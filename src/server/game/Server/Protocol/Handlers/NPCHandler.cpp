@@ -288,7 +288,7 @@ void WorldSession::HandleTrainerBuySpellOpcode(WorldPacket & recv_data)
     else
         _player->learnSpell(spellId, false);
 
-    WorldPacket data(SMSG_TRAINER_BUY_SUCCEEDED, 12);
+    WorldPacket data(SMSG_TRAINER_BUY_RESULT, 12);
     data << uint64(guid);
     data << uint32(spellId);                                // should be same as in packet from client
     SendPacket(&data);
@@ -488,7 +488,7 @@ void WorldSession::SendBindPoint(Creature *npc)
     // send spell for homebinding (3286)
     npc->CastSpell(_player, bindspell, true);
 
-    WorldPacket data(SMSG_TRAINER_BUY_SUCCEEDED, (8+4));
+    WorldPacket data(SMSG_TRAINER_BUY_RESULT, (8+4));
     data << uint64(npc->GetGUID());
     data << uint32(bindspell);
     SendPacket(&data);
@@ -576,7 +576,6 @@ void WorldSession::SendStablePetCallback(QueryResult result, uint64 guid)
 
     data.put<uint8>(wpos, num);                             // set real data to placeholder
     SendPacket(&data);
-
 }
 
 void WorldSession::SendStableResult(uint8 res)
@@ -620,7 +619,6 @@ void WorldSession::HandleStablePet(WorldPacket & recv_data)
 
     _stablePetCallback = CharacterDatabase.AsyncPQuery("SELECT owner, slot, id FROM character_pet WHERE owner = '%u'  AND slot >= '%u' AND slot <= '%u' ORDER BY slot ",
         _player->GetGUIDLow(), PET_SAVE_FIRST_STABLE_SLOT, PET_SAVE_LAST_STABLE_SLOT);
-
 }
 
 void WorldSession::HandleStablePetCallback(QueryResult result)
@@ -893,4 +891,3 @@ void WorldSession::HandleRepairItemOpcode(WorldPacket & recv_data)
         TotalCost = _player->DurabilityRepairAll(true, discountMod, guildBank);
     }
 }
-

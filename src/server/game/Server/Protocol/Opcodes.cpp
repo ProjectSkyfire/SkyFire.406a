@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
@@ -58,7 +58,7 @@ void InitOpcodeTable()
     OPCODE( SMSG_CHAR_CREATE,                             STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( SMSG_CHAR_ENUM,                               STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( SMSG_CHAR_DELETE,                             STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
-    OPCODE( CMSG_WORLD_LOGIN,                             STATUS_AUTHED,   PROCESS_THREADUNSAFE,  &WorldSession::HandleWorldLoginOpcode          );
+    OPCODE( CMSG_WORLD_LOGIN,                             STATUS_AUTHED,   PROCESS_THREADUNSAFE,  &WorldSession::Handle_ServerSide               );
     OPCODE( CMSG_PLAYER_LOGIN,                            STATUS_AUTHED,   PROCESS_THREADUNSAFE,  &WorldSession::HandlePlayerLoginOpcode         );
     OPCODE( SMSG_NEW_WORLD,                               STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( SMSG_TRANSFER_PENDING,                        STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
@@ -659,7 +659,7 @@ void InitOpcodeTable()
     OPCODE( SMSG_LFG_OFFER_CONTINUE,                      STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( CMSG_MEETINGSTONE_CHEAT,                      STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
     OPCODE( SMSG_MEETINGSTONE_SETQUEUE,                   STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
-    OPCODE( CMSG_MEETINGSTONE_INFO,                       STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleMeetingStoneInfo          );
+    OPCODE( CMSG_MEETINGSTONE_INFO,                       STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::Handle_ServerSide               );
     OPCODE( SMSG_MEETINGSTONE_COMPLETE,                   STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( SMSG_MEETINGSTONE_IN_PROGRESS,                STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( SMSG_MEETINGSTONE_MEMBER_ADDED,               STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
@@ -1277,5 +1277,4 @@ void InitOpcodeTable()
     OPCODE( CMSG_GROUP_SET_ROLES,                         STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
     OPCODE( SMSG_UNKNOWN_1310,                            STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( CMSG_RETURN_TO_GRAVEYARD,                     STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
-
 };

@@ -625,7 +625,7 @@ void WorldSession::SendLfgUpdateProposal(uint32 proposalId, const LfgProposal* p
 void WorldSession::SendLfgUpdateSearch(bool update)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "SMSG_LFG_UPDATE_SEARCH [" UI64FMTD "] update: %u", GetPlayer()->GetGUID(), update ? 1 : 0);
-    WorldPacket data(SMSG_LFG_UPDATE_SEARCH, 1);
+    WorldPacket data(SMSG_LFG_UPDATE_LIST, 1);
     data << uint8(update);                                 // In Lfg Queue?
     SendPacket(&data);
 }
