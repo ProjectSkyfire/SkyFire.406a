@@ -1,20 +1,28 @@
 /*
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2010 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2005-2011 MaNGOS <http://www.getmangos.com/>
  *
- * This program is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
- * option) any later version.
+ * Copyright (C) 2008-2011 Trinity <http://www.trinitycore.org/>
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
- * more details.
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
  *
- * You should have received a copy of the GNU General Public License along
- * with this program. If not, see <http://www.gnu.org/licenses/>.
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
+
+/** \file
+  \ingroup realmd
+  */
 
 #ifndef __REALMACCEPTOR_H__
 #define __REALMACCEPTOR_H__
@@ -27,44 +35,20 @@
 
 class RealmAcceptor : public ACE_Acceptor<RealmSocket, ACE_SOCK_Acceptor>
 {
-public:
-    RealmAcceptor(void) { }
-    virtual ~RealmAcceptor(void)
-    {
-        if (reactor())
-            reactor()->cancel_timer(this, 1);
-    }
+    public:
+        RealmAcceptor(void) { }
+        virtual ~RealmAcceptor(void) { }
 
-protected:
-    virtual int make_svc_handler(RealmSocket *&sh)
-    {
-        if (sh == 0)
-            ACE_NEW_RETURN(sh, RealmSocket, -1);
-
-        sh->reactor(reactor());
-        sh->set_session(new AuthSocket(*sh));
-        return 0;
-    }
-
-    virtual int handle_timeout(const ACE_Time_Value& /*current_time*/, const void* /*act = 0*/)
-    {
-        sLog->outBasic("Resuming acceptor");
-        reactor()->cancel_timer(this, 1);
-        return reactor()->register_handler(this, ACE_Event_Handler::ACCEPT_MASK);
-    }
-
-    virtual int handle_accept_error(void)
-    {
-#if defined(ENFILE) && defined(EMFILE)
-        if (errno == ENFILE || errno == EMFILE)
+    protected:
+        virtual int make_svc_handler(RealmSocket *&sh)
         {
-            sLog->outError("Out of file descriptors, suspending incoming connections for 10 seconds");
-            reactor()->remove_handler(this, ACE_Event_Handler::ACCEPT_MASK | ACE_Event_Handler::DONT_CALL);
-            reactor()->schedule_timer(this, NULL, ACE_Time_Value(10));
+            if (sh == 0)
+                ACE_NEW_RETURN(sh, RealmSocket, -1);
+
+            sh->reactor(reactor());
+            sh->set_session(new AuthSocket(*sh));
+            return 0;
         }
-#endif
-        return 0;
-    }
 };
 
-#endif
+#endif /* __REALMACCEPTOR_H__ */

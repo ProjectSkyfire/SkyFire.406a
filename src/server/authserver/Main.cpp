@@ -1,19 +1,23 @@
 /*
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2005-2011 MaNGOS <http://www.getmangos.com/>
  *
- * This program is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
- * option) any later version.
+ * Copyright (C) 2008-2011 Trinity <http://www.trinitycore.org/>
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
- * more details.
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
  *
- * You should have received a copy of the GNU General Public License along
- * with this program. If not, see <http://www.gnu.org/licenses/>.
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
 #include <ace/Dev_Poll_Reactor.h>
@@ -25,6 +29,7 @@
 
 #include "Common.h"
 #include "Database/DatabaseEnv.h"
+
 #include "Configuration/Config.h"
 #include "Log.h"
 #include "SystemConfig.h"
@@ -35,45 +40,71 @@
 
 #ifndef _TRINITY_REALM_CONFIG
 # define _TRINITY_REALM_CONFIG  "authserver.conf"
+#endif //_TRINITY_REALM_CONFIG
+
+#ifdef _WIN32
+#include "ServiceWin32.h"
+char serviceName[] = "authserver";
+char serviceLongName[] = "SkyFireEMU Auth service";
+char serviceDescription[] = "SkyFireEMU World of Warcraft emulator world auth service";
+/*
+ * -1 - not in service mode
+ *  0 - stopped
+ *  1 - running
+ *  2 - paused
+ */
+int m_ServiceStatus = -1;
 #endif
 
 bool StartDB();
-void StopDB();
 
-bool stopEvent = false;                                     // Setting it to true stops the server
+bool stopEvent = false;                                     ///< Setting it to true stops the server
 
-LoginDatabaseWorkerPool LoginDatabase;                      // Accessor to the auth server database
+LoginDatabaseWorkerPool LoginDatabase;                      ///< Accessor to the realm server database
 
-// Handle authserver's termination signals
-class AuthServerSignalHandler : public Trinity::SignalHandler
+/// Handle realmd's termination signals
+class RealmdSignalHandler : public Trinity::SignalHandler
 {
-public:
-    virtual void HandleSignal(int SigNum)
-    {
-        switch (SigNum)
+    public:
+        virtual void HandleSignal(int SigNum)
         {
-        case SIGINT:
-        case SIGTERM:
-            stopEvent = true;
-            break;
+            switch (SigNum)
+            {
+                case SIGINT:
+                case SIGTERM:
+                    stopEvent = true;
+                    break;
+#ifdef _WIN32
+                case SIGBREAK:
+                    if (m_ServiceStatus != 1)
+                        stopEvent = true;
+                    break;
+#endif /* _WIN32 */
+            }
         }
-    }
 };
 
 /// Print out the usage string for this program on the console.
 void usage(const char *prog)
 {
     sLog->outString("Usage: \n %s [<options>]\n"
-        "    -c config_file           use config_file as configuration file\n\r",
-        prog);
+        "    -c config_file           use config_file as configuration file\n\r"
+#ifdef _WIN32
+        "    Running as service functions:\n\r"
+        "    --service                run as service\n\r"
+        "    -s install               install service\n\r"
+        "    -s uninstall             uninstall service\n\r"
+#endif
+        , prog);
 }
 
-// Launch the auth server
+/// Launch the realm server
 extern int main(int argc, char **argv)
 {
     sLog->SetLogDB(false);
-    // Command line parsing to get the configuration file name
-    char const *cfg_file = _TRINITY_REALM_CONFIG;
+
+    ///- Command line parsing to get the configuration file name
+    char const* cfg_file = _TRINITY_REALM_CONFIG;
     int c = 1;
     while(c < argc)
     {
@@ -88,6 +119,43 @@ extern int main(int argc, char **argv)
             else
                 cfg_file = argv[c];
         }
+
+#ifdef _WIN32
+        ////////////
+        //Services//
+        ////////////
+        if (strcmp(argv[c], "-s") == 0)
+        {
+            if (++c >= argc)
+            {
+                sLog->outError("Runtime-Error: -s option requires an input argument");
+                usage(argv[0]);
+                return 1;
+            }
+            if (strcmp(argv[c], "install") == 0)
+            {
+                if (WinServiceInstall())
+                    sLog->outString("Installing service");
+                return 1;
+            }
+            else if (strcmp(argv[c], "uninstall") == 0)
+            {
+                if (WinServiceUninstall())
+                    sLog->outString("Uninstalling service");
+                return 1;
+            }
+            else
+            {
+                sLog->outError("Runtime-Error: unsupported option %s", argv[c]);
+                usage(argv[0]);
+                return 1;
+            }
+        }
+
+        if (strcmp(argv[c], "--service") == 0)
+            WinServiceRun();
+
+#endif
         ++c;
     }
 
@@ -99,9 +167,15 @@ extern int main(int argc, char **argv)
     }
     sLog->Initialize();
 
-    sLog->outString("%s (authserver)", _FULLVERSION);
+    sLog->outString("%s (realm-daemon)", _FULLVERSION);
+	sLog->outString("   ______  __  __  __  __  ______ __  ______  ______ ");
+    sLog->outString("  /\\  ___\\/\\ \\/ / /\\ \\_\\ \\/\\  ___/\\ \\/\\  == \\/\\  ___\\ ");
+    sLog->outString("  \\ \\___  \\ \\  _'-\\ \\____ \\ \\  __\\ \\ \\ \\  __<\\ \\  __\\ ");
+    sLog->outString("   \\/\\_____\\ \\_\\ \\_\\/\\_____\\ \\_\\  \\ \\_\\ \\_\\ \\_\\ \\_____\\ ");
+    sLog->outString("    \\/_____/\\/_/\\/_/\\/_____/\\/_/   \\/_/\\/_/ /_/\\/_____/ ");
+    sLog->outString("  Project SkyFireEmu 2011(c) Open-sourced Game Emulation ");
+    sLog->outString("           <http://www.projectskyfire.org/> ");
     sLog->outString("<Ctrl-C> to stop.\n");
-    sLog->outString("Using configuration file %s.", cfg_file);
 
     sLog->outDetail("%s (Library: %s)", OPENSSL_VERSION_TEXT, SSLeay_version(SSLEAY_VERSION));
 
@@ -113,7 +187,7 @@ extern int main(int argc, char **argv)
 
     sLog->outBasic("Max allowed open files is %d", ACE::max_handles());
 
-    // authserver PID file creation
+    /// realmd PID file creation
     std::string pidfile = sConfig->GetStringDefault("PidFile", "");
     if (!pidfile.empty())
     {
@@ -127,16 +201,16 @@ extern int main(int argc, char **argv)
         sLog->outString("Daemon PID: %u\n", pid);
     }
 
-    // Initialize the database connection
+    ///- Initialize the database connection
     if (!StartDB())
         return 1;
 
-    // Initialize the log database
+    ///- Initialize the log database
     sLog->SetLogDBLater(sConfig->GetBoolDefault("EnableLogDB", false)); // set var to enable DB logging once startup finished.
     sLog->SetLogDB(false);
-    sLog->SetRealmID(0);                                               // ensure we've set realm to 0 (authserver realmid)
+    sLog->SetRealmID(0);                                               // ensure we've set realm to 0 (realmd realmid)
 
-    // Get the list of realms for the server
+    ///- Get the list of realms for the server
     sRealmList->Initialize(sConfig->GetIntDefault("RealmsStateUpdateDelay", 20));
     if (sRealmList->size() == 0)
     {
@@ -144,7 +218,7 @@ extern int main(int argc, char **argv)
         return 1;
     }
 
-    // Launch the listening network socket
+    ///- Launch the listening network socket
     RealmAcceptor acceptor;
 
     uint16 rmport = sConfig->GetIntDefault("RealmServerPort", 3724);
@@ -154,17 +228,23 @@ extern int main(int argc, char **argv)
 
     if (acceptor.open(bind_addr, ACE_Reactor::instance(), ACE_NONBLOCK) == -1)
     {
-        sLog->outError("Auth server can not bind to %s:%d", bind_ip.c_str(), rmport);
+        sLog->outError("SkyFireAuth can not bind to %s:%d", bind_ip.c_str(), rmport);
         return 1;
     }
 
     // Initialise the signal handlers
-    AuthServerSignalHandler SignalINT, SignalTERM;
+    RealmdSignalHandler SignalINT, SignalTERM;
+#ifdef _WIN32
+    RealmdSignalHandler SignalBREAK;
+#endif /* _WIN32 */
 
-    // Register authservers's signal handlers
+    // Register realmd's signal handlers
     ACE_Sig_Handler Handler;
     Handler.register_handler(SIGINT, &SignalINT);
     Handler.register_handler(SIGTERM, &SignalTERM);
+#ifdef _WIN32
+    Handler.register_handler(SIGBREAK, &SignalBREAK);
+#endif /* _WIN32 */
 
     ///- Handle affinity for multiple processors and process priority on Windows
 #ifdef _WIN32
@@ -182,7 +262,7 @@ extern int main(int argc, char **argv)
                 ULONG_PTR curAff = Aff & appAff;            // remove non accessible processors
 
                 if (!curAff)
-                    sLog->outError("Processors marked in UseProcessors bitmask (hex) %x not accessible for authserver. Accessible processors bitmask (hex): %x", Aff, appAff);
+                    sLog->outError("Processors marked in UseProcessors bitmask (hex) %x not accessible for realmd. Accessible processors bitmask (hex): %x", Aff, appAff);
                 else if (SetProcessAffinityMask(hProcess, curAff))
                     sLog->outString("Using processors (bitmask, hex): %x", curAff);
                 else
@@ -196,9 +276,9 @@ extern int main(int argc, char **argv)
         if (Prio)
         {
             if (SetPriorityClass(hProcess, HIGH_PRIORITY_CLASS))
-                sLog->outString("The auth server process priority class has been set to HIGH");
+                sLog->outString("SkyFireAuth process priority class set to HIGH");
             else
-                sLog->outError("Can't set auth server process priority class.");
+                sLog->outError("Can't set realmd process priority class.");
             sLog->outString();
         }
     }
@@ -213,13 +293,14 @@ extern int main(int argc, char **argv)
     {
         sLog->outString("Enabling database logging...");
         sLog->SetLogDBLater(false);
+
         // login db needs thread for logging
         sLog->SetLogDB(true);
     }
     else
         sLog->SetLogDB(false);
 
-    // Wait for termination signal
+    ///- Wait for termination signal
     while (!stopEvent)
     {
         // dont move this outside the loop, the reactor will modify it
@@ -234,20 +315,27 @@ extern int main(int argc, char **argv)
             sLog->outDetail("Ping MySQL to keep connection alive");
             LoginDatabase.KeepAlive();
         }
+#ifdef _WIN32
+        if (m_ServiceStatus == 0)
+            stopEvent = true;
+        else
+        {
+            while (m_ServiceStatus == 2)
+                Sleep(1000);
+        }
+#endif
     }
 
-    // Close the Database Pool and library
-    StopDB();
+    ///- Close the Database Pool
+    LoginDatabase.Close();
 
     sLog->outString("Halting process...");
     return 0;
 }
 
-// Initialize connection to the database
+/// Initialize connection to the database
 bool StartDB()
 {
-    MySQL::Library_Init();
-
     std::string dbstring = sConfig->GetStringDefault("LoginDatabaseInfo", "");
     if (dbstring.empty())
     {
@@ -269,7 +357,7 @@ bool StartDB()
         synch_threads = 1;
     }
 
-    // NOTE: While authserver is singlethreaded you should keep synch_threads == 1. Increasing it is just silly since only 1 will be used ever.
+    /// NOTE: While authserver is singlethreaded you should keep synch_threads == 1. Increasing it is just silly since only 1 will be used ever.
     if (!LoginDatabase.Open(dbstring.c_str(), worker_threads, synch_threads))
     {
         sLog->outError("Cannot connect to database");
@@ -279,8 +367,4 @@ bool StartDB()
     return true;
 }
 
-void StopDB()
-{
-    LoginDatabase.Close();
-    MySQL::Library_End();
-}
+/// @}
