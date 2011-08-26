@@ -38,25 +38,23 @@
 #pragma pack(push, 1)
 #endif
 
+typedef char const* const* DBCString;                       //char* DBCStrings[MAX_LOCALE];
+
 struct AchievementEntry
 {
-    uint32    ID;                                           // 0
-    int32    requiredFaction;                               // 1 -1=all, 0=horde, 1=alliance
-    int32    mapID;                                         // 2 -1=none
-    //uint32 parentAchievement;                             // 3 its Achievement parent (can`t start while parent uncomplete, use its Criteria if don`t have own, use its progress on begin)
-    char *name[16];                                         // 4-19
-    //uint32 name_flags;                                    // 20
-    //char *description[16];                                // 21-36
-    //uint32 desc_flags;                                    // 37
-    uint32    categoryId;                                   // 38
-    uint32    points;                                       // 39 reward points
-    //uint32 OrderInCategory;                               // 40
-    uint32    flags;                                        // 41
-    //uint32    icon;                                       // 42 icon (from SpellIcon.dbc)
-    //char *titleReward[16];                                // 43-58
-    //uint32 titleReward_flags;                             // 59
-    uint32 count;                                           // 60 - need this count of completed criterias (own or referenced achievement criterias)
-    uint32 refAchievement;                                  // 61 - referenced achievement (counting of all completed criterias)
+    int32    requiredFaction;                               // 1       -1=all, 0=horde, 1=alliance
+    int32    mapID;                                         // 2       -1=none
+    //uint32 parentAchievement;                             // 3        its Achievement parent (can`t start while parent uncomplete, use its Criteria if don`t have own, use its progress on begin)
+    DBCString name;                                         // 4     m_title_lang
+    //char *description;                                    // 5     m_description_lang
+    uint32    categoryId;                                   // 6     m_category
+    uint32    points;                                       // 7     m_points
+    //uint32 OrderInCategory;                               // 8     m_ui_order
+    uint32    flags;                                        // 9     m_flags
+    //uint32    icon;                                       // 10    m_iconID
+    //char *titleReward;                                    // 11    m_reward_lang
+    uint32 count;                                           // 12    m_minimum_criteria - need this count of completed criterias (own or referenced achievement criterias)
+    uint32 refAchievement;                                  // 13    m_shares_criteria - referenced achievement (counting of all completed criterias)
 };
 
 struct AchievementCategoryEntry
