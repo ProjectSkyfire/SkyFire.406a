@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
@@ -76,7 +77,7 @@ BEGIN
         BLOCK "080004b0"
         BEGIN
             VALUE "CompanyName",        VER_COMPANYNAME_STR
-            VALUE "FileDescription",    "SkyFireEmu Authentication Server Daemon"
+            VALUE "FileDescription",    "SkyFireEMU Authentication Server Daemon"
             VALUE "FileVersion",        VER_FILEVERSION_STR
             VALUE "InternalName",       "authserver"
             VALUE "LegalCopyright",     VER_LEGALCOPYRIGHT_STR

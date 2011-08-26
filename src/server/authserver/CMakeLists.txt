@@ -1,8 +1,4 @@
-# Copyright (C) 2005-2011 MaNGOS <http://www.getmangos.com/>
-#
-# Copyright (C) 2008-2011 Trinity <http://www.trinitycore.org/>
-#
-# Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
+# Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
 #
 # This file is free software; as a special exception the author gives
 # unlimited permission to copy and/or distribute it, with or without
@@ -12,28 +8,23 @@
 # WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
+########### authserver ###############
+
 file(GLOB_RECURSE sources_authentication Authentication/*.cpp Authentication/*.h)
 file(GLOB_RECURSE sources_realms Realms/*.cpp Realms/*.h)
 file(GLOB_RECURSE sources_server Server/*.cpp Server/*.h)
-file(GLOB sources_localdir *.cpp *.h *.rc)
+file(GLOB sources_localdir *.cpp *.h)
 
-source_group(CMake FILES CMakeLists.txt)
-source_group(Authentication FILES ${sources_authentication})
-source_group(Realms FILES ${sources_realms})
-source_group(Server FILES ${sources_server})
-source_group(Debugging FILES ${sources_Debugging})
-source_group("" FILES ${sources_localdir})
-
-if ( USE_COREPCH )
+if( USE_COREPCH )
   include_directories(${CMAKE_CURRENT_BINARY_DIR})
-endif ()
+endif()
 
 if ( USE_COREPCH AND MSVC )
   set(authserver_SRCS
     PrecompiledHeaders/authPCH.cpp
     PrecompiledHeaders/authPCH.h
   )
-endif ()
+endif()
 
 set(authserver_SRCS
   ${authserver_SRCS}
@@ -43,13 +34,13 @@ set(authserver_SRCS
   ${sources_localdir}
 )
 
-if ( WIN32 )
+if( WIN32 )
 set(authserver_SRCS
     ${authserver_SRCS}
     ${sources_Debugging}
     authserver.rc
 )
-endif ()
+endif()
 
 include_directories(
   ${CMAKE_BINARY_DIR}
@@ -79,17 +70,17 @@ add_executable(authserver
 
 add_dependencies(authserver revision.h)
 
-if ( NOT WIN32 )
+if( NOT WIN32 )
   add_definitions(-D_TRINITY_REALM_CONFIG='"${CONF_DIR}/authserver.conf"')
-endif ()
+endif()
 
-if ( UNIX )
+if( UNIX )
   set(authserver_LINK_FLAGS "-pthread ${authserver_LINK_FLAGS}")
-endif ()
+endif()
 
-if ( CMAKE_SYSTEM_NAME MATCHES "Darwin" )
+if( CMAKE_SYSTEM_NAME MATCHES "Darwin" )
   set(authserver_LINK_FLAGS "-framework Carbon ${authserver_LINK_FLAGS}")
-endif ()
+endif()
 
 set_target_properties(authserver PROPERTIES LINK_FLAGS "${authserver_LINK_FLAGS}")
 
@@ -101,27 +92,27 @@ target_link_libraries(authserver
   ${OSX_LIBS}
 )
 
-if ( WIN32 )
+if( WIN32 )
   add_custom_command(TARGET authserver
     POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/authserver.conf.dist ${CMAKE_BINARY_DIR}/bin/$(ConfigurationName)/
   )
-endif ()
+endif()
 
-if ( UNIX )
+if( UNIX )
   install(TARGETS authserver DESTINATION bin)
   install(FILES  authserver.conf.dist DESTINATION etc)
-elseif ( WIN32 )
+elseif( WIN32 )
   install(TARGETS authserver DESTINATION "${CMAKE_INSTALL_PREFIX}")
   install(FILES authserver.conf.dist DESTINATION "${CMAKE_INSTALL_PREFIX}")
-endif ()
+endif()
 
 # Generate precompiled header
-if ( USE_COREPCH )
-  if (CMAKE_COMPILER_IS_GNUCXX)
+if( USE_COREPCH )
+  if(CMAKE_COMPILER_IS_GNUCXX)
     add_precompiled_header(authserver ${CMAKE_CURRENT_SOURCE_DIR}/PrecompiledHeaders/authPCH.h)
-  elseif (MSVC)
+  elseif(MSVC)
     add_native_precompiled_header(authserver ${CMAKE_CURRENT_SOURCE_DIR}/PrecompiledHeaders/authPCH)
-  endif ()
-endif ()
+  endif()
+endif()
 
