@@ -1,8 +1,11 @@
-= TrinityCore -- General information =
+= SkyFireEMU 4.0.6a -- General information =
 
+Copyright (C) MaNGOS      (http://www.getmangos.com)
 Copyright (C) TrinityCore (http://www.trinitycore.org)
+Copyright (C) Cactus      (http://www.cactusemu.com)
+Copyright (C) SkyFireEMU  (http://www.projectskyfire.org)
 
-  Trinity Core is free software; you can redistribute it and/or modify
+  SkyFireEMU is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
@@ -16,8 +19,8 @@ Copyright (C) TrinityCore (http://www.trinitycore.org)
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-  In addition, as a special exception, the Trinity Core project
-  gives permission to link the code of its release of Trinity Core with
+  In addition, as a special exception, the SkyFireEMU project
+  gives permission to link the code of its release of SkyFireEMU with
   the OpenSSL project's "OpenSSL" library (or with modified versions of
   it that use the same license as the "OpenSSL" library), and distribute
   the linked executables.  You must obey the GNU General Public License
@@ -26,18 +29,27 @@ Copyright (C) TrinityCore (http://www.trinitycore.org)
   file, but you are not obligated to do so.  If you do not wish to do
   so, delete this exception statement from your version.
 
-TrinityCore is a World of Warcraft game server emulator. It is derived
-from MaNGOS, the Massive Network Game Object Server, and is based on the
+SkyFireEMU is a World of Warcraft game server emulator. It is derived
+from TrinityCore & MaNGOS, the Massive Network Game Object Server, and is based on the
 code of that project.
 
-For further information on the TrinityCore project, please visit our
+For further information on the TrinityCore project, please visit the
 project website at http://www.trinitycore.org.
 
-API documentation can be obtained by running the "make doc" command inside
-the doc directory.
+For further information on the MaNGOS project, please visit the
+project website at http://www.getmangos.com/.
 
-SQL files to create the database can be found in the sql directory. Files
+For further information on the Cactus project, please visit the
+project website at http://www.cactusemu.com/.
+
+For further information on the SkyFireEMU project, please visit the
+project website at http://www.projectskyfire.org/.
+
+SQL files to create the database can be found in the database directory. Files
 to update your database from an older revision/version can be found in the
-sql/updates directory.
+database/updates directory.
 
-See the docs/UnixInstall.txt file for installation instructions on Linux.
+See http://wiki.projectskyfire.org/ for installation instructions on Linux.
+
+Our Bug Tracker is located here.
+http://www.projectskyfire.org/bugtracker/
