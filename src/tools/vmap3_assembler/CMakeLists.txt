@@ -1,5 +1,8 @@
-# Copyright (C) 2005-2009 MaNGOS project <http://getmangos.com/>
-# Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
+# Copyright (C) 2005-2011 MaNGOS <http://www.getmangos.com/>
+#
+# Copyright (C) 2008-2011 Trinity <http://www.trinitycore.org/>
+#
+# Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
 #
 # This file is free software; as a special exception the author gives
 # unlimited permission to copy and/or distribute it, with or without
@@ -23,9 +26,9 @@ add_definitions(-DNO_CORE_FUNCS)
 add_executable(vmap3assembler VMapAssembler.cpp)
 add_dependencies(vmap3assembler mpq)
 
-if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
+if (CMAKE_SYSTEM_NAME MATCHES "Darwin")
   set_target_properties(vmap3assembler PROPERTIES LINK_FLAGS "-framework Carbon")
-endif()
+endif ()
 
 target_link_libraries(vmap3assembler
   collision
@@ -33,8 +36,8 @@ target_link_libraries(vmap3assembler
   ${ZLIB_LIBRARIES}
 )
 
-if( UNIX )
+if ( UNIX )
   install(TARGETS vmap3assembler DESTINATION bin)
-elseif( WIN32 )
+elseif ( WIN32 )
   install(TARGETS vmap3assembler DESTINATION "${CMAKE_INSTALL_PREFIX}")
-endif()
+endif ()

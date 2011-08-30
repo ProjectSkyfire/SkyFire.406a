@@ -119,7 +119,6 @@ public:
     }
 };
 
-
 class Vec2D
 {
 public:
@@ -206,7 +205,6 @@ public:
         r.normalize();
         return r;
     }
-
 
     friend std::istream& operator>>(std::istream& in, Vec2D& v)
     {

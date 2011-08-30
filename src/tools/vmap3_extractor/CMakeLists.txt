@@ -1,5 +1,8 @@
-# Copyright (C) 2005-2009 MaNGOS project <http://getmangos.com/>
-# Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
+# Copyright (C) 2005-2011 MaNGOS <http://www.getmangos.com/>
+#
+# Copyright (C) 2008-2011 Trinity <http://www.trinitycore.org/>
+#
+# Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
 #
 # This file is free software; as a special exception the author gives
 # unlimited permission to copy and/or distribute it, with or without
@@ -20,16 +23,16 @@ add_definitions("-Wall")
 add_definitions("-ggdb")
 add_definitions("-O3")
 
-if( UNIX )
+if ( UNIX )
   include_directories(
     ${CMAKE_SOURCE_DIR}/dep/libmpq
   )
-elseif( WIN32 )
+elseif ( WIN32 )
   include_directories(
     ${CMAKE_SOURCE_DIR}/dep/libmpq
     ${CMAKE_SOURCE_DIR}/dep/libmpq/win
   )
-endif()
+endif ()
 
 add_executable(vmap3extractor ${sources})
 
@@ -41,8 +44,8 @@ target_link_libraries(vmap3extractor
 
 add_dependencies(vmap3extractor mpq)
 
-if( UNIX )
+if ( UNIX )
   install(TARGETS vmap3extractor DESTINATION bin)
-elseif( WIN32 )
+elseif ( WIN32 )
   install(TARGETS vmap3extractor DESTINATION "${CMAKE_INSTALL_PREFIX}")
-endif()
+endif ()

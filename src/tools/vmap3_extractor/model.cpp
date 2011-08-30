@@ -24,7 +24,7 @@ bool Model::open()
     }
 
     memcpy(&header, f.getBuffer(), sizeof(ModelHeader));
-    if(header.nBoundingTriangles > 0)
+    if (header.nBoundingTriangles > 0)
     {
         f.seek(0);
         f.seekRelative(header.ofsBoundingVertices);
@@ -53,7 +53,7 @@ bool Model::ConvertToVMAPModel(char * outfilename)
 {
     int N[12] = {0,0,0,0,0,0,0,0,0,0,0,0};
     FILE * output=fopen(outfilename,"wb");
-    if(!output)
+    if (!output)
     {
         printf("Can't create the output file '%s'\n",outfilename);
         return false;
@@ -80,7 +80,7 @@ bool Model::ConvertToVMAPModel(char * outfilename)
     wsize = sizeof(uint32) + sizeof(unsigned short) * nIndexes;
     fwrite(&wsize, sizeof(int), 1, output);
     fwrite(&nIndexes, sizeof(uint32), 1, output);
-    if(nIndexes >0)
+    if (nIndexes >0)
     {
         fwrite(indices, sizeof(unsigned short), nIndexes, output);
     }
@@ -88,7 +88,7 @@ bool Model::ConvertToVMAPModel(char * outfilename)
     wsize = sizeof(int) + sizeof(float) * 3 * nVertices;
     fwrite(&wsize, sizeof(int), 1, output);
     fwrite(&nVertices, sizeof(int), 1, output);
-    if(nVertices >0)
+    if (nVertices >0)
     {
         for(uint32 vpos=0; vpos <nVertices; ++vpos)
         {
@@ -138,7 +138,7 @@ ModelInstance::ModelInstance(MPQFile &f,const char* ModelInstName, uint32 mapID,
     FILE *input;
     input = fopen(tempname, "r+b");
 
-    if(!input)
+    if (!input)
     {
         //printf("ModelInstance::ModelInstance couldn't open %s\n", tempname);
         return;
@@ -149,12 +149,12 @@ ModelInstance::ModelInstance(MPQFile &f,const char* ModelInstName, uint32 mapID,
     fread(&nVertices, sizeof (int), 1, input);
     fclose(input);
 
-    if(nVertices == 0)
+    if (nVertices == 0)
         return;
 
     uint16 adtId = 0;// not used for models
     uint32 flags = MOD_M2;
-    if(tileX == 65 && tileY == 65) flags |= MOD_WORLDSPAWN;
+    if (tileX == 65 && tileY == 65) flags |= MOD_WORLDSPAWN;
     //write mapID, tileX, tileY, Flags, ID, Pos, Rot, Scale, name
     fwrite(&mapID, sizeof(uint32), 1, pDirfile);
     fwrite(&tileX, sizeof(uint32), 1, pDirfile);

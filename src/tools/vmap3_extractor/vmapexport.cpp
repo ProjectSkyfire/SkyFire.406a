@@ -77,7 +77,7 @@ static const char * GetPlainName(const char * szFileName)
 {
     const char * szTemp;
 
-    if((szTemp = strrchr(szFileName, '\\')) != NULL)
+    if ((szTemp = strrchr(szFileName, '\\')) != NULL)
         szFileName = szTemp + 1;
     return szFileName;
 }
@@ -87,7 +87,7 @@ void ReadLiquidTypeTableDBC()
 {
     printf("Read LiquidType.dbc file...");
     DBCFile dbc("DBFilesClient\\LiquidType.dbc");
-    if(!dbc.open())
+    if (!dbc.open())
     {
         printf("Fatal error: Invalid LiquidType.dbc file format!\n");
         exit(1);
@@ -131,29 +131,29 @@ int ExtractWmo()
                     int p = 0;
                     //Select root wmo files
                     const char * rchr = strrchr(GetPlainName(fname->c_str()),0x5f);
-                    if(rchr != NULL)
+                    if (rchr != NULL)
                     {
                         char cpy[4];
                         strncpy((char*)cpy,rchr,4);
                         for (int i=0;i<4; ++i)
                         {
                             int m = cpy[i];
-                            if(isdigit(m))
+                            if (isdigit(m))
                                 p++;
                         }
                     }
-                    if(p != 3)
+                    if (p != 3)
                     {
                         std::cout << "Extracting " << *fname << std::endl;
                         WMORoot * froot = new WMORoot(*fname);
-                        if(!froot->open())
+                        if (!froot->open())
                         {
                             printf("Couldn't open RootWmo!!!\n");
                             delete froot;
                             continue;
                         }
                         FILE *output=fopen(szLocalFile,"wb");
-                        if(!output)
+                        if (!output)
                         {
                             printf("couldn't open %s for writing!\n", szLocalFile);
                             success=false;
@@ -161,7 +161,7 @@ int ExtractWmo()
                         froot->ConvertToVMAPRootWmo(output);
                         int Wmo_nVertices = 0;
                         //printf("root has %d groups\n", froot->nGroups);
-                        if(froot->nGroups !=0)
+                        if (froot->nGroups !=0)
                         {
                             for (uint32 i=0; i<froot->nGroups; ++i)
                             {
@@ -173,7 +173,7 @@ int ExtractWmo()
                                 //printf("Trying to open groupfile %s\n",groupFileName);
                                 string s = groupFileName;
                                 WMOGroup * fgroup = new WMOGroup(s);
-                                if(!fgroup->open())
+                                if (!fgroup->open())
                                 {
                                     printf("Could not open all Group file for: %s\n",GetPlainName(fname->c_str()));
                                     file_ok=false;
@@ -196,12 +196,12 @@ int ExtractWmo()
                 }
             }
             // Delete the extracted file in the case of an error
-            if(!file_ok)
+            if (!file_ok)
                 remove(szLocalFile);
         }
     }
 
-    if(success)
+    if (success)
         printf("\nExtract wmo complete (No (fatal) errors)\n");
 
     return success;
@@ -221,7 +221,7 @@ void ParsMapFiles()
         sprintf(id,"%03u",map_ids[i].id);
         sprintf(fn,"World\\Maps\\%s\\%s.wdt", map_ids[i].name, map_ids[i].name);
         WDTFile WDT(fn,map_ids[i].name);
-        if(WDT.init(id, map_ids[i].id))
+        if (WDT.init(id, map_ids[i].id))
         {
             printf("Processing Map %u\n[", map_ids[i].id);
             for (int x=0; x<64; ++x)
@@ -280,9 +280,9 @@ bool scan_patches(char* scanmatch, std::vector<std::string>& pArchiveNames)
             sprintf(path, "%s.MPQ", scanmatch);
         }
 #ifdef __linux__
-        if(FILE* h = fopen64(path, "rb"))
+        if (FILE* h = fopen64(path, "rb"))
 #else
-        if(FILE* h = fopen(path, "rb"))
+        if (FILE* h = fopen(path, "rb"))
 #endif
         {
             fclose(h);
@@ -296,7 +296,7 @@ bool scan_patches(char* scanmatch, std::vector<std::string>& pArchiveNames)
 
 bool fillArchiveNameVector(std::vector<std::string>& pArchiveNames)
 {
-    if(!hasInputPathParam)
+    if (!hasInputPathParam)
         getGamePath();
 
     printf("\nGame path: %s\n", input_path);
@@ -337,15 +337,24 @@ bool fillArchiveNameVector(std::vector<std::string>& pArchiveNames)
     for (std::vector<std::string>::iterator i = locales.begin(); i != locales.end(); ++i)
     {
         pArchiveNames.push_back(in_path + *i + "/locale-" + *i + ".MPQ");
-        pArchiveNames.push_back(in_path + *i + "/expansion-locale-" + *i + ".MPQ");
-        pArchiveNames.push_back(in_path + *i + "/lichking-locale-" + *i + ".MPQ");
+		pArchiveNames.push_back(in_path + *i + "/expansion1-locale-" + *i + ".MPQ");
+		pArchiveNames.push_back(in_path + *i + "/expansion2-locale-" + *i + ".MPQ");
+		pArchiveNames.push_back(in_path + *i + "/expansion3-locale-" + *i + ".MPQ");;
     }
 
     // open expansion and common files
-    pArchiveNames.push_back(input_path + string("common.MPQ"));
-    pArchiveNames.push_back(input_path + string("common-2.MPQ"));
-    pArchiveNames.push_back(input_path + string("expansion.MPQ"));
-    pArchiveNames.push_back(input_path + string("lichking.MPQ"));
+	pArchiveNames.push_back(input_path + string("world.MPQ"));
+	pArchiveNames.push_back(input_path + string("art.MPQ"));
+	pArchiveNames.push_back(input_path + string("expansion1.MPQ"));
+	pArchiveNames.push_back(input_path + string("expansion2.MPQ"));
+	pArchiveNames.push_back(input_path + string("expansion3.MPQ"));
+
+	//mh is this useless? the extractor crash if this active!
+	//pArchiveNames.push_back(input_path + string("wow-update-13164.MPQ"));
+	//pArchiveNames.push_back(input_path + string("wow-update-13205.MPQ"));
+	//pArchiveNames.push_back(input_path + string("wow-update-13287.MPQ"));
+	//pArchiveNames.push_back(input_path + string("wow-update-13329.MPQ"));
+	//pArchiveNames.push_back(input_path + string("wow-update-13596.MPQ"));
 
     // now, scan for the patch levels in the core dir
     printf("Scanning patch levels from data directory.\n");
@@ -360,13 +369,13 @@ bool fillArchiveNameVector(std::vector<std::string>& pArchiveNames)
     {
         printf("Locale: %s\n", i->c_str());
         sprintf(path, "%s%s/patch-%s", input_path, i->c_str(), i->c_str());
-        if(scan_patches(path, pArchiveNames))
+        if (scan_patches(path, pArchiveNames))
             foundOne = true;
     }
 
     printf("\n");
 
-    if(!foundOne)
+    if (!foundOne)
     {
         printf("no locale found\n");
         return false;
@@ -383,13 +392,13 @@ bool processArgv(int argc, char ** argv, const char *versionString)
 
     for(int i=1; i< argc; ++i)
     {
-        if(strcmp("-s",argv[i]) == 0)
+        if (strcmp("-s",argv[i]) == 0)
         {
             preciseVectorData = false;
         }
-        else if(strcmp("-d",argv[i]) == 0)
+        else if (strcmp("-d",argv[i]) == 0)
         {
-            if((i+1)<argc)
+            if ((i+1)<argc)
             {
                 hasInputPathParam = true;
                 strcpy(input_path, argv[i+1]);
@@ -402,11 +411,11 @@ bool processArgv(int argc, char ** argv, const char *versionString)
                 result = false;
             }
         }
-        else if(strcmp("-?",argv[1]) == 0)
+        else if (strcmp("-?",argv[1]) == 0)
         {
             result = false;
         }
-        else if(strcmp("-l",argv[i]) == 0)
+        else if (strcmp("-l",argv[i]) == 0)
         {
             preciseVectorData = true;
         }
@@ -416,7 +425,7 @@ bool processArgv(int argc, char ** argv, const char *versionString)
             break;
         }
     }
-    if(!result)
+    if (!result)
     {
         printf("Extract %s.\n",versionString);
         printf("%s [-?][-s][-l][-d <path>]\n", argv[0]);
@@ -443,7 +452,7 @@ int main(int argc, char ** argv)
     const char *versionString = "V3.00 2010_07";
 
     // Use command line arguments, when some
-    if(!processArgv(argc, argv, versionString))
+    if (!processArgv(argc, argv, versionString))
         return 1;
 
     // some simple check if working dir is dirty
@@ -465,7 +474,7 @@ int main(int argc, char ** argv)
     printf("Extract %s. Beginning work ....\n",versionString);
     //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
     // Create the working directory
-    if(mkdir(szWorkDirWmo
+    if (mkdir(szWorkDirWmo
 #ifdef _XOPEN_UNIX
                     , 0711
 #endif
@@ -478,11 +487,11 @@ int main(int argc, char ** argv)
     for (size_t i=0; i < archiveNames.size(); ++i)
     {
         MPQArchive *archive = new MPQArchive(archiveNames[i].c_str());
-        if(!gOpenArchives.size() || gOpenArchives.front() != archive)
+        if (!gOpenArchives.size() || gOpenArchives.front() != archive)
             delete archive;
     }
 
-    if(gOpenArchives.empty())
+    if (gOpenArchives.empty())
     {
         printf("FATAL ERROR: None MPQ archive found by path '%s'. Use -d option with proper path.\n",input_path);
         return 1;
@@ -490,15 +499,15 @@ int main(int argc, char ** argv)
     ReadLiquidTypeTableDBC();
 
     // extract data
-    if(success)
+    if (success)
         success = ExtractWmo();
 
     //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
     //map.dbc
-    if(success)
+    if (success)
     {
         DBCFile * dbc = new DBCFile("DBFilesClient\\Map.dbc");
-        if(!dbc->open())
+        if (!dbc->open())
         {
             delete dbc;
             printf("FATAL ERROR: Map.dbc not found in data file.\n");
@@ -513,7 +522,6 @@ int main(int argc, char ** argv)
             printf("Map - %s\n",map_ids[x].name);
         }
 
-
         delete dbc;
         ParsMapFiles();
         delete [] map_ids;
@@ -521,7 +529,7 @@ int main(int argc, char ** argv)
     }
 
     clreol();
-    if(!success)
+    if (!success)
     {
         printf("ERROR: Extract %s. Work NOT complete.\n   Precise vector data=%d.\nPress any key.\n",versionString, preciseVectorData);
         getchar();

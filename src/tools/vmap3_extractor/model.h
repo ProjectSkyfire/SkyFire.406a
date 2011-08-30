@@ -47,7 +47,6 @@ public:
 
     ModelInstance() {}
     ModelInstance(MPQFile &f,const char* ModelInstName, uint32 mapID, uint32 tileX, uint32 tileY, FILE *pDirfile);
-
 };
 
 #endif

@@ -88,7 +88,6 @@ struct MapChunkHeader
     uint32 effectId;
 };
 
-
 class ADTFile
 {
 public:
