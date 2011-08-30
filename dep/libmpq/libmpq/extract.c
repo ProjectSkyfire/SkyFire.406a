@@ -48,7 +48,6 @@ static decompress_table_s dcmp_table[] = {
 
 /* this function decompress a stream using huffman algorithm. */
 int32_t libmpq__decompress_huffman(uint8_t *in_buf, uint32_t in_size, uint8_t *out_buf, uint32_t out_size) {
-
 	/* TODO: make typdefs of this structs? */
 	/* some common variables. */
 	int32_t tb     = 0;
@@ -58,7 +57,6 @@ int32_t libmpq__decompress_huffman(uint8_t *in_buf, uint32_t in_size, uint8_t *o
 	/* allocate memory for the huffman tree. */
 	if ((ht = malloc(sizeof(struct huffman_tree_s))) == NULL ||
 	    (is = malloc(sizeof(struct huffman_input_stream_s))) == NULL) {
-
 		/* memory allocation problem. */
 		return LIBMPQ_ERROR_MALLOC;
 	}
@@ -96,7 +94,6 @@ int32_t libmpq__decompress_huffman(uint8_t *in_buf, uint32_t in_size, uint8_t *o
 
 /* this function decompress a stream using zlib algorithm. */
 int32_t libmpq__decompress_zlib(uint8_t *in_buf, uint32_t in_size, uint8_t *out_buf, uint32_t out_size) {
-
 	/* some common variables. */
 	int32_t result = 0;
 	int32_t tb     = 0;
@@ -114,14 +111,12 @@ int32_t libmpq__decompress_zlib(uint8_t *in_buf, uint32_t in_size, uint8_t *out_
 
 	/* initialize the decompression structure, storm.dll uses zlib version 1.1.3. */
 	if ((result = inflateInit(&z)) != Z_OK) {
-
 		/* something on zlib initialization failed. */
 		return result;
 	}
 
 	/* call zlib to decompress the data. */
 	if ((result = inflate(&z, Z_FINISH)) != Z_STREAM_END) {
-
 		/* something on zlib decompression failed. */
 		return result;
 	}
@@ -131,7 +126,6 @@ int32_t libmpq__decompress_zlib(uint8_t *in_buf, uint32_t in_size, uint8_t *out_
 
 	/* cleanup zlib. */
 	if ((result = inflateEnd(&z)) != Z_OK) {
-
 		/* something on zlib finalization failed. */
 		return result;
 	}
@@ -142,7 +136,6 @@ int32_t libmpq__decompress_zlib(uint8_t *in_buf, uint32_t in_size, uint8_t *out_
 
 /* this function decompress a stream using pkzip algorithm. */
 int32_t libmpq__decompress_pkzip(uint8_t *in_buf, uint32_t in_size, uint8_t *out_buf, uint32_t out_size) {
-
 	/* some common variables. */
 	int32_t tb = 0;
 	uint8_t *work_buf;
@@ -150,7 +143,6 @@ int32_t libmpq__decompress_pkzip(uint8_t *in_buf, uint32_t in_size, uint8_t *out
 
 	/* allocate memory for pkzip data structure. */
 	if ((work_buf = malloc(sizeof(pkzip_cmp_s))) == NULL) {
-
 		/* memory allocation problem. */
 		return LIBMPQ_ERROR_MALLOC;
 	}
@@ -168,7 +160,6 @@ int32_t libmpq__decompress_pkzip(uint8_t *in_buf, uint32_t in_size, uint8_t *out
 
 	/* do the decompression. */
 	if ((tb = libmpq__do_decompress_pkzip(work_buf, &info)) < 0) {
-
 		/* free working buffer. */
 		free(work_buf);
 
@@ -188,7 +179,6 @@ int32_t libmpq__decompress_pkzip(uint8_t *in_buf, uint32_t in_size, uint8_t *out
 
 /* this function decompress a stream using bzip2 library. */
 int32_t libmpq__decompress_bzip2(uint8_t *in_buf, uint32_t in_size, uint8_t *out_buf, uint32_t out_size) {
-
 	/* some common variables. */
 	int32_t result = 0;
 	int32_t tb     = 0;
@@ -200,7 +190,6 @@ int32_t libmpq__decompress_bzip2(uint8_t *in_buf, uint32_t in_size, uint8_t *out
 
 	/* initialize the structure. */
 	if ((result = BZ2_bzDecompressInit(&strm, 0, 0)) != BZ_OK) {
-
 		/* something on bzlib initialization failed. */
 		return result;
 	}
@@ -226,13 +215,11 @@ int32_t libmpq__decompress_bzip2(uint8_t *in_buf, uint32_t in_size, uint8_t *out
 
 /* this function decompress a stream using wave algorithm. (1 channel) */
 int32_t libmpq__decompress_wave_mono(uint8_t *in_buf, uint32_t in_size, uint8_t *out_buf, uint32_t out_size) {
-
 	/* some common variables. */
 	int32_t tb = 0;
 
 	/* save the number of copied bytes. */
 	if ((tb = libmpq__do_decompress_wave(out_buf, out_size, in_buf, in_size, 1)) < 0) {
-
 		/* something on wave decompression failed. */
 		return tb;
 	}
@@ -243,13 +230,11 @@ int32_t libmpq__decompress_wave_mono(uint8_t *in_buf, uint32_t in_size, uint8_t 
 
 /* this function decompress a stream using wave algorithm. (2 channels) */
 int32_t libmpq__decompress_wave_stereo(uint8_t *in_buf, uint32_t in_size, uint8_t *out_buf, uint32_t out_size) {
-
 	/* some common variables. */
 	int32_t tb = 0;
 
 	/* save the number of copied bytes. */
 	if ((tb = libmpq__do_decompress_wave(out_buf, out_size, in_buf, in_size, 2)) < 0) {
-
 		/* something on wave decompression failed. */
 		return tb;
 	}
@@ -260,7 +245,6 @@ int32_t libmpq__decompress_wave_stereo(uint8_t *in_buf, uint32_t in_size, uint8_
 
 /* this function decompress a stream using a combination of the other compression algorithm. */
 int32_t libmpq__decompress_multi(uint8_t *in_buf, uint32_t in_size, uint8_t *out_buf, uint32_t out_size) {
-
 	/* some common variables. */
 	int32_t tb        = 0;
 	uint32_t count    = 0;
@@ -278,10 +262,8 @@ int32_t libmpq__decompress_multi(uint8_t *in_buf, uint32_t in_size, uint8_t *out
 
 	/* search decompression table type and get all types of compression. */
 	for (i = 0; i < entries; i++) {
-
 		/* check if have to apply this decompression. */
 		if (decompress_flag & dcmp_table[i].mask) {
-
 			/* increase counter for used compression algorithms. */
 			count++;
 			/* this algorithm is supported, remove from unsupp mask */
@@ -291,17 +273,14 @@ int32_t libmpq__decompress_multi(uint8_t *in_buf, uint32_t in_size, uint8_t *out
 
 	/* check if there is some method unhandled. (e.g. compressed by future versions) */
 	if (decompress_unsupp) {
-
 		/* compression type is unknown and we need to implement it. :) */
 		return LIBMPQ_ERROR_UNPACK;
 	}
 
 	/* if multiple decompressions should be made, we need temporary buffer for the data. */
 	if (count > 1) {
-
 		/* allocate memory for temporary buffer. */
 		if ((temp_buf = malloc(out_size)) == NULL) {
-
 			/* memory allocation problem. */
 			return LIBMPQ_ERROR_MALLOC;
 		}
@@ -312,24 +291,19 @@ int32_t libmpq__decompress_multi(uint8_t *in_buf, uint32_t in_size, uint8_t *out
 
 	/* apply all decompressions. */
 	for (i = 0, count = 0; i < entries; i++) {
-
 		/* check if not used this kind of compression. */
 		if (decompress_flag & dcmp_table[i].mask) {
-
 			/* if multiple decompressions should be made, we need temporary buffer for the data. */
 			if (count == 0) {
-
 				/* use output buffer as working buffer. */
 				work_buf = out_buf;
 			} else {
-
 				/* use temporary buffer as working buffer. */
 				work_buf = temp_buf;
 			}
 
 			/* decompress buffer using corresponding function. */
 			if ((tb = dcmp_table[i].decompress(in_buf, in_size, work_buf, out_size)) < 0) {
-
 				/* free temporary buffer. */
 				free(temp_buf);
 
@@ -348,7 +322,6 @@ int32_t libmpq__decompress_multi(uint8_t *in_buf, uint32_t in_size, uint8_t *out
 
 	/* if output buffer is not the same like target buffer, we have to copy data (this will happen on multiple decompressions). */
 	if (work_buf != out_buf) {
-
 		/* copy buffer. */
 		memcpy(out_buf, in_buf, out_size);
 	}

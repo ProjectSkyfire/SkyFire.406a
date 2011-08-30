@@ -121,7 +121,6 @@ typedef struct {
 
 /* archive structure used since diablo 1.00 by blizzard. */
 struct mpq_archive {
-
 	/* generic file information. */
 	FILE		*fp;			/* file handle. */
 

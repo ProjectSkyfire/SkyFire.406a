@@ -40,7 +40,6 @@
 
 /* function to return the hash to a given string. */
 uint32_t libmpq__hash_string(const char *key, uint32_t offset) {
-
 	/* some common variables. */
 	uint32_t seed1 = 0x7FED7FED;
 	uint32_t seed2 = 0xEEEEEEEE;
@@ -60,7 +59,6 @@ uint32_t libmpq__hash_string(const char *key, uint32_t offset) {
 
 /* function to encrypt a block. */
 int32_t libmpq__encrypt_block(uint32_t *in_buf, uint32_t in_size, uint32_t seed) {
-
 	/* some common variables. */
 	uint32_t seed2 = 0xEEEEEEEE;
 	uint32_t ch;
@@ -78,10 +76,8 @@ int32_t libmpq__encrypt_block(uint32_t *in_buf, uint32_t in_size, uint32_t seed)
 	return LIBMPQ_SUCCESS;
 }
 
-
 /* function to decrypt a block. */
 int32_t libmpq__decrypt_block(uint32_t *in_buf, uint32_t in_size, uint32_t seed) {
-
 	/* some common variables. */
 	uint32_t seed2 = 0xEEEEEEEE;
 	uint32_t ch;
@@ -101,7 +97,6 @@ int32_t libmpq__decrypt_block(uint32_t *in_buf, uint32_t in_size, uint32_t seed)
 
 /* function to detect decryption key. */
 int32_t libmpq__decrypt_key(uint8_t *in_buf, uint32_t in_size, uint32_t block_size, uint32_t *key) {
-
 	/* some common variables. */
 	uint32_t saveseed1;
 
@@ -114,7 +109,6 @@ int32_t libmpq__decrypt_key(uint8_t *in_buf, uint32_t in_size, uint32_t block_si
 
 	/* try all 255 possibilities. */
 	for (i = 0; i < 0x100; i++) {
-
 		/* some common variables. */
 		uint32_t seed1;
 		uint32_t seed2 = 0xEEEEEEEE;
@@ -146,7 +140,6 @@ int32_t libmpq__decrypt_key(uint8_t *in_buf, uint32_t in_size, uint32_t block_si
 
 		/* check if we found the file seed. */
 		if ((ch - ch2) <= block_size) {
-
 			/* file seed found, so return it. */
 			*key = saveseed1;
 			return LIBMPQ_SUCCESS;
@@ -159,13 +152,11 @@ int32_t libmpq__decrypt_key(uint8_t *in_buf, uint32_t in_size, uint32_t block_si
 
 /* function to decompress or explode a block from mpq archive. */
 int32_t libmpq__decompress_block(uint8_t *in_buf, uint32_t in_size, uint8_t *out_buf, uint32_t out_size, uint32_t compression_type) {
-
 	/* some common variables. */
 	int32_t tb = 0;
 
 	/* check if buffer is not compressed. */
 	if (compression_type == LIBMPQ_FLAG_COMPRESS_NONE) {
-
 		/* no compressed data, so copy input buffer to output buffer. */
 		memcpy(out_buf, in_buf, out_size);
 
@@ -176,16 +167,12 @@ int32_t libmpq__decompress_block(uint8_t *in_buf, uint32_t in_size, uint8_t *out
 	/* check if one compression mode is used. */
 	else if (compression_type == LIBMPQ_FLAG_COMPRESS_PKZIP ||
 	    compression_type == LIBMPQ_FLAG_COMPRESS_MULTI) {
-
 		/* check if block is really compressed, some blocks have set the compression flag, but are not compressed. */
 		if (in_size < out_size) {
-
 			/* check if we are using pkzip compression algorithm. */
 			if (compression_type == LIBMPQ_FLAG_COMPRESS_PKZIP) {
-
 				/* decompress using pkzip. */
 				if ((tb = libmpq__decompress_pkzip(in_buf, in_size, out_buf, out_size)) < 0) {
-
 					/* something on decompression failed. */
 					return tb;
 				}
@@ -193,20 +180,17 @@ int32_t libmpq__decompress_block(uint8_t *in_buf, uint32_t in_size, uint8_t *out
 
 			/* check if we are using multiple compression algorithm. */
 			else if (compression_type == LIBMPQ_FLAG_COMPRESS_MULTI) {
-
 				/*
 				 *  check if it is a file compressed by blizzard's multiple compression, note that storm.dll
 				 *  version 1.0.9 distributed with warcraft 3 passes the full path name of the opened archive
 				 *  as the new last parameter.
 				 */
 				if ((tb = libmpq__decompress_multi(in_buf, in_size, out_buf, out_size)) < 0) {
-
 					/* something on decompression failed. */
 					return tb;
 				}
 			}
 		} else {
-
 			/* block has set compression flag, but is not compressed, so copy data to output buffer. */
 			memcpy(out_buf, in_buf, out_size);
 

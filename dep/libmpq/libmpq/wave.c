@@ -35,8 +35,8 @@
 static const uint32_t wave_table_1503f120[] = {
 	0xFFFFFFFF, 0x00000000, 0xFFFFFFFF, 0x00000004, 0xFFFFFFFF, 0x00000002, 0xFFFFFFFF, 0x00000006,
 	0xFFFFFFFF, 0x00000001, 0xFFFFFFFF, 0x00000005, 0xFFFFFFFF, 0x00000003, 0xFFFFFFFF, 0x00000007,
-	0xFFFFFFFF, 0x00000001, 0xFFFFFFFF, 0x00000005, 0xFFFFFFFF, 0x00000003, 0xFFFFFFFF, 0x00000007,  
-	0xFFFFFFFF, 0x00000002, 0xFFFFFFFF, 0x00000004, 0xFFFFFFFF, 0x00000006, 0xFFFFFFFF, 0x00000008  
+	0xFFFFFFFF, 0x00000001, 0xFFFFFFFF, 0x00000005, 0xFFFFFFFF, 0x00000003, 0xFFFFFFFF, 0x00000007,
+	0xFFFFFFFF, 0x00000002, 0xFFFFFFFF, 0x00000004, 0xFFFFFFFF, 0x00000006, 0xFFFFFFFF, 0x00000008
 };
 
 /* table necessary dor decompression. */
@@ -57,7 +57,6 @@ static const uint32_t wave_table_1503f1a0[] = {
 
 /* this function decompress a wave file, mono or stereo, 1500F230 offset. */
 int32_t libmpq__do_decompress_wave(uint8_t *out_buf, int32_t out_length, uint8_t *in_buf, int32_t in_length, int32_t channels) {
-
 	/* some common variables. */
 	byte_and_int16_t out;
 	byte_and_int16_t in;
@@ -80,7 +79,6 @@ int32_t libmpq__do_decompress_wave(uint8_t *out_buf, int32_t out_length, uint8_t
 
 	/* 15007AD7 */
 	for (count = 0; count < channels; count++) {
-
 		/* some common variables. */
 		int32_t temp;
 
@@ -103,7 +101,6 @@ int32_t libmpq__do_decompress_wave(uint8_t *out_buf, int32_t out_length, uint8_t
 
 	/* loop through input buffer until end reached. */
 	while (in.pb < in_end) {
-
 		/* save the byte. */
 		uint8_t one_byte = *in.pb++;
 
@@ -114,7 +111,6 @@ int32_t libmpq__do_decompress_wave(uint8_t *out_buf, int32_t out_length, uint8_t
 
 		/* 15007B25 - get one byte from input buffer. */
 		if (one_byte & 0x80) {
-
 			/* 15007B32 */
 			switch (one_byte & 0x7F) {
 				case 0:
@@ -175,7 +171,6 @@ int32_t libmpq__do_decompress_wave(uint8_t *out_buf, int32_t out_length, uint8_t
 					continue;
 			}
 		} else {
-
 			/* EDI */
 			uint32_t temp1 = wave_table_1503f1a0[nr_array1[index]];
 
@@ -236,7 +231,6 @@ int32_t libmpq__do_decompress_wave(uint8_t *out_buf, int32_t out_length, uint8_t
 			if (nr_array1[index] < 0) {
 				nr_array1[index] = 0;
 			} else {
-
 				/* check index. */
 				if (nr_array1[index] > 0x58) {
 					nr_array1[index] = 0x58;

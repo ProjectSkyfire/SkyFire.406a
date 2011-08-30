@@ -31,4 +31,3 @@
   /* we assume GNU here */
   #define PACK_STRUCT __attribute__((packed))
 #endif
-
