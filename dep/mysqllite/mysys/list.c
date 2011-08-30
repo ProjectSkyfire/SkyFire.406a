@@ -1,4 +1,4 @@
-/* Copyright (C) 2000 MySQL AB
+/* Copyright (c) 2000, 2010, Oracle and/or its affiliates. All rights reserved.
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -11,7 +11,7 @@
 
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
-   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA */
+   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA */
 
 /*
   Code for handling dubble-linked lists in C
@@ -19,8 +19,6 @@
 
 #include "mysys_priv.h"
 #include <my_list.h>
-
-
 
 	/* Add a element to start of list */
 
@@ -41,7 +39,6 @@ LIST *list_add(LIST *root, LIST *element)
   DBUG_RETURN(element);			/* New root */
 }
 
-
 LIST *list_delete(LIST *root, LIST *element)
 {
   if (element->prev)
@@ -52,7 +49,6 @@ LIST *list_delete(LIST *root, LIST *element)
     element->next->prev=element->prev;
   return root;
 }
-
 
 void list_free(LIST *root, uint free_data)
 {
@@ -67,7 +63,6 @@ void list_free(LIST *root, uint free_data)
   }
 }
 
-
 LIST *list_cons(void *data, LIST *list)
 {
   LIST *new_charset=(LIST*) my_malloc(sizeof(LIST),MYF(MY_FAE));
@@ -76,7 +71,6 @@ LIST *list_cons(void *data, LIST *list)
   new_charset->data=data;
   return list_add(list,new_charset);
 }
-
 
 LIST *list_reverse(LIST *root)
 {
@@ -99,7 +93,6 @@ uint list_length(LIST *list)
   for (count=0 ; list ; list=list->next, count++) ;
   return count;
 }
-
 
 int list_walk(LIST *list, list_walk_action action, uchar* argument)
 {

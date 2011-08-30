@@ -1,4 +1,4 @@
-/* Copyright (C) 2000 MySQL AB, 2008-2009 Sun Microsystems, Inc
+/* Copyright (c) 2000, 2011, Oracle and/or its affiliates. All rights reserved.
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -11,13 +11,12 @@
 
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
-   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA */
+   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA */
 
 #include "mysys_priv.h"
 #include "mysys_err.h"
 #include <my_dir.h>
 #include <errno.h>
-
 
 /*
   Open a file
@@ -25,7 +24,7 @@
   SYNOPSIS
     my_open()
       FileName	Fully qualified file name
-      Flags	Read | write 
+      Flags	Read | write
       MyFlags	Special flags
 
   RETURN VALUE
@@ -52,7 +51,6 @@ File my_open(const char *FileName, int Flags, myf MyFlags)
   DBUG_RETURN(my_register_filename(fd, FileName, FILE_BY_OPEN,
 				   EE_FILENOTFOUND, MyFlags));
 } /* my_open */
-
 
 /*
   Close a file
@@ -99,10 +97,9 @@ int my_close(File fd, myf MyFlags)
   DBUG_RETURN(err);
 } /* my_close */
 
-
 /*
   Register file in my_file_info[]
-   
+
   SYNOPSIS
     my_register_filename()
     fd			   File number opened, -1 if error on open
@@ -125,7 +122,7 @@ File my_register_filename(File fd, const char *FileName, enum file_type
   {
     if ((uint) fd >= my_file_limit)
     {
-#if !defined(HAVE_PREAD) 
+#if !defined(HAVE_PREAD)
       my_errno= EMFILE;
 #else
       thread_safe_increment(my_file_opened,&THR_LOCK_open);
@@ -167,9 +164,6 @@ File my_register_filename(File fd, const char *FileName, enum file_type
   }
   DBUG_RETURN(-1);
 }
-
-
-
 
 #ifdef EXTRA_DEBUG
 

@@ -1,4 +1,4 @@
-/* Copyright (C) 2000 MySQL AB
+/* Copyright (c) 2002, 2010, Oracle and/or its affiliates. All rights reserved.
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -11,7 +11,7 @@
 
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
-   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA */
+   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA */
 
 #include <my_global.h>
 #include "m_ctype.h"
@@ -19,34 +19,12 @@
 
 #ifdef USE_MB
 
-
 size_t my_caseup_str_mb(CHARSET_INFO * cs, char *str)
 {
   register uint32 l;
   register uchar *map= cs->to_upper;
   char *str_orig= str;
-  
-  while (*str)
-  {
-    /* Pointing after the '\0' is safe here. */
-    if ((l= my_ismbchar(cs, str, str + cs->mbmaxlen)))
-      str+= l;
-    else
-    { 
-      *str= (char) map[(uchar)*str];
-      str++;
-    }
-  }
-  return (size_t) (str - str_orig);
-}
 
-
-size_t my_casedn_str_mb(CHARSET_INFO * cs, char *str)
-{
-  register uint32 l;
-  register uchar *map= cs->to_lower;
-  char *str_orig= str;
-  
   while (*str)
   {
     /* Pointing after the '\0' is safe here. */
@@ -61,6 +39,25 @@ size_t my_casedn_str_mb(CHARSET_INFO * cs, char *str)
   return (size_t) (str - str_orig);
 }
 
+size_t my_casedn_str_mb(CHARSET_INFO * cs, char *str)
+{
+  register uint32 l;
+  register uchar *map= cs->to_lower;
+  char *str_orig= str;
+
+  while (*str)
+  {
+    /* Pointing after the '\0' is safe here. */
+    if ((l= my_ismbchar(cs, str, str + cs->mbmaxlen)))
+      str+= l;
+    else
+    {
+      *str= (char) map[(uchar)*str];
+      str++;
+    }
+  }
+  return (size_t) (str - str_orig);
+}
 
 static inline MY_UNICASE_INFO*
 get_case_info_for_ch(CHARSET_INFO *cs, uint page, uint offs)
@@ -68,7 +65,6 @@ get_case_info_for_ch(CHARSET_INFO *cs, uint page, uint offs)
   MY_UNICASE_INFO *p;
   return cs->caseinfo ? ((p= cs->caseinfo[page]) ? &p[offs] : NULL) :  NULL;
 }
-
 
 /*
   For character sets which don't change octet length in case conversion.
@@ -84,7 +80,7 @@ size_t my_caseup_mb(CHARSET_INFO * cs, char *src, size_t srclen,
   DBUG_ASSERT(cs->caseup_multiply == 1);
   DBUG_ASSERT(src == dst && srclen == dstlen);
   DBUG_ASSERT(cs->mbmaxlen == 2);
-  
+
   while (src < srcend)
   {
     if ((l=my_ismbchar(cs, src, srcend)))
@@ -98,7 +94,7 @@ size_t my_caseup_mb(CHARSET_INFO * cs, char *src, size_t srclen,
       else
         src+= l;
     }
-    else 
+    else
     {
       *src=(char) map[(uchar) *src];
       src++;
@@ -106,7 +102,6 @@ size_t my_caseup_mb(CHARSET_INFO * cs, char *src, size_t srclen,
   }
   return srclen;
 }
-
 
 size_t my_casedn_mb(CHARSET_INFO * cs, char *src, size_t srclen,
                     char *dst __attribute__((unused)),
@@ -117,9 +112,9 @@ size_t my_casedn_mb(CHARSET_INFO * cs, char *src, size_t srclen,
   register uchar *map=cs->to_lower;
 
   DBUG_ASSERT(cs->casedn_multiply == 1);
-  DBUG_ASSERT(src == dst && srclen == dstlen);  
+  DBUG_ASSERT(src == dst && srclen == dstlen);
   DBUG_ASSERT(cs->mbmaxlen == 2);
-  
+
   while (src < srcend)
   {
     if ((l= my_ismbchar(cs, src, srcend)))
@@ -141,7 +136,6 @@ size_t my_casedn_mb(CHARSET_INFO * cs, char *src, size_t srclen,
   }
   return srclen;
 }
-
 
 /*
   Case folding functions for character set
@@ -191,16 +185,14 @@ my_casefold_mb_varlen(CHARSET_INFO *cs,
   return (size_t) (dst - dst0);
 }
 
-
 size_t
 my_casedn_mb_varlen(CHARSET_INFO * cs, char *src, size_t srclen,
                     char *dst, size_t dstlen)
 {
-  DBUG_ASSERT(dstlen >= srclen * cs->casedn_multiply); 
+  DBUG_ASSERT(dstlen >= srclen * cs->casedn_multiply);
   DBUG_ASSERT(src != dst || cs->casedn_multiply == 1);
   return my_casefold_mb_varlen(cs, src, srclen, dst, dstlen, cs->to_lower, 0);
 }
-
 
 size_t
 my_caseup_mb_varlen(CHARSET_INFO * cs, char *src, size_t srclen,
@@ -211,7 +203,6 @@ my_caseup_mb_varlen(CHARSET_INFO * cs, char *src, size_t srclen,
   return my_casefold_mb_varlen(cs, src, srclen, dst, dstlen, cs->to_upper, 1);
 }
 
-
 /*
   my_strcasecmp_mb() returns 0 if strings are equal, non-zero otherwise.
  */
@@ -220,14 +211,14 @@ int my_strcasecmp_mb(CHARSET_INFO * cs,const char *s, const char *t)
 {
   register uint32 l;
   register uchar *map=cs->to_upper;
-  
+
   while (*s && *t)
   {
     /* Pointing after the '\0' is safe here. */
     if ((l=my_ismbchar(cs, s, s + cs->mbmaxlen)))
     {
       while (l--)
-        if (*s++ != *t++) 
+        if (*s++ != *t++)
           return 1;
     }
     else if (my_mbcharlen(cs, *t) > 1)
@@ -238,7 +229,6 @@ int my_strcasecmp_mb(CHARSET_INFO * cs,const char *s, const char *t)
   /* At least one of '*s' and '*t' is zero here. */
   return (*t != *s);
 }
-
 
 /*
 ** Compare string against string with wildcard
@@ -295,7 +285,7 @@ int my_wildcmp_mb(CHARSET_INFO *cs,
       uchar cmp;
       const char* mb = wildstr;
       int mb_len=0;
-      
+
       wildstr++;
       /* Remove any '%' and '_' from the wild search string */
       for (; wildstr != wildend ; wildstr++)
@@ -315,14 +305,14 @@ int my_wildcmp_mb(CHARSET_INFO *cs,
 	return(0);				/* Ok if w_many is last */
       if (str == str_end)
 	return -1;
-      
+
       if ((cmp= *wildstr) == escape && wildstr+1 != wildend)
 	cmp= *++wildstr;
-	
+
       mb=wildstr;
       mb_len= my_ismbchar(cs, wildstr, wildend);
       INC_PTR(cs,wildstr,wildend);		/* This is compared trough cmp */
-      cmp=likeconv(cs,cmp);   
+      cmp=likeconv(cs,cmp);
       do
       {
         for (;;)
@@ -358,12 +348,11 @@ int my_wildcmp_mb(CHARSET_INFO *cs,
   return (str != str_end ? 1 : 0);
 }
 
-
 size_t my_numchars_mb(CHARSET_INFO *cs __attribute__((unused)),
 		      const char *pos, const char *end)
 {
   register size_t count= 0;
-  while (pos < end) 
+  while (pos < end)
   {
     uint mb_len;
     pos+= (mb_len= my_ismbchar(cs,pos,end)) ? mb_len : 1;
@@ -372,12 +361,11 @@ size_t my_numchars_mb(CHARSET_INFO *cs __attribute__((unused)),
   return count;
 }
 
-
 size_t my_charpos_mb(CHARSET_INFO *cs __attribute__((unused)),
 		     const char *pos, const char *end, size_t length)
 {
   const char *start= pos;
-  
+
   while (length && pos < end)
   {
     uint mb_len;
@@ -386,7 +374,6 @@ size_t my_charpos_mb(CHARSET_INFO *cs __attribute__((unused)),
   }
   return (size_t) (length ? end+2-start : pos-start);
 }
-
 
 size_t my_well_formed_len_mb(CHARSET_INFO *cs, const char *b, const char *e,
                              size_t pos, int *error)
@@ -409,15 +396,14 @@ size_t my_well_formed_len_mb(CHARSET_INFO *cs, const char *b, const char *e,
   return (size_t) (b - b_start);
 }
 
-
 uint my_instr_mb(CHARSET_INFO *cs,
-                 const char *b, size_t b_length, 
+                 const char *b, size_t b_length,
                  const char *s, size_t s_length,
                  my_match_t *match, uint nmatch)
 {
   register const char *end, *b0;
   int res= 0;
-  
+
   if (s_length <= b_length)
   {
     if (!s_length)
@@ -430,15 +416,15 @@ uint my_instr_mb(CHARSET_INFO *cs,
       }
       return 1;		/* Empty string is always found */
     }
-    
+
     b0= b;
     end= b+b_length-s_length+1;
-    
+
     while (b < end)
     {
       int mb_len;
-      
-      if (!cs->coll->strnncoll(cs, (uchar*) b,   s_length, 
+
+      if (!cs->coll->strnncoll(cs, (uchar*) b,   s_length,
       				   (uchar*) s, s_length, 0))
       {
         if (nmatch)
@@ -464,7 +450,6 @@ uint my_instr_mb(CHARSET_INFO *cs,
   return 0;
 }
 
-
 /* BINARY collations handlers for MB charsets */
 
 int
@@ -478,10 +463,9 @@ my_strnncoll_mb_bin(CHARSET_INFO * cs __attribute__((unused)),
   return cmp ? cmp : (int) ((t_is_prefix ? len : slen) - tlen);
 }
 
-
 /*
-  Compare two strings. 
-  
+  Compare two strings.
+
   SYNOPSIS
     my_strnncollsp_mb_bin()
     cs			Chararacter set
@@ -506,7 +490,7 @@ my_strnncoll_mb_bin(CHARSET_INFO * cs __attribute__((unused)),
 
 int
 my_strnncollsp_mb_bin(CHARSET_INFO * cs __attribute__((unused)),
-                      const uchar *a, size_t a_length, 
+                      const uchar *a, size_t a_length,
                       const uchar *b, size_t b_length,
                       my_bool diff_if_only_endspace_difference)
 {
@@ -517,7 +501,7 @@ my_strnncollsp_mb_bin(CHARSET_INFO * cs __attribute__((unused)),
 #ifndef VARCHAR_WITH_DIFF_ENDSPACE_ARE_DIFFERENT_FOR_UNIQUE
   diff_if_only_endspace_difference= 0;
 #endif
-  
+
   end= a + (length= min(a_length, b_length));
   while (a < end)
   {
@@ -551,7 +535,6 @@ my_strnncollsp_mb_bin(CHARSET_INFO * cs __attribute__((unused)),
   return res;
 }
 
-
 static size_t my_strnxfrm_mb_bin(CHARSET_INFO *cs __attribute__((unused)),
                                  uchar *dest, size_t dstlen,
                                  const uchar *src, size_t srclen)
@@ -563,7 +546,6 @@ static size_t my_strnxfrm_mb_bin(CHARSET_INFO *cs __attribute__((unused)),
   return dstlen;
 }
 
-
 int
 my_strcasecmp_mb_bin(CHARSET_INFO * cs __attribute__((unused)),
                      const char *s, const char *t)
@@ -571,29 +553,27 @@ my_strcasecmp_mb_bin(CHARSET_INFO * cs __attribute__((unused)),
   return strcmp(s,t);
 }
 
-
 void
 my_hash_sort_mb_bin(CHARSET_INFO *cs __attribute__((unused)),
                     const uchar *key, size_t len,ulong *nr1, ulong *nr2)
 {
   const uchar *pos = key;
-  
+
   /*
      Remove trailing spaces. We have to do this to be able to compare
     'A ' and 'A' as identical
   */
   key= skip_trailing_space(key, len);
-  
+
   for (; pos < (uchar*) key ; pos++)
   {
-    nr1[0]^=(ulong) ((((uint) nr1[0] & 63)+nr2[0]) * 
+    nr1[0]^=(ulong) ((((uint) nr1[0] & 63)+nr2[0]) *
 	     ((uint)*pos)) + (nr1[0] << 8);
     nr2[0]+=3;
   }
 }
 
-
-/* 
+/*
   Fill the given buffer with 'maximum character' for given charset
   SYNOPSIS
       pad_max_char()
@@ -609,13 +589,13 @@ my_hash_sort_mb_bin(CHARSET_INFO *cs __attribute__((unused)),
         and optionally pad with a single space character.
       - for Unicode character set (utf-8):
         create a buffer with multibyte representation of the max_sort_char
-        character, and copy it into max_str in a loop. 
+        character, and copy it into max_str in a loop.
 */
 static void pad_max_char(CHARSET_INFO *cs, char *str, char *end)
 {
   char buf[10];
   char buflen;
-  
+
   if (!(cs->state & MY_CS_UNICODE))
   {
     if (cs->max_sort_char <= 255)
@@ -632,7 +612,7 @@ static void pad_max_char(CHARSET_INFO *cs, char *str, char *end)
     buflen= cs->cset->wc_mb(cs, cs->max_sort_char, (uchar*) buf,
                             (uchar*) buf + sizeof(buf));
   }
-  
+
   DBUG_ASSERT(buflen > 0);
   do
   {
@@ -644,10 +624,10 @@ static void pad_max_char(CHARSET_INFO *cs, char *str, char *end)
     }
     else
     {
-      /* 
+      /*
         There is no space for whole multibyte
         character, then add trailing spaces.
-      */  
+      */
       *str++= ' ';
     }
   } while (str < end);
@@ -683,7 +663,7 @@ my_bool my_like_range_mb(CHARSET_INFO *cs,
   char *min_end= min_str + res_length;
   char *max_end= max_str + res_length;
   size_t maxcharlen= res_length / cs->mbmaxlen;
-  const char *contraction_flags= cs->contractions ? 
+  const char *contraction_flags= cs->contractions ?
               ((const char*) cs->contractions) + 0x40*0x40 : NULL;
 
   for (; ptr != end && min_str != min_end && maxcharlen ; maxcharlen--)
@@ -692,7 +672,7 @@ my_bool my_like_range_mb(CHARSET_INFO *cs,
     if (*ptr == escape && ptr+1 != end)
       ptr++;                                    /* Skip escape */
     else if (*ptr == w_one || *ptr == w_many)   /* '_' and '%' in SQL */
-    {      
+    {
 fill_max_and_min:
       /*
         Calculate length of keys:
@@ -707,11 +687,11 @@ fill_max_and_min:
       {
 	*min_str++= (char) cs->min_sort_char;
       } while (min_str != min_end);
-      
-      /* 
+
+      /*
         Write max key: create a buffer with multibyte
         representation of the max_sort_char character,
-        and copy it into max_str in a loop. 
+        and copy it into max_str in a loop.
       */
       *max_length= res_length;
       pad_max_char(cs, max_str, max_end);
@@ -756,21 +736,21 @@ fill_max_and_min:
           contraction_flags[(uchar) *ptr])
       {
         /* Ptr[0] is a contraction head. */
-        
+
         if (ptr[1] == w_one || ptr[1] == w_many)
         {
           /* Contraction head followed by a wildcard, quit. */
           goto fill_max_and_min;
         }
-        
+
         /*
           Some letters can be both contraction heads and contraction tails.
           For example, in Danish 'aa' is a separate single letter which
           is sorted after 'z'. So 'a' can be both head and tail.
-          
+
           If ptr[0]+ptr[1] is a contraction,
           then put both letters together.
-          
+
           If ptr[1] can be a contraction part, but ptr[0]+ptr[1]
           is not a contraction, then we put only ptr[0],
           and continue with ptr[1] on the next loop.
@@ -784,14 +764,14 @@ fill_max_and_min:
             /* Both contraction parts don't fit, quit */
             goto fill_max_and_min;
           }
-          
+
           /* Put contraction head */
           *min_str++= *max_str++= *ptr++;
           maxcharlen--;
         }
       }
       /* Put contraction tail, or a single character */
-      *min_str++= *max_str++= *ptr++;    
+      *min_str++= *max_str++= *ptr++;
     }
   }
 
@@ -800,7 +780,6 @@ fill_max_and_min:
     *min_str++= *max_str++= ' ';           /* Because if key compression */
   return 0;
 }
-
 
 /**
    Calculate min_str and max_str that ranges a LIKE string.
@@ -987,7 +966,6 @@ pad_min_max:
   return FALSE;
 }
 
-
 int
 my_wildcmp_mb_bin(CHARSET_INFO *cs,
                   const char *str,const char *str_end,
@@ -1033,7 +1011,7 @@ my_wildcmp_mb_bin(CHARSET_INFO *cs,
       uchar cmp;
       const char* mb = wildstr;
       int mb_len=0;
-      
+
       wildstr++;
       /* Remove any '%' and '_' from the wild search string */
       for (; wildstr != wildend ; wildstr++)
@@ -1053,10 +1031,10 @@ my_wildcmp_mb_bin(CHARSET_INFO *cs,
 	return(0);				/* Ok if w_many is last */
       if (str == str_end)
 	return -1;
-      
+
       if ((cmp= *wildstr) == escape && wildstr+1 != wildend)
 	cmp= *++wildstr;
-	
+
       mb=wildstr;
       mb_len= my_ismbchar(cs, wildstr, wildend);
       INC_PTR(cs,wildstr,wildend);		/* This is compared trough cmp */
@@ -1093,9 +1071,8 @@ my_wildcmp_mb_bin(CHARSET_INFO *cs,
   return (str != str_end ? 1 : 0);
 }
 
-
 /*
-  Data was produced from EastAsianWidth.txt 
+  Data was produced from EastAsianWidth.txt
   using utt11-dump utility.
 */
 static char pg11[256]=
@@ -1302,12 +1279,11 @@ static struct {int page; char *p;} utr11_data[256]=
 {0,NULL},{1,NULL},{0,pgFA},{0,NULL},{0,NULL},{0,NULL},{0,pgFE},{0,pgFF}
 };
 
-
 size_t my_numcells_mb(CHARSET_INFO *cs, const char *b, const char *e)
 {
   my_wc_t wc;
   size_t clen= 0;
-  
+
   while (b < e)
   {
     int mb_len;
@@ -1334,7 +1310,6 @@ size_t my_numcells_mb(CHARSET_INFO *cs, const char *b, const char *e)
   return clen;
 }
 
-
 int my_mb_ctype_mb(CHARSET_INFO *cs, int *ctype,
                    const uchar *s, const uchar *e)
 {
@@ -1345,10 +1320,9 @@ int my_mb_ctype_mb(CHARSET_INFO *cs, int *ctype,
   else
     *ctype= my_uni_ctype[wc>>8].ctype ?
             my_uni_ctype[wc>>8].ctype[wc&0xFF] :
-            my_uni_ctype[wc>>8].pctype;    
+            my_uni_ctype[wc>>8].pctype;
   return res;
 }
-
 
 MY_COLLATION_HANDLER my_collation_mb_bin_handler =
 {
@@ -1364,6 +1338,5 @@ MY_COLLATION_HANDLER my_collation_mb_bin_handler =
     my_hash_sort_mb_bin,
     my_propagate_simple
 };
-
 
 #endif

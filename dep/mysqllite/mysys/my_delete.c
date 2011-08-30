@@ -1,4 +1,4 @@
-/* Copyright (C) 2000 MySQL AB
+/* Copyright (c) 2000, 2010, Oracle and/or its affiliates. All rights reserved.
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -11,7 +11,7 @@
 
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
-   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA */
+   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA */
 
 #include "mysys_priv.h"
 #include "mysys_err.h"
@@ -45,7 +45,7 @@ int my_delete(const char *name, myf MyFlags)
   that the file must be opened everywhere with FILE_SHARE_DELETE mode).
   Deleting not-closed files can not be supported on Win 98|ME (and because
   of that is considered harmful).
-  
+
   The function deletes the file with its preliminary renaming. This is
   because when not-closed share-delete file is deleted it still lives on
   a disk until it will not be closed everwhere. This may conflict with an
@@ -65,7 +65,6 @@ int my_delete(const char *name, myf MyFlags)
     0	ok
   @retval
     1   error
-
 
 */
 int nt_share_delete(const char *name, myf MyFlags)
@@ -96,7 +95,7 @@ int nt_share_delete(const char *name, myf MyFlags)
 
   if (errno == ERROR_FILE_NOT_FOUND)
   {
-    my_errno= ENOENT;    // marking, that `name' doesn't exist 
+    my_errno= ENOENT;    // marking, that `name' doesn't exist
   }
   else if (errno == 0)
   {

@@ -1,4 +1,4 @@
-/* Copyright (C) 2000 MySQL AB
+/* Copyright (c) 2000, 2010, Oracle and/or its affiliates. All rights reserved.
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -11,7 +11,7 @@
 
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
-   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA */
+   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA */
 
 #include "mysys_priv.h"
 #include <my_dir.h>
@@ -50,7 +50,7 @@ int my_redel(const char *org_name, const char *tmp_name, myf MyFlags)
     goto end;
   if (MyFlags & MY_REDEL_MAKE_BACKUP)
   {
-    char name_buff[FN_REFLEN+20];    
+    char name_buff[FN_REFLEN+20];
     char ext[20];
     ext[0]='-';
     get_date(ext+1,2+4,(time_t) 0);
@@ -68,7 +68,6 @@ int my_redel(const char *org_name, const char *tmp_name, myf MyFlags)
 end:
   DBUG_RETURN(error);
 } /* my_redel */
-
 
 	/* Copy stat from one file to another */
 	/* Return -1 if can't get stat, 1 if wrong type of file */

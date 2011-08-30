@@ -1,4 +1,4 @@
-/* Copyright (C) 2000 MySQL AB
+/* Copyright (c) 2000, 2010, Oracle and/or its affiliates. All rights reserved.
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -11,9 +11,9 @@
 
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
-   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA */
+   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA */
 
-/* 
+/*
  * This file is for Korean EUC charset, and created by powerm90@tinc.co.kr.
  * and updated by mrpark@tinc.co.kr.
  */
@@ -30,7 +30,6 @@
 #include "m_ctype.h"
 
 #ifdef HAVE_CHARSET_euckr
-
 
 static uchar ctype_euc_kr[257] =
 {
@@ -182,11 +181,11 @@ static uchar sort_order_euc_kr[]=
 /*
  Unicode mapping is done according to:
  ftp://ftp.unicode.org/Public/MAPPINGS/OBSOLETE/EASTASIA/KSC/KSC5601.TXT
- 
+
  Valid multi-byte characters:
- 
+
    [81..FE][41..5A,61..7A,81..FE]
- 
+
  Note, 0x5C is not a valid MB tail,
  so escape_with_backslash_is_dangerous is not set.
 */
@@ -201,7 +200,6 @@ static uchar sort_order_euc_kr[]=
                               iseuc_kr_tail2(c) || \
                               iseuc_kr_tail3(c))
 
-
 static uint ismbchar_euc_kr(CHARSET_INFO *cs __attribute__((unused)),
                             const char* p, const char *e)
 {
@@ -214,7 +212,6 @@ static uint mbcharlen_euc_kr(CHARSET_INFO *cs __attribute__((unused)),uint c)
 {
   return (iseuc_kr_head(c) ? 2 : 1);
 }
-
 
 static MY_UNICASE_INFO cA3[256]=
 {
@@ -420,7 +417,6 @@ static MY_UNICASE_INFO cA3[256]=
   {0xA3FF,0xA3FF,0x003F}
 };
 
-
 static MY_UNICASE_INFO cA5[256]=
 {
   {0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0}, /* xx00 */
@@ -622,9 +618,8 @@ static MY_UNICASE_INFO cA5[256]=
   {0xA5FC,0xA5FC,0x003F},
   {0xA5FD,0xA5FD,0x003F},
   {0xA5FE,0xA5FE,0x003F},
-  {0xA5FF,0xA5FF,0x003F} 
+  {0xA5FF,0xA5FF,0x003F}
 };
-
 
 static MY_UNICASE_INFO cA7[256]=
 {
@@ -830,7 +825,6 @@ static MY_UNICASE_INFO cA7[256]=
   {0xA7FF,0xA7FF,0x003F}
 };
 
-
 static MY_UNICASE_INFO cA8[256]=
 {
   {0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0}, /* xx00 */
@@ -1035,7 +1029,6 @@ static MY_UNICASE_INFO cA8[256]=
   {0xA8FF,0xA8FF,0x003F}
 };
 
-
 static MY_UNICASE_INFO cA9[256]=
 {
   {0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0}, /* xx00 */
@@ -1238,8 +1231,7 @@ static MY_UNICASE_INFO cA9[256]=
   {0xA9FD,0xA9FD,0x2083},
   {0xA9FE,0xA9FE,0x2084},
   {0xA9FF,0xA9FF,0x003F}
-};  
-
+};
 
 static MY_UNICASE_INFO cAC[256]=
 {
@@ -1445,7 +1437,6 @@ static MY_UNICASE_INFO cAC[256]=
   {0xACFF,0xACFF,0x003F}
 };
 
-
 static MY_UNICASE_INFO *my_caseinfo_euckr[256]=
 {
   NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, /* 0 */
@@ -1481,7 +1472,6 @@ static MY_UNICASE_INFO *my_caseinfo_euckr[256]=
   NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, /* F */
   NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
 };
-
 
 /* page 0 0x8141-0xC8FE */
 static uint16 tab_ksc5601_uni0[]={
@@ -9867,60 +9857,56 @@ static int func_uni_ksc5601_onechar(int code){
   return(0);
 }
 
-
 static int
 my_wc_mb_euc_kr(CHARSET_INFO *cs __attribute__((unused)),
 		 my_wc_t wc, uchar *s, uchar *e)
 {
   int code;
-  
+
   if (s >= e)
     return MY_CS_TOOSMALL;
-  
+
   if ((uint) wc < 0x80)
   {
     s[0]= (uchar) wc;
     return 1;
   }
-  
+
   if (!(code=func_uni_ksc5601_onechar(wc)))
     return MY_CS_ILUNI;
-  
+
   if (s+2>e)
     return MY_CS_TOOSMALL2;
-  
+
   s[0]=code>>8;
   s[1]=code&0xFF;
-  
+
   return 2;
 }
 
-
-static int 
+static int
 my_mb_wc_euc_kr(CHARSET_INFO *cs __attribute__((unused)),
 		 my_wc_t *pwc, const uchar *s, const uchar *e)
 {
-  
   int hi;
-  
+
   if (s >= e)
     return MY_CS_TOOSMALL;
-  
+
   if ((hi= s[0]) < 0x80)
   {
     pwc[0]=hi;
     return 1;
   }
-  
+
   if (s+2>e)
     return MY_CS_TOOSMALL2;
-  
+
   if (!(pwc[0]=func_ksc5601_uni_onechar((hi<<8)+s[1])))
     return -2;
-  
+
   return 2;
 }
-
 
 /*
   Returns well formed length of a EUC-KR string.
@@ -9955,7 +9941,6 @@ my_well_formed_len_euckr(CHARSET_INFO *cs __attribute__((unused)),
   }
   return (size_t) (b - b0);
 }
-
 
 static MY_COLLATION_HANDLER my_collation_ci_handler =
 {
@@ -10003,7 +9988,6 @@ static MY_CHARSET_HANDLER my_charset_handler=
   my_scan_8bit
 };
 
-
 CHARSET_INFO my_charset_euckr_korean_ci=
 {
     19,0,0,		/* number */
@@ -10035,7 +10019,6 @@ CHARSET_INFO my_charset_euckr_korean_ci=
     &my_charset_handler,
     &my_collation_ci_handler
 };
-
 
 CHARSET_INFO my_charset_euckr_bin=
 {

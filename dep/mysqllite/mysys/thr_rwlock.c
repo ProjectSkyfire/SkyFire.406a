@@ -1,4 +1,4 @@
-/* Copyright (C) 2000 MySQL AB
+/* Copyright (c) 2000, 2011, Oracle and/or its affiliates. All rights reserved.
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -11,7 +11,7 @@
 
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
-   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA */
+   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA */
 
 /* Synchronization - readers / writer thread locks */
 
@@ -60,20 +60,18 @@ static void check_srwlock_availability(void)
     "TryAcquireSRWLockShared");
 
   /*
-    We currently require TryAcquireSRWLockExclusive. This API is missing on 
+    We currently require TryAcquireSRWLockExclusive. This API is missing on
     Vista, this means SRWLock are only used starting with Win7.
 
-    If "trylock" usage for rwlocks is eliminated from server codebase (it is used 
-    in a single place currently, in query cache), then SRWLock can be enabled on 
-    Vista too. In this case  condition below needs to be changed to  e.g check 
+    If "trylock" usage for rwlocks is eliminated from server codebase (it is used
+    in a single place currently, in query cache), then SRWLock can be enabled on
+    Vista too. In this case  condition below needs to be changed to  e.g check
     for my_InitializeSRWLock.
   */
 
   if (my_TryAcquireSRWLockExclusive)
     have_srwlock= TRUE;
-
 }
-
 
 static int srw_init(my_rw_lock_t *rwp)
 {
@@ -82,22 +80,18 @@ static int srw_init(my_rw_lock_t *rwp)
   return 0;
 }
 
-
 static int srw_rdlock(my_rw_lock_t *rwp)
 {
   my_AcquireSRWLockShared(&rwp->srwlock);
   return 0;
 }
 
-
 static int srw_tryrdlock(my_rw_lock_t *rwp)
 {
-
   if (!my_TryAcquireSRWLockShared(&rwp->srwlock))
     return EBUSY;
   return 0;
 }
-
 
 static int srw_wrlock(my_rw_lock_t *rwp)
 {
@@ -106,7 +100,6 @@ static int srw_wrlock(my_rw_lock_t *rwp)
   return 0;
 }
 
-
 static int srw_trywrlock(my_rw_lock_t *rwp)
 {
   if (!my_TryAcquireSRWLockExclusive(&rwp->srwlock))
@@ -114,7 +107,6 @@ static int srw_trywrlock(my_rw_lock_t *rwp)
   rwp->have_exclusive_srwlock= TRUE;
   return 0;
 }
-
 
 static int srw_unlock(my_rw_lock_t *rwp)
 {
@@ -180,8 +172,8 @@ int my_rw_init(my_rw_lock_t *rwp)
     Once initialization is used here rather than in my_init(), in order to
     - avoid  my_init() pitfalls- (undefined order in which initialization should
     run)
-    - be potentially useful C++ (static constructors) 
-    - just to simplify  the API. 
+    - be potentially useful C++ (static constructors)
+    - just to simplify  the API.
     Also, the overhead is of my_pthread_once is very small.
   */
   static my_pthread_once_t once_control= MY_PTHREAD_ONCE_INIT;
@@ -206,7 +198,6 @@ int my_rw_init(my_rw_lock_t *rwp)
   return(0);
 }
 
-
 int my_rw_destroy(my_rw_lock_t *rwp)
 {
 #ifdef _WIN32
@@ -219,7 +210,6 @@ int my_rw_destroy(my_rw_lock_t *rwp)
   pthread_cond_destroy( &rwp->writers );
   return(0);
 }
-
 
 int my_rw_rdlock(my_rw_lock_t *rwp)
 {
@@ -260,7 +250,6 @@ int my_rw_tryrdlock(my_rw_lock_t *rwp)
   return(res);
 }
 
-
 int my_rw_wrlock(my_rw_lock_t *rwp)
 {
 #ifdef _WIN32
@@ -284,7 +273,6 @@ int my_rw_wrlock(my_rw_lock_t *rwp)
   return(0);
 }
 
-
 int my_rw_trywrlock(my_rw_lock_t *rwp)
 {
   int res;
@@ -296,7 +284,7 @@ int my_rw_trywrlock(my_rw_lock_t *rwp)
 
   pthread_mutex_lock(&rwp->lock);
   if (rwp->state)
-    res= EBUSY;					/* Can't get lock */    
+    res= EBUSY;					/* Can't get lock */
   else
   {
     res=0;
@@ -308,7 +296,6 @@ int my_rw_trywrlock(my_rw_lock_t *rwp)
   pthread_mutex_unlock(&rwp->lock);
   return(res);
 }
-
 
 int my_rw_unlock(my_rw_lock_t *rwp)
 {
@@ -349,7 +336,6 @@ int my_rw_unlock(my_rw_lock_t *rwp)
 
 #endif /* defined(NEED_MY_RW_LOCK) */
 
-
 int rw_pr_init(rw_pr_lock_t *rwlock)
 {
   pthread_mutex_init(&rwlock->lock, NULL);
@@ -363,14 +349,12 @@ int rw_pr_init(rw_pr_lock_t *rwlock)
   return 0;
 }
 
-
 int rw_pr_destroy(rw_pr_lock_t *rwlock)
 {
   pthread_cond_destroy(&rwlock->no_active_readers);
   pthread_mutex_destroy(&rwlock->lock);
   return 0;
 }
-
 
 int rw_pr_rdlock(rw_pr_lock_t *rwlock)
 {
@@ -385,7 +369,6 @@ int rw_pr_rdlock(rw_pr_lock_t *rwlock)
   pthread_mutex_unlock(&rwlock->lock);
   return 0;
 }
-
 
 int rw_pr_wrlock(rw_pr_lock_t *rwlock)
 {
@@ -421,7 +404,6 @@ int rw_pr_wrlock(rw_pr_lock_t *rwlock)
 #endif
   return 0;
 }
-
 
 int rw_pr_unlock(rw_pr_lock_t *rwlock)
 {
@@ -468,5 +450,3 @@ int rw_pr_unlock(rw_pr_lock_t *rwlock)
   }
   return 0;
 }
-
-

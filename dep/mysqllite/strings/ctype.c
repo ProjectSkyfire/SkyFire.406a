@@ -1,4 +1,5 @@
-/* Copyright (C) 2000 MySQL AB
+/* Copyright (c) 2000-2007 MySQL AB, 2008, 2009 Sun Microsystems, Inc.
+   Use is subject to license terms.
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -11,7 +12,7 @@
 
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
-   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA */
+   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA */
 
 #include <my_global.h>
 #include <m_ctype.h>
@@ -20,23 +21,22 @@
 #include <m_string.h>
 #endif
 
-
 /*
 
   This files implements routines which parse XML based
   character set and collation description files.
-  
+
   Unicode collations are encoded according to
-  
+
     Unicode Technical Standard #35
     Locale Data Markup Language (LDML)
     http://www.unicode.org/reports/tr35/
-  
+
   and converted into ICU string according to
-  
+
     Collation Customization
     http://oss.software.ibm.com/icu/userguide/Collate_Customization.html
-  
+
 */
 
 static char *mstr(char *str,const char *src,size_t l1,size_t l2)
@@ -75,7 +75,6 @@ struct my_cs_file_section_st
 #define	_CS_DIFF2	20
 #define	_CS_DIFF3	21
 #define	_CS_IDENTICAL	22
-
 
 static struct my_cs_file_section_st sec[] =
 {
@@ -143,15 +142,13 @@ typedef struct my_cs_file_info
   int (*add_collation)(CHARSET_INFO *cs);
 } MY_CHARSET_LOADER;
 
-
-
 static int fill_uchar(uchar *a,uint size,const char *str, size_t len)
 {
   uint i= 0;
   const char *s, *b, *e=str+len;
-  
+
   for (s=str ; s < e ; i++)
-  { 
+  {
     for ( ; (s < e) && strchr(" \t\r\n",s[0]); s++) ;
     b=s;
     for ( ; (s < e) && !strchr(" \t\r\n",s[0]); s++) ;
@@ -165,10 +162,10 @@ static int fill_uchar(uchar *a,uint size,const char *str, size_t len)
 static int fill_uint16(uint16 *a,uint size,const char *str, size_t len)
 {
   uint i= 0;
-  
+
   const char *s, *b, *e=str+len;
   for (s=str ; s < e ; i++)
-  { 
+  {
     for ( ; (s < e) && strchr(" \t\r\n",s[0]); s++) ;
     b=s;
     for ( ; (s < e) && !strchr(" \t\r\n",s[0]); s++) ;
@@ -179,21 +176,19 @@ static int fill_uint16(uint16 *a,uint size,const char *str, size_t len)
   return 0;
 }
 
-
 static int cs_enter(MY_XML_PARSER *st,const char *attr, size_t len)
 {
   struct my_cs_file_info *i= (struct my_cs_file_info *)st->user_data;
   struct my_cs_file_section_st *s= cs_file_sec(attr,len);
-  
+
   if ( s && (s->state == _CS_CHARSET))
     bzero(&i->cs,sizeof(i->cs));
-  
+
   if (s && (s->state == _CS_COLLATION))
     i->tailoring_length= 0;
 
   return MY_XML_OK;
 }
-
 
 static int cs_leave(MY_XML_PARSER *st,const char *attr, size_t len)
 {
@@ -201,7 +196,7 @@ static int cs_leave(MY_XML_PARSER *st,const char *attr, size_t len)
   struct my_cs_file_section_st *s= cs_file_sec(attr,len);
   int    state= s ? s->state : 0;
   int    rc;
-  
+
   switch(state){
   case _CS_COLLATION:
     rc= i->add_collation ? i->add_collation(&i->cs) : MY_XML_OK;
@@ -212,14 +207,13 @@ static int cs_leave(MY_XML_PARSER *st,const char *attr, size_t len)
   return rc;
 }
 
-
 static int cs_value(MY_XML_PARSER *st,const char *attr, size_t len)
 {
   struct my_cs_file_info *i= (struct my_cs_file_info *)st->user_data;
   struct my_cs_file_section_st *s;
   int    state= (int)((s=cs_file_sec(st->attr, strlen(st->attr))) ? s->state :
                       0);
-  
+
   switch (state) {
   case _CS_ID:
     i->cs.number= strtol(attr,(char**)NULL,10);
@@ -292,14 +286,13 @@ static int cs_value(MY_XML_PARSER *st,const char *attr, size_t len)
   return MY_XML_OK;
 }
 
-
 my_bool my_parse_charset_xml(const char *buf, size_t len,
                              int (*add_collation)(CHARSET_INFO *cs))
 {
   MY_XML_PARSER p;
   struct my_cs_file_info i;
   my_bool rc;
-  
+
   my_xml_parser_create(&p);
   my_xml_set_enter_handler(&p,cs_enter);
   my_xml_set_value_handler(&p,cs_value);
@@ -310,7 +303,6 @@ my_bool my_parse_charset_xml(const char *buf, size_t len,
   my_xml_parser_free(&p);
   return rc;
 }
-
 
 /*
   Check repertoire: detect pure ascii strings
@@ -342,7 +334,6 @@ my_string_repertoire(CHARSET_INFO *cs, const char *str, ulong length)
   return MY_REPERTOIRE_ASCII;
 }
 
-
 /*
   Returns repertoire for charset
 */
@@ -352,29 +343,28 @@ uint my_charset_repertoire(CHARSET_INFO *cs)
     MY_REPERTOIRE_ASCII : MY_REPERTOIRE_UNICODE30;
 }
 
-
 /*
   Detect whether a character set is ASCII compatible.
 
   Returns TRUE for:
-  
+
   - all 8bit character sets whose Unicode mapping of 0x7B is '{'
     (ignores swe7 which maps 0x7B to "LATIN LETTER A WITH DIAERESIS")
-  
+
   - all multi-byte character sets having mbminlen == 1
     (ignores ucs2 whose mbminlen is 2)
-  
+
   TODO:
-  
+
   When merging to 5.2, this function should be changed
-  to check a new flag MY_CS_NONASCII, 
-  
+  to check a new flag MY_CS_NONASCII,
+
      return (cs->flag & MY_CS_NONASCII) ? 0 : 1;
-  
+
   This flag was previously added into 5.2 under terms
   of WL#3759 "Optimize identifier conversion in client-server protocol"
   especially to mark character sets not compatible with ASCII.
-  
+
   We won't backport this flag to 5.0 or 5.1.
   This function is Ok for 5.0 and 5.1, because we're not going
   to introduce new tricky character sets between 5.0 and 5.2.
@@ -382,11 +372,10 @@ uint my_charset_repertoire(CHARSET_INFO *cs)
 my_bool
 my_charset_is_ascii_based(CHARSET_INFO *cs)
 {
-  return 
+  return
     (cs->mbmaxlen == 1 && cs->tab_to_uni && cs->tab_to_uni['{'] == '{') ||
     (cs->mbminlen == 1 && cs->mbmaxlen > 1);
 }
-
 
 /*
   Detect if a character set is 8bit,
@@ -408,7 +397,6 @@ my_charset_is_8bit_pure_ascii(CHARSET_INFO *cs)
   }
   return 1;
 }
-
 
 /*
   Shared function between conf_to_src and mysys.

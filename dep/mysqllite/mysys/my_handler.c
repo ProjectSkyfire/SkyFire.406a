@@ -1,10 +1,10 @@
 /* Copyright (C) 2002-2006 MySQL AB
-   
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; version 2
    of the License.
-   
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
@@ -35,7 +35,6 @@ int ha_compare_text(CHARSET_INFO *charset_info, uchar *a, uint a_length,
   return charset_info->coll->strnncoll(charset_info, a, a_length,
                                        b, b_length, part_key);
 }
-
 
 static int compare_bin(uchar *a, uint a_length, uchar *b, uint b_length,
                        my_bool part_key, my_bool skip_end_space)
@@ -77,7 +76,6 @@ static int compare_bin(uchar *a, uint a_length, uchar *b, uint b_length,
   return (int) (a_length-b_length);
 }
 
-
 /*
   Compare two keys
 
@@ -92,12 +90,12 @@ static int compare_bin(uchar *a, uint a_length, uchar *b, uint b_length,
     next_flag	How keys should be compared
 		If bit SEARCH_FIND is not set the keys includes the row
 		position and this should also be compared
-    diff_pos    OUT Number of first keypart where values differ, counting 
+    diff_pos    OUT Number of first keypart where values differ, counting
                 from one.
     diff_pos[1] OUT  (b + diff_pos[1]) points to first value in tuple b
                       that is different from corresponding value in tuple a.
-  
-  EXAMPLES 
+
+  EXAMPLES
    Example1: if the function is called for tuples
      ('aaa','bbb') and ('eee','fff'), then
      diff_pos[0] = 1 (as 'aaa' != 'eee')
@@ -477,7 +475,6 @@ end:
   return 0;
 } /* ha_key_cmp */
 
-
 /*
   Find the first NULL value in index-suffix values tuple
 
@@ -567,8 +564,6 @@ HA_KEYSEG *ha_find_null(HA_KEYSEG *keyseg, uchar *a)
   return keyseg;
 }
 
-
-
 /*
   Register handler error messages for usage with my_error()
 
@@ -595,7 +590,6 @@ void my_handler_error_register(void)
   my_error_register(get_handler_error_messages, HA_ERR_FIRST,
                     HA_ERR_FIRST+ array_elements(handler_error_messages)-1);
 }
-
 
 void my_handler_error_unregister(void)
 {

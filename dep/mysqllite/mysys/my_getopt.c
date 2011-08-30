@@ -1,4 +1,4 @@
-/* Copyright (C) 2002-2006 MySQL AB, 2008-2009 Sun Microsystems, Inc
+/* Copyright (c) 2002, 2011, Oracle and/or its affiliates. All rights reserved.
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -53,7 +53,7 @@ enum enum_special_opt
 char *disabled_my_option= (char*) "0";
 char *enabled_my_option= (char*) "1";
 
-/* 
+/*
    This is a flag that can be set in client programs. 0 means that
    my_getopt will not print error messages, but the client should do
    it by itself
@@ -61,7 +61,7 @@ char *enabled_my_option= (char*) "1";
 
 my_bool my_getopt_print_errors= 1;
 
-/* 
+/*
    This is a flag that can be set in client programs. 1 means that
    my_getopt will skip over options it does not know how to handle.
 */
@@ -149,7 +149,7 @@ void my_getopt_register_get_addr(my_getopt_value func_addr)
   @return error in case of ambiguous or unknown options,
           0 on success.
 */
-int handle_options(int *argc, char ***argv, 
+int handle_options(int *argc, char ***argv,
 		   const struct my_option *longopts,
                    my_get_one_option get_one_option)
 {
@@ -176,7 +176,7 @@ int handle_options(int *argc, char ***argv,
   */
   for (pos= *argv, pos_end=pos+ *argc; pos != pos_end ; pos++)
   {
-    if (*pos == args_separator)
+    if (my_getopt_is_args_separator(*pos))
     {
       is_cmdline_arg= 0;
       break;
@@ -188,7 +188,7 @@ int handle_options(int *argc, char ***argv,
     char **first= pos;
     char *cur_arg= *pos;
     opt_found= 0;
-    if (!is_cmdline_arg && (cur_arg == args_separator))
+    if (!is_cmdline_arg && (my_getopt_is_args_separator(cur_arg)))
     {
       is_cmdline_arg= 1;
 
@@ -303,7 +303,7 @@ int handle_options(int *argc, char ***argv,
 	    if (must_be_var)
 	    {
 	      if (my_getopt_print_errors)
-                my_getopt_error_reporter(option_is_loose ? 
+                my_getopt_error_reporter(option_is_loose ?
                                            WARNING_LEVEL : ERROR_LEVEL,
                                          "%s: unknown variable '%s'",
                                          my_progname, cur_arg);
@@ -313,9 +313,9 @@ int handle_options(int *argc, char ***argv,
 	    else
 	    {
 	      if (my_getopt_print_errors)
-                my_getopt_error_reporter(option_is_loose ? 
+                my_getopt_error_reporter(option_is_loose ?
                                            WARNING_LEVEL : ERROR_LEVEL,
-                                         "%s: unknown option '--%s'", 
+                                         "%s: unknown option '--%s'",
                                          my_progname, cur_arg);
 	      if (!option_is_loose)
 		return EXIT_UNKNOWN_OPTION;
@@ -342,7 +342,7 @@ int handle_options(int *argc, char ***argv,
 	    if (my_getopt_print_errors)
               my_getopt_error_reporter(ERROR_LEVEL,
                                        "%s: ambiguous option '--%s' (%s, %s)",
-                                       my_progname, opt_str, prev_found, 
+                                       my_progname, opt_str, prev_found,
                                        optp->name);
 	    return EXIT_AMBIGUOUS_OPTION;
 	  }
@@ -559,7 +559,6 @@ int handle_options(int *argc, char ***argv,
   return 0;
 }
 
-
 /*
   function: check_struct_option
 
@@ -581,7 +580,7 @@ static char *check_struct_option(char *cur_arg, char *key_name)
   ptr= strcend(cur_arg + 1, '.'); /* Skip the first character */
   end= strcend(cur_arg, '=');
 
-  /* 
+  /*
      If the first dot is after an equal sign, then it is part
      of a variable value and the option is not a struct option.
      Also, if the last character in the string before the ending
@@ -611,13 +610,21 @@ static char *check_struct_option(char *cur_arg, char *key_name)
    @param[in] argument The value argument
    @return boolean value
 */
-static my_bool get_bool_argument(const char *argument)
+static my_bool get_bool_argument(const struct my_option *opts,
+                                 const char *argument)
 {
   if (!my_strcasecmp(&my_charset_latin1, argument, "true") ||
-      !my_strcasecmp(&my_charset_latin1, argument, "on"))
+      !my_strcasecmp(&my_charset_latin1, argument, "on") ||
+      !my_strcasecmp(&my_charset_latin1, argument, "1"))
     return 1;
-  else
-    return (my_bool) atoi(argument);
+  else if (!my_strcasecmp(&my_charset_latin1, argument, "false") ||
+      !my_strcasecmp(&my_charset_latin1, argument, "off") ||
+      !my_strcasecmp(&my_charset_latin1, argument, "0"))
+    return 0;
+  my_getopt_error_reporter(WARNING_LEVEL,
+      "option '%s': boolean value '%s' wasn't recognized. Set to OFF.",
+      opts->name, argument);
+  return 0;
 }
 
 /*
@@ -647,7 +654,7 @@ static int setval(const struct my_option *opts, void *value, char *argument,
 
     switch ((opts->var_type & GET_TYPE_MASK)) {
     case GET_BOOL: /* If argument differs from 0, enable option, else disable */
-      *((my_bool*) value)= get_bool_argument(argument);
+      *((my_bool*) value)= get_bool_argument(opts, argument);
       break;
     case GET_INT:
       *((int*) value)= (int) getopt_ll(argument, opts, &err);
@@ -687,7 +694,7 @@ static int setval(const struct my_option *opts, void *value, char *argument,
       break;
     case GET_ENUM:
       {
-        int type= find_type(argument, opts->typelib, 2);
+        int type= find_type(argument, opts->typelib, FIND_TYPE_BASIC);
         if (type == 0)
         {
           /*
@@ -728,7 +735,7 @@ static int setval(const struct my_option *opts, void *value, char *argument,
         uint error_len;
 
         *((ulonglong*)value)=
-              find_set_from_flags(opts->typelib, opts->typelib->count, 
+              find_set_from_flags(opts->typelib, opts->typelib->count,
                                   *(ulonglong *)value, opts->def_value,
                                   argument, strlen(argument),
                                   &error, &error_len);
@@ -758,8 +765,7 @@ ret:
   return res;
 }
 
-
-/* 
+/*
   Find option
 
   SYNOPSIS
@@ -814,8 +820,7 @@ static int findopt(char *optpat, uint length,
   return count;
 }
 
-
-/* 
+/*
   function: compare_strings
 
   Works like strncmp, other than 1.) considers '-' and '_' the same.
@@ -845,7 +850,7 @@ static longlong eval_num_suffix(char *argument, int *error, char *option_name)
 {
   char *endchar;
   longlong num;
-  
+
   *error= 0;
   errno= 0;
   num= strtoll(argument, &endchar, 10);
@@ -873,7 +878,7 @@ static longlong eval_num_suffix(char *argument, int *error, char *option_name)
   return num;
 }
 
-/* 
+/*
   function: getopt_ll
 
   Evaluates and returns the value that user gave as an argument
@@ -965,7 +970,6 @@ static ulonglong getopt_ull(char *arg, const struct my_option *optp, int *err)
   ulonglong num= eval_num_suffix(arg, err, (char*) optp->name);
   return getopt_ull_limit_value(num, optp, NULL);
 }
-
 
 ulonglong getopt_ull_limit_value(ulonglong num, const struct my_option *optp,
                                  my_bool *fix)
@@ -1153,7 +1157,6 @@ static void init_one_value(const struct my_option *option, void *variable,
   DBUG_VOID_RETURN;
 }
 
-
 /*
   Init one value to it's default values
 
@@ -1178,14 +1181,12 @@ static void fini_one_value(const struct my_option *option, void *variable,
   DBUG_VOID_RETURN;
 }
 
-
 void my_cleanup_options(const struct my_option *options)
 {
   init_variables(options, fini_one_value);
 }
 
-
-/* 
+/*
   initialize all variables to their default values
 
   SYNOPSIS
@@ -1317,7 +1318,6 @@ void my_print_help(const struct my_option *options)
   }
 }
 
-
 /*
   function: my_print_options
 
@@ -1344,7 +1344,7 @@ void my_print_variables(const struct my_option *options)
   for (length=1; length < 75; length++)
     putchar(length == name_space ? ' ' : '-');
   putchar('\n');
-  
+
   for (optp= options; optp->name; optp++)
   {
     void *value= (optp->var_type & GET_ASK_ADDR ?

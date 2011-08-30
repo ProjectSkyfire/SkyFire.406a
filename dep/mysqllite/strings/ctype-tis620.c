@@ -1,4 +1,4 @@
-/* Copyright (C) 2000-2003 MySQL AB
+/* Copyright (c) 2000, 2010, Oracle and/or its affiliates. All rights reserved.
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -11,7 +11,7 @@
 
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
-   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA */
+   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA */
 
 /*
    Copyright (C) 2003  by Sathit Jittanupat
@@ -33,7 +33,6 @@
    about the suitability of this software for any purpose.  It is provided
    "as is" without express or implied warranty.
 */
-
 
 /*
    This file is basicly tis620 character sets with some extra functions
@@ -61,7 +60,6 @@
 #define L  L_LOWER
 #define UU L_UPRUPR
 #define X  L_MIDDLE
-
 
 static int t_ctype[][TOT_LEVELS] = {
     /*0x00*/ { IGNORE, IGNORE, IGNORE, IGNORE, X },
@@ -452,7 +450,6 @@ static uchar sort_order_tis620[]=
   (uchar) '\370',(uchar) '\371',(uchar) '\372',(uchar) '\373',(uchar) '\374',(uchar) '\375',(uchar) '\376',(uchar) '\377',
 };
 
-
 /*
   Convert thai string to "Standard C String Function" sortable string
 
@@ -477,7 +474,7 @@ static size_t thai2sortable(uchar *tstr, size_t len)
     if (isthai(c))
     {
       int *t_ctype0= t_ctype[c];
-		    
+
       if (isconsnt(c))
 	l2bias	-= 8;
       if (isldvowel(c) && tlen != 1 && isconsnt(p[1]))
@@ -486,7 +483,7 @@ static size_t thai2sortable(uchar *tstr, size_t len)
 	*p= p[1];
 	p[1]= c;
 	tlen--;
-	p++; 
+	p++;
 	continue;
       }
 
@@ -506,12 +503,11 @@ static size_t thai2sortable(uchar *tstr, size_t len)
     else
     {
       l2bias-= 8;
-      *p= to_lower_tis620[c]; 
+      *p= to_lower_tis620[c];
     }
   }
   return len;
 }
-
 
 /*
   strncoll() replacement, compare 2 string, both are converted to sortable
@@ -527,7 +523,7 @@ static size_t thai2sortable(uchar *tstr, size_t len)
 
 static
 int my_strnncoll_tis620(CHARSET_INFO *cs __attribute__((unused)),
-                        const uchar *s1, size_t len1, 
+                        const uchar *s1, size_t len1,
                         const uchar *s2, size_t len2,
                         my_bool s2_is_prefix)
 {
@@ -554,10 +550,9 @@ int my_strnncoll_tis620(CHARSET_INFO *cs __attribute__((unused)),
   return i;
 }
 
-
 static
 int my_strnncollsp_tis620(CHARSET_INFO * cs __attribute__((unused)),
-			  const uchar *a0, size_t a_length, 
+			  const uchar *a0, size_t a_length,
 			  const uchar *b0, size_t b_length,
                           my_bool diff_if_only_endspace_difference)
 {
@@ -568,11 +563,11 @@ int my_strnncollsp_tis620(CHARSET_INFO * cs __attribute__((unused)),
 #ifndef VARCHAR_WITH_DIFF_ENDSPACE_ARE_DIFFERENT_FOR_UNIQUE
   diff_if_only_endspace_difference= 0;
 #endif
-  
+
   a= buf;
   if ((a_length + b_length +2) > (int) sizeof(buf))
     alloced= a= (uchar*) my_str_malloc(a_length+b_length+2);
-  
+
   b= a + a_length+1;
   memcpy((char*) a, (char*) a0, a_length);
   a[a_length]= 0;	/* if length(a0)> len1, need to put 'end of string' */
@@ -580,7 +575,7 @@ int my_strnncollsp_tis620(CHARSET_INFO * cs __attribute__((unused)),
   b[b_length]= 0;	/* put end of string */
   a_length= thai2sortable(a, a_length);
   b_length= thai2sortable(b, b_length);
-  
+
   end= a + (length= min(a_length, b_length));
   while (a < end)
   {
@@ -616,14 +611,13 @@ int my_strnncollsp_tis620(CHARSET_INFO * cs __attribute__((unused)),
       }
     }
   }
-  
+
 ret:
-  
+
   if (alloced)
     my_str_free(alloced);
   return res;
 }
-
 
 /*
   strnxfrm replacment, convert Thai string to sortable string
@@ -645,7 +639,6 @@ size_t my_strnxfrm_tis620(CHARSET_INFO *cs __attribute__((unused)),
     bfill(dest + len, dstlen - len, ' ');
   return dstlen;
 }
-
 
 static unsigned short cs_to_uni[256]={
 0x0000,0x0001,0x0002,0x0003,0x0004,0x0005,0x0006,0x0007,
@@ -818,7 +811,6 @@ NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,
 NULL,NULL,NULL,NULL,NULL,NULL,NULL,plFF
 };
 
-
 static
 int my_mb_wc_tis620(CHARSET_INFO *cs  __attribute__((unused)),
 		  my_wc_t *wc,
@@ -827,7 +819,7 @@ int my_mb_wc_tis620(CHARSET_INFO *cs  __attribute__((unused)),
 {
   if (str >= end)
     return MY_CS_TOOSMALL;
-  
+
   *wc=cs_to_uni[*str];
   return (!wc[0] && str[0]) ? -1 : 1;
 }
@@ -839,15 +831,14 @@ int my_wc_mb_tis620(CHARSET_INFO *cs  __attribute__((unused)),
 		  uchar *end __attribute__((unused)))
 {
   uchar *pl;
-  
+
   if (str >= end)
     return MY_CS_TOOSMALL;
-  
+
   pl= uni_to_cs[(wc>>8) & 0xFF];
   str[0]= pl ? pl[wc & 0xFF] : '\0';
   return (!str[0] && wc) ? MY_CS_ILUNI : 1;
 }
-
 
 static MY_COLLATION_HANDLER my_collation_ci_handler =
 {
@@ -894,8 +885,6 @@ static MY_CHARSET_HANDLER my_charset_handler=
     my_strntoull10rnd_8bit,
     my_scan_8bit
 };
-
-
 
 CHARSET_INFO my_charset_tis620_thai_ci=
 {
@@ -960,6 +949,5 @@ CHARSET_INFO my_charset_tis620_bin=
     &my_charset_handler,
     &my_collation_8bit_bin_handler
 };
-
 
 #endif

@@ -1,5 +1,6 @@
 # Copyright (C) 2006 MySQL AB
 # Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
+# Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
 #
 # This file is free software; as a special exception the author gives
 # unlimited permission to copy and/or distribute it, with or without
@@ -171,7 +172,7 @@ set(MYSYS_SOURCES
   ${CMAKE_CURRENT_SOURCE_DIR}/mysys/my_file.c
   ${CMAKE_CURRENT_SOURCE_DIR}/mysys/my_fopen.c
   ${CMAKE_CURRENT_SOURCE_DIR}/mysys/my_fstream.c
-  ${CMAKE_CURRENT_SOURCE_DIR}/mysys/my_gethostbyname.c
+  #${CMAKE_CURRENT_SOURCE_DIR}/mysys/my_gethostbyname.c
   ${CMAKE_CURRENT_SOURCE_DIR}/mysys/my_gethwaddr.c
   ${CMAKE_CURRENT_SOURCE_DIR}/mysys/my_getopt.c
   ${CMAKE_CURRENT_SOURCE_DIR}/mysys/my_getsystime.c

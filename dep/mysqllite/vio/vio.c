@@ -1,4 +1,4 @@
-/* Copyright (C) 2000 MySQL AB
+/* Copyright (c) 2000, 2010, Oracle and/or its affiliates. All rights reserved.
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -11,7 +11,7 @@
 
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
-   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA */
+   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA */
 
 /*
   Note that we can't have assertion on file descriptors;  The reason for
@@ -98,7 +98,7 @@ static void vio_init(Vio* vio, enum enum_vio_type type,
     DBUG_VOID_RETURN;
   }
 #endif
-#ifdef HAVE_SMEM 
+#ifdef HAVE_SMEM
   if (type == VIO_TYPE_SHARED_MEMORY)
   {
     vio->viodelete	=vio_delete;
@@ -119,14 +119,14 @@ static void vio_init(Vio* vio, enum enum_vio_type type,
     vio->has_data       =has_no_data;
 
     /* Currently, shared memory is on Windows only, hence the below is ok*/
-    vio->timeout= vio_win32_timeout; 
+    vio->timeout= vio_win32_timeout;
     /* Set default timeout */
     vio->read_timeout_ms= INFINITE;
     vio->write_timeout_ms= INFINITE;
     DBUG_VOID_RETURN;
   }
-#endif   
-#ifdef HAVE_OPENSSL 
+#endif
+#ifdef HAVE_OPENSSL
   if (type == VIO_TYPE_SSL)
   {
     vio->viodelete	=vio_ssl_delete;
@@ -168,7 +168,6 @@ static void vio_init(Vio* vio, enum enum_vio_type type,
   DBUG_VOID_RETURN;
 }
 
-
 /* Reset initialized VIO to use with another transport type */
 
 void vio_reset(Vio* vio, enum enum_vio_type type,
@@ -177,7 +176,6 @@ void vio_reset(Vio* vio, enum enum_vio_type type,
   my_free(vio->read_buffer);
   vio_init(vio, type, sd, hPipe, flags);
 }
-
 
 /* Open the socket or TCP/IP connection and read the fnctl() status */
 
@@ -223,7 +221,6 @@ Vio *vio_new(my_socket sd, enum enum_vio_type type, uint flags)
   DBUG_RETURN(vio);
 }
 
-
 #ifdef __WIN__
 
 Vio *vio_new_win32pipe(HANDLE hPipe)
@@ -265,7 +262,6 @@ Vio *vio_new_win32shared_memory(HANDLE handle_file_map, HANDLE handle_map,
 #endif
 #endif
 
-
 void vio_delete(Vio* vio)
 {
   if (!vio)
@@ -276,7 +272,6 @@ void vio_delete(Vio* vio)
   my_free(vio->read_buffer);
   my_free(vio);
 }
-
 
 /*
   Cleanup memory allocated by vio or the

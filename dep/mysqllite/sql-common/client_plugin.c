@@ -1,4 +1,4 @@
-/* Copyright (C) 2010 Sun Microsystems, Inc.
+/* Copyright (c) 2010, 2011, Oracle and/or its affiliates. All rights reserved.
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -11,11 +11,11 @@
 
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
-   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA */
+   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA */
 
 /**
   @file
-  
+
   Support code for the client side (libmysql) plugins
 
   Client plugins are somewhat different from server plugins, they are simpler.
@@ -83,7 +83,7 @@ static int is_not_initialized(MYSQL *mysql, const char *name)
   @param type   plugin type
 
   @note this does NOT necessarily need a mutex, take care!
-  
+
   @retval a pointer to a found plugin or 0
 */
 static struct st_mysql_client_plugin *
@@ -163,6 +163,7 @@ add_plugin(MYSQL *mysql, struct st_mysql_client_plugin *plugin, void *dlhandle,
 
   p->next= plugin_list[plugin->type];
   plugin_list[plugin->type]= p;
+  net_clear_error(&mysql->net);
 
   return plugin;
 
@@ -181,7 +182,7 @@ err1:
 /**
   Loads plugins which are specified in the environment variable
   LIBMYSQL_PLUGINS.
-  
+
   Multiple plugins must be separated by semicolon. This function doesn't
   return or log an error.
 
@@ -342,7 +343,7 @@ mysql_load_plugin_v(MYSQL *mysql, const char *name, int type,
            mysql->options.extension && mysql->options.extension->plugin_dir ?
            mysql->options.extension->plugin_dir : PLUGINDIR, "/",
            name, SO_EXT, NullS);
-   
+
   DBUG_PRINT ("info", ("dlopeninig %s", dlpath));
   /* Open new dll handle */
   if (!(dlhandle= dlopen(dlpath, RTLD_NOW)))
@@ -371,7 +372,7 @@ mysql_load_plugin_v(MYSQL *mysql, const char *name, int type,
   }
 
 #if defined(__APPLE__)
-have_plugin:  
+have_plugin:
 #endif
   if (!(sym= dlsym(dlhandle, plugin_declarations_sym)))
   {
@@ -457,9 +458,8 @@ mysql_client_find_plugin(MYSQL *mysql, const char *name, int type)
   DBUG_RETURN (p);
 }
 
-
 /* see <mysql/client_plugin.h> for a full description */
-int STDCALL mysql_plugin_options(struct st_mysql_client_plugin *plugin,
+int mysql_plugin_options(struct st_mysql_client_plugin *plugin,
                                  const char *option,
                                  const void *value)
 {

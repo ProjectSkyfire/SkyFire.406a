@@ -1,4 +1,4 @@
-/* Copyright (c) 2000, 2010, Oracle and/or its affiliates. All rights reserved.
+/* Copyright (c) 2000, 2011, Oracle and/or its affiliates. All rights reserved.
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@
 */
 
 /*
-  HFTODO this must be hidden if we don't want client capabilities in 
+  HFTODO this must be hidden if we don't want client capabilities in
   embedded library
  */
 #include <my_global.h>
@@ -50,7 +50,6 @@
 #undef MYSQL_CLIENT
 #define MYSQL_CLIENT
 #endif /*EMBEDDED_LIBRARY */
-
 
 /*
   The following handles the differences when this is linked between the
@@ -105,7 +104,6 @@ extern void query_cache_insert(const char *packet, ulong length,
 
 static my_bool net_write_buff(NET *net,const uchar *packet,ulong len);
 
-
 /** Init with packet info. */
 
 my_bool my_net_init(NET *net, Vio* vio)
@@ -145,7 +143,6 @@ my_bool my_net_init(NET *net, Vio* vio)
   DBUG_RETURN(0);
 }
 
-
 void net_end(NET *net)
 {
   DBUG_ENTER("net_end");
@@ -153,7 +150,6 @@ void net_end(NET *net)
   net->buff=0;
   DBUG_VOID_RETURN;
 }
-
 
 /** Realloc the packet buffer. */
 
@@ -176,7 +172,7 @@ my_bool net_realloc(NET *net, size_t length)
 #endif
     DBUG_RETURN(1);
   }
-  pkt_length = (length+IO_SIZE-1) & ~(IO_SIZE-1); 
+  pkt_length = (length+IO_SIZE-1) & ~(IO_SIZE-1);
   /*
     We must allocate some extra bytes for the end 0 and to be able to
     read big compressed blocks + 1 safety byte since uint3korr() in
@@ -197,7 +193,6 @@ my_bool net_realloc(NET *net, size_t length)
   net->buff_end=buff+(net->max_packet= (ulong) pkt_length);
   DBUG_RETURN(0);
 }
-
 
 /**
   Check if there is any data to be read from the socket.
@@ -325,7 +320,6 @@ void net_clear(NET *net, my_bool clear_buffer)
   DBUG_VOID_RETURN;
 }
 
-
 /** Flush write_buffer if not empty. */
 
 my_bool net_flush(NET *net)
@@ -343,7 +337,6 @@ my_bool net_flush(NET *net)
     net->pkt_nr=net->compress_pkt_nr;
   DBUG_RETURN(error);
 }
-
 
 /*****************************************************************************
 ** Write something to server/client buffer
@@ -415,7 +408,7 @@ my_net_write(NET *net,const uchar *packet,size_t len)
     As the command is part of the first data packet, we have to do some data
     juggling to put the command in there, without having to create a new
     packet.
-  
+
     This function will split big packets into sub-packets if needed.
     (Each sub packet can only be 2^24 bytes)
 
@@ -524,7 +517,7 @@ net_write_buff(NET *net, const uchar *packet, ulong len)
     {
       /* Fill up already used packet and write it */
       memcpy((char*) net->write_pos,packet,left_length);
-      if (net_real_write(net, net->buff, 
+      if (net_real_write(net, net->buff,
 			 (size_t) (net->write_pos - net->buff) + left_length))
 	return 1;
       net->write_pos= net->buff;
@@ -554,7 +547,6 @@ net_write_buff(NET *net, const uchar *packet, ulong len)
   net->write_pos+= len;
   return 0;
 }
-
 
 /**
   Read and write one packet using timeouts.
@@ -705,7 +697,6 @@ net_real_write(NET *net,const uchar *packet, size_t len)
   DBUG_RETURN(((int) (pos != end)));
 }
 
-
 /*****************************************************************************
 ** Read something from server/clinet
 *****************************************************************************/
@@ -786,7 +777,6 @@ static my_bool my_net_skip_rest(NET *net, uint32 remain, thr_alarm_t *alarmed,
   DBUG_RETURN(0);
 }
 #endif /* NO_ALARM */
-
 
 /**
   Reads one packet to net->buff + net->where_b.
@@ -917,7 +907,7 @@ my_real_read(NET *net, size_t *complen)
 		       ("Packets out of order (Found: %d, expected %u)",
 			(int) net->buff[net->where_b + 3],
 			net->pkt_nr));
-            /* 
+            /*
               We don't make noise server side, since the client is expected
               to break the protocol for e.g. --send LOAD DATA .. LOCAL where
               the server expects the client to send a file, but the client
@@ -996,7 +986,6 @@ end:
 #endif
   return(len);
 }
-
 
 /**
   Read a packet from the client/server and return it without the internal
@@ -1078,7 +1067,7 @@ my_net_read(NET *net)
       {
 	read_length = uint3korr(net->buff+start_of_packet);
 	if (!read_length)
-	{ 
+	{
 	  /* End of multi-byte packet */
 	  start_of_packet += NET_HEADER_SIZE;
 	  break;
@@ -1159,7 +1148,6 @@ my_net_read(NET *net)
   return len;
 }
 
-
 void my_net_set_read_timeout(NET *net, uint timeout)
 {
   DBUG_ENTER("my_net_set_read_timeout");
@@ -1171,7 +1159,6 @@ void my_net_set_read_timeout(NET *net, uint timeout)
 #endif
   DBUG_VOID_RETURN;
 }
-
 
 void my_net_set_write_timeout(NET *net, uint timeout)
 {

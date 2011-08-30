@@ -78,7 +78,6 @@ void soundex(CHARSET_INFO * cs,register char * out_pntr, char * in_pntr,
   return;
 } /* soundex */
 
-
   /*
     If alpha, map input letter to soundex code.
     If not alpha and remove_garbage is set then skip to next char

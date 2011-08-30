@@ -523,7 +523,6 @@ int main(argc, argv)
     if (zlibVersion()[0] != myVersion[0]) {
         fprintf(stderr, "incompatible zlib version\n");
         exit(1);
-
     } else if (strcmp(zlibVersion(), ZLIB_VERSION) != 0) {
         fprintf(stderr, "warning: different zlib version\n");
     }

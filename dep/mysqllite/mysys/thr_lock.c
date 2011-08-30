@@ -1,4 +1,4 @@
-/* Copyright (C) 2000 MySQL AB, 2008-2009 Sun Microsystems, Inc
+/* Copyright (c) 2000, 2011, Oracle and/or its affiliates. All rights reserved.
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -11,7 +11,7 @@
 
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
-   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA */
+   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA */
 
 /*
 Read and write locks for Posix threads. All tread must acquire
@@ -86,7 +86,6 @@ enum thr_lock_type thr_upgraded_concurrent_insert_lock = TL_WRITE;
 #define MAX_THREADS 100
 #define MAX_LOCKS   100
 
-
 LIST *thr_lock_thread_list;			/* List of threads in use */
 ulong max_write_lock_count= ~(ulong) 0L;
 
@@ -120,7 +119,6 @@ thr_lock_owner_equal(THR_LOCK_INFO *rhs, THR_LOCK_INFO *lhs)
 {
   return rhs == lhs;
 }
-
 
 #ifdef EXTRA_DEBUG
 #define MAX_FOUND_ERRORS	10		/* Report 10 first errors */
@@ -185,7 +183,6 @@ static int check_lock(struct st_lock_list *list, const char* lock_type,
   return 0;
 }
 
-
 static void check_locks(THR_LOCK *lock, const char *where,
 			my_bool allow_no_locks)
 {
@@ -216,7 +213,7 @@ static void check_locks(THR_LOCK *lock, const char *where,
 	found_errors++;
 	fprintf(stderr,
 		"Warning at '%s': Locks read_no_write_count was %u when it should have been %u\n", where, lock->read_no_write_count,count);
-      }      
+      }
 
       if (!lock->write.data)
       {
@@ -251,13 +248,13 @@ static void check_locks(THR_LOCK *lock, const char *where,
 	    fprintf(stderr,
 		    "Warning at '%s': Write lock %d waiting while no exclusive read locks\n",where,(int) lock->write_wait.data->type);
 	  }
-	}	      
+	}
       }
       else
       {						/* Have write lock */
 	if (lock->write_wait.data)
 	{
-	  if (!allow_no_locks && 
+	  if (!allow_no_locks &&
 	      lock->write.data->type == TL_WRITE_ALLOW_WRITE &&
 	      lock->write_wait.data->type == TL_WRITE_ALLOW_WRITE)
 	  {
@@ -283,7 +280,6 @@ static void check_locks(THR_LOCK *lock, const char *where,
 		    where, lock->write.data->type);
 	    DBUG_PRINT("warning",("At '%s': Found lock of type %d that is write and read locked\n",
 		    where, lock->write.data->type));
-
 	  }
 	}
 	if (lock->read_wait.data)
@@ -313,7 +309,6 @@ static void check_locks(THR_LOCK *lock, const char *where,
 #define check_locks(A,B,C)
 #endif
 
-
 	/* Initialize a lock */
 
 void thr_lock_init(THR_LOCK *lock)
@@ -333,7 +328,6 @@ void thr_lock_init(THR_LOCK *lock)
   DBUG_VOID_RETURN;
 }
 
-
 void thr_lock_delete(THR_LOCK *lock)
 {
   DBUG_ENTER("thr_lock_delete");
@@ -343,7 +337,6 @@ void thr_lock_delete(THR_LOCK *lock)
   mysql_mutex_destroy(&lock->mutex);
   DBUG_VOID_RETURN;
 }
-
 
 void thr_lock_info_init(THR_LOCK_INFO *info)
 {
@@ -362,7 +355,6 @@ void thr_lock_data_init(THR_LOCK *lock,THR_LOCK_DATA *data, void *param)
   data->status_param=param;
   data->cond=0;
 }
-
 
 static inline my_bool
 has_old_lock(THR_LOCK_DATA *data, THR_LOCK_INFO *owner)
@@ -386,9 +378,7 @@ static inline my_bool have_specific_lock(THR_LOCK_DATA *data,
   return 0;
 }
 
-
 static void wake_up_waiters(THR_LOCK *lock);
-
 
 static enum enum_thr_lock_result
 wait_for_lock(struct st_lock_list *wait, THR_LOCK_DATA *data,
@@ -533,7 +523,6 @@ wait_for_lock(struct st_lock_list *wait, THR_LOCK_DATA *data,
   DBUG_RETURN(result);
 }
 
-
 enum enum_thr_lock_result
 thr_lock(THR_LOCK_DATA *data, THR_LOCK_INFO *owner,
          enum thr_lock_type lock_type, ulong lock_wait_timeout)
@@ -574,7 +563,6 @@ thr_lock(THR_LOCK_DATA *data, THR_LOCK_INFO *owner,
            ||\ = READ_HIGH_PRIORITY
            |\  = READ_WITH_SHARED_LOCKS
            \   = READ
-          
 
         + = Request can be satisified.
         - = Request cannot be satisified.
@@ -782,7 +770,6 @@ end:
   DBUG_RETURN(result);
 }
 
-
 static inline void free_all_read_locks(THR_LOCK *lock,
 				       my_bool using_concurrent_insert)
 {
@@ -806,7 +793,7 @@ static inline void free_all_read_locks(THR_LOCK *lock,
       if (using_concurrent_insert)
       {
 	/*
-	  We can't free this lock; 
+	  We can't free this lock;
 	  Link lock away from read chain back into read_wait chain
 	*/
 	if (((*data->prev)=data->next))
@@ -819,7 +806,7 @@ static inline void free_all_read_locks(THR_LOCK *lock,
 	continue;
       }
       lock->read_no_write_count++;
-    }      
+    }
     /* purecov: begin inspected */
     DBUG_PRINT("lock",("giving read lock to thread: 0x%lx",
 		       data->owner->thread_id));
@@ -852,7 +839,7 @@ void thr_unlock(THR_LOCK_DATA *data)
   else if (lock_type == TL_WRITE_DELAYED && data->cond)
   {
     /*
-      This only happens in extreme circumstances when a 
+      This only happens in extreme circumstances when a
       write delayed lock that is waiting for a lock
     */
     lock->write_wait.last=data->prev;		/* Put it on wait queue */
@@ -877,7 +864,6 @@ void thr_unlock(THR_LOCK_DATA *data)
   mysql_mutex_unlock(&lock->mutex);
   DBUG_VOID_RETURN;
 }
-
 
 /**
   @brief  Wake up all threads which pending requests for the lock
@@ -1003,13 +989,11 @@ end:
   DBUG_VOID_RETURN;
 }
 
-
 /*
 ** Get all locks in a specific order to avoid dead-locks
 ** Sort acording to lock position and put write_locks before read_locks if
 ** lock on same lock.
 */
-
 
 #define LOCK_CMP(A,B) ((uchar*) (A->lock) - (uint) ((A)->type) < (uchar*) (B->lock)- (uint) ((B)->type))
 
@@ -1032,7 +1016,6 @@ static void sort_locks(THR_LOCK_DATA **data,uint count)
     }
   }
 }
-
 
 enum enum_thr_lock_result
 thr_multi_lock(THR_LOCK_DATA **data, uint count, THR_LOCK_INFO *owner,
@@ -1062,7 +1045,6 @@ thr_multi_lock(THR_LOCK_DATA **data, uint count, THR_LOCK_INFO *owner,
   thr_lock_merge_status(data, count);
   DBUG_RETURN(THR_LOCK_SUCCESS);
 }
-
 
 /**
   Ensure that all locks for a given table have the same
@@ -1199,7 +1181,6 @@ void thr_abort_locks(THR_LOCK *lock, my_bool upgrade_lock)
   DBUG_VOID_RETURN;
 }
 
-
 /*
   Abort all locks for specific table/thread combination
 
@@ -1250,7 +1231,6 @@ my_bool thr_abort_locks_for_thread(THR_LOCK *lock, my_thread_id thread_id)
   mysql_mutex_unlock(&lock->mutex);
   DBUG_RETURN(found);
 }
-
 
 /*
   Downgrade a WRITE_* to a lower WRITE level
@@ -1348,7 +1328,6 @@ my_bool thr_upgrade_write_delay_lock(THR_LOCK_DATA *data,
   DBUG_RETURN(wait_for_lock(&lock->write_wait,data,1, lock_wait_timeout));
 }
 
-
 /* downgrade a WRITE lock to a WRITE_DELAY lock if there is pending locks */
 
 my_bool thr_reschedule_write_lock(THR_LOCK_DATA *data,
@@ -1387,7 +1366,6 @@ my_bool thr_reschedule_write_lock(THR_LOCK_DATA *data,
   DBUG_RETURN(thr_upgrade_write_delay_lock(data, write_lock_type,
                                            lock_wait_timeout));
 }
-
 
 #include <my_sys.h>
 
@@ -1450,7 +1428,6 @@ void thr_print_locks(void)
   mysql_mutex_unlock(&THR_LOCK_lock);
 }
 
-
 /*****************************************************************************
 ** Test of thread locks
 ****************************************************************************/
@@ -1502,7 +1479,6 @@ int lock_counts[]= {sizeof(test_0)/sizeof(struct st_test),
 		    sizeof(test_15)/sizeof(struct st_test)
 };
 
-
 static mysql_cond_t COND_thread_count;
 static mysql_mutex_t LOCK_thread_count;
 static uint thread_count;
@@ -1532,7 +1508,6 @@ static my_bool test_check_status(void* param __attribute__((unused)))
   return 0;
 }
 
-
 static void *test_thread(void *arg)
 {
   int i,j,param=*((int*) arg);
@@ -1542,7 +1517,6 @@ static void *test_thread(void *arg)
   my_thread_init();
 
   printf("Thread %s (%d) started\n",my_thread_name(),param); fflush(stdout);
-
 
   thr_lock_info_init(&lock_info);
   for (i=0; i < lock_counts[param] ; i++)
@@ -1582,7 +1556,6 @@ static void *test_thread(void *arg)
   free((uchar*) arg);
   return 0;
 }
-
 
 int main(int argc __attribute__((unused)),char **argv __attribute__((unused)))
 {

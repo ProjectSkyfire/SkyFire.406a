@@ -1,4 +1,4 @@
-/* Copyright (C) 2000 MySQL AB, 2008-2009 Sun Microsystems, Inc
+/* Copyright (c) 2000, 2011, Oracle and/or its affiliates. All rights reserved.
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -11,7 +11,7 @@
 
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
-   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA */
+   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA */
 
 /*
   Cashing of files with only does (sequential) read or writes of fixed-
@@ -91,7 +91,6 @@ void setup_io_cache(IO_CACHE* info)
   }
 }
 
-
 static void
 init_functions(IO_CACHE* info)
 {
@@ -117,7 +116,6 @@ init_functions(IO_CACHE* info)
 
   setup_io_cache(info);
 }
-
 
 /*
   Initialize an IO_CACHE object
@@ -313,7 +311,6 @@ static void my_aiowait(my_aio_result *result)
 }
 #endif
 
-
 /*
   Use this to reset cache to re-start reading or to change the type
   between READ_CACHE <-> WRITE_CACHE
@@ -414,8 +411,6 @@ my_bool reinit_io_cache(IO_CACHE *info, enum cache_type type,
   DBUG_RETURN(0);
 } /* reinit_io_cache */
 
-
-
 /*
   Read buffered.
 
@@ -472,7 +467,7 @@ int _my_b_read(register IO_CACHE *info, uchar *Buffer, size_t Count)
   */
   if (info->seek_not_done)
   {
-    if ((mysql_file_seek(info->file, pos_in_file, MY_SEEK_SET, MYF(0)) 
+    if ((mysql_file_seek(info->file, pos_in_file, MY_SEEK_SET, MYF(0))
         != MY_FILEPOS_ERROR))
     {
       /* No error, reset seek_not_done flag. */
@@ -587,7 +582,6 @@ int _my_b_read(register IO_CACHE *info, uchar *Buffer, size_t Count)
   DBUG_RETURN(0);
 }
 
-
 /*
   Prepare IO_CACHE for shared use.
 
@@ -693,7 +687,6 @@ void init_io_cache_share(IO_CACHE *read_cache, IO_CACHE_SHARE *cshare,
   DBUG_VOID_RETURN;
 }
 
-
 /*
   Remove a thread from shared access to IO_CACHE.
 
@@ -762,7 +755,6 @@ void remove_io_thread(IO_CACHE *cache)
 
   DBUG_VOID_RETURN;
 }
-
 
 /*
   Lock IO cache and wait for all other threads to join.
@@ -907,7 +899,6 @@ static int lock_io_cache(IO_CACHE *cache, my_off_t pos)
   DBUG_RETURN(0);
 }
 
-
 /*
   Unlock IO cache.
 
@@ -950,7 +941,6 @@ static void unlock_io_cache(IO_CACHE *cache)
   mysql_mutex_unlock(&cshare->mutex);
   DBUG_VOID_RETURN;
 }
-
 
 /*
   Read from IO_CACHE when it is shared between several threads.
@@ -1098,7 +1088,6 @@ int _my_b_read_r(register IO_CACHE *cache, uchar *Buffer, size_t Count)
   DBUG_RETURN(0);
 }
 
-
 /*
   Copy data from write cache to read cache.
 
@@ -1149,10 +1138,9 @@ static void copy_to_read_buffer(IO_CACHE *write_cache,
   }
 }
 
-
 /*
   Do sequential read from the SEQ_READ_APPEND cache.
-  
+
   We do this in three stages:
    - first read from info->buffer
    - then if there are still data to read, try the file descriptor
@@ -1306,7 +1294,6 @@ read_append_buffer:
   return Count ? 1 : 0;
 }
 
-
 #ifdef HAVE_AIOWAIT
 
 /*
@@ -1415,7 +1402,7 @@ int _my_b_async_read(register IO_CACHE *info, uchar *Buffer, size_t Count)
       info->error=(int) (read_length+left_length);
       return 1;
     }
-    
+
     if (mysql_file_seek(info->file, next_pos_in_file, MY_SEEK_SET, MYF(0))
         == MY_FILEPOS_ERROR)
     {
@@ -1499,7 +1486,6 @@ int _my_b_async_read(register IO_CACHE *info, uchar *Buffer, size_t Count)
 } /* _my_b_async_read */
 #endif
 
-
 /* Read one byte when buffer is empty */
 
 int _my_b_get(IO_CACHE *info)
@@ -1515,7 +1501,7 @@ int _my_b_get(IO_CACHE *info)
   return (int) (uchar) buff;
 }
 
-/* 
+/*
    Write a byte buffer to IO_CACHE and flush to disk
    if IO_CACHE is full.
 
@@ -1587,7 +1573,6 @@ int _my_b_write(register IO_CACHE *info, const uchar *Buffer, size_t Count)
   return 0;
 }
 
-
 /*
   Append a block to the write buffer.
   This is done with the buffer locked to ensure that we don't read from
@@ -1637,12 +1622,11 @@ end:
   return 0;
 }
 
-
 int my_b_safe_write(IO_CACHE *info, const uchar *Buffer, size_t Count)
 {
   /*
     Sasha: We are not writing this with the ? operator to avoid hitting
-    a possible compiler bug. At least gcc 2.95 cannot deal with 
+    a possible compiler bug. At least gcc 2.95 cannot deal with
     several layers of ternary operators that evaluated comma(,) operator
     expressions inside - I do have a test case if somebody wants it
   */
@@ -1650,7 +1634,6 @@ int my_b_safe_write(IO_CACHE *info, const uchar *Buffer, size_t Count)
     return my_b_append(info, Buffer, Count);
   return my_b_write(info, Buffer, Count);
 }
-
 
 /*
   Write a block to disk where part of the data may be inside the record
@@ -1710,7 +1693,6 @@ int my_block_write(register IO_CACHE *info, const uchar *Buffer, size_t Count,
     error= -1;
   return error;
 }
-
 
 	/* Flush write cache */
 
@@ -1855,7 +1837,6 @@ int end_io_cache(IO_CACHE *info)
   }
   DBUG_RETURN(error);
 } /* end_io_cache */
-
 
 /**********************************************************************
  Testing of MF_IOCACHE

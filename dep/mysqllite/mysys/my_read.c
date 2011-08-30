@@ -1,4 +1,4 @@
-/* Copyright (C) 2000 MySQL AB
+/* Copyright (c) 2000, 2011, Oracle and/or its affiliates. All rights reserved.
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -11,7 +11,7 @@
 
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
-   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA */
+   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA */
 
 #include "mysys_priv.h"
 #include "mysys_err.h"
@@ -61,7 +61,7 @@ size_t my_read(File Filedes, uchar *Buffer, size_t Count, myf MyFlags)
                             my_errno));
 
       if ((readbytes == 0 || (int) readbytes == -1) && errno == EINTR)
-      {  
+      {
         DBUG_PRINT("debug", ("my_read() was interrupted and returned %ld",
                              (long) readbytes));
         continue;                              /* Interrupted */

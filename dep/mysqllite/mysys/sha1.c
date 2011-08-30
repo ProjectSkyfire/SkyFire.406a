@@ -43,9 +43,9 @@
   HEREIN WILL NOT INFRINGE ANY RIGHTS OR ANY IMPLIED WARRANTIES OF
   MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
 
-  Acknowledgement 
-  Funding for the RFC Editor function is currently provided by the 
-  Internet Society. 
+  Acknowledgement
+  Funding for the RFC Editor function is currently provided by the
+  Internet Society.
 
  DESCRIPTION
   This file implements the Secure Hashing Algorithm 1 as
@@ -94,7 +94,6 @@
 static void SHA1PadMessage(SHA1_CONTEXT*);
 static void SHA1ProcessMessageBlock(SHA1_CONTEXT*);
 
-
 /*
   Initialize SHA1Context
 
@@ -111,7 +110,6 @@ static void SHA1ProcessMessageBlock(SHA1_CONTEXT*);
    != SHA_SUCCESS	sha Error Code.
 */
 
-
 const uint32 sha_const_key[5]=
 {
   0x67452301,
@@ -120,7 +118,6 @@ const uint32 sha_const_key[5]=
   0x10325476,
   0xC3D2E1F0
 };
-
 
 int mysql_sha1_reset(SHA1_CONTEXT *context)
 {
@@ -143,7 +140,6 @@ int mysql_sha1_reset(SHA1_CONTEXT *context)
 
   return SHA_SUCCESS;
 }
-
 
 /*
    Return the 160-bit message digest into the array provided by the caller
@@ -189,7 +185,6 @@ int mysql_sha1_result(SHA1_CONTEXT *context,
 			 * ( 3 - ( i & 0x03 ) )));
   return SHA_SUCCESS;
 }
-
 
 /*
   Accepts an array of octets as the next portion of the message.
@@ -246,7 +241,6 @@ int mysql_sha1_input(SHA1_CONTEXT *context, const uint8 *message_array,
   return SHA_SUCCESS;
 }
 
-
 /*
   Process the next 512 bits of the message stored in the Message_Block array.
 
@@ -268,7 +262,6 @@ static const uint32  K[]=
   0xCA62C1D6
 };
 
-
 static void SHA1ProcessMessageBlock(SHA1_CONTEXT *context)
 {
   int		t;		   /* Loop counter		  */
@@ -289,7 +282,6 @@ static void SHA1ProcessMessageBlock(SHA1_CONTEXT *context)
     W[t] |= context->Message_Block[idx + 2] << 8;
     W[t] |= context->Message_Block[idx + 3];
   }
-
 
   for (t = 16; t < 80; t++)
   {
@@ -351,7 +343,6 @@ static void SHA1ProcessMessageBlock(SHA1_CONTEXT *context)
 
   context->Message_Block_Index = 0;
 }
-
 
 /*
   Pad message

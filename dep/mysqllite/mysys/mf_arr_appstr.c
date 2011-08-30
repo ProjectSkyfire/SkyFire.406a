@@ -16,7 +16,6 @@
 #include "mysys_priv.h"
 #include <m_string.h>                           /* strcmp() */
 
-
 /**
   Append str to array, or move to the end if it already exists
 

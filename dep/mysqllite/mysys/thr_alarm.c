@@ -1,4 +1,4 @@
-/* Copyright (C) 2000 MySQL AB, 2008-2009 Sun Microsystems, Inc
+/* Copyright (c) 2000, 2011, Oracle and/or its affiliates. All rights reserved.
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -11,7 +11,7 @@
 
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
-   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA */
+   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA */
 
 /* To avoid problems with alarms in debug code, we disable DBUG here */
 #define FORCE_DBUG_OFF
@@ -116,7 +116,6 @@ void init_thr_alarm(uint max_alarms)
   DBUG_VOID_RETURN;
 }
 
-
 void resize_thr_alarm(uint max_alarms)
 {
   mysql_mutex_lock(&LOCK_alarm);
@@ -128,7 +127,6 @@ void resize_thr_alarm(uint max_alarms)
     resize_queue(&alarm_queue,max_alarms+1);
   mysql_mutex_unlock(&LOCK_alarm);
 }
-
 
 /*
   Request alarm after sec seconds.
@@ -236,7 +234,6 @@ my_bool thr_alarm(thr_alarm_t *alrm, uint sec, ALARM *alarm_data)
   DBUG_RETURN(0);
 }
 
-
 /*
   Remove alarm from list of alarms
 */
@@ -334,7 +331,6 @@ sig_handler process_alarm(int sig __attribute__((unused)))
   return;
 }
 
-
 static sig_handler process_alarm_part2(int sig __attribute__((unused)))
 {
   ALARM *alarm_data;
@@ -415,7 +411,6 @@ static sig_handler process_alarm_part2(int sig __attribute__((unused)))
   DBUG_VOID_RETURN;
 }
 
-
 /*
   Schedule all alarms now and optionally free all structures
 
@@ -475,7 +470,6 @@ void end_thr_alarm(my_bool free_structures)
   DBUG_VOID_RETURN;
 }
 
-
 /*
   Remove another thread from the alarm
 */
@@ -500,7 +494,6 @@ void thr_alarm_kill(my_thread_id thread_id)
   mysql_mutex_unlock(&LOCK_alarm);
 }
 
-
 void thr_alarm_info(ALARM_INFO *info)
 {
   mysql_mutex_lock(&LOCK_alarm);
@@ -522,7 +515,6 @@ void thr_alarm_info(ALARM_INFO *info)
   ARGSUSED
 */
 
-
 static sig_handler thread_alarm(int sig __attribute__((unused)))
 {
 #ifdef MAIN
@@ -532,7 +524,6 @@ static sig_handler thread_alarm(int sig __attribute__((unused)))
   my_sigset(sig,thread_alarm);		/* int. thread system calls */
 #endif
 }
-
 
 #ifdef HAVE_TIMESPEC_TS_SEC
 #define tv_sec ts_sec
@@ -616,7 +607,6 @@ sig_handler process_alarm(int sig __attribute__((unused)))
   /* Can't do this yet */
 }
 
-
 my_bool thr_alarm(thr_alarm_t *alrm, uint sec, ALARM *alarm)
 {
   (*alrm)= &alarm->alarmed;
@@ -630,7 +620,6 @@ my_bool thr_alarm(thr_alarm_t *alrm, uint sec, ALARM *alarm)
     return 1;
   return 0;
 }
-
 
 my_bool thr_got_alarm(thr_alarm_t *alrm_ptr)
 {
@@ -647,7 +636,6 @@ my_bool thr_got_alarm(thr_alarm_t *alrm_ptr)
   }
   return !alrm->crono || alarm_aborted;
 }
-
 
 void thr_end_alarm(thr_alarm_t *alrm_ptr)
 {
@@ -804,7 +792,6 @@ static sig_handler print_signal_warning(int sig)
 }
 #endif /* USE_ONE_SIGNAL_HAND */
 
-
 static void *signal_hand(void *arg __attribute__((unused)))
 {
   sigset_t set;
@@ -871,7 +858,6 @@ static void *signal_hand(void *arg __attribute__((unused)))
     }
   }
 }
-
 
 int main(int argc __attribute__((unused)),char **argv __attribute__((unused)))
 {

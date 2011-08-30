@@ -1,4 +1,4 @@
-/* Copyright (C) 2000 MySQL AB
+/* Copyright (c) 2000, 2011, Oracle and/or its affiliates. All rights reserved.
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -19,7 +19,6 @@
 #include <m_string.h>
 #include <m_ctype.h>
 
-
 #define is_field_separator(X) ((X) == ',' || (X) == '=')
 
 int find_type_or_exit(const char *x, TYPELIB *typelib, const char *option)
@@ -27,7 +26,7 @@ int find_type_or_exit(const char *x, TYPELIB *typelib, const char *option)
   int res;
   const char **ptr;
 
-  if ((res= find_type((char *) x, typelib, 2)) <= 0)
+  if ((res= find_type((char *) x, typelib, FIND_TYPE_BASIC)) <= 0)
   {
     ptr= typelib->type_names;
     if (!*x)
@@ -43,21 +42,17 @@ int find_type_or_exit(const char *x, TYPELIB *typelib, const char *option)
   return res;
 }
 
-
 /**
   Search after a string in a list of strings. Endspace in x is not compared.
 
   @param x              String to find
-  @param lib            TYPELIB (struct of pointer to values + count)
-  @param full_name      bitmap of what to do
-                        If & 1 accept only whole names
-                        If & 2 don't expand if half field
-                        If & 4 allow #number# as type
-                        If & 8 use ',' as string terminator
-
-  @note
-  If part, uniq field is found and full_name == 0 then x is expanded
-  to full field.
+  @param typelib        TYPELIB (struct of pointer to values + count)
+  @param flags          flags to tune behaviour: a combination of
+                        FIND_TYPE_NO_PREFIX
+                        FIND_TYPE_ALLOW_NUMBER
+                        FIND_TYPE_COMMA_TERM.
+                        FIND_TYPE_NO_OVERWRITE can be passed but is
+                        superfluous (is always implicitely on).
 
   @retval
     -1  Too many matching values
@@ -67,16 +62,17 @@ int find_type_or_exit(const char *x, TYPELIB *typelib, const char *option)
     >0  Offset+1 in typelib for matched string
 */
 
-
-int find_type(char *x, const TYPELIB *typelib, uint full_name)
+int find_type(const char *x, const TYPELIB *typelib, uint flags)
 {
   int find,pos;
   int UNINIT_VAR(findpos);                       /* guarded by find */
-  reg1 char * i;
-  reg2 const char *j;
+  const char *i;
+  const char *j;
   DBUG_ENTER("find_type");
   DBUG_PRINT("enter",("x: '%s'  lib: 0x%lx", x, (long) typelib));
 
+  DBUG_ASSERT(!(flags & ~(FIND_TYPE_NO_PREFIX | FIND_TYPE_ALLOW_NUMBER |
+                          FIND_TYPE_NO_OVERWRITE | FIND_TYPE_COMMA_TERM)));
   if (!typelib->count)
   {
     DBUG_PRINT("exit",("no count"));
@@ -85,25 +81,27 @@ int find_type(char *x, const TYPELIB *typelib, uint full_name)
   find=0;
   for (pos=0 ; (j=typelib->type_names[pos]) ; pos++)
   {
-    for (i=x ; 
-    	*i && (!(full_name & 8) || !is_field_separator(*i)) &&
-        my_toupper(&my_charset_latin1,*i) == 
+    for (i=x ;
+    	*i && (!(flags & FIND_TYPE_COMMA_TERM) || !is_field_separator(*i)) &&
+        my_toupper(&my_charset_latin1,*i) ==
     		my_toupper(&my_charset_latin1,*j) ; i++, j++) ;
     if (! *j)
     {
       while (*i == ' ')
 	i++;					/* skip_end_space */
-      if (! *i || ((full_name & 8) && is_field_separator(*i)))
+      if (! *i || ((flags & FIND_TYPE_COMMA_TERM) && is_field_separator(*i)))
 	DBUG_RETURN(pos+1);
     }
-    if ((!*i && (!(full_name & 8) || !is_field_separator(*i))) && 
-        (!*j || !(full_name & 1)))
+    if ((!*i &&
+         (!(flags & FIND_TYPE_COMMA_TERM) || !is_field_separator(*i))) &&
+        (!*j || !(flags & FIND_TYPE_NO_PREFIX)))
     {
       find++;
       findpos=pos;
     }
   }
-  if (find == 0 && (full_name & 4) && x[0] == '#' && strend(x)[-1] == '#' &&
+  if (find == 0 && (flags & FIND_TYPE_ALLOW_NUMBER) && x[0] == '#' &&
+      strend(x)[-1] == '#' &&
       (findpos=atoi(x+1)-1) >= 0 && (uint) findpos < typelib->count)
     find=1;
   else if (find == 0 || ! x[0])
@@ -111,20 +109,17 @@ int find_type(char *x, const TYPELIB *typelib, uint full_name)
     DBUG_PRINT("exit",("Couldn't find type"));
     DBUG_RETURN(0);
   }
-  else if (find != 1 || (full_name & 1))
+  else if (find != 1 || (flags & FIND_TYPE_NO_PREFIX))
   {
     DBUG_PRINT("exit",("Too many possybilities"));
     DBUG_RETURN(-1);
   }
-  if (!(full_name & 2))
-    (void) strmov(x,typelib->type_names[findpos]);
   DBUG_RETURN(findpos+1);
 } /* find_type */
 
-
 /**
   Get name of type nr
- 
+
   @note
   first type is 1, 0 = empty field
 */
@@ -140,7 +135,6 @@ void make_type(register char * to, register uint nr,
   DBUG_VOID_RETURN;
 } /* make_type */
 
-
 /**
   Get type
 
@@ -155,14 +149,13 @@ const char *get_type(TYPELIB *typelib, uint nr)
   return "?";
 }
 
-
 /**
   Create an integer value to represent the supplied comma-seperated
   string where each string in the TYPELIB denotes a bit position.
 
   @param x      string to decompose
   @param lib    TYPELIB (struct of pointer to values + count)
-  @param err    index (not char position) of string element which was not 
+  @param err    index (not char position) of string element which was not
                 found or 0 if there was no error
 
   @retval
@@ -192,14 +185,13 @@ my_ulonglong find_typeset(char *x, TYPELIB *lib, int *err)
       x++;
     if (x[0] && x[1])      /* skip separator if found */
       x++;
-    if ((find= find_type(i, lib, 2 | 8) - 1) < 0)
+    if ((find= find_type(i, lib, FIND_TYPE_COMMA_TERM) - 1) < 0)
       DBUG_RETURN(0);
     result|= (ULL(1) << find);
   }
   *err= 0;
   DBUG_RETURN(result);
 } /* find_set */
-
 
 /**
   Create a copy of a specified TYPELIB structure.
@@ -250,7 +242,6 @@ TYPELIB *copy_typelib(MEM_ROOT *root, TYPELIB *from)
   return to;
 }
 
-
 static const char *on_off_default_names[]= { "off","on","default", 0};
 static TYPELIB on_off_default_typelib= {array_elements(on_off_default_names)-1,
                                         "", on_off_default_names, 0};
@@ -276,7 +267,7 @@ static TYPELIB on_off_default_typelib= {array_elements(on_off_default_names)-1,
 static uint parse_name(const TYPELIB *lib, const char **strpos, const char *end)
 {
   const char *pos= *strpos;
-  uint find= find_type((char*)pos, lib, 8);
+  uint find= find_type(pos, lib, FIND_TYPE_COMMA_TERM);
   for (; pos != end && *pos != '=' && *pos !=',' ; pos++);
   *strpos= pos;
   return find;
@@ -299,14 +290,14 @@ static uint parse_name(const TYPELIB *lib, const char **strpos, const char *end)
   @details
   Parse a set of flag assignments, that is, parse a string in form:
 
-    param_name1=value1,param_name2=value2,... 
-  
+    param_name1=value1,param_name2=value2,...
+
   where the names are specified in the TYPELIB, and each value can be
-  either 'on','off', or 'default'. Setting the same name twice is not 
+  either 'on','off', or 'default'. Setting the same name twice is not
   allowed.
-  
-  Besides param=val assignments, we support the "default" keyword (keyword 
-  #default_name in the typelib). It can be used one time, if specified it 
+
+  Besides param=val assignments, we support the "default" keyword (keyword
+  #default_name in the typelib). It can be used one time, if specified it
   causes us to build the new set over the default_set rather than cur_set
   value.
 
@@ -329,7 +320,7 @@ my_ulonglong find_set_from_flags(const TYPELIB *lib, uint default_name,
   *err_pos= 0;                  /* No error yet */
   if (str != end)
   {
-    const char *start= str;    
+    const char *start= str;
     for (;;)
     {
       const char *pos= start;
@@ -353,7 +344,7 @@ my_ulonglong find_set_from_flags(const TYPELIB *lib, uint default_name,
             pos >= end || *pos++ != '=' ||
             !(value= parse_name(&on_off_default_typelib, &pos, end)))
           goto err;
-        
+
         if (value == 1) /* this is '=off' */
           flags_to_clear|= bit;
         else if (value == 2) /* this is '=on' */
@@ -385,4 +376,3 @@ my_ulonglong find_set_from_flags(const TYPELIB *lib, uint default_name,
   res&= ~flags_to_clear;
   return res;
 }
-

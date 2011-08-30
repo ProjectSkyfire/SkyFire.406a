@@ -14,6 +14,7 @@ SET(zlib_STAT_SRCS
   crc32.c                                                                                                                                             
   deflate.c                                                                                                                                           
   example.c                                                                                                                                           
+  gzio.c
   infback.c                                                                                                                                           
   inffast.c                                                                                                                                           
   inflate.c                                                                                                                                           

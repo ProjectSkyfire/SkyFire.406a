@@ -1,4 +1,4 @@
-/* Copyright (C) 2000 MySQL AB, 2008-2009 Sun Microsystems, Inc
+/* Copyright (c) 2000, 2010, Oracle and/or its affiliates. All rights reserved.
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -11,7 +11,7 @@
 
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
-   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA */
+   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA */
 
 #include "mysys_priv.h"
 #include <m_string.h>
@@ -69,7 +69,6 @@ err:
   DBUG_RETURN(TRUE);
 }
 
-
 char *my_tmpdir(MY_TMPDIR *tmpdir)
 {
   char *dir;
@@ -92,4 +91,3 @@ void free_tmpdir(MY_TMPDIR *tmpdir)
   delete_dynamic(&tmpdir->full_list);
   mysql_mutex_destroy(&tmpdir->mutex);
 }
-

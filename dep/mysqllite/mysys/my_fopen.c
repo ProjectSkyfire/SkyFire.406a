@@ -1,4 +1,4 @@
-/* Copyright (C) 2000 MySQL AB, 2008-2009 Sun Microsystems, Inc
+/* Copyright (c) 2000, 2011, Oracle and/or its affiliates. All rights reserved.
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -92,7 +92,6 @@ FILE *my_fopen(const char *filename, int flags, myf MyFlags)
   DBUG_RETURN((FILE*) 0);
 } /* my_fopen */
 
-
 #if defined(_WIN32)
 
 static FILE *my_win_freopen(const char *path, const char *mode, FILE *stream)
@@ -184,7 +183,6 @@ static FILE *my_freebsd_freopen(const char *path, const char *mode, FILE *stream
 
 #endif
 
-
 /**
   Change the file associated with a file stream.
 
@@ -222,7 +220,6 @@ FILE *my_freopen(const char *path, const char *mode, FILE *stream)
   return result;
 }
 
-
 /* Close a stream */
 int my_fclose(FILE *fd, myf MyFlags)
 {
@@ -254,7 +251,6 @@ int my_fclose(FILE *fd, myf MyFlags)
   mysql_mutex_unlock(&THR_LOCK_open);
   DBUG_RETURN(err);
 } /* my_fclose */
-
 
 	/* Make a stream out of a file handle */
 	/* Name may be 0 */
@@ -302,8 +298,7 @@ FILE *my_fdopen(File Filedes, const char *name, int Flags, myf MyFlags)
   DBUG_RETURN(fd);
 } /* my_fdopen */
 
-
-/*   
+/*
   Make a fopen() typestring from a open() type bitmap
 
   SYNOPSIS
@@ -312,47 +307,47 @@ FILE *my_fdopen(File Filedes, const char *name, int Flags, myf MyFlags)
     flag	Flag used by open()
 
   IMPLEMENTATION
-    This routine attempts to find the best possible match 
-    between  a numeric option and a string option that could be 
-    fed to fopen.  There is not a 1 to 1 mapping between the two.  
-  
+    This routine attempts to find the best possible match
+    between  a numeric option and a string option that could be
+    fed to fopen.  There is not a 1 to 1 mapping between the two.
+
   NOTE
     On Unix, O_RDONLY is usually 0
 
   MAPPING
-    r  == O_RDONLY   
-    w  == O_WRONLY|O_TRUNC|O_CREAT  
-    a  == O_WRONLY|O_APPEND|O_CREAT  
-    r+ == O_RDWR  
-    w+ == O_RDWR|O_TRUNC|O_CREAT  
+    r  == O_RDONLY
+    w  == O_WRONLY|O_TRUNC|O_CREAT
+    a  == O_WRONLY|O_APPEND|O_CREAT
+    r+ == O_RDWR
+    w+ == O_RDWR|O_TRUNC|O_CREAT
     a+ == O_RDWR|O_APPEND|O_CREAT
 */
 
 static void make_ftype(register char * to, register int flag)
 {
-  /* check some possible invalid combinations */  
+  /* check some possible invalid combinations */
   DBUG_ASSERT((flag & (O_TRUNC | O_APPEND)) != (O_TRUNC | O_APPEND));
   DBUG_ASSERT((flag & (O_WRONLY | O_RDWR)) != (O_WRONLY | O_RDWR));
 
-  if ((flag & (O_RDONLY|O_WRONLY)) == O_WRONLY)    
-    *to++= (flag & O_APPEND) ? 'a' : 'w';  
-  else if (flag & O_RDWR)          
+  if ((flag & (O_RDONLY|O_WRONLY)) == O_WRONLY)
+    *to++= (flag & O_APPEND) ? 'a' : 'w';
+  else if (flag & O_RDWR)
   {
-    /* Add '+' after theese */    
-    if (flag & (O_TRUNC | O_CREAT))      
-      *to++= 'w';    
-    else if (flag & O_APPEND)      
-      *to++= 'a';    
-    else      
+    /* Add '+' after theese */
+    if (flag & (O_TRUNC | O_CREAT))
+      *to++= 'w';
+    else if (flag & O_APPEND)
+      *to++= 'a';
+    else
       *to++= 'r';
-    *to++= '+';  
-  }  
-  else    
+    *to++= '+';
+  }
+  else
     *to++= 'r';
 
-#if FILE_BINARY            /* If we have binary-files */  
-  if (flag & FILE_BINARY)    
+#if FILE_BINARY            /* If we have binary-files */
+  if (flag & FILE_BINARY)
     *to++='b';
-#endif  
+#endif
   *to='\0';
 } /* make_ftype */

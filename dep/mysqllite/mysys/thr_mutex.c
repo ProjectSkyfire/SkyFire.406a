@@ -1,4 +1,4 @@
-/* Copyright (C) 2000-2003 MySQL AB, 2008-2009 Sun Microsystems, Inc
+/* Copyright (c) 2000, 2011, Oracle and/or its affiliates. All rights reserved.
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -11,7 +11,7 @@
 
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
-   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA */
+   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA */
 
 /* This makes a wrapper for mutex handling to make it easier to debug mutex */
 
@@ -50,7 +50,6 @@ void safe_mutex_global_init(void)
 {
   pthread_mutex_init(&THR_LOCK_mutex,MY_MUTEX_INIT_FAST);
 }
-
 
 int safe_mutex_init(safe_mutex_t *mp,
 		    const pthread_mutexattr_t *attr __attribute__((unused)),
@@ -92,7 +91,6 @@ int safe_mutex_init(safe_mutex_t *mp,
 #endif /* SAFE_MUTEX_DETECT_DESTROY */
   return 0;
 }
-
 
 int safe_mutex_lock(safe_mutex_t *mp, my_bool try_lock, const char *file, uint line)
 {
@@ -172,7 +170,6 @@ line %d more than 1 time\n", file,line);
   return error;
 }
 
-
 int safe_mutex_unlock(safe_mutex_t *mp,const char *file, uint line)
 {
   int error;
@@ -208,7 +205,6 @@ int safe_mutex_unlock(safe_mutex_t *mp,const char *file, uint line)
   pthread_mutex_unlock(&mp->global);
   return error;
 }
-
 
 int safe_cond_wait(pthread_cond_t *cond, safe_mutex_t *mp, const char *file,
 		   uint line)
@@ -260,7 +256,6 @@ int safe_cond_wait(pthread_cond_t *cond, safe_mutex_t *mp, const char *file,
   return error;
 }
 
-
 int safe_cond_timedwait(pthread_cond_t *cond, safe_mutex_t *mp,
                         const struct timespec *abstime,
                         const char *file, uint line)
@@ -298,7 +293,6 @@ int safe_cond_timedwait(pthread_cond_t *cond, safe_mutex_t *mp,
   return error;
 }
 
-
 int safe_mutex_destroy(safe_mutex_t *mp, const char *file, uint line)
 {
   int error=0;
@@ -317,7 +311,7 @@ int safe_mutex_destroy(safe_mutex_t *mp, const char *file, uint line)
     fflush(stderr);
     abort();
   }
-#ifdef __WIN__ 
+#ifdef __WIN__
   pthread_mutex_destroy(&mp->global);
   pthread_mutex_destroy(&mp->mutex);
 #else
@@ -353,7 +347,6 @@ int safe_mutex_destroy(safe_mutex_t *mp, const char *file, uint line)
 #endif /* SAFE_MUTEX_DETECT_DESTROY */
   return error;
 }
-
 
 /*
   Free global resources and check that all mutex has been destroyed
@@ -428,8 +421,8 @@ ulong mutex_delay(ulong delayloops)
   for (i = 0; i < delayloops * 50; i++)
     j += i;
 
-  return(j); 
-}	
+  return(j);
+}
 
 #define MY_PTHREAD_FASTMUTEX_SPINS 8
 #define MY_PTHREAD_FASTMUTEX_DELAY 4
@@ -440,11 +433,11 @@ int my_pthread_fastmutex_init(my_pthread_fastmutex_t *mp,
                               const pthread_mutexattr_t *attr)
 {
   if ((cpu_count > 1) && (attr == MY_MUTEX_INIT_FAST))
-    mp->spins= MY_PTHREAD_FASTMUTEX_SPINS; 
+    mp->spins= MY_PTHREAD_FASTMUTEX_SPINS;
   else
     mp->spins= 0;
   mp->rng_state= 1;
-  return pthread_mutex_init(&mp->mutex, attr); 
+  return pthread_mutex_init(&mp->mutex, attr);
 }
 
 /**
@@ -492,12 +485,11 @@ int my_pthread_fastmutex_lock(my_pthread_fastmutex_t *mp)
   return pthread_mutex_lock(&mp->mutex);
 }
 
-
 void fastmutex_global_init(void)
 {
 #ifdef _SC_NPROCESSORS_CONF
   cpu_count= sysconf(_SC_NPROCESSORS_CONF);
 #endif
 }
-  
-#endif /* defined(MY_PTHREAD_FASTMUTEX) && !defined(SAFE_MUTEX) */ 
+
+#endif /* defined(MY_PTHREAD_FASTMUTEX) && !defined(SAFE_MUTEX) */

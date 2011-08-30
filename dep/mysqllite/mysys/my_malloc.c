@@ -60,7 +60,6 @@ void *my_malloc(size_t size, myf my_flags)
   DBUG_RETURN(point);
 }
 
-
 /**
    @brief wrapper around realloc()
 
@@ -113,7 +112,6 @@ void *my_realloc(void *oldpoint, size_t size, myf my_flags)
   DBUG_RETURN(point);
 }
 
-
 /**
   Free memory allocated with my_malloc.
 
@@ -129,7 +127,6 @@ void my_free(void *ptr)
   DBUG_VOID_RETURN;
 }
 
-
 void *my_memdup(const void *from, size_t length, myf my_flags)
 {
   void *ptr;
@@ -137,7 +134,6 @@ void *my_memdup(const void *from, size_t length, myf my_flags)
     memcpy(ptr, from, length);
   return ptr;
 }
-
 
 char *my_strdup(const char *from, myf my_flags)
 {
@@ -147,7 +143,6 @@ char *my_strdup(const char *from, myf my_flags)
     memcpy(ptr, from, length);
   return ptr;
 }
-
 
 char *my_strndup(const char *from, size_t length, myf my_flags)
 {
@@ -159,4 +154,3 @@ char *my_strndup(const char *from, size_t length, myf my_flags)
   }
   return ptr;
 }
-

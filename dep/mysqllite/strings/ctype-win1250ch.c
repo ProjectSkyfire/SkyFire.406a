@@ -1,4 +1,4 @@
-/* Copyright (C) 2003 MySQL AB
+/* Copyright (c) 2002, 2010, Oracle and/or its affiliates. All rights reserved.
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -11,7 +11,7 @@
 
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
-   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA */
+   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA */
 
 /*
    Shared, independent copyright: (C) 2001 Jan Pazdziora.
@@ -52,7 +52,6 @@
 
 #ifdef HAVE_CHARSET_cp1250
 
-
 static uint16 tab_cp1250_uni[256]={
      0,0x0001,0x0002,0x0003,0x0004,0x0005,0x0006,0x0007,
 0x0008,0x0009,0x000A,0x000B,0x000C,0x000D,0x000E,0x000F,
@@ -87,7 +86,6 @@ static uint16 tab_cp1250_uni[256]={
 0x0111,0x0144,0x0148,0x00F3,0x00F4,0x0151,0x00F6,0x00F7,
 0x0159,0x016F,0x00FA,0x0171,0x00FC,0x00FD,0x0163,0x02D9
 };
-
 
 /* 0000-00FD , 254 chars */
 static uchar tab_uni_cp1250_plane00[]={
@@ -141,7 +139,6 @@ static uchar tab_uni_cp1250_plane02[]={
 static uchar tab_uni_cp1250_plane21[]={
 0x99};
 
-
 static MY_UNI_IDX idx_uni_cp1250[]={
   {0x0000,0x00FD,tab_uni_cp1250_plane00},
   {0x0102,0x017E,tab_uni_cp1250_plane01},
@@ -150,7 +147,6 @@ static MY_UNI_IDX idx_uni_cp1250[]={
   {0x2122,0x2122,tab_uni_cp1250_plane21},
   {0,0,NULL}
 };
-
 
 static uchar ctype_win1250ch[] = {
 0x00,
@@ -258,8 +254,6 @@ static uchar to_upper_win1250ch[] = {
 0xd8, 0xd9, 0xda, 0xdb, 0xdc, 0xdd, 0xde, 0xff
 };
 
-
-
 static uchar sort_order_win1250ch[] = {
 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31,
@@ -300,7 +294,7 @@ static uchar _sort_order_win1250ch1[] = {
 0xac, 0xae, 0xaf, 0xb0, 0xb1, 0xb2, 0xb3, 0xb4,
 0xb5, 0xb6,
 	    /* R ord 82 0x52 */
-	    0xb7, 
+	    0xb7,
 		  /* S ord 83 0x53 */
 		  0xb9, 0xbc, 0xbd, 0xbe, 0xbf,
 0xc0, 0xc1, 0xc2,
@@ -360,7 +354,7 @@ static uchar _sort_order_win1250ch2[] = {
 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01,
 0x01, 0x01,
 	    /* R ord 82 0x52 */
-	    0x01, 
+	    0x01,
 		  /* S ord 83 0x53 */
 		  0x01, 0x01, 0x01, 0x01, 0x01,
 0x01, 0x01, 0x01,
@@ -445,7 +439,7 @@ static struct wordvalue doubles[] = {
 
 #define IS_END(p, src, len)	(((char *)p - (char *)src) >= (len))
 
-static int my_strnncoll_win1250ch(CHARSET_INFO *cs __attribute__((unused)), 
+static int my_strnncoll_win1250ch(CHARSET_INFO *cs __attribute__((unused)),
 				  const uchar *s1, size_t len1,
                                   const uchar *s2, size_t len2,
                                   my_bool s2_is_prefix)
@@ -470,14 +464,13 @@ static int my_strnncoll_win1250ch(CHARSET_INFO *cs __attribute__((unused)),
   return 0;
 }
 
-
 /*
   TODO: Has to be fixed as strnncollsp in ctype-simple
 */
 
 static
-int my_strnncollsp_win1250ch(CHARSET_INFO * cs, 
-			     const uchar *s, size_t slen, 
+int my_strnncollsp_win1250ch(CHARSET_INFO * cs,
+			     const uchar *s, size_t slen,
 			     const uchar *t, size_t tlen,
                              my_bool diff_if_only_endspace_difference
                              __attribute__((unused)))
@@ -487,9 +480,8 @@ int my_strnncollsp_win1250ch(CHARSET_INFO * cs,
   return my_strnncoll_win1250ch(cs,s,slen,t,tlen,0);
 }
 
-
 static size_t my_strnxfrm_win1250ch(CHARSET_INFO * cs  __attribute__((unused)),
-                                    uchar *dest, size_t len, 
+                                    uchar *dest, size_t len,
                                     const uchar *src, size_t srclen)
 {
   int value;
@@ -621,7 +613,6 @@ my_like_range_win1250ch(CHARSET_INFO *cs __attribute__((unused)),
 			char *min_str, char *max_str,
 			size_t *min_length, size_t *max_length)
 {
-
   int only_min_found= 1;
   const char *end = ptr + ptr_length;
   char *min_org = min_str;
@@ -660,7 +651,6 @@ my_like_range_win1250ch(CHARSET_INFO *cs __attribute__((unused)),
   return (only_min_found);
 }
 
-
 static MY_COLLATION_HANDLER my_collation_czech_ci_handler =
 {
   NULL,				/* init */
@@ -675,7 +665,6 @@ static MY_COLLATION_HANDLER my_collation_czech_ci_handler =
   my_hash_sort_simple,
   my_propagate_simple
 };
-
 
 CHARSET_INFO my_charset_cp1250_czech_ci =
 {
@@ -708,7 +697,6 @@ CHARSET_INFO my_charset_cp1250_czech_ci =
   &my_charset_8bit_handler,
   &my_collation_czech_ci_handler
 };
-
 
 #endif /* REAL_MYSQL */
 

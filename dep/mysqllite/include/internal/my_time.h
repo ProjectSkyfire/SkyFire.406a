@@ -1,4 +1,4 @@
-/* Copyright (C) 2004-2005 MySQL AB
+/* Copyright (c) 2004, 2011, Oracle and/or its affiliates. All rights reserved.
 
  This program is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -11,7 +11,7 @@
 
  You should have received a copy of the GNU General Public License
  along with this program; if not, write to the Free Software
- Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA */
+ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA */
 
 /*
   This is a private header of sql-common library, containing
@@ -49,6 +49,19 @@ typedef long my_time_t;
 
 /* two-digit years < this are 20..; >= this are 19.. */
 #define YY_PART_YEAR	   70
+
+/*
+  check for valid times only if the range of time_t is greater than
+  the range of my_time_t
+*/
+#if SIZEOF_TIME_T > 4 || defined(TIME_T_UNSIGNED)
+# define IS_TIME_T_VALID_FOR_TIMESTAMP(x) \
+    ((x) <= TIMESTAMP_MAX_VALUE && \
+     (x) >= TIMESTAMP_MIN_VALUE)
+#else
+# define IS_TIME_T_VALID_FOR_TIMESTAMP(x) \
+    ((x) >= TIMESTAMP_MIN_VALUE)
+#endif
 
 /* Flags to str_to_datetime */
 #define TIME_FUZZY_DATE		1

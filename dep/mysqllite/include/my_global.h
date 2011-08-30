@@ -1,4 +1,5 @@
-/* Copyright (C) 2000-2003 MySQL AB, 2009 Sun Microsystems, Inc
+/*
+   Copyright (c) 2001, 2011, Oracle and/or its affiliates. All rights reserved.
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -285,7 +286,7 @@ C_MODE_END
 #define ulonglong2double(A) my_ulonglong2double(A)
 #define my_off_t2double(A)  my_ulonglong2double(A)
 C_MODE_START
-double my_ulonglong2double(unsigned long long A);
+inline double my_ulonglong2double(unsigned long long A) { return (double A); }
 C_MODE_END
 #endif /* _AIX */
 
@@ -301,9 +302,6 @@ C_MODE_END
 #undef HAVE_PWRITE
 #endif
 
-#ifdef UNDEF_HAVE_GETHOSTBYNAME_R		/* For OSF4.x */
-#undef HAVE_GETHOSTBYNAME_R
-#endif
 #ifdef UNDEF_HAVE_INITGROUPS			/* For AIX 4.3 */
 #undef HAVE_INITGROUPS
 #endif
@@ -1476,7 +1474,6 @@ static inline double rint(double x)
 
 #undef HAVE_OPENSSL
 #undef HAVE_SMEM				/* No shared memory */
-#undef HAVE_NDBCLUSTER_DB /* No NDB cluster */
 
 #endif /* EMBEDDED_LIBRARY */
 

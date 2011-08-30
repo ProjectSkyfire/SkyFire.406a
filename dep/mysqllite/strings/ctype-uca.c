@@ -1,36 +1,35 @@
-/* Copyright (C) 2004 MySQL AB
-   
+/* Copyright (c) 2004, 2010, Oracle and/or its affiliates. All rights reserved.
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; version 2
    of the License.
-   
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
-   
+
    You should have received a copy of the GNU Library General Public
    License along with this library; if not, write to the Free
-   Software Foundation, Inc., 59 Temple Place - Suite 330, Boston,
-   MA 02111-1307, USA */
+   Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston,
+   MA 02110-1301, USA */
 
-/* 
-   UCA (Unicode Collation Algorithm) support. 
+/*
+   UCA (Unicode Collation Algorithm) support.
    Written by Alexander Barkov <bar@mysql.com>
-   
+
    Currently supports only subset of the full UCA:
    - Only Primary level key comparison
    - Basic Latin letters contraction is implemented
    - Variable weighting is done for Non-ignorable option
-   
+
    Features that are not implemented yet:
    - No Normalization From D is done
      + No decomposition is done
      + No Thai/Lao orderding is done
    - No combining marks processing is done
 */
-
 
 #include <my_global.h>
 #include "m_string.h"
@@ -6566,7 +6565,6 @@ static const char latvian[]=
     "& S < \\u0161 <<< \\u0160 "
     "& Z < \\u017E <<< \\u017D ";
 
-
 static const char romanian[]=
     "& A < \\u0103 <<< \\u0102 < \\u00E2 <<< \\u00C2 "
     "& I < \\u00EE <<< \\u00CE "
@@ -6577,7 +6575,6 @@ static const char slovenian[]=
     "& C < \\u010D <<< \\u010C "
     "& S < \\u0161 <<< \\u0160 "
     "& Z < \\u017E <<< \\u017D ";
-    
 
 static const char polish[]=
     "& A < \\u0105 <<< \\u0104 "
@@ -6604,7 +6601,7 @@ static const char spanish[]= "& N < \\u00F1 <<< \\u00D1 ";
   Some sources treat V and W as similar on primary level.
   We'll treat V and W as different on primary level.
 */
-    
+
 static const char swedish[]=
     "& Y <<\\u00FC <<< \\u00DC "
     "& Z < \\u00E5 <<< \\u00C5 "
@@ -6618,7 +6615,6 @@ static const char turkish[]=
     "& O < \\u00F6 <<< \\u00D6 "
     "& S < \\u015F <<< \\u015E "
     "& U < \\u00FC <<< \\u00DC ";
-    
 
 static const char czech[]=
     "& C < \\u010D <<< \\u010C "
@@ -6658,17 +6654,17 @@ static const char roman[]= /* i.e. Classical Latin */
     "& V << u <<< U ";
 
 /*
-  Persian collation support was provided by 
+  Persian collation support was provided by
   Jody McIntyre <mysql@modernduck.com>
-  
+
   To: internals@lists.mysql.com
   Subject: Persian UTF8 collation support
   Date: 17.08.2004
-  
+
   Contraction is not implemented.  Some implementations do perform
   contraction but others do not, and it is able to sort all my test
   strings correctly.
-  
+
   Jody.
 */
 static const char persian[]=
@@ -6740,10 +6736,9 @@ static const char sinhala[]=
               "< \\u0DDB < \\u0DDC < \\u0DDD < \\u0DDE < \\u0DCA";
 #endif
 
-
 /*
   Unicode Collation Algorithm:
-  Collation element (weight) scanner, 
+  Collation element (weight) scanner,
   for consequent scan of collations
   weights from a string.
 */
@@ -6765,15 +6760,14 @@ typedef struct my_uca_scanner_st
   Charset dependent scanner part, to optimize
   some character sets.
 */
-typedef struct my_uca_scanner_handler_st 
+typedef struct my_uca_scanner_handler_st
 {
-  void (*init)(my_uca_scanner *scanner, CHARSET_INFO *cs, 
+  void (*init)(my_uca_scanner *scanner, CHARSET_INFO *cs,
                const uchar *str, size_t length);
   int (*next)(my_uca_scanner *scanner);
 } my_uca_scanner_handler;
 
 static uint16 nochar[]= {0,0};
-
 
 #ifdef HAVE_CHARSET_ucs2
 /*
@@ -6785,7 +6779,7 @@ static uint16 nochar[]= {0,0};
     cs		Character set + collation information
     str		Beginning of the string
     length	Length of the string.
-    
+
   NOTES:
     Optimized for UCS2
 
@@ -6797,7 +6791,7 @@ static void my_uca_scanner_init_ucs2(my_uca_scanner *scanner,
                                      CHARSET_INFO *cs __attribute__((unused)),
                                      const uchar *str, size_t length)
 {
-  scanner->wbeg= nochar; 
+  scanner->wbeg= nochar;
   if (length)
   {
     scanner->sbeg= str;
@@ -6812,11 +6806,11 @@ static void my_uca_scanner_init_ucs2(my_uca_scanner *scanner,
     Sometimes this function is called with
     str=NULL and length=0, which should be
     considered as an empty string.
-    
+
     The above initialization is unsafe for such cases,
     because scanner->send is initialized to (NULL-2), which is 0xFFFFFFFE.
     Then we fall into an endless loop in my_uca_scanner_next_ucs2().
-      
+
     Do special initialization for the case when length=0.
     Initialize scanner->sbeg to an address greater than scanner->send.
     Next call of my_uca_scanner_next_ucs2() will correctly return with -1.
@@ -6825,27 +6819,26 @@ static void my_uca_scanner_init_ucs2(my_uca_scanner *scanner,
   scanner->send= (uchar*) &nochar[0];
 }
 
-
 /*
   Read next collation element (weight), i.e. converts
   a stream of characters into a stream of their weights.
-  
+
   SYNOPSIS:
     my_uca_scanner_next()
     scanner	Address of a previously initialized scanner strucuture
-    
+
   NOTES:
     Optimized for UCS2
-    
+
     Checks if the current character's weight string has been fully scanned,
     if no, then returns the next weight for this character,
     else scans the next character and returns its first weight.
 
     Each character can have number weights from 0 to 8.
-    
-    Some characters do not have weights at all, 0 weights. 
+
+    Some characters do not have weights at all, 0 weights.
     It means they are ignored during comparison.
-    
+
     Examples:
     1. 0x0001 START OF HEADING, has no weights, ignored, does
        not produce any weights.
@@ -6855,13 +6848,13 @@ static void my_uca_scanner_init_ucs2(my_uca_scanner *scanner,
        has two weights. It will return 0x0FEA twice for two
        consequent calls.
     4. 0x247D PATENTHESIZED NUMBER TEN, has four weights,
-       this function will return these numbers in four 
+       this function will return these numbers in four
        consequent calls: 0x0288, 0x0E2A, 0x0E29, 0x0289
     5. A string consisting of the above characters:
        0x0001 0x0061 0x00DF 0x247D
        will return the following weights, one weight per call:
        0x0E33 0x0FEA 0x0FEA 0x0288, 0x0E2A, 0x0E29, 0x0289
-    
+
   RETURN
     Next weight, a number between 0x0000 and 0xFFFF
     Or -1 on error (END-OF-STRING or ILLEGAL MULTIBYTE SEQUENCE)
@@ -6869,32 +6862,31 @@ static void my_uca_scanner_init_ucs2(my_uca_scanner *scanner,
 
 static int my_uca_scanner_next_ucs2(my_uca_scanner *scanner)
 {
-  
-  /* 
+  /*
     Check if the weights for the previous character have been
-    already fully scanned. If yes, then get the next character and 
+    already fully scanned. If yes, then get the next character and
     initialize wbeg and wlength to its weight string.
   */
-  
+
   if (scanner->wbeg[0])
     return *scanner->wbeg++;
-  
-  do 
+
+  do
   {
     uint16 **ucaw= scanner->uca_weight;
     uchar *ucal= scanner->uca_length;
-    
+
     if (scanner->sbeg > scanner->send)
       return -1;
-    
+
     scanner->page= (uchar)scanner->sbeg[0];
     scanner->code= (uchar)scanner->sbeg[1];
     scanner->sbeg+= 2;
-    
+
     if (scanner->contractions && (scanner->sbeg <= scanner->send))
     {
       int cweight;
-      
+
       if (!scanner->page && !scanner->sbeg[0] &&
           (scanner->sbeg[1] > 0x40) && (scanner->sbeg[1] < 0x80) &&
           (scanner->code > 0x40) && (scanner->code < 0x80) &&
@@ -6906,30 +6898,30 @@ static int my_uca_scanner_next_ucs2(my_uca_scanner *scanner)
           return cweight;
         }
     }
-    
+
     if (!ucaw[scanner->page])
       goto implicit;
     scanner->wbeg= ucaw[scanner->page] + scanner->code * ucal[scanner->page];
   } while (!scanner->wbeg[0]);
-  
+
   return *scanner->wbeg++;
-  
+
 implicit:
-  
+
   scanner->code= (scanner->page << 8) + scanner->code;
   scanner->implicit[0]= (scanner->code & 0x7FFF) | 0x8000;
   scanner->implicit[1]= 0;
   scanner->wbeg= scanner->implicit;
-  
+
   scanner->page= scanner->page >> 7;
-  
+
   if (scanner->code >= 0x3400 && scanner->code <= 0x4DB5)
     scanner->page+= 0xFB80;
   else if (scanner->code >= 0x4E00 && scanner->code <= 0x9FA5)
     scanner->page+= 0xFB40;
   else
     scanner->page+= 0xFBC0;
-  
+
   return scanner->page;
 }
 
@@ -6941,7 +6933,6 @@ static my_uca_scanner_handler my_ucs2_uca_scanner_handler=
 
 #endif
 
-
 /*
   The same two functions for any character set
 */
@@ -6952,7 +6943,7 @@ static void my_uca_scanner_init_any(my_uca_scanner *scanner,
   /* Note, no needs to initialize scanner->wbeg */
   scanner->sbeg= str;
   scanner->send= str + length;
-  scanner->wbeg= nochar; 
+  scanner->wbeg= nochar;
   scanner->uca_length= cs->sort_order;
   scanner->uca_weight= cs->sort_order_big;
   scanner->contractions= cs->contractions;
@@ -6961,28 +6952,27 @@ static void my_uca_scanner_init_any(my_uca_scanner *scanner,
 
 static int my_uca_scanner_next_any(my_uca_scanner *scanner)
 {
-  
-  /* 
+  /*
     Check if the weights for the previous character have been
-    already fully scanned. If yes, then get the next character and 
+    already fully scanned. If yes, then get the next character and
     initialize wbeg and wlength to its weight string.
   */
-  
+
   if (scanner->wbeg[0])
     return *scanner->wbeg++;
-  
-  do 
+
+  do
   {
     uint16 **ucaw= scanner->uca_weight;
     uchar *ucal= scanner->uca_length;
     my_wc_t wc;
     int mb_len;
-    
-    if (((mb_len= scanner->cs->cset->mb_wc(scanner->cs, &wc, 
+
+    if (((mb_len= scanner->cs->cset->mb_wc(scanner->cs, &wc,
                                           scanner->sbeg,
                                           scanner->send)) <= 0))
       return -1;
-    
+
     scanner->sbeg+= mb_len;
     if (wc > 0xFFFF)
     {
@@ -6995,18 +6985,18 @@ static int my_uca_scanner_next_any(my_uca_scanner *scanner)
       scanner->page= wc >> 8;
       scanner->code= wc & 0xFF;
     }
-    
+
     if (scanner->contractions && !scanner->page &&
         (scanner->code > 0x40) && (scanner->code < 0x80))
     {
       uint page1, code1, cweight;
-      
+
       if (((mb_len= scanner->cs->cset->mb_wc(scanner->cs, &wc,
-                                            scanner->sbeg, 
+                                            scanner->sbeg,
                                             scanner->send)) >=0) &&
            (!(page1= (wc >> 8))) &&
            ((code1= (wc & 0xFF)) > 0x40) &&
-           (code1 < 0x80) && 
+           (code1 < 0x80) &&
            (cweight= scanner->contractions[(scanner->code-0x40)*0x40 + code1-0x40]))
       {
         scanner->implicit[0]= 0;
@@ -7015,33 +7005,32 @@ static int my_uca_scanner_next_any(my_uca_scanner *scanner)
         return cweight;
       }
     }
-    
+
     if (!ucaw[scanner->page])
       goto implicit;
     scanner->wbeg= ucaw[scanner->page] + scanner->code * ucal[scanner->page];
   } while (!scanner->wbeg[0]);
-  
+
   return *scanner->wbeg++;
-  
+
 implicit:
-  
+
   scanner->code= (scanner->page << 8) + scanner->code;
   scanner->implicit[0]= (scanner->code & 0x7FFF) | 0x8000;
   scanner->implicit[1]= 0;
   scanner->wbeg= scanner->implicit;
-  
+
   scanner->page= scanner->page >> 7;
-  
+
   if (scanner->code >= 0x3400 && scanner->code <= 0x4DB5)
     scanner->page+= 0xFB80;
   else if (scanner->code >= 0x4E00 && scanner->code <= 0x9FA5)
     scanner->page+= 0xFB40;
   else
     scanner->page+= 0xFBC0;
-  
+
   return scanner->page;
 }
-
 
 static my_uca_scanner_handler my_any_uca_scanner_handler=
 {
@@ -7059,12 +7048,12 @@ static my_uca_scanner_handler my_any_uca_scanner_handler=
     slen	First string length
     t		Second string
     tlen	Seconf string length
-  
+
   NOTES:
     Initializes two weight scanners and gets weights
     corresponding to two strings in a loop. If weights are not
     the same at some step then returns their difference.
-    
+
     In the while() comparison these situations are possible:
     1. (s_res>0) and (t_res>0) and (s_res == t_res)
        Weights are the same so far, continue comparison
@@ -7074,7 +7063,7 @@ static my_uca_scanner_handler my_any_uca_scanner_handler=
        We have reached the end of the second string, or found
        an illegal multibyte sequence in the second string.
        Return a positive number, i.e. the first string is bigger.
-    4. (s_res<0) and (t_res>0)   
+    4. (s_res<0) and (t_res>0)
        We have reached the end of the first string, or found
        an illegal multibyte sequence in the first string.
        Return a negative number, i.e. the second string is bigger.
@@ -7082,7 +7071,7 @@ static my_uca_scanner_handler my_any_uca_scanner_handler=
        Both scanners returned -1. It means we have riched
        the end-of-string of illegal-sequence in both strings
        at the same time. Return 0, strings are equal.
-    
+
   RETURN
     Difference between two strings, according to the collation:
     0               - means strings are equal
@@ -7090,7 +7079,7 @@ static my_uca_scanner_handler my_any_uca_scanner_handler=
     positive number - means the first string is bigger
 */
 
-static int my_strnncoll_uca(CHARSET_INFO *cs, 
+static int my_strnncoll_uca(CHARSET_INFO *cs,
                             my_uca_scanner_handler *scanner_handler,
 			    const uchar *s, size_t slen,
                             const uchar *t, size_t tlen,
@@ -7100,16 +7089,16 @@ static int my_strnncoll_uca(CHARSET_INFO *cs,
   my_uca_scanner tscanner;
   int s_res;
   int t_res;
-  
+
   scanner_handler->init(&sscanner, cs, s, slen);
   scanner_handler->init(&tscanner, cs, t, tlen);
-  
+
   do
   {
     s_res= scanner_handler->next(&sscanner);
     t_res= scanner_handler->next(&tscanner);
   } while ( s_res == t_res && s_res >0);
-  
+
   return  (t_is_prefix && t_res < 0) ? 0 : (s_res - t_res);
 }
 
@@ -7127,7 +7116,7 @@ static int my_strnncoll_uca(CHARSET_INFO *cs,
     diff_if_only_endspace_difference
 		        Set to 1 if the strings should be regarded as different
                         if they only difference in end space
-  
+
   NOTES:
     Works exactly the same with my_strnncoll_uca(),
     but ignores trailing spaces.
@@ -7143,7 +7132,7 @@ static int my_strnncoll_uca(CHARSET_INFO *cs,
        Compare the first string to an infinite array of
        space characters until difference is found, or until
        the end of the first string.
-    4. (s_res<0) and (t_res>0)   
+    4. (s_res<0) and (t_res>0)
        We have reached the end of the first string, or found
        an illegal multibyte sequence in the first string.
        Compare the second string to an infinite array of
@@ -7153,7 +7142,7 @@ static int my_strnncoll_uca(CHARSET_INFO *cs,
        Both scanners returned -1. It means we have riched
        the end-of-string of illegal-sequence in both strings
        at the same time. Return 0, strings are equal.
-  
+
   RETURN
     Difference between two strings, according to the collation:
     0               - means strings are equal
@@ -7161,7 +7150,7 @@ static int my_strnncoll_uca(CHARSET_INFO *cs,
     positive number - means the first string is bigger
 */
 
-static int my_strnncollsp_uca(CHARSET_INFO *cs, 
+static int my_strnncollsp_uca(CHARSET_INFO *cs,
                               my_uca_scanner_handler *scanner_handler,
                               const uchar *s, size_t slen,
                               const uchar *t, size_t tlen,
@@ -7169,14 +7158,14 @@ static int my_strnncollsp_uca(CHARSET_INFO *cs,
 {
   my_uca_scanner sscanner, tscanner;
   int s_res, t_res;
-  
+
 #ifndef VARCHAR_WITH_DIFF_ENDSPACE_ARE_DIFFERENT_FOR_UNIQUE
   diff_if_only_endspace_difference= 0;
 #endif
 
   scanner_handler->init(&sscanner, cs, s, slen);
   scanner_handler->init(&tscanner, cs, t, tlen);
-  
+
   do
   {
     s_res= scanner_handler->next(&sscanner);
@@ -7184,10 +7173,10 @@ static int my_strnncollsp_uca(CHARSET_INFO *cs,
   } while ( s_res == t_res && s_res >0);
 
   if (s_res > 0 && t_res < 0)
-  { 
+  {
     /* Calculate weight for SPACE character */
     t_res= cs->sort_order_big[0][0x20 * cs->sort_order[0]];
-      
+
     /* compare the first string to spaces */
     do
     {
@@ -7197,12 +7186,12 @@ static int my_strnncollsp_uca(CHARSET_INFO *cs,
     } while (s_res > 0);
     return diff_if_only_endspace_difference ? 1 : 0;
   }
-    
+
   if (s_res < 0 && t_res > 0)
   {
     /* Calculate weight for SPACE character */
     s_res= cs->sort_order_big[0][0x20 * cs->sort_order[0]];
-      
+
     /* compare the second string to spaces */
     do
     {
@@ -7212,14 +7201,14 @@ static int my_strnncollsp_uca(CHARSET_INFO *cs,
     } while (t_res > 0);
     return diff_if_only_endspace_difference ? -1 : 0;
   }
-  
+
   return ( s_res - t_res );
 }
 
 /*
   Calculates hash value for the given string,
   according to the collation, and ignoring trailing spaces.
-  
+
   SYNOPSIS:
     my_hash_sort_uca()
     cs		Character set information
@@ -7227,14 +7216,14 @@ static int my_strnncollsp_uca(CHARSET_INFO *cs,
     slen	String's length
     n1		First hash parameter
     n2		Second hash parameter
-  
+
   NOTES:
     Scans consequently weights and updates
     hash parameters n1 and n2. In a case insensitive collation,
     upper and lower case of the same letter will return the same
     weight sequence, and thus will produce the same hash values
     in n1 and n2.
-  
+
   RETURN
     N/A
 */
@@ -7246,10 +7235,10 @@ static void my_hash_sort_uca(CHARSET_INFO *cs,
 {
   int   s_res;
   my_uca_scanner scanner;
-  
+
   slen= cs->cset->lengthsp(cs, (char*) s, slen);
   scanner_handler->init(&scanner, cs, s, slen);
-  
+
   while ((s_res= scanner_handler->next(&scanner)) >0)
   {
     n1[0]^= (((n1[0] & 63)+n2[0])*(s_res >> 8))+ (n1[0] << 8);
@@ -7259,11 +7248,10 @@ static void my_hash_sort_uca(CHARSET_INFO *cs,
   }
 }
 
-
 /*
   For the given string creates its "binary image", suitable
-  to be used in binary comparison, i.e. in memcmp(). 
-  
+  to be used in binary comparison, i.e. in memcmp().
+
   SYNOPSIS:
     my_strnxfrm_uca()
     cs		Character set information
@@ -7271,7 +7259,7 @@ static void my_hash_sort_uca(CHARSET_INFO *cs,
     dstlen	Space available for the image, in bytes
     src		The source string
     srclen	Length of the source string, in bytes
-  
+
   NOTES:
     In a loop, scans weights from the source string and writes
     them into the binary image. In a case insensitive collation,
@@ -7280,18 +7268,18 @@ static void my_hash_sort_uca(CHARSET_INFO *cs,
     or found an illegal multibyte sequence, the loop stops.
 
     It is impossible to restore the original string using its
-    binary image. 
-    
+    binary image.
+
     Binary images are used for bulk comparison purposes,
     e.g. in ORDER BY, when it is more efficient to create
     a binary image and use it instead of weight scanner
     for the original strings for every comparison.
-  
+
   RETURN
     Number of bytes that have been written into the binary image.
 */
 
-static size_t my_strnxfrm_uca(CHARSET_INFO *cs, 
+static size_t my_strnxfrm_uca(CHARSET_INFO *cs,
                               my_uca_scanner_handler *scanner_handler,
                               uchar *dst, size_t dstlen,
                               const uchar *src, size_t srclen)
@@ -7300,7 +7288,7 @@ static size_t my_strnxfrm_uca(CHARSET_INFO *cs,
   int   s_res;
   my_uca_scanner scanner;
   scanner_handler->init(&scanner, cs, src, srclen);
-  
+
   while (dst < de && (s_res= scanner_handler->next(&scanner)) >0)
   {
     dst[0]= s_res >> 8;
@@ -7316,11 +7304,9 @@ static size_t my_strnxfrm_uca(CHARSET_INFO *cs,
   }
   if (dstlen & 1) /* if odd number then fill the last char */
     *dst= '\0';
-  
+
   return dstlen;
 }
-
-
 
 /*
   This function compares if two characters are the same.
@@ -7340,18 +7326,18 @@ static int my_uca_charcmp(CHARSET_INFO *cs, my_wc_t wc1, my_wc_t wc2)
   size_t length2= ucal[page2];
   uint16 *weight1= ucaw[page1] + (wc1 & MY_UCA_CMASK) * ucal[page1];
   uint16 *weight2= ucaw[page2] + (wc2 & MY_UCA_CMASK) * ucal[page2];
-  
+
   if (!weight1 || !weight2)
     return wc1 != wc2;
-  
+
   if (length1 > length2)
     return memcmp((const void*)weight1, (const void*)weight2, length2*2) ?
            1: weight1[length2];
-  
+
   if (length1 < length2)
     return memcmp((const void*)weight1, (const void*)weight2, length1*2) ?
            1 : weight2[length1];
-  
+
   return memcmp((const void*)weight1, (const void*)weight2, length1*2);
 }
 
@@ -7374,7 +7360,7 @@ int my_wildcmp_uca(CHARSET_INFO *cs,
   int (*mb_wc)(struct charset_info_st *, my_wc_t *,
                const uchar *, const uchar *);
   mb_wc= cs->cset->mb_wc;
-  
+
   while (wildstr != wildend)
   {
     while (1)
@@ -7399,12 +7385,12 @@ int my_wildcmp_uca(CHARSET_INFO *cs,
         wildstr+= scan;
         escaped= 1;
       }
-      
+
       if ((scan= mb_wc(cs, &s_wc, (const uchar*)str,
       		       (const uchar*)str_end)) <= 0)
         return 1;
       str+= scan;
-      
+
       if (!escaped && w_wc == (my_wc_t)w_one)
       {
         result= 1;				/* Found an anchor char */
@@ -7417,24 +7403,23 @@ int my_wildcmp_uca(CHARSET_INFO *cs,
       if (wildstr == wildend)
 	return (str != str_end);		/* Match if both are at end */
     }
-    
-    
+
     if (w_wc == (my_wc_t)w_many)
     {						/* Found w_many */
-    
+
       /* Remove any '%' and '_' from the wild search string */
       for ( ; wildstr != wildend ; )
       {
         if ((scan= mb_wc(cs, &w_wc, (const uchar*)wildstr,
 			 (const uchar*)wildend)) <= 0)
           return 1;
-        
+
 	if (w_wc == (my_wc_t)w_many)
 	{
 	  wildstr+= scan;
 	  continue;
-	} 
-	
+	}
+
 	if (w_wc == (my_wc_t)w_one)
 	{
 	  wildstr+= scan;
@@ -7446,17 +7431,17 @@ int my_wildcmp_uca(CHARSET_INFO *cs,
 	}
 	break;					/* Not a wild character */
       }
-      
+
       if (wildstr == wildend)
 	return 0;				/* Ok if w_many is last */
-      
+
       if (str == str_end)
 	return -1;
-      
+
       if ((scan= mb_wc(cs, &w_wc, (const uchar*)wildstr,
 		       (const uchar*)wildend)) <= 0)
         return 1;
-      
+
       if (w_wc ==  (my_wc_t)escape)
       {
         wildstr+= scan;
@@ -7464,7 +7449,7 @@ int my_wildcmp_uca(CHARSET_INFO *cs,
 			 (const uchar*)wildend)) <= 0)
           return 1;
       }
-      
+
       while (1)
       {
         /* Skip until the first character from wildstr is found */
@@ -7473,60 +7458,58 @@ int my_wildcmp_uca(CHARSET_INFO *cs,
           if ((scan= mb_wc(cs, &s_wc, (const uchar*)str,
 			   (const uchar*)str_end)) <= 0)
             return 1;
-          
+
           if (!my_uca_charcmp(cs,s_wc,w_wc))
             break;
           str+= scan;
         }
         if (str == str_end)
           return -1;
-        
+
         result= my_wildcmp_uca(cs, str, str_end, wildstr, wildend,
         		       escape, w_one, w_many);
-        
+
         if (result <= 0)
           return result;
-        
+
         str+= scan;
-      } 
+      }
     }
   }
   return (str != str_end ? 1 : 0);
 }
 
-
 /*
   Collation language is implemented according to
   subset of ICU Collation Customization (tailorings):
   http://oss.software.ibm.com/icu/userguide/Collate_Customization.html
-  
+
   Collation language elements:
   Delimiters:
     space   - skipped
-  
+
   <char> :=  A-Z | a-z | \uXXXX
-  
+
   Shift command:
-    <shift>  := &       - reset at this letter. 
-  
+    <shift>  := &       - reset at this letter.
+
   Diff command:
     <d1> :=  <     - Identifies a primary difference.
     <d2> :=  <<    - Identifies a secondary difference.
     <d3> := <<<    - Idenfifies a tertiary difference.
-  
-  
+
   Collation rules:
     <ruleset> :=  <rule>  { <ruleset> }
-    
+
     <rule> :=   <d1>    <string>
               | <d2>    <string>
               | <d3>    <string>
               | <shift> <char>
-    
+
     <string> := <char> [ <string> ]
 
   An example, Polish collation:
-  
+
     &A < \u0105 <<< \u0104
     &C < \u0107 <<< \u0106
     &E < \u0119 <<< \u0118
@@ -7534,19 +7517,17 @@ int my_wildcmp_uca(CHARSET_INFO *cs,
     &N < \u0144 <<< \u0143
     &O < \u00F3 <<< \u00D3
     &S < \u015B <<< \u015A
-    &Z < \u017A <<< \u017B    
+    &Z < \u017A <<< \u017B
 */
-
 
 typedef enum my_coll_lexem_num_en
 {
   MY_COLL_LEXEM_EOF	= 0,
-  MY_COLL_LEXEM_DIFF	= 1, 
+  MY_COLL_LEXEM_DIFF	= 1,
   MY_COLL_LEXEM_SHIFT	= 4,
   MY_COLL_LEXEM_CHAR	= 5,
   MY_COLL_LEXEM_ERROR	= 6
 } my_coll_lexem_num;
-
 
 typedef struct my_coll_lexem_st
 {
@@ -7557,17 +7538,16 @@ typedef struct my_coll_lexem_st
   int   code;
 } MY_COLL_LEXEM;
 
-
 /*
   Initialize collation rule lexical anilizer
-  
+
   SYNOPSIS
     my_coll_lexem_init
     lexem                Lex analizer to init
     str                  Const string to parse
     str_end               End of the string
   USAGE
-  
+
   RETURN VALUES
     N/A
 */
@@ -7582,10 +7562,9 @@ static void my_coll_lexem_init(MY_COLL_LEXEM *lexem,
   lexem->code= 0;
 }
 
-
 /*
   Print collation customization expression parse error, with context.
-  
+
   SYNOPSIS
     my_coll_lexem_print_error
     lexem                Lex analizer to take context from
@@ -7593,7 +7572,7 @@ static void my_coll_lexem_init(MY_COLL_LEXEM *lexem,
     errsize              errstr size
     txt                  error message
   USAGE
-  
+
   RETURN VALUES
     N/A
 */
@@ -7609,15 +7588,14 @@ static void my_coll_lexem_print_error(MY_COLL_LEXEM *lexem,
   my_snprintf(errstr,errsize-1,"%s at '%s'", txt, tail);
 }
 
-
 /*
   Convert a hex digit into its numeric value
-  
+
   SYNOPSIS
     ch2x
     ch                   hex digit to convert
   USAGE
-  
+
   RETURN VALUES
     an integer value in the range 0..15
     -1 on error
@@ -7627,28 +7605,27 @@ static int ch2x(int ch)
 {
   if (ch >= '0' && ch <= '9')
     return ch - '0';
-  
+
   if (ch >= 'a' && ch <= 'f')
     return 10 + ch - 'a';
-  
+
   if (ch >= 'A' && ch <= 'F')
     return 10 + ch - 'A';
-  
+
   return -1;
 }
-
 
 /*
   Collation language lexical parser:
   Scans the next lexem.
-  
+
   SYNOPSIS
     my_coll_lexem_next
-    lexem                Lex analizer, previously initialized by 
+    lexem                Lex analizer, previously initialized by
                          my_coll_lexem_init.
   USAGE
     Call this function in a loop
-    
+
   RETURN VALUES
     Lexem number: eof, diff, shift, char or error.
 */
@@ -7657,69 +7634,68 @@ static my_coll_lexem_num my_coll_lexem_next(MY_COLL_LEXEM *lexem)
 {
   const char *beg;
   my_coll_lexem_num rc;
-  
+
   for (beg= lexem->beg ; beg < lexem->end ; beg++)
   {
     if (*beg == ' ' || *beg == '\t' || *beg == '\r' || *beg == '\n')
       continue;
-    
+
     if (*beg == '&')
     {
       beg++;
       rc= MY_COLL_LEXEM_SHIFT;
       goto ex;
     }
-    
+
     if (beg[0] == '=')
     {
       beg++;
       rc= MY_COLL_LEXEM_DIFF;
       goto ex;
     }
-    
+
     if (beg[0] == '<')
     {
       for (beg++, lexem->diff= 1;
-           (beg < lexem->end) && 
+           (beg < lexem->end) &&
            (*beg == '<') && (lexem->diff<3);
            beg++, lexem->diff++);
       rc= MY_COLL_LEXEM_DIFF;
       goto ex;
     }
-    
+
     if ((*beg >= 'a' && *beg <= 'z') || (*beg >= 'A' && *beg <= 'Z'))
     {
       lexem->code= *beg++;
       rc= MY_COLL_LEXEM_CHAR;
       goto ex;
     }
-    
+
     if ((*beg == '\\') && (beg+2 < lexem->end) && (beg[1] == 'u'))
     {
       int ch;
-      
+
       beg+= 2;
       lexem->code= 0;
       while ((beg < lexem->end) && ((ch= ch2x(beg[0])) >= 0))
-      { 
+      {
         lexem->code= (lexem->code << 4) + ch;
         beg++;
       }
       rc= MY_COLL_LEXEM_CHAR;
       goto ex;
     }
-    
+
     rc= MY_COLL_LEXEM_ERROR;
     goto ex;
   }
   rc= MY_COLL_LEXEM_EOF;
-  
+
 ex:
   lexem->prev= lexem->beg;
   lexem->beg= beg;
-  return rc;  
+  return rc;
 }
-
 
 /*
   Collation rule item
@@ -7732,18 +7708,17 @@ typedef struct my_coll_rule_item_st
   int diff[3];   /* Primary, Secondary and Tertiary difference */
 } MY_COLL_RULE;
 
-
 /*
   Collation language syntax parser.
   Uses lexical parser.
-  
+
   SYNOPSIS
     my_coll_rule_parse
     rule                 Collation rule list to load to.
     str                  A string containin collation language expression.
     str_end              End of the string.
   USAGE
-    
+
   RETURN VALUES
     A positive number means the number of rules loaded.
    -1 means ERROR, e.g. too many items, syntax error, etc.
@@ -7756,15 +7731,15 @@ static int my_coll_rule_parse(MY_COLL_RULE *rule, size_t mitems,
   MY_COLL_LEXEM lexem;
   my_coll_lexem_num lexnum;
   my_coll_lexem_num prevlexnum= MY_COLL_LEXEM_ERROR;
-  MY_COLL_RULE item; 
+  MY_COLL_RULE item;
   int state= 0;
   size_t nitems= 0;
-  
+
   /* Init all variables */
   errstr[0]= '\0';
   bzero(&item, sizeof(item));
   my_coll_lexem_init(&lexem, str, str_end);
-  
+
   while ((lexnum= my_coll_lexem_next(&lexem)))
   {
     if (lexnum == MY_COLL_LEXEM_ERROR)
@@ -7772,7 +7747,7 @@ static int my_coll_rule_parse(MY_COLL_RULE *rule, size_t mitems,
       my_coll_lexem_print_error(&lexem,errstr,errsize-1,"Unknown character");
       return -1;
     }
-    
+
     switch (state) {
     case 0:
       if (lexnum != MY_COLL_LEXEM_SHIFT)
@@ -7783,7 +7758,7 @@ static int my_coll_rule_parse(MY_COLL_RULE *rule, size_t mitems,
       prevlexnum= lexnum;
       state= 2;
       continue;
-      
+
     case 1:
       if (lexnum != MY_COLL_LEXEM_SHIFT && lexnum != MY_COLL_LEXEM_DIFF)
       {
@@ -7793,14 +7768,14 @@ static int my_coll_rule_parse(MY_COLL_RULE *rule, size_t mitems,
       prevlexnum= lexnum;
       state= 2;
       continue;
-      
+
     case 2:
       if (lexnum != MY_COLL_LEXEM_CHAR)
       {
         my_coll_lexem_print_error(&lexem,errstr,errsize-1,"character expected");
         return -1;
       }
-      
+
       if (prevlexnum == MY_COLL_LEXEM_SHIFT)
       {
         item.base= lexem.code;
@@ -7866,14 +7841,14 @@ static int my_coll_rule_parse(MY_COLL_RULE *rule, size_t mitems,
   This function copies an UCS2 collation from
   the default Unicode Collation Algorithm (UCA)
   weights applying tailorings, i.e. a set of
-  alternative weights for some characters. 
-  
+  alternative weights for some characters.
+
   The default UCA weights are stored in uca_weight/uca_length.
   They consist of 256 pages, 256 character each.
-  
+
   If a page is not overwritten by tailoring rules,
   it is copies as is from UCA as is.
-  
+
   If a page contains some overwritten characters, it is
   allocated. Untouched characters are copied from the
   default weights.
@@ -7889,35 +7864,35 @@ static my_bool create_tailoring(CHARSET_INFO *cs, void *(*alloc)(size_t))
   uint16     **defweights= uca_weight;
   int rc, i;
   int ncontractions= 0;
-  
+
   if (!cs->tailoring)
     return 1;
-  
+
   /* Parse ICU Collation Customization expression */
   if ((rc= my_coll_rule_parse(rule, MY_MAX_COLL_RULE,
                               cs->tailoring,
                               cs->tailoring + strlen(cs->tailoring),
                               errstr, sizeof(errstr))) < 0)
   {
-    /* 
+    /*
       TODO: add error message reporting.
       printf("Error: %d '%s'\n", rc, errstr);
     */
     return 1;
   }
-  
+
   if (!cs->caseinfo)
     cs->caseinfo= my_unicase_default;
-  
+
   if (!(newweights= (uint16**) (*alloc)(256*sizeof(uint16*))))
     return 1;
   bzero(newweights, 256*sizeof(uint16*));
-  
+
   if (!(newlengths= (uchar*) (*alloc)(256)))
     return 1;
-  
+
   memcpy(newlengths, deflengths, 256);
-  
+
   /*
     Calculate maximum lenghts for the pages
     which will be overwritten.
@@ -7928,32 +7903,32 @@ static my_bool create_tailoring(CHARSET_INFO *cs, void *(*alloc)(size_t))
     {
       uint pageb= (rule[i].base >> 8) & 0xFF;
       uint pagec= (rule[i].curr[0] >> 8) & 0xFF;
-    
+
       if (newlengths[pagec] < deflengths[pageb])
         newlengths[pagec]= deflengths[pageb];
     }
     else
       ncontractions++;
   }
-  
+
   for (i=0; i < rc;  i++)
   {
     uint pageb= (rule[i].base >> 8) & 0xFF;
     uint pagec= (rule[i].curr[0] >> 8) & 0xFF;
     uint chb, chc;
-    
+
     if (rule[i].curr[1]) /* Skip contraction */
       continue;
-    
+
     if (!newweights[pagec])
     {
       /* Alloc new page and copy the default UCA weights */
       uint size= 256*newlengths[pagec]*sizeof(uint16);
-      
+
       if (!(newweights[pagec]= (uint16*) (*alloc)(size)))
         return 1;
       bzero((void*) newweights[pagec], size);
-      
+
       for (chc=0 ; chc < 256; chc++)
       {
         memcpy(newweights[pagec] + chc*newlengths[pagec],
@@ -7961,8 +7936,8 @@ static my_bool create_tailoring(CHARSET_INFO *cs, void *(*alloc)(size_t))
                deflengths[pagec]*sizeof(uint16));
       }
     }
-    
-    /* 
+
+    /*
       Aply the alternative rule:
       shift to the base character and primary difference.
     */
@@ -7974,18 +7949,18 @@ static my_bool create_tailoring(CHARSET_INFO *cs, void *(*alloc)(size_t))
     /* Apply primary difference */
     newweights[pagec][chc*newlengths[pagec]]+= rule[i].diff[0];
   }
-  
+
   /* Copy non-overwritten pages from the default UCA weights */
   for (i= 0; i < 256 ; i++)
   {
     if (!newweights[i])
       newweights[i]= defweights[i];
   }
-  
+
   cs->sort_order= newlengths;
   cs->sort_order_big= newweights;
   cs->contractions= NULL;
-  
+
   /* Now process contractions */
   if (ncontractions)
   {
@@ -8007,12 +7982,12 @@ static my_bool create_tailoring(CHARSET_INFO *cs, void *(*alloc)(size_t))
         uint chb= rule[i].base & 0xFF;
         uint16 *offsb= defweights[pageb] + chb*deflengths[pageb];
         uint offsc;
-        
-        if (offsb[1] || 
+
+        if (offsb[1] ||
             rule[i].curr[0] < 0x40 || rule[i].curr[0] > 0x7f ||
             rule[i].curr[1] < 0x40 || rule[i].curr[1] > 0x7f)
         {
-          /* 
+          /*
            TODO: add error reporting;
            We support only basic latin letters contractions at this point.
            Also, We don't support contractions with weight longer than one.
@@ -8021,7 +7996,7 @@ static my_bool create_tailoring(CHARSET_INFO *cs, void *(*alloc)(size_t))
           return 1;
         }
         offsc= (rule[i].curr[0]-0x40)*0x40+(rule[i].curr[1]-0x40);
-        
+
         /* Copy base weight applying primary difference */
         cs->contractions[offsc]= offsb[0] + rule[i].diff[0];
         /* Mark both letters as "is contraction part */
@@ -8032,7 +8007,6 @@ static my_bool create_tailoring(CHARSET_INFO *cs, void *(*alloc)(size_t))
   }
   return 0;
 }
-
 
 /*
   Universal CHARSET_INFO compatible wrappers
@@ -8064,23 +8038,22 @@ static int my_strnncollsp_any_uca(CHARSET_INFO *cs,
   return my_strnncollsp_uca(cs, &my_any_uca_scanner_handler,
                             s, slen, t, tlen,
                             diff_if_only_endspace_difference);
-}   
+}
 
 static void my_hash_sort_any_uca(CHARSET_INFO *cs,
                                  const uchar *s, size_t slen,
                                  ulong *n1, ulong *n2)
 {
-  my_hash_sort_uca(cs, &my_any_uca_scanner_handler, s, slen, n1, n2); 
+  my_hash_sort_uca(cs, &my_any_uca_scanner_handler, s, slen, n1, n2);
 }
 
-static size_t my_strnxfrm_any_uca(CHARSET_INFO *cs, 
+static size_t my_strnxfrm_any_uca(CHARSET_INFO *cs,
                                   uchar *dst, size_t dstlen,
                                   const uchar *src, size_t srclen)
 {
   return my_strnxfrm_uca(cs, &my_any_uca_scanner_handler,
                          dst, dstlen, src, srclen);
 }
-
 
 #ifdef HAVE_CHARSET_ucs2
 /*
@@ -8103,16 +8076,16 @@ static int my_strnncollsp_ucs2_uca(CHARSET_INFO *cs,
   return my_strnncollsp_uca(cs, &my_ucs2_uca_scanner_handler,
                             s, slen, t, tlen,
                             diff_if_only_endspace_difference);
-}   
+}
 
 static void my_hash_sort_ucs2_uca(CHARSET_INFO *cs,
                                   const uchar *s, size_t slen,
                                   ulong *n1, ulong *n2)
 {
-  my_hash_sort_uca(cs, &my_ucs2_uca_scanner_handler, s, slen, n1, n2); 
+  my_hash_sort_uca(cs, &my_ucs2_uca_scanner_handler, s, slen, n1, n2);
 }
 
-static size_t my_strnxfrm_ucs2_uca(CHARSET_INFO *cs, 
+static size_t my_strnxfrm_ucs2_uca(CHARSET_INFO *cs,
                                    uchar *dst, size_t dstlen,
                                    const uchar *src, size_t srclen)
 {
@@ -8487,7 +8460,6 @@ CHARSET_INFO my_charset_ucs2_czech_uca_ci=
     &my_collation_ucs2_uca_handler
 };
 
-
 CHARSET_INFO my_charset_ucs2_danish_uca_ci=
 {
     139,0,0,		/* number       */
@@ -8616,7 +8588,6 @@ CHARSET_INFO my_charset_ucs2_spanish2_uca_ci=
     &my_collation_ucs2_uca_handler
 };
 
-
 CHARSET_INFO my_charset_ucs2_roman_uca_ci=
 {
     143,0,0,		/* number       */
@@ -8648,7 +8619,6 @@ CHARSET_INFO my_charset_ucs2_roman_uca_ci=
     &my_charset_ucs2_handler,
     &my_collation_ucs2_uca_handler
 };
-
 
 CHARSET_INFO my_charset_ucs2_persian_uca_ci=
 {
@@ -8682,7 +8652,6 @@ CHARSET_INFO my_charset_ucs2_persian_uca_ci=
     &my_collation_ucs2_uca_handler
 };
 
-
 CHARSET_INFO my_charset_ucs2_esperanto_uca_ci=
 {
     145,0,0,		/* number       */
@@ -8714,7 +8683,6 @@ CHARSET_INFO my_charset_ucs2_esperanto_uca_ci=
     &my_charset_ucs2_handler,
     &my_collation_ucs2_uca_handler
 };
-
 
 CHARSET_INFO my_charset_ucs2_hungarian_uca_ci=
 {
@@ -8748,7 +8716,6 @@ CHARSET_INFO my_charset_ucs2_hungarian_uca_ci=
     &my_collation_ucs2_uca_handler
 };
 
-
 CHARSET_INFO my_charset_ucs2_sinhala_uca_ci=
 {
     147,0,0,             /* number       */
@@ -8781,9 +8748,7 @@ CHARSET_INFO my_charset_ucs2_sinhala_uca_ci=
     &my_collation_ucs2_uca_handler
 };
 
-
 #endif
-
 
 #ifdef HAVE_CHARSET_utf8
 MY_COLLATION_HANDLER my_collation_any_uca_handler =
@@ -8801,7 +8766,7 @@ MY_COLLATION_HANDLER my_collation_any_uca_handler =
     my_propagate_complex
 };
 
-/* 
+/*
   We consider bytes with code more than 127 as a letter.
   This garantees that word boundaries work fine with regular
   expressions. Note, there is no need to mark byte 255  as a
@@ -8860,7 +8825,6 @@ CHARSET_INFO my_charset_utf8_unicode_ci=
     &my_charset_utf8_handler,
     &my_collation_any_uca_handler
 };
-
 
 CHARSET_INFO my_charset_utf8_icelandic_uca_ci=
 {
@@ -9182,7 +9146,6 @@ CHARSET_INFO my_charset_utf8_czech_uca_ci=
     &my_collation_any_uca_handler
 };
 
-
 CHARSET_INFO my_charset_utf8_danish_uca_ci=
 {
     203,0,0,		/* number       */
@@ -9473,7 +9436,6 @@ CHARSET_INFO my_charset_utf8_sinhala_uca_ci=
 
 #endif /* HAVE_CHARSET_utf8 */
 
-
 #ifdef HAVE_CHARSET_utf8mb4
 
 extern MY_CHARSET_HANDLER my_charset_utf8mb4_handler;
@@ -9511,7 +9473,6 @@ CHARSET_INFO my_charset_utf8mb4_unicode_ci=
     &my_charset_utf8mb4_handler,
     &my_collation_any_uca_handler
 };
-
 
 CHARSET_INFO my_charset_utf8mb4_icelandic_uca_ci=
 {
@@ -9833,7 +9794,6 @@ CHARSET_INFO my_charset_utf8mb4_czech_uca_ci=
     &my_collation_any_uca_handler
 };
 
-
 CHARSET_INFO my_charset_utf8mb4_danish_uca_ci=
 {
     235,0,0,             /* number       */
@@ -10124,7 +10084,6 @@ CHARSET_INFO my_charset_utf8mb4_sinhala_uca_ci=
 
 #endif /* HAVE_CHARSET_utf8mb4 */
 
-
 #ifdef HAVE_CHARSET_utf32
 
 MY_COLLATION_HANDLER my_collation_utf32_uca_handler =
@@ -10177,7 +10136,6 @@ CHARSET_INFO my_charset_utf32_unicode_ci=
     &my_charset_utf32_handler,
     &my_collation_utf32_uca_handler
 };
-
 
 CHARSET_INFO my_charset_utf32_icelandic_uca_ci=
 {
@@ -10499,7 +10457,6 @@ CHARSET_INFO my_charset_utf32_czech_uca_ci=
     &my_collation_utf32_uca_handler
 };
 
-
 CHARSET_INFO my_charset_utf32_danish_uca_ci=
 {
     171,0,0,             /* number       */
@@ -10790,9 +10747,7 @@ CHARSET_INFO my_charset_utf32_sinhala_uca_ci=
 
 #endif /* HAVE_CHARSET_utf32 */
 
-
 #ifdef HAVE_CHARSET_utf16
-
 
 MY_COLLATION_HANDLER my_collation_utf16_uca_handler =
 {
@@ -10844,7 +10799,6 @@ CHARSET_INFO my_charset_utf16_unicode_ci=
     &my_charset_utf16_handler,
     &my_collation_utf16_uca_handler
 };
-
 
 CHARSET_INFO my_charset_utf16_icelandic_uca_ci=
 {
@@ -11166,7 +11120,6 @@ CHARSET_INFO my_charset_utf16_czech_uca_ci=
     &my_collation_utf16_uca_handler
 };
 
-
 CHARSET_INFO my_charset_utf16_danish_uca_ci=
 {
     112,0,0,             /* number       */
@@ -11456,7 +11409,5 @@ CHARSET_INFO my_charset_utf16_sinhala_uca_ci=
 };
 
 #endif /* HAVE_CHARSET_utf16 */
-
-
 
 #endif /* HAVE_UCA_COLLATIONS */

@@ -1,4 +1,4 @@
-/* Copyright (C) 2000 MySQL AB
+/* Copyright (c) 2000, 2010, Oracle and/or its affiliates. All rights reserved.
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -11,7 +11,7 @@
 
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
-   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA */
+   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA */
 
 #include "mysys_priv.h"
 #include "mysys_err.h"
@@ -56,7 +56,6 @@ static struct my_err_head
 
 static struct my_err_head *my_errmsgs_list= &my_errmsgs_globerrs;
 
-
 /*
    Error message to user
 
@@ -96,7 +95,6 @@ void my_error(int nr, myf MyFlags, ...)
   (*error_handler_hook)(nr, ebuff, MyFlags);
   DBUG_VOID_RETURN;
 }
-
 
 /*
   Error as printf
@@ -163,7 +161,6 @@ void my_message(uint error, const char *str, register myf MyFlags)
   (*error_handler_hook)(error, str, MyFlags);
 }
 
-
 /*
   Register error messages for use with my_error().
 
@@ -221,7 +218,6 @@ int my_error_register(const char** (*get_errmsgs) (), int first, int last)
   return 0;
 }
 
-
 /*
   Unregister formerly registered error messages.
 
@@ -268,10 +264,9 @@ const char **my_error_unregister(int first, int last)
   /* Save the return value and free the header. */
   errmsgs= meh_p->get_errmsgs();
   my_free(meh_p);
-  
+
   return errmsgs;
 }
-
 
 void my_error_unregister_all(void)
 {

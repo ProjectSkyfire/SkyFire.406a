@@ -1,4 +1,4 @@
-/* Copyright (C) 2000 MySQL AB
+/* Copyright (c) 2000, 2010, Oracle and/or its affiliates. All rights reserved.
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -11,7 +11,7 @@
 
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
-   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA */
+   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA */
 
 /* File strings/ctype-czech.c for MySQL.
 
@@ -240,7 +240,7 @@ while (1)						\
 */
 
 static int my_strnncoll_czech(CHARSET_INFO *cs __attribute__((unused)),
-			      const uchar *s1, size_t len1, 
+			      const uchar *s1, size_t len1,
 			      const uchar *s2, size_t len2,
                               my_bool s2_is_prefix)
 {
@@ -266,15 +266,13 @@ static int my_strnncoll_czech(CHARSET_INFO *cs __attribute__((unused)),
   return 0;
 }
 
-
-
 /*
   TODO: Fix this one to compare strings as they are done in ctype-simple1
 */
 
 static
-int my_strnncollsp_czech(CHARSET_INFO * cs, 
-                         const uchar *s, size_t slen, 
+int my_strnncollsp_czech(CHARSET_INFO * cs,
+                         const uchar *s, size_t slen,
                          const uchar *t, size_t tlen,
                          my_bool diff_if_only_endspace_difference
                          __attribute__((unused)))
@@ -284,13 +282,12 @@ int my_strnncollsp_czech(CHARSET_INFO * cs,
   return my_strnncoll_czech(cs,s,slen,t,tlen,0);
 }
 
-
 /*
   Function strnxfrm, actually strxfrm, with Czech sorting, which expect
   the length of the strings being specified
 */
 
-static size_t my_strnxfrm_czech(CHARSET_INFO *cs __attribute__((unused)), 
+static size_t my_strnxfrm_czech(CHARSET_INFO *cs __attribute__((unused)),
                                 uchar *dest, size_t len,
                                 const uchar *src, size_t srclen)
 {
@@ -313,7 +310,6 @@ static size_t my_strnxfrm_czech(CHARSET_INFO *cs __attribute__((unused)),
 
 #undef IS_END
 
-
 /*
 	Neformální popis algoritmu:
 
@@ -334,7 +330,6 @@ static size_t my_strnxfrm_czech(CHARSET_INFO *cs __attribute__((unused)),
 
 	na konci pøipojíme znak 0
  */
-
 
 /*
 ** Calculate min_str and max_str that ranges a LIKE string.
@@ -542,7 +537,6 @@ static uint16 tab_8859_2_uni[256]={
 0x0159,0x016F,0x00FA,0x0171,0x00FC,0x00FD,0x0163,0x02D9
 };
 
-
 /* 0000-00FD , 254 chars */
 static uchar tab_uni_8859_2_plane00[]={
 0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0A,0x0B,0x0C,0x0D,0x0E,0x0F,
@@ -584,7 +578,6 @@ static MY_UNI_IDX idx_uni_8859_2[]={
   {0x02C7,0x02DD,tab_uni_8859_2_plane02},
   {0,0,NULL}
 };
-
 
 static MY_COLLATION_HANDLER my_collation_latin2_czech_ci_handler =
 {
@@ -632,7 +625,6 @@ CHARSET_INFO my_charset_latin2_czech_ci =
     &my_charset_8bit_handler,
     &my_collation_latin2_czech_ci_handler
 };
-
 
 #endif
 

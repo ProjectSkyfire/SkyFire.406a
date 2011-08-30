@@ -118,4 +118,3 @@ uchar *net_store_length(uchar *packet, ulonglong length)
   int8store(packet,length);
   return packet+8;
 }
-

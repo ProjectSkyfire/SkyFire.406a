@@ -1,4 +1,4 @@
-/* Copyright (C) 2000 MySQL AB
+/* Copyright (c) 2000, 2010, Oracle and/or its affiliates. All rights reserved.
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -11,13 +11,12 @@
 
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
-   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA */
+   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA */
 
 #include <my_global.h>
 #include <m_string.h>
 #include <stdarg.h>
 #include <m_ctype.h>
-
 
 #define MAX_ARGS 32                           /* max positional args count*/
 #define MAX_PRINT_INFO 32                     /* max print position count */
@@ -25,7 +24,7 @@
 #define LENGTH_ARG     1
 #define WIDTH_ARG      2
 #define PREZERO_ARG    4
-#define ESCAPED_ARG    8 
+#define ESCAPED_ARG    8
 
 typedef struct pos_arg_info ARGS_INFO;
 typedef struct print_info PRINT_INFO;
@@ -39,7 +38,6 @@ struct pos_arg_info
   double double_arg;                          /* double value of the arg */
 };
 
-
 struct print_info
 {
   char arg_type;                              /* argument type */
@@ -50,7 +48,6 @@ struct print_info
   const char *begin;                          /**/
   const char *end;                            /**/
 };
-
 
 /**
   Calculates print length or index of positional argument
@@ -73,7 +70,6 @@ static const char *get_length(const char *fmt, size_t *length, uint *pre_zero)
   }
   return fmt;
 }
-
 
 /**
   Calculates print width or index of positional argument
@@ -126,7 +122,6 @@ static const char *check_longlong(const char *fmt, uint *have_longlong)
   return fmt;
 }
 
-
 /**
   Returns escaped string
 
@@ -168,7 +163,7 @@ static char *backtick_string(CHARSET_INFO *cs, char *to, char *end,
       goto err;
     start= strnmov(start, par, char_len);
   }
-    
+
   if (start + 1 >= end)
     goto err;
   *start++= quote_char;
@@ -178,7 +173,6 @@ err:
     *to='\0';
   return to;
 }
-
 
 /**
   Prints string argument
@@ -204,7 +198,6 @@ static char *process_str_arg(CHARSET_INFO *cs, char *to, char *end,
   return to;
 }
 
-
 /**
   Prints binary argument
 */
@@ -219,7 +212,6 @@ static char *process_bin_arg(char *to, char *end, size_t width, char *par)
   return to;
 }
 
-
 /**
   Prints double or float argument
 */
@@ -232,14 +224,13 @@ static char *process_dbl_arg(char *to, char *end, size_t width,
   else if (width >= NOT_FIXED_DEC)
     width= NOT_FIXED_DEC - 1; /* max.precision for my_fcvt() */
   width= min(width, (size_t)(end-to) - 1);
-  
+
   if (arg_type == 'f')
     to+= my_fcvt(par, (int)width , to, NULL);
   else
     to+= my_gcvt(par, MY_GCVT_ARG_DOUBLE, (int) width , to, NULL);
   return to;
 }
-
 
 /**
   Prints integer argument
@@ -301,7 +292,6 @@ static char *process_int_arg(char *to, char *end, size_t length,
   return to;
 }
 
-
 /**
   Procesed positional arguments.
 
@@ -337,10 +327,10 @@ start:
   print_arr[idx].length= print_arr[idx].width= 0;
   /* Get print length */
   if (*fmt == '*')
-  {          
+  {
     fmt++;
     fmt= get_length(fmt, &print_arr[idx].length, &print_arr[idx].flags);
-    print_arr[idx].length--;    
+    print_arr[idx].length--;
     DBUG_ASSERT(*fmt == '$' && print_arr[idx].length < MAX_ARGS);
     args_arr[print_arr[idx].length].arg_type= 'd';
     print_arr[idx].flags|= LENGTH_ARG;
@@ -349,7 +339,7 @@ start:
   }
   else
     fmt= get_length(fmt, &print_arr[idx].length, &print_arr[idx].flags);
-  
+
   if (*fmt == '.')
   {
     fmt++;
@@ -375,7 +365,7 @@ start:
   if (*fmt == 'p')
     args_arr[arg_index].have_longlong= (sizeof(void *) == sizeof(longlong));
   args_arr[arg_index].arg_type= print_arr[idx].arg_type= *fmt;
-  
+
   print_arr[idx].arg_idx= arg_index;
   print_arr[idx].begin= ++fmt;
 
@@ -517,8 +507,6 @@ start:
   return 0;
 }
 
-
-
 /**
   Produces output string according to a format string
 
@@ -595,7 +583,7 @@ size_t my_vsnprintf_ex(CHARSET_INFO *cs, char *to, size_t n,
         fmt= get_width(fmt, &width);
     }
     else
-      width= SIZE_T_MAX;   
+      width= SIZE_T_MAX;
 
     fmt= check_longlong(fmt, &have_longlong);
 
@@ -617,7 +605,7 @@ size_t my_vsnprintf_ex(CHARSET_INFO *cs, char *to, size_t n,
       to= process_dbl_arg(to, end, width, d, *fmt);
       continue;
     }
-    else if (*fmt == 'd' || *fmt == 'i' || *fmt == 'u' || *fmt == 'x' || 
+    else if (*fmt == 'd' || *fmt == 'i' || *fmt == 'u' || *fmt == 'x' ||
              *fmt == 'X' || *fmt == 'p' || *fmt == 'o')
     {
       /* Integer parameter */
@@ -655,7 +643,6 @@ size_t my_vsnprintf_ex(CHARSET_INFO *cs, char *to, size_t n,
   return (size_t) (to - start);
 }
 
-
 /*
   Limited snprintf() implementations
 
@@ -668,7 +655,6 @@ size_t my_vsnprintf(char *to, size_t n, const char* fmt, va_list ap)
   return my_vsnprintf_ex(&my_charset_latin1, to, n, fmt, ap);
 }
 
-
 size_t my_snprintf(char* to, size_t n, const char* fmt, ...)
 {
   size_t result;
@@ -678,4 +664,3 @@ size_t my_snprintf(char* to, size_t n, const char* fmt, ...)
   va_end(args);
   return result;
 }
-

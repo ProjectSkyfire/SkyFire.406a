@@ -1,4 +1,4 @@
-/* Copyright (c) 2000, 2010, Oracle and/or its affiliates. All rights reserved.
+/* Copyright (c) 2000, 2011, Oracle and/or its affiliates. All rights reserved.
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -99,7 +99,6 @@ void pack_dirname(char * to, const char *from)
   DBUG_VOID_RETURN;
 } /* pack_dirname */
 
-
 /*
   remove unwanted chars from dirname
 
@@ -117,7 +116,7 @@ void pack_dirname(char * to, const char *from)
   Unpacks current dir if if "./.." used
 
   RETURN
-    #  length of new name   
+    #  length of new name
 */
 
 size_t cleanup_dirname(register char *to, const char *from)
@@ -193,7 +192,7 @@ size_t cleanup_dirname(register char *to, const char *from)
 	  while (pos >= start && *pos != FN_LIBCHAR)	/* remove prev dir */
 	    pos--;
           if (pos[1] == FN_HOMELIB ||
-              (pos > start && memcmp(pos, parent, length) == 0))
+              (pos >= start && memcmp(pos, parent, length) == 0))
 	  {					/* Don't remove ~user/ */
 	    pos=strmov(end_parentdir+1,parent);
 	    *pos=FN_LIBCHAR;
@@ -226,15 +225,13 @@ size_t cleanup_dirname(register char *to, const char *from)
   DBUG_RETURN((size_t) (pos-buff));
 } /* cleanup_dirname */
 
-
 /*
   On system where you don't have symbolic links, the following
-  code will allow you to create a file: 
+  code will allow you to create a file:
   directory-name.sym that should contain the real path
   to the directory.  This will be used if the directory name
   doesn't exists
 */
-
 
 my_bool my_use_symdir=0;	/* Set this if you want to use symdirs */
 
@@ -270,7 +267,6 @@ void symdirget(char *dir)
   }
 }
 #endif /* USE_SYMDIR */
-
 
 /**
   Convert a directory name to a format which can be compared as strings
@@ -317,7 +313,6 @@ size_t normalize_dirname(char *to, const char *from)
 
   DBUG_RETURN(length);
 }
-
 
 /**
   Fixes a directory name so that can be used by open()
@@ -368,7 +363,6 @@ size_t unpack_dirname(char * to, const char *from)
   DBUG_RETURN(system_filename(to,buff));	/* Fix for open */
 } /* unpack_dirname */
 
-
 	/* Expand tilde to home or user-directory */
 	/* Path is reset to point at FN_LIBCHAR after ~xxx */
 
@@ -397,7 +391,6 @@ static char * expand_tilde(char **path)
   return (char *) 0;
 }
 
-
 /*
   Fix filename so it can be used by open, create
 
@@ -413,7 +406,6 @@ static char * expand_tilde(char **path)
     to may be == from
     ~ will only be expanded if total length < FN_REFLEN
 */
-
 
 size_t unpack_filename(char * to, const char *from)
 {
@@ -432,7 +424,6 @@ size_t unpack_filename(char * to, const char *from)
     length= system_filename(to,from);		/* Fix to usably filename */
   DBUG_RETURN(length);
 } /* unpack_filename */
-
 
 	/* Convert filename (unix standard) to system standard */
 	/* Used before system command's like open(), create() .. */

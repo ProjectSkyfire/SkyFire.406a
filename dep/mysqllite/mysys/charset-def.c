@@ -1,4 +1,5 @@
-/* Copyright (C) 2000 MySQL AB
+/* Copyright (c) 2000, 2003-2007 MySQL AB, 2009, 2010 Sun Microsystems, Inc.
+   Use is subject to license terms.
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -11,7 +12,7 @@
 
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
-   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA */
+   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA */
 
 #include "mysys_priv.h"
 
@@ -45,7 +46,6 @@ extern CHARSET_INFO my_charset_ucs2_hungarian_uca_ci;
 extern CHARSET_INFO my_charset_ucs2_sinhala_uca_ci;
 #endif
 
-
 #ifdef HAVE_CHARSET_utf32
 extern CHARSET_INFO my_charset_utf32_icelandic_uca_ci;
 extern CHARSET_INFO my_charset_utf32_latvian_uca_ci;
@@ -68,7 +68,6 @@ extern CHARSET_INFO my_charset_utf32_hungarian_uca_ci;
 extern CHARSET_INFO my_charset_utf32_sinhala_uca_ci;
 #endif /* HAVE_CHARSET_utf32 */
 
-
 #ifdef HAVE_CHARSET_utf16
 extern CHARSET_INFO my_charset_utf16_icelandic_uca_ci;
 extern CHARSET_INFO my_charset_utf16_latvian_uca_ci;
@@ -90,7 +89,6 @@ extern CHARSET_INFO my_charset_utf16_esperanto_uca_ci;
 extern CHARSET_INFO my_charset_utf16_hungarian_uca_ci;
 extern CHARSET_INFO my_charset_utf16_sinhala_uca_ci;
 #endif  /* HAVE_CHARSET_utf16 */
-
 
 #ifdef HAVE_CHARSET_utf8
 extern CHARSET_INFO my_charset_utf8_icelandic_uca_ci;
@@ -147,7 +145,7 @@ my_bool init_compiled_charsets(myf flags __attribute__((unused)))
 
   add_compiled_collation(&my_charset_bin);
   add_compiled_collation(&my_charset_filename);
-  
+
   add_compiled_collation(&my_charset_latin1);
   add_compiled_collation(&my_charset_latin1_bin);
   add_compiled_collation(&my_charset_latin1_german2_ci);
@@ -262,7 +260,6 @@ my_bool init_compiled_charsets(myf flags __attribute__((unused)))
 #endif
 #endif /* HAVE_CHARSET_utf8 */
 
-
 #ifdef HAVE_CHARSET_utf8mb4
   add_compiled_collation(&my_charset_utf8mb4_general_ci);
   add_compiled_collation(&my_charset_utf8mb4_bin);
@@ -290,7 +287,6 @@ my_bool init_compiled_charsets(myf flags __attribute__((unused)))
 #endif /* HAVE_UCA_COLLATIONS  */
 #endif /* HAVE_CHARSET_utf8mb4 */
 
-
 #ifdef HAVE_CHARSET_utf16
   add_compiled_collation(&my_charset_utf16_general_ci);
   add_compiled_collation(&my_charset_utf16_bin);
@@ -317,7 +313,6 @@ my_bool init_compiled_charsets(myf flags __attribute__((unused)))
   add_compiled_collation(&my_charset_utf16_sinhala_uca_ci);
 #endif /* HAVE_UCA_COLLATIOINS */
 #endif /* HAVE_CHARSET_utf16 */
-
 
 #ifdef HAVE_CHARSET_utf32
   add_compiled_collation(&my_charset_utf32_general_ci);
@@ -349,6 +344,6 @@ my_bool init_compiled_charsets(myf flags __attribute__((unused)))
   /* Copy compiled charsets */
   for (cs=compiled_charsets; cs->name; cs++)
     add_compiled_collation(cs);
-  
+
   return FALSE;
 }

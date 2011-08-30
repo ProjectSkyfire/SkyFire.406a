@@ -1,4 +1,4 @@
-/* Copyright (C) 2002, 2004 MySQL AB
+/* Copyright (c) 2002, 2010, Oracle and/or its affiliates. All rights reserved.
 
  This program is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -11,8 +11,7 @@
 
  You should have received a copy of the GNU General Public License
  along with this program; if not, write to the Free Software
- Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA */
-
+ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA */
 
 /*
   Based on version 3.0 (December 2000)
@@ -713,7 +712,6 @@ static const uint32 Td4[256]=
   0x55555555U, 0x21212121U, 0x0c0c0c0cU, 0x7d7d7d7dU,
 };
 
-
 /* for 128-bit blocks, Rijndael never uses more than 10 rcon values */
 static const uint32 rcon[]=
 {
@@ -736,7 +734,6 @@ static const uint32 rcon[]=
 = (uint8)((st) >> 16); (ct)[2] = (uint8)((st) >>  8); (ct)[3] = (uint8)(st); }
 
 #endif /* defined(_MSC_VER) && defined(__i386__) */
-
 
 /*
   Expand the cipher key into the encryption key schedule.
@@ -834,7 +831,6 @@ int rijndaelKeySetupEnc(uint32 rk[/*4*(Nr + 1)*/], const uint8 cipherKey[],
   return 0;
 }
 
-
 /*
   Expand the cipher key into the decryption key schedule.
 
@@ -889,7 +885,6 @@ int rijndaelKeySetupDec(uint32 rk[/*4*(Nr + 1)*/], const uint8 cipherKey[],
   }
   return nr;
 }
-
 
 void rijndaelEncrypt(const uint32 rk[/*4*(Nr + 1)*/], int Nr,
 		     const uint8 pt[16], uint8 ct[16])
@@ -1132,7 +1127,6 @@ void rijndaelEncrypt(const uint32 rk[/*4*(Nr + 1)*/], int Nr,
        rk[3]);
   PUTuint32(ct + 12, s3);
 }
-
 
 void rijndaelDecrypt(const uint32 rk[/*4*(Nr + 1)*/], int Nr,
 		     const uint8 ct[16], uint8 pt[16])
