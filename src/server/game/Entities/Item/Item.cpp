@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
@@ -781,7 +781,6 @@ bool Item::CanBeTraded(bool mail, bool trade) const
 
 bool Item::HasEnchantRequiredSkill(const Player *pPlayer) const
 {
-
   // Check all enchants for required skill
   for (uint32 enchant_slot = PERM_ENCHANTMENT_SLOT; enchant_slot < MAX_ENCHANTMENT_SLOT; ++enchant_slot)
     if (uint32 enchant_id = GetEnchantmentId(EnchantmentSlot(enchant_slot)))
@@ -794,7 +793,6 @@ bool Item::HasEnchantRequiredSkill(const Player *pPlayer) const
 
 uint32 Item::GetEnchantRequiredLevel() const
 {
-
   uint32 level = 0;
 
   // Check all enchants for required level
@@ -1146,7 +1144,7 @@ void Item::SetNotRefundable(Player *owner, bool changestate /*=true*/, SQLTransa
     // Following is not applicable in the trading procedure
     if (changestate)
         SetState(ITEM_CHANGED, owner);
-     
+
     SetRefundRecipient(0);
     SetPaidMoney(0);
     SetPaidExtendedCost(0);

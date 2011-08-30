@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 //Basic headers
 #include "WaypointMovementGenerator.h"
 #include "DestinationHolderImp.h"
@@ -269,7 +269,6 @@ void FlightPathMovementGenerator::Finalize(Player & player)
     float z = 0;
     i_destinationHolder.GetLocationNow(player.GetBaseMap(), x, y, z);
     player.SetPosition(x, y, z, player.GetOrientation());
-
 }
 
 bool FlightPathMovementGenerator::Update(Player &player, const uint32 diff)
@@ -367,7 +366,6 @@ void FlightPathMovementGenerator::DoEventIfAny(Player& player, TaxiPathNodeEntry
         player.GetMap()->ScriptsStart(sEventScripts, eventid, &player, &player);
     }
 }
-
 
 //
 // Unique1's ASTAR Pathfinding Code... For future use & reference...
@@ -694,4 +692,3 @@ int GetFCost(int to, int num, int parentNum, float *gcost)
     return (int)(gc + hc);
 }
 #endif                                                      //__PATHFINDING__
-

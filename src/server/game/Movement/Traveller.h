@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
@@ -150,4 +150,3 @@ inline void Traveller<Player>::MoveTo(float x, float y, float z, uint32 t)
 typedef Traveller<Creature> CreatureTraveller;
 typedef Traveller<Player> PlayerTraveller;
 #endif
-

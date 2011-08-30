@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
@@ -749,7 +749,7 @@ enum Opcodes
     SMSG_WARDEN_DATA                                 = 0x0F8A0, // 4.0.6a 13623
     CMSG_WARDEN_DATA                                 = 0x02F84, // 4.0.6a 13623
     SMSG_GROUP_JOINED_BATTLEGROUND                   = 0x00D1E, // 4.0.6a 13623
-	CMSG_BATTLEGROUND_PLAYER_POSITIONS               = 0x00293, // 4.0.6a 13623
+    CMSG_BATTLEGROUND_PLAYER_POSITIONS               = 0x00293, // 4.0.6a 13623
     SMSG_BATTLEGROUND_PLAYER_POSITIONS               = 0x0045C, // 4.0.6a 13623
     CMSG_PET_STOP_ATTACK                             = 0x10100, //
     SMSG_BINDER_CONFIRM                              = 0x033C4, // 4.0.6a 13623
@@ -882,8 +882,8 @@ enum Opcodes
     CMSG_LFG_SET_NEEDS                               = 0x10145, //
     CMSG_LFG_SET_BOOT_VOTE                           = 0x0D65D, //
     SMSG_LFG_BOOT_PROPOSAL_UPDATE                    = 0x079AC, //
-    SMSG_LFG_BOOT_PLAYER                             = 0x36D,   //    
-	CMSG_LFD_PLAYER_LOCK_INFO_REQUEST                = 0x00C76, // 4.0.6a 13623
+    SMSG_LFG_BOOT_PLAYER                             = 0x36D,   //
+    CMSG_LFD_PLAYER_LOCK_INFO_REQUEST                = 0x00C76, // 4.0.6a 13623
     SMSG_LFG_PLAYER_INFO                             = 0x0E088, // 4.0.6a 13623
     CMSG_LFG_TELEPORT                                = 0x0FA88, // 4.0.6a 13623
     CMSG_LFD_PARTY_LOCK_INFO_REQUEST                 = 0x00574, //

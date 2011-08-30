@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
@@ -91,4 +91,3 @@ void WorldSession::HandleUnlearnSkillOpcode(WorldPacket & recv_data)
     recv_data >> skill_id;
     GetPlayer()->SetSkill(skill_id, 0, 0, 0);
 }
-

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
@@ -323,7 +323,6 @@ void AuctionHouseMgr::LoadAuctionItems()
 
     do
     {
-
         Field* fields = result->Fetch();
 
         uint32 item_guid        = fields[11].GetUInt32();
@@ -828,12 +827,10 @@ void AuctionHouseMgr::DeleteExpiredAuctionsAtStartup()
         // Release memory
         delete auction;
         ++expirecount;
-
     } while (expAuctions->NextRow());
 
     sLog->outString(">> Deleted %u expired auctions in %u ms", expirecount, GetMSTimeDiffToNow(oldMSTime));
     sLog->outString();
-
 }
 
 bool AuctionEntry::LoadFromFieldList(Field* fields)

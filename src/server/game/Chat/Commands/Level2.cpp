@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
@@ -265,7 +265,6 @@ bool ChatHandler::HandlePInfoCommand(const char* args)
     uint32 mapId;
     uint32 areaId;
     uint32 phase = 0;
-
 
     // get additional information from Player object
     if (target)
@@ -656,7 +655,6 @@ bool ChatHandler::HandleCombatStopCommand(const char* args)
 
 bool ChatHandler::HandleLookupPlayerIpCommand(const char* args)
 {
-
     if (!*args)
         return false;
 
@@ -692,7 +690,6 @@ bool ChatHandler::HandleLookupPlayerAccountCommand(const char* args)
 
 bool ChatHandler::HandleLookupPlayerEmailCommand(const char* args)
 {
-
     if (!*args)
         return false;
 
@@ -747,7 +744,6 @@ bool ChatHandler::LookupPlayerSearchCommand(QueryResult result, int32 limit)
 
                 PSendSysMessage(LANG_LOOKUP_PLAYER_CHARACTER, name.c_str(), guid);
                 ++i;
-
             } while (chars->NextRow() && (limit == -1 || i < limit));
         }
     } while (result->NextRow());

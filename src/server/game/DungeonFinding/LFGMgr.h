@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
@@ -228,7 +228,6 @@ struct LfgProposal
     time_t cancelTime;                                     ///< Time when we will cancel this proposal
     LfgGuidList queues;                                    ///< Queue Ids to remove/readd
     LfgProposalPlayerMap players;                          ///< Players data
-
 };
 
 /// Stores all rolecheck info of a group that wants to join

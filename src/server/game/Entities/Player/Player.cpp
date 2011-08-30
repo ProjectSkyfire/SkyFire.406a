@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
@@ -3815,7 +3815,6 @@ bool Player::addSpell(uint32 spell_id, bool active, bool learning, bool dependen
                         break;
                 }
             }
-
         }
     }
 
@@ -4034,7 +4033,6 @@ void Player::removeSpell(uint32 spell_id, bool disabled, bool learn_low_rank)
                 SetSkill(prevSkill->skill, prevSkill->step, skill_value, skill_max_value);
             }
         }
-
     }
     else
     {
@@ -4316,7 +4314,6 @@ void Player::_SaveSpellCooldowns(SQLTransaction& trans)
         }
         else
             ++itr;
-
     }
     // if something changed execute
     if (!first_round)
@@ -5554,7 +5551,6 @@ void Player::CleanupChannels()
         ch->Leave(GetGUID(), false);                        // not send to client, not remove from player's channel list
         if (ChannelMgr* cMgr = channelMgr(GetTeam()))
             cMgr->LeftChannel(ch->GetName());               // deleted channel if empty
-
     }
     sLog->outDebug(LOG_FILTER_CHATSYS, "Player: channels cleaned up!");
 }
@@ -7965,7 +7961,6 @@ void Player::_ApplyItemBonuses(ItemTemplate const *proto, uint8 slot, bool apply
         if (feral_bonus > 0)
             ApplyFeralAPBonus(feral_bonus, apply);
     }
-
  }
 
 void Player::_ApplyWeaponDamage(uint8 slot, ItemTemplate const *proto, ScalingStatValuesEntry const *ssv, bool apply)
@@ -14606,7 +14601,6 @@ bool Player::CanCompleteQuest(uint32 quest_id)
 
         if (q_status.m_status == QUEST_STATUS_INCOMPLETE)
         {
-
             if (qInfo->HasFlag(QUEST_TRINITY_FLAGS_DELIVER))
             {
                 for (uint8 i = 0; i < QUEST_ITEM_OBJECTIVES_COUNT; i++)
@@ -18406,7 +18400,6 @@ void Player::SaveToDB()
     // save pet (hunter pet level and experience and all type pets health/mana).
     if (Pet* pet = GetPet())
         pet->SavePetToDB(PET_SAVE_AS_CURRENT);
-
 }
 
 // fast save function for item/money cheating preventing - save only inventory and money state
@@ -19473,7 +19466,6 @@ void Player::VehicleSpellInitialize()
     if (!veh)
         return;
 
-
     uint8 cooldownCount = veh->m_CreatureSpellCooldowns.size() + veh->m_CreatureCategoryCooldowns.size();
 
     WorldPacket data(SMSG_PET_SPELLS, 8 + 2 + 4 + 4 + 4 * 10 + 1 + 1 + cooldownCount * (4 + 2 + 4 + 4));
@@ -19809,7 +19801,6 @@ void Player::RemovePetitionsAndSigns(uint64 guid, uint32 type)
             Player* owner = ObjectAccessor::FindPlayer(ownerguid);
             if (owner)
                 owner->GetSession()->SendPetitionQueryOpcode(petitionguid);
-
         } while (result->NextRow());
 
         if (type == 10)
@@ -21439,7 +21430,6 @@ void Player::SendInitialPacketsBeforeAddToMap()
     // SMSG_PET_GUIDS
     // SMSG_UPDATE_WORLD_STATE
     // SMSG_POWER_UPDATE
-
 }
 
 void Player::SendInitialPacketsAfterAddToMap()
@@ -21813,7 +21803,6 @@ void Player::SetDailyQuestStatus(uint32 quest_id)
                     break;
                 }
             }
-
         } else
         {
             m_DFQuests.insert(quest_id);
@@ -24235,7 +24224,6 @@ void Player::UpdateSpecCount(uint8 count)
         for (ActionButtonList::iterator itr = m_actionButtons.begin(); itr != m_actionButtons.end(); ++itr)
             trans->PAppend("INSERT INTO character_action (guid, button, action, type, spec) VALUES ('%u', '%u', '%u', '%u', '%u')",
             GetGUIDLow(), uint32(itr->first), uint32(itr->second.GetAction()), uint32(itr->second.GetType()), 1);
-
     }
     // Delete spec data for removed spec.
     else if (count < curCount)

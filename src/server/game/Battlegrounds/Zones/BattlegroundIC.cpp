@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
@@ -58,7 +58,6 @@ BattlegroundIC::BattlegroundIC()
 
 BattlegroundIC::~BattlegroundIC()
 {
-
 }
 
 void BattlegroundIC::HandlePlayerResurrect(Player* player)
@@ -111,7 +110,6 @@ void BattlegroundIC::DoAction(uint32 action, uint64 var)
 
 void BattlegroundIC::PostUpdateImpl(uint32 diff)
 {
-
     if (GetStatus() != STATUS_IN_PROGRESS)
         return;
 
@@ -855,7 +853,6 @@ void BattlegroundIC::DestroyGate(Player* player, GameObject* go)
 
 void BattlegroundIC::EventPlayerDamagedGO(Player* /*plr*/, GameObject* /*go*/, uint32 /*eventType*/)
 {
-
 }
 
 WorldSafeLocsEntry const* BattlegroundIC::GetClosestGraveYard(Player* player)

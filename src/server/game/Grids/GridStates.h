@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
@@ -72,4 +72,3 @@ class RemovalState : public GridState
         void Update(Map &, NGridType &, GridInfo &, const uint32 x, const uint32 y, const uint32 t_diff) const;
 };
 #endif
-

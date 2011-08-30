@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
@@ -42,7 +42,6 @@ BattlegroundBE::BattlegroundBE()
 
 BattlegroundBE::~BattlegroundBE()
 {
-
 }
 
 void BattlegroundBE::StartingEventCloseDoors()
@@ -164,14 +163,12 @@ bool BattlegroundBE::SetupBattleground()
 
 void BattlegroundBE::UpdatePlayerScore(Player* Source, uint32 type, uint32 value, bool doAddHonor)
 {
-
     BattlegroundScoreMap::iterator itr = m_PlayerScores.find(Source->GetGUID());
     if (itr == m_PlayerScores.end())                         // player not found...
         return;
 
     //there is nothing special in this score
     Battleground::UpdatePlayerScore(Source, type, value, doAddHonor);
-
 }
 
 /*

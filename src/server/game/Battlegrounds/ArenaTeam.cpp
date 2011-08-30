@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
@@ -57,7 +57,6 @@ bool ArenaTeam::Create(uint32 captainGuid, uint8 type, std::string teamName, uin
     if (sArenaTeamMgr->GetArenaTeamByName(TeamName))
         return false;
 
-
     // Generate new arena team id
     TeamId = sArenaTeamMgr->GenerateArenaTeamId();
 
@@ -70,8 +69,6 @@ bool ArenaTeam::Create(uint32 captainGuid, uint8 type, std::string teamName, uin
     EmblemColor = emblemColor;
     BorderStyle = borderStyle;
     BorderColor = borderColor;
-
-
 
     // Save arena team to db
     PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_ADD_ARENA_TEAM);

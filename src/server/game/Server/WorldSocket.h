@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
@@ -205,10 +205,8 @@ class WorldSocket : public WorldHandler
         bool m_OutActive;
 
         uint32 m_Seed;
-
 };
 
 #endif  /* _WORLDSOCKET_H */
 
 /// @}
-

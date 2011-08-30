@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
@@ -386,7 +386,6 @@ bool SpellMgr::IsSpellValid(SpellInfo const *spellInfo, Player *pl, bool msg)
                         }
                         return false;
                     }
-
                 }
                 // also possible IsLootCrafting case but fake item must exist anyway
                 else if (!sObjectMgr->GetItemTemplate(spellInfo->Effects[i].ItemType))
@@ -1116,7 +1115,6 @@ bool SpellArea::IsFitToRequirements(Player const* player, uint32 newZone, uint32
 
 void SpellMgr::LoadSpellInfos()
 {
-
 }
 
 void SpellMgr::LoadSpellRanks()
@@ -1514,7 +1512,6 @@ void SpellMgr::LoadSpellTargetPositions()
 
         mSpellTargetPositions[Spell_ID] = st;
         ++count;
-
     } while (result->NextRow());
 
     /*
@@ -1590,7 +1587,6 @@ void SpellMgr::LoadSpellGroups()
 
         groups.insert(std::set<uint32>::value_type(group_id));
         mSpellGroupSpell.insert(SpellGroupSpellMap::value_type((SpellGroup)group_id, spell_id));
-
     } while (result->NextRow());
 
     for (SpellGroupSpellMap::iterator itr = mSpellGroupSpell.begin(); itr!= mSpellGroupSpell.end() ;)
@@ -2315,7 +2311,6 @@ void SpellMgr::LoadPetDefaultSpells()
     CreatureTemplateContainer const* ctc = sObjectMgr->GetCreatureTemplates();
     for (CreatureTemplateContainer::const_iterator itr = ctc->begin(); itr != ctc->end(); ++itr)
     {
-
         if (!itr->second.PetSpellDataId)
             continue;
 
