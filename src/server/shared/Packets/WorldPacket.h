@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
@@ -24,29 +25,43 @@
 
 class WorldPacket : public ByteBuffer
 {
-    public:
-                                                            // just container for later use
-        WorldPacket()                                       : ByteBuffer(0), m_opcode(0)
-        {
-        }
-        explicit WorldPacket(uint16 opcode, size_t res=200) : ByteBuffer(res), m_opcode(opcode) { }
-                                                            // copy constructor
-        WorldPacket(const WorldPacket &packet)              : ByteBuffer(packet), m_opcode(packet.m_opcode)
-        {
-        }
+public:
+	// just container for later use
+	WorldPacket()                                       : ByteBuffer(0), m_opcode(0)
+	{
+	}
+	explicit WorldPacket(uint32 opcode, size_t res=200) : ByteBuffer(res)
+	{
+		SetOpcode(opcode);
+	}
+//	explicit WorldPacket(uint32 opcode, size_t res=200) : ByteBuffer(res)
+//	{
+//		SetOpcode(opcode);
+//	}
+	// copy constructor
+	WorldPacket(const WorldPacket &packet)              : ByteBuffer(packet), m_opcode(packet.m_opcode)
+	{
+	}
 
-        void Initialize(uint16 opcode, size_t newres=200)
-        {
-            clear();
-            _storage.reserve(newres);
-            m_opcode = opcode;
-        }
+//	void Initialize(Opcodes enumVal, size_t newres=200)
+//	{
+//		clear();
+//		_storage.reserve(newres);
+//		SetOpcode(enumVal);
+//	}
+	void Initialize(uint32 opcode, size_t newres=200)
+	{
+		clear();
+		_storage.reserve(newres);
+		SetOpcode(opcode);
+	}
 
-        uint16 GetOpcode() const { return m_opcode; }
-        void SetOpcode(uint16 opcode) { m_opcode = opcode; }
+	uint32 GetOpcode() const { return m_opcode; }
+	void SetOpcode(uint32 opcode) { m_opcode = opcode; }
 
-    protected:
-        uint16 m_opcode;
+protected:
+
+	uint32 m_opcode;
 };
 #endif
 
