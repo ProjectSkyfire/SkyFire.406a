@@ -28,12 +28,13 @@ void WorldSession::SendAuthResponse(uint8 code, bool shortForm, uint32 queuePos)
     packet << uint32(0);                                   // BillingTimeRemaining
     packet << uint8(0);                                    // BillingPlanFlags
     packet << uint32(0);                                   // BillingTimeRested
-    packet << uint8(Expansion());                          // 0 - normal, 1 - TBC, 2 - WOTLK, must be set in database manually for each account
+	packet << uint8(Expansion());                          // | 0 - normal | 1 - TBC | 2 - WOTLK | 3 - CATA |
+	packet << uint8(Expansion());                          // Server Expansion
 
     if (!shortForm)
     {
-        packet << uint32(queuePos);                             // Queue position
-        packet << uint8(0);                                     // Unk 3.3.0
+		packet << uint32(queuePos);                        // Queue position
+		packet << uint8(0);                                // Unk 3.3.0
     }
 
     SendPacket(&packet);

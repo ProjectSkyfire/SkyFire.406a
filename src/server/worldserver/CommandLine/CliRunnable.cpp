@@ -112,7 +112,7 @@ void utf8print(void* /*arg*/, const char* str)
 
 void commandFinished(void*, bool /*success*/)
 {
-    printf("TC> ");
+    printf("SF> ");
     fflush(stdout);
 }
 /**
@@ -220,11 +220,11 @@ void ChatHandler::HandleCharacterDeletedListHelper(DeletedInfoList const& foundL
 
         if (!m_session)
             PSendSysMessage(LANG_CHARACTER_DELETED_LIST_LINE_CONSOLE,
-                itr->lowguid, itr->name.c_str(), itr->accountName.empty() ? "<Not existed>" : itr->accountName.c_str(),
+                itr->lowguid, itr->name.c_str(), itr->accountName.empty() ? "<Does Not Exist>" : itr->accountName.c_str(),
                 itr->accountId, dateStr.c_str());
         else
             PSendSysMessage(LANG_CHARACTER_DELETED_LIST_LINE_CHAT,
-                itr->lowguid, itr->name.c_str(), itr->accountName.empty() ? "<Not existed>" : itr->accountName.c_str(),
+                itr->lowguid, itr->name.c_str(), itr->accountName.empty() ? "<Does Not Exist>" : itr->accountName.c_str(),
                 itr->accountId, dateStr.c_str());
     }
 
@@ -571,7 +571,7 @@ void CliRunnable::run()
 
     // print this here the first time
     // later it will be printed after command queue updates
-    printf("TC>");
+    printf("SF>");
 
     ///- As long as the World is running (no World::m_stopEvent), get the command line and handle it
     while (!World::IsStopped())
@@ -584,7 +584,7 @@ void CliRunnable::run()
         char commandbuf[256];
         command_str = fgets(commandbuf, sizeof(commandbuf), stdin);
         #else
-        command_str = readline("TC>");
+        command_str = readline("SF>");
         rl_bind_key('\t', rl_complete);
         #endif
         if (command_str != NULL)
@@ -599,7 +599,7 @@ void CliRunnable::run()
             if (!*command_str)
             {
                 #if PLATFORM == PLATFORM_WINDOWS
-                printf("TC>");
+                printf("SF>");
                 #endif
                 continue;
             }
@@ -608,7 +608,7 @@ void CliRunnable::run()
             if (!consoleToUtf8(command_str, command))         // convert from console encoding to utf8
             {
                 #if PLATFORM == PLATFORM_WINDOWS
-                printf("TC>");
+                printf("SF>");
                 #endif
                 continue;
             }
