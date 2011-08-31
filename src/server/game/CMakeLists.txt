@@ -113,6 +113,8 @@ include_directories(
   ${CMAKE_SOURCE_DIR}/src/server/shared/Cryptography/Authentication
   ${CMAKE_SOURCE_DIR}/src/server/shared/Database
   ${CMAKE_SOURCE_DIR}/src/server/shared/DataStores
+  ${CMAKE_SOURCE_DIR}/src/server/shared/DataStores/DBC
+  ${CMAKE_SOURCE_DIR}/src/server/shared/DataStores/DB2
   ${CMAKE_SOURCE_DIR}/src/server/shared/Debugging
   ${CMAKE_SOURCE_DIR}/src/server/shared/Dynamic/CountedReference
   ${CMAKE_SOURCE_DIR}/src/server/shared/Dynamic/LinkedReference
@@ -141,6 +143,8 @@ include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}/Combat
   ${CMAKE_CURRENT_SOURCE_DIR}/Conditions
   ${CMAKE_CURRENT_SOURCE_DIR}/DataStores
+  ${CMAKE_CURRENT_SOURCE_DIR}/DataStores/DBC
+  ${CMAKE_CURRENT_SOURCE_DIR}/DataStores/DB2  
   ${CMAKE_CURRENT_SOURCE_DIR}/DungeonFinding
   ${CMAKE_CURRENT_SOURCE_DIR}/Entities
   ${CMAKE_CURRENT_SOURCE_DIR}/Entities/Creature

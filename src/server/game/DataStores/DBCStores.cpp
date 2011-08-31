@@ -108,7 +108,6 @@ DBCStorage <GtRegenMPPerSptEntry>         sGtRegenMPPerSptStore(GtRegenMPPerSptf
 
 DBCStorage <HolidaysEntry>                sHolidaysStore(Holidaysfmt);
 
-DBCStorage <ItemEntry>                    sItemStore(Itemfmt);
 DBCStorage <ItemBagFamilyEntry>           sItemBagFamilyStore(ItemBagFamilyfmt);
 //DBCStorage <ItemCondExtCostsEntry> sItemCondExtCostsStore(ItemCondExtCostsEntryfmt);
 //DBCStorage <ItemDisplayInfoEntry> sItemDisplayInfoStore(ItemDisplayTemplateEntryfmt); -- not used currently
@@ -345,7 +344,6 @@ void LoadDBCStores(const std::string& dataPath)
 
     LoadDBC(availableDbcLocales, bad_dbc_files, sHolidaysStore,               dbcPath, "Holidays.dbc");
 
-    LoadDBC(availableDbcLocales, bad_dbc_files, sItemStore,                   dbcPath, "Item.dbc");
     LoadDBC(availableDbcLocales, bad_dbc_files, sItemBagFamilyStore,          dbcPath, "ItemBagFamily.dbc");
     //LoadDBC(dbcCount, availableDbcLocales, bad_dbc_files, sItemDisplayInfoStore,        dbcPath, "ItemDisplayInfo.dbc");     -- not used currently
     //LoadDBC(dbcCount, availableDbcLocales, bad_dbc_files, sItemCondExtCostsStore,       dbcPath, "ItemCondExtCosts.dbc");
@@ -620,14 +618,13 @@ void LoadDBCStores(const std::string& dataPath)
         exit(1);
     }
 
-    // Check loaded DBC files proper version
-    if (!sAreaStore.LookupEntry(3617)              ||       // last area (areaflag) added in 3.3.5a
-        !sCharTitlesStore.LookupEntry(177)         ||       // last char title added in 3.3.5a
-        !sGemPropertiesStore.LookupEntry(1629)     ||       // last added spell in 3.3.5a
-        !sItemStore.LookupEntry(56806)             ||       // last gem property added in 3.3.5a
-        !sItemExtendedCostStore.LookupEntry(2997)  ||       // last item extended cost added in 3.3.5a
-        !sMapStore.LookupEntry(724)                ||       // last map added in 3.3.5a
-        !sSpellStore.LookupEntry(80864)            )        // last client known item added in 3.3.5a
+	// Check loaded DBC files proper version
+	if (!sAreaStore.LookupEntry(4445)              ||       // last area (areaflag) added in 4.0.6a
+		!sCharTitlesStore.LookupEntry(229)         ||       // last char title added in 4.0.6a
+		!sGemPropertiesStore.LookupEntry(1858)     ||       // last gem property added in 4.0.6a
+		!sItemExtendedCostStore.LookupEntry(3400)  ||       // last item extended cost added in 4.0.6a
+		!sMapStore.LookupEntry(767)                ||       // last map added in 4.0.6a
+		!sSpellStore.LookupEntry(96539)            )        // last added spell in 4.0.6a
     {
         sLog->outError("You have _outdated_ DBC files. Please extract correct versions from current using client.");
         exit(1);
@@ -867,7 +864,6 @@ uint32 const* GetTalentTabPages(uint8 cls)
  DBCStorage <SoundEntriesEntry>  const* GetSoundEntriesStore()   { return &sSoundEntriesStore;   }
  DBCStorage <SpellRangeEntry>    const* GetSpellRangeStore()     { return &sSpellRangeStore;     }
  DBCStorage <FactionEntry>       const* GetFactionStore()        { return &sFactionStore;        }
- DBCStorage <ItemEntry>          const* GetItemDisplayStore()    { return &sItemStore;           }
  DBCStorage <CreatureDisplayInfoEntry> const* GetCreatureDisplayStore() { return &sCreatureDisplayInfoStore; }
  DBCStorage <EmotesEntry>        const* GetEmotesStore()         { return &sEmotesStore;         }
  DBCStorage <EmotesTextEntry>    const* GetEmotesTextStore()     { return &sEmotesTextStore;     }
