@@ -222,7 +222,6 @@ GameObject* SpellCastTargets::GetGOTarget() const
     return NULL;
 }
 
-
 void SpellCastTargets::SetGOTarget(GameObject* target)
 {
     if (!target)

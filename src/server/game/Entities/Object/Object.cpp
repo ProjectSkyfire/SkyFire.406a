@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #include "Common.h"
 #include "SharedDefines.h"
 #include "WorldPacket.h"
@@ -114,7 +114,6 @@ Object::~Object()
 
     delete [] m_uint32Values;
     delete [] _changedFields;
-
 }
 
 void Object::_InitValues()
@@ -2033,7 +2032,6 @@ void WorldObject::SendMessageToSet(WorldPacket *data, bool self)
 {
     SendMessageToSetInRange(data, GetVisibilityRange(), self);
 }
-
 
 void WorldObject::SendMessageToSetInRange(WorldPacket *data, float dist, bool /*self*/)
 {

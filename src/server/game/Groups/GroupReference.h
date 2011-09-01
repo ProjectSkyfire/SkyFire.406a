@@ -40,4 +40,3 @@ class GroupReference : public Reference<Group, Player>
         void setSubGroup(uint8 pSubGroup) { iSubGroup = pSubGroup; }
 };
 #endif
-

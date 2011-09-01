@@ -1369,25 +1369,25 @@ void LFGMgr::UpdateProposal(uint32 proposalId, uint64 guid, bool accept)
                     uint32 old_number = m_NumWaitTimeDps++;
                     m_WaitTimeDps = int32((m_WaitTimeDps * old_number + waitTimesMap[plr->GetGUID()]) / m_NumWaitTimeDps);
                     break;
-				}	
+				}
                 case ROLE_HEALER:
                 {
                     uint32 old_number = m_NumWaitTimeHealer++;
                     m_WaitTimeHealer = int32((m_WaitTimeHealer * old_number + waitTimesMap[plr->GetGUID()]) / m_NumWaitTimeHealer);
                     break;
-				}	
+				}
                 case ROLE_TANK:
                 {
                     uint32 old_number = m_NumWaitTimeTank++;
                     m_WaitTimeTank = int32((m_WaitTimeTank * old_number + waitTimesMap[plr->GetGUID()]) / m_NumWaitTimeTank);
                     break;
-				}	
+				}
                 default:
                 {
                     uint32 old_number = m_NumWaitTimeAvg++;
                     m_WaitTimeAvg = int32((m_WaitTimeAvg * old_number + waitTimesMap[plr->GetGUID()]) / m_NumWaitTimeAvg);
                     break;
-				}	
+				}
             }
             grp->SetLfgRoles(pguid, pProposal->players[pguid]->role);
             SetState(pguid, LFG_STATE_DUNGEON);

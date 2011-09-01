@@ -46,7 +46,6 @@ public:
     void   AddGroup(Group* group);
     void   RemoveGroup(Group* group);
 
-
 protected:
     uint32           NextGroupId;
     uint32           NextGroupDbStoreId;
