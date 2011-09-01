@@ -108,5 +108,7 @@ namespace Trinity
         SPECIFIC_TYPE* t = Remove(elements._elements, obj);
         return ( t != NULL ? t : Remove(elements._TailElements, obj) );
     }
+
 }
 #endif
+

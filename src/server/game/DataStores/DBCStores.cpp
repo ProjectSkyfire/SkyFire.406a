@@ -19,7 +19,7 @@
 
 #include "DBCStores.h"
 
-#include "Logging/Log.h"
+#include "Log.h"
 #include "SharedDefines.h"
 #include "SpellMgr.h"
 

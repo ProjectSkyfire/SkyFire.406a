@@ -38,3 +38,4 @@ LocaleConstant GetLocaleByName(const std::string& name)
 
     return LOCALE_enUS;                                     // including enGB case
 }
+

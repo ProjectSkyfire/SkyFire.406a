@@ -37,3 +37,4 @@ void GroupReference::sourceObjectDestroyLink()
     // called from invalidate()
     getTarget()->DelinkMember(this);
 }
+

@@ -394,6 +394,7 @@ m_result(result)
 {
 }
 
+
 PreparedStatementTask::~PreparedStatementTask()
 {
     delete m_stmt;

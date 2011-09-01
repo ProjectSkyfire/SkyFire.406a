@@ -52,3 +52,4 @@ class Config
 #define sConfig ACE_Singleton<Config, ACE_Null_Mutex>::instance()
 
 #endif
+

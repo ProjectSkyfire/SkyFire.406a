@@ -53,3 +53,4 @@ template <class TO, class FROM> class RefManager : public LinkedListHead
 
 //=====================================================
 #endif
+

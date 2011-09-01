@@ -162,5 +162,7 @@ namespace Trinity
         bool t = Remove(elements._elements, obj, hdl);
         return ( !t ? Remove(elements._TailElements, obj, hdl) : t );
     }
+
 }
 #endif
+

@@ -410,7 +410,8 @@ public:
     bool IsAbilityOfSkillType(uint32 skillType) const;
 
     bool IsAOE() const;
-    bool IsRequiringSelectedTarget() const;
+    bool NeedsExplicitUnitTarget() const;
+    bool NeedsToBeTriggeredByCaster() const;
 
     bool IsPassive() const;
     bool IsAutocastable() const;
@@ -443,6 +444,7 @@ public:
     SpellCastResult CheckShapeshift(uint32 form) const;
     SpellCastResult CheckLocation(uint32 map_id, uint32 zone_id, uint32 area_id, Player const* player = NULL) const;
     SpellCastResult CheckTarget(Unit const* caster, Unit const* target, bool implicit = true) const;
+    SpellCastResult CheckExplicitTarget(Unit const* caster, WorldObject const* target) const;
     bool CheckTargetCreatureType(Unit const* target) const;
 
     SpellSchoolMask GetSchoolMask() const;

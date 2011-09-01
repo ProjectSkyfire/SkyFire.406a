@@ -89,3 +89,4 @@ template <class TO, class FROM> class Reference : public LinkedListElement
 
 //=====================================================
 #endif
+
