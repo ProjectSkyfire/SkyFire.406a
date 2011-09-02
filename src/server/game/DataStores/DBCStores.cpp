@@ -206,25 +206,25 @@ static bool LoadDBC_assert_print(uint32 fsize, uint32 rsize, const std::string& 
 }
 
 template<class T>
-inline void LoadDBC(uint32& availableDbcLocales, StoreProblemList& errors, DBCStorage<T>& storage, std::string const& dbcPath, std::string const& filename, std::string const* customFormat = NULL, std::string const* customIndexName = NULL)
+inline void LoadDBC(uint32& availableDbcLocales, StoreProblemList& errlist, DBCStorage<T>& storage, const std::string& dbc_path, const std::string& filename, const std::string * custom_entries = NULL, const std::string * idname = NULL)
 {
 	// compatibility format and C++ structure sizes
-	ASSERT(DBCFileLoader::GetFormatRecordSize(storage.GetFormat()) == sizeof(T) || LoadDBC_assert_print(DBCFileLoader::GetFormatRecordSize(storage.GetFormat()), sizeof(T), filename));
+	if (!(DBCFileLoader::GetFormatRecordSize(storage.GetFormat()) == sizeof(T) || LoadDBC_assert_print(DBCFileLoader::GetFormatRecordSize(storage.GetFormat()), sizeof(T), filename)))
 
 	++DBCFileCount;
-	std::string dbcFilename = dbcPath + filename;
+	std::string dbc_filename = dbc_path + filename;
 	SqlDbc * sql = NULL;
-	if (customFormat)
-		sql = new SqlDbc(&filename, customFormat, customIndexName, storage.GetFormat());
+	if (custom_entries)
+		sql = new SqlDbc(&filename, custom_entries, idname, storage.GetFormat());
 
-	if (storage.Load(dbcFilename.c_str(), sql))
+	if (storage.Load(dbc_filename.c_str(), sql))
 	{
 		for (uint8 i = 0; i < TOTAL_LOCALES; ++i)
 		{
 			if (!(availableDbcLocales & (1 << i)))
 				continue;
 
-			std::string localizedName(dbcPath);
+			std::string localizedName(dbc_path);
 			localizedName.append(localeNames[i]);
 			localizedName.push_back('/');
 			localizedName.append(filename);
@@ -236,15 +236,20 @@ inline void LoadDBC(uint32& availableDbcLocales, StoreProblemList& errors, DBCSt
 	else
 	{
 		// sort problematic dbc to (1) non compatible and (2) non-existed
-		if (FILE* f = fopen(dbcFilename.c_str(), "rb"))
+		FILE * f=fopen(dbc_filename.c_str(), "rb");
+		if (f)
 		{
+			printf("Can't LOAD dbc %s !\n", dbc_filename.c_str());
 			char buf[100];
-			snprintf(buf, 100, " (exists, but has %u fields instead of " SIZEFMTD ") Possible wrong client version.", storage.GetFieldCount(), strlen(storage.GetFormat()));
-			errors.push_back(dbcFilename + buf);
+			snprintf(buf, 100, " (exist, but have %d fields instead " SIZEFMTD ") Wrong client version DBC file?", storage.GetFieldCount(), strlen(storage.GetFormat()));
+			errlist.push_back(dbc_filename + buf);
 			fclose(f);
 		}
 		else
-			errors.push_back(dbcFilename);
+		{
+			printf("Can't OPEN dbc %s !\n", dbc_filename.c_str());
+			errlist.push_back(dbc_filename);
+		}
 	}
 
 	delete sql;
@@ -260,7 +265,7 @@ void LoadDBCStores(const std::string& dataPath)
 	uint32 availableDbcLocales = 0xFFFFFFFF;
 
 	//DBC Files
-	LoadDBC(availableDbcLocales, bad_dbc_files, sAreaStore,                   dbcPath, "AreaTable.dbc");
+	LoadDBC(availableDbcLocales, bad_dbc_files, sAreaStore, dbcPath, "AreaTable.dbc");
 
 	// must be after sAreaStore loading
 	for (uint32 i = 0; i < sAreaStore.GetNumRows(); ++i)           // areaflag numbered from 0
@@ -499,9 +504,9 @@ void LoadDBCStores(const std::string& dataPath)
 		}
 	}
 
-	LoadDBC(availableDbcLocales, bad_dbc_files, sTaxiNodesStore,              dbcPath, "TaxiNodes.dbc");
-	LoadDBC(availableDbcLocales, bad_dbc_files, sTaxiPathStore,               dbcPath, "TaxiPath.dbc");
-	 for (uint32 i = 1; i < sTaxiPathStore.GetNumRows(); ++i)
+	LoadDBC(availableDbcLocales, bad_dbc_files, sTaxiNodesStore,           dbcPath, "TaxiNodes.dbc");
+	LoadDBC(availableDbcLocales, bad_dbc_files, sTaxiPathStore,            dbcPath, "TaxiPath.dbc");
+	for (uint32 i = 1; i < sTaxiPathStore.GetNumRows(); ++i)
 		if (TaxiPathEntry const* entry = sTaxiPathStore.LookupEntry(i))
 			sTaxiPathSetBySource[entry->from][entry->to] = TaxiPathBySourceAndDestination(entry->ID, entry->price);
 	uint32 pathCount = sTaxiPathStore.GetNumRows();

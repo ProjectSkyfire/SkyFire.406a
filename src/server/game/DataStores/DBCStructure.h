@@ -1898,15 +1898,17 @@ struct WMOAreaTableEntry
 	int32 rootId;                                           // 1 used in root WMO
 	int32 adtId;                                            // 2 used in adt file
 	int32 groupId;                                          // 3 used in group WMO
-	//uint32 field4;
-	//uint32 field5;
-	//uint32 field6;
-	//uint32 field7;
-	//uint32 field8;
+	//uint32 field4;                                        // 4
+	//uint32 field5;                                        // 5
+	//uint32 field6;                                        // 6
+	//uint32 field7;                                        // 7
+	//uint32 field8;                                        // 8
 	uint32 Flags;                                           // 9 used for indoor/outdoor determination
 	uint32 areaId;                                          // 10 link to AreaTableEntry.ID
-	//char *Name[16];
-	//uint32 nameFlags;
+	//DBCString Name;                                       // 11
+	//uint32 field12;                                       // 12
+	//uint32 field13;                                       // 13
+	//uint32 field14;                                       // 14
 };
 
 struct WorldMapAreaEntry
@@ -1914,7 +1916,7 @@ struct WorldMapAreaEntry
 	//uint32  ID;                                           // 0
 	uint32  map_id;                                         // 1
 	uint32  area_id;                                        // 2 index (continent 0 areas ignored)
-	//char* internal_name                                   // 3
+	//DBCString internal_name                               // 3
 	float   y1;                                             // 4
 	float   y2;                                             // 5
 	float   x1;                                             // 6
@@ -1922,6 +1924,7 @@ struct WorldMapAreaEntry
 	int32   virtual_map_id;                                 // 8 -1 (map_id have correct map) other: virtual map where zone show (map_id - where zone in fact internally)
 	// int32   dungeonMap_id;                               // 9 pointer to DungeonMap.dbc (owerride x1, x2, y1, y2 coordinates)
 	// uint32  someMapID;                                   // 10
+	//uint32   unk1;                                        // 11 4.0.0
 };
 
 #define MAX_WORLD_MAP_OVERLAY_AREA_IDX 4
@@ -1932,8 +1935,8 @@ struct WorldMapOverlayEntry
 	//uint32    worldMapAreaId;                             // 1 idx in WorldMapArea.dbc
 	uint32    areatableID[MAX_WORLD_MAP_OVERLAY_AREA_IDX];  // 2-5
 															// 6-7 always 0, possible part of areatableID[]
-	//char* internal_name                                   // 8
-															// 9-16 some ints
+	//DBCString internal_name                               // 8
+															// 9-14 some ints
 };
 
 struct WorldSafeLocsEntry
@@ -1943,8 +1946,7 @@ struct WorldSafeLocsEntry
 	float     x;                                            // 2
 	float     y;                                            // 3
 	float     z;                                            // 4
-	//char*   name[16]                                      // 5-20 name, unused
-															// 21 name flags, unused
+	//DBCString name;                                       // 5 name, unused
 };
 
 /*
@@ -2034,6 +2036,6 @@ struct TaxiPathNodePtr
 typedef Path<TaxiPathNodePtr, TaxiPathNodeEntry const> TaxiPathNodeList;
 typedef std::vector<TaxiPathNodeList> TaxiPathNodesByPath;
 
-#define TaxiMaskSize 14
+#define TaxiMaskSize 22
 typedef uint32 TaxiMask[TaxiMaskSize];
 #endif
