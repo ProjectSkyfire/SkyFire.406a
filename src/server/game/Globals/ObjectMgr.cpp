@@ -179,7 +179,9 @@ LanguageDesc lang_description[LANGUAGES_COUNT] =
     { LANG_DRAENEI,     29932, SKILL_LANG_DRAENEI      },
     { LANG_ZOMBIE,          0, 0                       },
     { LANG_GNOMISH_BINARY,  0, 0                       },
-    { LANG_GOBLIN_BINARY,   0, 0                       }
+    { LANG_GOBLIN_BINARY,   0, 0                       },
+    { LANG_WORGEN,      69270, SKILL_LANG_WORGEN       },
+    { LANG_GOBLIN,      69269, SKILL_LANG_GOBLIN       }
 };
 
 LanguageDesc const* GetLanguageDescByID(uint32 lang)
@@ -3488,6 +3490,10 @@ void ObjectMgr::LoadPlayerInfo()
 
                 // skip expansion classes if not playing with expansion
                 if (sWorld->getIntConfig(CONFIG_EXPANSION) < 2 && class_ == CLASS_DEATH_KNIGHT)
+                    continue;
+               
+			    // skip expansion race from Cataclysm expansion
+                if (sWorld->getIntConfig(CONFIG_EXPANSION) < 3 && (race == RACE_WORGEN || race == RACE_GOBLIN))
                     continue;
 
                 // fatal error if no level 1 data
