@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
@@ -20,6 +21,7 @@
 #define DBCSTORE_H
 
 #include "DBCFileLoader.h"
+#include "DBCfmt.h"
 #include "Logging/Log.h"
 #include "Field.h"
 #include "DatabaseWorkerPool.h"
@@ -70,17 +72,12 @@ class DBCStorage
 {
     typedef std::list<char*> StringPoolList;
     public:
-        explicit DBCStorage(const char *f) :
-            fmt(f), nCount(0), fieldCount(0), dataTable(NULL)
-        {
-            indexTable.asT = NULL;
-        }
+        explicit DBCStorage(const char *f) : fmt(f), nCount(0), fieldCount(0), indexTable(NULL), m_dataTable(NULL) { }
         ~DBCStorage() { Clear(); }
 
-        T const* LookupEntry(uint32 id) const
-        {
-            return (id >= nCount) ? NULL : indexTable.asT[id];
-        }
+        T const* LookupEntry(uint32 id) const { return (id>=nCount)?NULL:indexTable[id]; }
+        T* LookupEntryNoConst(uint32 id) const { return (id>=nCount)?NULL:indexTable[id]; }
+        void SetEntry(uint32 id, T* entry) { if (id>=nCount){ printf("ERROR"); return;} indexTable[id]=entry; }
         uint32  GetNumRows() const { return nCount; }
         char const* GetFormat() const { return fmt; }
         uint32 GetFieldCount() const { return fieldCount; }
@@ -102,8 +99,7 @@ class DBCStorage
                 std::string query = "SELECT * FROM " + sql->sqlTableName;
                 if (sql->indexPos >= 0)
                     query +=" ORDER BY " + *sql->indexName + " DESC";
-                query += ';';
-
+                query += ";";
 
                 result = WorldDatabase.Query(query.c_str());
                 if (result)
@@ -122,19 +118,16 @@ class DBCStorage
                     }
                 }
             }
-
             char * sqlDataTable;
             fieldCount = dbc.GetCols();
+            m_dataTable = (T*)dbc.AutoProduceData(fmt, nCount, (char**&)indexTable, sqlRecordCount, sqlHighestIndex, sqlDataTable);
 
-            dataTable = (T*)dbc.AutoProduceData(fmt, nCount, indexTable.asChar,
-                sqlRecordCount, sqlHighestIndex, sqlDataTable);
-
-            stringPoolList.push_back(dbc.AutoProduceStrings(fmt, (char*)dataTable));
+            m_stringPoolList.push_back(dbc.AutoProduceStrings(fmt, (char*)m_dataTable));
 
             // Insert sql data into arrays
             if (result)
             {
-                if (indexTable.asT)
+                if (indexTable)
                 {
                     uint32 offset = 0;
                     uint32 rowIndex = dbc.GetNumRows();
@@ -143,18 +136,18 @@ class DBCStorage
                         if (!fields)
                             fields = result->Fetch();
 
-                        if(sql->indexPos >= 0)
+                        if (sql->indexPos >= 0)
                         {
                             uint32 id = fields[sql->sqlIndexPos].GetUInt32();
-                            if (indexTable.asT[id])
+                            if (indexTable[id])
                             {
                                 sLog->outError("Index %d already exists in dbc:'%s'", id, sql->sqlTableName.c_str());
                                 return false;
                             }
-                            indexTable.asT[id]=(T*)&sqlDataTable[offset];
+                            indexTable[id]=(T*)&sqlDataTable[offset];
                         }
                         else
-                            indexTable.asT[rowIndex]=(T*)&sqlDataTable[offset];
+                            indexTable[rowIndex]=(T*)&sqlDataTable[offset];
                         uint32 columnNumber = 0;
                         uint32 sqlColumnNumber = 0;
 
@@ -179,7 +172,7 @@ class DBCStorage
                                         break;
                                     case FT_STRING:
                                         // Beginning of the pool - empty string
-                                        *((char**)(&sqlDataTable[offset]))=stringPoolList.back();
+                                        *((char**)(&sqlDataTable[offset]))=m_stringPoolList.back();
                                         offset+=sizeof(char*);
                                         break;
                                 }
@@ -232,57 +225,50 @@ class DBCStorage
             }
 
             // error in dbc file at loading if NULL
-            return indexTable.asT != NULL;
+            return indexTable!=NULL;
         }
 
         bool LoadStringsFrom(char const* fn)
         {
             // DBC must be already loaded using Load
-            if (!indexTable.asT)
+            if (!indexTable)
                 return false;
 
             DBCFileLoader dbc;
             // Check if load was successful, only then continue
-            if(!dbc.Load(fn, fmt))
+            if (!dbc.Load(fn, fmt))
                 return false;
 
-            stringPoolList.push_back(dbc.AutoProduceStrings(fmt, (char*)dataTable));
+            m_stringPoolList.push_back(dbc.AutoProduceStrings(fmt, (char*)m_dataTable));
 
             return true;
         }
 
         void Clear()
         {
-            if (!indexTable.asT)
+            if (!indexTable)
                 return;
 
-            delete[] ((char*)indexTable.asT);
-            indexTable.asT = NULL;
-            delete[] ((char*)dataTable);
-            dataTable = NULL;
+            delete[] ((char*)indexTable);
+            indexTable = NULL;
+            delete[] ((char*)m_dataTable);
+            m_dataTable = NULL;
 
-            while(!stringPoolList.empty())
+            while(!m_stringPoolList.empty())
             {
-                delete[] stringPoolList.front();
-                stringPoolList.pop_front();
+                delete[] m_stringPoolList.front();
+                m_stringPoolList.pop_front();
             }
             nCount = 0;
         }
 
-    private:
+    public:
         char const* fmt;
         uint32 nCount;
         uint32 fieldCount;
-
-        union
-        {
-            T** asT;
-            char** asChar;
-        }
-        indexTable;
-
-        T* dataTable;
-        StringPoolList stringPoolList;
+        T** indexTable;
+        T* m_dataTable;
+        StringPoolList m_stringPoolList;
 };
 
 #endif

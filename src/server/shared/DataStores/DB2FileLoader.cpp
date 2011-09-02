@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
@@ -184,7 +184,7 @@ DB2FileLoader::Record DB2FileLoader::getRecord(size_t id)
     return Record(*this, data + id*recordSize);
 }
 
-uint32 DB2FileLoader::GetFormatRecordSize(const char * format,int32* index_pos)
+uint32 DB2FileLoader::GetFormatRecordSize(const char * format, int32* index_pos)
 {
     uint32 recordsize = 0;
     int32 i = -1;
@@ -231,7 +231,7 @@ uint32 DB2FileLoader::GetFormatStringsFields(const char * format)
 char* DB2FileLoader::AutoProduceData(const char* format, uint32& records, char**& indexTable)
 {
     /*
-    format STRING, NA, FLOAT,NA,INT <=>
+    format STRING, NA, FLOAT, NA, INT <=>
     struct{
     char* field0,
     float field1,
@@ -318,27 +318,27 @@ char* DB2FileLoader::AutoProduceStringsArrayHolders(const char* format, char* da
 {
     if (strlen(format) != fieldCount)
         return NULL;
-    
+
     // we store flat holders pool as single memory block
     size_t stringFields = GetFormatStringsFields(format);
     // each string field at load have array of string for each locale
     size_t stringHolderSize = sizeof(char*) * TOTAL_LOCALES;
     size_t stringHoldersRecordPoolSize = stringFields * stringHolderSize;
     size_t stringHoldersPoolSize = stringHoldersRecordPoolSize * recordCount;
-    
+
     char* stringHoldersPool = new char[stringHoldersPoolSize];
-    
+
     // DB2 strings expected to have at least empty string
     for (size_t i = 0; i < stringHoldersPoolSize / sizeof(char*); ++i)
         ((char const**)stringHoldersPool)[i] = nullStr;
-    
+
     uint32 offset=0;
-    
+
     // assign string holders to string field slots
     for (uint32 y = 0; y < recordCount; y++)
     {
         uint32 stringFieldNum = 0;
-        
+
         for(uint32 x = 0; x < fieldCount; x++)
             switch(format[x])
             {
@@ -367,7 +367,7 @@ char* DB2FileLoader::AutoProduceStringsArrayHolders(const char* format, char* da
                     assert(false && "unknown format character");
         }
     }
-    
+
     //send as char* for store in char* pool list for free at unload
     return stringHoldersPool;
 }
