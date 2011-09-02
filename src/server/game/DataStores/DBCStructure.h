@@ -517,29 +517,29 @@ struct AchievementCriteriaEntry
 
 struct AreaTableEntry
 {
-    uint32  ID;                                             // 0
-    uint32  mapid;                                          // 1
-    uint32  zone;                                           // 2 if 0 then it's zone, else it's zone id of this area
-    uint32  exploreFlag;                                    // 3, main index
-    uint32  flags;                                          // 4, unknown value but 312 for all cities
-                                                            // 5-9 unused
-    int32   area_level;                                     // 10
-    DBCString area_name;                                    // 11
-    uint32  team;                                           // 12
-                                                            // 13-19 unknown
-    //uint32 unk20;                                         // 20 4.0.0
-    //uint32 unk21;                                         // 21 4.0.0
-    //uint32 unk22;                                         // 22 4.0.0
-    //uint32 unk23;                                         // 23 4.0.0
-    //uint32 unk24;                                         // 24 - worldStateId
+	uint32  ID;                                             // 0
+	uint32  mapid;                                          // 1
+	uint32  zone;                                           // 2 if 0 then it's zone, else it's zone id of this area
+	uint32  exploreFlag;                                    // 3, main index
+	uint32  flags;                                          // 4, unknown value but 312 for all cities
+															// 5-9 unused
+	int32   area_level;                                     // 10
+	DBCString area_name;                                    // 11
+	uint32  team;                                           // 12
+															// 13-19 unknown
+	//uint32 unk20;                                         // 20 4.0.0
+	//uint32 unk21;                                         // 21 4.0.0
+	//uint32 unk22;                                         // 22 4.0.0
+	//uint32 unk23;                                         // 23 4.0.0
+	//uint32 unk24;                                         // 24 - worldStateId
 
-    // helpers
-    bool IsSanctuary() const
-    {
-        if (mapid == 609)
-            return true;
-        return (flags & AREA_FLAG_SANCTUARY);
-    }
+	// helpers
+	bool IsSanctuary() const
+	{
+		if (mapid == 609)
+			return true;
+		return (flags & AREA_FLAG_SANCTUARY);
+	}
 };
 
 #define MAX_GROUP_AREA_IDS 6
@@ -1167,10 +1167,10 @@ struct LFGDungeonEntry
 	uint32  recmaxlevel;                                    // 22
 	int32  map;                                             // 23
 	uint32  difficulty;                                     // 24
-    //uint32  flags;                                        // 25
+	//uint32  flags;                                        // 25
 	uint32  type;                                           // 26
-    //uint32  unk;                                          // 27
-    //char*   iconname;                                     // 28
+	//uint32  unk;                                          // 27
+	//char*   iconname;                                     // 28
 	uint32  expansion;                                      // 29
 	//uint32  unk4;                                         // 30
 	uint32  grouptype;                                      // 31
