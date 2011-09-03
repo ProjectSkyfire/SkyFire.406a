@@ -45,25 +45,26 @@ struct AchievementEntry
 {
 	uint32   ID;                                            // 0
 	int32    requiredFaction;                               // 1       -1=all, 0=horde, 1=alliance
-    int32    mapID;                                         // 2 -1=none
-    //uint32 parentAchievement;                             // 3 its Achievement parent (can`t start while parent uncomplete, use its Criteria if don`t have own, use its progress on begin)
-    DBCString name;                                         // 4
-    //DBCString description;                                // 5
-    uint32    categoryId;                                   // 6
-    uint32    points;                                       // 7 reward points
-    //uint32 OrderInCategory;                               // 8
-    uint32    flags;                                        // 9
-    //uint32    icon;                                       // 10 icon (from SpellIcon.dbc)
-    //DBCString titleReward;                                // 11
-    uint32 count;                                           // 12 - need this count of completed criterias (own or referenced achievement criterias)
-    uint32 refAchievement;                                  // 13 - referenced achievement (counting of all completed criterias)};
+	int32    mapID;                                         // 2 -1=none
+	//uint32 parentAchievement;                             // 3 its Achievement parent (can`t start while parent uncomplete, use its Criteria if don`t have own, use its progress on begin)
+	DBCString name;                                         // 4
+	//DBCString description;                                // 5
+	uint32    categoryId;                                   // 6
+	uint32    points;                                       // 7 reward points
+	//uint32 OrderInCategory;                               // 8
+	uint32    flags;                                        // 9
+	//uint32    icon;                                       // 10 icon (from SpellIcon.dbc)
+	//DBCString titleReward;                                // 11
+	uint32 count;                                           // 12 - need this count of completed criterias (own or referenced achievement criterias)
+	uint32 refAchievement;                                  // 13 - referenced achievement (counting of all completed criterias)};
 };
 
 struct AchievementCategoryEntry
 {
 	uint32    ID;                                           // 0
 	uint32    parentCategory;                               // 1 -1 for main category
-    //DBCString name;                                       // 2
+	//DBCString name;                                       // 2
+	//uint32    sortOrder;                                  // 3
 };
 
 struct AchievementCriteriaEntry
@@ -502,18 +503,18 @@ struct AchievementCriteriaEntry
 		uint32  additionalRequirement_value;
 	} additionalRequirements[MAX_CRITERIA_REQUIREMENTS];
 
-    DBCString  name;                                        // 9
-    uint32  completionFlag;                                 // 10
-    uint32  timedType;                                      // 11 Only appears with timed achievements, seems to be the type of starting a timed Achievement, only type 1 and some of type 6 need manual starting
-                                                            // 1: ByEventId(?) (serverside IDs),    2: ByQuestId,   5: ByCastSpellId(?)
-                                                            // 6: BySpellIdTarget(some of these are unknown spells, some not, some maybe spells)
-                                                            // 7: ByKillNpcId,  9: ByUseItemId
-    uint32  timerStartEvent;                                // 12 Alway appears with timed events, used internally to start the achievement, store
-    uint32  timeLimit;                                      // 13 time limit in seconds
-    uint32  showOrder;                                      // 14 show order
-    //uint32 unk1;                                          // 15 only one value, still unknown
-    //uint32 unk2;                                          // 16 all zeros
-    //uint32 moreRequirement[3];                            // 17-19
+	DBCString  name;                                        // 9
+	uint32  completionFlag;                                 // 10
+	uint32  timedType;                                      // 11 Only appears with timed achievements, seems to be the type of starting a timed Achievement, only type 1 and some of type 6 need manual starting
+															// 1: ByEventId(?) (serverside IDs),    2: ByQuestId,   5: ByCastSpellId(?)
+															// 6: BySpellIdTarget(some of these are unknown spells, some not, some maybe spells)
+															// 7: ByKillNpcId,  9: ByUseItemId
+	uint32  timerStartEvent;                                // 12 Alway appears with timed events, used internally to start the achievement, store
+	uint32  timeLimit;                                      // 13 time limit in seconds
+	uint32  showOrder;                                      // 14 show order
+	//uint32 unk1;                                          // 15 only one value, still unknown
+	//uint32 unk2;                                          // 16 all zeros
+	//uint32 moreRequirement[3];                            // 17-19
 };
 
 struct AreaTableEntry
@@ -554,34 +555,34 @@ struct AreaGroupEntry
 
 struct AreaPOIEntry
 {
-    uint32 id;              //0
-    uint32 icon[11];        //1-11
-    float x;                //12
-    float y;                //13
-    uint32 mapId;           //14
-    //uint32 val1;          //15
-    uint32 zoneId;          //16
-    //DBCString name;       //17
-    //DBCString name2;      //18
-    uint32 worldState;      //19
-    //float unk1;           //20
+	uint32 id;              //0
+	uint32 icon[11];        //1-11
+	float x;                //12
+	float y;                //13
+	uint32 mapId;           //14
+	//uint32 val1;          //15
+	uint32 zoneId;          //16
+	//DBCString name;       //17
+	//DBCString name2;      //18
+	uint32 worldState;      //19
+	//float unk1;           //20
 };
 
 struct AreaTriggerEntry
 {
-    uint32  id;                                             // 0        m_ID
-    uint32  mapid;                                          // 1        m_ContinentID
-    float   x;                                              // 2        m_x
-    float   y;                                              // 3        m_y
-    float   z;                                              // 4        m_z
-    //uint32                                                // 5
-    //uint32                                                // 6
-    //uint32                                                // 7
-    float   radius;                                         // 8        m_radius
-    float   box_x;                                          // 9        m_box_length
-    float   box_y;                                          // 10       m_box_width
-    float   box_z;                                          // 11       m_box_heigh
-    float   box_orientation;                                // 12       m_box_yaw
+	uint32  id;                                             // 0        m_ID
+	uint32  mapid;                                          // 1        m_ContinentID
+	float   x;                                              // 2        m_x
+	float   y;                                              // 3        m_y
+	float   z;                                              // 4        m_z
+	//uint32                                                // 5
+	//uint32                                                // 6
+	//uint32                                                // 7
+	float   radius;                                         // 8        m_radius
+	float   box_x;                                          // 9        m_box_length
+	float   box_y;                                          // 10       m_box_width
+	float   box_z;                                          // 11       m_box_heigh
+	float   box_orientation;                                // 12       m_box_yaw
 };
 
 struct AuctionHouseEntry
@@ -1032,9 +1033,9 @@ struct GtRegenMPPerSptEntry
 
 struct GuildPerksEntry
 {
-    uint32 Id;
-    uint32 Level;
-    uint32 SpellId;
+	uint32 Id;
+	uint32 Level;
+	uint32 SpellId;
 };
 
 /* no used
@@ -1756,43 +1757,43 @@ struct TalentTabEntry
 
 struct TalentTreePrimarySpellsEntry
 {
-    uint32 Id;                                              // 0
-    uint32 TalentTabID;                                     // 1
-    uint32 SpellID;                                         // 2
+	uint32 Id;                                              // 0
+	uint32 TalentTabID;                                     // 1
+	uint32 SpellID;                                         // 2
 };
 
 struct TaxiNodesEntry
 {
-    uint32    ID;                                           // 0        m_ID
-    uint32    map_id;                                       // 1        m_ContinentID
-    float     x;                                            // 2        m_x
-    float     y;                                            // 3        m_y
-    float     z;                                            // 4        m_z
-    DBCString name;                                         // 5        m_Name_lang
-    uint32    MountCreatureID[2];                           // 6-7      m_MountCreatureID[2]
+	uint32    ID;                                           // 0        m_ID
+	uint32    map_id;                                       // 1        m_ContinentID
+	float     x;                                            // 2        m_x
+	float     y;                                            // 3        m_y
+	float     z;                                            // 4        m_z
+	DBCString name;                                         // 5        m_Name_lang
+	uint32    MountCreatureID[2];                           // 6-7      m_MountCreatureID[2]
 };
 
 struct TaxiPathEntry
 {
-    uint32    ID;                                           // 0        m_ID
-    uint32    from;                                         // 1        m_FromTaxiNode
-    uint32    to;                                           // 2        m_ToTaxiNode
-    uint32    price;                                        // 3        m_Cost
+	uint32    ID;                                           // 0        m_ID
+	uint32    from;                                         // 1        m_FromTaxiNode
+	uint32    to;                                           // 2        m_ToTaxiNode
+	uint32    price;                                        // 3        m_Cost
 };
 
 struct TaxiPathNodeEntry
 {
-                                                            // 0        m_ID
-    uint32    path;                                         // 1        m_PathID
-    uint32    index;                                        // 2        m_NodeIndex
-    uint32    mapid;                                        // 3        m_ContinentID
-    float     x;                                            // 4        m_LocX
-    float     y;                                            // 5        m_LocY
-    float     z;                                            // 6        m_LocZ
-    uint32    actionFlag;                                   // 7        m_flags
-    uint32    delay;                                        // 8        m_delay
-    uint32    arrivalEventID;                               // 9        m_arrivalEventID
-    uint32    departureEventID;                             // 10       m_departureEventID
+															// 0        m_ID
+	uint32    path;                                         // 1        m_PathID
+	uint32    index;                                        // 2        m_NodeIndex
+	uint32    mapid;                                        // 3        m_ContinentID
+	float     x;                                            // 4        m_LocX
+	float     y;                                            // 5        m_LocY
+	float     z;                                            // 6        m_LocZ
+	uint32    actionFlag;                                   // 7        m_flags
+	uint32    delay;                                        // 8        m_delay
+	uint32    arrivalEventID;                               // 9        m_arrivalEventID
+	uint32    departureEventID;                             // 10       m_departureEventID
 };
 
 struct TeamContributionPointsEntry
@@ -2030,21 +2031,21 @@ typedef std::map<uint32, TalentSpellPos> TalentSpellPosMap;
 
 struct TaxiPathBySourceAndDestination
 {
-    TaxiPathBySourceAndDestination() : ID(0), price(0) {}
-    TaxiPathBySourceAndDestination(uint32 _id, uint32 _price) : ID(_id), price(_price) {}
+	TaxiPathBySourceAndDestination() : ID(0), price(0) {}
+	TaxiPathBySourceAndDestination(uint32 _id, uint32 _price) : ID(_id), price(_price) {}
 
-    uint32    ID;
-    uint32    price;
+	uint32    ID;
+	uint32    price;
 };
 typedef std::map<uint32, TaxiPathBySourceAndDestination> TaxiPathSetForSource;
 typedef std::map<uint32, TaxiPathSetForSource> TaxiPathSetBySource;
 
 struct TaxiPathNodePtr
 {
-    TaxiPathNodePtr() : i_ptr(NULL) {}
-    TaxiPathNodePtr(TaxiPathNodeEntry const* ptr) : i_ptr(ptr) {}
-    TaxiPathNodeEntry const* i_ptr;
-    operator TaxiPathNodeEntry const& () const { return *i_ptr; }
+	TaxiPathNodePtr() : i_ptr(NULL) {}
+	TaxiPathNodePtr(TaxiPathNodeEntry const* ptr) : i_ptr(ptr) {}
+	TaxiPathNodeEntry const* i_ptr;
+	operator TaxiPathNodeEntry const& () const { return *i_ptr; }
 };
 
 typedef Path<TaxiPathNodePtr, TaxiPathNodeEntry const> TaxiPathNodeList;
