@@ -1,5 +1,6 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.org/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
@@ -17,8 +18,6 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <openssl/md5.h>
-
 #include "Common.h"
 #include "Database/DatabaseEnv.h"
 #include "ByteBuffer.h"
@@ -28,6 +27,8 @@
 #include "AuthSocket.h"
 #include "AuthCodes.h"
 #include "SHA1.h"
+
+#include <openssl/md5.h>
 
 #define ChunkSize 2048
 
@@ -326,7 +327,7 @@ bool AuthSocket::_HandleLogonChallenge()
     sLog->outStaticDebug("[AuthChallenge] got full packet, %#04x bytes", ch->size);
     sLog->outStaticDebug("[AuthChallenge] name(%d): '%s'", ch->I_len, ch->I);
 
-    // BigEndian code, nop in little endian case
+    // BigEndian code, not in little endian case
     // size already converted
 #if TRINITY_ENDIAN == TRINITY_BIGENDIAN
     EndianConvert(*((uint32*)(&ch->gamename[0])));

@@ -1,5 +1,6 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
+ * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.org/> 
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
@@ -17,12 +18,12 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "RealmSocket.h"
+#include "Log.h"
+
 #include <ace/OS_NS_string.h>
 #include <ace/INET_Addr.h>
 #include <ace/SString.h>
-
-#include "RealmSocket.h"
-#include "Log.h"
 
 #ifndef MSG_NOSIGNAL
 #define MSG_NOSIGNAL 0
