@@ -503,18 +503,19 @@ struct AchievementCriteriaEntry
 		uint32  additionalRequirement_value;
 	} additionalRequirements[MAX_CRITERIA_REQUIREMENTS];
 
-	DBCString  name;                                        // 9
-	uint32  completionFlag;                                 // 10
-	uint32  timedType;                                      // 11 Only appears with timed achievements, seems to be the type of starting a timed Achievement, only type 1 and some of type 6 need manual starting
-															// 1: ByEventId(?) (serverside IDs),    2: ByQuestId,   5: ByCastSpellId(?)
-															// 6: BySpellIdTarget(some of these are unknown spells, some not, some maybe spells)
-															// 7: ByKillNpcId,  9: ByUseItemId
-	uint32  timerStartEvent;                                // 12 Alway appears with timed events, used internally to start the achievement, store
-	uint32  timeLimit;                                      // 13 time limit in seconds
-	uint32  showOrder;                                      // 14 show order
-	//uint32 unk1;                                          // 15 only one value, still unknown
-	//uint32 unk2;                                          // 16 all zeros
-	//uint32 moreRequirement[3];                            // 17-19
+	DBCString  name;                                            // 9
+	uint32  completionFlag;                                     // 10
+	uint32  timedType;                                          // 11 Only appears with timed achievements, seems to be the type of starting a timed Achievement, only type 1 and some of type 6 need manual starting
+	                                                            // 1: ByEventId(?) (serverside IDs),    2: ByQuestId,   5: ByCastSpellId(?)
+	                                                            // 6: BySpellIdTarget(some of these are unknown spells, some not, some maybe spells)
+	                                                            // 7: ByKillNpcId,  9: ByUseItemId
+	uint32  timerStartEvent;                                    // 12 Alway appears with timed events, used internally to start the achievement, store
+	uint32  timeLimit;                                          // 13 time limit in seconds
+	uint32  showOrder;                                          // 14 show order
+	//uint32 unk1;                                              // 15 only one value, still unknown
+	//uint32 unk2;                                              // 16 all zeros
+	//uint32 moreRequirement[3];                                // 17-19
+	//uint32 moreRequirementValue[3];                           // 20-22
 };
 
 struct AreaTableEntry
@@ -524,16 +525,16 @@ struct AreaTableEntry
 	uint32  zone;                                           // 2 if 0 then it's zone, else it's zone id of this area
 	uint32  exploreFlag;                                    // 3, main index
 	uint32  flags;                                          // 4, unknown value but 312 for all cities
-															// 5-9 unused
+	                                                        // 5-9 unused
 	int32   area_level;                                     // 10
 	DBCString area_name;                                    // 11
 	uint32  team;                                           // 12
-															// 13-19 unknown
+	                                                        // 13-19 unknown
 	//uint32 unk20;                                         // 20 4.0.0
 	//uint32 unk21;                                         // 21 4.0.0
 	//uint32 unk22;                                         // 22 4.0.0
 	//uint32 unk23;                                         // 23 4.0.0
-	//uint32 unk24;                                         // 24 - worldStateId
+	//uint32 unk24;                                         // 24 4.0.1, worldstateid?
 
 	// helpers
 	bool IsSanctuary() const
@@ -2053,4 +2054,5 @@ typedef std::vector<TaxiPathNodeList> TaxiPathNodesByPath;
 
 #define TaxiMaskSize 22
 typedef uint32 TaxiMask[TaxiMaskSize];
+
 #endif
