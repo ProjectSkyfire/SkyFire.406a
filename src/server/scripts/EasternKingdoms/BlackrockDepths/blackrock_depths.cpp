@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
@@ -67,7 +67,6 @@ public:
         }
         return false;
     }
-
 };
 
 /*######
@@ -122,7 +121,6 @@ public:
         }
         return false;
     }
-
 };
 
 /*######
@@ -367,7 +365,6 @@ public:
                 npc_escortAI::UpdateAI(diff);
            }
     };
-
 };
 
 /*######
@@ -439,7 +436,6 @@ public:
             DoMeleeAttackIfReady();
         }
     };
-
 };
 
 /*######
@@ -536,7 +532,6 @@ public:
 
         return true;
     }
-
 };
 
 /*######
@@ -603,7 +598,6 @@ public:
 
         return true;
     }
-
 };
 
 /*######
@@ -709,7 +703,6 @@ public:
             npc_escortAI::UpdateAI(diff);
         }
     };
-
 };
 
  */
@@ -773,7 +766,6 @@ public:
                     pInstance->SetData(DATA_QUEST_JAIL_BREAK, ENCOUNTER_STATE_IN_PROGRESS);
                     creature->setFaction(11);
             }
-
             }
         return false;
     }
@@ -877,7 +869,6 @@ public:
             npc_escortAI::UpdateAI(diff);
         }
     };
-
 };
 
   */
@@ -1098,7 +1089,6 @@ public:
             npc_escortAI::UpdateAI(diff);
         }
     };
-
 };
 */
 /*######
@@ -1200,7 +1190,6 @@ public:
             npc_escortAI::UpdateAI(diff);
         }
     };
-
 };
 
 */
@@ -1353,7 +1342,6 @@ public:
             npc_escortAI::UpdateAI(diff);
         }
     };
-
 };
 
 /*######

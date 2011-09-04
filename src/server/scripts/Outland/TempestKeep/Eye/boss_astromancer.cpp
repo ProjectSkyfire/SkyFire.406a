@@ -497,4 +497,3 @@ void AddSC_boss_high_astromancer_solarian()
     new boss_high_astromancer_solarian();
     new mob_solarium_priest();
 }
-

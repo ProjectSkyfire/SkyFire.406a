@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
@@ -990,7 +990,6 @@ public:
 
     static bool HandleReloadEventAITextsCommand(ChatHandler* handler, const char* /*args*/)
     {
-
         sLog->outString("Re-Loading Texts from `creature_ai_texts`...");
         sEventAIMgr->LoadCreatureEventAI_Texts();
         handler->SendGlobalGMSysMessage("DB table `creature_ai_texts` reloaded.");

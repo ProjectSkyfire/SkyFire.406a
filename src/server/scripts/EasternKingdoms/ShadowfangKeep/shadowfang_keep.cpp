@@ -138,7 +138,6 @@ public:
         void Reset() {}
         void EnterCombat(Unit* /*who*/) {}
     };
-
 };
 
 class npc_arugal_voidwalker : public CreatureScript
@@ -193,7 +192,6 @@ public:
                 pInstance->SetData(TYPE_FENRUS, pInstance->GetData(TYPE_FENRUS) + 1);
         }
     };
-
 };
 
 void AddSC_shadowfang_keep()

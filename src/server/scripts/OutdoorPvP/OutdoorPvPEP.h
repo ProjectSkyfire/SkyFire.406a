@@ -340,4 +340,3 @@ class OutdoorPvPEP : public OutdoorPvP
 };
 
 #endif
-

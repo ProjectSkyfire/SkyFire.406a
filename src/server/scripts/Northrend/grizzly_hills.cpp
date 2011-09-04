@@ -608,7 +608,6 @@ public:
                     me->SetStandState(UNIT_STAND_STATE_STAND);
                     me->DespawnOrUnsummon(DespawnTimer);
                 }
-
             }
         }
 

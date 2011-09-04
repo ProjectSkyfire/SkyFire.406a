@@ -81,7 +81,6 @@ public:
         player->SEND_GOSSIP_MENU(player->GetGossipTextId(creature), creature->GetGUID());
         return true;
     }
-
 };
 
 /*######
@@ -106,7 +105,6 @@ public:
 
         return false;
     }
-
 };
 
 enum eTombCreature
@@ -164,7 +162,6 @@ public:
                 pInstance->SetData(DATA_GONG_WAVES, pInstance->GetData(DATA_GONG_WAVES)+1);
         }
     };
-
 };
 
 void AddSC_razorfen_downs()

@@ -1556,7 +1556,7 @@ class BattlegroundAV : public Battleground
         void EndBattleground(uint32 winner);
 
         virtual WorldSafeLocsEntry const* GetClosestGraveYard(Player* player);
- 
+
         /* achievement req. */
         bool IsBothMinesControlledByTeam(uint32 team) const;
         bool IsAllTowersControlledAndCaptainAlive(uint32 team) const;

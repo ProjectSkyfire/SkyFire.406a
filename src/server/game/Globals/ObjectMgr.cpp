@@ -3491,7 +3491,7 @@ void ObjectMgr::LoadPlayerInfo()
                 // skip expansion classes if not playing with expansion
                 if (sWorld->getIntConfig(CONFIG_EXPANSION) < 2 && class_ == CLASS_DEATH_KNIGHT)
                     continue;
-               
+
 			    // skip expansion race from Cataclysm expansion
                 if (sWorld->getIntConfig(CONFIG_EXPANSION) < 3 && (race == RACE_WORGEN || race == RACE_GOBLIN))
                     continue;

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
@@ -201,7 +201,6 @@ public:
     }
     static bool HandleWpUnLoadCommand(ChatHandler* handler, const char* /*args*/)
     {
-
         Creature* target = handler->getSelectedCreature();
 
         if (!target)
@@ -752,7 +751,6 @@ public:
                         creature->DeleteFromDB();
                         creature->AddObjectToRemoveList();
                     }
-
                 }
                 while (result2->NextRow());
 

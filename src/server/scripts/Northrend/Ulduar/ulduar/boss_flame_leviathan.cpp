@@ -995,7 +995,6 @@ public:
             }
         }
     };
-
 };
 
 class npc_hodirs_fury : public CreatureScript

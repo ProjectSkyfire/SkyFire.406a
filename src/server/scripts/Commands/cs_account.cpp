@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
@@ -228,7 +228,6 @@ public:
             }
             else
                 handler->PSendSysMessage(LANG_ACCOUNT_LIST_ERROR, name.c_str());
-
         }while (resultDB->NextRow());
 
         handler->SendSysMessage(LANG_ACCOUNT_LIST_BAR);
@@ -365,7 +364,6 @@ public:
                 handler->SetSentErrorMessage(true);
                 return false;
             }
-
         }
 
         // Let set addon state only for lesser (strong) security level

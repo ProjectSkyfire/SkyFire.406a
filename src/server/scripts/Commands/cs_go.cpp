@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
@@ -500,17 +500,17 @@ public:
         float z;
         float ort;
         uint32 mapid;
-        
+
         if (pmapid)
             mapid = (uint32)atoi(pmapid);
         else
             mapid = _player->GetMapId();
-            
+
         if( port )
             ort = (float)atof(port);
         else
             ort = _player->GetOrientation();
-        
+
         if( pz )
         {
             z = (float)atof(pz);
@@ -532,7 +532,7 @@ public:
             Map const *map = sMapMgr->CreateBaseMap(mapid);
             z = std::max(map->GetHeight(x, y, MAX_HEIGHT), map->GetWaterLevel(x, y));
         }
-        
+
         // stop flight if need
         if (_player->isInFlight())
         {
