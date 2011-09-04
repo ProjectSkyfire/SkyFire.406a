@@ -1,0 +1,10 @@
+#! /bin/bash
+while true
+do
+PID2=$(pidof authserver)
+  if (( PID2 < 1 ))
+  then
+                ./startl
+  fi
+sleep 20
+done

@@ -1,0 +1,10 @@
+#!/bin/sh
+# exit # Comment this in if you are working on your server and don't want it to boot
+cd /opt/skyfire/bin # Adjust this to the binary directory of the realm to be run
+pidof restarter >/dev/null # Grap the process ID
+PID1=$?
+if [ $PID1 -eq 1 ] # If not running boot the server in a dedicated screen session and log
+    then
+echo "Re-/Starting the logonserver on "`date` >> ../restarter.log
+   ./restarter && screen -A -m -d -S worldserver ./startw
+fi
