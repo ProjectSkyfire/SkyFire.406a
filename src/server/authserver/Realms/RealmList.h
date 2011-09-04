@@ -1,6 +1,5 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
- * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.org/> 
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
@@ -21,10 +20,9 @@
 #ifndef _REALMLIST_H
 #define _REALMLIST_H
 
-#include "Common.h"
 #include <ace/Singleton.h>
 #include <ace/Null_Mutex.h>
-
+#include "Common.h"
 
 // Storage object for a realm
 struct Realm

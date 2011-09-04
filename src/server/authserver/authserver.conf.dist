@@ -1,6 +1,6 @@
-##################################################
-# SkyFireEMU Auth Server configuration file      #
-##################################################
+###############################################
+# SkyFireEMU Auth Server configuration file   #
+###############################################
 [authserver]
 
 ###################################################################################################
@@ -8,7 +8,6 @@
 #
 #    EXAMPLE CONFIG
 #    AUTH SERVER SETTINGS
-#    AUTH SERVER LOGGING
 #    MYSQL SETTINGS
 #
 ###################################################################################################
@@ -31,6 +30,15 @@
 ###################################################################################################
 # AUTH SERVER SETTINGS
 #
+#    LogsDir
+#        Description: Logs directory setting.
+#        Important:   LogsDir needs to be quoted, as the string might contain space characters.
+#                     Logs directory must exists, or log file creation will be disabled.
+#        Default:     "" - (Log files will be stored in the current path)
+
+LogsDir = ""
+
+#
 #    MaxPingTime
 #        Description: Time (in minutes) between database pings.
 #        Default:     30
@@ -51,6 +59,116 @@ RealmServerPort = 3724
 #        Default:     "0.0.0.0" - (Bind to all IPs on the system)
 
 BindIP = "0.0.0.0"
+
+#
+#    PidFile
+#        Description: Auth server PID file.
+#        Example:     "./authserver.pid"  - (Enabled)
+#        Default:     ""                  - (Disabled)
+
+PidFile = ""
+
+#
+#    LogLevel
+#        Description: Server console level of logging
+#        Default:     0 - (Minimum)
+#                     1 - (Basic)
+#                     2 - (Detail)
+#                     3 - (Full/Debug)
+
+LogLevel = 0
+
+#
+#    LogFile
+#        Description: Log file for main server log.
+#        Default:     "Auth.log" - (Enabled)
+#                     ""           - (Disabled)
+
+LogFile = "Auth.log"
+
+#
+#    Debug Log Mask
+#        Description: Bitmask that determines which debug log output (level 3)
+#                     will be logged.
+#        Possible flags:
+#
+#                  64 - Anything related to network input/output,
+#                        such as packet handlers and netcode logs
+#
+#                       Simply add the values together to create a bitmask.
+#                       For more info see enum DebugLogFilters in Log.h
+#
+#             Default: 0 (nothing)
+
+DebugLogMask = 64
+
+#
+#    SQLDriverLogFile
+#        Description: Log file for SQL driver events.
+#        Example:     "SQLDriver.log" - (Enabled)
+#        Default:      ""             - (Disabled)
+
+SQLDriverLogFile = ""
+
+#
+#    LogTimestamp
+#        Description: Append timestamp to the server log file name.
+#                     Logname_YYYY-MM-DD_HH-MM-SS.Ext for Logname.Ext
+#        Default:     0 - (Disabled)
+#                     1 - (Enabled)
+
+LogTimestamp = 0
+
+#
+#    LogFileLevel
+#        Description: Server file level of logging
+#        Default:     0 - (Minimum)
+#                     1 - (Basic)
+#                     2 - (Detail)
+#                     3 - (Full/Debug)
+
+LogFileLevel = 0
+
+#
+#    LogColors
+#        Description: Colors for log messages (Format: "normal basic detail debug").
+#        Colors:      0  - Black
+#                     1  - Red
+#                     2  - Green
+#                     3  - Brown
+#                     4  - Blue
+#                     5  - Magenta
+#                     6  - Cyan
+#                     7  - Grey
+#                     8  - Yellow
+#                     9  - Lred
+#                     10 - Lgreen
+#                     11 - Lblue
+#                     12 - Lmagenta
+#                     13 - Lcyan
+#                     14 - White
+#        Example:     "13 11 9 5" - (Enabled)
+#        Default:     ""          - (Disabled)
+
+LogColors = ""
+
+#
+#    EnableLogDB
+#        Description: Write log messages to database (LogDatabaseInfo).
+#        Default:     0 - (Disabled)
+#                     1 - (Enabled)
+
+EnableLogDB = 0
+
+#
+#    DBLogLevel
+#        Description: Log level of databases logging.
+#        Default:     1 - (Basic)
+#                     0 - (Minimum)
+#                     2 - (Detail)
+#                     3 - (Full/Debug)
+
+DBLogLevel = 1
 
 #
 #    UseProcessors
@@ -100,201 +218,6 @@ WrongPass.BanTime = 600
 #                     1 - (Ban Account)
 
 WrongPass.BanType = 0
-
-#
-###################################################################################################
-
-###################################################################################################
-# AUTH SERVER LOGGING
-#
-#    PidFile
-#        Description: Auth server PID file.
-#        Example:     "./authserver.pid"  - (Enabled)
-#        Default:     ""                  - (Disabled)
-
-PidFile = ""
-
-#
-#    Log.Directory
-#        Description: Directory for all the logs.
-#        Important:   Value needs to be quoted, as the string might contain space characters.
-#        Default:     "" - (Log files will be stored in the current path)
-
-Log.Directory = ""
-
-#
-#    Log.Console.Level
-#        Description: Log level for console messages (from all the logs which write to console).
-#        Default:     0 - (Minimum)
-#                     1 - (Warning)
-#                     2 - (Info)
-#                     3 - (Full)
-
-Log.Console.Level = 0
-
-#
-#    Log.Console.Colors
-#        Description: Colors for log messages (Format: "minimum warning info full").
-#        Colors:      0  - Black
-#                     1  - Red
-#                     2  - Green
-#                     3  - Brown
-#                     4  - Blue
-#                     5  - Magenta
-#                     6  - Cyan
-#                     7  - Grey
-#                     8  - Yellow
-#                     9  - Light red
-#                     10 - Light green
-#                     11 - Light blue
-#                     12 - Light magenta
-#                     13 - Light cyan
-#                     14 - White
-#        Default:     ""          - (Disabled)
-#                     "13 8 10 5" - (Enabled)
-
-Log.Console.Colors = ""
-
-#
-#    Log.DB.Enable
-#        Description: Write log messages to database (LogDatabaseInfo).
-#        Default:     0 - (Disabled)
-#                     1 - (Enabled)
-
-Log.DB.Enable = 0
-
-#
-#    Log.DB.Level
-#        Description: Log level of databases logging.
-#        Default:     0 - (Minimum)
-#                     1 - (Warning)
-#                     2 - (Info)
-#                     3 - (Full)
-
-Log.DB.Level = 0
-
-#
-#    Log.<name>.Enabled
-#        Description: Enable given log.
-#        Default:     1 - (Enabled)
-#                     0 - (Disabled)
-#
-#    Log.<name>.Level
-#        Description: Level of logging for this log file.
-#        Default:     1 - (Warning)
-#                     0 - (Minimum)
-#                     2 - (Info)
-#                     3 - (Full)
-#
-#    Log.<name>.File
-#        Description: Path to log file.
-#        Example:     "Server.log" - (Enabled)
-#        Default:     ""           - (Disabled)
-#        Time format specifiers can be used in order to customize file name using current time, e.g.
-#        "Char_%Y-%m-%d.log"
-#        If you use SplitDate setting you should provide time format specifiers, otherwise you may
-#        get unexpected behaviour.
-#        Available format specifiers (also see C strftime function):
-#            %a    Abbreviated weekday name             Thu
-#            %A    Full weekday name                    Thursday
-#            %b    Abbreviated month name               Aug
-#            %B    Full month name                      August
-#            %c    Date and time representation         Thu Aug 23 14:55:02 2001
-#            %d    Day of the month (01-31)             23
-#            %H    Hour in 24h format (00-23)           14
-#            %I    Hour in 12h format (01-12)           02
-#            %j    Day of the year (001-366)            235
-#            %m    Month as a decimal number (01-12)    08
-#            %M    Minute (00-59)                       55
-#            %p    AM or PM designation                 PM
-#            %S    Second (00-61)                       02
-#            %U    Week number with the first Sunday
-#                  as the first day of week one (00-53) 33
-#            %w    Weekday as a decimal number with
-#                  Sunday as 0 (0-6)                    4
-#            %W    Week number with the first Monday
-#                  as the first day of week one (00-53) 34
-#            %x    Date representation                  08/23/01
-#            %X    Time representation                  14:55:02
-#            %y    Year, last two digits (00-99)        01
-#            %Y    Year                                 2001
-#            %Z    Timezone name or abbreviation        CDT
-#            %%    A % sign                             %
-#
-#    Log.<name>.TimestampFmt
-#        Description: Format string for timestamp. Uses the same format specifier as in
-#                     Log.<name>.File (also see C strftime function).
-#        Default:     "%Y-%m-%d %H:%M:%S"
-#
-#    Log.<name>.SplitDate
-#        Description: Specifies whether new log file should be created at midnight. Correct
-#                     Log.<name>.File should be given for this option to work correctly.
-#        Default:     1 - (Enabled)
-#                     0 - (Disabled)
-#
-#    Log.<name>.Append
-#        Description: Specifies whether new log file should be created on every server start or
-#                     messages should be appended to existing log with the same name.
-#        Default:     1 - (Append)
-#                     0 - (Create new file, i.e. overwrite existing)
-#
-#    Log.<name>.Console
-#        Description: Specifies whether messages should be written to server console.
-#        Default:     0 - (Do not write)
-#                     1 - (Write)
-#
-#    Log.<name>.DB
-#        Description: Specifies whether messages should be written to database. Log name and
-#                     log level of the messages are saved with message.
-#        Default:     0 - (Do not write to DB)
-#                     1 - (Write to DB)
-#
-#    Log.<name>.FlushBytes
-#        Description: Defines number of bytes after which buffers should be flushed to disk.
-#        Default:     0 - (Flush after every message)
-#                    -1 - (Flush manually)
-#                  1024 - (Flush every kilobyte)
-
-#    Server log
-#    Description: Main auth server log.
-
-Log.Server.Enabled = 1
-Log.Server.File = Auth.log
-Log.Server.TimestampFmt = "%Y-%m-%d %H:%M:%S"
-Log.Server.SplitDate = 0
-Log.Server.Append = 0
-Log.Server.Console = 1
-Log.Server.DB = 0
-Log.Server.FlushBytes = 4096
-
-#
-#    Log.Debug.Mask
-#        Description: Bitmask that determines which debug log output (level 3)
-#                     will be logged.
-#
-#        Possible flags:
-#                  64 - Anything related to network input/output,
-#                        such as packet handlers and netcode logs
-#
-#                       Simply add the values together to create a bitmask.
-#                       For more info see enum DebugLogFilters in Log.h
-#
-#             Default: 0 (nothing)
-
-Log.Debug.Mask = 64
-
-#
-#    SqlDriver log
-#    Description: Used to log operations and queries performed via SQL database driver.
-
-Log.SqlDriver.Enabled = 1
-Log.SqlDriver.File = SqlDriver.log
-Log.SqlDriver.TimestampFmt = "%Y-%m-%d %H:%M:%S"
-Log.SqlDriver.SplitDate = 0
-Log.SqlDriver.Append = 1
-Log.SqlDriver.Console = 1
-Log.SqlDriver.DB = 0
-Log.SqlDriver.FlushBytes = 0
 
 #
 ###################################################################################################
