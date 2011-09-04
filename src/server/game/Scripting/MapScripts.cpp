@@ -365,9 +365,7 @@ void Map::ScriptsProcess()
                     break;
             }
         }
-        // Some information for error messages
-        std::string tableName = GetScriptsTableNameByType(step.script->type);
-        std::string commandName = GetScriptCommandName(step.script->command);
+
         switch (step.script->command)
         {
             case SCRIPT_COMMAND_TALK:
