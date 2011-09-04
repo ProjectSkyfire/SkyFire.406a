@@ -41,7 +41,7 @@ struct CreateBattlegroundData
     uint32 MaxPlayersPerTeam;
     uint32 LevelMin;
     uint32 LevelMax;
-    char* BattlegroundName;
+    const char* BattlegroundName;
     uint32 MapID;
     float Team1StartLocX;
     float Team1StartLocY;
