@@ -1,19 +1,25 @@
 /*
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2006-2008 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
+ * Copyright (C) 2005-2011 MaNGOS <http://www.getmangos.com/>
  *
- * This program is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
- * option) any later version.
+ * Copyright (C) 2008-2011 Trinity <http://www.trinitycore.org/>
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
- * more details.
+ * Copyright (C) 2006-2011 ScriptDev2 <http://www.scriptdev2.com/>
  *
- * You should have received a copy of the GNU General Public License along
- * with this program. If not, see <http://www.gnu.org/licenses/>.
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
 /* ScriptData
@@ -25,6 +31,11 @@ EndScriptData */
 
 #include "ScriptPCH.h"
 #include "deadmines.h"
+
+enum Factions
+{
+    FACTION_HOSTILE_FOR_ALL                       = 16
+};
 
 enum Sounds
 {
@@ -53,7 +64,7 @@ class instance_deadmines : public InstanceMapScript
 
         struct instance_deadmines_InstanceMapScript : public InstanceScript
         {
-            instance_deadmines_InstanceMapScript(Map* pMap) : InstanceScript(pMap) {}
+            instance_deadmines_InstanceMapScript(Map* pMap) : InstanceScript(pMap) { Initialize(); };
 
             uint64 FactoryDoorGUID;
             uint64 IronCladDoorGUID;
@@ -82,6 +93,94 @@ class instance_deadmines : public InstanceMapScript
                 uiSmiteChestGUID = 0;
             }
 
+            void OnCreatureCreate(Creature *pCreature, bool /*bAdd*/)
+            {
+            Map::PlayerList const &players = instance->GetPlayers();
+            uint32 TeamInInstance = 0;
+
+            if (!players.isEmpty())
+            {
+                if (Player* pPlayer = players.begin()->getSource())
+                    TeamInInstance = pPlayer->GetTeam();
+            }
+            switch (pCreature->GetEntry())
+            {
+                // Alliance, you will be supported by Alliance npcs. Horde = Invisible.
+                case 46889: // Kagtha
+                {
+                    if (ServerAllowsTwoSideGroups())
+                        pCreature->setFaction(FACTION_HOSTILE_FOR_ALL);
+                    if (TeamInInstance == ALLIANCE)
+                        pCreature->UpdateEntry(42308, ALLIANCE); // Lieutenant Horatio Laine
+                    break;
+                }
+                case 46902: // Miss Mayhem
+                {
+                    if (ServerAllowsTwoSideGroups())
+                        pCreature->setFaction(FACTION_HOSTILE_FOR_ALL);
+                    if (TeamInInstance == ALLIANCE)
+                        pCreature->UpdateEntry(491, ALLIANCE); // Quartermaster Lewis <Quartermaster>
+                    break;
+                }
+                case 46890: // Shattered Hand Assassin
+                {
+                    if (ServerAllowsTwoSideGroups())
+                        pCreature->setFaction(FACTION_HOSTILE_FOR_ALL);
+                    if (TeamInInstance == ALLIANCE)
+                        pCreature->UpdateEntry(1, ALLIANCE); // GM WAYPOINT
+                    break;
+                }
+                case 46903: // Mayhem Reaper Prototype
+                {
+                    if (ServerAllowsTwoSideGroups())
+                        pCreature->setFaction(FACTION_HOSTILE_FOR_ALL);
+                    if (TeamInInstance == ALLIANCE)
+                        pCreature->UpdateEntry(1, ALLIANCE); // GM WAYPOINT
+                    break;
+                }
+                case 24935: // Vend-O-Tron D-Luxe
+                {
+                    if (ServerAllowsTwoSideGroups())
+                        pCreature->setFaction(FACTION_HOSTILE_FOR_ALL);
+                    if (TeamInInstance == ALLIANCE)
+                        pCreature->UpdateEntry(1, ALLIANCE); // GM WAYPOINT
+                    break;
+                }
+                case 46906: // Slinky Sharpshiv
+                {
+                    if (ServerAllowsTwoSideGroups())
+                        pCreature->setFaction(FACTION_HOSTILE_FOR_ALL);
+                    if (TeamInInstance == ALLIANCE)
+                        pCreature->UpdateEntry(1, ALLIANCE); // GM WAYPOINT
+                    break;
+                }
+                // Horde, you will be supported by Horde npcs. Alliance = Invisible.
+                case 46613: // Crime Scene Alarm-O-Bot
+                {
+                    if (ServerAllowsTwoSideGroups())
+                        pCreature->setFaction(FACTION_HOSTILE_FOR_ALL);
+                    if (TeamInInstance == HORDE)
+                        pCreature->UpdateEntry(1, HORDE); // GM WAYPOINT
+                    break;
+                }
+                case 50595: // Stormwind Defender
+                {
+                    if (ServerAllowsTwoSideGroups())
+                        pCreature->setFaction(FACTION_HOSTILE_FOR_ALL);
+                    if (TeamInInstance == HORDE)
+                        pCreature->UpdateEntry(1, HORDE); // GM WAYPOINT
+                   break;
+               }
+               case 46614: // Stormwind Investigator
+               {
+                    if (ServerAllowsTwoSideGroups())
+                        pCreature->setFaction(FACTION_HOSTILE_FOR_ALL);
+                    if (TeamInInstance == HORDE)
+                        pCreature->UpdateEntry(1, HORDE); // GM WAYPOINT
+                   break;
+               }
+            }
+            }
             virtual void Update(uint32 diff)
             {
                 if (!IronCladDoorGUID || !DefiasCannonGUID || !DoorLeverGUID)
@@ -188,10 +287,10 @@ class instance_deadmines : public InstanceMapScript
             {
                 switch(go->GetEntry())
                 {
-                    case GO_FACTORY_DOOR:   FactoryDoorGUID = go->GetGUID(); break;
+                    case GO_FACTORY_DOOR:   FactoryDoorGUID  = go->GetGUID();  break;
                     case GO_IRONCLAD_DOOR:  IronCladDoorGUID = go->GetGUID();  break;
                     case GO_DEFIAS_CANNON:  DefiasCannonGUID = go->GetGUID();  break;
-                    case GO_DOOR_LEVER:     DoorLeverGUID = go->GetGUID();     break;
+                    case GO_DOOR_LEVER:     DoorLeverGUID    = go->GetGUID();  break;
                     case GO_MR_SMITE_CHEST: uiSmiteChestGUID = go->GetGUID();  break;
                 }
             }

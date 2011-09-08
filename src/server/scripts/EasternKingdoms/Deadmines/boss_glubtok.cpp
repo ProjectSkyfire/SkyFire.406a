@@ -22,49 +22,59 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-/* ScriptData
-SDName: Deadmines
-SD%Complete: 0
-SDComment: Placeholder
-SDCategory: Deadmines
+/* TODO:
+ScriptData
+SDName:
+SD%Complete:
+SDComment:
 EndScriptData */
 
 #include "ScriptPCH.h"
 #include "deadmines.h"
-#include "Spell.h"
 
-/*#####
-# item_Defias_Gunpowder
-#####*/
-
-class item_defias_gunpowder : public ItemScript
+enum eSpels
 {
-public:
-    item_defias_gunpowder() : ItemScript("item_defias_gunpowder") { }
-
-    bool OnUse(Player* player, Item* item, SpellCastTargets const& targets)
-    {
-        InstanceScript *pInstance = player->GetInstanceScript();
-
-        if (!pInstance)
-        {
-            player->GetSession()->SendNotification("Instance script not initialized");
-            return true;
-        }
-        if (pInstance->GetData(EVENT_STATE)!= CANNON_NOT_USED)
-            return false;
-        if (targets.GetGOTarget() && targets.GetGOTarget()->GetEntry() == GO_DEFIAS_CANNON)
-        {
-            pInstance->SetData(EVENT_STATE, CANNON_GUNPOWDER_USED);
-        }
-
-        player->DestroyItemCount(item->GetEntry(), 1, true);
-        return true;
-    }
-	
+    SPELL_ARCANE_POWER      = 88009,
+    SPELL_FIST_OF_FLAME     = 87859,
+    SPELL_FIST_OF_FROST     = 87861,
+    SPELL_FIRE_BLOSSOM      = 88129,
+    SPELL_FIRE_BLOSSOM_H    = 91286,
+    SPELL_FROST_BLOSSOM     = 88169,
+    SPELL_FROST_BLOSSOM_H   = 91287
 };
 
-void AddSC_deadmines()
+class boss_glubtok : public CreatureScript
 {
-    new item_defias_gunpowder();
+public:
+    boss_glubtok() : CreatureScript("boss_glubtok") { }
+
+    CreatureAI* GetAI(Creature* creature) const
+    {
+        return new boss_glubtokAI (creature);
+    }
+
+    struct boss_glubtokAI : public ScriptedAI
+    {
+        boss_glubtokAI(Creature* creature) : ScriptedAI(creature)
+        {
+            pInstance = creature->GetInstanceScript();
+        }
+
+        InstanceScript* pInstance;
+
+        uint32 uiTrashTimer;
+        uint32 uiSlamTimer;
+        uint32 uiNimbleReflexesTimer;
+
+        uint8 uiHealth;
+
+        uint32 uiPhase;
+        uint32 uiTimer;
+        // TODO: MAKE THE CORRECT SCRIPT :)
+    };
+};
+
+void AddSC_boss_glubtok()
+{
+    new boss_glubtok();
 }
