@@ -15835,7 +15835,7 @@ void Player::KilledPlayerCredit()
             {
                 uint32 reqkill = qInfo->GetPlayersSlain();
                 uint16 curkill = q_status.m_playercount;
-                
+
                 if (curkill < reqkill)
                 {
                     q_status.m_playercount = curkill + addkillcount;
