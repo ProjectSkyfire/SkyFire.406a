@@ -26,11 +26,11 @@
 #include "Path.h"
 #include "Util.h"
 #include "Vehicle.h"
+#include "SharedDefines.h"
 
 #include <map>
 #include <set>
 #include <vector>
-#include "SharedDefines.h"
 
 // Structures using to access raw DB2 data and required packing to portability
 struct ItemEntry
@@ -47,137 +47,71 @@ struct ItemEntry
 
 struct ItemSparseEntry
 {
-    int32 ID;
-    int32 Quality;
-    uint32 Flags;
-    uint32 Flags2;
-    int32 BuyPrice;
-    int32 SellPrice;
-    int32 InventoryType;
-    int32 AllowableClass;
-    int32 AllowableRace;
-    int32 ItemLevel;
-    int32 RequiredLevel;
-    int32 RequiredSkill;
-    int32 RequiredSkillRank;
-    int32 RequiredSpell;
-    int32 RequiredHonorRank;
-    int32 RequiredCityRank;
-    int32 RequiredReputationFaction;
-    int32 RequiredReputationRank;
-    int32 Maxcount;
-    int32 Stackable;
-    int32 ContainerSlots;
-    int32 stat_type1;
-    int32 stat_type2;
-    int32 stat_type3;
-    int32 stat_type4;
-    int32 stat_type5;
-    int32 stat_type6;
-    int32 stat_type7;
-    int32 stat_type8;
-    int32 stat_type9;
-    int32 stat_type10;
-    int32 stat_value1;
-    int32 stat_value2;
-    int32 stat_value3;
-    int32 stat_value4;
-    int32 stat_value5;
-    int32 stat_value6;
-    int32 stat_value7;
-    int32 stat_value8;
-    int32 stat_value9;
-    int32 stat_value10;
-    int32 stat_unk1_1;
-    int32 stat_unk1_2;
-    int32 stat_unk1_3;
-    int32 stat_unk1_4;
-    int32 stat_unk1_5;
-    int32 stat_unk1_6;
-    int32 stat_unk1_7;
-    int32 stat_unk1_8;
-    int32 stat_unk1_9;
-    int32 stat_unk1_10;
-    int32 stat_unk2_1;
-    int32 stat_unk2_2;
-    int32 stat_unk2_3;
-    int32 stat_unk2_4;
-    int32 stat_unk2_5;
-    int32 stat_unk2_6;
-    int32 stat_unk2_7;
-    int32 stat_unk2_8;
-    int32 stat_unk2_9;
-    int32 stat_unk2_10;
-    int32 ScalingStatDistribution;
-    int32 DamageType;
-    int32 Delay;
-    float RangedModRange;
-    int32 spellid_1;
-    int32 spellid_2;
-    int32 spellid_3;
-    int32 spellid_4;
-    int32 spellid_5;
-    int32 spelltrigger_1;
-    int32 spelltrigger_2;
-    int32 spelltrigger_3;
-    int32 spelltrigger_4;
-    int32 spelltrigger_5;
-    int32 spellcharges_1;
-    int32 spellcharges_2;
-    int32 spellcharges_3;
-    int32 spellcharges_4;
-    int32 spellcharges_5;
-    int32 spellcooldown_1;
-    int32 spellcooldown_2;
-    int32 spellcooldown_3;
-    int32 spellcooldown_4;
-    int32 spellcooldown_5;
-    int32 spellcategory_1;
-    int32 spellcategory_2;
-    int32 spellcategory_3;
-    int32 spellcategory_4;
-    int32 spellcategory_5;
-    int32 spellcategorycooldown_1;
-    int32 spellcategorycooldown_2;
-    int32 spellcategorycooldown_3;
-    int32 spellcategorycooldown_4;
-    int32 spellcategorycooldown_5;
-    int32 Bonding;
-    DBCString Name;
-    DBCString Name2;
-    DBCString Name3;
-    DBCString Name4;
-    DBCString Description;
-    int32 PageText;
-    int32 Languageid;
-    int32 PageMaterial;
-    int32 StartQuest;
-    int32 LockID;
-    int32 Material;
-    int32 Sheath;
-    int32 RandomProperty;
-    int32 RandomSuffix;
-    int32 ItemSet;
-    int32 MaxDurability;
-    int32 Area;
-    int32 Map;
-    int32 BagFamily;
-    int32 TotemCategory;
-    int32 SocketColor_1;
-    int32 SocketColor_2;
-    int32 SocketColor_3;
-    int32 SocketContent_1;
-    int32 SocketContent_2;
-    int32 SocketContent_3;
-    int32 SocketBonus;
-    int32 GemProperties;
-    float ArmorDamageModifier;
-    int32 Duration;
-    int32 ItemLimitCategory;
-    int32 HolidayID;
-    float StatScalingFactor;
-    int32 Field130;
-    int32 Field131;
+    uint32     ID;                                           // 0
+    uint32     Quality;                                      // 1
+    uint32     Flags;                                        // 2
+    uint32     Flags2;                                       // 3
+    uint32     BuyPrice;                                     // 4
+    uint32     SellPrice;                                    // 5
+    uint32     InventoryType;                                // 6
+    int32      AllowableClass;                               // 7
+    int32      AllowableRace;                                // 8
+    uint32     ItemLevel;                                    // 9
+    int32      RequiredLevel;                                // 10
+    uint32     RequiredSkill;                                // 11
+    uint32     RequiredSkillRank;                            // 12
+    uint32     RequiredSpell;                                // 13
+    uint32     RequiredHonorRank;                            // 14
+    uint32     RequiredCityRank;                             // 15
+    uint32     RequiredReputationFaction;                    // 16
+    uint32     RequiredReputationRank;                       // 17
+    uint32     MaxCount;                                     // 18
+    uint32     Stackable;                                    // 19
+    uint32     ContainerSlots;                               // 20
+    int32      ItemStatType[MAX_ITEM_PROTO_STATS];           // 21 - 31
+    uint32     ItemStatValue[MAX_ITEM_PROTO_STATS];          // 32 - 42
+    uint32     ScalingStatDistribution;                      // 43
+    uint32     DamageType;                                   // 44
+    uint32     Delay;                                        // 45
+    float      RangedModRange;                               // 46
+    int32      SpellId[MAX_ITEM_PROTO_SPELLS];               // 47 - 52
+    int32      SpellTrigger[MAX_ITEM_PROTO_SPELLS];          // 53 - 58
+    int32      SpellCharges[MAX_ITEM_PROTO_SPELLS];          // 59 - 64
+    int32      SpellCooldown[MAX_ITEM_PROTO_SPELLS];         // 65 - 70
+    int32      SpellCategory[MAX_ITEM_PROTO_SPELLS];         // 71 - 76
+    int32      SpellCategoryCooldown[MAX_ITEM_PROTO_SPELLS]; // 77 - 82
+    uint32     Bonding;                                      // 83
+    DB2String  Name;                                         // 84
+    DB2String  Name2;                                        // 85
+    DB2String  Name3;                                        // 86
+    DB2String  Name4;                                        // 87
+    DB2String  Description;                                  // 88
+    uint32     PageText;                                     // 89
+    uint32     LanguageID;                                   // 90
+    uint32     PageMaterial;                                 // 91
+    uint32     StartQuest;                                   // 92
+    uint32     LockID;                                       // 93
+    int32      Material;                                     // 94
+    uint32     Sheath;                                       // 95
+    uint32     RandomProperty;                               // 96
+    uint32     RandomSuffix;                                 // 97
+    uint32     ItemSet;                                      // 98
+    uint32     MaxDurability;                                // 99
+    uint32     Area;                                         // 100
+    uint32     Map;                                          // 111
+    uint32     BagFamily;                                    // 112
+    uint32     TotemCategory;                                // 113
+    uint32     Color[MAX_ITEM_PROTO_SOCKETS];                // 114 - 117
+    uint32     Content[MAX_ITEM_PROTO_SOCKETS];              // 118 - 121
+    int32      SocketBonus;                                  // 122
+    uint32     GemProperties;                                // 123
+    float      ArmorDamageModifier;                          // 124
+    uint32     Duration;                                     // 125
+    uint32     ItemLimitCategory;                            // 126
+    uint32     HolidayId;                                    // 127
+    float      StatScalingFactor;                            // 128
+    int32      Field130;                                     // 129
+    int32      Field131;                                     // 130
 };
 
 #endif

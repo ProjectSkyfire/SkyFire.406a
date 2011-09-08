@@ -39,8 +39,6 @@
 #pragma pack(push, 1)
 #endif
 
-typedef char const* const* DBCString;                              //char* DBCStrings[MAX_LOCALE];
-
 struct AchievementEntry
 {
     uint32    ID;                                           // 0

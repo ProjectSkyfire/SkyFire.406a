@@ -26,6 +26,9 @@
 
 #include "CompilerDefs.h"
 
+typedef char const* const* DBCString;                              //char* DBCStrings[MAX_LOCALE];
+typedef char const* const* DB2String;                              //char* DB2Strings[MAX_LOCALE];
+
 enum
 {
     FT_NA='x',                                              //not used or unknown, 4 byte size
