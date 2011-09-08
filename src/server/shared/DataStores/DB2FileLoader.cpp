@@ -114,21 +114,21 @@ bool DB2FileLoader::Load(const char *filename, const char *fmt)
 
     EndianConvert(unk1);
 
-    if (fread(&unk2, 4, 1, f) != 1)                               // Unknown WDB2
+    if (fread(&minId, 4, 1, f) != 1)                               // minId WDB2
     {
         fclose(f);
         return false;
     }
 
-    EndianConvert(unk2);
+    EndianConvert(minId);
 
-    if (fread(&unk3, 4, 1, f) != 1)                               // Unknown WDB2
+    if (fread(&maxId, 4, 1, f) != 1)                               // maxId WDB2
     {
         fclose(f);
         return false;
     }
 
-    EndianConvert(unk3);
+    EndianConvert(maxId);
 
     if (fread(&locale, 4, 1, f) != 1)                             // Locales
     {
@@ -146,7 +146,13 @@ bool DB2FileLoader::Load(const char *filename, const char *fmt)
 
     EndianConvert(unk5);
 
-    fieldsOffset = new uint32[fieldCount];
+    if (maxId != 0)
+    {
+        int32 diff = maxId - minId + 1;          // blizzard is some weird people...
+        fseek(f, diff * 4 + diff * 2, SEEK_CUR); // diff * 4: an index for rows, diff * 2: a memory allocation bank
+    }
+    
+	fieldsOffset = new uint32[fieldCount];
     fieldsOffset[0] = 0;
     for (uint32 i = 1; i < fieldCount; i++)
     {
@@ -401,8 +407,8 @@ char* DB2FileLoader::AutoProduceStrings(const char* format, char* dataTable)
             case FT_STRING:
             {
                 // fill only not filled entries
-                char** slot = *((char***)(&dataTable[offset]));
-                if (*slot == nullStr)
+                char** slot = (char**)(&dataTable[offset]);//char** slot = *((char***)(&dataTable[offset]));
+                if (**((char***)slot) == nullStr)
                 {
                     const char * st = getRecord(y).getString(x);
                     *slot=stringPool + (st-(const char*)stringTable);
