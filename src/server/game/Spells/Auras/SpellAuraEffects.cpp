@@ -4523,7 +4523,7 @@ void AuraEffect::HandleModDamagePercentDone(AuraApplication const* aurApp, uint8
     }
     else
     {
-        // done in Player::_ApplyWeaponDependentAuraMods for !SPELL_SCHOOL_MASK_NORMAL and also for wand case
+        // done in Player::_ApplyWeaponDependentAuraMods for SPELL_SCHOOL_MASK_NORMAL && EquippedItemClass != -1 and also for wand case
     }
 }
 
