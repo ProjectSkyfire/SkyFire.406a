@@ -51,8 +51,6 @@ private:
     ItemInfoMap mItemInfoMap;
 };
 
-#define sItemInfoMgr ACE_Singleton<ItemInfoMgr, ACE_Null_Mutex>::instance()
-
 class ItemInfo
 {
 public:
@@ -144,5 +142,7 @@ public:
     ItemInfo(ItemSparseEntry const* itemSparse);
     ItemEntry const* GetItemEntry() const;
 };
+
+#define sItemInfoMgr ACE_Singleton<ItemInfoMgr, ACE_Null_Mutex>::instance()
 
 #endif // _ITEMINFO_H
