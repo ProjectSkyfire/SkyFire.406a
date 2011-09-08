@@ -69,7 +69,6 @@ ACE_OS::ace_flock_t::dump (void) const
 
 /*****************************************************************************/
 
-
 #if defined (ACE_WIN32) && !defined (ACE_HAS_WINCE)
 namespace
 {

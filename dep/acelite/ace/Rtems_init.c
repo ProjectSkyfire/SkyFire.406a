@@ -177,7 +177,6 @@ struct rtems_bsdnet_config rtems_bsdnet_config = {
   {"192.168.1.2" },  /* NTP server(s) */
 #endif
 #endif /* !RTEMS_USE_BOOTP */
-
 };
 
 /*

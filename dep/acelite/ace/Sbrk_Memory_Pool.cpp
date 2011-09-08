@@ -4,8 +4,6 @@
 #include "ace/Sbrk_Memory_Pool.h"
 #include "ace/Log_Msg.h"
 
-
-
 #if !defined (ACE_LACKS_SBRK)
 
 ACE_BEGIN_VERSIONED_NAMESPACE_DECL

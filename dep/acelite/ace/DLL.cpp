@@ -11,8 +11,6 @@
 
 #include <algorithm>
 
-
-
   ACE_BEGIN_VERSIONED_NAMESPACE_DECL
 
 // Default constructor. Also, by default, the object will be closed
@@ -66,7 +64,6 @@ ACE_DLL::operator= (const ACE_DLL &rhs)
 
   return *this;
 }
-
 
 // If the library name and the opening mode are specified than on
 // object creation the library is implicitly opened.

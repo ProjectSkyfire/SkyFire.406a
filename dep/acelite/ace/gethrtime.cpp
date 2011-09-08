@@ -7,8 +7,6 @@
 
 #include "ace/config-all.h"
 
-
-
 #if defined (ghs) && (defined (i386) || defined(__i386__))
 
 #include "ace/OS_NS_time.h"

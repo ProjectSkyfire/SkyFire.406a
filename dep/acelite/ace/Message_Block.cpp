@@ -47,7 +47,6 @@ enum
   ACE_DATA_BLOCK_CLONE_LEAVE
 };
 
-
 // Setup Timeprobes
 ACE_TIMEPROBE_EVENT_DESCRIPTIONS (ACE_MB_Timeprobe_Description,
                                   ACE_MESSAGE_BLOCK_INIT_I_ENTER);
@@ -612,7 +611,6 @@ ACE_Message_Block::ACE_Message_Block (const ACE_Message_Block &mb,
       // Set our rd & wr pointers
       this->rd_ptr (start);
       this->wr_ptr (start);
-
     }
   else
     {
@@ -663,7 +661,6 @@ ACE_Message_Block::ACE_Message_Block (const ACE_Message_Block &mb,
 
       // Dont move the write pointer, just leave it to the application
       // to do what it wants
-
     }
 #if defined (ACE_LACKS_CDR_ALIGNMENT)
   ACE_UNUSED_ARG (align);
@@ -1161,7 +1158,6 @@ ACE_Data_Block::clone_nocopy (ACE_Message_Block::Message_Flags mask,
       errno = ENOMEM;
       return 0;
     }
-
 
   // Set new flags minus the mask...
   nb->clr_flags (mask | always_clear);

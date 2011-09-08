@@ -2,8 +2,6 @@
 
 #include "ace/TLI_Connector.h"
 
-
-
 #if defined (ACE_HAS_TLI)
 
 #if !defined (__ACE_INLINE__)

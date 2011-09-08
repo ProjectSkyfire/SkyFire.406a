@@ -1,12 +1,9 @@
 //$Id: Recyclable.cpp 91286 2010-08-05 09:04:31Z johnnyw $
 #include "ace/Recyclable.h"
 
-
 #if !defined (__ACE_INLINE__)
 #include "ace/Recyclable.inl"
 #endif /* __ACE_INLINE __ */
-
-
 
 ACE_BEGIN_VERSIONED_NAMESPACE_DECL
 

@@ -3,8 +3,6 @@
 
 #include "ace/MEM_Connector.h"
 
-
-
 #if (ACE_HAS_POSITION_INDEPENDENT_POINTERS == 1)
 
 #if !defined (__ACE_INLINE__)
@@ -81,7 +79,6 @@ ACE_MEM_Connector::connect (ACE_MEM_Stream &new_stream,
   else
     this->address_.set_port_number (remote_sap.get_port_number ());
 
-
   ACE_SOCK_Stream temp_stream;
 
   if (ACE_SOCK_Connector::connect (temp_stream,
@@ -92,7 +89,6 @@ ACE_MEM_Connector::connect (ACE_MEM_Stream &new_stream,
                        ACE_TEXT ("%p\n"),
                        ACE_TEXT ("ACE_MEM_Connector::connect")),
                       -1);
-
 
   ACE_HANDLE new_handle = temp_stream.get_handle ();
   new_stream.set_handle (new_handle);

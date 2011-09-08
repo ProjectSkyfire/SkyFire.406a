@@ -379,7 +379,6 @@ ACE_SOCK_Dgram_Mcast::subscribe_ifs (const ACE_INET_Addr &mcast_addr,
           // 1 indicates a "short-circuit" return.  This handles the
           // recursive behavior of checking all the interfaces.
           return 1;
-
         }
 #else
       // Subscribe on all local multicast-capable network interfaces, by
@@ -457,7 +456,6 @@ ACE_SOCK_Dgram_Mcast::subscribe_ifs (const ACE_INET_Addr &mcast_addr,
 #endif /* ACE_HAS_IPV6 */
 
   return 0;
-
 }
 
 int
@@ -608,7 +606,6 @@ ACE_SOCK_Dgram_Mcast::unsubscribe_ifs (const ACE_INET_Addr &mcast_addr,
 {
   ACE_TRACE ("ACE_SOCK_Dgram_Mcast::unsubscribe_ifs");
 
-
   if (ACE_BIT_ENABLED (this->opts_, OPT_NULLIFACE_ALL)
       && net_if == 0)
     {
@@ -685,8 +682,6 @@ ACE_SOCK_Dgram_Mcast::unsubscribe_ifs (const ACE_INET_Addr &mcast_addr,
             }
 
           return 1;
-
-
         }
       else
         {
@@ -737,7 +732,6 @@ ACE_SOCK_Dgram_Mcast::unsubscribe_ifs (const ACE_INET_Addr &mcast_addr,
             }
 
           return 1;
-
         }
 #else /* ACE_HAS_IPV6 */
       // Unsubscribe on all local multicast-capable network interfaces, by
@@ -792,7 +786,6 @@ ACE_SOCK_Dgram_Mcast::unsubscribe_ifs (const ACE_INET_Addr &mcast_addr,
 
   return 0;
 }
-
 
 int
 ACE_SOCK_Dgram_Mcast::leave (const ACE_INET_Addr &mcast_addr,
@@ -862,7 +855,6 @@ ACE_SOCK_Dgram_Mcast::unsubscribe_i (const ACE_INET_Addr &mcast_addr,
         {
           return -1;
         }
-
     }
   else  // IPv4
     {
@@ -881,7 +873,6 @@ ACE_SOCK_Dgram_Mcast::unsubscribe_i (const ACE_INET_Addr &mcast_addr,
         {
           return -1;
         }
-
     }
 #else
   // Validate addr/if specifications and create addr/if struct.

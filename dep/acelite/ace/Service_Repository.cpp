@@ -109,7 +109,6 @@ ACE_Service_Repository::ACE_Service_Repository (size_t size)
   ACE_TRACE ("ACE_Service_Repository::ACE_Service_Repository");
 }
 
-
 /// Finalize (call fini() and possibly delete) all the services.
 
 int
@@ -204,7 +203,6 @@ ACE_Service_Repository::fini (void)
   }
   return (retval == 0) ? 0 : -1;
 }
-
 
 /// Close down all the services.
 int
@@ -314,7 +312,6 @@ ACE_Service_Repository::find_i (const ACE_TCHAR name[],
 
   return -1;
 }
-
 
 /// @brief Relocate (a static) service to another DLL.
 ///

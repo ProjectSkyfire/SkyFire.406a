@@ -13,12 +13,9 @@
 #include "ace/Log_Msg.h"
 #include "ace/Truncate.h"
 
-
-
 ACE_BEGIN_VERSIONED_NAMESPACE_DECL
 
 ACE_ALLOC_HOOK_DEFINE(ACE_Mem_Map)
-
 
 void
 ACE_Mem_Map::dump (void) const

@@ -2,8 +2,6 @@
 
 #include "ace/Object_Manager_Base.h"
 
-
-
 #include "ace/OS_Memory.h"
 #include "ace/OS_NS_Thread.h"
 #include "ace/OS_NS_sys_socket.h"
@@ -186,7 +184,6 @@ ACE_OS_Object_Manager::instance (void)
       // ACE_ASSERT (instance_pointer == instance_);
 
       instance_pointer->dynamically_allocated_ = true;
-
     }
 
   return instance_;

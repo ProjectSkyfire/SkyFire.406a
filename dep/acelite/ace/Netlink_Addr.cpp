@@ -65,4 +65,3 @@ ACE_Netlink_Addr::get_gid (void) const
 ACE_END_VERSIONED_NAMESPACE_DECL
 
 #endif
-

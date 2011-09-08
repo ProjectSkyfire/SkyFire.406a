@@ -15,8 +15,6 @@
 #include "ace/ATM_Addr.inl"
 #endif /* __ACE_INLINE__ */
 
-
-
 ACE_BEGIN_VERSIONED_NAMESPACE_DECL
 
 ACE_ALLOC_HOOK_DEFINE(ACE_ATM_Addr)
@@ -99,7 +97,6 @@ ACE_ATM_Addr::ACE_ATM_Addr (const ATM_Addr *sap,
   ACE_TRACE ("ACE_ATM_Addr::ACE_ATM_Addr");
   this->set (sap, selector);
 }
-
 
 ACE_ATM_Addr::ACE_ATM_Addr (const ACE_TCHAR sap[],
                             u_char selector)

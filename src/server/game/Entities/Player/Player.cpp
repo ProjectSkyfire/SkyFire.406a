@@ -5522,7 +5522,7 @@ bool Player::CanJoinConstantChannelInZone(ChatChannelsEntry const* channel, Area
 {
     if (channel->flags & CHANNEL_DBC_FLAG_ZONE_DEP && zone->flags & AREA_FLAG_ARENA_INSTANCE)
        return false;
- 
+
    if ((channel->flags & CHANNEL_DBC_FLAG_CITY_ONLY) && (!(zone->flags & AREA_FLAG_SLAVE_CAPITAL)))
        return false;
 
@@ -15246,7 +15246,7 @@ bool Player::SatisfyQuestReputation(Quest const* qInfo, bool msg)
 			SendCanTakeQuestResponse(INVALIDREASON_DONT_HAVE_REQ);
 		return false;
 	}
-    
+
     // ReputationObjective2 does not seem to be an objective requirement but a requirement
     // to be able to accept the quest
     uint32 fIdObj = qInfo->GetRepObjectiveFaction2();

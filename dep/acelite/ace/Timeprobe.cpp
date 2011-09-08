@@ -2,8 +2,6 @@
 
 #include "ace/config-all.h"
 
-
-
 #if defined (ACE_COMPILE_TIMEPROBES)
 
 #include "ace/Timeprobe.h"

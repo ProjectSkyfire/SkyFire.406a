@@ -10,8 +10,6 @@
 #include "ace/SPIPE_Connector.inl"
 #endif /* __ACE_INLINE__ */
 
-
-
 ACE_BEGIN_VERSIONED_NAMESPACE_DECL
 
 ACE_ALLOC_HOOK_DEFINE(ACE_SPIPE_Connector)
@@ -114,7 +112,6 @@ ACE_SPIPE_Connector::connect (ACE_SPIPE_Stream &new_io,
             }
           // Get the amount of time remaining for ::WaitNamedPipe.
           time_out_value = relative_time.msec ();
-
         }
 
       // Wait for the named pipe to become available.

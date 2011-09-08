@@ -943,7 +943,7 @@ enum TrinityStrings
     LANG_GOINFO_NAME                    = 5027,
     LANG_GOINFO_LOOTID                  = 5028,
     LANG_COMMAND_LOOKUP_MAX_RESULTS     = 5029,
-    LANG_FLEE                           = 5030,    
+    LANG_FLEE                           = 5030,
 	// Room for more Trinity strings      5031-9999
 
     // Level requirement notifications

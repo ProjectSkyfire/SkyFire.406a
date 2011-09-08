@@ -6,8 +6,6 @@
 #include "ace/OS_Memory.h"
 #include "ace/Log_Msg.h"
 
-
-
 ACE_BEGIN_VERSIONED_NAMESPACE_DECL
 
 ACE_ALLOC_HOOK_DEFINE(ACE_Local_Memory_Pool)

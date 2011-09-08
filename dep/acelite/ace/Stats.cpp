@@ -9,8 +9,6 @@
 #include "ace/OS_NS_stdio.h"
 #include "ace/OS_NS_string.h"
 
-
-
 ACE_BEGIN_VERSIONED_NAMESPACE_DECL
 
 ACE_UINT32
@@ -196,7 +194,6 @@ ACE_Stats::std_dev (ACE_Stats_Value &std_dev,
 
   return 0;
 }
-
 
 void
 ACE_Stats::reset (void)

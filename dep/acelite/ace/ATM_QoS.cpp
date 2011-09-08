@@ -2,8 +2,6 @@
 
 #include "ace/ATM_QoS.h"
 
-
-
 #if defined (ACE_HAS_ATM)
 
 #if !defined (__ACE_INLINE__)
@@ -628,4 +626,3 @@ ACE_ATM_QoS::construct_options (ACE_HANDLE fd,
 ACE_END_VERSIONED_NAMESPACE_DECL
 
 #endif /* ACE_HAS_ATM */
-

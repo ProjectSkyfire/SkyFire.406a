@@ -203,4 +203,3 @@ class Log
 #define sLog ACE_Singleton<Log, ACE_Thread_Mutex>::instance()
 
 #endif
-

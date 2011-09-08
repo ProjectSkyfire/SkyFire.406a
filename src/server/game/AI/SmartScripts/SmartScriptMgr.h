@@ -518,7 +518,7 @@ struct SmartAction
         } flee;
 
         struct
-        {		
+        {
             uint32 emote1;
             uint32 emote2;
             uint32 emote3;

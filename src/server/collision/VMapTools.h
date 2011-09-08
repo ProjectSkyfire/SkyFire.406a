@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
@@ -61,7 +61,6 @@ namespace VMAP
             G3D::Vector3&           location,
             bool&                   Inside)
         {
-
             // Integer representation of a floating-point value.
 #define IR(x)   (reinterpret_cast<G3D::uint32 const&>(x))
 
