@@ -31,10 +31,10 @@ void WorldSession::HandleDuelAcceptedOpcode(WorldPacket& recvPacket)
     Player *pl;
     Player *plTarget;
 
+    recvPacket >> guid;
+
     if (!GetPlayer()->duel)                                  // ignore accept from duel-sender
         return;
-
-    recvPacket >> guid;
 
     pl       = GetPlayer();
     plTarget = pl->duel->opponent;
@@ -56,7 +56,9 @@ void WorldSession::HandleDuelAcceptedOpcode(WorldPacket& recvPacket)
 
 void WorldSession::HandleDuelCancelledOpcode(WorldPacket& recvPacket)
 {
-    //sLog->outDebug(LOG_FILTER_PACKETIO, "WORLD: Received CMSG_DUEL_CANCELLED");
+    sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_DUEL_CANCELLED");
+    uint64 guid;
+    recvPacket >> guid;
 
     // no duel requested
     if (!GetPlayer()->duel)
@@ -73,11 +75,6 @@ void WorldSession::HandleDuelCancelledOpcode(WorldPacket& recvPacket)
         GetPlayer()->DuelComplete(DUEL_WON);
         return;
     }
-
-    // player either discarded the duel using the "discard button"
-    // or used "/forfeit" before countdown reached 0
-    uint64 guid;
-    recvPacket >> guid;
 
     GetPlayer()->DuelComplete(DUEL_INTERRUPTED);
 }
