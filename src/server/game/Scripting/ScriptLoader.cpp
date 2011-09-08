@@ -711,7 +711,7 @@ void AddEasternKingdomsScripts()
     AddSC_boss_vanndar();
     //AddSC_instance_baradin_hold();          //Baradin Hold
     //AddSC_boss_argaloth();
-	AddSC_blackrock_depths();               //Blackrock Depths
+    AddSC_blackrock_depths();               //Blackrock Depths
     AddSC_boss_ambassador_flamelash();
     AddSC_boss_anubshiah();
     AddSC_boss_draganthaurissan();
@@ -813,7 +813,7 @@ void AddEasternKingdomsScripts()
     AddSC_instance_shadowfang_keep();
     //AddSC_the_stonecore();                  //Stonecore
     //AddSC_instance_the_stonecore();
-	AddSC_boss_magistrate_barthilas();      //Stratholme
+    AddSC_boss_magistrate_barthilas();      //Stratholme
     AddSC_boss_maleki_the_pallid();
     AddSC_boss_nerubenkan();
     AddSC_boss_cannon_master_willey();
@@ -838,7 +838,7 @@ void AddEasternKingdomsScripts()
     AddSC_sunwell_plateau();
     //AddSC_instance_throne_of_the_tides();   //Throne of the Tides);
     //AddSC_throne_of_the_tides();
-	AddSC_boss_archaedas();                 //Uldaman
+    AddSC_boss_archaedas();                 //Uldaman
     AddSC_boss_ironaya();
     AddSC_uldaman();
     AddSC_instance_uldaman();
@@ -875,7 +875,7 @@ void AddEasternKingdomsScripts()
     AddSC_eversong_woods();
     AddSC_ghostlands();
     //AddSC_gilneas();
-	AddSC_hinterlands();
+    AddSC_hinterlands();
     AddSC_ironforge();
     AddSC_isle_of_queldanas();
     AddSC_loch_modan();
@@ -928,7 +928,7 @@ void AddKalimdorScripts()
     AddSC_culling_of_stratholme();
     AddSC_instance_culling_of_stratholme();
     //AddSC_npc_pusillin();                   //Dire maul
-	//AddSC_instance_halls_of_origination();     //Halls of Origination
+    //AddSC_instance_halls_of_origination();     //Halls of Origination
     //AddSC_boss_temple_guardian_anhuur();
     //AddSC_boss_earthrager_ptah();
     //AddSC_boss_anraphet();
@@ -964,7 +964,7 @@ void AddKalimdorScripts()
     AddSC_mob_anubisath_sentinel();
     AddSC_instance_temple_of_ahnqiraj();
     //AddSC_instance_the_vortex_pinnacle();   //The Vortex Pinnacle
-	AddSC_wailing_caverns();                //Wailing caverns
+    AddSC_wailing_caverns();                //Wailing caverns
     AddSC_instance_wailing_caverns();
     AddSC_zulfarrak();                      //Zul'Farrak generic
     AddSC_instance_zulfarrak();             //Zul'Farrak instance script

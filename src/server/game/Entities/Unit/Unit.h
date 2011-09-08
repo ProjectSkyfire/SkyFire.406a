@@ -554,11 +554,12 @@ enum CombatRating
     CR_WEAPON_SKILL_MAINHAND    = 20,
     CR_WEAPON_SKILL_OFFHAND     = 21,
     CR_WEAPON_SKILL_RANGED      = 22,
-    CR_EXPERTISE                = 23,
-    CR_ARMOR_PENETRATION        = 24
+    CR_ARMOR_PENETRATION        = 23,
+    CR_EXPERTISE                = 24,
+    CR_MASTERY	                = 25
 };
 
-#define MAX_COMBAT_RATING         25
+#define MAX_COMBAT_RATING         26
 
 enum DamageEffectType
 {
@@ -2240,7 +2241,7 @@ class Unit : public WorldObject
 
         AuraEffectList m_modAuras[TOTAL_AURAS];
         AuraList m_scAuras;                        // casted singlecast auras
-        AuraApplicationList m_interruptableAuras;             // auras which have interrupt mask applied on unit
+        AuraApplicationList m_interruptableAuras;  // auras which have interrupt mask applied on unit
         AuraStateAurasMap m_auraStateAuras;        // Used for improve performance of aura state checks on aura apply/remove
         uint32 m_interruptMask;
 

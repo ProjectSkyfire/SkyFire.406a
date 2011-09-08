@@ -13466,8 +13466,8 @@ float Unit::GetTotalAttackPowerValue(WeaponAttackType attType) const
         if (ap < 0)
             return 0.0f;
         return ap * (1.0f + GetFloatValue(UNIT_FIELD_ATTACK_POWER_MULTIPLIER));
-	}*/
-	return 0.0f; // This is only for temp atm.
+    }*/
+    return 0.0f; // This is only for temp atm.
 }
 
 float Unit::GetWeaponDamageRange(WeaponAttackType attType , WeaponDamageRange type) const
