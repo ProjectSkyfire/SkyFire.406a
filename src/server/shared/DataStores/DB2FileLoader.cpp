@@ -114,7 +114,7 @@ bool DB2FileLoader::Load(const char *filename, const char *fmt)
 
     EndianConvert(unk1);
 
-    if (build > 13623)
+    if (build > 12880)
     {
         if (fread(&unk2, 4, 1, f) != 1)                // Unknown WDB2
         {
