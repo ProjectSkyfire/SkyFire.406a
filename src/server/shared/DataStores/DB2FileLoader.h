@@ -99,8 +99,8 @@ private:
     uint32 build;        // WDB2
 
     int unk1;            // WDB2 (Unix time in WCH2)
-    int minId;            // WDB2
-    int maxId;            // WDB2 (index table)
+    int unk2;            // WDB2
+    int maxIndex;        // WDB2 (index table)
     int locale;          // WDB2
     int unk5;            // WDB2
 };

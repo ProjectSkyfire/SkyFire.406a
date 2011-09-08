@@ -22,13 +22,13 @@
 #include "Logging/Log.h"
 #include "SharedDefines.h"
 #include "SpellMgr.h"
-//#include "ProgressBar.h"
-
 #include "DB2fmt.h"
 
 #include <map>
 
 DB2Storage <ItemEntry> sItemStore(Itemfmt);
+DB2Storage <ItemSparseEntry> sItemSparseStore (ItemSparsefmt);
+
 typedef std::list<std::string> StoreProblemList1;
 
 static bool LoadDB2_assert_print(uint32 fsize,uint32 rsize, const std::string& filename)
@@ -85,7 +85,7 @@ void LoadDB2Stores(const std::string& dataPath)
     uint32 availableDb2Locales = 0xFFFFFFFF;
 
     LoadDB2(availableDb2Locales, bad_db2_files, sItemStore, db2Path, "Item.db2");
-
+    LoadDB2(availableDb2Locales, bad_db2_files, sItemSparseStore, db2Path, "Item-sparse.db2");
     // error checks
     if (bad_db2_files.size() >= DB2FilesCount)
     {

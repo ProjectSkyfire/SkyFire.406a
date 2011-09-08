@@ -57,7 +57,7 @@ bool DB2FileLoader::Load(const char *filename, const char *fmt)
         return false;                                       //'WDB2'
     }
 
-    if (fread(&recordCount, 4, 1, f) != 1)                       // Number of records
+    if (fread(&recordCount, 4, 1, f) != 1)                 // Number of records
     {
         fclose(f);
         return false;
@@ -65,7 +65,7 @@ bool DB2FileLoader::Load(const char *filename, const char *fmt)
 
     EndianConvert(recordCount);
 
-    if (fread(&fieldCount, 4, 1, f) != 1)                         // Number of fields
+    if (fread(&fieldCount, 4, 1, f) != 1)                 // Number of fields
     {
         fclose(f);
         return false;
@@ -73,7 +73,7 @@ bool DB2FileLoader::Load(const char *filename, const char *fmt)
 
     EndianConvert(fieldCount);
 
-    if (fread(&recordSize, 4, 1, f) != 1)                         // Size of a record
+    if (fread(&recordSize, 4, 1, f) != 1)                 // Size of a record
     {
         fclose(f);
         return false;
@@ -81,7 +81,7 @@ bool DB2FileLoader::Load(const char *filename, const char *fmt)
 
     EndianConvert(recordSize);
 
-    if (fread(&stringSize, 4, 1, f) != 1)                         // String size
+    if (fread(&stringSize, 4, 1, f) != 1)                 // String size
     {
         fclose(f);
         return false;
@@ -90,7 +90,7 @@ bool DB2FileLoader::Load(const char *filename, const char *fmt)
     EndianConvert(stringSize);
 
     /* NEW WDB2 FIELDS*/
-    if (fread(&tableHash, 4, 1, f) != 1)                          // Table hash
+    if (fread(&tableHash, 4, 1, f) != 1)                  // Table hash
     {
         fclose(f);
         return false;
@@ -98,7 +98,7 @@ bool DB2FileLoader::Load(const char *filename, const char *fmt)
 
     EndianConvert(tableHash);
 
-    if (fread(&build, 4, 1, f) != 1)                              // Build
+    if (fread(&build, 4, 1, f) != 1)                     // Build
     {
         fclose(f);
         return false;
@@ -106,7 +106,7 @@ bool DB2FileLoader::Load(const char *filename, const char *fmt)
 
     EndianConvert(build);
 
-    if (fread(&unk1, 4, 1, f) != 1)                               // Unknown WDB2
+    if (fread(&unk1, 4, 1, f) != 1)                     // Unknown WDB2
     {
         fclose(f);
         return false;
@@ -114,42 +114,44 @@ bool DB2FileLoader::Load(const char *filename, const char *fmt)
 
     EndianConvert(unk1);
 
-    if (fread(&minId, 4, 1, f) != 1)                               // minId WDB2
+    if (build > 13623)
     {
-        fclose(f);
-        return false;
+        if (fread(&unk2, 4, 1, f) != 1)                // Unknown WDB2
+        {
+            fclose(f);
+            return false;
+        }
+        EndianConvert(unk2);
+
+        if (fread(&maxIndex, 4, 1, f) != 1)                           // MaxIndex WDB2
+        {
+            fclose(f);
+            return false;
+        }
+        EndianConvert(maxIndex);
+
+        if (fread(&locale, 4, 1, f) != 1)                             // Locales
+        {
+            fclose(f);
+            return false;
+        }
+        EndianConvert(locale);
+
+        if (fread(&unk5, 4, 1, f) != 1)                               // Unknown WDB2
+        {
+            fclose(f);
+            return false;
+        }
+        EndianConvert(unk5);
+
+        if (maxIndex)
+            fseek(f, maxIndex * 6 - 48*3, SEEK_CUR);
     }
 
-    EndianConvert(minId);
-
-    if (fread(&maxId, 4, 1, f) != 1)                               // maxId WDB2
+    if (maxIndex != 0)
     {
-        fclose(f);
-        return false;
-    }
-
-    EndianConvert(maxId);
-
-    if (fread(&locale, 4, 1, f) != 1)                             // Locales
-    {
-        fclose(f);
-        return false;
-    }
-
-    EndianConvert(locale);
-
-    if (fread(&unk5, 4, 1, f) != 1)                               // Unknown WDB2
-    {
-        fclose(f);
-        return false;
-    }
-
-    EndianConvert(unk5);
-
-    if (maxId != 0)
-    {
-        int32 diff = maxId - minId + 1;          // blizzard is some weird people...
-        fseek(f, diff * 4 + diff * 2, SEEK_CUR); // diff * 4: an index for rows, diff * 2: a memory allocation bank
+        int32 diff = maxIndex - unk2 + 1;             // blizzard is some weird people...
+        fseek(f, diff * 4 + diff * 2, SEEK_CUR);    // diff * 4: an index for rows, diff * 2: a memory allocation bank
     }
 
     fieldsOffset = new uint32[fieldCount];
@@ -157,9 +159,9 @@ bool DB2FileLoader::Load(const char *filename, const char *fmt)
     for (uint32 i = 1; i < fieldCount; i++)
     {
         fieldsOffset[i] = fieldsOffset[i - 1];
-        if (fmt[i - 1] == 'b' || fmt[i - 1] == 'X')         // byte fields
+        if (fmt[i - 1] == 'b' || fmt[i - 1] == 'X')  // byte fields
             fieldsOffset[i] += 1;
-        else                                                // 4 byte fields (int32/float/strings)
+        else                                         // 4 byte fields (int32/float/strings)
             fieldsOffset[i] += 4;
     }
 
