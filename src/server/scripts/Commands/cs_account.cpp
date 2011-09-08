@@ -101,11 +101,11 @@ public:
         if (!szAcc || !szPassword)
             return false;
 
-        // normalized in sAccountMgr->CreateAccount
+        // normalized in AccountMgr::CreateAccount
         std::string account_name = szAcc;
         std::string password = szPassword;
 
-        AccountOpResult result = sAccountMgr->CreateAccount(account_name, password);
+        AccountOpResult result = AccountMgr::CreateAccount(account_name, password);
         switch(result)
         {
         case AOR_OK:
@@ -152,7 +152,7 @@ public:
             return false;
         }
 
-        uint32 account_id = sAccountMgr->GetId(account_name);
+        uint32 account_id = AccountMgr::GetId(account_name);
         if (!account_id)
         {
             handler->PSendSysMessage(LANG_ACCOUNT_NOT_EXIST, account_name.c_str());
@@ -166,7 +166,7 @@ public:
         if (handler->HasLowerSecurityAccount (NULL, account_id, true))
             return false;
 
-        AccountOpResult result = sAccountMgr->DeleteAccount(account_id);
+        AccountOpResult result = AccountMgr::DeleteAccount(account_id);
         switch(result)
         {
         case AOR_OK:
@@ -228,6 +228,7 @@ public:
             }
             else
                 handler->PSendSysMessage(LANG_ACCOUNT_LIST_ERROR, name.c_str());
+
         }while (resultDB->NextRow());
 
         handler->SendSysMessage(LANG_ACCOUNT_LIST_BAR);
@@ -283,7 +284,7 @@ public:
             return false;
         }
 
-        if (!sAccountMgr->CheckPassword(handler->GetSession()->GetAccountId(), std::string(old_pass)))
+        if (!AccountMgr::CheckPassword(handler->GetSession()->GetAccountId(), std::string(old_pass)))
         {
             handler->SendSysMessage(LANG_COMMAND_WRONGOLDPASSWORD);
             handler->SetSentErrorMessage(true);
@@ -297,7 +298,7 @@ public:
             return false;
         }
 
-        AccountOpResult result = sAccountMgr->ChangePassword(handler->GetSession()->GetAccountId(), std::string(new_pass));
+        AccountOpResult result = AccountMgr::ChangePassword(handler->GetSession()->GetAccountId(), std::string(new_pass));
         switch(result)
         {
         case AOR_OK:
@@ -343,7 +344,7 @@ public:
                 return false;
 
             account_id = player->GetSession()->GetAccountId();
-            sAccountMgr->GetName(account_id, account_name);
+            AccountMgr::GetName(account_id, account_name);
             szExp = szAcc;
         }
         else
@@ -357,13 +358,14 @@ public:
                 return false;
             }
 
-            account_id = sAccountMgr->GetId(account_name);
+            account_id = AccountMgr::GetId(account_name);
             if (!account_id)
             {
                 handler->PSendSysMessage(LANG_ACCOUNT_NOT_EXIST, account_name.c_str());
                 handler->SetSentErrorMessage(true);
                 return false;
             }
+
         }
 
         // Let set addon state only for lesser (strong) security level
@@ -429,17 +431,17 @@ public:
         }
 
         // handler->getSession() == NULL only for console
-        targetAccountId = (isAccountNameGiven) ? sAccountMgr->GetId(targetAccountName) : handler->getSelectedPlayer()->GetSession()->GetAccountId();
+        targetAccountId = (isAccountNameGiven) ? AccountMgr::GetId(targetAccountName) : handler->getSelectedPlayer()->GetSession()->GetAccountId();
         int32 gmRealmID = (isAccountNameGiven) ? atoi(arg3) : atoi(arg2);
         uint32 plSecurity;
         if (handler->GetSession())
-            plSecurity = sAccountMgr->GetSecurity(handler->GetSession()->GetAccountId(), gmRealmID);
+            plSecurity = AccountMgr::GetSecurity(handler->GetSession()->GetAccountId(), gmRealmID);
         else
             plSecurity = SEC_CONSOLE;
 
         // can set security level only for target with less security and to less security that we have
         // This is also reject self apply in fact
-        targetSecurity = sAccountMgr->GetSecurity(targetAccountId, gmRealmID);
+        targetSecurity = AccountMgr::GetSecurity(targetAccountId, gmRealmID);
         if (targetSecurity >= plSecurity || gm >= plSecurity)
         {
             handler->SendSysMessage(LANG_YOURS_SECURITY_IS_LOW);
@@ -501,7 +503,7 @@ public:
             return false;
         }
 
-        uint32 targetAccountId = sAccountMgr->GetId(account_name);
+        uint32 targetAccountId = AccountMgr::GetId(account_name);
         if (!targetAccountId)
         {
             handler->PSendSysMessage(LANG_ACCOUNT_NOT_EXIST, account_name.c_str());
@@ -521,7 +523,7 @@ public:
             return false;
         }
 
-        AccountOpResult result = sAccountMgr->ChangePassword(targetAccountId, szPassword1);
+        AccountOpResult result = AccountMgr::ChangePassword(targetAccountId, szPassword1);
 
         switch (result)
         {

@@ -111,7 +111,7 @@ void AuctionHouseMgr::SendAuctionWonMail(AuctionEntry *auction, SQLTransaction& 
         else
         {
             bidder_accId = sObjectMgr->GetPlayerAccountIdByGUID(bidder_guid);
-            bidder_security = sAccountMgr->GetSecurity(bidder_accId, realmID);
+            bidder_security = AccountMgr::GetSecurity(bidder_accId, realmID);
 
             if (bidder_security > SEC_PLAYER) // not do redundant DB requests
             {
@@ -618,10 +618,10 @@ void AuctionHouseObject::BuildListAuctionItems(WorldPacket& data, Player* player
 
                 if (itemRandProp)
                 {
-					DBCString temp = itemRandProp->nameSuffix;
-					//char* temp = itemRandProp->nameSuffix;
+                    DBCString temp = itemRandProp->nameSuffix;
+                    //char* temp = itemRandProp->nameSuffix;
 
-					// dbc local name
+                    // dbc local name
                     if (temp)
                     {
                         // Append the suffix (ie: of the Monkey) to the name using localization

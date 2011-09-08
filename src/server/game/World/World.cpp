@@ -1254,7 +1254,7 @@ void World::SetInitialWorldSettings()
     sLog->outString("Initialize data stores...");
     LoadDBCStores(m_dataPath);
     LoadDB2Stores(m_dataPath);
-	DetectDBCLang();
+    DetectDBCLang();
 
     sLog->outString("Loading spell dbc data corrections...");
     sSpellMgr->LoadDbcDataCorrections();
@@ -2300,7 +2300,7 @@ bool World::RemoveBanAccount(BanMode mode, std::string nameOrIP)
     {
         uint32 account = 0;
         if (mode == BAN_ACCOUNT)
-            account = sAccountMgr->GetId(nameOrIP);
+            account = AccountMgr::GetId(nameOrIP);
         else if (mode == BAN_CHARACTER)
             account = sObjectMgr->GetPlayerAccountIdByPlayerName(nameOrIP);
 
