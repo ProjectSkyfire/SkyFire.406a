@@ -151,8 +151,8 @@ bool DB2FileLoader::Load(const char *filename, const char *fmt)
         int32 diff = maxId - minId + 1;          // blizzard is some weird people...
         fseek(f, diff * 4 + diff * 2, SEEK_CUR); // diff * 4: an index for rows, diff * 2: a memory allocation bank
     }
-    
-	fieldsOffset = new uint32[fieldCount];
+
+    fieldsOffset = new uint32[fieldCount];
     fieldsOffset[0] = 0;
     for (uint32 i = 1; i < fieldCount; i++)
     {
