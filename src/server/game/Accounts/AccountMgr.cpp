@@ -26,7 +26,6 @@
 
 namespace AccountMgr
 {
-
 AccountOpResult CreateAccount(std::string username, std::string password)
 {
     if (utf8length(username) > MAX_ACCOUNT_STR)
@@ -220,5 +219,4 @@ std::string CalculateShaPassHash(std::string& name, std::string& password)
 
     return encoded;
 }
-
 } // Namespace AccountMgr

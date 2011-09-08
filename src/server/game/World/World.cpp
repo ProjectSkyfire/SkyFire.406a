@@ -1348,7 +1348,7 @@ void World::SetInitialWorldSettings()
 
     sLog->outString("Loading Item set names...");                // must be after LoadItemPrototypes
     sObjectMgr->LoadItemSetNames();
- 
+
     sLog->outString("Loading Items Info...");
     sItemInfoMgr->LoadItemInfo();
 

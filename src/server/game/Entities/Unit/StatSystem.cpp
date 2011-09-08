@@ -826,7 +826,7 @@ void Player::_RemoveAllStatBonuses()
 
     UpdateAllStats();
 }
- 
+
 void Player::UpdateMastery()
 {
     if(HasAuraType(SPELL_AURA_MASTERY))

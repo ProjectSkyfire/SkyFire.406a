@@ -74,7 +74,6 @@ struct AuctionEntry
     void SaveToDB(SQLTransaction& trans) const;
     bool LoadFromDB(Field* fields);
     bool LoadFromFieldList(Field* fields);
-
 };
 
 //this class is used as auctionhouse instance
