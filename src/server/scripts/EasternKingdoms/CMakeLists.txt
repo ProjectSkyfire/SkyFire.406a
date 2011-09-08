@@ -12,6 +12,7 @@ set(scripts_STAT_SRCS
   ${scripts_STAT_SRCS}
   EasternKingdoms/ghostlands.cpp
   EasternKingdoms/eversong_woods.cpp
+  #EasternKingdoms/gilneas.cpp
   EasternKingdoms/AlteracValley/boss_galvangar.cpp
   EasternKingdoms/AlteracValley/boss_balinda.cpp
   EasternKingdoms/AlteracValley/boss_drekthar.cpp
@@ -54,6 +55,8 @@ set(scripts_STAT_SRCS
   EasternKingdoms/Gnomeregan/instance_gnomeregan.cpp
   EasternKingdoms/Gnomeregan/gnomeregan.cpp
   EasternKingdoms/Gnomeregan/gnomeregan.h
+  #EasternKingdoms/GrimBatol/grim_batol.h
+  #EasternKingdoms/GrimBatol/instance_grim_batol.cpp  
   EasternKingdoms/redridge_mountains.cpp
   EasternKingdoms/BlackrockDepths/boss_high_interrogator_gerstahn.cpp
   EasternKingdoms/BlackrockDepths/boss_gorosh_the_dervish.cpp
@@ -102,6 +105,8 @@ set(scripts_STAT_SRCS
   EasternKingdoms/Stratholme/stratholme.h
   EasternKingdoms/Stratholme/stratholme.cpp
   EasternKingdoms/tirisfal_glades.cpp
+  #EasternKingdoms/ThroneOfTheTides/throne_of_the_tides.h
+  #EasternKingdoms/ThroneOfTheTides/instance_throne_of_the_tides.cpp  
   EasternKingdoms/SunkenTemple/sunken_temple.cpp
   EasternKingdoms/SunkenTemple/sunken_temple.h
   EasternKingdoms/SunkenTemple/instance_sunken_temple.cpp
@@ -118,6 +123,11 @@ set(scripts_STAT_SRCS
   EasternKingdoms/Uldaman/instance_uldaman.cpp
   EasternKingdoms/Uldaman/boss_archaedas.cpp
   EasternKingdoms/swamp_of_sorrows.cpp
+  #EasternKingdoms/BaradinHold/baradin_hold.h
+  #EasternKingdoms/BaradinHold/instance_baradin_hold.cpp
+  #EasternKingdoms/BaradinHold/boss_argaloth.cpp  
+  #EasternKingdoms/BlackrockCaverns/blackrock_caverns.h
+  #EasternKingdoms/BlackrockCaverns/instance_blackrock_caverns.cpp  
   EasternKingdoms/BlackrockSpire/boss_pyroguard_emberseer.cpp
   EasternKingdoms/BlackrockSpire/boss_drakkisath.cpp
   EasternKingdoms/BlackrockSpire/boss_warmaster_voone.cpp
@@ -141,11 +151,14 @@ set(scripts_STAT_SRCS
   EasternKingdoms/SunwellPlateau/boss_brutallus.cpp
   EasternKingdoms/SunwellPlateau/sunwell_plateau.cpp
   EasternKingdoms/SunwellPlateau/boss_felmyst.cpp
+  #EasternKingdoms/TheStonecore/instance_the_stonecore.cpp
+  #EasternKingdoms/TheStonecore/the_stonecore.cpp
+  #EasternKingdoms/TheStonecore/the_stonecore.h  
   EasternKingdoms/stranglethorn_vale.cpp
-  EasternKingdoms/Deadmines/deadmines.h
-  EasternKingdoms/Deadmines/deadmines.cpp
-  EasternKingdoms/Deadmines/boss_mr_smite.cpp
-  EasternKingdoms/Deadmines/instance_deadmines.cpp
+  #EasternKingdoms/Deadmines/deadmines.h
+  #EasternKingdoms/Deadmines/deadmines.cpp
+  #EasternKingdoms/Deadmines/boss_mr_smite.cpp
+  #EasternKingdoms/Deadmines/instance_deadmines.cpp
   EasternKingdoms/duskwood.cpp
   EasternKingdoms/ScarletMonastery/boss_azshir_the_sleepless.cpp
   EasternKingdoms/ScarletMonastery/boss_mograine_and_whitemane.cpp

@@ -83,6 +83,8 @@ void AddSC_boss_balinda();
 void AddSC_boss_drekthar();
 void AddSC_boss_galvangar();
 void AddSC_boss_vanndar();
+//void AddSC_instance_baradin_hold();          //Baradin Hold
+//void AddSC_boss_argaloth();
 void AddSC_blackrock_depths();               //Blackrock Depths
 void AddSC_boss_ambassador_flamelash();
 void AddSC_boss_anubshiah();
@@ -118,8 +120,10 @@ void AddSC_boss_chromaggus();
 void AddSC_boss_nefarian();
 void AddSC_boss_victor_nefarius();
 void AddSC_boss_mr_smite();
-void AddSC_deadmines();                      //Deadmines
-void AddSC_instance_deadmines();
+//void AddSC_deadmines();                      //Deadmines
+//void AddSC_instance_deadmines();
+//void AddSC_boss_mr_smite();
+//void AddSC_boss_glubtok();
 void AddSC_gnomeregan();                     //Gnomeregan
 void AddSC_instance_gnomeregan();
 void AddSC_boss_attumen();                   //Karazhan
@@ -182,6 +186,8 @@ void AddSC_boss_vectus();
 void AddSC_instance_scholomance();
 void AddSC_shadowfang_keep();                //Shadowfang keep
 void AddSC_instance_shadowfang_keep();
+//void AddSC_the_stonecore();                  //The Stonecore
+//void AddSC_instance_the_stonecore();
 void AddSC_boss_magistrate_barthilas();      //Stratholme
 void AddSC_boss_maleki_the_pallid();
 void AddSC_boss_nerubenkan();
@@ -205,6 +211,8 @@ void AddSC_boss_eredar_twins();
 void AddSC_boss_muru();
 void AddSC_boss_kiljaeden();
 void AddSC_sunwell_plateau();
+//void AddSC_instance_throne_of_the_tides();   //Throne of the Tides);
+//void AddSC_throne_of_the_tides();
 void AddSC_boss_archaedas();                 //Uldaman
 void AddSC_boss_ironaya();
 void AddSC_uldaman();
@@ -241,6 +249,7 @@ void AddSC_duskwood();
 void AddSC_eastern_plaguelands();
 void AddSC_eversong_woods();
 void AddSC_ghostlands();
+//void AddSC_gilneas();
 void AddSC_hinterlands();
 void AddSC_ironforge();
 void AddSC_isle_of_queldanas();
@@ -289,6 +298,15 @@ void AddSC_boss_mal_ganis();
 void AddSC_boss_meathook();
 void AddSC_culling_of_stratholme();
 void AddSC_instance_culling_of_stratholme();
+//void AddSC_npc_pusillin();                   //Dire maul
+//void AddSC_instance_halls_of_origination();  //Halls of Origination
+//void AddSC_boss_temple_guardian_anhuur();
+//void AddSC_boss_earthrager_ptah();
+//void AddSC_boss_anraphet();
+//void AddSC_lost_city_of_the_tolvir();        //Lost City of the Tol'vir
+//void AddSC_instance_lost_city_of_the_tolvir();
+//void AddSC_boss_lockmaw();
+//void AddSC_boss_high_prophet_barim();
 void AddSC_boss_celebras_the_cursed();       //Maraudon
 void AddSC_boss_landslide();
 void AddSC_boss_noxxion();
@@ -316,6 +334,7 @@ void AddSC_boss_skeram();
 void AddSC_boss_twinemperors();
 void AddSC_mob_anubisath_sentinel();
 void AddSC_instance_temple_of_ahnqiraj();
+//void AddSC_instance_the_vortex_pinnacle();   //The Vortex Pinnacle
 void AddSC_wailing_caverns();                //Wailing caverns
 void AddSC_instance_wailing_caverns();
 void AddSC_zulfarrak();                     //Zul'Farrak generic
@@ -690,7 +709,9 @@ void AddEasternKingdomsScripts()
     AddSC_boss_drekthar();
     AddSC_boss_galvangar();
     AddSC_boss_vanndar();
-    AddSC_blackrock_depths();               //Blackrock Depths
+    //AddSC_instance_baradin_hold();          //Baradin Hold
+    //AddSC_boss_argaloth();    
+	AddSC_blackrock_depths();               //Blackrock Depths
     AddSC_boss_ambassador_flamelash();
     AddSC_boss_anubshiah();
     AddSC_boss_draganthaurissan();
@@ -724,9 +745,10 @@ void AddEasternKingdomsScripts()
     AddSC_boss_chromaggus();
     AddSC_boss_nefarian();
     AddSC_boss_victor_nefarius();
-    AddSC_boss_mr_smite();
-    AddSC_deadmines();                      //Deadmines
-    AddSC_instance_deadmines();
+    //AddSC_deadmines();                      //Deadmines
+    //ddSC_instance_deadmines();
+    //AddSC_boss_mr_smite();
+    //AddSC_boss_glubtok();
     AddSC_gnomeregan();                     //Gnomeregan
     AddSC_instance_gnomeregan();
     AddSC_boss_attumen();                   //Karazhan
@@ -789,7 +811,9 @@ void AddEasternKingdomsScripts()
     AddSC_instance_scholomance();
     AddSC_shadowfang_keep();                //Shadowfang keep
     AddSC_instance_shadowfang_keep();
-    AddSC_boss_magistrate_barthilas();      //Stratholme
+    //AddSC_the_stonecore();                  //Stonecore
+    //AddSC_instance_the_stonecore();   
+	AddSC_boss_magistrate_barthilas();      //Stratholme
     AddSC_boss_maleki_the_pallid();
     AddSC_boss_nerubenkan();
     AddSC_boss_cannon_master_willey();
@@ -812,7 +836,9 @@ void AddEasternKingdomsScripts()
     AddSC_boss_muru();
     AddSC_boss_kiljaeden();
     AddSC_sunwell_plateau();
-    AddSC_boss_archaedas();                 //Uldaman
+    //AddSC_instance_throne_of_the_tides();   //Throne of the Tides);
+    //AddSC_throne_of_the_tides();    
+	AddSC_boss_archaedas();                 //Uldaman
     AddSC_boss_ironaya();
     AddSC_uldaman();
     AddSC_instance_uldaman();
@@ -848,7 +874,8 @@ void AddEasternKingdomsScripts()
     AddSC_eastern_plaguelands();
     AddSC_eversong_woods();
     AddSC_ghostlands();
-    AddSC_hinterlands();
+    //AddSC_gilneas();    
+	AddSC_hinterlands();
     AddSC_ironforge();
     AddSC_isle_of_queldanas();
     AddSC_loch_modan();
@@ -900,6 +927,15 @@ void AddKalimdorScripts()
     AddSC_boss_meathook();
     AddSC_culling_of_stratholme();
     AddSC_instance_culling_of_stratholme();
+    //AddSC_npc_pusillin();                   //Dire maul   
+	//AddSC_instance_halls_of_origination();     //Halls of Origination
+    //AddSC_boss_temple_guardian_anhuur();
+    //AddSC_boss_earthrager_ptah();
+    //AddSC_boss_anraphet();  
+    //AddSC_lost_city_of_the_tolvir();           //Lost City of the Tol'vir
+    //AddSC_instance_lost_city_of_the_tolvir();
+    //AddSC_boss_lockmaw();
+    //AddSC_boss_high_prophet_barim();	
     AddSC_boss_celebras_the_cursed();       //Maraudon
     AddSC_boss_landslide();
     AddSC_boss_noxxion();
@@ -927,7 +963,8 @@ void AddKalimdorScripts()
     AddSC_boss_twinemperors();
     AddSC_mob_anubisath_sentinel();
     AddSC_instance_temple_of_ahnqiraj();
-    AddSC_wailing_caverns();                //Wailing caverns
+    //AddSC_instance_the_vortex_pinnacle();   //The Vortex Pinnacle    
+	AddSC_wailing_caverns();                //Wailing caverns
     AddSC_instance_wailing_caverns();
     AddSC_zulfarrak();                      //Zul'Farrak generic
     AddSC_instance_zulfarrak();             //Zul'Farrak instance script
