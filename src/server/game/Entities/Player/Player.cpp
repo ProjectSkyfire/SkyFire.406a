@@ -14618,10 +14618,6 @@ bool Player::CanCompleteQuest(uint32 quest_id)
 			if (repFacId && GetReputationMgr().GetReputation(repFacId) < qInfo->GetRepObjectiveValue())
 				return false;
 
-			uint32 repFacId2 = qInfo->GetRepObjectiveFaction2();
-			if (repFacId2 && GetReputationMgr().GetReputation(repFacId2) < qInfo->GetRepObjectiveValue2())
-				return false;
-
 			return true;
 		}
 	}
@@ -15254,6 +15250,16 @@ bool Player::SatisfyQuestReputation(Quest const* qInfo, bool msg)
 			SendCanTakeQuestResponse(INVALIDREASON_DONT_HAVE_REQ);
 		return false;
 	}
+    
+    // ReputationObjective2 does not seem to be an objective requirement but a requirement
+    // to be able to accept the quest
+    uint32 fIdObj = qInfo->GetRepObjectiveFaction2();
+    if (fIdObj && GetReputationMgr().GetReputation(fIdObj) >= qInfo->GetRepObjectiveValue2())
+    {
+        if (msg)
+            SendCanTakeQuestResponse(INVALIDREASON_DONT_HAVE_REQ);
+        return false;
+    }
 
 	return true;
 }
