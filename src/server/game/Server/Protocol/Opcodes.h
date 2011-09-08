@@ -37,7 +37,7 @@
 /// List of Opcodes
 enum Opcodes
 {
-   CMSG_WORLD_TELEPORT                              = 0x08581, // 4.0.6a 13623
+    CMSG_WORLD_TELEPORT                              = 0x08581, // 4.0.6a 13623
     CMSG_TELEPORT_TO_UNIT                            = 0x0E1AC, // 4.0.6a 13623
     SMSG_CHECK_FOR_BOTS                              = 0x0FEC8, // 4.0.6a 13623
     CMSG_BOT_DETECTED2                               = 0x10002, //
