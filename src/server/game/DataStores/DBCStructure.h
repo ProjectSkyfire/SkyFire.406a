@@ -1694,15 +1694,15 @@ struct SpellItemEnchantmentEntry
     uint32      amount[MAX_ITEM_ENCHANTMENT_EFFECTS];       // 5-7      m_effectPointsMin[MAX_ITEM_ENCHANTMENT_EFFECTS]
     //uint32      amount2[MAX_ITEM_ENCHANTMENT_EFFECTS]     // 8-10     m_effectPointsMax[MAX_ITEM_ENCHANTMENT_EFFECTS]
     uint32      spellid[MAX_ITEM_ENCHANTMENT_EFFECTS];      // 11-13    m_effectArg[MAX_ITEM_ENCHANTMENT_EFFECTS]
-    char*       description[16];                            // 14-29    m_name_lang[16]
-    //uint32      descriptionFlags;                         // 30 name flags
-    uint32      aura_id;                                    // 31       m_itemVisual
-    uint32      slot;                                       // 32       m_flags
-    uint32      GemID;                                      // 33       m_src_itemID
-    uint32      EnchantmentCondition;                       // 34       m_condition_id
-    uint32      requiredSkill;                              // 35       m_requiredSkillID
-    uint32      requiredSkillValue;                         // 36       m_requiredSkillRank
-    uint32      requiredLevel;                              // 37       m_requiredLevel
+    DBCString   description;                                // 14       m_name
+    //uint32      descriptionFlags;                         // 15       name flags
+    uint32      aura_id;                                    // 16       m_itemVisual
+    uint32      slot;                                       // 17       m_flags
+    uint32      GemID;                                      // 18       m_src_itemID
+    uint32      EnchantmentCondition;                       // 19       m_condition_id
+    uint32      requiredSkill;                              // 20       m_requiredSkillID
+    uint32      requiredSkillValue;                         // 21       m_requiredSkillRank
+    uint32      requiredLevel;                              // 22       m_requiredLevel
 };
 
 struct SpellItemEnchantmentConditionEntry
