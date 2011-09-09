@@ -13267,7 +13267,7 @@ uint32 Unit::GetCreatureType() const
     if (GetTypeId() == TYPEID_PLAYER)
     {
         ShapeshiftForm form = GetShapeshiftForm();
-        SpellShapeshiftEntry const* ssEntry = sSpellShapeshiftStore.LookupEntry(form);
+        SpellShapeshiftFormEntry const* ssEntry = sSpellShapeshiftFormStore.LookupEntry(form);
         if (ssEntry && ssEntry->creatureType > 0)
             return ssEntry->creatureType;
         else
@@ -16698,22 +16698,22 @@ uint32 Unit::GetModelForForm(ShapeshiftForm form)
     }
 
     uint32 modelid = 0;
-    SpellShapeshiftEntry const* formEntry = sSpellShapeshiftStore.LookupEntry(form);
-    if (formEntry && formEntry->modelID_A)
+    SpellShapeshiftFormEntry const* formEntry = sSpellShapeshiftFormStore.LookupEntry(form);
+    if (formEntry && formEntry->modelID[0])
     {
-        // Take the alliance modelid as default
+        // Take the first modelid as default
         if (GetTypeId() != TYPEID_PLAYER)
-            return formEntry->modelID_A;
+            return formEntry->modelID[0];
         else
         {
-            if (Player::TeamForRace(getRace()) == ALLIANCE)
-                modelid = formEntry->modelID_A;
-            else
-                modelid = formEntry->modelID_H;
-
-            // If the player is horde but there are no values for the horde modelid - take the alliance modelid
-            if (!modelid && Player::TeamForRace(getRace()) == HORDE)
-                modelid = formEntry->modelID_A;
+            // Choose random modelid (note: currently modelid 1-3 are not available yet)
+            std::vector<uint32> modelIDs;
+            for (uint8 i = 0; i < MAX_SHAPESHIFT_MODELS; i++)
+                if (formEntry->modelID[i])
+                    modelIDs.push_back(formEntry->modelID[i]);
+            std::vector<uint32>::iterator itr = modelIDs.begin();
+            std::advance(itr, urand(0, modelIDs.size()-1));
+            modelid = *itr;
         }
     }
 

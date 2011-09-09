@@ -1661,23 +1661,32 @@ struct SpellRuneCostEntry
     bool NoRunicPowerGain() const { return runePowerGain == 0; }
 };
 
+#define MAX_SHAPESHIFT_MODELS 4
 #define MAX_SHAPESHIFT_SPELLS 8
 
 struct SpellShapeshiftEntry
 {
     uint32 ID;                                              // 0
+    uint32 flags1;                                          // 1
+    //uint32 unk2;                                          // 2 unused
+    uint32 flags2;                                          // 3
+    //uint32 unk4;                                          // 4 unused
+    //uint32 unk5;                                          // 5 unused
+};
+
+struct SpellShapeshiftFormEntry
+{
+    uint32 ID;                                              // 0
     //uint32 buttonPosition;                                // 1 unused
-    //char*  Name[16];                                      // 2-17 unused
-    //uint32 NameFlags;                                     // 18 unused
-    uint32 flags1;                                          // 19
-    int32  creatureType;                                    // 20 <= 0 humanoid, other normal creature types
-    //uint32 unk1;                                          // 21 unused
-    uint32 attackSpeed;                                     // 22
-    uint32 modelID_A;                                       // 23 alliance modelid
-    uint32 modelID_H;                                       // 24 horde modelid (only one form)
-    //uint32 unk3;                                          // 25 unused
-    //uint32 unk4;                                          // 26 unused
-    uint32 stanceSpell[MAX_SHAPESHIFT_SPELLS];                                  // 27 - 34 unused
+    //DBCString Name;                                       // 2 unused
+    uint32 flags1;                                          // 3
+    int32  creatureType;                                    // 4 <= 0 humanoid, other normal creature types
+    //uint32 unk1;                                          // 5 unused looks like faction id?
+    uint32 attackSpeed;                                     // 6
+    uint32 modelID[MAX_SHAPESHIFT_MODELS];                  // 7-10 modelid
+    uint32 stanceSpell[MAX_SHAPESHIFT_SPELLS];              // 11-18 unused
+    //uint32 unk3;                                          // 19 unused
+    //uint32 unk4;                                          // 20 unused
 };
 
 struct SpellDurationEntry

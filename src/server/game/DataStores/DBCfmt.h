@@ -124,6 +124,7 @@ const char SpellPowerEntryfmt[]="diiiixx";
 const char SpellReagentsEntryfmt[]="diiiiiiiiiiiiiiii";
 const char SpellScalingEntryfmt[]="diiiiffffffffffi";
 const char SpellShapeshiftEntryfmt[]="nixixx";
+const char SpellShapeshiftFormEntryfmt[]="nxxiixiiiiiiiiiiiiixx";
 const char SpellTargetRestrictionsEntryfmt[]="diiii";
 const char SpellTotemsEntryfmt[]="xiiii";
 const char SpellFocusObjectfmt[]="nx";
