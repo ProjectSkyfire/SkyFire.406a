@@ -779,7 +779,7 @@ struct CreatureSpellDataEntry
 struct CreatureTypeEntry
 {
     uint32    ID;                                           // 0        m_ID
-    //DBCString   Name[16];                                 // 1-16     name
+    //DBCString   Name;                                 // 1-16     name
                                                             // 17       string flags
     //uint32    no_expirience;                              // 18 no exp? critters, non-combat pets, gas cloud.
 };
@@ -1572,7 +1572,7 @@ struct SpellEntry
 	uint32    SpellIconID;                                  // 133      m_spellIconID
 	uint32    activeIconID;                                 // 134      m_activeIconID
 	//uint32    spellPriority;                              // 135 not used
-	char*     SpellName[16];                                // 136-151  m_name_lang
+	char*     SpellName;                                // 136-151  m_name_lang
 	//uint32    SpellNameFlag;                              // 152 not used
 	char*     Rank[16];                                     // 153-168  m_nameSubtext_lang
 	//uint32    RankFlags;                                  // 169 not used
@@ -1627,7 +1627,7 @@ struct SpellDifficultyEntry
 struct SpellFocusObjectEntry
 {
     uint32    ID;                                             // 0
-    //DBCString  Name[16];                                    // 1     m_name_lang,  unused
+    //DBCString  Name;                                    // 1     m_name_lang,  unused
                                                               // 2-16  string flags, unused
 };
 
