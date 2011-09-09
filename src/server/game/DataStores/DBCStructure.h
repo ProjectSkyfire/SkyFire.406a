@@ -1762,17 +1762,20 @@ struct TalentEntry
     //uint64  allowForPet;                                  // 21 its a 64 bit mask for pet 1<<m_categoryEnumID in CreatureFamily.dbc
 };
 
+#define MAX_TALENT_MASTERY_SPELLS 2
+
 struct TalentTabEntry
 {
     uint32  TalentTabID;                                    // 0
-    //char* name[16];                                       // 1-16, unused
-    //uint32  nameFlags;                                    // 17, unused
-    //unit32  spellicon;                                    // 18
-                                                            // 19 not used
-    uint32  ClassMask;                                      // 20
-    uint32  petTalentMask;                                  // 21
-    uint32  tabpage;                                        // 22
-    //char* internalname;                                   // 23
+    //uint32  unk1;                                         // 1 unused
+    //uint32  unk2;                                         // 2 unused
+    uint32  ClassMask;                                      // 3
+    uint32  petTalentMask;                                  // 4
+    uint32  tabpage;                                        // 5
+    //uint32  unk6;                                         // 6 unused
+    //uint32  unk7;                                         // 7 unused
+    //uint32  roleMask;                                     // 8 unused (2 tank; 4 healer; 8 damage dealer)
+    uint32  masterySpell[MAX_TALENT_MASTERY_SPELLS];        // 9-10
 };
 
 struct TalentTreePrimarySpellsEntry
