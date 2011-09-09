@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
+ * Copyright (C) 2010-2011 MigCore <http://wow-mig.ru/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -20,49 +20,41 @@
 #include "ScriptPCH.h"
 #include "deadmines.h"
 
-enum eSpels
-{
-    SPELL_ARCANE_POWER      = 88009,
-    SPELL_FIST_OF_FLAME     = 87859,
-    SPELL_FIST_OF_FROST     = 87861,
-    SPELL_FIRE_BLOSSOM      = 88129,
-    SPELL_FIRE_BLOSSOM_H    = 91286,
-    SPELL_FROST_BLOSSOM     = 88169,
-    SPELL_FROST_BLOSSOM_H   = 91287
-};
-
-class boss_glubtok : public CreatureScript
+class boss_captain_cookie : public CreatureScript
 {
 public:
-    boss_glubtok() : CreatureScript("boss_glubtok") { }
+    boss_captain_cookie() : CreatureScript("boss_captain_cookie") { }
 
     CreatureAI* GetAI(Creature* creature) const
     {
-        return new boss_glubtokAI (creature);
+        return new boss_captain_cookieAI (creature);
     }
 
-    struct boss_glubtokAI : public ScriptedAI
+    struct boss_captain_cookieAI : public ScriptedAI
     {
-        boss_glubtokAI(Creature* creature) : ScriptedAI(creature)
+        boss_captain_cookieAI(Creature* creature) : ScriptedAI(creature)
         {
             pInstance = creature->GetInstanceScript();
         }
 
         InstanceScript* pInstance;
 
-        uint32 uiTrashTimer;
-        uint32 uiSlamTimer;
-        uint32 uiNimbleReflexesTimer;
+        void Reset() {}
 
-        uint8 uiHealth;
+        void EnterCombat(Unit* /*pWho*/) {}
 
-        uint32 uiPhase;
-        uint32 uiTimer;
-        // TODO: MAKE THE CORRECT SCRIPT :)
+        void UpdateAI(const uint32 uiDiff)
+        {
+            if (!UpdateVictim())
+                return;
+
+            DoMeleeAttackIfReady();
+        }
     };
+
 };
 
-void AddSC_boss_glubtok()
+void AddSC_boss_captain_cookie()
 {
-    new boss_glubtok();
+    new boss_captain_cookie();
 }

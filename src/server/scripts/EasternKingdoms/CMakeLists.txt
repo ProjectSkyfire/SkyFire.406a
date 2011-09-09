@@ -164,8 +164,13 @@ set(scripts_STAT_SRCS
   EasternKingdoms/stranglethorn_vale.cpp
   EasternKingdoms/Deadmines/deadmines.h
   EasternKingdoms/Deadmines/deadmines.cpp
-  EasternKingdoms/Deadmines/boss_glubtok.cpp
+  EasternKingdoms/Deadmines/boss_admiral_ripsnarl.cpp
   EasternKingdoms/Deadmines/boss_mr_smite.cpp
+  EasternKingdoms/Deadmines/boss_captain_cookie.cpp
+  EasternKingdoms/Deadmines/boss_foe_reaper_5000.cpp
+  EasternKingdoms/Deadmines/boss_glubtok.cpp
+  EasternKingdoms/Deadmines/boss_helix_gearbreaker.cpp
+  EasternKingdoms/Deadmines/boss_vanessa_vancleef.cpp
   EasternKingdoms/Deadmines/instance_deadmines.cpp
   EasternKingdoms/duskwood.cpp
   EasternKingdoms/ScarletMonastery/boss_azshir_the_sleepless.cpp
