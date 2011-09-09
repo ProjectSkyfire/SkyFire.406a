@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2010-2011 MigCore <http://wow-mig.ru/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  *
@@ -51,7 +51,6 @@ public:
             DoMeleeAttackIfReady();
         }
     };
-
 };
 
 void AddSC_boss_foe_reaper_5000()

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
@@ -154,7 +154,6 @@ public:
                             me->GetMotionMaster()->MoveChase(me->getVictim(), me->m_CombatDistance);
                             uiPhase = 0;
                             break;
-
                     }
                 } else uiTimer -= uiDiff;
             }
@@ -170,9 +169,7 @@ public:
             uiTimer = 1500;
             uiPhase = 1;
         }
-
     };
-
 };
 void AddSC_boss_mr_smite()
 {
