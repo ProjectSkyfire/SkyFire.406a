@@ -19,8 +19,10 @@
 
 #ifndef DBC_FILE_LOADER_H
 #define DBC_FILE_LOADER_H
+
 #include "Define.h"
 #include "Utilities/ByteConverter.h"
+
 #include <cassert>
 
 class DBCFileLoader
