@@ -1850,7 +1850,6 @@ struct SpellRuneCostEntry
     bool NoRunicPowerGain() const { return runePowerGain == 0; }
 };
 
-#define MAX_SHAPESHIFT_MODELS 4
 #define MAX_SHAPESHIFT_SPELLS 8
 
 struct SpellShapeshiftFormEntry
@@ -1862,7 +1861,10 @@ struct SpellShapeshiftFormEntry
     int32  creatureType;                                       // 4 <= 0 humanoid, other normal creature types
     //uint32 unk1;                                             // 5 unused looks like faction id?
     uint32 attackSpeed;                                        // 6
-    uint32 modelID[MAX_SHAPESHIFT_MODELS];                     // 7-10 modelid (0 means no model)
+    uint32 modelID_A;                                          // 7 alliance modelid (0 means no model)
+    uint32 modelID_H;                                          // 8 horde modelid (but only for one form)
+    //uint32 unk3;                                             // 9 unused always 0
+    //uint32 unk4;                                             // 10 unused always 0
     uint32 stanceSpell[MAX_SHAPESHIFT_SPELLS];                 // 11-18 spells which appear in the bar after shapeshifting
     //uint32 unk5;                                             // 19 unk, only defined for flight form.
     //uint32 unk6;                                             // 20
