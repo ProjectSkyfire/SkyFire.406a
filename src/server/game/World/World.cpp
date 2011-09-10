@@ -1341,7 +1341,7 @@ void World::SetInitialWorldSettings()
     LoadRandomEnchantmentsTable();
 
     sLog->outString("Loading Disables");
-    sDisableMgr->LoadDisables();                                 // must be before loading quests and items
+    DisableMgr::LoadDisables();                                 // must be before loading quests and items
 
     sLog->outString("Loading Items...");                         // must be after LoadRandomEnchantmentsTable and LoadPageTexts
     sObjectMgr->LoadItemTemplates();
@@ -1410,7 +1410,7 @@ void World::SetInitialWorldSettings()
     sObjectMgr->LoadQuests();                                    // must be loaded after DBCs, creature_template, item_template, gameobject tables
 
     sLog->outString("Checking Quest Disables");
-    sDisableMgr->CheckQuestDisables();                           // must be after loading quests
+    DisableMgr::CheckQuestDisables();                           // must be after loading quests
 
     sLog->outString("Loading Quest POI");
     sObjectMgr->LoadQuestPOI();
