@@ -152,6 +152,23 @@ DBCStorage <SpellEntry> sSpellStore(SpellEntryfmt);
 SpellCategoryStore sSpellCategoryStore;
 PetFamilySpellsStore sPetFamilySpellsStore;
 
+DBCStorage <SpellAuraOptionsEntry> sSpellAuraOptionsStore(SpellAuraOptionsfmt);
+DBCStorage <SpellAuraRestrictionsEntry> sSpellAuraRestrictionsStore(SpellAuraRestrictionsfmt);
+DBCStorage <SpellCastingRequirementsEntry> sSpellCastingRequirementsStore(SpellCastingRequirementsfmt);
+DBCStorage <SpellCategoriesEntry> sSpellCategoriesStore(SpellCategoriesfmt);
+DBCStorage <SpellClassOptionsEntry> sSpellClassOptionsStore(SpellClassOptionsfmt);
+DBCStorage <SpellCooldownsEntry> sSpellCooldownsStore(SpellCooldownsfmt);
+DBCStorage <SpellEffectEntry> sSpellEffectStore(SpellEffectfmt);
+DBCStorage <SpellEquippedItemsEntry> sSpellEquippedItemsStore(SpellEquippedItemsfmt);
+DBCStorage <SpellInterruptsEntry> sSpellInterruptsStore(SpellInterruptsfmt);
+DBCStorage <SpellLevelsEntry> sSpellLevelsStore(SpellLevelsfmt);
+DBCStorage <SpellPowerEntry> sSpellPowerStore(SpellPowerfmt);
+DBCStorage <SpellReagentsEntry> sSpellReagentsStore(SpellReagentsfmt);
+DBCStorage <SpellScalingEntry> sSpellScalingStore(SpellScalingfmt);
+DBCStorage <SpellShapeshiftEntry> sSpellShapeshiftStore(SpellShapeshiftfmt);
+DBCStorage <SpellTargetRestrictionsEntry> sSpellTargetRestrictionsStore(SpellTargetRestrictionsfmt);
+DBCStorage <SpellTotemsEntry> sSpellTotemsStore(SpellTotemsfmt);
+
 DBCStorage <SpellCastTimesEntry> sSpellCastTimesStore(SpellCastTimefmt);
 DBCStorage <SpellDifficultyEntry> sSpellDifficultyStore(SpellDifficultyfmt);
 DBCStorage <SpellDurationEntry> sSpellDurationStore(SpellDurationfmt);
@@ -159,8 +176,7 @@ DBCStorage <SpellFocusObjectEntry> sSpellFocusObjectStore(SpellFocusObjectfmt);
 DBCStorage <SpellRadiusEntry> sSpellRadiusStore(SpellRadiusfmt);
 DBCStorage <SpellRangeEntry> sSpellRangeStore(SpellRangefmt);
 DBCStorage <SpellRuneCostEntry> sSpellRuneCostStore(SpellRuneCostfmt);
-DBCStorage <SpellShapeshiftEntry> sSpellShapeshiftStore(SpellShapeshiftEntryfmt);
-DBCStorage <SpellShapeshiftFormEntry> sSpellShapeshiftFormStore(SpellShapeshiftFormEntryfmt);
+DBCStorage <SpellShapeshiftFormEntry> sSpellShapeshiftFormStore(SpellShapeshiftFormfmt);
 //DBCStorage <StableSlotPricesEntry> sStableSlotPricesStore(StableSlotPricesfmt);
 DBCStorage <SummonPropertiesEntry> sSummonPropertiesStore(SummonPropertiesfmt);
 DBCStorage <TalentEntry> sTalentStore(TalentEntryfmt);
@@ -394,6 +410,22 @@ void LoadDBCStores(const std::string& dataPath)
 	LoadDBC(availableDbcLocales, bad_dbc_files, sSkillLineStore,              dbcPath, "SkillLine.dbc");
 	LoadDBC(availableDbcLocales, bad_dbc_files, sSkillLineAbilityStore,       dbcPath, "SkillLineAbility.dbc");
 	LoadDBC(availableDbcLocales, bad_dbc_files, sSoundEntriesStore,           dbcPath, "SoundEntries.dbc");
+	LoadDBC(availableDbcLocales, bad_dbc_files, sSpellAuraOptionsStore,    dbcPath, "SpellAuraOptions.dbc"/*, &CustomSpellAuraOptionsEntryfmt, &CustomSpellAuraOptionsEntryIndex*/);
+	LoadDBC(availableDbcLocales, bad_dbc_files, sSpellAuraRestrictionsStore, dbcPath, "SpellAuraRestrictions.dbc"/*, &CustomSpellAuraRestrictionsEntryfmt, &CustomSpellAuraRestrictionsEntryIndex*/);
+	LoadDBC(availableDbcLocales, bad_dbc_files, sSpellCastingRequirementsStore, dbcPath, "SpellCastingRequirements.dbc"/*, &CustomSpellCastingRequirementsEntryfmt, &CustomSpellCastingRequirementsEntryIndex*/);
+	LoadDBC(availableDbcLocales, bad_dbc_files, sSpellCategoriesStore,     dbcPath, "SpellCategories.dbc"/*, &CustomSpellCategoriesEntryfmt, &CustomSpellCategoriesEntryIndex*/);
+	LoadDBC(availableDbcLocales, bad_dbc_files, sSpellClassOptionsStore,   dbcPath, "SpellClassOptions.dbc"/*, &CustomSpellClassOptionsEntryfmt, &CustomSpellClassOptionsEntryIndex*/);
+	LoadDBC(availableDbcLocales, bad_dbc_files, sSpellCooldownsStore,      dbcPath, "SpellCooldowns.dbc"/*, &CustomSpellCooldownsEntryfmt, &CustomSpellCooldownsEntryIndex*/);
+	LoadDBC(availableDbcLocales, bad_dbc_files, sSpellEffectStore,         dbcPath, "SpellEffect.dbc"/*, &CustomSpellEffectEntryfmt, &CustomSpellEffectEntryIndex*/);
+	LoadDBC(availableDbcLocales, bad_dbc_files, sSpellEquippedItemsStore,  dbcPath, "SpellEquippedItems.dbc"/*, &CustomSpellEquippedItemsEntryfmt, &CustomSpellEquippedItemsEntryIndex*/);
+	LoadDBC(availableDbcLocales, bad_dbc_files, sSpellInterruptsStore,     dbcPath, "SpellInterrupts.dbc"/*, &CustomSpellInterruptsEntryfmt, &CustomSpellInterruptsEntryIndex*/);
+	LoadDBC(availableDbcLocales, bad_dbc_files, sSpellLevelsStore,         dbcPath, "SpellLevels.dbc"/*, &CustomSpellLevelsEntryfmt, &CustomSpellLevelsEntryIndex*/);
+	LoadDBC(availableDbcLocales, bad_dbc_files, sSpellPowerStore,          dbcPath, "SpellPower.dbc"/*, &CustomSpellPowerEntryfmt, &CustomSpellPowerEntryIndex*/);
+	LoadDBC(availableDbcLocales, bad_dbc_files, sSpellReagentsStore,       dbcPath, "SpellReagents.dbc"/*, &CustomSpellReagentsEntryfmt, &CustomSpellReagentsEntryIndex*/);
+	LoadDBC(availableDbcLocales, bad_dbc_files, sSpellScalingStore,        dbcPath, "SpellScaling.dbc"/*, &CustomSpellScalingEntryfmt, &CustomSpellScalingEntryIndex*/);
+	LoadDBC(availableDbcLocales, bad_dbc_files, sSpellShapeshiftStore,     dbcPath, "SpellShapeshift.dbc"/*, &CustomSpellShapeshiftEntryfmt, &CustomSpellShapeshiftEntryIndex*/);
+	LoadDBC(availableDbcLocales, bad_dbc_files, sSpellTargetRestrictionsStore, dbcPath, "SpellTargetRestrictions.dbc"/*, &CustomSpellTargetRestrictionsEntryfmt, &CustomSpellTargetRestrictionsEntryIndex*/);
+	LoadDBC(availableDbcLocales, bad_dbc_files, sSpellTotemsStore,         dbcPath, "SpellTotems.dbc"/*, &CustomSpellTotemsEntryfmt, &CustomSpellTotemsEntryIndex*/);
 	LoadDBC(availableDbcLocales, bad_dbc_files, sSpellStore,                  dbcPath, "Spell.dbc", &CustomSpellEntryfmt, &CustomSpellEntryIndex);
 	for (uint32 i = 1; i < sSpellStore.GetNumRows(); ++i)
 	{
@@ -441,7 +473,6 @@ void LoadDBCStores(const std::string& dataPath)
 	LoadDBC(availableDbcLocales, bad_dbc_files, sSpellRadiusStore,            dbcPath, "SpellRadius.dbc");
 	LoadDBC(availableDbcLocales, bad_dbc_files, sSpellRangeStore,             dbcPath, "SpellRange.dbc");
 	LoadDBC(availableDbcLocales, bad_dbc_files, sSpellRuneCostStore,          dbcPath, "SpellRuneCost.dbc");
-	LoadDBC(availableDbcLocales, bad_dbc_files, sSpellShapeshiftStore,        dbcPath, "SpellShapeshift.dbc");
 	LoadDBC(availableDbcLocales, bad_dbc_files, sSpellShapeshiftFormStore,    dbcPath, "SpellShapeshiftForm.dbc");
 	LoadDBC(availableDbcLocales, bad_dbc_files, sSummonPropertiesStore,       dbcPath, "SummonProperties.dbc");
 
