@@ -286,3 +286,4 @@ class Channel
         static void CleanOldChannelsInDB();
 };
 #endif
+

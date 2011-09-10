@@ -22,7 +22,7 @@
 #include "World.h"
 #include "WorldPacket.h"
 #include "WorldSession.h"
-
+#include "AccountMgr.h"
 #include "AuctionHouseMgr.h"
 #include "Log.h"
 #include "Opcodes.h"
@@ -205,7 +205,7 @@ void WorldSession::HandleAuctionSellItem(WorldPacket & recv_data)
         return;
     }
 
-    if (GetSecurity() > SEC_PLAYER && sWorld->getBoolConfig(CONFIG_GM_LOG_TRADE))
+    if (AccountMgr::IsGMAccount(GetSecurity()) && sWorld->getBoolConfig(CONFIG_GM_LOG_TRADE))
     {
         sLog->outCommand(GetAccountId(), "GM %s (Account: %u) create auction: %s (Entry: %u Count: %u)",
             GetPlayerName(), GetAccountId(), it->GetTemplate()->Name1.c_str(), it->GetEntry(), count);

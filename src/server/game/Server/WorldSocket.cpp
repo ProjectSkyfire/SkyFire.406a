@@ -17,20 +17,9 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <ace/Message_Block.h>
-#include <ace/OS_NS_string.h>
-#include <ace/OS_NS_unistd.h>
-#include <ace/os_include/arpa/os_inet.h>
-#include <ace/os_include/netinet/os_tcp.h>
-#include <ace/os_include/sys/os_types.h>
-#include <ace/os_include/sys/os_socket.h>
-#include <ace/OS_NS_string.h>
-#include <ace/Reactor.h>
-#include <ace/Auto_Ptr.h>
-
 #include "WorldSocket.h"
 #include "Common.h"
-
+#include "AccountMgr.h"
 #include "Util.h"
 #include "World.h"
 #include "WorldPacket.h"
@@ -45,6 +34,17 @@
 #include "Log.h"
 #include "WorldLog.h"
 #include "ScriptMgr.h"
+ 
+#include <ace/Message_Block.h>
+#include <ace/OS_NS_string.h>
+#include <ace/OS_NS_unistd.h>
+#include <ace/os_include/arpa/os_inet.h>
+#include <ace/os_include/netinet/os_tcp.h>
+#include <ace/os_include/sys/os_types.h>
+#include <ace/os_include/sys/os_socket.h>
+#include <ace/OS_NS_string.h>
+#include <ace/Reactor.h>
+#include <ace/Auto_Ptr.h>
 
 #if defined(__GNUC__)
 #pragma pack(1)
@@ -945,7 +945,7 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     // Check locked state for server
     AccountTypes allowedAccountType = sWorld->GetPlayerSecurityLimit();
     sLog->outDebug(LOG_FILTER_NETWORKIO, "Allowed Level: %u Player Level %u", allowedAccountType, AccountTypes(security));
-    if (allowedAccountType > SEC_PLAYER && AccountTypes(security) < allowedAccountType)
+    if (AccountTypes(security) < allowedAccountType)
     {
         WorldPacket Packet (SMSG_AUTH_RESPONSE, 1);
         Packet << uint8 (AUTH_UNAVAILABLE);
@@ -1039,7 +1039,7 @@ int WorldSocket::HandlePing (WorldPacket& recvPacket)
             {
                 ACE_GUARD_RETURN (LockType, Guard, m_SessionLock, -1);
 
-                if (m_Session && m_Session->GetSecurity() == SEC_PLAYER)
+                if (m_Session && AccountMgr::IsPlayerAccount(m_Session->GetSecurity()))
                 {
                     Player* _player = m_Session->GetPlayer();
                     sLog->outError("WorldSocket::HandlePing: Player (account: %u, GUID: %u, name: %s) kicked for over-speed pings (address: %s)",
