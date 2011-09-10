@@ -230,7 +230,7 @@ class DBCStorage
             }
 
             // error in dbc file at loading if NULL
-           return indexTable.asT != NULL;
+           return indexTable.asT!= NULL;
         }
 
         bool LoadStringsFrom(char const* fn)
