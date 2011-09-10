@@ -68,41 +68,43 @@ struct ItemSparseEntry
     uint32     MaxCount;                                     // 18
     uint32     Stackable;                                    // 19
     uint32     ContainerSlots;                               // 20
-    int32      ItemStatType[MAX_ITEM_PROTO_STATS];           // 21 - 31
-    uint32     ItemStatValue[MAX_ITEM_PROTO_STATS];          // 32 - 42
-    uint32     ScalingStatDistribution;                      // 43
-    uint32     DamageType;                                   // 44
-    uint32     Delay;                                        // 45
-    float      RangedModRange;                               // 46
-    int32      SpellId[MAX_ITEM_PROTO_SPELLS];               // 47 - 52
-    int32      SpellTrigger[MAX_ITEM_PROTO_SPELLS];          // 53 - 58
-    int32      SpellCharges[MAX_ITEM_PROTO_SPELLS];          // 59 - 64
-    int32      SpellCooldown[MAX_ITEM_PROTO_SPELLS];         // 65 - 70
-    int32      SpellCategory[MAX_ITEM_PROTO_SPELLS];         // 71 - 76
-    int32      SpellCategoryCooldown[MAX_ITEM_PROTO_SPELLS]; // 77 - 82
-    uint32     Bonding;                                      // 83
-    DB2String  Name;                                         // 84
-    DB2String  Name2;                                        // 85
-    DB2String  Name3;                                        // 86
-    DB2String  Name4;                                        // 87
-    DB2String  Description;                                  // 88
-    uint32     PageText;                                     // 89
-    uint32     LanguageID;                                   // 90
-    uint32     PageMaterial;                                 // 91
-    uint32     StartQuest;                                   // 92
-    uint32     LockID;                                       // 93
-    int32      Material;                                     // 94
-    uint32     Sheath;                                       // 95
-    uint32     RandomProperty;                               // 96
-    uint32     RandomSuffix;                                 // 97
-    uint32     ItemSet;                                      // 98
-    uint32     MaxDurability;                                // 99
-    uint32     Area;                                         // 100
-    uint32     Map;                                          // 111
-    uint32     BagFamily;                                    // 112
-    uint32     TotemCategory;                                // 113
-    uint32     Color[MAX_ITEM_PROTO_SOCKETS];                // 114 - 117
-    uint32     Content[MAX_ITEM_PROTO_SOCKETS];              // 118 - 121
+    int32      ItemStatType[MAX_ITEM_PROTO_STATS];           // 21 - 30
+    uint32     ItemStatValue[MAX_ITEM_PROTO_STATS];          // 31 - 40
+    int32      ItemStatUnk1[MAX_ITEM_PROTO_STATS];           // 41 - 50
+    int32      ItemStatUnk2[MAX_ITEM_PROTO_STATS];           // 51 - 60
+    uint32     ScalingStatDistribution;                      // 61
+    uint32     DamageType;                                   // 62
+    uint32     Delay;                                        // 63
+    float      RangedModRange;                               // 64
+    int32      SpellId[MAX_ITEM_PROTO_SPELLS];               // 65 - 69
+    int32      SpellTrigger[MAX_ITEM_PROTO_SPELLS];          // 70 - 74
+    int32      SpellCharges[MAX_ITEM_PROTO_SPELLS];          // 75 - 79
+    int32      SpellCooldown[MAX_ITEM_PROTO_SPELLS];         // 80 - 84
+    int32      SpellCategory[MAX_ITEM_PROTO_SPELLS];         // 85 - 89
+    int32      SpellCategoryCooldown[MAX_ITEM_PROTO_SPELLS]; // 90 - 94
+    uint32     Bonding;                                      // 95
+    DB2String  Name;                                         // 96
+    DB2String  Name2;                                        // 97
+    DB2String  Name3;                                        // 98
+    DB2String  Name4;                                        // 99
+    DB2String  Description;                                  // 100
+    uint32     PageText;                                     // 101
+    uint32     LanguageID;                                   // 102
+    uint32     PageMaterial;                                 // 103
+    uint32     StartQuest;                                   // 104
+    uint32     LockID;                                       // 105
+    int32      Material;                                     // 106
+    uint32     Sheath;                                       // 107
+    uint32     RandomProperty;                               // 108
+    uint32     RandomSuffix;                                 // 109
+    uint32     ItemSet;                                      // 110
+    uint32     MaxDurability;                                // 111
+    uint32     Area;                                         // 112
+    uint32     Map;                                          // 113
+    uint32     BagFamily;                                    // 114
+    uint32     TotemCategory;                                // 115
+    uint32     Color[MAX_ITEM_PROTO_SOCKETS];                // 116 - 118
+    uint32     Content[MAX_ITEM_PROTO_SOCKETS];              // 119 - 121
     int32      SocketBonus;                                  // 122
     uint32     GemProperties;                                // 123
     float      ArmorDamageModifier;                          // 124

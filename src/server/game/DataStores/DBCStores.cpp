@@ -152,6 +152,23 @@ DBCStorage <SpellEntry> sSpellStore(SpellEntryfmt);
 SpellCategoryStore sSpellCategoryStore;
 PetFamilySpellsStore sPetFamilySpellsStore;
 
+DBCStorage <SpellAuraOptionsEntry> sSpellAuraOptionsStore(SpellAuraOptionsfmt);
+DBCStorage <SpellAuraRestrictionsEntry> sSpellAuraRestrictionsStore(SpellAuraRestrictionsfmt);
+DBCStorage <SpellCastingRequirementsEntry> sSpellCastingRequirementsStore(SpellCastingRequirementsfmt);
+DBCStorage <SpellCategoriesEntry> sSpellCategoriesStore(SpellCategoriesfmt);
+DBCStorage <SpellClassOptionsEntry> sSpellClassOptionsStore(SpellClassOptionsfmt);
+DBCStorage <SpellCooldownsEntry> sSpellCooldownsStore(SpellCooldownsfmt);
+DBCStorage <SpellEffectEntry> sSpellEffectStore(SpellEffectfmt);
+DBCStorage <SpellEquippedItemsEntry> sSpellEquippedItemsStore(SpellEquippedItemsfmt);
+DBCStorage <SpellInterruptsEntry> sSpellInterruptsStore(SpellInterruptsfmt);
+DBCStorage <SpellLevelsEntry> sSpellLevelsStore(SpellLevelsfmt);
+DBCStorage <SpellPowerEntry> sSpellPowerStore(SpellPowerfmt);
+DBCStorage <SpellReagentsEntry> sSpellReagentsStore(SpellReagentsfmt);
+DBCStorage <SpellScalingEntry> sSpellScalingStore(SpellScalingfmt);
+DBCStorage <SpellShapeshiftEntry> sSpellShapeshiftStore(SpellShapeshiftfmt);
+DBCStorage <SpellTargetRestrictionsEntry> sSpellTargetRestrictionsStore(SpellTargetRestrictionsfmt);
+DBCStorage <SpellTotemsEntry> sSpellTotemsStore(SpellTotemsfmt);
+
 DBCStorage <SpellCastTimesEntry> sSpellCastTimesStore(SpellCastTimefmt);
 DBCStorage <SpellDifficultyEntry> sSpellDifficultyStore(SpellDifficultyfmt);
 DBCStorage <SpellDurationEntry> sSpellDurationStore(SpellDurationfmt);
@@ -159,8 +176,7 @@ DBCStorage <SpellFocusObjectEntry> sSpellFocusObjectStore(SpellFocusObjectfmt);
 DBCStorage <SpellRadiusEntry> sSpellRadiusStore(SpellRadiusfmt);
 DBCStorage <SpellRangeEntry> sSpellRangeStore(SpellRangefmt);
 DBCStorage <SpellRuneCostEntry> sSpellRuneCostStore(SpellRuneCostfmt);
-DBCStorage <SpellShapeshiftEntry> sSpellShapeshiftStore(SpellShapeshiftEntryfmt);
-DBCStorage <SpellShapeshiftFormEntry> sSpellShapeshiftFormStore(SpellShapeshiftFormEntryfmt);
+DBCStorage <SpellShapeshiftFormEntry> sSpellShapeshiftFormStore(SpellShapeshiftFormfmt);
 //DBCStorage <StableSlotPricesEntry> sStableSlotPricesStore(StableSlotPricesfmt);
 DBCStorage <SummonPropertiesEntry> sSummonPropertiesStore(SummonPropertiesfmt);
 DBCStorage <TalentEntry> sTalentStore(TalentEntryfmt);
@@ -394,44 +410,23 @@ void LoadDBCStores(const std::string& dataPath)
 	LoadDBC(availableDbcLocales, bad_dbc_files, sSkillLineStore,              dbcPath, "SkillLine.dbc");
 	LoadDBC(availableDbcLocales, bad_dbc_files, sSkillLineAbilityStore,       dbcPath, "SkillLineAbility.dbc");
 	LoadDBC(availableDbcLocales, bad_dbc_files, sSoundEntriesStore,           dbcPath, "SoundEntries.dbc");
+	LoadDBC(availableDbcLocales, bad_dbc_files, sSpellAuraOptionsStore,    dbcPath, "SpellAuraOptions.dbc"/*, &CustomSpellAuraOptionsEntryfmt, &CustomSpellAuraOptionsEntryIndex*/);
+	LoadDBC(availableDbcLocales, bad_dbc_files, sSpellAuraRestrictionsStore, dbcPath, "SpellAuraRestrictions.dbc"/*, &CustomSpellAuraRestrictionsEntryfmt, &CustomSpellAuraRestrictionsEntryIndex*/);
+	LoadDBC(availableDbcLocales, bad_dbc_files, sSpellCastingRequirementsStore, dbcPath, "SpellCastingRequirements.dbc"/*, &CustomSpellCastingRequirementsEntryfmt, &CustomSpellCastingRequirementsEntryIndex*/);
+	LoadDBC(availableDbcLocales, bad_dbc_files, sSpellCategoriesStore,     dbcPath, "SpellCategories.dbc"/*, &CustomSpellCategoriesEntryfmt, &CustomSpellCategoriesEntryIndex*/);
+	LoadDBC(availableDbcLocales, bad_dbc_files, sSpellClassOptionsStore,   dbcPath, "SpellClassOptions.dbc"/*, &CustomSpellClassOptionsEntryfmt, &CustomSpellClassOptionsEntryIndex*/);
+	LoadDBC(availableDbcLocales, bad_dbc_files, sSpellCooldownsStore,      dbcPath, "SpellCooldowns.dbc"/*, &CustomSpellCooldownsEntryfmt, &CustomSpellCooldownsEntryIndex*/);
+	LoadDBC(availableDbcLocales, bad_dbc_files, sSpellEffectStore,         dbcPath, "SpellEffect.dbc"/*, &CustomSpellEffectEntryfmt, &CustomSpellEffectEntryIndex*/);
+	LoadDBC(availableDbcLocales, bad_dbc_files, sSpellEquippedItemsStore,  dbcPath, "SpellEquippedItems.dbc"/*, &CustomSpellEquippedItemsEntryfmt, &CustomSpellEquippedItemsEntryIndex*/);
+	LoadDBC(availableDbcLocales, bad_dbc_files, sSpellInterruptsStore,     dbcPath, "SpellInterrupts.dbc"/*, &CustomSpellInterruptsEntryfmt, &CustomSpellInterruptsEntryIndex*/);
+	LoadDBC(availableDbcLocales, bad_dbc_files, sSpellLevelsStore,         dbcPath, "SpellLevels.dbc"/*, &CustomSpellLevelsEntryfmt, &CustomSpellLevelsEntryIndex*/);
+	LoadDBC(availableDbcLocales, bad_dbc_files, sSpellPowerStore,          dbcPath, "SpellPower.dbc"/*, &CustomSpellPowerEntryfmt, &CustomSpellPowerEntryIndex*/);
+	LoadDBC(availableDbcLocales, bad_dbc_files, sSpellReagentsStore,       dbcPath, "SpellReagents.dbc"/*, &CustomSpellReagentsEntryfmt, &CustomSpellReagentsEntryIndex*/);
+	LoadDBC(availableDbcLocales, bad_dbc_files, sSpellScalingStore,        dbcPath, "SpellScaling.dbc"/*, &CustomSpellScalingEntryfmt, &CustomSpellScalingEntryIndex*/);
+	LoadDBC(availableDbcLocales, bad_dbc_files, sSpellShapeshiftStore,     dbcPath, "SpellShapeshift.dbc"/*, &CustomSpellShapeshiftEntryfmt, &CustomSpellShapeshiftEntryIndex*/);
+	LoadDBC(availableDbcLocales, bad_dbc_files, sSpellTargetRestrictionsStore, dbcPath, "SpellTargetRestrictions.dbc"/*, &CustomSpellTargetRestrictionsEntryfmt, &CustomSpellTargetRestrictionsEntryIndex*/);
+	LoadDBC(availableDbcLocales, bad_dbc_files, sSpellTotemsStore,         dbcPath, "SpellTotems.dbc"/*, &CustomSpellTotemsEntryfmt, &CustomSpellTotemsEntryIndex*/);
 	LoadDBC(availableDbcLocales, bad_dbc_files, sSpellStore,                  dbcPath, "Spell.dbc", &CustomSpellEntryfmt, &CustomSpellEntryIndex);
-	for (uint32 i = 1; i < sSpellStore.GetNumRows(); ++i)
-	{
-		SpellEntry const* spell = sSpellStore.LookupEntry(i);
-		if (spell && spell->Category)
-			sSpellCategoryStore[spell->Category].insert(i);
-	}
-
-	for (uint32 j = 0; j < sSkillLineAbilityStore.GetNumRows(); ++j)
-	{
-		SkillLineAbilityEntry const *skillLine = sSkillLineAbilityStore.LookupEntry(j);
-
-		if (!skillLine)
-			continue;
-
-		SpellEntry const* spellInfo = sSpellStore.LookupEntry(skillLine->spellId);
-
-		if (spellInfo && spellInfo->Attributes & SPELL_ATTR0_PASSIVE)
-		{
-			for (uint32 i = 1; i < sCreatureFamilyStore.GetNumRows(); ++i)
-			{
-				CreatureFamilyEntry const* cFamily = sCreatureFamilyStore.LookupEntry(i);
-				if (!cFamily)
-					continue;
-
-				if (skillLine->skillId != cFamily->skillLine[0] && skillLine->skillId != cFamily->skillLine[1])
-					continue;
-				if (spellInfo->spellLevel)
-					continue;
-
-				if (skillLine->learnOnGetSkill != ABILITY_LEARNED_ON_GET_RACE_OR_CLASS_SKILL)
-					continue;
-
-				sPetFamilySpellsStore[i].insert(spellInfo->Id);
-			}
-		}
-	}
-
 	LoadDBC(availableDbcLocales, bad_dbc_files, sSpellCastTimesStore,         dbcPath, "SpellCastTimes.dbc");
 	LoadDBC(availableDbcLocales, bad_dbc_files, sSpellDifficultyStore,        dbcPath, "SpellDifficulty.dbc", &CustomSpellDifficultyfmt, &CustomSpellDifficultyIndex);
 	LoadDBC(availableDbcLocales, bad_dbc_files, sSpellDurationStore,          dbcPath, "SpellDuration.dbc");
@@ -441,7 +436,6 @@ void LoadDBCStores(const std::string& dataPath)
 	LoadDBC(availableDbcLocales, bad_dbc_files, sSpellRadiusStore,            dbcPath, "SpellRadius.dbc");
 	LoadDBC(availableDbcLocales, bad_dbc_files, sSpellRangeStore,             dbcPath, "SpellRange.dbc");
 	LoadDBC(availableDbcLocales, bad_dbc_files, sSpellRuneCostStore,          dbcPath, "SpellRuneCost.dbc");
-	LoadDBC(availableDbcLocales, bad_dbc_files, sSpellShapeshiftStore,        dbcPath, "SpellShapeshift.dbc");
 	LoadDBC(availableDbcLocales, bad_dbc_files, sSpellShapeshiftFormStore,    dbcPath, "SpellShapeshiftForm.dbc");
 	LoadDBC(availableDbcLocales, bad_dbc_files, sSummonPropertiesStore,       dbcPath, "SummonProperties.dbc");
 
@@ -533,69 +527,6 @@ void LoadDBCStores(const std::string& dataPath)
 	for (uint32 i = 1; i < sTaxiPathNodeStore.GetNumRows(); ++i)
 		if (TaxiPathNodeEntry const* entry = sTaxiPathNodeStore.LookupEntry(i))
 			sTaxiPathNodesByPath[entry->path].set(entry->index, entry);
-
-	// Initialize global taxinodes mask
-	// include existed nodes that have at least single not spell base (scripted) path
-	{
-		std::set<uint32> spellPaths;
-		for (uint32 i = 1; i < sSpellStore.GetNumRows (); ++i)
-			if (SpellEntry const* sInfo = sSpellStore.LookupEntry (i))
-				for (int j = 0; j < MAX_SPELL_EFFECTS; ++j)
-					if (sInfo->Effect[j] == SPELL_EFFECT_SEND_TAXI)
-						spellPaths.insert(sInfo->EffectMiscValue[j]);
-
-		ASSERT(((sTaxiNodesStore.GetNumRows()-1)/32) < TaxiMaskSize && "TaxiMaskSize needs to be increased");
-		memset(sTaxiNodesMask, 0, sizeof(sTaxiNodesMask));
-		memset(sOldContinentsNodesMask, 0, sizeof(sOldContinentsNodesMask));
-		memset(sHordeTaxiNodesMask, 0, sizeof(sHordeTaxiNodesMask));
-		memset(sAllianceTaxiNodesMask, 0, sizeof(sAllianceTaxiNodesMask));
-		memset(sDeathKnightTaxiNodesMask, 0, sizeof(sDeathKnightTaxiNodesMask));
-		for (uint32 i = 1; i < sTaxiNodesStore.GetNumRows(); ++i)
-		{
-			TaxiNodesEntry const* node = sTaxiNodesStore.LookupEntry(i);
-			if (!node)
-				continue;
-
-			TaxiPathSetBySource::const_iterator src_i = sTaxiPathSetBySource.find(i);
-			if (src_i != sTaxiPathSetBySource.end() && !src_i->second.empty())
-			{
-				bool ok = false;
-				for (TaxiPathSetForSource::const_iterator dest_i = src_i->second.begin(); dest_i != src_i->second.end(); ++dest_i)
-				{
-					// not spell path
-					if (spellPaths.find(dest_i->second.ID) == spellPaths.end())
-					{
-						ok = true;
-						break;
-					}
-				}
-
-				if (!ok)
-					continue;
-			}
-
-			// valid taxi network node
-			uint8  field   = (uint8)((i - 1) / 32);
-			uint32 submask = 1<<((i-1)%32);
-			sTaxiNodesMask[field] |= submask;
-
-			if (node->MountCreatureID[0] && node->MountCreatureID[0] != 32981)
-				sHordeTaxiNodesMask[field] |= submask;
-			if (node->MountCreatureID[1] && node->MountCreatureID[1] != 32981)
-				sAllianceTaxiNodesMask[field] |= submask;
-			if (node->MountCreatureID[0] == 32981 || node->MountCreatureID[1] == 32981)
-				sDeathKnightTaxiNodesMask[field] |= submask;
-
-			// old continent node (+ nodes virtually at old continents, check explicitly to avoid loading map files for zone info)
-			if (node->map_id < 2 || i == 82 || i == 83 || i == 93 || i == 94)
-				sOldContinentsNodesMask[field] |= submask;
-
-			// fix DK node at Ebon Hold
-			if (i == 315) {
-				((TaxiNodesEntry*)node)->MountCreatureID[1] = 32981;
-			}
-		}
-	}
 
 	LoadDBC(availableDbcLocales, bad_dbc_files, sTeamContributionPointsStore, dbcPath, "TeamContributionPoints.dbc");
 	LoadDBC(availableDbcLocales, bad_dbc_files, sTotemCategoryStore,          dbcPath, "TotemCategory.dbc");

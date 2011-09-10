@@ -2599,7 +2599,125 @@ void SpellMgr::LoadSpellInfoStore()
     for (uint32 i = 0; i < sSpellStore.GetNumRows(); ++i)
     {
         if (SpellEntry const* spellEntry = sSpellStore.LookupEntry(i))
-            mSpellInfoMap[i] = new SpellInfo(spellEntry);
+        {
+            SpellInfo *newspell = new SpellInfo(spellEntry);
+            mSpellInfoMap[i] = newspell;
+
+            if (newspell->Category)
+                sSpellCategoryStore[newspell->Category].insert(i);
+        }
+    }
+
+    for(uint32 i = 1; i < sSpellEffectStore.GetNumRows(); ++i)
+    {
+        if (SpellEffectEntry const *spellEffect = sSpellEffectStore.LookupEntry(i))
+        {
+            if (spellEffect->EffectSpellId >= GetSpellInfoStoreSize())
+            {
+                sLog->outError("Spell effect %u belongs to unknown spell %d", spellEffect->Id, spellEffect->EffectSpellId);
+                continue;
+            }
+            SpellInfo* spellInfo = mSpellInfoMap[spellEffect->EffectSpellId];
+            if (!spellInfo)
+            {
+                sLog->outError("Spell effect %u belongs to unknown spell %d", spellEffect->Id, spellEffect->EffectSpellId);
+                continue;
+            }
+            spellInfo->LoadSpellEffect(spellEffect);
+        }
+    }
+
+    for (uint32 j = 0; j < sSkillLineAbilityStore.GetNumRows(); ++j)
+    {
+        SkillLineAbilityEntry const *skillLine = sSkillLineAbilityStore.LookupEntry(j);
+
+        if (!skillLine)
+            continue;
+
+        SpellInfo const* spellInfo = GetSpellInfo(skillLine->spellId);
+
+        if (spellInfo && spellInfo->Attributes & SPELL_ATTR0_PASSIVE)
+        {
+            for (uint32 i = 1; i < sCreatureFamilyStore.GetNumRows(); ++i)
+            {
+                CreatureFamilyEntry const* cFamily = sCreatureFamilyStore.LookupEntry(i);
+                if (!cFamily)
+                    continue;
+
+                if (skillLine->skillId != cFamily->skillLine[0] && skillLine->skillId != cFamily->skillLine[1])
+                    continue;
+                if (spellInfo->SpellLevel)
+                    continue;
+
+                if (skillLine->learnOnGetSkill != ABILITY_LEARNED_ON_GET_RACE_OR_CLASS_SKILL)
+                    continue;
+
+                sPetFamilySpellsStore[i].insert(spellInfo->Id);
+            }
+        }
+    }
+
+    // Initialize global taxinodes mask
+    // include existed nodes that have at least single not spell base (scripted) path
+    {
+        std::set<uint32> spellPaths;
+        for (uint32 i = 1; i < sSpellStore.GetNumRows (); ++i)
+            if (SpellInfo const* sInfo = GetSpellInfo(i))
+                for (int j = 0; j < MAX_SPELL_EFFECTS; ++j)
+                    if (sInfo->Effects[j].Effect == SPELL_EFFECT_SEND_TAXI)
+                        spellPaths.insert(sInfo->Effects[j].MiscValue);
+
+        ASSERT(((sTaxiNodesStore.GetNumRows()-1)/32) < TaxiMaskSize && "TaxiMaskSize needs to be increased");
+        memset(sTaxiNodesMask, 0, sizeof(sTaxiNodesMask));
+        memset(sOldContinentsNodesMask, 0, sizeof(sOldContinentsNodesMask));
+        memset(sHordeTaxiNodesMask, 0, sizeof(sHordeTaxiNodesMask));
+        memset(sAllianceTaxiNodesMask, 0, sizeof(sAllianceTaxiNodesMask));
+        memset(sDeathKnightTaxiNodesMask, 0, sizeof(sDeathKnightTaxiNodesMask));
+        for (uint32 i = 1; i < sTaxiNodesStore.GetNumRows(); ++i)
+        {
+            TaxiNodesEntry const* node = sTaxiNodesStore.LookupEntry(i);
+            if (!node)
+                continue;
+
+            TaxiPathSetBySource::const_iterator src_i = sTaxiPathSetBySource.find(i);
+            if (src_i != sTaxiPathSetBySource.end() && !src_i->second.empty())
+            {
+                bool ok = false;
+                for (TaxiPathSetForSource::const_iterator dest_i = src_i->second.begin(); dest_i != src_i->second.end(); ++dest_i)
+                {
+                    // not spell path
+                    if (spellPaths.find(dest_i->second.ID) == spellPaths.end())
+                    {
+                        ok = true;
+                        break;
+                    }
+                }
+
+                if (!ok)
+                    continue;
+            }
+
+            // valid taxi network node
+            uint8  field   = (uint8)((i - 1) / 32);
+            uint32 submask = 1<<((i-1)%32);
+            sTaxiNodesMask[field] |= submask;
+
+            if (node->MountCreatureID[0] && node->MountCreatureID[0] != 32981)
+                sHordeTaxiNodesMask[field] |= submask;
+            if (node->MountCreatureID[1] && node->MountCreatureID[1] != 32981)
+                sAllianceTaxiNodesMask[field] |= submask;
+            if (node->MountCreatureID[0] == 32981 || node->MountCreatureID[1] == 32981)
+                sDeathKnightTaxiNodesMask[field] |= submask;
+
+            // old continent node (+ nodes virtually at old continents, check explicitly to avoid loading map files for zone info)
+            if (node->map_id < 2 || i == 82 || i == 83 || i == 93 || i == 94)
+                sOldContinentsNodesMask[field] |= submask;
+
+            // fix DK node at Ebon Hold
+            if (i == 315) {
+                ((TaxiNodesEntry*)node)->MountCreatureID[1] = 32981;
+            }
+        }
     }
 
     sLog->outString(">> Loaded spell custom attributes in %u ms", GetMSTimeDiffToNow(oldMSTime));
@@ -2879,62 +2997,63 @@ void SpellMgr::LoadDbcDataCorrections()
 {
     uint32 oldMSTime = getMSTime();
 
-    SpellEntry* spellInfo = NULL;
-    for (uint32 i = 0; i < sSpellStore.GetNumRows(); ++i)
+    SpellInfo* spellInfo = NULL;
+
+    for (uint32 i = 0; i < mSpellInfoMap.size(); ++i)
     {
-        spellInfo = (SpellEntry*)sSpellStore.LookupEntry(i);
+        spellInfo = mSpellInfoMap[i];
         if (!spellInfo)
             continue;
 
         for (uint8 j = 0; j < MAX_SPELL_EFFECTS; ++j)
         {
-            switch (spellInfo->Effect[j])
+            switch (spellInfo->Effects[j].Effect)
             {
                 case SPELL_EFFECT_CHARGE:
                 case SPELL_EFFECT_CHARGE_DEST:
                 case SPELL_EFFECT_JUMP:
                 case SPELL_EFFECT_JUMP_DEST:
                 case SPELL_EFFECT_LEAP_BACK:
-                    if (!spellInfo->speed && !spellInfo->SpellFamilyName)
-                        spellInfo->speed = SPEED_CHARGE;
+                    if (!spellInfo->Speed && !spellInfo->SpellFamilyName)
+                        spellInfo->Speed = SPEED_CHARGE;
                     break;
                 case SPELL_EFFECT_TRIGGER_SPELL:
-                    if (SpellImplicitTargetInfo::IsPosition(spellInfo->EffectImplicitTargetA[j]) ||
+                    if (SpellImplicitTargetInfo::IsPosition(spellInfo->Effects[j].TargetA.GetTarget()) ||
                         spellInfo->Targets & (TARGET_FLAG_SOURCE_LOCATION | TARGET_FLAG_DEST_LOCATION))
-                        spellInfo->Effect[j] = SPELL_EFFECT_TRIGGER_MISSILE;
+                        spellInfo->Effects[j].Effect = SPELL_EFFECT_TRIGGER_MISSILE;
                     break;
             }
         }
 
-        if (spellInfo->activeIconID == 2158)  // flight
+        if (spellInfo->ActiveIconID == 2158)  // flight
             spellInfo->Attributes |= SPELL_ATTR0_PASSIVE;
 
         switch (spellInfo->Id)
         {
             case 42835: // Spout
-                spellInfo->Effect[0] = 0; // remove damage effect, only anim is needed
+                spellInfo->Effects[0].Effect = 0; // remove damage effect, only anim is needed
                 break;
             case 30657: // Quake
-                spellInfo->EffectTriggerSpell[0] = 30571;
+                spellInfo->Effects[0].TriggerSpell = 30571;
                 break;
             case 30541: // Blaze (needs conditions entry)
-                spellInfo->EffectImplicitTargetA[0] = TARGET_UNIT_TARGET_ENEMY;
-                spellInfo->EffectImplicitTargetB[0] = 0;
+                spellInfo->Effects[0].TargetA = TARGET_UNIT_TARGET_ENEMY;
+                spellInfo->Effects[0].TargetB = 0;
                 break;
             case 31447: // Mark of Kaz'rogal (needs target selection script)
             case 31298: // Sleep (needs target selection script)
-                spellInfo->EffectImplicitTargetA[0] = TARGET_UNIT_CASTER;
-                spellInfo->EffectImplicitTargetB[0] = 0;
+                spellInfo->Effects[0].TargetA = TARGET_UNIT_CASTER;
+                spellInfo->Effects[0].TargetB = 0;
                 break;
             case 31344: // Howl of Azgalor
-                spellInfo->EffectRadiusIndex[0] = 12; // 100yards instead of 50000?!
+                spellInfo->Effects[0].RadiusEntry = sSpellRadiusStore.LookupEntry(12); // 100yards instead of 50000?!
                 break;
             case 42818: // Headless Horseman - Wisp Flight Port
             case 42821: // Headless Horseman - Wisp Flight Missile
-                spellInfo->rangeIndex = 6; // 100 yards
+                spellInfo->RangeEntry = sSpellRangeStore.LookupEntry(6); // 100 yards
                 break;
             case 36350: //They Must Burn Bomb Aura (self)
-                spellInfo->EffectTriggerSpell[0] = 36325; // They Must Burn Bomb Drop (DND)
+                spellInfo->Effects[0].TriggerSpell = 36325; // They Must Burn Bomb Drop (DND)
                 break;
             case 49838: // Stop Time
                 spellInfo->AttributesEx3 |= SPELL_ATTR3_NO_INITIAL_AGGRO;
@@ -2943,25 +3062,25 @@ void SpellMgr::LoadDbcDataCorrections()
             case 62136: // Energize Cores
             case 54069: // Energize Cores
             case 56251: // Energize Cores
-                spellInfo->EffectImplicitTargetA[0] = TARGET_UNIT_SRC_AREA_ENTRY;
+                spellInfo->Effects[0].TargetA = TARGET_UNIT_SRC_AREA_ENTRY;
                 break;
             case 50785: // Energize Cores
             case 59372: // Energize Cores
-                spellInfo->EffectImplicitTargetA[0] = TARGET_UNIT_SRC_AREA_ENEMY;
+                spellInfo->Effects[0].TargetA = TARGET_UNIT_SRC_AREA_ENEMY;
                 break;
             case 3286:  // Bind
-                spellInfo->EffectImplicitTargetA[0] = TARGET_UNIT_TARGET_ENEMY;
-                spellInfo->EffectImplicitTargetA[1] = TARGET_UNIT_TARGET_ENEMY;
+                spellInfo->Effects[0].TargetA = TARGET_UNIT_TARGET_ENEMY;
+                spellInfo->Effects[1].TargetA = TARGET_UNIT_TARGET_ENEMY;
                 break;
             case 8494: // Mana Shield (rank 2)
                 // because of bug in dbc
-                spellInfo->procChance = 0;
+                spellInfo->ProcChance = 0;
                 break;
             case 32182: // Heroism
-                spellInfo->excludeCasterAuraSpell = 57723; // Exhaustion
+                spellInfo->ExcludeCasterAuraSpell = 57723; // Exhaustion
                 break;
             case 2825:  // Bloodlust
-                spellInfo->excludeCasterAuraSpell = 57724; // Sated
+                spellInfo->ExcludeCasterAuraSpell = 57724; // Sated
                 break;
             case 20335: // Heart of the Crusader
             case 20336:
@@ -2972,16 +3091,16 @@ void SpellMgr::LoadDbcDataCorrections()
                 break;
             case 16007: // Draco-Incarcinatrix 900
                 // was 46, but effect is aura effect
-                spellInfo->EffectImplicitTargetA[0] = TARGET_UNIT_NEARBY_ENTRY;
-                spellInfo->EffectImplicitTargetB[0] = TARGET_DEST_NEARBY_ENTRY;
+                spellInfo->Effects[0].TargetA = TARGET_UNIT_NEARBY_ENTRY;
+                spellInfo->Effects[0].TargetB = TARGET_DEST_NEARBY_ENTRY;
                 break;
             case 19465: // Improved Stings, only rank 2 of this spell has target for effect 2 = TARGET_DST_DB
-                spellInfo->EffectImplicitTargetA[2] = TARGET_UNIT_CASTER;
+                spellInfo->Effects[2].TargetA = TARGET_UNIT_CASTER;
                 break;
             case 59725: // Improved Spell Reflection - aoe aura
                 // Target entry seems to be wrong for this spell :/
-                spellInfo->EffectImplicitTargetA[0] = TARGET_UNIT_CASTER_AREA_PARTY;
-                spellInfo->EffectRadiusIndex[0] = 45;
+                spellInfo->Effects[0].TargetA = TARGET_UNIT_CASTER_AREA_PARTY;
+                spellInfo->Effects[0].RadiusEntry = sSpellRadiusStore.LookupEntry(45);
                 break;
             case 44978: case 45001: case 45002: // Wild Magic
             case 45004: case 45006: case 45010: // Wild Magic
@@ -3005,8 +3124,8 @@ void SpellMgr::LoadDbcDataCorrections()
             case 52479: // Gift of the Harvester
                 spellInfo->MaxAffectedTargets = 1;
                 // a trap always has dst = src?
-                spellInfo->EffectImplicitTargetA[0] = TARGET_DEST_CASTER;
-                spellInfo->EffectImplicitTargetA[1] = TARGET_DEST_CASTER;
+                spellInfo->Effects[0].TargetA = TARGET_DEST_CASTER;
+                spellInfo->Effects[1].TargetA = TARGET_DEST_CASTER;
                 break;
             case 41376: // Spite
             case 39992: // Needle Spine
@@ -3049,7 +3168,7 @@ void SpellMgr::LoadDbcDataCorrections()
                 break;
             case 38794: case 33711: //Murmur's Touch
                 spellInfo->MaxAffectedTargets = 1;
-                spellInfo->EffectTriggerSpell[0] = 33760;
+                spellInfo->Effects[0].TriggerSpell = 33760;
                 break;
             case 17941: // Shadow Trance
             case 22008: // Netherwind Focus
@@ -3064,17 +3183,17 @@ void SpellMgr::LoadDbcDataCorrections()
             case 64823: // Item - Druid T8 Balance 4P Bonus
             case 34477: // Misdirection
             case 44401: // Missile Barrage
-                spellInfo->procCharges = 1;
+                spellInfo->ProcCharges = 1;
                 break;
             case 44544: // Fingers of Frost
-                spellInfo->EffectSpellClassMask[0] = flag96(685904631, 1151048, 0);
+                spellInfo->Effects[0].SpellClassMask = flag96(685904631, 1151048, 0);
                 break;
             case 74396: // Fingers of Frost visual buff
-                spellInfo->procCharges = 2;
+                spellInfo->ProcCharges = 2;
                 spellInfo->StackAmount = 0;
                 break;
             case 28200: // Ascendance (Talisman of Ascendance trinket)
-                spellInfo->procCharges = 6;
+                spellInfo->ProcCharges = 6;
                 break;
             case 47201: // Everlasting Affliction
             case 47202:
@@ -3082,20 +3201,20 @@ void SpellMgr::LoadDbcDataCorrections()
             case 47204:
             case 47205:
                 // add corruption to affected spells
-                spellInfo->EffectSpellClassMask[1][0] |= 2;
+                spellInfo->Effects[1].SpellClassMask[0] |= 2;
                 break;
             case 49305: // Teleport to Boss 1 DND
             case 64981: // Summon Random Vanquished Tentacle
-                spellInfo->EffectImplicitTargetB[0] = TARGET_UNIT_CASTER;
+                spellInfo->Effects[0].TargetB = TARGET_UNIT_CASTER;
                 break;
             case 51852: // The Eye of Acherus (no spawn in phase 2 in db)
-                spellInfo->EffectMiscValue[0] |= 1;
+                spellInfo->Effects[0].MiscValue |= 1;
                 break;
             case 51904: // Summon Ghouls On Scarlet Crusade (core does not know the triggered spell is summon spell)
-                spellInfo->EffectImplicitTargetA[0] = TARGET_UNIT_CASTER;
+                spellInfo->Effects[0].TargetA = TARGET_UNIT_CASTER;
                 break;
             case 29809: // Desecration Arm - 36 instead of 37 - typo? :/
-                spellInfo->EffectRadiusIndex[0] = 37;
+                spellInfo->Effects[0].RadiusEntry = sSpellRadiusStore.LookupEntry(37);
                 break;
             // Master Shapeshifter: missing stance data for forms other than bear - bear version has correct data
             // To prevent aura staying on target after talent unlearned
@@ -3113,11 +3232,11 @@ void SpellMgr::LoadDbcDataCorrections()
                 spellInfo->Attributes &= ~SPELL_ATTR0_NOT_SHAPESHIFT;
                 break;
             case 30421: // Nether Portal - Perseverence
-                spellInfo->EffectBasePoints[2] += 30000;
+                spellInfo->Effects[2].BasePoints += 30000;
                 break;
             case 16834: // Natural shapeshifter
             case 16835:
-                spellInfo->DurationIndex = 21;
+                spellInfo->DurationEntry = sSpellDurationStore.LookupEntry(21);
                 break;
             case 51735: // Ebon Plague
             case 51734:
@@ -3126,7 +3245,7 @@ void SpellMgr::LoadDbcDataCorrections()
                 spellInfo->SpellFamilyFlags[2] = 0x10;
                 break;
             case 41913: // Parasitic Shadowfiend Passive
-                spellInfo->EffectApplyAuraName[0] = 4; // proc debuff, and summon infinite fiends
+                spellInfo->Effects[0].ApplyAuraName = 4; // proc debuff, and summon infinite fiends
                 break;
             case 27892: // To Anchor 1
             case 27928: // To Anchor 1
@@ -3134,22 +3253,22 @@ void SpellMgr::LoadDbcDataCorrections()
             case 27915: // Anchor to Skulls
             case 27931: // Anchor to Skulls
             case 27937: // Anchor to Skulls
-                spellInfo->rangeIndex = 13;
+                spellInfo->RangeEntry = sSpellRangeStore.LookupEntry(13);
                 break;
             // target allys instead of enemies, target A is src_caster, spells with effect like that have ally target
             // this is the only known exception, probably just wrong data
             case 29214: // Wrath of the Plaguebringer
             case 54836: // Wrath of the Plaguebringer
-                spellInfo->EffectImplicitTargetB[0] = TARGET_UNIT_SRC_AREA_ALLY;
-                spellInfo->EffectImplicitTargetB[1] = TARGET_UNIT_SRC_AREA_ALLY;
+                spellInfo->Effects[0].TargetB = TARGET_UNIT_SRC_AREA_ALLY;
+                spellInfo->Effects[1].TargetB = TARGET_UNIT_SRC_AREA_ALLY;
                 break;
             case 31687: // Summon Water Elemental
                 // 322-330 switch - effect changed to dummy, target entry not changed in client:(
-                spellInfo->EffectImplicitTargetA[0] = TARGET_UNIT_CASTER;
+                spellInfo->Effects[0].TargetA = TARGET_UNIT_CASTER;
                 break;
             case 57994: // Wind Shear - improper data for EFFECT_1 in 3.3.5 DBC, but is correct in 4.x
-                spellInfo->Effect[EFFECT_1] = SPELL_EFFECT_MODIFY_THREAT_PERCENT;
-                spellInfo->EffectBasePoints[EFFECT_1] = -6; // -5%
+                spellInfo->Effects[EFFECT_1].Effect = SPELL_EFFECT_MODIFY_THREAT_PERCENT;
+                spellInfo->Effects[EFFECT_1].BasePoints = -6; // -5%
                 break;
             case 63675: // Improved Devouring Plague
                 spellInfo->AttributesEx3 |= SPELL_ATTR3_NO_DONE_BONUS;
@@ -3163,22 +3282,22 @@ void SpellMgr::LoadDbcDataCorrections()
             case 53244: // Marked for Death (Rank 3)
             case 53245: // Marked for Death (Rank 4)
             case 53246: // Marked for Death (Rank 5)
-                spellInfo->EffectSpellClassMask[0] = flag96(423937, 276955137, 2049);
+                spellInfo->Effects[0].SpellClassMask = flag96(423937, 276955137, 2049);
                 break;
             case 70728: // Exploit Weakness
             case 70840: // Devious Minds
-                spellInfo->EffectImplicitTargetA[0] = TARGET_UNIT_CASTER;
-                spellInfo->EffectImplicitTargetB[0] = TARGET_UNIT_PET;
+                spellInfo->Effects[0].TargetA = TARGET_UNIT_CASTER;
+                spellInfo->Effects[0].TargetB = TARGET_UNIT_PET;
                 break;
             case 70893: // Culling The Herd
-                spellInfo->EffectImplicitTargetA[0] = TARGET_UNIT_CASTER;
-                spellInfo->EffectImplicitTargetB[0] = TARGET_UNIT_MASTER;
+                spellInfo->Effects[0].TargetA = TARGET_UNIT_CASTER;
+                spellInfo->Effects[0].TargetB = TARGET_UNIT_MASTER;
                 break;
             case 54800: // Sigil of the Frozen Conscience - change class mask to custom extended flags of Icy Touch
                         // this is done because another spell also uses the same SpellFamilyFlags as Icy Touch
                         // SpellFamilyFlags[0] & 0x00000040 in SPELLFAMILY_DEATHKNIGHT is currently unused (3.3.5a)
                         // this needs research on modifier applying rules, does not seem to be in Attributes fields
-                spellInfo->EffectSpellClassMask[0] = flag96(0x00000040, 0x00000000, 0x00000000);
+                spellInfo->Effects[0].SpellClassMask = flag96(0x00000040, 0x00000000, 0x00000000);
                 break;
             case 19970: // Entangling Roots (Rank 6) -- Nature's Grasp Proc
             case 19971: // Entangling Roots (Rank 5) -- Nature's Grasp Proc
@@ -3188,7 +3307,7 @@ void SpellMgr::LoadDbcDataCorrections()
             case 19975: // Entangling Roots (Rank 1) -- Nature's Grasp Proc
             case 27010: // Entangling Roots (Rank 7) -- Nature's Grasp Proc
             case 53313: // Entangling Roots (Rank 8) -- Nature's Grasp Proc
-                spellInfo->CastingTimeIndex = 1;
+                spellInfo->CastTimeEntry = sSpellCastTimesStore.LookupEntry(1);
                 break;
             case 61719: // Easter Lay Noblegarden Egg Aura - Interrupt flags copied from aura which this aura is linked with
                 spellInfo->AuraInterruptFlags = AURA_INTERRUPT_FLAG_HITBYSPELL | AURA_INTERRUPT_FLAG_TAKE_DAMAGE;
@@ -3215,12 +3334,12 @@ void SpellMgr::LoadDbcDataCorrections()
             // then EFFECT_1, etc - instead of applying each effect on target1, then target2, etc.
             // The above situation causes the visual for this spell to be bugged, so we remove the instakill
             // effect and implement a script hack for that.
-                spellInfo->Effect[EFFECT_1] = 0;
+                spellInfo->Effects[EFFECT_1].Effect = 0;
                 break;
             case 64386: // Terrifying Screech (Auriaya)
             case 64389: // Sentinel Blast (Auriaya)
             case 64678: // Sentinel Blast (Auriaya)
-                spellInfo->DurationIndex = 28; // 5 seconds, wrong DBC data?
+                spellInfo->DurationEntry = sSpellDurationStore.LookupEntry(28); // 5 seconds, wrong DBC data?
                 break;
             case 64321: // Potent Pheromones (Freya)
                 // spell should dispel area aura, but doesn't have the attribute
@@ -3230,8 +3349,8 @@ void SpellMgr::LoadDbcDataCorrections()
                 break;
             case 62584: // Lifebinder's Gift
             case 64185: // Lifebinder's Gift
-                spellInfo->EffectImplicitTargetB[1] = TARGET_UNIT_NEARBY_ENTRY;
-                spellInfo->EffectImplicitTargetB[2] = TARGET_UNIT_NEARBY_ENTRY;
+                spellInfo->Effects[1].TargetB = TARGET_UNIT_NEARBY_ENTRY;
+                spellInfo->Effects[2].TargetB = TARGET_UNIT_NEARBY_ENTRY;
                 break;
             // ENDOF ULDUAR SPELLS
             //
@@ -3241,7 +3360,7 @@ void SpellMgr::LoadDbcDataCorrections()
             case 67901: // Infernal Eruption (25N)
                 // increase duration from 15 to 18 seconds because caster is already
                 // unsummoned when spell missile hits the ground so nothing happen in result
-                spellInfo->DurationIndex = 85;
+                spellInfo->DurationEntry = sSpellDurationStore.LookupEntry(85);
                 break;
             // ENDOF TRIAL OF THE CRUSADER SPELLS
             //
@@ -3257,11 +3376,11 @@ void SpellMgr::LoadDbcDataCorrections()
             case 70859: // Upper Spire Teleport
             case 70860: // Frozen Throne Teleport
             case 70861: // Sindragosa's Lair Teleport
-                spellInfo->EffectImplicitTargetA[0] = TARGET_DEST_DB;
+                spellInfo->Effects[0].TargetA = TARGET_DEST_DB;
                 break;
             case 69055: // Saber Lash (Lord Marrowgar)
             case 70814: // Saber Lash (Lord Marrowgar)
-                spellInfo->EffectRadiusIndex[0] = 8;    // 5yd
+                spellInfo->Effects[0].RadiusEntry = sSpellRadiusStore.LookupEntry(8);    // 5yd
                 break;
             case 69075: // Bone Storm (Lord Marrowgar)
             case 70834: // Bone Storm (Lord Marrowgar)
@@ -3273,45 +3392,45 @@ void SpellMgr::LoadDbcDataCorrections()
             case 71160: // Plague Stench (Stinky)
             case 71161: // Plague Stench (Stinky)
             case 71123: // Decimate (Stinky & Precious)
-                spellInfo->EffectRadiusIndex[0] = 12;   // 100yd
+                spellInfo->Effects[0].RadiusEntry = sSpellRadiusStore.LookupEntry(12);   // 100yd
                 break;
             case 72723: // Resistant Skin (Deathbringer Saurfang adds)
                 // this spell initially granted Shadow damage immunity, however it was removed but the data was left in client
-                spellInfo->Effect[2] = 0;
+                spellInfo->Effects[2].Effect = 0;
                 break;
             case 70460: // Coldflame Jets (Traps after Saurfang)
-                spellInfo->DurationIndex = 1;   // 10 seconds
+                spellInfo->DurationEntry = sSpellDurationStore.LookupEntry(1);   // 10 seconds
                 break;
             case 71413: // Green Ooze Summon (Professor Putricide)
             case 71414: // Orange Ooze Summon (Professor Putricide)
-                spellInfo->EffectImplicitTargetA[0] = TARGET_DEST_DEST;
+                spellInfo->Effects[0].TargetA = TARGET_DEST_DEST;
                 break;
             case 71159: // Awaken Plagued Zombies
-                spellInfo->DurationIndex = 21;
+                spellInfo->DurationEntry = sSpellDurationStore.LookupEntry(21);
                 break;
             // THIS IS HERE BECAUSE COOLDOWN ON CREATURE PROCS IS NOT IMPLEMENTED
             case 71604: // Mutated Strength (Professor Putricide)
             case 72673: // Mutated Strength (Professor Putricide)
             case 72674: // Mutated Strength (Professor Putricide)
             case 72675: // Mutated Strength (Professor Putricide)
-                spellInfo->Effect[1] = 0;
+                spellInfo->Effects[1].Effect = 0;
                 break;
             case 72454: // Mutated Plague (Professor Putricide)
             case 72464: // Mutated Plague (Professor Putricide)
             case 72506: // Mutated Plague (Professor Putricide)
             case 72507: // Mutated Plague (Professor Putricide)
-                spellInfo->EffectRadiusIndex[0] = 28;   // 50000yd
+                spellInfo->Effects[0].RadiusEntry = sSpellRadiusStore.LookupEntry(28);   // 50000yd
                 break;
             case 70911: // Unbound Plague (Professor Putricide)
             case 72854: // Unbound Plague (Professor Putricide)
             case 72855: // Unbound Plague (Professor Putricide)
             case 72856: // Unbound Plague (Professor Putricide)
-                spellInfo->EffectImplicitTargetB[0] = TARGET_UNIT_TARGET_ENEMY;
+                spellInfo->Effects[0].TargetB = TARGET_UNIT_TARGET_ENEMY;
                 break;
             case 71518: // Unholy Infusion Quest Credit (Professor Putricide)
             case 72934: // Blood Infusion Quest Credit (Blood-Queen Lana'thel)
             case 72289: // Frost Infusion Quest Credit (Sindragosa)
-                spellInfo->EffectRadiusIndex[0] = 28;   // another missing radius
+                spellInfo->Effects[0].RadiusEntry = sSpellRadiusStore.LookupEntry(28);   // another missing radius
                 break;
             case 71708: // Empowered Flare (Blood Prince Council)
             case 72785: // Empowered Flare (Blood Prince Council)
@@ -3327,27 +3446,27 @@ void SpellMgr::LoadDbcDataCorrections()
                 spellInfo->AttributesEx3 |= SPELL_ATTR3_STACK_FOR_DIFF_CASTERS;
                 break;
             case 70715: // Column of Frost (visual marker)
-                spellInfo->DurationIndex = 32; // 6 seconds (missing)
+                spellInfo->DurationEntry = sSpellDurationStore.LookupEntry(32); // 6 seconds (missing)
                 break;
             case 71085: // Mana Void (periodic aura)
-                spellInfo->DurationIndex = 9; // 30 seconds (missing)
+                spellInfo->DurationEntry = sSpellDurationStore.LookupEntry(9); // 30 seconds (missing)
                 break;
             case 70936: // Summon Suppressor
-                spellInfo->EffectImplicitTargetA[0] = TARGET_UNIT_TARGET_ANY;
-                spellInfo->EffectImplicitTargetB[0] = 0;
+                spellInfo->Effects[0].TargetA = TARGET_UNIT_TARGET_ANY;
+                spellInfo->Effects[0].TargetB = 0;
                 break;
             case 72706: // Achievement Check (Valithria Dreamwalker)
             case 71357: // Order Whelp
-                spellInfo->EffectRadiusIndex[0] = 22;   // 200yd
+                spellInfo->Effects[0].RadiusEntry = sSpellRadiusStore.LookupEntry(22);   // 200yd
                 break;
             case 70598: // Sindragosa's Fury
-                spellInfo->EffectImplicitTargetA[0] = TARGET_DEST_CASTER;
+                spellInfo->Effects[0].TargetA = TARGET_DEST_CASTER;
                 break;
             case 69846: // Frost Bomb
-                spellInfo->speed = 10;
-                spellInfo->EffectImplicitTargetA[0] = TARGET_DEST_TARGET_ANY;
-                spellInfo->EffectImplicitTargetB[0] = TARGET_UNIT_TARGET_ANY;
-                spellInfo->Effect[1] = 0;
+                spellInfo->Speed = 10;
+                spellInfo->Effects[0].TargetA = TARGET_DEST_TARGET_ANY;
+                spellInfo->Effects[0].TargetB = TARGET_UNIT_TARGET_ANY;
+                spellInfo->Effects[1].Effect = 0;
                 break;
             default:
                 break;
@@ -3363,7 +3482,7 @@ void SpellMgr::LoadDbcDataCorrections()
             case SPELLFAMILY_PALADIN:
                 // Seals of the Pure should affect Seal of Righteousness
                 if (spellInfo->SpellIconID == 25 && spellInfo->Attributes & SPELL_ATTR0_PASSIVE)
-                    spellInfo->EffectSpellClassMask[0][1] |= 0x20000000;
+                    spellInfo->Effects[0].SpellClassMask[1] |= 0x20000000;
                 break;
             case SPELLFAMILY_DEATHKNIGHT:
                 // Icy Touch - extend FamilyFlags (unused value) for Sigil of the Frozen Conscience to use

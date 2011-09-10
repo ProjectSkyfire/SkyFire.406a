@@ -16705,21 +16705,21 @@ uint32 Unit::GetModelForForm(ShapeshiftForm form)
 
     uint32 modelid = 0;
     SpellShapeshiftFormEntry const* formEntry = sSpellShapeshiftFormStore.LookupEntry(form);
-    if (formEntry && formEntry->modelID[0])
+    if (formEntry && formEntry->modelID_A)
     {
-        // Take the first modelid as default
+        // Take the alliance modelid as default
         if (GetTypeId() != TYPEID_PLAYER)
-            return formEntry->modelID[0];
+            return formEntry->modelID_A;
         else
         {
-            // Choose random modelid (note: currently modelid 1-3 are not available yet)
-            std::vector<uint32> modelIDs;
-            for (uint8 i = 0; i < MAX_SHAPESHIFT_MODELS; i++)
-                if (formEntry->modelID[i])
-                    modelIDs.push_back(formEntry->modelID[i]);
-            std::vector<uint32>::iterator itr = modelIDs.begin();
-            std::advance(itr, urand(0, modelIDs.size()-1));
-            modelid = *itr;
+            if (Player::TeamForRace(getRace()) == ALLIANCE)
+                modelid = formEntry->modelID_A;
+            else
+                modelid = formEntry->modelID_H;
+
+            // If the player is horde but there are no values for the horde modelid - take the alliance modelid
+            if (!modelid && Player::TeamForRace(getRace()) == HORDE)
+                modelid = formEntry->modelID_A;
         }
     }
 
