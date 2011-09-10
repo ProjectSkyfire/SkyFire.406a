@@ -143,9 +143,6 @@ bool DB2FileLoader::Load(const char *filename, const char *fmt)
             return false;
         }
         EndianConvert(unk5);
-
-        if (maxIndex)
-            fseek(f, maxIndex * 6 - 48*3, SEEK_CUR);
     }
 
     if (maxIndex != 0)
