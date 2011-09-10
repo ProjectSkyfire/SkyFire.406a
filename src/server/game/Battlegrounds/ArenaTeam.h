@@ -24,7 +24,7 @@
 #include <ace/Singleton.h>
 #include <list>
 #include <map>
- 
+
 class WorldSession;
 class WorldPacket;
 class Player;

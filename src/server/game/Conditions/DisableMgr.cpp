@@ -25,7 +25,6 @@
 
 namespace DisableMgr
 {
-
 namespace
 {
     struct DisableData

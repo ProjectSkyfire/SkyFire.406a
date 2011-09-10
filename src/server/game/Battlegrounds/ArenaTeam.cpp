@@ -66,9 +66,9 @@ bool ArenaTeam::Create(uint64 captainGuid, uint8 type, std::string teamName, uin
     EmblemStyle = emblemStyle;
     EmblemColor = emblemColor;
     BorderStyle = borderStyle;
-    BorderColor = borderColor;	
+    BorderColor = borderColor;
     uint32 captainLowGuid = GUID_LOPART(captainGuid);
-	
+
     // Save arena team to db
     PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_ADD_ARENA_TEAM);
     stmt->setUInt32(0, TeamId);
@@ -432,7 +432,7 @@ void ArenaTeam::NotifyStatsChanged()
     // This is called after a rated match ended
     // Updates arena team stats for every member of the team (not only the ones who participated!)
     for (MemberList::const_iterator itr = Members.begin(); itr != Members.end(); ++itr)
-    
+
         if (Player* plr = ObjectAccessor::FindPlayer(itr->Guid))
             SendStats(plr->GetSession());
 }
@@ -480,7 +480,7 @@ void ArenaTeamMember::ModifyMatchmakerRating(int32 mod, uint32 /*slot*/)
 void ArenaTeam::BroadcastPacket(WorldPacket* packet)
 {
     for (MemberList::const_iterator itr = Members.begin(); itr != Members.end(); ++itr)
-    
+
         if (Player* player = ObjectAccessor::FindPlayer(itr->Guid))
             player->GetSession()->SendPacket(packet);
 }

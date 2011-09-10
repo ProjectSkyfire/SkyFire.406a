@@ -244,5 +244,4 @@ bool IsConsoleAccount(uint32 gmlevel)
 {
     return gmlevel == SEC_CONSOLE;
 }
-
 } // Namespace AccountMgr

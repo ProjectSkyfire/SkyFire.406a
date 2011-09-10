@@ -729,4 +729,3 @@ void WorldSession::HandleClearTradeItemOpcode(WorldPacket& recvPacket)
 
     my_trade->SetItem(TradeSlots(tradeSlot), NULL);
 }
-
