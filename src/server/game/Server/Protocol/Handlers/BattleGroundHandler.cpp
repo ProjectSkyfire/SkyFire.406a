@@ -74,17 +74,16 @@ void WorldSession::SendBattlegGroundList(uint64 guid, BattlegroundTypeId bgTypeI
 
 void WorldSession::HandleBattlemasterJoinOpcode(WorldPacket & recv_data)
 {
-    uint64 guid;
-    uint32 bgTypeId_;
-    uint32 instanceId;
     uint8 joinAsGroup;
+    uint32 bgTypeId_;
+    uint32 unk, unk2;
     bool isPremade = false;
     Group * grp = NULL;
 
-    recv_data >> guid;                                      // battlemaster guid
+    recv_data >> joinAsGroup;                               // join as group (join as group = 0x80, else 0x0)
+    recv_data >> unk;                                       // unk
     recv_data >> bgTypeId_;                                 // battleground type id (DBC id)
-    recv_data >> instanceId;                                // instance id, 0 if First Available selected
-    recv_data >> joinAsGroup;                               // join as group
+    recv_data >> unk2;                                      // unk
 
     if (!sBattlemasterListStore.LookupEntry(bgTypeId_))
     {
@@ -100,8 +99,6 @@ void WorldSession::HandleBattlemasterJoinOpcode(WorldPacket & recv_data)
 
     BattlegroundTypeId bgTypeId = BattlegroundTypeId(bgTypeId_);
 
-    sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Recvd CMSG_BATTLEMASTER_JOIN Message from (GUID: %u TypeId:%u)", GUID_LOPART(guid), GuidHigh2TypeId(GUID_HIPART(guid)));
-
     // can do this, since it's battleground, not arena
     BattlegroundQueueTypeId bgQueueTypeId = BattlegroundMgr::BGQueueTypeId(bgTypeId, 0);
     BattlegroundQueueTypeId bgQueueTypeIdRandom = BattlegroundMgr::BGQueueTypeId(BATTLEGROUND_RB, 0);
@@ -110,10 +107,10 @@ void WorldSession::HandleBattlemasterJoinOpcode(WorldPacket & recv_data)
     if (_player->InBattleground())
         return;
 
-    // get bg instance or bg template if instance not found
-    Battleground *bg = NULL;
-    if (instanceId)
-        bg = sBattlegroundMgr->GetBattlegroundThroughClientInstance(instanceId, bgTypeId);
+    // get bg template
+    Battleground *bg = sBattlegroundMgr->GetBattlegroundTemplate(bgTypeId);
+    if (!bg)
+        return;
 
     if (!bg)
         bg = sBattlegroundMgr->GetBattlegroundTemplate(bgTypeId);
@@ -256,32 +253,34 @@ void WorldSession::HandleBattlegroundPlayerPositionsOpcode(WorldPacket & /*recv_
     {
         case BATTLEGROUND_WS:
         {
-            uint32 count = 0;
+            uint32 count1 = 0;                                  //always constant zero?
+            uint32 count2 = 0;                                  //count of next fields
 
-            Player* aplr = ObjectAccessor::FindPlayer(((BattlegroundWS*)bg)->GetAllianceFlagPickerGUID());
-            if (aplr)
-                ++count;
+            Player *ali_plr = ObjectAccessor::FindPlayer(((BattlegroundWS*)bg)->GetAllianceFlagPickerGUID());
+            if (ali_plr)
+                count1++;
 
-            Player* hplr = ObjectAccessor::FindPlayer(((BattlegroundWS*)bg)->GetHordeFlagPickerGUID());
-            if (hplr)
-                ++count;
+            Player *horde_plr = ObjectAccessor::FindPlayer(((BattlegroundWS*)bg)->GetHordeFlagPickerGUID());
+            if (horde_plr)
+                count2++;
 
-            WorldPacket data(SMSG_BATTLEGROUND_PLAYER_POSITIONS, 4 + 4 + 16 * count);
-            data << 0;
-            data << count;
-            if (aplr)
+            WorldPacket data(SMSG_BATTLEGROUND_PLAYER_POSITIONS, (4 + 4 + 16 * count1 + 16 * count2));
+            data << count1;                                     // alliance flag holders count
+            data << count2;                                     // horde flag holders count
+
+            if (ali_plr)
             {
-                data << uint64(aplr->GetGUID());
-                data << float(aplr->GetPositionX());
-                data << float(aplr->GetPositionY());
+                data << (float)ali_plr->GetPositionX();
+                data << (float)ali_plr->GetPositionY();
+                data << (uint64)ali_plr->GetGUID();
             }
 
-            if (hplr)
+            if (horde_plr)
             {
-                data << uint64(hplr->GetGUID());
-                data << float(hplr->GetPositionX());
-                data << float(hplr->GetPositionY());
-            }
+                data << (float)horde_plr->GetPositionX();
+                data << (float)horde_plr->GetPositionY();
+                data << (uint64)horde_plr->GetGUID();
+             }
 
             SendPacket(&data);
             break;
@@ -330,11 +329,8 @@ void WorldSession::HandleBattlefieldListOpcode(WorldPacket &recv_data)
     uint32 bgTypeId;
     recv_data >> bgTypeId;                                  // id from DBC
 
-    uint8 fromWhere;
-    recv_data >> fromWhere;                                 // 0 - battlemaster (lua: ShowBattlefieldList), 1 - UI (lua: RequestBattlegroundInstanceInfo)
-
-    uint8 unk1;
-    recv_data >> unk1;                                       // Unknown 3.2.2
+    uint8 fromWhere = 1;
+    //recv_data >> fromWhere;                                 // 0 - battlemaster (lua: ShowBattlefieldList), 1 - UI (lua: RequestBattlegroundInstanceInfo)
 
     BattlemasterListEntry const* bl = sBattlemasterListStore.LookupEntry(bgTypeId);
     if (!bl)
@@ -353,12 +349,10 @@ void WorldSession::HandleBattleFieldPortOpcode(WorldPacket &recv_data)
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Recvd CMSG_BATTLEFIELD_PORT Message");
 
     uint8 type;                                             // arenatype if arena
-    uint8 unk2;                                             // unk, can be 0x0 (may be if was invited?) and 0x1
     uint32 bgTypeId_;                                       // type id from dbc
-    uint16 unk;                                             // 0x1F90 constant?
-    uint8 action;                                           // enter battle 0x1, leave queue 0x0
+    uint8 action;                                           // enter battle 128, leave queue 0
 
-    recv_data >> type >> unk2 >> bgTypeId_ >> unk >> action;
+    recv_data >> action >> bgTypeId_ >> type;
 
     if (!sBattlemasterListStore.LookupEntry(bgTypeId_))
     {
@@ -383,7 +377,7 @@ void WorldSession::HandleBattleFieldPortOpcode(WorldPacket &recv_data)
         return;
     }
     // if action == 1, then instanceId is required
-    if (!ginfo.IsInvitedToBGInstanceGUID && action == 1)
+    if (!ginfo.IsInvitedToBGInstanceGUID && action == 128)
     {
         sLog->outError("BattlegroundHandler: instance not found.");
         return;
@@ -406,7 +400,7 @@ void WorldSession::HandleBattleFieldPortOpcode(WorldPacket &recv_data)
         return;
 
     //some checks if player isn't cheating - it is not exactly cheating, but we cannot allow it
-    if (action == 1 && ginfo.ArenaType == 0)
+    if (action == 128 && ginfo.ArenaType == 0)
     {
         //if player is trying to enter battleground (not arena!) and he has deserter debuff, we must just remove him from queue
         if (!_player->CanJoinToBattleground())
@@ -430,7 +424,7 @@ void WorldSession::HandleBattleFieldPortOpcode(WorldPacket &recv_data)
     WorldPacket data;
     switch(action)
     {
-        case 1:                                         // port to battleground
+        case 128:                                       // port to battleground
             if (!_player->IsInvitedForBattlegroundQueueType(bgQueueTypeId))
                 return;                                 // cheating?
 
