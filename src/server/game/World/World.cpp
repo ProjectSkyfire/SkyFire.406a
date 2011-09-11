@@ -1754,15 +1754,19 @@ void World::DetectDBCLang()
         m_lang_confid = LOCALE_enUS;
     }
 
-    ChrRacesEntry const* race = sChrRacesStore.LookupEntry(1);
-
     std::string availableLocalsStr;
 
     uint8 default_locale = TOTAL_LOCALES;
     for (uint8 i = default_locale-1; i < TOTAL_LOCALES; --i)  // -1 will be 255 due to uint8
     {
-        if (race->name[i][0] != '\0')                     // check by race names
+        // NOTE: since multilocale DBCs were gone, we have to detect DBC locale in another way
+        // this way only works if component.wow-*.txt exists (which is extracted together with the dbc files)
+        // if you deleted it, you will have to specify a DBC locale manually
+        char filename[512];
+        sprintf(filename, "%s/dbc/component.wow-%s.txt", m_dataPath.c_str(), localeNames[i]);
+        if (FILE *fp = fopen(filename,"r"))
         {
+            fclose(fp);
             default_locale = i;
             m_availableDbcLocaleMask |= (1 << i);
             availableLocalsStr += localeNames[i];
@@ -1778,7 +1782,7 @@ void World::DetectDBCLang()
 
     if (default_locale >= TOTAL_LOCALES)
     {
-        sLog->outError("Unable to determine your DBC Locale! (corrupt DBC?)");
+        sLog->outError("Unable to determine your DBC Locale, please change DBC.Locale to a specific value");
         exit(1);
     }
 
