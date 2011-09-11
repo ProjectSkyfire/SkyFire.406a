@@ -1029,20 +1029,22 @@ struct GtOCTClassCombatRatingScalarEntry
     float    ratio;
 };
 
-struct GtOCTRegenHPEntry
-{
-    float    ratio;
-};
+//struct GtOCTRegenHPEntry
+//{
+//    uint32 level;
+//    float    ratio;
+//};
 
 //struct GtOCTRegenMPEntry
 //{
 //    float    ratio;
 //};
 
-struct GtRegenHPPerSptEntry
-{
-    float    ratio;
-};
+//struct GtRegenHPPerSptEntry
+//{
+//    //uint32 level;
+//    float    ratio;
+//};
 
 struct GtRegenMPPerSptEntry
 {
@@ -1686,7 +1688,7 @@ struct SpellTotemsEntry
 };
 
 // Spell.dbc
-struct SpellEntry
+struct SpellEntry //Structure of the true Spell.dbc
 {
     uint32    Id;                                           // 0        m_ID
     uint32    Attributes;                                   // 1        m_attribute
@@ -1696,7 +1698,7 @@ struct SpellEntry
     uint32    AttributesEx4;                                // 5        m_attributesExD
     uint32    AttributesEx5;                                // 6        m_attributesExE
     uint32    AttributesEx6;                                // 7        m_attributesExF
-    uint32    AttributesEx7;                                // 8       3.2.0 (0x20 - totems, 0x4 - paladin auras, etc...)
+    uint32    AttributesEx7;                                // 8        3.2.0 (0x20 - totems, 0x4 - paladin auras, etc...)
     uint32    AttributesEx8;                                // 9        m_attributesExH
     // uint32 unk_400_1;                                    // 10       4.0.0
     uint32    CastingTimeIndex;                             // 11       m_castingTimeIndex
@@ -1939,12 +1941,6 @@ struct TaxiPathNodeEntry
     uint32    delay;                                        // 8        m_delay
     uint32    arrivalEventID;                               // 9        m_arrivalEventID
     uint32    departureEventID;                             // 10       m_departureEventID
-};
-
-struct TeamContributionPointsEntry
-{
-    //uint32    entry;                                      // 0
-    float     value;                                        // 1 (???)
 };
 
 struct TotemCategoryEntry

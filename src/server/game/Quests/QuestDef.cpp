@@ -213,7 +213,7 @@ bool Quest::IsAllowedInRaid() const
 
     return sWorld->getBoolConfig(CONFIG_QUEST_IGNORE_RAID);
 }
-
+/*  // Net ro revamp this.
 uint32 Quest::CalculateHonorGain(uint8 level) const
 {
     if (level > GT_MAX_LEVEL)
@@ -232,4 +232,4 @@ uint32 Quest::CalculateHonorGain(uint8 level) const
     }
 
     return honor;
-}
+} */

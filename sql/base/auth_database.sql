@@ -189,7 +189,7 @@ DROP TABLE IF EXISTS `realmlist`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `realmlist` (
   `id` int(11) unsigned NOT NULL auto_increment,
-  `name` varchar(32) NOT NULL default '',
+  `name` varchar(32) NOT NULL default 'SkyFire',
   `address` varchar(32) NOT NULL default '127.0.0.1',
   `port` int(11) NOT NULL default '8085',
   `icon` tinyint(3) unsigned NOT NULL default '0',
