@@ -1225,10 +1225,10 @@ enum Opcodes
     SMSG_ARENA_OPPONENT_UPDATE                       = 0x028CC, // 4.0.6a 13623
     SMSG_ARENA_TEAM_CHANGE_FAILED_QUEUED             = 0x0B2A0, // 4.0.6a 13623
     SMSG_MULTIPLE_PACKETS                            = 0x0FEC0, // 4.0.6a 13623
-    SMSG_FORCE_UNK1_SPEED_CHANGE                     = 0x10219, //
-    CMSG_FORCE_UNK1_SPEED_CHANGE_ACK                 = 0x0F0C0, // 4.0.6a 13623
-    SMSG_FORCE_UNK2_SPEED_CHANGE                     = 0x1021B, //
-    CMSG_FORCE_UNK2_SPEED_CHANGE_ACK                 = 0x07DE8, // 4.0.6a 13623
+    SMSG_MOVE_GRAVITY_DISABLE                        = 0x10219, //
+    CMSG_MOVE_GRAVITY_DISABLE_ACK                    = 0x0F0C0, // 4.0.6a 13623
+    SMSG_MOVE_GRAVITY_ENABLE                         = 0x1021B, //
+    CMSG_MOVE_GRAVITY_ENABLE_ACK                     = 0x07DE8, // 4.0.6a 13623
     SMSG_MOVE_LEVITATING                             = 0x0B8AC, // 4.0.6a 13623
     SMSG_SPLINE_MOVE_UNKNOWN_1235                    = 0x1021E, //
     SMSG_SPLINE_MOVE_UNKNOWN_1236                    = 0x1022F, // 4.0.6a 13623
