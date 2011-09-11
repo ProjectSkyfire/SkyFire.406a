@@ -737,21 +737,11 @@ class spell_powering_up : public SpellScriptLoader
             public:
                 PrepareSpellScript(spell_powering_up_SpellScript)
 
-            uint32 spellId;
-
-            bool Validate(SpellInfo const* /*spellEntry*/)
-            {
-                spellId = sSpellMgr->GetSpellIdForDifficulty(SPELL_SURGE_OF_SPEED, GetCaster());
-                if (!sSpellMgr->GetSpellInfo(spellId))
-                    return false;
-                return true;
-            }
-
             void HandleScriptEffect(SpellEffIndex /*effIndex*/)
             {
                 if (Unit* target = GetTargetUnit())
                     if (urand(0, 99) < 15)
-                        target->CastSpell(target, spellId, true);
+                        target->CastSpell(target, SPELL_SURGE_OF_SPEED, true);
             }
 
             void Register()
