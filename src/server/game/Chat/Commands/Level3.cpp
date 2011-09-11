@@ -847,26 +847,12 @@ bool ChatHandler::HandleLookupItemSetCommand(const char *args)
         if (set)
         {
             int loc = GetSessionDbcLocale();
-            std::string name = set->name[loc];
+            std::string name = set->name;
             if (name.empty())
                 continue;
 
             if (!Utf8FitTo(name, wnamepart))
-            {
-                loc = 0;
-                for (; loc < TOTAL_LOCALES; ++loc)
-                {
-                    if (loc == GetSessionDbcLocale())
-                        continue;
-
-                    name = set->name[loc];
-                    if (name.empty())
-                        continue;
-
-                    if (Utf8FitTo(name, wnamepart))
-                        break;
-                }
-            }
+                continue;
 
             if (loc < TOTAL_LOCALES)
             {
@@ -920,26 +906,12 @@ bool ChatHandler::HandleLookupSkillCommand(const char *args)
         if (skillInfo)
         {
             int loc = GetSessionDbcLocale();
-            std::string name = skillInfo->name[loc];
+            std::string name = skillInfo->name;
             if (name.empty())
                 continue;
 
             if (!Utf8FitTo(name, wnamepart))
-            {
-                loc = 0;
-                for (; loc < TOTAL_LOCALES; ++loc)
-                {
-                    if (loc == GetSessionDbcLocale())
-                        continue;
-
-                    name = skillInfo->name[loc];
-                    if (name.empty())
-                        continue;
-
-                    if (Utf8FitTo(name, wnamepart))
-                        break;
-                }
-            }
+                continue;
 
             if (loc < TOTAL_LOCALES)
             {
@@ -1007,26 +979,12 @@ bool ChatHandler::HandleLookupSpellCommand(const char *args)
         if (spellInfo)
         {
             int loc = GetSessionDbcLocale();
-            std::string name = spellInfo->SpellName[loc];
+            std::string name = spellInfo->SpellName;
             if (name.empty())
                 continue;
 
             if (!Utf8FitTo(name, wnamepart))
-            {
-                loc = 0;
-                for (; loc < TOTAL_LOCALES; ++loc)
-                {
-                    if (loc == GetSessionDbcLocale())
-                        continue;
-
-                    name = spellInfo->SpellName[loc];
-                    if (name.empty())
-                        continue;
-
-                    if (Utf8FitTo(name, wnamepart))
-                        break;
-                }
-            }
+                continue;
 
             if (loc < TOTAL_LOCALES)
             {
@@ -1394,26 +1352,12 @@ bool ChatHandler::HandleLookupFactionCommand(const char *args)
             FactionState const* repState = target ? target->GetReputationMgr().GetState(factionEntry) : NULL;
 
             int loc = GetSessionDbcLocale();
-            std::string name = factionEntry->name[loc];
+            std::string name = factionEntry->name;
             if (name.empty())
                 continue;
 
             if (!Utf8FitTo(name, wnamepart))
-            {
-                loc = 0;
-                for (; loc < TOTAL_LOCALES; ++loc)
-                {
-                    if (loc == GetSessionDbcLocale())
-                        continue;
-
-                    name = factionEntry->name[loc];
-                    if (name.empty())
-                        continue;
-
-                    if (Utf8FitTo(name, wnamepart))
-                        break;
-                }
-            }
+                continue;
 
             if (loc < TOTAL_LOCALES)
             {
@@ -1492,26 +1436,12 @@ bool ChatHandler::HandleLookupTaxiNodeCommand(const char * args)
         if (nodeEntry)
         {
             int loc = GetSessionDbcLocale();
-            std::string name = nodeEntry->name[loc];
+            std::string name = nodeEntry->name;
             if (name.empty())
                 continue;
 
             if (!Utf8FitTo(name, wnamepart))
-            {
-                loc = 0;
-                for (; loc < TOTAL_LOCALES; ++loc)
-                {
-                    if (loc == GetSessionDbcLocale())
-                        continue;
-
-                    name = nodeEntry->name[loc];
-                    if (name.empty())
-                        continue;
-
-                    if (Utf8FitTo(name, wnamepart))
-                        break;
-                }
-            }
+                continue;
 
             if (loc < TOTAL_LOCALES)
             {
@@ -2410,7 +2340,7 @@ bool ChatHandler::HandleListAurasCommand (const char * /*args*/)
 
         AuraApplication const* aurApp = itr->second;
         Aura const* aura = aurApp->GetBase();
-        char const* name = aura->GetSpellInfo()->SpellName[GetSessionDbcLocale()];
+        char const* name = aura->GetSpellInfo()->SpellName;
 
         std::ostringstream ss_name;
         ss_name << "|cffffffff|Hspell:" << aura->GetId() << "|h[" << name << "]|h|r";

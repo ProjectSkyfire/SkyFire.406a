@@ -481,26 +481,12 @@ bool ChatHandler::HandleLookupAreaCommand(const char* args)
         if (areaEntry)
         {
             int loc = GetSessionDbcLocale ();
-            std::string name = areaEntry->area_name[loc];
+            std::string name = areaEntry->area_name;
             if (name.empty())
                 continue;
 
             if (!Utf8FitTo (name, wnamepart))
-            {
-                loc = 0;
-                for (; loc < TOTAL_LOCALES; ++loc)
-                {
-                    if (loc == GetSessionDbcLocale ())
-                        continue;
-
-                    name = areaEntry->area_name[loc];
-                    if (name.empty ())
-                        continue;
-
-                    if (Utf8FitTo (name, wnamepart))
-                        break;
-                }
-            }
+                continue;
 
             if (loc < TOTAL_LOCALES)
             {
