@@ -13,7 +13,6 @@
 
 SOAP_SOURCE_STAMP("@(#) soapServer.cpp ver 2.8.2 2011-04-26 21:49:07 GMT")
 
-
 SOAP_FMAC5 int SOAP_FMAC6 soap_serve(struct soap *soap)
 {
 #ifndef WITH_FASTCGI

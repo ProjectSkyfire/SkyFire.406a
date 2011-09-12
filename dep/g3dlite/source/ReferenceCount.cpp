@@ -14,18 +14,16 @@
 #include "G3D/ReferenceCount.h"
 
 namespace G3D {
-
-ReferenceCountedObject::ReferenceCountedObject() : 
-    ReferenceCountedObject_refCount(0), 
+ReferenceCountedObject::ReferenceCountedObject() :
+    ReferenceCountedObject_refCount(0),
     ReferenceCountedObject_weakPointer(0) {
-
-    debugAssertM(isValidHeapPointer(this), 
+    debugAssertM(isValidHeapPointer(this),
         "Reference counted objects must be allocated on the heap.");
 }
 
 void ReferenceCountedObject::ReferenceCountedObject_zeroWeakPointers() {
     // Tell all of my weak pointers that I'm gone.
-    
+
     _WeakPtrLinkedList* node = ReferenceCountedObject_weakPointer;
 
     while (node != NULL) {
@@ -41,12 +39,11 @@ void ReferenceCountedObject::ReferenceCountedObject_zeroWeakPointers() {
 
 ReferenceCountedObject::~ReferenceCountedObject() {}
 
-
-ReferenceCountedObject::ReferenceCountedObject(const ReferenceCountedObject& notUsed) : 
+ReferenceCountedObject::ReferenceCountedObject(const ReferenceCountedObject& notUsed) :
     ReferenceCountedObject_refCount(0),
     ReferenceCountedObject_weakPointer(0) {
     (void)notUsed;
-    debugAssertM(G3D::isValidHeapPointer(this), 
+    debugAssertM(G3D::isValidHeapPointer(this),
         "Reference counted objects must be allocated on the heap.");
 }
 
@@ -57,5 +54,4 @@ ReferenceCountedObject& ReferenceCountedObject::operator=(const ReferenceCounted
     // changes).
     return *this;
 }
-
 } // G3D

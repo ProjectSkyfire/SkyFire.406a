@@ -15,7 +15,6 @@
 #include "G3D/CoordinateFrame.h"
 
 namespace G3D {
-
 /**
  Sets a field on four vertices.  Used by the constructor.
  */
@@ -27,15 +26,13 @@ namespace G3D {
 Box::Box() {
 }
 
-
 Box::Box(const AABox& b) {
     init(b.low(), b.high());
 }
 
 Box::Box(class BinaryInput& b) {
-	deserialize(b);	
+	deserialize(b);
 }
-
 
 void Box::serialize(class BinaryOutput& b) const {
 	int i;
@@ -45,7 +42,6 @@ void Box::serialize(class BinaryOutput& b) const {
 
     // Other state can be reconstructed
 }
-
 
 void Box::deserialize(class BinaryInput& b) {
 	int i;
@@ -57,7 +53,7 @@ void Box::deserialize(class BinaryInput& b) {
 	}
 
     _center = _center / 8;
-    
+
     // Reconstruct other state from the corners
     _axis[0] = _corner[5] - _corner[4];
     _axis[1] = _corner[7] - _corner[4];
@@ -70,25 +66,21 @@ void Box::deserialize(class BinaryInput& b) {
 
     _volume = _extent.x * _extent.y * _extent.z;
 
-    _area = 2 * 
+    _area = 2 *
         (_extent.x * _extent.y +
          _extent.y * _extent.z +
          _extent.z * _extent.x);
 }
 
-
 Box::Box(
     const Vector3& min,
     const Vector3& max) {
-
     init(min.min(max), min.max(max));
-
 }
 
 void Box::init(
     const Vector3& min,
     const Vector3& max) {
-
     debugAssert(
         (min.x <= max.x) &&
         (min.y <= max.y) &&
@@ -117,7 +109,7 @@ void Box::init(
 
     debugAssert(! isNaN(_extent.x));
 
-    _area = 2 * 
+    _area = 2 *
         (_extent.x * _extent.y +
          _extent.y * _extent.z +
          _extent.z * _extent.x);
@@ -132,19 +124,15 @@ void Box::init(
     }
 }
 
-
 float Box::volume() const {
     return _volume;
 }
-
 
 float Box::area() const {
     return _area;
 }
 
-
 void Box::getLocalFrame(CoordinateFrame& frame) const {
-
     frame.rotation = Matrix3(
         _axis[0][0], _axis[1][0], _axis[2][0],
         _axis[0][1], _axis[1][1], _axis[2][1],
@@ -153,13 +141,11 @@ void Box::getLocalFrame(CoordinateFrame& frame) const {
     frame.translation = _center;
 }
 
-
 CoordinateFrame Box::localFrame() const {
     CoordinateFrame out;
     getLocalFrame(out);
     return out;
 }
-
 
 void Box::getFaceCorners(int f, Vector3& v0, Vector3& v1, Vector3& v2, Vector3& v3) const {
     switch (f) {
@@ -192,8 +178,6 @@ void Box::getFaceCorners(int f, Vector3& v0, Vector3& v1, Vector3& v2, Vector3& 
     }
 }
 
-
-
 int Box::dummy = 0;
 
 bool Box::culledBy(
@@ -201,7 +185,6 @@ bool Box::culledBy(
     int&                cullingPlane,
     const uint32        _inMask,
     uint32&             childMask) const {
-
     uint32 inMask = _inMask;
     assert(plane.size() < 31);
 
@@ -210,10 +193,8 @@ bool Box::culledBy(
     // See if there is one plane for which all of the
 	// vertices are in the negative half space.
     for (int p = 0; p < plane.size(); ++p) {
-
 		// Only test planes that are not masked
 		if ((inMask & 1) != 0) {
-		
 			Vector3 corner;
 
             int numContained = 0;
@@ -238,7 +219,6 @@ bool Box::culledBy(
                 // will immediately cull the volume.
                 childMask = 1 << p;
 				return true;
-
             } else if (numContained < v) {
                 // The bounding volume straddled the plane; we have
                 // to keep testing against this plane
@@ -255,22 +235,18 @@ bool Box::culledBy(
     return false;
 }
 
-
 bool Box::culledBy(
     const Array<Plane>& plane,
 	int&				cullingPlane,
 	const uint32		_inMask) const {
-
 	uint32 inMask = _inMask;
 	assert(plane.size() < 31);
 
     // See if there is one plane for which all of the
 	// vertices are in the negative half space.
     for (int p = 0; p < plane.size(); ++p) {
-
 		// Only test planes that are not masked
 		if ((inMask & 1) != 0) {
-		
 			bool culled = true;
 
             int v;
@@ -299,10 +275,8 @@ bool Box::culledBy(
     return false;
 }
 
-
 bool Box::contains(
     const Vector3&      point) const {
-
     // Form axes from three edges, transform the point into that
     // space, and perform 3 interval tests
 
@@ -319,7 +293,7 @@ bool Box::contains(
     Vector3 osPoint = M.inverse() * (point - _corner[0]);
 
     return
-        (osPoint.x >= 0) && 
+        (osPoint.x >= 0) &&
         (osPoint.y >= 0) &&
         (osPoint.z >= 0) &&
         (osPoint.x <= 1) &&
@@ -328,7 +302,6 @@ bool Box::contains(
 }
 
 #undef setMany
-
 
 void Box::getRandomSurfacePoint(Vector3& P, Vector3& N) const {
     float aXY = _extent.x * _extent.y;
@@ -360,7 +333,6 @@ void Box::getRandomSurfacePoint(Vector3& P, Vector3& N) const {
     }
 }
 
-
 Vector3 Box::randomInteriorPoint() const {
     Vector3 sum = _center;
 
@@ -376,7 +348,6 @@ Box Box::inf() {
 }
 
 void Box::getBounds(class AABox& aabb) const {
-
     Vector3 lo = _corner[0];
     Vector3 hi = lo;
 
@@ -388,6 +359,4 @@ void Box::getBounds(class AABox& aabb) const {
 
     aabb = AABox(lo, hi);
 }
-
-
 } // namespace

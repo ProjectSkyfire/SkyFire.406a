@@ -13,7 +13,6 @@
 #include <algorithm>
 
 namespace G3D {
-
 #ifdef _MSC_VER
     // disable: "C++ exception handler used"
 #   pragma warning (push)
@@ -73,7 +72,6 @@ void parseCommaSeparated(const std::string s, Array<std::string>& array, bool st
 bool beginsWith(
     const std::string& test,
     const std::string& pattern) {
-
     if (test.size() >= pattern.size()) {
         for (int i = 0; i < (int)pattern.size(); ++i) {
             if (pattern[i] != test[i]) {
@@ -86,11 +84,9 @@ bool beginsWith(
     }
 }
 
-
 bool endsWith(
     const std::string& test,
     const std::string& pattern) {
-
     if (test.size() >= pattern.size()) {
         int te = test.size() - 1;
         int pe = pattern.size() - 1;
@@ -105,11 +101,9 @@ bool endsWith(
     }
 }
 
-
 std::string wordWrap(
     const std::string&      input,
     int                     numCols) {
-
     std::string output;
     size_t      c = 0;
     int         len;
@@ -143,7 +137,6 @@ std::string wordWrap(
         if (len == minLength) {
             // Just crop
             len = numCols;
-
         }
 
         output += input.substr(c, len);
@@ -159,22 +152,17 @@ std::string wordWrap(
     return output;
 }
 
-
 int stringCompare(
     const std::string&      s1,
     const std::string&      s2) {
-
     return stringPtrCompare(&s1, &s2);
 }
-
 
 int stringPtrCompare(
     const std::string*      s1,
     const std::string*      s2) {
-
     return s1->compare(*s2);
 }
-
 
 std::string toUpper(const std::string& x) {
     std::string result = x;
@@ -182,24 +170,21 @@ std::string toUpper(const std::string& x) {
     return result;
 }
 
-
 std::string toLower(const std::string& x) {
     std::string result = x;
     std::transform(result.begin(), result.end(), result.begin(), tolower);
     return result;
 }
 
-
 Array<std::string> stringSplit(
     const std::string&          x,
     char                        splitChar) {
-
     Array<std::string> out;
-    
+
     // Pointers to the beginning and end of the substring
     const char* start = x.c_str();
     const char* stop = start;
-    
+
     while ((stop = strchr(start, splitChar))) {
         out.append(std::string(start, stop - start));
         start = stop + 1;
@@ -207,15 +192,13 @@ Array<std::string> stringSplit(
 
     // Append the last one
     out.append(std::string(start));
-    
+
     return out;
 }
-
 
 std::string stringJoin(
     const Array<std::string>&   a,
     char                        joinChar) {
-
     std::string out;
 
     for (int i = 0; i < (int)a.size() - 1; ++i) {
@@ -229,11 +212,9 @@ std::string stringJoin(
     }
 }
 
-
 std::string stringJoin(
     const Array<std::string>&   a,
     const std::string&          joinStr) {
-
     std::string out;
 
     for (int i = 0; i < (int)a.size() - 1; ++i) {
@@ -247,12 +228,10 @@ std::string stringJoin(
     }
 }
 
-
 std::string trimWhitespace(
     const std::string&              s) {
-
     size_t left = 0;
-    
+
     // Trim from left
     while ((left < s.length()) && iswspace(s[left])) {
         ++left;
@@ -263,10 +242,9 @@ std::string trimWhitespace(
     while ((right > (int)left) && iswspace(s[right])) {
         --right;
     }
-    
+
     return s.substr(left, right - left + 1);
 }
-
 }; // namespace
 
 #undef NEWLINE

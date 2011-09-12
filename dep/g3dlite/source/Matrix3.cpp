@@ -23,7 +23,6 @@
 #include "G3D/Any.h"
 
 namespace G3D {
-
 const float Matrix3::EPSILON = 1e-06f;
 
 Matrix3::Matrix3(const Any& any) {
@@ -43,7 +42,6 @@ Matrix3::Matrix3(const Any& any) {
         }
     }
 }
-
 
 Matrix3::operator Any() const {
     Any any(Any::ARRAY, "Matrix3");
@@ -67,7 +65,6 @@ const Matrix3& Matrix3::identity() {
     return m;
 }
 
-
 const float Matrix3::ms_fSvdEpsilon = 1e-04f;
 const int Matrix3::ms_iSvdMaxIterations = 32;
 
@@ -86,9 +83,7 @@ bool Matrix3::fuzzyEq(const Matrix3& b) const {
     return true;
 }
 
-
 bool Matrix3::isRightHanded() const{
-
     const Vector3& X = column(0);
     const Vector3& Y = column(1);
     const Vector3& Z = column(2);
@@ -98,13 +93,12 @@ bool Matrix3::isRightHanded() const{
     return W.dot(Z) > 0.0f;
 }
 
-
 bool Matrix3::isOrthonormal() const {
     const Vector3& X = column(0);
     const Vector3& Y = column(1);
     const Vector3& Z = column(2);
 
-    return 
+    return
         (G3D::fuzzyEq(X.dot(Y), 0.0f) &&
          G3D::fuzzyEq(Y.dot(Z), 0.0f) &&
          G3D::fuzzyEq(X.dot(Z), 0.0f) &&
@@ -159,9 +153,8 @@ Matrix3::Matrix3(
 
 void Matrix3::set(
           float fEntry00, float fEntry01, float fEntry02,
-          float fEntry10, float fEntry11, float fEntry12, 
+          float fEntry10, float fEntry11, float fEntry12,
           float fEntry20, float fEntry21, float fEntry22) {
-
     elt[0][0] = fEntry00;
     elt[0][1] = fEntry01;
     elt[0][2] = fEntry02;
@@ -173,7 +166,6 @@ void Matrix3::set(
     elt[2][2] = fEntry22;
 }
 
-
 void Matrix3::deserialize(BinaryInput& b) {
     int r,c;
     for (c = 0; c < 3; ++c) {
@@ -182,7 +174,6 @@ void Matrix3::deserialize(BinaryInput& b) {
         }
     }
 }
-
 
 void Matrix3::serialize(BinaryOutput& b) const {
     int r,c;
@@ -193,7 +184,6 @@ void Matrix3::serialize(BinaryOutput& b) const {
     }
 }
 
-
 //----------------------------------------------------------------------------
 Vector3 Matrix3::column (int iCol) const {
     assert((0 <= iCol) && (iCol < 3));
@@ -201,12 +191,10 @@ Vector3 Matrix3::column (int iCol) const {
                    elt[2][iCol]);
 }
 
-
 const Vector3& Matrix3::row (int iRow) const {
     assert((0 <= iRow) && (iRow < 3));
     return *reinterpret_cast<const Vector3*>(elt[iRow]);
 }
-
 
 void Matrix3::setColumn(int iCol, const Vector3 &vector) {
     debugAssert((iCol >= 0) && (iCol < 3));
@@ -215,14 +203,12 @@ void Matrix3::setColumn(int iCol, const Vector3 &vector) {
     elt[2][iCol] = vector.z;
 }
 
-
 void Matrix3::setRow(int iRow, const Vector3 &vector) {
     debugAssert((iRow >= 0) && (iRow < 3));
     elt[iRow][0] = vector.x;
     elt[iRow][1] = vector.y;
     elt[iRow][2] = vector.z;
 }
-
 
 //----------------------------------------------------------------------------
 bool Matrix3::operator== (const Matrix3& rkMatrix) const {
@@ -351,7 +337,6 @@ Matrix3& Matrix3::operator/= (float fScalar) {
 }
 
 Matrix3& Matrix3::operator*= (float fScalar) {
-
     for (int iRow = 0; iRow < 3; iRow++) {
         for (int iCol = 0; iCol < 3; iCol++) {
             elt[iRow][iCol] *= fScalar;
@@ -377,7 +362,6 @@ Matrix3 operator* (double fScalar, const Matrix3& rkMatrix) {
 Matrix3 operator* (float fScalar, const Matrix3& rkMatrix) {
     return (double)fScalar * rkMatrix;
 }
-
 
 Matrix3 operator* (int fScalar, const Matrix3& rkMatrix) {
     return (double)fScalar * rkMatrix;
@@ -1027,7 +1011,7 @@ void Matrix3::polarDecomposition(Matrix3 &R, Matrix3 &S) const{
     Matrix3 tmp = X.inverse();
     Matrix3 Xit = tmp.transpose();
     int iter = 0;
-    
+
     const int MAX_ITERS = 100;
 
     const double eps = 50 * std::numeric_limits<float>::epsilon();
@@ -1041,10 +1025,9 @@ void Matrix3::polarDecomposition(Matrix3 &R, Matrix3 &S) const{
 
     double resid = X.diffOneNorm(Xit);
     while (resid > eps && iter < MAX_ITERS) {
-
       tmp = X.inverse();
       Xit = tmp.transpose();
-      
+
       if (resid < BigEps) {
 	// close enough use simple iteration
 	X += Xit;
@@ -1060,7 +1043,7 @@ void Matrix3::polarDecomposition(Matrix3 &R, Matrix3 &S) const{
 	tmp *= 0.5f / gamma;
 	X += tmp;
       }
-      
+
       resid = X.diffOneNorm(Xit);
       iter++;
     }
@@ -1193,7 +1176,7 @@ float Matrix3::spectralNorm () const {
 float Matrix3::squaredFrobeniusNorm() const {
     float norm2 = 0;
     const float* e = &elt[0][0];
-    
+
     for (int i = 0; i < 9; ++i){
       norm2 += (*e) * (*e);
     }
@@ -1211,9 +1194,8 @@ float Matrix3::l1Norm() const {
     // The one norm of a matrix is the max column sum in absolute value.
     float oneNorm = 0;
     for (int c = 0; c < 3; ++c) {
-      
       float f = fabs(elt[0][c])+ fabs(elt[1][c]) + fabs(elt[2][c]);
-      
+
       if (f > oneNorm) {
 	oneNorm = f;
       }
@@ -1227,9 +1209,8 @@ float Matrix3::lInfNorm() const {
     float infNorm = 0;
 
     for (int r = 0; r < 3; ++r) {
-      
       float f = fabs(elt[r][0]) + fabs(elt[r][1])+ fabs(elt[r][2]);
-      
+
       if (f > infNorm) {
 	infNorm = f;
       }
@@ -1240,12 +1221,11 @@ float Matrix3::lInfNorm() const {
 //----------------------------------------------------------------------------
 float Matrix3::diffOneNorm(const Matrix3 &y) const{
     float oneNorm = 0;
-    
+
     for (int c = 0; c < 3; ++c){
-    
       float f = fabs(elt[0][c] - y[0][c]) + fabs(elt[1][c] - y[1][c])
 	+ fabs(elt[2][c] - y[2][c]);
-      
+
       if (f > oneNorm) {
 	oneNorm = f;
       }
@@ -1255,7 +1235,7 @@ float Matrix3::diffOneNorm(const Matrix3 &y) const{
 
 //----------------------------------------------------------------------------
 void Matrix3::toAxisAngle (Vector3& rkAxis, float& rfRadians) const {
-    // 
+    //
     // Let (x,y,z) be the unit-length axis and let A be an angle of rotation.
     // The rotation matrix is R = I + sin(A)*P + (1-cos(A))*P^2 (Rodrigues' formula) where
     // I is the identity and
@@ -1567,7 +1547,6 @@ Matrix3 Matrix3::fromEulerAnglesXYZ (float fYAngle, float fPAngle,
 //----------------------------------------------------------------------------
 Matrix3 Matrix3::fromEulerAnglesXZY (float fYAngle, float fPAngle,
                                   float fRAngle) {
-
     float fCos, fSin;
 
     fCos = cosf(fYAngle);
@@ -1587,10 +1566,9 @@ Matrix3 Matrix3::fromEulerAnglesXZY (float fYAngle, float fPAngle,
 
 //----------------------------------------------------------------------------
 Matrix3 Matrix3::fromEulerAnglesYXZ(
-    float fYAngle, 
+    float fYAngle,
     float fPAngle,
     float fRAngle) {
-    
     float fCos, fSin;
 
     fCos = cos(fYAngle);
@@ -1610,10 +1588,9 @@ Matrix3 Matrix3::fromEulerAnglesYXZ(
 
 //----------------------------------------------------------------------------
 Matrix3 Matrix3::fromEulerAnglesYZX(
-    float fYAngle, 
+    float fYAngle,
     float fPAngle,
     float fRAngle) {
-
     float fCos, fSin;
 
     fCos = cos(fYAngle);
@@ -1852,9 +1829,9 @@ void Matrix3::tensorProduct (const Vector3& rkU, const Vector3& rkV,
 
 // Runs in 52 cycles on AMD, 76 cycles on Intel Centrino
 //
-// The loop unrolling is necessary for performance. 
+// The loop unrolling is necessary for performance.
 // I was unable to improve performance further by flattening the matrices
-// into float*'s instead of 2D arrays.  
+// into float*'s instead of 2D arrays.
 //
 // -morgan
 void Matrix3::_mul(const Matrix3& A, const Matrix3& B, Matrix3& out) {
@@ -1921,13 +1898,9 @@ void Matrix3::_transpose(const Matrix3& A, Matrix3& out) {
 
 //-----------------------------------------------------------------------------
 std::string Matrix3::toString() const {
-    return G3D::format("[%g, %g, %g; %g, %g, %g; %g, %g, %g]", 
+    return G3D::format("[%g, %g, %g; %g, %g, %g; %g, %g, %g]",
 			elt[0][0], elt[0][1], elt[0][2],
 			elt[1][0], elt[1][1], elt[1][2],
 			elt[2][0], elt[2][1], elt[2][2]);
 }
-
-
-
 } // namespace
-

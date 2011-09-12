@@ -21,14 +21,12 @@
 #endif
 
 namespace G3D {
-
 void logPrintf(const char* fmt, ...) {
 	va_list arg_list;
 	va_start(arg_list, fmt);
     Log::common()->vprintf(fmt, arg_list);
     va_end(arg_list);
 }
-
 
 void logLazyPrintf(const char* fmt, ...) {
 	va_list arg_list;
@@ -39,9 +37,8 @@ void logLazyPrintf(const char* fmt, ...) {
 
 Log* Log::commonLog = NULL;
 
-Log::Log(const std::string& filename, int stripFromStackBottom) : 
+Log::Log(const std::string& filename, int stripFromStackBottom) :
     stripFromStackBottom(stripFromStackBottom) {
-
     this->filename = filename;
 
     logFile = FileSystem::fopen(filename.c_str(), "w");
@@ -50,7 +47,7 @@ Log::Log(const std::string& filename, int stripFromStackBottom) :
         std::string drive, base, ext;
         Array<std::string> path;
         parseFilename(filename, drive, path, base, ext);
-        std::string logName = base + ((ext != "") ? ("." + ext) : ""); 
+        std::string logName = base + ((ext != "") ? ("." + ext) : "");
 
         // Write time is greater than 1ms.  This may be a network drive.... try another file.
         #ifdef G3D_WIN32
@@ -76,11 +73,10 @@ Log::Log(const std::string& filename, int stripFromStackBottom) :
     }
 }
 
-
 Log::~Log() {
     section("Shutdown");
     println("Closing log file");
-    
+
     // Make sure we don't leave a dangling pointer
     if (Log::commonLog == this) {
         Log::commonLog = NULL;
@@ -89,11 +85,9 @@ Log::~Log() {
     fclose(logFile);
 }
 
-
 FILE* Log::getFile() const {
     return logFile;
 }
-
 
 Log* Log::common() {
     if (commonLog == NULL) {
@@ -102,17 +96,14 @@ Log* Log::common() {
     return commonLog;
 }
 
-
 std::string Log::getCommonLogFilename() {
     return common()->filename;
 }
-
 
 void Log::section(const std::string& s) {
     fprintf(logFile, "_____________________________________________________\n");
     fprintf(logFile, "\n    ###    %s    ###\n\n", s.c_str());
 }
-
 
 void __cdecl Log::printf(const char* fmt, ...) {
     va_list arg_list;
@@ -121,27 +112,22 @@ void __cdecl Log::printf(const char* fmt, ...) {
     va_end(arg_list);
 }
 
-
 void __cdecl Log::vprintf(const char* fmt, va_list argPtr) {
     vfprintf(logFile, fmt, argPtr);
     fflush(logFile);
 }
 
-
 void __cdecl Log::lazyvprintf(const char* fmt, va_list argPtr) {
     vfprintf(logFile, fmt, argPtr);
 }
-
 
 void Log::print(const std::string& s) {
     fprintf(logFile, "%s", s.c_str());
     fflush(logFile);
 }
 
-
 void Log::println(const std::string& s) {
     fprintf(logFile, "%s\n", s.c_str());
     fflush(logFile);
 }
-
 }

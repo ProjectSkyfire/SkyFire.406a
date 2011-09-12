@@ -14,7 +14,6 @@
 
 SOAP_SOURCE_STAMP("@(#) soapC.cpp ver 2.8.2 2011-04-26 21:49:07 GMT")
 
-
 #ifndef WITH_NOGLOBAL
 
 SOAP_FMAC3 void SOAP_FMAC4 soap_serializeheader(struct soap *soap)

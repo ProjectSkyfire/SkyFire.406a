@@ -201,7 +201,6 @@ void WorldSession::SendTrainerList(uint64 guid, const std::string& strTitle)
         data << uint32(0);
         data << uint32(0);
         ++count;
-
     }
 
     data << strTitle;

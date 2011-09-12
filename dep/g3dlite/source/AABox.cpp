@@ -15,46 +15,38 @@
 #include "G3D/BinaryInput.h"
 #include "G3D/BinaryOutput.h"
 
-
 namespace G3D {
-
 const AABox& AABox::maxFinite() {
-    static const AABox b = AABox(Vector3::minFinite(), 
+    static const AABox b = AABox(Vector3::minFinite(),
                                  Vector3::maxFinite());
     return b;
 }
 
-
 const AABox& AABox::large() {
-    static const AABox b = AABox(Vector3::minFinite() * 0.5f, 
+    static const AABox b = AABox(Vector3::minFinite() * 0.5f,
                                  Vector3::maxFinite() * 0.5f);
     return b;
 }
-
 
 const AABox& AABox::inf() {
     static const AABox b = AABox(-Vector3::inf(), Vector3::inf());
     return b;
 }
 
-
 const AABox& AABox::zero() {
     static const AABox b = AABox(Vector3::zero(), Vector3::zero());
     return b;
 }
-
 
 void AABox::serialize(class BinaryOutput& b) const {
     b.writeVector3(lo);
     b.writeVector3(hi);
 }
 
-
 void AABox::deserialize(class BinaryInput& b) {
     lo = b.readVector3();
     hi = b.readVector3();
 }
-
 
 void AABox::split(const Vector3::Axis& axis, float location, AABox& low, AABox& high) const {
     // Low, medium, and high along the chosen axis
@@ -72,7 +64,6 @@ void AABox::split(const Vector3::Axis& axis, float location, AABox& low, AABox& 
     high.hi[axis] = H;
 }
 
-
 Vector3 AABox::randomSurfacePoint() const {
     Vector3 extent = hi - lo;
     float aXY = extent.x * extent.y;
@@ -87,22 +78,22 @@ Vector3 AABox::randomSurfacePoint() const {
     // The probability of choosing a given face is proportional to
     // its area.
     if (r < aXY) {
-        return 
-            lo + 
+        return
+            lo +
             Vector3(
                 (float)uniformRandom(0.0f, extent.x),
                 (float)uniformRandom(0.0f, extent.y),
                 d * extent.z);
     } else if (r < aYZ) {
-        return 
-            lo + 
+        return
+            lo +
             Vector3(
                 d * extent.x,
                 (float)uniformRandom(0, extent.y),
                 (float)uniformRandom(0, extent.z));
     } else {
-        return 
-            lo + 
+        return
+            lo +
             Vector3(
                 (float)uniformRandom(0, extent.x),
                 d * extent.y,
@@ -110,21 +101,18 @@ Vector3 AABox::randomSurfacePoint() const {
     }
 }
 
-
 Vector3 AABox::randomInteriorPoint() const {
     return Vector3(
-        (float)uniformRandom(lo.x, hi.x), 
-        (float)uniformRandom(lo.y, hi.y), 
+        (float)uniformRandom(lo.x, hi.x),
+        (float)uniformRandom(lo.y, hi.y),
         (float)uniformRandom(lo.z, hi.z));
 }
-
 
 bool AABox::intersects(const AABox& other) const {
     // Must be overlap along all three axes.
     // Try to find a separating axis.
 
     for (int a = 0; a < 3; ++a) {
-
         //     |--------|
         // |------|
 
@@ -144,13 +132,12 @@ bool AABox::culledBy(
     int&		cullingPlane,
     const uint32	_inMask,
     uint32&             childMask) const {
-
     uint32 inMask = _inMask;
     assert(plane.size() < 31);
 
     childMask = 0;
 
-    const bool finite = 
+    const bool finite =
         (abs(lo.x) < G3D::finf()) &&
         (abs(hi.x) < G3D::finf()) &&
         (abs(lo.y) < G3D::finf()) &&
@@ -161,10 +148,8 @@ bool AABox::culledBy(
     // See if there is one plane for which all of the
 	// vertices are in the negative half space.
     for (int p = 0; p < plane.size(); ++p) {
-
 		// Only test planes that are not masked
 		if ((inMask & 1) != 0) {
-		
 			Vector3 corner;
 
             int numContained = 0;
@@ -179,7 +164,7 @@ bool AABox::culledBy(
 				corner.x = (v & 1) ? hi.x : lo.x;
 				corner.y = (v & 2) ? hi.y : lo.y;
 				corner.z = (v & 4) ? hi.z : lo.z;
-        
+
                 if (finite) { // this branch is highly predictable
                     if (plane[p].halfSpaceContainsFinite(corner)) {
                         ++numContained;
@@ -201,7 +186,6 @@ bool AABox::culledBy(
                 // will immediately cull the volume.
                 childMask = 1 << p;
 				return true;
-
             } else if (numContained < v) {
                 // The bounding volume straddled the plane; we have
                 // to keep testing against this plane
@@ -218,16 +202,14 @@ bool AABox::culledBy(
     return false;
 }
 
-
 bool AABox::culledBy(
     const Array<Plane>& plane,
 	int&				cullingPlane,
 	const uint32		_inMask) const {
-
 	uint32 inMask = _inMask;
 	assert(plane.size() < 31);
-    
-    const bool finite = 
+
+    const bool finite =
         (abs(lo.x) < G3D::finf()) &&
         (abs(hi.x) < G3D::finf()) &&
         (abs(lo.y) < G3D::finf()) &&
@@ -238,10 +220,8 @@ bool AABox::culledBy(
     // See if there is one plane for which all of the
 	// vertices are in the negative half space.
     for (int p = 0; p < plane.size(); ++p) {
-
 		// Only test planes that are not masked
 		if ((inMask & 1) != 0) {
-		
 			bool culled = true;
 			Vector3 corner;
 
@@ -251,13 +231,12 @@ bool AABox::culledBy(
 			// not culled by the plane... early out when at least one point
             // is in the positive half space.
 			for (v = 0; (v < 8) && culled; ++v) {
-
                 // Unrolling these 3 if's into a switch decreases performance
                 // by about 2x
 				corner.x = (v & 1) ? hi.x : lo.x;
 				corner.y = (v & 2) ? hi.y : lo.y;
 				corner.z = (v & 4) ? hi.z : lo.z;
-        
+
                 if (finite) { // this branch is highly predictable
                     culled = ! plane[p].halfSpaceContainsFinite(corner);
                 } else {
@@ -282,9 +261,8 @@ bool AABox::culledBy(
     return false;
 }
 
-
 bool AABox::intersects(const class Sphere& sphere) const {
-    double d = 0; 
+    double d = 0;
 
     //find the square of the distance
     //from the sphere to the box
@@ -300,7 +278,6 @@ bool AABox::intersects(const class Sphere& sphere) const {
 }
 
 Vector3 AABox::corner(int index) const {
-
     // default constructor inits all components to 0
     Vector3 v;
 
@@ -361,6 +338,4 @@ Vector3 AABox::corner(int index) const {
 
     return v;
 }
-
-
 }

@@ -1,7 +1,7 @@
 /**
  @file prompt.cpp
- 
- @author Morgan McGuire, http://graphics.cs.williams.edu 
+
+ @author Morgan McGuire, http://graphics.cs.williams.edu
  @cite Windows dialog interface by Max McGuire, mmcguire@ironlore.com
  @cite Font setting code by Kurt Miller, kurt@flipcode.com
 
@@ -41,7 +41,6 @@
 #endif /* G3DFIX: exclude GUI prompt code */
 
 namespace G3D {
-
 #if 0 /* G3DFIX: exclude GUI prompt code */
 #ifdef G3D_WIN32
 
@@ -53,27 +52,26 @@ namespace _internal {
 class DialogTemplate {
 public:
 
-    DialogTemplate(LPCSTR caption, DWORD style, 
+    DialogTemplate(LPCSTR caption, DWORD style,
                  int x, int y, int w, int h,
                  LPCSTR font = NULL, WORD fontSize = 8) {
-    
       usedBufferLength = sizeof(DLGTEMPLATE);
       totalBufferLength = usedBufferLength;
 
       dialogTemplate = (DLGTEMPLATE*)malloc(totalBufferLength);
 
       dialogTemplate->style = style;
-        
+
       if (font != NULL) {
         dialogTemplate->style |= DS_SETFONT;
       }
-        
+
       dialogTemplate->x     = (short)x;
       dialogTemplate->y     = (short)y;
       dialogTemplate->cx    = (short)w;
       dialogTemplate->cy    = (short)h;
       dialogTemplate->cdit  = 0;
-        
+
       dialogTemplate->dwExtendedStyle = 0;
 
       // The dialog box doesn't have a menu or a special class
@@ -91,7 +89,6 @@ public:
     }
 
   void AddComponent(LPCSTR type, LPCSTR caption, DWORD style, DWORD exStyle, int x, int y, int w, int h, WORD id) {
-
       DLGITEMTEMPLATE item;
 
       item.style = style;
@@ -104,7 +101,7 @@ public:
       item.dwExtendedStyle = exStyle;
 
       AppendData(&item, sizeof(DLGITEMTEMPLATE));
-        
+
       AppendString(type);
       AppendString(caption);
 
@@ -113,71 +110,51 @@ public:
 
       // Increment the component count
       dialogTemplate->cdit++;
-
     }
 
-
   void AddButton(LPCSTR caption, DWORD style, DWORD exStyle, int x, int y, int w, int h, WORD id) {
-
       AddStandardComponent(0x0080, caption, style, exStyle, x, y, w, h, id);
 
       WORD creationDataLength = 0;
       AppendData(&creationDataLength, sizeof(WORD));
-
     }
-
 
   void AddEditBox(LPCSTR caption, DWORD style, DWORD exStyle, int x, int y, int w, int h, WORD id) {
-
       AddStandardComponent(0x0081, caption, style, exStyle, x, y, w, h, id);
-    
+
       WORD creationDataLength = 0;
       AppendData(&creationDataLength, sizeof(WORD));
-    
     }
-
 
   void AddStatic(LPCSTR caption, DWORD style, DWORD exStyle, int x, int y, int w, int h, WORD id) {
-
       AddStandardComponent(0x0082, caption, style, exStyle, x, y, w, h, id);
-    
+
       WORD creationDataLength = 0;
       AppendData(&creationDataLength, sizeof(WORD));
-    
     }
 
-
   void AddListBox(LPCSTR caption, DWORD style, DWORD exStyle, int x, int y, int w, int h, WORD id) {
-
       AddStandardComponent(0x0083, caption, style, exStyle, x, y, w, h, id);
-    
+
       WORD creationDataLength = sizeof(WORD) + 5 * sizeof(WCHAR);
       AppendData(&creationDataLength, sizeof(WORD));
 
       AppendString("TEST");
-    
     }
-    
 
   void AddScrollBar(LPCSTR caption, DWORD style, DWORD exStyle, int x, int y, int w, int h, WORD id) {
-
       AddStandardComponent(0x0084, caption, style, exStyle, x, y, w, h, id);
-    
+
       WORD creationDataLength = 0;
       AppendData(&creationDataLength, sizeof(WORD));
-    
     }
-
 
   void AddComboBox(LPCSTR caption, DWORD style, DWORD exStyle, int x, int y, int w, int h, WORD id) {
-
       AddStandardComponent(0x0085, caption, style, exStyle, x, y, w, h, id);
-    
+
       WORD creationDataLength = 0;
       AppendData(&creationDataLength, sizeof(WORD));
-
     }
-
 
   /**
    *
@@ -196,13 +173,12 @@ public:
 
 protected:
 
-  void AddStandardComponent(WORD type, LPCSTR caption, DWORD style, DWORD exStyle, 
+  void AddStandardComponent(WORD type, LPCSTR caption, DWORD style, DWORD exStyle,
                             int x, int y, int w, int h, WORD id, LPSTR font = NULL, WORD fontSize = 8) {
-
       DLGITEMTEMPLATE item;
 
       // DWORD align the beginning of the component data
-        
+
       AlignData(sizeof(DWORD));
 
       item.style = style;
@@ -218,9 +194,9 @@ protected:
       item.dwExtendedStyle = exStyle;
 
       AppendData(&item, sizeof(DLGITEMTEMPLATE));
-        
+
       WORD preType = 0xFFFF;
-        
+
       AppendData(&preType, sizeof(WORD));
       AppendData(&type, sizeof(WORD));
 
@@ -235,20 +211,16 @@ protected:
       dialogTemplate->cdit++;
   }
 
-    
   void AlignData(int size) {
-
       int paddingSize = usedBufferLength % size;
-        
+
       if (paddingSize != 0) {
           EnsureSpace(paddingSize);
           usedBufferLength += paddingSize;
       }
-
   }
 
   void AppendString(LPCSTR string) {
-
       int length = MultiByteToWideChar(CP_ACP, 0, string, -1, NULL, 0);
 
       WCHAR* wideString = (WCHAR*)malloc(sizeof(WCHAR) * length);
@@ -256,16 +228,13 @@ protected:
 
       AppendData(wideString, length * sizeof(WCHAR));
       free(wideString);
-
   }
 
   void AppendData(const void* data, int dataLength) {
-
       EnsureSpace(dataLength);
 
       memcpy((char*)dialogTemplate + usedBufferLength, data, dataLength);
       usedBufferLength += dataLength;
-
   }
 
   void EnsureSpace(int length) {
@@ -274,7 +243,7 @@ protected:
 
           void* newBuffer = malloc(totalBufferLength);
           memcpy(newBuffer, dialogTemplate, usedBufferLength);
-            
+
           free(dialogTemplate);
           dialogTemplate = (DLGTEMPLATE*)newBuffer;
       }
@@ -286,9 +255,7 @@ private:
 
   int               totalBufferLength;
   int               usedBufferLength;
-
 };
-
 
 struct PromptParams {
     const char* message;
@@ -315,12 +282,11 @@ INT_PTR CALLBACK PromptDlgProc(HWND hDlg, UINT msg,
 
         HFONT hfont =
             CreateFontA(16, 0, 0, 0, FW_NORMAL,
-                       FALSE, FALSE, FALSE, 
+                       FALSE, FALSE, FALSE,
                        ANSI_CHARSET,OUT_DEFAULT_PRECIS,CLIP_DEFAULT_PRECIS,
                         PROOF_QUALITY, FIXED_PITCH | FF_MODERN, "Courier New");
-                        
-        SendDlgItemMessage(hDlg, IDC_MESSAGE, WM_SETFONT, (WPARAM)hfont, MAKELPARAM(TRUE,0));
 
+        SendDlgItemMessage(hDlg, IDC_MESSAGE, WM_SETFONT, (WPARAM)hfont, MAKELPARAM(TRUE,0));
 
         break;
       }
@@ -340,14 +306,11 @@ INT_PTR CALLBACK PromptDlgProc(HWND hDlg, UINT msg,
         // window is immediately closed.  This is here to debug the problem.
         (void)0;
         break;
-
     }
 
     return FALSE;
 }
-
 }; // namespace _internal
-
 
 using namespace _internal;
 
@@ -359,16 +322,14 @@ static int guiPrompt(
     const char*         prompt,
     const char**        choice,
     int                 numChoices) {
-
     int width = 280;
     int height = 128;
 
     const int buttonSpacing = 2;
-    const int buttonWidth = 
-        (width - buttonSpacing * 2 - 
+    const int buttonWidth =
+        (width - buttonSpacing * 2 -
           buttonSpacing * (numChoices - 1)) / numChoices;
     const int buttonHeight = 13;
-
 
     DialogTemplate dialogTemplate(
         windowTitle,
@@ -382,13 +343,11 @@ static int guiPrompt(
 
     int i;
     for (i = 0; i < numChoices; i++) {
-
         int x = buttonSpacing + i * (buttonWidth + buttonSpacing);
         int y = height - buttonHeight - buttonSpacing;
 
         dialogTemplate.AddButton(choice[i], WS_VISIBLE | WS_TABSTOP, 0,
                            x, y, buttonWidth, buttonHeight, IDC_BUTTON0 + (WORD)i);
-        
     }
 
     // Convert all single \n characters to \r\n for proper printing
@@ -406,7 +365,7 @@ static int guiPrompt(
     }
 
     char* newStr = (char*)malloc(strLen + 1);
-    
+
     const char* pStr2 = prompt;
     char* pNew = newStr;
 
@@ -438,7 +397,7 @@ static int guiPrompt(
 
         // The last error value.  (Which is preserved across the call).
         DWORD lastErr = GetLastError();
-    
+
         // The decoded message from FormatMessage
         LPTSTR formatMsg = NULL;
 
@@ -474,16 +433,14 @@ static int guiPrompt(
 #endif
 #endif /* G3DFIX: exclude GUI prompt code */
 
-
 /**
- * Show a prompt on stdout 
+ * Show a prompt on stdout
  */
 static int textPrompt(
     const char*         windowTitle,
     const char*         prompt,
     const char**        choice,
     int                 numChoices) {
-
     printf("\n___________________________________________________\n");
     printf("%s\n", windowTitle);
     printf("%s", prompt);
@@ -497,7 +454,7 @@ static int textPrompt(
         printf("\n");
         printf("Choose an option by number:");
 
-        while ((c < 0) || (c >= numChoices)) { 
+        while ((c < 0) || (c >= numChoices)) {
             printf("\n");
 
             for (int i = 0; i < numChoices; i++) {
@@ -517,15 +474,11 @@ static int textPrompt(
                 printf("%d", c);
             }
         }
-    
     } else if (numChoices == 1) {
-        
         printf("\nPress any key for '%s'...", choice[0]);
         _getch();
         c = 0;
-
     } else {
-
         printf("\nPress any key...");
         _getch();
         c = 0;
@@ -559,7 +512,7 @@ struct CallbackData {
 
 /**
  Assumes that userData is a pointer to a carbon_evt_data_t.
- 
+
  */
 static pascal OSStatus DoCommandEvent(EventHandlerCallRef handlerRef, EventRef event, void* userData) {
     // See http://developer.apple.com/documentation/Carbon/Conceptual/HandlingWindowsControls/index.html
@@ -567,12 +520,12 @@ static pascal OSStatus DoCommandEvent(EventHandlerCallRef handlerRef, EventRef e
     CallbackData& callbackData = *(CallbackData*)userData;
 
 #   pragma unused(handlerRef)
-	
+
     callbackData.whichButton[0] = callbackData.myIndex;
-	
+
     // If we get here we can close the window
     ::QuitAppModalLoopForWindow(callbackData.refWindow);
-	
+
     // Return noErr to indicate that we handled the event
     return noErr;
 }
@@ -582,22 +535,21 @@ static int guiPrompt
  const char*         prompt,
  const char**        choice,
  int                 numChoices) {
-
     WindowRef	 window;
 
     int          iNumButtonRows	= 0;
     int          iButtonWidth   = -1;
     OSStatus	 err            = noErr;
-    
+
     // Determine number of rows of buttons
     while (iButtonWidth < CARBON_BUTTON_MINWIDTH) {
         ++iNumButtonRows;
-        iButtonWidth = 
-            (550 - (CARBON_WINDOW_PADDING*2 + 
-                    (CARBON_BUTTON_SPACING*numChoices))) / 
+        iButtonWidth =
+            (550 - (CARBON_WINDOW_PADDING*2 +
+                    (CARBON_BUTTON_SPACING*numChoices))) /
             (numChoices/iNumButtonRows);
     }
-	
+
     // Window Variables
     Rect	rectWin = {0, 0, 200 + ((iNumButtonRows-1) * (CARBON_BUTTON_HEIGHT+CARBON_BUTTON_SPACING)), 550};			// top, left, bottom, right
     CFStringRef	szWindowTitle = CFStringCreateWithCString(kCFAllocatorDefault, windowTitle, kCFStringEncodingUTF8);
@@ -608,17 +560,17 @@ static int guiPrompt
     err = SetWindowTitleWithCFString(window, szWindowTitle);
     err = SetThemeWindowBackground(window, kThemeBrushAlertBackgroundActive, false);
     assert(err == noErr);
-    
+
     // Event Handler Variables
     EventTypeSpec	buttonSpec[] = {{ kEventClassControl, kEventControlHit }, { kEventClassCommand, kEventCommandProcess }};
     EventHandlerUPP	buttonHandler = NewEventHandlerUPP(DoCommandEvent);
-    
+
     // Static Text Variables
     Rect		rectStatic = {20, 20, 152, 530};
     CFStringRef		szStaticText = CFStringCreateWithCString(kCFAllocatorDefault, prompt, kCFStringEncodingUTF8);
     ControlRef		refStaticText = NULL;
     err = CreateStaticTextControl(window, &rectStatic, szStaticText, NULL, &refStaticText);
-    
+
     // Button Variables
     Rect		bounds[numChoices];
     CFStringRef		caption[numChoices];
@@ -626,17 +578,17 @@ static int guiPrompt
 
     int whichButton=-1;
     CallbackData        callbackData[numChoices];
-	
+
     // Create the Buttons and assign event handlers
     for (int i = 0; i < numChoices; ++i) {
         bounds[i].top	 = 160 + ((CARBON_BUTTON_HEIGHT+CARBON_BUTTON_SPACING)*(i%iNumButtonRows));
         bounds[i].right	 = 530 - ((iButtonWidth+CARBON_BUTTON_SPACING)*(i/iNumButtonRows));
         bounds[i].left	 = bounds[i].right - iButtonWidth;
         bounds[i].bottom = bounds[i].top + CARBON_BUTTON_HEIGHT;
-        
+
         // Convert the button captions to Apple strings
         caption[i] = CFStringCreateWithCString(kCFAllocatorDefault, choice[i], kCFStringEncodingUTF8);
-    
+
         err = CreatePushButtonControl(window, &bounds[i], caption[i], &button[i]);
         assert(err == noErr);
 
@@ -647,23 +599,23 @@ static int guiPrompt
         callbackData[i].myIndex     = i;
         callbackData[i].whichButton = &whichButton;
 
-        err = InstallControlEventHandler(button[i], buttonHandler, 
+        err = InstallControlEventHandler(button[i], buttonHandler,
                                          GetEventTypeCount(buttonSpec), buttonSpec,
                                          &callbackData[i], NULL);
         assert(err == noErr);
     }
-    
+
     // Show Dialog
     err = RepositionWindow(window, NULL, kWindowCenterOnMainScreen);
     ShowWindow(window);
     BringToFront(window);
     err = ActivateWindow(window, true);
-    
+
     // Hack to get our window/process to the front...
-    ProcessSerialNumber psn = { 0, kCurrentProcess};    
+    ProcessSerialNumber psn = { 0, kCurrentProcess};
     TransformProcessType(&psn, kProcessTransformToForegroundApplication);
     SetFrontProcess (&psn);
-    
+
     // Run in Modal State
     err = RunAppModalLoopForWindow(window);
 
@@ -671,24 +623,24 @@ static int guiPrompt
     for (int i = 0; i < numChoices; ++i) {
         // Dispose of controls
         DisposeControl(button[i]);
-        
+
         // Release CFStrings
         CFRelease(caption[i]);
     }
-    
+
     // Dispose of Other Controls
     DisposeControl(refStaticText);
-    
+
     // Dispose of Event Handlers
     DisposeEventHandlerUPP(buttonHandler);
-    
+
     // Dispose of Window
     DisposeWindow(window);
-    
+
     // Release CFStrings
     CFRelease(szWindowTitle);
     CFRelease(szStaticText);
-    
+
     // Return Selection
     return whichButton;
 }
@@ -699,7 +651,7 @@ static int guiPrompt
 
 int prompt(
     const char*      windowTitle,
-    const char*      prompt, 
+    const char*      prompt,
     const char**     choice,
     int              numChoices,
     bool             useGui) {
@@ -710,7 +662,7 @@ int prompt(
             return guiPrompt(windowTitle, prompt, choice, numChoices);
         }
     #endif
-    
+
         #ifdef G3D_OSX
                 if (useGui){
                         //Will default to text prompt if numChoices > 4
@@ -721,18 +673,14 @@ int prompt(
     return textPrompt(windowTitle, prompt, choice, numChoices);
 }
 
-
 void msgBox(
     const std::string& message,
     const std::string& title) {
-
     const char *choice[] = {"Ok"};
-    prompt(title.c_str(), message.c_str(), choice, 1, true); 
+    prompt(title.c_str(), message.c_str(), choice, 1, true);
 }
 
 #ifndef G3D_WIN32
     #undef _getch
 #endif
-
 };// namespace
-

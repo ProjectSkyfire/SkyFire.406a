@@ -1,12 +1,12 @@
 /**
  @file Vector3.cpp
- 
+
  3D vector class
- 
+
  @maintainer Morgan McGuire, http://graphics.cs.williams.edu
- 
+
  @cite Portions based on Dave Eberly's Magic Software Library at http://www.magic-software.com
- 
+
  @created 2001-06-02
  @edited  2009-11-27
  */
@@ -28,9 +28,8 @@
 #include "G3D/Vector4.h"
 #include "G3D/Vector3int32.h"
 #include "G3D/Any.h"
- 
-namespace G3D {
 
+namespace G3D {
 Vector3::Vector3(const Any& any) {
     any.verifyName("Vector3");
     any.verifyType(Any::TABLE, Any::ARRAY);
@@ -79,7 +78,6 @@ const Vector3& Vector3::minFinite(){ static const Vector3 v(-FLT_MAX, -FLT_MAX, 
 const Vector3& Vector3::maxFinite(){ static const Vector3 v(FLT_MAX, FLT_MAX, FLT_MAX); return v; }
 
 Vector3::Axis Vector3::primaryAxis() const {
-    
     Axis a = X_AXIS;
 
     double nx = abs(x);
@@ -103,7 +101,6 @@ Vector3::Axis Vector3::primaryAxis() const {
     return a;
 }
 
-
 size_t Vector3::hashCode() const {
     return Vector4(*this, 0.0f).hashCode();
 }
@@ -111,7 +108,6 @@ size_t Vector3::hashCode() const {
 std::ostream& operator<<(std::ostream& os, const Vector3& v) {
     return os << v.toString();
 }
-
 
 //----------------------------------------------------------------------------
 
@@ -127,20 +123,17 @@ Vector3::Vector3(BinaryInput& b) {
     deserialize(b);
 }
 
-
 Vector3::Vector3(const class Vector3int16& v) {
     x = v.x;
     y = v.y;
     z = v.z;
 }
 
-
 void Vector3::deserialize(BinaryInput& b) {
     x = b.readFloat32();
     y = b.readFloat32();
     z = b.readFloat32();
 }
-
 
 void Vector3::deserialize(TextInput& t) {
     t.readSymbol("(");
@@ -152,7 +145,6 @@ void Vector3::deserialize(TextInput& t) {
     t.readSymbol(")");
 }
 
-
 void Vector3::serialize(TextOutput& t) const {
    t.writeSymbol("(");
    t.writeNumber(x);
@@ -163,20 +155,17 @@ void Vector3::serialize(TextOutput& t) const {
    t.writeSymbol(")");
 }
 
-
 void Vector3::serialize(BinaryOutput& b) const {
     b.writeFloat32(x);
     b.writeFloat32(y);
     b.writeFloat32(z);
 }
 
-
 Vector3 Vector3::random(Random& r) {
     Vector3 result;
     r.sphere(result.x, result.y, result.z);
     return result;
 }
-
 
 float Vector3::unitize(float fTolerance) {
     float fMagnitude = magnitude();
@@ -193,7 +182,6 @@ float Vector3::unitize(float fTolerance) {
     return fMagnitude;
 }
 
-
 Vector3 Vector3::reflectAbout(const Vector3& normal) const {
     Vector3 out;
 
@@ -203,9 +191,8 @@ Vector3 Vector3::reflectAbout(const Vector3& normal) const {
     return N * 2 * this->dot(N) - *this;
 }
 
-
 Vector3 Vector3::cosHemiRandom(const Vector3& normal, Random& r) {
-    debugAssertM(G3D::fuzzyEq(normal.length(), 1.0f), 
+    debugAssertM(G3D::fuzzyEq(normal.length(), 1.0f),
                  "cosHemiRandom requires its argument to have unit length");
 
     float x, y, z;
@@ -217,15 +204,14 @@ Vector3 Vector3::cosHemiRandom(const Vector3& normal, Random& r) {
     Vector3 X, Y;
     normal.getTangents(X, Y);
 
-    return 
+    return
         x * X +
         y * Y +
         z * Z;
 }
 
-
 Vector3 Vector3::cosPowHemiRandom(const Vector3& normal, const float k, Random& r) {
-    debugAssertM(G3D::fuzzyEq(normal.length(), 1.0f), 
+    debugAssertM(G3D::fuzzyEq(normal.length(), 1.0f),
                  "cosPowHemiRandom requires its argument to have unit length");
 
     float x, y, z;
@@ -237,12 +223,11 @@ Vector3 Vector3::cosPowHemiRandom(const Vector3& normal, const float k, Random& 
     Vector3 X, Y;
     normal.getTangents(X, Y);
 
-    return 
+    return
         x * X +
         y * Y +
         z * Z;
 }
-
 
 Vector3 Vector3::hemiRandom(const Vector3& normal, Random& r) {
     const Vector3& V = Vector3::random(r);
@@ -266,7 +251,6 @@ Vector3 Vector3::refractionDirection(
     const Vector3&  normal,
     float           iInside,
     float           iOutside) const {
-
     // From pg. 24 of Henrik Wann Jensen. Realistic Image Synthesis
     // Using Photon Mapping.  AK Peters. ISBN: 1568811470. July 2001.
 
@@ -351,7 +335,6 @@ std::string Vector3::toString() const {
     return G3D::format("(%g, %g, %g)", x, y, z);
 }
 
-
 //----------------------------------------------------------------------------
 
 Matrix3 Vector3::cross() const {
@@ -359,7 +342,6 @@ Matrix3 Vector3::cross() const {
                     z,  0, -x,
                    -y,  x,  0);
 }
-
 
 void serialize(const Vector3::Axis& a, class BinaryOutput& bo) {
     bo.writeUInt8((uint8)a);
@@ -495,10 +477,4 @@ Vector4 Vector3::zyzz() const  { return Vector4       (z, y, z, z); }
 Vector4 Vector3::xzzz() const  { return Vector4       (x, z, z, z); }
 Vector4 Vector3::yzzz() const  { return Vector4       (y, z, z, z); }
 Vector4 Vector3::zzzz() const  { return Vector4       (z, z, z, z); }
-
-
-
-
-
-
 } // namespace

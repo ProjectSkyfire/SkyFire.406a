@@ -2,7 +2,7 @@
  @file PhysicsFrame.cpp
 
  @maintainer Morgan McGuire, http://graphics.cs.williams.edu
- 
+
  @created 2002-07-09
  @edited  2010-03-25
 */
@@ -15,20 +15,16 @@
 #include "G3D/BinaryOutput.h"
 
 namespace G3D {
-
 PhysicsFrame::PhysicsFrame() {
     translation = Vector3::zero();
     rotation    = Quat();
 }
 
-
 PhysicsFrame::PhysicsFrame(
     const CoordinateFrame& coordinateFrame) {
-
     translation = coordinateFrame.translation;
     rotation    = Quat(coordinateFrame.rotation);
 }
-
 
 PhysicsFrame::PhysicsFrame(const Any& a) {
     const std::string& n = toLower(a.name());
@@ -36,9 +32,9 @@ PhysicsFrame::PhysicsFrame(const Any& a) {
 
     if (beginsWith(n, "vector3")) {
         *this = PhysicsFrame(Vector3(a));
-    } else if (beginsWith(n, "matrix3")) {        
+    } else if (beginsWith(n, "matrix3")) {
         *this = PhysicsFrame(Matrix3(a));
-    } else if (beginsWith(n, "cframe") || beginsWith(n, "coordinateframe")) {        
+    } else if (beginsWith(n, "cframe") || beginsWith(n, "coordinateframe")) {
         *this = PhysicsFrame(CoordinateFrame(a));
     } else if (beginsWith(n, "pframe") || beginsWith(n, "physicsframe")) {
         if (a.type() == Any::ARRAY) {
@@ -60,7 +56,6 @@ PhysicsFrame::PhysicsFrame(const Any& a) {
     }
 }
 
-
 PhysicsFrame PhysicsFrame::operator*(const PhysicsFrame& other) const {
     PhysicsFrame result;
 
@@ -70,21 +65,18 @@ PhysicsFrame PhysicsFrame::operator*(const PhysicsFrame& other) const {
     return result;
 }
 
-
 PhysicsFrame::operator CoordinateFrame() const {
     CoordinateFrame f;
-    
+
     f.translation = translation;
     f.rotation    = rotation.toRotationMatrix();
 
     return f;
 }
 
-
 PhysicsFrame PhysicsFrame::lerp(
     const PhysicsFrame&     other,
     float                   alpha) const {
-
     PhysicsFrame result;
 
     result.translation = translation.lerp(other.translation, alpha);
@@ -93,18 +85,13 @@ PhysicsFrame PhysicsFrame::lerp(
     return result;
 }
 
-
 void PhysicsFrame::deserialize(class BinaryInput& b) {
     translation.deserialize(b);
     rotation.deserialize(b);
 }
 
-
 void PhysicsFrame::serialize(class BinaryOutput& b) const {
     translation.serialize(b);
     rotation.serialize(b);
 }
-
-
 }; // namespace
-

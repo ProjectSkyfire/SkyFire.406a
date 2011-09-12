@@ -1,8 +1,8 @@
 /**
  @file Random.cpp
- 
+
  @maintainer Morgan McGuire, http://graphics.cs.williams.edu
- 
+
  @created 2009-01-02
  @edited  2009-03-29
 
@@ -12,7 +12,6 @@
 #include "G3D/Random.h"
 
 namespace G3D {
-
 Random& Random::common() {
     static Random r;
     return r;
@@ -21,7 +20,6 @@ Random& Random::common() {
 Random::Random(void* x) : state(NULL), m_threadsafe(false) {
     (void)x;
 }
-
 
 Random::Random(uint32 seed, bool threadsafe) : m_threadsafe(threadsafe) {
     const uint32 X = 1812433253UL;
@@ -33,12 +31,10 @@ Random::Random(uint32 seed, bool threadsafe) : m_threadsafe(threadsafe) {
     }
 }
 
-
 Random::~Random() {
     delete[] state;
     state = NULL;
 }
-
 
 uint32 Random::bits() {
     // See http://en.wikipedia.org/wiki/Mersenne_twister
@@ -68,10 +64,9 @@ uint32 Random::bits() {
     r ^= (r << S) & B;
     r ^= (r << T) & C;
     r ^=  r >> L;
-    
-    return r;    
-}
 
+    return r;
+}
 
 /** Generate the next N ints, and store them for readback later */
 void Random::generate() {
@@ -93,17 +88,17 @@ void Random::generate() {
     }
 
     // First N - M
-    for (unsigned int i = 0; i < N - M; ++i) {    
+    for (unsigned int i = 0; i < N - M; ++i) {
         uint32 x = (state[i] & UPPER_MASK) | (state[i + 1] & LOWER_MASK);
         state[i] = state[i + M] ^ (x >> 1) ^ mag01[x & 1];
     }
 
     // Rest
-    for (unsigned int i = N - M + 1; i < N - 1; ++i) {    
+    for (unsigned int i = N - M + 1; i < N - 1; ++i) {
         uint32 x = (state[i] & UPPER_MASK) | (state[i + 1] & LOWER_MASK);
         state[i] = state[i + (M - N)] ^ (x >> 1) ^ mag01[x & 1];
     }
-        
+
     uint32 y = (state[N - 1] & UPPER_MASK) | (state[0] & LOWER_MASK);
     state[N - 1] = state[M - 1] ^ (y >> 1) ^ mag01[y & 1];
     index = 0;
@@ -113,7 +108,6 @@ void Random::generate() {
     }
 }
 
-    
 int Random::integer(int low, int high) {
     int r = iFloor(low + (high - low + 1) * (double)bits() / 0xFFFFFFFFUL);
 
@@ -126,9 +120,7 @@ int Random::integer(int low, int high) {
     }
 }
 
-    
 float Random::gaussian(float mean, float stdev) {
-
     // Using Box-Mueller method from http://www.taygeta.com/random/gaussian.html
     // Modified to specify standard deviation and mean of distribution
     float w, x1, x2;
@@ -143,15 +135,14 @@ float Random::gaussian(float mean, float stdev) {
 
     // Transform to gassian distribution
     // Multiply by sigma (stdev ^ 2) and add mean.
-    return x2 * (float)square(stdev) * sqrtf((-2.0f * logf(w) ) / w) + mean; 
+    return x2 * (float)square(stdev) * sqrtf((-2.0f * logf(w) ) / w) + mean;
 }
-
 
 void Random::cosHemi(float& x, float& y, float& z) {
     const float e1 = uniform();
     const float e2 = uniform();
 
-    // Jensen's method 
+    // Jensen's method
     const float sin_theta = sqrtf(1.0f - e1);
     const float cos_theta = sqrtf(e1);
     const float phi = 6.28318531f * e2;
@@ -169,7 +160,6 @@ void Random::cosHemi(float& x, float& y, float& z) {
     //  z = sqrt(1.0 - x*x + y*y);
 }
 
-
 void Random::cosPowHemi(const float k, float& x, float& y, float& z) {
     const float e1 = uniform();
     const float e2 = uniform();
@@ -183,12 +173,10 @@ void Random::cosPowHemi(const float k, float& x, float& y, float& z) {
     z = cos_theta;
 }
 
-
 void Random::hemi(float& x, float& y, float& z) {
     sphere(x, y, z);
     z = fabsf(z);
 }
-
 
 void Random::sphere(float& x, float& y, float& z) {
     // Squared magnitude
@@ -196,7 +184,7 @@ void Random::sphere(float& x, float& y, float& z) {
 
     // Rejection sample
     do {
-        x = uniform() * 2.0f - 1.0f, 
+        x = uniform() * 2.0f - 1.0f,
         y = uniform() * 2.0f - 1.0f,
         z = uniform() * 2.0f - 1.0f;
         m2 = x*x + y*y + z*z;
@@ -208,5 +196,4 @@ void Random::sphere(float& x, float& y, float& z) {
     y *= s;
     z *= s;
 }
-
 } // G3D

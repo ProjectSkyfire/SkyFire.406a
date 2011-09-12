@@ -4,7 +4,7 @@
  Windows implementation of assertion routines.
 
  @maintainer Morgan McGuire, graphics3d.com
- 
+
  @created 2001-08-26
  @edited  2009-06-02
  */
@@ -31,7 +31,6 @@
 using namespace std;
 
 namespace G3D { namespace _internal {
-
 ConsolePrintHook _consolePrintHook;
 AssertionHook _debugHook = _handleDebugAssert_;
 AssertionHook _failureHook = _handleErrorCheck_;
@@ -42,7 +41,6 @@ AssertionHook _failureHook = _handleErrorCheck_;
     Window        x11Window  = 0;
 #endif
 #endif
-
 
 #ifdef G3D_WIN32
 static void postToClipboard(const char *text) {
@@ -73,7 +71,6 @@ static void createErrorMessage(
     int                 lineNumber,
     std::string&        outTitle,
     std::string&        outMessage) {
-
     std::string le = "";
     const char* newline = "\n";
 
@@ -82,7 +79,7 @@ static void createErrorMessage(
 
         // The last error value.  (Which is preserved across the call).
         DWORD lastErr = GetLastError();
-    
+
         // The decoded message from FormatMessage
         LPTSTR formatMsg = NULL;
 
@@ -125,11 +122,10 @@ static void createErrorMessage(
 
     // Build the message.
     outMessage =
-        G3D::format("%s%s%sExpression: %s%s%s:%d%s%s%s", 
-                 message.c_str(), newline, newline, expression, newline, 
+        G3D::format("%s%s%sExpression: %s%s%s:%d%s%s%s",
+                 message.c_str(), newline, newline, expression, newline,
                  filename, lineNumber, newline, newline, le.c_str());
 }
-
 
 bool _handleDebugAssert_(
     const char*         expression,
@@ -137,7 +133,6 @@ bool _handleDebugAssert_(
     const char*         filename,
     int                 lineNumber,
     bool                useGuiPrompt) {
-
     std::string dialogTitle = "Assertion Failure";
     std::string dialogText = "";
     createErrorMessage(expression, message, filename, lineNumber, dialogTitle, dialogText);
@@ -165,7 +160,7 @@ bool _handleDebugAssert_(
 #    endif
 
     switch (result) {
-    // -1 shouldn't actually occur because it means 
+    // -1 shouldn't actually occur because it means
     // that we're in release mode.
     case -1:
     case cBreak:
@@ -175,7 +170,7 @@ bool _handleDebugAssert_(
     case cIgnore:
         return false;
         break;
-   
+
     case cAbort:
         exit(-1);
         break;
@@ -185,14 +180,12 @@ bool _handleDebugAssert_(
     return false;
 }
 
-
 bool _handleErrorCheck_(
     const char*         expression,
     const std::string&  message,
     const char*         filename,
     int                 lineNumber,
     bool                useGuiPrompt) {
-
     std::string dialogTitle = "Critical Error";
     std::string dialogText = "";
 
@@ -209,7 +202,7 @@ bool _handleErrorCheck_(
 
     static const char* choices[] = {"Ok"};
 
-    const std::string& m = 
+    const std::string& m =
         std::string("An internal error has occured in this program and it will now close.  "
         "The specific error is below. More information has been saved in \"") +
             Log::getCommonLogFilename() + "\".\n" + dialogText;
@@ -219,7 +212,6 @@ bool _handleErrorCheck_(
 
     return true;
 }
-
 
 #ifdef G3D_WIN32
 static HCURSOR oldCursor;
@@ -250,7 +242,7 @@ void _releaseInputGrab_() {
         // Allow the cursor full access to the screen
         GetClipCursor(&oldCursorRect);
         ClipCursor(NULL);
-        
+
     #elif defined(G3D_LINUX)
 #if 0 /* G3DFIX: Disabled to avoid requirement for X11 libraries */
         if (x11Display != NULL) {
@@ -263,7 +255,7 @@ void _releaseInputGrab_() {
                 Cursor c = XCreateFontCursor(x11Display, 68);
                 XDefineCursor(x11Display, x11Window, c);
             }
-            XSync(x11Display, false);           
+            XSync(x11Display, false);
             XAllowEvents(x11Display, AsyncPointer, CurrentTime);
             XFlush(x11Display);
         }
@@ -272,7 +264,6 @@ void _releaseInputGrab_() {
         // TODO: OS X
     #endif
 }
-
 
 void _restoreInputGrab_() {
     #ifdef G3D_WIN32
@@ -291,17 +282,15 @@ void _restoreInputGrab_() {
                 ShowCursor(false);
             }
         }
-        
+
     #elif defined(G3D_LINUX)
         // TODO: Linux
     #elif defined(G3D_OSX)
         // TODO: OS X
     #endif
 }
-
-
 }; // internal namespace
- 
+
 void setAssertionHook(AssertionHook hook) {
     G3D::_internal::_debugHook = hook;
 }
@@ -318,7 +307,6 @@ AssertionHook failureHook() {
     return G3D::_internal::_failureHook;
 }
 
-
 void setConsolePrintHook(ConsolePrintHook h) {
     G3D::_internal::_consolePrintHook = h;
 }
@@ -327,11 +315,10 @@ ConsolePrintHook consolePrintHook() {
     return G3D::_internal::_consolePrintHook;
 }
 
-
 std::string __cdecl debugPrint(const std::string& s) {
 #   ifdef G3D_WIN32
         const int MAX_STRING_LEN = 1024;
-    
+
         // Windows can't handle really long strings sent to
         // the console, so we break the string.
         if (s.size() < MAX_STRING_LEN) {
@@ -372,7 +359,6 @@ std::string consolePrint(const std::string& s) {
     return s;
 }
 
-
 std::string __cdecl consolePrintf(const char* fmt ...) {
     va_list argList;
     va_start(argList, fmt);
@@ -381,7 +367,6 @@ std::string __cdecl consolePrintf(const char* fmt ...) {
 
     return consolePrint(s);
 }
-
 } // namespace
 
 #ifdef _MSC_VER

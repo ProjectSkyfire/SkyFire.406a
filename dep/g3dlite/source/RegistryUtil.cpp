@@ -17,10 +17,8 @@
 #include "G3D/System.h"
 
 namespace G3D {
-
 // static helpers
 static HKEY getRootKeyFromString(const char* str, size_t length);
-
 
 bool RegistryUtil::keyExists(const std::string& key) {
     size_t pos = key.find('\\', 0);
@@ -72,7 +70,6 @@ bool RegistryUtil::valueExists(const std::string& key, const std::string& value)
     }
     return (result == ERROR_SUCCESS);
 }
-
 
 bool RegistryUtil::readInt32(const std::string& key, const std::string& value, int32& data) {
     size_t pos = key.find('\\', 0);
@@ -162,7 +159,7 @@ bool RegistryUtil::readString(const std::string& key, const std::string& value, 
 
             result = RegQueryValueExA(openKey, value.c_str(), NULL, NULL, reinterpret_cast<LPBYTE>(tmpStr), reinterpret_cast<LPDWORD>(&dataSize));
             debugAssertM(result == ERROR_SUCCESS, "Could not read registry key value.");
-                
+
             if (result == ERROR_SUCCESS) {
                 data = tmpStr;
             }
@@ -247,14 +244,13 @@ bool RegistryUtil::writeString(const std::string& key, const std::string& value,
     debugAssert(result == ERROR_SUCCESS || result == ERROR_FILE_NOT_FOUND);
 
     if (result == ERROR_SUCCESS) {
-        result = RegSetValueExA(openKey, value.c_str(), 0, REG_SZ, reinterpret_cast<const BYTE*>(data.c_str()), (data.size() + 1));                
+        result = RegSetValueExA(openKey, value.c_str(), 0, REG_SZ, reinterpret_cast<const BYTE*>(data.c_str()), (data.size() + 1));
         debugAssertM(result == ERROR_SUCCESS, "Could not write registry key value.");
 
         RegCloseKey(openKey);
     }
     return (result == ERROR_SUCCESS);
 }
-
 
 // static helpers
 static HKEY getRootKeyFromString(const char* str, size_t length) {
@@ -284,7 +280,6 @@ static HKEY getRootKeyFromString(const char* str, size_t length) {
         return NULL;
     }
 }
-
 } // namespace G3D
 
 #endif // G3D_WIN32
