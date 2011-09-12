@@ -197,6 +197,14 @@ set(scripts_STAT_SRCS
   EasternKingdoms/ShadowfangKeep/instance_shadowfang_keep.cpp
   EasternKingdoms/ShadowfangKeep/shadowfang_keep.h
   EasternKingdoms/burning_steppes.cpp
+  EasternKingdoms/BlackwingDescent/instance_blackwing_descent.cpp
+  EasternKingdoms/BlackwingDescent/boss_omnotron_defense_system.cpp
+  EasternKingdoms/BlackwingDescent/boss_nefarian.cpp
+  EasternKingdoms/BlackwingDescent/boss_maloriak.cpp
+  EasternKingdoms/BlackwingDescent/boss_magmaw.cpp
+  EasternKingdoms/BlackwingDescent/boss_chimaeron.cpp 
+  EasternKingdoms/BlackwingDescent/boss_atramedes.cpp 
+  EasternKingdoms/BlackwingDescent/blackwing_descent.h 
   EasternKingdoms/BlackwingLair/boss_chromaggus.cpp
   EasternKingdoms/BlackwingLair/boss_razorgore.cpp
   EasternKingdoms/BlackwingLair/boss_firemaw.cpp

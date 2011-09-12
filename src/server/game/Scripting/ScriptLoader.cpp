@@ -132,6 +132,13 @@ void AddSC_boss_flamegor();
 void AddSC_boss_chromaggus();
 void AddSC_boss_nefarian();
 void AddSC_boss_victor_nefarius();
+void AddSC_boss_omnotron_defense_system(); //Blackwing Descent
+void AddSC_boss_bd_nefarian();
+void AddSC_boss_maloriak();
+void AddSC_boss_atramedes();
+void AddSC_boss_magmaw();
+void AddSC_boss_chimaeron();
+void AddSC_instance_blackwing_descent();
 void AddSC_deadmines();                      //Deadmines
 void AddSC_instance_deadmines();
 void AddSC_boss_mr_smite();
@@ -775,6 +782,13 @@ void AddEasternKingdomsScripts()
     AddSC_boss_chromaggus();
     AddSC_boss_nefarian();
     AddSC_boss_victor_nefarius();
+    AddSC_boss_omnotron_defense_system(); //Blackwing Descent
+    AddSC_boss_bd_nefarian();
+    AddSC_boss_maloriak();
+    AddSC_boss_atramedes();
+    AddSC_boss_magmaw();
+    AddSC_boss_chimaeron();
+    AddSC_instance_blackwing_descent();
     AddSC_deadmines();                      //Deadmines
     AddSC_instance_deadmines();
     AddSC_boss_mr_smite();
