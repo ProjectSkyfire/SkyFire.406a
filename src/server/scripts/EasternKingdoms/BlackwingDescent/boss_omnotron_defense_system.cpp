@@ -50,7 +50,7 @@ public:
         }
 
         void EnterCombat(Unit* /*pWho*/) {}
-        
+
         void JustDied(Unit* /*Killer*/) {}
 
         void UpdateAI(const uint32 uiDiff)
@@ -91,7 +91,7 @@ public:
         }
 
         void EnterCombat(Unit* /*pWho*/) { }
-        
+
         void JustDied(Unit* /*Killer*/) { }
 
         void UpdateAI(const uint32 uiDiff)
@@ -122,7 +122,7 @@ public:
         }
 
         InstanceScript* pInstance;
-        
+
         uint32 uiArcaneAnnihilatorTimer;
 
         void Reset()
@@ -143,7 +143,7 @@ public:
         {
             pInstance->SetData(DATA_OMNOTRON_DEFENSE_SYSTEM, FAIL);
         }
-        
+
         void JustDied(Unit* /*Killer*/)
         {
             pInstance->SetData(DATA_OMNOTRON_DEFENSE_SYSTEM, DONE);
@@ -195,7 +195,7 @@ public:
         }
 
         void EnterCombat(Unit* /*pWho*/) { }
-        
+
         void JustDied(Unit* /*Killer*/) {}
 
         void UpdateAI(const uint32 uiDiff)

@@ -18,7 +18,6 @@
 #include "ScriptPCH.h"
 #include "blackrock_caverns.h"
 
-
 class boss_karsh_steelbender : public CreatureScript
 {
 public:

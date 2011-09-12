@@ -41,7 +41,7 @@ public:
         void Reset() { }
 
         void EnterCombat(Unit* /*pWho*/) {}
-        
+
         void JustDied(Unit* /*Killer*/)
         {
             pInstance->SetData(DATA_CHIMAERON, DONE);

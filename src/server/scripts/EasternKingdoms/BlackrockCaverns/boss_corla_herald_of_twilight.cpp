@@ -18,7 +18,6 @@
 #include "ScriptPCH.h"
 #include "blackrock_caverns.h"
 
-
 class boss_corla_herald_of_twilight : public CreatureScript
 {
 public:
