@@ -240,7 +240,16 @@ inline void LoadDBC(uint32& availableDbcLocales, StoreProblemList& errlist, DBCS
 
 	if (storage.Load(dbc_filename.c_str(), sql))
 	{
-	}
+        for (uint8 loc = 0; loc < TOTAL_LOCALES; ++loc)
+        {
+            if (!(availableDbcLocales & (1 << loc)))
+                continue;
+
+            std::string localizedFileName = dbc_path + localeNames[loc] + "/" + filename;
+            if (!storage.LoadStringsFrom(localizedFileName.c_str(), loc))
+                availableDbcLocales &= ~(1<<loc);             // mark locale as not available
+        }
+    }
 	else
 	{
 		// sort problematic dbc to (1) non compatible and (2) non-existed

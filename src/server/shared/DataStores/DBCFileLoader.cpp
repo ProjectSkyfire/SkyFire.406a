@@ -250,18 +250,40 @@ char* DBCFileLoader::AutoProduceData(const char* format, uint32& records, char**
     return dataTable;
 }
 
-char* DBCFileLoader::AutoProduceStrings(const char* format, char* dataTable)
+char* DBCFileLoader::AutoProduceStrings(const char* format, char* dataTable, uint8 locale)
 {
     if (strlen(format)!=fieldCount)
         return NULL;
 
-    char* stringPool= new char[stringSize];
+    uint32 stringFields = 0;
+    for (uint32 i = 0; i < fieldCount; i++)
+        if (format[i] == FT_STRING)
+            stringFields++;
+
+    struct DBCStringHolder
+    {
+        char const* Strings[TOTAL_LOCALES];
+    };
+
+    uint32 stringHolderSize = sizeof(DBCStringHolder);                      // size of the string holder
+    uint32 stringHolderRecordPoolSize = stringFields * stringHolderSize;    // size of the string holder per record
+    uint32 stringHolderPoolSize = stringHolderRecordPoolSize * recordCount; // total size of the string holder pool
+
+    char* pool = new char[stringHolderPoolSize + stringSize];
+
+    // first part: string array pool
+    DBCStringHolder* stringArrayPool = (DBCStringHolder*)pool;
+    memset(stringArrayPool, 0, stringHolderPoolSize);
+
+    // second part: string pool
+    char* stringPool = pool + stringHolderPoolSize;
     memcpy(stringPool, stringTable, stringSize);
 
     uint32 offset=0;
 
     for (uint32 y =0; y<recordCount; y++)
     {
+        uint32 stringFieldIndex = 0;
         for (uint32 x=0; x<fieldCount; x++)
             switch (format[x])
         {
@@ -275,16 +297,30 @@ char* DBCFileLoader::AutoProduceStrings(const char* format, char* dataTable)
                 break;
             case FT_STRING:
                 // fill only not filled entries
-                char** slot = (char**)(&dataTable[offset]);
-                if (!*slot || !**slot)
+                //char** slot = (char**)(&dataTable[offset]);
+                //if (!*slot || !**slot)
+                //{
+                //    const char * st = getRecord(y).getString(x);
+                //    *slot=stringPool+(st-(const char*)stringTable);
+                //}
+                DBCStringHolder** slot = (DBCStringHolder**)(&dataTable[offset]);
+                if (!*slot)
+                    *slot = (DBCStringHolder*)(&stringArrayPool[y * stringFields + stringFieldIndex].Strings);
+                const char * st = getRecord(y).getString(x);
+                if (locale == 0)
                 {
-                    const char * st = getRecord(y).getString(x);
-                    *slot=stringPool+(st-(const char*)stringTable);
+                    // default locale, fill all locales strings
+                    for(uint8 loc = 0; loc < TOTAL_LOCALES; loc++)
+                        if (!(*slot)->Strings[loc])
+                            (*slot)->Strings[loc] = stringPool+(st-(const char*)stringTable);
                 }
+                else // specific locale
+                    (*slot)->Strings[locale] = stringPool+(st-(const char*)stringTable);
+                stringFieldIndex++;
                 offset+=sizeof(char*);
                 break;
         }
     }
 
-    return stringPool;
+    return pool;
 }

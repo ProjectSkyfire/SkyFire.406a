@@ -233,7 +233,7 @@ class DBCStorage
            return indexTable.asT!= NULL;
         }
 
-        bool LoadStringsFrom(char const* fn)
+        bool LoadStringsFrom(char const* fn, uint8 locale)
         {
             // DBC must be already loaded using Load
             if (!indexTable.asT)
@@ -244,7 +244,7 @@ class DBCStorage
             if (!dbc.Load(fn, fmt))
                 return false;
 
-            stringPoolList.push_back(dbc.AutoProduceStrings(fmt, (char*)dataTable));
+            stringPoolList.push_back(dbc.AutoProduceStrings(fmt, (char*)dataTable, locale));
 
             return true;
         }
