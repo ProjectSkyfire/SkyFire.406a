@@ -6931,7 +6931,7 @@ void Player::RewardOnKill(Unit *pVictim, float rate)
     if (pVictim->ToCreature()->IsReputationGainDisabled())
         return;
 
-    RewardOnKillEntry const* Rew = sObjectMgr->GetRewardOnKilEntry(pVictim->ToCreature()->GetCreatureInfo()->Entry);
+    RewardOnKillEntry const* Rew = sObjectMgr->GetRewardOnKillEntry(pVictim->ToCreature()->GetCreatureInfo()->Entry);
 
     if (!Rew)
         return;
