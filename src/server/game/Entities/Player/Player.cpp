@@ -11371,7 +11371,7 @@ void Player::ModifyCurrency(uint32 id, int32 count, bool force)
     {
         int32 deltaMax = int32(weekCap) - oldWeekCount; // deltaMax could be minus if oldWeekCount already exceeded week cap
         if (!force && count > 0 && count > deltaMax)    // correct count only when gaining currency exceeds week cap
-            count = deltaMax > 0 ? deltaMax : 0;         
+            count = deltaMax > 0 ? deltaMax : 0;
     }
 
     // count could be changed to 0 due to the total cap and week cap check, so check it again
