@@ -130,9 +130,9 @@ set(scripts_STAT_SRCS
   EasternKingdoms/Uldaman/instance_uldaman.cpp
   EasternKingdoms/Uldaman/boss_archaedas.cpp
   EasternKingdoms/swamp_of_sorrows.cpp
-  #EasternKingdoms/BaradinHold/baradin_hold.h
-  #EasternKingdoms/BaradinHold/instance_baradin_hold.cpp
-  #EasternKingdoms/BaradinHold/boss_argaloth.cpp  
+  EasternKingdoms/BaradinHold/baradin_hold.h
+  EasternKingdoms/BaradinHold/instance_baradin_hold.cpp
+  EasternKingdoms/BaradinHold/boss_argaloth.cpp  
   #EasternKingdoms/BlackrockCaverns/blackrock_caverns.h
   #EasternKingdoms/BlackrockCaverns/instance_blackrock_caverns.cpp  
   EasternKingdoms/BlackrockSpire/boss_pyroguard_emberseer.cpp

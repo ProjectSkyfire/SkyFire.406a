@@ -83,8 +83,8 @@ void AddSC_boss_balinda();
 void AddSC_boss_drekthar();
 void AddSC_boss_galvangar();
 void AddSC_boss_vanndar();
-//void AddSC_instance_baradin_hold();          //Baradin Hold
-//void AddSC_boss_argaloth();
+void AddSC_instance_baradin_hold();          //Baradin Hold
+void AddSC_boss_argaloth();
 //void AddSC_instance_bastion_of_twilight();   //BastionOfTwilight
 //void AddSC_boss_theralion_and_valiona();
 //void AddSC_boss_sinestra();
