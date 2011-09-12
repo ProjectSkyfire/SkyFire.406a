@@ -72,24 +72,24 @@ public:
             return false;
         }
 
-        void OnCreatureCreate(Creature* pCreature, bool)
+        void OnCreatureCreate(Creature* creature, bool)
         {
-            switch(pCreature->GetEntry())
+            switch(creature->GetEntry())
             {
                 case BOSS_ROMOGG_BONECRUSHER:
-                    uiRomoggBonecrusher = pCreature->GetGUID();
+                    uiRomoggBonecrusher = creature->GetGUID();
                     break;
                 case BOSS_CORLA:
-                    uiCorla = pCreature->GetGUID();
+                    uiCorla = creature->GetGUID();
                     break;
                 case BOSS_KARSH_STEELBENDER:
-                    uiKarshSteelbender = pCreature->GetGUID();
+                    uiKarshSteelbender = creature->GetGUID();
                     break;
                 case BOSS_BEAUTY:
-                    uiBeauty = pCreature->GetGUID();
+                    uiBeauty = creature->GetGUID();
                     break;
                 case BOSS_ASCENDANT_LORD_OBSIDIUS:
-                    uiAscendantLordObsidius = pCreature->GetGUID();
+                    uiAscendantLordObsidius = creature->GetGUID();
                     break;
             }
         }

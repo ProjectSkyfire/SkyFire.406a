@@ -133,8 +133,13 @@ set(scripts_STAT_SRCS
   EasternKingdoms/BaradinHold/baradin_hold.h
   EasternKingdoms/BaradinHold/instance_baradin_hold.cpp
   EasternKingdoms/BaradinHold/boss_argaloth.cpp  
-  #EasternKingdoms/BlackrockCaverns/blackrock_caverns.h
-  #EasternKingdoms/BlackrockCaverns/instance_blackrock_caverns.cpp  
+  EasternKingdoms/BlackrockCaverns/blackrock_caverns.h
+  EasternKingdoms/BlackrockCaverns/boss_ascendant_lord_obsidius.cpp
+  EasternKingdoms/BlackrockCaverns/boss_beauty.cpp
+  EasternKingdoms/BlackrockCaverns/boss_corla_herald_of_twilight.cpp
+  EasternKingdoms/BlackrockCaverns/boss_karsh_steelbender.cpp
+  EasternKingdoms/BlackrockCaverns/boss_romogg_bonecrusher.cpp 
+  EasternKingdoms/BlackrockCaverns/instance_blackrock_caverns.cpp  
   EasternKingdoms/BlackrockSpire/boss_pyroguard_emberseer.cpp
   EasternKingdoms/BlackrockSpire/boss_drakkisath.cpp
   EasternKingdoms/BlackrockSpire/boss_warmaster_voone.cpp
