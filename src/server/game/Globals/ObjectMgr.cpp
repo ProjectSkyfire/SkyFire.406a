@@ -6892,7 +6892,7 @@ void ObjectMgr::LoadRewardOnKill()
         {
             if (!sCurrencyTypesStore.LookupEntry(rewOnKill.currencyid1))
             {
-                sLog->outErrorDb("CurrenctType (CurrenctTypes.dbc) %u does not exist but is used in `creature_onkill_reward`", rewOnKill.currencyid1);
+                sLog->outErrorDb("CurrencyType (CurrencyTypes.dbc) %u does not exist but is used in `creature_onkill_reward`", rewOnKill.currencyid1);
                 continue;
             }
         }
@@ -6901,7 +6901,7 @@ void ObjectMgr::LoadRewardOnKill()
         {
             if (!sCurrencyTypesStore.LookupEntry(rewOnKill.currencyid2))
             {
-                sLog->outErrorDb("CurrenctType (CurrenctTypes.dbc) %u does not exist but is used in `creature_onkill_reward`", rewOnKill.currencyid2);
+                sLog->outErrorDb("CurrencyType (CurrencyTypes.dbc) %u does not exist but is used in `creature_onkill_reward`", rewOnKill.currencyid2);
                 continue;
             }
         }
@@ -6910,7 +6910,7 @@ void ObjectMgr::LoadRewardOnKill()
         {
             if (!sCurrencyTypesStore.LookupEntry(rewOnKill.currencyid3))
             {
-                sLog->outErrorDb("CurrenctType (CurrenctTypes.dbc) %u does not exist but is used in `creature_onkill_reward`", rewOnKill.currencyid3);
+                sLog->outErrorDb("CurrencyType (CurrencyTypes.dbc) %u does not exist but is used in `creature_onkill_reward`", rewOnKill.currencyid3);
                 continue;
             }
         }
