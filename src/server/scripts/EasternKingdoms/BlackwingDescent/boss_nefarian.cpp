@@ -39,7 +39,7 @@ public:
     {
         boss_bd_nefarianAI(Creature* creature) : ScriptedAI(creature)
         {
-            pInstance = pCreature->GetInstanceScript();
+            pInstance = creature->GetInstanceScript();
         }
 
         InstanceScript* pInstance;

@@ -80,7 +80,7 @@ public:
             Unit* Summoned = me->SummonCreature(creatureId, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), 0, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 240000);
             if (Summoned)
             {
-                Unit* target = SelectUnit(SELECT_TARGET_RANDOM, 0);
+                Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0);
                 if (target)
                     Summoned->AddThreat(target, 1.0f);
             }

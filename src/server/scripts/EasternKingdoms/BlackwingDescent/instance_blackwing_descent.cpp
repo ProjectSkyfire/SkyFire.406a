@@ -80,7 +80,7 @@ class instance_blackwing_descent : public InstanceMapScript
 
                 for (Map::PlayerList::const_iterator i = PlList.begin(); i != PlList.end(); ++i)
                     if (Player* pPlayer = i->getSource())
-                        pPlayer->ModifyMoney(396, 7000);
+                        pPlayer->ModifyCurrency(396, 7000);
             }
 
             void Load(const char* in)
