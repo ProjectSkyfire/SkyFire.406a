@@ -6815,24 +6815,26 @@ void ObjectMgr::LoadReputationRewardRate()
 	sLog->outString();
 }
 
-void ObjectMgr::LoadReputationOnKill()
+void ObjectMgr::LoadRewardOnKill()
 {
 	uint32 oldMSTime = getMSTime();
 
 	// For reload case
-	mRepOnKill.clear();
+	mRewOnKill.clear();
 
 	uint32 count = 0;
 
 	//                                                0            1                     2
 	QueryResult result = WorldDatabase.Query("SELECT creature_id, RewOnKillRepFaction1, RewOnKillRepFaction2, "
 	//   3             4             5                   6             7             8                   9
-		"IsTeamAward1, MaxStanding1, RewOnKillRepValue1, IsTeamAward2, MaxStanding2, RewOnKillRepValue2, TeamDependent "
-		"FROM creature_onkill_reputation");
+        "IsTeamAward1, MaxStanding1, RewOnKillRepValue1, IsTeamAward2, MaxStanding2, RewOnKillRepValue2, TeamDependent, "
+    //   10            11            12                  13              14              15
+        "CurrencyId1,  CurrencyId2,  CurrencyId3,        CurrencyCount1, CurrencyCount2, CurrencyCount3 "
+        "FROM creature_onkill_reward");
 
 	if (!result)
 	{
-		sLog->outErrorDb(">> Loaded 0 creature award reputation definitions. DB table `creature_onkill_reputation` is empty.");
+		sLog->outErrorDb(">> Loaded 0 creature reward definitions. DB table `creature_onkill_reward` is empty.");
 		sLog->outString();
 		return;
 	}
@@ -6843,49 +6845,82 @@ void ObjectMgr::LoadReputationOnKill()
 
 		uint32 creature_id = fields[0].GetUInt32();
 
-		ReputationOnKillEntry repOnKill;
-		repOnKill.repfaction1          = fields[1].GetUInt32();
-		repOnKill.repfaction2          = fields[2].GetUInt32();
-		repOnKill.is_teamaward1        = fields[3].GetBool();
-		repOnKill.reputation_max_cap1  = fields[4].GetUInt32();
-		repOnKill.repvalue1            = fields[5].GetInt32();
-		repOnKill.is_teamaward2        = fields[6].GetBool();
-		repOnKill.reputation_max_cap2  = fields[7].GetUInt32();
-		repOnKill.repvalue2            = fields[8].GetInt32();
-		repOnKill.team_dependent       = fields[9].GetUInt8();
+		RewardOnKillEntry rewOnKill;
+		rewOnKill.repfaction1          = fields[1].GetUInt32();
+		rewOnKill.repfaction2          = fields[2].GetUInt32();
+		rewOnKill.is_teamaward1        = fields[3].GetBool();
+		rewOnKill.reputation_max_cap1  = fields[4].GetUInt32();
+		rewOnKill.repvalue1            = fields[5].GetInt32();
+		rewOnKill.is_teamaward2        = fields[6].GetBool();
+		rewOnKill.reputation_max_cap2  = fields[7].GetUInt32();
+		rewOnKill.repvalue2            = fields[8].GetInt32();
+		rewOnKill.team_dependent       = fields[9].GetUInt8();
+		rewOnKill.currencyid1          = fields[10].GetUInt32();
+		rewOnKill.currencyid2          = fields[11].GetUInt32();
+		rewOnKill.currencyid3          = fields[12].GetUInt32();
+		rewOnKill.currencycount1       = fields[13].GetInt32();
+		rewOnKill.currencycount2       = fields[14].GetInt32();
+		rewOnKill.currencycount3       = fields[15].GetInt32();
 
 		if (!GetCreatureTemplate(creature_id))
 		{
-			sLog->outErrorDb("Table `creature_onkill_reputation` have data for not existed creature entry (%u), skipped", creature_id);
+			sLog->outErrorDb("Table `creature_onkill_reward` have data for not existed creature entry (%u), skipped", creature_id);
 			continue;
 		}
 
-		if (repOnKill.repfaction1)
+		if (rewOnKill.repfaction1)
 		{
-			FactionEntry const *factionEntry1 = sFactionStore.LookupEntry(repOnKill.repfaction1);
+			FactionEntry const *factionEntry1 = sFactionStore.LookupEntry(rewOnKill.repfaction1);
 			if (!factionEntry1)
 			{
-				sLog->outErrorDb("Faction (faction.dbc) %u does not exist but is used in `creature_onkill_reputation`", repOnKill.repfaction1);
+				sLog->outErrorDb("Faction (faction.dbc) %u does not exist but is used in `creature_onkill_reward`", rewOnKill.repfaction1);
 				continue;
 			}
 		}
 
-		if (repOnKill.repfaction2)
+		if (rewOnKill.repfaction2)
 		{
-			FactionEntry const *factionEntry2 = sFactionStore.LookupEntry(repOnKill.repfaction2);
+			FactionEntry const *factionEntry2 = sFactionStore.LookupEntry(rewOnKill.repfaction2);
 			if (!factionEntry2)
 			{
-				sLog->outErrorDb("Faction (faction.dbc) %u does not exist but is used in `creature_onkill_reputation`", repOnKill.repfaction2);
+				sLog->outErrorDb("Faction (faction.dbc) %u does not exist but is used in `creature_onkill_reward`", rewOnKill.repfaction2);
 				continue;
 			}
 		}
 
-		mRepOnKill[creature_id] = repOnKill;
+        if (rewOnKill.currencyid1)
+        {
+            if (!sCurrencyTypesStore.LookupEntry(rewOnKill.currencyid1))
+            {
+                sLog->outErrorDb("CurrenctType (CurrenctTypes.dbc) %u does not exist but is used in `creature_onkill_reward`", rewOnKill.currencyid1);
+                continue;
+            }
+        }
+
+        if (rewOnKill.currencyid2)
+        {
+            if (!sCurrencyTypesStore.LookupEntry(rewOnKill.currencyid2))
+            {
+                sLog->outErrorDb("CurrenctType (CurrenctTypes.dbc) %u does not exist but is used in `creature_onkill_reward`", rewOnKill.currencyid2);
+                continue;
+            }
+        }
+
+        if (rewOnKill.currencyid3)
+        {
+            if (!sCurrencyTypesStore.LookupEntry(rewOnKill.currencyid3))
+            {
+                sLog->outErrorDb("CurrenctType (CurrenctTypes.dbc) %u does not exist but is used in `creature_onkill_reward`", rewOnKill.currencyid3);
+                continue;
+            }
+        }
+
+		mRewOnKill[creature_id] = rewOnKill;
 
 		++count;
 	} while (result->NextRow());
 
-	sLog->outString(">> Loaded %u creature award reputation definitions in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+	sLog->outString(">> Loaded %u creature reward definitions in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
 	sLog->outString();
 }
 
