@@ -11101,6 +11101,33 @@ InventoryResult Player::_CanStoreItem(uint8 bag, uint8 slot, ItemPosCountVec &de
     return EQUIP_ERR_INVENTORY_FULL;
 }
 
+void Player::SendCurrencies() const
+{
+    // TODO: not yet implemented
+}
+
+uint32 Player::GetCurrency(uint32 id) const
+{
+    // TODO: not yet implemented
+    return 0;
+}
+
+bool Player::HasCurrency(uint32 id, uint32 count) const
+{
+    // TODO: not yet implemented
+    return false;
+}
+
+void Player::SetCurrency(uint32 id, uint32 count)
+{
+    // TODO: not yet implemented
+}
+
+void Player::ModifyCurrency(uint32 id, int32 count)
+{
+    // TODO: not yet implemented
+}
+
 //////////////////////////////////////////////////////////////////////////
 InventoryResult Player::CanStoreItems(Item** pItems, int count) const
 {
