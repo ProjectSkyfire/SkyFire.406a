@@ -617,12 +617,10 @@ void CliRunnable::run()
             #if PLATFORM != PLATFORM_WINDOWS
             add_history(command.c_str());
             #endif
-
         }
         else if (feof(stdin))
         {
             World::StopNow(SHUTDOWN_EXIT_CODE);
         }
-
     }
 }

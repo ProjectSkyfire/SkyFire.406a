@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #include "ScriptPCH.h"
 #include "blackwing_descent.h"
 
@@ -43,7 +43,7 @@ public:
         }
 
         InstanceScript* pInstance;
-        
+
         uint32 uiLavaSpewTimer;
         uint32 uiMagmaSpitTimer;
         uint32 uiLavaParasiteSummonTimer;
@@ -51,11 +51,11 @@ public:
         void Reset()
         {
             pInstance->SetData(DATA_MAGMAW, NOT_STARTED);
-            
+
             uiLavaSpewTimer = 10*IN_MILLISECONDS;
             uiMagmaSpitTimer = 14*IN_MILLISECONDS;
             uiLavaParasiteSummonTimer = 30*IN_MILLISECONDS;
-            
+
             me->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
             me->ApplySpellImmune(0, IMMUNITY_MECHANIC, MECHANIC_GRIP, true);
         }
@@ -133,7 +133,7 @@ public:
     struct mobs_lava_parasiteAI : public ScriptedAI
     {
         mobs_lava_parasiteAI(Creature* creature) : ScriptedAI(creature) { }
-        
+
         uint32 uiCheckDistanceTimer;
 
         void Reset()
@@ -142,14 +142,14 @@ public:
         }
 
         void EnterCombat(Unit* /*pWho*/) { }
-        
+
         void JustDied(Unit* /*Killer*/) {}
 
         void UpdateAI(const uint32 uiDiff)
         {
             if (!UpdateVictim())
                 return;
-            
+
             if (me->IsWithinDistInMap(me->getVictim(), 2.0f))
             {
                 if (uiCheckDistanceTimer <= uiDiff)

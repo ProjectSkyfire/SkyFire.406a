@@ -6931,7 +6931,7 @@ void Player::RewardOnKill(Unit *pVictim, float rate)
     if (pVictim->ToCreature()->IsReputationGainDisabled())
         return;
 
-    RewardOnKillEntry const* Rew = sObjectMgr->GetRewardOnKilEntry(pVictim->ToCreature()->GetCreatureInfo()->Entry);
+    RewardOnKillEntry const* Rew = sObjectMgr->GetRewardOnKillEntry(pVictim->ToCreature()->GetCreatureInfo()->Entry);
 
     if (!Rew)
         return;
@@ -11118,29 +11118,174 @@ InventoryResult Player::_CanStoreItem(uint8 bag, uint8 slot, ItemPosCountVec &de
 
 void Player::SendCurrencies() const
 {
-    // TODO: not yet implemented
+    WorldPacket packet(SMSG_INIT_CURRENCY, 4 + m_currencies.size()*(5*4 + 1));
+    packet << uint32(m_currencies.size());
+
+    for (PlayerCurrenciesMap::const_iterator itr = m_currencies.begin(); itr != m_currencies.end(); ++itr)
+    {
+        const CurrencyTypesEntry* entry = sCurrencyTypesStore.LookupEntry(itr->first);
+        if (!entry)
+            continue;
+        packet << uint32(itr->second.weekCount / PLAYER_CURRENCY_PRECISION);
+        packet << uint8(0);                     // unknown
+        packet << uint32(entry->ID);
+        packet << uint32(0/*TODO:sWorld->GetNextCurrencyResetTime() - WEEK*/);
+        packet << uint32(_GetCurrencyWeekCap(entry) / PLAYER_CURRENCY_PRECISION);
+        packet << uint32(itr->second.totalCount / PLAYER_CURRENCY_PRECISION);
+    }
+
+    GetSession()->SendPacket(&packet);
 }
 
 uint32 Player::GetCurrency(uint32 id) const
 {
-    // TODO: not yet implemented
-    return 0;
+    PlayerCurrenciesMap::const_iterator itr = m_currencies.find(id);
+    return itr != m_currencies.end() ? itr->second.totalCount : 0;
 }
 
 bool Player::HasCurrency(uint32 id, uint32 count) const
 {
-    // TODO: not yet implemented
-    return false;
+    PlayerCurrenciesMap::const_iterator itr = m_currencies.find(id);
+    return itr != m_currencies.end() && itr->second.totalCount >= count;
+}
+
+// NOTE:
+// when gaining currency (count > 0) with force flag set (recommended for gm command '.modify currency' use only):
+//     currency is gained forcedly without checking total cap nor week cap
+// when gaining currency (count > 0) with force flag unset:
+//     currency is limited to total cap and week cap, currency is unchanged if already exceeded cap (no force correction)
+// when removing/paying currency (count < 0):
+//     do simply subtraction to total count only, total cap and week cap are not checked in this case
+void Player::ModifyCurrency(uint32 id, int32 count, bool force)
+{
+    if (!count)
+        return;
+
+    const CurrencyTypesEntry* currency = sCurrencyTypesStore.LookupEntry(id);
+    if (!currency)
+    {
+        sLog->outError("ModifyCurrency: currency %u does not exist", id);
+        return;
+    }
+
+    int32 oldTotalCount = 0;
+    int32 oldWeekCount = 0;
+    PlayerCurrenciesMap::iterator itr = m_currencies.find(id);
+    if (itr == m_currencies.end())
+    {
+        PlayerCurrency cur;
+        cur.state = PLAYERCURRENCY_NEW;
+        cur.totalCount = 0;
+        cur.weekCount = 0;
+        m_currencies[id] = cur;
+        itr = m_currencies.find(id);
+    }
+    else
+    {
+        oldTotalCount = itr->second.totalCount;
+        oldWeekCount = itr->second.weekCount;
+    }
+
+    uint32 totalCap = _GetCurrencyTotalCap(currency);
+    if (totalCap)
+    {
+        int32 deltaMax = int32(totalCap) - oldTotalCount; // deltaMax could be minus if oldTotalCount already exceeded total cap
+        if (!force && count > 0 && count > deltaMax)      // correct count only when gaining currency exceeds total cap
+            count = deltaMax > 0 ? deltaMax : 0;
+    }
+
+    uint32 weekCap = _GetCurrencyWeekCap(currency);
+    if (weekCap)
+    {
+        int32 deltaMax = int32(weekCap) - oldWeekCount; // deltaMax could be minus if oldWeekCount already exceeded week cap
+        if (!force && count > 0 && count > deltaMax)    // correct count only when gaining currency exceeds week cap
+            count = deltaMax > 0 ? deltaMax : 0;         
+    }
+
+    // count could be changed to 0 due to the total cap and week cap check, so check it again
+    if (!count)
+        return;
+
+    int32 newTotalCount = oldTotalCount + count;
+    if (newTotalCount < 0)
+        newTotalCount = 0;
+
+    int32 newWeekCount = oldWeekCount + ((!force && count > 0) ? count : 0); // no updating week count when paying or force gaining
+    if (newWeekCount < 0)
+        newWeekCount = 0;
+
+    if (newTotalCount != oldTotalCount)
+    {
+        if (itr->second.state != PLAYERCURRENCY_NEW)
+            itr->second.state = PLAYERCURRENCY_CHANGED;
+
+        itr->second.totalCount = newTotalCount;
+        itr->second.weekCount = newWeekCount;
+
+        // probably excessive checks
+        if (IsInWorld() && !GetSession()->PlayerLoading())
+        {
+            WorldPacket packet(SMSG_UPDATE_CURRENCY, 12);
+            packet << uint32(id);
+            packet << uint32(weekCap ? (newWeekCount / PLAYER_CURRENCY_PRECISION) : 0);
+            packet << uint32(newTotalCount / PLAYER_CURRENCY_PRECISION);
+            GetSession()->SendPacket(&packet);
+        }
+    }
 }
 
 void Player::SetCurrency(uint32 id, uint32 count)
 {
-    // TODO: not yet implemented
+    ModifyCurrency(id, int32(count) - GetCurrency(id));
 }
 
-void Player::ModifyCurrency(uint32 id, int32 count)
+// NYI, need rename
+uint32 Player::_GetCurrencyWeekCap(const CurrencyTypesEntry* currency) const
 {
-    // TODO: not yet implemented
+    uint32 cap = currency->WeekCap;
+    //switch (currency->ID)
+    //{
+    //case CURRENCY_TYPE_CONQUEST_POINTS:
+    //    cap = uint32( m_conquestPointsWeekCap[CP_SOURCE_ARENA] * PLAYER_CURRENCY_PRECISION * sWorld->getRate(RATE_CONQUEST_POINTS_WEEK_LIMIT));
+    //    break;
+    //case CURRENCY_TYPE_JUSTICE_POINTS:
+    //    {
+    //        uint32 justicecap = sWorld->getIntConfig(CONFIG_MAX_JUSTICE_POINTS) * PLAYER_CURRENCY_PRECISION;
+    //        if (justicecap > 0)
+    //            cap = justicecap;
+    //        break;
+    //    }
+    //}
+
+    //if (cap != currency->WeekCap && IsInWorld() && !GetSession()->PlayerLoading())
+    //{
+    //    WorldPacket packet(SMSG_UPDATE_CURRENCY_WEEK_LIMIT, 8);
+    //    packet << uint32(cap / PLAYER_CURRENCY_PRECISION);
+    //    packet << uint32(currency->ID);
+    //    GetSession()->SendPacket(&packet);
+    //}
+
+    return cap;
+}
+
+// NYI, need rename
+uint32 Player::_GetCurrencyTotalCap(const CurrencyTypesEntry* currency) const
+{
+    uint32 cap = currency->TotalCap;
+    //switch (currency->ID)
+    //{
+    //case CURRENCY_TYPE_CONQUEST_POINTS:
+    //    cap = sWorld->getIntConfig(CONFIG_MAX_CONQUEST_POINTS) * PLAYER_CURRENCY_PRECISION;
+    //    break;
+    //case CURRENCY_TYPE_HONOR_POINTS:
+    //    cap = sWorld->getIntConfig(CONFIG_MAX_HONOR_POINTS) * PLAYER_CURRENCY_PRECISION;
+    //    break;
+    //case CURRENCY_TYPE_JUSTICE_POINTS:
+    //    cap = sWorld->getIntConfig(CONFIG_MAX_JUSTICE_POINTS) * PLAYER_CURRENCY_PRECISION;
+    //    break;
+    //}
+
+    return cap;
 }
 
 //////////////////////////////////////////////////////////////////////////

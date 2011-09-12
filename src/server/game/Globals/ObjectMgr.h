@@ -753,7 +753,7 @@ class ObjectMgr
             return NULL;
         }
 
-        RewardOnKillEntry const* GetRewardOnKilEntry(uint32 id) const
+        RewardOnKillEntry const* GetRewardOnKillEntry(uint32 id) const
         {
             RewOnKillMap::const_iterator itr = mRewOnKill.find(id);
             if (itr != mRewOnKill.end())

@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #include "ScriptPCH.h"
 #include "blackwing_descent.h"
 
@@ -43,7 +43,7 @@ public:
         }
 
         InstanceScript* pInstance;
-        
+
         uint32 uiShadowflameBreathTimer;
         uint32 uiShadowCowardiceTimer;
 
@@ -57,7 +57,7 @@ public:
         {
             pInstance->SetData(DATA_NEFARIAN, IN_PROGRESS);
         }
-        
+
         void JustDied(Unit* /*Killer*/)
         {
             pInstance->SetData(DATA_NEFARIAN, DONE);
