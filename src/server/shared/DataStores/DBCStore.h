@@ -127,6 +127,8 @@ class DBCStorage
             fieldCount = dbc.GetCols();
             dataTable = (T*)dbc.AutoProduceData(fmt, nCount, indexTable.asChar, sqlRecordCount, sqlHighestIndex, sqlDataTable);
 
+            stringPoolList.push_back(dbc.AutoProduceStringsArrayHolders(fmt, (char*)dataTable));
+
             stringPoolList.push_back(dbc.AutoProduceStrings(fmt, (char*)dataTable));
 
             // Insert sql data into arrays

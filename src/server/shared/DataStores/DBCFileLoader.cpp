@@ -163,6 +163,16 @@ uint32 DBCFileLoader::GetFormatRecordSize(const char * format, int32* index_pos)
     return recordsize;
 }
 
+uint32 DBCFileLoader::GetFormatStringsFields(const char * format)
+{
+    uint32 stringfields = 0;
+    for (uint32 x=0; format[x]; ++x)
+        if (format[x] == FT_STRING)
+            ++stringfields;
+
+    return stringfields;
+}
+
 char* DBCFileLoader::AutoProduceData(const char* format, uint32& records, char**& indexTable, uint32 sqlRecordCount, uint32 sqlHighestIndex, char*& sqlDataTable)
 {
     /*
@@ -250,40 +260,80 @@ char* DBCFileLoader::AutoProduceData(const char* format, uint32& records, char**
     return dataTable;
 }
 
+char* DBCFileLoader::AutoProduceStringsArrayHolders(const char* format, char* dataTable)
+{
+    if (strlen(format) != fieldCount)
+        return NULL;
+
+    // we store flat holders pool as single memory block
+    size_t stringFields = GetFormatStringsFields(format);
+    // each string field at load have array of string for each locale
+    size_t stringHolderSize = sizeof(char*) * TOTAL_LOCALES;
+    size_t stringHoldersRecordPoolSize = stringFields * stringHolderSize;
+    size_t stringHoldersPoolSize = stringHoldersRecordPoolSize * recordCount;
+
+    char* stringHoldersPool = new char[stringHoldersPoolSize];
+
+    for (size_t i = 0; i < stringHoldersPoolSize / sizeof(char*); ++i)
+        ((char const**)stringHoldersPool)[i] = NULL;
+
+    uint32 offset=0;
+
+    // assign string holders to string field slots
+    for (uint32 y = 0; y < recordCount; y++)
+    {
+        uint32 stringFieldNum = 0;
+
+        for(uint32 x = 0; x < fieldCount; x++)
+            switch(format[x])
+        {
+            case FT_FLOAT:
+            case FT_IND:
+            case FT_INT:
+                offset += 4;
+                break;
+            case FT_BYTE:
+                offset += 1;
+                break;
+            case FT_STRING:
+                {
+                    // init dbc string field slots by pointers to string holders
+                    char const*** slot = (char const***)(&dataTable[offset]);
+                    *slot = (char const**)(&stringHoldersPool[stringHoldersRecordPoolSize * y + stringHolderSize*stringFieldNum]);
+                    ++stringFieldNum;
+                    offset += sizeof(char*);
+                    break;
+                }
+            case FT_NA:
+            case FT_NA_BYTE:
+            case FT_SORT:
+                break;
+            default:
+                assert(false && "unknown format character");
+        }
+    }
+
+    //send as char* for store in char* pool list for free at unload
+    return stringHoldersPool;
+}
+
 char* DBCFileLoader::AutoProduceStrings(const char* format, char* dataTable, uint8 locale)
 {
     if (strlen(format)!=fieldCount)
         return NULL;
-
-    uint32 stringFields = 0;
-    for (uint32 i = 0; i < fieldCount; i++)
-        if (format[i] == FT_STRING)
-            stringFields++;
 
     struct DBCStringHolder
     {
         char const* Strings[TOTAL_LOCALES];
     };
 
-    uint32 stringHolderSize = sizeof(DBCStringHolder);                      // size of the string holder
-    uint32 stringHolderRecordPoolSize = stringFields * stringHolderSize;    // size of the string holder per record
-    uint32 stringHolderPoolSize = stringHolderRecordPoolSize * recordCount; // total size of the string holder pool
-
-    char* pool = new char[stringHolderPoolSize + stringSize];
-
-    // first part: string array pool
-    DBCStringHolder* stringArrayPool = (DBCStringHolder*)pool;
-    memset(stringArrayPool, 0, stringHolderPoolSize);
-
-    // second part: string pool
-    char* stringPool = pool + stringHolderPoolSize;
+    char* stringPool = new char[stringSize];
     memcpy(stringPool, stringTable, stringSize);
 
     uint32 offset=0;
 
     for (uint32 y =0; y<recordCount; y++)
     {
-        uint32 stringFieldIndex = 0;
         for (uint32 x=0; x<fieldCount; x++)
             switch (format[x])
         {
@@ -296,31 +346,24 @@ char* DBCFileLoader::AutoProduceStrings(const char* format, char* dataTable, uin
                 offset+=1;
                 break;
             case FT_STRING:
-                // fill only not filled entries
-                //char** slot = (char**)(&dataTable[offset]);
-                //if (!*slot || !**slot)
-                //{
-                //    const char * st = getRecord(y).getString(x);
-                //    *slot=stringPool+(st-(const char*)stringTable);
-                //}
                 DBCStringHolder** slot = (DBCStringHolder**)(&dataTable[offset]);
-                if (!*slot)
-                    *slot = (DBCStringHolder*)(&stringArrayPool[y * stringFields + stringFieldIndex].Strings);
-                const char * st = getRecord(y).getString(x);
-                if (locale == 0)
+                if (*slot) // ensure the strings array holder is filled
                 {
-                    // default locale, fill all locales strings
-                    for(uint8 loc = 0; loc < TOTAL_LOCALES; loc++)
-                        if (!(*slot)->Strings[loc])
-                            (*slot)->Strings[loc] = stringPool+(st-(const char*)stringTable);
+                    const char * st = getRecord(y).getString(x);
+                    if (locale == 0)
+                    {
+                        // default locale, fill all unfilled locale entries
+                        for(uint8 loc = 0; loc < TOTAL_LOCALES; loc++)
+                            if (!(*slot)->Strings[loc])
+                                (*slot)->Strings[loc] = stringPool+(st-(const char*)stringTable);
+                    }
+                    else // specific locale, overwrite locale entry
+                        (*slot)->Strings[locale] = stringPool+(st-(const char*)stringTable);
                 }
-                else // specific locale
-                    (*slot)->Strings[locale] = stringPool+(st-(const char*)stringTable);
-                stringFieldIndex++;
                 offset+=sizeof(char*);
                 break;
         }
     }
 
-    return pool;
+    return stringPool;
 }
