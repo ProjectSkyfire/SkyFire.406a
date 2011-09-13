@@ -661,7 +661,6 @@ class SpellMgr
         void LoadSpellInfoStore();
         void UnloadSpellInfoStore();
         void LoadSpellCustomAttr();
-        void LoadDbcDataCorrections();
 
     private:
         SpellDifficultySearcherMap mSpellDifficultySearcherMap;
