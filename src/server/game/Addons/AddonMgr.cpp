@@ -17,74 +17,72 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "AddonMgr.h"
 #include "DatabaseEnv.h"
-#include "Log.h"
-#include "Timer.h"
+#include "AddonMgr.h"
+#include "ObjectAccessor.h"
+#include "Player.h"
+#include "Util.h"
+#include "SHA1.h"
 
-#include <list>
-
-namespace AddonMgr
+AddonMgr::AddonMgr()
 {
-// Anonymous namespace ensures file scope of all the stuff inside it, even
-// if you add something more to this namespace somewhere else.
-namespace
-{
-    // List of saved addons (in DB).
-    typedef std::list<SavedAddon> SavedAddonsList;
-
-    SavedAddonsList m_knownAddons;
 }
 
-void LoadFromDB()
+AddonMgr::~AddonMgr()
 {
-    uint32 oldMSTime = getMSTime();
-
-    QueryResult result = CharacterDatabase.Query("SELECT name, crc FROM addons");
-    if (!result)
-    {
-        sLog->outString(">> Loaded 0 known addons. DB table `addons` is empty!");
-        sLog->outString();
-        return;
-    }
-
-    uint32 count = 0;
-
-    do
-    {
-        Field *fields = result->Fetch();
-
-        std::string name = fields[0].GetString();
-        uint32 crc = fields[1].GetUInt32();
-
-        m_knownAddons.push_back(SavedAddon(name, crc));
-
-        ++count;
-    }
-    while (result->NextRow());
-
-    sLog->outString(">> Loaded %u known addons in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
-    sLog->outString();
 }
 
-void SaveAddon(AddonInfo const& addon)
+void AddonMgr::LoadFromDB()
 {
-    std::string name = addon.Name;
-    CharacterDatabase.EscapeString(name);
-    CharacterDatabase.PExecute("INSERT INTO addons (name, crc) VALUES ('%s', %u)", name.c_str(), addon.CRC);
+	uint32 oldMSTime = getMSTime();
 
-    m_knownAddons.push_back(SavedAddon(addon.Name, addon.CRC));
+	QueryResult result = CharacterDatabase.Query("SELECT name, crc FROM addons");
+
+	if (!result)
+	{
+		sLog->outString(">> Loaded 0 known addons. DB table `addons` is empty!");
+		sLog->outString();
+		return;
+	}
+
+	uint32 count = 0;
+
+	do
+	{
+		Field *fields = result->Fetch();
+
+		std::string name = fields[0].GetString();
+		uint32 crc = fields[1].GetUInt32();
+
+		SavedAddon addon(name, crc);
+		m_knownAddons.push_back(addon);
+
+		++count;
+	}
+	while (result->NextRow());
+
+	sLog->outString(">> Loaded %u known addons in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+	sLog->outString();
 }
 
-SavedAddon const* GetAddonInfo(const std::string& name)
+void AddonMgr::SaveAddon(AddonInfo const& addon)
 {
-    for (SavedAddonsList::const_iterator it = m_knownAddons.begin(); it != m_knownAddons.end(); ++it)
-    {
-        SavedAddon const& addon = (*it);
-        if (addon.Name == name)
-            return &addon;
-    }
+	std::string name = addon.Name;
+	CharacterDatabase.EscapeString(name);
+	CharacterDatabase.PExecute("INSERT INTO addons (name, crc) VALUES ('%s', %u)", name.c_str(), addon.CRC);
 
-    return NULL;
+	SavedAddon newAddon(addon.Name, addon.CRC);
+	m_knownAddons.push_back(newAddon);
 }
-} // Namespace
+
+SavedAddon const* AddonMgr::GetAddonInfo(const std::string& name) const
+{
+	for (SavedAddonsList::const_iterator it = m_knownAddons.begin(); it != m_knownAddons.end(); ++it)
+	{
+		SavedAddon const& addon = (*it);
+		if (addon.Name == name)
+			return &addon;
+	}
+
+	return NULL;
+}
