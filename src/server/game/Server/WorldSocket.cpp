@@ -837,7 +837,7 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
 
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLDSocket::HandleAuthSession: Clientbuild %u, accountname %s, clientseed %u",
                 clientBuild,
-                accountName.c_str(),
+                account.c_str(),
                 clientSeed);
 
     // Get the account information from the realmd database
