@@ -1,5 +1,5 @@
 ################################################
-# Trinity Core World Server configuration file #
+# SkyFireEMU World Server configuration file   #
 ################################################
 [worldserver]
 
@@ -56,7 +56,7 @@ RealmID = 1
 #    DataDir
 #        Description: Data directory setting.
 #        Important:   DataDir needs to be quoted, as the string might contain space characters.
-#        Example:     "@prefix@/share/trinitycore"
+#        Example:     "@prefix@/share/skyfirecore"
 #        Default:     "."
 
 DataDir = "."
@@ -81,13 +81,13 @@ LogsDir = ""
 #                                                                 section my.ini)
 #                     ".;/path/to/unix_socket;username;password;database" - (use Unix sockets on
 #                                                                           Unix/Linux)
-#        Default:     "127.0.0.1;3306;trinity;trinity;auth"       - (LoginDatabaseInfo)
-#                     "127.0.0.1;3306;trinity;trinity;world"      - (WorldDatabaseInfo)
-#                     "127.0.0.1;3306;trinity;trinity;characters" - (CharacterDatabaseInfo)
+#        Default:     "127.0.0.1;3306;username;password;auth"       - (LoginDatabaseInfo)
+#                     "127.0.0.1;3306;username;password;world"      - (WorldDatabaseInfo)
+#                     "127.0.0.1;3306;username;password;characters" - (CharacterDatabaseInfo)
 
-LoginDatabaseInfo     = "127.0.0.1;3306;trinity;trinity;auth"
-WorldDatabaseInfo     = "127.0.0.1;3306;trinity;trinity;world"
-CharacterDatabaseInfo = "127.0.0.1;3306;trinity;trinity;characters"
+LoginDatabaseInfo     = "127.0.0.1;3306;skyfire;skyfire;auth"
+WorldDatabaseInfo     = "127.0.0.1;3306;skyfire;skyfire;world"
+CharacterDatabaseInfo = "127.0.0.1;3306;skyfire;skyfire;characters"
 
 #
 #    LoginDatabase.WorkerThreads
@@ -1041,16 +1041,16 @@ SkipCinematics = 0
 #        Description: Maximum level that can be reached by players.
 #        Important:   Levels beyond 100 are not recommended at all.
 #        Range:       1-255
-#        Default:     80
+#        Default:     85
 
-MaxPlayerLevel = 80
+MaxPlayerLevel = 85
 
 #
 #    MinDualSpecLevel
 #        Description: Level requirement for Dual Talent Specialization
-#        Default:     40
+#        Default:     30
 
-MinDualSpecLevel = 40
+MinDualSpecLevel = 30
 
 #
 #    StartPlayerLevel
@@ -1359,10 +1359,10 @@ BeepAtStart = 1
 #    Motd
 #        Description: Message of the Day, displayed at login.
 #                     Use '@' for a newline and be sure to escape special characters.
-#        Example:     "Welcome to John\'s Server@This server runs on Trinity Core."
-#        Default:     "Welcome to a Trinity Core server."
+#        Example:     "Welcome to John\'s Server@This server runs on Skyfire Core."
+#        Default:     "Welcome to a Skyfire Core server."
 
-Motd = "Welcome to a Trinity Core server."
+Motd = "Welcome to a Skyfire Core server."
 
 #
 #    Server.LoginInfo
