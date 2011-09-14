@@ -12,7 +12,7 @@ set(scripts_STAT_SRCS
   ${scripts_STAT_SRCS}
   EasternKingdoms/ghostlands.cpp
   EasternKingdoms/eversong_woods.cpp
-  #EasternKingdoms/gilneas.cpp
+  EasternKingdoms/gilneas.cpp
   EasternKingdoms/AlteracValley/boss_galvangar.cpp
   EasternKingdoms/AlteracValley/boss_balinda.cpp
   EasternKingdoms/AlteracValley/boss_drekthar.cpp
