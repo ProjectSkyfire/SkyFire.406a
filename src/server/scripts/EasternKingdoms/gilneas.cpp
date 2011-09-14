@@ -1,7 +1,5 @@
 /*
  * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -17,18 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* ScriptData
-Name: Gilneas City
-%Complete: 10
-Comment:
-Category: Gilneas
-EndScriptData */
-
-/* ContentData
-TODO
-EndContentData */
-
 #include "ScriptPCH.h"
+#include "Unit.h"
 
 //Phase 1
 enum eGilneasCityPhase1
@@ -376,9 +364,9 @@ public:
     {
         npc_lieutenant_waldenAI(Creature *c) : ScriptedAI(c) {}
 
-        void sQuestReward(Player *player, const Quest *pQuest, uint32 data)
+        void sQuestReward(Player *player, const Quest *quest, uint32 data)
         {
-            if (pQuest->GetQuestId() == QUEST_LOCKDOWN && player->GetPhaseMask() == 1)
+            if (quest->GetQuestId() == QUEST_LOCKDOWN && player->GetPhaseMask() == 1)
                 player->SetAuraStack(SPELL_PHASE_2, player, 1); //phaseshift
         }
     };
@@ -468,21 +456,21 @@ public:
             tSeek = urand(1000, 2000);
         }
 
-        void DamageTaken(Unit * pWho, uint32 &uiDamage)
+        void DamageTaken(Unit * who, uint32 &uiDamage)
         {
-            if (pWho->GetTypeId() == TYPEID_PLAYER)
+            if (who->GetTypeId() == TYPEID_PLAYER)
             {
                 me->getThreatManager().resetAllAggro();
-                pWho->AddThreat(me, 1.0f);
-                me->AddThreat(pWho, 1.0f);
-                me->AI()->AttackStart(pWho);
+                who->AddThreat(me, 1.0f);
+                me->AddThreat(who, 1.0f);
+                me->AI()->AttackStart(who);
                 dmgCount = 0;
             }
-            else if (pWho->isPet())
+            else if (who->isPet())
             {
                 me->getThreatManager().resetAllAggro();
-                me->AddThreat(pWho, 1.0f);
-                me->AI()->AttackStart(pWho);
+                me->AddThreat(who, 1.0f);
+                me->AI()->AttackStart(who);
                 dmgCount = 0;
             }
         }
@@ -573,21 +561,21 @@ public:
                 player->SetAuraStack(SPELL_PHASE_4, player, 1); //phaseshift
         }
 
-        void DamageTaken(Unit * pWho, uint32 &uiDamage)
+        void DamageTaken(Unit * who, uint32 &uiDamage)
         {
-            if (pWho->GetTypeId() == TYPEID_PLAYER)
+            if (who->GetTypeId() == TYPEID_PLAYER)
             {
                 me->getThreatManager().resetAllAggro();
-                pWho->AddThreat(me, 1.0f);
-                me->AddThreat(pWho, 1.0f);
-                me->AI()->AttackStart(pWho);
+                who->AddThreat(me, 1.0f);
+                me->AddThreat(who, 1.0f);
+                me->AI()->AttackStart(who);
                 dmgCount = 0;
             }
-            else if (pWho->isPet())
+            else if (who->isPet())
             {
                 me->getThreatManager().resetAllAggro();
-                me->AddThreat(pWho, 1.0f);
-                me->AI()->AttackStart(pWho);
+                me->AddThreat(who, 1.0f);
+                me->AI()->AttackStart(who);
                 dmgCount = 0;
             }
         }
@@ -716,21 +704,21 @@ public:
                 dmgCount ++;
         }
 
-        void DamageTaken(Unit * pWho, uint32 &uiDamage)
+        void DamageTaken(Unit * who, uint32 &uiDamage)
         {
-            if (pWho->GetTypeId() == TYPEID_PLAYER)
+            if (who->GetTypeId() == TYPEID_PLAYER)
             {
                 me->getThreatManager().resetAllAggro();
-                pWho->AddThreat(me, 1.0f);
-                me->AddThreat(pWho, 1.0f);
-                me->AI()->AttackStart(pWho);
+                who->AddThreat(me, 1.0f);
+                me->AddThreat(who, 1.0f);
+                me->AI()->AttackStart(who);
                 dmgCount = 0;
             }
-            else if (pWho->isPet())
+            else if (who->isPet())
             {
                 me->getThreatManager().resetAllAggro();
-                me->AddThreat(pWho, 1.0f);
-                me->AI()->AttackStart(pWho);
+                me->AddThreat(who, 1.0f);
+                me->AI()->AttackStart(who);
                 dmgCount = 0;
             }
         }
@@ -1280,51 +1268,6 @@ public:
     }
 };
 
-class spell_rescue_krennan : public SpellScriptLoader
-{
-    public:
-        spell_rescue_krennan() : SpellScriptLoader("spell_rescue_krennan") { }
-
-        class spell_rescue_krennan_SpellScript : public SpellScript
-        {
-            PrepareSpellScript(spell_rescue_krennan_SpellScript)
-
-            bool Validate(SpellEntry const * /*spellEntry*/)
-            {
-                return true;
-            }
-
-            void HandleDummy(SpellEffIndex /*effIndex*/)
-            {
-                if (Unit * caster = GetCaster())
-                {
-                    if (Creature *krennan = caster->FindNearestCreature(35905, 30))
-                        krennan->DisappearAndDie();
-                    else
-                        return;
-
-                    if (Creature *krennan = caster->FindNearestCreature(35907, 30))
-                        caster->GetVehicle()->AddPassenger(krennan, 1, false);
-
-                    if (caster->GetTypeId() != TYPEID_PLAYER)
-                        return;
-
-                    caster->ToPlayer()->KilledMonsterCredit(35753, 0);
-                }
-            }
-
-            void Register()
-            {
-                OnEffect += SpellEffectFn(spell_rescue_krennan_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_SUMMON);
-            }
-        };
-
-        SpellScript* GetSpellScript() const
-        {
-            return new spell_rescue_krennan_SpellScript();
-        }
-};
-
 class npc_lord_darius_crowley_c2 : public CreatureScript
 {
 public:
@@ -1452,7 +1395,6 @@ void AddSC_gilneas()
     new npc_lord_darius_crowley();
     new npc_josiah_avery();
     new npc_king_genn_greymane();
-    new spell_rescue_krennan();
     new npc_lord_darius_crowley_c2();
     new npc_lord_darius_crowley_c3();
     new npc_king_genn_greymane_c2();

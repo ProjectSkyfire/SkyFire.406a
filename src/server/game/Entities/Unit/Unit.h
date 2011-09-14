@@ -622,8 +622,12 @@ enum UnitFlags2
     UNIT_FLAG2_DISARM_RANGED        = 0x00000400,   // this does not disable ranged weapon display (maybe additional flag needed?)
     UNIT_FLAG2_REGENERATE_POWER     = 0x00000800,
     UNIT_FLAG2_ALLOW_CHEAT_SPELLS   = 0x00040000,   // allows casting spells with AttributesEx7 & SPELL_ATTR7_IS_CHEAT_SPELL
+    UNIT_FLAG2_WORGEN_TRANSFORM     = 0x00080000,   // transform to worgen
+    UNIT_FLAG2_WORGEN_TRANSFORM2    = 0x00100000,   // transform to worgen, less animation
+    UNIT_FLAG2_WORGEN_TRANSFORM3    = 0x00200000    // transform to worgen, less animation(why twice?)
 };
 
+#define IN_WORGEN_FORM (UNIT_FLAG2_WORGEN_TRANSFORM|UNIT_FLAG2_WORGEN_TRANSFORM2|UNIT_FLAG2_WORGEN_TRANSFORM3)
 /// Non Player Character flags
 enum NPCFlags
 {
