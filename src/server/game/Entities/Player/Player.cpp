@@ -4683,6 +4683,9 @@ void Player::InitVisibleBits()
     updateVisualBits.SetBit(UNIT_FIELD_POWER5);
     updateVisualBits.SetBit(UNIT_FIELD_POWER6);
     updateVisualBits.SetBit(UNIT_FIELD_POWER7);
+    updateVisualBits.SetBit(UNIT_FIELD_POWER8);
+    updateVisualBits.SetBit(UNIT_FIELD_POWER9);
+    updateVisualBits.SetBit(UNIT_FIELD_POWER10);
     updateVisualBits.SetBit(UNIT_FIELD_MAXHEALTH);
     updateVisualBits.SetBit(UNIT_FIELD_MAXPOWER1);
     updateVisualBits.SetBit(UNIT_FIELD_MAXPOWER2);
@@ -4691,6 +4694,9 @@ void Player::InitVisibleBits()
     updateVisualBits.SetBit(UNIT_FIELD_MAXPOWER5);
     updateVisualBits.SetBit(UNIT_FIELD_MAXPOWER6);
     updateVisualBits.SetBit(UNIT_FIELD_MAXPOWER7);
+    updateVisualBits.SetBit(UNIT_FIELD_MAXPOWER8);
+    updateVisualBits.SetBit(UNIT_FIELD_MAXPOWER9);
+    updateVisualBits.SetBit(UNIT_FIELD_MAXPOWER10);
     updateVisualBits.SetBit(UNIT_FIELD_LEVEL);
     updateVisualBits.SetBit(UNIT_FIELD_FACTIONTEMPLATE);
     updateVisualBits.SetBit(UNIT_VIRTUAL_ITEM_SLOT_ID + 0);
