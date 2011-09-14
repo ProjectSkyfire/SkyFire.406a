@@ -84,6 +84,7 @@ const char ItemRandomPropertiesfmt[]="nxiiixxs";
 const char ItemRandomSuffixfmt[]="nsxiiiiiiiiii";;
 const char ItemSetEntryfmt[]="dsiiiiiiiiiixxxxxxxiiiiiiiiiiiiiiiiii";
 const char LFGDungeonEntryfmt[]="nxiiiiiiixixxixix";
+//const char LiquidTypeEntryfmt[]="nsiiiiffffifiiisssssiiffffffffffffffffffiiii";  // unused atm... still tc values.
 const char LockEntryfmt[]="niiiiiiiiiiiiiiiiiiiiiiiixxxxxxxx";
 const char MailTemplateEntryfmt[]="nxs";
 const char MapEntryfmt[]="nxixxxsixxixiffxiixx";
