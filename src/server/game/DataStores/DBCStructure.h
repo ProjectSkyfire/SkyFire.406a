@@ -1208,7 +1208,7 @@ struct LFGDungeonEntry
     // Helpers
     uint32 Entry() const { return ID + (type << 24); }
 };
- 
+
 /*
 struct LiquidTypeEntry
 {

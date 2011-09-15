@@ -17504,7 +17504,7 @@ bool Player::isAllowedToLoot(const Creature* creature)
 {
     if (!creature->isDead() || !creature->IsDamageEnoughForLootingAndReward())
         return false;
-       
+
     if (HasPendingBind())
         return false;
 
