@@ -893,6 +893,12 @@ struct FactionEntry
     DBCString name;                                         // 23       m_name_lang
     //DBCString     description;                            // 24       m_description_lang
     //uint32                                                // 25
+
+    // helpers
+    bool CanHaveReputation() const
+    {
+        return reputationListID >= 0;
+    }	
 };
 
 #define MAX_FACTION_RELATIONS 4
@@ -912,8 +918,6 @@ struct FactionTemplateEntry
     // helpers
     bool IsFriendlyTo(FactionTemplateEntry const& entry) const
     {
-        if (ID == entry.ID)
-            return true;
         if (entry.faction)
         {
             for (int i = 0; i < 4; ++i)
@@ -927,8 +931,6 @@ struct FactionTemplateEntry
     }
     bool IsHostileTo(FactionTemplateEntry const& entry) const
     {
-        if (ID == entry.ID)
-            return false;
         if (entry.faction)
         {
             for (int i = 0; i < 4; ++i)
