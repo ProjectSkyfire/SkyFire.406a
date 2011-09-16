@@ -4,7 +4,7 @@
 /**
  *  @file    Timer_List.h
  *
- *  $Id: Timer_List.h 80826 2008-03-04 14:51:23Z wotte $
+ *  $Id: Timer_List.h 92580 2010-11-15 09:48:02Z johnnyw $
  *
  *  @author Doug Schmidt
  */
@@ -25,7 +25,6 @@ ACE_BEGIN_VERSIONED_NAMESPACE_DECL
 
 // The following typedefs are here for ease of use and backward
 // compatibility.
-
 typedef ACE_Timer_List_T<ACE_Event_Handler *,
                          ACE_Event_Handler_Handle_Timeout_Upcall<ACE_SYNCH_RECURSIVE_MUTEX>,
                          ACE_SYNCH_RECURSIVE_MUTEX>

@@ -682,6 +682,7 @@ int ACE_TTY_IO::control (Control_Mode cmd, Serial_Params *arg) const
 
     default:
       return -1; // Wrong cmd.
+
     } // arg switch
 #else
   ACE_UNUSED_ARG (cmd);

@@ -478,6 +478,7 @@ ACE_Remote_RLock::dump (void) const
 #endif /* ACE_HAS_DUMP */
 }
 
+
 ACE_Tokens *
 ACE_Remote_WLock::create_token (const ACE_TCHAR *name)
 {

@@ -49,6 +49,7 @@ public:
   /// Destructor.
   virtual ~ACE_POSIX_Wakeup_Completion (void);
 
+
   /// This method calls the <handler>'s <handle_wakeup> method.
   virtual void complete (size_t bytes_transferred = 0,
                          int success = 1,
@@ -179,6 +180,7 @@ ACE_POSIX_Proactor::create_asynch_read_stream_result
   return implementation;
 }
 
+
 ACE_Asynch_Write_Stream_Impl *
 ACE_POSIX_Proactor::create_asynch_write_stream (void)
 {
@@ -213,6 +215,7 @@ ACE_POSIX_Proactor::create_asynch_write_stream_result
                   0);
   return implementation;
 }
+
 
 ACE_Asynch_Read_File_Impl *
 ACE_POSIX_Proactor::create_asynch_read_file (void)
@@ -253,6 +256,7 @@ ACE_POSIX_Proactor::create_asynch_read_file_result
   return implementation;
 }
 
+
 ACE_Asynch_Write_File_Impl *
 ACE_POSIX_Proactor::create_asynch_write_file (void)
 {
@@ -291,6 +295,7 @@ ACE_POSIX_Proactor::create_asynch_write_file_result
                   0);
   return implementation;
 }
+
 
 ACE_Asynch_Read_Dgram_Impl *
 ACE_POSIX_Proactor::create_asynch_read_dgram (void)
@@ -332,6 +337,7 @@ ACE_POSIX_Proactor::create_asynch_read_dgram_result
   return implementation;
 }
 
+
 ACE_Asynch_Write_Dgram_Impl *
 ACE_POSIX_Proactor::create_asynch_write_dgram (void)
 {
@@ -371,6 +377,7 @@ ACE_POSIX_Proactor::create_asynch_write_dgram_result
   return implementation;
 }
 
+
 ACE_Asynch_Accept_Impl *
 ACE_POSIX_Proactor::create_asynch_accept (void)
 {
@@ -409,6 +416,7 @@ ACE_POSIX_Proactor::create_asynch_accept_result
   return implementation;
 }
 
+
 ACE_Asynch_Connect_Impl *
 ACE_POSIX_Proactor::create_asynch_connect (void)
 {
@@ -440,6 +448,7 @@ ACE_POSIX_Proactor::create_asynch_connect_result
                   0);
   return implementation;
 }
+
 
 ACE_Asynch_Transmit_File_Impl *
 ACE_POSIX_Proactor::create_asynch_transmit_file (void)
@@ -551,6 +560,7 @@ ACE_POSIX_Proactor::get_impl_type (void)
 {
   return PROACTOR_POSIX;
 }
+
 
 /**
  * @class ACE_AIOCB_Notify_Pipe_Manager
@@ -676,7 +686,9 @@ ACE_AIOCB_Notify_Pipe_Manager::~ACE_AIOCB_Notify_Pipe_Manager (void)
   h = this->pipe_.read_handle ();
   if ( h != ACE_INVALID_HANDLE)
      ACE_OS::closesocket (h);
+
 }
+
 
 int
 ACE_AIOCB_Notify_Pipe_Manager::notify ()
@@ -724,6 +736,7 @@ ACE_AIOCB_Notify_Pipe_Manager::handle_read_stream
                 ACE_TEXT ("ACE_AIOCB_Notify_Pipe_Manager::handle_read_stream:")
                 ACE_TEXT ("Read from pipe failed")));
 
+
   // 2. Do the upcalls
   // this->posix_aiocb_proactor_->process_result_queue ();
 }
@@ -749,6 +762,7 @@ ACE_POSIX_AIOCB_Proactor::ACE_POSIX_AIOCB_Proactor (size_t max_aio_operations)
   // start pseudo-asynchronous accept task
   // one per all future acceptors
   this->get_asynch_pseudo_task().start ();
+
 }
 
 // Special protected constructor for ACE_SUN_Proactor
@@ -783,6 +797,7 @@ ACE_POSIX_AIOCB_Proactor::get_impl_type (void)
 {
   return PROACTOR_AIOCB;
 }
+
 
 int
 ACE_POSIX_AIOCB_Proactor::close (void)
@@ -861,6 +876,7 @@ int ACE_POSIX_AIOCB_Proactor::delete_result_aiocb_list (void)
 
           char * op = (aiocb_list_[ai]->aio_lio_opcode == LIO_WRITE )?
             "WRITE":"READ" ;
+
 
           ACE_ERROR ((LM_ERROR,
                       ACE_TEXT("slot=%d op=%s status=%d xfercnt=%d %s\n"),
@@ -1064,6 +1080,7 @@ ACE_POSIX_Asynch_Result * ACE_POSIX_AIOCB_Proactor::getq_result (void)
 {
   ACE_MT (ACE_GUARD_RETURN (ACE_SYNCH_MUTEX, ace_mon, this->mutex_, 0));
 
+
   ACE_POSIX_Asynch_Result* result = 0;
 
   if (this->result_queue_.dequeue_head (result) != 0)
@@ -1227,6 +1244,7 @@ ACE_POSIX_AIOCB_Proactor::find_completed_aio (int &error_status,
                                         error_status,
                                         transfer_count))  // completed
         break;
+
     } // end for
 
   if (count == 0) // all processed , nothing found
@@ -1247,6 +1265,7 @@ ACE_POSIX_AIOCB_Proactor::find_completed_aio (int &error_status,
 
   return asynch_result;
 }
+
 
 int
 ACE_POSIX_AIOCB_Proactor::start_aio (ACE_POSIX_Asynch_Result *result,
@@ -1409,6 +1428,7 @@ ACE_POSIX_AIOCB_Proactor::start_aio_i (ACE_POSIX_Asynch_Result *result)
   return ret_val;
 }
 
+
 int
 ACE_POSIX_AIOCB_Proactor::start_deferred_aio ()
 {
@@ -1531,6 +1551,7 @@ ACE_POSIX_AIOCB_Proactor::cancel_aio (ACE_HANDLE handle)
               num_cancelled++;     //it is OS responsiblity
           }
       }
+
   } // release mutex_
 
   if (num_total == 0)
@@ -1557,6 +1578,7 @@ ACE_POSIX_AIOCB_Proactor::cancel_aiocb (ACE_POSIX_Asynch_Result * result)
   else // (rc == AIO_NOTCANCELED)
     return 2;
 }
+
 
 // *********************************************************************
 
@@ -1789,6 +1811,7 @@ ACE_POSIX_SIG_Proactor::setup_signal_handler (int signal_number) const
   return 0;
 }
 
+
 int
 ACE_POSIX_SIG_Proactor::block_signals (void) const
 {
@@ -1968,6 +1991,7 @@ ACE_POSIX_Asynch_Timer::complete (size_t       /* bytes_transferred */,
     handler->handle_time_out (this->time_, this->act ());
 }
 
+
 // *********************************************************************
 
 ACE_POSIX_Wakeup_Completion::ACE_POSIX_Wakeup_Completion
@@ -1997,6 +2021,7 @@ ACE_POSIX_Wakeup_Completion::complete (size_t       /* bytes_transferred */,
                                        const void * /* completion_key */,
                                        u_long       /*  error */)
 {
+
   ACE_Handler *handler = this->handler_proxy_.get ()->handler ();
   if (handler != 0)
     handler->handle_wakeup ();

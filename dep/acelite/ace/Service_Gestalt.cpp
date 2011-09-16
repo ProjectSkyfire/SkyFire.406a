@@ -68,6 +68,7 @@ ACE_Service_Type_Dynamic_Guard::ACE_Service_Type_Dynamic_Guard
   ACE_ASSERT (this->name_ != 0); // No name?
 }
 
+
 /// Destructor
 ACE_Service_Type_Dynamic_Guard::~ACE_Service_Type_Dynamic_Guard (void)
 {
@@ -124,6 +125,8 @@ ACE_Service_Type_Dynamic_Guard::~ACE_Service_Type_Dynamic_Guard (void)
     }
 }
 
+
+
 // ----------------------------------------
 
 ACE_Service_Gestalt::Processed_Static_Svc::
@@ -161,8 +164,10 @@ ACE_Service_Gestalt::intrusive_remove_ref (ACE_Service_Gestalt* g)
     }
 }
 
+
 ACE_Service_Gestalt::~ACE_Service_Gestalt (void)
 {
+
   if (this->svc_repo_is_owned_)
     delete this->repo_;
 
@@ -256,6 +261,7 @@ ACE_Service_Gestalt::init_i (void)
   return 0;
 }
 
+
 /// Add the default statically-linked services to the Service
 /// Repository.
 int
@@ -277,7 +283,10 @@ ACE_Service_Gestalt::load_static_svcs (void)
         return -1;
     }
   return 0;
+
 } /* load_static_svcs () */
+
+
 
 /// Find a static service descriptor by name
 int
@@ -324,6 +333,8 @@ ACE_Service_Gestalt::find_processed_static_svc (const ACE_TCHAR* name)
   return 0;
 }
 
+
+
 /// @brief Captures a list of the direcives processed (explicitely) for this
 /// Gestalt so that services can be replicated in other repositories
 /// upon their first initialization.
@@ -334,6 +345,7 @@ void
 ACE_Service_Gestalt::add_processed_static_svc
   (const ACE_Static_Svc_Descriptor *assd)
 {
+
   /// When process_directive(Static_Svc_Descriptor&) is called, it
   /// associates a service object with the Gestalt and makes the
   /// resource (a Service Object) local to the repository. This is but
@@ -376,6 +388,7 @@ ACE_Service_Gestalt::add_processed_static_svc
                 assd->name_));
 }
 
+
 /// Queues a static service object descriptor which, during open()
 /// will be given to process_directive() to create the Service
 /// Object. Normally, only called from static initializers, prior to
@@ -392,7 +405,9 @@ ACE_Service_Gestalt::insert (ACE_Static_Svc_Descriptor *stsd)
   return this->static_svcs_->insert (stsd);
 }
 
+
 ACE_ALLOC_HOOK_DEFINE (ACE_Service_Gestalt)
+
 
 void
 ACE_Service_Gestalt::dump (void) const
@@ -464,6 +479,7 @@ ACE_Service_Gestalt::initialize (const ACE_TCHAR *svc_name,
   const_cast<ACE_Service_Type *>(srp)->active (1);
   return 0;
 }
+
 
 #if (ACE_USES_CLASSIC_SVC_CONF == 1)
 int
@@ -549,6 +565,7 @@ ACE_Service_Gestalt::initialize (const ACE_Service_Type_Factory *stf,
 }
 #endif /* (ACE_USES_CLASSIC_SVC_CONF == 1) */
 
+
 /// Dynamically link the shared object file and retrieve a pointer to
 /// the designated shared object in this file.
 /// @note This is obsolete (and error-prone) in the presense of dynamic
@@ -587,6 +604,7 @@ ACE_Service_Gestalt::initialize (const ACE_Service_Type *sr,
     }
 
   return this->initialize_i (sr, parameters);
+
 }
 
 /// Dynamically link the shared object file and retrieve a pointer to
@@ -676,6 +694,7 @@ ACE_Service_Gestalt::resume (const ACE_TCHAR svc_name[])
   return this->repo_->resume (svc_name);
 }
 
+
 int
 ACE_Service_Gestalt::process_directive (const ACE_Static_Svc_Descriptor &ssd,
                                         bool force_replace)
@@ -703,6 +722,7 @@ ACE_Service_Gestalt::process_directive_i (const ACE_Static_Svc_Descriptor &ssd,
           return 0;
         }
     }
+
 
   ACE_Service_Object_Exterminator gobbler;
   void *sym = (ssd.alloc_)(&gobbler);
@@ -937,7 +957,9 @@ ACE_Service_Gestalt::process_directive (const ACE_TCHAR directive[])
 
   return xml_svc_conf->parse_string (directive);
 #endif /* ACE_USES_CLASSIC_SVC_CONF == 1 */
+
 } /* process_directive () */
+
 
 int
 ACE_Service_Gestalt::init_svc_conf_file_queue (void)
@@ -960,7 +982,9 @@ ACE_Service_Gestalt::init_svc_conf_file_queue (void)
 #endif
 
   return 0;
+
 } /* init_svc_conf_file_queue () */
+
 
 int
 ACE_Service_Gestalt::open_i (const ACE_TCHAR program_name[],
@@ -1061,6 +1085,7 @@ ACE_Service_Gestalt::open_i (const ACE_TCHAR program_name[],
                 ACE_OS::fclose(fp);
               else
                 add_default = false;
+
             }
         }
 
@@ -1111,6 +1136,7 @@ ACE_Service_Gestalt::open_i (const ACE_TCHAR program_name[],
   return result;
 } /* open_i () */
 
+
 int
 ACE_Service_Gestalt::is_opened (void)
 {
@@ -1143,7 +1169,9 @@ ACE_Service_Gestalt::process_commandline_directives (void)
     }
 
   return result;
+
 } /* process_commandline_directives () */
+
 
 int
 ACE_Service_Gestalt::parse_args (int argc, ACE_TCHAR *argv[])
@@ -1218,6 +1246,8 @@ ACE_Service_Gestalt::parse_args_i (int argc,
   return 0;
 } /* parse_args_i () */
 
+
+
 // Process service configuration directives from the files queued for
 // processing
 int
@@ -1245,6 +1275,7 @@ ACE_Service_Gestalt::process_directives (bool )
     }
 
   return failed;
+
 } /* process_directives () */
 
 // Tidy up and perform last rites on a terminating ACE_Service_Gestalt.
@@ -1288,6 +1319,7 @@ ACE_Service_Gestalt::close (void)
 
   return 0;
 } /* close () */
+
 
 ACE_END_VERSIONED_NAMESPACE_DECL
 

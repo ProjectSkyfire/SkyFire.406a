@@ -1,4 +1,4 @@
-// $Id: OS_NS_wchar.cpp 91286 2010-08-05 09:04:31Z johnnyw $
+// $Id: OS_NS_wchar.cpp 92712 2010-11-25 12:22:13Z johnnyw $
 
 #include "ace/OS_NS_wchar.h"
 
@@ -109,6 +109,7 @@ ACE_OS::wcscspn_emulation (const wchar_t *s, const wchar_t *reject)
 
   for (scan = s; *scan; scan++)
     {
+
       for (rej_scan = reject; *rej_scan; rej_scan++)
         if (*scan == *rej_scan)
           return count;

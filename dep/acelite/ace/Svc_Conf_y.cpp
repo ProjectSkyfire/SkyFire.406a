@@ -59,6 +59,8 @@
 /* Using locations.  */
 #define YYLSP_NEEDED 0
 
+
+
 /* Tokens.  */
 #ifndef YYTOKENTYPE
 # define YYTOKENTYPE
@@ -97,7 +99,11 @@
 #define ACE_IDENT 270
 #define ACE_STRING 271
 
+
+
+
 /* Copy the first part of user declarations.  */
+
 
 // $Id: Svc_Conf_y.cpp 91368 2010-08-16 13:03:34Z mhengstmengel $
 
@@ -109,6 +115,7 @@
 #include "ace/Stream.h"
 #include "ace/Service_Types.h"
 #include "ace/ace_wchar.h"
+
 
 ACE_BEGIN_VERSIONED_NAMESPACE_DECL
 
@@ -143,6 +150,8 @@ static ACE_Module_Type *
 
 ACE_END_VERSIONED_NAMESPACE_DECL
 
+
+
 /* Enabling traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -168,9 +177,13 @@ typedef int YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 #endif
 
+
+
 /* Copy the second part of user declarations.  */
 
+
 /* Line 216 of yacc.c.  */
+
 
 #ifdef short
 # undef short
@@ -324,6 +337,7 @@ void free (void *); /* INFRINGES ON USER NAME SPACE */
 #  endif
 # endif
 #endif /* ! defined ace_yyoverflow || YYERROR_VERBOSE */
+
 
 #if (! defined ace_yyoverflow \
      && (! defined __cplusplus \
@@ -616,6 +630,7 @@ static const ace_yytype_uint8 ace_yystos[] =
 #define YYABORT    goto ace_yyabortlab
 #define YYERROR    goto ace_yyerrorlab
 
+
 /* Like YYERROR except do call ace_yyerror.  This remains here temporarily
    to ease the transition to the new meaning of YYERROR, for GCC.
    Once GCC version 2 has supplanted version 1, this can go.  */
@@ -641,8 +656,10 @@ do                \
     }                \
 while (YYID (0))
 
+
 #define YYTERROR  1
 #define YYERRCODE  256
+
 
 /* YYLLOC_DEFAULT -- Set CURRENT to span from RHS[1] to RHS[N].
    If N is 0, then set CURRENT to the empty location which ends
@@ -669,6 +686,7 @@ while (YYID (0))
     while (YYID (0))
 #endif
 
+
 /* YY_LOCATION_PRINT -- Print the location on the stream.
    This macro was not mandated originally: define only if we know
    we won't break user code: when these are the locations we know.  */
@@ -683,6 +701,7 @@ while (YYID (0))
 #  define YY_LOCATION_PRINT(File, Loc) ((void) 0)
 # endif
 #endif
+
 
 /* YYLEX -- calling `ace_yylex' with the right arguments.  */
 
@@ -717,6 +736,7 @@ do {                    \
     }                    \
 } while (YYID (0))
 
+
 /*--------------------------------.
 | Print this symbol on YYOUTPUT.  |
 `--------------------------------*/
@@ -748,6 +768,7 @@ ace_yy_symbol_value_print (ace_yyoutput, ace_yytype, ace_yyvaluep)
   break;
     }
 }
+
 
 /*--------------------------------.
 | Print this symbol on YYOUTPUT.  |
@@ -802,6 +823,7 @@ do {                \
     ace_yy_stack_print ((Bottom), (Top));        \
 } while (YYID (0))
 
+
 /*------------------------------------------------.
 | Report that the YYRULE is going to be reduced.  |
 `------------------------------------------------*/
@@ -849,6 +871,7 @@ int ace_yydebug;
 # define YY_REDUCE_PRINT(Rule)
 #endif /* !YYDEBUG */
 
+
 /* YYINITDEPTH -- initial size of the parser's stacks.  */
 #ifndef  YYINITDEPTH
 # define YYINITDEPTH 200
@@ -864,6 +887,8 @@ int ace_yydebug;
 #ifndef YYMAXDEPTH
 # define YYMAXDEPTH 10000
 #endif
+
+
 
 #if YYERROR_VERBOSE
 
@@ -1075,6 +1100,7 @@ ace_yysyntax_error (char *ace_yyresult, int ace_yystate, int ace_yychar)
 }
 #endif /* YYERROR_VERBOSE */
 
+
 /*-----------------------------------------------.
 | Release the memory associated to this symbol.  |
 `-----------------------------------------------*/
@@ -1100,10 +1126,12 @@ ace_yydestruct (ace_yymsg, ace_yytype, ace_yyvaluep)
 
   switch (ace_yytype)
     {
+
       default:
   break;
     }
 }
+
 
 /* Prevent warnings from -Wmissing-prototypes.  */
 
@@ -1120,6 +1148,11 @@ int ace_yyparse (void);
 int ace_yyparse ();
 #endif
 #endif /* ! YYPARSE_PARAM */
+
+
+
+
+
 
 /*----------.
 | ace_yyparse.  |
@@ -1188,6 +1221,8 @@ int ace_yynerrs;
   YYSTYPE *ace_yyvs = ace_yyvsa;
   YYSTYPE *ace_yyvsp;
 
+
+
 #define YYPOPSTACK(N)   (ace_yyvsp -= (N), ace_yyssp -= (N))
 
   YYSIZE_T ace_yystacksize = YYINITDEPTH;
@@ -1195,6 +1230,7 @@ int ace_yynerrs;
   /* The variables used to return semantic value and location from the
      action routines.  */
   YYSTYPE ace_yyval;
+
 
   /* The number of symbols on the RHS of the reduced rule.
      Keep to zero when no symbol should be popped.  */
@@ -1241,6 +1277,7 @@ int ace_yynerrs;
   YYSTYPE *ace_yyvs1 = ace_yyvs;
   ace_yytype_int16 *ace_yyss1 = ace_yyss;
 
+
   /* Each stack pointer address is followed by the size of the
      data in use in that stack, in bytes.  This used to be a
      conditional around just the two extra args, but that might
@@ -1283,6 +1320,7 @@ int ace_yynerrs;
 
       ace_yyssp = ace_yyss + ace_yysize - 1;
       ace_yyvsp = ace_yyvs + ace_yysize - 1;
+
 
       YYDPRINTF ((stderr, "Stack size increased to %lu\n",
       (unsigned long int) ace_yystacksize));
@@ -1362,6 +1400,7 @@ ace_yybackup:
 
   goto ace_yynewstate;
 
+
 /*-----------------------------------------------------------.
 | ace_yydefault -- do the default action for the current state.  |
 `-----------------------------------------------------------*/
@@ -1370,6 +1409,7 @@ ace_yydefault:
   if (ace_yyn == 0)
     goto ace_yyerrlab;
   goto ace_yyreduce;
+
 
 /*-----------------------------.
 | ace_yyreduce -- Do a reduction.  |
@@ -1387,6 +1427,7 @@ ace_yyreduce:
      unconditionally makes the parser a bit smaller, and it avoids a
      GCC warning that YYVAL may be used uninitialized.  */
   ace_yyval = ace_yyvsp[1-ace_yylen];
+
 
   YY_REDUCE_PRINT (ace_yyn);
   switch (ace_yyn)
@@ -1660,6 +1701,7 @@ ace_yyreduce:
     { (ace_yyval.ident_) = 0; ;}
     break;
 
+
 /* Line 1267 of yacc.c.  */
 
       default: break;
@@ -1671,6 +1713,7 @@ ace_yyreduce:
   YY_STACK_PRINT (ace_yyss, ace_yyssp);
 
   *++ace_yyvsp = ace_yyval;
+
 
   /* Now `shift' the result of the reduction.  Determine what state
      that goes to, based on the state we popped back to and the rule
@@ -1685,6 +1728,7 @@ ace_yyreduce:
     ace_yystate = ace_yydefgoto[ace_yyn - YYNTOKENS];
 
   goto ace_yynewstate;
+
 
 /*------------------------------------.
 | ace_yyerrlab -- here on detecting error |
@@ -1731,6 +1775,8 @@ ace_yyerrlab:
 #endif
     }
 
+
+
   if (ace_yyerrstatus == 3)
     {
       /* If just tried and failed to reuse look-ahead token after an
@@ -1754,6 +1800,7 @@ ace_yyerrlab:
      token.  */
   goto ace_yyerrlab1;
 
+
 /*---------------------------------------------------.
 | ace_yyerrorlab -- error raised explicitly by YYERROR.  |
 `---------------------------------------------------*/
@@ -1772,6 +1819,7 @@ ace_yyerrorlab:
   YY_STACK_PRINT (ace_yyss, ace_yyssp);
   ace_yystate = *ace_yyssp;
   goto ace_yyerrlab1;
+
 
 /*-------------------------------------------------------------.
 | ace_yyerrlab1 -- common code for both syntax error and YYERROR.  |
@@ -1797,6 +1845,7 @@ ace_yyerrlab1:
       if (ace_yyssp == ace_yyss)
   YYABORT;
 
+
       ace_yydestruct ("Error: popping",
       ace_yystos[ace_yystate], ace_yyvsp);
       YYPOPSTACK (1);
@@ -1809,11 +1858,13 @@ ace_yyerrlab1:
 
   *++ace_yyvsp = ace_yylval;
 
+
   /* Shift the error token.  */
   YY_SYMBOL_PRINT ("Shifting", ace_yystos[ace_yyn], ace_yyvsp, ace_yylsp);
 
   ace_yystate = ace_yyn;
   goto ace_yynewstate;
+
 
 /*-------------------------------------.
 | ace_yyacceptlab -- YYACCEPT comes here.  |
@@ -1864,6 +1915,10 @@ ace_yyreturn:
   /* Make sure YYID is used.  */
   return YYID (ace_yyresult);
 }
+
+
+
+
 
 ACE_BEGIN_VERSIONED_NAMESPACE_DECL
 

@@ -4,7 +4,7 @@
 /**
  *  @file   config-lite.h
  *
- *  $Id: config-lite.h 85832 2009-06-28 16:14:59Z johnnyw $
+ *  $Id: config-lite.h 92580 2010-11-15 09:48:02Z johnnyw $
  *
  *  @author (Originally in OS.h)Doug Schmidt <schmidt@cs.wustl.edu>
  *  @author Jesper S. M|ller<stophph@diku.dk>
@@ -26,12 +26,6 @@
 #if !defined (ACE_LACKS_PRAGMA_ONCE)
 # pragma once
 #endif /* ACE_LACKS_PRAGMA_ONCE */
-
-// Empty ACE_OS namespace to help identify compiler errors more
-// easily.      -- @@ Do we really need this?
-ACE_BEGIN_VERSIONED_NAMESPACE_DECL
-namespace ACE_OS {}
-ACE_END_VERSIONED_NAMESPACE_DECL
 
 // ============================================================================
 // UNICODE macros (to be added later)

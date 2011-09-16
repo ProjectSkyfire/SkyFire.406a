@@ -7,6 +7,8 @@
 #include "ace/File_Lock.inl"
 #endif /* __ACE_INLINE__ */
 
+
+
 ACE_BEGIN_VERSIONED_NAMESPACE_DECL
 
 ACE_ALLOC_HOOK_DEFINE(ACE_File_Lock)

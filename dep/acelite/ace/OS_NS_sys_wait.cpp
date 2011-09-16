@@ -1,4 +1,4 @@
-// $Id: OS_NS_sys_wait.cpp 91286 2010-08-05 09:04:31Z johnnyw $
+// $Id: OS_NS_sys_wait.cpp 92712 2010-11-25 12:22:13Z johnnyw $
 
 #include "ace/OS_NS_sys_wait.h"
 

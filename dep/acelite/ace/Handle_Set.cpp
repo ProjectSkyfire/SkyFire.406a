@@ -9,6 +9,8 @@
 
 #include "ace/OS_NS_string.h"
 
+
+
 ACE_BEGIN_VERSIONED_NAMESPACE_DECL
 
 ACE_ALLOC_HOOK_DEFINE(ACE_Handle_Set)
@@ -115,6 +117,7 @@ ACE_Handle_Set::ACE_Handle_Set (const fd_set &fd_mask)
 int
 ACE_Handle_Set::count_bits (u_long n)
 {
+
  ACE_TRACE ("ACE_Handle_Set::count_bits");
 #if defined (ACE_HAS_HANDLE_SET_OPTIMIZED_FOR_SELECT)
   register int rval = 0;
@@ -490,6 +493,7 @@ ACE_Handle_Set_Iterator::ACE_Handle_Set_Iterator (const ACE_Handle_Set &hs)
       }
 #endif /* !ACE_WIN32 && !ACE_HAS_BIG_FD_SET */
 }
+
 
 void
 ACE_Handle_Set_Iterator::reset_state (void)

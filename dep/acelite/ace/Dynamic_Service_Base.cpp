@@ -7,7 +7,9 @@
 #include "ace/Service_Types.h"
 #include "ace/Log_Msg.h"
 
+
 ACE_BEGIN_VERSIONED_NAMESPACE_DECL
+
 
 void
 ACE_Dynamic_Service_Base::dump (void) const
@@ -52,6 +54,7 @@ ACE_Dynamic_Service_Base::find_i (const ACE_Service_Gestalt* &repo,
 
   return svc_rec;
 }
+
 
 // Get the instance using <name> for specific configuration repository.
 void *

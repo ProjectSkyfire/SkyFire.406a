@@ -11,6 +11,8 @@
 #include "ace/SOCK_SEQPACK_Association.inl"
 #endif /* __ACE_INLINE__ */
 
+
+
 ACE_BEGIN_VERSIONED_NAMESPACE_DECL
 
 ACE_ALLOC_HOOK_DEFINE(ACE_SOCK_SEQPACK_Association)
@@ -203,6 +205,7 @@ ACE_SOCK_SEQPACK_Association::get_local_addrs (ACE_INET_Addr *addrs, size_t &siz
 #endif /* ACE_HAS_LKSCTP */
   return 0;
 }
+
 
 int
 ACE_SOCK_SEQPACK_Association::get_remote_addrs (ACE_INET_Addr *addrs, size_t &size) const

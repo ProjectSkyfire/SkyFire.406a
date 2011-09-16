@@ -1,6 +1,5 @@
 // -*- C++ -*-
-//
-// $Id: Atomic_Op.inl 91813 2010-09-17 07:52:52Z johnnyw $
+// $Id: Atomic_Op.inl 92474 2010-11-02 13:29:39Z johnnyw $
 
 #if defined (ACE_HAS_INTRINSIC_INTERLOCKED)
 # include "ace/os_include/os_intrin.h"

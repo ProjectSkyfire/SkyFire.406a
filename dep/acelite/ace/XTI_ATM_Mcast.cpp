@@ -2,6 +2,8 @@
 
 #include "ace/XTI_ATM_Mcast.h"
 
+
+
 #if defined (ACE_HAS_XTI_ATM)
 
 #if !defined (__ACE_INLINE__)

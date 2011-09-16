@@ -1,4 +1,4 @@
-// $Id: Configuration.cpp 91688 2010-09-09 11:21:50Z johnnyw $
+// $Id: Configuration.cpp 92828 2010-12-08 09:38:57Z mcorino $
 #include "ace/Configuration.h"
 #include "ace/Auto_Ptr.h"
 #include "ace/SString.h"
@@ -128,6 +128,7 @@ ACE_Configuration::expand_path (const ACE_Configuration_Section_Key& key,
     }
 
   return 0;
+
 }
 
 int
@@ -341,9 +342,11 @@ ACE_Configuration::operator== (const ACE_Configuration& rhs) const
                   // we're not comparing them.  How would we since we have
                   // no get operation for invalid types.
                   // So, if we have them, we guess they are equal.
+
                 }// end else if values match.
 
               ++valueIndex;
+
             }// end value while loop
 
           // look in the rhs for values not in this
@@ -364,9 +367,11 @@ ACE_Configuration::operator== (const ACE_Configuration& rhs) const
                 }
               ++valueIndex;
             }// end while for rhs values not in this.
+
         }// end else if sections match.
 
       ++sectionIndex;
+
     }// end section while loop
 
   // Finally, make sure that there are no sections in rhs that do not
@@ -453,6 +458,7 @@ ACE_Configuration_Win32Registry::ACE_Configuration_Win32Registry (HKEY hKey)
 
   root_ = ACE_Configuration_Section_Key (temp);
 }
+
 
 ACE_Configuration_Win32Registry::~ACE_Configuration_Win32Registry (void)
 {
@@ -949,6 +955,7 @@ ACE_Configuration_Win32Registry::remove_value (const ACE_Configuration_Section_K
   return 0;
 }
 
+
 int
 ACE_Configuration_Win32Registry::load_key (const ACE_Configuration_Section_Key& key,
                                            HKEY& hKey)
@@ -1168,6 +1175,7 @@ ACE_Configuration_Section_IntId::ACE_Configuration_Section_IntId (const ACE_Conf
   : value_hash_map_ (rhs.value_hash_map_),
     section_hash_map_ (rhs.section_hash_map_)
 {
+
 }
 
 ACE_Configuration_Section_IntId::~ACE_Configuration_Section_IntId ()
@@ -1246,6 +1254,7 @@ ACE_Configuration_Heap::open (size_t default_map_size)
                   -1);
   return create_index ();
 }
+
 
 int
 ACE_Configuration_Heap::open (const ACE_TCHAR* file_name,
@@ -1347,6 +1356,7 @@ ACE_Configuration_Heap::load_key (const ACE_Configuration_Section_Key& key,
   name.assign_nocopy (temp);
   return 0;
 }
+
 
 int
 ACE_Configuration_Heap::add_section (const ACE_Configuration_Section_Key& base,
@@ -1622,7 +1632,7 @@ ACE_Configuration_Heap::remove_section (const ACE_Configuration_Section_Key& key
 
   // Now remove subkey from parent key
   ACE_Configuration_ExtId SubSExtId (sub_section);
-  SUBSECTION_HASH::ENTRY* subsection_entry;
+  SUBSECTION_HASH::ENTRY* subsection_entry = 0;
   if (((SUBSECTION_HASH*)ParentIntId.section_hash_map_)->
       find (SubSExtId, subsection_entry))
     return -1;
@@ -1985,6 +1995,7 @@ ACE_Configuration_Heap::get_integer_value (const ACE_Configuration_Section_Key& 
     {
       return -1;    // section does not exist
     }
+
 
   // See if it exists first
   ACE_Configuration_ExtId VExtId (t_name);

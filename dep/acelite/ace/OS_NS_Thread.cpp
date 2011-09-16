@@ -1,4 +1,4 @@
-// $Id: OS_NS_Thread.cpp 91693 2010-09-09 12:57:54Z johnnyw $
+// $Id: OS_NS_Thread.cpp 92682 2010-11-23 23:41:19Z shuston $
 
 #include "ace/OS_NS_Thread.h"
 
@@ -26,6 +26,7 @@ ACE_MUTEX_LOCK_CLEANUP_ADAPTER_NAME (void *args)
 {
   ACE_VERSIONED_NAMESPACE_NAME::ACE_OS::mutex_lock_cleanup (args);
 }
+
 
 #if !defined(ACE_WIN32) && defined (__IBMCPP__) && (__IBMCPP__ >= 400)
 # define ACE_BEGINTHREADEX(STACK, STACKSIZE, ENTRY_POINT, ARGS, FLAGS, THR_ID) \
@@ -583,6 +584,7 @@ private:
   /// use by this thread.
   ACE_thread_key_t in_use_;
 };
+
 
 /*****************************************************************************/
 /**
@@ -3610,6 +3612,7 @@ ACE_OS::sched_params (const ACE_Sched_Params &sched_params,
 
   if (sched_params.scope () == ACE_SCOPE_THREAD)
     {
+
       // Setting the REALTIME_PRIORITY_CLASS on Windows is almost always
       // a VERY BAD THING. This include guard will allow people
       // to easily disable this feature in ACE.
@@ -3635,6 +3638,7 @@ ACE_OS::sched_params (const ACE_Sched_Params &sched_params,
     }
   else if (sched_params.scope () == ACE_SCOPE_PROCESS)
     {
+
 # if defined (ACE_HAS_PHARLAP_RT)
       ACE_NOTSUP_RETURN (-1);
 # else
@@ -3666,6 +3670,7 @@ ACE_OS::sched_params (const ACE_Sched_Params &sched_params,
       ::CloseHandle (hProcess);
       return 0;
 #endif /* ACE_HAS_PHARLAP_RT */
+
     }
   else
     {
@@ -3853,12 +3858,14 @@ ACE_OS::thr_create (ACE_THR_FUNC func,
                     ACE_OS_Thread_Adapter (func, args,
                                            (ACE_THR_C_FUNC) ACE_THREAD_ADAPTER_NAME,
                                            ACE_OS_Object_Manager::seh_except_selector(),
-                                           ACE_OS_Object_Manager::seh_except_handler()),
+                                           ACE_OS_Object_Manager::seh_except_handler(),
+                                           flags),
                     -1);
 #else
   ACE_NEW_RETURN (thread_args,
                   ACE_OS_Thread_Adapter (func, args,
-                                         (ACE_THR_C_FUNC) ACE_THREAD_ADAPTER_NAME),
+                                         (ACE_THR_C_FUNC) ACE_THREAD_ADAPTER_NAME,
+                                         flags),
                   -1);
 
 #endif /* ACE_HAS_WIN32_STRUCTURAL_EXCEPTIONS */
@@ -3868,9 +3875,8 @@ ACE_OS::thr_create (ACE_THR_FUNC func,
   auto_ptr <ACE_Base_Thread_Adapter> auto_thread_args;
 
   if (thread_adapter == 0)
-    ACE_AUTO_PTR_RESET (auto_thread_args,
-                        thread_args,
-                        ACE_Base_Thread_Adapter);
+    ACE_auto_ptr_reset (auto_thread_args,
+                        thread_args);
 
 #if defined (ACE_HAS_THREADS)
 
@@ -4159,6 +4165,7 @@ ACE_OS::thr_create (ACE_THR_FUNC func,
         {
            if (ACE_ADAPT_RETVAL(::pthread_attr_setcreatesuspend_np(&attr), result) != 0)
             {
+
               ::pthread_attr_destroy (&attr);
               return -1;
             }

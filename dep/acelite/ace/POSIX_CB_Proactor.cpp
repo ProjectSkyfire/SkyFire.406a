@@ -71,6 +71,7 @@ ACE_POSIX_CB_Proactor::notify_completion (int sig_num)
   return this->sema_.release();
 }
 
+
 ssize_t
 ACE_POSIX_CB_Proactor::allocate_aio_slot (ACE_POSIX_Asynch_Result *result)
 {
@@ -99,6 +100,7 @@ ACE_POSIX_CB_Proactor::allocate_aio_slot (ACE_POSIX_Asynch_Result *result)
 int
 ACE_POSIX_CB_Proactor::handle_events_i (u_long milli_seconds)
 {
+
   int result_wait=0;
 
   // Wait for the signals.

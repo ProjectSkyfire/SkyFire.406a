@@ -3,7 +3,7 @@
 /**
  *  @file   config-win32-msvc-8.h
  *
- *  $Id: config-win32-msvc-8.h 91685 2010-09-09 09:35:14Z johnnyw $
+ *  $Id: config-win32-msvc-8.h 92386 2010-10-28 07:44:37Z johnnyw $
  *
  *  @brief  Microsoft Visual C++ 8.0 configuration file.
  *
@@ -131,7 +131,7 @@
 #  define ACE_HAS_TR24731_2005_CRT
 #endif
 
-//Detect Platform SDK 64-bit (AMD64) compiler using _MSC_FULL_VER
+// Detect Platform SDK 64-bit (AMD64) compiler using _MSC_FULL_VER
 #if (defined (_WIN64) || defined (WIN64)) && _MSC_FULL_VER < 140050000
 #  define ACE_AUTO_PTR_LACKS_RESET
 #  define ACE_MSVC_USES_DOUBLE_UNDERSCORE_STAT64

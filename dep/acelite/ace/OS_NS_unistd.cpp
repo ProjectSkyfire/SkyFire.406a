@@ -1,4 +1,4 @@
-// $Id: OS_NS_unistd.cpp 91286 2010-08-05 09:04:31Z johnnyw $
+// $Id: OS_NS_unistd.cpp 92712 2010-11-25 12:22:13Z johnnyw $
 
 #include "ace/OS_NS_unistd.h"
 
@@ -21,22 +21,6 @@
 # include "vxCpuLib.h"
 # include "cpuset.h"
 #endif /* ACE_HAS_VXCPULIB */
-
-#if defined (ACE_NEEDS_FTRUNCATE)
-extern "C" int
-ftruncate (ACE_HANDLE handle, long len)
-{
-  struct flock fl;
-  fl.l_whence = 0;
-  fl.l_len = 0;
-  fl.l_start = len;
-  fl.l_type = F_WRLCK;
-
-  return ACE_OS::fcntl (handle, F_FREESP, reinterpret_cast <long> (&fl));
-}
-#endif /* ACE_NEEDS_FTRUNCATE */
-
-/*****************************************************************************/
 
 ACE_BEGIN_VERSIONED_NAMESPACE_DECL
 

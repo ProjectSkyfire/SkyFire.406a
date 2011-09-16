@@ -4,7 +4,7 @@
 /**
  *  @file   config-macros.h
  *
- *  $Id: config-macros.h 91685 2010-09-09 09:35:14Z johnnyw $
+ *  $Id: config-macros.h 92474 2010-11-02 13:29:39Z johnnyw $
  *
  *  @author (Originally in OS.h)Doug Schmidt <schmidt@cs.wustl.edu>
  *  @author Jesper S. M|ller<stophph@diku.dk>
@@ -22,9 +22,9 @@
 #define ACE_CONFIG_MACROS_H
 
 #ifdef _WIN32
-  #include "ace/config-win32.h"
+   #include "ace/config-win32.h"
 #else
-  #include "ace/config.h"
+   #include "ace/config.h"
 #endif
 
 #include "ace/Version.h"
@@ -82,6 +82,7 @@
 
 # if defined (ACE_HAS_VALGRIND)
 #   define ACE_INITIALIZE_MEMORY_BEFORE_USE
+#   define ACE_LACKS_DLCLOSE
 # endif /* ACE_HAS_VALGRIND */
 
 // =========================================================================

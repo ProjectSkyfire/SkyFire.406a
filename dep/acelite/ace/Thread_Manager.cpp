@@ -1,4 +1,4 @@
-// $Id: Thread_Manager.cpp 91368 2010-08-16 13:03:34Z mhengstmengel $
+// $Id: Thread_Manager.cpp 92682 2010-11-23 23:41:19Z shuston $
 
 #include "ace/TSS_T.h"
 #include "ace/Thread_Manager.h"
@@ -455,6 +455,7 @@ ACE_Thread_Manager::~ACE_Thread_Manager (void)
   this->close ();
 }
 
+
 // Run the entry point for thread spawned under the control of the
 // <ACE_Thread_Manager>.  This must be an extern "C" to make certain
 // compilers happy...
@@ -570,7 +571,8 @@ ACE_Thread_Manager::spawn_i (ACE_THR_FUNC func,
                                       this,
                                       new_thr_desc.get (),
                                       ACE_OS_Object_Manager::seh_except_selector(),
-                                      ACE_OS_Object_Manager::seh_except_handler()),
+                                      ACE_OS_Object_Manager::seh_except_handler(),
+                                      flags),
                   -1);
 # else
   ACE_NEW_RETURN (thread_args,
@@ -578,7 +580,8 @@ ACE_Thread_Manager::spawn_i (ACE_THR_FUNC func,
                                       args,
                                       (ACE_THR_C_FUNC) ACE_THREAD_ADAPTER_NAME,
                                       this,
-                                      new_thr_desc.get ()),
+                                      new_thr_desc.get (),
+                                      flags),
                   -1);
 # endif /* ACE_HAS_WIN32_STRUCTURAL_EXCEPTIONS */
   auto_ptr <ACE_Base_Thread_Adapter> auto_thread_args (static_cast<ACE_Base_Thread_Adapter *> (thread_args));
@@ -1987,6 +1990,7 @@ ACE_Thread_Manager::thread_all_list (ACE_thread_t thread_list[],
 
   return ACE_Utils::truncate_cast<ssize_t> (thread_count);
 }
+
 
 int
 ACE_Thread_Manager::thr_state (ACE_thread_t id,

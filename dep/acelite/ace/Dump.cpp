@@ -6,6 +6,8 @@
 #include "ace/Object_Manager.h"
 #include "ace/Log_Msg.h"
 
+
+
 ACE_BEGIN_VERSIONED_NAMESPACE_DECL
 
 // Implementations (very simple for now...)

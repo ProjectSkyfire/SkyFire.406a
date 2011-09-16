@@ -3,6 +3,8 @@
 #include "ace/Priority_Reactor.h"
 #include "ace/Malloc_T.h"
 
+
+
 ACE_BEGIN_VERSIONED_NAMESPACE_DECL
 
 typedef ACE_Unbounded_Queue_Iterator<ACE_Event_Tuple> QUEUE_ITERATOR;
@@ -139,6 +141,7 @@ ACE_Priority_Reactor::dispatch_io_set (int number_of_active_handles,
       while (!bucket_[i]->is_empty ()
              && number_dispatched < number_of_active_handles)
         {
+
           ACE_Event_Tuple et;
 
           bucket_[i]->dequeue_head (et);

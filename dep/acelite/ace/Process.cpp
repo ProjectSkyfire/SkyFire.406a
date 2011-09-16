@@ -29,6 +29,8 @@
 # include <taskLib.h>
 #endif
 
+
+
 // This function acts as a signal handler for SIGCHLD. We don't really want
 // to do anything with the signal - it's just needed to interrupt a sleep.
 // See wait() for more info.
@@ -39,6 +41,7 @@ sigchld_nop (int, siginfo_t *, ucontext_t *)
   return;
 }
 #endif /* ACE_WIN32 */
+
 
 ACE_BEGIN_VERSIONED_NAMESPACE_DECL
 
@@ -1150,6 +1153,7 @@ ACE_Process_Options::set_handles (ACE_HANDLE std_in,
   return 0; // Success.
 }
 
+
 void
 ACE_Process_Options::release_handles ()
 {
@@ -1168,6 +1172,7 @@ ACE_Process_Options::release_handles ()
     }
 }
 #endif /* !ACE_HAS_WINCE */
+
 
 ACE_Process_Options::~ACE_Process_Options (void)
 {

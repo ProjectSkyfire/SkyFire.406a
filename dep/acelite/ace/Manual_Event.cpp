@@ -6,6 +6,9 @@
 #include "ace/Manual_Event.inl"
 #endif /* __ACE_INLINE__ */
 
+
+
+
 ACE_BEGIN_VERSIONED_NAMESPACE_DECL
 
 ACE_Manual_Event::ACE_Manual_Event (int initial_state,

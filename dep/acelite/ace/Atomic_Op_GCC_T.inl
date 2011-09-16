@@ -1,6 +1,5 @@
 // -*- C++ -*-
-//
-// $Id: Atomic_Op_GCC_T.inl 89391 2010-03-08 13:53:30Z johnnyw $
+// $Id: Atomic_Op_GCC_T.inl 92474 2010-11-02 13:29:39Z johnnyw $
 
 #if defined (ACE_HAS_GCC_ATOMIC_BUILTINS) && (ACE_HAS_GCC_ATOMIC_BUILTINS == 1)
 

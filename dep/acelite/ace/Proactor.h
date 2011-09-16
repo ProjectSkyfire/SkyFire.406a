@@ -4,7 +4,7 @@
 /**
  *  @file    Proactor.h
  *
- *  $Id: Proactor.h 80826 2008-03-04 14:51:23Z wotte $
+ *  $Id: Proactor.h 92580 2010-11-15 09:48:02Z johnnyw $
  *
  *  @author Irfan Pyarali <irfan@cs.wustl.edu>
  *  @author Tim Harrison <harrison@cs.wustl.edu>
@@ -323,8 +323,8 @@ public:
                                  const void *act,
                                  const ACE_Time_Value &interval);
 
-  // Same as above except @a interval it is used to reschedule the
-  // @a handler automatically.
+  /// Same as above except @a interval it is used to reschedule the
+  /// @a handler automatically.
 
   /// This combines the above two methods into one. Mostly for backward
   /// compatibility.
@@ -357,7 +357,7 @@ public:
    * @param wait_time the time to wait for an event to occur. This is
    * a relative time. On successful return, the time is updated to
    * reflect the amount of time spent waiting for event(s) to occur.
-   * @return Returns 0 if no events occur before the wait_time expires.
+   * @return Returns 0 if no events occur before the @a wait_time expires.
    * Returns 1 when a completion is dispatched. On error, returns -1
    * and sets errno accordingly.
    */

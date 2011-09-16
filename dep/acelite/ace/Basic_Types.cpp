@@ -6,6 +6,7 @@
 # include "ace/Basic_Types.inl"
 #endif /* ! __ACE_INLINE__ */
 
+
 #if defined (ACE_LACKS_LONGLONG_T) && !defined (ACE_LACKS_UNSIGNEDLONGLONG_T)
 # include "ace/Log_Msg.h"
 # include "ace/OS_NS_stdio.h"
@@ -25,6 +26,7 @@ ACE_U_LongLong::output (FILE *file) const
   else
     ACE_OS::fprintf (file, "0x%lx", l_ ());
 }
+
 
 ACE_TCHAR *
 ACE_U_LongLong::as_string (ACE_TCHAR *output,
@@ -90,6 +92,7 @@ ACE_U_LongLong::as_string (ACE_TCHAR *output,
                 {
                   ACE_OS::sprintf(output,
                                   (uppercase ? "%lX" : "%lx"), this->l_ ());
+
                 }
               break;
             }
@@ -104,6 +107,7 @@ ACE_U_LongLong::as_string (ACE_TCHAR *output,
 
   return output;
 }
+
 
 # if !defined (ACE_LACKS_IOSTREAM_TOTALLY)
 ostream&
@@ -129,3 +133,4 @@ operator<< (ostream& os, const ACE_U_LongLong& ll)
 ACE_END_VERSIONED_NAMESPACE_DECL
 
 #endif /* ACE_LACKS_LONGLONG_T */
+

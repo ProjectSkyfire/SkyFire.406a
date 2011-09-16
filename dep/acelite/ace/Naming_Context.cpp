@@ -14,6 +14,8 @@
 # include "ace/Trace.h"
 #endif /* ACE_HAS_TRACE */
 
+
+
 #if !defined (__ACE_INLINE__)
 #include "ace/Naming_Context.inl"
 #endif /* __ACE_INLINE__ */

@@ -3,6 +3,8 @@
 #include "ace/Thread_Hook.h"
 #include "ace/Object_Manager_Base.h"
 
+
+
 ACE_BEGIN_VERSIONED_NAMESPACE_DECL
 
 ACE_Thread_Hook::~ACE_Thread_Hook ()

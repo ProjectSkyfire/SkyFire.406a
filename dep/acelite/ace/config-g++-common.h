@@ -1,6 +1,6 @@
 // -*- C++ -*-
 //
-// $Id: config-g++-common.h 92120 2010-10-01 12:00:01Z johnnyw $
+// $Id: config-g++-common.h 92386 2010-10-28 07:44:37Z johnnyw $
 
 // This configuration file is designed to be included by another,
 // specific configuration file.  It provides config information common
@@ -24,19 +24,9 @@
 #define ACE_USES_STD_NAMESPACE_FOR_STDCPP_LIB 1
 #define ACE_TEMPLATES_REQUIRE_SOURCE
 
-#if ( __GNUC__ == 2 && __GNUC_MINOR__ < 97 )
-  // gcc 2.97 and lower use old iostreams
-# define ACE_USES_OLD_IOSTREAMS
-#endif /* __GNUC__ >= 2.97 */
-
 #if (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4))
 # define ACE_EXPLICIT_TEMPLATE_DESTRUCTOR_TAKES_ARGS
 #endif /* __GNUC__ >= 3.4 */
-
-#if (__GNUC__ < 3)
-# define ACE_LACKS_MEMBER_TEMPLATES
-# define ACE_LACKS_NUMERIC_LIMITS
-#endif /* __GNUC__ < 3 */
 
 #define ACE_NEW_THROWS_EXCEPTIONS
 #if (__GNUC__ >= 4 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 3))

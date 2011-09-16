@@ -41,6 +41,7 @@ int ACE_SOCK_Netlink::open (ACE_Netlink_Addr &local,
   return 0;
 }
 
+
 ACE_SOCK_Netlink::ACE_SOCK_Netlink (ACE_Netlink_Addr &local,
                                     int protocol_family,
                                     int protocol)

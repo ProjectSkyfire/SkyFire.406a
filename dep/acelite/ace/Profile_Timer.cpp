@@ -14,6 +14,8 @@
 #include "ace/OS_NS_unistd.h"
 #endif
 
+
+
 #if (defined (ACE_HAS_PRUSAGE_T) || defined (ACE_HAS_GETRUSAGE)) && !defined (ACE_WIN32)
 
 #include "ace/OS_NS_stdio.h"
@@ -21,6 +23,7 @@
 ACE_BEGIN_VERSIONED_NAMESPACE_DECL
 
 ACE_ALLOC_HOOK_DEFINE(ACE_Profile_Timer)
+
 
 void
 ACE_Profile_Timer::dump (void) const
@@ -425,6 +428,7 @@ ACE_Profile_Timer::get_rusage (ACE_Profile_Timer::Rusage &usage)
   ACE_TRACE ("ACE_Profile_Timer::get_rusage");
   usage = 0;
 }
+
 
 void
 ACE_Profile_Timer::elapsed_rusage (ACE_Profile_Timer::Rusage &usage)

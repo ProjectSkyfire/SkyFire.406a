@@ -18,6 +18,8 @@
 #include "ace/SOCK_SEQPACK_Connector.inl"
 #endif /* __ACE_INLINE__ */
 
+
+
 ACE_BEGIN_VERSIONED_NAMESPACE_DECL
 
 ACE_ALLOC_HOOK_DEFINE(ACE_SOCK_SEQPACK_Connector)
@@ -37,6 +39,8 @@ ACE_SOCK_SEQPACK_Connector::shared_open (ACE_SOCK_SEQPACK_Association &new_assoc
                                  int reuse_addr)
 {
   ACE_TRACE ("ACE_SOCK_SEQPACK_Connector::shared_open");
+
+
 
   // Only open a new socket if we don't already have a valid handle.
   if (new_association.get_handle () == ACE_INVALID_HANDLE &&
@@ -263,6 +267,7 @@ ACE_SOCK_SEQPACK_Connector::shared_connect_finish (ACE_SOCK_SEQPACK_Association 
 }
 
 // Actively connect and produce a new ACE_SOCK_SEQPACK_Association if things go well...
+
 
 int
 ACE_SOCK_SEQPACK_Connector::connect (ACE_SOCK_SEQPACK_Association &new_association,

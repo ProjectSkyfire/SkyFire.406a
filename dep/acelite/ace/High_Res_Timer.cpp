@@ -22,6 +22,8 @@
 #include "ace/OS_NS_stdlib.h"
 #include "ace/Truncate.h"
 
+
+
 ACE_BEGIN_VERSIONED_NAMESPACE_DECL
 
 ACE_ALLOC_HOOK_DEFINE(ACE_High_Res_Timer)
@@ -71,6 +73,7 @@ ACE_BEGIN_VERSIONED_NAMESPACE_DECL
 // set, and if high resolution timers are supported.
 /* static */
 int ACE_High_Res_Timer::global_scale_factor_status_ = 0;
+
 
 #if defined (linux)
 // Determine the apparent CPU clock speed from /proc/cpuinfo

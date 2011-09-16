@@ -4,7 +4,7 @@
 /**
  *  @file    Reactor.h
  *
- *  $Id: Reactor.h 92345 2010-10-24 12:39:33Z johnnyw $
+ *  $Id: Reactor.h 92465 2010-11-01 15:04:23Z shuston $
  *
  *  @author Irfan Pyarali <irfan@cs.wustl.edu>
  *  @author Douglas C. Schmidt <schmidt@cs.wustl.edu>
@@ -559,13 +559,19 @@ public:
    * @see cancel_timer()
    * @see reset_timer_interval()
    *
-   * @param event_handler Event handler to schedule on reactor
-   * @param arg Argument passed to the handle_timeout() method of
-   * event_handler
-   * @param delay Time interval after which the timer will expire
-   * @param interval Time interval after which the timer will be automatically
-   * rescheduled
-   * @return -1 on failure, a timer_id value on success
+   * @param event_handler Event handler to schedule on reactor. The handler's
+   *                      handle_timeout() method will be called when this
+   *                      scheduled timer expires.
+   * @param arg           Argument passed to the handle_timeout() method of
+   *                      event_handler.
+   * @param delay         Time interval after which the timer will expire.
+   * @param interval      Time interval for which the timer will be
+   *                      automatically rescheduled if the handle_timeout()
+   *                      callback does not return a value less than 0.
+   *
+   * @retval              timer id, on success. The id can be used to
+   *                      cancel or reschedule this timer.
+   * @retval              -1 on failure, with errno set.
    */
   virtual long schedule_timer (ACE_Event_Handler *event_handler,
                                const void *arg,

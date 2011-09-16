@@ -1,5 +1,5 @@
 /* -*- C++ -*- */
-// $Id: config-linux-common.h 92183 2010-10-08 08:44:15Z olli $
+// $Id: config-linux-common.h 92437 2010-11-01 07:21:38Z olli $
 
 // Do not use this configuration file directly since it's designed to
 // be included by another, specific configuration file, such as
@@ -98,34 +98,11 @@
   // its timeout argument, use ::poll () instead.
 # define ACE_HAS_POLL
 
-// Don't define _XOPEN_SOURCE and _XOPEN_SOURCE_EXTENDED in ACE to make
-// getpgid() prototype visible.  ACE shouldn't depend on feature test
-// macros to make prototypes visible.
-# define ACE_LACKS_GETPGID_PROTOTYPE
+# define ACE_HAS_SIGINFO_T
+# define ACE_LACKS_SIGINFO_H
+# define ACE_HAS_UCONTEXT_T
+# define ACE_HAS_SIGTIMEDWAIT
 
-// @note  the following defines are necessary with glibc 2.0 (0.961212-5)
-//        on Alpha.  I assume that they're necessary on Intel as well,
-//        but that may depend on the version of glibc that is used.
-//# define ACE_HAS_DLFCN_H_BROKEN_EXTERN_C
-# define ACE_HAS_VOIDPTR_SOCKOPT
-
-// Don't define _POSIX_SOURCE in ACE to make strtok() prototype
-// visible.  ACE shouldn't depend on feature test macros to make
-// prototypes visible.
-# define ACE_LACKS_STRTOK_R_PROTOTYPE
-// @note  end of glibc 2.0 (0.961212-5)-specific configuration.
-
-# if __GLIBC__ > 1 && __GLIBC_MINOR__ >= 1
-    // These were suggested by Robert Hanzlik <robi@codalan.cz> to get
-    // ACE to compile on Linux using glibc 2.1 and libg++/gcc 2.8.
-#   undef ACE_HAS_BYTESEX_H
-#   define ACE_HAS_SIGINFO_T
-#   define ACE_LACKS_SIGINFO_H
-#   define ACE_HAS_UCONTEXT_T
-
-    // Pre-glibc (RedHat 5.2) doesn't have sigtimedwait.
-#   define ACE_HAS_SIGTIMEDWAIT
-# endif /* __GLIBC__ 2.1+ */
 #else  /* ! __GLIBC__ */
     // Fixes a problem with some non-glibc versions of Linux...
 #   define ACE_LACKS_MADVISE
@@ -145,12 +122,10 @@
 #  endif
 #endif /* __GLIBC__ > 1 */
 
-#if __GLIBC__ > 1 && __GLIBC_MINOR__ >= 1
-# define ACE_HAS_P_READ_WRITE
+#define ACE_HAS_P_READ_WRITE
 // Use ACE's alternate cuserid() implementation since the use of the
 // system cuserid() is discouraged.
-# define ACE_HAS_ALT_CUSERID
-#endif /* __GLIBC__ > 1 && __GLIBC_MINOR__ >= 0 */
+#define ACE_HAS_ALT_CUSERID
 
 #if (__GLIBC__  > 2)  || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 3)
 # define ACE_HAS_ISASTREAM_PROTOTYPE
@@ -202,36 +177,23 @@
 
 #define ACE_HAS_STRSIGNAL
 
-#if __GLIBC__ >= 2
 #ifndef ACE_HAS_POSIX_REALTIME_SIGNALS
-#define ACE_HAS_POSIX_REALTIME_SIGNALS
+# define ACE_HAS_POSIX_REALTIME_SIGNALS
 #endif /* ACE_HAS_POSIX_REALTIME_SIGNALS */
 
 #ifndef ACE_HAS_AIO_CALLS
-#define ACE_HAS_AIO_CALLS
+# define ACE_HAS_AIO_CALLS
 #endif /* ACE_HAS_AIO_CALLS */
-#endif
 
-#if __GLIBC__ >= 2
-// glibc 2 and higher has wchar support
-# define ACE_HAS_XPG4_MULTIBYTE_CHAR
-# define ACE_HAS_VFWPRINTF
-#endif
-
-#if __GLIBC__ < 2
-// These are present in glibc 2 and higher
-# define ACE_LACKS_WCSTOK
-# define ACE_LACKS_WCSDUP_PROTOTYPE
-#endif /* __GLIBC__ < 2 */
+#define ACE_HAS_XPG4_MULTIBYTE_CHAR
+#define ACE_HAS_VFWPRINTF
 
 #define ACE_LACKS_ITOW
 #define ACE_LACKS_WCSICMP
 #define ACE_LACKS_WCSNICMP
 #define ACE_LACKS_ISWASCII
 
-#if __GLIBC__ >= 2
-# define ACE_HAS_3_PARAM_WCSTOK
-#endif
+#define ACE_HAS_3_PARAM_WCSTOK
 
 #define ACE_HAS_3_PARAM_READDIR_R
 
@@ -294,19 +256,6 @@
 
 #define ACE_HAS_GETPAGESIZE 1
 
-#if (__GLIBC__  < 2)  ||  (__GLIBC__ == 2 && __GLIBC_MINOR__ < 2)
-// glibc supports wchar, but lacks fgetwc and ungetwc
-# define ACE_LACKS_FGETWC
-# define ACE_HAS_NONCONST_MSGSND
-# define ACE_LACKS_STRNLEN_PROTOTYPE
-#endif
-
-// glibc requires _XOPEN_SOURCE_EXTENDED to make this prototype
-// visible, so force ACE to declare one.  Yuk!
-#ifndef _XOPEN_SOURCE_EXTENDED
-# define ACE_LACKS_MKSTEMP_PROTOTYPE
-#endif  /* !_XOPEN_SOURCE_EXTENDED */
-
 // Platform defines struct timespec but not timespec_t
 #define ACE_LACKS_TIMESPEC_T
 
@@ -332,11 +281,6 @@
 #define ACE_HAS_TIMEZONE
 
 #define ACE_HAS_TIMEZONE_GETTIMEOFDAY
-
-// Don't define _XOPEN_SOURCE in ACE to make strptime() prototype
-// visible.  ACE shouldn't depend on feature test macros to make
-// prototypes visible.
-#define ACE_LACKS_STRPTIME_PROTOTYPE
 
 // Compiler supports the ssize_t typedef.
 #define ACE_HAS_SSIZE_T

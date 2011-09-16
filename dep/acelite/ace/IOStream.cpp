@@ -5,6 +5,8 @@
 
 #include "ace/IOStream.h"
 
+
+
 #if !defined (ACE_LACKS_ACE_IOSTREAM)
 
 #  include "ace/OS_NS_errno.h"
@@ -46,6 +48,7 @@
   // a reference to iostream.  The second >> has no idea of the ACE_IOStream and
   // gets invoked on iostream.  Probably NOT what you wanted!
 
+
   // In order to make all of this work the way you want, you have to do this:
 
   class myiostream : public iostream
@@ -75,6 +78,7 @@
   foo >> i;
   // OK
   // invokes myiostream::operator>> (int&) returning myiostream&
+
 
   foo >> i >> s;
   // OK

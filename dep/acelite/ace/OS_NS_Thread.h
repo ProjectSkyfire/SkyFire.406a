@@ -4,7 +4,7 @@
 /**
  *  @file   OS_NS_Thread.h
  *
- *  $Id: OS_NS_Thread.h 91693 2010-09-09 12:57:54Z johnnyw $
+ *  $Id: OS_NS_Thread.h 92682 2010-11-23 23:41:19Z shuston $
  *
  *  @author Douglas C. Schmidt <schmidt@cs.wustl.edu>
  *  @author Jesper S. M|ller<stophph@diku.dk>
@@ -1684,9 +1684,11 @@ namespace ACE_OS {
   ACE_NAMESPACE_INLINE_FUNCTION
   const char* thr_name (void);
 
+  /// State is THR_CANCEL_ENABLE or THR_CANCEL_DISABLE
   ACE_NAMESPACE_INLINE_FUNCTION
   int thr_setcancelstate (int new_state, int *old_state);
 
+  /// Type is THR_CANCEL_DEFERRED or THR_CANCEL_ASYNCHRONOUS
   ACE_NAMESPACE_INLINE_FUNCTION
   int thr_setcanceltype (int new_type, int *old_type);
 

@@ -189,6 +189,7 @@ ACE_Stack_Trace::generate_trace (ssize_t starting_frame_offset,
   trcStack (&regs, (FUNCPTR)ACE_Stack_Trace_Add_Frame_To_Buf, taskIdSelf ());
 }
 
+
 #elif defined(VXWORKS) && defined(__RTP__)
 #  include <setjmp.h>
 #  include <taskLib.h>
@@ -504,6 +505,7 @@ typedef struct _dbghelp_functions
   SymCleanup_t SymCleanup;
 } dbghelp_functions;
 
+
 #  pragma warning (push)
 #  pragma warning (disable:4706)
 static bool load_dbghelp_library_if_needed (dbghelp_functions *pDbg)
@@ -528,6 +530,7 @@ static bool load_dbghelp_library_if_needed (dbghelp_functions *pDbg)
 #  undef LINK_T
 }
 #  pragma warning (pop)
+
 
 struct frame_state {
   STACKFRAME64 sf;
@@ -715,3 +718,4 @@ ACE_Stack_Trace::generate_trace (ssize_t, size_t)
   ACE_OS::strcpy (&this->buf_[0], UNSUPPORTED);
 }
 #endif
+

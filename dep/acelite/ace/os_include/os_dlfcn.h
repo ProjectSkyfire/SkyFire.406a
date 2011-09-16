@@ -6,7 +6,7 @@
  *
  *  dynamic linking
  *
- *  $Id: os_dlfcn.h 82273 2008-07-09 14:21:45Z jtc $
+ *  $Id: os_dlfcn.h 92474 2010-11-02 13:29:39Z johnnyw $
  *
  *  @author Don Hinton <dhinton@dresystems.com>
  *  @author This code was originally in various places including ace/OS.h.
@@ -48,13 +48,6 @@
 extern "C"
 {
 #endif /* __cplusplus */
-
-#if defined (_M_UNIX)
-  int _dlclose (void *);
-  char *_dlerror (void);
-  void *_dlopen (const char *, int);
-  void * _dlsym (void *, const char *);
-#endif /* _M_UNIX */
 
 /* Set the proper handle type for dynamically-loaded libraries. */
 /* Also define a default 'mode' for loading a library - the names and values */

@@ -8,6 +8,8 @@
 
 #include "ace/Log_Msg.h"
 
+
+
 ACE_BEGIN_VERSIONED_NAMESPACE_DECL
 
 ACE_Event::ACE_Event (int manual_reset,

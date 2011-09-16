@@ -1,6 +1,421 @@
+Tue Dec 14 13:13:17 CET 2010  Johnny Willemsen  <jwillemsen@remedy.nl>
+
+        * ACE version 6.0.0 released.
+
+Wed Dec  8 09:36:00 UTC 2010  Martin Corino <mcorino@remedy.nl>
+
+        * ace/Configuration.cpp:
+          Fixed uninitialized use warning.
+          
+Tue Dec  7 23:07:27 UTC 2010  Johnny Willemsen  <jwillemsen@remedy.nl>
+
+        * tests/Bug_3878_Regression_Test.cpp:
+          Fixed problem in single threaded build
+
+Tue Dec  7 23:04:14 UTC 2010  Johnny Willemsen  <jwillemsen@remedy.nl>
+
+        * tests/Bug_3539_Regression_Test.cpp:
+          Fixed problem in single threaded build
+
+Tue Dec  7 15:52:02 UTC 2010  Steve Huston  <shuston@riverace.com>
+
+        * tests/Atomic_Op_Test.cpp: For platforms w/o built-in atomic op
+          support, run fewer iterations of the test loop. Those platforms
+          sometimes time out during regression tests. This was a problem
+          with Riverace's PA-RISC box so if this change causes problems
+          otherwise, please let me know.
+
+Mon Dec  6 15:59:52 UTC 2010  Adam Mitz  <mitza@ociweb.com>
+
+        * bin/make_release.py:
+
+          Enabled the calls to update_latest_tag() now that the bug in that
+          functions has been fixed in:
+          Tue Sep 14 16:42:26 UTC 2010  Adam Mitz  <mitza@ociweb.com>
+
+Sat Dec  4 14:25:26 UTC 2010  Steve Huston  <shuston@riverace.com>
+
+        * ace/ACE.cpp (timestamp):
+        * ace/Log_Msg.cpp (log):
+        * ace/Log_Msg_UNIX_Syslog.cpp (log):
+        * ace/Log_Record.cpp (format_msg):
+        * examples/Misc/test_timestamp.cpp: Cleanups, correcting buffer sizes
+          from old 35-char length to 27 based on new timestamp format. Thanks
+          to Thomas Lockhart for these.
+
+Thu Dec  2 18:29:36 UTC 2010  Steve Huston  <shuston@riverace.com>
+
+        * ace/ACE.{h cpp} (timestamp): Changed the format produced from
+          ACE::timestamp() from ctime-ish "Day Mon dd hh:mm:ss yyyy" to
+          ISO-8601 yyyy-mm-dd hh:mm:ss.mmmmmm. Thank you to Thomas
+          Lockhart for this fix. Resolves Bugzilla #3210.
+          Also fixed up the doxygen comments related.
+
+        * ace/Log_Record.cpp (format_msg): VERBOSE[_LITE] timestamp also
+          changed to ISO-8601 format but uses 3 decimal places after secs.
+
+        * NEWS: Described above change for users.
+
+Mon Nov 29 17:20:47 UTC 2010  Jeff Parsons <j.parsons@vanderbilt.edu>
+
+        * THANKS:
+
+          Added Shi John <John dot Shi at acxiom dot com>.
+
+Fri Nov 26 17:36:10 UTC 2010  Steve Huston  <shuston@riverace.com>
+
+        * ace/os_include/os_pthread.h: Removed the #defines for
+          PTHREAD_CANCEL_{ENABLE, DISABLE, DEFERRED, ASYNCHRONOUS}. They
+          were breaking the LynxOS build (LynxOS sets these via enum, not
+          macro). If a platform doesn't have these symbols then the
+          ACE_LACKS_PTHREAD_CANCEL config setting should be used to avoid
+          code that references them.
+
+Thu Nov 25 12:17:31 UTC 2010  Johnny Willemsen  <jwillemsen@remedy.nl>
+
+        * ace/OS_NS_unistd.h:
+        * ace/OS_NS_unistd.cpp:
+          Removed not enabled ftruncate workaround
+
+        * ace/Env_Value_T.h:
+          Doxygen change
+
+        * ace/OS_NS_sys_utsname.cpp:
+        * ace/OS_NS_sys_wait.cpp:
+        * ace/OS_NS_time.cpp:
+        * ace/OS_NS_wchar.cpp:
+          Layout changes
+
+Tue Nov 23 23:20:07 UTC 2010  Steve Huston  <shuston@riverace.com>
+
+        * ace/os_include/os_pthread.h: Give definite values to THR_CANCEL_*
+          flags - using the PTHREAD_CANCEL_* values gives the THR_CANCEL_*
+          options overlapping bits making it impossible to distinguish them.
+
+        * ace/Base_Thread_Adapter.{h, cpp}:
+        * ace/OS_NS_Thread.cpp (thr_create):
+        * ace/OS_Thread_Adapter.{h, cpp}:
+        * ace/Thread_Adapter.{h, cpp}:
+        * ace/Thread_Manager.cpp (spawn):
+          Added a member in the thread adapters to carry the cancel flags
+          through to the spawned thread. In the spawned thread, check the
+          cancel-related flags and act on them if set. This enables proper
+          support for spawning threads with the THR_CANCEL_* flags as
+          documented.
+
+        * ace/OS_NS_Thread.{h inl} (thr_setcancelstate, thr_setcanceltype):
+          Map the THR_CANCEL_* values to PTHREAD_CANCEL_* values on both
+          sides of the pthread call. Makes this API portable across OSes
+          in case cancel support is ever added anywhere else.
+          Added comments for doxygen to pick up explaining this.
+
+        * tests/Thread_Attrs_Test.cpp: Added test cases for spawning threads
+          with various cancel settings.
+
+          Resolves Bugzilla #3932.
+
+Fri Nov 19 18:55:58 UTC 2010  Jeff Parsons <j.parsons@vanderbilt.edu>
+
+        * THANKS:
+
+          Added Wendsomde Yameogo <wendsomde at yameogo dot com>.
+
+Fri Nov 19 15:46:07 UTC 2010  Vladimir Zykov  <vladimir.zykov@prismtech.com>
+
+        * include/makeinclude/platform_g++_common.GNU:
+          Attempted to fix compile problems with using tao_idl3_to_xmi
+          in cross builds.
+
+Wed Nov 17 09:29:42 UTC 2010  Vladimir Zykov  <vladimir.zykov@prismtech.com>
+
+        * apps/gperf/src/Key_List.cpp:
+          Fixed memory leaks.
+
+Mon Nov 15 12:58:26 UTC 2010  Johnny Willemsen  <jwillemsen@remedy.nl>
+
+        * tests/Malloc_Test.cpp:
+          Use ACE_auto_ptr_reset
+
+Mon Nov 15 12:41:22 UTC 2010  Steve Huston  <shuston@riverace.com>
+
+        * protocols/ace/INet/inet.mpc: Renamed 2nd instance of http_simple_wget
+          to be slightly different in ssl case - prevents name clash when
+          regenerating automake files.
+
+Mon Nov 15 12:29:51 UTC 2010  Steve Huston  <shuston@riverace.com>
+
+        * m4/ace.m4: Restored TAO-related conditionals; there's no way to set
+          them to true, but they're referred to in many Makefile.ams so
+          the conditional needs to be there.
+          Also added enable/disable for protocols/ace/INet.
+
+Mon Nov 15 09:40:48 UTC 2010  Johnny Willemsen  <jwillemsen@remedy.nl>
+
+        * Makefile.am:
+          Zap TAO as directory
+
+        * ACEXML/common/XML_Types.h:
+        * ace/Auto_Ptr.h:
+        * ace/Basic_Types.h:
+        * ace/OS_NS_Thread.cpp:
+        * ace/Obchunk.cpp:
+        * ace/Object_Manager.cpp:
+        * ace/Object_Manager_Base.cpp:
+        * ace/Proactor.h:
+        * ace/SOCK_Dgram.h:
+        * ace/SOCK_Dgram.inl:
+        * ace/SOCK_Dgram_Mcast.h:
+        * ace/SOCK_Dgram_Mcast.cpp:
+        * ace/SString.h:
+        * ace/SString.cpp:
+        * ace/Thread_Exit.cpp:
+        * ace/Timer_List.h:
+        * ace/config-lite.h:
+        * apps/JAWS/clients/Caching/Locator_Request_Reply.cpp:
+        * apps/JAWS/clients/Caching/URL_Properties.h:
+        * apps/JAWS/clients/Caching/URL_Properties.inl:
+        * apps/JAWS/clients/Caching/URL_Properties.cpp:
+          Clean of deprecated define ACE_USHORT16 and ACE_AUTO_PTR_RESET
+
+        * configure.ac:
+          Updated support address
+
+Wed Nov 10 18:12:41 UTC 2010  Johnny Willemsen  <jwillemsen@remedy.nl>
+
+        * ace/Makefile.am:
+        * ace/ace.mpc:
+        * ace/ace_for_tao.mpc:
+          Updated for removed file
+
+        * ace/Strategies.h:
+          Removed this file, was for backwards compatibility but had an invalid
+          include in it. Thanks to Helmut Böing for reporting this
+
+Wed Nov 10 14:49:57 UTC 2010  Johnny Willemsen  <jwillemsen@remedy.nl>
+
+        * ace/SOCK_Dgram_Mcast.h:
+          Doxygen changes
+
+        * configure.ac:
+        * m4/ace.m4:
+        * m4/tao.m4:
+          Removed support for TAO, thanks to Mark <markg85 at gmail dot com>
+          for reporting this
+
+Wed Nov 10 10:17:27 UTC 2010  Vladimir Zykov  <vladimir.zykov@prismtech.com>
+
+        * bin/MakeProjectCreator/templates/gnu.mpd:
+          Added support for tao_idl3_to_xmi in makefiles.
+
+Sun Nov  7 00:13:13 UTC 2010  Steve Huston  <shuston@riverace.com>
+
+        * tests/INET_Addr_Test.cpp: Mismatching the addr->name test is not
+          necessarily an error.
+
+Fri Nov  5 14:23:26 UTC 2010  Steve Huston  <shuston@riverace.com>
+
+        * include/makeinclude/rules.local.GNU: Added a hook for users to
+          include site-private rules in a build. If the user places a
+          "rules.private.GNU" in any build directory it will get included
+          from rules.local.GNU. The "private_rules_file" make variable
+          can be set to override the name and/or location of the file.
+          If no such rules file exists, its absence is silently ignored.
+          This facility can be used, for example, to integrate a specialized
+          code checker into the build process.
+
+        * NEWS: Describe this new hook.
+
+Fri Nov  5 00:29:08  2010  Steve Huston  <shuston@riverace.com>
+
+        * ace/Process_Manager.h: Removed remaining references to reap().
+          Noted that terminate() doesn't remove the process entry, and the
+          caller is advised to also call wait() or remove().
+
+Thu Nov  4 15:17:51 UTC 2010  Steve Huston  <shuston@riverace.com>
+
+        * ace/INET_Addr.cpp (set): For platforms that have the GNU-extended
+          gethostbyname2_r() function, use it instead of getaddrinfo() for
+          a IPv6 hostname lookup. Customer reports that it getaddrinfo() is
+          hugely slower than gethostbyname2 on large vlans. The alternate
+          code is used if ACE_HAS_GETHOSTBYNAME2 is set in config.h.
+          (This is a revised fix from Tue Nov  2 00:18:34 UTC 2010)
+
+        * tests/INET_Addr_Test.cpp: Add some IPv6 address and name lookups.
+
+Tue Nov  2 13:26:56 UTC 2010  Johnny Willemsen  <jwillemsen@remedy.nl>
+
+        * ace/ATM_Stream.inl:
+        * ace/Atomic_Op.inl:
+        * ace/Atomic_Op_GCC_T.inl:
+          Layout changes
+
+        * ace/OS_NS_dlfcn.inl:
+          Removed old code
+
+        * ace/config-macros.h:
+          When using ACE_HAS_VALGRIND, disable the dlclose functionality,
+          valgrind needs to have all loaded dll's still in memory in order
+          to show the full callstack, if the dll is unloaded before process
+          shutdown valgrind will show ???
+
+        * ace/os_include/os_dlfcn.h:
+          Removed old defines
+
+        * debian/TODO:
+        * debian/debian.rules:
+          Cleanup
+
+        * debian/cmp-installation.sh:
+          Removed this file.
+
+Tue Nov  2 01:25:05 UTC 2010  Douglas C. Schmidt  <schmidt@dre.vanderbilt.edu>
+
+        * ace/Log_Msg.cpp (ACE_Log_Msg::log): Added
+
+          ACE_OS::memset(format,'\0',128);
+
+          to ensure the format string has known values.  Thanks to Chad
+          Beaulac <chad dot beaulac at objectivesolutions dot com> for
+          this suggestion.  This fixes bugid 3923.
+
+Tue Nov  2 00:18:34 UTC 2010  Steve Huston  <shuston@riverace.com>
+
+        * ace/INET_Addr.cpp (set): For platforms that have the GNU-extended
+          gethostbyname2_r() function, use it instead of getaddrinfo() for
+          a IPv6 hostname lookup. Customer reports that it getaddrinfo() is
+          hugely slower than gethostbyname2 on large vlans. The alternate
+          code is used if ACE_HAS_GETHOSTBYNAME2 is set in config.h.
+
+        * configure.ac: Check for ACE_HAS_GETHOSTBYNAME2.
+
+Mon Nov  1 15:03:05 UTC 2010  Steve Huston  <shuston@riverace.com>
+
+        * ace/Reactor.h: Clarified some behavior descriptions related to
+          timer expiry behavior and return value from handle_timeout().
+
+Mon Nov  1 14:57:11 UTC 2010  Adam Mitz  <mitza@ociweb.com>
+
+        * ace/OS_NS_sys_mman.inl:
+
+          For 64-bit Windows, pass the high 32 bits of ACE_OS::mmap()'s "len"
+          parameter as the 3rd parameter to CreateFileMapping(), which was
+          previously hard-coded to zero.  This both avoids a warning and also
+          enables the user to pass a value > MAX_INT as the maximum size.
+
+Mon Nov  1 07:18:43 UTC 2010  Olli Savia  <ops@iki.fi>
+
+        * ace/config-linux-common.h:
+          Reverted some of changes in previous commit which
+          were accidentally cheked in.
+
+Sun Oct 31 10:14:10 UTC 2010  Olli Savia  <ops@iki.fi>
+
+        * ace/config-linux-common.h:
+          Removed some legacy GLIBC 1.x related settings.
+
+Sat Oct 30 10:09:47 UTC 2010  Olli Savia  <ops@iki.fi>
+
+        * ace/config-linux-common.h:
+          Removed some legacy settings.
+
+Fri Oct 29 14:33:33 UTC 2010  Olli Savia  <ops@iki.fi>
+
+        * include/makeinclude/platform_g++_common.GNU:
+          Removed GCC 2.x support.
+
+Thu Oct 28 17:45:10 UTC 2010  Steve Huston  <shuston@riverace.com>
+
+        * ace/INET_Addr.cpp (set): Corrected ACE_HAS_IPV6 checks made in
+          Wed Oct 27 22:16:12 UTC 2010  Steve Huston  <shuston@riverace.com>.
+
+Thu Oct 28 11:40:01 UTC 2010  Vladimir Zykov  <vladimir.zykov@prismtech.com>
+
+        * bin/make_release.py:
+          Fixed incorrect spelling of DANCE.
+
+Thu Oct 28 11:18:12 UTC 2010  Johnny Willemsen  <jwillemsen@remedy.nl>
+
+        * bin/make_release.py:
+          Fixed generation of dsc file
+
+Thu Oct 28 07:38:47 UTC 2010  Johnny Willemsen  <jwillemsen@remedy.nl>
+
+        * ace/Array_Map.h:
+        * ace/Array_Map.cpp:
+        * ace/Auto_Functor.h:
+        * ace/Auto_Functor.inl:
+        * ace/Value_Ptr.h:
+        * ace/config-g++-common.h:
+        * ace/config-win32-msvc-8.h:
+        * performance-tests/Misc/test_singleton.cpp:
+          Cleanup because GCC < 3 isn't supported anymore
+
+        * include/makeinclude/platform_hpux_aCC.GNU:
+          aCC 3.31 isn't supported anymore for a long time
+
+Thu Oct 28 07:08:00 UTC 2010  Johnny Willemsen  <jwillemsen@remedy.nl>
+
+        * examples/APG/Logging/Trace_Return.cpp:
+        * examples/APG/Logging/Wrap_Macros.cpp:
+          Fixed compile errors
+
+Wed Oct 27 22:16:12 UTC 2010  Steve Huston  <shuston@riverace.com>
+
+        * ace/INET_Addr.cpp (set): When looking up a hostname, always use
+          gethostbyname() for IPv4 requests, even if IPv6 is available.
+          getaddrinfo() (used when IPv4 and 6 are both available) is hugely
+          slower than gethostbyname() in large vlan environments. Note that
+          even though gethostbyname() can grok IPv6 on Linux, it can't
+          anywhere else, so I avoided trying to go that route.
+
+Wed Oct 27 19:35:09 UTC 2010  Johnny Willemsen  <jwillemsen@remedy.nl>
+
+        * debian/libace-5.8.3.docs:
+        * rpmbuild/ace-tao.spec:
+          FAQ got removed
+
+Wed Oct 27 17:47:55 UTC 2010  Johnny Willemsen  <jwillemsen@remedy.nl>
+
+        * ace/config-g++-common.h:
+        * examples/APG/Logging/Trace.h:
+        * examples/APG/Logging/Trace_Return.cpp:
+        * examples/APG/Logging/Wrap_Macros.cpp:
+          Removed support for GCC < 3
+
+Wed Oct 27 17:40:19 UTC 2010  Johnny Willemsen  <jwillemsen@remedy.nl>
+
+        * docs/Download.html:
+          Make x.8.3 available for download
+
+        * debian/ace.dsc:
+          Updated size and md5
+
+        * rpmbuild/ace-tao.spec:
+          Corrected executable names
+
+Wed Oct 27 12:29:47 UTC 2010  Johnny Willemsen  <jwillemsen@remedy.nl>
+
+        * etc/index.html:
+          Added x.8.3
+
+        * bin/diff-builds-and-group-fixed-tests-only.sh:
+          Updated for x.8.3
+
+        * bin/make_release.py:
+          Generate spaces and removed some not needed excludes
+
+        * bin/generate_rel_manpages:
+          Print a message when we are ready
+
+Wed Oct 27 10:38:47 UTC 2010  Johnny Willemsen  <jwillemsen@remedy.nl>
+
+        * ChangeLog:
+        * NEWS:
+          Updated for next release
+
 Wed Oct 27 12:01:05 CEST 2010  Johnny Willemsen  <jwillemsen@remedy.nl>
 
-	* ACE version 5.8.3 released.
+       * ACE version 5.8.3 released.
 
 Tue Oct 26 11:21:35 UTC 2010  Johnny Willemsen  <jwillemsen@remedy.nl>
 

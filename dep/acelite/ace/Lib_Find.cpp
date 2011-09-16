@@ -110,6 +110,8 @@ template ACE_Singleton<ACE_LD_Symbol_Registry, ACE_Thread_Mutex> *
 #endif /* ACE_HAS_EXPLICIT_STATIC_TEMPLATE_MEMBER_INSTANTIATION */
 #endif
 
+
+
 ACE_BEGIN_VERSIONED_NAMESPACE_DECL
 
 int
@@ -163,6 +165,7 @@ ACE::ldfind (const ACE_TCHAR* filename,
     errno = ENOMEM;
     return -1;
   }
+
 
   ACE_OS::strcpy(pathname, ACE_DLL_PREFIX);
   ACE_OS::strcat(pathname, filename);
@@ -672,6 +675,7 @@ ACE::strrepl (char *s, char search, char replace)
 
   return replaced;
 }
+
 
 // Split a string up into 'token'-delimited pieces, ala Perl's
 // "split".
