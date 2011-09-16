@@ -261,7 +261,7 @@ public:
             pInstance = c->GetInstanceScript();
         }
 
-        InstanceScript *pInstance;
+        InstanceScript* pInstance;
 
         uint64 PortalGUID[2];
         uint8 PortalsCount;

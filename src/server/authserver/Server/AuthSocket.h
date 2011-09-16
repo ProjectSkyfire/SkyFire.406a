@@ -63,7 +63,7 @@ public:
 
     void _SetVSFields(const std::string& rI);
 
-    FILE *pPatch;
+    FILE* pPatch;
     ACE_Thread_Mutex patcherLock;
 
 private:

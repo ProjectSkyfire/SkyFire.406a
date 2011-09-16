@@ -152,7 +152,7 @@ public:
             Intro = false;
         }
 
-        InstanceScript *pInstance;
+        InstanceScript* pInstance;
         bool Intro, HelpYell;
         bool sumportals;
 

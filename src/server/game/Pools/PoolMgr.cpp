@@ -546,7 +546,7 @@ void PoolMgr::Initialize()
     QueryResult result = WorldDatabase.Query("SELECT MAX(entry) FROM pool_template");
     if (result)
     {
-        Field *fields = result->Fetch();
+        Field* fields = result->Fetch();
         max_pool_id = fields[0].GetUInt32();
     }
 
@@ -579,7 +579,7 @@ void PoolMgr::LoadFromDB()
         uint32 count = 0;
         do
         {
-            Field *fields = result->Fetch();
+            Field* fields = result->Fetch();
 
             uint32 pool_id = fields[0].GetUInt32();
 
@@ -613,7 +613,7 @@ void PoolMgr::LoadFromDB()
             uint32 count = 0;
             do
             {
-                Field *fields = result->Fetch();
+                Field* fields = result->Fetch();
 
                 uint32 guid    = fields[0].GetUInt32();
                 uint32 pool_id = fields[1].GetUInt32();
@@ -635,7 +635,7 @@ void PoolMgr::LoadFromDB()
                     sLog->outErrorDb("`pool_creature` has an invalid chance (%f) for creature guid (%u) in pool id (%u), skipped.", chance, guid, pool_id);
                     continue;
                 }
-                PoolTemplateData *pPoolTemplate = &mPoolTemplate[pool_id];
+                PoolTemplateData* pPoolTemplate = &mPoolTemplate[pool_id];
                 PoolObject plObject = PoolObject(guid, chance);
                 PoolGroup<Creature>& cregroup = mPoolCreatureGroups[pool_id];
                 cregroup.SetPoolId(pool_id);
@@ -671,7 +671,7 @@ void PoolMgr::LoadFromDB()
             uint32 count = 0;
             do
             {
-                Field *fields = result->Fetch();
+                Field* fields = result->Fetch();
 
                 uint32 guid    = fields[0].GetUInt32();
                 uint32 pool_id = fields[1].GetUInt32();
@@ -705,7 +705,7 @@ void PoolMgr::LoadFromDB()
                     continue;
                 }
 
-                PoolTemplateData *pPoolTemplate = &mPoolTemplate[pool_id];
+                PoolTemplateData* pPoolTemplate = &mPoolTemplate[pool_id];
                 PoolObject plObject = PoolObject(guid, chance);
                 PoolGroup<GameObject>& gogroup = mPoolGameobjectGroups[pool_id];
                 gogroup.SetPoolId(pool_id);
@@ -741,7 +741,7 @@ void PoolMgr::LoadFromDB()
             uint32 count = 0;
             do
             {
-                Field *fields = result->Fetch();
+                Field* fields = result->Fetch();
 
                 uint32 child_pool_id  = fields[0].GetUInt32();
                 uint32 mother_pool_id = fields[1].GetUInt32();
@@ -767,7 +767,7 @@ void PoolMgr::LoadFromDB()
                     sLog->outErrorDb("`pool_pool` has an invalid chance (%f) for pool id (%u) in mother pool id (%u), skipped.", chance, child_pool_id, mother_pool_id);
                     continue;
                 }
-                PoolTemplateData *pPoolTemplateMother = &mPoolTemplate[mother_pool_id];
+                PoolTemplateData* pPoolTemplateMother = &mPoolTemplate[mother_pool_id];
                 PoolObject plObject = PoolObject(child_pool_id, chance);
                 PoolGroup<Pool>& plgroup = mPoolPoolGroups[mother_pool_id];
                 plgroup.SetPoolId(mother_pool_id);
@@ -881,7 +881,7 @@ void PoolMgr::LoadFromDB()
                     continue;
                 }
 
-                PoolTemplateData *pPoolTemplate = &mPoolTemplate[pool_id];
+                PoolTemplateData* pPoolTemplate = &mPoolTemplate[pool_id];
                 PoolObject plObject = PoolObject(entry, 0.0f);
                 PoolGroup<Quest>& questgroup = mPoolQuestGroups[pool_id];
                 questgroup.SetPoolId(pool_id);
@@ -917,7 +917,7 @@ void PoolMgr::LoadFromDB()
             uint32 count = 0;
             do
             {
-                Field *fields = result->Fetch();
+                Field* fields = result->Fetch();
                 uint32 pool_entry = fields[0].GetUInt32();
                 uint32 pool_pool_id = fields[1].GetUInt32();
 

@@ -203,7 +203,7 @@ namespace VMAP
                 iTilesX * iTilesY;
     }
 
-    bool WmoLiquid::writeToFile(FILE *wf)
+    bool WmoLiquid::writeToFile(FILE* wf)
     {
         bool result = true;
         if (result && fwrite(&iTilesX, sizeof(uint32), 1, wf) != 1) result = false;
@@ -217,10 +217,10 @@ namespace VMAP
         return result;
     }
 
-    bool WmoLiquid::readFromFile(FILE *rf, WmoLiquid *&out)
+    bool WmoLiquid::readFromFile(FILE* rf, WmoLiquid* &out)
     {
         bool result = true;
-        WmoLiquid *liquid = new WmoLiquid();
+        WmoLiquid* liquid = new WmoLiquid();
         if (result && fread(&liquid->iTilesX, sizeof(uint32), 1, rf) != 1) result = false;
         if (result && fread(&liquid->iTilesY, sizeof(uint32), 1, rf) != 1) result = false;
         if (result && fread(&liquid->iCorner, sizeof(Vector3), 1, rf) != 1) result = false;
@@ -255,7 +255,7 @@ namespace VMAP
         meshTree.build(triangles, bFunc);
     }
 
-    bool GroupModel::writeToFile(FILE *wf)
+    bool GroupModel::writeToFile(FILE* wf)
     {
         bool result = true;
         uint32 chunkSize, count;
@@ -301,7 +301,7 @@ namespace VMAP
         return result;
     }
 
-    bool GroupModel::readFromFile(FILE *rf)
+    bool GroupModel::readFromFile(FILE* rf)
     {
         char chunk[8];
         bool result = true;
@@ -502,7 +502,7 @@ namespace VMAP
 
     bool WorldModel::writeFile(const std::string &filename)
     {
-        FILE *wf = fopen(filename.c_str(), "wb");
+        FILE* wf = fopen(filename.c_str(), "wb");
         if (!wf)
             return false;
 
@@ -536,7 +536,7 @@ namespace VMAP
 
     bool WorldModel::readFile(const std::string &filename)
     {
-        FILE *rf = fopen(filename.c_str(), "rb");
+        FILE* rf = fopen(filename.c_str(), "rb");
         if (!rf)
             return false;
 

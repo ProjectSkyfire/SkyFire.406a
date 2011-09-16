@@ -87,7 +87,7 @@ void WorldSession::HandleUseItemOpcode(WorldPacket& recvPacket)
         return;
     }
 
-    Item *pItem = pUser->GetUseableItemByPos(bagIndex, slot);
+    Item* pItem = pUser->GetUseableItemByPos(bagIndex, slot);
     if (!pItem)
     {
         pUser->SendEquipError(EQUIP_ERR_ITEM_NOT_FOUND, NULL, NULL);
@@ -102,7 +102,7 @@ void WorldSession::HandleUseItemOpcode(WorldPacket& recvPacket)
 
     sLog->outDetail("WORLD: CMSG_USE_ITEM packet, bagIndex: %u, slot: %u, castCount: %u, spellId: %u, Item: %u, glyphIndex: %u, data length = %i", bagIndex, slot, castCount, spellId, pItem->GetEntry(), glyphIndex, (uint32)recvPacket.size());
 
-    ItemTemplate const *proto = pItem->GetTemplate();
+    ItemTemplate const* proto = pItem->GetTemplate();
     if (!proto)
     {
         pUser->SendEquipError(EQUIP_ERR_ITEM_NOT_FOUND, pItem, NULL);
@@ -141,7 +141,7 @@ void WorldSession::HandleUseItemOpcode(WorldPacket& recvPacket)
     {
         for (int i = 0; i < MAX_ITEM_PROTO_SPELLS; ++i)
         {
-            if (SpellInfo const *spellInfo = sSpellMgr->GetSpellInfo(proto->Spells[i].SpellId))
+            if (SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(proto->Spells[i].SpellId))
             {
                 if (!spellInfo->CanBeUsedInCombat())
                 {
@@ -214,14 +214,14 @@ void WorldSession::HandleOpenItemOpcode(WorldPacket& recvPacket)
 
     sLog->outDetail("bagIndex: %u, slot: %u", bagIndex, slot);
 
-    Item *pItem = pUser->GetItemByPos(bagIndex, slot);
+    Item* pItem = pUser->GetItemByPos(bagIndex, slot);
     if (!pItem)
     {
         pUser->SendEquipError(EQUIP_ERR_ITEM_NOT_FOUND, NULL, NULL);
         return;
     }
 
-    ItemTemplate const *proto = pItem->GetTemplate();
+    ItemTemplate const* proto = pItem->GetTemplate();
     if (!proto)
     {
         pUser->SendEquipError(EQUIP_ERR_ITEM_NOT_FOUND, pItem, NULL);
@@ -241,7 +241,7 @@ void WorldSession::HandleOpenItemOpcode(WorldPacket& recvPacket)
     uint32 lockId = proto->LockID;
     if (lockId)
     {
-        LockEntry const *lockInfo = sLockStore.LookupEntry(lockId);
+        LockEntry const* lockInfo = sLockStore.LookupEntry(lockId);
 
         if (!lockInfo)
         {
@@ -263,7 +263,7 @@ void WorldSession::HandleOpenItemOpcode(WorldPacket& recvPacket)
         QueryResult result = CharacterDatabase.PQuery("SELECT entry, flags FROM character_gifts WHERE item_guid = '%u'", pItem->GetGUIDLow());
         if (result)
         {
-            Field *fields = result->Fetch();
+            Field* fields = result->Fetch();
             uint32 entry = fields[0].GetUInt32();
             uint32 flags = fields[1].GetUInt32();
 
@@ -296,7 +296,7 @@ void WorldSession::HandleGameObjectUseOpcode(WorldPacket & recv_data)
     if (_player->m_mover != _player)
         return;
 
-    if (GameObject *obj = GetPlayer()->GetMap()->GetGameObject(guid))
+    if (GameObject* obj = GetPlayer()->GetMap()->GetGameObject(guid))
         obj->Use(_player);
 }
 
@@ -339,7 +339,7 @@ void WorldSession::HandleCastSpellOpcode(WorldPacket& recvPacket)
         return;
     }
 
-    SpellInfo const *spellInfo = sSpellMgr->GetSpellInfo(spellId);
+    SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(spellId);
 
     if (!spellInfo)
     {
@@ -393,7 +393,7 @@ void WorldSession::HandleCastSpellOpcode(WorldPacket& recvPacket)
     // auto-selection buff level base at target level (in spellInfo)
     if (targets.GetUnitTarget())
     {
-        SpellInfo const *actualSpellInfo = spellInfo->GetAuraRankForLevel(targets.GetUnitTarget()->getLevel());
+        SpellInfo const* actualSpellInfo = spellInfo->GetAuraRankForLevel(targets.GetUnitTarget()->getLevel());
 
         // if rank not found then function return NULL but in explicit cast case original spell can be casted and later failed with appropriate error message
         if (actualSpellInfo)
@@ -421,7 +421,7 @@ void WorldSession::HandleCancelAuraOpcode(WorldPacket& recvPacket)
     uint32 spellId;
     recvPacket >> spellId;
 
-    SpellInfo const *spellInfo = sSpellMgr->GetSpellInfo(spellId);
+    SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(spellId);
     if (!spellInfo)
         return;
 
@@ -456,7 +456,7 @@ void WorldSession::HandlePetCancelAuraOpcode(WorldPacket& recvPacket)
     recvPacket >> guid;
     recvPacket >> spellId;
 
-    SpellInfo const *spellInfo = sSpellMgr->GetSpellInfo(spellId);
+    SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(spellId);
     if (!spellInfo)
     {
         sLog->outError("WORLD: unknown PET spell id %u", spellId);
@@ -543,7 +543,7 @@ void WorldSession::HandleSelfResOpcode(WorldPacket & /*recv_data*/)
 
     if (_player->GetUInt32Value(PLAYER_SELF_RES_SPELL))
     {
-        SpellInfo const *spellInfo = sSpellMgr->GetSpellInfo(_player->GetUInt32Value(PLAYER_SELF_RES_SPELL));
+        SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(_player->GetUInt32Value(PLAYER_SELF_RES_SPELL));
         if (spellInfo)
             _player->CastSpell(_player, spellInfo, false, 0);
 
@@ -628,7 +628,7 @@ void WorldSession::HandleMirrorImageDataRequest(WorldPacket & recv_data)
                 data << uint32(0);
             else if (*itr == EQUIPMENT_SLOT_BACK && player->HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_HIDE_CLOAK))
                 data << uint32(0);
-            else if (Item const *item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, *itr))
+            else if (Item const* item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, *itr))
                 data << uint32(item->GetTemplate()->DisplayInfoID);
             else
                 data << uint32(0);

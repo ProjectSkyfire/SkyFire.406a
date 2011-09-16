@@ -107,7 +107,7 @@ class at_ring_of_law : public AreaTriggerScript
 public:
     at_ring_of_law() : AreaTriggerScript("at_ring_of_law") { }
 
-    bool OnTrigger(Player* player, const AreaTriggerEntry * /*at*/)
+    bool OnTrigger(Player* player, const AreaTriggerEntry*  /*at*/)
     {
         if (InstanceScript* pInstance = player->GetInstanceScript())
         {
@@ -756,7 +756,7 @@ public:
         return marshal_windsorAI;
     }
 
-    bool OnQuestAccept(Player* player, Creature* creature, Quest const *quest)
+    bool OnQuestAccept(Player* player, Creature* creature, Quest const* quest)
     {
         if (quest->GetQuestId() == 4322)
             {PlayerStart = player;

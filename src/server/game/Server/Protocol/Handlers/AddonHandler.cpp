@@ -31,7 +31,7 @@ AddonHandler::~AddonHandler()
 {
 }
 
-bool AddonHandler::BuildAddonPacket(WorldPacket *Source, WorldPacket *Target)
+bool AddonHandler::BuildAddonPacket(WorldPacket* Source, WorldPacket* Target)
 {
     WorldPacket data(SMSG_ADDON_INFO);
     data << uint8(0x0C);

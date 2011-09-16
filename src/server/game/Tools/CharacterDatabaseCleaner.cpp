@@ -81,7 +81,7 @@ void CharacterDatabaseCleaner::CheckUnique(const char* column, const char* table
     std::ostringstream ss;
     do
     {
-        Field *fields = result->Fetch();
+        Field* fields = result->Fetch();
 
         uint32 id = fields[0].GetUInt32();
 
@@ -139,7 +139,7 @@ void CharacterDatabaseCleaner::CleanCharacterSpell()
 
 bool CharacterDatabaseCleaner::TalentCheck(uint32 talent_id)
 {
-    TalentEntry const *talentInfo = sTalentStore.LookupEntry(talent_id);
+    TalentEntry const* talentInfo = sTalentStore.LookupEntry(talent_id);
     if (!talentInfo)
         return false;
 

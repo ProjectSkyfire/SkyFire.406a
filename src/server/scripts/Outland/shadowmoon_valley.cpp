@@ -1367,7 +1367,7 @@ public:
             if (!player)
                 return;
 
-            if (Group *EventGroup = player->GetGroup())
+            if (Group* EventGroup = player->GetGroup())
             {
                 Player* GroupMember;
 

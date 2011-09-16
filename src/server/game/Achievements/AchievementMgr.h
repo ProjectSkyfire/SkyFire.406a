@@ -276,7 +276,7 @@ class AchievementMgr
         bool IsCompletedCriteria(AchievementCriteriaEntry const* achievementCriteria, AchievementEntry const* achievement);
         bool IsCompletedAchievement(AchievementEntry const* entry);
         bool CanUpdateCriteria(AchievementCriteriaEntry const* criteria, AchievementEntry const* achievement);
-        void BuildAllDataPacket(WorldPacket *data) const;
+        void BuildAllDataPacket(WorldPacket* data) const;
 
         Player* m_player;
         CriteriaProgressMap m_criteriaProgress;
@@ -326,7 +326,7 @@ class AchievementGlobalMgr
             return iter != m_achievementRewardLocales.end() ? &iter->second : NULL;
         }
 
-        AchievementCriteriaDataSet const* GetCriteriaDataSet(AchievementCriteriaEntry const *achievementCriteria) const
+        AchievementCriteriaDataSet const* GetCriteriaDataSet(AchievementCriteriaEntry const* achievementCriteria) const
         {
             AchievementCriteriaDataMap::const_iterator iter = m_criteriaDataMap.find(achievementCriteria->ID);
             return iter != m_criteriaDataMap.end() ? &iter->second : NULL;

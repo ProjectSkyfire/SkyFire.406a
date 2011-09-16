@@ -153,7 +153,7 @@ public:
             c->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE); //set it only once on Creature create (no need do intro if wiped)
         }
 
-        InstanceScript *pInstance;
+        InstanceScript* pInstance;
 
         uint64 ShieldGeneratorChannel[4];
 
@@ -450,8 +450,8 @@ public:
                 {
                     bool InMeleeRange = false;
                     Unit* target;
-                    std::list<HostileReference *> t_list = me->getThreatManager().getThreatList();
-                    for (std::list<HostileReference *>::const_iterator itr = t_list.begin(); itr!= t_list.end(); ++itr)
+                    std::list<HostileReference*> t_list = me->getThreatManager().getThreatList();
+                    for (std::list<HostileReference*>::const_iterator itr = t_list.begin(); itr!= t_list.end(); ++itr)
                     {
                         target = Unit::GetUnit(*me, (*itr)->getUnitGuid());
                                                                 //if in melee range
@@ -590,7 +590,7 @@ public:
             pInstance = c->GetInstanceScript();
         }
 
-        InstanceScript *pInstance;
+        InstanceScript* pInstance;
         uint32 move;
         uint32 phase;
         float x, y, z;
@@ -691,7 +691,7 @@ public:
             pInstance = c->GetInstanceScript();
         }
 
-        InstanceScript *pInstance;
+        InstanceScript* pInstance;
 
         uint32 PoisonBolt_Timer;
         uint32 Despawn_Timer;
@@ -766,7 +766,7 @@ public:
             EnterEvadeMode();
         }
 
-        InstanceScript *pInstance;
+        InstanceScript* pInstance;
 
         uint32 movement_timer;
         uint32 ToxicSpore_Timer;
@@ -918,7 +918,7 @@ public:
             pInstance = c->GetInstanceScript();
         }
 
-        InstanceScript *pInstance;
+        InstanceScript* pInstance;
         uint32 Check_Timer;
         bool Casted;
         void Reset()
@@ -966,7 +966,7 @@ public:
 
     bool OnUse(Player* player, Item* /*_Item*/, SpellCastTargets const& targets)
     {
-        InstanceScript *pInstance = player->GetInstanceScript();
+        InstanceScript* pInstance = player->GetInstanceScript();
 
         if (!pInstance)
         {
