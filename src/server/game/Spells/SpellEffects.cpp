@@ -732,7 +732,7 @@ void Spell::SpellDamageSchoolDmg(SpellEffIndex effIndex)
                         return;
                 break;
             }
-		}
+        }
 
         if (m_originalCaster && damage > 0 && apply_direct_bonus)
             damage = m_originalCaster->SpellDamageBonus(unitTarget, m_spellInfo, (uint32)damage, SPELL_DIRECT_DAMAGE);

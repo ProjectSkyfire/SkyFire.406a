@@ -9239,7 +9239,7 @@ FactionTemplateEntry const* Unit::getFactionTemplateEntry() const
     }
     return entry;
 }
- 
+
 ReputationRank Unit::GetReactionTo(Unit const* target) const
 {
     // always friendly to self
@@ -9276,7 +9276,7 @@ ReputationRank Unit::GetReactionTo(Unit const* target) const
             if (GetByteValue(UNIT_FIELD_BYTES_2, 1) & UNIT_BYTE2_FLAG_FFA_PVP
                 && target->GetByteValue(UNIT_FIELD_BYTES_2, 1) & UNIT_BYTE2_FLAG_FFA_PVP)
                 return REP_HOSTILE;
-            
+
             if (selfPlayerOwner)
             {
                 if (FactionTemplateEntry const* targetFactionTemplateEntry = target->getFactionTemplateEntry())
@@ -9913,7 +9913,7 @@ Player* Unit::GetCharmerOrOwnerPlayerOrPlayerItself() const
 
     return GetTypeId() == TYPEID_PLAYER ? (Player*)this : NULL;
 }
- 
+
 Player* Unit::GetAffectingPlayer() const
 {
     if (!GetCharmerOrOwnerGUID())

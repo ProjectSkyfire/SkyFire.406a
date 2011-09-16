@@ -898,7 +898,7 @@ struct FactionEntry
     bool CanHaveReputation() const
     {
         return reputationListID >= 0;
-    }	
+    }
 };
 
 #define MAX_FACTION_RELATIONS 4

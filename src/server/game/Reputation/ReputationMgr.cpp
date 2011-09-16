@@ -39,7 +39,7 @@ ReputationRank ReputationMgr::ReputationToRank(int32 standing)
     }
     return MIN_REPUTATION_RANK;
 }
- 
+
 bool ReputationMgr::IsAtWar(uint32 faction_id) const
 {
     FactionEntry const* factionEntry = sFactionStore.LookupEntry(faction_id);
