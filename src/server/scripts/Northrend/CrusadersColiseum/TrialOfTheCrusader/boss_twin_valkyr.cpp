@@ -473,6 +473,7 @@ public:
             }
         }
     };
+
 };
 
 /*######
@@ -520,6 +521,7 @@ public:
             EssenceLocation[1] = TwinValkyrsLoc[1];
         }
     };
+
 };
 
 #define ESSENCE_REMOVE 0
@@ -646,12 +648,13 @@ public:
             else m_uiRangeCheckTimer -= uiDiff;
         }
 
-        void SpellHitTarget(Unit* who, const SpellInfo* spell)
+        void SpellHitTarget(Unit* who, const SpellInfo* /*spell*/)
         {
             if (who->HasAura(SPELL_DARK_ESSENCE_HELPER))
                 who->CastSpell(who, SPELL_POWERING_UP, true);
         }
     };
+
 };
 
 class mob_unleashed_light : public CreatureScript
@@ -684,12 +687,13 @@ public:
             else m_uiRangeCheckTimer -= uiDiff;
         }
 
-        void SpellHitTarget(Unit* who, const SpellInfo* spell)
+        void SpellHitTarget(Unit* who, const SpellInfo* /*spell*/)
         {
             if (who->HasAura(SPELL_LIGHT_ESSENCE_HELPER))
                 who->CastSpell(who, SPELL_POWERING_UP, true);
         }
     };
+
 };
 
 class spell_powering_up : public SpellScriptLoader
@@ -737,11 +741,21 @@ class spell_powering_up : public SpellScriptLoader
             public:
                 PrepareSpellScript(spell_powering_up_SpellScript)
 
+            uint32 spellId;
+
+            bool Validate(SpellEntry const*  /*spellEntry*/)
+            {
+                spellId = sSpellMgr->GetSpellIdForDifficulty(SPELL_SURGE_OF_SPEED, GetCaster());
+                if (!sSpellMgr->GetSpellInfo(spellId))
+                    return false;
+                return true;
+            }
+
             void HandleScriptEffect(SpellEffIndex /*effIndex*/)
             {
                 if (Unit* target = GetTargetUnit())
                     if (urand(0, 99) < 15)
-                        target->CastSpell(target, SPELL_SURGE_OF_SPEED, true);
+                        target->CastSpell(target, spellId, true);
             }
 
             void Register()
@@ -775,7 +789,7 @@ class spell_valkyr_essences : public SpellScriptLoader
                 return true;
             }
 
-            void Absorb(AuraEffect * /*aurEff*/, DamageInfo & /*dmgInfo*/, uint32 & /*absorbAmount*/)
+            void Absorb(AuraEffect*  /*aurEff*/, DamageInfo & /*dmgInfo*/, uint32 & /*absorbAmount*/)
             {
                 if (urand(0, 99) < 5)
                     GetTarget()->CastSpell(GetTarget(), spellId, true);
@@ -787,7 +801,7 @@ class spell_valkyr_essences : public SpellScriptLoader
             }
         };
 
-        AuraScript *GetAuraScript() const
+        AuraScript* GetAuraScript() const
         {
             return new spell_valkyr_essences_AuraScript();
         }
@@ -807,7 +821,7 @@ class spell_power_of_the_twins : public SpellScriptLoader
                 return GetCaster()->GetTypeId() == TYPEID_UNIT;
             }
 
-            void HandleEffectApply(AuraEffect const* aurEff, AuraEffectHandleModes /*mode*/)
+            void HandleEffectApply(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
             {
                 if (InstanceScript* instance = GetCaster()->GetInstanceScript())
                 {
@@ -829,10 +843,11 @@ class spell_power_of_the_twins : public SpellScriptLoader
             {
                 AfterEffectApply += AuraEffectApplyFn(spell_power_of_the_twins_AuraScript::HandleEffectApply, EFFECT_0, SPELL_AURA_MOD_DAMAGE_PERCENT_DONE, AURA_EFFECT_HANDLE_REAL);
                 AfterEffectRemove += AuraEffectRemoveFn(spell_power_of_the_twins_AuraScript::HandleEffectRemove, EFFECT_0, SPELL_AURA_MOD_DAMAGE_PERCENT_DONE, AURA_EFFECT_HANDLE_REAL_OR_REAPPLY_MASK);
+
             }
         };
 
-        AuraScript *GetAuraScript() const
+        AuraScript* GetAuraScript() const
         {
             return new spell_power_of_the_twins_AuraScript();
         }
