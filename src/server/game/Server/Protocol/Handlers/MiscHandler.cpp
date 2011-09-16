@@ -830,7 +830,7 @@ void WorldSession::HandleAreaTriggerOpcode(WorldPacket& recv_data)
         if (dist > atEntry->radius + delta)
         {
             sLog->outDebug(LOG_FILTER_NETWORKIO, "Player '%s' (GUID: %u) too far (radius: %f distance: %f), ignore Area Trigger ID: %u",
-                player->GetName(), player->GetGUIDLow(), atEntry->radius, dist, triggerId
+                player->GetName(), player->GetGUIDLow(), atEntry->radius, dist, triggerId);
             return;
         }
     }
