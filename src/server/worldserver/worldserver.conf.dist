@@ -634,10 +634,11 @@ SQLDriverQueryLogging = 0
 #                     12 - Lmagenta
 #                     13 - Lcyan
 #                     14 - White
-#        Example:     "13 11 9 5" - (Enabled)
-#        Default:     ""          - (Disabled)
+#        Example:     "10 1 11 5"  - (Enabled)
+#                     ""           - (Disabled)
+#        Default:     "13 11 9 5"
 
-LogColors = ""
+LogColors = "13 11 9 5"
 
 #
 #    EnableLogDB
@@ -910,11 +911,12 @@ DeclinedNames = 0
 #    Expansion
 #        Description: Allow server to use content from expansions. Checks for expansion-related
 #                     map files, client compatibility and class/race character creation.
-#        Default:     2 - (Expansion 2)
-#                     1 - (Expansion 1)
+#        Default:     3 - (Expansion: Cata)
+#                     2 - (Expansion: WoLK)
+#                     1 - (Expansion: TBC)
 #                     0 - (Disabled, Ignore and disable expansion content (maps, races, classes)
 
-Expansion = 2
+Expansion = 3
 
 #
 #    MinPlayerName
@@ -1362,7 +1364,7 @@ BeepAtStart = 1
 #        Example:     "Welcome to John\'s Server@This server runs on Skyfire Core."
 #        Default:     "Welcome to a Skyfire Core server."
 
-Motd = "Welcome to a Skyfire Core server."
+Motd = "Welcome to a Skyfire Core server.@If your seeing this message@it's because the developer hasnt read configs fully"
 
 #
 #    Server.LoginInfo
@@ -1774,10 +1776,10 @@ ChatLevelReq.Say = 1
 #
 #    AllowPlayerCommands
 #        Description: Allow players to use commands.
-#        Default:     1 - (Enabled)
-#                     0 - (Disabled)
+#                     1 - (Enabled)
+#         Default:    0 - (Disabled)
 
-AllowPlayerCommands = 1
+AllowPlayerCommands = 0
 
 #
 #    PreserveCustomChannels
@@ -2460,9 +2462,9 @@ Arena.ArenaSeason.InProgress = 1
 #
 #    Arena.ArenaStartRating
 #        Description: Start rating for new arena teams.
-#        Default:     0
+#        Default:     1500
 
-Arena.ArenaStartRating = 0
+Arena.ArenaStartRating = 1500
 
 #
 #    Arena.ArenaStartPersonalRating
@@ -2739,7 +2741,7 @@ MinRecordUpdateTimeDiff = 100
 #        Description: String to be displayed at first login of newly created characters.
 #         Default:    "" - (Disabled)
 
-PlayerStart.String = ""
+PlayerStart.String = "IF YOUR READING THIS YOUR DEVELOPER HAS NOT READ ALL OF THE CONFIGERATION FILE!"
 
 #
 #     LevelReq.Trade

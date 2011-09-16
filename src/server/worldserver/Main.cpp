@@ -20,16 +20,15 @@
 /// @{
 /// \file
 
-#include <openssl/opensslv.h>
-#include <openssl/crypto.h>
-#include <ace/Version.h>
-
 #include "Common.h"
 #include "Database/DatabaseEnv.h"
 #include "Configuration/Config.h"
-
 #include "Log.h"
 #include "Master.h"
+
+#include <openssl/opensslv.h>
+#include <openssl/crypto.h>
+#include <ace/Version.h>
 
 #ifndef _TRINITY_CORE_CONFIG
 # define _TRINITY_CORE_CONFIG  "worldserver.conf"
@@ -38,8 +37,8 @@
 #ifdef _WIN32
 #include "ServiceWin32.h"
 char serviceName[] = "worldserver";
-char serviceLongName[] = "TrinityCore world service";
-char serviceDescription[] = "TrinityCore World of Warcraft emulator world service";
+char serviceLongName[] = "SkyFireEMU world service";
+char serviceDescription[] = "SkyFireEMU World of Warcraft:Cataclysm emulator world service";
 /*
  * -1 - not in service mode
  *  0 - stopped

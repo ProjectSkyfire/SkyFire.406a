@@ -20,8 +20,6 @@
     \ingroup Trinityd
 */
 
-#include <ace/Sig_Handler.h>
-
 #include "Common.h"
 #include "SystemConfig.h"
 #include "SignalHandler.h"
@@ -32,7 +30,6 @@
 #include "Configuration/Config.h"
 #include "Database/DatabaseEnv.h"
 #include "Database/DatabaseWorkerPool.h"
-
 #include "CliRunnable.h"
 #include "Log.h"
 #include "Master.h"
@@ -41,15 +38,16 @@
 #include "Timer.h"
 #include "Util.h"
 #include "AuthSocket.h"
-
 #include "BigNumber.h"
+
+#include <ace/Sig_Handler.h>
 
 #ifdef _WIN32
 #include "ServiceWin32.h"
 extern int m_ServiceStatus;
 #endif
 
-/// Handle worldservers's termination signals
+/// Handle worldserver's termination signals
 class WorldServerSignalHandler : public Trinity::SignalHandler
 {
     public:
@@ -109,13 +107,9 @@ public:
     }
 };
 
-Master::Master()
-{
-}
+Master::Master() { }
 
-Master::~Master()
-{
-}
+Master::~Master() {}
 
 /// Main function
 int Master::Run()
@@ -167,7 +161,7 @@ int Master::Run()
     ///- Initialize the World
     sWorld->SetInitialWorldSettings();
 
-    // Initialise the signal handlers
+    // Initialize the signal handlers
     WorldServerSignalHandler SignalINT, SignalTERM;
     #ifdef _WIN32
     WorldServerSignalHandler SignalBREAK;
@@ -256,7 +250,7 @@ int Master::Run()
     if (uint32 freeze_delay = sConfig->GetIntDefault("MaxCoreStuckTime", 0))
     {
         FreezeDetectorRunnable* fdr = new FreezeDetectorRunnable();
-        fdr->SetDelayTime(freeze_delay*1000);
+        fdr->SetDelayTime(freeze_delay * 1000);
         ACE_Based::Thread freeze_thread(fdr);
         freeze_thread.setPriority(ACE_Based::Highest);
     }
@@ -462,7 +456,7 @@ bool Master::_StartDB()
     sWorld->LoadDBVersion();
 
     sLog->outString("Using World DB: %s", sWorld->GetDBVersion());
-    sLog->outString("Using creature EventAI: %s", sWorld->GetCreatureEventAIVersion());
+    sLog->outString("Using creature AI: %s", sWorld->GetCreatureAIVersion());
     return true;
 }
 
