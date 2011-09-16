@@ -1074,7 +1074,9 @@ void LootTemplate::LootGroup::Process(Loot& loot, uint16 lootMode) const
         if (item == NULL && !EqualPossibleDrops.empty()) // If nothing selected yet - an item is taken from equal-chanced part
         {
             itemSource = 2;
-            item = const_cast<LootStoreItem*>(&SelectRandomContainerElement(EqualPossibleDrops));
+            itr = EqualPossibleDrops.begin();
+            std::advance(itr, irand(0, EqualPossibleDrops.size()-1));
+            item = &*itr;
         }
         // finish rolling
 
