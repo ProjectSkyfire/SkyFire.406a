@@ -615,7 +615,7 @@ enum UnitFlags2
 {
     UNIT_FLAG2_FEIGN_DEATH          = 0x00000001,
     UNIT_FLAG2_UNK1                 = 0x00000002,   // Hide unit model (show only player equip)
-    UNIT_FLAG2_IGNORE_REPUTATION    = 0x00000004,	
+    UNIT_FLAG2_IGNORE_REPUTATION    = 0x00000004,
     UNIT_FLAG2_COMPREHEND_LANG      = 0x00000008,
     UNIT_FLAG2_MIRROR_IMAGE         = 0x00000010,
     UNIT_FLAG2_FORCE_MOVE           = 0x00000040,
@@ -1398,7 +1398,7 @@ class Unit : public WorldObject
 
         ReputationRank GetReactionTo(Unit const* target) const;
         ReputationRank static GetFactionReactionTo(FactionTemplateEntry const* factionTemplateEntry, Unit const* target);
-		
+
         bool IsHostileTo(Unit const* unit) const;
         bool IsHostileToPlayers() const;
         bool IsFriendlyTo(Unit const* unit) const;
@@ -1676,7 +1676,7 @@ class Unit : public WorldObject
         }
         Player* GetCharmerOrOwnerPlayerOrPlayerItself() const;
         Player* GetAffectingPlayer() const;
-		
+
         void SetMinion(Minion *minion, bool apply);
         void GetAllMinionsByEntry(std::list<Creature*>& Minions, uint32 entry);
         void RemoveAllMinionsByEntry(uint32 entry);

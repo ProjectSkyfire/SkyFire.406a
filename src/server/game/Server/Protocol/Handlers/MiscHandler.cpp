@@ -815,7 +815,7 @@ void WorldSession::HandleAreaTriggerOpcode(WorldPacket& recv_data)
 
     if (player->GetMapId() != atEntry->mapid)
     {
-        sLog->outDebug(LOG_FILTER_NETWORKIO, "Player '%s' (GUID: %u) too far (trigger map: %u player map: %u), ignore Area Trigger ID: %u", 
+        sLog->outDebug(LOG_FILTER_NETWORKIO, "Player '%s' (GUID: %u) too far (trigger map: %u player map: %u), ignore Area Trigger ID: %u",
             player->GetName(), atEntry->mapid, player->GetMapId(), player->GetGUIDLow(), triggerId);
         return;
     }
@@ -896,11 +896,11 @@ void WorldSession::HandleAreaTriggerOpcode(WorldPacket& recv_data)
             bg->HandleAreaTrigger(player, triggerId);
             return;
         }
-		
+
     if (OutdoorPvP* pvp = player->GetOutdoorPvP())
         if (pvp->HandleAreaTrigger(_player, triggerId))
             return;
-			
+
     // NULL if all values default (non teleport trigger)
     AreaTrigger const* at = sObjectMgr->GetAreaTrigger(triggerId);;
     if (!at)

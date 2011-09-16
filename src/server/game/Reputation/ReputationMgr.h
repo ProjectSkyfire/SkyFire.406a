@@ -95,7 +95,7 @@ class ReputationMgr
             FactionStateList::const_iterator repItr = m_factions.find (id);
             return repItr != m_factions.end() ? &repItr->second : NULL;
         }
- 
+
         bool IsAtWar(uint32 faction_id) const;
         bool IsAtWar(FactionEntry const* factionEntry) const;
 
