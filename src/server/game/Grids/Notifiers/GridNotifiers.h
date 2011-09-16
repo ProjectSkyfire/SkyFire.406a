@@ -808,7 +808,7 @@ namespace Trinity
                 return u->isAlive()
                     && i_funit->IsWithinDistInMap(u, i_range)
                     && !i_funit->IsFriendlyTo(u)
-                    && i_funit->canAttack(u)
+                    && i_funit->IsValidAttackTarget(u)
                     && u->GetCreatureType() != CREATURE_TYPE_CRITTER
                     && i_funit->canSeeOrDetect(u);
             }
@@ -978,7 +978,7 @@ namespace Trinity
                 if (!me->IsWithinDistInMap(u, m_range))
                     return false;
 
-                if (!me->canAttack(u))
+                if (!me->IsValidAttackTarget(u))
                     return false;
 
                 m_range = me->GetDistance(u);   // use found unit range as new range limit for next check
@@ -1009,7 +1009,7 @@ namespace Trinity
 
                 if (m_force)
                 {
-                    if (!me->canAttack(u))
+                    if (!me->IsValidAttackTarget(u))
                         return false;
                 }
                 else
