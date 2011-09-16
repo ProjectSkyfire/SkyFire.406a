@@ -220,6 +220,7 @@ WorldSocketMgr::WorldSocketMgr() :
     m_UseNoDelay(true),
     m_Acceptor (0)
 {
+    InitOpcodeTable();
 }
 
 WorldSocketMgr::~WorldSocketMgr()
