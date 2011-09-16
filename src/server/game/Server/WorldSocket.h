@@ -204,7 +204,7 @@ class WorldSocket : protected WorldHandler
         LockType m_OutBufferLock;
 
         /// Buffer used for writing output.
-        ACE_Message_Block *m_OutBuffer;
+        ACE_Message_Block* m_OutBuffer;
 
         /// Size of the m_OutBuffer.
         size_t m_OutBufferSize;

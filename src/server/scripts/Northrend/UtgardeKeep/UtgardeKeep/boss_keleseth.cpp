@@ -165,7 +165,7 @@ public:
 
             if (IsHeroic() && !ShatterFrostTomb)
             {
-                AchievementEntry const *AchievOnTheRocks = GetAchievementStore()->LookupEntry(ACHIEVEMENT_ON_THE_ROCKS);
+                AchievementEntry const* AchievOnTheRocks = GetAchievementStore()->LookupEntry(ACHIEVEMENT_ON_THE_ROCKS);
                 if (AchievOnTheRocks)
                 {
                     Map* pMap = me->GetMap();
@@ -270,7 +270,7 @@ public:
             pInstance = c->GetInstanceScript();
         }
 
-        InstanceScript *pInstance;
+        InstanceScript* pInstance;
         uint32 Respawn_Time;
         uint64 Target_Guid;
         uint32 Decrepify_Timer;

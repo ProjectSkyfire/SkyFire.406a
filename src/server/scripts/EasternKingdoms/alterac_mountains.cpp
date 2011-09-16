@@ -31,5 +31,5 @@ EndContentData */
 
 /*void AddSC_alterac_mountains()
 {
-    Script *newscript;
+    Script* newscript;
 }*/

@@ -123,7 +123,7 @@ public:
 
         char* spawntimeSecs = strtok(NULL, " ");
 
-        const GameObjectTemplate *gInfo = sObjectMgr->GetGameObjectTemplate(id);
+        const GameObjectTemplate* gInfo = sObjectMgr->GetGameObjectTemplate(id);
 
         if (!gInfo)
         {
@@ -146,7 +146,7 @@ public:
         float y = float(chr->GetPositionY());
         float z = float(chr->GetPositionZ());
         float o = float(chr->GetOrientation());
-        Map *map = chr->GetMap();
+        Map* map = chr->GetMap();
 
         GameObject* pGameObj = new GameObject;
         uint32 db_lowGUID = sObjectMgr->GenerateLowGuid(HIGHGUID_GAMEOBJECT);
@@ -285,7 +285,7 @@ public:
 
         do
         {
-            Field *fields = result->Fetch();
+            Field* fields = result->Fetch();
             lowguid = fields[0].GetUInt32();
             id =      fields[1].GetUInt32();
             x =       fields[2].GetFloat();
@@ -550,7 +550,7 @@ public:
         {
             do
             {
-                Field *fields = result->Fetch();
+                Field* fields = result->Fetch();
                 uint32 guid = fields[0].GetUInt32();
                 uint32 entry = fields[1].GetUInt32();
                 float x = fields[2].GetFloat();
@@ -584,7 +584,7 @@ public:
 
         if (!*args)
         {
-            if (WorldObject * obj = handler->getSelectedObject())
+            if (WorldObject* obj = handler->getSelectedObject())
                 entry = obj->GetEntry();
             else
                 entry = atoi((char*)args);

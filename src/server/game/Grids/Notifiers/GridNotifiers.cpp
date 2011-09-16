@@ -208,7 +208,7 @@ void DelayedUnitRelocation::Visit(PlayerMapType &m)
     for (PlayerMapType::iterator iter = m.begin(); iter != m.end(); ++iter)
     {
         Player* player = iter->getSource();
-        WorldObject const *viewPoint = player->m_seer;
+        WorldObject const* viewPoint = player->m_seer;
 
         if (!viewPoint->isNeedNotify(NOTIFY_VISIBILITY_CHANGED))
             continue;
@@ -235,7 +235,7 @@ void AIRelocationNotifier::Visit(CreatureMapType &m)
 {
     for (CreatureMapType::iterator iter = m.begin(); iter != m.end(); ++iter)
     {
-        Creature *c = iter->getSource();
+        Creature* c = iter->getSource();
         CreatureUnitRelocationWorker(c, &i_unit);
         if (isCreature)
             CreatureUnitRelocationWorker((Creature*)&i_unit, c);
@@ -247,7 +247,7 @@ MessageDistDeliverer::Visit(PlayerMapType &m)
 {
     for (PlayerMapType::iterator iter = m.begin(); iter != m.end(); ++iter)
     {
-        Player *target = iter->getSource();
+        Player* target = iter->getSource();
         if (!target->InSamePhase(i_phaseMask))
             continue;
 
@@ -294,7 +294,7 @@ void MessageDistDeliverer::Visit(DynamicObjectMapType &m)
 {
     for (DynamicObjectMapType::iterator iter = m.begin(); iter != m.end(); ++iter)
     {
-        DynamicObject *target = iter->getSource();
+        DynamicObject* target = iter->getSource();
         if (!target->InSamePhase(i_phaseMask))
             continue;
 

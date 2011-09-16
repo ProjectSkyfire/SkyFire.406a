@@ -98,7 +98,7 @@ void MapManager::checkAndCorrectGridStatesArray()
 
 Map* MapManager::_createBaseMap(uint32 id)
 {
-    Map *m = _findMap(id);
+    Map* m = _findMap(id);
 
     if (m == NULL)
     {
@@ -124,7 +124,7 @@ Map* MapManager::CreateMap(uint32 id, const WorldObject* obj, uint32 /*instanceI
 {
     ASSERT(obj);
     //if (!obj->IsInWorld()) sLog->outError("GetMap: called for map %d with object (typeid %d, guid %d, mapid %d, instanceid %d) who is not in world!", id, obj->GetTypeId(), obj->GetGUIDLow(), obj->GetMapId(), obj->GetInstanceId());
-    Map *m = _createBaseMap(id);
+    Map* m = _createBaseMap(id);
 
     if (m && (obj->GetTypeId() == TYPEID_PLAYER) && m->Instanceable()) m = ((MapInstanced*)m)->CreateInstance(id, (Player*)obj);
 
@@ -133,7 +133,7 @@ Map* MapManager::CreateMap(uint32 id, const WorldObject* obj, uint32 /*instanceI
 
 Map* MapManager::FindMap(uint32 mapid, uint32 instanceId) const
 {
-    Map *map = _findMap(mapid);
+    Map* map = _findMap(mapid);
     if (!map)
         return NULL;
 
@@ -339,10 +339,10 @@ uint32 MapManager::GetNumInstances()
     uint32 ret = 0;
     for (MapMapType::iterator itr = i_maps.begin(); itr != i_maps.end(); ++itr)
     {
-        Map *map = itr->second;
+        Map* map = itr->second;
         if (!map->Instanceable())
             continue;
-        MapInstanced::InstancedMaps &maps = ((MapInstanced *)map)->GetInstancedMaps();
+        MapInstanced::InstancedMaps &maps = ((MapInstanced* )map)->GetInstancedMaps();
         for (MapInstanced::InstancedMaps::iterator mitr = maps.begin(); mitr != maps.end(); ++mitr)
             if (mitr->second->IsDungeon()) ret++;
     }
@@ -356,10 +356,10 @@ uint32 MapManager::GetNumPlayersInInstances()
     uint32 ret = 0;
     for (MapMapType::iterator itr = i_maps.begin(); itr != i_maps.end(); ++itr)
     {
-        Map *map = itr->second;
+        Map* map = itr->second;
         if (!map->Instanceable())
             continue;
-        MapInstanced::InstancedMaps &maps = ((MapInstanced *)map)->GetInstancedMaps();
+        MapInstanced::InstancedMaps &maps = ((MapInstanced* )map)->GetInstancedMaps();
         for (MapInstanced::InstancedMaps::iterator mitr = maps.begin(); mitr != maps.end(); ++mitr)
             if (mitr->second->IsDungeon())
                 ret += ((InstanceMap*)mitr->second)->GetPlayers().getSize();

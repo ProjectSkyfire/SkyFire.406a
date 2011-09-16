@@ -33,8 +33,8 @@ namespace VMAP
     struct LocationInfo
     {
         LocationInfo(): hitInstance(0), hitModel(0), ground_Z(-G3D::inf()) {};
-        const ModelInstance *hitInstance;
-        const GroupModel *hitModel;
+        const ModelInstance* hitInstance;
+        const GroupModel* hitModel;
         float ground_Z;
     };
 
@@ -46,7 +46,7 @@ namespace VMAP
             uint32 iMapID;
             bool iIsTiled;
             BIH iTree;
-            ModelInstance *iTreeValues; // the tree entries
+            ModelInstance* iTreeValues; // the tree entries
             uint32 iNTreeValues;
 
             // Store all the map tile idents that are loaded for that map
@@ -75,10 +75,10 @@ namespace VMAP
             bool getAreaInfo(G3D::Vector3 &pos, uint32 &flags, int32 &adtId, int32 &rootId, int32 &groupId) const;
             bool GetLocationInfo(const Vector3 &pos, LocationInfo &info) const;
 
-            bool InitMap(const std::string &fname, VMapManager2 *vm);
-            void UnloadMap(VMapManager2 *vm);
-            bool LoadMapTile(uint32 tileX, uint32 tileY, VMapManager2 *vm);
-            void UnloadMapTile(uint32 tileX, uint32 tileY, VMapManager2 *vm);
+            bool InitMap(const std::string &fname, VMapManager2* vm);
+            void UnloadMap(VMapManager2* vm);
+            bool LoadMapTile(uint32 tileX, uint32 tileY, VMapManager2* vm);
+            void UnloadMapTile(uint32 tileX, uint32 tileY, VMapManager2* vm);
             bool isTiled() const { return iIsTiled; }
             uint32 numLoadedTiles() const { return iLoadedTiles.size(); }
     };

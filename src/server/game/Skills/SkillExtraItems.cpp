@@ -70,7 +70,7 @@ void LoadSkillExtraItemTable()
 
     do
     {
-        Field *fields = result->Fetch();
+        Field* fields = result->Fetch();
 
         uint32 spellId = fields[0].GetUInt32();
 

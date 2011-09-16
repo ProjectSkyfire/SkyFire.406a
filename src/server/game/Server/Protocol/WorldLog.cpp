@@ -58,7 +58,7 @@ void WorldLog::Initialize()
     m_dbWorld = sConfig->GetBoolDefault("LogDB.World", false); // can be VERY heavy if enabled
 }
 
-void WorldLog::outTimestampLog(char const *fmt, ...)
+void WorldLog::outTimestampLog(char const* fmt, ...)
 {
     if (LogWorld())
     {
@@ -86,7 +86,7 @@ void WorldLog::outTimestampLog(char const *fmt, ...)
     }
 }
 
-void WorldLog::outLog(char const *fmt, ...)
+void WorldLog::outLog(char const* fmt, ...)
 {
     if (LogWorld())
     {

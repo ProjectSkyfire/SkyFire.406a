@@ -124,7 +124,7 @@ public:
             me->setActive(true);
         }
 
-        InstanceScript *pInstance;
+        InstanceScript* pInstance;
 
         uint32 ArcaneBuffetTimer;
         uint32 FrostBreathTimer;
@@ -444,7 +444,7 @@ public:
 
     struct boss_kalecAI : public ScriptedAI
     {
-        InstanceScript *pInstance;
+        InstanceScript* pInstance;
 
         uint32 RevitalizeTimer;
         uint32 HeroicStrikeTimer;
@@ -579,7 +579,7 @@ public:
             KalecgosGUID = 0;
         }
 
-        InstanceScript *pInstance;
+        InstanceScript* pInstance;
 
         uint32 CorruptionStrikeTimer;
         uint32 AgonyCurseTimer;
