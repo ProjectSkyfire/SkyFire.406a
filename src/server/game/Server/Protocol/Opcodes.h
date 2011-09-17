@@ -863,7 +863,7 @@ enum Opcodes
     CMSG_BATTLEMASTER_JOIN_ARENA                     = 0x00311, // 4.0.6a 13623
     MSG_MOVE_START_ASCEND                            = 0x0BDC0, // 4.0.6a 13623
     MSG_MOVE_STOP_ASCEND                             = 0x0FCA8, // 4.0.6a 13623
-    SMSG_ARENA_TEAM_STATS                            = 0x09F5F, //
+    SMSG_ARENA_TEAM_STATS                            = 0x0FA80, // 4.0.6a 13623
     CMSG_LFG_JOIN                                    = 0x063C0, // 4.0.6a 13623
     CMSG_LFG_LEAVE                                   = 0x03688, // 4.0.6a 13623
     CMSG_SEARCH_LFG_JOIN                             = 0x061CC, // 4.0.6a 13623
