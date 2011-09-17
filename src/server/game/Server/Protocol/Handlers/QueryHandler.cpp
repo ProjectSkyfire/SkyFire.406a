@@ -182,8 +182,8 @@ void WorldSession::HandleCreatureQueryOpcode(WorldPacket & recv_data)
         data << uint32(ci->type);                           // CreatureType.dbc
         data << uint32(ci->family);                         // CreatureFamily.dbc
         data << uint32(ci->rank);                           // Creature Rank (elite, boss, etc)
-        data << uint32(ci->KillCredit[0]);                  // new in 3.1, kill credit
-        data << uint32(ci->KillCredit[1]);                  // new in 3.1, kill credit
+        data << uint32(ci->KillCredit[0]);                  // kill credit
+        data << uint32(ci->KillCredit[1]);                  // kill credit
         data << uint32(ci->Modelid1);                       // Modelid1
         data << uint32(ci->Modelid2);                       // Modelid2
         data << uint32(ci->Modelid3);                       // Modelid3
@@ -194,6 +194,7 @@ void WorldSession::HandleCreatureQueryOpcode(WorldPacket & recv_data)
         for (uint32 i = 0; i < MAX_CREATURE_QUEST_ITEMS; ++i)
             data << uint32(ci->questItems[i]);              // itemId[6], quest drop
         data << uint32(ci->movementId);                     // CreatureMovementInfo.dbc
+        data << uint32(ci->expansion);                      // client will not allow interaction if this value is not in line with its stored exp
         SendPacket(&data);
         sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Sent SMSG_CREATURE_QUERY_RESPONSE");
     }
@@ -246,10 +247,11 @@ void WorldSession::HandleGameObjectQueryOpcode(WorldPacket & recv_data)
         data << IconName;                                   // 2.0.3, string. Icon name to use instead of default icon for go's (ex: "Attack" makes sword)
         data << CastBarCaption;                             // 2.0.3, string. Text will appear in Cast Bar when using GO (ex: "Collecting")
         data << info->unk1;                                 // 2.0.3, string
-        data.append(info->raw.data, 24);
+        data.append(info->raw.data, 32);
         data << float(info->size);                          // go size
         for (uint32 i = 0; i < MAX_GAMEOBJECT_QUEST_ITEMS; ++i)
             data << uint32(info->questItems[i]);              // itemId[6], quest drop
+        data << uint32(0);                                  // go expansion field
         SendPacket(&data);
         sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Sent SMSG_GAMEOBJECT_QUERY_RESPONSE");
     }
@@ -324,7 +326,7 @@ void WorldSession::HandleNpcTextQueryOpcode(WorldPacket & recv_data)
     sLog->outDetail("WORLD: CMSG_NPC_TEXT_QUERY ID '%u'", textID);
 
     recv_data >> guid;
-    GetPlayer()->SetSelection(guid);
+    GetPlayer()->SetUInt64Value(UNIT_FIELD_TARGET, guid);
 
     GossipText const* pGossip = sObjectMgr->GetGossipText(textID);
 
@@ -402,6 +404,7 @@ void WorldSession::HandleNpcTextQueryOpcode(WorldPacket & recv_data)
 void WorldSession::HandlePageTextQueryOpcode(WorldPacket & recv_data)
 {
     sLog->outDetail("WORLD: Received CMSG_PAGE_TEXT_QUERY");
+    recv_data.hexlike();
 
     uint32 pageID;
     recv_data >> pageID;
