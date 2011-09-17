@@ -179,7 +179,7 @@ public:
             if (!SpawnAssoc)
                 return;
 
-            if (who->isTargetableForAttack() && me->IsHostileTo(who))
+            if (me->IsValidAttackTarget(who))
             {
                 Player* playerTarget = who->ToPlayer();
 
@@ -1539,6 +1539,7 @@ public:
             else
                 me->SetReactState(REACT_AGGRESSIVE);
         }
+
     };
 
     CreatureAI* GetAI(Creature* creature) const
@@ -1717,7 +1718,7 @@ public:
         //Redefined for random target selection:
         void MoveInLineOfSight(Unit* who)
         {
-            if (!me->getVictim() && who->isTargetableForAttack() && (me->IsHostileTo(who)) && who->isInAccessiblePlaceFor(me))
+            if (!me->getVictim() && me->canCreatureAttack(who))
             {
                 if (me->GetDistanceZ(who) > CREATURE_Z_ATTACK_RANGE)
                     return;
@@ -2673,3 +2674,4 @@ void AddSC_npcs_special()
     new npc_tabard_vendor;
     new npc_experience;
 }
+

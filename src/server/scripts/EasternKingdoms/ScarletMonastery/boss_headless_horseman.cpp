@@ -205,6 +205,7 @@ public:
             }
         }
     };
+
 };
 
 class mob_head : public CreatureScript
@@ -343,6 +344,7 @@ public:
             }
         }
     };
+
 };
 
 class boss_headless_horseman : public CreatureScript
@@ -730,6 +732,7 @@ public:
             }
         }
     };
+
 };
 
 class mob_pulsing_pumpkin : public CreatureScript
@@ -797,7 +800,7 @@ public:
 
         void MoveInLineOfSight(Unit* who)
         {
-            if (!who || !who->isTargetableForAttack() || !me->IsHostileTo(who) || me->getVictim())
+            if (!who || !me->IsValidAttackTarget(who) || me->getVictim())
                 return;
 
             me->AddThreat(who, 0.0f);
@@ -811,6 +814,7 @@ public:
                 DoMeleeAttackIfReady();
         }
     };
+
 };
 
 class go_loosely_turned_soil : public GameObjectScript
@@ -843,6 +847,7 @@ public:
         //}
         return true;
     }
+
 };
 
 void mob_head::mob_headAI::Disappear()

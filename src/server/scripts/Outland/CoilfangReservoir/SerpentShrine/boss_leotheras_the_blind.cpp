@@ -154,6 +154,7 @@ public:
            DoMeleeAttackIfReady();
         }
     };
+
 };
 
 //Original Leotheras the Blind AI
@@ -244,6 +245,7 @@ public:
                 Creature* binder = me->SummonCreature(MOB_SPELLBINDER, nx, ny, z, o, TEMPSUMMON_DEAD_DESPAWN, 0);
                 if (binder)
                     SpellBinderGUID[i] = binder->GetGUID();
+
             }
         }
         void MoveInLineOfSight(Unit* who)
@@ -251,7 +253,7 @@ public:
             if (me->HasAura(AURA_BANISH))
                 return;
 
-            if (!me->getVictim() && who->isTargetableForAttack() && (me->IsHostileTo(who)) && who->isInAccessiblePlaceFor(me))
+            if (!me->getVictim() && me->canCreatureAttack(who))
             {
                 if (me->GetDistanceZ(who) > CREATURE_Z_ATTACK_RANGE)
                     return;
@@ -582,6 +584,7 @@ public:
             }
         }
     };
+
 };
 
 //Leotheras the Blind Demon Form AI
@@ -791,6 +794,7 @@ public:
 
         void JustDied(Unit* /*killer*/) {}
     };
+
 };
 
 void AddSC_boss_leotheras_the_blind()

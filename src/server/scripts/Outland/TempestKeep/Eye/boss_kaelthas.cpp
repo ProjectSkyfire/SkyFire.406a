@@ -378,6 +378,7 @@ class boss_kaelthas : public CreatureScript
 
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                         AttackStart(target);
+
                 }
                 else
                 {
@@ -396,8 +397,7 @@ class boss_kaelthas : public CreatureScript
 
             void MoveInLineOfSight(Unit* who)
             {
-                if (!me->HasUnitState(UNIT_STAT_STUNNED) && who->isTargetableForAttack() &&
-                    me->IsHostileTo(who) && who->isInAccessiblePlaceFor(me))
+                if (!me->HasUnitState(UNIT_STAT_STUNNED) && me->canCreatureAttack(who))
                 {
                     if (!me->canFly() && me->GetDistanceZ(who) > CREATURE_Z_ATTACK_RANGE)
                         return;
@@ -875,6 +875,7 @@ class boss_kaelthas : public CreatureScript
                         //Phase 5
                         if (Phase == 6)
                         {
+
                             //GravityLapse_Timer
                             if (GravityLapse_Timer <= diff)
                             {

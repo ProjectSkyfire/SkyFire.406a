@@ -331,7 +331,7 @@ public:
             if (bJustReset)//boss is invisible, don't attack
                 return;
 
-            if (!me->getVictim() && who->isTargetableForAttack() && (me->IsHostileTo(who)))
+            if (!me->getVictim() && me->IsValidAttackTarget(who))
             {
                 float attackRadius = me->GetAttackDistance(who);
                 if (me->IsWithinDistInMap(who, attackRadius))
@@ -430,6 +430,7 @@ public:
             }
         }
     };
+
 };
 
 class boss_kalec : public CreatureScript
@@ -531,6 +532,7 @@ public:
             DoMeleeAttackIfReady();
         }
     };
+
 };
 
 class kalecgos_teleporter : public GameObjectScript
@@ -558,6 +560,7 @@ public:
             player->CastSpell(player, SPELL_TELEPORT_SPECTRAL, true);
         return true;
     }
+
 };
 
 class boss_sathrovarr : public CreatureScript
@@ -793,6 +796,7 @@ public:
             DoMeleeAttackIfReady();
         }
     };
+
 };
 
 void AddSC_boss_kalecgos()

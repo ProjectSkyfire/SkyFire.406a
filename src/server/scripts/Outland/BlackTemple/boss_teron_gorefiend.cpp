@@ -114,6 +114,7 @@ public:
 
         void SetTeronGUID(uint64 guid){ TeronGUID = guid; }
     };
+
 };
 
 class mob_shadowy_construct : public CreatureScript
@@ -203,6 +204,7 @@ public:
             } else CheckTeronTimer -= diff;
         }
     };
+
 };
 
 class boss_teron_gorefiend : public CreatureScript
@@ -265,7 +267,7 @@ public:
 
         void MoveInLineOfSight(Unit* who)
         {
-            if (!Intro && who->GetTypeId() == TYPEID_PLAYER && who->isTargetableForAttack() && me->IsHostileTo(who) && who->isInAccessiblePlaceFor(me))
+            if (!Intro && who->GetTypeId() == TYPEID_PLAYER && me->canCreatureAttack(who))
             {
                 if (me->IsWithinDistInMap(who, VISIBLE_RANGE) && me->IsWithinLOSInMap(who))
                 {
@@ -505,6 +507,7 @@ public:
             DoMeleeAttackIfReady();
         }
     };
+
 };
 
 void AddSC_boss_teron_gorefiend()

@@ -25,3 +25,4 @@ enum eTypes
     TYPE_ANZU_ENCOUNTER = 2,
 };
 #endif
+

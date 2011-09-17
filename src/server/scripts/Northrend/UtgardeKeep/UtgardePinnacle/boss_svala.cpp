@@ -128,7 +128,7 @@ public:
             if (!who)
                 return;
 
-            if (Phase == IDLE && who->isTargetableForAttack() && me->IsHostileTo(who) && me->IsWithinDistInMap(who, 40))
+            if (Phase == IDLE && me->IsValidAttackTarget(who) && me->IsWithinDistInMap(who, 40))
             {
                 Phase = INTRO;
                 me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
@@ -204,6 +204,7 @@ public:
             } else uiIntroTimer -= diff;
         }
     };
+
 };
 
 class mob_ritual_channeler : public CreatureScript
@@ -242,6 +243,7 @@ public:
         {
         }
     };
+
 };
 
 class boss_svala_sorrowgrave : public CreatureScript
@@ -406,6 +408,7 @@ public:
             DoScriptText(SAY_DEATH, me);
         }
     };
+
 };
 
 void AddSC_boss_svala()

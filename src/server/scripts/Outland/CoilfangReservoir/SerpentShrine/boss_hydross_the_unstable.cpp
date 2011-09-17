@@ -375,6 +375,7 @@ public:
             DoMeleeAttackIfReady();
         }
     };
+
 };
 
 void AddSC_boss_hydross_the_unstable()

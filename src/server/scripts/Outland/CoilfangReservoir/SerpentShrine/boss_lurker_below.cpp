@@ -161,7 +161,7 @@ public:
         {
             if (!CanStartEvent)//boss is invisible, don't attack
                 return;
-            if (!me->getVictim() && who->isTargetableForAttack() && (me->IsHostileTo(who)))
+            if (!me->getVictim() && who->IsValidAttackTarget(me))
             {
                 float attackRadius = me->GetAttackDistance(who);
                 if (me->IsWithinDistInMap(who, attackRadius))
@@ -317,6 +317,7 @@ public:
                     return;
 
                 DoMeleeAttackIfReady();
+
             }else//submerged
             {
                 if (PhaseTimer <= diff)
@@ -385,6 +386,7 @@ public:
 
         return ai;
     }
+
 };
 
 class mob_coilfang_ambusher : public CreatureScript
@@ -410,17 +412,19 @@ public:
         {
             MultiShotTimer = 10000;
             ShootBowTimer = 4000;
+
         }
 
         void EnterCombat(Unit* /*who*/)
         {
+
         }
 
         void MoveInLineOfSight(Unit* who)
         {
             if (!who || me->getVictim()) return;
 
-            if (who->isTargetableForAttack() && who->isInAccessiblePlaceFor(me) && me->IsHostileTo(who) && me->IsWithinDistInMap(who, 45))
+            if (who->isInAccessiblePlaceFor(me) && me->IsValidAttackTarget(who) && me->IsWithinDistInMap(who, 45))
             {
                 AttackStart(who);
             }
@@ -449,6 +453,7 @@ public:
             } else ShootBowTimer -= diff;
         }
     };
+
 };
 
 class go_strange_pool : public GameObjectScript

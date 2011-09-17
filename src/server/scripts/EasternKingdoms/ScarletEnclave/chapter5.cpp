@@ -487,7 +487,7 @@ public:
             if (!who)
                 return;
 
-            if (who->isTargetableForAttack() && me->IsHostileTo(who))
+            if (me->IsValidAttackTarget(who))
                 if (me->IsWithinDistInMap(who, 20) && me->IsWithinLOSInMap(who))
                     AttackStart(who);
         }
@@ -1342,6 +1342,7 @@ public:
                             me->DespawnOrUnsummon();
                             break;
                     }
+
                 } else uiPhase_timer -= diff;
             }
 
@@ -1517,6 +1518,7 @@ public:
                         DoScriptText(SAY_LIGHT_OF_DAWN26, pTemp);
 
                     SetHoldState(false);
+
                 } else uiFight_duration -= diff;
 
                 DoMeleeAttackIfReady();
@@ -1658,6 +1660,7 @@ public:
                 }
         }
     };
+
 };
 
 /*######
@@ -1681,6 +1684,7 @@ public:
         void UpdateAI(const uint32 /*diff*/) {}
         void JustDied(Unit* /*killer*/) {}
     };
+
 };
 
 void AddSC_the_scarlet_enclave_c5()

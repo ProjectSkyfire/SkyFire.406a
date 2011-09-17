@@ -269,7 +269,7 @@ public:
 
         void MoveInLineOfSight(Unit* who)
         {
-            if (!who->isTargetableForAttack() || !me->IsHostileTo(who))
+            if (!me->IsValidAttackTarget(who))
                 return;
             if (pInstance && Intro)
                 pInstance->SetData(DATA_BRUTALLUS_EVENT, SPECIAL);
@@ -343,6 +343,7 @@ public:
             DoMeleeAttackIfReady();
         }
     };
+
 };
 
 void AddSC_boss_brutallus()

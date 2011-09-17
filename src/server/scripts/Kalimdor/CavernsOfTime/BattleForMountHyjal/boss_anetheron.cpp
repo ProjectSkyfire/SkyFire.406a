@@ -230,6 +230,7 @@ public:
             DoMeleeAttackIfReady();
         }
     };
+
 };
 
 #define SPELL_IMMOLATION     31303
@@ -280,7 +281,7 @@ public:
 
         void MoveInLineOfSight(Unit* who)
         {
-            if (me->IsWithinDist(who, 50) && !me->isInCombat() && me->IsHostileTo(who))
+            if (me->IsWithinDist(who, 50) && !me->isInCombat() && me->IsValidAttackTarget(who))
                 AttackStart(who);
         }
 
@@ -314,6 +315,7 @@ public:
             DoMeleeAttackIfReady();
         }
     };
+
 };
 
 void AddSC_boss_anetheron()
