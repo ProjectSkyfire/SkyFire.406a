@@ -46,6 +46,7 @@ class Quest;
 class WorldPacket;
 class WorldSocket;
 class LoginQueryHolder;
+class CharacterHandler;
 class SpellCastTargets;
 struct AreaTableEntry;
 struct LfgJoinResultData;
@@ -214,6 +215,7 @@ class CharacterCreateInfo
 /// Player session in the World
 class WorldSession
 {
+    friend class CharacterHandler;
     public:
         WorldSession(uint32 id, WorldSocket *sock, AccountTypes sec, uint8 expansion, time_t mute_time, LocaleConstant locale, uint32 recruiter, bool isARecruiter);
         ~WorldSession();
@@ -236,7 +238,7 @@ class WorldSession
         void SendPetNameInvalid(uint32 error, const std::string& name, DeclinedName *declinedName);
         void SendPartyResult(PartyOperation operation, const std::string& member, PartyResult res, uint32 val = 0);
         void SendAreaTriggerMessage(const char* Text, ...) ATTR_PRINTF(2, 3);
-        void SendSetPhaseShift(uint32 phaseShift);
+        void SendSetPhaseShift(uint32 phaseShift, uint32 MapID = 0);
         void SendQueryTimeResponse();
 
         void SendAuthResponse(uint8 code, bool shortForm, uint32 queuePos = 0);
@@ -406,7 +408,7 @@ class WorldSession
         void HandleCharCreateCallback(PreparedQueryResult result, CharacterCreateInfo* createInfo);
         void HandlePlayerLoginOpcode(WorldPacket& recvPacket);
 
-        void HandleUnk8508Opcode(WorldPacket& recvPacket);
+        void HandleWorldLoginOpcode(WorldPacket& recvPacket);
 
         void HandleCharEnum(QueryResult result);
         void HandlePlayerLogin(LoginQueryHolder * holder);

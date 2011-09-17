@@ -586,14 +586,14 @@ void WorldSession::HandleCharCreateCallback(PreparedQueryResult result, Characte
                         break;
 
                     field = result->Fetch();
-                    accRace = field[1].GetUInt8();
+                    accRace = field[1].GetUInt32();
 
                     if (!haveSameRace)
                         haveSameRace = createInfo->Race == accRace;
 
                     if (AccountMgr::IsPlayerAccount(GetSecurity()) && createInfo->Class == CLASS_DEATH_KNIGHT)
                     {
-                        uint8 acc_class = field[2].GetUInt8();
+                        uint8 acc_class = field[2].GetUInt32();
                         if (acc_class == CLASS_DEATH_KNIGHT)
                         {
                             if (freeHeroicSlots > 0)
@@ -613,7 +613,7 @@ void WorldSession::HandleCharCreateCallback(PreparedQueryResult result, Characte
 
                         if (!hasHeroicReqLevel)
                         {
-                            uint8 acc_level = field[0].GetUInt8();
+                            uint8 acc_level = field[0].GetUInt32();
                             if (acc_level >= heroicReqLevel)
                                 hasHeroicReqLevel = true;
                         }
@@ -756,6 +756,14 @@ void WorldSession::HandleCharDeleteOpcode(WorldPacket & recv_data)
     WorldPacket data(SMSG_CHAR_DELETE, 1);
     data << (uint8)CHAR_DELETE_SUCCESS;
     SendPacket(&data);
+}
+
+void WorldSession::HandleWorldLoginOpcode(WorldPacket& recv_data)
+{
+    sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Recvd World Login Message");
+    uint32 unk;
+    uint8 unk1;
+    recv_data >> unk >> unk1;
 }
 
 void WorldSession::HandlePlayerLoginOpcode(WorldPacket & recv_data)
@@ -971,6 +979,7 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder * holder)
 
     // Load pet if any (if player not alive and in taxi flight or another then pet will remember as temporary unsummoned)
     pCurrChar->LoadPet();
+    pCurrChar->GetSession()->SendStablePet(0);  // testing atm
 
     // Set FFA PvP for non GM in non-rest mode
     if (sWorld->IsFFAPvPRealm() && !pCurrChar->isGameMaster() && !pCurrChar->HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_RESTING))
@@ -1490,6 +1499,7 @@ void WorldSession::HandleEquipmentSetUse(WorldPacket &recv_data)
         return;
 
     sLog->outDebug(LOG_FILTER_NETWORKIO, "CMSG_EQUIPMENT_SET_USE");
+    recv_data.hexlike();
 
     for (uint32 i = 0; i < EQUIPMENT_SLOT_END; ++i)
     {
