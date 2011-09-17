@@ -298,6 +298,26 @@ namespace Trinity
         template<class NOT_INTERESTED> void Visit(GridRefManager<NOT_INTERESTED> &) {}
     };
 
+    template<class Functor>
+    struct GameObjectWorker
+    {
+        GameObjectWorker(WorldObject const* searcher, Functor& func)
+            : _func(func), _phaseMask(searcher->GetPhaseMask()) {}
+
+        void Visit(GameObjectMapType& m)
+        {
+            for (GameObjectMapType::iterator itr = m.begin(); itr != m.end(); ++itr)
+                if (itr->getSource()->InSamePhase(_phaseMask))
+                    _func(itr->getSource());
+        }
+
+        template<class NOT_INTERESTED> void Visit(GridRefManager<NOT_INTERESTED> &) {}
+
+    private:
+        Functor& _func;
+        uint32 _phaseMask;
+    };
+
     // Unit searchers
 
     // First accepted by Check Unit if any
