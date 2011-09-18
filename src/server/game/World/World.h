@@ -26,11 +26,11 @@
 
 #include "Common.h"
 #include "Timer.h"
-#include <ace/Singleton.h>
 #include "SharedDefines.h"
 #include "QueryResult.h"
 #include "Callback.h"
 
+#include <ace/Singleton.h>
 #include <map>
 #include <set>
 #include <list>

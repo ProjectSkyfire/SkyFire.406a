@@ -21,7 +21,7 @@
 #define TRINITY_GRIDNOTIFIERSIMPL_H
 
 #include "GridNotifiers.h"
-#include "WorldPacket.h"
+#include "..\game\Server\Packets\WorldPacket.h"
 #include "Corpse.h"
 #include "Player.h"
 #include "UpdateData.h"

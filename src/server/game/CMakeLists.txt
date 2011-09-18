@@ -181,9 +181,10 @@ include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}/PrecompiledHeaders
   ${CMAKE_CURRENT_SOURCE_DIR}/Quests
   ${CMAKE_CURRENT_SOURCE_DIR}/Reputation
-  ${CMAKE_CURRENT_SOURCE_DIR}/Scripting
+  ${CMAKE_CURRENT_SOURCE_DIR}/Scripting 
   ${CMAKE_CURRENT_SOURCE_DIR}/Server/Protocol
   ${CMAKE_CURRENT_SOURCE_DIR}/Server/Protocol/Handlers
+  ${CMAKE_CURRENT_SOURCE_DIR}/Server/Packets
   ${CMAKE_CURRENT_SOURCE_DIR}/Server
   ${CMAKE_CURRENT_SOURCE_DIR}/Skills
   ${CMAKE_CURRENT_SOURCE_DIR}/Spells

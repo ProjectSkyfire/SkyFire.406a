@@ -35,7 +35,7 @@
 #include "DBCStructure.h"
 #include "SpellInfo.h"
 #include "Path.h"
-#include "WorldPacket.h"
+#include "..\game\Server\Packets\WorldPacket.h"
 #include "Timer.h"
 #include <list>
 
