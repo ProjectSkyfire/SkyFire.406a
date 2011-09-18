@@ -451,7 +451,7 @@ void Object::_BuildMovementUpdate(ByteBuffer * data, uint16 flags) const
         *data << uint16(0);
     }
 
-    // 0x1000    
+    // 0x1000
     if (flags & UPDATEFLAG_UNK12)
     {
         uint8 bytes = 0;
