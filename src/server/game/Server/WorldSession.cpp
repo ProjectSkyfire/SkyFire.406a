@@ -744,14 +744,17 @@ void WorldSession::ReadMovementInfo(WorldPacket &data, MovementInfo *mi)
     if (mi->HasMovementFlag(MovementFlags(MOVEMENTFLAG_SWIMMING | MOVEMENTFLAG_FLYING)) || (mi->HasExtraMovementFlag(MOVEMENTFLAG2_ALWAYS_ALLOW_PITCHING)))
         data >> mi->pitch;
 
-    data >> mi->fallTime;
-
-    if (mi->HasMovementFlag(MOVEMENTFLAG_JUMPING))
+    if (mi->HasExtraMovementFlag(MOVEMENTFLAG2_INTERPOLATED_TURNING))    // 4.0.6
     {
-        data >> mi->j_zspeed;
-        data >> mi->j_sinAngle;
-        data >> mi->j_cosAngle;
-        data >> mi->j_xyspeed;
+         data >> mi->fallTime;
+         data >> mi->j_zspeed;
+
+        if (mi->HasMovementFlag(MOVEMENTFLAG_JUMPING))
+        {
+           data >> mi->j_sinAngle;
+           data >> mi->j_cosAngle;
+           data >> mi->j_xyspeed;
+        }
     }
 
     if (mi->HasMovementFlag(MOVEMENTFLAG_SPLINE_ELEVATION))
@@ -809,14 +812,17 @@ void WorldSession::WriteMovementInfo(WorldPacket *data, MovementInfo *mi)
     if (mi->HasMovementFlag(MovementFlags(MOVEMENTFLAG_SWIMMING | MOVEMENTFLAG_FLYING)) || mi->HasExtraMovementFlag(MOVEMENTFLAG2_ALWAYS_ALLOW_PITCHING))
         *data << mi->pitch;
 
-    *data << mi->fallTime;
-
-    if (mi->HasMovementFlag(MOVEMENTFLAG_JUMPING))
+    if (mi->HasExtraMovementFlag(MOVEMENTFLAG2_INTERPOLATED_TURNING))    // 4.0.6
     {
+        *data << mi->fallTime;
         *data << mi->j_zspeed;
-        *data << mi->j_sinAngle;
-        *data << mi->j_cosAngle;
-        *data << mi->j_xyspeed;
+
+        if (mi->HasMovementFlag(MOVEMENTFLAG_JUMPING))
+        {
+           *data << mi->j_sinAngle;
+           *data << mi->j_cosAngle;
+           *data << mi->j_xyspeed;
+        }
     }
 
     if (mi->HasMovementFlag(MOVEMENTFLAG_SPLINE_ELEVATION))
