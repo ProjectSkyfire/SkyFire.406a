@@ -531,7 +531,6 @@ void GameObject::Update(uint32 diff)
                         // m_unique_users can contain only player GUIDs
                         if (Player* owner = ObjectAccessor::GetPlayer(*this, *it))
                             owner->CastSpell(owner, spellId, false);
-                    
 
                     m_unique_users.clear();
                     m_usetimes = 0;

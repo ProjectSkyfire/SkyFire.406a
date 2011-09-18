@@ -50,7 +50,7 @@ bool UpdateData::BuildPacket(WorldPacket* packet)
 
     packet->Initialize(SMSG_UPDATE_OBJECT, 2 + 4 + (m_outOfRangeGUIDs.empty() ? 0 : 1 + 4 + 9 * m_outOfRangeGUIDs.size()) + m_data.wpos());
 
-	*packet << uint16 (m_map);
+    *packet << uint16 (m_map);
     *packet << uint32 (!m_outOfRangeGUIDs.empty() ? m_blockCount + 1 : m_blockCount);
 
     if (!m_outOfRangeGUIDs.empty())
