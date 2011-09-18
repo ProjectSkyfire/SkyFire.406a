@@ -1255,7 +1255,7 @@ void World::SetInitialWorldSettings()
 
     ///- Load the DBC files
     sLog->outString("Initialize data stores...");
-    LoadDBCStores(m_dataPath);
+    LoadDBCStores(m_dataPath, m_availableDbcLocaleMask);
     LoadDB2Stores(m_dataPath);
     DetectDBCLang();
 
@@ -1753,17 +1753,14 @@ void World::DetectDBCLang()
         m_lang_confid = LOCALE_enUS;
     }
 
-    ChrRacesEntry const* race = sChrRacesStore.LookupEntry(1);
-
     std::string availableLocalsStr;
 
     uint8 default_locale = TOTAL_LOCALES;
     for (uint8 i = default_locale-1; i < TOTAL_LOCALES; --i)  // -1 will be 255 due to uint8
     {
-        if (strlen((const char*)race->name) > 0)              // check by race names ( must be converted)
+        if (m_availableDbcLocaleMask & (1 << i))
         {
             default_locale = i;
-            m_availableDbcLocaleMask |= (1 << i);
             availableLocalsStr += localeNames[i];
             availableLocalsStr += " ";
         }
