@@ -183,18 +183,6 @@ void Object::RemoveFromWorld()
     ClearUpdateMask(true);
 }
 
-void Object::BuildMovementUpdateBlock(UpdateData * data, uint32 flags) const
-{
-    ByteBuffer buf(500);
-
-    buf << uint8(UPDATETYPE_MOVEMENT);
-    buf.append(GetPackGUID());
-
-    _BuildMovementUpdate(&buf, flags);
-
-    data->AddUpdateBlock(buf);
-}
-
 void Object::BuildCreateUpdateBlockForPlayer(UpdateData *data, Player *target) const
 {
     if (!target)
@@ -262,7 +250,7 @@ void Object::BuildCreateUpdateBlockForPlayer(UpdateData *data, Player *target) c
 void Object::SendUpdateToPlayer(Player* player)
 {
     // send create update to player
-    UpdateData upd;
+    UpdateData upd(player->GetMapId());
     WorldPacket packet;
 
     BuildCreateUpdateBlockForPlayer(&upd, player);
@@ -427,41 +415,6 @@ void Object::_BuildMovementUpdate(ByteBuffer * data, uint16 flags) const
         }
     }
 
-    // 0x8
-    if (flags & UPDATEFLAG_LOWGUID)
-    {
-        switch(GetTypeId())
-        {
-            case TYPEID_OBJECT:
-            case TYPEID_ITEM:
-            case TYPEID_CONTAINER:
-            case TYPEID_GAMEOBJECT:
-            case TYPEID_DYNAMICOBJECT:
-            case TYPEID_CORPSE:
-                *data << uint32(GetGUIDLow());              // GetGUIDLow()
-                break;
-            case TYPEID_UNIT:
-                *data << uint32(0x0000000B);                // unk, can be 0xB or 0xC
-                break;
-            case TYPEID_PLAYER:
-                if (flags & UPDATEFLAG_SELF)
-                    *data << uint32(0x0000002F);            // unk, can be 0x15 or 0x22
-                else
-                    *data << uint32(0x00000008);            // unk, can be 0x7 or 0x8
-                break;
-            default:
-                *data << uint32(0x00000000);                // unk
-                break;
-        }
-    }
-
-    // 0x10
-    if (flags & UPDATEFLAG_HIGHGUID)
-    {
-        // not high guid
-        *data << uint32(GetUInt32Value(OBJECT_FIELD_GUID));                // unk
-    }
-
     // 0x4
     if (flags & UPDATEFLAG_HAS_TARGET)                       // packed guid (current target guid)
     {
@@ -488,6 +441,23 @@ void Object::_BuildMovementUpdate(ByteBuffer * data, uint16 flags) const
     if (flags & UPDATEFLAG_ROTATION)
     {
         *data << uint64(((GameObject*)this)->GetRotation());
+    }
+
+    // 0x0800
+    if (flags & UPDATEFLAG_UNK11)
+    {
+        *data << uint16(0);
+        *data << uint16(0);
+        *data << uint16(0);
+    }
+
+    // 0x1000
+    if (flags & UPDATEFLAG_UNK12)
+    {
+        uint8 bytes = 0;
+        *data << bytes;
+        for (uint8 i = 0; i < bytes; i++)
+	        *data << uint32(0);
     }
 }
 
@@ -786,7 +756,7 @@ void Object::BuildFieldsUpdate(Player* pl, UpdateDataMapType& data_map) const
 
     if (iter == data_map.end())
     {
-        std::pair<UpdateDataMapType::iterator, bool> p = data_map.insert(UpdateDataMapType::value_type(pl, UpdateData()));
+        std::pair<UpdateDataMapType::iterator, bool> p = data_map.insert(UpdateDataMapType::value_type(pl, UpdateData(pl->GetMapId())));
         ASSERT(p.second);
         iter = p.first;
     }

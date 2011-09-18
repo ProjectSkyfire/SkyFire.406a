@@ -9292,16 +9292,12 @@ void Player::SendInitWorldStates(uint32 zoneid, uint32 areaid)
     data << uint32(zoneid);                                 // zone id
     data << uint32(areaid);                                 // area id, new 2.1.0
     data << uint16(NumberOfFields);                         // count of uint64 blocks
-    data << uint32(0x8d8) << uint32(0x0);                   // 1
-    data << uint32(0x8d7) << uint32(0x0);                   // 2
-    data << uint32(0x8d6) << uint32(0x0);                   // 3
-    data << uint32(0x8d5) << uint32(0x0);                   // 4
-    data << uint32(0x8d4) << uint32(0x0);                   // 5
-    data << uint32(0x8d3) << uint32(0x0);                   // 6
-                                                            // 7 1 - Arena season in progress, 0 - end of season
-    data << uint32(0xC77) << uint32(sWorld->getBoolConfig(CONFIG_ARENA_SEASON_IN_PROGRESS));
-                                                            // 8 Arena season id
-    data << uint32(0xF3D) << uint32(sWorld->getIntConfig(CONFIG_ARENA_SEASON_ID));
+    data << uint32(5334) << uint32(0);                      // Unknown
+    data << uint32(5332) << uint32(0);                      // Unknown
+    data << uint32(5333) << uint32(0);                      // 1 - TB "In Progress"
+
+    data << uint32(3191) << uint32(sWorld->getBoolConfig(CONFIG_ARENA_SEASON_IN_PROGRESS));
+    data << uint32(3901) << uint32(sWorld->getIntConfig(CONFIG_ARENA_SEASON_ID));
 
     if (mapid == 530)                                       // Outland
     {
@@ -9313,7 +9309,9 @@ void Player::SendInitWorldStates(uint32 zoneid, uint32 areaid)
     // insert <field> <value>
     switch (zoneid)
     {
-        case 1:                                             // Dun Morogh
+        case 1:                                             // Dun Morogh - Unknown Value maybe some day we will know that
+            data << uint32(3094) << uint32(0x1);
+            data << uint32(3096) << uint32(0x0);
         case 11:                                            // Wetlands
         case 12:                                            // Elwynn Forest
         case 38:                                            // Loch Modan
@@ -21602,7 +21600,7 @@ void Player::UpdateTriggerVisibility()
     if (!IsInWorld())
         return;
 
-    UpdateData udata;
+    UpdateData udata(GetMapId());
     WorldPacket packet;
     for (ClientGUIDs::iterator itr = m_clientGUIDs.begin(); itr != m_clientGUIDs.end(); ++itr)
     {
@@ -22408,7 +22406,7 @@ void Player::UpdateForQuestWorldObjects()
     if (m_clientGUIDs.empty())
         return;
 
-    UpdateData udata;
+    UpdateData udata(GetMapId());
     WorldPacket packet;
     for (ClientGUIDs::iterator itr=m_clientGUIDs.begin(); itr != m_clientGUIDs.end(); ++itr)
     {

@@ -241,7 +241,7 @@ inline void LoadDBC(uint32& availableDbcLocales, StoreProblemList& errlist, DBCS
 
 	if (storage.Load(dbc_filename.c_str(), sql))
 	{
-        for (uint8 loc = 0; loc < TOTAL_LOCALES; ++loc)
+        for (uint8 loc = 1; loc < TOTAL_LOCALES; ++loc)
         {
             if (!(availableDbcLocales & (1 << loc)))
                 continue;
@@ -273,14 +273,16 @@ inline void LoadDBC(uint32& availableDbcLocales, StoreProblemList& errlist, DBCS
 	delete sql;
 }
 
-void LoadDBCStores(const std::string& dataPath)
+void LoadDBCStores(const std::string& dataPath, uint32& availableDbcLocales)
 {
 	uint32 oldMSTime = getMSTime();
 
 	std::string dbcPath = dataPath+"dbc/";
 
 	StoreProblemList bad_dbc_files;
-	uint32 availableDbcLocales = 0xFFFFFFFF;
+
+	for (uint8 i = 0 ; i < TOTAL_LOCALES; ++i)
+		availableDbcLocales |= (1 << i);
 
 	LoadDBC(availableDbcLocales, bad_dbc_files, sAreaStore, dbcPath, "AreaTable.dbc");
 

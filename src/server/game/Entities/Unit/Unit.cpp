@@ -157,7 +157,7 @@ m_vehicleKit(NULL), m_unitTypeMask(UNIT_MASK_NONE), m_HostileRefManager(this)
     m_objectType |= TYPEMASK_UNIT;
     m_objectTypeId = TYPEID_UNIT;
 
-    m_updateFlag = (UPDATEFLAG_HIGHGUID | UPDATEFLAG_LIVING | UPDATEFLAG_HAS_POSITION);
+    m_updateFlag = (UPDATEFLAG_LIVING | UPDATEFLAG_HAS_POSITION);
 
     m_attackTimer[BASE_ATTACK] = 0;
     m_attackTimer[OFF_ATTACK] = 0;
@@ -1481,10 +1481,11 @@ void Unit::DealMeleeDamage(CalcDamageInfo *damageInfo, bool durabilityLoss)
             data << uint64(victim->GetGUID());
             data << uint64(GetGUID());
             data << uint32(i_spellProto->Id);
-            data << uint32(damage);                  // Damage
+            data << uint32(damage);                               // Damage
             int32 overkill = int32(damage) - int32(GetHealth());
-            data << uint32(overkill > 0 ? overkill : 0); // Overkill
+            data << uint32(overkill > 0 ? overkill : 0);          // Overkill
             data << uint32(i_spellProto->SchoolMask);
+            data << uint32(0);                                    // 4.0.6
             victim->SendMessageToSet(&data, true);
 
             victim->DealDamage(this, damage, 0, SPELL_DIRECT_DAMAGE, i_spellProto->GetSchoolMask(), i_spellProto, true);

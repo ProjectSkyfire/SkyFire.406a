@@ -187,7 +187,7 @@ extern DBCStorage <WMOAreaTableEntry>            sWMOAreaTableStore;
 extern DBCStorage <WorldMapOverlayEntry>         sWorldMapOverlayStore;
 extern DBCStorage <WorldSafeLocsEntry>           sWorldSafeLocsStore;
 
-void LoadDBCStores(const std::string& dataPath);
+void LoadDBCStores(const std::string& dataPath, uint32& availableDbcLocales);
 
 // script support functions
  DBCStorage <SoundEntriesEntry>          const* GetSoundEntriesStore();
