@@ -443,22 +443,22 @@ void Object::_BuildMovementUpdate(ByteBuffer * data, uint16 flags) const
         *data << uint64(((GameObject*)this)->GetRotation());
     }
 
-	// 0x0800
-	if (flags & UPDATEFLAG_UNK2)
+    // 0x0800
+    if (flags & UPDATEFLAG_UNK11)
     {
         *data << uint16(0);
-		*data << uint16(0);
-		*data << uint16(0);
+        *data << uint16(0);
+        *data << uint16(0);
     }
 
     // 0x1000    
-	if (flags & UPDATEFLAG_UNK3)
-	{
-		uint8 bytes = 0;
-		*data << bytes;
-		for (uint8 i = 0; i < bytes; i++)
-			*data << uint32(0);
-	}
+    if (flags & UPDATEFLAG_UNK12)
+    {
+        uint8 bytes = 0;
+        *data << bytes;
+        for (uint8 i = 0; i < bytes; i++)
+	        *data << uint32(0);
+    }
 }
 
 void Object::_BuildValuesUpdate(uint8 updatetype, ByteBuffer * data, UpdateMask *updateMask, Player *target) const
