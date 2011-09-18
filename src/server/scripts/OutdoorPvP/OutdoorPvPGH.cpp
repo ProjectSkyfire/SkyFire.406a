@@ -27,9 +27,9 @@
 
 OPvPCapturePointGH::OPvPCapturePointGH(OutdoorPvP *pvp) :
 OPvPCapturePoint(pvp),
-m_capturable(true),
-m_ControllingFaction(0),
-m_VentureState(VENTURE_N)
+_capturable(true),
+_ControllingFaction(0),
+_VentureState(VENTURE_N)
 {
     SetCapturePointData(189310, 571, 2483.68f, -1873.6f, 10.68f, -0.1047f, 0.0f, 0.0f, 0.0f, 0.0f);
 }
@@ -55,29 +55,29 @@ void OPvPCapturePointGH::DeSpawnNPCs()
 
 void OPvPCapturePointGH::FactionTakeOver(uint32 team)
 {
-    m_ControllingFaction = team;
+    _ControllingFaction = team;
     DeSpawnNPCs();
     SpawnNPCsForTeam(team);
-    m_capturable = true;
+    _capturable = true;
 }
 
-bool OPvPCapturePointGH::HandlePlayerEnter(Player *plr)
+bool OPvPCapturePointGH::HandlePlayerEnter(Player* player)
 {
-    if (OPvPCapturePoint::HandlePlayerEnter(plr))
+    if (OPvPCapturePoint::HandlePlayerEnter(player))
     {
-        plr->SendUpdateWorldState(GH_UI_TOWER_SLIDER_DISPLAY, 1);
+        player->SendUpdateWorldState(GH_UI_TOWER_SLIDER_DISPLAY, 1);
         uint32 phase = (uint32)ceil((m_value + m_maxValue) / (2 * m_maxValue) * 100.0f);
-        plr->SendUpdateWorldState(GH_UI_TOWER_SLIDER_POS, phase);
-        plr->SendUpdateWorldState(GH_UI_TOWER_SLIDER_N, m_neutralValuePct);
+        player->SendUpdateWorldState(GH_UI_TOWER_SLIDER_POS, phase);
+        player->SendUpdateWorldState(GH_UI_TOWER_SLIDER_N, m_neutralValuePct);
         return true;
     }
     return false;
 }
 
-void OPvPCapturePointGH::HandlePlayerLeave(Player *plr)
+void OPvPCapturePointGH::HandlePlayerLeave(Player* player)
 {
-    plr->SendUpdateWorldState(GH_UI_TOWER_SLIDER_DISPLAY, 0);
-    OPvPCapturePoint::HandlePlayerLeave(plr);
+    player->SendUpdateWorldState(GH_UI_TOWER_SLIDER_DISPLAY, 0);
+    OPvPCapturePoint::HandlePlayerLeave(player);
 }
 
 void OPvPCapturePointGH::FillInitialWorldStates(WorldPacket &data)
@@ -86,18 +86,18 @@ void OPvPCapturePointGH::FillInitialWorldStates(WorldPacket &data)
     data << GH_UI_TOWER_SLIDER_POS << uint32(50);
     data << GH_UI_TOWER_SLIDER_N << uint32(100);
 
-    m_PvP->SendUpdateWorldState(GH_MAP_VENTURE_NEUTRAL , uint32(bool(m_VentureState & VENTURE_N)));
-    m_PvP->SendUpdateWorldState(GH_MAP_VENTURE_HORDE , uint32(bool(m_VentureState & VENTURE_H)));
-    m_PvP->SendUpdateWorldState(GH_MAP_VENTURE_ALLIANCE , uint32(bool(m_VentureState & VENTURE_A)));
-    m_PvP->SendUpdateWorldState(GH_MAP_VENTURE_NEU_A , uint32(bool(m_VentureState & VENTURE_N_A)));
-    m_PvP->SendUpdateWorldState(GH_MAP_VENTURE_NEU_H , uint32(bool(m_VentureState & VENTURE_N_H)));
+    m_PvP->SendUpdateWorldState(GH_MAP_VENTURE_NEUTRAL,  uint32(bool(_VentureState & VENTURE_N)));
+    m_PvP->SendUpdateWorldState(GH_MAP_VENTURE_HORDE,    uint32(bool(_VentureState & VENTURE_H)));
+    m_PvP->SendUpdateWorldState(GH_MAP_VENTURE_ALLIANCE, uint32(bool(_VentureState & VENTURE_A)));
+    m_PvP->SendUpdateWorldState(GH_MAP_VENTURE_NEU_A,    uint32(bool(_VentureState & VENTURE_N_A)));
+    m_PvP->SendUpdateWorldState(GH_MAP_VENTURE_NEU_H,    uint32(bool(_VentureState & VENTURE_N_H)));
 }
 
 bool OPvPCapturePointGH::Update(uint32 diff)
 {
     // ToDo: research if all the soldiers attack at once
     // research if they respawn after some time
-    if (m_capturable)
+    if (_capturable)
         return OPvPCapturePoint::Update(diff);
     return false;
 }
@@ -127,32 +127,32 @@ void OPvPCapturePointGH::ChangeState()
     switch(m_State)
     {
     case OBJECTIVESTATE_NEUTRAL:
-        m_VentureState = VENTURE_N;
+        _VentureState = VENTURE_N;
         break;
     case OBJECTIVESTATE_ALLIANCE:
-        m_VentureState = VENTURE_A;
+        _VentureState = VENTURE_A;
         FactionTakeOver(ALLIANCE);
         artkit = 2;
         sWorld->SendZoneText(GH_OUTDOORPVP_ZONE, sObjectMgr->GetTrinityStringForDBCLocale(LANG_OPVP_GH_CAPTURE_A));
         break;
     case OBJECTIVESTATE_HORDE:
-        m_VentureState = VENTURE_H;
+        _VentureState = VENTURE_H;
         FactionTakeOver(HORDE);
         artkit = 1;
         sWorld->SendZoneText(GH_OUTDOORPVP_ZONE, sObjectMgr->GetTrinityStringForDBCLocale(LANG_OPVP_GH_CAPTURE_H));
         break;
     case OBJECTIVESTATE_NEUTRAL_ALLIANCE_CHALLENGE:
-        m_VentureState = VENTURE_N_A;
+        _VentureState = VENTURE_N_A;
         break;
     case OBJECTIVESTATE_NEUTRAL_HORDE_CHALLENGE:
-        m_VentureState = VENTURE_N_H;
+        _VentureState = VENTURE_N_H;
         break;
     case OBJECTIVESTATE_ALLIANCE_HORDE_CHALLENGE:
-        m_VentureState = VENTURE_N_A;
+        _VentureState = VENTURE_N_A;
         artkit = 2;
         break;
     case OBJECTIVESTATE_HORDE_ALLIANCE_CHALLENGE:
-        m_VentureState = VENTURE_N_H;
+        _VentureState = VENTURE_N_H;
         artkit = 1;
         break;
     }
@@ -168,11 +168,11 @@ void OPvPCapturePointGH::ChangeState()
 
 void OPvPCapturePointGH::UpdateVentureWorldState()
 {
-    m_PvP->SendUpdateWorldState(GH_MAP_VENTURE_NEUTRAL, uint32(bool(m_VentureState & VENTURE_N)));
-    m_PvP->SendUpdateWorldState(GH_MAP_VENTURE_HORDE, uint32(bool(m_VentureState & VENTURE_H)));
-    m_PvP->SendUpdateWorldState(GH_MAP_VENTURE_ALLIANCE, uint32(bool(m_VentureState & VENTURE_A)));
-    m_PvP->SendUpdateWorldState(GH_MAP_VENTURE_NEU_A, uint32(bool(m_VentureState & VENTURE_N_A)));
-    m_PvP->SendUpdateWorldState(GH_MAP_VENTURE_NEU_H, uint32(bool(m_VentureState & VENTURE_N_H)));
+    m_PvP->SendUpdateWorldState(GH_MAP_VENTURE_NEUTRAL,  uint32(bool(_VentureState & VENTURE_N)));
+    m_PvP->SendUpdateWorldState(GH_MAP_VENTURE_HORDE,    uint32(bool(_VentureState & VENTURE_H)));
+    m_PvP->SendUpdateWorldState(GH_MAP_VENTURE_ALLIANCE, uint32(bool(_VentureState & VENTURE_A)));
+    m_PvP->SendUpdateWorldState(GH_MAP_VENTURE_NEU_A,    uint32(bool(_VentureState & VENTURE_N_A)));
+    m_PvP->SendUpdateWorldState(GH_MAP_VENTURE_NEU_H,    uint32(bool(_VentureState & VENTURE_N_H)));
 }
 
 void OPvPCapturePointGH::SendChangePhase()
@@ -190,17 +190,17 @@ OutdoorPvPGH::OutdoorPvPGH()
     m_TypeId = OUTDOOR_PVP_GH;
 }
 
-void OutdoorPvPGH::HandleKillImpl(Player *plr, Unit * killed)
+void OutdoorPvPGH::HandleKillImpl(Player* player, Unit* killed)
 {
-    if (killed->GetTypeId() == TYPEID_PLAYER && plr->GetTeam() != killed->ToPlayer()->GetTeam())
-        plr->CastSpell(plr, GH_VENTURE_KILL_CREDIT, true);
+    if (killed->GetTypeId() == TYPEID_PLAYER && player->GetTeam() != killed->ToPlayer()->GetTeam())
+        player->CastSpell(player, GH_VENTURE_KILL_CREDIT, true);
 }
 
-void OutdoorPvPGH::SendRemoveWorldStates(Player *plr)
+void OutdoorPvPGH::SendRemoveWorldStates(Player* player)
 {
-    plr->SendUpdateWorldState(GH_UI_TOWER_SLIDER_DISPLAY, 0);
-    plr->SendUpdateWorldState(GH_UI_TOWER_SLIDER_POS, 0);
-    plr->SendUpdateWorldState(GH_UI_TOWER_SLIDER_N, 0);
+    player->SendUpdateWorldState(GH_UI_TOWER_SLIDER_DISPLAY, 0);
+    player->SendUpdateWorldState(GH_UI_TOWER_SLIDER_POS, 0);
+    player->SendUpdateWorldState(GH_UI_TOWER_SLIDER_N, 0);
 }
 
 bool OutdoorPvPGH::Update(uint32 diff)
@@ -208,14 +208,14 @@ bool OutdoorPvPGH::Update(uint32 diff)
     return m_obj->Update(diff);
 }
 
-void OutdoorPvPGH::HandlePlayerEnterZone(Player * plr, uint32 zone)
+void OutdoorPvPGH::HandlePlayerEnterZone(Player* player, uint32 zone)
 {
-    OutdoorPvP::HandlePlayerEnterZone(plr, zone);
+    OutdoorPvP::HandlePlayerEnterZone(player, zone);
 }
 
-void OutdoorPvPGH::HandlePlayerLeaveZone(Player * plr, uint32 zone)
+void OutdoorPvPGH::HandlePlayerLeaveZone(Player* player, uint32 zone)
 {
-    OutdoorPvP::HandlePlayerLeaveZone(plr, zone);
+    OutdoorPvP::HandlePlayerLeaveZone(player, zone);
 }
 
 bool OutdoorPvPGH::SetupOutdoorPvP()

@@ -141,8 +141,8 @@ class OPvPCapturePointGH : public OPvPCapturePoint
         void FillInitialWorldStates(WorldPacket & data);
 
         // used when player is activated/inactivated in the area
-        bool HandlePlayerEnter(Player * plr);
-        void HandlePlayerLeave(Player * plr);
+        bool HandlePlayerEnter(Player* player);
+        void HandlePlayerLeave(Player* player);
 
     protected:
 
@@ -156,10 +156,10 @@ class OPvPCapturePointGH : public OPvPCapturePoint
 
     private:
 
-        bool m_capturable;
+        bool _capturable;
 
-        uint32 m_ControllingFaction;
-        uint32 m_VentureState;
+        uint32 _ControllingFaction;
+        uint32 _VentureState;
 };
 
 class OutdoorPvPGH : public OutdoorPvP
@@ -172,20 +172,20 @@ class OutdoorPvPGH : public OutdoorPvP
 
         bool SetupOutdoorPvP();
 
-        void HandlePlayerEnterZone(Player *plr, uint32 zone);
-        void HandlePlayerLeaveZone(Player *plr, uint32 zone);
+        void HandlePlayerEnterZone(Player* player, uint32 zone);
+        void HandlePlayerLeaveZone(Player* player, uint32 zone);
 
         bool Update(uint32 diff);
 
         void FillInitialWorldStates(WorldPacket &data);
 
-        void SendRemoveWorldStates(Player * plr);
+        void SendRemoveWorldStates(Player* playerr);
 
-        void HandleKillImpl(Player * plr, Unit * killed);
+        void HandleKillImpl(Player* player, Unit* killed);
 
     private:
 
-        OPvPCapturePointGH * m_obj;
+        OPvPCapturePointGH* m_obj;
 };
 
 #endif
