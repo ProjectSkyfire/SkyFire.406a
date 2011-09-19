@@ -5478,9 +5478,12 @@ void Spell::EffectStuck(SpellEffIndex /*effIndex*/)
     if (pTarget->isInFlight())
         return;
 
-    pTarget->TeleportTo(pTarget->GetStartPosition(), unitTarget == m_caster ? TELE_TO_SPELL : 0);
     // homebind location is loaded always
-    // pTarget->TeleportTo(pTarget->m_homebindMapId, pTarget->m_homebindX, pTarget->m_homebindY, pTarget->m_homebindZ, pTarget->GetOrientation(), (unitTarget == m_caster ? TELE_TO_SPELL : 0));
+    WorldSafeLocsEntry const *ClosestGrave = sObjectMgr->GetClosestGraveYard(pTarget->GetPositionX(), pTarget->GetPositionY(), pTarget->GetPositionZ(), pTarget->GetMapId(), pTarget->GetTeam());
+    if (ClosestGrave)
+        pTarget->TeleportTo(ClosestGrave->map_id, ClosestGrave->x, ClosestGrave->y, ClosestGrave->z, pTarget->GetOrientation());
+    else
+        pTarget->TeleportTo(pTarget->m_homebindMapId, pTarget->m_homebindX, pTarget->m_homebindY, pTarget->m_homebindZ, pTarget->GetOrientation(), (unitTarget == m_caster ? TELE_TO_SPELL : 0));
 
     // Stuck spell trigger Hearthstone cooldown
     SpellInfo const *spellInfo = sSpellMgr->GetSpellInfo(8690);
