@@ -26,14 +26,14 @@ EndScriptData */
 
 /* ContentData
 npc_mikhail
-npc_tapoke_sli_jahn
+npc_tapoke_slim_jahn
 EndContentData */
 
 #include "ScriptPCH.h"
 #include "ScriptedEscortAI.h"
 
 /*######
-## npc_tapoke_sli_jahn
+## npc_tapoke_slim_jahn
 ######*/
 
 enum eTapokeSlim
@@ -46,19 +46,19 @@ enum eTapokeSlim
     NPC_TAPOKE_SLIM_JAHN        = 4962
 };
 
-class npc_tapoke_sli_jahn : public CreatureScript
+class npc_tapoke_slim_jahn : public CreatureScript
 {
 public:
-    npc_tapoke_sli_jahn() : CreatureScript("npc_tapoke_sli_jahn") { }
+    npc_tapoke_slim_jahn() : CreatureScript("npc_tapoke_slim_jahn") { }
 
     CreatureAI* GetAI(Creature* creature) const
     {
-        return new npc_tapoke_sli_jahnAI(creature);
+        return new npc_tapoke_slim_jahnAI(creature);
     }
 
-    struct npc_tapoke_sli_jahnAI : public npc_escortAI
+    struct npc_tapoke_slim_jahnAI : public npc_escortAI
     {
-        npc_tapoke_sli_jahnAI(Creature* creature) : npc_escortAI(creature) { }
+        npc_tapoke_slim_jahnAI(Creature* creature) : npc_escortAI(creature) { }
 
         bool _bFriendSummoned;
 
@@ -156,7 +156,7 @@ public:
             if (!pSlim->HasStealthAura())
                 pSlim->CastSpell(pSlim, SPELL_STEALTH, true);
 
-            if (npc_tapoke_sli_jahn::npc_tapoke_sli_jahnAI* escortAI = CAST_AI(npc_tapoke_sli_jahn::npc_tapoke_sli_jahnAI, pSlim->AI()))
+            if (npc_tapoke_slim_jahn::npc_tapoke_slim_jahnAI* escortAI = CAST_AI(npc_tapoke_slim_jahn::npc_tapoke_slim_jahnAI, pSlim->AI()))
                 escortAI->Start(false, false, player->GetGUID(), quest);
         }
         return false;
@@ -169,6 +169,6 @@ public:
 
 void AddSC_wetlands()
 {
-    new npc_tapoke_sli_jahn();
+    new npc_tapoke_slim_jahn();
     new npc_mikhail();
 }

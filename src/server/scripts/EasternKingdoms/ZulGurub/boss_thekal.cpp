@@ -281,7 +281,7 @@ class mob_zealot_lorkhan : public CreatureScript
             uint32 Shield_Timer;
             uint32 BloodLust_Timer;
             uint32 GreaterHeal_Timer;
-            uint32 Disar_Timer;
+            uint32 Disarm_Timer;
             uint32 Check_Timer;
 
             bool FakeDeath;
@@ -293,7 +293,7 @@ class mob_zealot_lorkhan : public CreatureScript
                 Shield_Timer = 1000;
                 BloodLust_Timer = 16000;
                 GreaterHeal_Timer = 32000;
-                Disar_Timer = 6000;
+                Disarm_Timer = 6000;
                 Check_Timer = 10000;
 
                 FakeDeath = false;
@@ -353,12 +353,12 @@ class mob_zealot_lorkhan : public CreatureScript
                     GreaterHeal_Timer = 15000+rand()%5000;
                 } else GreaterHeal_Timer -= diff;
 
-                //Disar_Timer
-                if (Disar_Timer <= diff)
+                //Disarm_Timer
+                if (Disarm_Timer <= diff)
                 {
                     DoCast(me->getVictim(), SPELL_DISARM);
-                    Disar_Timer = 15000+rand()%10000;
-                } else Disar_Timer -= diff;
+                    Disarm_Timer = 15000+rand()%10000;
+                } else Disarm_Timer -= diff;
 
                 //Check_Timer for the death of LorKhan and Zath.
                 if (!FakeDeath && Check_Timer <= diff)

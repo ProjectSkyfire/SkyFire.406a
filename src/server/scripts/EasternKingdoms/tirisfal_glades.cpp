@@ -26,8 +26,8 @@ EndScriptData */
 
 /* ContentData
 npc_calvin_montague
-go_mausoleu_door
-go_mausoleu_trigger
+go_mausoleum_door
+go_mausoleum_trigger
 EndContentData */
 
 #include "ScriptPCH.h"
@@ -154,8 +154,8 @@ public:
 };
 
 /*######
-## go_mausoleu_door
-## go_mausoleu_trigger
+## go_mausoleum_door
+## go_mausoleum_trigger
 ######*/
 
 enum eMausoleum
@@ -166,10 +166,10 @@ enum eMausoleum
     GO_DOOR         = 176594
 };
 
-class go_mausoleu_door : public GameObjectScript
+class go_mausoleum_door : public GameObjectScript
 {
 public:
-    go_mausoleu_door() : GameObjectScript("go_mausoleu_door") { }
+    go_mausoleum_door() : GameObjectScript("go_mausoleum_door") { }
 
     bool OnGossipHello(Player* player, GameObject* /*go*/)
     {
@@ -187,10 +187,10 @@ public:
     }
 };
 
-class go_mausoleu_trigger : public GameObjectScript
+class go_mausoleum_trigger : public GameObjectScript
 {
 public:
-    go_mausoleu_trigger() : GameObjectScript("go_mausoleu_trigger") { }
+    go_mausoleum_trigger() : GameObjectScript("go_mausoleum_trigger") { }
 
     bool OnGossipHello(Player* player, GameObject* go)
     {
@@ -211,6 +211,6 @@ public:
 void AddSC_tirisfal_glades()
 {
     new npc_calvin_montague();
-    new go_mausoleu_door();
-    new go_mausoleu_trigger();
+    new go_mausoleum_door();
+    new go_mausoleum_trigger();
 }

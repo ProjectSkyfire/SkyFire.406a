@@ -85,7 +85,7 @@ public:
         uint32 MindBlast_Timer;
         uint32 HolyStrike_Timer;
         uint32 ShadowShock_Timer;
-        uint32 PsychicScrea_Timer;
+        uint32 PsychicScream_Timer;
         uint32 DeepSleep_Timer;
         uint32 MindControl_Timer;
         bool _bTransformed;
@@ -97,7 +97,7 @@ public:
             MindBlast_Timer       = 6000;
             HolyStrike_Timer      = 18000;
             ShadowShock_Timer     = 4000;
-            PsychicScrea_Timer   = 16000;
+            PsychicScream_Timer   = 16000;
             DeepSleep_Timer       = 20000;
             MindControl_Timer     = 10000;
             _bTransformed = false;
@@ -185,13 +185,13 @@ public:
                 } else ShadowShock_Timer -= Diff;
 
                 //PsychicScream
-                if (PsychicScrea_Timer <= Diff)
+                if (PsychicScream_Timer <= Diff)
                 {
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                         DoCast(target, SPELL_PSYCHICSCREAM);
 
-                    PsychicScrea_Timer = 20000;
-                } else PsychicScrea_Timer -= Diff;
+                    PsychicScream_Timer = 20000;
+                } else PsychicScream_Timer -= Diff;
 
                 //DeepSleep
                 if (DeepSleep_Timer <= Diff)

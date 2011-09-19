@@ -883,7 +883,7 @@ public:
         boss_warlord_salarisAI(Creature* c) : boss_priestess_lackey_commonAI(c) {}
 
         uint32 Intercept_Stun_Timer;
-        uint32 Disar_Timer;
+        uint32 Disarm_Timer;
         uint32 Piercing_Howl_Timer;
         uint32 Frightening_Shout_Timer;
         uint32 Hamstring_Timer;
@@ -892,7 +892,7 @@ public:
         void Reset()
         {
             Intercept_Stun_Timer = 500;
-            Disar_Timer = 6000;
+            Disarm_Timer = 6000;
             Piercing_Howl_Timer = 10000;
             Frightening_Shout_Timer = 18000;
             Hamstring_Timer = 4500;
@@ -940,11 +940,11 @@ public:
                 Intercept_Stun_Timer = 10000;
             } else Intercept_Stun_Timer -= diff;
 
-            if (Disar_Timer <= diff)
+            if (Disarm_Timer <= diff)
             {
                 DoCast(me->getVictim(), SPELL_DISARM);
-                Disar_Timer = 6000;
-            } else Disar_Timer -= diff;
+                Disarm_Timer = 6000;
+            } else Disarm_Timer -= diff;
 
             if (Hamstring_Timer <= diff)
             {
@@ -1121,7 +1121,7 @@ public:
         //Shaman
         boss_apokoAI(Creature* c) : boss_priestess_lackey_commonAI(c) {}
 
-        uint32 Tote_Timer;
+        uint32 Totem_Timer;
         uint8  Tote_Amount;
         uint32 War_Stomp_Timer;
         uint32 Purge_Timer;
@@ -1130,7 +1130,7 @@ public:
 
         void Reset()
         {
-            Tote_Timer = 2000;
+            Totem_Timer = 2000;
             Tote_Amount = 1;
             War_Stomp_Timer = 10000;
             Purge_Timer = 8000;
@@ -1147,12 +1147,12 @@ public:
 
             boss_priestess_lackey_commonAI::UpdateAI(diff);
 
-            if (Tote_Timer <= diff)
+            if (Totem_Timer <= diff)
             {
                 DoCast(me, RAND(SPELL_WINDFURY_TOTEM, SPELL_FIRE_NOVA_TOTEM, SPELL_EARTHBIND_TOTEM));
                 ++Tote_Amount;
-                Tote_Timer = Tote_Amount*2000;
-            } else Tote_Timer -= diff;
+                Totem_Timer = Tote_Amount*2000;
+            } else Totem_Timer -= diff;
 
             if (War_Stomp_Timer <= diff)
             {

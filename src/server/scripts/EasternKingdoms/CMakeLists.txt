@@ -55,8 +55,8 @@ set(scripts_STAT_SRCS
   EasternKingdoms/Gnomeregan/instance_gnomeregan.cpp
   EasternKingdoms/Gnomeregan/gnomeregan.cpp
   EasternKingdoms/Gnomeregan/gnomeregan.h
-  #EasternKingdoms/GrimBatol/gri_batol.h
-  #EasternKingdoms/GrimBatol/instance_gri_batol.cpp  
+  #EasternKingdoms/GrimBatol/grim_batol.h
+  #EasternKingdoms/GrimBatol/instance_grim_batol.cpp  
   EasternKingdoms/redridge_mountains.cpp
   EasternKingdoms/BlackrockDepths/boss_high_interrogator_gerstahn.cpp
   EasternKingdoms/BlackrockDepths/boss_gorosh_the_dervish.cpp

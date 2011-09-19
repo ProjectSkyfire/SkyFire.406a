@@ -87,7 +87,7 @@ class boss_akilzon : public CreatureScript
             uint32 StaticDisruption_Timer;
             uint32 GustOfWind_Timer;
             uint32 CallLighting_Timer;
-            uint32 ElectricalStor_Timer;
+            uint32 ElectricalStorm_Timer;
             uint32 SummonEagles_Timer;
             uint32 Enrage_Timer;
 
@@ -104,7 +104,7 @@ class boss_akilzon : public CreatureScript
                 StaticDisruption_Timer = urand(10000, 20000); //10 to 20 seconds (bosskillers)
                 GustOfWind_Timer = urand(20000, 30000); //20 to 30 seconds(bosskillers)
                 CallLighting_Timer = urand(10000, 20000); //totaly random timer. can't find any info on this
-                ElectricalStor_Timer = 60000; //60 seconds(bosskillers)
+                ElectricalStorm_Timer = 60000; //60 seconds(bosskillers)
                 Enrage_Timer = 10*MINUTE*IN_MILLISECONDS; //10 minutes till enrage(bosskillers)
                 SummonEagles_Timer = 99999;
 
@@ -195,11 +195,11 @@ class boss_akilzon : public CreatureScript
                     cell.data.Part.reserved = ALL_DISTRICT;
                     cell.SetNoCreate();
 
-                    std::list<Unit*> temunitMap;
+                    std::list<Unit*> tempUnitMap;
 
                     {
                         Trinity::AnyAoETargetUnitInObjectRangeCheck u_check(me, me, 999);
-                        Trinity::UnitListSearcher<Trinity::AnyAoETargetUnitInObjectRangeCheck> searcher(me, temunitMap, u_check);
+                        Trinity::UnitListSearcher<Trinity::AnyAoETargetUnitInObjectRangeCheck> searcher(me, tempUnitMap, u_check);
 
                         TypeContainerVisitor<Trinity::UnitListSearcher<Trinity::AnyAoETargetUnitInObjectRangeCheck>, WorldTypeMapContainer > world_unit_searcher(searcher);
                         TypeContainerVisitor<Trinity::UnitListSearcher<Trinity::AnyAoETargetUnitInObjectRangeCheck>, GridTypeMapContainer >  grid_unit_searcher(searcher);
@@ -208,7 +208,7 @@ class boss_akilzon : public CreatureScript
                         cell.Visit(p, grid_unit_searcher, *(me->GetMap()));
                     }
                     //dealdamege
-                    for (std::list<Unit*>::const_iterator i = temunitMap.begin(); i != temunitMap.end(); ++i)
+                    for (std::list<Unit*>::const_iterator i = tempUnitMap.begin(); i != tempUnitMap.end(); ++i)
                     {
                         if (!Cloud->IsWithinDist(*i, 6, false))
                         {
@@ -307,13 +307,13 @@ class boss_akilzon : public CreatureScript
                     CallLighting_Timer = (12 + rand()%5)*1000; //totaly random timer. can't find any info on this
                 } else CallLighting_Timer -= diff;
 
-                if (!isRaining && ElectricalStor_Timer < uint32(8000 + rand() % 5000))
+                if (!isRaining && ElectricalStorm_Timer < uint32(8000 + rand() % 5000))
                 {
                     SetWeather(WEATHER_STATE_HEAVY_RAIN, 0.9999f);
                     isRaining = true;
                 }
 
-                if (ElectricalStor_Timer <= diff) {
+                if (ElectricalStorm_Timer <= diff) {
                     Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 50, true);
                     if (!target)
                     {
@@ -341,10 +341,10 @@ class boss_akilzon : public CreatureScript
                         Cloud->SetHealth(9999999);
                         Cloud->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                     }
-                    ElectricalStor_Timer = 60000; //60 seconds(bosskillers)
+                    ElectricalStorm_Timer = 60000; //60 seconds(bosskillers)
                     StormCount = 1;
                     StormSequenceTimer = 0;
-                } else ElectricalStor_Timer -= diff;
+                } else ElectricalStorm_Timer -= diff;
 
                 if (SummonEagles_Timer <= diff)
                 {

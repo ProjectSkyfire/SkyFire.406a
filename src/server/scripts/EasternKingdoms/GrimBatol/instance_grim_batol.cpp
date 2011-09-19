@@ -16,7 +16,7 @@
 */
 
 #include "ScriptPCH.h"
-#include "gri_batol.h"
+#include "grim_batol.h"
 
 #define ENCOUNTERS 4
 
@@ -27,19 +27,19 @@
    Erudax
  */
 
-class instance_gri_batol : public InstanceMapScript
+class instance_grim_batol : public InstanceMapScript
 {
 public:
-    instance_gri_batol() : InstanceMapScript("instance_gri_batol", 670) { }
+    instance_grim_batol() : InstanceMapScript("instance_grim_batol", 670) { }
 
     InstanceScript* GetInstanceScript(InstanceMap* map) const
     {
-        return new instance_gri_batol_InstanceMapScript(map);
+        return new instance_grim_batol_InstanceMapScript(map);
     }
 
-    struct instance_gri_batol_InstanceMapScript: public InstanceScript
+    struct instance_grim_batol_InstanceMapScript: public InstanceScript
     {
-        instance_gri_batol_InstanceMapScript(InstanceMap* map) : InstanceScript(map) {}
+        instance_grim_batol_InstanceMapScript(InstanceMap* map) : InstanceScript(map) {}
 
         uint32 uiEncounter[ENCOUNTERS];
 
@@ -190,7 +190,7 @@ public:
     };
 };
 
-void AddSC_instance_gri_batol()
+void AddSC_instance_grim_batol()
 {
-    new instance_gri_batol();
+    new instance_grim_batol();
 }

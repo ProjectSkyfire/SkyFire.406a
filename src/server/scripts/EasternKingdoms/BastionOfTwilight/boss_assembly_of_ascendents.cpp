@@ -27,12 +27,12 @@ public:
 
     CreatureAI* GetAI(Creature* creature) const
     {
-        return new boss_elementiu_monstrosityAI (creature);
+        return new boss_elementium_monstrosityAI (creature);
     }
 
-    struct boss_elementiu_monstrosityAI : public ScriptedAI
+    struct boss_elementium_monstrosityAI : public ScriptedAI
     {
-        boss_elementiu_monstrosityAI(Creature* creature) : ScriptedAI(creature)
+        boss_elementium_monstrosityAI(Creature* creature) : ScriptedAI(creature)
         {
             pInstance = creature->GetInstanceScript();
         }

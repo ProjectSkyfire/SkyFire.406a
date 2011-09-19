@@ -739,14 +739,14 @@ public:
         //Arms Warr
         boss_lord_crispin_ferenceAI(Creature* c) : boss_moroes_guestAI(c) {}
 
-        uint32 Disar_Timer;
+        uint32 Disarm_Timer;
         uint32 HeroicStrike_Timer;
         uint32 ShieldBash_Timer;
         uint32 ShieldWall_Timer;
 
         void Reset()
         {
-            Disar_Timer = 6000;
+            Disarm_Timer = 6000;
             HeroicStrike_Timer = 10000;
             ShieldBash_Timer = 8000;
             ShieldWall_Timer = 4000;
@@ -761,11 +761,11 @@ public:
 
             boss_moroes_guestAI::UpdateAI(diff);
 
-            if (Disar_Timer <= diff)
+            if (Disarm_Timer <= diff)
             {
                 DoCast(me->getVictim(), SPELL_DISARM);
-                Disar_Timer = 12000;
-            } else Disar_Timer -= diff;
+                Disarm_Timer = 12000;
+            } else Disarm_Timer -= diff;
 
             if (HeroicStrike_Timer <= diff)
             {

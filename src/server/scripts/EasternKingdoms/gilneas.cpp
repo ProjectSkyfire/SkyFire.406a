@@ -75,22 +75,22 @@ enum eGilneasCityPhase2
 };
 
 /*######
-## npc_prince_lia_greymane_phase1
+## npc_prince_liam_greymane_phase1
 ######*/
 
-class npc_prince_lia_greymane_phase1 : public CreatureScript
+class npc_prince_liam_greymane_phase1 : public CreatureScript
 {
 public:
-    npc_prince_lia_greymane_phase1() : CreatureScript("npc_prince_lia_greymane_phase1") { }
+    npc_prince_liam_greymane_phase1() : CreatureScript("npc_prince_liam_greymane_phase1") { }
 
     CreatureAI* GetAI(Creature* creature) const
     {
-        return new npc_prince_lia_greymane_phase1AI (creature);
+        return new npc_prince_liam_greymane_phase1AI (creature);
     }
 
-    struct npc_prince_lia_greymane_phase1AI : public ScriptedAI
+    struct npc_prince_liam_greymane_phase1AI : public ScriptedAI
     {
-        npc_prince_lia_greymane_phase1AI(Creature *c) : ScriptedAI(c) {}
+        npc_prince_liam_greymane_phase1AI(Creature *c) : ScriptedAI(c) {}
 
         uint32 tSay; //Time left for say
         uint32 cSay; //Current Say
@@ -524,22 +524,22 @@ public:
 };
 
 /*######
-## npc_prince_lia_greymane_phase2
+## npc_prince_liam_greymane_phase2
 ######*/
 
-class npc_prince_lia_greymane_phase2 : public CreatureScript
+class npc_prince_liam_greymane_phase2 : public CreatureScript
 {
 public:
-    npc_prince_lia_greymane_phase2() : CreatureScript("npc_prince_lia_greymane_phase2") { }
+    npc_prince_liam_greymane_phase2() : CreatureScript("npc_prince_liam_greymane_phase2") { }
 
     CreatureAI* GetAI(Creature* creature) const
     {
-        return new npc_prince_lia_greymane_phase2AI (creature);
+        return new npc_prince_liam_greymane_phase2AI (creature);
     }
 
-    struct npc_prince_lia_greymane_phase2AI : public ScriptedAI
+    struct npc_prince_liam_greymane_phase2AI : public ScriptedAI
     {
-        npc_prince_lia_greymane_phase2AI(Creature *c) : ScriptedAI(c) {}
+        npc_prince_liam_greymane_phase2AI(Creature *c) : ScriptedAI(c) {}
 
         uint32 tAnimate, tSound, dmgCount, tYell, tSeek;
         bool playSnd, doYell;
@@ -1383,8 +1383,8 @@ void AddSC_gilneas()
 {
     new npc_gilneas_city_guard_phase1();
     new npc_gilneas_city_guard_phase2();
-    new npc_prince_lia_greymane_phase1();
-    new npc_prince_lia_greymane_phase2();
+    new npc_prince_liam_greymane_phase1();
+    new npc_prince_liam_greymane_phase2();
     new npc_rampaging_worgen();
     new npc_rampaging_worgen2();
     new go_merchant_square_door();
