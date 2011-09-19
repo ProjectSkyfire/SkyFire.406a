@@ -77,21 +77,21 @@ public:
         }
 
         InstanceScript* pInstance;
-        uint32 uiShadowNovaTimer;
-        uint32 uiBerserkTimer;
-        uint32 uiFuriousRoarTimer;
-        uint32 uiFuriousRoarCount;
-        uint32 uiPhase;
+        uint32 ShadowNovaTimer;
+        uint32 BerserkTimer;
+        uint32 FuriousRoarTimer;
+        uint32 FuriousRoarCount;
+        uint32 Phase;
         bool StormRider;
         bool Berserk;
 
         void Reset()
         {
-            uiShadowNovaTimer = urand(12000,17000);
-            uiBerserkTimer = 360000;
-            uiFuriousRoarTimer = 0;
-            uiFuriousRoarCount = 0;
-            uiPhase = PHASE_1;
+            ShadowNovaTimer = urand(12000,17000);
+            BerserkTimer = 360000;
+            FuriousRoarTimer = 0;
+            FuriousRoarCount = 0;
+            Phase = PHASE_1;
             StormRider = false;
             Berserk = false;
             if (pInstance)
@@ -128,42 +128,42 @@ public:
                 return;
 
             if (StormRider)
-                if (uiShadowNovaTimer <= diff)
+                if (ShadowNovaTimer <= diff)
                 {
                     DoCast(SPELL_SHADOW_NOVA);
-                    uiShadowNovaTimer = urand(12000,17000);
+                    ShadowNovaTimer = urand(12000,17000);
                 }
                 else
-                    uiShadowNovaTimer -= diff;
+                    ShadowNovaTimer -= diff;
 
-            if (uiPhase == PHASE_2)
-                if (uiFuriousRoarTimer <= diff)
-                    if (uiFuriousRoarCount < 3)
+            if (Phase == PHASE_2)
+                if (FuriousRoarTimer <= diff)
+                    if (FuriousRoarCount < 3)
                     {
                         DoCast(SPELL_FURIOUS_ROAR);
-                        ++uiFuriousRoarCount;
-                        uiFuriousRoarTimer = 1500;
+                        ++FuriousRoarCount;
+                        FuriousRoarTimer = 1500;
                     }
                     else
                     {
                         DoCast(SPELL_SHADOW_NOVA);
-                        uiFuriousRoarCount = 0;
-                        uiFuriousRoarTimer = urand(12000, 17000);
+                        FuriousRoarCount = 0;
+                        FuriousRoarTimer = urand(12000, 17000);
                     }
                 else
-                    uiFuriousRoarTimer -= diff;
+                    FuriousRoarTimer -= diff;
 
             if (!Berserk)
-                if (uiBerserkTimer <= diff)
+                if (BerserkTimer <= diff)
                 {
                     DoCast(SPELL_BERSERK);
                     Berserk = true;
                 }
                 else
-                    uiBerserkTimer -= diff;
+                    BerserkTimer -= diff;
 
-            if (uiPhase == PHASE_1 && me->HealthBelowPct(50))
-                uiPhase = PHASE_2;
+            if (Phase == PHASE_1 && me->HealthBelowPct(50))
+                Phase = PHASE_2;
 
             DoMeleeAttackIfReady();
         }
@@ -204,11 +204,11 @@ public:
         void JustDied(Unit* /*Killer*/)
         {
             if (pInstance)
-                if (Creature* pHalfus = Unit::GetCreature(*me, pInstance->GetData64(DATA_HALFUS)))
-                    if(Aura* aura = pHalfus->GetAura(87683))
+                if (Creature* halfus = Unit::GetCreature(*me, pInstance->GetData64(DATA_HALFUS)))
+                    if(Aura* aura = halfus->GetAura(87683))
                         aura->SetStackAmount(aura->GetStackAmount() + 1);
                     else
-                        me->AddAura(87683, pHalfus);
+                        me->AddAura(87683, halfus);
         }
 
         void SpellHit(Unit* unit, const SpellEntry* spell)

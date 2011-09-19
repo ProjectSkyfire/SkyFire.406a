@@ -35,14 +35,14 @@ class instance_bastion_of_twilight : public InstanceMapScript
             instance_bastion_of_twilight_InstanceMapScript(InstanceMap* map) : InstanceScript(map) { Initialize(); }
 
         private:
-            uint8 EmeraldWhelpFlag;
-            uint64 uiEncounter[MAX_ENCOUNTER];
+            uint8  EmeraldWhelpFlag;
+            uint64 Encounter[MAX_ENCOUNTER];
             uint64 HalfusGUID;
-            uint64 uiEmeraldWhelp[5];
-            uint64 uiStormRiderGUID;
-            uint64 uiTimeWardenGUID;
-            uint64 uiSlateDragonGUID;
-            uint64 uiNetherScionGUID;
+            uint64 EmeraldWhelp[5];
+            uint64 StormRiderGUID;
+            uint64 TimeWardenGUID;
+            uint64 SlateDragonGUID;
+            uint64 NetherScionGUID;
             uint32 StormRiderEvent;
             uint32 TimeWardenEvent;
             uint32 SlateDragonEvent;
@@ -51,27 +51,27 @@ class instance_bastion_of_twilight : public InstanceMapScript
 
             void Initialize()
             {
-                memset(&uiEncounter, 0, sizeof(uiEncounter));
-                memset(&uiEmeraldWhelp, 0, sizeof(uiEmeraldWhelp));
+                memset(&Encounter, 0, sizeof(Encounter));
+                memset(&EmeraldWhelp, 0, sizeof(EmeraldWhelp));
                 EmeraldWhelpFlag = 0;
                 HalfusGUID = 0;
-                uiStormRiderGUID = 0;
-                uiTimeWardenGUID = 0;
-                uiSlateDragonGUID = 0;
-                uiNetherScionGUID = 0;
+                StormRiderGUID = 0;
+                TimeWardenGUID = 0;
+                SlateDragonGUID = 0;
+                NetherScionGUID = 0;
                 TimeWardenEvent = 0;
                 StormRiderEvent = 1;
                 SlateDragonEvent = 1;
                 NetherScionEvent = 1;
                 EmeraldWhelpEvent = 0;
                 for (int i = 0; i < 5; ++i)
-                    uiEmeraldWhelp[i] = 0;
+                    EmeraldWhelp[i] = 0;
             }
 
             bool IsEncounterInProgress() const
             {
                 for (uint8 i = 0; i < MAX_ENCOUNTER; ++i)
-                    if (uiEncounter[i] == IN_PROGRESS) return true;
+                    if (Encounter[i] == IN_PROGRESS) return true;
 
                 return false;
             }
@@ -81,32 +81,32 @@ class instance_bastion_of_twilight : public InstanceMapScript
                 switch(creature->GetEntry())
                 {
                     case 44600:
-						HalfusGUID = creature->GetGUID();
-						break;
+                        HalfusGUID = creature->GetGUID();
+                        break;
                     case 44645:
                         {
-                            uiNetherScionGUID = creature->GetGUID();
+                            NetherScionGUID = creature->GetGUID();
                             if (NetherScionEvent == 1)
                                 creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
                         }
                         break;
                     case 44652:
                         {
-                            uiSlateDragonGUID = creature->GetGUID();
+                            SlateDragonGUID = creature->GetGUID();
                             if (SlateDragonEvent == 1)
                                 creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
                         }
                         break;
                     case 44650:
                         {
-                            uiStormRiderGUID  = creature->GetGUID();
+                            StormRiderGUID  = creature->GetGUID();
                             if (StormRiderEvent == 1)
                                 creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
                         }
                         break;
                     case 44797:
                         {
-                            uiTimeWardenGUID  = creature->GetGUID();
+                            TimeWardenGUID  = creature->GetGUID();
                             if (TimeWardenEvent == 1)
                                 creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
                         }
@@ -114,7 +114,7 @@ class instance_bastion_of_twilight : public InstanceMapScript
                     case 44641:
                         if (EmeraldWhelpFlag < 5)
                         {
-                            uiEmeraldWhelp[EmeraldWhelpFlag] = creature->GetGUID();
+                            EmeraldWhelp[EmeraldWhelpFlag] = creature->GetGUID();
                             ++EmeraldWhelpFlag;
                         }
                 }
@@ -135,11 +135,11 @@ class instance_bastion_of_twilight : public InstanceMapScript
             {
                 switch (type)
                 {
-                    case DATA_HALFUS:                 return uiEncounter[0];
-                    case DATA_THERALION_ANA_VALIONA:  return uiEncounter[1];
-                    case DATA_ASCENDANT_COUNCIL:      return uiEncounter[2];
-                    case DATA_CHOGALL:                return uiEncounter[3];
-                    case DATA_SINESTRA:               return uiEncounter[4];
+                    case DATA_HALFUS:                 return Encounter[0];
+                    case DATA_THERALION_ANA_VALIONA:  return Encounter[1];
+                    case DATA_ASCENDANT_COUNCIL:      return Encounter[2];
+                    case DATA_CHOGALL:                return Encounter[3];
+                    case DATA_SINESTRA:               return Encounter[4];
                     case DATA_STORM_RIDER:            return StormRiderEvent;
                     case DATA_THE_TIME_WARDEN:        return TimeWardenEvent;
                     case DATA_THE_SLATE_DRAGON:       return SlateDragonEvent;
@@ -157,31 +157,31 @@ class instance_bastion_of_twilight : public InstanceMapScript
                 creature->GetMotionMaster()->MoveTargetedHome();
             }
 
-            void SetData(uint32 uiType, uint32 uiData)
+            void SetData(uint32 Type, uint32 Data)
             {
-                uiEncounter[uiType] = uiData;
+                Encounter[Type] = Data;
 
-                if (uiType == DATA_HALFUS && uiData == NOT_STARTED)
+                if (Type == DATA_HALFUS && Data == NOT_STARTED)
                 {
                     if (NetherScionEvent == 1)
-                        if (Creature* netherScion = instance->GetCreature(uiNetherScionGUID))
+                        if (Creature* netherScion = instance->GetCreature(NetherScionGUID))
                             ResetDragon(netherScion);
                     if (SlateDragonEvent == 1)
-                        if (Creature* slateDragon = instance->GetCreature(uiSlateDragonGUID))
+                        if (Creature* slateDragon = instance->GetCreature(SlateDragonGUID))
                             ResetDragon(slateDragon);
                     if (StormRiderEvent == 1)
-                        if (Creature* stormRider = instance->GetCreature(uiStormRiderGUID))
+                        if (Creature* stormRider = instance->GetCreature(StormRiderGUID))
                             ResetDragon(stormRider);
                     if (TimeWardenEvent == 1)
-                        if (Creature* timeWarden = instance->GetCreature(uiTimeWardenGUID))
+                        if (Creature* timeWarden = instance->GetCreature(TimeWardenGUID))
                             ResetDragon(timeWarden);
                     if (EmeraldWhelpEvent == 1)
                         for (int i=0; i<5; ++i)
-                            if (Creature* emeraldWhelp = instance->GetCreature(uiEmeraldWhelp[i]))
+                            if (Creature* emeraldWhelp = instance->GetCreature(EmeraldWhelp[i]))
                                 emeraldWhelp->AI()->Reset();
                 }
 
-                if (uiData == DONE)
+                if (Data == DONE)
                 {
                     RewardValorPoints();
                     SaveToDB();
@@ -234,7 +234,7 @@ class instance_bastion_of_twilight : public InstanceMapScript
                         loadStream >> tmpState;
                         if (tmpState == IN_PROGRESS || tmpState > SPECIAL)
                             tmpState = NOT_STARTED;
-                        uiEncounter[i] = tmpState;
+                        Encounter[i] = tmpState;
                     }
                 } else OUT_LOAD_INST_DATA_FAIL;
 

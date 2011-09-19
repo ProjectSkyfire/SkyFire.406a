@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2010-2011 MigCore <http://wow-mig.ru/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  *
@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #include "ScriptPCH.h"
 #include "bastion_of_twilight.h"
 
@@ -48,13 +48,13 @@ public:
         {
             pInstance->SetData(DATA_SINESTRA, IN_PROGRESS);
         }
-        
+
         void JustDied(Unit* /*Killer*/)
         {
             pInstance->SetData(DATA_SINESTRA, DONE);
         }
 
-        void UpdateAI(const uint32 uiDiff)
+        void UpdateAI(const uint32 Diff)
         {
             if (!UpdateVictim())
                 return;
