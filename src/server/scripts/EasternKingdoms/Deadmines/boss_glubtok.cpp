@@ -50,14 +50,14 @@ public:
 
         InstanceScript* pInstance;
 
-        uint32 uiTrashTimer;
-        uint32 uiSlamTimer;
-        uint32 uiNimbleReflexesTimer;
+        uint32 TrashTimer;
+        uint32 SlamTimer;
+        uint32 NimbleReflexesTimer;
 
-        uint8 uiHealth;
+        uint8 Health;
 
-        uint32 uiPhase;
-        uint32 uiTimer;
+        uint32 Phase;
+        uint32 Timer;
         // TODO: MAKE THE CORRECT SCRIPT :)
     };
 };

@@ -43,7 +43,7 @@ public:
 
         void EnterCombat(Unit* /*pWho*/) {}
 
-        void UpdateAI(const uint32 uiDiff)
+        void UpdateAI(const uint32 Diff)
         {
             if (!UpdateVictim())
                 return;
