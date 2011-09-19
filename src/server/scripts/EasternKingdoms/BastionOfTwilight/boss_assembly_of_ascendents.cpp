@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2010-2011 MigCore <http://wow-mig.ru/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  *
@@ -48,13 +48,13 @@ public:
         {
             pInstance->SetData(DATA_ASCENDANT_COUNCIL, IN_PROGRESS);
         }
-        
+
         void JustDied(Unit* /*Killer*/)
         {
             pInstance->SetData(DATA_ASCENDANT_COUNCIL, DONE);
         }
 
-        void UpdateAI(const uint32 uiDiff)
+        void UpdateAI(const uint32 Diff)
         {
             if (!UpdateVictim())
                 return;
@@ -64,7 +64,7 @@ public:
     };
 };
 
-void AddSC_bosses_ascendant_council()
+void AddSC_boss_assembly_of_ascendents()
 {
     new boss_elementium_monstrosity();
 }

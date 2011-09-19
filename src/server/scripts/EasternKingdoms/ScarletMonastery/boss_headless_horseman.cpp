@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2006-2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
@@ -205,7 +206,6 @@ public:
             }
         }
     };
-
 };
 
 class mob_head : public CreatureScript
@@ -344,7 +344,6 @@ public:
             }
         }
     };
-
 };
 
 class boss_headless_horseman : public CreatureScript
@@ -732,7 +731,6 @@ public:
             }
         }
     };
-
 };
 
 class mob_pulsing_pumpkin : public CreatureScript
@@ -814,7 +812,6 @@ public:
                 DoMeleeAttackIfReady();
         }
     };
-
 };
 
 class go_loosely_turned_soil : public GameObjectScript
@@ -847,7 +844,6 @@ public:
         //}
         return true;
     }
-
 };
 
 void mob_head::mob_headAI::Disappear()

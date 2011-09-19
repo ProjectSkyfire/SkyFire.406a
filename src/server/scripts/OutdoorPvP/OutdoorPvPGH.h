@@ -179,7 +179,7 @@ class OutdoorPvPGH : public OutdoorPvP
 
         void FillInitialWorldStates(WorldPacket &data);
 
-        void SendRemoveWorldStates(Player* playerr);
+        void SendRemoveWorldStates(Player* player);
 
         void HandleKillImpl(Player* player, Unit* killed);
 

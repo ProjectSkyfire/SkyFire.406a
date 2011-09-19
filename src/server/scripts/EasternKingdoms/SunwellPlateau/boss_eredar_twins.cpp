@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -340,7 +341,6 @@ public:
             }
         }
     };
-
 };
 
 class boss_alythess : public CreatureScript
@@ -479,7 +479,6 @@ public:
         {
             switch(spell->Id)
             {
-
             case SPELL_BLAZE:
                 target->CastSpell(target, SPELL_BLAZE_SUMMON, true);
             case SPELL_CONFLAGRATION:
@@ -669,7 +668,6 @@ public:
             } else EnrageTimer -= diff;
         }
     };
-
 };
 
 class mob_shadow_image : public CreatureScript
@@ -704,7 +702,6 @@ public:
         {
             switch(spell->Id)
             {
-
             case SPELL_SHADOW_FURY:
             case SPELL_DARK_STRIKE:
                 if (!target->HasAura(SPELL_DARK_FLAME))
@@ -751,7 +748,6 @@ public:
             } else DarkstrikeTimer -= diff;
         }
     };
-
 };
 
 void AddSC_boss_eredar_twins()

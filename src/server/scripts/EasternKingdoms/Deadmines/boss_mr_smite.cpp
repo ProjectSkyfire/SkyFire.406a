@@ -52,25 +52,25 @@ public:
 
         InstanceScript* pInstance;
 
-        uint32 uiTrashTimer;
-        uint32 uiSlamTimer;
-        uint32 uiNimbleReflexesTimer;
+        uint32 TrashTimer;
+        uint32 SlamTimer;
+        uint32 NimbleReflexesTimer;
 
-        uint8 uiHealth;
+        uint8 Health;
 
-        uint32 uiPhase;
-        uint32 uiTimer;
+        uint32 Phase;
+        uint32 Timer;
 
         void Reset()
         {
-            uiTrashTimer = urand(5000, 9000);
-            uiSlamTimer = 9000;
-            uiNimbleReflexesTimer = urand(15500, 31600);
+            TrashTimer = urand(5000, 9000);
+            SlamTimer = 9000;
+            NimbleReflexesTimer = urand(15500, 31600);
 
-            uiHealth = 0;
+            Health = 0;
 
-            uiPhase = 0;
-            uiTimer = 0;
+            Phase = 0;
+            Timer = 0;
 
             SetEquipmentSlots(false, EQUIP_SWORD, EQUIP_UNEQUIP, EQUIP_NO_CHANGE);
         }
@@ -82,92 +82,91 @@ public:
 
         bool bCheckChances()
         {
-            uint32 uiChances = urand(0, 99);
-            if (uiChances <= 15)
+            uint32 Chances = urand(0, 99);
+            if (Chances <= 15)
                 return false;
             else
                 return true;
         }
 
-        void UpdateAI(const uint32 uiDiff)
+        void UpdateAI(const uint32 Diff)
         {
             if (!UpdateVictim())
                 return;
-
-        /*START ACID-AI*/
-            if (uiTrashTimer <= uiDiff)
+            /* Start SkyFireAI */
+            if (TrashTimer <= Diff)
             {
                 if (bCheckChances())
                     DoCast(me, SPELL_TRASH);
-                uiTrashTimer = urand(6000, 15500);
-            } else uiTrashTimer -= uiDiff;
+                TrashTimer = urand(6000, 15500);
+            } else TrashTimer -= Diff;
 
-            if (uiSlamTimer <= uiDiff)
+            if (SlamTimer <= Diff)
             {
                 if (bCheckChances())
                     DoCast(me->getVictim(), SPELL_SMITE_SLAM);
-                uiSlamTimer = 11000;
-            } else uiSlamTimer -= uiDiff;
+                SlamTimer = 11000;
+            } else SlamTimer -= Diff;
 
-            if (uiNimbleReflexesTimer <= uiDiff)
+            if (NimbleReflexesTimer <= Diff)
             {
                 if (bCheckChances())
                     DoCast(me, SPELL_NIMBLE_REFLEXES);
-                uiNimbleReflexesTimer = urand(27300, 60100);
-            } else uiNimbleReflexesTimer -= uiDiff;
-        /*END ACID-AI*/
+                NimbleReflexesTimer = urand(27300, 60100);
+            } else NimbleReflexesTimer -= Diff;
+        /*END SkyFireAI*/
 
-            if ((uiHealth == 0 && !HealthAbovePct(66)) || (uiHealth == 1 && !HealthAbovePct(33)))
+            if ((Health == 0 && !HealthAbovePct(66)) || (Health == 1 && !HealthAbovePct(33)))
             {
-                ++uiHealth;
+                ++Health;
                 DoCastAOE(SPELL_SMITE_STOMP, false);
                 SetCombatMovement(false);
                 if (pInstance)
-                    if (GameObject* pGo = GameObject::GetGameObject((*me), pInstance->GetData64(DATA_SMITE_CHEST)))
+                    if (GameObject* go = GameObject::GetGameObject((*me), pInstance->GetData64(DATA_SMITE_CHEST)))
                     {
                         me->GetMotionMaster()->Clear();
-                        me->GetMotionMaster()->MovePoint(1, pGo->GetPositionX() - 3.0f, pGo->GetPositionY(), pGo->GetPositionZ());
+                        me->GetMotionMaster()->MovePoint(1, go->GetPositionX() - 3.0f, go->GetPositionY(), go->GetPositionZ());
                     }
             }
 
-            if (uiPhase)
+            if (Phase)
             {
-                if (uiTimer <= uiDiff)
+                if (Timer <= Diff)
                 {
-                    switch(uiPhase)
+                    switch(Phase)
                     {
                         case 1:
                             me->HandleEmoteCommand(EMOTE_STATE_KNEEL); //dosen't work?
-                            uiTimer = 1000;
-                            uiPhase = 2;
+                            Timer = 1000;
+                            Phase = 2;
                             break;
                         case 2:
-                            if (uiHealth == 1)
+                            if (Health == 1)
                                 SetEquipmentSlots(false, EQUIP_SWORD, EQUIP_SWORD, EQUIP_NO_CHANGE);
                             else
                                 SetEquipmentSlots(false, EQUIP_MACE, EQUIP_UNEQUIP, EQUIP_NO_CHANGE);
-                            uiTimer = 500;
-                            uiPhase = 3;
+                            Timer = 500;
+                            Phase = 3;
                             break;
                         case 3:
                             SetCombatMovement(true);
                             me->GetMotionMaster()->MoveChase(me->getVictim(), me->m_CombatDistance);
-                            uiPhase = 0;
+                            Phase = 0;
                             break;
                     }
-                } else uiTimer -= uiDiff;
+                } else Timer -= Diff;
             }
 
             DoMeleeAttackIfReady();
         }
 
-        void MovementInform(uint32 uiType, uint32 /*uiId*/)
+        void MovementInform(uint32 Type, uint32 /*Id*/)
         {
-            if (uiType != POINT_MOTION_TYPE)
+            if (Type != POINT_MOTION_TYPE)
                 return;
 
-            uiTimer = 1500;
-            uiPhase = 1;
+            Timer = 1500;
+            Phase = 1;
         }
     };
 };

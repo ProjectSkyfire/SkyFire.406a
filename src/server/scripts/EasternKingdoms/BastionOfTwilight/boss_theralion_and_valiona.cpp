@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2010-2011 MigCore <http://wow-mig.ru/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  *
@@ -48,13 +48,13 @@ public:
         {
             pInstance->SetData(DATA_THERALION_ANA_VALIONA, IN_PROGRESS);
         }
-        
+
         void JustDied(Unit* /*Killer*/)
         {
             pInstance->SetData(DATA_THERALION_ANA_VALIONA, DONE);
         }
 
-        void UpdateAI(const uint32 uiDiff)
+        void UpdateAI(const uint32 Diff)
         {
             if (!UpdateVictim())
                 return;
@@ -64,7 +64,7 @@ public:
     };
 };
 
-void AddSC_bosses_theralion_and_valiona()
+void AddSC_boss_theralion_and_valiona()
 {
     new boss_valiona();
 }

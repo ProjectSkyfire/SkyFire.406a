@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -1342,7 +1343,6 @@ public:
                             me->DespawnOrUnsummon();
                             break;
                     }
-
                 } else uiPhase_timer -= diff;
             }
 
@@ -1518,7 +1518,6 @@ public:
                         DoScriptText(SAY_LIGHT_OF_DAWN26, pTemp);
 
                     SetHoldState(false);
-
                 } else uiFight_duration -= diff;
 
                 DoMeleeAttackIfReady();
@@ -1660,7 +1659,6 @@ public:
                 }
         }
     };
-
 };
 
 /*######
@@ -1684,7 +1682,6 @@ public:
         void UpdateAI(const uint32 /*diff*/) {}
         void JustDied(Unit* /*killer*/) {}
     };
-
 };
 
 void AddSC_the_scarlet_enclave_c5()
