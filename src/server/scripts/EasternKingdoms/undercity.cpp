@@ -59,8 +59,8 @@ float HighborneLoc[4][3]=
     {1292.51f, 310.50f, 1.99f},
 };
 
-#define HIGHBORNE_LOC_Y             -61.00f
-#define HIGHBORNE_LOC_Y_NEW         -55.50f
+const float HIGHBORNE_LOC_Y            = -61.00f;
+const float HIGHBORNE_LOC_Y_NEW        = -55.50f;
 
 class npc_lady_sylvanas_windrunner : public CreatureScript
 {
@@ -207,7 +207,7 @@ public:
 ## npc_parqual_fintallas
 ######*/
 
-#define SPELL_MARK_OF_SHAME 6767
+const int SPELL_MARK_OF_SHAME = 6767;
 
 #define GOSSIP_HPF1 "Gul'dan"
 #define GOSSIP_HPF2 "Kel'Thuzad"

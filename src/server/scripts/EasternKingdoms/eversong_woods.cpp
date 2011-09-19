@@ -39,6 +39,7 @@ EndContentData */
 ## npc_prospector_anvilward
 ######*/
 
+// Add this to DB:
 #define GOSSIP_HELLO    "I need a moment of your time, sir."
 #define GOSSIP_SELECT   "Why... yes, of course. I've something to show you right inside this building, Mr. Anvilward."
 
@@ -516,9 +517,12 @@ public:
 ## npc_apprentice_mirveda
 ######*/
 
-#define QUEST_UNEXPECTED_RESULT 8488
-#define MOB_GHARZUL     15958
-#define MOB_ANGERSHADE  15656
+enum eNums
+{
+    QUEST_UNEXPECTED_RESULT = 8488,
+    MOB_GHARZUL             = 15958,
+    MOB_ANGERSHADE          = 15656
+};
 
 class npc_apprentice_mirveda : public CreatureScript
 {
@@ -599,9 +603,12 @@ public:
 ## npc_infused_crystal
 ######*/
 
-#define MOB_ENRAGED_WRAITH  17086
-#define EMOTE   -1000283
-#define QUEST_POWERING_OUR_DEFENSES 8490
+enum Infused_Crystal
+{
+    MOB_ENRAGED_WRAITH          = 17086,
+    EMOTE                       = -1000283,
+    QUEST_POWERING_OUR_DEFENSES = 8490
+};
 
 struct Location
 {

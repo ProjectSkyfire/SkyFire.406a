@@ -35,11 +35,14 @@ EndContentData */
 ## npc_deathly_usher
 ######*/
 
-#define GOSSIP_ITEM_USHER "I wish to to visit the Rise of the Defiler."
+#define GOSSIP_ITEM_USHER "I wish to to visit the Rise of the Defiler." // Add this to DB!
 
-#define SPELL_TELEPORT_SINGLE           12885
-#define SPELL_TELEPORT_SINGLE_IN_GROUP  13142
-#define SPELL_TELEPORT_GROUP            27686
+enum eEnums
+{
+    SPELL_TELEPORT_SINGLE          = 12885,
+    SPELL_TELEPORT_SINGLE_IN_GROUP = 13142,
+    SPELL_TELEPORT_GROUP           = 27686
+};
 
 class npc_deathly_usher : public CreatureScript
 {

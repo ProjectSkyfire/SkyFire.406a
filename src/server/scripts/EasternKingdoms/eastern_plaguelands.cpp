@@ -97,7 +97,7 @@ public:
 ## npc_darrowshire_spirit
 ######*/
 
-#define SPELL_SPIRIT_SPAWNIN    17321
+const int SPELL_SPIRIT_SPAWNIN = 17321;
 
 class npc_darrowshire_spirit : public CreatureScript
 {
@@ -135,6 +135,7 @@ public:
 ## npc_tirion_fordring
 ######*/
 
+// Add this to DB:
 #define GOSSIP_HELLO    "I am ready to hear your tale, Tirion."
 #define GOSSIP_SELECT1  "Thank you, Tirion.  What of your identity?"
 #define GOSSIP_SELECT2  "That is terrible."

@@ -192,13 +192,15 @@ public:
 ## npc_defias_traitor
 ######*/
 
-#define SAY_START                   -1000101
-#define SAY_PROGRESS                -1000102
-#define SAY_END                     -1000103
-#define SAY_AGGRO_1                 -1000104
-#define SAY_AGGRO_2                 -1000105
-
-#define QUEST_DEFIAS_BROTHERHOOD    155
+enum Defias_Traitor
+{
+    SAY_START                  = -1000101,
+    SAY_PROGRESS               = -1000102,
+    SAY_END                    = -1000103,
+    SAY_AGGRO_1                = -1000104,
+    SAY_AGGRO_2                = -1000105,
+    QUEST_DEFIAS_BROTHERHOOD   = 155
+};
 
 class npc_defias_traitor : public CreatureScript
 {

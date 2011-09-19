@@ -34,6 +34,7 @@ EndContentData */
 ## npc_ragged_john
 ######*/
 
+// Add this to DB:
 #define GOSSIP_HELLO    "Official buisness, John. I need some information about Marsha Windsor. Tell me about the last time you saw him."
 #define GOSSIP_SELECT1  "So what did you do?"
 #define GOSSIP_SELECT2  "Start making sense, dwarf. I don't want to have anything to do with your cracker, your pappy, or any sort of 'discreditin'."
