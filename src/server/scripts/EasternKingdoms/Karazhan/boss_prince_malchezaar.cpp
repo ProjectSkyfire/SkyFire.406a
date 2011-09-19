@@ -271,11 +271,11 @@ public:
         {
             //Infernal Cleanup
             for (std::vector<uint64>::const_iterator itr = infernals.begin(); itr != infernals.end(); ++itr)
-                if (Unit* pInfernal = Unit::GetUnit(*me, *itr))
-                    if (pInfernal->isAlive())
+                if (Unit* infernal = Unit::GetUnit(*me, *itr))
+                    if (infernal->isAlive())
                     {
-                        pInfernal->SetVisible(false);
-                        pInfernal->setDeathState(JUST_DIED);
+                        infernal->SetVisible(false);
+                        infernal->setDeathState(JUST_DIED);
                     }
 
             infernals.clear();

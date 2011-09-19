@@ -57,10 +57,10 @@ class npc_kalecgos : public CreatureScript
 public:
     npc_kalecgos() : CreatureScript("npc_kalecgos") { }
 
-    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*uiSender*/, uint32 uiAction)
+    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*uiSender*/, uint32 Action)
     {
         player->PlayerTalkClass->ClearMenus();
-        switch(uiAction)
+        switch(Action)
         {
             case GOSSIP_ACTION_INFO_DEF:
                 player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_KAEL_2, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
@@ -106,56 +106,56 @@ public:
     {
         npc_kalecgosAI(Creature* creature) : ScriptedAI(creature) {}
 
-        uint32 m_uiTransformTimer;
+        uint32 TransformTimer;
 
         void Reset()
         {
-            m_uiTransformTimer = 0;
+            TransformTimer = 0;
 
             // we must assume he appear as dragon somewhere outside the platform of orb, and then move directly to here
             if (me->GetEntry() != NPC_KAEL)
                 me->GetMotionMaster()->MovePoint(POINT_ID_LAND, afKaelLandPoint[0], afKaelLandPoint[1], afKaelLandPoint[2]);
         }
 
-        void MovementInform(uint32 uiType, uint32 uiPointId)
+        void MovementInform(uint32 Type, uint32 PointId)
         {
-            if (uiType != POINT_MOTION_TYPE)
+            if (Type != POINT_MOTION_TYPE)
                 return;
 
-            if (uiPointId == POINT_ID_LAND)
-                m_uiTransformTimer = MINUTE*IN_MILLISECONDS;
+            if (PointId == POINT_ID_LAND)
+                TransformTimer = MINUTE*IN_MILLISECONDS;
         }
 
         // some targeting issues with the spell, so use this workaround as temporary solution
         void DoWorkaroundForQuestCredit()
         {
-            Map* pMap = me->GetMap();
+            Map* map = me->GetMap();
 
-            if (!pMap || pMap->IsHeroic())
+            if (!map || map->IsHeroic())
                 return;
 
-            Map::PlayerList const &lList = pMap->GetPlayers();
+            Map::PlayerList const &lList = map->GetPlayers();
 
             if (lList.isEmpty())
                 return;
 
-            SpellInfo const* pSpell = sSpellMgr->GetSpellInfo(SPELL_ORB_KILL_CREDIT);
+            SpellInfo const* spell = sSpellMgr->GetSpellInfo(SPELL_ORB_KILL_CREDIT);
 
             for (Map::PlayerList::const_iterator i = lList.begin(); i != lList.end(); ++i)
             {
                 if (Player* player = i->getSource())
                 {
-                    if (pSpell && pSpell->Effects[0].MiscValue)
-                        player->KilledMonsterCredit(pSpell->Effects[0].MiscValue, 0);
+                    if (spell && spell->Effects[0].MiscValue)
+                        player->KilledMonsterCredit(spell->Effects[0].MiscValue, 0);
                 }
             }
         }
 
-        void UpdateAI(const uint32 uiDiff)
+        void UpdateAI(const uint32 Diff)
         {
-            if (m_uiTransformTimer)
+            if (TransformTimer)
             {
-                if (m_uiTransformTimer <= uiDiff)
+                if (TransformTimer <= Diff)
                 {
                     DoCast(me, SPELL_ORB_KILL_CREDIT, false);
                     DoWorkaroundForQuestCredit();
@@ -164,8 +164,8 @@ public:
                     DoCast(me, SPELL_TRANSFORM_TO_KAEL, false);
                     me->UpdateEntry(NPC_KAEL);
 
-                    m_uiTransformTimer = 0;
-                } else m_uiTransformTimer -= uiDiff;
+                    TransformTimer = 0;
+                } else TransformTimer -= Diff;
             }
         }
     };

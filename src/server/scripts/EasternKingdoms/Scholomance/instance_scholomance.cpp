@@ -43,18 +43,18 @@ class instance_scholomance : public InstanceMapScript
 public:
     instance_scholomance() : InstanceMapScript("instance_scholomance", 289) { }
 
-    InstanceScript* GetInstanceScript(InstanceMap* pMap) const
+    InstanceScript* GetInstanceScript(InstanceMap* map) const
     {
-        return new instance_scholomance_InstanceMapScript(pMap);
+        return new instance_scholomance_InstanceMapScript(map);
     }
 
     struct instance_scholomance_InstanceMapScript : public InstanceScript
     {
-        instance_scholomance_InstanceMapScript(Map* pMap) : InstanceScript(pMap) {}
+        instance_scholomance_InstanceMapScript(Map* map) : InstanceScript(map) {}
 
         //Lord Alexei Barov, Doctor Theolen Krastinov, The Ravenian, Lorekeeper Polkelt, Instructor Malicia and the Lady Illucia Barov.
         bool IsBossDied[6];
-        uint32 m_auiEncounter[MAX_ENCOUNTER];
+        uint32 Encounter[MAX_ENCOUNTER];
 
         uint64 GateKirtonosGUID;
         uint64 GateGandlingGUID;
@@ -67,7 +67,7 @@ public:
 
         void Initialize()
         {
-            memset(&m_auiEncounter, 0, sizeof(m_auiEncounter));
+            memset(&Encounter, 0, sizeof(Encounter));
 
             GateKirtonosGUID = 0;
             GateGandlingGUID = 0;
@@ -120,10 +120,10 @@ public:
                     IsBossDied[5] = true;
                     break;
                 case TYPE_GANDLING:
-                    m_auiEncounter[0] = data;
+                    Encounter[0] = data;
                     break;
                 case TYPE_KIRTONOS:
-                    m_auiEncounter[1] = data;
+                    Encounter[1] = data;
                     break;
             }
         }
@@ -134,7 +134,7 @@ public:
             {
                 if (IsBossDied[0] && IsBossDied[1] && IsBossDied[2] && IsBossDied[3] && IsBossDied[4] && IsBossDied[5])
                 {
-                    m_auiEncounter[0] = IN_PROGRESS;
+                    Encounter[0] = IN_PROGRESS;
                     return IN_PROGRESS;
                 }
             }

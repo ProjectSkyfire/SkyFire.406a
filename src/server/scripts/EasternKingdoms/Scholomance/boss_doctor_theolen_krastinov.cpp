@@ -48,15 +48,15 @@ public:
     {
         boss_theolenkrastinovAI(Creature* c) : ScriptedAI(c) {}
 
-        uint32 m_uiRend_Timer;
-        uint32 m_uiBackhand_Timer;
-        uint32 m_uiFrenzy_Timer;
+        uint32 Rend_Timer;
+        uint32 Backhand_Timer;
+        uint32 Frenzy_Timer;
 
         void Reset()
         {
-            m_uiRend_Timer = 8000;
-            m_uiBackhand_Timer = 9000;
-            m_uiFrenzy_Timer = 1000;
+            Rend_Timer = 8000;
+            Backhand_Timer = 9000;
+            Frenzy_Timer = 1000;
         }
 
         void JustDied(Unit* /*killer*/)
@@ -71,41 +71,41 @@ public:
             }
         }
 
-        void UpdateAI(const uint32 uiDiff)
+        void UpdateAI(const uint32 Diff)
         {
             if (!UpdateVictim())
                 return;
 
             //Rend_Timer
-            if (m_uiRend_Timer <= uiDiff)
+            if (Rend_Timer <= Diff)
             {
                 DoCast(me->getVictim(), SPELL_REND);
-                m_uiRend_Timer = 10000;
+                Rend_Timer = 10000;
             }
             else
-                m_uiRend_Timer -= uiDiff;
+                Rend_Timer -= Diff;
 
             //Backhand_Timer
-            if (m_uiBackhand_Timer <= uiDiff)
+            if (Backhand_Timer <= Diff)
             {
                 DoCast(me->getVictim(), SPELL_BACKHAND);
-                m_uiBackhand_Timer = 10000;
+                Backhand_Timer = 10000;
             }
             else
-                m_uiBackhand_Timer -= uiDiff;
+                Backhand_Timer -= Diff;
 
             //Frenzy_Timer
             if (HealthBelowPct(26))
             {
-                if (m_uiFrenzy_Timer <= uiDiff)
+                if (Frenzy_Timer <= Diff)
                 {
                     DoCast(me, SPELL_FRENZY);
                     DoScriptText(EMOTE_GENERIC_FRENZY_KILL, me);
 
-                    m_uiFrenzy_Timer = 120000;
+                    Frenzy_Timer = 120000;
                 }
                 else
-                    m_uiFrenzy_Timer -= uiDiff;
+                    Frenzy_Timer -= Diff;
             }
 
             DoMeleeAttackIfReady();

@@ -58,9 +58,9 @@ class npc_00x09hl : public CreatureScript
 public:
     npc_00x09hl() : CreatureScript("npc_00x09hl") { }
 
-    bool OnQuestAccept(Player* player, Creature* creature, const Quest* pQuest)
+    bool OnQuestAccept(Player* player, Creature* creature, const Quest* quest)
     {
-        if (pQuest->GetQuestId() == QUEST_RESQUE_OOX_09)
+        if (quest->GetQuestId() == QUEST_RESQUE_OOX_09)
         {
             creature->SetStandState(UNIT_STAND_STATE_STAND);
 
@@ -71,8 +71,8 @@ public:
 
             DoScriptText(SAY_OOX_START, creature, player);
 
-            if (npc_00x09hlAI* pEscortAI = CAST_AI(npc_00x09hl::npc_00x09hlAI, creature->AI()))
-                pEscortAI->Start(false, false, player->GetGUID(), pQuest);
+            if (npc_00x09hlAI* escortAI = CAST_AI(npc_00x09hl::npc_00x09hlAI, creature->AI()))
+                escortAI->Start(false, false, player->GetGUID(), quest);
         }
         return true;
     }
@@ -88,9 +88,9 @@ public:
 
         void Reset() { }
 
-        void WaypointReached(uint32 uiPointId)
+        void WaypointReached(uint32 PointId)
         {
-            switch(uiPointId)
+            switch(PointId)
             {
                 case 26:
                     DoScriptText(SAY_OOX_AMBUSH, me);
@@ -106,9 +106,9 @@ public:
             }
         }
 
-        void WaypointStart(uint32 uiPointId)
+        void WaypointStart(uint32 PointId)
         {
-            switch(uiPointId)
+            switch(PointId)
             {
                 case 27:
                     for (uint8 i = 0; i < 3; ++i)
@@ -171,16 +171,16 @@ enum eRinji
 
 struct Location
 {
-    float m_fX, m_fY, m_fZ;
+    float _fX, _fY, _fZ;
 };
 
-Location m_afAmbushSpawn[] =
+Location _afAmbushSpawn[] =
 {
     {191.296204f, -2839.329346f, 107.388f},
     {70.972466f,  -2848.674805f, 109.459f}
 };
 
-Location m_afAmbushMoveTo[] =
+Location _afAmbushMoveTo[] =
 {
     {166.630386f, -2824.780273f, 108.153f},
     {70.886589f,  -2874.335449f, 116.675f}
@@ -191,15 +191,15 @@ class npc_rinji : public CreatureScript
 public:
     npc_rinji() : CreatureScript("npc_rinji") { }
 
-    bool OnQuestAccept(Player* player, Creature* creature, const Quest* pQuest)
+    bool OnQuestAccept(Player* player, Creature* creature, const Quest* quest)
     {
-        if (pQuest->GetQuestId() == QUEST_RINJI_TRAPPED)
+        if (quest->GetQuestId() == QUEST_RINJI_TRAPPED)
         {
-            if (GameObject* pGo = creature->FindNearestGameObject(GO_RINJI_CAGE, INTERACTION_DISTANCE))
-                pGo->UseDoorOrButton();
+            if (GameObject* go = creature->FindNearestGameObject(GO_RINJI_CAGE, INTERACTION_DISTANCE))
+                go->UseDoorOrButton();
 
-            if (npc_rinjiAI* pEscortAI = CAST_AI(npc_rinji::npc_rinjiAI, creature->AI()))
-                pEscortAI->Start(false, false, player->GetGUID(), pQuest);
+            if (npc_rinjiAI* escortAI = CAST_AI(npc_rinji::npc_rinjiAI, creature->AI()))
+                escortAI->Start(false, false, player->GetGUID(), quest);
         }
         return true;
     }
@@ -213,25 +213,25 @@ public:
     {
         npc_rinjiAI(Creature* creature) : npc_escortAI(creature)
         {
-            m_bIsByOutrunner = false;
-            m_iSpawnId = 0;
+            _bIsByOutrunner = false;
+            _iSpawnId = 0;
         }
 
-        bool m_bIsByOutrunner;
-        uint32 m_uiPostEventCount;
-        uint32 m_uiPostEventTimer;
-        int m_iSpawnId;
+        bool _bIsByOutrunner;
+        uint32 PostEventCount;
+        uint32 PostEventTimer;
+        int _iSpawnId;
 
         void Reset()
         {
-            m_uiPostEventCount = 0;
-            m_uiPostEventTimer = 3000;
+            PostEventCount = 0;
+            PostEventTimer = 3000;
         }
 
         void JustRespawned()
         {
-            m_bIsByOutrunner = false;
-            m_iSpawnId = 0;
+            _bIsByOutrunner = false;
+            _iSpawnId = 0;
 
             npc_escortAI::JustRespawned();
         }
@@ -240,10 +240,10 @@ public:
         {
             if (HasEscortState(STATE_ESCORT_ESCORTING))
             {
-                if (who->GetEntry() == NPC_OUTRUNNER && !m_bIsByOutrunner)
+                if (who->GetEntry() == NPC_OUTRUNNER && !_bIsByOutrunner)
                 {
                     DoScriptText(SAY_RIN_BY_OUTRUNNER, who);
-                    m_bIsByOutrunner = true;
+                    _bIsByOutrunner = true;
                 }
 
                 if (rand()%4)
@@ -257,16 +257,16 @@ public:
         void DoSpawnAmbush(bool bFirst)
         {
             if (!bFirst)
-                m_iSpawnId = 1;
+                _iSpawnId = 1;
 
             me->SummonCreature(NPC_RANGER,
-                m_afAmbushSpawn[m_iSpawnId].m_fX, m_afAmbushSpawn[m_iSpawnId].m_fY, m_afAmbushSpawn[m_iSpawnId].m_fZ, 0.0f,
+                _afAmbushSpawn[_iSpawnId]._fX, _afAmbushSpawn[_iSpawnId]._fY, _afAmbushSpawn[_iSpawnId]._fZ, 0.0f,
                 TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 60000);
 
             for (int i = 0; i < 2; ++i)
             {
                 me->SummonCreature(NPC_OUTRUNNER,
-                    m_afAmbushSpawn[m_iSpawnId].m_fX, m_afAmbushSpawn[m_iSpawnId].m_fY, m_afAmbushSpawn[m_iSpawnId].m_fZ, 0.0f,
+                    _afAmbushSpawn[_iSpawnId]._fX, _afAmbushSpawn[_iSpawnId]._fY, _afAmbushSpawn[_iSpawnId]._fZ, 0.0f,
                     TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 60000);
             }
         }
@@ -274,17 +274,17 @@ public:
         void JustSummoned(Creature* summoned)
         {
             summoned->RemoveUnitMovementFlag(MOVEMENTFLAG_WALKING);
-            summoned->GetMotionMaster()->MovePoint(0, m_afAmbushMoveTo[m_iSpawnId].m_fX, m_afAmbushMoveTo[m_iSpawnId].m_fY, m_afAmbushMoveTo[m_iSpawnId].m_fZ);
+            summoned->GetMotionMaster()->MovePoint(0, _afAmbushMoveTo[_iSpawnId]._fX, _afAmbushMoveTo[_iSpawnId]._fY, _afAmbushMoveTo[_iSpawnId]._fZ);
         }
 
-        void WaypointReached(uint32 uiPointId)
+        void WaypointReached(uint32 PointId)
         {
             Player* player = GetPlayerForEscort();
 
             if (!player)
                 return;
 
-            switch(uiPointId)
+            switch(PointId)
             {
                 case 1:
                     DoScriptText(SAY_RIN_FREE, me, player);
@@ -299,33 +299,33 @@ public:
                     DoScriptText(SAY_RIN_COMPLETE, me, player);
                     player->GroupEventHappens(QUEST_RINJI_TRAPPED, me);
                     SetRun();
-                    m_uiPostEventCount = 1;
+                    PostEventCount = 1;
                     break;
             }
         }
 
-        void UpdateEscortAI(const uint32 uiDiff)
+        void UpdateEscortAI(const uint32 Diff)
         {
             //Check if we have a current target
             if (!UpdateVictim())
             {
-                if (HasEscortState(STATE_ESCORT_ESCORTING) && m_uiPostEventCount)
+                if (HasEscortState(STATE_ESCORT_ESCORTING) && PostEventCount)
                 {
-                    if (m_uiPostEventTimer <= uiDiff)
+                    if (PostEventTimer <= Diff)
                     {
-                        m_uiPostEventTimer = 3000;
+                        PostEventTimer = 3000;
 
                         if (Unit* player = GetPlayerForEscort())
                         {
-                            switch(m_uiPostEventCount)
+                            switch(PostEventCount)
                             {
                                 case 1:
                                     DoScriptText(SAY_RIN_PROGRESS_1, me, player);
-                                    ++m_uiPostEventCount;
+                                    ++PostEventCount;
                                     break;
                                 case 2:
                                     DoScriptText(SAY_RIN_PROGRESS_2, me, player);
-                                    m_uiPostEventCount = 0;
+                                    PostEventCount = 0;
                                     break;
                             }
                         }
@@ -336,7 +336,7 @@ public:
                         }
                     }
                     else
-                        m_uiPostEventTimer -= uiDiff;
+                        PostEventTimer -= Diff;
                 }
 
                 return;

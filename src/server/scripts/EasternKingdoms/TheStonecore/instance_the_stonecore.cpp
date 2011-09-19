@@ -63,29 +63,29 @@ public:
              return false;
         }
 
-        void OnCreatureCreate(Creature* pCreature, bool /*add*/)
+        void OnCreatureCreate(Creature* creature, bool /*add*/)
         {
             Map::PlayerList const &players = instance->GetPlayers();
 
             if (!players.isEmpty())
             {
-                if (Player* pPlayer = players.begin()->getSource())
-                    uiTeamInInstance = pPlayer->GetTeam();
+                if (Player* player = players.begin()->getSource())
+                    uiTeamInInstance = player->GetTeam();
             }
 
-            switch(pCreature->GetEntry())
+            switch(creature->GetEntry())
             {
                 case BOSS_CORBORUS:
-                    uiCorborus = pCreature->GetGUID();
+                    uiCorborus = creature->GetGUID();
                     break;
                 case BOSS_SLABHIDE:
-                    uiSlabhide = pCreature->GetGUID();
+                    uiSlabhide = creature->GetGUID();
                     break;
                 case BOSS_OZRUK:
-                    uiOzruk = pCreature->GetGUID();
+                    uiOzruk = creature->GetGUID();
                     break;
                 case BOSS_HIGH_PRIESTESS_AZIL:
-                    uiHighPriestessAzil = pCreature->GetGUID();
+                    uiHighPriestessAzil = creature->GetGUID();
                     break;
             }
         }

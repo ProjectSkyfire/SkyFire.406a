@@ -22,13 +22,13 @@
 #include "Spell.h"
 
 /*#####
-# item_Defias_Gunpowder
+# ite_Defias_Gunpowder
 #####*/
 
-class item_defias_gunpowder : public ItemScript
+class ite_defias_gunpowder : public ItemScript
 {
 public:
-    item_defias_gunpowder() : ItemScript("item_defias_gunpowder") { }
+    ite_defias_gunpowder() : ItemScript("ite_defias_gunpowder") { }
 
     bool OnUse(Player* player, Item* item, SpellCastTargets const& targets)
     {
@@ -53,5 +53,5 @@ public:
 
 void AddSC_deadmines()
 {
-    new item_defias_gunpowder();
+    new ite_defias_gunpowder();
 }

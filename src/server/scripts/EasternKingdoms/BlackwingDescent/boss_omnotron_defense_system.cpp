@@ -53,7 +53,7 @@ public:
 
         void JustDied(Unit* /*Killer*/) {}
 
-        void UpdateAI(const uint32 uiDiff)
+        void UpdateAI(const uint32 Diff)
         {
             if (!UpdateVictim())
                 return;
@@ -94,7 +94,7 @@ public:
 
         void JustDied(Unit* /*Killer*/) { }
 
-        void UpdateAI(const uint32 uiDiff)
+        void UpdateAI(const uint32 Diff)
         {
             if (!UpdateVictim())
                 return;
@@ -149,18 +149,18 @@ public:
             pInstance->SetData(DATA_OMNOTRON_DEFENSE_SYSTEM, DONE);
         }
 
-        void UpdateAI(const uint32 uiDiff)
+        void UpdateAI(const uint32 Diff)
         {
             if (!UpdateVictim())
                 return;
 
-            if (uiArcaneAnnihilatorTimer <= uiDiff)
+            if (uiArcaneAnnihilatorTimer <= Diff)
             {
                 if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                     me->CastSpell(target, SPELL_ARCANE_ANNIHILATOR, true);
 
                 uiArcaneAnnihilatorTimer = urand(5*IN_MILLISECONDS, 7*IN_MILLISECONDS);
-            } else uiArcaneAnnihilatorTimer -= uiDiff;
+            } else uiArcaneAnnihilatorTimer -= Diff;
 
             DoMeleeAttackIfReady();
         }
@@ -198,7 +198,7 @@ public:
 
         void JustDied(Unit* /*Killer*/) {}
 
-        void UpdateAI(const uint32 uiDiff)
+        void UpdateAI(const uint32 Diff)
         {
             if (!UpdateVictim())
                 return;

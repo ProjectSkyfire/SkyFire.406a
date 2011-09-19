@@ -83,9 +83,7 @@ public:
             Teleport_Timer = 16000;
         }
 
-        void EnterCombat(Unit* /*who*/)
-        {
-        }
+        void EnterCombat(Unit* /*who*/) {}
 
         void JustDied(Unit* /*killer*/)
         {

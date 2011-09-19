@@ -20,19 +20,19 @@
 #include "ScriptPCH.h"
 #include "bastion_of_twilight.h"
 
-class boss_elementium_monstrosity : public CreatureScript
+class boss_elementiu_monstrosity : public CreatureScript
 {
 public:
-    boss_elementium_monstrosity() : CreatureScript("boss_elementium_monstrosity") { }
+    boss_elementiu_monstrosity() : CreatureScript("boss_elementiu_monstrosity") { }
 
     CreatureAI* GetAI(Creature* creature) const
     {
-        return new boss_elementium_monstrosityAI (creature);
+        return new boss_elementiu_monstrosityAI (creature);
     }
 
-    struct boss_elementium_monstrosityAI : public ScriptedAI
+    struct boss_elementiu_monstrosityAI : public ScriptedAI
     {
-        boss_elementium_monstrosityAI(Creature* creature) : ScriptedAI(creature)
+        boss_elementiu_monstrosityAI(Creature* creature) : ScriptedAI(creature)
         {
             pInstance = creature->GetInstanceScript();
         }
@@ -66,5 +66,5 @@ public:
 
 void AddSC_boss_assembly_of_ascendents()
 {
-    new boss_elementium_monstrosity();
+    new boss_elementiu_monstrosity();
 }

@@ -35,7 +35,7 @@ public:
         instance_blackrock_spireMapScript(InstanceMap* map) : InstanceScript(map) {}
 
         uint32 Encounter[MAX_ENCOUNTER];
-        std::string m_strInstData;
+        std::string _strInstData;
         uint64 HighlordOmokk;
         uint64 ShadowHunterVoshgajin;
         uint64 WarMasterVoone;

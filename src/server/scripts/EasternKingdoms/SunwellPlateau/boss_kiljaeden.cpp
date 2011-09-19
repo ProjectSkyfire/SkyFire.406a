@@ -374,19 +374,19 @@ class go_orb_of_the_blue_flight : public GameObjectScript
 public:
     go_orb_of_the_blue_flight() : GameObjectScript("go_orb_of_the_blue_flight") { }
 
-    bool OnGossipHello(Player* player, GameObject* pGo)
+    bool OnGossipHello(Player* player, GameObject* go)
     {
-        if (pGo->GetUInt32Value(GAMEOBJECT_FACTION) == 35)
+        if (go->GetUInt32Value(GAMEOBJECT_FACTION) == 35)
         {
-            InstanceScript* pInstance = pGo->GetInstanceScript();
+            InstanceScript* pInstance = go->GetInstanceScript();
             player->SummonCreature(CREATURE_POWER_OF_THE_BLUE_DRAGONFLIGHT, player->GetPositionX(), player->GetPositionY(), player->GetPositionZ(), 0.0f, TEMPSUMMON_TIMED_DESPAWN, 121000);
             player->CastSpell(player, SPELL_VENGEANCE_OF_THE_BLUE_FLIGHT, false);
-            pGo->SetUInt32Value(GAMEOBJECT_FACTION, 0);
+            go->SetUInt32Value(GAMEOBJECT_FACTION, 0);
 
             if (Creature* pKalec = Unit::GetCreature(*player, pInstance->GetData64(DATA_KALECGOS_KJ)))
                 CAST_AI(boss_kalecgos_kj::boss_kalecgos_kjAI, pKalec->AI())->SetRingOfBlueFlames();
 
-            pGo->Refresh();
+            go->Refresh();
         }
         return true;
     }
@@ -986,14 +986,14 @@ public:
             // Felfire Portal - Creatres a portal, that spawns Volatile Felfire Fiends, which do suicide bombing.
             if (FelfirePortalTimer <= diff)
             {
-                if (Creature* pPortal = DoSpawnCreature(CREATURE_FELFIRE_PORTAL, 0, 0, 0, 0, TEMPSUMMON_TIMED_DESPAWN, 20000))
+                if (Creature* portal = DoSpawnCreature(CREATURE_FELFIRE_PORTAL, 0, 0, 0, 0, TEMPSUMMON_TIMED_DESPAWN, 20000))
                 {
                     std::list<HostileReference*>::iterator itr;
                     for (itr = me->getThreatManager().getThreatList().begin(); itr != me->getThreatManager().getThreatList().end(); ++itr)
                     {
-                        Unit* pUnit = Unit::GetUnit(*me, (*itr)->getUnitGuid());
-                        if (pUnit)
-                            pPortal->AddThreat(pUnit, 1.0f);
+                        Unit* unit = Unit::GetUnit(*me, (*itr)->getUnitGuid());
+                        if (unit)
+                            portal->AddThreat(unit, 1.0f);
                     }
                 }
                 FelfirePortalTimer = 20000;
@@ -1121,17 +1121,17 @@ public:
         mob_armageddonAI(Creature* c) : Scripted_NoMovementAI(c) {}
 
         uint8 spell;
-        uint32 uiTimer;
+        uint32 Timer;
 
         void Reset()
         {
             spell = 0;
-            uiTimer = 0;
+            Timer = 0;
         }
 
         void UpdateAI(const uint32 diff)
         {
-            if (uiTimer <= diff)
+            if (Timer <= diff)
             {
                 switch(spell)
                 {
@@ -1141,20 +1141,20 @@ public:
                         break;
                     case 1:
                         DoCast(me, SPELL_ARMAGEDDON_VISUAL2, true);
-                        uiTimer = 9000;
+                        Timer = 9000;
                         ++spell;
                         break;
                     case 2:
                         DoCast(me, SPELL_ARMAGEDDON_TRIGGER, true);
                         ++spell;
-                        uiTimer = 5000;
+                        Timer = 5000;
                         break;
                     case 3:
                         me->Kill(me);
                         me->RemoveCorpse();
                         break;
                 }
-            } else uiTimer -=diff;
+            } else Timer -=diff;
         }
     };
 };
@@ -1181,7 +1181,7 @@ public:
 
         bool bPointReached;
         bool bClockwise;
-        uint32 uiTimer;
+        uint32 Timer;
         uint32 uiCheckTimer;
         float x, y, r, c, mx, my;
 
@@ -1189,7 +1189,7 @@ public:
         {
             me->AddUnitMovementFlag(MOVEMENTFLAG_LEVITATING);
             bPointReached = true;
-            uiTimer = urand(500, 1000);
+            Timer = urand(500, 1000);
             uiCheckTimer = 1000;
             r = 17;
             c = 0;
@@ -1228,12 +1228,12 @@ public:
                 else uiCheckTimer -= diff;
             }
 
-            if (uiTimer <= diff)
+            if (Timer <= diff)
             {
                 if (Unit* random = Unit::GetUnit(*me, pInstance ? pInstance->GetData64(DATA_PLAYER_GUID) : 0))
                     DoCast(random, SPELL_SHADOW_BOLT, false);
-                uiTimer = urand(500, 1000);
-            } else uiTimer -= diff;
+                Timer = urand(500, 1000);
+            } else Timer -= diff;
         }
 
         void MovementInform(uint32 type, uint32 /*id*/)
@@ -1262,13 +1262,13 @@ public:
         mob_sinster_reflectionAI(Creature* c) : ScriptedAI(c) {}
 
         uint8 victimClass;
-        uint32 uiTimer[3];
+        uint32 Timer[3];
 
         void Reset()
         {
-            uiTimer[0] = 0;
-            uiTimer[1] = 0;
-            uiTimer[2] = 0;
+            Timer[0] = 0;
+            Timer[1] = 0;
+            Timer[2] = 0;
             victimClass = 0;
         }
 
@@ -1308,109 +1308,109 @@ public:
 
             switch(victimClass) {
                 case CLASS_DRUID:
-                    if (uiTimer[1] <= diff)
+                    if (Timer[1] <= diff)
                     {
                         DoCast(me->getVictim(), SPELL_SR_MOONFIRE, false);
-                        uiTimer[1] = urand(2000, 4000);
+                        Timer[1] = urand(2000, 4000);
                     }
                     DoMeleeAttackIfReady();
                     break;
                 case CLASS_HUNTER:
-                    if (uiTimer[1] <= diff)
+                    if (Timer[1] <= diff)
                     {
                         DoCast(me->getVictim(), SPELL_SR_MULTI_SHOT, false);
-                        uiTimer[1] = urand(8000, 10000);
+                        Timer[1] = urand(8000, 10000);
                     }
-                    if (uiTimer[2] <= diff)
+                    if (Timer[2] <= diff)
                     {
                         DoCast(me->getVictim(), SPELL_SR_SHOOT, false);
-                        uiTimer[2] = urand(4000, 6000);
+                        Timer[2] = urand(4000, 6000);
                     }
                     if (me->IsWithinMeleeRange(me->getVictim(), 6))
                     {
-                        if (uiTimer[0] <= diff)
+                        if (Timer[0] <= diff)
                         {
                             DoCast(me->getVictim(), SPELL_SR_MULTI_SHOT, false);
-                            uiTimer[0] = urand(6000, 8000);
+                            Timer[0] = urand(6000, 8000);
                         }
                         DoMeleeAttackIfReady();
                     }
                     break;
                 case CLASS_MAGE:
-                    if (uiTimer[1] <= diff)
+                    if (Timer[1] <= diff)
                     {
                         DoCast(me->getVictim(), SPELL_SR_FIREBALL, false);
-                        uiTimer[1] = urand(2000, 4000);
+                        Timer[1] = urand(2000, 4000);
                     }
                     DoMeleeAttackIfReady();
                     break;
                 case CLASS_WARLOCK:
-                    if (uiTimer[1] <= diff)
+                    if (Timer[1] <= diff)
                     {
                         DoCast(me->getVictim(), SPELL_SR_SHADOW_BOLT, false);
-                        uiTimer[1] = urand(3000, 5000);
+                        Timer[1] = urand(3000, 5000);
                     }
-                    if (uiTimer[2] <= diff)
+                    if (Timer[2] <= diff)
                     {
                         DoCast(SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true), SPELL_SR_CURSE_OF_AGONY, true);
-                        uiTimer[2] = urand(2000, 4000);
+                        Timer[2] = urand(2000, 4000);
                     }
                     DoMeleeAttackIfReady();
                     break;
                 case CLASS_WARRIOR:
-                    if (uiTimer[1] <= diff)
+                    if (Timer[1] <= diff)
                     {
                         DoCast(me->getVictim(), SPELL_SR_WHIRLWIND, false);
-                        uiTimer[1] = urand(9000, 11000);
+                        Timer[1] = urand(9000, 11000);
                     }
                     DoMeleeAttackIfReady();
                     break;
                 case CLASS_PALADIN:
-                    if (uiTimer[1] <= diff)
+                    if (Timer[1] <= diff)
                     {
                         DoCast(me->getVictim(), SPELL_SR_HAMMER_OF_JUSTICE, false);
-                        uiTimer[1] = urand(6000, 8000);
+                        Timer[1] = urand(6000, 8000);
                     }
-                    if (uiTimer[2] <= diff)
+                    if (Timer[2] <= diff)
                     {
                         DoCast(me->getVictim(), SPELL_SR_HOLY_SHOCK, false);
-                        uiTimer[2] = urand(2000, 4000);
+                        Timer[2] = urand(2000, 4000);
                     }
                     DoMeleeAttackIfReady();
                     break;
                 case CLASS_PRIEST:
-                    if (uiTimer[1] <= diff)
+                    if (Timer[1] <= diff)
                     {
                         DoCast(me->getVictim(), SPELL_SR_HOLY_SMITE, false);
-                        uiTimer[1] = urand(4000, 6000);
+                        Timer[1] = urand(4000, 6000);
                     }
-                    if (uiTimer[2] <= diff)
+                    if (Timer[2] <= diff)
                     {
                         DoCast(me, SPELL_SR_RENEW, false);
-                        uiTimer[2] = urand(6000, 8000);
+                        Timer[2] = urand(6000, 8000);
                     }
                     DoMeleeAttackIfReady();
                     break;
                 case CLASS_SHAMAN:
-                    if (uiTimer[1] <= diff)
+                    if (Timer[1] <= diff)
                     {
                         DoCast(me->getVictim(), SPELL_SR_EARTH_SHOCK, false);
-                        uiTimer[1] = urand(4000, 6000);
+                        Timer[1] = urand(4000, 6000);
                     }
                     DoMeleeAttackIfReady();
                     break;
                 case CLASS_ROGUE:
-                    if (uiTimer[1] <= diff)
+                    if (Timer[1] <= diff)
                     {
                         DoCast(me->getVictim(), SPELL_SR_HEMORRHAGE, true);
-                        uiTimer[1] = urand(4000, 6000);
+                        Timer[1] = urand(4000, 6000);
                     }
                     DoMeleeAttackIfReady();
                     break;
                 }
                 sLog->outDebug(LOG_FILTER_TSCR, "Sinister-Timer");
                 for (uint8 i = 0; i < 3; ++i)
-                    uiTimer[i] -= diff;
+                    Timer[i] -= diff;
             }
     };
 };

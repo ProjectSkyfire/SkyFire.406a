@@ -55,7 +55,7 @@ class boss_jindo : public CreatureScript
         {
             boss_jindoAI(Creature* c) : ScriptedAI(c) {}
 
-            uint32 BrainWashTotem_Timer;
+            uint32 BrainWashTote_Timer;
             uint32 HealingWard_Timer;
             uint32 Hex_Timer;
             uint32 Delusions_Timer;
@@ -63,7 +63,7 @@ class boss_jindo : public CreatureScript
 
             void Reset()
             {
-                BrainWashTotem_Timer = 20000;
+                BrainWashTote_Timer = 20000;
                 HealingWard_Timer = 16000;
                 Hex_Timer = 8000;
                 Delusions_Timer = 10000;
@@ -80,12 +80,12 @@ class boss_jindo : public CreatureScript
                 if (!UpdateVictim())
                     return;
 
-                //BrainWashTotem_Timer
-                if (BrainWashTotem_Timer <= diff)
+                //BrainWashTote_Timer
+                if (BrainWashTote_Timer <= diff)
                 {
                     DoCast(me, SPELL_BRAINWASHTOTEM);
-                    BrainWashTotem_Timer = 18000 + rand()%8000;
-                } else BrainWashTotem_Timer -= diff;
+                    BrainWashTote_Timer = 18000 + rand()%8000;
+                } else BrainWashTote_Timer -= diff;
 
                 //HealingWard_Timer
                 if (HealingWard_Timer <= diff)

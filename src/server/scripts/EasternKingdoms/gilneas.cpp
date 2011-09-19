@@ -75,22 +75,22 @@ enum eGilneasCityPhase2
 };
 
 /*######
-## npc_prince_liam_greymane_phase1
+## npc_prince_lia_greymane_phase1
 ######*/
 
-class npc_prince_liam_greymane_phase1 : public CreatureScript
+class npc_prince_lia_greymane_phase1 : public CreatureScript
 {
 public:
-    npc_prince_liam_greymane_phase1() : CreatureScript("npc_prince_liam_greymane_phase1") { }
+    npc_prince_lia_greymane_phase1() : CreatureScript("npc_prince_lia_greymane_phase1") { }
 
     CreatureAI* GetAI(Creature* creature) const
     {
-        return new npc_prince_liam_greymane_phase1AI (creature);
+        return new npc_prince_lia_greymane_phase1AI (creature);
     }
 
-    struct npc_prince_liam_greymane_phase1AI : public ScriptedAI
+    struct npc_prince_lia_greymane_phase1AI : public ScriptedAI
     {
-        npc_prince_liam_greymane_phase1AI(Creature *c) : ScriptedAI(c) {}
+        npc_prince_lia_greymane_phase1AI(Creature *c) : ScriptedAI(c) {}
 
         uint32 tSay; //Time left for say
         uint32 cSay; //Current Say
@@ -278,10 +278,10 @@ public:
 
             for (uint8 i = 0; i < PATHS_COUNT_PANICKED_CITIZEN; i ++)
             {
-                Field* pFields = result[i]->Fetch();
-                waypoints[i].pathID = pFields[0].GetUInt32();
-                waypoints[i].x = pFields[1].GetFloat();
-                waypoints[i].y = pFields[2].GetFloat();
+                Field* Fields = result[i]->Fetch();
+                waypoints[i].pathID = Fields[0].GetUInt32();
+                waypoints[i].x = Fields[1].GetFloat();
+                waypoints[i].y = Fields[2].GetFloat();
             }
         }
 
@@ -456,7 +456,7 @@ public:
             tSeek = urand(1000, 2000);
         }
 
-        void DamageTaken(Unit * who, uint32 &uiDamage)
+        void DamageTaken(Unit * who, uint32 &Damage)
         {
             if (who->GetTypeId() == TYPEID_PLAYER)
             {
@@ -524,22 +524,22 @@ public:
 };
 
 /*######
-## npc_prince_liam_greymane_phase2
+## npc_prince_lia_greymane_phase2
 ######*/
 
-class npc_prince_liam_greymane_phase2 : public CreatureScript
+class npc_prince_lia_greymane_phase2 : public CreatureScript
 {
 public:
-    npc_prince_liam_greymane_phase2() : CreatureScript("npc_prince_liam_greymane_phase2") { }
+    npc_prince_lia_greymane_phase2() : CreatureScript("npc_prince_lia_greymane_phase2") { }
 
     CreatureAI* GetAI(Creature* creature) const
     {
-        return new npc_prince_liam_greymane_phase2AI (creature);
+        return new npc_prince_lia_greymane_phase2AI (creature);
     }
 
-    struct npc_prince_liam_greymane_phase2AI : public ScriptedAI
+    struct npc_prince_lia_greymane_phase2AI : public ScriptedAI
     {
-        npc_prince_liam_greymane_phase2AI(Creature *c) : ScriptedAI(c) {}
+        npc_prince_lia_greymane_phase2AI(Creature *c) : ScriptedAI(c) {}
 
         uint32 tAnimate, tSound, dmgCount, tYell, tSeek;
         bool playSnd, doYell;
@@ -561,7 +561,7 @@ public:
                 player->SetAuraStack(SPELL_PHASE_4, player, 1); //phaseshift
         }
 
-        void DamageTaken(Unit * who, uint32 &uiDamage)
+        void DamageTaken(Unit * who, uint32 &Damage)
         {
             if (who->GetTypeId() == TYPEID_PLAYER)
             {
@@ -704,7 +704,7 @@ public:
                 dmgCount ++;
         }
 
-        void DamageTaken(Unit * who, uint32 &uiDamage)
+        void DamageTaken(Unit * who, uint32 &Damage)
         {
             if (who->GetTypeId() == TYPEID_PLAYER)
             {
@@ -844,27 +844,27 @@ public:
     bool opened;
     uint8 spawnKind;
     Player* aPlayer;
-    GameObject* pGO;
+    GameObject* go;
 
-    bool OnGossipHello(Player *player, GameObject *pGO)
+    bool OnGossipHello(Player *player, GameObject *go)
     {
         if (player->GetQuestStatus(QUEST_EVAC_MERC_SQUA) == QUEST_STATUS_INCOMPLETE)
         {
             aPlayer = player;
             opened = 1;
             tQuestCredit = 2500;
-            pGO->Use(player);
+            go->Use(player);
             spawnKind = urand(1, 3); //1,2=citizen, 3=citizen&worgen (66%,33%)
-            angle=pGO->GetOrientation();
-            x=pGO->GetPositionX()-cos(angle)*2;
-            y=pGO->GetPositionY()-sin(angle)*2;
-            z=pGO->GetPositionZ();
+            angle=go->GetOrientation();
+            x=go->GetPositionX()-cos(angle)*2;
+            y=go->GetPositionY()-sin(angle)*2;
+            z=go->GetPositionZ();
             wx = x-cos(angle)*2;
             wy = y-sin(angle)*2;
 
             if (spawnKind < 3)
             {
-                if (Creature *spawnedCreature = pGO->SummonCreature(NPC_FRIGHTENED_CITIZEN_1,x,y,z,angle,TEMPSUMMON_TIMED_DESPAWN,SUMMON1_TTL))
+                if (Creature *spawnedCreature = go->SummonCreature(NPC_FRIGHTENED_CITIZEN_1,x,y,z,angle,TEMPSUMMON_TIMED_DESPAWN,SUMMON1_TTL))
                 {
                     spawnedCreature->SetPhaseMask(6, 1);
                     spawnedCreature->Respawn(1);
@@ -872,7 +872,7 @@ public:
             }
             else
             {
-                if (Creature *spawnedCreature = pGO->SummonCreature(NPC_FRIGHTENED_CITIZEN_2,x,y,z,angle,TEMPSUMMON_TIMED_DESPAWN,SUMMON1_TTL))
+                if (Creature *spawnedCreature = go->SummonCreature(NPC_FRIGHTENED_CITIZEN_2,x,y,z,angle,TEMPSUMMON_TIMED_DESPAWN,SUMMON1_TTL))
                 {
                     spawnedCreature->SetPhaseMask(6, 1);
                     spawnedCreature->Respawn(1);
@@ -883,7 +883,7 @@ public:
         return false;
     }
 
-    void OnUpdate(GameObject *pGO, uint32 diff)
+    void OnUpdate(GameObject *go, uint32 diff)
     {
         if (opened == 1)
         {
@@ -893,7 +893,7 @@ public:
                 aPlayer->KilledMonsterCredit(35830, 0);
                 if (spawnKind == 3)
                 {
-                    if (Creature *spawnedCreature = pGO->SummonCreature(NPC_RAMPAGING_WORGEN_2,wx,wy,z,angle,TEMPSUMMON_TIMED_DESPAWN,SUMMON1_TTL))
+                    if (Creature *spawnedCreature = go->SummonCreature(NPC_RAMPAGING_WORGEN_2,wx,wy,z,angle,TEMPSUMMON_TIMED_DESPAWN,SUMMON1_TTL))
                     {
                         spawnedCreature->SetPhaseMask(6, 1);
                         spawnedCreature->Respawn(1);
@@ -990,9 +990,9 @@ public:
                 j = 0;
                 do
                 {
-                    Field* pFields = result[i]->Fetch();
-                    paths.paths[i][j].x = pFields[2].GetFloat();
-                    paths.paths[i][j].y = pFields[3].GetFloat();
+                    Field* Fields = result[i]->Fetch();
+                    paths.paths[i][j].x = Fields[2].GetFloat();
+                    paths.paths[i][j].y = Fields[3].GetFloat();
                     j++;
                 }
                 while (result[i]->NextRow());
@@ -1113,7 +1113,7 @@ public:
         {
             CAST_AI(npc_lord_darius_crowley::npc_lord_darius_crowleyAI, creature->AI())->in_progress = true;
             CAST_AI(npc_lord_darius_crowley::npc_lord_darius_crowleyAI, creature->AI())->phase = 1;
-            CAST_AI(npc_lord_darius_crowley::npc_lord_darius_crowleyAI, creature->AI())->m_player = player;
+            CAST_AI(npc_lord_darius_crowley::npc_lord_darius_crowleyAI, creature->AI())->_player = player;
             creature->CastSpell(player, 66914, true);
         }
         return true;
@@ -1132,7 +1132,7 @@ public:
         uint32 phaseTime;
         bool in_progress;
         SummonList Summons;
-        Player* m_player;
+        Player* _player;
 
         void Reset()
         {
@@ -1140,7 +1140,7 @@ public:
             phaseTime = 15000;
             Summons.DespawnAll();
             in_progress = false;
-            m_player = NULL;
+            _player = NULL;
             me->CastSpell(me, 67503, true);
         }
 
@@ -1151,7 +1151,7 @@ public:
 
         void JustSummoned(Creature *summoned)
         {
-            summoned->AI()->AttackStart(m_player);
+            summoned->AI()->AttackStart(_player);
             Summons.Summon(summoned);
         }
 
@@ -1162,10 +1162,10 @@ public:
 
         void JustDied(Unit* /*killer*/)
         {
-            if (m_player)
+            if (_player)
             {
-                m_player->RemoveAurasDueToSpell(59073);
-                m_player->FailQuest(66914);
+                _player->RemoveAurasDueToSpell(59073);
+                _player->FailQuest(66914);
             }
         }
 
@@ -1383,8 +1383,8 @@ void AddSC_gilneas()
 {
     new npc_gilneas_city_guard_phase1();
     new npc_gilneas_city_guard_phase2();
-    new npc_prince_liam_greymane_phase1();
-    new npc_prince_liam_greymane_phase2();
+    new npc_prince_lia_greymane_phase1();
+    new npc_prince_lia_greymane_phase2();
     new npc_rampaging_worgen();
     new npc_rampaging_worgen2();
     new go_merchant_square_door();

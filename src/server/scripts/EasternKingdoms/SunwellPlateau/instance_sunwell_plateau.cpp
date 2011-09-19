@@ -43,16 +43,16 @@ class instance_sunwell_plateau : public InstanceMapScript
 public:
     instance_sunwell_plateau() : InstanceMapScript("instance_sunwell_plateau", 580) { }
 
-    InstanceScript* GetInstanceScript(InstanceMap* pMap) const
+    InstanceScript* GetInstanceScript(InstanceMap* map) const
     {
-        return new instance_sunwell_plateau_InstanceMapScript(pMap);
+        return new instance_sunwell_plateau_InstanceMapScript(map);
     }
 
     struct instance_sunwell_plateau_InstanceMapScript : public InstanceScript
     {
-        instance_sunwell_plateau_InstanceMapScript(Map* pMap) : InstanceScript(pMap) {}
+        instance_sunwell_plateau_InstanceMapScript(Map* map) : InstanceScript(map) {}
 
-        uint32 m_auiEncounter[MAX_ENCOUNTER];
+        uint32 Encounter[MAX_ENCOUNTER];
 
         /** Creatures **/
         uint64 Kalecgos_Dragon;
@@ -82,7 +82,7 @@ public:
 
         void Initialize()
         {
-            memset(&m_auiEncounter, 0, sizeof(m_auiEncounter));
+            memset(&Encounter, 0, sizeof(Encounter));
 
             /*** Creatures ***/
             Kalecgos_Dragon         = 0;
@@ -115,7 +115,7 @@ public:
         bool IsEncounterInProgress() const
         {
             for (uint8 i = 0; i < MAX_ENCOUNTER; ++i)
-                if (m_auiEncounter[i] == IN_PROGRESS)
+                if (Encounter[i] == IN_PROGRESS)
                     return true;
 
             return false;
@@ -167,13 +167,13 @@ public:
                 case 188523: KalecgosWall[0] = go->GetGUID(); break;
                 case 188524: KalecgosWall[0] = go->GetGUID(); break;
                 case 188075:
-                    if (m_auiEncounter[2] == DONE)
+                    if (Encounter[2] == DONE)
                         HandleGameObject(0, true, go);
                     FireBarrier = go->GetGUID();
                     break;
                 case 187990: MurusGate[0]   = go->GetGUID(); break;
                 case 188118:
-                    if (m_auiEncounter[4] == DONE)
+                    if (Encounter[4] == DONE)
                         HandleGameObject(0, true, go);
                     MurusGate[1]= go->GetGUID();
                     break;
@@ -184,12 +184,12 @@ public:
         {
             switch(id)
             {
-                case DATA_KALECGOS_EVENT:     return m_auiEncounter[0];
-                case DATA_BRUTALLUS_EVENT:    return m_auiEncounter[1];
-                case DATA_FELMYST_EVENT:      return m_auiEncounter[2];
-                case DATA_EREDAR_TWINS_EVENT: return m_auiEncounter[3];
-                case DATA_MURU_EVENT:         return m_auiEncounter[4];
-                case DATA_KILJAEDEN_EVENT:    return m_auiEncounter[5];
+                case DATA_KALECGOS_EVENT:     return Encounter[0];
+                case DATA_BRUTALLUS_EVENT:    return Encounter[1];
+                case DATA_FELMYST_EVENT:      return Encounter[2];
+                case DATA_EREDAR_TWINS_EVENT: return Encounter[3];
+                case DATA_MURU_EVENT:         return Encounter[4];
+                case DATA_KILJAEDEN_EVENT:    return Encounter[5];
             }
             return 0;
         }
@@ -237,15 +237,15 @@ public:
                             HandleGameObject(KalecgosWall[0], false);
                             HandleGameObject(KalecgosWall[1], false);
                         }
-                        m_auiEncounter[0] = data;
+                        Encounter[0] = data;
                     }
                     break;
-                case DATA_BRUTALLUS_EVENT:     m_auiEncounter[1] = data; break;
+                case DATA_BRUTALLUS_EVENT:     Encounter[1] = data; break;
                 case DATA_FELMYST_EVENT:
                     if (data == DONE)
                         HandleGameObject(FireBarrier, true);
-                    m_auiEncounter[2] = data; break;
-                case DATA_EREDAR_TWINS_EVENT:  m_auiEncounter[3] = data; break;
+                    Encounter[2] = data; break;
+                case DATA_EREDAR_TWINS_EVENT:  Encounter[3] = data; break;
                 case DATA_MURU_EVENT:
                     switch(data)
                     {
@@ -262,8 +262,8 @@ public:
                             HandleGameObject(MurusGate[1], false);
                             break;
                     }
-                    m_auiEncounter[4] = data; break;
-                case DATA_KILJAEDEN_EVENT:     m_auiEncounter[5] = data; break;
+                    Encounter[4] = data; break;
+                case DATA_KILJAEDEN_EVENT:     Encounter[5] = data; break;
             }
 
             if (data == DONE)
@@ -274,8 +274,8 @@ public:
         {
             OUT_SAVE_INST_DATA;
             std::ostringstream stream;
-            stream << m_auiEncounter[0] << ' '  << m_auiEncounter[1] << ' '  << m_auiEncounter[2] << ' '  << m_auiEncounter[3] << ' '
-                << m_auiEncounter[4] << ' '  << m_auiEncounter[5];
+            stream << Encounter[0] << ' '  << Encounter[1] << ' '  << Encounter[2] << ' '  << Encounter[3] << ' '
+                << Encounter[4] << ' '  << Encounter[5];
             char* out = new char[stream.str().length() + 1];
             strcpy(out, stream.str().c_str());
             if (out)
@@ -296,11 +296,11 @@ public:
 
             OUT_LOAD_INST_DATA(in);
             std::istringstream stream(in);
-            stream >> m_auiEncounter[0] >> m_auiEncounter[1] >> m_auiEncounter[2] >> m_auiEncounter[3]
-                >> m_auiEncounter[4] >> m_auiEncounter[5];
+            stream >> Encounter[0] >> Encounter[1] >> Encounter[2] >> Encounter[3]
+                >> Encounter[4] >> Encounter[5];
             for (uint8 i = 0; i < MAX_ENCOUNTER; ++i)
-                if (m_auiEncounter[i] == IN_PROGRESS)                // Do not load an encounter as "In Progress" - reset it instead.
-                    m_auiEncounter[i] = NOT_STARTED;
+                if (Encounter[i] == IN_PROGRESS)                // Do not load an encounter as "In Progress" - reset it instead.
+                    Encounter[i] = NOT_STARTED;
             OUT_LOAD_INST_DATA_COMPLETE;
         }
     };

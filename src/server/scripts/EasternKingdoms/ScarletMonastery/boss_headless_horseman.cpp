@@ -502,10 +502,10 @@ public:
 
         Player* SelectRandomPlayer(float range = 0.0f, bool checkLoS = true)
         {
-            Map* pMap = me->GetMap();
-            if (!pMap->IsDungeon()) return NULL;
+            Map* map = me->GetMap();
+            if (!map->IsDungeon()) return NULL;
 
-            Map::PlayerList const &PlayerList = pMap->GetPlayers();
+            Map::PlayerList const &PlayerList = map->GetPlayers();
             Map::PlayerList::const_iterator i;
             if (PlayerList.isEmpty()) return NULL;
 
@@ -568,9 +568,9 @@ public:
                 std::list<HostileReference*>::const_iterator itr;
                 for (itr = caster->getThreatManager().getThreatList().begin(); itr != caster->getThreatManager().getThreatList().end(); ++itr)
                 {
-                    Unit* pUnit = Unit::GetUnit((*me), (*itr)->getUnitGuid());
-                    if (pUnit && pUnit->isAlive() && pUnit != caster)
-                        me->AddThreat(pUnit, caster->getThreatManager().getThreat(pUnit));
+                    Unit* unit = Unit::GetUnit((*me), (*itr)->getUnitGuid());
+                    if (unit && unit->isAlive() && unit != caster)
+                        me->AddThreat(unit, caster->getThreatManager().getThreat(unit));
                 }
             }
         }

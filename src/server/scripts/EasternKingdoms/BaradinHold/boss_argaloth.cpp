@@ -40,9 +40,9 @@ class boss_argaloth: public CreatureScript
 
     struct boss_argalothAI: public BossAI
     {
-        boss_argalothAI(Creature* pCreature) : BossAI(pCreature, DATA_ARGALOTH) { }
+        boss_argalothAI(Creature* creature) : BossAI(creature, DATA_ARGALOTH) { }
 
-        uint32 fel_firestorm_casted;
+        uint32 fel_firestor_casted;
 
         void Reset()
         {
@@ -51,7 +51,7 @@ class boss_argaloth: public CreatureScript
             events.ScheduleEvent(EVENT_BERSERK, 300 *IN_MILLISECONDS);
             events.ScheduleEvent(EVENT_CONSUMING_DARKNESS, 14 *IN_MILLISECONDS);
             events.ScheduleEvent(EVENT_METEOR_SLASH, 10 *IN_MILLISECONDS);
-            fel_firestorm_casted = 0;
+            fel_firestor_casted = 0;
         }
 
         void UpdateAI(const uint32 diff)
@@ -59,17 +59,17 @@ class boss_argaloth: public CreatureScript
             if (!UpdateVictim())
                 return;
 
-            if (me->GetHealthPct() < 66 && fel_firestorm_casted == 0)
+            if (me->GetHealthPct() < 66 && fel_firestor_casted == 0)
             {
                 DoCast(SPELL_FEL_FIRESTORM);
                 events.DelayEvents(3 *IN_MILLISECONDS);
-                fel_firestorm_casted = 1;
+                fel_firestor_casted = 1;
             }
-            if (me->GetHealthPct() < 33 && fel_firestorm_casted == 1)
+            if (me->GetHealthPct() < 33 && fel_firestor_casted == 1)
             {
                 DoCast(SPELL_FEL_FIRESTORM);
                 events.DelayEvents(3 *IN_MILLISECONDS);
-                fel_firestorm_casted = 2;
+                fel_firestor_casted = 2;
             }
 
             events.Update(diff);
@@ -99,9 +99,9 @@ class boss_argaloth: public CreatureScript
         }
      };
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new boss_argalothAI(pCreature);
+        return new boss_argalothAI(creature);
     }
 };
 

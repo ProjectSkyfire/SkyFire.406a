@@ -75,10 +75,10 @@ class boss_victor_nefarius : public CreatureScript
 public:
     boss_victor_nefarius() : CreatureScript("boss_victor_nefarius") { }
 
-    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*uiSender*/, uint32 uiAction)
+    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*uiSender*/, uint32 Action)
     {
         player->PlayerTalkClass->ClearMenus();
-        switch (uiAction)
+        switch (Action)
         {
             case GOSSIP_ACTION_INFO_DEF+1:
                 player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_2, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+2);
@@ -250,7 +250,7 @@ public:
 
         void MoveInLineOfSight(Unit* who)
         {
-            //We simply use this function to find players until we can use pMap->GetPlayers()
+            //We simply use this function to find players until we can use map->GetPlayers()
 
             if (who && who->GetTypeId() == TYPEID_PLAYER && me->IsHostileTo(who))
             {

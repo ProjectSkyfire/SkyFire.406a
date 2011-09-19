@@ -39,14 +39,14 @@ class instance_scarlet_monastery : public InstanceMapScript
 public:
     instance_scarlet_monastery() : InstanceMapScript("instance_scarlet_monastery", 189) { }
 
-    InstanceScript* GetInstanceScript(InstanceMap* pMap) const
+    InstanceScript* GetInstanceScript(InstanceMap* map) const
     {
-        return new instance_scarlet_monastery_InstanceMapScript(pMap);
+        return new instance_scarlet_monastery_InstanceMapScript(map);
     }
 
     struct instance_scarlet_monastery_InstanceMapScript : public InstanceScript
     {
-        instance_scarlet_monastery_InstanceMapScript(Map* pMap) : InstanceScript(pMap) {}
+        instance_scarlet_monastery_InstanceMapScript(Map* map) : InstanceScript(map) {}
 
         uint64 PumpkinShrineGUID;
         uint64 HorsemanGUID;
@@ -58,11 +58,11 @@ public:
         uint64 VorrelGUID;
         uint64 DoorHighInquisitorGUID;
 
-        uint32 m_auiEncounter[MAX_ENCOUNTER];
+        uint32 Encounter[MAX_ENCOUNTER];
 
         void Initialize()
         {
-            memset(&m_auiEncounter, 0, sizeof(m_auiEncounter));
+            memset(&Encounter, 0, sizeof(Encounter));
 
             PumpkinShrineGUID  = 0;
             HorsemanGUID = 0;
@@ -107,13 +107,13 @@ public:
                 if (data == FAIL)
                     DoUseDoorOrButton(DoorHighInquisitorGUID);
 
-                m_auiEncounter[0] = data;
+                Encounter[0] = data;
                 break;
             case GAMEOBJECT_PUMPKIN_SHRINE:
                 HandleGameObject(PumpkinShrineGUID, false);
                 break;
             case DATA_HORSEMAN_EVENT:
-                m_auiEncounter[1] = data;
+                Encounter[1] = data;
                 if (data == DONE)
                 {
                     for (std::set<uint64>::const_iterator itr = HorsemanAdds.begin(); itr != HorsemanAdds.end(); ++itr)
@@ -147,9 +147,9 @@ public:
         uint32 GetData(uint32 type)
         {
             if (type == TYPE_MOGRAINE_AND_WHITE_EVENT)
-                return m_auiEncounter[0];
+                return Encounter[0];
             if (type == DATA_HORSEMAN_EVENT)
-                return m_auiEncounter[1];
+                return Encounter[1];
             return 0;
         }
     };

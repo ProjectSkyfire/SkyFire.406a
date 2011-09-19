@@ -77,40 +77,40 @@ public:
             pInstance->SetData(DATA_MALORIAK, DONE);
         }
 
-        void UpdateAI(const uint32 uiDiff)
+        void UpdateAI(const uint32 Diff)
         {
             if (!UpdateVictim())
                 return;
 
-            if (uiConsumingFlames <= uiDiff)
+            if (uiConsumingFlames <= Diff)
             {
                 if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                     me->CastSpell(target, SPELL_CONSUMING_FLAMES, true);
 
                 uiConsumingFlames = urand(10*IN_MILLISECONDS, 12*IN_MILLISECONDS);
-            } else uiConsumingFlames -= uiDiff;
+            } else uiConsumingFlames -= Diff;
 
-            if (uiArcaneStorm <= uiDiff)
+            if (uiArcaneStorm <= Diff)
             {
                 if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                     me->CastSpell(target, SPELL_ARCANE_STORM, true);
 
                 uiArcaneStorm = urand(15*IN_MILLISECONDS, 17*IN_MILLISECONDS);
-            } else uiArcaneStorm -= uiDiff;
+            } else uiArcaneStorm -= Diff;
 
-            if (uiScorchingBlast <= uiDiff)
+            if (uiScorchingBlast <= Diff)
             {
                 me->CastSpell(me->getVictim(), SPELL_SCORCHING_BLAST, true);
 
                 uiScorchingBlast = urand(120*IN_MILLISECONDS, 130*IN_MILLISECONDS);
-            } else uiScorchingBlast -= uiDiff;
+            } else uiScorchingBlast -= Diff;
 
-            if (uiRemedy <= uiDiff)
+            if (uiRemedy <= Diff)
             {
                 me->CastSpell(me, SPELL_REMEDY, true);
 
                 uiRemedy = urand(30*IN_MILLISECONDS, 32*IN_MILLISECONDS);
-            } else uiRemedy -= uiDiff;
+            } else uiRemedy -= Diff;
 
             DoMeleeAttackIfReady();
         }

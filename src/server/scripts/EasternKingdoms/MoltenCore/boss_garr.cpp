@@ -54,9 +54,7 @@ class boss_garr : public CreatureScript
 
         struct boss_garrAI : public BossAI
         {
-            boss_garrAI(Creature* creature) : BossAI(creature, BOSS_GARR)
-            {
-            }
+            boss_garrAI(Creature* creature) : BossAI(creature, BOSS_GARR) {}
 
             void EnterCombat(Unit* victim)
             {

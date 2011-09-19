@@ -41,16 +41,16 @@ class instance_magisters_terrace : public InstanceMapScript
 public:
     instance_magisters_terrace() : InstanceMapScript("instance_magisters_terrace", 585) { }
 
-    InstanceScript* GetInstanceScript(InstanceMap* pMap) const
+    InstanceScript* GetInstanceScript(InstanceMap* map) const
     {
-        return new instance_magisters_terrace_InstanceMapScript(pMap);
+        return new instance_magisters_terrace_InstanceMapScript(map);
     }
 
     struct instance_magisters_terrace_InstanceMapScript : public InstanceScript
     {
-        instance_magisters_terrace_InstanceMapScript(Map* pMap) : InstanceScript(pMap) {}
+        instance_magisters_terrace_InstanceMapScript(Map* map) : InstanceScript(map) {}
 
-        uint32 m_auiEncounter[MAX_ENCOUNTER];
+        uint32 Encounter[MAX_ENCOUNTER];
         uint32 DelrissaDeathCount;
 
         std::list<uint64> FelCrystals;
@@ -69,7 +69,7 @@ public:
 
         void Initialize()
         {
-            memset(&m_auiEncounter, 0, sizeof(m_auiEncounter));
+            memset(&Encounter, 0, sizeof(Encounter));
 
             FelCrystals.clear();
 
@@ -91,7 +91,7 @@ public:
         bool IsEncounterInProgress() const
         {
             for (uint8 i = 0; i < MAX_ENCOUNTER; ++i)
-                if (m_auiEncounter[i] == IN_PROGRESS)
+                if (Encounter[i] == IN_PROGRESS)
                     return true;
             return false;
         }
@@ -100,10 +100,10 @@ public:
         {
             switch(identifier)
             {
-                case DATA_SELIN_EVENT:          return m_auiEncounter[0];
-                case DATA_VEXALLUS_EVENT:       return m_auiEncounter[1];
-                case DATA_DELRISSA_EVENT:       return m_auiEncounter[2];
-                case DATA_KAELTHAS_EVENT:       return m_auiEncounter[3];
+                case DATA_SELIN_EVENT:          return Encounter[0];
+                case DATA_VEXALLUS_EVENT:       return Encounter[1];
+                case DATA_DELRISSA_EVENT:       return Encounter[2];
+                case DATA_KAELTHAS_EVENT:       return Encounter[3];
                 case DATA_DELRISSA_DEATH_COUNT: return DelrissaDeathCount;
                 case DATA_FEL_CRYSTAL_SIZE:     return FelCrystals.size();
             }
@@ -114,20 +114,20 @@ public:
         {
             switch(identifier)
             {
-                case DATA_SELIN_EVENT:       m_auiEncounter[0] = data;  break;
+                case DATA_SELIN_EVENT:       Encounter[0] = data;  break;
                 case DATA_VEXALLUS_EVENT:
                     if (data == DONE)
                         DoUseDoorOrButton(VexallusDoorGUID);
-                    m_auiEncounter[1] = data;
+                    Encounter[1] = data;
                     break;
                 case DATA_DELRISSA_EVENT:
                     if (data == DONE)
                         DoUseDoorOrButton(DelrissaDoorGUID);
                     if (data == IN_PROGRESS)
                         DelrissaDeathCount = 0;
-                    m_auiEncounter[2] = data;
+                    Encounter[2] = data;
                     break;
-                case DATA_KAELTHAS_EVENT:    m_auiEncounter[3] = data;  break;
+                case DATA_KAELTHAS_EVENT:    Encounter[3] = data;  break;
 
                 case DATA_DELRISSA_DEATH_COUNT:
                     if (data == SPECIAL)

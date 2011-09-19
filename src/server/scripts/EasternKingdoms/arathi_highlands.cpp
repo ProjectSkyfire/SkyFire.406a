@@ -65,14 +65,14 @@ class npc_professor_phizzlethorpe : public CreatureScript
         {
             npc_professor_phizzlethorpeAI(Creature* c) : npc_escortAI(c) {}
 
-            void WaypointReached(uint32 uiPointId)
+            void WaypointReached(uint32 PointId)
             {
                 Player* player = GetPlayerForEscort();
 
                 if (!player)
                     return;
 
-                switch(uiPointId)
+                switch(PointId)
                 {
                 case 4:DoScriptText(SAY_PROGRESS_2, me, player);break;
                 case 5:DoScriptText(SAY_PROGRESS_3, me, player);break;
@@ -124,8 +124,8 @@ class npc_professor_phizzlethorpe : public CreatureScript
             if (quest->GetQuestId() == QUEST_SUNKEN_TREASURE)
             {
                 DoScriptText(SAY_PROGRESS_1, creature, player);
-                if (npc_escortAI* pEscortAI = CAST_AI(npc_professor_phizzlethorpeAI, (creature->AI())))
-                    pEscortAI->Start(false, false, player->GetGUID(), quest);
+                if (npc_escortAI* escortAI = CAST_AI(npc_professor_phizzlethorpeAI, (creature->AI())))
+                    escortAI->Start(false, false, player->GetGUID(), quest);
 
                 creature->setFaction(113);
             }

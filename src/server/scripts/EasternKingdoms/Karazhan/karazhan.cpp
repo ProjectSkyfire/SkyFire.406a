@@ -113,25 +113,25 @@ public:
         npc_barnesAI(Creature* c) : npc_escortAI(c)
         {
             RaidWiped = false;
-            m_uiEventId = 0;
+            EventId = 0;
             pInstance = c->GetInstanceScript();
         }
 
         InstanceScript* pInstance;
 
-        uint64 m_uiSpotlightGUID;
+        uint64 SpotlightGUID;
 
         uint32 TalkCount;
         uint32 TalkTimer;
         uint32 WipeTimer;
-        uint32 m_uiEventId;
+        uint32 EventId;
 
         bool PerformanceReady;
         bool RaidWiped;
 
         void Reset()
         {
-            m_uiSpotlightGUID = 0;
+            SpotlightGUID = 0;
 
             TalkCount = 0;
             TalkTimer = 2000;
@@ -140,7 +140,7 @@ public:
             PerformanceReady = false;
 
             if (pInstance)
-                m_uiEventId = pInstance->GetData(DATA_OPERA_PERFORMANCE);
+                EventId = pInstance->GetData(DATA_OPERA_PERFORMANCE);
         }
 
         void StartEvent()
@@ -151,7 +151,7 @@ public:
             pInstance->SetData(TYPE_OPERA, IN_PROGRESS);
 
             //resets count for this event, in case earlier failed
-            if (m_uiEventId == EVENT_OZ)
+            if (EventId == EVENT_OZ)
                 pInstance->SetData(DATA_OPERA_OZ_DEATHCOUNT, IN_PROGRESS);
 
             Start(false, false);
@@ -180,7 +180,7 @@ public:
                     {
                         pSpotlight->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                         pSpotlight->CastSpell(pSpotlight, SPELL_SPOTLIGHT, false);
-                        m_uiSpotlightGUID = pSpotlight->GetGUID();
+                        SpotlightGUID = pSpotlight->GetGUID();
                     }
                     break;
                 case 8:
@@ -198,7 +198,7 @@ public:
         {
             int32 text = 0;
 
-            switch(m_uiEventId)
+            switch(EventId)
             {
                 case EVENT_OZ:
                     if (OzDialogue[count].textid)
@@ -228,11 +228,11 @@ public:
 
         void PrepareEncounter()
         {
-            sLog->outDebug(LOG_FILTER_TSCR, "TSCR: Barnes Opera Event - Introduction complete - preparing encounter %d", m_uiEventId);
+            sLog->outDebug(LOG_FILTER_TSCR, "TSCR: Barnes Opera Event - Introduction complete - preparing encounter %d", EventId);
             uint8 index = 0;
             uint8 count = 0;
 
-            switch(m_uiEventId)
+            switch(EventId)
             {
                 case EVENT_OZ:
                     index = 0;
@@ -274,7 +274,7 @@ public:
                 {
                     if (TalkCount > 3)
                     {
-                        if (Creature* pSpotlight = Unit::GetCreature(*me, m_uiSpotlightGUID))
+                        if (Creature* pSpotlight = Unit::GetCreature(*me, SpotlightGUID))
                             pSpotlight->DespawnOrUnsummon();
 
                         SetEscortPaused(false);
@@ -292,11 +292,11 @@ public:
                 {
                     if (WipeTimer <= diff)
                     {
-                        Map* pMap = me->GetMap();
-                        if (!pMap->IsDungeon())
+                        Map* map = me->GetMap();
+                        if (!map->IsDungeon())
                             return;
 
-                        Map::PlayerList const &PlayerList = pMap->GetPlayers();
+                        Map::PlayerList const &PlayerList = map->GetPlayers();
                         if (PlayerList.isEmpty())
                             return;
 
@@ -324,12 +324,12 @@ public:
         }
     };
 
-    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*uiSender*/, uint32 uiAction)
+    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*uiSender*/, uint32 Action)
     {
         player->PlayerTalkClass->ClearMenus();
         npc_barnesAI* pBarnesAI = CAST_AI(npc_barnes::npc_barnesAI, creature->AI());
 
-        switch(uiAction)
+        switch(Action)
         {
             case GOSSIP_ACTION_INFO_DEF+1:
                 player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, OZ_GOSSIP2, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+2);
@@ -341,17 +341,17 @@ public:
                 break;
             case GOSSIP_ACTION_INFO_DEF+3:
                 player->CLOSE_GOSSIP_MENU();
-                pBarnesAI->m_uiEventId = EVENT_OZ;
+                pBarnesAI->EventId = EVENT_OZ;
                 sLog->outString("TSCR: player (GUID " UI64FMTD ") manually set Opera event to EVENT_OZ", player->GetGUID());
                 break;
             case GOSSIP_ACTION_INFO_DEF+4:
                 player->CLOSE_GOSSIP_MENU();
-                pBarnesAI->m_uiEventId = EVENT_HOOD;
+                pBarnesAI->EventId = EVENT_HOOD;
                 sLog->outString("TSCR: player (GUID " UI64FMTD ") manually set Opera event to EVENT_HOOD", player->GetGUID());
                 break;
             case GOSSIP_ACTION_INFO_DEF+5:
                 player->CLOSE_GOSSIP_MENU();
-                pBarnesAI->m_uiEventId = EVENT_RAJ;
+                pBarnesAI->EventId = EVENT_RAJ;
                 sLog->outString("TSCR: player (GUID " UI64FMTD ") manually set Opera event to EVENT_RAJ", player->GetGUID());
                 break;
         }
@@ -413,10 +413,10 @@ class npc_berthold : public CreatureScript
 public:
     npc_berthold() : CreatureScript("npc_berthold") { }
 
-    bool OnGossipSelect(Player* player, Creature* /*creature*/, uint32 /*uiSender*/, uint32 uiAction)
+    bool OnGossipSelect(Player* player, Creature* /*creature*/, uint32 /*uiSender*/, uint32 Action)
     {
         player->PlayerTalkClass->ClearMenus();
-        if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+        if (Action == GOSSIP_ACTION_INFO_DEF + 1)
             player->CastSpell(player, SPELL_TELEPORT, true);
 
         player->CLOSE_GOSSIP_MENU();
@@ -535,7 +535,7 @@ public:
         uint32 NextStep(uint32 Step)
         {
             Unit* arca = Unit::GetUnit((*me), ArcanagosGUID);
-            Map* pMap = me->GetMap();
+            Map* map = me->GetMap();
             switch(Step)
             {
             case 0: return 9999999;
@@ -591,9 +591,9 @@ public:
                 me->SetVisible(false);
                 me->ClearInCombat();
 
-                if (pMap->IsDungeon())
+                if (map->IsDungeon())
                 {
-                    InstanceMap::PlayerList const &PlayerList = pMap->GetPlayers();
+                    InstanceMap::PlayerList const &PlayerList = map->GetPlayers();
                     for (InstanceMap::PlayerList::const_iterator i = PlayerList.begin(); i != PlayerList.end(); ++i)
                     {
                         if (i->getSource()->isAlive())

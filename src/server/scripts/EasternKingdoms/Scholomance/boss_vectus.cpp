@@ -48,52 +48,52 @@ public:
     {
         boss_vectusAI(Creature* c) : ScriptedAI(c) {}
 
-        uint32 m_uiFireShield_Timer;
-        uint32 m_uiBlastWave_Timer;
-        uint32 m_uiFrenzy_Timer;
+        uint32 FireShield_Timer;
+        uint32 BlastWave_Timer;
+        uint32 Frenzy_Timer;
 
         void Reset()
         {
-            m_uiFireShield_Timer = 2000;
-            m_uiBlastWave_Timer = 14000;
-            m_uiFrenzy_Timer = 0;
+            FireShield_Timer = 2000;
+            BlastWave_Timer = 14000;
+            Frenzy_Timer = 0;
         }
 
-        void UpdateAI(const uint32 uiDiff)
+        void UpdateAI(const uint32 Diff)
         {
             if (!UpdateVictim())
                 return;
 
             //FireShield_Timer
-            if (m_uiFireShield_Timer <= uiDiff)
+            if (FireShield_Timer <= Diff)
             {
                 DoCast(me, SPELL_FIRESHIELD);
-                m_uiFireShield_Timer = 90000;
+                FireShield_Timer = 90000;
             }
             else
-                m_uiFireShield_Timer -= uiDiff;
+                FireShield_Timer -= Diff;
 
             //BlastWave_Timer
-            if (m_uiBlastWave_Timer <= uiDiff)
+            if (BlastWave_Timer <= Diff)
             {
                 DoCast(me->getVictim(), SPELL_BLAST_WAVE);
-                m_uiBlastWave_Timer = 12000;
+                BlastWave_Timer = 12000;
             }
             else
-                m_uiBlastWave_Timer -= uiDiff;
+                BlastWave_Timer -= Diff;
 
             //Frenzy_Timer
             if (HealthBelowPct(25))
             {
-                if (m_uiFrenzy_Timer <= uiDiff)
+                if (Frenzy_Timer <= Diff)
                 {
                     DoCast(me, SPELL_FRENZY);
                     DoScriptText(EMOTE_GENERIC_FRENZY_KILL, me);
 
-                    m_uiFrenzy_Timer = 24000;
+                    Frenzy_Timer = 24000;
                 }
                 else
-                    m_uiFrenzy_Timer -= uiDiff;
+                    Frenzy_Timer -= Diff;
             }
 
             DoMeleeAttackIfReady();

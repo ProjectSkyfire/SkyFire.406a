@@ -64,15 +64,15 @@ public:
         return new npc_shadowfang_prisonerAI(creature);
     }
 
-    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*uiSender*/, uint32 uiAction)
+    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*uiSender*/, uint32 Action)
     {
         player->PlayerTalkClass->ClearMenus();
-        if (uiAction == GOSSIP_ACTION_INFO_DEF+1)
+        if (Action == GOSSIP_ACTION_INFO_DEF+1)
         {
             player->CLOSE_GOSSIP_MENU();
 
-            if (npc_escortAI* pEscortAI = CAST_AI(npc_shadowfang_prisoner::npc_shadowfang_prisonerAI, creature->AI()))
-                pEscortAI->Start(false, false);
+            if (npc_escortAI* escortAI = CAST_AI(npc_shadowfang_prisoner::npc_shadowfang_prisonerAI, creature->AI()))
+                escortAI->Start(false, false);
         }
         return true;
     }
@@ -94,34 +94,34 @@ public:
         npc_shadowfang_prisonerAI(Creature* c) : npc_escortAI(c)
         {
             pInstance = c->GetInstanceScript();
-            uiNpcEntry = c->GetEntry();
+            NpcEntry = c->GetEntry();
         }
 
         InstanceScript* pInstance;
-        uint32 uiNpcEntry;
+        uint32 NpcEntry;
 
-        void WaypointReached(uint32 uiPoint)
+        void WaypointReached(uint32 Point)
         {
-            switch(uiPoint)
+            switch(Point)
             {
                 case 0:
-                    if (uiNpcEntry == NPC_ASH)
+                    if (NpcEntry == NPC_ASH)
                         DoScriptText(SAY_FREE_AS, me);
                     else
                         DoScriptText(SAY_FREE_AD, me);
                     break;
                 case 10:
-                    if (uiNpcEntry == NPC_ASH)
+                    if (NpcEntry == NPC_ASH)
                         DoScriptText(SAY_OPEN_DOOR_AS, me);
                     else
                         DoScriptText(SAY_OPEN_DOOR_AD, me);
                     break;
                 case 11:
-                    if (uiNpcEntry == NPC_ASH)
+                    if (NpcEntry == NPC_ASH)
                         DoCast(me, SPELL_UNLOCK);
                     break;
                 case 12:
-                    if (uiNpcEntry == NPC_ASH)
+                    if (NpcEntry == NPC_ASH)
                         DoScriptText(SAY_POST_DOOR_AS, me);
                     else
                         DoScriptText(SAY_POST1_DOOR_AD, me);
@@ -130,7 +130,7 @@ public:
                         pInstance->SetData(TYPE_FREE_NPC, DONE);
                     break;
                 case 13:
-                    if (uiNpcEntry != NPC_ASH)
+                    if (NpcEntry != NPC_ASH)
                         DoScriptText(SAY_POST2_DOOR_AD, me);
                     break;
             }
@@ -160,19 +160,19 @@ public:
 
         InstanceScript* pInstance;
 
-        uint32 uiDarkOffering;
+        uint32 DarkOffering;
 
         void Reset()
         {
-            uiDarkOffering = urand(290, 10);
+            DarkOffering = urand(290, 10);
         }
 
-        void UpdateAI(uint32 const uiDiff)
+        void UpdateAI(uint32 const Diff)
         {
             if (!UpdateVictim())
                 return;
 
-            if (uiDarkOffering <= uiDiff)
+            if (DarkOffering <= Diff)
             {
                 if (Creature* pFriend = me->FindNearestCreature(me->GetEntry(), 25.0f, true))
                 {
@@ -181,8 +181,8 @@ public:
                 }
                 else
                     DoCast(me, SPELL_DARK_OFFERING);
-                uiDarkOffering = urand(4400, 12500);
-            } else uiDarkOffering -= uiDiff;
+                DarkOffering = urand(4400, 12500);
+            } else DarkOffering -= Diff;
 
             DoMeleeAttackIfReady();
         }

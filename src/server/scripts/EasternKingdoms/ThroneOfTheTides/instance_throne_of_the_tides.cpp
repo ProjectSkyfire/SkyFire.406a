@@ -72,24 +72,24 @@ public:
             return false;
         }
 
-        void OnCreatureCreate(Creature* pCreature, bool )
+        void OnCreatureCreate(Creature* creature, bool )
         {
-            switch(pCreature->GetEntry())
+            switch(creature->GetEntry())
             {
                  case BOSS_LADY_NAZJAR:
-                     uiLadyNazjar = pCreature->GetGUID();
+                     uiLadyNazjar = creature->GetGUID();
                      break;
                  case BOSS_COMMANDER_ULTHOK:
-                     uiCommanderUlthok = pCreature->GetGUID();
+                     uiCommanderUlthok = creature->GetGUID();
                      break;
                  case BOSS_ERUNAK_STONESPEAKER:
-                     uiErunakStonespeaker = pCreature->GetGUID();
+                     uiErunakStonespeaker = creature->GetGUID();
                      break;
                  case BOSS_MINDBENDER_GHURSHA:
-                     uiMindbenderGhrusha = pCreature->GetGUID();
+                     uiMindbenderGhrusha = creature->GetGUID();
                      break;
                  case BOSS_OZUMAT:
-                     uiOzumat = pCreature->GetGUID();
+                     uiOzumat = creature->GetGUID();
                      break;
             }
         }

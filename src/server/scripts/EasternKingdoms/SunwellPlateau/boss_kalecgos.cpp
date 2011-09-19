@@ -304,9 +304,9 @@ public:
 
                 if (SpectralBlastTimer <= diff)
                 {
-                    std::list<HostileReference*> &m_threatlist = me->getThreatManager().getThreatList();
+                    std::list<HostileReference*> &_threatlist = me->getThreatManager().getThreatList();
                     std::list<Unit*> targetList;
-                    for (std::list<HostileReference*>::const_iterator itr = m_threatlist.begin(); itr!= m_threatlist.end(); ++itr)
+                    for (std::list<HostileReference*>::const_iterator itr = _threatlist.begin(); itr!= _threatlist.end(); ++itr)
                         if ((*itr)->getTarget() && (*itr)->getTarget()->GetTypeId() == TYPEID_PLAYER && (*itr)->getTarget()->GetGUID() != me->getVictim()->GetGUID() && !(*itr)->getTarget()->HasAura(AURA_SPECTRAL_EXHAUSTION) && (*itr)->getTarget()->GetPositionZ() > me->GetPositionZ()-5)
                             targetList.push_back((*itr)->getTarget());
                     if (targetList.empty())
@@ -539,14 +539,14 @@ class kalecgos_teleporter : public GameObjectScript
 public:
     kalecgos_teleporter() : GameObjectScript("kalecgos_teleporter") { }
 
-    bool OnGossipHello(Player* player, GameObject* pGo)
+    bool OnGossipHello(Player* player, GameObject* go)
     {
         uint8 SpectralPlayers = 0;
-        Map* pMap = pGo->GetMap();
-        if (!pMap->IsDungeon())
+        Map* map = go->GetMap();
+        if (!map->IsDungeon())
             return true;
 
-        Map::PlayerList const &PlayerList = pMap->GetPlayers();
+        Map::PlayerList const &PlayerList = map->GetPlayers();
         for (Map::PlayerList::const_iterator i = PlayerList.begin(); i != PlayerList.end(); ++i)
         {
             if (i->getSource() && i->getSource()->GetPositionZ() < DEMON_REALM_Z + 5)
@@ -673,9 +673,9 @@ public:
 
         void TeleportAllPlayersBack()
         {
-            Map* pMap = me->GetMap();
-            if (!pMap->IsDungeon()) return;
-            Map::PlayerList const &PlayerList = pMap->GetPlayers();
+            Map* map = me->GetMap();
+            if (!map->IsDungeon()) return;
+            Map::PlayerList const &PlayerList = map->GetPlayers();
             for (Map::PlayerList::const_iterator i = PlayerList.begin(); i != PlayerList.end(); ++i)
             {
                 if (i->getSource()->GetPositionZ() <= DRAGON_REALM_Z-5)
@@ -758,11 +758,11 @@ public:
             {
                 for (std::list<HostileReference*>::const_iterator itr = me->getThreatManager().getThreatList().begin(); itr != me->getThreatManager().getThreatList().end(); ++itr)
                 {
-                    if (Unit* pUnit = Unit::GetUnit(*me, (*itr)->getUnitGuid()))
+                    if (Unit* unit = Unit::GetUnit(*me, (*itr)->getUnitGuid()))
                     {
-                        if (pUnit->GetPositionZ() > me->GetPositionZ()+5)
+                        if (unit->GetPositionZ() > me->GetPositionZ()+5)
                         {
-                            me->getThreatManager().modifyThreatPercent(pUnit, -100);
+                            me->getThreatManager().modifyThreatPercent(unit, -100);
                         }
                     }
                 }

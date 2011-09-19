@@ -65,16 +65,16 @@ public:
     {
         npc_galen_goodwardAI(Creature* creature) : npc_escortAI(creature)
         {
-            m_uiGalensCageGUID = 0;
+            GalensCageGUID = 0;
             Reset();
         }
 
-        uint64 m_uiGalensCageGUID;
-        uint32 m_uiPeriodicSay;
+        uint64 GalensCageGUID;
+        uint32 PeriodicSay;
 
         void Reset()
         {
-            m_uiPeriodicSay = 6000;
+            PeriodicSay = 6000;
         }
 
         void EnterCombat(Unit* who)
@@ -83,21 +83,21 @@ public:
                 DoScriptText(RAND(SAY_ATTACKED_1, SAY_ATTACKED_2), me, who);
         }
 
-        void WaypointStart(uint32 uiPointId)
+        void WaypointStart(uint32 PointId)
         {
-            switch (uiPointId)
+            switch (PointId)
             {
             case 0:
                 {
-                    GameObject* pCage = NULL;
-                    if (m_uiGalensCageGUID)
-                        pCage = me->GetMap()->GetGameObject(m_uiGalensCageGUID);
+                    GameObject* cage = NULL;
+                    if (GalensCageGUID)
+                        cage = me->GetMap()->GetGameObject(GalensCageGUID);
                     else
-                        pCage = GetClosestGameObjectWithEntry(me, GO_GALENS_CAGE, INTERACTION_DISTANCE);
-                    if (pCage)
+                        cage = GetClosestGameObjectWithEntry(me, GO_GALENS_CAGE, INTERACTION_DISTANCE);
+                    if (cage)
                     {
-                        pCage->UseDoorOrButton();
-                        m_uiGalensCageGUID = pCage->GetGUID();
+                        cage->UseDoorOrButton();
+                        GalensCageGUID = cage->GetGUID();
                     }
                     break;
                 }
@@ -107,13 +107,13 @@ public:
             }
         }
 
-        void WaypointReached(uint32 uiPointId)
+        void WaypointReached(uint32 PointId)
         {
-            switch (uiPointId)
+            switch (PointId)
             {
             case 0:
-                if (GameObject* pCage = me->GetMap()->GetGameObject(m_uiGalensCageGUID))
-                    pCage->ResetDoorOrButton();
+                if (GameObject* cage = me->GetMap()->GetGameObject(GalensCageGUID))
+                    cage->ResetDoorOrButton();
                 break;
             case 20:
                 if (Player* player = GetPlayerForEscort())
@@ -128,21 +128,21 @@ public:
             }
         }
 
-        void UpdateAI(const uint32 uiDiff)
+        void UpdateAI(const uint32 Diff)
         {
-            npc_escortAI::UpdateAI(uiDiff);
+            npc_escortAI::UpdateAI(Diff);
 
             if (HasEscortState(STATE_ESCORT_NONE))
                 return;
 
-            if (m_uiPeriodicSay < uiDiff)
+            if (PeriodicSay < Diff)
             {
                 if (!HasEscortState(STATE_ESCORT_ESCORTING))
                     DoScriptText(SAY_PERIODIC, me);
-                m_uiPeriodicSay = 15000;
+                PeriodicSay = 15000;
             }
             else
-                m_uiPeriodicSay -= uiDiff;
+                PeriodicSay -= Diff;
 
             DoMeleeAttackIfReady();
         }

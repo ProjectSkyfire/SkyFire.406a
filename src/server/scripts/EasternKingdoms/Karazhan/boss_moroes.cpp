@@ -359,9 +359,9 @@ struct boss_moroes_guestAI : public ScriptedAI
         uint64 TempGUID = GuestGUID[rand()%4];
         if (TempGUID)
         {
-            Unit* pUnit = Unit::GetUnit((*me), TempGUID);
-            if (pUnit && pUnit->isAlive())
-                return pUnit;
+            Unit* unit = Unit::GetUnit((*me), TempGUID);
+            if (unit && unit->isAlive())
+                return unit;
         }
 
         return me;
@@ -739,14 +739,14 @@ public:
         //Arms Warr
         boss_lord_crispin_ferenceAI(Creature* c) : boss_moroes_guestAI(c) {}
 
-        uint32 Disarm_Timer;
+        uint32 Disar_Timer;
         uint32 HeroicStrike_Timer;
         uint32 ShieldBash_Timer;
         uint32 ShieldWall_Timer;
 
         void Reset()
         {
-            Disarm_Timer = 6000;
+            Disar_Timer = 6000;
             HeroicStrike_Timer = 10000;
             ShieldBash_Timer = 8000;
             ShieldWall_Timer = 4000;
@@ -761,11 +761,11 @@ public:
 
             boss_moroes_guestAI::UpdateAI(diff);
 
-            if (Disarm_Timer <= diff)
+            if (Disar_Timer <= diff)
             {
                 DoCast(me->getVictim(), SPELL_DISARM);
-                Disarm_Timer = 12000;
-            } else Disarm_Timer -= diff;
+                Disar_Timer = 12000;
+            } else Disar_Timer -= diff;
 
             if (HeroicStrike_Timer <= diff)
             {

@@ -35,9 +35,7 @@ class boss_wushoolay : public CreatureScript
     public:
 
         boss_wushoolay()
-            : CreatureScript("boss_wushoolay")
-        {
-        }
+            : CreatureScript("boss_wushoolay") {}
 
         struct boss_wushoolayAI : public ScriptedAI
         {
@@ -52,9 +50,7 @@ class boss_wushoolay : public CreatureScript
                 LightningWave_Timer = 8000 + rand()%8000;
             }
 
-            void EnterCombat(Unit* /*who*/)
-            {
-            }
+            void EnterCombat(Unit* /*who*/) {}
 
             void UpdateAI(const uint32 diff)
             {

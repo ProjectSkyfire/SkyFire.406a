@@ -67,14 +67,14 @@ class mob_jadespine_basilisk : public CreatureScript
             {
             }
 
-            void UpdateAI(const uint32 uiDiff)
+            void UpdateAI(const uint32 Diff)
             {
                 //Return since we have no target
                 if (!UpdateVictim())
                     return;
 
                 //uiCslumberTimer
-                if (uiCslumberTimer <= uiDiff)
+                if (uiCslumberTimer <= Diff)
                 {
                     //Cast
                     DoCastVictim(SPELL_CRYSTALLINE_SLUMBER, true);
@@ -89,7 +89,7 @@ class mob_jadespine_basilisk : public CreatureScript
 
                     if (target)
                         me->TauntApply(target);
-                } else uiCslumberTimer -= uiDiff;
+                } else uiCslumberTimer -= Diff;
 
                 DoMeleeAttackIfReady();
             }
@@ -110,9 +110,9 @@ class go_keystone_chamber : public GameObjectScript
 public:
     go_keystone_chamber() : GameObjectScript("go_keystone_chamber") { }
 
-    bool OnGossipHello(Player* /*player*/, GameObject* pGo)
+    bool OnGossipHello(Player* /*player*/, GameObject* go)
     {
-        if (InstanceScript* pInstance = pGo->GetInstanceScript())
+        if (InstanceScript* pInstance = go->GetInstanceScript())
             pInstance->SetData(DATA_IRONAYA_SEAL, IN_PROGRESS); //door animation and save state.
 
         return false;
@@ -183,10 +183,10 @@ class npc_lore_keeper_of_norgannon : public CreatureScript
             return true;
         }
 
-        bool OnGossipSelect(Player* player, Creature* creature, uint32 /*uiSender*/, uint32 uiAction)
+        bool OnGossipSelect(Player* player, Creature* creature, uint32 /*uiSender*/, uint32 Action)
         {
             player->PlayerTalkClass->ClearMenus();
-            switch (uiAction)
+            switch (Action)
             {
                 case GOSSIP_ACTION_INFO_DEF+1:
                     player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_SELECT_KEEPER1, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+2);

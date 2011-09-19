@@ -76,7 +76,7 @@ float LackeyLocations[4][2]=
     {129.988f, 17.2355f},
 };
 
-const uint32 m_auiAddEntries[] =
+const uint32 AddEntries[] =
 {
     24557,                                                  //Kagani Nightstrike
     24558,                                                  //Elris Duskhallow
@@ -103,14 +103,14 @@ public:
         boss_priestess_delrissaAI(Creature* c) : ScriptedAI(c)
         {
             pInstance = c->GetInstanceScript();
-            memset(&m_auiLackeyGUID, 0, sizeof(m_auiLackeyGUID));
+            memset(&LackeyGUID, 0, sizeof(LackeyGUID));
             LackeyEntryList.clear();
         }
 
         InstanceScript* pInstance;
 
         std::vector<uint32> LackeyEntryList;
-        uint64 m_auiLackeyGUID[MAX_ACTIVE_LACKEY];
+        uint64 LackeyGUID[MAX_ACTIVE_LACKEY];
 
         uint8 PlayersKilled;
 
@@ -148,12 +148,12 @@ public:
 
             for (uint8 i = 0; i < MAX_ACTIVE_LACKEY; ++i)
             {
-                if (Unit* pAdd = Unit::GetUnit(*me, m_auiLackeyGUID[i]))
+                if (Unit* add = Unit::GetUnit(*me, LackeyGUID[i]))
                 {
-                    if (!pAdd->getVictim())
+                    if (!add->getVictim())
                     {
-                        who->SetInCombatWith(pAdd);
-                        pAdd->AddThreat(who, 0.0f);
+                        who->SetInCombatWith(add);
+                        add->AddThreat(who, 0.0f);
                     }
                 }
             }
@@ -174,11 +174,11 @@ public:
             if (LackeyEntryList.empty())
             {
                 //pre-allocate size for speed
-                LackeyEntryList.resize((sizeof(m_auiAddEntries) / sizeof(uint32)));
+                LackeyEntryList.resize((sizeof(AddEntries) / sizeof(uint32)));
 
                 //fill vector array with entries from Creature array
                 for (uint8 i = 0; i < LackeyEntryList.size(); ++i)
-                    LackeyEntryList[i] = m_auiAddEntries[i];
+                    LackeyEntryList[i] = AddEntries[i];
 
                 //remove random entries
                 while (LackeyEntryList.size() > MAX_ACTIVE_LACKEY)
@@ -187,8 +187,8 @@ public:
                 //summon all the remaining in vector
                 for (std::vector<uint32>::const_iterator itr = LackeyEntryList.begin(); itr != LackeyEntryList.end(); ++itr)
                 {
-                    if (Creature* pAdd = me->SummonCreature((*itr), LackeyLocations[j][0], LackeyLocations[j][1], fZLocation, fOrientation, TEMPSUMMON_CORPSE_DESPAWN, 0))
-                        m_auiLackeyGUID[j] = pAdd->GetGUID();
+                    if (Creature* add = me->SummonCreature((*itr), LackeyLocations[j][0], LackeyLocations[j][1], fZLocation, fOrientation, TEMPSUMMON_CORPSE_DESPAWN, 0))
+                        LackeyGUID[j] = add->GetGUID();
 
                     ++j;
                 }
@@ -197,13 +197,13 @@ public:
             {
                 for (std::vector<uint32>::const_iterator itr = LackeyEntryList.begin(); itr != LackeyEntryList.end(); ++itr)
                 {
-                    Unit* pAdd = Unit::GetUnit(*me, m_auiLackeyGUID[j]);
+                    Unit* add = Unit::GetUnit(*me, LackeyGUID[j]);
 
                     //object already removed, not exist
-                    if (!pAdd)
+                    if (!add)
                     {
-                        if (Creature* pAdd = me->SummonCreature((*itr), LackeyLocations[j][0], LackeyLocations[j][1], fZLocation, fOrientation, TEMPSUMMON_CORPSE_DESPAWN, 0))
-                            m_auiLackeyGUID[j] = pAdd->GetGUID();
+                        if (Creature* add = me->SummonCreature((*itr), LackeyLocations[j][0], LackeyLocations[j][1], fZLocation, fOrientation, TEMPSUMMON_CORPSE_DESPAWN, 0))
+                            LackeyGUID[j] = add->GetGUID();
                     }
                     ++j;
                 }
@@ -260,10 +260,10 @@ public:
                 Unit* target = me;
                 for (uint8 i = 0; i < MAX_ACTIVE_LACKEY; ++i)
                 {
-                    if (Unit* pAdd = Unit::GetUnit(*me, m_auiLackeyGUID[i]))
+                    if (Unit* add = Unit::GetUnit(*me, LackeyGUID[i]))
                     {
-                        if (pAdd->isAlive() && pAdd->GetHealth() < health)
-                            target = pAdd;
+                        if (add->isAlive() && add->GetHealth() < health)
+                            target = add;
                     }
                 }
 
@@ -276,9 +276,9 @@ public:
                 Unit* target = me;
 
                 if (urand(0, 1))
-                    if (Unit* pAdd = Unit::GetUnit(*me, m_auiLackeyGUID[rand()%MAX_ACTIVE_LACKEY]))
-                        if (pAdd->isAlive())
-                            target = pAdd;
+                    if (Unit* add = Unit::GetUnit(*me, LackeyGUID[rand()%MAX_ACTIVE_LACKEY]))
+                        if (add->isAlive())
+                            target = add;
 
                 DoCast(target, SPELL_RENEW_NORMAL);
                 RenewTimer = 5000;
@@ -289,9 +289,9 @@ public:
                 Unit* target = me;
 
                 if (urand(0, 1))
-                    if (Unit* pAdd = Unit::GetUnit(*me, m_auiLackeyGUID[rand()%MAX_ACTIVE_LACKEY]))
-                        if (pAdd->isAlive() && !pAdd->HasAura(SPELL_SHIELD))
-                            target = pAdd;
+                    if (Unit* add = Unit::GetUnit(*me, LackeyGUID[rand()%MAX_ACTIVE_LACKEY]))
+                        if (add->isAlive() && !add->HasAura(SPELL_SHIELD))
+                            target = add;
 
                 DoCast(target, SPELL_SHIELD);
                 ShieldTimer = 7500;
@@ -308,9 +308,9 @@ public:
                     if (urand(0, 1))
                         target = me;
                     else
-                        if (Unit* pAdd = Unit::GetUnit(*me, m_auiLackeyGUID[rand()%MAX_ACTIVE_LACKEY]))
-                            if (pAdd->isAlive())
-                                target = pAdd;
+                        if (Unit* add = Unit::GetUnit(*me, LackeyGUID[rand()%MAX_ACTIVE_LACKEY]))
+                            if (add->isAlive())
+                                target = add;
                 }
 
                 if (target)
@@ -343,13 +343,13 @@ struct boss_priestess_lackey_commonAI : public ScriptedAI
     boss_priestess_lackey_commonAI(Creature* c) : ScriptedAI(c)
     {
         pInstance = c->GetInstanceScript();
-        memset(&m_auiLackeyGUIDs, 0, sizeof(m_auiLackeyGUIDs));
+        memset(&LackeyGUIDs, 0, sizeof(LackeyGUIDs));
         AcquireGUIDs();
     }
 
     InstanceScript* pInstance;
 
-    uint64 m_auiLackeyGUIDs[MAX_ACTIVE_LACKEY];
+    uint64 LackeyGUIDs[MAX_ACTIVE_LACKEY];
     uint32 ResetThreatTimer;
 
     bool UsedPotion;
@@ -365,10 +365,10 @@ struct boss_priestess_lackey_commonAI : public ScriptedAI
         ResetThreatTimer = urand(5000, 20000);
 
         // in case she is not alive and Reset was for some reason called, respawn her (most likely party wipe after killing her)
-        if (Creature* pDelrissa = Unit::GetCreature(*me, pInstance ? pInstance->GetData64(DATA_DELRISSA) : 0))
+        if (Creature* delrissa = Unit::GetCreature(*me, pInstance ? pInstance->GetData64(DATA_DELRISSA) : 0))
         {
-            if (!pDelrissa->isAlive())
-                pDelrissa->Respawn();
+            if (!delrissa->isAlive())
+                delrissa->Respawn();
         }
     }
 
@@ -381,22 +381,22 @@ struct boss_priestess_lackey_commonAI : public ScriptedAI
         {
             for (uint8 i = 0; i < MAX_ACTIVE_LACKEY; ++i)
             {
-                if (Unit* pAdd = Unit::GetUnit(*me, m_auiLackeyGUIDs[i]))
+                if (Unit* add = Unit::GetUnit(*me, LackeyGUIDs[i]))
                 {
-                    if (!pAdd->getVictim() && pAdd != me)
+                    if (!add->getVictim() && add != me)
                     {
-                        who->SetInCombatWith(pAdd);
-                        pAdd->AddThreat(who, 0.0f);
+                        who->SetInCombatWith(add);
+                        add->AddThreat(who, 0.0f);
                     }
                 }
             }
 
-            if (Creature* pDelrissa = Unit::GetCreature(*me, pInstance->GetData64(DATA_DELRISSA)))
+            if (Creature* delrissa = Unit::GetCreature(*me, pInstance->GetData64(DATA_DELRISSA)))
             {
-                if (pDelrissa->isAlive() && !pDelrissa->getVictim())
+                if (delrissa->isAlive() && !delrissa->getVictim())
                 {
-                    who->SetInCombatWith(pDelrissa);
-                    pDelrissa->AddThreat(who, 0.0f);
+                    who->SetInCombatWith(delrissa);
+                    delrissa->AddThreat(who, 0.0f);
                 }
             }
         }
@@ -407,27 +407,27 @@ struct boss_priestess_lackey_commonAI : public ScriptedAI
         if (!pInstance)
             return;
 
-        Creature* pDelrissa = Unit::GetCreature(*me, pInstance->GetData64(DATA_DELRISSA));
-        uint32 uiLackeyDeathCount = pInstance->GetData(DATA_DELRISSA_DEATH_COUNT);
+        Creature* delrissa = Unit::GetCreature(*me, pInstance->GetData64(DATA_DELRISSA));
+        uint32 LackeyDeathCount = pInstance->GetData(DATA_DELRISSA_DEATH_COUNT);
 
-        if (!pDelrissa)
+        if (!delrissa)
             return;
 
         //should delrissa really yell if dead?
-        DoScriptText(LackeyDeath[uiLackeyDeathCount].id, pDelrissa);
+        DoScriptText(LackeyDeath[LackeyDeathCount].id, delrissa);
 
         pInstance->SetData(DATA_DELRISSA_DEATH_COUNT, SPECIAL);
 
         //increase local var, since we now may have four dead
-        ++uiLackeyDeathCount;
+        ++LackeyDeathCount;
 
-        if (uiLackeyDeathCount == MAX_ACTIVE_LACKEY)
+        if (LackeyDeathCount == MAX_ACTIVE_LACKEY)
         {
             //time to make her lootable and complete event if she died before lackeys
-            if (!pDelrissa->isAlive())
+            if (!delrissa->isAlive())
             {
-                if (!pDelrissa->HasFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE))
-                    pDelrissa->SetFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
+                if (!delrissa->HasFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE))
+                    delrissa->SetFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
 
                 pInstance->SetData(DATA_DELRISSA_EVENT, DONE);
             }
@@ -451,7 +451,7 @@ struct boss_priestess_lackey_commonAI : public ScriptedAI
         if (Creature* Delrissa = (Unit::GetCreature(*me, pInstance->GetData64(DATA_DELRISSA))))
         {
             for (uint8 i = 0; i < MAX_ACTIVE_LACKEY; ++i)
-                m_auiLackeyGUIDs[i] = CAST_AI(boss_priestess_delrissa::boss_priestess_delrissaAI, Delrissa->AI())->m_auiLackeyGUID[i];
+                LackeyGUIDs[i] = CAST_AI(boss_priestess_delrissa::boss_priestess_delrissaAI, Delrissa->AI())->LackeyGUID[i];
         }
     }
 
@@ -527,12 +527,12 @@ public:
             {
                 DoCast(me, SPELL_VANISH);
 
-                Unit* pUnit = SelectTarget(SELECT_TARGET_RANDOM, 0);
+                Unit* unit = SelectTarget(SELECT_TARGET_RANDOM, 0);
 
                 DoResetThreat();
 
-                if (pUnit)
-                    me->AddThreat(pUnit, 1000.0f);
+                if (unit)
+                    me->AddThreat(unit, 1000.0f);
 
                 InVanish = true;
                 Vanish_Timer = 30000;
@@ -643,24 +643,24 @@ public:
 
             if (Seed_of_Corruption_Timer <= diff)
             {
-                if (Unit* pUnit = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                    DoCast(pUnit, SPELL_SEED_OF_CORRUPTION);
+                if (Unit* unit = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                    DoCast(unit, SPELL_SEED_OF_CORRUPTION);
 
                 Seed_of_Corruption_Timer = 10000;
             } else Seed_of_Corruption_Timer -= diff;
 
             if (Curse_of_Agony_Timer <= diff)
             {
-                if (Unit* pUnit = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                    DoCast(pUnit, SPELL_CURSE_OF_AGONY);
+                if (Unit* unit = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                    DoCast(unit, SPELL_CURSE_OF_AGONY);
 
                 Curse_of_Agony_Timer = 13000;
             } else Curse_of_Agony_Timer -= diff;
 
             if (Fear_Timer <= diff)
             {
-                if (Unit* pUnit = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                    DoCast(pUnit, SPELL_FEAR);
+                if (Unit* unit = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                    DoCast(unit, SPELL_FEAR);
 
                 Fear_Timer = 10000;
             } else Fear_Timer -= diff;
@@ -803,8 +803,8 @@ public:
 
             if (Blizzard_Timer <= diff)
             {
-                if (Unit* pUnit = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                    DoCast(pUnit, SPELL_BLIZZARD);
+                if (Unit* unit = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                    DoCast(unit, SPELL_BLIZZARD);
 
                 Blizzard_Timer = 8000;
             } else Blizzard_Timer -= diff;
@@ -883,7 +883,7 @@ public:
         boss_warlord_salarisAI(Creature* c) : boss_priestess_lackey_commonAI(c) {}
 
         uint32 Intercept_Stun_Timer;
-        uint32 Disarm_Timer;
+        uint32 Disar_Timer;
         uint32 Piercing_Howl_Timer;
         uint32 Frightening_Shout_Timer;
         uint32 Hamstring_Timer;
@@ -892,7 +892,7 @@ public:
         void Reset()
         {
             Intercept_Stun_Timer = 500;
-            Disarm_Timer = 6000;
+            Disar_Timer = 6000;
             Piercing_Howl_Timer = 10000;
             Frightening_Shout_Timer = 18000;
             Hamstring_Timer = 4500;
@@ -933,18 +933,18 @@ public:
                 //if nobody is in melee range than try to use Intercept
                 if (!InMeleeRange)
                 {
-                    if (Unit* pUnit = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                        DoCast(pUnit, SPELL_INTERCEPT_STUN);
+                    if (Unit* unit = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                        DoCast(unit, SPELL_INTERCEPT_STUN);
                 }
 
                 Intercept_Stun_Timer = 10000;
             } else Intercept_Stun_Timer -= diff;
 
-            if (Disarm_Timer <= diff)
+            if (Disar_Timer <= diff)
             {
                 DoCast(me->getVictim(), SPELL_DISARM);
-                Disarm_Timer = 6000;
-            } else Disarm_Timer -= diff;
+                Disar_Timer = 6000;
+            } else Disar_Timer -= diff;
 
             if (Hamstring_Timer <= diff)
             {
@@ -1000,9 +1000,9 @@ public:
     struct boss_garaxxasAI : public boss_priestess_lackey_commonAI
     {
         //Hunter
-        boss_garaxxasAI(Creature* c) : boss_priestess_lackey_commonAI(c) { m_uiPetGUID = 0; }
+        boss_garaxxasAI(Creature* c) : boss_priestess_lackey_commonAI(c) { PetGUID = 0; }
 
-        uint64 m_uiPetGUID;
+        uint64 PetGUID;
 
         uint32 Aimed_Shot_Timer;
         uint32 Shoot_Timer;
@@ -1020,7 +1020,7 @@ public:
             Wing_Clip_Timer = 4000;
             Freezing_Trap_Timer = 15000;
 
-            Unit* pPet = Unit::GetUnit(*me, m_uiPetGUID);
+            Unit* pPet = Unit::GetUnit(*me, PetGUID);
             if (!pPet)
                 me->SummonCreature(NPC_SLIVER, 0.0f, 0.0f, 0.0f, 0.0f, TEMPSUMMON_CORPSE_DESPAWN, 0);
 
@@ -1029,7 +1029,7 @@ public:
 
         void JustSummoned(Creature* summoned)
         {
-            m_uiPetGUID = summoned->GetGUID();
+            PetGUID = summoned->GetGUID();
         }
 
         void UpdateAI(const uint32 diff)
@@ -1050,14 +1050,14 @@ public:
                 if (Freezing_Trap_Timer <= diff)
                 {
                     //attempt find go summoned from spell (casted by me)
-                    GameObject* pGo = me->GetGameObject(SPELL_FREEZING_TRAP);
+                    GameObject* go = me->GetGameObject(SPELL_FREEZING_TRAP);
 
-                    //if we have a pGo, we need to wait (only one trap at a time)
-                    if (pGo)
+                    //if we have a go, we need to wait (only one trap at a time)
+                    if (go)
                         Freezing_Trap_Timer = 2500;
                     else
                     {
-                        //if pGo does not exist, then we can cast
+                        //if go does not exist, then we can cast
                         DoCast(me->getVictim(), SPELL_FREEZING_TRAP);
                         Freezing_Trap_Timer = 15000;
                     }
@@ -1121,8 +1121,8 @@ public:
         //Shaman
         boss_apokoAI(Creature* c) : boss_priestess_lackey_commonAI(c) {}
 
-        uint32 Totem_Timer;
-        uint8  Totem_Amount;
+        uint32 Tote_Timer;
+        uint8  Tote_Amount;
         uint32 War_Stomp_Timer;
         uint32 Purge_Timer;
         uint32 Healing_Wave_Timer;
@@ -1130,8 +1130,8 @@ public:
 
         void Reset()
         {
-            Totem_Timer = 2000;
-            Totem_Amount = 1;
+            Tote_Timer = 2000;
+            Tote_Amount = 1;
             War_Stomp_Timer = 10000;
             Purge_Timer = 8000;
             Healing_Wave_Timer = 5000;
@@ -1147,12 +1147,12 @@ public:
 
             boss_priestess_lackey_commonAI::UpdateAI(diff);
 
-            if (Totem_Timer <= diff)
+            if (Tote_Timer <= diff)
             {
                 DoCast(me, RAND(SPELL_WINDFURY_TOTEM, SPELL_FIRE_NOVA_TOTEM, SPELL_EARTHBIND_TOTEM));
-                ++Totem_Amount;
-                Totem_Timer = Totem_Amount*2000;
-            } else Totem_Timer -= diff;
+                ++Tote_Amount;
+                Tote_Timer = Tote_Amount*2000;
+            } else Tote_Timer -= diff;
 
             if (War_Stomp_Timer <= diff)
             {
@@ -1162,8 +1162,8 @@ public:
 
             if (Purge_Timer <= diff)
             {
-                if (Unit* pUnit = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                    DoCast(pUnit, SPELL_PURGE);
+                if (Unit* unit = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                    DoCast(unit, SPELL_PURGE);
 
                 Purge_Timer = 15000;
             } else Purge_Timer -= diff;
@@ -1180,8 +1180,8 @@ public:
                 // uint64 guid = (*itr)->guid;
                 // if (guid)
                 // {
-                //   Unit* pAdd = Unit::GetUnit(*me, (*itr)->guid);
-                //   if (pAdd && pAdd->isAlive())
+                //   Unit* add = Unit::GetUnit(*me, (*itr)->guid);
+                //   if (add && add->isAlive())
                 //   {
                 DoCast(me, SPELL_LESSER_HEALING_WAVE);
                 Healing_Wave_Timer = 5000;
@@ -1265,11 +1265,11 @@ public:
             {
                 for (uint8 i = 0; i < MAX_ACTIVE_LACKEY; ++i)
                 {
-                    if (Unit* pAdd = Unit::GetUnit(*me, m_auiLackeyGUIDs[i]))
+                    if (Unit* add = Unit::GetUnit(*me, LackeyGUIDs[i]))
                     {
-                        if (pAdd->IsPolymorphed())
+                        if (add->IsPolymorphed())
                         {
-                            DoCast(pAdd, SPELL_RECOMBOBULATE);
+                            DoCast(add, SPELL_RECOMBOBULATE);
                             break;
                         }
                     }

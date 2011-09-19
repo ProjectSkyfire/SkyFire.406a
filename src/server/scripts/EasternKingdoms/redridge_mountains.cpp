@@ -45,11 +45,11 @@ class npc_corporal_keeshan : public CreatureScript
 public:
     npc_corporal_keeshan() : CreatureScript("npc_corporal_keeshan") { }
 
-    bool OnQuestAccept(Player* player, Creature* creature, Quest const* pQuest)
+    bool OnQuestAccept(Player* player, Creature* creature, Quest const* quest)
     {
-        if (pQuest->GetQuestId() == QUEST_MISSING_IN_ACTION)
+        if (quest->GetQuestId() == QUEST_MISSING_IN_ACTION)
         {
-            CAST_AI(npc_corporal_keeshan::npc_corporal_keeshanAI, creature->AI())->Start(true, false, player->GetGUID(), pQuest);
+            CAST_AI(npc_corporal_keeshan::npc_corporal_keeshanAI, creature->AI())->Start(true, false, player->GetGUID(), quest);
             DoScriptText(SAY_CORPORAL_1, creature);
         }
 
@@ -65,17 +65,17 @@ public:
     {
         npc_corporal_keeshanAI(Creature* creature) : npc_escortAI(creature) {}
 
-        uint32 uiPhase;
-        uint32 uiTimer;
-        uint32 uiMockingBlowTimer;
-        uint32 uiShieldBashTimer;
+        uint32 Phase;
+        uint32 Timer;
+        uint32 MockingBlowTimer;
+        uint32 ShieldBashTimer;
 
         void Reset()
         {
-            uiTimer = 0;
-            uiPhase = 0;
-            uiMockingBlowTimer = 5000;
-            uiShieldBashTimer  = 8000;
+            Timer = 0;
+            Phase = 0;
+            MockingBlowTimer = 5000;
+            ShieldBashTimer  = 8000;
         }
 
         void WaypointReached(uint32 uiI)
@@ -92,76 +92,76 @@ public:
             {
                 case 39:
                     SetEscortPaused(true);
-                    uiTimer = 2000;
-                    uiPhase = 1;
+                    Timer = 2000;
+                    Phase = 1;
                     break;
                 case 65:
                     me->RemoveUnitMovementFlag(MOVEMENTFLAG_WALKING);
                     break;
                 case 115:
                     player->AreaExploredOrEventHappens(QUEST_MISSING_IN_ACTION);
-                    uiTimer = 2000;
-                    uiPhase = 4;
+                    Timer = 2000;
+                    Phase = 4;
                     break;
             }
         }
 
-        void UpdateAI(const uint32 uiDiff)
+        void UpdateAI(const uint32 Diff)
         {
             if (HasEscortState(STATE_ESCORT_NONE))
                 return;
 
-            npc_escortAI::UpdateAI(uiDiff);
+            npc_escortAI::UpdateAI(Diff);
 
-            if (uiPhase)
+            if (Phase)
             {
-                if (uiTimer <= uiDiff)
+                if (Timer <= Diff)
                 {
-                    switch(uiPhase)
+                    switch(Phase)
                     {
                         case 1:
                             me->SetStandState(UNIT_STAND_STATE_SIT);
-                            uiTimer = 1000;
-                            uiPhase = 2;
+                            Timer = 1000;
+                            Phase = 2;
                             break;
                         case 2:
                             DoScriptText(SAY_CORPORAL_2, me);
-                            uiTimer = 15000;
-                            uiPhase = 3;
+                            Timer = 15000;
+                            Phase = 3;
                             break;
                         case 3:
                             DoScriptText(SAY_CORPORAL_3, me);
                             me->SetStandState(UNIT_STAND_STATE_STAND);
                             SetEscortPaused(false);
-                            uiTimer = 0;
-                            uiPhase = 0;
+                            Timer = 0;
+                            Phase = 0;
                             break;
                         case 4:
                             DoScriptText(SAY_CORPORAL_4, me);
-                            uiTimer = 2500;
-                            uiPhase = 5;
+                            Timer = 2500;
+                            Phase = 5;
                         case 5:
                             DoScriptText(SAY_CORPORAL_5, me);
-                            uiTimer = 0;
-                            uiPhase = 0;
+                            Timer = 0;
+                            Phase = 0;
                     }
-                } else uiTimer -= uiDiff;
+                } else Timer -= Diff;
             }
 
             if (!UpdateVictim())
                 return;
 
-            if (uiMockingBlowTimer <= uiDiff)
+            if (MockingBlowTimer <= Diff)
             {
                 DoCast(me->getVictim(), SPELL_MOCKING_BLOW);
-                uiMockingBlowTimer = 5000;
-            } else uiMockingBlowTimer -= uiDiff;
+                MockingBlowTimer = 5000;
+            } else MockingBlowTimer -= Diff;
 
-            if (uiShieldBashTimer <= uiDiff)
+            if (ShieldBashTimer <= Diff)
             {
                 DoCast(me->getVictim(), SPELL_MOCKING_BLOW);
-                uiShieldBashTimer = 8000;
-            } else uiShieldBashTimer -= uiDiff;
+                ShieldBashTimer = 8000;
+            } else ShieldBashTimer -= Diff;
 
             DoMeleeAttackIfReady();
         }

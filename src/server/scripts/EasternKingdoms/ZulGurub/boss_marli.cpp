@@ -46,25 +46,23 @@ class boss_marli : public CreatureScript
     public:
 
         boss_marli()
-            : CreatureScript("boss_marli")
-        {
-        }
+            : CreatureScript("boss_marli") {}
 
         struct boss_marliAI : public ScriptedAI
         {
             boss_marliAI(Creature* c) : ScriptedAI(c)
             {
-                m_pInstance = c->GetInstanceScript();
+                pInstance = c->GetInstanceScript();
             }
 
-            InstanceScript* m_pInstance;
+            InstanceScript* pInstance;
 
             uint32 SpawnStartSpiders_Timer;
             uint32 PoisonVolley_Timer;
             uint32 SpawnSpider_Timer;
             uint32 Charge_Timer;
             uint32 Aspect_Timer;
-            uint32 Transform_Timer;
+            uint32 Transfor_Timer;
             uint32 TransformBack_Timer;
 
             bool Spawned;
@@ -77,7 +75,7 @@ class boss_marli : public CreatureScript
                 SpawnSpider_Timer = 30000;
                 Charge_Timer = 1500;
                 Aspect_Timer = 12000;
-                Transform_Timer = 45000;
+                Transfor_Timer = 45000;
                 TransformBack_Timer = 25000;
 
                 Spawned = false;
@@ -92,8 +90,8 @@ class boss_marli : public CreatureScript
             void JustDied(Unit* /*Killer*/)
             {
                 DoScriptText(SAY_DEATH, me);
-                if (m_pInstance)
-                    m_pInstance->SetData(DATA_MARLI, DONE);
+                if (pInstance)
+                    pInstance->SetData(DATA_MARLI, DONE);
             }
 
             void UpdateAI(const uint32 diff)
@@ -153,7 +151,7 @@ class boss_marli : public CreatureScript
                         SpawnSpider_Timer = 12000 + rand()%5000;
                     } else SpawnSpider_Timer -= diff;
 
-                    if (!PhaseTwo && Transform_Timer <= diff)
+                    if (!PhaseTwo && Transfor_Timer <= diff)
                     {
                         DoScriptText(SAY_TRANSFORM, me);
                         DoCast(me, SPELL_SPIDER_FORM);
@@ -167,8 +165,8 @@ class boss_marli : public CreatureScript
                             DoModifyThreatPercent(me->getVictim(), -100);
 
                         PhaseTwo = true;
-                        Transform_Timer = urand(35000, 60000);
-                    } else Transform_Timer -= diff;
+                        Transfor_Timer = urand(35000, 60000);
+                    } else Transfor_Timer -= diff;
 
                     if (PhaseTwo)
                     {
@@ -224,9 +222,7 @@ class mob_spawn_of_marli : public CreatureScript
     public:
 
         mob_spawn_of_marli()
-            : CreatureScript("mob_spawn_of_marli")
-        {
-        }
+            : CreatureScript("mob_spawn_of_marli") {}
 
         struct mob_spawn_of_marliAI : public ScriptedAI
         {
@@ -239,9 +235,7 @@ class mob_spawn_of_marli : public CreatureScript
                 LevelUp_Timer = 3000;
             }
 
-            void EnterCombat(Unit* /*who*/)
-            {
-            }
+            void EnterCombat(Unit* /*who*/) {}
 
             void UpdateAI (const uint32 diff)
             {

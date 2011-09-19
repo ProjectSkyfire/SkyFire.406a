@@ -93,9 +93,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit* /*who*/)
-        {
-        }
+        void EnterCombat(Unit* /*who*/) {}
 
         void JustDied(Unit* Killer)
         {

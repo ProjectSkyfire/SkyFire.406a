@@ -43,13 +43,13 @@ class instance_uldaman : public InstanceMapScript
 
         struct instance_uldaman_InstanceMapScript : public InstanceScript
         {
-            instance_uldaman_InstanceMapScript(Map* pMap) : InstanceScript(pMap)
+            instance_uldaman_InstanceMapScript(Map* map) : InstanceScript(map)
             {
             }
 
             void Initialize()
             {
-                memset(&m_auiEncounter, 0, sizeof(m_auiEncounter));
+                memset(&Encounter, 0, sizeof(Encounter));
 
                 uiArchaedasGUID = 0;
                 uiIronayaGUID = 0;
@@ -70,7 +70,7 @@ class instance_uldaman : public InstanceMapScript
             bool IsEncounterInProgress() const
             {
                 for (uint8 i = 0; i < MAX_ENCOUNTER; ++i)
-                    if (m_auiEncounter[i] == IN_PROGRESS)
+                    if (Encounter[i] == IN_PROGRESS)
                         return true;
 
                 return false;
@@ -96,7 +96,7 @@ class instance_uldaman : public InstanceMapScript
             std::vector<uint64> vEarthenGuardian;
             std::vector<uint64> vArchaedasWallMinions;    // minions lined up around the wall
 
-            uint32 m_auiEncounter[MAX_ENCOUNTER];
+            uint32 Encounter[MAX_ENCOUNTER];
             std::string str_data;
 
             void OnGameObjectCreate(GameObject* go)
@@ -106,14 +106,14 @@ class instance_uldaman : public InstanceMapScript
                     case GO_ALTAR_OF_THE_KEEPER_TEMPLE_DOOR:         // lock the door
                         uiAltarOfTheKeeperTempleDoor = go->GetGUID();
 
-                        if(m_auiEncounter[0] == DONE)
+                        if(Encounter[0] == DONE)
                            HandleGameObject(0, true, go);
                         break;
 
                     case GO_ARCHAEDAS_TEMPLE_DOOR:
                         uiArchaedasTempleDoor = go->GetGUID();
 
-                        if(m_auiEncounter[0] == DONE)
+                        if(Encounter[0] == DONE)
                             HandleGameObject(0, true, go);
                         break;
 
@@ -122,21 +122,21 @@ class instance_uldaman : public InstanceMapScript
                         go->SetUInt32Value(GAMEOBJECT_FLAGS, 33);
                         uiAncientVaultDoor = go->GetGUID();
 
-                        if(m_auiEncounter[1] == DONE)
+                        if(Encounter[1] == DONE)
                             HandleGameObject(0, true, go);
                         break;
 
                     case GO_IRONAYA_SEAL_DOOR:
                         uiIronayaSealDoor = go->GetGUID();
 
-                        if (m_auiEncounter[2] == DONE)
+                        if (Encounter[2] == DONE)
                             HandleGameObject(0, true, go);
                         break;
 
                     case GO_KEYSTONE:
                         uiKeystoneGUID = go->GetGUID();
 
-                        if (m_auiEncounter[2] == DONE)
+                        if (Encounter[2] == DONE)
                         {
                             HandleGameObject(0, true, go);
                             go->SetUInt32Value(GAMEOBJECT_FLAGS, GO_FLAG_INTERACT_COND);
@@ -326,13 +326,13 @@ class instance_uldaman : public InstanceMapScript
                 switch(type)
                 {
                     case DATA_ALTAR_DOORS:
-                        m_auiEncounter[0] = data;
+                        Encounter[0] = data;
                         if(data == DONE)
                             SetDoor(uiAltarOfTheKeeperTempleDoor, true);
                         break;
 
                     case DATA_ANCIENT_DOOR:
-                        m_auiEncounter[1] = data;
+                        Encounter[1] = data;
                         if(data == DONE) //archeadas defeat
                         {
                             SetDoor(uiArchaedasTempleDoor, true); //re open enter door
@@ -341,7 +341,7 @@ class instance_uldaman : public InstanceMapScript
                         break;
 
                     case DATA_IRONAYA_DOOR:
-                        m_auiEncounter[2] = data;
+                        Encounter[2] = data;
                         break;
 
                     case DATA_STONE_KEEPERS:
@@ -352,7 +352,7 @@ class instance_uldaman : public InstanceMapScript
                         switch(data)
                         {
                             case NOT_STARTED:
-                                if (m_auiEncounter[0] == DONE) //if players opened the doors
+                                if (Encounter[0] == DONE) //if players opened the doors
                                     SetDoor(uiArchaedasTempleDoor, true);
 
                                 RespawnMinions();
@@ -378,7 +378,7 @@ class instance_uldaman : public InstanceMapScript
                     OUT_SAVE_INST_DATA;
 
                     std::ostringstream saveStream;
-                    saveStream << m_auiEncounter[0] << ' ' << m_auiEncounter[1] << ' ' << m_auiEncounter[2];
+                    saveStream << Encounter[0] << ' ' << Encounter[1] << ' ' << Encounter[2];
 
                     str_data = saveStream.str();
 
@@ -413,12 +413,12 @@ class instance_uldaman : public InstanceMapScript
                 OUT_LOAD_INST_DATA(in);
 
                 std::istringstream loadStream(in);
-                loadStream >> m_auiEncounter[0] >> m_auiEncounter[1] >> m_auiEncounter[2];
+                loadStream >> Encounter[0] >> Encounter[1] >> Encounter[2];
 
                 for (uint8 i = 0; i < MAX_ENCOUNTER; ++i)
                 {
-                    if (m_auiEncounter[i] == IN_PROGRESS)
-                        m_auiEncounter[i] = NOT_STARTED;
+                    if (Encounter[i] == IN_PROGRESS)
+                        Encounter[i] = NOT_STARTED;
                 }
 
                 OUT_LOAD_INST_DATA_COMPLETE;
@@ -447,7 +447,7 @@ class instance_uldaman : public InstanceMapScript
                     case 7228:    // Ironaya
                         uiIronayaGUID = creature->GetGUID();
 
-                        if(m_auiEncounter[2] != DONE)
+                        if(Encounter[2] != DONE)
                             SetFrozenState (creature);
                         break;
 
@@ -480,9 +480,9 @@ class instance_uldaman : public InstanceMapScript
             } // end GetData64
         };
 
-        InstanceScript* GetInstanceScript(InstanceMap* pMap) const
+        InstanceScript* GetInstanceScript(InstanceMap* map) const
         {
-            return new instance_uldaman_InstanceMapScript(pMap);
+            return new instance_uldaman_InstanceMapScript(map);
         }
 };
 

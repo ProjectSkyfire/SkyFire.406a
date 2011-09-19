@@ -86,34 +86,34 @@ public:
             }
         }
 
-        void UpdateAI(const uint32 uiDiff)
+        void UpdateAI(const uint32 Diff)
         {
             if (!UpdateVictim())
                 return;
 
-            if (uiLavaSpewTimer <= uiDiff)
+            if (uiLavaSpewTimer <= Diff)
             {
                 if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                     me->CastSpell(target, SPELL_LAVA_SPEW, true);
 
                 uiLavaSpewTimer = urand(10*IN_MILLISECONDS, 12*IN_MILLISECONDS);
-            } else uiLavaSpewTimer -= uiDiff;
+            } else uiLavaSpewTimer -= Diff;
 
-            if (uiMagmaSpitTimer <= uiDiff)
+            if (uiMagmaSpitTimer <= Diff)
             {
                 if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                     me->CastSpell(target, SPELL_MAGMA_SPIT , true);
 
                 uiMagmaSpitTimer = urand(12*IN_MILLISECONDS, 14*IN_MILLISECONDS);
-            } else uiMagmaSpitTimer -= uiDiff;
+            } else uiMagmaSpitTimer -= Diff;
 
-            if (uiLavaParasiteSummonTimer <= uiDiff)
+            if (uiLavaParasiteSummonTimer <= Diff)
             {
                 for(int i = 0; i < 2; ++i)
                     SummonCreatureWithRandomTarget(42321);
 
                 uiLavaParasiteSummonTimer = 30*IN_MILLISECONDS;
-            } else uiLavaParasiteSummonTimer -= uiDiff;
+            } else uiLavaParasiteSummonTimer -= Diff;
 
             DoMeleeAttackIfReady();
         }
@@ -145,19 +145,19 @@ public:
 
         void JustDied(Unit* /*Killer*/) {}
 
-        void UpdateAI(const uint32 uiDiff)
+        void UpdateAI(const uint32 Diff)
         {
             if (!UpdateVictim())
                 return;
 
             if (me->IsWithinDistInMap(me->getVictim(), 2.0f))
             {
-                if (uiCheckDistanceTimer <= uiDiff)
+                if (uiCheckDistanceTimer <= Diff)
                 {
                     me->CastSpell(me->getVictim(), 94679 , true);
 
                     uiCheckDistanceTimer = 86400*IN_MILLISECONDS;
-                } else uiCheckDistanceTimer -= uiDiff;
+                } else uiCheckDistanceTimer -= Diff;
             }
 
             DoMeleeAttackIfReady();

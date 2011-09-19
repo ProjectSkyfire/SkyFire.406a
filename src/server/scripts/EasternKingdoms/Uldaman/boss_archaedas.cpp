@@ -131,14 +131,14 @@ class boss_archaedas : public CreatureScript
                 DoPlaySoundToSet(me, SOUND_KILL);
             }
 
-            void UpdateAI(const uint32 uiDiff)
+            void UpdateAI(const uint32 Diff)
             {
                 if (!pInstance)
                     return;
                 // we're still doing awaken animation
                 if (bWakingUp && iAwakenTimer >= 0)
                 {
-                    iAwakenTimer -= uiDiff;
+                    iAwakenTimer -= Diff;
                     return;        // dont do anything until we are done
                 } else if (bWakingUp && iAwakenTimer <= 0)
                 {
@@ -152,12 +152,12 @@ class boss_archaedas : public CreatureScript
                     return;
 
                 // wake a wall minion
-                if (uiWallMinionTimer <= uiDiff)
+                if (uiWallMinionTimer <= Diff)
                 {
                     pInstance->SetData (DATA_MINIONS, IN_PROGRESS);
 
                     uiWallMinionTimer = 10000;
-                } else uiWallMinionTimer -= uiDiff;
+                } else uiWallMinionTimer -= Diff;
 
                 //If we are <66 summon the guardians
                 if (!bGuardiansAwake && !HealthAbovePct(66))
@@ -185,14 +185,14 @@ class boss_archaedas : public CreatureScript
                     bVaultWalkersAwake = true;
                 }
 
-                if (uiTremorTimer <= uiDiff)
+                if (uiTremorTimer <= Diff)
                 {
                     //Cast
                     DoCast(me->getVictim(), SPELL_GROUND_TREMOR);
 
                     //45 seconds until we should cast this agian
                     uiTremorTimer  = 45000;
-                } else uiTremorTimer  -= uiDiff;
+                } else uiTremorTimer  -= Diff;
 
                 DoMeleeAttackIfReady();
             }
@@ -283,12 +283,12 @@ class mob_archaedas_minions : public CreatureScript
                     ScriptedAI::MoveInLineOfSight(who);
             }
 
-            void UpdateAI(const uint32 uiDiff)
+            void UpdateAI(const uint32 Diff)
             {
                 // we're still in the awaken animation
                 if (bWakingUp && iAwakenTimer >= 0)
                 {
-                    iAwakenTimer -= uiDiff;
+                    iAwakenTimer -= Diff;
                     return;        // dont do anything until we are done
                 } else if (bWakingUp && iAwakenTimer <= 0)
                 {
@@ -395,7 +395,7 @@ class go_altar_of_archaedas : public GameObjectScript
         {
         }
 
-        bool OnGossipHello(Player* player, GameObject* /*pGO*/)
+        bool OnGossipHello(Player* player, GameObject* /*go*/)
         {
             InstanceScript* pInstance = player->GetInstanceScript();
             if (!pInstance)
@@ -426,7 +426,7 @@ class go_altar_of_the_keepers : public GameObjectScript
         {
         }
 
-        bool OnGossipHello(Player* player, GameObject* /*pGo*/)
+        bool OnGossipHello(Player* player, GameObject* /*go*/)
         {
             InstanceScript* pInstance = player->GetInstanceScript();
             if (!pInstance)

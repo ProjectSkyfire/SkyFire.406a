@@ -47,7 +47,7 @@ public:
             pInstance->SetData(DATA_ATRAMEDES, DONE);
         }
 
-        void UpdateAI(const uint32 uiDiff)
+        void UpdateAI(const uint32 Diff)
         {
             if (!UpdateVictim())
                 return;

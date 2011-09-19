@@ -59,28 +59,28 @@ public:
     {
         npc_crusade_persuadedAI(Creature* creature) : ScriptedAI(creature) {}
 
-        uint32 uiSpeech_timer;
-        uint32 uiSpeech_counter;
-        uint64 uiPlayerGUID;
+        uint32 Speech_timer;
+        uint32 Speech_counter;
+        uint64 PlayerGUID;
 
         void Reset()
         {
-            uiSpeech_timer = 0;
-            uiSpeech_counter = 0;
-            uiPlayerGUID = 0;
+            Speech_timer = 0;
+            Speech_counter = 0;
+            PlayerGUID = 0;
             me->SetReactState(REACT_AGGRESSIVE);
             me->RestoreFaction();
         }
 
         void SpellHit(Unit* caster, const SpellInfo* spell)
         {
-            if (spell->Id == SPELL_PERSUASIVE_STRIKE && caster->GetTypeId() == TYPEID_PLAYER && me->isAlive() && !uiSpeech_counter)
+            if (spell->Id == SPELL_PERSUASIVE_STRIKE && caster->GetTypeId() == TYPEID_PLAYER && me->isAlive() && !Speech_counter)
             {
                 if (CAST_PLR(caster)->GetQuestStatus(12720) == QUEST_STATUS_INCOMPLETE)
                 {
-                    uiPlayerGUID = caster->GetGUID();
-                    uiSpeech_timer = 1000;
-                    uiSpeech_counter = 1;
+                    PlayerGUID = caster->GetGUID();
+                    Speech_timer = 1000;
+                    Speech_counter = 1;
                     me->setFaction(caster->getFaction());
                     me->CombatStop(true);
                     me->GetMotionMaster()->MoveIdle();
@@ -99,36 +99,36 @@ public:
 
         void UpdateAI(const uint32 diff)
         {
-            if (uiSpeech_counter)
+            if (Speech_counter)
             {
-                if (uiSpeech_timer <= diff)
+                if (Speech_timer <= diff)
                 {
-                    Player* player = Unit::GetPlayer(*me, uiPlayerGUID);
+                    Player* player = Unit::GetPlayer(*me, PlayerGUID);
                     if (!player)
                     {
                         EnterEvadeMode();
                         return;
                     }
 
-                    switch(uiSpeech_counter)
+                    switch(Speech_counter)
                     {
-                        case 1: DoScriptText(SAY_PERSUADED1, me); uiSpeech_timer = 8000; break;
-                        case 2: DoScriptText(SAY_PERSUADED2, me); uiSpeech_timer = 8000; break;
-                        case 3: DoScriptText(SAY_PERSUADED3, me); uiSpeech_timer = 8000; break;
-                        case 4: DoScriptText(SAY_PERSUADED4, me); uiSpeech_timer = 8000; break;
-                        case 5: DoScriptText(SAY_PERSUADED5, player); uiSpeech_timer = 8000; break;
+                        case 1: DoScriptText(SAY_PERSUADED1, me); Speech_timer = 8000; break;
+                        case 2: DoScriptText(SAY_PERSUADED2, me); Speech_timer = 8000; break;
+                        case 3: DoScriptText(SAY_PERSUADED3, me); Speech_timer = 8000; break;
+                        case 4: DoScriptText(SAY_PERSUADED4, me); Speech_timer = 8000; break;
+                        case 5: DoScriptText(SAY_PERSUADED5, player); Speech_timer = 8000; break;
                         case 6: DoScriptText(SAY_PERSUADED6, me);
                             player->Kill(me);
                             //me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
                             //me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-                            uiSpeech_counter = 0;
+                            Speech_counter = 0;
                             player->GroupEventHappens(12720, me);
                             return;
                     }
 
-                    ++uiSpeech_counter;
+                    ++Speech_counter;
                     DoCastAOE(58111, true);
-                } else uiSpeech_timer -= diff;
+                } else Speech_timer -= diff;
 
                 return;
             }
@@ -177,14 +177,14 @@ class npc_koltira_deathweaver : public CreatureScript
 public:
     npc_koltira_deathweaver() : CreatureScript("npc_koltira_deathweaver") { }
 
-    bool OnQuestAccept(Player* player, Creature* creature, const Quest* pQuest)
+    bool OnQuestAccept(Player* player, Creature* creature, const Quest* quest)
     {
-        if (pQuest->GetQuestId() == QUEST_BREAKOUT)
+        if (quest->GetQuestId() == QUEST_BREAKOUT)
         {
             creature->SetStandState(UNIT_STAND_STATE_STAND);
 
-            if (npc_escortAI* pEscortAI = CAST_AI(npc_koltira_deathweaver::npc_koltira_deathweaverAI, creature->AI()))
-                pEscortAI->Start(false, false, player->GetGUID());
+            if (npc_escortAI* escortAI = CAST_AI(npc_koltira_deathweaver::npc_koltira_deathweaverAI, creature->AI()))
+                escortAI->Start(false, false, player->GetGUID());
         }
         return true;
     }
@@ -201,26 +201,26 @@ public:
             me->SetReactState(REACT_DEFENSIVE);
         }
 
-        uint32 m_uiWave;
-        uint32 m_uiWave_Timer;
-        uint64 m_uiValrothGUID;
+        uint32 Wave;
+        uint32 Wave_Timer;
+        uint64 ValrothGUID;
 
         void Reset()
         {
             if (!HasEscortState(STATE_ESCORT_ESCORTING))
             {
-                m_uiWave = 0;
-                m_uiWave_Timer = 3000;
-                m_uiValrothGUID = 0;
+                Wave = 0;
+                Wave_Timer = 3000;
+                ValrothGUID = 0;
                 me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
                 me->LoadEquipment(0, true);
                 me->RemoveAura(SPELL_ANTI_MAGIC_ZONE);
             }
         }
 
-        void WaypointReached(uint32 uiPointId)
+        void WaypointReached(uint32 PointId)
         {
-            switch(uiPointId)
+            switch(PointId)
             {
                 case 0:
                     DoScriptText(SAY_BREAKOUT1, me);
@@ -261,7 +261,7 @@ public:
             }
 
             if (summoned->GetEntry() == NPC_HIGH_INQUISITOR_VALROTH)
-                m_uiValrothGUID = summoned->GetGUID();
+                ValrothGUID = summoned->GetGUID();
 
             summoned->AddThreat(me, 0.0f);
             summoned->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_OOC_NOT_ATTACKABLE);
@@ -273,49 +273,49 @@ public:
                 me->SummonCreature(NPC_CRIMSON_ACOLYTE, 1642.329f, -6045.818f, 127.583f, 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 5000);
         }
 
-        void UpdateAI(const uint32 uiDiff)
+        void UpdateAI(const uint32 Diff)
         {
-            npc_escortAI::UpdateAI(uiDiff);
+            npc_escortAI::UpdateAI(Diff);
 
             if (HasEscortState(STATE_ESCORT_PAUSED))
             {
-                if (m_uiWave_Timer <= uiDiff)
+                if (Wave_Timer <= Diff)
                 {
-                    switch(m_uiWave)
+                    switch(Wave)
                     {
                         case 0:
                             DoScriptText(SAY_BREAKOUT3, me);
                             SummonAcolyte(3);
-                            m_uiWave_Timer = 20000;
+                            Wave_Timer = 20000;
                             break;
                         case 1:
                             DoScriptText(SAY_BREAKOUT4, me);
                             SummonAcolyte(3);
-                            m_uiWave_Timer = 20000;
+                            Wave_Timer = 20000;
                             break;
                         case 2:
                             DoScriptText(SAY_BREAKOUT5, me);
                             SummonAcolyte(4);
-                            m_uiWave_Timer = 20000;
+                            Wave_Timer = 20000;
                             break;
                         case 3:
                             DoScriptText(SAY_BREAKOUT6, me);
                             me->SummonCreature(NPC_HIGH_INQUISITOR_VALROTH, 1642.329f, -6045.818f, 127.583f, 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 1000);
-                            m_uiWave_Timer = 1000;
+                            Wave_Timer = 1000;
                             break;
                         case 4:
                         {
-                            Creature* pTemp = Unit::GetCreature(*me, m_uiValrothGUID);
+                            Creature* temp = Unit::GetCreature(*me, ValrothGUID);
 
-                            if (!pTemp || !pTemp->isAlive())
+                            if (!temp || !temp->isAlive())
                             {
                                 DoScriptText(SAY_BREAKOUT8, me);
-                                m_uiWave_Timer = 5000;
+                                Wave_Timer = 5000;
                             }
                             else
                             {
-                                m_uiWave_Timer = 2500;
-                                return;                         //return, we don't want m_uiWave to increment now
+                                Wave_Timer = 2500;
+                                return;                         //return, we don't want Wave to increment now
                             }
                             break;
                         }
@@ -323,7 +323,7 @@ public:
                             DoScriptText(SAY_BREAKOUT9, me);
                             me->RemoveAurasDueToSpell(SPELL_ANTI_MAGIC_ZONE);
                             // i do not know why the armor will also be removed
-                            m_uiWave_Timer = 2500;
+                            Wave_Timer = 2500;
                             break;
                         case 6:
                             DoScriptText(SAY_BREAKOUT10, me);
@@ -331,10 +331,10 @@ public:
                             break;
                     }
 
-                    ++m_uiWave;
+                    ++Wave;
                 }
                 else
-                    m_uiWave_Timer -= uiDiff;
+                    Wave_Timer -= Diff;
             }
         }
     };
@@ -364,21 +364,21 @@ public:
     {
         mob_scarlet_courierAI(Creature* creature) : ScriptedAI(creature) {}
 
-        uint32 uiStage;
-        uint32 uiStage_timer;
+        uint32 Stage;
+        uint32 Stage_timer;
 
         void Reset()
         {
             me->Mount(14338); // not sure about this id
-            uiStage = 1;
-            uiStage_timer = 3000;
+            Stage = 1;
+            Stage_timer = 3000;
         }
 
         void EnterCombat(Unit* /*who*/)
         {
             DoScriptText(SAY_TREE2, me);
             me->Unmount();
-            uiStage = 0;
+            Stage = 0;
         }
 
         void MovementInform(uint32 type, uint32 id)
@@ -387,16 +387,16 @@ public:
                 return;
 
             if (id == 1)
-                uiStage = 2;
+                Stage = 2;
         }
 
         void UpdateAI(const uint32 diff)
         {
-            if (uiStage && !me->isInCombat())
+            if (Stage && !me->isInCombat())
             {
-                if (uiStage_timer <= diff)
+                if (Stage_timer <= diff)
                 {
-                    switch(uiStage)
+                    switch(Stage)
                     {
                     case 1:
                         me->AddUnitMovementFlag(MOVEMENTFLAG_WALKING);
@@ -414,9 +414,9 @@ public:
                                 AttackStart(unit);
                         break;
                     }
-                    uiStage_timer = 3000;
-                    uiStage = 0;
-                } else uiStage_timer -= diff;
+                    Stage_timer = 3000;
+                    Stage = 0;
+                } else Stage_timer -= diff;
             }
 
             if (!UpdateVictim())
@@ -457,15 +457,15 @@ public:
     {
         mob_high_inquisitor_valrothAI(Creature* creature) : ScriptedAI(creature) {}
 
-        uint32 uiRenew_timer;
-        uint32 uiInquisitor_Penance_timer;
-        uint32 uiValroth_Smite_timer;
+        uint32 Renew_timer;
+        uint32 Inquisitor_Penance_timer;
+        uint32 Valroth_Smite_timer;
 
         void Reset()
         {
-            uiRenew_timer = 1000;
-            uiInquisitor_Penance_timer = 2000;
-            uiValroth_Smite_timer = 1000;
+            Renew_timer = 1000;
+            Inquisitor_Penance_timer = 2000;
+            Valroth_Smite_timer = 1000;
         }
 
         void EnterCombat(Unit* who)
@@ -476,26 +476,26 @@ public:
 
         void UpdateAI(const uint32 diff)
         {
-            if (uiRenew_timer <= diff)
+            if (Renew_timer <= diff)
             {
                 Shout();
                 DoCast(me, SPELL_RENEW);
-                uiRenew_timer = 1000 + rand()%5000;
-            } else uiRenew_timer -= diff;
+                Renew_timer = 1000 + rand()%5000;
+            } else Renew_timer -= diff;
 
-            if (uiInquisitor_Penance_timer <= diff)
+            if (Inquisitor_Penance_timer <= diff)
             {
                 Shout();
                 DoCast(me->getVictim(), SPELL_INQUISITOR_PENANCE);
-                uiInquisitor_Penance_timer = 2000 + rand()%5000;
-            } else uiInquisitor_Penance_timer -= diff;
+                Inquisitor_Penance_timer = 2000 + rand()%5000;
+            } else Inquisitor_Penance_timer -= diff;
 
-            if (uiValroth_Smite_timer <= diff)
+            if (Valroth_Smite_timer <= diff)
             {
                 Shout();
                 DoCast(me->getVictim(), SPELL_VALROTH_SMITE);
-                uiValroth_Smite_timer = 1000 + rand()%5000;
-            } else uiValroth_Smite_timer -= diff;
+                Valroth_Smite_timer = 1000 + rand()%5000;
+            } else Valroth_Smite_timer -= diff;
 
             DoMeleeAttackIfReady();
         }

@@ -44,13 +44,13 @@ class boss_gahzranka : public CreatureScript
             boss_gahzrankaAI(Creature* c) : ScriptedAI(c) {}
             uint32 Frostbreath_Timer;
             uint32 MassiveGeyser_Timer;
-            uint32 Slam_Timer;
+            uint32 Sla_Timer;
 
             void Reset()
             {
                 Frostbreath_Timer = 8000;
                 MassiveGeyser_Timer = 25000;
-                Slam_Timer = 17000;
+                Sla_Timer = 17000;
             }
 
             void EnterCombat(Unit* /*who*/)
@@ -79,12 +79,12 @@ class boss_gahzranka : public CreatureScript
                     MassiveGeyser_Timer = 22000 + rand()%10000;
                 } else MassiveGeyser_Timer -= diff;
 
-                //Slam_Timer
-                if (Slam_Timer <= diff)
+                //Sla_Timer
+                if (Sla_Timer <= diff)
                 {
                     DoCast(me->getVictim(), SPELL_SLAM);
-                    Slam_Timer = 12000 + rand()%8000;
-                } else Slam_Timer -= diff;
+                    Sla_Timer = 12000 + rand()%8000;
+                } else Sla_Timer -= diff;
 
                 DoMeleeAttackIfReady();
             }

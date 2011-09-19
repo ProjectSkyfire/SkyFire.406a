@@ -50,10 +50,10 @@ class npcs_dithers_and_arbington : public CreatureScript
 public:
     npcs_dithers_and_arbington() : CreatureScript("npcs_dithers_and_arbington") { }
 
-    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*uiSender*/, uint32 uiAction)
+    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*uiSender*/, uint32 Action)
     {
         player->PlayerTalkClass->ClearMenus();
-        switch(uiAction)
+        switch(Action)
         {
             case GOSSIP_ACTION_TRADE:
                 player->GetSession()->SendListInventory(creature->GetGUID());
@@ -121,10 +121,10 @@ class npc_myranda_the_hag : public CreatureScript
 public:
     npc_myranda_the_hag() : CreatureScript("npc_myranda_the_hag") { }
 
-    bool OnGossipSelect(Player* player, Creature* /*creature*/, uint32 /*uiSender*/, uint32 uiAction)
+    bool OnGossipSelect(Player* player, Creature* /*creature*/, uint32 /*uiSender*/, uint32 Action)
     {
         player->PlayerTalkClass->ClearMenus();
-        if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+        if (Action == GOSSIP_ACTION_INFO_DEF + 1)
         {
             player->CLOSE_GOSSIP_MENU();
             player->CastSpell(player, SPELL_SCARLET_ILLUSION, false);
@@ -292,10 +292,10 @@ public:
 
     bool OnQuestAccept(Player* player, Creature* creature, Quest const* quest)
     {
-        npc_escortAI* pEscortAI = CAST_AI(npc_anchorite_truuen::npc_anchorite_truuenAI, creature->AI());
+        npc_escortAI* escortAI = CAST_AI(npc_anchorite_truuen::npc_anchorite_truuenAI, creature->AI());
 
         if (quest->GetQuestId() == QUEST_TOMB_LIGHTBRINGER)
-            pEscortAI->Start(true, true, player->GetGUID());
+            escortAI->Start(true, true, player->GetGUID());
         return false;
     }
 
@@ -308,7 +308,7 @@ public:
     {
         npc_anchorite_truuenAI(Creature* creature) : npc_escortAI(creature) { }
 
-        uint32 m_uiChatTimer;
+        uint32 ChatTimer;
 
         uint64 UghostGUID;
         uint64 TheldanisGUID;
@@ -318,7 +318,7 @@ public:
 
         void Reset()
         {
-            m_uiChatTimer = 7000;
+            ChatTimer = 7000;
         }
 
         void JustSummoned(Creature* summoned)
@@ -358,15 +358,15 @@ public:
                     Ughost = me->SummonCreature(NPC_GHOST_UTHER, 971.86f, -1825.42f , 81.99f , 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 30000);
                     Ughost->AddUnitMovementFlag(MOVEMENTFLAG_LEVITATING);
                     DoScriptText(SAY_WP_4, Ughost, me);
-                    m_uiChatTimer = 4000;
+                    ChatTimer = 4000;
                     break;
                 case 24:
                     DoScriptText(SAY_WP_5, Ughost, me);
-                    m_uiChatTimer = 4000;
+                    ChatTimer = 4000;
                     break;
                 case 25:
                     DoScriptText(SAY_WP_6, Ughost, me);
-                    m_uiChatTimer = 4000;
+                    ChatTimer = 4000;
                     break;
                 case 26:
                     if (player)
@@ -384,12 +384,12 @@ public:
                 player->FailQuest(QUEST_TOMB_LIGHTBRINGER);
         }
 
-        void UpdateAI(const uint32 uiDiff)
+        void UpdateAI(const uint32 Diff)
         {
-            npc_escortAI::UpdateAI(uiDiff);
+            npc_escortAI::UpdateAI(Diff);
             DoMeleeAttackIfReady();
             if (HasEscortState(STATE_ESCORT_ESCORTING))
-                m_uiChatTimer = 6000;
+                ChatTimer = 6000;
         }
     };
 };

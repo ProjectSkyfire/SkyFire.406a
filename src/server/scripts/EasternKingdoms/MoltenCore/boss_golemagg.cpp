@@ -60,9 +60,7 @@ class boss_golemagg : public CreatureScript
 
         struct boss_golemaggAI : public BossAI
         {
-            boss_golemaggAI(Creature* creature) : BossAI(creature, BOSS_GOLEMAGG_THE_INCINERATOR)
-            {
-            }
+            boss_golemaggAI(Creature* creature) : BossAI(creature, BOSS_GOLEMAGG_THE_INCINERATOR) {}
 
             void Reset()
             {
@@ -145,9 +143,9 @@ class mob_core_rager : public CreatureScript
                 if (HealthAbovePct(50) || !instance)
                     return;
 
-                if (Creature* pGolemagg = instance->instance->GetCreature(instance->GetData64(BOSS_GOLEMAGG_THE_INCINERATOR)))
+                if (Creature* golemagg = instance->instance->GetCreature(instance->GetData64(BOSS_GOLEMAGG_THE_INCINERATOR)))
                 {
-                    if (pGolemagg->isAlive())
+                    if (golemagg->isAlive())
                     {
                         me->AddAura(SPELL_GOLEMAGG_TRUST, me);
                         DoScriptText(EMOTE_LOWHP, me);

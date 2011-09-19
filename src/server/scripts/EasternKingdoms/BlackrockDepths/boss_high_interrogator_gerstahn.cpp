@@ -50,14 +50,14 @@ public:
 
         uint32 ShadowWordPain_Timer;
         uint32 ManaBurn_Timer;
-        uint32 PsychicScream_Timer;
+        uint32 PsychicScrea_Timer;
         uint32 ShadowShield_Timer;
 
         void Reset()
         {
             ShadowWordPain_Timer = 4000;
             ManaBurn_Timer = 14000;
-            PsychicScream_Timer = 32000;
+            PsychicScrea_Timer = 32000;
             ShadowShield_Timer = 8000;
         }
 
@@ -87,12 +87,12 @@ public:
                 ManaBurn_Timer = 10000;
             } else ManaBurn_Timer -= diff;
 
-            //PsychicScream_Timer
-            if (PsychicScream_Timer <= diff)
+            //PsychicScrea_Timer
+            if (PsychicScrea_Timer <= diff)
             {
                 DoCast(me->getVictim(), SPELL_PSYCHICSCREAM);
-                PsychicScream_Timer = 30000;
-            } else PsychicScream_Timer -= diff;
+                PsychicScrea_Timer = 30000;
+            } else PsychicScrea_Timer -= diff;
 
             //ShadowShield_Timer
             if (ShadowShield_Timer <= diff)

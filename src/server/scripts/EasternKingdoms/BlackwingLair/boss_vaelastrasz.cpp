@@ -46,20 +46,20 @@ class boss_vaelastrasz : public CreatureScript
 public:
     boss_vaelastrasz() : CreatureScript("boss_vaelastrasz") { }
 
-    void SendDefaultMenu(Player* player, Creature* creature, uint32 uiAction)
+    void SendDefaultMenu(Player* player, Creature* creature, uint32 Action)
     {
-        if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)               //Fight time
+        if (Action == GOSSIP_ACTION_INFO_DEF + 1)               //Fight time
         {
             player->CLOSE_GOSSIP_MENU();
             CAST_AI(boss_vaelastrasz::boss_vaelAI, creature->AI())->BeginSpeech(player);
         }
     }
 
-    bool OnGossipSelect(Player* player, Creature* creature, uint32 uiSender, uint32 uiAction)
+    bool OnGossipSelect(Player* player, Creature* creature, uint32 uiSender, uint32 Action)
     {
         player->PlayerTalkClass->ClearMenus();
         if (uiSender == GOSSIP_SENDER_MAIN)
-            SendDefaultMenu(player, creature, uiAction);
+            SendDefaultMenu(player, creature, Action);
 
         return true;
     }

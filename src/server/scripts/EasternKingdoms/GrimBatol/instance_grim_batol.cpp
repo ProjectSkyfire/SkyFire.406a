@@ -16,7 +16,7 @@
 */
 
 #include "ScriptPCH.h"
-#include "grim_batol.h"
+#include "gri_batol.h"
 
 #define ENCOUNTERS 4
 
@@ -27,19 +27,19 @@
    Erudax
  */
 
-class instance_grim_batol : public InstanceMapScript
+class instance_gri_batol : public InstanceMapScript
 {
 public:
-    instance_grim_batol() : InstanceMapScript("instance_grim_batol", 670) { }
+    instance_gri_batol() : InstanceMapScript("instance_gri_batol", 670) { }
 
     InstanceScript* GetInstanceScript(InstanceMap* map) const
     {
-        return new instance_grim_batol_InstanceMapScript(map);
+        return new instance_gri_batol_InstanceMapScript(map);
     }
 
-    struct instance_grim_batol_InstanceMapScript: public InstanceScript
+    struct instance_gri_batol_InstanceMapScript: public InstanceScript
     {
-        instance_grim_batol_InstanceMapScript(InstanceMap* map) : InstanceScript(map) {}
+        instance_gri_batol_InstanceMapScript(InstanceMap* map) : InstanceScript(map) {}
 
         uint32 uiEncounter[ENCOUNTERS];
 
@@ -70,21 +70,21 @@ public:
             return false;
         }
 
-        void OnCreatureCreate(Creature* pCreature, bool )
+        void OnCreatureCreate(Creature* creature, bool )
         {
-            switch(pCreature->GetEntry())
+            switch(creature->GetEntry())
             {
                  case BOSS_GENERAL_UMBRISS:
-                     uiGeneralUmbriss = pCreature->GetGUID();
+                     uiGeneralUmbriss = creature->GetGUID();
                      break;
                  case BOSS_FORGEMASTER_THRONGUS:
-                     uiForgemasterThrongus = pCreature->GetGUID();
+                     uiForgemasterThrongus = creature->GetGUID();
                      break;
                  case BOSS_DRAHGA_SHADOWBURNER:
-                     uiDrahgaShadowburner = pCreature->GetGUID();
+                     uiDrahgaShadowburner = creature->GetGUID();
                      break;
                  case BOSS_ERUDAX:
-                     uiErudax = pCreature->GetGUID();
+                     uiErudax = creature->GetGUID();
                      break;
             }
         }
@@ -190,7 +190,7 @@ public:
     };
 };
 
-void AddSC_instance_grim_batol()
+void AddSC_instance_gri_batol()
 {
-    new instance_grim_batol();
+    new instance_gri_batol();
 }
