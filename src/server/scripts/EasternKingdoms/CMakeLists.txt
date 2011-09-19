@@ -71,13 +71,13 @@ set(scripts_STAT_SRCS
   EasternKingdoms/BlackrockDepths/blackrock_depths.h
   EasternKingdoms/BlackrockDepths/boss_emperor_dagran_thaurissan.cpp
   EasternKingdoms/BlackrockDepths/boss_magmus.cpp
-  #EasternKingdoms/BastionOfTwilight/instance_bastion_of_twilight.cpp
-  #EasternKingdoms/BastionOfTwilight/boss_assembly_of_ascendents.cpp
-  #EasternKingdoms/BastionOfTwilight/boss_halfus_wyrmbreaker.cpp
-  #EasternKingdoms/BastionOfTwilight/boss_theralion_and_valiona.cpp
-  #EasternKingdoms/BastionOfTwilight/boss_cho'gall.cpp
-  #EasternKingdoms/BastionOfTwilight/boss_sinestra.cpp
-  #EasternKingdoms/BastionOfTwilight/bastion_of_twilight.h  
+  EasternKingdoms/BastionOfTwilight/instance_bastion_of_twilight.cpp
+  EasternKingdoms/BastionOfTwilight/boss_assembly_of_ascendents.cpp
+  EasternKingdoms/BastionOfTwilight/boss_halfus_wyrmbreaker.cpp
+  EasternKingdoms/BastionOfTwilight/boss_theralion_and_valiona.cpp
+  EasternKingdoms/BastionOfTwilight/boss_chogall.cpp
+  EasternKingdoms/BastionOfTwilight/boss_sinestra.cpp
+  EasternKingdoms/BastionOfTwilight/bastion_of_twilight.h  
   EasternKingdoms/ironforge.cpp
   EasternKingdoms/ScarletEnclave/chapter2.cpp
   EasternKingdoms/ScarletEnclave/chapter5.cpp

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2010-2011 MigCore <http://wow-mig.ru/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  *
@@ -71,7 +71,7 @@ public:
 
     struct boss_halfus_wyrmbreakerAI : public ScriptedAI
     {
-        boss_halfus_wyrmbreakerAI(Creature *c) : ScriptedAI(c) 
+        boss_halfus_wyrmbreakerAI(Creature *c) : ScriptedAI(c)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -116,7 +116,7 @@ public:
             if (pInstance)
                 pInstance->SetData(DATA_HALFUS, IN_PROGRESS);
         }
-        
+
         void JustDied(Unit* /*Killer*/)
         {
             pInstance->SetData(DATA_HALFUS, DONE);
@@ -148,7 +148,7 @@ public:
                     {
                         DoCast(SPELL_SHADOW_NOVA);
                         uiFuriousRoarCount = 0;
-                        uiFuriousRoarTimer = urand(12000,17000);
+                        uiFuriousRoarTimer = urand(12000, 17000);
                     }
                 else
                     uiFuriousRoarTimer -= diff;
@@ -211,28 +211,28 @@ public:
                         me->AddAura(87683, pHalfus);
         }
 
-        void SpellHit(Unit* pUnit, const SpellEntry* pSpell)
+        void SpellHit(Unit* unit, const SpellEntry* spell)
         {
-            switch (pSpell->Id)
+            switch (spell->Id)
             {
                 case SPELL_FREE_DRAGON:
                     {
                         if (!pInstance)
                             return;
-                        Creature* pHalfus = Unit::GetCreature(*me, pInstance->GetData64(DATA_HALFUS));
-                        if (!pHalfus)
+                        Creature* halfus = Unit::GetCreature(*me, pInstance->GetData64(DATA_HALFUS));
+                        if (!halfus)
                             return;
                         me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
                         switch(me->GetEntry())
                         {
                             case NPC_STORM_RIDER:
-                                me->AddAura(84092, pHalfus);
+                                me->AddAura(84092, halfus);
                                 break;
                             case NPC_NETHER_SCION:
-                                me->AddAura(83611, pHalfus);
+                                me->AddAura(83611, halfus);
                                 break;
                         }
-                        pHalfus->CastSpell(me, SPELL_BIND_WILL, false);
+                        halfus->CastSpell(me, SPELL_BIND_WILL, false);
                     }
                     break;
                 case SPELL_BIND_WILL:
@@ -251,11 +251,11 @@ public:
                     if (StoneTouchTimer <= diff)
                     {
                         StoneTouchTimer = 35000;
-                        if (Creature* pHalfus = Unit::GetCreature(*me, pInstance->GetData64(DATA_HALFUS)))
+                        if (Creature* halfus = Unit::GetCreature(*me, pInstance->GetData64(DATA_HALFUS)))
                         {
-                            me->AddAura(SPELL_STONE_TOUCH, pHalfus);
-                            if (Aura* pStone = pHalfus->GetAura(SPELL_STONE_TOUCH))
-                                pStone->SetDuration(12000);
+                            me->AddAura(SPELL_STONE_TOUCH, halfus);
+                            if (Aura* stone = halfus->GetAura(SPELL_STONE_TOUCH))
+                                stone->SetDuration(12000);
                         }
                     }
                     else
@@ -278,7 +278,7 @@ public:
 
     struct boss_proto_behemothAI : public ScriptedAI
     {
-        boss_proto_behemothAI(Creature *c) : ScriptedAI(c) 
+        boss_proto_behemothAI(Creature *c) : ScriptedAI(c)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -288,7 +288,7 @@ public:
         void Reset(){}
 
         void EnterCombat(Unit* /*pWho*/){}
-        
+
         void JustDied(Unit* /*Killer*/){}
 
         void UpdateAI(const uint32 diff)
@@ -333,7 +333,6 @@ class spell_halfus_stone_touch : public SpellScriptLoader
                 OnEffectApply += AuraEffectApplyFn(spell_halfus_stone_touch_AuraScript::HandleEffectApply, EFFECT_0, SPELL_AURA_PERIODIC_DUMMY, AURA_EFFECT_HANDLE_REAL);
                 OnEffectRemove += AuraEffectRemoveFn(spell_halfus_stone_touch_AuraScript::HandleEffectRemove, EFFECT_0, SPELL_AURA_PERIODIC_DUMMY, AURA_EFFECT_HANDLE_REAL);
             }
-
         };
 
         AuraScript* GetAuraScript() const

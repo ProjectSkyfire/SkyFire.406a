@@ -85,13 +85,12 @@ void AddSC_boss_galvangar();
 void AddSC_boss_vanndar();
 void AddSC_instance_baradin_hold();          //Baradin Hold
 void AddSC_boss_argaloth();
-//void AddSC_instance_bastion_of_twilight();   //BastionOfTwilight
-//void AddSC_boss_theralion_and_valiona();
-//void AddSC_boss_sinestra();
-//void AddSC_boss_halfus_wyrmbreaker();
-//void AddSC_boss_cho'gall();
-//void AddSC_boss_assembly_of_ascendents();
-//void AddSC_bastion_of_twilight();
+void AddSC_instance_bastion_of_twilight();   //BastionOfTwilight
+void AddSC_boss_theralion_and_valiona();
+void AddSC_boss_sinestra();
+void AddSC_boss_halfus_wyrmbreaker();
+void AddSC_boss_chogall();
+void AddSC_boss_assembly_of_ascendents();
 void AddSC_instance_blackrock_caverns();     //Blackrock Caverns
 void AddSC_boss_romogg_bonecrusher();
 void AddSC_boss_karsh_steelbender();
@@ -734,15 +733,14 @@ void AddEasternKingdomsScripts()
     AddSC_boss_drekthar();
     AddSC_boss_galvangar();
     AddSC_boss_vanndar();
-    //AddSC_instance_baradin_hold();          //Baradin Hold
+    //AddSC_instance_baradin_hold();        //Baradin Hold
     //AddSC_boss_argaloth();
-    //AddSC_instance_bastion_of_twilight();   //BastionOfTwilight
-    //AddSC_boss_theralion_and_valiona();
-    //AddSC_boss_sinestra();
-    //AddSC_boss_halfus_wyrmbreaker();
-    //AddSC_boss_cho'gall();
-    //AddSC_boss_assembly_of_ascendents();
-    //AddSC_bastion_of_twilight();
+    AddSC_instance_bastion_of_twilight();   //BastionOfTwilight
+    AddSC_boss_theralion_and_valiona();
+    AddSC_boss_sinestra();
+    AddSC_boss_halfus_wyrmbreaker();
+    //AddSC_boss_chogall();
+    AddSC_boss_assembly_of_ascendents();
     AddSC_instance_blackrock_caverns();     //Blackrock Caverns
     AddSC_boss_romogg_bonecrusher();
     AddSC_boss_karsh_steelbender();

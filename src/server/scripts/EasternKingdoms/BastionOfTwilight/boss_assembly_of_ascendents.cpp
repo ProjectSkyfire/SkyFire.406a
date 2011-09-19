@@ -64,7 +64,7 @@ public:
     };
 };
 
-void AddSC_bosses_ascendant_council()
+void AddSC_boss_assembly_of_ascendents()
 {
     new boss_elementium_monstrosity();
 }

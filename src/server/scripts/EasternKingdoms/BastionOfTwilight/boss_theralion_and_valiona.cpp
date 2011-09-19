@@ -64,7 +64,7 @@ public:
     };
 };
 
-void AddSC_bosses_theralion_and_valiona()
+void AddSC_boss_theralion_and_valiona()
 {
     new boss_valiona();
 }
