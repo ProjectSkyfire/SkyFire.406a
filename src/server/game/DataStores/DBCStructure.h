@@ -1495,7 +1495,8 @@ struct SkillLineAbilityEntry
     uint32    learnOnGetSkill;                              // 9        m_acquireMethod
     uint32    max_value;                                    // 10       m_trivialSkillLineRankHigh
     uint32    min_value;                                    // 11       m_trivialSkillLineRankLow
-    //uint32    characterPoints[2];                         // 12-13    m_characterPoints[2]
+    uint32    rewardSkillPoints;                            // 12       m_rewardSkillPoints
+    //uint32    characterPoints;                            // 13       m_characterPoints
 };
 
 struct SoundEntriesEntry

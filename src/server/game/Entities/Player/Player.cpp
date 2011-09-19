@@ -6259,7 +6259,10 @@ bool Player::UpdateCraftSkill(uint32 spellid)
                     learnSpell(discoveredSpell, false);
             }
 
-            uint32 craft_skill_gain = sWorld->getIntConfig(CONFIG_SKILL_GAIN_CRAFTING);
+            // reward extra skill points only if SkillValue not reached yellow level (<min_level: orange, min_level: yellow)
+            uint32 craft_skill_gain = (SkillValue < _spell_idx->second->min_value && _spell_idx->second->rewardSkillPoints > 0)
+                ? _spell_idx->second->rewardSkillPoints
+                : sWorld->getIntConfig(CONFIG_SKILL_GAIN_CRAFTING);
 
             return UpdateSkillPro(_spell_idx->second->skillId, SkillGainChance(SkillValue,
                 _spell_idx->second->max_value,
