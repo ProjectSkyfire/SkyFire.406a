@@ -40,9 +40,7 @@ public:
     {
         boss_death_knight_darkreaverAI(Creature* c) : ScriptedAI(c) {}
 
-        void Reset()
-        {
-        }
+        void Reset() {}
 
         void DamageTaken(Unit* /*done_by*/, uint32 &damage)
         {
@@ -50,9 +48,7 @@ public:
                 DoCast(me, 23261, true);   //Summon Darkreaver's Fallen Charger
         }
 
-        void EnterCombat(Unit* /*who*/)
-        {
-        }
+        void EnterCombat(Unit* /*who*/) {}
     };
 };
 

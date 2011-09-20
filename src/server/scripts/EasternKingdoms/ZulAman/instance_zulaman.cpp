@@ -61,7 +61,7 @@ class instance_zulaman : public InstanceMapScript
 
         struct instance_zulaman_InstanceMapScript : public InstanceScript
         {
-            instance_zulaman_InstanceMapScript(Map* pMap) : InstanceScript(pMap) {}
+            instance_zulaman_InstanceMapScript(Map* map) : InstanceScript(map) {}
 
             uint64 HarkorsSatchelGUID;
             uint64 TanzarsTrunkGUID;
@@ -79,12 +79,12 @@ class instance_zulaman : public InstanceMapScript
             uint16 QuestMinute;
             uint16 ChestLooted;
 
-            uint32 m_auiEncounter[MAX_ENCOUNTER];
+            uint32 Encounter[MAX_ENCOUNTER];
             uint32 RandVendor[RAND_VENDOR];
 
             void Initialize()
             {
-                memset(&m_auiEncounter, 0, sizeof(m_auiEncounter));
+                memset(&Encounter, 0, sizeof(Encounter));
 
                 HarkorsSatchelGUID = 0;
                 TanzarsTrunkGUID = 0;
@@ -109,7 +109,7 @@ class instance_zulaman : public InstanceMapScript
             bool IsEncounterInProgress() const
             {
                 for (uint8 i = 0; i < MAX_ENCOUNTER; ++i)
-                    if (m_auiEncounter[i] == IN_PROGRESS) return true;
+                    if (Encounter[i] == IN_PROGRESS) return true;
 
                 return false;
             }
@@ -207,7 +207,7 @@ class instance_zulaman : public InstanceMapScript
                 switch(type)
                 {
                 case DATA_NALORAKKEVENT:
-                    m_auiEncounter[0] = data;
+                    Encounter[0] = data;
                     if (data == DONE)
                     {
                         if (QuestMinute)
@@ -219,7 +219,7 @@ class instance_zulaman : public InstanceMapScript
                     }
                     break;
                 case DATA_AKILZONEVENT:
-                    m_auiEncounter[1] = data;
+                    Encounter[1] = data;
                     HandleGameObject(AkilzonDoorGUID, data != IN_PROGRESS);
                     if (data == DONE)
                     {
@@ -232,23 +232,23 @@ class instance_zulaman : public InstanceMapScript
                     }
                     break;
                 case DATA_JANALAIEVENT:
-                    m_auiEncounter[2] = data;
+                    Encounter[2] = data;
                     if (data == DONE) SummonHostage(2);
                     break;
                 case DATA_HALAZZIEVENT:
-                    m_auiEncounter[3] = data;
+                    Encounter[3] = data;
                     HandleGameObject(HalazziDoorGUID, data != IN_PROGRESS);
                     if (data == DONE) SummonHostage(3);
                     break;
                 case DATA_HEXLORDEVENT:
-                    m_auiEncounter[4] = data;
+                    Encounter[4] = data;
                     if (data == IN_PROGRESS)
                         HandleGameObject(HexLordGateGUID, false);
                     else if (data == NOT_STARTED)
                         CheckInstanceStatus();
                     break;
                 case DATA_ZULJINEVENT:
-                    m_auiEncounter[5] = data;
+                    Encounter[5] = data;
                     HandleGameObject(ZulJinDoorGUID, data != IN_PROGRESS);
                     break;
                 case DATA_CHESTLOOTED:
@@ -280,12 +280,12 @@ class instance_zulaman : public InstanceMapScript
             {
                 switch(type)
                 {
-                case DATA_NALORAKKEVENT: return m_auiEncounter[0];
-                case DATA_AKILZONEVENT:  return m_auiEncounter[1];
-                case DATA_JANALAIEVENT:  return m_auiEncounter[2];
-                case DATA_HALAZZIEVENT:  return m_auiEncounter[3];
-                case DATA_HEXLORDEVENT:  return m_auiEncounter[4];
-                case DATA_ZULJINEVENT:   return m_auiEncounter[5];
+                case DATA_NALORAKKEVENT: return Encounter[0];
+                case DATA_AKILZONEVENT:  return Encounter[1];
+                case DATA_JANALAIEVENT:  return Encounter[2];
+                case DATA_HALAZZIEVENT:  return Encounter[3];
+                case DATA_HEXLORDEVENT:  return Encounter[4];
+                case DATA_ZULJINEVENT:   return Encounter[5];
                 case DATA_CHESTLOOTED:   return ChestLooted;
                 case TYPE_RAND_VENDOR_1: return RandVendor[0];
                 case TYPE_RAND_VENDOR_2: return RandVendor[1];
@@ -313,9 +313,9 @@ class instance_zulaman : public InstanceMapScript
             }
         };
 
-        InstanceScript* GetInstanceScript(InstanceMap* pMap) const
+        InstanceScript* GetInstanceScript(InstanceMap* map) const
         {
-            return new instance_zulaman_InstanceMapScript(pMap);
+            return new instance_zulaman_InstanceMapScript(map);
         }
 };
 

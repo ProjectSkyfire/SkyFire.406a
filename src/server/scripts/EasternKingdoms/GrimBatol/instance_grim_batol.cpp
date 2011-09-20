@@ -70,21 +70,21 @@ public:
             return false;
         }
 
-        void OnCreatureCreate(Creature* pCreature, bool )
+        void OnCreatureCreate(Creature* creature, bool )
         {
-            switch(pCreature->GetEntry())
+            switch(creature->GetEntry())
             {
                  case BOSS_GENERAL_UMBRISS:
-                     uiGeneralUmbriss = pCreature->GetGUID();
+                     uiGeneralUmbriss = creature->GetGUID();
                      break;
                  case BOSS_FORGEMASTER_THRONGUS:
-                     uiForgemasterThrongus = pCreature->GetGUID();
+                     uiForgemasterThrongus = creature->GetGUID();
                      break;
                  case BOSS_DRAHGA_SHADOWBURNER:
-                     uiDrahgaShadowburner = pCreature->GetGUID();
+                     uiDrahgaShadowburner = creature->GetGUID();
                      break;
                  case BOSS_ERUDAX:
-                     uiErudax = pCreature->GetGUID();
+                     uiErudax = creature->GetGUID();
                      break;
             }
         }

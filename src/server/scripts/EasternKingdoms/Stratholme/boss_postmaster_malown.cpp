@@ -60,17 +60,15 @@ public:
 
         void Reset()
         {
-            WailingDead_Timer = 19000; //lasts 6 sec
-            Backhand_Timer = 8000; //2 sec stun
+            WailingDead_Timer     = 19000; //lasts 6 sec
+            Backhand_Timer        = 8000; //2 sec stun
             CurseOfWeakness_Timer = 20000; //lasts 2 mins
-            CurseOfTongues_Timer = 22000;
-            CallOfTheGrave_Timer = 25000;
+            CurseOfTongues_Timer  = 22000;
+            CallOfTheGrave_Timer  = 25000;
             HasYelled = false;
         }
 
-        void EnterCombat(Unit* /*who*/)
-        {
-        }
+        void EnterCombat(Unit* /*who*/) {}
 
         void UpdateAI(const uint32 diff)
         {

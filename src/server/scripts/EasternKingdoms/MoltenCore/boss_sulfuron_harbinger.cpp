@@ -64,9 +64,7 @@ class boss_sulfuron : public CreatureScript
 
         struct boss_sulfuronAI : public BossAI
         {
-            boss_sulfuronAI(Creature* creature) : BossAI(creature, BOSS_SULFURON_HARBINGER)
-            {
-            }
+            boss_sulfuronAI(Creature* creature) : BossAI(creature, BOSS_SULFURON_HARBINGER) {}
 
             void EnterCombat(Unit* victim)
             {
@@ -141,9 +139,7 @@ class mob_flamewaker_priest : public CreatureScript
 
         struct mob_flamewaker_priestAI : public ScriptedAI
         {
-            mob_flamewaker_priestAI(Creature* creature) : ScriptedAI(creature)
-            {
-            }
+            mob_flamewaker_priestAI(Creature* creature) : ScriptedAI(creature) {}
 
             void Reset()
             {

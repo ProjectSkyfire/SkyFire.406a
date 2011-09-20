@@ -40,7 +40,7 @@ class boss_argaloth: public CreatureScript
 
     struct boss_argalothAI: public BossAI
     {
-        boss_argalothAI(Creature* pCreature) : BossAI(pCreature, DATA_ARGALOTH) { }
+        boss_argalothAI(Creature* creature) : BossAI(creature, DATA_ARGALOTH) { }
 
         uint32 fel_firestorm_casted;
 
@@ -99,9 +99,9 @@ class boss_argaloth: public CreatureScript
         }
      };
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new boss_argalothAI(pCreature);
+        return new boss_argalothAI(creature);
     }
 };
 

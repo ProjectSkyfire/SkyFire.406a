@@ -313,9 +313,9 @@ class go_acherus_soul_prison : public GameObjectScript
 public:
     go_acherus_soul_prison() : GameObjectScript("go_acherus_soul_prison") { }
 
-    bool OnGossipHello(Player* player, GameObject* pGo)
+    bool OnGossipHello(Player* player, GameObject* go)
     {
-        if (Creature* anchor = pGo->FindNearestCreature(29521, 15))
+        if (Creature* anchor = go->FindNearestCreature(29521, 15))
             if (uint64 prisonerGUID = anchor->AI()->GetGUID())
                 if (Creature* prisoner = Creature::GetCreature(*player, prisonerGUID))
                     CAST_AI(npc_unworthy_initiate::npc_unworthy_initiateAI, prisoner->AI())->EventStart(anchor, player);
@@ -351,7 +351,7 @@ enum eDuelEnums
     FACTION_HOSTILE             = 2068
 };
 
-int32 m_auiRandomSay[] =
+int32 _auiRandomSay[] =
 {
     SAY_DUEL_A, SAY_DUEL_B, SAY_DUEL_C, SAY_DUEL_D, SAY_DUEL_E, SAY_DUEL_F, SAY_DUEL_G, SAY_DUEL_H, SAY_DUEL_I
 };
@@ -361,10 +361,10 @@ class npc_death_knight_initiate : public CreatureScript
 public:
     npc_death_knight_initiate() : CreatureScript("npc_death_knight_initiate") { }
 
-    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*uiSender*/, uint32 uiAction)
+    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*uiSender*/, uint32 Action)
     {
         player->PlayerTalkClass->ClearMenus();
-        if (uiAction == GOSSIP_ACTION_INFO_DEF)
+        if (Action == GOSSIP_ACTION_INFO_DEF)
         {
             player->CLOSE_GOSSIP_MENU();
 
@@ -373,15 +373,15 @@ public:
 
             if (npc_death_knight_initiateAI* pInitiateAI = CAST_AI(npc_death_knight_initiate::npc_death_knight_initiateAI, creature->AI()))
             {
-                if (pInitiateAI->m_bIsDuelInProgress)
+                if (pInitiateAI->_bIsDuelInProgress)
                     return true;
             }
 
             creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_OOC_NOT_ATTACKABLE);
             creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_UNK_15);
 
-            int32 uiSayId = rand()% (sizeof(m_auiRandomSay)/sizeof(int32));
-            DoScriptText(m_auiRandomSay[uiSayId], creature, player);
+            int32 uiSayId = rand()% (sizeof(_auiRandomSay)/sizeof(int32));
+            DoScriptText(_auiRandomSay[uiSayId], creature, player);
 
             player->CastSpell(creature, SPELL_DUEL, false);
             player->CastSpell(player, SPELL_DUEL_FLAG, true);
@@ -414,13 +414,13 @@ public:
     {
         npc_death_knight_initiateAI(Creature* creature) : CombatAI(creature)
         {
-            m_bIsDuelInProgress = false;
+            _bIsDuelInProgress = false;
         }
 
         bool lose;
-        uint64 m_uiDuelerGUID;
-        uint32 m_uiDuelTimer;
-        bool m_bIsDuelInProgress;
+        uint64 DuelerGUID;
+        uint32 DuelTimer;
+        bool _bIsDuelInProgress;
 
         void Reset()
         {
@@ -430,35 +430,35 @@ public:
 
             me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_UNK_15);
 
-            m_uiDuelerGUID = 0;
-            m_uiDuelTimer = 5000;
-            m_bIsDuelInProgress = false;
+            DuelerGUID = 0;
+            DuelTimer = 5000;
+            _bIsDuelInProgress = false;
         }
 
-        void SpellHit(Unit* pCaster, const SpellInfo* pSpell)
+        void SpellHit(Unit* caster, const SpellInfo* spell)
         {
-            if (!m_bIsDuelInProgress && pSpell->Id == SPELL_DUEL)
+            if (!_bIsDuelInProgress && spell->Id == SPELL_DUEL)
             {
-                m_uiDuelerGUID = pCaster->GetGUID();
-                m_bIsDuelInProgress = true;
+                DuelerGUID = caster->GetGUID();
+                _bIsDuelInProgress = true;
             }
         }
 
-       void DamageTaken(Unit* pDoneBy, uint32 &uiDamage)
+       void DamageTaken(Unit* doneBy, uint32 &Damage)
         {
-            if (m_bIsDuelInProgress && pDoneBy->IsControlledByPlayer())
+            if (_bIsDuelInProgress && doneBy->IsControlledByPlayer())
             {
-                if (pDoneBy->GetGUID() != m_uiDuelerGUID && pDoneBy->GetOwnerGUID() != m_uiDuelerGUID) // other players cannot help
-                    uiDamage = 0;
-                else if (uiDamage >= me->GetHealth())
+                if (doneBy->GetGUID() != DuelerGUID && doneBy->GetOwnerGUID() != DuelerGUID) // other players cannot help
+                    Damage = 0;
+                else if (Damage >= me->GetHealth())
                 {
-                    uiDamage = 0;
+                    Damage = 0;
 
                     if (!lose)
                     {
-                        pDoneBy->RemoveGameObject(SPELL_DUEL_FLAG, true);
-                        pDoneBy->AttackStop();
-                        me->CastSpell(pDoneBy, SPELL_DUEL_VICTORY, true);
+                        doneBy->RemoveGameObject(SPELL_DUEL_FLAG, true);
+                        doneBy->AttackStop();
+                        me->CastSpell(doneBy, SPELL_DUEL_VICTORY, true);
                         lose = true;
                         me->CastSpell(me, 7267, true);
                         me->RestoreFaction();
@@ -467,26 +467,26 @@ public:
             }
         }
 
-        void UpdateAI(const uint32 uiDiff)
+        void UpdateAI(const uint32 Diff)
         {
             if (!UpdateVictim())
             {
-                if (m_bIsDuelInProgress)
+                if (_bIsDuelInProgress)
                 {
-                    if (m_uiDuelTimer <= uiDiff)
+                    if (DuelTimer <= Diff)
                     {
                         me->setFaction(FACTION_HOSTILE);
 
-                        if (Unit* pUnit = Unit::GetUnit(*me, m_uiDuelerGUID))
-                            AttackStart(pUnit);
+                        if (Unit* unit = Unit::GetUnit(*me, DuelerGUID))
+                            AttackStart(unit);
                     }
                     else
-                        m_uiDuelTimer -= uiDiff;
+                        DuelTimer -= Diff;
                 }
                 return;
             }
 
-            if (m_bIsDuelInProgress)
+            if (_bIsDuelInProgress)
             {
                 if (lose)
                 {
@@ -505,7 +505,7 @@ public:
 
             // TODO: spells
 
-            CombatAI::UpdateAI(uiDiff);
+            CombatAI::UpdateAI(Diff);
         }
     };
 };
@@ -1046,7 +1046,7 @@ class go_inconspicuous_mine_car : public GameObjectScript
 public:
     go_inconspicuous_mine_car() : GameObjectScript("go_inconspicuous_mine_car") { }
 
-    bool OnGossipHello(Player* player, GameObject* /*pGO*/)
+    bool OnGossipHello(Player* player, GameObject* /*go*/)
     {
         if (player->GetQuestStatus(12701) == QUEST_STATUS_INCOMPLETE)
         {

@@ -53,9 +53,7 @@ class boss_shazzrah : public CreatureScript
 
         struct boss_shazzrahAI : public BossAI
         {
-            boss_shazzrahAI(Creature* creature) : BossAI(creature, BOSS_SHAZZRAH)
-            {
-            }
+            boss_shazzrahAI(Creature* creature) : BossAI(creature, BOSS_SHAZZRAH) {}
 
             void EnterCombat(Unit* target)
             {

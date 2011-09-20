@@ -119,9 +119,9 @@ class mob_crystalspawn_giant : public CreatureScript
 public:
     mob_crystalspawn_giant() : CreatureScript("mob_crystalspawn_giant") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new mob_crystalspawn_giantAI(pCreature);
+        return new mob_crystalspawn_giantAI(creature);
     }
 
     struct mob_crystalspawn_giantAI : public ScriptedAI
@@ -174,9 +174,9 @@ class mob_impp : public CreatureScript
 public:
     mob_impp() : CreatureScript("mob_impp") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new mob_imppAI(pCreature);
+        return new mob_imppAI(creature);
     }
 
     struct mob_imppAI : public ScriptedAI
@@ -230,9 +230,9 @@ class mob_rock_borer : public CreatureScript
 public:
     mob_rock_borer() : CreatureScript("mob_rock_borer") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new mob_rock_borerAI(pCreature);
+        return new mob_rock_borerAI(creature);
     }
 
     struct mob_rock_borerAI : public ScriptedAI
@@ -286,9 +286,9 @@ class mob_millhouse_manastorm : public CreatureScript
 public:
     mob_millhouse_manastorm() : CreatureScript("mob_millhouse_manastorm") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new mob_millhouse_manastormAI(pCreature);
+        return new mob_millhouse_manastormAI(creature);
     }
 
     struct mob_millhouse_manastormAI : public ScriptedAI

@@ -136,7 +136,7 @@ public:
                     switch(Phase)
                     {
                         case 1:
-                            me->HandleEmoteCommand(EMOTE_STATE_KNEEL); //dosen't work?
+                            me->HandleEmoteCommand(EMOTE_STATE_KNEEL); //doesn't work?
                             Timer = 1000;
                             Phase = 2;
                             break;

@@ -138,7 +138,7 @@ public:
         uint32 Start_Timer;
 
         void Reset() {}
-        void WaypointReached(uint32 /*uiPoint*/) {}
+        void WaypointReached(uint32 /*Point*/) {}
         void EnterCombat(Unit* /*who*/) {}
 
         void UpdateAI(const uint32 diff)

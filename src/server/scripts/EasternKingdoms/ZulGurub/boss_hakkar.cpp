@@ -58,10 +58,10 @@ class boss_hakkar : public CreatureScript
         {
             boss_hakkarAI(Creature* c) : ScriptedAI(c)
             {
-                m_pInstance = c->GetInstanceScript();
+                pInstance = c->GetInstanceScript();
             }
 
-            InstanceScript* m_pInstance;
+            InstanceScript* pInstance;
 
             uint32 BloodSiphon_Timer;
             uint32 CorruptedBlood_Timer;
@@ -157,9 +157,9 @@ class boss_hakkar : public CreatureScript
                 //Checking if Jeklik is dead. If not we cast her Aspect
                 if (CheckJeklik_Timer <= diff)
                 {
-                    if (m_pInstance)
+                    if (pInstance)
                     {
-                        if (m_pInstance->GetData(DATA_JEKLIK) != DONE)
+                        if (pInstance->GetData(DATA_JEKLIK) != DONE)
                         {
                             if (AspectOfJeklik_Timer <= diff)
                             {
@@ -174,9 +174,9 @@ class boss_hakkar : public CreatureScript
                 //Checking if Venoxis is dead. If not we cast his Aspect
                 if (CheckVenoxis_Timer <= diff)
                 {
-                    if (m_pInstance)
+                    if (pInstance)
                     {
-                        if (m_pInstance->GetData(DATA_VENOXIS) != DONE)
+                        if (pInstance->GetData(DATA_VENOXIS) != DONE)
                         {
                             if (AspectOfVenoxis_Timer <= diff)
                             {
@@ -191,9 +191,9 @@ class boss_hakkar : public CreatureScript
                 //Checking if Marli is dead. If not we cast her Aspect
                 if (CheckMarli_Timer <= diff)
                 {
-                    if (m_pInstance)
+                    if (pInstance)
                     {
-                        if (m_pInstance->GetData(DATA_MARLI) != DONE)
+                        if (pInstance->GetData(DATA_MARLI) != DONE)
                         {
                             if (AspectOfMarli_Timer <= diff)
                             {
@@ -208,9 +208,9 @@ class boss_hakkar : public CreatureScript
                 //Checking if Thekal is dead. If not we cast his Aspect
                 if (CheckThekal_Timer <= diff)
                 {
-                    if (m_pInstance)
+                    if (pInstance)
                     {
-                        if (m_pInstance->GetData(DATA_THEKAL) != DONE)
+                        if (pInstance->GetData(DATA_THEKAL) != DONE)
                         {
                             if (AspectOfThekal_Timer <= diff)
                             {
@@ -225,9 +225,9 @@ class boss_hakkar : public CreatureScript
                 //Checking if Arlokk is dead. If yes we cast her Aspect
                 if (CheckArlokk_Timer <= diff)
                 {
-                    if (m_pInstance)
+                    if (pInstance)
                     {
-                        if (m_pInstance->GetData(DATA_ARLOKK) != DONE)
+                        if (pInstance->GetData(DATA_ARLOKK) != DONE)
                         {
                             if (AspectOfArlokk_Timer <= diff)
                             {

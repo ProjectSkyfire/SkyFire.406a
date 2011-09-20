@@ -227,7 +227,7 @@ class boss_janalai : public CreatureScript
                 BombCount = 0;
             }
 
-            bool HatchAllEggs(uint32 uiAction) //1: reset, 2: isHatching all
+            bool HatchAllEggs(uint32 Action) //1: reset, 2: isHatching all
             {
                 std::list<Creature*> templist;
                 float x, y, z;
@@ -253,9 +253,9 @@ class boss_janalai : public CreatureScript
 
                 for (std::list<Creature*>::const_iterator i = templist.begin(); i != templist.end(); ++i)
                 {
-                    if (uiAction == 1)
+                    if (Action == 1)
                        (*i)->SetDisplayId(10056);
-                    else if (uiAction == 2 &&(*i)->GetDisplayId() != 11686)
+                    else if (Action == 2 &&(*i)->GetDisplayId() != 11686)
                        (*i)->CastSpell(*i, SPELL_HATCH_EGG, false);
                 }
                 return true;
@@ -376,9 +376,9 @@ class boss_janalai : public CreatureScript
                     BombSequenceTimer = 100;
 
                     //Teleport every Player into the middle
-                    Map* pMap = me->GetMap();
-                    if (!pMap->IsDungeon()) return;
-                    Map::PlayerList const &PlayerList = pMap->GetPlayers();
+                    Map* map = me->GetMap();
+                    if (!map->IsDungeon()) return;
+                    Map::PlayerList const &PlayerList = map->GetPlayers();
                     for (Map::PlayerList::const_iterator i = PlayerList.begin(); i != PlayerList.end(); ++i)
                         if (Player* i_pl = i->getSource())
                             if (i_pl->isAlive())

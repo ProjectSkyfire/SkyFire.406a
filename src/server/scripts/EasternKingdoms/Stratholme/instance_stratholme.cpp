@@ -63,9 +63,7 @@ class instance_stratholme : public InstanceMapScript
 
         struct instance_stratholme_InstanceMapScript : public InstanceScript
         {
-            instance_stratholme_InstanceMapScript(Map* map) : InstanceScript(map)
-            {
-            }
+            instance_stratholme_InstanceMapScript(Map* map) : InstanceScript(map) {}
 
             uint32 EncounterState[MAX_ENCOUNTER];
 
@@ -288,8 +286,8 @@ class instance_stratholme : public InstanceMapScript
                             uint32 count = abomnationGUID.size();
                             for (std::set<uint64>::const_iterator i = abomnationGUID.begin(); i != abomnationGUID.end(); ++i)
                             {
-                                if (Creature* pAbom = instance->GetCreature(*i))
-                                    if (!pAbom->isAlive())
+                                if (Creature* abom = instance->GetCreature(*i))
+                                    if (!abom->isAlive())
                                         --count;
                             }
 
@@ -297,8 +295,8 @@ class instance_stratholme : public InstanceMapScript
                             {
                                 //a bit itchy, it should close the door after 10 secs, but it doesn't. skipping it for now.
                                 //UpdateGoState(ziggurat4GUID, 0, true);
-                                if (Creature* pBaron = instance->GetCreature(baronGUID))
-                                    pBaron->SummonCreature(C_RAMSTEIN, 4032.84f, -3390.24f, 119.73f, 4.71f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 1800000);
+                                if (Creature* baron = instance->GetCreature(baronGUID))
+                                    baron->SummonCreature(C_RAMSTEIN, 4032.84f, -3390.24f, 119.73f, 4.71f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 1800000);
                                 sLog->outDebug(LOG_FILTER_TSCR, "TSCR: Instance Stratholme: Ramstein spawned.");
                             }
                             else

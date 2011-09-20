@@ -37,9 +37,7 @@ class boss_renataki : public CreatureScript
     public:
 
         boss_renataki()
-            : CreatureScript("boss_renataki")
-        {
-        }
+            : CreatureScript("boss_renataki") {}
 
         struct boss_renatakiAI : public ScriptedAI
         {
@@ -66,9 +64,7 @@ class boss_renataki : public CreatureScript
                 Ambushed = false;
             }
 
-            void EnterCombat(Unit* /*who*/)
-            {
-            }
+            void EnterCombat(Unit* /*who*/) {}
 
             void UpdateAI(const uint32 diff)
             {

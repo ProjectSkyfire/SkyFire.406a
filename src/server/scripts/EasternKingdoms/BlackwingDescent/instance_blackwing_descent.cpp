@@ -27,7 +27,7 @@ class instance_blackwing_descent : public InstanceMapScript
         {
             instance_blackwing_descent_InstanceMapScript(InstanceMap* map) : InstanceScript(map)
             {
-                memset(&m_auiEncounter, 0, sizeof(m_auiEncounter));
+                memset(&Encounter, 0, sizeof(Encounter));
             }
 
             void OnCreatureCreate(Creature* creature)
@@ -45,14 +45,14 @@ class instance_blackwing_descent : public InstanceMapScript
 
             uint32 GetData(uint32 type)
             {
-                return m_auiEncounter[type];
+                return Encounter[type];
             }
 
-            void SetData(uint32 uiType, uint32 uiData)
+            void SetData(uint32 Type, uint32 Data)
             {
-                m_auiEncounter[uiType] = uiData;
+                Encounter[Type] = Data;
 
-                if (uiData == DONE)
+                if (Data == DONE)
                 {
                     RewardValorPoints();
                     SaveToDB();
@@ -78,8 +78,8 @@ class instance_blackwing_descent : public InstanceMapScript
                     return;
 
                 for (Map::PlayerList::const_iterator i = PlList.begin(); i != PlList.end(); ++i)
-                    if (Player* pPlayer = i->getSource())
-                        pPlayer->ModifyCurrency(396, 7000);
+                    if (Player* player = i->getSource())
+                        player->ModifyCurrency(396, 7000);
             }
 
             void Load(const char* in)
@@ -105,7 +105,7 @@ class instance_blackwing_descent : public InstanceMapScript
                         loadStream >> tmpState;
                         if (tmpState == IN_PROGRESS || tmpState > SPECIAL)
                             tmpState = NOT_STARTED;
-                        m_auiEncounter[i] = tmpState;
+                        Encounter[i] = tmpState;
                     }
                 } else OUT_LOAD_INST_DATA_FAIL;
 
@@ -113,7 +113,7 @@ class instance_blackwing_descent : public InstanceMapScript
             }
 
         private:
-            uint32 m_auiEncounter[MAX_ENCOUNTER];
+            uint32 Encounter[MAX_ENCOUNTER];
         };
 
         InstanceScript* GetInstanceScript(InstanceMap* map) const

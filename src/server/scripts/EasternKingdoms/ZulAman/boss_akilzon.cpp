@@ -171,14 +171,14 @@ class boss_akilzon : public CreatureScript
 
             void SetWeather(uint32 weather, float grade)
             {
-                Map* pMap = me->GetMap();
-                if (!pMap->IsDungeon())
+                Map* map = me->GetMap();
+                if (!map->IsDungeon())
                     return;
 
                 WorldPacket data(SMSG_WEATHER, (4+4+4));
                 data << uint32(weather) << float(grade) << uint8(0);
 
-                pMap->SendToPlayers(&data);
+                map->SendToPlayers(&data);
             }
 
             void HandleStormSequence(Unit* Cloud) // 1: begin, 2-9: tick, 10: end

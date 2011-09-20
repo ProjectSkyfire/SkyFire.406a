@@ -54,10 +54,10 @@ class npc_prospector_anvilward : public CreatureScript
 public:
     npc_prospector_anvilward() : CreatureScript("npc_prospector_anvilward") { }
 
-    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*uiSender*/, uint32 uiAction)
+    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*uiSender*/, uint32 Action)
     {
         player->PlayerTalkClass->ClearMenus();
-        switch(uiAction)
+        switch(Action)
         {
             case GOSSIP_ACTION_INFO_DEF+1:
                 player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_SELECT, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+2);
@@ -65,8 +65,8 @@ public:
                 break;
             case GOSSIP_ACTION_INFO_DEF+2:
                 player->CLOSE_GOSSIP_MENU();
-                if (npc_escortAI* pEscortAI = CAST_AI(npc_prospector_anvilward::npc_prospector_anvilwardAI, creature->AI()))
-                    pEscortAI->Start(true, false, player->GetGUID());
+                if (npc_escortAI* escortAI = CAST_AI(npc_prospector_anvilward::npc_prospector_anvilwardAI, creature->AI()))
+                    escortAI->Start(true, false, player->GetGUID());
                 break;
         }
         return true;
@@ -502,10 +502,10 @@ class go_second_trial : public GameObjectScript
 public:
     go_second_trial() : GameObjectScript("go_second_trial") { }
 
-    bool OnGossipHello(Player* /*player*/, GameObject* pGO)
+    bool OnGossipHello(Player* /*player*/, GameObject* go)
     {
         // find spawn :: master_kelerun_bloodmourn
-        if (Creature* creature = pGO->FindNearestCreature(MASTER_KELERUN_BLOODMOURN, 30.0f))
+        if (Creature* creature = go->FindNearestCreature(MASTER_KELERUN_BLOODMOURN, 30.0f))
            CAST_AI(npc_second_trial_controller::master_kelerun_bloodmournAI, creature->AI())->StartEvent();
 
         return true;

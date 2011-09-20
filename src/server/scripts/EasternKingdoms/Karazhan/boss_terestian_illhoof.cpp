@@ -281,10 +281,10 @@ public:
             {
                 if (PortalGUID[i])
                 {
-                    if (Creature* pPortal = Unit::GetCreature(*me, PortalGUID[i]))
+                    if (Creature* portal = Unit::GetCreature(*me, PortalGUID[i]))
                     {
-                        CAST_AI(mob_fiendish_portal::mob_fiendish_portalAI, pPortal->AI())->DespawnAllImp();
-                        pPortal->DespawnOrUnsummon();
+                        CAST_AI(mob_fiendish_portal::mob_fiendish_portalAI, portal->AI())->DespawnAllImp();
+                        portal->DespawnOrUnsummon();
                     }
 
                     PortalGUID[i] = 0;
@@ -347,8 +347,8 @@ public:
             {
                 if (PortalGUID[i])
                 {
-                    if (Creature* pPortal = Unit::GetCreature((*me), PortalGUID[i]))
-                        pPortal->DespawnOrUnsummon();
+                    if (Creature* portal = Unit::GetCreature((*me), PortalGUID[i]))
+                        portal->DespawnOrUnsummon();
 
                     PortalGUID[i] = 0;
                 }
@@ -399,8 +399,8 @@ public:
 
                 if (PortalGUID[0] && PortalGUID[1])
                 {
-                    if (Creature* pPortal = Unit::GetCreature(*me, PortalGUID[urand(0, 1)]))
-                        pPortal->CastSpell(me->getVictim(), SPELL_SUMMON_FIENDISIMP, false);
+                    if (Creature* portal = Unit::GetCreature(*me, PortalGUID[urand(0, 1)]))
+                        portal->CastSpell(me->getVictim(), SPELL_SUMMON_FIENDISIMP, false);
                     SummonTimer = 5000;
                 }
             } else SummonTimer -= diff;

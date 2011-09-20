@@ -61,15 +61,13 @@ class boss_thekal : public CreatureScript
     public:
 
         boss_thekal()
-            : CreatureScript("boss_thekal")
-        {
-        }
+            : CreatureScript("boss_thekal") {}
 
         struct boss_thekalAI : public ScriptedAI
         {
             boss_thekalAI(Creature* c) : ScriptedAI(c)
             {
-                m_pInstance = c->GetInstanceScript();
+                pInstance = c->GetInstanceScript();
             }
 
             uint32 MortalCleave_Timer;
@@ -82,7 +80,7 @@ class boss_thekal : public CreatureScript
             uint32 Check_Timer;
             uint32 Resurrect_Timer;
 
-            InstanceScript *m_pInstance;
+            InstanceScript *pInstance;
             bool Enraged;
             bool PhaseTwo;
             bool WasDead;
@@ -112,14 +110,14 @@ class boss_thekal : public CreatureScript
             void JustDied(Unit* /*Killer*/)
             {
                 DoScriptText(SAY_DEATH, me);
-                if (m_pInstance)
-                    m_pInstance->SetData(DATA_THEKAL, DONE);
+                if (pInstance)
+                    pInstance->SetData(DATA_THEKAL, DONE);
             }
 
             void JustReachedHome()
             {
-                if (m_pInstance)
-                    m_pInstance->SetData(DATA_THEKAL, NOT_STARTED);
+                if (pInstance)
+                    pInstance->SetData(DATA_THEKAL, NOT_STARTED);
             }
 
             void UpdateAI(const uint32 diff)
@@ -130,34 +128,34 @@ class boss_thekal : public CreatureScript
                     //Check_Timer for the death of LorKhan and Zath.
                     if (!WasDead && Check_Timer <= diff)
                     {
-                        if (m_pInstance)
+                        if (pInstance)
                         {
-                            if (m_pInstance->GetData(DATA_LORKHAN) == SPECIAL)
+                            if (pInstance->GetData(DATA_LORKHAN) == SPECIAL)
                             {
                                 //Resurrect LorKhan
-                                if (Unit* pLorKhan = Unit::GetUnit((*me), m_pInstance->GetData64(DATA_LORKHAN)))
+                                if (Unit* LorKhan = Unit::GetUnit((*me), pInstance->GetData64(DATA_LORKHAN)))
                                 {
-                                    pLorKhan->SetUInt32Value(UNIT_FIELD_BYTES_1, 0);
-                                    pLorKhan->setFaction(14);
-                                    pLorKhan->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-                                    pLorKhan->SetFullHealth();
+                                    LorKhan->SetUInt32Value(UNIT_FIELD_BYTES_1, 0);
+                                    LorKhan->setFaction(14);
+                                    LorKhan->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                                    LorKhan->SetFullHealth();
 
-                                    m_pInstance->SetData(DATA_LORKHAN, DONE);
+                                    pInstance->SetData(DATA_LORKHAN, DONE);
                                 }
                             }
 
-                            if (m_pInstance->GetData(DATA_ZATH) == SPECIAL)
+                            if (pInstance->GetData(DATA_ZATH) == SPECIAL)
                             {
                                 //Resurrect Zath
-                                Unit* pZath = Unit::GetUnit((*me), m_pInstance->GetData64(DATA_ZATH));
-                                if (pZath)
+                                Unit* zath = Unit::GetUnit((*me), pInstance->GetData64(DATA_ZATH));
+                                if (zath)
                                 {
-                                    pZath->SetUInt32Value(UNIT_FIELD_BYTES_1, 0);
-                                    pZath->setFaction(14);
-                                    pZath->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-                                    pZath->SetFullHealth();
+                                    zath->SetUInt32Value(UNIT_FIELD_BYTES_1, 0);
+                                    zath->setFaction(14);
+                                    zath->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                                    zath->SetFullHealth();
 
-                                    m_pInstance->SetData(DATA_ZATH, DONE);
+                                    pInstance->SetData(DATA_ZATH, DONE);
                                 }
                             }
                         }
@@ -186,8 +184,8 @@ class boss_thekal : public CreatureScript
                         me->SetStandState(UNIT_STAND_STATE_SLEEP);
                         me->AttackStop();
 
-                        if (m_pInstance)
-                            m_pInstance->SetData(DATA_THEKAL, SPECIAL);
+                        if (pInstance)
+                            pInstance->SetData(DATA_THEKAL, SPECIAL);
 
                         WasDead=true;
                     }
@@ -271,15 +269,13 @@ class mob_zealot_lorkhan : public CreatureScript
     public:
 
         mob_zealot_lorkhan()
-            : CreatureScript("mob_zealot_lorkhan")
-        {
-        }
+            : CreatureScript("mob_zealot_lorkhan") {}
 
         struct mob_zealot_lorkhanAI : public ScriptedAI
         {
             mob_zealot_lorkhanAI(Creature* c) : ScriptedAI(c)
             {
-                m_pInstance = c->GetInstanceScript();
+                pInstance = c->GetInstanceScript();
             }
 
             uint32 Shield_Timer;
@@ -290,7 +286,7 @@ class mob_zealot_lorkhan : public CreatureScript
 
             bool FakeDeath;
 
-            InstanceScript *m_pInstance;
+            InstanceScript *pInstance;
 
             void Reset()
             {
@@ -302,16 +298,14 @@ class mob_zealot_lorkhan : public CreatureScript
 
                 FakeDeath = false;
 
-                if (m_pInstance)
-                    m_pInstance->SetData(DATA_LORKHAN, NOT_STARTED);
+                if (pInstance)
+                    pInstance->SetData(DATA_LORKHAN, NOT_STARTED);
 
                 me->SetUInt32Value(UNIT_FIELD_BYTES_1, 0);
                 me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
             }
 
-            void EnterCombat(Unit* /*who*/)
-            {
-            }
+            void EnterCombat(Unit* /*who*/) {}
 
             void UpdateAI (const uint32 diff)
             {
@@ -335,23 +329,23 @@ class mob_zealot_lorkhan : public CreatureScript
                 //Casting Greaterheal to Thekal or Zath if they are in meele range.
                 if (GreaterHeal_Timer <= diff)
                 {
-                    if (m_pInstance)
+                    if (pInstance)
                     {
-                        Unit* pThekal = Unit::GetUnit((*me), m_pInstance->GetData64(DATA_THEKAL));
-                        Unit* pZath = Unit::GetUnit((*me), m_pInstance->GetData64(DATA_ZATH));
+                        Unit* thekal = Unit::GetUnit((*me), pInstance->GetData64(DATA_THEKAL));
+                        Unit* zath = Unit::GetUnit((*me), pInstance->GetData64(DATA_ZATH));
 
-                        if (!pThekal || !pZath)
+                        if (!thekal || !zath)
                             return;
 
                         switch (urand(0, 1))
                         {
                             case 0:
-                                if (me->IsWithinMeleeRange(pThekal))
-                                    DoCast(pThekal, SPELL_GREATERHEAL);
+                                if (me->IsWithinMeleeRange(thekal))
+                                    DoCast(thekal, SPELL_GREATERHEAL);
                                 break;
                             case 1:
-                                if (me->IsWithinMeleeRange(pZath))
-                                    DoCast(pZath, SPELL_GREATERHEAL);
+                                if (me->IsWithinMeleeRange(zath))
+                                    DoCast(zath, SPELL_GREATERHEAL);
                                 break;
                         }
                     }
@@ -369,29 +363,29 @@ class mob_zealot_lorkhan : public CreatureScript
                 //Check_Timer for the death of LorKhan and Zath.
                 if (!FakeDeath && Check_Timer <= diff)
                 {
-                    if (m_pInstance)
+                    if (pInstance)
                     {
-                        if (m_pInstance->GetData(DATA_THEKAL) == SPECIAL)
+                        if (pInstance->GetData(DATA_THEKAL) == SPECIAL)
                         {
                             //Resurrect Thekal
-                            if (Unit* pThekal = Unit::GetUnit((*me), m_pInstance->GetData64(DATA_THEKAL)))
+                            if (Unit* thekal = Unit::GetUnit((*me), pInstance->GetData64(DATA_THEKAL)))
                             {
-                                pThekal->SetUInt32Value(UNIT_FIELD_BYTES_1, 0);
-                                pThekal->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-                                pThekal->setFaction(14);
-                                pThekal->SetFullHealth();
+                                thekal->SetUInt32Value(UNIT_FIELD_BYTES_1, 0);
+                                thekal->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                                thekal->setFaction(14);
+                                thekal->SetFullHealth();
                             }
                         }
 
-                        if (m_pInstance->GetData(DATA_ZATH) == SPECIAL)
+                        if (pInstance->GetData(DATA_ZATH) == SPECIAL)
                         {
                             //Resurrect Zath
-                            if (Unit* pZath = Unit::GetUnit((*me), m_pInstance->GetData64(DATA_ZATH)))
+                            if (Unit* zath = Unit::GetUnit((*me), pInstance->GetData64(DATA_ZATH)))
                             {
-                                pZath->SetUInt32Value(UNIT_FIELD_BYTES_1, 0);
-                                pZath->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-                                pZath->setFaction(14);
-                                pZath->SetFullHealth();
+                                zath->SetUInt32Value(UNIT_FIELD_BYTES_1, 0);
+                                zath->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                                zath->setFaction(14);
+                                zath->SetFullHealth();
                             }
                         }
                     }
@@ -409,8 +403,8 @@ class mob_zealot_lorkhan : public CreatureScript
                     me->setFaction(35);
                     me->AttackStop();
 
-                    if (m_pInstance)
-                        m_pInstance->SetData(DATA_LORKHAN, SPECIAL);
+                    if (pInstance)
+                        pInstance->SetData(DATA_LORKHAN, SPECIAL);
 
                     FakeDeath = true;
                 }
@@ -431,15 +425,13 @@ class mob_zealot_zath : public CreatureScript
     public:
 
         mob_zealot_zath()
-            : CreatureScript("mob_zealot_zath")
-        {
-        }
+            : CreatureScript("mob_zealot_zath") {}
 
         struct mob_zealot_zathAI : public ScriptedAI
         {
             mob_zealot_zathAI(Creature* c) : ScriptedAI(c)
             {
-                m_pInstance = c->GetInstanceScript();
+                pInstance = c->GetInstanceScript();
             }
 
             uint32 SweepingStrikes_Timer;
@@ -451,7 +443,7 @@ class mob_zealot_zath : public CreatureScript
 
             bool FakeDeath;
 
-            InstanceScript *m_pInstance;
+            InstanceScript *pInstance;
 
             void Reset()
             {
@@ -464,16 +456,14 @@ class mob_zealot_zath : public CreatureScript
 
                 FakeDeath = false;
 
-                if (m_pInstance)
-                    m_pInstance->SetData(DATA_ZATH, NOT_STARTED);
+                if (pInstance)
+                    pInstance->SetData(DATA_ZATH, NOT_STARTED);
 
                 me->SetStandState(UNIT_STAND_STATE_STAND);
                 me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
             }
 
-            void EnterCombat(Unit* /*who*/)
-            {
-            }
+            void EnterCombat(Unit* /*who*/) {}
 
             void UpdateAI (const uint32 diff)
             {
@@ -522,29 +512,29 @@ class mob_zealot_zath : public CreatureScript
                 //Check_Timer for the death of LorKhan and Zath.
                 if (!FakeDeath && Check_Timer <= diff)
                 {
-                    if (m_pInstance)
+                    if (pInstance)
                     {
-                        if (m_pInstance->GetData(DATA_LORKHAN) == SPECIAL)
+                        if (pInstance->GetData(DATA_LORKHAN) == SPECIAL)
                         {
                             //Resurrect LorKhan
-                            if (Unit* pLorKhan = Unit::GetUnit((*me), m_pInstance->GetData64(DATA_LORKHAN)))
+                            if (Unit* LorKhan = Unit::GetUnit((*me), pInstance->GetData64(DATA_LORKHAN)))
                             {
-                                pLorKhan->SetUInt32Value(UNIT_FIELD_BYTES_1, 0);
-                                pLorKhan->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-                                pLorKhan->setFaction(14);
-                                pLorKhan->SetFullHealth();
+                                LorKhan->SetUInt32Value(UNIT_FIELD_BYTES_1, 0);
+                                LorKhan->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                                LorKhan->setFaction(14);
+                                LorKhan->SetFullHealth();
                             }
                         }
 
-                        if (m_pInstance->GetData(DATA_THEKAL) == SPECIAL)
+                        if (pInstance->GetData(DATA_THEKAL) == SPECIAL)
                         {
                             //Resurrect Thekal
-                            if (Unit* pThekal = Unit::GetUnit((*me), m_pInstance->GetData64(DATA_THEKAL)))
+                            if (Unit* thekal = Unit::GetUnit((*me), pInstance->GetData64(DATA_THEKAL)))
                             {
-                                pThekal->SetUInt32Value(UNIT_FIELD_BYTES_1, 0);
-                                pThekal->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-                                pThekal->setFaction(14);
-                                pThekal->SetFullHealth();
+                                thekal->SetUInt32Value(UNIT_FIELD_BYTES_1, 0);
+                                thekal->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                                thekal->setFaction(14);
+                                thekal->SetFullHealth();
                             }
                         }
                     }
@@ -562,8 +552,8 @@ class mob_zealot_zath : public CreatureScript
                     me->setFaction(35);
                     me->AttackStop();
 
-                    if (m_pInstance)
-                        m_pInstance->SetData(DATA_ZATH, SPECIAL);
+                    if (pInstance)
+                        pInstance->SetData(DATA_ZATH, SPECIAL);
 
                     FakeDeath = true;
                 }

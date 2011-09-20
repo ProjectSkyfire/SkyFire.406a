@@ -62,41 +62,41 @@ class boss_arlokk : public CreatureScript
         {
             boss_arlokkAI(Creature* creature) : ScriptedAI(creature)
             {
-                m_pInstance = creature->GetInstanceScript();
+                pInstance = creature->GetInstanceScript();
             }
 
-            InstanceScript* m_pInstance;
+            InstanceScript* pInstance;
 
-            uint32 m_uiShadowWordPain_Timer;
-            uint32 m_uiGouge_Timer;
-            uint32 m_uiMark_Timer;
-            uint32 m_uiCleave_Timer;
-            uint32 m_uiVanish_Timer;
-            uint32 m_uiVisible_Timer;
+            uint32 ShadowWordPain_Timer;
+            uint32 Gouge_Timer;
+            uint32 Mark_Timer;
+            uint32 Cleave_Timer;
+            uint32 Vanish_Timer;
+            uint32 Visible_Timer;
 
-            uint32 m_uiSummon_Timer;
-            uint32 m_uiSummonCount;
+            uint32 Summon_Timer;
+            uint32 SummonCount;
 
-            Unit* m_pMarkedTarget;
+            Unit* _pMarkedTarget;
             uint64 MarkedTargetGUID;
 
-            bool m_bIsPhaseTwo;
-            bool m_bIsVanished;
+            bool _bIsPhaseTwo;
+            bool _bIsVanished;
 
             void Reset()
             {
-                m_uiShadowWordPain_Timer = 8000;
-                m_uiGouge_Timer = 14000;
-                m_uiMark_Timer = 35000;
-                m_uiCleave_Timer = 4000;
-                m_uiVanish_Timer = 60000;
-                m_uiVisible_Timer = 6000;
+                ShadowWordPain_Timer = 8000;
+                Gouge_Timer = 14000;
+                Mark_Timer = 35000;
+                Cleave_Timer = 4000;
+                Vanish_Timer = 60000;
+                Visible_Timer = 6000;
 
-                m_uiSummon_Timer = 5000;
-                m_uiSummonCount = 0;
+                Summon_Timer = 5000;
+                SummonCount = 0;
 
-                m_bIsPhaseTwo = false;
-                m_bIsVanished = false;
+                _bIsPhaseTwo = false;
+                _bIsVanished = false;
 
                 MarkedTargetGUID = 0;
 
@@ -111,8 +111,8 @@ class boss_arlokk : public CreatureScript
 
             void JustReachedHome()
             {
-                if (m_pInstance)
-                    m_pInstance->SetData(DATA_ARLOKK, NOT_STARTED);
+                if (pInstance)
+                    pInstance->SetData(DATA_ARLOKK, NOT_STARTED);
 
                 //we should be summoned, so despawn
                 me->DespawnOrUnsummon();
@@ -125,8 +125,8 @@ class boss_arlokk : public CreatureScript
                 me->SetDisplayId(MODEL_ID_NORMAL);
                 me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
 
-                if (m_pInstance)
-                    m_pInstance->SetData(DATA_ARLOKK, DONE);
+                if (pInstance)
+                    pInstance->SetData(DATA_ARLOKK, DONE);
             }
 
             void DoSummonPhanters()
@@ -143,25 +143,25 @@ class boss_arlokk : public CreatureScript
                 if (Unit* pMarkedTarget = Unit::GetUnit(*me, MarkedTargetGUID))
                     summoned->AI()->AttackStart(pMarkedTarget);
 
-                ++m_uiSummonCount;
+                ++SummonCount;
             }
 
-            void UpdateAI(const uint32 uiDiff)
+            void UpdateAI(const uint32 Diff)
             {
                 if (!UpdateVictim())
                     return;
 
-                if (!m_bIsPhaseTwo)
+                if (!_bIsPhaseTwo)
                 {
-                    if (m_uiShadowWordPain_Timer <= uiDiff)
+                    if (ShadowWordPain_Timer <= Diff)
                     {
                         DoCast(me->getVictim(), SPELL_SHADOWWORDPAIN);
-                        m_uiShadowWordPain_Timer = 15000;
+                        ShadowWordPain_Timer = 15000;
                     }
                     else
-                        m_uiShadowWordPain_Timer -= uiDiff;
+                        ShadowWordPain_Timer -= Diff;
 
-                    if (m_uiMark_Timer <= uiDiff)
+                    if (Mark_Timer <= Diff)
                     {
                         Unit* pMarkedTarget = SelectTarget(SELECT_TARGET_RANDOM, 0);
 
@@ -173,47 +173,47 @@ class boss_arlokk : public CreatureScript
                         else
                             sLog->outError("TSCR: boss_arlokk could not accuire pMarkedTarget.");
 
-                        m_uiMark_Timer = 15000;
+                        Mark_Timer = 15000;
                     }
                     else
-                        m_uiMark_Timer -= uiDiff;
+                        Mark_Timer -= Diff;
                 }
                 else
                 {
                     //Cleave_Timer
-                    if (m_uiCleave_Timer <= uiDiff)
+                    if (Cleave_Timer <= Diff)
                     {
                         DoCast(me->getVictim(), SPELL_CLEAVE);
-                        m_uiCleave_Timer = 16000;
+                        Cleave_Timer = 16000;
                     }
                     else
-                        m_uiCleave_Timer -= uiDiff;
+                        Cleave_Timer -= Diff;
 
                     //Gouge_Timer
-                    if (m_uiGouge_Timer <= uiDiff)
+                    if (Gouge_Timer <= Diff)
                     {
                         DoCast(me->getVictim(), SPELL_GOUGE);
 
                         DoModifyThreatPercent(me->getVictim(), -80);
 
-                        m_uiGouge_Timer = 17000+rand()%10000;
+                        Gouge_Timer = 17000+rand()%10000;
                     }
                     else
-                        m_uiGouge_Timer -= uiDiff;
+                        Gouge_Timer -= Diff;
                 }
 
-                if (m_uiSummonCount <= 30)
+                if (SummonCount <= 30)
                 {
-                    if (m_uiSummon_Timer <= uiDiff)
+                    if (Summon_Timer <= Diff)
                     {
                         DoSummonPhanters();
-                        m_uiSummon_Timer = 5000;
+                        Summon_Timer = 5000;
                     }
                     else
-                        m_uiSummon_Timer -= uiDiff;
+                        Summon_Timer -= Diff;
                 }
 
-                if (m_uiVanish_Timer <= uiDiff)
+                if (Vanish_Timer <= Diff)
                 {
                     //Invisble Model
                     me->SetDisplayId(MODEL_ID_BLANK);
@@ -222,17 +222,17 @@ class boss_arlokk : public CreatureScript
                     me->AttackStop();
                     DoResetThreat();
 
-                    m_bIsVanished = true;
+                    _bIsVanished = true;
 
-                    m_uiVanish_Timer = 45000;
-                    m_uiVisible_Timer = 6000;
+                    Vanish_Timer = 45000;
+                    Visible_Timer = 6000;
                 }
                 else
-                    m_uiVanish_Timer -= uiDiff;
+                    Vanish_Timer -= Diff;
 
-                if (m_bIsVanished)
+                if (_bIsVanished)
                 {
-                    if (m_uiVisible_Timer <= uiDiff)
+                    if (Visible_Timer <= Diff)
                     {
                         //The Panther Model
                         me->SetDisplayId(MODEL_ID_PANTHER);
@@ -246,11 +246,11 @@ class boss_arlokk : public CreatureScript
                         if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                             AttackStart(target);
 
-                        m_bIsPhaseTwo = true;
-                        m_bIsVanished = false;
+                        _bIsPhaseTwo = true;
+                        _bIsVanished = false;
                     }
                     else
-                        m_uiVisible_Timer -= uiDiff;
+                        Visible_Timer -= Diff;
                 }
                 else
                     DoMeleeAttackIfReady();
@@ -270,14 +270,14 @@ class go_gong_of_bethekk : public GameObjectScript
         {
         }
 
-        bool OnGossipHello(Player* /*player*/, GameObject* pGo)
+        bool OnGossipHello(Player* /*player*/, GameObject* go)
         {
-            if (InstanceScript* m_pInstance = pGo->GetInstanceScript())
+            if (InstanceScript* pInstance = go->GetInstanceScript())
             {
-                if (m_pInstance->GetData(DATA_ARLOKK) == DONE || m_pInstance->GetData(DATA_ARLOKK) == IN_PROGRESS)
+                if (pInstance->GetData(DATA_ARLOKK) == DONE || pInstance->GetData(DATA_ARLOKK) == IN_PROGRESS)
                     return true;
 
-                m_pInstance->SetData(DATA_ARLOKK, IN_PROGRESS);
+                pInstance->SetData(DATA_ARLOKK, IN_PROGRESS);
                 return true;
             }
 

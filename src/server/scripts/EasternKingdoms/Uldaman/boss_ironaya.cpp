@@ -61,7 +61,7 @@ class boss_ironaya : public CreatureScript
                 DoScriptText(SAY_AGGRO, me);
             }
 
-            void UpdateAI(const uint32 uiDiff)
+            void UpdateAI(const uint32 Diff)
             {
                 //Return since we have no target
                 if (!UpdateVictim())
@@ -86,11 +86,11 @@ class boss_ironaya : public CreatureScript
                 }
 
                 //uiArcingTimer
-                if (uiArcingTimer <= uiDiff)
+                if (uiArcingTimer <= Diff)
                 {
                     DoCast(me, SPELL_ARCINGSMASH);
                     uiArcingTimer = 13000;
-                } else uiArcingTimer -= uiDiff;
+                } else uiArcingTimer -= Diff;
 
                 if (!bHasCastedWstomp && HealthBelowPct(25))
                 {

@@ -360,9 +360,9 @@ class boss_hexlord_malacrass : public CreatureScript
                 if (CheckAddState_Timer <= diff)
                 {
                     for (uint8 i = 0; i < 4; ++i)
-                        if (Creature* pTemp = Unit::GetCreature(*me, AddGUID[i]))
-                            if (pTemp->isAlive() && !pTemp->getVictim())
-                                pTemp->AI()->AttackStart(me->getVictim());
+                        if (Creature* temp = Unit::GetCreature(*me, AddGUID[i]))
+                            if (temp->isAlive() && !temp->getVictim())
+                                temp->AI()->AttackStart(me->getVictim());
 
                     CheckAddState_Timer = 5000;
                 } else CheckAddState_Timer -= diff;

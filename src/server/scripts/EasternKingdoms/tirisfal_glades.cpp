@@ -49,9 +49,9 @@ class npc_calvin_montague : public CreatureScript
 public:
     npc_calvin_montague() : CreatureScript("npc_calvin_montague") { }
 
-    bool OnQuestAccept(Player* player, Creature* creature, Quest const* pQuest)
+    bool OnQuestAccept(Player* player, Creature* creature, Quest const* quest)
     {
-        if (pQuest->GetQuestId() == QUEST_590)
+        if (quest->GetQuestId() == QUEST_590)
         {
             creature->setFaction(FACTION_HOSTILE);
             creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_OOC_NOT_ATTACKABLE);
@@ -69,15 +69,15 @@ public:
     {
         npc_calvin_montagueAI(Creature* creature) : ScriptedAI(creature) { }
 
-        uint32 m_uiPhase;
-        uint32 m_uiPhaseTimer;
-        uint64 m_uiPlayerGUID;
+        uint32 Phase;
+        uint32 PhaseTimer;
+        uint64 PlayerGUID;
 
         void Reset()
         {
-            m_uiPhase = 0;
-            m_uiPhaseTimer = 5000;
-            m_uiPlayerGUID = 0;
+            Phase = 0;
+            PhaseTimer = 5000;
+            PlayerGUID = 0;
 
             me->RestoreFaction();
 
@@ -87,55 +87,55 @@ public:
 
         void EnterCombat(Unit* /*who*/) {}
 
-        void AttackedBy(Unit* pAttacker)
+        void AttackedBy(Unit* attacker)
         {
-            if (me->getVictim() || me->IsFriendlyTo(pAttacker))
+            if (me->getVictim() || me->IsFriendlyTo(attacker))
                 return;
 
-            AttackStart(pAttacker);
+            AttackStart(attacker);
         }
 
-        void DamageTaken(Unit* pDoneBy, uint32 &uiDamage)
+        void DamageTaken(Unit* doneBy, uint32 &Damage)
         {
-            if (uiDamage > me->GetHealth() || me->HealthBelowPctDamaged(15, uiDamage))
+            if (Damage > me->GetHealth() || me->HealthBelowPctDamaged(15, Damage))
             {
-                uiDamage = 0;
+                Damage = 0;
 
                 me->RestoreFaction();
                 me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_OOC_NOT_ATTACKABLE);
                 me->CombatStop(true);
 
-                m_uiPhase = 1;
+                Phase = 1;
 
-                if (pDoneBy->GetTypeId() == TYPEID_PLAYER)
-                    m_uiPlayerGUID = pDoneBy->GetGUID();
+                if (doneBy->GetTypeId() == TYPEID_PLAYER)
+                    PlayerGUID = doneBy->GetGUID();
             }
         }
 
-        void UpdateAI(const uint32 uiDiff)
+        void UpdateAI(const uint32 Diff)
         {
-            if (m_uiPhase)
+            if (Phase)
             {
-                if (m_uiPhaseTimer <= uiDiff)
-                    m_uiPhaseTimer = 7500;
+                if (PhaseTimer <= Diff)
+                    PhaseTimer = 7500;
                 else
                 {
-                    m_uiPhaseTimer -= uiDiff;
+                    PhaseTimer -= Diff;
                     return;
                 }
 
-                switch(m_uiPhase)
+                switch(Phase)
                 {
                     case 1:
                         DoScriptText(SAY_COMPLETE, me);
-                        ++m_uiPhase;
+                        ++Phase;
                         break;
                     case 2:
-                        if (Player* player = Unit::GetPlayer(*me, m_uiPlayerGUID))
+                        if (Player* player = Unit::GetPlayer(*me, PlayerGUID))
                             player->AreaExploredOrEventHappens(QUEST_590);
 
                         DoCast(me, SPELL_DRINK, true);
-                        ++m_uiPhase;
+                        ++Phase;
                         break;
                     case 3:
                         EnterEvadeMode();
@@ -171,14 +171,14 @@ class go_mausoleum_door : public GameObjectScript
 public:
     go_mausoleum_door() : GameObjectScript("go_mausoleum_door") { }
 
-    bool OnGossipHello(Player* player, GameObject* /*pGo*/)
+    bool OnGossipHello(Player* player, GameObject* /*go*/)
     {
         if (player->GetQuestStatus(QUEST_ULAG) != QUEST_STATUS_INCOMPLETE)
             return false;
 
-        if (GameObject* pTrigger = player->FindNearestGameObject(GO_TRIGGER, 30.0f))
+        if (GameObject* trigger = player->FindNearestGameObject(GO_TRIGGER, 30.0f))
         {
-            pTrigger->SetGoState(GO_STATE_READY);
+            trigger->SetGoState(GO_STATE_READY);
             player->SummonCreature(NPC_ULAG, 2390.26f, 336.47f, 40.01f, 2.26f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 300000);
             return false;
         }
@@ -192,15 +192,15 @@ class go_mausoleum_trigger : public GameObjectScript
 public:
     go_mausoleum_trigger() : GameObjectScript("go_mausoleum_trigger") { }
 
-    bool OnGossipHello(Player* player, GameObject* pGo)
+    bool OnGossipHello(Player* player, GameObject* go)
     {
         if (player->GetQuestStatus(QUEST_ULAG) != QUEST_STATUS_INCOMPLETE)
             return false;
 
-        if (GameObject* pDoor = player->FindNearestGameObject(GO_DOOR, 30.0f))
+        if (GameObject* door = player->FindNearestGameObject(GO_DOOR, 30.0f))
         {
-            pGo->SetGoState(GO_STATE_ACTIVE);
-            pDoor->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_INTERACT_COND);
+            go->SetGoState(GO_STATE_ACTIVE);
+            door->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_INTERACT_COND);
             return true;
         }
 

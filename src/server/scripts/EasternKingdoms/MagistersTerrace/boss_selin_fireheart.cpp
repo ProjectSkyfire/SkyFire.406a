@@ -104,15 +104,15 @@ public:
                 //for (uint8 i = 0; i < CRYSTALS_NUMBER; ++i)
                 for (std::list<uint64>::const_iterator itr = Crystals.begin(); itr != Crystals.end(); ++itr)
                 {
-                    //Unit* pUnit = Unit::GetUnit(*me, FelCrystals[i]);
-                    Unit* pUnit = Unit::GetUnit(*me, *itr);
-                    if (pUnit)
+                    //Unit* unit = Unit::GetUnit(*me, FelCrystals[i]);
+                    Unit* unit = Unit::GetUnit(*me, *itr);
+                    if (unit)
                     {
-                        if (!pUnit->isAlive())
-                            CAST_CRE(pUnit)->Respawn();      // Let the core handle setting death state, etc.
+                        if (!unit->isAlive())
+                            CAST_CRE(unit)->Respawn();      // Let the core handle setting death state, etc.
 
                         // Only need to set unselectable flag. You can't attack unselectable units so non_attackable flag is not necessary here.
-                        pUnit->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                        unit->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                     }
                 }
 
@@ -144,21 +144,21 @@ public:
 
             //float ShortestDistance = 0;
             CrystalGUID = 0;
-            Unit* pCrystal = NULL;
+            Unit* crystal = NULL;
             Unit* CrystalChosen = NULL;
             //for (uint8 i =  0; i < CRYSTALS_NUMBER; ++i)
             for (std::list<uint64>::const_iterator itr = Crystals.begin(); itr != Crystals.end(); ++itr)
             {
-                pCrystal = NULL;
-                //pCrystal = Unit::GetUnit(*me, FelCrystals[i]);
-                pCrystal = Unit::GetUnit(*me, *itr);
-                if (pCrystal && pCrystal->isAlive())
+                crystal = NULL;
+                //crystal = Unit::GetUnit(*me, FelCrystals[i]);
+                crystal = Unit::GetUnit(*me, *itr);
+                if (crystal && crystal->isAlive())
                 {
                     // select nearest
-                    if (!CrystalChosen || me->GetDistanceOrder(pCrystal, CrystalChosen, false))
+                    if (!CrystalChosen || me->GetDistanceOrder(crystal, CrystalChosen, false))
                     {
-                        CrystalGUID = pCrystal->GetGUID();
-                        CrystalChosen = pCrystal;               // Store a copy of pCrystal so we don't need to recreate a pointer to closest crystal for the movement and yell.
+                        CrystalGUID = crystal->GetGUID();
+                        CrystalChosen = crystal;               // Store a copy of crystal so we don't need to recreate a pointer to closest crystal for the movement and yell.
                     }
                 }
             }
@@ -186,10 +186,10 @@ public:
             //for (uint8 i = 0; i < CRYSTALS_NUMBER; ++i)
             for (std::list<uint64>::const_iterator itr = Crystals.begin(); itr != Crystals.end(); ++itr)
             {
-                //Creature* pCrystal = (Unit::GetCreature(*me, FelCrystals[i]));
-                Creature* pCrystal = Unit::GetCreature(*me, *itr);
-                if (pCrystal && pCrystal->isAlive())
-                    pCrystal->Kill(pCrystal);
+                //Creature* crystal = (Unit::GetCreature(*me, FelCrystals[i]));
+                Creature* crystal = Unit::GetCreature(*me, *itr);
+                if (crystal && crystal->isAlive())
+                    crystal->Kill(crystal);
             }
         }
 

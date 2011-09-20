@@ -60,17 +60,17 @@ public:
     {
         npc_tapoke_slim_jahnAI(Creature* creature) : npc_escortAI(creature) { }
 
-        bool m_bFriendSummoned;
+        bool _bFriendSummoned;
 
         void Reset()
         {
             if (!HasEscortState(STATE_ESCORT_ESCORTING))
-                m_bFriendSummoned = false;
+                _bFriendSummoned = false;
         }
 
-        void WaypointReached(uint32 uiPointId)
+        void WaypointReached(uint32 PointId)
         {
-            switch(uiPointId)
+            switch(PointId)
             {
                 case 2:
                     if (me->HasStealthAura())
@@ -86,12 +86,12 @@ public:
         {
             Player* player = GetPlayerForEscort();
 
-            if (HasEscortState(STATE_ESCORT_ESCORTING) && !m_bFriendSummoned && player)
+            if (HasEscortState(STATE_ESCORT_ESCORTING) && !_bFriendSummoned && player)
             {
                 for (uint8 i = 0; i < 3; ++i)
                     DoCast(me, SPELL_CALL_FRIENDS, true);
 
-                m_bFriendSummoned = true;
+                _bFriendSummoned = true;
             }
         }
 
@@ -101,18 +101,18 @@ public:
                 summoned->AI()->AttackStart(player);
         }
 
-        void AttackedBy(Unit* pAttacker)
+        void AttackedBy(Unit* attacker)
         {
             if (me->getVictim())
                 return;
 
-            if (me->IsFriendlyTo(pAttacker))
+            if (me->IsFriendlyTo(attacker))
                 return;
 
-            AttackStart(pAttacker);
+            AttackStart(attacker);
         }
 
-        void DamageTaken(Unit* /*pDoneBy*/, uint32& uiDamage)
+        void DamageTaken(Unit* /*doneBy*/, uint32& Damage)
         {
             if (HealthBelowPct(20))
             {
@@ -121,7 +121,7 @@ public:
                     if (player->GetTypeId() == TYPEID_PLAYER)
                         CAST_PLR(player)->GroupEventHappens(QUEST_MISSING_DIPLO_PT11, me);
 
-                    uiDamage = 0;
+                    Damage = 0;
 
                     me->RestoreFaction();
                     me->RemoveAllAuras();
@@ -144,9 +144,9 @@ class npc_mikhail : public CreatureScript
 public:
     npc_mikhail() : CreatureScript("npc_mikhail") { }
 
-    bool OnQuestAccept(Player* player, Creature* creature, const Quest* pQuest)
+    bool OnQuestAccept(Player* player, Creature* creature, const Quest* quest)
     {
-        if (pQuest->GetQuestId() == QUEST_MISSING_DIPLO_PT11)
+        if (quest->GetQuestId() == QUEST_MISSING_DIPLO_PT11)
         {
             Creature* pSlim = creature->FindNearestCreature(NPC_TAPOKE_SLIM_JAHN, 25.0f);
 
@@ -156,8 +156,8 @@ public:
             if (!pSlim->HasStealthAura())
                 pSlim->CastSpell(pSlim, SPELL_STEALTH, true);
 
-            if (npc_tapoke_slim_jahn::npc_tapoke_slim_jahnAI* pEscortAI = CAST_AI(npc_tapoke_slim_jahn::npc_tapoke_slim_jahnAI, pSlim->AI()))
-                pEscortAI->Start(false, false, player->GetGUID(), pQuest);
+            if (npc_tapoke_slim_jahn::npc_tapoke_slim_jahnAI* escortAI = CAST_AI(npc_tapoke_slim_jahn::npc_tapoke_slim_jahnAI, pSlim->AI()))
+                escortAI->Start(false, false, player->GetGUID(), quest);
         }
         return false;
     }

@@ -77,9 +77,7 @@ class boss_majordomo : public CreatureScript
 
         struct boss_majordomoAI : public BossAI
         {
-            boss_majordomoAI(Creature* creature) : BossAI(creature, BOSS_MAJORDOMO_EXECUTUS)
-            {
-            }
+            boss_majordomoAI(Creature* creature) : BossAI(creature, BOSS_MAJORDOMO_EXECUTUS) {}
 
             void KilledUnit(Unit* /*victim*/)
             {
@@ -201,7 +199,7 @@ class boss_majordomo : public CreatureScript
             return true;
         }
 
-        bool OnGossipSelect(Player* player, Creature* creature, uint32 /*uiSender*/, uint32 /*uiAction*/)
+        bool OnGossipSelect(Player* player, Creature* creature, uint32 /*uiSender*/, uint32 /*Action*/)
         {
             player->CLOSE_GOSSIP_MENU();
             creature->AI()->DoAction(ACTION_START_RAGNAROS);

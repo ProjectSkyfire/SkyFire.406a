@@ -74,16 +74,16 @@ class instance_blackrock_depths : public InstanceMapScript
 public:
     instance_blackrock_depths() : InstanceMapScript("instance_blackrock_depths", 230) { }
 
-    InstanceScript* GetInstanceScript(InstanceMap* pMap) const
+    InstanceScript* GetInstanceScript(InstanceMap* map) const
     {
-        return new instance_blackrock_depths_InstanceMapScript(pMap);
+        return new instance_blackrock_depths_InstanceMapScript(map);
     }
 
     struct instance_blackrock_depths_InstanceMapScript : public InstanceScript
     {
-        instance_blackrock_depths_InstanceMapScript(Map* pMap) : InstanceScript(pMap) {}
+        instance_blackrock_depths_InstanceMapScript(Map* map) : InstanceScript(map) {}
 
-        uint32 m_auiEncounter[MAX_ENCOUNTER];
+        uint32 Encounter[MAX_ENCOUNTER];
         std::string str_data;
 
         uint64 EmperorGUID;
@@ -122,7 +122,7 @@ public:
 
         void Initialize()
         {
-            memset(&m_auiEncounter, 0, sizeof(m_auiEncounter));
+            memset(&Encounter, 0, sizeof(Encounter));
 
             EmperorGUID = 0;
             PhalanxGUID = 0;
@@ -240,25 +240,25 @@ public:
             switch(type)
             {
             case TYPE_RING_OF_LAW:
-                m_auiEncounter[0] = data;
+                Encounter[0] = data;
                 break;
             case TYPE_VAULT:
-                m_auiEncounter[1] = data;
+                Encounter[1] = data;
                 break;
             case TYPE_BAR:
                 if (data == SPECIAL)
                     ++BarAleCount;
                 else
-                    m_auiEncounter[2] = data;
+                    Encounter[2] = data;
                 break;
             case TYPE_TOMB_OF_SEVEN:
-                m_auiEncounter[3] = data;
+                Encounter[3] = data;
                 break;
             case TYPE_LYCEUM:
-                m_auiEncounter[4] = data;
+                Encounter[4] = data;
                 break;
             case TYPE_IRON_HALL:
-                m_auiEncounter[5] = data;
+                Encounter[5] = data;
                 break;
             case DATA_GHOSTKILL:
                 GhostKillCount += data;
@@ -270,8 +270,8 @@ public:
                 OUT_SAVE_INST_DATA;
 
                 std::ostringstream saveStream;
-                saveStream << m_auiEncounter[0] << ' ' << m_auiEncounter[1] << ' ' << m_auiEncounter[2] << ' '
-                    << m_auiEncounter[3] << ' ' << m_auiEncounter[4] << ' ' << m_auiEncounter[5] << ' ' << GhostKillCount;
+                saveStream << Encounter[0] << ' ' << Encounter[1] << ' ' << Encounter[2] << ' '
+                    << Encounter[3] << ' ' << Encounter[4] << ' ' << Encounter[5] << ' ' << GhostKillCount;
 
                 str_data = saveStream.str();
 
@@ -285,20 +285,20 @@ public:
             switch(type)
             {
             case TYPE_RING_OF_LAW:
-                return m_auiEncounter[0];
+                return Encounter[0];
             case TYPE_VAULT:
-                return m_auiEncounter[1];
+                return Encounter[1];
             case TYPE_BAR:
-                if (m_auiEncounter[2] == IN_PROGRESS && BarAleCount == 3)
+                if (Encounter[2] == IN_PROGRESS && BarAleCount == 3)
                     return SPECIAL;
                 else
-                    return m_auiEncounter[2];
+                    return Encounter[2];
             case TYPE_TOMB_OF_SEVEN:
-                return m_auiEncounter[3];
+                return Encounter[3];
             case TYPE_LYCEUM:
-                return m_auiEncounter[4];
+                return Encounter[4];
             case TYPE_IRON_HALL:
-                return m_auiEncounter[5];
+                return Encounter[5];
             case DATA_GHOSTKILL:
                 return GhostKillCount;
             }
@@ -363,12 +363,12 @@ public:
             OUT_LOAD_INST_DATA(in);
 
             std::istringstream loadStream(in);
-            loadStream >> m_auiEncounter[0] >> m_auiEncounter[1] >> m_auiEncounter[2] >> m_auiEncounter[3]
-            >> m_auiEncounter[4] >> m_auiEncounter[5] >> GhostKillCount;
+            loadStream >> Encounter[0] >> Encounter[1] >> Encounter[2] >> Encounter[3]
+            >> Encounter[4] >> Encounter[5] >> GhostKillCount;
 
             for (uint8 i = 0; i < MAX_ENCOUNTER; ++i)
-                if (m_auiEncounter[i] == IN_PROGRESS)
-                    m_auiEncounter[i] = NOT_STARTED;
+                if (Encounter[i] == IN_PROGRESS)
+                    Encounter[i] = NOT_STARTED;
             if (GhostKillCount > 0 && GhostKillCount < 7)
                 GhostKillCount = 0;//reset tomb of seven event
             if (GhostKillCount >= 7)

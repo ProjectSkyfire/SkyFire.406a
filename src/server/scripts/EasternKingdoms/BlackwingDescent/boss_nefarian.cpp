@@ -63,25 +63,25 @@ public:
             pInstance->SetData(DATA_NEFARIAN, DONE);
         }
 
-        void UpdateAI(const uint32 uiDiff)
+        void UpdateAI(const uint32 Diff)
         {
             if (!UpdateVictim())
                 return;
 
-            if (uiShadowflameBreathTimer <= uiDiff)
+            if (uiShadowflameBreathTimer <= Diff)
             {
                 me->CastSpell(me->getVictim(), SPELL_SHADOWFLAME_BREATH, true);
 
                 uiShadowflameBreathTimer = urand(10*IN_MILLISECONDS, 12*IN_MILLISECONDS);
-            } else uiShadowflameBreathTimer -= uiDiff;
+            } else uiShadowflameBreathTimer -= Diff;
 
-            if (uiShadowCowardiceTimer <= uiDiff)
+            if (uiShadowCowardiceTimer <= Diff)
             {
                 if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                     me->CastSpell(target, SPELL_SHADOW_COWARDICE , true);
 
                 uiShadowCowardiceTimer = urand(8*IN_MILLISECONDS, 9*IN_MILLISECONDS);
-            } else uiShadowCowardiceTimer -= uiDiff;
+            } else uiShadowCowardiceTimer -= Diff;
 
             DoMeleeAttackIfReady();
         }

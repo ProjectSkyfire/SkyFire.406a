@@ -51,18 +51,18 @@ class go_shadowforge_brazier : public GameObjectScript
 public:
     go_shadowforge_brazier() : GameObjectScript("go_shadowforge_brazier") { }
 
-    bool OnGossipHello(Player* /*player*/, GameObject* pGo)
+    bool OnGossipHello(Player* /*player*/, GameObject* go)
     {
-        if (InstanceScript* pInstance = pGo->GetInstanceScript())
+        if (InstanceScript* pInstance = go->GetInstanceScript())
         {
             if (pInstance->GetData(TYPE_LYCEUM) == IN_PROGRESS)
                 pInstance->SetData(TYPE_LYCEUM, DONE);
             else
                 pInstance->SetData(TYPE_LYCEUM, IN_PROGRESS);
             // If used brazier open linked doors (North or South)
-            if (pGo->GetGUID() == pInstance->GetData64(DATA_SF_BRAZIER_N))
+            if (go->GetGUID() == pInstance->GetData64(DATA_SF_BRAZIER_N))
                 pInstance->HandleGameObject(pInstance->GetData64(DATA_GOLEM_DOOR_N), true);
-            else if (pGo->GetGUID() == pInstance->GetData64(DATA_SF_BRAZIER_S))
+            else if (go->GetGUID() == pInstance->GetData64(DATA_SF_BRAZIER_S))
                 pInstance->HandleGameObject(pInstance->GetData64(DATA_GOLEM_DOOR_S), true);
         }
         return false;
@@ -465,10 +465,10 @@ class npc_kharan_mighthammer : public CreatureScript
 public:
     npc_kharan_mighthammer() : CreatureScript("npc_kharan_mighthammer") { }
 
-    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*uiSender*/, uint32 uiAction)
+    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*uiSender*/, uint32 Action)
     {
         player->PlayerTalkClass->ClearMenus();
-        switch (uiAction)
+        switch (Action)
         {
             case GOSSIP_ACTION_INFO_DEF+1:
                  player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_KHARAN_3, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+2);
@@ -562,15 +562,15 @@ class npc_lokhtos_darkbargainer : public CreatureScript
 public:
     npc_lokhtos_darkbargainer() : CreatureScript("npc_lokhtos_darkbargainer") { }
 
-    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*uiSender*/, uint32 uiAction)
+    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*uiSender*/, uint32 Action)
     {
         player->PlayerTalkClass->ClearMenus();
-        if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+        if (Action == GOSSIP_ACTION_INFO_DEF + 1)
         {
             player->CLOSE_GOSSIP_MENU();
             player->CastSpell(player, SPELL_CREATE_THORIUM_BROTHERHOOD_CONTRACT_DND, false);
         }
-        if (uiAction == GOSSIP_ACTION_TRADE)
+        if (Action == GOSSIP_ACTION_TRADE)
             player->GetSession()->SendListInventory(creature->GetGUID());
 
         return true;
@@ -629,10 +629,10 @@ public:
         return dughal_stormwingAI;
     }
 
-    bool OnGossipSelect(Player* player, Creature* creature, uint32 uiSender, uint32 uiAction)
+    bool OnGossipSelect(Player* player, Creature* creature, uint32 uiSender, uint32 Action)
     {
         player->PlayerTalkClass->ClearMenus();
-        if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+        if (Action == GOSSIP_ACTION_INFO_DEF + 1)
         {
             player->CLOSE_GOSSIP_MENU();
             CAST_AI(npc_escort::npc_escortAI, (creature->AI()))->Start(false, true, player->GetGUID());
@@ -1115,10 +1115,10 @@ public:
         return tobias_seecherAI;
     }
 
-    bool OnGossipSelect(Player* player, Creature* creature, uint32 uiSender, uint32 uiAction)
+    bool OnGossipSelect(Player* player, Creature* creature, uint32 uiSender, uint32 Action)
     {
         player->PlayerTalkClass->ClearMenus();
-        if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+        if (Action == GOSSIP_ACTION_INFO_DEF + 1)
         {
             player->CLOSE_GOSSIP_MENU();
             CAST_AI(npc_escort::npc_escortAI, (creature->AI()))->Start(false, true, player->GetGUID());
@@ -1275,8 +1275,8 @@ public:
 
         void DoGo(uint32 id, uint32 state)
         {
-            if (GameObject* pGo = pInstance->instance->GetGameObject(pInstance->GetData64(id)))
-                pGo->SetGoState((GOState)state);
+            if (GameObject* go = pInstance->instance->GetGameObject(pInstance->GetData64(id)))
+                go->SetGoState((GOState)state);
         }
 
         void WaypointReached(uint32 i)

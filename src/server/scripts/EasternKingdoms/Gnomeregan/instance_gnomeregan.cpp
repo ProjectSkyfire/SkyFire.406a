@@ -26,18 +26,18 @@ class instance_gnomeregan : public InstanceMapScript
 public:
     instance_gnomeregan() : InstanceMapScript("instance_gnomeregan", 90) { }
 
-    InstanceScript* GetInstanceScript(InstanceMap* pMap) const
+    InstanceScript* GetInstanceScript(InstanceMap* map) const
     {
-        return new instance_gnomeregan_InstanceMapScript(pMap);
+        return new instance_gnomeregan_InstanceMapScript(map);
     }
 
     struct instance_gnomeregan_InstanceMapScript : public InstanceScript
     {
-        instance_gnomeregan_InstanceMapScript(Map* pMap) : InstanceScript(pMap)
+        instance_gnomeregan_InstanceMapScript(Map* map) : InstanceScript(map)
         {
         }
 
-        uint32 m_auiEncounter[MAX_ENCOUNTER];
+        uint32 Encounter[MAX_ENCOUNTER];
 
         uint64 uiCaveInLeftGUID;
         uint64 uiCaveInRightGUID;
@@ -46,7 +46,7 @@ public:
 
         void Initialize()
         {
-            memset(&m_auiEncounter, 0, sizeof(m_auiEncounter));
+            memset(&Encounter, 0, sizeof(Encounter));
 
             uiCaveInLeftGUID                = 0;
             uiCaveInRightGUID               = 0;
@@ -65,12 +65,12 @@ public:
             OUT_LOAD_INST_DATA(in);
 
             std::istringstream loadStream(in);
-            loadStream >> m_auiEncounter[0];
+            loadStream >> Encounter[0];
 
             for (uint8 i = 0; i < MAX_ENCOUNTER; ++i)
             {
-                if (m_auiEncounter[i] == IN_PROGRESS)
-                    m_auiEncounter[i] = NOT_STARTED;
+                if (Encounter[i] == IN_PROGRESS)
+                    Encounter[i] = NOT_STARTED;
             }
 
             OUT_LOAD_INST_DATA_COMPLETE;
@@ -90,41 +90,41 @@ public:
             {
                 case GO_CAVE_IN_LEFT:
                     uiCaveInLeftGUID = go->GetGUID();
-                    if (m_auiEncounter[0] == DONE || m_auiEncounter[0] == NOT_STARTED)
+                    if (Encounter[0] == DONE || Encounter[0] == NOT_STARTED)
                         HandleGameObject(0, false, go);
                     break;
                 case GO_CAVE_IN_RIGHT:
                     uiCaveInRightGUID = go->GetGUID();
-                    if (m_auiEncounter[0] == DONE || m_auiEncounter[0] == NOT_STARTED)
+                    if (Encounter[0] == DONE || Encounter[0] == NOT_STARTED)
                         HandleGameObject(0, false, go);
                     break;
             }
         }
 
-        void SetData(uint32 uiType, uint32 uiData)
+        void SetData(uint32 Type, uint32 Data)
         {
-            switch(uiType)
+            switch(Type)
             {
                 case TYPE_EVENT:
-                    m_auiEncounter[0] = uiData;
-                    if (uiData == DONE)
+                    Encounter[0] = Data;
+                    if (Data == DONE)
                         SaveToDB();
                     break;
             }
         }
 
-        uint32 GetData(uint32 uiType)
+        uint32 GetData(uint32 Type)
         {
-            switch(uiType)
+            switch(Type)
             {
-                case TYPE_EVENT:    return m_auiEncounter[0];
+                case TYPE_EVENT:    return Encounter[0];
             }
             return 0;
         }
 
-        uint64 GetData64(uint32 uiType)
+        uint64 GetData64(uint32 Type)
         {
-            switch(uiType)
+            switch(Type)
             {
                 case DATA_GO_CAVE_IN_LEFT:              return uiCaveInLeftGUID;
                 case DATA_GO_CAVE_IN_RIGHT:             return uiCaveInRightGUID;

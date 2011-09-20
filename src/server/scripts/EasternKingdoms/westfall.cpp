@@ -55,14 +55,14 @@ class npc_daphne_stilwell : public CreatureScript
 public:
     npc_daphne_stilwell() : CreatureScript("npc_daphne_stilwell") { }
 
-    bool OnQuestAccept(Player* player, Creature* creature, const Quest* pQuest)
+    bool OnQuestAccept(Player* player, Creature* creature, const Quest* quest)
     {
-        if (pQuest->GetQuestId() == QUEST_TOME_VALOR)
+        if (quest->GetQuestId() == QUEST_TOME_VALOR)
         {
             DoScriptText(SAY_DS_START, creature);
 
-            if (npc_escortAI* pEscortAI = CAST_AI(npc_daphne_stilwell::npc_daphne_stilwellAI, creature->AI()))
-                pEscortAI->Start(true, true, player->GetGUID());
+            if (npc_escortAI* escortAI = CAST_AI(npc_daphne_stilwell::npc_daphne_stilwellAI, creature->AI()))
+                escortAI->Start(true, true, player->GetGUID());
         }
 
         return true;
@@ -77,14 +77,14 @@ public:
     {
         npc_daphne_stilwellAI(Creature* creature) : npc_escortAI(creature) {}
 
-        uint32 uiWPHolder;
-        uint32 uiShootTimer;
+        uint32 WPHolder;
+        uint32 ShootTimer;
 
         void Reset()
         {
             if (HasEscortState(STATE_ESCORT_ESCORTING))
             {
-                switch(uiWPHolder)
+                switch(WPHolder)
                 {
                     case 7: DoScriptText(SAY_DS_DOWN_1, me); break;
                     case 8: DoScriptText(SAY_DS_DOWN_2, me); break;
@@ -92,21 +92,21 @@ public:
                 }
             }
             else
-                uiWPHolder = 0;
+                WPHolder = 0;
 
-            uiShootTimer = 0;
+            ShootTimer = 0;
         }
 
-        void WaypointReached(uint32 uiPoint)
+        void WaypointReached(uint32 Point)
         {
             Player* player = GetPlayerForEscort();
 
             if (!player)
                 return;
 
-            uiWPHolder = uiPoint;
+            WPHolder = Point;
 
-            switch(uiPoint)
+            switch(Point)
             {
                 case 4:
                     SetEquipmentSlots(false, EQUIP_NO_CHANGE, EQUIP_NO_CHANGE, EQUIP_ID_RIFLE);
@@ -177,13 +177,13 @@ public:
             if (!UpdateVictim())
                 return;
 
-            if (uiShootTimer <= diff)
+            if (ShootTimer <= diff)
             {
-                uiShootTimer = 1500;
+                ShootTimer = 1500;
 
                 if (!me->IsWithinDist(me->getVictim(), ATTACK_DISTANCE))
                     DoCast(me->getVictim(), SPELL_SHOOT);
-            } else uiShootTimer -= diff;
+            } else ShootTimer -= diff;
         }
     };
 };
@@ -209,8 +209,8 @@ public:
     {
         if (quest->GetQuestId() == QUEST_DEFIAS_BROTHERHOOD)
         {
-            if (npc_escortAI* pEscortAI = CAST_AI(npc_defias_traitor::npc_defias_traitorAI, creature->AI()))
-                pEscortAI->Start(true, true, player->GetGUID());
+            if (npc_escortAI* escortAI = CAST_AI(npc_defias_traitor::npc_defias_traitorAI, creature->AI()))
+                escortAI->Start(true, true, player->GetGUID());
 
             DoScriptText(SAY_START, creature, player);
         }

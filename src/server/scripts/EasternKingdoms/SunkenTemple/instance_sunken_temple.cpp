@@ -45,14 +45,14 @@ class instance_sunken_temple : public InstanceMapScript
 public:
     instance_sunken_temple() : InstanceMapScript("instance_sunken_temple", 109) { }
 
-    InstanceScript* GetInstanceScript(InstanceMap* pMap) const
+    InstanceScript* GetInstanceScript(InstanceMap* map) const
     {
-        return new instance_sunken_temple_InstanceMapScript(pMap);
+        return new instance_sunken_temple_InstanceMapScript(map);
     }
 
     struct instance_sunken_temple_InstanceMapScript : public InstanceScript
     {
-        instance_sunken_temple_InstanceMapScript(Map* pMap) : InstanceScript(pMap)
+        instance_sunken_temple_InstanceMapScript(Map* map) : InstanceScript(map)
         {
         }
 
@@ -114,8 +114,8 @@ public:
              case GO_ATALAI_STATUE1:
                 if (!s1 && !s2 && !s3 && !s4 && !s5 && !s6)
                 {
-                    if (GameObject* pAtalaiStatue1 = instance->GetGameObject(GOAtalaiStatue1))
-                        UseStatue(pAtalaiStatue1);
+                    if (GameObject* atalaiStatue1 = instance->GetGameObject(GOAtalaiStatue1))
+                        UseStatue(atalaiStatue1);
                     s1 = true;
                     State = 0;
                 };
@@ -123,8 +123,8 @@ public:
              case GO_ATALAI_STATUE2:
                 if (s1 && !s2 && !s3 && !s4 && !s5 && !s6)
                 {
-                    if (GameObject* pAtalaiStatue2 = instance->GetGameObject(GOAtalaiStatue2))
-                        UseStatue(pAtalaiStatue2);
+                    if (GameObject* atalaiStatue2 = instance->GetGameObject(GOAtalaiStatue2))
+                        UseStatue(atalaiStatue2);
                     s2 = true;
                     State = 0;
                 };
@@ -132,8 +132,8 @@ public:
              case GO_ATALAI_STATUE3:
                 if (s1 && s2 && !s3 && !s4 && !s5 && !s6)
                 {
-                    if (GameObject* pAtalaiStatue3 = instance->GetGameObject(GOAtalaiStatue3))
-                        UseStatue(pAtalaiStatue3);
+                    if (GameObject* atalaiStatue3 = instance->GetGameObject(GOAtalaiStatue3))
+                        UseStatue(atalaiStatue3);
                     s3 = true;
                     State = 0;
                 };
@@ -141,8 +141,8 @@ public:
              case GO_ATALAI_STATUE4:
                 if (s1 && s2 && s3 && !s4 && !s5 && !s6)
                 {
-                    if (GameObject* pAtalaiStatue4 = instance->GetGameObject(GOAtalaiStatue4))
-                        UseStatue(pAtalaiStatue4);
+                    if (GameObject* atalaiStatue4 = instance->GetGameObject(GOAtalaiStatue4))
+                        UseStatue(atalaiStatue4);
                     s4 = true;
                     State = 0;
                 }
@@ -150,8 +150,8 @@ public:
              case GO_ATALAI_STATUE5:
                 if (s1 && s2 && s3 && s4 && !s5 && !s6)
                 {
-                    if (GameObject* pAtalaiStatue5 = instance->GetGameObject(GOAtalaiStatue5))
-                        UseStatue(pAtalaiStatue5);
+                    if (GameObject* atalaiStatue5 = instance->GetGameObject(GOAtalaiStatue5))
+                        UseStatue(atalaiStatue5);
                     s5 = true;
                     State = 0;
                 }
@@ -159,8 +159,8 @@ public:
              case GO_ATALAI_STATUE6:
                 if (s1 && s2 && s3 && s4 && s5 && !s6)
                 {
-                    if (GameObject* pAtalaiStatue6 = instance->GetGameObject(GOAtalaiStatue6))
-                        UseStatue(pAtalaiStatue6);
+                    if (GameObject* atalaiStatue6 = instance->GetGameObject(GOAtalaiStatue6))
+                        UseStatue(atalaiStatue6);
                     s6 = true;
                     State = 0;
                 }
