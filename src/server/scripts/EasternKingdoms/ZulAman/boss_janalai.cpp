@@ -1,4 +1,4 @@
-/*
+ /*
  * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2006-2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
@@ -106,11 +106,7 @@ float hatcherway[2][5][3] =
 class boss_janalai : public CreatureScript
 {
     public:
-
-        boss_janalai()
-            : CreatureScript("boss_janalai")
-        {
-        }
+        boss_janalai() : CreatureScript("boss_janalai") {}
 
         struct boss_janalaiAI : public ScriptedAI
         {
@@ -300,7 +296,7 @@ class boss_janalai : public CreatureScript
                     ++BombCount;
                     if (BombCount == 40)
                     {
-                        BombSequenceTimer = 5000;
+                        BombSequenceTimer    = 5000;
                     } else BombSequenceTimer = 100;
                 }
                 else
@@ -310,7 +306,7 @@ class boss_janalai : public CreatureScript
                     BombTimer = urand(20000, 40000);
                     me->RemoveAurasDueToSpell(SPELL_FIRE_BOMB_CHANNEL);
                     if (EnrageTimer <= 10000)
-                        EnrageTimer = 0;
+                        EnrageTimer  = 0;
                     else
                         EnrageTimer -= 10000;
                 }
@@ -443,11 +439,7 @@ class boss_janalai : public CreatureScript
 class mob_janalai_firebomb : public CreatureScript
 {
     public:
-
-        mob_janalai_firebomb()
-            : CreatureScript("mob_janalai_firebomb")
-        {
-        }
+        mob_janalai_firebomb() : CreatureScript("mob_janalai_firebomb") {}
 
         struct mob_janalai_firebombAI : public ScriptedAI
         {
@@ -479,11 +471,7 @@ class mob_janalai_firebomb : public CreatureScript
 class mob_janalai_hatcher : public CreatureScript
 {
     public:
-
-        mob_janalai_hatcher()
-            : CreatureScript("mob_janalai_hatcher")
-        {
-        }
+        mob_janalai_hatcher() : CreatureScript("mob_janalai_hatcher") {}
 
         struct mob_janalai_hatcherAI : public ScriptedAI
         {
@@ -506,11 +494,11 @@ class mob_janalai_hatcher : public CreatureScript
             {
                 me->AddUnitMovementFlag(MOVEMENTFLAG_WALKING);
                 side =(me->GetPositionY() < 1150);
-                waypoint = 0;
-                isHatching = false;
-                hasChangedSide = false;
-                WaitTimer = 1;
-                HatchNum = 0;
+                waypoint        = 0;
+                isHatching      = false;
+                hasChangedSide  = false;
+                WaitTimer       = 1;
+                HatchNum        = 0;
             }
 
             bool HatchEggs(uint32 num)
@@ -553,7 +541,7 @@ class mob_janalai_hatcher : public CreatureScript
                 if (waypoint == 5)
                 {
                     isHatching = true;
-                    HatchNum = 1;
+                    HatchNum  = 1;
                     WaitTimer = 5000;
                 }
                 else
@@ -591,8 +579,8 @@ class mob_janalai_hatcher : public CreatureScript
                         {
                             side = side ? 0 : 1;
                             isHatching = false;
-                            waypoint = 3;
-                            WaitTimer = 1;
+                            waypoint   = 3;
+                            WaitTimer  = 1;
                             hasChangedSide = true;
                         }
                         else
@@ -611,11 +599,7 @@ class mob_janalai_hatcher : public CreatureScript
 class mob_janalai_hatchling : public CreatureScript
 {
     public:
-
-        mob_janalai_hatchling()
-            : CreatureScript("mob_janalai_hatchling")
-        {
-        }
+        mob_janalai_hatchling() : CreatureScript("mob_janalai_hatchling") {}
 
         struct mob_janalai_hatchlingAI : public ScriptedAI
         {

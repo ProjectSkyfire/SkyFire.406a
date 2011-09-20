@@ -87,19 +87,19 @@ class boss_thekal : public CreatureScript
 
             void Reset()
             {
-                MortalCleave_Timer = 4000;
-                Silence_Timer = 9000;
-                Frenzy_Timer = 30000;
-                ForcePunch_Timer = 4000;
-                Charge_Timer = 12000;
-                Enrage_Timer = 32000;
-                SummonTigers_Timer = 25000;
-                Check_Timer = 10000;
-                Resurrect_Timer = 10000;
+                MortalCleave_Timer     = 4000;
+                Silence_Timer          = 9000;
+                Frenzy_Timer           = 30000;
+                ForcePunch_Timer       = 4000;
+                Charge_Timer           = 12000;
+                Enrage_Timer           = 32000;
+                SummonTigers_Timer     = 25000;
+                Check_Timer            = 10000;
+                Resurrect_Timer        = 10000;
 
-                Enraged = false;
-                PhaseTwo = false;
-                WasDead = false;
+                Enraged                = false;
+                PhaseTwo               = false;
+                WasDead                = false;
             }
 
             void EnterCombat(Unit* /*who*/)
@@ -290,11 +290,11 @@ class mob_zealot_lorkhan : public CreatureScript
 
             void Reset()
             {
-                Shield_Timer = 1000;
-                BloodLust_Timer = 16000;
+                Shield_Timer      = 1000;
+                BloodLust_Timer   = 16000;
                 GreaterHeal_Timer = 32000;
-                Disarm_Timer = 6000;
-                Check_Timer = 10000;
+                Disarm_Timer      = 6000;
+                Check_Timer       = 10000;
 
                 FakeDeath = false;
 
@@ -447,14 +447,14 @@ class mob_zealot_zath : public CreatureScript
 
             void Reset()
             {
-                SweepingStrikes_Timer = 13000;
-                SinisterStrike_Timer = 8000;
-                Gouge_Timer = 25000;
-                Kick_Timer = 18000;
-                Blind_Timer = 5000;
-                Check_Timer = 10000;
+                SweepingStrikes_Timer    = 13000;
+                SinisterStrike_Timer     = 8000;
+                Gouge_Timer              = 25000;
+                Kick_Timer               = 18000;
+                Blind_Timer              = 5000;
+                Check_Timer              = 10000;
 
-                FakeDeath = false;
+                FakeDeath                = false;
 
                 if (pInstance)
                     pInstance->SetData(DATA_ZATH, NOT_STARTED);

@@ -46,11 +46,7 @@ enum eSpells
 class mob_jadespine_basilisk : public CreatureScript
 {
     public:
-
-        mob_jadespine_basilisk()
-            : CreatureScript("mob_jadespine_basilisk")
-        {
-        }
+        mob_jadespine_basilisk() : CreatureScript("mob_jadespine_basilisk") {}
 
         struct mob_jadespine_basiliskAI : public ScriptedAI
         {
@@ -63,9 +59,7 @@ class mob_jadespine_basilisk : public CreatureScript
                 uiCslumberTimer = 2000;
             }
 
-            void EnterCombat(Unit* /*who*/)
-            {
-            }
+            void EnterCombat(Unit* /*who*/) {}
 
             void UpdateAI(const uint32 Diff)
             {
@@ -123,16 +117,12 @@ public:
 ## at_map_chamber
 ######*/
 
-#define QUEST_HIDDEN_CHAMBER    2240
+#define QUEST_HIDDEN_CHAMBER      2240
 
 class AreaTrigger_at_map_chamber : public AreaTriggerScript
 {
     public:
-
-        AreaTrigger_at_map_chamber()
-            : AreaTriggerScript("at_map_chamber")
-        {
-        }
+        AreaTrigger_at_map_chamber() : AreaTriggerScript("at_map_chamber") {}
 
         bool OnTrigger(Player* player, AreaTriggerEntry const* /*trigger*/)
         {
@@ -147,31 +137,28 @@ class AreaTrigger_at_map_chamber : public AreaTriggerScript
 ## npc_lore_keeper_of_norgannon
 ######*/
 
-#define GOSSIP_HELLO_KEEPER     "Who are the Earthen?"
-#define GOSSIP_SELECT_KEEPER1   "What is a \"subterranean being matrix\"?"
-#define GOSSIP_SELECT_KEEPER2   "What are the anomalies you speak of?"
-#define GOSSIP_SELECT_KEEPER3   "What is a resilient foundation of construction?"
-#define GOSSIP_SELECT_KEEPER4   "So... the Earthen were made out of stone?"
-#define GOSSIP_SELECT_KEEPER5   "Anything else I should know about the Earthen?"
-#define GOSSIP_SELECT_KEEPER6   "I think I understand the Creators' design intent for the Earthen now. What are the Earthen's anomalies that you spoke of earlier?"
-#define GOSSIP_SELECT_KEEPER7   "What high-stress environments would cause the Earthen to destabilize?"
-#define GOSSIP_SELECT_KEEPER8   "What happens when the Earthen destabilize?"
-#define GOSSIP_SELECT_KEEPER9   "Troggs?! Are the troggs you mention the same as the ones in the world today?"
-#define GOSSIP_SELECT_KEEPER10  "You mentioned two results when the Earthen destabilize. What is the second?"
-#define GOSSIP_SELECT_KEEPER11  "Dwarves!!! Now you're telling me that dwarves originally came from the Earthen?!"
-#define GOSSIP_SELECT_KEEPER12  "These dwarves are the same ones today, yes? Do the dwarves maintain any other links to the Earthen?"
-#define GOSSIP_SELECT_KEEPER13  "Who are the Creators?"
-#define GOSSIP_SELECT_KEEPER14  "This is a lot to think about."
-#define GOSSIP_SELECT_KEEPER15  "I will access the discs now."
+#define GOSSIP_HELLO_KEEPER       "Who are the Earthen?"
+#define GOSSIP_SELECT_KEEPER1     "What is a \"subterranean being matrix\"?"
+#define GOSSIP_SELECT_KEEPER2     "What are the anomalies you speak of?"
+#define GOSSIP_SELECT_KEEPER3     "What is a resilient foundation of construction?"
+#define GOSSIP_SELECT_KEEPER4     "So... the Earthen were made out of stone?"
+#define GOSSIP_SELECT_KEEPER5     "Anything else I should know about the Earthen?"
+#define GOSSIP_SELECT_KEEPER6     "I think I understand the Creators' design intent for the Earthen now. What are the Earthen's anomalies that you spoke of earlier?"
+#define GOSSIP_SELECT_KEEPER7     "What high-stress environments would cause the Earthen to destabilize?"
+#define GOSSIP_SELECT_KEEPER8     "What happens when the Earthen destabilize?"
+#define GOSSIP_SELECT_KEEPER9     "Troggs?! Are the troggs you mention the same as the ones in the world today?"
+#define GOSSIP_SELECT_KEEPER10    "You mentioned two results when the Earthen destabilize. What is the second?"
+#define GOSSIP_SELECT_KEEPER11    "Dwarves!!! Now you're telling me that dwarves originally came from the Earthen?!"
+#define GOSSIP_SELECT_KEEPER12    "These dwarves are the same ones today, yes? Do the dwarves maintain any other links to the Earthen?"
+#define GOSSIP_SELECT_KEEPER13    "Who are the Creators?"
+#define GOSSIP_SELECT_KEEPER14    "This is a lot to think about."
+#define GOSSIP_SELECT_KEEPER15    "I will access the discs now."
 
 class npc_lore_keeper_of_norgannon : public CreatureScript
 {
     public:
 
-        npc_lore_keeper_of_norgannon()
-            : CreatureScript("npc_lore_keeper_of_norgannon")
-        {
-        }
+        npc_lore_keeper_of_norgannon() : CreatureScript("npc_lore_keeper_of_norgannon") {}
 
         bool OnGossipHello(Player* player, Creature* creature)
         {

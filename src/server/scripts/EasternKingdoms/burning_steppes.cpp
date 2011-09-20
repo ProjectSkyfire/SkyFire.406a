@@ -34,18 +34,18 @@ EndContentData */
 ## npc_ragged_john
 ######*/
 
-#define GOSSIP_HELLO    "Official buisness, John. I need some information about Marsha Windsor. Tell me about the last time you saw him."
-#define GOSSIP_SELECT1  "So what did you do?"
-#define GOSSIP_SELECT2  "Start making sense, dwarf. I don't want to have anything to do with your cracker, your pappy, or any sort of 'discreditin'."
-#define GOSSIP_SELECT3  "Ironfoe?"
-#define GOSSIP_SELECT4  "Interesting... continue John."
-#define GOSSIP_SELECT5  "So that's how Windsor died..."
-#define GOSSIP_SELECT6  "So how did he die?"
-#define GOSSIP_SELECT7  "Ok so where the hell is he? Wait a minute! Are you drunk?"
-#define GOSSIP_SELECT8  "WHY is he in Blackrock Depths?"
-#define GOSSIP_SELECT9  "300? So the Dark Irons killed him and dragged him into the Depths?"
-#define GOSSIP_SELECT10 "Ahh... Ironfoe"
-#define GOSSIP_SELECT11 "Thanks, Ragged John. Your story was very uplifting and informative"
+#define GOSSIP_HELLO     "Official buisness, John. I need some information about Marsha Windsor. Tell me about the last time you saw him."
+#define GOSSIP_SELECT1   "So what did you do?"
+#define GOSSIP_SELECT2   "Start making sense, dwarf. I don't want to have anything to do with your cracker, your pappy, or any sort of 'discreditin'."
+#define GOSSIP_SELECT3   "Ironfoe?"
+#define GOSSIP_SELECT4   "Interesting... continue John."
+#define GOSSIP_SELECT5   "So that's how Windsor died..."
+#define GOSSIP_SELECT6   "So how did he die?"
+#define GOSSIP_SELECT7   "Ok so where the hell is he? Wait a minute! Are you drunk?"
+#define GOSSIP_SELECT8   "WHY is he in Blackrock Depths?"
+#define GOSSIP_SELECT9   "300? So the Dark Irons killed him and dragged him into the Depths?"
+#define GOSSIP_SELECT10  "Ahh... Ironfoe"
+#define GOSSIP_SELECT11  "Thanks, Ragged John. Your story was very uplifting and informative"
 
 class npc_ragged_john : public CreatureScript
 {

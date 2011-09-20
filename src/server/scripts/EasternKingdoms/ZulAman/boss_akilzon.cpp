@@ -41,35 +41,36 @@ enum Spells
     SPELL_ELECTRICAL_OVERLOAD   = 43658,
     SPELL_EAGLE_SWOOP           = 44732
 };
-
+// texts need moved to db and enums need set...
 //"Your death gonna be quick, strangers. You shoulda never have come to this place..."
-#define SAY_ONAGGRO "I be da predator! You da prey..."
-#define SAY_ONDEATH "You can't... kill... me spirit!"
-#define SAY_ONSLAY1 "Ya got nothin'!"
-#define SAY_ONSLAY2 "Stop your cryin'!"
-#define SAY_ONSUMMON "Feed, me bruddahs!"
-#define SAY_ONENRAGE "All you be doing is wasting my time!"
-#define SOUND_ONAGGRO 12013
-#define SOUND_ONDEATH 12019
-#define SOUND_ONSLAY1 12017
-#define SOUND_ONSLAY2 12018
-#define SOUND_ONSUMMON 12014
-#define SOUND_ONENRAGE 12016
+#define SAY_ONAGGRO             "I be da predator! You da prey..."
+#define SOUND_ONAGGRO            12013
 
-#define MOB_SOARING_EAGLE 24858
-#define SE_LOC_X_MAX 400
-#define SE_LOC_X_MIN 335
-#define SE_LOC_Y_MAX 1435
-#define SE_LOC_Y_MIN 1370
+#define SAY_ONDEATH             "You can't... kill... me spirit!"
+#define SOUND_ONDEATH            12019
+
+#define SAY_ONSLAY1             "Ya got nothin'!"
+#define SOUND_ONSLAY1            12017
+
+#define SAY_ONSLAY2             "Stop your cryin'!"
+#define SOUND_ONSLAY2            12018
+
+#define SAY_ONSUMMON            "Feed, me bruddahs!"
+#define SOUND_ONSUMMON           12014
+
+#define SAY_ONENRAGE            "All you be doing is wasting my time!"
+#define SOUND_ONENRAGE           12016
+
+#define MOB_SOARING_EAGLE        24858
+#define SE_LOC_X_MAX             400
+#define SE_LOC_X_MIN             335
+#define SE_LOC_Y_MAX             1435
+#define SE_LOC_Y_MIN             1370
 
 class boss_akilzon : public CreatureScript
 {
     public:
-
-        boss_akilzon()
-            : CreatureScript("boss_akilzon")
-        {
-        }
+        boss_akilzon() : CreatureScript("boss_akilzon") {}
 
         struct boss_akilzonAI : public ScriptedAI
         {
@@ -108,14 +109,14 @@ class boss_akilzon : public CreatureScript
                 Enrage_Timer = 10*MINUTE*IN_MILLISECONDS; //10 minutes till enrage(bosskillers)
                 SummonEagles_Timer = 99999;
 
-                TargetGUID = 0;
-                CloudGUID = 0;
-                CycloneGUID = 0;
+                TargetGUID       = 0;
+                CloudGUID        = 0;
+                CycloneGUID      = 0;
                 DespawnSummons();
                 for (uint8 i = 0; i < 8; ++i)
                     BirdGUIDs[i] = 0;
 
-                StormCount = 0;
+                StormCount         = 0;
                 StormSequenceTimer = 0;
 
                 isRaining = false;
@@ -392,11 +393,7 @@ class boss_akilzon : public CreatureScript
 class mob_akilzon_eagle : public CreatureScript
 {
     public:
-
-        mob_akilzon_eagle()
-            : CreatureScript("mob_akilzon_eagle")
-        {
-        }
+        mob_akilzon_eagle() : CreatureScript("mob_akilzon_eagle") {}
 
         struct mob_akilzon_eagleAI : public ScriptedAI
         {
@@ -434,7 +431,7 @@ class mob_akilzon_eagle : public CreatureScript
             void UpdateAI(const uint32 diff)
             {
                 if (EagleSwoop_Timer <= diff)
-                    EagleSwoop_Timer = 0;
+                    EagleSwoop_Timer  = 0;
                 else
                     EagleSwoop_Timer -= diff;
 

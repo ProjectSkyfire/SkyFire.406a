@@ -39,7 +39,7 @@ enum eSpells
     SPELL_SHADOWWORDPAIN        = 23952,
     SPELL_GOUGE                 = 24698,
     SPELL_MARK                  = 24210,
-    SPELL_CLEAVE                = 26350,                    //Perhaps not right. Not a red aura...
+    SPELL_CLEAVE                = 26350,        //Perhaps not right. Not a red aura...
     SPELL_PANTHER_TRANSFORM     = 24190,
 
     MODEL_ID_NORMAL             = 15218,
@@ -52,11 +52,7 @@ enum eSpells
 class boss_arlokk : public CreatureScript
 {
     public:
-
-        boss_arlokk()
-            : CreatureScript("boss_arlokk")
-        {
-        }
+        boss_arlokk() : CreatureScript("boss_arlokk") {}
 
         struct boss_arlokkAI : public ScriptedAI
         {
@@ -85,20 +81,20 @@ class boss_arlokk : public CreatureScript
 
             void Reset()
             {
-                ShadowWordPain_Timer = 8000;
-                Gouge_Timer = 14000;
-                Mark_Timer = 35000;
-                Cleave_Timer = 4000;
-                Vanish_Timer = 60000;
-                Visible_Timer = 6000;
+                ShadowWordPain_Timer     = 8000;
+                Gouge_Timer              = 14000;
+                Mark_Timer               = 35000;
+                Cleave_Timer             = 4000;
+                Vanish_Timer             = 60000;
+                Visible_Timer            = 6000;
 
-                Summon_Timer = 5000;
-                SummonCount = 0;
+                Summon_Timer             = 5000;
+                SummonCount              = 0;
 
-                _bIsPhaseTwo = false;
-                _bIsVanished = false;
+                _bIsPhaseTwo             = false;
+                _bIsVanished             = false;
 
-                MarkedTargetGUID = 0;
+                MarkedTargetGUID         = 0;
 
                 me->SetDisplayId(MODEL_ID_NORMAL);
                 me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
@@ -131,8 +127,8 @@ class boss_arlokk : public CreatureScript
 
             void DoSummonPhanters()
             {
-                if (Unit* pMarkedTarget = Unit::GetUnit(*me, MarkedTargetGUID))
-                    DoScriptText(SAY_FEAST_PANTHER, me, pMarkedTarget);
+                if (Unit* markedTarget = Unit::GetUnit(*me, MarkedTargetGUID))
+                    DoScriptText(SAY_FEAST_PANTHER, me, markedTarget);
 
                 me->SummonCreature(NPC_ZULIAN_PROWLER, -11532.7998f, -1649.6734f, 41.4800f, 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 15000);
                 me->SummonCreature(NPC_ZULIAN_PROWLER, -11532.9970f, -1606.4840f, 41.2979f, 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 15000);
@@ -140,8 +136,8 @@ class boss_arlokk : public CreatureScript
 
             void JustSummoned(Creature* summoned)
             {
-                if (Unit* pMarkedTarget = Unit::GetUnit(*me, MarkedTargetGUID))
-                    summoned->AI()->AttackStart(pMarkedTarget);
+                if (Unit* markedTarget = Unit::GetUnit(*me, MarkedTargetGUID))
+                    summoned->AI()->AttackStart(markedTarget);
 
                 ++SummonCount;
             }
@@ -163,15 +159,15 @@ class boss_arlokk : public CreatureScript
 
                     if (Mark_Timer <= Diff)
                     {
-                        Unit* pMarkedTarget = SelectTarget(SELECT_TARGET_RANDOM, 0);
+                        Unit* markedTarget = SelectTarget(SELECT_TARGET_RANDOM, 0);
 
-                        if (pMarkedTarget)
+                        if (markedTarget)
                         {
-                            DoCast(pMarkedTarget, SPELL_MARK);
-                            MarkedTargetGUID = pMarkedTarget->GetGUID();
+                            DoCast(markedTarget, SPELL_MARK);
+                            MarkedTargetGUID = markedTarget->GetGUID();
                         }
                         else
-                            sLog->outError("TSCR: boss_arlokk could not accuire pMarkedTarget.");
+                            sLog->outError("TSCR: boss_arlokk could not accuire MarkedTarget.");
 
                         Mark_Timer = 15000;
                     }
@@ -224,7 +220,7 @@ class boss_arlokk : public CreatureScript
 
                     _bIsVanished = true;
 
-                    Vanish_Timer = 45000;
+                    Vanish_Timer  = 45000;
                     Visible_Timer = 6000;
                 }
                 else
@@ -266,9 +262,7 @@ class boss_arlokk : public CreatureScript
 class go_gong_of_bethekk : public GameObjectScript
 {
     public:
-        go_gong_of_bethekk() : GameObjectScript("go_gong_of_bethekk")
-        {
-        }
+        go_gong_of_bethekk() : GameObjectScript("go_gong_of_bethekk") {}
 
         bool OnGossipHello(Player* /*player*/, GameObject* go)
         {

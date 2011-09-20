@@ -20,97 +20,96 @@
 /* ScriptData
 SDName: Boss_ZulJin
 SD%Complete: 85%
-SDComment:
+SDComment: TODO: Clear out all these defines2enums and db
 EndScriptData */
 
 #include "ScriptPCH.h"
 #include "zulaman.h"
 
 //Speech
-const char* YELL_TRANSFORM_TO_LYNX = "Let me introduce to you my new bruddahs: fang and claw!";
-#define SOUND_TRANSFORM_TO_LYNX 12094
 
-const char* YELL_TRANSFORM_TO_BEAR = "Got me some new tricks...like me bruddah bear!";
-#define SOUND_TRANSFORM_TO_BEAR 12092
-
+#define SOUND_TRANSFORM_TO_LYNX                      12094
+#define SOUND_TRANSFORM_TO_BEAR                      12092
+#define SOUND_TRANSFORM_TO_DRAGONHAWK                12095
+#define SOUND_TRANSFORM_TO_EAGLE                     12093
+const char* YELL_TRANSFORM_TO_LYNX       = "Let me introduce to you my new bruddahs: fang and claw!";
+const char* YELL_TRANSFORM_TO_BEAR       = "Got me some new tricks...like me bruddah bear!";
 const char* YELL_TRANSFORM_TO_DRAGONHAWK = "Ya don' have to look to da sky to see da dragonhawk!";
-#define SOUND_TRANSFORM_TO_DRAGONHAWK 12095
+const char* YELL_TRANSFORM_TO_EAGLE      = "Dere be no hidin' from da eagle!";
 
-const char* YELL_TRANSFORM_TO_EAGLE = "Dere be no hidin' from da eagle!";
-#define SOUND_TRANSFORM_TO_EAGLE 12093
 
-#define YELL_KILL_ONE "Da Amani de chuka!"
-#define SOUND_KILL_ONE 12098
+#define YELL_KILL_ONE                               "Da Amani de chuka! ..."    // http://www.wowhead.com/npc=23863/daakara#comments
+#define SOUND_KILL_ONE                               12098
 
-#define YELL_KILL_TWO "Lot more gonna fall like you!"
-#define SOUND_KILL_TWO 12099
+#define YELL_KILL_TWO                               "Lot more gonna fall like you!"
+#define SOUND_KILL_TWO                               12099
 
-#define YELL_FIRE_BREATH "Fire kill you just as quick!"
-#define SOUND_FIRE_BRETH 12096
+#define YELL_FIRE_BREATH                            "Fire kill you just as quick!"
+#define SOUND_FIRE_BRETH                             12096
 
-#define YELL_AGGRO "Nobody badduh dan me!"
-#define SOUND_AGGRO 12091
+#define YELL_AGGRO                                  "Nobody badduh dan me!"
+#define SOUND_AGGRO                                  12091
 
-#define YELL_BERSERK "You too slow! Me too strong!"
-#define SOUND_BERSERK 12097
+#define YELL_BERSERK                                "You too slow! Me too strong!"
+#define SOUND_BERSERK                                12097
 
-#define YELL_DEATH "Mebbe me fall...but da Amani empire...never gonna die..."
-#define SOUND_DEATH 12100
+#define YELL_DEATH                                  "Mebbe me fall...but da Amani empire...never gonna die..."
+#define SOUND_DEATH                                  12100
 
 //Still not used, need more info
-#define YELL_INTRO "Everybody always wanna take from us. Now we gonna start takin' back. Anybody who get in our way...gonna drown in their own blood! De Amani empire be back now...seekin' vengeance. And we gonna start...with you!"
-#define SOUND_INTRO 12090
+#define YELL_INTRO                                  "Everybody always wanna take from us. Now we gonna start takin' back. Anybody who get in our way...gonna drown in their own blood! De Amani empire be back now...seekin' vengeance. And we gonna start...with you!"
+#define SOUND_INTRO                                  12090
 
 //Spells:
 //====== Troll Form
-#define SPELL_WHIRLWIND             17207
-#define SPELL_GRIEVOUS_THROW        43093   // remove debuff after full healed
+#define SPELL_WHIRLWIND                              17207
+#define SPELL_GRIEVOUS_THROW                         43093   // remove debuff after full healed
 //====== Bear Form
-#define SPELL_CREEPING_PARALYSIS    43095   // should cast on the whole raid
-#define SPELL_OVERPOWER             43456   // use after melee attack dodged
+#define SPELL_CREEPING_PARALYSIS                     43095   // should cast on the whole raid
+#define SPELL_OVERPOWER                              43456   // use after melee attack dodged
 //====== Eagle Form
-#define SPELL_ENERGY_STORM          43983   // enemy area aura, trigger 42577
-#define SPELL_ZAP_INFORM            42577
-#define SPELL_ZAP_DAMAGE            43137   // 1250 damage
-#define SPELL_SUMMON_CYCLONE        43112   // summon four feather vortex
-#define CREATURE_FEATHER_VORTEX     24136
-#define SPELL_CYCLONE_VISUAL        43119   // trigger 43147 visual
-#define SPELL_CYCLONE_PASSIVE       43120   // trigger 43121 (4y aoe) every second
+#define SPELL_ENERGY_STORM                           43983   // enemy area aura, trigger 42577
+#define SPELL_ZAP_INFORM                             42577
+#define SPELL_ZAP_DAMAGE                             43137   // 1250 damage
+#define SPELL_SUMMON_CYCLONE                         43112   // summon four feather vortex
+#define CREATURE_FEATHER_VORTEX                      24136
+#define SPELL_CYCLONE_VISUAL                         43119   // trigger 43147 visual
+#define SPELL_CYCLONE_PASSIVE                        43120   // trigger 43121 (4y aoe) every second
 //Lynx Form
-#define SPELL_CLAW_RAGE_HASTE       42583
-#define SPELL_CLAW_RAGE_TRIGGER     43149
-#define SPELL_CLAW_RAGE_DAMAGE      43150
-#define SPELL_LYNX_RUSH_HASTE       43152
-#define SPELL_LYNX_RUSH_DAMAGE      43153
+#define SPELL_CLAW_RAGE_HASTE                        42583
+#define SPELL_CLAW_RAGE_TRIGGER                      43149
+#define SPELL_CLAW_RAGE_DAMAGE                       43150
+#define SPELL_LYNX_RUSH_HASTE                        43152
+#define SPELL_LYNX_RUSH_DAMAGE                       43153
 //Dragonhawk Form
-#define SPELL_FLAME_WHIRL           43213   // trigger two spells
-#define SPELL_FLAME_BREATH          43215
-#define SPELL_SUMMON_PILLAR         43216   // summon 24187
-#define CREATURE_COLUMN_OF_FIRE     24187
-#define SPELL_PILLAR_TRIGGER        43218   // trigger 43217
+#define SPELL_FLAME_WHIRL                            43213   // trigger two spells
+#define SPELL_FLAME_BREATH                           43215
+#define SPELL_SUMMON_PILLAR                          43216   // summon 24187
+#define CREATURE_COLUMN_OF_FIRE                      24187
+#define SPELL_PILLAR_TRIGGER                         43218   // trigger 43217
 
 //cosmetic
-#define SPELL_SPIRIT_AURA           42466
-#define SPELL_SIPHON_SOUL           43501
+#define SPELL_SPIRIT_AURA                            42466
+#define SPELL_SIPHON_SOUL                            43501
 
 //Transforms:
-#define SPELL_SHAPE_OF_THE_BEAR     42594   // 15% dmg
-#define SPELL_SHAPE_OF_THE_EAGLE    42606
-#define SPELL_SHAPE_OF_THE_LYNX     42607   // haste melee 30%
-#define SPELL_SHAPE_OF_THE_DRAGONHAWK   42608
+#define SPELL_SHAPE_OF_THE_BEAR                      42594   // 15% dmg
+#define SPELL_SHAPE_OF_THE_EAGLE                     42606
+#define SPELL_SHAPE_OF_THE_LYNX                      42607   // haste melee 30%
+#define SPELL_SHAPE_OF_THE_DRAGONHAWK                42608
 
-#define SPELL_BERSERK 45078
+#define SPELL_BERSERK                                45078
 
-#define PHASE_BEAR 0
-#define PHASE_EAGLE 1
-#define PHASE_LYNX 2
-#define PHASE_DRAGONHAWK 3
-#define PHASE_TROLL 4
+#define PHASE_BEAR         0
+#define PHASE_EAGLE        1
+#define PHASE_LYNX         2
+#define PHASE_DRAGONHAWK   3
+#define PHASE_TROLL        4
 
 //coords for going for changing form
-#define CENTER_X 120.148811f
-#define CENTER_Y 703.713684f
-#define CENTER_Z 45.111477f
+#define CENTER_X           120.148811f
+#define CENTER_Y           703.713684f
+#define CENTER_Z            45.111477f
 
 struct SpiritInfoStruct
 {
@@ -135,20 +134,16 @@ struct TransformStruct
 
 static TransformStruct Transform[4] =
 {
-    {SOUND_TRANSFORM_TO_BEAR, YELL_TRANSFORM_TO_BEAR, SPELL_SHAPE_OF_THE_BEAR, SPELL_WHIRLWIND},
+    {SOUND_TRANSFORM_TO_BEAR,  YELL_TRANSFORM_TO_BEAR,  SPELL_SHAPE_OF_THE_BEAR,  SPELL_WHIRLWIND},
     {SOUND_TRANSFORM_TO_EAGLE, YELL_TRANSFORM_TO_EAGLE, SPELL_SHAPE_OF_THE_EAGLE, SPELL_SHAPE_OF_THE_BEAR},
-    {SOUND_TRANSFORM_TO_LYNX, YELL_TRANSFORM_TO_LYNX, SPELL_SHAPE_OF_THE_LYNX, SPELL_SHAPE_OF_THE_EAGLE},
+    {SOUND_TRANSFORM_TO_LYNX,  YELL_TRANSFORM_TO_LYNX,  SPELL_SHAPE_OF_THE_LYNX,  SPELL_SHAPE_OF_THE_EAGLE},
     {SOUND_TRANSFORM_TO_DRAGONHAWK, YELL_TRANSFORM_TO_DRAGONHAWK, SPELL_SHAPE_OF_THE_DRAGONHAWK, SPELL_SHAPE_OF_THE_LYNX}
 };
 
 class boss_zuljin : public CreatureScript
 {
     public:
-
-        boss_zuljin()
-            : CreatureScript("boss_zuljin")
-        {
-        }
+        boss_zuljin() : CreatureScript("boss_zuljin") {}
 
         struct boss_zuljinAI : public ScriptedAI
         {
@@ -190,30 +185,30 @@ class boss_zuljin : public CreatureScript
                 if (pInstance)
                     pInstance->SetData(DATA_ZULJINEVENT, NOT_STARTED);
 
-                Phase = 0;
+                Phase                       = 0;
 
                 health_20 = me->CountPctFromMaxHealth(20);
 
-                Intro_Timer = 37000;
-                Berserk_Timer = 600000;
+                Intro_Timer                = 37000;
+                Berserk_Timer              = 600000;
 
-                Whirlwind_Timer = 7000;
-                Grievous_Throw_Timer = 8000;
+                Whirlwind_Timer            = 7000;
+                Grievous_Throw_Timer       = 8000;
 
-                Creeping_Paralysis_Timer = 7000;
-                Overpower_Timer = 0;
+                Creeping_Paralysis_Timer   = 7000;
+                Overpower_Timer            = 0;
 
-                Claw_Rage_Timer = 5000;
-                Lynx_Rush_Timer = 14000;
-                Claw_Loop_Timer = 0;
-                Claw_Counter = 0;
+                Claw_Rage_Timer            = 5000;
+                Lynx_Rush_Timer            = 14000;
+                Claw_Loop_Timer            = 0;
+                Claw_Counter               = 0;
 
-                Flame_Whirl_Timer = 5000;
-                Flame_Breath_Timer = 6000;
-                Pillar_Of_Fire_Timer = 7000;
+                Flame_Whirl_Timer          = 5000;
+                Flame_Breath_Timer         = 6000;
+                Pillar_Of_Fire_Timer       = 7000;
 
-                ClawTargetGUID = 0;
-                TankGUID = 0;
+                ClawTargetGUID             = 0;
+                TankGUID                   = 0;
 
                 Summons.DespawnAll();
 
@@ -471,7 +466,7 @@ class boss_zuljin : public CreatureScript
                                 AttackStart(target); // change victim
                                 Claw_Rage_Timer = 0;
                                 Claw_Loop_Timer = 500;
-                                Claw_Counter = 0;
+                                Claw_Counter    = 0;
                             }
                         }
                         else if (!Claw_Rage_Timer) // do not do this when Lynx_Rush
@@ -519,7 +514,7 @@ class boss_zuljin : public CreatureScript
                                 me->SetSpeed(MOVE_RUN, 5.0f);
                                 AttackStart(target); // change victim
                                 Lynx_Rush_Timer = 0;
-                                Claw_Counter = 0;
+                                Claw_Counter    = 0;
                             }
                         }
                         else if (!Lynx_Rush_Timer)
@@ -599,9 +594,7 @@ class mob_zuljin_vortex : public CreatureScript
     public:
 
         mob_zuljin_vortex()
-            : CreatureScript("mob_zuljin_vortex")
-        {
-        }
+            : CreatureScript("mob_zuljin_vortex") {}
 
         struct mob_zuljin_vortexAI : public ScriptedAI
         {

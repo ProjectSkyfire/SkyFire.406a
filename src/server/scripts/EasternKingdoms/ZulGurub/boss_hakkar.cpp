@@ -48,11 +48,7 @@ EndScriptData */
 class boss_hakkar : public CreatureScript
 {
     public:
-
-        boss_hakkar()
-            : CreatureScript("boss_hakkar")
-        {
-        }
+        boss_hakkar() : CreatureScript("boss_hakkar") {}
 
         struct boss_hakkarAI : public ScriptedAI
         {
@@ -85,23 +81,23 @@ class boss_hakkar : public CreatureScript
 
             void Reset()
             {
-                BloodSiphon_Timer = 90000;
-                CorruptedBlood_Timer = 25000;
-                CauseInsanity_Timer = 17000;
-                WillOfHakkar_Timer = 17000;
-                Enrage_Timer = 600000;
+                BloodSiphon_Timer           = 90000;
+                CorruptedBlood_Timer        = 25000;
+                CauseInsanity_Timer         = 17000;
+                WillOfHakkar_Timer          = 17000;
+                Enrage_Timer                = 600000;
 
-                CheckJeklik_Timer = 1000;
-                CheckVenoxis_Timer = 2000;
-                CheckMarli_Timer = 3000;
-                CheckThekal_Timer = 4000;
-                CheckArlokk_Timer = 5000;
+                CheckJeklik_Timer           = 1000;
+                CheckVenoxis_Timer          = 2000;
+                CheckMarli_Timer            = 3000;
+                CheckThekal_Timer           = 4000;
+                CheckArlokk_Timer           = 5000;
 
-                AspectOfJeklik_Timer = 4000;
-                AspectOfVenoxis_Timer = 7000;
-                AspectOfMarli_Timer = 12000;
-                AspectOfThekal_Timer = 8000;
-                AspectOfArlokk_Timer = 18000;
+                AspectOfJeklik_Timer        = 4000;
+                AspectOfVenoxis_Timer       = 7000;
+                AspectOfMarli_Timer         = 12000;
+                AspectOfThekal_Timer        = 8000;
+                AspectOfArlokk_Timer        = 18000;
 
                 Enraged = false;
             }

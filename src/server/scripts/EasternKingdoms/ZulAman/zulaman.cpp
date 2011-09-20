@@ -42,11 +42,7 @@ EndContentData */
 class npc_forest_frog : public CreatureScript
 {
     public:
-
-        npc_forest_frog()
-            : CreatureScript("npc_forest_frog")
-        {
-        }
+        npc_forest_frog() : CreatureScript("npc_forest_frog") {}
 
         struct npc_forest_frogAI : public ScriptedAI
         {
@@ -121,11 +117,7 @@ static uint32 ChestEntry[] = {186648, 187021, 186672, 186667};
 class npc_zulaman_hostage : public CreatureScript
 {
     public:
-
-        npc_zulaman_hostage()
-            : CreatureScript("npc_zulaman_hostage")
-        {
-        }
+        npc_zulaman_hostage() : CreatureScript("npc_zulaman_hostage") {}
 
         struct npc_zulaman_hostageAI : public ScriptedAI
         {

@@ -60,7 +60,7 @@ public:
         void Reset()
         {
             Credit = false;
-            Timer = 2500;
+            Timer  = 2500;
         }
 
         void MoveInLineOfSight(Unit* /*who*/) {}

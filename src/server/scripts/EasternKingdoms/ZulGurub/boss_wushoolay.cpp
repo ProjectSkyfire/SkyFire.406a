@@ -47,7 +47,7 @@ class boss_wushoolay : public CreatureScript
             void Reset()
             {
                 LightningCloud_Timer = 5000 + rand()%5000;
-                LightningWave_Timer = 8000 + rand()%8000;
+                LightningWave_Timer  = 8000 + rand()%8000;
             }
 
             void EnterCombat(Unit* /*who*/) {}

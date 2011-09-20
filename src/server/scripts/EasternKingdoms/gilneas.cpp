@@ -22,56 +22,56 @@
 enum eGilneasCityPhase1
 {
     //Quests
-    QUEST_LOCKDOWN = 14078,
+    QUEST_LOCKDOWN                                     = 14078,
 
     //Spells
-    SPELL_PHASE_2 = 59073,
+    SPELL_PHASE_2                                      = 59073,
 
     //Say
-    SAY_PRINCE_LIAM_GREYMANE_1 = -1638000,
-    SAY_PRINCE_LIAM_GREYMANE_2 = -1638001,
-    SAY_PRINCE_LIAM_GREYMANE_3 = -1638002,
-    DELAY_SAY_PRINCE_LIAM_GREYMANE = 20000, //20 seconds repetition time
+    SAY_PRINCE_LIAM_GREYMANE_1                         = -1638000,
+    SAY_PRINCE_LIAM_GREYMANE_2                         = -1638001,
+    SAY_PRINCE_LIAM_GREYMANE_3                         = -1638002,
+    DELAY_SAY_PRINCE_LIAM_GREYMANE                     = 20000, //20 seconds repetition time
 
-    SAY_PANICKED_CITIZEN_1 = -1638016,
-    SAY_PANICKED_CITIZEN_2 = -1638017,
-    SAY_PANICKED_CITIZEN_3 = -1638018,
-    SAY_PANICKED_CITIZEN_4 = -1638019,
+    SAY_PANICKED_CITIZEN_1                             = -1638016,
+    SAY_PANICKED_CITIZEN_2                             = -1638017,
+    SAY_PANICKED_CITIZEN_3                             = -1638018,
+    SAY_PANICKED_CITIZEN_4                             = -1638019,
     #define DELAY_EMOTE_PANICKED_CITIZEN urand(5000, 15000) //5-15 second time
     #define DELAY_SAY_PANICKED_CITIZEN urand(30000, 120000) //30sec - 1.5min
 
-    SAY_GILNEAS_CITY_GUARD_GATE_1 = -1638022,
-    SAY_GILNEAS_CITY_GUARD_GATE_2 = -1638023,
-    SAY_GILNEAS_CITY_GUARD_GATE_3 = -1638024,
+    SAY_GILNEAS_CITY_GUARD_GATE_1                      = -1638022,
+    SAY_GILNEAS_CITY_GUARD_GATE_2                      = -1638023,
+    SAY_GILNEAS_CITY_GUARD_GATE_3                      = -1638024,
     #define DELAY_SAY_GILNEAS_CITY_GUARD_GATE urand(30000, 120000) //30sec - 1.5min
 };
 //Phase 2
 enum eGilneasCityPhase2
 {
     //Sounds
-    SOUND_SWORD_FLESH = 143,
-    SOUND_SWORD_PLATE = 147,
-    DELAY_SOUND = 500,
-    DELAY_ANIMATE = 2000,
+    SOUND_SWORD_FLESH                                 = 143,
+    SOUND_SWORD_PLATE                                 = 147,
+    DELAY_SOUND                                       = 500,
+    DELAY_ANIMATE                                     = 2000,
 
     //Spells
-    SPELL_PHASE_4 = 59074,
+    SPELL_PHASE_4                                     = 59074,
 
     //NPCs
-    NPC_PRINCE_LIAM_GREYMANE = 34913,
-    NPC_GILNEAS_CITY_GUARD = 34916,
-    NPC_RAMPAGING_WORGEN_1 = 34884,
-    NPC_RAMPAGING_WORGEN_2 = 35660,
-    NPC_FRIGHTENED_CITIZEN_1 = 34981,
-    NPC_FRIGHTENED_CITIZEN_2 = 35836,
+    NPC_PRINCE_LIAM_GREYMANE                          = 34913,
+    NPC_GILNEAS_CITY_GUARD                            = 34916,
+    NPC_RAMPAGING_WORGEN_1                            = 34884,
+    NPC_RAMPAGING_WORGEN_2                            = 35660,
+    NPC_FRIGHTENED_CITIZEN_1                          = 34981,
+    NPC_FRIGHTENED_CITIZEN_2                          = 35836,
 
     //Say
-    YELL_PRINCE_LIAM_GREYMANE_1 = -1638025,
-    YELL_PRINCE_LIAM_GREYMANE_2 = -1638026,
-    YELL_PRINCE_LIAM_GREYMANE_3 = -1638027,
-    YELL_PRINCE_LIAM_GREYMANE_4 = -1638028,
-    YELL_PRINCE_LIAM_GREYMANE_5 = -1638029,
-    DELAY_YELL_PRINCE_LIAM_GREYMANE = 2000,
+    YELL_PRINCE_LIAM_GREYMANE_1                       = -1638025,
+    YELL_PRINCE_LIAM_GREYMANE_2                       = -1638026,
+    YELL_PRINCE_LIAM_GREYMANE_3                       = -1638027,
+    YELL_PRINCE_LIAM_GREYMANE_4                       = -1638028,
+    YELL_PRINCE_LIAM_GREYMANE_5                       = -1638029,
+    DELAY_YELL_PRINCE_LIAM_GREYMANE                   = 2000,
 };
 
 /*######
@@ -237,7 +237,7 @@ public:
 
 enum ePanicked_citizen_2
 {
-    #define PATHS_COUNT_PANICKED_CITIZEN 8
+    #define PATHS_COUNT_PANICKED_CITIZEN 8  //Why is this define, within a enum? was this purposeful?
 };
 
 struct Waypoint
@@ -280,8 +280,8 @@ public:
             {
                 Field* Fields = result[i]->Fetch();
                 waypoints[i].pathID = Fields[0].GetUInt32();
-                waypoints[i].x = Fields[1].GetFloat();
-                waypoints[i].y = Fields[2].GetFloat();
+                waypoints[i].x      = Fields[1].GetFloat();
+                waypoints[i].y      = Fields[2].GetFloat();
             }
         }
 
@@ -445,15 +445,15 @@ public:
         npc_gilneas_city_guard_phase2AI(Creature *c) : ScriptedAI(c) {}
 
         uint32 tAnimate, tSound, dmgCount, tSeek;
-        bool playSnd;
+        bool playSound;
 
         void Reset()
         {
-            tAnimate = DELAY_ANIMATE;
-            dmgCount = 0;
-            tSound = DELAY_SOUND;
-            playSnd = false;
-            tSeek = urand(1000, 2000);
+            tAnimate   = DELAY_ANIMATE;
+            dmgCount   = 0;
+            tSound     = DELAY_SOUND;
+            playSound  = false;
+            tSeek      = urand(1000, 2000);
         }
 
         void DamageTaken(Unit * who, uint32 &Damage)
@@ -499,10 +499,10 @@ public:
             {
                 me->PlayDistanceSound(SOUND_SWORD_FLESH);
                 tSound = DELAY_SOUND;
-                playSnd = false;
+                playSound = false;
             }
 
-            if (playSnd == true) tSound -= diff;
+            if (playSound == true) tSound -= diff;
 
             if (dmgCount < 2)
                 DoMeleeAttackIfReady();
@@ -513,7 +513,7 @@ public:
                 if (tAnimate <= diff)
                 {
                     me->HandleEmoteCommand(EMOTE_ONESHOT_ATTACK1H);
-                    playSnd = true;
+                    playSound = true;
                     tAnimate = DELAY_ANIMATE;
                 }
                 else
@@ -542,17 +542,17 @@ public:
         npc_prince_liam_greymane_phase2AI(Creature *c) : ScriptedAI(c) {}
 
         uint32 tAnimate, tSound, dmgCount, tYell, tSeek;
-        bool playSnd, doYell;
+        bool playSound, doYell;
 
         void Reset()
         {
-            tAnimate = DELAY_ANIMATE;
-            dmgCount = 0;
-            tSound = DELAY_SOUND;
-            playSnd = false;
-            tSeek = urand(1000, 2000);
-            doYell = true;
-            tYell = DELAY_YELL_PRINCE_LIAM_GREYMANE;
+            tAnimate  = DELAY_ANIMATE;
+            dmgCount  = 0;
+            tSound    = DELAY_SOUND;
+            playSound = false;
+            tSeek     = urand(1000, 2000);
+            doYell    = true;
+            tYell     = DELAY_YELL_PRINCE_LIAM_GREYMANE;
         }
 
         void sGossipHello(Player *player)
@@ -629,10 +629,10 @@ public:
                 {
                     me->PlayDistanceSound(SOUND_SWORD_FLESH);
                     tSound = DELAY_SOUND;
-                    playSnd = false;
+                    playSound = false;
                 }
 
-                if (playSnd == true) tSound -= diff;
+                if (playSound == true) tSound -= diff;
 
                 //Attack
                 if (dmgCount < 2)
@@ -644,7 +644,7 @@ public:
                     if (tAnimate <= diff)
                     {
                         me->HandleEmoteCommand(EMOTE_ONESHOT_ATTACK1H);
-                        playSnd = true;
+                        playSound = true;
                         tAnimate = DELAY_ANIMATE;
                     }
                     else
@@ -690,11 +690,11 @@ public:
 
         void Reset()
         {
-            tEnrage = 0;
-            dmgCount = 0;
-            tAnimate = DELAY_ANIMATE;
-            tSound = DELAY_SOUND;
-            playSound = false;
+            tEnrage    = 0;
+            dmgCount   = 0;
+            tAnimate   = DELAY_ANIMATE;
+            tSound     = DELAY_SOUND;
+            playSound  = false;
             willCastEnrage = urand(0, 1);
         }
 
@@ -831,7 +831,7 @@ public:
 
 enum eMerchant_square_door
 {
-    #define SUMMON1_TTL 300000
+    #define SUMMON1_TTL 300000             // Agian, with the defines within enums 
     #define QUEST_EVAC_MERC_SQUA 14098
 };
 
@@ -850,9 +850,9 @@ public:
     {
         if (player->GetQuestStatus(QUEST_EVAC_MERC_SQUA) == QUEST_STATUS_INCOMPLETE)
         {
-            aPlayer = player;
-            opened = 1;
-            tQuestCredit = 2500;
+            aPlayer          = player;
+            opened           = 1;
+            tQuestCredit     = 2500;
             go->Use(player);
             spawnKind = urand(1, 3); //1,2=citizen, 3=citizen&worgen (66%,33%)
             angle=go->GetOrientation();
@@ -914,20 +914,20 @@ public:
 
 enum eFrightened_citizen
 {
-    SAY_CITIZEN_1 = -1638003,
-    SAY_CITIZEN_2 = -1638004,
-    SAY_CITIZEN_3 = -1638005,
-    SAY_CITIZEN_4 = -1638006,
-    SAY_CITIZEN_5 = -1638007,
-    SAY_CITIZEN_6 = -1638008,
-    SAY_CITIZEN_7 = -1638009,
-    SAY_CITIZEN_8 = -1638010,
-    SAY_CITIZEN_1b = -1638011,
-    SAY_CITIZEN_2b = -1638012,
-    SAY_CITIZEN_3b = -1638013,
-    SAY_CITIZEN_4b = -1638014,
-    SAY_CITIZEN_5b = -1638015,
-    #define PATHS_COUNT 2
+    SAY_CITIZEN_1                = -1638003,
+    SAY_CITIZEN_2                = -1638004,
+    SAY_CITIZEN_3                = -1638005,
+    SAY_CITIZEN_4                = -1638006,
+    SAY_CITIZEN_5                = -1638007,
+    SAY_CITIZEN_6                = -1638008,
+    SAY_CITIZEN_7                = -1638009,
+    SAY_CITIZEN_8                = -1638010,
+    SAY_CITIZEN_1b               = -1638011,
+    SAY_CITIZEN_2b               = -1638012,
+    SAY_CITIZEN_3b               = -1638013,
+    SAY_CITIZEN_4b               = -1638014,
+    SAY_CITIZEN_5b               = -1638015,
+    #define PATHS_COUNT          2
 };
 
 struct Point
@@ -942,8 +942,8 @@ struct WayPointID
 
 struct Paths
 {
-    uint8 pointsCount[8];//pathID, pointsCount
-    Point paths[8][10];//pathID, pointID, Point
+    uint8 pointsCount[8]; //pathID, pointsCount
+    Point paths[8][10];   //pathID, pointID, Point
 };
 
 class npc_frightened_citizen : public CreatureScript
@@ -1051,10 +1051,10 @@ public:
 
         void JustRespawned()
         {
-            paths = LoadPaths();
-            tRun = 500;
-            tRun2 = 2500;
-            tSay = 1000;
+            paths          = LoadPaths();
+            tRun           = 500;
+            tRun2          = 2500;
+            tSay           = 1000;
             onceRun = onceRun2 = onceSay = onceGet = true;
             x = me->m_positionX+cos(me->m_orientation)*5;
             y = me->m_positionY+sin(me->m_orientation)*5;
@@ -1136,7 +1136,7 @@ public:
 
         void Reset()
         {
-            phase = 1;
+            phase     = 1;
             phaseTime = 15000;
             Summons.DespawnAll();
             in_progress = false;
@@ -1216,7 +1216,7 @@ public:
 
                     phase++;
                     phaseTime = 15000;
-                    if (phase>7)
+                    if (phase > 7)
                     {
                         phase = 1;
                         in_progress = false;
@@ -1238,7 +1238,7 @@ public:
     {
         if (_Quest->GetQuestId() == 14159)
         {
-            if (Creature *lorna = creature->FindNearestCreature(35378, 30))
+            if (Creature* lorna = creature->FindNearestCreature(35378, 30))
                 lorna->CastSpell(player, 67357, true);
 
             player->RemoveAurasDueToSpell(59073);

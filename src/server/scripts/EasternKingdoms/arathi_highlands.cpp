@@ -37,16 +37,16 @@ EndContentData */
 
 enum eEnums
 {
-    SAY_PROGRESS_1      = -1000264,
-    SAY_PROGRESS_2      = -1000265,
-    SAY_PROGRESS_3      = -1000266,
-    EMOTE_PROGRESS_4    = -1000267,
-    SAY_AGGRO           = -1000268,
-    SAY_PROGRESS_5      = -1000269,
-    SAY_PROGRESS_6      = -1000270,
-    SAY_PROGRESS_7      = -1000271,
-    EMOTE_PROGRESS_8    = -1000272,
-    SAY_PROGRESS_9      = -1000273,
+    SAY_PROGRESS_1          = -1000264,
+    SAY_PROGRESS_2          = -1000265,
+    SAY_PROGRESS_3          = -1000266,
+    EMOTE_PROGRESS_4        = -1000267,
+    SAY_AGGRO               = -1000268,
+    SAY_PROGRESS_5          = -1000269,
+    SAY_PROGRESS_6          = -1000270,
+    SAY_PROGRESS_7          = -1000271,
+    EMOTE_PROGRESS_8        = -1000272,
+    SAY_PROGRESS_9          = -1000273,
 
     QUEST_SUNKEN_TREASURE   = 665,
     MOB_VENGEFUL_SURGE      = 2776
@@ -56,10 +56,7 @@ class npc_professor_phizzlethorpe : public CreatureScript
 {
     public:
 
-        npc_professor_phizzlethorpe()
-            : CreatureScript("npc_professor_phizzlethorpe")
-        {
-        }
+        npc_professor_phizzlethorpe() : CreatureScript("npc_professor_phizzlethorpe") {}
 
         struct npc_professor_phizzlethorpeAI : public npc_escortAI
         {

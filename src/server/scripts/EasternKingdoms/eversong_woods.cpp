@@ -209,8 +209,8 @@ public:
 
         void Reset()
         {
-          timer = 2000;
-          questPhase = 0;
+          timer        = 2000;
+          questPhase   = 0;
           summonerGuid = 0;
 
           me->SetUInt32Value(UNIT_FIELD_BYTES_1, UNIT_STAND_STATE_KNEEL);
@@ -388,9 +388,9 @@ public:
 
         void Reset()
         {
-            questPhase = 0;
-            timer = 60000;
-            paladinPhase = 0;
+            questPhase     = 0;
+            timer          = 60000;
+            paladinPhase   = 0;
             for (uint8 i = 0; i < 4; ++i)
                 paladinGuid[i] = 0;
         }
@@ -516,9 +516,9 @@ public:
 ## npc_apprentice_mirveda
 ######*/
 
-#define QUEST_UNEXPECTED_RESULT 8488
-#define MOB_GHARZUL     15958
-#define MOB_ANGERSHADE  15656
+#define QUEST_UNEXPECTED_RESULT       8488
+#define MOB_GHARZUL                   15958
+#define MOB_ANGERSHADE                15656
 
 class npc_apprentice_mirveda : public CreatureScript
 {
@@ -551,7 +551,7 @@ public:
 
         void Reset()
         {
-            KillCount = 0;
+            KillCount  = 0;
             PlayerGUID = 0;
             Summons.DespawnAll();
             Summon = false;
@@ -599,9 +599,9 @@ public:
 ## npc_infused_crystal
 ######*/
 
-#define MOB_ENRAGED_WRAITH  17086
-#define EMOTE   -1000283
-#define QUEST_POWERING_OUR_DEFENSES 8490
+#define MOB_ENRAGED_WRAITH                 17086
+#define EMOTE                             -1000283
+#define QUEST_POWERING_OUR_DEFENSES       8490
 
 struct Location
 {
@@ -613,7 +613,7 @@ static Location SpawnLocations[] =
     {8270.68f, -7188.53f, 139.619f},
     {8284.27f, -7187.78f, 139.603f},
     {8297.43f, -7193.53f, 139.603f},
-    {8303.5f, -7201.96f, 139.577f},
+    {8303.5f,  -7201.96f, 139.577f},
     {8273.22f, -7241.82f, 139.382f},
     {8254.89f, -7222.12f, 139.603f},
     {8278.51f, -7242.13f, 139.162f},
@@ -642,11 +642,11 @@ public:
 
         void Reset()
         {
-            EndTimer = 0;
-            Completed = false;
-            Progress = false;
-            PlayerGUID = 0;
-            WaveTimer = 0;
+            EndTimer    = 0;
+            Completed   = false;
+            Progress    = false;
+            PlayerGUID  = 0;
+            WaveTimer   = 0;
         }
 
         void MoveInLineOfSight(Unit* who)
@@ -656,9 +656,9 @@ public:
                 if (CAST_PLR(who)->GetQuestStatus(QUEST_POWERING_OUR_DEFENSES) == QUEST_STATUS_INCOMPLETE)
                 {
                     PlayerGUID = who->GetGUID();
-                    WaveTimer = 1000;
-                    EndTimer = 60000;
-                    Progress = true;
+                    WaveTimer  = 1000;
+                    EndTimer   = 60000;
+                    Progress   = true;
                 }
             }
         }

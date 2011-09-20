@@ -33,29 +33,24 @@ EndScriptData */
 class boss_gahzranka : public CreatureScript
 {
     public:
-
-        boss_gahzranka()
-            : CreatureScript("boss_gahzranka")
-        {
-        }
+        boss_gahzranka() : CreatureScript("boss_gahzranka") {}
 
         struct boss_gahzrankaAI : public ScriptedAI
         {
             boss_gahzrankaAI(Creature* c) : ScriptedAI(c) {}
-            uint32 Frostbreath_Timer;
+            
+			uint32 Frostbreath_Timer;
             uint32 MassiveGeyser_Timer;
             uint32 Slam_Timer;
 
             void Reset()
             {
-                Frostbreath_Timer = 8000;
-                MassiveGeyser_Timer = 25000;
-                Slam_Timer = 17000;
+                Frostbreath_Timer    = 8000;
+                MassiveGeyser_Timer  = 25000;
+                Slam_Timer           = 17000;
             }
 
-            void EnterCombat(Unit* /*who*/)
-            {
-            }
+            void EnterCombat(Unit* /*who*/) {}
 
             void UpdateAI(const uint32 diff)
             {

@@ -59,9 +59,9 @@ public:
 # boss_twilight_corrupter
 ######*/
 
-#define SPELL_SOUL_CORRUPTION 25805
-#define SPELL_CREATURE_OF_NIGHTMARE 25806
-#define SPELL_LEVEL_UP 24312
+#define SPELL_SOUL_CORRUPTION               25805
+#define SPELL_CREATURE_OF_NIGHTMARE         25806
+#define SPELL_LEVEL_UP                      24312
 
 class boss_twilight_corrupter : public CreatureScript
 {
@@ -83,9 +83,9 @@ public:
 
         void Reset()
         {
-            SoulCorruption_Timer = 15000;
-            CreatureOfNightmare_Timer = 30000;
-            KillCount = 0;
+            SoulCorruption_Timer         = 15000;
+            CreatureOfNightmare_Timer    = 30000;
+            KillCount                    = 0;
         }
         void EnterCombat(Unit* /*who*/)
         {
