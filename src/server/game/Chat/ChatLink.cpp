@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
@@ -54,8 +54,8 @@ inline bool ReadUInt32(std::istringstream& iss, uint32& res)
 
 inline bool ReadInt32(std::istringstream& iss, int32& res)
 {
-     iss >> std::dec >> res;
-     return !iss.fail() && !iss.eof();
+    iss >> std::dec >> res;
+    return !iss.fail() && !iss.eof();
 }
 
 inline std::string ReadSkip(std::istringstream& iss, char term)
@@ -252,9 +252,9 @@ bool QuestChatLink::ValidateName(char* buffer, const char* context)
                     res = true;
                     break;
                 }
-                if (!res)
-                    sLog->outDebug(LOG_FILTER_CHATSYS, "ChatHandler::isValidChatMessage('%s'): linked quest (id: %u) title wasn't found in any localization", context, _quest->GetQuestId());
-                return res;
+    if (!res)
+        sLog->outDebug(LOG_FILTER_CHATSYS, "ChatHandler::isValidChatMessage('%s'): linked quest (id: %u) title wasn't found in any localization", context, _quest->GetQuestId());
+    return res;
 }
 
 // |color|Hspell:spell_id|h[name]|h|r
@@ -327,9 +327,9 @@ bool SpellChatLink::ValidateName(char* buffer, const char* context)
             break;
         }
 
-        if (!res)
-            sLog->outDebug(LOG_FILTER_CHATSYS, "ChatHandler::isValidChatMessage('%s'): linked spell (id: %u) name wasn't found in any localization", context, _spell->Id);
-        return res;
+    if (!res)
+        sLog->outDebug(LOG_FILTER_CHATSYS, "ChatHandler::isValidChatMessage('%s'): linked spell (id: %u) name wasn't found in any localization", context, _spell->Id);
+    return res;
 }
 
 // |color|Hachievement:achievement_id:player_guid:0:0:0:0:0:0:0:0|h[name]|h|r
@@ -389,9 +389,9 @@ bool AchievementChatLink::ValidateName(char* buffer, const char* context)
             break;
         }
 
-        if (!res)
-            sLog->outDebug(LOG_FILTER_CHATSYS, "ChatHandler::isValidChatMessage('%s'): linked achievement (id: %u) name wasn't found in any localization", context, _achievement->ID);
-        return res;
+    if (!res)
+        sLog->outDebug(LOG_FILTER_CHATSYS, "ChatHandler::isValidChatMessage('%s'): linked achievement (id: %u) name wasn't found in any localization", context, _achievement->ID);
+    return res;
 }
 
 // |color|Htrade:spell_id:cur_value:max_value:player_guid:base64_data|h[name]|h|r
@@ -625,81 +625,81 @@ bool LinkExtractor::IsValidMessage()
 
         switch (commandChar)
         {
-        case 'c':
-            if (!ReadHex(_iss, color, 8))
-            {
-                sLog->outDebug(LOG_FILTER_CHATSYS, "ChatHandler::isValidChatMessage('%s'): invalid hexadecimal number while reading color", _iss.str().c_str());
-                return false;
-            }
-            break;
-        case 'H':
-            // read chars up to colon = link type
-            _iss.getline(buffer, 256, DELIMITER);
-            if (_iss.eof())
-            {
-                sLog->outDebug(LOG_FILTER_CHATSYS, "ChatHandler::isValidChatMessage('%s'): sequence finished unexpectedly", _iss.str().c_str());
-                return false;
-            }
-
-            if (strcmp(buffer, "item") == 0)
-                link = new ItemChatLink();
-            else if (strcmp(buffer, "quest") == 0)
-                link = new QuestChatLink();
-            else if (strcmp(buffer, "trade") == 0)
-                link = new TradeChatLink();
-            else if (strcmp(buffer, "talent") == 0)
-                link = new TalentChatLink();
-            else if (strcmp(buffer, "spell") == 0)
-                link = new SpellChatLink();
-            else if (strcmp(buffer, "enchant") == 0)
-                link = new EnchantmentChatLink();
-            else if (strcmp(buffer, "achievement") == 0)
-                link = new AchievementChatLink();
-            else if (strcmp(buffer, "glyph") == 0)
-                link = new GlyphChatLink();
-            else
-            {
-                sLog->outDebug(LOG_FILTER_CHATSYS, "ChatHandler::isValidChatMessage('%s'): user sent unsupported link type '%s'", _iss.str().c_str(), buffer);
-                return false;
-            }
-            _links.push_back(link);
-            link->SetColor(color);
-            if (!link->Initialize(_iss))
-                return false;
-            break;
-        case 'h':
-            // if h is next element in sequence, this one must contain the linked text :)
-            if (*validSequenceIterator == 'h')
-            {
-                // links start with '['
-                if (_iss.get() != '[')
+            case 'c':
+                if (!ReadHex(_iss, color, 8))
                 {
-                    sLog->outDebug(LOG_FILTER_CHATSYS, "ChatHandler::isValidChatMessage('%s'): link caption doesn't start with '['", _iss.str().c_str());
+                    sLog->outDebug(LOG_FILTER_CHATSYS, "ChatHandler::isValidChatMessage('%s'): invalid hexadecimal number while reading color", _iss.str().c_str());
                     return false;
                 }
-                _iss.getline(buffer, 256, ']');
+                break;
+            case 'H':
+                // read chars up to colon = link type
+                _iss.getline(buffer, 256, DELIMITER);
                 if (_iss.eof())
                 {
                     sLog->outDebug(LOG_FILTER_CHATSYS, "ChatHandler::isValidChatMessage('%s'): sequence finished unexpectedly", _iss.str().c_str());
                     return false;
                 }
 
-                if (!link)
+                if (strcmp(buffer, "item") == 0)
+                    link = new ItemChatLink();
+                else if (strcmp(buffer, "quest") == 0)
+                    link = new QuestChatLink();
+                else if (strcmp(buffer, "trade") == 0)
+                    link = new TradeChatLink();
+                else if (strcmp(buffer, "talent") == 0)
+                    link = new TalentChatLink();
+                else if (strcmp(buffer, "spell") == 0)
+                    link = new SpellChatLink();
+                else if (strcmp(buffer, "enchant") == 0)
+                    link = new EnchantmentChatLink();
+                else if (strcmp(buffer, "achievement") == 0)
+                    link = new AchievementChatLink();
+                else if (strcmp(buffer, "glyph") == 0)
+                    link = new GlyphChatLink();
+                else
+                {
+                    sLog->outDebug(LOG_FILTER_CHATSYS, "ChatHandler::isValidChatMessage('%s'): user sent unsupported link type '%s'", _iss.str().c_str(), buffer);
                     return false;
+                }
+                _links.push_back(link);
+                link->SetColor(color);
+                if (!link->Initialize(_iss))
+                    return false;
+                break;
+            case 'h':
+                // if h is next element in sequence, this one must contain the linked text :)
+                if (*validSequenceIterator == 'h')
+                {
+                    // links start with '['
+                    if (_iss.get() != '[')
+                    {
+                        sLog->outDebug(LOG_FILTER_CHATSYS, "ChatHandler::isValidChatMessage('%s'): link caption doesn't start with '['", _iss.str().c_str());
+                        return false;
+                    }
+                    _iss.getline(buffer, 256, ']');
+                    if (_iss.eof())
+                    {
+                        sLog->outDebug(LOG_FILTER_CHATSYS, "ChatHandler::isValidChatMessage('%s'): sequence finished unexpectedly", _iss.str().c_str());
+                        return false;
+                    }
 
-                if (!link->ValidateName(buffer, _iss.str().c_str()))
-                    return false;
-            }
-            break;
-        case 'r':
-            if (link)
-                link->SetBounds(startPos, _iss.tellg());
-        case '|':
-            // no further payload
-            break;
-        default:
-            sLog->outDebug(LOG_FILTER_CHATSYS, "ChatHandler::isValidChatMessage('%s'): got invalid command |%c", _iss.str().c_str(), commandChar);
-            return false;
+                    if (!link)
+                        return false;
+
+                    if (!link->ValidateName(buffer, _iss.str().c_str()))
+                        return false;
+                }
+                break;
+            case 'r':
+                if (link)
+                    link->SetBounds(startPos, _iss.tellg());
+            case '|':
+                // no further payload
+                break;
+            default:
+                sLog->outDebug(LOG_FILTER_CHATSYS, "ChatHandler::isValidChatMessage('%s'): got invalid command |%c", _iss.str().c_str(), commandChar);
+                return false;
         }
     }
 

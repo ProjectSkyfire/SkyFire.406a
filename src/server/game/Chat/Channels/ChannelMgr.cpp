@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
@@ -18,6 +18,7 @@
  */
 
 #include "ChannelMgr.h"
+
 #include "World.h"
 
 ChannelMgr* channelMgr(uint32 team)
@@ -41,7 +42,7 @@ ChannelMgr::~ChannelMgr()
     channels.clear();
 }
 
-Channel* ChannelMgr::GetJoinChannel(std::string name, uint32 channel_id)
+Channel *ChannelMgr::GetJoinChannel(std::string name, uint32 channel_id)
 {
     std::wstring wname;
     Utf8toWStr(name, wname);
@@ -49,7 +50,7 @@ Channel* ChannelMgr::GetJoinChannel(std::string name, uint32 channel_id)
 
     if (channels.find(wname) == channels.end())
     {
-        Channel* nchan = new Channel(name, channel_id, team);
+        Channel *nchan = new Channel(name, channel_id, team);
         channels[wname] = nchan;
         return nchan;
     }
@@ -57,7 +58,7 @@ Channel* ChannelMgr::GetJoinChannel(std::string name, uint32 channel_id)
     return channels[wname];
 }
 
-Channel* ChannelMgr::GetChannel(std::string name, Player* p, bool pkt)
+Channel *ChannelMgr::GetChannel(std::string name, Player *p, bool pkt)
 {
     std::wstring wname;
     Utf8toWStr(name, wname);
@@ -100,8 +101,8 @@ void ChannelMgr::LeftChannel(std::string name)
     }
 }
 
-void ChannelMgr::MakeNotOnPacket(WorldPacket* data, std::string name)
+void ChannelMgr::MakeNotOnPacket(WorldPacket *data, std::string name)
 {
-    data->Initialize(SMSG_CHANNEL_NOTIFY, (1+10));  // we guess size
+    data->Initialize(SMSG_CHANNEL_NOTIFY, (1+35));  // we guess size
     (*data) << (uint8)0x05 << name;
 }
