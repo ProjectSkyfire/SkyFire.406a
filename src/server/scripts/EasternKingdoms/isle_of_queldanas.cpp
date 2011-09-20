@@ -35,10 +35,12 @@ EndContentData */
 ## npc_converted_sentry
 ######*/
 
-#define SAY_CONVERTED_1         -1000188
-#define SAY_CONVERTED_2         -1000189
-
-#define SPELL_CONVERT_CREDIT    45009
+enum eNums
+{
+    SAY_CONVERTED_1       =  -1000188,
+    SAY_CONVERTED_2       =  -1000189,
+    SPELL_CONVERT_CREDIT  =  45009
+};
 
 class npc_converted_sentry : public CreatureScript
 {
@@ -92,10 +94,13 @@ public:
 ## npc_greengill_slave
 ######*/
 
-#define ENRAGE  45111
-#define ORB     45109
-#define QUESTG  11541
-#define DM      25060
+enum Greengill_slave
+{
+    ENRAGE  = 45111,
+    ORB     = 45109,
+    QUESTG  = 11541,
+    DM      = 25060
+};
 
 class npc_greengill_slave : public CreatureScript
 {
