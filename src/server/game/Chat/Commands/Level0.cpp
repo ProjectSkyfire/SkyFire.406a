@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
@@ -55,7 +55,7 @@ bool ChatHandler::HandleCommandsCommand(const char* /*args*/)
 
 bool ChatHandler::HandleStartCommand(const char* /*args*/)
 {
-    Player *chr = m_session->GetPlayer();
+    Player* chr = m_session->GetPlayer();
 
     if (chr->isInFlight())
     {
@@ -132,7 +132,7 @@ bool ChatHandler::HandleSaveCommand(const char* /*args*/)
     // save GM account without delay and output message
     if (!AccountMgr::IsPlayerAccount(m_session->GetSecurity()))
     {
-        if (Player *target = getSelectedPlayer())
+        if (Player* target = getSelectedPlayer())
             target->SaveToDB();
         else
             player->SaveToDB();
@@ -154,4 +154,3 @@ bool ChatHandler::HandleServerMotdCommand(const char* /*args*/)
     PSendSysMessage(LANG_MOTD_CURRENT, sWorld->GetMotd());
     return true;
 }
-
