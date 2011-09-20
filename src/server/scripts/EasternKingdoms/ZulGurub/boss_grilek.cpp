@@ -27,17 +27,13 @@ EndScriptData */
 #include "ScriptPCH.h"
 #include "zulgurub.h"
 
-#define SPELL_AVARTAR                24646                  //The Enrage Spell
+#define SPELL_AVARTAR                 24646                //The Enrage Spell
 #define SPELL_GROUNDTREMOR            6524
 
 class boss_grilek : public CreatureScript
 {
     public:
-
-        boss_grilek()
-            : CreatureScript("boss_grilek")
-        {
-        }
+        boss_grilek() : CreatureScript("boss_grilek") {}
 
         struct boss_grilekAI : public ScriptedAI
         {
@@ -48,13 +44,11 @@ class boss_grilek : public CreatureScript
 
             void Reset()
             {
-                Avartar_Timer = 15000 + rand()%10000;
+                Avartar_Timer      = 15000 + rand()%10000;
                 GroundTremor_Timer = 8000 + rand()%8000;
             }
 
-            void EnterCombat(Unit* /*who*/)
-            {
-            }
+            void EnterCombat(Unit* /*who*/) {}
 
             void UpdateAI(const uint32 diff)
             {

@@ -82,25 +82,25 @@ class boss_mandokir : public CreatureScript
 
             void Reset()
             {
-                KillCount = 0;
-                Watch_Timer = 33000;
-                Cleave_Timer = 7000;
-                Whirlwind_Timer = 20000;
-                Fear_Timer = 1000;
-                MortalStrike_Timer = 1000;
-                Check_Timer = 1000;
+                KillCount                 = 0;
+                Watch_Timer               = 33000;
+                Cleave_Timer              = 7000;
+                Whirlwind_Timer           = 20000;
+                Fear_Timer                = 1000;
+                MortalStrike_Timer        = 1000;
+                Check_Timer               = 1000;
 
-                targetX = 0.0;
-                targetY = 0.0;
-                targetZ = 0.0;
-                TargetInRange = 0;
+                targetX                   = 0.0;
+                targetY                   = 0.0;
+                targetZ                   = 0.0;
+                TargetInRange             = 0;
 
-                WatchTarget = 0;
+                WatchTarget               = 0;
 
-                someWatched = false;
-                endWatch = false;
-                RaptorDead = false;
-                CombatStart = false;
+                someWatched               = false;
+                endWatch                  = false;
+                RaptorDead                = false;
+                CombatStart               = false;
 
                 DoCast(me, 23243);
             }

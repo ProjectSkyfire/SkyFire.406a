@@ -33,11 +33,7 @@ EndScriptData */
 class boss_hazzarah : public CreatureScript
 {
     public:
-
-        boss_hazzarah()
-            : CreatureScript("boss_hazzarah")
-        {
-        }
+        boss_hazzarah() : CreatureScript("boss_hazzarah") {}
 
         struct boss_hazzarahAI : public ScriptedAI
         {
@@ -49,9 +45,9 @@ class boss_hazzarah : public CreatureScript
 
             void Reset()
             {
-                ManaBurn_Timer = 4000 + rand()%6000;
-                Sleep_Timer = 10000 + rand()%8000;
-                Illusions_Timer = 10000 + rand()%8000;
+                ManaBurn_Timer   = 4000 + rand()%6000;
+                Sleep_Timer      = 10000 + rand()%8000;
+                Illusions_Timer  = 10000 + rand()%8000;
             }
 
             void EnterCombat(Unit* /*who*/)

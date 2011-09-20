@@ -70,16 +70,16 @@ class boss_marli : public CreatureScript
 
             void Reset()
             {
-                SpawnStartSpiders_Timer = 1000;
-                PoisonVolley_Timer = 15000;
-                SpawnSpider_Timer = 30000;
-                Charge_Timer = 1500;
-                Aspect_Timer = 12000;
-                Transform_Timer = 45000;
-                TransformBack_Timer = 25000;
+                SpawnStartSpiders_Timer    = 1000;
+                PoisonVolley_Timer         = 15000;
+                SpawnSpider_Timer          = 30000;
+                Charge_Timer               = 1500;
+                Aspect_Timer               = 12000;
+                Transform_Timer            = 45000;
+                TransformBack_Timer        = 25000;
 
-                Spawned = false;
-                PhaseTwo = false;
+                Spawned                    = false;
+                PhaseTwo                   = false;
             }
 
             void EnterCombat(Unit* /*who*/)

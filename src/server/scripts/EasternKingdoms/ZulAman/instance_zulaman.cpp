@@ -28,7 +28,7 @@ EndScriptData */
 #include "zulaman.h"
 
 #define MAX_ENCOUNTER     6
-#define RAND_VENDOR    2
+#define RAND_VENDOR       2
 
 //187021 //Harkor's Satchel
 //186648 //Tanzar's Trunk
@@ -54,10 +54,7 @@ static SHostageInfo HostageInfo[] =
 class instance_zulaman : public InstanceMapScript
 {
     public:
-        instance_zulaman()
-            : InstanceMapScript("instance_zulaman", 568)
-        {
-        }
+        instance_zulaman() : InstanceMapScript("instance_zulaman", 568) {}
 
         struct instance_zulaman_InstanceMapScript : public InstanceScript
         {
@@ -86,21 +83,21 @@ class instance_zulaman : public InstanceMapScript
             {
                 memset(&Encounter, 0, sizeof(Encounter));
 
-                HarkorsSatchelGUID = 0;
-                TanzarsTrunkGUID = 0;
-                AshlisBagGUID = 0;
-                KrazsPackageGUID = 0;
+                HarkorsSatchelGUID         = 0;
+                TanzarsTrunkGUID           = 0;
+                AshlisBagGUID              = 0;
+                KrazsPackageGUID           = 0;
 
-                HexLordGateGUID = 0;
-                ZulJinGateGUID = 0;
-                AkilzonDoorGUID = 0;
-                HalazziDoorGUID = 0;
-                ZulJinDoorGUID = 0;
+                HexLordGateGUID            = 0;
+                ZulJinGateGUID             = 0;
+                AkilzonDoorGUID            = 0;
+                HalazziDoorGUID            = 0;
+                ZulJinDoorGUID             = 0;
 
-                QuestTimer = 0;
-                QuestMinute = 21;
-                BossKilled = 0;
-                ChestLooted = 0;
+                QuestTimer                 = 0;
+                QuestMinute                = 21;
+                BossKilled                 = 0;
+                ChestLooted                = 0;
 
                 for (uint8 i = 0; i < RAND_VENDOR; ++i)
                     RandVendor[i] = NOT_STARTED;
@@ -196,7 +193,7 @@ class instance_zulaman : public InstanceMapScript
                 //sLog->outError("TSCR: Zul'aman loaded, %d %d %d.", data1, data2, data3);
                 if (dataHead == 'S')
                 {
-                    BossKilled = data1;
+                    BossKilled  = data1;
                     ChestLooted = data2;
                     QuestMinute = data3;
                 } else sLog->outError("TSCR: Zul'aman: corrupted save data.");

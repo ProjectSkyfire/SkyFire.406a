@@ -31,18 +31,18 @@ EndScriptData */
 #define SAY_RAIN_FIRE               -1309003
 #define SAY_DEATH                   -1309004
 
-#define SPELL_CHARGE              22911
-#define SPELL_SONICBURST          23918
-#define SPELL_SCREECH             6605
-#define SPELL_SHADOW_WORD_PAIN    23952
-#define SPELL_MIND_FLAY           23953
-#define SPELL_CHAIN_MIND_FLAY     26044                     //Right ID unknown. So disabled
-#define SPELL_GREATERHEAL         23954
-#define SPELL_BAT_FORM            23966
+#define SPELL_CHARGE                22911
+#define SPELL_SONICBURST            23918
+#define SPELL_SCREECH               6605
+#define SPELL_SHADOW_WORD_PAIN      23952
+#define SPELL_MIND_FLAY             23953
+#define SPELL_CHAIN_MIND_FLAY       26044             //Right ID unknown. So disabled
+#define SPELL_GREATERHEAL           23954
+#define SPELL_BAT_FORM              23966
 
 // Batriders Spell
 
-#define SPELL_BOMB                40332                     //Wrong ID but Magmadars bomb is not working...
+#define SPELL_BOMB                  40332             //Wrong ID but Magmadars bomb is not working...
 
 class boss_jeklik : public CreatureScript
 {
@@ -76,17 +76,17 @@ class boss_jeklik : public CreatureScript
 
             void Reset()
             {
-                Charge_Timer = 20000;
-                SonicBurst_Timer = 8000;
-                Screech_Timer = 13000;
-                SpawnBats_Timer = 60000;
-                ShadowWordPain_Timer = 6000;
-                MindFlay_Timer = 11000;
-                ChainMindFlay_Timer = 26000;
-                GreaterHeal_Timer = 50000;
-                SpawnFlyingBats_Timer = 10000;
+                Charge_Timer            = 20000;
+                SonicBurst_Timer        = 8000;
+                Screech_Timer           = 13000;
+                SpawnBats_Timer         = 60000;
+                ShadowWordPain_Timer    = 6000;
+                MindFlay_Timer          = 11000;
+                ChainMindFlay_Timer     = 26000;
+                GreaterHeal_Timer       = 50000;
+                SpawnFlyingBats_Timer   = 10000;
 
-                PhaseTwo = false;
+                PhaseTwo                = false;
             }
 
             void EnterCombat(Unit* /*who*/)
@@ -229,11 +229,7 @@ class boss_jeklik : public CreatureScript
 class mob_batrider : public CreatureScript
 {
     public:
-
-        mob_batrider()
-            : CreatureScript("mob_batrider")
-        {
-        }
+        mob_batrider() : CreatureScript("mob_batrider") {}
 
         struct mob_batriderAI : public ScriptedAI
         {
@@ -249,7 +245,7 @@ class mob_batrider : public CreatureScript
 
             void Reset()
             {
-                Bomb_Timer = 2000;
+                Bomb_Timer  = 2000;
                 Check_Timer = 1000;
 
                 me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);

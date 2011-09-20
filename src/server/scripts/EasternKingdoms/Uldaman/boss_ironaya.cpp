@@ -20,40 +20,36 @@
 /* ScriptData
 SDName: Boss_Ironaya
 SD%Complete: 100
-SDComment:
+SDComment: TODO: Move defines2enums, Add texts/says to db and make enum
 SDCategory: Uldaman
 EndScriptData */
 
 #include "ScriptPCH.h"
 
-#define SAY_AGGRO                   -1070000
+#define SAY_AGGRO                    -1070000
 
-#define SPELL_ARCINGSMASH           8374
-#define SPELL_KNOCKAWAY             10101
-#define SPELL_WSTOMP                11876
+#define SPELL_ARCINGSMASH            8374
+#define SPELL_KNOCKAWAY              10101
+#define SPELL_WSTOMP                 11876
 
 class boss_ironaya : public CreatureScript
 {
     public:
-
-        boss_ironaya()
-            : CreatureScript("boss_ironaya")
-        {
-        }
+        boss_ironaya() : CreatureScript("boss_ironaya") {}
 
         struct boss_ironayaAI : public ScriptedAI
         {
             boss_ironayaAI(Creature* creature) : ScriptedAI(creature) {}
 
-            uint32 uiArcingTimer;
+            uint32 ArcingTimer;
             bool bHasCastedWstomp;
             bool bHasCastedKnockaway;
 
             void Reset()
             {
-                uiArcingTimer = 3000;
-                bHasCastedKnockaway = false;
-                bHasCastedWstomp = false;
+                ArcingTimer          = 3000;
+                bHasCastedKnockaway  = false;
+                bHasCastedWstomp     = false;
             }
 
             void EnterCombat(Unit* /*who*/)
@@ -85,12 +81,12 @@ class boss_ironaya : public CreatureScript
                     bHasCastedKnockaway = true;
                 }
 
-                //uiArcingTimer
-                if (uiArcingTimer <= Diff)
+                //ArcingTimer
+                if (ArcingTimer <= Diff)
                 {
                     DoCast(me, SPELL_ARCINGSMASH);
-                    uiArcingTimer = 13000;
-                } else uiArcingTimer -= Diff;
+                    ArcingTimer = 13000;
+                } else ArcingTimer -= Diff;
 
                 if (!bHasCastedWstomp && HealthBelowPct(25))
                 {

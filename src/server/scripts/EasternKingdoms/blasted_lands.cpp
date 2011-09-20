@@ -35,7 +35,7 @@ EndContentData */
 ## npc_deathly_usher
 ######*/
 
-#define GOSSIP_ITEM_USHER "I wish to to visit the Rise of the Defiler."
+#define GOSSIP_ITEM_USHER   "I wish to to visit the Rise of the Defiler."
 
 #define SPELL_TELEPORT_SINGLE           12885
 #define SPELL_TELEPORT_SINGLE_IN_GROUP  13142
@@ -72,16 +72,16 @@ public:
 /*######
 ## npc_fallen_hero_of_horde
 ######*/
-#define GOSSIP_H_F1 "Why are you here?"
-#define GOSSIP_H_F2 "Continue story..."
+#define GOSSIP_H_F1             "Why are you here?"
+#define GOSSIP_H_F2             "Continue story..."
 
-#define GOSSIP_ITEM_FALLEN "Continue..."
+#define GOSSIP_ITEM_FALLEN      "Continue..."
 
-#define GOSSIP_ITEM_FALLEN1 "What could be worse than death?"
-#define GOSSIP_ITEM_FALLEN2 "Subordinates?"
-#define GOSSIP_ITEM_FALLEN3 "What are the stones of binding?"
-#define GOSSIP_ITEM_FALLEN4 "You can count on me, Hero"
-#define GOSSIP_ITEM_FALLEN5 "I shall"
+#define GOSSIP_ITEM_FALLEN1     "What could be worse than death?"
+#define GOSSIP_ITEM_FALLEN2     "Subordinates?"
+#define GOSSIP_ITEM_FALLEN3     "What are the stones of binding?"
+#define GOSSIP_ITEM_FALLEN4     "You can count on me, Hero"
+#define GOSSIP_ITEM_FALLEN5     "I shall"
 
 class npc_fallen_hero_of_horde : public CreatureScript
 {

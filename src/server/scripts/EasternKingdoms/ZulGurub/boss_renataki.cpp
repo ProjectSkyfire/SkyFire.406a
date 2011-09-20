@@ -54,14 +54,14 @@ class boss_renataki : public CreatureScript
 
             void Reset()
             {
-                Invisible_Timer = 8000 + rand()%10000;
-                Ambush_Timer = 3000;
-                Visible_Timer = 4000;
-                Aggro_Timer = 15000 + rand()%10000;
+                Invisible_Timer      = 8000 + rand()%10000;
+                Ambush_Timer         = 3000;
+                Visible_Timer        = 4000;
+                Aggro_Timer          = 15000 + rand()%10000;
                 ThousandBlades_Timer = 4000 + rand()%4000;
 
-                Invisible = false;
-                Ambushed = false;
+                Invisible            = false;
+                Ambushed             = false;
             }
 
             void EnterCombat(Unit* /*who*/) {}
@@ -97,8 +97,8 @@ class boss_renataki : public CreatureScript
                             DoCast(target, SPELL_AMBUSH);
                         }
 
-                        Ambushed = true;
-                        Ambush_Timer = 3000;
+                        Ambushed         = true;
+                        Ambush_Timer     = 3000;
                     } else Ambush_Timer -= diff;
                 }
 

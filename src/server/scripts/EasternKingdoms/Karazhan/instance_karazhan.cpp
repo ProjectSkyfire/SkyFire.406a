@@ -121,9 +121,9 @@ public:
         {
             switch (creature->GetEntry())
             {
-                case 17229:   KilrekGUID = creature->GetGUID();      break;
-                case 15688:   TerestianGUID = creature->GetGUID();   break;
-                case 15687:   MoroesGUID = creature->GetGUID();      break;
+                case 17229:   KilrekGUID =    creature->GetGUID();      break;
+                case 15688:   TerestianGUID = creature->GetGUID();      break;
+                case 15687:   MoroesGUID =    creature->GetGUID();      break;
             }
         }
 

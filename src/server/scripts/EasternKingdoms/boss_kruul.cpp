@@ -58,18 +58,16 @@ public:
 
         void Reset()
         {
-            ShadowVolley_Timer = 10000;
-            Cleave_Timer = 14000;
-            ThunderClap_Timer = 20000;
+            ShadowVolley_Timer      = 10000;
+            Cleave_Timer            = 14000;
+            ThunderClap_Timer       = 20000;
             TwistedReflection_Timer = 25000;
-            VoidBolt_Timer = 30000;
-            Rage_Timer = 60000;                                 //Cast rage after 1 minute
-            Hound_Timer = 8000;
+            VoidBolt_Timer          = 30000;
+            Rage_Timer              = 60000;        //Cast rage after 1 minute
+            Hound_Timer             = 8000;
         }
 
-        void EnterCombat(Unit* /*who*/)
-        {
-        }
+        void EnterCombat(Unit* /*who*/) {}
 
         void KilledUnit(Unit* /*victim*/)
         {

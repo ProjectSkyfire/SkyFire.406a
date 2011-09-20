@@ -20,7 +20,7 @@
 /* ScriptData
 SDName: Boss_Nalorakk
 SD%Complete: 100
-SDComment:
+SDComment: TODO: Move defines2enums, and texts to db.
 SDCategory: Zul'Aman
 EndScriptData */
 
@@ -42,13 +42,16 @@ float NalorakkWay[8][3] =
 };
 
 #define YELL_NALORAKK_WAVE1     "Get da move on, guards! It be killin' time!"
-#define SOUND_NALORAKK_WAVE1    12066
+#define SOUND_NALORAKK_WAVE1     12066
+
 #define YELL_NALORAKK_WAVE2     "Guards, go already! Who you more afraid of, dem... or me?"
-#define SOUND_NALORAKK_WAVE2    12067
+#define SOUND_NALORAKK_WAVE2     12067
+
 #define YELL_NALORAKK_WAVE3     "Ride now! Ride out dere and bring me back some heads!"
-#define SOUND_NALORAKK_WAVE3    12068
+#define SOUND_NALORAKK_WAVE3     12068
+
 #define YELL_NALORAKK_WAVE4     "I be losin' me patience! Go on: make dem wish dey was never born!"
-#define SOUND_NALORAKK_WAVE4    12069
+#define SOUND_NALORAKK_WAVE4     12069
 
 //Unimplemented SoundIDs
 /*
@@ -58,47 +61,47 @@ float NalorakkWay[8][3] =
 
 //General defines
 #define YELL_AGGRO              "You be dead soon enough!"
-#define SOUND_YELL_AGGRO        12070
-#define YELL_KILL_ONE           "Mua-ha-ha! Now whatchoo got to say?"
-#define SOUND_YELL_KILL_ONE     12075
-#define YELL_KILL_TWO           "Da Amani gonna rule again!"
-#define SOUND_YELL_KILL_TWO     12076
-#define YELL_DEATH              "I... be waitin' on da udda side...."
-#define SOUND_YELL_DEATH        12077
-#define YELL_BERSERK            "You had your chance, now it be too late!" //Never seen this being used, so just guessing from what I hear.
-#define SOUND_YELL_BERSERK      12074
+#define SOUND_YELL_AGGRO         12070
 
-#define SPELL_BERSERK           45078
+#define YELL_KILL_ONE           "Mua-ha-ha! Now whatchoo got to say?"
+#define SOUND_YELL_KILL_ONE      12075
+
+#define YELL_KILL_TWO           "Da Amani gonna rule again!"
+#define SOUND_YELL_KILL_TWO      12076
+
+#define YELL_DEATH              "I... be waitin' on da udda side...."
+#define SOUND_YELL_DEATH         12077
+
+#define YELL_BERSERK            "You had your chance, now it be too late!" //Never seen this being used, so just guessing from what I hear.
+#define SOUND_YELL_BERSERK       12074
+
+#define SPELL_BERSERK            45078
 
 //Defines for Troll form
-#define SPELL_BRUTALSWIPE       42384
-#define SPELL_MANGLE            42389
-#define SPELL_MANGLEEFFECT      44955
-#define SPELL_SURGE             42402
-#define SPELL_BEARFORM          42377
+#define SPELL_BRUTALSWIPE        42384
+#define SPELL_MANGLE             42389
+#define SPELL_MANGLEEFFECT       44955
+#define SPELL_SURGE              42402
+#define SPELL_BEARFORM           42377
 
 #define YELL_SURGE              "I bring da pain!"
-#define SOUND_YELL_SURGE        12071
+#define SOUND_YELL_SURGE         12071
 
 #define YELL_SHIFTEDTOTROLL     "Make way for Nalorakk!"
-#define SOUND_YELL_TOTROLL      12073
+#define SOUND_YELL_TOTROLL       12073
 
 //Defines for Bear form
-#define SPELL_LACERATINGSLASH   42395
-#define SPELL_RENDFLESH         42397
-#define SPELL_DEAFENINGROAR     42398
+#define SPELL_LACERATINGSLASH    42395
+#define SPELL_RENDFLESH          42397
+#define SPELL_DEAFENINGROAR      42398
 
 #define YELL_SHIFTEDTOBEAR      "You call on da beast, you gonna get more dan you bargain for!"
-#define SOUND_YELL_TOBEAR       12072
+#define SOUND_YELL_TOBEAR        12072
 
 class boss_nalorakk : public CreatureScript
 {
     public:
-
-        boss_nalorakk()
-            : CreatureScript("boss_nalorakk")
-        {
-        }
+        boss_nalorakk() : CreatureScript("boss_nalorakk") {}
 
         struct boss_nalorakkAI : public ScriptedAI
         {
@@ -146,11 +149,11 @@ class boss_nalorakk : public CreatureScript
                 if (pInstance)
                     pInstance->SetData(DATA_NALORAKKEVENT, NOT_STARTED);
 
-                Surge_Timer = 15000 + rand()%5000;
-                BrutalSwipe_Timer = 7000 + rand()%5000;
-                Mangle_Timer = 10000 + rand()%5000;
-                ShapeShift_Timer = 45000 + rand()%5000;
-                Berserk_Timer = 600000;
+                Surge_Timer        = 15000 + rand()%5000;
+                BrutalSwipe_Timer  = 7000 + rand()%5000;
+                Mangle_Timer       = 10000 + rand()%5000;
+                ShapeShift_Timer   = 45000 + rand()%5000;
+                Berserk_Timer      = 600000;
 
                 inBearForm = false;
                 // me->SetUInt32Value(UNIT_VIRTUAL_ITEM_SLOT_ID + 1, 5122);  // TODO: find the correct equipment id
@@ -330,11 +333,11 @@ class boss_nalorakk : public CreatureScript
                             inMove = true;
                             return;
                         case 5:
-                            me->SetOrientation(3.1415f*0.5f);
+                            me->SetOrientation(3.1415f * 0.5f);
                             inMove = false;
                             return;
                         case 7:
-                            me->SetOrientation(3.1415f*0.5f);
+                            me->SetOrientation(3.1415f * 0.5f);
                             inMove = false;
                             return;
                     }
@@ -372,10 +375,10 @@ class boss_nalorakk : public CreatureScript
                         me->MonsterYell(YELL_SHIFTEDTOTROLL, LANG_UNIVERSAL, 0);
                         DoPlaySoundToSet(me, SOUND_YELL_TOTROLL);
                         me->RemoveAurasDueToSpell(SPELL_BEARFORM);
-                        Surge_Timer = 15000 + rand()%5000;
-                        BrutalSwipe_Timer = 7000 + rand()%5000;
-                        Mangle_Timer = 10000 + rand()%5000;
-                        ShapeShift_Timer = 45000 + rand()%5000;
+                        Surge_Timer          = 15000 + rand()%5000;
+                        BrutalSwipe_Timer    = 7000 + rand()%5000;
+                        Mangle_Timer         = 10000 + rand()%5000;
+                        ShapeShift_Timer     = 45000 + rand()%5000;
                         inBearForm = false;
                     }
                     else
@@ -384,10 +387,10 @@ class boss_nalorakk : public CreatureScript
                         me->MonsterYell(YELL_SHIFTEDTOBEAR, LANG_UNIVERSAL, 0);
                         DoPlaySoundToSet(me, SOUND_YELL_TOBEAR);
                         DoCast(me, SPELL_BEARFORM, true);
-                        LaceratingSlash_Timer = 2000; // dur 18s
-                        RendFlesh_Timer = 3000;  // dur 5s
-                        DeafeningRoar_Timer = 5000 + rand()%5000;  // dur 2s
-                        ShapeShift_Timer = 20000 + rand()%5000; // dur 30s
+                        LaceratingSlash_Timer   = 2000;  // dur 18s
+                        RendFlesh_Timer         = 3000;  // dur 5s
+                        DeafeningRoar_Timer     = 5000 + rand()%5000;  // dur 2s
+                        ShapeShift_Timer        = 20000 + rand()%5000; // dur 30s
                         inBearForm = true;
                     }
                 } else ShapeShift_Timer -= diff;

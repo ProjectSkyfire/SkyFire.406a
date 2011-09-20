@@ -214,7 +214,7 @@ public:
         npc_rinjiAI(Creature* creature) : npc_escortAI(creature)
         {
             _bIsByOutrunner = false;
-            _iSpawnId = 0;
+            _iSpawnId       = 0;
         }
 
         bool _bIsByOutrunner;
@@ -231,7 +231,7 @@ public:
         void JustRespawned()
         {
             _bIsByOutrunner = false;
-            _iSpawnId = 0;
+            _iSpawnId       = 0;
 
             npc_escortAI::JustRespawned();
         }

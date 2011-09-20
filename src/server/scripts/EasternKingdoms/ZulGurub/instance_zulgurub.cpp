@@ -50,10 +50,10 @@ class instance_zulgurub : public InstanceMapScript
             {
                 memset(&Encounter, 0, sizeof(Encounter));
 
-                LorKhanGUID = 0;
-                ZathGUID = 0;
-                ThekalGUID = 0;
-                JindoGUID = 0;
+                LorKhanGUID  = 0;
+                ZathGUID     = 0;
+                ThekalGUID   = 0;
+                JindoGUID    = 0;
             }
 
             bool IsEncounterInProgress() const
@@ -67,9 +67,9 @@ class instance_zulgurub : public InstanceMapScript
                 switch(creature->GetEntry())
                 {
                     case 11347: LorKhanGUID = creature->GetGUID(); break;
-                    case 11348: ZathGUID = creature->GetGUID(); break;
-                    case 14509: ThekalGUID = creature->GetGUID(); break;
-                    case 11380: JindoGUID = creature->GetGUID(); break;
+                    case 11348: ZathGUID    = creature->GetGUID(); break;
+                    case 14509: ThekalGUID  = creature->GetGUID(); break;
+                    case 11380: JindoGUID   = creature->GetGUID(); break;
                 }
             }
 

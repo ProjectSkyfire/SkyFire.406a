@@ -20,7 +20,7 @@
 /* ScriptData
 SDName: Boss_Hex_Lord_Malacrass
 SD%Complete:
-SDComment:
+SDComment: TODO: Move defines2enums, and texts to db
 SDCategory: Zul'Aman
 EndScriptData */
 
@@ -28,78 +28,83 @@ EndScriptData */
 #include "zulaman.h"
 
 #define YELL_AGGRO              "Da shadow gonna fall on you... "
-#define SOUND_YELL_AGGRO        12041
+#define SOUND_YELL_AGGRO         12041
+
 #define YELL_SPIRIT_BOLTS       "Your soul gonna bleed!"
-#define SOUND_YELL_SPIRIT_BOLTS 12047
+#define SOUND_YELL_SPIRIT_BOLTS  12047
+
 #define YELL_DRAIN_POWER        "Darkness comin\' for you"
-#define SOUND_YELL_DRAIN_POWER  12046
+#define SOUND_YELL_DRAIN_POWER   12046
+
 #define YELL_KILL_ONE           "Dis a nightmare ya don\' wake up from!"
-#define SOUND_YELL_KILL_ONE     12043
+#define SOUND_YELL_KILL_ONE      12043
+
 #define YELL_KILL_TWO           "Azzaga choogo zinn!"
-#define SOUND_YELL_KILL_TWO     12044
+#define SOUND_YELL_KILL_TWO      12044
+
 #define YELL_DEATH              "Dis not... da end of me..."
-#define SOUND_YELL_DEATH        12051
+#define SOUND_YELL_DEATH         12051
 
-#define SPELL_SPIRIT_BOLTS      43383
-#define SPELL_DRAIN_POWER       44131
-#define SPELL_SIPHON_SOUL       43501
+#define SPELL_SPIRIT_BOLTS       43383
+#define SPELL_DRAIN_POWER        44131
+#define SPELL_SIPHON_SOUL        43501
 
-#define MOB_TEMP_TRIGGER        23920
+#define MOB_TEMP_TRIGGER         23920
 
 //Defines for various powers he uses after using soul drain
 
 //Druid
-#define SPELL_DR_LIFEBLOOM      43421
-#define SPELL_DR_THORNS         43420
-#define SPELL_DR_MOONFIRE       43545
+#define SPELL_DR_LIFEBLOOM       43421
+#define SPELL_DR_THORNS          43420
+#define SPELL_DR_MOONFIRE        43545
 
 //Hunter
-#define SPELL_HU_EXPLOSIVE_TRAP 43444
-#define SPELL_HU_FREEZING_TRAP  43447
-#define SPELL_HU_SNAKE_TRAP     43449
+#define SPELL_HU_EXPLOSIVE_TRAP  43444
+#define SPELL_HU_FREEZING_TRAP   43447
+#define SPELL_HU_SNAKE_TRAP      43449
 
 //Mage
-#define SPELL_MG_FIREBALL       41383
-#define SPELL_MG_FROSTBOLT      43428
-#define SPELL_MG_FROST_NOVA     43426
-#define SPELL_MG_ICE_LANCE      43427
+#define SPELL_MG_FIREBALL        41383
+#define SPELL_MG_FROSTBOLT       43428
+#define SPELL_MG_FROST_NOVA      43426
+#define SPELL_MG_ICE_LANCE       43427
 
 //Paladin
-#define SPELL_PA_CONSECRATION   43429
-#define SPELL_PA_HOLY_LIGHT     43451
-#define SPELL_PA_AVENGING_WRATH 43430
+#define SPELL_PA_CONSECRATION    43429
+#define SPELL_PA_HOLY_LIGHT      43451
+#define SPELL_PA_AVENGING_WRATH  43430
 
 //Priest
-#define SPELL_PR_HEAL           41372
-#define SPELL_PR_MIND_CONTROL   43550
-#define SPELL_PR_MIND_BLAST     41374
-#define SPELL_PR_SW_DEATH       41375
-#define SPELL_PR_PSYCHIC_SCREAM 43432
-#define SPELL_PR_PAIN_SUPP      44416
+#define SPELL_PR_HEAL            41372
+#define SPELL_PR_MIND_CONTROL    43550
+#define SPELL_PR_MIND_BLAST      41374
+#define SPELL_PR_SW_DEATH        41375
+#define SPELL_PR_PSYCHIC_SCREAM  43432
+#define SPELL_PR_PAIN_SUPP       44416
 
 //Rogue
-#define SPELL_RO_BLIND          43433
-#define SPELL_RO_SLICE_DICE     43457
-#define SPELL_RO_WOUND_POISON   39665
+#define SPELL_RO_BLIND           43433
+#define SPELL_RO_SLICE_DICE      43457
+#define SPELL_RO_WOUND_POISON    39665
 
 //Shaman
-#define SPELL_SH_FIRE_NOVA      43436
-#define SPELL_SH_HEALING_WAVE   43548
-#define SPELL_SH_CHAIN_LIGHT    43435
+#define SPELL_SH_FIRE_NOVA       43436
+#define SPELL_SH_HEALING_WAVE    43548
+#define SPELL_SH_CHAIN_LIGHT     43435
 
 //Warlock
-#define SPELL_WL_CURSE_OF_DOOM  43439
-#define SPELL_WL_RAIN_OF_FIRE   43440
-#define SPELL_WL_UNSTABLE_AFFL  35183
+#define SPELL_WL_CURSE_OF_DOOM   43439
+#define SPELL_WL_RAIN_OF_FIRE    43440
+#define SPELL_WL_UNSTABLE_AFFL   35183
 
 //Warrior
-#define SPELL_WR_SPELL_REFLECT  43443
-#define SPELL_WR_WHIRLWIND      43442
-#define SPELL_WR_MORTAL_STRIKE  43441
+#define SPELL_WR_SPELL_REFLECT   43443
+#define SPELL_WR_WHIRLWIND       43442
+#define SPELL_WR_MORTAL_STRIKE   43441
 
-#define ORIENT                  1.5696f
-#define POS_Y                   921.2795f
-#define POS_Z                   33.8883f
+#define ORIENT                   1.5696f
+#define POS_Y                    921.2795f
+#define POS_Z                    33.8883f
 
 static float Pos_X[4] = {112.8827f, 107.8827f, 122.8827f, 127.8827f};
 
@@ -117,12 +122,12 @@ static uint32 AddEntryList[8]=
 
 enum AbilityTarget
 {
-    ABILITY_TARGET_SELF = 0,
-    ABILITY_TARGET_VICTIM = 1,
-    ABILITY_TARGET_ENEMY = 2,
-    ABILITY_TARGET_HEAL = 3,
-    ABILITY_TARGET_BUFF = 4,
-    ABILITY_TARGET_SPECIAL = 5
+    ABILITY_TARGET_SELF     = 0,
+    ABILITY_TARGET_VICTIM   = 1,
+    ABILITY_TARGET_ENEMY    = 2,
+    ABILITY_TARGET_HEAL     = 3,
+    ABILITY_TARGET_BUFF     = 4,
+    ABILITY_TARGET_SPECIAL  = 5
 };
 
 struct PlayerAbilityStruct
@@ -204,11 +209,7 @@ struct boss_hexlord_addAI : public ScriptedAI
 class boss_hexlord_malacrass : public CreatureScript
 {
     public:
-
-        boss_hexlord_malacrass()
-            : CreatureScript("boss_hexlord_malacrass")
-        {
-        }
+        boss_hexlord_malacrass() : CreatureScript("boss_hexlord_malacrass") {}
 
         struct boss_hex_lord_malacrassAI : public ScriptedAI
         {
@@ -241,12 +242,12 @@ class boss_hexlord_malacrass : public CreatureScript
                 if (pInstance)
                     pInstance->SetData(DATA_HEXLORDEVENT, NOT_STARTED);
 
-                SpiritBolts_Timer = 20000;
-                DrainPower_Timer = 60000;
-                SiphonSoul_Timer = 100000;
-                PlayerAbility_Timer = 99999;
-                CheckAddState_Timer = 5000;
-                ResetTimer = 5000;
+                SpiritBolts_Timer    = 20000;
+                DrainPower_Timer     = 60000;
+                SiphonSoul_Timer     = 100000;
+                PlayerAbility_Timer  = 99999;
+                CheckAddState_Timer  = 5000;
+                ResetTimer           = 5000;
 
                 SpawnAdds();
 
@@ -384,8 +385,8 @@ class boss_hexlord_malacrass : public CreatureScript
                         DoCast(me, SPELL_SPIRIT_BOLTS, false);
                         me->MonsterYell(YELL_SPIRIT_BOLTS, LANG_UNIVERSAL, 0);
                         DoPlaySoundToSet(me, SOUND_YELL_SPIRIT_BOLTS);
-                        SpiritBolts_Timer = 40000;
-                        SiphonSoul_Timer = 10000;    // ready to drain
+                        SpiritBolts_Timer   = 40000;
+                        SiphonSoul_Timer    = 10000;    // ready to drain
                         PlayerAbility_Timer = 99999;
                     }
                 } else SpiritBolts_Timer -= diff;
@@ -474,17 +475,13 @@ class boss_hexlord_malacrass : public CreatureScript
         }
 };
 
-#define SPELL_BLOODLUST       43578
-#define SPELL_CLEAVE          15496
-
+#define SPELL_BLOODLUST        43578
+#define SPELL_CLEAVE           15496
+ 
 class boss_thurg : public CreatureScript
 {
     public:
-
-        boss_thurg()
-            : CreatureScript("boss_thurg")
-        {
-        }
+        boss_thurg() : CreatureScript("boss_thurg") {}
 
         struct boss_thurgAI : public boss_hexlord_addAI
         {
@@ -496,7 +493,7 @@ class boss_thurg : public CreatureScript
             void Reset()
             {
                 bloodlust_timer = 15000;
-                cleave_timer = 10000;
+                cleave_timer    = 10000;
 
                 boss_hexlord_addAI::Reset();
             }
@@ -533,17 +530,13 @@ class boss_thurg : public CreatureScript
         }
 };
 
-#define SPELL_FLASH_HEAL     43575
-#define SPELL_DISPEL_MAGIC   43577
+#define SPELL_FLASH_HEAL      43575
+#define SPELL_DISPEL_MAGIC    43577
 
 class boss_alyson_antille : public CreatureScript
 {
     public:
-
-        boss_alyson_antille()
-            : CreatureScript("boss_alyson_antille")
-        {
-        }
+        boss_alyson_antille() : CreatureScript("boss_alyson_antille") {}
 
         struct boss_alyson_antilleAI : public boss_hexlord_addAI
         {
@@ -555,7 +548,7 @@ class boss_alyson_antille : public CreatureScript
 
             void Reset()
             {
-                flashheal_timer = 2500;
+                flashheal_timer   = 2500;
                 dispelmagic_timer = 10000;
 
                 //AcquireGUID();
@@ -633,7 +626,7 @@ class boss_alyson_antille : public CreatureScript
         }
 };
 
-#define SPELL_FIREBOLT        43584
+#define SPELL_FIREBOLT         43584
 
 struct boss_gazakrothAI : public boss_hexlord_addAI
 {
@@ -677,17 +670,13 @@ struct boss_gazakrothAI : public boss_hexlord_addAI
     }
 };
 
-#define SPELL_FLAME_BREATH    43582
-#define SPELL_THUNDERCLAP     43583
+#define SPELL_FLAME_BREATH     43582
+#define SPELL_THUNDERCLAP      43583
 
 class boss_lord_raadan : public CreatureScript
 {
     public:
-
-        boss_lord_raadan()
-            : CreatureScript("boss_lord_raadan")
-        {
-        }
+        boss_lord_raadan() : CreatureScript("boss_lord_raadan") {}
 
         struct boss_lord_raadanAI : public boss_hexlord_addAI
         {
@@ -730,16 +719,12 @@ class boss_lord_raadan : public CreatureScript
         }
 };
 
-#define SPELL_PSYCHIC_WAIL   43590
+#define SPELL_PSYCHIC_WAIL    43590
 
 class boss_darkheart : public CreatureScript
 {
     public:
-
-        boss_darkheart()
-            : CreatureScript("boss_darkheart")
-        {
-        }
+        boss_darkheart() : CreatureScript("boss_darkheart") {}
 
         struct boss_darkheartAI : public boss_hexlord_addAI
         {
@@ -773,16 +758,12 @@ class boss_darkheart : public CreatureScript
         }
 };
 
-#define SPELL_VENOM_SPIT    43579
+#define SPELL_VENOM_SPIT     43579
 
 class boss_slither : public CreatureScript
 {
     public:
-
-        boss_slither()
-            : CreatureScript("boss_slither")
-        {
-        }
+        boss_slither() : CreatureScript("boss_slither") {}
 
         struct boss_slitherAI : public boss_hexlord_addAI
         {
@@ -834,15 +815,12 @@ class boss_slither : public CreatureScript
 };
 
 //Fenstalker
-#define SPELL_VOLATILE_INFECTION 43586
+#define SPELL_VOLATILE_INFECTION    43586
+
 class boss_fenstalker : public CreatureScript
 {
     public:
-
-        boss_fenstalker()
-            : CreatureScript("boss_fenstalker")
-        {
-        }
+        boss_fenstalker() : CreatureScript("boss_fenstalker") {}
 
         struct boss_fenstalkerAI : public boss_hexlord_addAI
         {
@@ -878,17 +856,13 @@ class boss_fenstalker : public CreatureScript
 };
 
 //Koragg
-#define SPELL_COLD_STARE      43593
-#define SPELL_MIGHTY_BLOW     43592
+#define SPELL_COLD_STARE       43593
+#define SPELL_MIGHTY_BLOW      43592
 
 class boss_koragg : public CreatureScript
 {
     public:
-
-        boss_koragg()
-            : CreatureScript("boss_koragg")
-        {
-        }
+        boss_koragg() : CreatureScript("boss_koragg") {}
 
         struct boss_koraggAI : public boss_hexlord_addAI
         {
@@ -899,7 +873,7 @@ class boss_koragg : public CreatureScript
 
             void Reset()
             {
-                coldstare_timer = 15000;
+                coldstare_timer  = 15000;
                 mightyblow_timer = 10000;
                 boss_hexlord_addAI::Reset();
             }

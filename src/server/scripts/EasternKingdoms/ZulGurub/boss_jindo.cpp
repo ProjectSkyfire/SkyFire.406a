@@ -63,11 +63,11 @@ class boss_jindo : public CreatureScript
 
             void Reset()
             {
-                BrainWashTotem_Timer = 20000;
-                HealingWard_Timer = 16000;
-                Hex_Timer = 8000;
-                Delusions_Timer = 10000;
-                Teleport_Timer = 5000;
+                BrainWashTotem_Timer   = 20000;
+                HealingWard_Timer      = 16000;
+                Hex_Timer              = 8000;
+                Delusions_Timer        = 10000;
+                Teleport_Timer         = 5000;
             }
 
             void EnterCombat(Unit* /*who*/)
@@ -180,11 +180,7 @@ class boss_jindo : public CreatureScript
 class mob_healing_ward : public CreatureScript
 {
     public:
-
-        mob_healing_ward()
-            : CreatureScript("mob_healing_ward")
-        {
-        }
+        mob_healing_ward(): CreatureScript("mob_healing_ward") {}
 
         struct mob_healing_wardAI : public ScriptedAI
         {
@@ -213,9 +209,9 @@ class mob_healing_ward : public CreatureScript
                 {
                     if (pInstance)
                     {
-                        Unit* pJindo = Unit::GetUnit((*me), pInstance->GetData64(DATA_JINDO));
-                        if (pJindo)
-                            DoCast(pJindo, SPELL_HEAL);
+                        Unit* jindo = Unit::GetUnit((*me), pInstance->GetData64(DATA_JINDO));
+                        if (jindo)
+                            DoCast(jindo, SPELL_HEAL);
                     }
                     Heal_Timer = 3000;
                 } else Heal_Timer -= diff;
