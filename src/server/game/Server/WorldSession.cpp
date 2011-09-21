@@ -259,7 +259,7 @@ bool WorldSession::Update(uint32 diff, PacketFilter& updater)
                                 "the player has not logged in yet and not recently logout");
                         else
                         {
-                            // not expected _player or must checked in packet hanlder
+                            // not expected _player or must checked in packet handler
                             sScriptMgr->OnPacketReceive(m_Socket, WorldPacket(*packet));
                             (this->*opHandle.handler)(*packet);
                             if (sLog->IsOutDebug() && packet->rpos() < packet->wpos())
@@ -871,7 +871,7 @@ void WorldSession::ReadAddonsInfo(WorldPacket &data)
 
             addonInfo >> enabled >> crc >> unk1;
 
-            sLog->outDetail("ADDON: Name: %s, Enabled: 0x%x, CRC: 0x%x, Unknown2: 0x%x", addonName.c_str(), enabled, crc, unk1);
+            //sLog->outDetail("ADDON: Name: %s, Enabled: 0x%x, CRC: 0x%x, Unknown2: 0x%x", addonName.c_str(), enabled, crc, unk1);
 
             AddonInfo addon(addonName, enabled, crc, 2, true);
 
@@ -937,8 +937,7 @@ void WorldSession::SendAddonsInfo()
             data << uint8(usepk);
             if (usepk)                                      // if CRC is wrong, add public key (client need it)
             {
-                sLog->outDetail("ADDON: CRC (0x%x) for addon %s is wrong (does not match expected 0x%x), sending pubkey",
-                    itr->CRC, itr->Name.c_str(), STANDARD_ADDON_CRC);
+                //sLog->outDetail("ADDON: CRC (0x%x) for addon %s is wrong (does not match expected 0x%x), sending pubkey", itr->CRC, itr->Name.c_str(), STANDARD_ADDON_CRC);
 
                 data.append(addonPublicKey, sizeof(addonPublicKey));
             }

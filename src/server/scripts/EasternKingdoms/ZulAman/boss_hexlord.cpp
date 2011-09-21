@@ -477,7 +477,7 @@ class boss_hexlord_malacrass : public CreatureScript
 
 #define SPELL_BLOODLUST        43578
 #define SPELL_CLEAVE           15496
- 
+
 class boss_thurg : public CreatureScript
 {
     public:

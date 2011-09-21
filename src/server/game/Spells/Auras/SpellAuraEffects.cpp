@@ -5656,7 +5656,7 @@ void AuraEffect::HandlePeriodicDummyAuraTick(Unit* target, Unit* caster) const
                     caster->CastCustomSpell(66153, SPELLVALUE_MAX_TARGETS, urand(1,6), target, true);
                     break;
                 }
-                case 54798: // FLAMING Arrow Triggered Effect				
+                case 54798: // FLAMING Arrow Triggered Effect
                 {
                     if (!caster || !target || !target->ToCreature() || !caster->GetVehicle() || target->HasAura(54683))
                         break;

@@ -559,7 +559,7 @@ class npc_tirion_toc : public CreatureScript
                             if (m_pInstance->GetData(TYPE_BEASTS) != DONE)
                             {
                                 m_pInstance->DoUseDoorOrButton(m_pInstance->GetData64(GO_MAIN_GATE_DOOR));
-                                
+
                                 if (Creature* pTemp = me->SummonCreature(NPC_GORMOK, ToCSpawnLoc[0].GetPositionX(), ToCSpawnLoc[0].GetPositionY(), ToCSpawnLoc[0].GetPositionZ(), 5, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 30*IN_MILLISECONDS))
                                 {
                                     pTemp->GetMotionMaster()->MovePoint(0, ToCCommonLoc[5].GetPositionX(), ToCCommonLoc[5].GetPositionY(), ToCCommonLoc[5].GetPositionZ());
@@ -625,7 +625,6 @@ class npc_tirion_toc : public CreatureScript
                                     pTemp->GetMotionMaster()->MovePoint(2, ToCCommonLoc[5].GetPositionX(), ToCCommonLoc[5].GetPositionY(), ToCCommonLoc[5].GetPositionZ());
                                     me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_OOC_NOT_ATTACKABLE | UNIT_FLAG_NOT_SELECTABLE);
                                     me->SetReactState(REACT_PASSIVE);
-                                    
                                 }
                             }
                             m_uiUpdateTimer = 5000;
