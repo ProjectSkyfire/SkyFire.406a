@@ -183,97 +183,92 @@ void BattlegroundMgr::BuildBattlegroundStatusPacket(WorldPacket *data, Battlegro
     switch(StatusID)
     {
     case STATUS_NONE:
-        {
-            ///- STATUS1 resets clients' BG Info
-            data->Initialize(SMSG_BATTLEFIELD_STATUS1, 4);
-            *data << uint32(QueueSlot);                          // queue id (0...1)
-        }break;
+        ///- STATUS1 resets clients' BG Info
+        data->Initialize(SMSG_BATTLEFIELD_STATUS1, 4);
+        *data << uint32(QueueSlot);                          // queue id (0...1)
+        break;
     case STATUS_WAIT_QUEUE:
-        {
-            ///- The client will set STATUS_WAIT_QUEUE at BGInfo once it receives this packet
-            data->Initialize(SMSG_JOINED_BATTLEGROUND_QUEUE, (1 + 1 + 4 + 4 + 4 + 1 + 8 + 1 + 4));
-            *data << uint8(0x20);                               // packed flag, seems to be always 0x20 for non-rated non-arena bgs
-            *data << uint8(bg->GetMaxLevel());                  // max level
-            *data << uint32(Time1);                             // avg wait time
-            *data << uint32(QueueSlot);                         // queueSlot
-            *data << uint32(bg->GetClientInstanceID());         // instanceid
-            *data << uint8(bg->GetMinLevel());                  // lowest level (seems to be set to 0 even though its not 0 sometimes O.O)
+        ///- The client will set STATUS_WAIT_QUEUE at BGInfo once it receives this packet
+        data->Initialize(SMSG_JOINED_BATTLEGROUND_QUEUE, (1 + 1 + 4 + 4 + 4 + 1 + 8 + 1 + 4));
+        *data << uint8(0x20);                               // packed flag, seems to be always 0x20 for non-rated non-arena bgs
+        *data << uint8(bg->GetMaxLevel());                  // max level
+        *data << uint32(Time1);                             // avg wait time
+        *data << uint32(QueueSlot);                         // queueSlot
+        *data << uint32(bg->GetClientInstanceID());         // instanceid
+        *data << uint8(bg->GetMinLevel());                  // lowest level (seems to be set to 0 even though its not 0 sometimes O.O)
 
-            ///- packed uint64 (seems to be BG GUID)
-            *data << uint32(bg->GetTypeID());                   // BGTypeID
-            *data << uint32(arenatype);                         // On retail 0x101F is sent here, but we need this value to be returned in PORT opcode
-            // end
+        ///- packed uint64 (seems to be BG GUID)
+        *data << uint32(bg->GetTypeID());                   // BGTypeID
+        *data << uint32(arenatype);                         // On retail 0x101F is sent here, but we need this value to be returned in PORT opcode
+        // end
 
-            *data << uint8(0);                                  // teamsize, 0 if not arena
-            *data << uint32(Time2);                             // time in queue
-        }break;
+        *data << uint8(0);                                  // teamsize, 0 if not arena
+        *data << uint32(Time2);                             // time in queue
+        break;
     case STATUS_WAIT_JOIN:
-        {
-            ///- The client will set STATUS_WAIT_JOIN at BGInfo once it receives this packet
-            data->Initialize(SMSG_BATTLEFIELD_STATUS3, (1 + 1 + 4 + 8 + 4 + 1 + 4 + 4 + 1));
-            *data << uint8(bg->isRated() ? 128 : 0);            // isarena?
-            *data << uint8(bg->GetMinLevel());
-            *data << uint32(bg->GetClientInstanceID());         // instance id
+        ///- The client will set STATUS_WAIT_JOIN at BGInfo once it receives this packet
+        data->Initialize(SMSG_BATTLEFIELD_STATUS3, (1 + 1 + 4 + 8 + 4 + 1 + 4 + 4 + 1));
+        *data << uint8(bg->isRated() ? 128 : 0);            // isarena?
+        *data << uint8(bg->GetMinLevel());
+        *data << uint32(bg->GetClientInstanceID());         // instance id
 
-            *data << uint32(bg->GetTypeID());                   // BGTypeID
-            *data << uint32(arenatype);
+        *data << uint32(bg->GetTypeID());                   // BGTypeID
+        *data << uint32(arenatype);
 
-            *data << uint32(QueueSlot);                         // queueslot
-            *data << uint8(arenatype);                          // teamsize (0 if not arena)
-            *data << uint32(Time1);                             // port expiration time
+        *data << uint32(QueueSlot);                         // queueslot
+        *data << uint8(arenatype);                          // teamsize (0 if not arena)
+        *data << uint32(Time1);                             // port expiration time
 
-            if (bg->GetTypeID() != BATTLEGROUND_RB)
-                *data << uint32(bg->GetMapId());                // mapid
-            else *data << uint32(0);
+        if (bg->GetTypeID() != BATTLEGROUND_RB)
+            *data << uint32(bg->GetMapId());                // mapid
+        else *data << uint32(0);
 
-            *data << uint8(bg->GetMaxLevel());                  // highestLevel
-        }break;
+        *data << uint8(bg->GetMaxLevel());                  // highestLevel
+        break;
     case STATUS_IN_PROGRESS:
-        {
-            data->Initialize(SMSG_BATTLEFIELD_STATUS2, 100);
-            *data << uint8(bg->isRated() ? 128 : 0);
-            *data << uint32(Time2);                             // Time since started
-            *data << uint32(QueueSlot);                         // queueslot
-            *data << uint32(bg->GetMapId());                    // MapID
+        data->Initialize(SMSG_BATTLEFIELD_STATUS2, 100);
+        *data << uint8(bg->isRated() ? 128 : 0);
+        *data << uint32(Time2);                             // Time since started
+        *data << uint32(QueueSlot);                         // queueslot
+        *data << uint32(bg->GetMapId());                    // MapID
 
-            ///- This is bg guid
-            *data << uint32(bg->GetTypeID());                   // BGTypeID
-            *data << uint16(0);
-            *data << uint8(0x10);                               // High guid
-            *data << uint8(0x1F);                               // High guid
-            // end
+        ///- This is bg guid
+        *data << uint32(bg->GetTypeID());                   // BGTypeID
+        *data << uint16(0);
+        *data << uint8(0x10);                               // High guid
+        *data << uint8(0x1F);                               // High guid
+        // end
 
-            *data << uint32(Time1);                             // Time until BG closed
-            *data << uint8(arenatype);                          // teamsize (0 if not arena)
-            *data << uint8(bg->GetMaxLevel());
-            *data << uint32(bg->GetClientInstanceID());         // instanceid
-            *data << uint8(bg->GetMinLevel());
-        }break;
+        *data << uint32(Time1);                             // Time until BG closed
+        *data << uint8(arenatype);                          // teamsize (0 if not arena)
+        *data << uint8(bg->GetMaxLevel());
+        *data << uint32(bg->GetClientInstanceID());         // instanceid
+        *data << uint8(bg->GetMinLevel());
+        break;
     case STATUS_WAIT_LEAVE:
-        {
-            ///- Not used...
-            data->Initialize(SMSG_BATTLEFIELD_STATUS4, (1 + 4 + 1 + 1 + 1 + 4 + 1 + 4 + 1 + 4 + 1 + 8 + 1));
-            *data << uint8(0);                                 // flag
-            *data << uint32(Time1);
-            *data << uint8(bg->GetMinLevel());                 // lowestLevel
-            *data << uint8(0);
-            *data << uint8(0);
-            *data << uint32(QueueSlot);                        // queueSlot
-            *data << uint8(bg->GetMaxLevel());                 // highestLevel
-            *data << uint32(Time2); 
-            *data << uint8(0);                                 // teamsize (0 if not arena)
-            *data << uint32(bg->GetClientInstanceID());        // instanceid
-            *data << uint8(0);
+        ///- Not used...
+        data->Initialize(SMSG_BATTLEFIELD_STATUS4, (1 + 4 + 1 + 1 + 1 + 4 + 1 + 4 + 1 + 4 + 1 + 8 + 1));
+        *data << uint8(0);                                 // flag
+        *data << uint32(Time1);
+        *data << uint8(bg->GetMinLevel());                 // lowestLevel
+        *data << uint8(0);
+        *data << uint8(0);
+        *data << uint32(QueueSlot);                        // queueSlot
+        *data << uint8(bg->GetMaxLevel());                 // highestLevel
+        *data << uint32(Time2);
+        *data << uint8(0);                                 // teamsize (0 if not arena)
+        *data << uint32(bg->GetClientInstanceID());        // instanceid
+        *data << uint8(0);
 
-            ///- This is bg guid
-            *data << uint32(bg->GetTypeID());                  // BGTypeID
-            *data << uint16(0);
-            *data << uint8(0x10);                              // High guid
-            *data << uint8(0x1F);                              // High guid
-            // end
+        ///- This is bg guid
+        *data << uint32(bg->GetTypeID());                  // BGTypeID
+        *data << uint16(0);
+        *data << uint8(0x10);                              // High guid
+        *data << uint8(0x1F);                              // High guid
+        // end
 
-            *data << uint8(0);
-        }break;
+        *data << uint8(0);
+        break;
     }
 }
 
@@ -813,10 +808,10 @@ void BattlegroundMgr::CreateInitialBattlegrounds()
             continue;
         }
 
-		selectionWeight = fields[9].GetUInt8();
-		data.scriptId = sObjectMgr->GetScriptId(fields[10].GetCString());
-		data.BattlegroundName = bl->name[sWorld->GetDefaultDbcLocale()];
-		data.MapID = bl->mapid[0];
+        selectionWeight = fields[9].GetUInt8();
+        data.scriptId = sObjectMgr->GetScriptId(fields[10].GetCString());
+        data.BattlegroundName = bl->name[sWorld->GetDefaultDbcLocale()];
+        data.MapID = bl->mapid[0];
 
         if (!CreateBattleground(data))
             continue;
