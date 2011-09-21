@@ -637,7 +637,7 @@ void WorldSession::HandleMirrorImageDataRequest(WorldPacket & recv_data)
     else
     {
         // Skip player data for creatures
-        data << uint8(0);
+        data << uint32(0);
         data << uint32(0);
         data << uint32(0);
         data << uint32(0);

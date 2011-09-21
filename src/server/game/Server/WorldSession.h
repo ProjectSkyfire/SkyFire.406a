@@ -503,6 +503,8 @@ class WorldSession
         void HandleGameObjectUseOpcode(WorldPacket& recPacket);
         void HandleGameobjectReportUse(WorldPacket& recvPacket);
 
+        void HandleMeetingStoneInfo(WorldPacket& recPacket);
+
         void HandleNameQueryOpcode(WorldPacket& recvPacket);
 
         void HandleQueryTimeOpcode(WorldPacket& recvPacket);

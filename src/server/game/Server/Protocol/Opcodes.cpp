@@ -1025,7 +1025,7 @@ void InitOpcodeTable()
     OPCODE( MSG_GUILD_BANK_MONEY_WITHDRAWN,               STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleGuildBankMoneyWithdrawn   );
     OPCODE( MSG_GUILD_EVENT_LOG_QUERY,                    STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleGuildEventLogQueryOpcode  );
     OPCODE( CMSG_MAELSTROM_RENAME_GUILD,                  STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
-    OPCODE( CMSG_GET_MIRRORIMAGE_DATA,                    STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleMirrrorImageDataRequest   );
+    OPCODE( CMSG_GET_MIRRORIMAGE_DATA,                    STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleMirrorImageDataRequest   );
     OPCODE( SMSG_MIRRORIMAGE_DATA,                        STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( SMSG_FORCE_DISPLAY_UPDATE,                    STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( SMSG_SPELL_CHANCE_RESIST_PUSHBACK,            STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );

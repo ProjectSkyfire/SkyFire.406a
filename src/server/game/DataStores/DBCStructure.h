@@ -919,7 +919,7 @@ struct FactionTemplateEntry
     bool IsFriendlyTo(FactionTemplateEntry const& entry) const
     {
         if (ID == entry.ID)
-            return true;	
+            return true;
         if (entry.faction)
         {
             for (int i = 0; i < 4; ++i)
@@ -934,7 +934,7 @@ struct FactionTemplateEntry
     bool IsHostileTo(FactionTemplateEntry const& entry) const
     {
         if (ID == entry.ID)
-            return true;	
+            return true;
         if (entry.faction)
         {
             for (int i = 0; i < 4; ++i)
