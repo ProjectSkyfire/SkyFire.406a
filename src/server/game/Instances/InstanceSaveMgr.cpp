@@ -130,6 +130,9 @@ void InstanceSaveManager::DeleteInstanceFromDB(uint32 instanceid)
     trans->PAppend("DELETE FROM group_instance WHERE instance = '%u'", instanceid);
     CharacterDatabase.CommitTransaction(trans);
     // respawn times should be deleted only when the map gets unloaded
+
+    // Delete completed encounters cache when deleting instance from db
+    sInstanceSaveMgr->DeleteCompletedEncounters(instanceid);
 }
 
 void InstanceSaveManager::RemoveInstanceSave(uint32 InstanceId)
@@ -186,6 +189,9 @@ void InstanceSave::SaveToDB()
     stmt->setUInt32(4, completedEncounters);
     stmt->setString(5, data);
     CharacterDatabase.Execute(stmt);
+
+    // Update completed encounters cache when adding InstanceSave
+    sInstanceSaveMgr->SetCompletedEncounters(m_instanceid, GetMapId(), GetDifficulty(), completedEncounters);
 }
 
 time_t InstanceSave::GetResetTimeForDB()
@@ -260,6 +266,12 @@ void InstanceSaveManager::LoadInstances()
     sInstanceSaveMgr->LoadResetTimes();
 
     sLog->outString(">> Loaded instances in %u ms", GetMSTimeDiffToNow(oldMSTime));
+    sLog->outString();
+
+    oldMSTime = getMSTime();
+    sInstanceSaveMgr->LoadCompletedEncounters();
+
+    sLog->outString(">> Loaded instance completed encounters in %u ms", GetMSTimeDiffToNow(oldMSTime));
     sLog->outString();
 }
 
@@ -409,6 +421,31 @@ void InstanceSaveManager::LoadResetTimes()
 
         for (in_itr = mapDiffResetInstances.lower_bound(map_diff_pair); in_itr != mapDiffResetInstances.upper_bound(map_diff_pair); ++in_itr)
             ScheduleReset(true, t - ResetTimeDelay[type-1], InstResetEvent(type, mapid, difficulty, in_itr->second));
+    }
+}
+
+// TODO: this function should be merged into LoadResetTimes and rename to LoadInstances
+void InstanceSaveManager::LoadCompletedEncounters()
+{
+    m_completedEncounters.clear();
+
+    QueryResult result = CharacterDatabase.Query("SELECT id, map, difficulty, completedEncounters FROM instance");
+    if (result)
+    {
+        do
+        {
+            Field* fields = result->Fetch();
+
+            uint32 instanceId = fields[0].GetUInt32();
+            uint32 mapid = fields[1].GetUInt16();
+            uint32 difficulty = fields[2].GetUInt8();
+            uint32 completedEncounters = fields[3].GetUInt32();
+
+            InstanceEncounter encounter(mapid, Difficulty(difficulty), completedEncounters);
+
+            m_completedEncounters.insert(InstanceCompletedEncounters::value_type(instanceId, encounter));
+        }
+        while (result->NextRow());
     }
 }
 

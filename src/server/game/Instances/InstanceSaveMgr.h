@@ -141,6 +141,40 @@ class InstanceSaveManager
         };
         typedef std::multimap<time_t /*resetTime*/, InstResetEvent> ResetTimeQueue;
 
+        struct InstanceEncounter
+        {
+            uint16 mapid;
+            Difficulty difficulty:16;
+            uint32 completedEncounters;
+            InstanceEncounter() : mapid(0), difficulty(DUNGEON_DIFFICULTY_NORMAL), completedEncounters(0) {}
+            InstanceEncounter(uint32 m, Difficulty d, uint32 e) : mapid(m), difficulty(d), completedEncounters(e) {}
+        };
+        typedef std::map<uint32, InstanceEncounter> InstanceCompletedEncounters;
+
+        void LoadCompletedEncounters();
+        uint32 GetCompletedEncounters(uint32 instanceId)
+        {
+            InstanceCompletedEncounters::const_iterator itr = m_completedEncounters.find(instanceId);
+            return itr != m_completedEncounters.end() ? itr->second.completedEncounters : 0;
+        }
+        void SetCompletedEncounters(uint32 instanceId, uint16 mapid, uint32 difficulty, uint32 encounters)
+        {
+            InstanceCompletedEncounters::iterator itr = m_completedEncounters.find(instanceId);
+            if (itr != m_completedEncounters.end())
+                itr->second.completedEncounters = encounters;
+            else
+            {
+                InstanceEncounter encounter(mapid, Difficulty(difficulty), encounters);
+                m_completedEncounters.insert(InstanceCompletedEncounters::value_type(instanceId, encounter));
+            }
+        }
+        void DeleteCompletedEncounters(uint32 instanceId)
+        {
+            InstanceCompletedEncounters::const_iterator itr = m_completedEncounters.find(instanceId);
+            if (itr != m_completedEncounters.end())
+                m_completedEncounters.erase(itr);
+        }
+
         void LoadInstances();
 
         void LoadResetTimes();
@@ -187,6 +221,7 @@ class InstanceSaveManager
         // fast lookup for reset times (always use existed functions for access/set)
         ResetTimeByMapDifficultyMap m_resetTimeByMapDifficulty;
         ResetTimeQueue m_resetTimeQueue;
+        InstanceCompletedEncounters m_completedEncounters;
 };
 
 #define sInstanceSaveMgr ACE_Singleton<InstanceSaveManager, ACE_Thread_Mutex>::instance()

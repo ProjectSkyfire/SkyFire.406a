@@ -18437,12 +18437,38 @@ void Player::SendRaidInfo()
             if (itr->second.perm)
             {
                 InstanceSave *save = itr->second.save;
+                uint32 completedEncounterMask = sInstanceSaveMgr->GetCompletedEncounters(save->GetInstanceId());
+                MapEntry const* mapEntry = sMapStore.LookupEntry(save->GetMapId());
+                Difficulty difficulty = save->GetDifficulty();
+                bool isHeroic = false;
+                if (mapEntry && mapEntry->IsRaid())
+                {
+                    switch(difficulty)
+                    {
+                    case RAID_DIFFICULTY_10MAN_HEROIC:
+                        difficulty = RAID_DIFFICULTY_10MAN_NORMAL;
+                        isHeroic = true;
+                        break;
+                    case RAID_DIFFICULTY_25MAN_HEROIC:
+                        difficulty = RAID_DIFFICULTY_25MAN_NORMAL;
+                        isHeroic = true;
+                        break;
+                    }
+                }
+                // NOTE: not sure about DUNGEON_DIFFICULTY_EPIC
+                //else
+                //{
+                //    if (difficulty == DUNGEON_DIFFICULTY_EPIC)
+                //        difficulty = DUNGEON_DIFFICULTY_NORMAL;
+                //}
                 data << uint32(save->GetMapId());           // map id
-                data << uint32(save->GetDifficulty());      // difficulty
+                data << uint32(difficulty);                 // difficulty
+                data << uint32(isHeroic);                   // is heroic
                 data << uint64(save->GetInstanceId());      // instance id
                 data << uint8(1);                           // expired = 0
                 data << uint8(0);                           // extended = 1
                 data << uint32(save->GetResetTime() - now); // reset time
+                data << uint32(completedEncounterMask);     // completed encounter mask
                 ++counter;
             }
         }
