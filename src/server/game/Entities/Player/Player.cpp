@@ -2552,8 +2552,8 @@ void Player::ProcessDelayedOperations()
 
     if (m_DelayedOperations & DELAYED_BG_GROUP_RESTORE)
     {
-        if (Group *g = GetGroup())
-            g->SendUpdateToPlayer(GetGUID());
+        if (Group *group = GetGroup())
+            group->SendUpdateToPlayer(GetGUID());
     }
 
     //we have executed ALL delayed ops, so clear the flag
