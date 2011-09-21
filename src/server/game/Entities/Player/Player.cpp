@@ -18437,6 +18437,7 @@ void Player::SendRaidInfo()
             if (itr->second.perm)
             {
                 InstanceSave *save = itr->second.save;
+                uint32 completedEncounterMask = sInstanceSaveMgr->GetCompletedEncounters(save->GetInstanceId());
                 MapEntry const* mapEntry = sMapStore.LookupEntry(save->GetMapId());
                 Difficulty difficulty = save->GetDifficulty();
                 bool isHeroic = false;
@@ -18467,7 +18468,7 @@ void Player::SendRaidInfo()
                 data << uint8(1);                           // expired = 0
                 data << uint8(0);                           // extended = 1
                 data << uint32(save->GetResetTime() - now); // reset time
-                data << uint32(0);                          // TODO: completed encounter mask
+                data << uint32(completedEncounterMask);     // completed encounter mask
                 ++counter;
             }
         }

@@ -26,6 +26,7 @@
 #include "CreatureAI.h"
 #include "Log.h"
 #include "LFGMgr.h"
+#include "InstanceSaveMgr.h"
 
 void InstanceScript::SaveToDB()
 {
@@ -38,6 +39,9 @@ void InstanceScript::SaveToDB()
     stmt->setString(1, data);
     stmt->setUInt32(2, instance->GetInstanceId());
     CharacterDatabase.Execute(stmt);
+
+    // Update completed encounters cache when updating instance data
+    sInstanceSaveMgr->SetCompletedEncounters(instance->GetInstanceId(), instance->GetId(), instance->GetDifficulty(), GetCompletedEncounterMask());
 }
 
 void InstanceScript::HandleGameObject(uint64 GUID, bool open, GameObject* go)
@@ -431,6 +435,8 @@ void InstanceScript::UpdateEncounterState(EncounterCreditType type, uint32 credi
         if ((*itr)->creditType == type && (*itr)->creditEntry == creditEntry)
         {
             completedEncounters |= 1 << (*itr)->dbcEntry->encounterIndex;
+            // Update completed encounters cache when updating encounter state
+            sInstanceSaveMgr->SetCompletedEncounters(instance->GetInstanceId(), instance->GetId(), instance->GetDifficulty(), completedEncounters);
             sLog->outDebug(LOG_FILTER_TSCR, "Instance %s (instanceId %u) completed encounter %s", instance->GetMapName(), instance->GetInstanceId(), (*itr)->dbcEntry->encounterName[0]);
             if (uint32 dungeonId = (*itr)->lastEncounterDungeon)
             {
