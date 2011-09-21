@@ -831,7 +831,7 @@ public:
 
 enum eMerchant_square_door
 {
-    #define SUMMON1_TTL 300000             // Agian, with the defines within enums 
+    #define SUMMON1_TTL 300000             // Agian, with the defines within enums
     #define QUEST_EVAC_MERC_SQUA 14098
 };
 

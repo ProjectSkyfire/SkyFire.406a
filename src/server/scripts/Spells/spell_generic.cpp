@@ -1323,11 +1323,9 @@ public:
        PrepareSpellScript(spell_gen_oracle_wolvar_reputation_SpellScript)
 
        void HandleDummy(SpellEffIndex effIndex)
-       {                 
-           
+       {
            if (Player* player = GetCaster()->ToPlayer())
            {
-
                uint32 factionId = GetSpellInfo()->Effects[effIndex].CalcValue();
                int32  repChange =  GetSpellInfo()->Effects[EFFECT_1].CalcValue();
 
@@ -1343,7 +1341,6 @@ public:
 
                // EFFECT_INDEX_2 most likely update at war state, we already handle this in SetReputation
            }
-             
        }
 
        void Register()

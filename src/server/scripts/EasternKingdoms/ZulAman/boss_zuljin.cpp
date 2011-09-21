@@ -37,7 +37,6 @@ const char* YELL_TRANSFORM_TO_BEAR       = "Got me some new tricks...like me bru
 const char* YELL_TRANSFORM_TO_DRAGONHAWK = "Ya don' have to look to da sky to see da dragonhawk!";
 const char* YELL_TRANSFORM_TO_EAGLE      = "Dere be no hidin' from da eagle!";
 
-
 #define YELL_KILL_ONE                               "Da Amani de chuka! ..."    // http://www.wowhead.com/npc=23863/daakara#comments
 #define SOUND_KILL_ONE                               12098
 

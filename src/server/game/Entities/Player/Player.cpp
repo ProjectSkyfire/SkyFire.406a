@@ -2549,13 +2549,13 @@ void Player::ProcessDelayedOperations()
             ContinueTaxiFlight();
         }
     }
-    
+
     if (m_DelayedOperations & DELAYED_BG_GROUP_RESTORE)
     {
         if (Group *g = GetGroup())
             g->SendUpdateToPlayer(GetGUID());
     }
-    
+
     //we have executed ALL delayed ops, so clear the flag
     m_DelayedOperations = 0;
 }
