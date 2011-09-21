@@ -604,7 +604,7 @@ struct BarberShopStyleEntry
 {
     uint32  Id;                                             // 0
     uint32  type;                                           // 1 value 0 -> hair, value 2 -> facialhair
-    //DBCString  name[16];                                  // 2        m_DisplayName_lang
+    //DBCString  name;                                  // 2        m_DisplayName_lang
     //uint32  unk_name;                                     // 3        m_Description_lang
     //float   CostMultiplier;                               // 4        m_Cost_Modifier
     uint32  race;                                           // 5        m_race
@@ -918,6 +918,8 @@ struct FactionTemplateEntry
     // helpers
     bool IsFriendlyTo(FactionTemplateEntry const& entry) const
     {
+        if (ID == entry.ID)
+            return true;
         if (entry.faction)
         {
             for (int i = 0; i < 4; ++i)
@@ -931,6 +933,8 @@ struct FactionTemplateEntry
     }
     bool IsHostileTo(FactionTemplateEntry const& entry) const
     {
+        if (ID == entry.ID)
+            return true;
         if (entry.faction)
         {
             for (int i = 0; i < 4; ++i)
