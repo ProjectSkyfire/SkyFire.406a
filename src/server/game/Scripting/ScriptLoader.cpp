@@ -1298,7 +1298,7 @@ void AddOutdoorPvPScripts()
     AddSC_outdoorpvp_si();
     AddSC_outdoorpvp_tf();
     AddSC_outdoorpvp_zm();
-    AddSC_outdoorpvp_gh();	
+    AddSC_outdoorpvp_gh();
 #endif
 }
 
