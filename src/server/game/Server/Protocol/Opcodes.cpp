@@ -659,7 +659,7 @@ void InitOpcodeTable()
     OPCODE( SMSG_LFG_OFFER_CONTINUE,                      STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( CMSG_MEETINGSTONE_CHEAT,                      STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
     OPCODE( SMSG_MEETINGSTONE_SETQUEUE,                   STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
-    OPCODE( CMSG_MEETINGSTONE_INFO,                       STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::Handle_ServerSide               );
+    OPCODE( CMSG_MEETINGSTONE_INFO,                       STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleMeetingStoneInfo          );
     OPCODE( SMSG_MEETINGSTONE_COMPLETE,                   STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( SMSG_MEETINGSTONE_IN_PROGRESS,                STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( SMSG_MEETINGSTONE_MEMBER_ADDED,               STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
@@ -1025,7 +1025,7 @@ void InitOpcodeTable()
     OPCODE( MSG_GUILD_BANK_MONEY_WITHDRAWN,               STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleGuildBankMoneyWithdrawn   );
     OPCODE( MSG_GUILD_EVENT_LOG_QUERY,                    STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleGuildEventLogQueryOpcode  );
     OPCODE( CMSG_MAELSTROM_RENAME_GUILD,                  STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
-    OPCODE( CMSG_GET_MIRRORIMAGE_DATA,                    STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
+    OPCODE( CMSG_GET_MIRRORIMAGE_DATA,                    STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleMirrorImageDataRequest   );
     OPCODE( SMSG_MIRRORIMAGE_DATA,                        STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( SMSG_FORCE_DISPLAY_UPDATE,                    STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( SMSG_SPELL_CHANCE_RESIST_PUSHBACK,            STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
