@@ -48,7 +48,7 @@ SmartScript::SmartScript()
     mLastTextID = 0;
     mTextGUID = 0;
     mUseTextTimer = false;
-    talker = NULL;
+    mTalkerEntry = 0;
     mTemplate = SMARTAI_TEMPLATE_BASIC;
     meOrigGUID = 0;
     goOrigGUID = 0;
@@ -140,7 +140,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 return;
 
             ObjectList* targets = GetTargets(e, unit);
-            talker = me;
+            Creature* talker = me;
             if (targets)
             {
                 for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
@@ -154,7 +154,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
 
                 delete targets;
             }
-
+            mTalkerEntry = talker->GetEntry();
             mLastTextID = e.action.talk.textGroupID;
             mTextTimer = e.action.talk.duration;
             mTextGUID = IsPlayer(GetLastInvoker()) ? GetLastInvoker()->GetGUID() : 0;//invoker, used for $vars in texts
@@ -2707,13 +2707,13 @@ void SmartScript::OnUpdate(uint32 const diff)
     {
         if (mTextTimer < diff)
         {
-            uint32 temp = mLastTextID;
+            uint32 textID = mLastTextID;
             mLastTextID = 0;
+            uint32 entry = mTalkerEntry;
+            mTalkerEntry = 0;
             mTextTimer = 0;
             mUseTextTimer = false;
-            uint32 tempEntry = talker?talker->GetEntry():0;
-            talker = NULL;
-            ProcessEventsFor(SMART_EVENT_TEXT_OVER, NULL, temp, tempEntry);
+            ProcessEventsFor(SMART_EVENT_TEXT_OVER, NULL, textID, entry);
         } else mTextTimer -= diff;
     }
 }
