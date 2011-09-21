@@ -250,6 +250,7 @@ public:
             DoMeleeAttackIfReady();
         }
     };
+
 };
 
 class mob_legion_flame : public CreatureScript
@@ -281,6 +282,7 @@ public:
             UpdateVictim();
         }
     };
+
 };
 
 class mob_infernal_volcano : public CreatureScript
@@ -335,6 +337,7 @@ public:
             me->DespawnOrUnsummon();
         }
     };
+
 };
 
 class mob_fel_infernal : public CreatureScript
@@ -388,6 +391,7 @@ public:
             DoMeleeAttackIfReady();
         }
     };
+
 };
 
 class mob_nether_portal : public CreatureScript
@@ -442,6 +446,7 @@ public:
             me->DespawnOrUnsummon();
         }
     };
+
 };
 
 class mob_mistress_of_pain : public CreatureScript
@@ -514,6 +519,7 @@ public:
             DoMeleeAttackIfReady();
         }
     };
+
 };
 
 void AddSC_boss_jaraxxus()
