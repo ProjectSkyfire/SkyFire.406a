@@ -906,8 +906,8 @@ SpellInfo::SpellInfo(SpellEntry const* spellEntry)
     SpellTotemsId = spellEntry->SpellTotemsId;
 
     AttributesCu = 0;
+    ExplicitTargetMask = 0;
     ChainEntry = NULL;
-    ExplicitTargetMask = 0;//TODO: _GetExplicitTargetMask();
 
     LoadSpellAddons();
 }

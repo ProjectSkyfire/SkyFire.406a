@@ -2739,6 +2739,14 @@ void SpellMgr::LoadSpellCustomAttr()
     uint32 oldMSTime = getMSTime();
 
     SpellInfo* spellInfo = NULL;
+
+    for (uint32 i = 0; i < GetSpellInfoStoreSize(); ++i)
+    {
+        spellInfo = mSpellInfoMap[i];
+        if (!spellInfo)
+            continue;
+        spellInfo->ExplicitTargetMask = spellInfo->_GetExplicitTargetMask();
+    }
     for (uint32 i = 0; i < GetSpellInfoStoreSize(); ++i)
     {
         spellInfo = mSpellInfoMap[i];
