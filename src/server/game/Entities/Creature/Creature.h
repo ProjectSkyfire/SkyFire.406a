@@ -89,9 +89,9 @@ struct CreatureTemplate
     uint32  Modelid2;
     uint32  Modelid3;
     uint32  Modelid4;
-    char*   Name;
-    char*   SubName;
-    char*   IconName;
+    std::string  Name;
+    std::string  SubName;
+    std::string  IconName;
     uint32  GossipMenuId;
     uint8   minlevel;
     uint8   maxlevel;
@@ -132,7 +132,7 @@ struct CreatureTemplate
     uint32  VehicleId;
     uint32  mingold;
     uint32  maxgold;
-    char const* AIName;
+    std::string AIName;
     uint32  MovementType;
     uint32  InhabitType;
     float   ModHealth;
