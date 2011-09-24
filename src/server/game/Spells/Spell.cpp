@@ -808,7 +808,7 @@ void Spell::SelectEffectTypeImplicitTargets(uint8 effIndex)
 
     switch (m_spellInfo->Effects[effIndex].GetImplicitTargetType())
     {
-        // add explicit object target or self to the target map 
+        // add explicit object target or self to the target map
         case EFFECT_IMPLICIT_TARGET_EXPLICIT:
             // player which not released his spirit is Unit, but target flag for it is TARGET_FLAG_CORPSE_MASK
             if (targetMask & (TARGET_FLAG_UNIT_MASK | TARGET_FLAG_CORPSE_MASK))
@@ -840,16 +840,10 @@ void Spell::SelectEffectTypeImplicitTargets(uint8 effIndex)
                     AddGOTarget(gObjTarget, 1 << effIndex);
             }
             break;
-        // add self to the target map 
+        // add self to the target map
         case EFFECT_IMPLICIT_TARGET_CASTER:
             if (targetMask & TARGET_FLAG_UNIT_MASK)
                 AddUnitTarget(m_caster, 1 << effIndex, false);
-            break;
-        // for EFFECT_LEARN_PET_SPELL - maybe should add unitTarget's pet instead of caster's?
-        case EFFECT_IMPLICIT_TARGET_PET:
-            if (targetMask & TARGET_FLAG_UNIT_MASK)
-                if (Guardian* pet = m_caster->GetGuardianPet())
-                    AddUnitTarget(pet, 1 << effIndex, false);
             break;
     }
 }
@@ -4948,20 +4942,24 @@ SpellCastResult Spell::CheckCast(bool strict)
             }
             case SPELL_EFFECT_LEARN_PET_SPELL:
             {
-                if (m_caster->GetTypeId() != TYPEID_PLAYER)
-                    return SPELL_FAILED_BAD_TARGETS;
+                // check target only for unit target case
+                if (Unit* unitTarget = m_targets.GetUnitTarget())
+                {
+                    if (m_caster->GetTypeId() != TYPEID_PLAYER)
+                        return SPELL_FAILED_BAD_TARGETS;
 
-                Pet* pet = m_caster->ToPlayer()->GetPet();
-                if (!pet)
-                    return SPELL_FAILED_NO_PET;
+                    Pet* pet = unitTarget->ToPet();
+                    if (!pet || pet->GetOwner() != m_caster)
+                        return SPELL_FAILED_BAD_TARGETS;
 
-                SpellInfo const* learn_spellproto = sSpellMgr->GetSpellInfo(m_spellInfo->Effects[i].TriggerSpell);
+                    SpellInfo const* learn_spellproto = sSpellMgr->GetSpellInfo(m_spellInfo->Effects[i].TriggerSpell);
 
-                if (!learn_spellproto)
-                    return SPELL_FAILED_NOT_KNOWN;
+                    if (!learn_spellproto)
+                        return SPELL_FAILED_NOT_KNOWN;
 
-                if (m_spellInfo->SpellLevel > pet->getLevel())
-                    return SPELL_FAILED_LOWLEVEL;
+                    if (m_spellInfo->SpellLevel > pet->getLevel())
+                        return SPELL_FAILED_LOWLEVEL;
+                }
 
                 break;
             }

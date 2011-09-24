@@ -154,10 +154,9 @@ enum SpellEffectImplicitTargetTypes
     EFFECT_IMPLICIT_TARGET_NONE = 0,
     EFFECT_IMPLICIT_TARGET_EXPLICIT,
     EFFECT_IMPLICIT_TARGET_CASTER,
-    EFFECT_IMPLICIT_TARGET_PET,
 };
 
-// Spell clasification
+// Spell classification
 enum SpellSpecificType
 {
     SPELL_SPECIFIC_NORMAL                        = 0,
