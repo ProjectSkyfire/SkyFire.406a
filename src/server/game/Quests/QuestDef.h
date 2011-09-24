@@ -108,17 +108,18 @@ enum QuestStatus
 
 enum __QuestGiverStatus
 {
-    DIALOG_STATUS_NONE                     = 0,
-    DIALOG_STATUS_UNAVAILABLE              = 1,
-    DIALOG_STATUS_LOW_LEVEL_AVAILABLE      = 2,
-    DIALOG_STATUS_LOW_LEVEL_REWARD_REP     = 3,
-    DIALOG_STATUS_LOW_LEVEL_AVAILABLE_REP  = 4,
-    DIALOG_STATUS_INCOMPLETE               = 5,
-    DIALOG_STATUS_REWARD_REP               = 6,
-    DIALOG_STATUS_AVAILABLE_REP            = 7,
-    DIALOG_STATUS_AVAILABLE                = 8,
-    DIALOG_STATUS_REWARD2                  = 9,             // no yellow dot on minimap
-    DIALOG_STATUS_REWARD                   = 10             // yellow dot on minimap
+    DIALOG_STATUS_NONE                     = 0x00,
+    DIALOG_STATUS_UNK1                     = 0x01,
+    DIALOG_STATUS_UNAVAILABLE              = 0x02,
+    DIALOG_STATUS_LOW_LEVEL_AVAILABLE      = 0x04,
+    DIALOG_STATUS_LOW_LEVEL_REWARD_REP     = 0x08,
+    DIALOG_STATUS_LOW_LEVEL_AVAILABLE_REP  = 0x10,
+    DIALOG_STATUS_INCOMPLETE               = 0x20,
+    DIALOG_STATUS_REWARD_REP               = 0x40,
+    DIALOG_STATUS_AVAILABLE_REP            = 0x80,
+    DIALOG_STATUS_AVAILABLE                = 0x100,
+    DIALOG_STATUS_REWARD2                  = 0x200,             // no yellow dot on minimap
+    DIALOG_STATUS_REWARD                   = 0x400             // yellow dot on minimap
 };
 
 enum __QuestFlags
