@@ -40,7 +40,6 @@
 #include "Util.h"
 #include "ScriptMgr.h"
 #include "AccountMgr.h"
-#include "Config.h"
 
 bool WorldSession::processChatmessageFurtherAfterSecurityChecks(std::string& msg, uint32 lang)
 {
@@ -193,55 +192,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
         SendNotification(GetTrinityString(LANG_GM_SILENCE), sender->GetName());
         return;
     }
-    ///- START More out for testing...
-    /*std::string to, channel, msg;
-    bool ignoreChecks = false;
-    switch (type)
-    {
-        case CHAT_MSG_SAY:
-        case CHAT_MSG_EMOTE:
-        case CHAT_MSG_YELL:
-        case CHAT_MSG_PARTY:
-        case CHAT_MSG_PARTY_LEADER:
-        case CHAT_MSG_GUILD:
-        case CHAT_MSG_OFFICER:
-        case CHAT_MSG_RAID:
-        case CHAT_MSG_RAID_LEADER:
-        case CHAT_MSG_RAID_WARNING:
-        case CHAT_MSG_BATTLEGROUND:
-        case CHAT_MSG_BATTLEGROUND_LEADER:
-            recv_data >> msg;
-            break;
-        case CHAT_MSG_WHISPER:
-            recv_data >> to;
-            recv_data >> msg;
-            break;
-        case CHAT_MSG_CHANNEL:
-            recv_data >> channel;
-            recv_data >> msg;
-            break;
-        case CHAT_MSG_AFK:
-        case CHAT_MSG_DND:
-            recv_data >> msg;
-            ignoreChecks = true;
-            break;
-    }
 
-    if (!ignoreChecks)
-    {
-        if (msg.empty())
-            return;
-
-        if (ChatHandler(this).ParseCommands(msg.c_str()) > 0)
-            return;
-
-        if (!processChatmessageFurtherAfterSecurityChecks(msg, lang))
-            return;
-
-        if (msg.empty())
-            return;
-    }*/
-    ///- END
     switch (type)
     {
         case CHAT_MSG_SAY:
