@@ -254,7 +254,7 @@ class spell_ex_66244 : public SpellScriptLoader
                 amplitude = 2 * IN_MILLISECONDS;
             }
 
-            void HandleEffectCalcSpellMod(AuraEffect const* /*aurEff*/, SpellModifier*& spellMod)
+            void HandleEffectCalcSpellMod(AuraEffect const* /*aurEff*/, SpellModifier*& spellMod, SpellInfo const * /*spellInfo*/, Unit * /*target*/)
             {
                 sLog->outString("SpellMod data of Aura Effect is being calculated now!");
                 // we don't want spellmod for example

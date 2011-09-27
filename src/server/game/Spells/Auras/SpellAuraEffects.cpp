@@ -866,7 +866,7 @@ void AuraEffect::CalculatePeriodic(Unit* caster, bool create, bool load)
     }
 }
 
-void AuraEffect::CalculateSpellMod()
+void AuraEffect::CalculateSpellMod(SpellInfo const *spellInfo, Unit * target)
 {
     switch (GetAuraType())
     {
@@ -879,7 +879,7 @@ void AuraEffect::CalculateSpellMod()
                     {
                         if (!m_spellmod)
                         {
-                            m_spellmod = new SpellModifier(GetBase());
+                            m_spellmod = new SpellModifier(GetBase(), this);
                             m_spellmod->op = SPELLMOD_DOT;
                             m_spellmod->type = SPELLMOD_PCT;
                             m_spellmod->spellId = GetId();
@@ -896,7 +896,7 @@ void AuraEffect::CalculateSpellMod()
                         {
                             if (!m_spellmod)
                             {
-                                m_spellmod = new SpellModifier(GetBase());
+                                m_spellmod = new SpellModifier(GetBase(), this);
                                 m_spellmod->op = SPELLMOD_DOT;
                                 m_spellmod->type = SPELLMOD_FLAT;
                                 m_spellmod->spellId = GetId();
@@ -918,7 +918,7 @@ void AuraEffect::CalculateSpellMod()
                     // "while Clearcasting from Elemental Focus is active, you deal 5%/10% more spell damage."
                     if (!m_spellmod)
                     {
-                        m_spellmod = new SpellModifier(GetBase());
+                        m_spellmod = new SpellModifier(GetBase(), this);
                         m_spellmod->op = SPELLMOD_EFFECT2;
                         m_spellmod->type = SPELLMOD_FLAT;
                         m_spellmod->spellId = GetId();
@@ -934,7 +934,7 @@ void AuraEffect::CalculateSpellMod()
         case SPELL_AURA_ADD_PCT_MODIFIER:
             if (!m_spellmod)
             {
-                m_spellmod = new SpellModifier(GetBase());
+                m_spellmod = new SpellModifier(GetBase(), this);
                 m_spellmod->op = SpellModOp(GetMiscValue());
                 ASSERT(m_spellmod->op < MAX_SPELLMOD);
 
@@ -948,7 +948,7 @@ void AuraEffect::CalculateSpellMod()
         default:
             break;
     }
-    GetBase()->CallScriptEffectCalcSpellModHandlers(const_cast<AuraEffect const*>(this), m_spellmod);
+    GetBase()->CallScriptEffectCalcSpellModHandlers(const_cast<AuraEffect const*>(this), m_spellmod, spellInfo, target);
 }
 
 void AuraEffect::ChangeAmount(int32 newAmount, bool mark, bool onStackOrReapply)

@@ -134,10 +134,12 @@ enum SpellModType
 };
 
 class Aura;
+class AuraEffect;
+class SpellInfo;
 // Spell modifier (used for modify other spells)
 struct SpellModifier
 {
-    SpellModifier(Aura * _ownerAura = NULL) : charges(0), ownerAura(_ownerAura) {}
+    SpellModifier(Aura * _ownerAura = NULL, AuraEffect * _ownerAurEff = NULL) : charges(0), ownerAura(_ownerAura), ownerAuraEffect(_ownerAurEff) {}
     SpellModOp   op   : 8;
     SpellModType type : 8;
     int16 charges     : 16;
@@ -145,6 +147,8 @@ struct SpellModifier
     flag96 mask;
     uint32 spellId;
     Aura * const ownerAura;
+    AuraEffect * ownerAuraEffect;
+    void Recalculate(SpellInfo const *spellInfo, Unit* pTarget);
 };
 
 typedef std::list<SpellModifier*> SpellModList;
@@ -2246,7 +2250,7 @@ class Unit : public WorldObject
 
         void AddSpellMod(SpellModifier* mod, bool apply);
         bool IsAffectedBySpellmod(SpellInfo const *spellInfo, SpellModifier *mod, Spell* spell = NULL);
-        template <class T> T ApplySpellMod(uint32 spellId, SpellModOp op, T &basevalue, Spell* spell = NULL);
+        template <class T> T ApplySpellMod(uint32 spellId, SpellModOp op, T &basevalue, Spell* spell = NULL, Unit* pTarget = NULL);
         void RemoveSpellMods(Spell* spell);
         void RestoreSpellMods(Spell* spell, uint32 ownerAuraId = 0, Aura* aura = NULL);
         void RestoreAllSpellMods(uint32 ownerAuraId = 0, Aura* aura = NULL);
@@ -2441,7 +2445,7 @@ inline void Unit::SendMonsterMoveByPath(Path<Elem, Node> const& path, uint32 sta
 SpellInfo const* GetSpellInfo(uint32 spellId);
 
 // "the bodies of template functions must be made available in a header file"
-template <class T> T Unit::ApplySpellMod(uint32 spellId, SpellModOp op, T &basevalue, Spell* spell)
+template <class T> T Unit::ApplySpellMod(uint32 spellId, SpellModOp op, T &basevalue, Spell* spell, Unit* pTarget)
 {
     SpellInfo const* spellInfo = GetSpellInfo(spellId);
     if (!spellInfo)
@@ -2463,6 +2467,14 @@ template <class T> T Unit::ApplySpellMod(uint32 spellId, SpellModOp op, T &basev
 
         if (!IsAffectedBySpellmod(spellInfo, mod, spell))
             continue;
+
+        // Calculate spell mod value before applying
+        // Value of some spell mods depends on which spell is casting, caster and/or target's stats, e.g.:
+        // 77226 Deep Healing: Increases the potency of your healing spells ... based on the current health level of your target
+        // 76547 Mana Adept:   Increases all spell damage done by up to 0%, based on the amount of mana the Mage has unspent
+        // 76613 Frostburn:    All your spells deal 0% increased damage against 'Frozen' targets
+        // current solution is treat these spell effects as spell mods and recalculate spell mod value before applying
+        mod->Recalculate(spellInfo, pTarget);
 
         if (mod->type == SPELLMOD_FLAT)
             totalflat += mod->value;
