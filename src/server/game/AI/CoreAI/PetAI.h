@@ -62,3 +62,4 @@ class PetAI : public CreatureAI
         bool _CheckTargetCC(Unit* target);
 };
 #endif
+

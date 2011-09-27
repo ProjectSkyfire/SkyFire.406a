@@ -2903,12 +2903,6 @@ void SpellMgr::LoadSpellCustomAttr()
                 // because of bug in dbc
                 spellInfo->ProcChance = 0;
                 break;
-            case 32182: // Heroism
-                spellInfo->ExcludeCasterAuraSpell = 57723; // Exhaustion
-                break;
-            case 2825:  // Bloodlust
-                spellInfo->ExcludeCasterAuraSpell = 57724; // Sated
-                break;
             case 20335: // Heart of the Crusader
             case 20336:
             case 20337:
