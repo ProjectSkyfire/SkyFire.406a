@@ -3390,6 +3390,7 @@ void SpellMgr::LoadSpellCustomAttr()
                 spellInfo->AttributesCu |= SPELL_ATTR0_CU_NEGATIVE_EFF0;
                 break;
             case 74522: // Skinning (Grandmaster)
+                // 4.06 dbc issue which was fixed in 4.20 (or 4.10?)
                 spellInfo->Effects[1].BasePoints = 7;
                 break;
             default:
