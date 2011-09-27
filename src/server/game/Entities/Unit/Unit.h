@@ -126,6 +126,29 @@ enum SpellModOp
 
 #define MAX_SPELLMOD 32
 
+// Note: SPELLMOD_* values is aura types in fact
+enum SpellModType
+{
+    SPELLMOD_FLAT         = 107,                            // SPELL_AURA_ADD_FLAT_MODIFIER
+    SPELLMOD_PCT          = 108                             // SPELL_AURA_ADD_PCT_MODIFIER
+};
+
+class Aura;
+// Spell modifier (used for modify other spells)
+struct SpellModifier
+{
+    SpellModifier(Aura * _ownerAura = NULL) : charges(0), ownerAura(_ownerAura) {}
+    SpellModOp   op   : 8;
+    SpellModType type : 8;
+    int16 charges     : 16;
+    int32 value;
+    flag96 mask;
+    uint32 spellId;
+    Aura * const ownerAura;
+};
+
+typedef std::list<SpellModifier*> SpellModList;
+
 enum SpellValueMod
 {
     SPELLVALUE_BASE_POINT0,
@@ -2221,6 +2244,18 @@ class Unit : public WorldObject
                 SetUInt64Value(UNIT_FIELD_TARGET, 0);
         }
 
+        void AddSpellMod(SpellModifier* mod, bool apply);
+        bool IsAffectedBySpellmod(SpellInfo const *spellInfo, SpellModifier *mod, Spell* spell = NULL);
+        template <class T> T ApplySpellMod(uint32 spellId, SpellModOp op, T &basevalue, Spell* spell = NULL);
+        void RemoveSpellMods(Spell* spell);
+        void RestoreSpellMods(Spell* spell, uint32 ownerAuraId = 0, Aura* aura = NULL);
+        void RestoreAllSpellMods(uint32 ownerAuraId = 0, Aura* aura = NULL);
+        void DropModCharge(SpellModifier* mod, Spell* spell);
+        void SetSpellModTakingSpell(Spell* spell, bool apply);
+
+        Spell* m_spellModTakingSpell;  // Spell for which charges are dropped in spell::finish
+        SpellModList m_spellMods[MAX_SPELLMOD];
+
     protected:
         explicit Unit ();
 
@@ -2401,5 +2436,53 @@ inline void Unit::SendMonsterMoveByPath(Path<Elem, Node> const& path, uint32 sta
     }
 
     SendMessageToSet(&data, true);
+}
+
+SpellInfo const* GetSpellInfo(uint32 spellId);
+
+// "the bodies of template functions must be made available in a header file"
+template <class T> T Unit::ApplySpellMod(uint32 spellId, SpellModOp op, T &basevalue, Spell* spell)
+{
+    SpellInfo const* spellInfo = GetSpellInfo(spellId);
+    if (!spellInfo)
+        return 0;
+    float totalmul = 1.0f;
+    int32 totalflat = 0;
+
+    // Drop charges for triggering spells instead of triggered ones
+    if (m_spellModTakingSpell)
+        spell = m_spellModTakingSpell;
+
+    for (SpellModList::iterator itr = m_spellMods[op].begin(); itr != m_spellMods[op].end(); ++itr)
+    {
+        SpellModifier *mod = *itr;
+
+        // Charges can be set only for mods with auras
+        if (!mod->ownerAura)
+            ASSERT(mod->charges == 0);
+
+        if (!IsAffectedBySpellmod(spellInfo, mod, spell))
+            continue;
+
+        if (mod->type == SPELLMOD_FLAT)
+            totalflat += mod->value;
+        else if (mod->type == SPELLMOD_PCT)
+        {
+            // skip percent mods for null basevalue (most important for spell mods with charges)
+            if (basevalue == T(0))
+                continue;
+
+            // special case (skip > 10sec spell casts for instant cast setting)
+            if (mod->op == SPELLMOD_CASTING_TIME && basevalue >= T(10000) && mod->value <= -100)
+                continue;
+
+            totalmul += CalculatePctN(1.0f, mod->value);
+        }
+
+        DropModCharge(mod, spell);
+    }
+    float diff = (float)basevalue * (totalmul - 1.0f) + (float)totalflat;
+    basevalue = T((float)basevalue + diff);
+    return T(diff);
 }
 #endif

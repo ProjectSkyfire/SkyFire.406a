@@ -244,6 +244,8 @@ m_vehicleKit(NULL), m_unitTypeMask(UNIT_MASK_NONE), m_HostileRefManager(this)
 
     _focusSpell = NULL;
     _targetLocked = false;
+
+    m_spellModTakingSpell = NULL;
 }
 
 ////////////////////////////////////////////////////////////
@@ -304,6 +306,17 @@ void Unit::Update(uint32 p_time)
         return;
 
     _UpdateSpells(p_time);
+
+    // If this is set during update SetSpellModTakingSpell call is missing somewhere in the code
+    // Having this would prevent more aura charges to be dropped, so let's crash
+    //ASSERT (!m_spellModTakingSpell);
+    if (m_spellModTakingSpell)
+    {
+        //sLog->outCrash("Unit has m_pad %u during update!", m_pad);
+        //if (m_spellModTakingSpell)
+        sLog->outCrash("Unit has m_spellModTakingSpell %u during update!", m_spellModTakingSpell->m_spellInfo->Id);
+        m_spellModTakingSpell = NULL;
+    }
 
     // If this is set during update SetCantProc(false) call is missing somewhere in the code
     // Having this would prevent spells from being proced, so let's crash
@@ -17459,4 +17472,192 @@ void CharmInfo::SetIsReturning(bool val)
 bool CharmInfo::IsReturning()
 {
     return m_isReturning;
+}
+
+bool Unit::IsAffectedBySpellmod(SpellInfo const *spellInfo, SpellModifier *mod, Spell* spell)
+{
+    if (!mod || !spellInfo)
+        return false;
+
+    // Mod out of charges
+    if (spell && mod->charges == -1 && spell->m_appliedMods.find(mod->ownerAura) == spell->m_appliedMods.end())
+        return false;
+
+    // +duration to infinite duration spells making them limited
+    if (mod->op == SPELLMOD_DURATION && spellInfo->GetDuration() == -1)
+        return false;
+
+    return spellInfo->IsAffectedBySpellMod(mod);
+}
+
+void Unit::AddSpellMod(SpellModifier* mod, bool apply)
+{
+    sLog->outDebug(LOG_FILTER_SPELLS_AURAS, "Unit::AddSpellMod %d", mod->spellId);
+
+    if (Player* player = this->ToPlayer())
+    {
+        bool isFlat = mod->type == SPELLMOD_FLAT;
+        uint32 Opcode = (isFlat) ? SMSG_SET_FLAT_SPELL_MODIFIER : SMSG_SET_PCT_SPELL_MODIFIER;
+
+        WorldPacket data(Opcode, (1+1+4));
+        data << uint32(1); //number of spell mod to add
+        size_t wpos_modcount = data.wpos();
+        uint32 modcount = 0;
+        data << uint32(modcount);
+        data << uint8(mod->op);
+        int i = 0;
+        flag96 _mask = 0;
+        for (int eff = 0; eff < 96; ++eff)
+        {
+            if (eff != 0 && eff%32 == 0)
+                _mask[i++] = 0;
+
+            _mask[i] = uint32(1) << (eff-(32*i));
+            if (mod->mask & _mask)
+            {
+                int32 val = 0;
+                for (SpellModList::iterator itr = m_spellMods[mod->op].begin(); itr != m_spellMods[mod->op].end(); ++itr)
+                {
+                    if ((*itr)->type == mod->type && (*itr)->mask & _mask)
+                        val += (*itr)->value;
+                }
+                val += apply ? mod->value : -(mod->value);
+                data << uint8(eff);
+                if (isFlat)
+                    data << int32(val);
+                else
+                    data << float(val);
+                modcount++;
+            }
+        }
+        data.put(wpos_modcount, modcount);
+
+        player->SendDirectMessage(&data);
+    }
+
+    if (apply)
+        m_spellMods[mod->op].push_back(mod);
+    else
+    {
+        m_spellMods[mod->op].remove(mod);
+        // mods bound to aura will be removed in AuraEffect::~AuraEffect
+        if (!mod->ownerAura)
+            delete mod;
+    }
+}
+
+// Restore spellmods in case of failed cast
+void Unit::RestoreSpellMods(Spell* spell, uint32 ownerAuraId, Aura* aura)
+{
+    if (!spell || spell->m_appliedMods.empty())
+        return;
+
+    for (uint8 i=0; i<MAX_SPELLMOD; ++i)
+    {
+        for (SpellModList::iterator itr = m_spellMods[i].begin(); itr != m_spellMods[i].end(); ++itr)
+        {
+            SpellModifier *mod = *itr;
+
+            // spellmods without aura set cannot be charged
+            if (!mod->ownerAura || !mod->ownerAura->IsUsingCharges())
+                continue;
+
+            // Restore only specific owner aura mods
+            if (ownerAuraId && (ownerAuraId != mod->ownerAura->GetSpellInfo()->Id))
+                continue;
+
+            if (aura && mod->ownerAura != aura)
+                continue;
+
+            // check if mod affected this spell
+            Spell::UsedSpellMods::iterator iterMod = spell->m_appliedMods.find(mod->ownerAura);
+            if (iterMod == spell->m_appliedMods.end())
+                continue;
+
+            // remove from list
+            spell->m_appliedMods.erase(iterMod);
+
+            // add mod charges back to mod
+            if (mod->charges == -1)
+                mod->charges = 1;
+            else
+                mod->charges++;
+
+            // Do not set more spellmods than avalible
+            if (mod->ownerAura->GetCharges() < mod->charges)
+                mod->charges = mod->ownerAura->GetCharges();
+
+            // Skip this check for now - aura charges may change due to various reason
+            // TODO: trac these changes correctly
+            //ASSERT (mod->ownerAura->GetCharges() <= mod->charges);
+        }
+    }
+}
+
+void Unit::RestoreAllSpellMods(uint32 ownerAuraId, Aura* aura)
+{
+    for (uint32 i = 0; i < CURRENT_MAX_SPELL; ++i)
+        if (m_currentSpells[i])
+            RestoreSpellMods(m_currentSpells[i], ownerAuraId, aura);
+}
+
+void Unit::RemoveSpellMods(Spell* spell)
+{
+    if (!spell)
+        return;
+
+    if (spell->m_appliedMods.empty())
+        return;
+
+    for (uint8 i=0; i<MAX_SPELLMOD; ++i)
+    {
+        for (SpellModList::iterator itr = m_spellMods[i].begin(); itr != m_spellMods[i].end();)
+        {
+            SpellModifier *mod = *itr;
+            ++itr;
+
+            // spellmods without aura set cannot be charged
+            if (!mod->ownerAura || !mod->ownerAura->IsUsingCharges())
+                continue;
+
+            // check if mod affected this spell
+            Spell::UsedSpellMods::iterator iterMod = spell->m_appliedMods.find(mod->ownerAura);
+            if (iterMod == spell->m_appliedMods.end())
+                continue;
+
+            // remove from list
+            spell->m_appliedMods.erase(iterMod);
+
+            if (mod->ownerAura->DropCharge(AURA_REMOVE_BY_EXPIRE))
+                itr = m_spellMods[i].begin();
+        }
+    }
+}
+
+void Unit::DropModCharge(SpellModifier* mod, Spell* spell)
+{
+    // don't handle spells with proc_event entry defined
+    // this is a temporary workaround, because all spellmods should be handled like that
+    if (sSpellMgr->GetSpellProcEvent(mod->spellId))
+        return;
+
+    if (spell && mod->ownerAura && mod->charges > 0)
+    {
+        --mod->charges;
+        if (mod->charges == 0)
+            mod->charges = -1;
+
+        spell->m_appliedMods.insert(mod->ownerAura);
+    }
+}
+
+void Unit::SetSpellModTakingSpell(Spell* spell, bool apply)
+{
+    if (!spell || (m_spellModTakingSpell && m_spellModTakingSpell != spell))
+        return;
+
+    if (apply && spell->getState() == SPELL_STATE_FINISHED)
+        return;
+
+    m_spellModTakingSpell = apply ? spell : NULL;
 }
