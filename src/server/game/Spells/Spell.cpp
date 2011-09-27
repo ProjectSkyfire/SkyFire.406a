@@ -3357,12 +3357,12 @@ void Spell::_handle_immediate_phase()
     // initialize Diminishing Returns Data
     m_diminishLevel = DIMINISHING_LEVEL_1;
     m_diminishGroup = DIMINISHING_NONE;
-    
+
 	// handle some immediate features of the spell here
     HandleThreatSpells();
 
     PrepareScriptHitHandlers();
-	
+
     // handle effects with SPELL_EFFECT_HANDLE_HIT mode
     for (uint32 j = 0; j < MAX_SPELL_EFFECTS; ++j)
     {

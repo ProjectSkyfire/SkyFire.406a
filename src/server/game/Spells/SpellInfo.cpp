@@ -645,7 +645,7 @@ float SpellEffectInfo::CalcRadius(Unit* caster, Spell* spell) const
 
     return radius;
 }
- 
+
 uint32 SpellEffectInfo::GetProvidedTargetMask() const
 {
     return GetTargetFlagMask(TargetA.GetObjectType()) | GetTargetFlagMask(TargetB.GetObjectType());

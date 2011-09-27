@@ -270,7 +270,7 @@ class boss_kologarn : public CreatureScript
                             break;
                         case EVENT_STONE_SHOUT:
                             DoCast(SPELL_STONE_SHOUT);
-                            events.ScheduleEvent(EVENT_STONE_SHOUT, 2 * IN_MILLISECONDS); 
+                            events.ScheduleEvent(EVENT_STONE_SHOUT, 2 * IN_MILLISECONDS);
                             break;
                         case EVENT_ENRAGE:
                             DoCast(SPELL_BERSERK);

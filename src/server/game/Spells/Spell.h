@@ -538,7 +538,7 @@ class Spell
         Item* itemTarget;
         GameObject* gameObjTarget;
         int32 damage;
-        SpellEffectHandleMode effectHandleMode;		
+        SpellEffectHandleMode effectHandleMode;
         // used in effects handlers
         Aura* m_spellAura;
 

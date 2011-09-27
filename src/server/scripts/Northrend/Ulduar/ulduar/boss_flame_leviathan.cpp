@@ -971,7 +971,6 @@ public:
             }
         }
     };
-
 };
 
 class npc_hodirs_fury : public CreatureScript
@@ -1647,7 +1646,7 @@ class spell_pursue : public SpellScriptLoader
                     return;
 
                 caster->AI()->AttackStart(GetHitUnit());    // Chase target
-                
+
                 for (SeatMap::const_iterator itr = caster->GetVehicleKit()->Seats.begin(); itr != caster->GetVehicleKit()->Seats.end(); ++itr)
                 {
                     if (IS_PLAYER_GUID(itr->second.Passenger))

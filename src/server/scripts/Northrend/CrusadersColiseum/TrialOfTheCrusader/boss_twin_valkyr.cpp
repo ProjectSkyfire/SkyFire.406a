@@ -81,8 +81,8 @@ enum BossSpells
     SPELL_DARK_ESSENCE          = 65684,
     SPELL_EMPOWERED_DARK        = 65724,
     SPELL_TWIN_EMPATHY_DARK     = 66132,
-    SPELL_UNLEASHED_DARK        = 65808,    
-    
+    SPELL_UNLEASHED_DARK        = 65808,
+
     SPELL_CONTROLLER_PERIODIC    = 66149,
     SPELL_POWER_TWINS           = 65879,
     SPELL_BERSERK               = 64238,
@@ -408,7 +408,7 @@ public:
         {
             m_pInstance = (InstanceScript*)creature->GetInstanceScript();
         }
-        
+
         InstanceScript* m_pInstance;
 
         void Reset() {
@@ -445,7 +445,7 @@ public:
             me->SummonCreature(NPC_BULLET_CONTROLLER, ToCCommonLoc[1].GetPositionX(), ToCCommonLoc[1].GetPositionY(), ToCCommonLoc[1].GetPositionZ(), 0.0f, TEMPSUMMON_MANUAL_DESPAWN);
             boss_twin_baseAI::EnterCombat(who);
         }
-        
+
         void EnterEvadeMode()
         {
             m_pInstance->DoUseDoorOrButton(m_pInstance->GetData64(GO_MAIN_GATE_DOOR));
@@ -460,7 +460,6 @@ public:
             boss_twin_baseAI::JustReachedHome();
         }
     };
-
 };
 
 /*######
@@ -500,7 +499,6 @@ public:
             m_uiSpikeSpellId = SPELL_DARK_TWIN_SPIKE;
         }
     };
-
 };
 
 #define ESSENCE_REMOVE 0
@@ -636,7 +634,6 @@ public:
             }
         }
     };
-
 };
 
 class mob_unleashed_light : public CreatureScript
@@ -678,7 +675,6 @@ public:
             }
         }
     };
-
 };
 
 class mob_bullet_controller : public CreatureScript
@@ -857,7 +853,6 @@ class spell_power_of_the_twins : public SpellScriptLoader
             {
                 AfterEffectApply += AuraEffectApplyFn(spell_power_of_the_twins_AuraScript::HandleEffectApply, EFFECT_0, SPELL_AURA_MOD_DAMAGE_PERCENT_DONE, AURA_EFFECT_HANDLE_REAL);
                 AfterEffectRemove += AuraEffectRemoveFn(spell_power_of_the_twins_AuraScript::HandleEffectRemove, EFFECT_0, SPELL_AURA_MOD_DAMAGE_PERCENT_DONE, AURA_EFFECT_HANDLE_REAL_OR_REAPPLY_MASK);
-
             }
         };
 

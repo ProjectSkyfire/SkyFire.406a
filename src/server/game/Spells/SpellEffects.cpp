@@ -3684,7 +3684,6 @@ void Spell::EffectEnchantItemTmp(SpellEffIndex effIndex)
         {
             sLog->outError("Spell::EffectEnchantItemTmp: unknown spell id %i", spell_id);
             return;
-
         }
 
         for (int j = BASE_ATTACK; j <= OFF_ATTACK; ++j)
@@ -4460,7 +4459,6 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
                             aurEff->GetBase()->SetDuration(uint32(aurEff->GetBase()->GetDuration() + 3000));
                             aurEff->GetBase()->SetMaxDuration(countMin + 2000);
                         }
-
                     }
                     return;
                 }
