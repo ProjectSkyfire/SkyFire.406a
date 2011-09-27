@@ -5604,6 +5604,13 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                     instance->DoCastSpellOnPlayers(65037);  // Achievement criteria marker
                     break;
                 }
+                // Dark Hunger (The Lich King encounter)
+                case 69383:
+                {
+                    basepoints0 = CalculatePctN(int32(damage), 50);
+                    triggered_spell_id = 69384;
+                    break;
+                }				
             }
             break;
         }
