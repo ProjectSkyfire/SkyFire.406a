@@ -459,6 +459,32 @@ SpellImplicitTargetInfo::StaticData  SpellImplicitTargetInfo::_data[TOTAL_SPELL_
     {TARGET_OBJECT_TYPE_DEST, TARGET_REFERENCE_TYPE_NONE,   TARGET_SELECT_CATEGORY_NYI,     TARGET_SELECT_CHECK_DEFAULT,  TARGET_DIR_NONE},        // 110 TARGET_DEST_UNK_110
 };
 
+SpellEffectInfo::SpellEffectInfo()
+{
+    _spellInfo = NULL;
+    _effIndex = 0;
+    Effect = 0;
+    ValueMultiplier = 0.0f;
+    ApplyAuraName = 0;
+    Amplitude = 0;
+    BasePoints = 0;
+    BonusCoefficient = 0.0f;
+    DamageMultiplier = 0.0f;
+    ChainTarget = 0;
+    DieSides = 0;
+    ItemType = 0;
+    Mechanic = MECHANIC_NONE;
+    MiscValue = 0;
+    MiscValueB = 0;
+    PointsPerComboPoint = 0.0f;
+    RadiusEntry = NULL;
+    RealPointsPerLevel = 0.0f;
+    SpellClassMask = flag96(0, 0, 0);
+    TriggerSpell = 0;
+    TargetA = SpellImplicitTargetInfo(0);
+    TargetB = SpellImplicitTargetInfo(0);
+}
+
 SpellEffectInfo::SpellEffectInfo(SpellEffectEntry const *spellEffect, SpellInfo const* spellInfo)
 {
     _spellInfo = spellInfo;

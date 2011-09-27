@@ -274,7 +274,7 @@ public:
     SpellImplicitTargetInfo TargetA;
     SpellImplicitTargetInfo TargetB;
 
-    SpellEffectInfo() : Effect(0) {}
+    SpellEffectInfo();
     SpellEffectInfo(SpellEffectEntry const *spellEffect, SpellInfo const* spellInfo);
 
     bool IsEffect() const;
