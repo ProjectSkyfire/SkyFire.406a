@@ -251,6 +251,7 @@ public:
                 DoMeleeAttackIfReady();
         }
     };
+
 };
 
 class mob_stalagg : public CreatureScript
@@ -336,6 +337,7 @@ public:
             DoMeleeAttackIfReady();
         }
     };
+
 };
 
 class mob_feugen : public CreatureScript
@@ -395,6 +397,7 @@ public:
             DoMeleeAttackIfReady();
         }
     };
+
 };
 
 void AddSC_boss_thaddius()

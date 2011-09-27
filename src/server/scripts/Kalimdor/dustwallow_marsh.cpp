@@ -360,6 +360,7 @@ public:
 
         return true;
     }
+
 };
 
 /*######
@@ -400,6 +401,7 @@ public:
 
         return true;
     }
+
 };
 
 /*######
@@ -476,6 +478,7 @@ public:
             }
         }
     };
+
 };
 
 /*######
@@ -552,6 +555,7 @@ public:
             DoMeleeAttackIfReady();
         }
     };
+
 };
 
 /*######
@@ -645,6 +649,7 @@ public:
             case 39:
                 DoScriptText(EMOTE_DISAPPEAR, me);
                 break;
+
             }
         }
 
@@ -723,7 +728,7 @@ class spell_ooze_zap : public SpellScriptLoader
 
             void Register()
             {
-                OnEffect += SpellEffectFn(spell_ooze_zap_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
+                OnEffectHitTarget += SpellEffectFn(spell_ooze_zap_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
                 OnCheckCast += SpellCheckCastFn(spell_ooze_zap_SpellScript::CheckRequirement);
             }
         };
@@ -760,7 +765,7 @@ class spell_ooze_zap_channel_end : public SpellScriptLoader
 
             void Register()
             {
-                OnEffect += SpellEffectFn(spell_ooze_zap_channel_end_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
+                OnEffectHitTarget += SpellEffectFn(spell_ooze_zap_channel_end_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
             }
         };
 
@@ -806,7 +811,7 @@ class spell_energize_aoe : public SpellScriptLoader
 
             void Register()
             {
-                OnEffect += SpellEffectFn(spell_energize_aoe_SpellScript::HandleScript, EFFECT_0, SPELL_EFFECT_SCRIPT_EFFECT);
+                OnEffectHitTarget += SpellEffectFn(spell_energize_aoe_SpellScript::HandleScript, EFFECT_0, SPELL_EFFECT_SCRIPT_EFFECT);
                 OnUnitTargetSelect += SpellUnitTargetFn(spell_energize_aoe_SpellScript::FilterTargets, EFFECT_0, TARGET_UNIT_SRC_AREA_ENTRY);
                 OnUnitTargetSelect += SpellUnitTargetFn(spell_energize_aoe_SpellScript::FilterTargets, EFFECT_1, TARGET_UNIT_SRC_AREA_ENTRY);
             }

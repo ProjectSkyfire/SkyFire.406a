@@ -906,6 +906,7 @@ class npc_darkrune_guardian : public CreatureScript
                     killedByBreath = value;
             }
 
+
             void UpdateAI(uint32 const Diff)
             {
                 if (!UpdateVictim())
@@ -1014,7 +1015,7 @@ class spell_razorscale_devouring_flame : public SpellScriptLoader
 
             void Register()
             {
-                OnEffect += SpellEffectFn(spell_razorscale_devouring_flame_SpellScript::HandleSummon, EFFECT_0, SPELL_EFFECT_SUMMON);
+                OnEffectHit += SpellEffectFn(spell_razorscale_devouring_flame_SpellScript::HandleSummon, EFFECT_0, SPELL_EFFECT_SUMMON);
             }
         };
 

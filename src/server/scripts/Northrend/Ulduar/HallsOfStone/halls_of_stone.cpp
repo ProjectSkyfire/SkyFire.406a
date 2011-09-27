@@ -260,6 +260,7 @@ public:
             }
         }
     };
+
 };
 
 class npc_brann_hos : public CreatureScript
@@ -731,6 +732,7 @@ public:
             DoMeleeAttackIfReady();
         }
     };
+
 };
 
 class achievement_brann_spankin_new : public AchievementCriteriaScript

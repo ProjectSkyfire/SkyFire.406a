@@ -392,6 +392,7 @@ public:
                 (*itr)->ApplySpellImmune(0, IMMUNITY_ID, SPELL_FROST_EXPLOSION, false);
         }
     };
+
 };
 
 void AddSC_boss_sapphiron()

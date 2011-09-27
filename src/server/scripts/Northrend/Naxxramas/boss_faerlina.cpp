@@ -65,6 +65,7 @@ class boss_faerlina : public CreatureScript
             {
             }
 
+
             void EnterCombat(Unit* /*who*/)
             {
                 _EnterCombat();

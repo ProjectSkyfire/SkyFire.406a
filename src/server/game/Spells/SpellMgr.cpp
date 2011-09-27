@@ -2811,11 +2811,6 @@ void SpellMgr::LoadSpellCustomAttr()
                 case SPELL_EFFECT_PICKPOCKET:
                     spellInfo->AttributesCu |= SPELL_ATTR0_CU_PICKPOCKET;
                     break;
-                case SPELL_EFFECT_TRIGGER_SPELL:
-                    if (SpellImplicitTargetInfo::IsPosition(spellInfo->Effects[j].TargetA.GetTarget()) ||
-                        spellInfo->Targets & (TARGET_FLAG_SOURCE_LOCATION | TARGET_FLAG_DEST_LOCATION))
-                        spellInfo->Effects[j].Effect = SPELL_EFFECT_TRIGGER_MISSILE;
-                    break;
                 case SPELL_EFFECT_ENCHANT_ITEM:
                 case SPELL_EFFECT_ENCHANT_ITEM_TEMPORARY:
                 case SPELL_EFFECT_ENCHANT_ITEM_PRISMATIC:
@@ -2904,10 +2899,6 @@ void SpellMgr::LoadSpellCustomAttr()
             case 59372: // Energize Cores
                 spellInfo->Effects[0].TargetA = TARGET_UNIT_SRC_AREA_ENEMY;
                 break;
-            case 3286:  // Bind
-                spellInfo->Effects[0].TargetA = TARGET_UNIT_TARGET_ENEMY;
-                spellInfo->Effects[1].TargetA = TARGET_UNIT_TARGET_ENEMY;
-                break;
             case 8494: // Mana Shield (rank 2)
                 // because of bug in dbc
                 spellInfo->ProcChance = 0;
@@ -2924,14 +2915,6 @@ void SpellMgr::LoadSpellCustomAttr()
             case 63320: // Glyph of Life Tap
             // Entries were not updated after spell effect change, we have to do that manually :/
                 spellInfo->AttributesEx3 |= SPELL_ATTR3_CAN_PROC_WITH_TRIGGERED;
-                break;
-            case 16007: // Draco-Incarcinatrix 900
-                // was 46, but effect is aura effect
-                spellInfo->Effects[0].TargetA = TARGET_UNIT_NEARBY_ENTRY;
-                spellInfo->Effects[0].TargetB = TARGET_DEST_NEARBY_ENTRY;
-                break;
-            case 19465: // Improved Stings, only rank 2 of this spell has target for effect 2 = TARGET_DST_DB
-                spellInfo->Effects[2].TargetA = TARGET_UNIT_CASTER;
                 break;
             case 59725: // Improved Spell Reflection - aoe aura
                 // Target entry seems to be wrong for this spell :/
@@ -2955,13 +2938,8 @@ void SpellMgr::LoadSpellCustomAttr()
             case 42611: // Shoot
             case 62374: // Pursued
             case 61588: // Blazing Harpoon
-                spellInfo->MaxAffectedTargets = 1;
-                break;
             case 52479: // Gift of the Harvester
                 spellInfo->MaxAffectedTargets = 1;
-                // a trap always has dst = src?
-                spellInfo->Effects[0].TargetA = TARGET_DEST_CASTER;
-                spellInfo->Effects[1].TargetA = TARGET_DEST_CASTER;
                 break;
             case 41376: // Spite
             case 39992: // Needle Spine
@@ -3039,14 +3017,10 @@ void SpellMgr::LoadSpellCustomAttr()
                 // add corruption to affected spells
                 spellInfo->Effects[1].SpellClassMask[0] |= 2;
                 break;
-            case 49305: // Teleport to Boss 1 DND
-            case 64981: // Summon Random Vanquished Tentacle
-                spellInfo->Effects[0].TargetB = TARGET_UNIT_CASTER;
-                break;
             case 51852: // The Eye of Acherus (no spawn in phase 2 in db)
                 spellInfo->Effects[0].MiscValue |= 1;
                 break;
-            case 51904: // Summon Ghouls On Scarlet Crusade (core does not know the triggered spell is summon spell)
+            case 51904: // Summon Ghouls On Scarlet Crusade (this should use conditions table, script for this spell needs to be fixed)
                 spellInfo->Effects[0].TargetA = TARGET_UNIT_CASTER;
                 break;
             case 29809: // Desecration Arm - 36 instead of 37 - typo? :/
@@ -3098,10 +3072,6 @@ void SpellMgr::LoadSpellCustomAttr()
                 spellInfo->Effects[0].TargetB = TARGET_UNIT_SRC_AREA_ALLY;
                 spellInfo->Effects[1].TargetB = TARGET_UNIT_SRC_AREA_ALLY;
                 break;
-            case 31687: // Summon Water Elemental
-                // 322-330 switch - effect changed to dummy, target entry not changed in client:(
-                spellInfo->Effects[0].TargetA = TARGET_UNIT_CASTER;
-                break;
             case 57994: // Wind Shear - improper data for EFFECT_1 in 3.3.5 DBC, but is correct in 4.x
                 spellInfo->Effects[EFFECT_1].Effect = SPELL_EFFECT_MODIFY_THREAT_PERCENT;
                 spellInfo->Effects[EFFECT_1].BasePoints = -6; // -5%
@@ -3120,12 +3090,12 @@ void SpellMgr::LoadSpellCustomAttr()
             case 53246: // Marked for Death (Rank 5)
                 spellInfo->Effects[0].SpellClassMask = flag96(423937, 276955137, 2049);
                 break;
-            case 70728: // Exploit Weakness
-            case 70840: // Devious Minds
+            case 70728: // Exploit Weakness (needs target selection script)
+            case 70840: // Devious Minds (needs target selection script)
                 spellInfo->Effects[0].TargetA = TARGET_UNIT_CASTER;
                 spellInfo->Effects[0].TargetB = TARGET_UNIT_PET;
                 break;
-            case 70893: // Culling The Herd
+            case 70893: // Culling The Herd (needs target selection script)
                 spellInfo->Effects[0].TargetA = TARGET_UNIT_CASTER;
                 spellInfo->Effects[0].TargetB = TARGET_UNIT_MASTER;
                 break;
@@ -3257,10 +3227,10 @@ void SpellMgr::LoadSpellCustomAttr()
             case 72507: // Mutated Plague (Professor Putricide)
                 spellInfo->Effects[0].RadiusEntry = sSpellRadiusStore.LookupEntry(28);   // 50000yd
                 break;
-            case 70911: // Unbound Plague (Professor Putricide)
-            case 72854: // Unbound Plague (Professor Putricide)
-            case 72855: // Unbound Plague (Professor Putricide)
-            case 72856: // Unbound Plague (Professor Putricide)
+            case 70911: // Unbound Plague (Professor Putricide) (needs target selection script)
+            case 72854: // Unbound Plague (Professor Putricide) (needs target selection script)
+            case 72855: // Unbound Plague (Professor Putricide) (needs target selection script)
+            case 72856: // Unbound Plague (Professor Putricide) (needs target selection script)
                 spellInfo->Effects[0].TargetB = TARGET_UNIT_TARGET_ENEMY;
                 break;
             case 71518: // Unholy Infusion Quest Credit (Professor Putricide)
@@ -3287,7 +3257,7 @@ void SpellMgr::LoadSpellCustomAttr()
             case 71085: // Mana Void (periodic aura)
                 spellInfo->DurationEntry = sSpellDurationStore.LookupEntry(9); // 30 seconds (missing)
                 break;
-            case 70936: // Summon Suppressor
+            case 70936: // Summon Suppressor (needs target selection script)
                 spellInfo->Effects[0].TargetA = TARGET_UNIT_TARGET_ANY;
                 spellInfo->Effects[0].TargetB = 0;
                 break;

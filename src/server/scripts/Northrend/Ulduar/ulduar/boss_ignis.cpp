@@ -280,6 +280,7 @@ class boss_ignis : public CreatureScript
             Vehicle* _vehicle;
             time_t _firstConstructKill;
             bool _shattered;
+
         };
 
         CreatureAI* GetAI(Creature* creature) const

@@ -650,6 +650,7 @@ public:
     {
         return new boss_kelthuzadAI (creature);
     }
+
 };
 
 class at_kelthuzad_center : public AreaTriggerScript
@@ -713,6 +714,7 @@ public:
 
         return true;
     }
+
 };
 
 class npc_kelthuzad_abomination : public CreatureScript

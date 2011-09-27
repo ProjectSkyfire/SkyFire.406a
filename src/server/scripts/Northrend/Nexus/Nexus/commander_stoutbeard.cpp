@@ -71,6 +71,7 @@ public:
             DoScriptText(SAY_DEATH, me);
         }
     };
+
 };
 
 void AddSC_boss_commander_stoutbeard()

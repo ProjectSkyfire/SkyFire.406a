@@ -688,6 +688,7 @@ public:
             EnterEvadeIfOutOfCombatArea(uiDiff);
         }
     };
+
 };
 
 enum TeneText
@@ -1066,6 +1067,7 @@ public:
             DoMeleeAttackIfReady();
         }
     };
+
 };
 
 /*######
@@ -1170,6 +1172,7 @@ public:
             DoMeleeAttackIfReady();
         }
     };
+
 };
 
 /*######
@@ -1265,6 +1268,7 @@ public:
             DoMeleeAttackIfReady();
         }
     };
+
 };
 
 /*######
@@ -1374,6 +1378,7 @@ public:
             DoMeleeAttackIfReady();
         }
     };
+
 };
 
 /*######
@@ -1468,6 +1473,7 @@ public:
             DoMeleeAttackIfReady();
         }
     };
+
 };
 
 /*######
@@ -1538,6 +1544,7 @@ public:
         void AttackStart(Unit* /*who*/) {}
         void MoveInLineOfSight(Unit* /*who*/) {}
     };
+
 };
 
 /*######
@@ -1591,6 +1598,7 @@ public:
             }else TsunamiBuff_timer -= diff;
         }
     };
+
 };
 
 // Twilight Fissure
@@ -1636,6 +1644,7 @@ public:
             } else VoidBlast_Timer -= diff;
         }
     };
+
 };
 
 /*######
@@ -1686,6 +1695,7 @@ public:
             DoMeleeAttackIfReady();
         }
     };
+
 };
 
 class achievement_twilight_assist : public AchievementCriteriaScript

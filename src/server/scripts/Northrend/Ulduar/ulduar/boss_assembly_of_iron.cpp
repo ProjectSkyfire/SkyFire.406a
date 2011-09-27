@@ -611,6 +611,7 @@ class boss_stormcaller_brundir : public CreatureScript
                             events.RescheduleEvent(EVENT_LIGHTNING_TENDRILS, urand(50000, 60000));
                         }
                     break;
+
                 }
             }
 
@@ -786,7 +787,7 @@ class spell_assembly_meltdown : public SpellScriptLoader
 
             void Register()
             {
-                OnEffect += SpellEffectFn(spell_assembly_meltdown_SpellScript::HandleInstaKill, EFFECT_1, SPELL_EFFECT_INSTAKILL);
+                OnEffectHitTarget += SpellEffectFn(spell_assembly_meltdown_SpellScript::HandleInstaKill, EFFECT_1, SPELL_EFFECT_INSTAKILL);
             }
         };
 

@@ -219,6 +219,7 @@ public:
             DoMeleeAttackIfReady();
         }
     };
+
 };
 
 class mob_crystal_spike : public CreatureScript
@@ -261,6 +262,7 @@ public:
             } else SpellCrystalSpikeDamageTimer -= diff;
         }
     };
+
 };
 
 class mob_crystalline_tangler : public CreatureScript
@@ -296,6 +298,7 @@ public:
             } else uiRootsTimer -= diff;
         }
     };
+
 };
 
 void AddSC_boss_ormorok()

@@ -171,6 +171,7 @@ public:
 
         return true;
     }
+
 };
 
 void AddSC_oculus()

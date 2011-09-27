@@ -421,6 +421,7 @@ public:
             gothikDoorState = GOState(buff);
         }
     };
+
 };
 
 void AddSC_instance_naxxramas()

@@ -73,3 +73,4 @@ enum Data64
 #define GO_BIRTH                181356
 
 #endif
+
