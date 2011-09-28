@@ -60,14 +60,7 @@ typedef std::deque<Mail*> PlayerMails;
 
 #define PLAYER_MAX_SKILLS           127
 #define PLAYER_MAX_DAILY_QUESTS     25
-#define PLAYER_EXPLORED_ZONES_SIZE  128
-
-// Note: SPELLMOD_* values is aura types in fact
-enum SpellModType
-{
-    SPELLMOD_FLAT         = 107,                            // SPELL_AURA_ADD_FLAT_MODIFIER
-    SPELLMOD_PCT          = 108                             // SPELL_AURA_ADD_PCT_MODIFIER
-};
+#define PLAYER_EXPLORED_ZONES_SIZE  144
 
 // 2^n values, Player::m_isunderwater is a bitmask. These are Trinity internal values, they are never send to any client
 enum PlayerUnderwaterState
@@ -129,23 +122,9 @@ struct PlayerCurrency
 
 #define PLAYER_CURRENCY_PRECISION   100
 
-// Spell modifier (used for modify other spells)
-struct SpellModifier
-{
-    SpellModifier(Aura * _ownerAura = NULL) : charges(0), ownerAura(_ownerAura) {}
-    SpellModOp   op   : 8;
-    SpellModType type : 8;
-    int16 charges     : 16;
-    int32 value;
-    flag96 mask;
-    uint32 spellId;
-    Aura * const ownerAura;
-};
-
 typedef UNORDERED_MAP<uint32, PlayerTalent*> PlayerTalentMap;
 typedef UNORDERED_MAP<uint32, PlayerSpell*> PlayerSpellMap;
 typedef UNORDERED_MAP<uint32, PlayerCurrency> PlayerCurrenciesMap;
-typedef std::list<SpellModifier*> SpellModList;
 
 typedef std::list<uint64> WhisperListContainer;
 
@@ -1723,15 +1702,6 @@ class Player : public Unit, public GridObject<Player>
 
         SpellCooldowns const& GetSpellCooldownMap() const { return m_spellCooldowns; }
 
-        void AddSpellMod(SpellModifier* mod, bool apply);
-        bool IsAffectedBySpellmod(SpellInfo const *spellInfo, SpellModifier *mod, Spell* spell = NULL);
-        template <class T> T ApplySpellMod(uint32 spellId, SpellModOp op, T &basevalue, Spell* spell = NULL);
-        void RemoveSpellMods(Spell* spell);
-        void RestoreSpellMods(Spell* spell, uint32 ownerAuraId = 0, Aura* aura = NULL);
-        void RestoreAllSpellMods(uint32 ownerAuraId = 0, Aura* aura = NULL);
-        void DropModCharge(SpellModifier* mod, Spell* spell);
-        void SetSpellModTakingSpell(Spell* spell, bool apply);
-
         static uint32 const infinityCooldownDelay = MONTH;  // used for set "infinity cooldowns" for spells and check
         static uint32 const infinityCooldownDelayCheck = MONTH/2;
         bool HasSpellCooldown(uint32 spell_id) const
@@ -2510,7 +2480,6 @@ class Player : public Unit, public GridObject<Player>
 
         uint32 GetChampioningFaction() const { return m_ChampioningFaction; }
         void SetChampioningFaction(uint32 faction) { m_ChampioningFaction = faction; }
-        Spell* m_spellModTakingSpell;
 
         float GetAverageItemLevel();
         bool isDebugAreaTriggers;
@@ -2684,9 +2653,7 @@ class Player : public Unit, public GridObject<Player>
         uint32 m_baseHealthRegen;
         int32 m_spellPenetrationItemMod;
 
-        SpellModList m_spellMods[MAX_SPELLMOD];
         //uint32 m_pad;
-//        Spell* m_spellModTakingSpell;  // Spell for which charges are dropped in spell::finish
 
         EnchantDurationList m_enchantDuration;
         ItemDurationList m_itemDuration;
@@ -2857,49 +2824,4 @@ class Player : public Unit, public GridObject<Player>
 void AddItemsSetItem(Player*player, Item *item);
 void RemoveItemsSetItem(Player*player, ItemTemplate const *proto);
 
-// "the bodies of template functions must be made available in a header file"
-template <class T> T Player::ApplySpellMod(uint32 spellId, SpellModOp op, T &basevalue, Spell* spell)
-{
-    SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(spellId);
-    if (!spellInfo)
-        return 0;
-    float totalmul = 1.0f;
-    int32 totalflat = 0;
-
-    // Drop charges for triggering spells instead of triggered ones
-    if (m_spellModTakingSpell)
-        spell = m_spellModTakingSpell;
-
-    for (SpellModList::iterator itr = m_spellMods[op].begin(); itr != m_spellMods[op].end(); ++itr)
-    {
-        SpellModifier *mod = *itr;
-
-        // Charges can be set only for mods with auras
-        if (!mod->ownerAura)
-            ASSERT(mod->charges == 0);
-
-        if (!IsAffectedBySpellmod(spellInfo, mod, spell))
-            continue;
-
-        if (mod->type == SPELLMOD_FLAT)
-            totalflat += mod->value;
-        else if (mod->type == SPELLMOD_PCT)
-        {
-            // skip percent mods for null basevalue (most important for spell mods with charges)
-            if (basevalue == T(0))
-                continue;
-
-            // special case (skip > 10sec spell casts for instant cast setting)
-            if (mod->op == SPELLMOD_CASTING_TIME && basevalue >= T(10000) && mod->value <= -100)
-                continue;
-
-            totalmul += CalculatePctN(1.0f, mod->value);
-        }
-
-        DropModCharge(mod, spell);
-    }
-    float diff = (float)basevalue * (totalmul - 1.0f) + (float)totalflat;
-    basevalue = T((float)basevalue + diff);
-    return T(diff);
-}
 #endif

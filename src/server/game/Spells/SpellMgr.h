@@ -695,4 +695,5 @@ class SpellMgr
 
 #define sSpellMgr ACE_Singleton<SpellMgr, ACE_Null_Mutex>::instance()
 
+inline SpellInfo const* GetSpellInfo(uint32 spellId) { return sSpellMgr->GetSpellInfo(spellId); }
 #endif

@@ -33,7 +33,7 @@
 //==============================================================
 
 // The hatingUnit is not used yet
-float ThreatCalcHelper::calcThreat(Unit* hatedUnit, Unit* /*hatingUnit*/, float threat, SpellSchoolMask schoolMask, SpellInfo const* threatSpell)
+float ThreatCalcHelper::calcThreat(Unit* hatedUnit, Unit* hatingUnit, float threat, SpellSchoolMask schoolMask, SpellInfo const* threatSpell)
 {
     if (threatSpell)
     {
@@ -47,7 +47,7 @@ float ThreatCalcHelper::calcThreat(Unit* hatedUnit, Unit* /*hatingUnit*/, float 
                 return threat;
 
         if (Player* modOwner = hatedUnit->GetSpellModOwner())
-            modOwner->ApplySpellMod(threatSpell->Id, SPELLMOD_THREAT, threat);
+            modOwner->ApplySpellMod(threatSpell->Id, SPELLMOD_THREAT, threat, NULL, hatingUnit);
     }
 
     return hatedUnit->ApplyTotalThreatModifier(threat, schoolMask);

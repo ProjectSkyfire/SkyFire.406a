@@ -102,7 +102,7 @@ isRecruiter(isARecruiter)
         m_Address = sock->GetRemoteAddress();
         sock->AddReference();
         ResetTimeOutTime();
-        LoginDatabase.PExecute("UPDATE account SET online = 1 WHERE id = %u;", GetAccountId());
+        LoginDatabase.PExecute("UPDATE account SET online = %d WHERE id = %u;", realmID,  GetAccountId());
     }
 
     InitializeQueryCallbackParameters();
@@ -225,99 +225,92 @@ bool WorldSession::Update(uint32 diff, PacketFilter& updater)
     WorldPacket* packet = NULL;
     while (m_Socket && !m_Socket->IsClosed() && _recvQueue.next(packet, updater))
     {
-        if (packet->GetOpcode() >= NUM_MSG_TYPES)
+        OpcodeHandler const &opHandle = opcodeTable[packet->GetOpcode()];
+        // !=NULL checked in WorldSocket
+        try
         {
-            sLog->outError("SESSION: received non-existed opcode %s (0x%.4X)", LookupOpcodeName(packet->GetOpcode()), packet->GetOpcode());
-            sScriptMgr->OnUnknownPacketReceive(m_Socket, WorldPacket(*packet));
-        }
-        else
-        {
-            OpcodeHandler &opHandle = opcodeTable[packet->GetOpcode()];
-            try
+            switch (opHandle.status)
             {
-                switch (opHandle.status)
-                {
-                    case STATUS_LOGGEDIN:
-                        if (!_player)
-                        {
-                            // skip STATUS_LOGGEDIN opcode unexpected errors if player logout sometime ago - this can be network lag delayed packets
-                            if (!m_playerRecentlyLogout)
-                                LogUnexpectedOpcode(packet, "STATUS_LOGGEDIN", "the player has not logged in yet");
-                        }
-                        else if (_player->IsInWorld())
-                        {
-                            sScriptMgr->OnPacketReceive(m_Socket, WorldPacket(*packet));
-                            (this->*opHandle.handler)(*packet);
-                            if (sLog->IsOutDebug() && packet->rpos() < packet->wpos())
-                                LogUnprocessedTail(packet);
-                        }
-                        // lag can cause STATUS_LOGGEDIN opcodes to arrive after the player started a transfer
-                        break;
-                    case STATUS_LOGGEDIN_OR_RECENTLY_LOGGOUT:
-                        if (!_player && !m_playerRecentlyLogout)
-                            LogUnexpectedOpcode(packet, "STATUS_LOGGEDIN_OR_RECENTLY_LOGGOUT",
-                                "the player has not logged in yet and not recently logout");
-                        else
-                        {
-                            // not expected _player or must checked in packet handler
-                            sScriptMgr->OnPacketReceive(m_Socket, WorldPacket(*packet));
-                            (this->*opHandle.handler)(*packet);
-                            if (sLog->IsOutDebug() && packet->rpos() < packet->wpos())
-                                LogUnprocessedTail(packet);
-                        }
-                        break;
-                    case STATUS_TRANSFER:
-                        if (!_player)
-                            LogUnexpectedOpcode(packet, "STATUS_TRANSFER", "the player has not logged in yet");
-                        else if (_player->IsInWorld())
-                            LogUnexpectedOpcode(packet, "STATUS_TRANSFER", "the player is still in world");
-                        else
-                        {
-                            sScriptMgr->OnPacketReceive(m_Socket, WorldPacket(*packet));
-                            (this->*opHandle.handler)(*packet);
-                            if (sLog->IsOutDebug() && packet->rpos() < packet->wpos())
-                                LogUnprocessedTail(packet);
-                        }
-                        break;
-                    case STATUS_AUTHED:
-                        // prevent cheating with skip queue wait
-                        if (m_inQueue)
-                        {
-                            LogUnexpectedOpcode(packet, "STATUS_AUTHED", "the player not pass queue yet");
-                            break;
-                        }
-
-                        // single from authed time opcodes send in to after logout time
-                        // and before other STATUS_LOGGEDIN_OR_RECENTLY_LOGGOUT opcodes.
-                        if (packet->GetOpcode() != CMSG_SET_ACTIVE_VOICE_CHANNEL)
-                            m_playerRecentlyLogout = false;
-
+                case STATUS_LOGGEDIN:
+                    if (!_player)
+                    {
+                        // skip STATUS_LOGGEDIN opcode unexpected errors if player logout sometime ago - this can be network lag delayed packets
+                        if (!m_playerRecentlyLogout)
+                            LogUnexpectedOpcode(packet, "STATUS_LOGGEDIN", "the player has not logged in yet");
+                    }
+                    else if (_player->IsInWorld())
+                    {
                         sScriptMgr->OnPacketReceive(m_Socket, WorldPacket(*packet));
                         (this->*opHandle.handler)(*packet);
                         if (sLog->IsOutDebug() && packet->rpos() < packet->wpos())
                             LogUnprocessedTail(packet);
+                    }
+                    // lag can cause STATUS_LOGGEDIN opcodes to arrive after the player started a transfer
+                    break;
+                case STATUS_LOGGEDIN_OR_RECENTLY_LOGGOUT:
+                    if (!_player && !m_playerRecentlyLogout)
+                        LogUnexpectedOpcode(packet, "STATUS_LOGGEDIN_OR_RECENTLY_LOGGOUT",
+                            "the player has not logged in yet and not recently logout");
+                    else
+                    {
+                        // not expected _player or must checked in packet hanlder
+                        sScriptMgr->OnPacketReceive(m_Socket, WorldPacket(*packet));
+                        (this->*opHandle.handler)(*packet);
+                        if (sLog->IsOutDebug() && packet->rpos() < packet->wpos())
+                            LogUnprocessedTail(packet);
+                    }
+                    break;
+                case STATUS_TRANSFER:
+                    if (!_player)
+                        LogUnexpectedOpcode(packet, "STATUS_TRANSFER", "the player has not logged in yet");
+                    else if (_player->IsInWorld())
+                        LogUnexpectedOpcode(packet, "STATUS_TRANSFER", "the player is still in world");
+                    else
+                    {
+                        sScriptMgr->OnPacketReceive(m_Socket, WorldPacket(*packet));
+                        (this->*opHandle.handler)(*packet);
+                        if (sLog->IsOutDebug() && packet->rpos() < packet->wpos())
+                            LogUnprocessedTail(packet);
+                    }
+                    break;
+                case STATUS_AUTHED:
+                    // prevent cheating with skip queue wait
+                    if (m_inQueue)
+                    {
+                        LogUnexpectedOpcode(packet, "STATUS_AUTHED", "the player not pass queue yet");
                         break;
-                    case STATUS_NEVER:
-                        sLog->outError("SESSION (account: %u, guidlow: %u, char: %s): received not allowed opcode %s (0x%.4X)",
-                            GetAccountId(), m_GUIDLow, _player ? _player->GetName() : "<none>",
-                            LookupOpcodeName(packet->GetOpcode()), packet->GetOpcode());
-                        break;
-                    case STATUS_UNHANDLED:
-                        sLog->outDebug(LOG_FILTER_NETWORKIO, "SESSION (account: %u, guidlow: %u, char: %s): received not handled opcode %s (0x%.4X)",
-                            GetAccountId(), m_GUIDLow, _player ? _player->GetName() : "<none>",
-                            LookupOpcodeName(packet->GetOpcode()), packet->GetOpcode());
-                        break;
-                }
+                    }
+
+                    // single from authed time opcodes send in to after logout time
+                    // and before other STATUS_LOGGEDIN_OR_RECENTLY_LOGGOUT opcodes.
+                    if (packet->GetOpcode() != CMSG_SET_ACTIVE_VOICE_CHANNEL)
+                        m_playerRecentlyLogout = false;
+
+                    sScriptMgr->OnPacketReceive(m_Socket, WorldPacket(*packet));
+                    (this->*opHandle.handler)(*packet);
+                    if (sLog->IsOutDebug() && packet->rpos() < packet->wpos())
+                        LogUnprocessedTail(packet);
+                    break;
+                case STATUS_NEVER:
+                    sLog->outError("SESSION (account: %u, guidlow: %u, char: %s): received not allowed opcode %s (0x%.4X)",
+                        GetAccountId(), m_GUIDLow, _player ? _player->GetName() : "<none>",
+                        LookupOpcodeName(packet->GetOpcode()), packet->GetOpcode());
+                    break;
+                case STATUS_UNHANDLED:
+                    sLog->outDebug(LOG_FILTER_NETWORKIO, "SESSION (account: %u, guidlow: %u, char: %s): received not handled opcode %s (0x%.4X)",
+                        GetAccountId(), m_GUIDLow, _player ? _player->GetName() : "<none>",
+                        LookupOpcodeName(packet->GetOpcode()), packet->GetOpcode());
+                    break;
             }
-            catch(ByteBufferException &)
+        }
+        catch(ByteBufferException &)
+        {
+            sLog->outError("WorldSession::Update ByteBufferException occured while parsing a packet (opcode: %u) from client %s, accountid=%i. Skipped packet.",
+                    packet->GetOpcode(), GetRemoteAddress().c_str(), GetAccountId());
+            if (sLog->IsOutDebug())
             {
-                sLog->outError("WorldSession::Update ByteBufferException occured while parsing a packet (opcode: %u) from client %s, accountid=%i. Skipped packet.",
-                        packet->GetOpcode(), GetRemoteAddress().c_str(), GetAccountId());
-                if (sLog->IsOutDebug())
-                {
-                    sLog->outDebug(LOG_FILTER_NETWORKIO, "Dumping error causing packet:");
-                    packet->hexlike();
-                }
+                sLog->outDebug(LOG_FILTER_NETWORKIO, "Dumping error causing packet:");
+                packet->hexlike();
             }
         }
 
@@ -371,7 +364,7 @@ void WorldSession::LogoutPlayer(bool Save)
             _player->BuildPlayerRepop();
             _player->RepopAtGraveyard();
         }
-        else if (!_player->getAttackers().empty())
+        else if (!_player->getAttackers().empty() || _player->isCharmed())
         {
             _player->CombatStop();
             _player->getHostileRefManager().setOnlineOfflineState(false);
@@ -526,13 +519,13 @@ void WorldSession::SendNotification(const char *format, ...)
     if (format)
     {
         va_list ap;
-        char szStr[1024];
+        char szStr [1024];
         szStr[0] = '\0';
         va_start(ap, format);
         vsnprintf(szStr, 1024, format, ap);
         va_end(ap);
 
-        WorldPacket data(SMSG_NOTIFICATION, (strlen(szStr) + 1));
+        WorldPacket data(SMSG_NOTIFICATION, (strlen(szStr)+1));
         data << szStr;
         SendPacket(&data);
     }
@@ -540,17 +533,17 @@ void WorldSession::SendNotification(const char *format, ...)
 
 void WorldSession::SendNotification(uint32 string_id, ...)
 {
-    char const *format = GetTrinityString(string_id);
+    char const* format = GetTrinityString(string_id);
     if (format)
     {
         va_list ap;
-        char szStr[1024];
+        char szStr [1024];
         szStr[0] = '\0';
         va_start(ap, string_id);
         vsnprintf(szStr, 1024, format, ap);
         va_end(ap);
 
-        WorldPacket data(SMSG_NOTIFICATION, (strlen(szStr) + 1));
+        WorldPacket data(SMSG_NOTIFICATION, (strlen(szStr)+1));
         data << szStr;
         SendPacket(&data);
     }
@@ -601,9 +594,9 @@ void WorldSession::SendAuthWaitQue(uint32 position)
 
 void WorldSession::LoadGlobalAccountData()
 {
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_LOAD_ACCOUNT_DATA);
-    stmt->setUInt32(0, GetAccountId());
-    LoadAccountData(CharacterDatabase.Query(stmt), GLOBAL_CACHE_MASK);
+    PreparedStatement* stime_t = CharacterDatabase.GetPreparedStatement(CHAR_LOAD_ACCOUNT_DATA);
+    stime_t->setUInt32(0, GetAccountId());
+    LoadAccountData(CharacterDatabase.Query(stime_t), GLOBAL_CACHE_MASK);
 }
 
 void WorldSession::LoadAccountData(PreparedQueryResult result, uint32 mask)
@@ -617,7 +610,7 @@ void WorldSession::LoadAccountData(PreparedQueryResult result, uint32 mask)
 
     do
     {
-        Field *fields = result->Fetch();
+        Field* fields = result->Fetch();
         uint32 type = fields[0].GetUInt8();
         if (type >= NUM_ACCOUNT_DATA_TYPES)
         {
@@ -637,7 +630,7 @@ void WorldSession::LoadAccountData(PreparedQueryResult result, uint32 mask)
     while (result->NextRow());
 }
 
-void WorldSession::SetAccountData(AccountDataType type, time_t tm, std::string data)
+void WorldSession::SetAccountData(AccountDataType type, time_t time_, std::string data)
 {
     uint32 id = 0;
     uint32 index = 0;
@@ -656,14 +649,14 @@ void WorldSession::SetAccountData(AccountDataType type, time_t tm, std::string d
         index = CHAR_SET_PLAYER_ACCOUNT_DATA;
     }
 
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(index);
-    stmt->setUInt32(0, id);
-    stmt->setUInt8 (1, type);
-    stmt->setUInt32(2, uint32(tm));
-    stmt->setString(3, data);
-    CharacterDatabase.Execute(stmt);
+    PreparedStatement* stime_t = CharacterDatabase.GetPreparedStatement(index);
+    stime_t->setUInt32(0, id);
+    stime_t->setUInt8 (1, type);
+    stime_t->setUInt32(2, uint32(time_));
+    stime_t->setString(3, data);
+    CharacterDatabase.Execute(stime_t);
 
-    m_accountData[type].Time = tm;
+    m_accountData[type].Time = time_;
     m_accountData[type].Data = data;
 }
 
@@ -681,39 +674,49 @@ void WorldSession::SendAccountDataTimes(uint32 mask)
 
 void WorldSession::LoadTutorialsData()
 {
-    memset(m_Tutorials, 0, sizeof(uint32) * MAX_ACCOUNT_TUTORIAL_VALUES);
+    for (int aX = 0 ; aX < MAX_ACCOUNT_TUTORIAL_VALUES ; ++aX)
+        m_Tutorials[ aX ] = 0;
 
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_LOAD_TUTORIALS);
-    stmt->setUInt32(0, GetAccountId());
-    if (PreparedQueryResult result = CharacterDatabase.Query(stmt))
-        for (uint8 i = 0; i < MAX_ACCOUNT_TUTORIAL_VALUES; ++i)
-            m_Tutorials[i] = (*result)[i].GetUInt32();
+    QueryResult result = CharacterDatabase.PQuery("SELECT tut0, tut1, tut2, tut3, tut4, tut5, tut6, tut7 FROM character_tutorial WHERE account = '%u'", GetAccountId());
 
+    if (result)
+    {
+        do
+        {
+            Field *fields = result->Fetch();
+
+            for (int iI = 0; iI < MAX_ACCOUNT_TUTORIAL_VALUES; ++iI)
+                m_Tutorials[iI] = fields[iI].GetUInt32();
+        }
+        while (result->NextRow());
+    }
     m_TutorialsChanged = false;
 }
 
 void WorldSession::SendTutorialsData()
 {
     WorldPacket data(SMSG_TUTORIAL_FLAGS, 4 * MAX_ACCOUNT_TUTORIAL_VALUES);
-    for (uint8 i = 0; i < MAX_ACCOUNT_TUTORIAL_VALUES; ++i)
+    for (uint32 i = 0; i < MAX_ACCOUNT_TUTORIAL_VALUES; ++i)
         data << m_Tutorials[i];
     SendPacket(&data);
 }
 
-void WorldSession::SaveTutorialsData(SQLTransaction &trans)
+void WorldSession::SaveTutorialsData(SQLTransaction& trans)
 {
     if (!m_TutorialsChanged)
         return;
 
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_GET_HAS_TUTORIALS);
-    stmt->setUInt32(0, GetAccountId());
-    bool hasTutorials = !CharacterDatabase.Query(stmt).null();
-    // Modify data in DB
-    stmt = CharacterDatabase.GetPreparedStatement(hasTutorials ? CHAR_SET_TUTORIALS : CHAR_ADD_TUTORIALS);
-    for (uint8 i = 0; i < MAX_ACCOUNT_TUTORIAL_VALUES; ++i)
-        stmt->setUInt32(i, m_Tutorials[i]);
-    stmt->setUInt32(MAX_ACCOUNT_TUTORIAL_VALUES, GetAccountId());
-    trans->Append(stmt);
+    uint32 Rows=0;
+    // it's better than rebuilding indexes multiple times
+    QueryResult result = CharacterDatabase.PQuery("SELECT count(*) AS r FROM character_tutorial WHERE account = '%u'", GetAccountId());
+    if (result)
+        Rows = result->Fetch()[0].GetUInt32();
+
+    if (Rows)
+        trans->PAppend("UPDATE character_tutorial SET tut0='%u', tut1='%u', tut2='%u', tut3='%u', tut4='%u', tut5='%u', tut6='%u', tut7='%u' WHERE account = '%u'",
+            m_Tutorials[0], m_Tutorials[1], m_Tutorials[2], m_Tutorials[3], m_Tutorials[4], m_Tutorials[5], m_Tutorials[6], m_Tutorials[7], GetAccountId());
+    else
+        trans->PAppend("INSERT INTO character_tutorial (account, tut0, tut1, tut2, tut3, tut4, tut5, tut6, tut7) VALUES ('%u', '%u', '%u', '%u', '%u', '%u', '%u', '%u', '%u')", GetAccountId(), m_Tutorials[0], m_Tutorials[1], m_Tutorials[2], m_Tutorials[3], m_Tutorials[4], m_Tutorials[5], m_Tutorials[6], m_Tutorials[7]);
 
     m_TutorialsChanged = false;
 }
@@ -742,7 +745,9 @@ void WorldSession::ReadMovementInfo(WorldPacket &data, MovementInfo *mi)
     }
 
     if (mi->HasMovementFlag(MovementFlags(MOVEMENTFLAG_SWIMMING | MOVEMENTFLAG_FLYING)) || (mi->HasExtraMovementFlag(MOVEMENTFLAG2_ALWAYS_ALLOW_PITCHING)))
+    {
         data >> mi->pitch;
+    }
 
     if (mi->HasExtraMovementFlag(MOVEMENTFLAG2_INTERPOLATED_TURNING))    // 4.0.6
     {
@@ -758,37 +763,9 @@ void WorldSession::ReadMovementInfo(WorldPacket &data, MovementInfo *mi)
     }
 
     if (mi->HasMovementFlag(MOVEMENTFLAG_SPLINE_ELEVATION))
+    {
         data >> mi->splineElevation;
-
-    // This must be a packet spoofing attempt. MOVEMENTFLAG_ROOT sent from the client is not valid,
-    // and when used in conjunction with any of the moving movement flags such as MOVEMENTFLAG_FORWARD
-    // it will freeze clients that receive this player's movement info.
-    if (mi->HasMovementFlag(MOVEMENTFLAG_ROOT))
-        mi->flags &= ~MOVEMENTFLAG_ROOT;
-
-    // Cannot hover and jump at the same time
-    if (mi->HasMovementFlag(MOVEMENTFLAG_HOVER) && mi->HasMovementFlag(MOVEMENTFLAG_JUMPING))
-        mi->flags &= ~MOVEMENTFLAG_JUMPING;
-
-    // Cannot ascend and descend at the same time
-    if (mi->HasMovementFlag(MOVEMENTFLAG_ASCENDING) && mi->HasMovementFlag(MOVEMENTFLAG_DESCENDING))
-        mi->flags &= ~(MOVEMENTFLAG_ASCENDING | MOVEMENTFLAG_DESCENDING);
-
-    // Cannot move left and right at the same time
-    if (mi->HasMovementFlag(MOVEMENTFLAG_LEFT) && mi->HasMovementFlag(MOVEMENTFLAG_RIGHT))
-        mi->flags &= ~(MOVEMENTFLAG_LEFT | MOVEMENTFLAG_RIGHT);
-
-    // Cannot strafe left and right at the same time
-    if (mi->HasMovementFlag(MOVEMENTFLAG_STRAFE_LEFT) && mi->HasMovementFlag(MOVEMENTFLAG_STRAFE_RIGHT))
-        mi->flags &= ~(MOVEMENTFLAG_STRAFE_LEFT | MOVEMENTFLAG_STRAFE_RIGHT);
-
-    // Cannot pitch up and down at the same time
-    if (mi->HasMovementFlag(MOVEMENTFLAG_PITCH_UP) && mi->HasMovementFlag(MOVEMENTFLAG_PITCH_DOWN))
-        mi->flags &= ~(MOVEMENTFLAG_PITCH_UP | MOVEMENTFLAG_PITCH_DOWN);
-
-    // Cannot move forwards and backwards at the same time
-    if (mi->HasMovementFlag(MOVEMENTFLAG_FORWARD) && mi->HasMovementFlag(MOVEMENTFLAG_BACKWARD))
-        mi->flags &= ~(MOVEMENTFLAG_FORWARD | MOVEMENTFLAG_BACKWARD);
+    }
 }
 
 void WorldSession::WriteMovementInfo(WorldPacket *data, MovementInfo *mi)
@@ -807,10 +784,15 @@ void WorldSession::WriteMovementInfo(WorldPacket *data, MovementInfo *mi)
        *data << mi->t_pos.PositionXYZOStream();
        *data << mi->t_time;
        *data << mi->t_seat;
+
+        if (mi->flags2 & MOVEMENTFLAG2_INTERPOLATED_MOVEMENT)
+            *data << mi->t_time2;
     }
 
-    if (mi->HasMovementFlag(MovementFlags(MOVEMENTFLAG_SWIMMING | MOVEMENTFLAG_FLYING)) || mi->HasExtraMovementFlag(MOVEMENTFLAG2_ALWAYS_ALLOW_PITCHING))
+    if ((mi->HasMovementFlag(MovementFlags(MOVEMENTFLAG_SWIMMING | MOVEMENTFLAG_FLYING))) || (mi->flags2 & MOVEMENTFLAG2_ALWAYS_ALLOW_PITCHING))
+    {
         *data << mi->pitch;
+    }
 
     if (mi->HasExtraMovementFlag(MOVEMENTFLAG2_INTERPOLATED_TURNING))    // 4.0.6
     {
@@ -826,7 +808,9 @@ void WorldSession::WriteMovementInfo(WorldPacket *data, MovementInfo *mi)
     }
 
     if (mi->HasMovementFlag(MOVEMENTFLAG_SPLINE_ELEVATION))
+    {
         *data << mi->splineElevation;
+    }
 }
 
 void WorldSession::ReadAddonsInfo(WorldPacket &data)
@@ -852,7 +836,7 @@ void WorldSession::ReadAddonsInfo(WorldPacket &data)
     ByteBuffer addonInfo;
     addonInfo.resize(size);
 
-    if (uncompress(const_cast<uint8 *>(addonInfo.contents()), &uSize, const_cast<uint8 *>(data.contents() + pos), data.size() - pos) == Z_OK)
+    if (uncompress(const_cast<uint8*>(addonInfo.contents()), &uSize, const_cast<uint8*>(data.contents() + pos), data.size() - pos) == Z_OK)
     {
         uint32 addonsCount;
         addonInfo >> addonsCount;                         // addons count
@@ -864,14 +848,12 @@ void WorldSession::ReadAddonsInfo(WorldPacket &data)
             uint32 crc, unk1;
 
             // check next addon data format correctness
-            if (addonInfo.rpos() + 1 > addonInfo.size())
+            if (addonInfo.rpos()+1 > addonInfo.size())
                 return;
 
             addonInfo >> addonName;
 
             addonInfo >> enabled >> crc >> unk1;
-
-            //sLog->outDetail("ADDON: Name: %s, Enabled: 0x%x, CRC: 0x%x, Unknown2: 0x%x", addonName.c_str(), enabled, crc, unk1);
 
             AddonInfo addon(addonName, enabled, crc, 2, true);
 
@@ -937,12 +919,10 @@ void WorldSession::SendAddonsInfo()
             data << uint8(usepk);
             if (usepk)                                      // if CRC is wrong, add public key (client need it)
             {
-                //sLog->outDetail("ADDON: CRC (0x%x) for addon %s is wrong (does not match expected 0x%x), sending pubkey", itr->CRC, itr->Name.c_str(), STANDARD_ADDON_CRC);
-
                 data.append(addonPublicKey, sizeof(addonPublicKey));
             }
 
-            data << uint32(0);                              // TODO: Find out the meaning of this.
+            data << uint32(/*itr->CRC*/ 0);                 // TODO: Find out the meaning of this.
         }
 
         uint8 unk3 = 0;                                     // 0 is sent here
@@ -956,7 +936,16 @@ void WorldSession::SendAddonsInfo()
 
     m_addonsList.clear();
 
-    data << uint32(0); // count for an unknown for loop
+    uint32 count = 0;
+    data << uint32(count);
+    /*for (uint32 i = 0; i < count; ++i)
+    {
+        uint32
+        string (16 bytes)
+        string (16 bytes)
+        uint32
+        uint32
+    }*/
 
     SendPacket(&data);
 }

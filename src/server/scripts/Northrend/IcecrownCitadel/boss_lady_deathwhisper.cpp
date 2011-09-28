@@ -891,7 +891,7 @@ class npc_darnavan : public CreatureScript
                 if (me->HasUnitState(UNIT_STAT_CASTING))
                     return;
 
-                if (_canShatter && me->getVictim()->IsImmunedToDamage(SPELL_SCHOOL_MASK_NORMAL))
+                if (_canShatter && me->getVictim() && me->getVictim()->IsImmunedToDamage(SPELL_SCHOOL_MASK_NORMAL))
                 {
                     DoCastVictim(SPELL_SHATTERING_THROW);
                     _canShatter = false;
@@ -1004,7 +1004,7 @@ class spell_cultist_dark_martyrdom : public SpellScriptLoader
 
             void Register()
             {
-                OnEffect += SpellEffectFn(spell_cultist_dark_martyrdom_SpellScript::HandleEffect, EFFECT_2, SPELL_EFFECT_FORCE_DESELECT);
+                OnEffectHitTarget += SpellEffectFn(spell_cultist_dark_martyrdom_SpellScript::HandleEffect, EFFECT_2, SPELL_EFFECT_FORCE_DESELECT);
             }
         };
 

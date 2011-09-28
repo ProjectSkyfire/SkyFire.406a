@@ -625,9 +625,9 @@ public:
             else m_uiRangeCheckTimer -= uiDiff;
         }
 
-        void SpellHitTarget(Unit* who, const SpellInfo* spell)
+        void SpellHitTarget(Unit* who, SpellInfo const* spell)
         {
-            if(spell->Id == SPELL_UNLEASHED_DARK_HELPER)
+            if (spell->Id == SPELL_UNLEASHED_DARK_HELPER)
             {
                 if (who->HasAura(SPELL_DARK_ESSENCE_HELPER))
                     who->CastSpell(who, SPELL_POWERING_UP, true);
@@ -668,7 +668,7 @@ public:
 
         void SpellHitTarget(Unit* who, SpellInfo const* spell)
         {
-            if(spell->Id == SPELL_UNLEASHED_LIGHT_HELPER)
+            if (spell->Id == SPELL_UNLEASHED_LIGHT_HELPER)
             {
                 if (who->HasAura(SPELL_LIGHT_ESSENCE_HELPER))
                     who->CastSpell(who, SPELL_POWERING_UP, true);
@@ -770,7 +770,7 @@ class spell_powering_up : public SpellScriptLoader
 
             void Register()
             {
-                OnEffect += SpellEffectFn(spell_powering_up_SpellScript::HandleScriptEffect, EFFECT_1, SPELL_EFFECT_SCRIPT_EFFECT);
+                OnEffectHitTarget += SpellEffectFn(spell_powering_up_SpellScript::HandleScriptEffect, EFFECT_1, SPELL_EFFECT_SCRIPT_EFFECT);
             }
         };
 

@@ -744,11 +744,6 @@ int32 AuraEffect::CalculateAmount(Unit* caster)
             if (GetId() == 55233)
                 amount = GetBase()->GetUnitOwner()->CountPctFromMaxHealth(amount);
             break;
-        case SPELL_AURA_MOD_INCREASE_ENERGY:
-            // Hymn of Hope
-            if (GetId() == 64904)
-                ApplyPctU(amount, GetBase()->GetUnitOwner()->GetMaxPower(GetBase()->GetUnitOwner()->getPowerType()));
-            break;
         case SPELL_AURA_MOD_INCREASE_SPEED:
             // Dash - do not set speed if not in cat form
             if (GetSpellInfo()->SpellFamilyName == SPELLFAMILY_DRUID && GetSpellInfo()->SpellFamilyFlags[2] & 0x00000008)
@@ -866,7 +861,7 @@ void AuraEffect::CalculatePeriodic(Unit* caster, bool create, bool load)
     }
 }
 
-void AuraEffect::CalculateSpellMod()
+void AuraEffect::CalculateSpellMod(SpellInfo const *spellInfo, Unit * target)
 {
     switch (GetAuraType())
     {
@@ -879,7 +874,7 @@ void AuraEffect::CalculateSpellMod()
                     {
                         if (!m_spellmod)
                         {
-                            m_spellmod = new SpellModifier(GetBase());
+                            m_spellmod = new SpellModifier(GetBase(), this);
                             m_spellmod->op = SPELLMOD_DOT;
                             m_spellmod->type = SPELLMOD_PCT;
                             m_spellmod->spellId = GetId();
@@ -896,7 +891,7 @@ void AuraEffect::CalculateSpellMod()
                         {
                             if (!m_spellmod)
                             {
-                                m_spellmod = new SpellModifier(GetBase());
+                                m_spellmod = new SpellModifier(GetBase(), this);
                                 m_spellmod->op = SPELLMOD_DOT;
                                 m_spellmod->type = SPELLMOD_FLAT;
                                 m_spellmod->spellId = GetId();
@@ -918,7 +913,7 @@ void AuraEffect::CalculateSpellMod()
                     // "while Clearcasting from Elemental Focus is active, you deal 5%/10% more spell damage."
                     if (!m_spellmod)
                     {
-                        m_spellmod = new SpellModifier(GetBase());
+                        m_spellmod = new SpellModifier(GetBase(), this);
                         m_spellmod->op = SPELLMOD_EFFECT2;
                         m_spellmod->type = SPELLMOD_FLAT;
                         m_spellmod->spellId = GetId();
@@ -934,7 +929,7 @@ void AuraEffect::CalculateSpellMod()
         case SPELL_AURA_ADD_PCT_MODIFIER:
             if (!m_spellmod)
             {
-                m_spellmod = new SpellModifier(GetBase());
+                m_spellmod = new SpellModifier(GetBase(), this);
                 m_spellmod->op = SpellModOp(GetMiscValue());
                 ASSERT(m_spellmod->op < MAX_SPELLMOD);
 
@@ -948,7 +943,7 @@ void AuraEffect::CalculateSpellMod()
         default:
             break;
     }
-    GetBase()->CallScriptEffectCalcSpellModHandlers(const_cast<AuraEffect const*>(this), m_spellmod);
+    GetBase()->CallScriptEffectCalcSpellModHandlers(const_cast<AuraEffect const*>(this), m_spellmod, spellInfo, target);
 }
 
 void AuraEffect::ChangeAmount(int32 newAmount, bool mark, bool onStackOrReapply)
@@ -4003,19 +3998,6 @@ void AuraEffect::HandleAuraModIncreaseEnergy(AuraApplication const* aurApp, uint
 
     UnitMods unitMod = UnitMods(UNIT_MOD_POWER_START + powerType);
 
-    // Special case with temporary increase max/current power (percent)
-    if (GetId() == 64904)                                     // Hymn of Hope
-    {
-        if (mode & AURA_EFFECT_HANDLE_CHANGE_AMOUNT_MASK)
-        {
-            int32 change = target->GetPower(powerType) + (apply ? GetAmount() : -GetAmount());
-            if (change < 0)
-                change = 0;
-            target->SetPower(powerType, change);
-        }
-    }
-
-    // generic flat case
     target->HandleStatModifier(unitMod, TOTAL_VALUE, float(GetAmount()), apply);
 }
 

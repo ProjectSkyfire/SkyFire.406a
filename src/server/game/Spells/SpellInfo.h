@@ -230,9 +230,7 @@ public:
     uint32 GetExplicitTargetMask(bool& srcSet, bool& dstSet) const;
 
     // temporarily avalible to public
-    static bool IsPosition(uint32 targetType);
     static SpellSelectTargetTypes Type[TOTAL_SPELL_TARGETS];
-
 private:
     static bool InitStaticData();
     static void InitTypeData();
@@ -276,7 +274,7 @@ public:
     SpellImplicitTargetInfo TargetA;
     SpellImplicitTargetInfo TargetB;
 
-    SpellEffectInfo() : Effect(0) {}
+    SpellEffectInfo();
     SpellEffectInfo(SpellEffectEntry const *spellEffect, SpellInfo const* spellInfo);
 
     bool IsEffect() const;
@@ -297,6 +295,7 @@ public:
     bool HasRadius() const;
     float CalcRadius(Unit* caster = NULL, Spell* = NULL) const;
 
+    uint32 GetProvidedTargetMask() const;
     uint32 GetMissingTargetMask(bool srcSet = false, bool destSet = false, uint32 mask = 0) const;
 
     SpellEffectImplicitTargetTypes GetImplicitTargetType() const;

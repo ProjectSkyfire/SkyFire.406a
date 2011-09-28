@@ -206,20 +206,6 @@ uint32 SpellImplicitTargetInfo::GetExplicitTargetMask(bool& srcSet, bool& dstSet
     return targetMask;
 }
 
-bool SpellImplicitTargetInfo::IsPosition(uint32 targetType)
-{
-    switch (SpellImplicitTargetInfo::Type[targetType])
-    {
-        case TARGET_TYPE_DEST_CASTER:
-        case TARGET_TYPE_DEST_TARGET:
-        case TARGET_TYPE_DEST_DEST:
-            return true;
-        default:
-            break;
-    }
-    return false;
-}
-
 bool SpellImplicitTargetInfo::InitStaticData()
 {
     InitTypeData();
@@ -473,6 +459,32 @@ SpellImplicitTargetInfo::StaticData  SpellImplicitTargetInfo::_data[TOTAL_SPELL_
     {TARGET_OBJECT_TYPE_DEST, TARGET_REFERENCE_TYPE_NONE,   TARGET_SELECT_CATEGORY_NYI,     TARGET_SELECT_CHECK_DEFAULT,  TARGET_DIR_NONE},        // 110 TARGET_DEST_UNK_110
 };
 
+SpellEffectInfo::SpellEffectInfo()
+{
+    _spellInfo = NULL;
+    _effIndex = 0;
+    Effect = 0;
+    ValueMultiplier = 0.0f;
+    ApplyAuraName = 0;
+    Amplitude = 0;
+    BasePoints = 0;
+    BonusCoefficient = 0.0f;
+    DamageMultiplier = 0.0f;
+    ChainTarget = 0;
+    DieSides = 0;
+    ItemType = 0;
+    Mechanic = MECHANIC_NONE;
+    MiscValue = 0;
+    MiscValueB = 0;
+    PointsPerComboPoint = 0.0f;
+    RadiusEntry = NULL;
+    RealPointsPerLevel = 0.0f;
+    SpellClassMask = flag96(0, 0, 0);
+    TriggerSpell = 0;
+    TargetA = SpellImplicitTargetInfo(0);
+    TargetB = SpellImplicitTargetInfo(0);
+}
+
 SpellEffectInfo::SpellEffectInfo(SpellEffectEntry const *spellEffect, SpellInfo const* spellInfo)
 {
     _spellInfo = spellInfo;
@@ -660,6 +672,11 @@ float SpellEffectInfo::CalcRadius(Unit* caster, Spell* spell) const
     return radius;
 }
 
+uint32 SpellEffectInfo::GetProvidedTargetMask() const
+{
+    return GetTargetFlagMask(TargetA.GetObjectType()) | GetTargetFlagMask(TargetB.GetObjectType());
+}
+
 uint32 SpellEffectInfo::GetMissingTargetMask(bool srcSet /*= false*/, bool dstSet /*= false*/, uint32 mask /*=0*/) const
 {
     uint32 effImplicitTargetMask = GetTargetFlagMask(GetUsedTargetObjectType());
@@ -696,7 +713,7 @@ SpellTargetObjectTypes SpellEffectInfo::GetUsedTargetObjectType() const
 
 SpellEffectInfo::StaticData  SpellEffectInfo::_data[TOTAL_SPELL_EFFECTS] =
 {
-    // implicit target type   used target object type
+    // implicit target type           used target object type
     {EFFECT_IMPLICIT_TARGET_NONE,     TARGET_OBJECT_TYPE_NONE}, // 0
     {EFFECT_IMPLICIT_TARGET_EXPLICIT, TARGET_OBJECT_TYPE_UNIT}, // 1 SPELL_EFFECT_INSTAKILL
     {EFFECT_IMPLICIT_TARGET_EXPLICIT, TARGET_OBJECT_TYPE_UNIT}, // 2 SPELL_EFFECT_SCHOOL_DAMAGE
@@ -729,7 +746,7 @@ SpellEffectInfo::StaticData  SpellEffectInfo::_data[TOTAL_SPELL_EFFECTS] =
     {EFFECT_IMPLICIT_TARGET_EXPLICIT, TARGET_OBJECT_TYPE_UNIT_AND_DEST},// 29 SPELL_EFFECT_LEAP
     {EFFECT_IMPLICIT_TARGET_NONE,     TARGET_OBJECT_TYPE_UNIT}, // 30 SPELL_EFFECT_ENERGIZE
     {EFFECT_IMPLICIT_TARGET_EXPLICIT, TARGET_OBJECT_TYPE_UNIT}, // 31 SPELL_EFFECT_WEAPON_PERCENT_DAMAGE
-    {EFFECT_IMPLICIT_TARGET_NONE,     TARGET_OBJECT_TYPE_DEST}, // 32 SPELL_EFFECT_TRIGGER_MISSILE
+    {EFFECT_IMPLICIT_TARGET_NONE,     TARGET_OBJECT_TYPE_NONE}, // 32 SPELL_EFFECT_TRIGGER_MISSILE
     {EFFECT_IMPLICIT_TARGET_EXPLICIT, TARGET_OBJECT_TYPE_GOBJ_ITEM}, // 33 SPELL_EFFECT_OPEN_LOCK
     {EFFECT_IMPLICIT_TARGET_NONE,     TARGET_OBJECT_TYPE_UNIT}, // 34 SPELL_EFFECT_SUMMON_CHANGE_ITEM
     {EFFECT_IMPLICIT_TARGET_EXPLICIT, TARGET_OBJECT_TYPE_UNIT}, // 35 SPELL_EFFECT_APPLY_AREA_AURA_PARTY
@@ -739,7 +756,7 @@ SpellEffectInfo::StaticData  SpellEffectInfo::_data[TOTAL_SPELL_EFFECTS] =
     {EFFECT_IMPLICIT_TARGET_NONE,     TARGET_OBJECT_TYPE_UNIT}, // 39 SPELL_EFFECT_LANGUAGE
     {EFFECT_IMPLICIT_TARGET_EXPLICIT, TARGET_OBJECT_TYPE_UNIT}, // 40 SPELL_EFFECT_DUAL_WIELD
     {EFFECT_IMPLICIT_TARGET_EXPLICIT, TARGET_OBJECT_TYPE_UNIT}, // 41 SPELL_EFFECT_JUMP
-    {EFFECT_IMPLICIT_TARGET_EXPLICIT, TARGET_OBJECT_TYPE_UNIT_AND_DEST},// 42 SPELL_EFFECT_JUMP_DEST
+    {EFFECT_IMPLICIT_TARGET_EXPLICIT, TARGET_OBJECT_TYPE_DEST}, // 42 SPELL_EFFECT_JUMP_DEST
     {EFFECT_IMPLICIT_TARGET_EXPLICIT, TARGET_OBJECT_TYPE_UNIT_AND_DEST},// 43 SPELL_EFFECT_TELEPORT_UNITS_FACE_CASTER
     {EFFECT_IMPLICIT_TARGET_EXPLICIT, TARGET_OBJECT_TYPE_UNIT}, // 44 SPELL_EFFECT_SKILL_STEP
     {EFFECT_IMPLICIT_TARGET_EXPLICIT, TARGET_OBJECT_TYPE_UNIT}, // 45 SPELL_EFFECT_ADD_HONOR
@@ -845,10 +862,10 @@ SpellEffectInfo::StaticData  SpellEffectInfo::_data[TOTAL_SPELL_EFFECTS] =
     {EFFECT_IMPLICIT_TARGET_EXPLICIT, TARGET_OBJECT_TYPE_UNIT_AND_DEST},// 145 SPELL_EFFECT_PULL_TOWARDS_DEST
     {EFFECT_IMPLICIT_TARGET_EXPLICIT, TARGET_OBJECT_TYPE_UNIT}, // 146 SPELL_EFFECT_ACTIVATE_RUNE
     {EFFECT_IMPLICIT_TARGET_EXPLICIT, TARGET_OBJECT_TYPE_UNIT}, // 147 SPELL_EFFECT_QUEST_FAIL
-    {EFFECT_IMPLICIT_TARGET_NONE,     TARGET_OBJECT_TYPE_NONE}, // 148 SPELL_EFFECT_148
+    {EFFECT_IMPLICIT_TARGET_NONE,     TARGET_OBJECT_TYPE_NONE}, // 148 SPELL_EFFECT_TRIGGER_MISSILE_SPELL_WITH_VALUE
     {EFFECT_IMPLICIT_TARGET_EXPLICIT, TARGET_OBJECT_TYPE_DEST}, // 149 SPELL_EFFECT_CHARGE_DEST
     {EFFECT_IMPLICIT_TARGET_EXPLICIT, TARGET_OBJECT_TYPE_UNIT}, // 150 SPELL_EFFECT_QUEST_START
-    {EFFECT_IMPLICIT_TARGET_NONE,     TARGET_OBJECT_TYPE_DEST}, // 151 SPELL_EFFECT_TRIGGER_SPELL_2
+    {EFFECT_IMPLICIT_TARGET_NONE,     TARGET_OBJECT_TYPE_NONE}, // 151 SPELL_EFFECT_TRIGGER_SPELL_2
     {EFFECT_IMPLICIT_TARGET_NONE,     TARGET_OBJECT_TYPE_NONE}, // 152 SPELL_EFFECT_SUMMON_RAF_FRIEND
     {EFFECT_IMPLICIT_TARGET_EXPLICIT, TARGET_OBJECT_TYPE_UNIT}, // 153 SPELL_EFFECT_CREATE_TAMED_PET
     {EFFECT_IMPLICIT_TARGET_EXPLICIT, TARGET_OBJECT_TYPE_UNIT}, // 154 SPELL_EFFECT_DISCOVER_TAXI
@@ -1226,7 +1243,7 @@ bool SpellInfo::IsAbilityOfSkillType(uint32 skillType) const
 bool SpellInfo::IsAOE() const
 {
     for (uint8 i = 0; i < MAX_SPELL_EFFECTS; ++i)
-        if (Effects[i].IsArea())
+        if (Effects[i].IsEffect() && Effects[i].IsArea())
             return true;
     return false;
 }
@@ -1700,6 +1717,8 @@ SpellCastResult SpellInfo::CheckLocation(uint32 map_id, uint32 zone_id, uint32 a
     // aura limitations
     for (uint8 i = 0; i < MAX_SPELL_EFFECTS; ++i)
     {
+        if (!Effects[i].IsAura())
+            continue;
         switch (Effects[i].ApplyAuraName)
         {
             case SPELL_AURA_MOD_INCREASE_MOUNTED_FLIGHT_SPEED:
@@ -1880,7 +1899,7 @@ uint32 SpellInfo::GetAllEffectsMechanicMask() const
     if (Mechanic)
         mask |= 1 << Mechanic;
     for (int i = 0; i < MAX_SPELL_EFFECTS; ++i)
-        if (Effects[i].Mechanic)
+        if (Effects[i].IsEffect() && Effects[i].Mechanic)
             mask |= 1 << Effects[i].Mechanic;
     return mask;
 }
@@ -1890,14 +1909,14 @@ uint32 SpellInfo::GetEffectMechanicMask(uint8 effIndex) const
     uint32 mask = 0;
     if (Mechanic)
         mask |= 1<< Mechanic;
-    if (Effects[effIndex].Mechanic)
+    if (Effects[effIndex].IsEffect() && Effects[effIndex].Mechanic)
         mask |= 1<< Effects[effIndex].Mechanic;
     return mask;
 }
 
 Mechanics SpellInfo::GetEffectMechanic(uint8 effIndex) const
 {
-    if (Effects[effIndex].Mechanic)
+    if (Effects[effIndex].IsEffect() && Effects[effIndex].Mechanic)
         return Mechanics(Effects[effIndex].Mechanic);
     if (Mechanic)
         return Mechanics(Mechanic);
@@ -1967,8 +1986,8 @@ AuraStateType SpellInfo::GetAuraState() const
 
     if (GetSchoolMask() & SPELL_SCHOOL_MASK_FROST)
         for (uint8 i = 0; i < MAX_SPELL_EFFECTS; ++i)
-            if (Effects[i].ApplyAuraName == SPELL_AURA_MOD_STUN
-                || Effects[i].ApplyAuraName == SPELL_AURA_MOD_ROOT)
+            if (Effects[i].IsAura() && (Effects[i].ApplyAuraName == SPELL_AURA_MOD_STUN
+                || Effects[i].ApplyAuraName == SPELL_AURA_MOD_ROOT))
                 return AURA_STATE_FROZEN;
 
     switch (Id)
@@ -1995,6 +2014,8 @@ SpellSpecificType SpellInfo::GetSpellSpecific() const
                 bool drink = false;
                 for (uint8 i = 0; i < MAX_SPELL_EFFECTS; ++i)
                 {
+                    if (!Effects[i].IsAura())
+                        continue;
                     switch (Effects[i].ApplyAuraName)
                     {
                         // Food
@@ -2466,7 +2487,7 @@ bool SpellInfo::_IsPositiveEffect(uint8 effIndex, bool deep) const
     // Special case: effects which determine positivity of whole spell
     for (uint8 i = 0; i < MAX_SPELL_EFFECTS; ++i)
     {
-        if (Effects[i].ApplyAuraName == SPELL_AURA_MOD_STEALTH)
+        if (Effects[i].IsAura() && Effects[i].ApplyAuraName == SPELL_AURA_MOD_STEALTH)
             return true;
     }
 
