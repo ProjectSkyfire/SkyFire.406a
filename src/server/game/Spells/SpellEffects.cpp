@@ -4646,11 +4646,14 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
                     // Triggered spell id dependent on riding skill and zone
                     bool canFly = true;
                     uint32 v_map = GetVirtualMapForMapAndZone(unitTarget->GetMapId(), unitTarget->GetZoneId());
-                    if (v_map != 530 && v_map != 571)
+                    if (v_map != 530 && v_map != 571 && v_map != 0)
                         canFly = false;
 
                     if (canFly && v_map == 571 && !unitTarget->ToPlayer()->HasSpell(54197))
                         canFly = false;
+
+                    if (canFly && v_map == 0 && !unitTarget->ToPlayer()->HasSpell(90267))
+                       canFly = false;
 
                     float x, y, z;
                     unitTarget->GetPosition(x, y, z);
@@ -4691,11 +4694,14 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
                     // Triggered spell id dependent on riding skill and zone
                     bool canFly = true;
                     uint32 v_map = GetVirtualMapForMapAndZone(unitTarget->GetMapId(), unitTarget->GetZoneId());
-                    if (v_map != 530 && v_map != 571)
+                    if (v_map != 530 && v_map != 571 && v_map != 0)
                         canFly = false;
 
                     if (canFly && v_map == 571 && !unitTarget->ToPlayer()->HasSpell(54197))
                         canFly = false;
+
+                    if (canFly && v_map == 0 && !unitTarget->ToPlayer()->HasSpell(90267))
+                       canFly = false;
 
                     float x, y, z;
                     unitTarget->GetPosition(x, y, z);
@@ -5007,10 +5013,13 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
                     // Triggered spell id dependent on riding skill and zone
                     bool canFly = true;
                     uint32 v_map = GetVirtualMapForMapAndZone(unitTarget->GetMapId(), unitTarget->GetZoneId());
-                    if (v_map != 530 && v_map != 571)
+                        if (v_map != 530 && v_map != 571 && v_map != 0)
                         canFly = false;
 
                     if (canFly && v_map == 571 && !unitTarget->ToPlayer()->HasSpell(54197))
+                        canFly = false;
+
+                    if (canFly && v_map == 0 && !unitTarget->ToPlayer()->HasSpell(90267))
                         canFly = false;
 
                     float x, y, z;
@@ -5053,11 +5062,14 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
                     // Triggered spell id dependent on riding skill and zone
                     bool canFly = true;
                     uint32 v_map = GetVirtualMapForMapAndZone(unitTarget->GetMapId(), unitTarget->GetZoneId());
-                    if (v_map != 530 && v_map != 571)
+                    if (v_map != 530 && v_map != 571 && v_map != 0)
                         canFly = false;
 
                     if (canFly && v_map == 571 && !unitTarget->ToPlayer()->HasSpell(54197))
                         canFly = false;
+
+                    if (canFly && v_map == 0 && !unitTarget->ToPlayer()->HasSpell(90267))
+                       canFly = false;
 
                     float x, y, z;
                     unitTarget->GetPosition(x, y, z);
@@ -5116,11 +5128,14 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
                     // Triggered spell id dependent on riding skill and zone
                     bool canFly = true;
                     uint32 v_map = GetVirtualMapForMapAndZone(unitTarget->GetMapId(), unitTarget->GetZoneId());
-                    if (v_map != 530 && v_map != 571)
+                    if (v_map != 530 && v_map != 571 && v_map != 0)
                         canFly = false;
 
                     if (canFly && v_map == 571 && !unitTarget->ToPlayer()->HasSpell(54197))
                         canFly = false;
+
+                    if (canFly && v_map == 0 && !unitTarget->ToPlayer()->HasSpell(90267))
+                       canFly = false;
 
                     float x, y, z;
                     unitTarget->GetPosition(x, y, z);
