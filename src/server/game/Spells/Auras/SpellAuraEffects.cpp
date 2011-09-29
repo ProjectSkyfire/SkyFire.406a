@@ -2807,6 +2807,36 @@ void AuraEffect::HandleAuraMounted(AuraApplication const* aurApp, uint8 mode, bo
 
     if (apply)
     {
+        uint32 spellId = 0;
+        Player *plr = target->ToPlayer();
+        if(plr)
+        {
+            // find the spell we need
+            const MountTypeEntry *type = sMountTypeStore.LookupEntry(GetMiscValueB());
+            if(!type)
+                return;
+
+            uint32 plrskill = plr->GetSkillValue(SKILL_RIDING);
+            uint32 map = plr->GetMapId();
+            uint32 maxSkill = 0;
+            for(int i = 0; i < MAX_MOUNT_TYPE_COLUMN; i++)
+            {
+               const MountCapabilityEntry *cap = sMountCapabilityStore.LookupEntry(type->capabilities[i]);
+               if(!cap)
+                   continue;
+               if(cap->map != -1 && cap->map != map)
+                   continue;
+               if(cap->reqSkillLevel > plrskill || cap->reqSkillLevel <= maxSkill)
+                   continue;
+               if(cap->reqSpell && !plr->HasSpell(cap->reqSpell))
+                   continue;
+               maxSkill = cap->reqSkillLevel;
+               spellId = cap->spell;
+            }
+            if(spellId == 0)
+                return; // couldn't find a valid spell to apply
+        }
+
         uint32 creatureEntry = GetMiscValue();
 
         // Festive Holiday Mount
