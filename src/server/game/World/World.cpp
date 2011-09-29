@@ -1254,6 +1254,7 @@ void World::SetInitialWorldSettings()
     CharacterDatabase.Execute(stmt);
 
     ///- Load the DBC files
+    sLog->outString("Initialize data stores...");
     LoadDBCStores(m_dataPath, m_availableDbcLocaleMask);
     LoadDB2Stores(m_dataPath);
     DetectDBCLang();
