@@ -1254,12 +1254,12 @@ void World::SetInitialWorldSettings()
     CharacterDatabase.Execute(stmt);
 
     ///- Load the DBC files
-    sLog->outString("Initialize data stores...");
-    LoadDBCStores(m_dataPath);
+    LoadDBCStores(m_dataPath, m_availableDbcLocaleMask);
+    LoadDB2Stores(m_dataPath);
     DetectDBCLang();
 
     sLog->outString("Loading spell dbc data corrections...");
-    sSpellMgr->LoadDbcDataCorrections();
+    /*sSpellMgr->LoadDbcDataCorrections();*/           ///-needs added to spellmgr
 
     sLog->outString("Loading SpellInfo store...");
     sSpellMgr->LoadSpellInfoStore();
@@ -1350,6 +1350,9 @@ void World::SetInitialWorldSettings()
     sLog->outString("Loading Item set names...");                // must be after LoadItemPrototypes
     sObjectMgr->LoadItemSetNames();
 
+    sLog->outString("Loading Items Info...");
+    sItemInfoMgr->LoadItemInfo();
+
     sLog->outString("Loading Creature Model Based Info Data...");
     sObjectMgr->LoadCreatureModelInfo();
 
@@ -1366,7 +1369,7 @@ void World::SetInitialWorldSettings()
     sObjectMgr->LoadReputationRewardRate();
 
     sLog->outString("Loading Creature Reputation OnKill Data...");
-    sObjectMgr->LoadReputationOnKill();
+    sObjectMgr->LoadRewardOnKill();
 
     sLog->outString("Loading Reputation Spillover Data..." );
     sObjectMgr->LoadReputationSpilloverTemplate();
@@ -1591,7 +1594,7 @@ void World::SetInitialWorldSettings()
     sTicketMgr->LoadSurveys();
 
     sLog->outString("Loading client addons...");
-    AddonMgr::LoadFromDB();
+    sAddonMgr->LoadFromDB();
 
     ///- Handle outdated emails (delete/return)
     sLog->outString("Returning old mails...");
@@ -1831,7 +1834,6 @@ void World::LoadAutobroadcasts()
 
     do
     {
-
         Field* fields = result->Fetch();
         std::string message = fields[0].GetString();
 
@@ -2527,7 +2529,6 @@ void World::UpdateSessions(uint32 diff)
             RemoveQueuedPlayer(pSession);
             m_sessions.erase(itr);
             delete pSession;
-
         }
     }
 }
@@ -2757,8 +2758,8 @@ void World::LoadDBVersion()
     if (m_DBVersion.empty())
         m_DBVersion = "Unknown world database.";
 
-    if (m_CreatureAIVersion.empty())
-        m_CreatureAIVersion = "Unknown creature AI.";
+    if (m_CreatureEventAIVersion.empty())
+        m_CreatureEventAIVersion = "Unknown creature AI.";
 }
 
 void World::ProcessStartEvent()
