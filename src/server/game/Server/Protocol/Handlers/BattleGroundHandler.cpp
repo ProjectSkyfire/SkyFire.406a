@@ -239,7 +239,6 @@ void WorldSession::HandleBattlemasterJoinOpcode(WorldPacket & recv_data)
             sLog->outDebug(LOG_FILTER_BATTLEGROUND, "Battleground: player joined queue for bg queue type %u bg type %u: GUID %u, NAME %s", bgQueueTypeId, bgTypeId, member->GetGUIDLow(), member->GetName());
         }
         sLog->outDebug(LOG_FILTER_BATTLEGROUND, "Battleground: group end");
-
     }
     sBattlegroundMgr->ScheduleQueueUpdate(0, 0, bgQueueTypeId, bgTypeId, bracketEntry->GetBracketId());
 }
@@ -270,7 +269,7 @@ void WorldSession::HandleBattlegroundPlayerPositionsOpcode(WorldPacket & /*recv_
             ++count;
     }
 
-    WorldPacket data(MSG_BATTLEGROUND_PLAYER_POSITIONS, 4 + 4 + 16 * count);
+    WorldPacket data(SMSG_BATTLEGROUND_PLAYER_POSITIONS, 4 + 4 + 16 * count);
     data << 0;
     data << count;
     if (aplr)

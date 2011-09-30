@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #ifndef __BATTLEGROUNDAB_H
 #define __BATTLEGROUNDAB_H
 
@@ -302,4 +302,3 @@ class BattlegroundAB : public Battleground
         bool                m_TeamScores500Disadvantage[BG_TEAMS_COUNT];
 };
 #endif
-

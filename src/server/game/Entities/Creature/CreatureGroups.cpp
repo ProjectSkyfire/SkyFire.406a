@@ -29,7 +29,6 @@ CreatureGroupInfoType   CreatureGroupMap;
 
 namespace FormationMgr
 {
-
 void AddCreatureToGroup(uint32 groupId, Creature* member)
 {
     Map* map = member->FindMap();
@@ -153,7 +152,6 @@ void LoadCreatureFormations()
     sLog->outString(">> Loaded %u creatures in formations in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
     sLog->outString();
 }
-
 } // Namespace
 
 void CreatureGroup::AddMember(Creature* member)

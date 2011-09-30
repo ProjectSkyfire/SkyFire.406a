@@ -42,7 +42,6 @@ BattlegroundRV::BattlegroundRV()
 
 BattlegroundRV::~BattlegroundRV()
 {
-
 }
 
 void BattlegroundRV::PostUpdateImpl(uint32 diff)

@@ -5626,7 +5626,7 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                     basepoints0 = CalculatePctN(int32(damage), 50);
                     triggered_spell_id = 69384;
                     break;
-                }				
+                }
             }
             break;
         }
