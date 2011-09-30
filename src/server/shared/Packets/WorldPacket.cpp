@@ -19,6 +19,7 @@
 
 #include "WorldPacket.h"
 #include "World.h"
+#include "Opcodes.h"
 
 #include <zlib.h>
 
