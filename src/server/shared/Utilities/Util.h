@@ -172,7 +172,7 @@ inline T RoundToInterval(T& num, T floor, T ceil)
 
 // UTF8 handling
 bool Utf8toWStr(const std::string& utf8str, std::wstring& wstr);
-// in wsize==max size of buffer, out wsize==real string size
+// in wsize == max size of buffer, out wsize == real string size
 bool Utf8toWStr(char const* utf8str, size_t csize, wchar_t* wstr, size_t& wsize);
 inline bool Utf8toWStr(const std::string& utf8str, wchar_t* wstr, size_t& wsize)
 {
@@ -180,7 +180,7 @@ inline bool Utf8toWStr(const std::string& utf8str, wchar_t* wstr, size_t& wsize)
 }
 
 bool WStrToUtf8(std::wstring wstr, std::string& utf8str);
-// size==real string size
+// size == real string size
 bool WStrToUtf8(wchar_t* wstr, size_t size, std::string& utf8str);
 
 size_t utf8length(std::string& utf8str);                    // set string to "" if invalid utf8 sequence

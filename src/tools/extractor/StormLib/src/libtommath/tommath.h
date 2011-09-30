@@ -498,7 +498,7 @@ int mp_prime_next_prime(mp_int *a, int t, int bbs_style);
  *
  * The prime generated will be larger than 2^(8*size).
  */
-#define mp_prime_random(a, t, size, bbs, cb, dat) mp_prime_random_ex(a, t, ((size) * 8) + 1, (bbs==1)?LTM_PRIME_BBS:0, cb, dat)
+#define mp_prime_random(a, t, size, bbs, cb, dat) mp_prime_random_ex(a, t, ((size) * 8) + 1, (bbs == 1)?LTM_PRIME_BBS:0, cb, dat)
 
 /* makes a truly random prime of a given size (bits), 
  *

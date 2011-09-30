@@ -1051,7 +1051,7 @@ void BZ2_blockSort ( EState* s )
                     budgetInit - budget, 
                     nblock, 
                     (float)(budgetInit - budget) /
-                    (float)(nblock==0 ? 1 : nblock) );
+                    (float)(nblock == 0 ? 1 : nblock) );
       if (budget < 0) {
          if (verb >= 2)
             VPrintf0 ( "    too repetitive; using fallback"

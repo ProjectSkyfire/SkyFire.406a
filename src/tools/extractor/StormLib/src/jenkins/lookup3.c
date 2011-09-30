@@ -832,14 +832,14 @@ void driver2()
 	    if (finished) break;
 	  }
 	  if (k>z) z=k;
-	  if (k==MAXPAIR)
+	  if (k == MAXPAIR)
 	  {
 	     printf("Some bit didn't change: ");
 	     printf("%.8x %.8x %.8x %.8x %.8x %.8x  ", 
 	            e[0], f[0], g[0], h[0], x[0], y[0]);
 	     printf("i %d j %d m %d len %d\n", i, j, m, hlen);
 	  }
-	  if (z==MAXPAIR) goto done;
+	  if (z == MAXPAIR) goto done;
 	}
       }
     }

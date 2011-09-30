@@ -116,7 +116,7 @@ int mp_karatsuba_mul (mp_int * a, mp_int * b, mp_int * c)
   mp_clamp (&y0);
 
   /* now calc the products x0y0 and x1y1 */
-  /* after this x0 is no longer required, free temp [x0==t2]! */
+  /* after this x0 is no longer required, free temp [x0 == t2]! */
   if (mp_mul (&x0, &y0, &x0y0) != MP_OKAY)
     goto X1Y1;          /* x0y0 = x0*y0 */
   if (mp_mul (&x1, &y1, &x1y1) != MP_OKAY)

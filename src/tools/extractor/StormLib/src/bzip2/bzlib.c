@@ -1366,8 +1366,8 @@ BZFILE * bzopen_or_bzdopen
    strcat(mode2, writing ? "w" : "r" );
    strcat(mode2, "b");   /* binary mode */
 
-   if (open_mode==0) {
-      if (path==NULL || strcmp(path, "")==0) {
+   if (open_mode == 0) {
+      if (path == NULL || strcmp(path, "")==0) {
         fp = (writing ? stdout : stdin);
         SET_BINARY_MODE(fp);
       } else {
@@ -1459,7 +1459,7 @@ void BZ_API(BZ2_bzclose) (BZFILE* b)
    int bzerr;
    FILE *fp;
 
-   if (b==NULL) {return;}
+   if (b == NULL) {return;}
    fp = ((bzFile *)b)->handle;
    if (((bzFile*)b)->writing){
       BZ2_bzWriteClose(&bzerr, b, 0, NULL, NULL);

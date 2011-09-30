@@ -267,7 +267,7 @@ typedef struct {
                        blocklen, 
    /** The padding offset */
                        padlen, 
-   /** The mode (endianess) of the CTR, 0==little, 1==big */
+   /** The mode (endianess) of the CTR, 0 == little, 1 == big */
                        mode, 
    /** counter width */
                        ctrlen;
@@ -344,7 +344,7 @@ extern struct ltc_cipher_descriptor {
    /** Setup the cipher 
       @param key         The input symmetric key
       @param keylen      The length of the input key (octets)
-      @param num_rounds  The requested number of rounds (0==default)
+      @param num_rounds  The requested number of rounds (0 == default)
       @param skey        [out] The destination of the scheduled key
       @return CRYPT_OK if successful
    */

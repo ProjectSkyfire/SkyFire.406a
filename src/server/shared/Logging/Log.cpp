@@ -978,7 +978,7 @@ void Log::outCharDump(const char * str, uint32 account_id, uint32 guid, const ch
         file = charLogfile;
     if (file)
     {
-        fprintf(file, "== START DUMP == (account: %u guid: %u name: %s )\n%s\n== END DUMP ==\n",
+        fprintf(file, "== START DUMP == (account: %u guid: %u name: %s )\n%s\n ==  END DUMP ==\n",
             account_id, guid, name, str);
         fflush(file);
         if (m_charLog_Dump_Separate)

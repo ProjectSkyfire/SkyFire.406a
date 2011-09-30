@@ -22,7 +22,7 @@
    @param prng     An active PRNG state
    @param wprng    The index of the PRNG desired
    @param size     The size of the modulus (key size) desired (octets)
-   @param e        The "e" value (public key).  e==65537 is a good choice
+   @param e        The "e" value (public key).  e == 65537 is a good choice
    @param key      [out] Destination of a newly created private key pair
    @return CRYPT_OK if successful, upon error all allocated ram is freed
 */

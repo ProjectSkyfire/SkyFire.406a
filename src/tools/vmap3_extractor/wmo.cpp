@@ -388,7 +388,7 @@ int WMOGroup::ConvertToVMAPGroupWmo(FILE *output, WMORoot *rootWMO, bool pPrecis
             if (IndexRenum[i] >= 0)
                 check -= fwrite(MOVT+3*i, sizeof(float), 3, output);
 
-        assert(check==0);
+        assert(check == 0);
 
         delete [] MoviEx;
         delete [] IndexRenum;
@@ -482,7 +482,7 @@ WMOInstance::WMOInstance(MPQFile &f, const char* WmoInstName, uint32 mapID, uint
     float x, z;
     x = pos.x;
     z = pos.z;
-    if (x==0 && z == 0)
+    if (x == 0 && z == 0)
     {
         pos.x = 533.33333f*32;
         pos.z = 533.33333f*32;

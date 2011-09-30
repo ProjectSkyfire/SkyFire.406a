@@ -182,7 +182,7 @@ public:
                 }
             }
 
-            if (uiPhase==6)
+            if (uiPhase == 6)
             {
                 if (!UpdateVictim())
                     return;
@@ -208,7 +208,7 @@ public:
                 }
                 else uiFireBallTimer -= uiDiff;
 
-                if (uiSpiritOfRunnTimer <= uiDiff && buffed==false)
+                if (uiSpiritOfRunnTimer <= uiDiff && buffed == false)
                 {
                     DoCast(me, SPELL_RUNN);
                     buffed = true;

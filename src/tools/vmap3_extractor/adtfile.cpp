@@ -44,7 +44,7 @@ void fixnamen(char *name, size_t len)
         if (i>0 && name[i]>='A' && name[i]<='Z' && isalpha(name[i-1]))
         {
             name[i] |= 0x20;
-        } else if ((i==0 || !isalpha(name[i-1])) && name[i]>='a' && name[i]<='z')
+        } else if ((i == 0 || !isalpha(name[i-1])) && name[i]>='a' && name[i]<='z')
         {
             name[i] &= ~0x20;
         }

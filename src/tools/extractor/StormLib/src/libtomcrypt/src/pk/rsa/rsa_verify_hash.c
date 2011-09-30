@@ -26,7 +26,7 @@
   @param padding          Type of padding (LTC_LTC_PKCS_1_PSS or LTC_LTC_PKCS_1_V1_5)
   @param hash_idx         The index of the desired hash
   @param saltlen          The length of the salt used during signature
-  @param stat             [out] The result of the signature comparison, 1==valid, 0==invalid
+  @param stat             [out] The result of the signature comparison, 1 == valid, 0 == invalid
   @param key              The public RSA key corresponding to the key that performed the signature
   @return CRYPT_OK on success (even if the signature is invalid)
 */

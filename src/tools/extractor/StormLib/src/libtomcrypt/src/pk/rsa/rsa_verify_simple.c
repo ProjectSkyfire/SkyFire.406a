@@ -24,7 +24,7 @@
   @param siglen           The length of the signature data (octets)
   @param hash             The hash of the message that was signed
   @param hashlen          The length of the hash of the message that was signed (octets)
-  @param stat             [out] The result of the signature comparison, 1==valid, 0==invalid
+  @param stat             [out] The result of the signature comparison, 1 == valid, 0 == invalid
   @param key              The public RSA key corresponding
   @return Error code
 */
