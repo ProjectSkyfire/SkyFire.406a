@@ -544,7 +544,7 @@ public:
                 ScriptedAI::AttackStart(who);
         }
 
-        void MoveInLineOfSight(Unit* ) {}
+        void MoveInLineOfSight(Unit*) {}
 
         void JustDied(Unit* /*killer*/)
         {

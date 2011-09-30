@@ -270,13 +270,13 @@ typedef
 /*-- externs for compression. --*/
 
 extern void 
-BZ2_blockSort ( EState* );
+BZ2_blockSort ( EState*);
 
 extern void 
 BZ2_compressBlock ( EState*, Bool );
 
 extern void 
-BZ2_bsInitWrite ( EState* );
+BZ2_bsInitWrite ( EState*);
 
 extern void 
 BZ2_hbAssignCodes ( Int32*, UChar*, Int32, Int32, Int32 );
@@ -482,10 +482,10 @@ typedef
 /*-- externs for decompression. --*/
 
 extern Int32 
-BZ2_indexIntoF ( Int32, Int32* );
+BZ2_indexIntoF ( Int32, Int32*);
 
 extern Int32 
-BZ2_decompress ( DState* );
+BZ2_decompress ( DState*);
 
 extern void 
 BZ2_hbCreateDecodeTables ( Int32*, Int32*, Int32*, UChar*,

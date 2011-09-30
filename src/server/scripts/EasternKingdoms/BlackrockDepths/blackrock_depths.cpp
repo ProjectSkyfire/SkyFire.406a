@@ -107,7 +107,7 @@ class at_ring_of_law : public AreaTriggerScript
 public:
     at_ring_of_law() : AreaTriggerScript("at_ring_of_law") { }
 
-    bool OnTrigger(Player* player, const AreaTriggerEntry*  /*at*/)
+    bool OnTrigger(Player* player, const AreaTriggerEntry* /*at*/)
     {
         if (InstanceScript* pInstance = player->GetInstanceScript())
         {
