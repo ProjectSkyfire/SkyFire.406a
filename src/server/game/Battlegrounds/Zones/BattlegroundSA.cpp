@@ -202,13 +202,13 @@ bool BattlegroundSA::ResetObjs()
     }
 
     //Player may enter BEFORE we set up bG - lets update his worldstates anyway...
-    UpdateWorldState(BG_SA_RIGHT_GY_HORDE , GraveyardStatus[BG_SA_RIGHT_CAPTURABLE_GY] == TEAM_HORDE?1:0);
-    UpdateWorldState(BG_SA_LEFT_GY_HORDE , GraveyardStatus[BG_SA_LEFT_CAPTURABLE_GY] == TEAM_HORDE?1:0);
-    UpdateWorldState(BG_SA_CENTER_GY_HORDE , GraveyardStatus[BG_SA_CENTRAL_CAPTURABLE_GY] == TEAM_HORDE?1:0);
+    UpdateWorldState(BG_SA_RIGHT_GY_HORDE, GraveyardStatus[BG_SA_RIGHT_CAPTURABLE_GY] == TEAM_HORDE?1:0);
+    UpdateWorldState(BG_SA_LEFT_GY_HORDE, GraveyardStatus[BG_SA_LEFT_CAPTURABLE_GY] == TEAM_HORDE?1:0);
+    UpdateWorldState(BG_SA_CENTER_GY_HORDE, GraveyardStatus[BG_SA_CENTRAL_CAPTURABLE_GY] == TEAM_HORDE?1:0);
 
-    UpdateWorldState(BG_SA_RIGHT_GY_ALLIANCE , GraveyardStatus[BG_SA_RIGHT_CAPTURABLE_GY] == TEAM_ALLIANCE?1:0);
-    UpdateWorldState(BG_SA_LEFT_GY_ALLIANCE , GraveyardStatus[BG_SA_LEFT_CAPTURABLE_GY] == TEAM_ALLIANCE?1:0);
-    UpdateWorldState(BG_SA_CENTER_GY_ALLIANCE , GraveyardStatus[BG_SA_CENTRAL_CAPTURABLE_GY] == TEAM_ALLIANCE?1:0);
+    UpdateWorldState(BG_SA_RIGHT_GY_ALLIANCE, GraveyardStatus[BG_SA_RIGHT_CAPTURABLE_GY] == TEAM_ALLIANCE?1:0);
+    UpdateWorldState(BG_SA_LEFT_GY_ALLIANCE, GraveyardStatus[BG_SA_LEFT_CAPTURABLE_GY] == TEAM_ALLIANCE?1:0);
+    UpdateWorldState(BG_SA_CENTER_GY_ALLIANCE, GraveyardStatus[BG_SA_CENTRAL_CAPTURABLE_GY] == TEAM_ALLIANCE?1:0);
 
     if (Attackers == TEAM_ALLIANCE)
     {
@@ -267,7 +267,7 @@ void BattlegroundSA::StartShips()
         {
             if (Player* p = ObjectAccessor::FindPlayer(itr->first))
             {
-                UpdateData data(GetMapId());
+                UpdateData data;
                 WorldPacket pkt;
                 GetBGObject(i)->BuildValuesUpdateBlockForPlayer(&data, p);
                 data.BuildPacket(&pkt);
@@ -448,6 +448,7 @@ void BattlegroundSA::AddPlayer(Player* plr)
                 plr->TeleportTo(607, 2682.936f, -830.368f, 50.0f, 2.895f, 0);
             else
                 plr->TeleportTo(607, 2577.003f, 980.261f, 50.0f, 0.807f, 0);
+
         }
         else
             plr->TeleportTo(607, 1209.7f, -65.16f, 70.1f, 0.0f, 0);
@@ -612,7 +613,7 @@ void BattlegroundSA::DestroyGate(Player* player, GameObject* go)
                 UpdateWorldState(uws, GateStatus[i]);
             bool rewardHonor = true;
             gateDestroyed = true;
-            switch(i)
+            switch (i)
             {
                 case BG_SA_GREEN_GATE:
                     if (GateStatus[BG_SA_BLUE_GATE] == BG_SA_GATE_DESTROYED)
@@ -686,7 +687,7 @@ void BattlegroundSA::SendTime()
 
 void BattlegroundSA::EventPlayerClickedOnFlag(Player* Source, GameObject* target_obj)
 {
-    switch(target_obj->GetEntry())
+    switch (target_obj->GetEntry())
     {
         case 191307:
         case 191308:
@@ -721,7 +722,7 @@ void BattlegroundSA::CaptureGraveyard(BG_SA_Graveyards i, Player* Source)
     uint32 npc = 0;
     uint32 flag = 0;
 
-    switch(i)
+    switch (i)
     {
         case BG_SA_LEFT_CAPTURABLE_GY:
             flag = BG_SA_LEFT_FLAG;
@@ -900,7 +901,7 @@ void BattlegroundSA::SendTransportInit(Player* player)
 {
     if (m_BgObjects[BG_SA_BOAT_ONE] ||  m_BgObjects[BG_SA_BOAT_TWO])
     {
-        UpdateData transData(GetMapId());
+        UpdateData transData;
         if (m_BgObjects[BG_SA_BOAT_ONE])
             GetBGObject(BG_SA_BOAT_ONE)->BuildCreateUpdateBlockForPlayer(&transData, player);
         if (m_BgObjects[BG_SA_BOAT_TWO])
@@ -915,7 +916,7 @@ void BattlegroundSA::SendTransportsRemove(Player* player)
 {
     if (m_BgObjects[BG_SA_BOAT_ONE] ||  m_BgObjects[BG_SA_BOAT_TWO])
     {
-        UpdateData transData(GetMapId());
+        UpdateData transData;
         if (m_BgObjects[BG_SA_BOAT_ONE])
             GetBGObject(BG_SA_BOAT_ONE)->BuildOutOfRangeUpdateBlock(&transData);
         if (m_BgObjects[BG_SA_BOAT_TWO])
@@ -925,3 +926,4 @@ void BattlegroundSA::SendTransportsRemove(Player* player)
         player->GetSession()->SendPacket(&packet);
     }
 }
+
