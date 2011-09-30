@@ -19,7 +19,6 @@ ACE_Dynamic_Service_Dependency::ACE_Dynamic_Service_Dependency (const ACE_Servic
   this->init (cfg, principal);
 }
 
-
 ACE_Dynamic_Service_Dependency::~ACE_Dynamic_Service_Dependency (void)
 {
   if (ACE::debug ())
@@ -42,6 +41,5 @@ ACE_Dynamic_Service_Dependency::init (const ACE_Service_Gestalt *cfg,
     }
   this->tracker_ = st->dll ();
 }
-
 
 ACE_END_VERSIONED_NAMESPACE_DECL

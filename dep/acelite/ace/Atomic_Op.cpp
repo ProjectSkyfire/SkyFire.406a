@@ -14,7 +14,6 @@
 #endif /* ACE_INCLUDE_ATOMIC_OP_SPARC */
 
 namespace {
-
 #if defined (_MSC_VER)
 // Disable "no return value" warning, as we will be putting
 // the return values directly into the EAX register.
@@ -230,7 +229,6 @@ multi_cpu_exchange_add (volatile long *value, long rhs)
 #if defined (_MSC_VER)
 #pragma warning (pop)
 #endif /* _MSC_VER */
-
 } // end namespace
 
 ACE_BEGIN_VERSIONED_NAMESPACE_DECL

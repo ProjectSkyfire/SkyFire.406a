@@ -104,7 +104,7 @@ public PathMovementBase<Player, TaxiPathNodeList const*>
             i_currentNode = startNode;
         }
         void Initialize(Player &);
-        void Reset(Player & /*u*/){};
+        void Reset(Player & /*u*/) {};
         void Finalize(Player &);
         bool Update(Player &, const uint32);
         MovementGeneratorType GetMovementGeneratorType() { return FLIGHT_MOTION_TYPE; }

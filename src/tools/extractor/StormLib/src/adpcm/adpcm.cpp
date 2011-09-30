@@ -34,25 +34,25 @@ union TWordAndByteArray
 
 static long Table1503F120[] =
 {
-    0xFFFFFFFF, 0x00000000, 0xFFFFFFFF, 0x00000004, 0xFFFFFFFF, 0x00000002, 0xFFFFFFFF, 0x00000006,
-    0xFFFFFFFF, 0x00000001, 0xFFFFFFFF, 0x00000005, 0xFFFFFFFF, 0x00000003, 0xFFFFFFFF, 0x00000007,
-    0xFFFFFFFF, 0x00000001, 0xFFFFFFFF, 0x00000005, 0xFFFFFFFF, 0x00000003, 0xFFFFFFFF, 0x00000007,
+    0xFFFFFFFF, 0x00000000, 0xFFFFFFFF, 0x00000004, 0xFFFFFFFF, 0x00000002, 0xFFFFFFFF, 0x00000006, 
+    0xFFFFFFFF, 0x00000001, 0xFFFFFFFF, 0x00000005, 0xFFFFFFFF, 0x00000003, 0xFFFFFFFF, 0x00000007, 
+    0xFFFFFFFF, 0x00000001, 0xFFFFFFFF, 0x00000005, 0xFFFFFFFF, 0x00000003, 0xFFFFFFFF, 0x00000007, 
     0xFFFFFFFF, 0x00000002, 0xFFFFFFFF, 0x00000004, 0xFFFFFFFF, 0x00000006, 0xFFFFFFFF, 0x00000008
 };
 
 static long step_table[] =
 {
-    0x00000007, 0x00000008, 0x00000009, 0x0000000A, 0x0000000B, 0x0000000C, 0x0000000D, 0x0000000E,
-    0x00000010, 0x00000011, 0x00000013, 0x00000015, 0x00000017, 0x00000019, 0x0000001C, 0x0000001F,
-    0x00000022, 0x00000025, 0x00000029, 0x0000002D, 0x00000032, 0x00000037, 0x0000003C, 0x00000042,
-    0x00000049, 0x00000050, 0x00000058, 0x00000061, 0x0000006B, 0x00000076, 0x00000082, 0x0000008F,
-    0x0000009D, 0x000000AD, 0x000000BE, 0x000000D1, 0x000000E6, 0x000000FD, 0x00000117, 0x00000133,
-    0x00000151, 0x00000173, 0x00000198, 0x000001C1, 0x000001EE, 0x00000220, 0x00000256, 0x00000292,
-    0x000002D4, 0x0000031C, 0x0000036C, 0x000003C3, 0x00000424, 0x0000048E, 0x00000502, 0x00000583,
-    0x00000610, 0x000006AB, 0x00000756, 0x00000812, 0x000008E0, 0x000009C3, 0x00000ABD, 0x00000BD0,
-    0x00000CFF, 0x00000E4C, 0x00000FBA, 0x0000114C, 0x00001307, 0x000014EE, 0x00001706, 0x00001954,
-    0x00001BDC, 0x00001EA5, 0x000021B6, 0x00002515, 0x000028CA, 0x00002CDF, 0x0000315B, 0x0000364B,
-    0x00003BB9, 0x000041B2, 0x00004844, 0x00004F7E, 0x00005771, 0x0000602F, 0x000069CE, 0x00007462,
+    0x00000007, 0x00000008, 0x00000009, 0x0000000A, 0x0000000B, 0x0000000C, 0x0000000D, 0x0000000E, 
+    0x00000010, 0x00000011, 0x00000013, 0x00000015, 0x00000017, 0x00000019, 0x0000001C, 0x0000001F, 
+    0x00000022, 0x00000025, 0x00000029, 0x0000002D, 0x00000032, 0x00000037, 0x0000003C, 0x00000042, 
+    0x00000049, 0x00000050, 0x00000058, 0x00000061, 0x0000006B, 0x00000076, 0x00000082, 0x0000008F, 
+    0x0000009D, 0x000000AD, 0x000000BE, 0x000000D1, 0x000000E6, 0x000000FD, 0x00000117, 0x00000133, 
+    0x00000151, 0x00000173, 0x00000198, 0x000001C1, 0x000001EE, 0x00000220, 0x00000256, 0x00000292, 
+    0x000002D4, 0x0000031C, 0x0000036C, 0x000003C3, 0x00000424, 0x0000048E, 0x00000502, 0x00000583, 
+    0x00000610, 0x000006AB, 0x00000756, 0x00000812, 0x000008E0, 0x000009C3, 0x00000ABD, 0x00000BD0, 
+    0x00000CFF, 0x00000E4C, 0x00000FBA, 0x0000114C, 0x00001307, 0x000014EE, 0x00001706, 0x00001954, 
+    0x00001BDC, 0x00001EA5, 0x000021B6, 0x00002515, 0x000028CA, 0x00002CDF, 0x0000315B, 0x0000364B, 
+    0x00003BB9, 0x000041B2, 0x00004844, 0x00004F7E, 0x00005771, 0x0000602F, 0x000069CE, 0x00007462, 
     0x00007FFF
 };
 
@@ -99,7 +99,7 @@ int CompressADPCM(unsigned char * pbOutBuffer, int dwOutLength, short * pwInBuff
 
     SInt32Array1[0] = SInt32Array1[1] = 0x2C;
 
-    for(int i = 0; i < nChannels; i++)
+    for (int i = 0; i < nChannels; i++)
     {
         nOneWord = BSWAP_INT16_SIGNED(*pwInBuffer++);
         *out.pw++ = BSWAP_INT16_SIGNED((short)nOneWord);
@@ -119,7 +119,7 @@ int CompressADPCM(unsigned char * pbOutBuffer, int dwOutLength, short * pwInBuff
 
     // ebx - nChannels
     // ecx - pwOutPos
-    for(int chnl = nChannels; chnl < nWordsRemains; chnl++)
+    for (int chnl = nChannels; chnl < nWordsRemains; chnl++)
     {
         // 1500F030
         if ((out.pb - pbOutBuffer + 2) > nBytesRemains)
@@ -155,7 +155,7 @@ int CompressADPCM(unsigned char * pbOutBuffer, int dwOutLength, short * pwInBuff
         }
         else
         {
-            while(nValue > nTableValue * 2)
+            while (nValue > nTableValue * 2)
             {
                 if (SInt32Array1[nIndex] >= 0x58 || nLength == 0)
                     break;
@@ -175,7 +175,7 @@ int CompressADPCM(unsigned char * pbOutBuffer, int dwOutLength, short * pwInBuff
             esi = (1 << (dwStopBit - 2));
             dwStopBit = (esi <= 0x20) ? esi : 0x20;
 
-            for(var_1C = 0, dwBit = 1; ; dwBit <<= 1)
+            for (var_1C = 0, dwBit = 1; ; dwBit <<= 1)
             {
 //              esi = var_1C + nTableValue;
                 if ((var_1C + nTableValue) <= nValue)
@@ -238,7 +238,7 @@ int DecompressADPCM(unsigned char * pbOutBuffer, int dwOutLength, unsigned char 
     in.pw++;
 
     // Fill the Uint32Array2 array by channel values.
-    for(int i = 0; i < nChannels; i++)
+    for (int i = 0; i < nChannels; i++)
     {
         nOneWord = BSWAP_INT16_SIGNED(*in.pw++);
         SInt32Array2[i] = nOneWord;
@@ -253,7 +253,7 @@ int DecompressADPCM(unsigned char * pbOutBuffer, int dwOutLength, unsigned char 
     nIndex = nChannels - 1;
 
     // Perform the decompression
-    while(in.pb < pbInBufferEnd)
+    while (in.pb < pbInBufferEnd)
     {
         unsigned char nOneByte = *in.pb++;
 
@@ -264,7 +264,7 @@ int DecompressADPCM(unsigned char * pbOutBuffer, int dwOutLength, unsigned char 
         // 1500F2A2: Get one byte from input buffer
         if (nOneByte & 0x80)
         {
-            switch(nOneByte & 0x7F)
+            switch (nOneByte & 0x7F)
             {
                 case 0:     // 1500F315
                     if (SInt32Array1[nIndex] != 0)

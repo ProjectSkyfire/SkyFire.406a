@@ -180,7 +180,7 @@ void BattlegroundMgr::BuildBattlegroundStatusPacket(WorldPacket *data, Battlegro
     if (!bg)
         StatusID = STATUS_NONE;
 
-    switch(StatusID)
+    switch (StatusID)
     {
     case STATUS_NONE:
         ///- STATUS1 resets clients' BG Info
@@ -344,10 +344,10 @@ void BattlegroundMgr::BuildPvpLogDataPacket(WorldPacket *data, Battleground *bg)
         }
         *data << uint32(itr2->second->DamageDone);              // damage done
         *data << uint32(itr2->second->HealingDone);             // healing done
-        switch(bg->GetTypeID(true))                             // battleground specific things
+        switch (bg->GetTypeID(true))                             // battleground specific things
         {
             case BATTLEGROUND_RB:
-                switch(bg->GetMapId())
+                switch (bg->GetMapId())
                 {
                     case 489:
                         *data << uint32(0x00000002);            // count of next fields
@@ -598,7 +598,7 @@ Battleground* BattlegroundMgr::CreateNewBattleground(BattlegroundTypeId bgTypeId
 
     Battleground *bg = NULL;
     // create a copy of the BG template
-    switch(bgTypeId)
+    switch (bgTypeId)
     {
         case BATTLEGROUND_AV:
             bg = new BattlegroundAV(*(BattlegroundAV*)bg_template);
@@ -921,7 +921,7 @@ bool BattlegroundMgr::IsArenaType(BattlegroundTypeId bgTypeId)
 
 BattlegroundQueueTypeId BattlegroundMgr::BGQueueTypeId(BattlegroundTypeId bgTypeId, uint8 arenaType)
 {
-    switch(bgTypeId)
+    switch (bgTypeId)
     {
         case BATTLEGROUND_WS:
             return BATTLEGROUND_QUEUE_WS;
@@ -943,7 +943,7 @@ BattlegroundQueueTypeId BattlegroundMgr::BGQueueTypeId(BattlegroundTypeId bgType
         case BATTLEGROUND_BE:
         case BATTLEGROUND_DS:
         case BATTLEGROUND_RV:
-            switch(arenaType)
+            switch (arenaType)
             {
                 case ARENA_TYPE_2v2:
                     return BATTLEGROUND_QUEUE_2v2;
@@ -961,7 +961,7 @@ BattlegroundQueueTypeId BattlegroundMgr::BGQueueTypeId(BattlegroundTypeId bgType
 
 BattlegroundTypeId BattlegroundMgr::BGTemplateId(BattlegroundQueueTypeId bgQueueTypeId)
 {
-    switch(bgQueueTypeId)
+    switch (bgQueueTypeId)
     {
         case BATTLEGROUND_QUEUE_WS:
             return BATTLEGROUND_WS;
@@ -988,7 +988,7 @@ BattlegroundTypeId BattlegroundMgr::BGTemplateId(BattlegroundQueueTypeId bgQueue
 
 uint8 BattlegroundMgr::BGArenaType(BattlegroundQueueTypeId bgQueueTypeId)
 {
-    switch(bgQueueTypeId)
+    switch (bgQueueTypeId)
     {
         case BATTLEGROUND_QUEUE_2v2:
             return ARENA_TYPE_2v2;

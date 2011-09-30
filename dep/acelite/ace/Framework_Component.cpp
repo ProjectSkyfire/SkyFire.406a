@@ -250,7 +250,6 @@ ACE_Framework_Repository::compact (void)
           // active slot.
           this->current_size_ = start_hole;
         }
-
     } while (start_hole != this->current_size_);
 }
 

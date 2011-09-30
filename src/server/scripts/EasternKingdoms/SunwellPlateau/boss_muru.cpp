@@ -146,7 +146,7 @@ public:
 
         void JustSummoned(Creature* summoned)
         {
-            switch(summoned->GetEntry())
+            switch (summoned->GetEntry())
             {
                 case CREATURE_DARK_FIENDS:
                     summoned->CastSpell(summoned, SPELL_DARKFIEND_VISUAL, false);
@@ -270,7 +270,7 @@ public:
 
         void JustSummoned(Creature* summoned)
         {
-            switch(summoned->GetEntry())
+            switch (summoned->GetEntry())
             {
                 case BOSS_ENTROPIUS:
                     me->SetVisible(false);
@@ -294,7 +294,7 @@ public:
                 {
                     if (!pInstance)
                         return;
-                    switch(pInstance->GetData(DATA_MURU_EVENT))
+                    switch (pInstance->GetData(DATA_MURU_EVENT))
                     {
                         case NOT_STARTED:
                             Reset();
@@ -318,7 +318,7 @@ public:
             {
                 if (Timer[i] <= diff)
                 {
-                    switch(i)
+                    switch (i)
                     {
                         case TIMER_DARKNESS:
                             if (!DarkFiend)
@@ -418,7 +418,7 @@ public:
             me->GetHomePosition(x, y, z, o);
             DoTeleportTo(x, y, z);
             InAction = true;
-            switch(Spell->Id)
+            switch (Spell->Id)
             {
                 case SPELL_OPEN_ALL_PORTALS:
                     DoCastAOE(SPELL_OPEN_PORTAL, false);
@@ -521,7 +521,7 @@ public:
 
     struct npc_void_sentinelAI : public ScriptedAI
     {
-        npc_void_sentinelAI(Creature* c) : ScriptedAI(c){}
+        npc_void_sentinelAI(Creature* c) : ScriptedAI(c) {}
 
         uint32 PulseTimer;
         uint32 VoidBlastTimer;

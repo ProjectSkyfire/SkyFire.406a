@@ -93,7 +93,6 @@ ACE_TP_Token_Guard::acquire_token (ACE_Time_Value *max_wait_time)
   return result;
 }
 
-
 ACE_TP_Reactor::ACE_TP_Reactor (ACE_Sig_Handler *sh,
                                 ACE_Timer_Queue *tq,
                                 bool mask_signals,
@@ -248,7 +247,6 @@ ACE_TP_Reactor::dispatch_i (ACE_Time_Value *max_wait_time,
   return result;
 }
 
-
 #if 0
   // @Ciju
   // signal handling isn't in a production state yet.
@@ -297,7 +295,6 @@ endif
   return -1;
 }
 #endif // #if 0
-
 
 int
 ACE_TP_Reactor::handle_timer_events (int & /*event_count*/,
@@ -394,7 +391,6 @@ int
 ACE_TP_Reactor::handle_socket_events (int &event_count,
                                       ACE_TP_Token_Guard &guard)
 {
-
   // We got the lock, lets handle some I/O events.
   ACE_EH_Dispatch_Info dispatch_info;
 
@@ -410,7 +406,6 @@ ACE_TP_Reactor::handle_socket_events (int &event_count,
           this->handler_rep_.unbind(dispatch_info.handle_,
                                     dispatch_info.mask_);
         }
-
 
       return 0;
     }

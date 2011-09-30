@@ -397,7 +397,7 @@ class npc_scorch_ground : public CreatureScript
             {
                 if (_heat)
                 {
-                    if(_heatTimer <= uiDiff)
+                    if (_heatTimer <= uiDiff)
                     {
                         Creature* construct = me->GetCreature(*me , _constructGUID);
                         if (construct && !construct->HasAura(SPELL_MOLTEN))

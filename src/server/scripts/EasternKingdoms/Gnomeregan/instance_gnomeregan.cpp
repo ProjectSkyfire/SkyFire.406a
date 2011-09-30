@@ -78,7 +78,7 @@ public:
 
         void OnCreatureCreate(Creature* creature)
         {
-            switch(creature->GetEntry())
+            switch (creature->GetEntry())
             {
                 case NPC_BLASTMASTER_EMI_SHORTFUSE: uiBastmasterEmiShortfuseGUID = creature->GetGUID(); break;
             }
@@ -86,7 +86,7 @@ public:
 
         void OnGameObjectCreate(GameObject* go)
         {
-            switch(go->GetEntry())
+            switch (go->GetEntry())
             {
                 case GO_CAVE_IN_LEFT:
                     uiCaveInLeftGUID = go->GetGUID();
@@ -103,7 +103,7 @@ public:
 
         void SetData(uint32 Type, uint32 Data)
         {
-            switch(Type)
+            switch (Type)
             {
                 case TYPE_EVENT:
                     Encounter[0] = Data;
@@ -115,7 +115,7 @@ public:
 
         uint32 GetData(uint32 Type)
         {
-            switch(Type)
+            switch (Type)
             {
                 case TYPE_EVENT:    return Encounter[0];
             }
@@ -124,7 +124,7 @@ public:
 
         uint64 GetData64(uint32 Type)
         {
-            switch(Type)
+            switch (Type)
             {
                 case DATA_GO_CAVE_IN_LEFT:              return uiCaveInLeftGUID;
                 case DATA_GO_CAVE_IN_RIGHT:             return uiCaveInRightGUID;

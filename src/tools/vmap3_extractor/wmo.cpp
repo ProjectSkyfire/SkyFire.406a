@@ -8,7 +8,7 @@
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful, 
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
@@ -51,7 +51,7 @@ bool WMORoot::open()
 
     while (!f.isEof())
     {
-        f.read(fourcc,4);
+        f.read(fourcc, 4);
         f.read(&size, 4);
 
         flipcc(fourcc);
@@ -59,7 +59,7 @@ bool WMORoot::open()
 
         size_t nextpos = f.getPos() + size;
 
-        if (!strcmp(fourcc,"MOHD"))//header
+        if (!strcmp(fourcc, "MOHD"))//header
         {
             f.read(&nTextures, 4);
             f.read(&nGroups, 4);
@@ -70,49 +70,49 @@ bool WMORoot::open()
             f.read(&nDoodadSets, 4);
             f.read(&col, 4);
             f.read(&RootWMOID, 4);
-            f.read(bbcorn1,12);
-            f.read(bbcorn2,12);
+            f.read(bbcorn1, 12);
+            f.read(bbcorn2, 12);
             f.read(&liquidType, 4);
             break;
         }
         /*
-        else if (!strcmp(fourcc,"MOTX"))
+        else if (!strcmp(fourcc, "MOTX"))
         {
         }
-        else if (!strcmp(fourcc,"MOMT"))
+        else if (!strcmp(fourcc, "MOMT"))
         {
         }
-        else if (!strcmp(fourcc,"MOGN"))
+        else if (!strcmp(fourcc, "MOGN"))
         {
         }
-        else if (!strcmp(fourcc,"MOGI"))
+        else if (!strcmp(fourcc, "MOGI"))
         {
         }
-        else if (!strcmp(fourcc,"MOLT"))
+        else if (!strcmp(fourcc, "MOLT"))
         {
         }
-        else if (!strcmp(fourcc,"MODN"))
+        else if (!strcmp(fourcc, "MODN"))
         {
         }
-        else if (!strcmp(fourcc,"MODS"))
+        else if (!strcmp(fourcc, "MODS"))
         {
         }
-        else if (!strcmp(fourcc,"MODD"))
+        else if (!strcmp(fourcc, "MODD"))
         {
         }
-        else if (!strcmp(fourcc,"MOSB"))
+        else if (!strcmp(fourcc, "MOSB"))
         {
         }
-        else if (!strcmp(fourcc,"MOPV"))
+        else if (!strcmp(fourcc, "MOPV"))
         {
         }
-        else if (!strcmp(fourcc,"MOPT"))
+        else if (!strcmp(fourcc, "MOPT"))
         {
         }
-        else if (!strcmp(fourcc,"MOPR"))
+        else if (!strcmp(fourcc, "MOPR"))
         {
         }
-        else if (!strcmp(fourcc,"MFOG"))
+        else if (!strcmp(fourcc, "MFOG"))
         {
         }
         */
@@ -126,11 +126,11 @@ bool WMORoot::ConvertToVMAPRootWmo(FILE *pOutfile)
 {
     //printf("Convert RootWmo...\n");
 
-    fwrite("VMAP003",1,8,pOutfile);
+    fwrite("VMAP003", 1, 8, pOutfile);
     unsigned int nVectors = 0;
-    fwrite(&nVectors,sizeof(nVectors),1,pOutfile); // will be filled later
-    fwrite(&nGroups,4,1,pOutfile);
-    fwrite(&RootWMOID,4,1,pOutfile);
+    fwrite(&nVectors, sizeof(nVectors), 1, pOutfile); // will be filled later
+    fwrite(&nGroups, 4, 1, pOutfile);
+    fwrite(&RootWMOID, 4, 1, pOutfile);
     return true;
 }
 
@@ -138,7 +138,7 @@ WMORoot::~WMORoot()
 {
 }
 
-WMOGroup::WMOGroup(std::string &filename) : filename(filename),
+WMOGroup::WMOGroup(std::string &filename) : filename(filename), 
         MOPY(0), MOVI(0), MoviEx(0), MOVT(0), MOBA(0), MobaEx(0), hlq(0), LiquEx(0), LiquBytes(0)
 {
 }
@@ -155,10 +155,10 @@ bool WMOGroup::open()
     char fourcc[5];
     while (!f.isEof())
     {
-        f.read(fourcc,4);
+        f.read(fourcc, 4);
         f.read(&size, 4);
         flipcc(fourcc);
-        if (!strcmp(fourcc,"MOGP"))//Fix sizeoff = Data size.
+        if (!strcmp(fourcc, "MOGP"))//Fix sizeoff = Data size.
         {
             size = 68;
         }
@@ -167,7 +167,7 @@ bool WMOGroup::open()
         LiquEx_size = 0;
         liquflags = 0;
 
-        if (!strcmp(fourcc,"MOGP"))//header
+        if (!strcmp(fourcc, "MOGP"))//header
         {
             f.read(&groupName, 4);
             f.read(&descGroupName, 4);
@@ -181,39 +181,39 @@ bool WMOGroup::open()
             f.read(&nBatchC, 4);
             f.read(&fogIdx, 4);
             f.read(&liquidType, 4);
-            f.read(&groupWMOID,4);
+            f.read(&groupWMOID, 4);
         }
-        else if (!strcmp(fourcc,"MOPY"))
+        else if (!strcmp(fourcc, "MOPY"))
         {
             MOPY = new char[size];
             mopy_size = size;
             nTriangles = (int)size / 2;
             f.read(MOPY, size);
         }
-        else if (!strcmp(fourcc,"MOVI"))
+        else if (!strcmp(fourcc, "MOVI"))
         {
             MOVI = new uint16[size/2];
             f.read(MOVI, size);
         }
-        else if (!strcmp(fourcc,"MOVT"))
+        else if (!strcmp(fourcc, "MOVT"))
         {
             MOVT = new float[size/4];
             f.read(MOVT, size);
             nVertices = (int)size / 12;
         }
-        else if (!strcmp(fourcc,"MONR"))
+        else if (!strcmp(fourcc, "MONR"))
         {
         }
-        else if (!strcmp(fourcc,"MOTV"))
+        else if (!strcmp(fourcc, "MOTV"))
         {
         }
-        else if (!strcmp(fourcc,"MOBA"))
+        else if (!strcmp(fourcc, "MOBA"))
         {
             MOBA = new uint16[size/2];
             moba_size = size/2;
             f.read(MOBA, size);
         }
-        else if (!strcmp(fourcc,"MLIQ"))
+        else if (!strcmp(fourcc, "MLIQ"))
         {
             liquflags |= 1;
             hlq = new WMOLiquidHeader;
@@ -240,34 +240,34 @@ bool WMOGroup::open()
 
 int WMOGroup::ConvertToVMAPGroupWmo(FILE *output, WMORoot *rootWMO, bool pPreciseVectorData)
 {
-    fwrite(&mogpFlags,sizeof(uint32),1,output);
-    fwrite(&groupWMOID,sizeof(uint32),1,output);
+    fwrite(&mogpFlags, sizeof(uint32), 1, output);
+    fwrite(&groupWMOID, sizeof(uint32), 1, output);
     // group bound
     fwrite(bbcorn1, sizeof(float), 3, output);
     fwrite(bbcorn2, sizeof(float), 3, output);
-    fwrite(&liquflags,sizeof(uint32),1,output);
+    fwrite(&liquflags, sizeof(uint32), 1, output);
     int nColTriangles = 0;
     if (pPreciseVectorData)
     {
         char GRP[] = "GRP ";
-        fwrite(GRP,1,4,output);
+        fwrite(GRP, 1, 4, output);
 
         int k = 0;
         int moba_batch = moba_size/12;
         MobaEx = new int[moba_batch*4];
-        for(int i=8; i<moba_size; i+=12)
+        for (int i=8; i<moba_size; i+=12)
         {
             MobaEx[k++] = MOBA[i];
         }
         int moba_size_grp = moba_batch*4+4;
-        fwrite(&moba_size_grp,4,1,output);
-        fwrite(&moba_batch,4,1,output);
-        fwrite(MobaEx,4,k,output);
+        fwrite(&moba_size_grp, 4, 1, output);
+        fwrite(&moba_batch, 4, 1, output);
+        fwrite(MobaEx, 4, k, output);
         delete [] MobaEx;
 
         uint32 nIdexes = nTriangles * 3;
 
-        if (fwrite("INDX",4, 1, output) != 1)
+        if (fwrite("INDX", 4, 1, output) != 1)
         {
             printf("Error while writing file nbraches ID");
             exit(0);
@@ -292,7 +292,7 @@ int WMOGroup::ConvertToVMAPGroupWmo(FILE *output, WMORoot *rootWMO, bool pPrecis
             }
         }
 
-        if (fwrite("VERT",4, 1, output) != 1)
+        if (fwrite("VERT", 4, 1, output) != 1)
         {
             printf("Error while writing file nbraches ID");
             exit(0);
@@ -322,19 +322,19 @@ int WMOGroup::ConvertToVMAPGroupWmo(FILE *output, WMORoot *rootWMO, bool pPrecis
     else
     {
         char GRP[] = "GRP ";
-        fwrite(GRP,1,4,output);
+        fwrite(GRP, 1, 4, output);
         int k = 0;
         int moba_batch = moba_size/12;
         MobaEx = new int[moba_batch*4];
-        for(int i=8; i<moba_size; i+=12)
+        for (int i=8; i<moba_size; i+=12)
         {
             MobaEx[k++] = MOBA[i];
         }
 
         int moba_size_grp = moba_batch*4+4;
-        fwrite(&moba_size_grp,4,1,output);
-        fwrite(&moba_batch,4,1,output);
-        fwrite(MobaEx,4,k,output);
+        fwrite(&moba_size_grp, 4, 1, output);
+        fwrite(&moba_batch, 4, 1, output);
+        fwrite(MobaEx, 4, k, output);
         delete [] MobaEx;
 
         //-------INDX------------------------------------
@@ -377,13 +377,13 @@ int WMOGroup::ConvertToVMAPGroupWmo(FILE *output, WMORoot *rootWMO, bool pPrecis
 
         // write triangle indices
         int INDX[] = {0x58444E49, nColTriangles*6+4, nColTriangles*3};
-        fwrite(INDX,4,3,output);
-        fwrite(MoviEx,2,nColTriangles*3,output);
+        fwrite(INDX, 4, 3, output);
+        fwrite(MoviEx, 2, nColTriangles*3, output);
 
         // write vertices
         int VERT[] = {0x54524556, nColVertices*3*sizeof(float)+4, nColVertices};// "VERT"
         int check = 3*nColVertices;
-        fwrite(VERT,4,3,output);
+        fwrite(VERT, 4, 3, output);
         for (uint32 i=0; i<nVertices; ++i)
             if (IndexRenum[i] >= 0)
                 check -= fwrite(MOVT+3*i, sizeof(float), 3, output);
@@ -438,25 +438,25 @@ WMOGroup::~WMOGroup()
     delete [] LiquBytes;
 }
 
-WMOInstance::WMOInstance(MPQFile &f,const char* WmoInstName, uint32 mapID, uint32 tileX, uint32 tileY, FILE *pDirfile)
+WMOInstance::WMOInstance(MPQFile &f, const char* WmoInstName, uint32 mapID, uint32 tileX, uint32 tileY, FILE *pDirfile)
 {
-    pos = Vec3D(0,0,0);
+    pos = Vec3D(0, 0, 0);
 
     float ff[3];
     f.read(&id, 4);
-    f.read(ff,12);
-    pos = Vec3D(ff[0],ff[1],ff[2]);
-    f.read(ff,12);
-    rot = Vec3D(ff[0],ff[1],ff[2]);
-    f.read(ff,12);
-    pos2 = Vec3D(ff[0],ff[1],ff[2]);
-    f.read(ff,12);
-    pos3 = Vec3D(ff[0],ff[1],ff[2]);
-    f.read(&d2,4);
+    f.read(ff, 12);
+    pos = Vec3D(ff[0], ff[1], ff[2]);
+    f.read(ff, 12);
+    rot = Vec3D(ff[0], ff[1], ff[2]);
+    f.read(ff, 12);
+    pos2 = Vec3D(ff[0], ff[1], ff[2]);
+    f.read(ff, 12);
+    pos3 = Vec3D(ff[0], ff[1], ff[2]);
+    f.read(&d2, 4);
 
-    uint16 trash,adtId;
-    f.read(&adtId,2);
-    f.read(&trash,2);
+    uint16 trash, adtId;
+    f.read(&adtId, 2);
+    f.read(&trash, 2);
 
     //-----------add_in _dir_file----------------
 
@@ -479,7 +479,7 @@ WMOInstance::WMOInstance(MPQFile &f,const char* WmoInstName, uint32 mapID, uint3
     if (nVertices == 0)
         return;
 
-    float x,z;
+    float x, z;
     x = pos.x;
     z = pos.z;
     if (x==0 && z == 0)
@@ -510,13 +510,13 @@ WMOInstance::WMOInstance(MPQFile &f,const char* WmoInstName, uint32 mapID, uint3
     fwrite(&nlen, sizeof(uint32), 1, pDirfile);
     fwrite(WmoInstName, sizeof(char), nlen, pDirfile);
 
-    /* fprintf(pDirfile,"%s/%s %f,%f,%f_%f,%f,%f 1.0 %d %d %d,%d %d\n",
-        MapName,
-        WmoInstName,
-        (float) x, (float) pos.y, (float) z,
-        (float) rot.x, (float) rot.y, (float) rot.z,
-        nVertices,
-        realx1, realy1,
+    /* fprintf(pDirfile, "%s/%s %f, %f, %f_%f, %f, %f 1.0 %d %d %d, %d %d\n", 
+        MapName, 
+        WmoInstName, 
+        (float) x, (float) pos.y, (float) z, 
+        (float) rot.x, (float) rot.y, (float) rot.z, 
+        nVertices, 
+        realx1, realy1, 
         realx2, realy2
         ); */
 

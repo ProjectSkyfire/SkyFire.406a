@@ -29,12 +29,12 @@
  *
  *  @return CRYPT_OK if successful (even if invalid)
  */
-int pkcs_1_v1_5_decode(const unsigned char *msg,
-                             unsigned long  msglen,
-                                       int  block_type,
-                             unsigned long  modulus_bitlen,
-                             unsigned char *out,
-                             unsigned long *outlen,
+int pkcs_1_v1_5_decode(const unsigned char *msg, 
+                             unsigned long  msglen, 
+                                       int  block_type, 
+                             unsigned long  modulus_bitlen, 
+                             unsigned char *out, 
+                             unsigned long *outlen, 
                                        int *is_valid)
 {
   unsigned long modulus_len, ps_len, i;
@@ -66,7 +66,7 @@ int pkcs_1_v1_5_decode(const unsigned char *msg,
     ps_len = i++ - 2;
 
     if ((i >= modulus_len) || (ps_len < 8)) {
-      /* There was no octet with hexadecimal value 0x00 to separate ps from m,
+      /* There was no octet with hexadecimal value 0x00 to separate ps from m, 
        * or the length of ps is less than 8 octets.
        */
       result = CRYPT_INVALID_PACKET;
@@ -105,6 +105,6 @@ bail:
 
 #endif /* #ifdef LTC_PKCS_1 */
 
-/* $Source: /cvs/libtom/libtomcrypt/src/pk/pkcs1/pkcs_1_v1_5_decode.c,v $ */
+/* $Source: /cvs/libtom/libtomcrypt/src/pk/pkcs1/pkcs_1_v1_5_decode.c, v $ */
 /* $Revision: 1.7 $ */
 /* $Date: 2007/05/12 14:32:35 $ */

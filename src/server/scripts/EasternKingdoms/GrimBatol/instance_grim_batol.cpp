@@ -56,13 +56,13 @@ public:
             uiDrahgaShadowburner = 0;
             uiErudax = 0;
 
-            for(uint8 i=0 ; i<ENCOUNTERS; ++i)
+            for (uint8 i=0 ; i<ENCOUNTERS; ++i)
                 uiEncounter[i] = NOT_STARTED;
         }
 
         bool IsEncounterInProgress() const
         {
-            for(uint8 i=0; i < ENCOUNTERS; ++i)
+            for (uint8 i=0; i < ENCOUNTERS; ++i)
             {
                 if (uiEncounter[i] == IN_PROGRESS)
                     return true;
@@ -72,7 +72,7 @@ public:
 
         void OnCreatureCreate(Creature* creature, bool )
         {
-            switch(creature->GetEntry())
+            switch (creature->GetEntry())
             {
                  case BOSS_GENERAL_UMBRISS:
                      uiGeneralUmbriss = creature->GetGUID();
@@ -91,7 +91,7 @@ public:
 
         uint64 getData64(uint32 identifier)
         {
-            switch(identifier)
+            switch (identifier)
             {
                 case DATA_GENERAL_UMBRISS:
                     return uiGeneralUmbriss;
@@ -107,7 +107,7 @@ public:
 
         void SetData(uint32 type, uint32 data)
         {
-            switch(type)
+            switch (type)
             {
                 case DATA_GENERAL_UMBRISS_EVENT:
                     uiEncounter[0] = data;
@@ -129,7 +129,7 @@ public:
 
         uint32 GetData(uint32 type)
         {
-            switch(type)
+            switch (type)
             {
                 case DATA_GENERAL_UMBRISS_EVENT:
                     return uiEncounter[0];
@@ -179,7 +179,7 @@ public:
                 uiEncounter[2] = data2;
                 uiEncounter[3] = data3;
 
-                for(uint8 i=0; i < ENCOUNTERS; ++i)
+                for (uint8 i=0; i < ENCOUNTERS; ++i)
                     if (uiEncounter[i] == IN_PROGRESS)
                         uiEncounter[i] = NOT_STARTED;
             }

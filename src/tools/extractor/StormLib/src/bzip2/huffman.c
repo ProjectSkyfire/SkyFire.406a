@@ -22,11 +22,11 @@
 /*---------------------------------------------------*/
 #define WEIGHTOF(zz0)  ((zz0) & 0xffffff00)
 #define DEPTHOF(zz1)   ((zz1) & 0x000000ff)
-#define MYMAX(zz2,zz3) ((zz2) > (zz3) ? (zz2) : (zz3))
+#define MYMAX(zz2, zz3) ((zz2) > (zz3) ? (zz2) : (zz3))
 
-#define ADDWEIGHTS(zw1,zw2)                           \
+#define ADDWEIGHTS(zw1, zw2)                           \
    (WEIGHTOF(zw1)+WEIGHTOF(zw2)) |                    \
-   (1 + MYMAX(DEPTHOF(zw1),DEPTHOF(zw2)))
+   (1 + MYMAX(DEPTHOF(zw1), DEPTHOF(zw2)))
 
 #define UPHEAP(z)                                     \
 {                                                     \
@@ -57,9 +57,9 @@
 }
 
 /*---------------------------------------------------*/
-void BZ2_hbMakeCodeLengths ( UChar *len,
-                             Int32 *freq,
-                             Int32 alphaSize,
+void BZ2_hbMakeCodeLengths ( UChar *len, 
+                             Int32 *freq, 
+                             Int32 alphaSize, 
                              Int32 maxLen )
 {
    /*--
@@ -119,11 +119,11 @@ void BZ2_hbMakeCodeLengths ( UChar *len,
       if (! tooLong) break;
 
       /* 17 Oct 04: keep-going condition for the following loop used
-         to be 'i < alphaSize', which missed the last element,
+         to be 'i < alphaSize', which missed the last element, 
          theoretically leading to the possibility of the compressor
          looping.  However, this count-scaling step is only needed if
          one of the generated Huffman code words is longer than
-         maxLen, which up to and including version 1.0.2 was 20 bits,
+         maxLen, which up to and including version 1.0.2 was 20 bits, 
          which is extremely unlikely.  In version 1.0.3 maxLen was
          changed to 17 bits, which has minimal effect on compression
          ratio, but does mean this scaling step is used from time to
@@ -144,10 +144,10 @@ void BZ2_hbMakeCodeLengths ( UChar *len,
 }
 
 /*---------------------------------------------------*/
-void BZ2_hbAssignCodes ( Int32 *code,
-                         UChar *length,
-                         Int32 minLen,
-                         Int32 maxLen,
+void BZ2_hbAssignCodes ( Int32 *code, 
+                         UChar *length, 
+                         Int32 minLen, 
+                         Int32 maxLen, 
                          Int32 alphaSize )
 {
    Int32 n, vec, i;
@@ -161,12 +161,12 @@ void BZ2_hbAssignCodes ( Int32 *code,
 }
 
 /*---------------------------------------------------*/
-void BZ2_hbCreateDecodeTables ( Int32 *limit,
-                                Int32 *base,
-                                Int32 *perm,
-                                UChar *length,
-                                Int32 minLen,
-                                Int32 maxLen,
+void BZ2_hbCreateDecodeTables ( Int32 *limit, 
+                                Int32 *base, 
+                                Int32 *perm, 
+                                UChar *length, 
+                                Int32 minLen, 
+                                Int32 maxLen, 
                                 Int32 alphaSize )
 {
    Int32 pp, i, j, vec;

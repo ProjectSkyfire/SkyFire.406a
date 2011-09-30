@@ -54,7 +54,7 @@ public:
         bool disabled = false;
 
         //for special scripts
-        switch(itemId)
+        switch (itemId)
         {
            case 24538:
                 if (player->GetAreaId() != 3628)

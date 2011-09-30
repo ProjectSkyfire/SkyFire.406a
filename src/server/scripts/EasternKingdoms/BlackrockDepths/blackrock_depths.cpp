@@ -211,7 +211,7 @@ public:
 
         void WaypointReached(uint32 i)
         {
-            switch(i)
+            switch (i)
             {
             case 0:
                 DoScriptText(SCRIPT_TEXT1, me);//2
@@ -297,7 +297,7 @@ public:
             {
                 if (Event_Timer <= diff)
                 {
-                    switch(EventPhase)
+                    switch (EventPhase)
                     {
                     case 0:
                         DoScriptText(SCRIPT_TEXT5, me);//1
@@ -658,7 +658,7 @@ public:
 
         void WaypointReached(uint32 i)
         {
-        switch(i)
+        switch (i)
             {
             case 0:me->Say(SAY_DUGHAL_FREE, LANG_UNIVERSAL, PlayerGUID); break;
             case 1:pInstance->SetData(DATA_DUGHAL, ENCOUNTER_STATE_OBJECTIVE_COMPLETED);break;
@@ -779,7 +779,7 @@ public:
 
         void WaypointReached(uint32 i)
         {
-        switch(i)
+        switch (i)
             {
             case 1:
                 me->Say(SAY_WINDSOR_1, LANG_UNIVERSAL, PlayerGUID);
@@ -952,7 +952,7 @@ public:
         void WaypointReached(uint32 i)
         {
         wp=i;
-        switch(i)
+        switch (i)
             {
             case 0:
                 me->setFaction(11);
@@ -1158,7 +1158,7 @@ public:
 
         void WaypointReached(uint32 i)
         {
-        switch(i)
+        switch (i)
             {
             case 0:me->Say(SAY_TOBIAS_FREE, LANG_UNIVERSAL, PlayerGUID); break;
             case 2:
@@ -1284,7 +1284,7 @@ public:
             if (!pInstance)
                 return;
 
-            switch(i)
+            switch (i)
             {
             case 1:
                 me->HandleEmoteCommand(EMOTE_ONESHOT_KICK);

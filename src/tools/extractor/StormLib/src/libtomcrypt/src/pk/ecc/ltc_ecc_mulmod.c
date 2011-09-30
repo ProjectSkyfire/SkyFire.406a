@@ -217,6 +217,6 @@ done:
 
 #endif
 
-/* $Source: /cvs/libtom/libtomcrypt/src/pk/ecc/ltc_ecc_mulmod.c,v $ */
+/* $Source: /cvs/libtom/libtomcrypt/src/pk/ecc/ltc_ecc_mulmod.c, v $ */
 /* $Revision: 1.26 $ */
 /* $Date: 2007/05/12 14:32:35 $ */

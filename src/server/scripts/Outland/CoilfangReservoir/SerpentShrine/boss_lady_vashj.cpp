@@ -982,7 +982,7 @@ public:
             {
                 uint32 identifier;
                 uint8 channel_identifier;
-                switch(gObj->GetEntry())
+                switch (gObj->GetEntry())
                 {
                     case 185052:
                         identifier = DATA_SHIELDGENERATOR1;

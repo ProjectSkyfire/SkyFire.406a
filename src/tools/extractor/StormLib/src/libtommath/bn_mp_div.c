@@ -161,7 +161,7 @@ int mp_div (mp_int * a, mp_int * b, mp_int * c, mp_int * d)
      norm = 0;
   }
 
-  /* note hac does 0 based, so if used==5 then its 0,1,2,3,4, e.g. use 4 */
+  /* note hac does 0 based, so if used==5 then its 0, 1, 2, 3, 4, e.g. use 4 */
   n = x.used - 1;
   t = y.used - 1;
 
@@ -186,7 +186,7 @@ int mp_div (mp_int * a, mp_int * b, mp_int * c, mp_int * d)
       continue;
     }
 
-    /* step 3.1 if xi == yt then set q{i-t-1} to b-1,
+    /* step 3.1 if xi == yt then set q{i-t-1} to b-1, 
      * otherwise set q{i-t-1} to (xi*b + x{i-1})/yt */
     if (x.dp[i] == y.dp[t]) {
       q.dp[i - t - 1] = ((((mp_digit)1) << DIGIT_BIT) - 1);
@@ -286,6 +286,6 @@ LBL_Q:mp_clear (&q);
 
 #endif
 
-/* $Source: /cvs/libtom/libtommath/bn_mp_div.c,v $ */
+/* $Source: /cvs/libtom/libtommath/bn_mp_div.c, v $ */
 /* $Revision: 1.4 $ */
 /* $Date: 2006/12/28 01:25:13 $ */

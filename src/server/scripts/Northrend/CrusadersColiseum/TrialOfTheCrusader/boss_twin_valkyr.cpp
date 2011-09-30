@@ -723,10 +723,10 @@ class spell_powering_up : public SpellScriptLoader
                     {
                         if (pAura->GetStackAmount() == 100)
                         {
-                            if(target->GetDummyAuraEffect(SPELLFAMILY_GENERIC, 2206, EFFECT_1))
+                            if (target->GetDummyAuraEffect(SPELLFAMILY_GENERIC, 2206, EFFECT_1))
                                 target->CastSpell(target, SPELL_EMPOWERED_DARK, true);
 
-                            if(target->GetDummyAuraEffect(SPELLFAMILY_GENERIC, 2845, EFFECT_1))
+                            if (target->GetDummyAuraEffect(SPELLFAMILY_GENERIC, 2845, EFFECT_1))
                                 target->CastSpell(target, SPELL_EMPOWERED_LIGHT, true);
 
                             target->RemoveAurasDueToSpell(GetId());

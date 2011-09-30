@@ -723,7 +723,7 @@ public:
             Unit* pUnit = NULL;
             if (pInstance)
             {
-                switch(rand()%4)
+                switch (rand()%4)
                 {
                 case 0:
                     pUnit = Unit::GetUnit((*me), pInstance->GetData64(DATA_KARATHRESS));

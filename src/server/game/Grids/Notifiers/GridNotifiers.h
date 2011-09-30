@@ -95,7 +95,7 @@ namespace Trinity
     {
         Unit &i_unit;
         bool isCreature;
-        explicit AIRelocationNotifier(Unit &unit) : i_unit(unit), isCreature(unit.GetTypeId() == TYPEID_UNIT)  {}
+        explicit AIRelocationNotifier(Unit &unit) : i_unit(unit), isCreature(unit.GetTypeId() == TYPEID_UNIT) {}
         template<class T> void Visit(GridRefManager<T> &) {}
         void Visit(CreatureMapType &);
     };

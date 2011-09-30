@@ -441,7 +441,7 @@ class boss_hexlord_malacrass : public CreatureScript
             {
                 uint8 random = urand(0, 2);
                 Unit* target = NULL;
-                switch(PlayerAbility[PlayerClass][random].target)
+                switch (PlayerAbility[PlayerClass][random].target)
                 {
                     case ABILITY_TARGET_SELF:
                         target = me;
@@ -630,7 +630,7 @@ class boss_alyson_antille : public CreatureScript
 
 struct boss_gazakrothAI : public boss_hexlord_addAI
 {
-    boss_gazakrothAI(Creature* c) : boss_hexlord_addAI(c)  {}
+    boss_gazakrothAI(Creature* c) : boss_hexlord_addAI(c) {}
 
     uint32 firebolt_timer;
 
@@ -680,7 +680,7 @@ class boss_lord_raadan : public CreatureScript
 
         struct boss_lord_raadanAI : public boss_hexlord_addAI
         {
-            boss_lord_raadanAI(Creature* c) : boss_hexlord_addAI(c)  {}
+            boss_lord_raadanAI(Creature* c) : boss_hexlord_addAI(c) {}
 
             uint32 flamebreath_timer;
             uint32 thunderclap_timer;
@@ -728,7 +728,7 @@ class boss_darkheart : public CreatureScript
 
         struct boss_darkheartAI : public boss_hexlord_addAI
         {
-            boss_darkheartAI(Creature* c) : boss_hexlord_addAI(c)  {}
+            boss_darkheartAI(Creature* c) : boss_hexlord_addAI(c) {}
 
             uint32 psychicwail_timer;
 

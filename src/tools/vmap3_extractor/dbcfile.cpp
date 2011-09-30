@@ -8,7 +8,7 @@
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful, 
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
@@ -40,9 +40,9 @@ bool DBCFile::open()
         return false;
 
     unsigned char header[4];
-    unsigned int na,nb,es,ss;
+    unsigned int na, nb, es, ss;
 
-    f.read(header,4); // File Header
+    f.read(header, 4); // File Header
 
     if (header[0]!='W' || header[1]!='D' || header[2]!='B' || header[3] != 'C')
     {
@@ -54,10 +54,10 @@ bool DBCFile::open()
 
     //assert(header[0]=='W' && header[1]=='D' && header[2]=='B' && header[3] == 'C');
 
-    f.read(&na,4); // Number of records
-    f.read(&nb,4); // Number of fields
-    f.read(&es,4); // Size of a record
-    f.read(&ss,4); // String size
+    f.read(&na, 4); // Number of records
+    f.read(&nb, 4); // Number of fields
+    f.read(&es, 4); // Size of a record
+    f.read(&ss, 4); // String size
 
     recordSize = es;
     recordCount = na;
@@ -68,7 +68,7 @@ bool DBCFile::open()
 
     data = new unsigned char[recordSize*recordCount+stringSize];
     stringTable = data + recordSize*recordCount;
-    f.read(data,recordSize*recordCount+stringSize);
+    f.read(data, recordSize*recordCount+stringSize);
     f.close();
     return true;
 }

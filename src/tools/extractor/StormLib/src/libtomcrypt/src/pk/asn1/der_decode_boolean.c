@@ -24,7 +24,7 @@
   @param out     [out]  The boolean to decode
   @return CRYPT_OK if successful
 */
-int der_decode_boolean(const unsigned char *in, unsigned long inlen,
+int der_decode_boolean(const unsigned char *in, unsigned long inlen, 
                                        int *out)
 {
    LTC_ARGCHK(in  != NULL);
@@ -41,6 +41,6 @@ int der_decode_boolean(const unsigned char *in, unsigned long inlen,
 
 #endif
 
-/* $Source: /cvs/libtom/libtomcrypt/src/pk/asn1/der/boolean/der_decode_boolean.c,v $ */
+/* $Source: /cvs/libtom/libtomcrypt/src/pk/asn1/der/boolean/der_decode_boolean.c, v $ */
 /* $Revision: 1.2 $ */
 /* $Date: 2006/12/28 01:27:24 $ */

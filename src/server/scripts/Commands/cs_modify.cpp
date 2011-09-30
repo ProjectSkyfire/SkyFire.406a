@@ -727,7 +727,7 @@ public:
         uint32 num = 0;
 
         num = atoi((char*)args);
-        switch(num)
+        switch (num)
         {
         case 1:
             mId=14340;

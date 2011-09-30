@@ -225,7 +225,7 @@ uint8 Aura::BuildEffectMaskForOwner(SpellInfo const* spellProto, uint8 avalibleE
     ASSERT(spellProto);
     ASSERT(owner);
     uint8 effMask = 0;
-    switch(owner->GetTypeId())
+    switch (owner->GetTypeId())
     {
         case TYPEID_UNIT:
         case TYPEID_PLAYER:
@@ -363,7 +363,7 @@ void Aura::_InitEffects(uint8 effMask, Unit* caster, int32 *baseAmount)
 Aura::~Aura()
 {
     // unload scripts
-    while(!m_loadedScripts.empty())
+    while (!m_loadedScripts.empty())
     {
         std::list<AuraScript*>::iterator itr = m_loadedScripts.begin();
         (*itr)->_Unload();
@@ -1092,7 +1092,7 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
         switch (GetSpellInfo()->SpellFamilyName)
         {
             case SPELLFAMILY_GENERIC:
-                switch(GetId())
+                switch (GetId())
                 {
                     case 32474: // Buffeting Winds of Susurrus
                         if (target->GetTypeId() == TYPEID_PLAYER)
@@ -1154,7 +1154,7 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                             caster->CastSpell(target, 61634, true);
                     }
                 }
-                switch(GetId())
+                switch (GetId())
                 {
                     case 12536: // Clearcasting
                     case 12043: // Presence of Mind
@@ -1191,7 +1191,7 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                 }
                 break;
             case SPELLFAMILY_WARLOCK:
-                switch(GetId())
+                switch (GetId())
                 {
                     case 48020: // Demonic Circle
                         if (target->GetTypeId() == TYPEID_PLAYER)
@@ -1295,10 +1295,10 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
     // mods at aura remove
     else
     {
-        switch(GetSpellInfo()->SpellFamilyName)
+        switch (GetSpellInfo()->SpellFamilyName)
         {
             case SPELLFAMILY_GENERIC:
-                switch(GetId())
+                switch (GetId())
                 {
                     case 61987: // Avenging Wrath
                         // Remove the immunity shield marker on Avenging Wrath removal if Forbearance is not present
@@ -1320,7 +1320,7 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                 }
                 break;
             case SPELLFAMILY_MAGE:
-                switch(GetId())
+                switch (GetId())
                 {
                     case 66: // Invisibility
                         if (removeMode != AURA_REMOVE_BY_EXPIRE)
@@ -1404,7 +1404,7 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                             caster->CastSpell(target, spellId, true);
                     }
                 }
-                switch(GetId())
+                switch (GetId())
                 {
                    case 48018: // Demonic Circle
                         // Do not remove GO when aura is removed by stack
@@ -1462,7 +1462,7 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                                 break;
 
                             int32 triggeredSpellId = 0;
-                            switch(target->getPowerType())
+                            switch (target->getPowerType())
                             {
                                 case POWER_MANA:
                                 {
@@ -1481,7 +1481,7 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                         }
                     }
                 }
-                switch(GetId())
+                switch (GetId())
                 {
                     case 47788: // Guardian Spirit
                         if (removeMode != AURA_REMOVE_BY_EXPIRE)
@@ -1586,7 +1586,7 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
             }
             break;
         case SPELLFAMILY_HUNTER:
-            switch(GetId())
+            switch (GetId())
             {
                 case 19574: // Bestial Wrath
                     // The Beast Within cast on owner if talent present
@@ -1605,7 +1605,7 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
             }
             break;
         case SPELLFAMILY_PALADIN:
-            switch(GetId())
+            switch (GetId())
             {
                 case 19746:
                 case 31821:
@@ -1647,7 +1647,7 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                 Unit::AuraEffectList const& vDummyAuras = target->GetAuraEffectsByType(SPELL_AURA_DUMMY);
                 for (Unit::AuraEffectList::const_iterator itr = vDummyAuras.begin(); itr != vDummyAuras.end(); ++itr)
                 {
-                    switch((*itr)->GetId())
+                    switch ((*itr)->GetId())
                     {
                         // Improved Blood Presence
                         case 50365:

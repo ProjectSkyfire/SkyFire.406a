@@ -111,7 +111,7 @@ public:
                 //Timed say
                 if (tSay <= diff)
                 {
-                    switch(cSay)
+                    switch (cSay)
                     {
                         default:
                         case 1:
@@ -178,7 +178,7 @@ public:
             if (!me->getVictim() && me->GetPhaseMask() == 1)
             {
                 //Timed emote
-                if(tEmote <= diff)
+                if (tEmote <= diff)
                 {
                     //Do random emote (1, 5, 18, 20, 430)
                     me->HandleEmoteCommand(RAND(
@@ -196,19 +196,19 @@ public:
                 }
 
                 //Randomly select an NPC to say the next random text
-                if(!guid_panicked_nextsay)
+                if (!guid_panicked_nextsay)
                 {
-                    if(urand(0,1))
+                    if (urand(0, 1))
                     {
                         guid_panicked_nextsay = me->GetGUIDLow();
                     }
                 }
 
                 //If this is the selected npc to say
-                if(guid_panicked_nextsay == me->GetGUIDLow())
+                if (guid_panicked_nextsay == me->GetGUIDLow())
                 {
                     //Timed say
-                    if(tSay_panicked <= diff)
+                    if (tSay_panicked <= diff)
                     {
                         //Say random
                         DoScriptText(RAND(
@@ -406,7 +406,7 @@ public:
             if (me->GetGUIDLow() == 3486400)
             {
                 //Timed say
-                if(tSay <= diff)
+                if (tSay <= diff)
                 {
                     //Random say
                     DoScriptText(RAND(
@@ -602,10 +602,10 @@ public:
                 else tSeek -= diff;
 
                 //Yell only once after Reset()
-                if(doYell)
+                if (doYell)
                 {
                     //Yell Timer
-                    if(tYell <= diff)
+                    if (tYell <= diff)
                     {
                         //Random yell
                         DoScriptText(RAND(
@@ -854,7 +854,7 @@ public:
             opened           = 1;
             tQuestCredit     = 2500;
             go->Use(player);
-            spawnKind = urand(1, 3); //1,2=citizen, 3=citizen&worgen (66%,33%)
+            spawnKind = urand(1, 3); //1, 2=citizen, 3=citizen&worgen (66%, 33%)
             angle=go->GetOrientation();
             x=go->GetPositionX()-cos(angle)*2;
             y=go->GetPositionY()-sin(angle)*2;
@@ -864,7 +864,7 @@ public:
 
             if (spawnKind < 3)
             {
-                if (Creature *spawnedCreature = go->SummonCreature(NPC_FRIGHTENED_CITIZEN_1,x,y,z,angle,TEMPSUMMON_TIMED_DESPAWN,SUMMON1_TTL))
+                if (Creature *spawnedCreature = go->SummonCreature(NPC_FRIGHTENED_CITIZEN_1, x, y, z, angle, TEMPSUMMON_TIMED_DESPAWN, SUMMON1_TTL))
                 {
                     spawnedCreature->SetPhaseMask(6, 1);
                     spawnedCreature->Respawn(1);
@@ -872,7 +872,7 @@ public:
             }
             else
             {
-                if (Creature *spawnedCreature = go->SummonCreature(NPC_FRIGHTENED_CITIZEN_2,x,y,z,angle,TEMPSUMMON_TIMED_DESPAWN,SUMMON1_TTL))
+                if (Creature *spawnedCreature = go->SummonCreature(NPC_FRIGHTENED_CITIZEN_2, x, y, z, angle, TEMPSUMMON_TIMED_DESPAWN, SUMMON1_TTL))
                 {
                     spawnedCreature->SetPhaseMask(6, 1);
                     spawnedCreature->Respawn(1);
@@ -893,7 +893,7 @@ public:
                 aPlayer->KilledMonsterCredit(35830, 0);
                 if (spawnKind == 3)
                 {
-                    if (Creature *spawnedCreature = go->SummonCreature(NPC_RAMPAGING_WORGEN_2,wx,wy,z,angle,TEMPSUMMON_TIMED_DESPAWN,SUMMON1_TTL))
+                    if (Creature *spawnedCreature = go->SummonCreature(NPC_RAMPAGING_WORGEN_2, wx, wy, z, angle, TEMPSUMMON_TIMED_DESPAWN, SUMMON1_TTL))
                     {
                         spawnedCreature->SetPhaseMask(6, 1);
                         spawnedCreature->Respawn(1);

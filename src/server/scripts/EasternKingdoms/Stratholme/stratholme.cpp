@@ -258,7 +258,7 @@ public:
 
         void ReceiveEmote(Player* player, uint32 emote)
         {
-            switch(emote)
+            switch (emote)
             {
                 case TEXT_EMOTE_DANCE:
                     EnterEvadeMode();

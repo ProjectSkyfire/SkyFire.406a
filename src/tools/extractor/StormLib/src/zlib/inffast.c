@@ -11,7 +11,7 @@
 #ifndef ASMINF
 
 /* Allow machine dependent optimization for post-increment or pre-increment.
-   Based on testing to date,
+   Based on testing to date, 
    Pre-increment preferred for:
    - PowerPC G3 (Adler)
    - MIPS R5000 (Randers-Pehrson)
@@ -54,7 +54,7 @@
    Notes:
 
     - The maximum input bits used by a length/distance pair is 15 bits for the
-      length code, 5 bits for the length extra, 15 bits for the distance code,
+      length code, 5 bits for the length extra, 15 bits for the distance code, 
       and 13 bits for the distance extra.  This totals 48 bits, or six bytes.
       Therefore if strm->avail_in >= 6, then there is enough input to avoid
       checking for available input while decoding.

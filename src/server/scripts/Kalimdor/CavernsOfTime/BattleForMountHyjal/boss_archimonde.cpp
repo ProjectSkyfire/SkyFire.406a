@@ -308,7 +308,7 @@ public:
 
         void GainSoulCharge(Player* victim)
         {
-            switch(victim->getClass())
+            switch (victim->getClass())
             {
                 case CLASS_PRIEST:
                 case CLASS_PALADIN:
@@ -632,7 +632,7 @@ public:
 
             DoMeleeAttackIfReady();
         }
-        void WaypointReached(uint32 /*i*/){}
+        void WaypointReached(uint32 /*i*/) {}
     };
 };
 

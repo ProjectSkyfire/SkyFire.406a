@@ -123,4 +123,3 @@ ACE_THREAD_ADAPTER_NAME (void *args)
 
   return status;
 }
-

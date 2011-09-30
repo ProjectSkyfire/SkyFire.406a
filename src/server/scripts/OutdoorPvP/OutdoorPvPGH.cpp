@@ -104,7 +104,7 @@ bool OPvPCapturePointGH::Update(uint32 diff)
 
 void OPvPCapturePointGH::ChangeState()
 {
-    switch(m_OldState)
+    switch (m_OldState)
     {
     case OBJECTIVESTATE_NEUTRAL:
         break;
@@ -124,7 +124,7 @@ void OPvPCapturePointGH::ChangeState()
     }
 
     uint32 artkit = 21;
-    switch(m_State)
+    switch (m_State)
     {
     case OBJECTIVESTATE_NEUTRAL:
         _VentureState = VENTURE_N;

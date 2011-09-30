@@ -73,7 +73,7 @@ public:
                     uiTeamInInstance = player->GetTeam();
             }
 
-            switch(creature->GetEntry())
+            switch (creature->GetEntry())
             {
                 case BOSS_CORBORUS:
                     uiCorborus = creature->GetGUID();
@@ -92,7 +92,7 @@ public:
 
         uint64 GetData64(uint32 identifier)
         {
-            switch(identifier)
+            switch (identifier)
             {
                 case DATA_CORBORUS:                    return uiCorborus;
                 case DATA_SLABHIDE:                    return uiSlabhide;
@@ -105,7 +105,7 @@ public:
 
         void SetData(uint32 type, uint32 data)
         {
-            switch(type)
+            switch (type)
             {
                 case DATA_CORBORUS_EVENT:
                     uiEncounter[0] = data;
@@ -127,7 +127,7 @@ public:
 
         uint32 GetData(uint32 type)
         {
-            switch(type)
+            switch (type)
             {
                 case DATA_CORBORUS_EVENT:                return uiEncounter[0];
                 case DATA_SLABHIDE_EVENT:                return uiEncounter[1];

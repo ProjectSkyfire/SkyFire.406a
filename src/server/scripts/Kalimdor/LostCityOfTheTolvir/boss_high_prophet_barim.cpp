@@ -25,44 +25,44 @@
 
 enum ScriptTexts
 {
-    SAY_AGGRO                   = 0,
-    SAY_KILL_1                  = 1,
-    SAY_REPENTANCE              = 2,
-    SAY_KILL_2                  = 3,
-    SAY_DEATH                   = 4,
+    SAY_AGGRO                   = 0, 
+    SAY_KILL_1                  = 1, 
+    SAY_REPENTANCE              = 2, 
+    SAY_KILL_2                  = 3, 
+    SAY_DEATH                   = 4, 
 };
 
 enum Spells
 {
-    SPELL_FIFTY_LASHING         = 82506,
-    SPELL_PLAGUE_OF_AGES        = 82622,
-    H_SPELL_PLAGUEOF_AGES       = 89997,
-    SPELL_REPENTANCE            = 81947,
-    SPELL_REPENTANCE_IMMUNE     = 82320,
+    SPELL_FIFTY_LASHING         = 82506, 
+    SPELL_PLAGUE_OF_AGES        = 82622, 
+    H_SPELL_PLAGUEOF_AGES       = 89997, 
+    SPELL_REPENTANCE            = 81947, 
+    SPELL_REPENTANCE_IMMUNE     = 82320, 
     SPELL_BLAZE_OF_HEAVENS      = 95248, /* Blaze of Heavens ability */
     SPELL_SOUL_SEVER            = 82255, /* Harbinger of Darkness ability */
-    SPELL_HEAVENS_FURY          = 81939,
-    H_SPELL_HEAVENS_FURY        = 90040,
-    SPELL_HALLOWED_GROUND       = 88814,
-    H_SPELL_HALLOWED_GROUND     = 90010,
+    SPELL_HEAVENS_FURY          = 81939, 
+    H_SPELL_HEAVENS_FURY        = 90040, 
+    SPELL_HALLOWED_GROUND       = 88814, 
+    H_SPELL_HALLOWED_GROUND     = 90010, 
 };
 
 enum Events
 {
-    EVENT_FIFTY_LASHING         = 0,
-    EVENT_PLAGUE_OF_AGES        = 1,
-    EVENT_REPENTANCE            = 2,
-    EVENT_BLAZE_OF_HEAVENS      = 3,
-    EVENT_SOUL_SEVER            = 4,
-    EVENT_HEAVENS_FURY          = 5,
-    EVENT_HALLOWED_GROUND       = 6,
-    EVENT_PHASE_1               = 7,
+    EVENT_FIFTY_LASHING         = 0, 
+    EVENT_PLAGUE_OF_AGES        = 1, 
+    EVENT_REPENTANCE            = 2, 
+    EVENT_BLAZE_OF_HEAVENS      = 3, 
+    EVENT_SOUL_SEVER            = 4, 
+    EVENT_HEAVENS_FURY          = 5, 
+    EVENT_HALLOWED_GROUND       = 6, 
+    EVENT_PHASE_1               = 7, 
 };
 
 enum SummonIds
 {
-    NPC_BLAZE_OF_HEAVENS        = 48906,
-    NPC_HARBINGER_OF_DARKNESS   = 43927,
+    NPC_BLAZE_OF_HEAVENS        = 48906, 
+    NPC_HARBINGER_OF_DARKNESS   = 43927, 
 };
 
 enum ProphetPhases
@@ -74,9 +74,9 @@ enum ProphetPhases
 const Position SummonLocations[2] =
 {
     /* Blaze of Heavens */
-    {-11015.45f, -1288.05f, -10.22f, 4.82f},
+    {-11015.45f, -1288.05f, -10.22f, 4.82f}, 
     /* Harbinger of Darkness */
-    {-11015.45f, -1288.05f, -10.22f, 4.82f},
+    {-11015.45f, -1288.05f, -10.22f, 4.82f}, 
 };
 
 class boss_high_prophet_barim : public CreatureScript
@@ -176,9 +176,9 @@ public:
 
             uiPhase = PHASE_1;
 
-            while(uint32 eventId = events.ExecuteEvent())
+            while (uint32 eventId = events.ExecuteEvent())
             {
-                switch(eventId)
+                switch (eventId)
                 {
                     EnterPhase1();
 
@@ -240,7 +240,7 @@ public:
 
             while (uint32 eventId = events.ExecuteEvent())
             {
-                switch(eventId)
+                switch (eventId)
                 {
                     case EVENT_BLAZE_OF_HEAVENS:
                         DoCast(me, SPELL_BLAZE_OF_HEAVENS);
@@ -294,7 +294,7 @@ public:
 
             while (uint32 eventId = events.ExecuteEvent())
             {
-                switch(eventId)
+                switch (eventId)
                 {
                     case EVENT_SOUL_SEVER:
                         DoCast(me->getVictim(), SPELL_SOUL_SEVER);

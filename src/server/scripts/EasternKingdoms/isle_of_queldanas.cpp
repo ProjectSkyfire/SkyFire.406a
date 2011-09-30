@@ -113,7 +113,7 @@ public:
 
         uint64 PlayerGUID;
 
-        void EnterCombat(Unit* /*who*/){}
+        void EnterCombat(Unit* /*who*/) {}
 
         void Reset()
         {

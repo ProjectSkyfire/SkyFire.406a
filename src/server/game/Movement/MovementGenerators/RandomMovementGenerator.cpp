@@ -159,7 +159,7 @@ RandomMovementGenerator<Creature>::Reset(Creature &creature)
 
 template<>
 void
-RandomMovementGenerator<Creature>::Finalize(Creature & /*creature*/){}
+RandomMovementGenerator<Creature>::Finalize(Creature & /*creature*/) {}
 
 template<>
 bool

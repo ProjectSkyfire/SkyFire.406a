@@ -46,7 +46,7 @@ static int char_to_int(unsigned char x)
   @param out    [out] Destination of UTC time structure
   @return CRYPT_OK   if successful
 */
-int der_decode_utctime(const unsigned char *in, unsigned long *inlen,
+int der_decode_utctime(const unsigned char *in, unsigned long *inlen, 
                              ltc_utctime   *out)
 {
    unsigned char buf[32];
@@ -121,6 +121,6 @@ YYMMDDhhmmss-hh'mm'
 
 #endif
 
-/* $Source: /cvs/libtom/libtomcrypt/src/pk/asn1/der/utctime/der_decode_utctime.c,v $ */
+/* $Source: /cvs/libtom/libtomcrypt/src/pk/asn1/der/utctime/der_decode_utctime.c, v $ */
 /* $Revision: 1.9 $ */
 /* $Date: 2006/12/28 01:27:24 $ */

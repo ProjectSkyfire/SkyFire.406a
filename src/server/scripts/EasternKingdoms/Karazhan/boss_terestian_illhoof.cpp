@@ -177,7 +177,7 @@ public:
 
     struct mob_fiendish_portalAI : public PassiveAI
     {
-        mob_fiendish_portalAI(Creature* c) : PassiveAI(c), summons(me){}
+        mob_fiendish_portalAI(Creature* c) : PassiveAI(c), summons(me) {}
 
         SummonList summons;
 

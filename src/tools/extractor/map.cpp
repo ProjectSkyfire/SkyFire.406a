@@ -8,7 +8,7 @@
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful, 
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
@@ -52,7 +52,7 @@ void ExtractMapsFromMpq(uint32 build)
 
     printf("Convert map files\n");
     HANDLE actualMPQ = WorldMPQ;
-    for(uint32 z = 0; z < map_count; ++z)
+    for (uint32 z = 0; z < map_count; ++z)
     {
         // Loadup map grid data
         sprintf(mpq_map_name, "World\\Maps\\%s\\%s.wdt", map_ids[z].name, map_ids[z].name);
@@ -94,9 +94,9 @@ void ExtractMapsFromMpq(uint32 build)
 
         wdt.prepareLoadedData();
 
-        for(uint32 y = 0; y < WDT_MAP_SIZE; ++y)
+        for (uint32 y = 0; y < WDT_MAP_SIZE; ++y)
         {
-            for(uint32 x = 0; x < WDT_MAP_SIZE; ++x)
+            for (uint32 x = 0; x < WDT_MAP_SIZE; ++x)
             {
                 if (!wdt.main->adt_list[y][x].exist)
                     continue;
@@ -112,7 +112,7 @@ void ExtractMapsFromMpq(uint32 build)
     delete [] areas;
     delete [] map_ids;
     //printf("Map not extracted : %u\n", not_found.size());
-    //for(int i = 0; i < not_found.size(); i++)
+    //for (int i = 0; i < not_found.size(); i++)
     //    printf("    %s\n", not_found[i].c_str());
 }
 
@@ -245,9 +245,9 @@ bool ConvertADT(char *filename, char *filename2, int cell_y, int cell_x, uint32 
     // Get area flags data
     for (int i=0;i<ADT_CELLS_PER_GRID;i++)
     {
-        for(int j=0;j<ADT_CELLS_PER_GRID;j++)
+        for (int j=0;j<ADT_CELLS_PER_GRID;j++)
         {
-            adt_MCNK * cell = adt.getMCNK(i,j);
+            adt_MCNK * cell = adt.getMCNK(i, j);
             if (cell)
             {
                 uint32 areaid = cell->areaid;
@@ -271,7 +271,7 @@ bool ConvertADT(char *filename, char *filename2, int cell_y, int cell_x, uint32 
     uint32 areaflag = area_flags[0][0];
     for (int y=0;y<ADT_CELLS_PER_GRID;y++)
     {
-        for(int x=0;x<ADT_CELLS_PER_GRID;x++)
+        for (int x=0;x<ADT_CELLS_PER_GRID;x++)
         {
             if (area_flags[y][x]!=areaflag)
             {
@@ -303,9 +303,9 @@ bool ConvertADT(char *filename, char *filename2, int cell_y, int cell_x, uint32 
     //
     for (int i=0;i<ADT_CELLS_PER_GRID;i++)
     {
-        for(int j=0;j<ADT_CELLS_PER_GRID;j++)
+        for (int j=0;j<ADT_CELLS_PER_GRID;j++)
         {
-            adt_MCNK * cell = adt.getMCNK(i,j);
+            adt_MCNK * cell = adt.getMCNK(i, j);
             if (!cell)
                 continue;
             // Height values for triangles stored in order:
@@ -376,7 +376,7 @@ bool ConvertADT(char *filename, char *filename2, int cell_y, int cell_x, uint32 
     float minHeight =  20000;
     for (int y=0; y<ADT_GRID_SIZE; y++)
     {
-        for(int x=0;x<ADT_GRID_SIZE;x++)
+        for (int x=0;x<ADT_GRID_SIZE;x++)
         {
             float h = V8[y][x];
             if (maxHeight < h) maxHeight = h;
@@ -385,7 +385,7 @@ bool ConvertADT(char *filename, char *filename2, int cell_y, int cell_x, uint32 
     }
     for (int y=0; y<=ADT_GRID_SIZE; y++)
     {
-        for(int x=0;x<=ADT_GRID_SIZE;x++)
+        for (int x=0;x<=ADT_GRID_SIZE;x++)
         {
             float h = V9[y][x];
             if (maxHeight < h) maxHeight = h;
@@ -397,11 +397,11 @@ bool ConvertADT(char *filename, char *filename2, int cell_y, int cell_x, uint32 
     if (CONF_allow_height_limit && minHeight < CONF_use_minHeight)
     {
         for (int y=0; y<ADT_GRID_SIZE; y++)
-            for(int x=0;x<ADT_GRID_SIZE;x++)
+            for (int x=0;x<ADT_GRID_SIZE;x++)
                 if (V8[y][x] < CONF_use_minHeight)
                     V8[y][x] = CONF_use_minHeight;
         for (int y=0; y<=ADT_GRID_SIZE; y++)
-            for(int x=0;x<=ADT_GRID_SIZE;x++)
+            for (int x=0;x<=ADT_GRID_SIZE;x++)
                 if (V9[y][x] < CONF_use_minHeight)
                     V9[y][x] = CONF_use_minHeight;
         if (minHeight < CONF_use_minHeight)
@@ -450,20 +450,20 @@ bool ConvertADT(char *filename, char *filename2, int cell_y, int cell_x, uint32 
         if (heightHeader.flags&MAP_HEIGHT_AS_INT8)
         {
             for (int y=0; y<ADT_GRID_SIZE; y++)
-                for(int x=0;x<ADT_GRID_SIZE;x++)
+                for (int x=0;x<ADT_GRID_SIZE;x++)
                     uint8_V8[y][x] = uint8((V8[y][x] - minHeight) * step + 0.5f);
             for (int y=0; y<=ADT_GRID_SIZE; y++)
-                for(int x=0;x<=ADT_GRID_SIZE;x++)
+                for (int x=0;x<=ADT_GRID_SIZE;x++)
                     uint8_V9[y][x] = uint8((V9[y][x] - minHeight) * step + 0.5f);
             map.heightMapSize+= sizeof(uint8_V9) + sizeof(uint8_V8);
         }
         else if (heightHeader.flags&MAP_HEIGHT_AS_INT16)
         {
             for (int y=0; y<ADT_GRID_SIZE; y++)
-                for(int x=0;x<ADT_GRID_SIZE;x++)
+                for (int x=0;x<ADT_GRID_SIZE;x++)
                     uint16_V8[y][x] = uint16((V8[y][x] - minHeight) * step + 0.5f);
             for (int y=0; y<=ADT_GRID_SIZE; y++)
-                for(int x=0;x<=ADT_GRID_SIZE;x++)
+                for (int x=0;x<=ADT_GRID_SIZE;x++)
                     uint16_V9[y][x] = uint16((V9[y][x] - minHeight) * step + 0.5f);
             map.heightMapSize+= sizeof(uint16_V9) + sizeof(uint16_V8);
         }
@@ -477,9 +477,9 @@ bool ConvertADT(char *filename, char *filename2, int cell_y, int cell_x, uint32 
     {
         for (int i=0;i<ADT_CELLS_PER_GRID;i++)
         {
-            for(int j=0;j<ADT_CELLS_PER_GRID;j++)
+            for (int j=0;j<ADT_CELLS_PER_GRID;j++)
             {
-                adt_liquid_header *h = h2o->getLiquidData(i,j);
+                adt_liquid_header *h = h2o->getLiquidData(i, j);
                 if (!h)
                     continue;
 
@@ -508,7 +508,7 @@ bool ConvertADT(char *filename, char *filename2, int cell_y, int cell_x, uint32 
                     case LIQUID_TYPE_MAGMA: liquid_type[i][j] |= MAP_LIQUID_TYPE_MAGMA; break;
                     case LIQUID_TYPE_SLIME: liquid_type[i][j] |= MAP_LIQUID_TYPE_SLIME; break;
                     default:
-                        printf("\nCan't find Liquid type %u for map %s\nchunk %d,%d\n", h->liquidType, filename, i, j);
+                        printf("\nCan't find Liquid type %u for map %s\nchunk %d, %d\n", h->liquidType, filename, i, j);
                         break;
                 }
                 // Dark water detect
@@ -545,7 +545,7 @@ bool ConvertADT(char *filename, char *filename2, int cell_y, int cell_x, uint32 
         // Get from MCLQ chunk (old)
         for (int i=0;i<ADT_CELLS_PER_GRID;i++)
         {
-            for(int j=0;j<ADT_CELLS_PER_GRID;j++)
+            for (int j=0;j<ADT_CELLS_PER_GRID;j++)
             {
                 adt_MCNK *cell = adt.getMCNK(i, j);
                 if (!cell)
@@ -603,7 +603,7 @@ bool ConvertADT(char *filename, char *filename2, int cell_y, int cell_x, uint32 
     bool fullType = false;
     for (int y=0;y<ADT_CELLS_PER_GRID;y++)
     {
-        for(int x=0;x<ADT_CELLS_PER_GRID;x++)
+        for (int x=0;x<ADT_CELLS_PER_GRID;x++)
         {
             if (liquid_type[y][x]!=type)
             {
@@ -631,7 +631,7 @@ bool ConvertADT(char *filename, char *filename2, int cell_y, int cell_x, uint32 
         minHeight = 20000;
         for (int y=0; y<ADT_GRID_SIZE; y++)
         {
-            for(int x=0; x<ADT_GRID_SIZE; x++)
+            for (int x=0; x<ADT_GRID_SIZE; x++)
             {
                 if (liquid_show[y][x])
                 {

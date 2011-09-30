@@ -44,7 +44,7 @@ static DWORD HashString(const char * szFileName, DWORD dwHashType)
     DWORD  dwSeed2 = 0xEEEEEEEE;
     DWORD  ch;
 
-    while(*pbKey != 0)
+    while (*pbKey != 0)
     {
         ch = toupper(*pbKey++);
 
@@ -66,9 +66,9 @@ void InitializeMpqCryptography()
     // Do nothing if already done.
     if (bMpqCryptographyInitialized == false)
     {
-        for(index1 = 0; index1 < 0x100; index1++)
+        for (index1 = 0; index1 < 0x100; index1++)
         {
-            for(index2 = index1, i = 0; i < 5; i++, index2 += 0x100)
+            for (index2 = index1, i = 0; i < 5; i++, index2 += 0x100)
             {
                 DWORD temp1, temp2;
 
@@ -143,7 +143,7 @@ ULONGLONG HashStringJenkins(const char * szFileName)
     if (szFileName != NULL)
     {
         szTemp = szLocFileName;
-        while(*szFileName != 0)
+        while (*szFileName != 0)
         {
             chOneChar = (char)tolower(*szFileName++);
             if (chOneChar == '/')
@@ -169,8 +169,8 @@ ULONGLONG HashStringJenkins(const char * szFileName)
 // This function converts the MPQ header so it always looks like version 4
 
 void ConvertMpqHeaderToFormat4(
-    TMPQArchive * ha,
-    ULONGLONG FileSize,
+    TMPQArchive * ha, 
+    ULONGLONG FileSize, 
     DWORD dwFlags)
 {
     ULONGLONG ByteOffset;
@@ -184,7 +184,7 @@ void ConvertMpqHeaderToFormat4(
         wFormatVersion = MPQ_FORMAT_VERSION_1;
 
     // Format-specific fixes
-    switch(wFormatVersion)
+    switch (wFormatVersion)
     {
         case MPQ_FORMAT_VERSION_1:
 
@@ -205,7 +205,7 @@ void ConvertMpqHeaderToFormat4(
             if (pHeader->dwArchiveSize != dwExpectedArchiveSize)
             {
                 // Note: dwExpectedArchiveSize might be incorrect at this point.
-                // MPQs version 1.0 can have strong digital signature appended at the end,
+                // MPQs version 1.0 can have strong digital signature appended at the end, 
                 // or they might just have arbitrary data there.
                 // In either case, we recalculate the archive size later when
                 // block table is loaded and positions of all files is known.
@@ -250,7 +250,7 @@ void ConvertMpqHeaderToFormat4(
                             ArchiveSize64 = ByteOffset;
                     }
 
-                    // We need to recalculate archive size later,
+                    // We need to recalculate archive size later, 
                     // when block table is loaded and the position of files is known
                     ha->dwFlags |= MPQ_FLAG_NEED_FIX_SIZE;
                 }
@@ -342,7 +342,7 @@ void EncryptMpqBlock(void * pvFileBlock, DWORD dwLength, DWORD dwSeed1)
     // Round to DWORDs
     dwLength >>= 2;
 
-    while(dwLength-- > 0)
+    while (dwLength-- > 0)
     {
         dwSeed2 += StormBuffer[0x400 + (dwSeed1 & 0xFF)];
         ch     = *block;
@@ -362,7 +362,7 @@ void DecryptMpqBlock(void * pvFileBlock, DWORD dwLength, DWORD dwSeed1)
     // Round to DWORDs
     dwLength >>= 2;
 
-    while(dwLength-- > 0)
+    while (dwLength-- > 0)
     {
         dwSeed2 += StormBuffer[0x400 + (dwSeed1 & 0xFF)];
         ch     = *block ^ (dwSeed1 + dwSeed2);
@@ -388,7 +388,7 @@ void DecryptMpqTable(void * pvMpqTable, DWORD dwLength, const char * szKey)
 // Functions tries to get file decryption key. The trick comes from sector
 // positions which are stored at the begin of each compressed file. We know the
 // file size, that means we know number of sectors that means we know the first
-// DWORD value in sector position. And if we know encrypted and decrypted value,
+// DWORD value in sector position. And if we know encrypted and decrypted value, 
 // we can find the decryption key !!!
 //
 // hf            - MPQ file handle
@@ -401,7 +401,7 @@ DWORD DetectFileKeyBySectorSize(LPDWORD SectorOffsets, DWORD decrypted)
     DWORD temp = *SectorOffsets ^ decrypted;    // temp = seed1 + seed2
     temp -= 0xEEEEEEEE;                 // temp = seed1 + StormBuffer[0x400 + (seed1 & 0xFF)]
 
-    for(int i = 0; i < 0x100; i++)      // Try all 255 possibilities
+    for (int i = 0; i < 0x100; i++)      // Try all 255 possibilities
     {
         DWORD seed1;
         DWORD seed2 = 0xEEEEEEEE;
@@ -418,7 +418,7 @@ DWORD DetectFileKeyBySectorSize(LPDWORD SectorOffsets, DWORD decrypted)
         // Add 1 because we are decrypting sector positions
         saveKey1 = seed1 + 1;
 
-        // If OK, continue and test the second value. We don't know exactly the value,
+        // If OK, continue and test the second value. We don't know exactly the value, 
         // but we know that the second one has lower 16 bits set to zero
         // (no compressed sector is larger than 0xFFFF bytes)
         seed1  = ((~seed1 << 0x15) + 0x11111111) | (seed1 >> 0x0B);
@@ -448,12 +448,12 @@ DWORD DetectFileKeyByKnownContent(void * pvFileContent, DWORD nDwords, ...)
         return 0;
 
     va_start(argList, nDwords);
-    for(i = 0; i < nDwords; i++)
+    for (i = 0; i < nDwords; i++)
         dwDecrypted[i] = va_arg(argList, DWORD);
     va_end(argList);
 
     dwTemp = (*pdwContent ^ dwDecrypted[0]) - 0xEEEEEEEE;
-    for(i = 0; i < 0x100; i++)      // Try all 256 possibilities
+    for (i = 0; i < 0x100; i++)      // Try all 256 possibilities
     {
         DWORD seed1;
         DWORD seed2 = 0xEEEEEEEE;
@@ -470,7 +470,7 @@ DWORD DetectFileKeyByKnownContent(void * pvFileContent, DWORD nDwords, ...)
         saveKey1 = seed1;
 
         // If OK, continue and test all bytes.
-        for(j = 1; j < nDwords; j++)
+        for (j = 1; j < nDwords; j++)
         {
             seed1  = ((~seed1 << 0x15) + 0x11111111) | (seed1 >> 0x0B);
             seed2  = ch + seed2 + (seed2 << 5) + 3;
@@ -518,9 +518,9 @@ DWORD DetectFileKeyByContent(void * pvFileContent, DWORD dwFileSize)
 }
 
 DWORD DecryptFileKey(
-    const char * szFileName,
-    ULONGLONG MpqPos,
-    DWORD dwFileSize,
+    const char * szFileName, 
+    ULONGLONG MpqPos, 
+    DWORD dwFileSize, 
     DWORD dwFlags)
 {
     DWORD dwFileKey;
@@ -585,7 +585,7 @@ TMPQHash * GetFirstHashEntry(TMPQArchive * ha, const char * szFileName)
     pStartHash = pHash = ha->pHashTable + (dwIndex & dwHashTableSizeMask);
 
     // There might be deleted entries in the hash table prior to our desired entry.
-    while(pHash->dwBlockIndex != HASH_ENTRY_FREE)
+    while (pHash->dwBlockIndex != HASH_ENTRY_FREE)
     {
         // If the entry agrees, we found it.
         if (pHash->dwName1 == dwName1 && pHash->dwName2 == dwName2 && pHash->dwBlockIndex < ha->dwFileTableSize)
@@ -610,9 +610,9 @@ TMPQHash * GetNextHashEntry(TMPQArchive * ha, TMPQHash * pFirstHash, TMPQHash * 
     DWORD dwName1 = pPrevHash->dwName1;
     DWORD dwName2 = pPrevHash->dwName2;
 
-    // Now go for any next entry that follows the pPrevHash,
+    // Now go for any next entry that follows the pPrevHash, 
     // until either free hash entry was found, or the start entry was reached
-    for(;;)
+    for (;;)
     {
         // Move to the next hash entry. Stop searching
         // if we got reached the original hash entry
@@ -650,7 +650,7 @@ TMPQHash * AllocateHashEntry(TMPQArchive * ha, const char * szFileName, LCID lcL
     pStartHash = pHash = ha->pHashTable + (dwIndex & dwHashTableSizeMask);
 
     // There might be deleted entries in the hash table prior to our desired entry.
-    while(pHash->dwBlockIndex < HASH_ENTRY_DELETED)
+    while (pHash->dwBlockIndex < HASH_ENTRY_DELETED)
     {
         // If there already is an existing entry, reuse it.
         if (pHash->dwName1 == dwName1 && pHash->dwName2 == dwName2 && pHash->lcLocale == lcLocale)
@@ -683,7 +683,7 @@ void FindFreeMpqSpace(TMPQArchive * ha, ULONGLONG * pMpqPos)
     ULONGLONG MpqPos = ha->pHeader->dwHeaderSize;
 
     // Parse the entire block table
-    while(pFileEntry < pFileTableEnd)
+    while (pFileEntry < pFileTableEnd)
     {
         // Only take existing files
         if (pFileEntry->dwFlags & MPQ_FILE_EXISTS)
@@ -726,11 +726,11 @@ TMPQFile * CreateMpqFile(TMPQArchive * ha)
 // Loads a table from MPQ.
 // Can be used for hash table, block table, sector offset table or sector checksum table
 int LoadMpqTable(
-    TMPQArchive * ha,
-    ULONGLONG ByteOffset,
-    void * pvTable,
-    DWORD dwCompressedSize,
-    DWORD dwRealSize,
+    TMPQArchive * ha, 
+    ULONGLONG ByteOffset, 
+    void * pvTable, 
+    DWORD dwCompressedSize, 
+    DWORD dwRealSize, 
     DWORD dwKey)
 {
     ULONGLONG ByteOffsetLi;
@@ -785,8 +785,8 @@ int LoadMpqTable(
 }
 
 void CalculateRawSectorOffset(
-    ULONGLONG & RawFilePos,
-    TMPQFile * hf,
+    ULONGLONG & RawFilePos, 
+    TMPQFile * hf, 
     DWORD dwSectorOffset)
 {
     //
@@ -846,7 +846,7 @@ int AllocatePatchInfo(TMPQFile * hf, bool bLoadFromFile)
 
 __AllocateAndLoadPatchInfo:
 
-    // Allocate space for patch header. Start with default size,
+    // Allocate space for patch header. Start with default size, 
     // and if its size if bigger, then we reload them
     hf->PatchInfo = (TPatchInfo *)ALLOCMEM(BYTE, dwLength);
     if (hf->PatchInfo == NULL)
@@ -980,7 +980,7 @@ int AllocateSectorOffsets(TMPQFile * hf, bool bLoadFromFile)
             }
 
             //
-            // I've seen MPQs that had MPQ_FILE_SECTOR_CRC flag absent,
+            // I've seen MPQs that had MPQ_FILE_SECTOR_CRC flag absent, 
             // but there was one extra entry in the sector offset table
             // (Example: expansion-locale-frFR.MPQ from WoW Cataclysm BETA)
             // We detect such behavior here by verifying the value
@@ -1210,7 +1210,7 @@ void FreeMPQArchive(TMPQArchive *& ha)
             FreeMPQArchive(ha->haPatch);
 
         // Free the file names from the file table
-        for(DWORD i = 0; i < ha->dwFileTableSize; i++)
+        for (DWORD i = 0; i < ha->dwFileTableSize; i++)
         {
             if (ha->pFileTable[i].szFileName != NULL)
                 FREEMEM(ha->pFileTable[i].szFileName);
@@ -1236,7 +1236,7 @@ const char * GetPlainFileName(const char * szFileName)
 {
     const char * szPlainName = szFileName + strlen(szFileName);
 
-    while(szPlainName > szFileName)
+    while (szPlainName > szFileName)
     {
         if (szPlainName[0] == '\\' || szPlainName[0] == '/')
             return szPlainName + 1;
@@ -1267,7 +1267,7 @@ bool IsInternalMpqFileName(const char * szFileName)
 #ifndef PLATFORM_LITTLE_ENDIAN
 
 //
-// Note that those functions are implemented for Mac operating system,
+// Note that those functions are implemented for Mac operating system, 
 // as this is the only supported platform that uses big endian.
 //
 
@@ -1313,7 +1313,7 @@ void ConvertUInt16Buffer(void * ptr, size_t length)
     uint16_t * buffer = (uint16_t *)ptr;
     uint32_t nElements = (uint32_t)(length / sizeof(uint16_t));
 
-    while(nElements-- > 0)
+    while (nElements-- > 0)
 	{
 		*buffer = SwapUInt16(*buffer);
 		buffer++;
@@ -1326,7 +1326,7 @@ void ConvertUInt32Buffer(void * ptr, size_t length)
     uint32_t * buffer = (uint32_t *)ptr;
     uint32_t nElements = (uint32_t)(length / sizeof(uint32_t));
 
-	while(nElements-- > 0)
+	while (nElements-- > 0)
 	{
 		*buffer = SwapUInt32(*buffer);
 		buffer++;
@@ -1339,7 +1339,7 @@ void ConvertUInt64Buffer(void * ptr, size_t length)
     uint64_t * buffer = (uint64_t *)ptr;
     uint32_t nElements = (uint32_t)(length / sizeof(uint64_t));
 
-	while(nElements-- > 0)
+	while (nElements-- > 0)
 	{
 		*buffer = SwapUInt64(*buffer);
 		buffer++;

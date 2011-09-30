@@ -389,7 +389,7 @@ struct TMPQUserData
 // MPQ file header
 //
 // We have to make sure that the header is packed OK.
-// Reason: A 64-bit integer at the beginning of 3.0 part,
+// Reason: A 64-bit integer at the beginning of 3.0 part, 
 // which is offset 0x2C
 #pragma pack(push, 1)
 struct TMPQHeader
@@ -402,7 +402,7 @@ struct TMPQHeader
 
     // 32-bit size of MPQ archive
     // This field is deprecated in the Burning Crusade MoPaQ format, and the size of the archive
-    // is calculated as the size from the beginning of the archive to the end of the hash table,
+    // is calculated as the size from the beginning of the archive to the end of the hash table, 
     // block table, or hi-block table (whichever is largest).
     DWORD dwArchiveSize;
 
@@ -572,7 +572,7 @@ struct TPatchHeader
 #define SIZE_OF_XFRM_HEADER  0x0C
 
 // This is the combined file entry for maintaining file list in the MPQ.
-// This structure is combined from block table, hi-block table,
+// This structure is combined from block table, hi-block table, 
 // (attributes) file and from (listfile).
 struct TFileEntry
 {
@@ -747,7 +747,7 @@ LCID   WINAPI SFileGetLocale();
 bool   WINAPI SFileFlushArchive(HANDLE hMpq);
 bool   WINAPI SFileCloseArchive(HANDLE hMpq);
 
-// Adds another listfile into MPQ. The currently added listfile(s) remain,
+// Adds another listfile into MPQ. The currently added listfile(s) remain, 
 // so you can use this API to combining more listfiles.
 // Note that this function is internally called by SFileFindFirstFile
 int    WINAPI SFileAddListFile(HANDLE hMpq, const char * szListFile);

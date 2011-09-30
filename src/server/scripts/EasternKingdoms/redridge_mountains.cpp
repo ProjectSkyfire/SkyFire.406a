@@ -88,7 +88,7 @@ public:
             if (uiI >= 65 && me->GetUnitMovementFlags() == MOVEMENTFLAG_WALKING)
                 me->RemoveUnitMovementFlag(MOVEMENTFLAG_WALKING);
 
-            switch(uiI)
+            switch (uiI)
             {
                 case 39:
                     SetEscortPaused(true);
@@ -117,7 +117,7 @@ public:
             {
                 if (Timer <= Diff)
                 {
-                    switch(Phase)
+                    switch (Phase)
                     {
                         case 1:
                             me->SetStandState(UNIT_STAND_STATE_SIT);

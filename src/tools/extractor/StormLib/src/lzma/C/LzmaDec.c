@@ -477,8 +477,8 @@ static int MY_FAST_CALL LzmaDec_DecodeReal2(CLzmaDec *p, SizeT limit, const Byte
 typedef enum
 {
   DUMMY_ERROR, /* unexpected end of input stream */
-  DUMMY_LIT,
-  DUMMY_MATCH,
+  DUMMY_LIT, 
+  DUMMY_MATCH, 
   DUMMY_REP
 } ELzmaDummy;
 
@@ -713,7 +713,7 @@ static void LzmaDec_InitStateReal(CLzmaDec *p)
   p->needInitState = 0;
 }
 
-SRes LzmaDec_DecodeToDic(CLzmaDec *p, SizeT dicLimit, const Byte *src, SizeT *srcLen,
+SRes LzmaDec_DecodeToDic(CLzmaDec *p, SizeT dicLimit, const Byte *src, SizeT *srcLen, 
     ELzmaFinishMode finishMode, ELzmaStatus *status)
 {
   SizeT inSize = *srcLen;
@@ -963,8 +963,8 @@ SRes LzmaDec_Allocate(CLzmaDec *p, const Byte *props, unsigned propsSize, ISzAll
   return SZ_OK;
 }
 
-SRes LzmaDecode(Byte *dest, SizeT *destLen, const Byte *src, SizeT *srcLen,
-    const Byte *propData, unsigned propSize, ELzmaFinishMode finishMode,
+SRes LzmaDecode(Byte *dest, SizeT *destLen, const Byte *src, SizeT *srcLen, 
+    const Byte *propData, unsigned propSize, ELzmaFinishMode finishMode, 
     ELzmaStatus *status, ISzAlloc *alloc)
 {
   CLzmaDec p;

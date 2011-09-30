@@ -48,7 +48,7 @@ static int CheckIfAllFilesKnown(TMPQArchive * ha, const char * szListFile, LPDWO
     if (nError == ERROR_SUCCESS)
     {
         pFileTableEnd = ha->pFileTable + ha->dwFileTableSize;
-        for(pFileEntry = ha->pFileTable; pFileEntry < pFileTableEnd; pFileEntry++, dwBlockIndex++)
+        for (pFileEntry = ha->pFileTable; pFileEntry < pFileTableEnd; pFileEntry++, dwBlockIndex++)
         {
             if (pFileEntry->dwFlags & MPQ_FILE_EXISTS)
             {
@@ -59,9 +59,9 @@ static int CheckIfAllFilesKnown(TMPQArchive * ha, const char * szListFile, LPDWO
                     // Resolve the file key. Use plain file name for it
                     if (pFileEntry->dwFlags & MPQ_FILE_ENCRYPTED)
                     {
-                        dwFileKey = DecryptFileKey(pFileEntry->szFileName,
-                                                   pFileEntry->ByteOffset,
-                                                   pFileEntry->dwFileSize,
+                        dwFileKey = DecryptFileKey(pFileEntry->szFileName, 
+                                                   pFileEntry->ByteOffset, 
+                                                   pFileEntry->dwFileSize, 
                                                    pFileEntry->dwFlags);
                     }
 
@@ -82,9 +82,9 @@ static int CheckIfAllFilesKnown(TMPQArchive * ha, const char * szListFile, LPDWO
 }
 
 static int CopyNonMpqData(
-    TFileStream * pSrcStream,
-    TFileStream * pTrgStream,
-    ULONGLONG & ByteOffset,
+    TFileStream * pSrcStream, 
+    TFileStream * pTrgStream, 
+    ULONGLONG & ByteOffset, 
     ULONGLONG & ByteCount)
 {
     ULONGLONG DataSize = ByteCount;
@@ -93,7 +93,7 @@ static int CopyNonMpqData(
     int nError = ERROR_SUCCESS;
 
     // Copy the data
-    while(DataSize > 0)
+    while (DataSize > 0)
     {
         // Get the proper size of data
         dwToRead = sizeof(DataBuffer);
@@ -131,8 +131,8 @@ static int CopyNonMpqData(
 
 // Copies all file sectors into another archive.
 static int CopyMpqFileSectors(
-    TMPQArchive * ha,
-    TMPQFile * hf,
+    TMPQArchive * ha, 
+    TMPQFile * hf, 
     TFileStream * pNewStream)
 {
     TFileEntry * pFileEntry = hf->pFileEntry;
@@ -212,7 +212,7 @@ static int CopyMpqFileSectors(
     // recompression, because recompression is not necessary in this case
     if (nError == ERROR_SUCCESS)
     {
-        for(DWORD dwSector = 0; dwSector < hf->dwDataSectors; dwSector++)
+        for (DWORD dwSector = 0; dwSector < hf->dwDataSectors; dwSector++)
         {
             DWORD dwRawDataInSector = hf->dwSectorSize;
             DWORD dwRawByteOffset = dwSector * hf->dwSectorSize;
@@ -239,7 +239,7 @@ static int CopyMpqFileSectors(
             }
 
             // If necessary, re-encrypt the sector
-            // Note: Recompression is not necessary here. Unlike encryption,
+            // Note: Recompression is not necessary here. Unlike encryption, 
             // the compression does not depend on the position of the file in MPQ.
             if ((pFileEntry->dwFlags & MPQ_FILE_ENCRYPTED) && dwFileKey1 != dwFileKey2)
             {
@@ -300,11 +300,11 @@ static int CopyMpqFileSectors(
     if (nError == ERROR_SUCCESS)
     {
         // At this point, number of bytes written should be exactly
-        // the same like the compressed file size. If it isn't,
+        // the same like the compressed file size. If it isn't, 
         // there's something wrong (an unknown archive version, MPQ protection, ...)
         //
         // Note: Diablo savegames have very weird layout, and the file "hero"
-        // seems to have improper compressed size. Instead of real compressed size,
+        // seems to have improper compressed size. Instead of real compressed size, 
         // the "dwCmpSize" member of the block table entry contains
         // uncompressed size of file data + size of the sector table.
         // If we compact the archive, Diablo will refuse to load the game
@@ -332,7 +332,7 @@ static int CopyMpqFiles(TMPQArchive * ha, LPDWORD pFileKeys, TFileStream * pNewS
     int nError = ERROR_SUCCESS;
 
     // Walk through all files and write them to the destination MPQ archive
-    for(pFileEntry = ha->pFileTable; pFileEntry < pFileTableEnd; pFileEntry++)
+    for (pFileEntry = ha->pFileTable; pFileEntry < pFileTableEnd; pFileEntry++)
     {
         // Copy all the file sectors
         // Only do that when the file has nonzero size
@@ -603,7 +603,7 @@ bool WINAPI SFileSetHashTableSize(HANDLE hMpq, DWORD dwNewTableSize)
         ha->pHeader->dwHashTableSize = dwNewTableSize;
 
         // Make new hash table entry for each file
-        for(pFileEntry = ha->pFileTable; pFileEntry < pFileTableEnd; pFileEntry++)
+        for (pFileEntry = ha->pFileTable; pFileEntry < pFileTableEnd; pFileEntry++)
         {
             if (pFileEntry->dwFlags & MPQ_FILE_EXISTS)
             {

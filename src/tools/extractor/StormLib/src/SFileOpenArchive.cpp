@@ -104,9 +104,9 @@ LCID WINAPI SFileSetLocale(LCID lcNewLocale)
 //extern "C" void wow_SFileVerifyMpqHeaderMD5(TMPQHeader * ha);
 
 bool WINAPI SFileOpenArchive(
-    const char * szMpqName,
-    DWORD dwPriority,
-    DWORD dwFlags,
+    const char * szMpqName, 
+    DWORD dwPriority, 
+    DWORD dwFlags, 
     HANDLE * phMpq)
 {
     TFileStream * pStream = NULL;       // Open file stream
@@ -169,7 +169,7 @@ bool WINAPI SFileOpenArchive(
         ULONGLONG SearchPos = 0;
         DWORD dwHeaderID;
 
-        while(SearchPos < FileSize)
+        while (SearchPos < FileSize)
         {
             DWORD dwBytesAvailable = MPQ_HEADER_SIZE_V4;
 
@@ -237,7 +237,7 @@ bool WINAPI SFileOpenArchive(
     // Fix table positions according to format
     if (nError == ERROR_SUCCESS)
     {
-        // W3x Map Protectors use the fact that War3's Storm.dll ignores the MPQ user data,
+        // W3x Map Protectors use the fact that War3's Storm.dll ignores the MPQ user data, 
         // and probably ignores the MPQ format version as well. The trick is to
         // fake MPQ format 2, with an improper hi-word position of hash table and block table
         // We can overcome such protectors by forcing opening the archive as MPQ v 1.0
@@ -298,12 +298,12 @@ bool WINAPI SFileOpenArchive(
         ULONGLONG RawFilePos;
 
         // Parse all file entries
-        for(pFileEntry = ha->pFileTable; pFileEntry < pFileTableEnd; pFileEntry++)
+        for (pFileEntry = ha->pFileTable; pFileEntry < pFileTableEnd; pFileEntry++)
         {
             // If that file entry is valid, check the file position
             if (pFileEntry->dwFlags & MPQ_FILE_EXISTS)
             {
-                // Get the 64-bit file position,
+                // Get the 64-bit file position, 
                 // relative to the begin of the file
                 RawFilePos = ha->MpqPos + pFileEntry->ByteOffset;
 
@@ -369,7 +369,7 @@ bool WINAPI SFileOpenArchive(
 //
 // Saves all dirty data into MPQ archive.
 // Has similar effect like SFileCloseArchive, but the archive is not closed.
-// Use on clients who keep MPQ archive open even for write operations,
+// Use on clients who keep MPQ archive open even for write operations, 
 // and terminating without calling SFileCloseArchive might corrupt the archive.
 //
 

@@ -92,7 +92,6 @@ ACE_Stream_Node::apply (ACE_Service_Gestalt *config, int &yyerrno)
             }
           ++yyerrno;
         }
-
     }
 
 #ifndef ACE_NLOGGING
@@ -151,7 +150,6 @@ ACE_Stream_Node::ACE_Stream_Node (const ACE_Static_Node *str_ops,
   ACE_TRACE ("ACE_Stream_Node::ACE_Stream_Node");
 }
 
-
 ACE_Stream_Node::~ACE_Stream_Node (void)
 {
   ACE_TRACE ("ACE_Stream_Node::~ACE_Stream_Node");
@@ -167,7 +165,6 @@ ACE_Parse_Node::ACE_Parse_Node (void)
 {
   ACE_TRACE ("ACE_Parse_Node::ACE_Parse_Node");
 }
-
 
 ACE_Parse_Node::ACE_Parse_Node (const ACE_TCHAR *nm)
   : name_ (ACE::strnew (nm)),
@@ -188,7 +185,6 @@ ACE_Parse_Node::print (void) const
   if (this->next_)
     this->next_->print ();
 }
-
 
 ACE_Parse_Node::~ACE_Parse_Node (void)
 {
@@ -309,7 +305,6 @@ ACE_Remove_Node::apply (ACE_Service_Gestalt *config, int &yyerrno)
 #endif /* ACE_NLOGGING */
 }
 
-
 ACE_Dynamic_Node::ACE_Dynamic_Node (ACE_Service_Type_Factory const *stf,
                                     ACE_TCHAR *parms)
   : ACE_Static_Node (stf->name (), parms)
@@ -413,7 +408,6 @@ ACE_Static_Node::~ACE_Static_Node (void)
   delete[] this->parameters_;
 }
 
-
 ACE_ALLOC_HOOK_DEFINE (ACE_Location_Node)
 
   void
@@ -495,7 +489,6 @@ ACE_Location_Node::open_dll (int & yyerrno)
     }
 
   return 0;
-
 }
 
 void
@@ -860,11 +853,9 @@ ACE_Service_Type_Factory::ACE_Service_Type_Factory (ACE_TCHAR const *name,
 {
 }
 
-
 ACE_Service_Type_Factory::~ACE_Service_Type_Factory (void)
 {
 }
-
 
 ACE_Service_Type *
 ACE_Service_Type_Factory::make_service_type (ACE_Service_Gestalt *cfg) const
@@ -918,7 +909,6 @@ ACE_Service_Type_Factory::name (void) const
 {
   return name_.c_str ();
 }
-
 
 ACE_END_VERSIONED_NAMESPACE_DECL
 

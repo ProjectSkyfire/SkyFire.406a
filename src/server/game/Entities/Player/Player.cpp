@@ -153,7 +153,7 @@ PlayerTaxi::PlayerTaxi()
 void PlayerTaxi::InitTaxiNodesForLevel(uint32 race, uint32 chrClass, uint8 level)
 {
     // class specific initial known nodes
-    switch(chrClass)
+    switch (chrClass)
     {
         case CLASS_DEATH_KNIGHT:
         {
@@ -164,7 +164,7 @@ void PlayerTaxi::InitTaxiNodesForLevel(uint32 race, uint32 chrClass, uint8 level
     }
 
     // race specific initial known nodes: capital and taxi hub masks
-    switch(race)
+    switch (race)
     {
         case RACE_HUMAN:    SetTaximaskNode(2);  break;     // Human
         case RACE_ORC:      SetTaximaskNode(23); break;     // Orc
@@ -180,7 +180,7 @@ void PlayerTaxi::InitTaxiNodesForLevel(uint32 race, uint32 chrClass, uint8 level
     }
 
     // new continent starting masks (It will be accessible only at new map)
-    switch(Player::TeamForRace(race))
+    switch (Player::TeamForRace(race))
     {
         case ALLIANCE: SetTaximaskNode(100); break;
         case HORDE:    SetTaximaskNode(99);  break;
@@ -1036,7 +1036,7 @@ bool Player::Create(uint32 guidlow, CharacterCreateInfo* createInfo)
         GetReputationMgr().SetReputation(sFactionStore.LookupEntry(1077), 42999);
 
         // Factions depending on team, like cities and some more stuff
-        switch(GetTeam())
+        switch (GetTeam())
         {
         case ALLIANCE:
             GetReputationMgr().SetReputation(sFactionStore.LookupEntry(72), 42999);
@@ -1133,7 +1133,7 @@ bool Player::Create(uint32 guidlow, CharacterCreateInfo* createInfo)
             // special amount for food/drink
             if (iProto->Class == ITEM_CLASS_CONSUMABLE && iProto->SubClass == ITEM_SUBCLASS_FOOD)
             {
-                switch(iProto->Spells[0].SpellCategory)
+                switch (iProto->Spells[0].SpellCategory)
                 {
                     case SPELL_CATEGORY_FOOD:                                // food
                         count = getClass() == CLASS_DEATH_KNIGHT ? 10 : 4;
@@ -3029,7 +3029,7 @@ void Player::SetGMVisible(bool on)
 
 bool Player::IsGroupVisibleFor(Player const* p) const
 {
-    switch(sWorld->getIntConfig(CONFIG_GROUP_VISIBILITY))
+    switch (sWorld->getIntConfig(CONFIG_GROUP_VISIBILITY))
     {
         default: return IsInSameGroupWith(p);
         case 1:  return IsInSameRaidWith(p);
@@ -3780,7 +3780,7 @@ bool Player::addSpell(uint32 spell_id, bool active, bool learning, bool dependen
 
             disabled_case = true;
         }
-        else switch(itr->second->state)
+        else switch (itr->second->state)
         {
             case PLAYERSPELL_UNCHANGED:                     // known saved spell
                 return false;
@@ -3966,7 +3966,7 @@ bool Player::addSpell(uint32 spell_id, bool active, bool learning, bool dependen
                 // lockpicking/runeforging special case, not have ABILITY_LEARNED_ON_GET_RACE_OR_CLASS_SKILL
                 ((pSkill->id == SKILL_LOCKPICKING || pSkill->id == SKILL_RUNEFORGING) && _spell_idx->second->max_value == 0))
             {
-                switch(GetSkillRangeType(pSkill, _spell_idx->second->racemask != 0))
+                switch (GetSkillRangeType(pSkill, _spell_idx->second->racemask != 0))
                 {
                     case SKILL_RANGE_LANGUAGE:
                         SetSkill(pSkill->id, GetSkillStep(pSkill->id), 300, 300);
@@ -4474,8 +4474,8 @@ void Player::_SaveSpellCooldowns(SQLTransaction& trans)
             }
             // next new/changed record prefix
             else
-                ss << ',';
-            ss << '(' << GetGUIDLow() << ',' << itr->first << ',' << itr->second.itemid << ',' << uint64(itr->second.end) << ')';
+                ss << ', ';
+            ss << '(' << GetGUIDLow() << ', ' << itr->first << ', ' << itr->second.itemid << ', ' << uint64(itr->second.end) << ')';
             ++itr;
         }
         else
@@ -5148,14 +5148,14 @@ void Player::DeleteOldCharacters(uint32 keepDays)
          {
             Field *charFields = resultChars->Fetch();
             Player::DeleteFromDB(charFields[0].GetUInt64(), charFields[1].GetUInt32(), true, true);
-        } while(resultChars->NextRow());
+        } while (resultChars->NextRow());
     }
 }
 
 void Player::SetMovement(PlayerMovementType pType)
 {
     WorldPacket data;
-    switch(pType)
+    switch (pType)
     {
         case MOVE_ROOT:       data.Initialize(SMSG_FORCE_MOVE_ROOT,   GetPackGUID().size()+4); break;
         case MOVE_UNROOT:     data.Initialize(SMSG_FORCE_MOVE_UNROOT, GetPackGUID().size()+4); break;
@@ -5854,7 +5854,7 @@ void Player::HandleBaseModValue(BaseModGroup modGroup, BaseModType modType, floa
     if (!CanModifyStats())
         return;
 
-    switch(modGroup)
+    switch (modGroup)
     {
         case CRIT_PERCENTAGE:              UpdateCritPercentage(BASE_ATTACK);                          break;
         case RANGED_CRIT_PERCENTAGE:       UpdateCritPercentage(RANGED_ATTACK);                        break;
@@ -6387,7 +6387,7 @@ void Player::UpdateWeaponSkill (WeaponAttackType attType)
 
     uint32 weapon_skill_gain = sWorld->getIntConfig(CONFIG_SKILL_GAIN_WEAPON);
 
-    switch(attType)
+    switch (attType)
     {
         case BASE_ATTACK:
         {
@@ -10367,7 +10367,7 @@ Item* Player::GetShield(bool useable) const
 
 uint8 Player::GetAttackBySlot(uint8 slot)
 {
-    switch(slot)
+    switch (slot)
     {
         case EQUIPMENT_SLOT_MAINHAND: return BASE_ATTACK;
         case EQUIPMENT_SLOT_OFFHAND:  return OFF_ATTACK;
@@ -12514,7 +12514,7 @@ Item* Player::EquipItem(uint16 pos, Item *pItem, bool update)
         else if (slot == EQUIPMENT_SLOT_OFFHAND)
             UpdateExpertise(OFF_ATTACK);
 
-        switch(slot)
+        switch (slot)
         {
         case EQUIPMENT_SLOT_MAINHAND:
         case EQUIPMENT_SLOT_OFFHAND:
@@ -12672,7 +12672,7 @@ void Player::RemoveItem(uint8 bag, uint8 slot, bool update)
                     else if (slot == EQUIPMENT_SLOT_OFFHAND)
                         UpdateExpertise(OFF_ATTACK);
                     // update armor penetration - passive auras may need it
-                    switch(slot)
+                    switch (slot)
                     {
                         case EQUIPMENT_SLOT_MAINHAND:
                         case EQUIPMENT_SLOT_OFFHAND:
@@ -13625,7 +13625,7 @@ void Player::SendEquipError(InventoryResult msg, Item* pItem, Item* pItem2, uint
         data << uint64(pItem2 ? pItem2->GetGUID() : 0);
         data << uint8(0);                                   // bag type subclass, used with EQUIP_ERR_EVENT_AUTOEQUIP_BIND_CONFIRM and EQUIP_ERR_ITEM_DOESNT_GO_INTO_BAG2
 
-        switch(msg)
+        switch (msg)
         {
             case EQUIP_ERR_CANT_EQUIP_LEVEL_I:
             case EQUIP_ERR_PURCHASE_LEVEL_TOO_LOW:
@@ -13928,7 +13928,7 @@ void Player::ApplyEnchantment(Item *item, EnchantmentSlot slot, bool apply, bool
             uint32 enchant_amount = pEnchant->amount[s];
             uint32 enchant_spell_id = pEnchant->spellid[s];
 
-            switch(enchant_display_type)
+            switch (enchant_display_type)
             {
                 case ITEM_ENCHANTMENT_TYPE_NONE:
                     break;
@@ -14243,7 +14243,7 @@ void Player::ApplyEnchantment(Item *item, EnchantmentSlot slot, bool apply, bool
                 default:
                     sLog->outError("Unknown item enchantment (id = %d) display type: %d", enchant_id, enchant_display_type);
                     break;
-            }                                               /*switch(enchant_display_type)*/
+            }                                               /*switch (enchant_display_type)*/
         }                                                   /*for*/
     }
 
@@ -17514,7 +17514,7 @@ bool Player::isAllowedToLoot(const Creature* creature)
     else if (thisGroup != creature->GetLootRecipientGroup())
         return false;
 
-    switch(thisGroup->GetLootMethod())
+    switch (thisGroup->GetLootMethod())
     {
         case FREE_FOR_ALL:
             return true;
@@ -18438,7 +18438,7 @@ void Player::SendRaidInfo()
                 bool isHeroic = false;
                 if (mapEntry && mapEntry->IsRaid())
                 {
-                    switch(difficulty)
+                    switch (difficulty)
                     {
                     case RAID_DIFFICULTY_10MAN_HEROIC:
                         difficulty = RAID_DIFFICULTY_10MAN_NORMAL;
@@ -18721,114 +18721,114 @@ void Player::SaveToDB()
         "death_expire_time, taxi_path, arenaPoints, totalHonorPoints, todayHonorPoints, yesterdayHonorPoints, totalKills, "
         "todayKills, yesterdayKills, chosenTitle, knownCurrencies, watchedFaction, drunk, health, power1, power2, power3, "
         "power4, power5, power6, power7, power8, power9, power10, latency, speccount, activespec, exploredZones, equipmentCache, ammoId, knownTitles, actionBars, grantableLevels) VALUES ("
-        << GetGUIDLow() << ','
+        << GetGUIDLow() << ', '
         << GetSession()->GetAccountId() << ", '"
         << sql_name << "', "
-        << uint32(getRace()) << ','
-        << uint32(getClass()) << ','
-        << uint32(getGender()) << ','
-        << uint32(getLevel()) << ','
-        << GetUInt32Value(PLAYER_XP) << ','
-        << GetMoney() << ','
-        << GetUInt32Value(PLAYER_BYTES) << ','
-        << GetUInt32Value(PLAYER_BYTES_2) << ','
-        << GetUInt32Value(PLAYER_FLAGS) << ',';
+        << uint32(getRace()) << ', '
+        << uint32(getClass()) << ', '
+        << uint32(getGender()) << ', '
+        << uint32(getLevel()) << ', '
+        << GetUInt32Value(PLAYER_XP) << ', '
+        << GetMoney() << ', '
+        << GetUInt32Value(PLAYER_BYTES) << ', '
+        << GetUInt32Value(PLAYER_BYTES_2) << ', '
+        << GetUInt32Value(PLAYER_FLAGS) << ', ';
 
     if (!IsBeingTeleported())
     {
-        ss << GetMapId() << ','
-        << (uint32)GetInstanceId() << ','
-        << uint32(uint8(GetDungeonDifficulty()) | uint8(GetRaidDifficulty()) << 4) << ','
-        << finiteAlways(GetPositionX()) << ','
-        << finiteAlways(GetPositionY()) << ','
-        << finiteAlways(GetPositionZ()) << ','
-        << finiteAlways(GetOrientation()) << ',';
+        ss << GetMapId() << ', '
+        << (uint32)GetInstanceId() << ', '
+        << uint32(uint8(GetDungeonDifficulty()) | uint8(GetRaidDifficulty()) << 4) << ', '
+        << finiteAlways(GetPositionX()) << ', '
+        << finiteAlways(GetPositionY()) << ', '
+        << finiteAlways(GetPositionZ()) << ', '
+        << finiteAlways(GetOrientation()) << ', ';
     }
     else
     {
-        ss << GetTeleportDest().GetMapId() << ','
-        << (uint32)0 << ','
-        << uint32(uint8(GetDungeonDifficulty()) | uint8(GetRaidDifficulty()) << 4) << ','
-        << finiteAlways(GetTeleportDest().GetPositionX()) << ','
-        << finiteAlways(GetTeleportDest().GetPositionY()) << ','
-        << finiteAlways(GetTeleportDest().GetPositionZ()) << ','
-        << finiteAlways(GetTeleportDest().GetOrientation()) << ',';
+        ss << GetTeleportDest().GetMapId() << ', '
+        << (uint32)0 << ', '
+        << uint32(uint8(GetDungeonDifficulty()) | uint8(GetRaidDifficulty()) << 4) << ', '
+        << finiteAlways(GetTeleportDest().GetPositionX()) << ', '
+        << finiteAlways(GetTeleportDest().GetPositionY()) << ', '
+        << finiteAlways(GetTeleportDest().GetPositionZ()) << ', '
+        << finiteAlways(GetTeleportDest().GetOrientation()) << ', ';
     }
 
-    ss << m_taxi << ',';                                    // string with TaxiMaskSize numbers
+    ss << m_taxi << ', ';                                    // string with TaxiMaskSize numbers
 
-    ss << (IsInWorld() ? 1 : 0) << ',';
+    ss << (IsInWorld() ? 1 : 0) << ', ';
 
-    ss << uint32(m_cinematic) << ',';
+    ss << uint32(m_cinematic) << ', ';
 
-    ss << m_Played_time[PLAYED_TIME_TOTAL] << ',';
-    ss << m_Played_time[PLAYED_TIME_LEVEL] << ',';
+    ss << m_Played_time[PLAYED_TIME_TOTAL] << ', ';
+    ss << m_Played_time[PLAYED_TIME_LEVEL] << ', ';
 
-    ss << finiteAlways(m_rest_bonus) << ',';
-    ss << uint32(time(NULL)) << ',';
-    ss << (HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_RESTING) ? 1 : 0) << ',';
+    ss << finiteAlways(m_rest_bonus) << ', ';
+    ss << uint32(time(NULL)) << ', ';
+    ss << (HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_RESTING) ? 1 : 0) << ', ';
                                                             //save, far from tavern/city
                                                             //save, but in tavern/city
-    ss << m_resetTalentsCost << ',';
-    ss << uint32(m_resetTalentsTime) << ',';
+    ss << m_resetTalentsCost << ', ';
+    ss << uint32(m_resetTalentsTime) << ', ';
 
-    ss << finiteAlways(m_movementInfo.t_pos.GetPositionX()) << ',';
-    ss << finiteAlways(m_movementInfo.t_pos.GetPositionY()) << ',';
-    ss << finiteAlways(m_movementInfo.t_pos.GetPositionZ()) << ',';
-    ss << finiteAlways(m_movementInfo.t_pos.GetOrientation()) << ',';
+    ss << finiteAlways(m_movementInfo.t_pos.GetPositionX()) << ', ';
+    ss << finiteAlways(m_movementInfo.t_pos.GetPositionY()) << ', ';
+    ss << finiteAlways(m_movementInfo.t_pos.GetPositionZ()) << ', ';
+    ss << finiteAlways(m_movementInfo.t_pos.GetOrientation()) << ', ';
     if (m_transport)
         ss << m_transport->GetGUIDLow();
     else
         ss << '0';
-    ss << ',';
+    ss << ', ';
 
-    ss << m_ExtraFlags << ',';
+    ss << m_ExtraFlags << ', ';
 
-    ss << uint32(m_stableSlots) << ',';                     // to prevent save uint8 as char
+    ss << uint32(m_stableSlots) << ', ';                     // to prevent save uint8 as char
 
-    ss << uint32(m_atLoginFlags) << ',';
+    ss << uint32(m_atLoginFlags) << ', ';
 
-    ss << GetZoneId() << ',';
+    ss << GetZoneId() << ', ';
 
     ss << uint32(m_deathExpireTime) << ", '";
 
     ss << m_taxi.SaveTaxiDestinationsToString() << "', ";
 
-    ss << GetArenaPoints() << ',';
+    ss << GetArenaPoints() << ', ';
 
-    ss << GetHonorPoints() << ',';
+    ss << GetHonorPoints() << ', ';
 
-    /*ss << GetUInt32Value(PLAYER_FIELD_TODAY_CONTRIBUTION) << ',';
+    /*ss << GetUInt32Value(PLAYER_FIELD_TODAY_CONTRIBUTION) << ', ';
 
-    ss << GetUInt32Value(PLAYER_FIELD_YESTERDAY_CONTRIBUTION) << ',';*/
+    ss << GetUInt32Value(PLAYER_FIELD_YESTERDAY_CONTRIBUTION) << ', ';*/
     ss << uint32(0) << ", ";
 
     ss << uint32(0) << ", ";
 
-    ss << GetUInt32Value(PLAYER_FIELD_LIFETIME_HONORABLE_KILLS) << ',';
+    ss << GetUInt32Value(PLAYER_FIELD_LIFETIME_HONORABLE_KILLS) << ', ';
 
-    ss << GetUInt16Value(PLAYER_FIELD_KILLS, 0) << ',';
+    ss << GetUInt16Value(PLAYER_FIELD_KILLS, 0) << ', ';
 
-    ss << GetUInt16Value(PLAYER_FIELD_KILLS, 1) << ',';
+    ss << GetUInt16Value(PLAYER_FIELD_KILLS, 1) << ', ';
 
-    ss << GetUInt32Value(PLAYER_CHOSEN_TITLE) << ',';
+    ss << GetUInt32Value(PLAYER_CHOSEN_TITLE) << ', ';
 
-    //ss << GetUInt64Value(PLAYER_FIELD_KNOWN_CURRENCIES) << ',';
+    //ss << GetUInt64Value(PLAYER_FIELD_KNOWN_CURRENCIES) << ', ';
     ss << uint64(0) << ", ";
 
-    ss << GetUInt32Value(PLAYER_FIELD_WATCHED_FACTION_INDEX) << ',';
+    ss << GetUInt32Value(PLAYER_FIELD_WATCHED_FACTION_INDEX) << ', ';
 
-    ss << (uint16)(GetUInt32Value(PLAYER_BYTES_3) & 0xFFFE) << ',';
+    ss << (uint16)(GetUInt32Value(PLAYER_BYTES_3) & 0xFFFE) << ', ';
 
     ss << GetHealth();
 
     for (uint32 i = 0; i < MAX_POWERS; ++i)
-        ss << ',' << GetPower(Powers(i));
-    ss << ',';
+        ss << ', ' << GetPower(Powers(i));
+    ss << ', ';
     ss << GetSession()->GetLatency();
-    ss << ',';
+    ss << ', ';
     ss << uint32(m_specsCount);
-    ss << ',';
+    ss << ', ';
     ss << uint32(m_activeSpec) << ", '";
     for (uint32 i = 0; i < PLAYER_EXPLORED_ZONES_SIZE; ++i)
         ss << GetUInt32Value(PLAYER_EXPLORED_ZONES_1 + i) << ' ';
@@ -18848,15 +18848,15 @@ void Player::SaveToDB()
         ss << " 0 ";
     }
 
-    ss << "',";
+    ss << "', ";
 
     ss << uint32(0) << ", '";
     for (uint32 i = 0; i < KNOWN_TITLES_SIZE*2; ++i)
         ss << GetUInt32Value(PLAYER__FIELD_KNOWN_TITLES + i) << ' ';
 
-    ss << "',";
+    ss << "', ";
     ss << uint32(GetByteValue(PLAYER_FIELD_BYTES, 2));
-    ss << ",";
+    ss << ", ";
     ss << uint32(m_grantableLevels);
     ss << ')';
 
@@ -19322,24 +19322,24 @@ void Player::_SaveStats(SQLTransaction& trans)
     ss << "INSERT INTO character_stats (guid, maxhealth, maxpower1, maxpower2, maxpower3, maxpower4, maxpower5, maxpower6, maxpower7, "
         "strength, agility, stamina, intellect, spirit, armor, resHoly, resFire, resNature, resFrost, resShadow, resArcane, "
         "blockPct, dodgePct, parryPct, critPct, rangedCritPct, spellCritPct, attackPower, rangedAttackPower, spellPower, resilience) VALUES ("
-        << GetGUIDLow() << ','
-        << GetMaxHealth() << ',';
+        << GetGUIDLow() << ', '
+        << GetMaxHealth() << ', ';
     for (uint8 i = 0; i < MAX_POWERS; ++i)
-        ss << GetMaxPower(Powers(i)) << ',';
+        ss << GetMaxPower(Powers(i)) << ', ';
     for (uint8 i = 0; i < MAX_STATS; ++i)
-        ss << GetStat(Stats(i)) << ',';
+        ss << GetStat(Stats(i)) << ', ';
     // armor + school resistances
     for (int i = 0; i < MAX_SPELL_SCHOOL; ++i)
-        ss << GetResistance(SpellSchools(i)) << ',';
-    ss << GetFloatValue(PLAYER_BLOCK_PERCENTAGE) << ','
-       << GetFloatValue(PLAYER_DODGE_PERCENTAGE) << ','
-       << GetFloatValue(PLAYER_PARRY_PERCENTAGE) << ','
-       << GetFloatValue(PLAYER_CRIT_PERCENTAGE) << ','
-       << GetFloatValue(PLAYER_RANGED_CRIT_PERCENTAGE) << ','
-       << GetFloatValue(PLAYER_SPELL_CRIT_PERCENTAGE1) << ','
-       << GetUInt32Value(UNIT_FIELD_ATTACK_POWER) << ','
-       << GetUInt32Value(UNIT_FIELD_RANGED_ATTACK_POWER) << ','
-       << GetBaseSpellPowerBonus() << ','
+        ss << GetResistance(SpellSchools(i)) << ', ';
+    ss << GetFloatValue(PLAYER_BLOCK_PERCENTAGE) << ', '
+       << GetFloatValue(PLAYER_DODGE_PERCENTAGE) << ', '
+       << GetFloatValue(PLAYER_PARRY_PERCENTAGE) << ', '
+       << GetFloatValue(PLAYER_CRIT_PERCENTAGE) << ', '
+       << GetFloatValue(PLAYER_RANGED_CRIT_PERCENTAGE) << ', '
+       << GetFloatValue(PLAYER_SPELL_CRIT_PERCENTAGE1) << ', '
+       << GetUInt32Value(UNIT_FIELD_ATTACK_POWER) << ', '
+       << GetUInt32Value(UNIT_FIELD_RANGED_ATTACK_POWER) << ', '
+       << GetBaseSpellPowerBonus() << ', '
        << GetUInt32Value(PLAYER_FIELD_COMBAT_RATING_1 + CR_CRIT_TAKEN_SPELL) << ')';
     trans->Append(ss.str().c_str());
 }
@@ -19702,7 +19702,7 @@ void Player::RemovePet(Pet* pet, PetSaveMode mode, bool returnreagent)
 
     if (returnreagent)
     {
-        switch(pet->GetEntry())
+        switch (pet->GetEntry())
         {
             //warlock pets except imp are removed(?) when logging out
             case 1860:
@@ -20568,7 +20568,7 @@ void Player::InitDisplayIds()
     }
 
     uint8 gender = getGender();
-    switch(gender)
+    switch (gender)
     {
         case GENDER_FEMALE:
             SetDisplayId(info->displayId_f);
@@ -21091,7 +21091,7 @@ bool Player::EnchantmentFitsRequirements(uint32 enchantmentcondition, int8 slot)
         // if have <CompareColor> use them as count, else use <value> from Condition
         uint32 _cmp_gem = Condition->CompareColor[i] ? curcount[Condition->CompareColor[i] - 1]: Condition->Value[i];
 
-        switch(Condition->Comparator[i])
+        switch (Condition->Comparator[i])
         {
             case 2:                                         // requires less <color> than (<value> || <comparecolor>) gems
                 activate &= (_cur_gem < _cmp_gem) ? true : false;
@@ -21812,7 +21812,7 @@ void Player::SendTransferAborted(uint32 mapid, TransferAbortReason reason, uint8
     WorldPacket data(SMSG_TRANSFER_ABORTED, 4+2);
     data << uint32(mapid);
     data << uint8(reason);                                 // transfer abort reason
-    switch(reason)
+    switch (reason)
     {
         case TRANSFER_ABORT_INSUF_EXPAN_LVL:
         case TRANSFER_ABORT_DIFFICULTY:
@@ -22726,7 +22726,7 @@ void Player::UpdateAreaDependentAuras(uint32 newArea)
 
     if (newArea == 4273 && GetVehicle() && GetPositionX() > 400) // Ulduar
     {
-        switch(GetVehicleBase()->GetEntry())
+        switch (GetVehicleBase()->GetEntry())
         {
             case 33062:
             case 33109:
@@ -23527,7 +23527,7 @@ void Player::_LoadSkills(PreparedQueryResult result)
             }
 
             // set fixed skill ranges
-            switch(GetSkillRangeType(pSkill, false))
+            switch (GetSkillRangeType(pSkill, false))
             {
                 case SKILL_RANGE_LANGUAGE:                      // 300..300
                     value = max = 300;

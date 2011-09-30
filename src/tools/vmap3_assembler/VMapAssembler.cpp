@@ -8,7 +8,7 @@
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful, 
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
@@ -30,18 +30,18 @@
 
 void chompAndTrim(std::string& str)
 {
-    for(unsigned int i=0;i<str.length(); ++i) {
+    for (unsigned int i=0;i<str.length(); ++i) {
         char lc = str[i];
         if (lc == '#') {
-            str = str.substr(0,i);
+            str = str.substr(0, i);
             break;
         }
     }
 
-    while(str.length() >0) {
+    while (str.length() >0) {
         char lc = str[str.length()-1];
         if (lc == '\r' || lc == '\n' || lc == ' ') {
-            str = str.substr(0,str.length()-1);
+            str = str.substr(0, str.length()-1);
         } else {
             break;
         }
@@ -62,7 +62,7 @@ bool modelNameFilter(char *pName)
     if (result) result = !Wildcard::wildcardfit("*_Bushes_*", pName);
     if (result) result = !Wildcard::wildcardfit("*_Bush_*", pName);
     if (!result) {
-        printf("%s",pName);
+        printf("%s", pName);
     }
 #endif
     return true;
@@ -80,7 +80,7 @@ A '#' at the beginning of a line defines a comment
     char buffer[501];
     FILE *cf = fopen(pConffile, "rb");
     if (cf) {
-        while(fgets(buffer, 500, cf)) {
+        while (fgets(buffer, 500, cf)) {
             std::string name = std::string(buffer);
             size_t pos = name.find_first_not_of(' ');
             name = name.substr(pos);

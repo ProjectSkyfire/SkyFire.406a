@@ -284,8 +284,8 @@ char* DBCFileLoader::AutoProduceStringsArrayHolders(const char* format, char* da
     {
         uint32 stringFieldNum = 0;
 
-        for(uint32 x = 0; x < fieldCount; x++)
-            switch(format[x])
+        for (uint32 x = 0; x < fieldCount; x++)
+            switch (format[x])
         {
             case FT_FLOAT:
             case FT_IND:
@@ -353,7 +353,7 @@ char* DBCFileLoader::AutoProduceStrings(const char* format, char* dataTable, uin
                     if (locale == 0)
                     {
                         // default locale, fill all unfilled locale entries
-                        for(uint8 loc = 0; loc < TOTAL_LOCALES; loc++)
+                        for (uint8 loc = 0; loc < TOTAL_LOCALES; loc++)
                             if (!(*slot)->Strings[loc])
                                 (*slot)->Strings[loc] = stringPool+(st-(const char*)stringTable);
                     }

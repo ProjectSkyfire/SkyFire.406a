@@ -36,7 +36,7 @@ void makeMaps_d ( DState* s )
 #define RETURN(rrr)                               \
    { retVal = rrr; goto save_state_and_return; };
 
-#define GET_BITS(lll,vvv,nnn)                     \
+#define GET_BITS(lll, vvv, nnn)                     \
    case lll: s->state = lll;                      \
    while (True) {                                 \
       if (s->bsLive >= nnn) {                     \
@@ -60,14 +60,14 @@ void makeMaps_d ( DState* s )
          s->strm->total_in_hi32++;                \
    }
 
-#define GET_UCHAR(lll,uuu)                        \
-   GET_BITS(lll,uuu,8)
+#define GET_UCHAR(lll, uuu)                        \
+   GET_BITS(lll, uuu, 8)
 
-#define GET_BIT(lll,uuu)                          \
-   GET_BITS(lll,uuu,1)
+#define GET_BIT(lll, uuu)                          \
+   GET_BITS(lll, uuu, 1)
 
 /*---------------------------------------------------*/
-#define GET_MTF_VAL(label1,label2,lval)           \
+#define GET_MTF_VAL(label1, label2, lval)           \
 {                                                 \
    if (groupPos == 0) {                           \
       groupNo++;                                  \
@@ -331,10 +331,10 @@ Int32 BZ2_decompress ( DState* s )
             if (s->len[t][i] < minLen) minLen = s->len[t][i];
          }
          BZ2_hbCreateDecodeTables (
-            &(s->limit[t][0]),
-            &(s->base[t][0]),
-            &(s->perm[t][0]),
-            &(s->len[t][0]),
+            &(s->limit[t][0]), 
+            &(s->base[t][0]), 
+            &(s->perm[t][0]), 
+            &(s->len[t][0]), 
             minLen, maxLen, alphaSize
          );
          s->minLens[t] = minLen;

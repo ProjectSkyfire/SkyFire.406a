@@ -18,6 +18,6 @@ extern const char *crypt_build_settings;
 /* ---- HMM ---- */
 int crypt_fsa(void *mp, ...);
 
-/* $Source: /cvs/libtom/libtomcrypt/src/headers/tomcrypt_misc.h,v $ */
+/* $Source: /cvs/libtom/libtomcrypt/src/headers/tomcrypt_misc.h, v $ */
 /* $Revision: 1.5 $ */
 /* $Date: 2007/05/12 14:32:35 $ */

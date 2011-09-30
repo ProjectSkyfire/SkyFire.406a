@@ -67,7 +67,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
     uint32 type;
     uint32 lang;
 
-    switch(recv_data.GetOpcode())
+    switch (recv_data.GetOpcode())
     {
         case CMSG_MESSAGECHAT_SAY:
             type = CHAT_MSG_SAY;
@@ -200,7 +200,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                 lang = LANG_UNIVERSAL;
             else
             {
-                switch(type)
+                switch (type)
                 {
                     case CHAT_MSG_PARTY:
                     case CHAT_MSG_PARTY_LEADER:
@@ -559,7 +559,7 @@ void WorldSession::HandleTextEmoteOpcode(WorldPacket & recv_data)
 
     uint32 emote_anim = em->textid;
 
-    switch(emote_anim)
+    switch (emote_anim)
     {
         case EMOTE_STATE_SLEEP:
         case EMOTE_STATE_SIT:

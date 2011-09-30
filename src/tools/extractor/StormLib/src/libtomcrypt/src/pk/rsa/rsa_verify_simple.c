@@ -28,9 +28,9 @@
   @param key              The public RSA key corresponding
   @return Error code
 */
-int rsa_verify_simple(const unsigned char *sig, unsigned long siglen,
-                      const unsigned char *hash, unsigned long hashlen,
-                            int           *stat,
+int rsa_verify_simple(const unsigned char *sig, unsigned long siglen, 
+                      const unsigned char *hash, unsigned long hashlen, 
+                            int           *stat, 
                             rsa_key       *key)
 {
   unsigned long modulus_bitlen, modulus_bytelen, x;

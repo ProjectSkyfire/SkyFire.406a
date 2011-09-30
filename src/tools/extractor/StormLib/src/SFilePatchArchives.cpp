@@ -42,7 +42,7 @@ static void Decompress_RLE(LPBYTE pbDecompressed, DWORD cbDecompressed, LPBYTE p
     memset(pbDecompressed, 0, cbDecompressed);
 
     // Unpack
-    while(pbCompressed < pbCompressedEnd && pbDecompressed < pbDecompressedEnd)
+    while (pbCompressed < pbCompressedEnd && pbDecompressed < pbDecompressedEnd)
     {
         OneByte = *pbCompressed++;
 
@@ -50,7 +50,7 @@ static void Decompress_RLE(LPBYTE pbDecompressed, DWORD cbDecompressed, LPBYTE p
         if (OneByte & 0x80)
         {
             RepeatCount = (OneByte & 0x7F) + 1;
-            for(BYTE i = 0; i < RepeatCount; i++)
+            for (BYTE i = 0; i < RepeatCount; i++)
             {
                 if (pbDecompressed == pbDecompressedEnd || pbCompressed == pbCompressedEnd)
                     break;
@@ -150,7 +150,7 @@ static int LoadMpqPatch_BSD0(TMPQFile * hf, TPatchHeader * pPatchHeader)
 }
 
 static int ApplyMpqPatch_COPY(
-    TMPQFile * hf,
+    TMPQFile * hf, 
     TPatchHeader * pPatchHeader)
 {
     LPBYTE pbNewFileData;
@@ -175,7 +175,7 @@ static int ApplyMpqPatch_COPY(
 }
 
 static int ApplyMpqPatch_BSD0(
-    TMPQFile * hf,
+    TMPQFile * hf, 
     TPatchHeader * pPatchHeader)
 {
     PBLIZZARD_BSDIFF40_FILE pBsdiff;
@@ -222,7 +222,7 @@ static int ApplyMpqPatch_BSD0(
         return ERROR_NOT_ENOUGH_MEMORY;
 
     // Now patch the file
-    while(dwNewOffset < dwNewSize)
+    while (dwNewOffset < dwNewSize)
     {
         DWORD dwAddDataLength = BSWAP_INT32_UNSIGNED(pCtrlBlock[0]);
         DWORD dwMovDataLength = BSWAP_INT32_UNSIGNED(pCtrlBlock[1]);
@@ -241,7 +241,7 @@ static int ApplyMpqPatch_BSD0(
         pDataBlock += dwAddDataLength;
 
         // Now combine the patch data with the original file
-        for(i = 0; i < dwAddDataLength; i++)
+        for (i = 0; i < dwAddDataLength; i++)
         {
             if (dwOldOffset < dwOldSize)
                 pbNewData[dwNewOffset] = pbNewData[dwNewOffset] + pbOldData[dwOldOffset];
@@ -305,7 +305,7 @@ static int LoadMpqPatch(TMPQFile * hf)
     // Read the patch, depending on patch type
     if (nError == ERROR_SUCCESS)
     {
-        switch(PatchHeader.dwPatchType)
+        switch (PatchHeader.dwPatchType)
         {
             case 0x59504f43:    // 'COPY'
                 nError = LoadMpqPatch_COPY(hf, &PatchHeader);
@@ -325,7 +325,7 @@ static int LoadMpqPatch(TMPQFile * hf)
 }
 
 static int ApplyMpqPatch(
-    TMPQFile * hf,
+    TMPQFile * hf, 
     TPatchHeader * pPatchHeader)
 {
     unsigned char md5_digest[MD5_DIGEST_SIZE];
@@ -345,7 +345,7 @@ static int ApplyMpqPatch(
     // Apply the patch
     if (nError == ERROR_SUCCESS)
     {
-        switch(pPatchHeader->dwPatchType)
+        switch (pPatchHeader->dwPatchType)
         {
             case 0x59504f43:    // 'COPY'
                 nError = ApplyMpqPatch_COPY(hf, pPatchHeader);
@@ -412,7 +412,7 @@ int PatchFileData(TMPQFile * hf)
     hf = hf->hfPatchFile;
 
     // Now go through all patches and patch the original data
-    while(hf != NULL)
+    while (hf != NULL)
     {
         // This must be true
         assert(hf->pFileEntry->dwFlags & MPQ_FILE_PATCH_FILE);
@@ -456,9 +456,9 @@ int PatchFileData(TMPQFile * hf)
 //
 
 bool WINAPI SFileOpenPatchArchive(
-    HANDLE hMpq,
-    const char * szPatchMpqName,
-    const char * szPatchPathPrefix,
+    HANDLE hMpq, 
+    const char * szPatchMpqName, 
+    const char * szPatchPathPrefix, 
     DWORD dwFlags)
 {
     TMPQArchive * haPatch;
@@ -524,7 +524,7 @@ bool WINAPI SFileOpenPatchArchive(
         }
 
         // Now add the patch archive to the list of patches to the original MPQ
-        while(ha != NULL)
+        while (ha != NULL)
         {
             if (ha->haPatch == NULL)
             {

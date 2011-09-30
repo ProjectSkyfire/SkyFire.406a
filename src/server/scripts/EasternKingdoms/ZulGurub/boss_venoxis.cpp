@@ -177,7 +177,7 @@ class boss_venoxis : public CreatureScript
 
                 while (uint32 eventId = events.ExecuteEvent())
                 {
-                    switch(eventId)
+                    switch (eventId)
                     {
                         // thrash is available in all phases
                         case EVENT_THRASH:
@@ -219,7 +219,7 @@ class boss_venoxis : public CreatureScript
                         case EVENT_HOLY_WRATH:
                             if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM))
                                 DoCast(target, SPELL_HOLY_WRATH);
-                            events.ScheduleEvent(EVENT_HOLY_WRATH, urand(45000,60000), 0, PHASE_ONE);
+                            events.ScheduleEvent(EVENT_HOLY_WRATH, urand(45000, 60000), 0, PHASE_ONE);
                             break;
 
                         //

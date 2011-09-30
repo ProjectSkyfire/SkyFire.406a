@@ -35,7 +35,7 @@ namespace ACE_Based
             void incReference() { ++m_refs; }
             void decReference()
             {
-                if(!--m_refs)
+                if (!--m_refs)
                     delete this;
             }
         private:

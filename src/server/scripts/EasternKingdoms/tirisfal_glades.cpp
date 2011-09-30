@@ -124,7 +124,7 @@ public:
                     return;
                 }
 
-                switch(Phase)
+                switch (Phase)
                 {
                     case 1:
                         DoScriptText(SAY_COMPLETE, me);

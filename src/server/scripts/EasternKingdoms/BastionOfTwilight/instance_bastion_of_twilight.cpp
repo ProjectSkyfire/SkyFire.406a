@@ -78,7 +78,7 @@ class instance_bastion_of_twilight : public InstanceMapScript
 
             void OnCreatureCreate(Creature* creature)
             {
-                switch(creature->GetEntry())
+                switch (creature->GetEntry())
                 {
                     case 44600:
                         HalfusGUID = creature->GetGUID();

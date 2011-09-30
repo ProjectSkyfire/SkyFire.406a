@@ -60,7 +60,7 @@ public:
 
     struct npc_sinkhole_kill_creditAI : public ScriptedAI
     {
-        npc_sinkhole_kill_creditAI(Creature* c) : ScriptedAI(c){}
+        npc_sinkhole_kill_creditAI(Creature* c) : ScriptedAI(c) {}
 
         uint32 uiPhaseTimer;
         uint8  Phase;
@@ -86,7 +86,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit* /*who*/){}
+        void EnterCombat(Unit* /*who*/) {}
 
         void UpdateAI(const uint32 diff)
         {
@@ -392,7 +392,7 @@ public:
 
     struct npc_scourge_prisonerAI : public ScriptedAI
     {
-        npc_scourge_prisonerAI(Creature* creature) : ScriptedAI (creature){}
+        npc_scourge_prisonerAI(Creature* creature) : ScriptedAI (creature) {}
 
         void Reset()
         {
@@ -698,7 +698,7 @@ public:
 
     struct npc_lurgglbrAI : public npc_escortAI
     {
-        npc_lurgglbrAI(Creature* creature) : npc_escortAI(creature){}
+        npc_lurgglbrAI(Creature* creature) : npc_escortAI(creature) {}
 
         uint32 IntroTimer;
         uint32 IntroPhase;
@@ -733,7 +733,7 @@ public:
             {
                 if (IntroTimer <= diff)
                 {
-                    switch(IntroPhase)
+                    switch (IntroPhase)
                     {
                         case 1:
                             //DoScriptText(SAY_WP_1_LUR_START, me);
@@ -1015,7 +1015,7 @@ public:
             if (!player)
                 return;
 
-            switch(uiPointId)
+            switch (uiPointId)
             {
                 case 3:
                     SetEscortPaused(true);
@@ -1855,7 +1855,7 @@ public:
             if (!player)
                 return;
 
-            switch(i)
+            switch (i)
             {
             case 10:
                 me->HandleEmoteCommand(EMOTE_ONESHOT_EXCLAMATION);
@@ -1956,7 +1956,7 @@ public:
             if (!player)
                 return;
 
-            switch(i)
+            switch (i)
             {
                 case 29:
                     if (player)
@@ -2254,7 +2254,7 @@ public:
 
     struct npc_warmage_coldarraAI : public Scripted_NoMovementAI
     {
-        npc_warmage_coldarraAI(Creature* creature) : Scripted_NoMovementAI(creature){}
+        npc_warmage_coldarraAI(Creature* creature) : Scripted_NoMovementAI(creature) {}
 
         uint32 m_uiTimer;                 //Timer until recast
 
@@ -2274,7 +2274,7 @@ public:
                 std::list<Creature*> orbList;
                 GetCreatureListWithEntryInGrid(orbList, me, NPC_TRANSITUS_SHIELD_DUMMY, 32.0f);
 
-                switch(me->GetEntry())
+                switch (me->GetEntry())
                 {
                     case NPC_WARMAGE_HOLLISTER:
                     {
@@ -2432,10 +2432,10 @@ public:
         {
             if (uiEventTimer && uiEventTimer <= uiDiff)
             {
-                switch(uiEventPhase)
+                switch (uiEventPhase)
                 {
                     case 1:
-                        switch(me->GetEntry())
+                        switch (me->GetEntry())
                         {
                             case NPC_SALTY_JOHN_THORPE:
                                 me->SetUInt32Value(UNIT_NPC_EMOTESTATE, 0);
@@ -2456,7 +2456,7 @@ public:
                         }
                         break;
                     case 2:
-                        switch(me->GetEntry())
+                        switch (me->GetEntry())
                         {
                             case NPC_SALTY_JOHN_THORPE:
                                 DoScriptText(SAY_HIDDEN_CULTIST_4, me);
@@ -2502,7 +2502,7 @@ public:
         uint32 uiGossipText = 0;
         const char* charGossipItem;
 
-        switch(creature->GetEntry())
+        switch (creature->GetEntry())
         {
             case NPC_TOM_HEGGER:
                 uiGossipText = GOSSIP_TEXT_TOM_HEGGER;

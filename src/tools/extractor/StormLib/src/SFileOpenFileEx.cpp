@@ -56,7 +56,7 @@ bool OpenPatchedFile(HANDLE hMpq, const char * szFileName, DWORD dwReserved, HAN
     dwReserved = dwReserved;
 
     // First of all, try to open the original version of the file in any of the patch chain
-    while(ha != NULL)
+    while (ha != NULL)
     {
         // Construct the name of the patch file
         strcpy(szPatchFileName, ha->szPatchPrefix);
@@ -91,7 +91,7 @@ bool OpenPatchedFile(HANDLE hMpq, const char * szFileName, DWORD dwReserved, HAN
     ha = ha->haPatch;
 
     // Now keep going in the patch chain and open every patch file that is there
-    while(ha != NULL)
+    while (ha != NULL)
     {
         // Construct patch file name
         strcpy(szPatchFileName, ha->szPatchPrefix);
@@ -101,7 +101,7 @@ bool OpenPatchedFile(HANDLE hMpq, const char * szFileName, DWORD dwReserved, HAN
             // Remember the new version
             hfPatch = (TMPQFile *)hPatchFile;
 
-            // If we encountered a full replacement of the file,
+            // If we encountered a full replacement of the file, 
             // we have to remember the highest full file
             if ((hfPatch->pFileEntry->dwFlags & MPQ_FILE_PATCH_FILE) == 0)
                 hfLast = hfPatch;
@@ -116,7 +116,7 @@ bool OpenPatchedFile(HANDLE hMpq, const char * szFileName, DWORD dwReserved, HAN
     }
 
     // Now we need to free all files that are below the highest unpatched version
-    while(hfBase != hfLast)
+    while (hfBase != hfLast)
     {
         TMPQFile * hfNext = hfBase->hfPatchFile;
 
@@ -141,14 +141,14 @@ bool OpenPatchedFile(HANDLE hMpq, const char * szFileName, DWORD dwReserved, HAN
 //-----------------------------------------------------------------------------
 // SFileEnumLocales enums all locale versions within MPQ.
 // Functions fills all available language identifiers on a file into the buffer
-// pointed by plcLocales. There must be enough entries to copy the localed,
+// pointed by plcLocales. There must be enough entries to copy the localed, 
 // otherwise the function returns ERROR_INSUFFICIENT_BUFFER.
 
 int WINAPI SFileEnumLocales(
-    HANDLE hMpq,
-    const char * szFileName,
-    LCID * plcLocales,
-    LPDWORD pdwMaxLocales,
+    HANDLE hMpq, 
+    const char * szFileName, 
+    LCID * plcLocales, 
+    LPDWORD pdwMaxLocales, 
     DWORD dwSearchScope)
 {
     TMPQArchive * ha = (TMPQArchive *)hMpq;
@@ -170,7 +170,7 @@ int WINAPI SFileEnumLocales(
     if (dwSearchScope == SFILE_OPEN_FROM_MPQ)
     {
         pFirstHash = pHash = GetFirstHashEntry(ha, szFileName);
-        while(pHash != NULL)
+        while (pHash != NULL)
         {
             dwLocales++;
             pHash = GetNextHashEntry(ha, pFirstHash, pHash);
@@ -195,7 +195,7 @@ int WINAPI SFileEnumLocales(
     if (dwSearchScope == SFILE_OPEN_FROM_MPQ)
     {
         pFirstHash = pHash = GetFirstHashEntry(ha, szFileName);
-        while(pHash != NULL)
+        while (pHash != NULL)
         {
             *plcLocales++ = pHash->lcLocale;
             pHash = GetNextHashEntry(ha, pFirstHash, pHash);
@@ -268,7 +268,7 @@ bool WINAPI SFileOpenFileEx(HANDLE hMpq, const char * szFileName, DWORD dwSearch
     // Prepare the file opening
     if (nError == ERROR_SUCCESS)
     {
-        switch(dwSearchScope)
+        switch (dwSearchScope)
         {
             case SFILE_OPEN_PATCHED_FILE:
 
@@ -323,7 +323,7 @@ bool WINAPI SFileOpenFileEx(HANDLE hMpq, const char * szFileName, DWORD dwSearch
             case SFILE_OPEN_ANY_LOCALE:
 
                 // This open option is reserved for opening MPQ internal listfile.
-                // No argument validation. Tries to open file with neutral locale first,
+                // No argument validation. Tries to open file with neutral locale first, 
                 // then any other available.
                 dwSearchScope = SFILE_OPEN_FROM_MPQ;
                 pFileEntry = GetFileEntryAny(ha, szFileName);
@@ -396,9 +396,9 @@ bool WINAPI SFileOpenFileEx(HANDLE hMpq, const char * szFileName, DWORD dwSearch
         {
             if (pFileEntry->dwFlags & MPQ_FILE_ENCRYPTED)
             {
-                hf->dwFileKey = DecryptFileKey(szFileName,
-                                               pFileEntry->ByteOffset,
-                                               pFileEntry->dwFileSize,
+                hf->dwFileKey = DecryptFileKey(szFileName, 
+                                               pFileEntry->ByteOffset, 
+                                               pFileEntry->dwFileSize, 
                                                pFileEntry->dwFlags);
             }
         }

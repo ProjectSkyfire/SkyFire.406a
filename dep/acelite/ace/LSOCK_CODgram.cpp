@@ -5,8 +5,6 @@
 
 #include "ace/Log_Msg.h"
 
-
-
 #if !defined (__ACE_INLINE__)
 #include "ace/LSOCK_CODgram.inl"
 #endif /* __ACE_INLINE__ */

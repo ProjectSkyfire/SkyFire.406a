@@ -143,7 +143,7 @@ static size_t ReadListFileLine(TListFileCache * pCache, char * szLine, int nMaxC
     char * szExtraString = NULL;
 
     // Skip newlines, spaces, tabs and another non-printable stuff
-    for(;;)
+    for (;;)
     {
         // If we need to reload the cache, do it
         if (pCache->pPos == pCache->pEnd)
@@ -161,7 +161,7 @@ static size_t ReadListFileLine(TListFileCache * pCache, char * szLine, int nMaxC
     }
 
     // Copy the remaining characters
-    while(szLine < szLineEnd)
+    while (szLine < szLineEnd)
     {
         // If we need to reload the cache, do it now and resume copying
         if (pCache->pPos == pCache->pEnd)
@@ -175,7 +175,7 @@ static size_t ReadListFileLine(TListFileCache * pCache, char * szLine, int nMaxC
             break;
 
         // Blizzard listfiles can also contain information about patch:
-        // Pass1\Files\MacOS\unconditional\user\Background Downloader.app\Contents\Info.plist~Patch(Data#frFR#base-frFR,1326)
+        // Pass1\Files\MacOS\unconditional\user\Background Downloader.app\Contents\Info.plist~Patch(Data#frFR#base-frFR, 1326)
         if (*pCache->pPos == '~')
             szExtraString = szLine;
 
@@ -209,7 +209,7 @@ static int CompareFileNodes(const void * p1, const void * p2)
 }
 
 static int WriteListFileLine(
-    TMPQFile * hf,
+    TMPQFile * hf, 
     const char * szLine)
 {
     char szNewLine[2] = {0x0D, 0x0A};
@@ -226,7 +226,7 @@ static int WriteListFileLine(
 //-----------------------------------------------------------------------------
 // Local functions (listfile nodes)
 
-// Adds a name into the list of all names. For each locale in the MPQ,
+// Adds a name into the list of all names. For each locale in the MPQ, 
 // one entry will be created
 // If the file name is already there, does nothing.
 int SListFileCreateNodeForAllLocales(TMPQArchive * ha, const char * szFileName)
@@ -240,7 +240,7 @@ int SListFileCreateNodeForAllLocales(TMPQArchive * ha, const char * szFileName)
     pFirstHash = pHash = GetFirstHashEntry(ha, szFileName);
 
     // Go while we found something
-    while(pHash != NULL)
+    while (pHash != NULL)
     {
         // Is it a valid file table index ?
         if (pHash->dwBlockIndex < pHeader->dwBlockTableSize)
@@ -283,11 +283,11 @@ int SListFileSaveToMpq(TMPQArchive * ha)
         return ERROR_NOT_ENOUGH_MEMORY;
 
     // Construct the sort table
-    // Note: in MPQs with multiple locale versions of the same file,
+    // Note: in MPQs with multiple locale versions of the same file, 
     // this code causes adding multiple listfile entries.
-    // Since those MPQs were last time used in Starcraft II,
+    // Since those MPQs were last time used in Starcraft II, 
     // we leave it as it is.
-    for(pFileEntry = ha->pFileTable; pFileEntry < pFileTableEnd; pFileEntry++)
+    for (pFileEntry = ha->pFileTable; pFileEntry < pFileTableEnd; pFileEntry++)
     {
         // Only take existing items
         if ((pFileEntry->dwFlags & MPQ_FILE_EXISTS) && pFileEntry->szFileName != NULL)
@@ -312,7 +312,7 @@ int SListFileSaveToMpq(TMPQArchive * ha)
         szPrevItem = SortTable[0];
 
         // Count all next items
-        for(i = 1; i < nFileNodes; i++)
+        for (i = 1; i < nFileNodes; i++)
         {
             // If the item is the same like the last one, skip it
             if (_stricmp(SortTable[i], szPrevItem))
@@ -323,11 +323,11 @@ int SListFileSaveToMpq(TMPQArchive * ha)
         }
 
         // Create the listfile in the MPQ
-        nError = SFileAddFile_Init(ha, LISTFILE_NAME,
-                                       NULL,
-                                       dwFileSize,
-                                       LANG_NEUTRAL,
-                                       MPQ_FILE_ENCRYPTED | MPQ_FILE_COMPRESS | MPQ_FILE_REPLACEEXISTING,
+        nError = SFileAddFile_Init(ha, LISTFILE_NAME, 
+                                       NULL, 
+                                       dwFileSize, 
+                                       LANG_NEUTRAL, 
+                                       MPQ_FILE_ENCRYPTED | MPQ_FILE_COMPRESS | MPQ_FILE_REPLACEEXISTING, 
                                       &hf);
 
         // Add all file names
@@ -338,7 +338,7 @@ int SListFileSaveToMpq(TMPQArchive * ha)
             nError = WriteListFileLine(hf, SortTable[0]);
 
             // Count all next items
-            for(i = 1; i < nFileNodes; i++)
+            for (i = 1; i < nFileNodes; i++)
             {
                 // If the item is the same like the last one, skip it
                 if (_stricmp(SortTable[i], szPrevItem))
@@ -353,11 +353,11 @@ int SListFileSaveToMpq(TMPQArchive * ha)
     {
         // Create the listfile in the MPQ
         dwFileSize = (DWORD)strlen(LISTFILE_NAME) + 2;
-        nError = SFileAddFile_Init(ha, LISTFILE_NAME,
-                                       NULL,
-                                       dwFileSize,
-                                       LANG_NEUTRAL,
-                                       MPQ_FILE_ENCRYPTED | MPQ_FILE_COMPRESS | MPQ_FILE_REPLACEEXISTING,
+        nError = SFileAddFile_Init(ha, LISTFILE_NAME, 
+                                       NULL, 
+                                       dwFileSize, 
+                                       LANG_NEUTRAL, 
+                                       MPQ_FILE_ENCRYPTED | MPQ_FILE_COMPRESS | MPQ_FILE_REPLACEEXISTING, 
                                       &hf);
 
         // Just add "(listfile)" there
@@ -387,7 +387,7 @@ int WINAPI SFileAddListFile(HANDLE hMpq, const char * szListFile)
     int nError = ERROR_SUCCESS;
 
     // Add the listfile for each MPQ in the patch chain
-    while(ha != NULL)
+    while (ha != NULL)
     {
         // Load the listfile to cache
         pCache = CreateListFileCache(hMpq, szListFile);
@@ -398,7 +398,7 @@ int WINAPI SFileAddListFile(HANDLE hMpq, const char * szListFile)
         }
 
         // Load the node list. Add the node for every locale in the archive
-        while((nLength = ReadListFileLine(pCache, szFileName, sizeof(szFileName))) > 0)
+        while ((nLength = ReadListFileLine(pCache, szFileName, sizeof(szFileName))) > 0)
             SListFileCreateNodeForAllLocales(ha, szFileName);
 
         // Also, add three special files to the listfile:
@@ -447,7 +447,7 @@ HANDLE WINAPI SListFileFindFirstFile(HANDLE hMpq, const char * szListFile, const
     // Perform file search
     if (nError == ERROR_SUCCESS)
     {
-        for(;;)
+        for (;;)
         {
             // Read the (next) line
             nLength = ReadListFileLine(pCache, lpFindFileData->cFileName, sizeof(lpFindFileData->cFileName));
@@ -482,7 +482,7 @@ bool WINAPI SListFileFindNextFile(HANDLE hFind, SFILE_FIND_DATA * lpFindFileData
     bool bResult = false;
     int nError = ERROR_SUCCESS;
 
-    for(;;)
+    for (;;)
     {
         // Read the (next) line
         nLength = ReadListFileLine(pCache, lpFindFileData->cFileName, sizeof(lpFindFileData->cFileName));

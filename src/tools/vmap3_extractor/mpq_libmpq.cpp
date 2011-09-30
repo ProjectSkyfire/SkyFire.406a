@@ -8,7 +8,7 @@
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful, 
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
@@ -29,7 +29,7 @@ MPQArchive::MPQArchive(const char* filename)
     int result = libmpq__archive_open(&mpq_a, filename, -1);
     printf("Opening %s\n", filename);
     if (result) {
-        switch(result) {
+        switch (result) {
             case LIBMPQ_ERROR_OPEN :
                 printf("Error opening archive '%s': Does file really exist?\n", filename);
                 break;
@@ -61,12 +61,12 @@ void MPQArchive::close()
 }
 
 MPQFile::MPQFile(const char* filename):
-    eof(false),
-    buffer(0),
-    pointer(0),
+    eof(false), 
+    buffer(0), 
+    pointer(0), 
     size(0)
 {
-    for(ArchiveSet::iterator i=gOpenArchives.begin(); i!=gOpenArchives.end();++i)
+    for (ArchiveSet::iterator i=gOpenArchives.begin(); i!=gOpenArchives.end();++i)
     {
         mpq_archive *mpq_a = (*i)->mpq_a;
 

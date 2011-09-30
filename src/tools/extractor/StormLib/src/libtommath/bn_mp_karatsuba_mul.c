@@ -20,7 +20,7 @@
  *
  * Let B represent the radix [e.g. 2**DIGIT_BIT] and
  * let n represent half of the number of digits in
- * the min(a,b)
+ * the min(a, b)
  *
  * a = a1 * B**n + a0
  * b = b1 * B**n + b0
@@ -162,6 +162,6 @@ ERR:
 }
 #endif
 
-/* $Source: /cvs/libtom/libtommath/bn_mp_karatsuba_mul.c,v $ */
+/* $Source: /cvs/libtom/libtommath/bn_mp_karatsuba_mul.c, v $ */
 /* $Revision: 1.6 $ */
 /* $Date: 2006/12/28 01:25:13 $ */

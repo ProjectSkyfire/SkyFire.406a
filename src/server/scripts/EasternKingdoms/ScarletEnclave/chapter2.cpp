@@ -110,7 +110,7 @@ public:
                         return;
                     }
 
-                    switch(Speech_counter)
+                    switch (Speech_counter)
                     {
                         case 1: DoScriptText(SAY_PERSUADED1, me); Speech_timer = 8000; break;
                         case 2: DoScriptText(SAY_PERSUADED2, me); Speech_timer = 8000; break;
@@ -220,7 +220,7 @@ public:
 
         void WaypointReached(uint32 PointId)
         {
-            switch(PointId)
+            switch (PointId)
             {
                 case 0:
                     DoScriptText(SAY_BREAKOUT1, me);
@@ -281,7 +281,7 @@ public:
             {
                 if (Wave_Timer <= Diff)
                 {
-                    switch(Wave)
+                    switch (Wave)
                     {
                         case 0:
                             DoScriptText(SAY_BREAKOUT3, me);
@@ -396,7 +396,7 @@ public:
             {
                 if (Stage_timer <= diff)
                 {
-                    switch(Stage)
+                    switch (Stage)
                     {
                     case 1:
                         me->AddUnitMovementFlag(MOVEMENTFLAG_WALKING);
@@ -607,7 +607,7 @@ public:
 
         bool MeetQuestCondition(Unit* player)
         {
-            switch(me->GetEntry())
+            switch (me->GetEntry())
             {
                 case 29061:                                     // Ellen Stanbridge
                     if (CAST_PLR(player)->GetQuestStatus(12742) == QUEST_STATUS_INCOMPLETE)
@@ -679,10 +679,10 @@ public:
 
                     //TODO: simplify text's selection
 
-                    switch(player->getRace())
+                    switch (player->getRace())
                     {
                         case RACE_HUMAN:
-                            switch(ExecuteSpeech_Counter)
+                            switch (ExecuteSpeech_Counter)
                             {
                                 case 0: DoScriptText(SAY_EXEC_START_1, me, player); break;
                                 case 1: me->SetStandState(UNIT_STAND_STATE_STAND); break;
@@ -710,7 +710,7 @@ public:
                             }
                             break;
                         case RACE_ORC:
-                            switch(ExecuteSpeech_Counter)
+                            switch (ExecuteSpeech_Counter)
                             {
                                 case 0: DoScriptText(SAY_EXEC_START_1, me, player); break;
                                 case 1: me->SetStandState(UNIT_STAND_STATE_STAND); break;
@@ -738,7 +738,7 @@ public:
                             }
                             break;
                         case RACE_DWARF:
-                            switch(ExecuteSpeech_Counter)
+                            switch (ExecuteSpeech_Counter)
                             {
                                 case 0: DoScriptText(SAY_EXEC_START_2, me, player); break;
                                 case 1: me->SetStandState(UNIT_STAND_STATE_STAND); break;
@@ -766,7 +766,7 @@ public:
                             }
                             break;
                         case RACE_NIGHTELF:
-                            switch(ExecuteSpeech_Counter)
+                            switch (ExecuteSpeech_Counter)
                             {
                                 case 0: DoScriptText(SAY_EXEC_START_1, me, player); break;
                                 case 1: me->SetStandState(UNIT_STAND_STATE_STAND); break;
@@ -794,7 +794,7 @@ public:
                             }
                             break;
                         case RACE_UNDEAD_PLAYER:
-                            switch(ExecuteSpeech_Counter)
+                            switch (ExecuteSpeech_Counter)
                             {
                                 case 0: DoScriptText(SAY_EXEC_START_1, me, player); break;
                                 case 1: me->SetStandState(UNIT_STAND_STATE_STAND); break;
@@ -822,7 +822,7 @@ public:
                             }
                             break;
                         case RACE_TAUREN:
-                            switch(ExecuteSpeech_Counter)
+                            switch (ExecuteSpeech_Counter)
                             {
                                 case 0: DoScriptText(SAY_EXEC_START_1, me, player); break;
                                 case 1: me->SetStandState(UNIT_STAND_STATE_STAND); break;
@@ -850,7 +850,7 @@ public:
                             }
                             break;
                         case RACE_GNOME:
-                            switch(ExecuteSpeech_Counter)
+                            switch (ExecuteSpeech_Counter)
                             {
                                 case 0: DoScriptText(SAY_EXEC_START_1, me, player); break;
                                 case 1: me->SetStandState(UNIT_STAND_STATE_STAND); break;
@@ -878,7 +878,7 @@ public:
                             }
                             break;
                         case RACE_TROLL:
-                            switch(ExecuteSpeech_Counter)
+                            switch (ExecuteSpeech_Counter)
                             {
                                 case 0: DoScriptText(SAY_EXEC_START_3, me, player); break;
                                 case 1: me->SetStandState(UNIT_STAND_STATE_STAND); break;
@@ -906,7 +906,7 @@ public:
                             }
                             break;
                         case RACE_BLOODELF:
-                            switch(ExecuteSpeech_Counter)
+                            switch (ExecuteSpeech_Counter)
                             {
                                 case 0: DoScriptText(SAY_EXEC_START_1, me, player); break;
                                 case 1: me->SetStandState(UNIT_STAND_STATE_STAND); break;
@@ -934,7 +934,7 @@ public:
                             }
                             break;
                         case RACE_DRAENEI:
-                            switch(ExecuteSpeech_Counter)
+                            switch (ExecuteSpeech_Counter)
                             {
                                 case 0: DoScriptText(SAY_EXEC_START_1, me, player); break;
                                 case 1: me->SetStandState(UNIT_STAND_STATE_STAND); break;

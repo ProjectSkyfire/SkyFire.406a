@@ -27,7 +27,6 @@ ACE_MUTEX_LOCK_CLEANUP_ADAPTER_NAME (void *args)
   ACE_VERSIONED_NAMESPACE_NAME::ACE_OS::mutex_lock_cleanup (args);
 }
 
-
 #if !defined(ACE_WIN32) && defined (__IBMCPP__) && (__IBMCPP__ >= 400)
 # define ACE_BEGINTHREADEX(STACK, STACKSIZE, ENTRY_POINT, ARGS, FLAGS, THR_ID) \
        (*THR_ID = ::_beginthreadex ((void(_Optlink*)(void*))ENTRY_POINT, STACK, STACKSIZE, ARGS), *THR_ID)
@@ -584,7 +583,6 @@ private:
   /// use by this thread.
   ACE_thread_key_t in_use_;
 };
-
 
 /*****************************************************************************/
 /**
@@ -3612,7 +3610,6 @@ ACE_OS::sched_params (const ACE_Sched_Params &sched_params,
 
   if (sched_params.scope () == ACE_SCOPE_THREAD)
     {
-
       // Setting the REALTIME_PRIORITY_CLASS on Windows is almost always
       // a VERY BAD THING. This include guard will allow people
       // to easily disable this feature in ACE.
@@ -3638,7 +3635,6 @@ ACE_OS::sched_params (const ACE_Sched_Params &sched_params,
     }
   else if (sched_params.scope () == ACE_SCOPE_PROCESS)
     {
-
 # if defined (ACE_HAS_PHARLAP_RT)
       ACE_NOTSUP_RETURN (-1);
 # else
@@ -3670,7 +3666,6 @@ ACE_OS::sched_params (const ACE_Sched_Params &sched_params,
       ::CloseHandle (hProcess);
       return 0;
 #endif /* ACE_HAS_PHARLAP_RT */
-
     }
   else
     {
@@ -4165,7 +4160,6 @@ ACE_OS::thr_create (ACE_THR_FUNC func,
         {
            if (ACE_ADAPT_RETVAL(::pthread_attr_setcreatesuspend_np(&attr), result) != 0)
             {
-
               ::pthread_attr_destroy (&attr);
               return -1;
             }

@@ -435,7 +435,7 @@ void Creature::Update(uint32 diff)
             m_vehicleKit->Reset();
     }
 
-    switch(m_deathState)
+    switch (m_deathState)
     {
         case JUST_ALIVED:
             // Must not be called, see Creature::setDeathState JUST_ALIVED -> ALIVE promoting.
@@ -820,7 +820,7 @@ bool Creature::isCanTrainingOf(Player* pPlayer, bool msg) const
         return false;
     }
 
-    switch(GetCreatureInfo()->trainer_type)
+    switch (GetCreatureInfo()->trainer_type)
     {
         case TRAINER_TYPE_CLASS:
             if (pPlayer->getClass() != GetCreatureInfo()->trainer_class)
@@ -828,7 +828,7 @@ bool Creature::isCanTrainingOf(Player* pPlayer, bool msg) const
                 if (msg)
                 {
                     pPlayer->PlayerTalkClass->ClearMenus();
-                    switch(GetCreatureInfo()->trainer_class)
+                    switch (GetCreatureInfo()->trainer_class)
                     {
                         case CLASS_DRUID:  pPlayer->PlayerTalkClass->SendGossipMenu(4913, GetGUID()); break;
                         case CLASS_HUNTER: pPlayer->PlayerTalkClass->SendGossipMenu(10090, GetGUID()); break;
@@ -858,7 +858,7 @@ bool Creature::isCanTrainingOf(Player* pPlayer, bool msg) const
                 if (msg)
                 {
                     pPlayer->PlayerTalkClass->ClearMenus();
-                    switch(GetCreatureInfo()->trainer_class)
+                    switch (GetCreatureInfo()->trainer_class)
                     {
                         case RACE_DWARF:        pPlayer->PlayerTalkClass->SendGossipMenu(5865, GetGUID()); break;
                         case RACE_GNOME:        pPlayer->PlayerTalkClass->SendGossipMenu(4881, GetGUID()); break;
@@ -904,7 +904,7 @@ bool Creature::isCanInteractWithBattleMaster(Player* pPlayer, bool msg) const
     if (!pPlayer->GetBGAccessByLevel(bgTypeId))
     {
         pPlayer->PlayerTalkClass->ClearMenus();
-        switch(bgTypeId)
+        switch (bgTypeId)
         {
             case BATTLEGROUND_AV:  pPlayer->PlayerTalkClass->SendGossipMenu(7616, GetGUID()); break;
             case BATTLEGROUND_WS:  pPlayer->PlayerTalkClass->SendGossipMenu(7599, GetGUID()); break;
@@ -1084,25 +1084,25 @@ void Creature::SaveToDB(uint32 mapid, uint8 spawnMask, uint32 phaseMask)
 
     std::ostringstream ss;
     ss << "INSERT INTO creature VALUES ("
-        << m_DBTableGuid << ','
-        << GetEntry() << ','
-        << mapid << ','
-        << uint32(spawnMask) << ','                         // cast to prevent save as symbol
-        << uint16(GetPhaseMask()) << ','                    // prevent out of range error
-        << displayId << ','
-        << GetEquipmentId() << ','
-        << GetPositionX() << ','
-        << GetPositionY() << ','
-        << GetPositionZ() << ','
-        << GetOrientation() << ','
-        << m_respawnDelay << ','                            //respawn time
-        << (float) m_respawnradius << ','                   //spawn distance (float)
-        << (uint32) (0) << ','                              //currentwaypoint
-        << GetHealth() << ','                               //curhealth
-        << GetPower(POWER_MANA) << ','                      //curmana
-        << GetDefaultMovementType() << ','                  //default movement generator type
-        << npcflag << ','
-        << unit_flags << ','
+        << m_DBTableGuid << ', '
+        << GetEntry() << ', '
+        << mapid << ', '
+        << uint32(spawnMask) << ', '                         // cast to prevent save as symbol
+        << uint16(GetPhaseMask()) << ', '                    // prevent out of range error
+        << displayId << ', '
+        << GetEquipmentId() << ', '
+        << GetPositionX() << ', '
+        << GetPositionY() << ', '
+        << GetPositionZ() << ', '
+        << GetOrientation() << ', '
+        << m_respawnDelay << ', '                            //respawn time
+        << (float) m_respawnradius << ', '                   //spawn distance (float)
+        << (uint32) (0) << ', '                              //currentwaypoint
+        << GetHealth() << ', '                               //curhealth
+        << GetPower(POWER_MANA) << ', '                      //curmana
+        << GetDefaultMovementType() << ', '                  //default movement generator type
+        << npcflag << ', '
+        << unit_flags << ', '
         << dynamicflags << ')';
 
     trans->Append(ss.str().c_str());

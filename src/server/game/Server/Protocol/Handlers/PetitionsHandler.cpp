@@ -125,7 +125,7 @@ void WorldSession::HandlePetitionBuyOpcode(WorldPacket & recv_data)
             return;
         }
 
-        switch(clientIndex)                                 // arenaSlot+1 as received from client (1 from 3 case)
+        switch (clientIndex)                                 // arenaSlot+1 as received from client (1 from 3 case)
         {
             case 1:
                 charterid = ARENA_TEAM_CHARTER_2v2;

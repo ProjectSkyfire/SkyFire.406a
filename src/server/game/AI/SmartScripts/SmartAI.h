@@ -49,7 +49,7 @@ enum SmartEscortVars
 class SmartAI : public CreatureAI
 {
     public:
-        ~SmartAI(){};
+        ~SmartAI() {};
         explicit SmartAI(Creature* c);
 
         // Start moving to the desired MovePoint

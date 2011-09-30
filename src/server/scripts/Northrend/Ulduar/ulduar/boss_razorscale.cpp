@@ -836,7 +836,7 @@ class npc_darkrune_watcher : public CreatureScript
 
         struct npc_darkrune_watcherAI : public ScriptedAI
         {
-            npc_darkrune_watcherAI(Creature* creature) : ScriptedAI(creature){}
+            npc_darkrune_watcherAI(Creature* creature) : ScriptedAI(creature) {}
 
             uint32 ChainTimer;
             uint32 LightTimer;
@@ -885,7 +885,7 @@ class npc_darkrune_guardian : public CreatureScript
 
         struct npc_darkrune_guardianAI : public ScriptedAI
         {
-            npc_darkrune_guardianAI(Creature* creature) : ScriptedAI(creature){}
+            npc_darkrune_guardianAI(Creature* creature) : ScriptedAI(creature) {}
 
             uint32 StormTimer;
 
@@ -939,7 +939,7 @@ class npc_darkrune_sentinel : public CreatureScript
 
         struct npc_darkrune_sentinelAI : public ScriptedAI
         {
-            npc_darkrune_sentinelAI(Creature* creature) : ScriptedAI(creature){}
+            npc_darkrune_sentinelAI(Creature* creature) : ScriptedAI(creature) {}
 
             uint32 HeroicTimer;
             uint32 WhirlTimer;

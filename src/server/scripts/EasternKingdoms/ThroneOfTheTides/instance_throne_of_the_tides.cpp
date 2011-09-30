@@ -58,13 +58,13 @@ public:
             uiMindbenderGhrusha = 0;
             uiOzumat = 0;
 
-            for(uint8 i=0; i < ENCOUNTERS; ++i)
+            for (uint8 i=0; i < ENCOUNTERS; ++i)
                 uiEncounter[i] = NOT_STARTED;
         }
 
         bool IsEncounterInProgress() const
         {
-            for(uint8 i=0; i < ENCOUNTERS; ++i)
+            for (uint8 i=0; i < ENCOUNTERS; ++i)
             {
                 if (uiEncounter[i] == IN_PROGRESS)
                     return true;
@@ -74,7 +74,7 @@ public:
 
         void OnCreatureCreate(Creature* creature, bool )
         {
-            switch(creature->GetEntry())
+            switch (creature->GetEntry())
             {
                  case BOSS_LADY_NAZJAR:
                      uiLadyNazjar = creature->GetGUID();
@@ -96,7 +96,7 @@ public:
 
         uint64 getData64(uint32 identifier)
         {
-            switch(identifier)
+            switch (identifier)
             {
                 case DATA_LADY_NAZJAR:
                     return uiLadyNazjar;
@@ -114,7 +114,7 @@ public:
 
         void SetData(uint32 type, uint32 data)
         {
-            switch(type)
+            switch (type)
             {
                 case DATA_LADY_NAZJAR:
                     uiEncounter[0] = data;
@@ -139,7 +139,7 @@ public:
 
         uint32 GetData(uint32 type)
         {
-            switch(type)
+            switch (type)
             {
                 case DATA_LADY_NAZJAR_EVENT:
                     return uiEncounter[0];
@@ -192,7 +192,7 @@ public:
                 uiEncounter[3] = data3;
                 uiEncounter[4] = data4;
 
-                for(uint8 i=0; i<ENCOUNTERS; ++i)
+                for (uint8 i=0; i<ENCOUNTERS; ++i)
                     if (uiEncounter[i] == IN_PROGRESS)
                         uiEncounter[i] = NOT_STARTED;
             }

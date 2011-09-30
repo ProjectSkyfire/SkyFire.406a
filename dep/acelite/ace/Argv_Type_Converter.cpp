@@ -28,7 +28,6 @@ ACE_Argv_Type_Converter::ACE_Argv_Type_Converter (int &argc, wchar_t** argv)
 }
 #endif  // ACE_USES_WCHAR
 
-
 ACE_Argv_Type_Converter::ACE_Argv_Type_Converter (int &argc, char **argv)
   : saved_argc_(argc),
     char_argv_(argv)
@@ -99,7 +98,6 @@ ACE_Argv_Type_Converter::initialize (void)
       this->wchar_argv_[saved_argc_] = 0;
     }
 }
-
 
 void
 ACE_Argv_Type_Converter::align_char_with_wchar (void)

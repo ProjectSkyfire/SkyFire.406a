@@ -138,7 +138,6 @@ ACE_INET_Addr::is_ip_equal (const ACE_INET_Addr &sap) const
   return this->get_ip_address () == sap.get_ip_address();
 }
 
-
 u_long
 ACE_INET_Addr::hash (void) const
 {
@@ -309,7 +308,6 @@ ACE_INET_Addr::set (u_short port_number,
 
   return 0;
 }
-
 
 // Initializes a ACE_INET_Addr from a PORT_NUMBER and the remote
 // HOST_NAME.
@@ -944,7 +942,6 @@ int ACE_INET_Addr::set_address (const char *ip_addr,
       if (encode)
         ip4 = ACE_HTONL (ip4);
 
-
       if (this->get_type () == AF_INET && map == 0) {
         this->base_set (AF_INET, sizeof (this->inet_addr_.in4_));
 #ifdef ACE_HAS_SOCKADDR_IN_SIN_LEN
@@ -1023,7 +1020,6 @@ int ACE_INET_Addr::set_address (const char *ip_addr,
   // Here with an unrecognized length.
   errno = EAFNOSUPPORT;
   return -1;
-
 }
 
 #if (defined (__linux__) || defined (ACE_WIN32)) && defined (ACE_HAS_IPV6)
@@ -1049,7 +1045,6 @@ ACE_INET_Addr::set_interface (const char *intf_name)
     }
   else
     return 0;
-
 }
 #endif /* __linux && ACE_HAS_IPV6 */
 

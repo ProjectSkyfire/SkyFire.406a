@@ -518,7 +518,7 @@ void ArenaTeam::BroadcastEvent(ArenaTeamEvents event, uint64 guid, uint8 strCoun
 
 uint8 ArenaTeam::GetSlotByType(uint32 type)
 {
-    switch(type)
+    switch (type)
     {
         case ARENA_TEAM_2v2: return 0;
         case ARENA_TEAM_3v3: return 1;

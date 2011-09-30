@@ -102,7 +102,7 @@ public:
 
         void WaypointReached(uint32 Point)
         {
-            switch(Point)
+            switch (Point)
             {
                 case 0:
                     if (NpcEntry == NPC_ASH)

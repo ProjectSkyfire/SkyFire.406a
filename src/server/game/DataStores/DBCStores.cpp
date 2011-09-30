@@ -394,8 +394,8 @@ void LoadDBCStores(const std::string& dataPath, uint32& availableDbcLocales)
     sMapDifficultyStore.Clear();
 
     LoadDBC(availableDbcLocales, bad_dbc_files, sMovieStore,                  dbcPath, "Movie.dbc");
-    LoadDBC(availableDbcLocales,bad_dbc_files,sMountCapabilityStore,          dbcPath,"MountCapability.dbc");
-    LoadDBC(availableDbcLocales,bad_dbc_files,sMountTypeStore,                dbcPath,"MountType.dbc");
+    LoadDBC(availableDbcLocales, bad_dbc_files, sMountCapabilityStore,          dbcPath, "MountCapability.dbc");
+    LoadDBC(availableDbcLocales, bad_dbc_files, sMountTypeStore,                dbcPath, "MountType.dbc");
     LoadDBC(availableDbcLocales, bad_dbc_files, sOverrideSpellDataStore,      dbcPath, "OverrideSpellData.dbc");
 
     LoadDBC(availableDbcLocales, bad_dbc_files, sPvPDifficultyStore,          dbcPath, "PvpDifficulty.dbc");
@@ -685,7 +685,7 @@ ContentLevels GetContentLevelsForMapAndZone(uint32 mapid, uint32 zoneId)
     if (!mapEntry)
         return CONTENT_1_60;
 
-    switch(mapEntry->Expansion())
+    switch (mapEntry->Expansion())
     {
         case 1:
             return CONTENT_61_70;

@@ -168,9 +168,9 @@ class spell_dk_anti_magic_zone : public SpellScriptLoader
                 SpellInfo const* talentSpell = sSpellMgr->GetSpellInfo(DK_SPELL_ANTI_MAGIC_SHELL_TALENT);
                 amount = talentSpell->Effects[EFFECT_0].CalcValue(GetCaster());
                 Unit* caster = GetCaster();
-                if(!caster)
+                if (!caster)
                     return;
-                if(Player* player = caster->ToPlayer())
+                if (Player* player = caster->ToPlayer())
                      amount += int32(2 * player->GetTotalAttackPowerValue(BASE_ATTACK));
             }
 
@@ -607,7 +607,7 @@ public:
     }
 };
 
-// 50391,50392 Improved Unholy Presence
+// 50391, 50392 Improved Unholy Presence
 class spell_dk_improved_unholy_presence : public SpellScriptLoader
 {
 public:

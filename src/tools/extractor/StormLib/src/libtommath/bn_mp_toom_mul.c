@@ -28,8 +28,8 @@ int mp_toom_mul(mp_int *a, mp_int *b, mp_int *c)
     int res, B;
 
     /* init temps */
-    if ((res = mp_init_multi(&w0, &w1, &w2, &w3, &w4,
-                             &a0, &a1, &a2, &b0, &b1,
+    if ((res = mp_init_multi(&w0, &w1, &w2, &w3, &w4, 
+                             &a0, &a1, &a2, &b0, &b1, 
                              &b2, &tmp1, &tmp2, NULL)) != MP_OKAY) {
        return res;
     }
@@ -166,7 +166,7 @@ int mp_toom_mul(mp_int *a, mp_int *b, mp_int *c)
        16 8  4  2  1
        1  0  0  0  0
 
-       using 12 subtractions, 4 shifts,
+       using 12 subtractions, 4 shifts, 
               2 small divisions and 1 small multiplication
      */
 
@@ -270,14 +270,14 @@ int mp_toom_mul(mp_int *a, mp_int *b, mp_int *c)
      }
 
 ERR:
-     mp_clear_multi(&w0, &w1, &w2, &w3, &w4,
-                    &a0, &a1, &a2, &b0, &b1,
+     mp_clear_multi(&w0, &w1, &w2, &w3, &w4, 
+                    &a0, &a1, &a2, &b0, &b1, 
                     &b2, &tmp1, &tmp2, NULL);
      return res;
 }
 
 #endif
 
-/* $Source: /cvs/libtom/libtommath/bn_mp_toom_mul.c,v $ */
+/* $Source: /cvs/libtom/libtommath/bn_mp_toom_mul.c, v $ */
 /* $Revision: 1.4 $ */
 /* $Date: 2006/12/28 01:25:13 $ */
