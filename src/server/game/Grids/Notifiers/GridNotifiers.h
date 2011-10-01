@@ -1026,15 +1026,11 @@ namespace Trinity
                     return false;
 
                 if (m_force)
-                {
                     if (!me->IsValidAttackTarget(u))
                         return false;
-                }
                 else
-                {
                     if (!me->canStartAttack(u, false))
                         return false;
-                }
 
                 m_range = me->GetDistance(u);   // use found unit range as new range limit for next check
                 return true;
