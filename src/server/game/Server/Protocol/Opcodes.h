@@ -719,7 +719,7 @@ enum Opcodes
     CMSG_MOVE_SPLINE_DONE                            = 0x069E8, // 4.0.6a 13623
     CMSG_MOVE_FALL_RESET                             = 0x100E6, // Unknown opcode ID
     SMSG_INSTANCE_SAVE_CREATED                       = 0x0BBC4, // 4.0.6a 13623
-    SMSG_RAID_INSTANCE_INFO                          = 0x100E7, // 4.0.6a 13623
+    SMSG_RAID_INSTANCE_INFO                          = 0x0A18C, // 4.0.6a 13623
     CMSG_REQUEST_RAID_INFO                           = 0x03DE4, // 4.0.6a 13623
     CMSG_MOVE_TIME_SKIPPED                           = 0x0E180, // 4.0.6a 13623
     CMSG_MOVE_FEATHER_FALL_ACK                       = 0x06EA8, // 4.0.6a 13623
