@@ -4891,7 +4891,7 @@ TrainerSpellState Player::GetTrainerSpellState(TrainerSpell const* trainer_spell
             continue;
         SpellInfo const* learnedSpellInfo = sSpellMgr->GetSpellInfo(trainer_spell->learnedSpell[i]);
         if (learnedSpellInfo && learnedSpellInfo->IsPrimaryProfessionFirstRank() && (GetFreePrimaryProfessionPoints() == 0))
-            return TRAINER_SPELL_GREEN_DISABLED;
+            return TRAINER_SPELL_RED;
     }
 
     return TRAINER_SPELL_GREEN;
