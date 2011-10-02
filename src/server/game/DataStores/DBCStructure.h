@@ -934,7 +934,7 @@ struct FactionTemplateEntry
     bool IsHostileTo(FactionTemplateEntry const& entry) const
     {
         if (ID == entry.ID)
-            return true;
+            return false;
         if (entry.faction)
         {
             for (int i = 0; i < 4; ++i)
@@ -1414,7 +1414,7 @@ struct ScalingStatValuesEntry
     //uint32 trash[24];                                     // 22-45
     //uint32 unk2;                                          // 46 unk, probably also Armor for level (flag 0x80000?)
 
-    uint32  getssdMultiplier(uint32 mask) const
+    uint32 getssdMultiplier(uint32 mask) const
     {
         if (mask & 0x4001F)
         {
@@ -1428,7 +1428,7 @@ struct ScalingStatValuesEntry
         return 0;
     }
 
-    uint32  getArmorMod(uint32 mask) const
+    uint32 getArmorMod(uint32 mask) const
     {
         if (mask & 0x00F001E0)
         {
@@ -1471,7 +1471,7 @@ struct ScalingStatValuesEntry
 
 //struct SkillLineCategoryEntry{
 //    uint32    id;                                         // 0      m_ID
-//    char*     name[16];                                   // 1-17   m_name_lang
+//    DBCString name                                        // 1-17   m_name_lang
 //                                                          // 18 string flag
 //    uint32    displayOrder;                               // 19     m_sortIndex
 //};
@@ -1528,7 +1528,7 @@ struct SoundEntriesEntry
     uint32    Id;                                           // 0        m_ID
     //uint32    Type;                                       // 1        m_soundType
     //DBCString     InternalName;                           // 2        m_name
-    //DBCString     FileName[10];                           // 3-12     m_File[10]
+    //DBCString     FileName;                               // 3-12     m_File[10]
     //uint32    Unk13[10];                                  // 13-22    m_Freq[10]
     //DBCString     Path;                                   // 23       m_DirectoryBase
                                                             // 24       m_volumeFloat
@@ -1995,7 +1995,7 @@ struct TaxiPathNodeEntry
 struct TotemCategoryEntry
 {
     uint32    ID;                                           // 0
-    //char*   name[16];                                     // 1-16
+    // DBCString name;                                        // 1-16
                                                             // 17 string flags, unused
     uint32    categoryType;                                 // 18 (one for specialization)
     uint32    categoryMask;                                 // 19 (compatibility mask for same type: different for totems, compatible from high to low for rods)
@@ -2028,9 +2028,9 @@ struct VehicleEntry
     float   m_msslTrgtArcRepeat;                            // 25
     float   m_msslTrgtArcWidth;                             // 26
     float   m_msslTrgtImpactRadius[2];                      // 27-28
-    char*   m_msslTrgtArcTexture;                           // 29
-    char*   m_msslTrgtImpactTexture;                        // 30
-    char*   m_msslTrgtImpactModel[2];                       // 31-32
+    DBCString  m_msslTrgtArcTexture;                        // 29
+    DBCString  m_msslTrgtImpactTexture;                     // 30
+    DBCString  m_msslTrgtImpactModel[2];                    // 31-32
     float   m_cameraYawOffset;                              // 33
     uint32  m_uiLocomotionType;                             // 34
     float   m_msslTrgtImpactTexRadius;                      // 35
@@ -2089,6 +2089,9 @@ struct VehicleSeatEntry
     int32   m_uiSkin;                                       // 44
     uint32  m_flagsB;                                       // 45
                                                             // 46-57 added in 3.1, floats mostly
+    //uint32 unk[6];                                        // 58-63
+    //uint32 unk2;                                          // 64 4.0.0
+    //uint32 unk3;                                          // 65 4.0.1
 
     bool CanEnterOrExit() const { return m_flags & VEHICLE_SEAT_FLAG_CAN_ENTER_OR_EXIT; }
     bool CanSwitchFromSeat() const { return m_flags & VEHICLE_SEAT_FLAG_B_CANSWITCH; }
