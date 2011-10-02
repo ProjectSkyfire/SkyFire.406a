@@ -50,22 +50,22 @@ GameObject::GameObject() : WorldObject(), m_goValue(new GameObjectValue), m_AI(N
 
     m_updateFlag = (UPDATEFLAG_HAS_POSITION | UPDATEFLAG_POSITION | UPDATEFLAG_ROTATION);
 
-    m_valuesCount = GAMEOBJECT_END;
-    m_respawnTime = 0;
-    m_respawnDelayTime = 300;
-    m_lootState = GO_NOT_READY;
-    m_spawnedByDefault = true;
-    m_usetimes = 0;
-    m_spellId = 0;
-    m_cooldownTime = 0;
-    m_goInfo = NULL;
-    m_ritualOwner = NULL;
-    m_goData = NULL;
+    m_valuesCount       = GAMEOBJECT_END;
+    m_respawnTime       = 0;
+    m_respawnDelayTime  = 300;
+    m_lootState         = GO_NOT_READY;
+    m_spawnedByDefault  = true;
+    m_usetimes          = 0;
+    m_spellId           = 0;
+    m_cooldownTime      = 0;
+    m_goInfo            = NULL;
+    m_ritualOwner       = NULL;
+    m_goData            = NULL;
 
-    m_DBTableGuid = 0;
-    m_rotation = 0;
+    m_DBTableGuid       = 0;
+    m_rotation          = 0;
 
-    m_groupLootTimer = 0;
+    m_groupLootTimer    = 0;
     lootingGroupLowGUID = 0;
 
     ResetLootMode(); // restore default loot mode
@@ -221,7 +221,7 @@ bool GameObject::Create(uint32 guidlow, uint32 name_id, Map* map, uint32 phaseMa
     {
         case GAMEOBJECT_TYPE_DESTRUCTIBLE_BUILDING:
             m_goValue->Building.Health = goinfo->building.intactNumHits + goinfo->building.damagedNumHits;
-            m_goValue->Building.MaxHealth = m_goValue->Building.Health;
+            m_goValue->Building.MaxHealth = goinfo->building.intactNumHits + goinfo->building.damagedNumHits;
             SetGoAnimProgress(255);
             break;
         case GAMEOBJECT_TYPE_TRANSPORT:
@@ -666,22 +666,22 @@ void GameObject::SaveToDB(uint32 mapid, uint8 spawnMask, uint32 phaseMask)
     GameObjectData& data = sObjectMgr->NewGOData(m_DBTableGuid);
 
     // data->guid = guid must not be updated at save
-    data.id = GetEntry();
-    data.mapid = mapid;
-    data.phaseMask = phaseMask;
-    data.posX = GetPositionX();
-    data.posY = GetPositionY();
-    data.posZ = GetPositionZ();
-    data.orientation = GetOrientation();
-    data.rotation0 = GetFloatValue(GAMEOBJECT_PARENTROTATION+0);
-    data.rotation1 = GetFloatValue(GAMEOBJECT_PARENTROTATION+1);
-    data.rotation2 = GetFloatValue(GAMEOBJECT_PARENTROTATION+2);
-    data.rotation3 = GetFloatValue(GAMEOBJECT_PARENTROTATION+3);
-    data.spawntimesecs = m_spawnedByDefault ? m_respawnDelayTime : -(int32)m_respawnDelayTime;
-    data.animprogress = GetGoAnimProgress();
-    data.go_state = GetGoState();
-    data.spawnMask = spawnMask;
-    data.artKit = GetGoArtKit();
+    data.id               = GetEntry();
+    data.mapid            = mapid;
+    data.phaseMask        = phaseMask;
+    data.posX             = GetPositionX();
+    data.posY             = GetPositionY();
+    data.posZ             = GetPositionZ();
+    data.orientation      = GetOrientation();
+    data.rotation0        = GetFloatValue(GAMEOBJECT_PARENTROTATION + 0);
+    data.rotation1        = GetFloatValue(GAMEOBJECT_PARENTROTATION + 1);
+    data.rotation2        = GetFloatValue(GAMEOBJECT_PARENTROTATION + 2);
+    data.rotation3        = GetFloatValue(GAMEOBJECT_PARENTROTATION + 3);
+    data.spawntimesecs    = m_spawnedByDefault ? m_respawnDelayTime : -(int32)m_respawnDelayTime;
+    data.animprogress     = GetGoAnimProgress();
+    data.go_state         = GetGoState();
+    data.spawnMask        = spawnMask;
+    data.artKit           = GetGoArtKit();
 
     // update in DB
     std::ostringstream ss;
@@ -696,9 +696,9 @@ void GameObject::SaveToDB(uint32 mapid, uint8 spawnMask, uint32 phaseMask)
         << GetPositionZ() << ','
         << GetOrientation() << ','
         << GetFloatValue(GAMEOBJECT_PARENTROTATION) << ','
-        << GetFloatValue(GAMEOBJECT_PARENTROTATION+1) << ','
-        << GetFloatValue(GAMEOBJECT_PARENTROTATION+2) << ','
-        << GetFloatValue(GAMEOBJECT_PARENTROTATION+3) << ','
+        << GetFloatValue(GAMEOBJECT_PARENTROTATION + 1) << ','
+        << GetFloatValue(GAMEOBJECT_PARENTROTATION + 2) << ','
+        << GetFloatValue(GAMEOBJECT_PARENTROTATION + 3) << ','
         << m_respawnDelayTime << ','
         << uint32(GetGoAnimProgress()) << ','
         << uint32(GetGoState()) << ')';
@@ -719,22 +719,22 @@ bool GameObject::LoadFromDB(uint32 guid, Map* map)
         return false;
     }
 
-    uint32 entry = data->id;
-    //uint32 map_id = data->mapid;                          // already used before call
-    uint32 phaseMask = data->phaseMask;
-    float x = data->posX;
-    float y = data->posY;
-    float z = data->posZ;
-    float ang = data->orientation;
+    uint32 entry         = data->id;
+    //uint32 map_id      = data->mapid;                          // already used before call
+    uint32 phaseMask     = data->phaseMask;
+    float x              = data->posX;
+    float y              = data->posY;
+    float z              = data->posZ;
+    float ang            = data->orientation;
 
-    float rotation0 = data->rotation0;
-    float rotation1 = data->rotation1;
-    float rotation2 = data->rotation2;
-    float rotation3 = data->rotation3;
+    float rotation0      = data->rotation0;
+    float rotation1      = data->rotation1;
+    float rotation2      = data->rotation2;
+    float rotation3      = data->rotation3;
 
-    uint32 animprogress = data->animprogress;
-    GOState go_state = data->go_state;
-    uint32 artKit = data->artKit;
+    uint32 animprogress  = data->animprogress;
+    GOState go_state     = data->go_state;
+    uint32 artKit        = data->artKit;
 
     m_DBTableGuid = guid;
     if (map->GetInstanceId() != 0) guid = sObjectMgr->GenerateLowGuid(HIGHGUID_GAMEOBJECT);
@@ -749,8 +749,8 @@ bool GameObject::LoadFromDB(uint32 guid, Map* map)
         if (!GetGOInfo()->GetDespawnPossibility() && !GetGOInfo()->IsDespawnAtAction())
         {
             SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_NODESPAWN);
-            m_respawnDelayTime = 0;
-            m_respawnTime = 0;
+            m_respawnDelayTime   = 0;
+            m_respawnTime        = 0;
         }
         else
         {
@@ -767,9 +767,9 @@ bool GameObject::LoadFromDB(uint32 guid, Map* map)
     }
     else
     {
-        m_spawnedByDefault = false;
-        m_respawnDelayTime = -data->spawntimesecs;
-        m_respawnTime = 0;
+        m_spawnedByDefault  = false;
+        m_respawnDelayTime  = -data->spawntimesecs;
+        m_respawnTime       = 0;
     }
 
     m_goData = data;
@@ -819,7 +819,8 @@ bool GameObject::IsTransport() const
 {
     // If something is marked as a transport, don't transmit an out of range packet for it.
     GameObjectTemplate const* gInfo = GetGOInfo();
-    if (!gInfo) return false;
+    if (!gInfo)
+        return false;
     return gInfo->type == GAMEOBJECT_TYPE_TRANSPORT || gInfo->type == GAMEOBJECT_TYPE_MO_TRANSPORT;
 }
 
@@ -828,7 +829,8 @@ bool GameObject::IsDynTransport() const
 {
     // If something is marked as a transport, don't transmit an out of range packet for it.
     GameObjectTemplate const* gInfo = GetGOInfo();
-    if (!gInfo) return false;
+    if (!gInfo)
+        return false;
     return gInfo->type == GAMEOBJECT_TYPE_MO_TRANSPORT || (gInfo->type == GAMEOBJECT_TYPE_TRANSPORT && !gInfo->transport.pause);
 }
 
@@ -890,7 +892,7 @@ bool GameObject::ActivateToQuest(Player* pTarget) const
         {
             if (LootTemplates_Gameobject.HaveQuestLootForPlayer(GetGOInfo()->GetLootId(), pTarget))
             {
-                //TODO: fix this hack
+                ///- TODO: fix this hack!!!
                 //look for battlegroundAV for some objects which are only activated after mine gots captured by own team
                 if (GetEntry() == BG_AV_OBJECTID_MINE_N || GetEntry() == BG_AV_OBJECTID_MINE_S)
                     if (Battleground* bg = pTarget->GetBattleground())
@@ -1030,9 +1032,9 @@ void GameObject::SwitchDoorOrButton(bool activate, bool alternative /* = false *
 void GameObject::Use(Unit* user)
 {
     // by default spell caster is user
-    Unit* spellCaster = user;
-    uint32 spellId = 0;
-    bool triggered = false;
+    Unit* spellCaster  = user;
+    uint32 spellId     = 0;
+    bool triggered     = false;
 
     if (Player* playerUser = user->ToPlayer())
     {
@@ -1797,10 +1799,12 @@ void GameObject::SetDestructibleState(GameObjectDestructibleState state, Player*
         case GO_DESTRUCTIBLE_DAMAGED:
         {
             EventInform(m_goInfo->building.damagedEvent);
-            sScriptMgr->OnGameObjectDamaged(this, eventInvoker);
             if (eventInvoker)
+            {
+                sScriptMgr->OnGameObjectDamaged(this, eventInvoker);
                 if (Battleground* bg = eventInvoker->GetBattleground())
                     bg->EventPlayerDamagedGO(eventInvoker, this, m_goInfo->building.damagedEvent);
+            }
 
             RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_DESTROYED);
             SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_DAMAGED);
@@ -1824,10 +1828,10 @@ void GameObject::SetDestructibleState(GameObjectDestructibleState state, Player*
         }
         case GO_DESTRUCTIBLE_DESTROYED:
         {
-            sScriptMgr->OnGameObjectDestroyed(this, eventInvoker);
             EventInform(m_goInfo->building.destroyedEvent);
             if (eventInvoker)
             {
+                sScriptMgr->OnGameObjectDestroyed(this, eventInvoker);
                 if (Battleground* bg = eventInvoker->GetBattleground())
                 {
                     bg->EventPlayerDamagedGO(eventInvoker, this, m_goInfo->building.destroyedEvent);
