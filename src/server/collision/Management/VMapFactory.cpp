@@ -66,7 +66,7 @@ namespace VMAP
         unsigned int i;
         for (i=pStartPos;i<pString.size(); ++i)
         {
-            if (pString[i] == ', ')
+            if (pString[i] == ',')
             {
                 break;
             }

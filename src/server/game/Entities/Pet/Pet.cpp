@@ -402,18 +402,18 @@ void Pet::SavePetToDB(PetSaveMode mode)
         std::ostringstream ss;
         ss  << "INSERT INTO character_pet (id, entry,  owner, modelid, level, exp, Reactstate, slot, name, renamed, curhealth, curmana, curhappiness, abdata, savetime, CreatedBySpell, PetType) "
             << "VALUES ("
-            << m_charmInfo->GetPetNumber() << ', '
-            << GetEntry() << ', '
-            << owner << ', '
-            << GetNativeDisplayId() << ', '
-            << uint32(getLevel()) << ', '
-            << GetUInt32Value(UNIT_FIELD_PETEXPERIENCE) << ', '
-            << uint32(GetReactState()) << ', '
+            << m_charmInfo->GetPetNumber() << ','
+            << GetEntry() << ','
+            << owner << ','
+            << GetNativeDisplayId() << ','
+            << uint32(getLevel()) << ','
+            << GetUInt32Value(UNIT_FIELD_PETEXPERIENCE) << ','
+            << uint32(GetReactState()) << ','
             << uint32(mode) << ", '"
             << name.c_str() << "', "
-            << uint32(HasByteFlag(UNIT_FIELD_BYTES_2, 2, UNIT_CAN_BE_RENAMED) ? 0 : 1) << ', '
-            << curhealth << ', '
-            << curmana << ', '
+            << uint32(HasByteFlag(UNIT_FIELD_BYTES_2, 2, UNIT_CAN_BE_RENAMED) ? 0 : 1) << ','
+            << curhealth << ','
+            << curmana << ','
             << GetPower(POWER_HAPPINESS) << ", '";
 
         for (uint32 i = ACTION_BAR_INDEX_START; i < ACTION_BAR_INDEX_END; ++i)
@@ -423,8 +423,8 @@ void Pet::SavePetToDB(PetSaveMode mode)
         };
 
         ss  << "', "
-            << time(NULL) << ', '
-            << GetUInt32Value(UNIT_CREATED_BY_SPELL) << ', '
+            << time(NULL) << ','
+            << GetUInt32Value(UNIT_CREATED_BY_SPELL) << ','
             << uint32(getPetType()) << ')';
 
         trans->Append(ss.str().c_str());
@@ -1640,7 +1640,7 @@ void Pet::resetTalentsForAllPetsOf(Player* owner, Pet* online_pet /*= NULL*/)
         uint32 id = fields[0].GetUInt32();
 
         if (need_comma)
-            ss << ', ';
+            ss << ',';
 
         ss << id;
 
@@ -1661,7 +1661,7 @@ void Pet::resetTalentsForAllPetsOf(Player* owner, Pet* online_pet /*= NULL*/)
             continue;
 
         if (need_execute)
-            ss << ', ';
+            ss << ',';
 
         ss << spell;
 

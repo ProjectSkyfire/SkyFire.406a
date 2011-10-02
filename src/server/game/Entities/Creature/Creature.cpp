@@ -1084,25 +1084,25 @@ void Creature::SaveToDB(uint32 mapid, uint8 spawnMask, uint32 phaseMask)
 
     std::ostringstream ss;
     ss << "INSERT INTO creature VALUES ("
-        << m_DBTableGuid << ', '
-        << GetEntry() << ', '
-        << mapid << ', '
-        << uint32(spawnMask) << ', '                         // cast to prevent save as symbol
-        << uint16(GetPhaseMask()) << ', '                    // prevent out of range error
-        << displayId << ', '
-        << GetEquipmentId() << ', '
-        << GetPositionX() << ', '
-        << GetPositionY() << ', '
-        << GetPositionZ() << ', '
-        << GetOrientation() << ', '
-        << m_respawnDelay << ', '                            //respawn time
-        << (float) m_respawnradius << ', '                   //spawn distance (float)
-        << (uint32) (0) << ', '                              //currentwaypoint
-        << GetHealth() << ', '                               //curhealth
-        << GetPower(POWER_MANA) << ', '                      //curmana
-        << GetDefaultMovementType() << ', '                  //default movement generator type
-        << npcflag << ', '
-        << unit_flags << ', '
+        << m_DBTableGuid << ','
+        << GetEntry() << ','
+        << mapid << ','
+        << uint32(spawnMask) << ','                         // cast to prevent save as symbol
+        << uint16(GetPhaseMask()) << ','                    // prevent out of range error
+        << displayId << ','
+        << GetEquipmentId() << ','
+        << GetPositionX() << ','
+        << GetPositionY() << ','
+        << GetPositionZ() << ','
+        << GetOrientation() << ','
+        << m_respawnDelay << ','                            //respawn time
+        << (float) m_respawnradius << ','                   //spawn distance (float)
+        << (uint32) (0) << ','                              //currentwaypoint
+        << GetHealth() << ','                               //curhealth
+        << GetPower(POWER_MANA) << ','                      //curmana
+        << GetDefaultMovementType() << ','                  //default movement generator type
+        << npcflag << ','
+        << unit_flags << ','
         << dynamicflags << ')';
 
     trans->Append(ss.str().c_str());

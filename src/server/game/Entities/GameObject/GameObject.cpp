@@ -686,21 +686,21 @@ void GameObject::SaveToDB(uint32 mapid, uint8 spawnMask, uint32 phaseMask)
     // update in DB
     std::ostringstream ss;
     ss << "INSERT INTO gameobject VALUES ("
-        << m_DBTableGuid << ', '
-        << GetEntry() << ', '
-        << mapid << ', '
-        << uint32(spawnMask) << ', '                         // cast to prevent save as symbol
-        << uint16(GetPhaseMask()) << ', '                    // prevent out of range error
-        << GetPositionX() << ', '
-        << GetPositionY() << ', '
-        << GetPositionZ() << ', '
-        << GetOrientation() << ', '
-        << GetFloatValue(GAMEOBJECT_PARENTROTATION) << ', '
-        << GetFloatValue(GAMEOBJECT_PARENTROTATION+1) << ', '
-        << GetFloatValue(GAMEOBJECT_PARENTROTATION+2) << ', '
-        << GetFloatValue(GAMEOBJECT_PARENTROTATION+3) << ', '
-        << m_respawnDelayTime << ', '
-        << uint32(GetGoAnimProgress()) << ', '
+        << m_DBTableGuid << ','
+        << GetEntry() << ','
+        << mapid << ','
+        << uint32(spawnMask) << ','                         // cast to prevent save as symbol
+        << uint16(GetPhaseMask()) << ','                    // prevent out of range error
+        << GetPositionX() << ','
+        << GetPositionY() << ','
+        << GetPositionZ() << ','
+        << GetOrientation() << ','
+        << GetFloatValue(GAMEOBJECT_PARENTROTATION) << ','
+        << GetFloatValue(GAMEOBJECT_PARENTROTATION+1) << ','
+        << GetFloatValue(GAMEOBJECT_PARENTROTATION+2) << ','
+        << GetFloatValue(GAMEOBJECT_PARENTROTATION+3) << ','
+        << m_respawnDelayTime << ','
+        << uint32(GetGoAnimProgress()) << ','
         << uint32(GetGoState()) << ')';
 
     SQLTransaction trans = WorldDatabase.BeginTransaction();
