@@ -31,6 +31,6 @@ int     KARATSUBA_MUL_CUTOFF = 80,     /* Min. number of digits before Karatsuba
         TOOM_SQR_CUTOFF      = 400;
 #endif
 
-/* $Source: /cvs/libtom/libtommath/bncore.c,v $ */
+/* $Source: /cvs/libtom/libtommath/bncore.c, v $ */
 /* $Revision: 1.5 $ */
 /* $Date: 2006/12/28 01:25:13 $ */

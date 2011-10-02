@@ -119,7 +119,7 @@ public:
             if (!player)
                 return;
 
-            switch(i)
+            switch (i)
             {
             case 16:
                 DoScriptText(SAY_AMBUSH, me);
@@ -140,7 +140,7 @@ public:
             summoned->AI()->AttackStart(me);
         }
 
-        void Reset(){}
+        void Reset() {}
     };
 
     bool OnQuestAccept(Player* player, Creature* creature, Quest const* quest)

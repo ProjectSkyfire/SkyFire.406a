@@ -8,7 +8,7 @@
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful, 
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
@@ -34,7 +34,7 @@ char * wdtGetPlainName(char * FileName)
 
 WDTFile::WDTFile(char* file_name, char* file_name1):WDT(file_name)
 {
-    filename.append(file_name1,strlen(file_name1));
+    filename.append(file_name1, strlen(file_name1));
 }
 
 bool WDTFile::init(char *map_id, unsigned int mapID)
@@ -59,7 +59,7 @@ bool WDTFile::init(char *map_id, unsigned int mapID)
 
     while (!WDT.isEof())
     {
-        WDT.read(fourcc,4);
+        WDT.read(fourcc, 4);
         WDT.read(&size, 4);
 
         flipcc(fourcc);
@@ -67,10 +67,10 @@ bool WDTFile::init(char *map_id, unsigned int mapID)
 
         size_t nextpos = WDT.getPos() + size;
 
-        if (!strcmp(fourcc,"MAIN"))
+        if (!strcmp(fourcc, "MAIN"))
         {
         }
-        if (!strcmp(fourcc,"MWMO"))
+        if (!strcmp(fourcc, "MWMO"))
         {
             // global map objects
             if (size)
@@ -84,14 +84,14 @@ bool WDTFile::init(char *map_id, unsigned int mapID)
                 {
                     string path(p);
                     char* s=wdtGetPlainName(p);
-                    fixnamen(s,strlen(s));
+                    fixnamen(s, strlen(s));
                     p=p+strlen(p)+1;
                     gWmoInstansName[q++] = s;
                 }
                 delete[] buf;
             }
         }
-        else if (!strcmp(fourcc,"MODF"))
+        else if (!strcmp(fourcc, "MODF"))
         {
             // global wmo instance data
             if (size)
@@ -106,7 +106,7 @@ bool WDTFile::init(char *map_id, unsigned int mapID)
                 {
                     int id;
                     WDT.read(&id, 4);
-                    WMOInstance inst(WDT,gWmoInstansName[id].c_str(),mapID, 65, 65, dirfile);
+                    WMOInstance inst(WDT, gWmoInstansName[id].c_str(), mapID, 65, 65, dirfile);
                 }
                 delete[] gWmoInstansName;
             }
@@ -131,6 +131,6 @@ ADTFile* WDTFile::GetMap(int x, int z)
 
     char name[512];
 
-    sprintf(name,"World\\Maps\\%s\\%s_%d_%d_obj0.adt", filename.c_str(), filename.c_str(), x, z);
+    sprintf(name, "World\\Maps\\%s\\%s_%d_%d_obj0.adt", filename.c_str(), filename.c_str(), x, z);
     return new ADTFile(name);
 }

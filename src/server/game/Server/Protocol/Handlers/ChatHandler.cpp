@@ -64,8 +64,62 @@ bool WorldSession::processChatmessageFurtherAfterSecurityChecks(std::string& msg
 
 void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 {
-    uint32 type = 0;
+    uint32 type;
     uint32 lang;
+
+    switch (recv_data.GetOpcode())
+    {
+        case CMSG_MESSAGECHAT_SAY:
+            type = CHAT_MSG_SAY;
+            break;
+        case CMSG_MESSAGECHAT_YELL:
+            type = CHAT_MSG_YELL;
+            break;
+        case CMSG_MESSAGECHAT_CHANNEL:
+            type = CHAT_MSG_CHANNEL;
+            break;
+        case CMSG_MESSAGECHAT_WHISPER:
+            type = CHAT_MSG_WHISPER;
+            break;
+        case CMSG_MESSAGECHAT_GUILD:
+            type = CHAT_MSG_GUILD;
+            break;
+        case CMSG_MESSAGECHAT_OFFICER:
+            type = CHAT_MSG_OFFICER;
+            break;
+        case CMSG_MESSAGECHAT_AFK:
+            type = CHAT_MSG_AFK;
+            break;
+        case CMSG_MESSAGECHAT_DND:
+            type = CHAT_MSG_DND;
+            break;
+        case CMSG_MESSAGECHAT_EMOTE:
+            type = CHAT_MSG_EMOTE;
+            break;
+        case CMSG_MESSAGECHAT_PARTY:
+            type = CHAT_MSG_PARTY;
+            break;
+        case CMSG_MESSAGECHAT_PARTY_LEADER:
+            type = CHAT_MSG_PARTY_LEADER;
+            break;
+        case CMSG_MESSAGECHAT_RAID:
+            type = CHAT_MSG_RAID;
+            break;
+        case CMSG_MESSAGECHAT_RAID_LEADER:
+            type = CHAT_MSG_RAID_LEADER;
+            break;
+        case CMSG_MESSAGECHAT_BATTLEGROUND:
+            type = CHAT_MSG_BATTLEGROUND;
+            break;
+        case CMSG_MESSAGECHAT_BATTLEGROUND_LEADER:
+            type = CHAT_MSG_BATTLEGROUND_LEADER;
+            break;
+        case CMSG_MESSAGECHAT_RAID_WARNING:
+            type = CHAT_MSG_RAID_WARNING;
+            break;
+        default:
+            break;
+    }
 
     if (type != CHAT_MSG_EMOTE && type != CHAT_MSG_AFK && type != CHAT_MSG_DND)
         recv_data >> lang;
@@ -146,7 +200,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                 lang = LANG_UNIVERSAL;
             else
             {
-                switch(type)
+                switch (type)
                 {
                     case CHAT_MSG_PARTY:
                     case CHAT_MSG_PARTY_LEADER:
@@ -505,7 +559,7 @@ void WorldSession::HandleTextEmoteOpcode(WorldPacket & recv_data)
 
     uint32 emote_anim = em->textid;
 
-    switch(emote_anim)
+    switch (emote_anim)
     {
         case EMOTE_STATE_SLEEP:
         case EMOTE_STATE_SIT:

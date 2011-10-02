@@ -37,7 +37,7 @@ namespace VMAP
     class MeshTriangle
     {
         public:
-            MeshTriangle(){};
+            MeshTriangle() {};
             MeshTriangle(uint32 na, uint32 nb, uint32 nc): idx0(na), idx1(nb), idx2(nc) {};
 
             uint32 idx0;

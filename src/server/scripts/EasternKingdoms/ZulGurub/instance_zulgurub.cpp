@@ -64,7 +64,7 @@ class instance_zulgurub : public InstanceMapScript
 
             void OnCreatureCreate(Creature* creature)
             {
-                switch(creature->GetEntry())
+                switch (creature->GetEntry())
                 {
                     case 11347: LorKhanGUID = creature->GetGUID(); break;
                     case 11348: ZathGUID    = creature->GetGUID(); break;
@@ -75,7 +75,7 @@ class instance_zulgurub : public InstanceMapScript
 
             void SetData(uint32 Type, uint32 Data)
             {
-                switch(Type)
+                switch (Type)
                 {
                     case DATA_ARLOKK:
                         Encounter[0] = Data;
@@ -113,7 +113,7 @@ class instance_zulgurub : public InstanceMapScript
 
             uint32 GetData(uint32 Type)
             {
-                switch(Type)
+                switch (Type)
                 {
                     case DATA_ARLOKK:
                         return Encounter[0];
@@ -137,7 +137,7 @@ class instance_zulgurub : public InstanceMapScript
 
             uint64 GetData64(uint32 Data)
             {
-                switch(Data)
+                switch (Data)
                 {
                     case DATA_LORKHAN:
                         return LorKhanGUID;

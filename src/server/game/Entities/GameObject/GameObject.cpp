@@ -221,7 +221,7 @@ bool GameObject::Create(uint32 guidlow, uint32 name_id, Map* map, uint32 phaseMa
     {
         case GAMEOBJECT_TYPE_DESTRUCTIBLE_BUILDING:
             m_goValue->Building.Health = goinfo->building.intactNumHits + goinfo->building.damagedNumHits;
-            m_goValue->Building.MaxHealth = goinfo->building.intactNumHits + goinfo->building.damagedNumHits;
+            m_goValue->Building.MaxHealth = m_goValue->Building.Health;
             SetGoAnimProgress(255);
             break;
         case GAMEOBJECT_TYPE_TRANSPORT:
@@ -276,7 +276,7 @@ void GameObject::Update(uint32 diff)
     {
         case GO_NOT_READY:
         {
-            switch(GetGoType())
+            switch (GetGoType())
             {
                 case GAMEOBJECT_TYPE_TRAP:
                 {
@@ -484,7 +484,7 @@ void GameObject::Update(uint32 diff)
         }
         case GO_ACTIVATED:
         {
-            switch(GetGoType())
+            switch (GetGoType())
             {
                 case GAMEOBJECT_TYPE_DOOR:
                 case GAMEOBJECT_TYPE_BUTTON:
@@ -686,21 +686,21 @@ void GameObject::SaveToDB(uint32 mapid, uint8 spawnMask, uint32 phaseMask)
     // update in DB
     std::ostringstream ss;
     ss << "INSERT INTO gameobject VALUES ("
-        << m_DBTableGuid << ','
-        << GetEntry() << ','
-        << mapid << ','
-        << uint32(spawnMask) << ','                         // cast to prevent save as symbol
-        << uint16(GetPhaseMask()) << ','                    // prevent out of range error
-        << GetPositionX() << ','
-        << GetPositionY() << ','
-        << GetPositionZ() << ','
-        << GetOrientation() << ','
-        << GetFloatValue(GAMEOBJECT_PARENTROTATION) << ','
-        << GetFloatValue(GAMEOBJECT_PARENTROTATION+1) << ','
-        << GetFloatValue(GAMEOBJECT_PARENTROTATION+2) << ','
-        << GetFloatValue(GAMEOBJECT_PARENTROTATION+3) << ','
-        << m_respawnDelayTime << ','
-        << uint32(GetGoAnimProgress()) << ','
+        << m_DBTableGuid << ', '
+        << GetEntry() << ', '
+        << mapid << ', '
+        << uint32(spawnMask) << ', '                         // cast to prevent save as symbol
+        << uint16(GetPhaseMask()) << ', '                    // prevent out of range error
+        << GetPositionX() << ', '
+        << GetPositionY() << ', '
+        << GetPositionZ() << ', '
+        << GetOrientation() << ', '
+        << GetFloatValue(GAMEOBJECT_PARENTROTATION) << ', '
+        << GetFloatValue(GAMEOBJECT_PARENTROTATION+1) << ', '
+        << GetFloatValue(GAMEOBJECT_PARENTROTATION+2) << ', '
+        << GetFloatValue(GAMEOBJECT_PARENTROTATION+3) << ', '
+        << m_respawnDelayTime << ', '
+        << uint32(GetGoAnimProgress()) << ', '
         << uint32(GetGoState()) << ')';
 
     SQLTransaction trans = WorldDatabase.BeginTransaction();
@@ -1537,7 +1537,7 @@ void GameObject::Use(Unit* user)
                 GameObjectTemplate const* info = GetGOInfo();
                 if (info)
                 {
-                    switch(info->entry)
+                    switch (info->entry)
                     {
                         case 179785:                        // Silverwing Flag
                             // check if it's correct bg

@@ -209,7 +209,7 @@ class CharacterCreateInfo
         uint8 Stage;        // Stage of the callback chain
 
     private:
-        virtual ~CharacterCreateInfo(){};
+        virtual ~CharacterCreateInfo() {};
 };
 
 /// Player session in the World

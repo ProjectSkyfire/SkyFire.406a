@@ -170,7 +170,7 @@ enum Points
 class npc_tiger_matriarch_credit : public CreatureScript
 {
     public:
-        npc_tiger_matriarch_credit() : CreatureScript("npc_tiger_matriarch_credit"){}
+        npc_tiger_matriarch_credit() : CreatureScript("npc_tiger_matriarch_credit") {}
 
         struct npc_tiger_matriarch_creditAI : public Scripted_NoMovementAI
         {
@@ -223,7 +223,7 @@ class npc_tiger_matriarch_credit : public CreatureScript
 class npc_tiger_matriarch : public CreatureScript
 {
     public:
-        npc_tiger_matriarch() : CreatureScript("npc_tiger_matriarch"){}
+        npc_tiger_matriarch() : CreatureScript("npc_tiger_matriarch") {}
 
         struct npc_tiger_matriarchAI : public ScriptedAI
         {

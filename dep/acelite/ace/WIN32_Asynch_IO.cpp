@@ -921,7 +921,6 @@ ACE_WIN32_Asynch_Write_Stream::writev (ACE_Message_Block &message_block,
                          ACE_TEXT ("Attempt to write 0 bytes\n")),
                         -1);
 
-
   ACE_WIN32_Asynch_Write_Stream_Result *result = 0;
   ACE_NEW_RETURN (result,
                   ACE_WIN32_Asynch_Write_Stream_Result (this->handler_proxy_,
@@ -1288,7 +1287,6 @@ ACE_WIN32_Asynch_Read_File::read (ACE_Message_Block &message_block,
         ACE_TEXT ("Attempt to read 0 bytes or no space in the message block\n")),
        -1);
 
-
   ACE_WIN32_Asynch_Read_File_Result *result = 0;
   ACE_NEW_RETURN (result,
                   ACE_WIN32_Asynch_Read_File_Result (this->handler_proxy_,
@@ -1427,7 +1425,6 @@ ACE_WIN32_Asynch_Read_File::readv (ACE_Message_Block &message_block,
 #endif /* ACE_WIN32_OVERLAPPED_IO */
 }
 
-
 ACE_WIN32_Asynch_Read_File::~ACE_WIN32_Asynch_Read_File (void)
 {
 }
@@ -1553,7 +1550,6 @@ ACE_WIN32_Asynch_Write_File_Result::complete (size_t bytes_transferred,
 
       bytes_transferred -= len_part;
     }
-
   }
 
   // Create the interface result class.
@@ -1833,7 +1829,6 @@ ACE_WIN32_Asynch_Write_File::writev (ACE_Message_Block &message_block,
 
 #endif /* ACE_HAS_WIN32_OVERLAPPED_IO */
 }
-
 
 ACE_WIN32_Asynch_Write_File::~ACE_WIN32_Asynch_Write_File (void)
 {
@@ -2225,7 +2220,6 @@ void ACE_WIN32_Asynch_Connect_Result::connect_handle ( ACE_HANDLE handle )
   this->connect_handle_ = handle;
 }
 
-
 ACE_WIN32_Asynch_Connect_Result::ACE_WIN32_Asynch_Connect_Result
             (const ACE_Handler::Proxy_Ptr &handler_proxy,
              ACE_HANDLE connect_handle,
@@ -2361,7 +2355,6 @@ ACE_WIN32_Asynch_Connect::proactor (void) const
 ACE_HANDLE
 ACE_WIN32_Asynch_Connect::get_handle (void) const
 {
-
   ACE_ASSERT (0);
   return ACE_INVALID_HANDLE;
 }
@@ -2609,7 +2602,6 @@ ACE_WIN32_Asynch_Connect::connect_i (ACE_WIN32_Asynch_Connect_Result *result,
     }
 }
 
-
 // cancel_uncompleted
 // It performs cancellation of all pending requests
 //
@@ -2754,7 +2746,6 @@ ACE_WIN32_Asynch_Connect::handle_output (ACE_HANDLE fd)
   this->post_result (result, this->flg_open_);
   return 0;
 }
-
 
 int
 ACE_WIN32_Asynch_Connect::handle_close (ACE_HANDLE fd, ACE_Reactor_Mask)
@@ -3106,7 +3097,6 @@ ACE_WIN32_Asynch_Read_Dgram_Result::message_block (void) const
   return this->message_block_;
 }
 
-
 int
 ACE_WIN32_Asynch_Read_Dgram_Result::remote_address (ACE_Addr& addr) const
 {
@@ -3128,7 +3118,6 @@ ACE_WIN32_Asynch_Read_Dgram_Result::saddr () const
 {
   return (sockaddr *) this->remote_address_->get_addr ();
 }
-
 
 int
 ACE_WIN32_Asynch_Read_Dgram_Result::flags (void) const
@@ -3403,7 +3392,6 @@ ACE_WIN32_Asynch_Read_Dgram::recv (ACE_Message_Block *message_block,
         initiate_result = -1;
         break;
     }
-
   }
   else
   {
@@ -3608,7 +3596,6 @@ ACE_WIN32_Asynch_Write_Dgram_Result::~ACE_WIN32_Asynch_Write_Dgram_Result (void)
 {
 }
 
-
 //***********************************************
 
 ACE_WIN32_Asynch_Write_Dgram::~ACE_WIN32_Asynch_Write_Dgram (void)
@@ -3698,7 +3685,6 @@ ACE_WIN32_Asynch_Write_Dgram::send (ACE_Message_Block *message_block,
                                             result,
                                             0);
 
-
   if (initiate_result == SOCKET_ERROR)
   {
     // If initiate failed, check for a bad error.
@@ -3726,7 +3712,6 @@ ACE_WIN32_Asynch_Write_Dgram::send (ACE_Message_Block *message_block,
         initiate_result = -1;
         break;
     }
-
   }
   else
   {

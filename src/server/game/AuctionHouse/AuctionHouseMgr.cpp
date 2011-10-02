@@ -215,7 +215,7 @@ void AuctionHouseMgr::SendAuctionSuccessfulMail(AuctionEntry* auction, SQLTransa
 
         sLog->outDebug(LOG_FILTER_AUCTIONHOUSE, "AuctionSuccessful body string : %s", auctionSuccessfulBody.str().c_str());
 
-        uint32 profit = auction->bid + auction->deposit - auctionCut;
+        uint64 profit = auction->bid + auction->deposit - auctionCut;
 
         //FIXME: what do if owner offline
         if (owner)
@@ -666,19 +666,26 @@ bool AuctionEntry::BuildAuctionInfo(WorldPacket & data) const
         data << uint32(pItem->GetEnchantmentCharges(EnchantmentSlot(i)));
     }
 
+    for (uint8 i = 0; i < 2; ++i)
+    {
+        data << uint32(0);
+        data << uint32(0);
+        data << uint32(0);
+    }
+
     data << int32(pItem->GetItemRandomPropertyId());        //random item property id
     data << uint32(pItem->GetItemSuffixFactor());           //SuffixFactor
     data << uint32(pItem->GetCount());                      //item->count
     data << uint32(pItem->GetSpellCharges());               //item->charge FFFFFFF
     data << uint32(0);                                      //Unknown
     data << uint64(owner);                                  //Auction->owner
-    data << uint32(startbid);                               //Auction->startbid (not sure if useful)
-    data << uint32(bid ? GetAuctionOutBid() : 0);
+    data << uint64(startbid);                               //Auction->startbid (not sure if useful)
+    data << uint64(bid ? GetAuctionOutBid() : 0);
     //minimal outbid
     data << uint32(buyout);                                 //auction->buyout
-    data << uint32((expire_time-time(NULL))*IN_MILLISECONDS);//time left
+    data << uint32((expire_time-time(NULL)) * IN_MILLISECONDS);//time left
     data << uint64(bidder);                                 //auction->bidder current
-    data << uint32(bid);                                    //current bid
+    data << uint64(bid);                                    //current bid
     return true;
 }
 
@@ -689,9 +696,9 @@ uint32 AuctionEntry::GetAuctionCut() const
 }
 
 /// the sum of outbid is (1% from current bid)*5, if bid is very small, it is 1c
-uint32 AuctionEntry::GetAuctionOutBid() const
+uint64 AuctionEntry::GetAuctionOutBid() const
 {
-    uint32 outbid = CalculatePctN(bid, 5);
+    uint64 outbid = CalculatePctN(bid, 5);
     return outbid ? outbid : 1;
 }
 
@@ -720,17 +727,17 @@ void AuctionEntry::SaveToDB(SQLTransaction& trans) const
 
 bool AuctionEntry::LoadFromDB(Field* fields)
 {
-    Id = fields[0].GetUInt32();
-    auctioneer = fields[1].GetUInt32();
-    item_guidlow = fields[2].GetUInt32();
-    item_template = fields[3].GetUInt32();
-    owner = fields[4].GetUInt32();
-    buyout = fields[5].GetUInt32();
-    expire_time = fields[6].GetUInt32();
-    bidder = fields[7].GetUInt32();
-    bid = fields[8].GetUInt32();
-    startbid = fields[9].GetUInt32();
-    deposit = fields[10].GetUInt32();
+    Id                = fields[0].GetUInt32();
+    auctioneer        = fields[1].GetUInt32();
+    item_guidlow      = fields[2].GetUInt32();
+    item_template     = fields[3].GetUInt32();
+    owner             = fields[4].GetUInt32();
+    buyout            = fields[5].GetUInt32();
+    expire_time       = fields[6].GetUInt32();
+    bidder            = fields[7].GetUInt32();
+    bid               = fields[8].GetUInt32();
+    startbid          = fields[9].GetUInt32();
+    deposit           = fields[10].GetUInt32();
 
     CreatureData const* auctioneerData = sObjectMgr->GetCreatureData(auctioneer);
     if (!auctioneerData)
@@ -777,7 +784,7 @@ void AuctionHouseMgr::DeleteExpiredAuctionsAtStartup()
 
     // Query the DB to see if there are any expired auctions
     PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_LOAD_EXPIRED_AUCTIONS);
-    stmt->setUInt32(0, (uint32)curTime+60);
+    stmt->setUInt32(0, (uint32)curTime + 60);
     PreparedQueryResult expAuctions = CharacterDatabase.Query(stmt);
 
     if (!expAuctions)
@@ -804,7 +811,7 @@ void AuctionHouseMgr::DeleteExpiredAuctionsAtStartup()
 
         SQLTransaction trans = CharacterDatabase.BeginTransaction();
 
-        if (auction->bidder==0)
+        if (auction->bidder == 0)
         {
             // Cancel the auction, there was no bidder
             sAuctionMgr->SendAuctionExpiredMail(auction, trans);
@@ -839,17 +846,17 @@ bool AuctionEntry::LoadFromFieldList(Field* fields)
     //  does not require the AuctionEntryMap to have been loaded with items. It simply
     //  acts as a wrapper to fill out an AuctionEntry struct from a field list
 
-    Id = fields[0].GetUInt32();
-    auctioneer = fields[1].GetUInt32();
-    item_guidlow = fields[2].GetUInt32();
-    item_template = fields[3].GetUInt32();
-    owner = fields[4].GetUInt32();
-    buyout = fields[5].GetUInt32();
-    expire_time = fields[6].GetUInt32();
-    bidder = fields[7].GetUInt32();
-    bid = fields[8].GetUInt32();
-    startbid = fields[9].GetUInt32();
-    deposit = fields[10].GetUInt32();
+    Id                 = fields[0].GetUInt32();
+    auctioneer         = fields[1].GetUInt32();
+    item_guidlow       = fields[2].GetUInt32();
+    item_template      = fields[3].GetUInt32();
+    owner              = fields[4].GetUInt32();
+    buyout             = fields[5].GetUInt32();
+    expire_time        = fields[6].GetUInt32();
+    bidder             = fields[7].GetUInt32();
+    bid                = fields[8].GetUInt32();
+    startbid           = fields[9].GetUInt32();
+    deposit            = fields[10].GetUInt32();
 
     CreatureData const* auctioneerData = sObjectMgr->GetCreatureData(auctioneer);
     if (!auctioneerData)

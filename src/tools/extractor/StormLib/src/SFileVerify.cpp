@@ -126,7 +126,7 @@ static bool is_valid_md5(void * pvMd5)
     unsigned char ByteSum = 0;
     int i;
 
-    for(i = 0; i < 0x10; i++)
+    for (i = 0; i < 0x10; i++)
         ByteSum |= pbMd5[i];
 
     return (ByteSum != 0) ? true : false;
@@ -160,7 +160,7 @@ static bool decode_base64_key(const char * szKeyBase64, rsa_key * key)
 
 // Calculate begin and end of the MPQ archive
 static void CalculateArchiveRange(
-    TMPQArchive * ha,
+    TMPQArchive * ha, 
     PMPQ_SIGNATURE_INFO pSI)
 {
     TMPQHeader * pHeader = ha->pHeader;
@@ -183,7 +183,7 @@ static void CalculateArchiveRange(
     }
 
     // Get the MPQ data end. The end is calculated as the biggest
-    // value of (end of the last file), (end of block table),
+    // value of (end of the last file), (end of block table), 
     // (end of ext block table), (end of hash table)
     FindFreeMpqSpace(ha, &MaxPos);
 
@@ -213,7 +213,7 @@ static void CalculateArchiveRange(
 }
 
 static bool QueryMpqSignatureInfo(
-    TMPQArchive * ha,
+    TMPQArchive * ha, 
     PMPQ_SIGNATURE_INFO pSI)
 {
     ULONGLONG ExtraBytes;
@@ -244,7 +244,7 @@ static bool QueryMpqSignatureInfo(
         return (dwFileSize == (MPQ_WEAK_SIGNATURE_SIZE + 8)) ? true : false;
     }
 
-    // If there is extra bytes beyond the end of the archive,
+    // If there is extra bytes beyond the end of the archive, 
     // it's the strong signature
     ExtraBytes = pSI->EndOfFile - pSI->EndMpqData;
     if (ExtraBytes >= (MPQ_STRONG_SIGNATURE_SIZE + 4))
@@ -266,8 +266,8 @@ static bool QueryMpqSignatureInfo(
 }
 
 static bool CalculateMpqHashMd5(
-    TMPQArchive * ha,
-    PMPQ_SIGNATURE_INFO pSI,
+    TMPQArchive * ha, 
+    PMPQ_SIGNATURE_INFO pSI, 
     LPBYTE pMd5Digest)
 {
     hash_state md5_state;
@@ -287,7 +287,7 @@ static bool CalculateMpqHashMd5(
     BeginBuffer = pSI->BeginMpqData;
 
     // Create the digest
-    for(;;)
+    for (;;)
     {
         ULONGLONG BytesRemaining;
         LPBYTE pbSigBegin = NULL;
@@ -342,7 +342,7 @@ static bool CalculateMpqHashMd5(
 }
 
 static void AddTailToSha1(
-    hash_state * psha1_state,
+    hash_state * psha1_state, 
     const char * szTail)
 {
     unsigned char szUpperCase[0x200];
@@ -350,7 +350,7 @@ static void AddTailToSha1(
 
     // Convert the tail to uppercase
     // Note that we don't need to terminate the string with zero
-    while(*szTail != 0)
+    while (*szTail != 0)
     {
         szUpperCase[nLength++] = (unsigned char)toupper(*szTail++);
     }
@@ -360,10 +360,10 @@ static void AddTailToSha1(
 }
 
 static bool CalculateMpqHashSha1(
-    TMPQArchive * ha,
-    PMPQ_SIGNATURE_INFO pSI,
-    unsigned char * sha1_tail0,
-    unsigned char * sha1_tail1,
+    TMPQArchive * ha, 
+    PMPQ_SIGNATURE_INFO pSI, 
+    unsigned char * sha1_tail0, 
+    unsigned char * sha1_tail1, 
     unsigned char * sha1_tail2)
 {
     ULONGLONG BeginBuffer;
@@ -383,7 +383,7 @@ static bool CalculateMpqHashSha1(
     BeginBuffer = pSI->BeginMpqData;
 
     // Create the digest
-    for(;;)
+    for (;;)
     {
         ULONGLONG BytesRemaining;
         DWORD dwToRead = MPQ_DIGEST_UNIT_SIZE;
@@ -427,8 +427,8 @@ static bool CalculateMpqHashSha1(
 }
 
 static int VerifyRawMpqData(
-    TMPQArchive * ha,
-    ULONGLONG ByteOffset,
+    TMPQArchive * ha, 
+    ULONGLONG ByteOffset, 
     DWORD dwDataSize)
 {
     hash_state md5_state;
@@ -470,7 +470,7 @@ static int VerifyRawMpqData(
     // Now verify every data chunk
     if (nError == ERROR_SUCCESS)
     {
-        for(DWORD i = 0; i < dwChunkCount; i++)
+        for (DWORD i = 0; i < dwChunkCount; i++)
         {
             // Get the number of bytes in the chunk
             dwBytesInChunk = STORMLIB_MIN(dwChunkSize, dwDataSize);
@@ -510,7 +510,7 @@ static int VerifyRawMpqData(
 }
 
 static DWORD VerifyWeakSignature(
-    TMPQArchive * ha,
+    TMPQArchive * ha, 
     PMPQ_SIGNATURE_INFO pSI)
 {
     BYTE RevSignature[MPQ_WEAK_SIGNATURE_SIZE];
@@ -538,8 +538,8 @@ static DWORD VerifyWeakSignature(
 }
 
 static DWORD VerifyStrongSignatureWithKey(
-    unsigned char * reversed_signature,
-    unsigned char * padded_digest,
+    unsigned char * reversed_signature, 
+    unsigned char * padded_digest, 
     const char * szPublicKey)
 {
     rsa_key key;
@@ -562,7 +562,7 @@ static DWORD VerifyStrongSignatureWithKey(
 }
 
 static DWORD VerifyStrongSignature(
-    TMPQArchive * ha,
+    TMPQArchive * ha, 
     PMPQ_SIGNATURE_INFO pSI)
 {
     unsigned char reversed_signature[MPQ_STRONG_SIGNATURE_SIZE];
@@ -661,7 +661,7 @@ DWORD WINAPI SFileVerifyFile(HANDLE hMpq, const char * szFileName, DWORD dwFlags
         hf->bCheckSectorCRCs = true;
 
         // Go through entire file and update both CRC32 and MD5
-        for(;;)
+        for (;;)
         {
             // Read data from file
             SFileReadFile(hFile, Buffer, sizeof(Buffer), &dwBytesRead, NULL);
@@ -761,7 +761,7 @@ int WINAPI SFileVerifyRawData(HANDLE hMpq, DWORD dwWhatToVerify, const char * sz
         return ERROR_SUCCESS;
 
     // If we have to verify MPQ header, do it
-    switch(dwWhatToVerify)
+    switch (dwWhatToVerify)
     {
         case SFILE_VERIFY_MPQ_HEADER:
 
@@ -832,7 +832,7 @@ DWORD WINAPI SFileVerifyArchive(HANDLE hMpq)
         return ERROR_VERIFY_FAILED;
 
     // Verify the signature
-    switch(si.nSignatureType)
+    switch (si.nSignatureType)
     {
         case SIGNATURE_TYPE_NONE:
             return ERROR_NO_SIGNATURE;

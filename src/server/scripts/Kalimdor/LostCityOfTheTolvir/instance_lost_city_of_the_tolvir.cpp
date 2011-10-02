@@ -59,13 +59,13 @@ public:
             uiAugh = 0;
             uiSiamat = 0;
 
-            for(uint8 i=0 ; i<ENCOUNTERS; ++i)
+            for (uint8 i=0 ; i<ENCOUNTERS; ++i)
                 uiEncounter[i] = NOT_STARTED;
         }
 
         bool IsEncounterInProgress() const
         {
-            for(uint8 i=0; i<ENCOUNTERS; ++i)
+            for (uint8 i=0; i<ENCOUNTERS; ++i)
             {
                 if (uiEncounter[i] == IN_PROGRESS)
                     return true;
@@ -75,7 +75,7 @@ public:
 
         void OnCreatureCreate(Creature* pCreature, bool )
         {
-            switch(pCreature->GetEntry())
+            switch (pCreature->GetEntry())
             {
                  case BOSS_GENERAL_HUSAM:
                      uiGeneralHusam = pCreature->GetGUID();
@@ -97,7 +97,7 @@ public:
 
         uint64 getData64(uint32 identifier)
         {
-            switch(identifier)
+            switch (identifier)
             {
                 case DATA_GENERAL_HUSAM:
                     return uiGeneralHusam;
@@ -115,7 +115,7 @@ public:
 
         void SetData(uint32 type, uint32 data)
         {
-            switch(type)
+            switch (type)
             {
                 case DATA_GENERAL_HUSAM_EVENT:
                     uiEncounter[0] = data;
@@ -140,7 +140,7 @@ public:
 
         uint32 GetData(uint32 type)
         {
-            switch(type)
+            switch (type)
             {
                 case DATA_GENERAL_HUSAM_EVENT:
                     return uiEncounter[0];
@@ -193,7 +193,7 @@ public:
                 uiEncounter[3] = data3;
                 uiEncounter[4] = data4;
 
-                for(uint8 i=0; i<ENCOUNTERS; ++i)
+                for (uint8 i=0; i<ENCOUNTERS; ++i)
                     if (uiEncounter[i] == IN_PROGRESS)
                         uiEncounter[i] = NOT_STARTED;
             }

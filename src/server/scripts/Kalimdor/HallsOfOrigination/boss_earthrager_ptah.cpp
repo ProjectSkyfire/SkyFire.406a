@@ -25,22 +25,22 @@
 
 enum ScriptTexts
 {
-    SAY_AGGRO          = 0,
-    SAY_KILL_1         = 1,
-    SAY_KILL_2         = 2,
-    SAY_DEATH          = 3,
+    SAY_AGGRO          = 0, 
+    SAY_KILL_1         = 1, 
+    SAY_KILL_2         = 2, 
+    SAY_DEATH          = 3, 
 };
 
 enum Spells
 {
-    SPELL_FLAME_BOLT   = 77370,
-    SPELL_RAGING_SMASH = 83650,
+    SPELL_FLAME_BOLT   = 77370, 
+    SPELL_RAGING_SMASH = 83650, 
 };
 
 enum Events
 {
-    EVENT_FLAME_BOLT   = 1,
-    EVENT_RAGING_SMASH = 2,
+    EVENT_FLAME_BOLT   = 1, 
+    EVENT_RAGING_SMASH = 2, 
 };
 
 class boss_earthrager_ptah : public CreatureScript
@@ -99,9 +99,9 @@ class boss_earthrager_ptah : public CreatureScript
                    return;
                 events.Update(uiDiff);
 
-                while(uint32 eventId = events.ExecuteEvent())
+                while (uint32 eventId = events.ExecuteEvent())
                 {
-                    switch(eventId)
+                    switch (eventId)
                     {
                         case EVENT_FLAME_BOLT:
                             if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, true))

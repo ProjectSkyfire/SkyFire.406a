@@ -56,8 +56,12 @@ set(scripts_STAT_SRCS
   EasternKingdoms/Gnomeregan/instance_gnomeregan.cpp
   EasternKingdoms/Gnomeregan/gnomeregan.cpp
   EasternKingdoms/Gnomeregan/gnomeregan.h
-  #EasternKingdoms/GrimBatol/grim_batol.h
-  #EasternKingdoms/GrimBatol/instance_grim_batol.cpp  
+  EasternKingdoms/GrimBatol/grim_batol.h
+  EasternKingdoms/GrimBatol/boss_drahga_shadowburner.cpp
+  EasternKingdoms/GrimBatol/boss_erudax.cpp
+  EasternKingdoms/GrimBatol/boss_forgemaster_throngus.cpp
+  EasternKingdoms/GrimBatol/boss_general_umbriss.cpp
+  EasternKingdoms/GrimBatol/instance_grim_batol.cpp  
   EasternKingdoms/redridge_mountains.cpp
   EasternKingdoms/BlackrockDepths/boss_high_interrogator_gerstahn.cpp
   EasternKingdoms/BlackrockDepths/boss_gorosh_the_dervish.cpp
@@ -164,9 +168,13 @@ set(scripts_STAT_SRCS
   EasternKingdoms/SunwellPlateau/boss_brutallus.cpp
   EasternKingdoms/SunwellPlateau/sunwell_plateau.cpp
   EasternKingdoms/SunwellPlateau/boss_felmyst.cpp
-  #EasternKingdoms/TheStonecore/instance_the_stonecore.cpp
-  #EasternKingdoms/TheStonecore/the_stonecore.cpp
-  #EasternKingdoms/TheStonecore/the_stonecore.h  
+  EasternKingdoms/TheStonecore/instance_the_stonecore.cpp
+  EasternKingdoms/TheStonecore/the_stonecore.cpp
+  EasternKingdoms/TheStonecore/boss_corborus.cpp 
+  EasternKingdoms/TheStonecore/boss_slabhide.cpp
+  EasternKingdoms/TheStonecore/boss_ozruk.cpp
+  EasternKingdoms/TheStonecore/boss_priestess_azil.cpp
+  EasternKingdoms/TheStonecore/the_stonecore.h  
   EasternKingdoms/stranglethorn_vale.cpp
   EasternKingdoms/Deadmines/deadmines.h
   EasternKingdoms/Deadmines/deadmines.cpp

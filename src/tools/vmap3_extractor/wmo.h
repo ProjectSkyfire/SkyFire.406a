@@ -8,7 +8,7 @@
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful, 
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
@@ -91,7 +91,7 @@ public:
     uint16 nBatchB;
     uint32 nBatchC, fogIdx, liquidType, groupWMOID;
 
-    int mopy_size,moba_size;
+    int mopy_size, moba_size;
     int LiquEx_size;
     unsigned int nVertices; // number when loaded
     int nTriangles; // number when loaded
@@ -127,10 +127,10 @@ public:
     WMOGroup *wmo;
     Vec3D pos;
     Vec3D pos2, pos3, rot;
-    uint32 indx,id, d2, d3;
+    uint32 indx, id, d2, d3;
     int doodadset;
 
-    WMOInstance(MPQFile &f,const char* WmoInstName, uint32 mapID, uint32 tileX, uint32 tileY, FILE *pDirfile);
+    WMOInstance(MPQFile &f, const char* WmoInstName, uint32 mapID, uint32 tileX, uint32 tileY, FILE *pDirfile);
 
     static void reset();
 };

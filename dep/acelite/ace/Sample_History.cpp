@@ -10,9 +10,6 @@
 #include "ace/Log_Msg.h"
 #include "ace/OS_Memory.h"
 
-
-
-
 ACE_BEGIN_VERSIONED_NAMESPACE_DECL
 
 ACE_Sample_History::ACE_Sample_History (size_t max_samples)

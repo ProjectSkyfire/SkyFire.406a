@@ -186,9 +186,9 @@
     #define    BSWAP_INT32_SIGNED(a)            (a)
     #define    BSWAP_INT64_SIGNED(a)            (a)
     #define    BSWAP_INT64_UNSIGNED(a)          (a)
-    #define    BSWAP_ARRAY16_UNSIGNED(a,b)      {}
-    #define    BSWAP_ARRAY32_UNSIGNED(a,b)      {}
-    #define    BSWAP_ARRAY64_UNSIGNED(a,b)      {}
+    #define    BSWAP_ARRAY16_UNSIGNED(a, b)      {}
+    #define    BSWAP_ARRAY32_UNSIGNED(a, b)      {}
+    #define    BSWAP_ARRAY64_UNSIGNED(a, b)      {}
     #define    BSWAP_PART_HEADER(a)             {}
     #define    BSWAP_TMPQUSERDATA(a)            {}
     #define    BSWAP_TMPQHEADER(a)              {}
@@ -209,9 +209,9 @@
     #define    BSWAP_INT32_UNSIGNED(a)          SwapUInt32((a))
     #define    BSWAP_INT64_SIGNED(a)            SwapInt64((a))
     #define    BSWAP_INT64_UNSIGNED(a)          SwapUInt64((a))
-    #define    BSWAP_ARRAY16_UNSIGNED(a,b)      ConvertUInt16Buffer((a),(b))
-    #define    BSWAP_ARRAY32_UNSIGNED(a,b)      ConvertUInt32Buffer((a),(b))
-    #define    BSWAP_ARRAY64_UNSIGNED(a,b)      ConvertUInt64Buffer((a),(b))
+    #define    BSWAP_ARRAY16_UNSIGNED(a, b)      ConvertUInt16Buffer((a), (b))
+    #define    BSWAP_ARRAY32_UNSIGNED(a, b)      ConvertUInt32Buffer((a), (b))
+    #define    BSWAP_ARRAY64_UNSIGNED(a, b)      ConvertUInt64Buffer((a), (b))
     #define    BSWAP_PART_HEADER(a)             ConvertPartHeader(a)
     #define    BSWAP_TMPQUSERDATA(a)            ConvertTMPQUserData((a))
     #define    BSWAP_TMPQHEADER(a)              ConvertTMPQHeader((a))

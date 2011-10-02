@@ -12,7 +12,6 @@
 #include "ace/Local_Tokens.inl"
 #endif /* __ACE_INLINE__ */
 
-
 ACE_BEGIN_VERSIONED_NAMESPACE_DECL
 
 void
@@ -865,7 +864,6 @@ ACE_RW_Token::tryacquire (ACE_TPQ_Entry *caller)
       this->num_writers_--;
     }
 
-
   errno = EWOULDBLOCK;
   ACE_RETURN (-1);
 
@@ -981,7 +979,6 @@ ACE_RW_Token::notify_new_owner (ACE_TPQ_Entry *old_owner)
   else // writer
     this->owner ()->proxy ()->token_acquired (this->owner ());
 }
-
 
 int
 ACE_RW_Token::owners (OWNER_STACK &stack,

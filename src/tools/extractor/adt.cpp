@@ -8,7 +8,7 @@
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful, 
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
@@ -113,7 +113,7 @@ bool adt_MCIN::prepareLoadedData()
     // Check cells data
     for (int i=0; i<ADT_CELLS_PER_GRID;i++)
         for (int j=0; j<ADT_CELLS_PER_GRID;j++)
-            if (cells[i][j].offsMCNK && !getMCNK(i,j)->prepareLoadedData())
+            if (cells[i][j].offsMCNK && !getMCNK(i, j)->prepareLoadedData())
                 return false;
 
     return true;

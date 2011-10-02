@@ -87,7 +87,7 @@ public:
 
         void Reset()
         {
-            ShadowNovaTimer = urand(12000,17000);
+            ShadowNovaTimer = urand(12000, 17000);
             BerserkTimer = 360000;
             FuriousRoarTimer = 0;
             FuriousRoarCount = 0;
@@ -131,7 +131,7 @@ public:
                 if (ShadowNovaTimer <= diff)
                 {
                     DoCast(SPELL_SHADOW_NOVA);
-                    ShadowNovaTimer = urand(12000,17000);
+                    ShadowNovaTimer = urand(12000, 17000);
                 }
                 else
                     ShadowNovaTimer -= diff;
@@ -205,7 +205,7 @@ public:
         {
             if (pInstance)
                 if (Creature* halfus = Unit::GetCreature(*me, pInstance->GetData64(DATA_HALFUS)))
-                    if(Aura* aura = halfus->GetAura(87683))
+                    if (Aura* aura = halfus->GetAura(87683))
                         aura->SetStackAmount(aura->GetStackAmount() + 1);
                     else
                         me->AddAura(87683, halfus);
@@ -223,7 +223,7 @@ public:
                         if (!halfus)
                             return;
                         me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
-                        switch(me->GetEntry())
+                        switch (me->GetEntry())
                         {
                             case NPC_STORM_RIDER:
                                 me->AddAura(84092, halfus);
@@ -285,11 +285,11 @@ public:
 
         InstanceScript* pInstance;
 
-        void Reset(){}
+        void Reset() {}
 
-        void EnterCombat(Unit* /*pWho*/){}
+        void EnterCombat(Unit* /*pWho*/) {}
 
-        void JustDied(Unit* /*Killer*/){}
+        void JustDied(Unit* /*Killer*/) {}
 
         void UpdateAI(const uint32 diff)
         {

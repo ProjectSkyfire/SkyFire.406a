@@ -570,7 +570,7 @@ m_caster((info->AttributesEx6 & SPELL_ATTR6_CAST_BY_CHARMER && caster->GetCharme
 Spell::~Spell()
 {
     // unload scripts
-    while(!m_loadedScripts.empty())
+    while (!m_loadedScripts.empty())
     {
         std::list<SpellScript*>::iterator itr = m_loadedScripts.begin();
         (*itr)->_Unload();
@@ -843,6 +843,8 @@ void Spell::SelectEffectTypeImplicitTargets(uint8 effIndex)
         case EFFECT_IMPLICIT_TARGET_CASTER:
             if (targetMask & TARGET_FLAG_UNIT_MASK)
                 AddUnitTarget(m_caster, 1 << effIndex, false);
+            break;
+        default:
             break;
     }
 }
@@ -1819,7 +1821,7 @@ void Spell::SearchChainTarget(std::list<Unit*> &TagUnitMap, float max_range, uin
                 break;
 
             // Check if (*next) is a valid chain target. If not, don't add to TagUnitMap, and repeat loop.
-            // If you want to add any conditions to exclude a target from TagUnitMap, add condition in this while() loop.
+            // If you want to add any conditions to exclude a target from TagUnitMap, add condition in this while () loop.
             while ((m_spellInfo->DmgClass == SPELL_DAMAGE_CLASS_MELEE
                 && !m_caster->isInFrontInMap(*next, max_range))
                 || !m_caster->canSeeOrDetect(*next)
@@ -3424,7 +3426,7 @@ void Spell::_handle_finish_phase()
 
     if (m_caster->m_extraAttacks && GetSpellInfo()->HasEffect(SPELL_EFFECT_ADD_EXTRA_ATTACKS))
         m_caster->HandleProcExtraAttackFor(m_caster->getVictim());
-    
+
 	// TODO: trigger proc phase finish here
 }
 
@@ -5159,12 +5161,12 @@ SpellCastResult Spell::CheckCast(bool strict)
             // RETURN HERE
             case SPELL_EFFECT_SUMMON_RAF_FRIEND:
             {
-                if(m_caster->GetTypeId() != TYPEID_PLAYER)
+                if (m_caster->GetTypeId() != TYPEID_PLAYER)
                     return SPELL_FAILED_BAD_TARGETS;
 
                 Player* playerCaster = m_caster->ToPlayer();
                     //
-                if(!(playerCaster->GetSelection()))
+                if (!(playerCaster->GetSelection()))
                     return SPELL_FAILED_BAD_TARGETS;
 
                 Player* target = ObjectAccessor::FindPlayer(playerCaster->GetSelection());

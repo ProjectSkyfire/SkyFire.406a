@@ -55,9 +55,9 @@
 #ifdef BYFOUR
 #  define REV(w) (((w)>>24)+(((w)>>8)&0xff00)+ \
                 (((w)&0xff00)<<8)+(((w)&0xff)<<24))
-   local unsigned long crc32_little OF((unsigned long,
+   local unsigned long crc32_little OF((unsigned long, 
                         const unsigned char FAR *, unsigned));
-   local unsigned long crc32_big OF((unsigned long,
+   local unsigned long crc32_big OF((unsigned long, 
                         const unsigned char FAR *, unsigned));
 #  define TBLS 8
 #else
@@ -65,7 +65,7 @@
 #endif /* BYFOUR */
 
 /* Local functions for crc concatenation */
-local unsigned long gf2_matrix_times OF((unsigned long *mat,
+local unsigned long gf2_matrix_times OF((unsigned long *mat, 
                                          unsigned long vec));
 local void gf2_matrix_square OF((unsigned long *square, unsigned long *mat));
 
@@ -81,12 +81,12 @@ local void make_crc_table OF((void));
   Generate tables for a byte-wise 32-bit CRC calculation on the polynomial:
   x^32+x^26+x^23+x^22+x^16+x^12+x^11+x^10+x^8+x^7+x^5+x^4+x^2+x+1.
 
-  Polynomials over GF(2) are represented in binary, one bit per coefficient,
+  Polynomials over GF(2) are represented in binary, one bit per coefficient, 
   with the lowest powers in the most significant bit.  Then adding polynomials
   is just exclusive-or, and multiplying a polynomial by x is a right shift by
   one.  If we call the above polynomial p, and represent a byte as the
   polynomial q, also with the lowest power in the most significant bit (so the
-  byte 0xb1 is the polynomial x^7+x^3+x+1), then the CRC is (q*x^32) mod p,
+  byte 0xb1 is the polynomial x^7+x^3+x+1), then the CRC is (q*x^32) mod p, 
   where a mod b means the remainder after dividing a by b.
 
   This calculation is done using the shift-register method of multiplying and
@@ -110,7 +110,7 @@ local void make_crc_table()
     unsigned long poly;                 /* polynomial exclusive-or pattern */
     /* terms of polynomial defining this crc (except x^32): */
     static volatile int first = 1;      /* flag to limit concurrent making */
-    static const unsigned char p[] = {0,1,2,4,5,7,8,10,11,12,16,22,23,26};
+    static const unsigned char p[] = {0, 1, 2, 4, 5, 7, 8, 10, 11, 12, 16, 22, 23, 26};
 
     /* See if another task is already doing this (not thread-safe, but better
        than nothing -- significantly reduces duration of vulnerability in
@@ -132,7 +132,7 @@ local void make_crc_table()
         }
 
 #ifdef BYFOUR
-        /* generate crc for each value followed by one, two, and three zeros,
+        /* generate crc for each value followed by one, two, and three zeros, 
            and then the byte reversal of those as well as the first table */
         for (n = 0; n < 256; n++) {
             c = crc_table[0][n];
@@ -168,7 +168,7 @@ local void make_crc_table()
 #  ifdef BYFOUR
         fprintf(out, "#ifdef BYFOUR\n");
         for (k = 1; k < 8; k++) {
-            fprintf(out, "  },\n  {\n");
+            fprintf(out, "  }, \n  {\n");
             write_table(out, crc_table[k]);
         }
         fprintf(out, "#endif\n");
@@ -187,8 +187,8 @@ local void write_table(out, table)
     int n;
 
     for (n = 0; n < 256; n++)
-        fprintf(out, "%s0x%08lxUL%s", n % 5 ? "" : "    ", table[n],
-                n == 255 ? "\n" : (n % 5 == 4 ? ",\n" : ", "));
+        fprintf(out, "%s0x%08lxUL%s", n % 5 ? "" : "    ", table[n], 
+                n == 255 ? "\n" : (n % 5 == 4 ? ", \n" : ", "));
 }
 #endif /* MAKECRCH */
 

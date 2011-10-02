@@ -15,7 +15,7 @@
 #define __STORMCOMMON_H__
 
 //-----------------------------------------------------------------------------
-// Make sure that we include the compression library headers,
+// Make sure that we include the compression library headers, 
 // when a source needs the functions
 
 #ifdef __INCLUDE_COMPRESSION__
@@ -46,7 +46,7 @@
 #endif
 
 //-----------------------------------------------------------------------------
-// Make sure that we include the cryptography headers,
+// Make sure that we include the cryptography headers, 
 // when a source needs the functions
 
 #ifdef __INCLUDE_CRYPTOGRAPHY__
@@ -62,7 +62,7 @@
 #define MPQ_WEAK_SIGNATURE_SIZE        64
 #define MPQ_STRONG_SIGNATURE_SIZE     256 
 
-// Prevent problems with CRT "min" and "max" functions,
+// Prevent problems with CRT "min" and "max" functions, 
 // as they are not defined on all platforms
 #define STORMLIB_MIN(a, b) ((a < b) ? a : b)
 #define STORMLIB_MAX(a, b) ((a > b) ? a : b)
@@ -167,19 +167,19 @@ bool IsInternalMpqFileName(const char * szFileName);
 // Support for adding files to the MPQ
 
 int SFileAddFile_Init(
-    TMPQArchive * ha,
-    const char * szArchivedName,
-    ULONGLONG ft,
-    DWORD dwFileSize,
-    LCID lcLocale,
-    DWORD dwFlags,
+    TMPQArchive * ha, 
+    const char * szArchivedName, 
+    ULONGLONG ft, 
+    DWORD dwFileSize, 
+    LCID lcLocale, 
+    DWORD dwFlags, 
     TMPQFile ** phf
     );
 
 int SFileAddFile_Write(
-    TMPQFile * hf,
-    const void * pvData,
-    DWORD dwSize,
+    TMPQFile * hf, 
+    const void * pvData, 
+    DWORD dwSize, 
     DWORD dwCompression
     );
 

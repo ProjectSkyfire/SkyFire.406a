@@ -293,7 +293,7 @@ public:
                 else if (commentToken[1] == '/')
                 {
                     std::string str;
-                    getline(ifs,str);
+                    getline(ifs, str);
                     continue;
                 }
                 // regular data
@@ -560,7 +560,7 @@ public:
                 uint8 bag_slot = container ? container->GetSlot() : uint8(INVENTORY_SLOT_BAG_0);
 
                 std::string st;
-                switch(item->GetState())
+                switch (item->GetState())
                 {
                     case ITEM_UNCHANGED: st = "unchanged"; break;
                     case ITEM_CHANGED: st = "changed"; break;

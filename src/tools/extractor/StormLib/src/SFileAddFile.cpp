@@ -30,10 +30,10 @@ static void * pvUserData = NULL;
 #define LOSSY_COMPRESSION_MASK (MPQ_COMPRESSION_ADPCM_MONO | MPQ_COMPRESSION_ADPCM_STEREO | MPQ_COMPRESSION_HUFFMANN)
 
 static int WriteDataToMpqFile(
-    TMPQArchive * ha,
-    TMPQFile * hf,
-    LPBYTE pbFileData,
-    DWORD dwDataSize,
+    TMPQArchive * ha, 
+    TMPQFile * hf, 
+    LPBYTE pbFileData, 
+    DWORD dwDataSize, 
     DWORD dwCompression)
 {
     TFileEntry * pFileEntry = hf->pFileEntry;
@@ -43,7 +43,7 @@ static int WriteDataToMpqFile(
     int nCompressionLevel = -1;         // ADPCM compression level (only used for wave files)
     int nError = ERROR_SUCCESS;
 
-    // If the caller wants ADPCM compression, we will set wave compression level to 4,
+    // If the caller wants ADPCM compression, we will set wave compression level to 4, 
     // which corresponds to medium quality
     if (dwCompression & LOSSY_COMPRESSION_MASK)
         nCompressionLevel = 4;
@@ -64,7 +64,7 @@ static int WriteDataToMpqFile(
         DWORD dwBytesToCopy;
 
         // Process all data.
-        while(dwDataSize != 0)
+        while (dwDataSize != 0)
         {
             dwBytesToCopy = dwDataSize;
 
@@ -81,7 +81,7 @@ static int WriteDataToMpqFile(
             // Update the file position
             hf->dwFilePos += dwBytesToCopy;
 
-            // If the current sector is full, or if the file is already full,
+            // If the current sector is full, or if the file is already full, 
             // then write the data to the MPQ
             if (dwBytesInSector >= hf->dwSectorSize || hf->dwFilePos >= pFileEntry->dwFileSize)
             {
@@ -89,7 +89,7 @@ static int WriteDataToMpqFile(
                 ByteOffset = hf->RawFilePos + pFileEntry->dwCmpSize;
 
                 // If the file is compressed, allocate buffer for the compressed data.
-                // Note that we allocate buffer that is a bit longer than sector size,
+                // Note that we allocate buffer that is a bit longer than sector size, 
                 // for case if the compression method performs a buffer overrun
                 if ((pFileEntry->dwFlags & MPQ_FILE_COMPRESSED) && pbCompressed == NULL)
                 {
@@ -111,26 +111,26 @@ static int WriteDataToMpqFile(
                     assert(pbCompressed != NULL);
 
                     //
-                    // Note that both SCompImplode and SCompCompress give original buffer,
+                    // Note that both SCompImplode and SCompCompress give original buffer, 
                     // if they are unable to comperss the data.
                     //
 
                     if (pFileEntry->dwFlags & MPQ_FILE_IMPLODE)
                     {
-                        SCompImplode((char *)pbCompressed,
-                                            &nOutBuffer,
-                                     (char *)hf->pbFileSector,
+                        SCompImplode((char *)pbCompressed, 
+                                            &nOutBuffer, 
+                                     (char *)hf->pbFileSector, 
                                              nInBuffer);
                     }
 
                     if (pFileEntry->dwFlags & MPQ_FILE_COMPRESS)
                     {
-                        SCompCompress((char *)pbCompressed,
-                                             &nOutBuffer,
-                                      (char *)hf->pbFileSector,
-                                              nInBuffer,
-                                    (unsigned)dwCompression,
-                                              0,
+                        SCompCompress((char *)pbCompressed, 
+                                             &nOutBuffer, 
+                                      (char *)hf->pbFileSector, 
+                                              nInBuffer, 
+                                    (unsigned)dwCompression, 
+                                              0, 
                                               nCompressionLevel);
                     }
 
@@ -181,9 +181,9 @@ static int WriteDataToMpqFile(
 // Recrypts file data for file renaming
 
 static int RecryptFileData(
-    TMPQArchive * ha,
-    TMPQFile * hf,
-    const char * szFileName,
+    TMPQArchive * ha, 
+    TMPQFile * hf, 
+    const char * szFileName, 
     const char * szNewFileName)
 {
     ULONGLONG RawFilePos;
@@ -249,7 +249,7 @@ static int RecryptFileData(
     // recompression, because recompression is not necessary in this case
     if (nError == ERROR_SUCCESS)
     {
-        for(DWORD dwSector = 0; dwSector < hf->dwDataSectors; dwSector++)
+        for (DWORD dwSector = 0; dwSector < hf->dwDataSectors; dwSector++)
         {
             DWORD dwRawDataInSector = hf->dwSectorSize;
             DWORD dwRawByteOffset = dwSector * hf->dwSectorSize;
@@ -276,7 +276,7 @@ static int RecryptFileData(
             }
 
             // If necessary, re-encrypt the sector
-            // Note: Recompression is not necessary here. Unlike encryption,
+            // Note: Recompression is not necessary here. Unlike encryption, 
             // the compression does not depend on the position of the file in MPQ.
             BSWAP_ARRAY32_UNSIGNED(hf->pbFileSector, dwRawDataInSector);
             DecryptMpqBlock(hf->pbFileSector, dwRawDataInSector, dwOldKey + dwSector);
@@ -302,12 +302,12 @@ static int RecryptFileData(
 // Support functions for adding files to the MPQ
 
 int SFileAddFile_Init(
-    TMPQArchive * ha,
-    const char * szFileName,
-    ULONGLONG FileTime,
-    DWORD dwFileSize,
-    LCID lcLocale,
-    DWORD dwFlags,
+    TMPQArchive * ha, 
+    const char * szFileName, 
+    ULONGLONG FileTime, 
+    DWORD dwFileSize, 
+    LCID lcLocale, 
+    DWORD dwFlags, 
     TMPQFile ** phf)
 {
     TFileEntry * pFileEntry = NULL;
@@ -527,7 +527,7 @@ int SFileAddFile_Write(TMPQFile * hf, const void * pvData, DWORD dwSize, DWORD d
     if (nError == ERROR_SUCCESS)
         nError = WriteDataToMpqFile(ha, hf, (LPBYTE)pvData, dwSize, dwCompression);
 
-    // If it succeeded and we wrote all the file data,
+    // If it succeeded and we wrote all the file data, 
     // we need to re-save sector offset table
     if (nError == ERROR_SUCCESS)
     {
@@ -634,12 +634,12 @@ int SFileAddFile_Finish(TMPQFile * hf)
 // Adds data as file to the archive
 
 bool WINAPI SFileCreateFile(
-    HANDLE hMpq,
-    const char * szArchivedName,
-    ULONGLONG FileTime,
-    DWORD dwFileSize,
-    LCID lcLocale,
-    DWORD dwFlags,
+    HANDLE hMpq, 
+    const char * szArchivedName, 
+    ULONGLONG FileTime, 
+    DWORD dwFileSize, 
+    LCID lcLocale, 
+    DWORD dwFlags, 
     HANDLE * phFile)
 {
     TMPQArchive * ha = (TMPQArchive *)hMpq;
@@ -683,9 +683,9 @@ bool WINAPI SFileCreateFile(
 }
 
 bool WINAPI SFileWriteFile(
-    HANDLE hFile,
-    const void * pvData,
-    DWORD dwSize,
+    HANDLE hFile, 
+    const void * pvData, 
+    DWORD dwSize, 
     DWORD dwCompression)
 {
     TMPQFile * hf = (TMPQFile *)hFile;
@@ -702,7 +702,7 @@ bool WINAPI SFileWriteFile(
     {
         //
         // Note: Blizzard doesn't support single unit files
-        // that are stored as encrypted or imploded. We will allow them here,
+        // that are stored as encrypted or imploded. We will allow them here, 
         // the calling application must ensure that such flag combination doesn't get here
         //
 
@@ -752,10 +752,10 @@ bool WINAPI SFileFinishFile(HANDLE hFile)
 // Adds a file to the archive
 
 bool WINAPI SFileAddFileEx(
-    HANDLE hMpq,
-    const char * szFileName,
-    const char * szArchivedName,
-    DWORD dwFlags,
+    HANDLE hMpq, 
+    const char * szFileName, 
+    const char * szArchivedName, 
+    DWORD dwFlags, 
     DWORD dwCompression,           // Compression of the first sector
     DWORD dwCompressionNext)        // Compression of next sectors
 {
@@ -804,7 +804,7 @@ bool WINAPI SFileAddFileEx(
     // Deal with various combination of compressions
     if (nError == ERROR_SUCCESS)
     {
-        // When the compression for next blocks is set to default,
+        // When the compression for next blocks is set to default, 
         // we will copy the compression for the first sector
         if (dwCompressionNext == 0xFFFFFFFF)
             dwCompressionNext = dwCompression;
@@ -824,7 +824,7 @@ bool WINAPI SFileAddFileEx(
     }
 
     // Write the file data to the MPQ
-    while(nError == ERROR_SUCCESS && dwBytesRemaining != 0)
+    while (nError == ERROR_SUCCESS && dwBytesRemaining != 0)
     {
         // Get the number of bytes remaining in the source file
         dwBytesToRead = dwBytesRemaining;
@@ -870,11 +870,11 @@ bool WINAPI SFileAddFileEx(
 // Adds a data file into the archive
 bool WINAPI SFileAddFile(HANDLE hMpq, const char * szFileName, const char * szArchivedName, DWORD dwFlags)
 {
-    return SFileAddFileEx(hMpq,
-                          szFileName,
-                          szArchivedName,
-                          dwFlags,
-                          DefaultDataCompression,
+    return SFileAddFileEx(hMpq, 
+                          szFileName, 
+                          szArchivedName, 
+                          dwFlags, 
+                          DefaultDataCompression, 
                           DefaultDataCompression);
 }
 
@@ -896,7 +896,7 @@ bool WINAPI SFileAddWave(HANDLE hMpq, const char * szFileName, const char * szAr
     //
 
     // Convert quality to data compression
-    switch(dwQuality)
+    switch (dwQuality)
     {
         case MPQ_WAVE_QUALITY_HIGH:
 //          WaveCompressionLevel = -1;
@@ -914,10 +914,10 @@ bool WINAPI SFileAddWave(HANDLE hMpq, const char * szFileName, const char * szAr
             break;
     }
 
-    return SFileAddFileEx(hMpq,
-                          szFileName,
-                          szArchivedName,
-                          dwFlags,
+    return SFileAddFileEx(hMpq, 
+                          szFileName, 
+                          szArchivedName, 
+                          dwFlags, 
                           MPQ_COMPRESSION_PKWARE,  // First sector should be compressed as data
                           dwCompression);           // Next sectors should be compressed as WAVE
 }

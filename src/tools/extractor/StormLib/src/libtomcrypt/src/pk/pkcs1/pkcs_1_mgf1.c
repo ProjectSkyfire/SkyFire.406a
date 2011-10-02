@@ -26,8 +26,8 @@
    @param masklen     The length of the mask desired
    @return CRYPT_OK if successful
 */
-int pkcs_1_mgf1(int                  hash_idx,
-                const unsigned char *seed, unsigned long seedlen,
+int pkcs_1_mgf1(int                  hash_idx, 
+                const unsigned char *seed, unsigned long seedlen, 
                       unsigned char *mask, unsigned long masklen)
 {
    unsigned long hLen, x;
@@ -103,6 +103,6 @@ LBL_ERR:
 
 #endif /* LTC_PKCS_1 */
 
-/* $Source: /cvs/libtom/libtomcrypt/src/pk/pkcs1/pkcs_1_mgf1.c,v $ */
+/* $Source: /cvs/libtom/libtomcrypt/src/pk/pkcs1/pkcs_1_mgf1.c, v $ */
 /* $Revision: 1.8 $ */
 /* $Date: 2007/05/12 14:32:35 $ */

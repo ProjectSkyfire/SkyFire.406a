@@ -9,8 +9,6 @@
 #include "ace/SPIPE_Addr.inl"
 #endif /* __ACE_INLINE__ */
 
-
-
 ACE_BEGIN_VERSIONED_NAMESPACE_DECL
 
 ACE_ALLOC_HOOK_DEFINE(ACE_SPIPE_Addr)
@@ -41,7 +39,6 @@ ACE_SPIPE_Addr::get_addr (void) const
 {
   return (void *) &this->SPIPE_addr_;
 }
-
 
 // Do nothing constructor.
 
@@ -113,7 +110,6 @@ ACE_SPIPE_Addr::set (const ACE_TCHAR *addr,
     }
   else
     {
-
       if (ACE_OS::strncmp (addr,
                            ACE_TEXT ("localhost"),
                            ACE_OS::strlen ("localhost")) == 0)

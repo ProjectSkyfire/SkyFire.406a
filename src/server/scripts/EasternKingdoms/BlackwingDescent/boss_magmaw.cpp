@@ -109,7 +109,7 @@ public:
 
             if (uiLavaParasiteSummonTimer <= Diff)
             {
-                for(int i = 0; i < 2; ++i)
+                for (int i = 0; i < 2; ++i)
                     SummonCreatureWithRandomTarget(42321);
 
                 uiLavaParasiteSummonTimer = 30*IN_MILLISECONDS;

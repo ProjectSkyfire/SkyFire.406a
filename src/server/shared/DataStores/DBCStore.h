@@ -162,7 +162,7 @@ class DBCStorage
                         {
                             if ((*sql->formatString)[columnNumber] == FT_SQL_ABSENT)
                             {
-                                switch(fmt[columnNumber])
+                                switch (fmt[columnNumber])
                                 {
                                     case FT_FLOAT:
                                         *((float*)(&sqlDataTable[offset]))= 0.0f;
@@ -187,7 +187,7 @@ class DBCStorage
                             else if ((*sql->formatString)[columnNumber] == FT_SQL_PRESENT)
                             {
                                 bool validSqlColumn = true;
-                                switch(fmt[columnNumber])
+                                switch (fmt[columnNumber])
                                 {
                                     case FT_FLOAT:
                                         *((float*)(&sqlDataTable[offset]))=fields[sqlColumnNumber].GetFloat();
@@ -261,7 +261,7 @@ class DBCStorage
             delete[] ((char*)dataTable);
             dataTable = NULL;
 
-            while(!stringPoolList.empty())
+            while (!stringPoolList.empty())
             {
                 delete[] stringPoolList.front();
                 stringPoolList.pop_front();

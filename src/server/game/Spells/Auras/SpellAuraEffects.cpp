@@ -451,7 +451,7 @@ int32 AuraEffect::CalculateAmount(Unit* caster)
     float DoneActualBenefit = 0.0f;
 
     // custom amount calculations go here
-    switch(GetAuraType())
+    switch (GetAuraType())
     {
         // crowd control auras
         case SPELL_AURA_MOD_CONFUSE:
@@ -485,7 +485,7 @@ int32 AuraEffect::CalculateAmount(Unit* caster)
             m_canBeRecalculated = false;
             if (!caster)
                 break;
-            switch(GetSpellInfo()->SpellFamilyName)
+            switch (GetSpellInfo()->SpellFamilyName)
             {
                 case SPELLFAMILY_MAGE:
                     // Ice Barrier
@@ -866,7 +866,7 @@ void AuraEffect::CalculateSpellMod(SpellInfo const *spellInfo, Unit * target)
     switch (GetAuraType())
     {
         case SPELL_AURA_DUMMY:
-            switch(GetSpellInfo()->SpellFamilyName)
+            switch (GetSpellInfo()->SpellFamilyName)
             {
                 case SPELLFAMILY_PRIEST:
                     // Pain and Suffering
@@ -906,7 +906,7 @@ void AuraEffect::CalculateSpellMod(SpellInfo const *spellInfo, Unit * target)
                     break;
             }
         case SPELL_AURA_MOD_SPELL_CRIT_CHANCE:
-            switch(GetId())
+            switch (GetId())
             {
                 case 51466: // Elemental oath
                 case 51470: // Elemental oath
@@ -1114,7 +1114,7 @@ void AuraEffect::Update(uint32 diff, Unit* caster)
 
 void AuraEffect::UpdatePeriodic(Unit* caster)
 {
-    switch(GetAuraType())
+    switch (GetAuraType())
     {
         case SPELL_AURA_DUMMY:
             // Haunting Spirits
@@ -1125,10 +1125,10 @@ void AuraEffect::UpdatePeriodic(Unit* caster)
             }
             break;
         case SPELL_AURA_PERIODIC_DUMMY:
-            switch(GetSpellInfo()->SpellFamilyName)
+            switch (GetSpellInfo()->SpellFamilyName)
             {
                 case SPELLFAMILY_GENERIC:
-                    switch(GetId())
+                    switch (GetId())
                     {
                         // Drink
                         case 430:
@@ -1289,7 +1289,7 @@ void AuraEffect::PeriodicTick(AuraApplication * aurApp, Unit* caster) const
 
     Unit* target = aurApp->GetTarget();
 
-    switch(GetAuraType())
+    switch (GetAuraType())
     {
         case SPELL_AURA_PERIODIC_DUMMY:
             HandlePeriodicDummyAuraTick(target, caster);
@@ -1339,7 +1339,7 @@ void AuraEffect::PeriodicTick(AuraApplication * aurApp, Unit* caster) const
 void AuraEffect::HandleProc(AuraApplication* aurApp, ProcEventInfo& eventInfo)
 {
     // TODO: effect script handlers here
-    switch(GetAuraType())
+    switch (GetAuraType())
     {
         case SPELL_AURA_PROC_TRIGGER_SPELL:
             HandleProcTriggerSpellAuraProc(aurApp, eventInfo);
@@ -1390,7 +1390,7 @@ void AuraEffect::HandleShapeshiftBoosts(Unit* target, bool apply) const
     //uint32 spellId3 = 0;
     uint32 HotWSpellId = 0;
 
-    switch(GetMiscValue())
+    switch (GetMiscValue())
     {
         case FORM_CAT:
             spellId = 3025;
@@ -1520,7 +1520,7 @@ void AuraEffect::HandleShapeshiftBoosts(Unit* target, bool apply) const
                     }
                 }
             }
-            switch(GetMiscValue())
+            switch (GetMiscValue())
             {
                 case FORM_CAT:
                     // Savage Roar
@@ -2807,6 +2807,36 @@ void AuraEffect::HandleAuraMounted(AuraApplication const* aurApp, uint8 mode, bo
 
     if (apply)
     {
+        uint32 spellId = 0;
+        Player *plr = target->ToPlayer();
+        if (plr)
+        {
+            // find the spell we need
+            const MountTypeEntry *type = sMountTypeStore.LookupEntry(GetMiscValueB());
+            if (!type)
+                return;
+
+            uint32 plrskill = plr->GetSkillValue(SKILL_RIDING);
+            uint32 map = plr->GetMapId();
+            uint32 maxSkill = 0;
+            for (int i = 0; i < MAX_MOUNT_TYPE_COLUMN; i++)
+            {
+               const MountCapabilityEntry *cap = sMountCapabilityStore.LookupEntry(type->capabilities[i]);
+               if (!cap)
+                   continue;
+               if (cap->map != -1 && cap->map != map)
+                   continue;
+               if (cap->reqSkillLevel > plrskill || cap->reqSkillLevel <= maxSkill)
+                   continue;
+               if (cap->reqSpell && !plr->HasSpell(cap->reqSpell))
+                   continue;
+               maxSkill = cap->reqSkillLevel;
+               spellId = cap->spell;
+            }
+            if (spellId == 0)
+                return; // couldn't find a valid spell to apply
+        }
+
         uint32 creatureEntry = GetMiscValue();
 
         // Festive Holiday Mount
@@ -4514,8 +4544,8 @@ void AuraEffect::HandleModDamagePercentDone(AuraApplication const* aurApp, uint8
 
     if (target->GetTypeId() == TYPEID_PLAYER)
     {
-        for(int i = 0; i < MAX_ATTACK; ++i)
-            if(Item* item = target->ToPlayer()->GetWeaponForAttack(WeaponAttackType(i),false))
+        for (int i = 0; i < MAX_ATTACK; ++i)
+            if (Item* item = target->ToPlayer()->GetWeaponForAttack(WeaponAttackType(i), false))
                 target->ToPlayer()->_ApplyWeaponDependentAuraDamageMod(item, WeaponAttackType(i), this, apply);
     }
 
@@ -4695,7 +4725,7 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
                                 break;
                         }
             }
-            switch(GetId())
+            switch (GetId())
             {
                 case 1515:                                      // Tame beast
                     // FIX_ME: this is 2.0.12 threat effect replaced in 2.1.x by dummy aura, must be checked for correctness
@@ -4733,7 +4763,7 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
                 {
                     if (caster)
                     {
-                        switch(caster->getGender())
+                        switch (caster->getGender())
                         {
                             case GENDER_FEMALE:
                                 caster->CastSpell(target, 37095, true, NULL, this); // Blood Elf Disguise
@@ -4773,7 +4803,7 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
                 case 46354:                                     // Blood Elf Illusion
                     if (caster)
                     {
-                        switch(caster->getGender())
+                        switch (caster->getGender())
                         {
                             case GENDER_FEMALE:
                                 caster->CastSpell(target, 46356, true, NULL, this);
@@ -4813,7 +4843,7 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
                     if (caster) // actually we can also use cast(this, originalcasterguid)
                     {
                         int32 damage;
-                        switch(GetBase()->GetStackAmount())
+                        switch (GetBase()->GetStackAmount())
                         {
                             case 1: damage = 0;     break;
                             case 2: damage = 500;   break;
@@ -4846,7 +4876,7 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
             if ((GetSpellInfo()->IsQuestTame()) && caster && caster->isAlive() && target->isAlive())
             {
                 uint32 finalSpelId = 0;
-                switch(GetId())
+                switch (GetId())
                 {
                     case 19548: finalSpelId = 19597; break;
                     case 19674: finalSpelId = 19677; break;
@@ -4872,10 +4902,10 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
                     caster->CastSpell(target, finalSpelId, true, NULL, this);
             }
 
-            switch(m_spellInfo->SpellFamilyName)
+            switch (m_spellInfo->SpellFamilyName)
             {
                 case SPELLFAMILY_GENERIC:
-                    switch(GetId())
+                    switch (GetId())
                     {
                         case 2584: // Waiting to Resurrect
                             // Waiting to resurrect spell cancel, we must remove player from resurrect queue
@@ -4993,13 +5023,13 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
 
     // AT APPLY & REMOVE
 
-    switch(m_spellInfo->SpellFamilyName)
+    switch (m_spellInfo->SpellFamilyName)
     {
         case SPELLFAMILY_GENERIC:
         {
             if (!(mode & AURA_EFFECT_HANDLE_REAL))
                 break;
-            switch(GetId())
+            switch (GetId())
             {
                 // Recently Bandaged
                 case 11196:
@@ -5076,7 +5106,7 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
                 case 57723: // Exhaustion
                 case 57724: // Sated
                 {
-                    switch(GetId())
+                    switch (GetId())
                     {
                         case 57723: target->ApplySpellImmune(GetId(), IMMUNITY_ID, 32182, apply); break; // Heroism
                         case 57724: target->ApplySpellImmune(GetId(), IMMUNITY_ID, 2825, apply);  break; // Bloodlust
@@ -5095,7 +5125,7 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
 
                     if (apply)
                     {
-                        switch(m_spellInfo->Id)
+                        switch (m_spellInfo->Id)
                         {
                             case 57819: FactionID = 1106; break; // Argent Crusade
                             case 57820: FactionID = 1098; break; // Knights of the Ebon Blade
@@ -5177,7 +5207,7 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
         {
             if (!(mode & AURA_EFFECT_HANDLE_CHANGE_AMOUNT_MASK))
                 break;
-            switch(GetId())
+            switch (GetId())
             {
                 case 52610:                                 // Savage Roar
                 {
@@ -5634,8 +5664,8 @@ void AuraEffect::HandlePeriodicDummyAuraTick(Unit* target, Unit* caster) const
                 case 66149: // Bullet Controller Periodic - 10 Man
                 case 68396: // Bullet Controller Periodic - 25 Man
                 {
-                    caster->CastCustomSpell(66152, SPELLVALUE_MAX_TARGETS, urand(1,6), target, true);
-                    caster->CastCustomSpell(66153, SPELLVALUE_MAX_TARGETS, urand(1,6), target, true);
+                    caster->CastCustomSpell(66152, SPELLVALUE_MAX_TARGETS, urand(1, 6), target, true);
+                    caster->CastCustomSpell(66153, SPELLVALUE_MAX_TARGETS, urand(1, 6), target, true);
                     break;
                 }
                 case 54798: // FLAMING Arrow Triggered Effect
@@ -6005,7 +6035,7 @@ void AuraEffect::HandlePeriodicTriggerSpellAuraTick(Unit* target, Unit* caster) 
             }
             case SPELLFAMILY_SHAMAN:
             {
-                switch(auraId)
+                switch (auraId)
                 {
                     // Lightning Shield (The Earthshatterer set trigger after cast Lighting Shield)
                     case 28820:
@@ -6161,7 +6191,7 @@ void AuraEffect::HandlePeriodicTriggerSpellWithValueAuraTick(Unit* target, Unit*
         }
     }
     else
-        sLog->outDebug(LOG_FILTER_SPELLS_AURAS,"AuraEffect::HandlePeriodicTriggerSpellWithValueAuraTick: Spell %u has non-existent spell %u in EffectTriggered[%d] and is therefor not triggered.", GetId(), triggerSpellId, GetEffIndex());
+        sLog->outDebug(LOG_FILTER_SPELLS_AURAS, "AuraEffect::HandlePeriodicTriggerSpellWithValueAuraTick: Spell %u has non-existent spell %u in EffectTriggered[%d] and is therefor not triggered.", GetId(), triggerSpellId, GetEffIndex());
 }
 
 void AuraEffect::HandlePeriodicDamageAurasTick(Unit* target, Unit* caster) const
@@ -6567,7 +6597,7 @@ void AuraEffect::HandlePeriodicManaLeechAuraTick(Unit* target, Unit* caster) con
     }
 
     // spell-specific code
-    switch(GetId())
+    switch (GetId())
     {
         case 31447: // Mark of Kaz'rogal
             if (target->GetPower(powerType) == 0)
@@ -6734,7 +6764,7 @@ void AuraEffect::HandleProcTriggerSpellAuraProc(AuraApplication* aurApp, ProcEve
         triggerCaster->CastSpell(triggerTarget, triggeredSpellInfo, true, NULL, this);
     }
     else
-        sLog->outDebug(LOG_FILTER_SPELLS_AURAS,"AuraEffect::HandleProcTriggerSpellAuraProc: Could not trigger spell %u from aura %u proc, because the spell does not have an entry in Spell.dbc.", triggerSpellId, GetId());
+        sLog->outDebug(LOG_FILTER_SPELLS_AURAS, "AuraEffect::HandleProcTriggerSpellAuraProc: Could not trigger spell %u from aura %u proc, because the spell does not have an entry in Spell.dbc.", triggerSpellId, GetId());
 }
 
 void AuraEffect::HandleProcTriggerSpellWithValueAuraProc(AuraApplication* aurApp, ProcEventInfo& eventInfo)
@@ -6750,7 +6780,7 @@ void AuraEffect::HandleProcTriggerSpellWithValueAuraProc(AuraApplication* aurApp
         triggerCaster->CastCustomSpell(triggerTarget, triggerSpellId, &basepoints0, NULL, NULL, true, NULL, this);
     }
     else
-        sLog->outDebug(LOG_FILTER_SPELLS_AURAS,"AuraEffect::HandleProcTriggerSpellWithValueAuraProc: Could not trigger spell %u from aura %u proc, because the spell does not have an entry in Spell.dbc.", triggerSpellId, GetId());
+        sLog->outDebug(LOG_FILTER_SPELLS_AURAS, "AuraEffect::HandleProcTriggerSpellWithValueAuraProc: Could not trigger spell %u from aura %u proc, because the spell does not have an entry in Spell.dbc.", triggerSpellId, GetId());
 }
 
 void AuraEffect::HandleProcTriggerDamageAuraProc(AuraApplication* aurApp, ProcEventInfo& eventInfo)

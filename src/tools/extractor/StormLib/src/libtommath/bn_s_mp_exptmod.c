@@ -25,7 +25,7 @@ int s_mp_exptmod (mp_int * G, mp_int * X, mp_int * P, mp_int * Y, int redmode)
   mp_int  M[TAB_SIZE], res, mu;
   mp_digit buf;
   int     err, bitbuf, bitcpy, bitcnt, mode, digidx, x, y, winsize;
-  int (*redux)(mp_int*,mp_int*,mp_int*);
+  int (*redux)(mp_int*, mp_int*, mp_int*);
 
   /* find window size */
   x = mp_count_bits (X);
@@ -87,7 +87,7 @@ int s_mp_exptmod (mp_int * G, mp_int * X, mp_int * P, mp_int * Y, int redmode)
 
   /* create M table
    *
-   * The M table contains powers of the base,
+   * The M table contains powers of the base, 
    * e.g. M[x] = G**x mod P
    *
    * The first half of the table is not
@@ -106,7 +106,7 @@ int s_mp_exptmod (mp_int * G, mp_int * X, mp_int * P, mp_int * Y, int redmode)
 
   for (x = 0; x < (winsize - 1); x++) {
     /* square it */
-    if ((err = mp_sqr (&M[1 << (winsize - 1)],
+    if ((err = mp_sqr (&M[1 << (winsize - 1)], 
                        &M[1 << (winsize - 1)])) != MP_OKAY) {
       goto LBL_MU;
     }
@@ -247,6 +247,6 @@ LBL_M:
 }
 #endif
 
-/* $Source: /cvs/libtom/libtommath/bn_s_mp_exptmod.c,v $ */
+/* $Source: /cvs/libtom/libtommath/bn_s_mp_exptmod.c, v $ */
 /* $Revision: 1.5 $ */
 /* $Date: 2006/12/28 01:25:13 $ */

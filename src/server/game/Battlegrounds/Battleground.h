@@ -520,7 +520,7 @@ class Battleground
         void EventPlayerLoggedIn(Player* player);
         void EventPlayerLoggedOut(Player* player);
         virtual void EventPlayerDamagedGO(Player* /*plr*/, GameObject* /*go*/, uint32 /*eventType*/) {}
-        virtual void EventPlayerUsedGO(Player* /*player*/, GameObject* /*go*/){}
+        virtual void EventPlayerUsedGO(Player* /*player*/, GameObject* /*go*/) {}
 
         // this function can be used by spell to interact with the BG map
         virtual void DoAction(uint32 /*action*/, uint64 /*var*/) {}
@@ -573,6 +573,8 @@ class Battleground
 
         void RewardXPAtKill(Player* killer, Player* victim);
         bool CanAwardArenaPoints() const { return m_LevelMin >= BG_AWARD_ARENA_POINTS_MIN_LEVEL; }
+
+        virtual uint64 GetFlagPickerGUID(int32 /*team*/ = -1) const { return 0; }
 
     protected:
         // this method is called, when BG cannot spawn its own spirit guide, or something is wrong, It correctly ends Battleground

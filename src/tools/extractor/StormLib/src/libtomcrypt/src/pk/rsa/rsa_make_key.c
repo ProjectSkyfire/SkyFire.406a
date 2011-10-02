@@ -22,7 +22,7 @@
    @param prng     An active PRNG state
    @param wprng    The index of the PRNG desired
    @param size     The size of the modulus (key size) desired (octets)
-   @param e        The "e" value (public key).  e==65537 is a good choice
+   @param e        The "e" value (public key).  e == 65537 is a good choice
    @param key      [out] Destination of a newly created private key pair
    @return CRYPT_OK if successful, upon error all allocated ram is freed
 */
@@ -78,7 +78,7 @@ int rsa_make_key(prng_state *prng, int wprng, int size, long e, rsa_key *key)
    }
 
    if ((err = mp_set_int( key->e, e)) != CRYPT_OK)                     { goto errkey; } /* key->e =  e */
-   if ((err = mp_invmod( key->e, tmp1, key->d)) != CRYPT_OK)         { goto errkey; } /* key->d = 1/e mod lcm(p-1,q-1) */
+   if ((err = mp_invmod( key->e, tmp1, key->d)) != CRYPT_OK)         { goto errkey; } /* key->d = 1/e mod lcm(p-1, q-1) */
    if ((err = mp_mul( p, q, key->N)) != CRYPT_OK)                    { goto errkey; } /* key->N = pq */
 
    /* optimize for CRT now */
@@ -107,6 +107,6 @@ cleanup:
 
 #endif
 
-/* $Source: /cvs/libtom/libtomcrypt/src/pk/rsa/rsa_make_key.c,v $ */
+/* $Source: /cvs/libtom/libtomcrypt/src/pk/rsa/rsa_make_key.c, v $ */
 /* $Revision: 1.16 $ */
 /* $Date: 2007/05/12 14:32:35 $ */

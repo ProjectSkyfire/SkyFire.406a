@@ -15,7 +15,7 @@
  * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
  */
 
-/* computes the modular inverse via binary extended euclidean algorithm,
+/* computes the modular inverse via binary extended euclidean algorithm, 
  * that is c = 1/a mod b
  *
  * Based on slow invmod except this is optimized for the case where b is
@@ -46,7 +46,7 @@ int fast_mp_invmod (mp_int * a, mp_int * b, mp_int * c)
     goto LBL_ERR;
   }
 
-  /* 3. u=x, v=y, A=1, B=0, C=0,D=1 */
+  /* 3. u=x, v=y, A=1, B=0, C=0, D=1 */
   if ((res = mp_copy (&x, &u)) != MP_OKAY) {
     goto LBL_ERR;
   }
@@ -143,6 +143,6 @@ LBL_ERR:mp_clear_multi (&x, &y, &u, &v, &B, &D, NULL);
 }
 #endif
 
-/* $Source: /cvs/libtom/libtommath/bn_fast_mp_invmod.c,v $ */
+/* $Source: /cvs/libtom/libtommath/bn_fast_mp_invmod.c, v $ */
 /* $Revision: 1.4 $ */
 /* $Date: 2006/12/28 01:25:13 $ */

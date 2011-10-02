@@ -150,6 +150,11 @@ void AddSC_boss_helix_gearbreaker();
 void AddSC_boss_vanessa_vancleef();
 void AddSC_gnomeregan();                     //Gnomeregan
 void AddSC_instance_gnomeregan();
+void AddSC_boss_general_umbriss();           //Grimbatol
+void AddSC_boss_forgemaster_throngus();
+void AddSC_boss_drahga_shadowburner();
+void AddSC_boss_erudax();
+void AddSC_instance_grim_batol();
 void AddSC_boss_attumen();                   //Karazhan
 void AddSC_boss_curator();
 void AddSC_boss_maiden_of_virtue();
@@ -210,8 +215,12 @@ void AddSC_boss_vectus();
 void AddSC_instance_scholomance();
 void AddSC_shadowfang_keep();                //Shadowfang keep
 void AddSC_instance_shadowfang_keep();
-//void AddSC_the_stonecore();                  //The Stonecore
-//void AddSC_instance_the_stonecore();
+void AddSC_the_stonecore();                  //The Stonecore
+void AddSC_instance_the_stonecore();
+void AddSC_boss_priestess_azil();
+void AddSC_boss_ozruk();
+void AddSC_boss_slabhide();
+void AddSC_boss_corborus();
 void AddSC_boss_magistrate_barthilas();      //Stratholme
 void AddSC_boss_maleki_the_pallid();
 void AddSC_boss_nerubenkan();
@@ -801,6 +810,11 @@ void AddEasternKingdomsScripts()
     AddSC_boss_vanessa_vancleef();
     AddSC_gnomeregan();                     //Gnomeregan
     AddSC_instance_gnomeregan();
+    AddSC_boss_general_umbriss();           //Grimbatol
+    AddSC_boss_forgemaster_throngus();
+    AddSC_boss_drahga_shadowburner();
+    AddSC_boss_erudax();
+    AddSC_instance_grim_batol();	
     AddSC_boss_attumen();                   //Karazhan
     AddSC_boss_curator();
     AddSC_boss_maiden_of_virtue();
@@ -861,8 +875,12 @@ void AddEasternKingdomsScripts()
     AddSC_instance_scholomance();
     AddSC_shadowfang_keep();                //Shadowfang keep
     AddSC_instance_shadowfang_keep();
-    //AddSC_the_stonecore();                  //Stonecore
-    //AddSC_instance_the_stonecore();
+    AddSC_the_stonecore();                  //The Stonecore
+    AddSC_instance_the_stonecore();
+    AddSC_boss_priestess_azil();
+    AddSC_boss_ozruk();
+    AddSC_boss_slabhide();
+    AddSC_boss_corborus();
     AddSC_boss_magistrate_barthilas();      //Stratholme
     AddSC_boss_maleki_the_pallid();
     AddSC_boss_nerubenkan();

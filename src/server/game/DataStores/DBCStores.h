@@ -126,6 +126,8 @@ extern DBCStorage <MapEntry>                     sMapStore;
 //extern DBCStorage <MapDifficultyEntry>           sMapDifficultyStore; -- use GetMapDifficultyData insteed
 extern MapDifficultyMap                          sMapDifficultyMap;
 extern DBCStorage <MovieEntry>                   sMovieStore;
+extern DBCStorage <MountCapabilityEntry>         sMountCapabilityStore;
+extern DBCStorage <MountTypeEntry>               sMountTypeStore;
 extern DBCStorage <OverrideSpellDataEntry>       sOverrideSpellDataStore;
 extern DBCStorage <QuestSortEntry>               sQuestSortStore;
 extern DBCStorage <QuestXPEntry>                 sQuestXPStore;

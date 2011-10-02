@@ -8,7 +8,7 @@
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful, 
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
@@ -22,7 +22,7 @@
 #include "headers.h"
 
 DBCFile::DBCFile(const std::string &filename):
-    filename(filename),
+    filename(filename), 
     data(0)
 {
 }
@@ -31,21 +31,21 @@ bool DBCFile::open()
 {
     MPQFile f(filename.c_str(), localeMPQ[0]);
     char header[4];
-    unsigned int na,nb,es,ss;
+    unsigned int na, nb, es, ss;
 
-    if (f.read(header,4)!=4)                                 // Number of records
+    if (f.read(header, 4)!=4)                                 // Number of records
         return false;
 
     if (header[0]!='W' || header[1]!='D' || header[2]!='B' || header[3]!='C')
         return false;
 
-    if (f.read(&na,4)!=4)                                    // Number of records
+    if (f.read(&na, 4)!=4)                                    // Number of records
         return false;
-    if (f.read(&nb,4)!=4)                                    // Number of fields
+    if (f.read(&nb, 4)!=4)                                    // Number of fields
         return false;
-    if (f.read(&es,4)!=4)                                    // Size of a record
+    if (f.read(&es, 4)!=4)                                    // Size of a record
         return false;
-    if (f.read(&ss,4)!=4)                                    // String size
+    if (f.read(&ss, 4)!=4)                                    // String size
         return false;
 
     recordSize = es;
@@ -59,7 +59,7 @@ bool DBCFile::open()
     stringTable = data + recordSize*recordCount;
 
     size_t data_size = recordSize*recordCount+stringSize;
-    if (f.read(data,data_size)!=data_size)
+    if (f.read(data, data_size)!=data_size)
         return false;
     f.close();
     return true;
@@ -81,7 +81,7 @@ size_t DBCFile::getMaxId()
     assert(data);
 
     size_t maxId = 0;
-    for(size_t i = 0; i < getRecordCount(); ++i)
+    for (size_t i = 0; i < getRecordCount(); ++i)
     {
         if (maxId < getRecord(i).getUInt(0))
             maxId = getRecord(i).getUInt(0);

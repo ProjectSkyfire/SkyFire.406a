@@ -54,12 +54,12 @@ enum {
    CRYPT_FILE_NOTFOUND,   /* File Not Found */
 
    CRYPT_PK_INVALID_TYPE, /* Invalid type of PK key */
-   CRYPT_PK_INVALID_SYSTEM,/* Invalid PK system specified */
+   CRYPT_PK_INVALID_SYSTEM, /* Invalid PK system specified */
    CRYPT_PK_DUP,          /* Duplicate key already in key ring */
    CRYPT_PK_NOT_FOUND,    /* Key not found in keyring */
    CRYPT_PK_INVALID_SIZE, /* Invalid size input for PK parameters */
 
-   CRYPT_INVALID_PRIME_SIZE,/* Invalid size of prime requested */
+   CRYPT_INVALID_PRIME_SIZE, /* Invalid size of prime requested */
    CRYPT_PK_INVALID_PADDING /* Invalid padding on input */
 };
 
@@ -82,6 +82,6 @@ enum {
 #endif /* TOMCRYPT_H_ */
 
 
-/* $Source: /cvs/libtom/libtomcrypt/src/headers/tomcrypt.h,v $ */
+/* $Source: /cvs/libtom/libtomcrypt/src/headers/tomcrypt.h, v $ */
 /* $Revision: 1.21 $ */
 /* $Date: 2006/12/16 19:34:05 $ */

@@ -7,7 +7,6 @@
 #include "ace/Task.inl"
 #endif /* __ACE_INLINE__ */
 
-
 ACE_BEGIN_VERSIONED_NAMESPACE_DECL
 
 ACE_Task_Base::ACE_Task_Base (ACE_Thread_Manager *thr_man)
@@ -240,7 +239,6 @@ ACE_Task_Base::cleanup (void *object, void *)
   t->close ();
   // t is undefined here. close() could have deleted it.
 }
-
 
 #if defined (ACE_HAS_SIG_C_FUNC)
 extern "C" void

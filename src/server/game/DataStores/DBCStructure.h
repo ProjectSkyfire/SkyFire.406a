@@ -1094,7 +1094,7 @@ struct HolidaysEntry
     //uint32 holidayDescriptionId;                          // 50       m_holidayDescriptionID (HolidayDescriptions.dbc)
     //char *textureFilename;                                // 51       m_textureFilename
     //uint32 priority;                                      // 52       m_priority
-    //uint32 calendarFilterType;                            // 53       m_calendarFilterType (-1 = Fishing Contest, 0 = Unk,1 = Darkmoon Festival, 2 = Yearly holiday)
+    //uint32 calendarFilterType;                            // 53       m_calendarFilterType (-1 = Fishing Contest, 0 = Unk, 1 = Darkmoon Festival, 2 = Yearly holiday)
     //uint32 flags;                                         // 54       m_flags (0 = Darkmoon Faire, Fishing Contest and Wotlk Launch, rest is 1)
 };
 
@@ -1316,6 +1316,26 @@ struct MapDifficultyEntry
     //DBCString       difficultyString;                     // 6        m_difficultystring
 };
 
+struct MountCapabilityEntry
+{
+   uint32  id;                                             // 0 index
+   uint32  flag;                                           // 1 some flag
+   uint32  reqSkillLevel;                                  // 2 skill level of riding required
+   //uint32 unk;                                           // 3 unk
+   //uint32 empty;                                         // 4 empty
+   uint32  reqSpell;                                       // 5 spell that has to be known to you
+   uint32  spell;                                          // 6 spell to cast to apply mount speed effects
+   uint32  map;                                            // 7 map where this is applicable
+};
+
+#define MAX_MOUNT_TYPE_COLUMN 17
+
+struct MountTypeEntry
+{
+   uint32  id;                                             // 0 index
+   uint32  capabilities[MAX_MOUNT_TYPE_COLUMN];            // 1-17 capability ids from MountCapability.dbc
+   //uint32  empty[7];                                     // 18-24 empty. maybe continues capabilities
+};
 struct MovieEntry
 {
     uint32      Id;                                         // 0 index

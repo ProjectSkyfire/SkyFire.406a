@@ -53,7 +53,7 @@ public:
     bool OnGossipSelect(Player* player, Creature* creature, uint32 /*uiSender*/, uint32 Action)
     {
         player->PlayerTalkClass->ClearMenus();
-        switch(Action)
+        switch (Action)
         {
             case GOSSIP_ACTION_TRADE:
                 player->GetSession()->SendListInventory(creature->GetGUID());
@@ -190,7 +190,7 @@ public:
 
             if (who->GetTypeId() == TYPEID_PLAYER)
             {
-                switch(me->GetAreaId())
+                switch (me->GetAreaId())
                 {
                     case 199:                                   //felstone
                         if (CAST_PLR(who)->GetQuestStatus(5216) == QUEST_STATUS_INCOMPLETE ||
@@ -375,7 +375,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit* /*who*/){}
+        void EnterCombat(Unit* /*who*/) {}
 
          void JustDied(Unit* /*killer*/)
         {

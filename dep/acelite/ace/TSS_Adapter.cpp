@@ -10,8 +10,6 @@
 
 #include "ace/TSS_Adapter.h"
 
-
-
 ACE_BEGIN_VERSIONED_NAMESPACE_DECL
 
 ACE_TSS_Adapter::ACE_TSS_Adapter (void *object, ACE_THR_DEST f)

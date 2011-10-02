@@ -69,7 +69,7 @@ class npc_professor_phizzlethorpe : public CreatureScript
                 if (!player)
                     return;
 
-                switch(PointId)
+                switch (PointId)
                 {
                 case 4:DoScriptText(SAY_PROGRESS_2, me, player);break;
                 case 5:DoScriptText(SAY_PROGRESS_3, me, player);break;

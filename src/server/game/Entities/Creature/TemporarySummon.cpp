@@ -45,7 +45,7 @@ void TempSummon::Update(uint32 diff)
         UnSummon();
         return;
     }
-    switch(m_type)
+    switch (m_type)
     {
         case TEMPSUMMON_MANUAL_DESPAWN:
             break;

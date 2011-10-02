@@ -149,7 +149,6 @@ ACE_Token_Invariant_Manager::dump (void) const
 #endif /* ACE_HAS_DUMP */
 }
 
-
 int
 ACE_Token_Invariant_Manager::get_mutex (const ACE_TCHAR *token_name,
                                         ACE_Mutex_Invariants *&inv)
@@ -202,7 +201,6 @@ ACE_Token_Invariant_Manager::get_rwlock (const ACE_TCHAR *token_name,
 
   return 0;
 }
-
 
 ACE_Token_Invariant_Manager::~ACE_Token_Invariant_Manager (void)
 {

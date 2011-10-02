@@ -372,7 +372,7 @@ public:
             if (!player)
                 return;
 
-            switch(i)
+            switch (i)
             {
             case 0:
                 DoScriptText(SAY_START, me, player);
@@ -454,7 +454,7 @@ public:
             StartEvent();
         }
 
-        void EnterCombat(Unit* /*who*/){}
+        void EnterCombat(Unit* /*who*/) {}
 
         void StartEvent()
         {
@@ -474,7 +474,7 @@ public:
         {
             Creature* Spark = Unit::GetCreature(*me, SparkGUID);
 
-            switch(Step)
+            switch (Step)
             {
             case 0:
                 if (Spark)
@@ -607,7 +607,7 @@ public:
 
     struct npc_death_ravagerAI : public ScriptedAI
     {
-        npc_death_ravagerAI(Creature* c) : ScriptedAI(c){}
+        npc_death_ravagerAI(Creature* c) : ScriptedAI(c) {}
 
         uint32 RendTimer;
         uint32 EnragingBiteTimer;

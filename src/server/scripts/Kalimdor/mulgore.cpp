@@ -156,7 +156,7 @@ public:
                     uiEventTimer = 5000;
                     ++uiEventPhase;
 
-                    switch(uiEventPhase)
+                    switch (uiEventPhase)
                     {
                         case 1:
                             if (Unit* pUnit = Unit::GetUnit(*me, uiPlayerGUID))
@@ -280,7 +280,7 @@ public:
             amountWP  = 49;
         }
 
-        void EnterCombat(Unit* /*who*/){}
+        void EnterCombat(Unit* /*who*/) {}
 
         void MovementInform(uint32 type, uint32 id)
         {

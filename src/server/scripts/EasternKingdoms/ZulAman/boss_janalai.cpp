@@ -443,7 +443,7 @@ class mob_janalai_firebomb : public CreatureScript
 
         struct mob_janalai_firebombAI : public ScriptedAI
         {
-            mob_janalai_firebombAI(Creature* c) : ScriptedAI(c){}
+            mob_janalai_firebombAI(Creature* c) : ScriptedAI(c) {}
 
             void Reset() {}
 
@@ -663,7 +663,7 @@ public:
 
     struct mob_janalai_eggAI : public ScriptedAI
     {
-        mob_janalai_eggAI(Creature* creature) : ScriptedAI(creature){}
+        mob_janalai_eggAI(Creature* creature) : ScriptedAI(creature) {}
 
         void Reset() {}
 

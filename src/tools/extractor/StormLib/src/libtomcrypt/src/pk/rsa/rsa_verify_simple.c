@@ -24,13 +24,13 @@
   @param siglen           The length of the signature data (octets)
   @param hash             The hash of the message that was signed
   @param hashlen          The length of the hash of the message that was signed (octets)
-  @param stat             [out] The result of the signature comparison, 1==valid, 0==invalid
+  @param stat             [out] The result of the signature comparison, 1 == valid, 0 == invalid
   @param key              The public RSA key corresponding
   @return Error code
 */
-int rsa_verify_simple(const unsigned char *sig, unsigned long siglen,
-                      const unsigned char *hash, unsigned long hashlen,
-                            int           *stat,
+int rsa_verify_simple(const unsigned char *sig, unsigned long siglen, 
+                      const unsigned char *hash, unsigned long hashlen, 
+                            int           *stat, 
                             rsa_key       *key)
 {
   unsigned long modulus_bitlen, modulus_bytelen, x;

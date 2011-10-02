@@ -25,33 +25,33 @@
 
 enum ScriptTexts
 {
-    SAY_INTRO                  = 0,
-    SAY_AGGRO                  = 1,
-    SAY_KILL_1                 = 2,
-    SAY_KILL_2                 = 3,
-    SAY_OMEGA                  = 4,
-    SAY_DEATH                  = 5,
+    SAY_INTRO                  = 0, 
+    SAY_AGGRO                  = 1, 
+    SAY_KILL_1                 = 2, 
+    SAY_KILL_2                 = 3, 
+    SAY_OMEGA                  = 4, 
+    SAY_DEATH                  = 5, 
 };
 
 enum Spells
 {
-    SPELL_ALPHA_BEAMS          = 39788,
-    SPELL_CRUMBLING_RUIN       = 75609,
-    H_SPELL_CRUMBLING_RUIN     = 91206,
-    SPELL_DESTRUCTION_PROTOCOL = 77437,
-    SPELL_NEMESIS_STRIKE       = 75604,
-    H_SPELL_NEMESIS_STRIKE     = 91175,
-    SPELL_OMEGA_STANCE         = 75622,
-    H_SPELL_OMEGA_STANCE       = 91208,
+    SPELL_ALPHA_BEAMS          = 39788, 
+    SPELL_CRUMBLING_RUIN       = 75609, 
+    H_SPELL_CRUMBLING_RUIN     = 91206, 
+    SPELL_DESTRUCTION_PROTOCOL = 77437, 
+    SPELL_NEMESIS_STRIKE       = 75604, 
+    H_SPELL_NEMESIS_STRIKE     = 91175, 
+    SPELL_OMEGA_STANCE         = 75622, 
+    H_SPELL_OMEGA_STANCE       = 91208, 
 };
 
 enum Events
 {
-    EVENT_ALPHA_BEAMS          = 1,
-    EVENT_CRUMBLING_RUIN       = 2,
-    EVENT_DESTRUCTION_PROTOCOL = 3,
-    EVENT_NEMESIS_STRIKE       = 4,
-    EVENT_OMEGA_STANCE         = 5,
+    EVENT_ALPHA_BEAMS          = 1, 
+    EVENT_CRUMBLING_RUIN       = 2, 
+    EVENT_DESTRUCTION_PROTOCOL = 3, 
+    EVENT_NEMESIS_STRIKE       = 4, 
+    EVENT_OMEGA_STANCE         = 5, 
 };
 
 class boss_anraphet : public CreatureScript
@@ -110,9 +110,9 @@ class boss_anraphet : public CreatureScript
                    return;
                 events.Update(uiDiff);
 
-                while(uint32 eventId = events.ExecuteEvent())
+                while (uint32 eventId = events.ExecuteEvent())
                 {
-                    switch(eventId)
+                    switch (eventId)
                     {
                         case EVENT_ALPHA_BEAMS:
                             if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, true))

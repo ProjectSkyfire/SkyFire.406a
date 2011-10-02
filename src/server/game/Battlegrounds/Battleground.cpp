@@ -221,7 +221,12 @@ Battleground::~Battleground()
     sBattlegroundMgr->RemoveBattleground(GetInstanceID(), GetTypeID());
     // unload map
     if (m_Map)
+    {
         m_Map->SetUnload();
+        //unlink to prevent crash, always unlink all pointer reference before destruction
+        m_Map->SetBG(NULL);
+        m_Map = NULL;
+    }
     // remove from bg free slot queue
     RemoveFromBGFreeSlotQueue();
 
@@ -251,7 +256,7 @@ void Battleground::Update(uint32 diff)
         return;
     }
 
-    switch(GetStatus())
+    switch (GetStatus())
     {
         case STATUS_WAIT_JOIN:
             if (GetPlayersSize())
@@ -885,7 +890,7 @@ uint32 Battleground::GetBonusHonorFromKill(uint32 kills) const
 
 uint32 Battleground::GetBattlemasterEntry() const
 {
-    switch(GetTypeID(true))
+    switch (GetTypeID(true))
     {
         case BATTLEGROUND_AV: return 15972;
         case BATTLEGROUND_WS: return 14623;

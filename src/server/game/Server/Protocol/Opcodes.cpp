@@ -39,7 +39,7 @@ static void DefineOpcode(uint32 opcode, const char* name, SessionStatus status, 
 
 void InitOpcodeTable()
 {
-    for( int i = 0; i < NUM_MSG_TYPES; ++i )
+    for ( int i = 0; i < NUM_MSG_TYPES; ++i )
     {
         DefineOpcode( i, "UNKNOWN", STATUS_NEVER, PROCESS_INPLACE,  &WorldSession::Handle_NULL );
     }
@@ -924,7 +924,7 @@ void InitOpcodeTable()
     OPCODE( CMSG_ACTIVE_PVP_CHEAT,                        STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
     OPCODE( CMSG_CHEAT_DUMP_ITEMS_DEBUG_ONLY,             STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
     OPCODE( SMSG_CHEAT_DUMP_ITEMS_DEBUG_ONLY_RESPONSE,    STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
-    OPCODE( SMSG_CHEAT_DUMP_ITEMS_DEBUG_ONLY_RESPONSE_WRITE_FILE,STATUS_NEVER,PROCESS_INPLACE,    &WorldSession::Handle_ServerSide            );
+    OPCODE( SMSG_CHEAT_DUMP_ITEMS_DEBUG_ONLY_RESPONSE_WRITE_FILE, STATUS_NEVER, PROCESS_INPLACE,    &WorldSession::Handle_ServerSide            );
     OPCODE( SMSG_UPDATE_COMBO_POINTS,                     STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( SMSG_VOICE_SESSION_ROSTER_UPDATE,             STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( SMSG_VOICE_SESSION_LEAVE,                     STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
@@ -933,7 +933,7 @@ void InitOpcodeTable()
     OPCODE( SMSG_VOICE_SET_TALKER_MUTED,                  STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( SMSG_INIT_EXTRA_AURA_INFO_OBSOLETE,           STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( SMSG_SET_EXTRA_AURA_INFO_OBSOLETE,            STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
-    OPCODE( SMSG_SET_EXTRA_AURA_INFO_NEED_UPDATE_OBSOLETE,STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
+    OPCODE( SMSG_SET_EXTRA_AURA_INFO_NEED_UPDATE_OBSOLETE, STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( SMSG_CLEAR_EXTRA_AURA_INFO_OBSOLETE,          STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( MSG_MOVE_START_DESCEND,                       STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleMovementOpcodes           );
     OPCODE( CMSG_IGNORE_REQUIREMENTS_CHEAT,               STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );

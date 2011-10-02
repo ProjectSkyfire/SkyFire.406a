@@ -133,7 +133,7 @@ public:
             {
                 if (Timer <= Diff)
                 {
-                    switch(Phase)
+                    switch (Phase)
                     {
                         case 1:
                             me->HandleEmoteCommand(EMOTE_STATE_KNEEL); //doesn't work?

@@ -101,14 +101,14 @@ class instance_uldaman : public InstanceMapScript
                     case GO_ALTAR_OF_THE_KEEPER_TEMPLE_DOOR:         // lock the door
                         AltarOfTheKeeperTempleDoor = go->GetGUID();
 
-                        if(Encounter[0] == DONE)
+                        if (Encounter[0] == DONE)
                            HandleGameObject(0, true, go);
                         break;
 
                     case GO_ARCHAEDAS_TEMPLE_DOOR:
                         ArchaedasTempleDoor = go->GetGUID();
 
-                        if(Encounter[0] == DONE)
+                        if (Encounter[0] == DONE)
                             HandleGameObject(0, true, go);
                         break;
 
@@ -117,7 +117,7 @@ class instance_uldaman : public InstanceMapScript
                         go->SetUInt32Value(GAMEOBJECT_FLAGS, 33);
                         AncientVaultDoor = go->GetGUID();
 
-                        if(Encounter[1] == DONE)
+                        if (Encounter[1] == DONE)
                             HandleGameObject(0, true, go);
                         break;
 
@@ -161,7 +161,7 @@ class instance_uldaman : public InstanceMapScript
             void BlockGO(uint64 guid)
             {
                 GameObject* go = instance->GetGameObject(guid);
-                if(!go)
+                if (!go)
                     return;
 
                 go->SetUInt32Value(GAMEOBJECT_FLAGS, GO_FLAG_INTERACT_COND);
@@ -251,7 +251,7 @@ class instance_uldaman : public InstanceMapScript
             void ActivateIronaya()
             {
                 Creature* ironaya = instance->GetCreature(IronayaGUID);
-                if(!ironaya)
+                if (!ironaya)
                     return;
 
                 ironaya->setFaction(415);
@@ -302,7 +302,7 @@ class instance_uldaman : public InstanceMapScript
                 if (!bKeystoneCheck)
                     return;
 
-                if(IronayaSealDoorTimer <= diff)
+                if (IronayaSealDoorTimer <= diff)
                 {
                     ActivateIronaya();
 
@@ -318,17 +318,17 @@ class instance_uldaman : public InstanceMapScript
 
             void SetData (uint32 type, uint32 data)
             {
-                switch(type)
+                switch (type)
                 {
                     case DATA_ALTAR_DOORS:
                         Encounter[0] = data;
-                        if(data == DONE)
+                        if (data == DONE)
                             SetDoor(AltarOfTheKeeperTempleDoor, true);
                         break;
 
                     case DATA_ANCIENT_DOOR:
                         Encounter[1] = data;
-                        if(data == DONE) //archeadas defeat
+                        if (data == DONE) //archeadas defeat
                         {
                             SetDoor(ArchaedasTempleDoor, true); //re open enter door
                             SetDoor(AncientVaultDoor, true);
@@ -344,7 +344,7 @@ class instance_uldaman : public InstanceMapScript
                         break;
 
                     case DATA_MINIONS:
-                        switch(data)
+                        switch (data)
                         {
                             case NOT_STARTED:
                                 if (Encounter[0] == DONE) //if players opened the doors
@@ -442,7 +442,7 @@ class instance_uldaman : public InstanceMapScript
                     case 7228:    // Ironaya
                         IronayaGUID = creature->GetGUID();
 
-                        if(Encounter[2] != DONE)
+                        if (Encounter[2] != DONE)
                             SetFrozenState (creature);
                         break;
 

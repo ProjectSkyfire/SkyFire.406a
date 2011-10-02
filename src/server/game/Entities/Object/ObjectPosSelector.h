@@ -28,7 +28,7 @@ enum UsedPosType { USED_POS_PLUS, USED_POS_MINUS };
 
 inline UsedPosType operator ~(UsedPosType uptype)
 {
-    return uptype==USED_POS_PLUS ? USED_POS_MINUS : USED_POS_PLUS;
+    return uptype == USED_POS_PLUS ? USED_POS_MINUS : USED_POS_PLUS;
 }
 
 struct ObjectPosSelector

@@ -193,7 +193,7 @@ public:
 
         void DoReplyToTextEmote(uint32 emote)
         {
-            switch(emote)
+            switch (emote)
             {
                 case TEXT_EMOTE_KISS:    me->HandleEmoteCommand(EMOTE_ONESHOT_BOW);    break;
                 case TEXT_EMOTE_WAVE:    me->HandleEmoteCommand(EMOTE_ONESHOT_WAVE);   break;
@@ -206,7 +206,7 @@ public:
 
         void ReceiveEmote(Player* player, uint32 textEmote)
         {
-            switch(me->GetEntry())
+            switch (me->GetEntry())
             {
                 case NPC_STORMWIND_CITY_GUARD:
                 case NPC_STORMWIND_CITY_PATROLLER:

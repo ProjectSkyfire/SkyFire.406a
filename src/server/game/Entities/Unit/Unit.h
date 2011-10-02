@@ -35,7 +35,7 @@
 #include "DBCStructure.h"
 #include "SpellInfo.h"
 #include "Path.h"
-#include "..\game\Server\Packets\WorldPacket.h"
+#include "WorldPacket.h"
 #include "Timer.h"
 #include <list>
 
@@ -999,7 +999,7 @@ struct SpellNonMeleeDamage{
 struct SpellPeriodicAuraLogInfo
 {
     SpellPeriodicAuraLogInfo(AuraEffect const *_auraEff, uint32 _damage, uint32 _overDamage, uint32 _absorb, uint32 _resist, float _multiplier, bool _critical)
-        : auraEff(_auraEff), damage(_damage), overDamage(_overDamage), absorb(_absorb), resist(_resist), multiplier(_multiplier), critical(_critical){}
+        : auraEff(_auraEff), damage(_damage), overDamage(_overDamage), absorb(_absorb), resist(_resist), multiplier(_multiplier), critical(_critical) {}
 
     AuraEffect const* auraEff;
     uint32 damage;
@@ -1491,7 +1491,7 @@ class Unit : public WorldObject
         void CalculateMeleeDamage(Unit* pVictim, uint32 damage, CalcDamageInfo *damageInfo, WeaponAttackType attackType = BASE_ATTACK);
         void DealMeleeDamage(CalcDamageInfo *damageInfo, bool durabilityLoss);
         void HandleProcExtraAttackFor(Unit* victim);
-		
+
         void CalculateSpellDamageTaken(SpellNonMeleeDamage *damageInfo, int32 damage, SpellInfo const *spellInfo, WeaponAttackType attackType = BASE_ATTACK, bool crit = false);
         void DealSpellDamage(SpellNonMeleeDamage *damageInfo, bool durabilityLoss);
 
@@ -1525,7 +1525,7 @@ class Unit : public WorldObject
         int32 GetMechanicResistChance(const SpellInfo *spell);
         bool CanUseAttackType(uint8 attacktype) const
         {
-            switch(attacktype)
+            switch (attacktype)
             {
                 case BASE_ATTACK: return !HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISARMED);
                 case OFF_ATTACK: return !HasFlag(UNIT_FIELD_FLAGS_2, UNIT_FLAG2_DISARM_OFFHAND);
@@ -1606,7 +1606,7 @@ class Unit : public WorldObject
         void EnergizeBySpell(Unit* pVictim, uint32 SpellID, uint32 Damage, Powers powertype);
         uint32 SpellNonMeleeDamageLog(Unit* pVictim, uint32 spellID, uint32 damage);
 
-		void CastSpell(SpellCastTargets const& targets, SpellInfo const* spellInfo, CustomSpellValues const* value, TriggerCastFlags triggerFlags = TRIGGERED_NONE, Item* castItem = NULL, AuraEffect const* triggeredByAura = NULL, uint64 originalCaster = 0);
+        void CastSpell(SpellCastTargets const& targets, SpellInfo const* spellInfo, CustomSpellValues const* value, TriggerCastFlags triggerFlags = TRIGGERED_NONE, Item* castItem = NULL, AuraEffect const* triggeredByAura = NULL, uint64 originalCaster = 0);
         void CastSpell(Unit* victim, uint32 spellId, bool triggered, Item* castItem = NULL, AuraEffect const* triggeredByAura = NULL, uint64 originalCaster = 0);
         void CastSpell(Unit* victim, uint32 spellId, TriggerCastFlags triggerFlags = TRIGGERED_NONE, Item* castItem = NULL, AuraEffect const* triggeredByAura = NULL, uint64 originalCaster = 0);
         void CastSpell(Unit* victim, SpellInfo const *spellInfo, bool triggered, Item *castItem= NULL, AuraEffect const* triggeredByAura = NULL, uint64 originalCaster = 0);

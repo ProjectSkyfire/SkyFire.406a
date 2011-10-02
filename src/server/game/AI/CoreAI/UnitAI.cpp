@@ -132,7 +132,7 @@ void UnitAI::DoCast(uint32 spellId)
 {
     Unit* target = NULL;
     //sLog->outError("aggre %u %u", spellId, (uint32)AISpellInfo[spellId].target);
-    switch(AISpellInfo[spellId].target)
+    switch (AISpellInfo[spellId].target)
     {
         default:
         case AITARGET_SELF:     target = me; break;
@@ -266,7 +266,6 @@ bool SpellTargetSelector::operator()(Unit const* target) const
     uint32 range_type = _spellInfo->RangeEntry ? _spellInfo->RangeEntry->type : 0;
     float max_range = _caster->GetSpellMaxRangeForTarget(target, _spellInfo);
     float min_range = _caster->GetSpellMinRangeForTarget(target, _spellInfo);
-
 
     if (target && target != _caster)
     {

@@ -145,7 +145,6 @@ ACE_OS::strerror_emulation (int)
 }
 #endif /* ACE_LACKS_STRERROR */
 
-
 char *
 ACE_OS::strsignal (int signum)
 {

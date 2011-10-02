@@ -237,7 +237,7 @@ public:
             if (!player)
                 return;
 
-            switch(i)
+            switch (i)
             {
                 case 0:
                     DoScriptText(SAY_REM_START, me, player);

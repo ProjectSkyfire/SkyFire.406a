@@ -399,7 +399,7 @@ void WheatyExceptionReport::printTracesForAllThreads()
         }
         CloseHandle(threadHandle);
     }
-  } while(Thread32Next(hThreadSnap, &te32));
+  } while (Thread32Next(hThreadSnap, &te32));
 
 //  Don't forget to clean up the snapshot object.
   CloseHandle(hThreadSnap);

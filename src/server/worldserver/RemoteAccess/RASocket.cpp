@@ -32,7 +32,7 @@
 
 RASocket::RASocket()
 {
-    iMinLevel = sConfig->GetIntDefault("RA.MinLevel", 3);
+    iMinLevel = ConfigMgr::GetIntDefault("RA.MinLevel", 3);
 }
 
 RASocket::~RASocket()
@@ -348,7 +348,7 @@ int RASocket::svc(void)
     if (send(std::string(sWorld->GetMotd()) + "\r\n") == -1)
         return -1;
 
-    for(;;)
+    for (;;)
     {
         // show prompt
         const char* tc_prompt = "TC> ";

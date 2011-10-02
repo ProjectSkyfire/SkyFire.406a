@@ -256,7 +256,7 @@ public:
                     initString =false;
                 }
                 else
-                    eventFilter << ',' << *itr;
+                    eventFilter << ', ' << *itr;
             }
 
             if (!initString)

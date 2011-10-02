@@ -290,14 +290,14 @@ public:
                 if (pTenebron)
                 {
                     pTenebron->SetHomePosition(3239.07f, 657.235f, 86.8775f, 4.74729f);
-                    if(pTenebron->isAlive())
+                    if (pTenebron->isAlive())
                     {
                         if (pTenebron->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE))
                             pTenebron->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
                         pTenebron->GetMotionMaster()->MoveTargetedHome();
                     }else
                     {
-                        if(pInstance->GetData(TYPE_TENEBRON_PREKILLED) == false)
+                        if (pInstance->GetData(TYPE_TENEBRON_PREKILLED) == false)
                         {
                             pTenebron->Respawn();
                             pTenebron->GetMotionMaster()->MoveTargetedHome();
@@ -308,14 +308,14 @@ public:
                 if (pShadron)
                 {
                     pShadron->SetHomePosition(3363.06f, 525.28f, 98.362f, 4.76475f);
-                    if(pShadron->isAlive())
+                    if (pShadron->isAlive())
                     {
                         if (pShadron->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE))
                             pShadron->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
                         pShadron->GetMotionMaster()->MoveTargetedHome();
                     }else
                     {
-                        if(pInstance->GetData(TYPE_SHADRON_PREKILLED) == false)
+                        if (pInstance->GetData(TYPE_SHADRON_PREKILLED) == false)
                         {
                             pShadron->Respawn();
                             pShadron->GetMotionMaster()->MoveTargetedHome();
@@ -326,14 +326,14 @@ public:
                 if (pVesperon)
                 {
                     pVesperon->SetHomePosition(3145.68f, 520.71f, 89.7f, 4.64258f);
-                    if(pVesperon->isAlive())
+                    if (pVesperon->isAlive())
                     {
                         if (pVesperon->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE))
                             pVesperon->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
                         pVesperon->GetMotionMaster()->MoveTargetedHome();
                     }else
                     {
-                        if(pInstance->GetData(TYPE_VESPERON_PREKILLED) == false)
+                        if (pInstance->GetData(TYPE_VESPERON_PREKILLED) == false)
                         {
                             pVesperon->Respawn();
                             pVesperon->GetMotionMaster()->MoveTargetedHome();
@@ -484,7 +484,7 @@ public:
 
                         int32 iTextId = 0;
 
-                        switch(pTemp->GetEntry())
+                        switch (pTemp->GetEntry())
                         {
                             case NPC_TENEBRON:
                                 iTextId = SAY_SARTHARION_CALL_TENEBRON;
@@ -532,13 +532,13 @@ public:
             Trinity::CreatureListSearcher<Trinity::AllCreaturesOfEntryInRange> searcher(me, pFireCyclonesList, checker);
             me->VisitNearbyObject(200.0f, searcher);
 
-            if(pFireCyclonesList.empty())
+            if (pFireCyclonesList.empty())
                 return;
 
             std::list<Creature*>::iterator itr = pFireCyclonesList.begin();
             uint32 rnd = rand()%pFireCyclonesList.size();
 
-            for(uint32 i = 0; i < rnd; ++i)
+            for (uint32 i = 0; i < rnd; ++i)
                 ++itr;
 
             (*itr)->CastSpell(target, SPELL_LAVA_STRIKE, true);
@@ -586,7 +586,7 @@ public:
             if (m_uiFlameTsunamiTimer <= uiDiff)
             {
                 SendFlameTsunami();
-                switch(urand(0, 1))
+                switch (urand(0, 1))
                 {
                     case 0:
                     {
@@ -648,7 +648,7 @@ public:
                 {
                     CastLavaStrikeOnTarget(target);
 
-                    if(urand(0, 5) == 0)
+                    if (urand(0, 5) == 0)
                         DoScriptText(RAND(SAY_SARTHARION_SPECIAL_1, SAY_SARTHARION_SPECIAL_2, SAY_SARTHARION_SPECIAL_3), me);
                 }
                 m_uiLavaStrikeTimer = (m_bIsSoftEnraged ? urand(1400, 2000) : urand(5000, 20000));
@@ -779,7 +779,7 @@ struct dummy_dragonAI : public ScriptedAI
         {
             me->GetMotionMaster()->Clear();
             me->SetInCombatWithZone();
-            if(Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0, true))
+            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0, true))
             {
                 me->AddThreat(target, 1.0f);
                 me->Attack(target, true);
@@ -836,19 +836,19 @@ struct dummy_dragonAI : public ScriptedAI
         //in instance script and calculate range to each.
         GameObject* pPortal = me->FindNearestGameObject(GO_TWILIGHT_PORTAL, 50.0f);
 
-        switch(me->GetEntry())
+        switch (me->GetEntry())
         {
             case NPC_TENEBRON:
             {
                 iTextId = WHISPER_HATCH_EGGS;
                 if (pInstance && !pInstance->GetData(TYPE_SARTHARION_EVENT) == IN_PROGRESS)
                 {
-                    for(uint32 i = 0; i < 6; ++i)
+                    for (uint32 i = 0; i < 6; ++i)
                         me->SummonCreature(NPC_TWILIGHT_EGG, TwilightEggs[i].x, TwilightEggs[i].y, TwilightEggs[i].z, 0, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 20000);
                 }
                 else
                 {
-                    for(uint32 i = 0; i < 6; ++i)
+                    for (uint32 i = 0; i < 6; ++i)
                         me->SummonCreature(NPC_SARTHARION_TWILIGHT_EGG, TwilightEggsSarth[i].x, TwilightEggsSarth[i].y, TwilightEggsSarth[i].z, 0, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 20000);
                 }
                 break;
@@ -856,7 +856,7 @@ struct dummy_dragonAI : public ScriptedAI
             case NPC_SHADRON:
             {
                 iTextId = WHISPER_OPEN_PORTAL;
-                if(pInstance && !pInstance->GetData(TYPE_SARTHARION_EVENT) == IN_PROGRESS)
+                if (pInstance && !pInstance->GetData(TYPE_SARTHARION_EVENT) == IN_PROGRESS)
                     me->SummonCreature(NPC_ACOLYTE_OF_SHADRON, AcolyteofShadron.x, AcolyteofShadron.y , AcolyteofShadron.z, 0, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 28000);
                 else
                     me->SummonCreature(NPC_ACOLYTE_OF_SHADRON, AcolyteofShadron2.x, AcolyteofShadron2.y , AcolyteofShadron2.z, 0, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 28000);
@@ -868,7 +868,7 @@ struct dummy_dragonAI : public ScriptedAI
                 iTextId = WHISPER_OPEN_PORTAL;
                 if (pInstance && !pInstance->GetData(TYPE_SARTHARION_EVENT) == IN_PROGRESS)
                 {
-                    if(Creature* Acolyte = me->SummonCreature(NPC_ACOLYTE_OF_VESPERON, AcolyteofVesperon.x, AcolyteofVesperon.y , AcolyteofVesperon.z, 0, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 20000))
+                    if (Creature* Acolyte = me->SummonCreature(NPC_ACOLYTE_OF_VESPERON, AcolyteofVesperon.x, AcolyteofVesperon.y , AcolyteofVesperon.z, 0, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 20000))
                     {
                         me->InterruptNonMeleeSpells(true);
                         Acolyte->InterruptNonMeleeSpells(true);
@@ -877,7 +877,7 @@ struct dummy_dragonAI : public ScriptedAI
                 }
                 else
                 {
-                    if(Creature* Acolyte = me->SummonCreature(NPC_ACOLYTE_OF_VESPERON, AcolyteofVesperon2.x, AcolyteofVesperon2.y , AcolyteofVesperon2.z, 0, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 20000))
+                    if (Creature* Acolyte = me->SummonCreature(NPC_ACOLYTE_OF_VESPERON, AcolyteofVesperon2.x, AcolyteofVesperon2.y , AcolyteofVesperon2.z, 0, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 20000))
                     {
                         me->InterruptNonMeleeSpells(true);
                         Acolyte->InterruptNonMeleeSpells(true);
@@ -908,20 +908,20 @@ struct dummy_dragonAI : public ScriptedAI
         int32 iTextId = 0;
         uint32 uiSpellId = 0;
 
-        switch(me->GetEntry())
+        switch (me->GetEntry())
         {
             case NPC_TENEBRON:
                 iTextId = SAY_TENEBRON_DEATH;
                 uiSpellId = SPELL_POWER_OF_TENEBRON;
-                if(pInstance && pInstance->GetData(TYPE_SARTHARION_EVENT) != IN_PROGRESS)
+                if (pInstance && pInstance->GetData(TYPE_SARTHARION_EVENT) != IN_PROGRESS)
                     pInstance->SetData(TYPE_TENEBRON_PREKILLED, 1);
                 break;
             case NPC_SHADRON:
                 iTextId = SAY_SHADRON_DEATH;
                 uiSpellId = SPELL_POWER_OF_SHADRON;
-                if(pInstance && pInstance->GetData(TYPE_SARTHARION_EVENT) != IN_PROGRESS)
+                if (pInstance && pInstance->GetData(TYPE_SARTHARION_EVENT) != IN_PROGRESS)
                     pInstance->SetData(TYPE_SHADRON_PREKILLED, 1);
-                if(Creature* pAcolyte = me->FindNearestCreature(NPC_ACOLYTE_OF_SHADRON, 100.0f))
+                if (Creature* pAcolyte = me->FindNearestCreature(NPC_ACOLYTE_OF_SHADRON, 100.0f))
                 {
                     pAcolyte->Kill(pAcolyte);
                 }
@@ -929,9 +929,9 @@ struct dummy_dragonAI : public ScriptedAI
             case NPC_VESPERON:
                 iTextId = SAY_VESPERON_DEATH;
                 uiSpellId = SPELL_POWER_OF_VESPERON;
-                if(pInstance && pInstance->GetData(TYPE_SARTHARION_EVENT) != IN_PROGRESS)
+                if (pInstance && pInstance->GetData(TYPE_SARTHARION_EVENT) != IN_PROGRESS)
                     pInstance->SetData(TYPE_VESPERON_PREKILLED, 1);
-                if(Creature* pAcolyte = me->FindNearestCreature(NPC_ACOLYTE_OF_VESPERON, 100.0f))
+                if (Creature* pAcolyte = me->FindNearestCreature(NPC_ACOLYTE_OF_VESPERON, 100.0f))
                 {
                     pAcolyte->Kill(pAcolyte);
                 }
@@ -966,7 +966,7 @@ struct dummy_dragonAI : public ScriptedAI
         {
             if (m_uiMoveNextTimer <= uiDiff)
             {
-                if(m_uiWaypointId < MAX_WAYPOINT)
+                if (m_uiWaypointId < MAX_WAYPOINT)
                     me->GetMotionMaster()->MovePoint(m_uiWaypointId,
                         m_aDragonCommon[m_uiWaypointId].m_fX, m_aDragonCommon[m_uiWaypointId].m_fY, m_aDragonCommon[m_uiWaypointId].m_fZ);
 
@@ -1142,7 +1142,7 @@ public:
             // Portal Event
             if (m_uiAcolyteShadronTimer <= uiDiff)
             {
-                if(m_bHasPortalOpen)
+                if (m_bHasPortalOpen)
                     m_uiAcolyteShadronTimer = 10000;
                 else
                 {
@@ -1240,7 +1240,7 @@ public:
             // Portal Event
             if (m_uiAcolyteVesperonTimer <= uiDiff)
             {
-                if(m_bHasPortalOpen)
+                if (m_bHasPortalOpen)
                     m_uiAcolyteVesperonTimer = 10000;
                 else
                 {
@@ -1320,7 +1320,7 @@ public:
             if (pInstance)
             {
                 Creature* Shadron = pInstance->instance->GetCreature(pInstance->GetData64(DATA_SHADRON));
-                if(Shadron)
+                if (Shadron)
                 {
                     (CAST_AI(mob_shadron::mob_shadronAI, Shadron->AI()))->m_bHasPortalOpen = false;
                 }
@@ -1360,7 +1360,7 @@ public:
 
         void UpdateAI(const uint32 uiDiff)
         {
-            if(uiDespawnTimer < uiDiff)
+            if (uiDespawnTimer < uiDiff)
             {
                 me->SetVisible(false);
                 me->Kill(me);
@@ -1454,7 +1454,7 @@ public:
 
         void UpdateAI(const uint32 uiDiff)
         {
-            if(uiDespawnTimer < uiDiff)
+            if (uiDespawnTimer < uiDiff)
             {
                 me->SetVisible(false);
                 me->Kill(me);
@@ -1498,7 +1498,7 @@ public:
 
         void Reset()
         {
-            if(pInstance)
+            if (pInstance)
             {
                 me->AddAura(SPELL_TWILIGHT_SHIFT_ENTER, me);
             }
@@ -1527,7 +1527,7 @@ public:
             if (m_uiHatchEggTimer <= uiDiff)
             {
                 Creature* Tenebron = pInstance->instance->GetCreature(pInstance->GetData64(DATA_TENEBRON));
-                if(Tenebron)
+                if (Tenebron)
                     (CAST_AI(mob_tenebron::mob_tenebronAI, Tenebron->AI()))->m_bHasPortalOpen = false;
                 SpawnWhelps();
             }
@@ -1583,7 +1583,7 @@ public:
                 Tsunami_Timer = 500;
             }else Tsunami_Timer -= diff;
 
-            if(TsunamiBuff_timer <= diff)
+            if (TsunamiBuff_timer <= diff)
             {
                 if (Unit* LavaBlaze = GetClosestCreatureWithEntry(me, NPC_LAVA_BLAZE, 10.0f, true))
                     LavaBlaze->CastSpell(LavaBlaze, SPELL_FLAME_TSUNAMI_BUFF, true);

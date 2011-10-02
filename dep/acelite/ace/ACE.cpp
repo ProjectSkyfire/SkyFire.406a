@@ -56,7 +56,6 @@ namespace ACE
   char debug_;
 }
 
-
 int
 ACE::out_of_handles (int error)
 {
@@ -2897,7 +2896,6 @@ ACE::gcd (u_long x, u_long y)
   return x;
 }
 
-
 // Calculates the minimum enclosing frame size for the given values.
 u_long
 ACE::minimum_frame_size (u_long period1, u_long period2)
@@ -2940,7 +2938,6 @@ ACE::minimum_frame_size (u_long period1, u_long period2)
       return (period1 * period2) / greatest_common_divisor;
     }
 }
-
 
 u_long
 ACE::is_prime (const u_long n,
@@ -3312,7 +3309,6 @@ ACE::strnew (const wchar_t *s)
 // helper functions for ACE::wild_match()
 namespace
 {
-
   inline bool equal_char (char a, char b, bool case_sensitive)
   {
     if (case_sensitive)

@@ -1477,7 +1477,7 @@ void SpellMgr::LoadSpellTargetPositions()
             continue;
         }
 
-        if (st.target_X==0 && st.target_Y==0 && st.target_Z==0)
+        if (st.target_X == 0 && st.target_Y == 0 && st.target_Z == 0)
         {
             sLog->outErrorDb("Spell (ID:%u) target coordinates not provided.", Spell_ID);
             continue;
@@ -1817,7 +1817,7 @@ void SpellMgr::LoadSpellProcs()
         baseProcEntry.cooldown        = uint32(cooldown);
         baseProcEntry.charges         = fields[14].GetUInt32();
 
-        while(true)
+        while (true)
         {
             if (mSpellProcMap.find(spellId) != mSpellProcMap.end())
             {
@@ -2608,7 +2608,7 @@ void SpellMgr::LoadSpellInfoStore()
         }
     }
 
-    for(uint32 i = 1; i < sSpellEffectStore.GetNumRows(); ++i)
+    for (uint32 i = 1; i < sSpellEffectStore.GetNumRows(); ++i)
     {
         if (SpellEffectEntry const *spellEffect = sSpellEffectStore.LookupEntry(i))
         {

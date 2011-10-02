@@ -63,7 +63,7 @@ public:
 
             DoMeleeAttackIfReady();
         }
-        void JustDied(Unit* /*killer*/)  {}
+        void JustDied(Unit* /*killer*/) {}
     };
 };
 

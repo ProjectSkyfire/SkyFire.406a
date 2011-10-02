@@ -184,7 +184,7 @@ public:
 
          void SetData64(uint32 identifier, uint64 data)
          {
-             switch(identifier)
+             switch (identifier)
              {
              case DATA_IMAGE_OF_MEDIVH: ImageGUID = data;
              }
@@ -192,7 +192,7 @@ public:
 
         void OnGameObjectCreate(GameObject* go)
         {
-            switch(go->GetEntry())
+            switch (go->GetEntry())
             {
                 case 183932:   CurtainGUID = go->GetGUID(); break;
                 case 184278:
@@ -222,7 +222,7 @@ public:
                 case 185119: DustCoveredChest = go->GetGUID(); break;
             }
 
-            switch(OperaEvent)
+            switch (OperaEvent)
             {
                 //TODO: Set Object visibilities for Opera based on performance
                 case EVENT_OZ:

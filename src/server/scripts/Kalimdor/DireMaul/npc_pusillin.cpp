@@ -21,20 +21,20 @@
 
 enum pus
 {
-    SAY_1   = -1901000,
-    SAY_2   = -1901001,
-    SAY_3   = -1901002,
-    SAY_4   = -1901003,
-    SAY_5   = -1901004,
+    SAY_1   = -1901000, 
+    SAY_2   = -1901001, 
+    SAY_3   = -1901002, 
+    SAY_4   = -1901003, 
+    SAY_5   = -1901004, 
 
     NPC_IMP = 13276
 };
 
 enum eSpells
 {
-    SPELL_BLAST_WAVE            = 17145,
-    SPELL_FIRE_BLAST            = 14145,
-    SPELL_FIREBALL              = 15228,
+    SPELL_BLAST_WAVE            = 17145, 
+    SPELL_FIRE_BLAST            = 14145, 
+    SPELL_FIREBALL              = 15228, 
     SPELL_RUNN                  = 22735
 };
 
@@ -86,7 +86,7 @@ public:
 
         void WaypointReached(uint32 uiPointId)
         {
-            switch(uiPointId)
+            switch (uiPointId)
             {
             case 0:
                 break;
@@ -118,7 +118,7 @@ public:
 
             if (uiPhase)
             {
-                switch(uiPhase)
+                switch (uiPhase)
                 {
                 case 1:
                     DoScriptText(SAY_1, me);
@@ -143,9 +143,9 @@ public:
                     me->SetFloatValue(OBJECT_FIELD_SCALE_X, scale * 3);
                     Unit* pTarget = SelectTarget(SELECT_TARGET_NEAREST, 0);
                     me->AI()->AttackStart(pTarget);
-                    for(uint8 i = 0; i<5; i++)
+                    for (uint8 i = 0; i<5; i++)
                     {
-                        switch(i)
+                        switch (i)
                         {
                         case 1:
                             if (Creature *pImp=me->SummonCreature(NPC_IMP, SpawnPosition1, TEMPSUMMON_CORPSE_DESPAWN, 120000))
@@ -182,7 +182,7 @@ public:
                 }
             }
 
-            if (uiPhase==6)
+            if (uiPhase == 6)
             {
                 if (!UpdateVictim())
                     return;
@@ -208,7 +208,7 @@ public:
                 }
                 else uiFireBallTimer -= uiDiff;
 
-                if (uiSpiritOfRunnTimer <= uiDiff && buffed==false)
+                if (uiSpiritOfRunnTimer <= uiDiff && buffed == false)
                 {
                     DoCast(me, SPELL_RUNN);
                     buffed = true;

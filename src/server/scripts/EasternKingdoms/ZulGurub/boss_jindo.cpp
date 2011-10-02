@@ -248,7 +248,7 @@ class mob_shade_of_jindo : public CreatureScript
                 DoCast(me, SPELL_INVISIBLE, true);
             }
 
-            void EnterCombat(Unit* /*who*/){}
+            void EnterCombat(Unit* /*who*/) {}
 
             void UpdateAI (const uint32 diff)
             {

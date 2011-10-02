@@ -93,12 +93,12 @@ void CharacterDatabaseCleaner::CheckUnique(const char* column, const char* table
                 found = true;
             }
             else
-                ss << ',';
+                ss << ', ';
 
             ss << id;
         }
     }
-    while(result->NextRow());
+    while (result->NextRow());
 
     if (found)
     {

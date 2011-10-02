@@ -43,9 +43,9 @@ enum AuctionError
 
 enum AuctionAction
 {
-    AUCTION_SELL_ITEM = 0,
-    AUCTION_CANCEL = 1,
-    AUCTION_PLACE_BID = 2
+    AUCTION_SELL_ITEM   = 0,
+    AUCTION_CANCEL      = 1,
+    AUCTION_PLACE_BID   = 2
 };
 
 struct AuctionEntry
@@ -54,12 +54,12 @@ struct AuctionEntry
     uint32 auctioneer;                                      // creature low guid
     uint32 item_guidlow;
     uint32 item_template;
-    uint32 owner;
-    uint32 startbid;                                        //maybe useless
-    uint32 bid;
+    uint64 owner;
+    uint64 startbid;                                        //maybe useless
+    uint64 bid;
     uint32 buyout;
     time_t expire_time;
-    uint32 bidder;
+    uint64 bidder;
     uint32 deposit;                                         //deposit can be calculated only when creating auction
     AuctionHouseEntry const* auctionHouseEntry;             // in AuctionHouse.dbc
     uint32 factionTemplateId;
@@ -68,7 +68,7 @@ struct AuctionEntry
     uint32 GetHouseId() const { return auctionHouseEntry->houseId; }
     uint32 GetHouseFaction() const { return auctionHouseEntry->faction; }
     uint32 GetAuctionCut() const;
-    uint32 GetAuctionOutBid() const;
+    uint64 GetAuctionOutBid() const;
     bool BuildAuctionInfo(WorldPacket & data) const;
     void DeleteFromDB(SQLTransaction& trans) const;
     void SaveToDB(SQLTransaction& trans) const;

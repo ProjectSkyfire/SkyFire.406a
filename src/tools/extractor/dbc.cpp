@@ -8,7 +8,7 @@
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful, 
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
@@ -33,14 +33,14 @@ void ExtractDBCFiles(int locale, bool basicLocale)
 
     int foundCount = 0;
 
-    for(int i = 0; i < PATCH_REV_COUNT + 1; i++)
+    for (int i = 0; i < PATCH_REV_COUNT + 1; i++)
     {
         TMPQArchive * archive = (TMPQArchive *)localeMPQ[i];
         TFileEntry * pFileEntry = archive->pFileTable;
         TFileEntry * pFileTableEnd = archive->pFileTable + archive->dwFileTableSize;
 
         // Parse the entire block table
-        while(pFileEntry < pFileTableEnd)
+        while (pFileEntry < pFileTableEnd)
         {
             // Only take existing files
             if ( pFileEntry->dwFlags & MPQ_FILE_EXISTS &&
@@ -67,7 +67,7 @@ void ExtractDBCFiles(int locale, bool basicLocale)
                     if (i != 0)
                     {
                         bool alreadyExist = false;
-                        for(std::set<std::pair<int, std::string> >::iterator itr = dbcfiles.begin(); itr != dbcfiles.end(); itr++)
+                        for (std::set<std::pair<int, std::string> >::iterator itr = dbcfiles.begin(); itr != dbcfiles.end(); itr++)
                         {
                             if (itr->second == name)
                             {
@@ -130,7 +130,7 @@ uint32 ReadMapDBC()
 
     size_t map_count = dbc.getRecordCount();
     map_ids = new map_id[map_count];
-    for(uint32 x = 0; x < map_count; ++x)
+    for (uint32 x = 0; x < map_count; ++x)
     {
         map_ids[x].id = dbc.getRecord(x).getUInt(0);
         strcpy(map_ids[x].name, dbc.getRecord(x).getString(1));
@@ -155,7 +155,7 @@ void ReadAreaTableDBC()
     areas = new uint16[maxid + 1];
     memset(areas, 0xff, (maxid + 1) * sizeof(uint16));
 
-    for(uint32 x = 0; x < area_count; ++x)
+    for (uint32 x = 0; x < area_count; ++x)
         areas[dbc.getRecord(x).getUInt(0)] = dbc.getRecord(x).getUInt(3);
 
     maxAreaId = dbc.getMaxId();
@@ -178,7 +178,7 @@ void ReadLiquidTypeTableDBC()
     LiqType = new uint16[LiqType_maxid + 1];
     memset(LiqType, 0xff, (LiqType_maxid + 1) * sizeof(uint16));
 
-    for(uint32 x = 0; x < LiqType_count; ++x)
+    for (uint32 x = 0; x < LiqType_count; ++x)
         LiqType[dbc.getRecord(x).getUInt(0)] = dbc.getRecord(x).getUInt(3);
 
     printf("Done! (%u LiqTypes loaded)\n", LiqType_count);

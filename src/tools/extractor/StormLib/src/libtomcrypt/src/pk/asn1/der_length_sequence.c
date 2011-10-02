@@ -24,7 +24,7 @@
    @param outlen [out] The length required in octets to store it
    @return CRYPT_OK on success
 */
-int der_length_sequence(ltc_asn1_list *list, unsigned long inlen,
+int der_length_sequence(ltc_asn1_list *list, unsigned long inlen, 
                         unsigned long *outlen)
 {
    int           err, type;
@@ -163,6 +163,6 @@ LBL_ERR:
 
 #endif
 
-/* $Source: /cvs/libtom/libtomcrypt/src/pk/asn1/der/sequence/der_length_sequence.c,v $ */
+/* $Source: /cvs/libtom/libtomcrypt/src/pk/asn1/der/sequence/der_length_sequence.c, v $ */
 /* $Revision: 1.14 $ */
 /* $Date: 2006/12/28 01:27:24 $ */

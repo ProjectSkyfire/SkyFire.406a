@@ -23,9 +23,9 @@
 
 static const DWORD MpqHeaderSizes[] =
 {
-    MPQ_HEADER_SIZE_V1,
-    MPQ_HEADER_SIZE_V2,
-    MPQ_HEADER_SIZE_V3,
+    MPQ_HEADER_SIZE_V1, 
+    MPQ_HEADER_SIZE_V2, 
+    MPQ_HEADER_SIZE_V3, 
     MPQ_HEADER_SIZE_V4
 };
 
@@ -96,12 +96,12 @@ bool WINAPI SFileCreateArchive(const char * szMpqName, DWORD dwFlags, DWORD dwHa
             nError = ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    // Fill the MPQ archive handle structure and create the header,
+    // Fill the MPQ archive handle structure and create the header, 
     // hash table and block table
     if (nError == ERROR_SUCCESS)
     {
         // Round the hash table size up to the nearest power of two
-        for(dwPowerOfTwo = HASH_TABLE_SIZE_MIN; dwPowerOfTwo < HASH_TABLE_SIZE_MAX; dwPowerOfTwo <<= 1)
+        for (dwPowerOfTwo = HASH_TABLE_SIZE_MIN; dwPowerOfTwo < HASH_TABLE_SIZE_MAX; dwPowerOfTwo <<= 1)
         {
             if (dwPowerOfTwo >= dwHashTableSize)
             {
@@ -167,8 +167,8 @@ bool WINAPI SFileCreateArchive(const char * szMpqName, DWORD dwFlags, DWORD dwHa
             ha->dwFlags |= MPQ_FLAG_CHECK_SECTOR_CRC;
 
         //
-        // Note: Don't write the MPQ header at this point. If any operation fails later,
-        // the unfinished MPQ would stay on the disk, being 0x20 (or 0x2C) bytes long,
+        // Note: Don't write the MPQ header at this point. If any operation fails later, 
+        // the unfinished MPQ would stay on the disk, being 0x20 (or 0x2C) bytes long, 
         // containing naked MPQ header.
         //
 

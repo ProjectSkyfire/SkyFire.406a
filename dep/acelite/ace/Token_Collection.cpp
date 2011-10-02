@@ -7,7 +7,6 @@
 #include "ace/Token_Collection.inl"
 #endif /* __ACE_INLINE__ */
 
-
 ACE_BEGIN_VERSIONED_NAMESPACE_DECL
 
 ACE_Token_Collection::ACE_Token_Collection (bool debug,
@@ -118,7 +117,6 @@ ACE_Token_Collection::acquire (const ACE_TCHAR *token_name,
   // perform the operation
   return temp->acquire (notify, sleep_hook, options);
 }
-
 
 int
 ACE_Token_Collection::tryacquire (const ACE_TCHAR *token_name,
@@ -252,7 +250,6 @@ ACE_Token_Collection::~ACE_Token_Collection (void)
       // COLLECTION::ENTRYs goes away.
     }
 }
-
 
 // This method doesn't mean anything for a collection.
 ACE_Token_Proxy *

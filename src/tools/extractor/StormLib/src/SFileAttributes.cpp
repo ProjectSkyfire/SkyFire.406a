@@ -74,7 +74,7 @@ int SAttrLoadAttributes(TMPQArchive * ha)
                 SFileReadFile(hFile, pArrayCRC32, dwArraySize, &dwBytesRead, NULL);
                 if (dwBytesRead == dwArraySize)
                 {
-                    for(i = 0; i < dwBlockTableSize; i++)
+                    for (i = 0; i < dwBlockTableSize; i++)
                         ha->pFileTable[i].dwCrc32 = BSWAP_INT32_UNSIGNED(pArrayCRC32[i]);
                 }
                 else
@@ -97,7 +97,7 @@ int SAttrLoadAttributes(TMPQArchive * ha)
                 SFileReadFile(hFile, pArrayFileTime, dwArraySize, &dwBytesRead, NULL);
                 if (dwBytesRead == dwArraySize)
                 {
-                    for(i = 0; i < dwBlockTableSize; i++)
+                    for (i = 0; i < dwBlockTableSize; i++)
                         ha->pFileTable[i].FileTime = BSWAP_INT64_UNSIGNED(pArrayFileTime[i]);
                 }
                 else
@@ -123,7 +123,7 @@ int SAttrLoadAttributes(TMPQArchive * ha)
                 if (dwBytesRead == dwArraySize)
                 {
                     md5 = pArrayMD5;
-                    for(i = 0; i < dwBlockTableSize; i++)
+                    for (i = 0; i < dwBlockTableSize; i++)
                     {
                         memcpy(ha->pFileTable[i].md5, md5, MD5_DIGEST_SIZE);
                         md5 += MD5_DIGEST_SIZE;
@@ -165,7 +165,7 @@ int SAttrFileSaveToMpq(TMPQArchive * ha)
     DWORD i;
     int nError = ERROR_SUCCESS;
 
-    // If the (attributes) is not in the file table yet,
+    // If the (attributes) is not in the file table yet, 
     // we have to increase the final block table size
     pFileEntry = GetFileEntryExact(ha, ATTRIBUTES_NAME, LANG_NEUTRAL);
     if (pFileEntry != NULL)
@@ -204,11 +204,11 @@ int SAttrFileSaveToMpq(TMPQArchive * ha)
     }
 
     // Create the attributes file in the MPQ
-    nError = SFileAddFile_Init(ha, ATTRIBUTES_NAME,
-                                   NULL,
-                                   dwFileSize,
-                                   LANG_NEUTRAL,
-                                   MPQ_FILE_COMPRESS | MPQ_FILE_REPLACEEXISTING,
+    nError = SFileAddFile_Init(ha, ATTRIBUTES_NAME, 
+                                   NULL, 
+                                   dwFileSize, 
+                                   LANG_NEUTRAL, 
+                                   MPQ_FILE_COMPRESS | MPQ_FILE_REPLACEEXISTING, 
                                   &hf);
 
     // Write all parts of the (attributes) file
@@ -230,7 +230,7 @@ int SAttrFileSaveToMpq(TMPQArchive * ha)
         if (pArrayCRC32 != NULL)
         {
             // Copy from file table
-            for(i = 0; i < ha->dwFileTableSize; i++)
+            for (i = 0; i < ha->dwFileTableSize; i++)
                 pArrayCRC32[i] = BSWAP_INT32_UNSIGNED(ha->pFileTable[i].dwCrc32);
 
             dwToWrite = ha->dwFileTableSize * sizeof(DWORD);
@@ -247,7 +247,7 @@ int SAttrFileSaveToMpq(TMPQArchive * ha)
         if (pArrayFileTime != NULL)
         {
             // Copy from file table
-            for(i = 0; i < ha->dwFileTableSize; i++)
+            for (i = 0; i < ha->dwFileTableSize; i++)
                 pArrayFileTime[i] = BSWAP_INT64_UNSIGNED(ha->pFileTable[i].FileTime);
 
             dwToWrite = ha->dwFileTableSize * sizeof(ULONGLONG);
@@ -264,7 +264,7 @@ int SAttrFileSaveToMpq(TMPQArchive * ha)
         if (pArrayMD5 != NULL)
         {
             // Copy from file table
-            for(i = 0; i < ha->dwFileTableSize; i++)
+            for (i = 0; i < ha->dwFileTableSize; i++)
                 memcpy(&pArrayMD5[i * MD5_DIGEST_SIZE], ha->pFileTable[i].md5, MD5_DIGEST_SIZE);
 
             dwToWrite = ha->dwFileTableSize * MD5_DIGEST_SIZE;
@@ -359,7 +359,7 @@ bool WINAPI SFileUpdateFileAttributes(HANDLE hMpq, const char * szFileName)
     dwCrc32 = crc32(0, Z_NULL, 0);
 
     // Go through entire file and calculate both CRC32 and MD5
-    while(dwTotalBytes != 0)
+    while (dwTotalBytes != 0)
     {
         // Read data from file
         SFileReadFile(hFile, Buffer, sizeof(Buffer), &dwBytesRead, NULL);

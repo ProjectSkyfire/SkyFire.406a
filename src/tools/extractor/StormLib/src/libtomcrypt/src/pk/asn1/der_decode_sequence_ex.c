@@ -27,7 +27,7 @@
    @param ordered  Search an unordeded or ordered list
    @return CRYPT_OK on success
 */
-int der_decode_sequence_ex(const unsigned char *in, unsigned long  inlen,
+int der_decode_sequence_ex(const unsigned char *in, unsigned long  inlen, 
                            ltc_asn1_list *list,    unsigned long  outlen, int ordered)
 {
    int           err, type;
@@ -279,6 +279,6 @@ LBL_ERR:
 
 #endif
 
-/* $Source: /cvs/libtom/libtomcrypt/src/pk/asn1/der/sequence/der_decode_sequence_ex.c,v $ */
+/* $Source: /cvs/libtom/libtomcrypt/src/pk/asn1/der/sequence/der_decode_sequence_ex.c, v $ */
 /* $Revision: 1.16 $ */
 /* $Date: 2006/12/28 01:27:24 $ */

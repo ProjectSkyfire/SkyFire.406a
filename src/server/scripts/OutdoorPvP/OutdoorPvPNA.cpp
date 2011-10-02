@@ -50,7 +50,7 @@ uint32 OPvPCapturePointNA::GetAliveGuardsCount()
     uint32 cnt = 0;
     for (std::map<uint32, uint64>::iterator itr = m_Creatures.begin(); itr != m_Creatures.end(); ++itr)
     {
-        switch(itr->first)
+        switch (itr->first)
         {
         case NA_NPC_GUARD_01:
         case NA_NPC_GUARD_02:
@@ -339,7 +339,7 @@ bool OPvPCapturePointNA::HandleCustomSpell(Player* player, uint32 spellId, GameO
     std::vector<uint32> nodes;
     nodes.resize(2);
     bool retval = false;
-    switch(spellId)
+    switch (spellId)
     {
     case NA_SPELL_FLY_NORTH:
         nodes[0] = FlightPathStartNodes[NA_ROOST_N];
@@ -427,7 +427,7 @@ int32 OPvPCapturePointNA::HandleOpenGo(Player* player, uint64 guid)
         int32 add = -1;
         int32 add2 = -1;
 
-        switch(retval)
+        switch (retval)
         {
         case NA_DESTROYED_ROOST_S:
             del = NA_DESTROYED_ROOST_S;
@@ -573,7 +573,7 @@ bool OPvPCapturePointNA::Update(uint32 diff)
 void OPvPCapturePointNA::ChangeState()
 {
     uint32 artkit = 21;
-    switch(m_State)
+    switch (m_State)
     {
         case OBJECTIVESTATE_NEUTRAL:
             m_HalaaState = HALAA_N;
@@ -634,7 +634,7 @@ void OPvPCapturePointNA::UpdateHalaaWorldState()
 
 void OPvPCapturePointNA::UpdateWyvernRoostWorldState(uint32 roost)
 {
-    switch(roost)
+    switch (roost)
     {
     case NA_ROOST_S:
         m_PvP->SendUpdateWorldState(NA_MAP_WYVERN_SOUTH_NEU_H, uint32(bool(m_WyvernStateSouth & WYVERN_NEU_HORDE)));

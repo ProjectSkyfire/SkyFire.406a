@@ -27,9 +27,9 @@
 /*---------------------------------------------*/
 static
 __inline__
-void fallbackSimpleSort ( UInt32* fmap,
-                          UInt32* eclass,
-                          Int32   lo,
+void fallbackSimpleSort ( UInt32* fmap, 
+                          UInt32* eclass, 
+                          Int32   lo, 
                           Int32   hi )
 {
    Int32 i, j, tmp;
@@ -71,13 +71,13 @@ void fallbackSimpleSort ( UInt32* fmap,
    }                                  \
 }
 
-#define fmin(a,b) ((a) < (b)) ? (a) : (b)
+#define fmin(a, b) ((a) < (b)) ? (a) : (b)
 
-#define fpush(lz,hz) { stackLo[sp] = lz; \
+#define fpush(lz, hz) { stackLo[sp] = lz; \
                        stackHi[sp] = hz; \
                        sp++; }
 
-#define fpop(lz,hz) { sp--;              \
+#define fpop(lz, hz) { sp--;              \
                       lz = stackLo[sp];  \
                       hz = stackHi[sp]; }
 
@@ -85,9 +85,9 @@ void fallbackSimpleSort ( UInt32* fmap,
 #define FALLBACK_QSORT_STACK_SIZE   100
 
 static
-void fallbackQSort3 ( UInt32* fmap,
-                      UInt32* eclass,
-                      Int32   loSt,
+void fallbackQSort3 ( UInt32* fmap, 
+                      UInt32* eclass, 
+                      Int32   loSt, 
                       Int32   hiSt )
 {
    Int32 unLo, unHi, ltLo, gtHi, n, m;
@@ -202,10 +202,10 @@ void fallbackQSort3 ( UInt32* fmap,
 #define UNALIGNED_BH(zz)  ((zz) & 0x01f)
 
 static
-void fallbackSort ( UInt32* fmap,
-                    UInt32* eclass,
-                    UInt32* bhtab,
-                    Int32   nblock,
+void fallbackSort ( UInt32* fmap, 
+                    UInt32* eclass, 
+                    UInt32* bhtab, 
+                    Int32   nblock, 
                     Int32   verb )
 {
    Int32 ftab[257];
@@ -334,11 +334,11 @@ void fallbackSort ( UInt32* fmap,
 /*---------------------------------------------*/
 static
 __inline__
-Bool mainGtU ( UInt32  i1,
-               UInt32  i2,
-               UChar*  block,
-               UInt16* quadrant,
-               UInt32  nblock,
+Bool mainGtU ( UInt32  i1, 
+               UInt32  i2, 
+               UChar*  block, 
+               UInt16* quadrant, 
+               UInt32  nblock, 
                Int32*  budget )
 {
    Int32  k;
@@ -466,18 +466,18 @@ Bool mainGtU ( UInt32  i1,
    usually small, typically <= 20.
 --*/
 static
-Int32 incs[14] = { 1, 4, 13, 40, 121, 364, 1093, 3280,
-                   9841, 29524, 88573, 265720,
+Int32 incs[14] = { 1, 4, 13, 40, 121, 364, 1093, 3280, 
+                   9841, 29524, 88573, 265720, 
                    797161, 2391484 };
 
 static
-void mainSimpleSort ( UInt32* ptr,
-                      UChar*  block,
-                      UInt16* quadrant,
-                      Int32   nblock,
-                      Int32   lo,
-                      Int32   hi,
-                      Int32   d,
+void mainSimpleSort ( UInt32* ptr, 
+                      UChar*  block, 
+                      UInt16* quadrant, 
+                      Int32   nblock, 
+                      Int32   lo, 
+                      Int32   hi, 
+                      Int32   d, 
                       Int32*  budget )
 {
    Int32 i, j, h, bigN, hp;
@@ -545,7 +545,7 @@ void mainSimpleSort ( UInt32* ptr,
 /*---------------------------------------------*/
 /*--
    The following is an implementation of
-   an elegant 3-way quicksort for strings,
+   an elegant 3-way quicksort for strings, 
    described in a paper "Fast Algorithms for
    Sorting and Searching Strings", by Robert
    Sedgewick and Jon L. Bentley.
@@ -578,21 +578,21 @@ UChar mmed3 ( UChar a, UChar b, UChar c )
    return b;
 }
 
-#define mmin(a,b) ((a) < (b)) ? (a) : (b)
+#define mmin(a, b) ((a) < (b)) ? (a) : (b)
 
-#define mpush(lz,hz,dz) { stackLo[sp] = lz; \
+#define mpush(lz, hz, dz) { stackLo[sp] = lz; \
                           stackHi[sp] = hz; \
                           stackD [sp] = dz; \
                           sp++; }
 
-#define mpop(lz,hz,dz) { sp--;             \
+#define mpop(lz, hz, dz) { sp--;             \
                          lz = stackLo[sp]; \
                          hz = stackHi[sp]; \
                          dz = stackD [sp]; }
 
 #define mnextsize(az) (nextHi[az]-nextLo[az])
 
-#define mnextswap(az,bz)                                        \
+#define mnextswap(az, bz)                                        \
    { Int32 tz;                                                  \
      tz = nextLo[az]; nextLo[az] = nextLo[bz]; nextLo[bz] = tz; \
      tz = nextHi[az]; nextHi[az] = nextHi[bz]; nextHi[bz] = tz; \
@@ -603,13 +603,13 @@ UChar mmed3 ( UChar a, UChar b, UChar c )
 #define MAIN_QSORT_STACK_SIZE 100
 
 static
-void mainQSort3 ( UInt32* ptr,
-                  UChar*  block,
-                  UInt16* quadrant,
-                  Int32   nblock,
-                  Int32   loSt,
-                  Int32   hiSt,
-                  Int32   dSt,
+void mainQSort3 ( UInt32* ptr, 
+                  UChar*  block, 
+                  UInt16* quadrant, 
+                  Int32   nblock, 
+                  Int32   loSt, 
+                  Int32   hiSt, 
+                  Int32   dSt, 
                   Int32*  budget )
 {
    Int32 unLo, unHi, ltLo, gtHi, n, m, med;
@@ -638,8 +638,8 @@ void mainQSort3 ( UInt32* ptr,
       }
 
       med = (Int32)
-            mmed3 ( block[ptr[ lo         ]+d],
-                    block[ptr[ hi         ]+d],
+            mmed3 ( block[ptr[ lo         ]+d], 
+                    block[ptr[ hi         ]+d], 
                     block[ptr[ (lo+hi)>>1 ]+d] );
 
       unLo = ltLo = lo;
@@ -687,9 +687,9 @@ void mainQSort3 ( UInt32* ptr,
       nextLo[1] = m;   nextHi[1] = hi;  nextD[1] = d;
       nextLo[2] = n+1; nextHi[2] = m-1; nextD[2] = d+1;
 
-      if (mnextsize(0) < mnextsize(1)) mnextswap(0,1);
-      if (mnextsize(1) < mnextsize(2)) mnextswap(1,2);
-      if (mnextsize(0) < mnextsize(1)) mnextswap(0,1);
+      if (mnextsize(0) < mnextsize(1)) mnextswap(0, 1);
+      if (mnextsize(1) < mnextsize(2)) mnextswap(1, 2);
+      if (mnextsize(0) < mnextsize(1)) mnextswap(0, 1);
 
       AssertD (mnextsize(0) >= mnextsize(1), "mainQSort3(8)" );
       AssertD (mnextsize(1) >= mnextsize(2), "mainQSort3(9)" );
@@ -731,12 +731,12 @@ void mainQSort3 ( UInt32* ptr,
 #define CLEARMASK (~(SETMASK))
 
 static
-void mainSort ( UInt32* ptr,
-                UChar*  block,
-                UInt16* quadrant,
-                UInt32* ftab,
-                Int32   nblock,
-                Int32   verb,
+void mainSort ( UInt32* ptr, 
+                UChar*  block, 
+                UInt16* quadrant, 
+                UInt32* ftab, 
+                Int32   nblock, 
+                Int32   verb, 
                 Int32*  budget )
 {
    Int32  i, j, k, ss, sb;
@@ -874,10 +874,10 @@ void mainSort ( UInt32* ptr,
                if (hi > lo) {
                   if (verb >= 4)
                      VPrintf4 ( "        qsort [0x%x, 0x%x]   "
-                                "done %d   this %d\n",
+                                "done %d   this %d\n", 
                                 ss, j, numQSorted, hi - lo + 1 );
                   mainQSort3 (
-                     ptr, block, quadrant, nblock,
+                     ptr, block, quadrant, nblock, 
                      lo, hi, BZ_N_RADIX, budget
                   );
                   numQSorted += (hi - lo + 1);
@@ -893,8 +893,8 @@ void mainSort ( UInt32* ptr,
       /*--
          Step 2:
          Now scan this big bucket [ss] so as to synthesise the
-         sorted order for small buckets [t, ss] for all t,
-         including, magically, the bucket [ss,ss] too.
+         sorted order for small buckets [t, ss] for all t, 
+         including, magically, the bucket [ss, ss] too.
          This will avoid doing Real Work in subsequent Step 1's.
       --*/
       {
@@ -922,14 +922,14 @@ void mainSort ( UInt32* ptr,
                    Necessity for this case is demonstrated by compressing
                    a sequence of approximately 48.5 million of character
                    251; 1.0.0/1.0.1 will then die here. */
-                (copyStart[ss] == 0 && copyEnd[ss] == nblock-1),
+                (copyStart[ss] == 0 && copyEnd[ss] == nblock-1), 
                 1007 )
 
       for (j = 0; j <= 255; j++) ftab[(j << 8) + ss] |= SETMASK;
 
       /*--
          Step 3:
-         The [ss] big bucket is now done.  Record this fact,
+         The [ss] big bucket is now done.  Record this fact, 
          and update the quadrant descriptors.  Remember to
          update quadrants in the overshoot area too, if
          necessary.  The "if (i < 255)" test merely skips
@@ -947,7 +947,7 @@ void mainSort ( UInt32* ptr,
 
             for 0 <= i < nblock and 0 <= j <= nblock
 
-            if block[i] != block[j],
+            if block[i] != block[j], 
 
                then the relative values of quadrant[i] and
                     quadrant[j] are meaningless.
@@ -987,7 +987,7 @@ void mainSort ( UInt32* ptr,
    }
 
    if (verb >= 4)
-      VPrintf3 ( "        %d pointers, %d sorted, %d scanned\n",
+      VPrintf3 ( "        %d pointers, %d sorted, %d scanned\n", 
                  nblock, numQSorted, nblock - numQSorted );
 }
 
@@ -1047,11 +1047,11 @@ void BZ2_blockSort ( EState* s )
 
       mainSort ( ptr, block, quadrant, ftab, nblock, verb, &budget );
       if (verb >= 3)
-         VPrintf3 ( "      %d work, %d block, ratio %5.2f\n",
-                    budgetInit - budget,
-                    nblock,
+         VPrintf3 ( "      %d work, %d block, ratio %5.2f\n", 
+                    budgetInit - budget, 
+                    nblock, 
                     (float)(budgetInit - budget) /
-                    (float)(nblock==0 ? 1 : nblock) );
+                    (float)(nblock == 0 ? 1 : nblock) );
       if (budget < 0) {
          if (verb >= 2)
             VPrintf0 ( "    too repetitive; using fallback"

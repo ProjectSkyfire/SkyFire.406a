@@ -46,8 +46,6 @@
 #include "ace/Log_Msg.inl"
 #endif /* __ACE_INLINE__ */
 
-
-
 ACE_BEGIN_VERSIONED_NAMESPACE_DECL
 
 ACE_ALLOC_HOOK_DEFINE(ACE_Log_Msg)
@@ -2118,7 +2116,6 @@ ACE_Log_Msg::log (const ACE_TCHAR *format_str,
                     break;
                   }
 
-
                 default:
                   // So, it's not a legit format specifier after all...
                   // Copy from the original % to where we are now, then
@@ -2287,7 +2284,6 @@ ACE_Log_Msg::log (ACE_Log_Record &log_record,
           // Be sure that there is a message_queue_, with multiple threads.
           ACE_MT (ACE_Log_Msg_Manager::init_backend ());
         }
-
 
       if (ACE_BIT_ENABLED (ACE_Log_Msg::flags_, ACE_Log_Msg::LOGGER) ||
           ACE_BIT_ENABLED (ACE_Log_Msg::flags_, ACE_Log_Msg::SYSLOG))

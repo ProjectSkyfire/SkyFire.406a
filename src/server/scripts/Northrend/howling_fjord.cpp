@@ -68,7 +68,7 @@ public:
 
     struct npc_Apothecary_HanesAI : public npc_escortAI
     {
-        npc_Apothecary_HanesAI(Creature* creature) : npc_escortAI(creature){}
+        npc_Apothecary_HanesAI(Creature* creature) : npc_escortAI(creature) {}
         uint32 PotTimer;
 
         void Reset ()
@@ -102,7 +102,7 @@ public:
             Player* player = GetPlayerForEscort();
             if (!player)
                 return;
-            switch(i)
+            switch (i)
             {
                 case 1:
                     me->SetReactState(REACT_AGGRESSIVE);
@@ -306,7 +306,7 @@ public:
     bool OnGossipSelect(Player* player, Creature* creature, uint32 /*uiSender*/, uint32 uiAction)
     {
         player->PlayerTalkClass->ClearMenus();
-        switch(uiAction)
+        switch (uiAction)
         {
             case GOSSIP_ACTION_INFO_DEF+1:
                 player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_MG_II, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+2);

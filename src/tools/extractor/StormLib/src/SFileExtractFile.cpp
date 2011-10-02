@@ -39,7 +39,7 @@ bool WINAPI SFileExtractFile(HANDLE hMpq, const char * szToExtract, const char *
         char  szBuffer[0x1000];
         DWORD dwTransferred;
 
-        for(;;)
+        for (;;)
         {
             // dwTransferred is only set to nonzero if something has been read.
             // nError can be ERROR_SUCCESS or ERROR_HANDLE_EOF
