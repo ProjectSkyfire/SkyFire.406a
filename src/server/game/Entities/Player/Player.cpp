@@ -17359,6 +17359,7 @@ bool Player::LoadFromDB(uint32 guid, SQLQueryHolder *holder)
         sLog->outError("Player %s(GUID: %u) has SpecCount = %u and ActiveSpec = %u.", GetName(), GetGUIDLow(), m_specsCount, m_activeSpec);
     }
 
+    _LoadCurrency(holder->GetPreparedResult(PLAYER_LOGIN_QUERY_LOAD_CURRENCY));
     _LoadTalents(holder->GetPreparedResult(PLAYER_LOGIN_QUERY_LOADTALENTS));
     _LoadSpells(holder->GetPreparedResult(PLAYER_LOGIN_QUERY_LOADSPELLS));
 
@@ -18229,6 +18230,45 @@ void Player::_LoadWeeklyQuestStatus(PreparedQueryResult result)
     m_WeeklyQuestChanged = false;
 }
 
+void Player::_LoadCurrency(PreparedQueryResult result)
+{
+    //         0         1      2
+    // "SELECT currency, count, thisweek FROM character_currency WHERE guid = '%u'"
+
+    if (result)
+    {
+        do
+        {
+            Field *fields = result->Fetch();
+
+            uint32 currency_id = fields[0].GetUInt16();
+            uint32 totalCount = fields[1].GetUInt32();
+            uint32 weekCount = fields[2].GetUInt32();
+
+            const CurrencyTypesEntry* entry = sCurrencyTypesStore.LookupEntry(currency_id);
+            if (!entry)
+            {
+                sLog->outError("Player::_LoadCurrency: %s has not existing currency %u, removing.", GetName(), currency_id);
+                CharacterDatabase.PExecute("DELETE FROM character_currency WHERE currency = '%u'", currency_id);
+                continue;
+            }
+
+            PlayerCurrency cur;
+
+            // NOTE:
+            // no checking total cap nor week cap while loading currency
+            // currency may exceed cap temporarily by calling ModifyCurrency with force = true
+            // please check ModifyCurrency for more details
+            cur.state = PLAYERCURRENCY_UNCHANGED;
+            cur.totalCount = totalCount;
+            cur.weekCount = weekCount;
+
+            m_currencies[currency_id] = cur;
+        }
+        while(result->NextRow());
+    }
+}
+
 void Player::_LoadSpells(PreparedQueryResult result)
 {
     //QueryResult *result = CharacterDatabase.PQuery("SELECT spell, active, disabled FROM character_spell WHERE guid = '%u'", GetGUIDLow());
@@ -18884,6 +18924,7 @@ void Player::SaveToDB()
     GetSession()->SaveTutorialsData(trans);                 // changed only while character in game
     _SaveGlyphs(trans);
     _SaveInstanceTimeRestrictions(trans);
+    _SaveCurrency();
 
     // check if stats should only be saved on logout
     // save stats can be out of transaction
@@ -19304,6 +19345,27 @@ void Player::_SaveSpells(SQLTransaction& trans)
         else
         {
             itr->second->state = PLAYERSPELL_UNCHANGED;
+            ++itr;
+        }
+    }
+}
+
+void Player::_SaveCurrency()
+{
+    for (PlayerCurrenciesMap::iterator itr = m_currencies.begin(); itr != m_currencies.end();)
+    {
+        if (itr->second.state == PLAYERCURRENCY_CHANGED)
+            CharacterDatabase.PExecute("UPDATE character_currency SET `count` = '%u', thisweek = '%u' WHERE guid = '%u' AND currency = '%u'",
+            itr->second.totalCount, itr->second.weekCount, GetGUIDLow(), itr->first);
+        else if (itr->second.state == PLAYERCURRENCY_NEW)
+            CharacterDatabase.PExecute("INSERT INTO character_currency (guid, currency, `count`, thisweek) VALUES ('%u', '%u', '%u', '%u')",
+            GetGUIDLow(), itr->first, itr->second.totalCount, itr->second.weekCount);
+
+        if (itr->second.state == PLAYERCURRENCY_REMOVED)
+            m_currencies.erase(itr++);
+        else
+        {
+            itr->second.state = PLAYERCURRENCY_UNCHANGED;
             ++itr;
         }
     }
@@ -21719,6 +21781,7 @@ void Player::SendInitialPacketsBeforeAddToMap()
     m_reputationMgr.SendInitialReputations();
     m_achievementMgr.SendAllAchievementData();
 
+    SendCurrencies();
     SendEquipmentSetList();
 
     data.Initialize(SMSG_LOGIN_SETTIMESPEED, 4 + 4 + 4);
