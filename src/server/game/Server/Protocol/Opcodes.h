@@ -123,10 +123,10 @@ enum Opcodes
     SMSG_GUILD_INVITE                                = 0x0010C, // 4.0.6a 13623
     CMSG_GUILD_ACCEPT                                = 0x03729, // 4.0.6a 13623
     CMSG_GUILD_DECLINE                               = 0x0352D, // 4.0.6a 13623
-    SMSG_GUILD_DECLINE                               = 0x07DEC, // 4.0.6a 13623
+    SMSG_GUILD_DECLINE                               = 0x0B78C, // 4.0.6a 13623
     CMSG_GUILD_INFO                                  = 0x06884, // 4.0.6a 13623
     SMSG_GUILD_INFO                                  = 0x020A8, // 4.0.6a 13623
-    CMSG_GUILD_ROSTER                                = 0x0B2A4, // 4.0.6a 13623
+    CMSG_GUILD_ROSTER                                = 0x0250D, // 4.0.6a 13623
     SMSG_GUILD_ROSTER                                = 0x04D5C, // 4.0.6a 13623
     CMSG_GUILD_PROMOTE                               = 0x02109, // 4.0.6a 13623
     CMSG_GUILD_DEMOTE                                = 0x0330D, // 4.0.6a 13623
@@ -1206,7 +1206,7 @@ enum Opcodes
     CMSG_CHECK_LOGIN_CRITERIA                        = 0x101F8, // Unknown opcode ID
     SMSG_SERVER_BUCK_DATA_START                      = 0x101F9, // Unknown opcode ID
     CMSG_QUERY_VEHICLE_STATUS                        = 0x069A0, // 4.0.6a 13623
-    SMSG_BATTLEGROUND_INFO_THROTTLED                 = 0x075C4, // 4.0.6a 13623
+    SMSG_BATTLEGROUND_INFO_THROTTLED                 = 0x004A6, // 4.0.6a 13623
     SMSG_PLAYER_VEHICLE_DATA                         = 0x0A5A4, // 4.0.6a 13623
     CMSG_PLAYER_VEHICLE_ENTER                        = 0x0AEC8, // 4.0.6a 13623
     CMSG_EJECT_PASSENGER                             = 0x0F688, // 4.0.6a 13623
@@ -1219,8 +1219,8 @@ enum Opcodes
     CMSG_CORPSE_MAP_POSITION_QUERY                   = 0x023CC, // 4.0.6a 13623
     SMSG_CORPSE_MAP_POSITION_QUERY_RESPONSE          = 0x1020A, // Unknown opcode ID
     CMSG_LFG_SET_ROLES_2                             = 0x1020B, // Unknown opcode ID
-    CMSG_CALENDAR_CONTEXT_EVENT_SIGNUP               = 0x0AEAC, // 4.0.6a 13623
-    SMSG_CALENDAR_ACTION_PENDING                     = 0x07E8C, // 4.0.6a 13623
+    CMSG_CALENDAR_CONTEXT_EVENT_SIGNUP               = 0x0DC74, // 4.0.6a 13623
+    SMSG_CALENDAR_ACTION_PENDING                     = 0x0265E, // 4.0.6a 13623
     SMSG_EQUIPMENT_SET_LIST                          = 0x0F1A8, // 4.0.6a 13623
     CMSG_EQUIPMENT_SET_SAVE                          = 0x0BFC0, // 4.0.6a 13623
     CMSG_UPDATE_PROJECTILE_POSITION                  = 0x0EF7F, // 4.0.3a 13329 - 403
