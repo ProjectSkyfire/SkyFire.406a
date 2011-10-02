@@ -20,32 +20,38 @@
 #ifndef _AUCTION_HOUSE_MGR_H
 #define _AUCTION_HOUSE_MGR_H
 
-#include <ace/Singleton.h>
-
 #include "Common.h"
 #include "DatabaseEnv.h"
 #include "DBCStructure.h"
+
+#include <ace/Singleton.h>
 
 class Item;
 class Player;
 class WorldPacket;
 
-#define MIN_AUCTION_TIME (12*HOUR)
+#define MIN_AUCTION_TIME (12 * HOUR)
 
 enum AuctionError
 {
-    AUCTION_OK = 0,
-    AUCTION_INTERNAL_ERROR = 2,
-    AUCTION_NOT_ENOUGHT_MONEY = 3,
-    AUCTION_ITEM_NOT_FOUND = 4,
-    CANNOT_BID_YOUR_AUCTION_ERROR = 10
+    AUCTION_OK                     = 0,
+    ERR_AUCTION_REMOVED            = 1,
+    ERR_AUCTION_BID_PLACED         = 2,
+    ERR_NOT_ENOUGH_MONEY           = 3,
+    ERR_ITEM_NOT_FOUND             = 4,
+    ERR_AUCTION_HIGHER_BID         = 5,
+    ERR_AUCTION_BID_INCREMENT      = 7,
+    AUCTION_INTERNAL_ERROR         = 8,
+    ERR_AUCTION_BID_OWN            = 10,
+    ERR_RESTRICTED_ACCOUNT         = 13,
+    ERR_AUCTION_DATABASE_ERROR     = 14 // default
 };
 
 enum AuctionAction
 {
-    AUCTION_SELL_ITEM   = 0,
-    AUCTION_CANCEL      = 1,
-    AUCTION_PLACE_BID   = 2
+    AUCTION_SELL_ITEM              = 0,
+    AUCTION_CANCEL                 = 1,
+    AUCTION_PLACE_BID              = 2
 };
 
 struct AuctionEntry
@@ -54,12 +60,12 @@ struct AuctionEntry
     uint32 auctioneer;                                      // creature low guid
     uint32 item_guidlow;
     uint32 item_template;
-    uint64 owner;
-    uint64 startbid;                                        //maybe useless
-    uint64 bid;
+    uint32 owner;
+    uint32 startbid;                                        //maybe useless
+    uint32 bid;
     uint32 buyout;
     time_t expire_time;
-    uint64 bidder;
+    uint32 bidder;
     uint32 deposit;                                         //deposit can be calculated only when creating auction
     AuctionHouseEntry const* auctionHouseEntry;             // in AuctionHouse.dbc
     uint32 factionTemplateId;
@@ -107,8 +113,8 @@ class AuctionHouseObject
 
     void Update();
 
-    void BuildListBidderItems(WorldPacket& data, Player* player, uint32& count, uint32& totalcount);
-    void BuildListOwnerItems(WorldPacket& data, Player* player, uint32& count, uint32& totalcount);
+    void BuildListBidderItems(WorldPacket& data,  Player* player, uint32& count, uint32& totalcount);
+    void BuildListOwnerItems(WorldPacket& data,   Player* player, uint32& count, uint32& totalcount);
     void BuildListAuctionItems(WorldPacket& data, Player* player,
         std::wstring const& searchedname, uint32 listfrom, uint8 levelmin, uint8 levelmax, uint8 usable,
         uint32 inventoryType, uint32 itemClass, uint32 itemSubClass, uint32 quality,
@@ -146,10 +152,10 @@ class AuctionHouseMgr
         }
 
         //auction messages
-        void SendAuctionWonMail(AuctionEntry* auction, SQLTransaction& trans);
-        void SendAuctionSalePendingMail(AuctionEntry* auction, SQLTransaction& trans);
-        void SendAuctionSuccessfulMail(AuctionEntry* auction, SQLTransaction& trans);
-        void SendAuctionExpiredMail(AuctionEntry* auction, SQLTransaction& trans);
+        void SendAuctionWonMail(AuctionEntry* auction,          SQLTransaction& trans);
+        void SendAuctionSalePendingMail(AuctionEntry* auction,  SQLTransaction& trans);
+        void SendAuctionSuccessfulMail(AuctionEntry* auction,   SQLTransaction& trans);
+        void SendAuctionExpiredMail(AuctionEntry* auction,      SQLTransaction& trans);
         void SendAuctionOutbiddedMail(AuctionEntry* auction, uint32 newPrice, Player* newBidder, SQLTransaction& trans);
         void SendAuctionCancelledToBidderMail(AuctionEntry* auction, SQLTransaction& trans);
 
