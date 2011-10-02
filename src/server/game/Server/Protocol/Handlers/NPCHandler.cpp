@@ -119,7 +119,7 @@ void WorldSession::SendTrainerList(uint64 guid)
     SendTrainerList(guid, str);
 }
 
-void WorldSession::SendTrainerList(uint64 guid, const std::string& strTitle)
+void WorldSession::SendTrainerList(uint64 guid, const std::string &strTitle)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: SendTrainerList");
 
@@ -138,9 +138,9 @@ void WorldSession::SendTrainerList(uint64 guid, const std::string& strTitle)
     if (!unit->isCanTrainingOf(_player, true))
         return;
 
-    CreatureTemplate const *ci = unit->GetCreatureInfo();
+    CreatureTemplate const *creatureInfo = unit->GetCreatureInfo();
 
-    if (!ci)
+    if (!creatureInfo)
     {
         sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: SendTrainerList - (GUID: %u) NO CREATUREINFO!", GUID_LOPART(guid));
         return;
@@ -163,45 +163,26 @@ void WorldSession::SendTrainerList(uint64 guid, const std::string& strTitle)
     data << uint32(trainer_spells->spellList.size());
 
     // reputation discount
-    float fDiscountMod = _player->GetReputationPriceDiscount(unit);
-    bool can_learn_primary_prof = GetPlayer()->GetFreePrimaryProfessionPoints() > 0;
-
     uint32 count = 0;
+    float fDiscountMod = _player->GetReputationPriceDiscount(unit);
+
     for (TrainerSpellMap::const_iterator itr = trainer_spells->spellList.begin(); itr != trainer_spells->spellList.end(); ++itr)
     {
         TrainerSpell const* tSpell = &itr->second;
 
-        bool valid = true;
-        bool primary_prof_first_rank = false;
-
-        for (uint8 i = 0; i < MAX_SPELL_EFFECTS ; ++i)
-        {
-            if (!tSpell->learnedSpell[i])
-                continue;
-            if (!_player->IsSpellFitByClassAndRace(tSpell->learnedSpell[i]))
-            {
-                valid = false;
-                break;
-            }
-            SpellInfo const* learnedSpellInfo = sSpellMgr->GetSpellInfo(tSpell->learnedSpell[i]);
-            if (learnedSpellInfo && learnedSpellInfo->IsPrimaryProfessionFirstRank())
-                primary_prof_first_rank = true;
-        }
-        if (!valid)
-            continue;
-
         TrainerSpellState state = _player->GetTrainerSpellState(tSpell);
 
         data << uint32(tSpell->spell);                      // learned spell (or cast-spell in profession case)
-        data << uint8(state == TRAINER_SPELL_GREEN_DISABLED ? TRAINER_SPELL_GREEN : state);
+        data << uint8(state);
         data << uint32(floor(tSpell->spellCost * fDiscountMod));
         data << uint8(tSpell->reqLevel);
         data << uint32(tSpell->reqSkill);
         data << uint32(tSpell->reqSkillValue);
+        data << uint32(0);                                  // 4.0.3
         data << uint32(0);
         data << uint32(0);
         data << uint32(0);
-        data << uint32(0);
+
         ++count;
     }
 
@@ -252,22 +233,34 @@ void WorldSession::HandleTrainerBuySpellOpcode(WorldPacket & recv_data)
 
     // check money requirement
     if (!_player->HasEnoughMoney(nSpellCost))
-        return;
+        result = ERR_TRAINER_NOT_ENOUGH_MONEY;
 
-    _player->ModifyMoney(-int32(nSpellCost));
+    if (result == ERR_TRAINER_OK)
+    {
+        _player->ModifyMoney(-int32(nSpellCost));
 
-    unit->SendPlaySpellVisual(179); // 53 SpellCastDirected
-    unit->SendPlaySpellImpact(_player->GetGUID(), 362); // 113 EmoteSalute
+        WorldPacket data(SMSG_PLAY_SPELL_VISUAL, 12);           // visual effect on trainer
+        data << uint64(guid);
+        data << uint32(0xB3);                                   // index from SpellVisualKit.dbc
+        SendPacket(&data);
 
-    // learn explicitly or cast explicitly
-    if (trainer_spell->IsCastable())
-        _player->CastSpell(_player, trainer_spell->spell, true);
-    else
-        _player->learnSpell(spellId, false);
+        data.Initialize(SMSG_PLAY_SPELL_IMPACT, 12);            // visual effect on player
+        data << uint64(_player->GetGUID());
+        data << uint32(0x016A);                                 // index from SpellVisualKit.dbc
+        SendPacket(&data);
 
-    WorldPacket data(SMSG_TRAINER_BUY_RESULT, 12);
+        // learn explicitly or cast explicitly
+        if (trainer_spell->IsCastable())
+            _player->CastSpell(_player, trainer_spell->spell, true);
+        else
+            _player->learnSpell(spellId, false);
+
+    }
+
+    WorldPacket data(SMSG_TRAINER_BUY_RESULT, 16);
     data << uint64(guid);
-    data << uint32(spellId);                                // should be same as in packet from client
+    data << uint32(spellId);
+    data << uint32(result);
     SendPacket(&data);
 }
 
