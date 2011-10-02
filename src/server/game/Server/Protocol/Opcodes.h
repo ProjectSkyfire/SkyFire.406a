@@ -123,10 +123,10 @@ enum Opcodes
     SMSG_GUILD_INVITE                                = 0x0010C, // 4.0.6a 13623
     CMSG_GUILD_ACCEPT                                = 0x03729, // 4.0.6a 13623
     CMSG_GUILD_DECLINE                               = 0x0352D, // 4.0.6a 13623
-    SMSG_GUILD_DECLINE                               = 0x07DEC, // 4.0.6a 13623
+    SMSG_GUILD_DECLINE                               = 0x0B78C, // 4.0.6a 13623
     CMSG_GUILD_INFO                                  = 0x06884, // 4.0.6a 13623
     SMSG_GUILD_INFO                                  = 0x020A8, // 4.0.6a 13623
-    CMSG_GUILD_ROSTER                                = 0x0B2A4, // 4.0.6a 13623
+    CMSG_GUILD_ROSTER                                = 0x0250D, // 4.0.6a 13623
     SMSG_GUILD_ROSTER                                = 0x04D5C, // 4.0.6a 13623
     CMSG_GUILD_PROMOTE                               = 0x02109, // 4.0.6a 13623
     CMSG_GUILD_DEMOTE                                = 0x0330D, // 4.0.6a 13623
