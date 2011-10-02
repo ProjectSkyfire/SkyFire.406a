@@ -91,6 +91,13 @@ enum PlayerSpellState
     PLAYERSPELL_TEMPORARY = 4
 };
 
+enum TrainerBuySpellResult
+{
+    ERR_TRAINER_UNAVAILABLE      = 0,
+    ERR_TRAINER_NOT_ENOUGH_MONEY = 1,
+    ERR_TRAINER_OK               = 2
+};
+
 struct PlayerSpell
 {
     PlayerSpellState state : 8;
