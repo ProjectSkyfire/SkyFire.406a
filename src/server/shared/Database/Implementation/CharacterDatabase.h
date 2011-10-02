@@ -220,6 +220,8 @@ enum CharacterDatabaseStatements
     CHAR_DEL_AURA,
     CHAR_ADD_AURA,
 
+    // Currency
+    CHAR_LOAD_PLAYER_CURRENCY,
 
     // Tutorials
     CHAR_LOAD_TUTORIALS,

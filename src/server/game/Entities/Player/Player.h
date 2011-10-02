@@ -809,6 +809,7 @@ enum PlayerLoginQueryIndex
     PLAYER_LOGIN_QUERY_LOADBANNED               = 28,
     PLAYER_LOGIN_QUERY_LOADQUESTSTATUSREW       = 29,
     PLAYER_LOGIN_QUERY_LOADINSTANCELOCKTIMES    = 30,
+    PLAYER_LOGIN_QUERY_LOAD_CURRENCY            = 34,
     MAX_PLAYER_LOGIN_QUERY,
 };
 
@@ -2554,6 +2555,7 @@ class Player : public Unit, public GridObject<Player>
         void _LoadGlyphs(PreparedQueryResult result);
         void _LoadTalents(PreparedQueryResult result);
         void _LoadInstanceTimeRestrictions(PreparedQueryResult result);
+        void _LoadCurrency(PreparedQueryResult result);
 
         /*********************************************************/
         /***                   SAVE SYSTEM                     ***/
@@ -2572,6 +2574,7 @@ class Player : public Unit, public GridObject<Player>
         void _SaveBGData(SQLTransaction& trans);
         void _SaveGlyphs(SQLTransaction& trans);
         void _SaveTalents(SQLTransaction& trans);
+        void _SaveCurrency();
         void _SaveStats(SQLTransaction& trans);
         void _SaveInstanceTimeRestrictions(SQLTransaction& trans);
 
