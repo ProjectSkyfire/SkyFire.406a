@@ -133,7 +133,7 @@ void AddSC_boss_flamegor();
 void AddSC_boss_chromaggus();
 void AddSC_boss_nefarian();
 void AddSC_boss_victor_nefarius();
-void AddSC_boss_omnotron_defense_system(); //Blackwing Descent
+void AddSC_boss_omnotron_defense_system();   //Blackwing Descent
 void AddSC_boss_bd_nefarian();
 void AddSC_boss_maloriak();
 void AddSC_boss_atramedes();
@@ -245,8 +245,12 @@ void AddSC_boss_eredar_twins();
 void AddSC_boss_muru();
 void AddSC_boss_kiljaeden();
 void AddSC_sunwell_plateau();
-//void AddSC_instance_throne_of_the_tides();   //Throne of the Tides);
-//void AddSC_throne_of_the_tides();
+void AddSC_instance_throne_of_the_tides();   //Abyssal Maw: Throne of the Tides
+void AddSC_boss_ozumat();
+void AddSC_boss_ghursha();
+void AddSC_boss_nazjar();
+void AddSC_boss_erunak_stonespeaker();
+void AddSC_boss_ulthok();
 void AddSC_boss_archaedas();                 //Uldaman
 void AddSC_boss_ironaya();
 void AddSC_uldaman();
@@ -906,8 +910,12 @@ void AddEasternKingdomsScripts()
     AddSC_boss_muru();
     AddSC_boss_kiljaeden();
     AddSC_sunwell_plateau();
-    //AddSC_instance_throne_of_the_tides();   //Throne of the Tides);
-    //AddSC_throne_of_the_tides();
+    AddSC_instance_throne_of_the_tides();   //Abyssal Maw: Throne of the Tides
+    AddSC_boss_ozumat();
+    AddSC_boss_ghursha();
+    AddSC_boss_nazjar();
+    AddSC_boss_erunak_stonespeaker();
+    AddSC_boss_ulthok();
     AddSC_boss_archaedas();                 //Uldaman
     AddSC_boss_ironaya();
     AddSC_uldaman();
