@@ -15,22 +15,22 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include"ScriptPCH.h"
-#include"bastion_of_twilight.h"
+#include "ScriptPCH.h"
+#include "baradin_hold.h"
 
-class boss_chogall : public CreatureScript
+class boss_occuthar : public CreatureScript
 {
 public:
-    boss_chogall() : CreatureScript("boss_chogall") { }
+    boss_occuthar() : CreatureScript("boss_occuthar") { }
 
     CreatureAI* GetAI(Creature* creature) const
     {
-        return new boss_chogallAI (creature);
+        return new boss_occutharAI (creature);
     }
 
-    struct boss_chogallAI : public ScriptedAI
+    struct boss_occutharAI : public ScriptedAI
     {
-        boss_chogallAI(Creature* creature) : ScriptedAI(creature)
+        boss_occutharAI(Creature* creature) : ScriptedAI(creature)
         {
             pInstance = creature->GetInstanceScript();
         }
@@ -51,7 +51,7 @@ public:
     };
 };
 
-void AddSC_boss_chogall()
+void AddSC_boss_occuthar()
 {
-    new boss_chogall();
+    new boss_occuthar();
 }

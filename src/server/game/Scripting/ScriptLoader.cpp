@@ -86,6 +86,7 @@ void AddSC_boss_galvangar();
 void AddSC_boss_vanndar();
 void AddSC_instance_baradin_hold();          //Baradin Hold
 void AddSC_boss_argaloth();
+void AddSC_boss_occuthar();
 void AddSC_instance_bastion_of_twilight();   //BastionOfTwilight
 void AddSC_boss_theralion_and_valiona();
 void AddSC_boss_sinestra();
@@ -744,13 +745,14 @@ void AddEasternKingdomsScripts()
     AddSC_boss_drekthar();
     AddSC_boss_galvangar();
     AddSC_boss_vanndar();
-    //AddSC_instance_baradin_hold();        //Baradin Hold
-    //AddSC_boss_argaloth();
+    AddSC_instance_baradin_hold();          //Baradin Hold
+    AddSC_boss_argaloth();
+    AddSC_boss_occuthar();
     AddSC_instance_bastion_of_twilight();   //BastionOfTwilight
     AddSC_boss_theralion_and_valiona();
     AddSC_boss_sinestra();
     AddSC_boss_halfus_wyrmbreaker();
-    //AddSC_boss_chogall();
+    AddSC_boss_chogall();
     AddSC_boss_assembly_of_ascendents();
     AddSC_instance_blackrock_caverns();     //Blackrock Caverns
     AddSC_boss_romogg_bonecrusher();
@@ -814,7 +816,7 @@ void AddEasternKingdomsScripts()
     AddSC_boss_forgemaster_throngus();
     AddSC_boss_drahga_shadowburner();
     AddSC_boss_erudax();
-    AddSC_instance_grim_batol();	
+    AddSC_instance_grim_batol();
     AddSC_boss_attumen();                   //Karazhan
     AddSC_boss_curator();
     AddSC_boss_maiden_of_virtue();

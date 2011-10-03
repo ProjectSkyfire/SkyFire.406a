@@ -137,7 +137,8 @@ set(scripts_STAT_SRCS
   EasternKingdoms/swamp_of_sorrows.cpp
   EasternKingdoms/BaradinHold/baradin_hold.h
   EasternKingdoms/BaradinHold/instance_baradin_hold.cpp
-  EasternKingdoms/BaradinHold/boss_argaloth.cpp  
+  EasternKingdoms/BaradinHold/boss_argaloth.cpp
+  EasternKingdoms/BaradinHold/boss_occuthar.cpp
   EasternKingdoms/BlackrockCaverns/blackrock_caverns.h
   EasternKingdoms/BlackrockCaverns/boss_ascendant_lord_obsidius.cpp
   EasternKingdoms/BlackrockCaverns/boss_beauty.cpp
