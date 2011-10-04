@@ -181,3 +181,23 @@ INSERT INTO `conditions` (`SourceTypeOrReferenceId`, `SourceGroup`, `SourceEntry
 (14, 9647, 13059, 0, 11, 50517, 0, 0, 0, '', 'Pirates Day: DeMeza gossip'),
 (14, 9647, 13065, 0, 1, 50517, 0, 0, 0, '', 'Pirates Day: DeMeza gossip'),
 (15, 9647, 0, 0, 11, 50517, 0, 0, 0, '', 'Pirates Day: DeMeza gossip');
+
+-- Battered Hilt quest chains fixes
+-- Quests 20438,24556
+DELETE FROM gameobject WHERE id=201384;
+SET @ENTRY := 36856;
+SET @SOURCETYPE := 0;
+DELETE FROM `smart_scripts` WHERE `entryorguid`=@ENTRY AND `source_type`=@SOURCETYPE;
+UPDATE creature_template SET AIName="SmartAI" WHERE entry=@ENTRY LIMIT 1;
+INSERT INTO `smart_scripts` (`entryorguid`,`source_type`,`id`,`link`,`event_type`,`event_phase_mask`,`event_chance`,`event_flags`,`event_param1`,`event_param2`,`event_param3`,`event_param4`,`action_type`,`action_param1`,`action_param2`,`action_param3`,`action_param4`,`action_param5`,`action_param6`,`target_type`,`target_param1`,`target_param2`,`target_param3`,`target_x`,`target_y`,`target_z`,`target_o`,`comment`) VALUES
+(@ENTRY,@SOURCETYPE,0,0,62,0,100,0,10854,1,0,0,50,201384,60,0,0,0,0,8,0,0,0,5802.22,691.556,657.949,3.50801,"Arcanum Core - Script for quest http://wowhead.com/quest=20438"),
+(@ENTRY,@SOURCETYPE,1,0,62,0,100,0,10854,0,0,0,50,201384,60,0,0,0,0,8,0,0,0,5802.22,691.556,657.949,3.50801,"Arcanum Core - Script for quest http://wowhead.com/quest=24556");
+
+-- Quest 20439 (A Meeting With The Magister)
+SET @ENTRY := 36670;
+SET @SOURCETYPE := 0;
+DELETE FROM `smart_scripts` WHERE `entryorguid`=@ENTRY AND `source_type`=@SOURCETYPE;
+UPDATE creature_template SET AIName="SmartAI" WHERE entry=@ENTRY LIMIT 1;
+INSERT INTO `smart_scripts` (`entryorguid`,`source_type`,`id`,`link`,`event_type`,`event_phase_mask`,`event_chance`,`event_flags`,`event_param1`,`event_param2`,`event_param3`,`event_param4`,`action_type`,`action_param1`,`action_param2`,`action_param3`,`action_param4`,`action_param5`,`action_param6`,`target_type`,`target_param1`,`target_param2`,`target_param3`,`target_x`,`target_y`,`target_z`,`target_o`,`comment`) VALUES
+(@ENTRY,@SOURCETYPE,0,0,62,0,100,0,10857,1,0,0,56,49698,1,0,0,0,0,7,0,0,0,0.0,0.0,0.0,0.0,"Arcanum Core - Script for - http://wowhead.com/quest=20439");
+
