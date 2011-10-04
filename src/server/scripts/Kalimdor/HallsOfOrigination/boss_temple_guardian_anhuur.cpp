@@ -59,18 +59,18 @@ class boss_temple_guardian_anhuur : public CreatureScript
     public:
         boss_temple_guardian_anhuur() : CreatureScript("boss_temple_guardian_anhuur") { }
 
-        CreatureAI* GetAI(Creature* pCreature) const
+        CreatureAI* GetAI(Creature* creature) const
         {
-            return new boss_temple_guardian_anhuurAI(pCreature);
+            return new boss_temple_guardian_anhuurAI(creature);
         }
 	 struct boss_temple_guardian_anhuurAI : public ScriptedAI
         {
-            boss_temple_guardian_anhuurAI(Creature* pCreature) : ScriptedAI(pCreature)
+            boss_temple_guardian_anhuurAI(Creature* creature) : ScriptedAI(creature)
             {
-                pInstance = pCreature->GetInstanceScript();
+                pInstance = creature->GetInstanceScript();
             }
 
-            InstanceScript *pInstance;
+            InstanceScript* pInstance;
             EventMap events;
             bool check_in;
 
