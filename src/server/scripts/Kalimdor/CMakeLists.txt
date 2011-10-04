@@ -68,11 +68,15 @@ set(scripts_STAT_SRCS
   #Kalimdor/LostCityOfTheTolvir/lost_city_of_the_tolvir.h
   #Kalimdor/LostCityOfTheTolvir/boss_lockmaw.cpp
   #Kalimdor/LostCityOfTheTolvir/boss_high_prophet_barim.cpp  
-  #Kalimdor/HallsOfOrigination/instance_halls_of_origination.cpp
-  #Kalimdor/HallsOfOrigination/halls_of_origination.h
-  #Kalimdor/HallsOfOrigination/boss_temple_guardian_anhuur.cpp
-  #Kalimdor/HallsOfOrigination/boss_earthrager_ptah.cpp
-  #Kalimdor/HallsOfOrigination/boss_anraphet.cpp 
+  Kalimdor/HallsOfOrigination/instance_halls_of_origination.cpp
+  Kalimdor/HallsOfOrigination/halls_of_origination.h
+  Kalimdor/HallsOfOrigination/boss_temple_guardian_anhuur.cpp
+  Kalimdor/HallsOfOrigination/boss_earthrager_ptah.cpp
+  Kalimdor/HallsOfOrigination/boss_anraphet.cpp 
+  Kalimdor/HallsOfOrigination/boss_ammunae.cpp
+  Kalimdor/HallsOfOrigination/boss_setesh.cpp
+  Kalimdor/HallsOfOrigination/boss_rajh.cpp
+  Kalimdor/HallsOfOrigination/boss_isiset.cpp
   Kalimdor/Maraudon/boss_princess_theradras.cpp
   Kalimdor/Maraudon/boss_landslide.cpp
   Kalimdor/Maraudon/boss_celebras_the_cursed.cpp

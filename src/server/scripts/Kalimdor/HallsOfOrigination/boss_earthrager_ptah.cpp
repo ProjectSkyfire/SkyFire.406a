@@ -48,18 +48,18 @@ class boss_earthrager_ptah : public CreatureScript
     public:
         boss_earthrager_ptah() : CreatureScript("boss_earthrager_ptah") { }
 
-        CreatureAI* GetAI(Creature* pCreature) const
+        CreatureAI* GetAI(Creature* creature) const
         {
-            return new boss_earthrager_ptahAI(pCreature);
+            return new boss_earthrager_ptahAI(creature);
         }
         struct boss_earthrager_ptahAI : public ScriptedAI
         {
-            boss_earthrager_ptahAI(Creature* pCreature) : ScriptedAI(pCreature)
+            boss_earthrager_ptahAI(Creature* creature) : ScriptedAI(creature)
             {
-                pInstance = pCreature->GetInstanceScript();
+                pInstance = creature->GetInstanceScript();
             }
 
-            InstanceScript *pInstance;
+            InstanceScript* pInstance;
             EventMap events;
             bool check_in;
 
