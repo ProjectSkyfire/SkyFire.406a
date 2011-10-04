@@ -358,7 +358,7 @@ void Aura::_InitEffects(uint8 effMask, Unit* caster, int32 *baseAmount)
         else
             m_effects[i] = NULL;
     }
-	
+
     // Mixology
     if (m_spellInfo->SpellFamilyName == SPELLFAMILY_POTION && caster /*&& caster->IsPlayer()*/ && caster->HasAura(53042))
     {
@@ -373,7 +373,7 @@ void Aura::_InitEffects(uint8 effMask, Unit* caster, int32 *baseAmount)
                     m_effects[i]->SetAmount((int32)(m_effects[i]->GetAmount() * 1.3f));
             }
         }
-    }	
+    }
 }
 
 Aura::~Aura()
