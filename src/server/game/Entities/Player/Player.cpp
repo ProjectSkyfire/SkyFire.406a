@@ -23566,7 +23566,7 @@ bool Player::IsKnowHowFlyIn(uint32 mapid, uint32 zone) const
         return HasSpell(90267); // Flight Master's License
     case 571: // Northrend
         return HasSpell(54197); // Cold Weather Flying
-    case 531: // Outland
+    case 530: // Outland
         switch(zone)
         {
         case 3430: // Eversong Woods
