@@ -56,9 +56,7 @@ BattlegroundIC::BattlegroundIC()
     gunshipAlliance = NULL;
 }
 
-BattlegroundIC::~BattlegroundIC()
-{
-}
+BattlegroundIC::~BattlegroundIC() {}
 
 void BattlegroundIC::HandlePlayerResurrect(Player* player)
 {
@@ -422,6 +420,12 @@ bool BattlegroundIC::SetupBattleground()
     // correcting spawn time for keeps bombs
     for (uint8 i = BG_IC_GO_HUGE_SEAFORIUM_BOMBS_A_1; i < BG_IC_GO_HUGE_SEAFORIUM_BOMBS_H_4; i++)
         GetBGObject(i)->SetRespawnTime(10);
+
+    // Make bosses invisible
+    if (Creature *icBoss = GetBGCreature(BG_IC_NPC_OVERLORD_AGMAR))
+        ActivateBoss(TEAM_ALLIANCE, false);
+    if (Creature *icBoss = GetBGCreature(BG_IC_NPC_HIGH_COMMANDER_HALFORD_WYRMBANE))
+        ActivateBoss(TEAM_HORDE, false);
 
     return true;
 }
@@ -835,16 +839,27 @@ void BattlegroundIC::DestroyGate(Player* player, GameObject* go)
     switch (go->GetEntry())
     {
         case GO_HORDE_GATE_1:
+            ActivateBoss(TEAM_ALLIANCE);
             lang_entry = LANG_BG_IC_NORTH_GATE_DESTROYED;
+           break;
         case GO_HORDE_GATE_2:
-        case GO_ALLIANCE_GATE_1:
+            ActivateBoss(TEAM_ALLIANCE);
             lang_entry = LANG_BG_IC_WEST_GATE_DESTROYED;
             break;
+        case GO_ALLIANCE_GATE_1:
+           ActivateBoss(TEAM_HORDE);
+           lang_entry = LANG_BG_IC_WEST_GATE_DESTROYED;
+           break;
         case GO_HORDE_GATE_3:
-        case GO_ALLIANCE_GATE_2:
+            ActivateBoss(TEAM_ALLIANCE);
             lang_entry = LANG_BG_IC_EAST_GATE_DESTROYED;
             break;
+        case GO_ALLIANCE_GATE_2:
+           ActivateBoss(TEAM_HORDE);
+           lang_entry = LANG_BG_IC_EAST_GATE_DESTROYED;
+           break;
         case GO_ALLIANCE_GATE_3:
+            ActivateBoss(TEAM_HORDE);
             lang_entry = LANG_BG_IC_SOUTH_GATE_DESTROYED;
             break;
     default:
@@ -856,6 +871,34 @@ void BattlegroundIC::DestroyGate(Player* player, GameObject* go)
 
 void BattlegroundIC::EventPlayerDamagedGO(Player* /*plr*/, GameObject* /*go*/, uint32 /*eventType*/)
 {
+}
+
+void BattlegroundIC::ActivateBoss(uint8 faction, bool visible)
+{
+    Creature* icBoss;
+
+    if (faction == TEAM_ALLIANCE)
+    {
+        icBoss = GetBGCreature(BG_IC_NPC_OVERLORD_AGMAR);
+        if (icBoss)
+        {
+            if (visible)
+                icBoss->SetVisible(true);
+            else
+                icBoss->SetVisible(false);
+        }
+    }
+    else
+    {
+        icBoss = GetBGCreature(BG_IC_NPC_HIGH_COMMANDER_HALFORD_WYRMBANE);
+        if (icBoss)
+        {
+            if (visible)
+                icBoss->SetVisible(true);
+            else
+                icBoss->SetVisible(false);
+        }
+    }
 }
 
 WorldSafeLocsEntry const* BattlegroundIC::GetClosestGraveYard(Player* player)
