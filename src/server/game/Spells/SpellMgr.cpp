@@ -3340,6 +3340,10 @@ void SpellMgr::LoadSpellCustomAttr()
             case 43140: // Flame Breath
             case 43215: // Flame Breath
             case 70461: // Coldflame Trap
+            case 72133: // Pain and Suffering
+            case 73788: // Pain and Suffering
+            case 73789: // Pain and Suffering
+            case 73790: // Pain and Suffering
                 spellInfo->AttributesCu |= SPELL_ATTR0_CU_CONE_LINE;
                 break;
             case 24340: // Meteor

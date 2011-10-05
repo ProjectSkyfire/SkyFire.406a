@@ -64,8 +64,7 @@ void SummonList::DespawnEntry(uint32 entry)
         else if (summon->GetEntry() == entry)
         {
             erase(i++);
-            summon->setDeathState(JUST_DIED);
-            summon->RemoveCorpse();
+            summon->DespawnOrUnsummon();
         }
         else
             ++i;
@@ -82,13 +81,7 @@ void SummonList::DespawnAll()
         else
         {
             erase(begin());
-            if (TempSummon* summ = summon->ToTempSummon())
-            {
-                summon->DestroyForNearbyPlayers();
-                summ->UnSummon();
-            }
-            else
-                summon->DisappearAndDie();
+            summon->DespawnOrUnsummon();
         }
     }
 }
