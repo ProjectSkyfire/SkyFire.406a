@@ -23558,7 +23558,25 @@ bool Player::IsKnowHowFlyIn(uint32 mapid, uint32 zone) const
 {
     // continent checked in SpellInfo::CheckLocation at cast and area update
     uint32 v_map = GetVirtualMapForMapAndZone(mapid, zone);
-    return (v_map != 571 || HasSpell(54197)) && (v_map != 0 || HasSpell(90267)); // Cold Weather Flying
+    switch (v_map)
+    {
+    case 0:   // Eastern Kingdoms
+    case 1:   // Kalimdor
+    case 646: // Deepholm
+        return HasSpell(90267); // Flight Master's License
+    case 571: // Northrend
+        return HasSpell(54197); // Cold Weather Flying
+    case 531: // Outland
+        switch(zone)
+        {
+        case 3430: // Eversong Woods
+        case 3433: // Ghostlands
+        case 4080: // Isle of Quel'Danas
+            return false;
+        }
+        return true;
+    }
+    return false;
 }
 
 void Player::learnSpellHighRank(uint32 spellid)
