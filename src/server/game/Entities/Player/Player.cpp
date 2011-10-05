@@ -23561,19 +23561,21 @@ bool Player::IsKnowHowFlyIn(uint32 mapid, uint32 zone) const
     switch (v_map)
     {
     case 0:   // Eastern Kingdoms
+        switch(zone)
+        {
+        // mapid of these zones is 530 but v_map is 0
+        case 3430: // Eversong Woods
+        case 3433: // Ghostlands
+        case 4080: // Isle of Quel'Danas
+            return false;
+        }
+        // no break here
     case 1:   // Kalimdor
     case 646: // Deepholm
         return HasSpell(90267); // Flight Master's License
     case 571: // Northrend
         return HasSpell(54197); // Cold Weather Flying
     case 530: // Outland
-        switch(zone)
-        {
-        case 3430: // Eversong Woods
-        case 3433: // Ghostlands
-        case 4080: // Isle of Quel'Danas
-            return false;
-        }
         return true;
     }
     return false;
