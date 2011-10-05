@@ -868,6 +868,7 @@ public:
     {
         npc_scarlet_miner_cartAI(Creature* c) : PassiveAI(c), minerGUID(0)
         {
+            me->setFaction(35);
             me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_OOC_NOT_ATTACKABLE);
             me->SetDisplayId(me->GetCreatureInfo()->Modelid1); // Modelid2 is a horse.
         }
@@ -935,6 +936,7 @@ public:
             carGUID = 0;
             IntroTimer = 0;
             IntroPhase = 0;
+            me->RestoreFaction();
         }
 
         void InitWaypoint()
