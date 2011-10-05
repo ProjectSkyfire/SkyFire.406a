@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
@@ -21,9 +21,9 @@
 
 namespace AuthHelper
 {
-    bool IsPreCataAcceptedClientBuild(int build)
+    bool IsPreBCAcceptedClientBuild(int build)
     {
-        int accepted_versions[] = PRE_CATA_ACCEPTED_CLIENT_BUILD;
+        int accepted_versions[] = PRE_BC_ACCEPTED_CLIENT_BUILD;
 
         for (int i = 0; accepted_versions[i]; ++i)
             if (build == accepted_versions[i])
@@ -32,9 +32,20 @@ namespace AuthHelper
         return false;
     }
 
-    bool IsPostCataAcceptedClientBuild(int build)
+    bool IsPostBCAcceptedClientBuild(int build)
     {
-        int accepted_versions[] = POST_CATA_ACCEPTED_CLIENT_BUILD;
+        int accepted_versions[] = POST_BC_ACCEPTED_CLIENT_BUILD;
+
+        for (int i = 0; accepted_versions[i]; ++i)
+            if (build == accepted_versions[i])
+                return true;
+
+        return false;
+    }
+
+    bool IsPostWotLKAcceptedClientBuild(int build)
+    {
+        int accepted_versions[] = POST_WOTLK_ACCEPTED_CLIENT_BUILD;
 
         for (int i = 0; accepted_versions[i]; ++i)
             if (build == accepted_versions[i])
@@ -45,6 +56,6 @@ namespace AuthHelper
 
     bool IsAcceptedClientBuild(int build)
     {
-        return (IsPostCataAcceptedClientBuild(build) || IsPreCataAcceptedClientBuild(build));
+        return (IsPostWotLKAcceptedClientBuild(build) || IsPostBCAcceptedClientBuild(build) || IsPreBCAcceptedClientBuild(build));
     }
 };

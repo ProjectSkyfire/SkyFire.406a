@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
@@ -20,11 +20,11 @@
 #ifndef __REALMACCEPTOR_H__
 #define __REALMACCEPTOR_H__
 
-#include <ace/Acceptor.h>
-#include <ace/SOCK_Acceptor.h>
-
 #include "RealmSocket.h"
 #include "AuthSocket.h"
+
+#include <ace/Acceptor.h>
+#include <ace/SOCK_Acceptor.h>
 
 class RealmAcceptor : public ACE_Acceptor<RealmSocket, ACE_SOCK_Acceptor>
 {

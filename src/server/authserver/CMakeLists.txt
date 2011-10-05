@@ -1,4 +1,5 @@
-# Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
+# Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
+# Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
 #
 # This file is free software; as a special exception the author gives
 # unlimited permission to copy and/or distribute it, with or without
