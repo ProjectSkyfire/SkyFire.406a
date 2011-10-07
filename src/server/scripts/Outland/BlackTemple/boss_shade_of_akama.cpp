@@ -818,14 +818,14 @@ public:
                         {
                             bool Yelled = false;
                             for (std::list<uint64>::const_iterator itr = BrokenList.begin(); itr != BrokenList.end(); ++itr)
-                                if (Creature* pUnit = Unit::GetCreature(*me, *itr))
+                                if (Creature* unit = Unit::GetCreature(*me, *itr))
                                 {
                                     if (!Yelled)
                                     {
-                                        DoScriptText(SAY_BROKEN_FREE_01, pUnit);
+                                        DoScriptText(SAY_BROKEN_FREE_01, unit);
                                         Yelled = true;
                                     }
-                                    pUnit->HandleEmoteCommand(EMOTE_ONESHOT_KNEEL);
+                                    unit->HandleEmoteCommand(EMOTE_ONESHOT_KNEEL);
                                 }
                         }
                         ++EndingTalkCount;
@@ -835,9 +835,9 @@ public:
                         if (!BrokenList.empty())
                         {
                             for (std::list<uint64>::const_iterator itr = BrokenList.begin(); itr != BrokenList.end(); ++itr)
-                                if (Creature* pUnit = Unit::GetCreature(*me, *itr))
+                                if (Creature* unit = Unit::GetCreature(*me, *itr))
                                     // This is the incorrect spell, but can't seem to find the right one.
-                                    pUnit->CastSpell(pUnit, 39656, true);
+                                    unit->CastSpell(unit, 39656, true);
                         }
                         ++EndingTalkCount;
                         SoulRetrieveTimer = 5000;
@@ -846,8 +846,8 @@ public:
                         if (!BrokenList.empty())
                         {
                             for (std::list<uint64>::const_iterator itr = BrokenList.begin(); itr != BrokenList.end(); ++itr)
-                                if (Creature* pUnit = Unit::GetCreature((*me), *itr))
-                                    pUnit->MonsterYell(SAY_BROKEN_FREE_02, LANG_UNIVERSAL, 0);
+                                if (Creature* unit = Unit::GetCreature((*me), *itr))
+                                    unit->MonsterYell(SAY_BROKEN_FREE_02, LANG_UNIVERSAL, 0);
                         }
                         SoulRetrieveTimer = 0;
                         break;

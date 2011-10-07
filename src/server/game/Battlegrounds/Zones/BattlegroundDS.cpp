@@ -202,18 +202,18 @@ bool BattlegroundDS::SetupBattleground()
     return true;
 }
 
-void BattlegroundDS::KnockBackPlayer(Unit *pPlayer, float angle, float horizontalSpeed, float verticalSpeed)
+void BattlegroundDS::KnockBackPlayer(Unit *player, float angle, float horizontalSpeed, float verticalSpeed)
 {
-    if(pPlayer->GetTypeId() == TYPEID_PLAYER)
+    if(player->GetTypeId() == TYPEID_PLAYER)
     {
         WorldPacket data(SMSG_MOVE_KNOCK_BACK, 8+4+4+4+4+2);   // this needs checked for cataclysm!
-        data.append(pPlayer->GetPackGUID());
+        data.append(player->GetPackGUID());
         data << uint32(0);
         data << float(cos(angle));
         data << float(sin(angle));
         data << float(horizontalSpeed);
         data << float(-verticalSpeed);
-        ((Player*)pPlayer)->GetSession()->SendPacket(&data);
+        ((Player*)player)->GetSession()->SendPacket(&data);
     }
     else
         sLog->outError("The target of KnockBackPlayer must be a player !");

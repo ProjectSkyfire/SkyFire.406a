@@ -56,7 +56,7 @@ public:
 
     struct npc_pusillinAI : public npc_escortAI
     {
-        npc_pusillinAI(Creature* pCreature) : npc_escortAI(pCreature)
+        npc_pusillinAI(Creature* creature) : npc_escortAI(creature)
         {}
 
         uint32 uiPhase;
@@ -220,52 +220,52 @@ public:
         }
     };
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new npc_pusillinAI(pCreature);
+        return new npc_pusillinAI(creature);
     }
 
-    bool OnGossipHello(Player* pPlayer, Creature* pCreature)
+    bool OnGossipHello(Player* player, Creature* creature)
     {
-        npc_pusillinAI* pAI = CAST_AI(npc_pusillinAI, pCreature->AI());
+        npc_pusillinAI* pAI = CAST_AI(npc_pusillinAI, creature->AI());
 
         switch (pAI->uiGossipStep)
         {
         case 0:
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_HELLO, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
-            pPlayer->SEND_GOSSIP_MENU(6877, pCreature->GetGUID());
+            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_HELLO, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
+            player->SEND_GOSSIP_MENU(6877, creature->GetGUID());
             break;
         case 1:
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, Gossip_2, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+2);
-            pPlayer->SEND_GOSSIP_MENU(6878, pCreature->GetGUID());
+            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, Gossip_2, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+2);
+            player->SEND_GOSSIP_MENU(6878, creature->GetGUID());
             break;
         case 2:
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, Gossip_3, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+3);
-            pPlayer->SEND_GOSSIP_MENU(6879, pCreature->GetGUID());
+            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, Gossip_3, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+3);
+            player->SEND_GOSSIP_MENU(6879, creature->GetGUID());
             break;
         case 3:
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, Gossip_4, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+4);
-            pPlayer->SEND_GOSSIP_MENU(6880, pCreature->GetGUID());
+            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, Gossip_4, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+4);
+            player->SEND_GOSSIP_MENU(6880, creature->GetGUID());
             break;
         case 4:
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, Gossip_5, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+5);
-            pPlayer->SEND_GOSSIP_MENU(6881, pCreature->GetGUID());
+            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, Gossip_5, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+5);
+            player->SEND_GOSSIP_MENU(6881, creature->GetGUID());
             break;
         }
 
         return true;
     }
 
-    bool OnGossipSelect(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
+    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*uiSender*/, uint32 uiAction)
     {
-        npc_pusillinAI* pAI = CAST_AI(npc_pusillinAI, pCreature->AI());
+        npc_pusillinAI* pAI = CAST_AI(npc_pusillinAI, creature->AI());
 
         if (!pAI)
             return false;
 
         if (uiAction == GOSSIP_ACTION_INFO_DEF+1)
         {
-            CAST_AI(npc_pusillinAI, pCreature->AI())->Start(false, true, pPlayer->GetGUID());
+            CAST_AI(npc_pusillinAI, creature->AI())->Start(false, true, player->GetGUID());
             pAI->SetHoldState(false);
             pAI->uiPhase = 1;
         }
@@ -293,10 +293,10 @@ public:
             pAI->uiPhase = 5;
         }
 
-        pPlayer->CLOSE_GOSSIP_MENU();
+        player->CLOSE_GOSSIP_MENU();
         pAI->SetDespawnAtEnd(false);
         pAI->SetDespawnAtFar(false);
-        pCreature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
+        creature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
         return true;
     }
 };

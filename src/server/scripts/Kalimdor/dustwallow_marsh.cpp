@@ -532,8 +532,8 @@ public:
             SetCombatMovement(true);
 
             if (me->isInCombat())
-                if (Unit* pUnit = me->getVictim())
-                    me->GetMotionMaster()->MoveChase(pUnit);
+                if (Unit* unit = me->getVictim())
+                    me->GetMotionMaster()->MoveChase(unit);
         }
 
         void MoveToDock()

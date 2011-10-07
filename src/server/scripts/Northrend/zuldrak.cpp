@@ -838,12 +838,12 @@ public:
                 std::list<HostileReference*> t_list = me->getThreatManager().getThreatList();
                 for (std::list<HostileReference*>::const_iterator itr = t_list.begin(); itr!= t_list.end(); ++itr)
                 {
-                    if (Unit* pUnit = Unit::GetUnit(*me, (*itr)->getUnitGuid()))
+                    if (Unit* unit = Unit::GetUnit(*me, (*itr)->getUnitGuid()))
                     {
-                        if (pUnit->GetPositionZ() <= 286.276f)
+                        if (unit->GetPositionZ() <= 286.276f)
                         {
                             me->getThreatManager().resetAllAggro();
-                            me->AddThreat(pUnit, 5.0f);
+                            me->AddThreat(unit, 5.0f);
                             break;
                         }
                         EnterEvadeMode();
@@ -960,12 +960,12 @@ public:
                     std::list<HostileReference*> t_list = me->getThreatManager().getThreatList();
                     for (std::list<HostileReference*>::const_iterator itr = t_list.begin(); itr!= t_list.end(); ++itr)
                     {
-                        if (Unit* pUnit = Unit::GetUnit(*me, (*itr)->getUnitGuid()))
+                        if (Unit* unit = Unit::GetUnit(*me, (*itr)->getUnitGuid()))
                         {
-                            if (pUnit->GetPositionZ() <= 286.276f)
+                            if (unit->GetPositionZ() <= 286.276f)
                             {
                                 me->getThreatManager().resetAllAggro();
-                                me->AddThreat(pUnit, 5.0f);
+                                me->AddThreat(unit, 5.0f);
                                 break;
                             }
                             EnterEvadeMode();
@@ -1081,7 +1081,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit* pUnit)
+        void EnterCombat(Unit* unit)
         {
             if (!SummonList.empty())
                 for (std::list<uint64>::const_iterator itr = SummonList.begin(); itr != SummonList.end(); ++itr)
@@ -1089,7 +1089,7 @@ public:
                     if (Creature* pTemp = Unit::GetCreature(*me, *itr))
                     {
                         pTemp->m_CombatDistance = 100.0f; // ugly hack? we are not in a instance sorry. :(
-                        pTemp->AI()->AttackStart(pUnit);
+                        pTemp->AI()->AttackStart(unit);
                     }
                 }
         }
@@ -1104,12 +1104,12 @@ public:
                 std::list<HostileReference*> t_list = me->getThreatManager().getThreatList();
                 for (std::list<HostileReference*>::const_iterator itr = t_list.begin(); itr!= t_list.end(); ++itr)
                 {
-                    if (Unit* pUnit = Unit::GetUnit(*me, (*itr)->getUnitGuid()))
+                    if (Unit* unit = Unit::GetUnit(*me, (*itr)->getUnitGuid()))
                     {
-                        if (pUnit->GetPositionZ() <= 286.276f)
+                        if (unit->GetPositionZ() <= 286.276f)
                         {
                             me->getThreatManager().resetAllAggro();
-                            me->AddThreat(pUnit, 5.0f);
+                            me->AddThreat(unit, 5.0f);
                             break;
                         }
                         EnterEvadeMode();
