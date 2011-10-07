@@ -20809,7 +20809,7 @@ bool Player::BuyItemFromVendorSlot(uint64 vendorguid, uint32 vendorslot, uint32 
         }
         price = pProto->BuyPrice * count; //it should not exceed MAX_MONEY_AMOUNT
 
-         // reputation discount
+        // reputation discount
         price = uint32(floor(price * GetReputationPriceDiscount(creature)));
 
         if (!HasEnoughMoney(price))
@@ -20817,6 +20817,7 @@ bool Player::BuyItemFromVendorSlot(uint64 vendorguid, uint32 vendorslot, uint32 
             SendBuyError(BUY_ERR_NOT_ENOUGHT_MONEY, creature, item, 0);
             return false;
         }
+    }
 
     if ((bag == NULL_BAG && slot == NULL_SLOT) || IsInventoryPos(bag, slot))
     {
