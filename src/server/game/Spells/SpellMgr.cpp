@@ -3117,7 +3117,7 @@ void SpellMgr::LoadSpellCustomAttr()
             // ULDUAR SPELLS
             //
             case 62374: // Pursued (Flame Leviathan)
-                spellInfo->EffectRadiusIndex[0] = 28;   // 50000yd
+                spellInfo->Effects[0].RadiusEntry = sSpellRadiusStore.LookupEntry(28);   // 50000yd
                 break;
             case 63342: // Focused Eyebeam Summon Trigger (Kologarn)
                 spellInfo->MaxAffectedTargets = 1;
