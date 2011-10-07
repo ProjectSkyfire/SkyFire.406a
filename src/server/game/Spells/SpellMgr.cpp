@@ -2930,7 +2930,6 @@ void SpellMgr::LoadSpellCustomAttr()
             case 25425: // Shoot
             case 45761: // Shoot
             case 42611: // Shoot
-            case 62374: // Pursued
             case 61588: // Blazing Harpoon
             case 52479: // Gift of the Harvester
                 spellInfo->MaxAffectedTargets = 1;
@@ -3117,6 +3116,9 @@ void SpellMgr::LoadSpellCustomAttr()
                 break;
             // ULDUAR SPELLS
             //
+            case 62374: // Pursued (Flame Leviathan)
+                spellInfo->Effects[0].RadiusEntry = sSpellRadiusStore.LookupEntry(28);    // 50000yd
+                break;
             case 63342: // Focused Eyebeam Summon Trigger (Kologarn)
                 spellInfo->MaxAffectedTargets = 1;
                 break;
@@ -3340,6 +3342,10 @@ void SpellMgr::LoadSpellCustomAttr()
             case 43140: // Flame Breath
             case 43215: // Flame Breath
             case 70461: // Coldflame Trap
+            case 72133: // Pain and Suffering
+            case 73788: // Pain and Suffering
+            case 73789: // Pain and Suffering
+            case 73790: // Pain and Suffering
                 spellInfo->AttributesCu |= SPELL_ATTR0_CU_CONE_LINE;
                 break;
             case 24340: // Meteor

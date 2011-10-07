@@ -84,15 +84,15 @@ class boss_high_prophet_barim : public CreatureScript
 public:
     boss_high_prophet_barim() : CreatureScript("boss_high_prophet_barim") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new boss_high_prophet_barimAI(pCreature);
+        return new boss_high_prophet_barimAI(creature);
     }
     struct boss_high_prophet_barimAI : public ScriptedAI
     {
-        boss_high_prophet_barimAI(Creature* pCreature) : ScriptedAI(pCreature), Summons(me)
+        boss_high_prophet_barimAI(Creature* creature) : ScriptedAI(creature), Summons(me)
         {
-            pInstance = pCreature->GetInstanceScript();
+            pInstance = creature->GetInstanceScript();
         }
 
         InstanceScript *pInstance;
@@ -205,9 +205,9 @@ class npc_blaze_of_heavens: public CreatureScript
 public:
     npc_blaze_of_heavens() : CreatureScript("npc_blaze_of_heavens") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new npc_blaze_of_heavensAI(pCreature);
+        return new npc_blaze_of_heavensAI(creature);
     }
 
     struct npc_blaze_of_heavensAI : public ScriptedAI
@@ -259,9 +259,9 @@ class npc_harbinger_of_darkness: public CreatureScript
 public:
     npc_harbinger_of_darkness() : CreatureScript("npc_harbinger_of_darkness") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new npc_harbinger_of_darknessAI(pCreature);
+        return new npc_harbinger_of_darknessAI(creature);
     }
 
     struct npc_harbinger_of_darknessAI : public ScriptedAI

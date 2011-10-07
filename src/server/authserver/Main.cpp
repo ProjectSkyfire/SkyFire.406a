@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
@@ -17,13 +17,6 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <ace/Dev_Poll_Reactor.h>
-#include <ace/TP_Reactor.h>
-#include <ace/ACE.h>
-#include <ace/Sig_Handler.h>
-#include <openssl/opensslv.h>
-#include <openssl/crypto.h>
-
 #include "Common.h"
 #include "Database/DatabaseEnv.h"
 #include "Configuration/Config.h"
@@ -33,6 +26,13 @@
 #include "SignalHandler.h"
 #include "RealmList.h"
 #include "RealmAcceptor.h"
+
+#include <ace/Dev_Poll_Reactor.h>
+#include <ace/TP_Reactor.h>
+#include <ace/ACE.h>
+#include <ace/Sig_Handler.h>
+#include <openssl/opensslv.h>
+#include <openssl/crypto.h>
 
 #ifndef _AUTHSERVER_CONFIG
 # define _AUTHSERVER_CONFIG  "authserver.conf"
@@ -74,9 +74,9 @@ extern int main(int argc, char **argv)
 {
     sLog->SetLogDB(false);
     // Command line parsing to get the configuration file name
-    char const *cfg_file = _AUTHSERVER_CONFIG;
+    char const* cfg_file = _AUTHSERVER_CONFIG;
     int c = 1;
-    while (c < argc)
+    while(c < argc)
     {
         if (strcmp(argv[c], "-c") == 0)
         {
@@ -94,11 +94,12 @@ extern int main(int argc, char **argv)
 
     if (!ConfigMgr::Load(cfg_file))
     {
-         sLog->outError( "Invalid or missing configuration file : %s", cfg_file);
-         sLog->outError( "Verify that the file exists and has \'[authserver]\' written in the top of the file!");
+        sLog->outError("Invalid or missing configuration file : %s", cfg_file);
+        sLog->outError("Verify that the file exists and has \'[authserver]\' written in the top of the file!");
         return 1;
     }
     sLog->Initialize();
+
     sLog->outString( "%s (authserver)", _FULLVERSION);
     sLog->outString( "<Ctrl-C> to stop.\n");
     sLog->outString( "Using configuration file %s.", cfg_file);
@@ -130,7 +131,7 @@ extern int main(int argc, char **argv)
         uint32 pid = CreatePIDFile(pidfile);
         if (!pid)
         {
-             sLog->outError("Cannot create PID file %s.\n", pidfile.c_str());
+            sLog->outError("Cannot create PID file %s.\n", pidfile.c_str());
             return 1;
         }
 
@@ -144,13 +145,13 @@ extern int main(int argc, char **argv)
     // Initialize the log database
     sLog->SetLogDBLater(ConfigMgr::GetBoolDefault("EnableLogDB", false)); // set var to enable DB logging once startup finished.
     sLog->SetLogDB(false);
-    sLog->SetRealmID(0);
+    sLog->SetRealmID(0);                                               // ensure we've set realm to 0 (authserver realmid)
 
     // Get the list of realms for the server
     sRealmList->Initialize(ConfigMgr::GetIntDefault("RealmsStateUpdateDelay", 20));
     if (sRealmList->size() == 0)
     {
-         sLog->outError( "No valid realms specified.");
+        sLog->outError("No valid realms specified.");
         return 1;
     }
 
@@ -164,7 +165,7 @@ extern int main(int argc, char **argv)
 
     if (acceptor.open(bind_addr, ACE_Reactor::instance(), ACE_NONBLOCK) == -1)
     {
-         sLog->outError("Auth server can not bind to %s:%d", bind_ip.c_str(), rmport);
+        sLog->outError("Auth server can not bind to %s:%d", bind_ip.c_str(), rmport);
         return 1;
     }
 
@@ -206,15 +207,13 @@ extern int main(int argc, char **argv)
         if (Prio)
         {
             if (SetPriorityClass(hProcess, HIGH_PRIORITY_CLASS))
-                sLog->outString("auth process priority class set to HIGH");
+                sLog->outString("The auth server process priority class has been set to HIGH");
             else
-                sLog->outError("Can't set auth process priority class.");
+                sLog->outError("Can't set auth server process priority class.");
             sLog->outString();
         }
     }
 #endif
-
-    sLog->outString("%s (authserver-daemon) ready...", _FULLVERSION);
 
     // maximum counter for next ping
     uint32 numLoops = (ConfigMgr::GetIntDefault("MaxPingTime", 30) * (MINUTE * 1000000 / 100000));
@@ -234,7 +233,7 @@ extern int main(int argc, char **argv)
     // Wait for termination signal
     while (!stopEvent)
     {
-        // don't move this outside the loop, the reactor will modify it
+        // dont move this outside the loop, the reactor will modify it
         ACE_Time_Value interval(0, 100000);
 
         if (ACE_Reactor::instance()->run_reactor_event_loop(interval) == -1)
@@ -251,7 +250,7 @@ extern int main(int argc, char **argv)
     // Close the Database Pool and library
     StopDB();
 
-    sLog->outString( "Halting process...");
+    sLog->outString("Halting process...");
     return 0;
 }
 
@@ -263,28 +262,28 @@ bool StartDB()
     std::string dbstring = ConfigMgr::GetStringDefault("LoginDatabaseInfo", "");
     if (dbstring.empty())
     {
-         sLog->outError( "Database not specified");
+        sLog->outError("Database not specified");
         return false;
     }
 
     uint8 worker_threads = ConfigMgr::GetIntDefault("LoginDatabase.WorkerThreads", 1);
     if (worker_threads < 1 || worker_threads > 32)
     {
-         sLog->outError( "Improper value specified for LoginDatabase.WorkerThreads, defaulting to 1.");
+        sLog->outError("Improper value specified for LoginDatabase.WorkerThreads, defaulting to 1.");
         worker_threads = 1;
     }
 
     uint8 synch_threads = ConfigMgr::GetIntDefault("LoginDatabase.SynchThreads", 1);
     if (synch_threads < 1 || synch_threads > 32)
     {
-         sLog->outError( "Improper value specified for LoginDatabase.SynchThreads, defaulting to 1.");
+        sLog->outError("Improper value specified for LoginDatabase.SynchThreads, defaulting to 1.");
         synch_threads = 1;
     }
 
     // NOTE: While authserver is singlethreaded you should keep synch_threads == 1. Increasing it is just silly since only 1 will be used ever.
     if (!LoginDatabase.Open(dbstring.c_str(), worker_threads, synch_threads))
     {
-         sLog->outError( "Cannot connect to database");
+        sLog->outError("Cannot connect to database");
         return false;
     }
 

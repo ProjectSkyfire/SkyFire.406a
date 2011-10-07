@@ -160,9 +160,9 @@ class npc_neferset_darkcaster : public CreatureScript
 public:
     npc_neferset_darkcaster() : CreatureScript("npc_neferset_darkcaster") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new npc_neferset_darkcasterAI(pCreature);
+        return new npc_neferset_darkcasterAI(creature);
     }
 
     struct npc_neferset_darkcasterAI : public ScriptedAI
@@ -227,9 +227,9 @@ class npc_neferset_plaguebringer : public CreatureScript
 public:
     npc_neferset_plaguebringer() : CreatureScript("npc_neferset_plaguebringer") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new npc_neferset_plaguebringerAI(pCreature);
+        return new npc_neferset_plaguebringerAI(creature);
     }
 
     struct npc_neferset_plaguebringerAI : public ScriptedAI
@@ -287,9 +287,9 @@ class npc_neferset_theurgist : public CreatureScript
 public:
     npc_neferset_theurgist() : CreatureScript("npc_neferset_theurgist"){ }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new npc_neferset_theurgistAI(pCreature);
+        return new npc_neferset_theurgistAI(creature);
     }
 
     struct npc_neferset_theurgistAI : public ScriptedAI
@@ -353,9 +353,9 @@ class npc_neferset_torturer : public CreatureScript
 public:
     npc_neferset_torturer() : CreatureScript("npc_neferset_torturer"){ }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new npc_neferset_torturerAI(pCreature);
+        return new npc_neferset_torturerAI(creature);
     }
 
     struct npc_neferset_torturerAI : public ScriptedAI
@@ -413,9 +413,9 @@ class npc_oathsworn_axemaster : public CreatureScript
 public:
     npc_oathsworn_axemaster() : CreatureScript("npc_oathsworn_axemaster") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new npc_oathsworn_axemasterAI(pCreature);
+        return new npc_oathsworn_axemasterAI(creature);
     }
 
     struct npc_oathsworn_axemasterAI : public ScriptedAI
@@ -472,9 +472,9 @@ class npc_oathsworn_captain : public CreatureScript
 public:
     npc_oathsworn_captain() : CreatureScript("npc_oathsworn_captain") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new npc_oathsworn_captainAI(pCreature);
+        return new npc_oathsworn_captainAI(creature);
     }
 
     struct npc_oathsworn_captainAI : public ScriptedAI
@@ -526,9 +526,9 @@ class npc_oathsworn_myrmidon : public CreatureScript
 public:
     npc_oathsworn_myrmidon() : CreatureScript("npc_oathsworn_myrmidon") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new npc_oathsworn_myrmidonAI(pCreature);
+        return new npc_oathsworn_myrmidonAI(creature);
     }
 
     struct npc_oathsworn_myrmidonAI : public ScriptedAI
@@ -585,9 +585,9 @@ class npc_oathsworn_pathfinder : public CreatureScript
 public:
     npc_oathsworn_pathfinder() : CreatureScript("npc_oathsworn_pathfinder") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new npc_oathsworn_pathfinderAI(pCreature);
+        return new npc_oathsworn_pathfinderAI(creature);
     }
 
     struct npc_oathsworn_pathfinderAI : public ScriptedAI
@@ -650,9 +650,9 @@ class npc_oathsworn_scorpid_keeper : public CreatureScript
 public:
     npc_oathsworn_scorpid_keeper() : CreatureScript("npc_oathsworn_scorpid_keeper") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new npc_oathsworn_scorpid_keeperAI(pCreature);
+        return new npc_oathsworn_scorpid_keeperAI(creature);
     }
 
     struct npc_oathsworn_scorpid_keeperAI : public ScriptedAI
@@ -709,9 +709,9 @@ class npc_oathsworn_skinner : public CreatureScript
 public:
     npc_oathsworn_skinner() : CreatureScript("npc_oathsworn_skinner") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new npc_oathsworn_skinnerAI(pCreature);
+        return new npc_oathsworn_skinnerAI(creature);
     }
 
     struct npc_oathsworn_skinnerAI : public ScriptedAI
@@ -768,9 +768,9 @@ class npc_pygmy_brute : public CreatureScript
 public:
     npc_pygmy_brute() : CreatureScript("npc_pygmy_brute") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new npc_pygmy_bruteAI(pCreature);
+        return new npc_pygmy_bruteAI(creature);
     }
 
     struct npc_pygmy_bruteAI : public ScriptedAI
@@ -827,9 +827,9 @@ class npc_pygmy_firebreather : public CreatureScript
 public:
     npc_pygmy_firebreather() : CreatureScript("npc_pygmy_firebreather") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new npc_pygmy_firebreatherAI(pCreature);
+        return new npc_pygmy_firebreatherAI(creature);
     }
 
     struct npc_pygmy_firebreatherAI : public ScriptedAI
@@ -887,9 +887,9 @@ class npc_pygmy_scout : public CreatureScript
 public:
     npc_pygmy_scout() : CreatureScript("npc_pygmy_scout") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new npc_pygmy_scoutAI(pCreature);
+        return new npc_pygmy_scoutAI(creature);
     }
 
     struct npc_pygmy_scoutAI : public ScriptedAI

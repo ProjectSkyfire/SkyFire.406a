@@ -68,18 +68,18 @@ public:
             return false;
         }
 
-        void OnCreatureCreate(Creature* pCreature, bool)
+        void OnCreatureCreate(Creature* creature, bool)
         {
-            switch (pCreature->GetEntry())
+            switch (creature->GetEntry())
             {
                 case BOSS_GRAND_VIZIER_ERTAN:
-                    uiGrandVizierErtan = pCreature->GetGUID();
+                    uiGrandVizierErtan = creature->GetGUID();
                     break;
                 case BOSS_ALTAIRUS:
-                    uiAltairus = pCreature->GetGUID();
+                    uiAltairus = creature->GetGUID();
                     break;
                 case BOSS_ASAAD:
-                    uiAsaad = pCreature->GetGUID();
+                    uiAsaad = creature->GetGUID();
                     break;
             }
         }

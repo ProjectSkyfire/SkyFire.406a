@@ -60,15 +60,15 @@ class boss_lockmaw : public CreatureScript
     public:
         boss_lockmaw() : CreatureScript("boss_lockmaw") {}
 
-        CreatureAI* GetAI(Creature* pCreature) const
+        CreatureAI* GetAI(Creature* creature) const
         {
-           return new boss_lockmawAI(pCreature);
+           return new boss_lockmawAI(creature);
         }
         struct boss_lockmawAI : public ScriptedAI
 		{
-			boss_lockmawAI(Creature* pCreature) : ScriptedAI(pCreature), Summons(me)
+			boss_lockmawAI(Creature* creature) : ScriptedAI(creature), Summons(me)
 			{
-				pInstance = pCreature->GetInstanceScript();
+				pInstance = creature->GetInstanceScript();
 			}
 
 			InstanceScript* pInstance;

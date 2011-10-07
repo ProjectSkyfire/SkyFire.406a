@@ -73,24 +73,24 @@ public:
             return false;
         }
 
-        void OnCreatureCreate(Creature* pCreature, bool )
+        void OnCreatureCreate(Creature* creature, bool )
         {
-            switch (pCreature->GetEntry())
+            switch (creature->GetEntry())
             {
                  case BOSS_GENERAL_HUSAM:
-                     uiGeneralHusam = pCreature->GetGUID();
+                     uiGeneralHusam = creature->GetGUID();
                      break;
                  case BOSS_HIGH_PROPHET_BARIM:
-                     uiHighProphetBarim = pCreature->GetGUID();
+                     uiHighProphetBarim = creature->GetGUID();
                      break;
                  case BOSS_LOCKMAW:
-                     uiLockmaw = pCreature->GetGUID();
+                     uiLockmaw = creature->GetGUID();
                      break;
                  case BOSS_AUGH:
-                     uiAugh = pCreature->GetGUID();
+                     uiAugh = creature->GetGUID();
                      break;
                  case BOSS_SIAMAT:
-                     uiSiamat = pCreature->GetGUID();
+                     uiSiamat = creature->GetGUID();
                      break;
             }
         }

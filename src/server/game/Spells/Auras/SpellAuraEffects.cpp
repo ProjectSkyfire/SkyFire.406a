@@ -2826,7 +2826,7 @@ void AuraEffect::HandleAuraMounted(AuraApplication const* aurApp, uint8 mode, bo
                    continue;
                if (cap->map != -1 && cap->map != map)
                    continue;
-               if (cap->reqSkillLevel > plrskill || cap->reqSkillLevel <= maxSkill)
+               if (cap->reqSkillLevel && (cap->reqSkillLevel > plrskill || cap->reqSkillLevel <= maxSkill))
                    continue;
                if (cap->reqSpell && !plr->HasSpell(cap->reqSpell))
                    continue;
@@ -4793,6 +4793,14 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
                     }
                     break;
                 }
+                case 33763:
+                    if (target->HasAura(92363, GetCasterGUID())) // Get talent Malfurion's gift rank 1
+                        if (roll_chance_i(2)) // Procs only 2% of the time
+                            target->CastSpell(caster, 16870, true, NULL, this); // Clearcasting
+                    if (target->HasAura(92364, GetCasterGUID())) // Get talent Malfurion's gift rank 2
+                        if (roll_chance_i(4)) // Procs only 4% of the time
+                            target->CastSpell(caster, 16870, true, NULL, this); // Clearcasting
+                    break;
                 case 39850:                                     // Rocket Blast
                     if (roll_chance_i(20))                       // backfire stun
                         target->CastSpell(target, 51581, true, NULL, this);

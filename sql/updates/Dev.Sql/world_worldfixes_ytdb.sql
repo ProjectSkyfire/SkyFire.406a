@@ -23,7 +23,7 @@ UPDATE `creature_template` SET `InhabitType`=5 WHERE `entry` IN (37533, 37534);
 UPDATE `creature` SET `spawntimesecs` = 604800 WHERE `id` IN (38752, 16980);
 
 -- Add lost data
-DELETE FROM `creature` WHERE `guid` IN (85584, 85585, 85586);
+DELETE FROM `creature` WHERE `guid` in (85584, 85585, 85586);
 INSERT INTO `creature` (`guid`, `id`, `map`, `spawnMask`, `phaseMask`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecs`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `MovementType`, `npcflag`, `unit_flags`, `dynamicflags`) VALUES
 (85584, 29836, 604, 3, 1, 0, 0, 1851.12, 743.221, 135.951, 3.1629, 7200, 0, 0, 45516, 0, 0, 0, 0, 0),
 (85585, 29836, 604, 3, 1, 0, 0, 1874.55, 757.72, 136.039, 3.56345, 7200, 0, 0, 45516, 0, 0, 0, 0, 0),
@@ -158,7 +158,7 @@ INSERT INTO `smart_scripts` (`entryorguid`,`source_type`,`id`,`link`,`event_type
 (26917,0,1,1,38,0,100,0,0,2,0,0,66,0,0,0,0,0,0,1,0,0,0,0,0,0,0, 'On dataset 0 2 turn');
 
 -- Fix ICC blood princes loot
-UPDATE creature_template SET dynamicflags = 8 WHERE entry IN (37970, 38401, 38784, 38785);
+UPDATE creature_template set dynamicflags = 8 where entry in (37970, 38401, 38784, 38785);
 
 -- fix spawn for NPC 6090
 UPDATE `creature` SET position_x = "8603.88", position_y = "390.43" WHERE id = 6090;
@@ -171,3 +171,33 @@ UPDATE `item_loot_template` SET `ChanceOrQuestChance` = 10 WHERE `item` IN (3387
 DELETE FROM `gossip_menu_option` WHERE `menu_id` = 10368 AND `option_id` = 2;
 INSERT INTO `gossip_menu_option` (`menu_id`, `id`, `option_icon`, `option_text`, `option_id`, `npc_option_npcflag`, `action_menu_id`, `action_poi_id`, `box_coded`, `box_money`, `box_text`) 
  VALUES (10368, 0, 0, 'GOSSIP_OPTION_QUESTGIVER', 2, 2, 0, 0, 0, 0, NULL);
+
+-- Delete non-attackable flag from Army of the Dead Ghoul NPC (24207)
+UPDATE `creature_template` SET `unit_flags`=0 WHERE `entry` =24207;
+
+-- Fix gossips for Dread Captain DeMeza NPC (28048)
+DELETE FROM `conditions` WHERE `SourceGroup`=9647;
+INSERT INTO `conditions` (`SourceTypeOrReferenceId`, `SourceGroup`, `SourceEntry`, `ElseGroup`, `ConditionTypeOrReference`, `ConditionValue1`, `ConditionValue2`, `ConditionValue3`, `ErrorTextId`, `ScriptName`, `Comment`) VALUES
+(14, 9647, 13059, 0, 11, 50517, 0, 0, 0, '', 'Pirates Day: DeMeza gossip'),
+(14, 9647, 13065, 0, 1, 50517, 0, 0, 0, '', 'Pirates Day: DeMeza gossip'),
+(15, 9647, 0, 0, 11, 50517, 0, 0, 0, '', 'Pirates Day: DeMeza gossip');
+
+-- Battered Hilt quest chains fixes
+-- Quests 20438,24556
+DELETE FROM gameobject WHERE id=201384;
+SET @ENTRY := 36856;
+SET @SOURCETYPE := 0;
+DELETE FROM `smart_scripts` WHERE `entryorguid`=@ENTRY AND `source_type`=@SOURCETYPE;
+UPDATE creature_template SET AIName="SmartAI" WHERE entry=@ENTRY LIMIT 1;
+INSERT INTO `smart_scripts` (`entryorguid`,`source_type`,`id`,`link`,`event_type`,`event_phase_mask`,`event_chance`,`event_flags`,`event_param1`,`event_param2`,`event_param3`,`event_param4`,`action_type`,`action_param1`,`action_param2`,`action_param3`,`action_param4`,`action_param5`,`action_param6`,`target_type`,`target_param1`,`target_param2`,`target_param3`,`target_x`,`target_y`,`target_z`,`target_o`,`comment`) VALUES
+(@ENTRY,@SOURCETYPE,0,0,62,0,100,0,10854,1,0,0,50,201384,60,0,0,0,0,8,0,0,0,5802.22,691.556,657.949,3.50801,"Arcanum Core - Script for quest http://wowhead.com/quest=20438"),
+(@ENTRY,@SOURCETYPE,1,0,62,0,100,0,10854,0,0,0,50,201384,60,0,0,0,0,8,0,0,0,5802.22,691.556,657.949,3.50801,"Arcanum Core - Script for quest http://wowhead.com/quest=24556");
+
+-- Quest 20439 (A Meeting With The Magister)
+SET @ENTRY := 36670;
+SET @SOURCETYPE := 0;
+DELETE FROM `smart_scripts` WHERE `entryorguid`=@ENTRY AND `source_type`=@SOURCETYPE;
+UPDATE creature_template SET AIName="SmartAI" WHERE entry=@ENTRY LIMIT 1;
+INSERT INTO `smart_scripts` (`entryorguid`,`source_type`,`id`,`link`,`event_type`,`event_phase_mask`,`event_chance`,`event_flags`,`event_param1`,`event_param2`,`event_param3`,`event_param4`,`action_type`,`action_param1`,`action_param2`,`action_param3`,`action_param4`,`action_param5`,`action_param6`,`target_type`,`target_param1`,`target_param2`,`target_param3`,`target_x`,`target_y`,`target_z`,`target_o`,`comment`) VALUES
+(@ENTRY,@SOURCETYPE,0,0,62,0,100,0,10857,1,0,0,56,49698,1,0,0,0,0,7,0,0,0,0.0,0.0,0.0,0.0,"Arcanum Core - Script for - http://wowhead.com/quest=20439");
+

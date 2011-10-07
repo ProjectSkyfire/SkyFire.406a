@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
@@ -20,9 +20,10 @@
 #ifndef _REALMLIST_H
 #define _REALMLIST_H
 
+#include "Common.h"
+
 #include <ace/Singleton.h>
 #include <ace/Null_Mutex.h>
-#include "Common.h"
 
 // Storage object for a realm
 struct Realm
@@ -58,13 +59,14 @@ public:
     uint32 size() const { return m_realms.size(); }
 
 private:
-    void UpdateRealms(bool init=false);
+    void UpdateRealms(bool init = false);
     void UpdateRealm(uint32 ID, const std::string& name, const std::string& address, uint32 port, uint8 icon, uint8 color, uint8 timezone, AccountTypes allowedSecurityLevel, float popu, uint32 build);
 
-    RealmMap m_realms;
+    RealmMap m_realms;                                  ///< Internal map of realms
     uint32   m_UpdateInterval;
     time_t   m_NextUpdateTime;
 };
 
 #define sRealmList ACE_Singleton<RealmList, ACE_Null_Mutex>::instance()
+
 #endif
