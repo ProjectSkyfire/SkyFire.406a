@@ -2930,7 +2930,6 @@ void SpellMgr::LoadSpellCustomAttr()
             case 25425: // Shoot
             case 45761: // Shoot
             case 42611: // Shoot
-            case 62374: // Pursued
             case 61588: // Blazing Harpoon
             case 52479: // Gift of the Harvester
                 spellInfo->MaxAffectedTargets = 1;
@@ -3117,6 +3116,9 @@ void SpellMgr::LoadSpellCustomAttr()
                 break;
             // ULDUAR SPELLS
             //
+            case 62374: // Pursued (Flame Leviathan)
+                spellInfo->EffectRadiusIndex[0] = 28;   // 50000yd
+                break;
             case 63342: // Focused Eyebeam Summon Trigger (Kologarn)
                 spellInfo->MaxAffectedTargets = 1;
                 break;
