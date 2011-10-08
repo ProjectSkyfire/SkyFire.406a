@@ -7603,6 +7603,21 @@ void Player::UpdateZone(uint32 newZone, uint32 newArea)
         sOutdoorPvPMgr->HandlePlayerLeaveZone(this, m_zoneUpdateId);
         sOutdoorPvPMgr->HandlePlayerEnterZone(this, newZone);
         SendInitWorldStates(newZone, newArea);              // only if really enters to new zone, not just area change, works strange...
+
+        // zone changed, check mount
+        bool allowMount = false;
+        if (InstanceTemplate const* mInstance = sObjectMgr->GetInstanceTemplate(GetMapId()))
+            allowMount = mInstance->AllowMount;
+        else if (MapEntry const* mEntry = sMapStore.LookupEntry(GetMapId()))
+            allowMount = !mEntry->IsDungeon() || mEntry->IsBattlegroundOrArena();
+
+        if (!allowMount)
+        {
+            RemoveAurasByType(SPELL_AURA_MOUNTED);
+
+            if (IsInDisallowedMountForm())
+                RemoveAurasByType(SPELL_AURA_MOD_SHAPESHIFT);
+        }
     }
 
     m_zoneUpdateId    = newZone;
