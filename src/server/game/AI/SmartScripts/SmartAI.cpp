@@ -464,15 +464,15 @@ void SmartAI::MoveInLineOfSight(Unit* who)
 {
     if (!who)
         return;
-    
+
     GetScript()->OnMoveInLineOfSight(who);
-    
+
     if (me->HasReactState(REACT_PASSIVE) || AssistPlayerInCombat(who))
         return;
 
     if (!CanAIAttack(who))
         return;
-    
+
     if (!me->canStartAttack(who, false))
         return;
 

@@ -1647,71 +1647,73 @@ class FlameLeviathanPursuedTargetSelector
 
 class spell_pursue : public SpellScriptLoader
 {
-    public:
-        spell_pursue() : SpellScriptLoader("spell_pursue") {}
+public:
+    spell_pursue() : SpellScriptLoader("spell_pursue") {}
 
-        class spell_pursue_SpellScript : public SpellScript
-        {           
-            bool Load()
-            {
-                _target = NULL;
-                return true;
-            }
+    class spell_pursue_SpellScript : public SpellScript
+    {
+        PrepareSpellScript(spell_pursue_SpellScript);
 
-            void FilterTargets(std::list<Unit*>& targets)
-            {
-                targets.remove_if(FlameLeviathanPursuedTargetSelector(GetCaster()));
-                if (targets.empty())
-                {
-                    if (Creature* caster = GetCaster()->ToCreature())
-                        caster->AI()->EnterEvadeMode();
-                }
-                else
-                {
-                    //! In the end, only one target should be selected
-                    _target = SelectRandomContainerElement(targets);
-                    FilterTargetsSubsequently(targets);
-                }
-            }
-
-            void FilterTargetsSubsequently(std::list<Unit*>& targets)
-            {               
-                targets.clear();
-                targets.push_back(_target);
-            }
-
-            void HandleScript(SpellEffIndex /*eff*/)
-            {
-                Creature* caster = GetCaster()->ToCreature();
-                if (!caster)
-                    return;
-
-                caster->AI()->AttackStart(GetHitUnit());    // Chase target
-
-                for (SeatMap::const_iterator itr = caster->GetVehicleKit()->Seats.begin(); itr != caster->GetVehicleKit()->Seats.end(); ++itr)
-                {
-                    if (IS_PLAYER_GUID(itr->second.Passenger))
-                    {
-                        caster->MonsterTextEmote(EMOTE_PURSUE, itr->second.Passenger, true);
-                        return;
-                    }
-                }
-            }
-
-            void Register()
-            {
-                OnUnitTargetSelect += SpellUnitTargetFn(spell_pursue_SpellScript::FilterTargets, EFFECT_0, TARGET_UNIT_SRC_AREA_ENEMY);
-                OnUnitTargetSelect += SpellUnitTargetFn(spell_pursue_SpellScript::FilterTargetsSubsequently, EFFECT_1, TARGET_UNIT_SRC_AREA_ENEMY);
-                OnEffectHitTarget += SpellEffectFn(spell_pursue_SpellScript::HandleScript, EFFECT_0, SPELL_EFFECT_APPLY_AURA);
-            }
-
-            Unit* _target;
-        };
-
-        SpellScript* GetSpellScript() const
+        bool Load()
         {
-            return new spell_pursue_SpellScript();
+            _target = NULL;
+            return true;
         }
+
+        void FilterTargets(std::list<Unit*>& targets)
+        {
+            targets.remove_if(FlameLeviathanPursuedTargetSelector(GetCaster()));
+            if (targets.empty())
+            {
+                if (Creature* caster = GetCaster()->ToCreature())
+                    caster->AI()->EnterEvadeMode();
+            }
+            else
+            {
+                //! In the end, only one target should be selected
+                _target = SelectRandomContainerElement(targets);
+                FilterTargetsSubsequently(targets);
+            }
+        }
+
+        void FilterTargetsSubsequently(std::list<Unit*>& targets)
+        {
+            targets.clear();
+            targets.push_back(_target);
+        }
+
+        void HandleScript(SpellEffIndex /*eff*/)
+        {
+            Creature* caster = GetCaster()->ToCreature();
+            if (!caster)
+                return;
+
+            caster->AI()->AttackStart(GetHitUnit());    // Chase target
+
+            for (SeatMap::const_iterator itr = caster->GetVehicleKit()->Seats.begin(); itr != caster->GetVehicleKit()->Seats.end(); ++itr)
+            {
+                if (IS_PLAYER_GUID(itr->second.Passenger))
+                {
+                    caster->MonsterTextEmote(EMOTE_PURSUE, itr->second.Passenger, true);
+                    return;
+                }
+            }
+        }
+
+        void Register()
+        {
+            OnUnitTargetSelect += SpellUnitTargetFn(spell_pursue_SpellScript::FilterTargets, EFFECT_0, TARGET_UNIT_SRC_AREA_ENEMY);
+            OnUnitTargetSelect += SpellUnitTargetFn(spell_pursue_SpellScript::FilterTargetsSubsequently, EFFECT_1, TARGET_UNIT_SRC_AREA_ENEMY);
+            OnEffectHitTarget += SpellEffectFn(spell_pursue_SpellScript::HandleScript, EFFECT_0, SPELL_EFFECT_APPLY_AURA);
+        }
+
+        Unit* _target;
+    };
+
+    SpellScript* GetSpellScript() const
+    {
+        return new spell_pursue_SpellScript();
+    }
 };
 
 void AddSC_boss_flame_leviathan()

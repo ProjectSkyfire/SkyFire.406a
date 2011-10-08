@@ -134,7 +134,7 @@ World::~World()
         delete command;
 
     VMAP::VMapFactory::clear();
-	
+
     // Clean up character name data
     for (std::map<uint32, CharacterNameData*>::iterator itr = m_CharacterNameDataMap.begin(); itr != m_CharacterNameDataMap.end(); ++itr)
         delete itr->second;
@@ -1733,7 +1733,7 @@ void World::SetInitialWorldSettings()
 
     sLog->outString("Calculate random battleground reset time..." );
     InitRandomBGResetTime();
- 
+
     LoadCharacterNameData();
 
     // possibly enable db logging; avoid massive startup spam by doing it here.

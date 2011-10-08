@@ -511,7 +511,7 @@ struct CliCommandHolder
 };
 
 typedef UNORDERED_MAP<uint32, WorldSession*> SessionMap;
- 
+
 struct CharacterNameData
 {
     std::string m_name;
@@ -735,7 +735,7 @@ class World
         void ProcessStartEvent();
         void ProcessStopEvent();
         bool GetEventKill() const { return isEventKillStart; }
- 
+
         CharacterNameData *GetCharacterNameData(uint32 guid);
         void ReloadSingleCharacterNameData(uint32 guid);
 

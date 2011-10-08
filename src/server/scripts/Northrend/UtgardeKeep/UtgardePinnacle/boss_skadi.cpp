@@ -468,7 +468,7 @@ public:
         if (Creature* pSkadi = Unit::GetCreature((*pGO), m_pInstance->GetData64(DATA_SKADI_THE_RUTHLESS)))
         {
             if (((boss_skadi::boss_skadiAI*)pSkadi->GetAI())->Phase != FLYING)
-                return false;		
+                return false;
             player->CastSpell(pSkadi, SPELL_RAPID_FIRE, true);
         }
         return false;
