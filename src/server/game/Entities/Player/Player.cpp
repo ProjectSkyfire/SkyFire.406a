@@ -7618,6 +7618,80 @@ void Player::UpdateZone(uint32 newZone, uint32 newArea)
             if (IsInDisallowedMountForm())
                 RemoveAurasByType(SPELL_AURA_MOD_SHAPESHIFT);
         }
+        else
+        {
+            // Note:
+            // treat flying mounts as ground mounts in restricted flight area.
+            // flying mount or flight form will be reactivated when player entered a new zone:
+            //   if new zone is restricted flight area, flight effects will be suppressed,
+            //   if new zone is flight area, flight effects will be applied again.
+            // other restricted flight auras will be removed in UpdateAreaDependentAuras.
+
+            // Standard Mounts:
+            // with effect of SPELL_AURA_MOUNTED, effect amount is one of the following mount speed mod:
+            //  86457 Mount Speed Mod: Standard Ground Mount
+            //  86458 Mount Speed Mod: Epic Ground Mount
+            //   eff 0 SPELL_AURA_MOD_INCREASE_MOUNTED_SPEED
+            //  86459 Mount Speed Mod: Standard Flying Mount
+            //  86460 Mount Speed Mod: Epic Flying Mount
+            //  86461 Mount Speed Mod: Legendary Flying Mount
+            //   eff 0 SPELL_AURA_MOD_INCREASE_MOUNTED_SPEED
+            //   eff 1 SPELL_AURA_MOD_INCREASE_MOUNTED_FLIGHT_SPEED
+
+            // Special Mounts:
+            // with effect of SPELL_AURA_MOUNTED, SPELL_AURA_MOD_INCREASE_MOUNTED_SPEED (and SPELL_AURA_MOD_INCREASE_MOUNTED_FLIGHT_SPEED)
+            //  31700 Black Qiraji Battle Tank
+            //  44655 Flying Reindeer
+            //  64681 Loaned Gryphon
+            //  64761 Loaned Wind Rider
+            //   eff 0 SPELL_AURA_MOUNTED
+            //   eff 1 SPELL_AURA_MOD_INCREASE_MOUNTED_FLIGHT_SPEED
+            //   eff 2 SPELL_AURA_MOD_INCREASE_MOUNTED_SPEED
+
+            // Flight Forms:
+            // with effect of SPELL_AURA_MOD_SHAPESHIFT and SPELL_AURA_FLY
+            // 33943 Flight Form
+            // 40120 Swift Flight Form
+            //   eff 0 SPELL_AURA_MOD_SHAPESHIFT
+            //   eff 1 SPELL_AURA_MECHANIC_IMMUNITY
+            //   eff 2 SPELL_AURA_FLY
+
+            uint32 flyingMountSpellId = 0;
+            Unit::AuraEffectList const& mMounted = GetAuraEffectsByType(SPELL_AURA_MOUNTED);
+            for (Unit::AuraEffectList::const_iterator i = mMounted.begin(); i != mMounted.end(); ++i)
+            {
+                // Special mounts : mount aura has effect of SPELL_AURA_MOD_INCREASE_MOUNTED_FLIGHT_SPEED
+                SpellInfo const* spellInfo = (*i)->GetSpellInfo();
+                if (spellInfo && spellInfo->IsFlightAura())
+                    flyingMountSpellId = spellInfo->Id;     // reapply mount aura
+                // Standard mounts : effect amount is Mount Speed Mod spell id
+                if (uint32 spellId = (*i)->GetAmount())
+                {
+                    SpellInfo const *spellInfo = GetSpellInfo(spellId);
+                    if (spellInfo && spellInfo->IsFlightAura())
+                        flyingMountSpellId = spellInfo->Id; // reapply mount speed mod aura instead of mount aura
+                }
+            }
+            if (flyingMountSpellId)
+            {
+                sLog->outDebug(LOG_FILTER_SPELLS_AURAS, "Reactivate flying mount %u", flyingMountSpellId);
+                CastSpell(this, flyingMountSpellId, true);
+            }
+
+            uint32 flightFormSpellId = 0;
+            Unit::AuraEffectList const& mShapeshift = GetAuraEffectsByType(SPELL_AURA_MOD_SHAPESHIFT);
+            for (Unit::AuraEffectList::const_iterator i = mShapeshift.begin(); i != mShapeshift.end(); ++i)
+            {
+                SpellInfo const* spellInfo = (*i)->GetSpellInfo();
+                if (spellInfo && spellInfo->IsFlightAura())
+                    flightFormSpellId = spellInfo->Id;
+            }
+            if (flightFormSpellId)
+            {
+                sLog->outDebug(LOG_FILTER_SPELLS_AURAS, "Reactivate flight form %u", flightFormSpellId);
+                CastSpell(this, flightFormSpellId, true);
+            }
+        }
     }
 
     m_zoneUpdateId    = newZone;
