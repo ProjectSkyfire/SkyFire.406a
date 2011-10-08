@@ -182,7 +182,7 @@ public:
                 ShootTimer = 1500;
 
                 if (!me->IsWithinDist(me->getVictim(), ATTACK_DISTANCE))
-                    DoCast (me->getVictim(), SPELL_SHOOT);
+                    DoCast(me->getVictim(), SPELL_SHOOT);
             } else ShootTimer -= diff;
         }
     };

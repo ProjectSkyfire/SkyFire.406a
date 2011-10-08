@@ -232,14 +232,14 @@ public:
                 case 2:
                     me->SetStandState(UNIT_STAND_STATE_STAND);
                     //me->UpdateEntry(NPC_KOLTIRA_ALT); //unclear if we must update or not
-                    DoCast (me, SPELL_KOLTIRA_TRANSFORM);
+                    DoCast(me, SPELL_KOLTIRA_TRANSFORM);
                     me->LoadEquipment(me->GetEquipmentId());
                     break;
                 case 3:
                     SetEscortPaused(true);
                     me->SetStandState(UNIT_STAND_STATE_KNEEL);
                     DoScriptText(SAY_BREAKOUT2, me);
-                    DoCast (me, SPELL_ANTI_MAGIC_ZONE);  // cast again that makes bubble up
+                    DoCast(me, SPELL_ANTI_MAGIC_ZONE);  // cast again that makes bubble up
                     break;
                 case 4:
                     SetRun(true);
@@ -471,7 +471,7 @@ public:
         void EnterCombat(Unit* who)
         {
             DoScriptText(SAY_VALROTH2, me);
-            DoCast (who, SPELL_VALROTH_SMITE);
+            DoCast(who, SPELL_VALROTH_SMITE);
         }
 
         void UpdateAI(const uint32 diff)
@@ -479,21 +479,21 @@ public:
             if (Renew_timer <= diff)
             {
                 Shout();
-                DoCast (me, SPELL_RENEW);
+                DoCast(me, SPELL_RENEW);
                 Renew_timer = 1000 + rand()%5000;
             } else Renew_timer -= diff;
 
             if (Inquisitor_Penance_timer <= diff)
             {
                 Shout();
-                DoCast (me->getVictim(), SPELL_INQUISITOR_PENANCE);
+                DoCast(me->getVictim(), SPELL_INQUISITOR_PENANCE);
                 Inquisitor_Penance_timer = 2000 + rand()%5000;
             } else Inquisitor_Penance_timer -= diff;
 
             if (Valroth_Smite_timer <= diff)
             {
                 Shout();
-                DoCast (me->getVictim(), SPELL_VALROTH_SMITE);
+                DoCast(me->getVictim(), SPELL_VALROTH_SMITE);
                 Valroth_Smite_timer = 1000 + rand()%5000;
             } else Valroth_Smite_timer -= diff;
 

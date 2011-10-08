@@ -132,7 +132,7 @@ public:
             {
                 if (HealthBelowPct(20))
                 {
-                    DoCast (me, SPELL_HOLY_LIGHT);
+                    DoCast(me, SPELL_HOLY_LIGHT);
                     HolyLight_Timer = 20000;
                 }
             } else HolyLight_Timer -= diff;
@@ -141,7 +141,7 @@ public:
             {
                 if (HealthBelowPct(5))
                 {
-                    DoCast (me, SPELL_DIVINE_SHIELD);
+                    DoCast(me, SPELL_DIVINE_SHIELD);
                     DivineShield_Timer = 40000;
                 }
             } else DivineShield_Timer -= diff;

@@ -79,7 +79,7 @@ public:
             //Rend_Timer
             if (Rend_Timer <= Diff)
             {
-                DoCast (me->getVictim(), SPELL_REND);
+                DoCast(me->getVictim(), SPELL_REND);
                 Rend_Timer = 10000;
             }
             else
@@ -88,7 +88,7 @@ public:
             //Backhand_Timer
             if (Backhand_Timer <= Diff)
             {
-                DoCast (me->getVictim(), SPELL_BACKHAND);
+                DoCast(me->getVictim(), SPELL_BACKHAND);
                 Backhand_Timer = 10000;
             }
             else
@@ -99,7 +99,7 @@ public:
             {
                 if (Frenzy_Timer <= Diff)
                 {
-                    DoCast (me, SPELL_FRENZY);
+                    DoCast(me, SPELL_FRENZY);
                     DoScriptText(EMOTE_GENERIC_FRENZY_KILL, me);
 
                     Frenzy_Timer = 120000;

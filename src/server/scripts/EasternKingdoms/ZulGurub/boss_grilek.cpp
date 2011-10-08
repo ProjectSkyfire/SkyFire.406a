@@ -59,7 +59,7 @@ class boss_grilek : public CreatureScript
                 //Avartar_Timer
                 if (Avartar_Timer <= diff)
                 {
-                    DoCast (me, SPELL_AVARTAR);
+                    DoCast(me, SPELL_AVARTAR);
                     Unit* target = NULL;
 
                     target = SelectTarget(SELECT_TARGET_RANDOM, 1);
@@ -75,7 +75,7 @@ class boss_grilek : public CreatureScript
                 //GroundTremor_Timer
                 if (GroundTremor_Timer <= diff)
                 {
-                    DoCast (me->getVictim(), SPELL_GROUNDTREMOR);
+                    DoCast(me->getVictim(), SPELL_GROUNDTREMOR);
                     GroundTremor_Timer = 12000 + rand()%4000;
                 } else GroundTremor_Timer -= diff;
 

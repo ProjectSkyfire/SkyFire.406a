@@ -155,7 +155,7 @@ public:
                 switch (eventId)
                 {
                     case EVENT_QUAKE:
-                        DoCast (me->getVictim(), SPELL_QUAKE);
+                        DoCast(me->getVictim(), SPELL_QUAKE);
                         events.RescheduleEvent(EVENT_QUAKE, 5000 + rand()%5000);
                         return;
                 }
@@ -209,7 +209,7 @@ public:
                 {
                     case EVENT_FELL_FIREBALL:
                         if (Unit *target = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                            DoCast (target, SPELL_FELL_FIREBALL);
+                            DoCast(target, SPELL_FELL_FIREBALL);
                         events.RescheduleEvent(EVENT_FELL_FIREBALL, 1000);
                         return;
                 }
@@ -263,7 +263,7 @@ public:
                 {
                     case EVENT_ROCK_BORE:
                         if (Unit *target = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                            DoCast (target, SPELL_ROCK_BORE);
+                            DoCast(target, SPELL_ROCK_BORE);
                         events.RescheduleEvent(EVENT_ROCK_BORE, 1000);
                         return;
                 }
@@ -321,26 +321,26 @@ public:
                 {
                     case EVENT_MILL_FEAR:
                         if (Unit *target = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                            DoCast (target, SPELL_MILL_FEAR);
+                            DoCast(target, SPELL_MILL_FEAR);
                         events.RescheduleEvent(EVENT_MILL_FEAR, 10000);
                         return;
                     case EVENT_SHADOW_BOLT:
-                        DoCast (me->getVictim(), SPELL_SHADOW_BOLT);
+                        DoCast(me->getVictim(), SPELL_SHADOW_BOLT);
                         events.RescheduleEvent(EVENT_SHADOWBOLT, 1000);
                         return;
                     case EVENT_FROSTBOLT_VOLLEY:
                         if (Unit *target = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                            DoCast (target, SPELL_FROSTBOLT_VOLLEY);
+                            DoCast(target, SPELL_FROSTBOLT_VOLLEY);
                         events.RescheduleEvent(EVENT_FROSTBOLT_VOLLEY, rand()%15000);
                         return;
                     case EVENT_IMPENDING_DOOM:
                         if (Unit *target = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                            DoCast (target, SPELL_IMPENDING_DOOM);
+                            DoCast(target, SPELL_IMPENDING_DOOM);
                         events.RescheduleEvent(EVENT_IMPENDING_DOOM, rand()%15000);
                         return;
                     case EVENT_SHADOWFURY:
                         if (Unit *target = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                            DoCast (target, SPELL_SHADOWFURY);
+                            DoCast(target, SPELL_SHADOWFURY);
                         events.RescheduleEvent(SPELL_SHADOWFURY, 5000 + rand()%15000);
                         return;
                 }

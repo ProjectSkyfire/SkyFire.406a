@@ -94,7 +94,7 @@ class boss_renataki : public CreatureScript
                         if (target)
                         {
                             DoTeleportTo(target->GetPositionX(), target->GetPositionY(), target->GetPositionZ());
-                            DoCast (target, SPELL_AMBUSH);
+                            DoCast(target, SPELL_AMBUSH);
                         }
 
                         Ambushed         = true;
@@ -137,7 +137,7 @@ class boss_renataki : public CreatureScript
 
                     if (ThousandBlades_Timer <= diff)
                     {
-                        DoCast (me->getVictim(), SPELL_THOUSANDBLADES);
+                        DoCast(me->getVictim(), SPELL_THOUSANDBLADES);
                         ThousandBlades_Timer = 7000 + rand()%5000;
                     } else ThousandBlades_Timer -= diff;
                 }

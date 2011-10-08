@@ -131,28 +131,28 @@ public:
                 //MindBlast
                 if (MindBlast_Timer <= Diff)
                 {
-                    DoCast (me->getVictim(), SPELL_MINDBLAST);
+                    DoCast(me->getVictim(), SPELL_MINDBLAST);
                     MindBlast_Timer = 15000 + rand()%5000;
                 } else MindBlast_Timer -= Diff;
 
                 //CrusadersHammer
                 if (CrusadersHammer_Timer <= Diff)
                 {
-                    DoCast (me->getVictim(), SPELL_CRUSADERSHAMMER);
+                    DoCast(me->getVictim(), SPELL_CRUSADERSHAMMER);
                     CrusadersHammer_Timer = 12000;
                 } else CrusadersHammer_Timer -= Diff;
 
                 //CrusaderStrike
                 if (CrusaderStrike_Timer <= Diff)
                 {
-                    DoCast (me->getVictim(), SPELL_CRUSADERSTRIKE);
+                    DoCast(me->getVictim(), SPELL_CRUSADERSTRIKE);
                     CrusaderStrike_Timer = 15000;
                 } else CrusaderStrike_Timer -= Diff;
 
                 //HolyStrike
                 if (HolyStrike_Timer <= Diff)
                 {
-                    DoCast (me->getVictim(), SPELL_HOLYSTRIKE);
+                    DoCast(me->getVictim(), SPELL_HOLYSTRIKE);
                     HolyStrike_Timer = 15000;
                 } else HolyStrike_Timer -= Diff;
 
@@ -163,7 +163,7 @@ public:
                         me->InterruptNonMeleeSpells(false);
 
                     //restore hp, mana and stun
-                    DoCast (me, SPELL_BALNAZZARTRANSFORM);
+                    DoCast(me, SPELL_BALNAZZARTRANSFORM);
                     me->UpdateEntry(NPC_BALNAZZAR);
                     _bTransformed = true;
                 }
@@ -173,14 +173,14 @@ public:
                 //MindBlast
                 if (MindBlast_Timer <= Diff)
                 {
-                    DoCast (me->getVictim(), SPELL_MINDBLAST);
+                    DoCast(me->getVictim(), SPELL_MINDBLAST);
                     MindBlast_Timer = 15000 + rand()%5000;
                 } else MindBlast_Timer -= Diff;
 
                 //ShadowShock
                 if (ShadowShock_Timer <= Diff)
                 {
-                    DoCast (me->getVictim(), SPELL_SHADOWSHOCK);
+                    DoCast(me->getVictim(), SPELL_SHADOWSHOCK);
                     ShadowShock_Timer = 11000;
                 } else ShadowShock_Timer -= Diff;
 
@@ -188,7 +188,7 @@ public:
                 if (PsychicScream_Timer <= Diff)
                 {
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                        DoCast (target, SPELL_PSYCHICSCREAM);
+                        DoCast(target, SPELL_PSYCHICSCREAM);
 
                     PsychicScream_Timer = 20000;
                 } else PsychicScream_Timer -= Diff;
@@ -197,7 +197,7 @@ public:
                 if (DeepSleep_Timer <= Diff)
                 {
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                        DoCast (target, SPELL_SLEEP);
+                        DoCast(target, SPELL_SLEEP);
 
                     DeepSleep_Timer = 15000;
                 } else DeepSleep_Timer -= Diff;
@@ -205,7 +205,7 @@ public:
                 //MindControl
                 if (MindControl_Timer <= Diff)
                 {
-                    DoCast (me->getVictim(), SPELL_MINDCONTROL);
+                    DoCast(me->getVictim(), SPELL_MINDCONTROL);
                     MindControl_Timer = 15000;
                 } else MindControl_Timer -= Diff;
             }

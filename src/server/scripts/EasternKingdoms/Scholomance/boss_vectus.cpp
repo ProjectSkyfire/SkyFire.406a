@@ -67,7 +67,7 @@ public:
             //FireShield_Timer
             if (FireShield_Timer <= Diff)
             {
-                DoCast (me, SPELL_FIRESHIELD);
+                DoCast(me, SPELL_FIRESHIELD);
                 FireShield_Timer = 90000;
             }
             else
@@ -76,7 +76,7 @@ public:
             //BlastWave_Timer
             if (BlastWave_Timer <= Diff)
             {
-                DoCast (me->getVictim(), SPELL_BLAST_WAVE);
+                DoCast(me->getVictim(), SPELL_BLAST_WAVE);
                 BlastWave_Timer = 12000;
             }
             else
@@ -87,7 +87,7 @@ public:
             {
                 if (Frenzy_Timer <= Diff)
                 {
-                    DoCast (me, SPELL_FRENZY);
+                    DoCast(me, SPELL_FRENZY);
                     DoScriptText(EMOTE_GENERIC_FRENZY_KILL, me);
 
                     Frenzy_Timer = 24000;

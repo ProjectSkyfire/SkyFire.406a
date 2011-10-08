@@ -141,7 +141,7 @@ public:
 
         void EnterCombat(Unit* /*who*/)
         {
-            DoCast (me, SPELL_ESSENCEOFTHERED);
+            DoCast(me, SPELL_ESSENCEOFTHERED);
             DoZoneInCombat();
             me->SetHealth(me->CountPctFromMaxHealth(30));
             // now drop damage requirement to be able to take loot
@@ -174,7 +174,7 @@ public:
                             if (PlayerGUID && Unit::GetUnit((*me), PlayerGUID))
                             {
                                 AttackStart(Unit::GetUnit((*me), PlayerGUID));
-                                DoCast (me, SPELL_ESSENCEOFTHERED);
+                                DoCast(me, SPELL_ESSENCEOFTHERED);
                             }
                             SpeechTimer = 0;
                             DoingSpeech = false;
@@ -197,14 +197,14 @@ public:
             //Cleave_Timer
             if (Cleave_Timer <= diff)
             {
-                DoCast (me->getVictim(), SPELL_CLEAVE);
+                DoCast(me->getVictim(), SPELL_CLEAVE);
                 Cleave_Timer = 15000;
             } else Cleave_Timer -= diff;
 
             //FlameBreath_Timer
             if (FlameBreath_Timer <= diff)
             {
-                DoCast (me->getVictim(), SPELL_FLAMEBREATH);
+                DoCast(me->getVictim(), SPELL_FLAMEBREATH);
                 FlameBreath_Timer = urand(4000, 8000);
             } else FlameBreath_Timer -= diff;
 
@@ -240,7 +240,7 @@ public:
             //FireNova_Timer
             if (FireNova_Timer <= diff)
             {
-                DoCast (me->getVictim(), SPELL_FIRENOVA);
+                DoCast(me->getVictim(), SPELL_FIRENOVA);
                 FireNova_Timer = 5000;
             } else FireNova_Timer -= diff;
 
@@ -250,7 +250,7 @@ public:
                 //Only cast if we are behind
                 /*if (!me->HasInArc(M_PI, me->getVictim()))
                 {
-                DoCast (me->getVictim(), SPELL_TAILSWIPE);
+                DoCast(me->getVictim(), SPELL_TAILSWIPE);
                 }*/
 
                 TailSwipe_Timer = 20000;

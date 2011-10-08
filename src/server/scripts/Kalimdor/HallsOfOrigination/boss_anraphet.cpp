@@ -116,19 +116,19 @@ class boss_anraphet : public CreatureScript
                     {
                         case EVENT_ALPHA_BEAMS:
                             if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, true))
-                                DoCast (me->getVictim(), SPELL_ALPHA_BEAMS);
+                                DoCast(me->getVictim(), SPELL_ALPHA_BEAMS);
                                 events.ScheduleEvent(EVENT_ALPHA_BEAMS, 1000);
                             break;
                         case EVENT_CRUMBLING_RUIN:
-                            DoCast (me->getVictim(), SPELL_CRUMBLING_RUIN);
+                            DoCast(me->getVictim(), SPELL_CRUMBLING_RUIN);
                             events.ScheduleEvent(EVENT_CRUMBLING_RUIN, urand(10000, 16000));
                             break;
                         case EVENT_NEMESIS_STRIKE:
-                            DoCast (me->getVictim(), SPELL_NEMESIS_STRIKE);
+                            DoCast(me->getVictim(), SPELL_NEMESIS_STRIKE);
                             events.ScheduleEvent(EVENT_NEMESIS_STRIKE, 2000);
                             break;
                         case EVENT_OMEGA_STANCE:
-                            DoCast (me, SPELL_OMEGA_STANCE);
+                            DoCast(me, SPELL_OMEGA_STANCE);
                             events.ScheduleEvent(EVENT_OMEGA_STANCE, 14000);
                             break;
                         default:

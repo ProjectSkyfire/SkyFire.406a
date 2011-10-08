@@ -189,28 +189,28 @@ public:
 
                 if (uiBlastWaveTimer <= uiDiff)
                 {
-                    DoCast (me->getVictim(), SPELL_BLAST_WAVE);
+                    DoCast(me->getVictim(), SPELL_BLAST_WAVE);
                     uiBlastWaveTimer = urand(7000, 9000);
                 }
                 else uiBlastWaveTimer -= uiDiff;
 
                 if (uiFireBlastTimer <= uiDiff)
                 {
-                    DoCast (me->getVictim(), SPELL_FIRE_BLAST);
+                    DoCast(me->getVictim(), SPELL_FIRE_BLAST);
                     uiFireBlastTimer = urand(3000, 6000);
                 }
                 else uiFireBlastTimer -= uiDiff;
 
                 if (uiFireBallTimer <= uiDiff)
                 {
-                    DoCast (me->getVictim(), SPELL_FIREBALL);
+                    DoCast(me->getVictim(), SPELL_FIREBALL);
                     uiFireBallTimer  = urand(11000, 13000);
                 }
                 else uiFireBallTimer -= uiDiff;
 
                 if (uiSpiritOfRunnTimer <= uiDiff && buffed == false)
                 {
-                    DoCast (me, SPELL_RUNN);
+                    DoCast(me, SPELL_RUNN);
                     buffed = true;
                 }
                 else uiSpiritOfRunnTimer -= uiDiff;

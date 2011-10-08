@@ -61,7 +61,7 @@ class boss_magmadar : public CreatureScript
             void Reset()
             {
                 BossAI::Reset();
-                DoCast (me, SPELL_MAGMA_SPIT, true);
+                DoCast(me, SPELL_MAGMA_SPIT, true);
             }
 
             void EnterCombat(Unit* victim)
@@ -88,7 +88,7 @@ class boss_magmadar : public CreatureScript
                     {
                         case EVENT_FRENZY:
                             DoScriptText(EMOTE_FRENZY, me);
-                            DoCast (me, SPELL_FRENZY);
+                            DoCast(me, SPELL_FRENZY);
                             events.ScheduleEvent(EVENT_FRENZY, 15000);
                             break;
                         case EVENT_PANIC:
@@ -97,7 +97,7 @@ class boss_magmadar : public CreatureScript
                             break;
                         case EVENT_LAVA_BOMB:
                             if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true, -SPELL_LAVA_BOMB))
-                                DoCast (target, SPELL_LAVA_BOMB);
+                                DoCast(target, SPELL_LAVA_BOMB);
                             events.ScheduleEvent(EVENT_LAVA_BOMB, 12000);
                             break;
                         default:

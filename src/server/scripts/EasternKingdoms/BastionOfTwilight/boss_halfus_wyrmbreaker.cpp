@@ -99,13 +99,13 @@ public:
                 instance->SetData(DATA_HALFUS, NOT_STARTED);
                 if (instance->GetData(DATA_STORM_RIDER) == 1)
                 {
-                    DoCast (me, SPELL_SHADOW_WRAPPED);
+                    DoCast(me, SPELL_SHADOW_WRAPPED);
                     StormRider = true;
                 }
                 if (instance->GetData(DATA_THE_SLATE_DRAGON) == 1)
-                    DoCast (me, SPELL_MALEVOLENT_STRAKES);
+                    DoCast(me, SPELL_MALEVOLENT_STRAKES);
                 if (instance->GetData(DATA_NETHER_SCION) == 1)
-                    DoCast (me, SPELL_FRENZIED_ASSAULT);
+                    DoCast(me, SPELL_FRENZIED_ASSAULT);
             }
             me->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
             me->ApplySpellImmune(0, IMMUNITY_MECHANIC, MECHANIC_GRIP, true);
@@ -130,7 +130,7 @@ public:
             if (StormRider)
                 if (ShadowNovaTimer <= diff)
                 {
-                    DoCast (SPELL_SHADOW_NOVA);
+                    DoCast(SPELL_SHADOW_NOVA);
                     ShadowNovaTimer = urand(12000, 17000);
                 }
                 else
@@ -140,13 +140,13 @@ public:
                 if (FuriousRoarTimer <= diff)
                     if (FuriousRoarCount < 3)
                     {
-                        DoCast (SPELL_FURIOUS_ROAR);
+                        DoCast(SPELL_FURIOUS_ROAR);
                         ++FuriousRoarCount;
                         FuriousRoarTimer = 1500;
                     }
                     else
                     {
-                        DoCast (SPELL_SHADOW_NOVA);
+                        DoCast(SPELL_SHADOW_NOVA);
                         FuriousRoarCount = 0;
                         FuriousRoarTimer = urand(12000, 17000);
                     }
@@ -156,7 +156,7 @@ public:
             if (!Berserk)
                 if (BerserkTimer <= diff)
                 {
-                    DoCast (SPELL_BERSERK);
+                    DoCast(SPELL_BERSERK);
                     Berserk = true;
                 }
                 else

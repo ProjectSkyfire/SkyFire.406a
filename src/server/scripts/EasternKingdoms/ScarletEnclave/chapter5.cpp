@@ -539,7 +539,7 @@ public:
                     break;
                 case 2:
                     me->AddUnitMovementFlag(MOVEMENTFLAG_WALKING);
-                    DoCast (me, SPELL_THE_LIGHT_OF_DAWN);
+                    DoCast(me, SPELL_THE_LIGHT_OF_DAWN);
                     break;
                 case 3:
                 {
@@ -660,7 +660,7 @@ public:
 
                         case 4: // summon ghoul
                             // Dunno whats the summon spell, so workaround
-                            DoCast (me, 33271); // shack effect
+                            DoCast(me, 33271); // shack effect
                             Phase_timer = 500;
                             if (Summon_counter < ENCOUNTER_GHOUL_NUMBER)
                             {
@@ -678,7 +678,7 @@ public:
                             break;
 
                         case 5: // summon abomination
-                            DoCast (me, 33271); // shack effect
+                            DoCast(me, 33271); // shack effect
                             Phase_timer = 500;
                             if (Summon_counter < ENCOUNTER_ABOMINATION_NUMBER)
                             {
@@ -696,7 +696,7 @@ public:
                             break;
 
                         case 6: // summon warrior
-                            DoCast (me, 33271); // shack effect
+                            DoCast(me, 33271); // shack effect
                             Phase_timer = 500;
                             if (Summon_counter < ENCOUNTER_WARRIOR_NUMBER)
                             {
@@ -714,7 +714,7 @@ public:
                             break;
 
                         case 7: // summon warrior
-                            DoCast (me, 33271); // shack effect
+                            DoCast(me, 33271); // shack effect
                             Phase_timer = 500;
                             if (Summon_counter < ENCOUNTER_BEHEMOTH_NUMBER)
                             {
@@ -938,7 +938,7 @@ public:
 
                         case 33: // Darion supports to jump to lich king here
                             if (Unit::GetCreature(*me, LichKingGUID))
-                                DoCast (me, SPELL_MOGRAINE_CHARGE); // jumping charge
+                                DoCast(me, SPELL_MOGRAINE_CHARGE); // jumping charge
     //   doesn't make it looks well, so workarounds, Darion charges, looks better
                             me->SetSpeed(MOVE_RUN, 3.0f);
                             me->RemoveUnitMovementFlag(MOVEMENTFLAG_WALKING);
@@ -1351,31 +1351,31 @@ public:
             {
                 if (uiAnti_magic_zone <= diff)
                 {
-                    DoCast (me, SPELL_ANTI_MAGIC_ZONE1);
+                    DoCast(me, SPELL_ANTI_MAGIC_ZONE1);
                     uiAnti_magic_zone = 25000 + rand()%5000;
                 } else uiAnti_magic_zone -= diff;
 
                 if (Death_strike <= diff)
                 {
-                    DoCast (me->getVictim(), SPELL_DEATH_STRIKE);
+                    DoCast(me->getVictim(), SPELL_DEATH_STRIKE);
                     Death_strike = 5000 + rand()%5000;
                 } else Death_strike -= diff;
 
                 if (Death_embrace <= diff)
                 {
-                    DoCast (me->getVictim(), SPELL_DEATH_EMBRACE);
+                    DoCast(me->getVictim(), SPELL_DEATH_EMBRACE);
                     Death_embrace = 5000 + rand()%5000;
                 } else Death_embrace -= diff;
 
                 if (Icy_touch <= diff)
                 {
-                    DoCast (me->getVictim(), SPELL_ICY_TOUCH1);
+                    DoCast(me->getVictim(), SPELL_ICY_TOUCH1);
                     Icy_touch = 5000 + rand()%5000;
                 } else Icy_touch -= diff;
 
                 if (Unholy_blight <= diff)
                 {
-                    DoCast (me->getVictim(), SPELL_UNHOLY_BLIGHT);
+                    DoCast(me->getVictim(), SPELL_UNHOLY_BLIGHT);
                     Unholy_blight = 5000 + rand()%5000;
                 } else Unholy_blight -= diff;
 

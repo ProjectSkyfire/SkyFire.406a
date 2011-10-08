@@ -105,11 +105,11 @@ class boss_earthrager_ptah : public CreatureScript
                     {
                         case EVENT_FLAME_BOLT:
                             if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, true))
-                                DoCast (target, SPELL_FLAME_BOLT);
+                                DoCast(target, SPELL_FLAME_BOLT);
                                 events.ScheduleEvent(EVENT_FLAME_BOLT, 7500);
                             break;
                         case EVENT_RAGING_SMASH:
-                            DoCast (me->getVictim(), SPELL_RAGING_SMASH);
+                            DoCast(me->getVictim(), SPELL_RAGING_SMASH);
                             events.ScheduleEvent(EVENT_RAGING_SMASH, urand(4000, 10000));
                             break;
                         default:

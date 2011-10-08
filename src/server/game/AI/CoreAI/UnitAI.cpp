@@ -128,7 +128,7 @@ void UnitAI::DoCastToAllHostilePlayers(uint32 spellid, bool triggered)
         return;
 }
 
-void UnitAI::DoCast (uint32 spellId)
+void UnitAI::DoCast(uint32 spellId)
 {
     Unit* target = NULL;
     //sLog->outError("aggre %u %u", spellId, (uint32)AISpellInfo[spellId].target);

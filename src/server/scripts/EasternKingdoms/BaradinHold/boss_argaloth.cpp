@@ -61,13 +61,13 @@ class boss_argaloth: public CreatureScript
 
             if (me->GetHealthPct() < 66 && fel_firestorm_casted == 0)
             {
-                DoCast (SPELL_FEL_FIRESTORM);
+                DoCast(SPELL_FEL_FIRESTORM);
                 events.DelayEvents(3 *IN_MILLISECONDS);
                 fel_firestorm_casted = 1;
             }
             if (me->GetHealthPct() < 33 && fel_firestorm_casted == 1)
             {
-                DoCast (SPELL_FEL_FIRESTORM);
+                DoCast(SPELL_FEL_FIRESTORM);
                 events.DelayEvents(3 *IN_MILLISECONDS);
                 fel_firestorm_casted = 2;
             }
@@ -82,15 +82,15 @@ class boss_argaloth: public CreatureScript
                 switch (eventId)
                 {
                 case EVENT_CONSUMING_DARKNESS:
-                    DoCast (SPELL_CONSUMING_DARKNESS);
+                    DoCast(SPELL_CONSUMING_DARKNESS);
                     events.RescheduleEvent(EVENT_CONSUMING_DARKNESS, 22 *IN_MILLISECONDS);
                     break;
                 case EVENT_METEOR_SLASH:
-                    DoCast (SPELL_METEOR_SLASH);
+                    DoCast(SPELL_METEOR_SLASH);
                     events.RescheduleEvent(EVENT_METEOR_SLASH, 15 *IN_MILLISECONDS);
                     break;
                 case EVENT_BERSERK:
-                    DoCast (me, SPELL_BERSERK);
+                    DoCast(me, SPELL_BERSERK);
                     break;
                 }
             }

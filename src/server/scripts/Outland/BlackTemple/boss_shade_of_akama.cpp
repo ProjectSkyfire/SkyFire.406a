@@ -176,8 +176,8 @@ public:
                     {
                         me->GetMotionMaster()->Clear(false);
                         me->GetMotionMaster()->MoveIdle();
-                        DoCast (Shade, SPELL_SHADE_SOUL_CHANNEL, true);
-                        DoCast (Shade, SPELL_SHADE_SOUL_CHANNEL_2, true);
+                        DoCast(Shade, SPELL_SHADE_SOUL_CHANNEL, true);
+                        DoCast(Shade, SPELL_SHADE_SOUL_CHANNEL_2, true);
 
                         StartBanishing = true;
                     }
@@ -678,7 +678,7 @@ public:
                 if (Creature* Shade = Unit::GetCreature(*me, ShadeGUID))
                 {
                     me->SetTarget(ShadeGUID);
-                    DoCast (Shade, SPELL_AKAMA_SOUL_RETRIEVE);
+                    DoCast(Shade, SPELL_AKAMA_SOUL_RETRIEVE);
                     EndingTalkCount = 0;
                     SoulRetrieveTimer = 16000;
                 }
@@ -726,7 +726,7 @@ public:
                     {
                         if (CastSoulRetrieveTimer <= diff)
                         {
-                            DoCast (Shade, SPELL_AKAMA_SOUL_CHANNEL);
+                            DoCast(Shade, SPELL_AKAMA_SOUL_CHANNEL);
                             CastSoulRetrieveTimer = 500;
                         } else CastSoulRetrieveTimer -= diff;
                     }
@@ -862,13 +862,13 @@ public:
             {
                 Creature* Shade = Unit::GetCreature((*me), ShadeGUID);
                 if (Shade && Shade->isAlive())
-                    DoCast (Shade, SPELL_DESTRUCTIVE_POISON);
+                    DoCast(Shade, SPELL_DESTRUCTIVE_POISON);
                 DestructivePoisonTimer = 15000;
             } else DestructivePoisonTimer -= diff;
 
             if (LightningBoltTimer <= diff)
             {
-                DoCast (me->getVictim(), SPELL_LIGHTNING_BOLT);
+                DoCast(me->getVictim(), SPELL_LIGHTNING_BOLT);
                 LightningBoltTimer = 10000;
             } else LightningBoltTimer -= diff;
 

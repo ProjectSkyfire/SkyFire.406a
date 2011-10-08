@@ -397,7 +397,7 @@ public:
             {
                 me->AddThreat(target, 5000000.0f);
                 AttackStart(target);
-                DoCast (target, SPELL_CHARGE);
+                DoCast(target, SPELL_CHARGE);
                 me->MonsterTextEmote(EMOTE_SETS_GAZE_ON, target->GetGUID());
             }
         }
@@ -409,7 +409,7 @@ public:
                 if (!me->IsWithinDistInMap(Glaive, FLAME_ENRAGE_DISTANCE))
                 {
                     Glaive->InterruptNonMeleeSpells(true);
-                    DoCast (me, SPELL_FLAME_ENRAGE, true);
+                    DoCast(me, SPELL_FLAME_ENRAGE, true);
                     DoResetThreat();
                     Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0);
                     if (target && target->isAlive())
@@ -435,8 +435,8 @@ public:
 
             if (FlameBlastTimer <= diff)
             {
-                DoCast (me->getVictim(), SPELL_BLAZE_SUMMON, true); //appear at victim
-                DoCast (me->getVictim(), SPELL_FLAME_BLAST);
+                DoCast(me->getVictim(), SPELL_BLAZE_SUMMON, true); //appear at victim
+                DoCast(me->getVictim(), SPELL_FLAME_BLAST);
                 FlameBlastTimer = 15000; //10000 is official-like?
                 DoZoneInCombat(); //in case someone is revived
             } else FlameBlastTimer -= diff;
@@ -469,7 +469,7 @@ public:
         boss_illidan_stormrageAI(Creature* c) : ScriptedAI(c), Summons(me)
         {
             instance = c->GetInstanceScript();
-            DoCast (me, SPELL_DUAL_WIELD, true);
+            DoCast(me, SPELL_DUAL_WIELD, true);
         }
 
         InstanceScript* instance;
@@ -750,7 +750,7 @@ public:
 
             //Trigger->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
             me->SetTarget(Trigger->GetGUID());
-            DoCast (Trigger, SPELL_EYE_BLAST);
+            DoCast(Trigger, SPELL_EYE_BLAST);
         }
         void SummonFlamesOfAzzinoth()
         {
@@ -775,8 +775,8 @@ public:
         }
         void SummonMaiev()
         {
-            DoCast (me, SPELL_SHADOW_PRISON, true);
-            DoCast (me, 40403, true);
+            DoCast(me, SPELL_SHADOW_PRISON, true);
+            DoCast(me, 40403, true);
             if (!MaievGUID) // If Maiev cannot be summoned, reset the encounter and post some errors to the console.
             {
                 EnterEvadeMode();
@@ -813,7 +813,7 @@ public:
                         Glaive->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                         Glaive->SetDisplayId(11686);
                         Glaive->setFaction(me->getFaction());
-                        DoCast (Glaive, SPELL_THROW_GLAIVE2);
+                        DoCast(Glaive, SPELL_THROW_GLAIVE2);
                     }
                 }
                 Timer[EVENT_FLIGHT_SEQUENCE] = 700;
@@ -829,7 +829,7 @@ public:
                         Glaive->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                         Glaive->SetDisplayId(11686);
                         Glaive->setFaction(me->getFaction());
-                        DoCast (Glaive, SPELL_THROW_GLAIVE, true);
+                        DoCast(Glaive, SPELL_THROW_GLAIVE, true);
                     }
                 }
                 Timer[EVENT_FLIGHT_SEQUENCE] = 5000;
@@ -897,7 +897,7 @@ public:
                 me->RemoveAurasDueToSpell(DemonTransformation[TransformCount].unaura);
 
             if (DemonTransformation[TransformCount].aura)
-                DoCast (me, DemonTransformation[TransformCount].aura, true);
+                DoCast(me, DemonTransformation[TransformCount].aura, true);
 
             if (DemonTransformation[TransformCount].displayid)
                 me->SetDisplayId(DemonTransformation[TransformCount].displayid); // It's morphin time!
@@ -1004,7 +1004,7 @@ public:
                 case EVENT_BERSERK:
                     me->MonsterYell(SAY_ENRAGE, LANG_UNIVERSAL, 0);
                     DoPlaySoundToSet(me, SOUND_ENRAGE);
-                    DoCast (me, SPELL_BERSERK, true);
+                    DoCast(me, SPELL_BERSERK, true);
                     Timer[EVENT_BERSERK] = 5000;//The buff actually lasts forever.
                     break;
 
@@ -1022,19 +1022,19 @@ public:
 
                 case EVENT_SHEAR:
                     // no longer exists in 3.0f.2
-                    //DoCast (me->getVictim(), SPELL_SHEAR);
+                    //DoCast(me->getVictim(), SPELL_SHEAR);
                     Timer[EVENT_SHEAR] = 25000 + (rand()%16 * 1000);
                     break;
 
                 case EVENT_FLAME_CRASH:
-                    DoCast (me->getVictim(), SPELL_FLAME_CRASH);
+                    DoCast(me->getVictim(), SPELL_FLAME_CRASH);
                     Timer[EVENT_FLAME_CRASH] = 30000 + rand()%10000;
                     break;
 
                 case EVENT_PARASITIC_SHADOWFIEND:
                     {
                         if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 200, true))
-                            DoCast (target, SPELL_PARASITIC_SHADOWFIEND, true);
+                            DoCast(target, SPELL_PARASITIC_SHADOWFIEND, true);
                         Timer[EVENT_PARASITIC_SHADOWFIEND] = 35000 + rand()%10000;
                     }
                     break;
@@ -1044,13 +1044,13 @@ public:
                     break;
 
                 case EVENT_DRAW_SOUL:
-                    DoCast (me->getVictim(), SPELL_DRAW_SOUL);
+                    DoCast(me->getVictim(), SPELL_DRAW_SOUL);
                     Timer[EVENT_DRAW_SOUL] = 50000 + rand()%10000;
                     break;
 
                     //PHASE_NORMAL_2
                 case EVENT_AGONIZING_FLAMES:
-                    DoCast (SelectTarget(SELECT_TARGET_RANDOM, 0), SPELL_AGONIZING_FLAMES);
+                    DoCast(SelectTarget(SELECT_TARGET_RANDOM, 0), SPELL_AGONIZING_FLAMES);
                     Timer[EVENT_AGONIZING_FLAMES] = 0;
                     break;
 
@@ -1060,7 +1060,7 @@ public:
 
                     //PHASE_NORMAL_MAIEV
                 case EVENT_ENRAGE:
-                    DoCast (me, SPELL_ENRAGE);
+                    DoCast(me, SPELL_ENRAGE);
                     Timer[EVENT_ENRAGE] = 0;
                     break;
 
@@ -1075,12 +1075,12 @@ public:
                 switch (Event)
                 {
                 case EVENT_FIREBALL:
-                    DoCast (SelectTarget(SELECT_TARGET_RANDOM, 0), SPELL_FIREBALL);
+                    DoCast(SelectTarget(SELECT_TARGET_RANDOM, 0), SPELL_FIREBALL);
                     Timer[EVENT_FIREBALL] = 3000;
                     break;
 
                 case EVENT_DARK_BARRAGE:
-                    DoCast (SelectTarget(SELECT_TARGET_RANDOM, 0), SPELL_DARK_BARRAGE);
+                    DoCast(SelectTarget(SELECT_TARGET_RANDOM, 0), SPELL_DARK_BARRAGE);
                     Timer[EVENT_DARK_BARRAGE] = 0;
                     break;
 
@@ -1113,16 +1113,16 @@ public:
                         me->GetMotionMaster()->MoveChase(me->getVictim(), 30);
                     else
                         me->GetMotionMaster()->MoveIdle();
-                    DoCast (me->getVictim(), SPELL_SHADOW_BLAST);
+                    DoCast(me->getVictim(), SPELL_SHADOW_BLAST);
                     Timer[EVENT_SHADOW_BLAST] = 4000;
                     break;
                 case EVENT_SHADOWDEMON:
-                    DoCast (me, SPELL_SUMMON_SHADOWDEMON);
+                    DoCast(me, SPELL_SUMMON_SHADOWDEMON);
                     Timer[EVENT_SHADOWDEMON] = 0;
                     Timer[EVENT_FLAME_BURST] += 10000;
                     break;
                 case EVENT_FLAME_BURST:
-                    DoCast (me, SPELL_FLAME_BURST);
+                    DoCast(me, SPELL_FLAME_BURST);
                     Timer[EVENT_FLAME_BURST] = 15000;
                     break;
                 case EVENT_TRANSFORM_DEMON:
@@ -1258,7 +1258,7 @@ public:
             me->InterruptNonMeleeSpells(false);
             me->GetMotionMaster()->Clear(false);
             DoTeleportTo(x, y, z);
-            DoCast (me, SPELL_TELEPORT_VISUAL, true);
+            DoCast(me, SPELL_TELEPORT_VISUAL, true);
         }
 
         void BlinkToPlayer()
@@ -1319,21 +1319,21 @@ public:
                     }
                     break;
                 case EVENT_MAIEV_SHADOW_STRIKE:
-                    DoCast (me->getVictim(), SPELL_SHADOW_STRIKE);
+                    DoCast(me->getVictim(), SPELL_SHADOW_STRIKE);
                     Timer[EVENT_MAIEV_SHADOW_STRIKE] = 60000;
                     break;
                 case EVENT_MAIEV_TRAP:
                     if (Phase == PHASE_NORMAL_MAIEV)
                     {
                         BlinkToPlayer();
-                        DoCast (me, SPELL_CAGE_TRAP_SUMMON);
+                        DoCast(me, SPELL_CAGE_TRAP_SUMMON);
                         Timer[EVENT_MAIEV_TRAP] = 22000;
                     }
                     else
                     {
                         if (!me->IsWithinDistInMap(me->getVictim(), 40))
                             me->GetMotionMaster()->MoveChase(me->getVictim(), 30);
-                        DoCast (me->getVictim(), SPELL_THROW_DAGGER);
+                        DoCast(me->getVictim(), SPELL_THROW_DAGGER);
                         Timer[EVENT_MAIEV_THROW_DAGGER] = 2000;
                     }
                     break;
@@ -1516,7 +1516,7 @@ public:
             {
                 ChannelGUID = Channel->GetGUID();
                 Channel->SetDisplayId(11686); // Invisible but spell visuals can still be seen.
-                DoCast (Channel, SPELL_AKAMA_DOOR_FAIL);
+                DoCast(Channel, SPELL_AKAMA_DOOR_FAIL);
             }
 
             for (uint8 i = 0; i < 2; ++i)
@@ -1647,7 +1647,7 @@ public:
                 Timer = 2000;
                 break;
             case 2: // spirit help
-                DoCast (Channel, SPELL_AKAMA_DOOR_CHANNEL);
+                DoCast(Channel, SPELL_AKAMA_DOOR_CHANNEL);
                 Spirit[0]->CastSpell(Channel, SPELL_DEATHSWORN_DOOR_CHANNEL, false);
                 Spirit[1]->CastSpell(Channel, SPELL_DEATHSWORN_DOOR_CHANNEL, false);
                 Timer = 5000;
@@ -1754,7 +1754,7 @@ public:
                             EnterPhase(PHASE_TALK);
                         else
                         {
-                            DoCast (me->getVictim(), SPELL_CHAIN_LIGHTNING);
+                            DoCast(me->getVictim(), SPELL_CHAIN_LIGHTNING);
                             Timer = 30000;
                         }
                     }
@@ -1787,7 +1787,7 @@ public:
                 return;
 
             if (HealthBelowPct(20))
-                DoCast (me, SPELL_HEALING_POTION);
+                DoCast(me, SPELL_HEALING_POTION);
 
             DoMeleeAttackIfReady();
         }
@@ -1959,7 +1959,7 @@ void boss_illidan_stormrage::boss_illidan_stormrageAI::HandleTalkSequence()
         }
         break;
     case 15:
-        DoCast (me, SPELL_DEATH); // Animate his kneeling + stun him
+        DoCast(me, SPELL_DEATH); // Animate his kneeling + stun him
         Summons.DespawnAll();
         break;
     case 17:
@@ -2113,7 +2113,7 @@ public:
         void Reset()
         {
             TargetGUID = 0;
-            DoCast (me, SPELL_SHADOW_DEMON_PASSIVE, true);
+            DoCast(me, SPELL_SHADOW_DEMON_PASSIVE, true);
         }
 
         void JustDied(Unit* /*killer*/)
@@ -2132,12 +2132,12 @@ public:
             {
                 TargetGUID = me->getVictim()->GetGUID();
                 me->AddThreat(me->getVictim(), 10000000.0f);
-                DoCast (me->getVictim(), SPELL_PURPLE_BEAM, true);
-                DoCast (me->getVictim(), SPELL_PARALYZE, true);
+                DoCast(me->getVictim(), SPELL_PURPLE_BEAM, true);
+                DoCast(me->getVictim(), SPELL_PARALYZE, true);
             }
             // Kill our target if we're very close.
             if (me->IsWithinDistInMap(me->getVictim(), 3))
-                DoCast (me->getVictim(), SPELL_CONSUME_SOUL);
+                DoCast(me->getVictim(), SPELL_CONSUME_SOUL);
         }
     };
 };
@@ -2194,7 +2194,7 @@ public:
                 IllidanGUID = 0;
 
             CheckTimer = 5000;
-            DoCast (me, SPELL_SHADOWFIEND_PASSIVE, true);
+            DoCast(me, SPELL_SHADOWFIEND_PASSIVE, true);
         }
 
         void EnterCombat(Unit* /*who*/) { DoZoneInCombat(); }

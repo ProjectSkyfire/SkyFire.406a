@@ -733,7 +733,7 @@ public:
                 if (me->GetHealthPct() <= 30)
                 {
                     me->MonsterTextEmote(-106, 0);
-                    DoCast (me, SPELL_ENRAGE);
+                    DoCast(me, SPELL_ENRAGE);
                     tEnrage = CD_ENRAGE;
                 }
             }
@@ -814,7 +814,7 @@ public:
                 if (me->GetHealthPct() <= 30 && willCastEnrage)
                 {
                     me->MonsterTextEmote(-106, 0);
-                    DoCast (me, SPELL_ENRAGE);
+                    DoCast(me, SPELL_ENRAGE);
                     tEnrage = CD_ENRAGE;
                 }
             }
