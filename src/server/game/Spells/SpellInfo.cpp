@@ -1608,7 +1608,7 @@ SpellCastResult SpellInfo::CheckShapeshift(uint32 form) const
     return SPELL_CAST_OK;
 }
 
-SpellCastResult SpellInfo::CheckLocation(uint32 map_id, uint32 zone_id, uint32 area_id, Player const* player) const
+SpellCastResult SpellInfo::CheckLocation(uint32 map_id, uint32 zone_id, uint32 area_id, Player const* player, uint8 effMask) const
 {
     // normal case
     if (AreaGroupId > 0)
@@ -1727,7 +1727,12 @@ SpellCastResult SpellInfo::CheckLocation(uint32 map_id, uint32 zone_id, uint32 a
     // aura limitations
     for (uint8 i = 0; i < MAX_SPELL_EFFECTS; ++i)
     {
-        if (!Effects[i].IsAura())
+        // check only affected aura effects.
+        // e.g.:
+        // if a player in flying mount entered a non-flight area,
+        // the mount speed mod aura will be re-applied with flight effect removed (suppressed),
+        // in this case, the new applied speed mod aura (with ground mount speed mod only) should not be removed.
+        if (!(effMask & (1<<i)) || !Effects[i].IsAura())
             continue;
         switch (Effects[i].ApplyAuraName)
         {
