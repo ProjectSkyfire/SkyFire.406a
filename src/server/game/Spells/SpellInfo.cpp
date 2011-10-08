@@ -1326,6 +1326,16 @@ bool SpellInfo::IsMultiSlotAura() const
     return IsPassive() || Id == 44413;
 }
 
+bool SpellInfo::IsFlightAura() const
+{
+    for (uint8 i = 0; i < MAX_SPELL_EFFECTS; ++i)
+        if (Effects[i].IsAura()
+            && (Effects[i].ApplyAuraName == SPELL_AURA_FLY
+            || Effects[i].ApplyAuraName == SPELL_AURA_MOD_INCREASE_MOUNTED_FLIGHT_SPEED))
+            return true;
+    return false;
+}
+
 bool SpellInfo::IsDeathPersistent() const
 {
     return AttributesEx3 & SPELL_ATTR3_DEATH_PERSISTENT;
@@ -1724,7 +1734,7 @@ SpellCastResult SpellInfo::CheckLocation(uint32 map_id, uint32 zone_id, uint32 a
             case SPELL_AURA_MOD_INCREASE_MOUNTED_FLIGHT_SPEED:
             case SPELL_AURA_FLY:
             {
-                if (player && !player->IsKnowHowFlyIn(map_id, zone_id))
+                if (player && !player->IsKnowHowFlyIn(map_id, zone_id, Id))
                     return SPELL_FAILED_INCORRECT_AREA;
             }
         }

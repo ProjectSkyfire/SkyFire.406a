@@ -500,6 +500,7 @@ public:
     bool IsStackableWithRanks() const;
     bool IsPassiveStackableWithRanks() const;
     bool IsMultiSlotAura() const;
+    bool IsFlightAura() const;
     bool IsDeathPersistent() const;
     bool IsRequiringDeadTarget() const;
     bool IsAllowingDeadTarget() const;
