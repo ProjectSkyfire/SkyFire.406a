@@ -84,7 +84,7 @@ public:
             if (FrighteningShoutTimer <= diff)
             {
                 DoCast(me->getVictim(), SPELL_FRIGHTENING_SHOUT);
-                FrighteningShoutTimer = urand(10 *I N_MILLISECONDS, 15 * IN_MILLISECONDS);
+                FrighteningShoutTimer = urand(10 * IN_MILLISECONDS, 15 * IN_MILLISECONDS);
             } else FrighteningShoutTimer -= diff;
 
             if (Whirlwind1Timer <= diff)
