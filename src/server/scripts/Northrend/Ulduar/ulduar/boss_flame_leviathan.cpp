@@ -1651,8 +1651,12 @@ class spell_pursue : public SpellScriptLoader
         spell_pursue() : SpellScriptLoader("spell_pursue") {}
 
         class spell_pursue_SpellScript : public SpellScript
-        {
-            PrepareSpellScript(spell_pursue_SpellScript);
+        {           
+            bool Load()
+            {
+                _target = NULL;
+                return true;
+            }
 
             void FilterTargets(std::list<Unit*>& targets)
             {
@@ -1662,7 +1666,7 @@ class spell_pursue : public SpellScriptLoader
                     if (Creature* caster = GetCaster()->ToCreature())
                         caster->AI()->EnterEvadeMode();
                 }
-                else 
+                else
                 {
                     //! In the end, only one target should be selected
                     _target = SelectRandomContainerElement(targets);
@@ -1671,8 +1675,7 @@ class spell_pursue : public SpellScriptLoader
             }
 
             void FilterTargetsSubsequently(std::list<Unit*>& targets)
-            {
-                ASSERT(_target);
+            {               
                 targets.clear();
                 targets.push_back(_target);
             }
