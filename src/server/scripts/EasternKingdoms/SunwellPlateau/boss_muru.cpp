@@ -116,7 +116,7 @@ public:
     {
         boss_entropiusAI(Creature* creature) : ScriptedAI(creature), Summons(me)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
         }
 
         InstanceScript* instance;
@@ -215,7 +215,7 @@ public:
     {
         boss_muruAI(Creature* creature) : Scripted_NoMovementAI(creature), Summons(me)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
         }
 
         InstanceScript* instance;
@@ -379,7 +379,7 @@ public:
     {
         npc_muru_portalAI(Creature* creature) : Scripted_NoMovementAI(creature), Summons(me)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
         }
 
         InstanceScript* instance;
@@ -578,7 +578,7 @@ public:
     {
         npc_blackholeAI(Creature* creature) : ScriptedAI(creature)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
         }
 
         InstanceScript* instance;

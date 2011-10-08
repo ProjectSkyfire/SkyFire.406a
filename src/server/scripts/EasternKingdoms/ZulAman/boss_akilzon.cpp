@@ -76,7 +76,7 @@ class boss_akilzon : public CreatureScript
         {
             boss_akilzonAI(Creature* creature) : ScriptedAI(creature)
             {
-                instance = c->GetInstanceScript();
+                instance = creature->GetInstanceScript();
             }
             InstanceScript* instance;
 

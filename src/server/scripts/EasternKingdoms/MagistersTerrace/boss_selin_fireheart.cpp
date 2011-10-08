@@ -66,7 +66,7 @@ public:
     {
         boss_selin_fireheartAI(Creature* creature) : ScriptedAI(creature)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
 
             Crystals.clear();
             //GUIDs per instance is static, so we only need to load them once.

@@ -81,7 +81,7 @@ public:
     {
         boss_brutallusAI(Creature* creature) : ScriptedAI(creature)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
             Intro = true;
         }
 

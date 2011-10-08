@@ -84,9 +84,9 @@ public:
     {
         boss_vaelAI(Creature* creature) : ScriptedAI(creature)
         {
-            c->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
-            c->setFaction(35);
-            c->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+            creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
+            creature->setFaction(35);
+            creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
         }
 
         uint64 PlayerGUID;

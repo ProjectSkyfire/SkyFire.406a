@@ -114,7 +114,7 @@ public:
         {
             RaidWiped = false;
             EventId = 0;
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
         }
 
         InstanceScript* instance;
@@ -174,13 +174,13 @@ public:
                     TalkCount = 0;
                     SetEscortPaused(true);
 
-                    if (Creature* pSpotlight = me->SummonCreature(CREATURE_SPOTLIGHT,
+                    if (Creature* spotlight = me->SummonCreature(CREATURE_SPOTLIGHT,
                         me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), 0.0f,
                         TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 60000))
                     {
-                        pSpotlight->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-                        pSpotlight->CastSpell(pSpotlight, SPELL_SPOTLIGHT, false);
-                        SpotlightGUID = pSpotlight->GetGUID();
+                        spotlight->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                        spotlight->CastSpell(spotlight, SPELL_SPOTLIGHT, false);
+                        SpotlightGUID = spotlight->GetGUID();
                     }
                     break;
                 case 8:
@@ -274,8 +274,8 @@ public:
                 {
                     if (TalkCount > 3)
                     {
-                        if (Creature* pSpotlight = Unit::GetCreature(*me, SpotlightGUID))
-                            pSpotlight->DespawnOrUnsummon();
+                        if (Creature* spotlight = Unit::GetCreature(*me, SpotlightGUID))
+                            spotlight->DespawnOrUnsummon();
 
                         SetEscortPaused(false);
                         return;
@@ -327,7 +327,7 @@ public:
     bool OnGossipSelect(Player* player, Creature* creature, uint32 /*uiSender*/, uint32 Action)
     {
         player->PlayerTalkClass->ClearMenus();
-        npc_barnesAI* pBarnesAI = CAST_AI(npc_barnes::npc_barnesAI, creature->AI());
+        npc_barnesAI* barnesAI = CAST_AI(npc_barnes::npc_barnesAI, creature->AI());
 
         switch (Action)
         {
@@ -337,21 +337,21 @@ public:
                 break;
             case GOSSIP_ACTION_INFO_DEF+2:
                 player->CLOSE_GOSSIP_MENU();
-                pBarnesAI->StartEvent();
+                barnesAI->StartEvent();
                 break;
             case GOSSIP_ACTION_INFO_DEF+3:
                 player->CLOSE_GOSSIP_MENU();
-                pBarnesAI->EventId = EVENT_OZ;
+                barnesAI->EventId = EVENT_OZ;
                 sLog->outString("TSCR: player (GUID " UI64FMTD ") manually set Opera event to EVENT_OZ", player->GetGUID());
                 break;
             case GOSSIP_ACTION_INFO_DEF+4:
                 player->CLOSE_GOSSIP_MENU();
-                pBarnesAI->EventId = EVENT_HOOD;
+                barnesAI->EventId = EVENT_HOOD;
                 sLog->outString("TSCR: player (GUID " UI64FMTD ") manually set Opera event to EVENT_HOOD", player->GetGUID());
                 break;
             case GOSSIP_ACTION_INFO_DEF+5:
                 player->CLOSE_GOSSIP_MENU();
-                pBarnesAI->EventId = EVENT_RAJ;
+                barnesAI->EventId = EVENT_RAJ;
                 sLog->outString("TSCR: player (GUID " UI64FMTD ") manually set Opera event to EVENT_RAJ", player->GetGUID());
                 break;
         }
@@ -375,9 +375,9 @@ public:
                     player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, OZ_GM_GOSSIP3, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
                 }
 
-                if (npc_barnesAI* pBarnesAI = CAST_AI(npc_barnes::npc_barnesAI, creature->AI()))
+                if (npc_barnesAI* barnesAI = CAST_AI(npc_barnes::npc_barnesAI, creature->AI()))
                 {
-                    if (!pBarnesAI->RaidWiped)
+                    if (!barnesAI->RaidWiped)
                         player->SEND_GOSSIP_MENU(8970, creature->GetGUID());
                     else
                         player->SEND_GOSSIP_MENU(8975, creature->GetGUID());
@@ -474,7 +474,7 @@ public:
     {
         npc_image_of_medivhAI(Creature* creature) : ScriptedAI(creature)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
         }
 
         InstanceScript* instance;

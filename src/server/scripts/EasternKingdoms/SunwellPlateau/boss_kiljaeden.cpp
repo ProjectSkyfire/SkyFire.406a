@@ -254,7 +254,7 @@ public:
     {
         boss_kalecgos_kjAI(Creature* creature) : ScriptedAI(creature)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
         }
 
         InstanceScript* instance;
@@ -407,7 +407,7 @@ public:
     {
         mob_kiljaeden_controllerAI(Creature* creature) : Scripted_NoMovementAI(creature), summons(me)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
         }
 
         InstanceScript* instance;
@@ -506,7 +506,7 @@ public:
     {
         boss_kiljaedenAI(Creature* creature) : Scripted_NoMovementAI(creature), summons(me)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
         }
 
         InstanceScript* instance;
@@ -919,7 +919,7 @@ public:
     {
         mob_hand_of_the_deceiverAI(Creature* creature) : ScriptedAI(creature)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
         }
 
         InstanceScript* instance;
@@ -1174,7 +1174,7 @@ public:
     {
         mob_shield_orbAI(Creature* creature) : ScriptedAI(creature)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
         }
 
         InstanceScript* instance;
@@ -1204,13 +1204,13 @@ public:
             {
                 if (bClockwise)
                 {
-                    y = my - r * sin(creature);
-                    x = mx - r * cos(creature);
+                    y = my - r * sin(c);
+                    x = mx - r * cos(c);
                 }
                 else
                 {
-                    y = my + r * sin(creature);
-                    x = mx + r * cos(creature);
+                    y = my + r * sin(c);
+                    x = mx + r * cos(c);
                 }
                 bPointReached = false;
                 uiCheckTimer = 1000;

@@ -54,7 +54,7 @@ class boss_hakkar : public CreatureScript
         {
             boss_hakkarAI(Creature* creature) : ScriptedAI(creature)
             {
-                instance = c->GetInstanceScript();
+                instance = creature->GetInstanceScript();
             }
 
             InstanceScript* instance;

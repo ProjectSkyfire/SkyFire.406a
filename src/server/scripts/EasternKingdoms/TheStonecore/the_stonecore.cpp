@@ -126,7 +126,7 @@ public:
 
     struct mob_crystalspawn_giantAI : public ScriptedAI
     {
-        mob_crystalspawn_giantAI(Creature *c) : ScriptedAI(creature) { }
+        mob_crystalspawn_giantAI(Creature* creature) : ScriptedAI(creature) { }
 
         EventMap events;
 
@@ -179,7 +179,7 @@ public:
 
     struct mob_imppAI : public ScriptedAI
     {
-        mob_imppAI(Creature *c) : ScriptedAI(creature) {}
+        mob_imppAI(Creature* creature) : ScriptedAI(creature) {}
 
         EventMap events;
 
@@ -233,7 +233,7 @@ public:
 
     struct mob_rock_borerAI : public ScriptedAI
     {
-        mob_rock_borerAI(Creature *c) : ScriptedAI(creature) {}
+        mob_rock_borerAI(Creature* creature) : ScriptedAI(creature) {}
 
         EventMap events;
 
@@ -287,7 +287,7 @@ public:
 
     struct mob_millhouse_manastormAI : public ScriptedAI
     {
-        mob_millhouse_manastormAI(Creature *c) : ScriptedAI(creature) {}
+        mob_millhouse_manastormAI(Creature* creature) : ScriptedAI(creature) {}
 
         EventMap events;
 

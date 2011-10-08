@@ -100,7 +100,7 @@ public:
     {
         boss_sacrolashAI(Creature* creature) : ScriptedAI(creature)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
         }
 
         InstanceScript* instance;
@@ -357,7 +357,7 @@ public:
     {
         boss_alythessAI(Creature* creature) : Scripted_NoMovementAI(creature)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
             IntroStepCounter = 10;
         }
 

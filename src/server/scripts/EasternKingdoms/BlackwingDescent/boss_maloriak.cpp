@@ -47,19 +47,19 @@ public:
 
         InstanceScript* instance;
 
-        uint32 uiConsumingFlames;
-        uint32 uiArcaneStorm;
-        uint32 uiScorchingBlast;
-        uint32 uiRemedy;
+        uint32 ConsumingFlames;
+        uint32 ArcaneStorm;
+        uint32 ScorchingBlast;
+        uint32 Remedy;
 
         void Reset()
         {
             instance->SetData(DATA_MALORIAK, NOT_STARTED);
 
-            uiConsumingFlames = 5*IN_MILLISECONDS;
-            uiArcaneStorm = 15*IN_MILLISECONDS;
-            uiScorchingBlast = 120*IN_MILLISECONDS;
-            uiRemedy = 30*IN_MILLISECONDS;
+            ConsumingFlames = 5*IN_MILLISECONDS;
+            ArcaneStorm = 15*IN_MILLISECONDS;
+            ScorchingBlast = 120*IN_MILLISECONDS;
+            Remedy = 30*IN_MILLISECONDS;
         }
 
         void EnterCombat(Unit* /*who*/)
@@ -82,35 +82,35 @@ public:
             if (!UpdateVictim())
                 return;
 
-            if (uiConsumingFlames <= Diff)
+            if (ConsumingFlames <= Diff)
             {
                 if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                     me->CastSpell(target, SPELL_CONSUMING_FLAMES, true);
 
-                uiConsumingFlames = urand(10*IN_MILLISECONDS, 12*IN_MILLISECONDS);
-            } else uiConsumingFlames -= Diff;
+                ConsumingFlames = urand(10*IN_MILLISECONDS, 12*IN_MILLISECONDS);
+            } else ConsumingFlames -= Diff;
 
-            if (uiArcaneStorm <= Diff)
+            if (ArcaneStorm <= Diff)
             {
                 if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                     me->CastSpell(target, SPELL_ARCANE_STORM, true);
 
-                uiArcaneStorm = urand(15*IN_MILLISECONDS, 17*IN_MILLISECONDS);
-            } else uiArcaneStorm -= Diff;
+                ArcaneStorm = urand(15*IN_MILLISECONDS, 17*IN_MILLISECONDS);
+            } else ArcaneStorm -= Diff;
 
-            if (uiScorchingBlast <= Diff)
+            if (ScorchingBlast <= Diff)
             {
                 me->CastSpell(me->getVictim(), SPELL_SCORCHING_BLAST, true);
 
-                uiScorchingBlast = urand(120*IN_MILLISECONDS, 130*IN_MILLISECONDS);
-            } else uiScorchingBlast -= Diff;
+                ScorchingBlast = urand(120*IN_MILLISECONDS, 130*IN_MILLISECONDS);
+            } else ScorchingBlast -= Diff;
 
-            if (uiRemedy <= Diff)
+            if (Remedy <= Diff)
             {
                 me->CastSpell(me, SPELL_REMEDY, true);
 
-                uiRemedy = urand(30*IN_MILLISECONDS, 32*IN_MILLISECONDS);
-            } else uiRemedy -= Diff;
+                Remedy = urand(30*IN_MILLISECONDS, 32*IN_MILLISECONDS);
+            } else Remedy -= Diff;
 
             DoMeleeAttackIfReady();
         }

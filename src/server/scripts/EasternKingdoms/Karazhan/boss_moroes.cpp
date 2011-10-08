@@ -79,7 +79,7 @@ public:
             {
                 AddId[i] = 0;
             }
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
         }
 
         InstanceScript* instance;
@@ -327,7 +327,7 @@ struct boss_moroes_guestAI : public ScriptedAI
         for (uint8 i = 0; i < 4; ++i)
             GuestGUID[i] = 0;
 
-        instance = c->GetInstanceScript();
+        instance = creature->GetInstanceScript();
     }
 
     void Reset()

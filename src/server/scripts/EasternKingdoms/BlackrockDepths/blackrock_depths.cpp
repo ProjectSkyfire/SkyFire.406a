@@ -152,7 +152,7 @@ public:
     {
         npc_grimstoneAI(Creature* creature) : npc_escortAI(creature)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
             MobSpawnId = rand()%6;
         }
 
@@ -774,7 +774,7 @@ public:
     {
         npc_marshal_windsorAI(Creature* creature) : npc_escortAI(creature)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
         }
 
         void WaypointReached(uint32 i)
@@ -1256,7 +1256,7 @@ public:
     {
         npc_rocknotAI(Creature* creature) : npc_escortAI(creature)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
         }
 
         InstanceScript* instance;

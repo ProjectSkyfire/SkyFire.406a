@@ -186,7 +186,7 @@ class mob_healing_ward : public CreatureScript
         {
             mob_healing_wardAI(Creature* creature) : ScriptedAI(creature)
             {
-                instance = c->GetInstanceScript();
+                instance = creature->GetInstanceScript();
             }
 
             uint32 Heal_Timer;

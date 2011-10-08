@@ -109,7 +109,7 @@ public:
     {
         npc_bartlebyAI(Creature* creature) : ScriptedAI(creature)
         {
-            NormalFaction = c->getFaction();
+            NormalFaction = creature->getFaction();
         }
 
         uint32 NormalFaction;
@@ -180,7 +180,7 @@ public:
     {
         npc_dashel_stonefistAI(Creature* creature) : ScriptedAI(creature)
         {
-            NormalFaction = c->getFaction();
+            NormalFaction = creature->getFaction();
         }
 
         uint32 NormalFaction;

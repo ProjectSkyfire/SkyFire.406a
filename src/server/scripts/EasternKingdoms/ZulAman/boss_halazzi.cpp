@@ -88,7 +88,7 @@ class boss_halazzi : public CreatureScript
         {
             boss_halazziAI(Creature* creature) : ScriptedAI(creature)
             {
-                instance = c->GetInstanceScript();
+                instance = creature->GetInstanceScript();
             }
 
             InstanceScript* instance;

@@ -123,13 +123,13 @@ public:
 
         InstanceScript* instance;
 
-        uint32 uiArcaneAnnihilatorTimer;
+        uint32 ArcaneAnnihilatorTimer;
 
         void Reset()
         {
             instance->SetData(DATA_OMNOTRON_DEFENSE_SYSTEM, NOT_STARTED);
 
-            uiArcaneAnnihilatorTimer = 5*IN_MILLISECONDS;
+            ArcaneAnnihilatorTimer = 5*IN_MILLISECONDS;
             me->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
             me->ApplySpellImmune(0, IMMUNITY_MECHANIC, MECHANIC_GRIP, true);
         }
@@ -154,13 +154,13 @@ public:
             if (!UpdateVictim())
                 return;
 
-            if (uiArcaneAnnihilatorTimer <= Diff)
+            if (ArcaneAnnihilatorTimer <= Diff)
             {
                 if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                     me->CastSpell(target, SPELL_ARCANE_ANNIHILATOR, true);
 
-                uiArcaneAnnihilatorTimer = urand(5*IN_MILLISECONDS, 7*IN_MILLISECONDS);
-            } else uiArcaneAnnihilatorTimer -= Diff;
+                ArcaneAnnihilatorTimer = urand(5*IN_MILLISECONDS, 7*IN_MILLISECONDS);
+            } else ArcaneAnnihilatorTimer -= Diff;
 
             DoMeleeAttackIfReady();
         }

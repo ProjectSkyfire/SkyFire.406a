@@ -67,7 +67,7 @@ class boss_thekal : public CreatureScript
         {
             boss_thekalAI(Creature* creature) : ScriptedAI(creature)
             {
-                instance = c->GetInstanceScript();
+                instance = creature->GetInstanceScript();
             }
 
             uint32 MortalCleave_Timer;
@@ -275,7 +275,7 @@ class mob_zealot_lorkhan : public CreatureScript
         {
             mob_zealot_lorkhanAI(Creature* creature) : ScriptedAI(creature)
             {
-                instance = c->GetInstanceScript();
+                instance = creature->GetInstanceScript();
             }
 
             uint32 Shield_Timer;
@@ -431,7 +431,7 @@ class mob_zealot_zath : public CreatureScript
         {
             mob_zealot_zathAI(Creature* creature) : ScriptedAI(creature)
             {
-                instance = c->GetInstanceScript();
+                instance = creature->GetInstanceScript();
             }
 
             uint32 SweepingStrikes_Timer;

@@ -44,17 +44,17 @@ public:
 
         InstanceScript* instance;
 
-        uint32 uiLavaSpewTimer;
-        uint32 uiMagmaSpitTimer;
-        uint32 uiLavaParasiteSummonTimer;
+        uint32 LavaSpewTimer;
+        uint32 MagmaSpitTimer;
+        uint32 LavaParasiteSummonTimer;
 
         void Reset()
         {
             instance->SetData(DATA_MAGMAW, NOT_STARTED);
 
-            uiLavaSpewTimer = 10*IN_MILLISECONDS;
-            uiMagmaSpitTimer = 14*IN_MILLISECONDS;
-            uiLavaParasiteSummonTimer = 30*IN_MILLISECONDS;
+            LavaSpewTimer = 10*IN_MILLISECONDS;
+            MagmaSpitTimer = 14*IN_MILLISECONDS;
+            LavaParasiteSummonTimer = 30*IN_MILLISECONDS;
 
             me->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
             me->ApplySpellImmune(0, IMMUNITY_MECHANIC, MECHANIC_GRIP, true);
@@ -91,29 +91,29 @@ public:
             if (!UpdateVictim())
                 return;
 
-            if (uiLavaSpewTimer <= Diff)
+            if (LavaSpewTimer <= Diff)
             {
                 if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                     me->CastSpell(target, SPELL_LAVA_SPEW, true);
 
-                uiLavaSpewTimer = urand(10*IN_MILLISECONDS, 12*IN_MILLISECONDS);
-            } else uiLavaSpewTimer -= Diff;
+                LavaSpewTimer = urand(10*IN_MILLISECONDS, 12*IN_MILLISECONDS);
+            } else LavaSpewTimer -= Diff;
 
-            if (uiMagmaSpitTimer <= Diff)
+            if (MagmaSpitTimer <= Diff)
             {
                 if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                     me->CastSpell(target, SPELL_MAGMA_SPIT , true);
 
-                uiMagmaSpitTimer = urand(12*IN_MILLISECONDS, 14*IN_MILLISECONDS);
-            } else uiMagmaSpitTimer -= Diff;
+                MagmaSpitTimer = urand(12*IN_MILLISECONDS, 14*IN_MILLISECONDS);
+            } else MagmaSpitTimer -= Diff;
 
-            if (uiLavaParasiteSummonTimer <= Diff)
+            if (LavaParasiteSummonTimer <= Diff)
             {
                 for (int i = 0; i < 2; ++i)
                     SummonCreatureWithRandomTarget(42321);
 
-                uiLavaParasiteSummonTimer = 30*IN_MILLISECONDS;
-            } else uiLavaParasiteSummonTimer -= Diff;
+                LavaParasiteSummonTimer = 30*IN_MILLISECONDS;
+            } else LavaParasiteSummonTimer -= Diff;
 
             DoMeleeAttackIfReady();
         }
@@ -134,11 +134,11 @@ public:
     {
         mobs_lava_parasiteAI(Creature* creature) : ScriptedAI(creature) { }
 
-        uint32 uiCheckDistanceTimer;
+        uint32 CheckDistanceTimer;
 
         void Reset()
         {
-            uiCheckDistanceTimer = 2*IN_MILLISECONDS;
+            CheckDistanceTimer = 2*IN_MILLISECONDS;
         }
 
         void EnterCombat(Unit* /*who*/) { }
@@ -152,12 +152,12 @@ public:
 
             if (me->IsWithinDistInMap(me->getVictim(), 2.0f))
             {
-                if (uiCheckDistanceTimer <= Diff)
+                if (CheckDistanceTimer <= Diff)
                 {
                     me->CastSpell(me->getVictim(), 94679 , true);
 
-                    uiCheckDistanceTimer = 86400*IN_MILLISECONDS;
-                } else uiCheckDistanceTimer -= Diff;
+                    CheckDistanceTimer = 86400*IN_MILLISECONDS;
+                } else CheckDistanceTimer -= Diff;
             }
 
             DoMeleeAttackIfReady();

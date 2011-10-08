@@ -33,25 +33,23 @@ public:
 
     struct instance_gnomeregan_InstanceMapScript : public InstanceScript
     {
-        instance_gnomeregan_InstanceMapScript(Map* map) : InstanceScript(map)
-        {
-        }
+        instance_gnomeregan_InstanceMapScript(Map* map) : InstanceScript(map) {}
 
         uint32 Encounter[MAX_ENCOUNTER];
 
-        uint64 uiCaveInLeftGUID;
-        uint64 uiCaveInRightGUID;
+        uint64 CaveInLeftGUID;
+        uint64 CaveInRightGUID;
 
-        uint64 uiBastmasterEmiShortfuseGUID;
+        uint64 BastmasterEmiShortfuseGUID;
 
         void Initialize()
         {
             memset(&Encounter, 0, sizeof(Encounter));
 
-            uiCaveInLeftGUID                = 0;
-            uiCaveInRightGUID               = 0;
+            CaveInLeftGUID                = 0;
+            CaveInRightGUID               = 0;
 
-            uiBastmasterEmiShortfuseGUID    = 0;
+            BastmasterEmiShortfuseGUID    = 0;
         }
 
         void Load(const char* in)
@@ -80,7 +78,7 @@ public:
         {
             switch (creature->GetEntry())
             {
-                case NPC_BLASTMASTER_EMI_SHORTFUSE: uiBastmasterEmiShortfuseGUID = creature->GetGUID(); break;
+                case NPC_BLASTMASTER_EMI_SHORTFUSE: BastmasterEmiShortfuseGUID = creature->GetGUID(); break;
             }
         }
 
@@ -89,12 +87,12 @@ public:
             switch (go->GetEntry())
             {
                 case GO_CAVE_IN_LEFT:
-                    uiCaveInLeftGUID = go->GetGUID();
+                    CaveInLeftGUID = go->GetGUID();
                     if (Encounter[0] == DONE || Encounter[0] == NOT_STARTED)
                         HandleGameObject(0, false, go);
                     break;
                 case GO_CAVE_IN_RIGHT:
-                    uiCaveInRightGUID = go->GetGUID();
+                    CaveInRightGUID = go->GetGUID();
                     if (Encounter[0] == DONE || Encounter[0] == NOT_STARTED)
                         HandleGameObject(0, false, go);
                     break;
@@ -126,9 +124,9 @@ public:
         {
             switch (Type)
             {
-                case DATA_GO_CAVE_IN_LEFT:              return uiCaveInLeftGUID;
-                case DATA_GO_CAVE_IN_RIGHT:             return uiCaveInRightGUID;
-                case DATA_NPC_BASTMASTER_EMI_SHORTFUSE: return uiBastmasterEmiShortfuseGUID;
+                case DATA_GO_CAVE_IN_LEFT:              return CaveInLeftGUID;
+                case DATA_GO_CAVE_IN_RIGHT:             return CaveInRightGUID;
+                case DATA_NPC_BASTMASTER_EMI_SHORTFUSE: return BastmasterEmiShortfuseGUID;
             }
 
             return 0;

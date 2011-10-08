@@ -148,7 +148,7 @@ class boss_zuljin : public CreatureScript
         {
             boss_zuljinAI(Creature* creature) : ScriptedAI(creature), Summons(me)
             {
-                instance = c->GetInstanceScript();
+                instance = creature->GetInstanceScript();
             }
             InstanceScript* instance;
 

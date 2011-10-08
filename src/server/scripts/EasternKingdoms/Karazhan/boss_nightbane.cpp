@@ -73,7 +73,7 @@ public:
     {
         boss_nightbaneAI(Creature* creature) : ScriptedAI(creature)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
             Intro = true;
         }
 

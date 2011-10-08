@@ -71,7 +71,7 @@ public:
     {
         mob_kilrekAI(Creature* creature) : ScriptedAI(creature)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
         }
 
         InstanceScript* instance;
@@ -259,7 +259,7 @@ public:
         {
             for (uint8 i = 0; i < 2; ++i)
                 PortalGUID[i] = 0;
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
         }
 
         InstanceScript* instance;

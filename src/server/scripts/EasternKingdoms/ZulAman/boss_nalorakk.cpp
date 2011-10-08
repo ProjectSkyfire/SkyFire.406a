@@ -109,7 +109,7 @@ class boss_nalorakk : public CreatureScript
             {
                 MoveEvent = true;
                 MovePhase = 0;
-                instance = c->GetInstanceScript();
+                instance = creature->GetInstanceScript();
             }
 
             InstanceScript* instance;

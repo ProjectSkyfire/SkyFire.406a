@@ -93,8 +93,8 @@ public:
     {
         npc_shadowfang_prisonerAI(Creature* creature) : npc_escortAI(creature)
         {
-            instance = c->GetInstanceScript();
-            NpcEntry = c->GetEntry();
+            instance = creature->GetInstanceScript();
+            NpcEntry = creature->GetEntry();
         }
 
         InstanceScript* instance;

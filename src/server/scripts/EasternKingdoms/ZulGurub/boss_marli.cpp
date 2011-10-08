@@ -52,7 +52,7 @@ class boss_marli : public CreatureScript
         {
             boss_marliAI(Creature* creature) : ScriptedAI(creature)
             {
-                instance = c->GetInstanceScript();
+                instance = creature->GetInstanceScript();
             }
 
             InstanceScript* instance;

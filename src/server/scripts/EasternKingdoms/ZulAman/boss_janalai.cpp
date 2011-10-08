@@ -112,7 +112,7 @@ class boss_janalai : public CreatureScript
         {
             boss_janalaiAI(Creature* creature) : ScriptedAI(creature)
             {
-                instance = c->GetInstanceScript();
+                instance = creature->GetInstanceScript();
             }
 
             InstanceScript* instance;
@@ -477,7 +477,7 @@ class mob_janalai_hatcher : public CreatureScript
         {
             mob_janalai_hatcherAI(Creature* creature) : ScriptedAI(creature)
             {
-                instance =c->GetInstanceScript();
+                instance = creature->GetInstanceScript();
             }
 
             InstanceScript* instance;
@@ -605,7 +605,7 @@ class mob_janalai_hatchling : public CreatureScript
         {
             mob_janalai_hatchlingAI(Creature* creature) : ScriptedAI(creature)
             {
-                instance =c->GetInstanceScript();
+                instance = creature->GetInstanceScript();
             }
 
             InstanceScript* instance;

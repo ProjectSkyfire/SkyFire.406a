@@ -57,7 +57,7 @@ class boss_jeklik : public CreatureScript
         {
             boss_jeklikAI(Creature* creature) : ScriptedAI(creature)
             {
-                instance = c->GetInstanceScript();
+                instance = creature->GetInstanceScript();
             }
 
             InstanceScript* instance;
@@ -235,7 +235,7 @@ class mob_batrider : public CreatureScript
         {
             mob_batriderAI(Creature* creature) : ScriptedAI(creature)
             {
-                instance = c->GetInstanceScript();
+                instance = creature->GetInstanceScript();
             }
 
             InstanceScript* instance;

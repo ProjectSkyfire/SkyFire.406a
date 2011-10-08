@@ -48,7 +48,7 @@ class npc_forest_frog : public CreatureScript
         {
             npc_forest_frogAI(Creature* creature) : ScriptedAI(creature)
             {
-                instance = c->GetInstanceScript();
+                instance = creature->GetInstanceScript();
             }
 
             InstanceScript* instance;

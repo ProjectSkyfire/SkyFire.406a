@@ -57,7 +57,7 @@ public:
     {
         boss_silver_hand_bossesAI(Creature* creature) : ScriptedAI(creature)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
         }
 
         InstanceScript* instance;

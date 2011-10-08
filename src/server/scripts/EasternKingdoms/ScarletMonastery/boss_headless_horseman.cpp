@@ -360,7 +360,7 @@ public:
     {
         boss_headless_horsemanAI(Creature* creature) : ScriptedAI(creature)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
         }
 
         InstanceScript* instance;

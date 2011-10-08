@@ -44,13 +44,13 @@ public:
 
         InstanceScript* instance;
 
-        uint32 uiShadowflameBreathTimer;
-        uint32 uiShadowCowardiceTimer;
+        uint32 ShadowflameBreathTimer;
+        uint32 ShadowCowardiceTimer;
 
         void Reset()
         {
-            uiShadowflameBreathTimer = 10*IN_MILLISECONDS;
-            uiShadowCowardiceTimer = 13*IN_MILLISECONDS;
+            ShadowflameBreathTimer = 10*IN_MILLISECONDS;
+            ShadowCowardiceTimer = 13*IN_MILLISECONDS;
         }
 
         void EnterCombat(Unit* /*who*/)
@@ -68,20 +68,20 @@ public:
             if (!UpdateVictim())
                 return;
 
-            if (uiShadowflameBreathTimer <= Diff)
+            if (ShadowflameBreathTimer <= Diff)
             {
                 me->CastSpell(me->getVictim(), SPELL_SHADOWFLAME_BREATH, true);
 
-                uiShadowflameBreathTimer = urand(10*IN_MILLISECONDS, 12*IN_MILLISECONDS);
-            } else uiShadowflameBreathTimer -= Diff;
+                ShadowflameBreathTimer = urand(10*IN_MILLISECONDS, 12*IN_MILLISECONDS);
+            } else ShadowflameBreathTimer -= Diff;
 
-            if (uiShadowCowardiceTimer <= Diff)
+            if (ShadowCowardiceTimer <= Diff)
             {
                 if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                     me->CastSpell(target, SPELL_SHADOW_COWARDICE , true);
 
-                uiShadowCowardiceTimer = urand(8*IN_MILLISECONDS, 9*IN_MILLISECONDS);
-            } else uiShadowCowardiceTimer -= Diff;
+                ShadowCowardiceTimer = urand(8*IN_MILLISECONDS, 9*IN_MILLISECONDS);
+            } else ShadowCowardiceTimer -= Diff;
 
             DoMeleeAttackIfReady();
         }

@@ -102,7 +102,7 @@ public:
     {
         boss_priestess_delrissaAI(Creature* creature) : ScriptedAI(creature)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
             memset(&LackeyGUID, 0, sizeof(LackeyGUID));
             LackeyEntryList.clear();
         }
@@ -342,7 +342,7 @@ struct boss_priestess_lackey_commonAI : public ScriptedAI
 {
     boss_priestess_lackey_commonAI(Creature* creature) : ScriptedAI(creature)
     {
-        instance = c->GetInstanceScript();
+        instance = creature->GetInstanceScript();
         memset(&LackeyGUIDs, 0, sizeof(LackeyGUIDs));
         AcquireGUIDs();
     }
@@ -1020,8 +1020,8 @@ public:
             Wing_Clip_Timer = 4000;
             Freezing_Trap_Timer = 15000;
 
-            Unit* pPet = Unit::GetUnit(*me, PetGUID);
-            if (!pPet)
+            Unit* pet = Unit::GetUnit(*me, PetGUID);
+            if (!pet)
                 me->SummonCreature(NPC_SLIVER, 0.0f, 0.0f, 0.0f, 0.0f, TEMPSUMMON_CORPSE_DESPAWN, 0);
 
             boss_priestess_lackey_commonAI::Reset();

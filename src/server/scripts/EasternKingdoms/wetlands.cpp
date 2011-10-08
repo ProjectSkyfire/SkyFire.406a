@@ -148,15 +148,15 @@ public:
     {
         if (quest->GetQuestId() == QUEST_MISSING_DIPLO_PT11)
         {
-            Creature* pSlim = creature->FindNearestCreature(NPC_TAPOKE_SLIM_JAHN, 25.0f);
+            Creature* slim = creature->FindNearestCreature(NPC_TAPOKE_SLIM_JAHN, 25.0f);
 
-            if (!pSlim)
+            if (!slim)
                 return false;
 
-            if (!pSlim->HasStealthAura())
-                pSlim->CastSpell(pSlim, SPELL_STEALTH, true);
+            if (!slim->HasStealthAura())
+                slim->CastSpell(slim, SPELL_STEALTH, true);
 
-            if (npc_tapoke_slim_jahn::npc_tapoke_slim_jahnAI* escortAI = CAST_AI(npc_tapoke_slim_jahn::npc_tapoke_slim_jahnAI, pSlim->AI()))
+            if (npc_tapoke_slim_jahn::npc_tapoke_slim_jahnAI* escortAI = CAST_AI(npc_tapoke_slim_jahn::npc_tapoke_slim_jahnAI, slim->AI()))
                 escortAI->Start(false, false, player->GetGUID(), quest);
         }
         return false;
