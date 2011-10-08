@@ -6316,10 +6316,10 @@ uint32 ObjectMgr::GenerateLowGuid(HighGuid guidhigh)
             }
             return m_hiMoTransGuid++;
         default:
-            ASSERT(0);
+            ASSERT (0);
     }
 
-    ASSERT(0);
+    ASSERT (0);
     return 0;
 }
 
@@ -6736,7 +6736,7 @@ void ObjectMgr::LoadCorpses()
         Field *fields = result->Fetch();
         uint32 guid = fields[16].GetUInt32();
 
-        Corpse *corpse = new Corpse();
+        Corpse* corpse = new Corpse();
         if (!corpse->LoadFromDB(guid, fields))
         {
             delete corpse;

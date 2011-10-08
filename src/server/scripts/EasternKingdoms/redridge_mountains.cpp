@@ -153,13 +153,13 @@ public:
 
             if (MockingBlowTimer <= Diff)
             {
-                DoCast(me->getVictim(), SPELL_MOCKING_BLOW);
+                DoCast (me->getVictim(), SPELL_MOCKING_BLOW);
                 MockingBlowTimer = 5000;
             } else MockingBlowTimer -= Diff;
 
             if (ShieldBashTimer <= Diff)
             {
-                DoCast(me->getVictim(), SPELL_MOCKING_BLOW);
+                DoCast (me->getVictim(), SPELL_MOCKING_BLOW);
                 ShieldBashTimer = 8000;
             } else ShieldBashTimer -= Diff;
 

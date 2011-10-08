@@ -477,7 +477,7 @@ public:
                     me->SummonCreature(CREATURE_HAND_OF_THE_DECEIVER, DeceiverLocations[i], TEMPSUMMON_DEAD_DESPAWN, 0);
 
                 DoSpawnCreature(CREATURE_ANVEENA,  0, 0, 40, 0, TEMPSUMMON_DEAD_DESPAWN, 0);
-                DoCast(me, SPELL_ANVEENA_ENERGY_DRAIN);
+                DoCast (me, SPELL_ANVEENA_ENERGY_DRAIN);
                 bSummonedDeceivers = true;
             }
 
@@ -736,8 +736,8 @@ public:
                         case TIMER_SOUL_FLAY:
                             if (!me->IsNonMeleeSpellCasted(false))
                             {
-                                DoCast(me->getVictim(), SPELL_SOUL_FLAY_SLOW, false);
-                                DoCast(me->getVictim(), SPELL_SOUL_FLAY, false);
+                                DoCast (me->getVictim(), SPELL_SOUL_FLAY_SLOW, false);
+                                DoCast (me->getVictim(), SPELL_SOUL_FLAY, false);
                                 Timer[TIMER_SOUL_FLAY] = 3500;
                             }
                             break;
@@ -755,7 +755,7 @@ public:
                                 }
 
                                 if (pRandomPlayer)
-                                    DoCast(pRandomPlayer, SPELL_LEGION_LIGHTNING, false);
+                                    DoCast (pRandomPlayer, SPELL_LEGION_LIGHTNING, false);
                                 else
                                     sLog->outError("try to cast SPELL_LEGION_LIGHTNING on invalid target");
 
@@ -965,19 +965,19 @@ public:
         void UpdateAI(const uint32 diff)
         {
             if (!me->isInCombat())
-                DoCast(me, SPELL_SHADOW_CHANNELING);
+                DoCast (me, SPELL_SHADOW_CHANNELING);
 
             if (!UpdateVictim())
                 return;
 
             // Gain Shadow Infusion at 20% health
             if (HealthBelowPct(20) && !me->HasAura(SPELL_SHADOW_INFUSION, 0))
-                DoCast(me, SPELL_SHADOW_INFUSION, true);
+                DoCast (me, SPELL_SHADOW_INFUSION, true);
 
             // Shadow Bolt Volley - Shoots Shadow Bolts at all enemies within 30 yards, for ~2k Shadow damage.
             if (ShadowBoltVolleyTimer <= diff)
             {
-                DoCast(me->getVictim(), SPELL_SHADOW_BOLT_VOLLEY);
+                DoCast (me->getVictim(), SPELL_SHADOW_BOLT_VOLLEY);
                 ShadowBoltVolleyTimer = 12000;
             }
             else
@@ -1076,7 +1076,7 @@ public:
         void DamageTaken(Unit* /*done_by*/, uint32 &damage)
         {
             if (damage > me->GetHealth())
-                DoCast(me, SPELL_FELFIRE_FISSION, true);
+                DoCast (me, SPELL_FELFIRE_FISSION, true);
         }
 
         void UpdateAI(const uint32 diff)
@@ -1098,7 +1098,7 @@ public:
             }
             else if (me->IsWithinDistInMap(me->getVictim(), 3)) // Explode if it's close enough to it's target
             {
-                DoCast(me->getVictim(), SPELL_FELFIRE_FISSION);
+                DoCast (me->getVictim(), SPELL_FELFIRE_FISSION);
                 me->Kill(me);
             }
         }
@@ -1136,16 +1136,16 @@ public:
                 switch (spell)
                 {
                     case 0:
-                        DoCast(me, SPELL_ARMAGEDDON_VISUAL, true);
+                        DoCast (me, SPELL_ARMAGEDDON_VISUAL, true);
                         ++spell;
                         break;
                     case 1:
-                        DoCast(me, SPELL_ARMAGEDDON_VISUAL2, true);
+                        DoCast (me, SPELL_ARMAGEDDON_VISUAL2, true);
                         Timer = 9000;
                         ++spell;
                         break;
                     case 2:
-                        DoCast(me, SPELL_ARMAGEDDON_TRIGGER, true);
+                        DoCast (me, SPELL_ARMAGEDDON_TRIGGER, true);
                         ++spell;
                         Timer = 5000;
                         break;
@@ -1231,7 +1231,7 @@ public:
             if (Timer <= diff)
             {
                 if (Unit* random = Unit::GetUnit(*me, instance ? instance->GetData64(DATA_PLAYER_GUID) : 0))
-                    DoCast(random, SPELL_SHADOW_BOLT, false);
+                    DoCast (random, SPELL_SHADOW_BOLT, false);
                 Timer = urand(500, 1000);
             } else Timer -= diff;
         }
@@ -1310,7 +1310,7 @@ public:
                 case CLASS_DRUID:
                     if (Timer[1] <= diff)
                     {
-                        DoCast(me->getVictim(), SPELL_SR_MOONFIRE, false);
+                        DoCast (me->getVictim(), SPELL_SR_MOONFIRE, false);
                         Timer[1] = urand(2000, 4000);
                     }
                     DoMeleeAttackIfReady();
@@ -1318,19 +1318,19 @@ public:
                 case CLASS_HUNTER:
                     if (Timer[1] <= diff)
                     {
-                        DoCast(me->getVictim(), SPELL_SR_MULTI_SHOT, false);
+                        DoCast (me->getVictim(), SPELL_SR_MULTI_SHOT, false);
                         Timer[1] = urand(8000, 10000);
                     }
                     if (Timer[2] <= diff)
                     {
-                        DoCast(me->getVictim(), SPELL_SR_SHOOT, false);
+                        DoCast (me->getVictim(), SPELL_SR_SHOOT, false);
                         Timer[2] = urand(4000, 6000);
                     }
                     if (me->IsWithinMeleeRange(me->getVictim(), 6))
                     {
                         if (Timer[0] <= diff)
                         {
-                            DoCast(me->getVictim(), SPELL_SR_MULTI_SHOT, false);
+                            DoCast (me->getVictim(), SPELL_SR_MULTI_SHOT, false);
                             Timer[0] = urand(6000, 8000);
                         }
                         DoMeleeAttackIfReady();
@@ -1339,7 +1339,7 @@ public:
                 case CLASS_MAGE:
                     if (Timer[1] <= diff)
                     {
-                        DoCast(me->getVictim(), SPELL_SR_FIREBALL, false);
+                        DoCast (me->getVictim(), SPELL_SR_FIREBALL, false);
                         Timer[1] = urand(2000, 4000);
                     }
                     DoMeleeAttackIfReady();
@@ -1347,12 +1347,12 @@ public:
                 case CLASS_WARLOCK:
                     if (Timer[1] <= diff)
                     {
-                        DoCast(me->getVictim(), SPELL_SR_SHADOW_BOLT, false);
+                        DoCast (me->getVictim(), SPELL_SR_SHADOW_BOLT, false);
                         Timer[1] = urand(3000, 5000);
                     }
                     if (Timer[2] <= diff)
                     {
-                        DoCast(SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true), SPELL_SR_CURSE_OF_AGONY, true);
+                        DoCast (SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true), SPELL_SR_CURSE_OF_AGONY, true);
                         Timer[2] = urand(2000, 4000);
                     }
                     DoMeleeAttackIfReady();
@@ -1360,7 +1360,7 @@ public:
                 case CLASS_WARRIOR:
                     if (Timer[1] <= diff)
                     {
-                        DoCast(me->getVictim(), SPELL_SR_WHIRLWIND, false);
+                        DoCast (me->getVictim(), SPELL_SR_WHIRLWIND, false);
                         Timer[1] = urand(9000, 11000);
                     }
                     DoMeleeAttackIfReady();
@@ -1368,12 +1368,12 @@ public:
                 case CLASS_PALADIN:
                     if (Timer[1] <= diff)
                     {
-                        DoCast(me->getVictim(), SPELL_SR_HAMMER_OF_JUSTICE, false);
+                        DoCast (me->getVictim(), SPELL_SR_HAMMER_OF_JUSTICE, false);
                         Timer[1] = urand(6000, 8000);
                     }
                     if (Timer[2] <= diff)
                     {
-                        DoCast(me->getVictim(), SPELL_SR_HOLY_SHOCK, false);
+                        DoCast (me->getVictim(), SPELL_SR_HOLY_SHOCK, false);
                         Timer[2] = urand(2000, 4000);
                     }
                     DoMeleeAttackIfReady();
@@ -1381,12 +1381,12 @@ public:
                 case CLASS_PRIEST:
                     if (Timer[1] <= diff)
                     {
-                        DoCast(me->getVictim(), SPELL_SR_HOLY_SMITE, false);
+                        DoCast (me->getVictim(), SPELL_SR_HOLY_SMITE, false);
                         Timer[1] = urand(4000, 6000);
                     }
                     if (Timer[2] <= diff)
                     {
-                        DoCast(me, SPELL_SR_RENEW, false);
+                        DoCast (me, SPELL_SR_RENEW, false);
                         Timer[2] = urand(6000, 8000);
                     }
                     DoMeleeAttackIfReady();
@@ -1394,7 +1394,7 @@ public:
                 case CLASS_SHAMAN:
                     if (Timer[1] <= diff)
                     {
-                        DoCast(me->getVictim(), SPELL_SR_EARTH_SHOCK, false);
+                        DoCast (me->getVictim(), SPELL_SR_EARTH_SHOCK, false);
                         Timer[1] = urand(4000, 6000);
                     }
                     DoMeleeAttackIfReady();
@@ -1402,7 +1402,7 @@ public:
                 case CLASS_ROGUE:
                     if (Timer[1] <= diff)
                     {
-                        DoCast(me->getVictim(), SPELL_SR_HEMORRHAGE, true);
+                        DoCast (me->getVictim(), SPELL_SR_HEMORRHAGE, true);
                         Timer[1] = urand(4000, 6000);
                     }
                     DoMeleeAttackIfReady();

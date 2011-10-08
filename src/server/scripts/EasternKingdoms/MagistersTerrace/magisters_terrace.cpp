@@ -157,11 +157,11 @@ public:
             {
                 if (TransformTimer <= Diff)
                 {
-                    DoCast(me, SPELL_ORB_KILL_CREDIT, false);
+                    DoCast (me, SPELL_ORB_KILL_CREDIT, false);
                     DoWorkaroundForQuestCredit();
 
                     // Transform and update entry, now ready for quest/read gossip
-                    DoCast(me, SPELL_TRANSFORM_TO_KAEL, false);
+                    DoCast (me, SPELL_TRANSFORM_TO_KAEL, false);
                     me->UpdateEntry(NPC_KAEL);
 
                     TransformTimer = 0;

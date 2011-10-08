@@ -68,7 +68,7 @@ public:
         void DamageTaken(Unit* /*done_by*/, uint32 &damage)
         {
             if (me->GetHealth() <= damage)
-                DoCast(me, SPELL_SUMMON_SPIRE_SPIDERLING, true);
+                DoCast (me, SPELL_SUMMON_SPIRE_SPIDERLING, true);
         }
 
         void UpdateAI(uint32 const diff)
@@ -86,11 +86,11 @@ public:
                 switch (eventId)
                 {
                     case EVENT_CRYSTALIZE:
-                        DoCast(me, SPELL_CRYSTALIZE);
+                        DoCast (me, SPELL_CRYSTALIZE);
                         events.ScheduleEvent(EVENT_CRYSTALIZE, 15*IN_MILLISECONDS);
                         break;
                     case EVENT_MOTHERS_MILK:
-                        DoCast(me, SPELL_MOTHERSMILK);
+                        DoCast (me, SPELL_MOTHERSMILK);
                         events.ScheduleEvent(EVENT_MOTHERS_MILK, urand(5*IN_MILLISECONDS, 12500));
                         break;
                 }

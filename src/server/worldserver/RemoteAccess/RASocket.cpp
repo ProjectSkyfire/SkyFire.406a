@@ -87,7 +87,7 @@ int RASocket::recv_line(ACE_Message_Block& buffer)
             return -1;
         }
 
-        ACE_ASSERT(n == sizeof(byte));
+        ACE_ASSERT (n == sizeof(byte));
 
         if (byte == '\n')
             break;

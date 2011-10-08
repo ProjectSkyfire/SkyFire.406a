@@ -383,7 +383,7 @@ void WorldSession::SendSpiritResurrect()
 
     // get corpse nearest graveyard
     WorldSafeLocsEntry const *corpseGrave = NULL;
-    Corpse *corpse = _player->GetCorpse();
+    Corpse* corpse = _player->GetCorpse();
     if (corpse)
         corpseGrave = sObjectMgr->GetClosestGraveYard(
             corpse->GetPositionX(), corpse->GetPositionY(), corpse->GetPositionZ(), corpse->GetMapId(), _player->GetTeam());
@@ -506,7 +506,7 @@ void WorldSession::SendStablePetCallback(QueryResult result, uint64 guid)
 
     data << uint64 (guid);
 
-    Pet *pet = _player->GetPet();
+    Pet* pet = _player->GetPet();
 
     size_t wpos = data.wpos();
     data << uint8(0);                                       // place holder for slot show number
@@ -577,7 +577,7 @@ void WorldSession::HandleStablePet(WorldPacket & recv_data)
     if (GetPlayer()->HasUnitState(UNIT_STAT_DIED))
         GetPlayer()->RemoveAurasByType(SPELL_AURA_FEIGN_DEATH);
 
-    Pet *pet = _player->GetPet();
+    Pet* pet = _player->GetPet();
 
     // can't place in stable dead pet
     if (!pet||!pet->isAlive()||pet->getPetType() != HUNTER_PET)

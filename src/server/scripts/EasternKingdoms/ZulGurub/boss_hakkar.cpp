@@ -115,14 +115,14 @@ class boss_hakkar : public CreatureScript
                 //BloodSiphon_Timer
                 if (BloodSiphon_Timer <= diff)
                 {
-                    DoCast(me->getVictim(), SPELL_BLOODSIPHON);
+                    DoCast (me->getVictim(), SPELL_BLOODSIPHON);
                     BloodSiphon_Timer = 90000;
                 } else BloodSiphon_Timer -= diff;
 
                 //CorruptedBlood_Timer
                 if (CorruptedBlood_Timer <= diff)
                 {
-                    DoCast(me->getVictim(), SPELL_CORRUPTEDBLOOD);
+                    DoCast (me->getVictim(), SPELL_CORRUPTEDBLOOD);
                     CorruptedBlood_Timer = 30000 + rand()%15000;
                 } else CorruptedBlood_Timer -= diff;
 
@@ -130,7 +130,7 @@ class boss_hakkar : public CreatureScript
                 /*if (CauseInsanity_Timer <= diff)
                 {
                 if (Unit* target = SelectUnit(SELECT_TARGET_RANDOM, 0))
-                DoCast(target, SPELL_CAUSEINSANITY);
+                DoCast (target, SPELL_CAUSEINSANITY);
 
                 CauseInsanity_Timer = 35000 + rand()%8000;
                 } else CauseInsanity_Timer -= diff;*/
@@ -139,14 +139,14 @@ class boss_hakkar : public CreatureScript
                 if (WillOfHakkar_Timer <= diff)
                 {
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                        DoCast(target, SPELL_WILLOFHAKKAR);
+                        DoCast (target, SPELL_WILLOFHAKKAR);
 
                     WillOfHakkar_Timer = 25000 + rand()%10000;
                 } else WillOfHakkar_Timer -= diff;
 
                 if (!Enraged && Enrage_Timer <= diff)
                 {
-                    DoCast(me, SPELL_ENRAGE);
+                    DoCast (me, SPELL_ENRAGE);
                     Enraged = true;
                 } else Enrage_Timer -= diff;
 
@@ -159,7 +159,7 @@ class boss_hakkar : public CreatureScript
                         {
                             if (AspectOfJeklik_Timer <= diff)
                             {
-                                DoCast(me->getVictim(), SPELL_ASPECT_OF_JEKLIK);
+                                DoCast (me->getVictim(), SPELL_ASPECT_OF_JEKLIK);
                                 AspectOfJeklik_Timer = 10000 + rand()%4000;
                             } else AspectOfJeklik_Timer -= diff;
                         }
@@ -176,7 +176,7 @@ class boss_hakkar : public CreatureScript
                         {
                             if (AspectOfVenoxis_Timer <= diff)
                             {
-                                DoCast(me->getVictim(), SPELL_ASPECT_OF_VENOXIS);
+                                DoCast (me->getVictim(), SPELL_ASPECT_OF_VENOXIS);
                                 AspectOfVenoxis_Timer = 8000;
                             } else AspectOfVenoxis_Timer -= diff;
                         }
@@ -193,7 +193,7 @@ class boss_hakkar : public CreatureScript
                         {
                             if (AspectOfMarli_Timer <= diff)
                             {
-                                DoCast(me->getVictim(), SPELL_ASPECT_OF_MARLI);
+                                DoCast (me->getVictim(), SPELL_ASPECT_OF_MARLI);
                                 AspectOfMarli_Timer = 10000;
                             } else AspectOfMarli_Timer -= diff;
                         }
@@ -210,7 +210,7 @@ class boss_hakkar : public CreatureScript
                         {
                             if (AspectOfThekal_Timer <= diff)
                             {
-                                DoCast(me, SPELL_ASPECT_OF_THEKAL);
+                                DoCast (me, SPELL_ASPECT_OF_THEKAL);
                                 AspectOfThekal_Timer = 15000;
                             } else AspectOfThekal_Timer -= diff;
                         }
@@ -227,7 +227,7 @@ class boss_hakkar : public CreatureScript
                         {
                             if (AspectOfArlokk_Timer <= diff)
                             {
-                                DoCast(me, SPELL_ASPECT_OF_ARLOKK);
+                                DoCast (me, SPELL_ASPECT_OF_ARLOKK);
                                 DoResetThreat();
 
                                 AspectOfArlokk_Timer = 10000 + rand()%5000;

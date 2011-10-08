@@ -89,7 +89,7 @@ public:
             if (HasEscortState(STATE_ESCORT_ESCORTING) && !_bFriendSummoned && player)
             {
                 for (uint8 i = 0; i < 3; ++i)
-                    DoCast(me, SPELL_CALL_FRIENDS, true);
+                    DoCast (me, SPELL_CALL_FRIENDS, true);
 
                 _bFriendSummoned = true;
             }

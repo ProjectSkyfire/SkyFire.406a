@@ -254,7 +254,7 @@ public:
                 {
                     if (DrainLifeTimer <= diff)
                     {
-                        DoCast(SelectTarget(SELECT_TARGET_RANDOM, 0), SPELL_DRAIN_LIFE);
+                        DoCast (SelectTarget(SELECT_TARGET_RANDOM, 0), SPELL_DRAIN_LIFE);
                         DrainLifeTimer = 10000;
                     } else DrainLifeTimer -= diff;
 
@@ -263,7 +263,7 @@ public:
                     {
                         if (DrainManaTimer <= diff)
                         {
-                            DoCast(SelectTarget(SELECT_TARGET_RANDOM, 1), SPELL_DRAIN_MANA);
+                            DoCast (SelectTarget(SELECT_TARGET_RANDOM, 1), SPELL_DRAIN_MANA);
                             DrainManaTimer = 10000;
                         } else DrainManaTimer -= diff;
                     }
@@ -273,7 +273,7 @@ public:
                 {
                     if (!me->IsNonMeleeSpellCasted(false))
                     {
-                        DoCast(me, SPELL_FEL_EXPLOSION);
+                        DoCast (me, SPELL_FEL_EXPLOSION);
                         FelExplosionTimer = 2000;
                     }
                 } else FelExplosionTimer -= diff;

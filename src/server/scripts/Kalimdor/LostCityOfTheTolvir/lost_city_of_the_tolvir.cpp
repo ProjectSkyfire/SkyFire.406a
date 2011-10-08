@@ -201,17 +201,17 @@ public:
                 {
                     case EVENT_HEX:
                         if (Unit *target = SelectUnit(SELECT_TARGET_RANDOM, 0))
-                            DoCast(target, SPELL_HEX);
+                            DoCast (target, SPELL_HEX);
                         events.RescheduleEvent(EVENT_HEX, 5000);
                         return;
                     case EVENT_METEOR:
                         if (Unit *target = SelectUnit(SELECT_TARGET_RANDOM, 0))
-                            DoCast(target, SPELL_METEOR);
+                            DoCast (target, SPELL_METEOR);
                         events.RescheduleEvent(EVENT_METEOR, 5000);
                         return;
                     case EVENT_SHADOW_BOLT:
                         if (Unit *target = SelectUnit(SELECT_TARGET_RANDOM, 0))
-                            DoCast(target, SPELL_SHADOW_BOLT);
+                            DoCast (target, SPELL_SHADOW_BOLT);
                         events.RescheduleEvent(EVENT_SHADOW_BOLT, 3000);
                         return;
                 }
@@ -266,12 +266,12 @@ public:
                 switch (eventId)
                 {
                     case EVENT_DISEASE_BREATH:
-                        DoCast(me->getVictim(), SPELL_DISEASE_BREATH);
+                        DoCast (me->getVictim(), SPELL_DISEASE_BREATH);
                         events.RescheduleEvent(EVENT_DISEASE_BREATH, 5000);
                         return;
                     case EVENT_INFECTIOUS_PLAGUE:
                         if (Unit *target = SelectUnit(SELECT_TARGET_RANDOM, 0))
-                            DoCast(target, SPELL_INFECTIOUS_PLAGUE);
+                            DoCast (target, SPELL_INFECTIOUS_PLAGUE);
                         events.RescheduleEvent(EVENT_INFECTIOUS_PLAGUE, 5000);
                         return;
                 }
@@ -328,16 +328,16 @@ public:
                 {
                     case EVENT_MIXTURE:
                         if (Unit *target = SelectUnit(SELECT_TARGET_RANDOM, 0))
-                            DoCast(target, SPELL_MIXTURE);
+                            DoCast (target, SPELL_MIXTURE);
                         events.RescheduleEvent(EVENT_MIXTURE, 6000);
                         return;
                     case EVENT_RITUAL_BLOODLETTING:
-                        DoCast(me->getVictim(), SPELL_RITUAL_BLOODLETTING);
+                        DoCast (me->getVictim(), SPELL_RITUAL_BLOODLETTING);
                         events.RescheduleEvent(EVENT_RITUAL_BLOODLETTING, 2000);
                         return;
                     case EVENT_VICIOUS_LEECHES:
                         if (Unit *target = SelectUnit(SELECT_TARGET_RANDOM, 0))
-                            DoCast(target, SPELL_VICIOUS_LEECHES);
+                            DoCast (target, SPELL_VICIOUS_LEECHES);
                         events.RescheduleEvent(EVENT_VICIOUS_LEECHES, 5000);
                         return;
                 }
@@ -393,11 +393,11 @@ public:
                 {
                     case EVENT_BRANDED_TONGUE:
                         if (Unit *target = SelectUnit(SELECT_TARGET_RANDOM, 0))
-                            DoCast(target, SPELL_BRANDED_TONGUE);
+                            DoCast (target, SPELL_BRANDED_TONGUE);
                         events.RescheduleEvent(EVENT_BRANDED_TONGUE, 3000);
                         return;
                     case EVENT_SERUM_TORMENT:
-                        DoCast(me->getVictim(), SPELL_SERUM_TORMENT);
+                        DoCast (me->getVictim(), SPELL_SERUM_TORMENT);
                         events.RescheduleEvent(EVENT_SERUM_TORMENT, 2000);
                         return;
                 }
@@ -452,11 +452,11 @@ public:
                 switch (eventId)
                 {
                     case EVENT_SKULL_CRUSH:
-                        DoCast(me->getVictim(), SPELL_SKULL_CRUSH);
+                        DoCast (me->getVictim(), SPELL_SKULL_CRUSH);
                         events.RescheduleEvent(EVENT_SKULL_CRUSH, 3000);
                         return;
                     case EVENT_SLAM:
-                        DoCast(me->getVictim(), SPELL_SLAM);
+                        DoCast (me->getVictim(), SPELL_SLAM);
                         events.RescheduleEvent(EVENT_SLAM, 2000);
                         return;
                 }
@@ -510,7 +510,7 @@ public:
                 switch (eventId)
                 {
                     case EVENT_SKULL_CRACK:
-                        DoCast(me->getVictim(), SPELL_SKULL_CRACK);
+                        DoCast (me->getVictim(), SPELL_SKULL_CRACK);
                         events.RescheduleEvent(EVENT_SKULL_CRACK, 3000);
                         return;
                 }
@@ -565,11 +565,11 @@ public:
                 switch (eventId)
                 {
                     case EVENT_BLADED_SHIELD:
-                        DoCast(me->getVictim(), SPELL_BLADED_SHIELD);
+                        DoCast (me->getVictim(), SPELL_BLADED_SHIELD);
                         events.RescheduleEvent(EVENT_BLADED_SHIELD, 5000);
                         return;
                     case EVENT_RESISTANCE:
-                        DoCast(me->getVictim(), SPELL_SLAM);
+                        DoCast (me->getVictim(), SPELL_SLAM);
                         events.RescheduleEvent(EVENT_RESISTANCE, 11000);
                         return;
                 }
@@ -625,16 +625,16 @@ public:
                 switch (eventId)
                 {
                     case EVENT_CALL_FALCON:
-                        DoCast(me->getVictim(), SPELL_CALL_FALCON);
+                        DoCast (me->getVictim(), SPELL_CALL_FALCON);
                         events.RescheduleEvent(EVENT_CALL_FALCON, 8000);
                         return;
                     case EVENT_SHOOT:
-                        DoCast(me->getVictim(), SPELL_SHOOT);
+                        DoCast (me->getVictim(), SPELL_SHOOT);
                         events.RescheduleEvent(EVENT_SHOOT, 1000);
                         return;
                     case EVENT_WING_CLIP:
                         if (Unit *target = SelectUnit(SELECT_TARGET_RANDOM, 0))
-                            DoCast(target, SPELL_WING_CLIP);
+                            DoCast (target, SPELL_WING_CLIP);
                         events.RescheduleEvent(EVENT_WING_CLIP, 3000);
                         return;
                  }
@@ -689,11 +689,11 @@ public:
                 switch (eventId)
                 {
                     case EVENT_CALL_SCORPID:
-                        DoCast(me->getVictim(), SPELL_CALL_SCORPID);
+                        DoCast (me->getVictim(), SPELL_CALL_SCORPID);
                         events.RescheduleEvent(EVENT_CALL_SCORPID, 8000);
                         return;
                     case EVENT_EVASION:
-                        DoCast(me->getVictim(), SPELL_EVASION);
+                        DoCast (me->getVictim(), SPELL_EVASION);
                         events.RescheduleEvent(EVENT_EVASION, 5000);
                         return;
                 }
@@ -748,11 +748,11 @@ public:
                 switch (eventId)
                 {
                     case EVENT_FAN_KNIVES:
-                        DoCast(me->getVictim(), SPELL_FAN_KNIVES);
+                        DoCast (me->getVictim(), SPELL_FAN_KNIVES);
                         events.RescheduleEvent(EVENT_FAN_KNIVES, 3000);
                         return;
                     case EVENT_SPINAL_PIERCE:
-                        DoCast(me->getVictim(), SPELL_SPINAL_PIERCE);
+                        DoCast (me->getVictim(), SPELL_SPINAL_PIERCE);
                         events.RescheduleEvent(EVENT_SPINAL_PIERCE, 7000);
                         return;
                 }
@@ -807,11 +807,11 @@ public:
                 switch (eventId)
                 {
                     case EVENT_IMPALE:
-                        DoCast(me->getVictim(), SPELL_IMPALE);
+                        DoCast (me->getVictim(), SPELL_IMPALE);
                         events.RescheduleEvent(EVENT_IMPALE, 1000);
                         return;
                     case EVENT_SHOCKWAVE:
-                        DoCast(me->getVictim(), SPELL_SHOCKWAVE);
+                        DoCast (me->getVictim(), SPELL_SHOCKWAVE);
                         events.RescheduleEvent(EVENT_SHOCKWAVE, 4000);
                         return;
                 }
@@ -866,12 +866,12 @@ public:
                 switch (eventId)
                 {
                     case EVENT_SKULL_CRACK:
-                        DoCast(me->getVictim(), SPELL_SKULL_CRACK);
+                        DoCast (me->getVictim(), SPELL_SKULL_CRACK);
                         events.RescheduleEvent(SPELL_DRAGON_BREATH, 3000);
                         return;
                     case EVENT_FIRE_BLAST:
                         if (Unit *target = SelectUnit(SELECT_TARGET_RANDOM, 0))
-                            DoCast(target, SPELL_FIRE_BLAST);
+                            DoCast (target, SPELL_FIRE_BLAST);
                         events.RescheduleEvent(EVENT_FIRE_BLAST, 2000);
                         return;
                 }
@@ -925,7 +925,7 @@ public:
                 switch (eventId)
                 {
                     case EVENT_TOXIC_DART:
-                        DoCast(me->getVictim(), SPELL_TOXIC_DART);
+                        DoCast (me->getVictim(), SPELL_TOXIC_DART);
                         events.RescheduleEvent(EVENT_TOXIC_DART, 1000);
                         return;
                 }

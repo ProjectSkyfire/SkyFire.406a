@@ -84,7 +84,7 @@ public:
             me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
             me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
 
-            DoCast(me, SPELL_WARLORDS_RAGE_NAGA, true);
+            DoCast (me, SPELL_WARLORDS_RAGE_NAGA, true);
 
             if (instance)
                 instance->SetData(TYPE_DISTILLER, IN_PROGRESS);
@@ -174,7 +174,7 @@ public:
                 if (Creature* distiller = me->FindNearestCreature(17954, 100.0f))
                 {
                     DoScriptText(SAY_REGEN, me);
-                    DoCast(me, SPELL_WARLORDS_RAGE);
+                    DoCast (me, SPELL_WARLORDS_RAGE);
                     CAST_AI(mob_naga_distiller::mob_naga_distillerAI, distiller->AI())->StartRageGen(me);
                 }
                 Rage_Timer = 3000+rand()%15000;
@@ -183,7 +183,7 @@ public:
             //Reflection_Timer
             if (Reflection_Timer <= diff)
             {
-                DoCast(me, SPELL_SPELL_REFLECTION);
+                DoCast (me, SPELL_SPELL_REFLECTION);
                 Reflection_Timer = 15000+rand()%10000;
             } else Reflection_Timer -= diff;
 
@@ -191,7 +191,7 @@ public:
             if (Impale_Timer <= diff)
             {
                 if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                    DoCast(target, SPELL_IMPALE);
+                    DoCast (target, SPELL_IMPALE);
 
                 Impale_Timer = 7500+rand()%5000;
             } else Impale_Timer -= diff;
