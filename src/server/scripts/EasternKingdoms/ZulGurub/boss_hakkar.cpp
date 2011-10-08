@@ -52,7 +52,7 @@ class boss_hakkar : public CreatureScript
 
         struct boss_hakkarAI : public ScriptedAI
         {
-            boss_hakkarAI(Creature* c) : ScriptedAI(c)
+            boss_hakkarAI(Creature* creature) : ScriptedAI(creature)
             {
                 instance = c->GetInstanceScript();
             }

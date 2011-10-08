@@ -44,7 +44,7 @@ public:
 
     struct boss_flamegorAI : public ScriptedAI
     {
-        boss_flamegorAI(Creature* c) : ScriptedAI(c) {}
+        boss_flamegorAI(Creature* creature) : ScriptedAI(creature) {}
 
         uint32 ShadowFlame_Timer;
         uint32 WingBuffet_Timer;

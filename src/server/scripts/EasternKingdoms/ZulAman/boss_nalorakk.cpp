@@ -105,7 +105,7 @@ class boss_nalorakk : public CreatureScript
 
         struct boss_nalorakkAI : public ScriptedAI
         {
-            boss_nalorakkAI(Creature* c) : ScriptedAI(c)
+            boss_nalorakkAI(Creature* creature) : ScriptedAI(creature)
             {
                 MoveEvent = true;
                 MovePhase = 0;

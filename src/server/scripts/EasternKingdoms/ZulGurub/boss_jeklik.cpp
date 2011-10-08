@@ -55,7 +55,7 @@ class boss_jeklik : public CreatureScript
 
         struct boss_jeklikAI : public ScriptedAI
         {
-            boss_jeklikAI(Creature* c) : ScriptedAI(c)
+            boss_jeklikAI(Creature* creature) : ScriptedAI(creature)
             {
                 instance = c->GetInstanceScript();
             }
@@ -233,7 +233,7 @@ class mob_batrider : public CreatureScript
 
         struct mob_batriderAI : public ScriptedAI
         {
-            mob_batriderAI(Creature* c) : ScriptedAI(c)
+            mob_batriderAI(Creature* creature) : ScriptedAI(creature)
             {
                 instance = c->GetInstanceScript();
             }

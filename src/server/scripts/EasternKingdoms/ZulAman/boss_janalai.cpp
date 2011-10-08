@@ -110,7 +110,7 @@ class boss_janalai : public CreatureScript
 
         struct boss_janalaiAI : public ScriptedAI
         {
-            boss_janalaiAI(Creature* c) : ScriptedAI(c)
+            boss_janalaiAI(Creature* creature) : ScriptedAI(creature)
             {
                 instance = c->GetInstanceScript();
             }
@@ -443,7 +443,7 @@ class mob_janalai_firebomb : public CreatureScript
 
         struct mob_janalai_firebombAI : public ScriptedAI
         {
-            mob_janalai_firebombAI(Creature* c) : ScriptedAI(c) {}
+            mob_janalai_firebombAI(Creature* creature) : ScriptedAI(creature) {}
 
             void Reset() {}
 
@@ -475,7 +475,7 @@ class mob_janalai_hatcher : public CreatureScript
 
         struct mob_janalai_hatcherAI : public ScriptedAI
         {
-            mob_janalai_hatcherAI(Creature* c) : ScriptedAI(c)
+            mob_janalai_hatcherAI(Creature* creature) : ScriptedAI(creature)
             {
                 instance =c->GetInstanceScript();
             }
@@ -603,7 +603,7 @@ class mob_janalai_hatchling : public CreatureScript
 
         struct mob_janalai_hatchlingAI : public ScriptedAI
         {
-            mob_janalai_hatchlingAI(Creature* c) : ScriptedAI(c)
+            mob_janalai_hatchlingAI(Creature* creature) : ScriptedAI(creature)
             {
                 instance =c->GetInstanceScript();
             }

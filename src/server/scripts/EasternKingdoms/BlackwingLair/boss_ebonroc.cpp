@@ -43,7 +43,7 @@ public:
 
     struct boss_ebonrocAI : public ScriptedAI
     {
-        boss_ebonrocAI(Creature* c) : ScriptedAI(c) {}
+        boss_ebonrocAI(Creature* creature) : ScriptedAI(creature) {}
 
         uint32 ShadowFlame_Timer;
         uint32 WingBuffet_Timer;

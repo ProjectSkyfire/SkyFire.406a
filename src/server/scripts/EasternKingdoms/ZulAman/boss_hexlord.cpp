@@ -185,7 +185,7 @@ struct boss_hexlord_addAI : public ScriptedAI
 {
     InstanceScript* instance;
 
-    boss_hexlord_addAI(Creature* c) : ScriptedAI(c)
+    boss_hexlord_addAI(Creature* creature) : ScriptedAI(creature)
     {
         instance = c->GetInstanceScript();
     }
@@ -213,7 +213,7 @@ class boss_hexlord_malacrass : public CreatureScript
 
         struct boss_hex_lord_malacrassAI : public ScriptedAI
         {
-            boss_hex_lord_malacrassAI(Creature* c) : ScriptedAI(c)
+            boss_hex_lord_malacrassAI(Creature* creature) : ScriptedAI(creature)
             {
                 instance = c->GetInstanceScript();
                 SelectAddEntry();
@@ -485,7 +485,7 @@ class boss_thurg : public CreatureScript
 
         struct boss_thurgAI : public boss_hexlord_addAI
         {
-            boss_thurgAI(Creature* c) : boss_hexlord_addAI(c) {}
+            boss_thurgAI(Creature* creature) : boss_hexlord_addAI(creature) {}
 
             uint32 bloodlust_timer;
             uint32 cleave_timer;
@@ -541,7 +541,7 @@ class boss_alyson_antille : public CreatureScript
         struct boss_alyson_antilleAI : public boss_hexlord_addAI
         {
             //Holy Priest
-            boss_alyson_antilleAI(Creature* c) : boss_hexlord_addAI(c) {}
+            boss_alyson_antilleAI(Creature* creature) : boss_hexlord_addAI(creature) {}
 
             uint32 flashheal_timer;
             uint32 dispelmagic_timer;
@@ -630,7 +630,7 @@ class boss_alyson_antille : public CreatureScript
 
 struct boss_gazakrothAI : public boss_hexlord_addAI
 {
-    boss_gazakrothAI(Creature* c) : boss_hexlord_addAI(c) {}
+    boss_gazakrothAI(Creature* creature) : boss_hexlord_addAI(creature) {}
 
     uint32 firebolt_timer;
 
@@ -680,7 +680,7 @@ class boss_lord_raadan : public CreatureScript
 
         struct boss_lord_raadanAI : public boss_hexlord_addAI
         {
-            boss_lord_raadanAI(Creature* c) : boss_hexlord_addAI(c) {}
+            boss_lord_raadanAI(Creature* creature) : boss_hexlord_addAI(creature) {}
 
             uint32 flamebreath_timer;
             uint32 thunderclap_timer;
@@ -728,7 +728,7 @@ class boss_darkheart : public CreatureScript
 
         struct boss_darkheartAI : public boss_hexlord_addAI
         {
-            boss_darkheartAI(Creature* c) : boss_hexlord_addAI(c) {}
+            boss_darkheartAI(Creature* creature) : boss_hexlord_addAI(creature) {}
 
             uint32 psychicwail_timer;
 
@@ -767,7 +767,7 @@ class boss_slither : public CreatureScript
 
         struct boss_slitherAI : public boss_hexlord_addAI
         {
-            boss_slitherAI(Creature* c) : boss_hexlord_addAI(c) {}
+            boss_slitherAI(Creature* creature) : boss_hexlord_addAI(creature) {}
 
             uint32 venomspit_timer;
 
@@ -824,7 +824,7 @@ class boss_fenstalker : public CreatureScript
 
         struct boss_fenstalkerAI : public boss_hexlord_addAI
         {
-            boss_fenstalkerAI(Creature* c) : boss_hexlord_addAI(c) {}
+            boss_fenstalkerAI(Creature* creature) : boss_hexlord_addAI(creature) {}
 
             uint32 volatileinf_timer;
 
@@ -866,7 +866,7 @@ class boss_koragg : public CreatureScript
 
         struct boss_koraggAI : public boss_hexlord_addAI
         {
-            boss_koraggAI(Creature* c) : boss_hexlord_addAI(c) {}
+            boss_koraggAI(Creature* creature) : boss_hexlord_addAI(creature) {}
 
             uint32 coldstare_timer;
             uint32 mightyblow_timer;

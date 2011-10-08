@@ -150,7 +150,7 @@ public:
 
     struct npc_grimstoneAI : public npc_escortAI
     {
-        npc_grimstoneAI(Creature* c) : npc_escortAI(c)
+        npc_grimstoneAI(Creature* creature) : npc_escortAI(creature)
         {
             instance = c->GetInstanceScript();
             MobSpawnId = rand()%6;
@@ -390,7 +390,7 @@ public:
 
     struct mob_phalanxAI : public ScriptedAI
     {
-        mob_phalanxAI(Creature* c) : ScriptedAI(c) {}
+        mob_phalanxAI(Creature* creature) : ScriptedAI(creature) {}
 
         uint32 ThunderClap_Timer;
         uint32 FireballVolley_Timer;
@@ -654,7 +654,7 @@ public:
 
     struct npc_dughal_stormwingAI : public npc_escortAI
     {
-        npc_dughal_stormwingAI(Creature* c) : npc_escortAI(c) {}
+        npc_dughal_stormwingAI(Creature* creature) : npc_escortAI(creature) {}
 
         void WaypointReached(uint32 i)
         {
@@ -772,7 +772,7 @@ public:
 
     struct npc_marshal_windsorAI : public npc_escortAI
     {
-        npc_marshal_windsorAI(Creature* c) : npc_escortAI(c)
+        npc_marshal_windsorAI(Creature* creature) : npc_escortAI(creature)
         {
             instance = c->GetInstanceScript();
         }
@@ -945,7 +945,7 @@ public:
 
     struct npc_marshal_reginald_windsorAI : public npc_escortAI
     {
-        npc_marshal_reginald_windsorAI(Creature* c) : npc_escortAI(c)
+        npc_marshal_reginald_windsorAI(Creature* creature) : npc_escortAI(creature)
         {
         }
 
@@ -1140,7 +1140,7 @@ public:
 
     struct npc_tobias_seecherAI : public npc_escortAI
     {
-        npc_tobias_seecherAI(Creature* c) :npc_escortAI(c) {}
+        npc_tobias_seecherAI(Creature* creature) :npc_escortAI(creature) {}
 
         void EnterCombat(Unit* who) {}
         void Reset() {}
@@ -1254,7 +1254,7 @@ public:
 
     struct npc_rocknotAI : public npc_escortAI
     {
-        npc_rocknotAI(Creature* c) : npc_escortAI(c)
+        npc_rocknotAI(Creature* creature) : npc_escortAI(creature)
         {
             instance = c->GetInstanceScript();
         }

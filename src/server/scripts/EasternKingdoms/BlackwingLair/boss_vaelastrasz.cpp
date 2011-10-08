@@ -82,7 +82,7 @@ public:
 
     struct boss_vaelAI : public ScriptedAI
     {
-        boss_vaelAI(Creature* c) : ScriptedAI(c)
+        boss_vaelAI(Creature* creature) : ScriptedAI(creature)
         {
             c->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
             c->setFaction(35);

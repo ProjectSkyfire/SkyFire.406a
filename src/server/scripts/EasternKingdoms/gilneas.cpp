@@ -90,7 +90,7 @@ public:
 
     struct npc_prince_liam_greymane_phase1AI : public ScriptedAI
     {
-        npc_prince_liam_greymane_phase1AI(Creature *c) : ScriptedAI(c) {}
+        npc_prince_liam_greymane_phase1AI(Creature *c) : ScriptedAI(creature) {}
 
         uint32 tSay; //Time left for say
         uint32 cSay; //Current Say
@@ -158,7 +158,7 @@ public:
 
     struct npc_panicked_citizenAI : public ScriptedAI
     {
-        npc_panicked_citizenAI(Creature *c) : ScriptedAI(c) {}
+        npc_panicked_citizenAI(Creature *c) : ScriptedAI(creature) {}
 
         uint32 tEmote; //Time left for doing an emote
 
@@ -258,7 +258,7 @@ public:
 
     struct npc_panicked_citizen_2AI : public ScriptedAI
     {
-        npc_panicked_citizen_2AI(Creature *c) : ScriptedAI(c) {}
+        npc_panicked_citizen_2AI(Creature *c) : ScriptedAI(creature) {}
 
         bool running, onceRun;
         uint32 pathID, runDelay;
@@ -362,7 +362,7 @@ public:
 
     struct npc_lieutenant_waldenAI : public ScriptedAI
     {
-        npc_lieutenant_waldenAI(Creature *c) : ScriptedAI(c) {}
+        npc_lieutenant_waldenAI(Creature *c) : ScriptedAI(creature) {}
 
         void sQuestReward(Player *player, const Quest *quest, uint32 data)
         {
@@ -387,7 +387,7 @@ public:
 
     struct npc_gilneas_city_guard_phase1AI : public ScriptedAI
     {
-        npc_gilneas_city_guard_phase1AI(Creature *c) : ScriptedAI(c) {}
+        npc_gilneas_city_guard_phase1AI(Creature *c) : ScriptedAI(creature) {}
 
         uint32 tSay; //Time left for say
 
@@ -442,7 +442,7 @@ public:
 
     struct npc_gilneas_city_guard_phase2AI : public ScriptedAI
     {
-        npc_gilneas_city_guard_phase2AI(Creature *c) : ScriptedAI(c) {}
+        npc_gilneas_city_guard_phase2AI(Creature *c) : ScriptedAI(creature) {}
 
         uint32 tAnimate, tSound, dmgCount, tSeek;
         bool playSound;
@@ -539,7 +539,7 @@ public:
 
     struct npc_prince_liam_greymane_phase2AI : public ScriptedAI
     {
-        npc_prince_liam_greymane_phase2AI(Creature *c) : ScriptedAI(c) {}
+        npc_prince_liam_greymane_phase2AI(Creature *c) : ScriptedAI(creature) {}
 
         uint32 tAnimate, tSound, dmgCount, tYell, tSeek;
         bool playSound, doYell;
@@ -680,7 +680,7 @@ public:
 
     struct npc_rampaging_worgenAI : public ScriptedAI
     {
-        npc_rampaging_worgenAI(Creature *c) : ScriptedAI(c) {}
+        npc_rampaging_worgenAI(Creature *c) : ScriptedAI(creature) {}
 
         uint32 tEnrage;
         uint32 dmgCount;
@@ -780,7 +780,7 @@ public:
 
     struct npc_rampaging_worgen2AI : public ScriptedAI
     {
-        npc_rampaging_worgen2AI(Creature *c) : ScriptedAI(c) {}
+        npc_rampaging_worgen2AI(Creature *c) : ScriptedAI(creature) {}
 
         uint16 tRun, tEnrage;
         bool onceRun, willCastEnrage;
@@ -958,7 +958,7 @@ public:
 
     struct npc_frightened_citizenAI : public ScriptedAI
     {
-        npc_frightened_citizenAI(Creature *c) : ScriptedAI(c) {}
+        npc_frightened_citizenAI(Creature *c) : ScriptedAI(creature) {}
 
         uint16 tRun, tRun2, tSay;
         bool onceRun, onceRun2, onceGet, onceSay;
@@ -1126,7 +1126,7 @@ public:
 
     struct npc_lord_darius_crowleyAI : public ScriptedAI
     {
-        npc_lord_darius_crowleyAI(Creature* c) : ScriptedAI(c), Summons(me) {}
+        npc_lord_darius_crowleyAI(Creature* creature) : ScriptedAI(creature), Summons(me) {}
 
         uint8 phase;
         uint32 phaseTime;

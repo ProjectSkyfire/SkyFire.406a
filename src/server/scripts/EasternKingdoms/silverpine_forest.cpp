@@ -81,7 +81,7 @@ public:
 
     struct npc_astor_hadrenAI : public ScriptedAI
     {
-        npc_astor_hadrenAI(Creature* c) : ScriptedAI(c) {}
+        npc_astor_hadrenAI(Creature* creature) : ScriptedAI(creature) {}
 
         void Reset()
         {
@@ -132,7 +132,7 @@ public:
 
     struct npc_deathstalker_erlandAI : public npc_escortAI
     {
-        npc_deathstalker_erlandAI(Creature* c) : npc_escortAI(c) {}
+        npc_deathstalker_erlandAI(Creature* creature) : npc_escortAI(creature) {}
 
         void WaypointReached(uint32 i)
         {
@@ -243,7 +243,7 @@ public:
 
     struct pyrewood_ambushAI : public ScriptedAI
     {
-        pyrewood_ambushAI(Creature* c) : ScriptedAI(c), Summons(me)
+        pyrewood_ambushAI(Creature* creature) : ScriptedAI(creature), Summons(me)
         {
            QuestInProgress = false;
         }

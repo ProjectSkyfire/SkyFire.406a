@@ -46,7 +46,7 @@ public:
 
     struct boss_broodlordAI : public ScriptedAI
     {
-        boss_broodlordAI(Creature* c) : ScriptedAI(c) {}
+        boss_broodlordAI(Creature* creature) : ScriptedAI(creature) {}
 
         uint32 Cleave_Timer;
         uint32 BlastWave_Timer;

@@ -46,7 +46,7 @@ public:
 
     struct boss_vectusAI : public ScriptedAI
     {
-        boss_vectusAI(Creature* c) : ScriptedAI(c) {}
+        boss_vectusAI(Creature* creature) : ScriptedAI(creature) {}
 
         uint32 FireShield_Timer;
         uint32 BlastWave_Timer;

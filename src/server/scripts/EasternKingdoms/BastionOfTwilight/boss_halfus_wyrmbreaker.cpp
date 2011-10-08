@@ -71,7 +71,7 @@ public:
 
     struct boss_halfus_wyrmbreakerAI : public ScriptedAI
     {
-        boss_halfus_wyrmbreakerAI(Creature *c) : ScriptedAI(c)
+        boss_halfus_wyrmbreakerAI(Creature *c) : ScriptedAI(creature)
         {
             instance = c->GetInstanceScript();
         }
@@ -188,7 +188,7 @@ public:
 
     struct npc_halfus_dragon_prisonerAI : public ScriptedAI
     {
-        npc_halfus_dragon_prisonerAI(Creature *c) : ScriptedAI(c)
+        npc_halfus_dragon_prisonerAI(Creature *c) : ScriptedAI(creature)
         {
             instance = c->GetInstanceScript();
         }
@@ -278,7 +278,7 @@ public:
 
     struct boss_proto_behemothAI : public ScriptedAI
     {
-        boss_proto_behemothAI(Creature *c) : ScriptedAI(c)
+        boss_proto_behemothAI(Creature *c) : ScriptedAI(creature)
         {
             instance = c->GetInstanceScript();
         }

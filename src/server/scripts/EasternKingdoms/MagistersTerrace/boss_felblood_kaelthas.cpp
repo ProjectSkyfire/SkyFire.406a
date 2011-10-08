@@ -83,14 +83,14 @@ class boss_felblood_kaelthas : public CreatureScript
 public:
     boss_felblood_kaelthas() : CreatureScript("boss_felblood_kaelthas") { }
 
-    CreatureAI* GetAI(Creature* c) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new boss_felblood_kaelthasAI(c);
+        return new boss_felblood_kaelthasAI(creature);
     }
 
     struct boss_felblood_kaelthasAI : public ScriptedAI
     {
-        boss_felblood_kaelthasAI(Creature* c) : ScriptedAI(c)
+        boss_felblood_kaelthasAI(Creature* creature) : ScriptedAI(creature)
         {
             instance = c->GetInstanceScript();
         }
@@ -432,14 +432,14 @@ class mob_felkael_flamestrike : public CreatureScript
 public:
     mob_felkael_flamestrike() : CreatureScript("mob_felkael_flamestrike") { }
 
-    CreatureAI* GetAI(Creature* c) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new mob_felkael_flamestrikeAI(c);
+        return new mob_felkael_flamestrikeAI(creature);
     }
 
     struct mob_felkael_flamestrikeAI : public ScriptedAI
     {
-        mob_felkael_flamestrikeAI(Creature* c) : ScriptedAI(c) {}
+        mob_felkael_flamestrikeAI(Creature* creature) : ScriptedAI(creature) {}
 
         uint32 FlameStrikeTimer;
 
@@ -471,14 +471,14 @@ class mob_felkael_phoenix : public CreatureScript
 public:
     mob_felkael_phoenix() : CreatureScript("mob_felkael_phoenix") { }
 
-    CreatureAI* GetAI(Creature* c) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new mob_felkael_phoenixAI(c);
+        return new mob_felkael_phoenixAI(creature);
     }
 
     struct mob_felkael_phoenixAI : public ScriptedAI
     {
-        mob_felkael_phoenixAI(Creature* c) : ScriptedAI(c)
+        mob_felkael_phoenixAI(Creature* creature) : ScriptedAI(creature)
         {
             instance = c->GetInstanceScript();
         }
@@ -584,14 +584,14 @@ class mob_felkael_phoenix_egg : public CreatureScript
 public:
     mob_felkael_phoenix_egg() : CreatureScript("mob_felkael_phoenix_egg") { }
 
-    CreatureAI* GetAI(Creature* c) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new mob_felkael_phoenix_eggAI(c);
+        return new mob_felkael_phoenix_eggAI(creature);
     }
 
     struct mob_felkael_phoenix_eggAI : public ScriptedAI
     {
-        mob_felkael_phoenix_eggAI(Creature* c) : ScriptedAI(c) {}
+        mob_felkael_phoenix_eggAI(Creature* creature) : ScriptedAI(creature) {}
 
         uint32 HatchTimer;
 
@@ -619,14 +619,14 @@ class mob_arcane_sphere : public CreatureScript
 public:
     mob_arcane_sphere() : CreatureScript("mob_arcane_sphere") { }
 
-    CreatureAI* GetAI(Creature* c) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new mob_arcane_sphereAI(c);
+        return new mob_arcane_sphereAI(creature);
     }
 
     struct mob_arcane_sphereAI : public ScriptedAI
     {
-        mob_arcane_sphereAI(Creature* c) : ScriptedAI(c) { Reset(); }
+        mob_arcane_sphereAI(Creature* creature) : ScriptedAI(creature) { Reset(); }
 
         uint32 DespawnTimer;
         uint32 ChangeTargetTimer;

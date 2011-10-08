@@ -109,7 +109,7 @@ public:
 
     struct netherspite_infernalAI : public ScriptedAI
     {
-        netherspite_infernalAI(Creature* c) : ScriptedAI(c) ,
+        netherspite_infernalAI(Creature* creature) : ScriptedAI(creature) ,
             HellfireTimer(0), CleanupTimer(0), malchezaar(0), point(NULL) {}
 
         uint32 HellfireTimer;
@@ -183,7 +183,7 @@ public:
 
     struct boss_malchezaarAI : public ScriptedAI
     {
-        boss_malchezaarAI(Creature* c) : ScriptedAI(c)
+        boss_malchezaarAI(Creature* creature) : ScriptedAI(creature)
         {
             instance = c->GetInstanceScript();
         }

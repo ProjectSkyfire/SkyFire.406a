@@ -116,7 +116,7 @@ public:
 
     struct boss_kalecgosAI : public ScriptedAI
     {
-        boss_kalecgosAI(Creature* c) : ScriptedAI(c)
+        boss_kalecgosAI(Creature* creature) : ScriptedAI(creature)
         {
             instance = c->GetInstanceScript();
             SathGUID = 0;
@@ -456,7 +456,7 @@ public:
 
         bool isEnraged; // if demon is enraged
 
-        boss_kalecAI(Creature* c) : ScriptedAI(c)
+        boss_kalecAI(Creature* creature) : ScriptedAI(creature)
         {
             instance = c->GetInstanceScript();
         }
@@ -573,7 +573,7 @@ public:
 
     struct boss_sathrovarrAI : public ScriptedAI
     {
-        boss_sathrovarrAI(Creature* c) : ScriptedAI(c)
+        boss_sathrovarrAI(Creature* creature) : ScriptedAI(creature)
         {
             instance = c->GetInstanceScript();
             KalecGUID = 0;

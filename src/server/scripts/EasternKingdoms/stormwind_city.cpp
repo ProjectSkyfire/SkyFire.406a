@@ -107,7 +107,7 @@ public:
 
     struct npc_bartlebyAI : public ScriptedAI
     {
-        npc_bartlebyAI(Creature* c) : ScriptedAI(c)
+        npc_bartlebyAI(Creature* creature) : ScriptedAI(creature)
         {
             NormalFaction = c->getFaction();
         }
@@ -178,7 +178,7 @@ public:
 
     struct npc_dashel_stonefistAI : public ScriptedAI
     {
-        npc_dashel_stonefistAI(Creature* c) : ScriptedAI(c)
+        npc_dashel_stonefistAI(Creature* creature) : ScriptedAI(creature)
         {
             NormalFaction = c->getFaction();
         }

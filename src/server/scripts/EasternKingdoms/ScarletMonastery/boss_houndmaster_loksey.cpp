@@ -45,7 +45,7 @@ public:
 
     struct boss_houndmaster_lokseyAI : public ScriptedAI
     {
-        boss_houndmaster_lokseyAI(Creature* c) : ScriptedAI(c) {}
+        boss_houndmaster_lokseyAI(Creature* creature) : ScriptedAI(creature) {}
 
         uint32 BloodLust_Timer;
 

@@ -46,7 +46,7 @@ public:
 
     struct boss_theolenkrastinovAI : public ScriptedAI
     {
-        boss_theolenkrastinovAI(Creature* c) : ScriptedAI(c) {}
+        boss_theolenkrastinovAI(Creature* creature) : ScriptedAI(creature) {}
 
         uint32 Rend_Timer;
         uint32 Backhand_Timer;

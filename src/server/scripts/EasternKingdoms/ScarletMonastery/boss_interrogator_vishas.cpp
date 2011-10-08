@@ -50,7 +50,7 @@ public:
 
     struct boss_interrogator_vishasAI : public ScriptedAI
     {
-        boss_interrogator_vishasAI(Creature* c) : ScriptedAI(c)
+        boss_interrogator_vishasAI(Creature* creature) : ScriptedAI(creature)
         {
             instance = me->GetInstanceScript();
         }

@@ -42,7 +42,7 @@ public:
     {
         instance_blackrock_cavernsInstanceMapScript(InstanceMap* map) : InstanceScript(map) { }
 
-        uint32 uiEncounter[ENCOUNTERS];
+        uint32 Encounter[ENCOUNTERS];
 
         uint64 uiRomoggBonecrusher;
         uint64 uiCorla;
@@ -59,14 +59,14 @@ public:
              uiAscendantLordObsidius = 0;
 
              for (uint8 i = 0 ; i < ENCOUNTERS; ++i)
-                 uiEncounter[i] = NOT_STARTED;
+                 Encounter[i] = NOT_STARTED;
         }
 
         bool IsEncounterInProgress() const
         {
             for (uint8 i = 0; i < ENCOUNTERS; ++i)
             {
-                if (uiEncounter[i] == NOT_STARTED)
+                if (Encounter[i] == NOT_STARTED)
                     return true;
             }
             return false;
@@ -117,19 +117,19 @@ public:
             switch (type)
             {
                 case DATA_ROMOGG_BONECRUSHER_EVENT:
-                    uiEncounter[0] = data;
+                    Encounter[0] = data;
                     break;
                 case DATA_CORLA_EVENT:
-                    uiEncounter[1] = data;
+                    Encounter[1] = data;
                     break;
                 case DATA_KARSH_STEELBENDER_EVENT:
-                    uiEncounter[2] = data;
+                    Encounter[2] = data;
                     break;
                 case DATA_BEAUTY_EVENT:
-                    uiEncounter[3] = data;
+                    Encounter[3] = data;
                     break;
                 case DATA_ASCENDANT_LORD_OBSIDIUS_EVENT:
-                    uiEncounter[4] = data;
+                    Encounter[4] = data;
                     break;
             }
             if (data == DONE)
@@ -141,15 +141,15 @@ public:
             switch (type)
             {
                 case DATA_ROMOGG_BONECRUSHER_EVENT:
-                    return uiEncounter[0];
+                    return Encounter[0];
                 case DATA_CORLA_EVENT:
-                    return uiEncounter[1];
+                    return Encounter[1];
                 case DATA_KARSH_STEELBENDER_EVENT:
-                    return uiEncounter[2];
+                    return Encounter[2];
                 case DATA_BEAUTY_EVENT:
-                    return uiEncounter[3];
+                    return Encounter[3];
                 case DATA_ASCENDANT_LORD_OBSIDIUS_EVENT:
-                    return uiEncounter[4];
+                    return Encounter[4];
             }
             return 0;
         }
@@ -160,7 +160,7 @@ public:
 
             std::string str_data;
             std::ostringstream saveStream;
-            saveStream << "B C" << uiEncounter[0] << " " << uiEncounter[1]  << " " << uiEncounter[2]  << " " << uiEncounter[3] << " " << uiEncounter[4];
+            saveStream << "B C" << Encounter[0] << " " << Encounter[1]  << " " << Encounter[2]  << " " << Encounter[3] << " " << Encounter[4];
             str_data = saveStream.str();
 
             OUT_SAVE_INST_DATA_COMPLETE;
@@ -185,15 +185,15 @@ public:
 
             if (dataHead1 == 'B' && dataHead2 == 'C')
             {
-                uiEncounter[0] = data0;
-                uiEncounter[1] = data1;
-                uiEncounter[2] = data2;
-                uiEncounter[3] = data3;
-                uiEncounter[4] = data4;
+                Encounter[0] = data0;
+                Encounter[1] = data1;
+                Encounter[2] = data2;
+                Encounter[3] = data3;
+                Encounter[4] = data4;
 
                 for (uint8 i=0; i < ENCOUNTERS; ++i)
-                    if (uiEncounter[i] == IN_PROGRESS)
-                        uiEncounter[i] = NOT_STARTED;
+                    if (Encounter[i] == IN_PROGRESS)
+                        Encounter[i] = NOT_STARTED;
             }
             else OUT_LOAD_INST_DATA_FAIL;
 

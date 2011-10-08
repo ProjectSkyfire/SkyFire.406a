@@ -54,7 +54,7 @@ public:
 
     struct npc_blood_knight_stillbladeAI : public ScriptedAI
     {
-        npc_blood_knight_stillbladeAI(Creature* c) : ScriptedAI(c) {}
+        npc_blood_knight_stillbladeAI(Creature* creature) : ScriptedAI(creature) {}
 
         uint32 lifeTimer;
         bool spellHit;

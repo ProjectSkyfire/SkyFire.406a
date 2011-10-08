@@ -110,7 +110,7 @@ public:
 
     struct npc_barnesAI : public npc_escortAI
     {
-        npc_barnesAI(Creature* c) : npc_escortAI(c)
+        npc_barnesAI(Creature* creature) : npc_escortAI(creature)
         {
             RaidWiped = false;
             EventId = 0;
@@ -472,7 +472,7 @@ public:
 
     struct npc_image_of_medivhAI : public ScriptedAI
     {
-        npc_image_of_medivhAI(Creature* c) : ScriptedAI(c)
+        npc_image_of_medivhAI(Creature* creature) : ScriptedAI(creature)
         {
             instance = c->GetInstanceScript();
         }

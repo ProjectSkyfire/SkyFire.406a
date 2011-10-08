@@ -51,7 +51,7 @@ public:
 
     struct boss_draganthaurissanAI : public ScriptedAI
     {
-        boss_draganthaurissanAI(Creature* c) : ScriptedAI(c)
+        boss_draganthaurissanAI(Creature* creature) : ScriptedAI(creature)
         {
             instance = me->GetInstanceScript();
         }

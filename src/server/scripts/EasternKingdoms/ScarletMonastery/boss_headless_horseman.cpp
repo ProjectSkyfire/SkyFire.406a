@@ -141,7 +141,7 @@ public:
 
     struct mob_wisp_invisAI : public ScriptedAI
     {
-        mob_wisp_invisAI(Creature* c) : ScriptedAI(c)
+        mob_wisp_invisAI(Creature* creature) : ScriptedAI(creature)
         {
             Creaturetype = delay = spell = spell2 = 0;
         }
@@ -220,7 +220,7 @@ public:
 
     struct mob_headAI : public ScriptedAI
     {
-        mob_headAI(Creature* c) : ScriptedAI(c) {}
+        mob_headAI(Creature* creature) : ScriptedAI(creature) {}
 
         uint64 bodyGUID;
 
@@ -358,7 +358,7 @@ public:
 
     struct boss_headless_horsemanAI : public ScriptedAI
     {
-        boss_headless_horsemanAI(Creature* c) : ScriptedAI(c)
+        boss_headless_horsemanAI(Creature* creature) : ScriptedAI(creature)
         {
             instance = c->GetInstanceScript();
         }
@@ -745,7 +745,7 @@ public:
 
     struct mob_pulsing_pumpkinAI : public ScriptedAI
     {
-        mob_pulsing_pumpkinAI(Creature* c) : ScriptedAI(c) {}
+        mob_pulsing_pumpkinAI(Creature* creature) : ScriptedAI(creature) {}
 
         bool sprouted;
         uint64 debuffGUID;

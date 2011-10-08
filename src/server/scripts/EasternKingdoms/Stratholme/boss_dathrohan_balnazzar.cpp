@@ -78,7 +78,7 @@ public:
 
     struct boss_dathrohan_balnazzarAI : public ScriptedAI
     {
-        boss_dathrohan_balnazzarAI(Creature* c) : ScriptedAI(c) {}
+        boss_dathrohan_balnazzarAI(Creature* creature) : ScriptedAI(creature) {}
 
         uint32 CrusadersHammer_Timer;
         uint32 CrusaderStrike_Timer;

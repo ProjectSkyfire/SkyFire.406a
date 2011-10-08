@@ -37,7 +37,7 @@ class boss_gahzranka : public CreatureScript
 
         struct boss_gahzrankaAI : public ScriptedAI
         {
-            boss_gahzrankaAI(Creature* c) : ScriptedAI(c) {}
+            boss_gahzrankaAI(Creature* creature) : ScriptedAI(creature) {}
 
 			uint32 Frostbreath_Timer;
             uint32 MassiveGeyser_Timer;
