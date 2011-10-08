@@ -109,13 +109,13 @@ public:
     {
         boss_fathomlord_karathressAI(Creature* c) : ScriptedAI(c)
         {
-            pInstance = c->GetInstanceScript();
+            instance = c->GetInstanceScript();
             Advisors[0] = 0;
             Advisors[1] = 0;
             Advisors[2] = 0;
         }
 
-        InstanceScript* pInstance;
+        InstanceScript* instance;
 
         uint32 CataclysmicBolt_Timer;
         uint32 Enrage_Timer;
@@ -133,12 +133,12 @@ public:
 
             BlessingOfTides = false;
 
-            if (pInstance)
+            if (instance)
             {
                 uint64 RAdvisors[MAX_ADVISORS];
-                RAdvisors[0] = pInstance->GetData64(DATA_SHARKKIS);
-                RAdvisors[1] = pInstance->GetData64(DATA_TIDALVESS);
-                RAdvisors[2] = pInstance->GetData64(DATA_CARIBDIS);
+                RAdvisors[0] = instance->GetData64(DATA_SHARKKIS);
+                RAdvisors[1] = instance->GetData64(DATA_TIDALVESS);
+                RAdvisors[2] = instance->GetData64(DATA_CARIBDIS);
                 //Respawn of the 3 Advisors
                 Creature* pAdvisor = NULL;
                 for (int i=0; i<MAX_ADVISORS; ++i)
@@ -152,7 +152,7 @@ public:
                             pAdvisor->GetMotionMaster()->MoveTargetedHome();
                         }
                     }
-                pInstance->SetData(DATA_KARATHRESSEVENT, NOT_STARTED);
+                instance->SetData(DATA_KARATHRESSEVENT, NOT_STARTED);
             }
         }
 
@@ -176,17 +176,17 @@ public:
 
         void GetAdvisors()
         {
-            if (!pInstance)
+            if (!instance)
                 return;
 
-            Advisors[0] = pInstance->GetData64(DATA_SHARKKIS);
-            Advisors[1] = pInstance->GetData64(DATA_TIDALVESS);
-            Advisors[2] = pInstance->GetData64(DATA_CARIBDIS);
+            Advisors[0] = instance->GetData64(DATA_SHARKKIS);
+            Advisors[1] = instance->GetData64(DATA_TIDALVESS);
+            Advisors[2] = instance->GetData64(DATA_CARIBDIS);
         }
 
         void StartEvent(Unit* who)
         {
-            if (!pInstance)
+            if (!instance)
                 return;
 
             GetAdvisors();
@@ -194,8 +194,8 @@ public:
             DoScriptText(SAY_AGGRO, me);
             DoZoneInCombat();
 
-            pInstance->SetData64(DATA_KARATHRESSEVENT_STARTER, who->GetGUID());
-            pInstance->SetData(DATA_KARATHRESSEVENT, IN_PROGRESS);
+            instance->SetData64(DATA_KARATHRESSEVENT_STARTER, who->GetGUID());
+            instance->SetData(DATA_KARATHRESSEVENT, IN_PROGRESS);
         }
 
         void KilledUnit(Unit* /*victim*/)
@@ -207,8 +207,8 @@ public:
         {
             DoScriptText(SAY_DEATH, me);
 
-            if (pInstance)
-                pInstance->SetData(DATA_FATHOMLORDKARATHRESSEVENT, DONE);
+            if (instance)
+                instance->SetData(DATA_FATHOMLORDKARATHRESSEVENT, DONE);
 
             //support for quest 10944
             me->SummonCreature(SEER_OLUM, OLUM_X, OLUM_Y, OLUM_Z, OLUM_O, TEMPSUMMON_TIMED_DESPAWN, 3600000);
@@ -222,9 +222,9 @@ public:
         void UpdateAI(const uint32 diff)
         {
             //Only if not incombat check if the event is started
-            if (!me->isInCombat() && pInstance && pInstance->GetData(DATA_KARATHRESSEVENT))
+            if (!me->isInCombat() && instance && instance->GetData(DATA_KARATHRESSEVENT))
             {
-                Unit* target = Unit::GetUnit((*me), pInstance->GetData64(DATA_KARATHRESSEVENT_STARTER));
+                Unit* target = Unit::GetUnit((*me), instance->GetData64(DATA_KARATHRESSEVENT_STARTER));
 
                 if (target)
                 {
@@ -238,7 +238,7 @@ public:
                 return;
 
             //someone evaded!
-            if (pInstance && !pInstance->GetData(DATA_KARATHRESSEVENT))
+            if (instance && !instance->GetData(DATA_KARATHRESSEVENT))
             {
                 EnterEvadeMode();
                 return;
@@ -317,10 +317,10 @@ public:
     {
         boss_fathomguard_sharkkisAI(Creature* c) : ScriptedAI(c)
         {
-            pInstance = c->GetInstanceScript();
+            instance = c->GetInstanceScript();
         }
 
-        InstanceScript* pInstance;
+        InstanceScript* instance;
 
         uint32 LeechingThrow_Timer;
         uint32 TheBeastWithin_Timer;
@@ -348,16 +348,16 @@ public:
 
             SummonedPet = 0;
 
-            if (pInstance)
-                pInstance->SetData(DATA_KARATHRESSEVENT, NOT_STARTED);
+            if (instance)
+                instance->SetData(DATA_KARATHRESSEVENT, NOT_STARTED);
         }
 
         void JustDied(Unit* /*victim*/)
         {
-            if (pInstance)
+            if (instance)
             {
                 Creature* Karathress = NULL;
-                Karathress = (Unit::GetCreature((*me), pInstance->GetData64(DATA_KARATHRESS)));
+                Karathress = (Unit::GetCreature((*me), instance->GetData64(DATA_KARATHRESS)));
 
                 if (Karathress)
                     if (!me->isAlive() && Karathress)
@@ -367,19 +367,19 @@ public:
 
         void EnterCombat(Unit* who)
         {
-            if (pInstance)
+            if (instance)
             {
-                pInstance->SetData64(DATA_KARATHRESSEVENT_STARTER, who->GetGUID());
-                pInstance->SetData(DATA_KARATHRESSEVENT, IN_PROGRESS);
+                instance->SetData64(DATA_KARATHRESSEVENT_STARTER, who->GetGUID());
+                instance->SetData(DATA_KARATHRESSEVENT, IN_PROGRESS);
             }
         }
 
         void UpdateAI(const uint32 diff)
         {
             //Only if not incombat check if the event is started
-            if (!me->isInCombat() && pInstance && pInstance->GetData(DATA_KARATHRESSEVENT))
+            if (!me->isInCombat() && instance && instance->GetData(DATA_KARATHRESSEVENT))
             {
-                Unit* target = Unit::GetUnit((*me), pInstance->GetData64(DATA_KARATHRESSEVENT_STARTER));
+                Unit* target = Unit::GetUnit((*me), instance->GetData64(DATA_KARATHRESSEVENT_STARTER));
 
                 if (target)
                 {
@@ -392,7 +392,7 @@ public:
                 return;
 
             //someone evaded!
-            if (pInstance && !pInstance->GetData(DATA_KARATHRESSEVENT))
+            if (instance && !instance->GetData(DATA_KARATHRESSEVENT))
             {
                 EnterEvadeMode();
                 return;
@@ -470,10 +470,10 @@ public:
     {
         boss_fathomguard_tidalvessAI(Creature* c) : ScriptedAI(c)
         {
-            pInstance = c->GetInstanceScript();
+            instance = c->GetInstanceScript();
         }
 
-        InstanceScript* pInstance;
+        InstanceScript* instance;
 
         uint32 FrostShock_Timer;
         uint32 Spitfire_Timer;
@@ -487,16 +487,16 @@ public:
             PoisonCleansing_Timer = 30000;
             Earthbind_Timer = 45000;
 
-            if (pInstance)
-                pInstance->SetData(DATA_KARATHRESSEVENT, NOT_STARTED);
+            if (instance)
+                instance->SetData(DATA_KARATHRESSEVENT, NOT_STARTED);
         }
 
         void JustDied(Unit* /*victim*/)
         {
-            if (pInstance)
+            if (instance)
             {
                 Creature* Karathress = NULL;
-                Karathress = (Unit::GetCreature((*me), pInstance->GetData64(DATA_KARATHRESS)));
+                Karathress = (Unit::GetCreature((*me), instance->GetData64(DATA_KARATHRESS)));
 
                 if (Karathress)
                     if (!me->isAlive() && Karathress)
@@ -506,10 +506,10 @@ public:
 
         void EnterCombat(Unit* who)
         {
-            if (pInstance)
+            if (instance)
             {
-                pInstance->SetData64(DATA_KARATHRESSEVENT_STARTER, who->GetGUID());
-                pInstance->SetData(DATA_KARATHRESSEVENT, IN_PROGRESS);
+                instance->SetData64(DATA_KARATHRESSEVENT_STARTER, who->GetGUID());
+                instance->SetData(DATA_KARATHRESSEVENT, IN_PROGRESS);
             }
             DoCast(me, SPELL_WINDFURY_WEAPON);
         }
@@ -517,9 +517,9 @@ public:
         void UpdateAI(const uint32 diff)
         {
             //Only if not incombat check if the event is started
-            if (!me->isInCombat() && pInstance && pInstance->GetData(DATA_KARATHRESSEVENT))
+            if (!me->isInCombat() && instance && instance->GetData(DATA_KARATHRESSEVENT))
             {
-                Unit* target = Unit::GetUnit((*me), pInstance->GetData64(DATA_KARATHRESSEVENT_STARTER));
+                Unit* target = Unit::GetUnit((*me), instance->GetData64(DATA_KARATHRESSEVENT_STARTER));
 
                 if (target)
                 {
@@ -532,7 +532,7 @@ public:
                 return;
 
             //someone evaded!
-            if (pInstance && !pInstance->GetData(DATA_KARATHRESSEVENT))
+            if (instance && !instance->GetData(DATA_KARATHRESSEVENT))
             {
                 EnterEvadeMode();
                 return;
@@ -596,10 +596,10 @@ public:
     {
         boss_fathomguard_caribdisAI(Creature* c) : ScriptedAI(c)
         {
-            pInstance = c->GetInstanceScript();
+            instance = c->GetInstanceScript();
         }
 
-        InstanceScript* pInstance;
+        InstanceScript* instance;
 
         uint32 WaterBoltVolley_Timer;
         uint32 TidalSurge_Timer;
@@ -613,16 +613,16 @@ public:
             Heal_Timer = 55000;
             Cyclone_Timer = 30000+rand()%10000;
 
-            if (pInstance)
-                pInstance->SetData(DATA_KARATHRESSEVENT, NOT_STARTED);
+            if (instance)
+                instance->SetData(DATA_KARATHRESSEVENT, NOT_STARTED);
         }
 
         void JustDied(Unit* /*victim*/)
         {
-            if (pInstance)
+            if (instance)
             {
                 Creature* Karathress = NULL;
-                Karathress = (Unit::GetCreature((*me), pInstance->GetData64(DATA_KARATHRESS)));
+                Karathress = (Unit::GetCreature((*me), instance->GetData64(DATA_KARATHRESS)));
 
                 if (Karathress)
                     if (!me->isAlive() && Karathress)
@@ -632,19 +632,19 @@ public:
 
         void EnterCombat(Unit* who)
         {
-            if (pInstance)
+            if (instance)
             {
-                pInstance->SetData64(DATA_KARATHRESSEVENT_STARTER, who->GetGUID());
-                pInstance->SetData(DATA_KARATHRESSEVENT, IN_PROGRESS);
+                instance->SetData64(DATA_KARATHRESSEVENT_STARTER, who->GetGUID());
+                instance->SetData(DATA_KARATHRESSEVENT, IN_PROGRESS);
             }
         }
 
         void UpdateAI(const uint32 diff)
         {
             //Only if not incombat check if the event is started
-            if (!me->isInCombat() && pInstance && pInstance->GetData(DATA_KARATHRESSEVENT))
+            if (!me->isInCombat() && instance && instance->GetData(DATA_KARATHRESSEVENT))
             {
-                Unit* target = Unit::GetUnit((*me), pInstance->GetData64(DATA_KARATHRESSEVENT_STARTER));
+                Unit* target = Unit::GetUnit((*me), instance->GetData64(DATA_KARATHRESSEVENT_STARTER));
 
                 if (target)
                 {
@@ -657,7 +657,7 @@ public:
                 return;
 
             //someone evaded!
-            if (pInstance && !pInstance->GetData(DATA_KARATHRESSEVENT))
+            if (instance && !instance->GetData(DATA_KARATHRESSEVENT))
             {
                 EnterEvadeMode();
                 return;
@@ -721,18 +721,18 @@ public:
         Unit* selectAdvisorUnit()
         {
             Unit* unit = NULL;
-            if (pInstance)
+            if (instance)
             {
                 switch (rand()%4)
                 {
                 case 0:
-                    unit = Unit::GetUnit((*me), pInstance->GetData64(DATA_KARATHRESS));
+                    unit = Unit::GetUnit((*me), instance->GetData64(DATA_KARATHRESS));
                     break;
                 case 1:
-                    unit = Unit::GetUnit((*me), pInstance->GetData64(DATA_SHARKKIS));
+                    unit = Unit::GetUnit((*me), instance->GetData64(DATA_SHARKKIS));
                     break;
                 case 2:
-                    unit = Unit::GetUnit((*me), pInstance->GetData64(DATA_TIDALVESS));
+                    unit = Unit::GetUnit((*me), instance->GetData64(DATA_TIDALVESS));
                     break;
                 case 3:
                     unit = me;

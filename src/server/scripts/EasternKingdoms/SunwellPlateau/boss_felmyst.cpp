@@ -118,10 +118,10 @@ public:
     {
         boss_felmystAI(Creature* c) : ScriptedAI(c)
         {
-            pInstance = c->GetInstanceScript();
+            instance = c->GetInstanceScript();
         }
 
-        InstanceScript* pInstance;
+        InstanceScript* instance;
         PhaseFelmyst phase;
         EventMap events;
 
@@ -145,8 +145,8 @@ public:
             DespawnSummons(MOB_VAPOR_TRAIL);
             me->setActive(false);
 
-            if (pInstance)
-                pInstance->SetData(DATA_FELMYST_EVENT, NOT_STARTED);
+            if (instance)
+                instance->SetData(DATA_FELMYST_EVENT, NOT_STARTED);
         }
 
         void EnterCombat(Unit* /*who*/)
@@ -159,8 +159,8 @@ public:
             DoCast(me, AURA_NOXIOUS_FUMES, true);
             EnterPhase(PHASE_GROUND);
 
-            if (pInstance)
-                pInstance->SetData(DATA_FELMYST_EVENT, IN_PROGRESS);
+            if (instance)
+                instance->SetData(DATA_FELMYST_EVENT, IN_PROGRESS);
         }
 
         void AttackStart(Unit* who)
@@ -189,8 +189,8 @@ public:
         {
             DoScriptText(YELL_DEATH, me);
 
-            if (pInstance)
-                pInstance->SetData(DATA_FELMYST_EVENT, DONE);
+            if (instance)
+                instance->SetData(DATA_FELMYST_EVENT, DONE);
         }
 
         void SpellHit(Unit* caster, const SpellInfo* spell)
@@ -285,7 +285,7 @@ public:
             {
                 Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 150, true);
                 if (!target)
-                    target = Unit::GetUnit(*me, pInstance ? pInstance->GetData64(DATA_PLAYER_GUID) : 0);
+                    target = Unit::GetUnit(*me, instance ? instance->GetData64(DATA_PLAYER_GUID) : 0);
 
                 if (!target)
                 {
@@ -312,7 +312,7 @@ public:
 
                 Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 150, true);
                 if (!target)
-                    target = Unit::GetUnit(*me, pInstance ? pInstance->GetData64(DATA_PLAYER_GUID) : 0);
+                    target = Unit::GetUnit(*me, instance ? instance->GetData64(DATA_PLAYER_GUID) : 0);
 
                 if (!target)
                 {
@@ -320,7 +320,7 @@ public:
                     return;
                 }
 
-                //pTarget->CastSpell(target, SPELL_VAPOR_SUMMON, true); need core support
+                //target->CastSpell(target, SPELL_VAPOR_SUMMON, true); need core support
                 Creature* pVapor = me->SummonCreature(MOB_VAPOR, target->GetPositionX()-5+rand()%10, target->GetPositionY()-5+rand()%10, target->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 9000);
                 if (pVapor)
                 {
@@ -342,7 +342,7 @@ public:
             {
                 Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 150, true);
                 if (!target)
-                    target = Unit::GetUnit(*me, pInstance ? pInstance->GetData64(DATA_PLAYER_GUID) : 0);
+                    target = Unit::GetUnit(*me, instance ? instance->GetData64(DATA_PLAYER_GUID) : 0);
 
                 if (!target)
                 {

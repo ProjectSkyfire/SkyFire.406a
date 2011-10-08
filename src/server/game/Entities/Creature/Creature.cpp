@@ -1412,7 +1412,7 @@ bool Creature::canStartAttack(Unit const* who, bool force) const
 
     if (HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE))
         return false;
-        
+
     // Do not attack non-combat pets
     if (who->GetTypeId() == TYPEID_UNIT && who->GetCreatureType() == CREATURE_TYPE_NON_COMBAT_PET)
         return false;
@@ -2118,15 +2118,15 @@ void Creature::SetInCombatWithZone()
         return;
     }
 
-    Map* pMap = GetMap();
+    Map* map = GetMap();
 
-    if (!pMap->IsDungeon())
+    if (!map->IsDungeon())
     {
-        sLog->outError("Creature entry %u call SetInCombatWithZone for map (id: %u) that isn't an instance.", GetEntry(), pMap->GetId());
+        sLog->outError("Creature entry %u call SetInCombatWithZone for map (id: %u) that isn't an instance.", GetEntry(), map->GetId());
         return;
     }
 
-    Map::PlayerList const &PlList = pMap->GetPlayers();
+    Map::PlayerList const &PlList = map->GetPlayers();
 
     if (PlList.isEmpty())
         return;

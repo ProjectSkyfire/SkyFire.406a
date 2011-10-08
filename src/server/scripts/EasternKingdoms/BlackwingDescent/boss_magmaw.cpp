@@ -39,10 +39,10 @@ public:
     {
         boss_magmawAI(Creature* creature) : ScriptedAI(creature)
         {
-            pInstance = creature->GetInstanceScript();
+            instance = creature->GetInstanceScript();
         }
 
-        InstanceScript* pInstance;
+        InstanceScript* instance;
 
         uint32 uiLavaSpewTimer;
         uint32 uiMagmaSpitTimer;
@@ -50,7 +50,7 @@ public:
 
         void Reset()
         {
-            pInstance->SetData(DATA_MAGMAW, NOT_STARTED);
+            instance->SetData(DATA_MAGMAW, NOT_STARTED);
 
             uiLavaSpewTimer = 10*IN_MILLISECONDS;
             uiMagmaSpitTimer = 14*IN_MILLISECONDS;
@@ -60,19 +60,19 @@ public:
             me->ApplySpellImmune(0, IMMUNITY_MECHANIC, MECHANIC_GRIP, true);
         }
 
-        void EnterCombat(Unit* /*pWho*/)
+        void EnterCombat(Unit* /*who*/)
         {
-            pInstance->SetData(DATA_MAGMAW, IN_PROGRESS);
+            instance->SetData(DATA_MAGMAW, IN_PROGRESS);
         }
 
         void JustReachedHome()
         {
-            pInstance->SetData(DATA_MAGMAW, FAIL);
+            instance->SetData(DATA_MAGMAW, FAIL);
         }
 
         void JustDied(Unit* /*Killer*/)
         {
-            pInstance->SetData(DATA_MAGMAW, DONE);
+            instance->SetData(DATA_MAGMAW, DONE);
         }
 
         void SummonCreatureWithRandomTarget(uint32 creatureId)
@@ -141,7 +141,7 @@ public:
             uiCheckDistanceTimer = 2*IN_MILLISECONDS;
         }
 
-        void EnterCombat(Unit* /*pWho*/) { }
+        void EnterCombat(Unit* /*who*/) { }
 
         void JustDied(Unit* /*Killer*/) {}
 
@@ -182,9 +182,9 @@ class spell_parasitic_infection : public SpellScriptLoader
                     Unit* Summoned = caster->SummonCreature(42321, caster->GetPositionX(), caster->GetPositionY(), caster->GetPositionZ(), 0, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 240000);
                     /*if (Summoned)
                     {
-                        Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0);
-                        if (pTarget)
-                            Summoned->AddThreat(pTarget, 1.0f);
+                        Unit *target = SelectUnit(SELECT_TARGET_RANDOM, 0);
+                        if (target)
+                            Summoned->AddThreat(target, 1.0f);
                     }*/
                 }
             }

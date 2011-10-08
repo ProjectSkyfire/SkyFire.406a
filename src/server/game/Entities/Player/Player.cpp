@@ -7149,16 +7149,16 @@ void Player::RewardOnKill(Unit *pVictim, float rate)
     {
         // support for: Championing - http://www.wowwiki.com/Championing
 
-        Map const *pMap = GetMap();
-        if (pMap && pMap->IsDungeon())
+        Map const *map = GetMap();
+        if (map && map->IsDungeon())
         {
-            InstanceTemplate const *pInstance = sObjectMgr->GetInstanceTemplate(pMap->GetId());
-            if (pInstance)
+            InstanceTemplate const *instance = sObjectMgr->GetInstanceTemplate(map->GetId());
+            if (instance)
             {
-                AccessRequirement const *pAccessRequirement = sObjectMgr->GetAccessRequirement(pMap->GetId(), ((InstanceMap*)pMap)->GetDifficulty());
+                AccessRequirement const *pAccessRequirement = sObjectMgr->GetAccessRequirement(map->GetId(), ((InstanceMap*)map)->GetDifficulty());
                 if (pAccessRequirement)
                 {
-                    if (!pMap->IsRaid() && pAccessRequirement->levelMin == 80)
+                    if (!map->IsRaid() && pAccessRequirement->levelMin == 80)
                         ChampioningFaction = GetChampioningFaction();
                 }
             }
@@ -7223,29 +7223,29 @@ void Player::RewardOnKill(Unit *pVictim, float rate)
 }
 
 //Calculate how many reputation points player gain with the quest
-void Player::RewardReputation(Quest const *pQuest)
+void Player::RewardReputation(Quest const *quest)
 {
     bool recruitAFriend = GetsRecruitAFriendBonus(false);
 
     // quest reputation reward/loss
     for (uint8 i = 0; i < QUEST_REPUTATIONS_COUNT; ++i)
     {
-        if (!pQuest->RewRepFaction[i])
+        if (!quest->RewRepFaction[i])
             continue;
-        if (pQuest->RewRepValue[i])
+        if (quest->RewRepValue[i])
         {
-            int32 rep = CalculateReputationGain(GetQuestLevel(pQuest), pQuest->RewRepValue[i]/100, pQuest->RewRepFaction[i], true, true);
+            int32 rep = CalculateReputationGain(GetQuestLevel(quest), quest->RewRepValue[i]/100, quest->RewRepFaction[i], true, true);
 
             if (recruitAFriend)
                 rep = int32(rep * (1 + sWorld->getRate(RATE_REPUTATION_RECRUIT_A_FRIEND_BONUS)));
 
-            if (FactionEntry const* factionEntry = sFactionStore.LookupEntry(pQuest->RewRepFaction[i]))
+            if (FactionEntry const* factionEntry = sFactionStore.LookupEntry(quest->RewRepFaction[i]))
                 GetReputationMgr().ModifyReputation(factionEntry, rep);
         }
         else
         {
-            uint32 row = ((pQuest->RewRepValueId[i] < 0) ? 1 : 0) + 1;
-            uint32 field = abs(pQuest->RewRepValueId[i]);
+            uint32 row = ((quest->RewRepValueId[i] < 0) ? 1 : 0) + 1;
+            uint32 field = abs(quest->RewRepValueId[i]);
 
             if (const QuestFactionRewEntry *pRow = sQuestFactionRewardStore.LookupEntry(row))
             {
@@ -7254,12 +7254,12 @@ void Player::RewardReputation(Quest const *pQuest)
                 if (!repPoints)
                     continue;
 
-                repPoints = CalculateReputationGain(GetQuestLevel(pQuest), repPoints, pQuest->RewRepFaction[i], true);
+                repPoints = CalculateReputationGain(GetQuestLevel(quest), repPoints, quest->RewRepFaction[i], true);
 
                 if (recruitAFriend)
                     repPoints = int32(repPoints * (1 + sWorld->getRate(RATE_REPUTATION_RECRUIT_A_FRIEND_BONUS)));
 
-                if (const FactionEntry* factionEntry = sFactionStore.LookupEntry(pQuest->RewRepFaction[i]))
+                if (const FactionEntry* factionEntry = sFactionStore.LookupEntry(quest->RewRepFaction[i]))
                     GetReputationMgr().ModifyReputation(factionEntry, repPoints);
             }
         }
@@ -14763,14 +14763,14 @@ void Player::PrepareQuestMenu(uint64 guid)
     for (QuestRelations::const_iterator i = pObjectQR.first; i != pObjectQR.second; ++i)
     {
         uint32 quest_id = i->second;
-        Quest const* pQuest = sObjectMgr->GetQuestTemplate(quest_id);
-        if (!pQuest)
+        Quest const* quest = sObjectMgr->GetQuestTemplate(quest_id);
+        if (!quest)
             continue;
 
-        if (!CanTakeQuest(pQuest, false))
+        if (!CanTakeQuest(quest, false))
             continue;
 
-        if (pQuest->IsAutoComplete())
+        if (quest->IsAutoComplete())
             qm.AddMenuItem(quest_id, 4);
         else if (GetQuestStatus(quest_id) == QUEST_STATUS_NONE)
             qm.AddMenuItem(quest_id, 2);
@@ -14801,7 +14801,7 @@ void Player::SendPreparedQuest(uint64 guid)
             else if (icon == 4)
                 PlayerTalkClass->SendQuestGiverRequestItems(quest, guid, CanRewardQuest(quest, false), true);
             // Send completable on repeatable and autoCompletable quest if player don't have quest
-            // TODO: verify if check for !pQuest->IsDaily() is really correct (possibly not)
+            // TODO: verify if check for !quest->IsDaily() is really correct (possibly not)
             else
             {
                 Object* object = ObjectAccessor::GetObjectByTypeMask(*this, guid, TYPEMASK_UNIT | TYPEMASK_GAMEOBJECT | TYPEMASK_ITEM);
@@ -14878,7 +14878,7 @@ bool Player::IsActiveQuest(uint32 quest_id) const
     return m_QuestStatus.find(quest_id) != m_QuestStatus.end();
 }
 
-Quest const* Player::GetNextQuest(uint64 guid, Quest const *pQuest)
+Quest const* Player::GetNextQuest(uint64 guid, Quest const *quest)
 {
     QuestRelationBounds pObjectQR;
 
@@ -14898,7 +14898,7 @@ Quest const* Player::GetNextQuest(uint64 guid, Quest const *pQuest)
             return NULL;
     }
 
-    uint32 nextQuestID = pQuest->GetNextQuestInChain();
+    uint32 nextQuestID = quest->GetNextQuestInChain();
     for (QuestRelations::const_iterator itr = pObjectQR.first; itr != pObjectQR.second; ++itr)
     {
         if (itr->second == nextQuestID)
@@ -14908,41 +14908,41 @@ Quest const* Player::GetNextQuest(uint64 guid, Quest const *pQuest)
     return NULL;
 }
 
-bool Player::CanSeeStartQuest(Quest const *pQuest)
+bool Player::CanSeeStartQuest(Quest const *quest)
 {
-    if (SatisfyQuestRace(pQuest, false) && SatisfyQuestSkillOrClass(pQuest, false) &&
-        SatisfyQuestExclusiveGroup(pQuest, false) && SatisfyQuestReputation(pQuest, false) &&
-        SatisfyQuestPreviousQuest(pQuest, false) && SatisfyQuestNextChain(pQuest, false) &&
-        SatisfyQuestPrevChain(pQuest, false) && SatisfyQuestDay(pQuest, false) && SatisfyQuestWeek(pQuest, false) &&
-        !DisableMgr::IsDisabledFor(DISABLE_TYPE_QUEST, pQuest->GetQuestId(), this))
+    if (SatisfyQuestRace(quest, false) && SatisfyQuestSkillOrClass(quest, false) &&
+        SatisfyQuestExclusiveGroup(quest, false) && SatisfyQuestReputation(quest, false) &&
+        SatisfyQuestPreviousQuest(quest, false) && SatisfyQuestNextChain(quest, false) &&
+        SatisfyQuestPrevChain(quest, false) && SatisfyQuestDay(quest, false) && SatisfyQuestWeek(quest, false) &&
+        !DisableMgr::IsDisabledFor(DISABLE_TYPE_QUEST, quest->GetQuestId(), this))
     {
-        return getLevel() + sWorld->getIntConfig(CONFIG_QUEST_HIGH_LEVEL_HIDE_DIFF) >= pQuest->GetMinLevel();
+        return getLevel() + sWorld->getIntConfig(CONFIG_QUEST_HIGH_LEVEL_HIDE_DIFF) >= quest->GetMinLevel();
     }
 
     return false;
 }
 
-bool Player::CanTakeQuest(Quest const *pQuest, bool msg)
+bool Player::CanTakeQuest(Quest const *quest, bool msg)
 {
-    return SatisfyQuestStatus(pQuest, msg) && SatisfyQuestExclusiveGroup(pQuest, msg)
-        && SatisfyQuestRace(pQuest, msg) && SatisfyQuestLevel(pQuest, msg)
-        && SatisfyQuestSkillOrClass(pQuest, msg) && SatisfyQuestReputation(pQuest, msg)
-        && SatisfyQuestPreviousQuest(pQuest, msg) && SatisfyQuestTimed(pQuest, msg)
-        && SatisfyQuestNextChain(pQuest, msg) && SatisfyQuestPrevChain(pQuest, msg)
-        && SatisfyQuestDay(pQuest, msg) && SatisfyQuestWeek(pQuest, msg)
-        && !DisableMgr::IsDisabledFor(DISABLE_TYPE_QUEST, pQuest->GetQuestId(), this)
-        && SatisfyQuestConditions(pQuest, msg);
+    return SatisfyQuestStatus(quest, msg) && SatisfyQuestExclusiveGroup(quest, msg)
+        && SatisfyQuestRace(quest, msg) && SatisfyQuestLevel(quest, msg)
+        && SatisfyQuestSkillOrClass(quest, msg) && SatisfyQuestReputation(quest, msg)
+        && SatisfyQuestPreviousQuest(quest, msg) && SatisfyQuestTimed(quest, msg)
+        && SatisfyQuestNextChain(quest, msg) && SatisfyQuestPrevChain(quest, msg)
+        && SatisfyQuestDay(quest, msg) && SatisfyQuestWeek(quest, msg)
+        && !DisableMgr::IsDisabledFor(DISABLE_TYPE_QUEST, quest->GetQuestId(), this)
+        && SatisfyQuestConditions(quest, msg);
 }
 
-bool Player::CanAddQuest(Quest const *pQuest, bool msg)
+bool Player::CanAddQuest(Quest const *quest, bool msg)
 {
     if (!SatisfyQuestLog(msg))
         return false;
 
-    uint32 srcitem = pQuest->GetSrcItemId();
+    uint32 srcitem = quest->GetSrcItemId();
     if (srcitem > 0)
     {
-        uint32 count = pQuest->GetSrcItemCount();
+        uint32 count = quest->GetSrcItemCount();
         ItemPosCountVec dest;
         InventoryResult msg2 = CanStoreNewItem(NULL_BAG, NULL_SLOT, dest, srcitem, count);
 
@@ -15029,92 +15029,92 @@ bool Player::CanCompleteQuest(uint32 quest_id)
     return false;
 }
 
-bool Player::CanCompleteRepeatableQuest(Quest const *pQuest)
+bool Player::CanCompleteRepeatableQuest(Quest const *quest)
 {
     // Solve problem that player don't have the quest and try complete it.
     // if repeatable she must be able to complete event if player don't have it.
     // Seem that all repeatable quest are DELIVER Flag so, no need to add more.
-    if (!CanTakeQuest(pQuest, false))
+    if (!CanTakeQuest(quest, false))
         return false;
 
-    if (pQuest->HasFlag(QUEST_TRINITY_FLAGS_DELIVER))
+    if (quest->HasFlag(QUEST_TRINITY_FLAGS_DELIVER))
         for (uint8 i = 0; i < QUEST_ITEM_OBJECTIVES_COUNT; i++)
-            if (pQuest->ReqItemId[i] && pQuest->ReqItemCount[i] && !HasItemCount(pQuest->ReqItemId[i], pQuest->ReqItemCount[i]))
+            if (quest->ReqItemId[i] && quest->ReqItemCount[i] && !HasItemCount(quest->ReqItemId[i], quest->ReqItemCount[i]))
                 return false;
 
-    if (!CanRewardQuest(pQuest, false))
+    if (!CanRewardQuest(quest, false))
         return false;
 
     return true;
 }
 
-bool Player::CanRewardQuest(Quest const *pQuest, bool msg)
+bool Player::CanRewardQuest(Quest const *quest, bool msg)
 {
     // not auto complete quest and not completed quest (only cheating case, then ignore without message)
-    if (!pQuest->IsDFQuest() && !pQuest->IsAutoComplete() && !(pQuest->GetFlags() & QUEST_FLAGS_AUTOCOMPLETE) && GetQuestStatus(pQuest->GetQuestId()) != QUEST_STATUS_COMPLETE)
+    if (!quest->IsDFQuest() && !quest->IsAutoComplete() && !(quest->GetFlags() & QUEST_FLAGS_AUTOCOMPLETE) && GetQuestStatus(quest->GetQuestId()) != QUEST_STATUS_COMPLETE)
         return false;
 
     // daily quest can't be rewarded (25 daily quest already completed)
-    if (!SatisfyQuestDay(pQuest, true) || !SatisfyQuestWeek(pQuest, true))
+    if (!SatisfyQuestDay(quest, true) || !SatisfyQuestWeek(quest, true))
         return false;
 
     // rewarded and not repeatable quest (only cheating case, then ignore without message)
-    if (GetQuestRewardStatus(pQuest->GetQuestId()))
+    if (GetQuestRewardStatus(quest->GetQuestId()))
         return false;
 
     // prevent receive reward with quest items in bank
-    if (pQuest->HasFlag(QUEST_TRINITY_FLAGS_DELIVER))
+    if (quest->HasFlag(QUEST_TRINITY_FLAGS_DELIVER))
     {
         for (uint8 i = 0; i < QUEST_ITEM_OBJECTIVES_COUNT; i++)
         {
-            if (pQuest->ReqItemCount[i]!= 0 &&
-                GetItemCount(pQuest->ReqItemId[i]) < pQuest->ReqItemCount[i])
+            if (quest->ReqItemCount[i]!= 0 &&
+                GetItemCount(quest->ReqItemId[i]) < quest->ReqItemCount[i])
             {
                 if (msg)
-                    SendEquipError(EQUIP_ERR_ITEM_NOT_FOUND, NULL, NULL, pQuest->ReqItemId[i]);
+                    SendEquipError(EQUIP_ERR_ITEM_NOT_FOUND, NULL, NULL, quest->ReqItemId[i]);
                 return false;
             }
         }
     }
 
     // prevent receive reward with low money and GetRewOrReqMoney() < 0
-    if (pQuest->GetRewOrReqMoney() < 0 && !HasEnoughMoney(-pQuest->GetRewOrReqMoney()))
+    if (quest->GetRewOrReqMoney() < 0 && !HasEnoughMoney(-quest->GetRewOrReqMoney()))
         return false;
 
     return true;
 }
 
-bool Player::CanRewardQuest(Quest const *pQuest, uint32 reward, bool msg)
+bool Player::CanRewardQuest(Quest const *quest, uint32 reward, bool msg)
 {
     // prevent receive reward with quest items in bank or for not completed quest
-    if (!CanRewardQuest(pQuest, msg))
+    if (!CanRewardQuest(quest, msg))
         return false;
 
-    if (pQuest->GetRewChoiceItemsCount() > 0)
+    if (quest->GetRewChoiceItemsCount() > 0)
     {
-        if (pQuest->RewChoiceItemId[reward])
+        if (quest->RewChoiceItemId[reward])
         {
             ItemPosCountVec dest;
-            InventoryResult res = CanStoreNewItem(NULL_BAG, NULL_SLOT, dest, pQuest->RewChoiceItemId[reward], pQuest->RewChoiceItemCount[reward]);
+            InventoryResult res = CanStoreNewItem(NULL_BAG, NULL_SLOT, dest, quest->RewChoiceItemId[reward], quest->RewChoiceItemCount[reward]);
             if (res != EQUIP_ERR_OK)
             {
-                SendEquipError(res, NULL, NULL, pQuest->RewChoiceItemId[reward]);
+                SendEquipError(res, NULL, NULL, quest->RewChoiceItemId[reward]);
                 return false;
             }
         }
     }
 
-    if (pQuest->GetRewItemsCount() > 0)
+    if (quest->GetRewItemsCount() > 0)
     {
-        for (uint32 i = 0; i < pQuest->GetRewItemsCount(); ++i)
+        for (uint32 i = 0; i < quest->GetRewItemsCount(); ++i)
         {
-            if (pQuest->RewItemId[i])
+            if (quest->RewItemId[i])
             {
                 ItemPosCountVec dest;
-                InventoryResult res = CanStoreNewItem(NULL_BAG, NULL_SLOT, dest, pQuest->RewItemId[i], pQuest->RewItemCount[i]);
+                InventoryResult res = CanStoreNewItem(NULL_BAG, NULL_SLOT, dest, quest->RewItemId[i], quest->RewItemCount[i]);
                 if (res != EQUIP_ERR_OK)
                 {
-                    SendEquipError(res, NULL, NULL, pQuest->RewItemId[i]);
+                    SendEquipError(res, NULL, NULL, quest->RewItemId[i]);
                     return false;
                 }
             }
@@ -15124,12 +15124,12 @@ bool Player::CanRewardQuest(Quest const *pQuest, uint32 reward, bool msg)
     return true;
 }
 
-void Player::AddQuest(Quest const *pQuest, Object *questGiver)
+void Player::AddQuest(Quest const *quest, Object *questGiver)
 {
     uint16 log_slot = FindQuestSlot(0);
     ASSERT(log_slot < MAX_QUEST_LOG_SIZE);
 
-    uint32 quest_id = pQuest->GetQuestId();
+    uint32 quest_id = quest->GetQuestId();
 
     // if not exist then created with set uState == NEW and rewarded=false
     QuestStatusData& questStatusData = m_QuestStatus[quest_id];
@@ -15138,36 +15138,36 @@ void Player::AddQuest(Quest const *pQuest, Object *questGiver)
     questStatusData.m_status = QUEST_STATUS_INCOMPLETE;
     questStatusData.m_explored = false;
 
-    if (pQuest->HasFlag(QUEST_TRINITY_FLAGS_DELIVER))
+    if (quest->HasFlag(QUEST_TRINITY_FLAGS_DELIVER))
     {
         for (uint8 i = 0; i < QUEST_ITEM_OBJECTIVES_COUNT; ++i)
             questStatusData.m_itemcount[i] = 0;
     }
 
-    if (pQuest->HasFlag(QUEST_TRINITY_FLAGS_KILL_OR_CAST | QUEST_TRINITY_FLAGS_SPEAKTO))
+    if (quest->HasFlag(QUEST_TRINITY_FLAGS_KILL_OR_CAST | QUEST_TRINITY_FLAGS_SPEAKTO))
     {
         for (uint8 i = 0; i < QUEST_OBJECTIVES_COUNT; ++i)
             questStatusData.m_creatureOrGOcount[i] = 0;
     }
 
-    if (pQuest->HasFlag(QUEST_TRINITY_FLAGS_PLAYER_KILL))
+    if (quest->HasFlag(QUEST_TRINITY_FLAGS_PLAYER_KILL))
         questStatusData.m_playercount = 0;
 
-    GiveQuestSourceItem(pQuest);
-    AdjustQuestReqItemCount(pQuest, questStatusData);
+    GiveQuestSourceItem(quest);
+    AdjustQuestReqItemCount(quest, questStatusData);
 
-    if (pQuest->GetRepObjectiveFaction())
-        if (FactionEntry const* factionEntry = sFactionStore.LookupEntry(pQuest->GetRepObjectiveFaction()))
+    if (quest->GetRepObjectiveFaction())
+        if (FactionEntry const* factionEntry = sFactionStore.LookupEntry(quest->GetRepObjectiveFaction()))
             GetReputationMgr().SetVisible(factionEntry);
 
-    if (pQuest->GetRepObjectiveFaction2())
-        if (FactionEntry const* factionEntry = sFactionStore.LookupEntry(pQuest->GetRepObjectiveFaction2()))
+    if (quest->GetRepObjectiveFaction2())
+        if (FactionEntry const* factionEntry = sFactionStore.LookupEntry(quest->GetRepObjectiveFaction2()))
             GetReputationMgr().SetVisible(factionEntry);
 
     uint32 qtime = 0;
-    if (pQuest->HasFlag(QUEST_TRINITY_FLAGS_TIMED))
+    if (quest->HasFlag(QUEST_TRINITY_FLAGS_TIMED))
     {
-        uint32 limittime = pQuest->GetLimitTime();
+        uint32 limittime = quest->GetLimitTime();
 
         // shared timed quest
         if (questGiver && questGiver->GetTypeId() == TYPEID_PLAYER)
@@ -15187,8 +15187,8 @@ void Player::AddQuest(Quest const *pQuest, Object *questGiver)
     GetAchievementMgr().StartTimedAchievement(ACHIEVEMENT_TIMED_TYPE_QUEST, quest_id);
 
     //starting initial quest script
-    if (questGiver && pQuest->GetQuestStartScript() != 0)
-        GetMap()->ScriptsStart(sQuestStartScripts, pQuest->GetQuestStartScript(), questGiver, this);
+    if (questGiver && quest->GetQuestStartScript() != 0)
+        GetMap()->ScriptsStart(sQuestStartScripts, quest->GetQuestStartScript(), questGiver, this);
 
     // Some spells applied at quest activation
     SpellAreaForQuestMapBounds saBounds = sSpellMgr->GetSpellAreaForQuestMapBounds(quest_id, true);
@@ -15238,59 +15238,59 @@ void Player::IncompleteQuest(uint32 quest_id)
     }
 }
 
-void Player::RewardQuest(Quest const *pQuest, uint32 reward, Object* questGiver, bool announce)
+void Player::RewardQuest(Quest const *quest, uint32 reward, Object* questGiver, bool announce)
 {
     //this THING should be here to protect code from quest, which cast on player far teleport as a reward
     //should work fine, cause far teleport will be executed in Player::Update()
     SetCanDelayTeleport(true);
 
-    uint32 quest_id = pQuest->GetQuestId();
+    uint32 quest_id = quest->GetQuestId();
 
     for (uint8 i = 0; i < QUEST_ITEM_OBJECTIVES_COUNT; ++i)
-        if (pQuest->ReqItemId[i])
-            DestroyItemCount(pQuest->ReqItemId[i], pQuest->ReqItemCount[i], true);
+        if (quest->ReqItemId[i])
+            DestroyItemCount(quest->ReqItemId[i], quest->ReqItemCount[i], true);
 
     for (uint8 i = 0; i < QUEST_SOURCE_ITEM_IDS_COUNT; ++i)
     {
-        if (pQuest->ReqSourceId[i])
+        if (quest->ReqSourceId[i])
         {
-            uint32 count = pQuest->ReqSourceCount[i];
-            DestroyItemCount(pQuest->ReqSourceId[i], count ? count : 9999, true);
+            uint32 count = quest->ReqSourceCount[i];
+            DestroyItemCount(quest->ReqSourceId[i], count ? count : 9999, true);
         }
     }
 
     RemoveTimedQuest(quest_id);
 
-    if (pQuest->GetRewChoiceItemsCount() > 0)
+    if (quest->GetRewChoiceItemsCount() > 0)
     {
-        if (uint32 itemId = pQuest->RewChoiceItemId[reward])
+        if (uint32 itemId = quest->RewChoiceItemId[reward])
         {
             ItemPosCountVec dest;
-            if (CanStoreNewItem(NULL_BAG, NULL_SLOT, dest, itemId, pQuest->RewChoiceItemCount[reward]) == EQUIP_ERR_OK)
+            if (CanStoreNewItem(NULL_BAG, NULL_SLOT, dest, itemId, quest->RewChoiceItemCount[reward]) == EQUIP_ERR_OK)
             {
                 Item* item = StoreNewItem(dest, itemId, true, Item::GenerateItemRandomPropertyId(itemId));
-                SendNewItem(item, pQuest->RewChoiceItemCount[reward], true, false);
+                SendNewItem(item, quest->RewChoiceItemCount[reward], true, false);
             }
         }
     }
 
-    if (pQuest->GetRewItemsCount() > 0)
+    if (quest->GetRewItemsCount() > 0)
     {
-        for (uint32 i = 0; i < pQuest->GetRewItemsCount(); ++i)
+        for (uint32 i = 0; i < quest->GetRewItemsCount(); ++i)
         {
-            if (uint32 itemId = pQuest->RewItemId[i])
+            if (uint32 itemId = quest->RewItemId[i])
             {
                 ItemPosCountVec dest;
-                if (CanStoreNewItem(NULL_BAG, NULL_SLOT, dest, itemId, pQuest->RewItemCount[i]) == EQUIP_ERR_OK)
+                if (CanStoreNewItem(NULL_BAG, NULL_SLOT, dest, itemId, quest->RewItemCount[i]) == EQUIP_ERR_OK)
                 {
                     Item* item = StoreNewItem(dest, itemId, true, Item::GenerateItemRandomPropertyId(itemId));
-                    SendNewItem(item, pQuest->RewItemCount[i], true, false);
+                    SendNewItem(item, quest->RewItemCount[i], true, false);
                 }
             }
         }
     }
 
-    RewardReputation(pQuest);
+    RewardReputation(quest);
 
     uint16 log_slot = FindQuestSlot(quest_id);
     if (log_slot < MAX_QUEST_LOG_SIZE)
@@ -15300,7 +15300,7 @@ void Player::RewardQuest(Quest const *pQuest, uint32 reward, Object* questGiver,
     bool rewarded = (rewItr != m_RewardedQuests.end());
 
     // Not give XP in case already completed once repeatable quest
-    uint32 XP = rewarded ? 0 : uint32(pQuest->XPValue(this)*sWorld->getRate(RATE_XP_QUEST));
+    uint32 XP = rewarded ? 0 : uint32(quest->XPValue(this)*sWorld->getRate(RATE_XP_QUEST));
 
     // handle SPELL_AURA_MOD_XP_QUEST_PCT auras
     Unit::AuraEffectList const& ModXPPctAuras = GetAuraEffectsByType(SPELL_AURA_MOD_XP_QUEST_PCT);
@@ -15311,11 +15311,11 @@ void Player::RewardQuest(Quest const *pQuest, uint32 reward, Object* questGiver,
     if (getLevel() < sWorld->getIntConfig(CONFIG_MAX_PLAYER_LEVEL))
         GiveXP(XP, NULL);
     else
-        moneyRew = int32(pQuest->GetRewMoneyMaxLevel() * sWorld->getRate(RATE_DROP_MONEY));
+        moneyRew = int32(quest->GetRewMoneyMaxLevel() * sWorld->getRate(RATE_DROP_MONEY));
 
     // Give player extra money if GetRewOrReqMoney > 0 and get ReqMoney if negative
-    if (pQuest->GetRewOrReqMoney())
-        moneyRew += pQuest->GetRewOrReqMoney();
+    if (quest->GetRewOrReqMoney())
+        moneyRew += quest->GetRewOrReqMoney();
 
     if (moneyRew)
     {
@@ -15326,44 +15326,44 @@ void Player::RewardQuest(Quest const *pQuest, uint32 reward, Object* questGiver,
     }
 
     // honor reward
-    //if (uint32 honor = pQuest->CalculateHonorGain(getLevel()))
+    //if (uint32 honor = quest->CalculateHonorGain(getLevel()))
     //    RewardHonor(NULL, 0, honor);
 
     // title reward
-    if (pQuest->GetCharTitleId())
+    if (quest->GetCharTitleId())
     {
-        if (CharTitlesEntry const* titleEntry = sCharTitlesStore.LookupEntry(pQuest->GetCharTitleId()))
+        if (CharTitlesEntry const* titleEntry = sCharTitlesStore.LookupEntry(quest->GetCharTitleId()))
             SetTitle(titleEntry);
     }
 
-    if (pQuest->GetBonusTalents())
+    if (quest->GetBonusTalents())
     {
-        m_questRewardTalentCount+=pQuest->GetBonusTalents();
+        m_questRewardTalentCount+=quest->GetBonusTalents();
         InitTalentForLevel();
     }
 
-    if (pQuest->GetRewArenaPoints())
-        ModifyArenaPoints(pQuest->GetRewArenaPoints());
+    if (quest->GetRewArenaPoints())
+        ModifyArenaPoints(quest->GetRewArenaPoints());
 
     // Send reward mail
-    if (uint32 mail_template_id = pQuest->GetRewMailTemplateId())
+    if (uint32 mail_template_id = quest->GetRewMailTemplateId())
     {
         //- TODO: Poor design of mail system
         SQLTransaction trans = CharacterDatabase.BeginTransaction();
-        MailDraft(mail_template_id).SendMailTo(trans, this, questGiver, MAIL_CHECK_MASK_HAS_BODY, pQuest->GetRewMailDelaySecs());
+        MailDraft(mail_template_id).SendMailTo(trans, this, questGiver, MAIL_CHECK_MASK_HAS_BODY, quest->GetRewMailDelaySecs());
         CharacterDatabase.CommitTransaction(trans);
     }
 
-    if (pQuest->IsDaily() || pQuest->IsDFQuest())
+    if (quest->IsDaily() || quest->IsDFQuest())
     {
         SetDailyQuestStatus(quest_id);
-        if (pQuest->IsDaily())
+        if (quest->IsDaily())
         {
             GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_COMPLETE_DAILY_QUEST, quest_id);
             GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_COMPLETE_DAILY_QUEST_DAILY, quest_id);
         }
     }
-    else if (pQuest->IsWeekly())
+    else if (quest->IsWeekly())
         SetWeeklyQuestStatus(quest_id);
 
     RemoveActiveQuest(quest_id);
@@ -15377,18 +15377,18 @@ void Player::RewardQuest(Quest const *pQuest, uint32 reward, Object* questGiver,
     _SaveQuestStatus(trans);
 
     if (announce)
-        SendQuestReward(pQuest, XP, questGiver);
+        SendQuestReward(quest, XP, questGiver);
 
     // cast spells after mark quest complete (some spells have quest completed state requirements in spell_area data)
-    if (pQuest->GetRewSpellCast() > 0)
-        CastSpell(this, pQuest->GetRewSpellCast(), true);
-    else if (pQuest->GetRewSpell() > 0)
-        CastSpell(this, pQuest->GetRewSpell(), true);
+    if (quest->GetRewSpellCast() > 0)
+        CastSpell(this, quest->GetRewSpellCast(), true);
+    else if (quest->GetRewSpell() > 0)
+        CastSpell(this, quest->GetRewSpell(), true);
 
-    if (pQuest->GetZoneOrSort() > 0)
-        GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_COMPLETE_QUESTS_IN_ZONE, pQuest->GetZoneOrSort());
+    if (quest->GetZoneOrSort() > 0)
+        GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_COMPLETE_QUESTS_IN_ZONE, quest->GetZoneOrSort());
     GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_COMPLETE_QUEST_COUNT);
-    GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_COMPLETE_QUEST, pQuest->GetQuestId());
+    GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_COMPLETE_QUEST, quest->GetQuestId());
 
     uint32 zone = 0;
     uint32 area = 0;
@@ -15423,7 +15423,7 @@ void Player::RewardQuest(Quest const *pQuest, uint32 reward, Object* questGiver,
 
 void Player::FailQuest(uint32 questId)
 {
-    if (Quest const* pQuest = sObjectMgr->GetQuestTemplate(questId))
+    if (Quest const* quest = sObjectMgr->GetQuestTemplate(questId))
     {
         SetQuestStatus(questId, QUEST_STATUS_FAILED);
 
@@ -15435,7 +15435,7 @@ void Player::FailQuest(uint32 questId)
             SetQuestSlotState(log_slot, QUEST_STATE_FAIL);
         }
 
-        if (pQuest->HasFlag(QUEST_TRINITY_FLAGS_TIMED))
+        if (quest->HasFlag(QUEST_TRINITY_FLAGS_TIMED))
         {
             QuestStatusData& q_status = m_QuestStatus[questId];
 
@@ -15449,13 +15449,13 @@ void Player::FailQuest(uint32 questId)
 
         // Destroy quest items on quest failure.
         for (uint8 i = 0; i < QUEST_OBJECTIVES_COUNT; ++i)
-            if (pQuest->ReqItemId[i] > 0 && pQuest->ReqItemCount[i] > 0)
+            if (quest->ReqItemId[i] > 0 && quest->ReqItemCount[i] > 0)
                 // Destroy items recieved on starting the quest.
-                DestroyItemCount(pQuest->ReqItemId[i], pQuest->ReqItemCount[i], true, true);
+                DestroyItemCount(quest->ReqItemId[i], quest->ReqItemCount[i], true, true);
         for (uint8 i = 0; i < QUEST_SOURCE_ITEM_IDS_COUNT; ++i)
-            if (pQuest->ReqSourceId[i] > 0 && pQuest->ReqSourceCount[i] > 0)
+            if (quest->ReqSourceId[i] > 0 && quest->ReqSourceCount[i] > 0)
                 // Destroy items recieved during the quest.
-                DestroyItemCount(pQuest->ReqSourceId[i], pQuest->ReqSourceCount[i], true, true);
+                DestroyItemCount(quest->ReqSourceId[i], quest->ReqSourceCount[i], true, true);
     }
 }
 
@@ -15838,12 +15838,12 @@ bool Player::SatisfyQuestWeek(Quest const* qInfo, bool /*msg*/)
     return m_weeklyquests.find(qInfo->GetQuestId()) == m_weeklyquests.end();
 }
 
-bool Player::GiveQuestSourceItem(Quest const *pQuest)
+bool Player::GiveQuestSourceItem(Quest const *quest)
 {
-    uint32 srcitem = pQuest->GetSrcItemId();
+    uint32 srcitem = quest->GetSrcItemId();
     if (srcitem > 0)
     {
-        uint32 count = pQuest->GetSrcItemCount();
+        uint32 count = quest->GetSrcItemCount();
         if (count <= 0)
             count = 1;
 
@@ -15992,19 +15992,19 @@ uint16 Player::GetReqKillOrCastCurrentCount(uint32 quest_id, int32 entry)
     return 0;
 }
 
-void Player::AdjustQuestReqItemCount(Quest const* pQuest, QuestStatusData& questStatusData)
+void Player::AdjustQuestReqItemCount(Quest const* quest, QuestStatusData& questStatusData)
 {
-    if (pQuest->HasFlag(QUEST_TRINITY_FLAGS_DELIVER))
+    if (quest->HasFlag(QUEST_TRINITY_FLAGS_DELIVER))
     {
         for (uint8 i = 0; i < QUEST_ITEM_OBJECTIVES_COUNT; ++i)
         {
-            uint32 reqitemcount = pQuest->ReqItemCount[i];
+            uint32 reqitemcount = quest->ReqItemCount[i];
             if (reqitemcount != 0)
             {
-                uint32 curitemcount = GetItemCount(pQuest->ReqItemId[i], true);
+                uint32 curitemcount = GetItemCount(quest->ReqItemId[i], true);
 
                 questStatusData.m_itemcount[i] = std::min(curitemcount, reqitemcount);
-                m_QuestStatusSave[pQuest->GetQuestId()] = true;
+                m_QuestStatusSave[quest->GetQuestId()] = true;
             }
         }
     }
@@ -16547,9 +16547,9 @@ void Player::SendQuestComplete(uint32 quest_id)
     }
 }
 
-void Player::SendQuestReward(Quest const *pQuest, uint32 XP, Object * questGiver)
+void Player::SendQuestReward(Quest const *quest, uint32 XP, Object * questGiver)
 {
-    uint32 questid = pQuest->GetQuestId();
+    uint32 questid = quest->GetQuestId();
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Sent SMSG_QUESTGIVER_QUEST_COMPLETE quest = %u", questid);
     sGameEventMgr->HandleQuestComplete(questid);
     WorldPacket data(SMSG_QUESTGIVER_QUEST_COMPLETE, (4+4+4+4+4));
@@ -16558,21 +16558,21 @@ void Player::SendQuestReward(Quest const *pQuest, uint32 XP, Object * questGiver
     if (getLevel() < sWorld->getIntConfig(CONFIG_MAX_PLAYER_LEVEL))
     {
         data << uint32(XP);
-        data << uint32(pQuest->GetRewOrReqMoney());
+        data << uint32(quest->GetRewOrReqMoney());
     }
     else
     {
         data << uint32(0);
-        data << uint32(pQuest->GetRewOrReqMoney() + int32(pQuest->GetRewMoneyMaxLevel() * sWorld->getRate(RATE_DROP_MONEY)));
+        data << uint32(quest->GetRewOrReqMoney() + int32(quest->GetRewMoneyMaxLevel() * sWorld->getRate(RATE_DROP_MONEY)));
     }
 
-    data << 10 * Trinity::Honor::hk_honor_at_level(getLevel(), pQuest->GetRewHonorMultiplier());
-    data << uint32(pQuest->GetBonusTalents());              // bonus talents
-    data << uint32(pQuest->GetRewArenaPoints());
+    data << 10 * Trinity::Honor::hk_honor_at_level(getLevel(), quest->GetRewHonorMultiplier());
+    data << uint32(quest->GetBonusTalents());              // bonus talents
+    data << uint32(quest->GetRewArenaPoints());
     GetSession()->SendPacket(&data);
 
-    if (pQuest->GetQuestCompleteScript() != 0)
-        GetMap()->ScriptsStart(sQuestEndScripts, pQuest->GetQuestCompleteScript(), questGiver, this);
+    if (quest->GetQuestCompleteScript() != 0)
+        GetMap()->ScriptsStart(sQuestEndScripts, quest->GetQuestCompleteScript(), questGiver, this);
 }
 
 void Player::SendQuestFailed(uint32 questId, InventoryResult reason)
@@ -16606,19 +16606,19 @@ void Player::SendCanTakeQuestResponse(uint32 msg)
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Sent SMSG_QUESTGIVER_QUEST_INVALID");
 }
 
-void Player::SendQuestConfirmAccept(const Quest* pQuest, Player* pReceiver)
+void Player::SendQuestConfirmAccept(const Quest* quest, Player* pReceiver)
 {
     if (pReceiver)
     {
-        std::string strTitle = pQuest->GetTitle();
+        std::string strTitle = quest->GetTitle();
 
         int loc_idx = pReceiver->GetSession()->GetSessionDbLocaleIndex();
         if (loc_idx >= 0)
-            if (const QuestLocale* pLocale = sObjectMgr->GetQuestLocale(pQuest->GetQuestId()))
+            if (const QuestLocale* pLocale = sObjectMgr->GetQuestLocale(quest->GetQuestId()))
                 ObjectMgr::GetLocaleString(pLocale->Title, loc_idx, strTitle);
 
         WorldPacket data(SMSG_QUEST_CONFIRM_ACCEPT, (4 + strTitle.size() + 8));
-        data << uint32(pQuest->GetQuestId());
+        data << uint32(quest->GetQuestId());
         data << strTitle;
         data << uint64(GetGUID());
         pReceiver->GetSession()->SendPacket(&data);
@@ -16639,50 +16639,50 @@ void Player::SendPushToPartyResponse(Player *player, uint32 msg)
     }
 }
 
-void Player::SendQuestUpdateAddItem(Quest const* /*pQuest*/, uint32 /*item_idx*/, uint16 /*count*/)
+void Player::SendQuestUpdateAddItem(Quest const* /*quest*/, uint32 /*item_idx*/, uint16 /*count*/)
 {
     WorldPacket data(SMSG_QUESTUPDATE_ADD_ITEM, 0);
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Sent SMSG_QUESTUPDATE_ADD_ITEM");
-    //data << pQuest->ReqItemId[item_idx];
+    //data << quest->ReqItemId[item_idx];
     //data << count;
     GetSession()->SendPacket(&data);
 }
 
-void Player::SendQuestUpdateAddCreatureOrGo(Quest const* pQuest, uint64 guid, uint32 creatureOrGO_idx, uint16 old_count, uint16 add_count)
+void Player::SendQuestUpdateAddCreatureOrGo(Quest const* quest, uint64 guid, uint32 creatureOrGO_idx, uint16 old_count, uint16 add_count)
 {
     ASSERT(old_count + add_count < 65536 && "mob/GO count store in 16 bits 2^16 = 65536 (0..65536)");
 
-    int32 entry = pQuest->ReqCreatureOrGOId[ creatureOrGO_idx ];
+    int32 entry = quest->ReqCreatureOrGOId[ creatureOrGO_idx ];
     if (entry < 0)
         // client expected gameobject template id in form (id|0x80000000)
         entry = (-entry) | 0x80000000;
 
     WorldPacket data(SMSG_QUESTUPDATE_ADD_KILL, (4*4+8));
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Sent SMSG_QUESTUPDATE_ADD_KILL");
-    data << uint32(pQuest->GetQuestId());
+    data << uint32(quest->GetQuestId());
     data << uint32(entry);
     data << uint32(old_count + add_count);
-    data << uint32(pQuest->ReqCreatureOrGOCount[ creatureOrGO_idx ]);
+    data << uint32(quest->ReqCreatureOrGOCount[ creatureOrGO_idx ]);
     data << uint64(guid);
     GetSession()->SendPacket(&data);
 
-    uint16 log_slot = FindQuestSlot(pQuest->GetQuestId());
+    uint16 log_slot = FindQuestSlot(quest->GetQuestId());
     if (log_slot < MAX_QUEST_LOG_SIZE)
         SetQuestSlotCounter(log_slot, creatureOrGO_idx, GetQuestSlotCounter(log_slot, creatureOrGO_idx)+add_count);
 }
 
-void Player::SendQuestUpdateAddPlayer(Quest const* pQuest, uint16 old_count, uint16 add_count)
+void Player::SendQuestUpdateAddPlayer(Quest const* quest, uint16 old_count, uint16 add_count)
 {
     ASSERT(old_count + add_count < 65536 && "player count store in 16 bits");
 
     WorldPacket data(SMSG_QUESTUPDATE_ADD_PVP_KILL, (3*4));
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Sent SMSG_QUESTUPDATE_ADD_PVP_KILL");
-    data << uint32(pQuest->GetQuestId());
+    data << uint32(quest->GetQuestId());
     data << uint32(old_count + add_count);
-    data << uint32(pQuest->GetPlayersSlain());
+    data << uint32(quest->GetPlayersSlain());
     GetSession()->SendPacket(&data);
 
-    uint16 log_slot = FindQuestSlot(pQuest->GetQuestId());
+    uint16 log_slot = FindQuestSlot(quest->GetQuestId());
     if (log_slot < MAX_QUEST_LOG_SIZE)
         SetQuestSlotCounter(log_slot, QUEST_PVP_KILL_SLOT, GetQuestSlotCounter(log_slot, QUEST_PVP_KILL_SLOT) + add_count);
 }
@@ -18045,8 +18045,8 @@ void Player::_LoadQuestStatus(PreparedQueryResult result)
 
             uint32 quest_id = fields[0].GetUInt32();
                                                             // used to be new, no delete?
-            Quest const* pQuest = sObjectMgr->GetQuestTemplate(quest_id);
-            if (pQuest)
+            Quest const* quest = sObjectMgr->GetQuestTemplate(quest_id);
+            if (quest)
             {
                 // find or create
                 QuestStatusData& questStatusData = m_QuestStatus[quest_id];
@@ -18064,7 +18064,7 @@ void Player::_LoadQuestStatus(PreparedQueryResult result)
 
                 time_t quest_time = time_t(fields[3].GetUInt32());
 
-                if (pQuest->HasFlag(QUEST_TRINITY_FLAGS_TIMED) && !GetQuestRewardStatus(quest_id))
+                if (quest->HasFlag(QUEST_TRINITY_FLAGS_TIMED) && !GetQuestRewardStatus(quest_id))
                 {
                     AddTimedQuest(quest_id);
 
@@ -18129,21 +18129,21 @@ void Player::_LoadQuestStatusRewarded(PreparedQueryResult result)
 
             uint32 quest_id = fields[0].GetUInt32();
                                                             // used to be new, no delete?
-            Quest const* pQuest = sObjectMgr->GetQuestTemplate(quest_id);
-            if (pQuest)
+            Quest const* quest = sObjectMgr->GetQuestTemplate(quest_id);
+            if (quest)
             {
                 // learn rewarded spell if unknown
-                learnQuestRewardedSpells(pQuest);
+                learnQuestRewardedSpells(quest);
 
                 // set rewarded title if any
-                if (pQuest->GetCharTitleId())
+                if (quest->GetCharTitleId())
                 {
-                    if (CharTitlesEntry const* titleEntry = sCharTitlesStore.LookupEntry(pQuest->GetCharTitleId()))
+                    if (CharTitlesEntry const* titleEntry = sCharTitlesStore.LookupEntry(quest->GetCharTitleId()))
                         SetTitle(titleEntry);
                 }
 
-                if (pQuest->GetBonusTalents())
-                    m_questRewardTalentCount += pQuest->GetBonusTalents();
+                if (quest->GetBonusTalents())
+                    m_questRewardTalentCount += quest->GetBonusTalents();
             }
 
             m_RewardedQuests.insert(quest_id);
@@ -18189,8 +18189,8 @@ void Player::_LoadDailyQuestStatus(PreparedQueryResult result)
             // save _any_ from daily quest times (it must be after last reset anyway)
             m_lastDailyQuestTime = (time_t)fields[1].GetUInt64();
 
-            Quest const* pQuest = sObjectMgr->GetQuestTemplate(quest_id);
-            if (!pQuest)
+            Quest const* quest = sObjectMgr->GetQuestTemplate(quest_id);
+            if (!quest)
                 continue;
 
             SetUInt32Value(PLAYER_FIELD_DAILY_QUESTS_1+quest_daily_idx, quest_id);
@@ -18213,8 +18213,8 @@ void Player::_LoadWeeklyQuestStatus(PreparedQueryResult result)
         do
         {
             uint32 quest_id = (*result)[0].GetUInt32();
-            Quest const* pQuest = sObjectMgr->GetQuestTemplate(quest_id);
-            if (!pQuest)
+            Quest const* quest = sObjectMgr->GetQuestTemplate(quest_id);
+            if (!quest)
                 continue;
 
             m_weeklyquests.insert(quest_id);
@@ -19506,7 +19506,7 @@ void Player::Customize(uint64 guid, uint8 gender, uint8 skin, uint8 face, uint8 
     player_bytes2 |= facialHair;
 
     CharacterDatabase.PExecute("UPDATE characters SET gender = '%u', playerBytes = '%u', playerBytes2 = '%u' WHERE guid = '%u'", gender, skin | (face << 8) | (hairStyle << 16) | (hairColor << 24), player_bytes2, GUID_LOPART(guid));
-    sWorld->ReloadSingleCharacterNameData(GUID_LOPART(guid));	
+    sWorld->ReloadSingleCharacterNameData(GUID_LOPART(guid));
 }
 
 void Player::SendAttackSwingDeadTarget()

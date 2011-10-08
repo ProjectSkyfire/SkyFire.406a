@@ -34,24 +34,24 @@ public:
     {
         boss_elementium_monstrosityAI(Creature* creature) : ScriptedAI(creature)
         {
-            pInstance = creature->GetInstanceScript();
+            instance = creature->GetInstanceScript();
         }
 
-        InstanceScript* pInstance;
+        InstanceScript* instance;
 
         void Reset()
         {
-            pInstance->SetData(DATA_ASCENDANT_COUNCIL, NOT_STARTED);
+            instance->SetData(DATA_ASCENDANT_COUNCIL, NOT_STARTED);
         }
 
-        void EnterCombat(Unit* /*pWho*/)
+        void EnterCombat(Unit* /*who*/)
         {
-            pInstance->SetData(DATA_ASCENDANT_COUNCIL, IN_PROGRESS);
+            instance->SetData(DATA_ASCENDANT_COUNCIL, IN_PROGRESS);
         }
 
         void JustDied(Unit* /*Killer*/)
         {
-            pInstance->SetData(DATA_ASCENDANT_COUNCIL, DONE);
+            instance->SetData(DATA_ASCENDANT_COUNCIL, DONE);
         }
 
         void UpdateAI(const uint32 Diff)

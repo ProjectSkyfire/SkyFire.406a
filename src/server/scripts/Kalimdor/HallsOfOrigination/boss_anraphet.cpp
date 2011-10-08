@@ -25,33 +25,33 @@
 
 enum ScriptTexts
 {
-    SAY_INTRO                  = 0, 
-    SAY_AGGRO                  = 1, 
-    SAY_KILL_1                 = 2, 
-    SAY_KILL_2                 = 3, 
-    SAY_OMEGA                  = 4, 
-    SAY_DEATH                  = 5, 
+    SAY_INTRO                  = 0,
+    SAY_AGGRO                  = 1,
+    SAY_KILL_1                 = 2,
+    SAY_KILL_2                 = 3,
+    SAY_OMEGA                  = 4,
+    SAY_DEATH                  = 5,
 };
 
 enum Spells
 {
-    SPELL_ALPHA_BEAMS          = 39788, 
-    SPELL_CRUMBLING_RUIN       = 75609, 
-    H_SPELL_CRUMBLING_RUIN     = 91206, 
-    SPELL_DESTRUCTION_PROTOCOL = 77437, 
-    SPELL_NEMESIS_STRIKE       = 75604, 
-    H_SPELL_NEMESIS_STRIKE     = 91175, 
-    SPELL_OMEGA_STANCE         = 75622, 
-    H_SPELL_OMEGA_STANCE       = 91208, 
+    SPELL_ALPHA_BEAMS          = 39788,
+    SPELL_CRUMBLING_RUIN       = 75609,
+    H_SPELL_CRUMBLING_RUIN     = 91206,
+    SPELL_DESTRUCTION_PROTOCOL = 77437,
+    SPELL_NEMESIS_STRIKE       = 75604,
+    H_SPELL_NEMESIS_STRIKE     = 91175,
+    SPELL_OMEGA_STANCE         = 75622,
+    H_SPELL_OMEGA_STANCE       = 91208,
 };
 
 enum Events
 {
-    EVENT_ALPHA_BEAMS          = 1, 
-    EVENT_CRUMBLING_RUIN       = 2, 
-    EVENT_DESTRUCTION_PROTOCOL = 3, 
-    EVENT_NEMESIS_STRIKE       = 4, 
-    EVENT_OMEGA_STANCE         = 5, 
+    EVENT_ALPHA_BEAMS          = 1,
+    EVENT_CRUMBLING_RUIN       = 2,
+    EVENT_DESTRUCTION_PROTOCOL = 3,
+    EVENT_NEMESIS_STRIKE       = 4,
+    EVENT_OMEGA_STANCE         = 5,
 };
 
 class boss_anraphet : public CreatureScript
@@ -67,10 +67,10 @@ class boss_anraphet : public CreatureScript
         {
             boss_anraphetAI(Creature* creature) : ScriptedAI(creature)
             {
-                pInstance = creature->GetInstanceScript();
+                instance = creature->GetInstanceScript();
             }
 
-            InstanceScript *pInstance;
+            InstanceScript *instance;
             EventMap events;
             bool check_in;
 
@@ -78,23 +78,23 @@ class boss_anraphet : public CreatureScript
             {
                 events.Reset();
 
-                if (pInstance && (pInstance->GetData(DATA_ANRAPHET_EVENT) != DONE && !check_in))
-                   pInstance->SetData(DATA_ANRAPHET_EVENT, NOT_STARTED);
+                if (instance && (instance->GetData(DATA_ANRAPHET_EVENT) != DONE && !check_in))
+                   instance->SetData(DATA_ANRAPHET_EVENT, NOT_STARTED);
                 check_in = false;
             }
 
             void JustDied(Unit* /*Kill*/)
             {
                 DoScriptText(SAY_DEATH, me);
-                if (pInstance)
-                    pInstance->SetData(DATA_ANRAPHET_EVENT, DONE);
+                if (instance)
+                    instance->SetData(DATA_ANRAPHET_EVENT, DONE);
             }
 
             void EnterCombat(Unit* /*Ent*/)
             {
                 DoScriptText(SAY_AGGRO, me);
-				if (pInstance)
-                    pInstance->SetData(DATA_ANRAPHET_EVENT, IN_PROGRESS);
+				if (instance)
+                    instance->SetData(DATA_ANRAPHET_EVENT, IN_PROGRESS);
 
                 DoZoneInCombat();
 			}

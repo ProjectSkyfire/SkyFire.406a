@@ -102,12 +102,12 @@ public:
     {
         boss_priestess_delrissaAI(Creature* c) : ScriptedAI(c)
         {
-            pInstance = c->GetInstanceScript();
+            instance = c->GetInstanceScript();
             memset(&LackeyGUID, 0, sizeof(LackeyGUID));
             LackeyEntryList.clear();
         }
 
-        InstanceScript* pInstance;
+        InstanceScript* instance;
 
         std::vector<uint32> LackeyEntryList;
         uint64 LackeyGUID[MAX_ACTIVE_LACKEY];
@@ -138,8 +138,8 @@ public:
         //this mean she at some point evaded
         void JustReachedHome()
         {
-            if (pInstance)
-                 pInstance->SetData(DATA_DELRISSA_EVENT, FAIL);
+            if (instance)
+                 instance->SetData(DATA_DELRISSA_EVENT, FAIL);
         }
 
         void EnterCombat(Unit* who)
@@ -158,8 +158,8 @@ public:
                 }
             }
 
-            if (pInstance)
-                pInstance->SetData(DATA_DELRISSA_EVENT, IN_PROGRESS);
+            if (instance)
+                instance->SetData(DATA_DELRISSA_EVENT, IN_PROGRESS);
         }
 
         void InitializeLackeys()
@@ -225,11 +225,11 @@ public:
         {
             DoScriptText(SAY_DEATH, me);
 
-            if (!pInstance)
+            if (!instance)
                 return;
 
-            if (pInstance->GetData(DATA_DELRISSA_DEATH_COUNT) == MAX_ACTIVE_LACKEY)
-                pInstance->SetData(DATA_DELRISSA_EVENT, DONE);
+            if (instance->GetData(DATA_DELRISSA_DEATH_COUNT) == MAX_ACTIVE_LACKEY)
+                instance->SetData(DATA_DELRISSA_EVENT, DONE);
             else
             {
                 if (me->HasFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE))
@@ -342,12 +342,12 @@ struct boss_priestess_lackey_commonAI : public ScriptedAI
 {
     boss_priestess_lackey_commonAI(Creature* c) : ScriptedAI(c)
     {
-        pInstance = c->GetInstanceScript();
+        instance = c->GetInstanceScript();
         memset(&LackeyGUIDs, 0, sizeof(LackeyGUIDs));
         AcquireGUIDs();
     }
 
-    InstanceScript* pInstance;
+    InstanceScript* instance;
 
     uint64 LackeyGUIDs[MAX_ACTIVE_LACKEY];
     uint32 ResetThreatTimer;
@@ -365,7 +365,7 @@ struct boss_priestess_lackey_commonAI : public ScriptedAI
         ResetThreatTimer = urand(5000, 20000);
 
         // in case she is not alive and Reset was for some reason called, respawn her (most likely party wipe after killing her)
-        if (Creature* delrissa = Unit::GetCreature(*me, pInstance ? pInstance->GetData64(DATA_DELRISSA) : 0))
+        if (Creature* delrissa = Unit::GetCreature(*me, instance ? instance->GetData64(DATA_DELRISSA) : 0))
         {
             if (!delrissa->isAlive())
                 delrissa->Respawn();
@@ -377,7 +377,7 @@ struct boss_priestess_lackey_commonAI : public ScriptedAI
         if (!who)
             return;
 
-        if (pInstance)
+        if (instance)
         {
             for (uint8 i = 0; i < MAX_ACTIVE_LACKEY; ++i)
             {
@@ -391,7 +391,7 @@ struct boss_priestess_lackey_commonAI : public ScriptedAI
                 }
             }
 
-            if (Creature* delrissa = Unit::GetCreature(*me, pInstance->GetData64(DATA_DELRISSA)))
+            if (Creature* delrissa = Unit::GetCreature(*me, instance->GetData64(DATA_DELRISSA)))
             {
                 if (delrissa->isAlive() && !delrissa->getVictim())
                 {
@@ -404,11 +404,11 @@ struct boss_priestess_lackey_commonAI : public ScriptedAI
 
     void JustDied(Unit* /*killer*/)
     {
-        if (!pInstance)
+        if (!instance)
             return;
 
-        Creature* delrissa = Unit::GetCreature(*me, pInstance->GetData64(DATA_DELRISSA));
-        uint32 LackeyDeathCount = pInstance->GetData(DATA_DELRISSA_DEATH_COUNT);
+        Creature* delrissa = Unit::GetCreature(*me, instance->GetData64(DATA_DELRISSA));
+        uint32 LackeyDeathCount = instance->GetData(DATA_DELRISSA_DEATH_COUNT);
 
         if (!delrissa)
             return;
@@ -416,7 +416,7 @@ struct boss_priestess_lackey_commonAI : public ScriptedAI
         //should delrissa really yell if dead?
         DoScriptText(LackeyDeath[LackeyDeathCount].id, delrissa);
 
-        pInstance->SetData(DATA_DELRISSA_DEATH_COUNT, SPECIAL);
+        instance->SetData(DATA_DELRISSA_DEATH_COUNT, SPECIAL);
 
         //increase local var, since we now may have four dead
         ++LackeyDeathCount;
@@ -429,26 +429,26 @@ struct boss_priestess_lackey_commonAI : public ScriptedAI
                 if (!delrissa->HasFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE))
                     delrissa->SetFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
 
-                pInstance->SetData(DATA_DELRISSA_EVENT, DONE);
+                instance->SetData(DATA_DELRISSA_EVENT, DONE);
             }
         }
     }
 
     void KilledUnit(Unit* victim)
     {
-        if (!pInstance)
+        if (!instance)
             return;
 
-        if (Creature* Delrissa = Unit::GetCreature(*me, pInstance->GetData64(DATA_DELRISSA)))
+        if (Creature* Delrissa = Unit::GetCreature(*me, instance->GetData64(DATA_DELRISSA)))
             Delrissa->AI()->KilledUnit(victim);
     }
 
     void AcquireGUIDs()
     {
-        if (!pInstance)
+        if (!instance)
             return;
 
-        if (Creature* Delrissa = (Unit::GetCreature(*me, pInstance->GetData64(DATA_DELRISSA))))
+        if (Creature* Delrissa = (Unit::GetCreature(*me, instance->GetData64(DATA_DELRISSA))))
         {
             for (uint8 i = 0; i < MAX_ACTIVE_LACKEY; ++i)
                 LackeyGUIDs[i] = CAST_AI(boss_priestess_delrissa::boss_priestess_delrissaAI, Delrissa->AI())->LackeyGUID[i];

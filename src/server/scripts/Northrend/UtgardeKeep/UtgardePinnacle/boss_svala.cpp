@@ -98,7 +98,7 @@ public:
     {
         boss_svalaAI(Creature* c) : ScriptedAI(c)
         {
-            pInstance = c->GetInstanceScript();
+            instance = c->GetInstanceScript();
         }
 
         uint32 uiIntroTimer;
@@ -110,7 +110,7 @@ public:
         TempSummon* pArthas;
         uint64 uiArthasGUID;
 
-        InstanceScript* pInstance;
+        InstanceScript* instance;
 
         void Reset()
         {
@@ -119,8 +119,8 @@ public:
             uiIntroPhase = 0;
             uiArthasGUID = 0;
 
-            if (pInstance)
-                pInstance->SetData(DATA_SVALA_SORROWGRAVE_EVENT, NOT_STARTED);
+            if (instance)
+                instance->SetData(DATA_SVALA_SORROWGRAVE_EVENT, NOT_STARTED);
         }
 
         void MoveInLineOfSight(Unit* who)
@@ -220,10 +220,10 @@ public:
     {
         mob_ritual_channelerAI(Creature* c) :Scripted_NoMovementAI(c)
         {
-            pInstance = c->GetInstanceScript();
+            instance = c->GetInstanceScript();
         }
 
-        InstanceScript* pInstance;
+        InstanceScript* instance;
 
         void Reset()
         {
@@ -233,8 +233,8 @@ public:
         // called by svala sorrowgrave to set guid of victim
         void DoAction(const int32 /*action*/)
         {
-            if (pInstance)
-                if (Unit* victim = me->GetUnit(*me, pInstance->GetData64(DATA_SACRIFICED_PLAYER)))
+            if (instance)
+                if (Unit* victim = me->GetUnit(*me, instance->GetData64(DATA_SACRIFICED_PLAYER)))
                     DoCast(victim, SPELL_PARALYZE);
         }
 
@@ -258,7 +258,7 @@ public:
     {
         boss_svala_sorrowgraveAI(Creature* c) : ScriptedAI(c), summons(c)
         {
-            pInstance = c->GetInstanceScript();
+            instance = c->GetInstanceScript();
         }
 
         uint32 uiSinsterStrikeTimer;
@@ -272,7 +272,7 @@ public:
 
         bool bSacrificed;
 
-        InstanceScript* pInstance;
+        InstanceScript* instance;
 
         void Reset()
         {
@@ -290,10 +290,10 @@ public:
 
             summons.DespawnAll();
 
-            if (pInstance)
+            if (instance)
             {
-                pInstance->SetData(DATA_SVALA_SORROWGRAVE_EVENT, NOT_STARTED);
-                pInstance->SetData64(DATA_SACRIFICED_PLAYER, 0);
+                instance->SetData(DATA_SVALA_SORROWGRAVE_EVENT, NOT_STARTED);
+                instance->SetData64(DATA_SACRIFICED_PLAYER, 0);
             }
         }
 
@@ -301,8 +301,8 @@ public:
         {
             DoScriptText(SAY_AGGRO, me);
 
-            if (pInstance)
-                pInstance->SetData(DATA_SVALA_SORROWGRAVE_EVENT, IN_PROGRESS);
+            if (instance)
+                instance->SetData(DATA_SVALA_SORROWGRAVE_EVENT, IN_PROGRESS);
         }
 
         void JustSummoned(Creature* summon)
@@ -351,9 +351,9 @@ public:
                             me->SetUnitMovementFlags(MOVEMENTFLAG_CAN_FLY);
                             DoTeleportTo(296.632f, -346.075f, 120.85f);
                             Phase = SACRIFICING;
-                            if (pInstance)
+                            if (instance)
                             {
-                                pInstance->SetData64(DATA_SACRIFICED_PLAYER, pSacrificeTarget->GetGUID());
+                                instance->SetData64(DATA_SACRIFICED_PLAYER, pSacrificeTarget->GetGUID());
 
                                 for (uint8 i = 0; i < 3; ++i)
                                     if (Creature* summon = me->SummonCreature(CREATURE_RITUAL_CHANNELER, RitualChannelerPos[i], TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 360000))
@@ -371,8 +371,8 @@ public:
             {
                 if (uiSacrificeTimer <= diff)
                 {
-                    Unit* pSacrificeTarget = pInstance ? Unit::GetUnit(*me, pInstance->GetData64(DATA_SACRIFICED_PLAYER)) : NULL;
-                    if (pInstance && !summons.empty() && pSacrificeTarget && pSacrificeTarget->isAlive())
+                    Unit* pSacrificeTarget = instance ? Unit::GetUnit(*me, instance->GetData64(DATA_SACRIFICED_PLAYER)) : NULL;
+                    if (instance && !summons.empty() && pSacrificeTarget && pSacrificeTarget->isAlive())
                         me->Kill(pSacrificeTarget, false); // durability damage?
 
                     //go down
@@ -395,13 +395,13 @@ public:
 
         void JustDied(Unit* killer)
         {
-            if (pInstance)
+            if (instance)
             {
-                Creature* pSvala = Unit::GetCreature((*me), pInstance->GetData64(DATA_SVALA));
+                Creature* pSvala = Unit::GetCreature((*me), instance->GetData64(DATA_SVALA));
                 if (pSvala && pSvala->isAlive())
                     killer->Kill(pSvala);
 
-                pInstance->SetData(DATA_SVALA_SORROWGRAVE_EVENT, DONE);
+                instance->SetData(DATA_SVALA_SORROWGRAVE_EVENT, DONE);
             }
             DoScriptText(SAY_DEATH, me);
         }

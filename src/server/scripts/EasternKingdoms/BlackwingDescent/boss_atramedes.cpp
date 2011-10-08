@@ -33,18 +33,18 @@ public:
     {
         boss_atramedesAI(Creature* creature) : ScriptedAI(creature)
         {
-            pInstance = creature->GetInstanceScript();
+            instance = creature->GetInstanceScript();
         }
 
-        InstanceScript* pInstance;
+        InstanceScript* instance;
 
         void Reset() { }
 
-        void EnterCombat(Unit* /*pWho*/) {}
+        void EnterCombat(Unit* /*who*/) {}
 
         void JustDied(Unit* /*Killer*/)
         {
-            pInstance->SetData(DATA_ATRAMEDES, DONE);
+            instance->SetData(DATA_ATRAMEDES, DONE);
         }
 
         void UpdateAI(const uint32 Diff)

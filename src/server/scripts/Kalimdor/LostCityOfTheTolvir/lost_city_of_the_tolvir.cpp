@@ -200,18 +200,18 @@ public:
                 switch (eventId)
                 {
                     case EVENT_HEX:
-                        if (Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
-                            DoCast(pTarget, SPELL_HEX);
+                        if (Unit *target = SelectUnit(SELECT_TARGET_RANDOM, 0))
+                            DoCast(target, SPELL_HEX);
                         events.RescheduleEvent(EVENT_HEX, 5000);
                         return;
                     case EVENT_METEOR:
-                        if (Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
-                            DoCast(pTarget, SPELL_METEOR);
+                        if (Unit *target = SelectUnit(SELECT_TARGET_RANDOM, 0))
+                            DoCast(target, SPELL_METEOR);
                         events.RescheduleEvent(EVENT_METEOR, 5000);
                         return;
                     case EVENT_SHADOW_BOLT:
-                        if (Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
-                            DoCast(pTarget, SPELL_SHADOW_BOLT);
+                        if (Unit *target = SelectUnit(SELECT_TARGET_RANDOM, 0))
+                            DoCast(target, SPELL_SHADOW_BOLT);
                         events.RescheduleEvent(EVENT_SHADOW_BOLT, 3000);
                         return;
                 }
@@ -270,8 +270,8 @@ public:
                         events.RescheduleEvent(EVENT_DISEASE_BREATH, 5000);
                         return;
                     case EVENT_INFECTIOUS_PLAGUE:
-                        if (Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
-                            DoCast(pTarget, SPELL_INFECTIOUS_PLAGUE);
+                        if (Unit *target = SelectUnit(SELECT_TARGET_RANDOM, 0))
+                            DoCast(target, SPELL_INFECTIOUS_PLAGUE);
                         events.RescheduleEvent(EVENT_INFECTIOUS_PLAGUE, 5000);
                         return;
                 }
@@ -327,8 +327,8 @@ public:
                 switch (eventId)
                 {
                     case EVENT_MIXTURE:
-                        if (Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
-                            DoCast(pTarget, SPELL_MIXTURE);
+                        if (Unit *target = SelectUnit(SELECT_TARGET_RANDOM, 0))
+                            DoCast(target, SPELL_MIXTURE);
                         events.RescheduleEvent(EVENT_MIXTURE, 6000);
                         return;
                     case EVENT_RITUAL_BLOODLETTING:
@@ -336,8 +336,8 @@ public:
                         events.RescheduleEvent(EVENT_RITUAL_BLOODLETTING, 2000);
                         return;
                     case EVENT_VICIOUS_LEECHES:
-                        if (Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
-                            DoCast(pTarget, SPELL_VICIOUS_LEECHES);
+                        if (Unit *target = SelectUnit(SELECT_TARGET_RANDOM, 0))
+                            DoCast(target, SPELL_VICIOUS_LEECHES);
                         events.RescheduleEvent(EVENT_VICIOUS_LEECHES, 5000);
                         return;
                 }
@@ -392,8 +392,8 @@ public:
                 switch (eventId)
                 {
                     case EVENT_BRANDED_TONGUE:
-                        if (Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
-                            DoCast(pTarget, SPELL_BRANDED_TONGUE);
+                        if (Unit *target = SelectUnit(SELECT_TARGET_RANDOM, 0))
+                            DoCast(target, SPELL_BRANDED_TONGUE);
                         events.RescheduleEvent(EVENT_BRANDED_TONGUE, 3000);
                         return;
                     case EVENT_SERUM_TORMENT:
@@ -633,8 +633,8 @@ public:
                         events.RescheduleEvent(EVENT_SHOOT, 1000);
                         return;
                     case EVENT_WING_CLIP:
-                        if (Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
-                            DoCast(pTarget, SPELL_WING_CLIP);
+                        if (Unit *target = SelectUnit(SELECT_TARGET_RANDOM, 0))
+                            DoCast(target, SPELL_WING_CLIP);
                         events.RescheduleEvent(EVENT_WING_CLIP, 3000);
                         return;
                  }
@@ -870,8 +870,8 @@ public:
                         events.RescheduleEvent(SPELL_DRAGON_BREATH, 3000);
                         return;
                     case EVENT_FIRE_BLAST:
-                        if (Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
-                            DoCast(pTarget, SPELL_FIRE_BLAST);
+                        if (Unit *target = SelectUnit(SELECT_TARGET_RANDOM, 0))
+                            DoCast(target, SPELL_FIRE_BLAST);
                         events.RescheduleEvent(EVENT_FIRE_BLAST, 2000);
                         return;
                 }

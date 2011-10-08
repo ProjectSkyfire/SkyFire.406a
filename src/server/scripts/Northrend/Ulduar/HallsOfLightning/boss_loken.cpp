@@ -139,10 +139,10 @@ public:
                 // workaround for PULSING_SHOCKWAVE
                 if (m_uiPulsingShockwave_Timer <= uiDiff)
                 {
-                    Map* pMap = me->GetMap();
-                    if (pMap->IsDungeon())
+                    Map* map = me->GetMap();
+                    if (map->IsDungeon())
                     {
-                        Map::PlayerList const &PlayerList = pMap->GetPlayers();
+                        Map::PlayerList const &PlayerList = map->GetPlayers();
 
                         if (PlayerList.isEmpty())
                             return;

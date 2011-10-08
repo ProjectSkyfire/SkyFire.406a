@@ -34,24 +34,24 @@ public:
     {
         boss_valionaAI(Creature* creature) : ScriptedAI(creature)
         {
-            pInstance = creature->GetInstanceScript();
+            instance = creature->GetInstanceScript();
         }
 
-        InstanceScript* pInstance;
+        InstanceScript* instance;
 
         void Reset()
         {
-            pInstance->SetData(DATA_THERALION_ANA_VALIONA, NOT_STARTED);
+            instance->SetData(DATA_THERALION_ANA_VALIONA, NOT_STARTED);
         }
 
-        void EnterCombat(Unit* /*pWho*/)
+        void EnterCombat(Unit* /*who*/)
         {
-            pInstance->SetData(DATA_THERALION_ANA_VALIONA, IN_PROGRESS);
+            instance->SetData(DATA_THERALION_ANA_VALIONA, IN_PROGRESS);
         }
 
         void JustDied(Unit* /*Killer*/)
         {
-            pInstance->SetData(DATA_THERALION_ANA_VALIONA, DONE);
+            instance->SetData(DATA_THERALION_ANA_VALIONA, DONE);
         }
 
         void UpdateAI(const uint32 Diff)

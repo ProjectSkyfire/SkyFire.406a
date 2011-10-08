@@ -186,12 +186,12 @@ class mob_healing_ward : public CreatureScript
         {
             mob_healing_wardAI(Creature* c) : ScriptedAI(c)
             {
-                pInstance = c->GetInstanceScript();
+                instance = c->GetInstanceScript();
             }
 
             uint32 Heal_Timer;
 
-            InstanceScript* pInstance;
+            InstanceScript* instance;
 
             void Reset()
             {
@@ -207,9 +207,9 @@ class mob_healing_ward : public CreatureScript
                 //Heal_Timer
                 if (Heal_Timer <= diff)
                 {
-                    if (pInstance)
+                    if (instance)
                     {
-                        Unit* jindo = Unit::GetUnit((*me), pInstance->GetData64(DATA_JINDO));
+                        Unit* jindo = Unit::GetUnit((*me), instance->GetData64(DATA_JINDO));
                         if (jindo)
                             DoCast(jindo, SPELL_HEAL);
                     }

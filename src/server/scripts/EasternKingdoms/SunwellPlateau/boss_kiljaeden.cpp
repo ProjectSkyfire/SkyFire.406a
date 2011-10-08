@@ -254,10 +254,10 @@ public:
     {
         boss_kalecgos_kjAI(Creature* c) : ScriptedAI(c)
         {
-            pInstance = c->GetInstanceScript();
+            instance = c->GetInstanceScript();
         }
 
-        InstanceScript* pInstance;
+        InstanceScript* instance;
         uint8 OrbsEmpowered;
         uint8 EmpowerCount;
 
@@ -276,19 +276,19 @@ public:
 
         GameObject* GetOrb(int32 index)
         {
-            if (!pInstance)
+            if (!instance)
                 return NULL;
 
             switch (index)
             {
                 case 0:
-                    return pInstance->instance->GetGameObject(pInstance->GetData64(DATA_ORB_OF_THE_BLUE_DRAGONFLIGHT_1));
+                    return instance->instance->GetGameObject(instance->GetData64(DATA_ORB_OF_THE_BLUE_DRAGONFLIGHT_1));
                 case 1:
-                    return pInstance->instance->GetGameObject(pInstance->GetData64(DATA_ORB_OF_THE_BLUE_DRAGONFLIGHT_2));
+                    return instance->instance->GetGameObject(instance->GetData64(DATA_ORB_OF_THE_BLUE_DRAGONFLIGHT_2));
                 case 2:
-                    return pInstance->instance->GetGameObject(pInstance->GetData64(DATA_ORB_OF_THE_BLUE_DRAGONFLIGHT_3));
+                    return instance->instance->GetGameObject(instance->GetData64(DATA_ORB_OF_THE_BLUE_DRAGONFLIGHT_3));
                 case 3:
-                    return pInstance->instance->GetGameObject(pInstance->GetData64(DATA_ORB_OF_THE_BLUE_DRAGONFLIGHT_4));
+                    return instance->instance->GetGameObject(instance->GetData64(DATA_ORB_OF_THE_BLUE_DRAGONFLIGHT_4));
             }
 
             return NULL;
@@ -378,12 +378,12 @@ public:
     {
         if (go->GetUInt32Value(GAMEOBJECT_FACTION) == 35)
         {
-            InstanceScript* pInstance = go->GetInstanceScript();
+            InstanceScript* instance = go->GetInstanceScript();
             player->SummonCreature(CREATURE_POWER_OF_THE_BLUE_DRAGONFLIGHT, player->GetPositionX(), player->GetPositionY(), player->GetPositionZ(), 0.0f, TEMPSUMMON_TIMED_DESPAWN, 121000);
             player->CastSpell(player, SPELL_VENGEANCE_OF_THE_BLUE_FLIGHT, false);
             go->SetUInt32Value(GAMEOBJECT_FACTION, 0);
 
-            if (Creature* pKalec = Unit::GetCreature(*player, pInstance->GetData64(DATA_KALECGOS_KJ)))
+            if (Creature* pKalec = Unit::GetCreature(*player, instance->GetData64(DATA_KALECGOS_KJ)))
                 CAST_AI(boss_kalecgos_kj::boss_kalecgos_kjAI, pKalec->AI())->SetRingOfBlueFlames();
 
             go->Refresh();
@@ -407,10 +407,10 @@ public:
     {
         mob_kiljaeden_controllerAI(Creature* c) : Scripted_NoMovementAI(c), summons(me)
         {
-            pInstance = c->GetInstanceScript();
+            instance = c->GetInstanceScript();
         }
 
-        InstanceScript* pInstance;
+        InstanceScript* instance;
         SummonList summons;
 
         bool bSummonedDeceivers;
@@ -433,7 +433,7 @@ public:
         {
             phase = PHASE_DECEIVERS;
 
-            if (Creature* pKalecKJ = Unit::GetCreature((*me), pInstance->GetData64(DATA_KALECGOS_KJ)))
+            if (Creature* pKalecKJ = Unit::GetCreature((*me), instance->GetData64(DATA_KALECGOS_KJ)))
                 CAST_AI(boss_kalecgos_kj::boss_kalecgos_kjAI, pKalecKJ->AI())->ResetOrbs();
             deceiverDeathCount = 0;
             bSummonedDeceivers = false;
@@ -466,7 +466,7 @@ public:
         {
             if (uiRandomSayTimer < diff)
             {
-                if (pInstance && pInstance->GetData(DATA_MURU_EVENT) != DONE && pInstance->GetData(DATA_KILJAEDEN_EVENT) == NOT_STARTED)
+                if (instance && instance->GetData(DATA_MURU_EVENT) != DONE && instance->GetData(DATA_KILJAEDEN_EVENT) == NOT_STARTED)
                     DoScriptText(RAND(SAY_KJ_OFFCOMBAT1, SAY_KJ_OFFCOMBAT2, SAY_KJ_OFFCOMBAT3, SAY_KJ_OFFCOMBAT4, SAY_KJ_OFFCOMBAT5), me);
                 uiRandomSayTimer = 30000;
             } else uiRandomSayTimer -= diff;
@@ -506,10 +506,10 @@ public:
     {
         boss_kiljaedenAI(Creature* c) : Scripted_NoMovementAI(c), summons(me)
         {
-            pInstance = c->GetInstanceScript();
+            instance = c->GetInstanceScript();
         }
 
-        InstanceScript* pInstance;
+        InstanceScript* instance;
         SummonList summons;
 
         uint8 Phase;
@@ -565,9 +565,9 @@ public:
             OrbActivated  = false;
             SpeechBegins  = true;
 
-            if (pInstance)
+            if (instance)
             {
-                if (Creature* pKalec = Unit::GetCreature(*me, pInstance->GetData64(DATA_KALECGOS_KJ)))
+                if (Creature* pKalec = Unit::GetCreature(*me, instance->GetData64(DATA_KALECGOS_KJ)))
                     pKalec->RemoveDynObject(SPELL_RING_OF_BLUE_FLAMES);
             }
             me->SetFloatValue(UNIT_FIELD_COMBATREACH, 12);
@@ -614,8 +614,8 @@ public:
             DoScriptText(SAY_KJ_DEATH, me);
             summons.DespawnAll();
 
-            if (pInstance)
-                pInstance->SetData(DATA_KILJAEDEN_EVENT, DONE);
+            if (instance)
+                instance->SetData(DATA_KILJAEDEN_EVENT, DONE);
         }
 
         void KilledUnit(Unit* /*victim*/)
@@ -629,9 +629,9 @@ public:
             summons.DespawnAll();
 
             // Reset the controller
-            if (pInstance)
+            if (instance)
             {
-                if (Creature* pControl = Unit::GetCreature(*me, pInstance->GetData64(DATA_KILJAEDEN_CONTROLLER)))
+                if (Creature* pControl = Unit::GetCreature(*me, instance->GetData64(DATA_KILJAEDEN_CONTROLLER)))
                     CAST_AI(mob_kiljaeden_controller::mob_kiljaeden_controllerAI, pControl->AI())->Reset();
             }
         }
@@ -720,11 +720,11 @@ public:
                             if (Speeches[speechCount].timer < SpeechTimer)
                             {
                                 SpeechTimer = 0;
-                                if (pInstance)
-                                    if (Creature* pSpeechCreature = Unit::GetCreature(*me, pInstance->GetData64(Speeches[speechCount].creature)))
+                                if (instance)
+                                    if (Creature* pSpeechCreature = Unit::GetCreature(*me, instance->GetData64(Speeches[speechCount].creature)))
                                         DoScriptText(Speeches[speechCount].textid, pSpeechCreature);
                                 if (speechCount == 12)
-                                    if (Creature* pAnveena =  Unit::GetCreature(*me, pInstance->GetData64(DATA_ANVEENA)))
+                                    if (Creature* pAnveena =  Unit::GetCreature(*me, instance->GetData64(DATA_ANVEENA)))
                                         pAnveena->CastSpell(me, SPELL_SACRIFICE_OF_ANVEENA, false);
                                         //   ChangeTimers(true, 10000); // Kil should do an emote while screaming without attacking for 10 seconds
                                 if (speechCount == speechPhaseEnd)
@@ -823,8 +823,8 @@ public:
                             }
                             break;
                         case TIMER_ORBS_EMPOWER: //Phase 3
-                            if (pInstance)
-                                if (Creature* pKalec = Unit::GetCreature(*me, pInstance->GetData64(DATA_KALECGOS_KJ)))
+                            if (instance)
+                                if (Creature* pKalec = Unit::GetCreature(*me, instance->GetData64(DATA_KALECGOS_KJ)))
                                 {
                                     switch (Phase)
                                     {
@@ -919,10 +919,10 @@ public:
     {
         mob_hand_of_the_deceiverAI(Creature* c) : ScriptedAI(c)
         {
-            pInstance = c->GetInstanceScript();
+            instance = c->GetInstanceScript();
         }
 
-        InstanceScript* pInstance;
+        InstanceScript* instance;
 
         uint32 ShadowBoltVolleyTimer;
         uint32 FelfirePortalTimer;
@@ -932,8 +932,8 @@ public:
             // TODO: Timers!
             ShadowBoltVolleyTimer = urand(8000, 14000); // So they don't all cast it in the same moment.
             FelfirePortalTimer = 20000;
-            if (pInstance)
-                pInstance->SetData(DATA_KILJAEDEN_EVENT, NOT_STARTED);
+            if (instance)
+                instance->SetData(DATA_KILJAEDEN_EVENT, NOT_STARTED);
         }
 
         void JustSummoned(Creature* summoned)
@@ -944,10 +944,10 @@ public:
 
         void EnterCombat(Unit* who)
         {
-            if (pInstance)
+            if (instance)
             {
-                pInstance->SetData(DATA_KILJAEDEN_EVENT, IN_PROGRESS);
-                if (Creature* pControl = Unit::GetCreature(*me, pInstance->GetData64(DATA_KILJAEDEN_CONTROLLER)))
+                instance->SetData(DATA_KILJAEDEN_EVENT, IN_PROGRESS);
+                if (Creature* pControl = Unit::GetCreature(*me, instance->GetData64(DATA_KILJAEDEN_CONTROLLER)))
                     pControl->AddThreat(who, 1.0f);
             }
             me->InterruptNonMeleeSpells(true);
@@ -955,10 +955,10 @@ public:
 
         void JustDied(Unit* /*killer*/)
         {
-            if (!pInstance)
+            if (!instance)
                 return;
 
-            if (Creature* pControl = Unit::GetCreature(*me, pInstance->GetData64(DATA_KILJAEDEN_CONTROLLER)))
+            if (Creature* pControl = Unit::GetCreature(*me, instance->GetData64(DATA_KILJAEDEN_CONTROLLER)))
                 ++(CAST_AI(mob_kiljaeden_controller::mob_kiljaeden_controllerAI, pControl->AI())->deceiverDeathCount);
         }
 
@@ -1174,10 +1174,10 @@ public:
     {
         mob_shield_orbAI(Creature* c) : ScriptedAI(c)
         {
-            pInstance = c->GetInstanceScript();
+            instance = c->GetInstanceScript();
         }
 
-        InstanceScript* pInstance;
+        InstanceScript* instance;
 
         bool bPointReached;
         bool bClockwise;
@@ -1230,7 +1230,7 @@ public:
 
             if (Timer <= diff)
             {
-                if (Unit* random = Unit::GetUnit(*me, pInstance ? pInstance->GetData64(DATA_PLAYER_GUID) : 0))
+                if (Unit* random = Unit::GetUnit(*me, instance ? instance->GetData64(DATA_PLAYER_GUID) : 0))
                     DoCast(random, SPELL_SHADOW_BOLT, false);
                 Timer = urand(500, 1000);
             } else Timer -= diff;

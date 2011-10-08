@@ -46,12 +46,12 @@ public:
 
     bool OnGossipHello(Player* player, GameObject* go)
     {
-        InstanceScript* pInstance = go->GetInstanceScript();
+        InstanceScript* instance = go->GetInstanceScript();
 
-        if (!pInstance)
+        if (!instance)
             return false;
 
-        if (pInstance->GetData(TYPE_BARON_RUN) != NOT_STARTED)
+        if (instance->GetData(TYPE_BARON_RUN) != NOT_STARTED)
             return false;
 
         if (Group* group = player->GetGroup())
@@ -72,7 +72,7 @@ public:
                     player->GetMap() == go->GetMap())
                     player->CastSpell(player, SPELL_BARON_ULTIMATUM, true);
 
-        pInstance->SetData(TYPE_BARON_RUN, IN_PROGRESS);
+        instance->SetData(TYPE_BARON_RUN, IN_PROGRESS);
         return false;
     }
 };

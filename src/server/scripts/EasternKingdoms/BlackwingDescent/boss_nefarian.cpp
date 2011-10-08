@@ -39,10 +39,10 @@ public:
     {
         boss_bd_nefarianAI(Creature* creature) : ScriptedAI(creature)
         {
-            pInstance = creature->GetInstanceScript();
+            instance = creature->GetInstanceScript();
         }
 
-        InstanceScript* pInstance;
+        InstanceScript* instance;
 
         uint32 uiShadowflameBreathTimer;
         uint32 uiShadowCowardiceTimer;
@@ -53,14 +53,14 @@ public:
             uiShadowCowardiceTimer = 13*IN_MILLISECONDS;
         }
 
-        void EnterCombat(Unit* /*pWho*/)
+        void EnterCombat(Unit* /*who*/)
         {
-            pInstance->SetData(DATA_NEFARIAN, IN_PROGRESS);
+            instance->SetData(DATA_NEFARIAN, IN_PROGRESS);
         }
 
         void JustDied(Unit* /*Killer*/)
         {
-            pInstance->SetData(DATA_NEFARIAN, DONE);
+            instance->SetData(DATA_NEFARIAN, DONE);
         }
 
         void UpdateAI(const uint32 Diff)

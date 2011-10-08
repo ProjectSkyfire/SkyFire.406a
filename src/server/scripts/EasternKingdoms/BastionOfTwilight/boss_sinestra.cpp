@@ -34,24 +34,24 @@ public:
     {
         boss_sinestraAI(Creature* creature) : ScriptedAI(creature)
         {
-            pInstance = creature->GetInstanceScript();
+            instance = creature->GetInstanceScript();
         }
 
-        InstanceScript* pInstance;
+        InstanceScript* instance;
 
         void Reset()
         {
-            pInstance->SetData(DATA_SINESTRA, NOT_STARTED);
+            instance->SetData(DATA_SINESTRA, NOT_STARTED);
         }
 
-        void EnterCombat(Unit* /*pWho*/)
+        void EnterCombat(Unit* /*who*/)
         {
-            pInstance->SetData(DATA_SINESTRA, IN_PROGRESS);
+            instance->SetData(DATA_SINESTRA, IN_PROGRESS);
         }
 
         void JustDied(Unit* /*Killer*/)
         {
-            pInstance->SetData(DATA_SINESTRA, DONE);
+            instance->SetData(DATA_SINESTRA, DONE);
         }
 
         void UpdateAI(const uint32 Diff)

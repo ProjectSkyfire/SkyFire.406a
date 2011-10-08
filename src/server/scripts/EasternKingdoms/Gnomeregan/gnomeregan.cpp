@@ -114,9 +114,9 @@ public:
 
     bool OnGossipHello(Player* player, Creature* creature)
     {
-        InstanceScript* pInstance = creature->GetInstanceScript();
+        InstanceScript* instance = creature->GetInstanceScript();
 
-        if (pInstance && pInstance->GetData(TYPE_EVENT) == NOT_STARTED)
+        if (instance && instance->GetData(TYPE_EVENT) == NOT_STARTED)
             player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_START_EVENT, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
 
         player->SEND_GOSSIP_MENU(GOSSIP_TEXT_EMI, creature->GetGUID());
@@ -128,12 +128,12 @@ public:
     {
         npc_blastmaster_emi_shortfuseAI(Creature* creature) : npc_escortAI(creature)
         {
-            pInstance = creature->GetInstanceScript();
+            instance = creature->GetInstanceScript();
             creature->RestoreFaction();
             Reset();
         }
 
-        InstanceScript* pInstance;
+        InstanceScript* instance;
 
         uint8 Phase;
         uint32 Timer;
@@ -189,39 +189,39 @@ public:
 
            if (bBool)
            {
-                if (pInstance)
-                    if (GameObject* go = GameObject::GetGameObject((*me), pInstance->GetData64(DATA_GO_CAVE_IN_RIGHT)))
-                        pInstance->HandleGameObject(0, false, go);
+                if (instance)
+                    if (GameObject* go = GameObject::GetGameObject((*me), instance->GetData64(DATA_GO_CAVE_IN_RIGHT)))
+                        instance->HandleGameObject(0, false, go);
            }else
-                if (pInstance)
-                    if (GameObject* go = GameObject::GetGameObject((*me), pInstance->GetData64(DATA_GO_CAVE_IN_LEFT)))
-                        pInstance->HandleGameObject(0, false, go);
+                if (instance)
+                    if (GameObject* go = GameObject::GetGameObject((*me), instance->GetData64(DATA_GO_CAVE_IN_LEFT)))
+                        instance->HandleGameObject(0, false, go);
         }
 
         void SetInFace(bool bBool)
         {
-            if (!pInstance)
+            if (!instance)
                 return;
 
             if (bBool)
             {
-                if (GameObject* go = GameObject::GetGameObject((*me), pInstance->GetData64(DATA_GO_CAVE_IN_RIGHT)))
+                if (GameObject* go = GameObject::GetGameObject((*me), instance->GetData64(DATA_GO_CAVE_IN_RIGHT)))
                     me->SetFacingToObject(go);
             }else
-                if (GameObject* go = GameObject::GetGameObject((*me), pInstance->GetData64(DATA_GO_CAVE_IN_LEFT)))
+                if (GameObject* go = GameObject::GetGameObject((*me), instance->GetData64(DATA_GO_CAVE_IN_LEFT)))
                     me->SetFacingToObject(go);
         }
 
         void RestoreAll()
         {
-            if (!pInstance)
+            if (!instance)
                 return;
 
-            if (GameObject* go = GameObject::GetGameObject((*me), pInstance->GetData64(DATA_GO_CAVE_IN_RIGHT)))
-                pInstance->HandleGameObject(0, false, go);
+            if (GameObject* go = GameObject::GetGameObject((*me), instance->GetData64(DATA_GO_CAVE_IN_RIGHT)))
+                instance->HandleGameObject(0, false, go);
 
-            if (GameObject* go = GameObject::GetGameObject((*me), pInstance->GetData64(DATA_GO_CAVE_IN_LEFT)))
-                pInstance->HandleGameObject(0, false, go);
+            if (GameObject* go = GameObject::GetGameObject((*me), instance->GetData64(DATA_GO_CAVE_IN_LEFT)))
+                instance->HandleGameObject(0, false, go);
 
             if (!GoSummonList.empty())
                 for (std::list<uint64>::const_iterator itr = GoSummonList.begin(); itr != GoSummonList.end(); ++itr)
@@ -321,16 +321,16 @@ public:
                     NextStep(1500, true);
                     break;
                 case 2:
-                    if (!pInstance)
+                    if (!instance)
                         return;
 
                     switch (uiValue)
                     {
                         case 1:
-                            pInstance->SetData(TYPE_EVENT, IN_PROGRESS);
+                            instance->SetData(TYPE_EVENT, IN_PROGRESS);
                             break;
                         case 2:
-                            pInstance->SetData(TYPE_EVENT, DONE);
+                            instance->SetData(TYPE_EVENT, DONE);
                             NextStep(5000, false, 22);
                             break;
                     }
@@ -445,9 +445,9 @@ public:
                             SetInFace(true);
                             DoScriptText(SAY_BLASTMASTER_5, me);
                             Summon(1);
-                            if (pInstance)
-                                if (GameObject* go = GameObject::GetGameObject((*me), pInstance->GetData64(DATA_GO_CAVE_IN_RIGHT)))
-                                    pInstance->HandleGameObject(0, true, go);
+                            if (instance)
+                                if (GameObject* go = GameObject::GetGameObject((*me), instance->GetData64(DATA_GO_CAVE_IN_RIGHT)))
+                                    instance->HandleGameObject(0, true, go);
                             NextStep(3000, true);
                             break;
                         case 7:
@@ -491,9 +491,9 @@ public:
                         case 16:
                             DoScriptText(SAY_BLASTMASTER_23, me);
                             SetInFace(false);
-                            if (pInstance)
-                                if (GameObject* go = GameObject::GetGameObject((*me), pInstance->GetData64(DATA_GO_CAVE_IN_LEFT)))
-                                    pInstance->HandleGameObject(0, true, go);
+                            if (instance)
+                                if (GameObject* go = GameObject::GetGameObject((*me), instance->GetData64(DATA_GO_CAVE_IN_LEFT)))
+                                    instance->HandleGameObject(0, true, go);
                             NextStep(2000, true);
                             break;
                         case 17:

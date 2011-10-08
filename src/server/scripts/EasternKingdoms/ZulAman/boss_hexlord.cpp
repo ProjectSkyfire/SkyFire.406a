@@ -183,11 +183,11 @@ static PlayerAbilityStruct PlayerAbility[][3] =
 
 struct boss_hexlord_addAI : public ScriptedAI
 {
-    InstanceScript* pInstance;
+    InstanceScript* instance;
 
     boss_hexlord_addAI(Creature* c) : ScriptedAI(c)
     {
-        pInstance = c->GetInstanceScript();
+        instance = c->GetInstanceScript();
     }
 
     void Reset() {}
@@ -196,7 +196,7 @@ struct boss_hexlord_addAI : public ScriptedAI
 
     void UpdateAI(const uint32 /*diff*/)
     {
-        if (pInstance && pInstance->GetData(DATA_HEXLORDEVENT) != IN_PROGRESS)
+        if (instance && instance->GetData(DATA_HEXLORDEVENT) != IN_PROGRESS)
         {
             EnterEvadeMode();
             return;
@@ -215,13 +215,13 @@ class boss_hexlord_malacrass : public CreatureScript
         {
             boss_hex_lord_malacrassAI(Creature* c) : ScriptedAI(c)
             {
-                pInstance = c->GetInstanceScript();
+                instance = c->GetInstanceScript();
                 SelectAddEntry();
                 for (uint8 i = 0; i < 4; ++i)
                     AddGUID[i] = 0;
             }
 
-            InstanceScript* pInstance;
+            InstanceScript* instance;
 
             uint64 AddGUID[4];
             uint32 AddEntry[4];
@@ -239,8 +239,8 @@ class boss_hexlord_malacrass : public CreatureScript
 
             void Reset()
             {
-                if (pInstance)
-                    pInstance->SetData(DATA_HEXLORDEVENT, NOT_STARTED);
+                if (instance)
+                    instance->SetData(DATA_HEXLORDEVENT, NOT_STARTED);
 
                 SpiritBolts_Timer    = 20000;
                 DrainPower_Timer     = 60000;
@@ -257,8 +257,8 @@ class boss_hexlord_malacrass : public CreatureScript
 
             void EnterCombat(Unit* /*who*/)
             {
-                if (pInstance)
-                    pInstance->SetData(DATA_HEXLORDEVENT, IN_PROGRESS);
+                if (instance)
+                    instance->SetData(DATA_HEXLORDEVENT, IN_PROGRESS);
 
                 DoZoneInCombat();
                 me->MonsterYell(YELL_AGGRO, LANG_UNIVERSAL, 0);
@@ -294,8 +294,8 @@ class boss_hexlord_malacrass : public CreatureScript
 
             void JustDied(Unit* /*victim*/)
             {
-                if (pInstance)
-                    pInstance->SetData(DATA_HEXLORDEVENT, DONE);
+                if (instance)
+                    instance->SetData(DATA_HEXLORDEVENT, DONE);
 
                 me->MonsterYell(YELL_DEATH, LANG_UNIVERSAL, 0);
                 DoPlaySoundToSet(me, SOUND_YELL_DEATH);

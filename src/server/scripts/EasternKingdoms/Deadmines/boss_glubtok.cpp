@@ -45,10 +45,10 @@ public:
     {
         boss_glubtokAI(Creature* creature) : ScriptedAI(creature)
         {
-            pInstance = creature->GetInstanceScript();
+            instance = creature->GetInstanceScript();
         }
 
-        InstanceScript* pInstance;
+        InstanceScript* instance;
 
         uint32 TrashTimer;
         uint32 SlamTimer;

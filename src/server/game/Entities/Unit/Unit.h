@@ -148,7 +148,7 @@ struct SpellModifier
     uint32 spellId;
     Aura * const ownerAura;
     AuraEffect * ownerAuraEffect;
-    void Recalculate(SpellInfo const *spellInfo, Unit* pTarget);
+    void Recalculate(SpellInfo const *spellInfo, Unit* target);
 };
 
 typedef std::list<SpellModifier*> SpellModList;
@@ -1478,7 +1478,7 @@ class Unit : public WorldObject
         int32 DealHeal(Unit* pVictim, uint32 addhealth);
 
         void ProcDamageAndSpell(Unit* pVictim, uint32 procAttacker, uint32 procVictim, uint32 procEx, uint32 amount, WeaponAttackType attType = BASE_ATTACK, SpellInfo const *procSpell = NULL, SpellInfo const* procAura = NULL);
-        void ProcDamageAndSpellFor(bool isVictim, Unit* pTarget, uint32 procFlag, uint32 procExtra, WeaponAttackType attType, SpellInfo const* procSpell, uint32 damage , SpellInfo const* procAura = NULL);
+        void ProcDamageAndSpellFor(bool isVictim, Unit* target, uint32 procFlag, uint32 procExtra, WeaponAttackType attType, SpellInfo const* procSpell, uint32 damage , SpellInfo const* procAura = NULL);
 
         void GetProcAurasTriggeredOnEvent(std::list<AuraApplication*>& aurasTriggeringProc, std::list<AuraApplication*>* procAuras, ProcEventInfo eventInfo);
         void TriggerAurasProcOnEvent(CalcDamageInfo& damageInfo);
@@ -2251,7 +2251,7 @@ class Unit : public WorldObject
 
         void AddSpellMod(SpellModifier* mod, bool apply);
         bool IsAffectedBySpellmod(SpellInfo const *spellInfo, SpellModifier *mod, Spell* spell = NULL);
-        template <class T> T ApplySpellMod(uint32 spellId, SpellModOp op, T &basevalue, Spell* spell = NULL, Unit* pTarget = NULL);
+        template <class T> T ApplySpellMod(uint32 spellId, SpellModOp op, T &basevalue, Spell* spell = NULL, Unit* target = NULL);
         void RemoveSpellMods(Spell* spell);
         void RestoreSpellMods(Spell* spell, uint32 ownerAuraId = 0, Aura* aura = NULL);
         void RestoreAllSpellMods(uint32 ownerAuraId = 0, Aura* aura = NULL);
@@ -2446,7 +2446,7 @@ inline void Unit::SendMonsterMoveByPath(Path<Elem, Node> const& path, uint32 sta
 SpellInfo const* GetSpellInfo(uint32 spellId);
 
 // "the bodies of template functions must be made available in a header file"
-template <class T> T Unit::ApplySpellMod(uint32 spellId, SpellModOp op, T &basevalue, Spell* spell, Unit* pTarget)
+template <class T> T Unit::ApplySpellMod(uint32 spellId, SpellModOp op, T &basevalue, Spell* spell, Unit* target)
 {
     SpellInfo const* spellInfo = GetSpellInfo(spellId);
     if (!spellInfo)
@@ -2475,7 +2475,7 @@ template <class T> T Unit::ApplySpellMod(uint32 spellId, SpellModOp op, T &basev
         // 76547 Mana Adept:   Increases all spell damage done by up to 0%, based on the amount of mana the Mage has unspent
         // 76613 Frostburn:    All your spells deal 0% increased damage against 'Frozen' targets
         // current solution is treat these spell effects as spell mods and recalculate spell mod value before applying
-        mod->Recalculate(spellInfo, pTarget);
+        mod->Recalculate(spellInfo, target);
 
         if (mod->type == SPELLMOD_FLAT)
             totalflat += mod->value;

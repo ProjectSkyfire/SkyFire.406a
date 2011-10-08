@@ -42,10 +42,10 @@ public:
     {
         boss_maloriakAI(Creature* creature) : ScriptedAI(creature)
         {
-            pInstance = creature->GetInstanceScript();
+            instance = creature->GetInstanceScript();
         }
 
-        InstanceScript* pInstance;
+        InstanceScript* instance;
 
         uint32 uiConsumingFlames;
         uint32 uiArcaneStorm;
@@ -54,7 +54,7 @@ public:
 
         void Reset()
         {
-            pInstance->SetData(DATA_MALORIAK, NOT_STARTED);
+            instance->SetData(DATA_MALORIAK, NOT_STARTED);
 
             uiConsumingFlames = 5*IN_MILLISECONDS;
             uiArcaneStorm = 15*IN_MILLISECONDS;
@@ -62,19 +62,19 @@ public:
             uiRemedy = 30*IN_MILLISECONDS;
         }
 
-        void EnterCombat(Unit* /*pWho*/)
+        void EnterCombat(Unit* /*who*/)
         {
-            pInstance->SetData(DATA_MALORIAK, IN_PROGRESS);
+            instance->SetData(DATA_MALORIAK, IN_PROGRESS);
         }
 
         void JustReachedHome()
         {
-            pInstance->SetData(DATA_MALORIAK, FAIL);
+            instance->SetData(DATA_MALORIAK, FAIL);
         }
 
         void JustDied(Unit* /*Killer*/)
         {
-            pInstance->SetData(DATA_MALORIAK, DONE);
+            instance->SetData(DATA_MALORIAK, DONE);
         }
 
         void UpdateAI(const uint32 Diff)

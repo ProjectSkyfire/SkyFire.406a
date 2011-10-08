@@ -68,9 +68,9 @@ public:
 
         uint32 entry = atol(cId);
 
-        Quest const* pQuest = sObjectMgr->GetQuestTemplate(entry);
+        Quest const* quest = sObjectMgr->GetQuestTemplate(entry);
 
-        if (!pQuest)
+        if (!quest)
         {
             handler->PSendSysMessage(LANG_COMMAND_QUEST_NOTFOUND, entry);
             handler->SetSentErrorMessage(true);
@@ -89,9 +89,9 @@ public:
         }
 
         // ok, normal (creature/GO starting) quest
-        if (player->CanAddQuest(pQuest, true))
+        if (player->CanAddQuest(quest, true))
         {
-            player->AddQuest(pQuest, NULL);
+            player->AddQuest(quest, NULL);
 
             if (player->CanCompleteQuest(entry))
                 player->CompleteQuest(entry);
@@ -118,9 +118,9 @@ public:
 
         uint32 entry = atol(cId);
 
-        Quest const* pQuest = sObjectMgr->GetQuestTemplate(entry);
+        Quest const* quest = sObjectMgr->GetQuestTemplate(entry);
 
-        if (!pQuest)
+        if (!quest)
         {
             handler->PSendSysMessage(LANG_COMMAND_QUEST_NOTFOUND, entry);
             handler->SetSentErrorMessage(true);
@@ -165,10 +165,10 @@ public:
 
         uint32 entry = atol(cId);
 
-        Quest const* pQuest = sObjectMgr->GetQuestTemplate(entry);
+        Quest const* quest = sObjectMgr->GetQuestTemplate(entry);
 
         // If player doesn't have the quest
-        if (!pQuest || player->GetQuestStatus(entry) == QUEST_STATUS_NONE)
+        if (!quest || player->GetQuestStatus(entry) == QUEST_STATUS_NONE)
         {
             handler->PSendSysMessage(LANG_COMMAND_QUEST_NOTFOUND, entry);
             handler->SetSentErrorMessage(true);
@@ -178,8 +178,8 @@ public:
         // Add quest items for quests that require items
         for (uint8 x = 0; x < QUEST_ITEM_OBJECTIVES_COUNT; ++x)
         {
-            uint32 id = pQuest->ReqItemId[x];
-            uint32 count = pQuest->ReqItemCount[x];
+            uint32 id = quest->ReqItemId[x];
+            uint32 count = quest->ReqItemCount[x];
             if (!id || !count)
                 continue;
 
@@ -197,10 +197,10 @@ public:
         // All creature/GO slain/casted (not required, but otherwise it will display "Creature slain 0/10")
         for (uint8 i = 0; i < QUEST_OBJECTIVES_COUNT; ++i)
         {
-            int32 creature = pQuest->ReqCreatureOrGOId[i];
-            uint32 creaturecount = pQuest->ReqCreatureOrGOCount[i];
+            int32 creature = quest->ReqCreatureOrGOId[i];
+            uint32 creaturecount = quest->ReqCreatureOrGOCount[i];
 
-            if (uint32 spell_id = pQuest->ReqSpell[i])
+            if (uint32 spell_id = quest->ReqSpell[i])
             {
                 for (uint16 z = 0; z < creaturecount; ++z)
                     player->CastedCreatureOrGO(creature, 0, spell_id);
@@ -219,9 +219,9 @@ public:
         }
 
         // If the quest requires reputation to complete
-        if (uint32 repFaction = pQuest->GetRepObjectiveFaction())
+        if (uint32 repFaction = quest->GetRepObjectiveFaction())
         {
-            uint32 repValue = pQuest->GetRepObjectiveValue();
+            uint32 repValue = quest->GetRepObjectiveValue();
             uint32 curRep = player->GetReputationMgr().GetReputation(repFaction);
             if (curRep < repValue)
                 if (FactionEntry const* factionEntry = sFactionStore.LookupEntry(repFaction))
@@ -229,9 +229,9 @@ public:
         }
 
         // If the quest requires a SECOND reputation to complete
-        if (uint32 repFaction = pQuest->GetRepObjectiveFaction2())
+        if (uint32 repFaction = quest->GetRepObjectiveFaction2())
         {
-            uint32 repValue2 = pQuest->GetRepObjectiveValue2();
+            uint32 repValue2 = quest->GetRepObjectiveValue2();
             uint32 curRep = player->GetReputationMgr().GetReputation(repFaction);
             if (curRep < repValue2)
                 if (FactionEntry const* factionEntry = sFactionStore.LookupEntry(repFaction))
@@ -239,7 +239,7 @@ public:
         }
 
         // If the quest requires money
-        int32 ReqOrRewMoney = pQuest->GetRewOrReqMoney();
+        int32 ReqOrRewMoney = quest->GetRewOrReqMoney();
         if (ReqOrRewMoney < 0)
             player->ModifyMoney(-ReqOrRewMoney);
 

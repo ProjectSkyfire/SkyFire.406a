@@ -114,10 +114,10 @@ public:
         {
             RaidWiped = false;
             EventId = 0;
-            pInstance = c->GetInstanceScript();
+            instance = c->GetInstanceScript();
         }
 
-        InstanceScript* pInstance;
+        InstanceScript* instance;
 
         uint64 SpotlightGUID;
 
@@ -139,20 +139,20 @@ public:
 
             PerformanceReady = false;
 
-            if (pInstance)
-                EventId = pInstance->GetData(DATA_OPERA_PERFORMANCE);
+            if (instance)
+                EventId = instance->GetData(DATA_OPERA_PERFORMANCE);
         }
 
         void StartEvent()
         {
-            if (!pInstance)
+            if (!instance)
                 return;
 
-            pInstance->SetData(TYPE_OPERA, IN_PROGRESS);
+            instance->SetData(TYPE_OPERA, IN_PROGRESS);
 
             //resets count for this event, in case earlier failed
             if (EventId == EVENT_OZ)
-                pInstance->SetData(DATA_OPERA_OZ_DEATHCOUNT, IN_PROGRESS);
+                instance->SetData(DATA_OPERA_OZ_DEATHCOUNT, IN_PROGRESS);
 
             Start(false, false);
         }
@@ -161,14 +161,14 @@ public:
 
         void WaypointReached(uint32 i)
         {
-            if (!pInstance)
+            if (!instance)
                 return;
 
             switch (i)
             {
                 case 0:
                     DoCast(me, SPELL_TUXEDO, false);
-                    pInstance->DoUseDoorOrButton(pInstance->GetData64(DATA_GO_STAGEDOORLEFT));
+                    instance->DoUseDoorOrButton(instance->GetData64(DATA_GO_STAGEDOORLEFT));
                     break;
                 case 4:
                     TalkCount = 0;
@@ -184,12 +184,12 @@ public:
                     }
                     break;
                 case 8:
-                    pInstance->DoUseDoorOrButton(pInstance->GetData64(DATA_GO_STAGEDOORLEFT));
+                    instance->DoUseDoorOrButton(instance->GetData64(DATA_GO_STAGEDOORLEFT));
                     PerformanceReady = true;
                     break;
                 case 9:
                     PrepareEncounter();
-                    pInstance->DoUseDoorOrButton(pInstance->GetData64(DATA_GO_CURTAINS));
+                    instance->DoUseDoorOrButton(instance->GetData64(DATA_GO_CURTAINS));
                     break;
             }
         }
@@ -361,10 +361,10 @@ public:
 
     bool OnGossipHello(Player* player, Creature* creature)
     {
-        if (InstanceScript* pInstance = creature->GetInstanceScript())
+        if (InstanceScript* instance = creature->GetInstanceScript())
         {
             // Check for death of Moroes and if opera event is not done already
-            if (pInstance->GetData(TYPE_MOROES) == DONE && pInstance->GetData(TYPE_OPERA) != DONE)
+            if (instance->GetData(TYPE_MOROES) == DONE && instance->GetData(TYPE_OPERA) != DONE)
             {
                 player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, OZ_GOSSIP1, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
@@ -425,10 +425,10 @@ public:
 
     bool OnGossipHello(Player* player, Creature* creature)
     {
-        if (InstanceScript* pInstance = creature->GetInstanceScript())
+        if (InstanceScript* instance = creature->GetInstanceScript())
         {
             // Check if Shade of Aran event is done
-            if (pInstance->GetData(TYPE_ARAN) == DONE)
+            if (instance->GetData(TYPE_ARAN) == DONE)
                 player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_TELEPORT, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
         }
 
@@ -474,10 +474,10 @@ public:
     {
         npc_image_of_medivhAI(Creature* c) : ScriptedAI(c)
         {
-            pInstance = c->GetInstanceScript();
+            instance = c->GetInstanceScript();
         }
 
-        InstanceScript* pInstance;
+        InstanceScript* instance;
 
         uint64 ArcanagosGUID;
 
@@ -492,9 +492,9 @@ public:
         {
             ArcanagosGUID = 0;
 
-            if (pInstance && pInstance->GetData64(DATA_IMAGE_OF_MEDIVH) == 0)
+            if (instance && instance->GetData64(DATA_IMAGE_OF_MEDIVH) == 0)
             {
-                pInstance->SetData64(DATA_IMAGE_OF_MEDIVH, me->GetGUID());
+                instance->SetData64(DATA_IMAGE_OF_MEDIVH, me->GetGUID());
                 (*me).GetMotionMaster()->MovePoint(1, MedivPos[0], MedivPos[1], MedivPos[2]);
                 Step = 0;
             }else

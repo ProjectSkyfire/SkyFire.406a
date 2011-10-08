@@ -148,9 +148,9 @@ class boss_zuljin : public CreatureScript
         {
             boss_zuljinAI(Creature* c) : ScriptedAI(c), Summons(me)
             {
-                pInstance = c->GetInstanceScript();
+                instance = c->GetInstanceScript();
             }
-            InstanceScript* pInstance;
+            InstanceScript* instance;
 
             uint64 SpiritGUID[4];
             uint64 ClawTargetGUID;
@@ -181,8 +181,8 @@ class boss_zuljin : public CreatureScript
 
             void Reset()
             {
-                if (pInstance)
-                    pInstance->SetData(DATA_ZULJINEVENT, NOT_STARTED);
+                if (instance)
+                    instance->SetData(DATA_ZULJINEVENT, NOT_STARTED);
 
                 Phase                       = 0;
 
@@ -218,8 +218,8 @@ class boss_zuljin : public CreatureScript
 
             void EnterCombat(Unit* /*who*/)
             {
-                if (pInstance)
-                    pInstance->SetData(DATA_ZULJINEVENT, IN_PROGRESS);
+                if (instance)
+                    instance->SetData(DATA_ZULJINEVENT, IN_PROGRESS);
 
                 DoZoneInCombat();
 
@@ -249,8 +249,8 @@ class boss_zuljin : public CreatureScript
 
             void JustDied(Unit* /*Killer*/)
             {
-                if (pInstance)
-                    pInstance->SetData(DATA_ZULJINEVENT, DONE);
+                if (instance)
+                    instance->SetData(DATA_ZULJINEVENT, DONE);
 
                 me->MonsterYell(YELL_DEATH, LANG_UNIVERSAL, 0);
                 DoPlaySoundToSet(me, SOUND_DEATH);
@@ -601,7 +601,7 @@ class mob_zuljin_vortex : public CreatureScript
 
             void Reset() {}
 
-            void EnterCombat(Unit* /*pTarget*/) {}
+            void EnterCombat(Unit* /*target*/) {}
 
             void SpellHit(Unit* caster, const SpellInfo* spell)
             {

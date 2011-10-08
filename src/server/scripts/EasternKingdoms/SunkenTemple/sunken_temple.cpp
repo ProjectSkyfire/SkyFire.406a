@@ -58,8 +58,8 @@ public:
 
     bool OnGossipHello(Player* player, GameObject* go)
     {
-        if (InstanceScript* pInstance = player->GetInstanceScript())
-            pInstance->SetData(EVENT_STATE, go->GetEntry());
+        if (InstanceScript* instance = player->GetInstanceScript())
+            instance->SetData(EVENT_STATE, go->GetEntry());
         return false;
     }
 };

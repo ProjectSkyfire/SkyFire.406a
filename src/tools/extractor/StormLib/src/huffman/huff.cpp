@@ -65,18 +65,18 @@ void THTreeItem::ClearItemLinks()
 // 1500BC90
 void THTreeItem::RemoveItem()
 {
-    THTreeItem * pTemp;                // EDX
+    THTreeItem * temp;                // EDX
 
     if (next != NULL)
     {
-        pTemp = prev;
+        temp = prev;
 
-        if (PTR_INVALID_OR_NULL(pTemp))
-            pTemp = PTR_NOT(pTemp);
+        if (PTR_INVALID_OR_NULL(temp))
+            temp = PTR_NOT(temp);
         else
-            pTemp += (this - next->prev);
+            temp += (this - next->prev);
 
-        pTemp->next = next;
+        temp->next = next;
         next->prev  = prev;
         next = prev = NULL;
     }
@@ -809,7 +809,7 @@ unsigned int THuffmannTree::DoCompression(TOutputStream * os, unsigned char * pb
     THTreeItem  * pItem1;
     THTreeItem  * pItem2;
     THTreeItem  * pItem3;
-    THTreeItem  * pTemp;
+    THTreeItem  * temp;
     unsigned long dwBitBuff;
     unsigned int  nBits;
     unsigned int  nBit;
@@ -922,9 +922,9 @@ unsigned int THuffmannTree::DoCompression(TOutputStream * os, unsigned char * pb
                     if (pItem3 == pItem2)
                         pItem2->parent->child = pItem1;
 
-                    pTemp = pItem1->parent;
+                    temp = pItem1->parent;
                     pItem1->parent = pItem2->parent;
-                    pItem2->parent = pTemp;
+                    pItem2->parent = temp;
                     offs0004++;
                 }
             }

@@ -68,10 +68,10 @@ class boss_lockmaw : public CreatureScript
 		{
 			boss_lockmawAI(Creature* creature) : ScriptedAI(creature), Summons(me)
 			{
-				pInstance = creature->GetInstanceScript();
+				instance = creature->GetInstanceScript();
 			}
 
-			InstanceScript* pInstance;
+			InstanceScript* instance;
             EventMap events;
             SummonList Summons;
             bool check_in;
@@ -81,8 +81,8 @@ class boss_lockmaw : public CreatureScript
                 events.Reset();
                 Summons.DespawnAll();
 
-                if (pInstance && (pInstance->GetData(DATA_LOCKMAW_EVENT) != DONE && !check_in))
-                    pInstance->SetData(DATA_LOCKMAW_EVENT, NOT_STARTED);
+                if (instance && (instance->GetData(DATA_LOCKMAW_EVENT) != DONE && !check_in))
+                    instance->SetData(DATA_LOCKMAW_EVENT, NOT_STARTED);
 
                 check_in = false;
 			}
@@ -90,14 +90,14 @@ class boss_lockmaw : public CreatureScript
             void JustDied(Unit* /*Kill*/)
             {
                 Summons.DespawnAll();
-                if (pInstance)
-                    pInstance->SetData(DATA_LOCKMAW_EVENT, DONE);
+                if (instance)
+                    instance->SetData(DATA_LOCKMAW_EVENT, DONE);
             }
 
             void EnterCombat(Unit* /*Ent*/)
             {
-				if (pInstance)
-                    pInstance->SetData(DATA_LOCKMAW_EVENT, IN_PROGRESS);
+				if (instance)
+                    instance->SetData(DATA_LOCKMAW_EVENT, IN_PROGRESS);
 
                 DoZoneInCombat();
 			}

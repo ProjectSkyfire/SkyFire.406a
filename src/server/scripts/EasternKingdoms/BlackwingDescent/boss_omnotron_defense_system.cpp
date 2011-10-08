@@ -38,10 +38,10 @@ public:
     {
         boss_toxitronAI(Creature* creature) : ScriptedAI(creature)
         {
-            pInstance = creature->GetInstanceScript();
+            instance = creature->GetInstanceScript();
         }
 
-        InstanceScript* pInstance;
+        InstanceScript* instance;
 
         void Reset()
         {
@@ -49,7 +49,7 @@ public:
             me->ApplySpellImmune(0, IMMUNITY_MECHANIC, MECHANIC_GRIP, true);
         }
 
-        void EnterCombat(Unit* /*pWho*/) {}
+        void EnterCombat(Unit* /*who*/) {}
 
         void JustDied(Unit* /*Killer*/) {}
 
@@ -77,10 +77,10 @@ public:
     {
         boss_magmatronAI(Creature* creature) : ScriptedAI(creature)
         {
-            pInstance = creature->GetInstanceScript();
+            instance = creature->GetInstanceScript();
         }
 
-        InstanceScript* pInstance;
+        InstanceScript* instance;
 
         void Reset()
         {
@@ -90,7 +90,7 @@ public:
             me->ApplySpellImmune(0, IMMUNITY_MECHANIC, MECHANIC_GRIP, true);
         }
 
-        void EnterCombat(Unit* /*pWho*/) { }
+        void EnterCombat(Unit* /*who*/) { }
 
         void JustDied(Unit* /*Killer*/) { }
 
@@ -118,35 +118,35 @@ public:
     {
         boss_arcanotronAI(Creature* creature) : ScriptedAI(creature)
         {
-            pInstance = creature->GetInstanceScript();
+            instance = creature->GetInstanceScript();
         }
 
-        InstanceScript* pInstance;
+        InstanceScript* instance;
 
         uint32 uiArcaneAnnihilatorTimer;
 
         void Reset()
         {
-            pInstance->SetData(DATA_OMNOTRON_DEFENSE_SYSTEM, NOT_STARTED);
+            instance->SetData(DATA_OMNOTRON_DEFENSE_SYSTEM, NOT_STARTED);
 
             uiArcaneAnnihilatorTimer = 5*IN_MILLISECONDS;
             me->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
             me->ApplySpellImmune(0, IMMUNITY_MECHANIC, MECHANIC_GRIP, true);
         }
 
-        void EnterCombat(Unit* /*pWho*/)
+        void EnterCombat(Unit* /*who*/)
         {
-            pInstance->SetData(DATA_OMNOTRON_DEFENSE_SYSTEM, IN_PROGRESS);
+            instance->SetData(DATA_OMNOTRON_DEFENSE_SYSTEM, IN_PROGRESS);
         }
 
         void JustReachedHome()
         {
-            pInstance->SetData(DATA_OMNOTRON_DEFENSE_SYSTEM, FAIL);
+            instance->SetData(DATA_OMNOTRON_DEFENSE_SYSTEM, FAIL);
         }
 
         void JustDied(Unit* /*Killer*/)
         {
-            pInstance->SetData(DATA_OMNOTRON_DEFENSE_SYSTEM, DONE);
+            instance->SetData(DATA_OMNOTRON_DEFENSE_SYSTEM, DONE);
         }
 
         void UpdateAI(const uint32 Diff)
@@ -181,10 +181,10 @@ public:
     {
         boss_electronAI(Creature* creature) : ScriptedAI(creature)
         {
-            pInstance = creature->GetInstanceScript();
+            instance = creature->GetInstanceScript();
         }
 
-        InstanceScript* pInstance;
+        InstanceScript* instance;
 
         void Reset()
         {
@@ -194,7 +194,7 @@ public:
             me->ApplySpellImmune(0, IMMUNITY_MECHANIC, MECHANIC_GRIP, true);
         }
 
-        void EnterCombat(Unit* /*pWho*/) { }
+        void EnterCombat(Unit* /*who*/) { }
 
         void JustDied(Unit* /*Killer*/) {}
 

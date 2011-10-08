@@ -25,22 +25,22 @@
 
 enum ScriptTexts
 {
-    SAY_AGGRO          = 0, 
-    SAY_KILL_1         = 1, 
-    SAY_KILL_2         = 2, 
-    SAY_DEATH          = 3, 
+    SAY_AGGRO          = 0,
+    SAY_KILL_1         = 1,
+    SAY_KILL_2         = 2,
+    SAY_DEATH          = 3,
 };
 
 enum Spells
 {
-    SPELL_FLAME_BOLT   = 77370, 
-    SPELL_RAGING_SMASH = 83650, 
+    SPELL_FLAME_BOLT   = 77370,
+    SPELL_RAGING_SMASH = 83650,
 };
 
 enum Events
 {
-    EVENT_FLAME_BOLT   = 1, 
-    EVENT_RAGING_SMASH = 2, 
+    EVENT_FLAME_BOLT   = 1,
+    EVENT_RAGING_SMASH = 2,
 };
 
 class boss_earthrager_ptah : public CreatureScript
@@ -56,10 +56,10 @@ class boss_earthrager_ptah : public CreatureScript
         {
             boss_earthrager_ptahAI(Creature* creature) : ScriptedAI(creature)
             {
-                pInstance = creature->GetInstanceScript();
+                instance = creature->GetInstanceScript();
             }
 
-            InstanceScript* pInstance;
+            InstanceScript* instance;
             EventMap events;
             bool check_in;
 
@@ -67,8 +67,8 @@ class boss_earthrager_ptah : public CreatureScript
             {
                 events.Reset();
 
-                if (pInstance && (pInstance->GetData(DATA_EARTHRAGER_PTAH_EVENT) != DONE && !check_in))
-                   pInstance->SetData(DATA_EARTHRAGER_PTAH_EVENT, NOT_STARTED);
+                if (instance && (instance->GetData(DATA_EARTHRAGER_PTAH_EVENT) != DONE && !check_in))
+                   instance->SetData(DATA_EARTHRAGER_PTAH_EVENT, NOT_STARTED);
                 check_in = false;
             }
 
@@ -80,15 +80,15 @@ class boss_earthrager_ptah : public CreatureScript
             void JustDied(Unit* /*Kill*/)
             {
                 DoScriptText(SAY_DEATH, me);
-                if (pInstance)
-                    pInstance->SetData(DATA_EARTHRAGER_PTAH_EVENT, DONE);
+                if (instance)
+                    instance->SetData(DATA_EARTHRAGER_PTAH_EVENT, DONE);
             }
 
             void EnterCombat(Unit* /*Ent*/)
             {
                 DoScriptText(SAY_AGGRO, me);
-				if (pInstance)
-                    pInstance->SetData(DATA_EARTHRAGER_PTAH_EVENT, IN_PROGRESS);
+				if (instance)
+                    instance->SetData(DATA_EARTHRAGER_PTAH_EVENT, IN_PROGRESS);
 
                 DoZoneInCombat();
 			}

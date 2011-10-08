@@ -92,10 +92,10 @@ public:
     {
         boss_high_prophet_barimAI(Creature* creature) : ScriptedAI(creature), Summons(me)
         {
-            pInstance = creature->GetInstanceScript();
+            instance = creature->GetInstanceScript();
         }
 
-        InstanceScript *pInstance;
+        InstanceScript *instance;
         bool check_in;
         SummonList Summons;
         EventMap events;
@@ -107,8 +107,8 @@ public:
             Summons.DespawnAll();
             uiPhase = PHASE_1;
 
-            if (pInstance && (pInstance->GetData(DATA_HIGH_PROPHET_BARIM_EVENT) != DONE && !check_in))
-                pInstance->SetData(DATA_HIGH_PROPHET_BARIM_EVENT, NOT_STARTED);
+            if (instance && (instance->GetData(DATA_HIGH_PROPHET_BARIM_EVENT) != DONE && !check_in))
+                instance->SetData(DATA_HIGH_PROPHET_BARIM_EVENT, NOT_STARTED);
 
             check_in = false;
         }
@@ -117,8 +117,8 @@ public:
         {
             DoScriptText(SAY_DEATH, me);
             Summons.DespawnAll();
-            if (pInstance)
-                pInstance->SetData(DATA_HIGH_PROPHET_BARIM_EVENT, DONE);
+            if (instance)
+                instance->SetData(DATA_HIGH_PROPHET_BARIM_EVENT, DONE);
         }
 
         void KilledUnit(Unit* /*Killed*/)
@@ -131,8 +131,8 @@ public:
             DoScriptText(SAY_AGGRO, me);
             DoZoneInCombat();
 
-            if (pInstance)
-                pInstance->SetData(DATA_HIGH_PROPHET_BARIM_EVENT, IN_PROGRESS);
+            if (instance)
+                instance->SetData(DATA_HIGH_PROPHET_BARIM_EVENT, IN_PROGRESS);
         }
 
         void EnterPhase1()

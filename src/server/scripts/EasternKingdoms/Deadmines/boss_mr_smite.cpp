@@ -47,10 +47,10 @@ public:
     {
         boss_mr_smiteAI(Creature* creature) : ScriptedAI(creature)
         {
-            pInstance = creature->GetInstanceScript();
+            instance = creature->GetInstanceScript();
         }
 
-        InstanceScript* pInstance;
+        InstanceScript* instance;
 
         uint32 TrashTimer;
         uint32 SlamTimer;
@@ -75,7 +75,7 @@ public:
             SetEquipmentSlots(false, EQUIP_SWORD, EQUIP_UNEQUIP, EQUIP_NO_CHANGE);
         }
 
-        void EnterCombat(Unit* /*pWho*/)
+        void EnterCombat(Unit* /*who*/)
         {
            DoScriptText(SAY_AGGRO, me);
         }
@@ -121,8 +121,8 @@ public:
                 ++Health;
                 DoCastAOE(SPELL_SMITE_STOMP, false);
                 SetCombatMovement(false);
-                if (pInstance)
-                    if (GameObject* go = GameObject::GetGameObject((*me), pInstance->GetData64(DATA_SMITE_CHEST)))
+                if (instance)
+                    if (GameObject* go = GameObject::GetGameObject((*me), instance->GetData64(DATA_SMITE_CHEST)))
                     {
                         me->GetMotionMaster()->Clear();
                         me->GetMotionMaster()->MovePoint(1, go->GetPositionX() - 3.0f, go->GetPositionY(), go->GetPositionZ());

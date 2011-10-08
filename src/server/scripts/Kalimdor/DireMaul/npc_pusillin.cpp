@@ -141,8 +141,8 @@ public:
                     me->setFaction(14);
                     float scale = me->GetFloatValue(OBJECT_FIELD_SCALE_X);
                     me->SetFloatValue(OBJECT_FIELD_SCALE_X, scale * 3);
-                    Unit* pTarget = SelectTarget(SELECT_TARGET_NEAREST, 0);
-                    me->AI()->AttackStart(pTarget);
+                    Unit* target = SelectTarget(SELECT_TARGET_NEAREST, 0);
+                    me->AI()->AttackStart(target);
                     for (uint8 i = 0; i<5; i++)
                     {
                         switch (i)
@@ -150,29 +150,29 @@ public:
                         case 1:
                             if (Creature *pImp=me->SummonCreature(NPC_IMP, SpawnPosition1, TEMPSUMMON_CORPSE_DESPAWN, 120000))
                                 {
-                                    if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                                    pImp->AI()->AttackStart(pTarget);
+                                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                                    pImp->AI()->AttackStart(target);
                                 }
                             break;
                         case 2:
                             if (Creature *pImp=me->SummonCreature(NPC_IMP, SpawnPosition2, TEMPSUMMON_CORPSE_DESPAWN, 120000))
                                 {
-                                    if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                                    pImp->AI()->AttackStart(pTarget);
+                                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                                    pImp->AI()->AttackStart(target);
                                 }
                             break;
                         case 3:
                             if (Creature *pImp=me->SummonCreature(NPC_IMP, SpawnPosition3, TEMPSUMMON_CORPSE_DESPAWN, 120000))
                                 {
-                                    if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                                    pImp->AI()->AttackStart(pTarget);
+                                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                                    pImp->AI()->AttackStart(target);
                                 }
                             break;
                         case 4:
                             if (Creature *pImp=me->SummonCreature(NPC_IMP, SpawnPosition4, TEMPSUMMON_CORPSE_DESPAWN, 120000))
                                 {
-                                    if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                                    pImp->AI()->AttackStart(pTarget);
+                                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                                    pImp->AI()->AttackStart(target);
                                 }
                             break;
                         }

@@ -57,10 +57,10 @@ class boss_jeklik : public CreatureScript
         {
             boss_jeklikAI(Creature* c) : ScriptedAI(c)
             {
-                pInstance = c->GetInstanceScript();
+                instance = c->GetInstanceScript();
             }
 
-            InstanceScript* pInstance;
+            InstanceScript* instance;
 
             uint32 Charge_Timer;
             uint32 SonicBurst_Timer;
@@ -99,8 +99,8 @@ class boss_jeklik : public CreatureScript
             {
                 DoScriptText(SAY_DEATH, me);
 
-                if (pInstance)
-                    pInstance->SetData(DATA_JEKLIK, DONE);
+                if (instance)
+                    instance->SetData(DATA_JEKLIK, DONE);
             }
 
             void UpdateAI(const uint32 diff)
@@ -235,10 +235,10 @@ class mob_batrider : public CreatureScript
         {
             mob_batriderAI(Creature* c) : ScriptedAI(c)
             {
-                pInstance = c->GetInstanceScript();
+                instance = c->GetInstanceScript();
             }
 
-            InstanceScript* pInstance;
+            InstanceScript* instance;
 
             uint32 Bomb_Timer;
             uint32 Check_Timer;
@@ -271,9 +271,9 @@ class mob_batrider : public CreatureScript
                 //Check_Timer
                 if (Check_Timer <= diff)
                 {
-                    if (pInstance)
+                    if (instance)
                     {
-                        if (pInstance->GetData(DATA_JEKLIK) == DONE)
+                        if (instance->GetData(DATA_JEKLIK) == DONE)
                         {
                             me->setDeathState(JUST_DIED);
                             me->RemoveCorpse();

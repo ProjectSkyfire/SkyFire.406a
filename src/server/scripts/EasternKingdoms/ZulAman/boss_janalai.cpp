@@ -112,10 +112,10 @@ class boss_janalai : public CreatureScript
         {
             boss_janalaiAI(Creature* c) : ScriptedAI(c)
             {
-                pInstance = c->GetInstanceScript();
+                instance = c->GetInstanceScript();
             }
 
-            InstanceScript* pInstance;
+            InstanceScript* instance;
 
             uint32 FireBreathTimer;
             uint32 BombTimer;
@@ -134,8 +134,8 @@ class boss_janalai : public CreatureScript
 
             void Reset()
             {
-                if (pInstance)
-                    pInstance->SetData(DATA_JANALAIEVENT, NOT_STARTED);
+                if (instance)
+                    instance->SetData(DATA_JANALAIEVENT, NOT_STARTED);
 
                 FireBreathTimer = 8000;
                 BombTimer = 30000;
@@ -160,8 +160,8 @@ class boss_janalai : public CreatureScript
             {
                 DoScriptText(SAY_DEATH, me);
 
-                if (pInstance)
-                    pInstance->SetData(DATA_JANALAIEVENT, DONE);
+                if (instance)
+                    instance->SetData(DATA_JANALAIEVENT, DONE);
             }
 
             void KilledUnit(Unit* /*victim*/)
@@ -171,8 +171,8 @@ class boss_janalai : public CreatureScript
 
             void EnterCombat(Unit* /*who*/)
             {
-                if (pInstance)
-                    pInstance->SetData(DATA_JANALAIEVENT, IN_PROGRESS);
+                if (instance)
+                    instance->SetData(DATA_JANALAIEVENT, IN_PROGRESS);
 
                 DoScriptText(SAY_AGGRO, me);
         //        DoZoneInCombat();
@@ -477,10 +477,10 @@ class mob_janalai_hatcher : public CreatureScript
         {
             mob_janalai_hatcherAI(Creature* c) : ScriptedAI(c)
             {
-                pInstance =c->GetInstanceScript();
+                instance =c->GetInstanceScript();
             }
 
-            InstanceScript* pInstance;
+            InstanceScript* instance;
 
             uint32 waypoint;
             uint32 HatchNum;
@@ -550,7 +550,7 @@ class mob_janalai_hatcher : public CreatureScript
 
             void UpdateAI(const uint32 diff)
             {
-                if (!pInstance || !(pInstance->GetData(DATA_JANALAIEVENT) == IN_PROGRESS))
+                if (!instance || !(instance->GetData(DATA_JANALAIEVENT) == IN_PROGRESS))
                 {
                     me->DisappearAndDie();
                     return;
@@ -605,10 +605,10 @@ class mob_janalai_hatchling : public CreatureScript
         {
             mob_janalai_hatchlingAI(Creature* c) : ScriptedAI(c)
             {
-                pInstance =c->GetInstanceScript();
+                instance =c->GetInstanceScript();
             }
 
-            InstanceScript* pInstance;
+            InstanceScript* instance;
             uint32 BuffetTimer;
 
             void Reset()
@@ -626,7 +626,7 @@ class mob_janalai_hatchling : public CreatureScript
 
             void UpdateAI(const uint32 diff)
             {
-                if (!pInstance || !(pInstance->GetData(DATA_JANALAIEVENT) == IN_PROGRESS))
+                if (!instance || !(instance->GetData(DATA_JANALAIEVENT) == IN_PROGRESS))
                 {
                     me->DisappearAndDie();
                     return;

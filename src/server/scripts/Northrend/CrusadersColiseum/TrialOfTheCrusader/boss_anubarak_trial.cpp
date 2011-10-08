@@ -210,8 +210,8 @@ public:
                 m_pInstance->SetData(TYPE_ANUBARAK, FAIL);
             //Summon Scarab Swarms neutral at random places
             for (int i=0; i < 10; i++)
-                if (Creature* pTemp = me->SummonCreature(NPC_SCARAB, AnubarakLoc[1].GetPositionX()+urand(0, 50)-25, AnubarakLoc[1].GetPositionY()+urand(0, 50)-25, AnubarakLoc[1].GetPositionZ()))
-                    pTemp->setFaction(31);
+                if (Creature* temp = me->SummonCreature(NPC_SCARAB, AnubarakLoc[1].GetPositionX()+urand(0, 50)-25, AnubarakLoc[1].GetPositionY()+urand(0, 50)-25, AnubarakLoc[1].GetPositionZ()))
+                    temp->setFaction(31);
         }
 
         void JustDied(Unit* /*killer*/)

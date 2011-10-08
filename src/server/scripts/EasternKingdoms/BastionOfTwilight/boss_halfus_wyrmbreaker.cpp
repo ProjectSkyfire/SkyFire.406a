@@ -73,10 +73,10 @@ public:
     {
         boss_halfus_wyrmbreakerAI(Creature *c) : ScriptedAI(c)
         {
-            pInstance = c->GetInstanceScript();
+            instance = c->GetInstanceScript();
         }
 
-        InstanceScript* pInstance;
+        InstanceScript* instance;
         uint32 ShadowNovaTimer;
         uint32 BerserkTimer;
         uint32 FuriousRoarTimer;
@@ -94,32 +94,32 @@ public:
             Phase = PHASE_1;
             StormRider = false;
             Berserk = false;
-            if (pInstance)
+            if (instance)
             {
-                pInstance->SetData(DATA_HALFUS, NOT_STARTED);
-                if (pInstance->GetData(DATA_STORM_RIDER) == 1)
+                instance->SetData(DATA_HALFUS, NOT_STARTED);
+                if (instance->GetData(DATA_STORM_RIDER) == 1)
                 {
                     DoCast(me, SPELL_SHADOW_WRAPPED);
                     StormRider = true;
                 }
-                if (pInstance->GetData(DATA_THE_SLATE_DRAGON) == 1)
+                if (instance->GetData(DATA_THE_SLATE_DRAGON) == 1)
                     DoCast(me, SPELL_MALEVOLENT_STRAKES);
-                if (pInstance->GetData(DATA_NETHER_SCION) == 1)
+                if (instance->GetData(DATA_NETHER_SCION) == 1)
                     DoCast(me, SPELL_FRENZIED_ASSAULT);
             }
             me->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
             me->ApplySpellImmune(0, IMMUNITY_MECHANIC, MECHANIC_GRIP, true);
         }
 
-        void EnterCombat(Unit* /*pWho*/)
+        void EnterCombat(Unit* /*who*/)
         {
-            if (pInstance)
-                pInstance->SetData(DATA_HALFUS, IN_PROGRESS);
+            if (instance)
+                instance->SetData(DATA_HALFUS, IN_PROGRESS);
         }
 
         void JustDied(Unit* /*Killer*/)
         {
-            pInstance->SetData(DATA_HALFUS, DONE);
+            instance->SetData(DATA_HALFUS, DONE);
         }
 
         void UpdateAI(const uint32 diff)
@@ -190,10 +190,10 @@ public:
     {
         npc_halfus_dragon_prisonerAI(Creature *c) : ScriptedAI(c)
         {
-            pInstance = c->GetInstanceScript();
+            instance = c->GetInstanceScript();
         }
 
-        InstanceScript* pInstance;
+        InstanceScript* instance;
         uint32 StoneTouchTimer;
 
         void Reset()
@@ -203,8 +203,8 @@ public:
 
         void JustDied(Unit* /*Killer*/)
         {
-            if (pInstance)
-                if (Creature* halfus = Unit::GetCreature(*me, pInstance->GetData64(DATA_HALFUS)))
+            if (instance)
+                if (Creature* halfus = Unit::GetCreature(*me, instance->GetData64(DATA_HALFUS)))
                     if (Aura* aura = halfus->GetAura(87683))
                         aura->SetStackAmount(aura->GetStackAmount() + 1);
                     else
@@ -217,9 +217,9 @@ public:
             {
                 case SPELL_FREE_DRAGON:
                     {
-                        if (!pInstance)
+                        if (!instance)
                             return;
-                        Creature* halfus = Unit::GetCreature(*me, pInstance->GetData64(DATA_HALFUS));
+                        Creature* halfus = Unit::GetCreature(*me, instance->GetData64(DATA_HALFUS));
                         if (!halfus)
                             return;
                         me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
@@ -246,12 +246,12 @@ public:
             if (!UpdateVictim())
                 return;
 
-            if (pInstance)
+            if (instance)
                 if (me->GetEntry() == NPC_THE_SLATE_DRAGON)
                     if (StoneTouchTimer <= diff)
                     {
                         StoneTouchTimer = 35000;
-                        if (Creature* halfus = Unit::GetCreature(*me, pInstance->GetData64(DATA_HALFUS)))
+                        if (Creature* halfus = Unit::GetCreature(*me, instance->GetData64(DATA_HALFUS)))
                         {
                             me->AddAura(SPELL_STONE_TOUCH, halfus);
                             if (Aura* stone = halfus->GetAura(SPELL_STONE_TOUCH))
@@ -280,14 +280,14 @@ public:
     {
         boss_proto_behemothAI(Creature *c) : ScriptedAI(c)
         {
-            pInstance = c->GetInstanceScript();
+            instance = c->GetInstanceScript();
         }
 
-        InstanceScript* pInstance;
+        InstanceScript* instance;
 
         void Reset() {}
 
-        void EnterCombat(Unit* /*pWho*/) {}
+        void EnterCombat(Unit* /*who*/) {}
 
         void JustDied(Unit* /*Killer*/) {}
 
