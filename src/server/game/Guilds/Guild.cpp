@@ -752,7 +752,7 @@ void EmblemInfo::SaveToDB(uint32 guildId) const
 // MoveItemData
 bool Guild::MoveItemData::CheckItem(uint32& splitedAmount)
 {
-    ASSERT(m_pItem);
+    ASSERT (m_pItem);
     if (splitedAmount > m_pItem->GetCount())
         return false;
     if (splitedAmount == m_pItem->GetCount())
@@ -771,7 +771,7 @@ bool Guild::MoveItemData::CanStore(Item* pItem, bool swap, bool sendError)
 
 bool Guild::MoveItemData::CloneItem(uint32 count)
 {
-    ASSERT(m_pItem);
+    ASSERT (m_pItem);
     m_pClonedItem = m_pItem->CloneItem(count);
     if (!m_pClonedItem)
     {
@@ -783,7 +783,7 @@ bool Guild::MoveItemData::CloneItem(uint32 count)
 
 void Guild::MoveItemData::LogAction(MoveItemData* pFrom) const
 {
-    ASSERT(pFrom->GetItem());
+    ASSERT (pFrom->GetItem());
 
     sScriptMgr->OnGuildItemMove(m_pGuild, m_pPlayer, pFrom->GetItem(),
         pFrom->IsBank(), pFrom->GetContainer(), pFrom->GetSlotId(),
@@ -837,7 +837,7 @@ void Guild::PlayerMoveItemData::RemoveItem(SQLTransaction& trans, MoveItemData* 
 
 Item* Guild::PlayerMoveItemData::StoreItem(SQLTransaction& trans, Item* pItem)
 {
-    ASSERT(pItem);
+    ASSERT (pItem);
     m_pPlayer->MoveItemToInventory(m_vec, pItem, true);
     m_pPlayer->SaveInventoryAndGoldToDB(trans);
     return pItem;
@@ -845,7 +845,7 @@ Item* Guild::PlayerMoveItemData::StoreItem(SQLTransaction& trans, Item* pItem)
 
 void Guild::PlayerMoveItemData::LogBankEvent(SQLTransaction& trans, MoveItemData* pFrom, uint32 count) const
 {
-    ASSERT(pFrom);
+    ASSERT (pFrom);
     // Bank -> Char
     m_pGuild->_LogBankEvent(trans, GUILD_BANK_LOG_WITHDRAW_ITEM, pFrom->GetContainer(), m_pPlayer->GetGUIDLow(),
         pFrom->GetItem()->GetEntry(), count);
@@ -866,7 +866,7 @@ bool Guild::BankMoveItemData::InitItem()
 
 bool Guild::BankMoveItemData::HasStoreRights(MoveItemData* pOther) const
 {
-    ASSERT(pOther);
+    ASSERT (pOther);
     // Do not check rights if item is being swapped within the same bank tab
     if (pOther->IsBank() && pOther->GetContainer() == m_container)
         return true;
@@ -875,7 +875,7 @@ bool Guild::BankMoveItemData::HasStoreRights(MoveItemData* pOther) const
 
 bool Guild::BankMoveItemData::HasWithdrawRights(MoveItemData* pOther) const
 {
-    ASSERT(pOther);
+    ASSERT (pOther);
     // Do not check rights if item is being swapped within the same bank tab
     if (pOther->IsBank() && pOther->GetContainer() == m_container)
         return true;
@@ -884,7 +884,7 @@ bool Guild::BankMoveItemData::HasWithdrawRights(MoveItemData* pOther) const
 
 void Guild::BankMoveItemData::RemoveItem(SQLTransaction& trans, MoveItemData* pOther, uint32 splitedAmount)
 {
-    ASSERT(m_pItem);
+    ASSERT (m_pItem);
     if (splitedAmount)
     {
         m_pItem->SetCount(m_pItem->GetCount() - splitedAmount);
@@ -925,7 +925,7 @@ Item* Guild::BankMoveItemData::StoreItem(SQLTransaction& trans, Item* pItem)
 
 void Guild::BankMoveItemData::LogBankEvent(SQLTransaction& trans, MoveItemData* pFrom, uint32 count) const
 {
-    ASSERT(pFrom->GetItem());
+    ASSERT (pFrom->GetItem());
     if (pFrom->IsBank())
         // Bank -> Bank
         m_pGuild->_LogBankEvent(trans, GUILD_BANK_LOG_MOVE_ITEM, pFrom->GetContainer(), m_pPlayer->GetGUIDLow(),
@@ -2669,7 +2669,7 @@ void Guild::_SendBankMoneyUpdate(WorldSession* session) const
 
 void Guild::_SendBankContentUpdate(MoveItemData* pSrc, MoveItemData* pDest) const
 {
-    ASSERT(pSrc->IsBank() || pDest->IsBank());
+    ASSERT (pSrc->IsBank() || pDest->IsBank());
 
     uint8 tabId = 0;
     SlotIds slots;

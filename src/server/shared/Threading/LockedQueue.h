@@ -57,7 +57,7 @@ namespace ACE_Based
             {
                 lock();
 
-                //ASSERT(!this->_canceled);
+                //ASSERT (!this->_canceled);
                 // throw Cancellation_Exception();
 
                 _queue.push_back(item);

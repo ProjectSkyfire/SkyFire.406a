@@ -120,7 +120,7 @@ class boss_ignis : public CreatureScript
         {
             boss_ignis_AI(Creature* creature) : BossAI(creature, BOSS_IGNIS), _vehicle(me->GetVehicleKit())
             {
-                ASSERT(_vehicle);
+                ASSERT (_vehicle);
             }
 
             void Reset()

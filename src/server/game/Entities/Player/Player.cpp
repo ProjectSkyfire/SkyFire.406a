@@ -2224,7 +2224,7 @@ void Player::TeleportOutOfMap(Map *oldMap)
     {
         sLog->outCrash("Cannot teleport player out of map!");
         ResetMap();
-        ASSERT(false);
+        ASSERT (false);
     }
 }
 
@@ -4393,7 +4393,7 @@ void Player::RemoveArenaSpellCooldowns(bool removeActivePetCooldowns)
 
     // pet cooldowns
     if (removeActivePetCooldowns)
-        if (Pet *pet = GetPet())
+        if (Pet* pet = GetPet())
         {
             // notify player
             for (CreatureSpellCooldowns::const_iterator itr = pet->m_CreatureSpellCooldowns.begin(); itr != pet->m_CreatureSpellCooldowns.end(); ++itr)
@@ -5197,7 +5197,7 @@ void Player::BuildPlayerRepop()
 
     // create a corpse and place it at the player's location
     CreateCorpse();
-    Corpse *corpse = GetCorpse();
+    Corpse* corpse = GetCorpse();
     if (!corpse)
     {
         sLog->outError("Error creating corpse for Player %s [%u]", GetName(), GetGUIDLow());
@@ -5373,7 +5373,7 @@ void Player::CreateCorpse()
 
     uint32 _uf, _pb, _pb2, _cfb1, _cfb2;
 
-    Corpse *corpse = new Corpse((m_ExtraFlags & PLAYER_EXTRA_PVP_DEATH) ? CORPSE_RESURRECTABLE_PVP : CORPSE_RESURRECTABLE_PVE);
+    Corpse* corpse = new Corpse((m_ExtraFlags & PLAYER_EXTRA_PVP_DEATH) ? CORPSE_RESURRECTABLE_PVP : CORPSE_RESURRECTABLE_PVE);
     SetPvPDeath(false);
 
     if (!corpse->Create(sObjectMgr->GenerateLowGuid(HIGHGUID_CORPSE), this))
@@ -9913,7 +9913,7 @@ void Player::ResetPetTalents()
 
 void Player::SetVirtualItemSlot(uint8 i, Item* item)
 {
-    ASSERT(i < 3);
+    ASSERT (i < 3);
     if (i < 2 && item)
     {
         if (!item->GetEnchantmentId(TEMP_ENCHANTMENT_SLOT))
@@ -13771,7 +13771,7 @@ void Player::UpdateEnchantTime(uint32 time)
 {
     for (EnchantDurationList::iterator itr = m_enchantDuration.begin(), next; itr != m_enchantDuration.end(); itr=next)
     {
-        ASSERT(itr->item);
+        ASSERT (itr->item);
         next = itr;
         if (!itr->item->GetEnchantmentId(itr->slot))
         {
@@ -14749,7 +14749,7 @@ void Player::PrepareQuestMenu(uint64 guid)
         //we should obtain map pointer from GetMap() in 99% of cases. Special case
         //only for quests which cast teleport spells on player
         Map * _map = IsInWorld() ? GetMap() : sMapMgr->FindMap(GetMapId(), GetInstanceId());
-        ASSERT(_map);
+        ASSERT (_map);
         GameObject *pGameObject = _map->GetGameObject(guid);
         if (pGameObject)
         {
@@ -14905,7 +14905,7 @@ Quest const* Player::GetNextQuest(uint64 guid, Quest const *quest)
         //we should obtain map pointer from GetMap() in 99% of cases. Special case
         //only for quests which cast teleport spells on player
         Map * _map = IsInWorld() ? GetMap() : sMapMgr->FindMap(GetMapId(), GetInstanceId());
-        ASSERT(_map);
+        ASSERT (_map);
         GameObject *pGameObject = _map->GetGameObject(guid);
         if (pGameObject)
             pObjectQR  = sObjectMgr->GetGOQuestRelationBounds(pGameObject->GetEntry());
@@ -15142,7 +15142,7 @@ bool Player::CanRewardQuest(Quest const *quest, uint32 reward, bool msg)
 void Player::AddQuest(Quest const *quest, Object *questGiver)
 {
     uint16 log_slot = FindQuestSlot(0);
-    ASSERT(log_slot < MAX_QUEST_LOG_SIZE);
+    ASSERT (log_slot < MAX_QUEST_LOG_SIZE);
 
     uint32 quest_id = quest->GetQuestId();
 
@@ -15578,7 +15578,7 @@ bool Player::SatisfyQuestPreviousQuest(Quest const* qInfo, bool msg)
                 ObjectMgr::ExclusiveQuestGroups::iterator iter2 = sObjectMgr->mExclusiveQuestGroups.lower_bound(qPrevInfo->GetExclusiveGroup());
                 ObjectMgr::ExclusiveQuestGroups::iterator end  = sObjectMgr->mExclusiveQuestGroups.upper_bound(qPrevInfo->GetExclusiveGroup());
 
-                ASSERT(iter2 != end);                         // always must be found if qPrevInfo->ExclusiveGroup != 0
+                ASSERT (iter2 != end);                         // always must be found if qPrevInfo->ExclusiveGroup != 0
 
                 for (; iter2 != end; ++iter2)
                 {
@@ -15611,7 +15611,7 @@ bool Player::SatisfyQuestPreviousQuest(Quest const* qInfo, bool msg)
                 ObjectMgr::ExclusiveQuestGroups::iterator iter2 = sObjectMgr->mExclusiveQuestGroups.lower_bound(qPrevInfo->GetExclusiveGroup());
                 ObjectMgr::ExclusiveQuestGroups::iterator end  = sObjectMgr->mExclusiveQuestGroups.upper_bound(qPrevInfo->GetExclusiveGroup());
 
-                ASSERT(iter2 != end);                         // always must be found if qPrevInfo->ExclusiveGroup != 0
+                ASSERT (iter2 != end);                         // always must be found if qPrevInfo->ExclusiveGroup != 0
 
                 for (; iter2 != end; ++iter2)
                 {
@@ -15731,7 +15731,7 @@ bool Player::SatisfyQuestExclusiveGroup(Quest const* qInfo, bool msg)
     ObjectMgr::ExclusiveQuestGroups::iterator iter = sObjectMgr->mExclusiveQuestGroups.lower_bound(qInfo->GetExclusiveGroup());
     ObjectMgr::ExclusiveQuestGroups::iterator end  = sObjectMgr->mExclusiveQuestGroups.upper_bound(qInfo->GetExclusiveGroup());
 
-    ASSERT(iter != end);                                      // always must be found if qInfo->ExclusiveGroup != 0
+    ASSERT (iter != end);                                      // always must be found if qInfo->ExclusiveGroup != 0
 
     for (; iter != end; ++iter)
     {
@@ -16665,7 +16665,7 @@ void Player::SendQuestUpdateAddItem(Quest const* /*quest*/, uint32 /*item_idx*/,
 
 void Player::SendQuestUpdateAddCreatureOrGo(Quest const* quest, uint64 guid, uint32 creatureOrGO_idx, uint16 old_count, uint16 add_count)
 {
-    ASSERT(old_count + add_count < 65536 && "mob/GO count store in 16 bits 2^16 = 65536 (0..65536)");
+    ASSERT (old_count + add_count < 65536 && "mob/GO count store in 16 bits 2^16 = 65536 (0..65536)");
 
     int32 entry = quest->ReqCreatureOrGOId[ creatureOrGO_idx ];
     if (entry < 0)
@@ -16688,7 +16688,7 @@ void Player::SendQuestUpdateAddCreatureOrGo(Quest const* quest, uint64 guid, uin
 
 void Player::SendQuestUpdateAddPlayer(Quest const* quest, uint16 old_count, uint16 add_count)
 {
-    ASSERT(old_count + add_count < 65536 && "player count store in 16 bits");
+    ASSERT (old_count + add_count < 65536 && "player count store in 16 bits");
 
     WorldPacket data(SMSG_QUESTUPDATE_ADD_PVP_KILL, (3*4));
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Sent SMSG_QUESTUPDATE_ADD_PVP_KILL");
@@ -17174,7 +17174,7 @@ bool Player::LoadFromDB(uint32 guid, SQLQueryHolder *holder)
             TaxiNodesEntry const* nodeEntry = sTaxiNodesStore.LookupEntry(node_id);
             if (nodeEntry && nodeEntry->map_id == GetMapId())
             {
-                ASSERT(nodeEntry);                                  // checked in m_taxi.LoadTaxiDestinationsFromString
+                ASSERT (nodeEntry);                                  // checked in m_taxi.LoadTaxiDestinationsFromString
                 mapId = nodeEntry->map_id;
                 Relocate(nodeEntry->x, nodeEntry->y, nodeEntry->z, 0.0f);
             }
@@ -17693,7 +17693,7 @@ void Player::LoadCorpse()
         sObjectAccessor->ConvertCorpseForPlayer(GetGUID());
     else
     {
-        if (Corpse *corpse = GetCorpse())
+        if (Corpse* corpse = GetCorpse())
             ApplyModFlag(PLAYER_FIELD_BYTES, PLAYER_FIELD_BYTE_RELEASE_TIMER, corpse && !sMapStore.LookupEntry(corpse->GetMapId())->Instanceable());
         else
             //Prevent Dead Player login without corpse
@@ -18037,7 +18037,7 @@ void Player::LoadPet()
     // just not added to the map
     if (IsInWorld())
     {
-        Pet *pet = new Pet(this);
+        Pet* pet = new Pet(this);
         if (!pet->LoadPetFromDB(this, 0, 0, true))
             delete pet;
     }
@@ -19829,7 +19829,7 @@ void Player::StopCastingCharm()
         if (charm->GetCharmerGUID())
         {
             sLog->outCrash("Charmed unit has charmer guid " UI64FMTD, charm->GetCharmerGUID());
-            ASSERT(false);
+            ASSERT (false);
         }
         else
             SetCharm(charm, false);
@@ -20564,7 +20564,7 @@ void Player::ProhibitSpellSchool(SpellSchoolMask idSchoolMask, uint32 unTimeMs)
         SpellInfo const *spellInfo = sSpellMgr->GetSpellInfo(unSpellId);
         if (!spellInfo)
         {
-            ASSERT(spellInfo);
+            ASSERT (spellInfo);
             continue;
         }
 
@@ -21757,7 +21757,7 @@ void Player::SetGroup(Group* group, int8 subgroup)
     else
     {
         // never use SetGroup without a subgroup unless you specify NULL for group
-        ASSERT(subgroup >= 0);
+        ASSERT (subgroup >= 0);
         m_group.link(group, this);
         m_group.setSubGroup((uint8)subgroup);
     }
@@ -21887,7 +21887,7 @@ void Player::SendUpdateToOutOfRangeGroupMembers()
 
     m_groupUpdateMask = GROUP_UPDATE_FLAG_NONE;
     m_auraRaidUpdateMask = 0;
-    if (Pet *pet = GetPet())
+    if (Pet* pet = GetPet())
         pet->ResetAuraUpdateMaskForRaid();
 }
 
@@ -23012,7 +23012,7 @@ void Player::SetOriginalGroup(Group* group, int8 subgroup)
     else
     {
         // never use SetOriginalGroup without a subgroup unless you specify NULL for group
-        ASSERT(subgroup >= 0);
+        ASSERT (subgroup >= 0);
         m_originalGroup.link(group, this);
         m_originalGroup.setSubGroup((uint8)subgroup);
     }
@@ -23972,7 +23972,7 @@ void Player::LearnTalent(uint32 talentId, uint32 talentRank)
 
 void Player::LearnPetTalent(uint64 petGuid, uint32 talentId, uint32 talentRank)
 {
-    Pet *pet = GetPet();
+    Pet* pet = GetPet();
 
     if (!pet)
         return;
@@ -24244,7 +24244,7 @@ void Player::BuildPetTalentsInfoData(WorldPacket *data)
     size_t countPos = data->wpos();
     *data << uint8(talentIdCount);                          // [PH], talentIdCount
 
-    Pet *pet = GetPet();
+    Pet* pet = GetPet();
     if (!pet)
         return;
 
@@ -24999,7 +24999,7 @@ void Player::RefundItem(Item *item)
         {
             ItemPosCountVec dest;
             InventoryResult msg = CanStoreNewItem(NULL_BAG, NULL_SLOT, dest, itemid, count);
-            ASSERT(msg == EQUIP_ERR_OK) /// Already checked before
+            ASSERT (msg == EQUIP_ERR_OK) /// Already checked before
             Item* it = StoreNewItem(dest, itemid, true);
             SendNewItem(it, count, true, false, true);
         }

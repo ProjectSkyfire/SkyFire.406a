@@ -529,7 +529,7 @@ int WorldSocket::handle_input_header (void)
     }
     else
     {
-        ACE_ASSERT(m_RecvPct.space() == 0);
+        ACE_ASSERT (m_RecvPct.space() == 0);
     }
 
     return 0;

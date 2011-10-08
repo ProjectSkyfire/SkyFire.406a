@@ -286,7 +286,7 @@ class boss_rimefang : public CreatureScript
         {
             boss_rimefangAI(Creature* creature) : ScriptedAI(creature), _vehicle(creature->GetVehicleKit())
             {
-                ASSERT(_vehicle);
+                ASSERT (_vehicle);
             }
 
             void Reset()

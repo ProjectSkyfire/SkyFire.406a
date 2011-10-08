@@ -232,7 +232,7 @@ class boss_flame_leviathan : public CreatureScript
 
             void InitializeAI()
             {
-                ASSERT(vehicle);
+                ASSERT (vehicle);
                 if (!me->isDead())
                     Reset();
 
@@ -570,7 +570,7 @@ class boss_flame_leviathan_seat : public CreatureScript
         {
             boss_flame_leviathan_seatAI(Creature* creature) : ScriptedAI(creature), vehicle(creature->GetVehicleKit())
             {
-                ASSERT(vehicle);
+                ASSERT (vehicle);
                 me->SetReactState(REACT_PASSIVE);
                 me->SetDisplayId(me->GetCreatureInfo()->Modelid2);
                 instance = creature->GetInstanceScript();
@@ -780,7 +780,7 @@ class npc_mechanolift : public CreatureScript
         {
             npc_mechanoliftAI(Creature* creature) : PassiveAI(creature)
             {
-                ASSERT(me->GetVehicleKit());
+                ASSERT (me->GetVehicleKit());
             }
 
             uint32 MoveTimer;

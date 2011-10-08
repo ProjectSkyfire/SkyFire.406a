@@ -117,7 +117,7 @@ class mob_iceborn_protodrake : public CreatureScript
         {
             mob_iceborn_protodrakeAI(Creature* creature) : ScriptedAI(creature), _vehicle(creature->GetVehicleKit())
             {
-                ASSERT(_vehicle);
+                ASSERT (_vehicle);
             }
 
             void Reset()
