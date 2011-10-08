@@ -421,6 +421,7 @@ class instance_ulduar : public InstanceMapScript
                     case BOSS_XT002:
                     case BOSS_AURIAYA:
                     case BOSS_MIMIRON:
+                    case BOSS_FREYA:
                         break;
                     case BOSS_ASSEMBLY_OF_IRON:
                         if (state == DONE)
@@ -462,11 +463,6 @@ class instance_ulduar : public InstanceMapScript
                     case BOSS_THORIM:
                         if (state == DONE)
                             if (GameObject* gameObject = instance->GetGameObject(ThorimChestGUID))
-                                gameObject->SetRespawnTime(gameObject->GetRespawnDelay());
-                        break;
-                    case BOSS_FREYA:
-                        if (state == DONE)
-                            if (GameObject* gameObject = instance->GetGameObject(FreyaChestGUID))
                                 gameObject->SetRespawnTime(gameObject->GetRespawnDelay());
                         break;
                 }
