@@ -6355,6 +6355,12 @@ bool Spell::CheckEffectTarget(Unit const* target, uint32 eff) const
                 if ((int32)target->getLevel() > damage)
                     return false;
             break;
+        case SPELL_AURA_FLY:                               // Flight Form
+        case SPELL_AURA_MOD_INCREASE_VEHICLE_FLIGHT_SPEED: // Flight Form Passive
+        case SPELL_AURA_MOD_INCREASE_MOUNTED_FLIGHT_SPEED: // Mount Speed Mod
+            if (target->GetTypeId() == TYPEID_PLAYER && !target->ToPlayer()->IsKnowHowFlyIn(target->GetMapId(), target->GetZoneId(), m_spellInfo->Id))
+                return false;
+            break;
         default:
             break;
     }
