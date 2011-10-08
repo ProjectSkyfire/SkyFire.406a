@@ -92,7 +92,7 @@ public:
             }
 
             if (Creature* pOrb = me->GetCreature(*me, uiTargetGUID))
-                DoCast(pOrb, SPELL_TRANSITUS_SHIELD_BEAM);
+                DoCast (pOrb, SPELL_TRANSITUS_SHIELD_BEAM);
         }
     };
 

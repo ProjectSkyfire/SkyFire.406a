@@ -174,7 +174,7 @@ public:
                     break;
             }
             if (spell)
-                DoCast(me, spell);
+                DoCast (me, spell);
         }
 
         void SpellHit(Unit* /*caster*/, const SpellInfo* spell)
@@ -189,7 +189,7 @@ public:
                 return;
 
             if (me->IsWithinDist(who, 0.1f, false) && !who->HasAura(SPELL_SQUASH_SOUL))
-                DoCast(who, SPELL_SQUASH_SOUL);
+                DoCast (who, SPELL_SQUASH_SOUL);
         }
 
         void UpdateAI(const uint32 diff)
@@ -200,7 +200,7 @@ public:
                 {
                     me->RemoveAurasDueToSpell(SPELL_SMOKE);
                     if (spell2)
-                        DoCast(me, spell2);
+                        DoCast (me, spell2);
                     delay = 0;
                 } else delay -= diff;
             }
@@ -245,7 +245,7 @@ public:
         void SaySound(int32 textEntry, Unit* target = 0)
         {
             DoScriptText(textEntry, me, target);
-            //DoCast(me, SPELL_HEAD_SPEAKS, true);
+            //DoCast (me, SPELL_HEAD_SPEAKS, true);
             Creature* speaker = DoSpawnCreature(HELPER, 0, 0, 0, 0, TEMPSUMMON_TIMED_DESPAWN, 1000);
             if (speaker)
                 speaker->CastSpell(speaker, SPELL_HEAD_SPEAKS, false);
@@ -277,7 +277,7 @@ public:
                         me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
                         me->StopMoving();
                         //me->GetMotionMaster()->MoveIdle();
-                        DoCast(me, SPELL_HEAD_IS_DEAD);
+                        DoCast (me, SPELL_HEAD_IS_DEAD);
                     }
                     break;
             }
@@ -297,8 +297,8 @@ public:
                     bodyGUID = caster->GetGUID();
                 me->RemoveAllAuras();
                 me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-                DoCast(me, SPELL_HEAD_LANDS, true);
-                DoCast(me, SPELL_HEAD, false);
+                DoCast (me, SPELL_HEAD_LANDS, true);
+                DoCast (me, SPELL_HEAD, false);
                 SaySound(SAY_LOST_HEAD);
                 me->GetMotionMaster()->Clear(false);
                 me->GetMotionMaster()->MoveFleeing(caster->getVictim());
@@ -322,7 +322,7 @@ public:
                 {
                     laugh = urand(15000, 30000);
                     DoPlaySoundToSet(me, RandomLaugh[urand(0, 2)]);
-                    //DoCast(me, SPELL_HEAD_SPEAKS, true); //this spell remove buff "head"
+                    //DoCast (me, SPELL_HEAD_SPEAKS, true); //this spell remove buff "head"
                     Creature* speaker = DoSpawnCreature(HELPER, 0, 0, 0, 0, TEMPSUMMON_TIMED_DESPAWN, 1000);
                     if (speaker)
                         speaker->CastSpell(speaker, SPELL_HEAD_SPEAKS, false);
@@ -403,7 +403,7 @@ public:
             returned = true;
             burned = false;
             IsFlying = false;
-            DoCast(me, SPELL_HEAD);
+            DoCast (me, SPELL_HEAD);
             if (headGUID)
             {
                 if (Creature* Head = Unit::GetCreature((*me), headGUID))
@@ -445,7 +445,7 @@ public:
                 {
                     if (Creature* smoke = me->SummonCreature(HELPER, Spawn[1].x, Spawn[1].y, Spawn[1].z, 0, TEMPSUMMON_TIMED_DESPAWN, 20000))
                         CAST_AI(mob_wisp_invis::mob_wisp_invisAI, smoke->AI())->SetType(3);
-                    DoCast(me, SPELL_RHYME_BIG);
+                    DoCast (me, SPELL_RHYME_BIG);
                     break;
                 }
                 case 6:
@@ -561,7 +561,7 @@ public:
                 me->SetName("Headless Horseman");
                 me->SetFullHealth();
                 SaySound(SAY_REJOINED);
-                DoCast(me, SPELL_HEAD);
+                DoCast (me, SPELL_HEAD);
                 caster->GetMotionMaster()->Clear(false);
                 caster->GetMotionMaster()->MoveFollow(me, 6, float(urand(0, 5)));
                 //DoResetThreat();//not sure if need
@@ -593,10 +593,10 @@ public:
                     Head->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
                     //Head->CastSpell(Head, SPELL_HEAD_INVIS, false);
                     me->InterruptNonMeleeSpells(false);
-                    DoCast(me, SPELL_IMMUNE, true);
-                    DoCast(me, SPELL_BODY_REGEN, true);
-                    DoCast(Head, SPELL_FLYING_HEAD, true);
-                    DoCast(me, SPELL_CONFUSE, false);                     //test
+                    DoCast (me, SPELL_IMMUNE, true);
+                    DoCast (me, SPELL_BODY_REGEN, true);
+                    DoCast (Head, SPELL_FLYING_HEAD, true);
+                    DoCast (me, SPELL_CONFUSE, false);                     //test
                     whirlwind = urand(4000, 8000);
                     regen = 0;
                 }
@@ -624,7 +624,7 @@ public:
                                 }
                                 else
                                 {
-                                    DoCast(me, SPELL_RHYME_BIG);
+                                    DoCast (me, SPELL_RHYME_BIG);
                                     if (player)
                                     {
                                         player->Say(Text[count], 0);
@@ -663,7 +663,7 @@ public:
                         if (conflagrate <= diff)
                         {
                             if (Unit* player = SelectRandomPlayer(30.0f))
-                                DoCast(player, SPELL_CONFLAGRATION, false);
+                                DoCast (player, SPELL_CONFLAGRATION, false);
                             conflagrate = urand(10000, 16000);
                         } else conflagrate -= diff;
                         break;
@@ -671,7 +671,7 @@ public:
                         if (summonadds <= diff)
                         {
                             me->InterruptNonMeleeSpells(false);
-                            DoCast(me, SPELL_SUMMON_PUMPKIN);
+                            DoCast (me, SPELL_SUMMON_PUMPKIN);
                             SaySound(SAY_SPROUTING_PUMPKINS);
                             summonadds = urand(25000, 35000);
                         } else summonadds -= diff;
@@ -690,7 +690,7 @@ public:
                     DoMeleeAttackIfReady();
                     if (cleave <= diff)
                     {
-                        DoCast(me->getVictim(), SPELL_CLEAVE);
+                        DoCast (me->getVictim(), SPELL_CLEAVE);
                         cleave = urand(2000, 6000);       //1 cleave per 2.0f-6.0fsec
                     } else cleave -= diff;
                 }
@@ -723,8 +723,8 @@ public:
                     if (urand(0, 1))
                     {
                         me->RemoveAurasDueToSpell(SPELL_CONFUSE);
-                        DoCast(me, SPELL_WHIRLWIND, true);
-                        DoCast(me, SPELL_CONFUSE);
+                        DoCast (me, SPELL_WHIRLWIND, true);
+                        DoCast (me, SPELL_CONFUSE);
                     } else
                         me->RemoveAurasDueToSpell(SPELL_WHIRLWIND);
                 } else whirlwind -= diff;
@@ -765,8 +765,8 @@ public:
                 debuffGUID = debuff->GetGUID();
             }
             sprouted = false;
-            DoCast(me, SPELL_PUMPKIN_AURA, true);
-            DoCast(me, SPELL_SPROUTING);
+            DoCast (me, SPELL_PUMPKIN_AURA, true);
+            DoCast (me, SPELL_SPROUTING);
             me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_STUNNED);
         }
 
@@ -779,7 +779,7 @@ public:
                 sprouted = true;
                 me->RemoveAllAuras();
                 me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_STUNNED);
-                DoCast(me, SPELL_SPROUT_BODY, true);
+                DoCast (me, SPELL_SPROUT_BODY, true);
                 me->UpdateEntry(PUMPKIN_FIEND);
                 DoStartMovement(me->getVictim());
             }
@@ -858,7 +858,7 @@ void mob_head::mob_headAI::Disappear()
             withbody = true;
             me->RemoveAllAuras();
             body->RemoveAurasDueToSpell(SPELL_IMMUNE);//hack, SpellHit doesn't calls if body has immune aura
-            DoCast(body, SPELL_FLYING_HEAD);
+            DoCast (body, SPELL_FLYING_HEAD);
             me->SetFullHealth();
             me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
             me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);

@@ -111,7 +111,7 @@ public:
         void EnterCombat(Unit* /*who*/)
         {
             DoScriptText(SAY_MO_AGGRO, me);
-            DoCast(me, SPELL_RETRIBUTIONAURA);
+            DoCast (me, SPELL_RETRIBUTIONAURA);
 
             me->CallForHelp(VISIBLE_RANGE);
         }
@@ -183,7 +183,7 @@ public:
                 {
                     me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                     me->SetStandState(UNIT_STAND_STATE_STAND);
-                    DoCast(Whitemane, SPELL_LAYONHANDS);
+                    DoCast (Whitemane, SPELL_LAYONHANDS);
 
                     CrusaderStrike_Timer = 10000;
                     HammerOfJustice_Timer = 10000;
@@ -202,14 +202,14 @@ public:
             //CrusaderStrike_Timer
             if (CrusaderStrike_Timer <= Diff)
             {
-                DoCast(me->getVictim(), SPELL_CRUSADERSTRIKE);
+                DoCast (me->getVictim(), SPELL_CRUSADERSTRIKE);
                 CrusaderStrike_Timer = 10000;
             } else CrusaderStrike_Timer -= Diff;
 
             //HammerOfJustice_Timer
             if (HammerOfJustice_Timer <= Diff)
             {
-                DoCast(me->getVictim(), SPELL_HAMMEROFJUSTICE);
+                DoCast (me->getVictim(), SPELL_HAMMEROFJUSTICE);
                 HammerOfJustice_Timer = 60000;
             } else HammerOfJustice_Timer -= Diff;
 
@@ -290,7 +290,7 @@ public:
                 {
                     if (Unit* Mograine = Unit::GetUnit((*me), instance->GetData64(DATA_MOGRAINE)))
                     {
-                        DoCast(Mograine, SPELL_SCARLETRESURRECTION);
+                        DoCast (Mograine, SPELL_SCARLETRESURRECTION);
                         DoScriptText(SAY_WH_RESSURECT, me);
                         _bCanResurrect = false;
                     }
@@ -304,7 +304,7 @@ public:
                 if (me->IsNonMeleeSpellCasted(false))
                     me->InterruptNonMeleeSpells(false);
 
-                DoCast(me->getVictim(), SPELL_DEEPSLEEP);
+                DoCast (me->getVictim(), SPELL_DEEPSLEEP);
                 _bCanResurrectCheck = true;
                 _bCanResurrect = true;
                 return;
@@ -333,7 +333,7 @@ public:
                 }
 
                 if (target)
-                    DoCast(target, SPELL_HEAL);
+                    DoCast (target, SPELL_HEAL);
 
                 Heal_Timer = 13000;
             } else Heal_Timer -= Diff;
@@ -341,14 +341,14 @@ public:
             //PowerWordShield_Timer
             if (PowerWordShield_Timer <= Diff)
             {
-                DoCast(me, SPELL_POWERWORDSHIELD);
+                DoCast (me, SPELL_POWERWORDSHIELD);
                 PowerWordShield_Timer = 15000;
             } else PowerWordShield_Timer -= Diff;
 
             //HolySmite_Timer
             if (HolySmite_Timer <= Diff)
             {
-                DoCast(me->getVictim(), SPELL_HOLYSMITE);
+                DoCast (me->getVictim(), SPELL_HOLYSMITE);
                 HolySmite_Timer = 6000;
             } else HolySmite_Timer -= Diff;
 

@@ -79,7 +79,7 @@ public:
 
             if (bShielded && bCanDetonate)
             {
-                DoCast(me, SPELL_FIREAOE);
+                DoCast (me, SPELL_FIREAOE);
                 bCanDetonate = false;
             }
 
@@ -94,7 +94,7 @@ public:
                     return;
 
                 DoScriptText(SAY_SPECIALAE, me);
-                DoCast(me, SPELL_ARCANEBUBBLE);
+                DoCast (me, SPELL_ARCANEBUBBLE);
 
                 bCanDetonate = true;
                 bShielded = true;
@@ -103,7 +103,7 @@ public:
             if (Polymorph_Timer <= diff)
             {
                 if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1))
-                    DoCast(target, SPELL_POLYMORPH);
+                    DoCast (target, SPELL_POLYMORPH);
 
                 Polymorph_Timer = 20000;
             } else Polymorph_Timer -= diff;
@@ -111,14 +111,14 @@ public:
             //AoESilence_Timer
             if (AoESilence_Timer <= diff)
             {
-                DoCast(me->getVictim(), SPELL_AOESILENCE);
+                DoCast (me->getVictim(), SPELL_AOESILENCE);
                 AoESilence_Timer = 15000 + rand()%5000;
             } else AoESilence_Timer -= diff;
 
             //ArcaneExplosion_Timer
             if (ArcaneExplosion_Timer <= diff)
             {
-                DoCast(me->getVictim(), SPELL_ARCANEEXPLOSION);
+                DoCast (me->getVictim(), SPELL_ARCANEEXPLOSION);
                 ArcaneExplosion_Timer = 8000;
             } else ArcaneExplosion_Timer -= diff;
 

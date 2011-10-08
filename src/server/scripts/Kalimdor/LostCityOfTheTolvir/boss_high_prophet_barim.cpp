@@ -138,7 +138,7 @@ public:
         void EnterPhase1()
         {
             if (Unit* target = SelectUnit(SELECT_TARGET_RANDOM, 0))
-                DoCast(me->getVictim(), SPELL_HEAVENS_FURY);
+                DoCast (me->getVictim(), SPELL_HEAVENS_FURY);
                 events.ScheduleEvent(EVENT_HEAVENS_FURY, 4000);
 
             Creature* BlazeOfHeavens = me->SummonCreature(NPC_BLAZE_OF_HEAVENS, SummonLocations[0], TEMPSUMMON_CORPSE_DESPAWN);
@@ -148,11 +148,11 @@ public:
 
         void EnterPhase2()
         {
-            DoCast(me, SPELL_HALLOWED_GROUND);
+            DoCast (me, SPELL_HALLOWED_GROUND);
             events.ScheduleEvent(EVENT_HALLOWED_GROUND, 4000);
 
             DoScriptText(SAY_REPENTANCE, me);
-            DoCast(me, SPELL_REPENTANCE_IMMUNE);
+            DoCast (me, SPELL_REPENTANCE_IMMUNE);
             Creature* Harbinger = me->SummonCreature(NPC_HARBINGER_OF_DARKNESS, SummonLocations[1], TEMPSUMMON_CORPSE_DESPAWN);
             Harbinger->AddThreat(me->getVictim(), 0.0f);
             DoZoneInCombat(Harbinger);
@@ -183,12 +183,12 @@ public:
                     EnterPhase1();
 
                     case EVENT_FIFTY_LASHING:
-                        DoCast(me->getVictim(), SPELL_FIFTY_LASHING);
+                        DoCast (me->getVictim(), SPELL_FIFTY_LASHING);
                         events.ScheduleEvent(EVENT_FIFTY_LASHING, 4000);
                         return;
                     case EVENT_PLAGUE_OF_AGES:
                         if (Unit* target = SelectUnit(SELECT_TARGET_RANDOM, 0))
-                            DoCast(target, SPELL_PLAGUE_OF_AGES);
+                            DoCast (target, SPELL_PLAGUE_OF_AGES);
                         events.ScheduleEvent(EVENT_PLAGUE_OF_AGES, 6000);
                         return;
                     default:
@@ -243,7 +243,7 @@ public:
                 switch (eventId)
                 {
                     case EVENT_BLAZE_OF_HEAVENS:
-                        DoCast(me, SPELL_BLAZE_OF_HEAVENS);
+                        DoCast (me, SPELL_BLAZE_OF_HEAVENS);
                         events.RescheduleEvent(EVENT_BLAZE_OF_HEAVENS, 2000);
                         return;
                 }
@@ -297,7 +297,7 @@ public:
                 switch (eventId)
                 {
                     case EVENT_SOUL_SEVER:
-                        DoCast(me->getVictim(), SPELL_SOUL_SEVER);
+                        DoCast (me->getVictim(), SPELL_SOUL_SEVER);
                         events.RescheduleEvent(EVENT_SOUL_SEVER, 2000);
                         return;
                 }

@@ -97,21 +97,21 @@ public:
             if (TrashTimer <= Diff)
             {
                 if (bCheckChances())
-                    DoCast(me, SPELL_TRASH);
+                    DoCast (me, SPELL_TRASH);
                 TrashTimer = urand(6000, 15500);
             } else TrashTimer -= Diff;
 
             if (SlamTimer <= Diff)
             {
                 if (bCheckChances())
-                    DoCast(me->getVictim(), SPELL_SMITE_SLAM);
+                    DoCast (me->getVictim(), SPELL_SMITE_SLAM);
                 SlamTimer = 11000;
             } else SlamTimer -= Diff;
 
             if (NimbleReflexesTimer <= Diff)
             {
                 if (bCheckChances())
-                    DoCast(me, SPELL_NIMBLE_REFLEXES);
+                    DoCast (me, SPELL_NIMBLE_REFLEXES);
                 NimbleReflexesTimer = urand(27300, 60100);
             } else NimbleReflexesTimer -= Diff;
         /*END SkyFireAI*/

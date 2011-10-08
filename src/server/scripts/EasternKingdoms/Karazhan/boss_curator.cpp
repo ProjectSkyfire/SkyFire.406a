@@ -112,7 +112,7 @@ public:
                 DoScriptText(SAY_ENRAGE, me);
 
                 me->InterruptNonMeleeSpells(true);
-                DoCast(me, SPELL_BERSERK);
+                DoCast (me, SPELL_BERSERK);
 
                 //don't know if he's supposed to do summon/evocate after hard enrage (probably not)
                 Enraged = true;
@@ -153,7 +153,7 @@ public:
                         {
                             DoScriptText(SAY_EVOCATE, me);
                             me->InterruptNonMeleeSpells(false);
-                            DoCast(me, SPELL_EVOCATION);
+                            DoCast (me, SPELL_EVOCATION);
                             Evocating = true;
                             //no AddTimer cooldown, this will make first flare appear instantly after evocate end, like expected
                             return;
@@ -173,7 +173,7 @@ public:
                 if (!HealthAbovePct(15))
                 {
                     Enraged = true;
-                    DoCast(me, SPELL_ENRAGE);
+                    DoCast (me, SPELL_ENRAGE);
                     DoScriptText(SAY_ENRAGE, me);
                 }
             }
@@ -186,7 +186,7 @@ public:
                     HatefulBoltTimer = 15000;
 
                 if (Unit* target = SelectTarget(SELECT_TARGET_TOPAGGRO, 1))
-                    DoCast(target, SPELL_HATEFUL_BOLT);
+                    DoCast (target, SPELL_HATEFUL_BOLT);
             } else HatefulBoltTimer -= diff;
 
             DoMeleeAttackIfReady();

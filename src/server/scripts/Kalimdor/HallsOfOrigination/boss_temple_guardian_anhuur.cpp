@@ -109,13 +109,13 @@ class boss_temple_guardian_anhuur : public CreatureScript
             {
                 if (!HealthAbovePct(66) && HealthAbovePct(33)) // Need to add teleportation location with phase swap
                 {
-                    DoCast(me, SPELL_SHIELD_OF_LIGHT);
+                    DoCast (me, SPELL_SHIELD_OF_LIGHT);
                     events.ScheduleEvent(EVENT_REVERBERATING_HYMN, 3000);
                 }
 
                 if (!HealthAbovePct(33)) // Need to add teleportation location with phase swap
                 {
-                    DoCast(me, SPELL_SHIELD_OF_LIGHT);
+                    DoCast (me, SPELL_SHIELD_OF_LIGHT);
                     events.ScheduleEvent(EVENT_REVERBERATING_HYMN, 1000);
                 }
             }
@@ -132,15 +132,15 @@ class boss_temple_guardian_anhuur : public CreatureScript
                     switch (eventId)
                     {
                         case EVENT_DIVINE_RECKONING:
-                            DoCast(me->getVictim(), SPELL_DIVINE_RECKONING);
+                            DoCast (me->getVictim(), SPELL_DIVINE_RECKONING);
                             events.ScheduleEvent(EVENT_DIVINE_RECKONING, urand(4000, 9000));
                             break;
                         case EVENT_SHIELD_OF_LIGHT:
-                            DoCast(me, SPELL_SHIELD_OF_LIGHT);
+                            DoCast (me, SPELL_SHIELD_OF_LIGHT);
                             events.ScheduleEvent(EVENT_SHIELD_OF_LIGHT, 4500);
                             break;
                         case EVENT_REVERBERATING_HYMN:
-                            DoCast(me, SPELL_REVERBERATING_HYMN);
+                            DoCast (me, SPELL_REVERBERATING_HYMN);
                             events.ScheduleEvent(EVENT_REVERBERATING_HYMN, 3000);
                             break;
                         default:
