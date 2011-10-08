@@ -1734,7 +1734,7 @@ SpellCastResult SpellInfo::CheckLocation(uint32 map_id, uint32 zone_id, uint32 a
             case SPELL_AURA_MOD_INCREASE_MOUNTED_FLIGHT_SPEED:
             case SPELL_AURA_FLY:
             {
-                if (player && !player->IsKnowHowFlyIn(map_id, zone_id))
+                if (player && !player->IsKnowHowFlyIn(map_id, zone_id, Id))
                     return SPELL_FAILED_INCORRECT_AREA;
             }
         }
