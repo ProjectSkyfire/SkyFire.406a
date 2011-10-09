@@ -135,10 +135,6 @@ World::~World()
 
     VMAP::VMapFactory::clear();
 
-    // Clean up character name data
-    for (std::map<uint32, CharacterNameData*>::iterator itr = m_CharacterNameDataMap.begin(); itr != m_CharacterNameDataMap.end(); ++itr)
-        delete itr->second;
-
     //TODO free addSessQueue
 }
 
@@ -2869,58 +2865,44 @@ void World::LoadCharacterNameData()
         return;
     }
 
-    ACE_Guard<ACE_Thread_Mutex> guard(m_CharacterNameDataMapMutex);
-
     uint32 count = 0;
 
     do
     {
         Field *fields = result->Fetch();
-        CharacterNameData* data = new CharacterNameData;
-        data->m_name = fields[1].GetString();
-        data->m_race = fields[2].GetUInt8();
-        data->m_gender = fields[3].GetUInt8();
-        data->m_class = fields[4].GetUInt8();
-
-        m_CharacterNameDataMap[fields[0].GetUInt32()] = data;
+        AddCharacterNameData(fields[0].GetUInt32(), fields[1].GetString(),
+            fields[3].GetUInt8() /*gender*/, fields[2].GetUInt8() /*race*/, fields[4].GetUInt8() /*class*/);
         ++count;
     } while (result->NextRow());
 
     sLog->outString("Loaded name data for %u characters", count);
 }
 
-void World::ReloadSingleCharacterNameData(uint32 guid)
+void World::AddCharacterNameData(uint32 guid, const std::string& name, uint8 gender, uint8 race, uint8 playerClass)
 {
-    ACE_Guard<ACE_Thread_Mutex> guard(m_CharacterNameDataMapMutex);
-
-    std::map<uint32, CharacterNameData*>::iterator itr = m_CharacterNameDataMap.find(guid);
-
-    if (itr != m_CharacterNameDataMap.end())
-    {
-        delete itr->second;
-        m_CharacterNameDataMap.erase(itr);
-    }
-
-    QueryResult result = CharacterDatabase.PQuery("SELECT name, race, gender, class FROM characters WHERE guid = '%u'", guid);
-    if (result)
-    {
-        Field *fields = result->Fetch();
-        CharacterNameData* newdata = new CharacterNameData;
-        newdata->m_name = fields[0].GetString();
-        newdata->m_race = fields[1].GetUInt8();
-        newdata->m_gender = fields[2].GetUInt8();
-        newdata->m_class = fields[3].GetUInt8();
-        m_CharacterNameDataMap[guid] = newdata;
-    }
+    CharacterNameData& data = _characterNameDataMap[guid];
+    data.m_name = name;
+    data.m_race = race;
+    data.m_gender = gender;
+    data.m_class = playerClass;
 }
 
-CharacterNameData* World::GetCharacterNameData(uint32 guid)
+void World::UpdateCharacterNameData(uint32 guid, const std::string& name, uint8 gender, uint8 race)
 {
-    ACE_Guard<ACE_Thread_Mutex> guard(m_CharacterNameDataMapMutex);
+    std::map<uint32, CharacterNameData>::iterator itr = _characterNameDataMap.find(guid);
+    if (itr == _characterNameDataMap.end())
+        return;
+    itr->second.m_name = name;
+    itr->second.m_gender = gender;
+    if(race != RACE_NONE)
+        itr->second.m_race = race;
+}
 
-    std::map<uint32, CharacterNameData*>::iterator itr = m_CharacterNameDataMap.find(guid);
-    if (itr != m_CharacterNameDataMap.end())
-        return itr->second;
+const CharacterNameData* World::GetCharacterNameData(uint32 guid) const
+{
+    std::map<uint32, CharacterNameData>::const_iterator itr = _characterNameDataMap.find(guid);
+    if (itr != _characterNameDataMap.end())
+        return &itr->second;
     else
         return NULL;
 }
