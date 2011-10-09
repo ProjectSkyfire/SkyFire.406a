@@ -59,39 +59,39 @@ void WorldSession::SendNameQueryOpcode(Player *p)
 
 void WorldSession::HandleNameQueryOpcode(WorldPacket& recv_data)
 {
-	uint64 guid;
+    uint64 guid;
 
-	recv_data >> guid;
+    recv_data >> guid;
 
-	// This is disable by default to prevent lots of console spam
-	// sLog->outString("HandleNameQueryOpcode %u", guid);
+    // This is disable by default to prevent lots of console spam
+    // sLog->outString("HandleNameQueryOpcode %u", guid);
 
-	if (Player* pChar = ObjectAccessor::FindPlayer(guid))
-		SendNameQueryOpcode(pChar);
-	else
-	{
-		if (const CharacterNameData* cname = sWorld->GetCharacterNameData(GUID_LOPART(guid)))
-		{
-			WorldPacket data(SMSG_NAME_QUERY_RESPONSE, 8+1+1+1+1+1+1+10);
-			data.appendPackGUID(guid);
-			data << uint8(0);
-			if (cname->m_name == "")
-			{
-				data << std::string(GetTrinityString(LANG_NON_EXIST_CHARACTER));
-				data << uint32(0);
-			}
-			else
-			{
-				data << cname->m_name;
-				data << uint8(0);
-				data << uint8(cname->m_race);
-				data << uint8(cname->m_gender);
-				data << uint8(cname->m_class);
-			}
-			data << uint8(0);
-			SendPacket(&data);
-		}
-	}
+    if (Player* pChar = ObjectAccessor::FindPlayer(guid))
+        SendNameQueryOpcode(pChar);
+    else
+    {
+        if (const CharacterNameData* cname = sWorld->GetCharacterNameData(GUID_LOPART(guid)))
+        {
+            WorldPacket data(SMSG_NAME_QUERY_RESPONSE, 8+1+1+1+1+1+1+10);
+            data.appendPackGUID(guid);
+            data << uint8(0);
+            if (cname->m_name == "")
+            {
+                data << std::string(GetTrinityString(LANG_NON_EXIST_CHARACTER));
+                data << uint32(0);
+            }
+            else
+            {
+                data << cname->m_name;
+                data << uint8(0);
+                data << uint8(cname->m_race);
+                data << uint8(cname->m_gender);
+                data << uint8(cname->m_class);
+            }
+            data << uint8(0);
+            SendPacket(&data);
+        }
+    }
 }
 
 void WorldSession::HandleQueryTimeOpcode(WorldPacket & /*recv_data*/)

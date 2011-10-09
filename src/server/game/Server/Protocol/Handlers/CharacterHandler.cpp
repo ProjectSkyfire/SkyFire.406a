@@ -693,7 +693,7 @@ void WorldSession::HandleCharCreateCallback(PreparedQueryResult result, Characte
             sLog->outChar("Account: %d (IP: %s) Create Character:[%s] (GUID: %u)", GetAccountId(), IP_str.c_str(), createInfo->Name.c_str(), newChar.GetGUIDLow());
             sScriptMgr->OnPlayerCreate(&newChar);
             sWorld->AddCharacterNameData(newChar.GetGUIDLow(), std::string(newChar.GetName()), newChar.getGender(), newChar.getRace(), newChar.getClass());
- 			
+
             delete createInfo;
             _charCreateCallback.SetParam(NULL);
             _charCreateCallback.FreeResult();
@@ -749,7 +749,7 @@ void WorldSession::HandleCharDeleteOpcode(WorldPacket & recv_data)
     sLog->outChar("Account: %d (IP: %s) Delete Character:[%s] (GUID: %u)", GetAccountId(), IP_str.c_str(), name.c_str(), GUID_LOPART(guid));
     sScriptMgr->OnPlayerDelete(guid);
     sWorld->DeleteCharaceterNameData(guid);
-	
+
     if (sLog->IsOutCharDump())                                // optimize GetPlayerDump call
     {
         std::string dump;
@@ -1658,7 +1658,7 @@ void WorldSession::HandleCharFactionOrRaceChange(WorldPacket& recv_data)
     trans->PAppend("UPDATE `characters` SET name='%s', race='%u', at_login=at_login & ~ %u WHERE guid='%u'", newname.c_str(), race, used_loginFlag, lowGuid);
     trans->PAppend("DELETE FROM character_declinedname WHERE guid ='%u'", lowGuid);
     sWorld->UpdateCharacterNameData(GUID_LOPART(guid), newname, gender, race);
-	
+
     BattlegroundTeamId team = BG_TEAM_ALLIANCE;
 
     // Search each faction is targeted
