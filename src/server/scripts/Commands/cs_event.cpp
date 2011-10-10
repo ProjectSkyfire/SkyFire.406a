@@ -1,7 +1,6 @@
 /*
  * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -51,7 +50,7 @@ public:
         return commandTable;
     }
 
-    static bool HandleEventActiveListCommand(ChatHandler* handler, const char* /*args*/)
+    static bool HandleEventActiveListCommand(ChatHandler* handler, char const* /*args*/)
     {
         uint32 counter = 0;
 
@@ -62,13 +61,13 @@ public:
 
         for (GameEventMgr::ActiveEvents::const_iterator itr = activeEvents.begin(); itr != activeEvents.end(); ++itr)
         {
-            uint32 event_id = *itr;
-            GameEventData const& eventData = events[event_id];
+            uint32 eventId = *itr;
+            GameEventData const& eventData = events[eventId];
 
             if (handler->GetSession())
-                handler->PSendSysMessage(LANG_EVENT_ENTRY_LIST_CHAT, event_id, event_id, eventData.description.c_str(), active);
+                handler->PSendSysMessage(LANG_EVENT_ENTRY_LIST_CHAT, eventId, eventId, eventData.description.c_str(), active);
             else
-                handler->PSendSysMessage(LANG_EVENT_ENTRY_LIST_CONSOLE, event_id, eventData.description.c_str(), active);
+                handler->PSendSysMessage(LANG_EVENT_ENTRY_LIST_CONSOLE, eventId, eventData.description.c_str(), active);
 
             ++counter;
         }
@@ -80,28 +79,28 @@ public:
         return true;
     }
 
-    static bool HandleEventInfoCommand(ChatHandler* handler, const char* args)
+    static bool HandleEventInfoCommand(ChatHandler* handler, char const* args)
     {
         if (!*args)
             return false;
 
         // id or [name] Shift-click form |color|Hgameevent:id|h[name]|h|r
-        char* cId =  handler->extractKeyFromLink((char*)args, "Hgameevent");
-        if (!cId)
+        char* id =  handler->extractKeyFromLink((char*)args, "Hgameevent");
+        if (!id)
             return false;
 
-        uint32 event_id = atoi(cId);
+        uint32 eventId = atoi(id);
 
         GameEventMgr::GameEventDataMap const& events = sGameEventMgr->GetEventMap();
 
-        if (event_id >=events.size())
+        if (eventId >= events.size())
         {
             handler->SendSysMessage(LANG_EVENT_NOT_EXIST);
             handler->SetSentErrorMessage(true);
             return false;
         }
 
-        GameEventData const& eventData = events[event_id];
+        GameEventData const& eventData = events[eventId];
         if (!eventData.isValid())
         {
             handler->SendSysMessage(LANG_EVENT_NOT_EXIST);
@@ -110,47 +109,47 @@ public:
         }
 
         GameEventMgr::ActiveEvents const& activeEvents = sGameEventMgr->GetActiveEventList();
-        bool active = activeEvents.find(event_id) != activeEvents.end();
+        bool active = activeEvents.find(eventId) != activeEvents.end();
         char const* activeStr = active ? handler->GetTrinityString(LANG_ACTIVE) : "";
 
         std::string startTimeStr = TimeToTimestampStr(eventData.start);
         std::string endTimeStr = TimeToTimestampStr(eventData.end);
 
-        uint32 delay = sGameEventMgr->NextCheck(event_id);
-        time_t nextTime = time(NULL)+delay;
-        std::string nextStr = nextTime >= eventData.start && nextTime < eventData.end ? TimeToTimestampStr(time(NULL)+delay) : "-";
+        uint32 delay = sGameEventMgr->NextCheck(eventId);
+        time_t nextTime = time(NULL) + delay;
+        std::string nextStr = nextTime >= eventData.start && nextTime < eventData.end ? TimeToTimestampStr(time(NULL) + delay) : "-";
 
         std::string occurenceStr = secsToTimeString(eventData.occurence * MINUTE);
         std::string lengthStr = secsToTimeString(eventData.length * MINUTE);
 
-        handler->PSendSysMessage(LANG_EVENT_INFO, event_id, eventData.description.c_str(), activeStr,
+        handler->PSendSysMessage(LANG_EVENT_INFO, eventId, eventData.description.c_str(), activeStr,
             startTimeStr.c_str(), endTimeStr.c_str(), occurenceStr.c_str(), lengthStr.c_str(),
             nextStr.c_str());
         return true;
     }
 
-    static bool HandleEventStartCommand(ChatHandler* handler, const char* args)
+    static bool HandleEventStartCommand(ChatHandler* handler, char const* args)
     {
         if (!*args)
             return false;
 
         // id or [name] Shift-click form |color|Hgameevent:id|h[name]|h|r
-        char* cId =  handler->extractKeyFromLink((char*)args, "Hgameevent");
-        if (!cId)
+        char* id =  handler->extractKeyFromLink((char*)args, "Hgameevent");
+        if (!id)
             return false;
 
-        int32 event_id = atoi(cId);
+        int32 eventId = atoi(id);
 
         GameEventMgr::GameEventDataMap const& events = sGameEventMgr->GetEventMap();
 
-        if (event_id < 1 || uint32(event_id) >= events.size())
+        if (eventId < 1 || uint32(eventId) >= events.size())
         {
             handler->SendSysMessage(LANG_EVENT_NOT_EXIST);
             handler->SetSentErrorMessage(true);
             return false;
         }
 
-        GameEventData const& eventData = events[event_id];
+        GameEventData const& eventData = events[eventId];
         if (!eventData.isValid())
         {
             handler->SendSysMessage(LANG_EVENT_NOT_EXIST);
@@ -159,39 +158,39 @@ public:
         }
 
         GameEventMgr::ActiveEvents const& activeEvents = sGameEventMgr->GetActiveEventList();
-        if (activeEvents.find(event_id) != activeEvents.end())
+        if (activeEvents.find(eventId) != activeEvents.end())
         {
-            handler->PSendSysMessage(LANG_EVENT_ALREADY_ACTIVE, event_id);
+            handler->PSendSysMessage(LANG_EVENT_ALREADY_ACTIVE, eventId);
             handler->SetSentErrorMessage(true);
             return false;
         }
 
-        sGameEventMgr->StartEvent(event_id, true);
+        sGameEventMgr->StartEvent(eventId, true);
         return true;
     }
 
-    static bool HandleEventStopCommand(ChatHandler* handler, const char* args)
+    static bool HandleEventStopCommand(ChatHandler* handler, char const* args)
     {
         if (!*args)
             return false;
 
         // id or [name] Shift-click form |color|Hgameevent:id|h[name]|h|r
-        char* cId =  handler->extractKeyFromLink((char*)args, "Hgameevent");
-        if (!cId)
+        char* id =  handler->extractKeyFromLink((char*)args, "Hgameevent");
+        if (!id)
             return false;
 
-        int32 event_id = atoi(cId);
+        int32 eventId = atoi(id);
 
         GameEventMgr::GameEventDataMap const& events = sGameEventMgr->GetEventMap();
 
-        if (event_id < 1 || uint32(event_id) >= events.size())
+        if (eventId < 1 || uint32(eventId) >= events.size())
         {
             handler->SendSysMessage(LANG_EVENT_NOT_EXIST);
             handler->SetSentErrorMessage(true);
             return false;
         }
 
-        GameEventData const& eventData = events[event_id];
+        GameEventData const& eventData = events[eventId];
         if (!eventData.isValid())
         {
             handler->SendSysMessage(LANG_EVENT_NOT_EXIST);
@@ -201,14 +200,14 @@ public:
 
         GameEventMgr::ActiveEvents const& activeEvents = sGameEventMgr->GetActiveEventList();
 
-        if (activeEvents.find(event_id) == activeEvents.end())
+        if (activeEvents.find(eventId) == activeEvents.end())
         {
-            handler->PSendSysMessage(LANG_EVENT_NOT_ACTIVE, event_id);
+            handler->PSendSysMessage(LANG_EVENT_NOT_ACTIVE, eventId);
             handler->SetSentErrorMessage(true);
             return false;
         }
 
-        sGameEventMgr->StopEvent(event_id, true);
+        sGameEventMgr->StopEvent(eventId, true);
         return true;
     }
 };

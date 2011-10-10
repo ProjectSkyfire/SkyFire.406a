@@ -1,7 +1,6 @@
 /*
  * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -592,7 +591,7 @@ public:
                     wpCreature2->SaveToDB(map->GetId(), (1 << map->GetSpawnMode()), chr->GetPhaseMaskForSpawn());
                     // To call _LoadGoods(); _LoadQuests(); CreateTrainerSpells();
                     wpCreature2->LoadFromDB(wpCreature2->GetDBTableGUIDLow(), map);
-                    map->Add(wpCreature2);
+                    map->AddToMap(wpCreature2);
                     //sMapMgr->GetMap(npcCreature->GetMapId())->Add(wpCreature2);
                 }
 
@@ -790,7 +789,7 @@ public:
                 wpCreature->SaveToDB(map->GetId(), (1 << map->GetSpawnMode()), chr->GetPhaseMaskForSpawn());
                 // To call _LoadGoods(); _LoadQuests(); CreateTrainerSpells();
                 wpCreature->LoadFromDB(wpCreature->GetDBTableGUIDLow(), map);
-                map->Add(wpCreature);
+                map->AddToMap(wpCreature);
 
                 if (target)
                 {
@@ -837,7 +836,7 @@ public:
 
             creature->SaveToDB(map->GetId(), (1 << map->GetSpawnMode()), chr->GetPhaseMaskForSpawn());
             creature->LoadFromDB(creature->GetDBTableGUIDLow(), map);
-            map->Add(creature);
+            map->AddToMap(creature);
 
             if (target)
             {
@@ -885,7 +884,7 @@ public:
 
             creature->SaveToDB(map->GetId(), (1 << map->GetSpawnMode()), chr->GetPhaseMaskForSpawn());
             creature->LoadFromDB(creature->GetDBTableGUIDLow(), map);
-            map->Add(creature);
+            map->AddToMap(creature);
 
             if (target)
             {

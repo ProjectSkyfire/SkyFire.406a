@@ -1,7 +1,6 @@
 /*
  * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -151,7 +150,7 @@ public:
         // To call _LoadGoods(); _LoadQuests(); CreateTrainerSpells();
         creature->LoadFromDB(db_guid, map);
 
-        map->Add(creature);
+        map->AddToMap(creature);
         sObjectMgr->AddCreatureToGrid(db_guid, sObjectMgr->GetCreatureData(db_guid));
         return true;
     }
@@ -625,7 +624,7 @@ public:
                 const_cast<CreatureData*>(data)->posZ = z;
                 const_cast<CreatureData*>(data)->orientation = o;
             }
-            creature->GetMap()->CreatureRelocation(creature, x, y, z, o);
+            creature->SetPosition(x, y, z, o);
             creature->GetMotionMaster()->Initialize();
             if (creature->isAlive())                            // dead creature will reset movement generator at respawn
             {
@@ -1144,7 +1143,7 @@ public:
         pet->SetUInt32Value(UNIT_FIELD_LEVEL, level - 1);
 
         // add to world
-        pet->GetMap()->Add(pet->ToCreature());
+        pet->GetMap()->AddToMap(pet->ToCreature());
 
         // visual effect for levelup
         pet->SetUInt32Value(UNIT_FIELD_LEVEL, level);
