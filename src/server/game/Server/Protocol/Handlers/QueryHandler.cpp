@@ -32,27 +32,44 @@
 #include "Pet.h"
 #include "MapManager.h"
 
-void WorldSession::SendNameQueryOpcode(Player *p)
+void WorldSession::SendNameQueryOpcode(uint64 guid)
 {
-    if (!p)
-        return;
+    Player* player = NULL;
+    const CharacterNameData* nameData = sWorld->GetCharacterNameData(GUID_LOPART(guid));
+    if (nameData)
+        player = ObjectAccessor::FindPlayer(guid);
+
                                                             // guess size
     WorldPacket data(SMSG_NAME_QUERY_RESPONSE, (8+1+1+1+1+1+10));
-    data.append(p->GetPackGUID());                          // player guid
+    data.appendPackGUID(guid);
     data << uint8(0);                                       // added in 3.1
-    data << p->GetName();                                   // played name
-    data << uint8(0);                                       // realm name for cross realm BG usage
-    data << uint8(p->getRace());
-    data << uint8(p->getGender());
-    data << uint8(p->getClass());
-    if (DeclinedName const* names = p->GetDeclinedNames())
+    if (nameData)
     {
-        data << uint8(1);                                   // is declined
-        for (int i = 0; i < MAX_DECLINED_NAME_CASES; ++i)
-            data << names->name[i];
+        data << nameData->m_name;                                   // played name
+        data << uint8(0);                                       // realm name for cross realm BG usage
+        data << uint8(nameData->m_race);
+        data << uint8(nameData->m_gender);
+        data << uint8(nameData->m_class);
     }
     else
-        data << uint8(0);                                   // is not declined
+    {
+        data << std::string(GetTrinityString(LANG_NON_EXIST_CHARACTER));
+        data << uint32(0);
+    }
+
+    if (player)
+    {
+        if (DeclinedName const* names = player->GetDeclinedNames())
+        {
+            data << uint8(1);                                   // is declined
+            for (int i = 0; i < MAX_DECLINED_NAME_CASES; ++i)
+                data << names->name[i];
+        }
+        else
+            data << uint8(0);                                   // is not declined
+    }
+    else //TODO: decline names may also need to be stored in char name data
+        data << uint8(0);
 
     SendPacket(&data);
 }
@@ -66,32 +83,7 @@ void WorldSession::HandleNameQueryOpcode(WorldPacket& recv_data)
     // This is disable by default to prevent lots of console spam
     // sLog->outString("HandleNameQueryOpcode %u", guid);
 
-    if (Player* pChar = ObjectAccessor::FindPlayer(guid))
-        SendNameQueryOpcode(pChar);
-    else
-    {
-        if (const CharacterNameData* cname = sWorld->GetCharacterNameData(GUID_LOPART(guid)))
-        {
-            WorldPacket data(SMSG_NAME_QUERY_RESPONSE, 8+1+1+1+1+1+1+10);
-            data.appendPackGUID(guid);
-            data << uint8(0);
-            if (cname->m_name == "")
-            {
-                data << std::string(GetTrinityString(LANG_NON_EXIST_CHARACTER));
-                data << uint32(0);
-            }
-            else
-            {
-                data << cname->m_name;
-                data << uint8(0);
-                data << uint8(cname->m_race);
-                data << uint8(cname->m_gender);
-                data << uint8(cname->m_class);
-            }
-            data << uint8(0);
-            SendPacket(&data);
-        }
-    }
+    SendNameQueryOpcode(guid);
 }
 
 void WorldSession::HandleQueryTimeOpcode(WorldPacket & /*recv_data*/)
@@ -115,7 +107,7 @@ void WorldSession::HandleCreatureQueryOpcode(WorldPacket & recv_data)
     uint64 guid;
     recv_data >> guid;
 
-    CreatureTemplate const *ci = sObjectMgr->GetCreatureTemplate(entry);
+    CreatureTemplate const* ci = sObjectMgr->GetCreatureTemplate(entry);
     if (ci)
     {
         std::string Name, SubName;
@@ -125,7 +117,7 @@ void WorldSession::HandleCreatureQueryOpcode(WorldPacket & recv_data)
         int loc_idx = GetSessionDbLocaleIndex();
         if (loc_idx >= 0)
         {
-            if (CreatureLocale const *cl = sObjectMgr->GetCreatureLocale(entry))
+            if (CreatureLocale const* cl = sObjectMgr->GetCreatureLocale(entry))
             {
                 ObjectMgr::GetLocaleString(cl->Name, loc_idx, Name);
                 ObjectMgr::GetLocaleString(cl->SubName, loc_idx, SubName);
@@ -143,8 +135,8 @@ void WorldSession::HandleCreatureQueryOpcode(WorldPacket & recv_data)
         data << uint32(ci->type);                           // CreatureType.dbc
         data << uint32(ci->family);                         // CreatureFamily.dbc
         data << uint32(ci->rank);                           // Creature Rank (elite, boss, etc)
-        data << uint32(ci->KillCredit[0]);                  // kill credit
-        data << uint32(ci->KillCredit[1]);                  // kill credit
+        data << uint32(ci->KillCredit[0]);                  // new in 3.1, kill credit
+        data << uint32(ci->KillCredit[1]);                  // new in 3.1, kill credit
         data << uint32(ci->Modelid1);                       // Modelid1
         data << uint32(ci->Modelid2);                       // Modelid2
         data << uint32(ci->Modelid3);                       // Modelid3
@@ -178,7 +170,7 @@ void WorldSession::HandleGameObjectQueryOpcode(WorldPacket & recv_data)
     uint64 guid;
     recv_data >> guid;
 
-    const GameObjectTemplate *info = sObjectMgr->GetGameObjectTemplate(entry);
+    const GameObjectTemplate* info = sObjectMgr->GetGameObjectTemplate(entry);
     if (info)
     {
         std::string Name;
@@ -192,7 +184,7 @@ void WorldSession::HandleGameObjectQueryOpcode(WorldPacket & recv_data)
         int loc_idx = GetSessionDbLocaleIndex();
         if (loc_idx >= 0)
         {
-            if (GameObjectLocale const *gl = sObjectMgr->GetGameObjectLocale(entry))
+            if (GameObjectLocale const* gl = sObjectMgr->GetGameObjectLocale(entry))
             {
                 ObjectMgr::GetLocaleString(gl->Name, loc_idx, Name);
                 ObjectMgr::GetLocaleString(gl->CastBarCaption, loc_idx, CastBarCaption);
@@ -211,7 +203,7 @@ void WorldSession::HandleGameObjectQueryOpcode(WorldPacket & recv_data)
         data.append(info->raw.data, 32);
         data << float(info->size);                          // go size
         for (uint32 i = 0; i < MAX_GAMEOBJECT_QUEST_ITEMS; ++i)
-            data << uint32(info->questItems[i]);              // itemId[6], quest drop
+            data << uint32(info->questItems[i]);            // itemId[6], quest drop
         data << uint32(0);                                  // go expansion field
         SendPacket(&data);
         sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Sent SMSG_GAMEOBJECT_QUERY_RESPONSE");
@@ -287,7 +279,7 @@ void WorldSession::HandleNpcTextQueryOpcode(WorldPacket & recv_data)
     sLog->outDetail("WORLD: CMSG_NPC_TEXT_QUERY ID '%u'", textID);
 
     recv_data >> guid;
-    GetPlayer()->SetUInt64Value(UNIT_FIELD_TARGET, guid);
+    GetPlayer()->SetSelection(guid);
 
     GossipText const* pGossip = sObjectMgr->GetGossipText(textID);
 
@@ -322,7 +314,7 @@ void WorldSession::HandleNpcTextQueryOpcode(WorldPacket & recv_data)
         int loc_idx = GetSessionDbLocaleIndex();
         if (loc_idx >= 0)
         {
-            if (NpcTextLocale const *nl = sObjectMgr->GetNpcTextLocale(textID))
+            if (NpcTextLocale const* nl = sObjectMgr->GetNpcTextLocale(textID))
             {
                 for (int i = 0; i < MAX_LOCALES; ++i)
                 {
@@ -390,7 +382,7 @@ void WorldSession::HandlePageTextQueryOpcode(WorldPacket & recv_data)
 
             int loc_idx = GetSessionDbLocaleIndex();
             if (loc_idx >= 0)
-                if (PageTextLocale const *pl = sObjectMgr->GetPageTextLocale(pageID))
+                if (PageTextLocale const* pl = sObjectMgr->GetPageTextLocale(pageID))
                     ObjectMgr::GetLocaleString(pl->Text, loc_idx, Text);
 
             data << Text;
@@ -443,7 +435,7 @@ void WorldSession::HandleQuestPOIQuery(WorldPacket& recv_data)
 
         if (questOk)
         {
-            QuestPOIVector const *POI = sObjectMgr->GetQuestPOIVector(questId);
+            QuestPOIVector const* POI = sObjectMgr->GetQuestPOIVector(questId);
 
             if (POI)
             {
