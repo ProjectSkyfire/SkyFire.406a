@@ -24942,18 +24942,21 @@ void Player::SendRefundInfo(Item *item)
         return;
     }
 
-    WorldPacket data(SMSG_ITEM_REFUND_INFO_RESPONSE, 8+4+4+4+4*4+4*4+4+4);
+    WorldPacket data(SMSG_ITEM_REFUND_INFO_RESPONSE, 4*5+4*5+4+4*5+4*5+4+8+4);
+    for (uint8 i = 0; i < MAX_EXTENDED_COST_ITEMS; ++i) // item cost
+    {
+        data << uint32(iece->RequiredItemCount[i]);     // 4.06: count before id
+        data << uint32(iece->RequiredItem[i]);
+    }
+    data << uint32(0);                                  // unknown
+    for (uint8 i = 0; i < MAX_EXTENDED_COST_CURRENCIES; ++i)  // currency cost
+    {
+        data << uint32(iece->RequiredCurrencyCount[i] / PLAYER_CURRENCY_PRECISION);  // 4.06: count before id
+        data << uint32(iece->RequiredCurrency[i]);
+    }
+    data << uint32(GetTotalPlayedTime() - item->GetPlayedTime());
     data << uint64(item->GetGUID());                    // item guid
     data << uint32(item->GetPaidMoney());               // money cost
-    data << uint32(0/*iece->reqhonorpoints*/);          // TODO:currency cost
-    data << uint32(0/*iece->reqarenapoints*/);          // TODO:
-    for (uint8 i = 0; i < MAX_ITEM_EXTENDED_COST_REQUIREMENTS; ++i)                       // item cost data
-    {
-        data << uint32(iece->RequiredItem[i]);
-        data << uint32(iece->RequiredItemCount[i]);
-    }
-    data << uint32(0);
-    data << uint32(GetTotalPlayedTime() - item->GetPlayedTime());
     GetSession()->SendPacket(&data);
 }
 
