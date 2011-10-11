@@ -86,6 +86,7 @@ public:
             return true;
         }
 
+        //TODO: this should be handled in map, maybe add a summon function in map
         // There is no other way afaik...
         void SpawnGameObject(uint32 entry, Position& pos)
         {
@@ -98,7 +99,7 @@ public:
                 return;
             }
 
-            instance->Add(go);
+            instance->AddToMap(go);
         }
 
         void OnGameObjectCreate(GameObject* go)
@@ -273,6 +274,7 @@ public:
                         tmpState = NOT_STARTED;
                     SetBossState(i, EncounterState(tmpState));
                 }
+
             } else OUT_LOAD_INST_DATA_FAIL;
 
             OUT_LOAD_INST_DATA_COMPLETE;

@@ -172,7 +172,7 @@ public:
             return false;
         }
 
-        map->Add(object);
+        map->AddToMap(object);
 
         // TODO: is it really necessary to add both the real and DB table guid here ?
         sObjectMgr->AddGameobjectToGrid(guidLow, sObjectMgr->GetGOData(guidLow));

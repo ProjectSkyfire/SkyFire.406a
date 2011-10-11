@@ -170,7 +170,7 @@ bool OutdoorPvPSI::HandleDropFlag(Player* player, uint32 spellId)
                         else
                         {
                             go->SetRespawnTime(0);
-                            map->Add(go);
+                            map->AddToMap(go);
                         }
                     }
                 }
@@ -192,14 +192,14 @@ bool OutdoorPvPSI::HandleDropFlag(Player* player, uint32 spellId)
                           delete go;
                           return true;
                           }
-                        if (!go->Create(sObjectMgr->GenerateLowGuid(HIGHGUID_GAMEOBJECT), SI_SILITHYST_MOUND, map, player->GetPhaseMask() , player->GetPositionX(), player->GetPositionY(), player->GetPositionZ(), player->GetOrientation(), 0, 0, 0, 0, 100, GO_STATE_READY))
+                        if (!go->Create(sObjectMgr->GenerateLowGuid(HIGHGUID_GAMEOBJECT), SI_SILITHYST_MOUND, map, player->GetPhaseMask(), player->GetPositionX(), player->GetPositionY(), player->GetPositionZ(), player->GetOrientation(), 0, 0, 0, 0, 100, GO_STATE_READY))
                         {
                             delete go;
                         }
                         else
                         {
                             go->SetRespawnTime(0);
-                            map->Add(go);
+                            map->AddToMap(go);
                         }
                     }
                 }

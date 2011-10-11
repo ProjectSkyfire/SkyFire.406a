@@ -200,10 +200,10 @@ void ObjectAccessor::RemoveCorpse(Corpse* corpse)
 {
     ASSERT (corpse && corpse->GetType() != CORPSE_BONES);
 
-    if (corpse->FindMap())
+    if (Map* map = corpse->FindMap())
     {
         corpse->DestroyForNearbyPlayers();
-        corpse->FindMap()->Remove(corpse, false);
+        corpse->FindMap()->RemoveFromMap(corpse, false);
     }
     else
         corpse->RemoveFromWorld();
@@ -318,7 +318,7 @@ Corpse* ObjectAccessor::ConvertCorpseForPlayer(uint64 player_guid, bool insignia
         }
 
         // add bones in grid store if grid loaded where corpse placed
-        map->Add(bones);
+        map->AddToMap(bones);
     }
 
     // all references to the corpse should be removed at this point

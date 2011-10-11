@@ -405,7 +405,7 @@ void Map::LoadGrid(float x, float y)
     EnsureGridLoaded(cell);
 }
 
-bool Map::Add(Player* player)
+bool Map::AddToMap(Player* player)
 {
     // Check if we are adding to correct map
     ASSERT (player->GetMap() == this);
@@ -449,7 +449,7 @@ void Map::InitializeObject(Creature* obj)
 
 template<class T>
 void
-Map::Add(T *obj)
+Map::AddToMap(T *obj)
 {
     CellPair p = Trinity::ComputeCellPair(obj->GetPositionX(), obj->GetPositionY());
     if (p.x_coord >= TOTAL_NUMBER_OF_CELLS_PER_MAP || p.y_coord >= TOTAL_NUMBER_OF_CELLS_PER_MAP)
@@ -683,7 +683,7 @@ void Map::ProcessRelocationNotifies(const uint32 diff)
     }
 }
 
-void Map::Remove(Player* player, bool remove)
+void Map::RemoveFromMap(Player* player, bool remove)
 {
     player->RemoveFromWorld();
     SendRemoveTransports(player);
@@ -695,7 +695,7 @@ void Map::Remove(Player* player, bool remove)
     {
         Cell cell(p);
         if (!getNGrid(cell.data.Part.grid_x, cell.data.Part.grid_y))
-            sLog->outError("Map::Remove() i_grids was NULL x:%d, y:%d", cell.data.Part.grid_x, cell.data.Part.grid_y);
+            sLog->outError("Map::RemoveFromMap() i_grids was NULL x:%d, y:%d", cell.data.Part.grid_x, cell.data.Part.grid_y);
         else
         {
             sLog->outStaticDebug("Remove player %s from grid[%u, %u]", player->GetName(), cell.GridX(), cell.GridY());
@@ -715,7 +715,7 @@ void Map::Remove(Player* player, bool remove)
 
 template<class T>
 void
-Map::Remove(T *obj, bool remove)
+Map::RemoveFromMap(T *obj, bool remove)
 {
     obj->RemoveFromWorld();
     if (obj->isActiveObject())
@@ -2090,20 +2090,20 @@ void Map::RemoveAllObjectsInRemoveList()
                 if (!corpse)
                     sLog->outError("Tried to delete corpse/bones %u that is not in map.", obj->GetGUIDLow());
                 else
-                    Remove(corpse, true);
+                    RemoveFromMap(corpse, true);
                 break;
             }
         case TYPEID_DYNAMICOBJECT:
-            Remove((DynamicObject*)obj, true);
+            RemoveFromMap((DynamicObject*)obj, true);
             break;
         case TYPEID_GAMEOBJECT:
-            Remove((GameObject*)obj, true);
+            RemoveFromMap((GameObject*)obj, true);
             break;
         case TYPEID_UNIT:
             // in case triggered sequence some spell can continue casting after prev CleanupsBeforeDelete call
             // make sure that like sources auras/etc removed before destructor start
             obj->ToCreature()->CleanupsBeforeDelete();
-            Remove(obj->ToCreature(), true);
+            RemoveFromMap(obj->ToCreature(), true);
             break;
         default:
             sLog->outError("Non-grid object (TypeId: %u) is in grid object remove list, ignored.", obj->GetTypeId());
@@ -2213,15 +2213,15 @@ void Map::RemoveFromActive(Creature* c)
     }
 }
 
-template void Map::Add(Corpse *);
-template void Map::Add(Creature *);
-template void Map::Add(GameObject *);
-template void Map::Add(DynamicObject *);
+template void Map::AddToMap(Corpse *);
+template void Map::AddToMap(Creature *);
+template void Map::AddToMap(GameObject *);
+template void Map::AddToMap(DynamicObject *);
 
-template void Map::Remove(Corpse *, bool);
-template void Map::Remove(Creature *, bool);
-template void Map::Remove(GameObject *, bool);
-template void Map::Remove(DynamicObject *, bool);
+template void Map::RemoveFromMap(Corpse *, bool);
+template void Map::RemoveFromMap(Creature *, bool);
+template void Map::RemoveFromMap(GameObject *, bool);
+template void Map::RemoveFromMap(DynamicObject *, bool);
 
 /* ******* Dungeon Instance Maps ******* */
 
@@ -2316,7 +2316,7 @@ bool InstanceMap::CanEnter(Player* player)
 /*
     Do map specific checks and add the player to the map if successful.
 */
-bool InstanceMap::Add(Player* player)
+bool InstanceMap::AddToMap(Player* player)
 {
     // TODO: Not sure about checking player level: already done in HandleAreaTriggerOpcode
     // GMs still can teleport player in instance.
@@ -2426,7 +2426,7 @@ bool InstanceMap::Add(Player* player)
     }
 
     // this will acquire the same mutex so it cannot be in the previous block
-    Map::Add(player);
+    Map::AddToMap(player);
 
     if (i_data)
         i_data->OnPlayerEnter(player);
@@ -2442,13 +2442,13 @@ void InstanceMap::Update(const uint32 t_diff)
         i_data->Update(t_diff);
 }
 
-void InstanceMap::Remove(Player* player, bool remove)
+void InstanceMap::RemoveFromMap(Player* player, bool remove)
 {
     sLog->outDetail("MAP: Removing player '%s' from instance '%u' of map '%s' before relocating to another map", player->GetName(), GetInstanceId(), GetMapName());
     //if last player set unload timer
     if (!m_unloadTimer && m_mapRefManager.getSize() == 1)
         m_unloadTimer = m_unloadWhenEmpty ? MIN_UNLOAD_DELAY : std::max(sWorld->getIntConfig(CONFIG_INSTANCE_UNLOAD_DELAY), (uint32)MIN_UNLOAD_DELAY);
-    Map::Remove(player, remove);
+    Map::RemoveFromMap(player, remove);
     // for normal instances schedule the reset after all players have left
     SetResetSchedule(true);
 }
@@ -2662,7 +2662,7 @@ bool BattlegroundMap::CanEnter(Player* player)
     return Map::CanEnter(player);
 }
 
-bool BattlegroundMap::Add(Player* player)
+bool BattlegroundMap::AddToMap(Player* player)
 {
     {
         ACE_GUARD_RETURN(ACE_Thread_Mutex, guard, Lock, false);
@@ -2672,13 +2672,13 @@ bool BattlegroundMap::Add(Player* player)
         // reset instance validity, battleground maps do not homebind
         player->m_InstanceValid = true;
     }
-    return Map::Add(player);
+    return Map::AddToMap(player);
 }
 
-void BattlegroundMap::Remove(Player* player, bool remove)
+void BattlegroundMap::RemoveFromMap(Player* player, bool remove)
 {
     sLog->outDetail("MAP: Removing player '%s' from bg '%u' of map '%s' before relocating to another map", player->GetName(), GetInstanceId(), GetMapName());
-    Map::Remove(player, remove);
+    Map::RemoveFromMap(player, remove);
 }
 
 void BattlegroundMap::SetUnload()
