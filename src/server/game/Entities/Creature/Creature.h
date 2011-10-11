@@ -664,6 +664,9 @@ class Creature : public Unit, public GridObject<Creature>, public MapCreature
             else
                 return m_charmInfo->GetCharmSpell(pos)->GetAction();
         }
+		
+        void SetPosition(float x, float y, float z, float o);
+        void SetPosition(const Position &pos) { SetPosition(pos.GetPositionX(), pos.GetPositionY(), pos.GetPositionZ(), pos.GetOrientation()); }
 
         void SetHomePosition(float x, float y, float z, float o) { m_homePosition.Relocate(x, y, z, o); }
         void SetHomePosition(const Position &pos) { m_homePosition.Relocate(pos); }
