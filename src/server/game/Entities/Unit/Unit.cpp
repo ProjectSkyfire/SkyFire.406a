@@ -13750,6 +13750,32 @@ void Unit::RemoveFromWorld()
     }
 }
 
+void Unit::CleanupBeforeRemoveFromMap(bool finalCleanup)
+{
+    // This needs to be before RemoveFromWorld to make GetCaster() return a valid pointer on aura removal
+    InterruptNonMeleeSpells(true);
+
+    if (IsInWorld())
+        RemoveFromWorld();
+
+    ASSERT(GetGUID());
+
+    // A unit may be in removelist and not in world, but it is still in grid
+    // and may have some references during delete
+    RemoveAllAuras();
+    RemoveAllGameObjects();
+
+    if (finalCleanup)
+        m_cleanupDone = true;
+
+    m_Events.KillAllEvents(false);                      // non-delatable (currently casted spells) will not deleted now but it will deleted at call in Map::RemoveAllObjectsInRemoveList
+    CombatStop();
+    ClearComboPointHolders();
+    DeleteThreatList();
+    getHostileRefManager().setOnlineOfflineState(false);
+    GetMotionMaster()->Clear(false);                    // remove different non-standard movement generators.
+}
+
 void Unit::CleanupsBeforeDelete(bool finalCleanup)
 {
     // This needs to be before RemoveFromWorld to make GetCaster() return a valid pointer on aura removal
