@@ -1070,7 +1070,7 @@ public:
 
                     if (!target->HasAura(SPELL_DIGESTIVE_ACID))
                     {
-                        me->GetMap()->CreatureRelocation(me, target->GetPositionX(), target->GetPositionY(), target->GetPositionZ(), 0);
+                        me->SetPosition(target->GetPositionX(), target->GetPositionY(), target->GetPositionZ(), 0);
                         if (Creature* pPortal = me->SummonCreature(MOB_SMALL_PORTAL, *me, TEMPSUMMON_CORPSE_DESPAWN))
                         {
                             pPortal->SetReactState(REACT_PASSIVE);
@@ -1181,7 +1181,7 @@ public:
 
                     if (!target->HasAura(SPELL_DIGESTIVE_ACID))
                     {
-                        me->GetMap()->CreatureRelocation(me, target->GetPositionX(), target->GetPositionY(), target->GetPositionZ(), 0);
+                        me->SetPosition(target->GetPositionX(), target->GetPositionY(), target->GetPositionZ(), 0);
                         if (Creature* pPortal = me->SummonCreature(MOB_GIANT_PORTAL, *me, TEMPSUMMON_CORPSE_DESPAWN))
                         {
                             pPortal->SetReactState(REACT_PASSIVE);
