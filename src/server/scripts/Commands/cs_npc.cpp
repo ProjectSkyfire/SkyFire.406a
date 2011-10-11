@@ -150,7 +150,7 @@ public:
         // To call _LoadGoods(); _LoadQuests(); CreateTrainerSpells();
         creature->LoadFromDB(db_guid, map);
 
-        map->AddToMap(creature);
+        map->Add(creature);
         sObjectMgr->AddCreatureToGrid(db_guid, sObjectMgr->GetCreatureData(db_guid));
         return true;
     }
@@ -1143,7 +1143,7 @@ public:
         pet->SetUInt32Value(UNIT_FIELD_LEVEL, level - 1);
 
         // add to world
-        pet->GetMap()->AddToMap(pet->ToCreature());
+        pet->GetMap()->Add(pet->ToCreature());
 
         // visual effect for levelup
         pet->SetUInt32Value(UNIT_FIELD_LEVEL, level);

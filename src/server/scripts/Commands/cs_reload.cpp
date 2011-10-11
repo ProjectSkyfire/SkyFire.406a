@@ -392,7 +392,7 @@ public:
     static bool HandleReloadOnKillReputationCommand(ChatHandler* handler, const char* /*args*/)
     {
         sLog->outString("Re-Loading creature award reputation definitions...");
-        sObjectMgr->LoadReputationOnKill();
+        sObjectMgr->LoadRewardOnKill();
         handler->SendGlobalGMSysMessage("DB table `creature_onkill_reputation` reloaded.");
         return true;
     }

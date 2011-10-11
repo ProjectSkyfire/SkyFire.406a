@@ -408,7 +408,36 @@ typedef std::map<uint32, time_t> CreatureSpellCooldowns;
 
 #define MAX_VENDOR_ITEMS 300                                // Limitation in 4.x.x item count in SMSG_LIST_INVENTORY
 
-class Creature : public Unit, public GridObject<Creature>
+enum CreatureCellMoveState
+{
+    CREATURE_CELL_MOVE_NONE, //not in move list
+    CREATURE_CELL_MOVE_ACTIVE, //in move list
+    CREATURE_CELL_MOVE_INACTIVE, //in move list but should not move
+};
+
+class MapCreature
+{
+    friend class Map; //map for moving creatures
+    friend class ObjectGridLoader; //grid loader for loading creatures
+
+public:
+    MapCreature() : _moveState(CREATURE_CELL_MOVE_NONE) {}
+
+private:
+    Cell _currentCell;
+    Cell const& GetCurrentCell() const { return _currentCell; }
+    void SetCurrentCell(Cell const& cell) { _currentCell = cell; }
+
+    CreatureCellMoveState _moveState;
+    Position _newPosition;
+    void SetNewCellPosition(float x, float y, float z, float o)
+    {
+        _moveState = CREATURE_CELL_MOVE_ACTIVE;
+        _newPosition.Relocate(x, y, z, o);
+    }
+};
+
+class Creature : public Unit, public GridObject<Creature>, public MapCreature
 {
     public:
 
@@ -599,10 +628,6 @@ class Creature : public Unit, public GridObject<Creature>
         MovementGeneratorType GetDefaultMovementType() const { return m_defaultMovementType; }
         void SetDefaultMovementType(MovementGeneratorType mgt) { m_defaultMovementType = mgt; }
 
-        // for use only in LoadHelper, Map::Add Map::CreatureCellRelocation
-        Cell const& GetCurrentCell() const { return m_currentCell; }
-        void SetCurrentCell(Cell const& cell) { m_currentCell = cell; }
-
         void RemoveCorpse(bool setSpawnTime = true);
 
         void ForcedDespawn(uint32 timeMSToDespawn = 0);
@@ -703,8 +728,8 @@ class Creature : public Unit, public GridObject<Creature>
         void RegenerateMana();
         void RegenerateHealth();
         void Regenerate(Powers power);
-        MovementGeneratorType m_defaultMovementType;
-        Cell m_currentCell;                                 // store current cell where creature listed
+        
+		MovementGeneratorType m_defaultMovementType;
         uint32 m_DBTableGuid;                               ///< For new or temporary creatures is 0 for saved it is lowguid
         uint32 m_equipmentId;
 

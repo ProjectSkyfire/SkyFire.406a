@@ -926,7 +926,7 @@ public:
             return false;
         }
 
-        map->AddToMap(v->ToCreature());
+        map->Add(v->ToCreature());
 
         return true;
     }
