@@ -25044,7 +25044,36 @@ void Player::RefundItem(Item *item)
         return;
     }
 
-    // TODO: error code 10 : currency refund would exceed cap
+    store_error = false; // reuse variable
+    for (uint8 i = 0; i < MAX_EXTENDED_COST_CURRENCIES; ++i)
+    {
+        uint32 currencyid = iece->RequiredCurrency[i];
+        uint32 currencycount = iece->RequiredCurrencyCount[i];
+
+        if (currencyid && currencycount)
+        {
+            const CurrencyTypesEntry* currency = sCurrencyTypesStore.LookupEntry(currencyid);
+            if (!currency)
+                continue;
+
+            uint32 totalCap = _GetCurrencyTotalCap(currency);
+            if (totalCap && GetCurrency(currencyid) + currencycount > totalCap)
+            {
+                store_error = true;
+                break;
+            }
+        }
+    }
+
+    if (store_error)
+    {
+        WorldPacket data(SMSG_ITEM_REFUND_RESULT, 1+8+1);
+        data << uint8(0x00);                            // failed
+        data << uint64(item->GetGUID());                // Guid
+        data << uint8(10);                              // currency refund would exceed cap
+        GetSession()->SendPacket(&data);
+        return;
+    }
 
     WorldPacket data(SMSG_ITEM_REFUND_RESULT, 1+8+4*5+4*5+4+4*5+4*5+1);
     data << uint8(0x80);                                // success
