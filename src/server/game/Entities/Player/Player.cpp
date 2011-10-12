@@ -7702,7 +7702,7 @@ void Player::UpdateZone(uint32 newZone, uint32 newArea)
             TeleportTo(13, 1.118799f, 0.477914f, -144.708650f, 3.133046f);
         }
     }
-	
+
     m_zoneUpdateId    = newZone;
     m_zoneUpdateTimer = ZONE_UPDATE_INTERVAL;
 
@@ -23658,7 +23658,7 @@ uint32 Player::CalculateTalentsPoints() const
 bool Player::IsKnowHowFlyIn(uint32 mapid, uint32 zone, uint32 spellId) const
 {
     // Eye of the Storm is always allowed in Throne of the Four Winds
-    if (zone == 5638 && spellId == 82724) 
+    if (zone == 5638 && spellId == 82724)
         return true;
 
     // continent checked in SpellInfo::CheckLocation at cast and area update

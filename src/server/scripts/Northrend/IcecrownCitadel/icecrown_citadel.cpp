@@ -729,7 +729,7 @@ class boss_sister_svalna : public CreatureScript
                     Reset();
 
                 me->SetReactState(REACT_PASSIVE);
-                me->SetFlying(false);				
+                me->SetFlying(false);
             }
 
             void Reset()
@@ -844,7 +844,7 @@ class boss_sister_svalna : public CreatureScript
                 _isEventInProgress = false;
                 me->setActive(false);
                 me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_OOC_NOT_ATTACKABLE | UNIT_FLAG_PASSIVE);
-                me->SetFlying(false);				
+                me->SetFlying(false);
             }
 
             void SpellHitTarget(Unit* target, SpellInfo const* spell)
@@ -859,7 +859,7 @@ class boss_sister_svalna : public CreatureScript
                         {
                             Talk(EMOTE_SVALNA_IMPALE, target->GetGUID());
                             summon->CastCustomSpell(VEHICLE_SPELL_RIDE_HARDCODED, SPELLVALUE_BASE_POINT0, 1, target, false);
-                            summon->SetFlag(UNIT_FIELD_FLAGS_2, UNIT_FLAG2_UNK1 | UNIT_FLAG2_ALLOW_ENEMY_INTERACT);							
+                            summon->SetFlag(UNIT_FIELD_FLAGS_2, UNIT_FLAG2_UNK1 | UNIT_FLAG2_ALLOW_ENEMY_INTERACT);
                         }
                         break;
                     default:

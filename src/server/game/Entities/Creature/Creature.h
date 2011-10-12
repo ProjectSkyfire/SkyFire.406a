@@ -664,7 +664,7 @@ class Creature : public Unit, public GridObject<Creature>, public MapCreature
             else
                 return m_charmInfo->GetCharmSpell(pos)->GetAction();
         }
-		
+
         void SetPosition(float x, float y, float z, float o);
         void SetPosition(const Position &pos) { SetPosition(pos.GetPositionX(), pos.GetPositionY(), pos.GetPositionZ(), pos.GetOrientation()); }
 
@@ -731,7 +731,7 @@ class Creature : public Unit, public GridObject<Creature>, public MapCreature
         void RegenerateMana();
         void RegenerateHealth();
         void Regenerate(Powers power);
-        
+
 		MovementGeneratorType m_defaultMovementType;
         uint32 m_DBTableGuid;                               ///< For new or temporary creatures is 0 for saved it is lowguid
         uint32 m_equipmentId;

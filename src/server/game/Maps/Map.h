@@ -440,7 +440,7 @@ class Map : public GridRefManager<NGridType>
         void SendRemoveTransports(Player* player);
 
         bool CreatureCellRelocation(Creature* creature, Cell new_cell);
-		
+
         template<class T> void InitializeObject(T* obj);
         void AddCreatureToMoveList(Creature* c, float x, float y, float z, float ang);
         void RemoveCreatureFromMoveList(Creature* c);
