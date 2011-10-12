@@ -227,38 +227,76 @@ void WorldSession::HandleGuildRankOpcode(WorldPacket& recvPacket)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_GUILD_RANK");
 
-    Guild* guild = _GetPlayerGuild(this, true);
-    if (!guild)
+    uint32 BankStacks[GUILD_BANK_MAX_TABS];
+    for(uint32 i = 0; i < GUILD_BANK_MAX_TABS; i++)
+        recvPacket >> BankStacks[i];
+
+    uint32 new_rights;
+    recvPacket >> new_rights;
+
+    uint32 new_rankId;
+    recvPacket >> new_rankId;
+
+    uint32 old_rankId;
+    recvPacket >> old_rankId;
+
+    uint32 BankRights[GUILD_BANK_MAX_TABS];
+    for(uint32 i = 0; i < GUILD_BANK_MAX_TABS; i++)
+        recvPacket >> BankRights[i];
+
+    uint64 guildId;
+    recvPacket >> guildId;
+
+    uint32 old_rights;
+    recvPacket >> old_rights;
+
+    uint32 money;
+    recvPacket >> money;
+
+
+    uint64 playerGuid;
+    recvPacket >> playerGuid;
+
+    std::string rankName;
+    recvPacket >> rankName;
+
+    sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_GUILD_RANK");
+
+    if (GetPlayer()->GetGUID() != playerGuid)
+    {
+        sLog->outString("CMSG_GUILD_RANK: The playerGUID in the packet does not match the current player!\n");
+        recvPacket.rpos(recvPacket.wpos());                 // set to end to avoid warnings spam
+        Guild::SendCommandResult(this, GUILD_CREATE_S, ERR_GUILD_PLAYER_NOT_IN_GUILD);
+        return;
+    }
+    if (GetPlayer()->GetGuildId() != GUID_LOPART(guildId))
+    {
+        sLog->outString("CMSG_GUILD_RANK: This player is not in the guild.\n");
+        recvPacket.rpos(recvPacket.wpos());                 // set to end to avoid warnings spam
+        Guild::SendCommandResult(this, GUILD_CREATE_S, ERR_GUILD_PLAYER_NOT_IN_GUILD);
+        return;
+    }
+
+    Guild* pGuild = _GetPlayerGuild(this, true);
+    if (!pGuild)
     {
         recvPacket.rpos(recvPacket.wpos());
         return;
     }
 
-    uint32 rankId;
-    recvPacket >> rankId;
-
-    uint32 rights;
-    recvPacket >> rights;
-
-    std::string rankName;
-    recvPacket >> rankName;
-
-    uint32 money;
-    recvPacket >> money;
-
     GuildBankRightsAndSlotsVec rightsAndSlots(GUILD_BANK_MAX_TABS);
-    for (uint8 tabId = 0; tabId < GUILD_BANK_MAX_TABS; ++tabId)
+    if (old_rankId != GR_GUILDMASTER)
     {
-        uint32 bankRights;
-        uint32 slots;
+        for (uint8 tabId = 0; tabId < GUILD_BANK_MAX_TABS; ++tabId)
+        {
+            rightsAndSlots[tabId] = GuildBankRightsAndSlots(uint8(old_rights), new_rights);
+        }
 
-        recvPacket >> bankRights;
-        recvPacket >> slots;
-
-        rightsAndSlots[tabId] = GuildBankRightsAndSlots(uint8(bankRights), slots);
+        pGuild->HandleSetRankInfo(this, new_rankId, rankName, new_rights, money, rightsAndSlots);
+        pGuild->SetBankTabRights(this, new_rankId, BankRights, BankStacks);
     }
-
-    guild->HandleSetRankInfo(this, rankId, rankName, rights, money, rightsAndSlots);
+    if (old_rankId != new_rankId && old_rankId != GR_GUILDMASTER && new_rankId != GR_GUILDMASTER)
+        pGuild->SwitchRank(old_rankId, new_rankId);
 }
 
 void WorldSession::HandleGuildAddRankOpcode(WorldPacket& recvPacket)
