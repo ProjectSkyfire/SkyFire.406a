@@ -2771,6 +2771,14 @@ LevelReq.Auction = 1
 
 LevelReq.Mail = 1
 
+#   PlayersAccessToGMIsland
+#       Prevent access for players to gm island
+#	Default: 0 - Disable
+#		 1 - Enable
+
+PreventPlayersAccessToGMIsland = 0
+
+#
 #
 #     PlayerDump.DisallowPaths
 #        Description: Disallow using paths in PlayerDump output files

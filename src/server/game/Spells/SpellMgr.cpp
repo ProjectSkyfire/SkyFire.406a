@@ -3277,7 +3277,7 @@ void SpellMgr::LoadSpellCustomAttr()
                 spellInfo->AttributesCu |= SPELL_EFFECT_SCHOOL_DAMAGE;
                 spellInfo->AttributesCu |= SPELL_EFFECT_CHARGE;
                 spellInfo->Effects[1].TargetA = TARGET_UNIT_TARGET_ENEMY;
-                spellInfo->Effects[0].BasePoints = 20 * 1000;
+                spellInfo->Effects[0].BasePoints = 20*1000;
             break;
             case 1776: // Gouge
             case 1777:
