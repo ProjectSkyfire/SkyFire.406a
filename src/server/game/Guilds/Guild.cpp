@@ -46,7 +46,7 @@ inline uint32 _GetGuildBankTabPrice(uint8 tabId)
 
 void Guild::SwitchRank(uint32 oldID, uint32 newID)
 {
-    if (oldID == GR_GUILDMASTER || newID == GR_GUILDMASTER)
+    /*if (oldID == GR_GUILDMASTER || newID == GR_GUILDMASTER)
         return;
 
     if (oldID == newID)
@@ -65,7 +65,7 @@ void Guild::SwitchRank(uint32 oldID, uint32 newID)
 
     CharacterDatabase.PExecute("UPDATE guild_bank_right SET rid = 11 WHERE rid = '%u' AND guildid='%u'", oldID, m_id);
     CharacterDatabase.PExecute("UPDATE guild_bank_right SET rid = '%u' WHERE rid = '%u' AND guildid='%u'", oldID, newID, m_id);
-    CharacterDatabase.PExecute("UPDATE guild_bank_right SET rid = '%u' WHERE rid = 11 AND guildid='%u'", newID, m_id);
+    CharacterDatabase.PExecute("UPDATE guild_bank_right SET rid = '%u' WHERE rid = 11 AND guildid='%u'", newID, m_id);*/
 }
 
 void Guild::SendCommandResult(WorldSession* session, GuildCommandType type, GuildCommandError errCode, const std::string& param)
