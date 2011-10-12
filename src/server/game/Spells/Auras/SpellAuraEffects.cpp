@@ -905,6 +905,7 @@ void AuraEffect::CalculateSpellMod(SpellInfo const *spellInfo, Unit * target)
                 default:
                     break;
             }
+            break;
         case SPELL_AURA_ADD_FLAT_MODIFIER:
         case SPELL_AURA_ADD_PCT_MODIFIER:
             if (!m_spellmod)
