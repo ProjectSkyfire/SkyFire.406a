@@ -277,8 +277,8 @@ void WorldSession::HandleGuildRankOpcode(WorldPacket& recvPacket)
         return;
     }
 
-    Guild* pGuild = _GetPlayerGuild(this, true);
-    if (!pGuild)
+    Guild* guild = _GetPlayerGuild(this, true);
+    if (!guild)
     {
         recvPacket.rpos(recvPacket.wpos());
         return;
@@ -288,15 +288,13 @@ void WorldSession::HandleGuildRankOpcode(WorldPacket& recvPacket)
     if (old_rankId != GR_GUILDMASTER)
     {
         for (uint8 tabId = 0; tabId < GUILD_BANK_MAX_TABS; ++tabId)
-        {
             rightsAndSlots[tabId] = GuildBankRightsAndSlots(uint8(old_rights), new_rights);
-        }
 
-        pGuild->HandleSetRankInfo(this, new_rankId, rankName, new_rights, money, rightsAndSlots);
-        pGuild->SetBankTabRights(this, new_rankId, BankRights, BankStacks);
+        guild->HandleSetRankInfo(this, new_rankId, rankName, new_rights, money, rightsAndSlots);
+        guild->SetBankTabRights(this, new_rankId, BankRights, BankStacks);
     }
     if (old_rankId != new_rankId && old_rankId != GR_GUILDMASTER && new_rankId != GR_GUILDMASTER)
-        pGuild->SwitchRank(old_rankId, new_rankId);
+        guild->SwitchRank(old_rankId, new_rankId);
 }
 
 void WorldSession::HandleGuildAddRankOpcode(WorldPacket& recvPacket)
