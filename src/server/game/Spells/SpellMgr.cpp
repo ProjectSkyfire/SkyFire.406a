@@ -3273,6 +3273,12 @@ void SpellMgr::LoadSpellCustomAttr()
                 spellInfo->Effects[0].TargetB = TARGET_UNIT_TARGET_ANY;
                 spellInfo->Effects[1].Effect = 0;
                 break;
+            case 68282: // Charge (ToC mount)
+                spellInfo->AttributesCu |= SPELL_EFFECT_SCHOOL_DAMAGE;
+                spellInfo->AttributesCu |= SPELL_EFFECT_CHARGE;
+                spellInfo->Effects[1].TargetA = TARGET_UNIT_TARGET_ENEMY;
+                spellInfo->Effects[0].BasePoints = 20 * 1000;
+            break;
             case 1776: // Gouge
             case 1777:
             case 8629:
