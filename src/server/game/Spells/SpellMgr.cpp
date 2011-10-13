@@ -3032,19 +3032,19 @@ void SpellMgr::LoadSpellCustomAttr()
                 break;
             case 51466: // Elemental Oath (Rank 1)
             case 51470: // Elemental Oath (Rank 2)
-                spellInfo->Effect[EFFECT_1] = SPELL_EFFECT_APPLY_AURA;
-                spellInfo->EffectApplyAuraName[EFFECT_1] = SPELL_AURA_ADD_FLAT_MODIFIER;
-                spellInfo->EffectMiscValue[EFFECT_1] = SPELLMOD_EFFECT2;
-                spellInfo->EffectSpellClassMask[EFFECT_1] = flag96(0x00000000, 0x00004000, 0x00000000);
-                break;				
+                spellInfo->Effects[1].Effect = SPELL_EFFECT_APPLY_AURA;
+                spellInfo->Effects[1].ApplyAuraName = SPELL_AURA_ADD_FLAT_MODIFIER;
+                spellInfo->Effects[1].MiscValue = SPELLMOD_EFFECT2;
+                spellInfo->Effects[1].SpellClassMask = flag96(0x00000000, 0x00004000, 0x00000000);
+                break;
             case 47569: // Improved Shadowform (Rank 1)
-                // with this spell atrribute aura can be stacked several times
+                // with this spell attribute aura can be stacked several times
                 spellInfo->Attributes &= ~SPELL_ATTR0_NOT_SHAPESHIFT;
                 break;
             case 64904: // Hymn of Hope
                spellInfo->Effects[1].ApplyAuraName = SPELL_AURA_MOD_INCREASE_ENERGY_PERCENT;
                break;
-            case 30421: // Nether Portal - Perseverence
+            case 30421: // Nether Portal - Perseverance
                 spellInfo->Effects[2].BasePoints += 30000;
                 break;
             case 16834: // Natural shapeshifter
