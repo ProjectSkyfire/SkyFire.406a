@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
@@ -86,7 +86,7 @@ enum GuildCommandType
     GUILD_UNK2      = 0x14
 };
 
-enum GuildCommandError 
+enum GuildCommandError
 {
     ERR_PLAYER_NO_MORE_IN_GUILD     = 0x00,
     ERR_GUILD_INTERNAL              = 0x01,
@@ -202,7 +202,6 @@ enum GuildEmblemError
     ERR_GUILDEMBLEM_NOTENOUGHMONEY        = 4,
     ERR_GUILDEMBLEM_INVALIDVENDOR         = 5
 };
-
 
 // Emblem info
 class EmblemInfo

@@ -4065,7 +4065,7 @@ void AuraEffect::HandleAuraModIncreaseEnergyPercent(AuraApplication const* aurAp
 
     UnitMods unitMod = UnitMods(UNIT_MOD_POWER_START + powerType);
     float amount = float(GetAmount());
-	
+
     if (apply)
     {
         target->HandleStatModifier(unitMod, TOTAL_PCT, amount, apply);
