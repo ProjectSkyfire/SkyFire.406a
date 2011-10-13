@@ -909,8 +909,8 @@ bool ChatHandler::HandlePetLearnCommand(const char* args)
     if (!*args)
         return false;
 
-    Player *player = m_session->GetPlayer();
-    Pet* pet = player->GetPet();
+    Player *plr = m_session->GetPlayer();
+    Pet* pet = plr->GetPet();
 
     if (!pet)
     {
@@ -952,8 +952,8 @@ bool ChatHandler::HandlePetUnlearnCommand(const char *args)
     if (!*args)
         return false;
 
-    Player *player = m_session->GetPlayer();
-    Pet* pet = player->GetPet();
+    Player *plr = m_session->GetPlayer();
+    Pet* pet = plr->GetPet();
 
     if (!pet)
     {

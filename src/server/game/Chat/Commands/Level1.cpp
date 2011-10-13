@@ -714,18 +714,18 @@ bool ChatHandler::HandleGroupSummonCommand(const char* args)
 
     for (GroupReference* itr = grp->GetFirstMember(); itr != NULL; itr = itr->next())
     {
-        Player* player = itr->getSource();
+        Player* pl = itr->getSource();
 
-        if (!player || player == m_session->GetPlayer() || !player->GetSession())
+        if (!pl || pl == m_session->GetPlayer() || !pl->GetSession())
             continue;
 
         // check online security
-        if (HasLowerSecurity(player, 0))
+        if (HasLowerSecurity(pl, 0))
             return false;
 
-        std::string plNameLink = GetNameLink(player);
+        std::string plNameLink = GetNameLink(pl);
 
-        if (player->IsBeingTeleported() == true)
+        if (pl->IsBeingTeleported() == true)
         {
             PSendSysMessage(LANG_IS_TELEPORTED, plNameLink.c_str());
             SetSentErrorMessage(true);
@@ -734,7 +734,7 @@ bool ChatHandler::HandleGroupSummonCommand(const char* args)
 
         if (to_instance)
         {
-            Map* plMap = player->GetMap();
+            Map* plMap = pl->GetMap();
 
             if (plMap->Instanceable() && plMap->GetInstanceId() != gmMap->GetInstanceId())
             {
@@ -746,23 +746,23 @@ bool ChatHandler::HandleGroupSummonCommand(const char* args)
         }
 
         PSendSysMessage(LANG_SUMMONING, plNameLink.c_str(), "");
-        if (needReportToTarget(player))
-            ChatHandler(player).PSendSysMessage(LANG_SUMMONED_BY, GetNameLink().c_str());
+        if (needReportToTarget(pl))
+            ChatHandler(pl).PSendSysMessage(LANG_SUMMONED_BY, GetNameLink().c_str());
 
         // stop flight if need
-        if (player->isInFlight())
+        if (pl->isInFlight())
         {
-            player->GetMotionMaster()->MovementExpired();
-            player->CleanupAfterTaxiFlight();
+            pl->GetMotionMaster()->MovementExpired();
+            pl->CleanupAfterTaxiFlight();
         }
         // save only in non-flight case
         else
-            player->SaveRecallPosition();
+            pl->SaveRecallPosition();
 
         // before GM
         float x, y, z;
-        m_session->GetPlayer()->GetClosePoint(x, y, z, player->GetObjectSize());
-        player->TeleportTo(m_session->GetPlayer()->GetMapId(), x, y, z, player->GetOrientation());
+        m_session->GetPlayer()->GetClosePoint(x, y, z, pl->GetObjectSize());
+        pl->TeleportTo(m_session->GetPlayer()->GetMapId(), x, y, z, pl->GetOrientation());
     }
 
     return true;
