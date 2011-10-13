@@ -391,6 +391,11 @@ void LoadDBCStores(const std::string& dataPath, uint32& availableDbcLocales)
     for (uint32 i = 1; i < sMapDifficultyStore.GetNumRows(); ++i)
         if (MapDifficultyEntry const* entry = sMapDifficultyStore.LookupEntry(i))
             sMapDifficultyMap[MAKE_PAIR32(entry->MapId, entry->Difficulty)] = MapDifficulty(entry->resetTime, entry->maxPlayers, entry->areaTriggerText > 0);
+    
+    // HACK for map 0, data removed in 4.0 - by LordJZ
+    /// ToDo: Find a way to correctly fix this
+    sMapDifficultyMap[MAKE_PAIR32(0/*map*/,0/*difficulty*/)] = MapDifficulty(0/*resetTime*/,0/*mapPlayers*/);
+    
     sMapDifficultyStore.Clear();
 
     LoadDBC(availableDbcLocales, bad_dbc_files, sMovieStore,                  dbcPath, "Movie.dbc");
