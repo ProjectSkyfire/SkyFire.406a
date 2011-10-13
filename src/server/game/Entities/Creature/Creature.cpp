@@ -1559,6 +1559,12 @@ bool Creature::FallGround()
     float ground_Z = GetMap()->GetHeight(x, y, z, true, MAX_FALL_DISTANCE);
     if (fabs(ground_Z - z) < 0.1f)
         return false;
+    
+    // Hack ... ground_Z should not be invalid
+    // If Vmap is fixed remove this
+	if(ground_Z == -200000.0f)
+	return false;        
+    // End hack
 
     GetMotionMaster()->MoveFall(ground_Z, EVENT_FALL_GROUND);
     Unit::setDeathState(DEAD_FALLING);

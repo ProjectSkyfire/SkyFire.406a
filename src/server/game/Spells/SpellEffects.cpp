@@ -5872,10 +5872,14 @@ void Spell::EffectCharge(SpellEffIndex /*effIndex*/)
     {
         if (!unitTarget)
             return;
+    // temp to try and stop the stair climbing agro...
+    float angle = unitTarget->GetAngle(m_caster) - unitTarget->GetOrientation();
+    Position pos;
 
-        float x, y, z;
-        unitTarget->GetContactPoint(m_caster, x, y, z);
-        m_caster->GetMotionMaster()->MoveCharge(x, y, z);
+    unitTarget->GetContactPoint(m_caster, pos.m_positionX, pos.m_positionY, pos.m_positionZ);
+    unitTarget->GetFirstCollisionPosition(pos, unitTarget->GetObjectSize(), angle);
+
+    m_caster->GetMotionMaster()->MoveCharge(pos.m_positionX, pos.m_positionY, pos.m_positionZ + unitTarget->GetObjectSize());
     }
 
     if (effectHandleMode == SPELL_EFFECT_HANDLE_HIT_TARGET)
