@@ -2081,7 +2081,7 @@ void Map::RemoveAllObjectsInRemoveList()
     {
         std::set<WorldObject*>::iterator itr = i_objectsToRemove.begin();
         WorldObject* obj = *itr;
-              
+
     	// Prevents access violation caused by NULL obj pointer.
 		if (!obj)
 		{
