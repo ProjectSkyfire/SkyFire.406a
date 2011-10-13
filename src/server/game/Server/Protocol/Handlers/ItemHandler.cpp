@@ -651,9 +651,9 @@ void WorldSession::HandleBuyItemInSlotOpcode(WorldPacket & recv_data)
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_BUY_ITEM_IN_SLOT");
     uint64 vendorguid, bagguid;
     uint32 item, slot, count;
-    uint8 bagslot;
+    uint8 bagslot, unk;
 
-    recv_data >> vendorguid >> item  >> slot >> bagguid >> bagslot >> count;
+    recv_data >> vendorguid >> unk >> item  >> slot >> count >> bagguid >> bagslot;
 
     // client expects count starting at 1, and we send vendorslot+1 to client already
     if (slot > 0)
@@ -664,15 +664,15 @@ void WorldSession::HandleBuyItemInSlotOpcode(WorldPacket & recv_data)
     uint8 bag = NULL_BAG;                                   // init for case invalid bagGUID
 
     // find bag slot by bag guid
-    if (bagguid == _player->GetGUID())
+    if (bagguid == _player->GetGUID() || bagguid == 0)
         bag = INVENTORY_SLOT_BAG_0;
     else
     {
         for (int i = INVENTORY_SLOT_BAG_START; i < INVENTORY_SLOT_BAG_END; ++i)
         {
-            if (Bag* pBag = _player->GetBagByPos(i))
+            if (Bag* currentBag = _player->GetBagByPos(i))
             {
-                if (bagguid == pBag->GetGUID())
+                if (bagguid == currentBag->GetGUID())
                 {
                     bag = i;
                     break;
@@ -691,11 +691,14 @@ void WorldSession::HandleBuyItemInSlotOpcode(WorldPacket & recv_data)
 void WorldSession::HandleBuyItemOpcode(WorldPacket & recv_data)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_BUY_ITEM");
-    uint64 vendorguid;
+    uint64 vendorguid, unk1;
     uint32 item, slot, count;
-    uint8 unk1;
+    uint8 unk2, unk;
 
-    recv_data >> vendorguid >> item >> slot >> count >> unk1;
+    recv_data >> vendorguid;
+    recv_data >> unk;
+    recv_data >> item >> slot >> count
+    recv_data >> unk1 >> unk2;
 
     // client expects count starting at 1, and we send vendorslot+1 to client already
     if (slot > 0)

@@ -195,9 +195,9 @@ void WorldSession::SendTrainerList(uint64 guid, const std::string &strTitle)
 void WorldSession::HandleTrainerBuySpellOpcode(WorldPacket & recv_data)
 {
     uint64 guid;
-    uint32 spellId, unk = 0, result = ERR_TRAINER_OK;
+    uint32 spellId, unk, result = ERR_TRAINER_OK;
 
-    recv_data >> guid >> spellId;
+    recv_data >> guid >> unk >> spellId;
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_TRAINER_BUY_SPELL NpcGUID=%u, learn spell id is: %u", uint32(GUID_LOPART(guid)), spellId);
 
     Creature* unit = GetPlayer()->GetNPCIfCanInteractWith(guid, UNIT_NPC_FLAG_TRAINER);
@@ -238,16 +238,9 @@ void WorldSession::HandleTrainerBuySpellOpcode(WorldPacket & recv_data)
     if (result == ERR_TRAINER_OK)
     {
         _player->ModifyMoney(-int32(nSpellCost));
-
-        WorldPacket data(SMSG_PLAY_SPELL_VISUAL, 12);           // visual effect on trainer
-        data << uint64(guid);
-        data << uint32(0xB3);                                   // index from SpellVisualKit.dbc
-        SendPacket(&data);
-
-        data.Initialize(SMSG_PLAY_SPELL_IMPACT, 12);            // visual effect on player
-        data << uint64(_player->GetGUID());
-        data << uint32(0x016A);                                 // index from SpellVisualKit.dbc
-        SendPacket(&data);
+        
+        unit->SendPlaySpellVisual(179);
+        unit->SendPlaySpellImpact(_player->GetGUID(),362);
 
         // learn explicitly or cast explicitly
         if (trainer_spell->IsCastable())
