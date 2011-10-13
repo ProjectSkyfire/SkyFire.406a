@@ -268,8 +268,8 @@ void PlayerMenu::SendQuestGiverQuestList(QEmote eEmote, const std::string& Title
 
             int loc_idx = _session->GetSessionDbLocaleIndex();
             if (loc_idx >= 0)
-                if (QuestLocale const* ql = sObjectMgr->GetQuestLocale(questID))
-                    ObjectMgr::GetLocaleString(ql->Title, loc_idx, title);
+                if (QuestLocale const* localeData = sObjectMgr->GetQuestLocale(questID))
+                    ObjectMgr::GetLocaleString(localeData->Title, loc_idx, title);
 
             data << uint32(questID);
             data << uint32(qmi.QuestIcon);
@@ -306,12 +306,12 @@ void PlayerMenu::SendQuestGiverQuestDetails(Quest const* quest, uint64 npcGUID, 
     int locale = _session->GetSessionDbLocaleIndex();
     if (locale >= 0)
     {
-        if (QuestLocale const* ql = sObjectMgr->GetQuestLocale(quest->GetQuestId()))
+        if (QuestLocale const* localeData = sObjectMgr->GetQuestLocale(quest->GetQuestId()))
         {
-            sObjectMgr->GetLocaleString(ql->Title, locale, Title);
-            sObjectMgr->GetLocaleString(ql->Details, locale, Details);
-            sObjectMgr->GetLocaleString(ql->Objectives, locale, Objectives);
-            sObjectMgr->GetLocaleString(ql->EndText, locale, EndText);
+            sObjectMgr->GetLocaleString(localeData->Title, locale, Title);
+            sObjectMgr->GetLocaleString(localeData->Details, locale, Details);
+            sObjectMgr->GetLocaleString(localeData->Objectives, locale, Objectives);
+            sObjectMgr->GetLocaleString(localeData->EndText, locale, EndText);
         }
     }
 
