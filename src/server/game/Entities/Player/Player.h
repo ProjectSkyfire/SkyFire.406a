@@ -2096,6 +2096,7 @@ class Player : public Unit, public GridObject<Player>
         void _ApplyWeaponDependentAuraDamageMod(Item *item, WeaponAttackType attackType, AuraEffect const* aura, bool apply);
 
         void _ApplyItemMods(Item *item, uint8 slot, bool apply);
+        void ApplyReforgedStats(Item* item, bool apply);
         void _RemoveAllItemMods();
         void _ApplyAllItemMods();
         void _ApplyAllLevelScaleItemMods(bool apply);

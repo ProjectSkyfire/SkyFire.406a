@@ -1327,6 +1327,8 @@ enum Opcodes
     SMSG_UI_TIME                                     = 0x0618C, // 4.0.6a 13623
     CMSG_RETURN_TO_GRAVEYARD                         = 0x00593, // 4.0.6a 13623
     SMSG_UNKNOWN_1330                                = 0x0618C, // 4.0.6a 13623
+    CMSG_REFORGE_ITEM                                = 0x00313, // 4.0.6a 13623
+    SMSG_REFORGE_OPEN_FROM_GOSSIP                    = 0x00C5C, // 4.0.6a 13623
     NUM_MSG_TYPES                                    = 0x102B8  // last unknown opcode + 1.
 };
 
