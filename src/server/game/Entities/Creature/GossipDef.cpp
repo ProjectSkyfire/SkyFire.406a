@@ -150,7 +150,7 @@ void PlayerMenu::SendGossipMenu(uint32 titleTextId, uint64 objectGUID) const
     {
         QuestMenuItem const& item = _questMenu.GetItem(iI);
         uint32 questID = item.QuestId;
-        Quest const* quest = sObjectMgr->GetQuestTemplate(questID);
+        Quest const* quest = sObjectMgr-> GetQuestTemplate(questID);
 
         data << uint32(questID);
         data << uint32(item.QuestIcon);
@@ -306,7 +306,7 @@ void PlayerMenu::SendQuestGiverQuestDetails(Quest const* quest, uint64 npcGUID, 
     int locale = _session->GetSessionDbLocaleIndex();
     if (locale >= 0)
     {
-        if (QuestLocale const *ql = sObjectMgr->GetQuestLocale(quest->GetQuestId()))
+        if (QuestLocale const* ql = sObjectMgr->GetQuestLocale(quest->GetQuestId()))
         {
             sObjectMgr->GetLocaleString(ql->Title, locale, Title);
             sObjectMgr->GetLocaleString(ql->Details, locale, Details);
@@ -322,18 +322,18 @@ void PlayerMenu::SendQuestGiverQuestDetails(Quest const* quest, uint64 npcGUID, 
     data << Title;
     data << Details;
     data << Objectives;
-    data << unk;                                            // 4.0.1, unknow
-    data << unk;                                            // 4.0.1, unknow
-    data << unk;                                            // 4.0.1, unknow
-    data << unk;                                            // 4.0.1, unknow
-    data << uint32(0);                                      // 4.0.1, unknow
-    data << uint32(0);                                      // 4.0.1, unknow
+    data << unk;                                            // 4.0.1, unknown
+    data << unk;                                            // 4.0.1, unknown
+    data << unk;                                            // 4.0.1, unknown
+    data << unk;                                            // 4.0.1, unknown
+    data << uint32(0);                                      // 4.0.1, unknown
+    data << uint32(0);                                      // 4.0.1, unknown
     data << uint8(activateAccept ? 1 : 0);                  // auto finish
-    data << uint32(quest->GetFlags());                     // 3.3.3 questFlags
+    data << uint32(quest->GetFlags());                      // 3.3.3 questFlags
     data << uint32(quest->GetSuggestedPlayers());
-    data << uint8(0);                                       // 4.0.1, unknow
+    data << uint8(0);                                       // 4.0.1, unknown
     data << uint8(0);                                       // IsFinished? value is sent back to server in quest accept packet
-    data << uint32(0);                                      // 4.0.1, unknow
+    data << uint32(0);                                      // 4.0.1, unknown
 
     ItemTemplate const* item;
     data << uint32(quest->GetRewChoiceItemsCount());
@@ -366,8 +366,8 @@ void PlayerMenu::SendQuestGiverQuestDetails(Quest const* quest, uint64 npcGUID, 
             data << uint32(0);
     }
 
-    data << uint32(0); // unknow 4.0.1
-    data << uint32(0); // unknow 4.0.1
+    data << uint32(0); // unknown 4.0.1
+    data << uint32(0); // unknown 4.0.1
     data << uint32(quest->GetRewOrReqMoney());
     data << uint32(quest->XPValue(_session->GetPlayer())*sWorld->getRate(RATE_XP_QUEST));
 
@@ -375,9 +375,9 @@ void PlayerMenu::SendQuestGiverQuestDetails(Quest const* quest, uint64 npcGUID, 
     //data << 10 * Trinity::Honor::hk_honor_at_level(pSession->GetPlayer()->getLevel(), pQuest->GetRewHonorableKills());
     data << float(0);                                       // new 3.3.0, honor multiplier?
 
-    data << uint32(0); // unknow 4.0.1
-    data << uint32(0); // unknow 4.0.1
-    data << uint32(0); // unknow 4.0.1
+    data << uint32(0); // unknown 4.0.1
+    data << uint32(0); // unknown 4.0.1
+    data << uint32(0); // unknown 4.0.1
 
     for (int i = 0; i < QUEST_REPUTATIONS_COUNT; ++i)
         data << uint32(quest->RewRepFaction[i]);
@@ -388,8 +388,8 @@ void PlayerMenu::SendQuestGiverQuestDetails(Quest const* quest, uint64 npcGUID, 
     for (int i = 0; i < QUEST_REPUTATIONS_COUNT; ++i)
         data << int32(quest->RewRepValue[i]);
 
-    data << uint32(0); // unknow 4.0.1
-    data << uint32(0); // unknow 4.0.1
+    data << uint32(0); // unknown 4.0.1
+    data << uint32(0); // unknown 4.0.1
 
     for(int i = 0; i < 4; i++)
         data << uint32(0);
@@ -401,7 +401,7 @@ void PlayerMenu::SendQuestGiverQuestDetails(Quest const* quest, uint64 npcGUID, 
     data << uint32(0);
 
     data << uint32(QUEST_EMOTE_COUNT);
-    for (uint32 i=0; i < QUEST_EMOTE_COUNT; ++i)
+    for (uint32 i = 0; i < QUEST_EMOTE_COUNT; ++i)
     {
         data << uint32(quest->DetailsEmote[i]);
         data << uint32(quest->DetailsEmoteDelay[i]);       // (in ms)
