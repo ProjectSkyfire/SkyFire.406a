@@ -21738,22 +21738,19 @@ WorldLocation Player::GetStartPosition() const
     return WorldLocation(mapId, info->positionX, info->positionY, info->positionZ, 0);
 }
 
-bool Player::isValid() const
+bool Player::IsNeverVisible() const
 {
-    if (!Unit::isValid())
-        return false;
-
-    if (GetSession()->PlayerLogout() || GetSession()->PlayerLoading())
-        return false;
-
-    return true;
-}
-
-bool Player::canSeeAlways(WorldObject const* obj) const
-{
-    if (Unit::canSeeAlways(obj))
+    if (Unit::IsNeverVisible())
         return true;
 
+    if (GetSession()->PlayerLogout() || GetSession()->PlayerLoading())
+        return true;
+
+    return false;
+}
+
+bool Player::CanAlwaysSee(WorldObject const* obj) const
+{
     // Always can see self
     if (m_mover == obj)
         return true;
@@ -21765,9 +21762,9 @@ bool Player::canSeeAlways(WorldObject const* obj) const
     return false;
 }
 
-bool Player::isAlwaysDetectableFor(WorldObject const* seer) const
+bool Player::IsAlwaysDetectableFor(WorldObject const* seer) const
 {
-    if (Unit::isAlwaysDetectableFor(seer))
+    if (Unit::IsAlwaysDetectableFor(seer))
         return true;
 
     if (const Player* seerPlayer = seer->ToPlayer())
