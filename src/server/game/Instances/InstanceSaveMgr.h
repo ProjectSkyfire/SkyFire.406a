@@ -174,7 +174,7 @@ class InstanceSaveManager
         }
         void DeleteCompletedEncounters(uint32 instanceId)
         {
-            InstanceCompletedEncounters::const_iterator itr = m_completedEncounters.find(instanceId);
+            InstanceCompletedEncounters::iterator itr = m_completedEncounters.find(instanceId);
             if (itr != m_completedEncounters.end())
                 m_completedEncounters.erase(itr);
         }
