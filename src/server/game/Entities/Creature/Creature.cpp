@@ -1384,22 +1384,19 @@ void Creature::DeleteFromDB()
     WorldDatabase.CommitTransaction(trans);
 }
 
-bool Creature::isVisibleForInState(WorldObject const* seer) const
+bool Creature::IsInvisibleDueToDespawn() const
 {
-    if (!Unit::isVisibleForInState(seer))
-        return false;
+    if (Unit::IsInvisibleDueToDespawn())
+        return true;
 
     if (isAlive() || m_corpseRemoveTime > time(NULL))
-        return true;
+        return false;
 
-    return false;
+    return true;
 }
 
-bool Creature::canSeeAlways(WorldObject const* obj) const
+bool Creature::_CanAlwaysSee(WorldObject const* obj) const
 {
-    if (Unit::canSeeAlways(obj))
-        return true;
-
     if (IsAIEnabled && AI()->CanSeeAlways(obj))
         return true;
 
@@ -1562,8 +1559,8 @@ bool Creature::FallGround()
 
     // Hack ... ground_Z should not be invalid
     // If Vmap is fixed remove this
-	if(ground_Z == -200000.0f)
-	return false;
+    if(ground_Z == -200000.0f)
+    return false;
     // End hack
 
     GetMotionMaster()->MoveFall(ground_Z, EVENT_FALL_GROUND);
