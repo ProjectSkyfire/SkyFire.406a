@@ -1559,8 +1559,8 @@ bool Creature::FallGround()
 
     // Hack ... ground_Z should not be invalid
     // If Vmap is fixed remove this
-	if(ground_Z == -200000.0f)
-	return false;
+    if(ground_Z == -200000.0f)
+    return false;
     // End hack
 
     GetMotionMaster()->MoveFall(ground_Z, EVENT_FALL_GROUND);

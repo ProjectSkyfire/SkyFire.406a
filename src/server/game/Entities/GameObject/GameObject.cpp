@@ -847,7 +847,7 @@ void GameObject::SaveRespawnTime()
 
 bool GameObject::isAlwaysVisibleFor(WorldObject const* seer) const
 {
-    if (WorldObject::isAlwaysVisibleFor(seer))
+    if (WorldObject::IsAlwaysVisibleFor(seer))
         return true;
 
     if (IsTransport())

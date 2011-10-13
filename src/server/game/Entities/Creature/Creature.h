@@ -732,7 +732,7 @@ class Creature : public Unit, public GridObject<Creature>, public MapCreature
         void RegenerateHealth();
         void Regenerate(Powers power);
 
-		MovementGeneratorType m_defaultMovementType;
+        MovementGeneratorType m_defaultMovementType;
         uint32 m_DBTableGuid;                               ///< For new or temporary creatures is 0 for saved it is lowguid
         uint32 m_equipmentId;
 
@@ -755,7 +755,7 @@ class Creature : public Unit, public GridObject<Creature>, public MapCreature
         uint32 guid_transport;
 
         bool IsInvisibleDueToDespawn() const;
-        bool _canSeeAlways(WorldObject const* obj) const;
+        bool _CanAlwaysSee(WorldObject const* obj) const;
     private:
         //WaypointMovementGenerator vars
         uint32 m_waypointID;

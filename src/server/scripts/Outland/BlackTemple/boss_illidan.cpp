@@ -455,7 +455,6 @@ public:
             DoMeleeAttackIfReady();
         }
     };
-
 };
 
 /************************************** Illidan's AI* **************************************/
@@ -1139,7 +1138,6 @@ public:
             }
         }
     };
-
 };
 
 /********************************** End of Illidan AI* *****************************************/
@@ -1362,7 +1360,6 @@ public:
                     DoMeleeAttackIfReady();
         }
     };
-
 };
 
 class npc_akama_illidan : public CreatureScript
@@ -1403,7 +1400,7 @@ public:
                 instance->SetData(DATA_ILLIDANSTORMRAGEEVENT, NOT_STARTED);
 
                 IllidanGUID = instance->GetData64(DATA_ILLIDANSTORMRAGE);
-                GateGUID = instance->GetData64(DATA_GAMEOBJECT_ILLIDAN_GATE);
+                GateGUID    = instance->GetData64(DATA_GAMEOBJECT_ILLIDAN_GATE);
                 DoorGUID[0] = instance->GetData64(DATA_GAMEOBJECT_ILLIDAN_DOOR_R);
                 DoorGUID[1] = instance->GetData64(DATA_GAMEOBJECT_ILLIDAN_DOOR_L);
 
@@ -1413,10 +1410,11 @@ public:
 
                     for (uint8 i = 0; i < 2; ++i)
 
-                        Instance->HandleGameObject(DoorGUID[i], false);
+                    instance->HandleGameObject(DoorGUID[i], false);
                     // JustCreated = false;
-                }else
-                { // open all doors, raid wiped
+                }
+				else
+				{ // open all doors, raid wiped
                     instance->HandleGameObject(GateGUID, true);
                     WalkCount = 1; // skip first wp
 
@@ -1427,12 +1425,12 @@ public:
             else
             {
                 IllidanGUID = 0;
-                GateGUID = 0;
+                GateGUID    = 0;
                 DoorGUID[0] = 0;
                 DoorGUID[1] = 0;
             }
 
-            ChannelGUID = 0;
+            ChannelGUID   = 0;
             SpiritGUID[0] = 0;
             SpiritGUID[1] = 0;
 
@@ -1440,8 +1438,8 @@ public:
             Timer = 0;
 
             ChannelCount = 0;
-            TalkCount = 0;
-            Check_Timer = 5000;
+            TalkCount    = 0;
+            Check_Timer  = 5000;
 
             KillAllElites();
 
@@ -1496,7 +1494,8 @@ public:
 
             instance->SetData(DATA_ILLIDANSTORMRAGEEVENT, IN_PROGRESS);
             for (uint8 i = 0; i < 2; ++i)
-                instance->HandleGameObject(DoorGUID[i], false);
+
+			instance->HandleGameObject(DoorGUID[i], false);
             if (GETCRE(Illidan, IllidanGUID))
             {
                 Illidan->RemoveAurasDueToSpell(SPELL_KNEEL);
@@ -1513,10 +1512,12 @@ public:
         {
             me->setActive(true);
             me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
-            if (!JustCreated)
+
+			if (!JustCreated)
                 return;
             float x, y, z;
-            if (GETGO(Gate, GateGUID))
+
+			if (GETGO(Gate, GateGUID))
                 Gate->GetPosition(x, y, z);
             else
                 return; // if door not spawned, don't crash server
@@ -1825,7 +1826,6 @@ public:
     {
         return new npc_akama_illidanAI(creature);
     }
-
 };
 
 void boss_illidan_stormrage::boss_illidan_stormrageAI::Reset()
@@ -1985,7 +1985,6 @@ void boss_illidan_stormrage::boss_illidan_stormrageAI::HandleTalkSequence()
                 Akama->SetPosition(x, y, z, 0.0f);
                 Akama->SendMonsterMove(x, y, z, 0, MOVEMENTFLAG_NONE, 0); // Illidan must not die until Akama arrives.
                 Akama->GetMotionMaster()->MoveChase(me);
-
             }
         }
         break;
@@ -2084,7 +2083,6 @@ public:
                 // }
         }
     };
-
 };
 
 class gameobject_cage_trap : public GameObjectScript
@@ -2103,7 +2101,6 @@ public:
         go->SetGoState(GO_STATE_ACTIVE);
         return true;
     }
-
 };
 
 class mob_shadow_demon : public CreatureScript
@@ -2154,7 +2151,6 @@ public:
                 DoCast(me->getVictim(), SPELL_CONSUME_SOUL);
         }
     };
-
 };
 
 class mob_blade_of_azzinoth : public CreatureScript
@@ -2177,7 +2173,6 @@ public:
                 me->SetDisplayId(21431);// appear when hit by Illidan's glaive
         }
     };
-
 };
 
 class mob_parasitic_shadowfiend : public CreatureScript
@@ -2259,7 +2254,6 @@ public:
             DoMeleeAttackIfReady();
         }
     };
-
 };
 
 void AddSC_boss_illidan()

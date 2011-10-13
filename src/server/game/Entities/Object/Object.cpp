@@ -88,7 +88,7 @@ WorldObject::~WorldObject()
         if (GetTypeId() == TYPEID_CORPSE)
         {
             sLog->outCrash("Object::~Object Corpse guid="UI64FMTD", type=%d, entry=%u deleted but still in map!!", GetGUID(), ((Corpse*)this)->GetType(), GetEntry());
-            ASSERT (false);
+            ASSERT(false);
         }
         ResetMap();
     }
@@ -101,19 +101,20 @@ Object::~Object()
         sLog->outCrash("Object::~Object - guid="UI64FMTD", typeid=%d, entry=%u deleted but still in world!!", GetGUID(), GetTypeId(), GetEntry());
         if (isType(TYPEMASK_ITEM))
             sLog->outCrash("Item slot %u", ((Item*)this)->GetSlot());
-        ASSERT (false);
+        ASSERT(false);
         RemoveFromWorld();
     }
 
     if (m_objectUpdated)
     {
         sLog->outCrash("Object::~Object - guid="UI64FMTD", typeid=%d, entry=%u deleted but still in update list!!", GetGUID(), GetTypeId(), GetEntry());
-        ASSERT (false);
+        ASSERT(false);
         sObjectAccessor->RemoveUpdateObject(this);
     }
 
     delete [] m_uint32Values;
     delete [] _changedFields;
+
 }
 
 void Object::_InitValues()
@@ -164,7 +165,7 @@ void Object::AddToWorld()
     if (m_inWorld)
         return;
 
-    ASSERT (m_uint32Values);
+    ASSERT(m_uint32Values);
 
     m_inWorld = true;
 
@@ -258,7 +259,7 @@ void Object::SendUpdateToPlayer(Player* player)
     player->GetSession()->SendPacket(&packet);
 }
 
-void Object::BuildValuesUpdateBlockForPlayer(UpdateData *data, Player *target) const
+void Object::BuildValuesUpdateBlockForPlayer(UpdateData* data, Player* target) const
 {
     ByteBuffer buf(500);
 
@@ -274,14 +275,14 @@ void Object::BuildValuesUpdateBlockForPlayer(UpdateData *data, Player *target) c
     data->AddUpdateBlock(buf);
 }
 
-void Object::BuildOutOfRangeUpdateBlock(UpdateData * data) const
+void Object::BuildOutOfRangeUpdateBlock(UpdateData* data) const
 {
     data->AddOutOfRangeGUID(GetGUID());
 }
 
-void Object::DestroyForPlayer(Player *target, bool anim) const
+void Object::DestroyForPlayer(Player* target, bool anim) const
 {
-    ASSERT (target);
+    ASSERT(target);
 
     WorldPacket data(SMSG_DESTROY_OBJECT, 8 + 1);
     data << uint64(GetGUID());
@@ -402,14 +403,14 @@ void Object::_BuildMovementUpdate(ByteBuffer * data, uint16 flags) const
                     *data << (float)0;
                     *data << (float)0;
                     *data << (float)0;
-                    *data << ((WorldObject *)this)->GetOrientation();
+                    *data << ((WorldObject*)this)->GetOrientation();
                 }
                 else
                 {
-                    *data << ((WorldObject *)this)->GetPositionX();
-                    *data << ((WorldObject *)this)->GetPositionY();
-                    *data << ((WorldObject *)this)->GetPositionZ();
-                    *data << ((WorldObject *)this)->GetOrientation();
+                    *data << ((WorldObject*)this)->GetPositionX();
+                    *data << ((WorldObject*)this)->GetPositionY();
+                    *data << ((WorldObject*)this)->GetPositionZ();
+                    *data << ((WorldObject*)this)->GetOrientation();
                 }
             }
         }
@@ -443,25 +444,25 @@ void Object::_BuildMovementUpdate(ByteBuffer * data, uint16 flags) const
         *data << uint64(((GameObject*)this)->GetRotation());
     }
 
-    // 0x0800
-    if (flags & UPDATEFLAG_UNK11)
-    {
-        *data << uint16(0);
-        *data << uint16(0);
-        *data << uint16(0);
-    }
+   // 0x0800
+   if (flags & UPDATEFLAG_UNK11)
+   {
+       *data << uint16(0);
+       *data << uint16(0);
+       *data << uint16(0);
+   }
 
-    // 0x1000
-    if (flags & UPDATEFLAG_UNK12)
-    {
-        uint8 bytes = 0;
-        *data << bytes;
-        for (uint8 i = 0; i < bytes; i++)
-            *data << uint32(0);
-    }
+   // 0x1000
+   if (flags & UPDATEFLAG_UNK12)
+   {
+       uint8 bytes = 0;
+       *data << bytes;
+       for (uint8 i = 0; i < bytes; i++)
+           *data << uint32(0);
+   }	
 }
 
-void Object::_BuildValuesUpdate(uint8 updatetype, ByteBuffer * data, UpdateMask *updateMask, Player *target) const
+void Object::_BuildValuesUpdate(uint8 updatetype, ByteBuffer * data, UpdateMask* updateMask, Player* target) const
 {
     if (!target)
         return;
@@ -805,7 +806,7 @@ void Object::_SetCreateBits(UpdateMask* updateMask, Player* /*target*/) const
 
 void Object::SetInt32Value(uint16 index, int32 value)
 {
-    ASSERT (index < m_valuesCount || PrintIndexError(index, true));
+    ASSERT(index < m_valuesCount || PrintIndexError(index, true));
 
     if (m_int32Values[index] != value)
     {
@@ -822,7 +823,7 @@ void Object::SetInt32Value(uint16 index, int32 value)
 
 void Object::SetUInt32Value(uint16 index, uint32 value)
 {
-    ASSERT (index < m_valuesCount || PrintIndexError(index, true));
+    ASSERT(index < m_valuesCount || PrintIndexError(index, true));
 
     if (m_uint32Values[index] != value)
     {
@@ -839,7 +840,7 @@ void Object::SetUInt32Value(uint16 index, uint32 value)
 
 void Object::UpdateUInt32Value(uint16 index, uint32 value)
 {
-    ASSERT (index < m_valuesCount || PrintIndexError(index, true));
+    ASSERT(index < m_valuesCount || PrintIndexError(index, true));
 
     m_uint32Values[index] = value;
     _changedFields[index] = true;
@@ -847,7 +848,7 @@ void Object::UpdateUInt32Value(uint16 index, uint32 value)
 
 void Object::SetUInt64Value(uint16 index, uint64 value)
 {
-    ASSERT (index + 1 < m_valuesCount || PrintIndexError(index, true));
+    ASSERT(index + 1 < m_valuesCount || PrintIndexError(index, true));
     if (*((uint64*)&(m_uint32Values[index])) != value)
     {
         m_uint32Values[index] = PAIR64_LOPART(value);
@@ -865,7 +866,7 @@ void Object::SetUInt64Value(uint16 index, uint64 value)
 
 bool Object::AddUInt64Value(uint16 index, uint64 value)
 {
-    ASSERT (index + 1 < m_valuesCount || PrintIndexError(index , true));
+    ASSERT(index + 1 < m_valuesCount || PrintIndexError(index, true));
     if (value && !*((uint64*)&(m_uint32Values[index])))
     {
         m_uint32Values[index] = PAIR64_LOPART(value);
@@ -887,7 +888,7 @@ bool Object::AddUInt64Value(uint16 index, uint64 value)
 
 bool Object::RemoveUInt64Value(uint16 index, uint64 value)
 {
-    ASSERT (index + 1 < m_valuesCount || PrintIndexError(index , true));
+    ASSERT(index + 1 < m_valuesCount || PrintIndexError(index, true));
     if (value && *((uint64*)&(m_uint32Values[index])) == value)
     {
         m_uint32Values[index] = 0;
@@ -909,7 +910,7 @@ bool Object::RemoveUInt64Value(uint16 index, uint64 value)
 
 void Object::SetFloatValue(uint16 index, float value)
 {
-    ASSERT (index < m_valuesCount || PrintIndexError(index, true));
+    ASSERT(index < m_valuesCount || PrintIndexError(index, true));
 
     if (m_floatValues[index] != value)
     {
@@ -926,7 +927,7 @@ void Object::SetFloatValue(uint16 index, float value)
 
 void Object::SetByteValue(uint16 index, uint8 offset, uint8 value)
 {
-    ASSERT (index < m_valuesCount || PrintIndexError(index, true));
+    ASSERT(index < m_valuesCount || PrintIndexError(index, true));
 
     if (offset > 4)
     {
@@ -950,7 +951,7 @@ void Object::SetByteValue(uint16 index, uint8 offset, uint8 value)
 
 void Object::SetUInt16Value(uint16 index, uint8 offset, uint16 value)
 {
-    ASSERT (index < m_valuesCount || PrintIndexError(index, true));
+    ASSERT(index < m_valuesCount || PrintIndexError(index, true));
 
     if (offset > 2)
     {
@@ -1022,7 +1023,7 @@ void Object::ApplyModPositiveFloatValue(uint16 index, float  val, bool apply)
 
 void Object::SetFlag(uint16 index, uint32 newFlag)
 {
-    ASSERT (index < m_valuesCount || PrintIndexError(index, true));
+    ASSERT(index < m_valuesCount || PrintIndexError(index, true));
     uint32 oldval = m_uint32Values[index];
     uint32 newval = oldval | newFlag;
 
@@ -1041,8 +1042,8 @@ void Object::SetFlag(uint16 index, uint32 newFlag)
 
 void Object::RemoveFlag(uint16 index, uint32 oldFlag)
 {
-    ASSERT (index < m_valuesCount || PrintIndexError(index, true));
-    ASSERT (m_uint32Values);
+    ASSERT(index < m_valuesCount || PrintIndexError(index, true));
+    ASSERT(m_uint32Values);
 
     uint32 oldval = m_uint32Values[index];
     uint32 newval = oldval & ~oldFlag;
@@ -1062,7 +1063,7 @@ void Object::RemoveFlag(uint16 index, uint32 oldFlag)
 
 void Object::SetByteFlag(uint16 index, uint8 offset, uint8 newFlag)
 {
-    ASSERT (index < m_valuesCount || PrintIndexError(index, true));
+    ASSERT(index < m_valuesCount || PrintIndexError(index, true));
 
     if (offset > 4)
     {
@@ -1085,7 +1086,7 @@ void Object::SetByteFlag(uint16 index, uint8 offset, uint8 newFlag)
 
 void Object::RemoveByteFlag(uint16 index, uint8 offset, uint8 oldFlag)
 {
-    ASSERT (index < m_valuesCount || PrintIndexError(index, true));
+    ASSERT(index < m_valuesCount || PrintIndexError(index, true));
 
     if (offset > 4)
     {
@@ -1221,7 +1222,7 @@ void WorldObject::setActive(bool on)
     if (!IsInWorld())
         return;
 
-    Map *map = FindMap();
+    Map* map = FindMap();
     if (!map)
         return;
 
@@ -1268,7 +1269,7 @@ void WorldObject::GetZoneAndAreaId(uint32& zoneid, uint32& areaid) const
 
 InstanceScript* WorldObject::GetInstanceScript()
 {
-    Map *map = GetMap();
+    Map* map = GetMap();
     return map->IsDungeon() ? ((InstanceMap*)map)->GetInstanceScript() : NULL;
 }
 
@@ -1324,7 +1325,7 @@ bool WorldObject::IsWithinLOS(float ox, float oy, float oz) const
 {
     float x, y, z;
     GetPosition(x, y, z);
-    VMAP::IVMapManager *vMapManager = VMAP::VMapFactory::createOrGetVMapManager();
+    VMAP::IVMapManager* vMapManager = VMAP::VMapFactory::createOrGetVMapManager();
     return vMapManager->isInLineOfSight(GetMapId(), x, y, z+2.0f, ox, oy, oz+2.0f);
 }
 
@@ -1436,7 +1437,7 @@ void Position::GetPositionOffsetTo(const Position & endPos, Position & retOffset
     retOffset.m_orientation = endPos.GetOrientation() - GetOrientation();
 }
 
-float Position::GetAngle(const Position *obj) const
+float Position::GetAngle(const Position* obj) const
 {
     if (!obj) return 0;
     return GetAngle(obj->GetPositionX(), obj->GetPositionY());
@@ -1472,7 +1473,7 @@ void Position::GetSinCos(const float x, const float y, float &vsin, float &vcos)
     }
 }
 
-bool Position::HasInArc(float arc, const Position *obj) const
+bool Position::HasInArc(float arc, const Position* obj) const
 {
     // always have self in arc
     if (obj == this)
@@ -1494,7 +1495,7 @@ bool Position::HasInArc(float arc, const Position *obj) const
     return ((angle >= lborder) && (angle <= rborder));
 }
 
-bool WorldObject::IsInBetween(const WorldObject *obj1, const WorldObject *obj2, float size) const
+bool WorldObject::IsInBetween(const WorldObject* obj1, const WorldObject* obj2, float size) const
 {
     if (!obj1 || !obj2)
         return false;
@@ -1600,10 +1601,10 @@ bool WorldObject::canSeeOrDetect(WorldObject const* obj, bool ignoreStealth, boo
     if (this == obj)
         return true;
 
-    if (obj->IsNeverVisible() || _CanNeverSee(obj))
+    if (obj->IsNeverVisible() || CanNeverSee(obj))
         return false;
 
-    if (obj->IsAlwaysVisibleFor(this) || _CanAlwaysSee(obj))
+    if (obj->IsAlwaysVisibleFor(this) || CanAlwaysSee(obj))
         return true;
 
     bool corpseCheck = false;
@@ -1660,13 +1661,13 @@ bool WorldObject::canSeeOrDetect(WorldObject const* obj, bool ignoreStealth, boo
     if (obj->IsInvisibleDueToDespawn())
         return false;
 
-    if (!_canDetect(obj, ignoreStealth))
+    if (!CanDetect(obj, ignoreStealth))
         return false;
 
     return true;
 }
 
-bool WorldObject::_canDetect(WorldObject const* obj, bool ignoreStealth) const
+bool WorldObject::CanDetect(WorldObject const* obj, bool ignoreStealth) const
 {
     const WorldObject* seer = this;
 
@@ -1675,19 +1676,19 @@ bool WorldObject::_canDetect(WorldObject const* obj, bool ignoreStealth) const
         if (Unit* controller = thisUnit->GetCharmerOrOwner())
             seer = controller;
 
-    if (obj->isAlwaysDetectableFor(seer))
+    if (obj->IsAlwaysDetectableFor(seer))
         return true;
 
-    if (!seer->_canDetectInvisibilityOf(obj))
+    if (!seer->CanDetectInvisibilityOf(obj))
         return false;
 
-    if (!ignoreStealth && !seer->_canDetectStealthOf(obj))
+    if (!ignoreStealth && !seer->CanDetectStealthOf(obj))
         return false;
 
     return true;
 }
 
-bool WorldObject::_canDetectInvisibilityOf(WorldObject const* obj) const
+bool WorldObject::CanDetectInvisibilityOf(WorldObject const* obj) const
 {
     uint32 mask = obj->m_invisibility.GetFlags() & m_invisibilityDetect.GetFlags();
 
@@ -1718,7 +1719,7 @@ bool WorldObject::_canDetectInvisibilityOf(WorldObject const* obj) const
     return true;
 }
 
-bool WorldObject::canDetectStealthOf(WorldObject const* obj) const
+bool WorldObject::CanDetectStealthOf(WorldObject const* obj) const
 {
     // Combat reach is the minimal distance (both in front and behind),
     //   and it is also used in the range calculation.
@@ -1960,7 +1961,7 @@ void WorldObject::MonsterWhisper(int32 textId, uint64 receiver, bool IsBossWhisp
     player->GetSession()->SendPacket(&data);
 }
 
-void WorldObject::BuildMonsterChat(WorldPacket *data, uint8 msgtype, char const* text, uint32 language, char const* name, uint64 targetGuid) const
+void WorldObject::BuildMonsterChat(WorldPacket* data, uint8 msgtype, char const* text, uint32 language, char const* name, uint64 targetGuid) const
 {
     *data << (uint8)msgtype;
     *data << (uint32)language;
@@ -1979,25 +1980,26 @@ void WorldObject::BuildMonsterChat(WorldPacket *data, uint8 msgtype, char const*
     *data << (uint8)0;                                      // ChatTag
 }
 
-void Unit::BuildHeartBeatMsg(WorldPacket *data) const
+void Unit::BuildHeartBeatMsg(WorldPacket* data) const
 {
     data->Initialize(MSG_MOVE_HEARTBEAT, 32);
     data->append(GetPackGUID());
     BuildMovementPacket(data);
 }
 
-void WorldObject::SendMessageToSet(WorldPacket *data, bool self)
+void WorldObject::SendMessageToSet(WorldPacket* data, bool self)
 {
     SendMessageToSetInRange(data, GetVisibilityRange(), self);
 }
 
-void WorldObject::SendMessageToSetInRange(WorldPacket *data, float dist, bool /*self*/)
+
+void WorldObject::SendMessageToSetInRange(WorldPacket* data, float dist, bool /*self*/)
 {
     Trinity::MessageDistDeliverer notifier(this, data, dist);
     VisitNearbyWorldObject(dist, notifier);
 }
 
-void WorldObject::SendMessageToSet(WorldPacket *data, Player const* skipped_rcvr)
+void WorldObject::SendMessageToSet(WorldPacket* data, Player const* skipped_rcvr)
 {
     Trinity::MessageDistDeliverer notifier(this, data, GetVisibilityRange(), false, skipped_rcvr);
     VisitNearbyWorldObject(GetVisibilityRange(), notifier);
@@ -2010,16 +2012,16 @@ void WorldObject::SendObjectDeSpawnAnim(uint64 guid)
     SendMessageToSet(&data, true);
 }
 
-void WorldObject::SetMap(Map * map)
+void WorldObject::SetMap(Map* map)
 {
-    ASSERT (map);
-    ASSERT (!IsInWorld() || GetTypeId() == TYPEID_CORPSE);
+    ASSERT(map);
+    ASSERT(!IsInWorld() || GetTypeId() == TYPEID_CORPSE);
     if (m_currMap == map) // command add npc: first create, than loadfromdb
         return;
     if (m_currMap)
     {
         sLog->outCrash("WorldObject::SetMap: obj %u new map %u %u, old map %u %u", (uint32)GetTypeId(), map->GetId(), map->GetInstanceId(), m_currMap->GetId(), m_currMap->GetInstanceId());
-        ASSERT (false);
+        ASSERT(false);
     }
     m_currMap = map;
     m_mapId = map->GetId();
@@ -2030,8 +2032,8 @@ void WorldObject::SetMap(Map * map)
 
 void WorldObject::ResetMap()
 {
-    ASSERT (m_currMap);
-    ASSERT (!IsInWorld());
+    ASSERT(m_currMap);
+    ASSERT(!IsInWorld());
     if (m_isWorldObject)
         m_currMap->RemoveWorldObject(this);
     m_currMap = NULL;
@@ -2042,13 +2044,13 @@ void WorldObject::ResetMap()
 
 Map const* WorldObject::GetBaseMap() const
 {
-    ASSERT (m_currMap);
+    ASSERT(m_currMap);
     return m_currMap->GetParent();
 }
 
 void WorldObject::AddObjectToRemoveList()
 {
-    ASSERT (m_uint32Values);
+    ASSERT(m_uint32Values);
 
     Map* map = FindMap();
     if (!map)
@@ -2161,7 +2163,7 @@ TempSummon* Map::SummonCreature(uint32 entry, Position const& pos, SummonPropert
 
 void WorldObject::SetZoneScript()
 {
-    if (Map *map = FindMap())
+    if (Map* map = FindMap())
     {
         if (map->IsDungeon())
             m_zoneScript = (ZoneScript*)((InstanceMap*)map)->GetInstanceScript();
@@ -2172,9 +2174,9 @@ void WorldObject::SetZoneScript()
 
 TempSummon* WorldObject::SummonCreature(uint32 entry, const Position &pos, TempSummonType spwtype, uint32 duration, uint32 /*vehId*/) const
 {
-    if (Map *map = FindMap())
+    if (Map* map = FindMap())
     {
-        if (TempSummon *summon = map->SummonCreature(entry, pos, NULL, duration, isType(TYPEMASK_UNIT) ? (Unit*)this : NULL))
+        if (TempSummon* summon = map->SummonCreature(entry, pos, NULL, duration, isType(TYPEMASK_UNIT) ? (Unit*)this : NULL))
         {
             summon->SetTempSummonType(spwtype);
             return summon;
@@ -2224,7 +2226,7 @@ Pet* Player::SummonPet(uint32 entry, float x, float y, float z, float ang, PetTy
         return NULL;
     }
 
-    Map *map = GetMap();
+    Map* map = GetMap();
     uint32 pet_number = sObjectMgr->GeneratePetNumber();
     if (!pet->Create(sObjectMgr->GenerateLowGuid(HIGHGUID_PET), map, GetPhaseMask(), entry, pet_number))
     {
@@ -2237,7 +2239,7 @@ Pet* Player::SummonPet(uint32 entry, float x, float y, float z, float ang, PetTy
     pet->SetUInt32Value(UNIT_FIELD_FACTIONTEMPLATE, getFaction());
 
     pet->setPowerType(POWER_MANA);
-    pet->SetUInt32Value(UNIT_NPC_FLAGS , 0);
+    pet->SetUInt32Value(UNIT_NPC_FLAGS, 0);
     pet->SetUInt32Value(UNIT_FIELD_BYTES_1, 0);
     pet->InitStatsForLevel(getLevel());
 
@@ -2308,8 +2310,8 @@ GameObject* WorldObject::SummonGameObject(uint32 entry, float x, float y, float 
         sLog->outErrorDb("Gameobject template %u not found in database!", entry);
         return NULL;
     }
-    Map *map = GetMap();
-    GameObject *go = new GameObject();
+    Map* map = GetMap();
+    GameObject* go = new GameObject();
     if (!go->Create(sObjectMgr->GenerateLowGuid(HIGHGUID_GAMEOBJECT), entry, map, GetPhaseMask(), x, y, z, ang, rotation0, rotation1, rotation2, rotation3, 100, GO_STATE_READY))
     {
         delete go;
@@ -2346,7 +2348,7 @@ Creature* WorldObject::SummonTrigger(float x, float y, float z, float ang, uint3
 
 Creature* WorldObject::FindNearestCreature(uint32 entry, float range, bool alive) const
 {
-    Creature *creature = NULL;
+    Creature* creature = NULL;
     Trinity::NearestCreatureEntryWithLiveStateInObjectRangeCheck checker(*this, entry, alive, range);
     Trinity::CreatureLastSearcher<Trinity::NearestCreatureEntryWithLiveStateInObjectRangeCheck> searcher(this, creature, checker);
     VisitNearbyObject(range, searcher);
@@ -2355,7 +2357,7 @@ Creature* WorldObject::FindNearestCreature(uint32 entry, float range, bool alive
 
 GameObject* WorldObject::FindNearestGameObject(uint32 entry, float range) const
 {
-    GameObject *go = NULL;
+    GameObject* go = NULL;
     Trinity::NearestGameObjectEntryInObjectRangeCheck checker(*this, entry, range);
     Trinity::GameObjectLastSearcher<Trinity::NearestGameObjectEntryInObjectRangeCheck> searcher(this, go, checker);
     VisitNearbyGridObject(range, searcher);
@@ -2700,7 +2702,7 @@ void WorldObject::DestroyForNearbyPlayers()
     VisitNearbyWorldObject(GetVisibilityRange(), searcher);
     for (std::list<Player*>::const_iterator iter = targets.begin(); iter != targets.end(); ++iter)
     {
-        Player *player = (*iter);
+        Player* player = (*iter);
 
         if (player == this)
             continue;
@@ -2727,7 +2729,7 @@ struct WorldObjectChangeAccumulator
 {
     UpdateDataMapType& i_updateDatas;
     WorldObject& i_object;
-    std::set<uint64> plr_list;
+    std::set<uint64> player_list;
     WorldObjectChangeAccumulator(WorldObject &obj, UpdateDataMapType &d) : i_updateDatas(d), i_object(obj) {}
     void Visit(PlayerMapType &m)
     {
@@ -2773,7 +2775,7 @@ struct WorldObjectChangeAccumulator
             if (IS_PLAYER_GUID(guid))
             {
                 //Caster may be NULL if DynObj is in removelist
-                if (Player *caster = ObjectAccessor::FindPlayer(guid))
+                if (Player* caster = ObjectAccessor::FindPlayer(guid))
                     if (caster->GetUInt64Value(PLAYER_FARSIGHT) == source->GetGUID())
                         BuildPacket(caster);
             }
@@ -2783,10 +2785,10 @@ struct WorldObjectChangeAccumulator
     void BuildPacket(Player* player)
     {
         // Only send update once to a player
-        if (plr_list.find(player->GetGUID()) == plr_list.end() && player->HaveAtClient(&i_object))
+        if (player_list.find(player->GetGUID()) == player_list.end() && player->HaveAtClient(&i_object))
         {
             i_object.BuildFieldsUpdate(player, i_updateDatas);
-            plr_list.insert(player->GetGUID());
+            player_list.insert(player->GetGUID());
         }
     }
 
