@@ -51,16 +51,16 @@ void BattlegroundDS::PostUpdateImpl(uint32 diff)
         {
             for(BattlegroundPlayerMap::const_iterator itr = GetPlayers().begin(); itr != GetPlayers().end();itr++)
             {
-                Player *plr = ObjectAccessor::FindPlayer(itr->first);
-                if (plr && plr->isAlive() && plr->GetPositionX() < 1260 && plr->GetPositionY() >755 && plr->GetPositionY() < 775 && plr->GetPositionZ() > 13)
+                Player *player = ObjectAccessor::FindPlayer(itr->first);
+                if (player && player->isAlive() && player->GetPositionX() < 1260 && player->GetPositionY() >755 && player->GetPositionY() < 775 && player->GetPositionZ() > 13)
                 {
-                    KnockBackPlayer(plr, 6.15f, 50.00f, 5.00f);
-                    plr->RemoveAurasDueToSpell(48018);
+                    KnockBackPlayer(player, 6.15f, 50.00f, 5.00f);
+                    player->RemoveAurasDueToSpell(48018);
                 }
-                if (plr && plr->isAlive() && plr->GetPositionX() > 1330 && plr->GetPositionY() >805 && plr->GetPositionY() < 825 && plr->GetPositionZ() > 13)
+                if (player && player->isAlive() && player->GetPositionX() > 1330 && player->GetPositionY() >805 && player->GetPositionY() < 825 && player->GetPositionZ() > 13)
                 {
-                    KnockBackPlayer(plr, 3.10f, 50.00f, 5.00f);
-                    plr->RemoveAurasDueToSpell(48018);
+                    KnockBackPlayer(player, 3.10f, 50.00f, 5.00f);
+                    player->RemoveAurasDueToSpell(48018);
                 }
             }
         }
@@ -110,18 +110,18 @@ void BattlegroundDS::StartingEventOpenDoors()
     m_knockbackCheck = true;
 }
 
-void BattlegroundDS::AddPlayer(Player* plr)
+void BattlegroundDS::AddPlayer(Player* player)
 {
-    Battleground::AddPlayer(plr);
+    Battleground::AddPlayer(player);
     //create score and add it to map, default values are set in constructor
     BattlegroundDSScore* sc = new BattlegroundDSScore;
 
-    m_PlayerScores[plr->GetGUID()] = sc;
+    m_PlayerScores[player->GetGUID()] = sc;
 
     UpdateArenaWorldState();
 }
 
-void BattlegroundDS::RemovePlayer(Player* /*plr*/, uint64 /*guid*/, uint32 /*team*/)
+void BattlegroundDS::RemovePlayer(Player* /*player*/, uint64 /*guid*/, uint32 /*team*/)
 {
     if (GetStatus() == STATUS_WAIT_LEAVE)
         return;

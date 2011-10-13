@@ -307,9 +307,9 @@ void WorldSession::HandleGroupUninviteGuidOpcode(WorldPacket & recv_data)
         return;
     }
 
-    if (Player* plr = grp->GetInvited(guid))
+    if (Player* player = grp->GetInvited(guid))
     {
-        plr->UninviteFromGroup();
+        player->UninviteFromGroup();
         return;
     }
 
@@ -351,9 +351,9 @@ void WorldSession::HandleGroupUninviteOpcode(WorldPacket & recv_data)
         return;
     }
 
-    if (Player* plr = grp->GetInvited(membername))
+    if (Player* player = grp->GetInvited(membername))
     {
-        plr->UninviteFromGroup();
+        player->UninviteFromGroup();
         return;
     }
 

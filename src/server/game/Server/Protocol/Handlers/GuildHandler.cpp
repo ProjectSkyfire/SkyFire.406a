@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
@@ -227,76 +227,38 @@ void WorldSession::HandleGuildRankOpcode(WorldPacket& recvPacket)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_GUILD_RANK");
 
-    uint32 BankStacks[GUILD_BANK_MAX_TABS];
-    for(uint32 i = 0; i < GUILD_BANK_MAX_TABS; i++)
-        recvPacket >> BankStacks[i];
-
-    uint32 new_rights;
-    recvPacket >> new_rights;
-
-    uint32 new_rankId;
-    recvPacket >> new_rankId;
-
-    uint32 old_rankId;
-    recvPacket >> old_rankId;
-
-    uint32 BankRights[GUILD_BANK_MAX_TABS];
-    for(uint32 i = 0; i < GUILD_BANK_MAX_TABS; i++)
-        recvPacket >> BankRights[i];
-
-    uint64 guildId;
-    recvPacket >> guildId;
-
-    uint32 old_rights;
-    recvPacket >> old_rights;
-
-    uint32 money;
-    recvPacket >> money;
-
-
-    uint64 playerGuid;
-    recvPacket >> playerGuid;
-
-    std::string rankName;
-    recvPacket >> rankName;
-
-    sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_GUILD_RANK");
-
-    if (GetPlayer()->GetGUID() != playerGuid)
-    {
-        sLog->outString("CMSG_GUILD_RANK: The playerGUID in the packet does not match the current player!\n");
-        recvPacket.rpos(recvPacket.wpos());                 // set to end to avoid warnings spam
-        Guild::SendCommandResult(this, GUILD_CREATE_S, ERR_GUILD_PLAYER_NOT_IN_GUILD);
-        return;
-    }
-    if (GetPlayer()->GetGuildId() != GUID_LOPART(guildId))
-    {
-        sLog->outString("CMSG_GUILD_RANK: This player is not in the guild.\n");
-        recvPacket.rpos(recvPacket.wpos());                 // set to end to avoid warnings spam
-        Guild::SendCommandResult(this, GUILD_CREATE_S, ERR_GUILD_PLAYER_NOT_IN_GUILD);
-        return;
-    }
-
-    Guild* pGuild = _GetPlayerGuild(this, true);
-    if (!pGuild)
+    Guild* guild = _GetPlayerGuild(this, true);
+    if (!guild)
     {
         recvPacket.rpos(recvPacket.wpos());
         return;
     }
 
-    GuildBankRightsAndSlotsVec rightsAndSlots(GUILD_BANK_MAX_TABS);
-    if (old_rankId != GR_GUILDMASTER)
-    {
-        for (uint8 tabId = 0; tabId < GUILD_BANK_MAX_TABS; ++tabId)
-        {
-            rightsAndSlots[tabId] = GuildBankRightsAndSlots(uint8(old_rights), new_rights);
-        }
+    uint32 rankId;
+    recvPacket >> rankId;
 
-        pGuild->HandleSetRankInfo(this, new_rankId, rankName, new_rights, money, rightsAndSlots);
-        pGuild->SetBankTabRights(this, new_rankId, BankRights, BankStacks);
+    uint32 rights;
+    recvPacket >> rights;
+
+    std::string rankName;
+    recvPacket >> rankName;
+
+    uint32 money;
+    recvPacket >> money;
+
+    GuildBankRightsAndSlotsVec rightsAndSlots(GUILD_BANK_MAX_TABS);
+    for (uint8 tabId = 0; tabId < GUILD_BANK_MAX_TABS; ++tabId)
+    {
+        uint32 bankRights;
+        uint32 slots;
+
+        recvPacket >> bankRights;
+        recvPacket >> slots;
+
+        rightsAndSlots[tabId] = GuildBankRightsAndSlots(uint8(bankRights), slots);
     }
-    if (old_rankId != new_rankId && old_rankId != GR_GUILDMASTER && new_rankId != GR_GUILDMASTER)
-        pGuild->SwitchRank(old_rankId, new_rankId);
+
+    guild->HandleSetRankInfo(this, rankId, rankName, rights, money, rightsAndSlots);
 }
 
 void WorldSession::HandleGuildAddRankOpcode(WorldPacket& recvPacket)
@@ -427,9 +389,8 @@ void WorldSession::HandleGuildBankDepositMoney(WorldPacket & recv_data)
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received (CMSG_GUILD_BANK_DEPOSIT_MONEY)");
 
     uint64 GoGuid;
+    uint64 money;
     recv_data >> GoGuid;
-
-    uint32 money;
     recv_data >> money;
 
     if (GetPlayer()->GetGameObjectIfCanInteractWith(GoGuid, GAMEOBJECT_TYPE_GUILD_BANK))
@@ -443,9 +404,8 @@ void WorldSession::HandleGuildBankWithdrawMoney(WorldPacket & recv_data)
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received (CMSG_GUILD_BANK_WITHDRAW_MONEY)");
 
     uint64 GoGuid;
+    uint64 money;
     recv_data >> GoGuid;
-
-    uint32 money;
     recv_data >> money;
 
     if (money)
@@ -555,15 +515,12 @@ void WorldSession::HandleGuildBankUpdateTab(WorldPacket & recv_data)
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received (CMSG_GUILD_BANK_UPDATE_TAB)");
 
     uint64 GoGuid;
-    recv_data >> GoGuid;
-
     uint8 tabId;
+    std::string name, icon;
+
+    recv_data >> GoGuid;
     recv_data >> tabId;
-
-    std::string name;
     recv_data >> name;
-
-    std::string icon;
     recv_data >> icon;
 
     if (!name.empty() && !icon.empty())

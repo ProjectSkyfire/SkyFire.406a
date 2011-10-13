@@ -638,7 +638,7 @@ public:
 
         void EnterCombat(Unit* /*who*/) {}
 
-        void BeginEvent(Player* pl)
+        void BeginEvent(Player* player)
         {
             if (!instance)
                 return;
@@ -659,7 +659,7 @@ public:
                 me->CombatStart(Shade);
                 Shade->SetUInt32Value(UNIT_NPC_EMOTESTATE, EMOTE_STATE_NONE);
                 Shade->SetTarget(me->GetGUID());
-                if (pl) Shade->AddThreat(pl, 1.0f);
+                if (player) Shade->AddThreat(player, 1.0f);
                 DoZoneInCombat(Shade);
                 EventBegun = true;
             }

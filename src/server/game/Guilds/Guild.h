@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
@@ -86,7 +86,7 @@ enum GuildCommandType
     GUILD_UNK2      = 0x14
 };
 
-enum GuildCommandError
+enum GuildCommandError 
 {
     ERR_PLAYER_NO_MORE_IN_GUILD     = 0x00,
     ERR_GUILD_INTERNAL              = 0x01,
@@ -96,7 +96,7 @@ enum GuildCommandError
     ERR_ALREADY_INVITED_TO_GUILD_S  = 0x05,
     ERR_GUILD_NAME_INVALID          = 0x06,
     ERR_GUILD_NAME_EXISTS_S         = 0x07,
-    ERR_GUILD_LEADER_LEAVE          = 0x08,
+    ERR_GUILD_LEADER_LEAVE          = 0x08, // if (a3 == 3) ERR_GUILD_LEADER_LEAVE else ERR_GUILD_PERMISSIONS
     ERR_GUILD_PERMISSIONS           = 0x08,
     ERR_GUILD_PLAYER_NOT_IN_GUILD   = 0x09,
     ERR_GUILD_PLAYER_NOT_IN_GUILD_S = 0x0A,
@@ -111,7 +111,13 @@ enum GuildCommandError
     ERR_GUILD_WITHDRAW_LIMIT        = 0x19,
     ERR_GUILD_NOT_ENOUGH_MONEY      = 0x1A,
     ERR_GUILD_BANK_FULL             = 0x1C,
-    ERR_GUILD_ITEM_NOT_FOUND        = 0x1D
+    ERR_GUILD_ITEM_NOT_FOUND        = 0x1D,
+    ERR_GUILD_TOO_MUCH_MONEY        = 0x1F,
+    ERR_GUILD_BANK_WRONG_TAB        = 0x20,
+    ERR_RANK_REQUIRES_AUTHENTICATOR = 0x22,
+    ERR_GUILD_BANK_VOUCHER_FAILED   = 0x23,
+    ERR_GUILD_TRIAL_ACCOUNT         = 0x24,
+    ERR_GUILD_UNDELETABLE_DUE_TO_LEVEL = 0x25,
 };
 
 enum GuildEvents
@@ -197,7 +203,7 @@ enum GuildEmblemError
     ERR_GUILDEMBLEM_INVALIDVENDOR         = 5
 };
 
-////////////////////////////////////////////////////////////////////////////////////////////
+
 // Emblem info
 class EmblemInfo
 {
@@ -588,8 +594,6 @@ public:
 
     bool Create(Player* pLeader, const std::string& name);
     void Disband();
-    void SetBankTabRights(WorldSession* session, uint32 rankId,uint32 rights[GUILD_BANK_MAX_TABS], uint32 stacks[GUILD_BANK_MAX_TABS]);
-    void SwitchRank(uint32 oldRank, uint32 newRank);
 
     // Getters
     uint32 GetId() const { return m_id; }

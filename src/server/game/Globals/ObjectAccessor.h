@@ -226,10 +226,10 @@ class ObjectAccessor
             HashMapHolder<T>::Remove(object);
         }
 
-        void RemoveObject(Player* pl)
+        void RemoveObject(Player* player)
         {
-            HashMapHolder<Player>::Remove(pl);
-            RemoveUpdateObject((Object*)pl);
+            HashMapHolder<Player>::Remove(player);
+            RemoveUpdateObject((Object*)player);
         }
 
         void SaveAllPlayers();

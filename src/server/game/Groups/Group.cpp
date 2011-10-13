@@ -1322,15 +1322,15 @@ void Group::UpdatePlayerOutOfRange(Player* player)
 
 void Group::BroadcastPacket(WorldPacket* packet, bool ignorePlayersInBGRaid, int group, uint64 ignore)
 {
-    Player* member;
+    Player * member;
     for (GroupReference *itr = GetFirstMember(); itr != NULL; itr = itr->next())
     {
-        Player *plr = itr->getSource();
-        if (!plr || (ignore != 0 && plr->GetGUID() == ignore) || (ignorePlayersInBGRaid && plr->GetGroup() != this))
+        Player *player = itr->getSource();
+        if (!player || (ignore != 0 && player->GetGUID() == ignore) || (ignorePlayersInBGRaid && player->GetGroup() != this))
             continue;
 
-        if (plr->GetSession() && (group == -1 || itr->getSubGroup() == group))
-            plr->GetSession()->SendPacket(packet);
+        if (player->GetSession() && (group == -1 || itr->getSubGroup() == group))
+            player->GetSession()->SendPacket(packet);
     }
 }
 
@@ -1338,10 +1338,10 @@ void Group::BroadcastReadyCheck(WorldPacket* packet)
 {
     for (GroupReference *itr = GetFirstMember(); itr != NULL; itr = itr->next())
     {
-        Player *plr = itr->getSource();
-        if (plr && plr->GetSession())
-            if (IsLeader(plr->GetGUID()) || IsAssistant(plr->GetGUID()))
-                plr->GetSession()->SendPacket(packet);
+        Player *player = itr->getSource();
+        if (player && player->GetSession())
+            if (IsLeader(player->GetGUID()) || IsAssistant(player->GetGUID()))
+                player->GetSession()->SendPacket(packet);
     }
 }
 
@@ -1349,8 +1349,8 @@ void Group::OfflineReadyCheck()
 {
     for (member_citerator citr = m_memberSlots.begin(); citr != m_memberSlots.end(); ++citr)
     {
-        Player *plr = ObjectAccessor::FindPlayer(citr->guid);
-        if (!plr || !plr->GetSession())
+        Player *player = ObjectAccessor::FindPlayer(citr->guid);
+        if (!player || !player->GetSession())
         {
             WorldPacket data(MSG_RAID_READY_CHECK_CONFIRM, 9);
             data << uint64(citr->guid);
@@ -1475,10 +1475,10 @@ void Group::UpdateLooterGuid(WorldObject* pLootedObject, bool ifneed)
     Player *pNewLooter = NULL;
     for (member_citerator itr = guid_itr; itr != m_memberSlots.end(); ++itr)
     {
-        if (Player* plr = ObjectAccessor::FindPlayer(itr->guid))
-            if (plr->IsWithinDistInMap(pLootedObject, sWorld->getFloatConfig(CONFIG_GROUP_XP_DISTANCE), false))
+        if (Player* player = ObjectAccessor::FindPlayer(itr->guid))
+            if (player->IsWithinDistInMap(pLootedObject, sWorld->getFloatConfig(CONFIG_GROUP_XP_DISTANCE), false))
             {
-                pNewLooter = plr;
+                pNewLooter = player;
                 break;
             }
     }
@@ -1488,10 +1488,10 @@ void Group::UpdateLooterGuid(WorldObject* pLootedObject, bool ifneed)
         // search from start
         for (member_citerator itr = m_memberSlots.begin(); itr != guid_itr; ++itr)
         {
-            if (Player* plr = ObjectAccessor::FindPlayer(itr->guid))
-                if (plr->IsWithinDistInMap(pLootedObject, sWorld->getFloatConfig(CONFIG_GROUP_XP_DISTANCE), false))
+            if (Player* player = ObjectAccessor::FindPlayer(itr->guid))
+                if (player->IsWithinDistInMap(pLootedObject, sWorld->getFloatConfig(CONFIG_GROUP_XP_DISTANCE), false))
                 {
-                    pNewLooter = plr;
+                    pNewLooter = player;
                     break;
                 }
         }

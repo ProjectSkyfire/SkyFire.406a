@@ -608,7 +608,7 @@ class Creature : public Unit, public GridObject<Creature>, public MapCreature
         CreatureSpellCooldowns m_CreatureCategoryCooldowns;
 
         bool canStartAttack(Unit const* u, bool force) const;
-        float GetAttackDistance(Unit const* pl) const;
+        float GetAttackDistance(Unit const* player) const;
 
         void SendAIReaction(AiReaction reactionType);
 
