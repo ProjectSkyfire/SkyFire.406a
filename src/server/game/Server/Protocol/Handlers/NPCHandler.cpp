@@ -238,7 +238,7 @@ void WorldSession::HandleTrainerBuySpellOpcode(WorldPacket & recv_data)
     if (result == ERR_TRAINER_OK)
     {
         _player->ModifyMoney(-int32(nSpellCost));
-        
+
         unit->SendPlaySpellVisual(179);
         unit->SendPlaySpellImpact(_player->GetGUID(),362);
 

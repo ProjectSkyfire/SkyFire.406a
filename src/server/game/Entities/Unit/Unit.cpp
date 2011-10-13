@@ -2796,9 +2796,9 @@ float Unit::GetUnitCriticalChance(WeaponAttackType attackType, const Unit* victi
         if (victim->HasAura(63057) && victim->HasAura(22812))
             crit -= 25.0f;
         if (victim->HasAura(50365)) // Improved Blood Presence (Rank 1)
-            crit -= 3;
+            crit -= 3.0f;
         if (victim->HasAura(50371)) // Improved Blood Presence (Rank 2)
-            crit -= 6;
+            crit -= 6.0f;
     }
 
     if (crit < 0.0f)

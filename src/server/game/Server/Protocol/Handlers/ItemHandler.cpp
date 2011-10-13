@@ -1449,7 +1449,7 @@ void WorldSession::HandleReforgeItem(WorldPacket& recv_data)
 
     if(!item)       // cheating?
         return;
-    
+
     item->SetState(ITEM_CHANGED,GetPlayer()); // Set the 'changed' state to allow items to be saved to DB if they are equipped
     if(reforgeId == 0) // Reset item
     {

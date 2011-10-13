@@ -8012,10 +8012,10 @@ void Player::ApplyReforgedStats(Item* item, bool apply)
             continue;
 
         int32 val = int32((proto->ItemStat[i].ItemStatValue * stats->Scaling1)*stats->Scaling2);
-        
+
         if(val == 0)
             return;
-            
+
         switch(stats->DestinationStat)
         {
             case ITEM_MOD_MANA:
@@ -8160,8 +8160,7 @@ void Player::ApplyReforgedStats(Item* item, bool apply)
             case ITEM_MOD_SPELL_DAMAGE_DONE:
                 break;
         }
-        
-        
+
         val = -val;
         switch(stats->SourceStat)
         {
@@ -9087,7 +9086,7 @@ void Player::_RemoveAllItemMods()
 
             if (m_items[i]->IsBroken() || !CanUseAttackType(GetAttackBySlot(i)))
                 continue;
-                
+
             _ApplyItemMods(m_items[i],i,false);
         }
     }
