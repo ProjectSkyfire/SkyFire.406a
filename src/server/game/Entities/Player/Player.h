@@ -2750,7 +2750,7 @@ class Player : public Unit, public GridObject<Player>
         Runes *m_runes;
         EquipmentSets m_EquipmentSets;
 
-        bool canSeeAlways(WorldObject const* obj) const;
+        bool _canSeeAlways(WorldObject const* obj) const;
 
         bool isAlwaysDetectableFor(WorldObject const* seer) const;
 

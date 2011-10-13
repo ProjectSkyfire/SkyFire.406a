@@ -1600,19 +1600,10 @@ bool WorldObject::canSeeOrDetect(WorldObject const* obj, bool ignoreStealth, boo
     if (this == obj)
         return true;
 
-    if (obj->IsNeverVisible())
+    if (obj->IsNeverVisible() || _CanNeverSee(obj))
         return false;
 
-    if (GetMap() != obj->GetMap())
-        return false;
-
-    if (!InSamePhase(obj))
-        return false;
-
-    if (obj->isAlwaysVisibleFor(this))
-        return true;
-
-    if (canSeeAlways(obj))
+    if (obj->IsAlwaysVisibleFor(this) || _CanAlwaysSee(obj))
         return true;
 
     bool corpseCheck = false;
@@ -1669,13 +1660,13 @@ bool WorldObject::canSeeOrDetect(WorldObject const* obj, bool ignoreStealth, boo
     if (obj->IsInvisibleDueToDespawn())
         return false;
 
-    if (!canDetect(obj, ignoreStealth))
+    if (!_canDetect(obj, ignoreStealth))
         return false;
 
     return true;
 }
 
-bool WorldObject::canDetect(WorldObject const* obj, bool ignoreStealth) const
+bool WorldObject::_canDetect(WorldObject const* obj, bool ignoreStealth) const
 {
     const WorldObject* seer = this;
 
@@ -1687,16 +1678,16 @@ bool WorldObject::canDetect(WorldObject const* obj, bool ignoreStealth) const
     if (obj->isAlwaysDetectableFor(seer))
         return true;
 
-    if (!seer->canDetectInvisibilityOf(obj))
+    if (!seer->_canDetectInvisibilityOf(obj))
         return false;
 
-    if (!ignoreStealth && !seer->canDetectStealthOf(obj))
+    if (!ignoreStealth && !seer->_canDetectStealthOf(obj))
         return false;
 
     return true;
 }
 
-bool WorldObject::canDetectInvisibilityOf(WorldObject const* obj) const
+bool WorldObject::_canDetectInvisibilityOf(WorldObject const* obj) const
 {
     uint32 mask = obj->m_invisibility.GetFlags() & m_invisibilityDetect.GetFlags();
 

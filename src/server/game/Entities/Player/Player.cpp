@@ -21749,7 +21749,7 @@ bool Player::IsNeverVisible() const
     return false;
 }
 
-bool Player::canSeeAlways(WorldObject const* obj) const
+bool Player::_canSeeAlways(WorldObject const* obj) const
 {
     if (Unit::canSeeAlways(obj))
         return true;
