@@ -372,6 +372,42 @@ pAuraEffectHandler AuraEffectHandler[TOTAL_AURAS]=
     &AuraEffect::HandleNoImmediateEffect,                         //315 SPELL_AURA_UNDERWATER_WALKING todo
     &AuraEffect::HandleNoImmediateEffect,                         //316 SPELL_AURA_PERIODIC_HASTE implemented in AuraEffect::CalculatePeriodic
     &AuraEffect::HandleNULL,                                      //317 SPELL_AURA_MASTERY
+    &AuraEffect::HandleNULL,                                      //318 NYI
+    &AuraEffect::HandleNULL,                                      //319 NYI
+    &AuraEffect::HandleNULL,                                      //320 NYI
+    &AuraEffect::HandleNULL,                                      //321 NYI
+    &AuraEffect::HandleNULL,                                      //322 NYI
+    &AuraEffect::HandleNULL,                                      //323 NYI
+    &AuraEffect::HandleNULL,                                      //324 NYI
+    &AuraEffect::HandleNULL,                                      //325 NYI
+    &AuraEffect::HandleNULL,                                      //326 NYI
+    &AuraEffect::HandleNULL,                                      //327 NYI
+    &AuraEffect::HandleNULL,                                      //328 NYI
+    &AuraEffect::HandleNULL,                                      //329 NYI
+    &AuraEffect::HandleNULL,                                      //330 NYI
+    &AuraEffect::HandleNULL,                                      //331 NYI
+    &AuraEffect::HandleNULL,                                      //332 NYI
+    &AuraEffect::HandleNULL,                                      //333 NYI
+    &AuraEffect::HandleNULL,                                      //334 NYI
+    &AuraEffect::HandleNULL,                                      //335 NYI
+    &AuraEffect::HandleNULL,                                      //336 NYI
+    &AuraEffect::HandleNULL,                                      //337 NYI
+    &AuraEffect::HandleNULL,                                      //338 NYI
+    &AuraEffect::HandleNULL,                                      //339 NYI
+    &AuraEffect::HandleNULL,                                      //340 NYI
+    &AuraEffect::HandleNULL,                                      //341 NYI
+    &AuraEffect::HandleNULL,                                      //342 NYI
+    &AuraEffect::HandleNULL,                                      //343 NYI
+    &AuraEffect::HandleNULL,                                      //344 NYI
+    &AuraEffect::HandleNULL,                                      //345 NYI
+    &AuraEffect::HandleNULL,                                      //346 NYI
+    &AuraEffect::HandleNULL,                                      //347 NYI
+    &AuraEffect::HandleNULL,                                      //348 NYI
+    &AuraEffect::HandleNULL,                                      //349 NYI
+    &AuraEffect::HandleNULL,                                      //350 NYI
+    &AuraEffect::HandleNULL,                                      //351 NYI
+    &AuraEffect::HandleNULL,                                      //352 NYI
+    &AuraEffect::HandleNULL,                                      //353 NYI
 };
 
 AuraEffect::AuraEffect(Aura* base, uint8 effIndex, int32 *baseAmount, Unit* caster):
