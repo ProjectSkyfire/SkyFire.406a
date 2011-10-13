@@ -697,7 +697,7 @@ void WorldSession::HandleBuyItemOpcode(WorldPacket & recv_data)
 
     recv_data >> vendorguid;
     recv_data >> unk;
-    recv_data >> item >> slot >> count
+    recv_data >> item >> slot >> count;
     recv_data >> unk1 >> unk2;
 
     // client expects count starting at 1, and we send vendorslot+1 to client already
