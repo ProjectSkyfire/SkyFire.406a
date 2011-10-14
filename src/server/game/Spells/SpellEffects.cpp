@@ -5125,7 +5125,7 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
         case SPELLFAMILY_DEATHKNIGHT:
         {
             // Pestilence
-            if (m_spellInfo->SpellFamilyFlags[1]&0x10000)
+            if (m_spellInfo->SpellFamilyFlags[1] & 0x10000)
             {
                 // Get diseases on target of spell
                 if (m_targets.GetUnitTarget() &&  // Glyph of Disease - cast on unit target too to refresh aura
@@ -5140,16 +5140,15 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
                         m_caster->CastSpell(unitTarget, 55095, true);
                 }
             }
-			if (m_spellInfo->Id == 85948)
+            if (m_spellInfo->Id == 85948) // Festering Strike
             {
-				int32 r = urand(2, 6);
-
-				if (unitTarget->HasAura(45524)) // Chains of Ice
-                    unitTarget->GetAura(45524)->SetDuration((unitTarget->GetAura(45524)->GetDuration() + r * 1000), true);
-				if (unitTarget->HasAura(55095)) // Frost Fever
-                    unitTarget->GetAura(55095)->SetDuration((unitTarget->GetAura(55095)->GetDuration() + r * 1000), true);
-				if (unitTarget->HasAura(55078)) // Blood Plague
-                    unitTarget->GetAura(55078)->SetDuration((unitTarget->GetAura(55078)->GetDuration() + r * 1000), true);
+                uint32 addDuration = urand(2, 6);
+                if (unitTarget->HasAura(45524)) // Chains of Ice
+                    unitTarget->GetAura(45524)->SetDuration(unitTarget->GetAura(45524)->GetDuration() + (addDuration * 1000), true);
+                if (unitTarget->HasAura(55095)) // Frost Fever
+                    unitTarget->GetAura(55095)->SetDuration(unitTarget->GetAura(55095)->GetDuration() + (addDuration * 1000), true);
+                if (unitTarget->HasAura(55078)) // Blood Plague
+                    unitTarget->GetAura(55078)->SetDuration(unitTarget->GetAura(55078)->GetDuration() + (addDuration * 1000), true);
             }
             break;
 		}
