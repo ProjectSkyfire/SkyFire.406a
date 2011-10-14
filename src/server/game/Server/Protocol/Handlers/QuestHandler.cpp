@@ -212,13 +212,13 @@ void WorldSession::HandleQuestgiverAcceptQuestOpcode(WorldPacket & recv_data)
                     }
 
                     if (destroyItem)
-                        _player->DestroyItem(((Item*)pObject)->GetBagSlot(), ((Item*)pObject)->GetSlot(), true);
+                        _player->DestroyItem(((Item*)object)->GetBagSlot(), ((Item*)object)->GetSlot(), true);
 
                     break;
                 }
                 case TYPEID_GAMEOBJECT:
-                    sScriptMgr->OnQuestAccept(_player, ((GameObject*)pObject), quest_info);
-                    (pObject->ToGameObject())->AI()->QuestAccept(_player, quest_info);
+                    sScriptMgr->OnQuestAccept(_player, ((GameObject*)object), quest_info);
+                    (object->ToGameObject())->AI()->QuestAccept(_player, quest_info);
                     break;
                 default:
                     break;
@@ -592,7 +592,7 @@ void WorldSession::HandlePushQuestToParty(WorldPacket& recvPacket)
                     continue;
                 }
 
-                player->PlayerTalkClass->SendQuestGiverQuestDetails(pQuest, _player->GetGUID(), true);
+                player->PlayerTalkClass->SendQuestGiverQuestDetails(quest, _player->GetGUID(), true);
                 player->SetDivider(_player->GetGUID());
             }
         }
