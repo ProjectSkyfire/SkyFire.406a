@@ -1412,6 +1412,7 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
             {
                 if (!unitTarget)
                     return;
+
                 // Restorative Totems
                 if (Unit* owner = m_caster->GetOwner())
                     if (AuraEffect* dummy = owner->GetAuraEffect(SPELL_AURA_DUMMY, SPELLFAMILY_SHAMAN, 338, 1))
@@ -5139,8 +5140,19 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
                         m_caster->CastSpell(unitTarget, 55095, true);
                 }
             }
+			if (m_spellInfo->Id == 85948)
+            {
+				int32 r = urand(2, 6);
+
+				if (unitTarget->HasAura(45524)) // Chains of Ice
+                    unitTarget->GetAura(45524)->SetDuration((unitTarget->GetAura(45524)->GetDuration() + r * 1000), true);
+				if (unitTarget->HasAura(55095)) // Frost Fever
+                    unitTarget->GetAura(55095)->SetDuration((unitTarget->GetAura(55095)->GetDuration() + r * 1000), true);
+				if (unitTarget->HasAura(55078)) // Blood Plague
+                    unitTarget->GetAura(55078)->SetDuration((unitTarget->GetAura(55078)->GetDuration() + r * 1000), true);
+            }
             break;
-        }
+		}
         case SPELLFAMILY_WARRIOR:
         {
             // Shattering Throw
