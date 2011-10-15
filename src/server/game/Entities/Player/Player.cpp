@@ -2703,7 +2703,6 @@ void Player::Regenerate(Powers power)
             break;
         }
         case POWER_RUNE:
-        case POWER_FOCUS:
         case POWER_HAPPINESS:
         case POWER_HEALTH:
             break;
@@ -24533,6 +24532,8 @@ void Player::BuildPlayerTalentsInfoData(WorldPacket *data)
         for (uint32 specIdx = 0; specIdx < m_specsCount; ++specIdx)
         {
             uint8 talentIdCount = 0;
+            //*data << uint32(GetTalentBranchSpec(specIdx));  //branchSpec - ToDo
+            *data << uint32(0); // GetTalentBranchSpec(specIdx);
             size_t pos = data->wpos();
             *data << uint8(talentIdCount);                  // [PH], talentIdCount
 

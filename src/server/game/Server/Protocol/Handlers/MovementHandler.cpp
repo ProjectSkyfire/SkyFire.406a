@@ -441,7 +441,7 @@ void WorldSession::HandleForceSpeedChangeAck(WorldPacket &recv_data)
             return;
     }
 
-    if (!_player->GetTransport() && fabs(_player->GetSpeed(move_type) - newspeed) > 0.01f)
+    if (!_player->GetTransport() && fabs(_player->GetSpeed(move_type) - newspeed) > 0.01f && _player->GetSession()->GetSecurity() == SEC_PLAYER)
     {
         if (_player->GetSpeed(move_type) > newspeed)         // must be greater - just correct
         {

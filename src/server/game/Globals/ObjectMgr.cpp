@@ -2181,7 +2181,12 @@ void ObjectMgr::LoadItemTemplates()
         itemTemplate.ScalingStatDistribution = uint32(fields[47].GetUInt16());
         itemTemplate.ScalingStatValue        = fields[48].GetInt32();
 
-        itemTemplate.damageType     = uint32(fields[122].GetUInt16());
+        const ItemSparseEntry* info = sItemSparseStore.LookupEntry(entry);
+        if(info)
+            itemTemplate.damageType = info->DamageType;
+        else
+            itemTemplate.damageType     = 0;
+
         itemTemplate.Delay          = uint32(fields[49].GetUInt16());
         itemTemplate.RangedModRange = fields[50].GetFloat();
 
