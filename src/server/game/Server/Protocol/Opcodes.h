@@ -577,7 +577,7 @@ enum Opcodes
     SMSG_MAIL_LIST_RESULT                            = 0x0F1C8, // 4.0.6a 13623
     CMSG_BATTLEFIELD_LIST                            = 0x00093, // 4.0.6a 13623
     SMSG_BATTLEFIELD_LIST                            = 0x0490C, // 4.0.6a 13623
-    CMSG_BATTLEFIELD_JOIN                            = 0x00611, // 4.0.6a 13623
+    CMSG_BATTLEFIELD_JOIN                            = 0x00C91, // 4.0.6a 13623
     SMSG_JOINED_BATTLEGROUND_QUEUE                   = 0x0090E, // 4.0.6a 13623
     CMSG_REQUEST_RATED_BG_INFO                       = 0x08501, // 4.0.6a 13623
     CMSG_REQUEST_PVP_OPTIONS_ENABLED                 = 0x00188, // 4.0.6a 13623
