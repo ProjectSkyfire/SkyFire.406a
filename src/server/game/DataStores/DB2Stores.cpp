@@ -84,22 +84,25 @@ void LoadDB2Stores(const std::string& dataPath)
     StoreProblemList1 bad_db2_files;
     uint32 availableDb2Locales = 0xFFFFFFFF;
 
-    LoadDB2(availableDb2Locales, bad_db2_files, sItemStore, db2Path, "Item.db2");
-    LoadDB2(availableDb2Locales, bad_db2_files, sItemSparseStore, db2Path, "Item-sparse.db2");
-    // error checks
-    if (bad_db2_files.size() >= DB2FilesCount)
-    {
-        sLog->outError("\nIncorrect DataDir value in worldserver.conf or ALL required *.db2 files (%d) not found by path: %sdb2", DB2FilesCount, dataPath.c_str());
-        exit(1);
-    }
-    else if (!bad_db2_files.empty())
-    {
-        std::string str;
-        for (std::list<std::string>::iterator i = bad_db2_files.begin(); i != bad_db2_files.end(); ++i)
-            str += *i + "\n";
+    LoadDB2(availableDb2Locales, bad_db2_files, sItemStore,                   db2Path, "Item.db2");
+    LoadDB2(availableDb2Locales, bad_db2_files, sItemSparseStore,             db2Path, "Item-sparse.db2");
 
-        sLog->outError("\nSome required *.db2 files (%u from %d) not found or not compatible:\n%s", (uint32)bad_db2_files.size(), DB2FilesCount, str.c_str());
-        exit(1);
+    for (uint32 i = 0; i < sItemStore.GetNumRows(); ++i)
+    {
+        const ItemEntry* itemEntry = sItemStore.LookupEntry(i);
+        if (!itemEntry)
+            continue;
+
+        if (itemEntry->Class >= MAX_ITEM_CLASS)
+        {
+            sLog->outErrorDb("Item (Entry: %u) in Item.db2 has too high class value %u", itemEntry->ID, itemEntry->Class);
+            const_cast<ItemEntry*>(itemEntry)->Class = 0;
+        }
+        if (itemEntry->SubClass >= MaxItemSubclassValues[itemEntry->Class])
+        {
+            sLog->outErrorDb("Item (Entry: %u) in Item.db2 has too high subclass value %u for class %u", itemEntry->ID, itemEntry->SubClass, itemEntry->Class);
+            const_cast<ItemEntry*>(itemEntry)->SubClass = 0;
+        }
     }
 
     // Check loaded DBC files proper version

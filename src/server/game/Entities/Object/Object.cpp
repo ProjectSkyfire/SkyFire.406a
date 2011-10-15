@@ -114,7 +114,6 @@ Object::~Object()
 
     delete [] m_uint32Values;
     delete [] _changedFields;
-
 }
 
 void Object::_InitValues()
@@ -459,7 +458,7 @@ void Object::_BuildMovementUpdate(ByteBuffer * data, uint16 flags) const
        *data << bytes;
        for (uint8 i = 0; i < bytes; i++)
            *data << uint32(0);
-   }	
+   }
 }
 
 void Object::_BuildValuesUpdate(uint8 updatetype, ByteBuffer * data, UpdateMask* updateMask, Player* target) const
@@ -1991,7 +1990,6 @@ void WorldObject::SendMessageToSet(WorldPacket* data, bool self)
 {
     SendMessageToSetInRange(data, GetVisibilityRange(), self);
 }
-
 
 void WorldObject::SendMessageToSetInRange(WorldPacket* data, float dist, bool /*self*/)
 {

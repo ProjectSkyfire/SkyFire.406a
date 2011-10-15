@@ -21,11 +21,9 @@
 // Remove references to "sTeamContributionPointsStore"
 
 #include "DBCStores.h"
-
 #include "Log.h"
 #include "SharedDefines.h"
 #include "SpellMgr.h"
-
 #include "DBCfmt.h"
 
 #include <map>
@@ -63,6 +61,7 @@ static WMOAreaInfoByTripple sWMOAreaInfoByTripple;
 DBCStorage <AchievementEntry> sAchievementStore(Achievementfmt);
 DBCStorage <AchievementCriteriaEntry> sAchievementCriteriaStore(AchievementCriteriafmt);
 DBCStorage <AreaTriggerEntry> sAreaTriggerStore(AreaTriggerEntryfmt);
+DBCStorage <ArmorLocationEntry> sArmorLocationStore(ArmorLocationfmt);
 DBCStorage <AuctionHouseEntry> sAuctionHouseStore(AuctionHouseEntryfmt);
 DBCStorage <BankBagSlotPricesEntry> sBankBagSlotPricesStore(BankBagSlotPricesEntryfmt);
 DBCStorage <BattlemasterListEntry> sBattlemasterListStore(BattlemasterListEntryfmt);
@@ -111,15 +110,25 @@ DBCStorage <GtRegenMPPerSptEntry>         sGtRegenMPPerSptStore(GtRegenMPPerSptf
 
 DBCStorage <HolidaysEntry>                sHolidaysStore(Holidaysfmt);
 
+DBCStorage <ItemArmorQualityEntry>        sItemArmorQualityStore(ItemArmorQualityfmt);
+DBCStorage <ItemArmorShieldEntry>         sItemArmorShieldStore(ItemArmorShieldfmt);
+DBCStorage <ItemArmorTotalEntry>          sItemArmorTotalStore(ItemArmorTotalfmt);
 DBCStorage <ItemBagFamilyEntry>           sItemBagFamilyStore(ItemBagFamilyfmt);
-//DBCStorage <ItemCondExtCostsEntry> sItemCondExtCostsStore(ItemCondExtCostsEntryfmt);
-//DBCStorage <ItemDisplayInfoEntry> sItemDisplayInfoStore(ItemDisplayTemplateEntryfmt); -- not used currently
-DBCStorage <ItemExtendedCostEntry> sItemExtendedCostStore(ItemExtendedCostEntryfmt);
-DBCStorage <ItemLimitCategoryEntry> sItemLimitCategoryStore(ItemLimitCategoryEntryfmt);
-DBCStorage <ItemRandomPropertiesEntry> sItemRandomPropertiesStore(ItemRandomPropertiesfmt);
-DBCStorage <ItemRandomSuffixEntry> sItemRandomSuffixStore(ItemRandomSuffixfmt);
-DBCStorage <ItemReforgeEntry> sItemReforgeStore(ItemReforgefmt);
-DBCStorage <ItemSetEntry> sItemSetStore(ItemSetEntryfmt);
+DBCStorage <ItemDamageEntry>              sItemDamageAmmoStore(ItemDamagefmt);
+DBCStorage <ItemDamageEntry>              sItemDamageOneHandStore(ItemDamagefmt);
+DBCStorage <ItemDamageEntry>              sItemDamageOneHandCasterStore(ItemDamagefmt);
+DBCStorage <ItemDamageEntry>              sItemDamageRangedStore(ItemDamagefmt);
+DBCStorage <ItemDamageEntry>              sItemDamageThrownStore(ItemDamagefmt);
+DBCStorage <ItemDamageEntry>              sItemDamageTwoHandStore(ItemDamagefmt);
+DBCStorage <ItemDamageEntry>              sItemDamageTwoHandCasterStore(ItemDamagefmt);
+DBCStorage <ItemDamageEntry>              sItemDamageWandStore(ItemDamagefmt);
+//DBCStorage <ItemDisplayInfoEntry>         sItemDisplayInfoStore(ItemDisplayTemplateEntryfmt); -- not used currently
+DBCStorage <ItemExtendedCostEntry>        sItemExtendedCostStore(ItemExtendedCostEntryfmt);
+DBCStorage <ItemLimitCategoryEntry>       sItemLimitCategoryStore(ItemLimitCategoryEntryfmt);
+DBCStorage <ItemRandomPropertiesEntry>    sItemRandomPropertiesStore(ItemRandomPropertiesfmt);
+DBCStorage <ItemRandomSuffixEntry>        sItemRandomSuffixStore(ItemRandomSuffixfmt);
+DBCStorage <ItemSetEntry>                 sItemSetStore(ItemSetEntryfmt);
+DBCStorage <ItemReforgeEntry>             sItemReforgeStore(ItemReforgefmt);
 
 DBCStorage <LFGDungeonEntry> sLFGDungeonStore(LFGDungeonEntryfmt);
 

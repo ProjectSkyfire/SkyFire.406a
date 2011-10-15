@@ -2099,7 +2099,7 @@ class Player : public Unit, public GridObject<Player>
         void _ApplyAllLevelScaleItemMods(bool apply);
         void _ApplyItemBonuses(ItemTemplate const *proto, uint8 slot, bool apply, bool only_level_scale = false);
         void _ApplyWeaponDamage(uint8 slot, ItemTemplate const *proto, ScalingStatValuesEntry const *ssv, bool apply);
-        void _ApplyAmmoBonuses();
+        //void _ApplyAmmoBonuses();
         bool EnchantmentFitsRequirements(uint32 enchantmentcondition, int8 slot);
         void ToggleMetaGemsActive(uint8 exceptslot, bool apply);
         void CorrectMetaGemEnchants(uint8 slot, bool apply);

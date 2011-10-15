@@ -513,7 +513,7 @@ m_caster((info->AttributesEx6 & SPELL_ATTR6_CAST_BY_CHARMER && caster->GetCharme
         // wand case
         if ((m_caster->getClassMask() & CLASSMASK_WAND_USERS) != 0 && m_caster->GetTypeId() == TYPEID_PLAYER)
             if (Item* pItem = m_caster->ToPlayer()->GetWeaponForAttack(RANGED_ATTACK))
-                m_spellSchoolMask = SpellSchoolMask(1 << pItem->GetTemplate()->Damage[0].DamageType);
+                m_spellSchoolMask = SpellSchoolMask(1 << pItem->GetTemplate()->damageType);
 
     if (originalCasterGUID)
         m_originalCasterGUID = originalCasterGUID;
@@ -3361,7 +3361,7 @@ void Spell::_handle_immediate_phase()
     m_diminishLevel = DIMINISHING_LEVEL_1;
     m_diminishGroup = DIMINISHING_NONE;
 
-	// handle some immediate features of the spell here
+    // handle some immediate features of the spell here
     HandleThreatSpells();
 
     PrepareScriptHitHandlers();
@@ -3428,7 +3428,7 @@ void Spell::_handle_finish_phase()
     if (m_caster->m_extraAttacks && GetSpellInfo()->HasEffect(SPELL_EFFECT_ADD_EXTRA_ATTACKS))
         m_caster->HandleProcExtraAttackFor(m_caster->getVictim());
 
-	// TODO: trigger proc phase finish here
+    // TODO: trigger proc phase finish here
 }
 
 void Spell::SendSpellCooldown()
@@ -5967,7 +5967,7 @@ SpellCastResult Spell::CheckItems()
             }
             case SPELL_EFFECT_ENCHANT_ITEM:
                 if (m_spellInfo->Effects[i].ItemType && m_targets.GetItemTarget()
-                    && (m_targets.GetItemTarget()->IsWeaponVellum() || m_targets.GetItemTarget()->IsArmorVellum()))
+                    && m_targets.GetItemTarget()->IsArmorVellum())
                 {
                     // cannot enchant vellum for other player
                     if (m_targets.GetItemTarget()->GetOwner() != m_caster)

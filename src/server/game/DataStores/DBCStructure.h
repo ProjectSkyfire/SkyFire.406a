@@ -584,6 +584,12 @@ struct AreaTriggerEntry
     float   box_orientation;                                // 12       m_box_yaw
 };
 
+struct ArmorLocationEntry
+{
+  uint32    InventoryType;                                  // 0
+  float     Value[5];                                       // 1-5 multiplier for armor types (cloth...plate, no armor?)
+};
+
 struct AuctionHouseEntry
 {
     uint32    houseId;                                      // 0 index
@@ -1098,11 +1104,33 @@ struct HolidaysEntry
     //uint32 flags;                                         // 54       m_flags (0 = Darkmoon Faire, Fishing Contest and Wotlk Launch, rest is 1)
 };
 
+#define MAX_ITEM_EXTENDED_COST_REQUIREMENTS 5
+
+struct ItemArmorQualityEntry
+{
+  uint32    Id;                                             // 0 item level
+  float     Value[7];                                       // 1-7 multiplier for item quality
+  uint32    Id2;                                            // 8 item level
+};
+
+struct ItemArmorShieldEntry
+{
+  uint32    Id;                                             // 0 item level
+  uint32    Id2;                                            // 1 item level
+  float     Value[7];                                       // 2-8 multiplier for item quality
+};
+
+struct ItemArmorTotalEntry
+{
+  uint32    Id;                                             // 0 item level
+  uint32    Id2;                                            // 1 item level
+  float     Value[4];                                       // 2-5 multiplier for armor types (cloth...plate)
+};
+
 struct ItemBagFamilyEntry
 {
     uint32   ID;                                            // 0
-    //DBCString  name[16]                                   // 1-16     m_name_lang
-    //                                                      // 17       name flags
+    //DBCString     name;                                   // 1        m_name_lang
 };
 
 struct ItemDisplayInfoEntry
@@ -1129,33 +1157,46 @@ struct ItemDisplayInfoEntry
 //    uint32      arenaseason;                              // arena season number(1-4)
 //};
 
-#define MAX_ITEM_EXTENDED_COST_REQUIREMENTS 5
+// common struct for:
+// ItemDamageAmmo.dbc
+// ItemDamageOneHand.dbc
+// ItemDamageOneHandCaster.dbc
+// ItemDamageRanged.dbc
+// ItemDamageThrown.dbc
+// ItemDamageTwoHand.dbc
+// ItemDamageTwoHandCaster.dbc
+// ItemDamageWand.dbc
+struct ItemDamageEntry
+{
+  uint32    Id;                                             // 0 item level
+  float     Value[7];                                       // 1-7 multiplier for item quality
+  uint32    Id2;                                            // 8 item level
+};
 
-#define MAX_EXTENDED_COST_ITEMS         5
-#define MAX_EXTENDED_COST_CURRENCIES    5
+#define MAX_ITEM_EXT_COST_ITEMS         5
+#define MAX_ITEM_EXT_COST_CURRENCIES    5
 
 struct ItemExtendedCostEntry
 {
     uint32      ID;                                         // 0 extended-cost entry id
-    //uint32      reqhonorpoints;                             // 1 required honor points
-    //uint32      reqarenapoints;                             // 2 required arena points
-    uint32      RequiredArenaSlot;                          // 4 arena slot restrictions (min slot value)
-    uint32      RequiredItem[MAX_EXTENDED_COST_ITEMS];      // 5-8 required item id
-    uint32      RequiredItemCount[MAX_EXTENDED_COST_ITEMS]; // 9-13 required count of 1st item
+    //uint32    reqhonorpoints;                             // 1 required honor points
+    //uint32    reqarenapoints;                             // 2 required arena points
+    uint32      RequiredArenaSlot;                          // 3 arena slot restrictions (min slot value)
+    uint32      RequiredItem[MAX_ITEM_EXT_COST_ITEMS];      // 4-8 required item id
+    uint32      RequiredItemCount[MAX_ITEM_EXT_COST_ITEMS]; // 9-13 required count of 1st item
     uint32      RequiredPersonalArenaRating;                // 14 required personal arena rating
-    //uint32                                                // 15
-    uint32      RequiredCurrency[MAX_EXTENDED_COST_CURRENCIES];      // 16-20
-    uint32      RequiredCurrencyCount[MAX_EXTENDED_COST_CURRENCIES]; // 21-25
+    //uint32    ItemPurchaseGroup;                          // 15
+    uint32      RequiredCurrency[MAX_ITEM_EXT_COST_CURRENCIES];// 16-20 required curency id
+    uint32      RequiredCurrencyCount[MAX_ITEM_EXT_COST_CURRENCIES];// 21-25 required curency count
     //uint32    something[5];                               // 26-30
 };
 
 struct ItemLimitCategoryEntry
 {
-    uint32      ID;                                         // 0 Id
-    //DBCString  name[16]                                   // 1-16     m_name_lang
-                                                            // 17 name flags
-    uint32      maxCount;                                   // 18, max allowed equipped as item or in gem slot
-    uint32      mode;                                       // 19, 0 = have, 1 = equip (enum ItemLimitCategoryMode)
+    uint32      ID;                                                 // 0 Id
+    //DBCString     name;                                           // 1        m_name_lang
+    uint32      maxCount;                                           // 2       m_quantity max allowed equipped as item or in gem slot
+    uint32      mode;                                               // 3       m_flags 0 = have, 1 = equip (enum ItemLimitCategoryMode)
 };
 
 #define MAX_ITEM_ENCHANTMENT_EFFECTS 3
@@ -1178,15 +1219,6 @@ struct ItemRandomSuffixEntry
     uint32    prefix[5];                                    // 8-12     m_allocationPct
 };
 
-struct ItemReforgeEntry
-{
-    uint32    ID;                                           // 0        m_ID
-    uint32    SourceStat;                                   // 1        m_SourceStat
-    float     Scaling1;                                     // 2        m_Scaling1 - always 0.4.
-    uint32    DestinationStat;                              // 3        m_DestinationStat
-    float     Scaling2;                                     // 4        m_Scaling2 - always 1.
-};
-
 #define MAX_ITEM_SET_ITEMS 10
 #define MAX_ITEM_SET_SPELLS 8
 
@@ -1199,6 +1231,15 @@ struct ItemSetEntry
     uint32    items_to_triggerspell[MAX_ITEM_SET_SPELLS];   // 27-34    m_setThreshold
     uint32    required_skill_id;                            // 35       m_requiredSkill
     uint32    required_skill_value;                         // 36       m_requiredSkillRank
+};
+
+struct ItemReforgeEntry
+{
+    uint32    ID;                                           // 0        m_ID
+    uint32    SourceStat;                                   // 1        m_SourceStat
+    float     Scaling1;                                     // 2        m_Scaling1 - always 0.4.
+    uint32    DestinationStat;                              // 3        m_DestinationStat
+    float     Scaling2;                                     // 4        m_Scaling2 - always 1.
 };
 
 struct LFGDungeonEntry

@@ -1,6 +1,5 @@
 /*
  * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2011 TrilliumEMU <http://www.trilliumemu.org/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
@@ -31,118 +30,97 @@ class ItemInfo;
 struct ItemEntry;
 struct ItemSparseEntry;
 
-class ItemInfoMgr
-{
-    friend class ACE_Singleton<ItemInfoMgr, ACE_Null_Mutex>;
-private:
-    ItemInfoMgr();
-    ~ItemInfoMgr();
-
-public:
-    typedef std::vector<ItemInfo*> ItemInfoMap;
-
-    ItemInfo const* GetItemInfo(uint32 ItemId) const { return ItemId < GetItemInfoStoreSize() ?  mItemInfoMap[ItemId] : NULL; }
-    uint32 GetItemInfoStoreSize() const { return mItemInfoMap.size(); }
-
-    void LoadItemInfo();
-    void UnloadItemInfoStore();
-
-private:
-    ItemInfoMap mItemInfoMap;
-};
-
 class ItemInfo
 {
 public:
-    /* Item.db2 */
-    uint32     Class;
-    uint32     SubClass;
-    int32      Unk0;
-    //int32      Material;
-    uint32     DisplayId;
-    //uint32     InventoryType;
-    //uint32     Sheath;
-
-    /* Item-sparse.db2 */
-    uint32     ItemId;
-    uint32     Quality;
-    uint32     Flags;
-    uint32     Flags2;
-    uint32     BuyPrice;
-    uint32     SellPrice;
-    uint32     InventoryType;
-    int32      AllowableClass;
-    int32      AllowableRace;
-    uint32     ItemLevel;
-    int32      RequiredLevel;
-    uint32     RequiredSkill;
-    uint32     RequiredSkillRank;
-    uint32     RequiredSpell;
-    uint32     RequiredHonorRank;
-    uint32     RequiredCityRank;
-    uint32     RequiredReputationFaction;
-    uint32     RequiredReputationRank;
-    uint32     MaxCount;
-    uint32     Stackable;
-    uint32     ContainerSlots;
-    int32      ItemStatType[MAX_ITEM_PROTO_STATS];
-    uint32     ItemStatValue[MAX_ITEM_PROTO_STATS];
-    uint32     ScalingStatDistribution;
-    uint32     DamageType;
-    uint32     Delay;
-    float      RangedModRange;
-    int32      SpellId[MAX_ITEM_PROTO_SPELLS];
-    int32      SpellTrigger[MAX_ITEM_PROTO_SPELLS];
-    int32      SpellCharges[MAX_ITEM_PROTO_SPELLS];
-    int32      SpellCooldown[MAX_ITEM_PROTO_SPELLS];
-    int32      SpellCategory[MAX_ITEM_PROTO_SPELLS];
-    int32      SpellCategoryCooldown[MAX_ITEM_PROTO_SPELLS];
-    uint32     Bonding;
-    DB2String  Name;
-    DB2String  Name2;
-    DB2String  Name3;
-    DB2String  Name4;
-    DB2String  Description;
-    uint32     PageText;
-    uint32     LanguageID;
-    uint32     PageMaterial;
-    uint32     StartQuest;
-    uint32     LockID;
-    int32      Material;
-    uint32     Sheath;
-    uint32     RandomProperty;
-    uint32     RandomSuffix;
-    uint32     ItemSet;
-    uint32     MaxDurability;
-    uint32     Area;
-    uint32     Map;
-    uint32     BagFamily;
-    uint32     TotemCategory;
-    uint32     Color[MAX_ITEM_PROTO_SOCKETS];
-    uint32     Content[MAX_ITEM_PROTO_SOCKETS];
-    int32      SocketBonus;
-    uint32     GemProperties;
-    float      ArmorDamageModifier;
-    uint32     Duration;
-    uint32     ItemLimitCategory;
-    uint32     HolidayId;
-    float      StatScalingFactor;
-
-    /* item_template */
-    uint32     BuyCount;
-    uint32     Block;
-    uint32     RequiredDisenchantSkill;
-    uint32     ScriptId;
-    uint32     DisenchantID;
-    uint32     FoodType;
-    uint32     MinMoneyLoot;
-    uint32     MaxMoneyLoot;
+    uint32   Id;
+    uint32   Class;
+    uint32   SubClass;
+    int32    Unk0;
+    int32    Material;
+    uint32   DisplayId;
+    uint32   InventoryType;
+    uint32   Sheath;
 
     // Functions
     ItemInfo(ItemSparseEntry const* itemSparse);
-    ItemEntry const* GetItemEntry() const;
 };
 
-#define sItemInfoMgr ACE_Singleton<ItemInfoMgr, ACE_Null_Mutex>::instance()
+class ItemSparseInfo
+{
+public:
+    uint32 Id;
+    uint32 Quality;
+    uint32 Flags;
+    uint32 Flags2;
+    int32 BuyPrice;
+    int32 SellPrice;
+    uint32 InventoryType;
+    int32 AllowableClass;
+    int32 AllowableRace;
+    uint32 ItemLevel;
+    uint32 RequiredLevel;
+    uint32 RequiredSkill;
+    uint32 RequiredSkillRank;
+    uint32 RequiredSpell;
+    uint32 RequiredHonorRank;
+    uint32 RequiredCityRank;
+    uint32 RequiredReputationFaction;
+    uint32 RequiredReputationRank;
+    int32 MaxCount;
+    int32 Stackable;
+    int32 ContainerSlots;
+    int32 ItemStatType[MAX_ITEM_PROTO_STATS];
+    int32 ItemStatValue[MAX_ITEM_PROTO_STATS];
+    int32 ItemStatUnk1[MAX_ITEM_PROTO_STATS];
+    int32 ItemStatUnk2[MAX_ITEM_PROTO_STATS];
+    int32 ScalingStatDistribution;
+    int32 DamageType;
+    int32 Delay;
+    float RangedModRange;
+    int32 SpellId[MAX_ITEM_PROTO_SPELLS];
+    int32 SpellTrigger[MAX_ITEM_PROTO_SPELLS];
+    int32 SpellCharges[MAX_ITEM_PROTO_SPELLS];
+    int32 SpellCooldown[MAX_ITEM_PROTO_SPELLS];
+    int32 SpellCategory[MAX_ITEM_PROTO_SPELLS];
+    int32 SpellCategoryCooldown[MAX_ITEM_PROTO_SPELLS];
+    int32 Bonding;
+    DBCString name;
+    DBCString name2;
+    DBCString name3;
+    DBCString name4;
+    DBCString description;
+    int32 PageText;
+    int32 LanguageId;
+    int32 PageMaterial;
+    int32 StartQuest;
+    int32 LockID;
+    int32 Material;
+    int32 Sheath;
+    int32 RandomProperty;
+    int32 RandomSuffix;
+    int32 ItemSet;
+    uint32 MaxDurability;
+    int32 Area;
+    int32 Map;
+    int32 BagFamily;
+    int32 TotemCategory;
+    int32 SocketColor[MAX_ITEM_PROTO_SOCKETS];
+    int32 SocketContent[MAX_ITEM_PROTO_SOCKETS];
+    int32 SocketBonus;
+    int32 GemProperties;
+    float ArmorDamageModifier;
+    int32 Duration;
+    int32 ItemLimitCategory;
+    int32 HolidayId;
+    float StatScalingFactor;
+    int32 field_130; // related to archeology (?)
+    int32 field_131; // related to archeology
+
+    ItemSparseInfo(ItemEntry const* itemEntry);
+    ItemSparseEntry const* GetSparseInfo() const;
+};
+
+//#define sItemInfoMgr ACE_Singleton<ItemInfoMgr, ACE_Null_Mutex>::instance()
 
 #endif // _ITEMINFO_H

@@ -89,8 +89,8 @@ enum Races
     (1<<(RACE_DRAENEI-1))  |(1<<(RACE_GOBLIN-1))       |(1<<(RACE_WORGEN-1)))
 
 #define RACEMASK_ALLIANCE \
-    ((1<<(RACE_HUMAN-1)) |(1<<(RACE_DWARF-1))   |(1<<(RACE_NIGHTELF-1)) | \
-    (1<<(RACE_GNOME-1))  |(1<<(RACE_DRAENEI-1)) |(1<<(RACE_WORGEN-1)))
+    ((1<<(RACE_HUMAN-1))    | (1<<(RACE_DWARF-1))   | (1<<(RACE_NIGHTELF-1)) | \
+    (1<<(RACE_GNOME-1))     |(1<<(RACE_DRAENEI-1))  |(1<<(RACE_WORGEN-1)))
 
 #define RACEMASK_HORDE RACEMASK_ALL_PLAYABLE & ~RACEMASK_ALLIANCE
 
@@ -115,8 +115,8 @@ enum Classes
 
 #define CLASSMASK_ALL_PLAYABLE \
     ((1<<(CLASS_WARRIOR-1))|(1<<(CLASS_PALADIN-1))|(1<<(CLASS_HUNTER-1))| \
-    (1<<(CLASS_ROGUE-1))  |(1<<(CLASS_PRIEST-1)) |(1<<(CLASS_SHAMAN-1))| \
-    (1<<(CLASS_MAGE-1))   |(1<<(CLASS_WARLOCK-1))|(1<<(CLASS_DRUID-1)) | \
+    (1<<(CLASS_ROGUE-1))   |(1<<(CLASS_PRIEST-1)) |(1<<(CLASS_SHAMAN-1))| \
+    (1<<(CLASS_MAGE-1))    |(1<<(CLASS_WARLOCK-1))|(1<<(CLASS_DRUID-1)) | \
     (1<<(CLASS_DEATH_KNIGHT-1)))
 
 // valid classes for creature_template.unit_class
@@ -559,7 +559,7 @@ enum SpellAttr7
 #define MAX_TALENT_SPEC         1
 #define MIN_TALENT_SPECS        1
 #define MAX_TALENT_SPECS        2
-#define MAX_GLYPH_SLOT_INDEX    6
+#define MAX_GLYPH_SLOT_INDEX    8
 
 // Custom values
 enum SpellClickUserTypes
@@ -2346,7 +2346,13 @@ enum HolidayIds
     HOLIDAY_WOTLK_LAUNCH             = 406,
     HOLIDAY_DAY_OF_DEAD              = 409,
     HOLIDAY_CALL_TO_ARMS_IC          = 420,
-    HOLIDAY_KALU_AK_FISHING_DERBY    = 424
+    HOLIDAY_423                      = 423, // Rename
+    HOLIDAY_KALU_AK_FISHING_DERBY    = 424,
+    HOLIDAY_CALL_TO_ARMS_GILNEAS     = 435,
+    HOLIDAY_CALL_TO_ARMS_TWINPEAKS   = 436,
+    HOLIDAY_442                      = 442, // Rename
+    HOLIDAY_443                      = 443, // Rename
+    HOLIDAY_467                      = 467  // Rename
 };
 
 // values based at QuestInfo.dbc
@@ -2368,13 +2374,13 @@ enum QuestTypes
 // values based at QuestSort.dbc
 enum QuestSort
 {
-    QUEST_SORT_EPIC                = 1,
-    QUEST_SORT_WAILING_CAVERNS_OLD = 21,
+    QUEST_SORT_GROUP               = 1,
+    QUEST_SORT_HALLOW_END          = 21,
     QUEST_SORT_SEASONAL            = 22,
-    QUEST_SORT_UNDERCITY_OLD       = 23,
+    QUEST_SORT_CATACLYSM           = 23,
     QUEST_SORT_HERBALISM           = 24,
     QUEST_SORT_BATTLEGROUNDS       = 25,
-    QUEST_SORT_ULDAMN_OLD          = 41,
+    QUEST_SORT_DAY_OF_THE_DEAD     = 41,
     QUEST_SORT_WARLOCK             = 61,
     QUEST_SORT_WARRIOR             = 81,
     QUEST_SORT_SHAMAN              = 82,
@@ -2387,7 +2393,7 @@ enum QuestSort
     QUEST_SORT_LEATHERWORKING      = 182,
     QUEST_SORT_ENGINERING          = 201,
     QUEST_SORT_TREASURE_MAP        = 221,
-    QUEST_SORT_SUNKEN_TEMPLE_OLD   = 241,
+    QUEST_SORT_TOURNAMENT          = 241,
     QUEST_SORT_HUNTER              = 261,
     QUEST_SORT_PRIEST              = 262,
     QUEST_SORT_DRUID               = 263,
@@ -2405,7 +2411,15 @@ enum QuestSort
     QUEST_SORT_BREWFEST            = 370,
     QUEST_SORT_INSCRIPTION         = 371,
     QUEST_SORT_DEATH_KNIGHT        = 372,
-    QUEST_SORT_JEWELCRAFTING       = 373
+    QUEST_SORT_JEWELCRAFTING       = 373,
+    QUEST_SORT_NOBLEGARDEN         = 374,
+    QUEST_SORT_PILGRIM_BOUNTY      = 375,
+    QUEST_SORT_LOVE_IS_IN_THE_AIR  = 376,
+    QUEST_SORT_ARCHAEOLOGY         = 377,
+    QUEST_SORT_CHILDREN_WEEK       = 378,
+    // QUEST_SORT_FIRELANDS_INVASION  = 379, // 4.20a 14480
+    QUEST_SORT_THE_ZANDALARI       = 380,
+    QUEST_SORT_ELEMENTAL_BONDS     = 381
 };
 
 inline uint8 ClassByQuestSort(int32 QuestSort)
@@ -2628,6 +2642,7 @@ inline uint32 SkillByQuestSort(int32 QuestSort)
         case QUEST_SORT_FIRST_AID:      return SKILL_FIRST_AID;
         case QUEST_SORT_JEWELCRAFTING:  return SKILL_JEWELCRAFTING;
         case QUEST_SORT_INSCRIPTION:    return SKILL_INSCRIPTION;
+        case QUEST_SORT_ARCHAEOLOGY:    return SKILL_ARCHAEOLOGY;
     }
     return 0;
 }
@@ -2676,8 +2691,10 @@ enum TotemCategory
     TC_HAMMER_PICK                 = 167,
     TC_BLADED_PICKAXE              = 168,
     TC_FLINT_AND_TINDER            = 169,
-    TC_RUNED_COBALT_ROD            = 189,
-    TC_RUNED_TITANIUM_ROD          = 190
+    TC_RUNED_COBALT_ROD            = 189, // not use
+    TC_RUNED_TITANIUM_ROD          = 190,
+    TC_RUNED_ELEMENTIUM_ROD        = 209,
+    TC_HIGH_POWERED_BOLT_GUN       = 210
 };
 
 enum UnitDynFlags
@@ -2793,9 +2810,7 @@ enum PetDiet
 };
 
 #define MAX_PET_DIET 9
-
 #define CHAIN_SPELL_JUMP_RADIUS 8
-
 #define GUILD_BANKLOG_MAX_RECORDS   25
 #define GUILD_EVENTLOG_MAX_RECORDS  100
 
@@ -3026,10 +3041,23 @@ enum BattlegroundTypeId
     BATTLEGROUND_DS            = 10,
     BATTLEGROUND_RV            = 11,
     BATTLEGROUND_IC            = 30,
-    BATTLEGROUND_RB            = 32
+    BATTLEGROUND_RB            = 32,                        // Random Battleground
+    BATTLEGROUND_RA_BG         = 100,                       // Rated Battleground
+    BATTLEGROUND_RA_BG1        = 101,                       // Rated Battleground
+    BATTLEGROUND_RA_BG2        = 102,                       // Rated Battleground
+    BATTLEGROUND_TP            = 108,                       // Twin Peaks
+    BATTLEGROUND_BG            = 120,                       // The Battle for Gilneas
+    BATTLEGROUND_ICD           = 441,                       // Icecrown Citadel
+    BATTLEGROUND_RS            = 443,                       // The Ruby Sanctum
+    BATTLEGROUND_FL            = 522,                       // Firelands
+    BATTLEGROUND_FL2           = 523,                       // Firelands Terrain 2
+    BATTLEGROUND_TFW           = 530,                       // Throne of the Four Winds
+    BATTLEGROUND_BD            = 531,                       // Blackwing Descent
+    BATTLEGROUND_BT            = 532,                       // The Bastion of Twilight
+    BATTLEGROUND_BH            = 533                        // Baradin Hold
 };
 
-#define MAX_BATTLEGROUND_TYPE_ID 33
+#define MAX_BATTLEGROUND_TYPE_ID 543
 
 enum MailResponseType
 {

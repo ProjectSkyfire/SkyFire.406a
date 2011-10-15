@@ -659,50 +659,34 @@ void Spell::EffectSchoolDMG(SpellEffIndex effIndex)
                 break;
             }
             case SPELLFAMILY_HUNTER:
-            {
-                //Gore
-                if (m_spellInfo->SpellIconID == 1578)
                 {
-                    if (m_caster->HasAura(57627))           // Charge 6 sec post-affect
-                        damage *= 2;
-                }
-                // Steady Shot
-                else if (m_spellInfo->SpellFamilyFlags[1] & 0x1)
-                {
-                    bool found = false;
-                    // check dazed affect
-                    Unit::AuraEffectList const& decSpeedList = unitTarget->GetAuraEffectsByType(SPELL_AURA_MOD_DECREASE_SPEED);
-                    for (Unit::AuraEffectList::const_iterator iter = decSpeedList.begin(); iter != decSpeedList.end(); ++iter)
+                    //Gore
+                    if (m_spellInfo->SpellIconID == 1578)
                     {
-                        if ((*iter)->GetSpellInfo()->SpellIconID == 15 && (*iter)->GetSpellInfo()->Dispel == 0)
-                        {
-                            found = true;
-                            break;
-                        }
+                        if (m_caster->HasAura(57627))           // Charge 6 sec post-affect
+                            damage *= 2;
                     }
-
-                    // TODO: should this be put on taken but not done?
-                    if (found)
-                        damage += m_spellInfo->Effects[EFFECT_1].CalcValue();
-
-                    if (m_caster->GetTypeId() == TYPEID_PLAYER)
+                    // Steady Shot
+                    else if (m_spellInfo->SpellFamilyFlags[1] & 0x1)
                     {
-                        // Add Ammo and Weapon damage plus RAP * 0.1
-                        Item* item = m_caster->ToPlayer()->GetWeaponForAttack(RANGED_ATTACK);
-                        if (item)
+                        bool found = false;
+                        // check dazed affect
+                        Unit::AuraEffectList const& decSpeedList = unitTarget->GetAuraEffectsByType(SPELL_AURA_MOD_DECREASE_SPEED);
+                        for (Unit::AuraEffectList::const_iterator iter = decSpeedList.begin(); iter != decSpeedList.end(); ++iter)
                         {
-                            float dmg_min = item->GetTemplate()->Damage->DamageMin;
-                            float dmg_max = item->GetTemplate()->Damage->DamageMax;
-                            if (dmg_max == 0.0f && dmg_min > dmg_max)
-                                damage += int32(dmg_min);
-                            else
-                                damage += irand(int32(dmg_min), int32(dmg_max));
-                            damage += int32(m_caster->ToPlayer()->GetAmmoDPS()*item->GetTemplate()->Delay*0.001f);
+                            if ((*iter)->GetSpellInfo()->SpellIconID == 15 && (*iter)->GetSpellInfo()->Dispel == 0)
+                            {
+                                found = true;
+                                break;
+                            }
                         }
+
+                        // TODO: should this be put on taken but not done?
+                        if (found)
+                            damage += m_spellInfo->Effects[EFFECT_1].CalcValue();
                     }
+                    break;
                 }
-                break;
-            }
             case SPELLFAMILY_PALADIN:
             {
                 // Hammer of the Righteous
@@ -3525,7 +3509,7 @@ void Spell::EffectEnchantItemPerm(SpellEffIndex effIndex)
     Player* p_caster = (Player*)m_caster;
 
     // Handle vellums
-    if (itemTarget->IsWeaponVellum() || itemTarget->IsArmorVellum())
+    if (itemTarget->IsArmorVellum())
     {
         // destroy one vellum from stack
         uint32 count = 1;
@@ -3595,7 +3579,7 @@ void Spell::EffectEnchantItemPrismatic(SpellEffIndex effIndex)
     if (!pEnchant)
         return;
 
-    // support only enchantings with add socket in this slot
+    // support only enchanting with add socket in this slot
     {
         bool add_socket = false;
         for (uint8 i = 0; i < MAX_ITEM_ENCHANTMENT_EFFECTS; ++i)
@@ -3608,7 +3592,7 @@ void Spell::EffectEnchantItemPrismatic(SpellEffIndex effIndex)
         }
         if (!add_socket)
         {
-            sLog->outError("Spell::EffectEnchantItemPrismatic: attempt apply enchant spell %u with SPELL_EFFECT_ENCHANT_ITEM_PRISMATIC (%u) but without ITEM_ENCHANTMENT_TYPE_PRISMATIC_SOCKET (%u), not suppoted yet.",
+            sLog->outError("Spell::EffectEnchantItemPrismatic: attempt apply enchant spell %u with SPELL_EFFECT_ENCHANT_ITEM_PRISMATIC (%u) but without ITEM_ENCHANTMENT_TYPE_PRISMATIC_SOCKET (%u), not supported yet.",
                 m_spellInfo->Id, SPELL_EFFECT_ENCHANT_ITEM_PRISMATIC, ITEM_ENCHANTMENT_TYPE_PRISMATIC_SOCKET);
             return;
         }

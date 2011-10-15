@@ -184,7 +184,7 @@ void WorldSession::HandlePetitionBuyOpcode(WorldPacket & recv_data)
     ItemTemplate const* pProto = sObjectMgr->GetItemTemplate(charterid);
     if (!pProto)
     {
-        _player->SendBuyError(BUY_ERR_CANT_FIND_ITEM, NULL, charterid, 0);
+        _player->SendBuyError(BUY_ERR_ITEM_NOT_FOUND, NULL, charterid, 0);
         return;
     }
 
