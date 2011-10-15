@@ -5758,15 +5758,14 @@ void AuraEffect::HandlePeriodicDummyAuraTick(Unit* target, Unit* caster) const
                 case 48018:
                     if (GameObject* obj = target->GetGameObject(GetSpellInfo()->Id))
                     {
-                        AuraApplication* aurApp = GetBase()->GetApplicationOfTarget(target->GetGUID());
                         SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(48020);
                         if (target->IsWithinDist(obj, spellInfo->GetMaxRange(true)))
-                            aurApp->SendFakeAuraUpdate(62388,false);
-                        else
                         {
-                            target->RemoveAura(62388);
-                            aurApp->SendFakeAuraUpdate(62388,true);
+                            if (!target->HasAura(62388))
+                                target->CastSpell(target, 62388, true);
                         }
+                        else
+                            target->RemoveAura(62388);
                     }
                     break;
             }
