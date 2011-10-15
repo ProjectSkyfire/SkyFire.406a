@@ -3728,7 +3728,15 @@ void ObjectMgr::LoadQuests()
         "IncompleteEmote, CompleteEmote, OfferRewardEmote1, OfferRewardEmote2, OfferRewardEmote3, OfferRewardEmote4, "
     //   138                     139                     140                     141
         "OfferRewardEmoteDelay1, OfferRewardEmoteDelay2, OfferRewardEmoteDelay3, OfferRewardEmoteDelay4, "
-    //   142          143
+    //   142             143             144         145                 146
+        "RewSkillLineId, RewSkillPoints, RewRepMask, QuestGiverPortrait, QuestTurnInPortrait,"
+    //   147             148                149             150                151             152                153             154
+        "RewCurrencyId1, RewCurrencyCount1, RewCurrencyId2, RewCurrencyCount2, RewCurrencyId3, RewCurrencyCount3, RewCurrencyId4, RewCurrencyCount4,"
+    //   155             156                157             158                159             160                161             162
+        "ReqCurrencyId1, ReqCurrencyCount1, ReqCurrencyId2, ReqCurrencyCount2, ReqCurrencyId3, ReqCurrencyCount3, ReqCurrencyId4, ReqCurrencyCount4,"
+    //   163                     164                    165                      166                    167          168          169
+        "QuestGiverPortraitText, QuestGiverPortraitUnk, QuestTurnInPortraitText, QuestTurnInPortraitUnk, SoundAccept, SoundTurnIn, RequiredSpell,"
+    //   170          171
         "StartScript, CompleteScript"
         " FROM quest_template");
     if (!result)

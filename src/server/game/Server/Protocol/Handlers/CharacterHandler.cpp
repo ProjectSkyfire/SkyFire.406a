@@ -900,7 +900,16 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder * holder)
     if (pCurrChar->GetGuildId() != 0)
     {
         if (Guild* guild = sGuildMgr->GetGuildById(pCurrChar->GetGuildId()))
+        {
             guild->SendLoginInfo(this);
+            /*pCurrChar->SetUInt32Value(PLAYER_GUILDLEVEL, uint32(guild->GetLevel()));
+            pCurrChar->SetFlag(PLAYER_FLAGS, PLAYER_FLAGS_GLEVEL_ENABLED);
+
+            /// Learn perks to him
+            for(int i = 0; i < guild->GetLevel(); ++i)
+                if(const GuildPerksEntry* perk = sGuildPerksStore.LookupEntry(i)) //Since row id 25 does not exist, it just skip it
+                    pCurrChar->learnSpell(perk->SpellId, true);*/
+        }
         else
         {
             // remove wrong guild data

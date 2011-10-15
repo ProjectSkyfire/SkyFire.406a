@@ -399,10 +399,7 @@ enum PlayerFlags
     PLAYER_FLAGS_NO_XP_GAIN        = 0x02000000,
     PLAYER_FLAGS_UNK26             = 0x04000000,
     PLAYER_FLAGS_UNK27             = 0x08000000,
-    PLAYER_FLAGS_UNK28             = 0x01000000,
-    PLAYER_FLAGS_UNK29             = 0x02000000,
-    PLAYER_FLAGS_UNK30             = 0x04000000,
-    PLAYER_FLAGS_UNK31             = 0x08000000,
+    PLAYER_FLAGS_GLEVEL_ENABLED    = 0x10000000,
 };
 
 // used for PLAYER__FIELD_KNOWN_TITLES field (uint64), (1<<bit_index) without (-1)

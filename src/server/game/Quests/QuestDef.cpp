@@ -138,8 +138,34 @@ Quest::Quest(Field* questRecord)
     for (int i = 0; i < QUEST_EMOTE_COUNT; ++i)
         OfferRewardEmoteDelay[i] = questRecord[138+i].GetInt32();
 
-    QuestStartScript = questRecord[142].GetUInt32();
-    QuestCompleteScript = questRecord[143].GetUInt32();
+    RewSkillLineId = questRecord[142].GetUInt32();
+    RewSkillPoints = questRecord[143].GetUInt32();
+    RewRepMask = questRecord[144].GetUInt32();
+    QuestGiverPortrait = questRecord[145].GetUInt32();
+    QuestTurnInPortrait = questRecord[146].GetUInt32();
+
+    for (int i = 0; i < QUEST_CURRENCY_COUNT; ++i)
+    {
+        RewCurrencyId[i] = questRecord[147 + 2 * i].GetUInt32();
+        RewCurrencyCount[i] = questRecord[147 + 2 * i + 1].GetUInt32();
+    }
+
+    for (int i = 0; i < QUEST_CURRENCY_COUNT; ++i)
+    {
+        ReqCurrencyId[i] = questRecord[155 + 2 * i].GetUInt32();
+        ReqCurrencyCount[i] = questRecord[155 + 2 * i + 1].GetUInt32();
+    }
+
+    QuestGiverPortraitText = questRecord[163].GetString();
+    QuestGiverPortraitUnk = questRecord[164].GetString();
+    QuestTurnInPortraitText = questRecord[165].GetString();
+    QuestTurnInPortraitUnk = questRecord[166].GetString();
+    SoundAccept = questRecord[167].GetUInt32();
+    SoundTurnIn = questRecord[168].GetUInt32();
+    RequiredSpell = questRecord[169].GetUInt32();
+    
+    QuestStartScript = questRecord[170].GetUInt32();
+    QuestCompleteScript = questRecord[171].GetUInt32();
 
     QuestFlags |= SpecialFlags << 20;
     if (QuestFlags & QUEST_TRINITY_FLAGS_AUTO_ACCEPT)

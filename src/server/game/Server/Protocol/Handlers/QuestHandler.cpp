@@ -212,13 +212,13 @@ void WorldSession::HandleQuestgiverAcceptQuestOpcode(WorldPacket & recv_data)
                     }
 
                     if (destroyItem)
-                        _player->DestroyItem(((Item*)pObject)->GetBagSlot(), ((Item*)pObject)->GetSlot(), true);
+                        _player->DestroyItem(((Item*)object)->GetBagSlot(), ((Item*)object)->GetSlot(), true);
 
                     break;
                 }
                 case TYPEID_GAMEOBJECT:
-                    sScriptMgr->OnQuestAccept(_player, ((GameObject*)pObject), quest_info);
-                    (pObject->ToGameObject())->AI()->QuestAccept(_player, quest_info);
+                    sScriptMgr->OnQuestAccept(_player, ((GameObject*)object), quest_info);
+                    (object->ToGameObject())->AI()->QuestAccept(_player, quest_info);
                     break;
                 default:
                     break;
@@ -342,8 +342,8 @@ void WorldSession::HandleQuestgiverChooseRewardOpcode(WorldPacket & recv_data)
 
                             _player->PlayerTalkClass->SendQuestGiverQuestDetails(nextQuest, guid, true);
                         }
-
                         (object->ToCreature())->AI()->sQuestReward(_player, quest, reward);
+                        _player->PlayerTalkClass->SendCloseGossip();
                     }
                     break;
                 case TYPEID_GAMEOBJECT:
@@ -363,6 +363,7 @@ void WorldSession::HandleQuestgiverChooseRewardOpcode(WorldPacket & recv_data)
                         }
 
                         object->ToGameObject()->AI()->QuestReward(_player, quest, reward);
+                        _player->PlayerTalkClass->SendCloseGossip();
                     }
                     break;
                 default:
@@ -592,7 +593,7 @@ void WorldSession::HandlePushQuestToParty(WorldPacket& recvPacket)
                     continue;
                 }
 
-                player->PlayerTalkClass->SendQuestGiverQuestDetails(pQuest, _player->GetGUID(), true);
+                player->PlayerTalkClass->SendQuestGiverQuestDetails(quest, _player->GetGUID(), true);
                 player->SetDivider(_player->GetGUID());
             }
         }
@@ -730,8 +731,8 @@ void WorldSession::HandleQuestgiverStatusMultipleQuery(WorldPacket& /*recvPacket
 
     for (Player::ClientGUIDs::const_iterator itr = _player->m_clientGUIDs.begin(); itr != _player->m_clientGUIDs.end(); ++itr)
     {
-        uint8 questStatus = DIALOG_STATUS_NONE;
-        uint8 defstatus = DIALOG_STATUS_NONE;
+        uint32 questStatus = DIALOG_STATUS_NONE;
+        uint32 defstatus = DIALOG_STATUS_NONE;
 
         if (IS_CRE_OR_VEH_OR_PET_GUID(*itr))
         {
