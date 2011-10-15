@@ -78,8 +78,10 @@ enum Opcodes
     CMSG_COMMENTATOR_START_WARGAME                   = 0x08588, // 4.0.6a 13623  wtf::CMSG_ITEM_QUERY_SINGLE
     // CMSG_ITEM_QUERY_SINGLE                           = 0x08588, // 4.0.6a 13623
     // CMSG_ITEM_QUERY_MULTIPLE                         = 0x10008, // Unknown opcode ID
-    SMSG_ITEM_QUERY_SINGLE_RESPONSE                  = 0x00C4E, // 4.0.6a 13623
-    SMSG_ITEM_QUERY_MULTIPLE_RESPONSE                = 0x10009, // Unknown opcode ID
+    SMSG_DB_REPLY                                    = 0x00C4E, // 4.0.6a 13623
+    SMSG_HOTFIX_NOTIFY_BLOP                          = 0x04C1E, // 4.0.6a 13623 sent after SMSG_AUTH_RESPONSE
+    SMSG_HOTFIX_NOTIFY                               = 0x04C0E, // 4.0.6a 13623 can be sent while ingame
+    CMSG_REQUEST_HOTFIX                              = 0x08589, // 4.0.6a 13623 the client sends this after we send SMSG_HOTFIX_NOTIFY[_BLOP], only sent for the items that the player has in his inventory, that are flagged to be hotfixed
     CMSG_PAGE_TEXT_QUERY                             = 0x0AC8C, // 4.0.6a 13623
     SMSG_PAGE_TEXT_QUERY_RESPONSE                    = 0x0B084, // 4.0.6a 13623
     CMSG_QUEST_QUERY                                 = 0x0EFE8, // 4.0.6a 13623

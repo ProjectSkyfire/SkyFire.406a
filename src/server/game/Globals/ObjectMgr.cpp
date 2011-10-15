@@ -2123,8 +2123,8 @@ void ObjectMgr::LoadItemTemplates()
                                              "TotemCategory, socketColor_1, socketContent_1, socketColor_2, socketContent_2, socketColor_3, socketContent_3, socketBonus, "
     //                                          111				112							113				  114			115				116			117			118
                                              "GemProperties, RequiredDisenchantSkill, ArmorDamageModifier, Duration, ItemLimitCategory, HolidayId, ScriptName, DisenchantID, "
-    //											119			120				121			122
-                                             "FoodType, minMoneyLoot, maxMoneyLoot, damageType FROM item_template");
+    //											119			120				121
+                                             "FoodType, minMoneyLoot, maxMoneyLoot FROM item_template");
 
     if (!result)
     {

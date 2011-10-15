@@ -211,7 +211,7 @@ void AuraApplication::BuildUpdatePacket(ByteBuffer& data, bool remove) const
 
 void AuraApplication::SendFakeAuraUpdate(uint32 auraId, bool remove)
 {
-   WorldPacket data(SMSG_AURA_UPDATE);
+   /*WorldPacket data(SMSG_AURA_UPDATE);
    data.append(GetTarget()->GetPackGUID());
    data << uint8(64);
    data << uint32(remove ? 0 : auraId);
@@ -254,7 +254,7 @@ void AuraApplication::SendFakeAuraUpdate(uint32 auraId, bool remove)
        }
    }
 
-   m_target->SendMessageToSet(&data, true);
+   m_target->SendMessageToSet(&data, true);*/
 }
 
 void AuraApplication::ClientUpdate(bool remove)
