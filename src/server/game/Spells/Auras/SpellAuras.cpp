@@ -209,6 +209,54 @@ void AuraApplication::BuildUpdatePacket(ByteBuffer& data, bool remove) const
     }
 }
 
+void AuraApplication::SendFakeAuraUpdate(uint32 auraId, bool remove)
+{
+   WorldPacket data(SMSG_AURA_UPDATE);
+   data.append(GetTarget()->GetPackGUID());
+   data << uint8(64);
+   data << uint32(remove ? 0 : auraId);
+
+   if(remove)
+   {
+       m_target->SendMessageToSet(&data, true);
+       return;
+   }
+
+   Aura const* aura = GetBase();
+   uint32 flags = m_flags;
+   data << uint8(flags);
+   data << uint8(aura->GetCasterLevel());
+   data << uint8(aura->GetStackAmount() > 1 ? aura->GetStackAmount() : (aura->GetCharges()) ? aura->GetCharges() : 1);
+
+   if (!(flags & AFLAG_CASTER))
+           data.appendPackGUID(aura->GetCasterGUID());
+
+   if (flags & AFLAG_DURATION)
+   {
+       data << uint32(aura->GetMaxDuration());
+       data << uint32(aura->GetDuration());
+   }
+
+   if (flags & AFLAG_UNK2) 
+   {   
+       //contains spell effects
+       if (flags & AFLAG_EFF_INDEX_0) 
+       {
+           data << int32(aura->GetEffect(0)->GetAmount());
+       }
+       if (flags & AFLAG_EFF_INDEX_1) 
+       {
+           data << int32(aura->GetEffect(1)->GetAmount());
+       }
+       if (flags & AFLAG_EFF_INDEX_2) 
+       {
+           data << int32(aura->GetEffect(2)->GetAmount());
+       }
+   }
+
+   m_target->SendMessageToSet(&data, true);
+}
+
 void AuraApplication::ClientUpdate(bool remove)
 {
     m_needClientUpdate = false;
@@ -1429,7 +1477,6 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                         // old one is already removed
                         if (!onReapply)
                             target->RemoveGameObject(GetId(), true);
-                        target->RemoveAura(62388);
                     break;
                 }
                 break;
