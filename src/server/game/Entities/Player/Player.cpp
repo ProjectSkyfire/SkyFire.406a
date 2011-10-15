@@ -2625,8 +2625,13 @@ void Player::RegenerateAll()
         }
 
         Regenerate(POWER_RAGE);
+        
+        if (getClass() == CLASS_PALADIN)
+            Regenerate(POWER_HOLY_POWER);
         if (getClass() == CLASS_DEATH_KNIGHT)
             Regenerate(POWER_RUNIC_POWER);
+        if (getClass() == CLASS_HUNTER)
+            Regenerate(POWER_FOCUS);
 
         m_regenTimerCount -= 2000;
     }
@@ -2648,6 +2653,9 @@ void Player::Regenerate(Powers power)
 
     float addvalue = 0.0f;
 
+    //powers now benefit from haste.
+    float haste = (2 - GetFloatValue(UNIT_MOD_CAST_SPEED));
+    
     switch (power)
     {
         case POWER_MANA:
@@ -2659,20 +2667,31 @@ void Player::Regenerate(Powers power)
                 ManaIncreaseRate = sWorld->getRate(RATE_POWER_MANA) * (2.066f - (getLevel() * 0.066f));
 
             if (recentCast) // Trinity Updates Mana in intervals of 2s, which is correct
-                addvalue += GetFloatValue(UNIT_FIELD_POWER_REGEN_INTERRUPTED_FLAT_MODIFIER) *  ManaIncreaseRate * 0.001f * m_regenTimer;
+                addvalue += GetFloatValue(UNIT_FIELD_POWER_REGEN_INTERRUPTED_FLAT_MODIFIER) *  ManaIncreaseRate * 0.001f * m_regenTimer * haste;
             else
-                addvalue += GetFloatValue(UNIT_FIELD_POWER_REGEN_FLAT_MODIFIER) * ManaIncreaseRate * 0.001f * m_regenTimer;
-        }   break;
+                addvalue += GetFloatValue(UNIT_FIELD_POWER_REGEN_FLAT_MODIFIER) * ManaIncreaseRate * 0.001f * m_regenTimer * haste;
+            break;
+        }
         case POWER_RAGE:                                    // Regenerate rage
         {
             if (!isInCombat() && !HasAuraType(SPELL_AURA_INTERRUPT_REGEN))
             {
                 float RageDecreaseRate = sWorld->getRate(RATE_POWER_RAGE_LOSS);
-                addvalue += -20 * RageDecreaseRate;               // 2 rage by tick (= 2 seconds => 1 rage/sec)
+                addvalue += -20 * RageDecreaseRate / haste;               // 2 rage by tick (= 2 seconds => 1 rage/sec)
             }
-        }   break;
+            break;
+        }
+        case POWER_HOLY_POWER:                              // Regenerate holy power
+        {
+            if (!isInCombat())
+                addvalue += -0.2f;               // remove 1 each 10 sec
+            break;
+        }
         case POWER_ENERGY:                                  // Regenerate energy (rogue)
-            addvalue += 0.01f * m_regenTimer * sWorld->getRate(RATE_POWER_ENERGY);
+            addvalue += 0.01f * m_regenTimer * sWorld->getRate(RATE_POWER_ENERGY) * haste;
+            break;
+        case POWER_FOCUS:
+            addvalue += 0.01f * 800 * haste;
             break;
         case POWER_RUNIC_POWER:
         {
@@ -2681,7 +2700,8 @@ void Player::Regenerate(Powers power)
                 float RunicPowerDecreaseRate = sWorld->getRate(RATE_POWER_RUNICPOWER_LOSS);
                 addvalue += -30 * RunicPowerDecreaseRate;         // 3 RunicPower by tick
             }
-        }   break;
+            break;
+        }
         case POWER_RUNE:
         case POWER_FOCUS:
         case POWER_HAPPINESS:
