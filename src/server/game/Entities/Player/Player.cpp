@@ -23938,7 +23938,6 @@ bool Player::IsKnowHowFlyIn(uint32 mapid, uint32 zone, uint32 spellId) const
     return (v_map != 571 || HasSpell(54197)) && (v_map != 0 || HasSpell(90267)); // Cold Weather Flying
 
     // continent checked in SpellInfo::CheckLocation at cast and area update
-    //uint32 v_map = GetVirtualMapForMapAndZone(mapid, zone);
     switch (v_map)
     {
     case 0:   // Eastern Kingdoms
@@ -23952,7 +23951,7 @@ bool Player::IsKnowHowFlyIn(uint32 mapid, uint32 zone, uint32 spellId) const
         }
         // no break here
     case 1:   // Kalimdor
-    case 646: // Deepholm
+    case 646: // Deepholme
         return HasSpell(90267); // Flight Master's License
     case 571: // Northrend
         return HasSpell(54197); // Cold Weather Flying
