@@ -1063,6 +1063,12 @@ struct GtRegenMPPerSptEntry
     float    ratio;
 };
 
+struct GtSpellScalingEntry
+{
+	uint32   level;
+	float    coef;
+};
+
 struct GuildPerksEntry
 {
     uint32 Id;
@@ -1745,16 +1751,16 @@ struct SpellReagentsEntry
 // SpellScaling.dbc
 struct SpellScalingEntry
 {
-    uint32    Id;                                           // 0
-    int32     ct_min;                                       // 1        minimum cast time
-    int32     ct_max;                                       // 2        maximum cast time
-    uint32    ct_max_level;                                 // 3        first level with maximum cast time
-    int32     class_;                                       // 4        Caster's class. Can be a negative value : MAX_CLASSES + 1 - class_.
-    float     coefMultiplier[3];                            // 5-7
-    float     coefRandomMultiplier[3];                      // 8-10
-    float     coefOther[3];                                 // 11-13
-    float     base_coef;                                    // 14
-    uint32    base_level_coef;                              // 15       under this level, the final base coef will be < 1.
+    uint32    Id;                                           // 0        m_ID
+    int32     castTimeMin;                                  // 1
+    int32     castTimeMax;                                  // 2
+    uint32    castScalingMaxLevel;                          // 3
+    uint32    playerClass;                                  // 4        (index * 100) + charLevel => gtSpellScaling.dbc
+    float     Multiplier[3];                                // 5-7
+    float     RandomMultiplier[3];                          // 8-10
+    float     OtherMultiplier[3];                           // 11-13
+    float     CoefBase;                                     // 14        some coefficient, mostly 1.0f
+    uint32    CoefLevelBase;                                // 15        some level
 };
 
 // SpellShapeshift.dbc
