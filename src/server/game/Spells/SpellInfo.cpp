@@ -19,6 +19,7 @@
 
 #include "SpellAuraDefines.h"
 #include "SpellInfo.h"
+#include "SpellScaling.h"
 #include "SpellMgr.h"
 #include "Spell.h"
 #include "DBCStores.h"
@@ -575,31 +576,49 @@ int32 SpellEffectInfo::CalcValue(Unit const* caster, int32 const* bp, Unit const
     int32 basePoints = bp ? *bp : BasePoints;
     int32 randomPoints = int32(DieSides);
 
-    // base amount modification based on spell lvl vs caster lvl
+    float maxPoints = 0.00f;
+    float comboPointScaling = 0.00f;
     if (caster)
     {
-        int32 level = int32(caster->getLevel());
-        if (level > int32(_spellInfo->MaxLevel) && _spellInfo->MaxLevel > 0)
-            level = int32(_spellInfo->MaxLevel);
-        else if (level < int32(_spellInfo->BaseLevel))
-            level = int32(_spellInfo->BaseLevel);
-        level -= int32(_spellInfo->SpellLevel);
-        basePoints += int32(level * basePointsPerLevel);
+        SpellScaling values(_spellInfo, caster->getLevel());
+        if (values.CanUseScale() && int32(values.min[_effIndex]) != 0)
+        {
+            basePoints = int32(values.min[_effIndex]);
+            maxPoints = values.max[_effIndex];
+            comboPointScaling = values.pts[_effIndex];
+        }
+        // base amount modification based on spell lvl vs caster lvl
+        else
+        {
+            int32 level = int32(caster->getLevel());
+            if (level > int32(_spellInfo->MaxLevel) && _spellInfo->MaxLevel > 0)
+                level = int32(_spellInfo->MaxLevel);
+            else if (level < int32(_spellInfo->BaseLevel))
+                level = int32(_spellInfo->BaseLevel);
+            level -= int32(_spellInfo->SpellLevel);
+            basePoints += int32(level * basePointsPerLevel);
+        }
     }
 
-    // roll in a range <1;EffectDieSides> as of patch 3.3.3
-    switch (randomPoints)
+    if (maxPoints != 0.00f)
+        basePoints = irand(basePoints, int32(maxPoints));
+    else
     {
-        case 0: break;
-        case 1: basePoints += 1; break;                     // range 1..1
-        default:
-            // range can have positive (1..rand) and negative (rand..1) values, so order its for irand
-            int32 randvalue = (randomPoints >= 1)
-                ? irand(1, randomPoints)
-                : irand(randomPoints, 1);
+        // not sure for Cataclysm.
+        // roll in a range <1;EffectDieSides> as of patch 3.3.3
+        switch (randomPoints)
+        {
+            case 0: break;
+            case 1: basePoints += 1; break;                     // range 1..1
+            default:
+                // range can have positive (1..rand) and negative (rand..1) values, so order its for irand
+                int32 randvalue = (randomPoints >= 1)
+                    ? irand(1, randomPoints)
+                    : irand(randomPoints, 1);
 
-            basePoints += randvalue;
-            break;
+                basePoints += randvalue;
+                break;
+        }
     }
 
     float value = float(basePoints);
@@ -609,9 +628,18 @@ int32 SpellEffectInfo::CalcValue(Unit const* caster, int32 const* bp, Unit const
     {
         // bonus amount from combo points
         if (caster->m_movedPlayer)
+        {
             if (uint8 comboPoints = caster->m_movedPlayer->GetComboPoints())
+            {
                 if (float comboDamage = PointsPerComboPoint)
-                    value += comboDamage * comboPoints;
+                {
+                    if (comboPointScaling != 0.00f)
+                        comboDamage = comboPointScaling;
+
+                    value += int32(comboDamage * comboPoints);
+                }
+            }
+        }
 
         value = caster->ApplyEffectModifiers(_spellInfo, _effIndex, value);
 
@@ -998,19 +1026,20 @@ void SpellInfo::LoadSpellAddons()
         ReagentCount[i] = SpellReagents ? SpellReagents->ReagentCount[i] : 0;
     }
 
-    SpellScalingEntry const* SpellScaling = GetSpellScaling();
-    ct_min = SpellScaling ? SpellScaling->ct_min : 0;
-    ct_max = SpellScaling ? SpellScaling->ct_max : 0;
-    ct_max_level = SpellScaling ? SpellScaling->ct_max_level : 0;
-    SpellScaling_class = SpellScaling ? SpellScaling->class_ : 0;
-    for (int i = 0; i < 3; i++)
+    // SpellScalingEntry
+    SpellScalingEntry const* _scaling = GetSpellScaling();
+    castTimeMin = _scaling ? _scaling->castTimeMin : 0;
+    castTimeMax = _scaling ?_scaling->castTimeMax : 0;
+    castScalingMaxLevel = _scaling ? _scaling->castScalingMaxLevel : 0;
+    playerClass = _scaling ? _scaling->playerClass : 0;
+    for (uint8 i = 0; i < 3; ++i)
     {
-        coefMultiplier[i] = SpellScaling ? SpellScaling->coefMultiplier[i] : 0;
-        coefRandomMultiplier[i] = SpellScaling ? SpellScaling->coefRandomMultiplier[i] : 0;
-        coefOther[i] = SpellScaling ? SpellScaling->coefOther[i] : 0;
+        Multiplier[i] = _scaling ? _scaling->Multiplier[i] : 0;
+        RandomMultiplier[i] = _scaling ? _scaling->RandomMultiplier[i] : 0;
+        OtherMultiplier[i] = _scaling ? _scaling->OtherMultiplier[i] : 0;
     }
-    base_coef = SpellScaling ? SpellScaling->base_coef : 0;
-    base_level_coef = SpellScaling ? SpellScaling->base_level_coef : 0;
+    CoefBase = _scaling ? _scaling->CoefBase : 0;
+    CoefLevelBase = _scaling ? _scaling->CoefLevelBase : 0;
 
     SpellShapeshiftEntry const* SpellShapeshift = GetSpellShapeshift();
     Stances = SpellShapeshift ? SpellShapeshift->Stances : 0;
@@ -2226,11 +2255,18 @@ int32 SpellInfo::GetMaxDuration() const
 
 uint32 SpellInfo::CalcCastTime(Unit* caster, Spell* spell) const
 {
-    // not all spells have cast time index and this is all is pasiive abilities
+    // not all spells have cast time index and this is all is passive abilities
     if (!CastTimeEntry)
         return 0;
 
     int32 castTime = CastTimeEntry->CastTime;
+
+    if (caster)
+    {
+        SpellScaling values(spell->GetSpellInfo(), spell->GetCaster()->getLevel());
+        if (values.CanUseScale())
+            castTime = values.GetCastTime();
+    }
 
     if (caster)
         caster->ModSpellCastTime(this, castTime, spell);

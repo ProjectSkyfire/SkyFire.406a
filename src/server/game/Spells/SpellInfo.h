@@ -426,16 +426,16 @@ public:
     int32  Reagent[MAX_SPELL_REAGENTS];
     uint32 ReagentCount[MAX_SPELL_REAGENTS];
 
-    //SpellScalingEntry  4.0 new
-    uint32    ct_min;
-    uint32    ct_max;
-    uint32    ct_max_level;
-    int32     SpellScaling_class;
-    float     coefMultiplier[3];
-    float     coefRandomMultiplier[3];
-    float     coefOther[3];
-    float     base_coef;
-    uint32    base_level_coef;
+    // SpellScalingEntry
+    int32  castTimeMin;
+    int32  castTimeMax;
+    uint32 castScalingMaxLevel;
+    uint32 playerClass;
+    float  Multiplier[3];
+    float  RandomMultiplier[3];
+    float  OtherMultiplier[3];
+    float  CoefBase;
+    uint32 CoefLevelBase;
 
     //SpellShapeshiftEntry
     uint32 Stances;
