@@ -2134,7 +2134,7 @@ void AchievementMgr::BuildAllDataPacket(WorldPacket *data) const
     /*for (uint32 i = 0; i < criterias; ++i)
         data->append(GetPlayer()->GetPackGUID());*/
     for(CriteriaProgressMap::const_iterator iter = m_criteriaProgress.begin(); iter!=m_criteriaProgress.end(); ++iter)
-        data << uint64(iter->second.counter);
+        *data << uint64(iter->second.counter);
     for (CriteriaProgressMap::const_iterator iter = m_criteriaProgress.begin(); iter!=m_criteriaProgress.end(); ++iter)
         *data << uint32(now - iter->second.date);
 
