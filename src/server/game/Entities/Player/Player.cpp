@@ -75,6 +75,7 @@
 #include "InstanceScript.h"
 #include "AccountMgr.h"
 #include "DBCEnums.h"
+#include "Object.h"
 
 #include <cmath>
 
@@ -685,6 +686,7 @@ Player::Player (WorldSession *session): Unit(), m_achievementMgr(this), m_reputa
     memset(m_items, 0, sizeof(Item*)*PLAYER_SLOTS_COUNT);
 
     m_social = NULL;
+    guild = 0;
 
     // group is initialized in the reference constructor
     SetGroupInvite(NULL);
@@ -22138,7 +22140,6 @@ void Player::SendInitialPacketsBeforeAddToMap()
     // SMSG_INSTANCE_DIFFICULTY
     data.Initialize(SMSG_INSTANCE_DIFFICULTY, 4+4);
     data << uint32(GetMap()->GetDifficulty());
-    data << uint32(0);
     GetSession()->SendPacket(&data);
 
     SendInitialSpells();
@@ -23909,7 +23910,11 @@ void Player::StoreLootItem(uint8 lootSlot, Loot* loot)
 
 uint32 Player::CalculateTalentsPoints() const
 {
-    uint32 base_talent = getLevel() < 10 ? 0 : getLevel()-9;
+    uint32 base_talent = 0;
+    if (getLevel() >= 10 && getLevel() <= 81)
+        base_talent = (((getLevel() - 10 + 1) - ( ((getLevel() - 10 + 1) % 2) == 1 ? 1 : 0))/2)+1;
+    else
+        base_talent = getLevel() - 44;
 
     if (getClass() != CLASS_DEATH_KNIGHT || GetMapId() != 609)
         return uint32(base_talent * sWorld->getRate(RATE_TALENT));
@@ -23928,9 +23933,12 @@ bool Player::IsKnowHowFlyIn(uint32 mapid, uint32 zone, uint32 spellId) const
     // Eye of the Storm is always allowed in Throne of the Four Winds
     if (zone == 5638 && spellId == 82724)
         return true;
+    // continent checked in SpellMgr::GetSpellAllowedInLocationError at cast and area update
+    uint32 v_map = GetVirtualMapForMapAndZone(mapid, zone);
+    return (v_map != 571 || HasSpell(54197)) && (v_map != 0 || HasSpell(90267)); // Cold Weather Flying
 
     // continent checked in SpellInfo::CheckLocation at cast and area update
-    uint32 v_map = GetVirtualMapForMapAndZone(mapid, zone);
+    //uint32 v_map = GetVirtualMapForMapAndZone(mapid, zone);
     switch (v_map)
     {
     case 0:   // Eastern Kingdoms
@@ -25467,6 +25475,22 @@ void Player::_SaveInstanceTimeRestrictions(SQLTransaction& trans)
         stmt->setUInt32(1, itr->first);
         stmt->setUInt64(2, itr->second);
         trans->Append(stmt);
+    }
+}
+
+void Player::SetInGuild(uint32 GuildId)
+{
+    //printf("DEBUG: set in guild %u, %lX", GuildId, MAKE_NEW_GUID(GuildId, 0, HIGHGUID_GUILD));
+    guild = GuildId;
+    if (GuildId != 0)
+    {
+        SetUInt64Value(OBJECT_FIELD_DATA, MAKE_NEW_GUID(GuildId, 0, HIGHGUID_GUILD));
+        SetUInt32Value(OBJECT_FIELD_TYPE, GetUInt32Value(OBJECT_FIELD_TYPE) | TYPEMASK_IN_GUILD);
+    }
+    else
+    {
+        SetUInt64Value(OBJECT_FIELD_DATA, 0);
+        SetUInt32Value(OBJECT_FIELD_TYPE, GetUInt32Value(OBJECT_FIELD_TYPE) & ~TYPEMASK_IN_GUILD);
     }
 }
 
