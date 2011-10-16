@@ -578,8 +578,6 @@ void InitOpcodeTable()
     OPCODE( CMSG_BATTLEFIELD_JOIN,                        STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleBattlemasterJoinOpcode    );
     OPCODE( CMSG_REQUEST_RATED_BG_INFO,                   STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::Handle_NULL                     );
     OPCODE( CMSG_REQUEST_PVP_OPTIONS_ENABLED,             STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::Handle_NULL                     );
-    OPCODE( CMSG_TAXICLEARNODE,                           STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
-    OPCODE( CMSG_TAXIENABLENODE,                          STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
     OPCODE( CMSG_ITEM_TEXT_QUERY,                         STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleItemTextQuery             );
     OPCODE( SMSG_ITEM_TEXT_QUERY_RESPONSE,                STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( CMSG_MAIL_TAKE_MONEY,                         STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleMailTakeMoney             );
@@ -1248,7 +1246,6 @@ void InitOpcodeTable()
     OPCODE( SMSG_WORLD_STATE_UI_TIMER_UPDATE,             STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( CMSG_CHAR_RACE_CHANGE,                        STATUS_AUTHED,   PROCESS_THREADUNSAFE, &WorldSession::HandleCharFactionOrRaceChange   );
     OPCODE( SMSG_TALENTS_INVOLUNTARILY_RESET,             STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
-    OPCODE( SMSG_UNKNOWN_1276,                            STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( SMSG_LOOT_SLOT_CHANGED,                       STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( CMSG_READY_FOR_ACCOUNT_DATA_TIMES,            STATUS_AUTHED,   PROCESS_THREADUNSAFE, &WorldSession::HandleReadyForAccountDataTimes  );
     OPCODE( CMSG_QUERY_QUESTS_COMPLETED,                  STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleQueryQuestsCompleted      );

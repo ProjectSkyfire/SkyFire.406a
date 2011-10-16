@@ -1338,7 +1338,6 @@ enum Opcodes
     SMSG_SERVER_MESSAGE_BOX                          = 0x0080C, // Server msgbox-like 4.0.6a 13623
     SMSG_TALENT_ERROR                                = 0x068A4, // 4.0.6a 13623
     SMSG_SEND_ERROR_MESSAGE                          = 0x0480C, // 4.0.6a 13623 this has its own enum u8+u32+u32 special
-    SMSG_UI_TIME                                     = 0x0618C, // 4.0.6a 13623
     CMSG_GET_GUILD_ACHIEVEMENT_MEMBERS               = 0x02509, // 4.0.6a 13623
     CMSG_CLEAR_RAID_MARKER                           = 0x02218, // 4.0.6a 13623
     CMSG_REQUEST_GUILD_PARTY_STATE                   = 0x02219, // 4.0.6a 13623
