@@ -1065,8 +1065,8 @@ struct GtRegenMPPerSptEntry
 
 struct GtSpellScalingEntry
 {
-	uint32   level;
-	float    coef;
+    uint32   level;
+    float    coef;
 };
 
 struct GuildPerksEntry
@@ -1752,15 +1752,15 @@ struct SpellReagentsEntry
 struct SpellScalingEntry
 {
     uint32    Id;                                           // 0        m_ID
-    int32     castTimeMin;                                  // 1
-    int32     castTimeMax;                                  // 2
-    uint32    castScalingMaxLevel;                          // 3
+    int32     castTimeMin;                                  // 1        minimum cast time
+    int32     castTimeMax;                                  // 2        maximum cast time
+    uint32    castScalingMaxLevel;                          // 3        first level with maximum cast time
     uint32    playerClass;                                  // 4        (index * 100) + charLevel => gtSpellScaling.dbc
     float     Multiplier[3];                                // 5-7
     float     RandomMultiplier[3];                          // 8-10
     float     OtherMultiplier[3];                           // 11-13
     float     CoefBase;                                     // 14        some coefficient, mostly 1.0f
-    uint32    CoefLevelBase;                                // 15        some level
+    uint32    CoefLevelBase;                                // 15        under this level, the final base coef will be < 1.
 };
 
 // SpellShapeshift.dbc
