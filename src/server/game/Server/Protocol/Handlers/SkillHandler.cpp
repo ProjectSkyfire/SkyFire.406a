@@ -40,18 +40,98 @@ void WorldSession::HandleLearnPreviewTalents(WorldPacket& recvPacket)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "CMSG_LEARN_PREVIEW_TALENTS");
 
-    uint32 talentsCount;
-    recvPacket >> talentsCount;
+    uint32 spec, talentsCount;
+    recvPacket >> spec >> talentsCount;
 
+    if(spec != ((uint32)-1))
+    {
+        uint32 specID = 0;
+        for (uint32 i = 0; i < sTalentTabStore.GetNumRows(); i++)
+        {
+            TalentTabEntry const * entry = sTalentTabStore.LookupEntry(i);
+            if(entry)
+            {
+                if(entry->ClassMask == _player->getClassMask() && entry->tabpage == spec)
+                {
+                    specID = entry->TalentTabID;
+                    break;
+                }
+            }
+        }
+    
+        if (_player->m_usedTalentCount == 0 || _player->GetTalentBranchSpec(_player->m_activeSpec) == 0)
+        {
+            if (_player->m_usedTalentCount != 0)
+                _player->resetTalents();
+
+            _player->SetTalentBranchSpec(specID, _player->m_activeSpec);
+
+            for (uint32 i = 0; i < sTalentTreePrimarySpellsStore.GetNumRows(); ++i)
+            {
+                TalentTreePrimarySpellsEntry const *talentInfo = sTalentTreePrimarySpellsStore.LookupEntry(i);
+                
+                if (!talentInfo || talentInfo->TalentTabID != _player->GetTalentBranchSpec(_player->m_activeSpec))
+                    continue;
+                
+                _player->learnSpell(talentInfo->SpellID, true);
+            }    
+        }
+        else if (_player->GetTalentBranchSpec(_player->m_activeSpec) != specID) //cheat
+            return;
+    }
+    
     uint32 talentId, talentRank;
 
     for (uint32 i = 0; i < talentsCount; ++i)
     {
         recvPacket >> talentId >> talentRank;
 
-        _player->LearnTalent(talentId, talentRank);
+        _player->LearnTalent(talentId, talentRank, false);
     }
+    
 
+    bool inOtherBranch = false;
+    uint32 pointInBranchSpec = 0;
+
+    for (PlayerTalentMap::iterator itr = _player->m_talents[_player->m_activeSpec]->begin(); itr != _player->m_talents[_player->m_activeSpec]->end(); itr++)
+    {
+        for (uint32 i = 0; i < sTalentStore.GetNumRows(); i++)
+        {
+            const TalentEntry * thisTalent = sTalentStore.LookupEntry(i);
+            if (thisTalent) 
+            {
+                int thisrank = -1;
+                for (int j = 0; j < 5; j++)
+                    if (thisTalent->RankID[j] == itr->first)
+                    {
+                        thisrank = j;
+                        break;
+                    }
+                if (thisrank != -1)
+                {
+                    if (thisTalent->TalentTab == _player->GetTalentBranchSpec(_player->m_activeSpec))
+                    {
+                        int8 curtalent_maxrank = -1;
+                        for (int8 rank = MAX_TALENT_RANK-1; rank >= 0; --rank)
+                        {
+                            if (thisTalent->RankID[rank] && _player->HasTalent(thisTalent->RankID[rank], _player->m_activeSpec))
+                            {
+                                curtalent_maxrank = rank;
+                                break;
+                            }
+                        }
+                        if (curtalent_maxrank != -1 && thisrank == curtalent_maxrank)
+                            pointInBranchSpec += curtalent_maxrank + 1;
+                    }
+                    else
+                        inOtherBranch = true;
+                }
+            }
+        }
+    }
+    if (inOtherBranch && pointInBranchSpec < 31)
+        _player->resetTalents();
+    
     _player->SendTalentsInfoData(false);
 }
 

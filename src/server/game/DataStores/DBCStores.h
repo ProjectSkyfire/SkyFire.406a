@@ -184,6 +184,7 @@ extern DBCStorage <SpellTargetRestrictionsEntry> sSpellTargetRestrictionsStore;
 extern DBCStorage <SpellTotemsEntry>             sSpellTotemsStore;
 extern DBCStorage <SummonPropertiesEntry>        sSummonPropertiesStore;
 extern DBCStorage <TalentEntry>                  sTalentStore;
+extern DBCStorage <TalentTreePrimarySpellsEntry> sTalentTreePrimarySpellsStore;
 extern DBCStorage <TalentTabEntry>               sTalentTabStore;
 extern DBCStorage <TaxiNodesEntry>               sTaxiNodesStore;
 extern DBCStorage <TaxiPathEntry>                sTaxiPathStore;

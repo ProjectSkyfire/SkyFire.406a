@@ -24212,7 +24212,7 @@ void Player::CompletedAchievement(AchievementEntry const* entry)
     GetAchievementMgr().CompletedAchievement(entry);
 }
 
-void Player::LearnTalent(uint32 talentId, uint32 talentRank)
+void Player::LearnTalent(uint32 talentId, uint32 talentRank, bool one)
 {
     uint32 CurTalentPoints = GetFreeTalentPoints();
 
@@ -24231,6 +24231,47 @@ void Player::LearnTalent(uint32 talentId, uint32 talentRank)
 
     if (!talentTabInfo)
         return;
+
+    if(one && talentTabInfo->TalentTabID != GetTalentBranchSpec(m_activeSpec))
+    {
+        uint32 pointInBranchSpec = 0;
+        for(PlayerTalentMap::iterator itr = m_talents[m_activeSpec]->begin(); itr != m_talents[m_activeSpec]->end(); itr++)
+        {
+            for(uint32 i = 0; i < sTalentStore.GetNumRows(); i++)
+            {
+                const TalentEntry * thisTalent = sTalentStore.LookupEntry(i);
+                if(thisTalent)
+                {
+                    int thisrank = -1;
+                    for(int j = 0; j < 5; j++)
+                        if(thisTalent->RankID[j] == itr->first)
+                        {
+                            thisrank = j;
+                            break;
+                        }
+                    if(thisrank != -1)
+                    {
+                        if(thisTalent->TalentTab == GetTalentBranchSpec(m_activeSpec))
+                        {
+                            int8 curtalent_maxrank = -1;
+                            for (int8 rank = MAX_TALENT_RANK-1; rank >= 0; --rank)
+                            {
+                                if (thisTalent->RankID[rank] && HasTalent(thisTalent->RankID[rank], m_activeSpec))
+                                {
+                                    curtalent_maxrank = rank;
+                                    break;
+                                }
+                            }
+                            if(curtalent_maxrank != -1 && thisrank == curtalent_maxrank)
+                                pointInBranchSpec += curtalent_maxrank + 1;
+                        }
+                    }
+                }
+            }
+        }
+        if(pointInBranchSpec < 31)
+            return;
+    }
 
     // prevent learn talent for different class (cheating)
     if ((getClassMask() & talentTabInfo->ClassMask) == 0)
@@ -24320,6 +24361,7 @@ void Player::LearnTalent(uint32 talentId, uint32 talentRank)
 
     // learn! (other talent ranks will unlearned at learning)
     learnSpell(spellid, false);
+
     AddTalent(spellid, m_activeSpec, true);
 
     sLog->outDetail("TalentID: %u Rank: %u Spell: %u Spec: %u\n", talentId, talentRank, spellid, m_activeSpec);
@@ -24540,8 +24582,7 @@ void Player::BuildPlayerTalentsInfoData(WorldPacket *data)
         for (uint32 specIdx = 0; specIdx < m_specsCount; ++specIdx)
         {
             uint8 talentIdCount = 0;
-            //*data << uint32(GetTalentBranchSpec(specIdx));  //branchSpec - ToDo
-            *data << uint32(0); // GetTalentBranchSpec(specIdx);
+            *data << uint32(GetTalentBranchSpec(specIdx));
             size_t pos = data->wpos();
             *data << uint8(talentIdCount);                  // [PH], talentIdCount
 

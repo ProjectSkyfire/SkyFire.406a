@@ -1671,11 +1671,14 @@ class Player : public Unit, public GridObject<Player>
         void BuildPlayerTalentsInfoData(WorldPacket *data);
         void BuildPetTalentsInfoData(WorldPacket *data);
         void SendTalentsInfoData(bool pet);
-        void LearnTalent(uint32 talentId, uint32 talentRank);
+        void LearnTalent(uint32 talentId, uint32 talentRank, bool one = true);
         void LearnPetTalent(uint64 petGuid, uint32 talentId, uint32 talentRank);
 
         bool AddTalent(uint32 spell, uint8 spec, bool learning);
         bool HasTalent(uint32 spell_id, uint8 spec) const;
+
+        void SetTalentBranchSpec(uint32 branchSpec, uint8 spec) { m_branchSpec[spec] = branchSpec; }
+        uint32 GetTalentBranchSpec(uint8 spec) const { return m_branchSpec[spec]; }
 
         uint32 CalculateTalentsPoints() const;
 
@@ -2647,6 +2650,7 @@ class Player : public Unit, public GridObject<Player>
 
         uint8 m_activeSpec;
         uint8 m_specsCount;
+        uint32 m_branchSpec[MAX_TALENT_SPECS];
 
         uint32 m_Glyphs[MAX_TALENT_SPECS][MAX_GLYPH_SLOT_INDEX];
 
