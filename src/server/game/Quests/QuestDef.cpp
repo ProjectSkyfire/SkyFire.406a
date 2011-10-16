@@ -163,7 +163,7 @@ Quest::Quest(Field* questRecord)
     SoundAccept = questRecord[167].GetUInt32();
     SoundTurnIn = questRecord[168].GetUInt32();
     RequiredSpell = questRecord[169].GetUInt32();
-    
+
     QuestStartScript = questRecord[170].GetUInt32();
     QuestCompleteScript = questRecord[171].GetUInt32();
 

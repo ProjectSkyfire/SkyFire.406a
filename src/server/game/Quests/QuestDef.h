@@ -219,7 +219,7 @@ class Quest
         uint32 GetCharTitleId() const { return CharTitleId; }
         uint32 GetPlayersSlain() const { return PlayersSlain; }
         uint32 GetBonusTalents() const { return BonusTalents; }
-        int32  GetRewArenaPoints() const 
+        int32  GetRewArenaPoints() const
         {
             for(uint8 i = 0; i < QUEST_CURRENCY_COUNT; i++)
             {
@@ -304,7 +304,7 @@ class Quest
         uint32 RewCurrencyCount[QUEST_CURRENCY_COUNT];
         uint32 ReqCurrencyId[QUEST_CURRENCY_COUNT];
         uint32 ReqCurrencyCount[QUEST_CURRENCY_COUNT];
-        
+
         uint32 GetReqItemsCount() const { return m_reqitemscount; }
         uint32 GetReqCreatureOrGOcount() const { return m_reqCreatureOrGOcount; }
         uint32 GetRewChoiceItemsCount() const { return m_rewchoiceitemscount; }

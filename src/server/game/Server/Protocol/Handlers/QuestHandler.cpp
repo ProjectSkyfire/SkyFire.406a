@@ -116,7 +116,7 @@ void WorldSession::HandleQuestgiverAcceptQuestOpcode(WorldPacket & recv_data)
     uint32 quest;
     uint32 unk1;
     recv_data >> guid >> quest >> unk1;
-    
+
     if (!GetPlayer()->isAlive())
         return;
 
@@ -298,7 +298,7 @@ void WorldSession::HandleQuestgiverChooseRewardOpcode(WorldPacket & recv_data)
         sLog->outError("Error in CMSG_QUESTGIVER_CHOOSE_REWARD: player %s (guid %d) tried to get invalid reward (%u) (probably packet hacking)", _player->GetName(), _player->GetGUIDLow(), reward);
         return;
     }
-    
+
     if (!GetPlayer()->isAlive())
         return;
 
@@ -654,7 +654,7 @@ uint32 WorldSession::getDialogStatus(Player* player, Object* questgiver, uint32 
         uint32 result2 = 0;
         uint32 quest_id = i->second;
         Quest const* quest = sObjectMgr->GetQuestTemplate(quest_id);
-        if (!quest) 
+        if (!quest)
             continue;
 
         ConditionList conditions = sConditionMgr->GetConditionsForNotGroupedEntry(CONDITION_SOURCE_TYPE_QUEST_SHOW_MARK, quest->GetQuestId());

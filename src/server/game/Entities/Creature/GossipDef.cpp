@@ -545,7 +545,7 @@ void PlayerMenu::SendQuestQueryResponse(Quest const* quest) const
     }
 
     data << uint32(quest->GetRequiredSpell());
-    
+
     for (uint32 i = 0; i < QUEST_OBJECTIVES_COUNT; ++i)
         data << questObjectiveText[i];
 
@@ -568,7 +568,7 @@ void PlayerMenu::SendQuestQueryResponse(Quest const* quest) const
 
     data << uint32(quest->GetSoundAccept());
     data << uint32(quest->GetSoundTurnIn());
-    
+
     _session->SendPacket(&data);
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Sent SMSG_QUEST_QUERY_RESPONSE questid=%u", quest->GetQuestId());
 }
@@ -594,7 +594,7 @@ void PlayerMenu::SendQuestGiverOfferReward(Quest const* quest, uint64 npcGUID, b
     data << uint32(quest->GetQuestId());
     data << questTitle;
     data << questOfferRewardText;
-    
+
     data << quest->GetQuestGiverPortraitText();             // unk string, 4.0.1
     data << quest->GetQuestGiverPortraitUnk();              // unk string, 4.0.1
     data << quest->GetQuestTurnInPortraitText();            // unk string, 4.0.1
@@ -623,13 +623,13 @@ void PlayerMenu::SendQuestGiverOfferReward(Quest const* quest, uint64 npcGUID, b
     }
 
     data << uint32(quest->GetRewChoiceItemsCount());
-    
+
     for (uint32 i = 0; i < QUEST_REWARD_CHOICES_COUNT; ++i)
         data << uint32(quest->RewChoiceItemId[i]);
-        
+
     for (uint32 i = 0; i < QUEST_REWARD_CHOICES_COUNT; ++i)
         data << uint32(quest->RewChoiceItemCount[i]);
-        
+
     for (uint32 i = 0; i < QUEST_REWARD_CHOICES_COUNT; ++i)
     {
         if (ItemTemplate const* itemTemplate = sObjectMgr->GetItemTemplate(quest->RewChoiceItemId[i]))
@@ -637,15 +637,15 @@ void PlayerMenu::SendQuestGiverOfferReward(Quest const* quest, uint64 npcGUID, b
         else
             data << uint32(0);
     }
-    
+
     data << uint32(quest->GetRewItemsCount());
-    
+
     for (uint32 i = 0; i < QUEST_REWARDS_COUNT; ++i)
         data << uint32(quest->RewItemId[i]);
-        
+
     for (uint32 i = 0; i < QUEST_REWARDS_COUNT; ++i)
         data << uint32(quest->RewItemCount[i]);
-    
+
     for (uint32 i = 0; i < QUEST_REWARDS_COUNT; ++i)
     {
         if (ItemTemplate const* itemTemplate = sObjectMgr->GetItemTemplate(quest->RewItemId[i]))
@@ -653,7 +653,7 @@ void PlayerMenu::SendQuestGiverOfferReward(Quest const* quest, uint64 npcGUID, b
         else
             data << uint32(0);
     }
-    
+
     data << uint32(0); // unknown 4.0.1
     data << uint32(0); // unknown 4.0.1
     data << uint32(quest->GetRewOrReqMoney());
@@ -685,7 +685,7 @@ void PlayerMenu::SendQuestGiverOfferReward(Quest const* quest, uint64 npcGUID, b
 
     data << uint32(0);
     data << uint32(0);
-    
+
     _session->SendPacket(&data);
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Sent SMSG_QUESTGIVER_OFFER_REWARD NPCGuid=%u, questid=%u", GUID_LOPART(npcGUID), quest->GetQuestId());
 }

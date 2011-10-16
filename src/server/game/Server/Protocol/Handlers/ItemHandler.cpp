@@ -285,13 +285,13 @@ void WorldSession::HandleRequestHotFix(WorldPacket & recv_data)
 {
     uint32 count, type;
     recv_data >> count >> type;
-    
+
     if(type != DB2TYPE_ITEM_SPARSE && type != DB2TYPE_ITEM)
     {
         sLog->outString("Client tried to request update item data from non-handled update type");
         return;
     }
-    
+
     for(uint32 i = 0; i < count; ++i)
     {
         uint32 item;
@@ -299,12 +299,12 @@ void WorldSession::HandleRequestHotFix(WorldPacket & recv_data)
         recv_data.read_skip(8);
         WorldPacket data2(SMSG_DB_REPLY,700);
         ByteBuffer data;
-        
+
         data2 << uint32(type); // Needed?
         data2 << uint32(item);
-        
+
         ItemTemplate const* proto = sObjectMgr->GetItemTemplate(item);
-        
+
         if(!proto) // Item does not exist
         {
             data2 << uint32(4); // sizeof(uint32)
@@ -339,7 +339,7 @@ void WorldSession::HandleRequestHotFix(WorldPacket & recv_data)
                 data << uint32(proto->RequiredLevel);
                 data << uint32(proto->RequiredSkill);
                 data << uint32(proto->RequiredSkillRank);
-                
+
                 data << uint32(proto->RequiredSpell);
                 data << uint32(proto->RequiredHonorRank);
                 data << uint32(proto->RequiredCityRank);
@@ -348,42 +348,42 @@ void WorldSession::HandleRequestHotFix(WorldPacket & recv_data)
                 data << int32(proto->MaxCount);
                 data << int32(proto->Stackable);
                 data << uint32(proto->ContainerSlots);
-                
+
                 for(uint32 x = 0; x < MAX_ITEM_PROTO_STATS; ++x)
                     data << uint32(proto->ItemStat[x].ItemStatType);
-                
+
                 for(uint32 x = 0; x < MAX_ITEM_PROTO_STATS; ++x)
                     data << int32(proto->ItemStat[x].ItemStatValue);
-                    
+
                 // Till here we are going good, now we start with the unk shit
                 for(uint32 x = 0; x < 20; ++x) // 20 unk fields
                     data << uint32(0);
-                    
+
                 data << uint32(proto->ScalingStatDistribution);
                 data << uint32(proto->damageType);
                 data << uint32(proto->Delay);
                 data << float(proto->RangedModRange);
-                
+
                 for(uint32 x = 0; x < MAX_ITEM_PROTO_SPELLS; ++x)
                     data << int32(proto->Spells[x].SpellId);
-                    
+
                 for(uint32 x = 0; x < MAX_ITEM_PROTO_SPELLS; ++x)
                     data << uint32(proto->Spells[x].SpellTrigger);
-                    
+
                 for(uint32 x = 0; x < MAX_ITEM_PROTO_SPELLS; ++x)
                     data << int32(proto->Spells[x].SpellCharges);
-                    
+
                 for(uint32 x = 0; x < MAX_ITEM_PROTO_SPELLS; ++x)
                     data << int32(proto->Spells[x].SpellCooldown);
-                    
+
                 for(uint32 x = 0; x < MAX_ITEM_PROTO_SPELLS; ++x)
                     data << uint32(proto->Spells[x].SpellCategory);
-                    
+
                 for(uint32 x = 0; x < MAX_ITEM_PROTO_SPELLS; ++x)
                     data << int32(proto->Spells[x].SpellCategoryCooldown);
-                    
+
                 data << uint32(proto->Bonding);
-                
+
                 // Now we send item names :S pascal string?
                 const char* str = proto->Name1.c_str();
                 data << uint16(strlen(str) + 1);
@@ -395,12 +395,12 @@ void WorldSession::HandleRequestHotFix(WorldPacket & recv_data)
                     data << uint16(strlen(str) + 1);
                     data << str;
                 }
-                
+
                 // Now we send item descriptions :S pascal string?
                 const char* str2 = (const char*)"";
                 data << uint16(strlen(str2) + 1);
                 data << str2;
-                
+
                 data << uint32(proto->PageText);
                 data << uint32(proto->LanguageID);
                 data << uint32(proto->PageMaterial);
@@ -412,34 +412,34 @@ void WorldSession::HandleRequestHotFix(WorldPacket & recv_data)
                 data << int32(proto->RandomSuffix);
                 data << uint32(proto->ItemSet);
                 data << uint32(proto->MaxDurability);
-                
+
                 data << uint32(proto->Area);
                 data << uint32(proto->Map);
                 data << uint32(proto->BagFamily);
                 data << uint32(proto->TotemCategory);
-                
+
                 for(uint32 x = 0; x < MAX_ITEM_PROTO_SOCKETS; ++x)
                     data << uint32(proto->Socket[x].Color);
-                
+
                 for(uint32 x = 0; x < MAX_ITEM_PROTO_SOCKETS; ++x)
                     data << uint32(proto->Socket[x].Content);
-                    
+
                 data << uint32(proto->socketBonus);
                 data << uint32(proto->GemProperties);
                 data << float(proto->ArmorDamageModifier);
                 data << int32(proto->Duration);
                 data << uint32(proto->ItemLimitCategory);
                 data << uint32(proto->HolidayId);
-                
+
                 data << float(0.0f); // StatScalingFactor
                 data << uint32(0);
                 data << uint32(0);
             }
-            
+
             data2 << uint32(data.size());
             data2.append(data);
         }
-        
+
         data2 << uint32(type);
         SendPacket(&data2);
     }

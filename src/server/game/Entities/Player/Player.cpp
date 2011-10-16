@@ -2625,7 +2625,7 @@ void Player::RegenerateAll()
         }
 
         Regenerate(POWER_RAGE);
-        
+
         if (getClass() == CLASS_PALADIN)
             Regenerate(POWER_HOLY_POWER);
         if (getClass() == CLASS_DEATH_KNIGHT)
@@ -2655,7 +2655,7 @@ void Player::Regenerate(Powers power)
 
     //powers now benefit from haste.
     float haste = (2 - GetFloatValue(UNIT_MOD_CAST_SPEED));
-    
+
     switch (power)
     {
         case POWER_MANA:
