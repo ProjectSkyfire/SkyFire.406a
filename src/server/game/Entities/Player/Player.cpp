@@ -798,6 +798,7 @@ Player::Player (WorldSession *session): Unit(), m_achievementMgr(this), m_reputa
             m_Glyphs[i][g] = 0;
 
         m_talents[i] = new PlayerTalentMap();
+        m_branchSpec[i] = 0;
     }
 
     for (uint8 i = 0; i < BASEMOD_END; ++i)
@@ -4633,12 +4634,6 @@ bool Player::resetTalents(bool no_cost)
     */
 
     return true;
-}
-
-void Player::SetFreeTalentPoints(uint32 points)
-{
-    sScriptMgr->OnPlayerFreeTalentPointsChanged(this, points);
-    //SetUInt32Value(PLAYER_CHARACTER_POINTS1, points);
 }
 
 Mail* Player::GetMail(uint32 id)
