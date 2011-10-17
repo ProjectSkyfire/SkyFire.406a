@@ -58,12 +58,12 @@ class BattlegroundNA : public Battleground
         ~BattlegroundNA();
 
         /* inherited from BattlegroundClass */
-        virtual void AddPlayer(Player* player);
+        virtual void AddPlayer(Player *player);
         virtual void StartingEventCloseDoors();
         virtual void StartingEventOpenDoors();
 
-        void RemovePlayer(Player* player, uint64 guid, uint32 team);
-        void HandleAreaTrigger(Player* Source, uint32 Trigger);
+        void RemovePlayer(Player *player, uint64 guid, uint32 team);
+        void HandleAreaTrigger(Player *Source, uint32 Trigger);
         bool SetupBattleground();
         virtual void Reset();
         virtual void FillInitialWorldStates(WorldPacket &d);

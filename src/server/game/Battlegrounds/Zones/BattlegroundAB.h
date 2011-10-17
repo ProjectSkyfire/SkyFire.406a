@@ -247,23 +247,23 @@ class BattlegroundAB : public Battleground
         BattlegroundAB();
         ~BattlegroundAB();
 
-        void AddPlayer(Player* player);
+        void AddPlayer(Player *player);
         virtual void StartingEventCloseDoors();
         virtual void StartingEventOpenDoors();
-        void RemovePlayer(Player* player, uint64 guid, uint32 team);
-        void HandleAreaTrigger(Player* Source, uint32 Trigger);
+        void RemovePlayer(Player *player, uint64 guid, uint32 team);
+        void HandleAreaTrigger(Player *Source, uint32 Trigger);
         virtual bool SetupBattleground();
         virtual void Reset();
         void EndBattleground(uint32 winner);
         virtual WorldSafeLocsEntry const* GetClosestGraveYard(Player* player);
 
         /* Scorekeeping */
-        virtual void UpdatePlayerScore(Player* Source, uint32 type, uint32 value, bool doAddHonor = true);
+        virtual void UpdatePlayerScore(Player *Source, uint32 type, uint32 value, bool doAddHonor = true);
 
         virtual void FillInitialWorldStates(WorldPacket& data);
 
         /* Nodes occupying */
-        virtual void EventPlayerClickedOnFlag(Player* source, GameObject* target_obj);
+        virtual void EventPlayerClickedOnFlag(Player *source, GameObject* target_obj);
 
         /* achievement req. */
         bool IsAllNodesConrolledByTeam(uint32 team) const;  // overwrited

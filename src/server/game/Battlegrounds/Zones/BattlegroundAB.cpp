@@ -205,7 +205,7 @@ void BattlegroundAB::StartingEventOpenDoors()
     DoorOpen(BG_AB_OBJECT_GATE_H);
 }
 
-void BattlegroundAB::AddPlayer(Player* player)
+void BattlegroundAB::AddPlayer(Player *player)
 {
     Battleground::AddPlayer(player);
     //create score and add it to map, default values are set in the constructor
@@ -218,7 +218,7 @@ void BattlegroundAB::RemovePlayer(Player* /*player*/, uint64 /*guid*/, uint32 /*
 {
 }
 
-void BattlegroundAB::HandleAreaTrigger(Player* Source, uint32 Trigger)
+void BattlegroundAB::HandleAreaTrigger(Player *Source, uint32 Trigger)
 {
     if (GetStatus() != STATUS_IN_PROGRESS)
         return;
@@ -298,7 +298,7 @@ int32 BattlegroundAB::_GetNodeNameId(uint8 node)
         case BG_AB_NODE_LUMBER_MILL:return LANG_BG_AB_NODE_LUMBER_MILL;
         case BG_AB_NODE_GOLD_MINE:  return LANG_BG_AB_NODE_GOLD_MINE;
         default:
-            ASSERT (0);
+            ASSERT(0);
     }
     return 0;
 }
@@ -406,7 +406,7 @@ void BattlegroundAB::_NodeDeOccupied(uint8 node)
     std::vector<uint64> ghost_list = m_ReviveQueue[m_BgCreatures[node]];
     if (!ghost_list.empty())
     {
-        WorldSafeLocsEntry const* ClosestGrave = NULL;
+        WorldSafeLocsEntry const *ClosestGrave = NULL;
         for (std::vector<uint64>::const_iterator itr = ghost_list.begin(); itr != ghost_list.end(); ++itr)
         {
             Player* player = ObjectAccessor::FindPlayer(*itr);
@@ -428,7 +428,7 @@ void BattlegroundAB::_NodeDeOccupied(uint8 node)
 }
 
 /* Invoked if a player used a banner as a gameobject */
-void BattlegroundAB::EventPlayerClickedOnFlag(Player* source, GameObject* /*target_obj*/)
+void BattlegroundAB::EventPlayerClickedOnFlag(Player *source, GameObject* /*target_obj*/)
 {
     if (GetStatus() != STATUS_IN_PROGRESS)
         return;
@@ -654,8 +654,8 @@ WorldSafeLocsEntry const* BattlegroundAB::GetClosestGraveYard(Player* player)
     // If so, select the closest node to place ghost on
     if (!nodes.empty())
     {
-        float plr_x = player->GetPositionX();
-        float plr_y = player->GetPositionY();
+        float player_x = player->GetPositionX();
+        float player_y = player->GetPositionY();
 
         float mindist = 999999.0f;
         for (uint8 i = 0; i < nodes.size(); ++i)
@@ -663,7 +663,7 @@ WorldSafeLocsEntry const* BattlegroundAB::GetClosestGraveYard(Player* player)
             WorldSafeLocsEntry const*entry = sWorldSafeLocsStore.LookupEntry(BG_AB_GraveyardIds[nodes[i]]);
             if (!entry)
                 continue;
-            float dist = (entry->x - plr_x)*(entry->x - plr_x)+(entry->y - plr_y)*(entry->y - plr_y);
+            float dist = (entry->x - player_x)*(entry->x - player_x)+(entry->y - player_y)*(entry->y - player_y);
             if (mindist > dist)
             {
                 mindist = dist;
@@ -679,7 +679,7 @@ WorldSafeLocsEntry const* BattlegroundAB::GetClosestGraveYard(Player* player)
     return good_entry;
 }
 
-void BattlegroundAB::UpdatePlayerScore(Player* Source, uint32 type, uint32 value, bool doAddHonor)
+void BattlegroundAB::UpdatePlayerScore(Player *Source, uint32 type, uint32 value, bool doAddHonor)
 {
     BattlegroundScoreMap::iterator itr = m_PlayerScores.find(Source->GetGUID());
     if (itr == m_PlayerScores.end())                         // player not found...

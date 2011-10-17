@@ -330,7 +330,7 @@ class Battleground
         {
         }
 
-        virtual void DestroyGate(Player* /*player*/, GameObject* /*go*/) {}
+        virtual void DestroyGate(Player* /*pl*/, GameObject* /*go*/) {}
 
         /* achievement req. */
         virtual bool IsAllNodesConrolledByTeam(uint32 /*team*/) const { return false; }
@@ -432,8 +432,11 @@ class Battleground
 
         // Map pointers
         void SetBgMap(BattlegroundMap* map) { m_Map = map; }
-        BattlegroundMap* GetBgMap() const { ASSERT (m_Map); return m_Map; }
-        BattlegroundMap* FindBgMap() const { return m_Map; }
+        BattlegroundMap* GetBgMap()
+        {
+            ASSERT(m_Map);
+            return m_Map;
+        }
 
         void SetTeamStartLoc(uint32 TeamID, float X, float Y, float Z, float O);
         void GetTeamStartLoc(uint32 TeamID, float &X, float &Y, float &Z, float &O) const
@@ -474,10 +477,10 @@ class Battleground
         void SendMessage2ToAll(int32 entry, ChatMsg type, Player const* source, int32 strId1 = 0, int32 strId2 = 0);
 
         // Raid Group
-        Group* GetBgRaid(uint32 TeamID) const { return TeamID == ALLIANCE ? m_BgRaids[BG_TEAM_ALLIANCE] : m_BgRaids[BG_TEAM_HORDE]; }
-        void SetBgRaid(uint32 TeamID, Group* bg_raid);
+        Group *GetBgRaid(uint32 TeamID) const { return TeamID == ALLIANCE ? m_BgRaids[BG_TEAM_ALLIANCE] : m_BgRaids[BG_TEAM_HORDE]; }
+        void SetBgRaid(uint32 TeamID, Group *bg_raid);
 
-        virtual void UpdatePlayerScore(Player* Source, uint32 type, uint32 value, bool doAddHonor = true);
+        virtual void UpdatePlayerScore(Player *Source, uint32 type, uint32 value, bool doAddHonor = true);
 
         static BattlegroundTeamId GetTeamIndexByTeamId(uint32 Team) { return Team == ALLIANCE ? BG_TEAM_ALLIANCE : BG_TEAM_HORDE; }
         uint32 GetPlayersCountByTeam(uint32 Team) const { return m_PlayersCount[GetTeamIndexByTeamId(Team)]; }
@@ -517,7 +520,7 @@ class Battleground
         void EventPlayerLoggedIn(Player* player);
         void EventPlayerLoggedOut(Player* player);
         virtual void EventPlayerDamagedGO(Player* /*player*/, GameObject* /*go*/, uint32 /*eventType*/) {}
-        virtual void EventPlayerUsedGO(Player* /*player*/, GameObject* /*go*/) {}
+        virtual void EventPlayerUsedGO(Player* /*player*/, GameObject* /*go*/){}
 
         // this function can be used by spell to interact with the BG map
         virtual void DoAction(uint32 /*action*/, uint64 /*var*/) {}
@@ -571,8 +574,11 @@ class Battleground
         void RewardXPAtKill(Player* killer, Player* victim);
         bool CanAwardArenaPoints() const { return m_LevelMin >= BG_AWARD_ARENA_POINTS_MIN_LEVEL; }
 
-        virtual uint64 GetFlagPickerGUID(int32 /*team*/ = -1) const { return 0; }
+        // Arena team ids by team
+        uint32 m_ArenaTeamIds[BG_TEAMS_COUNT];
 
+        int32 m_ArenaTeamRatingChanges[BG_TEAMS_COUNT];
+        uint32 m_ArenaTeamMMR[BG_TEAMS_COUNT];
     protected:
         // this method is called, when BG cannot spawn its own spirit guide, or something is wrong, It correctly ends Battleground
         void EndNow();
@@ -630,7 +636,7 @@ class Battleground
         bool   m_IsRated;                                   // is this battle rated?
         bool   m_PrematureCountDown;
         uint32 m_PrematureCountDownTimer;
-        char const* m_Name;
+        char const *m_Name;
 
         /* Pre- and post-update hooks */
 
@@ -673,16 +679,10 @@ class Battleground
         uint32 m_InvitedHorde;
 
         // Raid Group
-        Group* m_BgRaids[BG_TEAMS_COUNT];                   // 0 - alliance, 1 - horde
+        Group *m_BgRaids[BG_TEAMS_COUNT];                   // 0 - alliance, 1 - horde
 
         // Players count by team
         uint32 m_PlayersCount[BG_TEAMS_COUNT];
-
-        // Arena team ids by team
-        uint32 m_ArenaTeamIds[BG_TEAMS_COUNT];
-
-        int32 m_ArenaTeamRatingChanges[BG_TEAMS_COUNT];
-        uint32 m_ArenaTeamMMR[BG_TEAMS_COUNT];
 
         // Limits
         uint32 m_LevelMin;

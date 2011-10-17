@@ -169,7 +169,7 @@ const float BG_SA_NpcSpawnlocs[BG_SA_MAXNPC + BG_SA_DEMOLISHER_AMOUNT][4] =
     { 1232.345f, -187.517f, 66.945f, 0.45f },
     { 1249.634f, -224.189f, 66.72f, 0.635f },
     { 1236.213f, 92.287f, 64.965f, 5.751f },
-    { 1215.11f, 57.772f, 64.739f, 5.78f },
+    { 1215.11f, 57.772f, 64.739f, 5.78f } ,
     //Demolishers
     { 1611.597656f, -117.270073f, 8.719355f, 2.513274f},
     { 1575.562500f, -158.421875f, 5.024450f, 2.129302f},
@@ -424,7 +424,7 @@ class BattlegroundSA : public Battleground
 
         /* inherited from BattlegroundClass */
         /// Called when a player join battle
-        virtual void AddPlayer(Player* player);
+        virtual void AddPlayer(Player *player);
         /// Called when battle start
         virtual void StartingEventCloseDoors();
         virtual void StartingEventOpenDoors();
@@ -440,7 +440,7 @@ class BattlegroundSA : public Battleground
         /// Return the nearest graveyard where player can respawn
         virtual WorldSafeLocsEntry const* GetClosestGraveYard(Player* player);
         /// Called when a player click on flag (graveyard flag)
-        virtual void EventPlayerClickedOnFlag(Player* Source, GameObject* target_obj);
+        virtual void EventPlayerClickedOnFlag(Player *Source, GameObject* target_obj);
         /// Called when a player use a gamobject (relic)
         virtual void EventPlayerUsedGO(Player* Source, GameObject* object);
         /// Return gate id, relative to bg data, according to gameobject id
@@ -478,12 +478,12 @@ class BattlegroundSA : public Battleground
         void EndBattleground(uint32 winner);
 
         /// CAlled when a player leave battleground
-        void RemovePlayer(Player* player, uint64 guid, uint32 team);
-        void HandleAreaTrigger(Player* Source, uint32 Trigger);
+        void RemovePlayer(Player *player, uint64 guid, uint32 team);
+        void HandleAreaTrigger(Player *Source, uint32 Trigger);
 
         /* Scorekeeping */
         /// Update score board
-        void UpdatePlayerScore(Player* Source, uint32 type, uint32 value, bool doAddHonor = true);
+        void UpdatePlayerScore(Player *Source, uint32 type, uint32 value, bool doAddHonor = true);
 
         // Achievement Defense of the Ancients
         bool gateDestroyed;
@@ -531,7 +531,7 @@ class BattlegroundSA : public Battleground
          * \param i : id of graveyard
          * \param Source : Player who capture gy
          */
-        void CaptureGraveyard(BG_SA_Graveyards i, Player* Source);
+        void CaptureGraveyard(BG_SA_Graveyards i, Player *Source);
         /// Switch on/off timer worldstate
         void ToggleTimer();
 

@@ -23,6 +23,7 @@
 #include "World.h"
 #include "Group.h"
 #include "ArenaTeamMgr.h"
+#include "Log.h"
 
 ArenaTeam::ArenaTeam()
 {
@@ -193,7 +194,7 @@ bool ArenaTeam::LoadArenaTeamFromDB(QueryResult result)
     if (!result)
         return false;
 
-    Field *fields = result->Fetch();
+    Field* fields = result->Fetch();
 
     TeamId            = fields[0].GetUInt32();
     TeamName          = fields[1].GetString();
@@ -223,7 +224,7 @@ bool ArenaTeam::LoadMembersFromDB(QueryResult result)
 
     do
     {
-        Field *fields = result->Fetch();
+        Field* fields = result->Fetch();
 
         // Prevent crash if db records are broken when all members in result are already processed and current team doesn't have any members
         if (!fields)
@@ -294,7 +295,7 @@ void ArenaTeam::SetCaptain(uint64 guid)
     if (newCaptain)
     {
         newCaptain->SetArenaTeamInfoField(GetSlot(), ARENA_TEAM_MEMBER, 0);
-        sLog->outArena("Player: %s [GUID: %u] promoted player: %s [GUID: %u] to leader of arena team [Id: %u] [Type: %u].",
+    sLog->outArena("Player: %s [GUID: %u] promoted player: %s [GUID: %u] to leader of arena team [Id: %u] [Type: %u].",
                         oldCaptain->GetName(), oldCaptain->GetGUIDLow(), newCaptain->GetName(), newCaptain->GetGUIDLow(), GetId(), GetType());
     }
 }
@@ -341,7 +342,7 @@ void ArenaTeam::Disband(WorldSession* session)
         BroadcastEvent(ERR_ARENA_TEAM_DISBANDED_S, 0, 2, session->GetPlayerName(), GetName(), "");
 
         if (Player* player = session->GetPlayer())
-            sLog->outArena("Player: %s [GUID: %u] disbanded arena team type: %u [Id: %u].", player->GetName(), player->GetGUIDLow(), GetType(), GetId());
+                sLog->outArena("Player: %s [GUID: %u] disbanded arena team type: %u [Id: %u].", player->GetName(), player->GetGUIDLow(), GetType(), GetId());
     }
 
     // Update database
@@ -377,17 +378,17 @@ void ArenaTeam::Roster(WorldSession* session)
     {
         player = ObjectAccessor::FindPlayer(itr->Guid);
 
-        data << uint64(itr->Guid);                            // guid
-        data << uint8((player ? 1 : 0));                      // online flag
-        data << itr->Name;                                    // member name
-        data << uint32((itr->Guid == GetCaptain() ? 0 : 1));  // captain flag 0 captain 1 member
-        data << uint8((player ? player->getLevel() : 0));     // unknown, level?
-        data << uint8(itr->Class);                            // class
-        data << uint32(itr->WeekGames);                       // played this week
-        data << uint32(itr->WeekWins);                        // wins this week
-        data << uint32(itr->SeasonGames);                     // played this season
-        data << uint32(itr->SeasonWins);                      // wins this season
-        data << uint32(itr->PersonalRating);                  // personal rating
+        data << uint64(itr->Guid);                          // guid
+        data << uint8((player ? 1 : 0));                        // online flag
+        data << itr->Name;                                  // member name
+        data << uint32((itr->Guid == GetCaptain() ? 0 : 1));// captain flag 0 captain 1 member
+        data << uint8((player ? player->getLevel() : 0));           // unknown, level?
+        data << uint8(itr->Class);                          // class
+        data << uint32(itr->WeekGames);                    // played this week
+        data << uint32(itr->WeekWins);                     // wins this week
+        data << uint32(itr->SeasonGames);                  // played this season
+        data << uint32(itr->SeasonWins);                   // wins this season
+        data << uint32(itr->PersonalRating);               // personal rating
         if (unk308)
         {
             data << float(0.0);                             // 308 unk
@@ -432,7 +433,6 @@ void ArenaTeam::NotifyStatsChanged()
     // This is called after a rated match ended
     // Updates arena team stats for every member of the team (not only the ones who participated!)
     for (MemberList::const_iterator itr = Members.begin(); itr != Members.end(); ++itr)
-
         if (Player* player = ObjectAccessor::FindPlayer(itr->Guid))
             SendStats(player->GetSession());
 }
@@ -480,7 +480,6 @@ void ArenaTeamMember::ModifyMatchmakerRating(int32 mod, uint32 /*slot*/)
 void ArenaTeam::BroadcastPacket(WorldPacket* packet)
 {
     for (MemberList::const_iterator itr = Members.begin(); itr != Members.end(); ++itr)
-
         if (Player* player = ObjectAccessor::FindPlayer(itr->Guid))
             player->GetSession()->SendPacket(packet);
 }
@@ -537,32 +536,6 @@ bool ArenaTeam::IsMember(uint64 guid) const
             return true;
 
     return false;
-}
-
-uint32 ArenaTeam::GetPoints(uint32 memberRating)
-{
-    // Returns how many points would be awarded with this team type with this rating
-    float points;
-
-    uint32 rating = memberRating + 150 < Stats.Rating ? memberRating : Stats.Rating;
-
-    if (rating <= 1500)
-    {
-        if (sWorld->getIntConfig(CONFIG_ARENA_SEASON_ID) < 6)
-            points = (float)rating * 0.22f + 14.0f;
-        else
-            points = 344;
-    }
-    else
-        points = 1511.26f / (1.0f + 1639.28f * exp(-0.00412f * (float)rating));
-
-    // Type penalties for teams < 5v5
-    if (Type == ARENA_TEAM_2v2)
-        points *= 0.76f;
-    else if (Type == ARENA_TEAM_3v3)
-        points *= 0.88f;
-
-    return (uint32) points;
 }
 
 uint32 ArenaTeam::GetAverageMMR(Group* group) const
@@ -788,37 +761,92 @@ void ArenaTeam::MemberWon(Player* player, uint32 againstMatchmakerRating, int32 
             player->SetArenaTeamInfoField(GetSlot(), ARENA_TEAM_GAMES_WEEK, itr->WeekGames);
             player->SetArenaTeamInfoField(GetSlot(), ARENA_TEAM_GAMES_SEASON, itr->SeasonGames);
             return;
+
+            //////////////////////////////////////////////////////
+            //                                                  //
+            //               CATACLYSM ARENA SYSTEM             //
+            //  Winners receive fixed amount of Conquest Points //
+            //                                                  //
+            //                Losers, only Shame                //
+            //                                                  //
+            //////////////////////////////////////////////////////
+
+            bool CapReached;
+
+            switch (player->GetCurrency(390))     // Checks if Soft Cap has been reached, if yes, do not earn anymore points.
+            {
+                case 1343:
+                case 1940:
+                case 2533:
+                case 2849:
+                case 2964:
+                case 3000:
+                    CapReached = true;
+                default:
+                    CapReached = false;
+            }
+
+            if (CapReached == false)       // if not go ahead.
+            {
+                player->ModifyCurrency(390, 268.6f);
+
+                // Conquest Point Soft Cap System - based on Personal Rating
+                uint32 OldPoints = player->GetCurrency(390);
+                uint32 OldRating = player->GetArenaPersonalRating(GetSlot());
+                uint32 NewPoints = OldPoints;
+                uint32 NewRating = OldRating;
+
+                // First Check, points - Total Conquest Points cannot exceed the Soft Cap, So:
+                if (OldRating <=1500 && OldPoints >= 1343)         // If this happens..
+                {
+                    NewPoints = 1343;                              // ..set points = Soft Cap, and set CapReached=1,
+                                                                   // so player cannot earn anymore points until next week
+
+                    // Second Check, rating - Rating has to remain the same
+                    // for all the week, when a new week starts, rating can raise
+                    // THIS IS TO AVOID RATING RAISING IN THE SAME WEEK.
+                    // TODO: RATING RAISE WITHOUT EARNING POINTS.
+                    if (Stats.WeekGames != 0 && OldRating > 1500)
+                        NewRating = 1500;
+                }
+
+                // The same happens for all other brackets
+                if ((OldRating > 1500 && OldRating < 1800) && OldPoints > 1940)
+                {
+                    NewPoints=1940;
+
+                    if (Stats.WeekGames != 0 && OldRating > 1800)
+                        NewRating = 1800;
+                }
+
+                if ((OldRating > 1800 && OldRating < 2100) && OldPoints > 2533)
+                {
+                    NewPoints = 2533;
+
+                    if (Stats.WeekGames != 0 && OldRating > 2100)
+                        NewRating = 2100;
+                }
+                if ((OldRating > 2100 && OldRating < 2400) && OldPoints > 2849)
+                {
+                    NewPoints = 2849;
+
+                    if (Stats.WeekGames != 0 && OldRating > 2400)
+                        NewRating = 2400;
+                }
+                if ((OldRating > 2400 && OldRating < 2700) && OldPoints > 2964)
+                {
+                    NewPoints = 2964;
+
+                    if (Stats.WeekGames != 0 && OldRating > 3000)
+                        NewRating = 3000;
+                }
+                if (OldRating >= 3000)
+                    NewPoints = 3000;
+
+                player->SetCurrency(390, NewPoints);
+                itr->ModifyPersonalRating(player, NewRating, GetSlot());
+            }
         }
-    }
-}
-
-void ArenaTeam::UpdateArenaPointsHelper(std::map<uint32, uint32>& playerPoints)
-{
-    // Called after a match has ended and the stats are already modified
-    // Helper function for arena point distribution (this way, when distributing, no actual calculation is required, just a few comparisons)
-    // 10 played games per week is a minimum
-    if (Stats.WeekGames < 10)
-        return;
-
-    // To get points, a player has to participate in at least 30% of the matches
-    uint32 requiredGames = (uint32) ceil(Stats.WeekGames * 0.3);
-
-    for (MemberList::const_iterator itr = Members.begin(); itr !=  Members.end(); ++itr)
-    {
-        // The player participated in enough games, update his points
-        uint32 pointsToAdd = 0;
-        if (itr->WeekGames >= requiredGames)
-            pointsToAdd = GetPoints(itr->PersonalRating);
-
-        std::map<uint32, uint32>::iterator plr_itr = playerPoints.find(GUID_LOPART(itr->Guid));
-        if (plr_itr != playerPoints.end())
-        {
-            // Check if there is already more points
-            if (plr_itr->second < pointsToAdd)
-                playerPoints[GUID_LOPART(itr->Guid)] = pointsToAdd;
-        }
-        else
-            playerPoints[GUID_LOPART(itr->Guid)] = pointsToAdd;
     }
 }
 
