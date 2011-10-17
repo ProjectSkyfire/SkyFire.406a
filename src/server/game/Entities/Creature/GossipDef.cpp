@@ -366,10 +366,10 @@ void PlayerMenu::SendQuestGiverQuestDetails(Quest const* quest, uint64 npcGUID, 
             data << uint32(0);
     }
 
-    data << uint32(0); // unknown 4.0.1
-    data << uint32(quest->GetRewOrReqMoney()); // not sure about this one
+    data << uint32(quest->GetRewOrReqMoney()); // unknown 4.0.1
+    data << uint32(quest->XPValue(_session->GetPlayer()) * sWorld->getRate(RATE_XP_QUEST)); // granted exp
     data << uint32(quest->GetCharTitleId()); // title
-    data << uint32(quest->XPValue(_session->GetPlayer())*sWorld->getRate(RATE_XP_QUEST));
+    data << uint32(0); // unknown 4.0.6a
 
     // rewarded honor points. Multiply with 10 to satisfy client
     //data << 10 * Trinity::Honor::hk_honor_at_level(pSession->GetPlayer()->getLevel(), pQuest->GetRewHonorableKills());
