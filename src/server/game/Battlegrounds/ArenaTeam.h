@@ -1,5 +1,4 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
@@ -21,7 +20,6 @@
 #define TRINITYCORE_ARENATEAM_H
 
 #include "QueryResult.h"
-
 #include <ace/Singleton.h>
 #include <list>
 #include <map>
@@ -31,7 +29,7 @@ class WorldPacket;
 class Player;
 class Group;
 
-enum ArenaTeamCommandTypes 
+enum ArenaTeamCommandTypes
 {
     ERR_ARENA_TEAM_CREATE_S                 = 0x00,
     ERR_ARENA_TEAM_INVITE_SS                = 0x01,
@@ -39,7 +37,7 @@ enum ArenaTeamCommandTypes
     ERR_ARENA_TEAM_FOUNDER_S                = 0x0E
 };
 
-enum ArenaTeamCommandErrors 
+enum ArenaTeamCommandErrors
 {
     ERR_ARENA_TEAM_INTERNAL                 = 0x01,
     ERR_ALREADY_IN_ARENA_TEAM               = 0x02,
@@ -48,7 +46,7 @@ enum ArenaTeamCommandErrors
     ERR_ALREADY_INVITED_TO_ARENA_TEAM_S     = 0x05,
     ERR_ARENA_TEAM_NAME_INVALID             = 0x06,
     ERR_ARENA_TEAM_NAME_EXISTS_S            = 0x07,
-    ERR_ARENA_TEAM_LEADER_LEAVE_S           = 0x08, // if ((a1 + 116) == 3 ) ERR_ARENA_TEAM_LEADER_LEAVE_S else ERR_ARENA_TEAM_PERMISSIONS
+    ERR_ARENA_TEAM_LEADER_LEAVE_S           = 0x08,
     ERR_ARENA_TEAM_PERMISSIONS              = 0x08,
     ERR_ARENA_TEAM_PLAYER_NOT_IN_TEAM       = 0x09,
     ERR_ARENA_TEAM_PLAYER_NOT_IN_TEAM_SS    = 0x0A,
@@ -59,8 +57,7 @@ enum ArenaTeamCommandErrors
     ERR_ARENA_TEAM_TARGET_TOO_HIGH_S        = 0x16,
     ERR_ARENA_TEAM_TOO_MANY_MEMBERS_S       = 0x17,
     ERR_ARENA_TEAM_NOT_FOUND                = 0x1B,
-    ERR_ARENA_TEAMS_LOCKED                  = 0x1E,
-    ERR_ARENA_TEAM_TOO_MANY_CREATE          = 0x21
+    ERR_ARENA_TEAMS_LOCKED                  = 0x1E
 };
 
 enum ArenaTeamEvents
@@ -100,7 +97,7 @@ struct ArenaTeamMember
     uint16 PersonalRating;
     uint16 MatchMakerRating;
 
-    void ModifyPersonalRating(Player* player, int32 mod, uint32 slot);
+    void ModifyPersonalRating(Player* plr, int32 mod, uint32 slot);
     void ModifyMatchmakerRating(int32 mod, uint32 slot);
 };
 
@@ -170,13 +167,14 @@ class ArenaTeam
         void SendStats(WorldSession* session);
         void Inspect(WorldSession* session, uint64 guid);
 
+        uint32 GetPoints(uint32 MemberRating);
         int32  GetMatchmakerRatingMod(uint32 ownRating, uint32 opponentRating, bool won);
         int32  GetRatingMod(uint32 ownRating, uint32 opponentRating, bool won);
         float  GetChanceAgainst(uint32 ownRating, uint32 opponentRating);
         int32  WonAgainst(uint32 Own_MMRating, uint32 Opponent_MMRating, int32& rating_change);
-        void   MemberWon(Player* player, uint32 againstMatchmakerRating, int32 MatchmakerRatingChange);
+        void   MemberWon(Player* plr, uint32 againstMatchmakerRating, int32 MatchmakerRatingChange);
         int32  LostAgainst(uint32 Own_MMRating, uint32 Opponent_MMRating, int32& rating_change);
-        void   MemberLost(Player* player, uint32 againstMatchmakerRating, int32 MatchmakerRatingChange = -12);
+        void   MemberLost(Player* plr, uint32 againstMatchmakerRating, int32 MatchmakerRatingChange = -12);
         void   OfflineMemberLost(uint64 guid, uint32 againstMatchmakerRating, int32 MatchmakerRatingChange = -12);
 
         void UpdateArenaPointsHelper(std::map<uint32, uint32> & PlayerPoints);
@@ -201,3 +199,4 @@ class ArenaTeam
         ArenaTeamStats Stats;
 };
 #endif
+
