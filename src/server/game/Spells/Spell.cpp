@@ -4747,7 +4747,7 @@ SpellCastResult Spell::CheckCast(bool strict)
                    float y_mid = (target->GetPositionY() + m_caster->GetPositionY()) / 2;
                    float z_mid = (target->GetPositionZ() + m_caster->GetPositionZ()) / 2;
                    float z_ground = m_caster->GetMap()->GetHeight(x_mid, y_mid, z_mid, true, 5.0f);
-                   if (fabs(z_mid - z_ground) > 1.0)
+                   if (fabs(z_mid - z_ground) > 1.0f)
                        return SPELL_FAILED_NOPATH;
                }
             }

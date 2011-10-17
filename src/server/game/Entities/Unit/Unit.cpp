@@ -599,7 +599,7 @@ bool Unit::IsWithinMeleeRange(const Unit* obj, float dist) const
 void Unit::GetRandomContactPoint(const Unit* obj, float &x, float &y, float &z, float distance2dMin, float distance2dMax) const
 {
     float combat_reach = GetCombatReach();
-    if (combat_reach < 0.1) // sometimes bugged for players
+    if (combat_reach < 0.1f) // sometimes bugged for players
         combat_reach = DEFAULT_COMBAT_REACH;
 
     uint32 attacker_number = getAttackers().size();
@@ -1613,7 +1613,7 @@ void Unit::CalcAbsorbResist(Unit* victim, SpellSchoolMask schoolMask, DamageEffe
         float victimResistance = baseVictimResistance - ignoredResistance;
 
         static const uint32 BOSS_LEVEL = 83;
-        static const float BOSS_RESISTANCE_CONSTANT = 510.0;
+        static const float BOSS_RESISTANCE_CONSTANT = 510.0f;
         uint32 level = getLevel();
         float resistanceConstant = 0.0f;
 
