@@ -896,11 +896,11 @@ WorldSafeLocsEntry const* BattlegroundEY::GetClosestGraveYard(Player* player)
         return NULL;
     }
 
-    float plr_x = player->GetPositionX();
-    float plr_y = player->GetPositionY();
-    float plr_z = player->GetPositionZ();
+    float player_x = player->GetPositionX();
+    float player_y = player->GetPositionY();
+    float player_z = player->GetPositionZ();
 
-    distance = (entry->x - plr_x)*(entry->x - plr_x) + (entry->y - plr_y)*(entry->y - plr_y) + (entry->z - plr_z)*(entry->z - plr_z);
+    distance = (entry->x - player_x)*(entry->x - player_x) + (entry->y - player_y)*(entry->y - player_y) + (entry->z - player_z)*(entry->z - player_z);
     nearestDistance = distance;
 
     for (uint8 i = 0; i < EY_POINTS_MAX; ++i)
@@ -912,7 +912,7 @@ WorldSafeLocsEntry const* BattlegroundEY::GetClosestGraveYard(Player* player)
                 sLog->outError("BattlegroundEY: Not found graveyard: %u", m_CapturingPointTypes[i].GraveYardId);
             else
             {
-                distance = (entry->x - plr_x)*(entry->x - plr_x) + (entry->y - plr_y)*(entry->y - plr_y) + (entry->z - plr_z)*(entry->z - plr_z);
+                distance = (entry->x - player_x)*(entry->x - player_x) + (entry->y - player_y)*(entry->y - player_y) + (entry->z - player_z)*(entry->z - player_z);
                 if (distance < nearestDistance)
                 {
                     nearestDistance = distance;
