@@ -22,7 +22,6 @@
 #include "WorldPacket.h"
 #include "WorldSession.h"
 #include "DatabaseEnv.h"
-
 #include "ArenaTeam.h"
 #include "Log.h"
 #include "ObjectMgr.h"

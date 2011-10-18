@@ -43,7 +43,9 @@ ArenaTeam::ArenaTeam()
     Stats.SeasonWins  = 0;
 }
 
-ArenaTeam::~ArenaTeam() {}
+ArenaTeam::~ArenaTeam()
+{
+}
 
 bool ArenaTeam::Create(uint64 captainGuid, uint8 type, std::string teamName, uint32 backgroundColor, uint8 emblemStyle, uint32 emblemColor, uint8 borderStyle, uint32 borderColor)
 {
@@ -193,7 +195,7 @@ bool ArenaTeam::LoadArenaTeamFromDB(QueryResult result)
     if (!result)
         return false;
 
-    Field *fields = result->Fetch();
+    Field* fields = result->Fetch();
 
     TeamId            = fields[0].GetUInt32();
     TeamName          = fields[1].GetString();
@@ -223,7 +225,7 @@ bool ArenaTeam::LoadMembersFromDB(QueryResult result)
 
     do
     {
-        Field *fields = result->Fetch();
+        Field* fields = result->Fetch();
 
         // Prevent crash if db records are broken when all members in result are already processed and current team doesn't have any members
         if (!fields)
@@ -377,17 +379,17 @@ void ArenaTeam::Roster(WorldSession* session)
     {
         player = ObjectAccessor::FindPlayer(itr->Guid);
 
-        data << uint64(itr->Guid);                            // guid
-        data << uint8((player ? 1 : 0));                      // online flag
-        data << itr->Name;                                    // member name
-        data << uint32((itr->Guid == GetCaptain() ? 0 : 1));  // captain flag 0 captain 1 member
-        data << uint8((player ? player->getLevel() : 0));     // unknown, level?
-        data << uint8(itr->Class);                            // class
-        data << uint32(itr->WeekGames);                       // played this week
-        data << uint32(itr->WeekWins);                        // wins this week
-        data << uint32(itr->SeasonGames);                     // played this season
-        data << uint32(itr->SeasonWins);                      // wins this season
-        data << uint32(itr->PersonalRating);                  // personal rating
+        data << uint64(itr->Guid);                          // guid
+        data << uint8((player ? 1 : 0));                        // online flag
+        data << itr->Name;                                  // member name
+        data << uint32((itr->Guid == GetCaptain() ? 0 : 1));// captain flag 0 captain 1 member
+        data << uint8((player ? player->getLevel() : 0));           // unknown, level?
+        data << uint8(itr->Class);                          // class
+        data << uint32(itr->WeekGames);                    // played this week
+        data << uint32(itr->WeekWins);                     // wins this week
+        data << uint32(itr->SeasonGames);                  // played this season
+        data << uint32(itr->SeasonWins);                   // wins this season
+        data << uint32(itr->PersonalRating);               // personal rating
         if (unk308)
         {
             data << float(0.0f);                              // 308 unk
@@ -432,7 +434,6 @@ void ArenaTeam::NotifyStatsChanged()
     // This is called after a rated match ended
     // Updates arena team stats for every member of the team (not only the ones who participated!)
     for (MemberList::const_iterator itr = Members.begin(); itr != Members.end(); ++itr)
-
         if (Player* player = ObjectAccessor::FindPlayer(itr->Guid))
             SendStats(player->GetSession());
 }
@@ -480,7 +481,6 @@ void ArenaTeamMember::ModifyMatchmakerRating(int32 mod, uint32 /*slot*/)
 void ArenaTeam::BroadcastPacket(WorldPacket* packet)
 {
     for (MemberList::const_iterator itr = Members.begin(); itr != Members.end(); ++itr)
-
         if (Player* player = ObjectAccessor::FindPlayer(itr->Guid))
             player->GetSession()->SendPacket(packet);
 }
@@ -810,11 +810,11 @@ void ArenaTeam::UpdateArenaPointsHelper(std::map<uint32, uint32>& playerPoints)
         if (itr->WeekGames >= requiredGames)
             pointsToAdd = GetPoints(itr->PersonalRating);
 
-        std::map<uint32, uint32>::iterator plr_itr = playerPoints.find(GUID_LOPART(itr->Guid));
-        if (plr_itr != playerPoints.end())
+        std::map<uint32, uint32>::iterator player_itr = playerPoints.find(GUID_LOPART(itr->Guid));
+        if (player_itr != playerPoints.end())
         {
             // Check if there is already more points
-            if (plr_itr->second < pointsToAdd)
+            if (player_itr->second < pointsToAdd)
                 playerPoints[GUID_LOPART(itr->Guid)] = pointsToAdd;
         }
         else
