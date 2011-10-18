@@ -27,7 +27,7 @@
 #include "Group.h"
 
 /*********************************************************/
-/***           BATTLEGROUND QUEUE SYSTEM              ***/
+/***           BATTLEGROUND QUEUE SYSTEM               ***/
 /*********************************************************/
 
 BattlegroundQueue::BattlegroundQueue()
@@ -61,7 +61,7 @@ BattlegroundQueue::~BattlegroundQueue()
 }
 
 /*********************************************************/
-/***     BATTLEGROUND QUEUE SELECTION POOLS           ***/
+/***     BATTLEGROUND QUEUE SELECTION POOLS            ***/
 /*********************************************************/
 
 // selection pool initialization, used to clean up from prev selection
@@ -124,7 +124,7 @@ bool BattlegroundQueue::SelectionPool::AddGroup(GroupQueueInfo* ginfo, uint32 de
 }
 
 /*********************************************************/
-/***              BATTLEGROUND QUEUES                 ***/
+/***              BATTLEGROUND QUEUES                  ***/
 /*********************************************************/
 
 // add group or player (group == NULL) to bg queue with the given leader and bg specifications
@@ -1016,7 +1016,7 @@ void BattlegroundQueue::BattlegroundQueueUpdate(uint32 diff, BattlegroundTypeId 
 }
 
 /*********************************************************/
-/***           BATTLEGROUND QUEUE EVENTS              ***/
+/***           BATTLEGROUND QUEUE EVENTS               ***/
 /*********************************************************/
 
 bool BGQueueInviteEvent::Execute(uint64 /*e_time*/, uint32 /*p_time*/)

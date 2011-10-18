@@ -319,7 +319,7 @@ inline void Battleground::_ProcessOfflineQueue()
 inline void Battleground::_ProcessRessurect(uint32 diff)
 {
     // *********************************************************
-    // ***       BATTLEGROUND RESSURECTION SYSTEM           ***
+    // ***       BATTLEGROUND RESSURECTION SYSTEM            ***
     // *********************************************************
     // this should be handled by spell system
     m_LastResurrectTime += diff;
@@ -378,7 +378,7 @@ inline void Battleground::_ProcessRessurect(uint32 diff)
 inline void Battleground::_ProcessProgress(uint32 diff)
 {
     // *********************************************************
-    // ***          BATTLEGROUND BALLANCE SYSTEM            ***
+    // ***          BATTLEGROUND BALLANCE SYSTEM             ***
     // *********************************************************
     // if less then minimum players are in on one side, then start premature finish timer
     if (!m_PrematureCountDown)
@@ -420,7 +420,7 @@ inline void Battleground::_ProcessProgress(uint32 diff)
 inline void Battleground::_ProcessJoin(uint32 diff)
 {
     // *********************************************************
-    // ***          BATTLEGROUND STARTING SYSTEM            ***
+    // ***          BATTLEGROUND STARTING SYSTEM             ***
     // *********************************************************
     ModifyStartDelayTime(diff);
 
@@ -533,7 +533,7 @@ inline void Battleground::_ProcessJoin(uint32 diff)
 inline void Battleground::_ProcessLeave(uint32 diff)
 {
     // *********************************************************
-    // ***          BATTLEGROUND ENDING SYSTEM              ***
+    // ***          BATTLEGROUND ENDING SYSTEM               ***
     // *********************************************************
     // remove all players from battleground after 2 minutes
     m_EndTime -= diff;
@@ -689,18 +689,18 @@ void Battleground::EndBattleground(uint32 winner)
 {
     RemoveFromBGFreeSlotQueue();
 
-    ArenaTeam* winner_arena_team = NULL;
-    ArenaTeam* loser_arena_team = NULL;
-    uint32 loser_team_rating = 0;
+    ArenaTeam* winner_arena_team   = NULL;
+    ArenaTeam* loser_arena_team    = NULL;
+    uint32 loser_team_rating       = 0;
     uint32 loser_matchmaker_rating = 0;
-    int32  loser_change = 0;
+    int32  loser_change            = 0;
     int32  loser_matchmaker_change = 0;
-    uint32 winner_team_rating = 0;
+    uint32 winner_team_rating      = 0;
     uint32 winner_matchmaker_rating = 0;
-    int32  winner_change = 0;
+    int32  winner_change           = 0;
     int32  winner_matchmaker_change = 0;
     WorldPacket data;
-    int32 winmsg_id = 0;
+    int32 winmsg_id                = 0;
 
     if (winner == ALLIANCE)
     {

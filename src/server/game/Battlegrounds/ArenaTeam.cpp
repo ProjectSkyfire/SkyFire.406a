@@ -59,14 +59,14 @@ bool ArenaTeam::Create(uint64 captainGuid, uint8 type, std::string teamName, uin
     TeamId = sArenaTeamMgr->GenerateArenaTeamId();
 
     // Assign member variables
-    CaptainGuid = captainGuid;
-    Type = type;
-    TeamName = teamName;
-    BackgroundColor = backgroundColor;
-    EmblemStyle = emblemStyle;
-    EmblemColor = emblemColor;
-    BorderStyle = borderStyle;
-    BorderColor = borderColor;
+    CaptainGuid        = captainGuid;
+    Type               = type;
+    TeamName           = teamName;
+    BackgroundColor    = backgroundColor;
+    EmblemStyle        = emblemStyle;
+    EmblemColor        = emblemColor;
+    BorderStyle        = borderStyle;
+    BorderColor        = borderColor;
     uint32 captainLowGuid = GUID_LOPART(captainGuid);
 
     // Save arena team to db
