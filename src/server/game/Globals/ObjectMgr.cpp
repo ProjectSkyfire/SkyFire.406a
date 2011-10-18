@@ -7973,20 +7973,17 @@ SkillRangeType GetSkillRangeType(SkillLineEntry const *pSkill, bool racial)
 
 void ObjectMgr::LoadGameTele()
 {
-    uint32 oldMSTime = getMSTime();
-
     m_GameTeleMap.clear();                                  // for reload case
 
+    uint32 count = 0;
     QueryResult result = WorldDatabase.Query("SELECT id, position_x, position_y, position_z, orientation, map, name FROM game_tele");
 
     if (!result)
     {
-        sLog->outErrorDb(">> Loaded 0 GameTeleports. DB table `game_tele` is empty!");
         sLog->outString();
+        sLog->outErrorDb(">> Loaded `game_tele`, table is empty!");
         return;
     }
-
-    uint32 count = 0;
 
     do
     {
@@ -8023,8 +8020,8 @@ void ObjectMgr::LoadGameTele()
     }
     while (result->NextRow());
 
-    sLog->outString(">> Loaded %u GameTeleports in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
     sLog->outString();
+    sLog->outString(">> Loaded %u GameTeleports", count);
 }
 
 GameTele const* ObjectMgr::GetGameTele(const std::string& name) const
