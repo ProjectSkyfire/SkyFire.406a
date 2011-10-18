@@ -444,6 +444,7 @@ class Map : public GridRefManager<NGridType>
         template<class T> void InitializeObject(T* obj);
         void AddCreatureToMoveList(Creature* c, float x, float y, float z, float ang);
         void RemoveCreatureFromMoveList(Creature* c);
+
         bool _creatureToMoveLock;
         std::vector<Creature*> _creaturesToMove;
 
@@ -459,8 +460,7 @@ class Map : public GridRefManager<NGridType>
 
         NGridType* getNGrid(uint32 x, uint32 y) const
         {
-            ASSERT (x < MAX_NUMBER_OF_GRIDS);
-            ASSERT (y < MAX_NUMBER_OF_GRIDS);
+            ASSERT(x < MAX_NUMBER_OF_GRIDS && y < MAX_NUMBER_OF_GRIDS);
             return i_grids[x][y];
         }
 
