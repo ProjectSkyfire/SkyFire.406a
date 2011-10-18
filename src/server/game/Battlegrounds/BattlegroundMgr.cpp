@@ -181,14 +181,14 @@ void BattlegroundMgr::BuildBattlegroundStatusPacket(WorldPacket *data, Battlegro
 
     switch (StatusID)
     {
-        case STATUS_NONE:
+    case STATUS_NONE:
         {
             // STATUS1 resets clients' BG Info
             data->Initialize(SMSG_BATTLEFIELD_STATUS1, 4);
             *data << uint32(QueueSlot);                         // queue id (0...1)
         }
         break;
-        case STATUS_WAIT_QUEUE:
+    case STATUS_WAIT_QUEUE:
         {
             // The client will set STATUS_WAIT_QUEUE at BGInfo once it receives this packet
             data->Initialize(SMSG_JOINED_BATTLEGROUND_QUEUE, (1+1+4+4+4+1+8+1+4));
@@ -208,7 +208,7 @@ void BattlegroundMgr::BuildBattlegroundStatusPacket(WorldPacket *data, Battlegro
             *data << uint32(Time2); // time in queue
         }
         break;
-        case STATUS_WAIT_JOIN:
+    case STATUS_WAIT_JOIN:
         {
             // The client will set STATUS_WAIT_JOIN at BGInfo once it receives this packet
             data->Initialize(SMSG_BATTLEFIELD_STATUS3, (1+1+4+8+4+1+4+4+1));
@@ -230,7 +230,7 @@ void BattlegroundMgr::BuildBattlegroundStatusPacket(WorldPacket *data, Battlegro
             *data << uint8(bg->GetMaxLevel()); // highestLevel
         }
         break;
-        case STATUS_IN_PROGRESS:
+    case STATUS_IN_PROGRESS:
         {
             data->Initialize(SMSG_BATTLEFIELD_STATUS2, 100);
             *data << uint8(bg->isRated() ? 128 : 0);
@@ -252,7 +252,7 @@ void BattlegroundMgr::BuildBattlegroundStatusPacket(WorldPacket *data, Battlegro
             *data << uint8(bg->GetMinLevel());
         }
         break;
-        case STATUS_WAIT_LEAVE:
+    case STATUS_WAIT_LEAVE:
         {
             // Not used...
             data->Initialize(SMSG_BATTLEFIELD_STATUS4, (1+4+1+1+1+4+1+4+1+4+1+8+1));
@@ -337,7 +337,7 @@ void BattlegroundMgr::BuildPvpLogDataPacket(WorldPacket *data, Battleground *bg)
             continue;
         }
 
-        Player *player = ObjectAccessor::FindPlayer(itr2->first);
+        Player* player = ObjectAccessor::FindPlayer(itr2->first);
         uint32 team = bg->GetPlayerTeam(itr2->first);
         if (!team && player)
             team = player->GetBGTeam();
@@ -502,7 +502,7 @@ void BattlegroundMgr::BuildGroupJoinedBattlegroundPacket(WorldPacket *data, Grou
 
 void BattlegroundMgr::BuildUpdateWorldStatePacket(WorldPacket *data, uint32 field, uint32 value)
 {
-    data->Initialize(SMSG_UPDATE_WORLD_STATE, 4 + 4 + 1);
+    data->Initialize(SMSG_UPDATE_WORLD_STATE, 4+4); // Checked on 406
     *data << uint32(field);
     *data << uint32(value);
     *data << uint8(0);
@@ -520,7 +520,7 @@ void BattlegroundMgr::BuildPlayerLeftBattlegroundPacket(WorldPacket *data, uint6
     *data << uint64(guid);
 }
 
-void BattlegroundMgr::BuildPlayerJoinedBattlegroundPacket(WorldPacket *data, Player *player)
+void BattlegroundMgr::BuildPlayerJoinedBattlegroundPacket(WorldPacket *data, Player* player)
 {
     data->Initialize(SMSG_BATTLEGROUND_PLAYER_JOINED, 8);
     *data << uint64(player->GetGUID());
@@ -966,7 +966,7 @@ void BattlegroundMgr::BuildBattlegroundListPacket(WorldPacket *data, uint64 guid
     }
 }
 
-void BattlegroundMgr::SendToBattleground(Player *pl, uint32 instanceId, BattlegroundTypeId bgTypeId)
+void BattlegroundMgr::SendToBattleground(Player* pl, uint32 instanceId, BattlegroundTypeId bgTypeId)
 {
     Battleground *bg = GetBattleground(instanceId, bgTypeId);
     if (bg)
@@ -987,7 +987,7 @@ void BattlegroundMgr::SendToBattleground(Player *pl, uint32 instanceId, Battlegr
     }
 }
 
-void BattlegroundMgr::SendAreaSpiritHealerQueryOpcode(Player *pl, Battleground *bg, uint64 guid)
+void BattlegroundMgr::SendAreaSpiritHealerQueryOpcode(Player* pl, Battleground *bg, uint64 guid)
 {
     WorldPacket data(SMSG_AREA_SPIRIT_HEALER_TIME, 12);
     uint32 time_ = 30000 - bg->GetLastResurrectTime();      // resurrect every 30 seconds

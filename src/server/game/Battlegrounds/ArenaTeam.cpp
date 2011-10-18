@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
@@ -433,8 +434,8 @@ void ArenaTeam::NotifyStatsChanged()
     // This is called after a rated match ended
     // Updates arena team stats for every member of the team (not only the ones who participated!)
     for (MemberList::const_iterator itr = Members.begin(); itr != Members.end(); ++itr)
-        if (Player* plr = ObjectAccessor::FindPlayer(itr->Guid))
-            SendStats(plr->GetSession());
+        if (Player* player = ObjectAccessor::FindPlayer(itr->Guid))
+            SendStats(player->GetSession());
 }
 
 void ArenaTeam::Inspect(WorldSession* session, uint64 guid)
@@ -455,17 +456,17 @@ void ArenaTeam::Inspect(WorldSession* session, uint64 guid)
     session->SendPacket(&data);
 }
 
-void ArenaTeamMember::ModifyPersonalRating(Player* plr, int32 mod, uint32 slot)
+void ArenaTeamMember::ModifyPersonalRating(Player* player, int32 mod, uint32 slot)
 {
     if (int32(PersonalRating) + mod < 0)
         PersonalRating = 0;
     else
         PersonalRating += mod;
 
-    if (plr)
+    if (player)
     {
-        plr->SetArenaTeamInfoField(slot, ARENA_TEAM_PERSONAL_RATING, PersonalRating);
-        plr->UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_HIGHEST_PERSONAL_RATING, PersonalRating, slot);
+        player->SetArenaTeamInfoField(slot, ARENA_TEAM_PERSONAL_RATING, PersonalRating);
+        player->UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_HIGHEST_PERSONAL_RATING, PersonalRating, slot);
     }
 }
 
@@ -716,16 +717,16 @@ int32 ArenaTeam::LostAgainst(uint32 Own_MMRating, uint32 Opponent_MMRating, int3
     return mod;
 }
 
-void ArenaTeam::MemberLost(Player* plr, uint32 againstMatchmakerRating, int32 MatchmakerRatingChange)
+void ArenaTeam::MemberLost(Player* player, uint32 againstMatchmakerRating, int32 MatchmakerRatingChange)
 {
     // Called for each participant of a match after losing
     for (MemberList::iterator itr = Members.begin(); itr !=  Members.end(); ++itr)
     {
-        if (itr->Guid == plr->GetGUID())
+        if (itr->Guid == player->GetGUID())
         {
             // Update personal rating
             int32 mod = GetRatingMod(itr->PersonalRating, againstMatchmakerRating, false);
-            itr->ModifyPersonalRating(plr, mod, GetSlot());
+            itr->ModifyPersonalRating(player, mod, GetSlot());
 
             // Update matchmaker rating
             itr->ModifyMatchmakerRating(MatchmakerRatingChange, GetSlot());
@@ -735,8 +736,8 @@ void ArenaTeam::MemberLost(Player* plr, uint32 againstMatchmakerRating, int32 Ma
             itr->SeasonGames +=1;
 
             // update the unit fields
-            plr->SetArenaTeamInfoField(GetSlot(), ARENA_TEAM_GAMES_WEEK,  itr->WeekGames);
-            plr->SetArenaTeamInfoField(GetSlot(), ARENA_TEAM_GAMES_SEASON,  itr->SeasonGames);
+            player->SetArenaTeamInfoField(GetSlot(), ARENA_TEAM_GAMES_WEEK,  itr->WeekGames);
+            player->SetArenaTeamInfoField(GetSlot(), ARENA_TEAM_GAMES_SEASON,  itr->SeasonGames);
             return;
         }
     }
@@ -764,16 +765,16 @@ void ArenaTeam::OfflineMemberLost(uint64 guid, uint32 againstMatchmakerRating, i
     }
 }
 
-void ArenaTeam::MemberWon(Player* plr, uint32 againstMatchmakerRating, int32 MatchmakerRatingChange)
+void ArenaTeam::MemberWon(Player* player, uint32 againstMatchmakerRating, int32 MatchmakerRatingChange)
 {
     // called for each participant after winning a match
     for (MemberList::iterator itr = Members.begin(); itr !=  Members.end(); ++itr)
     {
-        if (itr->Guid == plr->GetGUID())
+        if (itr->Guid == player->GetGUID())
         {
             // update personal rating
             int32 mod = GetRatingMod(itr->PersonalRating, againstMatchmakerRating, true);
-            itr->ModifyPersonalRating(plr, mod, GetSlot());
+            itr->ModifyPersonalRating(player, mod, GetSlot());
 
             // update matchmaker rating
             itr->ModifyMatchmakerRating(MatchmakerRatingChange, GetSlot());
@@ -784,8 +785,8 @@ void ArenaTeam::MemberWon(Player* plr, uint32 againstMatchmakerRating, int32 Mat
             itr->SeasonWins += 1;
             itr->WeekWins += 1;
             // update unit fields
-            plr->SetArenaTeamInfoField(GetSlot(), ARENA_TEAM_GAMES_WEEK, itr->WeekGames);
-            plr->SetArenaTeamInfoField(GetSlot(), ARENA_TEAM_GAMES_SEASON, itr->SeasonGames);
+            player->SetArenaTeamInfoField(GetSlot(), ARENA_TEAM_GAMES_WEEK, itr->WeekGames);
+            player->SetArenaTeamInfoField(GetSlot(), ARENA_TEAM_GAMES_SEASON, itr->SeasonGames);
             return;
         }
     }
@@ -809,11 +810,11 @@ void ArenaTeam::UpdateArenaPointsHelper(std::map<uint32, uint32>& playerPoints)
         if (itr->WeekGames >= requiredGames)
             pointsToAdd = GetPoints(itr->PersonalRating);
 
-        std::map<uint32, uint32>::iterator plr_itr = playerPoints.find(GUID_LOPART(itr->Guid));
-        if (plr_itr != playerPoints.end())
+        std::map<uint32, uint32>::iterator player_itr = playerPoints.find(GUID_LOPART(itr->Guid));
+        if (player_itr != playerPoints.end())
         {
             // Check if there is already more points
-            if (plr_itr->second < pointsToAdd)
+            if (player_itr->second < pointsToAdd)
                 playerPoints[GUID_LOPART(itr->Guid)] = pointsToAdd;
         }
         else
