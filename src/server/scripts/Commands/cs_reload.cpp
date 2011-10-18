@@ -504,7 +504,8 @@ public:
         const_cast<CreatureTemplate*>(cInfo)->RegenHealth = fields[78].GetBool();
         const_cast<CreatureTemplate*>(cInfo)->equipmentId = fields[79].GetUInt32();
         const_cast<CreatureTemplate*>(cInfo)->MechanicImmuneMask = fields[80].GetUInt32();
-        const_cast<CreatureTemplate*>(cInfo)->flags_extra = fields[81].GetUInt32();
+        uint32 flags_extra_dyn = (cInfo->flags_extra & CREATURE_FLAG_EXTRA_DUNGEON_BOSS);
+        const_cast<CreatureTemplate*>(cInfo)->flags_extra = fields[81].GetUInt32() | flags_extra_dyn;
         const_cast<CreatureTemplate*>(cInfo)->ScriptID = sObjectMgr->GetScriptId(fields[82].GetCString());
 
         sObjectMgr->CheckCreatureTemplate(cInfo);
