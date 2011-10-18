@@ -137,7 +137,6 @@ bool operator==(CoordPair<LIMIT> const& p1, CoordPair<LIMIT> const& p2)
 template<const unsigned int LIMIT>
 bool operator!=(CoordPair<LIMIT> const& p1, CoordPair<LIMIT> const& p2)
 {
-
     return !(p1 == p2);
 }
 

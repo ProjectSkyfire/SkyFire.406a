@@ -27,7 +27,7 @@
 #include "Group.h"
 
 /*********************************************************/
-/***            BATTLEGROUND QUEUE SYSTEM              ***/
+/***           BATTLEGROUND QUEUE SYSTEM              ***/
 /*********************************************************/
 
 BattlegroundQueue::BattlegroundQueue()
@@ -61,7 +61,7 @@ BattlegroundQueue::~BattlegroundQueue()
 }
 
 /*********************************************************/
-/***      BATTLEGROUND QUEUE SELECTION POOLS           ***/
+/***     BATTLEGROUND QUEUE SELECTION POOLS           ***/
 /*********************************************************/
 
 // selection pool initialization, used to clean up from prev selection
@@ -124,11 +124,11 @@ bool BattlegroundQueue::SelectionPool::AddGroup(GroupQueueInfo* ginfo, uint32 de
 }
 
 /*********************************************************/
-/***               BATTLEGROUND QUEUES                 ***/
+/***              BATTLEGROUND QUEUES                 ***/
 /*********************************************************/
 
 // add group or player (group == NULL) to bg queue with the given leader and bg specifications
-GroupQueueInfo*  BattlegroundQueue::AddGroup(Player* leader, Group* group, BattlegroundTypeId BgTypeId, PvPDifficultyEntry const*  bracketEntry, uint8 ArenaType, bool isRated, bool isPremade, uint32 ArenaRating, uint32 MatchmakerRating, uint32 arenateamid)
+GroupQueueInfo* BattlegroundQueue::AddGroup(Player* leader, Group* group, BattlegroundTypeId BgTypeId, PvPDifficultyEntry const* bracketEntry, uint8 ArenaType, bool isRated, bool isPremade, uint32 ArenaRating, uint32 MatchmakerRating, uint32 arenateamid)
 {
     BattlegroundBracketId bracketId =  bracketEntry->GetBracketId();
 
@@ -360,7 +360,7 @@ void BattlegroundQueue::RemovePlayer(uint64 guid, bool decreaseInvitedCount)
     // if player leaves queue and he is invited to rated arena match, then he have to lose
     if (group->IsInvitedToBGInstanceGUID && group->IsRated && decreaseInvitedCount)
     {
-        if (ArenaTeam*  at = sArenaTeamMgr->GetArenaTeamById(group->ArenaTeamId))
+        if (ArenaTeam* at = sArenaTeamMgr->GetArenaTeamById(group->ArenaTeamId))
         {
             sLog->outDebug(LOG_FILTER_BATTLEGROUND, "UPDATING memberLost's personal arena rating for %u by opponents rating: %u", GUID_LOPART(guid), group->OpponentsTeamRating);
             if (Player* player = ObjectAccessor::FindPlayer(guid))
@@ -418,7 +418,7 @@ bool BattlegroundQueue::GetPlayerGroupInfoData(uint64 guid, GroupQueueInfo* ginf
     return true;
 }
 
-bool BattlegroundQueue::InviteGroupToBG(GroupQueueInfo*  ginfo, Battleground* bg, uint32 side)
+bool BattlegroundQueue::InviteGroupToBG(GroupQueueInfo* ginfo, Battleground* bg, uint32 side)
 {
     // set side if needed
     if (side)
@@ -1016,7 +1016,7 @@ void BattlegroundQueue::BattlegroundQueueUpdate(uint32 diff, BattlegroundTypeId 
 }
 
 /*********************************************************/
-/***            BATTLEGROUND QUEUE EVENTS              ***/
+/***           BATTLEGROUND QUEUE EVENTS              ***/
 /*********************************************************/
 
 bool BGQueueInviteEvent::Execute(uint64 /*e_time*/, uint32 /*p_time*/)

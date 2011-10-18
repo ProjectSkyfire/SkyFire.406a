@@ -48,7 +48,7 @@
 #include "DisableMgr.h"
 
 /*********************************************************/
-/***            BATTLEGROUND MANAGER                   ***/
+/***           BATTLEGROUND MANAGER                   ***/
 /*********************************************************/
 
 BattlegroundMgr::BattlegroundMgr() : m_AutoDistributionTimeChecker(0), m_ArenaTesting(false)
@@ -234,7 +234,7 @@ void BattlegroundMgr::BuildBattlegroundStatusPacket(WorldPacket *data, Battlegro
         {
             data->Initialize(SMSG_BATTLEFIELD_STATUS2, 100);
             *data << uint8(bg->isRated() ? 128 : 0);
-            *data << uint32(Time2); 
+            *data << uint32(Time2);
             *data << uint32(QueueSlot);                                     // queueslot
             *data << uint32(bg->GetMapId());                                // MapID
 
@@ -257,13 +257,13 @@ void BattlegroundMgr::BuildBattlegroundStatusPacket(WorldPacket *data, Battlegro
             // Not used...
             data->Initialize(SMSG_BATTLEFIELD_STATUS4, (1+4+1+1+1+4+1+4+1+4+1+8+1));  // Check for 406
             *data << uint8(0);                                               // flag
-            *data << uint32(Time1); 
+            *data << uint32(Time1);
             *data << uint8(bg->GetMinLevel());                               // lowestLevel
             *data << uint8(0);
             *data << uint8(0);
             *data << uint32(QueueSlot);                                     // queueSlot
             *data << uint8(bg->GetMaxLevel());                              // highestLevel
-            *data << uint32(Time2); 
+            *data << uint32(Time2);
             *data << uint8(0);                                              // teamsize (0 if not arena)
             *data << uint32(bg->GetClientInstanceID());                     // instanceid
             *data << uint8(0);
@@ -960,7 +960,7 @@ void BattlegroundMgr::BuildBattlegroundListPacket(WorldPacket *data, uint64 guid
                     *data << uint32(*itr);
                     ++count;
                 }
-                data->put<uint32>(count_pos , count);
+                data->put<uint32>(count_pos, count);
             }
         }
     }

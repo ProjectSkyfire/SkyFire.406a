@@ -219,9 +219,9 @@ Battleground::~Battleground()
 
     sBattlegroundMgr->RemoveBattleground(GetInstanceID(), GetTypeID());
     // unload map
-    if (m_Map)	
+    if (m_Map)
     {
-        m_Map->SetUnload();	
+        m_Map->SetUnload();
         //unlink to prevent crash, always unlink all pointer reference before destruction
         m_Map->SetBG(NULL);
         m_Map = NULL;
@@ -319,7 +319,7 @@ inline void Battleground::_ProcessOfflineQueue()
 inline void Battleground::_ProcessRessurect(uint32 diff)
 {
     // *********************************************************
-    // ***        BATTLEGROUND RESSURECTION SYSTEM           ***
+    // ***       BATTLEGROUND RESSURECTION SYSTEM           ***
     // *********************************************************
     // this should be handled by spell system
     m_LastResurrectTime += diff;
@@ -378,7 +378,7 @@ inline void Battleground::_ProcessRessurect(uint32 diff)
 inline void Battleground::_ProcessProgress(uint32 diff)
 {
     // *********************************************************
-    // ***           BATTLEGROUND BALLANCE SYSTEM            ***
+    // ***          BATTLEGROUND BALLANCE SYSTEM            ***
     // *********************************************************
     // if less then minimum players are in on one side, then start premature finish timer
     if (!m_PrematureCountDown)
@@ -420,7 +420,7 @@ inline void Battleground::_ProcessProgress(uint32 diff)
 inline void Battleground::_ProcessJoin(uint32 diff)
 {
     // *********************************************************
-    // ***           BATTLEGROUND STARTING SYSTEM            ***
+    // ***          BATTLEGROUND STARTING SYSTEM            ***
     // *********************************************************
     ModifyStartDelayTime(diff);
 
@@ -533,7 +533,7 @@ inline void Battleground::_ProcessJoin(uint32 diff)
 inline void Battleground::_ProcessLeave(uint32 diff)
 {
     // *********************************************************
-    // ***           BATTLEGROUND ENDING SYSTEM              ***
+    // ***          BATTLEGROUND ENDING SYSTEM              ***
     // *********************************************************
     // remove all players from battleground after 2 minutes
     m_EndTime -= diff;
@@ -972,8 +972,8 @@ void Battleground::RemovePlayerAtLeave(uint64 guid, bool Transport, bool SendPac
                 if (isRated() && GetStatus() == STATUS_IN_PROGRESS)
                 {
                     //left a rated match while the encounter was in progress, consider as loser
-                    ArenaTeam*  winner_arena_team = sArenaTeamMgr->GetArenaTeamById(GetArenaTeamIdForTeam(GetOtherTeam(team)));
-                    ArenaTeam*  loser_arena_team = sArenaTeamMgr->GetArenaTeamById(GetArenaTeamIdForTeam(team));
+                    ArenaTeam* winner_arena_team = sArenaTeamMgr->GetArenaTeamById(GetArenaTeamIdForTeam(GetOtherTeam(team)));
+                    ArenaTeam* loser_arena_team = sArenaTeamMgr->GetArenaTeamById(GetArenaTeamIdForTeam(team));
                     if (winner_arena_team && loser_arena_team && winner_arena_team != loser_arena_team)
                         loser_arena_team->MemberLost(player, GetArenaMatchmakerRating(GetOtherTeam(team)));
                 }
@@ -994,8 +994,8 @@ void Battleground::RemovePlayerAtLeave(uint64 guid, bool Transport, bool SendPac
             if (isRated() && GetStatus() == STATUS_IN_PROGRESS)
             {
                 //left a rated match while the encounter was in progress, consider as loser
-                ArenaTeam*  others_arena_team = sArenaTeamMgr->GetArenaTeamById(GetArenaTeamIdForTeam(GetOtherTeam(team)));
-                ArenaTeam*  players_arena_team = sArenaTeamMgr->GetArenaTeamById(GetArenaTeamIdForTeam(team));
+                ArenaTeam* others_arena_team = sArenaTeamMgr->GetArenaTeamById(GetArenaTeamIdForTeam(GetOtherTeam(team)));
+                ArenaTeam* players_arena_team = sArenaTeamMgr->GetArenaTeamById(GetArenaTeamIdForTeam(team));
                 if (others_arena_team && players_arena_team)
                     players_arena_team->OfflineMemberLost(guid, GetArenaMatchmakerRating(GetOtherTeam(team)));
             }

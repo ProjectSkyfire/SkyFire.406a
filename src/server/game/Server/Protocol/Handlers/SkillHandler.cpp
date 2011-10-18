@@ -58,7 +58,7 @@ void WorldSession::HandleLearnPreviewTalents(WorldPacket& recvPacket)
                 }
             }
         }
-    
+
         if (_player->m_usedTalentCount == 0 || _player->GetTalentBranchSpec(_player->m_activeSpec) == 0)
         {
             if (_player->m_usedTalentCount != 0)
@@ -69,17 +69,17 @@ void WorldSession::HandleLearnPreviewTalents(WorldPacket& recvPacket)
             for (uint32 i = 0; i < sTalentTreePrimarySpellsStore.GetNumRows(); ++i)
             {
                 TalentTreePrimarySpellsEntry const *talentInfo = sTalentTreePrimarySpellsStore.LookupEntry(i);
-                
+
                 if (!talentInfo || talentInfo->TalentTabID != _player->GetTalentBranchSpec(_player->m_activeSpec))
                     continue;
-                
+
                 _player->learnSpell(talentInfo->SpellID, true);
-            }    
+            }
         }
         else if (_player->GetTalentBranchSpec(_player->m_activeSpec) != specID) //cheat
             return;
     }
-    
+
     uint32 talentId, talentRank;
 
     for (uint32 i = 0; i < talentsCount; ++i)
@@ -88,7 +88,6 @@ void WorldSession::HandleLearnPreviewTalents(WorldPacket& recvPacket)
 
         _player->LearnTalent(talentId, talentRank, false);
     }
-    
 
     bool inOtherBranch = false;
     uint32 pointInBranchSpec = 0;
@@ -98,7 +97,7 @@ void WorldSession::HandleLearnPreviewTalents(WorldPacket& recvPacket)
         for (uint32 i = 0; i < sTalentStore.GetNumRows(); i++)
         {
             const TalentEntry * thisTalent = sTalentStore.LookupEntry(i);
-            if (thisTalent) 
+            if (thisTalent)
             {
                 int thisrank = -1;
                 for (int j = 0; j < 5; j++)
@@ -131,7 +130,7 @@ void WorldSession::HandleLearnPreviewTalents(WorldPacket& recvPacket)
     }
     if (inOtherBranch && pointInBranchSpec < 31)
         _player->resetTalents();
-    
+
     _player->SendTalentsInfoData(false);
 }
 

@@ -252,7 +252,7 @@ void BattlegroundAB::HandleAreaTrigger(Player* Source, uint32 Trigger)
     }
 }
 
-/*  type: 0-neutral, 1-contested, 3-occupied
+/* type: 0-neutral, 1-contested, 3-occupied
     teamIndex: 0-ally, 1-horde                        */
 void BattlegroundAB::_CreateBanner(uint8 node, uint8 type, uint8 teamIndex, bool delay)
 {
