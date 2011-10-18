@@ -127,8 +127,8 @@ bool BattlegroundQueue::SelectionPool::AddGroup(GroupQueueInfo* ginfo, uint32 de
 /***               BATTLEGROUND QUEUES                 ***/
 /*********************************************************/
 
-// add group or player (grp == NULL) to bg queue with the given leader and bg specifications
-GroupQueueInfo* BattlegroundQueue::AddGroup(Player* leader, Group* grp, BattlegroundTypeId BgTypeId, PvPDifficultyEntry const*  bracketEntry, uint8 ArenaType, bool isRated, bool isPremade, uint32 ArenaRating, uint32 MatchmakerRating, uint32 arenateamid)
+// add group or player (group == NULL) to bg queue with the given leader and bg specifications
+GroupQueueInfo*  BattlegroundQueue::AddGroup(Player* leader, Group* group, BattlegroundTypeId BgTypeId, PvPDifficultyEntry const*  bracketEntry, uint8 ArenaType, bool isRated, bool isPremade, uint32 ArenaRating, uint32 MatchmakerRating, uint32 arenateamid)
 {
     BattlegroundBracketId bracketId =  bracketEntry->GetBracketId();
 
@@ -170,9 +170,9 @@ GroupQueueInfo* BattlegroundQueue::AddGroup(Player* leader, Group* grp, Battlegr
     //add players from group to ginfo
     {
         //ACE_Guard<ACE_Recursive_Thread_Mutex> guard(m_Lock);
-        if (grp)
+        if (group)
         {
-            for (GroupReference* itr = grp->GetFirstMember(); itr != NULL; itr = itr->next())
+            for (GroupReference* itr = group->GetFirstMember(); itr != NULL; itr = itr->next())
             {
                 Player* member = itr->getSource();
                 if (!member)
@@ -360,7 +360,7 @@ void BattlegroundQueue::RemovePlayer(uint64 guid, bool decreaseInvitedCount)
     // if player leaves queue and he is invited to rated arena match, then he have to lose
     if (group->IsInvitedToBGInstanceGUID && group->IsRated && decreaseInvitedCount)
     {
-        if (ArenaTeam* at = sArenaTeamMgr->GetArenaTeamById(group->ArenaTeamId))
+        if (ArenaTeam*  at = sArenaTeamMgr->GetArenaTeamById(group->ArenaTeamId))
         {
             sLog->outDebug(LOG_FILTER_BATTLEGROUND, "UPDATING memberLost's personal arena rating for %u by opponents rating: %u", GUID_LOPART(guid), group->OpponentsTeamRating);
             if (Player* player = ObjectAccessor::FindPlayer(guid))
@@ -384,16 +384,16 @@ void BattlegroundQueue::RemovePlayer(uint64 guid, bool decreaseInvitedCount)
     {
         // remove next player, this is recursive
         // first send removal information
-        if (Player* plr2 = ObjectAccessor::FindPlayer(group->Players.begin()->first))
+        if (Player* player2 = ObjectAccessor::FindPlayer(group->Players.begin()->first))
         {
             Battleground* bg = sBattlegroundMgr->GetBattlegroundTemplate(group->BgTypeId);
             BattlegroundQueueTypeId bgQueueTypeId = BattlegroundMgr::BGQueueTypeId(group->BgTypeId, group->ArenaType);
-            uint32 queueSlot = plr2->GetBattlegroundQueueIndex(bgQueueTypeId);
-            plr2->RemoveBattlegroundQueueId(bgQueueTypeId); // must be called this way, because if you move this call to
+            uint32 queueSlot = player2->GetBattlegroundQueueIndex(bgQueueTypeId);
+            player2->RemoveBattlegroundQueueId(bgQueueTypeId); // must be called this way, because if you move this call to
                                                             // queue->removeplayer, it causes bugs
             WorldPacket data;
             sBattlegroundMgr->BuildBattlegroundStatusPacket(&data, bg, queueSlot, STATUS_NONE, 0, 0, 0);
-            plr2->GetSession()->SendPacket(&data);
+            player2->GetSession()->SendPacket(&data);
         }
         // then actually delete, this may delete the group as well!
         RemovePlayer(group->Players.begin()->first, decreaseInvitedCount);
@@ -418,7 +418,7 @@ bool BattlegroundQueue::GetPlayerGroupInfoData(uint64 guid, GroupQueueInfo* ginf
     return true;
 }
 
-bool BattlegroundQueue::InviteGroupToBG(GroupQueueInfo* ginfo, Battleground* bg, uint32 side)
+bool BattlegroundQueue::InviteGroupToBG(GroupQueueInfo*  ginfo, Battleground* bg, uint32 side)
 {
     // set side if needed
     if (side)

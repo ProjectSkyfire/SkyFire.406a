@@ -22,7 +22,6 @@
 #include "ArenaTeamMgr.h"
 #include "World.h"
 #include "WorldPacket.h"
-
 #include "ArenaTeam.h"
 #include "Battleground.h"
 #include "BattlegroundMgr.h"
@@ -222,7 +221,6 @@ Battleground::~Battleground()
     // unload map
     if (m_Map)
     {
-        m_Map->SetUnload();
         //unlink to prevent crash, always unlink all pointer reference before destruction
         m_Map->SetBG(NULL);
         m_Map = NULL;
@@ -437,7 +435,7 @@ inline void Battleground::_ProcessJoin(uint32 diff)
     {
         m_Events |= BG_STARTING_EVENT_1;
 
-        if(!FindBgMap())
+        if(!GetBgMap())
         {
             sLog->outError("Battleground::_ProcessJoin: map (map id: %u, instance id: %u) is not created!", m_MapId, m_InstanceID);
             EndNow();
@@ -500,7 +498,7 @@ inline void Battleground::_ProcessJoin(uint32 diff)
                     for (Unit::AuraApplicationMap::iterator iter = auraMap.begin(); iter != auraMap.end();)
                     {
                         AuraApplication * aurApp = iter->second;
-                        Aura* aura = aurApp->GetBase();
+                        Aura * aura = aurApp->GetBase();
                         if (!aura->IsPermanent()
                             && aura->GetDuration() <= 30*IN_MILLISECONDS
                             && aurApp->IsPositive()
@@ -842,8 +840,6 @@ void Battleground::EndBattleground(uint32 winner)
             if (IsRandom() || BattlegroundMgr::IsBGWeekend(GetTypeID()))
             {
                 UpdatePlayerScore(player, SCORE_BONUS_HONOR, GetBonusHonorFromKill(winner_kills));
-                if (CanAwardArenaPoints())
-                    player->ModifyArenaPoints(winner_arena);
                 if (!player->GetRandomWinner())
                     player->SetRandomWinner(true);
             }
@@ -975,8 +971,8 @@ void Battleground::RemovePlayerAtLeave(uint64 guid, bool Transport, bool SendPac
                 if (isRated() && GetStatus() == STATUS_IN_PROGRESS)
                 {
                     //left a rated match while the encounter was in progress, consider as loser
-                    ArenaTeam* winner_arena_team = sArenaTeamMgr->GetArenaTeamById(GetArenaTeamIdForTeam(GetOtherTeam(team)));
-                    ArenaTeam* loser_arena_team = sArenaTeamMgr->GetArenaTeamById(GetArenaTeamIdForTeam(team));
+                    ArenaTeam*  winner_arena_team = sArenaTeamMgr->GetArenaTeamById(GetArenaTeamIdForTeam(GetOtherTeam(team)));
+                    ArenaTeam*  loser_arena_team = sArenaTeamMgr->GetArenaTeamById(GetArenaTeamIdForTeam(team));
                     if (winner_arena_team && loser_arena_team && winner_arena_team != loser_arena_team)
                         loser_arena_team->MemberLost(player, GetArenaMatchmakerRating(GetOtherTeam(team)));
                 }
@@ -997,8 +993,8 @@ void Battleground::RemovePlayerAtLeave(uint64 guid, bool Transport, bool SendPac
             if (isRated() && GetStatus() == STATUS_IN_PROGRESS)
             {
                 //left a rated match while the encounter was in progress, consider as loser
-                ArenaTeam* others_arena_team = sArenaTeamMgr->GetArenaTeamById(GetArenaTeamIdForTeam(GetOtherTeam(team)));
-                ArenaTeam* players_arena_team = sArenaTeamMgr->GetArenaTeamById(GetArenaTeamIdForTeam(team));
+                ArenaTeam*  others_arena_team = sArenaTeamMgr->GetArenaTeamById(GetArenaTeamIdForTeam(GetOtherTeam(team)));
+                ArenaTeam*  players_arena_team = sArenaTeamMgr->GetArenaTeamById(GetArenaTeamIdForTeam(team));
                 if (others_arena_team && players_arena_team)
                     players_arena_team->OfflineMemberLost(guid, GetArenaMatchmakerRating(GetOtherTeam(team)));
             }
@@ -1123,6 +1119,21 @@ void Battleground::AddPlayer(Player* player)
     // add arena specific auras
     if (isArena())
     {
+        player->ResummonPetTemporaryUnSummonedIfAny();
+
+        // Removing pet's buffs and debuffs which are not permanent on Arena enter
+        if (Pet* pet = player->GetPet())
+        {
+            pet->SetHealth(pet->GetMaxHealth());
+
+            Unit::AuraApplicationMap& appliedAuras = pet->GetAppliedAuras();
+            for (Unit::AuraApplicationMap::iterator itr = appliedAuras.begin(); itr != appliedAuras.end(); ++itr)
+                if (AuraApplication* aurApp = itr->second)
+                    if (Aura* aura = aurApp->GetBase())
+                        if (!aura->IsPermanent())
+                            pet->RemoveAura(itr);
+        }
+
         player->RemoveArenaEnchantments(TEMP_ENCHANTMENT_SLOT);
         if (team == ALLIANCE)                                // gold
         {
@@ -1412,9 +1423,9 @@ void Battleground::RemovePlayerFromResurrectQueue(uint64 player_guid)
 bool Battleground::AddObject(uint32 type, uint32 entry, float x, float y, float z, float o, float rotation0, float rotation1, float rotation2, float rotation3, uint32 /*respawnTime*/)
 {
     // If the assert is called, means that m_BgObjects must be resized!
-    ASSERT (type < m_BgObjects.size());
+    ASSERT(type < m_BgObjects.size());
 
-    Map* map = FindBgMap();
+    Map *map = GetBgMap();
     if (!map)
         return false;
     // Must be created this way, adding to godatamap would add it to the base map of the instance
@@ -1502,7 +1513,7 @@ GameObject* Battleground::GetBGObject(uint32 type)
 
 Creature* Battleground::GetBGCreature(uint32 type)
 {
-    Creature* creature = GetBgMap()->GetCreature(m_BgCreatures[type]);
+    Creature *creature = GetBgMap()->GetCreature(m_BgCreatures[type]);
     if (!creature)
         sLog->outError("Battleground::GetBGCreature: creature (type: %u, GUID: %u) not found for BG (map: %u, instance id: %u)!",
             type, GUID_LOPART(m_BgCreatures[type]), m_MapId, m_InstanceID);
@@ -1511,7 +1522,7 @@ Creature* Battleground::GetBGCreature(uint32 type)
 
 void Battleground::SpawnBGObject(uint32 type, uint32 respawntime)
 {
-    if (Map* map = FindBgMap())
+    if (Map* map = GetBgMap())
         if (GameObject* obj = map->GetGameObject(m_BgObjects[type]))
         {
             if (respawntime)
@@ -1528,9 +1539,9 @@ void Battleground::SpawnBGObject(uint32 type, uint32 respawntime)
 Creature* Battleground::AddCreature(uint32 entry, uint32 type, uint32 teamval, float x, float y, float z, float o, uint32 respawntime)
 {
     // If the assert is called, means that m_BgCreatures must be resized!
-    ASSERT (type < m_BgCreatures.size());
+    ASSERT(type < m_BgCreatures.size());
 
-    Map* map = FindBgMap();
+    Map* map = GetBgMap();
     if (!map)
         return NULL;
 
@@ -1571,7 +1582,7 @@ bool Battleground::DelCreature(uint32 type)
     if (!m_BgCreatures[type])
         return true;
 
-    if (Creature* creature = GetBgMap()->GetCreature(m_BgCreatures[type]))
+    if (Creature *creature = GetBgMap()->GetCreature(m_BgCreatures[type]))
     {
         creature->AddObjectToRemoveList();
         m_BgCreatures[type] = 0;
@@ -1823,8 +1834,8 @@ uint32 Battleground::GetAlivePlayersCountByTeam(uint32 Team) const
     {
         if (itr->second.Team == Team)
         {
-            Player* player = ObjectAccessor::FindPlayer(itr->first);
-            if (player && player->isAlive() && !player->HasByteFlag(UNIT_FIELD_BYTES_2, 3, FORM_SPIRITOFREDEMPTION))
+            Player* pl = ObjectAccessor::FindPlayer(itr->first);
+            if (pl && pl->isAlive() && !pl->HasByteFlag(UNIT_FIELD_BYTES_2, 3, FORM_SPIRITOFREDEMPTION))
                 ++count;
         }
     }

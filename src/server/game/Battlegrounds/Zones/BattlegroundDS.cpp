@@ -51,7 +51,7 @@ void BattlegroundDS::PostUpdateImpl(uint32 diff)
         {
             for(BattlegroundPlayerMap::const_iterator itr = GetPlayers().begin(); itr != GetPlayers().end();itr++)
             {
-                Player *player = ObjectAccessor::FindPlayer(itr->first);
+                Player* player = ObjectAccessor::FindPlayer(itr->first);
                 if (player && player->isAlive() && player->GetPositionX() < 1260 && player->GetPositionY() >755 && player->GetPositionY() < 775 && player->GetPositionZ() > 13)
                 {
                     KnockBackPlayer(player, 6.15f, 50.00f, 5.00f);
