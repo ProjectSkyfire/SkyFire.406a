@@ -851,6 +851,7 @@ Player::Player (WorldSession *session): Unit(), m_achievementMgr(this), m_reputa
     sWorld->IncreasePlayerCount();
 
     m_ChampioningFaction = 0;
+    m_ChampioningFactionDungeonLevel = 0;
 
     for (uint8 i = 0; i < MAX_POWERS; ++i)
         m_powerFraction[i] = 0;
@@ -7164,20 +7165,37 @@ void Player::RewardOnKill(Unit *pVictim, float rate)
     if (GetChampioningFaction())
     {
         // support for: Championing - http://www.wowwiki.com/Championing
+        
+        // Note:
+
+        // "All reputation gains while in dungeons will be applied to your standing with them."
+        //   Alliance and Horde factions championing is allowed in all dungeons
+
+        // "All reputation gains while in level 80 dungeons will be applied to your standing with them."
+        //   Wrath of the Lich King factions championing is allowed in WLK heroic dungeons (level 80) and Cataclysm dungeons (level 80 - 84)
+
+        // "All reputation gains while in level 85 Cataclysm dungeons will be applied to your standing with them."
+        //   Cataclysm factions championing is allowed in Cataclysm heroic dungeons only (level 85)
 
         Map const *map = GetMap();
         if (map && map->IsDungeon())
         {
-            InstanceTemplate const *instance = sObjectMgr->GetInstanceTemplate(map->GetId());
-            if (instance)
+            uint32 dungeonLevel = GetChampioningFactionDungeonLevel();
+            if (dungeonLevel)
             {
-                AccessRequirement const *pAccessRequirement = sObjectMgr->GetAccessRequirement(map->GetId(), ((InstanceMap*)map)->GetDifficulty());
-                if (pAccessRequirement)
+                InstanceTemplate const *instance = sObjectMgr->GetInstanceTemplate(map->GetId());
+                if (instance)
                 {
-                    if (!map->IsRaid() && pAccessRequirement->levelMin == 80)
-                        ChampioningFaction = GetChampioningFaction();
+                    AccessRequirement const *pAccessRequirement = sObjectMgr->GetAccessRequirement(map->GetId(), ((InstanceMap*)map)->GetDifficulty());
+                    if (pAccessRequirement)
+                    {
+                        if (!map->IsRaid() && pAccessRequirement->levelMin >= dungeonLevel)
+                            ChampioningFaction = GetChampioningFaction();
+                    }
                 }
             }
+            else
+                ChampioningFaction = GetChampioningFaction();
         }
     }
 
