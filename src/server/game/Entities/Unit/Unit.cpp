@@ -16594,10 +16594,9 @@ uint32 Unit::GetCombatRatingDamageReduction(CombatRating cr, float rate, float c
     return uint32 (percent * damage / 100.0f);
 }
 
-
 uint32 Unit::GetModelForForm(ShapeshiftForm form)
 {
-    switch(form)
+    switch (form)
     {
         case FORM_CAT:
             // Based on Hair color
@@ -16650,7 +16649,7 @@ uint32 Unit::GetModelForForm(ShapeshiftForm form)
                 // Male
                 if (getGender() == GENDER_MALE)
                 {
-                    switch(skinColor)
+                    switch (skinColor)
                     {
                         case 1: // Brown
                             return 33662;
@@ -16669,7 +16668,7 @@ uint32 Unit::GetModelForForm(ShapeshiftForm form)
                 // Female
                 else
                 {
-                    switch(skinColor)
+                    switch (skinColor)
                     {
                         case 5: // Brown
                         case 6:
@@ -16694,7 +16693,7 @@ uint32 Unit::GetModelForForm(ShapeshiftForm form)
                 // Male
                 if (getGender() == GENDER_MALE)
                 {
-                    switch(skinColor)
+                    switch (skinColor)
                     {
                         case 12: // White
                         case 13:
@@ -16799,7 +16798,7 @@ uint32 Unit::GetModelForForm(ShapeshiftForm form)
                 // Male
                 if (getGender() == GENDER_MALE)
                 {
-                    switch(skinColor)
+                    switch (skinColor)
                     {
                         case 1: // Brown
                             return 33652;
@@ -16818,7 +16817,7 @@ uint32 Unit::GetModelForForm(ShapeshiftForm form)
                 // Female
                 else
                 {
-                    switch(skinColor)
+                    switch (skinColor)
                     {
                         case 5: // Brown
                         case 6:
@@ -16897,7 +16896,7 @@ uint32 Unit::GetModelForForm(ShapeshiftForm form)
             else
                 return 2289;
         case FORM_FLIGHT:
-            switch(getRace())
+            switch (getRace())
             {
                 case RACE_NIGHTELF:
                     return 20857;
@@ -16909,7 +16908,7 @@ uint32 Unit::GetModelForForm(ShapeshiftForm form)
                     return 20872;
             }
         case FORM_FLIGHT_EPIC:
-            switch(getRace())
+            switch (getRace())
             {
                 case RACE_NIGHTELF:
                     return 21243;
@@ -16949,94 +16948,94 @@ uint32 Unit::GetModelForForm(ShapeshiftForm form)
 
 uint32 Unit::GetModelForTotem(PlayerTotemType totemType)
 {
-    switch(getRace())
+    switch (getRace())
     {
         case RACE_ORC:
         {
-            switch(totemType)
+            switch (totemType)
             {
-                case SUMMON_TYPE_TOTEM_FIRE:    //fire
+                case SUMMON_TYPE_TOTEM_FIRE:    // fire
                     return 30758;
-                case SUMMON_TYPE_TOTEM_EARTH:   //earth
+                case SUMMON_TYPE_TOTEM_EARTH:   // earth
                     return 30757;
-                case SUMMON_TYPE_TOTEM_WATER:   //water
+                case SUMMON_TYPE_TOTEM_WATER:   // water
                     return 30759;
-                case SUMMON_TYPE_TOTEM_AIR:     //air
+                case SUMMON_TYPE_TOTEM_AIR:     // air
                     return 30756;
             }
             break;
         }
         case RACE_DWARF:
         {
-            switch(totemType)
+            switch (totemType)
             {
-                case SUMMON_TYPE_TOTEM_FIRE:    //fire
+                case SUMMON_TYPE_TOTEM_FIRE:    // fire
                     return 30754;
-                case SUMMON_TYPE_TOTEM_EARTH:   //earth
+                case SUMMON_TYPE_TOTEM_EARTH:   // earth
                     return 30753;
-                case SUMMON_TYPE_TOTEM_WATER:   //water
+                case SUMMON_TYPE_TOTEM_WATER:   // water
                     return 30755;
-                case SUMMON_TYPE_TOTEM_AIR:     //air
+                case SUMMON_TYPE_TOTEM_AIR:     // air
                     return 30736;
             }
             break;
         }
         case RACE_TROLL:
         {
-            switch(totemType)
+            switch (totemType)
             {
-                case SUMMON_TYPE_TOTEM_FIRE:    //fire
+                case SUMMON_TYPE_TOTEM_FIRE:    // fire
                     return 30762;
-                case SUMMON_TYPE_TOTEM_EARTH:   //earth
+                case SUMMON_TYPE_TOTEM_EARTH:   // earth
                     return 30761;
-                case SUMMON_TYPE_TOTEM_WATER:   //water
+                case SUMMON_TYPE_TOTEM_WATER:   // water
                     return 30763;
-                case SUMMON_TYPE_TOTEM_AIR:     //air
+                case SUMMON_TYPE_TOTEM_AIR:     // air
                     return 30760;
             }
             break;
         }
         case RACE_TAUREN:
         {
-            switch(totemType)
+            switch (totemType)
             {
-                case SUMMON_TYPE_TOTEM_FIRE:    //fire
+                case SUMMON_TYPE_TOTEM_FIRE:    // fire
                     return 4589;
-                case SUMMON_TYPE_TOTEM_EARTH:   //earth
+                case SUMMON_TYPE_TOTEM_EARTH:   // earth
                     return 4588;
-                case SUMMON_TYPE_TOTEM_WATER:   //water
+                case SUMMON_TYPE_TOTEM_WATER:   // water
                     return 4587;
-                case SUMMON_TYPE_TOTEM_AIR:     //air
+                case SUMMON_TYPE_TOTEM_AIR:     // air
                     return 4590;
             }
             break;
         }
         case RACE_DRAENEI:
         {
-            switch(totemType)
+            switch (totemType)
             {
-                case SUMMON_TYPE_TOTEM_FIRE:    //fire
+                case SUMMON_TYPE_TOTEM_FIRE:    // fire
                     return 19074;
-                case SUMMON_TYPE_TOTEM_EARTH:   //earth
+                case SUMMON_TYPE_TOTEM_EARTH:   // earth
                     return 19073;
-                case SUMMON_TYPE_TOTEM_WATER:   //water
+                case SUMMON_TYPE_TOTEM_WATER:   // water
                     return 19075;
-                case SUMMON_TYPE_TOTEM_AIR:     //air
+                case SUMMON_TYPE_TOTEM_AIR:     // air
                     return 19071;
             }
             break;
         }
         case RACE_GOBLIN:
         {
-            switch(totemType)
+            switch (totemType)
             {
-                case SUMMON_TYPE_TOTEM_FIRE:    //fire
+                case SUMMON_TYPE_TOTEM_FIRE:    // fire
                     return 30783;
-                case SUMMON_TYPE_TOTEM_EARTH:   //earth
+                case SUMMON_TYPE_TOTEM_EARTH:   // earth
                     return 30782;
-                case SUMMON_TYPE_TOTEM_WATER:   //water
+                case SUMMON_TYPE_TOTEM_WATER:   // water
                     return 30784;
-                case SUMMON_TYPE_TOTEM_AIR:     //air
+                case SUMMON_TYPE_TOTEM_AIR:     // air
                     return 30781;
             }
             break;
