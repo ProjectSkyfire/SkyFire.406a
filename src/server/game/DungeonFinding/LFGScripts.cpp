@@ -57,7 +57,7 @@ void LFGScripts::OnAddMember(Group* group, uint64 guid)
             sLFGMgr->Leave(player);
 }
 
-void LFGScripts::OnRemoveMember(Group* group, uint64 guid, RemoveMethod method, uint64 kicker, const char* reason)
+void LFGScripts::OnRemoveMember(Group* group, uint64 guid, RemoveMethod& method, uint64 kicker, const char* reason)
 {
     uint64 gguid = group->GetGUID();
     if (!gguid || method == GROUP_REMOVEMETHOD_DEFAULT)
@@ -142,7 +142,7 @@ void LFGScripts::OnInviteMember(Group* group, uint64 guid)
     sLFGMgr->Leave(NULL, group);
 }
 
-void LFGScripts::OnLevelChanged(Player* player, uint8 /*oldLevel*/)
+void LFGScripts::OnLevelChanged(Player* player, uint8 /*newLevel*/)
 {
     sLFGMgr->InitializeLockedDungeons(player);
 }
@@ -165,7 +165,7 @@ void LFGScripts::OnLogin(Player* player)
     // TODO - Restore LfgPlayerData and send proper status to player if it was in a group
 }
 
-void LFGScripts::OnBindToInstance(Player* player, Difficulty difficulty, uint32 mapId, bool /*permanent*/)
+void LFGScripts::OnBindToInstance(Player* player, Difficulty difficulty, uint32 mapId, bool permanent)
 {
     MapEntry const* mapEntry = sMapStore.LookupEntry(mapId);
     if (mapEntry->IsDungeon() && difficulty > DUNGEON_DIFFICULTY_NORMAL)
