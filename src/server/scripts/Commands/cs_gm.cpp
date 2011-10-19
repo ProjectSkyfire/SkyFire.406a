@@ -92,9 +92,9 @@ public:
     if (!*args)
         return false;
 
-    Player *target = getSelectedPlayer();
+    Player* target = handler->getSelectedPlayer();
     if (!target)
-        target = m_session->GetPlayer();
+        target = handler->GetSession()->GetPlayer();
 
     WorldPacket data(SMSG_MULTIPLE_PACKETS, 14);
     if (strncmp(args, "change", 7) == 0)
