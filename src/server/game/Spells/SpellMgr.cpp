@@ -1132,7 +1132,7 @@ void SpellMgr::LoadSpellRanks()
     {
         mSpellInfoMap[itr->first]->ChainEntry = NULL;
     }
-    mSpellChains.clear();
+    mSpellChains.clear();                                // need for reload case
 
     QueryResult result = WorldDatabase.Query("SELECT first_spell_id, spell_id, rank from spell_ranks ORDER BY first_spell_id , rank");
 
@@ -1149,7 +1149,7 @@ void SpellMgr::LoadSpellRanks()
 
     do
     {
-                        // spellid, rank
+        // spellid, rank
         std::list < std::pair < int32, int32 > > rankChain;
         int32 currentSpell = -1;
         int32 lastSpell = -1;
@@ -1221,12 +1221,11 @@ void SpellMgr::LoadSpellRanks()
             mSpellChains[addedSpell].last = GetSpellInfo(rankChain.back().first);
             mSpellChains[addedSpell].rank = itr->second;
             mSpellChains[addedSpell].prev = GetSpellInfo(prevRank);
-            mSpellInfoMap[addedSpell]->ChainEntry = &mSpellChains[addedSpell];
             prevRank = addedSpell;
             ++itr;
             if (itr == rankChain.end())
             {
-                mSpellChains[addedSpell].next = NULL;
+                mSpellChains[addedSpell].next = 0;
                 break;
             }
             else
