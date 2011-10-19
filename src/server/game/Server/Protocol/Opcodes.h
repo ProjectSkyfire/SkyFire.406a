@@ -1204,7 +1204,7 @@ enum Opcodes
     SMSG_ACHIEVEMENT_DELETED                         = 0x0E6A0, // 4.0.6a 13623
     CMSG_SERVER_INFO_QUERY                           = 0x101F6, // Unknown opcode ID
     SMSG_SERVER_INFO_RESPONSE                        = 0x101F7, // Unknown opcode ID
-    CMSG_CHECK_LOGIN_CRITERIA                        = 0x00913, // 4.0.6a 13623
+    CMSG_CHECK_LOGIN_CRITERIA                        = 0x101F8, // Unknown opcode ID
     SMSG_SERVER_BUCK_DATA_START                      = 0x101F9, // Unknown opcode ID
     CMSG_QUERY_VEHICLE_STATUS                        = 0x069A0, // 4.0.6a 13623
     SMSG_BATTLEGROUND_INFO_THROTTLED                 = 0x00093, // 4.0.6a 13623
@@ -1266,7 +1266,7 @@ enum Opcodes
     CMSG_GMRESPONSE_RESOLVE                          = 0x062C8, // 4.0.6a 13623
     SMSG_GMRESPONSE_STATUS_UPDATE                    = 0x00101, // 4.0.6a 13623
     CMSG_WORLD_STATE_UI_TIMER_UPDATE                 = 0x03FA8, // 4.0.6a 13623
-    SMSG_WORLD_STATE_UI_TIMER_UPDATE                 = 0x00589, // 4.0.6a 13623
+    SMSG_WORLD_STATE_UI_TIMER_UPDATE                 = 0x05557, // 4.0.6a 13623
     CMSG_CHAR_RACE_CHANGE                            = 0x06EA4, // 4.0.6a 13623
     SMSG_TALENTS_INVOLUNTARILY_RESET                 = 0x0F6E4, // 4.0.6a 13623
     SMSG_LOOT_SLOT_CHANGED                           = 0x031EC, // 4.0.6a 13623 0x4D4C ?
