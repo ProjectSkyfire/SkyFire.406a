@@ -1580,18 +1580,18 @@ uint32 Unit::CalcArmorReducedDamage(Unit* victim, const uint32 damage, SpellInfo
         armor = 0.0f;
 
     float levelModifier = getLevel();
-    if (levelModifier > 59)
-        levelModifier = levelModifier + (4.5f * (levelModifier - 59));
+    float armorReduction = armor / (armor + 85.f * getLevel() + 400.f);
+    if(getLevel() > 59)
+        armorReduction =   armor / (armor + 467.5f * getLevel() - 22167.5f);
+    if(getLevel() > 80)
+        armorReduction =   armor / (armor + 2167.5f * getLevel() - 158167.5f);
 
-    float tmpvalue = 0.1f * armor / (8.5f * levelModifier + 40);
-    tmpvalue = tmpvalue / (1.0f + tmpvalue);
+    if (armorReduction < 0.0f)
+        armorReduction = 0.0f;
+    if (armorReduction > 0.75f)
+        armorReduction = 0.75f;
 
-    if (tmpvalue < 0.0f)
-        tmpvalue = 0.0f;
-    if (tmpvalue > 0.75f)
-        tmpvalue = 0.75f;
-
-    newdamage = uint32(damage - (damage * tmpvalue));
+    newdamage = uint32(damage - (damage * armorReduction));
 
     return (newdamage > 1) ? newdamage : 1;
 }
