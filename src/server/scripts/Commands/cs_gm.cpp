@@ -89,19 +89,24 @@ public:
 
     static bool HandleGMFlyCommand(ChatHandler* handler, char const* args)
     {
-        if (!*args)
-            return false;
+    if (!*args)
+        return false;
 
-        Player* target =  handler->getSelectedPlayer();
-        if (!target)
-            target = handler->GetSession()->GetPlayer();
+    Player* target = handler->getSelectedPlayer();
+    if (!target)
+        target = handler->GetSession()->GetPlayer();
 
-        WorldPacket data(12);
-        if (strncmp(args, "on", 3) == 0)
-            data.SetOpcode(SMSG_MOVE_SET_CAN_FLY);
-        else if (strncmp(args, "off", 4) == 0)
-            data.SetOpcode(SMSG_MOVE_UNSET_CAN_FLY);
+    WorldPacket data(SMSG_MULTIPLE_PACKETS, 14);
+    if (strncmp(args, "change", 7) == 0)
+        if (target->canFly())
+            data << uint16(SMSG_MOVE_UNSET_CAN_FLY);
         else
+            data << uint16(SMSG_MOVE_SET_CAN_FLY);
+    else if (strncmp(args, "on", 3) == 0)
+        data << uint16(SMSG_MOVE_SET_CAN_FLY);
+    else if (strncmp(args, "off", 4) == 0)
+        data << uint16(SMSG_MOVE_UNSET_CAN_FLY);
+    else
         {
             handler->SendSysMessage(LANG_USE_BOL);
             return false;

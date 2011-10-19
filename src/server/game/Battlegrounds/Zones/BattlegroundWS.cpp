@@ -360,7 +360,7 @@ void BattlegroundWS::EventPlayerDroppedFlag(Player* Source)
         {
             if (!this->IsHordeFlagPickedup())
                 return;
-            if (GetFlagPickerGUID(BG_TEAM_HORDE) == Source->GetGUID())
+            if (GetHordeFlagPickerGUID() == Source->GetGUID())
             {
                 SetHordeFlagPicker(0);
                 Source->RemoveAurasDueToSpell(BG_WS_SPELL_WARSONG_FLAG);
@@ -370,7 +370,7 @@ void BattlegroundWS::EventPlayerDroppedFlag(Player* Source)
         {
             if (!this->IsAllianceFlagPickedup())
                 return;
-            if (GetFlagPickerGUID(BG_TEAM_ALLIANCE) == Source->GetGUID())
+            if (GetAllianceFlagPickerGUID() == Source->GetGUID())
             {
                 SetAllianceFlagPicker(0);
                 Source->RemoveAurasDueToSpell(BG_WS_SPELL_SILVERWING_FLAG);
@@ -385,7 +385,7 @@ void BattlegroundWS::EventPlayerDroppedFlag(Player* Source)
     {
         if (!IsHordeFlagPickedup())
             return;
-        if (GetFlagPickerGUID(BG_TEAM_HORDE) == Source->GetGUID())
+        if (GetHordeFlagPickerGUID() == Source->GetGUID())
         {
             SetHordeFlagPicker(0);
             Source->RemoveAurasDueToSpell(BG_WS_SPELL_WARSONG_FLAG);
@@ -402,7 +402,7 @@ void BattlegroundWS::EventPlayerDroppedFlag(Player* Source)
     {
         if (!IsAllianceFlagPickedup())
             return;
-        if (GetFlagPickerGUID(BG_TEAM_ALLIANCE) == Source->GetGUID())
+        if (GetAllianceFlagPickerGUID() == Source->GetGUID())
         {
             SetAllianceFlagPicker(0);
             Source->RemoveAurasDueToSpell(BG_WS_SPELL_SILVERWING_FLAG);
@@ -630,12 +630,12 @@ void BattlegroundWS::HandleAreaTrigger(Player* Source, uint32 Trigger)
             break;
         case 3646:                                          // Alliance Flag spawn
             if (m_FlagState[BG_TEAM_HORDE] && !m_FlagState[BG_TEAM_ALLIANCE])
-                if (GetFlagPickerGUID(BG_TEAM_HORDE) == Source->GetGUID())
+                if (GetHordeFlagPickerGUID() == Source->GetGUID())
                     EventPlayerCapturedFlag(Source);
             break;
         case 3647:                                          // Horde Flag spawn
             if (m_FlagState[BG_TEAM_ALLIANCE] && !m_FlagState[BG_TEAM_HORDE])
-                if (GetFlagPickerGUID(BG_TEAM_ALLIANCE) == Source->GetGUID())
+                if (GetAllianceFlagPickerGUID() == Source->GetGUID())
                     EventPlayerCapturedFlag(Source);
             break;
         case 3649:                                          // unk1

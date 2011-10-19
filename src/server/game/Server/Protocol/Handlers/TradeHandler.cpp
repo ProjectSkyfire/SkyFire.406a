@@ -65,7 +65,7 @@ void WorldSession::SendTradeStatus(TradeStatus status)
             data << uint32(status);
             break;
     }*/
-    
+
     data.Initialize(SMSG_TRADE_STATUS, 1+8+4+4+4+1+4+4+4);
     data << uint8(0);
     data << uint64(0);
@@ -108,7 +108,7 @@ void WorldSession::SendUpdateTrade(bool trader_data /*= true*/)
     data << uint64(view_trade->GetMoney()); // trade money
     data << uint32(0);
     // old structure. meaning of new structure fields has to be researched
-    /*data << uint8(trader_data); 
+    /*data << uint8(trader_data);
     data << uint32(0);                                      // added in 2.4.0, this value must be equal to value from TRADE_STATUS_OPEN_WINDOW status packet (different value for different players to block multiple trades?)
     data << uint32(TRADE_SLOT_COUNT);                       // trade slots count/number?, = next field in most cases
     data << uint32(TRADE_SLOT_COUNT);                       // trade slots count/number?, = prev field in most cases
@@ -161,7 +161,7 @@ void WorldSession::SendUpdateTrade(bool trader_data /*= true*/)
             data << uint32(0);
         }
         // old structure
-        /*data << uint8(i); 
+        /*data << uint8(i);
 
         if (Item* item = view_trade->GetItem(TradeSlots(i)))
         {

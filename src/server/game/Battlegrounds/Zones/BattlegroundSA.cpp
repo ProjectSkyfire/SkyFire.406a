@@ -265,13 +265,13 @@ void BattlegroundSA::StartShips()
     {
         for (BattlegroundPlayerMap::const_iterator itr = GetPlayers().begin(); itr != GetPlayers().end(); ++itr)
         {
-            if (Player* p = ObjectAccessor::FindPlayer(itr->first))
+            if (Player* player = ObjectAccessor::FindPlayer(itr->first))
             {
-                UpdateData data(GetMapId());
+                UpdateData data(player->GetMapId());
                 WorldPacket pkt;
-                GetBGObject(i)->BuildValuesUpdateBlockForPlayer(&data, p);
+                GetBGObject(i)->BuildValuesUpdateBlockForPlayer(&data, player);
                 data.BuildPacket(&pkt);
-                p->GetSession()->SendPacket(&pkt);
+                player->GetSession()->SendPacket(&pkt);
             }
         }
     }
@@ -776,7 +776,7 @@ void BattlegroundSA::CaptureGraveyard(BG_SA_Graveyards i, Player* Source)
                 SendWarningToAll(LANG_BG_SA_H_GY_SOUTH);
             break;
         default:
-            ASSERT (0);
+            ASSERT(0);
             break;
     };
 }
@@ -865,7 +865,7 @@ void BattlegroundSA::UpdateDemolisherSpawns()
     {
         if (m_BgCreatures[i])
         {
-            if (Creature* Demolisher = GetBGCreature(i))
+            if (Creature *Demolisher = GetBGCreature(i))
             {
                 if (Demolisher->isDead())
                 {
@@ -900,7 +900,7 @@ void BattlegroundSA::SendTransportInit(Player* player)
 {
     if (m_BgObjects[BG_SA_BOAT_ONE] ||  m_BgObjects[BG_SA_BOAT_TWO])
     {
-        UpdateData transData(GetMapId());
+        UpdateData transData(player->GetMapId());
         if (m_BgObjects[BG_SA_BOAT_ONE])
             GetBGObject(BG_SA_BOAT_ONE)->BuildCreateUpdateBlockForPlayer(&transData, player);
         if (m_BgObjects[BG_SA_BOAT_TWO])
@@ -915,7 +915,7 @@ void BattlegroundSA::SendTransportsRemove(Player* player)
 {
     if (m_BgObjects[BG_SA_BOAT_ONE] ||  m_BgObjects[BG_SA_BOAT_TWO])
     {
-        UpdateData transData(GetMapId());
+        UpdateData transData(player->GetMapId());
         if (m_BgObjects[BG_SA_BOAT_ONE])
             GetBGObject(BG_SA_BOAT_ONE)->BuildOutOfRangeUpdateBlock(&transData);
         if (m_BgObjects[BG_SA_BOAT_TWO])
