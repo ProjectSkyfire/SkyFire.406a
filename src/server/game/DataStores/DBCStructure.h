@@ -263,7 +263,7 @@ struct AchievementCriteriaEntry
         struct
         {
             uint32  skillID;                                // 3
-            uint32  skillLevel;                             // 4 apprentice=1, journeyman=2, expert=3, artisan=4, master=5, grand master=6
+            uint32  skillLevel;                             // 4 apprentice=1, journeyman=2, expert=3, artisan=4, master=5, grand master=6, professional illustrious grand master=7
         } learn_skill_level;
 
         // ACHIEVEMENT_CRITERIA_TYPE_USE_ITEM               = 41
