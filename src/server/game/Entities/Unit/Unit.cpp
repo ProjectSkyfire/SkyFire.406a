@@ -16573,26 +16573,31 @@ void Unit::KnockbackFrom(float x, float y, float speedXY, float speedZ)
 
 float Unit::GetCombatRatingReduction(CombatRating cr) const
 {
-    if (Player const* player = ToPlayer())
-        return player->GetRatingBonusValue(cr);
-    // Player's pet get resilience from owner
-    else if (isPet())
+    if (GetTypeId() == TYPEID_PLAYER)
+        return ((Player const*)this)->GetRatingBonusValue(cr);
+    else if (((Creature const*)this)->isPet())
+    {
+        // Player's pet get resilience from owner
         if (Unit* owner = GetOwner())
-            if (Player* player = owner->ToPlayer())
-                return player->GetRatingBonusValue(cr);
+            if (owner->GetTypeId() == TYPEID_PLAYER)
+                return ((Player*)owner)->GetRatingBonusValue(cr);
+    }
 
     return 0.0f;
 }
 
 uint32 Unit::GetCombatRatingDamageReduction(CombatRating cr, float rate, float cap, uint32 damage) const
 {
-    float percent = std::min(GetCombatRatingReduction(cr) * rate, cap);
-    return CalculatePctF(damage, percent);
+    float percent = GetCombatRatingReduction(cr) * rate;
+    if (percent > cap)
+        percent = cap;
+    return uint32 (percent * damage / 100.0f);
 }
+
 
 uint32 Unit::GetModelForForm(ShapeshiftForm form)
 {
-    switch (form)
+    switch(form)
     {
         case FORM_CAT:
             // Based on Hair color
@@ -16616,6 +16621,72 @@ uint32 Unit::GetModelForForm(ShapeshiftForm form)
                         return 892;
                 }
             }
+            else if (getRace() == RACE_TROLL)
+            {
+                uint8 hairColor = GetByteValue(PLAYER_BYTES, 3);
+                switch (hairColor)
+                {
+                    case 0: // Red
+                    case 1:
+                        return 33668;
+                    case 2: // Yellow
+                    case 3:
+                        return 33667;
+                    case 4: // Blue
+                    case 5:
+                    case 6:
+                        return 33666;
+                    case 7: // Purple
+                    case 10:
+                        return 33665;
+                    default: // original - white
+                        return 33669;
+                }
+            }
+            else if (getRace() == RACE_WORGEN)
+            {
+                // Based on Skin color
+                uint8 skinColor = GetByteValue(PLAYER_BYTES, 0);
+                // Male
+                if (getGender() == GENDER_MALE)
+                {
+                    switch(skinColor)
+                    {
+                        case 1: // Brown
+                            return 33662;
+                        case 2: // Black
+                        case 7:
+                            return 33661;
+                        case 4: // yellow
+                            return 33664;
+                        case 3: // White
+                        case 5:
+                            return 33663;
+                        default: // original - Gray
+                            return 33660;
+                    }
+                }
+                // Female
+                else
+                {
+                    switch(skinColor)
+                    {
+                        case 5: // Brown
+                        case 6:
+                            return 33662;
+                        case 7: // Black
+                        case 8:
+                            return 33661;
+                        case 3: // yellow
+                        case 4:
+                            return 33664;
+                        case 2: // White
+                            return 33663;
+                        default: // original - Gray
+                            return 33660;
+                    }
+                }
+            }
             // Based on Skin color
             else if (getRace() == RACE_TAUREN)
             {
@@ -16623,7 +16694,7 @@ uint32 Unit::GetModelForForm(ShapeshiftForm form)
                 // Male
                 if (getGender() == GENDER_MALE)
                 {
-                    switch (skinColor)
+                    switch(skinColor)
                     {
                         case 12: // White
                         case 13:
@@ -16650,23 +16721,26 @@ uint32 Unit::GetModelForForm(ShapeshiftForm form)
                     }
                 }
                 // Female
-                else switch (skinColor)
+                else
                 {
-                    case 10: // White
-                        return 29409;
-                    case 6: // Light Brown
-                    case 7:
-                        return 29410;
-                    case 4: // Brown
-                    case 5:
-                        return 29411;
-                    case 0: // Dark
-                    case 1:
-                    case 2:
-                    case 3:
-                        return 29412;
-                    default: // original - Grey
-                        return 8571;
+                    switch (skinColor)
+                    {
+                        case 10: // White
+                            return 29409;
+                        case 6: // Light Brown
+                        case 7:
+                            return 29410;
+                        case 4: // Brown
+                        case 5:
+                            return 29411;
+                        case 0: // Dark
+                        case 1:
+                        case 2:
+                        case 3:
+                            return 29412;
+                        default: // original - Grey
+                            return 8571;
+                    }
                 }
             }
             else if (Player::TeamForRace(getRace()) == ALLIANCE)
@@ -16693,6 +16767,73 @@ uint32 Unit::GetModelForForm(ShapeshiftForm form)
                         return 29417;
                     default: // original - Violet
                         return 2281;
+                }
+            }
+            else if (getRace() == RACE_TROLL)
+            {
+                uint8 hairColor = GetByteValue(PLAYER_BYTES, 3);
+                switch (hairColor)
+                {
+                    case 0: // Red
+                    case 1:
+                        return 33657;
+                    case 2: // Yellow
+                    case 3:
+                        return 33659;
+                    case 7: // Purple
+                    case 10:
+                        return 33656;
+                    case 8: // White
+                    case 9:
+                    case 11:
+                    case 12:
+                        return 33658;
+                    default: // original - Blue
+                        return 33655;
+                }
+            }
+            else if (getRace() == RACE_WORGEN)
+            {
+                // Based on Skin color
+                uint8 skinColor = GetByteValue(PLAYER_BYTES, 0);
+                // Male
+                if (getGender() == GENDER_MALE)
+                {
+                    switch(skinColor)
+                    {
+                        case 1: // Brown
+                            return 33652;
+                        case 2: // Black
+                        case 7:
+                            return 33651;
+                        case 4: // Yellow
+                            return 33653;
+                        case 3: // White
+                        case 5:
+                            return 33654;
+                        default: // original - Gray
+                            return 33650;
+                    }
+                }
+                // Female
+                else
+                {
+                    switch(skinColor)
+                    {
+                        case 5: // Brown
+                        case 6:
+                            return 33652;
+                        case 7: // Black
+                        case 8:
+                            return 33651;
+                        case 3: // yellow
+                        case 4:
+                            return 33654;
+                        case 2: // White
+                            return 33653;
+                        default: // original - Gray
+                            return 33650;
+                    }
                 }
             }
             // Based on Skin color
@@ -16729,23 +16870,26 @@ uint32 Unit::GetModelForForm(ShapeshiftForm form)
                     }
                 }
                 // Female
-                else switch (skinColor)
+                else
                 {
-                    case 0: // Dark (Black)
-                    case 1:
-                        return 29418;
-                    case 2: // White
-                    case 3:
-                        return 29419;
-                    case 6: // Light Brown/Grey
-                    case 7:
-                    case 8:
-                    case 9:
-                        return 29420;
-                    case 10: // Completly White
-                        return 29421;
-                    default: // original - Brown
-                        return 2289;
+                    switch (skinColor)
+                    {
+                        case 0: // Dark (Black)
+                        case 1:
+                            return 29418;
+                        case 2: // White
+                        case 3:
+                            return 29419;
+                        case 6: // Light Brown/Grey
+                        case 7:
+                        case 8:
+                        case 9:
+                            return 29420;
+                        case 10: // Completly White
+                            return 29421;
+                        default: // original - Brown
+                            return 2289;
+                    }
                 }
             }
             else if (Player::TeamForRace(getRace()) == ALLIANCE)
@@ -16753,116 +16897,147 @@ uint32 Unit::GetModelForForm(ShapeshiftForm form)
             else
                 return 2289;
         case FORM_FLIGHT:
-            if (Player::TeamForRace(getRace()) == ALLIANCE)
-                return 20857;
-            return 20872;
+            switch(getRace())
+            {
+                case RACE_NIGHTELF:
+                    return 20857;
+                case RACE_WORGEN:
+                    return 37727;
+                case RACE_TROLL:
+                    return 37728;
+                default: // RACE_TAUREN
+                    return 20872;
+            }
         case FORM_FLIGHT_EPIC:
-            if (Player::TeamForRace(getRace()) == ALLIANCE)
-                return 21243;
-            return 21244;
+            switch(getRace())
+            {
+                case RACE_NIGHTELF:
+                    return 21243;
+                case RACE_WORGEN:
+                    return 37729;
+                case RACE_TROLL:
+                    return 37730;
+                default: // RACE_TAUREN
+                    return 21244;
+            }
         default:
-            break;
-    }
-
-    uint32 modelid = 0;
-    SpellShapeshiftFormEntry const* formEntry = sSpellShapeshiftFormStore.LookupEntry(form);
-    if (formEntry && formEntry->modelID_A)
-    {
-        // Take the alliance modelid as default
-        if (GetTypeId() != TYPEID_PLAYER)
-            return formEntry->modelID_A;
-        else
         {
-            if (Player::TeamForRace(getRace()) == ALLIANCE)
-                modelid = formEntry->modelID_A;
-            else
-                modelid = formEntry->modelID_H;
+            uint32 modelid = 0;
+            SpellShapeshiftFormEntry const* formEntry = sSpellShapeshiftFormStore.LookupEntry(form);
+            if (formEntry && formEntry->modelID_A)
+            {
+                // Take the alliance modelid as default
+                if (GetTypeId() != TYPEID_PLAYER)
+                    return formEntry->modelID_A;
+                else
+                {
+                    if (Player::TeamForRace(getRace()) == ALLIANCE)
+                        modelid = formEntry->modelID_A;
+                    else
+                        modelid = formEntry->modelID_H;
 
-            // If the player is horde but there are no values for the horde modelid - take the alliance modelid
-            if (!modelid && Player::TeamForRace(getRace()) == HORDE)
-                modelid = formEntry->modelID_A;
+                    // If the player is horde but there are no values for the horde modelid - take the alliance modelid
+                    if (!modelid && Player::TeamForRace(getRace()) == HORDE)
+                        modelid = formEntry->modelID_A;
+                }
+            }
+            return modelid;
         }
     }
-
-    return modelid;
+    return 0;
 }
 
 uint32 Unit::GetModelForTotem(PlayerTotemType totemType)
 {
-    switch (getRace())
+    switch(getRace())
     {
         case RACE_ORC:
         {
-            switch (totemType)
+            switch(totemType)
             {
-                case SUMMON_TYPE_TOTEM_FIRE:    // fire
+                case SUMMON_TYPE_TOTEM_FIRE:    //fire
                     return 30758;
-                case SUMMON_TYPE_TOTEM_EARTH:   // earth
+                case SUMMON_TYPE_TOTEM_EARTH:   //earth
                     return 30757;
-                case SUMMON_TYPE_TOTEM_WATER:   // water
+                case SUMMON_TYPE_TOTEM_WATER:   //water
                     return 30759;
-                case SUMMON_TYPE_TOTEM_AIR:     // air
+                case SUMMON_TYPE_TOTEM_AIR:     //air
                     return 30756;
             }
             break;
         }
         case RACE_DWARF:
         {
-            switch (totemType)
+            switch(totemType)
             {
-                case SUMMON_TYPE_TOTEM_FIRE:    // fire
+                case SUMMON_TYPE_TOTEM_FIRE:    //fire
                     return 30754;
-                case SUMMON_TYPE_TOTEM_EARTH:   // earth
+                case SUMMON_TYPE_TOTEM_EARTH:   //earth
                     return 30753;
-                case SUMMON_TYPE_TOTEM_WATER:   // water
+                case SUMMON_TYPE_TOTEM_WATER:   //water
                     return 30755;
-                case SUMMON_TYPE_TOTEM_AIR:     // air
+                case SUMMON_TYPE_TOTEM_AIR:     //air
                     return 30736;
             }
             break;
         }
         case RACE_TROLL:
         {
-            switch (totemType)
+            switch(totemType)
             {
-                case SUMMON_TYPE_TOTEM_FIRE:    // fire
+                case SUMMON_TYPE_TOTEM_FIRE:    //fire
                     return 30762;
-                case SUMMON_TYPE_TOTEM_EARTH:   // earth
+                case SUMMON_TYPE_TOTEM_EARTH:   //earth
                     return 30761;
-                case SUMMON_TYPE_TOTEM_WATER:   // water
+                case SUMMON_TYPE_TOTEM_WATER:   //water
                     return 30763;
-                case SUMMON_TYPE_TOTEM_AIR:     // air
+                case SUMMON_TYPE_TOTEM_AIR:     //air
                     return 30760;
             }
             break;
         }
         case RACE_TAUREN:
         {
-            switch (totemType)
+            switch(totemType)
             {
-                case SUMMON_TYPE_TOTEM_FIRE:    // fire
+                case SUMMON_TYPE_TOTEM_FIRE:    //fire
                     return 4589;
-                case SUMMON_TYPE_TOTEM_EARTH:   // earth
+                case SUMMON_TYPE_TOTEM_EARTH:   //earth
                     return 4588;
-                case SUMMON_TYPE_TOTEM_WATER:   // water
+                case SUMMON_TYPE_TOTEM_WATER:   //water
                     return 4587;
-                case SUMMON_TYPE_TOTEM_AIR:     // air
+                case SUMMON_TYPE_TOTEM_AIR:     //air
                     return 4590;
             }
             break;
         }
         case RACE_DRAENEI:
         {
-            switch (totemType)
+            switch(totemType)
             {
-                case SUMMON_TYPE_TOTEM_FIRE:    // fire
+                case SUMMON_TYPE_TOTEM_FIRE:    //fire
                     return 19074;
-                case SUMMON_TYPE_TOTEM_EARTH:   // earth
+                case SUMMON_TYPE_TOTEM_EARTH:   //earth
                     return 19073;
-                case SUMMON_TYPE_TOTEM_WATER:   // water
+                case SUMMON_TYPE_TOTEM_WATER:   //water
                     return 19075;
-                case SUMMON_TYPE_TOTEM_AIR:     // air
+                case SUMMON_TYPE_TOTEM_AIR:     //air
                     return 19071;
+            }
+            break;
+        }
+        case RACE_GOBLIN:
+        {
+            switch(totemType)
+            {
+                case SUMMON_TYPE_TOTEM_FIRE:    //fire
+                    return 30783;
+                case SUMMON_TYPE_TOTEM_EARTH:   //earth
+                    return 30782;
+                case SUMMON_TYPE_TOTEM_WATER:   //water
+                    return 30784;
+                case SUMMON_TYPE_TOTEM_AIR:     //air
+                    return 30781;
             }
             break;
         }
