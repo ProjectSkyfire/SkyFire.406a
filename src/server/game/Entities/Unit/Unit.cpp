@@ -9053,6 +9053,27 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
                 return false;
             break;
         }
+        // Seal of Insight
+        // giving each single-target melee attack a chance to heal the Paladin for (0.15 * AP + 0.15 * holy power) and restore 4% of the Paladin's base mana.
+        // Unleashing this Seal's energy will ... restore 15% of the Paladin's base mana.
+        case 20167:
+        {
+            int32 triggerAmount1 = 0;
+            if (procSpell && procSpell->Id == 54158) // Judgment, unleashing case
+            {
+                basepoints0 = 0;                 // no heal effect when unleashing Seal of Insight
+                triggerAmount1 = triggerAmount;  // restore 15% base mana
+            }
+            else
+            {
+                basepoints0 = triggerAmount;     // actual heal amount will be calculated in Spell::EffectHeal
+                if (SpellInfo const* triggeredSpellInfo = sSpellMgr->GetSpellInfo(trigger_spell_id))
+                    triggerAmount1 = triggeredSpellInfo->Effects[1].BasePoints; // restore 4% base mana
+            }
+            int32 basepoints1 = GetCreatePowers(POWER_MANA) * triggerAmount1 / 100;
+            CastCustomSpell(target, trigger_spell_id, &basepoints0, &basepoints1, NULL, true, castItem, triggeredByAura);
+            return true;
+        }
     }
 
     if (cooldown && GetTypeId() == TYPEID_PLAYER && ToPlayer()->HasSpellCooldown(trigger_spell_id))
