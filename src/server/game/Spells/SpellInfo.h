@@ -533,6 +533,7 @@ public:
     SpellSchoolMask GetSchoolMask() const;
     uint32 GetAllEffectsMechanicMask() const;
     uint32 GetEffectMechanicMask(uint8 effIndex) const;
+    uint32 GetSpellMechanicMaskByEffectMask(uint32 effectMask) const;
     Mechanics GetEffectMechanic(uint8 effIndex) const;
     uint32 GetDispelMask() const;
     static uint32 GetDispelMask(DispelType type);
