@@ -89,7 +89,7 @@ public:
         return indexTable!=NULL;
     }
 
-    bool LoadStringsFrom(char const* fn)
+    bool LoadStringsFrom(char const* fn, uint8 locale)
     {
         // DBC must be already loaded using Load
         if (!indexTable)
@@ -101,7 +101,7 @@ public:
             return false;
 
         // load strings from another locale dbc data
-        m_stringPoolList.push_back(db2.AutoProduceStrings(fmt, (char*)m_dataTable));
+        m_stringPoolList.push_back(db2.AutoProduceStrings(fmt, (char*)m_dataTable, locale));
 
         return true;
     }
