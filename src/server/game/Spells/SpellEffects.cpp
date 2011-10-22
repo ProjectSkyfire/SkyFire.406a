@@ -2295,6 +2295,13 @@ void Spell::EffectHeal(SpellEffIndex /*effIndex*/)
         // Death Pact - return pct of max health to caster
         else if (m_spellInfo->SpellFamilyName == SPELLFAMILY_DEATHKNIGHT && m_spellInfo->SpellFamilyFlags[0] & 0x00080000)
             addhealth = caster->SpellHealingBonus(unitTarget, m_spellInfo, int32(caster->CountPctFromMaxHealth(damage)), HEAL);
+        // Seal of Insight - heal for (0.15 * AP + 0.15 * holy spell power)
+        else if (m_spellInfo->Id == 20167)
+        {
+            if (!damage) // no heal when unleashing Seal of Insight
+                return;
+            addhealth = (caster->GetTotalAttackPowerValue(BASE_ATTACK) + caster->SpellBaseHealingBonus(SPELL_SCHOOL_MASK_HOLY)) * damage / 100;
+        }
         else
             addhealth = caster->SpellHealingBonus(unitTarget, m_spellInfo, addhealth, HEAL);
 

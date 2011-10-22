@@ -1560,6 +1560,22 @@ uint32 Unit::CalcArmorReducedDamage(Unit* victim, const uint32 damage, SpellInfo
         }
     }
 
+    // Apply Player CR_ARMOR_PENETRATION rating
+    if (GetTypeId() == TYPEID_PLAYER)
+    {
+        float maxArmorPen = 0;
+        if (getLevel() < 60)
+            maxArmorPen = float(400 + 85 * victim->getLevel());
+        else
+            maxArmorPen = 400 + 85 * victim->getLevel() + 4.5f * 85 * (victim->getLevel() - 59);
+        // Cap armor penetration to this number
+        maxArmorPen = std::min((armor + maxArmorPen) / 3, armor);
+        // Figure out how much armor do we ignore
+        float armorPen = CalculatePctF(maxArmorPen, ToPlayer()->GetRatingBonusValue(CR_ARMOR_PENETRATION));
+        // Got the value, apply it
+        armor -= std::min(armorPen, maxArmorPen);
+    }
+
     if (armor < 0.0f)
         armor = 0.0f;
 
@@ -9036,6 +9052,27 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
             if (HasAura(86627))
                 return false;
             break;
+        }
+        // Seal of Insight
+        // giving each single-target melee attack a chance to heal the Paladin for (0.15 * AP + 0.15 * holy power) and restore 4% of the Paladin's base mana.
+        // Unleashing this Seal's energy will ... restore 15% of the Paladin's base mana.
+        case 20167:
+        {
+            int32 triggerAmount1 = 0;
+            if (procSpell && procSpell->Id == 54158) // Judgment, unleashing case
+            {
+                basepoints0 = 0;                 // no heal effect when unleashing Seal of Insight
+                triggerAmount1 = triggerAmount;  // restore 15% base mana
+            }
+            else
+            {
+                basepoints0 = triggerAmount;     // actual heal amount will be calculated in Spell::EffectHeal
+                if (SpellInfo const* triggeredSpellInfo = sSpellMgr->GetSpellInfo(trigger_spell_id))
+                    triggerAmount1 = triggeredSpellInfo->Effects[1].BasePoints; // restore 4% base mana
+            }
+            int32 basepoints1 = GetCreatePowers(POWER_MANA) * triggerAmount1 / 100;
+            CastCustomSpell(target, trigger_spell_id, &basepoints0, &basepoints1, NULL, true, castItem, triggeredByAura);
+            return true;
         }
     }
 

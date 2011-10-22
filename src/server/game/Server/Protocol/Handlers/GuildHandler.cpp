@@ -131,9 +131,13 @@ void WorldSession::HandleGuildInfoOpcode(WorldPacket& /*recvPacket*/)
         guild->SendInfo(this);
 }
 
-void WorldSession::HandleGuildRosterOpcode(WorldPacket& /*recvPacket*/)
+void WorldSession::HandleGuildRosterOpcode(WorldPacket& recvPacket)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_GUILD_ROSTER");
+
+    uint64 guildGUID, playerGUID;
+
+    recvPacket >> guildGUID >> playerGUID;
 
     if (Guild* guild = _GetPlayerGuild(this))
         guild->HandleRoster(this);

@@ -81,7 +81,7 @@ class DB2FileLoader
     bool IsLoaded() const { return (data != NULL); }
     char* AutoProduceData(const char* fmt, uint32& count, char**& indexTable);
     char* AutoProduceStringsArrayHolders(const char* fmt, char* dataTable);
-    char* AutoProduceStrings(const char* fmt, char* dataTable);
+    char* AutoProduceStrings(const char* fmt, char* dataTable, uint8 locale = 0);
     static uint32 GetFormatRecordSize(const char * format, int32 * index_pos = NULL);
     static uint32 GetFormatStringsFields(const char * format);
 private:

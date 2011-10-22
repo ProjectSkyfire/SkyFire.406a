@@ -58,6 +58,15 @@ inline void LoadDB2(uint32& availableDb2Locales, StoreProblemList1& errlist, DB2
     std::string db2_filename = db2_path + filename;
     if (storage.Load(db2_filename.c_str()))
     {
+        for (uint8 loc = 1; loc < TOTAL_LOCALES; ++loc)
+        {
+            if (!(availableDb2Locales & (1 << loc)))
+                continue;
+
+            std::string localizedFileName = db2_path + localeNames[loc] + "/" + filename;
+            if (!storage.LoadStringsFrom(localizedFileName.c_str(), loc))
+                availableDb2Locales &= ~(1<<loc);             // mark locale as not available
+        }
     }
     else
     {
@@ -106,7 +115,8 @@ void LoadDB2Stores(const std::string& dataPath)
     }
 
     // Check loaded DBC files proper version
-    if (!sItemStore.LookupEntry(68815))                     // last client known item added in 4.0.6a
+    if (!sItemStore.LookupEntry(68815) ||                   // last client known item added in 4.0.6a
+        !sItemSparseStore.LookupEntry(68815))               // last client known item added in 4.0.6a
     {
         sLog->outString("");
         sLog->outError("Please extract correct db2 files from client 4.0.6a 13623.");
