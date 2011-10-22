@@ -84,21 +84,21 @@ class UpdateMask
 
         void operator &= (const UpdateMask& mask)
         {
-            ASSERT (mask.mCount <= mCount);
+            ASSERT(mask.mCount <= mCount);
             for (uint32 i = 0; i < mBlocks; ++i)
                 mUpdateMask[i] &= mask.mUpdateMask[i];
         }
 
         void operator |= (const UpdateMask& mask)
         {
-            ASSERT (mask.mCount <= mCount);
+            ASSERT(mask.mCount <= mCount);
             for (uint32 i = 0; i < mBlocks; ++i)
                 mUpdateMask[i] |= mask.mUpdateMask[i];
         }
 
         UpdateMask operator & (const UpdateMask& mask) const
         {
-            ASSERT (mask.mCount <= mCount);
+            ASSERT(mask.mCount <= mCount);
 
             UpdateMask newmask;
             newmask = *this;
@@ -109,7 +109,7 @@ class UpdateMask
 
         UpdateMask operator | (const UpdateMask& mask) const
         {
-            ASSERT (mask.mCount <= mCount);
+            ASSERT(mask.mCount <= mCount);
 
             UpdateMask newmask;
             newmask = *this;

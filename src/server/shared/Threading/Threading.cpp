@@ -43,7 +43,7 @@ ThreadPriority::ThreadPriority()
         pr_iter.next();
     }
 
-    ASSERT (!_tmp.empty());
+    ASSERT(!_tmp.empty());
 
     if (_tmp.size() >= MAXPRIORITYNUM)
     {
@@ -108,7 +108,7 @@ Thread::Thread(Runnable* instance): m_iThreadId(0), m_hThreadHandle(0), m_task(i
         m_task->incReference();
 
     bool _start = start();
-    ASSERT (_start);
+    ASSERT(_start);
 }
 
 Thread::~Thread()
@@ -222,7 +222,7 @@ void Thread::setPriority(Priority type)
     int _priority = m_TpEnum.getPriority(type);
     int _ok = ACE_Thread::setprio(m_hThreadHandle, _priority);
     //remove this ASSERT in case you don't want to know is thread priority change was successful or not
-    ASSERT (_ok == 0);
+    ASSERT(_ok == 0);
 }
 
 void Thread::Sleep(unsigned long msecs)

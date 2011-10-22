@@ -31,7 +31,7 @@ PreparedStatement::~PreparedStatement()
 
 void PreparedStatement::BindParameters()
 {
-    ASSERT (m_stmt);
+    ASSERT(m_stmt);
 
     uint32 i = 0;
     for (; i < statement_data.size(); i++)
@@ -393,7 +393,6 @@ m_has_result(true),
 m_result(result)
 {
 }
-
 
 PreparedStatementTask::~PreparedStatementTask()
 {

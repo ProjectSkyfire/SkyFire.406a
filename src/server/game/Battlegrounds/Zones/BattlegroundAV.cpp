@@ -1397,22 +1397,22 @@ void BattlegroundAV::AssaultNode(BG_AV_Nodes node, uint16 team)
     if (m_Nodes[node].TotalOwner == team)
     {
         sLog->outCrash("Assaulting team is TotalOwner of node");
-        ASSERT (false);
+        ASSERT(false);
     }
     if (m_Nodes[node].Owner == team)
     {
         sLog->outCrash("Assaulting team is owner of node");
-        ASSERT (false);
+        ASSERT(false);
     }
     if (m_Nodes[node].State == POINT_DESTROYED)
     {
         sLog->outCrash("Destroyed node is being assaulted");
-        ASSERT (false);
+        ASSERT(false);
     }
     if (m_Nodes[node].State == POINT_ASSAULTED && m_Nodes[node].TotalOwner) //only assault an assaulted node if no totalowner exists
     {
         sLog->outCrash("Assault on an not assaulted node with total owner");
-        ASSERT (false);
+        ASSERT(false);
     }
     //the timer gets another time, if the previous owner was 0 == Neutral
     m_Nodes[node].Timer      = (m_Nodes[node].PrevOwner)? BG_AV_CAPTIME : BG_AV_SNOWFALL_FIRSTCAP;

@@ -2152,7 +2152,7 @@ class Unit : public WorldObject
                 ++m_procDeep;
             else
             {
-                ASSERT (m_procDeep);
+                ASSERT(m_procDeep);
                 --m_procDeep;
             }
         }
@@ -2464,7 +2464,7 @@ template <class T> T Unit::ApplySpellMod(uint32 spellId, SpellModOp op, T &basev
 
         // Charges can be set only for mods with auras
         if (!mod->ownerAura)
-            ASSERT (mod->charges == 0);
+            ASSERT(mod->charges == 0);
 
         if (!IsAffectedBySpellmod(spellInfo, mod, spell))
             continue;

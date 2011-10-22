@@ -2666,7 +2666,7 @@ void SpellMgr::LoadSpellInfoStore()
                     if (sInfo->Effects[j].Effect == SPELL_EFFECT_SEND_TAXI)
                         spellPaths.insert(sInfo->Effects[j].MiscValue);
 
-        ASSERT (((sTaxiNodesStore.GetNumRows()-1)/32) < TaxiMaskSize && "TaxiMaskSize needs to be increased");
+        ASSERT(((sTaxiNodesStore.GetNumRows()-1)/32) < TaxiMaskSize && "TaxiMaskSize needs to be increased");
         memset(sTaxiNodesMask, 0, sizeof(sTaxiNodesMask));
         memset(sOldContinentsNodesMask, 0, sizeof(sOldContinentsNodesMask));
         memset(sHordeTaxiNodesMask, 0, sizeof(sHordeTaxiNodesMask));

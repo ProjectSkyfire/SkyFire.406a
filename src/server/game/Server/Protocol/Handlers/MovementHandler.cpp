@@ -65,7 +65,7 @@ void WorldSession::HandleMoveWorldportAckOpcode()
         GetPlayer()->m_InstanceValid = true;
 
     Map* oldMap = GetPlayer()->GetMap();
-    ASSERT (oldMap);
+    ASSERT(oldMap);
     if (GetPlayer()->IsInWorld())
     {
         sLog->outCrash("Player (Name %s) is still in world when teleported from map %u to new map %u", GetPlayer()->GetName(), oldMap->GetId(), loc.GetMapId());
@@ -241,7 +241,7 @@ void WorldSession::HandleMovementOpcodes(WorldPacket & recv_data)
 
     Unit* mover = _player->m_mover;
 
-    ASSERT (mover != NULL);                                  // there must always be a mover
+    ASSERT(mover != NULL);                                  // there must always be a mover
 
     Player* plMover = mover->GetTypeId() == TYPEID_PLAYER ? (Player*)mover : NULL;
 

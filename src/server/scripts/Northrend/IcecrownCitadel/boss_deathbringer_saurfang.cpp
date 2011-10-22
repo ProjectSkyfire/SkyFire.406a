@@ -243,7 +243,7 @@ class boss_deathbringer_saurfang : public CreatureScript
         {
             boss_deathbringer_saurfangAI(Creature* creature) : BossAI(creature, DATA_DEATHBRINGER_SAURFANG)
             {
-                ASSERT (creature->GetVehicleKit()); // we dont actually use it, just check if exists
+                ASSERT(creature->GetVehicleKit()); // we dont actually use it, just check if exists
                 _introDone = false;
                 _fallenChampionCastCount = 0;
             }
@@ -563,7 +563,7 @@ class npc_high_overlord_saurfang_icc : public CreatureScript
         {
             npc_high_overlord_saurfangAI(Creature* creature) : ScriptedAI(creature)
             {
-                ASSERT (creature->GetVehicleKit());
+                ASSERT(creature->GetVehicleKit());
                 _instance = me->GetInstanceScript();
             }
 
@@ -926,7 +926,7 @@ class npc_saurfang_event : public CreatureScript
 
             void SetData(uint32 type, uint32 data)
             {
-                ASSERT (!type && data && data < 6);
+                ASSERT(!type && data && data < 6);
                 _index = data;
             }
 

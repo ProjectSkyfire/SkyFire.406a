@@ -438,7 +438,7 @@ ChatCommand* ChatHandler::getCommandTable()
             // cache top-level commands
             commandTableCache = (ChatCommand*)malloc(sizeof(ChatCommand) * total);
             memset(commandTableCache, 0, sizeof(ChatCommand) * total);
-            ACE_ASSERT (commandTableCache);
+            ACE_ASSERT(commandTableCache);
             size_t added = appendCommandTable(commandTableCache, commandTable);
             for (std::vector<ChatCommand*>::const_iterator it = dynamic.begin(); it != dynamic.end(); ++it)
                 added += appendCommandTable(commandTableCache + added, *it);
@@ -782,8 +782,8 @@ bool ChatHandler::SetDataForCommandInTable(ChatCommand* table, const char* text,
 
 int ChatHandler::ParseCommands(const char* text)
 {
-    ASSERT (text);
-    ASSERT (*text);
+    ASSERT(text);
+    ASSERT(*text);
 
     std::string fullcmd = text;
 
@@ -1043,7 +1043,7 @@ void ChatHandler::FillMessageData(WorldPacket* data, WorldSession* session, uint
 
     if (type == CHAT_MSG_CHANNEL)
     {
-        ASSERT (channelName);
+        ASSERT(channelName);
         *data << channelName;
     }
 

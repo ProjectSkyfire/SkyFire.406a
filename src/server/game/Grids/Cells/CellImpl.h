@@ -174,7 +174,7 @@ Cell::Visit(const CellPair& standing_cell, TypeContainerVisitor<T, CONTAINER> &v
     if (standing_cell.x_coord >= TOTAL_NUMBER_OF_CELLS_PER_MAP || standing_cell.y_coord >= TOTAL_NUMBER_OF_CELLS_PER_MAP)
         return;
 
-    //no jokes here... Actually placing ASSERT () here was good idea, but
+    //no jokes here... Actually placing ASSERT() here was good idea, but
     //we had some problems with DynamicObjects, which pass radius = 0.0f (DB issue?)
     //maybe it is better to just return when radius <= 0.0f?
     if (radius <= 0.0f)

@@ -169,7 +169,7 @@ inline T RoundToInterval(T& num, T floor, T ceil)
 {
     return num = std::min(std::max(num, floor), ceil);
 }
- 
+
 inline float roundf(float value)
 {
     return floor(value + 0.5f);

@@ -357,7 +357,7 @@ class npc_bone_spike : public CreatureScript
         {
             npc_bone_spikeAI(Creature* creature) : Scripted_NoMovementAI(creature), _hasTrappedUnit(false)
             {
-                ASSERT (creature->GetVehicleKit());
+                ASSERT(creature->GetVehicleKit());
             }
 
             void JustDied(Unit* /*killer*/)

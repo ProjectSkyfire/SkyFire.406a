@@ -89,7 +89,7 @@ void WorldSession::HandleCalendarGetCalendar(WorldPacket& /*recv_data*/)
     data << uint32(counter);                               // raid reset count
 
     std::set<uint32> sentMaps;
-    
+
     ResetTimeByMapDifficultyMap const& resets = sInstanceSaveMgr->GetResetTimeMap();
     for (ResetTimeByMapDifficultyMap::const_iterator itr = resets.begin(); itr != resets.end(); ++itr)
     {
@@ -103,7 +103,7 @@ void WorldSession::HandleCalendarGetCalendar(WorldPacket& /*recv_data*/)
             continue;
 
         sentMaps.insert(mapId);
-        
+
         data << uint32(mapId);
         data << uint32(itr->second - cur_time);
         data << uint32(mapEntry->unk_time);
@@ -217,7 +217,6 @@ void WorldSession::HandleCalendarRemoveEvent(WorldPacket& recv_data)
     //recv_data >> uint64
     //recv_data >> uint64
     //recv_data >> uint32
-
 }
 
 void WorldSession::HandleCalendarCopyEvent(WorldPacket& recv_data)
@@ -228,7 +227,6 @@ void WorldSession::HandleCalendarCopyEvent(WorldPacket& recv_data)
     //recv_data >> uint64
     //recv_data >> uint64
     //recv_data >> uint32
-
 }
 
 void WorldSession::HandleCalendarEventInvite(WorldPacket& recv_data)
@@ -241,7 +239,6 @@ void WorldSession::HandleCalendarEventInvite(WorldPacket& recv_data)
     //recv_data >> std::string
     //recv_data >> uint8
     //recv_data >> uint8
-
 }
 
 void WorldSession::HandleCalendarEventRsvp(WorldPacket& recv_data)
@@ -252,7 +249,6 @@ void WorldSession::HandleCalendarEventRsvp(WorldPacket& recv_data)
     //recv_data >> uint64
     //recv_data >> uint64
     //recv_data >> uint32
-
 }
 
 void WorldSession::HandleCalendarEventRemoveInvite(WorldPacket& recv_data)

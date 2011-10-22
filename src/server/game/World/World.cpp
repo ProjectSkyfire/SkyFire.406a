@@ -221,7 +221,7 @@ void World::AddSession(WorldSession* s)
 void
 World::AddSession_(WorldSession* s)
 {
-    ASSERT (s);
+    ASSERT(s);
 
     //NOTE - Still there is race condition in WorldSession* being used in the Sockets
 

@@ -138,7 +138,7 @@ class boss_ick : public CreatureScript
         {
             boss_ickAI(Creature* creature) : BossAI(creature, DATA_ICK), _vehicle(creature->GetVehicleKit())
             {
-                ASSERT (_vehicle);
+                ASSERT(_vehicle);
             }
 
             void InitializeAI()

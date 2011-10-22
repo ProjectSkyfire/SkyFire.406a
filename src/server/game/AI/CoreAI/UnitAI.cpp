@@ -251,7 +251,7 @@ void SimpleCharmedAI::UpdateAI(const uint32 /*diff*/)
 SpellTargetSelector::SpellTargetSelector(Unit* caster, uint32 spellId) :
     _caster(caster), _spellInfo(sSpellMgr->GetSpellForDifficultyFromSpell(sSpellMgr->GetSpellInfo(spellId), caster))
 {
-    ASSERT (_spellInfo);
+    ASSERT(_spellInfo);
 }
 
 bool SpellTargetSelector::operator()(Unit const* target) const

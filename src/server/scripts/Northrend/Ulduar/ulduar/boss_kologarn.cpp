@@ -96,7 +96,7 @@ class boss_kologarn : public CreatureScript
             boss_kologarnAI(Creature* creature) : BossAI(creature, BOSS_KOLOGARN), vehicle(creature->GetVehicleKit()),
                 left(false), right(false)
             {
-                ASSERT (vehicle);
+                ASSERT(vehicle);
 
                 me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                 me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISABLE_MOVE);

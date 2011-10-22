@@ -326,7 +326,7 @@ void SpellCastTargets::SetSrc(WorldObject const& wObj)
 
 void SpellCastTargets::ModSrc(Position const& pos)
 {
-    ASSERT (m_targetMask & TARGET_FLAG_SOURCE_LOCATION);
+    ASSERT(m_targetMask & TARGET_FLAG_SOURCE_LOCATION);
 
     if (m_srcTransGUID)
     {
@@ -382,7 +382,7 @@ void SpellCastTargets::SetDst(SpellCastTargets const& spellTargets)
 
 void SpellCastTargets::ModDst(Position const& pos)
 {
-    ASSERT (m_targetMask & TARGET_FLAG_DEST_LOCATION);
+    ASSERT(m_targetMask & TARGET_FLAG_DEST_LOCATION);
 
     if (m_dstTransGUID)
     {
@@ -587,7 +587,7 @@ Spell::~Spell()
     }
 
     if (m_caster && m_caster->GetTypeId() == TYPEID_PLAYER)
-        ASSERT (m_caster->ToPlayer()->m_spellModTakingSpell != this);
+        ASSERT(m_caster->ToPlayer()->m_spellModTakingSpell != this);
     delete m_spellValue;
 
     CheckEffectExecuteData();
@@ -1488,7 +1488,7 @@ SpellMissInfo Spell::DoSpellHitOnUnit(Unit* unit, const uint32 effectMask, bool 
         if (scaleAura)
         {
             aurSpellInfo = m_spellInfo->GetAuraRankForLevel(unitTarget->getLevel());
-            ASSERT (aurSpellInfo);
+            ASSERT(aurSpellInfo);
             for (uint8 i = 0; i < MAX_SPELL_EFFECTS; ++i)
             {
                 basePoints[i] = aurSpellInfo->Effects[i].BasePoints;
@@ -6472,7 +6472,7 @@ SpellEvent::~SpellEvent()
     {
         sLog->outError("~SpellEvent: %s %u tried to delete non-deletable spell %u. Was not deleted, causes memory leak.",
             (m_Spell->GetCaster()->GetTypeId() == TYPEID_PLAYER ? "Player" : "Creature"), m_Spell->GetCaster()->GetGUIDLow(), m_Spell->m_spellInfo->Id);
-        ASSERT (false);
+        ASSERT(false);
     }
 }
 
@@ -6934,7 +6934,7 @@ void Spell::FinishTargetProcessing()
 
 void Spell::InitEffectExecuteData(uint8 effIndex)
 {
-    ASSERT (effIndex < MAX_SPELL_EFFECTS);
+    ASSERT(effIndex < MAX_SPELL_EFFECTS);
     if (!m_effectExecuteData[effIndex])
     {
         m_effectExecuteData[effIndex] = new ByteBuffer(0x20);
@@ -6958,7 +6958,7 @@ void Spell::CleanupEffectExecuteData()
 void Spell::CheckEffectExecuteData()
 {
     for (uint8 i = 0; i < MAX_SPELL_EFFECTS; ++i)
-        ASSERT (!m_effectExecuteData[i]);
+        ASSERT(!m_effectExecuteData[i]);
 }
 
 void Spell::LoadScripts()
@@ -7035,7 +7035,7 @@ bool Spell::CallScriptEffectHandlers(SpellEffIndex effIndex, SpellEffectHandleMo
                 hookType = SPELL_SCRIPT_HOOK_EFFECT_HIT_TARGET;
                 break;
             default:
-                ASSERT (false);
+                ASSERT(false);
                 break;
         }
         (*scritr)->_PrepareScriptCall(hookType);

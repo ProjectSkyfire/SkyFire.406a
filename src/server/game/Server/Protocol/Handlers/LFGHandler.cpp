@@ -390,7 +390,7 @@ void WorldSession::SendLfgRoleChosen(uint64 guid, uint8 roles)
 
 void WorldSession::SendLfgRoleCheckUpdate(const LfgRoleCheck* pRoleCheck)
 {
-    ASSERT (pRoleCheck);
+    ASSERT(pRoleCheck);
     LfgDungeonSet dungeons;
     if (pRoleCheck->rDungeonId)
         dungeons.insert(pRoleCheck->rDungeonId);
