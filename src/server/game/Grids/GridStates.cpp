@@ -36,8 +36,9 @@ ActiveState::Update(Map &m, NGridType &grid, GridInfo & info, const uint32 x, co
     {
         if (grid.ActiveObjectsInGrid() == 0 && !m.ActiveObjectsNearGrid(x, y))
         {
-            ObjectGridStoper stoper(grid);
-            stoper.StopN();
+            ObjectGridStoper worker;
+            TypeContainerVisitor<ObjectGridStoper, GridTypeMapContainer> visitor(worker);
+            grid.VisitAllGrids(visitor);
             grid.SetGridState(GRID_STATE_IDLE);
             sLog->outDebug(LOG_FILTER_MAPS, "Grid[%u, %u] on map %u moved to IDLE state", x, y, m.GetId());
         }
@@ -72,3 +73,4 @@ RemovalState::Update(Map &m, NGridType &grid, GridInfo &info, const uint32 x, co
         }
     }
 }
+

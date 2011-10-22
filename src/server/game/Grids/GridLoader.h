@@ -31,6 +31,8 @@
   GridLoader manages the grid (both local and remote).
  */
 
+//I cannot see why this cannot be replaced by a Grid::Visit
+/*
 #include "Define.h"
 #include "Grid.h"
 #include "TypeContainerVisitor.h"
@@ -45,8 +47,7 @@ class GridLoader
 {
     public:
 
-        /** Loads the grid
-         */
+        // Loads the grid
         template<class LOADER>
             void Load(Grid<ACTIVE_OBJECT, WORLD_OBJECT_TYPES, GRID_OBJECT_TYPES> &grid, LOADER &loader)
         {
@@ -55,8 +56,7 @@ class GridLoader
             grid.UnlockGrid();
         }
 
-        /** Stop the grid
-         */
+        // Stop the grid
         template<class STOPER>
             void Stop(Grid<ACTIVE_OBJECT, WORLD_OBJECT_TYPES, GRID_OBJECT_TYPES> &grid, STOPER &stoper)
         {
@@ -64,8 +64,8 @@ class GridLoader
             stoper.Stop(grid);
             grid.UnlockGrid();
         }
-        /** Unloads the grid
-         */
+
+        // Unloads the grid
         template<class UNLOADER>
             void Unload(Grid<ACTIVE_OBJECT, WORLD_OBJECT_TYPES, GRID_OBJECT_TYPES> &grid, UNLOADER &unloader)
         {
@@ -74,4 +74,6 @@ class GridLoader
             grid.UnlockGrid();
         }
 };
+*/
 #endif
+
