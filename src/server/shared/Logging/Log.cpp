@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
@@ -139,7 +140,7 @@ void Log::Initialize()
         {
             bool m_gmlog_timestamp = ConfigMgr::GetBoolDefault("GmLogTimestamp", false);
 
-            size_t dot_pos = m_gmlog_filename_format.find_last_of(".");
+            size_t dot_pos = m_gmlog_filename_format.find_last_of('.');
             if (dot_pos!=m_gmlog_filename_format.npos)
             {
                 if (m_gmlog_timestamp)
@@ -978,7 +979,7 @@ void Log::outCharDump(const char * str, uint32 account_id, uint32 guid, const ch
         file = charLogfile;
     if (file)
     {
-        fprintf(file, "== START DUMP == (account: %u guid: %u name: %s )\n%s\n ==  END DUMP ==\n",
+        fprintf(file, "== START DUMP == (account: %u guid: %u name: %s )\n%s\n== END DUMP ==\n",
             account_id, guid, name, str);
         fflush(file);
         if (m_charLog_Dump_Separate)

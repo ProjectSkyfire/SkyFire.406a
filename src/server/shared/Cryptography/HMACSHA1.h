@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
@@ -19,7 +20,8 @@
 #ifndef _AUTH_HMAC_H
 #define _AUTH_HMAC_H
 
-#include "Common.h"
+#include "Define.h"
+#include <string>
 #include <openssl/hmac.h>
 #include <openssl/sha.h>
 
@@ -44,3 +46,4 @@ class HmacHash
         uint8 m_digest[SHA_DIGEST_LENGTH];
 };
 #endif
+

@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
@@ -19,9 +20,9 @@
 #ifndef _AUTH_SHA1_H
 #define _AUTH_SHA1_H
 
-#include "Common.h"
+#include "Define.h"
+#include <string>
 #include <openssl/sha.h>
-#include <openssl/crypto.h>
 
 class BigNumber;
 
@@ -48,3 +49,4 @@ class SHA1Hash
         uint8 mDigest[SHA_DIGEST_LENGTH];
 };
 #endif
+

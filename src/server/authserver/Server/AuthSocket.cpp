@@ -27,6 +27,7 @@
 #include "AuthCodes.h"
 #include "SHA1.h"
 
+#include <openssl/crypto.h>
 #include <openssl/md5.h>
 
 #define ChunkSize 2048

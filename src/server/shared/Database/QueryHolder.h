@@ -49,8 +49,9 @@ class SQLQueryHolderTask : public SQLOperation
 
     public:
         SQLQueryHolderTask(SQLQueryHolder *holder, QueryResultHolderFuture res)
-            : m_holder(holder), m_result(res) {};
+            : m_holder(holder), m_result(res){};
         bool Execute();
+
 };
 
 #endif

@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
@@ -146,12 +147,12 @@ inline float finiteAlways(float f) { return finite(f) ? f : 0.0f; }
 
 enum TimeConstants
 {
-    MINUTE = 60,
-    HOUR   = MINUTE*60,
-    DAY    = HOUR*24,
-    WEEK   = DAY*7,
-    MONTH  = DAY*30,
-    YEAR   = MONTH*12,
+    MINUTE          = 60,
+    HOUR            = MINUTE*60,
+    DAY             = HOUR*24,
+    WEEK            = DAY*7,
+    MONTH           = DAY*30,
+    YEAR            = MONTH*12,
     IN_MILLISECONDS = 1000
 };
 

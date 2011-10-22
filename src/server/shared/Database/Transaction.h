@@ -45,6 +45,7 @@ class Transaction
 
     private:
         bool _cleanedUp;
+
 };
 typedef ACE_Refcounted_Auto_Ptr<Transaction, ACE_Null_Mutex> SQLTransaction;
 
@@ -56,7 +57,7 @@ class TransactionTask : public SQLOperation
 
     public:
         TransactionTask(SQLTransaction trans) : m_trans(trans) {} ;
-        ~TransactionTask() {};
+        ~TransactionTask(){};
 
     protected:
         bool Execute();

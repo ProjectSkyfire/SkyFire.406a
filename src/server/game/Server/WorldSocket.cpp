@@ -17,20 +17,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <ace/Message_Block.h>
-#include <ace/OS_NS_string.h>
-#include <ace/OS_NS_unistd.h>
-#include <ace/os_include/arpa/os_inet.h>
-#include <ace/os_include/netinet/os_tcp.h>
-#include <ace/os_include/sys/os_types.h>
-#include <ace/os_include/sys/os_socket.h>
-#include <ace/OS_NS_string.h>
-#include <ace/Reactor.h>
-#include <ace/Auto_Ptr.h>
-
 #include "WorldSocket.h"
 #include "Common.h"
-
 #include "Util.h"
 #include "World.h"
 #include "WorldPacket.h"
@@ -45,6 +33,17 @@
 #include "Log.h"
 #include "WorldLog.h"
 #include "ScriptMgr.h"
+
+#include <ace/Message_Block.h>
+#include <ace/OS_NS_string.h>
+#include <ace/OS_NS_unistd.h>
+#include <ace/os_include/arpa/os_inet.h>
+#include <ace/os_include/netinet/os_tcp.h>
+#include <ace/os_include/sys/os_types.h>
+#include <ace/os_include/sys/os_socket.h>
+#include <ace/OS_NS_string.h>
+#include <ace/Reactor.h>
+#include <ace/Auto_Ptr.h>
 
 #if defined(__GNUC__)
 #pragma pack(1)
