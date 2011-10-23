@@ -51,4 +51,3 @@ class GridReference : public Reference<GridRefManager<OBJECT>, OBJECT>
         GridReference* next() { return (GridReference*)Reference<GridRefManager<OBJECT>, OBJECT>::next(); }
 };
 #endif
-

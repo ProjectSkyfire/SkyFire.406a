@@ -264,7 +264,6 @@ class SmartScript
                         mStoredEvents.erase(i);
                         return;
                     }
-
                 }
             }
         }
@@ -278,7 +277,6 @@ class SmartScript
                     {
                         return (*i);
                     }
-
                 }
             }
             SmartScriptHolder s;

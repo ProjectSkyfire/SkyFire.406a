@@ -43,4 +43,3 @@ class MapRefManager : public RefManager<Map, Player>
         const_iterator end() const  { return const_iterator(NULL); }
 };
 #endif
-

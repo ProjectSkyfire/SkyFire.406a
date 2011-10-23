@@ -137,7 +137,7 @@ void WorldSession::HandleGuildRosterOpcode(WorldPacket& recvPacket)
 
     recvPacket.read_skip<uint64>(); // Guild guid, not used
     recvPacket.read_skip<uint64>(); // player guid, not used
-    
+
     if (Guild* guild = _GetPlayerGuild(this))
         guild->HandleRoster(this);
 }

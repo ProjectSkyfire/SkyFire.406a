@@ -585,7 +585,6 @@ bool SmartAIMgr::IsEventValid(SmartScriptHolder& e)
             if (!IsSpellValid(e, e.action.castCreatureOrGO.spell)) return false;
             break;
 
-
         case SMART_ACTION_SET_EVENT_PHASE:
             if (e.action.setEventPhase.phase >= SMART_EVENT_PHASE_MAX)
             {

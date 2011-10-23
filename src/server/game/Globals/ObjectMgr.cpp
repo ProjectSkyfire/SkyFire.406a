@@ -1585,8 +1585,8 @@ void ObjectMgr::RemoveCreatureFromGrid(uint32 guid, CreatureData const* data)
     {
         if (mask & 1)
         {
-			CellCoord cellCoord = Trinity::ComputeCellCoord(data->posX, data->posY);
-			uint32 cell_id = (cellCoord.y_coord*TOTAL_NUMBER_OF_CELLS_PER_MAP) + cellCoord.x_coord;
+            CellCoord cellCoord = Trinity::ComputeCellCoord(data->posX, data->posY);
+            uint32 cell_id = (cellCoord.y_coord*TOTAL_NUMBER_OF_CELLS_PER_MAP) + cellCoord.x_coord;
 
             CellObjectGuids& cell_guids = mMapObjectGuids[MAKE_PAIR32(data->mapid, i)][cell_id];
             cell_guids.creatures.erase(guid);
@@ -1896,8 +1896,8 @@ void ObjectMgr::RemoveGameobjectFromGrid(uint32 guid, GameObjectData const* data
     {
         if (mask & 1)
         {
-			CellCoord cellCoord = Trinity::ComputeCellCoord(data->posX, data->posY);
-			uint32 cell_id = (cellCoord.y_coord*TOTAL_NUMBER_OF_CELLS_PER_MAP) + cellCoord.x_coord;
+            CellCoord cellCoord = Trinity::ComputeCellCoord(data->posX, data->posY);
+            uint32 cell_id = (cellCoord.y_coord*TOTAL_NUMBER_OF_CELLS_PER_MAP) + cellCoord.x_coord;
 
             CellObjectGuids& cell_guids = mMapObjectGuids[MAKE_PAIR32(data->mapid, i)][cell_id];
             cell_guids.gameobjects.erase(guid);
