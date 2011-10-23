@@ -55,11 +55,11 @@ public:
             creature->ApplySpellImmune(0, IMMUNITY_DAMAGE, SPELL_SCHOOL_MASK_MAGIC, true);
         }
 
-        void Reset() {}
+        void Reset(){}
 
-        void EnterCombat(Unit* /*who*/) {}
+        void EnterCombat(Unit* /*who*/){}
 
-        void AttackStart(Unit* /*who*/) {}
+        void AttackStart(Unit* /*who*/){}
 
         void MoveInLineOfSight(Unit* who)
         {
@@ -69,6 +69,8 @@ public:
             if (!me->IsWithinDist(who, 65.0f, false))
                 return;
 
+            Player* player = who->GetCharmerOrOwnerPlayerOrPlayerItself();
+            
             // If player has Disguise aura for quest A Meeting With The Magister or An Audience With The Arcanist, do not teleport it away but let it pass
             if (!player || player->isGameMaster() || player->IsBeingTeleported() || player->HasAura(70973) || player->HasAura(70971))
                 return;
@@ -104,7 +106,7 @@ public:
             return;
         }
 
-        void UpdateAI(const uint32 /*diff*/) {}
+        void UpdateAI(const uint32 /*diff*/){}
     };
 
     CreatureAI* GetAI(Creature* creature) const
