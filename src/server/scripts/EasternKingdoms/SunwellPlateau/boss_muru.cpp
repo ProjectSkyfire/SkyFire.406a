@@ -1,5 +1,4 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -86,8 +85,8 @@ float DarkFiends[8][4] =
     {1801.98f,   633.62f,    69.74f,    5.71f},
     {1830.88f,   629.99f,    69.73f,    3.52f},
     {1800.38f,   621.41f,    69.74f,    0.22f},
-    {1808.3f ,   612.45f,    69.73f,    1.02f},
-    {1823.9f ,   639.69f,    69.74f,    4.12f},
+    {1808.3f,   612.45f,    69.73f,    1.02f},
+    {1823.9f,   639.69f,    69.74f,    4.12f},
     {1811.85f,   640.46f,    69.73f,    4.97f}
 };
 
@@ -96,7 +95,7 @@ float Humanoides[6][5] =
     {CREATURE_FURY_MAGE, 1780.16f,    666.83f,    71.19f,    5.21f},
     {CREATURE_FURY_MAGE, 1847.93f,    600.30f,    71.30f,    2.57f},
     {CREATURE_BERSERKER, 1779.97f,    660.64f,    71.19f,    5.28f},
-    {CREATURE_BERSERKER, 1786.2f ,    661.01f,    71.19f,    4.51f},
+    {CREATURE_BERSERKER, 1786.2f,    661.01f,    71.19f,    4.51f},
     {CREATURE_BERSERKER, 1845.17f,    602.63f,    71.28f,    2.43f},
     {CREATURE_BERSERKER, 1842.91f,    599.93f,    71.23f,    2.44f}
 };
@@ -114,9 +113,9 @@ public:
 
     struct boss_entropiusAI : public ScriptedAI
     {
-        boss_entropiusAI(Creature* creature) : ScriptedAI(creature), Summons(me)
+        boss_entropiusAI(Creature* c) : ScriptedAI(c), Summons(me)
         {
-            instance = creature->GetInstanceScript();
+            instance = c->GetInstanceScript();
         }
 
         InstanceScript* instance;
@@ -199,6 +198,7 @@ public:
             DoMeleeAttackIfReady();
         }
     };
+
 };
 
 class boss_muru : public CreatureScript
@@ -213,9 +213,9 @@ public:
 
     struct boss_muruAI : public Scripted_NoMovementAI
     {
-        boss_muruAI(Creature* creature) : Scripted_NoMovementAI(creature), Summons(me)
+        boss_muruAI(Creature* c) : Scripted_NoMovementAI(c), Summons(me)
         {
-            instance = creature->GetInstanceScript();
+            instance = c->GetInstanceScript();
         }
 
         InstanceScript* instance;
@@ -363,6 +363,7 @@ public:
             }
         }
     };
+
 };
 
 class npc_muru_portal : public CreatureScript
@@ -377,9 +378,9 @@ public:
 
     struct npc_muru_portalAI : public Scripted_NoMovementAI
     {
-        npc_muru_portalAI(Creature* creature) : Scripted_NoMovementAI(creature), Summons(me)
+        npc_muru_portalAI(Creature* c) : Scripted_NoMovementAI(c), Summons(me)
         {
-            instance = creature->GetInstanceScript();
+            instance = c->GetInstanceScript();
         }
 
         InstanceScript* instance;
@@ -446,6 +447,7 @@ public:
             } else SummonTimer -= diff;
         }
     };
+
 };
 
 class npc_dark_fiend : public CreatureScript
@@ -460,7 +462,7 @@ public:
 
     struct npc_dark_fiendAI : public ScriptedAI
     {
-        npc_dark_fiendAI(Creature* creature) : ScriptedAI(creature) {}
+        npc_dark_fiendAI(Creature* c) : ScriptedAI(c) {}
 
         uint32 WaitTimer;
         bool InAction;
@@ -497,6 +499,7 @@ public:
                 }
                 else
                 {
+
                     if (me->IsWithinDist(me->getVictim(), 5))
                     {
                         DoCastAOE(SPELL_DARKFIEND_AOE, false);
@@ -507,6 +510,7 @@ public:
             } else WaitTimer -= diff;
         }
     };
+
 };
 
 class npc_void_sentinel : public CreatureScript
@@ -521,7 +525,7 @@ public:
 
     struct npc_void_sentinelAI : public ScriptedAI
     {
-        npc_void_sentinelAI(Creature* creature) : ScriptedAI(creature) {}
+        npc_void_sentinelAI(Creature* c) : ScriptedAI(c){}
 
         uint32 PulseTimer;
         uint32 VoidBlastTimer;
@@ -562,6 +566,7 @@ public:
             DoMeleeAttackIfReady();
         }
     };
+
 };
 
 class npc_blackhole : public CreatureScript
@@ -576,9 +581,9 @@ public:
 
     struct npc_blackholeAI : public ScriptedAI
     {
-        npc_blackholeAI(Creature* creature) : ScriptedAI(creature)
+        npc_blackholeAI(Creature* c) : ScriptedAI(c)
         {
-            instance = creature->GetInstanceScript();
+            instance = c->GetInstanceScript();
         }
 
         InstanceScript* instance;
@@ -640,6 +645,7 @@ public:
             else DespawnTimer -= diff;
         }
     };
+
 };
 
 void AddSC_boss_muru()

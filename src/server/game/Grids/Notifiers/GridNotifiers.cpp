@@ -57,9 +57,9 @@ VisibleNotifier::SendToSelf()
 
         if (IS_PLAYER_GUID(*it))
         {
-            Player* player = ObjectAccessor::FindPlayer(*it);
-            if (player && player->IsInWorld() && !player->isNeedNotify(NOTIFY_VISIBILITY_CHANGED))
-                player->UpdateVisibilityOf(&i_player);
+            Player* plr = ObjectAccessor::FindPlayer(*it);
+            if (plr && plr->IsInWorld() && !plr->isNeedNotify(NOTIFY_VISIBILITY_CHANGED))
+                plr->UpdateVisibilityOf(&i_player);
         }
     }
 
@@ -127,16 +127,16 @@ void PlayerRelocationNotifier::Visit(PlayerMapType &m)
 {
     for (PlayerMapType::iterator iter=m.begin(); iter != m.end(); ++iter)
     {
-        Player* player = iter->getSource();
+        Player* plr = iter->getSource();
 
-        vis_guids.erase(player->GetGUID());
+        vis_guids.erase(plr->GetGUID());
 
-        i_player.UpdateVisibilityOf(player, i_data, i_visibleNow);
+        i_player.UpdateVisibilityOf(plr, i_data, i_visibleNow);
 
-        if (player->m_seer->isNeedNotify(NOTIFY_VISIBILITY_CHANGED))
+        if (plr->m_seer->isNeedNotify(NOTIFY_VISIBILITY_CHANGED))
             continue;
 
-        player->UpdateVisibilityOf(&i_player);
+        plr->UpdateVisibilityOf(&i_player);
     }
 }
 
@@ -161,12 +161,12 @@ void CreatureRelocationNotifier::Visit(PlayerMapType &m)
 {
     for (PlayerMapType::iterator iter=m.begin(); iter != m.end(); ++iter)
     {
-        Player* player = iter->getSource();
+        Player* pl = iter->getSource();
 
-        if (!player->m_seer->isNeedNotify(NOTIFY_VISIBILITY_CHANGED))
-            player->UpdateVisibilityOf(&i_creature);
+        if (!pl->m_seer->isNeedNotify(NOTIFY_VISIBILITY_CHANGED))
+            pl->UpdateVisibilityOf(&i_creature);
 
-        CreatureUnitRelocationWorker(&i_creature, player);
+        CreatureUnitRelocationWorker(&i_creature, pl);
     }
 }
 
@@ -216,7 +216,7 @@ void DelayedUnitRelocation::Visit(PlayerMapType &m)
         if (player != viewPoint && !viewPoint->IsPositionValid())
             continue;
 
-        CellPair pair2(Trinity::ComputeCellPair(viewPoint->GetPositionX(), viewPoint->GetPositionY()));
+        CellCoord pair2(Trinity::ComputeCellCoord(viewPoint->GetPositionX(), viewPoint->GetPositionY()));
         Cell cell2(pair2);
         //cell.SetNoCreate(); need load cells around viewPoint or player, that's why its commented
 
@@ -313,11 +313,11 @@ void MessageDistDeliverer::Visit(DynamicObjectMapType &m)
 
 /*
 void
-MessageDistDeliverer::VisitObject(Player* player)
+MessageDistDeliverer::VisitObject(Player* plr)
 {
-    if (!i_ownTeamOnly || (i_source.GetTypeId() == TYPEID_PLAYER && player->GetTeam() == ((Player&)i_source).GetTeam()))
+    if (!i_ownTeamOnly || (i_source.GetTypeId() == TYPEID_PLAYER && plr->GetTeam() == ((Player&)i_source).GetTeam()))
     {
-        SendPacket(player);
+        SendPacket(plr);
     }
 }
 */

@@ -44,7 +44,7 @@ namespace Trinity
         std::set<Unit*> i_visibleNow;
         Player::ClientGUIDs vis_guids;
 
-        VisibleNotifier(Player &player) : i_player(player), i_data(player.GetMapId()), vis_guids(player.m_clientGUIDs) { }
+        VisibleNotifier(Player &player) : i_player(player), i_data(player.GetMapId()), vis_guids(player.m_clientGUIDs) {}
         template<class T> void Visit(GridRefManager<T> &m);
         void SendToSelf(void);
     };
@@ -62,7 +62,7 @@ namespace Trinity
 
     struct PlayerRelocationNotifier : public VisibleNotifier
     {
-        PlayerRelocationNotifier(Player &player) : VisibleNotifier(player) {}
+        PlayerRelocationNotifier(Player &pl) : VisibleNotifier(pl) {}
 
         template<class T> void Visit(GridRefManager<T> &m) { VisibleNotifier::Visit(m); }
         void Visit(CreatureMapType &);
@@ -82,9 +82,9 @@ namespace Trinity
     {
         Map &i_map;
         Cell &cell;
-        CellPair &p;
+        CellCoord &p;
         const float i_radius;
-        DelayedUnitRelocation(Cell &c, CellPair &pair, Map &map, float radius) :
+        DelayedUnitRelocation(Cell &c, CellCoord &pair, Map &map, float radius) :
             i_map(map), cell(c), p(pair), i_radius(radius) {}
         template<class T> void Visit(GridRefManager<T> &) {}
         void Visit(CreatureMapType &);
@@ -95,7 +95,7 @@ namespace Trinity
     {
         Unit &i_unit;
         bool isCreature;
-        explicit AIRelocationNotifier(Unit &unit) : i_unit(unit), isCreature(unit.GetTypeId() == TYPEID_UNIT) {}
+        explicit AIRelocationNotifier(Unit &unit) : i_unit(unit), isCreature(unit.GetTypeId() == TYPEID_UNIT)  {}
         template<class T> void Visit(GridRefManager<T> &) {}
         void Visit(CreatureMapType &);
     };
@@ -138,16 +138,16 @@ namespace Trinity
         void Visit(DynamicObjectMapType &m);
         template<class SKIP> void Visit(GridRefManager<SKIP> &) {}
 
-        void SendPacket(Player* player)
+        void SendPacket(Player* plr)
         {
             // never send packet to self
-            if (player == i_source || (team && player->GetTeam() != team) || skipped_receiver == player)
+            if (plr == i_source || (team && plr->GetTeam() != team) || skipped_receiver == plr)
                 return;
 
-            if (!player->HaveAtClient(i_source))
+            if (!plr->HaveAtClient(i_source))
                 return;
 
-            if (WorldSession* session = player->GetSession())
+            if (WorldSession* session = plr->GetSession())
                 session->SendPacket(i_message);
         }
     };

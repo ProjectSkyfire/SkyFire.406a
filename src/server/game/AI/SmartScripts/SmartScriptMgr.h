@@ -1,7 +1,6 @@
 /*
  * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -514,11 +513,6 @@ struct SmartAction
 
         struct
         {
-            uint32 withEmote;
-        } flee;
-
-        struct
-        {
             uint32 emote1;
             uint32 emote2;
             uint32 emote3;
@@ -860,6 +854,11 @@ struct SmartAction
 
         struct
         {
+            uint32 withEmote;
+        } flee;
+
+        struct
+        {
             uint32 GoRespawnTime;
         } RespawnTarget;
 
@@ -1195,9 +1194,9 @@ typedef UNORDERED_MAP<uint32, ObjectList*> ObjectListMap;
 class SmartWaypointMgr
 {
     friend class ACE_Singleton<SmartWaypointMgr, ACE_Null_Mutex>;
-    SmartWaypointMgr() {};
+    SmartWaypointMgr(){};
     public:
-        ~SmartWaypointMgr() {};
+        ~SmartWaypointMgr(){};
 
         void LoadFromDB();
 
@@ -1221,9 +1220,9 @@ typedef UNORDERED_MAP<int32, SmartAIEventList> SmartAIEventMap;
 class SmartAIMgr
 {
     friend class ACE_Singleton<SmartAIMgr, ACE_Null_Mutex>;
-    SmartAIMgr() {};
+    SmartAIMgr(){};
     public:
-        ~SmartAIMgr() {};
+        ~SmartAIMgr(){};
 
         void LoadSmartAIFromDB();
 

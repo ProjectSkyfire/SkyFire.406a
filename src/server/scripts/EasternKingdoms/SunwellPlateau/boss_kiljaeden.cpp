@@ -1,5 +1,4 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -252,9 +251,9 @@ public:
 
     struct boss_kalecgos_kjAI : public ScriptedAI
     {
-        boss_kalecgos_kjAI(Creature* creature) : ScriptedAI(creature)
+        boss_kalecgos_kjAI(Creature* c) : ScriptedAI(c)
         {
-            instance = creature->GetInstanceScript();
+            instance = c->GetInstanceScript();
         }
 
         InstanceScript* instance;
@@ -367,6 +366,7 @@ public:
             }
         }
     };
+
 };
 
 class go_orb_of_the_blue_flight : public GameObjectScript
@@ -390,6 +390,7 @@ public:
         }
         return true;
     }
+
 };
 
 //AI for Kil'jaeden Event Controller
@@ -405,9 +406,9 @@ public:
 
     struct mob_kiljaeden_controllerAI : public Scripted_NoMovementAI
     {
-        mob_kiljaeden_controllerAI(Creature* creature) : Scripted_NoMovementAI(creature), summons(me)
+        mob_kiljaeden_controllerAI(Creature* c) : Scripted_NoMovementAI(c), summons(me)
         {
-            instance = creature->GetInstanceScript();
+            instance = c->GetInstanceScript();
         }
 
         InstanceScript* instance;
@@ -489,6 +490,7 @@ public:
             }
         }
     };
+
 };
 
 //AI for Kil'jaeden
@@ -504,9 +506,9 @@ public:
 
     struct boss_kiljaedenAI : public Scripted_NoMovementAI
     {
-        boss_kiljaedenAI(Creature* creature) : Scripted_NoMovementAI(creature), summons(me)
+        boss_kiljaedenAI(Creature* c) : Scripted_NoMovementAI(c), summons(me)
         {
-            instance = creature->GetInstanceScript();
+            instance = c->GetInstanceScript();
         }
 
         InstanceScript* instance;
@@ -902,6 +904,7 @@ public:
             }
         }
     };
+
 };
 
 //AI for Hand of the Deceiver
@@ -917,9 +920,9 @@ public:
 
     struct mob_hand_of_the_deceiverAI : public ScriptedAI
     {
-        mob_hand_of_the_deceiverAI(Creature* creature) : ScriptedAI(creature)
+        mob_hand_of_the_deceiverAI(Creature* c) : ScriptedAI(c)
         {
-            instance = creature->GetInstanceScript();
+            instance = c->GetInstanceScript();
         }
 
         InstanceScript* instance;
@@ -986,14 +989,14 @@ public:
             // Felfire Portal - Creatres a portal, that spawns Volatile Felfire Fiends, which do suicide bombing.
             if (FelfirePortalTimer <= diff)
             {
-                if (Creature* portal = DoSpawnCreature(CREATURE_FELFIRE_PORTAL, 0, 0, 0, 0, TEMPSUMMON_TIMED_DESPAWN, 20000))
+                if (Creature* pPortal = DoSpawnCreature(CREATURE_FELFIRE_PORTAL, 0, 0, 0, 0, TEMPSUMMON_TIMED_DESPAWN, 20000))
                 {
                     std::list<HostileReference*>::iterator itr;
                     for (itr = me->getThreatManager().getThreatList().begin(); itr != me->getThreatManager().getThreatList().end(); ++itr)
                     {
                         Unit* unit = Unit::GetUnit(*me, (*itr)->getUnitGuid());
                         if (unit)
-                            portal->AddThreat(unit, 1.0f);
+                            pPortal->AddThreat(unit, 1.0f);
                     }
                 }
                 FelfirePortalTimer = 20000;
@@ -1002,6 +1005,7 @@ public:
             DoMeleeAttackIfReady();
         }
     };
+
 };
 
 //AI for Felfire Portal
@@ -1017,7 +1021,7 @@ public:
 
     struct mob_felfire_portalAI : public Scripted_NoMovementAI
     {
-        mob_felfire_portalAI(Creature* creature) : Scripted_NoMovementAI(creature) {}
+        mob_felfire_portalAI(Creature* c) : Scripted_NoMovementAI(c) {}
 
         uint32 uiSpawnFiendTimer;
 
@@ -1046,6 +1050,7 @@ public:
             } else uiSpawnFiendTimer -= diff;
         }
     };
+
 };
 
 //AI for Felfire Fiend
@@ -1061,7 +1066,7 @@ public:
 
     struct mob_volatile_felfire_fiendAI : public ScriptedAI
     {
-        mob_volatile_felfire_fiendAI(Creature* creature) : ScriptedAI(creature) {}
+        mob_volatile_felfire_fiendAI(Creature* c) : ScriptedAI(c) {}
 
         uint32 uiExplodeTimer;
 
@@ -1103,6 +1108,7 @@ public:
             }
         }
     };
+
 };
 
 //AI for Armageddon target
@@ -1118,20 +1124,20 @@ public:
 
     struct mob_armageddonAI : public Scripted_NoMovementAI
     {
-        mob_armageddonAI(Creature* creature) : Scripted_NoMovementAI(creature) {}
+        mob_armageddonAI(Creature* c) : Scripted_NoMovementAI(c) {}
 
         uint8 spell;
-        uint32 Timer;
+        uint32 uiTimer;
 
         void Reset()
         {
             spell = 0;
-            Timer = 0;
+            uiTimer = 0;
         }
 
         void UpdateAI(const uint32 diff)
         {
-            if (Timer <= diff)
+            if (uiTimer <= diff)
             {
                 switch (spell)
                 {
@@ -1141,22 +1147,23 @@ public:
                         break;
                     case 1:
                         DoCast(me, SPELL_ARMAGEDDON_VISUAL2, true);
-                        Timer = 9000;
+                        uiTimer = 9000;
                         ++spell;
                         break;
                     case 2:
                         DoCast(me, SPELL_ARMAGEDDON_TRIGGER, true);
                         ++spell;
-                        Timer = 5000;
+                        uiTimer = 5000;
                         break;
                     case 3:
                         me->Kill(me);
                         me->RemoveCorpse();
                         break;
                 }
-            } else Timer -=diff;
+            } else uiTimer -=diff;
         }
     };
+
 };
 
 //AI for Shield Orbs
@@ -1172,16 +1179,16 @@ public:
 
     struct mob_shield_orbAI : public ScriptedAI
     {
-        mob_shield_orbAI(Creature* creature) : ScriptedAI(creature)
+        mob_shield_orbAI(Creature* c) : ScriptedAI(c)
         {
-            instance = creature->GetInstanceScript();
+            instance = c->GetInstanceScript();
         }
 
         InstanceScript* instance;
 
         bool bPointReached;
         bool bClockwise;
-        uint32 Timer;
+        uint32 uiTimer;
         uint32 uiCheckTimer;
         float x, y, r, c, mx, my;
 
@@ -1189,7 +1196,7 @@ public:
         {
             me->AddUnitMovementFlag(MOVEMENTFLAG_LEVITATING);
             bPointReached = true;
-            Timer = urand(500, 1000);
+            uiTimer = urand(500, 1000);
             uiCheckTimer = 1000;
             r = 17;
             c = 0;
@@ -1228,12 +1235,12 @@ public:
                 else uiCheckTimer -= diff;
             }
 
-            if (Timer <= diff)
+            if (uiTimer <= diff)
             {
                 if (Unit* random = Unit::GetUnit(*me, instance ? instance->GetData64(DATA_PLAYER_GUID) : 0))
                     DoCast(random, SPELL_SHADOW_BOLT, false);
-                Timer = urand(500, 1000);
-            } else Timer -= diff;
+                uiTimer = urand(500, 1000);
+            } else uiTimer -= diff;
         }
 
         void MovementInform(uint32 type, uint32 /*id*/)
@@ -1244,6 +1251,7 @@ public:
             bPointReached = true;
         }
     };
+
 };
 
 //AI for Sinister Reflection
@@ -1259,16 +1267,16 @@ public:
 
     struct mob_sinster_reflectionAI : public ScriptedAI
     {
-        mob_sinster_reflectionAI(Creature* creature) : ScriptedAI(creature) {}
+        mob_sinster_reflectionAI(Creature* c) : ScriptedAI(c) {}
 
         uint8 victimClass;
-        uint32 Timer[3];
+        uint32 uiTimer[3];
 
         void Reset()
         {
-            Timer[0] = 0;
-            Timer[1] = 0;
-            Timer[2] = 0;
+            uiTimer[0] = 0;
+            uiTimer[1] = 0;
+            uiTimer[2] = 0;
             victimClass = 0;
         }
 
@@ -1308,111 +1316,112 @@ public:
 
             switch (victimClass) {
                 case CLASS_DRUID:
-                    if (Timer[1] <= diff)
+                    if (uiTimer[1] <= diff)
                     {
                         DoCast(me->getVictim(), SPELL_SR_MOONFIRE, false);
-                        Timer[1] = urand(2000, 4000);
+                        uiTimer[1] = urand(2000, 4000);
                     }
                     DoMeleeAttackIfReady();
                     break;
                 case CLASS_HUNTER:
-                    if (Timer[1] <= diff)
+                    if (uiTimer[1] <= diff)
                     {
                         DoCast(me->getVictim(), SPELL_SR_MULTI_SHOT, false);
-                        Timer[1] = urand(8000, 10000);
+                        uiTimer[1] = urand(8000, 10000);
                     }
-                    if (Timer[2] <= diff)
+                    if (uiTimer[2] <= diff)
                     {
                         DoCast(me->getVictim(), SPELL_SR_SHOOT, false);
-                        Timer[2] = urand(4000, 6000);
+                        uiTimer[2] = urand(4000, 6000);
                     }
                     if (me->IsWithinMeleeRange(me->getVictim(), 6))
                     {
-                        if (Timer[0] <= diff)
+                        if (uiTimer[0] <= diff)
                         {
                             DoCast(me->getVictim(), SPELL_SR_MULTI_SHOT, false);
-                            Timer[0] = urand(6000, 8000);
+                            uiTimer[0] = urand(6000, 8000);
                         }
                         DoMeleeAttackIfReady();
                     }
                     break;
                 case CLASS_MAGE:
-                    if (Timer[1] <= diff)
+                    if (uiTimer[1] <= diff)
                     {
                         DoCast(me->getVictim(), SPELL_SR_FIREBALL, false);
-                        Timer[1] = urand(2000, 4000);
+                        uiTimer[1] = urand(2000, 4000);
                     }
                     DoMeleeAttackIfReady();
                     break;
                 case CLASS_WARLOCK:
-                    if (Timer[1] <= diff)
+                    if (uiTimer[1] <= diff)
                     {
                         DoCast(me->getVictim(), SPELL_SR_SHADOW_BOLT, false);
-                        Timer[1] = urand(3000, 5000);
+                        uiTimer[1] = urand(3000, 5000);
                     }
-                    if (Timer[2] <= diff)
+                    if (uiTimer[2] <= diff)
                     {
                         DoCast(SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true), SPELL_SR_CURSE_OF_AGONY, true);
-                        Timer[2] = urand(2000, 4000);
+                        uiTimer[2] = urand(2000, 4000);
                     }
                     DoMeleeAttackIfReady();
                     break;
                 case CLASS_WARRIOR:
-                    if (Timer[1] <= diff)
+                    if (uiTimer[1] <= diff)
                     {
                         DoCast(me->getVictim(), SPELL_SR_WHIRLWIND, false);
-                        Timer[1] = urand(9000, 11000);
+                        uiTimer[1] = urand(9000, 11000);
                     }
                     DoMeleeAttackIfReady();
                     break;
                 case CLASS_PALADIN:
-                    if (Timer[1] <= diff)
+                    if (uiTimer[1] <= diff)
                     {
                         DoCast(me->getVictim(), SPELL_SR_HAMMER_OF_JUSTICE, false);
-                        Timer[1] = urand(6000, 8000);
+                        uiTimer[1] = urand(6000, 8000);
                     }
-                    if (Timer[2] <= diff)
+                    if (uiTimer[2] <= diff)
                     {
                         DoCast(me->getVictim(), SPELL_SR_HOLY_SHOCK, false);
-                        Timer[2] = urand(2000, 4000);
+                        uiTimer[2] = urand(2000, 4000);
                     }
                     DoMeleeAttackIfReady();
                     break;
                 case CLASS_PRIEST:
-                    if (Timer[1] <= diff)
+                    if (uiTimer[1] <= diff)
                     {
                         DoCast(me->getVictim(), SPELL_SR_HOLY_SMITE, false);
-                        Timer[1] = urand(4000, 6000);
+                        uiTimer[1] = urand(4000, 6000);
                     }
-                    if (Timer[2] <= diff)
+                    if (uiTimer[2] <= diff)
                     {
                         DoCast(me, SPELL_SR_RENEW, false);
-                        Timer[2] = urand(6000, 8000);
+                        uiTimer[2] = urand(6000, 8000);
                     }
                     DoMeleeAttackIfReady();
                     break;
                 case CLASS_SHAMAN:
-                    if (Timer[1] <= diff)
+                    if (uiTimer[1] <= diff)
                     {
                         DoCast(me->getVictim(), SPELL_SR_EARTH_SHOCK, false);
-                        Timer[1] = urand(4000, 6000);
+                        uiTimer[1] = urand(4000, 6000);
                     }
                     DoMeleeAttackIfReady();
                     break;
                 case CLASS_ROGUE:
-                    if (Timer[1] <= diff)
+                    if (uiTimer[1] <= diff)
                     {
                         DoCast(me->getVictim(), SPELL_SR_HEMORRHAGE, true);
-                        Timer[1] = urand(4000, 6000);
+                        uiTimer[1] = urand(4000, 6000);
                     }
                     DoMeleeAttackIfReady();
                     break;
                 }
                 sLog->outDebug(LOG_FILTER_TSCR, "Sinister-Timer");
                 for (uint8 i = 0; i < 3; ++i)
-                    Timer[i] -= diff;
+                    uiTimer[i] -= diff;
             }
     };
+
 };
 
 void AddSC_boss_kiljaeden()

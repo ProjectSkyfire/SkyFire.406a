@@ -1,7 +1,6 @@
 /*
  * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -159,31 +158,29 @@ class SmartScript
 
             CellCoord p(Trinity::ComputeCellCoord(searchObject->GetPositionX(), searchObject->GetPositionY()));
             Cell cell(p);
-            cell.data.Part.reserved = ALL_DISTRICT;
 
             Trinity::GameObjectWithDbGUIDCheck goCheck(*searchObject, guid);
             Trinity::GameObjectSearcher<Trinity::GameObjectWithDbGUIDCheck> checker(searchObject, gameObject, goCheck);
 
             TypeContainerVisitor<Trinity::GameObjectSearcher<Trinity::GameObjectWithDbGUIDCheck>, GridTypeMapContainer > objectChecker(checker);
-            cell.Visit(p, objectChecker, *searchObject->GetMap());
+            cell.Visit(p, objectChecker, *searchObject->GetMap(), *searchObject, searchObject->GetGridActivationRange());
 
             return gameObject;
         }
 
         Creature* FindCreatureNear(WorldObject* searchObject, uint32 guid) const
         {
-            Creature* crea = NULL;
+            Creature* creature = NULL;
             CellCoord p(Trinity::ComputeCellCoord(searchObject->GetPositionX(), searchObject->GetPositionY()));
             Cell cell(p);
-            cell.data.Part.reserved = ALL_DISTRICT;
 
             Trinity::CreatureWithDbGUIDCheck target_check(searchObject, guid);
-            Trinity::CreatureSearcher<Trinity::CreatureWithDbGUIDCheck> checker(searchObject, crea, target_check);
+            Trinity::CreatureSearcher<Trinity::CreatureWithDbGUIDCheck> checker(searchObject, creature, target_check);
 
             TypeContainerVisitor<Trinity::CreatureSearcher <Trinity::CreatureWithDbGUIDCheck>, GridTypeMapContainer > unit_checker(checker);
-            cell.Visit(p, unit_checker, *searchObject->GetMap());
+            cell.Visit(p, unit_checker, *searchObject->GetMap(), *searchObject, searchObject->GetGridActivationRange());
 
-            return crea;
+            return creature;
         }
 
         ObjectListMap* mTargetStorage;
@@ -267,6 +264,7 @@ class SmartScript
                         mStoredEvents.erase(i);
                         return;
                     }
+
                 }
             }
         }
@@ -280,6 +278,7 @@ class SmartScript
                     {
                         return (*i);
                     }
+
                 }
             }
             SmartScriptHolder s;

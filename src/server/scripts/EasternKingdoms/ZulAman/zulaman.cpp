@@ -1,5 +1,4 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2006-2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
@@ -42,13 +41,17 @@ EndContentData */
 class npc_forest_frog : public CreatureScript
 {
     public:
-        npc_forest_frog() : CreatureScript("npc_forest_frog") {}
+
+        npc_forest_frog()
+            : CreatureScript("npc_forest_frog")
+        {
+        }
 
         struct npc_forest_frogAI : public ScriptedAI
         {
-            npc_forest_frogAI(Creature* creature) : ScriptedAI(creature)
+            npc_forest_frogAI(Creature* c) : ScriptedAI(c)
             {
-                instance = creature->GetInstanceScript();
+                instance = c->GetInstanceScript();
             }
 
             InstanceScript* instance;
@@ -117,11 +120,15 @@ static uint32 ChestEntry[] = {186648, 187021, 186672, 186667};
 class npc_zulaman_hostage : public CreatureScript
 {
     public:
-        npc_zulaman_hostage() : CreatureScript("npc_zulaman_hostage") {}
+
+        npc_zulaman_hostage()
+            : CreatureScript("npc_zulaman_hostage")
+        {
+        }
 
         struct npc_zulaman_hostageAI : public ScriptedAI
         {
-            npc_zulaman_hostageAI(Creature* creature) : ScriptedAI(creature) {IsLoot = false;}
+            npc_zulaman_hostageAI(Creature* c) : ScriptedAI(c) {IsLoot = false;}
             bool IsLoot;
             uint64 PlayerGUID;
             void Reset() {}
@@ -150,10 +157,10 @@ class npc_zulaman_hostage : public CreatureScript
             return true;
         }
 
-        bool OnGossipSelect(Player* player, Creature* creature, uint32 /*uiSender*/, uint32 Action)
+        bool OnGossipSelect(Player* player, Creature* creature, uint32 /*uiSender*/, uint32 uiAction)
         {
             player->PlayerTalkClass->ClearMenus();
-            if (Action == GOSSIP_ACTION_INFO_DEF + 1)
+            if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
                 player->CLOSE_GOSSIP_MENU();
 
             if (!creature->HasFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP))
@@ -186,3 +193,4 @@ void AddSC_zulaman()
     new npc_forest_frog();
     new npc_zulaman_hostage();
 }
+

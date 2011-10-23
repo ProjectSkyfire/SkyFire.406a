@@ -1,5 +1,4 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2006-2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
@@ -20,7 +19,7 @@
 /* ScriptData
 SDName: boss_Halazzi
 SD%Complete: 80
-SDComment: TODO: Move Defines2enums, add texts defines to db.
+SDComment:
 SDCategory: Zul'Aman
 EndScriptData */
 
@@ -28,28 +27,22 @@ EndScriptData */
 #include "zulaman.h"
 //#include "spell.h"
 
-#define YELL_AGGRO                     "Get on your knees and bow to da fang and claw!"
-#define SOUND_AGGRO                     12020
-
-#define YELL_SABER_ONE                 "You gonna leave in pieces!"
-#define YELL_SABER_TWO                 "Me gonna carve ya now!"
-#define YELL_SPLIT                     "Me gonna carve ya now!"
-#define SOUND_SPLIT                     12021
-
-#define YELL_MERGE                     "Spirit, come back to me!"
-#define SOUND_MERGE                     12022
-
-#define YELL_KILL_ONE                  "You cant fight the power!"
-#define SOUND_KILL_ONE                  12026
-
-#define YELL_KILL_TWO                  "You gonna fail!"
-#define SOUND_KILL_TWO                  12027
-
-#define YELL_DEATH                     "Chaga... choka'jinn."
-#define SOUND_DEATH                     12028
-
-#define YELL_BERSERK                   "Whatch you be doing? Pissin' yourselves..."
-#define SOUND_BERSERK                   12025
+#define YELL_AGGRO "Get on your knees and bow to da fang and claw!"
+#define SOUND_AGGRO                    12020
+#define YELL_SABER_ONE "You gonna leave in pieces!"
+#define YELL_SABER_TWO "Me gonna carve ya now!"
+#define YELL_SPLIT "Me gonna carve ya now!"
+#define SOUND_SPLIT                    12021
+#define YELL_MERGE "Spirit, come back to me!"
+#define SOUND_MERGE                    12022
+#define YELL_KILL_ONE "You cant fight the power!"
+#define SOUND_KILL_ONE                12026
+#define YELL_KILL_TWO "You gonna fail!"
+#define SOUND_KILL_TWO                12027
+#define YELL_DEATH "Chaga... choka'jinn."
+#define SOUND_DEATH                    12028
+#define YELL_BERSERK "Whatch you be doing? Pissin' yourselves..."
+#define SOUND_BERSERK                12025
 
 #define SPELL_DUAL_WIELD                29651
 #define SPELL_SABER_LASH                43267
@@ -71,24 +64,28 @@ EndScriptData */
 
 enum PhaseHalazzi
 {
-    PHASE_NONE       = 0,
-    PHASE_LYNX       = 1,
-    PHASE_SPLIT      = 2,
-    PHASE_HUMAN      = 3,
-    PHASE_MERGE      = 4,
-    PHASE_ENRAGE     = 5
+    PHASE_NONE = 0,
+    PHASE_LYNX = 1,
+    PHASE_SPLIT = 2,
+    PHASE_HUMAN = 3,
+    PHASE_MERGE = 4,
+    PHASE_ENRAGE = 5
 };
 
 class boss_halazzi : public CreatureScript
 {
     public:
-        boss_halazzi() : CreatureScript("boss_halazzi") {}
+
+        boss_halazzi()
+            : CreatureScript("boss_halazzi")
+        {
+        }
 
         struct boss_halazziAI : public ScriptedAI
         {
-            boss_halazziAI(Creature* creature) : ScriptedAI(creature)
+            boss_halazziAI(Creature* c) : ScriptedAI(c)
             {
-                instance = creature->GetInstanceScript();
+                instance = c->GetInstanceScript();
             }
 
             InstanceScript* instance;
@@ -99,6 +96,7 @@ class boss_halazzi : public CreatureScript
             uint32 TotemTimer;
             uint32 CheckTimer;
             uint32 BerserkTimer;
+
             uint32 TransformCount;
 
             PhaseHalazzi Phase;
@@ -110,9 +108,9 @@ class boss_halazzi : public CreatureScript
                 if (instance)
                     instance->SetData(DATA_HALAZZIEVENT, NOT_STARTED);
 
-                TransformCount  = 0;
-                BerserkTimer    = 600000;
-                CheckTimer      = 1000;
+                TransformCount = 0;
+                BerserkTimer = 600000;
+                CheckTimer = 1000;
 
                 DoCast(me, SPELL_DUAL_WIELD, true);
 
@@ -171,10 +169,10 @@ class boss_halazzi : public CreatureScript
                         Lynx->DisappearAndDie();
                     me->SetMaxHealth(600000);
                     me->SetHealth(600000 - 150000 * TransformCount);
-                    FrenzyTimer     = 16000;
-                    SaberlashTimer  = 20000;
-                    ShockTimer      = 10000;
-                    TotemTimer      = 12000;
+                    FrenzyTimer = 16000;
+                    SaberlashTimer = 20000;
+                    ShockTimer = 10000;
+                    TotemTimer = 12000;
                     break;
                 case PHASE_SPLIT:
                     me->MonsterYell(YELL_SPLIT, LANG_UNIVERSAL, 0);
@@ -186,8 +184,8 @@ class boss_halazzi : public CreatureScript
                     DoSpawnCreature(MOB_SPIRIT_LYNX, 5, 5, 0, 0, TEMPSUMMON_CORPSE_DESPAWN, 0);
                     me->SetMaxHealth(400000);
                     me->SetHealth(400000);
-                    ShockTimer   = 10000;
-                    TotemTimer   = 12000;
+                    ShockTimer = 10000;
+                    TotemTimer = 12000;
                     break;
                 case PHASE_MERGE:
                     if (Unit* pLynx = Unit::GetUnit(*me, LynxGUID))
@@ -346,18 +344,22 @@ class boss_halazzi : public CreatureScript
 class mob_halazzi_lynx : public CreatureScript
 {
     public:
-        mob_halazzi_lynx() : CreatureScript("mob_halazzi_lynx") {}
+
+        mob_halazzi_lynx()
+            : CreatureScript("mob_halazzi_lynx")
+        {
+        }
 
         struct mob_halazzi_lynxAI : public ScriptedAI
         {
-            mob_halazzi_lynxAI(Creature* creature) : ScriptedAI(creature) {}
+            mob_halazzi_lynxAI(Creature* c) : ScriptedAI(c) {}
 
             uint32 FrenzyTimer;
             uint32 shredder_timer;
 
             void Reset()
             {
-                FrenzyTimer    = urand(30000, 50000);  //frenzy every 30-50 seconds
+                FrenzyTimer = urand(30000, 50000);  //frenzy every 30-50 seconds
                 shredder_timer = 4000;
             }
 
@@ -394,6 +396,7 @@ class mob_halazzi_lynx : public CreatureScript
 
                 DoMeleeAttackIfReady();
             }
+
         };
 
         CreatureAI* GetAI(Creature* creature) const
@@ -407,3 +410,4 @@ void AddSC_boss_halazzi()
     new boss_halazzi();
     new mob_halazzi_lynx();
 }
+

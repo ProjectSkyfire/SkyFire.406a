@@ -1,5 +1,4 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2006-2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
@@ -116,9 +115,9 @@ public:
 
     struct boss_kalecgosAI : public ScriptedAI
     {
-        boss_kalecgosAI(Creature* creature) : ScriptedAI(creature)
+        boss_kalecgosAI(Creature* c) : ScriptedAI(c)
         {
-            instance = creature->GetInstanceScript();
+            instance = c->GetInstanceScript();
             SathGUID = 0;
             DoorGUID = 0;
             bJustReset = false;
@@ -304,9 +303,9 @@ public:
 
                 if (SpectralBlastTimer <= diff)
                 {
-                    std::list<HostileReference*> &_threatlist = me->getThreatManager().getThreatList();
+                    std::list<HostileReference*> &m_threatlist = me->getThreatManager().getThreatList();
                     std::list<Unit*> targetList;
-                    for (std::list<HostileReference*>::const_iterator itr = _threatlist.begin(); itr!= _threatlist.end(); ++itr)
+                    for (std::list<HostileReference*>::const_iterator itr = m_threatlist.begin(); itr!= m_threatlist.end(); ++itr)
                         if ((*itr)->getTarget() && (*itr)->getTarget()->GetTypeId() == TYPEID_PLAYER && (*itr)->getTarget()->GetGUID() != me->getVictim()->GetGUID() && !(*itr)->getTarget()->HasAura(AURA_SPECTRAL_EXHAUSTION) && (*itr)->getTarget()->GetPositionZ() > me->GetPositionZ()-5)
                             targetList.push_back((*itr)->getTarget());
                     if (targetList.empty())
@@ -431,6 +430,7 @@ public:
             }
         }
     };
+
 };
 
 class boss_kalec : public CreatureScript
@@ -456,9 +456,9 @@ public:
 
         bool isEnraged; // if demon is enraged
 
-        boss_kalecAI(Creature* creature) : ScriptedAI(creature)
+        boss_kalecAI(Creature* c) : ScriptedAI(c)
         {
-            instance = creature->GetInstanceScript();
+            instance = c->GetInstanceScript();
         }
 
         void Reset()
@@ -532,6 +532,7 @@ public:
             DoMeleeAttackIfReady();
         }
     };
+
 };
 
 class kalecgos_teleporter : public GameObjectScript
@@ -559,6 +560,7 @@ public:
             player->CastSpell(player, SPELL_TELEPORT_SPECTRAL, true);
         return true;
     }
+
 };
 
 class boss_sathrovarr : public CreatureScript
@@ -573,9 +575,9 @@ public:
 
     struct boss_sathrovarrAI : public ScriptedAI
     {
-        boss_sathrovarrAI(Creature* creature) : ScriptedAI(creature)
+        boss_sathrovarrAI(Creature* c) : ScriptedAI(c)
         {
-            instance = creature->GetInstanceScript();
+            instance = c->GetInstanceScript();
             KalecGUID = 0;
             KalecgosGUID = 0;
         }
@@ -794,6 +796,7 @@ public:
             DoMeleeAttackIfReady();
         }
     };
+
 };
 
 void AddSC_boss_kalecgos()

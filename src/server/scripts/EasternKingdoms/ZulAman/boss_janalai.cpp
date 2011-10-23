@@ -1,5 +1,4 @@
- /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
+/*
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2006-2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
@@ -106,13 +105,17 @@ float hatcherway[2][5][3] =
 class boss_janalai : public CreatureScript
 {
     public:
-        boss_janalai() : CreatureScript("boss_janalai") {}
+
+        boss_janalai()
+            : CreatureScript("boss_janalai")
+        {
+        }
 
         struct boss_janalaiAI : public ScriptedAI
         {
-            boss_janalaiAI(Creature* creature) : ScriptedAI(creature)
+            boss_janalaiAI(Creature* c) : ScriptedAI(c)
             {
-                instance = creature->GetInstanceScript();
+                instance = c->GetInstanceScript();
             }
 
             InstanceScript* instance;
@@ -223,16 +226,15 @@ class boss_janalai : public CreatureScript
                 BombCount = 0;
             }
 
-            bool HatchAllEggs(uint32 Action) //1: reset, 2: isHatching all
+            bool HatchAllEggs(uint32 uiAction) //1: reset, 2: isHatching all
             {
                 std::list<Creature*> templist;
                 float x, y, z;
                 me->GetPosition(x, y, z);
 
                 {
-                    CellPair pair(Trinity::ComputeCellPair(x, y));
+                    CellCoord pair(Trinity::ComputeCellCoord(x, y));
                     Cell cell(pair);
-                    cell.data.Part.reserved = ALL_DISTRICT;
                     cell.SetNoCreate();
 
                     Trinity::AllCreaturesOfEntryInRange check(me, MOB_EGG, 100);
@@ -240,7 +242,7 @@ class boss_janalai : public CreatureScript
 
                     TypeContainerVisitor<Trinity::CreatureListSearcher<Trinity::AllCreaturesOfEntryInRange>, GridTypeMapContainer> cSearcher(searcher);
 
-                    cell.Visit(pair, cSearcher, *(me->GetMap()));
+                    cell.Visit(pair, cSearcher, *me->GetMap(), *me, me->GetGridActivationRange());
                 }
 
                 //sLog->outError("Eggs %d at middle", templist.size());
@@ -249,9 +251,9 @@ class boss_janalai : public CreatureScript
 
                 for (std::list<Creature*>::const_iterator i = templist.begin(); i != templist.end(); ++i)
                 {
-                    if (Action == 1)
+                    if (uiAction == 1)
                        (*i)->SetDisplayId(10056);
-                    else if (Action == 2 &&(*i)->GetDisplayId() != 11686)
+                    else if (uiAction == 2 &&(*i)->GetDisplayId() != 11686)
                        (*i)->CastSpell(*i, SPELL_HATCH_EGG, false);
                 }
                 return true;
@@ -264,9 +266,8 @@ class boss_janalai : public CreatureScript
                 me->GetPosition(x, y, z);
 
                 {
-                    CellPair pair(Trinity::ComputeCellPair(x, y));
+                    CellCoord pair(Trinity::ComputeCellCoord(x, y));
                     Cell cell(pair);
-                    cell.data.Part.reserved = ALL_DISTRICT;
                     cell.SetNoCreate();
 
                     Trinity::AllCreaturesOfEntryInRange check(me, MOB_FIRE_BOMB, 100);
@@ -274,7 +275,7 @@ class boss_janalai : public CreatureScript
 
                     TypeContainerVisitor<Trinity::CreatureListSearcher<Trinity::AllCreaturesOfEntryInRange>, GridTypeMapContainer> cSearcher(searcher);
 
-                    cell.Visit(pair, cSearcher, *(me->GetMap()));
+                    cell.Visit(pair, cSearcher, *me->GetMap(), *me, me->GetGridActivationRange());
                 }
                 for (std::list<Creature*>::const_iterator i = templist.begin(); i != templist.end(); ++i)
                 {
@@ -296,7 +297,7 @@ class boss_janalai : public CreatureScript
                     ++BombCount;
                     if (BombCount == 40)
                     {
-                        BombSequenceTimer    = 5000;
+                        BombSequenceTimer = 5000;
                     } else BombSequenceTimer = 100;
                 }
                 else
@@ -306,7 +307,7 @@ class boss_janalai : public CreatureScript
                     BombTimer = urand(20000, 40000);
                     me->RemoveAurasDueToSpell(SPELL_FIRE_BOMB_CHANNEL);
                     if (EnrageTimer <= 10000)
-                        EnrageTimer  = 0;
+                        EnrageTimer = 0;
                     else
                         EnrageTimer -= 10000;
                 }
@@ -439,11 +440,15 @@ class boss_janalai : public CreatureScript
 class mob_janalai_firebomb : public CreatureScript
 {
     public:
-        mob_janalai_firebomb() : CreatureScript("mob_janalai_firebomb") {}
+
+        mob_janalai_firebomb()
+            : CreatureScript("mob_janalai_firebomb")
+        {
+        }
 
         struct mob_janalai_firebombAI : public ScriptedAI
         {
-            mob_janalai_firebombAI(Creature* creature) : ScriptedAI(creature) {}
+            mob_janalai_firebombAI(Creature* c) : ScriptedAI(c){}
 
             void Reset() {}
 
@@ -471,13 +476,17 @@ class mob_janalai_firebomb : public CreatureScript
 class mob_janalai_hatcher : public CreatureScript
 {
     public:
-        mob_janalai_hatcher() : CreatureScript("mob_janalai_hatcher") {}
+
+        mob_janalai_hatcher()
+            : CreatureScript("mob_janalai_hatcher")
+        {
+        }
 
         struct mob_janalai_hatcherAI : public ScriptedAI
         {
-            mob_janalai_hatcherAI(Creature* creature) : ScriptedAI(creature)
+            mob_janalai_hatcherAI(Creature* c) : ScriptedAI(c)
             {
-                instance = creature->GetInstanceScript();
+                instance =c->GetInstanceScript();
             }
 
             InstanceScript* instance;
@@ -494,11 +503,11 @@ class mob_janalai_hatcher : public CreatureScript
             {
                 me->AddUnitMovementFlag(MOVEMENTFLAG_WALKING);
                 side =(me->GetPositionY() < 1150);
-                waypoint        = 0;
-                isHatching      = false;
-                hasChangedSide  = false;
-                WaitTimer       = 1;
-                HatchNum        = 0;
+                waypoint = 0;
+                isHatching = false;
+                hasChangedSide = false;
+                WaitTimer = 1;
+                HatchNum = 0;
             }
 
             bool HatchEggs(uint32 num)
@@ -508,9 +517,8 @@ class mob_janalai_hatcher : public CreatureScript
                 me->GetPosition(x, y, z);
 
                 {
-                    CellPair pair(Trinity::ComputeCellPair(x, y));
+                    CellCoord pair(Trinity::ComputeCellCoord(x, y));
                     Cell cell(pair);
-                    cell.data.Part.reserved = ALL_DISTRICT;
                     cell.SetNoCreate();
 
                     Trinity::AllCreaturesOfEntryInRange check(me, 23817, 50);
@@ -518,7 +526,7 @@ class mob_janalai_hatcher : public CreatureScript
 
                     TypeContainerVisitor<Trinity::CreatureListSearcher<Trinity::AllCreaturesOfEntryInRange>, GridTypeMapContainer> cSearcher(searcher);
 
-                    cell.Visit(pair, cSearcher, *(me->GetMap()));
+                    cell.Visit(pair, cSearcher, *(me->GetMap()), *me, me->GetGridActivationRange());
                 }
 
                 //sLog->outError("Eggs %d at %d", templist.size(), side);
@@ -541,7 +549,7 @@ class mob_janalai_hatcher : public CreatureScript
                 if (waypoint == 5)
                 {
                     isHatching = true;
-                    HatchNum  = 1;
+                    HatchNum = 1;
                     WaitTimer = 5000;
                 }
                 else
@@ -579,12 +587,13 @@ class mob_janalai_hatcher : public CreatureScript
                         {
                             side = side ? 0 : 1;
                             isHatching = false;
-                            waypoint   = 3;
-                            WaitTimer  = 1;
+                            waypoint = 3;
+                            WaitTimer = 1;
                             hasChangedSide = true;
                         }
                         else
                             me->DisappearAndDie();
+
                     } else WaitTimer -= diff;
                 }
             }
@@ -599,13 +608,17 @@ class mob_janalai_hatcher : public CreatureScript
 class mob_janalai_hatchling : public CreatureScript
 {
     public:
-        mob_janalai_hatchling() : CreatureScript("mob_janalai_hatchling") {}
+
+        mob_janalai_hatchling()
+            : CreatureScript("mob_janalai_hatchling")
+        {
+        }
 
         struct mob_janalai_hatchlingAI : public ScriptedAI
         {
-            mob_janalai_hatchlingAI(Creature* creature) : ScriptedAI(creature)
+            mob_janalai_hatchlingAI(Creature* c) : ScriptedAI(c)
             {
-                instance = creature->GetInstanceScript();
+                instance =c->GetInstanceScript();
             }
 
             InstanceScript* instance;
@@ -663,7 +676,7 @@ public:
 
     struct mob_janalai_eggAI : public ScriptedAI
     {
-        mob_janalai_eggAI(Creature* creature) : ScriptedAI(creature) {}
+        mob_janalai_eggAI(Creature* creature) : ScriptedAI(creature){}
 
         void Reset() {}
 
@@ -677,6 +690,7 @@ public:
             }
         }
     };
+
 };
 
 void AddSC_boss_janalai()
@@ -687,3 +701,4 @@ void AddSC_boss_janalai()
     new mob_janalai_hatchling();
     new mob_janalai_egg();
 }
+

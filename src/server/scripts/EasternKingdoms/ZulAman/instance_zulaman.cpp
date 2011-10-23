@@ -1,5 +1,4 @@
-/*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
+ /*
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2006-2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
@@ -28,7 +27,7 @@ EndScriptData */
 #include "zulaman.h"
 
 #define MAX_ENCOUNTER     6
-#define RAND_VENDOR       2
+#define RAND_VENDOR    2
 
 //187021 //Harkor's Satchel
 //186648 //Tanzar's Trunk
@@ -49,12 +48,16 @@ static SHostageInfo HostageInfo[] =
     {23999, 187021, 400, 1414, 74.36f, 3.3f}, // eagle
     {24001, 186672, -35, 1134, 18.71f, 1.9f}, // dragonhawk
     {24024, 186667, 413, 1117,  6.32f, 3.1f}  // lynx
+
 };
 
 class instance_zulaman : public InstanceMapScript
 {
     public:
-        instance_zulaman() : InstanceMapScript("instance_zulaman", 568) {}
+        instance_zulaman()
+            : InstanceMapScript("instance_zulaman", 568)
+        {
+        }
 
         struct instance_zulaman_InstanceMapScript : public InstanceScript
         {
@@ -76,28 +79,28 @@ class instance_zulaman : public InstanceMapScript
             uint16 QuestMinute;
             uint16 ChestLooted;
 
-            uint32 Encounter[MAX_ENCOUNTER];
+            uint32 m_auiEncounter[MAX_ENCOUNTER];
             uint32 RandVendor[RAND_VENDOR];
 
             void Initialize()
             {
-                memset(&Encounter, 0, sizeof(Encounter));
+                memset(&m_auiEncounter, 0, sizeof(m_auiEncounter));
 
-                HarkorsSatchelGUID         = 0;
-                TanzarsTrunkGUID           = 0;
-                AshlisBagGUID              = 0;
-                KrazsPackageGUID           = 0;
+                HarkorsSatchelGUID = 0;
+                TanzarsTrunkGUID = 0;
+                AshlisBagGUID = 0;
+                KrazsPackageGUID = 0;
 
-                HexLordGateGUID            = 0;
-                ZulJinGateGUID             = 0;
-                AkilzonDoorGUID            = 0;
-                HalazziDoorGUID            = 0;
-                ZulJinDoorGUID             = 0;
+                HexLordGateGUID = 0;
+                ZulJinGateGUID = 0;
+                AkilzonDoorGUID = 0;
+                HalazziDoorGUID = 0;
+                ZulJinDoorGUID = 0;
 
-                QuestTimer                 = 0;
-                QuestMinute                = 21;
-                BossKilled                 = 0;
-                ChestLooted                = 0;
+                QuestTimer = 0;
+                QuestMinute = 21;
+                BossKilled = 0;
+                ChestLooted = 0;
 
                 for (uint8 i = 0; i < RAND_VENDOR; ++i)
                     RandVendor[i] = NOT_STARTED;
@@ -106,7 +109,7 @@ class instance_zulaman : public InstanceMapScript
             bool IsEncounterInProgress() const
             {
                 for (uint8 i = 0; i < MAX_ENCOUNTER; ++i)
-                    if (Encounter[i] == IN_PROGRESS) return true;
+                    if (m_auiEncounter[i] == IN_PROGRESS) return true;
 
                 return false;
             }
@@ -139,6 +142,7 @@ class instance_zulaman : public InstanceMapScript
                 case 186672: AshlisBagGUID = go->GetGUID(); break;
                 case 186667: KrazsPackageGUID  = go->GetGUID(); break;
                 default: break;
+
                 }
                 CheckInstanceStatus();
             }
@@ -193,7 +197,7 @@ class instance_zulaman : public InstanceMapScript
                 //sLog->outError("TSCR: Zul'aman loaded, %d %d %d.", data1, data2, data3);
                 if (dataHead == 'S')
                 {
-                    BossKilled  = data1;
+                    BossKilled = data1;
                     ChestLooted = data2;
                     QuestMinute = data3;
                 } else sLog->outError("TSCR: Zul'aman: corrupted save data.");
@@ -204,7 +208,7 @@ class instance_zulaman : public InstanceMapScript
                 switch (type)
                 {
                 case DATA_NALORAKKEVENT:
-                    Encounter[0] = data;
+                    m_auiEncounter[0] = data;
                     if (data == DONE)
                     {
                         if (QuestMinute)
@@ -216,7 +220,7 @@ class instance_zulaman : public InstanceMapScript
                     }
                     break;
                 case DATA_AKILZONEVENT:
-                    Encounter[1] = data;
+                    m_auiEncounter[1] = data;
                     HandleGameObject(AkilzonDoorGUID, data != IN_PROGRESS);
                     if (data == DONE)
                     {
@@ -229,23 +233,23 @@ class instance_zulaman : public InstanceMapScript
                     }
                     break;
                 case DATA_JANALAIEVENT:
-                    Encounter[2] = data;
+                    m_auiEncounter[2] = data;
                     if (data == DONE) SummonHostage(2);
                     break;
                 case DATA_HALAZZIEVENT:
-                    Encounter[3] = data;
+                    m_auiEncounter[3] = data;
                     HandleGameObject(HalazziDoorGUID, data != IN_PROGRESS);
                     if (data == DONE) SummonHostage(3);
                     break;
                 case DATA_HEXLORDEVENT:
-                    Encounter[4] = data;
+                    m_auiEncounter[4] = data;
                     if (data == IN_PROGRESS)
                         HandleGameObject(HexLordGateGUID, false);
                     else if (data == NOT_STARTED)
                         CheckInstanceStatus();
                     break;
                 case DATA_ZULJINEVENT:
-                    Encounter[5] = data;
+                    m_auiEncounter[5] = data;
                     HandleGameObject(ZulJinDoorGUID, data != IN_PROGRESS);
                     break;
                 case DATA_CHESTLOOTED:
@@ -277,12 +281,12 @@ class instance_zulaman : public InstanceMapScript
             {
                 switch (type)
                 {
-                case DATA_NALORAKKEVENT: return Encounter[0];
-                case DATA_AKILZONEVENT:  return Encounter[1];
-                case DATA_JANALAIEVENT:  return Encounter[2];
-                case DATA_HALAZZIEVENT:  return Encounter[3];
-                case DATA_HEXLORDEVENT:  return Encounter[4];
-                case DATA_ZULJINEVENT:   return Encounter[5];
+                case DATA_NALORAKKEVENT: return m_auiEncounter[0];
+                case DATA_AKILZONEVENT:  return m_auiEncounter[1];
+                case DATA_JANALAIEVENT:  return m_auiEncounter[2];
+                case DATA_HALAZZIEVENT:  return m_auiEncounter[3];
+                case DATA_HEXLORDEVENT:  return m_auiEncounter[4];
+                case DATA_ZULJINEVENT:   return m_auiEncounter[5];
                 case DATA_CHESTLOOTED:   return ChestLooted;
                 case TYPE_RAND_VENDOR_1: return RandVendor[0];
                 case TYPE_RAND_VENDOR_2: return RandVendor[1];
@@ -320,3 +324,4 @@ void AddSC_instance_zulaman()
 {
     new instance_zulaman();
 }
+

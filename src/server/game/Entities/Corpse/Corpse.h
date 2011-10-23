@@ -89,6 +89,6 @@ class Corpse : public WorldObject, public GridObject<Corpse>
     private:
         CorpseType m_type;
         time_t m_time;
-        GridPair _grid;                                    // gride for corpse position for fast search
+        GridCoord _gridCoord;                                    // gride for corpse position for fast search
 };
 #endif

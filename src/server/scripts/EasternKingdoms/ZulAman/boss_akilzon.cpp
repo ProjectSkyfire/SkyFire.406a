@@ -1,5 +1,4 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2006-2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
@@ -41,42 +40,41 @@ enum Spells
     SPELL_ELECTRICAL_OVERLOAD   = 43658,
     SPELL_EAGLE_SWOOP           = 44732
 };
-// texts need moved to db and enums need set...
+
 //"Your death gonna be quick, strangers. You shoulda never have come to this place..."
-#define SAY_ONAGGRO             "I be da predator! You da prey..."
-#define SOUND_ONAGGRO            12013
+#define SAY_ONAGGRO "I be da predator! You da prey..."
+#define SAY_ONDEATH "You can't... kill... me spirit!"
+#define SAY_ONSLAY1 "Ya got nothin'!"
+#define SAY_ONSLAY2 "Stop your cryin'!"
+#define SAY_ONSUMMON "Feed, me bruddahs!"
+#define SAY_ONENRAGE "All you be doing is wasting my time!"
+#define SOUND_ONAGGRO 12013
+#define SOUND_ONDEATH 12019
+#define SOUND_ONSLAY1 12017
+#define SOUND_ONSLAY2 12018
+#define SOUND_ONSUMMON 12014
+#define SOUND_ONENRAGE 12016
 
-#define SAY_ONDEATH             "You can't... kill... me spirit!"
-#define SOUND_ONDEATH            12019
-
-#define SAY_ONSLAY1             "Ya got nothin'!"
-#define SOUND_ONSLAY1            12017
-
-#define SAY_ONSLAY2             "Stop your cryin'!"
-#define SOUND_ONSLAY2            12018
-
-#define SAY_ONSUMMON            "Feed, me bruddahs!"
-#define SOUND_ONSUMMON           12014
-
-#define SAY_ONENRAGE            "All you be doing is wasting my time!"
-#define SOUND_ONENRAGE           12016
-
-#define MOB_SOARING_EAGLE        24858
-#define SE_LOC_X_MAX             400
-#define SE_LOC_X_MIN             335
-#define SE_LOC_Y_MAX             1435
-#define SE_LOC_Y_MIN             1370
+#define MOB_SOARING_EAGLE 24858
+#define SE_LOC_X_MAX 400
+#define SE_LOC_X_MIN 335
+#define SE_LOC_Y_MAX 1435
+#define SE_LOC_Y_MIN 1370
 
 class boss_akilzon : public CreatureScript
 {
     public:
-        boss_akilzon() : CreatureScript("boss_akilzon") {}
+
+        boss_akilzon()
+            : CreatureScript("boss_akilzon")
+        {
+        }
 
         struct boss_akilzonAI : public ScriptedAI
         {
-            boss_akilzonAI(Creature* creature) : ScriptedAI(creature)
+            boss_akilzonAI(Creature* c) : ScriptedAI(c)
             {
-                instance = creature->GetInstanceScript();
+                instance = c->GetInstanceScript();
             }
             InstanceScript* instance;
 
@@ -109,14 +107,14 @@ class boss_akilzon : public CreatureScript
                 Enrage_Timer = 10*MINUTE*IN_MILLISECONDS; //10 minutes till enrage(bosskillers)
                 SummonEagles_Timer = 99999;
 
-                TargetGUID       = 0;
-                CloudGUID        = 0;
-                CycloneGUID      = 0;
+                TargetGUID = 0;
+                CloudGUID = 0;
+                CycloneGUID = 0;
                 DespawnSummons();
                 for (uint8 i = 0; i < 8; ++i)
                     BirdGUIDs[i] = 0;
 
-                StormCount         = 0;
+                StormCount = 0;
                 StormSequenceTimer = 0;
 
                 isRaining = false;
@@ -191,22 +189,21 @@ class boss_akilzon : public CreatureScript
                     for (uint8 i = 2; i < StormCount; ++i)
                         bp0 *= 2;
 
-                    CellPair p(Trinity::ComputeCellPair(me->GetPositionX(), me->GetPositionY()));
+                    CellCoord p(Trinity::ComputeCellCoord(me->GetPositionX(), me->GetPositionY()));
                     Cell cell(p);
-                    cell.data.Part.reserved = ALL_DISTRICT;
                     cell.SetNoCreate();
 
                     std::list<Unit*> tempUnitMap;
 
                     {
-                        Trinity::AnyAoETargetUnitInObjectRangeCheck u_check(me, me, 999);
+                        Trinity::AnyAoETargetUnitInObjectRangeCheck u_check(me, me, SIZE_OF_GRIDS);
                         Trinity::UnitListSearcher<Trinity::AnyAoETargetUnitInObjectRangeCheck> searcher(me, tempUnitMap, u_check);
 
                         TypeContainerVisitor<Trinity::UnitListSearcher<Trinity::AnyAoETargetUnitInObjectRangeCheck>, WorldTypeMapContainer > world_unit_searcher(searcher);
                         TypeContainerVisitor<Trinity::UnitListSearcher<Trinity::AnyAoETargetUnitInObjectRangeCheck>, GridTypeMapContainer >  grid_unit_searcher(searcher);
 
-                        cell.Visit(p, world_unit_searcher, *(me->GetMap()));
-                        cell.Visit(p, grid_unit_searcher, *(me->GetMap()));
+                        cell.Visit(p, world_unit_searcher, *me->GetMap(), *me, SIZE_OF_GRIDS);
+                        cell.Visit(p, grid_unit_searcher, *me->GetMap(), *me, SIZE_OF_GRIDS);
                     }
                     //dealdamege
                     for (std::list<Unit*>::const_iterator i = tempUnitMap.begin(); i != tempUnitMap.end(); ++i)
@@ -393,11 +390,15 @@ class boss_akilzon : public CreatureScript
 class mob_akilzon_eagle : public CreatureScript
 {
     public:
-        mob_akilzon_eagle() : CreatureScript("mob_akilzon_eagle") {}
+
+        mob_akilzon_eagle()
+            : CreatureScript("mob_akilzon_eagle")
+        {
+        }
 
         struct mob_akilzon_eagleAI : public ScriptedAI
         {
-            mob_akilzon_eagleAI(Creature* creature) : ScriptedAI(creature) {}
+            mob_akilzon_eagleAI(Creature* c) : ScriptedAI(c) {}
 
             uint32 EagleSwoop_Timer;
             bool arrived;
@@ -431,7 +432,7 @@ class mob_akilzon_eagle : public CreatureScript
             void UpdateAI(const uint32 diff)
             {
                 if (EagleSwoop_Timer <= diff)
-                    EagleSwoop_Timer  = 0;
+                    EagleSwoop_Timer = 0;
                 else
                     EagleSwoop_Timer -= diff;
 
@@ -473,3 +474,4 @@ void AddSC_boss_akilzon()
     new boss_akilzon();
     new mob_akilzon_eagle();
 }
+
