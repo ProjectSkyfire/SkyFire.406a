@@ -3120,8 +3120,8 @@ void SpellMgr::LoadSpellCustomAttr()
                 break;
             case 2895:  // Wrath of Air Totem rank 1 (Aura)
             case 68933: // Wrath of Air Totem rank 2 (Aura)
-                spellInfo->EffectImplicitTargetA[0] = TARGET_UNIT_CASTER;
-                spellInfo->EffectImplicitTargetB[0] = 0;
+                spellInfo->Effects[0].TargetA = TARGET_UNIT_CASTER;
+                spellInfo->Effects[0].TargetB = 0;
                 break;
             case 52109: // Flametongue Totem rank 1 (Aura)
             case 52110: // Flametongue Totem rank 2 (Aura)
@@ -3131,10 +3131,10 @@ void SpellMgr::LoadSpellCustomAttr()
             case 58651: // Flametongue Totem rank 6 (Aura)
             case 58654: // Flametongue Totem rank 7 (Aura)
             case 58655: // Flametongue Totem rank 8 (Aura)
-                spellInfo->EffectImplicitTargetA[0] = TARGET_UNIT_CASTER;
-                spellInfo->EffectImplicitTargetA[1] = TARGET_UNIT_CASTER;
-                spellInfo->EffectImplicitTargetB[0] = 0;
-                spellInfo->EffectImplicitTargetB[1] = 0;
+                spellInfo->Effects[0].TargetA = TARGET_UNIT_CASTER;
+                spellInfo->Effects[1].TargetA = TARGET_UNIT_CASTER;
+                spellInfo->Effects[0].TargetB = 0;
+                spellInfo->Effects[1].TargetB = 0;
                 break;
             case 53241: // Marked for Death (Rank 1)
             case 53243: // Marked for Death (Rank 2)
