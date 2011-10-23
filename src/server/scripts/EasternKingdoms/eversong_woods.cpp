@@ -1,5 +1,4 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2006-2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
@@ -34,90 +33,6 @@ EndContentData */
 
 #include "ScriptPCH.h"
 #include "ScriptedEscortAI.h"
-
-/*######
-## npc_prospector_anvilward
-######*/
-
-#define GOSSIP_HELLO    "I need a moment of your time, sir."
-#define GOSSIP_SELECT   "Why... yes, of course. I've something to show you right inside this building, Mr. Anvilward."
-
-enum eProspectorAnvilward
-{
-    SAY_ANVIL1                                  = -1000209,
-    SAY_ANVIL2                                  = -1000210,
-    QUEST_THE_DWARVEN_SPY                       = 8483,
-};
-
-class npc_prospector_anvilward : public CreatureScript
-{
-public:
-    npc_prospector_anvilward() : CreatureScript("npc_prospector_anvilward") { }
-
-    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*uiSender*/, uint32 Action)
-    {
-        player->PlayerTalkClass->ClearMenus();
-        switch (Action)
-        {
-            case GOSSIP_ACTION_INFO_DEF+1:
-                player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_SELECT, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+2);
-                player->SEND_GOSSIP_MENU(8240, creature->GetGUID());
-                break;
-            case GOSSIP_ACTION_INFO_DEF+2:
-                player->CLOSE_GOSSIP_MENU();
-                if (npc_escortAI* escortAI = CAST_AI(npc_prospector_anvilward::npc_prospector_anvilwardAI, creature->AI()))
-                    escortAI->Start(true, false, player->GetGUID());
-                break;
-        }
-        return true;
-    }
-
-    bool OnGossipHello(Player* player, Creature* creature)
-    {
-        if (player->GetQuestStatus(QUEST_THE_DWARVEN_SPY) == QUEST_STATUS_INCOMPLETE)
-            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_HELLO, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
-
-        player->SEND_GOSSIP_MENU(8239, creature->GetGUID());
-        return true;
-    }
-
-    CreatureAI* GetAI(Creature* creature) const
-    {
-        return new npc_prospector_anvilwardAI(creature);
-    }
-
-    struct npc_prospector_anvilwardAI : public npc_escortAI
-    {
-        // CreatureAI functions
-        npc_prospector_anvilwardAI(Creature* creature) : npc_escortAI(creature) {}
-
-        // Pure Virtual Functions
-        void WaypointReached(uint32 i)
-        {
-            Player* player = GetPlayerForEscort();
-
-            if (!player)
-                return;
-
-            switch (i)
-            {
-                case 0: DoScriptText(SAY_ANVIL1, me, player); break;
-                case 5: DoScriptText(SAY_ANVIL2, me, player); break;
-                case 6: me->setFaction(24); break;
-            }
-        }
-
-        void Reset()
-        {
-            me->RestoreFaction();
-        }
-
-        void JustDied(Unit* /*killer*/)
-        {
-            me->RestoreFaction();
-        }
-    };
-};
 
 /*######
 ## Quest 9686 Second Trial
@@ -209,8 +124,9 @@ public:
 
         void Reset()
         {
-          timer        = 2000;
-          questPhase   = 0;
+
+          timer = 2000;
+          questPhase = 0;
           summonerGuid = 0;
 
           me->SetUInt32Value(UNIT_FIELD_BYTES_1, UNIT_STAND_STATE_KNEEL);
@@ -378,7 +294,7 @@ public:
 
     struct master_kelerun_bloodmournAI : public ScriptedAI
     {
-        master_kelerun_bloodmournAI(Creature* creature) : ScriptedAI(creature) {}
+        master_kelerun_bloodmournAI(Creature* c) : ScriptedAI(c) {}
 
         uint8  questPhase;
         uint8  paladinPhase;
@@ -388,9 +304,9 @@ public:
 
         void Reset()
         {
-            questPhase     = 0;
-            timer          = 60000;
-            paladinPhase   = 0;
+            questPhase = 0;
+            timer = 60000;
+            paladinPhase = 0;
             for (uint8 i = 0; i < 4; ++i)
                 paladinGuid[i] = 0;
         }
@@ -450,8 +366,10 @@ public:
 
         void StartEvent()
         {
+
             if (questPhase == 1)
             { // no player check, quest can be finished as group, so no complex PlayerGUID/group search code
+
                 for (uint8 i = 0; i < 4; ++i)
                 if (Creature* summoned = DoSpawnCreature(PaladinEntry[i], SpawnPosition[i].x, SpawnPosition[i].y, SpawnPosition[i].z, SpawnPosition[i].o, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 180000))
                     paladinGuid[i] = summoned->GetGUID();
@@ -502,23 +420,24 @@ class go_second_trial : public GameObjectScript
 public:
     go_second_trial() : GameObjectScript("go_second_trial") { }
 
-    bool OnGossipHello(Player* /*player*/, GameObject* go)
+    bool OnGossipHello(Player* /*player*/, GameObject* pGO)
     {
         // find spawn :: master_kelerun_bloodmourn
-        if (Creature* creature = go->FindNearestCreature(MASTER_KELERUN_BLOODMOURN, 30.0f))
+        if (Creature* creature = pGO->FindNearestCreature(MASTER_KELERUN_BLOODMOURN, 30.0f))
            CAST_AI(npc_second_trial_controller::master_kelerun_bloodmournAI, creature->AI())->StartEvent();
 
         return true;
     }
+
 };
 
 /*######
 ## npc_apprentice_mirveda
 ######*/
 
-#define QUEST_UNEXPECTED_RESULT       8488
-#define MOB_GHARZUL                   15958
-#define MOB_ANGERSHADE                15656
+#define QUEST_UNEXPECTED_RESULT 8488
+#define MOB_GHARZUL     15958
+#define MOB_ANGERSHADE  15656
 
 class npc_apprentice_mirveda : public CreatureScript
 {
@@ -542,7 +461,7 @@ public:
 
     struct npc_apprentice_mirvedaAI : public ScriptedAI
     {
-        npc_apprentice_mirvedaAI(Creature* creature) : ScriptedAI(creature), Summons(me) {}
+        npc_apprentice_mirvedaAI(Creature* c) : ScriptedAI(c), Summons(me) {}
 
         uint32 KillCount;
         uint64 PlayerGUID;
@@ -551,13 +470,13 @@ public:
 
         void Reset()
         {
-            KillCount  = 0;
+            KillCount = 0;
             PlayerGUID = 0;
             Summons.DespawnAll();
             Summon = false;
         }
 
-        void EnterCombat(Unit* /*who*/) {}
+        void EnterCombat(Unit* /*who*/){}
 
         void JustSummoned(Creature* summoned)
         {
@@ -593,15 +512,16 @@ public:
             }
         }
     };
+
 };
 
 /*######
 ## npc_infused_crystal
 ######*/
 
-#define MOB_ENRAGED_WRAITH                 17086
-#define EMOTE                             -1000283
-#define QUEST_POWERING_OUR_DEFENSES       8490
+#define MOB_ENRAGED_WRAITH  17086
+#define EMOTE   -1000283
+#define QUEST_POWERING_OUR_DEFENSES 8490
 
 struct Location
 {
@@ -613,7 +533,7 @@ static Location SpawnLocations[] =
     {8270.68f, -7188.53f, 139.619f},
     {8284.27f, -7187.78f, 139.603f},
     {8297.43f, -7193.53f, 139.603f},
-    {8303.5f,  -7201.96f, 139.577f},
+    {8303.5f, -7201.96f, 139.577f},
     {8273.22f, -7241.82f, 139.382f},
     {8254.89f, -7222.12f, 139.603f},
     {8278.51f, -7242.13f, 139.162f},
@@ -632,7 +552,7 @@ public:
 
     struct npc_infused_crystalAI : public Scripted_NoMovementAI
     {
-        npc_infused_crystalAI(Creature* creature) : Scripted_NoMovementAI(creature) {}
+        npc_infused_crystalAI(Creature* c) : Scripted_NoMovementAI(c) {}
 
         uint32 EndTimer;
         uint32 WaveTimer;
@@ -642,11 +562,11 @@ public:
 
         void Reset()
         {
-            EndTimer    = 0;
-            Completed   = false;
-            Progress    = false;
-            PlayerGUID  = 0;
-            WaveTimer   = 0;
+            EndTimer = 0;
+            Completed = false;
+            Progress = false;
+            PlayerGUID = 0;
+            WaveTimer = 0;
         }
 
         void MoveInLineOfSight(Unit* who)
@@ -656,9 +576,9 @@ public:
                 if (CAST_PLR(who)->GetQuestStatus(QUEST_POWERING_OUR_DEFENSES) == QUEST_STATUS_INCOMPLETE)
                 {
                     PlayerGUID = who->GetGUID();
-                    WaveTimer  = 1000;
-                    EndTimer   = 60000;
-                    Progress   = true;
+                    WaveTimer = 1000;
+                    EndTimer = 60000;
+                    Progress = true;
                 }
             }
         }
@@ -701,11 +621,11 @@ public:
             } else WaveTimer -= diff;
         }
     };
+
 };
 
 void AddSC_eversong_woods()
 {
-    new npc_prospector_anvilward();
     new npc_second_trial_controller();
     new npc_second_trial_paladin();
     new go_second_trial();
