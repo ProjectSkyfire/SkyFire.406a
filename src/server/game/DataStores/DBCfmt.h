@@ -99,6 +99,7 @@ const char QuestSortEntryfmt[]="nx";
 const char QuestXPfmt[]="niiiiiiiiii";
 const char QuestFactionRewardfmt[]="niiiiiiiiii";
 const char PvPDifficultyfmt[]="diiiii";
+const char PhaseEntryfmt[]="nsi";
 const char RandomPropertiesPointsfmt[]="niiiiiiiiiiiiiii";
 const char ScalingStatDistributionfmt[]="niiiiiiiiiiiiiiiiiiiixi";
 const char ScalingStatValuesfmt[]="iniiiiiiiiiiiiiiiiiiiixxxxxxxxxxxxxxxxxxxxxxxxx";
@@ -184,6 +185,6 @@ const char WMOAreaTableEntryfmt[]="niiixxxxxiixxxx";
 const char WorldMapAreaEntryfmt[]="xinxffffixxx";
 const char WorldMapOverlayEntryfmt[]="nxiiiixxxxxxxxx";
 const char WorldSafeLocsEntryfmt[]="nifffx";
-const char PhaseEntryfmt[]="nsi";
+const char WorldStateEntryfmt[]="niiixxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxixxxxxxxxxxxxxxxxxxxxxxx";  //this needs checked for 406
 
 #endif
