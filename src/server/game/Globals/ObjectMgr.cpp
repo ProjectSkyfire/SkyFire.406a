@@ -1807,38 +1807,35 @@ void ObjectMgr::LoadGameobjects()
         data.rotation2      = fields[ 9].GetFloat();
         data.rotation3      = fields[10].GetFloat();
         data.spawntimesecs  = fields[11].GetInt32();
+        data.animprogress   = fields[12].GetUInt32();
+        data.artKit         = 0;
+        uint32 go_state     = fields[13].GetUInt32();
+        data.spawnMask      = fields[14].GetUInt8();
+        data.phaseMask      = fields[15].GetUInt16();
+        int16 gameEvent     = fields[16].GetInt16();
+        uint32 PoolId       = fields[17].GetUInt32();
 
         MapEntry const* mapEntry = sMapStore.LookupEntry(data.mapid);
         if (!mapEntry)
         {
-            sLog->outErrorDb("Table `gameobject` has gameobject (GUID: %u Entry: %u) spawned on a non-existed map (Id: %u), skip", guid, data.id, data.mapid);
+            sLog->outErrorDb("Table `gameobject` have gameobject (GUID: %u Entry: %u) that spawned at nonexistent map (Id: %u), skip", guid, data.id, data.mapid);
             continue;
         }
+
+        if (data.spawnMask & ~spawnMasks[data.mapid])
+            sLog->outErrorDb("Table `gameobject` has gameobject (GUID: %u Entry: %u) that have wrong spawn mask %u including a non-supported difficulty mode for map (Id: %u), skip", guid, data.id, data.spawnMask, data.mapid);
 
         if (data.spawntimesecs == 0 && gInfo->IsDespawnAtAction())
         {
-            sLog->outErrorDb("Table `gameobject` has gameobject (GUID: %u Entry: %u) with `spawntimesecs` (0) value, but the gameobejct is marked as despawnable at action.", guid, data.id);
+            sLog->outErrorDb("Table `gameobject` has gameobject (GUID: %u Entry: %u) with `spawntimesecs` (0) value, but gameobject marked as despawnable at action.", guid, data.id);
         }
 
-        data.animprogress   = fields[12].GetUInt32();
-        data.artKit         = 0;
-
-        uint32 go_state     = fields[13].GetUInt32();
         if (go_state >= MAX_GO_STATE)
         {
             sLog->outErrorDb("Table `gameobject` has gameobject (GUID: %u Entry: %u) with invalid `state` (%u) value, skip", guid, data.id, go_state);
-            continue;
+           continue;
         }
         data.go_state       = GOState(go_state);
-
-        data.spawnMask      = fields[14].GetUInt8();
-
-        if (data.spawnMask & ~spawnMasks[data.mapid])
-            sLog->outErrorDb("Table `gameobject` has gameobject (GUID: %u Entry: %u) that has wrong spawn mask %u including not supported difficulty modes for map (Id: %u), skip", guid, data.id, data.spawnMask, data.mapid);
-
-        data.phaseMask      = fields[15].GetUInt16();
-        int16 gameEvent     = fields[16].GetInt16();
-        uint32 PoolId        = fields[17].GetUInt32();
 
         if (data.rotation2 < -1.0f || data.rotation2 > 1.0f)
         {
