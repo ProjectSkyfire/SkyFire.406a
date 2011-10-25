@@ -6378,10 +6378,13 @@ void AuraEffect::HandlePeriodicDamageAurasTick(Unit* target, Unit* caster) const
     else
         damage = uint32(target->CountPctFromMaxHealth(damage));
 
-    bool crit = IsPeriodicTickCrit(target, caster);
-    if (crit)
+    // bool crit = IsPeriodicTickCrit(target, caster);
+    bool crit = false;
+    if (roll_chance_i(10))
+    {
+        crit = true;
         damage = caster->SpellCriticalDamageBonus(m_spellInfo, damage, target);
-
+    }
     int32 dmg = damage;
     caster->ApplyResilience(target, &dmg);
     damage = dmg;
@@ -6435,10 +6438,13 @@ void AuraEffect::HandlePeriodicHealthLeechAuraTick(Unit* target, Unit* caster) c
     uint32 damage = std::max(GetAmount(), 0);
     damage = caster->SpellDamageBonus(target, GetSpellInfo(), damage, DOT, GetBase()->GetStackAmount());
 
-    bool crit = IsPeriodicTickCrit(target, caster);
-    if (crit)
+    // bool crit = IsPeriodicTickCrit(target, caster);
+    bool crit = false;
+    if (roll_chance_i(10))
+    {
+        crit = true;
         damage = caster->SpellCriticalDamageBonus(m_spellInfo, damage, target);
-
+    }
     // Calculate armor mitigation
     if (Unit::IsDamageReducedByArmor(GetSpellInfo()->GetSchoolMask(), GetSpellInfo(), m_effIndex))
     {
@@ -6579,10 +6585,13 @@ void AuraEffect::HandlePeriodicHealAurasTick(Unit* target, Unit* caster) const
         damage = caster->SpellHealingBonus(target, GetSpellInfo(), damage, DOT, GetBase()->GetStackAmount());
     }
 
-    bool crit = IsPeriodicTickCrit(target, caster);
-    if (crit)
+    // bool crit = IsPeriodicTickCrit(target, caster);
+    bool crit = false;
+    if (roll_chance_i(10))
+    {
+        crit = true;
         damage = caster->SpellCriticalHealingBonus(m_spellInfo, damage, target);
-
+    }
     sLog->outDetail("PeriodicTick: %u (TypeId: %u) heal of %u (TypeId: %u) for %u health inflicted by %u",
         GUID_LOPART(GetCasterGUID()), GuidHigh2TypeId(GUID_HIPART(GetCasterGUID())), target->GetGUIDLow(), target->GetTypeId(), damage, GetId());
 
