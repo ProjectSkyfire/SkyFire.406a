@@ -31,8 +31,7 @@
 
 using namespace Trinity;
 
-void
-VisibleNotifier::SendToSelf()
+void VisibleNotifier::SendToSelf()
 {
     // at this moment i_clientGUIDs have guids that not iterate at grid level checks
     // but exist one case when this possible and object not out of range: transports
@@ -74,8 +73,7 @@ VisibleNotifier::SendToSelf()
         i_player.SendInitialVisiblePackets(*it);
 }
 
-void
-VisibleChangesNotifier::Visit(PlayerMapType &m)
+void VisibleChangesNotifier::Visit(PlayerMapType &m)
 {
     for (PlayerMapType::iterator iter=m.begin(); iter != m.end(); ++iter)
     {
@@ -92,8 +90,7 @@ VisibleChangesNotifier::Visit(PlayerMapType &m)
     }
 }
 
-void
-VisibleChangesNotifier::Visit(CreatureMapType &m)
+void VisibleChangesNotifier::Visit(CreatureMapType &m)
 {
     for (CreatureMapType::iterator iter = m.begin(); iter != m.end(); ++iter)
         if (!iter->getSource()->GetSharedVisionList().empty())
@@ -103,8 +100,7 @@ VisibleChangesNotifier::Visit(CreatureMapType &m)
                     (*i)->UpdateVisibilityOf(&i_object);
 }
 
-void
-VisibleChangesNotifier::Visit(DynamicObjectMapType &m)
+void VisibleChangesNotifier::Visit(DynamicObjectMapType &m)
 {
     for (DynamicObjectMapType::iterator iter = m.begin(); iter != m.end(); ++iter)
         if (IS_PLAYER_GUID(iter->getSource()->GetCasterGUID()))
@@ -242,8 +238,7 @@ void AIRelocationNotifier::Visit(CreatureMapType &m)
     }
 }
 
-void
-MessageDistDeliverer::Visit(PlayerMapType &m)
+void MessageDistDeliverer::Visit(PlayerMapType &m)
 {
     for (PlayerMapType::iterator iter = m.begin(); iter != m.end(); ++iter)
     {
@@ -322,8 +317,8 @@ MessageDistDeliverer::VisitObject(Player* player)
 }
 */
 
-template<class T> void
-ObjectUpdater::Visit(GridRefManager<T> &m)
+template<class T>
+void ObjectUpdater::Visit(GridRefManager<T> &m)
 {
     for (typename GridRefManager<T>::iterator iter = m.begin(); iter != m.end(); ++iter)
     {

@@ -395,7 +395,8 @@ bool SmartAIMgr::IsEventValid(SmartScriptHolder& e)
                 break;
             case SMART_EVENT_ACCEPTED_QUEST:
             case SMART_EVENT_REWARD_QUEST:
-                if (!IsQuestValid(e, e.event.quest.quest)) return false;
+                if (e.event.quest.quest && !IsQuestValid(e, e.event.quest.quest))
+                    return false;
                 break;
             case SMART_EVENT_RECEIVE_EMOTE:
             {
@@ -527,7 +528,8 @@ bool SmartAIMgr::IsEventValid(SmartScriptHolder& e)
             }
             break;
         case SMART_ACTION_SOUND:
-            if (!IsSoundValid(e, e.action.sound.sound)) return false;
+            if (!IsSoundValid(e, e.action.sound.sound))
+                return false;
             if (e.action.sound.range > TEXT_RANGE_WORLD)
             {
                 sLog->outErrorDb("SmartAIMgr: Entry %d SourceType %u Event %u Action %u uses invalid Text Range %u, skipped.", e.entryOrGuid, e.GetScriptType(), e.event_id, e.GetActionType(), e.action.sound.range);
@@ -536,11 +538,13 @@ bool SmartAIMgr::IsEventValid(SmartScriptHolder& e)
             break;
         case SMART_ACTION_SET_EMOTE_STATE:
         case SMART_ACTION_PLAY_EMOTE:
-            if (!IsEmoteValid(e, e.action.emote.emote)) return false;
+            if (!IsEmoteValid(e, e.action.emote.emote))
+                return false;
             break;
         case SMART_ACTION_FAIL_QUEST:
         case SMART_ACTION_ADD_QUEST:
-            if (e.action.quest.quest && !IsQuestValid(e, e.action.quest.quest)) return false;
+            if (!e.action.quest.quest || !IsQuestValid(e, e.action.quest.quest))
+                return false;
             break;
         case SMART_ACTION_ACTIVATE_TAXI:
             {
