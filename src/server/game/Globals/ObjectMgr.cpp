@@ -1818,12 +1818,12 @@ void ObjectMgr::LoadGameobjects()
         MapEntry const* mapEntry = sMapStore.LookupEntry(data.mapid);
         if (!mapEntry)
         {
-            sLog->outErrorDb("Table `gameobject` have gameobject (GUID: %u Entry: %u) that spawned at nonexistent map (Id: %u), skip", guid, data.id, data.mapid);
+            sLog->outErrorDb("Table `gameobject` has gameobject (GUID: %u Entry: %u) that spawned on a nonexistent map (Id: %u), skip", guid, data.id, data.mapid);
             continue;
         }
 
         if (data.spawnMask & ~spawnMasks[data.mapid])
-            sLog->outErrorDb("Table `gameobject` has gameobject (GUID: %u Entry: %u) that have wrong spawn mask %u including a non-supported difficulty mode for map (Id: %u), skip", guid, data.id, data.spawnMask, data.mapid);
+            sLog->outErrorDb("Table `gameobject` has gameobject (GUID: %u Entry: %u) that has wrong spawn mask %u including a non-supported difficulty mode for map (Id: %u), skip", guid, data.id, data.spawnMask, data.mapid);
 
         if (data.spawntimesecs == 0 && gInfo->IsDespawnAtAction())
         {
@@ -1833,7 +1833,7 @@ void ObjectMgr::LoadGameobjects()
         if (go_state >= MAX_GO_STATE)
         {
             sLog->outErrorDb("Table `gameobject` has gameobject (GUID: %u Entry: %u) with invalid `state` (%u) value, skip", guid, data.id, go_state);
-           continue;
+            continue;
         }
         data.go_state       = GOState(go_state);
 
