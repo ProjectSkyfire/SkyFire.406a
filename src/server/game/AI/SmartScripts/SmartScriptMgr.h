@@ -461,9 +461,8 @@ enum SMART_ACTION
     SMART_ACTION_JUMP_TO_POS                        = 97,     // speedXY, speedZ, targetX, targetY, targetZ
     SMART_ACTION_SEND_GOSSIP_MENU                   = 98,     // menuId, optionId
     SMART_ACTION_LEAVE_VEHICLE                      = 99,
-    SMART_ACTION_REMOVE_PASSENGERS                  = 100
-
-    SMART_ACTION_END                                = 101,
+    SMART_ACTION_REMOVE_PASSENGERS                  = 100,
+    SMART_ACTION_END                                = 101
 };
 
 struct SmartAction
@@ -860,7 +859,7 @@ struct SmartAction
         {
             uint32 goRespawnTime;
         } RespawnTarget;
-        
+
         struct
         {
             uint32 gossipMenuId;
