@@ -228,7 +228,7 @@ DBCStorage <WMOAreaTableEntry> sWMOAreaTableStore(WMOAreaTableEntryfmt);
 DBCStorage <WorldMapAreaEntry> sWorldMapAreaStore(WorldMapAreaEntryfmt);
 DBCStorage <WorldMapOverlayEntry> sWorldMapOverlayStore(WorldMapOverlayEntryfmt);
 DBCStorage <WorldSafeLocsEntry> sWorldSafeLocsStore(WorldSafeLocsEntryfmt);
-DBCStorage <WorldStateEntry> sWorldStateStore(WorldStateEntryfmt);
+//DBCStorage <WorldStateEntry> sWorldStateStore(WorldStateEntryfmt);
 
 typedef std::list<std::string> StoreProblemList;
 
@@ -564,7 +564,7 @@ void LoadDBCStores(const std::string& dataPath, uint32& availableDbcLocales)
     LoadDBC(availableDbcLocales, bad_dbc_files, sWorldMapAreaStore,           dbcPath, "WorldMapArea.dbc");
     LoadDBC(availableDbcLocales, bad_dbc_files, sWorldMapOverlayStore,        dbcPath, "WorldMapOverlay.dbc");
     LoadDBC(availableDbcLocales, bad_dbc_files, sWorldSafeLocsStore,          dbcPath, "WorldSafeLocs.dbc");
-    LoadDBC(availableDbcLocales, bad_dbc_files, sWorldStateStore,             dbcPath, "WorldStateUI.dbc");
+    //LoadDBC(availableDbcLocales, bad_dbc_files, sWorldStateStore,             dbcPath, "WorldStateUI.dbc");
 
     // error checks
     if (bad_dbc_files.size() >= DBCFileCount)
