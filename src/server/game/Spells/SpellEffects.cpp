@@ -4631,6 +4631,35 @@ void Spell::EffectWeaponDmg(SpellEffIndex effIndex)
         }
         case SPELLFAMILY_PALADIN:
         {
+            // Seal of Command - Increase damage by 36% on every swing
+            if (m_spellInfo->SpellFamilyFlags[0] & 0x2000000)
+            {
+                totalDamagePercentMod *= 1.36f;            //136% damage
+            }
+
+            //Templar's Verdict
+            if (m_spellInfo->Id == 85256)
+            {
+                switch (m_caster->GetPower(POWER_HOLY_POWER))
+                {
+                    // 1 Holy Power
+                case 0:
+                    (m_caster->HasAura(31866 || 31867 || 31868)) ? totalDamagePercentMod += 0.3f : 0; //Crusade Rank 1, 2, 3 - 133%
+                    break;
+                    // 2 Holy Power
+                case 1:
+                    totalDamagePercentMod += 2.0f; // 3*30 = 90%
+                    (m_caster->HasAura(31866 || 31867 || 31868)) ? totalDamagePercentMod += 0.3f : 0; //Crusade Rank 1, 2, 3 - 133%
+                    break;
+                    // 3 Holy Power
+                case 2:
+                    totalDamagePercentMod += 6.5f; // 7.5*30 = 225%
+                    (m_caster->HasAura(31866 || 31867 || 31868)) ? totalDamagePercentMod += 0.9f : 0; //Crusade Rank 1, 2, 3  - 199%
+                    break;
+                }
+                (m_caster->HasAura(63220)) ? totalDamagePercentMod *= 1.15f : 0 ; // Glyph of Templar's Verdict
+            }
+
             // Seal of Command Unleashed
             if (m_spellInfo->Id == 20467)
             {
@@ -4665,9 +4694,64 @@ void Spell::EffectWeaponDmg(SpellEffIndex effIndex)
         }
         case SPELLFAMILY_HUNTER:
         {
-            // Kill Shot - bonus damage from Ranged Attack Power
-            if (m_spellInfo->SpellFamilyFlags[1] & 0x800000)
-                spell_bonus += int32(0.4f * m_caster->GetTotalAttackPowerValue(RANGED_ATTACK));
+            float shotMod = 0;
+            switch(m_spellInfo->Id)
+            {
+                case 53351: // Kill Shot
+                {
+                    // "You attempt to finish the wounded target off, firing a long range attack dealing % weapon damage plus RAP*0.30+543."
+                    shotMod = 0.3f;
+                    break;
+                }
+                case 56641: // Steady Shot
+                {
+                    // "A steady shot that causes % weapon damage plus RAP*0.021+280. Generates 9 Focus."
+                    // focus effect done in dummy
+                    shotMod = 0.021f;
+                    break;
+                }
+                case 19434: // Aimed Shot
+                    {
+                        // "A powerful aimed shot that deals % ranged weapon damage plus (RAP * 0.724)+776."
+                        shotMod = 0.724f;
+                        break;
+                    }
+                case 77767: // Cobra Shot
+                {
+                    // "Deals weapon damage plus (276 + (RAP * 0.017)) in the form of Nature damage and increases the duration of your Serpent Sting on the target by 6 sec. Generates 9 Focus."
+                    shotMod = 0.017f;
+                    break;
+                }
+                case 3044: // Arcane Shot
+                case 63741: // Chimera Shot
+                {
+                    // "An instant shot that causes % weapon damage plus (RAP * 0.0483)+289 as Arcane damage."
+                    if (m_spellInfo->SpellFamilyFlags[0] & 0x800)
+                        shotMod = 0.0483f;
+
+                    // "An instant shot that causes ranged weapon damage plus RAP*0.732+1620, refreshing the duration of  your Serpent Sting and healing you for 5% of your total health."
+                    if (m_spellInfo->SpellFamilyFlags[2] & 0x1)
+                        shotMod = 0.732f;
+
+                    // Marked for Death 1, 2
+                    if (m_caster->HasAuraEffect(53241, 0, 0))
+                        if (roll_chance_i(m_spellInfo->Effects[EFFECT_0].BasePoints))
+                        {
+                            m_caster->CastSpell(m_caster->ToPlayer()->GetSelectedUnit(), 88691, true);
+                            break;
+                        }
+                        if (m_caster->HasAuraEffect(53243, 0, 0))
+                            if (roll_chance_i(m_spellInfo->Effects[EFFECT_0].BasePoints))
+                            {
+                                m_caster->CastSpell(m_caster->ToPlayer()->GetSelectedUnit(), 88691, true);
+                                break;
+                            }
+                            break;
+                }
+                default:
+                    break;
+            }
+            spell_bonus += int32((shotMod*m_caster->GetTotalAttackPowerValue(RANGED_ATTACK)));
             break;
         }
         case SPELLFAMILY_DEATHKNIGHT:
