@@ -354,6 +354,10 @@ void Spell::EffectSchoolDMG(SpellEffIndex effIndex)
 
                 switch (m_spellInfo->Id)                     // better way to check unknown
                 {
+                    case 86150: // Guardian of Ancient Kings
+                        if (unitTarget)
+                        m_caster->CastSpell(m_caster, 86698, false, NULL);
+                    return;
                     // Positive/Negative Charge
                     case 28062:
                     case 28085:
@@ -449,7 +453,6 @@ void Spell::EffectSchoolDMG(SpellEffIndex effIndex)
                         damage = unitTarget->CountPctFromMaxHealth(50);
                         break;
                     }
-                    case 20625: // Ritual of Doom Sacrifice
                     case 29142: // Eyesore Blaster
                     case 35139: // Throw Boom's Doom
                     case 42393: // Brewfest - Attack Keg
@@ -458,6 +461,15 @@ void Spell::EffectSchoolDMG(SpellEffIndex effIndex)
                     case 62775: // Tympanic Tantrum
                     {
                         damage = unitTarget->CountPctFromMaxHealth(damage);
+                        break;
+                    }
+                    // Crystalspawn Giant - Quake
+                    case 81008:
+                    case 92631:
+                    {
+                        //avoid damage when players jumps
+                        if (unitTarget->GetUnitMovementFlags() == MOVEMENTFLAG_JUMPING || unitTarget->GetTypeId() != TYPEID_PLAYER)
+                            return;
                         break;
                     }
                     // Gargoyle Strike
