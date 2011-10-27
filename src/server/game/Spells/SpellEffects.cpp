@@ -2667,6 +2667,36 @@ void Spell::EffectPowerBurn(SpellEffIndex effIndex)
 
 void Spell::EffectHeal(SpellEffIndex /*effIndex*/)
 {
+    // Chakra Talent
+    if (m_caster->HasAura(14571))
+    {
+        switch(m_spellInfo->Id)
+        {
+            // Heal
+            case 2050:
+                m_caster->CastSpell(m_caster, 81208, true); // Chakra: Serenity
+                break;
+            // Greater Heal
+            case 2060:
+                m_caster->CastSpell(m_caster, 81208, true); // Chakra: Serenity
+                break;
+            // Flash Heal
+            case 2061:
+                m_caster->CastSpell(m_caster, 81208, true); // Chakra: Serenity
+                break;
+            // Binding Heal
+            case 32546:
+                m_caster->CastSpell(m_caster, 81208, true); // Chakra: Serenity
+                break;
+            // Prayer of Healing
+            case 596:
+                m_caster->CastSpell(m_caster, 81206, true); // Chakra: Sanctuary
+                break;
+        }
+    }
+}
+void Spell::SpellDamageHeal(SpellEffIndex effIndex)
+{
     if (effectHandleMode != SPELL_EFFECT_HANDLE_LAUNCH_TARGET)
         return;
 
@@ -2691,6 +2721,52 @@ void Spell::EffectHeal(SpellEffIndex /*effIndex*/)
                 damageAmount+= aurEff->GetAmount();
                 m_caster->RemoveAurasDueToSpell(45062);
             }
+        // Word of Glory
+        if (m_spellInfo->Id == 85673)
+        {
+            int32 dmg;
+            switch (m_caster->GetPower(POWER_HOLY_POWER))
+            {
+                case 0: // 1 hp
+                    dmg = int32(addhealth + 1*(m_caster->SpellBaseHealingBonus(SPELL_SCHOOL_MASK_HOLY) * 0.85));
+                    addhealth = dmg;
+                    break;
+                case 1: // 2 hp
+                    dmg = int32(addhealth + 2*(m_caster->SpellBaseHealingBonus(SPELL_SCHOOL_MASK_HOLY) * 0.85));
+                    addhealth = dmg;
+                    break;
+                case 2: // 3hp
+                    dmg = int32(addhealth + 3*(m_caster->SpellBaseHealingBonus(SPELL_SCHOOL_MASK_HOLY) * 0.85));
+                    addhealth = dmg;
+                    break;
+            }
+
+            if (m_caster->ToPlayer()->HasAuraType(SPELL_AURA_MASTERY))
+            {
+                if (m_caster->ToPlayer()->getClass() == CLASS_PALADIN)
+                {
+                    if (m_caster->ToPlayer()->GetTalentBranchSpec(m_caster->ToPlayer()->GetActiveSpec()) == BS_PALADIN_HOLY)
+                    {
+                        int32 bp0 = int32(m_caster->ToPlayer()->GetHealingDoneInPastSecs(15) * (12.0f + (1.5f * m_caster->ToPlayer()->GetMasteryPoints())) /100);
+                        m_caster->CastCustomSpell(m_caster, 86273, &bp0, NULL, NULL, true);
+                        caster->ToPlayer()->ResetHealingDoneInPastSecs(15);
+                    }
+                }
+            }
+        }
+
+        //Echo of Light
+        if (m_caster->getClass() == CLASS_PRIEST)
+        {
+            if (m_caster->HasAuraType(SPELL_AURA_MASTERY))
+            {
+                if (m_caster->ToPlayer()->GetTalentBranchSpec(m_caster->ToPlayer()->GetActiveSpec()) == BS_PRIEST_HOLY)
+                {
+                    int32 bp0 = int32 (addhealth * (10.0f + (1.25f * m_caster->ToPlayer()->GetMasteryPoints())) / 100);
+                    m_caster->CastCustomSpell(m_caster, 77489, &bp0, NULL, NULL, true);
+                }
+            }
+        }
 
             addhealth += damageAmount;
         }
@@ -2804,6 +2880,9 @@ void Spell::EffectHealPct(SpellEffIndex /*effIndex*/)
     // Rune Tap - Party
     if (m_spellInfo->Id == 59754 && unitTarget == m_caster)
         return;
+
+    if (m_spellInfo->Id == 34428 && m_originalCaster->HasAura(82368))
+        damage = 5;
 
     m_healing += m_originalCaster->SpellHealingBonus(unitTarget, m_spellInfo, unitTarget->CountPctFromMaxHealth(damage), HEAL);
 }

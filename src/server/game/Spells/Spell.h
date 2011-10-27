@@ -614,6 +614,9 @@ class Spell
         bool IsValidDeadOrAliveTarget(Unit const* target) const;
         void HandleLaunchPhase();
         void DoAllEffectOnLaunchTarget(TargetInfo& targetInfo, float* multiplier);
+        void SpellDamageSchoolDmg(SpellEffIndex effIndex);
+        void SpellDamageWeaponDmg(SpellEffIndex effIndex);
+        void SpellDamageHeal(SpellEffIndex effIndex);
 
         void PrepareTargetProcessing();
         void FinishTargetProcessing();
