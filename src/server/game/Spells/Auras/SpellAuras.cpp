@@ -193,7 +193,7 @@ void AuraApplication::BuildUpdatePacket(ByteBuffer& data, bool remove) const
     uint32 flags = m_flags;
     if (aura->GetMaxDuration() > 0 && !(aura->GetSpellInfo()->AttributesEx5 & SPELL_ATTR5_HIDE_DURATION))
         flags |= AFLAG_DURATION;
-    data << uint8(flags);
+    data << uint16(flags);
     data << uint8(aura->GetCasterLevel());
     // send stack amount for aura which could be stacked (never 0 - causes incorrect display) or charges
     // stack amount has priority over charges (checked on retail with spell 50262)
@@ -1190,6 +1190,11 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                                 caster->CastSpell(caster, spellId, true);
                         }
                         break;
+                    case 64343: // Impact
+                    {
+                        // Reset cooldown on Fire Blast
+                        caster->ToPlayer()->RemoveSpellCooldown(2136, true);
+                    }						
                     case 44544: // Fingers of Frost
                     {
                         // See if we already have the indicator aura. If not, create one.
@@ -1206,6 +1211,20 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                         break;
                 }
                 break;
+            case SPELLFAMILY_WARRIOR:
+                if (!caster)
+                    break;
+
+                switch(GetId())
+                {
+                    case 50227: // Warrior - Sword and Board
+                    {
+                        // Reset cooldown on shield slam if needed
+                        caster->ToPlayer()->RemoveSpellCooldown(23922, true);
+                        break;
+                    }
+                }
+                break;				
             case SPELLFAMILY_WARLOCK:
                 switch (GetId())
                 {
@@ -1219,6 +1238,39 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                         break;
                 }
                 break;
+            case SPELLFAMILY_HUNTER:
+                if (!caster)
+                    break;
+
+                switch(GetId())
+                {
+                    case 1978: // Improved Serpent Sting
+                    {
+                        if (AuraEffect const * aurEff = caster->GetDummyAuraEffect(SPELLFAMILY_HUNTER, 536, 0))
+                        {
+                            int32 basepoints0 = aurEff->GetAmount() * GetEffect(0)->GetTotalTicks() * caster->SpellDamageBonus(target, GetSpellInfo(), GetEffect(0)->GetAmount(), DOT) / 100;
+                            caster->CastCustomSpell(target, 83077, &basepoints0, NULL, NULL, true, NULL, GetEffect(0));
+                        }
+                        break;
+                    }
+                    case 82925: // Master Marksman
+                    {
+                        if (target->GetTypeId() == TYPEID_PLAYER && GetStackAmount() == 5)
+                        {
+                            target->CastSpell(target, 82926, true);
+                            target->RemoveAura(82925);
+                        }
+                        break;
+                    }
+                    case 68361: // Animal Handler
+                    {
+                        if (Unit* owner = target->GetOwner())
+                            if (AuraEffect* auraEff = owner->GetDummyAuraEffect(SPELLFAMILY_HUNTER, 2234, 1))
+                                GetEffect(0)->SetAmount(auraEff->GetAmount());
+                        break;
+                    }
+                }
+                break;				
             case SPELLFAMILY_PRIEST:
                 if (!caster)
                     break;
@@ -1343,6 +1395,30 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                             break;
                         target->CastSpell(target, 32612, true, NULL, GetEffect(1));
                         break;
+                    case 118: // Improved Polymorph
+                    {
+                        if (removeMode == AURA_REMOVE_BY_EXPIRE || removeMode == AURA_REMOVE_BY_CANCEL)
+                            break;
+                        if (caster->HasAura(11210) && !target->HasAura(87515))
+                        {
+                            target->CastSpell(target, 83046, true);
+                            caster->AddAura(87515, target); // Immune Marker
+                        }
+                        else if (caster->HasAura(12592) && !target->HasAura(87515))
+                        {
+                            target->CastSpell(target, 83047, true);
+                            caster->AddAura(87515, target); // Immune Marker
+                        }
+                        break;
+                    }
+                    case 1463: // Incanter's Absorption
+                    {
+                        if (removeMode == AURA_REMOVE_BY_EXPIRE || removeMode == AURA_REMOVE_BY_CANCEL)
+                            break;
+                        if (caster->HasAura(44394) || caster->HasAura(44395))
+                            caster->CastSpell(caster, 86261, true);
+                        break;
+                    }						
                     case 74396: // Fingers of Frost
                         // Remove the IGNORE_AURASTATE aura
                         target->RemoveAurasDueToSpell(44544);
