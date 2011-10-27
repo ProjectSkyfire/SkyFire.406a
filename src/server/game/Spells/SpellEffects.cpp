@@ -4661,7 +4661,7 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
                             else
                                 unitTarget->CastSpell(unitTarget, 48024, true);
                         }
-						break;
+                        break;
                     case 300:
                         {
                             if (canFly)
@@ -4669,7 +4669,7 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
                             else
                                 unitTarget->CastSpell(unitTarget, 48024, true);
                         }
-						break;
+                        break;
                     }
                     return;
                 }
@@ -4711,7 +4711,7 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
                             else
                                 unitTarget->CastSpell(unitTarget, 42683, true);
                         }
-						break;
+                        break;
                     case 300:
                         {
                             if (canFly)
@@ -4719,7 +4719,7 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
                             else
                                 unitTarget->CastSpell(unitTarget, 42683, true);
                         }
-						break;
+                        break;
                     }
                     return;
                 }
