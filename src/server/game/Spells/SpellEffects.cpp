@@ -4644,17 +4644,17 @@ void Spell::EffectWeaponDmg(SpellEffIndex effIndex)
                 {
                     // 1 Holy Power
                 case 0:
-                    (m_caster->HasAura(31866 || 31867 || 31868)) ? totalDamagePercentMod += 0.3f : 0; //Crusade Rank 1, 2, 3 - 133%
+                    (m_caster->HasAura(31866) || m_caster->HasAura(31867) || m_caster->HasAura(31868)) ? totalDamagePercentMod += 0.3f : 0; //Crusade Rank 1, 2, 3 - 133%
                     break;
                     // 2 Holy Power
                 case 1:
                     totalDamagePercentMod += 2.0f; // 3*30 = 90%
-                    (m_caster->HasAura(31866 || 31867 || 31868)) ? totalDamagePercentMod += 0.3f : 0; //Crusade Rank 1, 2, 3 - 133%
+                    (m_caster->HasAura(31866) || m_caster->HasAura(31867) || m_caster->HasAura(31868)) ? totalDamagePercentMod += 0.3f : 0; //Crusade Rank 1, 2, 3 - 133%
                     break;
                     // 3 Holy Power
                 case 2:
                     totalDamagePercentMod += 6.5f; // 7.5*30 = 225%
-                    (m_caster->HasAura(31866 || 31867 || 31868)) ? totalDamagePercentMod += 0.9f : 0; //Crusade Rank 1, 2, 3  - 199%
+                    (m_caster->HasAura(31866) || m_caster->HasAura(31867) || m_caster->HasAura(31868)) ? totalDamagePercentMod += 0.9f : 0; //Crusade Rank 1, 2, 3  - 199%
                     break;
                 }
                 (m_caster->HasAura(63220)) ? totalDamagePercentMod *= 1.15f : 0 ; // Glyph of Templar's Verdict
