@@ -484,26 +484,64 @@ void Spell::EffectSchoolDMG(SpellEffIndex effIndex)
             }
             case SPELLFAMILY_WARRIOR:
             {
-                // Bloodthirst
-                if (m_spellInfo->SpellFamilyFlags[1] & 0x400)
-                    ApplyPctF(damage, m_caster->GetTotalAttackPowerValue(BASE_ATTACK));
-                // Shield Slam
-                else if (m_spellInfo->SpellFamilyFlags[1] & 0x200 && m_spellInfo->Category == 1209)
+               // Bloodthirst
+               if (m_spellInfo->SpellFamilyFlags[1] & 0x400)
+                   damage = uint32(damage * (m_caster->GetTotalAttackPowerValue(BASE_ATTACK)) / 100);
+               // Victory Rush
+               else if (m_spellInfo->SpellFamilyFlags[1] & 0x100)
+               {
+                   damage = uint32(damage * m_caster->GetTotalAttackPowerValue(BASE_ATTACK) / 100);
+                   m_caster->RemoveAurasDueToSpell(32216); // Victorious
+               }
+
+               // Cleave
+               else if (m_spellInfo->Id == 845)
+                   damage = uint32(6+ m_caster->GetTotalAttackPowerValue(BASE_ATTACK)* 0.45);
+               // Intercept
+               else if (m_spellInfo->Id == 20253)
+                   damage = uint32(1 + m_caster->GetTotalAttackPowerValue(BASE_ATTACK) * 0.12);
+                else if (m_spellInfo->Id ==5308) // Execute
                 {
-                    uint8 level = m_caster->getLevel();
-                    uint32 block_value = m_caster->GetShieldBlockValue(uint32(float(level) * 24.5f), uint32(float(level) * 34.5f));
-                    damage += int32(m_caster->ApplyEffectModifiers(m_spellInfo, effIndex, float(block_value)));
+                    float ap = m_caster->GetTotalAttackPowerValue(BASE_ATTACK);
+                    damage = uint32 (10 + ap * 0.437 * 100 / 100);
+                    uint32 power = m_caster->GetPower(POWER_RAGE);
+                    if(power > 0)
+                    {
+                        uint32 mod = power > 20 ? 20 : power;
+                        uint32 bonus_rage = 0;
+
+                        if(m_caster->HasAura(29723))
+                            bonus_rage = 5;
+                        if(m_caster->HasAura(29725))
+                            bonus_rage = 10;
+
+                        damage += uint32 ((ap * 0.874 * 100 / 100 - 1) * mod / 100.0f);
+                        m_caster->SetPower(POWER_RAGE, (power - mod) + bonus_rage);
+                    }
                 }
-                // Victory Rush
-                else if (m_spellInfo->SpellFamilyFlags[1] & 0x100)
-                    ApplyPctF(damage, m_caster->GetTotalAttackPowerValue(BASE_ATTACK));
-                // Shockwave
-                else if (m_spellInfo->Id == 46968)
+                else if (m_spellInfo->Id == 78) // Heroic Strike
+                    damage = uint32(8 + (m_caster->GetTotalAttackPowerValue(BASE_ATTACK) * 60) / 100);
+                else if (m_spellInfo->Id == 20253)
+                    damage = uint32(1 + m_caster->GetTotalAttackPowerValue(BASE_ATTACK) * 0.12);
+                else if (m_spellInfo->Id == 46968) // Shockwave
                 {
                     int32 pct = m_caster->CalculateSpellDamage(unitTarget, m_spellInfo, 2);
                     if (pct > 0)
                         damage += int32(CalculatePctN(m_caster->GetTotalAttackPowerValue(BASE_ATTACK), pct));
                     break;
+                }
+                else if (m_spellInfo->Id == 6343)
+                {
+                    uint32 trig_spell;
+                    if (m_caster->HasAura(80979))
+                        trig_spell = 87095;
+                    else if (m_caster->HasAura(80980))
+                        trig_spell = 87096;
+                    else
+                        break;
+
+                    if(urand(0,1))
+                        m_caster->CastSpell(m_caster, trig_spell, true);
                 }
                 break;
             }
@@ -584,6 +622,37 @@ void Spell::EffectSchoolDMG(SpellEffIndex effIndex)
             }
             case SPELLFAMILY_PRIEST:
             {
+              // Evangelism
+                if (m_caster->HasAura(81659)) // Rank 1
+                {
+                    if (m_spellInfo->Id == 585)
+                        m_caster->CastSpell(m_caster, 81660, true);
+                }
+                else
+
+                if (m_caster->HasAura(81662)) // Rank 2
+                {
+                    if (m_spellInfo->Id == 585)
+                        m_caster->CastSpell(m_caster, 81661, true);
+                }
+
+                // Chakra
+                if (m_caster->HasAura(14751))
+                {
+                    switch(m_spellInfo->Id)
+                    {
+                        // Smite
+                        case 585:
+                            m_caster->CastSpell(m_caster, 81209, true); // Chakra: Chastise
+                            break;
+                        // Mind Spike
+                        case 73510:
+                            m_caster->CastSpell(m_caster, 81209, true); // Chakra: Chastise
+                            break;
+                        default:
+                            break;
+                    }
+                }
                 // Shadow Word: Death - deals damage equal to damage done to caster
                 if (m_spellInfo->SpellFamilyFlags[1] & 0x2)
                 {
