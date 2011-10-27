@@ -195,7 +195,7 @@ pAuraEffectHandler AuraEffectHandler[TOTAL_AURAS]=
     &AuraEffect::HandleModMeleeSpeedPct,                          //138 SPELL_AURA_MOD_MELEE_HASTE
     &AuraEffect::HandleForceReaction,                             //139 SPELL_AURA_FORCE_REACTION
     &AuraEffect::HandleAuraModRangedHaste,                        //140 SPELL_AURA_MOD_RANGED_HASTE
-    &AuraEffect::HandleRangedAmmoHaste,                           //141 SPELL_AURA_MOD_RANGED_AMMO_HASTE
+    &AuraEffect::HandleNULL,                                      //141 SPELL_AURA_MOD_RANGED_AMMO_HASTE
     &AuraEffect::HandleAuraModBaseResistancePCT,                  //142 SPELL_AURA_MOD_BASE_RESISTANCE_PCT
     &AuraEffect::HandleAuraModResistanceExclusive,                //143 SPELL_AURA_MOD_RESISTANCE_EXCLUSIVE
     &AuraEffect::HandleNoImmediateEffect,                         //144 SPELL_AURA_SAFE_FALL                         implemented in WorldSession::HandleMovementOpcodes
@@ -716,6 +716,9 @@ int32 AuraEffect::CalculateAmount(Unit* caster)
             if (GetSpellInfo()->SpellFamilyName == SPELLFAMILY_PRIEST && m_spellInfo->SpellFamilyFlags[2] & 0x4000)
             {
                 if (caster->GetTypeId() == TYPEID_PLAYER)
+                // Bonus from talent Spiritual Healing
+                if (AuraEffect* modHealing = caster->GetAuraEffect(SPELL_AURA_ADD_PCT_MODIFIER, SPELLFAMILY_PRIEST, 46, 1))
+
                 // Bonus from Glyph of Lightwell
                 if (AuraEffect* modHealing = caster->GetAuraEffect(55673, 0))
                     AddPctN(amount, modHealing->GetAmount());
@@ -779,6 +782,11 @@ int32 AuraEffect::CalculateAmount(Unit* caster)
             // Vampiric Blood
             if (GetId() == 55233)
                 amount = GetBase()->GetUnitOwner()->CountPctFromMaxHealth(amount);
+            break;
+        case SPELL_AURA_MOD_INCREASE_ENERGY:
+            // Hymn of Hope
+            if (GetId() == 64904)
+                ApplyPctU(amount, GetBase()->GetUnitOwner()->GetMaxPower(GetBase()->GetUnitOwner()->getPowerType()));
             break;
         case SPELL_AURA_MOD_INCREASE_SPEED:
             // Dash - do not set speed if not in cat form
@@ -937,6 +945,25 @@ void AuraEffect::CalculateSpellMod(SpellInfo const *spellInfo, Unit * target)
                         }
                         break;
                     }
+                    break;
+                default:
+                    break;
+            }
+        case SPELL_AURA_MOD_SPELL_CRIT_CHANCE:
+            switch(GetId())
+            {
+                case 51466: // Elemental oath
+                case 51470: // Elemental oath
+                    // "while Clearcasting from Elemental Focus is active, you deal 5%/10% more spell damage."
+                    if (!m_spellmod)
+                    {
+                        m_spellmod = new SpellModifier(GetBase());
+                        m_spellmod->op = SPELLMOD_EFFECT2;
+                        m_spellmod->type = SPELLMOD_FLAT;
+                        m_spellmod->spellId = GetId();
+                        m_spellmod->mask[1] = 0x0004000;
+                    }
+                    m_spellmod->value = GetBase()->GetUnitOwner()->CalculateSpellDamage(GetBase()->GetUnitOwner(), GetSpellInfo(), 1);
                     break;
                 default:
                     break;
@@ -1320,6 +1347,16 @@ void AuraEffect::PeriodicTick(AuraApplication * aurApp, Unit* caster) const
         case SPELL_AURA_PERIODIC_DAMAGE:
         case SPELL_AURA_PERIODIC_DAMAGE_PERCENT:
             HandlePeriodicDamageAurasTick(target, caster);
+
+            /* Dark Evangelism */
+            if (target->HasAura(15407)) //Mind Flay
+            {
+                if (caster->HasAura(81659)) //Rank 1
+                    caster->CastSpell(caster, 87117, true);
+                else
+                    if (caster->HasAura(81662)) //Rank 2
+                        caster->CastSpell(caster, 87118, true);
+            }
             break;
         case SPELL_AURA_PERIODIC_LEECH:
             HandlePeriodicHealthLeechAuraTick(target, caster);
@@ -1927,6 +1964,7 @@ void AuraEffect::HandleAuraModShapeshift(AuraApplication const* aurApp, uint8 mo
     {
         case FORM_CAT:                                      // 0x01
         case FORM_GHOUL:                                    // 0x07
+        case FORM_CREATURECAT:								// 0x0F
             PowerType = POWER_ENERGY;
             break;
 
@@ -1950,7 +1988,6 @@ void AuraEffect::HandleAuraModShapeshift(AuraApplication const* aurApp, uint8 mo
         case FORM_BLB_PLAYER:                               // 0x0C
         case FORM_SHADOW_DANCE:                             // 0x0D
         case FORM_CREATUREBEAR:                             // 0x0E
-        case FORM_CREATURECAT:                              // 0x0F
         case FORM_GHOSTWOLF:                                // 0x10
 
         case FORM_TEST:                                     // 0x14
@@ -2232,6 +2269,10 @@ void AuraEffect::HandleAuraTransform(AuraApplication const* aurApp, uint8 mode, 
                             case RACE_NIGHTELF:
                                 target->SetDisplayId(target->getGender() == GENDER_MALE ? 10143 : 10144);
                                 break;
+                            // Worgen
+                            case RACE_WORGEN:
+                                target->SetDisplayId(target->getGender() == GENDER_MALE ? 29335 : 30114);
+                                break;
                             default:
                                 break;
                         }
@@ -2290,6 +2331,10 @@ void AuraEffect::HandleAuraTransform(AuraApplication const* aurApp, uint8 mode, 
                             // Night Elf
                             case RACE_NIGHTELF:
                                 target->SetDisplayId(target->getGender() == GENDER_MALE ? 25038 : 25049);
+                                break;
+                            // Worgen
+                            case RACE_WORGEN:
+                                target->SetDisplayId(target->getGender() == GENDER_MALE ? 29335 : 30114);
                                 break;
                             default:
                                 break;
@@ -3130,20 +3175,6 @@ void AuraEffect::HandleAuraModRoot(AuraApplication const* aurApp, uint8 mode, bo
     Unit* target = aurApp->GetTarget();
 
     target->SetControlled(apply, UNIT_STAT_ROOT);
-    if (apply)
-    {
-        switch (GetSpellInfo()->Id)
-        {
-            case 69001: //Transform: Worgen. not used?
-            {
-                if (target->GetTypeId() == TYPEID_PLAYER)
-                    target->ToPlayer()->setInWorgenForm();
-                break;
-            }
-            default:
-                break;
-        }
-    }
 }
 
 void AuraEffect::HandlePreventFleeing(AuraApplication const* aurApp, uint8 mode, bool apply) const
@@ -3170,7 +3201,7 @@ void AuraEffect::HandleModPossess(AuraApplication const* aurApp, uint8 mode, boo
 
     Unit* caster = GetCaster();
 
-    // no support for posession AI yet
+    // no support for possession AI yet
     if (caster && caster->GetTypeId() == TYPEID_UNIT)
     {
         HandleModCharm(aurApp, mode, apply);
@@ -3300,7 +3331,7 @@ void AuraEffect::HandleAuraControlVehicle(AuraApplication const* aurApp, uint8 m
 /*********************************************************/
 /***                  MODIFY SPEED                     ***/
 /*********************************************************/
-void AuraEffect::HandleAuraModIncreaseSpeed(AuraApplication const* aurApp, uint8 mode, bool /*apply*/) const
+void AuraEffect::HandleAuraModIncreaseSpeed(AuraApplication const* aurApp, uint8 mode, bool apply) const
 {
     if (!(mode & AURA_EFFECT_HANDLE_CHANGE_AMOUNT_MASK))
         return;
@@ -3308,6 +3339,21 @@ void AuraEffect::HandleAuraModIncreaseSpeed(AuraApplication const* aurApp, uint8
     Unit* target = aurApp->GetTarget();
 
     target->UpdateSpeed(MOVE_RUN, true);
+
+    if (apply)
+    {
+        switch (GetId())
+        {
+            case 68992: // Darkflight, worgen's sprint spell.
+            {
+                if (target->GetTypeId() == TYPEID_PLAYER)
+                    target->ToPlayer()->setInWorgenForm(UNIT_FLAG2_WORGEN_TRANSFORM2);
+                break;
+            }
+            default:
+                break;
+        }
+    }
 }
 
 void AuraEffect::HandleAuraModIncreaseMountedSpeed(AuraApplication const* aurApp, uint8 mode, bool apply) const
@@ -4045,6 +4091,19 @@ void AuraEffect::HandleAuraModIncreaseEnergy(AuraApplication const* aurApp, uint
 
     UnitMods unitMod = UnitMods(UNIT_MOD_POWER_START + powerType);
 
+    // Special case with temporary increase max/current power (percent)
+    if (GetId() == 64904)                                     // Hymn of Hope
+    {
+        if (mode & AURA_EFFECT_HANDLE_CHANGE_AMOUNT_MASK)
+        {
+            int32 change = target->GetPower(powerType) + (apply ? GetAmount() : -GetAmount());
+            if (change < 0)
+                change = 0;
+            target->SetPower(powerType, change);
+        }
+    }
+
+    // generic flat case
     target->HandleStatModifier(unitMod, TOTAL_VALUE, float(GetAmount()), apply);
 }
 
@@ -4857,10 +4916,6 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
                             target->GetMotionMaster()->MoveFall(currentGroundLevel);
                     }
                     break;
-                case 46699:                                     // Requires No Ammo
-                    if (target->GetTypeId() == TYPEID_PLAYER)
-                        target->ToPlayer()->RemoveAmmo();      // not use ammo and not allow use
-                    break;
                 case 49028:
                     if (caster)
                         if (AuraEffect* aurEff = caster->GetAuraEffect(63330, 0)) // glyph of Dancing Rune Weapon
@@ -4900,9 +4955,27 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
                     caster->CastCustomSpell(target, 63338, &damage, NULL, NULL, true);
                     break;
                 }
+                case 75572: // Eject Spell!
+                {
+                    if (Vehicle *vehicle = caster->GetVehicleKit())
+                        if (Unit *driver = vehicle->GetPassenger(0))
+                        {
+                            driver->ExitVehicle();
+                            driver->GetMotionMaster()->MoveJump(driver->GetPositionX(), driver->GetPositionY(), driver->GetPositionZ()+7.0f, 2.0f, 2.0f);
+                        }
+                        break;
+                }
                 case 71563:
+                {
                     if (Aura* newAura = target->AddAura(71564, target))
                         newAura->SetStackAmount(newAura->GetSpellInfo()->StackAmount);
+                    break;
+                }
+                case 74401:
+                {
+                    caster->CastSpell(caster, GetAmount(), true);
+                    break;
+                }
             }
         }
         // AT REMOVE
@@ -5000,18 +5073,22 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
                 case SPELLFAMILY_PRIEST:
                     // Vampiric Touch
                     if (m_spellInfo->SpellFamilyFlags[1] & 0x0400 && aurApp->GetRemoveMode() == AURA_REMOVE_BY_ENEMY_SPELL && GetEffIndex() == 0)
+                    {
                         if (AuraEffect const* aurEff = GetBase()->GetEffect(1))
                         {
                             int32 damage = aurEff->GetAmount() * 8;
                             // backfire damage
                             target->CastCustomSpell(target, 64085, &damage, NULL, NULL, true, NULL, NULL, GetCasterGUID());
                         }
+                    }
                     break;
                 case SPELLFAMILY_WARLOCK:
                     // Haunt
                     if (m_spellInfo->SpellFamilyFlags[1] & 0x40000)
+                    {
                         if (caster)
                             target->CastCustomSpell(caster, 48210, &m_amount, 0, 0, true, NULL, this, GetCasterGUID());
+                    }
                     break;
                 case SPELLFAMILY_DRUID:
                     // Lifebloom
@@ -5140,12 +5217,13 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
                 }
                 case 57723: // Exhaustion
                 case 57724: // Sated
+                case 80354: // Temporal Displacement
+                case 95809: // Insanity
                 {
-                    switch (GetId())
-                    {
-                        case 57723: target->ApplySpellImmune(GetId(), IMMUNITY_ID, 32182, apply); break; // Heroism
-                        case 57724: target->ApplySpellImmune(GetId(), IMMUNITY_ID, 2825, apply);  break; // Bloodlust
-                    }
+                    target->ApplySpellImmune(GetId(), IMMUNITY_ID, 32182, apply); break; // Heroism
+                    target->ApplySpellImmune(GetId(), IMMUNITY_ID, 2825, apply);  break; // Bloodlust
+                    target->ApplySpellImmune(GetId(), IMMUNITY_ID, 80353, apply); break; // Time Warp
+                    target->ApplySpellImmune(GetId(), IMMUNITY_ID, 90355, apply); break; // Ancient Hysteria
                     break;
                 }
                 case 57819: // Argent Champion
@@ -6378,15 +6456,12 @@ void AuraEffect::HandlePeriodicDamageAurasTick(Unit* target, Unit* caster) const
     else
         damage = uint32(target->CountPctFromMaxHealth(damage));
 
-    // bool crit = IsPeriodicTickCrit(target, caster);
-    bool crit = false;
-    if (roll_chance_i(10))
-    {
-        crit = true;
+    bool crit = IsPeriodicTickCrit(target, caster);
+    if (crit)
         damage = caster->SpellCriticalDamageBonus(m_spellInfo, damage, target);
-    }
+
     int32 dmg = damage;
-    caster->ApplyResilience(target, &dmg);
+    caster->ApplyResilience(target, &dmg, CR_CRIT_TAKEN_SPELL);
     damage = dmg;
 
     caster->CalcAbsorbResist(target, GetSpellInfo()->GetSchoolMask(), DOT, damage, &absorb, &resist, GetSpellInfo());
@@ -6438,13 +6513,10 @@ void AuraEffect::HandlePeriodicHealthLeechAuraTick(Unit* target, Unit* caster) c
     uint32 damage = std::max(GetAmount(), 0);
     damage = caster->SpellDamageBonus(target, GetSpellInfo(), damage, DOT, GetBase()->GetStackAmount());
 
-    // bool crit = IsPeriodicTickCrit(target, caster);
-    bool crit = false;
-    if (roll_chance_i(10))
-    {
-        crit = true;
+    bool crit = IsPeriodicTickCrit(target, caster);
+    if (crit)
         damage = caster->SpellCriticalDamageBonus(m_spellInfo, damage, target);
-    }
+
     // Calculate armor mitigation
     if (Unit::IsDamageReducedByArmor(GetSpellInfo()->GetSchoolMask(), GetSpellInfo(), m_effIndex))
     {
@@ -6454,7 +6526,7 @@ void AuraEffect::HandlePeriodicHealthLeechAuraTick(Unit* target, Unit* caster) c
     }
 
     int32 dmg = damage;
-    caster->ApplyResilience(target, &dmg);
+    caster->ApplyResilience(target, &dmg, CR_CRIT_TAKEN_SPELL);
     damage = dmg;
 
     caster->CalcAbsorbResist(target, GetSpellInfo()->GetSchoolMask(), DOT, damage, &absorb, &resist, m_spellInfo);
@@ -6585,13 +6657,10 @@ void AuraEffect::HandlePeriodicHealAurasTick(Unit* target, Unit* caster) const
         damage = caster->SpellHealingBonus(target, GetSpellInfo(), damage, DOT, GetBase()->GetStackAmount());
     }
 
-    // bool crit = IsPeriodicTickCrit(target, caster);
-    bool crit = false;
-    if (roll_chance_i(10))
-    {
-        crit = true;
+    bool crit = IsPeriodicTickCrit(target, caster);
+    if (crit)
         damage = caster->SpellCriticalHealingBonus(m_spellInfo, damage, target);
-    }
+
     sLog->outDetail("PeriodicTick: %u (TypeId: %u) heal of %u (TypeId: %u) for %u health inflicted by %u",
         GUID_LOPART(GetCasterGUID()), GuidHigh2TypeId(GUID_HIPART(GetCasterGUID())), target->GetGUIDLow(), target->GetTypeId(), damage, GetId());
 

@@ -1087,14 +1087,19 @@ void Unit::CalculateSpellDamageTaken(SpellNonMeleeDamage *damageInfo, int32 dama
             // Spell weapon based damage CAN BE crit & blocked at same time
             if (blocked)
             {
-                damageInfo->blocked = damage * 0.3f;
-                //double blocked amount if block is critical
+                damageInfo->blocked = victim->GetShieldBlockValue();
+                // double blocked amount if block is critical
                 if (victim->isBlockCritical())
                     damageInfo->blocked += damageInfo->blocked;
+                if (damage < int32(damageInfo->blocked))
+                    damageInfo->blocked = uint32(damage);
                 damage -= damageInfo->blocked;
             }
 
-            ApplyResilience(victim, &damage);
+            if (attackType != RANGED_ATTACK)
+                ApplyResilience(victim, &damage, CR_CRIT_TAKEN_MELEE);
+            else
+                ApplyResilience(victim, &damage, CR_CRIT_TAKEN_RANGED);
             break;
         }
         // Magical Attacks
@@ -1108,7 +1113,7 @@ void Unit::CalculateSpellDamageTaken(SpellNonMeleeDamage *damageInfo, int32 dama
                 damage = SpellCriticalDamageBonus(spellInfo, damage, victim);
             }
 
-            ApplyResilience(victim, &damage);
+            ApplyResilience(victim, &damage, CR_CRIT_TAKEN_SPELL);
             break;
         }
         default:
@@ -1323,7 +1328,10 @@ void Unit::CalculateMeleeDamage(Unit* victim, uint32 damage, CalcDamageInfo *dam
     }
 
     int32 resilienceReduction = damageInfo->damage;
-    ApplyResilience(victim, &resilienceReduction);
+    if (attackType != RANGED_ATTACK)
+        ApplyResilience(victim, &resilienceReduction, CR_CRIT_TAKEN_MELEE);
+    else
+        ApplyResilience(victim, &resilienceReduction, CR_CRIT_TAKEN_RANGED);
     resilienceReduction = damageInfo->damage - resilienceReduction;
     damageInfo->damage      -= resilienceReduction;
     damageInfo->cleanDamage += resilienceReduction;
@@ -16483,7 +16491,7 @@ void Unit::SendPlaySpellImpact(uint64 guid, uint32 id)
     SendMessageToSet(&data, false);
 }
 
-void Unit::ApplyResilience(Unit const* victim, int32* damage) const
+void Unit::ApplyResilience(Unit const* victim, int32* damage, CombatRating type) const
 {
     // player mounted on multi-passenger mount is also classified as vehicle
     if (IsVehicle() || (victim->IsVehicle() && victim->GetTypeId() != TYPEID_PLAYER))
@@ -16504,8 +16512,29 @@ void Unit::ApplyResilience(Unit const* victim, int32* damage) const
     if (!target)
         return;
 
-    if (source && damage)
-        *damage -= target->ToPlayer()->GetPlayerDamageReduction(*damage);
+    switch (type)
+    {
+    case CR_CRIT_TAKEN_MELEE:
+        if (source && damage)
+        {
+            *damage -= target->GetMeleeDamageReduction(*damage);
+        }
+        break;
+    case CR_CRIT_TAKEN_RANGED:
+        if (source && damage)
+        {
+            *damage -= target->GetRangedDamageReduction(*damage);
+        }
+        break;
+    case CR_CRIT_TAKEN_SPELL:
+        if (source && damage)
+        {
+            *damage -= target->GetSpellDamageReduction(*damage);
+        }
+        break;
+    default:
+        break;
+    }
 }
 
 // Melee based spells can be miss, parry or dodge on this step
