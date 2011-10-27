@@ -823,6 +823,14 @@ void Spell::EffectSchoolDMG(SpellEffIndex effIndex)
             }
             case SPELLFAMILY_HUNTER:
                 {
+                    // Rapid Recuperation
+                    if (m_caster->HasAura(3045))
+                        if (m_caster->HasAura(53228))                // Rank 1
+                            m_caster->CastSpell(m_caster, 53230, true);
+                        else
+                            if (m_caster->HasAura(53232))                // Rank 2
+                                m_caster->CastSpell(m_caster, 54227, true);
+
                     //Gore
                     if (m_spellInfo->SpellIconID == 1578)
                     {
@@ -861,13 +869,21 @@ void Spell::EffectSchoolDMG(SpellEffIndex effIndex)
                     damage += count * int32(average * IN_MILLISECONDS) / m_caster->GetAttackTime(BASE_ATTACK);
                     break;
                 }
-                // Shield of Righteousness
-                if (m_spellInfo->SpellFamilyFlags[EFFECT_1] & 0x100000)
+                //Shield of  Righteous
+                if (m_spellInfo->Id == 53600)
                 {
-                    uint8 level = m_caster->getLevel();
-                    uint32 block_value = m_caster->GetShieldBlockValue(uint32(float(level) * 29.5f), uint32(float(level) * 39.5f));
-                    damage += CalculatePctN(block_value, m_spellInfo->Effects[EFFECT_1].CalcValue());
-                    break;
+                    switch(m_caster->GetPower(POWER_HOLY_POWER))
+                    {
+                    case 0:
+                        damage = int32(damage * 1.16f);
+                        break;
+                    case 1:
+                        damage = int32((damage * 1.16f) * 3);
+                        break;
+                    case 2:
+                        damage = int32((damage * 1.16f) * 6);
+                        break;
+                    }
                 }
                 break;
             }
