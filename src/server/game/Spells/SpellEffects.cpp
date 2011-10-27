@@ -4623,6 +4623,106 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
                         }
                     }
                     break;
+                case 48025:                                     // Headless Horseman's Mount
+                {
+                    if (!unitTarget || unitTarget->GetTypeId() != TYPEID_PLAYER)
+                        return;
+
+                    // Prevent stacking of mounts and client crashes upon dismounting
+                    unitTarget->RemoveAurasByType(SPELL_AURA_MOUNTED);
+
+                    // Triggered spell id dependent on riding skill and zone
+                    bool canFly = true;
+                    uint32 v_map = GetVirtualMapForMapAndZone(unitTarget->GetMapId(), unitTarget->GetZoneId());
+                    if (v_map != 530 && v_map != 571 && v_map != 0)
+                        canFly = false;
+
+                    if (canFly && v_map == 571 && !unitTarget->ToPlayer()->HasSpell(54197))
+                        canFly = false;
+
+                    if (canFly && v_map == 0 && !unitTarget->ToPlayer()->HasSpell(90267))
+                        canFly = false;
+
+                    float x, y, z;
+                    unitTarget->GetPosition(x, y, z);
+                    uint32 areaFlag = unitTarget->GetBaseMap()->GetAreaFlag(x, y, z);
+                    AreaTableEntry const *pArea = sAreaStore.LookupEntry(areaFlag);
+                    if (canFly && (pArea && pArea->flags & AREA_FLAG_NO_FLY_ZONE) || !pArea)
+                        canFly = false;
+
+                    switch(unitTarget->ToPlayer()->GetBaseSkillValue(SKILL_RIDING))
+                    {
+                    case 75: unitTarget->CastSpell(unitTarget, 51621, true); break;
+                    case 150: unitTarget->CastSpell(unitTarget, 48024, true); break;
+                    case 225:
+                        {
+                            if (canFly)
+                                unitTarget->CastSpell(unitTarget, 51617, true);
+                            else
+                                unitTarget->CastSpell(unitTarget, 48024, true);
+                        }
+						break;
+                    case 300:
+                        {
+                            if (canFly)
+                                unitTarget->CastSpell(unitTarget, 48023, true);
+                            else
+                                unitTarget->CastSpell(unitTarget, 48024, true);
+                        }
+						break;
+                    }
+                    return;
+                }
+                case 47977:                                     // Magic Broom
+                {
+                    if (!unitTarget || unitTarget->GetTypeId() != TYPEID_PLAYER)
+                        return;
+
+                    // Prevent stacking of mounts and client crashes upon dismounting
+                    unitTarget->RemoveAurasByType(SPELL_AURA_MOUNTED);
+
+                    // Triggered spell id dependent on riding skill and zone
+                    bool canFly = true;
+                    uint32 v_map = GetVirtualMapForMapAndZone(unitTarget->GetMapId(), unitTarget->GetZoneId());
+                    if (v_map != 530 && v_map != 571 && v_map != 0)
+                        canFly = false;
+
+                    if (canFly && v_map == 571 && !unitTarget->ToPlayer()->HasSpell(54197))
+                        canFly = false;
+
+                    if (canFly && v_map == 0 && !unitTarget->ToPlayer()->HasSpell(90267))
+                        canFly = false;
+
+                    float x, y, z;
+                    unitTarget->GetPosition(x, y, z);
+                    uint32 areaFlag = unitTarget->GetBaseMap()->GetAreaFlag(x, y, z);
+                    AreaTableEntry const *pArea = sAreaStore.LookupEntry(areaFlag);
+                    if (canFly && (pArea && pArea->flags & AREA_FLAG_NO_FLY_ZONE) || !pArea)
+                        canFly = false;
+
+                    switch(unitTarget->ToPlayer()->GetBaseSkillValue(SKILL_RIDING))
+                    {
+                    case 75: unitTarget->CastSpell(unitTarget, 42680, true); break;
+                    case 150: unitTarget->CastSpell(unitTarget, 42683, true); break;
+                    case 225:
+                        {
+                            if (canFly)
+                                unitTarget->CastSpell(unitTarget, 42667, true);
+                            else
+                                unitTarget->CastSpell(unitTarget, 42683, true);
+                        }
+						break;
+                    case 300:
+                        {
+                            if (canFly)
+                                unitTarget->CastSpell(unitTarget, 42668, true);
+                            else
+                                unitTarget->CastSpell(unitTarget, 42683, true);
+                        }
+						break;
+                    }
+                    return;
+                }
                 // Mug Transformation
                 case 41931:
                 {
@@ -5141,7 +5241,7 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
                     unitTarget->GetAura(55078)->SetDuration(unitTarget->GetAura(55078)->GetDuration() + (addDuration * 1000), true);
             }
             break;
-		}
+        }
         case SPELLFAMILY_WARRIOR:
         {
             // Shattering Throw
