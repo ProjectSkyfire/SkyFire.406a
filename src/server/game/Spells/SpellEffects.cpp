@@ -889,6 +889,17 @@ void Spell::EffectSchoolDMG(SpellEffIndex effIndex)
             }
             case SPELLFAMILY_DEATHKNIGHT:
             {
+                // Ebon Plaguebringer
+                if (m_caster->HasAura(51099)) // Rank 1
+                {
+                    if (m_spellInfo->Id == 45462 || m_spellInfo->Id == 45477 || m_spellInfo->Id == 45524)
+                        m_caster->CastSpell(unitTarget, 65142, true);
+                }
+                else if (m_caster->HasAura(51160)) // Rank 2
+                {
+                    if (m_spellInfo->Id == 45462 || m_spellInfo->Id == 45477 || m_spellInfo->Id == 45524)
+                        m_caster->CastSpell(unitTarget, 65142, true);
+                }
                 // Blood Boil - bonus for diseased targets
                 if (m_spellInfo->SpellFamilyFlags[0] & 0x00040000)
                 {
@@ -937,6 +948,7 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
         {
             switch (m_spellInfo->Id)
             {
+                case 8593:                                  // Symbol of life (restore creature to life)
                 case 31225:                                 // Shimmering Vessel (restore creature to life)
                 {
                     if (!unitTarget || unitTarget->GetTypeId() != TYPEID_UNIT)
@@ -1347,6 +1359,12 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                     m_caster->SendMessageToSet(&data, true);
                     return;
                 }
+				case 68996:                                 // Two forms (worgen transformation spell)
+				{
+					if (m_caster->GetTypeId() == TYPEID_PLAYER && !m_caster->isInCombat())
+						m_caster->ToPlayer()->toggleWorgenForm();
+					return;
+				}
                 case 53808:                                 // Pygmy Oil
                 {
                     Aura* pAura = m_caster->GetAura(53806);
