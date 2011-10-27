@@ -710,13 +710,56 @@ void Spell::EffectSchoolDMG(SpellEffIndex effIndex)
                     damage += int32(energy * multiple);
                     damage += int32(CalculatePctN(m_caster->ToPlayer()->GetComboPoints() * ap, 7));
                 }
+                // Starfire
+                else if (m_spellInfo->SpellFamilyFlags[0] & 0x00000004)
+                {
+                    if (m_caster->GetTypeId() == TYPEID_PLAYER)
+                    {
+                        if (m_caster->ToPlayer()->GetTalentBranchSpec(m_caster->ToPlayer()->GetActiveSpec()) == BS_DRUID_BALANCE)
+                        {
+                            if (m_caster->HasAura(48517))
+                            {
+                                m_caster->RemoveAurasDueToSpell(48517);
+                                m_caster->SetEclipsePower(0);
+                            }
+                            if (m_caster->GetEclipsePower() >= -20)
+                                if (m_caster->HasAura(48518))
+                                        m_caster->RemoveAurasDueToSpell(48518);
+
+                            m_caster->SetEclipsePower(int32(m_caster->GetEclipsePower() + 20));
+                        }
+                    }
+                }
                 // Wrath
                 else if (m_spellInfo->SpellFamilyFlags[0] & 0x00000001)
                 {
+                    if (m_caster->GetTypeId() == TYPEID_PLAYER)
+                    {
+                        if (m_caster->ToPlayer()->GetTalentBranchSpec(m_caster->ToPlayer()->GetActiveSpec()) == BS_DRUID_BALANCE)
+                        {
+                            if (m_caster->HasAura(48518))
+                            {
+                                m_caster->RemoveAurasDueToSpell(48518);
+                                m_caster->SetEclipsePower(0);
+                            }
+                            if (m_caster->GetEclipsePower() <= 13)
+                                if (m_caster->HasAura(48517))
+                                        m_caster->RemoveAurasDueToSpell(48517);
+
+                            m_caster->SetEclipsePower(int32(m_caster->GetEclipsePower() - 13));
+                        }
+                    }
                     // Improved Insect Swarm
                     if (AuraEffect const* aurEff = m_caster->GetDummyAuraEffect(SPELLFAMILY_DRUID, 1771, 0))
                         if (unitTarget->GetAuraEffect(SPELL_AURA_PERIODIC_DAMAGE, SPELLFAMILY_DRUID, 0x00200000, 0, 0))
-                            AddPctN(damage, aurEff->GetAmount());
+                            damage = int32(damage*(100.0f+aurEff->GetAmount())/100.0f);
+                }
+                else if (m_spellInfo->Id == 8921) // Moonfire
+                {
+                    if (m_caster->HasAura(78784)) // Blessing of the Grove rank 1
+                        damage = int32 (damage * 0.03f);
+                    if (m_caster->HasAura(78785)) // Blessing of the Grove rank 2
+                        damage = int32 (damage * 0.06f);
                 }
                 break;
             }

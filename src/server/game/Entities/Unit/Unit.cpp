@@ -17894,3 +17894,105 @@ void SpellModifier::Recalculate(SpellInfo const *spellInfo, Unit* target)
     if (ownerAuraEffect)
         ownerAuraEffect->CalculateSpellMod(spellInfo, target);
 }
+
+void Unit::SetEclipsePower(int32 power)
+{
+    eclipse = power;
+
+    if (eclipse == 0)
+    {
+        if (HasAura(67483))
+            RemoveAurasDueToSpell(67483);
+        if (HasAura(67484))
+            RemoveAurasDueToSpell(67484);
+    }
+
+    if (eclipse >= 100)
+    {
+        if (HasAura(48518))
+            RemoveAurasDueToSpell(48518);
+        eclipse = 100;
+        AddAura(48517, ToPlayer());
+    }
+
+    if (eclipse <= -100)
+    {
+        if (HasAura(48517))
+            RemoveAurasDueToSpell(48517);
+        eclipse = -100;
+        AddAura(48518, ToPlayer());
+    }
+
+    WorldPacket data(SMSG_POWER_UPDATE);
+    data.append(GetPackGUID());
+    data << int32(1);
+    data << int8(POWER_ECLIPSE);
+    data << int32(eclipse);
+    SendMessageToSet(&data, GetTypeId() == TYPEID_PLAYER ? true : false);
+}
+
+uint32 Unit::GetHealingDoneInPastSecs(uint32 secs)
+{
+    uint32 heal = 0;
+
+    if (secs > 120)
+        secs = 120;
+
+    for (uint32 i = 0; i < secs; i++)
+        heal += m_heal_done[i];
+
+    if (heal < 0)
+        return 0;
+
+    return heal;
+};
+
+uint32 Unit::GetDamageDoneInPastSecs(uint32 secs)
+{
+    uint32 damage = 0;
+
+    if (secs > 120)
+        secs = 120;
+
+    for (uint32 i = 0; i < secs; i++)
+        damage += m_damage_done[i];
+
+    if (damage < 0)
+        return 0;
+
+    return damage;
+};
+
+uint32 Unit::GetDamageTakenInPastSecs(uint32 secs)
+{
+    uint32 tdamage = 0;
+
+    if (secs > 120)
+        secs = 120;
+
+    for (uint32 i = 0; i < secs; i++)
+        tdamage += m_damage_taken[i];
+
+    if (tdamage < 0)
+        return 0;
+
+    return tdamage;
+};
+
+void Unit::ResetDamageDoneInPastSecs(uint32 secs)
+{
+    if (secs > 120)
+        secs = 120;
+
+    for (uint32 i = 0; i < secs; i++)
+        m_damage_done[i] = 0;
+};
+
+void Unit::ResetHealingDoneInPastSecs(uint32 secs)
+{
+    if (secs > 120)
+        secs = 120;
+
+    for (uint32 i = 0; i < secs; i++)
+        m_heal_done[i] = 0;
+};

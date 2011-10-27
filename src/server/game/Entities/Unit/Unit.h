@@ -1553,7 +1553,7 @@ class Unit : public WorldObject
             {
                 value = soft_cap + ((value - soft_cap) / 2);
             }
-        
+
             return value;
         }
         uint32 GetUnitMeleeSkill(Unit const* target = NULL) const { return (target ? getLevelForTarget(target) : getLevel()) * 5; }
@@ -2279,6 +2279,23 @@ class Unit : public WorldObject
         Spell* m_spellModTakingSpell;  // Spell for which charges are dropped in spell::finish
         SpellModList m_spellMods[MAX_SPELLMOD];
 
+        int32 eclipse;
+        int32 GetEclipsePower() {return eclipse;};
+        void SetEclipsePower(int32 power);
+
+        uint32 m_heal_done[120];
+        uint32 m_damage_done[120];
+        uint32 m_damage_taken[120];
+        int32 DmgandHealDoneTimer;
+        uint32 GetHealingDoneInPastSecs(uint32 secs);
+        uint32 GetDamageDoneInPastSecs(uint32 secs);
+        uint32 GetDamageTakenInPastSecs(uint32 secs);
+        void ResetDamageDoneInPastSecs(uint32 secs);
+        void ResetHealingDoneInPastSecs(uint32 secs);
+
+        float m_AbsorbHeal;
+        float GetAbsorbHeal() const { return m_AbsorbHeal; };
+        void SetAbsorbHeal(float heal) { m_AbsorbHeal = heal; };
     protected:
         explicit Unit ();
 
