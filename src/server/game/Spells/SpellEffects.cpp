@@ -1737,6 +1737,7 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
             break;
         }
         case SPELLFAMILY_PALADIN:
+        {
             // Divine Storm
             if (m_spellInfo->SpellFamilyFlags[1] & SPELLFAMILYFLAG1_PALADIN_DIVINESTORM && effIndex == 1)
             {
@@ -1791,7 +1792,7 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                     }
                     break;
                 }
-            case 31789: // Righteous Defense (step 1)
+                case 31789: // Righteous Defense (step 1)
                 {
                     // Clear targets for eff 1
                     for (std::list<TargetInfo>::iterator ihit = m_UniqueTargetInfo.begin(); ihit != m_UniqueTargetInfo.end(); ++ihit)
@@ -1821,6 +1822,7 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                 }
             }
             break;
+        }
         case SPELLFAMILY_SHAMAN:
             // Cleansing Totem Pulse
             if (m_spellInfo->SpellFamilyFlags[0] & SPELLFAMILYFLAG_SHAMAN_TOTEM_EFFECTS && m_spellInfo->SpellIconID == 1673)
@@ -1869,14 +1871,47 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
             }
             break;
         case SPELLFAMILY_DEATHKNIGHT:
+            // Hungering Cold
+            if (m_spellInfo->SpellFamilyFlags[1] & SPELLFAMILYFLAG1_DK_HUNGERING_COLD)
+            {
+                m_caster->CastCustomSpell(m_caster, 51209, &bp, NULL, NULL, true);
+            }
+            // Chains of Ice
+            if (m_spellInfo->SpellFamilyFlags[0] & SPELLFAMILYFLAG_DK_CHAINS_OF_ICE)
+            {
+                if (m_caster->HasAura(50040))
+                {
+                    m_caster->CastSpell(unitTarget, 96293, true);
+                }
+                if (m_caster->HasAura(50041))
+                {
+                    m_caster->CastSpell(unitTarget, 96294, true);
+                }
+            }
             // Death strike
             if (m_spellInfo->SpellFamilyFlags[0] & SPELLFAMILYFLAG_DK_DEATH_STRIKE)
             {
-                uint32 count = unitTarget->GetDiseasesByCaster(m_caster->GetGUID());
-                int32 bp = int32(count * m_caster->CountPctFromMaxHealth(int32(m_spellInfo->Effects[EFFECT_0].DamageMultiplier)));
+                int32 bp;
+                if ((m_caster->CountPctFromMaxHealth(7)) > (20 * m_caster->GetDamageTakenInPastSecs(5) / 100))
+                    bp = m_caster->CountPctFromMaxHealth(7);
+                else
+                    bp = (20 * m_caster->GetDamageTakenInPastSecs(5) / 100);
+
                 // Improved Death Strike
                 if (AuraEffect const* aurEff = m_caster->GetAuraEffect(SPELL_AURA_ADD_PCT_MODIFIER, SPELLFAMILY_DEATHKNIGHT, 2751, 0))
                     AddPctN(bp, m_caster->CalculateSpellDamage(m_caster, aurEff->GetSpellInfo(), 2));
+
+                if (m_caster->ToPlayer()->HasAuraType(SPELL_AURA_MASTERY))
+                {
+                    if (m_caster->ToPlayer()->HasSpell(50029)) //Temp check for spec
+                    {
+                        if (m_caster->HasAura(48263))
+                        {
+                            int32 shield = int32(bp * (50.0f + (6.25f * m_caster->ToPlayer()->GetMasteryPoints())) / 100.0f);
+                            m_caster->CastCustomSpell(m_caster, 77535, &shield, NULL, NULL, false);
+                        }
+                    }
+                }
                 m_caster->CastCustomSpell(m_caster, 45470, &bp, NULL, NULL, false);
                 return;
             }
@@ -1885,18 +1920,26 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
             {
                 if (m_caster->IsFriendlyTo(unitTarget))
                 {
-                    int32 bp = int32(damage * 1.5f);
+                    int32 bp = int32(985 + damage) * 3.5;
                     m_caster->CastCustomSpell(unitTarget, 47633, &bp, NULL, NULL, true);
                 }
                 else
                 {
-                    int32 bp = damage;
+                    int32 bp = 985 + damage;
                     m_caster->CastCustomSpell(unitTarget, 47632, &bp, NULL, NULL, true);
                 }
                 return;
             }
             switch (m_spellInfo->Id)
             {
+            case 49020: //Obliterate
+            case 66198: //Obliterate Off-Hand
+                {
+                    uint32 count = unitTarget->GetDiseasesByCaster(m_caster->GetGUID());
+                    if (count > 0)
+                       damage = int32(damage + (damage * count * 12.5 / 100));
+                    break;
+                }
             case 49560: // Death Grip
                 Position pos;
                 GetSummonPosition(effIndex, pos);

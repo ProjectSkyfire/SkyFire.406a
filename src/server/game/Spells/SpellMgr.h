@@ -86,7 +86,10 @@ enum SpellFamilyFlag
 
     // Deathknight
     SPELLFAMILYFLAG_DK_DEATH_STRIKE         = 0x00000010,
+    SPELLFAMILYFLAG1_DK_SCOURGE_STRIKE      = 0x08000000,
     SPELLFAMILYFLAG_DK_DEATH_COIL           = 0x00002000,
+    SPELLFAMILYFLAG1_DK_HUNGERING_COLD      = 0x00001000,
+    SPELLFAMILYFLAG_DK_CHAINS_OF_ICE        = 0x00000004,
 
     // TODO: Figure out a more accurate name for the following familyflag(s)
     SPELLFAMILYFLAG_SHAMAN_TOTEM_EFFECTS    = 0x04000000,  // Seems to be linked to most totems and some totem effects
