@@ -6126,6 +6126,14 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                 triggered_spell_id = 47753;
                 break;
             }
+            //Mind Melt
+            case 87160:
+            case 81292:
+            {
+                if(procSpell->Id != 73510)
+                    return false;
+                break;
+            }			
             // Body and Soul
             if (dummySpell->SpellIconID == 2218)
             {
