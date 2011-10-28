@@ -2769,6 +2769,8 @@ void SpellMgr::LoadSpellCustomAttr()
 {
     uint32 oldMSTime = getMSTime();
 
+    uint32 count = 0;
+
     SpellInfo* spellInfo = NULL;
 
     for (uint32 i = 0; i < GetSpellInfoStoreSize(); ++i)
@@ -2892,6 +2894,47 @@ void SpellMgr::LoadSpellCustomAttr()
 
         switch (spellInfo->Id)
         {
+        case 77515: // Mastery: Dreadblade
+            spellInfo->Effects[0].BasePoints = 20;
+            count++;
+            break;
+        case 77514: // Mastery: Frozen Heart
+            spellInfo->Effects[0].BasePoints = 16;
+            count++;
+            break;
+        case 77493: // Mastery: Razor Claws
+            spellInfo->Effects[0].BasePoints = 25.04;
+            count++;
+            break;
+        case 76658: // Mastery: Essence of the Viper
+            spellInfo->Effects[0].BasePoints = 8;
+            count++;
+            break;
+        case 76657: // Mastery: Master of Beasts
+            spellInfo->Effects[0].BasePoints = 13.6;
+            count++;
+            break;
+        case 76595: // Mastery: Flashburn
+            spellInfo->Effects[0].BasePoints = 22.4;
+            count++;
+            break;
+        case 76671: // Mastery: Divine Bulwark
+            spellInfo->Effects[0].BasePoints = 18;
+            count++;
+            break;
+        case 77220: // Mastery: Fiery Apocalypse
+            spellInfo->Effects[0].BasePoints = 10.8;
+            count++;
+            break;
+        case 76857: // Mastery: Critical Block
+            spellInfo->Effects[0].BasePoints = 12;
+            spellInfo->Effects[1].BasePoints = 12;
+            count++;
+            break;
+        case 77489: // Mastery: Echo of Light
+            spellInfo->StackAmount = 100; // should be inf
+            count++;
+            break;
             case 42835: // Spout
                 spellInfo->Effects[0].Effect = 0; // remove damage effect, only anim is needed
                 break;
