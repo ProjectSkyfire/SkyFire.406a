@@ -193,7 +193,7 @@ void AuraApplication::BuildUpdatePacket(ByteBuffer& data, bool remove) const
     uint32 flags = m_flags;
     if (aura->GetMaxDuration() > 0 && !(aura->GetSpellInfo()->AttributesEx5 & SPELL_ATTR5_HIDE_DURATION))
         flags |= AFLAG_DURATION;
-    data << uint16(flags);
+    data << uint8(flags);
     data << uint8(aura->GetCasterLevel());
     // send stack amount for aura which could be stacked (never 0 - causes incorrect display) or charges
     // stack amount has priority over charges (checked on retail with spell 50262)
@@ -1194,7 +1194,7 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                     {
                         // Reset cooldown on Fire Blast
                         caster->ToPlayer()->RemoveSpellCooldown(2136, true);
-                    }						
+                    }
                     case 44544: // Fingers of Frost
                     {
                         // See if we already have the indicator aura. If not, create one.
@@ -1224,7 +1224,7 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                         break;
                     }
                 }
-                break;				
+                break;
             case SPELLFAMILY_WARLOCK:
                 switch (GetId())
                 {
@@ -1270,7 +1270,7 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                         break;
                     }
                 }
-                break;				
+                break;
             case SPELLFAMILY_PRIEST:
                 if (!caster)
                     break;
@@ -1418,7 +1418,7 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                         if (caster->HasAura(44394) || caster->HasAura(44395))
                             caster->CastSpell(caster, 86261, true);
                         break;
-                    }						
+                    }
                     case 74396: // Fingers of Frost
                         // Remove the IGNORE_AURASTATE aura
                         target->RemoveAurasDueToSpell(44544);
