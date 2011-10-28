@@ -5765,6 +5765,20 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                     RemoveAurasByType(SPELL_AURA_MOD_DECREASE_SPEED);
                     return true;
                 }
+                // Permafrost
+                case 11175:
+                case 12569:				
+                case 12571:				
+                {						
+                    if (!GetGuardianPet())
+                        return false;
+
+                    // heal amount 
+                    basepoints0 = damage * triggerAmount/100;
+                    target = this;
+                    triggered_spell_id = 91394;
+                    break;
+                }				
                 // Ignite
                 case 11119:
                 case 11120:
