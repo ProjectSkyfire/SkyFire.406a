@@ -1942,6 +1942,7 @@ class Player : public Unit, public GridObject<Player>
         float GetMasteryPoints() { return CalculateMasteryPoints(m_baseRatingValue[CR_MASTERY]); }
         float CalculateMasteryPoints(int32 curr_rating)  { return float(curr_rating * 0.0055779569892473); }
         int32 CalculateMasteryRating(float curr_mastery) { return int32(curr_mastery / 0.0055779569892473); }
+        void RemoveOrAddMasterySpells();
 
         void UpdateAllSpellCritChances();
         void UpdateSpellCritChance(uint32 school);

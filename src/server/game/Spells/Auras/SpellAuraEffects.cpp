@@ -371,7 +371,7 @@ pAuraEffectHandler AuraEffectHandler[TOTAL_AURAS]=
     &AuraEffect::HandlePreventResurrection,                       //314 SPELL_AURA_PREVENT_RESURRECTION todo
     &AuraEffect::HandleNoImmediateEffect,                         //315 SPELL_AURA_UNDERWATER_WALKING todo
     &AuraEffect::HandleNoImmediateEffect,                         //316 SPELL_AURA_PERIODIC_HASTE implemented in AuraEffect::CalculatePeriodic
-    &AuraEffect::HandleNULL,                                      //317 SPELL_AURA_MASTERY
+    &AuraEffect::HandleNoImmediateEffect,                         //317 SPELL_AURA_MASTERY
     &AuraEffect::HandleNULL,                                      //318 NYI
     &AuraEffect::HandleNULL,                                      //319 NYI
     &AuraEffect::HandleNULL,                                      //320 NYI
