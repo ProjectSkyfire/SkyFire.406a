@@ -9543,7 +9543,7 @@ void Player::SendLoot(uint64 guid, LootType loot_type)
     // need know merged fishing/corpse loot type for achievements
     loot->loot_type = loot_type;
 
-    WorldPacket data(SMSG_LOOT_RESPONSE, (9+50));           // we guess size
+    WorldPacket data(SMSG_LOOT_RESPONSE, (9+50+2));          // we guess size -- Checked for 406a
 
     data << uint64(guid);
     data << uint8(loot_type);
@@ -9567,7 +9567,7 @@ void Player::SendNotifyLootMoneyRemoved()
 
 void Player::SendNotifyLootItemRemoved(uint8 lootSlot)
 {
-    WorldPacket data(SMSG_LOOT_REMOVED, 1);
+    WorldPacket data(SMSG_LOOT_REMOVED, 3);         // Checked for 406a
     data << uint8(lootSlot);
     GetSession()->SendPacket(&data);
 }
