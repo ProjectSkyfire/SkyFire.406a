@@ -2275,7 +2275,23 @@ uint32 Spell::SelectEffectTargets(uint32 i, SpellImplicitTargetInfo const& cur)
             }
 
             Position pos;
-            target->GetNearPosition(pos, dist, angle);
+            bool checkCollision = false;
+
+            switch (m_spellInfo->Id)
+            {
+                case 36563: // Shadowstep
+                case 57840: // Killing Spree
+                    checkCollision = true;
+                    break;
+                default:
+                    break;
+            }
+
+            if (checkCollision)
+                target->GetFirstCollisionPosition(pos, dist, angle);
+            else
+                target->GetNearPosition(pos, dist, angle);
+
             m_targets.SetDst(*target);
             m_targets.ModDst(pos);
             break;
@@ -2762,7 +2778,7 @@ uint32 Spell::SelectEffectTargets(uint32 i, SpellImplicitTargetInfo const& cur)
                                 itr = unitList.erase(itr);
                         }
                     }
-                    break;					
+                    break;
                 case SPELLFAMILY_DRUID:
                     if (m_spellInfo->SpellFamilyFlags[1] == 0x04000000) // Wild Growth
                     {

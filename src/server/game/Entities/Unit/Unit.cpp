@@ -6133,7 +6133,7 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                 if(procSpell->Id != 73510)
                     return false;
                 break;
-            }			
+            }
             // Body and Soul
             if (dummySpell->SpellIconID == 2218)
             {
@@ -8866,6 +8866,54 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
     // dummy basepoints or other customs
     switch (trigger_spell_id)
     {
+        // Will of Necropolis
+        case 81162:
+            if (HealthBelowPct(29) || (!HealthBelowPctDamaged(30, damage)))
+                return false;
+            else
+            {
+                if (!ToPlayer()->HasSpellCooldown(trigger_spell_id))
+                {
+                    AddAura(trigger_spell_id, this);
+                    ToPlayer()->AddSpellCooldown(trigger_spell_id, 0, time(NULL) + 15);
+                }
+            }
+            break;
+        case 92184: // Lead Plating
+        case 92233: // Tectonic Shift
+        case 92355: // Turn of the Worm
+        case 92235: // Turn of the Worm
+        case 90996: // Crescendo of Suffering
+        case 91002: // Crescendo of Suffering
+        case 75477: // Scale Nimbleness
+        case 75480: // Scaly Nimbleness
+        case 71633: // Thick Skin
+        case 71639: // Thick Skin
+            if (HealthBelowPct(34) || (!HealthBelowPctDamaged(35, damage)))
+                return false;
+            else
+            {
+                if (!ToPlayer()->HasSpellCooldown(trigger_spell_id))
+                {
+                    AddAura(trigger_spell_id, this);
+                    ToPlayer()->AddSpellCooldown(trigger_spell_id, 0, time(NULL) + 30);
+                }
+            }
+        break;
+        // Die by the Sword
+        case 85386:
+        case 86624:
+            if (HealthBelowPct(19) || (!HealthBelowPctDamaged(20, damage)))
+                return false;
+            else
+            {
+                if (!ToPlayer()->HasSpellCooldown(trigger_spell_id))
+                {
+                    AddAura(trigger_spell_id, this);
+                    ToPlayer()->AddSpellCooldown(trigger_spell_id, 0, time(NULL) + 120);
+                }
+            }
+        break;
         // Auras which should proc on area aura source (caster in this case):
         // Turn the Tables
         case 52914:
