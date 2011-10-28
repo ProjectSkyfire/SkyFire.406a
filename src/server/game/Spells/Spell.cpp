@@ -2750,6 +2750,19 @@ uint32 Spell::SelectEffectTargets(uint32 i, SpellImplicitTargetInfo const& cur)
                             ++itr;
                     }
                     break;
+                case SPELLFAMILY_PALADIN:
+                    // Holy Wrath
+                    if (m_spellInfo->Id == 2812)
+                    {
+                        for (std::list<Unit*>::iterator itr = unitList.begin() ; itr != unitList.end();)
+                        {
+                            if ((*itr)->GetTypeId() == TYPEID_PLAYER || (*itr)->GetCreatureType() == CREATURE_TYPE_DEMON || (*itr)->GetCreatureType() == CREATURE_TYPE_UNDEAD)
+                               itr++;
+                            else
+                                itr = unitList.erase(itr);
+                        }
+                    }
+                    break;					
                 case SPELLFAMILY_DRUID:
                     if (m_spellInfo->SpellFamilyFlags[1] == 0x04000000) // Wild Growth
                     {
