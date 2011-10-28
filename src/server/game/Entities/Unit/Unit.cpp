@@ -6283,7 +6283,7 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
             switch (dummySpell->Id)
             {
                 // Nature's Ward
-                case 33881:			
+                case 33881:
                 case 33882:
                 {
                     if (HealthAbovePct(50))
@@ -6292,7 +6292,7 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                     CastSpell(this, 45281, true);
                     CastSpell(this, 774, true);
                     break;
-                }			
+                }
                 // Glyph of Innervate
                 case 54832:
                 {
@@ -7144,12 +7144,12 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                 case 82984:
                 case 82988:
                 {
-                    basepoints0 = triggerAmount * damage / 100;				
-                    target = this;				
-                    triggered_spell_id = 82987;					
-                    break;					
-                }	                
-				// Tidal Waves
+                    basepoints0 = triggerAmount * damage / 100;
+                    target = this;
+                    triggered_spell_id = 82987;
+                    break;
+                }
+                // Tidal Waves
                 case 51562:
                 case 51563:
                 case 51564:
@@ -8375,20 +8375,20 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
                     }
                 }
                 switch (auraSpellInfo->Id)
-                {				
+                {
                     // Reactive Barrier
                     case 86303:
                     case 86304:
                     {
                         if (GetTypeId() == TYPEID_PLAYER && ToPlayer()->HasSpellCooldown(11426))
-				 			return false;
-		
+                            return false;
+
                         CastSpell(this, 86347, true);
-                        CastSpell(this, 11426, true);	
-					 	break;						
+                        CastSpell(this, 11426, true);
+                        break;
                     }
                 }
-                break;	
+                break;
             case SPELLFAMILY_WARRIOR:
                 if (auraSpellInfo->Id == 50421)             // Scent of Blood
                 {
