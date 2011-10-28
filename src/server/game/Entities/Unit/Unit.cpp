@@ -6282,6 +6282,17 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
         {
             switch (dummySpell->Id)
             {
+                // Nature's Ward
+                case 33881:			
+                case 33882:
+                {
+                    if (HealthAbovePct(50))
+                        return false;
+
+                    CastSpell(this, 45281, true);
+                    CastSpell(this, 774, true);
+                    break;
+                }			
                 // Glyph of Innervate
                 case 54832:
                 {
