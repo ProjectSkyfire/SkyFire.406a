@@ -5767,18 +5767,18 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                 }
                 // Permafrost
                 case 11175:
-                case 12569:				
-                case 12571:				
-                {						
+                case 12569:
+                case 12571:
+                {
                     if (!GetGuardianPet())
                         return false;
 
-                    // heal amount 
+                    // heal amount
                     basepoints0 = damage * triggerAmount/100;
                     target = this;
                     triggered_spell_id = 91394;
                     break;
-                }				
+                }
                 // Ignite
                 case 11119:
                 case 11120:
@@ -6645,16 +6645,16 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                 case 83340:
                 {
                     triggered_spell_id = 83359;
-                    target = this;				
+                    target = this;
                     break;
                 }
                 // Sic 'Em!
                 case 83356:
                 {
                     triggered_spell_id = 89388;
-                    target = this;				
+                    target = this;
                     break;
-                }					
+                }
                 case 3579: // Lock and Load
                 {
                     // Proc only from periodic (from trap activation proc another aura of this spell)
@@ -7127,6 +7127,15 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                 {
                     target = this;
                     triggered_spell_id = 28850;
+                    break;
+                }
+                // Tidal Waves
+                case 51562:
+                case 51563:
+                case 51564:
+                {
+                    target = this;
+                    triggered_spell_id = 53390;
                     break;
                 }
                 // Windfury Weapon (Passive) 1-5 Ranks
