@@ -16512,6 +16512,7 @@ void Unit::ApplyResilience(Unit const* victim, int32* damage, CombatRating type)
     if (!target)
         return;
 
+    if (source && damage)
     switch (type)
     {
     case CR_CRIT_TAKEN_MELEE:
