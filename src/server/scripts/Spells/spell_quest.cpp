@@ -991,7 +991,7 @@ public:
     class spell_q14112_14145_chum_the_water_SpellScript : public SpellScript
     {
         PrepareSpellScript(spell_q14112_14145_chum_the_water_SpellScript);
-    
+
         bool Validate(SpellInfo const* /*spellEntry*/)
         {
             if (!sSpellMgr->GetSpellInfo(SUMMON_ANGRY_KVALDIR))
@@ -1046,5 +1046,5 @@ void AddSC_quest_spell_scripts()
     new spell_q9874_liquid_fire();
     new spell_q12805_lifeblood_dummy();
     new spell_q13280_13283_plant_battle_standard();
-    new spell_q14112_14145_chum_the_water();	
+    new spell_q14112_14145_chum_the_water();
 }
