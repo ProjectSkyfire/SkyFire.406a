@@ -327,6 +327,50 @@ public:
     }
 };
 
+// Shield of Righteous
+// Spell Id: 53600
+class spell_pal_shield_of_righteous : public SpellScriptLoader
+{
+public:
+    spell_pal_shield_of_righteous() : SpellScriptLoader("spell_pal_shield_of_righteous") { }
+
+    class spell_pal_shield_of_righteous_SpellScript : public SpellScript
+    {
+        PrepareSpellScript(spell_pal_shield_of_righteous_SpellScript)
+        
+        void CalculateDamage(SpellEffIndex /*effIndex*/)
+        {
+            if(Unit* caster = GetCaster())
+            {
+                int32 damage = GetHitDamage();
+                switch(caster->GetPower(POWER_HOLY_POWER))
+                {
+                    case 0:
+                        damage = int32(damage * 1.16f);
+                        break;
+                    case 1:
+                        damage = int32((damage * 1.16f) * 3);
+                        break;
+                    case 2:
+                        damage = int32((damage * 1.16f) * 6);
+                        break;
+                }
+                SetHitDamage(damage);
+            }
+        }
+
+        void Register()
+        {
+            OnEffectHitTarget += SpellEffectFn(spell_pal_shield_of_righteous_SpellScript::CalculateDamage, EFFECT_0, SPELL_EFFECT_SCHOOL_DAMAGE);
+        }
+    };
+
+    SpellScript* GetSpellScript() const
+    {
+        return new spell_pal_shield_of_righteous_SpellScript();
+    }
+};
+
 void AddSC_paladin_spell_scripts()
 {
     new spell_pal_ardent_defender();
@@ -335,4 +379,5 @@ void AddSC_paladin_spell_scripts()
     new spell_pal_guarded_by_the_light();
     new spell_pal_holy_shock();
     new spell_pal_judgement_of_command();
+    new spell_pal_shield_of_righteous();
 }
