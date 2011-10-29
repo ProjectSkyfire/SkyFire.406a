@@ -1573,10 +1573,10 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                         for(std::list<Unit*>::iterator itr = PartyMembers.begin(); itr != PartyMembers.end(); ++itr) // If caster is in party with a player
                         {
                             ++player;
-                            if (Continue == false && player > 1)
+                            if (!Continue == false && player > 1)
                                 Continue = true;
                         }
-                        if (Continue == true)
+                        if (PartyMembers.size() > 1)
                             m_caster->CastSpell(unitTarget, 79102, true); // Blessing of Might (Raid)
                         else
                             m_caster->CastSpell(unitTarget, 79101, true); // Blessing of Might (Caster)
