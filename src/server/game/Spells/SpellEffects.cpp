@@ -537,6 +537,37 @@ void Spell::EffectSchoolDMG(SpellEffIndex effIndex)
                 }
                 break;
             }
+           case SPELLFAMILY_PRIEST:
+            {
+                /* Evangelism */
+                if (m_caster->HasAura(81659)) //Rank 1
+                {
+                    if (m_spellInfo->Id == 585 || m_spellInfo->Id == 14914)
+                        m_caster->CastSpell(m_caster, 81660, true);
+                }
+
+                if (m_caster->HasAura(81662)) //Rank 2
+                {
+                    if (m_spellInfo->Id == 585 || m_spellInfo->Id == 14914)
+                        m_caster->CastSpell(m_caster, 81661, true);
+                }
+
+                // Chakra
+                if (m_caster->HasAura(14751))
+                {
+                    switch(m_spellInfo->Id)
+                    {
+                        case   585:  /* Smite */
+                        case 73510:  /* Mind Spike */
+                            {
+                                m_caster->CastSpell(m_caster, 81209, true); // Chakra : Chastise
+                                break;
+                            }
+                        default:
+                            break;
+                    }
+                }
+            }
             case SPELLFAMILY_DRUID:
             {
                 // Starfire
@@ -4911,12 +4942,13 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
                     }
                     return;
                 }
-                case 35376: // translocations
+                // Orbs of translocation between silvermoon and undercity, these need moved to db!
+                /*case 35376: // translocations
                    m_caster->NearTeleportTo(0, 1805.99f, 341.32f, 70.66f, 1.6f);
                    break;
                 case 35727: // translocations
                    m_caster->NearTeleportTo(530, 10038.7f, -7000.9f, 61.86f, 3.05f);
-                   break;
+                   break;*/
                 case 45204: // Clone Me!
                     m_caster->CastSpell(unitTarget, damage, true);
                     break;
