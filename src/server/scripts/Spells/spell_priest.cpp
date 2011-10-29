@@ -383,8 +383,6 @@ class spell_pri_power_word_fortitude : public SpellScriptLoader
                         caster->CastSpell(GetHitUnit(), 79105, true); // Power Word : Fortitude (Raid)
                     else
                         caster->CastSpell(GetHitUnit(), 79104, true); // Power Word : Fortitude (Caster)
-
-					//if (caster->IsFriendlyTo(unitTarget)) //WTF If what?
                 }
             }
 
