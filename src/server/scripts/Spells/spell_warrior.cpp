@@ -94,7 +94,7 @@ class spell_warr_improved_spell_reflection : public SpellScriptLoader
 class spell_warr_bloodthirst : public SpellScriptLoader
 {
     public:
-        spell_warr_bloodthirst : SpellScriptLoader("spell_warr_bloodthirst") { }
+        spell_warr_bloodthirst() : SpellScriptLoader("spell_warr_bloodthirst") { }
         
         class spell_warr_bloodthirst_SpellScript : public SpellScript
         {
@@ -124,7 +124,7 @@ class spell_warr_bloodthirst : public SpellScriptLoader
 class spell_warr_victory_rush : public SpellScriptLoader
 {
     public:
-        spell_warr_victory_rush : SpellScriptLoader("spell_warr_victory_rush") { }
+        spell_warr_victory_rush() : SpellScriptLoader("spell_warr_victory_rush") { }
         
         class spell_warr_victory_rush_SpellScript : public SpellScript
         {
@@ -161,7 +161,7 @@ class spell_warr_victory_rush : public SpellScriptLoader
 class spell_warr_cleave : public SpellScriptLoader
 {
     public:
-        spell_warr_cleave : SpellScriptLoader("spell_warr_cleave") { }
+        spell_warr_cleave() : SpellScriptLoader("spell_warr_cleave") { }
         
         class spell_warr_cleave_SpellScript : public SpellScript
         {
@@ -192,7 +192,7 @@ class spell_warr_cleave : public SpellScriptLoader
 class spell_warr_intercept_triggered : public SpellScriptLoader
 {
     public:
-        spell_warr_intercept_triggered : SpellScriptLoader("spell_warr_intercept_triggered") { }
+        spell_warr_intercept_triggered() : SpellScriptLoader("spell_warr_intercept_triggered") { }
         
         class spell_warr_intercept_triggered_SpellScript : public SpellScript
         {
@@ -222,7 +222,7 @@ class spell_warr_intercept_triggered : public SpellScriptLoader
 class spell_warr_execute : public SpellScriptLoader
 {
     public:
-        spell_warr_execute : SpellScriptLoader("spell_warr_execute") { }
+        spell_warr_execute() : SpellScriptLoader("spell_warr_execute") { }
         
         class spell_warr_execute_SpellScript : public SpellScript
         {
@@ -269,7 +269,7 @@ class spell_warr_execute : public SpellScriptLoader
 class spell_warr_heroic_strike : public SpellScriptLoader
 {
     public:
-        spell_warr_heroic_strike : SpellScriptLoader("spell_warr_heroic_strike") { }
+        spell_warr_heroic_strike() : SpellScriptLoader("spell_warr_heroic_strike") { }
         
         class spell_warr_heroic_strike_SpellScript : public SpellScript
         {
@@ -299,7 +299,7 @@ class spell_warr_heroic_strike : public SpellScriptLoader
 class spell_warr_shockwave : public SpellScriptLoader
 {
     public:
-        spell_warr_shockwave : SpellScriptLoader("spell_warr_shockwave") { }
+        spell_warr_shockwave() : SpellScriptLoader("spell_warr_shockwave") { }
         
         class spell_warr_shockwave_SpellScript : public SpellScript
         {
@@ -332,7 +332,7 @@ class spell_warr_shockwave : public SpellScriptLoader
 class spell_warr_thunderclap : public SpellScriptLoader
 {
     public:
-        spell_warr_thunderclap : SpellScriptLoader("spell_warr_thunderclap") { }
+        spell_warr_thunderclap() : SpellScriptLoader("spell_warr_thunderclap") { }
         
         class spell_warr_thunderclap_SpellScript : public SpellScript
         {
