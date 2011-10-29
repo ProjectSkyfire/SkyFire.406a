@@ -793,6 +793,38 @@ int32 AuraEffect::CalculateAmount(Unit* caster)
             if (GetSpellInfo()->SpellFamilyName == SPELLFAMILY_DRUID && GetSpellInfo()->SpellFamilyFlags[2] & 0x00000008)
                 amount = GetBase()->GetUnitOwner()->GetShapeshiftForm() == FORM_CAT ? amount : 0;
             break;
+		case SPELL_AURA_MOUNTED:
+			{
+				Player *plr = caster->ToPlayer();
+				if(plr)
+				{
+					// find the spell we need
+					const MountTypeEntry *type = sMountTypeStore.LookupEntry(GetMiscValueB());
+					if(!type)
+						return 0;
+
+					uint32 spellId = 0;
+					uint32 plrskill = plr->GetSkillValue(SKILL_RIDING);
+					uint32 map = plr->GetMapId();
+					uint32 maxSkill = 0;
+					for(int i = 0; i < MAX_MOUNT_TYPE_COLUMN; i++)
+					{
+						const MountCapabilityEntry *cap = sMountCapabilityStore.LookupEntry(type->capabilities[i]);
+						if(!cap)
+							continue;
+						if(cap->map != -1 && cap->map != map)
+							continue;
+						if(cap->reqSkillLevel > plrskill || cap->reqSkillLevel <= maxSkill)
+							continue;
+						if(cap->reqSpell && !plr->HasSpell(cap->reqSpell))
+							continue;
+						maxSkill = cap->reqSkillLevel;
+						spellId = cap->spell;
+					}
+					return (int) spellId;
+				}  
+				break;
+			}
         default:
             break;
     }
@@ -2866,39 +2898,14 @@ void AuraEffect::HandleAuraMounted(AuraApplication const* aurApp, uint8 mode, bo
         return;
 
     Unit* target = aurApp->GetTarget();
-
+	uint32 spellId = (uint32)GetAmount();
+	Player *plr = target->ToPlayer();
+	if(plr && spellId < 2)
+	{
+		return;
+	}
     if (apply)
     {
-        uint32 spellId = 0;
-        Player *player = target->ToPlayer();
-        if (player)
-        {
-            // find the spell we need
-            const MountTypeEntry *type = sMountTypeStore.LookupEntry(GetMiscValueB());
-            if (!type)
-                return;
-
-            uint32 plrskill = player->GetSkillValue(SKILL_RIDING);
-            uint32 map = player->GetMapId();
-            uint32 maxSkill = 0;
-            for (int i = 0; i < MAX_MOUNT_TYPE_COLUMN; i++)
-            {
-               const MountCapabilityEntry *cap = sMountCapabilityStore.LookupEntry(type->capabilities[i]);
-               if (!cap)
-                   continue;
-               if (cap->map != -1 && cap->map != map)
-                   continue;
-               if (cap->reqSkillLevel && (cap->reqSkillLevel > plrskill || cap->reqSkillLevel <= maxSkill))
-                   continue;
-               if (cap->reqSpell && !player->HasSpell(cap->reqSpell))
-                   continue;
-               maxSkill = cap->reqSkillLevel;
-               spellId = cap->spell;
-            }
-            if (spellId == 0)
-                return; // couldn't find a valid spell to apply
-        }
-
         uint32 creatureEntry = GetMiscValue();
 
         // Festive Holiday Mount
@@ -2935,6 +2942,10 @@ void AuraEffect::HandleAuraMounted(AuraApplication const* aurApp, uint8 mode, bo
     else
     {
         target->Unmount();
+
+		if(plr)
+			plr->RemoveAurasDueToSpell(spellId);
+
         //some mounts like Headless Horseman's Mount or broom stick are skill based spell
         // need to remove ALL arura related to mounts, this will stop client crash with broom stick
         // and never endless flying after using Headless Horseman's Mount
