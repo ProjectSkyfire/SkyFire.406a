@@ -537,103 +537,10 @@ void Spell::EffectSchoolDMG(SpellEffIndex effIndex)
                 }
                 break;
             }
-            case SPELLFAMILY_PRIEST:
-            {
-                // Evangelism
-                if (m_caster->HasAura(81659)) // Rank 1
-                {
-                    if (m_spellInfo->Id == 585 || m_spellInfo->Id == 14914)
-                        m_caster->CastSpell(m_caster, 81660, true);
-                }
-                else
-
-                if (m_caster->HasAura(81662)) // Rank 2
-                {
-                    if (m_spellInfo->Id == 585 || m_spellInfo->Id == 14914)
-                        m_caster->CastSpell(m_caster, 81661, true);
-                }
-
-                // Chakra
-                if (m_caster->HasAura(14751))
-                {
-                    switch(m_spellInfo->Id)
-                    {
-                        case   585:  // Smite
-                        case 73510:  // Mind Spike
-                            {
-                                m_caster->CastSpell(m_caster, 81209, true); // Chakra: Chastise
-                                break;
-                            }
-                        default:
-                            break;
-                    }
-                }
-                // Shadow Word: Death - deals damage equal to damage done to caster
-                if (m_spellInfo->SpellFamilyFlags[1] & 0x2)
-                {
-                    int32 back_damage = m_caster->SpellDamageBonus(unitTarget, m_spellInfo, (uint32)damage, SPELL_DIRECT_DAMAGE);
-                    // Pain and Suffering reduces damage
-                    if (AuraEffect* aurEff = m_caster->GetDummyAuraEffect(SPELLFAMILY_PRIEST, 2874, 0))
-                        AddPctN(back_damage, -aurEff->GetAmount());
-
-                    if (back_damage < int32(unitTarget->GetHealth()))
-                    {
-                        m_caster->CastCustomSpell(m_caster, 32409, &back_damage, 0, 0, true);
-                        if (unitTarget->HealthBelowPct(25) && m_caster->HasAura(55682) && !unitTarget->HasAura(95652)) // Glyph of Shadow Word: Death
-                        {
-                            m_caster->AddAura(95652, unitTarget); // Glyph of Shadow Word: Death - Marker
-                            m_caster->ToPlayer()->RemoveSpellCooldown(32379, true); // Shadow Word: Death
-                        }
-                    }
-                }
-                // Mind Blast - applies Mind Trauma if:
-                else if (m_spellInfo->Id == 8092)
-                {
-                    // We are in Shadow Form
-                    if (m_caster->GetShapeshiftForm() == FORM_SHADOW)
-                        // We have Improved Mind Blast
-                        if (AuraEffect * aurEff = m_caster->GetDummyAuraEffect(SPELLFAMILY_PRIEST, 95, 0))
-                            // Chance has been successfully rolled
-                            if (roll_chance_i(aurEff->GetAmount()))
-                                m_caster->CastSpell(unitTarget, 48301, true);
-
-                    //Mind Melt Aura remove
-                    m_caster->RemoveAurasDueToSpell(87160);
-                    m_caster->RemoveAurasDueToSpell(81292);
-                }
-                // Improved Mind Blast (Mind Blast in shadow form bonus)
-                else if (m_caster->GetShapeshiftForm() == FORM_SHADOW && (m_spellInfo->SpellFamilyFlags[0] & 0x00002000))
-                {
-                    Unit::AuraEffectList const& ImprMindBlast = m_caster->GetAuraEffectsByType(SPELL_AURA_ADD_FLAT_MODIFIER);
-                    for (Unit::AuraEffectList::const_iterator i = ImprMindBlast.begin(); i != ImprMindBlast.end(); ++i)
-                    {
-                        if ((*i)->GetSpellInfo()->SpellFamilyName == SPELLFAMILY_PRIEST &&
-                            ((*i)->GetSpellInfo()->SpellIconID == 95))
-                        {
-                            int chance = (*i)->GetSpellInfo()->Effects[EFFECT_1].CalcValue(m_caster);
-                            if (roll_chance_i(chance))
-                                // Mind Trauma
-                                m_caster->CastSpell(unitTarget, 48301, true, 0);
-                            break;
-                        }
-                    }
-                }
-                break;
-            }
             case SPELLFAMILY_DRUID:
             {
-                // Ferocious Bite
-                if (m_caster->GetTypeId() == TYPEID_PLAYER && (m_spellInfo->SpellFamilyFlags[0] & 0x000800000) && m_spellInfo->SpellVisual[0] == 6587)
-                {
-                    // converts each extra point of energy into ($f1+$AP/410) additional damage
-                    float ap = m_caster->GetTotalAttackPowerValue(BASE_ATTACK);
-                    float multiple = ap / 410 + m_spellInfo->Effects[effIndex].DamageMultiplier;
-                    int32 energy = -(m_caster->ModifyPower(POWER_ENERGY, -30));
-                    damage += int32(energy * multiple);
-                    damage += int32(CalculatePctN(m_caster->ToPlayer()->GetComboPoints() * ap, 7));
-                }
                 // Starfire
-                else if (m_spellInfo->SpellFamilyFlags[0] & 0x00000004)
+                if (m_spellInfo->SpellFamilyFlags[0] & 0x00000004)
                 {
                     if (m_caster->GetTypeId() == TYPEID_PLAYER)
                     {
@@ -675,13 +582,6 @@ void Spell::EffectSchoolDMG(SpellEffIndex effIndex)
                     if (AuraEffect const* aurEff = m_caster->GetDummyAuraEffect(SPELLFAMILY_DRUID, 1771, 0))
                         if (unitTarget->GetAuraEffect(SPELL_AURA_PERIODIC_DAMAGE, SPELLFAMILY_DRUID, 0x00200000, 0, 0))
                             damage = int32(damage*(100.0f+aurEff->GetAmount())/100.0f);
-                }
-                else if (m_spellInfo->Id == 8921) // Moonfire
-                {
-                    if (m_caster->HasAura(78784)) // Blessing of the Grove rank 1
-                        damage = int32 (damage * 0.03f);
-                    if (m_caster->HasAura(78785)) // Blessing of the Grove rank 2
-                        damage = int32 (damage * 0.06f);
                 }
                 break;
             }
@@ -791,37 +691,10 @@ void Spell::EffectSchoolDMG(SpellEffIndex effIndex)
                     damage += count * int32(average * IN_MILLISECONDS) / m_caster->GetAttackTime(BASE_ATTACK);
                     break;
                 }
-                //Shield of  Righteous
-                if (m_spellInfo->Id == 53600)
-                {
-                    switch(m_caster->GetPower(POWER_HOLY_POWER))
-                    {
-                    case 0:
-                        damage = int32(damage * 1.16f);
-                        break;
-                    case 1:
-                        damage = int32((damage * 1.16f) * 3);
-                        break;
-                    case 2:
-                        damage = int32((damage * 1.16f) * 6);
-                        break;
-                    }
-                }
                 break;
             }
             case SPELLFAMILY_DEATHKNIGHT:
             {
-                // Ebon Plaguebringer
-                if (m_caster->HasAura(51099)) // Rank 1
-                {
-                    if (m_spellInfo->Id == 45462 || m_spellInfo->Id == 45477 || m_spellInfo->Id == 45524)
-                        m_caster->CastSpell(unitTarget, 65142, true);
-                }
-                else if (m_caster->HasAura(51160)) // Rank 2
-                {
-                    if (m_spellInfo->Id == 45462 || m_spellInfo->Id == 45477 || m_spellInfo->Id == 45524)
-                        m_caster->CastSpell(unitTarget, 65142, true);
-                }
                 // Blood Boil - bonus for diseased targets
                 if (m_spellInfo->SpellFamilyFlags[0] & 0x00040000)
                 {
@@ -1386,30 +1259,9 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
             {
                 switch (m_spellInfo->Id)
                 {
-                case 73325: // Leap of faith
+                    case 73325: // Leap of faith
                     {
                         unitTarget->CastSpell(m_caster, 92832, false);
-                        break;
-                    }
-                case 21562: // Power Word : Fortitude
-                    {
-                        if (m_caster->GetTypeId() == TYPEID_PLAYER)
-                        {
-                            std::list<Unit*> PartyMembers;
-                            m_caster->GetPartyMembers(PartyMembers);
-                            bool Continue = false;
-                            uint32 player = 0;
-                            for (std::list<Unit*>::iterator itr = PartyMembers.begin(); itr != PartyMembers.end(); ++itr) // If caster is in party with a player
-                            {
-                                ++player;
-                                if (Continue == false && player > 1)
-                                    Continue = true;
-                            }
-                            if (Continue == true)
-                                m_caster->CastSpell(unitTarget, 79105, true); // Power Word : Fortitude (Raid)
-                            else
-                                m_caster->CastSpell(unitTarget, 79104, true); // Power Word : Fortitude (Caster)
-                        }
                         break;
                     }
                 }
@@ -1432,7 +1284,7 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                 }
                 switch (m_spellInfo->Id)
                 {
-                case 1459: // Arcane Brilliance
+                    case 1459: // Arcane Brilliance
                     {
                         if (m_caster->GetTypeId() == TYPEID_PLAYER)
                         {
