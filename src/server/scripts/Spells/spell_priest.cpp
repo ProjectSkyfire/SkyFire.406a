@@ -380,9 +380,11 @@ class spell_pri_power_word_fortitude : public SpellScriptLoader
                     std::list<Unit*> PartyMembers;
                     caster->GetPartyMembers(PartyMembers);
                     if(PartyMembers.size() > 1)
-                        m_caster->CastSpell(GetHitUnit(), 79105, true); // Power Word : Fortitude (Raid)
+                        caster->CastSpell(GetHitUnit(), 79105, true); // Power Word : Fortitude (Raid)
                     else
-                        m_caster->CastSpell(GetHitUnit(), 79104, true); // Power Word : Fortitude (Caster)
+                        caster->CastSpell(GetHitUnit(), 79104, true); // Power Word : Fortitude (Caster)
+
+					//if (caster->IsFriendlyTo(unitTarget)) //WTF If what?
                 }
             }
 

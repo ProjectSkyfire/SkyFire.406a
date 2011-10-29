@@ -332,11 +332,11 @@ class spell_dru_swift_flight_passive : public SpellScriptLoader
 class spell_dru_ferocious_bite : public SpellScriptLoader
 {
     public:
-        spell_pri_ferocious_bite() : SpellScriptLoader("spell_pri_ferocious_bite") { }
+        spell_dru_ferocious_bite() : SpellScriptLoader("spell_pri_ferocious_bite") { }
 
-        class spell_pri_ferocious_bite_SpellScript : public SpellScript
+        class spell_dru_ferocious_bite_SpellScript : public SpellScript
         {
-            PrepareSpellScript(spell_pri_ferocious_bite_SpellScript);
+            PrepareSpellScript(spell_dru_ferocious_bite_SpellScript);
 
             void CalculateDamage(SpellEffIndex /*effIndex*/)
             {
@@ -347,7 +347,7 @@ class spell_dru_ferocious_bite : public SpellScriptLoader
                         
                     int32 damage = GetHitDamage();
                     float ap = caster->GetTotalAttackPowerValue(BASE_ATTACK);
-                    float multiple = ap / 410 + GetSpellInfo()->Effects[effIndex].DamageMultiplier;
+                    float multiple = ap / 410 + GetSpellInfo()->Effects[EFFECT_1].CalcValue();
                     int32 energy = -(caster->ModifyPower(POWER_ENERGY, -30));
                     damage += int32(energy * multiple);
                     damage += int32(CalculatePctN(caster->ToPlayer()->GetComboPoints() * ap, 7));
@@ -357,13 +357,13 @@ class spell_dru_ferocious_bite : public SpellScriptLoader
 
             void Register()
             {
-                OnEffectHitTarget += SpellEffectFn(spell_pri_ferocious_bite_SpellScript::CalculateDamage, EFFECT_0, SPELL_EFFECT_SCHOOL_DAMAGE);
+                OnEffectHitTarget += SpellEffectFn(spell_dru_ferocious_bite_SpellScript::CalculateDamage, EFFECT_0, SPELL_EFFECT_SCHOOL_DAMAGE);
             }
         };
 
         SpellScript* GetSpellScript() const
         {
-            return new spell_pri_ferocious_bite_SpellScript;
+            return new spell_dru_ferocious_bite_SpellScript;
         }
 };
 

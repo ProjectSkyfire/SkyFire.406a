@@ -91,7 +91,7 @@ class spell_warr_improved_spell_reflection : public SpellScriptLoader
 
 // Bloodthirst
 // Spell Id: 23881
-class spell_warr_bloodthirst : public SpellScriptLoader
+/* class spell_warr_bloodthirst : public SpellScriptLoader
 {
     public:
         spell_warr_bloodthirst() : SpellScriptLoader("spell_warr_bloodthirst") { }
@@ -388,17 +388,17 @@ class spell_warr_thunderclap : public SpellScriptLoader
             return new spell_warr_thunderclap_SpellScript();
         }
 };
-
+*/
 void AddSC_warrior_spell_scripts()
 {
     new spell_warr_last_stand();
     new spell_warr_improved_spell_reflection();
-    new spell_warr_bloodthirst();
+/*    new spell_warr_bloodthirst();
     new spell_warr_victory_rush();
     new spell_warr_cleave();
     new spell_warr_intercept_triggered();
     new spell_warr_execute();
     new spell_warr_heroic_strike();
     new spell_warr_shockwave();
-    new spell_warr_thunderclap();
+    new spell_warr_thunderclap(); */
 }
