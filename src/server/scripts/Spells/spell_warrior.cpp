@@ -91,7 +91,7 @@ class spell_warr_improved_spell_reflection : public SpellScriptLoader
 
 // Bloodthirst
 // Spell Id: 23881
-/* class spell_warr_bloodthirst : public SpellScriptLoader
+class spell_warr_bloodthirst : public SpellScriptLoader
 {
     public:
         spell_warr_bloodthirst() : SpellScriptLoader("spell_warr_bloodthirst") { }
@@ -109,7 +109,7 @@ class spell_warr_improved_spell_reflection : public SpellScriptLoader
             
             void Register()
             {
-                OnEffectHitTarget += SpellUnitTargetFn(spell_warr_bloodthirst::spell_warr_bloodthirst_SpellScript::CalculateDamage,EFFECT_0,SPELL_EFFECT_SCHOOL_DAMAGE);
+                OnEffectHitTarget += SpellEffectFn(spell_warr_bloodthirst::spell_warr_bloodthirst_SpellScript::CalculateDamage,EFFECT_0,SPELL_EFFECT_SCHOOL_DAMAGE);
             }
         };
         
@@ -145,8 +145,8 @@ class spell_warr_victory_rush : public SpellScriptLoader
             
             void Register()
             {
-                AfterHit += SpellHitFn(spell_warr_victory_rush::spell_warr_victory_rush_SpellScript::HandleAfterHit,EFFECT_0,SPELL_EFFECT_SCHOOL_DAMAGE);
-                OnEffectHitTarget += SpellUnitTargetFn(spell_warr_victory_rush::spell_warr_victory_rush_SpellScript::CalculateDamage,EFFECT_0,SPELL_EFFECT_SCHOOL_DAMAGE);
+                AfterHit += SpellHitFn(spell_warr_victory_rush::spell_warr_victory_rush_SpellScript::HandleAfterHit);
+                OnEffectHitTarget += SpellEffectFn(spell_warr_victory_rush::spell_warr_victory_rush_SpellScript::CalculateDamage,EFFECT_0,SPELL_EFFECT_SCHOOL_DAMAGE);
             }
         };
         
@@ -176,7 +176,7 @@ class spell_warr_cleave : public SpellScriptLoader
             
             void Register()
             {
-                OnEffectHitTarget += SpellUnitTargetFn(spell_warr_cleave::spell_warr_cleave_SpellScript::CalculateDamage,EFFECT_0,SPELL_EFFECT_SCHOOL_DAMAGE);
+                OnEffectHitTarget += SpellEffectFn(spell_warr_cleave::spell_warr_cleave_SpellScript::CalculateDamage,EFFECT_0,SPELL_EFFECT_SCHOOL_DAMAGE);
             }
         };
         
@@ -207,7 +207,7 @@ class spell_warr_intercept_triggered : public SpellScriptLoader
             
             void Register()
             {
-                OnEffectHitTarget += SpellUnitTargetFn(spell_warr_intercept_triggered::spell_warr_intercept_triggered_SpellScript::CalculateDamage,EFFECT_1,SPELL_EFFECT_SCHOOL_DAMAGE);
+                OnEffectHitTarget += SpellEffectFn(spell_warr_intercept_triggered::spell_warr_intercept_triggered_SpellScript::CalculateDamage,EFFECT_1,SPELL_EFFECT_SCHOOL_DAMAGE);
             }
         };
         
@@ -254,7 +254,7 @@ class spell_warr_execute : public SpellScriptLoader
             
             void Register()
             {
-                OnEffectHitTarget += SpellUnitTargetFn(spell_warr_execute::spell_warr_execute_SpellScript::CalculateDamage,EFFECT_1,SPELL_EFFECT_SCHOOL_DAMAGE);
+                OnEffectHitTarget += SpellEffectFn(spell_warr_execute::spell_warr_execute_SpellScript::CalculateDamage,EFFECT_0,SPELL_EFFECT_SCHOOL_DAMAGE);
             }
         };
         
@@ -284,7 +284,7 @@ class spell_warr_heroic_strike : public SpellScriptLoader
             
             void Register()
             {
-                OnEffectHitTarget += SpellUnitTargetFn(spell_warr_heroic_strike::spell_warr_heroic_strike_SpellScript::CalculateDamage,EFFECT_0,SPELL_EFFECT_SCHOOL_DAMAGE);
+                OnEffectHitTarget += SpellEffectFn(spell_warr_heroic_strike::spell_warr_heroic_strike_SpellScript::CalculateDamage,EFFECT_0,SPELL_EFFECT_SCHOOL_DAMAGE);
             }
         };
         
@@ -317,7 +317,7 @@ class spell_warr_shockwave : public SpellScriptLoader
             
             void Register()
             {
-                OnEffectHitTarget += SpellUnitTargetFn(spell_warr_shockwave::spell_warr_shockwave_SpellScript::CalculateDamage,EFFECT_1,SPELL_EFFECT_SCHOOL_DAMAGE);
+                OnEffectHitTarget += SpellEffectFn(spell_warr_shockwave::spell_warr_shockwave_SpellScript::CalculateDamage,EFFECT_1,SPELL_EFFECT_SCHOOL_DAMAGE);
             }
         };
         
@@ -345,6 +345,7 @@ class spell_warr_thunderclap : public SpellScriptLoader
             bool Load()
             {
                 CheckAgain = true;
+				return true;
             }
             
             void FilterTargets(std::list<Unit*>& unitList)
@@ -378,8 +379,8 @@ class spell_warr_thunderclap : public SpellScriptLoader
             
             void Register()
             {
-                OnEffectHitTarget += SpellUnitTargetFn(spell_warr_thunderclap::spell_warr_thunderclap_SpellScript::OnTargetHit,EFFECT_1,SPELL_EFFECT_SCHOOL_DAMAGE);
-                OnUnitTargetSelect += SpellUnitTargetFn(spell_warr_thunderclap::spell_warr_thunderclap_SpellScript::FilterTargets, EFFECT_1, TARGET_ALL_ENEMY_IN_AREA);
+                OnEffectHitTarget += SpellEffectFn(spell_warr_thunderclap::spell_warr_thunderclap_SpellScript::OnTargetHit,EFFECT_0,SPELL_EFFECT_SCHOOL_DAMAGE);
+                OnUnitTargetSelect += SpellUnitTargetFn(spell_warr_thunderclap::spell_warr_thunderclap_SpellScript::FilterTargets, EFFECT_0, TARGET_UNIT_SRC_AREA_ENEMY);
             }
         };
         
@@ -388,17 +389,17 @@ class spell_warr_thunderclap : public SpellScriptLoader
             return new spell_warr_thunderclap_SpellScript();
         }
 };
-*/
+
 void AddSC_warrior_spell_scripts()
 {
     new spell_warr_last_stand();
     new spell_warr_improved_spell_reflection();
-/*    new spell_warr_bloodthirst();
+    new spell_warr_bloodthirst();
     new spell_warr_victory_rush();
     new spell_warr_cleave();
     new spell_warr_intercept_triggered();
     new spell_warr_execute();
     new spell_warr_heroic_strike();
     new spell_warr_shockwave();
-    new spell_warr_thunderclap(); */
+    new spell_warr_thunderclap();
 }
