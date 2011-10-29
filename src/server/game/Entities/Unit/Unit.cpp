@@ -471,7 +471,7 @@ void Unit::SendMonsterMove(float NewPosX, float NewPosY, float NewPosZ, uint32 T
 
 void Unit::SendMonsterMove(MonsterMoveData const& moveData, Player* player)
 {
-    WorldPacket data(SMSG_MONSTER_MOVE, GetPackGUID().size() + 1 + 12 + 4 + 1 + 4 + 8 + 4 + 4 + 12);
+    WorldPacket data(SMSG_MONSTER_MOVE, 12+4+1+4+4+4+12+GetPackGUID().size());  // Checked for 406a
     data.append(GetPackGUID());
 
     data << uint8(0);                                           // new in 3.1
@@ -518,8 +518,8 @@ void Unit::SendMonsterMove(float NewPosX, float NewPosY, float NewPosZ, uint32 M
 }
 
 void Unit::SendMonsterMoveExitVehicle(Position const* newPos)
-{
-    WorldPacket data(SMSG_MONSTER_MOVE, 1+12+4+1+4+4+4+12+GetPackGUID().size());
+{ 
+    WorldPacket data(SMSG_MONSTER_MOVE, 1+12+4+1+4+4+4+12+GetPackGUID().size());  //Checked for 406a
     data.append(GetPackGUID());
 
     data << uint8(GetTypeId() == TYPEID_PLAYER ? 1 : 0);    // new in 3.1, bool
@@ -541,7 +541,7 @@ void Unit::SendMonsterMoveExitVehicle(Position const* newPos)
 void Unit::SendMonsterMoveTransport(Unit* vehicleOwner)
 {
     // TODO: Turn into BuildMonsterMoveTransport packet and allow certain variables (for npc movement aboard vehicles)
-    WorldPacket data(SMSG_MONSTER_MOVE_TRANSPORT, GetPackGUID().size()+vehicleOwner->GetPackGUID().size() + 47);
+    WorldPacket data(SMSG_MONSTER_MOVE_TRANSPORT, GetPackGUID().size()+vehicleOwner->GetPackGUID().size() + 47);  //406a
     data.append(GetPackGUID());
     data.append(vehicleOwner->GetPackGUID());
     data << int8(GetTransSeat());
@@ -1464,7 +1464,7 @@ void Unit::DealMeleeDamage(CalcDamageInfo *damageInfo, bool durabilityLoss)
             victim->DealDamageMods(this, damage, NULL);
 
             // TODO: Move this to a packet handler
-            WorldPacket data(SMSG_SPELLDAMAGESHIELD, (8+8+4+4+4+4));
+            WorldPacket data(SMSG_SPELLDAMAGESHIELD, (8+8+4+4+4+4)); // 406a
             data << uint64(victim->GetGUID());
             data << uint64(GetGUID());
             data << uint32(i_spellProto->Id);
@@ -1482,7 +1482,7 @@ void Unit::DealMeleeDamage(CalcDamageInfo *damageInfo, bool durabilityLoss)
 
 void Unit::HandleEmoteCommand(uint32 anim_id)
 {
-    WorldPacket data(SMSG_EMOTE, 4 + 8);
+    WorldPacket data(SMSG_EMOTE, 4 + 8);  //406a
     data << uint32(anim_id);
     data << uint64(GetGUID());
     SendMessageToSet(&data, true);
@@ -2247,7 +2247,7 @@ float Unit::CalculateLevelPenalty(SpellInfo const* spellProto) const
 
 void Unit::SendMeleeAttackStart(Unit* victim)
 {
-    WorldPacket data(SMSG_ATTACKSTART, 8 + 8);
+    WorldPacket data(SMSG_ATTACKSTART, 8 + 8);  //406
     data << uint64(GetGUID());
     data << uint64(victim->GetGUID());
 
@@ -4807,7 +4807,7 @@ void Unit::SendPeriodicAuraLog(SpellPeriodicAuraLogInfo *pInfo)
 {
     AuraEffect const* aura = pInfo->auraEff;
 
-    WorldPacket data(SMSG_PERIODICAURALOG, 30);
+    WorldPacket data(SMSG_PERIODICAURALOG, 8+8+4+4+4+4*5+1);  //406
     data.append(GetPackGUID());
     data.appendPackGUID(aura->GetCasterGUID());
     data << uint32(aura->GetId());                          // spellId
