@@ -1279,9 +1279,6 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
             break;
         }
         case SPELLFAMILY_HUNTER:
-            // steady shot focus effect (it has its own skill for this)
-            if (m_spellInfo->SpellFamilyFlags[1] & 0x1)
-                m_caster->CastSpell(m_caster, 77443, true);
 
             if (m_spellInfo->SpellFamilyFlags[2] & 0x20)
                 m_caster->CastSpell(m_caster, 51755, true);
