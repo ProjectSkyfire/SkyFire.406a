@@ -321,10 +321,14 @@ public:
 
         SpellCastResult CheckCast()
         {
-            if(caster->CountPctFromMaxHealth(GetSpellInfo()->Effects[EFFECT_2].CalcValue()) >= caster->GetHealth()) // You cant kill yourself with this
-                return SPELL_FAILED_FIZZLE;
-            
-            return SPELL_CAST_OK;
+            if(Unit* caster = GetCaster())
+            {
+                if(caster->CountPctFromMaxHealth(GetSpellInfo()->Effects[EFFECT_2].CalcValue()) >= caster->GetHealth()) // You cant kill yourself with this
+                    return SPELL_FAILED_FIZZLE;
+                
+                return SPELL_CAST_OK;
+            }
+            return SPELL_FAILED_DONT_REPORT;
         }
         
         void HandleDummy(SpellEffIndex /*EffIndex*/)
@@ -348,7 +352,7 @@ public:
                 
                 // Mana Feed
                 int32 manaFeedVal = 0;
-                if (AuraEffect const* aurEff = m_caster->GetAuraEffect(SPELL_AURA_ADD_FLAT_MODIFIER, SPELLFAMILY_WARLOCK, 1982, 0))
+                if (AuraEffect const* aurEff = caster->GetAuraEffect(SPELL_AURA_ADD_FLAT_MODIFIER, SPELLFAMILY_WARLOCK, 1982, 0))
                     manaFeedVal = aurEff->GetAmount();
                     
                 if (manaFeedVal > 0)
