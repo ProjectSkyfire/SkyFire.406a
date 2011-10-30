@@ -107,7 +107,7 @@ class spell_warr_bloodthirst : public SpellScriptLoader
                 {
                     int32 dmg = int32(GetHitDamage() * caster->GetTotalAttackPowerValue(BASE_ATTACK) / 100);
                     SetHitDamage(dmg);
-                    caster->CastCustomSpell(caster, 23885, &dmg, NULL, NULL, true, NULL);
+                    caster->CastCustomSpell(caster, 23885, &dmg, NULL, NULL, true);
                 }
             }
             
@@ -399,7 +399,8 @@ void AddSC_warrior_spell_scripts()
     new spell_warr_last_stand();
     new spell_warr_improved_spell_reflection();
     new spell_warr_bloodthirst();
-    new spell_warr_victory_rush();
+
+	new spell_warr_victory_rush();
     new spell_warr_cleave();
     new spell_warr_intercept_triggered();
     new spell_warr_execute();

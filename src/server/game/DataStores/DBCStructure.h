@@ -1815,7 +1815,7 @@ struct SpellEntry //Structure of the true Spell.dbc
     uint32    SpellIconID;                                  // 18       m_spellIconID
     uint32    activeIconID;                                 // 19       m_activeIconID
     DBCString SpellName;                                    // 20       m_name_lang
-    uint32 SpellShapeshiftId;                               // 21       SpellShapeshift.dbc
+    DBCString Rank;                                         // 21       m_rank_lang
     //DBCString Description;                                // 22       m_description_lang not used
     //DBCString ToolTip;                                    // 23       m_auraDescription_lang not used
     uint32    SchoolMask;                                   // 24       m_schoolMask
@@ -1837,6 +1837,7 @@ struct SpellEntry //Structure of the true Spell.dbc
     uint32 SpellLevelsId;                                   // 40       SpellLevels.dbc
     uint32 SpellPowerId;                                    // 41       SpellPower.dbc
     uint32 SpellReagentsId;                                 // 42       SpellReagents.dbc
+    uint32 SpellShapeshiftId;                               // 43       SpellShapeshift.dbc
     uint32 SpellTargetRestrictionsId;                       // 44       SpellTargetRestrictions.dbc
     uint32 SpellTotemsId;                                   // 45       SpellTotems.dbc
     //uint32 unk2;                                          // 46
