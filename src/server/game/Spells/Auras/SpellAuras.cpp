@@ -687,35 +687,35 @@ void Aura::Update(uint32 diff, Unit* caster)
                 m_timeCla -= diff;
             else if (caster)
             {
-				if(m_spellInfo->ManaPerSecond > 0)
-				{
-					if (int32 manaPerSecond = m_spellInfo->ManaPerSecond * caster->getLevel())
-					{
-						m_timeCla += 1000 - diff;
+                if(m_spellInfo->ManaPerSecond > 0)
+                {
+                    if (int32 manaPerSecond = m_spellInfo->ManaPerSecond * caster->getLevel())
+                    {
+                        m_timeCla += 1000 - diff;
 
-						Powers powertype = Powers(m_spellInfo->PowerType);
-						if (powertype == POWER_HEALTH)
-						{
-							if (int32(caster->GetHealth()) > manaPerSecond)
-								caster->ModifyHealth(-manaPerSecond);
-							else
-							{
-								Remove();
-								return;
-							}
-						}
-						else
-						{
-							if (int32(caster->GetPower(powertype)) >= manaPerSecond)
-								caster->ModifyPower(powertype, -manaPerSecond);
-							else
-							{
-								Remove();
-								return;
-							}
-						}
-					}
-				}
+                        Powers powertype = Powers(m_spellInfo->PowerType);
+                        if (powertype == POWER_HEALTH)
+                        {
+                            if (int32(caster->GetHealth()) > manaPerSecond)
+                                caster->ModifyHealth(-manaPerSecond);
+                            else
+                            {
+                                Remove();
+                                return;
+                            }
+                        }
+                        else
+                        {
+                            if (int32(caster->GetPower(powertype)) >= manaPerSecond)
+                                caster->ModifyPower(powertype, -manaPerSecond);
+                            else
+                            {
+                                Remove();
+                                return;
+                            }
+                        }
+                    }
+                }
             }
         }
     }
