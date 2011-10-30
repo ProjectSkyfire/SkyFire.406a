@@ -683,33 +683,6 @@ void Spell::EffectSchoolDMG(SpellEffIndex effIndex)
                         else
                             if (m_caster->HasAura(53232))                // Rank 2
                                 m_caster->CastSpell(m_caster, 54227, true);
-
-                    //Gore
-                    if (m_spellInfo->SpellIconID == 1578)
-                    {
-                        if (m_caster->HasAura(57627))           // Charge 6 sec post-affect
-                            damage *= 2;
-                    }
-                    // Steady Shot
-                    else if (m_spellInfo->SpellFamilyFlags[1] & 0x1)
-                    {
-                        bool found = false;
-                        // check dazed affect
-                        Unit::AuraEffectList const& decSpeedList = unitTarget->GetAuraEffectsByType(SPELL_AURA_MOD_DECREASE_SPEED);
-                        for (Unit::AuraEffectList::const_iterator iter = decSpeedList.begin(); iter != decSpeedList.end(); ++iter)
-                        {
-                            if ((*iter)->GetSpellInfo()->SpellIconID == 15 && (*iter)->GetSpellInfo()->Dispel == 0)
-                            {
-                                found = true;
-                                break;
-                            }
-                        }
-
-                        // TODO: should this be put on taken but not done?
-                        if (found)
-                            damage += m_spellInfo->Effects[EFFECT_1].CalcValue();
-                    }
-                    break;
                 }
             case SPELLFAMILY_PALADIN:
             {
@@ -1443,12 +1416,6 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
             }
             switch (m_spellInfo->Id)
             {
-                // Bloodthirst
-                case 23881:
-                {
-                    m_caster->CastCustomSpell(unitTarget, 23885, &damage, NULL, NULL, true, NULL);
-                    return;
-                }
                 // Intercept
                 case 20252:
                 {
@@ -1457,47 +1424,6 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                         m_caster->ToPlayer()->AddSpellCooldown(100, 0, time(NULL) + 13); //15 - 2 from Juggernaut
                     return;
                 }
-            }
-            break;
-        case SPELLFAMILY_WARLOCK:
-            // Life Tap
-            if ((m_spellInfo->SpellFamilyFlags[0] & SPELLFAMILYFLAG_WARLOCK_LIFETAP) && m_caster->ToPlayer())
-            {
-                float spFactor = 0.0f;
-                switch (m_spellInfo->Id)
-                {
-                    case 11689: spFactor = 0.2f; break;
-                    case 27222:
-                    case 57946: spFactor = 0.5f; break;
-                }
-                int32 damage = int32(m_spellInfo->Effects[EFFECT_0].CalcValue() + (6.3875 * m_spellInfo->BaseLevel));
-                int32 mana = int32(damage + (m_caster->ToPlayer()->GetUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_POS+SPELL_SCHOOL_SHADOW) * spFactor));
-
-                if (unitTarget && (int32(unitTarget->GetHealth()) > damage))
-                {
-                    // Shouldn't Appear in Combat Log
-                    unitTarget->ModifyHealth(-damage);
-
-                    // Improved Life Tap mod
-                    if (AuraEffect const* aurEff = m_caster->GetDummyAuraEffect(SPELLFAMILY_WARLOCK, 208, 0))
-                        AddPctN(mana, aurEff->GetAmount());
-
-                    m_caster->CastCustomSpell(unitTarget, 31818, &mana, NULL, NULL, false);
-
-                    // Mana Feed
-                    int32 manaFeedVal = 0;
-                    if (AuraEffect const* aurEff = m_caster->GetAuraEffect(SPELL_AURA_ADD_FLAT_MODIFIER, SPELLFAMILY_WARLOCK, 1982, 0))
-                        manaFeedVal = aurEff->GetAmount();
-
-                    if (manaFeedVal > 0)
-                    {
-                        ApplyPctN(manaFeedVal, mana);
-                        m_caster->CastCustomSpell(m_caster, 32553, &manaFeedVal, NULL, NULL, true, NULL);
-                    }
-                }
-                else
-                    SendCastResult(SPELL_FAILED_FIZZLE);
-                return;
             }
             break;
         case SPELLFAMILY_DRUID:
@@ -1519,29 +1445,6 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
 
                 m_caster->CastSpell(unitTarget, damage, true);
                 return;
-            }
-        }
-        switch(m_spellInfo->Id)
-        {
-            case 1126: // Mark of the Wild
-            {
-                if (m_caster->GetTypeId() == TYPEID_PLAYER)
-                {
-                    std::list<Unit*> PartyMembers;
-                    m_caster->GetPartyMembers(PartyMembers);
-                    bool Continue = false;
-                    uint32 player = 0;
-                    for(std::list<Unit*>::iterator itr = PartyMembers.begin(); itr != PartyMembers.end(); ++itr) // If caster is in party with a player
-                    {
-                        ++player;
-                        if (Continue == false && player > 1)
-                            Continue = true;
-                    }
-                    if (Continue == true)
-                        m_caster->CastSpell(unitTarget, 79061, true); // Mark of the Wild (Raid)
-                    else
-                        m_caster->CastSpell(unitTarget, 79060, true); // Mark of the Wild (Caster)
-                }
             }
             break;
         }
@@ -4884,54 +4787,6 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
         {
             switch (m_spellInfo->Id)
             {
-                // Glyph of Backstab
-                case 63975:
-                {
-                    // search our Rupture aura on target
-                    if (AuraEffect const* aurEff = unitTarget->GetAuraEffect(SPELL_AURA_PERIODIC_DAMAGE, SPELLFAMILY_ROGUE, 0x00100000, 0, 0, m_caster->GetGUID()))
-                    {
-                        uint32 countMin = aurEff->GetBase()->GetMaxDuration();
-                        uint32 countMax = 12000; // this can be wrong, duration should be based on combo-points
-                        countMax += m_caster->HasAura(56801) ? 4000 : 0;
-
-                        if (countMin < countMax)
-                        {
-                            aurEff->GetBase()->SetDuration(uint32(aurEff->GetBase()->GetDuration() + 3000));
-                            aurEff->GetBase()->SetMaxDuration(countMin + 2000);
-                        }
-                    }
-                    return;
-                }
-                // Glyph of Scourge Strike
-                case 69961:
-                {
-                    Unit::AuraEffectList const &mPeriodic = unitTarget->GetAuraEffectsByType(SPELL_AURA_PERIODIC_DAMAGE);
-                    for (Unit::AuraEffectList::const_iterator i = mPeriodic.begin(); i != mPeriodic.end(); ++i)
-                    {
-                        AuraEffect const* aurEff = *i;
-                        SpellInfo const* spellInfo = aurEff->GetSpellInfo();
-                        // search our Blood Plague and Frost Fever on target
-                        if (spellInfo->SpellFamilyName == SPELLFAMILY_DEATHKNIGHT && spellInfo->SpellFamilyFlags[2] & 0x2 &&
-                            aurEff->GetCasterGUID() == m_caster->GetGUID())
-                        {
-                            uint32 countMin = aurEff->GetBase()->GetMaxDuration();
-                            uint32 countMax = spellInfo->GetMaxDuration();
-
-                            // this Glyph
-                            countMax += 9000;
-                            // talent Epidemic
-                            if (AuraEffect const* epidemic = m_caster->GetAuraEffect(SPELL_AURA_ADD_FLAT_MODIFIER, SPELLFAMILY_DEATHKNIGHT, 234, EFFECT_0))
-                                countMax += epidemic->GetAmount();
-
-                            if (countMin < countMax)
-                            {
-                                aurEff->GetBase()->SetDuration(aurEff->GetBase()->GetDuration() + 3000);
-                                aurEff->GetBase()->SetMaxDuration(countMin + 3000);
-                            }
-                        }
-                    }
-                    return;
-                }
                 // Orbs of translocation between silvermoon and undercity, these need moved to db!
                 /*case 35376: // translocations
                    m_caster->NearTeleportTo(0, 1805.99f, 341.32f, 70.66f, 1.6f);
@@ -5915,16 +5770,6 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
                     if (m_targets.GetUnitTarget()->GetAura(55095))
                         m_caster->CastSpell(unitTarget, 55095, true);
                 }
-            }
-            if (m_spellInfo->Id == 85948) // Festering Strike
-            {
-                uint32 addDuration = urand(2, 6);
-                if (unitTarget->HasAura(45524)) // Chains of Ice
-                    unitTarget->GetAura(45524)->SetDuration(unitTarget->GetAura(45524)->GetDuration() + (addDuration * 1000), true);
-                if (unitTarget->HasAura(55095)) // Frost Fever
-                    unitTarget->GetAura(55095)->SetDuration(unitTarget->GetAura(55095)->GetDuration() + (addDuration * 1000), true);
-                if (unitTarget->HasAura(55078)) // Blood Plague
-                    unitTarget->GetAura(55078)->SetDuration(unitTarget->GetAura(55078)->GetDuration() + (addDuration * 1000), true);
             }
             break;
         }

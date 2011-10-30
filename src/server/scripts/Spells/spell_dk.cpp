@@ -656,6 +656,43 @@ public:
     }
 };
 
+// Festering Strike
+// Spell Id: 85948
+class spell_dk_festering_strike : public SpellScriptLoader
+{
+    public:
+        spell_dk_festering_strike() : SpellScriptLoader("spell_dk_festering_strike") { }
+
+        class spell_dk_festering_strike_SpellScript : public SpellScript
+        {
+            PrepareSpellScript(spell_dk_festering_strike_SpellScript);
+
+            void HandleScript(SpellEffIndex /*eff*/)
+            {
+                if(Unit* target = GetHitUnit())
+                {
+                    uint32 addDuration = urand(2, 6);
+                    if (target->HasAura(45524)) // Chains of Ice
+                        target->GetAura(45524)->SetDuration(target->GetAura(45524)->GetDuration() + (addDuration * 1000), true);
+                    if (target->HasAura(55095)) // Frost Fever
+                        target->GetAura(55095)->SetDuration(target->GetAura(55095)->GetDuration() + (addDuration * 1000), true);
+                    if (target->HasAura(55078)) // Blood Plague
+                        target->GetAura(55078)->SetDuration(target->GetAura(55078)->GetDuration() + (addDuration * 1000), true);
+                }
+            }
+            
+            void Register()
+            {
+                OnEffectHitTarget += SpellEffectFn(spell_dk_festering_strike_SpellScript::HandleScript,EFFECT_2,SPELL_EFFECT_SCRIPT_EFFECT);
+            }
+        };
+
+        SpellScript* GetSpellScript() const
+        {
+            return new spell_dk_festering_strike_SpellScript();
+        }
+};
+
 void AddSC_deathknight_spell_scripts()
 {
     new spell_dk_anti_magic_shell_raid();
@@ -671,4 +708,5 @@ void AddSC_deathknight_spell_scripts()
     new spell_dk_will_of_the_necropolis();
     new spell_dk_improved_blood_presence();
     new spell_dk_improved_unholy_presence();
+    new spell_dk_festering_strike();
 }

@@ -100,11 +100,15 @@ class spell_warr_bloodthirst : public SpellScriptLoader
         {
             PrepareSpellScript(spell_warr_bloodthirst_SpellScript);
             
-            void CalculateDamage(SpellEffIndex effect)
+            void CalculateDamage(SpellEffIndex /*effect*/)
             {
                 // Formula: AttackPower * BasePoints / 100
                 if(Unit* caster = GetCaster())
-                    SetHitDamage(int32(GetHitDamage() * caster->GetTotalAttackPowerValue(BASE_ATTACK) / 100));
+                {
+                    int32 dmg = int32(GetHitDamage() * caster->GetTotalAttackPowerValue(BASE_ATTACK) / 100);
+                    SetHitDamage(dmg);
+                    caster->CastCustomSpell(caster, 23885, &dmg, NULL, NULL, true, NULL);
+                }
             }
             
             void Register()

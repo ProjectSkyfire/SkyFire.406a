@@ -308,6 +308,70 @@ class spell_warl_seed_of_corruption : public SpellScriptLoader
         }
 };
 
+// Life Tap
+// Spell Id: 1454
+class spell_warl_life_tap : public SpellScriptLoader
+{
+public:
+    spell_warl_life_tap() : SpellScriptLoader("spell_warl_life_tap") { }
+
+    class spell_warl_life_tap_SpellScript : public SpellScript
+    {
+        PrepareSpellScript(spell_warl_life_tap_SpellScript);
+
+        SpellCastResult CheckCast()
+        {
+            if(caster->CountPctFromMaxHealth(GetSpellInfo()->Effects[EFFECT_2].CalcValue()) >= caster->GetHealth()) // You cant kill yourself with this
+                return SPELL_FAILED_FIZZLE;
+            
+            return SPELL_CAST_OK;
+        }
+        
+        void HandleDummy(SpellEffIndex /*EffIndex*/)
+        {
+            if(Unit* caster = GetCaster())
+            {
+                int32 damage = int32(caster->CountPctFromMaxHealth(GetSpellInfo()->Effects[EFFECT_2].CalcValue()));
+                int32 mana = 0;
+                
+                uint32 multiplier = 1.2f;
+                
+                // Should not appear in combat log
+                caster->ModifyHealth(-damage);
+                
+                // Improved Life Tap mod
+                if (AuraEffect const* aurEff = caster->GetDummyAuraEffect(SPELLFAMILY_WARLOCK, 208, 0))
+                    multiplier += int32(aurEff->GetAmount() / 100);
+                    
+                mana = int32(damage * multiplier);
+                caster->CastCustomSpell(caster, 31818, &mana, NULL, NULL, false);
+                
+                // Mana Feed
+                int32 manaFeedVal = 0;
+                if (AuraEffect const* aurEff = m_caster->GetAuraEffect(SPELL_AURA_ADD_FLAT_MODIFIER, SPELLFAMILY_WARLOCK, 1982, 0))
+                    manaFeedVal = aurEff->GetAmount();
+                    
+                if (manaFeedVal > 0)
+                {
+                    manaFeedVal = int32(mana * manaFeedVal / 100);
+                    caster->CastCustomSpell(caster, 32553, &manaFeedVal, NULL, NULL, true, NULL);
+                }
+            }
+        }
+        
+        void Register()
+        {
+            OnCheckCast += SpellCheckCastFn(spell_warl_life_tap_SpellScript::CheckCast);
+            OnEffectHitTarget += SpellEffectFn(spell_warl_life_tap_SpellScript::HandleDummy,EFFECT_0,SPELL_EFFECT_DUMMY);
+        }
+    };
+
+    SpellScript* GetSpellScript() const
+    {
+        return new spell_warl_life_tap_SpellScript();
+    }
+};
+
 void AddSC_warlock_spell_scripts()
 {
     new spell_warl_banish();
@@ -316,4 +380,5 @@ void AddSC_warlock_spell_scripts()
     new spell_warl_everlasting_affliction();
     new spell_warl_ritual_of_doom_effect();
     new spell_warl_seed_of_corruption();
+    new spell_warl_life_tap();
 }
