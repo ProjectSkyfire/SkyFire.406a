@@ -285,6 +285,84 @@ bool AchievementCriteriaData::IsValid(AchievementCriteriaEntry const* criteria)
 
 bool AchievementCriteriaData::Meets(uint32 criteria_id, Player const* source, Unit const* target, uint32 miscvalue1 /*= 0*/) const
 {
+	const AchievementCriteriaEntry* criteria = sAchievementCriteriaStore.LookupEntry(criteria_id);
+	
+	bool met = true;
+	for(uint32 i = 0; i < 3; ++i)
+	{
+		uint32 checkType = criteria->moreRequirement[i];
+		
+		if(checkType == 0)
+			break;
+
+		uint32 checkValue = criteria->moreRequirementValue[i];
+		
+		switch(checkType)
+		{
+			case ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_ITEM_LEVEL:
+            {
+				ItemTemplate const *item = sObjectMgr->GetItemTemplate(miscvalue1);
+				if (!item)
+					return false;
+				if(!(item->ItemLevel >= checkValue))
+					return false;
+				break;
+            }
+			case ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_CREATURE_ID:
+				if(target->GetEntry() != checkValue)
+					return false;
+				break;
+			case ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_TARGET_TYPE:
+				if(checkValue == 0 && target->GetTypeId() != TYPEID_PLAYER)
+					return false;
+				break;
+			case ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_SPELL:
+				if(!source->HasAura(checkValue))
+					return false;
+				break;
+			case ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_SPELL_ON_TARGET:
+				if(!target->HasAura(checkValue))
+					return false;
+				break;
+			case ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_MOUNTED:
+				if(!target->IsMounted())
+					return false;
+				break;
+			case ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_ITEM_QUALITY_EQUIPPED:
+            {
+				ItemTemplate const *item2 = sObjectMgr->GetItemTemplate(miscvalue1);
+				if (!item2)
+					return false;
+				if(!(item2->Quality >= checkValue))
+					return false;
+				break;
+            }
+			case ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_ITEM_QUALITY_LOOTED:
+            {
+				ItemTemplate const *item3 = sObjectMgr->GetItemTemplate(miscvalue1);
+				if (!item3)
+					return false;
+				if(!(item3->Quality == checkValue))
+					return false;
+				break;
+            }
+			case ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_AREA_ID:
+			case ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_AREA_ID2:
+			case ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_AREA_ID3:
+				if(source->GetAreaId() != checkValue && source->GetZoneId() != checkValue)
+					return false;
+				break;
+			case ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_RAID_DIFFICULTY:
+            {
+				Map* map = source->GetMap();
+				if(uint32(map->GetDifficulty()) != checkValue)
+					return false;
+				break;
+            }
+			// ToDo: Implement the rest, research more on it
+		}
+	}
+
     switch (dataType)
     {
         case ACHIEVEMENT_CRITERIA_DATA_TYPE_NONE:
