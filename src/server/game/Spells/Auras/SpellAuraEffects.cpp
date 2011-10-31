@@ -386,9 +386,9 @@ pAuraEffectHandler AuraEffectHandler[TOTAL_AURAS]=
     &AuraEffect::HandleNULL,                                      //329 NYI
     &AuraEffect::HandleNULL,                                      //330 NYI
     &AuraEffect::HandleNULL,                                      //331 NYI
-    &AuraEffect::HandleActionbarSpellOverride,                    //332 NYI SPELL_AURA_OVERRIDE_ACTIONBAR_SPELLS
-    &AuraEffect::HandleActionbarSpellOverride,                    //333 NYI SPELL_AURA_OVERRIDE_ACTIONBAR_SPELLS_2
-    &AuraEffect::HandleNULL,                                      //334 NYI 
+    //&AuraEffect::HandleActionbarSpellOverride,                    //332 NYI SPELL_AURA_OVERRIDE_ACTIONBAR_SPELLS
+    //&AuraEffect::HandleActionbarSpellOverride,                    //333 NYI SPELL_AURA_OVERRIDE_ACTIONBAR_SPELLS_2
+    &AuraEffect::HandleNULL,                                      //334 NYI
     &AuraEffect::HandleNULL,                                      //335 NYI
     &AuraEffect::HandleNULL,                                      //336 NYI
     &AuraEffect::HandleNULL,                                      //337 NYI
@@ -822,7 +822,7 @@ int32 AuraEffect::CalculateAmount(Unit* caster)
                         spellId = cap->spell;
                     }
                     return (int) spellId;
-                }  
+                }
                 break;
             }
         default:
@@ -5808,25 +5808,25 @@ void AuraEffect::HandleAuraSetVehicle(AuraApplication const* aurApp, uint8 mode,
         target->ToPlayer()->GetSession()->SendPacket(&data);
     }
 }
-
-void AuraEffect::HandleActionbarSpellOverride(AuraApplication const* aurApp, uint8 mode, bool apply) const
+// wtf is this?
+/*void AuraEffect::HandleActionbarSpellOverride(AuraApplication const* aurApp, uint8 mode, bool apply) const
 {
     if (!(mode & AURA_EFFECT_HANDLE_REAL))
         return;
 
     if (aurApp->GetTarget()->GetTypeId() != TYPEID_PLAYER)
         return;
-    
+
     uint32 spell = GetAmount();
-    
+
     if(!spell)
         return;
-        
+
     if(apply)
         aurApp->GetTarget()->learnSpell(spell,false);
     else
         aurApp->GetTarget()->removeSpell(spell,false,false);
-}
+}*/
 
 void AuraEffect::HandlePreventResurrection(AuraApplication const* aurApp, uint8 mode, bool apply) const
 {

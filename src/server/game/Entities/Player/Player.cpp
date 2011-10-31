@@ -8050,7 +8050,7 @@ void Player::ApplyReforgedStats(Item* item, bool apply)
         if(val == 0)
             return;
 
-        swich (stats->DestinationStat)
+        switch (stats->DestinationStat)
         {
             case ITEM_MOD_MANA:
                 HandleStatModifier(UNIT_MOD_MANA, BASE_VALUE, float(val), apply);
@@ -8196,7 +8196,7 @@ void Player::ApplyReforgedStats(Item* item, bool apply)
         }
 
         val = -val;
-        swich (stats->SourceStat)
+        switch (stats->SourceStat)
         {
             case ITEM_MOD_MANA:
                 HandleStatModifier(UNIT_MOD_MANA, BASE_VALUE, float(val), apply);
@@ -23959,7 +23959,7 @@ bool Player::IsKnowHowFlyIn(uint32 mapid, uint32 zone, uint32 spellId) const
     switch (v_map)
     {
     case 0:   // Eastern Kingdoms
-        swich (zone)
+        switch (zone)
         {
         // mapid of these zones is 530 but v_map is 0
         case 3430: // Eversong Woods
