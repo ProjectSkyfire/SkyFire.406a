@@ -376,6 +376,86 @@ public:
     }
 };
 
+// Fear
+// Spell Id: 5782
+class spell_warl_fear : public SpellScriptLoader
+{
+    public:
+        spell_warl_fear() : SpellScriptLoader("spell_warl_fear") { }
+
+        class spell_warl_fear_AuraScript : public AuraScript
+        {
+            PrepareAuraScript(spell_warl_fear_AuraScript);
+
+            void OnRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
+            {
+                // Check for Improved Fear
+                if (AuraEffect* aurEff = GetCaster()->GetAuraEffect(SPELL_AURA_DUMMY, SPELLFAMILY_WARLOCK, 98, 0))
+                {
+                    uint32 spellId = 0;
+                    switch (aurEff->GetId())
+                    {
+                        case 53759: 
+                            spellId = 60947; 
+                            break;
+                        case 53754: 
+                            spellId = 60946; 
+                            break;
+                    }
+                    if (spellId)
+                        GetCaster()->CastSpell(GetHitUnit(), spellId, true);
+                }
+            }
+
+            void Register()
+            {
+                AfterEffectRemove += AuraEffectRemoveFn(spell_warl_fear_AuraScript::OnRemove, EFFECT_0, SPELL_AURA_MOD_FEAR, AURA_EFFECT_HANDLE_REAL);
+            }
+        };
+
+        AuraScript* GetAuraScript() const
+        {
+            return new spell_warl_fear_AuraScript();
+        }
+};
+
+// Drain Life
+// Drain Life: Soulburn
+// Spell Id: 689
+// Spell Id: 89420
+class spell_warl_drain_life : public SpellScriptLoader
+{
+public:
+    spell_warl_drain_life() : SpellScriptLoader("spell_warl_drain_life") { }
+
+    class spell_warl_drain_life_AuraScript : public SpellScript
+    {
+        PrepareAuraScript(spell_warl_drain_life_AuraScript);
+        
+        void OnPeriodic(AuraEffect const* /*aurEff*/)
+        {
+            int32 bp = 2; // Normal, restore 2% of health
+            
+            // Check for Death's Embrace
+            if(AuraEffect const* aurEff = GetCaster()->GetAuraEffect(SPELL_AURA_DUMMY, SPELLFAMILY_WARLOCK, 3223, 0))
+                if(GetCaster()->HealthBelowPct(25))
+                    bp += int32(aurEff->GetAmount());
+
+            GetCaster()->CastCustomSpell(GetCaster(), 89653, &bp, NULL, NULL, true);
+        }
+
+        void Register()
+        {
+            OnEffectPeriodic += AuraEffectPeriodicFn(spell_warl_drain_life_AuraScript::OnPeriodic, EFFECT_0, SPELL_AURA_PERIODIC_DAMAGE);
+        }
+    };
+
+    AuraScript* GetAuraScript() const
+    {
+        return new spell_warl_drain_life_AuraScript();
+    }
+};
+
 void AddSC_warlock_spell_scripts()
 {
     new spell_warl_banish();
@@ -385,4 +465,6 @@ void AddSC_warlock_spell_scripts()
     new spell_warl_ritual_of_doom_effect();
     new spell_warl_seed_of_corruption();
     new spell_warl_life_tap();
+    new spell_warl_fear();
+    new spell_warl_drain_life();
 }

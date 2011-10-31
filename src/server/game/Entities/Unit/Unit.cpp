@@ -6014,17 +6014,6 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
             }
             switch (dummySpell->Id)
             {
-                // Siphon Life
-                case 63108:
-                {
-                    // Glyph of Siphon Life
-                    if (HasAura(56216))
-                        triggerAmount += triggerAmount / 4;
-                    triggered_spell_id = 63106;
-                    target = this;
-                    basepoints0 = CalculatePctN(int32(damage), triggerAmount);
-                    break;
-                }
                 // Glyph of Shadowflame
                 case 63310:
                 {
@@ -8404,8 +8393,15 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
                 break;
             case SPELLFAMILY_WARLOCK:
             {
+                // Siphon Life
+                if(auraSpellInfo->SpellIconID == 152)
+                {
+                    triggered_spell_id = 63106;
+                    target = this;
+                    basepoints0 = int32(CountPctFromMaxHealth(triggerAmount));
+                }
                 // Drain Soul
-                if (auraSpellInfo->SpellFamilyFlags[0] & 0x4000)
+                else if (auraSpellInfo->SpellFamilyFlags[0] & 0x4000)
                 {
                     // Improved Drain Soul
                     Unit::AuraEffectList const& mAddFlatModifier = GetAuraEffectsByType(SPELL_AURA_DUMMY);
