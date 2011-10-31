@@ -90,27 +90,31 @@ void GameObject::CleanupsBeforeDelete(bool /*finalCleanup*/)
         RemoveFromWorld();
 
     if (m_uint32Values)                                      // field array can be not exist if GameOBject not loaded
+        RemoveFromOwner();
+}
+
+void GameObject::RemoveFromOwner()
+{
+    uint64 ownerGUID = GetOwnerGUID();
+    if (!ownerGUID)
+        return;
+
+    if (Unit* owner = ObjectAccessor::GetUnit(*this, ownerGUID))
     {
-        // Possible crash at access to deleted GO in Unit::m_gameobj
-        if (uint64 owner_guid = GetOwnerGUID())
-        {
-            Unit* owner = ObjectAccessor::GetUnit(*this, owner_guid);
-
-            if (owner)
-                owner->RemoveGameObject(this, false);
-            else
-            {
-                const char * ownerType = "creature";
-                if (IS_PLAYER_GUID(owner_guid))
-                    ownerType = "player";
-                else if (IS_PET_GUID(owner_guid))
-                    ownerType = "pet";
-
-                sLog->outError("Delete GameObject (GUID: %u Entry: %u SpellId %u LinkedGO %u) that lost references to owner (GUID %u Type '%s') GO list. Crash possible later.",
-                    GetGUIDLow(), GetGOInfo()->entry, m_spellId, GetGOInfo()->GetLinkedGameObjectEntry(), GUID_LOPART(owner_guid), ownerType);
-            }
-        }
+        owner->RemoveGameObject(this, false);
+        ASSERT(!GetOwnerGUID());
+        return;
     }
+
+    const char * ownerType = "creature";
+    if (IS_PLAYER_GUID(ownerGUID))
+        ownerType = "player";
+    else if (IS_PET_GUID(ownerGUID))
+        ownerType = "pet";
+
+    sLog->outCrash("Delete GameObject (GUID: %u Entry: %u SpellId %u LinkedGO %u) that lost references to owner (GUID %u Type '%s') GO list. Crash possible later.",
+        GetGUIDLow(), GetGOInfo()->entry, m_spellId, GetGOInfo()->GetLinkedGameObjectEntry(), GUID_LOPART(ownerGUID), ownerType);
+    SetOwnerGUID(0);	
 }
 
 void GameObject::AddToWorld()
@@ -134,14 +138,7 @@ void GameObject::RemoveFromWorld()
         if (m_zoneScript)
             m_zoneScript->OnGameObjectRemove(this);
 
-        // Possible crash at access to deleted GO in Unit::m_gameobj
-        if (uint64 owner_guid = GetOwnerGUID())
-        {
-            if (Unit* owner = GetOwner())
-                owner->RemoveGameObject(this, false);
-            else
-                sLog->outError("Delete GameObject (GUID: %u Entry: %u, Name: %s) that have references in not found creature %u GO list. Crash possible later.", GetGUIDLow(), GetGOInfo()->entry, GetGOInfo()->name.c_str(), GUID_LOPART(owner_guid));
-        }
+        RemoveFromOwner();
         WorldObject::RemoveFromWorld();
         sObjectAccessor->RemoveObject(this);
     }
@@ -600,15 +597,8 @@ void GameObject::AddUniqueUse(Player* player)
 void GameObject::Delete()
 {
     SetLootState(GO_NOT_READY);
-    if (GetOwnerGUID())
-    {
-        if (Unit* owner = GetOwner())
-            owner->RemoveGameObject(this, false);
-        else    //! Owner not in world anymore
-            SetOwnerGUID(0);
-    }
+    RemoveFromOwner();
 
-    ASSERT(!GetOwnerGUID());
     SendObjectDeSpawnAnim(GetGUID());
 
     SetGoState(GO_STATE_READY);
@@ -1285,8 +1275,8 @@ void GameObject::Use(Unit* user)
                     if (chance >= roll)
                     {
                         player->UpdateFishingSkill();
-
-                        // prevent removing GO at spell cancel
+                        //TODO: I do not understand this hack. Need some explanation.
+                        RemoveFromOwner();
                         player->RemoveGameObject(this, false);
                         SetOwnerGUID(player->GetGUID());
 

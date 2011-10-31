@@ -1245,6 +1245,8 @@ enum ReactiveType
 #define SUMMON_SLOT_QUEST   6
 #define MAX_SUMMON_SLOT     7
 
+#define MAX_GAMEOBJECT_SLOT 4
+
 enum PlayerTotemType
 {
     SUMMON_TYPE_TOTEM_FIRE  = 63,
@@ -1919,7 +1921,7 @@ class Unit : public WorldObject
 
         uint32 m_addDmgOnce;
         uint64 m_SummonSlot[MAX_SUMMON_SLOT];
-        uint64 m_ObjectSlot[4];
+        uint64 m_ObjectSlot[MAX_GAMEOBJECT_SLOT];
 
         ShapeshiftForm GetShapeshiftForm() const { return ShapeshiftForm(GetByteValue(UNIT_FIELD_BYTES_2, 3)); }
         void SetShapeshiftForm(ShapeshiftForm form)
