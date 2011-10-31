@@ -403,7 +403,7 @@ class spell_warl_fear : public SpellScriptLoader
                             break;
                     }
                     if (spellId)
-                        GetCaster()->CastSpell(GetHitUnit(), spellId, true);
+                        GetCaster()->CastSpell(GetTarget(), spellId, true);
                 }
             }
 
@@ -428,7 +428,7 @@ class spell_warl_drain_life : public SpellScriptLoader
 public:
     spell_warl_drain_life() : SpellScriptLoader("spell_warl_drain_life") { }
 
-    class spell_warl_drain_life_AuraScript : public SpellScript
+    class spell_warl_drain_life_AuraScript : public AuraScript
     {
         PrepareAuraScript(spell_warl_drain_life_AuraScript);
         

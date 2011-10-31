@@ -8396,7 +8396,7 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
                 // Siphon Life
                 if(auraSpellInfo->SpellIconID == 152)
                 {
-                    triggered_spell_id = 63106;
+                    trigger_spell_id = 63106;
                     target = this;
                     basepoints0 = int32(CountPctFromMaxHealth(triggerAmount));
                 }
@@ -10560,7 +10560,7 @@ uint32 Unit::SpellDamageBonus(Unit* victim, SpellInfo const* spellProto, uint32 
                 {
                     Aura const* aura = itr->second->GetBase();
                     SpellInfo const* m_spell = aura->GetSpellInfo();
-                    if (m_spell->SpellFamilyName != SPELLFAMILY_WARLOCK || !(m_spell->SpellFamilyFlags[0] & 0x4008)
+                    if (m_spell->SpellFamilyName != SPELLFAMILY_WARLOCK || !(m_spell->SpellFamilyFlags[0] & 0x4008))
                         continue;
                     modPercent += stepPercent * aura->GetStackAmount();
                     if (modPercent >= maxPercent)
