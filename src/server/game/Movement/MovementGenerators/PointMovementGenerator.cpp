@@ -59,7 +59,7 @@ bool PointMovementGenerator<T>::Update(T &unit, const uint32 diff)
         arrived = true;
         return false;
     }
-    else if (!unit.HasUnitState(UNIT_STAT_MOVE))
+    else if (!unit.HasUnitState(UNIT_STAT_MOVE) && !unit.HasUnitState(UNIT_STAT_JUMPING))
         i_destinationHolder.StartTravel(traveller);
 
     return true;
