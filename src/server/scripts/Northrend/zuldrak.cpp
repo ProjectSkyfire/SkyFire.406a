@@ -1216,8 +1216,9 @@ public:
             {
                 if (uiMissleTimer <= uiDiff)
                 {
-                    DoCast(me, uiSpell); // this spell is not supported ... YET!
-                    uiMissleTimer = urand(2000, 7000);
+                    if (uiSpell) // Sometimes it is 0, why?
+                        DoCast(me, uiSpell); // this spell (what spell) is not supported ... YET!
+                     uiMissleTimer = urand(2000, 7000);
                 } else uiMissleTimer -= uiDiff;
             }
 
