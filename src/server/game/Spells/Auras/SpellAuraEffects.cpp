@@ -458,9 +458,13 @@ int32 AuraEffect::CalculateAmount(Unit* caster)
 
     // check item enchant aura cast
     if (!amount && caster)
+    {
         if (uint64 itemGUID = GetBase()->GetCastItemGUID())
+        {
             if (Player* playerCaster = caster->ToPlayer())
+            {
                 if (Item* castItem = playerCaster->GetItemByGuid(itemGUID))
+                {
                     if (castItem->GetItemSuffixFactor())
                     {
                         ItemRandomSuffixEntry const* item_rand_suffix = sItemRandomSuffixStore.LookupEntry(abs(castItem->GetItemRandomPropertyId()));
@@ -484,7 +488,10 @@ int32 AuraEffect::CalculateAmount(Unit* caster)
                             }
                         }
                     }
-
+                }
+            }
+        }
+    }
     float DoneActualBenefit = 0.0f;
 
     // custom amount calculations go here
