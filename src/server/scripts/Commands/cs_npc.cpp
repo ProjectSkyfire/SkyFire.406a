@@ -156,7 +156,7 @@ public:
     }
 
     //add item in vendorlist
-    static bool HandleNpcAddVendorItemCommand(ChatHandler* handler, const char* args)
+    static bool HandleNpcAddVendorItemCommand(ChatHandler* handler, char const* args)
     {
         if (!*args)
             return false;
