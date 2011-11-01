@@ -803,8 +803,8 @@ int32 AuraEffect::CalculateAmount(Unit* caster)
             break;
         case SPELL_AURA_MOUNTED:
             {
-                Player *plr = caster->ToPlayer();
-                if(plr)
+                Player *player = caster->ToPlayer();
+                if(player)
                 {
                     // find the spell we need
                     const MountTypeEntry *type = sMountTypeStore.LookupEntry(GetMiscValueB());
@@ -812,8 +812,8 @@ int32 AuraEffect::CalculateAmount(Unit* caster)
                         return 0;
 
                     uint32 spellId = 0;
-                    uint32 plrskill = plr->GetSkillValue(SKILL_RIDING);
-                    uint32 map = plr->GetMapId();
+                    uint32 plrskill = player->GetSkillValue(SKILL_RIDING);
+                    uint32 map = player->GetMapId();
                     uint32 maxSkill = 0;
                     for(int i = 0; i < MAX_MOUNT_TYPE_COLUMN; i++)
                     {
@@ -824,7 +824,7 @@ int32 AuraEffect::CalculateAmount(Unit* caster)
                             continue;
                         if(cap->reqSkillLevel > plrskill || cap->reqSkillLevel <= maxSkill)
                             continue;
-                        if(cap->reqSpell && !plr->HasSpell(cap->reqSpell))
+                        if(cap->reqSpell && !player->HasSpell(cap->reqSpell))
                             continue;
                         maxSkill = cap->reqSkillLevel;
                         spellId = cap->spell;
@@ -2907,8 +2907,8 @@ void AuraEffect::HandleAuraMounted(AuraApplication const* aurApp, uint8 mode, bo
 
     Unit* target = aurApp->GetTarget();
     uint32 spellId = (uint32)GetAmount();
-    Player *plr = target->ToPlayer();
-    if(plr && spellId < 2)
+    Player *player = target->ToPlayer();
+    if(player && spellId < 2)
     {
         return;
     }
@@ -2951,8 +2951,8 @@ void AuraEffect::HandleAuraMounted(AuraApplication const* aurApp, uint8 mode, bo
     {
         target->Unmount();
 
-        if(plr)
-            plr->RemoveAurasDueToSpell(spellId);
+        if(player)
+            player->RemoveAurasDueToSpell(spellId);
 
         //some mounts like Headless Horseman's Mount or broom stick are skill based spell
         // need to remove ALL arura related to mounts, this will stop client crash with broom stick
