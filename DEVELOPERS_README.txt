@@ -1,6 +1,6 @@
 2011_09_03 -= ANNOUNCEMENT =-
 
-This fork atm is not usible it is still WiP (work in progress).
+This fork atm is not stable it is still WiP (work in progress).
 
 Traffic for development work is to move to this repo:
 https://github.com/ProjectSkyfire/SkyFireEMU_rebase
@@ -16,10 +16,6 @@ still will be only limited support, until its announced otherwise.
 
 
 ~note from Bootz (Aptiva):
-If you are working on this project for the rebase...
-and find a situation (and we all know they comeup) where the code,
-your about to commit is hacky...
-add a damn comment in your the changed source to let the others know,
-and we can eventually get it changed and properly updated...
-less work arounds, clean coding proceedures, shouldnt be all that hard
-to stick to.
+
+Our todo list and development chat for this rebase is at:
+http://www.projectskyfire.org/index.php/topic/4272-development-list-rebase-only/
