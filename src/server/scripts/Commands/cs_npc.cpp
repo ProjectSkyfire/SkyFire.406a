@@ -171,7 +171,7 @@ public:
 
         int32 item_int = atol(pitem);
         if (item_int <= 0)
-            return true;
+            return false;
 
         uint32 itemId = item_int;
 
