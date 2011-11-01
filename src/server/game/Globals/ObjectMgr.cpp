@@ -8715,7 +8715,7 @@ void ObjectMgr::LoadCreatureClassLevelStats()
 {
     uint32 oldMSTime = getMSTime();
 
-    QueryResult result = WorldDatabase.Query("SELECT level, class, basehp0, basehp1, basehp2, basemana, basearmor FROM creature_classlevelstats");
+    QueryResult result = WorldDatabase.Query("SELECT level, class, basehp0, basehp1, basehp2, basehp3, basemana, basearmor FROM creature_classlevelstats");
 
     if (!result)
     {
@@ -8737,8 +8737,8 @@ void ObjectMgr::LoadCreatureClassLevelStats()
         for (uint8 i = 0; i < MAX_CREATURE_BASE_HP; ++i)
             stats.BaseHealth[i] = fields[i + 2].GetUInt32();
 
-        stats.BaseMana = fields[5].GetUInt32();
-        stats.BaseArmor = fields[6].GetUInt32();
+        stats.BaseMana = fields[6].GetUInt32();
+        stats.BaseArmor = fields[7].GetUInt32();
 
         if (!Class || ((1 << (Class - 1)) & CLASSMASK_ALL_CREATURES) == 0)
             sLog->outErrorDb("Creature base stats for level %u has invalid class %u", Level, Class);
