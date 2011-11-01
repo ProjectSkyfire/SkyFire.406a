@@ -286,17 +286,17 @@ bool AchievementCriteriaData::IsValid(AchievementCriteriaEntry const* criteria)
 bool AchievementCriteriaData::Meets(uint32 criteria_id, Player const* source, Unit const* target, uint32 miscvalue1 /*= 0*/) const
 {
 	const AchievementCriteriaEntry* criteria = sAchievementCriteriaStore.LookupEntry(criteria_id);
-	
+
 	bool met = true;
 	for(uint32 i = 0; i < 3; ++i)
 	{
 		uint32 checkType = criteria->moreRequirement[i];
-		
+
 		if(checkType == 0)
 			break;
 
 		uint32 checkValue = criteria->moreRequirementValue[i];
-		
+
 		switch(checkType)
 		{
 			case ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_ITEM_LEVEL:

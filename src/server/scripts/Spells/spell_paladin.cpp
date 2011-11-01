@@ -337,7 +337,7 @@ public:
     class spell_pal_shield_of_righteous_SpellScript : public SpellScript
     {
         PrepareSpellScript(spell_pal_shield_of_righteous_SpellScript)
-        
+
         void CalculateDamage(SpellEffIndex /*effIndex*/)
         {
             if(Unit* caster = GetCaster())

@@ -325,36 +325,36 @@ public:
             {
                 if(caster->CountPctFromMaxHealth(GetSpellInfo()->Effects[EFFECT_2].CalcValue()) >= caster->GetHealth()) // You cant kill yourself with this
                     return SPELL_FAILED_FIZZLE;
-                
+
                 return SPELL_CAST_OK;
             }
             return SPELL_FAILED_DONT_REPORT;
         }
-        
+
         void HandleDummy(SpellEffIndex /*EffIndex*/)
         {
             if(Unit* caster = GetCaster())
             {
                 int32 damage = int32(caster->CountPctFromMaxHealth(GetSpellInfo()->Effects[EFFECT_2].CalcValue()));
                 int32 mana = 0;
-                
+
                 uint32 multiplier = 1.2f;
-                
+
                 // Should not appear in combat log
                 caster->ModifyHealth(-damage);
-                
+
                 // Improved Life Tap mod
                 if (AuraEffect const* aurEff = caster->GetDummyAuraEffect(SPELLFAMILY_WARLOCK, 208, 0))
                     multiplier += int32(aurEff->GetAmount() / 100);
-                    
+
                 mana = int32(damage * multiplier);
                 caster->CastCustomSpell(caster, 31818, &mana, NULL, NULL, false);
-                
+
                 // Mana Feed
                 int32 manaFeedVal = 0;
                 if (AuraEffect const* aurEff = caster->GetAuraEffect(SPELL_AURA_ADD_FLAT_MODIFIER, SPELLFAMILY_WARLOCK, 1982, 0))
                     manaFeedVal = aurEff->GetAmount();
-                    
+
                 if (manaFeedVal > 0)
                 {
                     manaFeedVal = int32(mana * manaFeedVal / 100);
@@ -362,7 +362,7 @@ public:
                 }
             }
         }
-        
+
         void Register()
         {
             OnCheckCast += SpellCheckCastFn(spell_warl_life_tap_SpellScript::CheckCast);
@@ -395,11 +395,11 @@ class spell_warl_fear : public SpellScriptLoader
                     uint32 spellId = 0;
                     switch (aurEff->GetId())
                     {
-                        case 53759: 
-                            spellId = 60947; 
+                        case 53759:
+                            spellId = 60947;
                             break;
-                        case 53754: 
-                            spellId = 60946; 
+                        case 53754:
+                            spellId = 60946;
                             break;
                     }
                     if (spellId)
@@ -431,11 +431,11 @@ public:
     class spell_warl_drain_life_AuraScript : public AuraScript
     {
         PrepareAuraScript(spell_warl_drain_life_AuraScript);
-        
+
         void OnPeriodic(AuraEffect const* /*aurEff*/)
         {
             int32 bp = 2; // Normal, restore 2% of health
-            
+
             // Check for Death's Embrace
             if(AuraEffect const* aurEff = GetCaster()->GetAuraEffect(SPELL_AURA_DUMMY, SPELLFAMILY_WARLOCK, 3223, 0))
                 if(GetCaster()->HealthBelowPct(25))

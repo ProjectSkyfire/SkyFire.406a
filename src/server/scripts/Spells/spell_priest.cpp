@@ -291,14 +291,14 @@ class spell_pri_shadow_word_death : public SpellScriptLoader
                     int32 back_damage = caster->SpellDamageBonus(GetHitUnit(), GetSpellInfo(), uint32(GetHitDamage()), SPELL_DIRECT_DAMAGE);
                     if (AuraEffect* aurEff = caster->GetDummyAuraEffect(SPELLFAMILY_PRIEST, 2874, 1))
                         back_damage -= back_damage * (-aurEff->GetAmount() / 100);
-                    
+
                     if (back_damage < int32(GetHitUnit()->GetHealth()))
                     {
                         caster->CastCustomSpell(caster, 32409, &back_damage, NULL, NULL, true);
                         if(GetHitUnit()->HealthBelowPct(25))
                         {
                             SetHitDamage(int32(GetHitDamage() * 3)); // Deals 3 times more damage to targets below 25% health
-                            
+
                             if (caster->HasAura(55682) && !GetHitUnit()->HasAura(95652)) // Glyph of Shadow Word: Death
                             {
                                 caster->AddAura(95652, GetHitUnit()); // Glyph of Shadow Word: Death - Marker
@@ -307,7 +307,6 @@ class spell_pri_shadow_word_death : public SpellScriptLoader
                             }
                         }
                     }
-                    
                 }
             }
 
@@ -322,7 +321,6 @@ class spell_pri_shadow_word_death : public SpellScriptLoader
             return new spell_pri_shadow_word_death_SpellScript;
         }
 };
-
 
 // Mind Blast
 // Spell Id: 8092
@@ -343,7 +341,7 @@ class spell_pri_mind_blast : public SpellScriptLoader
                         if (caster->GetShapeshiftForm() == FORM_SHADOW)
                             if (roll_chance_i(aurEff->GetAmount()))
                                 caster->CastSpell(GetHitUnit(), 48301, true); // Cast Mind Trauma
-                    
+
                     // Remove Mind Melt
                     caster->RemoveAurasDueToSpell(87160);
                     caster->RemoveAurasDueToSpell(81292);

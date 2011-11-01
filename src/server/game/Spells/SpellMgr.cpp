@@ -3031,7 +3031,7 @@ void SpellMgr::LoadSpellCustomAttr()
             case 45641: // Fire Bloom
             case 55665: // Life Drain - Sapphiron (H)
             case 28796: // Poison Bolt Volly - Faerlina
-            case 44203: // Tranquility				
+            case 44203: // Tranquility
                 spellInfo->MaxAffectedTargets = 5;
                 break;
             case 40827: // Sinful Beam

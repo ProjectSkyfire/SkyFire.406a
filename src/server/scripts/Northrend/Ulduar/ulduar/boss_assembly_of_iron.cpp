@@ -612,7 +612,6 @@ class boss_stormcaller_brundir : public CreatureScript
                             me->ApplySpellImmune(0, IMMUNITY_MECHANIC, MECHANIC_STUN, true);    // Apply immumity to stuns
                         }
                     break;
-
                 }
             }
 

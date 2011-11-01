@@ -95,11 +95,11 @@ class spell_warr_bloodthirst : public SpellScriptLoader
 {
     public:
         spell_warr_bloodthirst() : SpellScriptLoader("spell_warr_bloodthirst") { }
-        
+
         class spell_warr_bloodthirst_SpellScript : public SpellScript
         {
             PrepareSpellScript(spell_warr_bloodthirst_SpellScript);
-            
+
             void CalculateDamage(SpellEffIndex /*effect*/)
             {
                 // Formula: AttackPower * BasePoints / 100
@@ -110,13 +110,13 @@ class spell_warr_bloodthirst : public SpellScriptLoader
                     caster->CastCustomSpell(caster, 23885, &dmg, NULL, NULL, true);
                 }
             }
-            
+
             void Register()
             {
                 OnEffectHitTarget += SpellEffectFn(spell_warr_bloodthirst::spell_warr_bloodthirst_SpellScript::CalculateDamage,EFFECT_0,SPELL_EFFECT_SCHOOL_DAMAGE);
             }
         };
-        
+
         SpellScript* GetSpellScript() const
         {
             return new spell_warr_bloodthirst_SpellScript();
@@ -129,31 +129,31 @@ class spell_warr_victory_rush : public SpellScriptLoader
 {
     public:
         spell_warr_victory_rush() : SpellScriptLoader("spell_warr_victory_rush") { }
-        
+
         class spell_warr_victory_rush_SpellScript : public SpellScript
         {
             PrepareSpellScript(spell_warr_victory_rush_SpellScript);
-            
+
             void CalculateDamage(SpellEffIndex effect)
             {
                 // Formula: AttackPower * BasePoints / 100
                 if(Unit* caster = GetCaster())
                     SetHitDamage(int32(GetHitDamage() * caster->GetTotalAttackPowerValue(BASE_ATTACK) / 100));
             }
-            
+
             void HandleAfterHit()
             {
                 if(Unit* caster = GetCaster())
                     caster->RemoveAurasDueToSpell(32216); // Remove Victorious aura
             }
-            
+
             void Register()
             {
                 AfterHit += SpellHitFn(spell_warr_victory_rush::spell_warr_victory_rush_SpellScript::HandleAfterHit);
                 OnEffectHitTarget += SpellEffectFn(spell_warr_victory_rush::spell_warr_victory_rush_SpellScript::CalculateDamage,EFFECT_0,SPELL_EFFECT_SCHOOL_DAMAGE);
             }
         };
-        
+
         SpellScript* GetSpellScript() const
         {
             return new spell_warr_victory_rush_SpellScript();
@@ -166,24 +166,24 @@ class spell_warr_cleave : public SpellScriptLoader
 {
     public:
         spell_warr_cleave() : SpellScriptLoader("spell_warr_cleave") { }
-        
+
         class spell_warr_cleave_SpellScript : public SpellScript
         {
             PrepareSpellScript(spell_warr_cleave_SpellScript);
-            
+
             void CalculateDamage(SpellEffIndex effect)
             {
                 // Formula: 6 + AttackPower * 0.45
                 if(Unit* caster = GetCaster())
                     SetHitDamage(int32(6 + caster->GetTotalAttackPowerValue(BASE_ATTACK) * 0.45f));
             }
-            
+
             void Register()
             {
                 OnEffectHitTarget += SpellEffectFn(spell_warr_cleave::spell_warr_cleave_SpellScript::CalculateDamage,EFFECT_0,SPELL_EFFECT_SCHOOL_DAMAGE);
             }
         };
-        
+
         SpellScript* GetSpellScript() const
         {
             return new spell_warr_cleave_SpellScript();
@@ -197,24 +197,24 @@ class spell_warr_intercept_triggered : public SpellScriptLoader
 {
     public:
         spell_warr_intercept_triggered() : SpellScriptLoader("spell_warr_intercept_triggered") { }
-        
+
         class spell_warr_intercept_triggered_SpellScript : public SpellScript
         {
             PrepareSpellScript(spell_warr_intercept_triggered_SpellScript);
-            
+
             void CalculateDamage(SpellEffIndex effect)
             {
                 // Formula: 1 + AttackPower * 0.12
                 if(Unit* caster = GetCaster())
                     SetHitDamage(int32(1 + caster->GetTotalAttackPowerValue(BASE_ATTACK) * 0.12f));
             }
-            
+
             void Register()
             {
                 OnEffectHitTarget += SpellEffectFn(spell_warr_intercept_triggered::spell_warr_intercept_triggered_SpellScript::CalculateDamage,EFFECT_1,SPELL_EFFECT_SCHOOL_DAMAGE);
             }
         };
-        
+
         SpellScript* GetSpellScript() const
         {
             return new spell_warr_intercept_triggered_SpellScript();
@@ -227,11 +227,11 @@ class spell_warr_execute : public SpellScriptLoader
 {
     public:
         spell_warr_execute() : SpellScriptLoader("spell_warr_execute") { }
-        
+
         class spell_warr_execute_SpellScript : public SpellScript
         {
             PrepareSpellScript(spell_warr_execute_SpellScript);
-            
+
             void CalculateDamage(SpellEffIndex effect)
             {
                 if(Unit* caster = GetCaster())
@@ -255,13 +255,13 @@ class spell_warr_execute : public SpellScriptLoader
                     }
                 }
             }
-            
+
             void Register()
             {
                 OnEffectHitTarget += SpellEffectFn(spell_warr_execute::spell_warr_execute_SpellScript::CalculateDamage,EFFECT_0,SPELL_EFFECT_SCHOOL_DAMAGE);
             }
         };
-        
+
         SpellScript* GetSpellScript() const
         {
             return new spell_warr_execute_SpellScript();
@@ -274,24 +274,24 @@ class spell_warr_heroic_strike : public SpellScriptLoader
 {
     public:
         spell_warr_heroic_strike() : SpellScriptLoader("spell_warr_heroic_strike") { }
-        
+
         class spell_warr_heroic_strike_SpellScript : public SpellScript
         {
             PrepareSpellScript(spell_warr_heroic_strike_SpellScript);
-            
+
             void CalculateDamage(SpellEffIndex effect)
             {
                 // Formula: 8 + AttackPower * 60 / 100
                 if(Unit* caster = GetCaster())
                     SetHitDamage(int32(8 + caster->GetTotalAttackPowerValue(BASE_ATTACK) * 60 / 100));
             }
-            
+
             void Register()
             {
                 OnEffectHitTarget += SpellEffectFn(spell_warr_heroic_strike::spell_warr_heroic_strike_SpellScript::CalculateDamage,EFFECT_0,SPELL_EFFECT_SCHOOL_DAMAGE);
             }
         };
-        
+
         SpellScript* GetSpellScript() const
         {
             return new spell_warr_heroic_strike_SpellScript();
@@ -304,11 +304,11 @@ class spell_warr_shockwave : public SpellScriptLoader
 {
     public:
         spell_warr_shockwave() : SpellScriptLoader("spell_warr_shockwave") { }
-        
+
         class spell_warr_shockwave_SpellScript : public SpellScript
         {
             PrepareSpellScript(spell_warr_shockwave_SpellScript);
-            
+
             void CalculateDamage(SpellEffIndex effect)
             {
                 // Formula: [Effect2BasePoints] / 100 * AttackPower
@@ -318,13 +318,13 @@ class spell_warr_shockwave : public SpellScriptLoader
                     SetHitDamage(int32(bp2 / 100 * caster->GetTotalAttackPowerValue(BASE_ATTACK)));
                 }
             }
-            
+
             void Register()
             {
                 OnEffectHitTarget += SpellEffectFn(spell_warr_shockwave::spell_warr_shockwave_SpellScript::CalculateDamage,EFFECT_1,SPELL_EFFECT_SCHOOL_DAMAGE);
             }
         };
-        
+
         SpellScript* GetSpellScript() const
         {
             return new spell_warr_shockwave_SpellScript();
@@ -337,7 +337,7 @@ class spell_warr_thunderclap : public SpellScriptLoader
 {
     public:
         spell_warr_thunderclap() : SpellScriptLoader("spell_warr_thunderclap") { }
-        
+
         class spell_warr_thunderclap_SpellScript : public SpellScript
         {
             PrepareSpellScript(spell_warr_thunderclap_SpellScript);
@@ -345,18 +345,18 @@ class spell_warr_thunderclap : public SpellScriptLoader
             // Lock for avoid processing the same thing multiple times when we already know the result
             bool CheckAgain;
             std::list<Unit*> targetList;
-            
+
             bool Load()
             {
                 CheckAgain = true;
 				return true;
             }
-            
+
             void FilterTargets(std::list<Unit*>& unitList)
             {
                 targetList = unitList;
             }
-            
+
             void OnTargetHit(SpellEffIndex effect)
             {
                 if(CheckAgain) // Dont re-cast the thing on each target if its already applied
@@ -380,14 +380,14 @@ class spell_warr_thunderclap : public SpellScriptLoader
                     }
                 }
             }
-            
+
             void Register()
             {
                 OnEffectHitTarget += SpellEffectFn(spell_warr_thunderclap::spell_warr_thunderclap_SpellScript::OnTargetHit,EFFECT_0,SPELL_EFFECT_SCHOOL_DAMAGE);
                 OnUnitTargetSelect += SpellUnitTargetFn(spell_warr_thunderclap::spell_warr_thunderclap_SpellScript::FilterTargets, EFFECT_0, TARGET_UNIT_SRC_AREA_ENEMY);
             }
         };
-        
+
         SpellScript* GetSpellScript() const
         {
             return new spell_warr_thunderclap_SpellScript();

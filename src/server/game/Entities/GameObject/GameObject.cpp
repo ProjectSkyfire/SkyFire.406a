@@ -114,7 +114,7 @@ void GameObject::RemoveFromOwner()
 
     sLog->outCrash("Delete GameObject (GUID: %u Entry: %u SpellId %u LinkedGO %u) that lost references to owner (GUID %u Type '%s') GO list. Crash possible later.",
         GetGUIDLow(), GetGOInfo()->entry, m_spellId, GetGOInfo()->GetLinkedGameObjectEntry(), GUID_LOPART(ownerGUID), ownerType);
-    SetOwnerGUID(0);	
+    SetOwnerGUID(0);
 }
 
 void GameObject::AddToWorld()

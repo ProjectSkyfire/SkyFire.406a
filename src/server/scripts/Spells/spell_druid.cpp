@@ -344,7 +344,7 @@ class spell_dru_ferocious_bite : public SpellScriptLoader
                 {
                     if(caster->GetTypeId() != TYPEID_PLAYER)
                         return;
-                        
+
                     int32 damage = GetHitDamage();
                     float ap = caster->GetTotalAttackPowerValue(BASE_ATTACK);
                     float multiple = ap / 410 + GetSpellInfo()->Effects[EFFECT_1].CalcValue();
@@ -384,7 +384,7 @@ class spell_dru_mark_of_the_wild : public SpellScriptLoader
                 {
                     if(caster->GetTypeId() != TYPEID_PLAYER)
                         return;
-                    
+
                     std::list<Unit*> PartyMembers;
                     caster->GetPartyMembers(PartyMembers);
 

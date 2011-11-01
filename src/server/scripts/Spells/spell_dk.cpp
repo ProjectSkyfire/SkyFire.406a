@@ -680,7 +680,7 @@ class spell_dk_festering_strike : public SpellScriptLoader
                         target->GetAura(55078)->SetDuration(target->GetAura(55078)->GetDuration() + (addDuration * 1000), true);
                 }
             }
-            
+
             void Register()
             {
                 OnEffectHitTarget += SpellEffectFn(spell_dk_festering_strike_SpellScript::HandleScript,EFFECT_2,SPELL_EFFECT_SCRIPT_EFFECT);
