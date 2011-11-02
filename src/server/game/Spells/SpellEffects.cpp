@@ -7389,8 +7389,8 @@ void Spell::SummonGuardian(uint32 i, uint32 entry, SummonPropertiesEntry const* 
     // level of pet summoned using engineering item based at engineering skill level
     if (m_CastItem && caster->GetTypeId() == TYPEID_PLAYER)
         if (ItemTemplate const* proto = m_CastItem->GetTemplate())
-            if (proto->RequiredSkill == SKILL_ENGINERING)
-                if (uint16 skill202 = caster->ToPlayer()->GetSkillValue(SKILL_ENGINERING))
+            if (proto->RequiredSkill == SKILL_ENGINEERING)
+                if (uint16 skill202 = caster->ToPlayer()->GetSkillValue(SKILL_ENGINEERING))
                     level = skill202/5;
 
     //float radius = GetSpellRadiusForFriend(sSpellRadiusStore.LookupEntry(m_spellInfo->EffectRadiusIndex[i]));
