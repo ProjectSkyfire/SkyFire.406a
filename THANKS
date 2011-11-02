@@ -13,8 +13,9 @@ Thanks to the ScriptDev2 team (http://www.scriptdev2.com) for scripts.
 Thanks to the WCell team (especially Ralek) for research on realm reconnect
 sequence, item scaling stats algorithm, gameobject rotation issues.
 
-Thanks go out to the following people for various patches/code from TrinityCore(listed in the
-order they were added): w12x, dythzer, XEQT, death420, balrok, TOM_RUS,
+Thanks go out to the following people for various patches/code from TrinityCore
+(listed in the order they were added): 
+w12x, dythzer, XEQT, death420, balrok, TOM_RUS,
 runningnak3d, Seline, KingPin, raczman, bogie, Neo2003, NoFantasy, Derex,
 freghar, toilet1, megamage, MadJack, WarHead, gvcoman, Ntsc, arrai, jrkpote,
 Seraphim, vagoth, KerchumA222, Rognar, Blaymoira, DragonHunter, Molius, ApoC,
@@ -75,8 +76,15 @@ zthoreen, clement.roussel, p.alexej, Ceris, Nayre, Kiper, announce, thmarth,
 Ner'zhul, DarkXuan, leak, linencloth, SnakeIce, Supabad, Tome, Nay, Kaelima,
 Svannon
 
+Thanks go out to the following people for various patches/code from Project SkyFire
+(listed in the order they were added):
+AlterEgo, Aptiva(mobiledev), Arktus, LordJZ, Chameleon, Bloddy, Fabian, Sovak(Hacker007), 
+Rad3k, Cerey(Venugh), AriDEV, TheHacker66, Dvlpr, Hammerstorm, Cristal, Keany(Woverine), 
+Bloody, Cooler-SAI, Pepsi1x1, Danford, ZenitH, scruffy, Karen, DarkXuan, Ner'zhul, 
+ChasterX, Kierkgaard, TehAvatar, Hav0c, Remake, cmaranec, Totomakers, MrBlitzKrieg,
+Allnightlong, Snajl, NNN666, Portgas D.Ace, Fedr, Takenbacon, kaiser, Djscias, Starzu,
+Petrosson, HUNTERok, Roc13x, Et2012, iDani3l, Vcrx6, Subv2112,
+
+
 // todo: fill in the rest of involved names with core from catcus to present.
-Thanks go out to the following people for various patches/code from SkyFireEmu(listed in the
-order they were added): AlterEgo, LordJZ, Chameleon, Bloddy, XEQT, Shocker, Silinoron, Fabi, 
-Sovak(Hacker007), Rad3k, Cerey, AriDEV, TheHacker66, Dvlpr, Hammerstorm, Cristal, Keany, Bloody, 
-Karen, Cooler Pepsi1x1, Danford, ZenitH
+only one name is needed, if there already listed in trinity thanks no need to add to skyfires.
