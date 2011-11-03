@@ -14028,7 +14028,7 @@ void Player::SendEquipError(InventoryResult msg, Item* pItem, Item* pItem2, uint
 void Player::SendBuyError(BuyResult msg, Creature* creature, uint32 item, uint32 param)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Sent SMSG_BUY_FAILED");
-    WorldPacket data(SMSG_BUY_FAILED, (8+4+4+1));
+    WorldPacket data(SMSG_BUY_FAILED, (8+4+4+1+2));
     data << uint64(creature ? creature->GetGUID() : 0);
     data << uint32(item);
     if (param > 0)
@@ -16922,17 +16922,23 @@ void Player::SendQuestReward(Quest const *quest, uint32 XP, Object * questGiver)
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Sent SMSG_QUESTGIVER_QUEST_COMPLETE quest = %u", questid);
     sGameEventMgr->HandleQuestComplete(questid);
     WorldPacket data(SMSG_QUESTGIVER_QUEST_COMPLETE, (4+4+4+4+4));
+    data << uint8(0x80); // unk 4.0.1 flags
+    data << uint32(quest->GetRewSkillLineId());
     data << uint32(questid);
 
     if (getLevel() < sWorld->getIntConfig(CONFIG_MAX_PLAYER_LEVEL))
     {
-        data << uint32(XP);
         data << uint32(quest->GetRewOrReqMoney());
+        data << uint32(quest->GetRewSkillPoints());
+        data << uint32(XP);
     }
     else
     {
-        data << uint32(0);
         data << uint32(quest->GetRewOrReqMoney() + int32(quest->GetRewMoneyMaxLevel() * sWorld->getRate(RATE_DROP_MONEY)));
+        data << uint32(quest->GetRewSkillPoints());              // bonus talents
+        data << uint32(0);
+
+        data << uint32(0);
     }
 
     data << 10 * Trinity::Honor::hk_honor_at_level(getLevel(), quest->GetRewHonorMultiplier());
@@ -23570,25 +23576,21 @@ uint32 Player::GetBarberShopCost(uint8 newhairstyle, uint8 newhaircolor, uint8 n
 
 void Player::InitGlyphsForLevel()
 {
+    uint8 slot = 0;
     for (uint32 i = 0; i < sGlyphSlotStore.GetNumRows(); ++i)
-        if (GlyphSlotEntry const* gs = sGlyphSlotStore.LookupEntry(i))
-            if (gs->Order)
-                SetGlyphSlot(gs->Order - 1, gs->Id);
+        if (GlyphSlotEntry const * gs = sGlyphSlotStore.LookupEntry(i))
+            if (gs)
+                SetGlyphSlot(slot++, gs->Id);
 
     uint8 level = getLevel();
     uint32 value = 0;
 
-    // 0x3F = 0x01 | 0x02 | 0x04 | 0x08 | 0x10 | 0x20 for 80 level
-    if (level >= 15)
-        value |= (0x01 | 0x02);
-    if (level >= 30)
-        value |= 0x08;
-    if (level >= 50)
-        value |= 0x04;
-    if (level >= 70)
-        value |= 0x10;
-    if (level >= 80)
-        value |= 0x20;
+    if (level >= 25)
+        value |= 1 | 2 | 64;
+    if(level >= 50)
+        value |= 4 | 8 | 128;
+    if (level >= 75)
+        value |= 16 | 32 | 256;
 
     SetUInt32Value(PLAYER_GLYPHS_ENABLED, value);
 }

@@ -712,7 +712,17 @@ int32 AuraEffect::CalculateAmount(Unit* caster)
             }
             // Innervate
             else if (m_spellInfo->Id == 29166)
-                ApplyPctF(amount, float(GetBase()->GetUnitOwner()->GetCreatePowers(POWER_MANA)) / GetTotalTicks());
+            {
+                int32 bonusMana = amount;
+                if(GetBase()->GetCaster() == GetBase()->GetUnitOwner())
+                {
+                    if(GetBase()->GetCaster()->HasAura(33597))  // Dreamstate rank1
+                        bonusMana += 15;
+                    if(GetBase()->GetCaster()->HasAura(33599))  // Dreamstate rank2
+                        bonusMana += 30;
+                }
+                ApplyPctF(bonusMana, float(GetBase()->GetUnitOwner()->GetMaxPower(POWER_MANA)) / GetTotalTicks());
+            }
             // Owlkin Frenzy
             else if (m_spellInfo->Id == 48391)
                 ApplyPctU(amount, GetBase()->GetUnitOwner()->GetCreatePowers(POWER_MANA));
