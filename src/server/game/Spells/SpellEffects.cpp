@@ -2288,7 +2288,7 @@ void Spell::EffectApplyAura(SpellEffIndex effIndex)
     switch (m_spellAura->GetId())
     {
         case 38177:  // Blackwhelp Net
-            if (unitTarget->GetEntry() != 21387)
+            if (unitTarget->GetEntry() != 21387) //Wyrmcult Blackwhelp
                 return;
         case 85673:  // Word of Glory
             if (!m_caster->HasAura(93466))
