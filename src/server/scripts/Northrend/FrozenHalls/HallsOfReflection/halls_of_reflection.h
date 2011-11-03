@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -84,7 +84,6 @@ enum Creatures
     NPC_RAGING_GNOUL                              = 36940,
     NPC_RISEN_WITCH_DOCTOR                        = 36941,
     NPC_ABON                                      = 37069,
-
 };
 
 enum GameObjects
@@ -121,7 +120,7 @@ enum Achievements
     SPELL_ACHIEV_CHECK             = 72830,
 };
 
-const Position OutroSpawns[2] = 
+const Position OutroSpawns[2] =
 {
     {5564.25f, 2274.69f, 733.01f, 3.93f}, // Lich King
     {5556.27f, 2266.28f, 733.01f, 0.8f}, // Jaina/Sylvana

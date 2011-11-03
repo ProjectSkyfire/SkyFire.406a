@@ -93,7 +93,7 @@ public:
         {
             if (!instance)
                 return;
-            
+
 			NonFight    = false;
             StartEscort = false;
             walkSpeed   = 1.0f;
@@ -464,7 +464,7 @@ public:
                         DoCast(target, SPELL_GNOUL_JUMP);
                     }
                 }
-            } 
+            }
             else if (instance->GetData(DATA_LICHKING_EVENT) == FAIL || instance->GetData(DATA_LICHKING_EVENT) == NOT_STARTED)
                 me->DespawnOrUnsummon();
 
@@ -476,7 +476,6 @@ public:
     {
         return new npc_raging_gnoulAI(creature);
     }
-
 };
 
 class npc_risen_witch_doctor : public CreatureScript
@@ -517,7 +516,6 @@ public:
                 return;
 
             instance->SetData(DATA_SUMMONS, 0);
-
         }
 
         void AttackStart(Unit* who)
@@ -576,7 +574,6 @@ public:
                         DoCast(target, SPELL_SHADOW_BOLT_VOLLEY);
                     BoltVolleyTimer = urand(15000, 22000);
                 } else BoltVolleyTimer -= diff;
-
             }
             else if (instance->GetData(DATA_LICHKING_EVENT) == FAIL || instance->GetData(DATA_LICHKING_EVENT) == NOT_STARTED)
                 me->DespawnOrUnsummon();
@@ -589,7 +586,6 @@ public:
     {
         return new npc_risen_witch_doctorAI(creature);
     }
-
 };
 
 class npc_abon : public CreatureScript

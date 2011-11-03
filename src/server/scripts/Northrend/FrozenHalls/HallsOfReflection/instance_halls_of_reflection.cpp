@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-	
+
 #include "ScriptPCH.h"
 #include "halls_of_reflection.h"
 
@@ -210,9 +210,9 @@ public:
                     break;
                 case NPC_JAINA_PART1:
                     if (TeamInInstance == HORDE)
-                        creature->UpdateEntry(NPC_SYLVANAS_PART1, HORDE);                    
+                        creature->UpdateEntry(NPC_SYLVANAS_PART1, HORDE);
                     JainaPart1 = creature->GetGUID();
-                    SylvanasPart1 = creature->GetGUID();                    
+                    SylvanasPart1 = creature->GetGUID();
                     break;
                 case NPC_KORELN:
                     if (TeamInInstance == HORDE)
@@ -235,7 +235,7 @@ public:
                 case BOSS_LICH_KING:
                     creature->SetHealth(20917000);
                     LichKing = creature->GetGUID();
-                    break;                    
+                    break;
             }
         }
 
@@ -534,7 +534,6 @@ public:
                     OpenDoor(FrostwornDoor);
                 if (Encounter[2] == DONE)
                     OpenDoor(ArthasDoor);
-
             } else OUT_LOAD_INST_DATA_FAIL;
 
             OUT_LOAD_INST_DATA_COMPLETE;
@@ -580,9 +579,7 @@ public:
         // Wipe has been detected. Perform cleanup and reset.
         void DoWipe()
         {
-            
             if (GetData(DATA_MARWYN_EVENT) != DONE) {
-                
                 SetData(DATA_WAVE_COUNT, FAIL);
                 WaveCount = 0;
                 events.Reset();
@@ -641,7 +638,6 @@ public:
             }
         }
     };
-
 };
 
 void AddSC_instance_halls_of_reflection()
