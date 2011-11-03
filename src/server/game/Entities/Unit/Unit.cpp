@@ -11329,6 +11329,29 @@ uint32 Unit::SpellHealingBonus(Unit* victim, SpellInfo const* spellProto, uint32
     if (spellProto->SpellFamilyName == SPELLFAMILY_POTION)
         return healamount;
 
+    // and Warlock's Healthstones
+    if (spellProto->SpellFamilyName == SPELLFAMILY_WARLOCK && (spellProto->SpellFamilyFlags[0] & 0x10000))
+    {
+        healamount = 0.45 * (GetMaxHealth() - 10 * (STAT_STAMINA - 180));
+        return healamount;
+    }
+
+    if (spellProto->Id == 85673)    // Word of Glory
+    {
+        uint32 am = GetPower(POWER_HOLY_POWER);
+        am = am > 0 ? am : 1;                              // proc Chance?
+        healamount = (((spellProto->Effects[0].BasePoints + spellProto->Effects[0].BasePoints / 2) + 0.198 * GetTotalAttackPowerValue(BASE_ATTACK))) * am;
+
+        uint32 chance = 0;
+        if (HasAura(87163))   // Eternal Glory rank1
+            chance = 15;
+        else if (HasAura(87164))   // Eternal Glory rank2
+            chance = 30;
+
+        if(!roll_chance_i(chance))
+            SetPower(POWER_HOLY_POWER, 0);
+    }
+
     // Healing Done
     // Taken/Done total percent damage auras
     float  DoneTotalMod = 1.0f;
