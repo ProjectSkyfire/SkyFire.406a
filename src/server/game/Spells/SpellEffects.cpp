@@ -4850,6 +4850,23 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
         {
             switch (m_spellInfo->Id)
             {
+                // Glyph of Backstab
+                case 63975:
+                {
+                    if (AuraEffect const * aurEff = unitTarget->GetAuraEffect(SPELL_AURA_PERIODIC_DAMAGE, SPELLFAMILY_ROGUE, 0x00100000, 0, 0, m_caster->GetGUID()))
+                    {
+                        uint32 countMin = aurEff->GetBase()->GetMaxDuration();
+                        uint32 countMax = 12000;
+                        countMax += m_caster->HasAura(56801) ? 4000 : 0;  // Glyph of Rupture
+
+                        if (countMin < countMax)
+                        {
+                            aurEff->GetBase()->SetDuration(uint32(aurEff->GetBase()->GetDuration()+3000));
+                            aurEff->GetBase()->SetMaxDuration(countMin+2000);
+                        }
+                    }
+                    return;
+                }			
                 // Orbs of translocation between silvermoon and undercity, these need moved to db!
                 /*case 35376: // translocations
                    m_caster->NearTeleportTo(0, 1805.99f, 341.32f, 70.66f, 1.6f);
