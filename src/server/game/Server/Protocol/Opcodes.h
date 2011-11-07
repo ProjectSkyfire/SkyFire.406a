@@ -1268,7 +1268,7 @@ enum Opcodes
     CMSG_WORLD_STATE_UI_TIMER_UPDATE                 = 0x03FA8, // 4.0.6a 13623
     SMSG_WORLD_STATE_UI_TIMER_UPDATE                 = 0x05557, // 4.0.6a 13623
     CMSG_CHAR_RACE_CHANGE                            = 0x06EA4, // 4.0.6a 13623
-    SMSG_TALENTS_INVOLUNTARILY_RESET                 = 0x0F6E4, // 4.0.6a 13623
+    SMSG_TALENTS_INVOLUNTARILY_RESET                 = 0x02A84, // 4.0.6a 13623
     SMSG_LOOT_SLOT_CHANGED                           = 0x031EC, // 4.0.6a 13623 0x4D4C ?
     CMSG_READY_FOR_ACCOUNT_DATA_TIMES                = 0x07DA8, // 4.0.6  13561
     CMSG_QUERY_QUESTS_COMPLETED                      = 0x0ECE8, // 4.0.6a 13623

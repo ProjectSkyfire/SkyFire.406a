@@ -3281,11 +3281,8 @@ void Player::InitTalentForLevel()
     if (level < 10)
     {
         // Remove all talent points
-        if (m_usedTalentCount > 0)                           // Free any used talents
-        {
-            resetTalents(true);
-            SetFreeTalentPoints(0);
-        }
+        resetTalents(true);
+        SetFreeTalentPoints(0);
     }
     else
     {
