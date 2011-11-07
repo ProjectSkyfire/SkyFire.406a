@@ -4851,7 +4851,7 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
             switch (m_spellInfo->Id)
             {
                 // Glyph of Backstab
-                case 63975:
+                case 56800:
                 {
                     if (AuraEffect const * aurEff = unitTarget->GetAuraEffect(SPELL_AURA_PERIODIC_DAMAGE, SPELLFAMILY_ROGUE, 0x00100000, 0, 0, m_caster->GetGUID()))
                     {
