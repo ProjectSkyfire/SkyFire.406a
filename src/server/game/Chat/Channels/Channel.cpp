@@ -650,7 +650,7 @@ void Channel::Say(uint64 p, const char *what, uint32 lang)
         data << p;
         data << messageLength;
         data << what;
-        data << uint8(player ? player->chatTag() : 0);
+        data << uint8(player ? player->GetChatTag() : 0);
 
         SendToAll(&data, !players[p].IsModerator() ? p : false);
     }
