@@ -4795,6 +4795,14 @@ SpellCastResult Spell::CheckCast(bool strict)
                        return SPELL_FAILED_NOPATH;
                }
             }
+
+            if (!m_triggeredByAuraSpell)
+            {
+                if (VMAP::VMapFactory::checkSpellForLoS(m_spellInfo->Id) && !m_caster->IsWithinLOSInMap(target))
+                    return SPELL_FAILED_LINE_OF_SIGHT;
+                if (m_caster->IsVisionObscured(target))
+                    return SPELL_FAILED_VISION_OBSCURED; // smoke bomb, camouflage...
+            }
         }
         else
         {

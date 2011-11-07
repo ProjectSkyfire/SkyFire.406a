@@ -386,9 +386,9 @@ pAuraEffectHandler AuraEffectHandler[TOTAL_AURAS]=
     &AuraEffect::HandleNULL,                                      //329 NYI
     &AuraEffect::HandleNULL,                                      //330 NYI
     &AuraEffect::HandleNULL,                                      //331 NYI
-    /* HandleActionbarSpellOverride - 332-333 */
+    /* HandleActionbarSpellOverride - 332?*/
     &AuraEffect::HandleNULL,                                      //332 NYI SPELL_AURA_OVERRIDE_ACTIONBAR_SPELLS
-    &AuraEffect::HandleNULL,                                      //333 NYI SPELL_AURA_OVERRIDE_ACTIONBAR_SPELLS_2
+    &AuraEffect::HandleModTrapLauncher,                           //333 SPELL_AURA_MOD_TRAP_LAUNCHER
     &AuraEffect::HandleNULL,                                      //334 NYI
     &AuraEffect::HandleNULL,                                      //335 NYI
     &AuraEffect::HandleNULL,                                      //336 NYI
@@ -408,7 +408,7 @@ pAuraEffectHandler AuraEffectHandler[TOTAL_AURAS]=
     &AuraEffect::HandleNULL,                                      //350 NYI
     &AuraEffect::HandleNULL,                                      //351 NYI
     &AuraEffect::HandleNULL,                                      //352 NYI
-    &AuraEffect::HandleNULL,                                      //353 NYI
+    &AuraEffect::HandleModCamouflage,                             //353 SPELL_AURA_CAMOUFLAGE
 };
 
 AuraEffect::AuraEffect(Aura* base, uint8 effIndex, int32 *baseAmount, Unit* caster):
@@ -1801,6 +1801,30 @@ void AuraEffect::HandleModInvisibility(AuraApplication const* aurApp, uint8 mode
         target->RemoveAurasWithInterruptFlags(AURA_INTERRUPT_FLAG_IMMUNE_OR_LOST_SELECTION);
     }
     target->UpdateObjectVisibility();
+}
+
+//TODO: Finish this aura
+void AuraEffect::HandleModTrapLauncher(AuraApplication const *aurApp, uint8 mode, bool apply) const
+{
+}
+
+//TODO: Finish this aura
+void AuraEffect::HandleModCamouflage(AuraApplication const *aurApp, uint8 mode, bool apply) const
+{
+    if (!(mode & AURA_EFFECT_HANDLE_SEND_FOR_CLIENT_MASK))
+        return;
+
+    Unit *target = aurApp->GetTarget();
+
+    if (apply)
+    {
+        target->CastSpell(target, 80326, true);  // Camouflage
+    }
+    else if (!(target->isCamouflaged()))
+    {
+        target->RemoveAura(80326);
+        target->RemoveAura(80325);
+    }
 }
 
 void AuraEffect::HandleModStealthDetect(AuraApplication const* aurApp, uint8 mode, bool apply) const

@@ -2039,7 +2039,7 @@ class Player : public Unit, public GridObject<Player>
 
         void UpdateDefense();
         void UpdateWeaponSkill (WeaponAttackType attType);
-        void UpdateCombatSkills(Unit *pVictim, WeaponAttackType attType, bool defence);
+        void UpdateCombatSkills(Unit *victim, WeaponAttackType attType, bool defence);
 
         void SetSkill(uint16 id, uint16 step, uint16 currVal, uint16 maxVal);
         uint16 GetMaxSkillValue(uint32 skill) const;        // max + perm. bonus + temp bonus
@@ -2072,9 +2072,9 @@ class Player : public Unit, public GridObject<Player>
 
         bool IsAtGroupRewardDistance(WorldObject const* pRewardSource) const;
         bool IsAtRecruitAFriendDistance(WorldObject const* pOther) const;
-        void RewardPlayerAndGroupAtKill(Unit* pVictim, bool isBattleGround);
+        void RewardPlayerAndGroupAtKill(Unit* victim, bool isBattleGround);
         void RewardPlayerAndGroupAtEvent(uint32 creature_id, WorldObject* pRewardSource);
-        bool isHonorOrXPTarget(Unit* pVictim);
+        bool isHonorOrXPTarget(Unit* victim);
 
         bool GetsRecruitAFriendBonus(bool forXP);
         uint8 GetGrantableLevels() { return m_grantableLevels; }
@@ -2083,7 +2083,7 @@ class Player : public Unit, public GridObject<Player>
         ReputationMgr&       GetReputationMgr()       { return m_reputationMgr; }
         ReputationMgr const& GetReputationMgr() const { return m_reputationMgr; }
         ReputationRank GetReputationRank(uint32 faction_id) const;
-        void RewardOnKill(Unit *pVictim, float rate);
+        void RewardOnKill(Unit *victim, float rate);
         void RewardReputation(Quest const *quest);
 
         void UpdateSkillsForLevel();
@@ -2094,7 +2094,7 @@ class Player : public Unit, public GridObject<Player>
         /***                  PVP SYSTEM                       ***/
         /*********************************************************/
         void UpdateHonorFields();
-        bool RewardHonor(Unit *pVictim, uint32 groupsize, int32 honor = -1, bool pvptoken = false);
+        bool RewardHonor(Unit *victim, uint32 groupsize, int32 honor = -1, bool pvptoken = false);
         uint32 GetHonorPoints() const { return talentPoints; }
         uint32 GetArenaPoints() const { return talentPoints; }
         void ModifyHonorPoints(int32 value, SQLTransaction* trans = NULL);      //! If trans is specified, honor save query will be added to trans

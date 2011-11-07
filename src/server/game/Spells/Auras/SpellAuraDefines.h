@@ -392,10 +392,10 @@ enum AuraType
     SPELL_AURA_328 									= 328,
     SPELL_AURA_MOD_RUNE_REGEN_SPEED 				= 329,    // NYI
     SPELL_AURA_CAST_WHILE_WALKING 					= 330,    // NYI
-    SPELL_AURA_331 								    = 331,
-    SPELL_AURA_OVERRIDE_ACTIONBAR_SPELLS 			= 332,    // NYI
-    SPELL_AURA_OVERRIDE_ACTIONBAR_SPELLS_2 			= 333,    // NYI
-    SPELL_AURA_334 									= 334,
+    SPELL_AURA_331                                  = 331,
+    SPELL_AURA_332                                  = 332,    // NYI
+    SPELL_AURA_MOD_TRAP_LAUNCHER                    = 333,    // NYI
+    SPELL_AURA_334                                  = 334,
     SPELL_AURA_335 									= 335,
     SPELL_AURA_MOD_FLYING_RESTRICTIONS 				= 336,    // NYI
     SPELL_AURA_MOD_VENDOR_ITEMS_PRICES 				= 337,    // NYI

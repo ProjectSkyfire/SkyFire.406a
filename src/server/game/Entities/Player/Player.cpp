@@ -1580,14 +1580,14 @@ void Player::Update(uint32 p_time)
 
     if (HasUnitState(UNIT_STAT_MELEE_ATTACKING) && !HasUnitState(UNIT_STAT_CASTING))
     {
-        if (Unit *pVictim = getVictim())
+        if (Unit *victim = getVictim())
         {
             // default combat reach 10
             // TODO add weapon, skill check
 
             if (isAttackReady(BASE_ATTACK))
             {
-                if (!IsWithinMeleeRange(pVictim))
+                if (!IsWithinMeleeRange(victim))
                 {
                     setAttackTimer(BASE_ATTACK, 100);
                     if (m_swingErrorMsg != 1)               // send single time (client auto repeat)
@@ -1597,7 +1597,7 @@ void Player::Update(uint32 p_time)
                     }
                 }
                 //120 degrees of radiant range
-                else if (!HasInArc(2*M_PI/3, pVictim))
+                else if (!HasInArc(2*M_PI/3, victim))
                 {
                     setAttackTimer(BASE_ATTACK, 100);
                     if (m_swingErrorMsg != 2)               // send single time (client auto repeat)
@@ -1616,16 +1616,16 @@ void Player::Update(uint32 p_time)
                             setAttackTimer(OFF_ATTACK, ATTACK_DISPLAY_DELAY);
 
                     // do attack
-                    AttackerStateUpdate(pVictim, BASE_ATTACK);
+                    AttackerStateUpdate(victim, BASE_ATTACK);
                     resetAttackTimer(BASE_ATTACK);
                 }
             }
 
             if (haveOffhandWeapon() && isAttackReady(OFF_ATTACK))
             {
-                if (!IsWithinMeleeRange(pVictim))
+                if (!IsWithinMeleeRange(victim))
                     setAttackTimer(OFF_ATTACK, 100);
-                else if (!HasInArc(2*M_PI/3, pVictim))
+                else if (!HasInArc(2*M_PI/3, victim))
                     setAttackTimer(OFF_ATTACK, 100);
                 else
                 {
@@ -1634,13 +1634,13 @@ void Player::Update(uint32 p_time)
                         setAttackTimer(BASE_ATTACK, ATTACK_DISPLAY_DELAY);
 
                     // do attack
-                    AttackerStateUpdate(pVictim, OFF_ATTACK);
+                    AttackerStateUpdate(victim, OFF_ATTACK);
                     resetAttackTimer(OFF_ATTACK);
                 }
             }
 
-            /*Unit* owner = pVictim->GetOwner();
-            Unit *u = owner ? owner : pVictim;
+            /*Unit* owner = victim->GetOwner();
+            Unit *u = owner ? owner : victim;
             if (u->IsPvP() && (!duel || duel->opponent != u))
             {
                 UpdatePvP(true);
@@ -7129,15 +7129,15 @@ int32 Player::CalculateReputationGain(uint32 creatureOrQuestLevel, int32 rep, in
 }
 
 //Calculates how many reputation points player gains in victim's enemy factions
-void Player::RewardOnKill(Unit *pVictim, float rate)
+void Player::RewardOnKill(Unit *victim, float rate)
 {
-    if (!pVictim || pVictim->GetTypeId() == TYPEID_PLAYER)
+    if (!victim || victim->GetTypeId() == TYPEID_PLAYER)
         return;
 
-    if (pVictim->ToCreature()->IsReputationGainDisabled())
+    if (victim->ToCreature()->IsReputationGainDisabled())
         return;
 
-    RewardOnKillEntry const* Rew = sObjectMgr->GetRewardOnKillEntry(pVictim->ToCreature()->GetCreatureInfo()->Entry);
+    RewardOnKillEntry const* Rew = sObjectMgr->GetRewardOnKillEntry(victim->ToCreature()->GetCreatureInfo()->Entry);
 
     if (!Rew)
         return;
@@ -7196,7 +7196,7 @@ void Player::RewardOnKill(Unit *pVictim, float rate)
 
     if (Rew->repfaction1 && (!Rew->team_dependent || team == ALLIANCE))
     {
-        int32 donerep1 = CalculateReputationGain(pVictim->getLevel(), Rew->repvalue1, ChampioningFaction ? ChampioningFaction : Rew->repfaction1, false);
+        int32 donerep1 = CalculateReputationGain(victim->getLevel(), Rew->repvalue1, ChampioningFaction ? ChampioningFaction : Rew->repfaction1, false);
         donerep1 = int32(donerep1*(rate + favored_rep_mult));
 
         if (recruitAFriend)
@@ -7210,7 +7210,7 @@ void Player::RewardOnKill(Unit *pVictim, float rate)
 
     if (Rew->repfaction2 && (!Rew->team_dependent || team == HORDE))
     {
-        int32 donerep2 = CalculateReputationGain(pVictim->getLevel(), Rew->repvalue2, ChampioningFaction ? ChampioningFaction : Rew->repfaction2, false);
+        int32 donerep2 = CalculateReputationGain(victim->getLevel(), Rew->repvalue2, ChampioningFaction ? ChampioningFaction : Rew->repfaction2, false);
         donerep2 = int32(donerep2*(rate + favored_rep_mult));
 
         if (recruitAFriend)
@@ -7357,14 +7357,14 @@ bool Player::RewardHonor(Unit *uVictim, uint32 groupsize, int32 honor, bool pvpt
 
         if (uVictim->GetTypeId() == TYPEID_PLAYER)
         {
-            Player *pVictim = uVictim->ToPlayer();
+            Player *victim = uVictim->ToPlayer();
 
-            if (GetTeam() == pVictim->GetTeam() && !sWorld->IsFFAPvPRealm())
+            if (GetTeam() == victim->GetTeam() && !sWorld->IsFFAPvPRealm())
                 return false;
 
             uint8 k_level = getLevel();
             uint8 k_grey = Trinity::XP::GetGrayLevel(k_level);
-            uint8 v_level = pVictim->getLevel();
+            uint8 v_level = victim->getLevel();
 
             if (v_level <= k_grey)
                 return false;
@@ -7375,7 +7375,7 @@ bool Player::RewardHonor(Unit *uVictim, uint32 groupsize, int32 honor, bool pvpt
             //  [15..28] Horde honor titles and player name
             //  [29..38] Other title and player name
             //  [39+]    Nothing
-            uint32 victim_title = pVictim->GetUInt32Value(PLAYER_CHOSEN_TITLE);
+            uint32 victim_title = victim->GetUInt32Value(PLAYER_CHOSEN_TITLE);
                                                         // Get Killer titles, CharTitlesEntry::bit_index
             // Ranks:
             //  title[1..14]  -> rank[5..18]
@@ -7397,10 +7397,10 @@ bool Player::RewardHonor(Unit *uVictim, uint32 groupsize, int32 honor, bool pvpt
             // and those in a lifetime
             ApplyModUInt32Value(PLAYER_FIELD_LIFETIME_HONORABLE_KILLS, 1, true);
             UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_EARN_HONORABLE_KILL);
-            UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_HK_CLASS, pVictim->getClass());
-            UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_HK_RACE, pVictim->getRace());
+            UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_HK_CLASS, victim->getClass());
+            UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_HK_RACE, victim->getRace());
             UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_HONORABLE_KILL_AT_AREA, GetAreaId());
-            UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_HONORABLE_KILL, 1, 0, pVictim);
+            UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_HONORABLE_KILL, 1, 0, victim);
         }
         else
         {
@@ -22960,20 +22960,20 @@ uint32 Player::GetResurrectionSpellId()
 }
 
 // Used in triggers for check "Only to targets that grant experience or honor" req
-bool Player::isHonorOrXPTarget(Unit* pVictim)
+bool Player::isHonorOrXPTarget(Unit* victim)
 {
-    uint8 v_level = pVictim->getLevel();
+    uint8 v_level = victim->getLevel();
     uint8 k_grey  = Trinity::XP::GetGrayLevel(getLevel());
 
     // Victim level less gray level
     if (v_level <= k_grey)
         return false;
 
-    if (pVictim->GetTypeId() == TYPEID_UNIT)
+    if (victim->GetTypeId() == TYPEID_UNIT)
     {
-        if (pVictim->ToCreature()->isTotem() ||
-            pVictim->ToCreature()->isPet() ||
-            pVictim->ToCreature()->GetCreatureInfo()->flags_extra & CREATURE_FLAG_EXTRA_NO_XP_AT_KILL)
+        if (victim->ToCreature()->isTotem() ||
+            victim->ToCreature()->isPet() ||
+            victim->ToCreature()->GetCreatureInfo()->flags_extra & CREATURE_FLAG_EXTRA_NO_XP_AT_KILL)
                 return false;
     }
     return true;
@@ -23020,9 +23020,9 @@ bool Player::GetsRecruitAFriendBonus(bool forXP)
     return recruitAFriend;
 }
 
-void Player::RewardPlayerAndGroupAtKill(Unit* pVictim, bool isBattleGround)
+void Player::RewardPlayerAndGroupAtKill(Unit* victim, bool isBattleGround)
 {
-    KillRewarder(this, pVictim, isBattleGround).Reward();
+    KillRewarder(this, victim, isBattleGround).Reward();
 }
 
 void Player::RewardPlayerAndGroupAtEvent(uint32 creature_id, WorldObject* pRewardSource)
