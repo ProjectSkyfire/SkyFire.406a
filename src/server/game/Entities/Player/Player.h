@@ -856,6 +856,7 @@ enum PlayerLoginQueryIndex
     PLAYER_LOGIN_QUERY_LOADBANNED               = 28,
     PLAYER_LOGIN_QUERY_LOADQUESTSTATUSREW       = 29,
     PLAYER_LOGIN_QUERY_LOADINSTANCELOCKTIMES    = 30,
+    PLAYER_LOGIN_QUERY_LOADTALENTBRANCHSPECS    = 32,
     PLAYER_LOGIN_QUERY_LOAD_CURRENCY            = 34,
     MAX_PLAYER_LOGIN_QUERY,
 };
@@ -1708,8 +1709,8 @@ class Player : public Unit, public GridObject<Player>
         void SetReputation(uint32 factionentry, uint32 value);
         uint32 GetReputation(uint32 factionentry);
         std::string GetGuildName();
-        uint32 GetFreeTalentPoints() const { return talentPoints; }
-        void SetFreeTalentPoints(uint32 points) { talentPoints = points;}
+        uint32 GetFreeTalentPoints() const { return m_freeTalentPoints; }
+        void SetFreeTalentPoints(uint32 points) { m_freeTalentPoints = points; }
         bool resetTalents(bool no_cost = false);
         uint32 resetTalentsCost() const;
         void InitTalentForLevel();
@@ -1736,7 +1737,11 @@ class Player : public Unit, public GridObject<Player>
         void ActivateSpec(uint8 spec);
 
         void InitGlyphsForLevel();
-        void SetGlyphSlot(uint8 slot, uint32 slottype) { SetUInt32Value(PLAYER_FIELD_GLYPH_SLOTS_1 + slot, slottype); }
+        void SetGlyphSlot(uint8 slot, uint32 slottype)
+        {
+            ASSERT(slot < MAX_GLYPH_SLOT_INDEX); // prevent updatefields corruption
+            SetUInt32Value(PLAYER_FIELD_GLYPH_SLOTS_1 + slot, slottype);
+        }
         uint32 GetGlyphSlot(uint8 slot) { return GetUInt32Value(PLAYER_FIELD_GLYPH_SLOTS_1 + slot); }
         void SetGlyph(uint8 slot, uint32 glyph)
         {
@@ -2612,6 +2617,7 @@ class Player : public Unit, public GridObject<Player>
         void _LoadGlyphs(PreparedQueryResult result);
         void _LoadTalents(PreparedQueryResult result);
         void _LoadInstanceTimeRestrictions(PreparedQueryResult result);
+        void _LoadTalentBranchSpecs(PreparedQueryResult result);
         void _LoadCurrency(PreparedQueryResult result);
 
         /*********************************************************/
@@ -2631,6 +2637,7 @@ class Player : public Unit, public GridObject<Player>
         void _SaveBGData(SQLTransaction& trans);
         void _SaveGlyphs(SQLTransaction& trans);
         void _SaveTalents(SQLTransaction& trans);
+        void _SaveTalentBranchSpecs(SQLTransaction& trans);
         void _SaveCurrency();
         void _SaveStats(SQLTransaction& trans);
         void _SaveInstanceTimeRestrictions(SQLTransaction& trans);
@@ -2701,6 +2708,7 @@ class Player : public Unit, public GridObject<Player>
         uint8 m_activeSpec;
         uint8 m_specsCount;
         uint32 m_branchSpec[MAX_TALENT_SPECS];
+        uint32 m_freeTalentPoints;
 
         uint32 m_Glyphs[MAX_TALENT_SPECS][MAX_GLYPH_SLOT_INDEX];
 

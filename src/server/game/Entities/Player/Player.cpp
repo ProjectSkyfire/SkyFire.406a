@@ -17727,6 +17727,7 @@ bool Player::LoadFromDB(uint32 guid, SQLQueryHolder *holder)
     }
 
     _LoadCurrency(holder->GetPreparedResult(PLAYER_LOGIN_QUERY_LOAD_CURRENCY));
+    _LoadTalentBranchSpecs(holder->GetPreparedResult(PLAYER_LOGIN_QUERY_LOADTALENTBRANCHSPECS));
     _LoadTalents(holder->GetPreparedResult(PLAYER_LOGIN_QUERY_LOADTALENTS));
     _LoadSpells(holder->GetPreparedResult(PLAYER_LOGIN_QUERY_LOADSPELLS));
 
@@ -24980,6 +24981,33 @@ void Player::_SaveGlyphs(SQLTransaction& trans)
     }
 }
 
+void Player::_SaveTalentBranchSpecs(SQLTransaction& trans)
+{
+    trans->PAppend("DELETE FROM character_branchspec WHERE guid='%u'", GetGUIDLow());
+    for (uint8 spec = 0; spec < m_specsCount; ++spec)
+    {
+        trans->PAppend("INSERT INTO character_branchspec VALUES('%u', '%u', '%u')",
+                       GetGUIDLow(), spec, GetTalentBranchSpec(spec));
+    }
+}
+
+void Player::_LoadTalentBranchSpecs(PreparedQueryResult result)
+{
+    // SetPQuery(PLAYER_LOGIN_QUERY_LOADTALENTBRANCHSPECS, "SELECT branchSpec, spec FROM character_branchspec WHERE guid = '%u'", GUID_LOPART(m_guid));
+    if (result)
+    {
+        do
+        {
+            Field* fields = result->Fetch();
+
+            uint32 branchSpec = fields[0].GetUInt32();
+            uint8 spec = fields[1].GetUInt32();
+            SetTalentBranchSpec(branchSpec, spec);
+        }
+        while (result->NextRow());
+    }
+}
+
 void Player::_LoadTalents(PreparedQueryResult result)
 {
     // SetPQuery(PLAYER_LOGIN_QUERY_LOADTALENTS, "SELECT spell, spec FROM character_talent WHERE guid = '%u'", GUID_LOPART(m_guid));
@@ -25119,11 +25147,21 @@ void Player::ActivateSpec(uint8 spec)
         }
     }
 
+    for (uint32 i = 0; i < sTalentTreePrimarySpellsStore.GetNumRows(); ++i)
+    {
+        TalentTreePrimarySpellsEntry const* talentInfo = sTalentTreePrimarySpellsStore.LookupEntry(i);
+
+        if (!talentInfo || talentInfo->TalentTabID != GetTalentBranchSpec(m_activeSpec))
+            continue;
+
+        removeSpell(talentInfo->SpellID, true);
+    }
+
     // set glyphs
     for (uint8 slot = 0; slot < MAX_GLYPH_SLOT_INDEX; ++slot)
         // remove secondary glyph
         if (uint32 oldglyph = m_Glyphs[m_activeSpec][slot])
-            if (GlyphPropertiesEntry const *old_gp = sGlyphPropertiesStore.LookupEntry(oldglyph))
+            if (GlyphPropertiesEntry const* old_gp = sGlyphPropertiesStore.LookupEntry(oldglyph))
                 RemoveAurasDueToSpell(old_gp->SpellId);
 
     SetActiveSpec(spec);
@@ -25158,6 +25196,16 @@ void Player::ActivateSpec(uint8 spec)
                 spentTalents += (rank + 1);                  // increment the spentTalents count
             }
         }
+    }
+
+    for (uint32 i = 0; i < sTalentTreePrimarySpellsStore.GetNumRows(); ++i)
+    {
+        TalentTreePrimarySpellsEntry const *talentInfo = sTalentTreePrimarySpellsStore.LookupEntry(i);
+
+        if (!talentInfo || talentInfo->TalentTabID != GetTalentBranchSpec(spec))
+            continue;
+
+        learnSpell(talentInfo->SpellID, false);
     }
 
     // set glyphs
