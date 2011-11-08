@@ -1261,6 +1261,26 @@ LOCK TABLES `character_talent` WRITE;
 /*!40000 ALTER TABLE `character_talent` ENABLE KEYS */;
 UNLOCK TABLES;
 
+DROP TABLE IF EXISTS `character_branchspec`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `character_branchspec` (
+  `guid` INT(11) UNSIGNED NOT NULL DEFAULT '0',
+  `spec` INT(11) UNSIGNED NOT NULL DEFAULT '0',
+  `branchSpec` INT(11) UNSIGNED NOT NULL DEFAULT '0',
+  PRIMARY KEY (`guid`,`spec`)
+) ENGINE=MYISAM DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `character_branchspec`
+--
+
+LOCK TABLES `character_branchspec` WRITE;
+/*!40000 ALTER TABLE `character_branchspec` DISABLE KEYS */;
+/*!40000 ALTER TABLE `character_branchspec` ENABLE KEYS */;
+UNLOCK TABLES;
+
 --
 -- Table structure for table `character_tutorial`
 --
