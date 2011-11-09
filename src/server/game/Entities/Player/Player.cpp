@@ -24983,11 +24983,11 @@ void Player::_SaveGlyphs(SQLTransaction& trans)
 
 void Player::_SaveTalentBranchSpecs(SQLTransaction& trans)
 {
-    trans->PAppend("DELETE FROM character_branchspec WHERE guid='%u'", GetGUIDLow());
+    trans->PAppend("DELETE FROM character_branchspec WHERE guid='%u'",GetGUIDLow());
     for (uint8 spec = 0; spec < m_specsCount; ++spec)
     {
         trans->PAppend("INSERT INTO character_branchspec VALUES('%u', '%u', '%u')",
-                       GetGUIDLow(), spec, GetTalentBranchSpec(spec));
+            GetGUIDLow(), spec, GetTalentBranchSpec(spec));
     }
 }
 
@@ -24999,7 +24999,6 @@ void Player::_LoadTalentBranchSpecs(PreparedQueryResult result)
         do
         {
             Field* fields = result->Fetch();
-
             uint32 branchSpec = fields[0].GetUInt32();
             uint8 spec = fields[1].GetUInt32();
             SetTalentBranchSpec(branchSpec, spec);
@@ -25014,7 +25013,7 @@ void Player::_LoadTalents(PreparedQueryResult result)
     if (result)
     {
         do
-            AddTalent((*result)[0].GetUInt32(), (*result)[1].GetUInt32(), false);
+        AddTalent((*result)[0].GetUInt32(), (*result)[1].GetUInt32(), false);
         while (result->NextRow());
     }
 }
@@ -25061,14 +25060,14 @@ void Player::UpdateSpecCount(uint8 count)
     {
         _SaveActions(trans); // make sure the button list is cleaned up
         for (ActionButtonList::iterator itr = m_actionButtons.begin(); itr != m_actionButtons.end(); ++itr)
-            trans->PAppend("INSERT INTO character_action (guid, button, action, type, spec) VALUES ('%u', '%u', '%u', '%u', '%u')",
+            trans->PAppend("INSERT INTO character_action (guid,button,action,type,spec) VALUES ('%u', '%u', '%u', '%u', '%u')",
             GetGUIDLow(), uint32(itr->first), uint32(itr->second.GetAction()), uint32(itr->second.GetType()), 1);
     }
     // Delete spec data for removed spec.
     else if (count < curCount)
     {
         _SaveActions(trans);
-        trans->PAppend("DELETE FROM character_action WHERE spec<>'%u' AND guid='%u'", m_activeSpec, GetGUIDLow());
+        trans->PAppend("DELETE FROM character_action WHERE spec<>'%u' AND guid='%u'",m_activeSpec, GetGUIDLow());
         m_activeSpec = 0;
     }
 
@@ -25095,16 +25094,16 @@ void Player::ActivateSpec(uint8 spec)
     CharacterDatabase.CommitTransaction(trans);
 
     // TO-DO: We need more research to know what happens with warlock's reagent
-    if (Pet* pet = GetPet())
-        RemovePet(pet, PET_SAVE_NOT_IN_SLOT);
+    //if (Pet* pet = GetPet())
+    //    RemovePet(pet, PET_SAVE_NOT_IN_SLOT);
 
     ClearComboPointHolders();
     ClearAllReactives();
     UnsummonAllTotems();
     RemoveAllControlled();
-    /*RemoveAllAurasOnDeath();
+    RemoveAllAurasOnDeath();
     if (GetPet())
-        GetPet()->RemoveAllAurasOnDeath();*/
+        GetPet()->RemoveAllAurasOnDeath();
 
     //RemoveAllAuras(GetGUID(), NULL, false, true); // removes too many auras
     //ExitVehicle(); // should be impossible to switch specs from inside a vehicle..
@@ -25130,11 +25129,12 @@ void Player::ActivateSpec(uint8 spec)
         if ((getClassMask() & talentTabInfo->ClassMask) == 0)
             continue;
 
-        for (int8 rank = MAX_TALENT_RANK-1; rank >= 0; --rank)
+        for (int8 rank = MAX_TALENT_RANK -1; rank >= 0; --rank)
         {
             // skip non-existant talent ranks
             if (talentInfo->RankID[rank] == 0)
                 continue;
+
             removeSpell(talentInfo->RankID[rank], true); // removes the talent, and all dependant, learned, and chained spells..
             if (const SpellInfo *_spellEntry = sSpellMgr->GetSpellInfo(talentInfo->RankID[rank]))
                 for (uint8 i = 0; i < MAX_SPELL_EFFECTS; ++i)                  // search through the SpellInfo for valid trigger spells
@@ -25159,10 +25159,12 @@ void Player::ActivateSpec(uint8 spec)
 
     // set glyphs
     for (uint8 slot = 0; slot < MAX_GLYPH_SLOT_INDEX; ++slot)
+    {
         // remove secondary glyph
         if (uint32 oldglyph = m_Glyphs[m_activeSpec][slot])
-            if (GlyphPropertiesEntry const* old_gp = sGlyphPropertiesStore.LookupEntry(oldglyph))
+            if (GlyphPropertiesEntry const *old_gp = sGlyphPropertiesStore.LookupEntry(oldglyph))
                 RemoveAurasDueToSpell(old_gp->SpellId);
+    }
 
     SetActiveSpec(spec);
     uint32 spentTalents = 0;
@@ -25189,6 +25191,7 @@ void Player::ActivateSpec(uint8 spec)
             // skip non-existant talent ranks
             if (talentInfo->RankID[rank] == 0)
                 continue;
+
             // if the talent can be found in the newly activated PlayerTalentMap
             if (HasTalent(talentInfo->RankID[rank], m_activeSpec))
             {
