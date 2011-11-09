@@ -4554,7 +4554,7 @@ bool Player::resetTalents(bool no_cost)
         return false;
     }
 
-    uint32 cost = 0;
+    uint64 cost = 0;
 
     if (!no_cost && !sWorld->getBoolConfig(CONFIG_NO_RESET_TALENT_COST))
     {
