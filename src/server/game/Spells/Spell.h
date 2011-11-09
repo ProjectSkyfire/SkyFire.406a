@@ -403,7 +403,8 @@ class Spell
 
         void DoCreateItem(uint32 i, uint32 itemtype);
         void WriteSpellGoTargets(WorldPacket* data);
-
+        void WriteAmmoToPacket(WorldPacket* data);
+	   
         void InitExplicitTargets(SpellCastTargets const& targets);
         void SelectSpellTargets();
         void SelectEffectTypeImplicitTargets(uint8 effIndex);
