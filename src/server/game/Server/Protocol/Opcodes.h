@@ -1328,7 +1328,7 @@ enum Opcodes
     CMSG_RETURN_TO_GRAVEYARD                         = 0x00593, // 4.0.6a 13623
     SMSG_UNKNOWN_1330                                = 0x0618C, // 4.0.6a 13623
     CMSG_REFORGE_ITEM                                = 0x00313, // 4.0.6a 13623
-    CMSG_COMPLETED_ATRIFACTS                         = 0x00A13, // 4.0.6a 13623
+    CMSG_COMPLETED_ARTIFACTS                         = 0x00A13, // 4.0.6a 13623
     SMSG_COMPLETED_ARTIFACTS                         = 0x0044E, // 4.0.6a 13623 structure: uint32 (count) loop: uint32(id), uint32(date), uint32(number of times completed) :endloop
     SMSG_ARTIFACT_COMPLETED                          = 0x0491C, // 4.0.6a 13623
     CMSG_SET_FOCUSED_ACHIEVEMENT                     = 0x03109, // 4.0.6a 13623
