@@ -224,7 +224,7 @@ class ObjectAccessor
         }
 
         static void SaveAllPlayers();
- 
+
         //non-static functions
         void AddUpdateObject(Object* obj)
         {
@@ -244,9 +244,9 @@ class ObjectAccessor
         void AddCorpse(Corpse* corpse);
         void AddCorpsesToGrid(GridCoord const& gridpair, GridType& grid, Map* map);
         Corpse* ConvertCorpseForPlayer(uint64 player_guid, bool insignia = false);
-        
+
 		//Thread unsafe
-        void Update(uint32 diff);		
+        void Update(uint32 diff);
         void RemoveOldCorpses();
 
         void UnloadAll();
@@ -255,7 +255,7 @@ class ObjectAccessor
         static void _buildChangeObjectForPlayer(WorldObject*, UpdateDataMapType&);
         static void _buildPacket(Player*, Object*, UpdateDataMapType&);
         void _update();
-		
+
         typedef UNORDERED_MAP<uint64, Corpse*> Player2CorpsesMapType;
         typedef UNORDERED_MAP<Player*, UpdateData>::value_type UpdateDataValueType;
 
