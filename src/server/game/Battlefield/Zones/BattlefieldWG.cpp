@@ -23,6 +23,7 @@
 #include "ObjectMgr.h"
 #include "BattlefieldWG.h"
 #include "SpellAuras.h"
+#include "Vehicle.h"
 
 enum eWGBfData
 {

@@ -137,7 +137,7 @@ namespace FactorySelector
 
         //scriptname in db
         if (!ai_factory)
-            if (GameObjectAI* scriptedAI = sScriptMgr->GetGameObjectAI(go))
+            if (GameObjectAI* scriptedAI = sScriptMgr->GetGameObjectAI(go));
 
         //future goAI types go here
 
