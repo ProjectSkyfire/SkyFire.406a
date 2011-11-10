@@ -256,6 +256,7 @@ void Map::AddToGrid(Creature* obj, Cell const& cell)
     obj->SetCurrentCell(cell);
 }
 
+//TODO: cell is not needed. Just an unlink is enough.
 template<class T>
 void Map::RemoveFromGrid(T* obj, Cell const& cell)
 {
@@ -288,12 +289,12 @@ void Map::SwitchGridContainers(T* obj, bool on)
 
     if (on)
     {
-        grid.RemoveGridObject<T>(obj);
+        grid.RemoveGridObject<T>(obj); //not really necessary if there were no ASSERT in remove/add
         grid.AddWorldObject<T>(obj);
     }
     else
     {
-        grid.RemoveWorldObject<T>(obj);
+        grid.RemoveWorldObject<T>(obj); //not really necessary if there were no ASSERT in remove/add
         grid.AddGridObject<T>(obj);
     }
     obj->m_isWorldObject = on;
@@ -313,7 +314,7 @@ template<>
 void Map::DeleteFromWorld(Player* player)
 {
     sObjectAccessor->RemoveObject(player);
-    sObjectAccessor->RemoveUpdateObject(player); //TODO: I do not know why we need this, it should be removed in ~Object anyway	
+    sObjectAccessor->RemoveUpdateObject(player); //TODO: I do not know why we need this, it should be removed in ~Object anyway
     delete player;
 }
 

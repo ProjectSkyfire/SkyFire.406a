@@ -4866,7 +4866,7 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
                         }
                     }
                     return;
-                }			
+                }
                 // Orbs of translocation between silvermoon and undercity, these need moved to db!
                 /*case 35376: // translocations
                    m_caster->NearTeleportTo(0, 1805.99f, 341.32f, 70.66f, 1.6f);
