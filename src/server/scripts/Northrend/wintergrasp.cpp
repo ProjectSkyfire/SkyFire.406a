@@ -21,6 +21,7 @@
 #include "ScriptSystem.h"
 #include "WorldSession.h"
 #include "ObjectMgr.h"
+#include "Vehicle.h"
 
 #define GOSSIP_HELLO_DEMO1  "Build catapult."
 #define GOSSIP_HELLO_DEMO2  "Build demolisher."
@@ -186,7 +187,6 @@ class npc_wg_queue : public CreatureScript
         BattlefieldWG* BfWG = (BattlefieldWG *) sBattlefieldMgr.GetBattlefieldByBattleId(BATTLEFIELD_BATTLEID_WG);
         if (BfWG)
         {
-
             if (BfWG->IsWarTime())
             {
                 pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, sObjectMgr->GetTrinityStringForDBCLocale(WG_NPCQUEUE_TEXTOPTION_JOIN), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF);
@@ -232,7 +232,7 @@ class npc_wg_queue : public CreatureScript
     }
 };
 
-const uint32 Vehicules[4] = { 32627, 28312, 28094, 27881 };
+const uint32 Vehicles[4] = { 32627, 28312, 28094, 27881 };
 
 class go_wg_vehicle_teleporter : public GameObjectScript
 {
@@ -253,23 +253,23 @@ class go_wg_vehicle_teleporter : public GameObjectScript
             if (uiCheckTimer <= diff)
             {
                 for (uint8 i = 0; i < 4; i++)
-                    if (Creature* pVehicle = go->FindNearestCreature(Vehicules[i], 3.0f, true))
-                        if (!pVehicle->HasAura(SPELL_VEHICLE_TELEPORT))
+                    if (Creature* vehicle = go->FindNearestCreature(Vehicles[i], 3.0f, true))
+                        if (!vehicle->HasAura(SPELL_VEHICLE_TELEPORT))
                         {
-                            if (pVehicle->GetVehicle())
+                            if (vehicle->GetVehicle())
                             {
-                                if (Unit* player = pVehicle->GetVehicle()->GetPassenger(0))
+                                if (Unit* player = vehicle->GetVehicle()->GetPassenger(0))
                                 {
                                     uint32 gofaction = go->GetUInt32Value(GAMEOBJECT_FACTION);
                                     uint32 plfaction = player->getFaction();
                                     if (gofaction == plfaction)
                                     {
-                                        pVehicle->CastSpell(pVehicle, SPELL_VEHICLE_TELEPORT, true);
-                                        if (Creature* TargetTeleport = pVehicle->FindNearestCreature(23472, 100.0f, true))
+                                        vehicle->CastSpell(vehicle, SPELL_VEHICLE_TELEPORT, true);
+                                        if (Creature* TargetTeleport = vehicle->FindNearestCreature(23472, 100.0f, true))
                                         {
                                             float x, y, z, o;
                                             TargetTeleport->GetPosition(x, y, z, o);
-                                            pVehicle->GetVehicle()->TeleportVehicle(x, y, z, o);
+                                            vehicle->GetVehicle()->TeleportVehicle(x, y, z, o);
                                         }
                                     }
                                 }
