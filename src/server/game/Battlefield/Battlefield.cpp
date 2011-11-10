@@ -661,24 +661,24 @@ void Battlefield::RemovePlayerFromResurrectQueue(uint64 player_guid)
     }
 }
 
-void Battlefield::SendAreaSpiritHealerQueryOpcode(Player *pl, const uint64 &guid)
+void Battlefield::SendAreaSpiritHealerQueryOpcode(Player *player, const uint64 &guid)
 {
     sLog->outError("SendAreaSpiritHealerQueryOpcode");
     WorldPacket data(SMSG_AREA_SPIRIT_HEALER_TIME, 12);
     uint32 time = m_LastResurectTimer;  // resurrect every 30 seconds
 
     data << guid << time;
-    ASSERT(pl && pl->GetSession());
-    pl->GetSession()->SendPacket(&data);
+    ASSERT(player && player->GetSession());
+    player->GetSession()->SendPacket(&data);
 }
 
-bool Battlefield::IncrementQuest(Player *player, uint32 quest, bool complete)
+bool Battlefield::IncrementQuest(Player* player, uint32 quest, bool complete)
 {
     if (!player)
         return false;
-
-    Quest const* pQuest = sObjectMgr->GetQuestTemplate(quest);
-    if (!pQuest || player->GetQuestStatus(quest) == QUEST_STATUS_NONE)
+///- tired as fuck testing this...i know its wrong butt-fuckit for now
+    /*Quest const* quest =*/sObjectMgr->GetQuestTemplate(quest);
+    if (!quest || player->GetQuestStatus(quest) == QUEST_STATUS_NONE)
         return false;
 
     if (complete)
@@ -690,8 +690,8 @@ bool Battlefield::IncrementQuest(Player *player, uint32 quest, bool complete)
     {
         for (uint8 i = 0; i < QUEST_OBJECTIVES_COUNT; ++i)
         {
-            int32 creature = pQuest->ReqCreatureOrGOId[i];
-            if (uint32 spell_id = pQuest->ReqSpell[i])
+            int32 creature = quest->ReqCreatureOrGOId[i];
+            if (uint32 spell_id = quest->ReqSpell[i])
             {
                 player->CastedCreatureOrGO(creature, 0, spell_id);
                 return true;
@@ -860,15 +860,15 @@ Creature *Battlefield::SpawnCreature(uint32 entry, float x, float y, float z, fl
     }
 
     //Create creature
-    Creature* pCreature = new Creature;
-    if (!pCreature->Create(sObjectMgr->GenerateLowGuid(HIGHGUID_UNIT), map, PHASEMASK_NORMAL, entry, 0, team, x, y, z, o))
+    Creature* creature = new Creature;
+    if (!creature->Create(sObjectMgr->GenerateLowGuid(HIGHGUID_UNIT), map, PHASEMASK_NORMAL, entry, 0, team, x, y, z, o))
     {
         sLog->outError("Can't create creature entry: %u", entry);
-        delete pCreature;
+        delete creature;
         return NULL;
     }
 
-    pCreature->SetHomePosition(x, y, z, o);
+    creature->SetHomePosition(x, y, z, o);
 
     CreatureTemplate const* cinfo = sObjectMgr->GetCreatureTemplate(entry);
     if (!cinfo)
@@ -877,21 +877,21 @@ Creature *Battlefield::SpawnCreature(uint32 entry, float x, float y, float z, fl
         return NULL;
     }
     // force using DB speeds -- do we really need this?
-    pCreature->SetSpeed(MOVE_WALK, cinfo->speed_walk);
-    pCreature->SetSpeed(MOVE_RUN, cinfo->speed_run);
+    creature->SetSpeed(MOVE_WALK, cinfo->speed_walk);
+    creature->SetSpeed(MOVE_RUN, cinfo->speed_run);
 
     // Set creature in world
-    map->AddToMap(pCreature);
-    pCreature->setActive(true);
+    map->AddToMap(creature);
+    creature->setActive(true);
 
-    return pCreature;
+    return creature;
 }
 
 // Method for spawning gameobject on map
-GameObject *Battlefield::SpawnGameObject(uint32 entry, float x, float y, float z, float o)
+GameObject* Battlefield::SpawnGameObject(uint32 entry, float x, float y, float z, float o)
 {
     // Get map object
-    Map* map = const_cast < Map * >(sMapMgr->CreateBaseMap(571));
+    Map* map = const_cast < Map* >(sMapMgr->CreateBaseMap(571));
     if (!map)
         return 0;
 

@@ -372,7 +372,7 @@ void PlayerMenu::SendQuestGiverQuestDetails(Quest const* quest, uint64 npcGUID, 
     data << uint32(0); // unknown 4.0.6a
 
     // rewarded honor points. Multiply with 10 to satisfy client
-    //data << 10 * Trinity::Honor::hk_honor_at_level(pSession->GetPlayer()->getLevel(), pQuest->GetRewHonorableKills());
+    //data << 10 * Trinity::Honor::hk_honor_at_level(pSession->GetPlayer()->getLevel(), quest->GetRewHonorableKills());
     data << float(0.0f);                                       // new 3.3.0, honor multiplier?
 
     data << uint32(0); // unknown 4.0.1
