@@ -55,7 +55,7 @@ enum SpellInterruptFlags
 enum SpellChannelInterruptFlags
 {
     CHANNEL_INTERRUPT_FLAG_INTERRUPT    = 0x08,  // interrupt
-    CHANNEL_FLAG_DELAY                  = 0x4000	
+    CHANNEL_FLAG_DELAY                  = 0x4000
 };
 
 enum SpellAuraInterruptFlags
