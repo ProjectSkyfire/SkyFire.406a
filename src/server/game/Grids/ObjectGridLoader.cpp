@@ -80,7 +80,7 @@ void ObjectGridLoader::SetObjectCell(Creature* obj, CellCoord const& cellCoord)
 template <class T>
 void AddObjectHelper(CellCoord &cell, GridRefManager<T> &m, uint32 &count, Map* map, T *obj)
 {
-    obj->GetGridRef().link(&m, obj);
+    obj->AddToGrid(m);
     ObjectGridLoader::SetObjectCell(obj, cell);
     obj->AddToWorld();
     if (obj->isActiveObject())
