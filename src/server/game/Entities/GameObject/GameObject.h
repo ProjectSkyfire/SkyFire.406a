@@ -634,7 +634,8 @@ class GameObject : public WorldObject, public GridObject<GameObject>
 
         bool IsTransport() const;
         bool IsDynTransport() const;
-
+        bool IsDestructibleBuilding() const;
+		
         uint32 GetDBTableGUIDLow() const { return m_DBTableGuid; }
 
         void UpdateRotationFields(float rotation2 = 0.0f, float rotation3 = 0.0f);

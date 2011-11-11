@@ -24,6 +24,7 @@
 #include "ObjectMgr.h"
 #include "SpellScript.h"
 #include "SpellAuraEffects.h"
+#include "GameObjectAI.h"
 
 #ifdef _WIN32
 #include <windows.h>
