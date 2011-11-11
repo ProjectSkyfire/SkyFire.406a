@@ -356,7 +356,17 @@ void WorldSession::HandleMovementOpcodes(WorldPacket & recv_data)
     {
         plMover->UpdateFallInformationIfNeed(movementInfo, opcode);
 
-        if (movementInfo.pos.GetPositionZ() < -500.0f)
+        float underMapValue = -500.0f;
+        switch (plMover->GetMapId())
+        {
+            case 617: underMapValue = 3.0f;  break; // Dalaran Sewers
+            case 618: underMapValue = 25.0f; break; // Ring of Valor
+            case 572: underMapValue = 30.0f; break; // Ruins of Lordearon
+            case 562: underMapValue = 0.0f;  break; // Blade's Edge Arena
+            case 559: underMapValue = 9.0f;  break; // Nagrand Arena
+        }
+
+        if (movementInfo.pos.GetPositionZ() < underMapValue)
         {
             if (!(plMover->InBattleground()
                 && plMover->GetBattleground()
