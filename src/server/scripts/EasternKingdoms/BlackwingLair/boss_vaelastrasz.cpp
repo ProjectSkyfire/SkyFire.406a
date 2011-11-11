@@ -55,10 +55,10 @@ public:
         }
     }
 
-    bool OnGossipSelect(Player* player, Creature* creature, uint32 uiSender, uint32 Action)
+    bool OnGossipSelect(Player* player, Creature* creature, uint32 Sender, uint32 Action)
     {
         player->PlayerTalkClass->ClearMenus();
-        if (uiSender == GOSSIP_SENDER_MAIN)
+        if (Sender == GOSSIP_SENDER_MAIN)
             SendDefaultMenu(player, creature, Action);
 
         return true;

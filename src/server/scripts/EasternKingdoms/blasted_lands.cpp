@@ -46,7 +46,7 @@ class npc_deathly_usher : public CreatureScript
 public:
     npc_deathly_usher() : CreatureScript("npc_deathly_usher") { }
 
-    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*uiSender*/, uint32 Action)
+    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*Sender*/, uint32 Action)
     {
         player->PlayerTalkClass->ClearMenus();
         if (Action == GOSSIP_ACTION_INFO_DEF)
@@ -88,7 +88,7 @@ class npc_fallen_hero_of_horde : public CreatureScript
 public:
     npc_fallen_hero_of_horde() : CreatureScript("npc_fallen_hero_of_horde") { }
 
-    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*uiSender*/, uint32 Action)
+    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*Sender*/, uint32 Action)
     {
         player->PlayerTalkClass->ClearMenus();
         switch (Action)

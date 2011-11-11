@@ -119,10 +119,10 @@ class npc_loramus_thalipedes : public CreatureScript
 public:
     npc_loramus_thalipedes() : CreatureScript("npc_loramus_thalipedes") { }
 
-    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*uiSender*/, uint32 uiAction)
+    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*Sender*/, uint32 action)
     {
         player->PlayerTalkClass->ClearMenus();
-        switch (uiAction)
+        switch (action)
         {
             case GOSSIP_ACTION_INFO_DEF+1:
                 player->CLOSE_GOSSIP_MENU();
@@ -266,10 +266,10 @@ class mob_rizzle_sprysprocket : public CreatureScript
 public:
     mob_rizzle_sprysprocket() : CreatureScript("mob_rizzle_sprysprocket") { }
 
-    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*uiSender*/, uint32 uiAction)
+    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*Sender*/, uint32 action)
     {
         player->PlayerTalkClass->ClearMenus();
-        if (uiAction == GOSSIP_ACTION_INFO_DEF + 1 && player->GetQuestStatus(10994) == QUEST_STATUS_INCOMPLETE)
+        if (action == GOSSIP_ACTION_INFO_DEF + 1 && player->GetQuestStatus(10994) == QUEST_STATUS_INCOMPLETE)
         {
             player->CLOSE_GOSSIP_MENU();
             creature->CastSpell(player, SPELL_GIVE_SOUTHFURY_MOONSTONE, true);

@@ -72,7 +72,7 @@ class npc_augustus_the_touched : public CreatureScript
 public:
     npc_augustus_the_touched() : CreatureScript("npc_augustus_the_touched") { }
 
-    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*uiSender*/, uint32 Action)
+    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*Sender*/, uint32 Action)
     {
         player->PlayerTalkClass->ClearMenus();
         if (Action == GOSSIP_ACTION_TRADE)

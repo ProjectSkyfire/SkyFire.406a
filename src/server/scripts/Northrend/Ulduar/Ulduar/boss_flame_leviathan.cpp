@@ -1149,7 +1149,7 @@ class npc_lorekeeper : public CreatureScript
             }
         };
 
-        bool OnGossipSelect(Player* player, Creature* creature, uint32 /*uiSender*/, uint32 action)
+        bool OnGossipSelect(Player* player, Creature* creature, uint32 /*Sender*/, uint32 action)
         {
             player->PlayerTalkClass->ClearMenus();
             InstanceScript* instance = creature->GetInstanceScript();
@@ -1222,10 +1222,10 @@ class npc_brann_bronzebeard : public CreatureScript
 public:
     npc_brann_bronzebeard() : CreatureScript("npc_brann_bronzebeard") { }
 
-    //bool OnGossipSelect(Player* player, Creature* creature, uint32 uiSender, uint32 uiAction)
+    //bool OnGossipSelect(Player* player, Creature* creature, uint32 Sender, uint32 action)
     //{
     //    player->PlayerTalkClass->ClearMenus();
-    //    switch(uiAction)
+    //    switch(action)
     //    {
     //        case GOSSIP_ACTION_INFO_DEF+1:
     //            if (player)

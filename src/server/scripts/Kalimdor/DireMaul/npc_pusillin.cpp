@@ -256,39 +256,39 @@ public:
         return true;
     }
 
-    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*uiSender*/, uint32 uiAction)
+    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*Sender*/, uint32 action)
     {
         npc_pusillinAI* pAI = CAST_AI(npc_pusillinAI, creature->AI());
 
         if (!pAI)
             return false;
 
-        if (uiAction == GOSSIP_ACTION_INFO_DEF+1)
+        if (action == GOSSIP_ACTION_INFO_DEF+1)
         {
             CAST_AI(npc_pusillinAI, creature->AI())->Start(false, true, player->GetGUID());
             pAI->SetHoldState(false);
             pAI->uiPhase = 1;
         }
 
-        if (uiAction == GOSSIP_ACTION_INFO_DEF+2)
+        if (action == GOSSIP_ACTION_INFO_DEF+2)
         {
             pAI->uiPhase = 2;
             pAI->SetHoldState(false);
         }
 
-        if (uiAction == GOSSIP_ACTION_INFO_DEF+3)
+        if (action == GOSSIP_ACTION_INFO_DEF+3)
         {
             pAI->uiPhase = 3;
             pAI->SetHoldState(false);
         }
 
-        if (uiAction == GOSSIP_ACTION_INFO_DEF+4)
+        if (action == GOSSIP_ACTION_INFO_DEF+4)
         {
             pAI->uiPhase = 4;
             pAI->SetHoldState(false);
         }
 
-        if (uiAction == GOSSIP_ACTION_INFO_DEF+5)
+        if (action == GOSSIP_ACTION_INFO_DEF+5)
         {
             pAI->uiPhase = 5;
         }

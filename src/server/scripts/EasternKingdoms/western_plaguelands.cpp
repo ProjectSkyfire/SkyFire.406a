@@ -50,7 +50,7 @@ class npcs_dithers_and_arbington : public CreatureScript
 public:
     npcs_dithers_and_arbington() : CreatureScript("npcs_dithers_and_arbington") { }
 
-    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*uiSender*/, uint32 Action)
+    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*Sender*/, uint32 Action)
     {
         player->PlayerTalkClass->ClearMenus();
         switch (Action)
@@ -121,7 +121,7 @@ class npc_myranda_the_hag : public CreatureScript
 public:
     npc_myranda_the_hag() : CreatureScript("npc_myranda_the_hag") { }
 
-    bool OnGossipSelect(Player* player, Creature* /*creature*/, uint32 /*uiSender*/, uint32 Action)
+    bool OnGossipSelect(Player* player, Creature* /*creature*/, uint32 /*Sender*/, uint32 Action)
     {
         player->PlayerTalkClass->ClearMenus();
         if (Action == GOSSIP_ACTION_INFO_DEF + 1)

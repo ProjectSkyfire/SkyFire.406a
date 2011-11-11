@@ -53,7 +53,7 @@ class boss_gloomrel : public CreatureScript
 public:
     boss_gloomrel() : CreatureScript("boss_gloomrel") { }
 
-    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*uiSender*/, uint32 Action)
+    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*Sender*/, uint32 Action)
     {
         player->PlayerTalkClass->ClearMenus();
         switch (Action)
@@ -112,7 +112,7 @@ class boss_doomrel : public CreatureScript
 public:
     boss_doomrel() : CreatureScript("boss_doomrel") { }
 
-    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*uiSender*/, uint32 Action)
+    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*Sender*/, uint32 Action)
     {
         player->PlayerTalkClass->ClearMenus();
         switch (Action)

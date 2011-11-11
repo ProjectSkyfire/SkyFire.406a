@@ -38,7 +38,7 @@ EndScriptData
 #define GOSSIP_BRACK2           "Fly me to The Abyssal Shelf"
 #define GOSSIP_BRACK3           "Fly me to Spinebreaker Post"
 #define GOSSIP_IRENA            "Fly me to Skettis please"
-#define GOSSIP_CLOUDBREAKER1    "Speaking of uiAction, I've been ordered to undertake an air strike."
+#define GOSSIP_CLOUDBREAKER1    "Speaking of action, I've been ordered to undertake an air strike."
 #define GOSSIP_CLOUDBREAKER2    "I need to intercept the Dawnblade reinforcements."
 #define GOSSIP_DRAGONHAWK       "<Ride the dragonhawk to Sun's Reach>"
 #define GOSSIP_VERONIA          "Fly me to Manaforge Coruu please"
@@ -186,10 +186,10 @@ public:
         return true;
     }
 
-    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*uiSender*/, uint32 uiAction)
+    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*Sender*/, uint32 action)
     {
         player->PlayerTalkClass->ClearMenus();
-        switch (uiAction)
+        switch (action)
         {
         case GOSSIP_ACTION_INFO_DEF:
             //spellId is correct, however it gives flight a somewhat funny effect //TaxiPath 506.

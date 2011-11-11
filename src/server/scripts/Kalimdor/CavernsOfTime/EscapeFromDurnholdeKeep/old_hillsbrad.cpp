@@ -588,6 +588,7 @@ public:
             player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_EPOCH2, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+2);
             player->SEND_GOSSIP_MENU(GOSSIP_ID_EPOCH2, creature->GetGUID());
         }
+
         if (action == GOSSIP_ACTION_INFO_DEF + 2)
         {
             player->CLOSE_GOSSIP_MENU();

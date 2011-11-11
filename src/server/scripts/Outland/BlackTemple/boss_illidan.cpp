@@ -1803,10 +1803,10 @@ public:
         }
     };
 
-    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*uiSender*/, uint32 uiAction)
+    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*Sender*/, uint32 action)
     {
         player->PlayerTalkClass->ClearMenus();
-        if (uiAction == GOSSIP_ACTION_INFO_DEF) // Time to begin the Event
+        if (action == GOSSIP_ACTION_INFO_DEF) // Time to begin the Event
         {
             player->CLOSE_GOSSIP_MENU();
             CAST_AI(npc_akama_illidan::npc_akama_illidanAI, creature->AI())->EnterPhase(PHASE_CHANNEL);

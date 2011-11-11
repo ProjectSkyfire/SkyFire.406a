@@ -48,7 +48,7 @@ class npc_mountaineer_pebblebitty : public CreatureScript
 public:
     npc_mountaineer_pebblebitty() : CreatureScript("npc_mountaineer_pebblebitty") { }
 
-    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*uiSender*/, uint32 Action)
+    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*Sender*/, uint32 Action)
     {
         player->PlayerTalkClass->ClearMenus();
         switch (Action)

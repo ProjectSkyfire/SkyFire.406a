@@ -45,7 +45,7 @@ class npc_kalaran_windblade : public CreatureScript
 public:
     npc_kalaran_windblade() : CreatureScript("npc_kalaran_windblade") { }
 
-    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*uiSender*/, uint32 Action)
+    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*Sender*/, uint32 Action)
     {
         player->PlayerTalkClass->ClearMenus();
         switch (Action)
@@ -91,7 +91,7 @@ class npc_lothos_riftwaker : public CreatureScript
 public:
     npc_lothos_riftwaker() : CreatureScript("npc_lothos_riftwaker") { }
 
-    bool OnGossipSelect(Player* player, Creature* /*creature*/, uint32 /*uiSender*/, uint32 Action)
+    bool OnGossipSelect(Player* player, Creature* /*creature*/, uint32 /*Sender*/, uint32 Action)
     {
         player->PlayerTalkClass->ClearMenus();
         if (Action == GOSSIP_ACTION_INFO_DEF + 1)
@@ -130,7 +130,7 @@ class npc_zamael_lunthistle : public CreatureScript
 public:
     npc_zamael_lunthistle() : CreatureScript("npc_zamael_lunthistle") { }
 
-    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*uiSender*/, uint32 Action)
+    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*Sender*/, uint32 Action)
     {
         player->PlayerTalkClass->ClearMenus();
         switch (Action)

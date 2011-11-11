@@ -49,7 +49,7 @@ class npc_archmage_malin : public CreatureScript
 public:
     npc_archmage_malin() : CreatureScript("npc_archmage_malin") { }
 
-    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*uiSender*/, uint32 Action)
+    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*Sender*/, uint32 Action)
     {
         player->PlayerTalkClass->ClearMenus();
         if (Action == GOSSIP_ACTION_INFO_DEF)
@@ -231,7 +231,7 @@ class npc_lady_katrana_prestor : public CreatureScript
 public:
     npc_lady_katrana_prestor() : CreatureScript("npc_lady_katrana_prestor") { }
 
-    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*uiSender*/, uint32 Action)
+    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*Sender*/, uint32 Action)
     {
         player->PlayerTalkClass->ClearMenus();
         switch (Action)

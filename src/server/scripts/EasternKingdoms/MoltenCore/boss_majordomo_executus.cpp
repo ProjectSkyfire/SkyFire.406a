@@ -199,7 +199,7 @@ class boss_majordomo : public CreatureScript
             return true;
         }
 
-        bool OnGossipSelect(Player* player, Creature* creature, uint32 /*uiSender*/, uint32 /*Action*/)
+        bool OnGossipSelect(Player* player, Creature* creature, uint32 /*Sender*/, uint32 /*Action*/)
         {
             player->CLOSE_GOSSIP_MENU();
             creature->AI()->DoAction(ACTION_START_RAGNAROS);

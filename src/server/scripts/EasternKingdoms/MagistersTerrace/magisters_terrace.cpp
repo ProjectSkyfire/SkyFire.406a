@@ -57,7 +57,7 @@ class npc_kalecgos : public CreatureScript
 public:
     npc_kalecgos() : CreatureScript("npc_kalecgos") { }
 
-    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*uiSender*/, uint32 Action)
+    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*Sender*/, uint32 Action)
     {
         player->PlayerTalkClass->ClearMenus();
         switch (Action)

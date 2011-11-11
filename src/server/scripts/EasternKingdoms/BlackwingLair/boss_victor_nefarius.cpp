@@ -75,7 +75,7 @@ class boss_victor_nefarius : public CreatureScript
 public:
     boss_victor_nefarius() : CreatureScript("boss_victor_nefarius") { }
 
-    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*uiSender*/, uint32 Action)
+    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*Sender*/, uint32 Action)
     {
         player->PlayerTalkClass->ClearMenus();
         switch (Action)

@@ -170,7 +170,7 @@ class npc_lore_keeper_of_norgannon : public CreatureScript
             return true;
         }
 
-        bool OnGossipSelect(Player* player, Creature* creature, uint32 /*uiSender*/, uint32 Action)
+        bool OnGossipSelect(Player* player, Creature* creature, uint32 /*Sender*/, uint32 Action)
         {
             player->PlayerTalkClass->ClearMenus();
             switch (Action)

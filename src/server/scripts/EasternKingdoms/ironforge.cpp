@@ -45,7 +45,7 @@ class npc_royal_historian_archesonus : public CreatureScript
 public:
     npc_royal_historian_archesonus() : CreatureScript("npc_royal_historian_archesonus") { }
 
-    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*uiSender*/, uint32 Action)
+    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*Sender*/, uint32 Action)
     {
         player->PlayerTalkClass->ClearMenus();
         switch (Action)

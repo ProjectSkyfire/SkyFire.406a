@@ -52,7 +52,7 @@ class npc_ragged_john : public CreatureScript
 public:
     npc_ragged_john() : CreatureScript("npc_ragged_john") { }
 
-    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*uiSender*/, uint32 Action)
+    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*Sender*/, uint32 Action)
     {
         player->PlayerTalkClass->ClearMenus();
         switch (Action)
