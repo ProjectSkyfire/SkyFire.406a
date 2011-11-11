@@ -34,7 +34,7 @@ enum BattlefieldTypes
 
 enum BattlefieldIDs
 {
-    BATTLEFIELD_BATTLEID_WG                      = 1,       // Wintergrasp battle 
+    BATTLEFIELD_BATTLEID_WG                      = 1,       // Wintergrasp battle
 };
 
 enum BattlefieldObjectiveStates
@@ -344,7 +344,7 @@ protected:
     PlayerTimerMap m_InvitedPlayers[BG_TEAMS_COUNT];
     PlayerTimerMap m_PlayersWillBeKick[BG_TEAMS_COUNT];
 
-    //Variables that must exist for each battlefield 
+    //Variables that must exist for each battlefield
     uint32 m_TypeId;                                        // See enum BattlefieldTypes
     uint32 m_BattleId;                                      // BattleID (for packet)
     uint32 m_ZoneId;                                        // ZoneID of Wintergrasp = 4197
@@ -396,7 +396,6 @@ protected:
     void RegisterZone(uint32 zoneid);
     bool HasPlayer(Player* player) const;
     void TeamCastSpell(TeamId team, int32 spellId);
-
 };
 
 #endif

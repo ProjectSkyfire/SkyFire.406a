@@ -54,7 +54,7 @@ class Vehicle
         void RelocatePassengers(float x, float y, float z, float ang);
         void RemoveAllPassengers();
         void Dismiss();
-        void TeleportVehicle(float x, float y, float z, float ang);		
+        void TeleportVehicle(float x, float y, float z, float ang);
         bool IsVehicleInUse() { return Seats.begin() != Seats.end(); }
 
         SeatMap Seats;
@@ -67,7 +67,7 @@ class Vehicle
 
         Unit* _me;
         VehicleEntry const* _vehicleInfo;
-        GuidSet vehiclePlayers;		
+        GuidSet vehiclePlayers;
         uint32 _usableSeatNum;         // Number of seats that match VehicleSeatEntry::UsableByPlayer, used for proper display flags
         uint32 _creatureEntry;         // Can be different than me->GetBase()->GetEntry() in case of players
 };

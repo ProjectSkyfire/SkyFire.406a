@@ -5079,11 +5079,11 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
 							{
                                 if (Battleground* bg = target->ToPlayer()->GetBattleground())
                                     bg->RemovePlayerFromResurrectQueue(target->GetGUID());
-                                
+
 								if (Battlefield* bf = sBattlefieldMgr.GetBattlefieldToZoneId(target->GetZoneId()))
                                     bf->RemovePlayerFromResurrectQueue(target->GetGUID());
-                            }									
-                            break;							
+                            }
+                            break;
                         case 36730:                                     // Flame Strike
                         {
                             target->CastSpell(target, 36731, true, NULL, this);

@@ -854,7 +854,7 @@ CreatureAI* ScriptMgr::GetCreatureAI(Creature* creature)
 GameObjectAI* ScriptMgr::GetGameObjectAI(GameObject* gameobject)
 {
     ASSERT(gameobject);
-        
+
     GET_SCRIPT_RET(GameObjectScript, gameobject->GetScriptId(), tmpscript, NULL);
     return tmpscript->GetAI(gameobject);
 }

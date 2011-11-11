@@ -474,7 +474,7 @@ class GameObjectScript : public ScriptObject, public UpdatableScript<GameObject>
         virtual void OnDamaged(GameObject* /*go*/, Player* /*player*/) { }
 
         // Called when a CreatureAI object is needed for the creature.
-        virtual GameObjectAI* GetAI(GameObject* /*gameobject*/) const { return NULL; }		
+        virtual GameObjectAI* GetAI(GameObject* /*gameobject*/) const { return NULL; }
 };
 
 class AreaTriggerScript : public ScriptObject
@@ -911,7 +911,7 @@ class ScriptMgr
         uint32 GetDialogStatus(Player* player, GameObject* go);
         void OnGameObjectDestroyed(GameObject* go, Player* player);
         void OnGameObjectDamaged(GameObject* go, Player* player);
-        GameObjectAI* GetGameObjectAI(GameObject* gameobject);		
+        GameObjectAI* GetGameObjectAI(GameObject* gameobject);
         void OnGameObjectUpdate(GameObject* go, uint32 diff);
 
     public: /* AreaTriggerScript */

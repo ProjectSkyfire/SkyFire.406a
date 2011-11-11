@@ -587,7 +587,6 @@ const BfWGBuildingSpawnData WGGameObjectBuillding[WG_MAX_OBJ] = {
     { 191810, 3773, 5397.11f, 2841.54f, 425.899f, 3.14159f, BATTLEFIELD_WG_OBJECTTYPE_DOOR_LAST, 0 },
 };
 
-
 // *********************************************************
 // **********Keep Element(GameObject,Creature)**************
 // *********************************************************
@@ -707,7 +706,6 @@ const BfWGTurretPos WGTurret[WG_MAX_TURRET] = {
     { 5148.8f, 2820.24f, 421.621f, 3.16043f },
     { 5147.98f, 2861.93f, 421.63f, 3.18792f },
 };
-
 
 // Here there is all npc keeper spawn point
 #define WG_MAX_KEEP_NPC 39
@@ -1788,7 +1786,6 @@ struct BfWGWorkShopData
 
         if (Creature *creature = m_WG->SpawnCreature(obj.entrya, obj.x, obj.y, obj.z, obj.o, TEAM_ALLIANCE))
             m_CreatureOnPoint[TEAM_ALLIANCE].insert(creature->GetGUID());
-
     }
 
     // Spawning Associate gameobject and store them
@@ -1841,7 +1838,6 @@ struct BfWGWorkShopData
                     // Hide Horde gameobject
                     for (GameObjectSet::const_iterator itr = m_GameObjectOnPoint[TEAM_HORDE].begin(); itr != m_GameObjectOnPoint[TEAM_HORDE].end(); ++itr)
                         (*itr)->SetRespawnTime(RESPAWN_ONE_DAY);
-
 
                     // Updating worldstate
                     m_State = BATTLEFIELD_WG_OBJECTSTATE_ALLIANCE_INTACT;

@@ -32,7 +32,7 @@
 //Param3:(time) Time in second that the player have for accept
 void WorldSession::SendBfInvitePlayerToWar(uint32 BattleId, uint32 ZoneId, uint32 p_time)
 {
-    //Send packet 
+    //Send packet
     WorldPacket data(SMSG_BATTLEFIELD_MGR_ENTRY_INVITE, 12);
     data << uint32(BattleId);
     data << uint32(ZoneId);
@@ -70,7 +70,7 @@ void WorldSession::SendBfQueueInviteResponce(uint32 BattleId, uint32 ZoneId)
     SendPacket(&data);
 }
 
-//This is call when player accept to join war 
+//This is call when player accept to join war
 //Param1:(BattleId) the BattleId of Bf
 void WorldSession::SendBfEntered(uint32 BattleId)
 {
