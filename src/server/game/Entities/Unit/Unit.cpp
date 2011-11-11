@@ -13304,8 +13304,8 @@ int32 Unit::CalcSpellDuration(SpellInfo const* spellProto)
 
 int32 Unit::ModSpellDuration(SpellInfo const* spellProto, Unit const* target, int32 duration, bool positive, uint32 effectMask)
 {
-    // don't mod permanent auras duration
-    if (duration < 0)
+    //don't mod permament auras duration + special Envenom handling
+    if (duration < 0 || ( spellProto->SpellFamilyName == SPELLFAMILY_ROGUE && spellProto->SpellFamilyFlags[1] & 0x8))
         return duration;
 
     // cut duration only of negative effects
