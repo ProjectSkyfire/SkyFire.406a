@@ -269,7 +269,7 @@ public:
                 break;
         }
         player->CLOSE_GOSSIP_MENU();
-        pAI->SetDespawnAtFar(true);
+        pAI->SetDespawnAtFar(false);
         creature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
         return true;
     }
@@ -287,7 +287,8 @@ public:
                     QuestStatus status = player->GetQuestStatus(13149);
                     if (status != QUEST_STATUS_COMPLETE && status != QUEST_STATUS_REWARDED)
                         return false;
-                    player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_ARTHAS_0, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF);
+                    
+				    player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_ARTHAS_0, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF);
                     player->SEND_GOSSIP_MENU(907, creature->GetGUID());
                     break;
                 }
@@ -395,7 +396,8 @@ public:
 
         void EnterCombat(Unit* /*who*/)
         {
-            DoCast(me, SPELL_ARTHAS_AURA);
+            if (!me->HasAura(SPELL_ARTHAS_AURA))
+                DoCast(me, SPELL_ARTHAS_AURA);
         }
 
         void JustDied(Unit* /*killer*/)
