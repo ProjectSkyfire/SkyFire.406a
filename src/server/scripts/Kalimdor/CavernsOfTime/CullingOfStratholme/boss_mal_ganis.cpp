@@ -242,7 +242,7 @@ public:
                                 break;
                         }
                     }
-					else
+                    else
 					   OutroTimer -= diff;
                     break;
             }
