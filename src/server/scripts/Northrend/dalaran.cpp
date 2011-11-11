@@ -31,14 +31,15 @@ Script Data End */
 
 enum Spells
 {
-    SPELL_TRESPASSER_A = 54028,
-    SPELL_TRESPASSER_H = 54029
+    SPELL_TRESPASSER_A      = 54028,
+    SPELL_TRESPASSER_H      = 54029,
+    SPELL_DETECTION         = 18950,	
 };
 
 enum NPCs // All outdoor guards are within 35.0f of these NPCs
 {
-    NPC_APPLEBOUGH_A = 29547,
-    NPC_SWEETBERRY_H = 29715,
+    NPC_APPLEBOUGH_A       = 29547,
+    NPC_SWEETBERRY_H       = 29715,
 };
 
 class npc_mageguard_dalaran : public CreatureScript
@@ -55,7 +56,10 @@ public:
             creature->ApplySpellImmune(0, IMMUNITY_DAMAGE, SPELL_SCHOOL_MASK_MAGIC, true);
         }
 
-        void Reset(){}
+        void Reset()
+        {
+            me->CastSpell(me, SPELL_DETECTION, true);
+        }
 
         void EnterCombat(Unit* /*who*/){}
 
