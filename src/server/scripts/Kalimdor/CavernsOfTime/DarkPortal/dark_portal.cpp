@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2011 MaNGOS <http://getmangos.com/>
  *
@@ -179,7 +179,7 @@ public:
                         SpellCorrupt_Timer = 3000;
                     else
                         SpellCorrupt_Timer = 0;
-                } 
+                }
 				else SpellCorrupt_Timer -= diff;
             }
 
@@ -227,7 +227,7 @@ public:
                         //TODO: start the post-event here
                         instance->SetData(TYPE_MEDIVH, DONE);
                     }
-                } 
+                }
 				else Check_Timer -= diff;
             }
 
@@ -332,7 +332,7 @@ public:
             {
                 for (uint8 i = 0; i < 3; ++i)
                     DoSummonAtRift(entry);
-            } 
+            }
 			else DoSummonAtRift(entry);
         }
 
@@ -345,7 +345,7 @@ public:
             {
                 DoSelectSummon();
                 TimeRiftWave_Timer = 15000;
-            } 
+            }
 			else TimeRiftWave_Timer -= diff;
 
             if (me->IsNonMeleeSpellCasted(false))

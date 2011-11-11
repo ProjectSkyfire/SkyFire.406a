@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2011 MaNGOS <http://getmangos.com/>
  *
@@ -121,7 +121,7 @@ public:
             {
                 DoCast(me->getVictim(), SPELL_SAND_BREATH);
                 SandBreath_Timer = 15000+rand()%10000;
-            } 
+            }
 			else SandBreath_Timer -= diff;
 
             //Time Stop
@@ -129,7 +129,7 @@ public:
             {
                 DoCast(me->getVictim(), SPELL_TIME_STOP);
                 TimeStop_Timer = 20000+rand()%15000;
-            } 
+            }
 			else TimeStop_Timer -= diff;
 
             //Frenzy
@@ -138,7 +138,7 @@ public:
                 DoScriptText(EMOTE_FRENZY, me);
                 DoCast(me, SPELL_ENRAGE);
                 Frenzy_Timer = 20000+rand()%15000;
-            } 
+            }
 			else Frenzy_Timer -= diff;
 
             DoMeleeAttackIfReady();

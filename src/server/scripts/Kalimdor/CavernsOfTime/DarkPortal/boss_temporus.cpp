@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2011 MaNGOS <http://getmangos.com/>
  *
@@ -120,7 +120,7 @@ public:
             {
                 DoCast(me, SPELL_HASTE);
                 Haste_Timer = 20000+rand()%5000;
-            } 
+            }
 			else Haste_Timer -= diff;
 
             //MortalWound_Timer
@@ -128,7 +128,7 @@ public:
             {
                 DoCast(me, SPELL_MORTAL_WOUND);
                 MortalWound_Timer = 10000+rand()%10000;
-            } 
+            }
 			else MortalWound_Timer -= diff;
 
             //Wing ruffet
@@ -136,7 +136,7 @@ public:
             {
                 DoCast(me, SPELL_WING_BUFFET);
                 WingBuffet_Timer = 20000+rand()%10000;
-            } 
+            }
 			else WingBuffet_Timer -= diff;
 
             if (IsHeroic())
@@ -145,7 +145,7 @@ public:
                 {
                     DoCast(me, SPELL_REFLECT);
                     SpellReflection_Timer = 25000+rand()%10000;
-                } 
+                }
 				else SpellReflection_Timer -= diff;
             }
 

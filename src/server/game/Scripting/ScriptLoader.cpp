@@ -1124,7 +1124,7 @@ void AddOutlandScripts()
     AddSC_instance_steam_vault();
     AddSC_boss_hungarfen();                 //CR Underbog
     AddSC_boss_the_black_stalker();
-    AddSC_boss_frostlord_ahune();           //CR Slave Pens	
+    AddSC_boss_frostlord_ahune();           //CR Slave Pens
     AddSC_boss_gruul();                     //Gruul's Lair
     AddSC_boss_high_king_maulgar();
     AddSC_instance_gruuls_lair();

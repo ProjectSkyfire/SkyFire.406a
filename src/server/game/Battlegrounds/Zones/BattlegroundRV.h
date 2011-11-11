@@ -118,7 +118,7 @@ class BattlegroundRV : public Battleground
         bool SetupBattleground();
         void HandleKillPlayer(Player* player, Player* killer);
         bool HandlePlayerUnderMap(Player* player);
-        
+
 		void SwitchDynLos();
     private:
         uint32 Timer;

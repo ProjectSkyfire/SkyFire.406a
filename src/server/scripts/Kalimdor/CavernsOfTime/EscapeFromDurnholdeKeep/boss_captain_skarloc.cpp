@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2011 MaNGOS <http://getmangos.com/>
  *
@@ -108,7 +108,7 @@ public:
             {
                 DoCast(me, SPELL_HOLY_LIGHT);
                 Holy_Light_Timer = 30000;
-            } 
+            }
 			else Holy_Light_Timer -= diff;
 
             //Cleanse
@@ -116,7 +116,7 @@ public:
             {
                 DoCast(me, SPELL_CLEANSE);
                 Cleanse_Timer = 10000;
-            } 
+            }
 			else Cleanse_Timer -= diff;
 
             //Hammer of Justice
@@ -124,7 +124,7 @@ public:
             {
                 DoCast(me->getVictim(), SPELL_HAMMER_OF_JUSTICE);
                 HammerOfJustice_Timer = 60000;
-            } 
+            }
 			else HammerOfJustice_Timer -= diff;
 
             //Holy Shield
@@ -132,7 +132,7 @@ public:
             {
                 DoCast(me, SPELL_HOLY_SHIELD);
                 HolyShield_Timer = 240000;
-            } 
+            }
 			else HolyShield_Timer -= diff;
 
             //Devotion_Aura
@@ -140,7 +140,7 @@ public:
             {
                 DoCast(me, SPELL_DEVOTION_AURA);
                 DevotionAura_Timer = 45000 + rand()%10000;
-            } 
+            }
 			else DevotionAura_Timer -= diff;
 
             //Consecration
@@ -148,7 +148,7 @@ public:
             {
                 //DoCast(me->getVictim(), SPELL_CONSECRATION);
                 Consecration_Timer = 5000 + rand()%5000;
-            } 
+            }
 			else Consecration_Timer -= diff;
 
             DoMeleeAttackIfReady();

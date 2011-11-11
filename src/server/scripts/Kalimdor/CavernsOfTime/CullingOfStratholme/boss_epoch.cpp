@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2011 MaNGOS <http://getmangos.com/>
  *
@@ -109,21 +109,21 @@ public:
                 if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                     DoCast(target, SPELL_CURSE_OF_EXERTION);
                 CurseOfExertionTimer = 9300;
-            } 
+            }
             else CurseOfExertionTimer -= diff;
 
             if (WoundingStrikeTimer < diff)
             {
                 DoCastVictim(SPELL_WOUNDING_STRIKE);
                 WoundingStrikeTimer = 5300;
-            } 
+            }
             else WoundingStrikeTimer -= diff;
 
             if (TimeStopTimer < diff)
             {
                 DoCastAOE(SPELL_TIME_STOP);
                 TimeStopTimer = 21300;
-            } 
+            }
             else TimeStopTimer -= diff;
 
             if (TimeWarpTimer < diff)
@@ -131,7 +131,7 @@ public:
                 DoScriptText(RAND(SAY_TIME_WARP_1, SAY_TIME_WARP_2, SAY_TIME_WARP_3), me);
                 DoCastAOE(SPELL_TIME_WARP);
                 TimeWarpTimer = 25300;
-            } 
+            }
             else TimeWarpTimer -= diff;
 
             DoMeleeAttackIfReady();

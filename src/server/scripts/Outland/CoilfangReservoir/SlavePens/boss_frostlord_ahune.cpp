@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,7 +16,7 @@
  */
 
  #include <LFGMgr.h>
- 
+
 // npc_frostlord_ahune
 #define EMOTE_SUBMERGE      "Ahune Retreats. His Defenses Diminish."
 #define EMOTE_EMERGE_SOON   "Ahune will soon resurface."

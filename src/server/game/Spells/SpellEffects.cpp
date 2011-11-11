@@ -436,7 +436,7 @@ void Spell::EffectSchoolDMG(SpellEffIndex effIndex)
                     case 29142: // Eyesore Blaster
                     case 35139: // Throw Boom's Doom
                     case 46198: // Cold Slap
-                    case 46588: // Ice Spear					
+                    case 46588: // Ice Spear
                     case 42393: // Brewfest - Attack Keg
                     case 55269: // Deathly Stare
                     case 56578: // Rapid-Fire Harpoon

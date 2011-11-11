@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2011 MaNGOS <http://getmangos.com/>
  *
@@ -171,7 +171,7 @@ public:
                     {
                         DoCastVictim(SPELL_CARRION_SWARM);
                         CarrionSwarmTimer = 7000;
-                    } 
+                    }
                     else CarrionSwarmTimer -= diff;
 
                     if (MindBlastTimer < diff)
@@ -179,14 +179,14 @@ public:
                         if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                             DoCast(target, SPELL_MIND_BLAST);
                         MindBlastTimer = 6000;
-                    } 
+                    }
                     else MindBlastTimer -= diff;
 
                     if (VampiricTouchTimer < diff)
                     {
                         DoCast(me, SPELL_VAMPIRIC_TOUCH);
                         VampiricTouchTimer = 32000;
-                    } 
+                    }
                     else VampiricTouchTimer -= diff;
 
                     if (SleepTimer < diff)
@@ -195,7 +195,7 @@ public:
                         if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                             DoCast(target, SPELL_SLEEP);
                         SleepTimer = urand(15000, 20000);
-                    } 
+                    }
                     else SleepTimer -= diff;
 
                     DoMeleeAttackIfReady();
@@ -236,13 +236,13 @@ public:
                                         for (Map::PlayerList::const_iterator itr = PlList.begin(); itr != PlList.end(); ++itr)
                                             if (Player * player = itr->getSource())
                                                 player->KilledMonsterCredit(MalGanis_Kill_Credit, 0);
-                                }							
+                                }
                                 me->SetVisible(false);
                                 me->Kill(me);
                                 break;
                         }
-                    } 
-					else 
+                    }
+					else
 					   OutroTimer -= diff;
                     break;
             }

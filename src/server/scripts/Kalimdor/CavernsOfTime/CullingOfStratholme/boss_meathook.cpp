@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2011 MaNGOS <http://getmangos.com/>
  *
@@ -100,14 +100,14 @@ public:
             {
                 DoCastAOE(SPELL_DISEASE_EXPULSION);
                 DiseaseTimer = urand(1500, 4000);
-            } 
+            }
             else DiseaseTimer -= diff;
 
             if (FrenzyTimer <= diff)
             {
                 DoCast(me, SPELL_FRENZY);
                 FrenzyTimer = urand(21000, 26000);
-            } 
+            }
             else FrenzyTimer -= diff;
 
             if (ChainTimer <= diff)
@@ -115,7 +115,7 @@ public:
                 if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                     DoCast(target, SPELL_CONSTRICTING_CHAINS); //anyone but the tank
                 ChainTimer = urand(2000, 4000);
-            } 
+            }
             else ChainTimer -= diff;
 
             DoMeleeAttackIfReady();

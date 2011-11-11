@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2011 MaNGOS <http://getmangos.com/>
  *
@@ -114,7 +114,7 @@ public:
             {
                 DoCast(me->getVictim(), SPELL_CURSE_OF_TWISTED_FLESH);
                 CurseFleshTimer = 37000;
-            } 
+            }
             else CurseFleshTimer -= diff;
 
             //Shadow bolt timer
@@ -123,7 +123,7 @@ public:
                 if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                     DoCast(target, SPELL_SHADOW_BOLT);
                 ShadowBoltTimer = urand(8000, 12000);
-            } 
+            }
             else ShadowBoltTimer -= diff;
 
             //Steal Flesh timer
@@ -133,7 +133,7 @@ public:
                 if (Unit* random_target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                     DoCast(random_target, SPELL_STEAL_FLESH);
                 StealFleshTimer = 10000;
-            } 
+            }
             else StealFleshTimer -= diff;
 
             //Summon ghouls timer
@@ -143,7 +143,7 @@ public:
                 if (Unit* random_target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                     DoCast(random_target, SPELL_SUMMON_GHOULS);
                 SummonGhoulsTimer = 10000;
-            } 
+            }
             else SummonGhoulsTimer -= diff;
 
             DoMeleeAttackIfReady();

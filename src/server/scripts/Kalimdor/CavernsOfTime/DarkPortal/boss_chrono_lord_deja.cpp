@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2011 MaNGOS <http://getmangos.com/>
  *
@@ -120,7 +120,7 @@ public:
             {
                 DoCast(me->getVictim(), SPELL_ARCANE_BLAST);
                 ArcaneBlast_Timer = 15000+rand()%10000;
-            } 
+            }
 			else ArcaneBlast_Timer -= diff;
 
             //Arcane Discharge
@@ -129,7 +129,7 @@ public:
                 Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0);
                 DoCast(target, SPELL_ARCANE_DISCHARGE);
                 ArcaneDischarge_Timer = 20000+rand()%10000;
-            } 
+            }
 			else ArcaneDischarge_Timer -= diff;
 
             //Time Lapse
@@ -138,7 +138,7 @@ public:
                 DoScriptText(SAY_BANISH, me);
                 DoCast(me, SPELL_TIME_LAPSE);
                 TimeLapse_Timer = 15000+rand()%10000;
-            } 
+            }
 			else TimeLapse_Timer -= diff;
 
             if (IsHeroic())
@@ -147,7 +147,7 @@ public:
                 {
                     DoCast(me, SPELL_ATTRACTION);
                     Attraction_Timer = 25000+rand()%10000;
-                } 
+                }
 				else Attraction_Timer -= diff;
             }
 

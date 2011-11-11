@@ -33,7 +33,7 @@ enum Spells
 {
     SPELL_TRESPASSER_A      = 54028,
     SPELL_TRESPASSER_H      = 54029,
-    SPELL_DETECTION         = 18950,	
+    SPELL_DETECTION         = 18950,
 };
 
 enum NPCs // All outdoor guards are within 35.0f of these NPCs
