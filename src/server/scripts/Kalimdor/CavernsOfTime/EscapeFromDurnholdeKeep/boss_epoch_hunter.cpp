@@ -1,6 +1,7 @@
 /*
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2006-2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
+ * Copyright (C) 2005-2011 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -54,9 +55,9 @@ public:
 
     struct boss_epoch_hunterAI : public ScriptedAI
     {
-        boss_epoch_hunterAI(Creature* c) : ScriptedAI(c)
+        boss_epoch_hunterAI(Creature* creature) : ScriptedAI(creature)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
         }
 
         InstanceScript* instance;
@@ -68,10 +69,10 @@ public:
 
         void Reset()
         {
-            SandBreath_Timer = 8000 + rand()%8000;
-            ImpendingDeath_Timer = 25000 + rand()%5000;
-            WingBuffet_Timer = 35000;
-            Mda_Timer = 40000;
+            SandBreath_Timer        = 8000 + rand()%8000;
+            ImpendingDeath_Timer    = 25000 + rand()%5000;
+            WingBuffet_Timer        = 35000;
+            Mda_Timer               = 40000;
         }
 
         void EnterCombat(Unit* /*who*/)
@@ -109,26 +110,30 @@ public:
                 DoScriptText(RAND(SAY_BREATH1, SAY_BREATH2), me);
 
                 SandBreath_Timer = 10000 + rand()%10000;
-            } else SandBreath_Timer -= diff;
+            } 
+			else SandBreath_Timer -= diff;
 
             if (ImpendingDeath_Timer <= diff)
             {
                 DoCast(me->getVictim(), SPELL_IMPENDING_DEATH);
                 ImpendingDeath_Timer = 25000+rand()%5000;
-            } else ImpendingDeath_Timer -= diff;
+            } 
+			else ImpendingDeath_Timer -= diff;
 
             if (WingBuffet_Timer <= diff)
             {
                 if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                     DoCast(target, SPELL_WING_BUFFET);
                 WingBuffet_Timer = 25000+rand()%10000;
-            } else WingBuffet_Timer -= diff;
+            } 
+			else WingBuffet_Timer -= diff;
 
             if (Mda_Timer <= diff)
             {
                 DoCast(me, SPELL_MAGIC_DISRUPTION_AURA);
                 Mda_Timer = 15000;
-            } else Mda_Timer -= diff;
+            } 
+			else Mda_Timer -= diff;
 
             DoMeleeAttackIfReady();
         }
