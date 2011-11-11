@@ -1,5 +1,7 @@
 /*
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2011 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,11 +18,11 @@
  */
 
 /* Script Data Start
-SDName: Boss mal_ganis
-SDAuthor: Tartalo
-SD%Complete: 80
-SDComment: TODO: Intro & outro
-SDCategory:
+SFName: Boss mal_ganis
+SFAuthor: Tartalo
+SF%Complete: 80
+SFComment: TODO: Intro & outro
+SFCategory:
 Script Data End */
 
 #include "ScriptPCH.h"
@@ -78,18 +80,18 @@ public:
 
     struct boss_mal_ganisAI : public ScriptedAI
     {
-        boss_mal_ganisAI(Creature* c) : ScriptedAI(c)
+        boss_mal_ganisAI(Creature* creature) : ScriptedAI(creature)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
         }
 
-        uint32 uiCarrionSwarmTimer;
-        uint32 uiMindBlastTimer;
-        uint32 uiVampiricTouchTimer;
-        uint32 uiSleepTimer;
+        uint32 CarrionSwarmTimer;
+        uint32 MindBlastTimer;
+        uint32 VampiricTouchTimer;
+        uint32 SleepTimer;
 
-        uint8 uiOutroStep;
-        uint32 uiOutroTimer;
+        uint8 OutroStep;
+        uint32 OutroTimer;
 
         bool bYelled;
         bool bYelled2;
@@ -103,11 +105,11 @@ public:
              bYelled = false;
              bYelled2 = false;
              Phase = COMBAT;
-             uiCarrionSwarmTimer = 6000;
-             uiMindBlastTimer = 11000;
-             uiVampiricTouchTimer = urand(10000, 15000);
-             uiSleepTimer = urand(15000, 20000);
-             uiOutroTimer = 1000;
+             CarrionSwarmTimer = 6000;
+             MindBlastTimer = 11000;
+             VampiricTouchTimer = urand(10000, 15000);
+             SleepTimer = urand(15000, 20000);
+             OutroTimer = 1000;
 
              if (instance)
                  instance->SetData(DATA_MAL_GANIS_EVENT, NOT_STARTED);
@@ -151,7 +153,7 @@ public:
                     {
                         //Handle Escape Event: Don't forget to add Player::RewardPlayerAndGroupAtEvent
                         me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_SELECTABLE);
-                        uiOutroStep = 1;
+                        OutroStep = 1;
                         Phase = OUTRO;
                         return;
                     }
@@ -165,62 +167,66 @@ public:
                                 instance->SetData(DATA_MAL_GANIS_EVENT, FAIL);
                         }
 
-                    if (uiCarrionSwarmTimer < diff)
+                    if (CarrionSwarmTimer < diff)
                     {
                         DoCastVictim(SPELL_CARRION_SWARM);
-                        uiCarrionSwarmTimer = 7000;
-                    } else uiCarrionSwarmTimer -= diff;
+                        CarrionSwarmTimer = 7000;
+                    } 
+					else CarrionSwarmTimer -= diff;
 
-                    if (uiMindBlastTimer < diff)
+                    if (MindBlastTimer < diff)
                     {
                         if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                             DoCast(target, SPELL_MIND_BLAST);
-                        uiMindBlastTimer = 6000;
-                    } else uiMindBlastTimer -= diff;
+                        MindBlastTimer = 6000;
+                    } 
+					else MindBlastTimer -= diff;
 
-                    if (uiVampiricTouchTimer < diff)
+                    if (VampiricTouchTimer < diff)
                     {
                         DoCast(me, SPELL_VAMPIRIC_TOUCH);
-                        uiVampiricTouchTimer = 32000;
-                    } else uiVampiricTouchTimer -= diff;
+                        VampiricTouchTimer = 32000;
+                    } 
+					else VampiricTouchTimer -= diff;
 
-                    if (uiSleepTimer < diff)
+                    if (SleepTimer < diff)
                     {
                         DoScriptText(RAND(SAY_SLEEP_1, SAY_SLEEP_2), me);
                         if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                             DoCast(target, SPELL_SLEEP);
-                        uiSleepTimer = urand(15000, 20000);
-                    } else uiSleepTimer -= diff;
+                        SleepTimer = urand(15000, 20000);
+                    } 
+					else SleepTimer -= diff;
 
                     DoMeleeAttackIfReady();
                     break;
                 case OUTRO:
-                    if (uiOutroTimer < diff)
+                    if (OutroTimer < diff)
                     {
-                        switch (uiOutroStep)
+                        switch (OutroStep)
                         {
                             case 1:
                                 DoScriptText(SAY_ESCAPE_SPEECH_1, me);
                                 me->GetMotionMaster()->MoveTargetedHome();
-                                ++uiOutroStep;
-                                uiOutroTimer = 8000;
+                                ++OutroStep;
+                                OutroTimer = 8000;
                                 break;
                             case 2:
                                 me->SetTarget(instance ? instance->GetData64(DATA_ARTHAS) : 0);
                                 me->HandleEmoteCommand(29);
                                 DoScriptText(SAY_ESCAPE_SPEECH_2, me);
-                                ++uiOutroStep;
-                                uiOutroTimer = 9000;
+                                ++OutroStep;
+                                OutroTimer = 9000;
                                 break;
                             case 3:
                                 DoScriptText(SAY_OUTRO, me);
-                                ++uiOutroStep;
-                                uiOutroTimer = 16000;
+                                ++OutroStep;
+                                OutroTimer = 16000;
                                 break;
                             case 4:
                                 me->HandleEmoteCommand(33);
-                                ++uiOutroStep;
-                                uiOutroTimer = 500;
+                                ++OutroStep;
+                                OutroTimer = 500;
                                 break;
                             case 5:
                                 if (instance)
@@ -237,7 +243,7 @@ public:
                         }
                     } 
 					else 
-					   uiOutroTimer -= diff;
+					   OutroTimer -= diff;
                     break;
             }
         }

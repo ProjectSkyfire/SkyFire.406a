@@ -1,5 +1,7 @@
 /*
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2011 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,11 +18,11 @@
  */
 
 /* Script Data Start
-SDName: Boss salramm
-SDAuthor: Tartalo
-SD%Complete: 80
-SDComment: TODO: Intro
-SDCategory:
+SFName: Boss salramm
+SFAuthor: Tartalo
+SF%Complete: 80
+SFComment: TODO: Intro
+SFCategory:
 Script Data End */
 
 #include "ScriptPCH.h"
@@ -66,28 +68,28 @@ public:
 
     struct boss_salrammAI : public ScriptedAI
     {
-        boss_salrammAI(Creature* c) : ScriptedAI(c)
+        boss_salrammAI(Creature* creature) : ScriptedAI(creature)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
             if (instance)
                 DoScriptText(SAY_SPAWN, me);
         }
 
-        uint32 uiCurseFleshTimer;
-        uint32 uiExplodeGhoulTimer;
-        uint32 uiShadowBoltTimer;
-        uint32 uiStealFleshTimer;
-        uint32 uiSummonGhoulsTimer;
+        uint32 CurseFleshTimer;
+        uint32 ExplodeGhoulTimer;
+        uint32 ShadowBoltTimer;
+        uint32 StealFleshTimer;
+        uint32 SummonGhoulsTimer;
 
         InstanceScript* instance;
 
         void Reset()
         {
-             uiCurseFleshTimer = 30000;  //30s DBM
-             uiExplodeGhoulTimer = urand(25000, 28000); //approx 6 sec after summon ghouls
-             uiShadowBoltTimer = urand(8000, 12000); // approx 10s
-             uiStealFleshTimer = 12345;
-             uiSummonGhoulsTimer = urand(19000, 24000); //on a video approx 24s after aggro
+             CurseFleshTimer = 30000;  //30s DBM
+             ExplodeGhoulTimer = urand(25000, 28000); //approx 6 sec after summon ghouls
+             ShadowBoltTimer = urand(8000, 12000); // approx 10s
+             StealFleshTimer = 12345;
+             SummonGhoulsTimer = urand(19000, 24000); //on a video approx 24s after aggro
 
              if (instance)
                  instance->SetData(DATA_SALRAMM_EVENT, NOT_STARTED);
@@ -108,37 +110,41 @@ public:
                 return;
 
             //Curse of twisted flesh timer
-            if (uiCurseFleshTimer <= diff)
+            if (CurseFleshTimer <= diff)
             {
                 DoCast(me->getVictim(), SPELL_CURSE_OF_TWISTED_FLESH);
-                uiCurseFleshTimer = 37000;
-            } else uiCurseFleshTimer -= diff;
+                CurseFleshTimer = 37000;
+            } 
+			else CurseFleshTimer -= diff;
 
             //Shadow bolt timer
-            if (uiShadowBoltTimer <= diff)
+            if (ShadowBoltTimer <= diff)
             {
                 if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                     DoCast(target, SPELL_SHADOW_BOLT);
-                uiShadowBoltTimer = urand(8000, 12000);
-            } else uiShadowBoltTimer -= diff;
+                ShadowBoltTimer = urand(8000, 12000);
+            } 
+			else ShadowBoltTimer -= diff;
 
             //Steal Flesh timer
-            if (uiStealFleshTimer <= diff)
+            if (StealFleshTimer <= diff)
             {
                 DoScriptText(RAND(SAY_STEAL_FLESH_1, SAY_STEAL_FLESH_2, SAY_STEAL_FLESH_3), me);
-                if (Unit* random_pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                    DoCast(random_pTarget, SPELL_STEAL_FLESH);
-                uiStealFleshTimer = 10000;
-            } else uiStealFleshTimer -= diff;
+                if (Unit* random_target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                    DoCast(random_target, SPELL_STEAL_FLESH);
+                StealFleshTimer = 10000;
+            } 
+			else StealFleshTimer -= diff;
 
             //Summon ghouls timer
-            if (uiSummonGhoulsTimer <= diff)
+            if (SummonGhoulsTimer <= diff)
             {
                 DoScriptText(RAND(SAY_SUMMON_GHOULS_1, SAY_SUMMON_GHOULS_2), me);
-                if (Unit* random_pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                    DoCast(random_pTarget, SPELL_SUMMON_GHOULS);
-                uiSummonGhoulsTimer = 10000;
-            } else uiSummonGhoulsTimer -= diff;
+                if (Unit* random_target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                    DoCast(random_target, SPELL_SUMMON_GHOULS);
+                SummonGhoulsTimer = 10000;
+            } 
+			else SummonGhoulsTimer -= diff;
 
             DoMeleeAttackIfReady();
         }

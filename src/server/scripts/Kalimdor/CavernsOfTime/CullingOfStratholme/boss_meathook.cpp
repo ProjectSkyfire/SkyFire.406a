@@ -1,5 +1,7 @@
 /*
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2011 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,11 +18,11 @@
  */
 
 /* Script Data Start
-SDName: Boss meathook
-SDAuthor: Tartalo
-SD%Complete: 100
-SDComment: It may need timer adjustment
-SDCategory:
+SFName: Boss meathook
+SFAuthor: Tartalo
+SF%Complete: 100
+SFComment: It may need timer adjustment
+SFCategory:
 Script Data End */
 
 #include "ScriptPCH.h"
@@ -57,24 +59,24 @@ public:
 
     struct boss_meathookAI : public ScriptedAI
     {
-        boss_meathookAI(Creature* c) : ScriptedAI(c)
+        boss_meathookAI(Creature* creature) : ScriptedAI(creature)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
             if (instance)
                 DoScriptText(SAY_SPAWN, me);
         }
 
-        uint32 uiChainTimer;
-        uint32 uiDiseaseTimer;
-        uint32 uiFrenzyTimer;
+        uint32 ChainTimer;
+        uint32 DiseaseTimer;
+        uint32 FrenzyTimer;
 
         InstanceScript* instance;
 
         void Reset()
         {
-            uiChainTimer = urand(12000, 17000);   //seen on video 13, 17, 15, 12, 16
-            uiDiseaseTimer = urand(2000, 4000);   //approx 3s
-            uiFrenzyTimer = urand(21000, 26000);  //made it up
+            ChainTimer = urand(12000, 17000);   //seen on video 13, 17, 15, 12, 16
+            DiseaseTimer = urand(2000, 4000);   //approx 3s
+            FrenzyTimer = urand(21000, 26000);  //made it up
 
             if (instance)
                 instance->SetData(DATA_MEATHOOK_EVENT, NOT_STARTED);
@@ -94,24 +96,27 @@ public:
             if (!UpdateVictim())
                 return;
 
-            if (uiDiseaseTimer <= diff)
+            if (DiseaseTimer <= diff)
             {
                 DoCastAOE(SPELL_DISEASE_EXPULSION);
-                uiDiseaseTimer = urand(1500, 4000);
-            } else uiDiseaseTimer -= diff;
+                DiseaseTimer = urand(1500, 4000);
+            } 
+			else DiseaseTimer -= diff;
 
-            if (uiFrenzyTimer <= diff)
+            if (FrenzyTimer <= diff)
             {
                 DoCast(me, SPELL_FRENZY);
-                uiFrenzyTimer = urand(21000, 26000);
-            } else uiFrenzyTimer -= diff;
+                FrenzyTimer = urand(21000, 26000);
+            } 
+			else FrenzyTimer -= diff;
 
-            if (uiChainTimer <= diff)
+            if (ChainTimer <= diff)
             {
                 if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                     DoCast(target, SPELL_CONSTRICTING_CHAINS); //anyone but the tank
-                uiChainTimer = urand(2000, 4000);
-            } else uiChainTimer -= diff;
+                ChainTimer = urand(2000, 4000);
+            } 
+			else ChainTimer -= diff;
 
             DoMeleeAttackIfReady();
         }

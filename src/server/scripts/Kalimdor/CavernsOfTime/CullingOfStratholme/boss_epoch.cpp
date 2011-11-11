@@ -1,5 +1,7 @@
 /*
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2011 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,11 +18,11 @@
  */
 
 /* Script Data Start
-SDName: Boss epoch
-SDAuthor: Tartalo
-SD%Complete: 80
-SDComment: TODO: Intro, consecutive attacks to a random target durin time wrap, adjust timers
-SDCategory:
+SFName: Boss epoch
+SFAuthor: Tartalo
+SF%Complete: 80
+SFComment: TODO: Intro, consecutive attacks to a random target durin time wrap, adjust timers
+SFCategory:
 Script Data End */
 
 #include "ScriptPCH.h"
@@ -60,29 +62,29 @@ public:
 
     struct boss_epochAI : public ScriptedAI
     {
-        boss_epochAI(Creature* c) : ScriptedAI(c)
+        boss_epochAI(Creature* creature) : ScriptedAI(creature)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
         }
 
-        uint8 uiStep;
+        uint8 Step;
 
-        uint32 uiStepTimer;
-        uint32 uiWoundingStrikeTimer;
-        uint32 uiTimeWarpTimer;
-        uint32 uiTimeStopTimer;
-        uint32 uiCurseOfExertionTimer;
+        uint32 StepTimer;
+        uint32 WoundingStrikeTimer;
+        uint32 TimeWarpTimer;
+        uint32 TimeStopTimer;
+        uint32 CurseOfExertionTimer;
 
         InstanceScript* instance;
 
         void Reset()
         {
-            uiStep = 1;
-            uiStepTimer = 26000;
-            uiCurseOfExertionTimer = 9300;
-            uiTimeWarpTimer = 25300;
-            uiTimeStopTimer = 21300;
-            uiWoundingStrikeTimer = 5300;
+            Step = 1;
+            StepTimer = 26000;
+            CurseOfExertionTimer = 9300;
+            TimeWarpTimer = 25300;
+            TimeStopTimer = 21300;
+            WoundingStrikeTimer = 5300;
 
             if (instance)
                 instance->SetData(DATA_EPOCH_EVENT, NOT_STARTED);
@@ -102,31 +104,35 @@ public:
             if (!UpdateVictim())
                 return;
 
-            if (uiCurseOfExertionTimer < diff)
+            if (CurseOfExertionTimer < diff)
             {
                 if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                     DoCast(target, SPELL_CURSE_OF_EXERTION);
-                uiCurseOfExertionTimer = 9300;
-            } else uiCurseOfExertionTimer -= diff;
+                CurseOfExertionTimer = 9300;
+            } 
+			else CurseOfExertionTimer -= diff;
 
-            if (uiWoundingStrikeTimer < diff)
+            if (WoundingStrikeTimer < diff)
             {
                 DoCastVictim(SPELL_WOUNDING_STRIKE);
-                uiWoundingStrikeTimer = 5300;
-            } else uiWoundingStrikeTimer -= diff;
+                WoundingStrikeTimer = 5300;
+            } 
+			else WoundingStrikeTimer -= diff;
 
-            if (uiTimeStopTimer < diff)
+            if (TimeStopTimer < diff)
             {
                 DoCastAOE(SPELL_TIME_STOP);
-                uiTimeStopTimer = 21300;
-            } else uiTimeStopTimer -= diff;
+                TimeStopTimer = 21300;
+            } 
+			else TimeStopTimer -= diff;
 
-            if (uiTimeWarpTimer < diff)
+            if (TimeWarpTimer < diff)
             {
                 DoScriptText(RAND(SAY_TIME_WARP_1, SAY_TIME_WARP_2, SAY_TIME_WARP_3), me);
                 DoCastAOE(SPELL_TIME_WARP);
-                uiTimeWarpTimer = 25300;
-            } else uiTimeWarpTimer -= diff;
+                TimeWarpTimer = 25300;
+            } 
+			else TimeWarpTimer -= diff;
 
             DoMeleeAttackIfReady();
         }

@@ -1,5 +1,7 @@
 /*
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2011 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -30,7 +32,7 @@
 
 enum Texts
 {
-    SAY_CRATES_COMPLETED    = 0,
+    SAY_CRATES_COMPLETED = 0,
 };
 
 Position const ChromieSummonPos = {1813.298f, 1283.578f, 142.3258f, 3.878161f};
