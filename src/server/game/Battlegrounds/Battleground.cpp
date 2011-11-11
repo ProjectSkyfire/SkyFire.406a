@@ -280,7 +280,7 @@ void Battleground::Update(uint32 diff)
                     // Determine winner team
                     if (m_arenaEndTimer < 100)
                     {
-                        if (!GetAlivePlayersCountByTeam(HORDE))
+                        if (!GetAlivePlayersCountByTeam(ALLIANCE))
                             EndBattleground(HORDE);
                         else
                             EndBattleground(ALLIANCE);
