@@ -1,6 +1,7 @@
 /*
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2006-2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
+ * Copyright (C) 2005-2011 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -17,10 +18,10 @@
  */
 
 /* ScriptData
-SDName: Dark_Portal
-SD%Complete: 30
-SDComment: Misc NPC's and mobs for instance. Most here far from complete.
-SDCategory: Caverns of Time, The Dark Portal
+SFName: Dark_Portal
+SF%Complete: 30
+SFComment: Misc NPC's and mobs for instance. Most here far from complete.
+SFCategory: Caverns of Time, The Dark Portal
 EndScriptData */
 
 /* ContentData
@@ -68,9 +69,9 @@ public:
 
     struct npc_medivh_bmAI : public ScriptedAI
     {
-        npc_medivh_bmAI(Creature* c) : ScriptedAI(c)
+        npc_medivh_bmAI(Creature* creature) : ScriptedAI(creature)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
         }
 
         InstanceScript* instance;
@@ -178,7 +179,8 @@ public:
                         SpellCorrupt_Timer = 3000;
                     else
                         SpellCorrupt_Timer = 0;
-                } else SpellCorrupt_Timer -= diff;
+                } 
+				else SpellCorrupt_Timer -= diff;
             }
 
             if (Check_Timer)
@@ -225,7 +227,8 @@ public:
                         //TODO: start the post-event here
                         instance->SetData(TYPE_MEDIVH, DONE);
                     }
-                } else Check_Timer -= diff;
+                } 
+				else Check_Timer -= diff;
             }
 
             //if (!UpdateVictim())
@@ -260,9 +263,9 @@ public:
 
     struct npc_time_riftAI : public ScriptedAI
     {
-        npc_time_riftAI(Creature* c) : ScriptedAI(c)
+        npc_time_riftAI(Creature* creature) : ScriptedAI(creature)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
         }
 
         InstanceScript* instance;
@@ -274,8 +277,8 @@ public:
 
         void Reset()
         {
-            TimeRiftWave_Timer = 15000;
-            mRiftWaveCount = 0;
+            TimeRiftWave_Timer  = 15000;
+            mRiftWaveCount      = 0;
 
             if (!instance)
                 return;
@@ -329,7 +332,8 @@ public:
             {
                 for (uint8 i = 0; i < 3; ++i)
                     DoSummonAtRift(entry);
-            } else DoSummonAtRift(entry);
+            } 
+			else DoSummonAtRift(entry);
         }
 
         void UpdateAI(const uint32 diff)
@@ -341,7 +345,8 @@ public:
             {
                 DoSelectSummon();
                 TimeRiftWave_Timer = 15000;
-            } else TimeRiftWave_Timer -= diff;
+            } 
+			else TimeRiftWave_Timer -= diff;
 
             if (me->IsNonMeleeSpellCasted(false))
                 return;
@@ -366,10 +371,10 @@ class npc_saat : public CreatureScript
 public:
     npc_saat() : CreatureScript("npc_saat") { }
 
-    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*uiSender*/, uint32 uiAction)
+    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*uiSender*/, uint32 action)
     {
         player->PlayerTalkClass->ClearMenus();
-        if (uiAction == GOSSIP_ACTION_INFO_DEF+1)
+        if (action == GOSSIP_ACTION_INFO_DEF+1)
         {
             player->CLOSE_GOSSIP_MENU();
             creature->CastSpell(player, SPELL_CHRONO_BEACON, false);

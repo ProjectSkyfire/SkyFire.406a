@@ -1,6 +1,7 @@
 /*
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2006-2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
+ * Copyright (C) 2005-2011 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -17,16 +18,16 @@
  */
 
 /* ScriptData
-SDName: Instance_Dark_Portal
-SD%Complete: 50
-SDComment: Quest support: 9836, 10297. Currently in progress.
-SDCategory: Caverns of Time, The Dark Portal
+SFName: Instance_Dark_Portal
+SF%Complete: 50
+SFComment: Quest support: 9836, 10297. Currently in progress.
+SFCategory: Caverns of Time, The Dark Portal
 EndScriptData */
 
 #include "ScriptPCH.h"
 #include "dark_portal.h"
 
-#define MAX_ENCOUNTER              2
+#define MAX_ENCOUNTER           2
 
 #define C_MEDIVH                15608
 #define C_TIME_RIFT             17838
@@ -73,11 +74,9 @@ public:
 
     struct instance_dark_portal_InstanceMapScript : public InstanceScript
     {
-        instance_dark_portal_InstanceMapScript(Map* map) : InstanceScript(map)
-        {
-        }
+        instance_dark_portal_InstanceMapScript(Map* map) : InstanceScript(map) {}
 
-        uint32 m_auiEncounter[MAX_ENCOUNTER];
+        uint32 Encounter[MAX_ENCOUNTER];
 
         uint32 mRiftPortalCount;
         uint32 mShieldPercent;
@@ -97,14 +96,14 @@ public:
 
         void Clear()
         {
-            memset(&m_auiEncounter, 0, sizeof(m_auiEncounter));
+            memset(&Encounter, 0, sizeof(Encounter));
 
             mRiftPortalCount    = 0;
             mShieldPercent      = 100;
             mRiftWaveCount      = 0;
             mRiftWaveId         = 0;
 
-            CurrentRiftId = 0;
+            CurrentRiftId       = 0;
 
             NextPortal_Timer    = 0;
         }
@@ -169,7 +168,7 @@ public:
             switch (type)
             {
             case TYPE_MEDIVH:
-                if (data == SPECIAL && m_auiEncounter[0] == IN_PROGRESS)
+                if (data == SPECIAL && Encounter[0] == IN_PROGRESS)
                 {
                     --mShieldPercent;
 
@@ -177,13 +176,13 @@ public:
 
                     if (!mShieldPercent)
                     {
-                        if (Creature* pMedivh = instance->GetCreature(MedivhGUID))
+                        if (Creature* medivh = instance->GetCreature(MedivhGUID))
                         {
-                            if (pMedivh->isAlive())
+                            if (medivh->isAlive())
                             {
-                                pMedivh->DealDamage(pMedivh, pMedivh->GetHealth(), NULL, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, NULL, false);
-                                m_auiEncounter[0] = FAIL;
-                                m_auiEncounter[1] = NOT_STARTED;
+                                medivh->DealDamage(medivh, medivh->GetHealth(), NULL, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, NULL, false);
+                                Encounter[0] = FAIL;
+                                Encounter[1] = NOT_STARTED;
                             }
                         }
                     }
@@ -194,7 +193,7 @@ public:
                     {
                         sLog->outDebug(LOG_FILTER_TSCR, "TSCR: Instance Dark Portal: Starting event.");
                         InitWorldState();
-                        m_auiEncounter[1] = IN_PROGRESS;
+                        Encounter[1] = IN_PROGRESS;
                         NextPortal_Timer = 15000;
                     }
 
@@ -220,7 +219,7 @@ public:
                         }
                     }
 
-                    m_auiEncounter[0] = data;
+                    Encounter[0] = data;
                 }
                 break;
             case TYPE_RIFT:
@@ -230,7 +229,7 @@ public:
                         NextPortal_Timer = 5000;
                 }
                 else
-                    m_auiEncounter[1] = data;
+                    Encounter[1] = data;
                 break;
             }
         }
@@ -240,9 +239,9 @@ public:
             switch (type)
             {
             case TYPE_MEDIVH:
-                return m_auiEncounter[0];
+                return Encounter[0];
             case TYPE_RIFT:
-                return m_auiEncounter[1];
+                return Encounter[1];
             case DATA_PORTAL_COUNT:
                 return mRiftPortalCount;
             case DATA_SHIELD:
@@ -283,7 +282,7 @@ public:
 
         void DoSpawnPortal()
         {
-            if (Creature* pMedivh = instance->GetCreature(MedivhGUID))
+            if (Creature* medivh = instance->GetCreature(MedivhGUID))
             {
                 uint8 tmp = urand(0, 2);
 
@@ -294,7 +293,7 @@ public:
 
                 CurrentRiftId = tmp;
 
-                Creature* temp = pMedivh->SummonCreature(C_TIME_RIFT,
+                Creature* temp = medivh->SummonCreature(C_TIME_RIFT,
                     PortalLocation[tmp][0], PortalLocation[tmp][1], PortalLocation[tmp][2], PortalLocation[tmp][3],
                     TEMPSUMMON_CORPSE_DESPAWN, 0);
                 if (temp)
@@ -302,14 +301,14 @@ public:
                     temp->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
                     temp->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
 
-                    if (Creature* pBoss = SummonedPortalBoss(temp))
+                    if (Creature* boss = SummonedPortalBoss(temp))
                     {
-                        if (pBoss->GetEntry() == C_AEONUS)
-                            pBoss->AddThreat(pMedivh, 0.0f);
+                        if (boss->GetEntry() == C_AEONUS)
+                            boss->AddThreat(medivh, 0.0f);
                         else
                         {
-                            pBoss->AddThreat(temp, 0.0f);
-                            temp->CastSpell(pBoss, SPELL_RIFT_CHANNEL, false);
+                            boss->AddThreat(temp, 0.0f);
+                            temp->CastSpell(boss, SPELL_RIFT_CHANNEL, false);
                         }
                     }
                 }
@@ -318,7 +317,7 @@ public:
 
         void Update(uint32 diff)
         {
-            if (m_auiEncounter[1] != IN_PROGRESS)
+            if (Encounter[1] != IN_PROGRESS)
                 return;
 
             //add delay timer?

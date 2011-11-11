@@ -1,6 +1,7 @@
 /*
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2006-2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
+ * Copyright (C) 2005-2011 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -17,10 +18,10 @@
  */
 
 /* ScriptData
-SDName: Boss_Chrono_Lord_Deja
-SD%Complete: 65
-SDComment: All abilities not implemented
-SDCategory: Caverns of Time, The Dark Portal
+SFName: Boss_Chrono_Lord_Deja
+SF%Complete: 65
+SFComment: All abilities not implemented
+SFCategory: Caverns of Time, The Dark Portal
 EndScriptData */
 
 #include "ScriptPCH.h"
@@ -55,9 +56,9 @@ public:
 
     struct boss_chrono_lord_dejaAI : public ScriptedAI
     {
-        boss_chrono_lord_dejaAI(Creature* c) : ScriptedAI(c)
+        boss_chrono_lord_dejaAI(Creature* creature) : ScriptedAI(creature)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
         }
 
         InstanceScript* instance;
@@ -69,10 +70,10 @@ public:
 
         void Reset()
         {
-            ArcaneBlast_Timer = 18000+rand()%5000;
-            TimeLapse_Timer = 10000+rand()%5000;
-            ArcaneDischarge_Timer = 20000+rand()%10000;
-            Attraction_Timer = 25000+rand()%10000;
+            ArcaneBlast_Timer       = 18000+rand()%5000;
+            TimeLapse_Timer         = 10000+rand()%5000;
+            ArcaneDischarge_Timer   = 20000+rand()%10000;
+            Attraction_Timer        = 25000+rand()%10000;
         }
 
         void EnterCombat(Unit* /*who*/)
@@ -119,7 +120,8 @@ public:
             {
                 DoCast(me->getVictim(), SPELL_ARCANE_BLAST);
                 ArcaneBlast_Timer = 15000+rand()%10000;
-            } else ArcaneBlast_Timer -= diff;
+            } 
+			else ArcaneBlast_Timer -= diff;
 
             //Arcane Discharge
             if (ArcaneDischarge_Timer <= diff)
@@ -127,7 +129,8 @@ public:
                 Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0);
                 DoCast(target, SPELL_ARCANE_DISCHARGE);
                 ArcaneDischarge_Timer = 20000+rand()%10000;
-            } else ArcaneDischarge_Timer -= diff;
+            } 
+			else ArcaneDischarge_Timer -= diff;
 
             //Time Lapse
             if (TimeLapse_Timer <= diff)
@@ -135,7 +138,8 @@ public:
                 DoScriptText(SAY_BANISH, me);
                 DoCast(me, SPELL_TIME_LAPSE);
                 TimeLapse_Timer = 15000+rand()%10000;
-            } else TimeLapse_Timer -= diff;
+            } 
+			else TimeLapse_Timer -= diff;
 
             if (IsHeroic())
             {
@@ -143,7 +147,8 @@ public:
                 {
                     DoCast(me, SPELL_ATTRACTION);
                     Attraction_Timer = 25000+rand()%10000;
-                } else Attraction_Timer -= diff;
+                } 
+				else Attraction_Timer -= diff;
             }
 
             DoMeleeAttackIfReady();

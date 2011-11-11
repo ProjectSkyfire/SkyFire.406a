@@ -1,6 +1,7 @@
 /*
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2006-2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
+ * Copyright (C) 2005-2011 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -17,10 +18,10 @@
  */
 
 /* ScriptData
-SDName: Boss_Aeonus
-SD%Complete: 80
-SDComment: Some spells not implemented
-SDCategory: Caverns of Time, The Dark Portal
+SFName: Boss_Aeonus
+SF%Complete: 80
+SFComment: Some spells not implemented
+SFCategory: Caverns of Time, The Dark Portal
 EndScriptData */
 
 #include "ScriptPCH.h"
@@ -55,9 +56,9 @@ public:
 
     struct boss_aeonusAI : public ScriptedAI
     {
-        boss_aeonusAI(Creature* c) : ScriptedAI(c)
+        boss_aeonusAI(Creature* creature) : ScriptedAI(creature)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
         }
 
         InstanceScript* instance;
@@ -68,9 +69,9 @@ public:
 
         void Reset()
         {
-            SandBreath_Timer = 15000+rand()%15000;
-            TimeStop_Timer = 10000+rand()%5000;
-            Frenzy_Timer = 30000+rand()%15000;
+            SandBreath_Timer  = 15000+rand()%15000;
+            TimeStop_Timer    = 10000+rand()%5000;
+            Frenzy_Timer      = 30000+rand()%15000;
         }
 
         void EnterCombat(Unit* /*who*/)
@@ -120,14 +121,16 @@ public:
             {
                 DoCast(me->getVictim(), SPELL_SAND_BREATH);
                 SandBreath_Timer = 15000+rand()%10000;
-            } else SandBreath_Timer -= diff;
+            } 
+			else SandBreath_Timer -= diff;
 
             //Time Stop
             if (TimeStop_Timer <= diff)
             {
                 DoCast(me->getVictim(), SPELL_TIME_STOP);
                 TimeStop_Timer = 20000+rand()%15000;
-            } else TimeStop_Timer -= diff;
+            } 
+			else TimeStop_Timer -= diff;
 
             //Frenzy
             if (Frenzy_Timer <= diff)
@@ -135,7 +138,8 @@ public:
                 DoScriptText(EMOTE_FRENZY, me);
                 DoCast(me, SPELL_ENRAGE);
                 Frenzy_Timer = 20000+rand()%15000;
-            } else Frenzy_Timer -= diff;
+            } 
+			else Frenzy_Timer -= diff;
 
             DoMeleeAttackIfReady();
         }
