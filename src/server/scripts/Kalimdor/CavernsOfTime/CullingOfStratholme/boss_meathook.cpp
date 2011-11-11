@@ -101,14 +101,14 @@ public:
                 DoCastAOE(SPELL_DISEASE_EXPULSION);
                 DiseaseTimer = urand(1500, 4000);
             } 
-			else DiseaseTimer -= diff;
+            else DiseaseTimer -= diff;
 
             if (FrenzyTimer <= diff)
             {
                 DoCast(me, SPELL_FRENZY);
                 FrenzyTimer = urand(21000, 26000);
             } 
-			else FrenzyTimer -= diff;
+            else FrenzyTimer -= diff;
 
             if (ChainTimer <= diff)
             {
@@ -116,7 +116,7 @@ public:
                     DoCast(target, SPELL_CONSTRICTING_CHAINS); //anyone but the tank
                 ChainTimer = urand(2000, 4000);
             } 
-			else ChainTimer -= diff;
+            else ChainTimer -= diff;
 
             DoMeleeAttackIfReady();
         }

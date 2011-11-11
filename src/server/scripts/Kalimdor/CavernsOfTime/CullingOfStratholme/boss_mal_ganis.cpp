@@ -172,7 +172,7 @@ public:
                         DoCastVictim(SPELL_CARRION_SWARM);
                         CarrionSwarmTimer = 7000;
                     } 
-					else CarrionSwarmTimer -= diff;
+                    else CarrionSwarmTimer -= diff;
 
                     if (MindBlastTimer < diff)
                     {
@@ -180,14 +180,14 @@ public:
                             DoCast(target, SPELL_MIND_BLAST);
                         MindBlastTimer = 6000;
                     } 
-					else MindBlastTimer -= diff;
+                    else MindBlastTimer -= diff;
 
                     if (VampiricTouchTimer < diff)
                     {
                         DoCast(me, SPELL_VAMPIRIC_TOUCH);
                         VampiricTouchTimer = 32000;
                     } 
-					else VampiricTouchTimer -= diff;
+                    else VampiricTouchTimer -= diff;
 
                     if (SleepTimer < diff)
                     {
@@ -196,7 +196,7 @@ public:
                             DoCast(target, SPELL_SLEEP);
                         SleepTimer = urand(15000, 20000);
                     } 
-					else SleepTimer -= diff;
+                    else SleepTimer -= diff;
 
                     DoMeleeAttackIfReady();
                     break;

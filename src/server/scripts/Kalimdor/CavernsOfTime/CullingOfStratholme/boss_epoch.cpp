@@ -110,21 +110,21 @@ public:
                     DoCast(target, SPELL_CURSE_OF_EXERTION);
                 CurseOfExertionTimer = 9300;
             } 
-			else CurseOfExertionTimer -= diff;
+            else CurseOfExertionTimer -= diff;
 
             if (WoundingStrikeTimer < diff)
             {
                 DoCastVictim(SPELL_WOUNDING_STRIKE);
                 WoundingStrikeTimer = 5300;
             } 
-			else WoundingStrikeTimer -= diff;
+            else WoundingStrikeTimer -= diff;
 
             if (TimeStopTimer < diff)
             {
                 DoCastAOE(SPELL_TIME_STOP);
                 TimeStopTimer = 21300;
             } 
-			else TimeStopTimer -= diff;
+            else TimeStopTimer -= diff;
 
             if (TimeWarpTimer < diff)
             {
@@ -132,7 +132,7 @@ public:
                 DoCastAOE(SPELL_TIME_WARP);
                 TimeWarpTimer = 25300;
             } 
-			else TimeWarpTimer -= diff;
+            else TimeWarpTimer -= diff;
 
             DoMeleeAttackIfReady();
         }

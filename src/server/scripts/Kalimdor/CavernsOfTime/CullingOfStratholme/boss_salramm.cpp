@@ -115,7 +115,7 @@ public:
                 DoCast(me->getVictim(), SPELL_CURSE_OF_TWISTED_FLESH);
                 CurseFleshTimer = 37000;
             } 
-			else CurseFleshTimer -= diff;
+            else CurseFleshTimer -= diff;
 
             //Shadow bolt timer
             if (ShadowBoltTimer <= diff)
@@ -124,7 +124,7 @@ public:
                     DoCast(target, SPELL_SHADOW_BOLT);
                 ShadowBoltTimer = urand(8000, 12000);
             } 
-			else ShadowBoltTimer -= diff;
+            else ShadowBoltTimer -= diff;
 
             //Steal Flesh timer
             if (StealFleshTimer <= diff)
@@ -134,7 +134,7 @@ public:
                     DoCast(random_target, SPELL_STEAL_FLESH);
                 StealFleshTimer = 10000;
             } 
-			else StealFleshTimer -= diff;
+            else StealFleshTimer -= diff;
 
             //Summon ghouls timer
             if (SummonGhoulsTimer <= diff)
@@ -144,7 +144,7 @@ public:
                     DoCast(random_target, SPELL_SUMMON_GHOULS);
                 SummonGhoulsTimer = 10000;
             } 
-			else SummonGhoulsTimer -= diff;
+            else SummonGhoulsTimer -= diff;
 
             DoMeleeAttackIfReady();
         }
