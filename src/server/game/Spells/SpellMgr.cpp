@@ -300,9 +300,9 @@ int32 GetDiminishingReturnsLimitDuration(DiminishingGroup group, SpellInfo const
         }
         case SPELLFAMILY_WARLOCK:
         {
-            // Banish - limit to 6 seconds in PvP
+            // Banish - limit to 11 seconds in PvP
             if (spellproto->SpellFamilyFlags[1] & 0x8000000)
-                return 6 * IN_MILLISECONDS;
+                return 11 * IN_MILLISECONDS;
             // Curse of Tongues - limit to 12 seconds in PvP
             else if (spellproto->SpellFamilyFlags[2] & 0x800)
                 return 12 * IN_MILLISECONDS;
