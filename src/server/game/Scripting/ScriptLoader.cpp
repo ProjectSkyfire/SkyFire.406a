@@ -602,6 +602,7 @@ void AddSC_boss_warlord_kalithresh();
 void AddSC_instance_steam_vault();
 void AddSC_boss_hungarfen();                 //CR Underbog
 void AddSC_boss_the_black_stalker();
+void AddSC_boss_frostlord_ahune();           //CR Slave Pens
 void AddSC_boss_gruul();                     //Gruul's Lair
 void AddSC_boss_high_king_maulgar();
 void AddSC_instance_gruuls_lair();
@@ -1123,6 +1124,7 @@ void AddOutlandScripts()
     AddSC_instance_steam_vault();
     AddSC_boss_hungarfen();                 //CR Underbog
     AddSC_boss_the_black_stalker();
+    AddSC_boss_frostlord_ahune();           //CR Slave Pens	
     AddSC_boss_gruul();                     //Gruul's Lair
     AddSC_boss_high_king_maulgar();
     AddSC_instance_gruuls_lair();

@@ -3088,6 +3088,10 @@ void SpellMgr::LoadSpellCustomAttr()
             case 51904: // Summon Ghouls On Scarlet Crusade (this should use conditions table, script for this spell needs to be fixed)
                 spellInfo->Effects[0].TargetA = TARGET_UNIT_CASTER;
                 break;
+            case 46363: // Midsummer - Beam Attack against Ahune
+                spellInfo->Effects[0].TargetA = TARGET_SRC_CASTER;
+                spellInfo->Effects[0].TargetB = TARGET_UNIT_TARGET_ANY;
+                break;
             case 29809: // Desecration Arm - 36 instead of 37 - typo? :/
                 spellInfo->Effects[0].RadiusEntry = sSpellRadiusStore.LookupEntry(37);
                 break;
