@@ -676,9 +676,9 @@ bool Battlefield::IncrementQuest(Player* player, uint32 quest, bool complete)
 {
     if (!player)
         return false;
-///- tired as fuck testing this...i know its wrong butt-fuckit for now
-    /*Quest const* quest =*/sObjectMgr->GetQuestTemplate(quest);
-    if (!quest || player->GetQuestStatus(quest) == QUEST_STATUS_NONE)
+
+    Quest const* pQuest = sObjectMgr->GetQuestTemplate(quest);
+    if (!pQuest || player->GetQuestStatus(quest) == QUEST_STATUS_NONE)
         return false;
 
     if (complete)
@@ -690,8 +690,8 @@ bool Battlefield::IncrementQuest(Player* player, uint32 quest, bool complete)
     {
         for (uint8 i = 0; i < QUEST_OBJECTIVES_COUNT; ++i)
         {
-            int32 creature = quest->ReqCreatureOrGOId[i];
-            if (uint32 spell_id = quest->ReqSpell[i])
+            int32 creature = pQuest->ReqCreatureOrGOId[i];
+            if (uint32 spell_id = pQuest->ReqSpell[i])
             {
                 player->CastedCreatureOrGO(creature, 0, spell_id);
                 return true;
