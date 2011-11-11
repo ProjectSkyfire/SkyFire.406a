@@ -259,9 +259,7 @@ void Battleground::Update(uint32 diff)
     {
         case STATUS_WAIT_JOIN:
             if (GetPlayersSize())
-            {
                 _ProcessJoin(diff);
-            }
             break;
         case STATUS_IN_PROGRESS:
             _ProcessOfflineQueue();
@@ -273,6 +271,20 @@ void Battleground::Update(uint32 diff)
                     UpdateArenaWorldState();
                     CheckArenaAfterTimerConditions();
                     return;
+                }
+
+                if ((GetAlivePlayersCountByTeam(ALLIANCE) && !GetAlivePlayersCountByTeam(HORDE)) || (GetAlivePlayersCountByTeam(HORDE) && !GetAlivePlayersCountByTeam(ALLIANCE)))
+                {
+                    // No player is alive, decrease the time
+                    m_arenaEndTimer -= diff;
+                    // Determine winner team
+                    if (m_arenaEndTimer < 100)
+                    {
+                        if (!GetAlivePlayersCountByTeam(HORDE))
+                            EndBattleground(HORDE);
+                        else
+                            EndBattleground(ALLIANCE);
+                    }
                 }
             }
             else
@@ -1870,9 +1882,24 @@ void Battleground::CheckArenaAfterTimerConditions()
 void Battleground::CheckArenaWinConditions()
 {
     if (!GetAlivePlayersCountByTeam(ALLIANCE) && GetPlayersCountByTeam(HORDE))
-        EndBattleground(HORDE);
+    {
+        if (isArena())
+            ScheduleArenaEnd(1500);
+        else
+            EndBattleground(HORDE);
+    }
     else if (GetPlayersCountByTeam(ALLIANCE) && !GetAlivePlayersCountByTeam(HORDE))
-        EndBattleground(ALLIANCE);
+    {
+        if (isArena())
+            ScheduleArenaEnd(1500);
+        else
+            EndBattleground(ALLIANCE);
+    }
+}
+
+void Battleground::ScheduleArenaEnd(uint32 time)
+{
+    m_arenaEndTimer = time;
 }
 
 void Battleground::UpdateArenaWorldState()
