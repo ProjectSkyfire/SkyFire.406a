@@ -291,6 +291,7 @@ class LFGMgr
         LfgState GetState(const uint64& guid);
         const LfgDungeonSet& GetSelectedDungeons(const uint64& guid);
         uint32 GetDungeon(const uint64& guid, bool asId = true);
+		void SetState(const uint64& guid, LfgState state);
         void ClearState(const uint64& guid);
         void RemovePlayerData(const uint64& guid);
         void RemoveGroupData(const uint64& guid);
@@ -303,7 +304,6 @@ class LFGMgr
         uint8 GetRoles(const uint64& guid);
         const std::string& GetComment(const uint64& gguid);
         void RestoreState(const uint64& guid);
-        void SetState(const uint64& guid, LfgState state);
         void SetDungeon(const uint64& guid, uint32 dungeon);
         void SetSelectedDungeons(const uint64& guid, const LfgDungeonSet& dungeons);
         void SetLockedDungeons(const uint64& guid, const LfgLockMap& lock);
