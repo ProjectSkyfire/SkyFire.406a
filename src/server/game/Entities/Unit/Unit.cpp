@@ -2252,22 +2252,23 @@ void Unit::SendMeleeAttackStart(Unit* victim)
     WorldPacket data(SMSG_ATTACKSTART, 8 + 8);  //406
     data << uint64(GetGUID());
     data << uint64(victim->GetGUID());
-
     SendMessageToSet(&data, true);
     sLog->outStaticDebug("WORLD: Sent SMSG_ATTACKSTART");
 }
 
 void Unit::SendMeleeAttackStop(Unit* victim)
 {
-    if (!victim)
-        return;
-
     WorldPacket data(SMSG_ATTACKSTOP, (8+8+4));            // we guess size
     data.append(GetPackGUID());
-    data.append(victim->GetPackGUID());                     // can be 0x00...
-    data << uint32(0);                                      // can be 0x1
+    data.append(victim ? victim->GetPackGUID() : 0);       // can be 0x00...
+    data << uint32(0);                                     // can be 0x1
     SendMessageToSet(&data, true);
-    sLog->outDetail("%s %u stopped attacking %s %u", (GetTypeId() == TYPEID_PLAYER ? "player" : "creature"), GetGUIDLow(), (victim->GetTypeId() == TYPEID_PLAYER ? "player" : "creature"), victim->GetGUIDLow());
+    sLog->outStaticDebug("WORLD: Sent SMSG_ATTACKSTART");
+
+    if (victim)
+        sLog->outDetail("%s %u stopped attacking %s %u", (GetTypeId() == TYPEID_PLAYER ? "Player" : "Creature"), GetGUIDLow(), (victim->GetTypeId() == TYPEID_PLAYER ? "player" : "creature"), victim->GetGUIDLow());
+    else
+        sLog->outDetail("%s %u stopped attacking", (GetTypeId() == TYPEID_PLAYER ? "Player" : "Creature"), GetGUIDLow());
 }
 
 bool Unit::isSpellBlocked(Unit* victim, SpellInfo const* spellProto, WeaponAttackType attackType)
@@ -15939,7 +15940,8 @@ void Unit::SetControlled(bool apply, UnitState state)
                 if (!HasUnitState(UNIT_STAT_STUNNED))
                 {
                     ClearUnitState(UNIT_STAT_MELEE_ATTACKING);
-                    SendMeleeAttackStop(m_attacking);
+                    SendMeleeAttackStop();
+                    // SendAutoRepeatCancel ?
                     SetConfused(true);
                     CastStop();
                 }
@@ -15948,7 +15950,8 @@ void Unit::SetControlled(bool apply, UnitState state)
                 if (!HasUnitState(UNIT_STAT_STUNNED | UNIT_STAT_CONFUSED))
                 {
                     ClearUnitState(UNIT_STAT_MELEE_ATTACKING);
-                    SendMeleeAttackStop(m_attacking);
+                    SendMeleeAttackStop();
+                    // SendAutoRepeatCancel ?
                     SetFeared(true);
                     CastStop();
                 }
