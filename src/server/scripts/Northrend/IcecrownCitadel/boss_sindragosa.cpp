@@ -242,6 +242,9 @@ class boss_sindragosa : public CreatureScript
             {
                 if (action == ACTION_START_FROSTWYRM)
                 {
+                    if (TempSummon* summon = me->ToTempSummon())
+                        summon->SetTempSummonType(TEMPSUMMON_DEAD_DESPAWN);
+
                     instance->SetData(DATA_SINDRAGOSA_FROSTWYRMS, 255);
                     if (me->isDead())
                         return;
@@ -971,7 +974,7 @@ class spell_sindragosa_s_fury : public SpellScriptLoader
                 if (!GetHitUnit()->isAlive() || !_targetCount)
                     return;
 
-                float resistance = float(GetHitUnit()->GetResistance(GetFirstSchoolInMask(SpellSchoolMask(GetSpellInfo()->SchoolMask))));
+                float resistance = float(GetHitUnit()->GetResistance(SpellSchoolMask(GetSpellInfo()->SchoolMask)));
                 uint32 minResistFactor = uint32((resistance / (resistance + 510.0f))* 10.0f) * 2;
                 uint32 randomResist = urand(0, (9 - minResistFactor) * 100)/100 + minResistFactor;
 

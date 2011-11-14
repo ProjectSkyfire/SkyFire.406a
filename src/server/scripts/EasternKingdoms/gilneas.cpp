@@ -145,7 +145,7 @@ public:
 ######*/
 
 uint32 guid_panicked_nextsay = 0; //GUID of the Panicked Citizen that will say random text, this is to prevent more than 1 npc speaking
-uint32 tSay_panicked = DELAY_SAY_PANICKED_CITIZEN; //Time left to say
+uint32 tSay_panicked = 30000; //Time left to say
 class npc_panicked_citizen : public CreatureScript
 {
 public:

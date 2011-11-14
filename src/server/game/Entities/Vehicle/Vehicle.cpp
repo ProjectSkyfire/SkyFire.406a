@@ -173,13 +173,12 @@ void Vehicle::ApplyAllImmunities()
     // Different immunities for vehicles goes below
     switch (GetVehicleInfo()->m_ID)
     {
-        case 160: //Isle of conquest turret
-        case 244: //Wintergrasp turret
+        // code below prevents a bug with movable cannons
+        case 160: // Strand of the Ancients
+        case 244: // Wintergrasp
+        case 510: // Isle of Conquest
             _me->SetControlled(true, UNIT_STAT_ROOT);
-            //me->AddUnitMovementFlag(MOVEMENTFLAG_ROOT);
-            //me->SetSpeed(MOVE_TURN_RATE, 0.7f);
-            //me->SetSpeed(MOVE_PITCH_RATE, 0.7f);
-            //me->m_movementInfo.flags2=59;
+            // why we need to apply this? we can simple add immunities to slow mechanic in DB
             _me->ApplySpellImmune(0, IMMUNITY_STATE, SPELL_AURA_MOD_DECREASE_SPEED, true);
             break;
         default:
