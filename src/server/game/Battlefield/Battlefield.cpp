@@ -36,35 +36,33 @@
 
 Battlefield::Battlefield()
 {
-    m_Timer = 0;
-    m_enable = true;
-    m_BattlefieldActive = false;
-    m_DefenderTeam = TEAM_NEUTRAL;
+    m_Timer                    = 0;
+    m_enable                   = true;
+    m_BattlefieldActive        = false;
+    m_DefenderTeam             = TEAM_NEUTRAL;
 
-    m_TypeId = 0;
-    m_BattleId = 0;
-    m_ZoneId = 0;
-    m_MapId = 0;
-    m_MaxPlayer = 0;
-    m_MinPlayer = 0;
-    m_BattleTime = 0;
-    m_NoWarBattleTime = 0;
-    m_TimeForAcceptInvite = 20;
-    m_uiKickDontAcceptTimer = 1000;
+    m_TypeId                   = 0;
+    m_BattleId                 = 0;
+    m_ZoneId                   = 0;
+    m_MapId                    = 0;
+    m_MaxPlayer                = 0;
+    m_MinPlayer                = 0;
+    m_BattleTime               = 0;
+    m_NoWarBattleTime          = 0;
+    m_TimeForAcceptInvite      = 20;
+    m_uiKickDontAcceptTimer    = 1000;
 
-    m_uiKickAfkTimer = 1000;
+    m_uiKickAfkTimer           = 1000;
 
-    m_LastResurectTimer = 30 * IN_MILLISECONDS;
-    m_StartGroupingTimer = 0;
-    m_StartGrouping = false;
-    StalkerGuid = 0;
+    m_LastResurectTimer        = 30 * IN_MILLISECONDS;
+    m_StartGroupingTimer       = 0;
+    m_StartGrouping            = false;
+    StalkerGuid                = 0;
 }
 
-Battlefield::~Battlefield()
-{
-}
+Battlefield::~Battlefield() {}
 
-void Battlefield::HandlePlayerEnterZone(Player *player, uint32 /*zone */ )
+void Battlefield::HandlePlayerEnterZone(Player* player, uint32 /*zone */ )
 {
     //If battle is start,
     //  if it not fully > invite player to join the war
@@ -95,7 +93,7 @@ void Battlefield::HandlePlayerEnterZone(Player *player, uint32 /*zone */ )
 }
 
 //Called when a player leave the zone
-void Battlefield::HandlePlayerLeaveZone(Player *player, uint32 /*zone */ )
+void Battlefield::HandlePlayerLeaveZone(Player* player, uint32 /*zone */ )
 {
     if (IsWarTime())
     {

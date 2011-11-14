@@ -27,7 +27,7 @@
 #include "QueryResult.h"
 #include "SharedDefines.h"
 #include "Player.h"
-#include "../../Battlefield/BattlefieldMgr.h"  //FIXME
+#include "BattlefieldMgr.h"
 
 class Creature;
 class GroupReference;
