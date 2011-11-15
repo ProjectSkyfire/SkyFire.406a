@@ -5023,6 +5023,80 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
                         }
                         break;
                 }
+                case 61551: // Toy Train Set
+                {
+                    if (target->GetTypeId() != TYPEID_PLAYER)
+                        return;
+                    // Server send SMSG_PLAY_OBJECT_SOUND with train sound for each race 0o
+                    switch(target->getRace())
+                    {
+                    case RACE_BLOODELF:
+                        if(target->getGender()==GENDER_MALE)
+                            target->PlayDistanceSound(9672);
+                        else
+                            target->PlayDistanceSound(9644);
+                        break;
+                    case RACE_DRAENEI:
+                        if(target->getGender()==GENDER_MALE)
+                            target->PlayDistanceSound(9722);
+                        else
+                            target->PlayDistanceSound(9697);
+                        break;
+                    case RACE_DWARF:
+                        if(target->getGender()==GENDER_MALE)
+                            target->PlayDistanceSound(7636);
+                        else
+                            target->PlayDistanceSound(7637);
+                        break;
+                    case RACE_HUMAN:
+                        if(target->getGender()==GENDER_MALE)
+                            target->PlayDistanceSound(7634);
+                        else
+                            target->PlayDistanceSound(7635);
+                        break;
+                    case RACE_ORC:
+                        if(target->getGender()==GENDER_MALE)
+                            target->PlayDistanceSound(7638);
+                        else
+                            target->PlayDistanceSound(7639);
+                        break;
+                    case RACE_GNOME:
+                        if(target->getGender()==GENDER_MALE)
+                            target->PlayDistanceSound(7640);
+                        else
+                            target->PlayDistanceSound(7641);
+                        break;
+                    case RACE_NIGHTELF:
+                        if(target->getGender()==GENDER_MALE)
+                            target->PlayDistanceSound(7642);
+                        else
+                            target->PlayDistanceSound(7643);
+                        break;
+                    case RACE_UNDEAD_PLAYER:
+                        if(target->getGender()==GENDER_MALE)
+                            target->PlayDistanceSound(7644);
+                        else
+                            target->PlayDistanceSound(7645);
+                        break;
+                    case RACE_TAUREN:
+                        if(target->getGender()==GENDER_MALE)
+                            target->PlayDistanceSound(7646);
+                        else
+                            target->PlayDistanceSound(7647);
+                        break;
+                    case RACE_TROLL:
+                        if(target->getGender()==GENDER_MALE)
+                            target->PlayDistanceSound(7648);
+                        else
+                            target->PlayDistanceSound(7649);
+                        break;
+                    default:
+                        break;
+                    }
+
+                    target->HandleEmoteCommand(EMOTE_ONESHOT_TRAIN);
+                    return;
+                }				
                 case 71563:
                 {
                     if (Aura* newAura = target->AddAura(71564, target))

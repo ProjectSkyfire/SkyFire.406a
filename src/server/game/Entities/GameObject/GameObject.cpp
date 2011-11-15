@@ -403,6 +403,8 @@ void GameObject::Update(uint32 diff)
                     //FIXME: this is activation radius (in different casting radius that must be selected from spell data)
                     //TODO: move activated state code (cast itself) to GO_ACTIVATED, in this place only check activating and set state
                     float radius = (float)(goInfo->trap.radius)/2; // TODO rename radius to diameter (goInfo->trap.radius) should be (goInfo->trap.diameter)
+                    if (goInfo->entry == 193963)               // Toy Train Set
+                        radius = 5.0f;					
                     if (!radius)
                     {
                         if (goInfo->trap.cooldown != 3)            // cast in other case (at some triggering/linked go/etc explicit call)
@@ -422,7 +424,7 @@ void GameObject::Update(uint32 diff)
 
                     // Note: this hack with search required until GO casting not implemented
                     // search unfriendly creature
-                    if (owner)                    // hunter trap
+                    if (owner && goInfo->entry != 193963)               // hunter trap
                     {
                         Trinity::AnyUnfriendlyNoTotemUnitInObjectRangeCheck checker(this, owner, radius);
                         Trinity::UnitSearcher<Trinity::AnyUnfriendlyNoTotemUnitInObjectRangeCheck> searcher(this, ok, checker);
