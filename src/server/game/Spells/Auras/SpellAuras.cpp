@@ -1733,6 +1733,33 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                     break;
             }
             break;
+
+            if (GetSpellSpecific(GetSpellInfo()) == SPELL_SPECIFIC_AURA)
+            {
+                if (GetCasterGUID() == target->GetGUID())
+                {
+                    if (apply)
+                    {
+                        // Retribution Aura Overflow
+                        if (!(GetSpellInfo()->SpellFamilyFlags[0] & 0x00000008))
+                            target->CastSpell(target, 63531, true);
+                        // Improved Devotion Aura
+                        target->CastSpell(target, 63514, true);
+                        // Improved Concentration Aura
+                        target->CastSpell(target, 63510, true);
+                    }
+                    else
+                    {
+                        if (!(GetSpellInfo()->SpellFamilyFlags[0] & 0x00000008))
+                            target->RemoveAurasDueToSpell(63531);
+                        // Improved Devotion Aura
+                        target->RemoveAurasDueToSpell(63514);
+                        // Improved Concentration Aura
+                        target->RemoveAurasDueToSpell(63510);
+                    }
+                }
+            }
+            break;
         case SPELLFAMILY_DEATHKNIGHT:
             if (GetSpellInfo()->GetSpellSpecific() == SPELL_SPECIFIC_PRESENCE)
             {
@@ -2359,6 +2386,11 @@ void Aura::CallScriptEffectAfterManaShieldHandlers(AuraEffect* aurEff, AuraAppli
         }
         (*scritr)->_FinishScriptCall();
     }
+}
+
+SpellSpecificType Aura::GetSpellSpecific( bool param1 )
+{
+    throw std::exception("The method or operation is not implemented.");
 }
 
 UnitAura::UnitAura(SpellInfo const* spellproto, uint8 effMask, WorldObject* owner, Unit* caster, int32 *baseAmount, Item* castItem, uint64 casterGUID)
