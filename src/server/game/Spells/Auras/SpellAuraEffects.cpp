@@ -5027,7 +5027,7 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
                 {
                     if (target->GetTypeId() != TYPEID_PLAYER)
                         return;
-                    // Server send SMSG_PLAY_OBJECT_SOUND with train sound for each race 0o
+                    // Server send SMSG_PLAY_OBJECT_SOUND with train sound for each race
                     switch(target->getRace())
                     {
                     case RACE_BLOODELF:
