@@ -444,6 +444,9 @@ DumpReturn PlayerDumpReader::LoadDump(const std::string& file, uint32 account, s
     typedef PetIds::value_type PetIdsPair;
     PetIds petids;
 
+    uint8 gender;
+    uint8 race;
+    uint8 playerClass;
     SQLTransaction trans = CharacterDatabase.BeginTransaction();
     while (!feof(fin))
     {
@@ -513,6 +516,9 @@ DumpReturn PlayerDumpReader::LoadDump(const std::string& file, uint32 account, s
                 if (!changenth(line, 2, chraccount))        // characters.account update
                     ROLLBACK(DUMP_FILE_BROKEN);
 
+                race = uint8(atol(getnth(line, 4).c_str()));
+                playerClass = uint8(atol(getnth(line, 5).c_str()));
+                gender = uint8(atol(getnth(line, 6).c_str()));
                 if (name == "")
                 {
                     // check if the original name already exists
@@ -521,10 +527,8 @@ DumpReturn PlayerDumpReader::LoadDump(const std::string& file, uint32 account, s
 
                     result = CharacterDatabase.PQuery("SELECT 1 FROM characters WHERE name = '%s'", name.c_str());
                     if (result)
-                    {
                         if (!changenth(line, 37, "1"))       // characters.at_login set to "rename on login"
                             ROLLBACK(DUMP_FILE_BROKEN);
-                    }
                 }
                 else if (!changenth(line, 3, name.c_str())) // characters.name
                     ROLLBACK(DUMP_FILE_BROKEN);
@@ -654,6 +658,9 @@ DumpReturn PlayerDumpReader::LoadDump(const std::string& file, uint32 account, s
     }
 
     CharacterDatabase.CommitTransaction(trans);
+
+    // in case of name conflict player has to rename at login anyway
+    sWorld->AddCharacterNameData(guid, name, gender, race, playerClass);
 
     sObjectMgr->m_hiItemGuid += items.size();
     sObjectMgr->m_mailid     += mails.size();
