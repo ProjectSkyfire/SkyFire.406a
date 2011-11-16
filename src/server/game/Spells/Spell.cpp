@@ -4602,6 +4602,13 @@ void Spell::HandleEffects(Unit* pUnitTarget, Item* pItemTarget, GameObject* pGOT
 
 SpellCastResult Spell::CheckCast(bool strict)
 {
+    // check Blink #(1953) and Mage Invisibility (#66) on battleground
+    // or arena when status STATUS_WAIT_JOIN
+    if (m_caster->GetTypeId() == TYPEID_PLAYER)
+        if (Battleground* bg = m_caster->ToPlayer()->GetBattleground())
+            if (bg->GetStatus() == STATUS_WAIT_JOIN && (m_spellInfo->Id == 66 || m_spellInfo->Id == 1953))
+                return SPELL_FAILED_CANT_DO_THAT_RIGHT_NOW;
+
     // check death state
     if (!m_caster->isAlive() && !(m_spellInfo->Attributes & SPELL_ATTR0_PASSIVE) && !((m_spellInfo->Attributes & SPELL_ATTR0_CASTABLE_WHILE_DEAD) || (IsTriggered() && !m_triggeredByAuraSpell)))
         return SPELL_FAILED_CASTER_DEAD;
