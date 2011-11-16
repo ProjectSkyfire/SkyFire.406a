@@ -1734,7 +1734,7 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
             }
             break;
 
-            if (GetSpellSpecific(GetSpellInfo()) == SPELL_SPECIFIC_AURA)
+            if (GetSpellInfo()->GetSpellSpecific() ==  SPELL_SPECIFIC_AURA)
             {
                 if (GetCasterGUID() == target->GetGUID())
                 {
@@ -2386,11 +2386,6 @@ void Aura::CallScriptEffectAfterManaShieldHandlers(AuraEffect* aurEff, AuraAppli
         }
         (*scritr)->_FinishScriptCall();
     }
-}
-
-SpellSpecificType Aura::GetSpellSpecific( bool param1 )
-{
-    throw std::exception("The method or operation is not implemented.");
 }
 
 UnitAura::UnitAura(SpellInfo const* spellproto, uint8 effMask, WorldObject* owner, Unit* caster, int32 *baseAmount, Item* castItem, uint64 casterGUID)

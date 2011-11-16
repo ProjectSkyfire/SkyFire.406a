@@ -215,7 +215,6 @@ class Aura
         std::list<AuraScript*> m_loadedScripts;
     private:
         void _DeleteRemovedApplications();
-        SpellSpecificType GetSpellSpecific( bool param1 );
     protected:
         SpellInfo const* const m_spellInfo;
         uint64 const m_casterGuid;
