@@ -377,7 +377,11 @@ void AddSC_boss_skeram();
 void AddSC_boss_twinemperors();
 void AddSC_mob_anubisath_sentinel();
 void AddSC_instance_temple_of_ahnqiraj();
-//void AddSC_instance_the_vortex_pinnacle();   //The Vortex Pinnacle
+void AddSC_boss_altairus();                  //Vortex Pinnacle
+void AddSC_boss_asaad();
+void AddSC_boss_grand_vizier_ertan();
+void AddSC_vortex_pinnacle();
+void AddSC_instance_vortex_pinnacle();
 void AddSC_wailing_caverns();                //Wailing caverns
 void AddSC_instance_wailing_caverns();
 void AddSC_zulfarrak();                     //Zul'Farrak generic
@@ -1055,7 +1059,11 @@ void AddKalimdorScripts()
     AddSC_boss_twinemperors();
     AddSC_mob_anubisath_sentinel();
     AddSC_instance_temple_of_ahnqiraj();
-    //AddSC_instance_the_vortex_pinnacle();   //The Vortex Pinnacle
+    AddSC_boss_altairus();                  //Vortex Pinnacle
+    AddSC_boss_asaad();
+    AddSC_boss_grand_vizier_ertan(); 
+    AddSC_vortex_pinnacle();
+    AddSC_instance_vortex_pinnacle();
     AddSC_wailing_caverns();                //Wailing caverns
     AddSC_instance_wailing_caverns();
     AddSC_zulfarrak();                      //Zul'Farrak generic
