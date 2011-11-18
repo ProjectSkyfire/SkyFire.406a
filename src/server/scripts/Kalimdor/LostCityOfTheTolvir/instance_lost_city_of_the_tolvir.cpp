@@ -42,32 +42,32 @@ public:
     {
         instance_lost_city_of_the_tolvir_InstanceMapScript(InstanceMap* map) : InstanceScript(map) {}
 
-        uint32 uiEncounter[ENCOUNTERS];
+        uint32 Encounter[ENCOUNTERS];
 
-        uint64 uiGeneralHusam;
-        uint64 uiHighProphetBarim;
-        uint64 uiLockmaw;
-        uint64 uiAugh;
-        uint64 uiSiamat;
-        uint64 uiTeamInInstance;
+        uint64 GeneralHusam;
+        uint64 HighProphetBarim;
+        uint64 Lockmaw;
+        uint64 Augh;
+        uint64 Siamat;
+        uint64 TeamInInstance;
 
         void Initialize()
         {
-            uiGeneralHusam = 0;
-            uiHighProphetBarim = 0;
-            uiLockmaw = 0;
-            uiAugh = 0;
-            uiSiamat = 0;
+            GeneralHusam           = 0;
+            HighProphetBarim       = 0;
+            Lockmaw                = 0;
+            Augh                   = 0;
+            Siamat                 = 0;
 
             for (uint8 i=0 ; i<ENCOUNTERS; ++i)
-                uiEncounter[i] = NOT_STARTED;
+                Encounter[i] = NOT_STARTED;
         }
 
         bool IsEncounterInProgress() const
         {
             for (uint8 i=0; i<ENCOUNTERS; ++i)
             {
-                if (uiEncounter[i] == IN_PROGRESS)
+                if (Encounter[i] == IN_PROGRESS)
                     return true;
             }
             return false;
@@ -78,19 +78,19 @@ public:
             switch (creature->GetEntry())
             {
                  case BOSS_GENERAL_HUSAM:
-                     uiGeneralHusam = creature->GetGUID();
+                     GeneralHusam = creature->GetGUID();
                      break;
                  case BOSS_HIGH_PROPHET_BARIM:
-                     uiHighProphetBarim = creature->GetGUID();
+                     HighProphetBarim = creature->GetGUID();
                      break;
                  case BOSS_LOCKMAW:
-                     uiLockmaw = creature->GetGUID();
+                     Lockmaw = creature->GetGUID();
                      break;
                  case BOSS_AUGH:
-                     uiAugh = creature->GetGUID();
+                     Augh = creature->GetGUID();
                      break;
                  case BOSS_SIAMAT:
-                     uiSiamat = creature->GetGUID();
+                     Siamat = creature->GetGUID();
                      break;
             }
         }
@@ -100,15 +100,15 @@ public:
             switch (identifier)
             {
                 case DATA_GENERAL_HUSAM:
-                    return uiGeneralHusam;
+                    return GeneralHusam;
                 case DATA_HIGH_PROPHET_BARIM:
-                    return uiHighProphetBarim;
+                    return HighProphetBarim;
                 case DATA_LOCKMAW:
-                    return uiLockmaw;
+                    return Lockmaw;
                 case DATA_AUGH:
-                    return uiAugh;
+                    return Augh;
                 case DATA_SIAMAT:
-                    return uiSiamat;
+                    return Siamat;
             }
             return 0;
         }
@@ -118,19 +118,19 @@ public:
             switch (type)
             {
                 case DATA_GENERAL_HUSAM_EVENT:
-                    uiEncounter[0] = data;
+                    Encounter[0] = data;
                     break;
                 case DATA_HIGH_PROPHET_BARIM_EVENT:
-                    uiEncounter[1] = data;
+                    Encounter[1] = data;
                     break;
                 case DATA_LOCKMAW_EVENT:
-                    uiEncounter[2] = data;
+                    Encounter[2] = data;
                     break;
                 case DATA_AUGH_EVENT:
-                    uiEncounter[3] = data;
+                    Encounter[3] = data;
                     break;
                 case DATA_SIAMAT_EVENT:
-                    uiEncounter[4] = data;
+                    Encounter[4] = data;
                     break;
             }
 
@@ -143,15 +143,15 @@ public:
             switch (type)
             {
                 case DATA_GENERAL_HUSAM_EVENT:
-                    return uiEncounter[0];
+                    return Encounter[0];
                 case DATA_HIGH_PROPHET_BARIM_EVENT:
-                    return uiEncounter[1];
+                    return Encounter[1];
                 case DATA_LOCKMAW_EVENT:
-                    return uiEncounter[2];
+                    return Encounter[2];
                 case DATA_AUGH_EVENT:
-                    return uiEncounter[3];
+                    return Encounter[3];
                 case DATA_SIAMAT_EVENT:
-                    return uiEncounter[4];
+                    return Encounter[4];
             }
             return 0;
         }
@@ -162,7 +162,7 @@ public:
 
             std::string str_data;
             std::ostringstream saveStream;
-            saveStream << "L V" << uiEncounter[0] << " " << uiEncounter[1]  << " " << uiEncounter[2]  << " " << uiEncounter[3] << " " << uiEncounter[4];
+            saveStream << "L V" << Encounter[0] << " " << Encounter[1]  << " " << Encounter[2]  << " " << Encounter[3] << " " << Encounter[4];
             str_data = saveStream.str();
 
             OUT_SAVE_INST_DATA_COMPLETE;
@@ -187,15 +187,15 @@ public:
 
             if (dataHead1 == 'L' && dataHead2 == 'V')
             {
-                uiEncounter[0] = data0;
-                uiEncounter[1] = data1;
-                uiEncounter[2] = data2;
-                uiEncounter[3] = data3;
-                uiEncounter[4] = data4;
+                Encounter[0] = data0;
+                Encounter[1] = data1;
+                Encounter[2] = data2;
+                Encounter[3] = data3;
+                Encounter[4] = data4;
 
                 for (uint8 i=0; i<ENCOUNTERS; ++i)
-                    if (uiEncounter[i] == IN_PROGRESS)
-                        uiEncounter[i] = NOT_STARTED;
+                    if (Encounter[i] == IN_PROGRESS)
+                        Encounter[i] = NOT_STARTED;
             }
             else OUT_LOAD_INST_DATA_FAIL;
 

@@ -346,10 +346,10 @@ void AddSC_boss_ammunae();
 void AddSC_boss_setesh();
 void AddSC_boss_rajh();
 void AddSC_boss_isiset();
-//void AddSC_lost_city_of_the_tolvir();        //Lost City of the Tol'vir
-//void AddSC_instance_lost_city_of_the_tolvir();
-//void AddSC_boss_lockmaw();
-//void AddSC_boss_high_prophet_barim();
+void AddSC_lost_city_of_the_tolvir();        //Lost City of the Tol'vir
+void AddSC_instance_lost_city_of_the_tolvir();
+void AddSC_boss_lockmaw();
+void AddSC_boss_high_prophet_barim();
 void AddSC_boss_celebras_the_cursed();       //Maraudon
 void AddSC_boss_landslide();
 void AddSC_boss_noxxion();
@@ -852,7 +852,7 @@ void AddEasternKingdomsScripts()
     AddSC_boss_vexallus();
     AddSC_boss_priestess_delrissa();
     AddSC_instance_magisters_terrace();
-    AddSC_magisters_terrace();
+    AddSC_magisters_terrace();	
     AddSC_boss_lucifron();                  //Molten core
     AddSC_boss_magmadar();
     AddSC_boss_gehennas();
@@ -1028,10 +1028,10 @@ void AddKalimdorScripts()
     AddSC_boss_setesh();
     AddSC_boss_rajh();
     AddSC_boss_isiset();
-    //AddSC_lost_city_of_the_tolvir();           //Lost City of the Tol'vir
-    //AddSC_instance_lost_city_of_the_tolvir();
-    //AddSC_boss_lockmaw();
-    //AddSC_boss_high_prophet_barim();
+    AddSC_lost_city_of_the_tolvir();           //Lost City of the Tol'vir
+    AddSC_instance_lost_city_of_the_tolvir();
+    AddSC_boss_lockmaw();
+    AddSC_boss_high_prophet_barim();
     AddSC_boss_celebras_the_cursed();       //Maraudon
     AddSC_boss_landslide();
     AddSC_boss_noxxion();

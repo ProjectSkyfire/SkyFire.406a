@@ -21,138 +21,138 @@
 enum Spells
 {
     // Blaze of Heavens
-    SPELL_BLAZE                 = 48906, 
+    SPELL_BLAZE                 = 48906,
 
     // Harbinger of Death
-    SPELL_SOUL_SEVER            = 82255, 
-    SPELL_WAIL_DARKNESS         = 82533, 
-    H_SPELL_WAIL_DARKNESS       = 90038, 
+    SPELL_SOUL_SEVER            = 82255,
+    SPELL_WAIL_DARKNESS         = 82533,
+    H_SPELL_WAIL_DARKNESS       = 90038,
 
     // Minion of Siamat
-    SPELL_CHAIN_LIGHTNING       = 44704, 
-    H_SPELL_CHAIN_LIGHTNING     = 90027, 
+    SPELL_CHAIN_LIGHTNING       = 44704,
+    H_SPELL_CHAIN_LIGHTNING     = 90027,
 
     // Neferset Darkcaster
-    SPELL_HEX                   = 82760, 
-    SPELL_METEOR                = 84032, 
-    H_SPELL_METEOR              = 90023, 
-    SPELL_SHADOW_BOLT           = 82765, 
-    H_SPELL_SHADOW_BOLT         = 90036, 
+    SPELL_HEX                   = 82760,
+    SPELL_METEOR                = 84032,
+    H_SPELL_METEOR              = 90023,
+    SPELL_SHADOW_BOLT           = 82765,
+    H_SPELL_SHADOW_BOLT         = 90036,
 
     // Neferset Plaguebringer
-    SPELL_DISEASE_BREATH        = 73976, 
-    H_SPELL_DISEASE_BREATH      = 90005, 
-    SPELL_INFECTIOUS_PLAGUE     = 82768, 
+    SPELL_DISEASE_BREATH        = 73976,
+    H_SPELL_DISEASE_BREATH      = 90005,
+    SPELL_INFECTIOUS_PLAGUE     = 82768,
 
     // Neferset Theurgist
-    SPELL_MIXTURE = 82759, 
-    SPELL_RITUAL_BLOODLETTING   = 82753, 
-    H_SPELL_RITUAL_BLOODLETTING = 89993, 
-    SPELL_VICIOUS_LEECHES       = 82757, 
+    SPELL_MIXTURE = 82759,
+    SPELL_RITUAL_BLOODLETTING   = 82753,
+    H_SPELL_RITUAL_BLOODLETTING = 89993,
+    SPELL_VICIOUS_LEECHES       = 82757,
 
     // Neferset Torturer
-    SPELL_BRANDED_TONGUE        = 82744, 
-    H_SPELL_BRANDED_TONGUE      = 90037, 
-    SPELL_SERUM_TORMENT         = 82750, 
-    H_SPELL_SERUM_TORMENT       = 89994, 
+    SPELL_BRANDED_TONGUE        = 82744,
+    H_SPELL_BRANDED_TONGUE      = 90037,
+    SPELL_SERUM_TORMENT         = 82750,
+    H_SPELL_SERUM_TORMENT       = 89994,
 
     // Oathsworn Axemaster
-    SPELL_SKULL_CRUSH           = 44922, 
-    SPELL_SLAM                  = 82763, 
+    SPELL_SKULL_CRUSH           = 44922,
+    SPELL_SLAM                  = 82763,
 
     // Oathsworn Captain
-    SPELL_SKULL_CRACK           = 82670, 
+    SPELL_SKULL_CRACK           = 82670,
 
     // Oathsworn Myrmidon
-    SPELL_BLADED_SHIELD         = 82671, 
-    H_SPELL_BLADED_SHIELD       = 95184, 
-    SPELL_RESISTANCE            = 82673, 
+    SPELL_BLADED_SHIELD         = 82671,
+    H_SPELL_BLADED_SHIELD       = 95184,
+    SPELL_RESISTANCE            = 82673,
 
     // Oathsworn Pathfinder
-    SPELL_CALL_FALCON           = 82792, 
-    SPELL_SHOOT                 = 83877, 
-    SPELL_WING_CLIP             = 82764, 
+    SPELL_CALL_FALCON           = 82792,
+    SPELL_SHOOT                 = 83877,
+    SPELL_WING_CLIP             = 82764,
 
     // Oathsworn Scorpid Keeper
-    SPELL_BLINK                 = 84123, 
-    SPELL_CALL_SCORPID          = 84126, 
-    SPELL_EVASION               = 84122, 
+    SPELL_BLINK                 = 84123,
+    SPELL_CALL_SCORPID          = 84126,
+    SPELL_EVASION               = 84122,
 
     // Oathsworn Skinner
-    SPELL_FAN_KNIVES            = 82789, 
-    H_SPELL_FAN_KNIVES          = 90034, 
-    SPELL_SPINAL_PIERCE         = 84031, 
+    SPELL_FAN_KNIVES            = 82789,
+    H_SPELL_FAN_KNIVES          = 90034,
+    SPELL_SPINAL_PIERCE         = 84031,
 
     // Oathsworn Tamer
-    SPELL_FERAL_LINK            = 84230, 
+    SPELL_FERAL_LINK            = 84230,
 
     // Wanderer
-    SPELL_CALL_CROCO            = 82791, 
-    SPELL_FORKED_SHOT           = 82794, 
-    H_SPELL_FORKED_SHOT         = 89992, 
+    SPELL_CALL_CROCO            = 82791,
+    SPELL_FORKED_SHOT           = 82794,
+    H_SPELL_FORKED_SHOT         = 89992,
 
     // Pygmy Brute
-    SPELL_IMPALE                = 83783, 
-    H_SPELL_IMPALE              = 89990, 
-    SPELL_SHOCKWAVE             = 83785, 
-    H_SPELL_SHOCKWAVE           = 90024, 
+    SPELL_IMPALE                = 83783,
+    H_SPELL_IMPALE              = 89990,
+    SPELL_SHOCKWAVE             = 83785,
+    H_SPELL_SHOCKWAVE           = 90024,
 
     // Pygmy Fire Breather
-    SPELL_DRAGON_BREATH         = 83776, 
-    H_SPELL_DRAGON_BREATH       = 90026, 
-    SPELL_FIRE_BLAST            = 83778, 
-    H_SPELL_FIREBLAST           = 90025, 
+    SPELL_DRAGON_BREATH         = 83776,
+    H_SPELL_DRAGON_BREATH       = 90026,
+    SPELL_FIRE_BLAST            = 83778,
+    H_SPELL_FIREBLAST           = 90025,
 
     // Pygmy Scout
-    SPELL_TOXIC_DART            = 83780, 
-    H_SPELL_TOXIC_DART          = 89991, 
+    SPELL_TOXIC_DART            = 83780,
+    H_SPELL_TOXIC_DART          = 89991,
 
     // Servent of Siamat
-    SPELL_LIGHTNING_NOVA        = 84544, 
-    H_SPELL_LIGHTNING_NOVA      = 90015, 
-    SPELL_THUNDER_CRASH         = 84521, 
+    SPELL_LIGHTNING_NOVA        = 84544,
+    H_SPELL_LIGHTNING_NOVA      = 90015,
+    SPELL_THUNDER_CRASH         = 84521,
 };
 
 enum eEvents
 {
-    EVENT_NONE, 
-    EVENT_BLAZE, 
-    EVENT_SOUL_SEVER, 
-    EVENT_WAIL_DARKNESS, 
-    EVENT_CHAIN_LIGHTNING, 
-    EVENT_HEX, 
-    EVENT_METEOR, 
-    EVENT_SHADOW_BOLT, 
-    EVENT_DISEASE_BREATH, 
-    EVENT_INFECTIOUS_PLAGUE, 
-    EVENT_MIXTURE, 
-    EVENT_RITUAL_BLOODLETTING, 
-    EVENT_VICIOUS_LEECHES, 
-    EVENT_BRANDED_TONGUE, 
-    EVENT_SERUM_TORMENT, 
-    EVENT_SKULL_CRUSH, 
-    EVENT_SLAM, 
-    EVENT_SKULL_CRACK, 
-    EVENT_BLADED_SHIELD, 
-    EVENT_RESISTANCE, 
-    EVENT_CALL_FALCON, 
-    EVENT_SHOOT, 
-    EVENT_WING_CLIP, 
-    EVENT_BLINK, 
-    EVENT_CALL_SCORPID, 
-    EVENT_EVASION, 
-    EVENT_FAN_KNIVES, 
-    EVENT_SPINAL_PIERCE, 
-    EVENT_FERAL_LINK, 
-    EVENT_CALL_CROCO, 
-    EVENT_FORKED_SHOT, 
-    EVENT_IMPALE, 
-    EVENT_SHOCKWAVE, 
-    EVENT_DRAGON_BREATH, 
-    EVENT_FIRE_BLAST, 
-    EVENT_TOXIC_DART, 
-    EVENT_LIGHTNING_NOVA, 
-    EVENT_THUNDER_CRASH, 
+    EVENT_NONE,
+    EVENT_BLAZE,
+    EVENT_SOUL_SEVER,
+    EVENT_WAIL_DARKNESS,
+    EVENT_CHAIN_LIGHTNING,
+    EVENT_HEX,
+    EVENT_METEOR,
+    EVENT_SHADOW_BOLT,
+    EVENT_DISEASE_BREATH,
+    EVENT_INFECTIOUS_PLAGUE,
+    EVENT_MIXTURE,
+    EVENT_RITUAL_BLOODLETTING,
+    EVENT_VICIOUS_LEECHES,
+    EVENT_BRANDED_TONGUE,
+    EVENT_SERUM_TORMENT,
+    EVENT_SKULL_CRUSH,
+    EVENT_SLAM,
+    EVENT_SKULL_CRACK,
+    EVENT_BLADED_SHIELD,
+    EVENT_RESISTANCE,
+    EVENT_CALL_FALCON,
+    EVENT_SHOOT,
+    EVENT_WING_CLIP,
+    EVENT_BLINK,
+    EVENT_CALL_SCORPID,
+    EVENT_EVASION,
+    EVENT_FAN_KNIVES,
+    EVENT_SPINAL_PIERCE,
+    EVENT_FERAL_LINK,
+    EVENT_CALL_CROCO,
+    EVENT_FORKED_SHOT,
+    EVENT_IMPALE,
+    EVENT_SHOCKWAVE,
+    EVENT_DRAGON_BREATH,
+    EVENT_FIRE_BLAST,
+    EVENT_TOXIC_DART,
+    EVENT_LIGHTNING_NOVA,
+    EVENT_THUNDER_CRASH,
 };
 
 class npc_neferset_darkcaster : public CreatureScript
@@ -167,9 +167,7 @@ public:
 
     struct npc_neferset_darkcasterAI : public ScriptedAI
     {
-        npc_neferset_darkcasterAI(Creature* c) : ScriptedAI(c)
-        {
-        }
+        npc_neferset_darkcasterAI(Creature* creature) : ScriptedAI(creature) {}
 
         EventMap events;
 
@@ -200,17 +198,17 @@ public:
                 switch (eventId)
                 {
                     case EVENT_HEX:
-                        if (Unit *target = SelectUnit(SELECT_TARGET_RANDOM, 0))
+                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                             DoCast(target, SPELL_HEX);
                         events.RescheduleEvent(EVENT_HEX, 5000);
                         return;
                     case EVENT_METEOR:
-                        if (Unit *target = SelectUnit(SELECT_TARGET_RANDOM, 0))
+                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                             DoCast(target, SPELL_METEOR);
                         events.RescheduleEvent(EVENT_METEOR, 5000);
                         return;
                     case EVENT_SHADOW_BOLT:
-                        if (Unit *target = SelectUnit(SELECT_TARGET_RANDOM, 0))
+                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                             DoCast(target, SPELL_SHADOW_BOLT);
                         events.RescheduleEvent(EVENT_SHADOW_BOLT, 3000);
                         return;
@@ -234,9 +232,7 @@ public:
 
     struct npc_neferset_plaguebringerAI : public ScriptedAI
     {
-        npc_neferset_plaguebringerAI(Creature* c) : ScriptedAI(c)
-        {
-        }
+        npc_neferset_plaguebringerAI(Creature* creature) : ScriptedAI(creature) {}
 
         EventMap events;
 
@@ -270,7 +266,7 @@ public:
                         events.RescheduleEvent(EVENT_DISEASE_BREATH, 5000);
                         return;
                     case EVENT_INFECTIOUS_PLAGUE:
-                        if (Unit *target = SelectUnit(SELECT_TARGET_RANDOM, 0))
+                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                             DoCast(target, SPELL_INFECTIOUS_PLAGUE);
                         events.RescheduleEvent(EVENT_INFECTIOUS_PLAGUE, 5000);
                         return;
@@ -294,9 +290,7 @@ public:
 
     struct npc_neferset_theurgistAI : public ScriptedAI
     {
-        npc_neferset_theurgistAI(Creature* c) : ScriptedAI(c)
-        {
-        }
+        npc_neferset_theurgistAI(Creature* creature) : ScriptedAI(creature) {}
 
         EventMap events;
 
@@ -327,7 +321,7 @@ public:
                 switch (eventId)
                 {
                     case EVENT_MIXTURE:
-                        if (Unit *target = SelectUnit(SELECT_TARGET_RANDOM, 0))
+                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                             DoCast(target, SPELL_MIXTURE);
                         events.RescheduleEvent(EVENT_MIXTURE, 6000);
                         return;
@@ -336,7 +330,7 @@ public:
                         events.RescheduleEvent(EVENT_RITUAL_BLOODLETTING, 2000);
                         return;
                     case EVENT_VICIOUS_LEECHES:
-                        if (Unit *target = SelectUnit(SELECT_TARGET_RANDOM, 0))
+                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                             DoCast(target, SPELL_VICIOUS_LEECHES);
                         events.RescheduleEvent(EVENT_VICIOUS_LEECHES, 5000);
                         return;
@@ -360,9 +354,7 @@ public:
 
     struct npc_neferset_torturerAI : public ScriptedAI
     {
-        npc_neferset_torturerAI(Creature* c) : ScriptedAI(c)
-        {
-        }
+        npc_neferset_torturerAI(Creature* creature) : ScriptedAI(creature) {}
 
         EventMap events;
 
@@ -392,7 +384,7 @@ public:
                 switch (eventId)
                 {
                     case EVENT_BRANDED_TONGUE:
-                        if (Unit *target = SelectUnit(SELECT_TARGET_RANDOM, 0))
+                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                             DoCast(target, SPELL_BRANDED_TONGUE);
                         events.RescheduleEvent(EVENT_BRANDED_TONGUE, 3000);
                         return;
@@ -420,9 +412,7 @@ public:
 
     struct npc_oathsworn_axemasterAI : public ScriptedAI
     {
-        npc_oathsworn_axemasterAI(Creature* c) : ScriptedAI(c)
-        {
-        }
+        npc_oathsworn_axemasterAI(Creature* creature) : ScriptedAI(creature) {}
 
         EventMap events;
 
@@ -479,9 +469,7 @@ public:
 
     struct npc_oathsworn_captainAI : public ScriptedAI
     {
-        npc_oathsworn_captainAI(Creature* c) : ScriptedAI(c)
-        {
-        }
+        npc_oathsworn_captainAI(Creature* creature) : ScriptedAI(creature) {}
 
         EventMap events;
 
@@ -533,9 +521,7 @@ public:
 
     struct npc_oathsworn_myrmidonAI : public ScriptedAI
     {
-        npc_oathsworn_myrmidonAI(Creature* c) : ScriptedAI(c)
-        {
-        }
+        npc_oathsworn_myrmidonAI(Creature* creature) : ScriptedAI(creature) {}
 
         EventMap events;
 
@@ -592,9 +578,7 @@ public:
 
     struct npc_oathsworn_pathfinderAI : public ScriptedAI
     {
-        npc_oathsworn_pathfinderAI(Creature* c) : ScriptedAI(c)
-        {
-        }
+        npc_oathsworn_pathfinderAI(Creature* creature) : ScriptedAI(creature) {}
 
         EventMap events;
 
@@ -633,7 +617,7 @@ public:
                         events.RescheduleEvent(EVENT_SHOOT, 1000);
                         return;
                     case EVENT_WING_CLIP:
-                        if (Unit *target = SelectUnit(SELECT_TARGET_RANDOM, 0))
+                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                             DoCast(target, SPELL_WING_CLIP);
                         events.RescheduleEvent(EVENT_WING_CLIP, 3000);
                         return;
@@ -657,9 +641,7 @@ public:
 
     struct npc_oathsworn_scorpid_keeperAI : public ScriptedAI
     {
-        npc_oathsworn_scorpid_keeperAI(Creature* c) : ScriptedAI(c)
-        {
-        }
+        npc_oathsworn_scorpid_keeperAI(Creature* creature) : ScriptedAI(creature) {}
 
         EventMap events;
 
@@ -716,9 +698,7 @@ public:
 
     struct npc_oathsworn_skinnerAI : public ScriptedAI
     {
-        npc_oathsworn_skinnerAI(Creature* c) : ScriptedAI(c)
-        {
-        }
+        npc_oathsworn_skinnerAI(Creature* creature) : ScriptedAI(creature) {}
 
         EventMap events;
 
@@ -775,9 +755,7 @@ public:
 
     struct npc_pygmy_bruteAI : public ScriptedAI
     {
-        npc_pygmy_bruteAI(Creature* c) : ScriptedAI(c)
-        {
-        }
+        npc_pygmy_bruteAI(Creature* creature) : ScriptedAI(creature) {}
 
         EventMap events;
 
@@ -834,9 +812,7 @@ public:
 
     struct npc_pygmy_firebreatherAI : public ScriptedAI
     {
-        npc_pygmy_firebreatherAI(Creature* c) : ScriptedAI(c)
-        {
-        }
+        npc_pygmy_firebreatherAI(Creature* creature) : ScriptedAI(creature) {}
 
         EventMap events;
 
@@ -870,7 +846,7 @@ public:
                         events.RescheduleEvent(SPELL_DRAGON_BREATH, 3000);
                         return;
                     case EVENT_FIRE_BLAST:
-                        if (Unit *target = SelectUnit(SELECT_TARGET_RANDOM, 0))
+                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                             DoCast(target, SPELL_FIRE_BLAST);
                         events.RescheduleEvent(EVENT_FIRE_BLAST, 2000);
                         return;
@@ -894,9 +870,7 @@ public:
 
     struct npc_pygmy_scoutAI : public ScriptedAI
     {
-        npc_pygmy_scoutAI(Creature* c) : ScriptedAI(c)
-        {
-        }
+        npc_pygmy_scoutAI(Creature* creature) : ScriptedAI(creature) {}
 
         EventMap events;
 
