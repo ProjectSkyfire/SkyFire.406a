@@ -84,16 +84,16 @@ public:
             me->setDeathState(DEAD);
         }
 
-        void SpellHit(Unit* pCaster, const SpellInfo* pSpell)
+        void SpellHit(Unit* caster, const SpellInfo* spell)
         {
-            if (pSpell->Id == SPELL_UNLOCK_SHACKLE)
+            if (spell->Id == SPELL_UNLOCK_SHACKLE)
             {
-                if (pCaster->ToPlayer()->GetQuestStatus(QUEST_TROLLS_IS_GONE_CRAZY) == QUEST_STATUS_INCOMPLETE)
+                if (caster->ToPlayer()->GetQuestStatus(QUEST_TROLLS_IS_GONE_CRAZY) == QUEST_STATUS_INCOMPLETE)
                 {
-                    if (Creature* pRageclaw = Unit::GetCreature(*me, RageclawGUID))
+                    if (Creature* rageclaw = Unit::GetCreature(*me, RageclawGUID))
                     {
-                        UnlockRageclaw(pCaster);
-                        pCaster->ToPlayer()->KilledMonster(pRageclaw->GetCreatureInfo(), RageclawGUID);
+                        UnlockRageclaw(caster);
+                        caster->ToPlayer()->KilledMonster(rageclaw->GetCreatureInfo(), RageclawGUID);
                         me->DisappearAndDie();
                     }
                     else
@@ -147,9 +147,9 @@ public:
 
         void MoveInLineOfSight(Unit* /*who*/){}
 
-        void SpellHit(Unit* /*pCaster*/, const SpellInfo* pSpell)
+        void SpellHit(Unit* /*caster*/, const SpellInfo* spell)
         {
-            if (pSpell->Id == SPELL_FREE_RAGECLAW)
+            if (spell->Id == SPELL_FREE_RAGECLAW)
             {
                 me->RemoveAurasDueToSpell(SPELL_LEFT_CHAIN);
 
