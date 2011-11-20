@@ -777,70 +777,6 @@ class npc_hyldsmeet_protodrake : public CreatureScript
             return new npc_hyldsmeet_protodrakeAI (creature);
         }
 };
-/*######
-## npc_harnessed_icemaw_matriarch
-######*/
-
-class npc_harnessed_icemaw_matriarch : public CreatureScript
-{
-    enum NPCs
-    {
-        ENTRY_HARNESSED_MATRIARCH = 29563,
-    };
-
-    public:
-    npc_harnessed_icemaw_matriarch() : CreatureScript("npc_harnessed_icemaw_matriarch") { }
-
-    struct npc_harnessed_icemaw_matriarchAI : public npc_escortAI
-    {
-        npc_harnessed_icemaw_matriarchAI(Creature* creature) : npc_escortAI(creature)
-        {
-            Reset();
-        }
-
-        bool m_bNotOnRoute;
-
-        void Reset()
-        {
-            m_bNotOnRoute = false;
-        }
-
-        void WaypointReached(uint32 pointId)
-        {
-            if (pointId == 16) //reached village, give credits
-            {
-                Unit* player = me->GetVehicleKit()->GetPassenger(0);
-                if (player && player->GetTypeId() == TYPEID_PLAYER)
-                {
-                    ((Player*)player)->KilledMonsterCredit(ENTRY_HARNESSED_MATRIARCH, 0);
-                    player->ExitVehicle();
-                }
-
-                me->SetVisible(false);
-                me->ForcedDespawn();
-            }
-        }
-
-        void UpdateAI(const uint32 diff)
-        {
-            if (!m_bNotOnRoute && me->isCharmed())
-            {
-                ((Player*)(me->GetCharmer()))->SetClientControl(me, 0);
-                m_bNotOnRoute = true;
-
-                me->SetSpeed(MOVE_WALK, 3.0f,true);
-
-                Start(false, ((Player*)(me->GetCharmer()))->GetGUID());
-            }
-            npc_escortAI::UpdateAI(diff);
-        }
-
-        CreatureAI* GetAI(Creature* creature) const
-        {
-            return new npc_harnessed_icemaw_matriarchAI(creature);
-        }
-    };
-};
 
 void AddSC_storm_peaks()
 {
@@ -855,5 +791,4 @@ void AddSC_storm_peaks()
     new npc_brunnhildar_prisoner;
     new npc_icefang;
     new npc_hyldsmeet_protodrake;
-    new npc_harnessed_icemaw_matriarch;
 }
