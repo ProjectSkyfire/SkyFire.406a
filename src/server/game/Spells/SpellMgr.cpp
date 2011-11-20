@@ -2104,7 +2104,7 @@ void SpellMgr::LoadSpellPetAuras()
     sLog->outString();
 }
 
-// Fill custom data about enchancments
+// Fill custom data about enchantments
 void SpellMgr::LoadEnchantCustomAttr()
 {
     uint32 oldMSTime = getMSTime();
@@ -2172,7 +2172,7 @@ void SpellMgr::LoadSpellEnchantProcData()
         SpellItemEnchantmentEntry const* ench = sSpellItemEnchantmentStore.LookupEntry(enchantId);
         if (!ench)
         {
-            sLog->outErrorDb("Enchancment %u listed in `spell_enchant_proc_data` does not exist", enchantId);
+            sLog->outErrorDb("Enchantment %u listed in `spell_enchant_proc_data` does not exist", enchantId);
             continue;
         }
 
