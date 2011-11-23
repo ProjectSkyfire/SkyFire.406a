@@ -5096,7 +5096,7 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
 
                     target->HandleEmoteCommand(EMOTE_ONESHOT_TRAIN);
                     return;
-                }				
+                }
                 case 71563:
                 {
                     if (Aura* newAura = target->AddAura(71564, target))

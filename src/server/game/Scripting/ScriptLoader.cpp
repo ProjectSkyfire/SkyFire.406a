@@ -852,7 +852,7 @@ void AddEasternKingdomsScripts()
     AddSC_boss_vexallus();
     AddSC_boss_priestess_delrissa();
     AddSC_instance_magisters_terrace();
-    AddSC_magisters_terrace();	
+    AddSC_magisters_terrace();
     AddSC_boss_lucifron();                  //Molten core
     AddSC_boss_magmadar();
     AddSC_boss_gehennas();
@@ -1061,7 +1061,7 @@ void AddKalimdorScripts()
     AddSC_instance_temple_of_ahnqiraj();
     AddSC_boss_altairus();                  //Vortex Pinnacle
     AddSC_boss_asaad();
-    AddSC_boss_grand_vizier_ertan(); 
+    AddSC_boss_grand_vizier_ertan();
     AddSC_vortex_pinnacle();
     AddSC_instance_vortex_pinnacle();
     AddSC_wailing_caverns();                //Wailing caverns

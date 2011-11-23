@@ -102,7 +102,7 @@ class spell_dk_anti_magic_shell_self : public SpellScriptLoader
                 if (GetCaster()->HasSpell(49610))
                     absorbPct += 16;
                 if (GetCaster()->HasSpell(49611))
-                    absorbPct += 25;				
+                    absorbPct += 25;
                 hpPct = GetSpellInfo()->Effects[EFFECT_1].CalcValue(GetCaster());
                 return true;
             }

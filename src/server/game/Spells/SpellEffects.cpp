@@ -379,7 +379,7 @@ void Spell::EffectSchoolDMG(SpellEffIndex effIndex)
                         float distance = m_caster->GetDistance2d(unitTarget);
                         damage *= exp(-distance/15.0f);
                         break;
-                    }						
+                    }
                     // percent from health with min
                     case 25599:                             // Thundercrash
                     {
@@ -1024,7 +1024,7 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                     if (m_caster->ToPlayer())
                         m_caster->ToPlayer()->SendAttackSwingCancelAttack();
                     return;
-                }				
+                }
                 // Demon Broiled Surprise
                 case 43723:
                 {
