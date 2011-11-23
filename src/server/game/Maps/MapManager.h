@@ -37,11 +37,7 @@ class MapManager
 
     public:
         Map* CreateBaseMap(uint32 mapId);
-        Map* FindBaseMap(uint32 mapId) const
-        {
-            MapMapType::const_iterator iter = i_maps.find(mapId);
-            return (iter == i_maps.end() ? NULL : iter->second);
-        }
+        Map* FindBaseNonInstanceMap(uint32 mapId) const;
         Map* CreateMap(uint32 mapId, Player* player);
         Map* FindMap(uint32 mapId, uint32 instanceId) const;
 
@@ -164,6 +160,12 @@ class MapManager
 
         MapManager();
         ~MapManager();
+
+        Map* FindBaseMap(uint32 mapId) const
+        {
+            MapMapType::const_iterator iter = i_maps.find(mapId);
+            return (iter == i_maps.end() ? NULL : iter->second);
+        }
 
         MapManager(const MapManager &);
         MapManager& operator=(const MapManager &);
