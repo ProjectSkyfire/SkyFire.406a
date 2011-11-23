@@ -211,8 +211,8 @@ public:
         if (!*args)
             return false;
 
-        Player* player = handler->getSelectedPlayer();
-        if (!player)
+        Player* target = handler->getSelectedPlayer();
+        if (!target)
         {
             handler->SendSysMessage(LANG_NO_CHAR_SELECTED);
             handler->SetSentErrorMessage(true);
@@ -220,7 +220,7 @@ public:
         }
 
         // check online security
-        if (handler->HasLowerSecurity(player, 0))
+        if (handler->HasLowerSecurity(target, 0))
             return false;
 
         // id, or string, or [name] Shift-click form |color|Htele:id|h[name]|h|r
@@ -240,9 +240,9 @@ public:
             return false;
         }
 
-        std::string nameLink = handler->GetNameLink(player);
+        std::string nameLink = handler->GetNameLink(target);
 
-        Group* grp = player->GetGroup();
+        Group* grp = target->GetGroup();
         if (!grp)
         {
             handler->PSendSysMessage(LANG_NOT_IN_GROUP, nameLink.c_str());

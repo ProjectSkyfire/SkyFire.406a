@@ -498,9 +498,9 @@ public:
             SetEscortPaused(bOnHold);
         }
 
-        void WaypointReached(uint32 i)
+        void WaypointReached(uint32 wpId)
         {
-            switch (i)
+            switch (wpId)
             {
                 case 0:
                     me->RemoveUnitMovementFlag(MOVEMENTFLAG_WALKING);
@@ -1174,8 +1174,8 @@ public:
                                 temp->SetSpeed(MOVE_RUN, 3.0f); // workarounds, make Tirion still running
                                 temp->RemoveUnitMovementFlag(MOVEMENTFLAG_WALKING);
                                 temp->GetMotionMaster()->MovePoint(0, LightofDawnLoc[2].x, LightofDawnLoc[2].y, LightofDawnLoc[2].z);
-                                if (Creature* temp = Unit::GetCreature(*me, LichKingGUID))
-                                    temp->Relocate(LightofDawnLoc[28].x, LightofDawnLoc[28].y, LightofDawnLoc[28].z); // workarounds, he should kick back by Tirion, but here we relocate him
+                                if (Creature* lktemp = Unit::GetCreature(*me, LichKingGUID))
+                                    lktemp->Relocate(LightofDawnLoc[28].x, LightofDawnLoc[28].y, LightofDawnLoc[28].z); // workarounds, he should kick back by Tirion, but here we relocate him
                             }
                             JumpToNextStep(1500);
                             break;
