@@ -1491,9 +1491,9 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                         if (IsSmart(target))
                             CAST_AI(SmartAI, target->AI())->SetScript9(e, e.action.timedActionList.id, GetLastInvoker());
                     }
-                    else if (GameObject* target = (*itr)->ToGameObject())
+                    else if (GameObject* goTarget = (*itr)->ToGameObject())
                     {
-                        if (IsSmartGO(target))
+                        if (IsSmartGO(goTarget))
                             CAST_AI(SmartGameObjectAI, target->AI())->SetScript9(e, e.action.timedActionList.id, GetLastInvoker());
                     }
                 }
@@ -1608,9 +1608,9 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                         if (IsSmart(target))
                             CAST_AI(SmartAI, target->AI())->SetScript9(e, id, GetLastInvoker());
                     }
-                    else if (GameObject* target = (*itr)->ToGameObject())
+                    else if (GameObject* goTarget = (*itr)->ToGameObject())
                     {
-                        if (IsSmartGO(target))
+                        if (IsSmartGO(goTarget))
                             CAST_AI(SmartGameObjectAI, target->AI())->SetScript9(e, id, GetLastInvoker());
                     }
                 }
@@ -1638,9 +1638,9 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                         if (IsSmart(target))
                             CAST_AI(SmartAI, target->AI())->SetScript9(e, id, GetLastInvoker());
                     }
-                    else if (GameObject* target = (*itr)->ToGameObject())
+                    else if (GameObject* goTarget = (*itr)->ToGameObject())
                     {
-                        if (IsSmartGO(target))
+                        if (IsSmartGO(goTarget))
                             CAST_AI(SmartGameObjectAI, target->AI())->SetScript9(e, id, GetLastInvoker());
                     }
                 }
@@ -2299,10 +2299,10 @@ void SmartScript::ProcessEvent(SmartScriptHolder& e, Unit* unit, uint32 var0, ui
             if (!me || !me->isInCombat())
                 return;
 
-            Unit* unit = DoSelectLowestHpFriendly((float)e.event.friendlyHealt.radius, e.event.friendlyHealt.hpDeficit);
-            if (!unit)
+            Unit* target = DoSelectLowestHpFriendly((float)e.event.friendlyHealt.radius, e.event.friendlyHealt.hpDeficit);
+            if (!target)
                 return;
-            ProcessAction(e, unit);
+            ProcessAction(e, target);
             RecalcTimer(e, e.event.friendlyHealt.repeatMin, e.event.friendlyHealt.repeatMax);
             break;
         }

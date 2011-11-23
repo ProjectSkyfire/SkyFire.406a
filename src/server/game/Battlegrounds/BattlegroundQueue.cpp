@@ -919,15 +919,15 @@ void BattlegroundQueue::BattlegroundQueueUpdate(uint32 diff, BattlegroundTypeId 
         for (uint8 i = BG_QUEUE_PREMADE_ALLIANCE; i < BG_QUEUE_NORMAL_ALLIANCE; i++)
         {
             // take the group that joined first
-            GroupsQueueType::iterator itr = m_QueuedGroups[bracket_id][i].begin();
-            for (; itr != m_QueuedGroups[bracket_id][i].end(); ++itr)
+            GroupsQueueType::iterator itr2 = m_QueuedGroups[bracket_id][i].begin();
+            for (; itr2 != m_QueuedGroups[bracket_id][i].end(); ++itr2)
             {
                 // if group match conditions, then add it to pool
-                if (!(*itr)->IsInvitedToBGInstanceGUID
-                    && (((*itr)->ArenaMatchmakerRating >= arenaMinRating && (*itr)->ArenaMatchmakerRating <= arenaMaxRating)
-                        || (*itr)->JoinTime < discardTime))
+                if (!(*itr2)->IsInvitedToBGInstanceGUID
+                    && (((*itr2)->ArenaMatchmakerRating >= arenaMinRating && (*itr2)->ArenaMatchmakerRating <= arenaMaxRating)
+                        || (*itr2)->JoinTime < discardTime))
                 {
-                    itr_teams[found++] = itr;
+                    itr_teams[found++] = itr2;
                     team = i;
                     break;
                 }
@@ -939,14 +939,14 @@ void BattlegroundQueue::BattlegroundQueueUpdate(uint32 diff, BattlegroundTypeId 
 
         if (found == 1)
         {
-            for (GroupsQueueType::iterator itr = itr_teams[0]; itr != m_QueuedGroups[bracket_id][team].end(); ++itr)
+            for (GroupsQueueType::iterator itr3 = itr_teams[0]; itr3 != m_QueuedGroups[bracket_id][team].end(); ++itr3)
             {
-                if (!(*itr)->IsInvitedToBGInstanceGUID
-                    && (((*itr)->ArenaMatchmakerRating >= arenaMinRating && (*itr)->ArenaMatchmakerRating <= arenaMaxRating)
-                        || (*itr)->JoinTime < discardTime)
-                    && (*itr_teams[0])->ArenaTeamId != (*itr)->ArenaTeamId)
+                if (!(*itr3)->IsInvitedToBGInstanceGUID
+                    && (((*itr3)->ArenaMatchmakerRating >= arenaMinRating && (*itr3)->ArenaMatchmakerRating <= arenaMaxRating)
+                        || (*itr3)->JoinTime < discardTime)
+                    && (*itr_teams[0])->ArenaTeamId != (*itr3)->ArenaTeamId)
                 {
-                    itr_teams[found++] = itr;
+                    itr_teams[found++] = itr3;
                     break;
                 }
             }

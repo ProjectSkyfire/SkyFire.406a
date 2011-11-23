@@ -557,10 +557,10 @@ void Log::outSQLDriver(const char* str, ...)
     {
         outTimestamp(sqlLogFile);
 
-        va_list ap;
-        va_start(ap, str);
-        vfprintf(sqlLogFile, str, ap);
-        va_end(ap);
+        va_list apSQL;
+        va_start(apSQL, str);
+        vfprintf(sqlLogFile, str, apSQL);
+        va_end(apSQL);
 
         fprintf(sqlLogFile, "\n");
         fflush(sqlLogFile);
@@ -647,11 +647,11 @@ void Log::outBasic(const char * str, ...)
         if (logfile)
         {
             outTimestamp(logfile);
-            va_list ap;
-            va_start(ap, str);
-            vfprintf(logfile, str, ap);
+            va_list ap2;
+            va_start(ap2, str);
+            vfprintf(logfile, str, ap2);
             fprintf(logfile, "\n" );
-            va_end(ap);
+            va_end(ap2);
             fflush(logfile);
         }
     }
@@ -691,10 +691,10 @@ void Log::outDetail(const char * str, ...)
         if (logfile)
         {
             outTimestamp(logfile);
-            va_list ap;
-            va_start(ap, str);
-            vfprintf(logfile, str, ap);
-            va_end(ap);
+            va_list ap2;
+            va_start(ap2, str);
+            vfprintf(logfile, str, ap2);
+            va_end(ap2);
 
             fprintf(logfile, "\n");
             fflush(logfile);
@@ -721,10 +721,10 @@ void Log::outDebugInLine(const char * str, ...)
 
         if (logfile)
         {
-            va_list ap;
-            va_start(ap, str);
-            vfprintf(logfile, str, ap);
-            va_end(ap);
+            va_list ap2;
+            va_start(ap2, str);
+            vfprintf(logfile, str, ap2);
+            va_end(ap2);
         }
     }
 }
@@ -743,10 +743,10 @@ void Log::outSQLDev(const char* str, ...)
 
     if (sqlDevLogFile)
     {
-        va_list ap;
-        va_start(ap, str);
-        vfprintf(sqlDevLogFile, str, ap);
-        va_end(ap);
+        va_list ap2;
+        va_start(ap2, str);
+        vfprintf(sqlDevLogFile, str, ap2);
+        va_end(ap2);
 
         fprintf(sqlDevLogFile, "\n");
         fflush(sqlDevLogFile);
@@ -791,10 +791,10 @@ void Log::outDebug(DebugLogFilters f, const char * str, ...)
         if (logfile)
         {
             outTimestamp(logfile);
-            va_list ap;
-            va_start(ap, str);
-            vfprintf(logfile, str, ap);
-            va_end(ap);
+            va_list ap2;
+            va_start(ap2, str);
+            vfprintf(logfile, str, ap2);
+            va_end(ap2);
 
             fprintf(logfile, "\n" );
             fflush(logfile);
@@ -836,10 +836,10 @@ void Log::outStaticDebug(const char * str, ...)
         if (logfile)
         {
             outTimestamp(logfile);
-            va_list ap;
-            va_start(ap, str);
-            vfprintf(logfile, str, ap);
-            va_end(ap);
+            va_list ap2;
+            va_start(ap2, str);
+            vfprintf(logfile, str, ap2);
+            va_end(ap2);
 
             fprintf(logfile, "\n" );
             fflush(logfile);
@@ -901,11 +901,11 @@ void Log::outCommand(uint32 account, const char * str, ...)
         if (logfile)
         {
             outTimestamp(logfile);
-            va_list ap;
-            va_start(ap, str);
-            vfprintf(logfile, str, ap);
+            va_list ap2;
+            va_start(ap2, str);
+            vfprintf(logfile, str, ap2);
             fprintf(logfile, "\n" );
-            va_end(ap);
+            va_end(ap2);
             fflush(logfile);
         }
     }
