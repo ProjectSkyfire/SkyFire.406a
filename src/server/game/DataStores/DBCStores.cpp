@@ -434,7 +434,7 @@ void LoadDBCStores(const std::string& dataPath, uint32& availableDbcLocales)
     LoadDBC(availableDbcLocales, bad_dbc_files, sSkillLineAbilityStore,       dbcPath, "SkillLineAbility.dbc");
     LoadDBC(availableDbcLocales, bad_dbc_files, sSoundEntriesStore,           dbcPath, "SoundEntries.dbc");
     LoadDBC(availableDbcLocales, bad_dbc_files, sSpellAuraOptionsStore,       dbcPath, "SpellAuraOptions.dbc"/*, &CustomSpellAuraOptionsEntryfmt, &CustomSpellAuraOptionsEntryIndex*/);
-    LoadDBC(availableDbcLocales, bad_dbc_files, sSpellAuraRestrictionsStore,  dbcPath, "SpellAuraRestrictions.dbc"/*, &CustomSpellAuraRestrictionsEntryfmt, &CustomSpellAuraRestrictionsEntryIndex*/);
+    LoadDBC(availableDbcLocales, bad_dbc_files, sSpellAuraRestrictionsStore,  dbcPath, "SpellAuraRestrictions.dbc", &CustomSpellAuraRestrictionsEntryfmt, &CustomSpellAuraRestrictionsEntryIndex);
     LoadDBC(availableDbcLocales, bad_dbc_files, sSpellCastingRequirementsStore, dbcPath, "SpellCastingRequirements.dbc"/*, &CustomSpellCastingRequirementsEntryfmt, &CustomSpellCastingRequirementsEntryIndex*/);
     LoadDBC(availableDbcLocales, bad_dbc_files, sSpellCategoriesStore,        dbcPath, "SpellCategories.dbc"/*, &CustomSpellCategoriesEntryfmt, &CustomSpellCategoriesEntryIndex*/);
     LoadDBC(availableDbcLocales, bad_dbc_files, sSpellClassOptionsStore,      dbcPath, "SpellClassOptions.dbc"/*, &CustomSpellClassOptionsEntryfmt, &CustomSpellClassOptionsEntryIndex*/);
