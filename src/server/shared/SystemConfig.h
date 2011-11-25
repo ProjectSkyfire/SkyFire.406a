@@ -32,6 +32,8 @@
 # define _ENDIAN_STRING "little-endian"
 #endif
 
+#define _CLIENT_BUILD_REVISION "4.2.0a - 14480"
+
 #if PLATFORM == PLATFORM_WINDOWS
 # ifdef _WIN64
 #  define _FULLVERSION _PACKAGENAME " rev. " VER_PRODUCTVERSION_STR " (Win64, "_BUILD_DIRECTIVE ")"
