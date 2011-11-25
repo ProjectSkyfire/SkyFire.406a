@@ -6491,8 +6491,6 @@ void Player::UpdateSkillsForLevel()
     uint16 maxconfskill = sWorld->GetConfigMaxSkillValue();
     uint32 maxSkill = GetMaxSkillValueForLevel();
 
-    bool alwaysMaxSkill = sWorld->getBoolConfig(CONFIG_ALWAYS_MAX_SKILL_FOR_LEVEL);
-
     for (SkillStatusMap::iterator itr = mSkillStatus.begin(); itr != mSkillStatus.end(); ++itr)
     {
         if (itr->second.uState == SKILL_DELETED)
@@ -6515,7 +6513,7 @@ void Player::UpdateSkillsForLevel()
         if (max != 1)
         {
             /// maximize skill always
-            if (alwaysMaxSkill)
+            if (!sWorld->getBoolConfig(CONFIG_USE_OLD_SKILL_SYSTEM))
             {
                 SetUInt32Value(valueIndex, MAKE_SKILL_VALUE(maxSkill, maxSkill));
                 if (itr->second.uState != SKILL_NEW)

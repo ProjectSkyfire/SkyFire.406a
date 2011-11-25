@@ -942,7 +942,7 @@ void World::LoadConfigSettings(bool reload)
 
     m_int_configs[CONFIG_DISABLE_BREATHING] = ConfigMgr::GetIntDefault("DisableWaterBreath", SEC_CONSOLE);
 
-    m_bool_configs[CONFIG_ALWAYS_MAX_SKILL_FOR_LEVEL] = ConfigMgr::GetBoolDefault("AlwaysMaxSkillForLevel", false);
+    m_bool_configs[CONFIG_USE_OLD_SKILL_SYSTEM] = ConfigMgr::GetBoolDefault("OldSkillSystem", false);
 
     if (reload)
     {

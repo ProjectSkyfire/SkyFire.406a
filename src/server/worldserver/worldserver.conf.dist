@@ -1163,13 +1163,13 @@ AllFlightPaths = 0
 InstantFlightPaths = 0
 
 #
-#    AlwaysMaxSkillForLevel
-#        Description: Players will automatically gain max skill level when logging in or leveling
+#    OldSkillSystem
+#        Description: Players will have to gain on-level skills manually. (weapon, defense)
 #                     up.
 #        Default:     0 - (Disabled)
 #                     1 - (Enabled)
 
-AlwaysMaxSkillForLevel = 0
+OldSkillSystem = 0
 
 #
 #    ActivateWeather
