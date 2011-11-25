@@ -15998,8 +15998,8 @@ void Unit::SetStunned(bool apply)
         else
             SetStandState(UNIT_STAND_STATE_STAND);
 
-        if(Player * plr = ToPlayer())
-            plr->SetMovement(MOVE_ROOT);
+        if(Player * player = ToPlayer())
+            player->SetMovement(MOVE_ROOT);
 
         CastStop();
     }
@@ -16015,8 +16015,8 @@ void Unit::SetStunned(bool apply)
 
         if (!HasUnitState(UNIT_STAT_ROOT))         // prevent allow move if have also root effect
         {
-            if(Player * plr = ToPlayer())
-                plr->SetMovement(MOVE_UNROOT);
+            if(Player * player = ToPlayer())
+                player->SetMovement(MOVE_UNROOT);
 
             RemoveUnitMovementFlag(MOVEMENTFLAG_ROOT);
         }
@@ -16038,12 +16038,12 @@ void Unit::SetRooted(bool apply)
 
         if (GetTypeId() == TYPEID_PLAYER)
         {
-            if(Player * plr = ToPlayer())
+            if(Player * player = ToPlayer())
             {
                 WorldPacket data(SMSG_FORCE_MOVE_ROOT, 10);
                 data.append(GetPackGUID());
                 data << m_rootTimes;
-                plr->GetSession()->SendPacket(&data);
+                player->GetSession()->SendPacket(&data);
             }
         }
         else
@@ -16060,12 +16060,12 @@ void Unit::SetRooted(bool apply)
         {
             if (GetTypeId() == TYPEID_PLAYER)
             {
-                if(Player * plr = ToPlayer())
+                if(Player * player = ToPlayer())
                 {
                     WorldPacket data(SMSG_FORCE_MOVE_UNROOT, 10);
                     data.append(GetPackGUID());
                     data << ++m_rootTimes;
-                    plr->GetSession()->SendPacket(&data);
+                    player->GetSession()->SendPacket(&data);
                 }
             }
             else
