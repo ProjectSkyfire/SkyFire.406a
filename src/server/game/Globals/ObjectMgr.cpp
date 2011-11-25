@@ -7792,8 +7792,8 @@ bool ObjectMgr::LoadSkyFireStrings(char const* table, int32 min_value, int32 max
 
     if (!result)
     {
-        if (min_value == MIN_TRINITY_STRING_ID)              // error only in case internal strings
-            sLog->outErrorDb(">> Loaded 0 skyfire strings. DB table `%s` is empty. Cannot continue.", table);
+        if (min_value == MIN_SKYFIRE_STRING_ID)              // error only in case internal strings
+            sLog->outErrorDb(">> Loaded 0 SkyFire strings. DB table `%s` is empty. Cannot continue.", table);
         else
             sLog->outString(">> Loaded 0 string templates. DB table `%s` is empty.", table);
         sLog->outString();
@@ -7834,7 +7834,7 @@ bool ObjectMgr::LoadSkyFireStrings(char const* table, int32 min_value, int32 max
             AddLocaleString(fields[i + 1].GetString(), LocaleConstant(i), data.Content);
     } while (result->NextRow());
 
-    if (min_value == MIN_TRINITY_STRING_ID)
+    if (min_value == MIN_SKYFIRE_STRING_ID)
         sLog->outString(">> Loaded %u SkyFire strings from table %s in %u ms", count, table, GetMSTimeDiffToNow(oldMSTime));
     else
         sLog->outString(">> Loaded %u string templates from %s in %u ms", count, table, GetMSTimeDiffToNow(oldMSTime));

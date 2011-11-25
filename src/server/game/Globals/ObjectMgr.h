@@ -375,10 +375,10 @@ typedef UNORDERED_MAP<uint32/*(mapid, spawnMode) pair*/, CellObjectGuidsMap> Map
 
 typedef UNORDERED_MAP<uint64/*(instance, guid) pair*/, time_t> RespawnTimes;
 
-// Trinity string ranges
-#define MIN_TRINITY_STRING_ID           1                    // 'skyfire_string'
-#define MAX_TRINITY_STRING_ID           2000000000
-#define MIN_DB_SCRIPT_STRING_ID        MAX_TRINITY_STRING_ID // 'db_script_string'
+// SkyFire string ranges
+#define MIN_SKYFIRE_STRING_ID           1                    // 'skyfire_string'
+#define MAX_SKYFIRE_STRING_ID           2000000000
+#define MIN_DB_SCRIPT_STRING_ID        MAX_SKYFIRE_STRING_ID // 'db_script_string'
 #define MAX_DB_SCRIPT_STRING_ID        2000010000
 #define MIN_CREATURE_AI_TEXT_STRING_ID (-1)                 // 'creature_ai_texts'
 #define MAX_CREATURE_AI_TEXT_STRING_ID (-1000000)
@@ -859,7 +859,7 @@ class ObjectMgr
         void ValidateSpellScripts();
 
         bool LoadSkyFireStrings(char const* table, int32 min_value, int32 max_value);
-        bool LoadSkyFireStrings() { return LoadSkyFireStrings("skyfire_string", MIN_TRINITY_STRING_ID, MAX_TRINITY_STRING_ID); }
+        bool LoadSkyFireStrings() { return LoadSkyFireStrings("skyfire_string", MIN_SKYFIRE_STRING_ID, MAX_SKYFIRE_STRING_ID); }
         void LoadDbScriptStrings();
         void LoadCreatureClassLevelStats();
         void LoadCreatureLocales();
