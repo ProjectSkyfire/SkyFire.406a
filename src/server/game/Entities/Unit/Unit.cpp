@@ -6783,6 +6783,42 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                     triggered_spell_id = 89906;
                     break;
                 }
+                // Ancient Healer
+                case 86674:
+                {
+                    int32 bp0 = damage;
+                    int32 bp1 = ((bp0 * 10) / 100);
+
+                    if (!bp0 || !bp1)
+                        return false;
+
+                    if (victim && victim->IsFriendlyTo(this))  
+                        CastCustomSpell(victim,86678,&bp0,&bp1,0,true,NULL,triggeredByAura,0);
+                    else
+                        CastCustomSpell(this,86678,&bp0,&bp1,0,true,NULL,triggeredByAura,0);
+                    return true;
+                }
+                // Ancient Crusader - Player
+                case 86701:
+                {
+                    target = this;
+                    triggered_spell_id = 86700;
+                    break;
+                }
+                // Uncomment this once the guardian is receiving the aura via 
+                // creature template addon and redirect aura procs to the owner
+                // Ancient Crusader - Guardian
+                /*
+                case 86703:
+                {
+                    Unit* owner = this->GetOwner();
+     
+                    if (!owner)
+                        return false;
+     
+                    owner->CastSpell(owner, 86700, true);
+                    return true;
+                }*/
                 // Long Arm of The law
                 case 87168:
                 case 87172:

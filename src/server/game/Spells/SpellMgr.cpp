@@ -3492,8 +3492,12 @@ void SpellMgr::LoadSpellCustomAttr()
             case 72505: // Ooze Eruption
             case 72624: // Ooze Eruption
             case 72625: // Ooze Eruption
+            case 86704: // Ancient Fury
                 // ONLY SPELLS WITH SPELLFAMILY_GENERIC and EFFECT_SCHOOL_DAMAGE
                 spellInfo->AttributesCu |= SPELL_ATTR0_CU_SHARE_DAMAGE;
+                break;
+            case 86674: // Ancient Healer
+                spellInfo->ProcCharges = 5;
                 break;
             case 18500: // Wing Buffet
             case 33086: // Wild Bite

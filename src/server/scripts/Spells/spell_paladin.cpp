@@ -327,6 +327,37 @@ public:
     }
 };
 
+class spell_pal_judgements_of_the_bold : public SpellScriptLoader
+{
+    public:
+        spell_pal_judgements_of_the_bold() : SpellScriptLoader("spell_pal_judgements_of_the_bold") { }
+
+        class spell_pal_judgements_of_the_bold_AuraScript : public AuraScript
+        {
+            PrepareAuraScript(spell_pal_judgements_of_the_bold_AuraScript);
+
+            void CalculateMana(AuraEffect const* /*aurEff*/, int32& amount, bool& canBeRecalculated)
+            {
+                if (Unit* caster = GetCaster())
+                {
+                    canBeRecalculated = true;
+                    int32 basemana = caster->ToPlayer()->GetCreateMana();
+                    amount = (3 * basemana) / 100; // 3% of base mana
+                }
+            }
+
+            void Register()
+            {
+                DoEffectCalcAmount += AuraEffectCalcAmountFn(spell_pal_judgements_of_the_bold_AuraScript::CalculateMana, EFFECT_0, SPELL_AURA_PERIODIC_ENERGIZE);
+            }
+        };
+
+        AuraScript* GetAuraScript() const
+        {
+            return new spell_pal_judgements_of_the_bold_AuraScript();
+        }
+};
+
 // Shield of Righteous
 // Spell Id: 53600
 class spell_pal_shield_of_righteous : public SpellScriptLoader
@@ -380,4 +411,5 @@ void AddSC_paladin_spell_scripts()
     new spell_pal_holy_shock();
     new spell_pal_judgement_of_command();
     new spell_pal_shield_of_righteous();
+    new spell_pal_judgements_of_the_bold();
 }

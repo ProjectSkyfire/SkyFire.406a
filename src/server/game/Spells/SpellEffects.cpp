@@ -334,10 +334,6 @@ void Spell::EffectSchoolDMG(SpellEffIndex effIndex)
 
                 switch (m_spellInfo->Id)                     // better way to check unknown
                 {
-                    case 86150: // Guardian of Ancient Kings
-                        if (unitTarget)
-                        m_caster->CastSpell(m_caster, 86698, false, NULL);
-                    return;
                     // Positive/Negative Charge
                     case 28062:
                     case 28085:
@@ -378,6 +374,17 @@ void Spell::EffectSchoolDMG(SpellEffIndex effIndex)
                     {
                         float distance = m_caster->GetDistance2d(unitTarget);
                         damage *= exp(-distance/15.0f);
+                        break;
+                    }
+                    // Ancient Fury
+                    case 86704:
+                    {
+                        Aura* ancientpower = m_caster->GetAura(86700);
+
+                        if (!ancientpower)
+                            return;
+
+                        damage = (damage * ancientpower->GetStackAmount()) ;
                         break;
                     }
                     // percent from health with min
@@ -1516,7 +1523,18 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
 
             switch (m_spellInfo->Id)
             {
-            case 19740: // Blessing of Might
+               // Guardian of Ancient Kings
+                case 86150:
+                {
+                    if (m_caster->ToPlayer()->HasSpell(20473)) // Holy Shock
+                        m_caster->CastSpell(m_caster,86669,true);
+                    if (m_caster->ToPlayer()->HasSpell(85256)) // Templar's Verdict
+                        m_caster->CastSpell(m_caster,86698,true);
+                    if (m_caster->ToPlayer()->HasSpell(31935)) // Avenger's shield
+                        m_caster->CastSpell(m_caster,86659,true);
+                    return;
+                }
+                case 19740: // Blessing of Might
                 {
                     if (m_caster->GetTypeId() == TYPEID_PLAYER)
                     {
@@ -1530,7 +1548,7 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                     }
                     break;
                 }
-            case 20217: // Blessing of Kings
+                case 20217: // Blessing of Kings
                 {
                     if (m_caster->GetTypeId() == TYPEID_PLAYER)
                     {
