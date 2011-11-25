@@ -16048,13 +16048,10 @@ void Unit::SetRooted(bool apply)
         }
         else
         {
-            if(Player * plr = ToPlayer())
-            {
-                WorldPacket data(SMSG_SPLINE_MOVE_ROOT, 8);
-                data.append(GetPackGUID());
-                plr->GetSession()->SendPacket(&data);
-                ToCreature()->StopMoving();
-            }
+            WorldPacket data(SMSG_SPLINE_MOVE_ROOT, 8);
+            data.append(GetPackGUID());
+            SendMessageToSet(&data,true);
+            ToCreature()->StopMoving();
         }
     }
     else
@@ -16073,12 +16070,9 @@ void Unit::SetRooted(bool apply)
             }
             else
             {
-                if(Player * plr = ToPlayer())
-                {
-                    WorldPacket data(SMSG_SPLINE_MOVE_UNROOT, 8);
-                    data.append(GetPackGUID());
-                    plr->GetSession()->SendPacket(&data);
-				}
+                WorldPacket data(SMSG_SPLINE_MOVE_UNROOT, 8);
+                data.append(GetPackGUID());
+                SendMessageToSet(&data, true);
             }
 
             RemoveUnitMovementFlag(MOVEMENTFLAG_ROOT);
