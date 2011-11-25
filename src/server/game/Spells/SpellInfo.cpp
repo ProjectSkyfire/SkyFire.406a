@@ -2310,6 +2310,9 @@ uint32 SpellInfo::CalcPowerCost(Unit const* caster, SpellSchoolMask schoolMask) 
         return 0;
     }
 
+    if (Id == 85696) // Zealotry
+        return 0;
+
     // Base powerCost
     int32 powerCost = ManaCost;
     // PCT cost from total amount

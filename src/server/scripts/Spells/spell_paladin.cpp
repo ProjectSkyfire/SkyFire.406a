@@ -37,6 +37,8 @@ enum PaladinSpells
     SPELL_BLESSING_OF_LOWER_CITY_PALADIN         = 37879,
     SPELL_BLESSING_OF_LOWER_CITY_PRIEST          = 37880,
     SPELL_BLESSING_OF_LOWER_CITY_SHAMAN          = 37881,
+
+    SPELL_DIVINE_PURPOSE_PROC                    = 90174,
 };
 
 // 31850 - Ardent Defender
@@ -402,6 +404,64 @@ public:
     }
 };
 
+class spell_pal_word_of_glory : public SpellScriptLoader
+{
+public:
+    spell_pal_word_of_glory() : SpellScriptLoader("spell_pal_word_of_glory") { }
+ 
+    class spell_pal_word_of_glory_heal_SpellScript : public SpellScript
+    {
+        PrepareSpellScript(spell_pal_word_of_glory_heal_SpellScript);
+ 
+        uint32 totalheal;
+
+        bool Load()
+        {
+            if (GetCaster()->GetTypeId() != TYPEID_PLAYER)
+                return false;
+            return true;
+        }
+
+        void ChangeHeal(SpellEffIndex /*effIndex*/)
+        {
+            Unit* caster = GetCaster();
+
+            if (GetCaster()->HasAura(SPELL_DIVINE_PURPOSE_PROC))
+            {
+                totalheal = GetHitHeal() * 3;
+                SetHitHeal(totalheal);
+                return;
+            }
+
+            switch (caster->GetPower(POWER_HOLY_POWER))
+            {
+                case 1: // 2 Holy Power
+                {
+                    totalheal = GetHitHeal() * 2;
+                    SetHitHeal(totalheal);
+                    break;
+                }
+                case 2: // 3 Holy Power
+                {
+                    totalheal = GetHitHeal() * 3;
+                    SetHitHeal(totalheal);
+                    break;
+                }
+            }
+        }
+
+        void Register()
+        {
+            OnEffectHit += SpellEffectFn(spell_pal_word_of_glory_heal_SpellScript::ChangeHeal, EFFECT_0, SPELL_EFFECT_HEAL);
+        }
+    };
+
+    SpellScript* GetSpellScript() const
+    {
+        return new spell_pal_word_of_glory_heal_SpellScript();
+    }
+};
+
 void AddSC_paladin_spell_scripts()
 {
     new spell_pal_ardent_defender();
@@ -412,4 +472,5 @@ void AddSC_paladin_spell_scripts()
     new spell_pal_judgement_of_command();
     new spell_pal_shield_of_righteous();
     new spell_pal_judgements_of_the_bold();
+    new spell_pal_word_of_glory();
 }

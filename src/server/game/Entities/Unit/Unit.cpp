@@ -5447,18 +5447,6 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                     owner->CastSpell(owner, 58227, true, castItem, triggeredByAura);
                     return true;
                 }
-                // Divine purpose
-                case 31871:
-                case 31872:
-                {
-                    // Roll chane
-                    if (!victim || !victim->isAlive() || !roll_chance_i(triggerAmount))
-                        return false;
-
-                    // Remove any stun effect on target
-                    victim->RemoveAurasWithMechanic(1<<MECHANIC_STUN, AURA_REMOVE_BY_ENEMY_SPELL);
-                    return true;
-                }
                 // Glyph of Scourge Strike
                 case 58642:
                 {
@@ -6827,6 +6815,17 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                     {
                         target = this;
                         triggered_spell_id = 87173;
+                        break;
+                    }
+                }
+                // Divine purpose
+                case 85117:
+                case 86172:
+                {
+                    if (roll_chance_f(triggerAmount))
+                    {
+                        target = this;
+                        triggered_spell_id = 90174;
                         break;
                     }
                 }
@@ -11361,22 +11360,6 @@ uint32 Unit::SpellHealingBonus(Unit* victim, SpellInfo const* spellProto, uint32
     {
         healamount = 0.45 * (GetMaxHealth() - 10 * (STAT_STAMINA - 180));
         return healamount;
-    }
-
-    if (spellProto->Id == 85673)    // Word of Glory
-    {
-        uint32 am = GetPower(POWER_HOLY_POWER);
-        am = am > 0 ? am : 1;                              // proc Chance?
-        healamount = (((spellProto->Effects[0].BasePoints + spellProto->Effects[0].BasePoints / 2) + 0.198 * GetTotalAttackPowerValue(BASE_ATTACK))) * am;
-
-        uint32 chance = 0;
-        if (HasAura(87163))   // Eternal Glory rank1
-            chance = 15;
-        else if (HasAura(87164))   // Eternal Glory rank2
-            chance = 30;
-
-        if(!roll_chance_i(chance))
-            SetPower(POWER_HOLY_POWER, 0);
     }
 
     // Healing Done

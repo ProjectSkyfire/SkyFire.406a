@@ -2327,9 +2327,6 @@ void Spell::EffectApplyAura(SpellEffIndex effIndex)
         case 38177:  // Blackwhelp Net
             if (unitTarget->GetEntry() != 21387) //Wyrmcult Blackwhelp
                 return;
-        case 85673:  // Word of Glory
-            if (!m_caster->HasAura(93466))
-                return;
     }
 
     ASSERT(unitTarget == m_spellAura->GetOwner());
@@ -2526,38 +2523,6 @@ void Spell::SpellDamageHeal(SpellEffIndex effIndex)
                 damageAmount+= aurEff->GetAmount();
                 m_caster->RemoveAurasDueToSpell(45062);
             }
-        // Word of Glory
-        if (m_spellInfo->Id == 85673)
-        {
-            int32 dmg;
-            switch (m_caster->GetPower(POWER_HOLY_POWER))
-            {
-                case 0: // 1 hp
-                    dmg = int32(addhealth + 1*(m_caster->SpellBaseHealingBonus(SPELL_SCHOOL_MASK_HOLY) * 0.85));
-                    addhealth = dmg;
-                    break;
-                case 1: // 2 hp
-                    dmg = int32(addhealth + 2*(m_caster->SpellBaseHealingBonus(SPELL_SCHOOL_MASK_HOLY) * 0.85));
-                    addhealth = dmg;
-                    break;
-                case 2: // 3hp
-                    dmg = int32(addhealth + 3*(m_caster->SpellBaseHealingBonus(SPELL_SCHOOL_MASK_HOLY) * 0.85));
-                    addhealth = dmg;
-                    break;
-            }
-
-            if (m_caster->ToPlayer()->HasAuraType(SPELL_AURA_MASTERY))
-            {
-                if (m_caster->ToPlayer()->getClass() == CLASS_PALADIN)
-                {
-                    if (m_caster->ToPlayer()->GetTalentBranchSpec(m_caster->ToPlayer()->GetActiveSpec()) == BS_PALADIN_HOLY)
-                    {
-                        int32 bp0 = int32(m_caster->ToPlayer()->GetHealingDoneInPastSecs(15) * (12.0f + (1.5f * m_caster->ToPlayer()->GetMasteryPoints())) /100);
-                        m_caster->CastCustomSpell(m_caster, 86273, &bp0, NULL, NULL, true);
-                        caster->ToPlayer()->ResetHealingDoneInPastSecs(15);
-                    }
-                }
-            }
         }
 
         //Echo of Light
@@ -2573,8 +2538,6 @@ void Spell::SpellDamageHeal(SpellEffIndex effIndex)
             }
         }
 
-            addhealth += damageAmount;
-        }
         // Runic Healing Injector (heal increased by 25% for engineers - 3.2.0 patch change)
         else if (m_spellInfo->Id == 67489)
         {
@@ -4452,42 +4415,28 @@ void Spell::EffectWeaponDmg(SpellEffIndex effIndex)
         }
         case SPELLFAMILY_PALADIN:
         {
-            // Seal of Command - Increase damage by 36% on every swing
-            if (m_spellInfo->SpellFamilyFlags[0] & 0x2000000)
-            {
-                totalDamagePercentMod *= 1.36f;            //136% damage
-            }
-
+            // TODO: Move this to script.
             //Templar's Verdict
             if (m_spellInfo->Id == 85256)
             {
+                if (m_caster->HasAura(90174)) // Divine Purpose Proc
+                {
+                    totalDamagePercentMod += 6.5f;
+                    break;
+                }
+
                 switch (m_caster->GetPower(POWER_HOLY_POWER))
                 {
-                    // 1 Holy Power
-                case 0:
-                    (m_caster->HasAura(31866) || m_caster->HasAura(31867) || m_caster->HasAura(31868)) ? totalDamagePercentMod += 0.3f : 0; //Crusade Rank 1, 2, 3 - 133%
-                    break;
                     // 2 Holy Power
                 case 1:
                     totalDamagePercentMod += 2.0f; // 3*30 = 90%
-                    (m_caster->HasAura(31866) || m_caster->HasAura(31867) || m_caster->HasAura(31868)) ? totalDamagePercentMod += 0.3f : 0; //Crusade Rank 1, 2, 3 - 133%
                     break;
                     // 3 Holy Power
                 case 2:
                     totalDamagePercentMod += 6.5f; // 7.5*30 = 225%
-                    (m_caster->HasAura(31866) || m_caster->HasAura(31867) || m_caster->HasAura(31868)) ? totalDamagePercentMod += 0.9f : 0; //Crusade Rank 1, 2, 3  - 199%
                     break;
                 }
-                (m_caster->HasAura(63220)) ? totalDamagePercentMod *= 1.15f : 0 ; // Glyph of Templar's Verdict
             }
-
-            // Seal of Command Unleashed
-            if (m_spellInfo->Id == 20467)
-            {
-                spell_bonus += int32(0.08f * m_caster->GetTotalAttackPowerValue(BASE_ATTACK));
-                spell_bonus += int32(0.13f * m_caster->SpellBaseDamageBonus(m_spellInfo->GetSchoolMask()));
-            }
-            break;
         }
         case SPELLFAMILY_SHAMAN:
         {
