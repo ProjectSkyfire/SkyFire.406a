@@ -8991,11 +8991,6 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
                 return false;
             break;
         }
-        case 26573: //Consecration
-        {
-            CastCustomSpell(victim,37553,NULL,NULL,NULL,true);
-            break;
-        }
     }
     // Sword Specialization
     if (auraSpellInfo->SpellFamilyName == SPELLFAMILY_GENERIC && auraSpellInfo->SpellIconID == 1462 && procSpell)
