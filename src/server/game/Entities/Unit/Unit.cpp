@@ -1591,9 +1591,9 @@ uint32 Unit::CalcArmorReducedDamage(Unit* victim, const uint32 damage, SpellInfo
 
     float levelModifier = getLevel();
     float armorReduction = armor / (armor + 85.f * getLevel() + 400.f);
-    if(getLevel() > 59)
+    if (getLevel() > 59)
         armorReduction =   armor / (armor + 467.5f * getLevel() - 22167.5f);
-    if(getLevel() > 80)
+    if (getLevel() > 80)
         armorReduction =   armor / (armor + 2167.5f * getLevel() - 158167.5f);
 
     if (armorReduction < 0.0f)
@@ -6143,7 +6143,7 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
             case 87160:
             case 81292:
             {
-                if(procSpell->Id != 73510)
+                if (procSpell->Id != 73510)
                     return false;
                 break;
             }
@@ -8416,7 +8416,7 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
             case SPELLFAMILY_WARLOCK:
             {
                 // Siphon Life
-                if(auraSpellInfo->SpellIconID == 152)
+                if (auraSpellInfo->SpellIconID == 152)
                 {
                     trigger_spell_id = 63106;
                     target = this;
@@ -8524,7 +8524,7 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
                     case 93398: // Rank 1
                     case 93399: // Rank 2
                     {
-                        if(GetTypeId() == TYPEID_PLAYER)
+                        if (GetTypeId() == TYPEID_PLAYER)
                             ToPlayer()->RemoveSpellCooldown(78674,true); // Remove cooldown of Starsurge
                         break;
                     }
@@ -13964,7 +13964,7 @@ uint32 Unit::GetCreatePowers(Powers power) const
                 return GetCreateMana();
         case POWER_RAGE:      return 1000;
         case POWER_FOCUS:
-            if(GetTypeId() == TYPEID_PLAYER && (ToPlayer()->getClass() == CLASS_HUNTER))
+            if (GetTypeId() == TYPEID_PLAYER && (ToPlayer()->getClass() == CLASS_HUNTER))
                 return 100;
             return (GetTypeId() == TYPEID_PLAYER || !((Creature const*)this)->isPet() || ((Pet const*)this)->getPetType() != HUNTER_PET ? 0 : 100);
         case POWER_ENERGY:    return 100;
@@ -15878,11 +15878,11 @@ void Unit::Kill(Unit* victim, bool durabilityLoss)
     // outdoor pvp things, do these after setting the death state, else the player activity notify won't work... doh...
     // handle player kill only if not suicide (spirit of redemption for example)
     if (player && this != victim)
-	{
+    {
         if (OutdoorPvP* pvp = player->GetOutdoorPvP())
             pvp->HandleKill(player, victim);
 
-		if (Battlefield* bf = sBattlefieldMgr.GetBattlefieldToZoneId(player->GetZoneId()))
+        if (Battlefield* bf = sBattlefieldMgr.GetBattlefieldToZoneId(player->GetZoneId()))
             bf->HandleKill(player, victim);
     }
 
@@ -16034,10 +16034,8 @@ void Unit::SetStunned(bool apply)
         else
             SetStandState(UNIT_STAND_STATE_STAND);
 
-        WorldPacket data(SMSG_FORCE_MOVE_ROOT, 8);
-        data.append(GetPackGUID());
-        data << uint32(0);
-        SendMessageToSet(&data, true);
+        if (Player* player = ToPlayer())
+            player->SetMovement(MOVE_ROOT);
 
         CastStop();
     }
@@ -16053,10 +16051,8 @@ void Unit::SetStunned(bool apply)
 
         if (!HasUnitState(UNIT_STAT_ROOT))         // prevent allow move if have also root effect
         {
-            WorldPacket data(SMSG_FORCE_MOVE_UNROOT, 8+4);
-            data.append(GetPackGUID());
-            data << uint32(0);
-            SendMessageToSet(&data, true);
+            if (Player* player = ToPlayer())
+                player->SetMovement(MOVE_UNROOT);
 
             RemoveUnitMovementFlag(MOVEMENTFLAG_ROOT);
         }
@@ -16078,16 +16074,19 @@ void Unit::SetRooted(bool apply)
 
         if (GetTypeId() == TYPEID_PLAYER)
         {
-            WorldPacket data(SMSG_FORCE_MOVE_ROOT, 10);
-            data.append(GetPackGUID());
-            data << m_rootTimes;
-            SendMessageToSet(&data, true);
+            if (Player* player = ToPlayer())
+            {
+                WorldPacket data(SMSG_FORCE_MOVE_ROOT, 10);
+                data.append(GetPackGUID());
+                data << m_rootTimes;
+                player->GetSession()->SendPacket(&data);
+            }
         }
         else
         {
             WorldPacket data(SMSG_SPLINE_MOVE_ROOT, 8);
             data.append(GetPackGUID());
-            SendMessageToSet(&data, true);
+            SendMessageToSet(&data,true);
             ToCreature()->StopMoving();
         }
     }
@@ -16097,10 +16096,13 @@ void Unit::SetRooted(bool apply)
         {
             if (GetTypeId() == TYPEID_PLAYER)
             {
-                WorldPacket data(SMSG_FORCE_MOVE_UNROOT, 10);
-                data.append(GetPackGUID());
-                data << ++m_rootTimes;
-                SendMessageToSet(&data, true);
+                if (Player* player = ToPlayer())
+                {
+                    WorldPacket data(SMSG_FORCE_MOVE_UNROOT, 10);
+                    data.append(GetPackGUID());
+                    data << ++m_rootTimes;
+                    player->GetSession()->SendPacket(&data);
+                }
             }
             else
             {
