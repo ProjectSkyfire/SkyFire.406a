@@ -53,7 +53,7 @@ void WorldSession::SendNameQueryOpcode(uint64 guid)
     }
     else
     {
-        data << std::string(GetTrinityString(LANG_NON_EXIST_CHARACTER));
+        data << std::string(GetSkyFireString(LANG_NON_EXIST_CHARACTER));
         data << uint32(0);
     }
 

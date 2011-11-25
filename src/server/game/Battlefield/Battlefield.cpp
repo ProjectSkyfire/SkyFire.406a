@@ -469,7 +469,7 @@ void Battlefield::SendWarningToAllInZone(uint32 entry)
 
 /*void Battlefield::SendWarningToAllInWar(int32 entry,...)
 {
-    const char *format = sObjectMgr->GetTrinityStringForDBCLocale(entry);
+    const char *format = sObjectMgr->GetSkyFireStringForDBCLocale(entry);
     va_list ap;
     char str [1024];
     va_start(ap, entry);

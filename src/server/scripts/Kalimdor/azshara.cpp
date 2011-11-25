@@ -416,7 +416,7 @@ public:
         void SendText(int32 iTextEntry, Player* player)
         {
             LocaleConstant loc_idx = player->GetSession()->GetSessionDbLocaleIndex();
-            const char* text = sObjectMgr->GetTrinityString(iTextEntry, loc_idx);
+            const char* text = sObjectMgr->GetSkyFireString(iTextEntry, loc_idx);
             sWorld->SendServerMessage(SERVER_MSG_STRING, text, player);
         }
 
