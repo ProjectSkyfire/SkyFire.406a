@@ -126,7 +126,8 @@ Map* MapManager::CreateMap(uint32 id, const WorldObject* obj, uint32 /*instanceI
     //if (!obj->IsInWorld()) sLog->outError("GetMap: called for map %d with object (typeid %d, guid %d, mapid %d, instanceid %d) who is not in world!", id, obj->GetTypeId(), obj->GetGUIDLow(), obj->GetMapId(), obj->GetInstanceId());
     Map* m = _createBaseMap(id);
 
-    if (m && (obj->GetTypeId() == TYPEID_PLAYER) && m->Instanceable()) m = ((MapInstanced*)m)->CreateInstance(id, (Player*)obj);
+    if (m && obj->GetTypeId() == TYPEID_PLAYER && m->Instanceable())
+        m = ((MapInstanced*)m)->CreateInstanceForPlayer(id, (Player*)obj);
 
     return m;
 }
@@ -140,7 +141,7 @@ Map* MapManager::FindMap(uint32 mapid, uint32 instanceId) const
     if (!map->Instanceable())
         return instanceId == 0 ? map : NULL;
 
-    return ((MapInstanced*)map)->FindMap(instanceId);
+    return ((MapInstanced*)map)->FindInstanceMap(instanceId);
 }
 
 bool MapManager::CanPlayerEnter(uint32 mapid, Player* player, bool loginCheck)
@@ -185,7 +186,7 @@ bool MapManager::CanPlayerEnter(uint32 mapid, Player* player, bool loginCheck)
         {
             // probably there must be special opcode, because client has this string constant in GlobalStrings.lua
             // TODO: this is not a good place to send the message
-            player->GetSession()->SendAreaTriggerMessage(player->GetSession()->GetTrinityString(LANG_INSTANCE_RAID_GROUP_ONLY), mapName);
+            player->GetSession()->SendAreaTriggerMessage(player->GetSession()->GetSkyFireString(LANG_INSTANCE_RAID_GROUP_ONLY), mapName);
             sLog->outDebug(LOG_FILTER_MAPS, "MAP: Player '%s' must be in a raid group to enter instance '%s'", player->GetName(), mapName);
             return false;
         }
@@ -249,7 +250,7 @@ bool MapManager::CanPlayerEnter(uint32 mapid, Player* player, bool loginCheck)
             instaceIdToCheck = save->GetInstanceId();
 
         // instanceId can never be 0 - will not be found
-        if (!player->CheckInstanceCount(instaceIdToCheck))
+        if (!player->CheckInstanceCount(instaceIdToCheck) && !player->isDead())
         {
             player->SendTransferAborted(mapid, TRANSFER_ABORT_TOO_MANY_INSTANCES);
             return false;

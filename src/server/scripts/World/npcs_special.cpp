@@ -2729,6 +2729,84 @@ public:
    }
 };
 
+// Uncomment this once guardians are able to cast spells
+// on owner at AI initialization and be able to cast spells based on owner's triggered spellcasts. 
+/*
+enum GuardianSpellsAndEntries
+{
+    NPC_PROTECTION_GUARDIAN         = 46490,
+    NPC_HOLY_GUARDIAN               = 46499,
+    NPC_RETRI_GUARDIAN              = 46506,
+    SPELL_ANCIENT_GUARDIAN_VISUAL   = 86657,
+    SPELL_ANCIENT_CRUSADER_PLAYER   = 86703,
+    SPELL_ANCIENT_CRUSADER_GUARDIAN = 86701
+};
+
+
+class npc_guardian_of_ancient_kings : public CreatureScript
+{
+public:
+    npc_guardian_of_ancient_kings() : CreatureScript("npc_guardian_of_ancient_kings") { }
+
+    struct npc_guardian_of_ancient_kingsAI : public ScriptedAI
+    {
+        npc_guardian_of_ancient_kingsAI(Creature *pCreature) : ScriptedAI(pCreature) 
+        {
+            _healcount = 0;
+        }
+
+        void InitializeAI()
+        {
+            Unit* owner = me->GetOwner();
+
+            if (!owner || owner->GetTypeId() != TYPEID_PLAYER)
+                return;
+
+            if (me->GetEntry() == NPC_PROTECTION_GUARDIAN)
+            {
+                me->SetUnitMovementFlags(MOVEMENTFLAG_ROOT);
+                me->SetReactState(REACT_PASSIVE);
+                me->CastSpell(owner,SPELL_ANCIENT_GUARDIAN_VISUAL,true);
+            }
+        }
+
+        void UpdateAI(const uint32 diff)
+        {
+            Unit* owner = me->GetOwner();
+
+            if (!UpdateVictim() || !owner)
+                return;
+
+            if (me->GetEntry() == NPC_RETRI_GUARDIAN) // Only the retpaladin guardian hits melee,
+                DoMeleeAttackIfReady();  // at least is what i saw on vids.
+        }
+
+        void SpellHitTarget(Unit* /*target*/ /*SpellEntry const* spell)
+        {
+            if (me->GetEntry() == NPC_HOLY_GUARDIAN) // Holy paladin guardian
+            {
+                for (uint32 i = 0; i = MAX_SPELL_EFFECTS;)
+                {
+                    if (spell->Effect[i] == SPELL_EFFECT_HEAL // if the spell is a heal...
+                        && spell->EffectImplicitTargetA[i] == TARGET_UNIT_TARGET_ALLY) //... and is single target
+                        _healcount++;
+                    else
+                        i++;
+                    if (_healcount == 5) // "Your Guardian of Ancient Spirits heals the target of your next 5 heals for the same amount as your heal"
+                        me->DespawnOrUnsummon();
+                }
+            }
+        }
+        private:
+            uint32 _healcount;
+    };
+
+    CreatureAI* GetAI(Creature* pCreature) const
+    {
+        return new npc_guardian_of_ancient_kingsAI(pCreature);
+    }
+};*/
+
 void AddSC_npcs_special()
 {
     new npc_air_force_bots;
@@ -2760,4 +2838,5 @@ void AddSC_npcs_special()
     new npc_tabard_vendor;
     new npc_experience;
     new npc_flame_orb;
+    //new npc_guardian_of_ancient_kings;
 }

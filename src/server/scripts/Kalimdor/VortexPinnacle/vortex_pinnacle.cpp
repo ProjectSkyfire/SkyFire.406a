@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/> 
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -49,7 +49,7 @@ public:
 
         if (instance && instance->GetData(DATA_GRAND_VIZIER_ERTAN)==DONE)
             player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Teleport me to platform 2", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
-            
+
         if (instance && instance->GetData(DATA_ALTAIRUS)==DONE)
             player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Teleport me to platform 3", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+2);
 

@@ -404,7 +404,7 @@ void GameObject::Update(uint32 diff)
                     //TODO: move activated state code (cast itself) to GO_ACTIVATED, in this place only check activating and set state
                     float radius = (float)(goInfo->trap.radius)/2; // TODO rename radius to diameter (goInfo->trap.radius) should be (goInfo->trap.diameter)
                     if (goInfo->entry == 193963)               // Toy Train Set
-                        radius = 5.0f;					
+                        radius = 5.0f;
                     if (!radius)
                     {
                         if (goInfo->trap.cooldown != 3)            // cast in other case (at some triggering/linked go/etc explicit call)

@@ -2174,16 +2174,18 @@ SpellSpecificType SpellInfo::GetSpellSpecific() const
         }
         case SPELLFAMILY_PALADIN:
         {
-            // Collection of all the seal family flags. No other paladin spell has any of those.
-            if (SpellFamilyFlags[1] & 0x26000C00
-                || SpellFamilyFlags[0] & 0x0A000000)
+            // Collection of all the seal family flags.
+            (SpellFamilyFlags[1] & 0x80000000 // Seal of Justice
+            || SpellFamilyFlags[1] & 0x20000000 // Seal of Righteoussness
+            || SpellFamilyFlags[1] & 0x00000800  // Seal of Truth
+            || SpellFamilyFlags[1] & 0x02000000); // Seal of Insigth
                 return SPELL_SPECIFIC_SEAL;
 
             if (SpellFamilyFlags[0] & 0x00002190)
                 return SPELL_SPECIFIC_HAND;
 
-            // Judgement of Wisdom, Judgement of Light, Judgement of Justice
-            if (Id == 20184 || Id == 20185 || Id == 20186)
+            // Judgement, Judgement of Truth, Judgement of Righteoussness, Judgement of Light
+            if (Id == 20271 || Id == 31804 || Id == 20187 || Id == 54158)
                 return SPELL_SPECIFIC_JUDGEMENT;
 
             // only paladin auras have this (for palaldin class family)
@@ -2307,6 +2309,9 @@ uint32 SpellInfo::CalcPowerCost(Unit const* caster, SpellSchoolMask schoolMask) 
         sLog->outError("SpellInfo::CalcPowerCost: Unknown power type '%d' in spell %d", PowerType, Id);
         return 0;
     }
+
+    if (Id == 85696) // Zealotry
+        return 0;
 
     // Base powerCost
     int32 powerCost = ManaCost;

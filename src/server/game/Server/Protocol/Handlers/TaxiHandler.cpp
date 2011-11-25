@@ -86,7 +86,7 @@ void WorldSession::HandleTaxiQueryAvailableNodes(WorldPacket & recv_data)
 
     // unknown taxi node case
     if (SendLearnNewTaxiNode(unit))
-        return;
+		SendTaxiMenu(unit);
 
     // known taxi node case
     SendTaxiMenu(unit);
@@ -105,7 +105,7 @@ void WorldSession::SendTaxiMenu(Creature* unit)
 
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: CMSG_TAXINODE_STATUS_QUERY %u ", curloc);
 
-    WorldPacket data(SMSG_SHOWTAXINODES, (4 + 8 + 4 + 1 + 8 * 4)); // Checked for 406a
+    WorldPacket data(SMSG_SHOWTAXINODES, (4 + 8 + 4 + 8 * 4)); // Checked for 406a
     data << uint32(1);
     data << uint64(unit->GetGUID());
     data << uint32(curloc);

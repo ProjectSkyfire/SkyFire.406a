@@ -1591,9 +1591,9 @@ uint32 Unit::CalcArmorReducedDamage(Unit* victim, const uint32 damage, SpellInfo
 
     float levelModifier = getLevel();
     float armorReduction = armor / (armor + 85.f * getLevel() + 400.f);
-    if(getLevel() > 59)
+    if (getLevel() > 59)
         armorReduction =   armor / (armor + 467.5f * getLevel() - 22167.5f);
-    if(getLevel() > 80)
+    if (getLevel() > 80)
         armorReduction =   armor / (armor + 2167.5f * getLevel() - 158167.5f);
 
     if (armorReduction < 0.0f)
@@ -5271,6 +5271,7 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                             break;
                         case CLASS_ROGUE:                   // 39511, 40997, 40998, 41002, 41005, 41011
                         case CLASS_WARRIOR:                 // 39511, 40997, 40998, 41002, 41005, 41011
+                        case CLASS_DEATH_KNIGHT:
                             triggered_spell_id = RAND(39511, 40997, 40998, 41002, 41005, 41011);
                             cooldown_spell_id = 39511;
                             break;
@@ -5444,18 +5445,6 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                         return false;
                     // Glyph of Shadowfiend (need cast as self cast for owner, no hidden cooldown)
                     owner->CastSpell(owner, 58227, true, castItem, triggeredByAura);
-                    return true;
-                }
-                // Divine purpose
-                case 31871:
-                case 31872:
-                {
-                    // Roll chane
-                    if (!victim || !victim->isAlive() || !roll_chance_i(triggerAmount))
-                        return false;
-
-                    // Remove any stun effect on target
-                    victim->RemoveAurasWithMechanic(1<<MECHANIC_STUN, AURA_REMOVE_BY_ENEMY_SPELL);
                     return true;
                 }
                 // Glyph of Scourge Strike
@@ -6142,7 +6131,7 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
             case 87160:
             case 81292:
             {
-                if(procSpell->Id != 73510)
+                if (procSpell->Id != 73510)
                     return false;
                 break;
             }
@@ -6346,7 +6335,7 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                 {
                     if (procSpell->SpellVisual[0] == 750 && procSpell->Effects[1].ApplyAuraName == 3)
                     {
-                        if (target->GetTypeId() == TYPEID_UNIT)
+                        if (target && target->GetTypeId() == TYPEID_UNIT)
                         {
                             triggered_spell_id = 54820;
                             break;
@@ -6693,8 +6682,8 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
         }
         case SPELLFAMILY_PALADIN:
         {
-            // Seal of Righteousness - melee proc dummy (addition ${$MWS*(0.022*$AP+0.044*$SPH)} damage)
-            if (dummySpell->SpellFamilyFlags[0] & 0x8000000)
+            // Seal of Righteousness - melee proc dummy (addition ${$MWS*(0.011*$AP+0.022*$SPH)} damage)
+            if (dummySpell->SpellFamilyFlags[1]& 0x20000000)
             {
                 if (effIndex != 0)
                     return false;
@@ -6702,7 +6691,7 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                 float ap = GetTotalAttackPowerValue(BASE_ATTACK);
                 int32 holy = SpellBaseDamageBonus(SPELL_SCHOOL_MASK_HOLY) +
                              SpellBaseDamageBonusForVictim(SPELL_SCHOOL_MASK_HOLY, victim);
-                basepoints0 = (int32)GetAttackTime(BASE_ATTACK) * int32(ap * 0.022f + 0.044f * holy) / 1000;
+                basepoints0 = (int32)GetAttackTime(BASE_ATTACK) * int32(ap * 0.011f + 0.022f * holy) / 1000;
                 break;
             }
             // Light's Beacon - Beacon of Light
@@ -6726,24 +6715,6 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                     }
                 }
                 return false;
-            }
-            // Judgements of the Wise
-            if (dummySpell->SpellIconID == 3017)
-            {
-                target = this;
-                triggered_spell_id = 31930;
-                // replenishment
-                CastSpell(this, 57669, true, castItem, triggeredByAura);
-                break;
-            }
-            // Sanctified Wrath
-            if (dummySpell->SpellIconID == 3029)
-            {
-                triggered_spell_id = 57318;
-                target = this;
-                basepoints0 = triggerAmount;
-                CastCustomSpell(target, triggered_spell_id, &basepoints0, &basepoints0, NULL, true, castItem, triggeredByAura);
-                return true;
             }
             // Sacred Shield
             if (dummySpell->SpellFamilyFlags[1] & 0x80000)
@@ -6793,24 +6764,77 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
             }
             switch (dummySpell->Id)
             {
-                // Heart of the Crusader
-                case 20335: // rank 1
-                    triggered_spell_id = 21183;
+                // Judgements of the Bold
+                case 89901:
+                {
+                    target = this;
+                    triggered_spell_id = 89906;
                     break;
-                case 20336: // rank 2
-                    triggered_spell_id = 54498;
+                }
+                // Selfless Healer
+                case 85803:
+                case 85804:
+                {
+                    if (victim == this)
+                        return false;
+
                     break;
-                case 20337: // rank 3
-                    triggered_spell_id = 54499;
+                }
+                // Ancient Healer
+                case 86674:
+                {
+                    int32 bp0 = damage;
+                    int32 bp1 = ((bp0 * 10) / 100);
+
+                    if (!bp0 || !bp1)
+                        return false;
+
+                    if (victim && victim->IsFriendlyTo(this))  
+                        CastCustomSpell(victim,86678,&bp0,&bp1,0,true,NULL,triggeredByAura,0);
+                    else
+                        CastCustomSpell(this,86678,&bp0,&bp1,0,true,NULL,triggeredByAura,0);
+                    return true;
+                }
+                // Ancient Crusader - Player
+                case 86701:
+                {
+                    target = this;
+                    triggered_spell_id = 86700;
                     break;
+                }
+                // Uncomment this once the guardian is receiving the aura via 
+                // creature template addon and redirect aura procs to the owner
+                // Ancient Crusader - Guardian
+                /*
+                case 86703:
+                {
+                    Unit* owner = this->GetOwner();
+     
+                    if (!owner)
+                        return false;
+     
+                    owner->CastSpell(owner, 86700, true);
+                    return true;
+                }*/
                 // Long Arm of The law
                 case 87168:
                 case 87172:
                 {
-                    if (!IsWithinDistInMap(victim, 15.0f))
+                    if (roll_chance_f(triggerAmount) && !this->IsWithinDistInMap(victim, 15.0f))
                     {
                         target = this;
                         triggered_spell_id = 87173;
+                        break;
+                    }
+                }
+                // Divine purpose
+                case 85117:
+                case 86172:
+                {
+                    if (roll_chance_f(triggerAmount))
+                    {
+                        target = this;
+                        triggered_spell_id = 90174;
                         break;
                     }
                 }
@@ -8434,7 +8458,7 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
             case SPELLFAMILY_WARLOCK:
             {
                 // Siphon Life
-                if(auraSpellInfo->SpellIconID == 152)
+                if (auraSpellInfo->SpellIconID == 152)
                 {
                     trigger_spell_id = 63106;
                     target = this;
@@ -8542,7 +8566,7 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
                     case 93398: // Rank 1
                     case 93399: // Rank 2
                     {
-                        if(GetTypeId() == TYPEID_PLAYER)
+                        if (GetTypeId() == TYPEID_PLAYER)
                             ToPlayer()->RemoveSpellCooldown(78674,true); // Remove cooldown of Starsurge
                         break;
                     }
@@ -9509,10 +9533,9 @@ ReputationRank Unit::GetReactionTo(Unit const* target) const
     if (GetCharmerOrOwnerOrSelf() == target->GetCharmerOrOwnerOrSelf())
         return REP_FRIENDLY;
 
-    // this is 0x8 in the 13580 client
-    if (HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PLAYER_CONTROLLED))
+    if (HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PVP_ATTACKABLE))
     {
-        if (target->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PLAYER_CONTROLLED))
+        if (target->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PVP_ATTACKABLE))
         {
             Player const* selfPlayerOwner = GetAffectingPlayer();
             Player const* targetPlayerOwner = target->GetAffectingPlayer();
@@ -11387,22 +11410,6 @@ uint32 Unit::SpellHealingBonus(Unit* victim, SpellInfo const* spellProto, uint32
         return healamount;
     }
 
-    if (spellProto->Id == 85673)    // Word of Glory
-    {
-        uint32 am = GetPower(POWER_HOLY_POWER);
-        am = am > 0 ? am : 1;                              // proc Chance?
-        healamount = (((spellProto->Effects[0].BasePoints + spellProto->Effects[0].BasePoints / 2) + 0.198 * GetTotalAttackPowerValue(BASE_ATTACK))) * am;
-
-        uint32 chance = 0;
-        if (HasAura(87163))   // Eternal Glory rank1
-            chance = 15;
-        else if (HasAura(87164))   // Eternal Glory rank2
-            chance = 30;
-
-        if(!roll_chance_i(chance))
-            SetPower(POWER_HOLY_POWER, 0);
-    }
-
     // Healing Done
     // Taken/Done total percent damage auras
     float  DoneTotalMod = 1.0f;
@@ -12474,20 +12481,16 @@ bool Unit::_IsValidAttackTarget(Unit const* target, SpellInfo const* bySpell) co
         if (playerAttacker->HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_UNK19))
             return false;
     }
-
     // check flags
-    // UNIT_FLAG_PLAYER_CONTROLLED is 0x8 in 13580
     if (target->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_TAXI_FLIGHT | UNIT_FLAG_NOT_ATTACKABLE_1 | UNIT_FLAG_UNK_16)
-        || (!HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PLAYER_CONTROLLED) && target->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE))
-        || (!target->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PLAYER_CONTROLLED) && HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE))
-        //! Also notable: in CGUnit_C__CanAttack the third parameter is a boolean that determines if the following flag check is exempted or not
-        || (HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PLAYER_CONTROLLED) && target->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_OOC_NOT_ATTACKABLE))
-        || (target->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PLAYER_CONTROLLED) && HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_OOC_NOT_ATTACKABLE)))
+        || (!HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PVP_ATTACKABLE) && target->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE))
+        || (!target->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PVP_ATTACKABLE) && HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE))
+        || (HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PVP_ATTACKABLE) && target->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_OOC_NOT_ATTACKABLE))
+        || (target->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PVP_ATTACKABLE) && HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_OOC_NOT_ATTACKABLE)))
         return false;
 
     // CvC case - can attack each other only when one of them is hostile
-    if (GetTypeId() == TYPEID_UNIT && !HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PLAYER_CONTROLLED)
-        && target->GetTypeId() == TYPEID_UNIT && !target->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PLAYER_CONTROLLED))
+    if (!HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PVP_ATTACKABLE) && !target->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PVP_ATTACKABLE))
         return GetReactionTo(target) <= REP_HOSTILE || target->GetReactionTo(this) <= REP_HOSTILE;
 
     // PvP, PvC, CvP case
@@ -12500,8 +12503,8 @@ bool Unit::_IsValidAttackTarget(Unit const* target, SpellInfo const* bySpell) co
     if (creatureAttacker && creatureAttacker->GetCreatureInfo()->type_flags & CREATURE_TYPEFLAGS_UNK26)
         return false;
 
-    Player const* playerAffectingAttacker = GetAffectingPlayer();
-    Player const* playerAffectingTarget = target->GetAffectingPlayer();
+    Player const* playerAffectingAttacker = HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PVP_ATTACKABLE) ? GetAffectingPlayer() : NULL;
+    Player const* playerAffectingTarget = target->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PVP_ATTACKABLE) ? target->GetAffectingPlayer() : NULL;
 
     // check duel - before sanctuary checks
     if (playerAffectingAttacker && playerAffectingTarget)
@@ -12510,10 +12513,8 @@ bool Unit::_IsValidAttackTarget(Unit const* target, SpellInfo const* bySpell) co
 
     // PvP case - can't attack when attacker or target are in sanctuary
     // however, 13850 client doesn't allow to attack when one of the unit's has sanctuary flag and is pvp
-    //! Machiavelli edit: I don't know if the unit flag check is correct here. In the above checks UNIT_FLAG_PVP_ATTACKABLE (0x80 in 12340) was replaced
-    //! with the proper flag which has 0x80 in 13580 - however I cannot find proof if this flag is correctly used here or not.
-    if (/*target->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PVP_ATTACKABLE) && HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PVP_ATTACKABLE)
-        && */((target->GetByteValue(UNIT_FIELD_BYTES_2, 1) & UNIT_BYTE2_FLAG_SANCTUARY) || (GetByteValue(UNIT_FIELD_BYTES_2, 1) & UNIT_BYTE2_FLAG_SANCTUARY)))
+    if (target->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PVP_ATTACKABLE) && HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PVP_ATTACKABLE)
+        && ((target->GetByteValue(UNIT_FIELD_BYTES_2, 1) & UNIT_BYTE2_FLAG_SANCTUARY) || (GetByteValue(UNIT_FIELD_BYTES_2, 1) & UNIT_BYTE2_FLAG_SANCTUARY)))
         return false;
 
     // additional checks - only PvP case
@@ -12590,10 +12591,10 @@ bool Unit::_IsValidAssistTarget(Unit const* target, SpellInfo const* bySpell) co
         return false;
 
     // PvP case
-    if (target->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PLAYER_CONTROLLED))
+    if (target->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PVP_ATTACKABLE))
     {
         Player const* targetPlayerOwner = target->GetAffectingPlayer();
-        if (HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PLAYER_CONTROLLED))
+        if (HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PVP_ATTACKABLE))
         {
             Player const* selfPlayerOwner = GetAffectingPlayer();
             if (selfPlayerOwner && targetPlayerOwner)
@@ -12615,7 +12616,7 @@ bool Unit::_IsValidAssistTarget(Unit const* target, SpellInfo const* bySpell) co
     }
     // PvC case - player can assist creature only if has specific type flags
     // !target->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PVP_ATTACKABLE) &&
-    else if (HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PLAYER_CONTROLLED)
+    else if (HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PVP_ATTACKABLE)
         && (!bySpell || !(bySpell->AttributesEx6 & SPELL_ATTR6_UNK3))
         && !((target->GetByteValue(UNIT_FIELD_BYTES_2, 1) & UNIT_BYTE2_FLAG_PVP)))
     {
@@ -13994,7 +13995,7 @@ uint32 Unit::GetCreatePowers(Powers power) const
                 return GetCreateMana();
         case POWER_RAGE:      return 1000;
         case POWER_FOCUS:
-            if(GetTypeId() == TYPEID_PLAYER && (ToPlayer()->getClass() == CLASS_HUNTER))
+            if (GetTypeId() == TYPEID_PLAYER && (ToPlayer()->getClass() == CLASS_HUNTER))
                 return 100;
             return (GetTypeId() == TYPEID_PLAYER || !((Creature const*)this)->isPet() || ((Pet const*)this)->getPetType() != HUNTER_PET ? 0 : 100);
         case POWER_ENERGY:    return 100;
@@ -15908,11 +15909,11 @@ void Unit::Kill(Unit* victim, bool durabilityLoss)
     // outdoor pvp things, do these after setting the death state, else the player activity notify won't work... doh...
     // handle player kill only if not suicide (spirit of redemption for example)
     if (player && this != victim)
-	{
+    {
         if (OutdoorPvP* pvp = player->GetOutdoorPvP())
             pvp->HandleKill(player, victim);
 
-		if (Battlefield* bf = sBattlefieldMgr.GetBattlefieldToZoneId(player->GetZoneId()))
+        if (Battlefield* bf = sBattlefieldMgr.GetBattlefieldToZoneId(player->GetZoneId()))
             bf->HandleKill(player, victim);
     }
 
@@ -16064,10 +16065,8 @@ void Unit::SetStunned(bool apply)
         else
             SetStandState(UNIT_STAND_STATE_STAND);
 
-        WorldPacket data(SMSG_FORCE_MOVE_ROOT, 8);
-        data.append(GetPackGUID());
-        data << uint32(0);
-        SendMessageToSet(&data, true);
+        if (Player* player = ToPlayer())
+            player->SetMovement(MOVE_ROOT);
 
         CastStop();
     }
@@ -16083,10 +16082,8 @@ void Unit::SetStunned(bool apply)
 
         if (!HasUnitState(UNIT_STAT_ROOT))         // prevent allow move if have also root effect
         {
-            WorldPacket data(SMSG_FORCE_MOVE_UNROOT, 8+4);
-            data.append(GetPackGUID());
-            data << uint32(0);
-            SendMessageToSet(&data, true);
+            if (Player* player = ToPlayer())
+                player->SetMovement(MOVE_UNROOT);
 
             RemoveUnitMovementFlag(MOVEMENTFLAG_ROOT);
         }
@@ -16108,16 +16105,19 @@ void Unit::SetRooted(bool apply)
 
         if (GetTypeId() == TYPEID_PLAYER)
         {
-            WorldPacket data(SMSG_FORCE_MOVE_ROOT, 10);
-            data.append(GetPackGUID());
-            data << m_rootTimes;
-            SendMessageToSet(&data, true);
+            if (Player* player = ToPlayer())
+            {
+                WorldPacket data(SMSG_FORCE_MOVE_ROOT, 10);
+                data.append(GetPackGUID());
+                data << m_rootTimes;
+                player->GetSession()->SendPacket(&data);
+            }
         }
         else
         {
             WorldPacket data(SMSG_SPLINE_MOVE_ROOT, 8);
             data.append(GetPackGUID());
-            SendMessageToSet(&data, true);
+            SendMessageToSet(&data,true);
             ToCreature()->StopMoving();
         }
     }
@@ -16127,10 +16127,13 @@ void Unit::SetRooted(bool apply)
         {
             if (GetTypeId() == TYPEID_PLAYER)
             {
-                WorldPacket data(SMSG_FORCE_MOVE_UNROOT, 10);
-                data.append(GetPackGUID());
-                data << ++m_rootTimes;
-                SendMessageToSet(&data, true);
+                if (Player* player = ToPlayer())
+                {
+                    WorldPacket data(SMSG_FORCE_MOVE_UNROOT, 10);
+                    data.append(GetPackGUID());
+                    data << ++m_rootTimes;
+                    player->GetSession()->SendPacket(&data);
+                }
             }
             else
             {

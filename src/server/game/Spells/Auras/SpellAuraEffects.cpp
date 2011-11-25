@@ -4881,6 +4881,25 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
                     if (caster)
                         caster->CastSpell(caster, 13138, true, NULL, this);
                     break;
+                    // Guardian of Ancient Kings - Retribution
+                case 86698:
+                {
+                    caster->CastSpell(caster,86701,true);
+                    break;
+                }
+                    // Guardian of Ancient Kings - Holy
+                case 86669:
+                {
+                    caster->CastSpell(caster,86674,true);
+                    break;
+                }
+                    // Sudden Death Cataclysm Proc
+                case 52437:
+                {
+                    if (caster && caster->ToPlayer()->HasSpellCooldown(86346))
+                        caster->ToPlayer()->RemoveSpellCooldown(86346,true);
+                    break;
+                }
                 case 34026:   // kill command
                 {
                     Unit* pet = target->GetGuardianPet();
@@ -5096,7 +5115,7 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
 
                     target->HandleEmoteCommand(EMOTE_ONESHOT_TRAIN);
                     return;
-                }				
+                }
                 case 71563:
                 {
                     if (Aura* newAura = target->AddAura(71564, target))
@@ -5266,6 +5285,23 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
                     if (GetId() == 61777)
                         target->CastSpell(target, GetAmount(), true);
                     break;
+                case SPELLFAMILY_PALADIN:
+                {
+                    switch (GetId())
+                    {
+                        // Guardian of Ancient Kings - Retribution
+                        case 86698:
+                        {
+                            if (aurApp->GetBase()->GetOwner()->ToUnit()->HasAura(86700))
+                            {
+                                caster->CastSpell((Unit*)NULL,86704,true);
+                                caster->RemoveAura(86701);
+                                caster->RemoveAura(86700);
+                            }
+                            break;
+                        }
+                    }
+                }
                 default:
                     break;
             }

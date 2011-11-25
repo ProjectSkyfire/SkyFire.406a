@@ -37,6 +37,8 @@ enum PaladinSpells
     SPELL_BLESSING_OF_LOWER_CITY_PALADIN         = 37879,
     SPELL_BLESSING_OF_LOWER_CITY_PRIEST          = 37880,
     SPELL_BLESSING_OF_LOWER_CITY_SHAMAN          = 37881,
+
+    SPELL_DIVINE_PURPOSE_PROC                    = 90174,
 };
 
 // 31850 - Ardent Defender
@@ -327,6 +329,37 @@ public:
     }
 };
 
+class spell_pal_judgements_of_the_bold : public SpellScriptLoader
+{
+    public:
+        spell_pal_judgements_of_the_bold() : SpellScriptLoader("spell_pal_judgements_of_the_bold") { }
+
+        class spell_pal_judgements_of_the_bold_AuraScript : public AuraScript
+        {
+            PrepareAuraScript(spell_pal_judgements_of_the_bold_AuraScript);
+
+            void CalculateMana(AuraEffect const* /*aurEff*/, int32& amount, bool& canBeRecalculated)
+            {
+                if (Unit* caster = GetCaster())
+                {
+                    canBeRecalculated = true;
+                    int32 basemana = caster->ToPlayer()->GetCreateMana();
+                    amount = (3 * basemana) / 100; // 3% of base mana
+                }
+            }
+
+            void Register()
+            {
+                DoEffectCalcAmount += AuraEffectCalcAmountFn(spell_pal_judgements_of_the_bold_AuraScript::CalculateMana, EFFECT_0, SPELL_AURA_PERIODIC_ENERGIZE);
+            }
+        };
+
+        AuraScript* GetAuraScript() const
+        {
+            return new spell_pal_judgements_of_the_bold_AuraScript();
+        }
+};
+
 // Shield of Righteous
 // Spell Id: 53600
 class spell_pal_shield_of_righteous : public SpellScriptLoader
@@ -371,6 +404,137 @@ public:
     }
 };
 
+class spell_pal_word_of_glory : public SpellScriptLoader
+{
+public:
+    spell_pal_word_of_glory() : SpellScriptLoader("spell_pal_word_of_glory") { }
+ 
+    class spell_pal_word_of_glory_heal_SpellScript : public SpellScript
+    {
+        PrepareSpellScript(spell_pal_word_of_glory_heal_SpellScript);
+ 
+        uint32 totalheal;
+
+        bool Load()
+        {
+            if (GetCaster()->GetTypeId() != TYPEID_PLAYER)
+                return false;
+            return true;
+        }
+
+        void ChangeHeal(SpellEffIndex /*effIndex*/)
+        {
+            Unit* caster = GetCaster();
+            Unit* target = GetHitUnit();
+
+            if (!target)
+                return;
+
+            if (GetCaster()->HasAura(SPELL_DIVINE_PURPOSE_PROC))
+            {
+                totalheal = GetHitHeal() * 3;
+
+                // Selfless Healer
+                if (AuraEffect const* auraEff = caster->GetAuraEffect(SPELL_AURA_DUMMY, SPELLFAMILY_PALADIN, 3924, EFFECT_0))
+                    if (target != caster)
+                        totalheal += totalheal + (totalheal * auraEff->GetAmount()) / 100;
+
+                SetHitHeal(totalheal);
+                return;
+            }
+
+            switch (caster->GetPower(POWER_HOLY_POWER))
+            {
+                case 0: // 1 Holy Power
+                {
+                    totalheal = GetHitHeal();
+                    break;
+                }
+                case 1: // 2 Holy Power
+                {
+                    totalheal = GetHitHeal() * 2;
+                    break;
+                }
+                case 2: // 3 Holy Power
+                {
+                    totalheal = GetHitHeal() * 3;
+                    break;
+                }
+            }
+            // Selfless Healer
+            if (AuraEffect const* auraEff = caster->GetDummyAuraEffect(SPELLFAMILY_PALADIN, 3924, EFFECT_0))
+                if (target != caster)
+                    totalheal += totalheal + (totalheal * auraEff->GetAmount()) / 100;
+
+            SetHitHeal(totalheal);
+        }
+
+        void Register()
+        {
+            OnEffectHit += SpellEffectFn(spell_pal_word_of_glory_heal_SpellScript::ChangeHeal, EFFECT_0, SPELL_EFFECT_HEAL);
+        }
+    };
+
+    SpellScript* GetSpellScript() const
+    {
+        return new spell_pal_word_of_glory_heal_SpellScript();
+    }
+};
+
+class spell_pal_selfless_healer : public SpellScriptLoader
+{
+    public:
+        spell_pal_selfless_healer() : SpellScriptLoader("spell_pal_selfless_healer") { }
+
+        class spell_pal_selfless_healer_AuraScript : public AuraScript
+        {
+            PrepareAuraScript(spell_pal_selfless_healer_AuraScript);
+
+            void CalculateBonus(AuraEffect const* /*aurEff*/, int32& amount, bool& canBeRecalculated)
+            {
+                if (Unit* caster = GetCaster())
+                {
+                    canBeRecalculated = true;
+
+                    if (caster->HasAura(SPELL_DIVINE_PURPOSE_PROC))
+                    {
+                        amount = 12;
+                        return;
+                    }
+
+                    switch (caster->GetPower(POWER_HOLY_POWER))
+                    {
+                        case 0: // 1 Holy Power
+                        {
+                            amount = 4;
+                            break;
+                        }
+                        case 1: // 2 Holy Power
+                        {
+                            amount = 8;
+                            break;
+                        }
+                        case 2: // 3 Holy Power
+                        {
+                            amount = 12;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            void Register()
+            {
+                DoEffectCalcAmount += AuraEffectCalcAmountFn(spell_pal_selfless_healer_AuraScript::CalculateBonus, EFFECT_0, SPELL_AURA_MOD_DAMAGE_PERCENT_DONE);
+            }
+        };
+
+        AuraScript* GetAuraScript() const
+        {
+            return new spell_pal_selfless_healer_AuraScript();
+        }
+};
+
 void AddSC_paladin_spell_scripts()
 {
     new spell_pal_ardent_defender();
@@ -380,4 +544,7 @@ void AddSC_paladin_spell_scripts()
     new spell_pal_holy_shock();
     new spell_pal_judgement_of_command();
     new spell_pal_shield_of_righteous();
+    new spell_pal_judgements_of_the_bold();
+    new spell_pal_word_of_glory();
+    new spell_pal_selfless_healer();
 }

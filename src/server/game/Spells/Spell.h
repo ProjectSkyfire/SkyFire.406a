@@ -373,6 +373,7 @@ class Spell
         void TakePower();
         void TakeAmmo();
 
+        void HandleHolyPower(Player* caster);
         void TakeRunePower(bool didHit);
         void TakeReagents();
         void TakeCastItem();

@@ -143,7 +143,7 @@ class npc_wg_spirit_guide : public CreatureScript
             {
                 if (gy[i]->GetControlTeamId() == player->GetTeamId())
                 {
-                    player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, sObjectMgr->GetTrinityStringForDBCLocale(((BfGraveYardWG *) gy[i])->GetTextId()), GOSSIP_SENDER_MAIN,
+                    player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, sObjectMgr->GetSkyFireStringForDBCLocale(((BfGraveYardWG *) gy[i])->GetTextId()), GOSSIP_SENDER_MAIN,
                                              GOSSIP_ACTION_INFO_DEF + i);
                 }
             }
@@ -191,7 +191,7 @@ class npc_wg_queue : public CreatureScript
         {
             if (BfWG->IsWarTime())
             {
-                player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, sObjectMgr->GetTrinityStringForDBCLocale(WG_NPCQUEUE_TEXTOPTION_JOIN), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF);
+                player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, sObjectMgr->GetSkyFireStringForDBCLocale(WG_NPCQUEUE_TEXTOPTION_JOIN), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF);
                 player->SEND_GOSSIP_MENU(BfWG->GetDefenderTeam()? WG_NPCQUEUE_TEXT_H_WAR : WG_NPCQUEUE_TEXT_A_WAR, creature->GetGUID());
             }
             else
@@ -200,7 +200,7 @@ class npc_wg_queue : public CreatureScript
                 player->SendUpdateWorldState(4354, time(NULL) + uiTime);
                 if (uiTime < 15 * MINUTE)
                 {
-                    player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, sObjectMgr->GetTrinityStringForDBCLocale(WG_NPCQUEUE_TEXTOPTION_JOIN), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF);
+                    player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, sObjectMgr->GetSkyFireStringForDBCLocale(WG_NPCQUEUE_TEXTOPTION_JOIN), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF);
                     player->SEND_GOSSIP_MENU(BfWG->GetDefenderTeam() ? WG_NPCQUEUE_TEXT_H_QUEUE : WG_NPCQUEUE_TEXT_A_QUEUE, creature->GetGUID());
                 }
                 else
