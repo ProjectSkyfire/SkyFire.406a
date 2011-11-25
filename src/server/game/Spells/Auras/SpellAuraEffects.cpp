@@ -4881,6 +4881,13 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
                     if (caster)
                         caster->CastSpell(caster, 13138, true, NULL, this);
                     break;
+                    // Sudden Death Cataclysm Proc
+                case 52437:
+                {
+                    if (caster && caster->ToPlayer()->HasSpellCooldown(86346))
+                        caster->ToPlayer()->RemoveSpellCooldown(86346,true);
+                    break;
+                }
                 case 34026:   // kill command
                 {
                     Unit* pet = target->GetGuardianPet();

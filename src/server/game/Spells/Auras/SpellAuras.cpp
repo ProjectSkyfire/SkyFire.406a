@@ -1336,6 +1336,12 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                     if (target->HasAura(58039)) // Glyph of Blurred Speed
                         target->CastSpell(target, 61922, true); // Sprint (waterwalk)
                 break;
+            case SPELLFAMILY_PALADIN:
+                // Sanctfied Wrath Cataclysm proc
+                if (GetId() == 31884)
+                    if (caster->GetAuraEffect(SPELL_AURA_ADD_FLAT_MODIFIER, SPELLFAMILY_PALADIN, 3029, 0))
+                        caster->CastSpell(caster,57318,true);
+                break;
             case SPELLFAMILY_DEATHKNIGHT:
                 if (!caster)
                     break;
