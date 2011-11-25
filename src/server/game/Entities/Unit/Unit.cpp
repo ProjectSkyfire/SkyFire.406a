@@ -15998,10 +15998,8 @@ void Unit::SetStunned(bool apply)
         else
             SetStandState(UNIT_STAND_STATE_STAND);
 
-        WorldPacket data(SMSG_FORCE_MOVE_ROOT, 8);
-        data.append(GetPackGUID());
-        data << uint32(0);
-        SendMessageToSet(&data, true);
+        if(Player * plr = ToPlayer())
+            plr->SetMovement(MOVE_ROOT);
 
         CastStop();
     }
@@ -16017,10 +16015,8 @@ void Unit::SetStunned(bool apply)
 
         if (!HasUnitState(UNIT_STAT_ROOT))         // prevent allow move if have also root effect
         {
-            WorldPacket data(SMSG_FORCE_MOVE_UNROOT, 8+4);
-            data.append(GetPackGUID());
-            data << uint32(0);
-            SendMessageToSet(&data, true);
+            if(Player * plr = ToPlayer())
+                plr->SetMovement(MOVE_UNROOT);
 
             RemoveUnitMovementFlag(MOVEMENTFLAG_ROOT);
         }
@@ -16042,16 +16038,19 @@ void Unit::SetRooted(bool apply)
 
         if (GetTypeId() == TYPEID_PLAYER)
         {
-            WorldPacket data(SMSG_FORCE_MOVE_ROOT, 10);
-            data.append(GetPackGUID());
-            data << m_rootTimes;
-            SendMessageToSet(&data, true);
+            if(Player * plr = ToPlayer())
+            {
+                WorldPacket data(SMSG_FORCE_MOVE_ROOT, 10);
+                data.append(GetPackGUID());
+                data << m_rootTimes;
+                plr->GetSession()->SendPacket(&data);
+            }
         }
         else
         {
             WorldPacket data(SMSG_SPLINE_MOVE_ROOT, 8);
             data.append(GetPackGUID());
-            SendMessageToSet(&data, true);
+            SendMessageToSet(&data,true);
             ToCreature()->StopMoving();
         }
     }
@@ -16061,10 +16060,13 @@ void Unit::SetRooted(bool apply)
         {
             if (GetTypeId() == TYPEID_PLAYER)
             {
-                WorldPacket data(SMSG_FORCE_MOVE_UNROOT, 10);
-                data.append(GetPackGUID());
-                data << ++m_rootTimes;
-                SendMessageToSet(&data, true);
+                if(Player * plr = ToPlayer())
+                {
+                    WorldPacket data(SMSG_FORCE_MOVE_UNROOT, 10);
+                    data.append(GetPackGUID());
+                    data << ++m_rootTimes;
+                    plr->GetSession()->SendPacket(&data);
+                }
             }
             else
             {
