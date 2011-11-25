@@ -942,7 +942,7 @@ void World::LoadConfigSettings(bool reload)
 
     m_int_configs[CONFIG_DISABLE_BREATHING] = ConfigMgr::GetIntDefault("DisableWaterBreath", SEC_CONSOLE);
 
-    m_bool_configs[CONFIG_ALWAYS_MAX_SKILL_FOR_LEVEL] = ConfigMgr::GetBoolDefault("AlwaysMaxSkillForLevel", false);
+    m_bool_configs[CONFIG_USE_OLD_SKILL_SYSTEM] = ConfigMgr::GetBoolDefault("OldSkillSystem", false);
 
     if (reload)
     {
@@ -1247,8 +1247,8 @@ void World::SetInitialWorldSettings()
 
     ///- Loading strings. Getting no records means core load has to be canceled because no error message can be output.
     sLog->outString();
-    sLog->outString("Loading Trinity strings...");
-    if (!sObjectMgr->LoadTrinityStrings())
+    sLog->outString("Loading SkyFire strings...");
+    if (!sObjectMgr->LoadSkyFireStrings())
         exit(1);                                            // Error message displayed in function already
 
     ///- Update the realm entry in the database with the realm type from the config file
@@ -2086,7 +2086,7 @@ namespace Trinity
             explicit WorldWorldTextBuilder(int32 textId, va_list* args = NULL) : i_textId(textId), i_args(args) {}
             void operator()(WorldPacketList& data_list, LocaleConstant loc_idx)
             {
-                char const* text = sObjectMgr->GetTrinityString(i_textId, loc_idx);
+                char const* text = sObjectMgr->GetSkyFireString(i_textId, loc_idx);
 
                 if (i_args)
                 {

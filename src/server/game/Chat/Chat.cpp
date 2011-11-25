@@ -462,7 +462,7 @@ ChatCommand* ChatHandler::getCommandTable()
 
 std::string ChatHandler::PGetParseString(int32 entry, ...) const
 {
-    const char *format = GetTrinityString(entry);
+    const char *format = GetSkyFireString(entry);
     char str[1024];
     va_list ap;
     va_start(ap, entry);
@@ -471,9 +471,9 @@ std::string ChatHandler::PGetParseString(int32 entry, ...) const
     return std::string(str);
 }
 
-const char *ChatHandler::GetTrinityString(int32 entry) const
+const char *ChatHandler::GetSkyFireString(int32 entry) const
 {
-    return m_session->GetTrinityString(entry);
+    return m_session->GetSkyFireString(entry);
 }
 
 bool ChatHandler::isAvailable(ChatCommand const& cmd) const
@@ -611,12 +611,12 @@ void ChatHandler::SendGlobalGMSysMessage(const char *str)
 
 void ChatHandler::SendSysMessage(int32 entry)
 {
-    SendSysMessage(GetTrinityString(entry));
+    SendSysMessage(GetSkyFireString(entry));
 }
 
 void ChatHandler::PSendSysMessage(int32 entry, ...)
 {
-    const char *format = GetTrinityString(entry);
+    const char *format = GetSkyFireString(entry);
     va_list ap;
     char str [2048];
     va_start(ap, entry);
@@ -1524,9 +1524,9 @@ int ChatHandler::GetSessionDbLocaleIndex() const
     return m_session->GetSessionDbLocaleIndex();
 }
 
-const char *CliHandler::GetTrinityString(int32 entry) const
+const char *CliHandler::GetSkyFireString(int32 entry) const
 {
-    return sObjectMgr->GetTrinityStringForDBCLocale(entry);
+    return sObjectMgr->GetSkyFireStringForDBCLocale(entry);
 }
 
 bool CliHandler::isAvailable(ChatCommand const& cmd) const
@@ -1543,7 +1543,7 @@ void CliHandler::SendSysMessage(const char *str)
 
 std::string CliHandler::GetNameLink() const
 {
-    return GetTrinityString(LANG_CONSOLE_COMMAND);
+    return GetSkyFireString(LANG_CONSOLE_COMMAND);
 }
 
 bool CliHandler::needReportToTarget(Player* /*chr*/) const
