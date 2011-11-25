@@ -425,29 +425,48 @@ public:
         void ChangeHeal(SpellEffIndex /*effIndex*/)
         {
             Unit* caster = GetCaster();
+            Unit* target = GetHitUnit();
+
+            if (!target)
+                return;
 
             if (GetCaster()->HasAura(SPELL_DIVINE_PURPOSE_PROC))
             {
                 totalheal = GetHitHeal() * 3;
+
+                // Selfless Healer
+                if (AuraEffect const* auraEff = caster->GetAuraEffect(SPELL_AURA_DUMMY, SPELLFAMILY_PALADIN, 3924, EFFECT_0))
+                    if (target != caster)
+                        totalheal += totalheal + (totalheal * auraEff->GetAmount()) / 100;
+
                 SetHitHeal(totalheal);
                 return;
             }
 
             switch (caster->GetPower(POWER_HOLY_POWER))
             {
+                case 0: // 1 Holy Power
+                {
+                    totalheal = GetHitHeal();
+                    break;
+                }
                 case 1: // 2 Holy Power
                 {
                     totalheal = GetHitHeal() * 2;
-                    SetHitHeal(totalheal);
                     break;
                 }
                 case 2: // 3 Holy Power
                 {
                     totalheal = GetHitHeal() * 3;
-                    SetHitHeal(totalheal);
                     break;
                 }
             }
+            // Selfless Healer
+            if (AuraEffect const* auraEff = caster->GetDummyAuraEffect(SPELLFAMILY_PALADIN, 3924, EFFECT_0))
+                if (target != caster)
+                    totalheal += totalheal + (totalheal * auraEff->GetAmount()) / 100;
+
+            SetHitHeal(totalheal);
         }
 
         void Register()
@@ -462,6 +481,60 @@ public:
     }
 };
 
+class spell_pal_selfless_healer : public SpellScriptLoader
+{
+    public:
+        spell_pal_selfless_healer() : SpellScriptLoader("spell_pal_selfless_healer") { }
+
+        class spell_pal_selfless_healer_AuraScript : public AuraScript
+        {
+            PrepareAuraScript(spell_pal_selfless_healer_AuraScript);
+
+            void CalculateBonus(AuraEffect const* /*aurEff*/, int32& amount, bool& canBeRecalculated)
+            {
+                if (Unit* caster = GetCaster())
+                {
+                    canBeRecalculated = true;
+
+                    if (caster->HasAura(SPELL_DIVINE_PURPOSE_PROC))
+                    {
+                        amount = 12;
+                        return;
+                    }
+
+                    switch (caster->GetPower(POWER_HOLY_POWER))
+                    {
+                        case 0: // 1 Holy Power
+                        {
+                            amount = 4;
+                            break;
+                        }
+                        case 1: // 2 Holy Power
+                        {
+                            amount = 8;
+                            break;
+                        }
+                        case 2: // 3 Holy Power
+                        {
+                            amount = 12;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            void Register()
+            {
+                DoEffectCalcAmount += AuraEffectCalcAmountFn(spell_pal_selfless_healer_AuraScript::CalculateBonus, EFFECT_0, SPELL_AURA_MOD_DAMAGE_PERCENT_DONE);
+            }
+        };
+
+        AuraScript* GetAuraScript() const
+        {
+            return new spell_pal_selfless_healer_AuraScript();
+        }
+};
+
 void AddSC_paladin_spell_scripts()
 {
     new spell_pal_ardent_defender();
@@ -473,4 +546,5 @@ void AddSC_paladin_spell_scripts()
     new spell_pal_shield_of_righteous();
     new spell_pal_judgements_of_the_bold();
     new spell_pal_word_of_glory();
+    new spell_pal_selfless_healer();
 }
