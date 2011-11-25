@@ -6150,6 +6150,14 @@ void AuraEffect::HandlePeriodicDummyAuraTick(Unit* target, Unit* caster) const
             }
             break;
         }
+        case SPELLFAMILY_PALADIN:
+        {
+            if(GetId() == 26573)
+            {
+                caster->CastSpell(target,81297,true);
+            }
+            break;
+        }
         case SPELLFAMILY_SHAMAN:
             if (GetId() == 52179) // Astral Shift
             {
