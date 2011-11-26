@@ -6127,14 +6127,6 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                 triggered_spell_id = 47753;
                 break;
             }
-            //Mind Melt
-            case 87160:
-            case 81292:
-            {
-                if (procSpell->Id != 73510)
-                    return false;
-                break;
-            }
             // Body and Soul
             if (dummySpell->SpellIconID == 2218)
             {
@@ -6252,6 +6244,7 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                 }
                 // Priest T10 Healer 2P Bonus
                 case 70770:
+                {
                     // Flash Heal
                     if (procSpell->SpellFamilyFlags[0] & 0x800)
                     {
@@ -6262,6 +6255,24 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                         basepoints0 = int32(CalculatePctN(damage, triggerAmount) / (blessHealing->GetMaxDuration() / blessHealing->Effects[0].Amplitude));
                     }
                     break;
+                }
+                //Mind Melt
+                case 87160:
+                case 81292:
+                {
+                    if (procSpell->Id != 73510)
+                        return false;
+                    break;
+                }
+                // Atonement
+                case 14523:
+                case 81749:
+                {
+                    basepoints0 = int32(CalculatePctN(damage, triggerAmount));
+                    triggered_spell_id = 81751;
+                    target = this;
+                    break;
+                }
             }
             break;
         }

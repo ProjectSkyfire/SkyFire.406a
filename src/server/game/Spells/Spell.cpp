@@ -2768,6 +2768,11 @@ uint32 Spell::SelectEffectTargets(uint32 i, SpellImplicitTargetInfo const& cur)
                         maxSize = 3;
                         power = POWER_MANA;
                     }
+                    else if (m_spellInfo->Id == 81751) // Atonement
+                    {
+                        maxSize = 1;
+                        power = POWER_HEALTH;
+                    }
                     else
                         break;
 
