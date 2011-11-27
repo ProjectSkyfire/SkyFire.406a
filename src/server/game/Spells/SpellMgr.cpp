@@ -312,6 +312,13 @@ int32 GetDiminishingReturnsLimitDuration(DiminishingGroup group, SpellInfo const
                return 120 * IN_MILLISECONDS;
             break;
         }
+        case SPELLFAMILY_DEATHKNIGHT:
+        {
+            // Hungering Cold - limit to 8 seconds in PvP
+            if(spellproto->SpellFamilyFlags[1] & 0x9000)
+                return 8 * IN_MILLISECONDS;
+            break;
+        }
         default:
             break;
     }
