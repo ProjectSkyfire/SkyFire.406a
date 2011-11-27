@@ -9009,6 +9009,22 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
                 return false;
             break;
         }
+        case 52284: // Will Of The Necropolis Rank 1
+        case 81163: // Will Of The Necropolis Rank 2
+        case 81164: // Will Of The Necropolis Rank 3
+        {
+            if(GetTypeId() != TYPEID_PLAYER)
+                return false;
+                
+            if(!HealthBelowPctDamaged(30, damage)) // Only proc if it brings us below 30% health
+                return false;
+
+            ToPlayer()->RemoveSpellCooldown(48982,true); // Remove cooldown of rune tap
+            CastSpell(this,96171,true); // next rune tap wont cost runes
+            cooldown = 45000; // Can only happen once in 45 seconds
+            break;
+        }
+        
     }
     // Sword Specialization
     if (auraSpellInfo->SpellFamilyName == SPELLFAMILY_GENERIC && auraSpellInfo->SpellIconID == 1462 && procSpell)
@@ -9054,19 +9070,6 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
     // dummy basepoints or other customs
     switch (trigger_spell_id)
     {
-        // Will of Necropolis
-        case 81162:
-            if (HealthBelowPct(29) || (!HealthBelowPctDamaged(30, damage)))
-                return false;
-            else
-            {
-                if (!ToPlayer()->HasSpellCooldown(trigger_spell_id))
-                {
-                    AddAura(trigger_spell_id, this);
-                    ToPlayer()->AddSpellCooldown(trigger_spell_id, 0, time(NULL) + 15);
-                }
-            }
-            break;
         case 92184: // Lead Plating
         case 92233: // Tectonic Shift
         case 92355: // Turn of the Worm
