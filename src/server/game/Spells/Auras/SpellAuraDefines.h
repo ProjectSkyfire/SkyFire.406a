@@ -393,8 +393,8 @@ enum AuraType
     SPELL_AURA_MOD_RUNE_REGEN_SPEED 				= 329,    // NYI
     SPELL_AURA_CAST_WHILE_WALKING 					= 330,    // NYI
     SPELL_AURA_331                                  = 331,
-    SPELL_AURA_332                                  = 332,    // NYI
-    SPELL_AURA_MOD_TRAP_LAUNCHER                    = 333,    // NYI
+    SPELL_AURA_OVERRIDE_ACTIONBAR_SPELLS_1          = 332,    // NYI
+    SPELL_AURA_OVERRIDE_ACTIONBAR_SPELLS_2          = 333,    // NYI
     SPELL_AURA_334                                  = 334,
     SPELL_AURA_335 									= 335,
     SPELL_AURA_MOD_FLYING_RESTRICTIONS 				= 336,    // NYI
@@ -405,7 +405,7 @@ enum AuraType
     SPELL_AURA_341 									= 341,    // cooldown decrease
     SPELL_AURA_MOD_TIME_BETWEEN_ATTACKS 			= 342,    // (attack speed) NYI
     SPELL_AURA_343 									= 343,
-    SPELL_AURA_MOD_AUTOATTACK_DAMAGE 				= 344,    // (white damage) NYI
+    SPELL_AURA_MOD_AUTOATTACK_DAMAGE 				= 344,    // (white damage)
     SPELL_AURA_MOD_ARMOR_EFFECTIVENESS_FOR_CASTER   = 345,
     SPELL_AURA_PROGRESS_BAR						    = 346,    // NYI
     SPELL_AURA_MOD_SPELL_COOLDOWN_BY_HASTE 			= 347,    // NYI

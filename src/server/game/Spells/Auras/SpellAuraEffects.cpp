@@ -387,9 +387,8 @@ pAuraEffectHandler AuraEffectHandler[TOTAL_AURAS]=
     &AuraEffect::HandleNULL,                                      //329 NYI
     &AuraEffect::HandleNULL,                                      //330 NYI
     &AuraEffect::HandleNULL,                                      //331 NYI
-    /* HandleActionbarSpellOverride - 332?*/
-    &AuraEffect::HandleNULL,                                      //332 NYI SPELL_AURA_OVERRIDE_ACTIONBAR_SPELLS
-    &AuraEffect::HandleModTrapLauncher,                           //333 SPELL_AURA_MOD_TRAP_LAUNCHER
+    &AuraEffect::HandleNULL,                                      //332 NYI SPELL_AURA_OVERRIDE_ACTIONBAR_SPELLS_1
+    &AuraEffect::HandleNULL,                                      //333 SPELL_AURA_OVERRIDE_ACTIONBAR_SPELLS_2
     &AuraEffect::HandleNULL,                                      //334 NYI
     &AuraEffect::HandleNULL,                                      //335 NYI
     &AuraEffect::HandleNULL,                                      //336 NYI
@@ -400,7 +399,7 @@ pAuraEffectHandler AuraEffectHandler[TOTAL_AURAS]=
     &AuraEffect::HandleNULL,                                      //341 NYI
     &AuraEffect::HandleNULL,                                      //342 NYI
     &AuraEffect::HandleNULL,                                      //343 NYI
-    &AuraEffect::HandleNULL,                                      //344 NYI
+    &AuraEffect::HandleNoImmediateEffect,                         //344 SPELL_AURA_MOD_AUTOATTACK_DAMAGE, Implemented in Unit::AttackerStateUpdate
     &AuraEffect::HandleNULL,                                      //345 NYI
     &AuraEffect::HandleNULL,                                      //346 NYI
     &AuraEffect::HandleNULL,                                      //347 NYI
@@ -1798,11 +1797,6 @@ void AuraEffect::HandleModInvisibility(AuraApplication const* aurApp, uint8 mode
         target->RemoveAurasWithInterruptFlags(AURA_INTERRUPT_FLAG_IMMUNE_OR_LOST_SELECTION);
     }
     target->UpdateObjectVisibility();
-}
-
-//TODO: Finish this aura
-void AuraEffect::HandleModTrapLauncher(AuraApplication const *aurApp, uint8 mode, bool apply) const
-{
 }
 
 //TODO: Finish this aura
