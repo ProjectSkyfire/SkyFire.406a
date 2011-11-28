@@ -416,14 +416,14 @@ void Map::InitializeObject(Creature* obj)
 }
 
 template<class T>
-void Map::AddToMap(T *obj)
+bool Map::AddToMap(T *obj)
 {
     //TODO: Needs clean up. An object should not be added to map twice.
     if (obj->IsInWorld())
     {
         ASSERT(obj->IsInGrid());
         obj->UpdateObjectVisibility(true);
-        return;
+        return true;
     }
 
     CellCoord cellCoord = Trinity::ComputeCellCoord(obj->GetPositionX(), obj->GetPositionY());
@@ -434,7 +434,7 @@ void Map::AddToMap(T *obj)
     if (!cellCoord.IsCoordValid())
     {
         sLog->outError("Map::Add: Object " UI64FMTD " has invalid coordinates X:%f Y:%f grid cell [%u:%u]", obj->GetGUID(), obj->GetPositionX(), obj->GetPositionY(), cellCoord.x_coord, cellCoord.y_coord);
-        return;
+        return false; //Should delete object
     }
 
     Cell cell(cellCoord);
@@ -457,6 +457,7 @@ void Map::AddToMap(T *obj)
     //something, such as vehicle, needs to be update immediately
     //also, trigger needs to cast spell, if not update, cannot see visual
     obj->UpdateObjectVisibility(true);
+    return true;
 }
 
 bool Map::IsGridLoaded(const GridCoord &p) const
@@ -665,8 +666,7 @@ void Map::RemovePlayerFromMap(Player* player, bool remove)
 }
 
 template<class T>
-void
-Map::RemoveFromMap(T *obj, bool remove)
+void Map::RemoveFromMap(T *obj, bool remove)
 {
     obj->RemoveFromWorld();
     if (obj->isActiveObject())
@@ -2142,10 +2142,10 @@ void Map::RemoveFromActive(Creature* c)
     }
 }
 
-template void Map::AddToMap(Corpse*);
-template void Map::AddToMap(Creature*);
-template void Map::AddToMap(GameObject*);
-template void Map::AddToMap(DynamicObject*);
+template bool Map::AddToMap(Corpse*);
+template bool Map::AddToMap(Creature*);
+template bool Map::AddToMap(GameObject*);
+template bool Map::AddToMap(DynamicObject*);
 
 template void Map::RemoveFromMap(Corpse*, bool);
 template void Map::RemoveFromMap(Creature*, bool);
