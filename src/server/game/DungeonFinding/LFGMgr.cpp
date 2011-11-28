@@ -688,7 +688,7 @@ void LFGMgr::Leave(Player* player, Group* group /* = NULL*/)
             LfgProposalMap::iterator it = m_Proposals.begin();
             while (it != m_Proposals.end())
             {
-                LfgProposalPlayerMap::iterator itPlayer = it->second->players.find(player ? player->GetGUID() : grp->GetLeaderGUID());
+                LfgProposalPlayerMap::iterator itPlayer = it->second->players.find(player ? player->GetGUID() : group->GetLeaderGUID());
                 if (itPlayer != it->second->players.end())
                 {
                     // Mark the player/leader of group who left as didn't accept the proposal
