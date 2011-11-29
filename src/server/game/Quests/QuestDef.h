@@ -263,6 +263,8 @@ class Quest
         std::string GetQuestGiverPortraitUnk() const { return QuestGiverPortraitUnk; }
         std::string GetQuestTurnInPortraitText() const { return QuestTurnInPortraitText; }
         std::string GetQuestTurnInPortraitUnk() const { return QuestTurnInPortraitUnk; }
+        uint32 GetQuestTargetMark() const { return QuestTargetMark; }
+        uint16 GetQuestStartType() const { return QuestStartType; }		
         uint32 GetSoundAccept() const { return SoundAccept; }
         uint32 GetSoundTurnIn() const { return SoundTurnIn; }
         uint32 GetRequiredSpell() const { return RequiredSpell; }
@@ -387,6 +389,8 @@ class Quest
         std::string QuestGiverPortraitUnk;
         std::string QuestTurnInPortraitText;
         std::string QuestTurnInPortraitUnk;
+        uint32 QuestTargetMark;
+        uint16 QuestStartType;		
         uint32 SoundAccept;
         uint32 SoundTurnIn;
         uint32 RequiredSpell;
