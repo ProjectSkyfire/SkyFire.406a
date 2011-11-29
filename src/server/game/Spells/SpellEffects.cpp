@@ -1650,6 +1650,12 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                 if (AuraEffect const* aurEff = m_caster->GetAuraEffect(SPELL_AURA_ADD_PCT_MODIFIER, SPELLFAMILY_DEATHKNIGHT, 2751, 0))
                     AddPctN(bp, m_caster->CalculateSpellDamage(m_caster, aurEff->GetSpellInfo(), 2));
 
+                // Glyph of Dark Succor
+                if(AuraEffect const* aurEff = m_caster->GetAuraEffect(96279, 0))
+                    if(bp < m_caster->CountPctFromMaxHealth(aurEff->GetAmount()))
+                        if(m_caster->HasAura(48265) || m_caster->HasAura(48266)) // Only in frost/unholy presence
+                            bp = m_caster->CountPctFromMaxHealth(aurEff->GetAmount());
+                
                 if (m_caster->ToPlayer()->HasAuraType(SPELL_AURA_MASTERY))
                 {
                     if (m_caster->ToPlayer()->HasSpell(50029)) //Temp check for spec
