@@ -4518,6 +4518,12 @@ void Spell::EffectWeaponDmg(SpellEffIndex effIndex)
                 AddPctF(totalDamagePercentMod, m_spellInfo->Effects[EFFECT_2].CalcValue() * unitTarget->GetDiseasesByCaster(m_caster->GetGUID(), false) / 2.0f);
                 break;
             }
+            // Scourge Strike ( for each of your diseases on your target, you deal an additional 18% of the Physical damage done as Shadow damage.)
+            if(m_spellInfo->SpellFamilyFlags[1] & 0x8000000)
+            {
+                AddPctF(totalDamagePercentMod, m_spellInfo->Effects[EFFECT_2].CalcValue() * unitTarget->GetDiseasesByCaster(m_caster->GetGUID(), false));
+                break;
+            }
             // Blood-Caked Strike - Blood-Caked Blade
             if (m_spellInfo->SpellIconID == 1736)
             {
