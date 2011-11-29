@@ -1704,29 +1704,18 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                 // Do we have talent Master of Ghouls?
                 if (m_caster->HasAura(52143))
                     // summon as pet
-                    bp = 52150;
+                    spell_id = 52150;
                 else
                     // or guardian
-                    bp = 46585;
+                    spell_id = 46585;
 
                 if (m_targets.HasDst())
                     targets.SetDst(*m_targets.GetDst());
                 else
-                {
                     targets.SetDst(*m_caster);
-                    // Corpse not found - take reagents (only not triggered cast can take them)
-                    triggered = false;
-                }
+
                 // Remove cooldown - summon spellls have category
                 m_caster->ToPlayer()->RemoveSpellCooldown(m_spellInfo->Id, true);
-                spell_id = 48289;
-                break;
-            // Raise dead - take reagents and trigger summon spells
-            case 48289:
-                if (m_targets.HasDst())
-                    targets.SetDst(*m_targets.GetDst());
-
-                spell_id = CalculateDamage(0, NULL);
                 break;
             }
             break;
@@ -1745,7 +1734,8 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
 
         targets.SetUnitTarget(unitTarget);
         Spell* spell = new Spell(m_caster, spellInfo, triggered ? TRIGGERED_FULL_MASK : TRIGGERED_NONE, m_originalCasterGUID, true);
-        if (bp) spell->SetSpellValue(SPELLVALUE_BASE_POINT0, bp);
+        if (bp) 
+            spell->SetSpellValue(SPELLVALUE_BASE_POINT0, bp);
         spell->prepare(&targets);
     }
 
