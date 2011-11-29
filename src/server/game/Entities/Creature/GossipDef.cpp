@@ -369,9 +369,6 @@ void PlayerMenu::SendQuestGiverQuestDetails(Quest const* quest, uint64 npcGUID, 
 
     data << uint32(quest->GetRewOrReqMoney()); // rewarded money
     data << uint32(quest->XPValue(_session->GetPlayer()) * sWorld->getRate(RATE_XP_QUEST)); // granted exp
-    data << uint32(quest->GetCharTitleId()); // title
-    data << uint32(0); // unknown 4.0.6a
-
     data << uint32(quest->GetCharTitleId());
     data << uint32(0); // unknown 4.0.6a
     data << uint32(0); // unknown 4.0.6a
