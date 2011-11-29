@@ -1984,7 +1984,7 @@ void Unit::AttackerStateUpdate (Unit* victim, WeaponAttackType attType, bool ext
         if(attType == BASE_ATTACK)
         {
             float mod = GetTotalAuraModifier(SPELL_AURA_MOD_AUTOATTACK_DAMAGE) / 100;
-            damageInfo.damage += uint32(damage * mod);
+            damageInfo.damage += uint32(damageInfo.damage * mod);
         }
 
         // Send log damage message to client
@@ -8804,8 +8804,12 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
                 // Sudden Doom
                 else if(auraSpellInfo->SpellIconID == 1939)
                 {
+                    if(GetTypeId() != TYPEID_PLAYER)
+                        return false;
+
                     // Select chance based on weapon speed
-                    float speed = GetWeaponForAttack(BASE_ATTACK)->GetTemplate()->Delay / 1000;
+                    float speed = ToPlayer()->GetWeaponForAttack(BASE_ATTACK)->GetTemplate()->Delay / 1000;
+                    
                     int32 modifier = 1;
                     
                     if(auraSpellInfo->Id == 49530) // Rank 3

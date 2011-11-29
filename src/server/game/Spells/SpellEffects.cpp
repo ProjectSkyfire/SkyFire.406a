@@ -1652,7 +1652,7 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
 
                 // Glyph of Dark Succor
                 if(AuraEffect const* aurEff = m_caster->GetAuraEffect(96279, 0))
-                    if(bp < m_caster->CountPctFromMaxHealth(aurEff->GetAmount()))
+                    if(bp < int32(m_caster->CountPctFromMaxHealth(aurEff->GetAmount())))
                         if(m_caster->HasAura(48265) || m_caster->HasAura(48266)) // Only in frost/unholy presence
                             bp = m_caster->CountPctFromMaxHealth(aurEff->GetAmount());
                 
@@ -1721,7 +1721,8 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                     targets.SetDst(*m_caster);
 
                 // Remove cooldown - summon spellls have category
-                m_caster->ToPlayer()->RemoveSpellCooldown(m_spellInfo->Id, true);
+                m_caster->ToPlayer()->RemoveSpellCooldown(52150, true);
+                m_caster->ToPlayer()->RemoveSpellCooldown(46585, true);
                 break;
             }
             break;
