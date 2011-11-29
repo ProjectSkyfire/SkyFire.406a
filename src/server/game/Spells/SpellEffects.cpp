@@ -1481,6 +1481,9 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                 if (m_caster->HasUnitState(UNIT_STAT_CONTROLLED))
                     return;
 
+                if(unitTarget && !unitTarget->isInCombat())
+                    return;
+                    
                 m_caster->CastSpell(unitTarget, damage, true);
                 return;
             }
