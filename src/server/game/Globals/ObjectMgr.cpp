@@ -3709,11 +3709,12 @@ void ObjectMgr::LoadQuests()
         "RewCurrencyId1, RewCurrencyCount1, RewCurrencyId2, RewCurrencyCount2, RewCurrencyId3, RewCurrencyCount3, RewCurrencyId4, RewCurrencyCount4,"
     //   155             156                157             158                159             160                161             162
         "ReqCurrencyId1, ReqCurrencyCount1, ReqCurrencyId2, ReqCurrencyCount2, ReqCurrencyId3, ReqCurrencyCount3, ReqCurrencyId4, ReqCurrencyCount4,"
-    //   163                     164                    165                      166                    167          168          169
-        "QuestGiverPortraitText, QuestGiverPortraitUnk, QuestTurnInPortraitText, QuestTurnInPortraitUnk, SoundAccept, SoundTurnIn, RequiredSpell,"
-    //   170          171
+    //   163                     164                    165                      166                     167              168             169          170          171
+        "QuestGiverPortraitText, QuestGiverPortraitUnk, QuestTurnInPortraitText, QuestTurnInPortraitUnk, QuestTargetMark, QuestStartType, SoundAccept, SoundTurnIn, RequiredSpell,"
+    //   172          173
         "StartScript, CompleteScript"
         " FROM quest_template");
+
     if (!result)
     {
         sLog->outErrorDb(">> Loaded 0 quests definitions. DB table `quest_template` is empty.");
