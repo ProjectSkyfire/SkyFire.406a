@@ -32,9 +32,9 @@
 
 void WorldSession::HandleSendMail(WorldPacket & recv_data)
 {
-    uint64 mailbox, unk3;
+    uint64 mailbox, unk3, money, COD;
     std::string receiver, subject, body;
-    uint32 unk1, unk2, money, COD;
+    uint32 unk1, unk2;
     uint8 unk4;
     recv_data >> mailbox;
     recv_data >> receiver;
@@ -292,8 +292,10 @@ void WorldSession::HandleSendMail(WorldPacket & recv_data)
 void WorldSession::HandleMailMarkAsRead(WorldPacket & recv_data)
 {
     uint64 mailbox;
+    uint64 unk;
     uint32 mailId;
     recv_data >> mailbox;
+    recv_data >> unk;            // 4.0.6
     recv_data >> mailId;
 
     if (!GetPlayer()->GetGameObjectIfCanInteractWith(mailbox, GAMEOBJECT_TYPE_MAILBOX))
@@ -318,7 +320,7 @@ void WorldSession::HandleMailDelete(WorldPacket & recv_data)
     uint32 mailId;
     recv_data >> mailbox;
     recv_data >> mailId;
-    recv_data.read_skip<uint32>();                          // mailTemplateId
+    recv_data.read_skip<uint64>();                          // mailTemplateId -- 406a
 
     if (!GetPlayer()->GetGameObjectIfCanInteractWith(mailbox, GAMEOBJECT_TYPE_MAILBOX))
         return;
@@ -574,34 +576,34 @@ void WorldSession::HandleGetMailList(WorldPacket & recv_data)
             continue;
         }
 
-        data << uint16(next_mail_size);                    // Message size
-        data << uint32((*itr)->messageID);                 // Message ID
-        data << uint8((*itr)->messageType);                // Message Type
+        data << uint16(next_mail_size);                     // Message size
+        data << uint32((*itr)->messageID);                  // Message ID
+        data << uint8((*itr)->messageType);                 // Message Type
 
         switch ((*itr)->messageType)
         {
-            case MAIL_NORMAL:                               // sender guid
+            case MAIL_NORMAL:                                // sender guid
                 data << uint64(MAKE_NEW_GUID((*itr)->sender, 0, HIGHGUID_PLAYER));
                 break;
             case MAIL_CREATURE:
             case MAIL_GAMEOBJECT:
             case MAIL_AUCTION:
-                data << uint32((*itr)->sender);            // creature/gameobject entry, auction id
+                data << uint32((*itr)->sender);              // creature/gameobject entry, auction id
                 break;
-            case MAIL_ITEM:                                 // item entry (?) sender = "Unknown", NYI
-                data << uint32(0);                          // item entry
+            case MAIL_ITEM:                                  // item entry (?) sender = "Unknown", NYI
+                data << uint32(0);                           // item entry
                 break;
         }
 
-        data << uint32((*itr)->COD);                         // COD
+        data << uint64((*itr)->COD);                         // COD
         data << uint32(0);                                   // probably changed in 3.3.3
         data << uint32((*itr)->stationery);                  // stationery (Stationery.dbc)
         data << uint32((*itr)->money);                       // Gold
-        data << uint32((*itr)->checked);                    // flags
+        data << uint32((*itr)->checked);                     // flags
         data << float(((*itr)->expire_time-time(NULL))/DAY); // Time
         data << uint32((*itr)->mailTemplateId);              // mail template (MailTemplate.dbc)
-        data << (*itr)->subject;                            // Subject string - once 00, when mail type = 3, max 256
-        data << (*itr)->body;                               // message? max 8000
+        data << (*itr)->subject;                             // Subject string - once 00, when mail type = 3, max 256
+        data << (*itr)->body;                                // message? max 8000
         data << uint8(item_count);                           // client limit is 0x10
 
         for (uint8 i = 0; i < item_count; ++i)
