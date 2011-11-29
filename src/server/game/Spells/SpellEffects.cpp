@@ -1707,6 +1707,8 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                 if (m_caster->GetTypeId() != TYPEID_PLAYER)
                     return;
 
+                if(effIndex != 0)
+                    return;
                 // Do we have talent Master of Ghouls?
                 if (m_caster->HasAura(52143))
                     // summon as pet
