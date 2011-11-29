@@ -1982,7 +1982,10 @@ void Unit::AttackerStateUpdate (Unit* victim, WeaponAttackType attType, bool ext
         CalculateMeleeDamage(victim, 0, &damageInfo, attType);
 
         if(attType == BASE_ATTACK)
-            damageInfo.damage *= GetTotalAuraModifier(SPELL_AURA_MOD_AUTOATTACK_DAMAGE) / 100;
+        {
+            float mod = GetTotalAuraModifier(SPELL_AURA_MOD_AUTOATTACK_DAMAGE) / 100;
+            damageInfo.damage *= mod > 0 ? mod : 1;
+        }
 
         // Send log damage message to client
         DealDamageMods(victim, damageInfo.damage, &damageInfo.absorb);
