@@ -1984,7 +1984,7 @@ void Unit::AttackerStateUpdate (Unit* victim, WeaponAttackType attType, bool ext
         if(attType == BASE_ATTACK)
         {
             float mod = GetTotalAuraModifier(SPELL_AURA_MOD_AUTOATTACK_DAMAGE) / 100;
-            damageInfo.damage *= mod > 0 ? mod : 1;
+            damageInfo.damage += uint32(damage * mod);
         }
 
         // Send log damage message to client
