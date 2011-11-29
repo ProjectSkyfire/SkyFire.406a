@@ -115,8 +115,8 @@ my_bool check_date(const MYSQL_TIME *ltime, my_bool not_zero_date,
                         TIME_NO_ZERO_DATE	Don't allow 0000-00-00 date
                         TIME_INVALID_DATES	Allow 2000-02-31
     was_cut             0	Value OK
-			1       If value was cut during conversion
-			2	check_date(date,flags) considers date invalid
+            1       If value was cut during conversion
+            2	check_date(date,flags) considers date invalid
 
   DESCRIPTION
     At least the following formats are recogniced (based on number of digits)
@@ -774,7 +774,7 @@ long calc_daynr(uint year,uint month,uint day)
     delsum-= (long) ((int) month * 4 + 23) / 10;
   temp=(int) ((y/100+1)*3)/4;
   DBUG_PRINT("exit",("year: %d  month: %d  day: %d -> daynr: %ld",
-		     y+(month <= 2),month,day,delsum+y/4-temp));
+             y+(month <= 2),month,day,delsum+y/4-temp));
   DBUG_ASSERT(delsum+(int) y/4-temp > 0);
   DBUG_RETURN(delsum+(int) y/4-temp);
 } /* calc_daynr */
@@ -922,8 +922,8 @@ my_system_gmt_sec(const MYSQL_TIME *t_src, long *my_timezone,
   l_time=&tm_tmp;
   for (loop=0;
        loop < 2 &&
-	 (t->hour != (uint) l_time->tm_hour ||
-	  t->minute != (uint) l_time->tm_min ||
+     (t->hour != (uint) l_time->tm_hour ||
+      t->minute != (uint) l_time->tm_min ||
           t->second != (uint) l_time->tm_sec);
        loop++)
   {					/* One check should be enough ? */
@@ -959,7 +959,7 @@ my_system_gmt_sec(const MYSQL_TIME *t_src, long *my_timezone,
     else if (days > 1)
       days= -1;
     diff=(3600L*(long) (days*24+((int) t->hour - (int) l_time->tm_hour))+
-	  (long) (60*((int) t->minute - (int) l_time->tm_min)) +
+      (long) (60*((int) t->minute - (int) l_time->tm_min)) +
           (long) ((int) t->second - (int) l_time->tm_sec));
     if (diff == 3600)
       tmp+=3600 - t->minute*60 - t->second;	/* Move to next hour */

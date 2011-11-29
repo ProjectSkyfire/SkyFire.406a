@@ -298,18 +298,18 @@ void my_print_stacktrace(uchar* stack_bottom, ulong thread_stack)
 
 #ifdef __i386__
   __asm __volatile__ ("movl %%ebp,%0"
-		      :"=r"(fp)
-		      :"r"(fp));
+              :"=r"(fp)
+              :"r"(fp));
 #endif
 #ifdef __x86_64__
   __asm __volatile__ ("movq %%rbp,%0"
-		      :"=r"(fp)
-		      :"r"(fp));
+              :"=r"(fp)
+              :"r"(fp));
 #endif
 #if defined(__alpha__) && defined(__GNUC__)
   __asm __volatile__ ("mov $30,%0"
-		      :"=r"(fp)
-		      :"r"(fp));
+              :"=r"(fp)
+              :"r"(fp));
 #endif
   if (!fp)
   {
@@ -323,7 +323,7 @@ void my_print_stacktrace(uchar* stack_bottom, ulong thread_stack)
     ulong tmp= min(0x10000,thread_stack);
     /* Assume that the stack starts at the previous even 65K */
     stack_bottom= (uchar*) (((ulong) &fp + tmp) &
-			  ~(ulong) 0xFFFF);
+              ~(ulong) 0xFFFF);
     fprintf(stderr, "Cannot determine thread, fp=%p, backtrace may not be correct.\n", fp);
   }
   if (fp > (uchar**) stack_bottom ||
@@ -331,7 +331,7 @@ void my_print_stacktrace(uchar* stack_bottom, ulong thread_stack)
   {
     fprintf(stderr, "Bogus stack limit or frame pointer,\
  fp=%p, stack_bottom=%p, thread_stack=%ld, aborting backtrace.\n",
-	    fp, stack_bottom, thread_stack);
+        fp, stack_bottom, thread_stack);
     return;
   }
 
@@ -342,8 +342,8 @@ void my_print_stacktrace(uchar* stack_bottom, ulong thread_stack)
  terminate abruptly\n");
   /* On Alpha, we need to get pc */
   __asm __volatile__ ("bsr %0, do_next; do_next: "
-		      :"=r"(pc)
-		      :"r"(pc));
+              :"=r"(pc)
+              :"r"(pc));
 #endif  /* __alpha__ */
 
   /* We are 1 frame above signal frame with NPTL and 2 frames above with LT */
@@ -354,7 +354,7 @@ void my_print_stacktrace(uchar* stack_bottom, ulong thread_stack)
 #if defined(__i386__) || defined(__x86_64__)
     uchar** new_fp = (uchar**)*fp;
     fprintf(stderr, "%p\n", frame_count == sigreturn_frame_count ?
-	    *(fp + SIGRETURN_FRAME_OFFSET) : *(fp + 1));
+        *(fp + SIGRETURN_FRAME_OFFSET) : *(fp + 1));
 #endif /* defined(__386__)  || defined(__x86_64__) */
 
 #if defined(__alpha__) && defined(__GNUC__)
@@ -368,12 +368,12 @@ void my_print_stacktrace(uchar* stack_bottom, ulong thread_stack)
     {
       pc = find_prev_pc(pc, fp);
       if (pc)
-	fprintf(stderr, "%p\n", pc);
+    fprintf(stderr, "%p\n", pc);
       else
       {
-	fprintf(stderr, "Not smart enough to deal with the rest\
+    fprintf(stderr, "Not smart enough to deal with the rest\
  of this stack\n");
-	goto end;
+    goto end;
       }
     }
     else

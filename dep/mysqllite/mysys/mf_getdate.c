@@ -26,11 +26,11 @@
     get_date()
     to   - string where date will be written
     flag - format of date:
-	  If flag & GETDATE_TIME	Return date and time
-	  If flag & GETDATE_SHORT_DATE	Return short date format YYMMDD
-	  If flag & GETDATE_HHMMSSTIME	Return time in HHMMDD format.
-	  If flag & GETDATE_GMT		Date/time in GMT
-	  If flag & GETDATE_FIXEDLENGTH	Return fixed length date/time
+      If flag & GETDATE_TIME	Return date and time
+      If flag & GETDATE_SHORT_DATE	Return short date format YYMMDD
+      If flag & GETDATE_HHMMSSTIME	Return time in HHMMDD format.
+      If flag & GETDATE_GMT		Date/time in GMT
+      If flag & GETDATE_FIXEDLENGTH	Return fixed length date/time
     date - for conversion
 */
 
@@ -57,25 +57,25 @@ void get_date(register char * to, int flag, time_t date)
 #endif
    if (flag & GETDATE_SHORT_DATE)
      sprintf(to,"%02d%02d%02d",
-	     start_time->tm_year % 100,
-	     start_time->tm_mon+1,
-	     start_time->tm_mday);
+         start_time->tm_year % 100,
+         start_time->tm_mon+1,
+         start_time->tm_mday);
    else
      sprintf(to, ((flag & GETDATE_FIXEDLENGTH) ?
-		  "%4d-%02d-%02d" : "%d-%02d-%02d"),
-	     start_time->tm_year+1900,
-	     start_time->tm_mon+1,
-	     start_time->tm_mday);
+          "%4d-%02d-%02d" : "%d-%02d-%02d"),
+         start_time->tm_year+1900,
+         start_time->tm_mon+1,
+         start_time->tm_mday);
    if (flag & GETDATE_DATE_TIME)
      sprintf(strend(to),
-	     ((flag & GETDATE_FIXEDLENGTH) ?
-	      " %02d:%02d:%02d" : " %2d:%02d:%02d"),
-	     start_time->tm_hour,
-	     start_time->tm_min,
-	     start_time->tm_sec);
+         ((flag & GETDATE_FIXEDLENGTH) ?
+          " %02d:%02d:%02d" : " %2d:%02d:%02d"),
+         start_time->tm_hour,
+         start_time->tm_min,
+         start_time->tm_sec);
    else if (flag & GETDATE_HHMMSSTIME)
      sprintf(strend(to),"%02d%02d%02d",
-	     start_time->tm_hour,
-	     start_time->tm_min,
-	     start_time->tm_sec);
+         start_time->tm_hour,
+         start_time->tm_min,
+         start_time->tm_sec);
 } /* get_date */

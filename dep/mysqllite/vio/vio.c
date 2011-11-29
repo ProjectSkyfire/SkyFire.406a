@@ -188,8 +188,8 @@ Vio *vio_new(my_socket sd, enum enum_vio_type type, uint flags)
   {
     vio_init(vio, type, sd, 0, flags);
     sprintf(vio->desc,
-	    (vio->type == VIO_TYPE_SOCKET ? "socket (%d)" : "TCP/IP (%d)"),
-	    vio->sd);
+        (vio->type == VIO_TYPE_SOCKET ? "socket (%d)" : "TCP/IP (%d)"),
+        vio->sd);
 #if !defined(__WIN__)
 #if !defined(NO_FCNTL_NONBLOCK)
     /*

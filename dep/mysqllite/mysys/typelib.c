@@ -82,15 +82,15 @@ int find_type(const char *x, const TYPELIB *typelib, uint flags)
   for (pos=0 ; (j=typelib->type_names[pos]) ; pos++)
   {
     for (i=x ;
-    	*i && (!(flags & FIND_TYPE_COMMA_TERM) || !is_field_separator(*i)) &&
+        *i && (!(flags & FIND_TYPE_COMMA_TERM) || !is_field_separator(*i)) &&
         my_toupper(&my_charset_latin1,*i) ==
-    		my_toupper(&my_charset_latin1,*j) ; i++, j++) ;
+            my_toupper(&my_charset_latin1,*j) ; i++, j++) ;
     if (! *j)
     {
       while (*i == ' ')
-	i++;					/* skip_end_space */
+    i++;					/* skip_end_space */
       if (! *i || ((flags & FIND_TYPE_COMMA_TERM) && is_field_separator(*i)))
-	DBUG_RETURN(pos+1);
+    DBUG_RETURN(pos+1);
     }
     if ((!*i &&
          (!(flags & FIND_TYPE_COMMA_TERM) || !is_field_separator(*i))) &&
@@ -125,7 +125,7 @@ int find_type(const char *x, const TYPELIB *typelib, uint flags)
 */
 
 void make_type(register char * to, register uint nr,
-	       register TYPELIB *typelib)
+           register TYPELIB *typelib)
 {
   DBUG_ENTER("make_type");
   if (!nr)

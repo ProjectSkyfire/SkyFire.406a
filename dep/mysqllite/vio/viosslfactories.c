@@ -65,7 +65,7 @@ report_errors()
 #ifndef DBUG_OFF				/* Avoid warning */
     char buf[200];
     DBUG_PRINT("error", ("OpenSSL: %s:%s:%d:%s\n", ERR_error_string(l,buf),
-			 file,line,(flags & ERR_TXT_STRING) ? data : "")) ;
+             file,line,(flags & ERR_TXT_STRING) ? data : "")) ;
 #endif
   }
   DBUG_VOID_RETURN;
@@ -96,7 +96,7 @@ vio_set_cert_stuff(SSL_CTX *ctx, const char *cert_file, const char *key_file,
 {
   DBUG_ENTER("vio_set_cert_stuff");
   DBUG_PRINT("enter", ("ctx: 0x%lx  cert_file: %s  key_file: %s",
-		       (long) ctx, cert_file, key_file));
+               (long) ctx, cert_file, key_file));
   if (cert_file)
   {
     if (SSL_CTX_use_certificate_file(ctx, cert_file, SSL_FILETYPE_PEM) <= 0)
@@ -273,8 +273,8 @@ new_VioSSLConnectorFd(const char *key_file, const char *cert_file,
 /************************ VioSSLAcceptorFd **********************************/
 struct st_VioSSLFd *
 new_VioSSLAcceptorFd(const char *key_file, const char *cert_file,
-		     const char *ca_file, const char *ca_path,
-		     const char *cipher, enum enum_ssl_init_error* error)
+             const char *ca_file, const char *ca_path,
+             const char *cipher, enum enum_ssl_init_error* error)
 {
   struct st_VioSSLFd *ssl_fd;
   int verify= SSL_VERIFY_PEER | SSL_VERIFY_CLIENT_ONCE;
@@ -295,8 +295,8 @@ new_VioSSLAcceptorFd(const char *key_file, const char *cert_file,
     Use the ssl_fd pointer
    */
   SSL_CTX_set_session_id_context(ssl_fd->ssl_context,
-				 (const unsigned char *)ssl_fd,
-				 sizeof(ssl_fd));
+                 (const unsigned char *)ssl_fd,
+                 sizeof(ssl_fd));
 
   return ssl_fd;
 }

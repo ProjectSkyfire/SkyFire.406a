@@ -49,8 +49,8 @@ static uint set_max_open_files(uint max_file_limit)
   {
     old_cur= (uint) rlimit.rlim_cur;
     DBUG_PRINT("info", ("rlim_cur: %u  rlim_max: %u",
-			(uint) rlimit.rlim_cur,
-			(uint) rlimit.rlim_max));
+            (uint) rlimit.rlim_cur,
+            (uint) rlimit.rlim_max));
     if (rlimit.rlim_cur == RLIM_INFINITY)
       rlimit.rlim_cur = max_file_limit;
     if (rlimit.rlim_cur >= max_file_limit)
@@ -64,7 +64,7 @@ static uint set_max_open_files(uint max_file_limit)
       (void) getrlimit(RLIMIT_NOFILE,&rlimit);
       DBUG_PRINT("info", ("rlim_cur: %u", (uint) rlimit.rlim_cur));
       if (rlimit.rlim_cur)			/* If call didn't fail */
-	max_file_limit= (uint) rlimit.rlim_cur;
+    max_file_limit= (uint) rlimit.rlim_cur;
     }
   }
   DBUG_PRINT("exit",("max_file_limit: %u", max_file_limit));
@@ -102,7 +102,7 @@ uint my_set_max_open_files(uint files)
     DBUG_RETURN(files);
 
   if (!(tmp= (struct st_my_file_info*) my_malloc(sizeof(*tmp) * files,
-						 MYF(MY_WME))))
+                         MYF(MY_WME))))
     DBUG_RETURN(MY_NFILE);
 
   /* Copy any initialized files */

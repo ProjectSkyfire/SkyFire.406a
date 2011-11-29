@@ -763,7 +763,7 @@ int decimal_shift(decimal_t *dec, int shift)
       to      - decimal where where the result will be stored
                 to->buf and to->len must be set.
       end     - Pointer to pointer to end of string. Will on return be
-		set to the char after the last used character
+        set to the char after the last used character
       fixed   - use to->intg, to->frac as limits for input number
 
   NOTE

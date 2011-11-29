@@ -6937,8 +6937,8 @@ static my_uca_scanner_handler my_ucs2_uca_scanner_handler=
   The same two functions for any character set
 */
 static void my_uca_scanner_init_any(my_uca_scanner *scanner,
-				    CHARSET_INFO *cs __attribute__((unused)),
-				    const uchar *str, size_t length)
+                    CHARSET_INFO *cs __attribute__((unused)),
+                    const uchar *str, size_t length)
 {
   /* Note, no needs to initialize scanner->wbeg */
   scanner->sbeg= str;
@@ -7081,7 +7081,7 @@ static my_uca_scanner_handler my_any_uca_scanner_handler=
 
 static int my_strnncoll_uca(CHARSET_INFO *cs,
                             my_uca_scanner_handler *scanner_handler,
-			    const uchar *s, size_t slen,
+                const uchar *s, size_t slen,
                             const uchar *t, size_t tlen,
                             my_bool t_is_prefix)
 {
@@ -7114,7 +7114,7 @@ static int my_strnncoll_uca(CHARSET_INFO *cs,
     t		Second string
     tlen	Seconf string length
     diff_if_only_endspace_difference
-		        Set to 1 if the strings should be regarded as different
+                Set to 1 if the strings should be regarded as different
                         if they only difference in end space
 
   NOTES:
@@ -7230,8 +7230,8 @@ static int my_strnncollsp_uca(CHARSET_INFO *cs,
 
 static void my_hash_sort_uca(CHARSET_INFO *cs,
                              my_uca_scanner_handler *scanner_handler,
-			     const uchar *s, size_t slen,
-			     ulong *n1, ulong *n2)
+                 const uchar *s, size_t slen,
+                 ulong *n1, ulong *n2)
 {
   int   s_res;
   my_uca_scanner scanner;
@@ -7350,9 +7350,9 @@ static int my_uca_charcmp(CHARSET_INFO *cs, my_wc_t wc1, my_wc_t wc2)
 
 static
 int my_wildcmp_uca(CHARSET_INFO *cs,
-		   const char *str,const char *str_end,
-		   const char *wildstr,const char *wildend,
-		   int escape, int w_one, int w_many)
+           const char *str,const char *str_end,
+           const char *wildstr,const char *wildend,
+           int escape, int w_one, int w_many)
 {
   int result= -1;			/* Not found, using wildcards */
   my_wc_t s_wc, w_wc;
@@ -7367,8 +7367,8 @@ int my_wildcmp_uca(CHARSET_INFO *cs,
     {
       my_bool escaped= 0;
       if ((scan= mb_wc(cs, &w_wc, (const uchar*)wildstr,
-		       (const uchar*)wildend)) <= 0)
-	return 1;
+               (const uchar*)wildend)) <= 0)
+    return 1;
 
       if (w_wc == (my_wc_t)w_many)
       {
@@ -7380,14 +7380,14 @@ int my_wildcmp_uca(CHARSET_INFO *cs,
       if (w_wc ==  (my_wc_t)escape)
       {
         if ((scan= mb_wc(cs, &w_wc, (const uchar*)wildstr,
-			(const uchar*)wildend)) <= 0)
+            (const uchar*)wildend)) <= 0)
           return 1;
         wildstr+= scan;
         escaped= 1;
       }
 
       if ((scan= mb_wc(cs, &s_wc, (const uchar*)str,
-      		       (const uchar*)str_end)) <= 0)
+                   (const uchar*)str_end)) <= 0)
         return 1;
       str+= scan;
 
@@ -7401,7 +7401,7 @@ int my_wildcmp_uca(CHARSET_INFO *cs,
           return 1;
       }
       if (wildstr == wildend)
-	return (str != str_end);		/* Match if both are at end */
+    return (str != str_end);		/* Match if both are at end */
     }
 
     if (w_wc == (my_wc_t)w_many)
@@ -7411,42 +7411,42 @@ int my_wildcmp_uca(CHARSET_INFO *cs,
       for ( ; wildstr != wildend ; )
       {
         if ((scan= mb_wc(cs, &w_wc, (const uchar*)wildstr,
-			 (const uchar*)wildend)) <= 0)
+             (const uchar*)wildend)) <= 0)
           return 1;
 
-	if (w_wc == (my_wc_t)w_many)
-	{
-	  wildstr+= scan;
-	  continue;
-	}
+    if (w_wc == (my_wc_t)w_many)
+    {
+      wildstr+= scan;
+      continue;
+    }
 
-	if (w_wc == (my_wc_t)w_one)
-	{
-	  wildstr+= scan;
-	  if ((scan= mb_wc(cs, &s_wc, (const uchar*)str,
-			   (const uchar*)str_end)) <= 0)
+    if (w_wc == (my_wc_t)w_one)
+    {
+      wildstr+= scan;
+      if ((scan= mb_wc(cs, &s_wc, (const uchar*)str,
+               (const uchar*)str_end)) <= 0)
             return 1;
           str+= scan;
-	  continue;
-	}
-	break;					/* Not a wild character */
+      continue;
+    }
+    break;					/* Not a wild character */
       }
 
       if (wildstr == wildend)
-	return 0;				/* Ok if w_many is last */
+    return 0;				/* Ok if w_many is last */
 
       if (str == str_end)
-	return -1;
+    return -1;
 
       if ((scan= mb_wc(cs, &w_wc, (const uchar*)wildstr,
-		       (const uchar*)wildend)) <= 0)
+               (const uchar*)wildend)) <= 0)
         return 1;
 
       if (w_wc ==  (my_wc_t)escape)
       {
         wildstr+= scan;
         if ((scan= mb_wc(cs, &w_wc, (const uchar*)wildstr,
-			 (const uchar*)wildend)) <= 0)
+             (const uchar*)wildend)) <= 0)
           return 1;
       }
 
@@ -7456,7 +7456,7 @@ int my_wildcmp_uca(CHARSET_INFO *cs,
         while (str != str_end)
         {
           if ((scan= mb_wc(cs, &s_wc, (const uchar*)str,
-			   (const uchar*)str_end)) <= 0)
+               (const uchar*)str_end)) <= 0)
             return 1;
 
           if (!my_uca_charcmp(cs,s_wc,w_wc))
@@ -7467,7 +7467,7 @@ int my_wildcmp_uca(CHARSET_INFO *cs,
           return -1;
 
         result= my_wildcmp_uca(cs, str, str_end, wildstr, wildend,
-        		       escape, w_one, w_many);
+                       escape, w_one, w_many);
 
         if (result <= 0)
           return result;

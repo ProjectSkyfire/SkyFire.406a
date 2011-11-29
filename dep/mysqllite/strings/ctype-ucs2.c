@@ -2593,7 +2593,7 @@ static uchar to_upper_ucs2[] = {
 };
 
 static int my_ucs2_uni(CHARSET_INFO *cs __attribute__((unused)),
-		       my_wc_t * pwc, const uchar *s, const uchar *e)
+               my_wc_t * pwc, const uchar *s, const uchar *e)
 {
   if (s+2 > e) /* Need 2 characters */
     return MY_CS_TOOSMALL2;
@@ -2603,7 +2603,7 @@ static int my_ucs2_uni(CHARSET_INFO *cs __attribute__((unused)),
 }
 
 static int my_uni_ucs2(CHARSET_INFO *cs __attribute__((unused)) ,
-		       my_wc_t wc, uchar *r, uchar *e)
+               my_wc_t wc, uchar *r, uchar *e)
 {
   if ( r+2 > e )
     return MY_CS_TOOSMALL2;
@@ -2639,7 +2639,7 @@ static size_t my_caseup_ucs2(CHARSET_INFO *cs, char *src, size_t srclen,
 }
 
 static void my_hash_sort_ucs2(CHARSET_INFO *cs, const uchar *s, size_t slen,
-			      ulong *n1, ulong *n2)
+                  ulong *n1, ulong *n2)
 {
   my_wc_t wc;
   int res;
@@ -2684,7 +2684,7 @@ static size_t my_casedn_ucs2(CHARSET_INFO *cs, char *src, size_t srclen,
 }
 
 static int my_strnncoll_ucs2(CHARSET_INFO *cs,
-			     const uchar *s, size_t slen,
+                 const uchar *s, size_t slen,
                              const uchar *t, size_t tlen,
                              my_bool t_is_prefix)
 {
@@ -2752,7 +2752,7 @@ static int my_strnncollsp_ucs2(CHARSET_INFO *cs __attribute__((unused)),
                                const uchar *s, size_t slen,
                                const uchar *t, size_t tlen,
                                my_bool diff_if_only_endspace_difference
-			       __attribute__((unused)))
+                   __attribute__((unused)))
 {
   const uchar *se, *te;
   size_t minlen;
@@ -2842,9 +2842,9 @@ size_t my_well_formed_len_ucs2(CHARSET_INFO *cs __attribute__((unused)),
 
 static
 int my_wildcmp_ucs2_ci(CHARSET_INFO *cs,
-		    const char *str,const char *str_end,
-		    const char *wildstr,const char *wildend,
-		    int escape, int w_one, int w_many)
+            const char *str,const char *str_end,
+            const char *wildstr,const char *wildend,
+            int escape, int w_one, int w_many)
 {
   MY_UNICASE_INFO **uni_plane= cs->caseinfo;
   return my_wildcmp_unicode(cs,str,str_end,wildstr,wildend,
@@ -2853,9 +2853,9 @@ int my_wildcmp_ucs2_ci(CHARSET_INFO *cs,
 
 static
 int my_wildcmp_ucs2_bin(CHARSET_INFO *cs,
-		    const char *str,const char *str_end,
-		    const char *wildstr,const char *wildend,
-		    int escape, int w_one, int w_many)
+            const char *str,const char *str_end,
+            const char *wildstr,const char *wildend,
+            int escape, int w_one, int w_many)
 {
   return my_wildcmp_unicode(cs,str,str_end,wildstr,wildend,
                             escape,w_one,w_many,NULL);
@@ -2941,7 +2941,7 @@ static int my_strnncollsp_ucs2_bin(CHARSET_INFO *cs __attribute__((unused)),
 
 static
 void my_hash_sort_ucs2_bin(CHARSET_INFO *cs __attribute__((unused)),
-			   const uchar *key, size_t len,ulong *nr1, ulong *nr2)
+               const uchar *key, size_t len,ulong *nr1, ulong *nr2)
 {
   const uchar *pos = key;
 
@@ -2953,7 +2953,7 @@ void my_hash_sort_ucs2_bin(CHARSET_INFO *cs __attribute__((unused)),
   for (; pos < (uchar*) key ; pos++)
   {
     nr1[0]^=(ulong) ((((uint) nr1[0] & 63)+nr2[0]) *
-	     ((uint)*pos)) + (nr1[0] << 8);
+         ((uint)*pos)) + (nr1[0] << 8);
     nr2[0]+=3;
   }
 }

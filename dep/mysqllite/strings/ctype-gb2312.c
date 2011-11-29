@@ -165,7 +165,7 @@ static uchar sort_order_gb2312[]=
 #define isgb2312tail(c) (0xa1<=(uchar)(c) && (uchar)(c)<=0xfe)
 
 static uint ismbchar_gb2312(CHARSET_INFO *cs __attribute__((unused)),
-		    const char* p, const char *e)
+            const char* p, const char *e)
 {
   return (isgb2312head(*(p)) && (e)-(p)>1 && isgb2312tail(*((p)+1))? 2: 0);
 }
@@ -6265,7 +6265,7 @@ static int func_uni_gb2312_onechar(int code){
 
 static int
 my_wc_mb_gb2312(CHARSET_INFO *cs  __attribute__((unused)),
-		my_wc_t wc, uchar *s, uchar *e)
+        my_wc_t wc, uchar *s, uchar *e)
 {
   int code;
 
@@ -6292,7 +6292,7 @@ my_wc_mb_gb2312(CHARSET_INFO *cs  __attribute__((unused)),
 
 static int
 my_mb_wc_gb2312(CHARSET_INFO *cs  __attribute__((unused)),
-		my_wc_t *pwc, const uchar *s, const uchar *e){
+        my_wc_t *pwc, const uchar *s, const uchar *e){
   int hi;
 
   if (s >= e)

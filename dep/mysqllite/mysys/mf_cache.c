@@ -20,14 +20,14 @@
 #include "my_static.h"
 #include "mysys_err.h"
 
-	/*
-	  Remove an open tempfile so that it doesn't survive
-	  if we crash;	If the operating system doesn't support
-	  this, just remember the file name for later removal
-	*/
+    /*
+      Remove an open tempfile so that it doesn't survive
+      if we crash;	If the operating system doesn't support
+      this, just remember the file name for later removal
+    */
 
 static my_bool cache_remove_open_tmp(IO_CACHE *cache __attribute__((unused)),
-				     const char *name)
+                     const char *name)
 {
 #if O_TEMPORARY == 0
 #if !defined(CANT_DELETE_OPEN_FILES)
@@ -36,7 +36,7 @@ static my_bool cache_remove_open_tmp(IO_CACHE *cache __attribute__((unused)),
 #else
   int length;
   if (!(cache->file_name=
-	(char*) my_malloc((length=strlen(name)+1),MYF(MY_WME))))
+    (char*) my_malloc((length=strlen(name)+1),MYF(MY_WME))))
   {
     my_close(cache->file,MYF(0));
     cache->file = -1;
@@ -49,13 +49,13 @@ static my_bool cache_remove_open_tmp(IO_CACHE *cache __attribute__((unused)),
   return 0;
 }
 
-	/*
-	** Open tempfile cached by IO_CACHE
-	** Should be used when no seeks are done (only reinit_io_buff)
-	** Return 0 if cache is inited ok
-	** The actual file is created when the IO_CACHE buffer gets filled
-	** If dir is not given, use TMPDIR.
-	*/
+    /*
+    ** Open tempfile cached by IO_CACHE
+    ** Should be used when no seeks are done (only reinit_io_buff)
+    ** Return 0 if cache is inited ok
+    ** The actual file is created when the IO_CACHE buffer gets filled
+    ** If dir is not given, use TMPDIR.
+    */
 
 my_bool open_cached_file(IO_CACHE *cache, const char* dir, const char *prefix,
                          size_t cache_size, myf cache_myflags)
@@ -63,11 +63,11 @@ my_bool open_cached_file(IO_CACHE *cache, const char* dir, const char *prefix,
   DBUG_ENTER("open_cached_file");
   cache->dir=	 dir ? my_strdup(dir,MYF(cache_myflags & MY_WME)) : (char*) 0;
   cache->prefix= (prefix ? my_strdup(prefix,MYF(cache_myflags & MY_WME)) :
-		 (char*) 0);
+         (char*) 0);
   cache->file_name=0;
   cache->buffer=0;				/* Mark that not open */
   if (!init_io_cache(cache,-1,cache_size,WRITE_CACHE,0L,0,
-		     MYF(cache_myflags | MY_NABP)))
+             MYF(cache_myflags | MY_NABP)))
   {
     DBUG_RETURN(0);
   }
@@ -76,7 +76,7 @@ my_bool open_cached_file(IO_CACHE *cache, const char* dir, const char *prefix,
   DBUG_RETURN(1);
 }
 
-	/* Create the temporary file */
+    /* Create the temporary file */
 
 my_bool real_open_cached_file(IO_CACHE *cache)
 {
@@ -84,9 +84,9 @@ my_bool real_open_cached_file(IO_CACHE *cache)
   int error=1;
   DBUG_ENTER("real_open_cached_file");
   if ((cache->file=create_temp_file(name_buff, cache->dir, cache->prefix,
-				    (O_RDWR | O_BINARY | O_TRUNC |
-				     O_TEMPORARY | O_SHORT_LIVED),
-				    MYF(MY_WME))) >= 0)
+                    (O_RDWR | O_BINARY | O_TRUNC |
+                     O_TEMPORARY | O_SHORT_LIVED),
+                    MYF(MY_WME))) >= 0)
   {
     error=0;
     cache_remove_open_tmp(cache, name_buff);
@@ -108,8 +108,8 @@ void close_cached_file(IO_CACHE *cache)
 #ifdef CANT_DELETE_OPEN_FILES
       if (cache->file_name)
       {
-	(void) my_delete(cache->file_name,MYF(MY_WME | ME_NOINPUT));
-	my_free(cache->file_name);
+    (void) my_delete(cache->file_name,MYF(MY_WME | ME_NOINPUT));
+    my_free(cache->file_name);
       }
 #endif
     }

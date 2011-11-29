@@ -76,15 +76,15 @@ int my_copy(const char *from, const char *to, myf MyFlags)
     create_flag= (MyFlags & MY_DONT_OVERWRITE_FILE) ? O_EXCL : O_TRUNC;
 
     if ((to_file=  my_create(to,(int) stat_buff.st_mode,
-			     O_WRONLY | create_flag | O_BINARY | O_SHARE,
-			     MyFlags)) < 0)
+                 O_WRONLY | create_flag | O_BINARY | O_SHARE,
+                 MyFlags)) < 0)
       goto err;
 
     while ((Count=my_read(from_file, buff, sizeof(buff), MyFlags)) != 0)
     {
-	if (Count == (uint) -1 ||
-	    my_write(to_file,buff,Count,MYF(MyFlags | MY_NABP)))
-	goto err;
+    if (Count == (uint) -1 ||
+        my_write(to_file,buff,Count,MYF(MyFlags | MY_NABP)))
+    goto err;
     }
 
     /* sync the destination file */
@@ -100,7 +100,7 @@ int my_copy(const char *from, const char *to, myf MyFlags)
     /* Copy modes if possible */
 
     if (MyFlags & MY_HOLD_ORIGINAL_MODES && !new_file_stat)
-	DBUG_RETURN(0);			/* File copyed but not stat */
+    DBUG_RETURN(0);			/* File copyed but not stat */
     /* Copy modes */
     if (chmod(to, stat_buff.st_mode & 07777))
     {

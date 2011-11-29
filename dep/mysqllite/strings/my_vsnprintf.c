@@ -534,7 +534,7 @@ size_t my_vsnprintf_ex(CHARSET_INFO *cs, char *to, size_t n,
     if (*fmt != '%')
     {
       if (to == end)                            /* End of buffer */
-	break;
+    break;
       *to++= *fmt;                            /* Copy ordinary char */
       continue;
     }

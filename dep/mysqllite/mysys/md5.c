@@ -190,7 +190,7 @@ my_MD5Final (unsigned char digest[16], my_MD5Context *ctx)
 
 /* This is the central step in the MD5 algorithm. */
 #define MD5STEP(f, w, x, y, z, data, s) \
-	( w += f(x, y, z) + data, w &= 0xffffffff, w = w<<s | w>>(32-s), w += x )
+    ( w += f(x, y, z) + data, w &= 0xffffffff, w = w<<s | w>>(32-s), w += x )
 
 /*
  * The core of the MD5 algorithm, this alters an existing MD5 hash to

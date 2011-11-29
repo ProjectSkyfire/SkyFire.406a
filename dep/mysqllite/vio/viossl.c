@@ -40,7 +40,7 @@ report_errors(SSL* ssl)
   while ((l= ERR_get_error_line_data(&file,&line,&data,&flags)))
   {
     DBUG_PRINT("error", ("OpenSSL: %s:%s:%d:%s\n", ERR_error_string(l,buf),
-			 file,line,(flags&ERR_TXT_STRING)?data:"")) ;
+             file,line,(flags&ERR_TXT_STRING)?data:"")) ;
   }
 
   if (ssl)
@@ -58,7 +58,7 @@ size_t vio_ssl_read(Vio *vio, uchar* buf, size_t size)
   size_t r;
   DBUG_ENTER("vio_ssl_read");
   DBUG_PRINT("enter", ("sd: %d  buf: 0x%lx  size: %u  ssl: 0x%lx",
-		       vio->sd, (long) buf, (uint) size, (long) vio->ssl_arg));
+               vio->sd, (long) buf, (uint) size, (long) vio->ssl_arg));
 
   r= SSL_read((SSL*) vio->ssl_arg, buf, size);
 #ifndef DBUG_OFF
@@ -230,8 +230,8 @@ int sslconnect(struct st_VioSSLFd *ptr, Vio *vio, long timeout, unsigned long *e
 }
 
 int vio_ssl_blocking(Vio *vio __attribute__((unused)),
-		     my_bool set_blocking_mode,
-		     my_bool *old_mode)
+             my_bool set_blocking_mode,
+             my_bool *old_mode)
 {
   /* Mode is always blocking */
   *old_mode= 1;

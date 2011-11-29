@@ -358,9 +358,9 @@ NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL
 
 static
 int my_mb_wc_latin1(CHARSET_INFO *cs  __attribute__((unused)),
-		    my_wc_t *wc,
-		    const uchar *str,
-		    const uchar *end __attribute__((unused)))
+            my_wc_t *wc,
+            const uchar *str,
+            const uchar *end __attribute__((unused)))
 {
   if (str >= end)
     return MY_CS_TOOSMALL;
@@ -371,9 +371,9 @@ int my_mb_wc_latin1(CHARSET_INFO *cs  __attribute__((unused)),
 
 static
 int my_wc_mb_latin1(CHARSET_INFO *cs  __attribute__((unused)),
-		    my_wc_t wc,
-		    uchar *str,
-		    uchar *end __attribute__((unused)))
+            my_wc_t wc,
+            uchar *str,
+            uchar *end __attribute__((unused)))
 {
   uchar *pl;
 
@@ -536,8 +536,8 @@ uchar combo2map[]={
 */
 
 static int my_strnncoll_latin1_de(CHARSET_INFO *cs __attribute__((unused)),
-				  const uchar *a, size_t a_length,
-				  const uchar *b, size_t b_length,
+                  const uchar *a, size_t a_length,
+                  const uchar *b, size_t b_length,
                                   my_bool b_is_prefix)
 {
   const uchar *a_end= a + a_length;
@@ -572,12 +572,12 @@ static int my_strnncoll_latin1_de(CHARSET_INFO *cs __attribute__((unused)),
     which string ran out first
   */
   return ((a < a_end || a_extend) ? (b_is_prefix ? 0 : 1) :
-	  (b < b_end || b_extend) ? -1 : 0);
+      (b < b_end || b_extend) ? -1 : 0);
 }
 
 static int my_strnncollsp_latin1_de(CHARSET_INFO *cs __attribute__((unused)),
-				    const uchar *a, size_t a_length,
-				    const uchar *b, size_t b_length,
+                    const uchar *a, size_t a_length,
+                    const uchar *b, size_t b_length,
                                     my_bool diff_if_only_endspace_difference)
 {
   const uchar *a_end= a + a_length, *b_end= b + b_length;
@@ -640,7 +640,7 @@ static int my_strnncollsp_latin1_de(CHARSET_INFO *cs __attribute__((unused)),
     for ( ; a < a_end ; a++)
     {
       if (*a != ' ')
-	return (*a < ' ') ? -swap : swap;
+    return (*a < ' ') ? -swap : swap;
     }
   }
   return res;
@@ -665,8 +665,8 @@ static size_t my_strnxfrm_latin1_de(CHARSET_INFO *cs __attribute__((unused)),
 }
 
 void my_hash_sort_latin1_de(CHARSET_INFO *cs __attribute__((unused)),
-			    const uchar *key, size_t len,
-			    ulong *nr1, ulong *nr2)
+                const uchar *key, size_t len,
+                ulong *nr1, ulong *nr2)
 {
   const uchar *end;
   /*

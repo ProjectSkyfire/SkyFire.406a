@@ -286,7 +286,7 @@ static void DBUGOpenFile(CODE_STATE *,const char *, const char *, int);
 static void DBUGCloseFile(CODE_STATE *cs, FILE *fp);
         /* Push current debug settings */
 static void PushState(CODE_STATE *cs);
-	/* Free memory associated with debug state. */
+    /* Free memory associated with debug state. */
 static void FreeState (CODE_STATE *cs, struct settings *state, int free_state);
         /* Test for tracing enabled */
 static int DoTrace(CODE_STATE *cs);

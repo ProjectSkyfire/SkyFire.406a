@@ -130,14 +130,14 @@ size_t vio_write(Vio * vio, const uchar* buf, size_t size)
 }
 
 int vio_blocking(Vio * vio __attribute__((unused)), my_bool set_blocking_mode,
-		 my_bool *old_mode)
+         my_bool *old_mode)
 {
   int r=0;
   DBUG_ENTER("vio_blocking");
 
   *old_mode= test(!(vio->fcntl_mode & O_NONBLOCK));
   DBUG_PRINT("enter", ("set_blocking_mode: %d  old_mode: %d",
-		       (int) set_blocking_mode, (int) *old_mode));
+               (int) set_blocking_mode, (int) *old_mode));
 
 #if !defined(__WIN__)
 #if !defined(NO_FCNTL_NONBLOCK)
@@ -234,13 +234,13 @@ int vio_keepalive(Vio* vio, my_bool set_keep_alive)
   uint opt = 0;
   DBUG_ENTER("vio_keepalive");
   DBUG_PRINT("enter", ("sd: %d  set_keep_alive: %d", vio->sd, (int)
-		       set_keep_alive));
+               set_keep_alive));
   if (vio->type != VIO_TYPE_NAMEDPIPE)
   {
     if (set_keep_alive)
       opt = 1;
     r = setsockopt(vio->sd, SOL_SOCKET, SO_KEEPALIVE, (char *) &opt,
-		   sizeof(opt));
+           sizeof(opt));
   }
   DBUG_RETURN(r);
 }
@@ -267,7 +267,7 @@ vio_was_interrupted(Vio *vio __attribute__((unused)))
 {
   int en= socket_errno;
   return (en == SOCKET_EAGAIN || en == SOCKET_EINTR ||
-	  en == SOCKET_EWOULDBLOCK || en == SOCKET_ETIMEDOUT);
+      en == SOCKET_EWOULDBLOCK || en == SOCKET_ETIMEDOUT);
 }
 
 int vio_close(Vio * vio)
@@ -866,7 +866,7 @@ size_t vio_read_shared_memory(Vio * vio, uchar* buf, size_t size)
         WaitForMultipleObjects can return next values:
          WAIT_OBJECT_0+0 - event from vio->event_server_wrote
          WAIT_OBJECT_0+1 - event from vio->event_conn_closed. We can't read
-		           anything
+                   anything
          WAIT_ABANDONED_0 and WAIT_TIMEOUT - fail.  We can't read anything
       */
       if (WaitForMultipleObjects(array_elements(events), events, FALSE,

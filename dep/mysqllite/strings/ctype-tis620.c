@@ -16,11 +16,11 @@
 /*
    Copyright (C) 2003  by Sathit Jittanupat
           <jsat66@hotmail.com,jsat66@yahoo.com>
-	* solving bug crash with long text field string
-	* sorting with different number of space or sign char. within string
+    * solving bug crash with long text field string
+    * sorting with different number of space or sign char. within string
 
    Copyright (C) 2001  by Korakot Chaovavanich <korakot@iname.com> and
-			  Apisilp Trunganont <apisilp@pantip.inet.co.th>
+              Apisilp Trunganont <apisilp@pantip.inet.co.th>
    Copyright (C) 1998, 1999 by Pruet Boonma <pruet@eng.cmu.ac.th>
    Copyright (C) 1998  by Theppitak Karoonboonyanan <thep@links.nectec.or.th>
    Copyright (C) 1989, 1991 by Samphan Raruenrom <samphan@thai.com>
@@ -476,28 +476,28 @@ static size_t thai2sortable(uchar *tstr, size_t len)
       int *t_ctype0= t_ctype[c];
 
       if (isconsnt(c))
-	l2bias	-= 8;
+    l2bias	-= 8;
       if (isldvowel(c) && tlen != 1 && isconsnt(p[1]))
       {
-	/* simply swap between leading-vowel and consonant */
-	*p= p[1];
-	p[1]= c;
-	tlen--;
-	p++;
-	continue;
+    /* simply swap between leading-vowel and consonant */
+    *p= p[1];
+    p[1]= c;
+    tlen--;
+    p++;
+    continue;
       }
 
       /* if found level 2 char (L2_GARAN,L2_TONE*,L2_TYKHU) move to last */
       if (t_ctype0[1] >= L2_GARAN)
       {
-	/*
-	  l2bias use to control position weight of l2char
-	  example (*=l2char) XX*X must come before X*XX
-	*/
-	memmove((char*) p, (char*) (p+1), tlen-1);
-	tstr[len-1]= l2bias + t_ctype0[1]- L2_GARAN +1;
-	p--;
-	continue;
+    /*
+      l2bias use to control position weight of l2char
+      example (*=l2char) XX*X must come before X*XX
+    */
+    memmove((char*) p, (char*) (p+1), tlen-1);
+    tstr[len-1]= l2bias + t_ctype0[1]- L2_GARAN +1;
+    p--;
+    continue;
       }
     }
     else
@@ -552,8 +552,8 @@ int my_strnncoll_tis620(CHARSET_INFO *cs __attribute__((unused)),
 
 static
 int my_strnncollsp_tis620(CHARSET_INFO * cs __attribute__((unused)),
-			  const uchar *a0, size_t a_length,
-			  const uchar *b0, size_t b_length,
+              const uchar *a0, size_t a_length,
+              const uchar *b0, size_t b_length,
                           my_bool diff_if_only_endspace_difference)
 {
   uchar	buf[80], *end, *a, *b, *alloced= NULL;
@@ -606,8 +606,8 @@ int my_strnncollsp_tis620(CHARSET_INFO * cs __attribute__((unused)),
     {
       if (*a != ' ')
       {
-	res= (*a < ' ') ? -swap : swap;
-	goto ret;
+    res= (*a < ' ') ? -swap : swap;
+    goto ret;
       }
     }
   }
@@ -813,9 +813,9 @@ NULL,NULL,NULL,NULL,NULL,NULL,NULL,plFF
 
 static
 int my_mb_wc_tis620(CHARSET_INFO *cs  __attribute__((unused)),
-		  my_wc_t *wc,
-		  const uchar *str,
-		  const uchar *end __attribute__((unused)))
+          my_wc_t *wc,
+          const uchar *str,
+          const uchar *end __attribute__((unused)))
 {
   if (str >= end)
     return MY_CS_TOOSMALL;
@@ -826,9 +826,9 @@ int my_mb_wc_tis620(CHARSET_INFO *cs  __attribute__((unused)),
 
 static
 int my_wc_mb_tis620(CHARSET_INFO *cs  __attribute__((unused)),
-		  my_wc_t wc,
-		  uchar *str,
-		  uchar *end __attribute__((unused)))
+          my_wc_t wc,
+          uchar *str,
+          uchar *end __attribute__((unused)))
 {
   uchar *pl;
 

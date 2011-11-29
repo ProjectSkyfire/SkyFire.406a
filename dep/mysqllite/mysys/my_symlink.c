@@ -53,7 +53,7 @@ int my_readlink(char *to, const char *filename, myf MyFlags)
     else
     {
       if (MyFlags & MY_WME)
-	my_error(EE_CANT_READLINK, MYF(0), filename, errno);
+    my_error(EE_CANT_READLINK, MYF(0), filename, errno);
       result= -1;
     }
   }

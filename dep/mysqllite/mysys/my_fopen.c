@@ -44,7 +44,7 @@ FILE *my_fopen(const char *filename, int flags, myf MyFlags)
   char type[5];
   DBUG_ENTER("my_fopen");
   DBUG_PRINT("my",("Name: '%s'  flags: %d  MyFlags: %d",
-		   filename, flags, MyFlags));
+           filename, flags, MyFlags));
 
   make_ftype(type,flags);
 
@@ -69,7 +69,7 @@ FILE *my_fopen(const char *filename, int flags, myf MyFlags)
     }
     mysql_mutex_lock(&THR_LOCK_open);
     if ((my_file_info[filedesc].name= (char*)
-	 my_strdup(filename,MyFlags)))
+     my_strdup(filename,MyFlags)))
     {
       my_stream_opened++;
       my_file_total_opened++;
@@ -87,8 +87,8 @@ FILE *my_fopen(const char *filename, int flags, myf MyFlags)
   DBUG_PRINT("error",("Got error %d on open",my_errno));
   if (MyFlags & (MY_FFNF | MY_FAE | MY_WME))
     my_error((flags & O_RDONLY) || (flags == O_RDONLY ) ? EE_FILENOTFOUND :
-	     EE_CANTCREATEFILE,
-	     MYF(ME_BELL+ME_WAITTANG), filename, my_errno);
+         EE_CANTCREATEFILE,
+         MYF(ME_BELL+ME_WAITTANG), filename, my_errno);
   DBUG_RETURN((FILE*) 0);
 } /* my_fopen */
 
@@ -239,7 +239,7 @@ int my_fclose(FILE *fd, myf MyFlags)
     my_errno=errno;
     if (MyFlags & (MY_FAE | MY_WME))
       my_error(EE_BADCLOSE, MYF(ME_BELL+ME_WAITTANG),
-	       my_filename(file),errno);
+           my_filename(file),errno);
   }
   else
     my_stream_opened--;
@@ -252,8 +252,8 @@ int my_fclose(FILE *fd, myf MyFlags)
   DBUG_RETURN(err);
 } /* my_fclose */
 
-	/* Make a stream out of a file handle */
-	/* Name may be 0 */
+    /* Make a stream out of a file handle */
+    /* Name may be 0 */
 
 FILE *my_fdopen(File Filedes, const char *name, int Flags, myf MyFlags)
 {
@@ -261,7 +261,7 @@ FILE *my_fdopen(File Filedes, const char *name, int Flags, myf MyFlags)
   char type[5];
   DBUG_ENTER("my_fdopen");
   DBUG_PRINT("my",("Fd: %d  Flags: %d  MyFlags: %d",
-		   Filedes, Flags, MyFlags));
+           Filedes, Flags, MyFlags));
 
   make_ftype(type,Flags);
 #ifdef _WIN32

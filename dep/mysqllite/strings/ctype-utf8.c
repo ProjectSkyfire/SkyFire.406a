@@ -2461,7 +2461,7 @@ static int my_strnncoll_utf8(CHARSET_INFO *cs,
     b                   Second string to compare
     b_length            Length of 'b'
     diff_if_only_endspace_difference
-		        Set to 1 if the strings should be regarded as different
+                Set to 1 if the strings should be regarded as different
                         if they only difference in end space
 
   IMPLEMENTATION
@@ -2549,7 +2549,7 @@ static int my_strnncollsp_utf8(CHARSET_INFO *cs,
     for ( ; s < se; s++)
     {
       if (*s != ' ')
-	return (*s < ' ') ? -swap : swap;
+    return (*s < ' ') ? -swap : swap;
     }
   }
   return res;
@@ -2654,9 +2654,9 @@ int my_strcasecmp_utf8(CHARSET_INFO *cs, const char *s, const char *t)
 
 static
 int my_wildcmp_utf8(CHARSET_INFO *cs,
-		    const char *str,const char *str_end,
-		    const char *wildstr,const char *wildend,
-		    int escape, int w_one, int w_many)
+            const char *str,const char *str_end,
+            const char *wildstr,const char *wildend,
+            int escape, int w_one, int w_many)
 {
   MY_UNICASE_INFO **uni_plane= cs->caseinfo;
   return my_wildcmp_unicode(cs,str,str_end,wildstr,wildend,
@@ -4908,7 +4908,7 @@ my_strnncollsp_utf8mb4(CHARSET_INFO *cs,
     for ( ; s < se; s++)
     {
       if (*s != ' ')
-	return (*s < ' ') ? -swap : swap;
+    return (*s < ' ') ? -swap : swap;
     }
   }
   return res;

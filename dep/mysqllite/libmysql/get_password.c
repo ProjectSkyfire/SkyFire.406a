@@ -79,9 +79,9 @@ char *get_tty_password(const char *opt_message)
     {
       if (pos != to)
       {
-	_cputs("\b \b");
-	pos--;
-	continue;
+    _cputs("\b \b");
+    pos--;
+    continue;
       }
     }
     if (tmp == '\n' || tmp == '\r' || tmp == 3)
@@ -120,13 +120,13 @@ static void get_password(char *to,uint length,int fd, my_bool echo)
     {
       if (pos != to)
       {
-	if (echo)
-	{
-	  fputs("\b \b",stdout);
-	  fflush(stdout);
-	}
-	pos--;
-	continue;
+    if (echo)
+    {
+      fputs("\b \b",stdout);
+      fflush(stdout);
+    }
+    pos--;
+    continue;
       }
     }
     if (tmp == '\n' || tmp == '\r' || tmp == 3)

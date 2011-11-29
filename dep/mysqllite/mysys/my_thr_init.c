@@ -374,7 +374,7 @@ void my_thread_end(void)
 
 #ifdef EXTRA_DEBUG_THREADS
   fprintf(stderr,"my_thread_end(): tmp: 0x%lx  pthread_self: 0x%lx  thread_id: %ld\n",
-	  (long) tmp, (long) pthread_self(), tmp ? (long) tmp->id : 0L);
+      (long) tmp, (long) pthread_self(), tmp ? (long) tmp->id : 0L);
 #endif
 
 #ifdef HAVE_PSI_INTERFACE

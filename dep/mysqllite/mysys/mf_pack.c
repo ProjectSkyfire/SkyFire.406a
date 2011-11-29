@@ -21,9 +21,9 @@
 
 static char * expand_tilde(char **path);
 
-	/* Pack a dirname ; Changes HOME to ~/ and current dev to ./ */
-	/* from is a dirname (from dirname() ?) ending with FN_LIBCHAR */
-	/* to may be == from */
+    /* Pack a dirname ; Changes HOME to ~/ and current dev to ./ */
+    /* from is a dirname (from dirname() ?) ending with FN_LIBCHAR */
+    /* to may be == from */
 
 void pack_dirname(char * to, const char *from)
 {
@@ -47,8 +47,8 @@ void pack_dirname(char * to, const char *from)
     buff_length= strlen(buff);
     d_length= (size_t) (start-to);
     if ((start == to ||
-	 (buff_length == d_length && !memcmp(buff,start,d_length))) &&
-	*start != FN_LIBCHAR && *start)
+     (buff_length == d_length && !memcmp(buff,start,d_length))) &&
+    *start != FN_LIBCHAR && *start)
     {						/* Put current dir before */
       bchange((uchar*) to, d_length, (uchar*) buff, buff_length, strlen(to)+1);
     }
@@ -61,37 +61,37 @@ void pack_dirname(char * to, const char *from)
     {
       length= strlen(home_dir);
       if (home_dir[length-1] == FN_LIBCHAR)
-	length--;				/* Don't test last '/' */
+    length--;				/* Don't test last '/' */
     }
     if (length > 1 && length < d_length)
     {						/* test if /xx/yy -> ~/yy */
       if (memcmp(to,home_dir,length) == 0 && to[length] == FN_LIBCHAR)
       {
-	to[0]=FN_HOMELIB;			/* Filename begins with ~ */
-	(void) strmov_overlapp(to+1,to+length);
+    to[0]=FN_HOMELIB;			/* Filename begins with ~ */
+    (void) strmov_overlapp(to+1,to+length);
       }
     }
     if (! cwd_err)
     {						/* Test if cwd is ~/... */
       if (length > 1 && length < buff_length)
       {
-	if (memcmp(buff,home_dir,length) == 0 && buff[length] == FN_LIBCHAR)
-	{
-	  buff[0]=FN_HOMELIB;
-	  (void) strmov_overlapp(buff+1,buff+length);
-	}
+    if (memcmp(buff,home_dir,length) == 0 && buff[length] == FN_LIBCHAR)
+    {
+      buff[0]=FN_HOMELIB;
+      (void) strmov_overlapp(buff+1,buff+length);
+    }
       }
       if (is_prefix(to,buff))
       {
-	length= strlen(buff);
-	if (to[length])
-	  (void) strmov_overlapp(to,to+length);	/* Remove everything before */
-	else
-	{
-	  to[0]= FN_CURLIB;			/* Put ./ instead of cwd */
-	  to[1]= FN_LIBCHAR;
-	  to[2]= '\0';
-	}
+    length= strlen(buff);
+    if (to[length])
+      (void) strmov_overlapp(to,to+length);	/* Remove everything before */
+    else
+    {
+      to[0]= FN_CURLIB;			/* Put ./ instead of cwd */
+      to[1]= FN_LIBCHAR;
+      to[2]= '\0';
+    }
       }
     }
   }
@@ -162,61 +162,61 @@ size_t cleanup_dirname(register char *to, const char *from)
     {
       if ((size_t) (pos-start) > length && memcmp(pos-length,parent,length) == 0)
       {						/* If .../../; skip prev */
-	pos-=length;
-	if (pos != start)
-	{					 /* not /../ */
-	  pos--;
-	  if (*pos == FN_HOMELIB && (pos == start || pos[-1] == FN_LIBCHAR))
-	  {
-	    if (!home_dir)
-	    {
-	      pos+=length+1;			/* Don't unpack ~/.. */
-	      continue;
-	    }
-	    pos=strmov(buff,home_dir)-1;	/* Unpacks ~/.. */
-	    if (*pos == FN_LIBCHAR)
-	      pos--;				/* home ended with '/' */
-	  }
-	  if (*pos == FN_CURLIB && (pos == start || pos[-1] == FN_LIBCHAR))
-	  {
-	    if (my_getwd(curr_dir,FN_REFLEN,MYF(0)))
-	    {
-	      pos+=length+1;			/* Don't unpack ./.. */
-	      continue;
-	    }
-	    pos=strmov(buff,curr_dir)-1;	/* Unpacks ./.. */
-	    if (*pos == FN_LIBCHAR)
-	      pos--;				/* home ended with '/' */
-	  }
-	  end_parentdir=pos;
-	  while (pos >= start && *pos != FN_LIBCHAR)	/* remove prev dir */
-	    pos--;
+    pos-=length;
+    if (pos != start)
+    {					 /* not /../ */
+      pos--;
+      if (*pos == FN_HOMELIB && (pos == start || pos[-1] == FN_LIBCHAR))
+      {
+        if (!home_dir)
+        {
+          pos+=length+1;			/* Don't unpack ~/.. */
+          continue;
+        }
+        pos=strmov(buff,home_dir)-1;	/* Unpacks ~/.. */
+        if (*pos == FN_LIBCHAR)
+          pos--;				/* home ended with '/' */
+      }
+      if (*pos == FN_CURLIB && (pos == start || pos[-1] == FN_LIBCHAR))
+      {
+        if (my_getwd(curr_dir,FN_REFLEN,MYF(0)))
+        {
+          pos+=length+1;			/* Don't unpack ./.. */
+          continue;
+        }
+        pos=strmov(buff,curr_dir)-1;	/* Unpacks ./.. */
+        if (*pos == FN_LIBCHAR)
+          pos--;				/* home ended with '/' */
+      }
+      end_parentdir=pos;
+      while (pos >= start && *pos != FN_LIBCHAR)	/* remove prev dir */
+        pos--;
           if (pos[1] == FN_HOMELIB ||
               (pos >= start && memcmp(pos, parent, length) == 0))
-	  {					/* Don't remove ~user/ */
-	    pos=strmov(end_parentdir+1,parent);
-	    *pos=FN_LIBCHAR;
-	    continue;
-	  }
-	}
+      {					/* Don't remove ~user/ */
+        pos=strmov(end_parentdir+1,parent);
+        *pos=FN_LIBCHAR;
+        continue;
+      }
+    }
       }
       else if ((size_t) (pos-start) == length-1 &&
-	       !memcmp(start,parent+1,length-1))
-	start=pos;				/* Starts with "../" */
+           !memcmp(start,parent+1,length-1))
+    start=pos;				/* Starts with "../" */
       else if (pos-start > 0 && pos[-1] == FN_LIBCHAR)
       {
 #ifdef FN_NETWORK_DRIVES
-	if (pos-start != 1)
+    if (pos-start != 1)
 #endif
-	  pos--;			/* Remove dupplicate '/' */
+      pos--;			/* Remove dupplicate '/' */
       }
       else if (pos-start > 1 && pos[-1] == FN_CURLIB && pos[-2] == FN_LIBCHAR)
-	pos-=2;					/* Skip /./ */
+    pos-=2;					/* Skip /./ */
       else if (pos > buff+1 && pos[-1] == FN_HOMELIB && pos[-2] == FN_LIBCHAR)
       {					/* Found ..../~/  */
-	buff[0]=FN_HOMELIB;
-	buff[1]=FN_LIBCHAR;
-	start=buff; pos=buff+1;
+    buff[0]=FN_HOMELIB;
+    buff[1]=FN_LIBCHAR;
+    start=buff; pos=buff+1;
       }
     }
   }
@@ -252,15 +252,15 @@ void symdirget(char *dir)
     {
       if ((length= my_read(file, buff, sizeof(buff) - 1, MYF(0))) > 0)
       {
-	for (pos= buff + length ;
-	     pos > buff && (iscntrl(pos[-1]) || isspace(pos[-1])) ;
-	     pos --);
+    for (pos= buff + length ;
+         pos > buff && (iscntrl(pos[-1]) || isspace(pos[-1])) ;
+         pos --);
 
-	/* Ensure that the symlink ends with the directory symbol */
-	if (pos == buff || pos[-1] != FN_LIBCHAR)
-	  *pos++=FN_LIBCHAR;
+    /* Ensure that the symlink ends with the directory symbol */
+    if (pos == buff || pos[-1] != FN_LIBCHAR)
+      *pos++=FN_LIBCHAR;
 
-	strmake(dir,buff, (size_t) (pos-buff));
+    strmake(dir,buff, (size_t) (pos-buff));
       }
       my_close(file, MYF(0));
     }
@@ -346,13 +346,13 @@ size_t unpack_dirname(char * to, const char *from)
       length-= (size_t) (suffix-buff)-1;
       if (length+(h_length= strlen(tilde_expansion)) <= FN_REFLEN)
       {
-	if ((h_length > 0) && (tilde_expansion[h_length-1] == FN_LIBCHAR))
-	  h_length--;
-	if (buff+h_length < suffix)
-	  bmove(buff+h_length,suffix,length);
-	else
-	  bmove_upp((uchar*) buff+h_length+length, (uchar*) suffix+length, length);
-	bmove(buff,tilde_expansion,h_length);
+    if ((h_length > 0) && (tilde_expansion[h_length-1] == FN_LIBCHAR))
+      h_length--;
+    if (buff+h_length < suffix)
+      bmove(buff+h_length,suffix,length);
+    else
+      bmove_upp((uchar*) buff+h_length+length, (uchar*) suffix+length, length);
+    bmove(buff,tilde_expansion,h_length);
       }
     }
   }
@@ -363,8 +363,8 @@ size_t unpack_dirname(char * to, const char *from)
   DBUG_RETURN(system_filename(to,buff));	/* Fix for open */
 } /* unpack_dirname */
 
-	/* Expand tilde to home or user-directory */
-	/* Path is reset to point at FN_LIBCHAR after ~xxx */
+    /* Expand tilde to home or user-directory */
+    /* Path is reset to point at FN_LIBCHAR after ~xxx */
 
 static char * expand_tilde(char **path)
 {
@@ -425,16 +425,16 @@ size_t unpack_filename(char * to, const char *from)
   DBUG_RETURN(length);
 } /* unpack_filename */
 
-	/* Convert filename (unix standard) to system standard */
-	/* Used before system command's like open(), create() .. */
-	/* Returns used length of to; total length should be FN_REFLEN */
+    /* Convert filename (unix standard) to system standard */
+    /* Used before system command's like open(), create() .. */
+    /* Returns used length of to; total length should be FN_REFLEN */
 
 size_t system_filename(char *to, const char *from)
 {
   return (size_t) (strmake(to,from,FN_REFLEN-1)-to);
 }
 
-	/* Fix a filename to intern (UNIX format) */
+    /* Fix a filename to intern (UNIX format) */
 
 char *intern_filename(char *to, const char *from)
 {

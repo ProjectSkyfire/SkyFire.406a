@@ -46,8 +46,8 @@ static ulong atoi_octal(const char *str)
   while (*str && my_isspace(&my_charset_latin1, *str))
     str++;
   str2int(str,
-	  (*str == '0' ? 8 : 10),       /* Octalt or decimalt */
-	  0, INT_MAX, &tmp);
+      (*str == '0' ? 8 : 10),       /* Octalt or decimalt */
+      0, INT_MAX, &tmp);
   return (ulong) tmp;
 }
 
@@ -118,7 +118,7 @@ my_bool my_init(void)
   }
 } /* my_init */
 
-	/* End my_sys */
+    /* End my_sys */
 
 void my_end(int infoflag)
 {
@@ -177,15 +177,15 @@ Maximum resident set size %ld, Integral resident set size %ld\n\
 Non-physical pagefaults %ld, Physical pagefaults %ld, Swaps %ld\n\
 Blocks in %ld out %ld, Messages in %ld out %ld, Signals %ld\n\
 Voluntary context switches %ld, Involuntary context switches %ld\n",
-	      (rus.ru_utime.tv_sec * SCALE_SEC +
-	       rus.ru_utime.tv_usec / SCALE_USEC) / 100.0,
-	      (rus.ru_stime.tv_sec * SCALE_SEC +
-	       rus.ru_stime.tv_usec / SCALE_USEC) / 100.0,
-	      rus.ru_maxrss, rus.ru_idrss,
-	      rus.ru_minflt, rus.ru_majflt,
-	      rus.ru_nswap, rus.ru_inblock, rus.ru_oublock,
-	      rus.ru_msgsnd, rus.ru_msgrcv, rus.ru_nsignals,
-	      rus.ru_nvcsw, rus.ru_nivcsw);
+          (rus.ru_utime.tv_sec * SCALE_SEC +
+           rus.ru_utime.tv_usec / SCALE_USEC) / 100.0,
+          (rus.ru_stime.tv_sec * SCALE_SEC +
+           rus.ru_stime.tv_usec / SCALE_USEC) / 100.0,
+          rus.ru_maxrss, rus.ru_idrss,
+          rus.ru_minflt, rus.ru_majflt,
+          rus.ru_nswap, rus.ru_inblock, rus.ru_oublock,
+          rus.ru_msgsnd, rus.ru_msgrcv, rus.ru_nsignals,
+          rus.ru_nvcsw, rus.ru_nivcsw);
 #endif
 #if defined(__WIN__) && defined(_MSC_VER)
    _CrtSetReportMode( _CRT_WARN, _CRTDBG_MODE_FILE );
@@ -239,7 +239,7 @@ void my_parameter_handler(const wchar_t * expression, const wchar_t * function,
                           uintptr_t pReserved)
 {
   DBUG_PRINT("my",("Expression: %s  function: %s  file: %s, line: %d",
-		   expression, function, file, line));
+           expression, function, file, line));
 }
 
 #ifdef __MSVC_RUNTIME_CHECKS
@@ -400,15 +400,15 @@ static my_bool win32_have_tcpip(void)
 {
   HKEY hTcpipRegKey;
   if (RegOpenKeyEx ( HKEY_LOCAL_MACHINE, TCPIPKEY, 0, KEY_READ,
-		      &hTcpipRegKey) != ERROR_SUCCESS)
+              &hTcpipRegKey) != ERROR_SUCCESS)
   {
     if (RegOpenKeyEx ( HKEY_LOCAL_MACHINE, WINSOCK2KEY, 0, KEY_READ,
-		      &hTcpipRegKey) != ERROR_SUCCESS)
+              &hTcpipRegKey) != ERROR_SUCCESS)
     {
       if (RegOpenKeyEx ( HKEY_LOCAL_MACHINE, WINSOCKKEY, 0, KEY_READ,
-			 &hTcpipRegKey) != ERROR_SUCCESS)
-	if (!getenv("HAVE_TCPIP") || have_tcpip)	/* Provide a workaround */
-	  return (FALSE);
+             &hTcpipRegKey) != ERROR_SUCCESS)
+    if (!getenv("HAVE_TCPIP") || have_tcpip)	/* Provide a workaround */
+      return (FALSE);
     }
   }
   RegCloseKey ( hTcpipRegKey);
@@ -421,27 +421,27 @@ static my_bool win32_init_tcp_ip()
   {
     WORD wVersionRequested = MAKEWORD( 2, 2 );
     WSADATA wsaData;
- 	/* Be a good citizen: maybe another lib has already initialised
- 		sockets, so dont clobber them unless necessary */
+    /* Be a good citizen: maybe another lib has already initialised
+        sockets, so dont clobber them unless necessary */
     if (WSAStartup( wVersionRequested, &wsaData ))
     {
       /* Load failed, maybe because of previously loaded
-	 incompatible version; try again */
+     incompatible version; try again */
       WSACleanup( );
       if (!WSAStartup( wVersionRequested, &wsaData ))
-	have_tcpip=1;
+    have_tcpip=1;
     }
     else
     {
       if (wsaData.wVersion != wVersionRequested)
       {
-	/* Version is no good, try again */
-	WSACleanup( );
-	if (!WSAStartup( wVersionRequested, &wsaData ))
-	  have_tcpip=1;
+    /* Version is no good, try again */
+    WSACleanup( );
+    if (!WSAStartup( wVersionRequested, &wsaData ))
+      have_tcpip=1;
       }
       else
-	have_tcpip=1;
+    have_tcpip=1;
     }
   }
   return(0);

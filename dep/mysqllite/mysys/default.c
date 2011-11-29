@@ -119,11 +119,11 @@ struct handle_option_ctx
 };
 
 static int search_default_file(Process_option_func func, void *func_ctx,
-			       const char *dir, const char *config_file);
+                   const char *dir, const char *config_file);
 static int search_default_file_with_ext(Process_option_func func,
                                         void *func_ctx,
-					const char *dir, const char *ext,
-					const char *config_file, int recursion_level);
+                    const char *dir, const char *ext,
+                    const char *config_file, int recursion_level);
 
 /**
   Create the list of default directories.
@@ -266,7 +266,7 @@ int my_search_option_files(const char *conf_file, int *argc, char ***argv,
     TYPELIB *group= ctx->group;
 
     if (!(extra_groups=
-	  (const char**)alloc_root(ctx->alloc,
+      (const char**)alloc_root(ctx->alloc,
                                    (2*group->count+1)*sizeof(char*))))
       DBUG_RETURN(2);
 
@@ -314,14 +314,14 @@ int my_search_option_files(const char *conf_file, int *argc, char ***argv,
     {
       if (**dirs)
       {
-	if (search_default_file(func, func_ctx, *dirs, conf_file) < 0)
-	  goto err;
+    if (search_default_file(func, func_ctx, *dirs, conf_file) < 0)
+      goto err;
       }
       else if (my_defaults_extra_file)
       {
         if ((error= search_default_file_with_ext(func, func_ctx, "", "",
                                                 my_defaults_extra_file, 0)) < 0)
-	  goto err;				/* Fatal error */
+      goto err;				/* Fatal error */
         if (error > 0)
         {
           fprintf(stderr, "Could not open required defaults file: %s\n",
@@ -440,9 +440,9 @@ int get_defaults_options(int argc, char **argv,
   SYNOPSIS
     load_defaults()
     conf_file			Basename for configuration file to search for.
-    				If this is a path, then only this file is read.
+                    If this is a path, then only this file is read.
     groups			Which [group] entrys to read.
-				Points to an null terminated array of pointers
+                Points to an null terminated array of pointers
     argc			Pointer to argc of original program
     argv			Pointer to argv of original program
 
@@ -467,9 +467,9 @@ int load_defaults(const char *conf_file, const char **groups,
   SYNOPSIS
     my_load_defaults()
     conf_file			Basename for configuration file to search for.
-    				If this is a path, then only this file is read.
+                    If this is a path, then only this file is read.
     groups			Which [group] entrys to read.
-				Points to an null terminated array of pointers
+                Points to an null terminated array of pointers
     argc			Pointer to argc of original program
     argv			Pointer to argv of original program
     default_directories         Pointer to a location where a pointer to the list
@@ -525,7 +525,7 @@ int my_load_defaults(const char *conf_file, const char **groups,
     /* remove the --no-defaults argument and return only the other arguments */
     uint i, j;
     if (!(ptr=(char*) alloc_root(&alloc,sizeof(alloc)+
-				 (*argc + 1)*sizeof(char*))))
+                 (*argc + 1)*sizeof(char*))))
       goto err;
     res= (char**) (ptr+sizeof(alloc));
     res[0]= **argv;				/* Copy program name */
@@ -578,7 +578,7 @@ int my_load_defaults(const char *conf_file, const char **groups,
     or a forced default file
   */
   if (!(ptr=(char*) alloc_root(&alloc,sizeof(alloc)+
-			       (args.elements + *argc + 1 + args_sep) *sizeof(char*))))
+                   (args.elements + *argc + 1 + args_sep) *sizeof(char*))))
     goto err;
   res= (char**) (ptr+sizeof(alloc));
 
@@ -608,7 +608,7 @@ int my_load_defaults(const char *conf_file, const char **groups,
 
   if (*argc)
     memcpy((uchar*) (res+1+args.elements+args_sep), (char*) ((*argv)+1),
-	   (*argc-1)*sizeof(char*));
+       (*argc-1)*sizeof(char*));
   res[args.elements+ *argc+args_sep]=0;                /* last null */
 
   (*argc)+=args.elements+args_sep;
@@ -619,7 +619,7 @@ int my_load_defaults(const char *conf_file, const char **groups,
   {
     int i;
     printf("%s would have been started with the following arguments:\n",
-	   **argv);
+       **argv);
     for (i=1 ; i < *argc ; i++)
       if (!my_getopt_is_args_separator((*argv)[i])) /* skip arguments separator */
         printf("%s ", (*argv)[i]);
@@ -647,8 +647,8 @@ void free_defaults(char **argv)
 
 static int search_default_file(Process_option_func opt_handler,
                                void *handler_ctx,
-			       const char *dir,
-			       const char *config_file)
+                   const char *dir,
+                   const char *config_file)
 {
   char **ext;
   const char *empty_list[]= { "", 0 };
@@ -660,7 +660,7 @@ static int search_default_file(Process_option_func opt_handler,
     int error;
     if ((error= search_default_file_with_ext(opt_handler, handler_ctx,
                                              dir, *ext,
-					     config_file, 0)) < 0)
+                         config_file, 0)) < 0)
       return error;
   }
   return 0;
@@ -708,8 +708,8 @@ static char *get_argument(const char *keyword, size_t kwlen,
   if (end <= ptr)
   {
     fprintf(stderr,
-	    "error: Wrong '!%s' directive in config file: %s at line %d\n",
-	    keyword, name, line);
+        "error: Wrong '!%s' directive in config file: %s at line %d\n",
+        keyword, name, line);
     return 0;
   }
   return ptr;
@@ -781,7 +781,7 @@ static int search_default_file_with_ext(Process_option_func opt_handler,
       the mysqld server, but the check is still valid in most context.
     */
     if ((stat_info.st_mode & S_IWOTH) &&
-	(stat_info.st_mode & S_IFMT) == S_IFREG)
+    (stat_info.st_mode & S_IFMT) == S_IFREG)
     {
       fprintf(stderr, "Warning: World-writable config file '%s' is ignored\n",
               name);
@@ -827,10 +827,10 @@ static int search_default_file_with_ext(Process_option_func opt_handler,
                     sizeof(includedir_keyword) - 1)) &&
           my_isspace(&my_charset_latin1, ptr[sizeof(includedir_keyword) - 1]))
       {
-	if (!(ptr= get_argument(includedir_keyword,
+    if (!(ptr= get_argument(includedir_keyword,
                                 sizeof(includedir_keyword),
                                 ptr, name, line)))
-	  goto err;
+      goto err;
 
         if (!(search_dir= my_dir(ptr, MYF(MY_WME))))
           goto err;
@@ -862,10 +862,10 @@ static int search_default_file_with_ext(Process_option_func opt_handler,
       else if ((!strncmp(ptr, include_keyword, sizeof(include_keyword) - 1)) &&
                my_isspace(&my_charset_latin1, ptr[sizeof(include_keyword)-1]))
       {
-	if (!(ptr= get_argument(include_keyword,
+    if (!(ptr= get_argument(include_keyword,
                                 sizeof(include_keyword), ptr,
                                 name, line)))
-	  goto err;
+      goto err;
 
         search_default_file_with_ext(opt_handler, handler_ctx, "", "", ptr,
                                      recursion_level + 1);
@@ -879,10 +879,10 @@ static int search_default_file_with_ext(Process_option_func opt_handler,
       found_group=1;
       if (!(end=(char *) strchr(++ptr,']')))
       {
-	fprintf(stderr,
-		"error: Wrong group definition in config file: %s at line %d\n",
-		name,line);
-	goto err;
+    fprintf(stderr,
+        "error: Wrong group definition in config file: %s at line %d\n",
+        name,line);
+    goto err;
       }
       /* Remove end space */
       for ( ; my_isspace(&my_charset_latin1,end[-1]) ; end--) ;
@@ -898,8 +898,8 @@ static int search_default_file_with_ext(Process_option_func opt_handler,
     if (!found_group)
     {
       fprintf(stderr,
-	      "error: Found option without preceding group in config file: %s at line: %d\n",
-	      name,line);
+          "error: Found option without preceding group in config file: %s at line: %d\n",
+          name,line);
       goto err;
     }
 
@@ -920,61 +920,61 @@ static int search_default_file_with_ext(Process_option_func opt_handler,
       for (value++ ; my_isspace(&my_charset_latin1,*value); value++) ;
       value_end=strend(value);
       /*
-	We don't have to test for value_end >= value as we know there is
-	an '=' before
+    We don't have to test for value_end >= value as we know there is
+    an '=' before
       */
       for ( ; my_isspace(&my_charset_latin1,value_end[-1]) ; value_end--) ;
       if (value_end < value)			/* Empty string */
-	value_end=value;
+    value_end=value;
 
       /* remove quotes around argument */
       if ((*value == '\"' || *value == '\'') && /* First char is quote */
           (value + 1 < value_end ) && /* String is longer than 1 */
           *value == value_end[-1] ) /* First char is equal to last char */
       {
-	value++;
-	value_end--;
+    value++;
+    value_end--;
       }
       ptr=strnmov(strmov(option,"--"),ptr,(size_t) (end-ptr));
       *ptr++= '=';
 
       for ( ; value != value_end; value++)
       {
-	if (*value == '\\' && value != value_end-1)
-	{
-	  switch(*++value) {
-	  case 'n':
-	    *ptr++='\n';
-	    break;
-	  case 't':
-	    *ptr++= '\t';
-	    break;
-	  case 'r':
-	    *ptr++ = '\r';
-	    break;
-	  case 'b':
-	    *ptr++ = '\b';
-	    break;
-	  case 's':
-	    *ptr++= ' ';			/* space */
-	    break;
-	  case '\"':
-	    *ptr++= '\"';
-	    break;
-	  case '\'':
-	    *ptr++= '\'';
-	    break;
-	  case '\\':
-	    *ptr++= '\\';
-	    break;
-	  default:				/* Unknown; Keep '\' */
-	    *ptr++= '\\';
-	    *ptr++= *value;
-	    break;
-	  }
-	}
-	else
-	  *ptr++= *value;
+    if (*value == '\\' && value != value_end-1)
+    {
+      switch(*++value) {
+      case 'n':
+        *ptr++='\n';
+        break;
+      case 't':
+        *ptr++= '\t';
+        break;
+      case 'r':
+        *ptr++ = '\r';
+        break;
+      case 'b':
+        *ptr++ = '\b';
+        break;
+      case 's':
+        *ptr++= ' ';			/* space */
+        break;
+      case '\"':
+        *ptr++= '\"';
+        break;
+      case '\'':
+        *ptr++= '\'';
+        break;
+      case '\\':
+        *ptr++= '\\';
+        break;
+      default:				/* Unknown; Keep '\' */
+        *ptr++= '\\';
+        *ptr++= *value;
+        break;
+      }
+    }
+    else
+      *ptr++= *value;
       }
       *ptr=0;
       if (opt_handler(handler_ctx, curr_gr, option))
@@ -999,9 +999,9 @@ static char *remove_end_comment(char *ptr)
     if ((*ptr == '\'' || *ptr == '\"') && !escape)
     {
       if (!quote)
-	quote= *ptr;
+    quote= *ptr;
       else if (quote == *ptr)
-	quote= 0;
+    quote= 0;
     }
     /* We are not inside a string */
     if (!quote && *ptr == '#')

@@ -60,11 +60,11 @@ static unsigned long lfactor[9]=
     -1		Number was an ok negative number
     0	 	ok
     ERANGE	If the the value of the converted number exceeded the
-	        maximum negative/unsigned long long integer.
-		In this case the return value is ~0 if value was
-		positive and LONGLONG_MIN if value was negative.
+            maximum negative/unsigned long long integer.
+        In this case the return value is ~0 if value was
+        positive and LONGLONG_MIN if value was negative.
     EDOM	If the string didn't contain any digits. In this case
-    		the return value is 0.
+            the return value is 0.
 
     If endptr is not NULL the function will store the end pointer to
     the stop character here.
@@ -119,7 +119,7 @@ longlong my_strtoll10(const char *nptr, char **endptr, int *error)
     if (*s == '+')
     {
       if (++s == end)
-	goto no_conv;
+    goto no_conv;
     }
     cutoff=  ULONGLONG_MAX / LFACTOR2;
     cutoff2= ULONGLONG_MAX % LFACTOR2 / 100;
@@ -133,7 +133,7 @@ longlong my_strtoll10(const char *nptr, char **endptr, int *error)
     do
     {
       if (++s == end)
-	goto end_i;				/* Return 0 */
+    goto end_i;				/* Return 0 */
     }
     while (*s == '0');
     n_end= s+ INIT_CNT;

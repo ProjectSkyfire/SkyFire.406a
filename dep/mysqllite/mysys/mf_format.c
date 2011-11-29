@@ -24,7 +24,7 @@
 */
 
 char * fn_format(char * to, const char *name, const char *dir,
-		    const char *extension, uint flag)
+            const char *extension, uint flag)
 {
   char dev[FN_REFLEN], buff[FN_REFLEN], *pos, *startpos;
   const char *ext;
@@ -34,7 +34,7 @@ char * fn_format(char * to, const char *name, const char *dir,
   DBUG_ASSERT(name != NULL);
   DBUG_ASSERT(extension != NULL);
   DBUG_PRINT("enter",("name: %s  dir: %s  extension: %s  flag: %d",
-		       name,dir,extension,flag));
+               name,dir,extension,flag));
 
   /* Copy and skip directory */
   name+=(length=dirname_part(dev, (startpos=(char *) name), &dev_length));
@@ -103,7 +103,7 @@ char * fn_format(char * to, const char *name, const char *dir,
   */
   if (flag & MY_RETURN_REAL_PATH)
     (void) my_realpath(to, to, MYF(flag & MY_RESOLVE_SYMLINKS ?
-				   MY_RESOLVE_LINK: 0));
+                   MY_RESOLVE_LINK: 0));
   else if (flag & MY_RESOLVE_SYMLINKS)
   {
     strmov(buff,to);
@@ -132,8 +132,8 @@ size_t strlength(const char *str)
       while (*++pos && *pos != ' ') {};
       if (!*pos)
       {
-	found=pos;			/* String ends here */
-	break;
+    found=pos;			/* String ends here */
+    break;
       }
     }
     found=pos;

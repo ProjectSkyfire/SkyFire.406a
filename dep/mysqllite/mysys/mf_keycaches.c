@@ -99,7 +99,7 @@ static uchar *safe_hash_entry_get(SAFE_HASH_ENTRY *entry, size_t *length,
 */
 
 static my_bool safe_hash_init(SAFE_HASH *hash, uint elements,
-			      uchar *default_value)
+                  uchar *default_value)
 {
   DBUG_ENTER("safe_hash");
   if (my_hash_init(&hash->hash, &my_charset_bin, elements,
@@ -176,7 +176,7 @@ static uchar *safe_hash_search(SAFE_HASH *hash, const uchar *key, uint length)
 */
 
 static my_bool safe_hash_set(SAFE_HASH *hash, const uchar *key, uint length,
-			     uchar *data)
+                 uchar *data)
 {
   SAFE_HASH_ENTRY *entry;
   my_bool error= 0;
@@ -209,7 +209,7 @@ static my_bool safe_hash_set(SAFE_HASH *hash, const uchar *key, uint length,
   else
   {
     if (!(entry= (SAFE_HASH_ENTRY *) my_malloc(sizeof(*entry) + length,
-					       MYF(MY_WME))))
+                           MYF(MY_WME))))
     {
       error= 1;
       goto end;
@@ -268,10 +268,10 @@ static void safe_hash_change(SAFE_HASH *hash, uchar *old_data, uchar *new_data)
       {
         if ((*entry->prev= entry->next))
           entry->next->prev= entry->prev;
-	my_hash_delete(&hash->hash, (uchar*) entry);
+    my_hash_delete(&hash->hash, (uchar*) entry);
       }
       else
-	entry->data= new_data;
+    entry->data= new_data;
     }
   }
 
@@ -335,13 +335,13 @@ KEY_CACHE *multi_key_cache_search(uchar *key, uint length)
 */
 
 my_bool multi_key_cache_set(const uchar *key, uint length,
-			    KEY_CACHE *key_cache)
+                KEY_CACHE *key_cache)
 {
   return safe_hash_set(&key_cache_hash, key, length, (uchar*) key_cache);
 }
 
 void multi_key_cache_change(KEY_CACHE *old_data,
-			    KEY_CACHE *new_data)
+                KEY_CACHE *new_data)
 {
   safe_hash_change(&key_cache_hash, (uchar*) old_data, (uchar*) new_data);
 }

@@ -58,7 +58,7 @@
 
 static int	comp_names(struct fileinfo *a,struct fileinfo *b);
 
-	/* We need this because program don't know with malloc we used */
+    /* We need this because program don't know with malloc we used */
 
 void my_dirend(MY_DIR *buffer)
 {
@@ -74,7 +74,7 @@ void my_dirend(MY_DIR *buffer)
   DBUG_VOID_RETURN;
 } /* my_dirend */
 
-	/* Compare in sort of filenames */
+    /* Compare in sort of filenames */
 
 static int comp_names(struct fileinfo *a, struct fileinfo *b)
 {

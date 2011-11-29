@@ -88,7 +88,7 @@
 */
 
 #define SHA1CircularShift(bits,word) \
-		(((word) << (bits)) | ((word) >> (32-(bits))))
+        (((word) << (bits)) | ((word) >> (32-(bits))))
 
 /* Local Function Prototyptes */
 static void SHA1PadMessage(SHA1_CONTEXT*);
@@ -151,7 +151,7 @@ int mysql_sha1_reset(SHA1_CONTEXT *context)
 
   DESCRIPTION
     NOTE: The first octet of hash is stored in the 0th element,
-	  the last octet of hash in the 19th element.
+      the last octet of hash in the 19th element.
 
  RETURN
    SHA_SUCCESS		ok
@@ -182,7 +182,7 @@ int mysql_sha1_result(SHA1_CONTEXT *context,
 
   for (i = 0; i < SHA1_HASH_SIZE; i++)
     Message_Digest[i] = (int8)((context->Intermediate_Hash[i>>2] >> 8
-			 * ( 3 - ( i & 0x03 ) )));
+             * ( 3 - ( i & 0x03 ) )));
   return SHA_SUCCESS;
 }
 
@@ -193,7 +193,7 @@ int mysql_sha1_result(SHA1_CONTEXT *context,
    mysql_sha1_input()
    context [in/out]	The SHA context to update
    message_array	An array of characters representing the next portion
-			of the message.
+            of the message.
   length		The length of the message in message_array
 
  RETURN
@@ -317,7 +317,7 @@ static void SHA1ProcessMessageBlock(SHA1_CONTEXT *context)
   for (t = 40; t < 60; t++)
   {
     temp= (SHA1CircularShift(5,A) + ((B & C) | (B & D) | (C & D)) + E + W[t] +
-	   K[2]);
+       K[2]);
     E = D;
     D = C;
     C = SHA1CircularShift(30,B);
@@ -378,21 +378,21 @@ static void SHA1PadMessage(SHA1_CONTEXT *context)
   {
     context->Message_Block[i++] = 0x80;
     bzero((char*) &context->Message_Block[i],
-	  sizeof(context->Message_Block[0])*(64-i));
+      sizeof(context->Message_Block[0])*(64-i));
     context->Message_Block_Index=64;
 
     /* This function sets context->Message_Block_Index to zero	*/
     SHA1ProcessMessageBlock(context);
 
     bzero((char*) &context->Message_Block[0],
-	  sizeof(context->Message_Block[0])*56);
+      sizeof(context->Message_Block[0])*56);
     context->Message_Block_Index=56;
   }
   else
   {
     context->Message_Block[i++] = 0x80;
     bzero((char*) &context->Message_Block[i],
-	  sizeof(context->Message_Block[0])*(56-i));
+      sizeof(context->Message_Block[0])*(56-i));
     context->Message_Block_Index=56;
   }
 

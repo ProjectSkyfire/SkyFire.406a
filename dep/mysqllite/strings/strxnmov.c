@@ -51,7 +51,7 @@ char *strxnmov(char *dst, size_t len, const char *src, ...)
     do
     {
       if (dst == end_of_dst)
-	goto end;
+    goto end;
     }
     while ((*dst++ = *src++));
     dst--;

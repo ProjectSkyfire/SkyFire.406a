@@ -43,7 +43,7 @@
 */
 
 void init_alloc_root(MEM_ROOT *mem_root, size_t block_size,
-		     size_t pre_alloc_size __attribute__((unused)))
+             size_t pre_alloc_size __attribute__((unused)))
 {
   DBUG_ENTER("init_alloc_root");
   DBUG_PRINT("enter",("root: 0x%lx", (long) mem_root));
@@ -59,8 +59,8 @@ void init_alloc_root(MEM_ROOT *mem_root, size_t block_size,
   if (pre_alloc_size)
   {
     if ((mem_root->free= mem_root->pre_alloc=
-	 (USED_MEM*) my_malloc(pre_alloc_size+ ALIGN_SIZE(sizeof(USED_MEM)),
-			       MYF(0))))
+     (USED_MEM*) my_malloc(pre_alloc_size+ ALIGN_SIZE(sizeof(USED_MEM)),
+                   MYF(0))))
     {
       mem_root->free->size= pre_alloc_size+ALIGN_SIZE(sizeof(USED_MEM));
       mem_root->free->left= pre_alloc_size;
@@ -193,8 +193,8 @@ void *alloc_root(MEM_ROOT *mem_root, size_t length)
   if ((*(prev= &mem_root->free)) != NULL)
   {
     if ((*prev)->left < length &&
-	mem_root->first_block_usage++ >= ALLOC_MAX_BLOCK_USAGE_BEFORE_DROP &&
-	(*prev)->left < ALLOC_MAX_BLOCK_TO_DROP)
+    mem_root->first_block_usage++ >= ALLOC_MAX_BLOCK_USAGE_BEFORE_DROP &&
+    (*prev)->left < ALLOC_MAX_BLOCK_TO_DROP)
     {
       next= *prev;
       *prev= next->next;			/* Remove block from list */
@@ -214,7 +214,7 @@ void *alloc_root(MEM_ROOT *mem_root, size_t length)
     if (!(next = (USED_MEM*) my_malloc(get_size,MYF(MY_WME | ME_FATALERROR))))
     {
       if (mem_root->error_handler)
-	(*mem_root->error_handler)();
+    (*mem_root->error_handler)();
       DBUG_RETURN((void*) 0);                      /* purecov: inspected */
     }
     mem_root->block_num++;
@@ -331,7 +331,7 @@ static inline void mark_blocks_free(MEM_ROOT* root)
 
         MY_MARK_BLOCKS_FREED	Don't free blocks, just mark them free
         MY_KEEP_PREALLOC	If this is not set, then free also the
-        		        preallocated block
+                        preallocated block
 
   NOTES
     One can call this function either with root block initialised with

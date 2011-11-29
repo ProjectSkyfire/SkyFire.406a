@@ -131,7 +131,7 @@ static inline uint get_first_not_set(uint32 value, uint word_pos)
 }
 
 my_bool bitmap_init(MY_BITMAP *map, my_bitmap_map *buf, uint n_bits,
-		    my_bool thread_safe __attribute__((unused)))
+            my_bool thread_safe __attribute__((unused)))
 {
   DBUG_ENTER("bitmap_init");
   if (!buf)
@@ -274,7 +274,7 @@ void bitmap_set_prefix(MY_BITMAP *map, uint prefix_size)
   uchar *m= (uchar *)map->bitmap;
 
   DBUG_ASSERT(map->bitmap &&
-	      (prefix_size <= map->n_bits || prefix_size == (uint) ~0));
+          (prefix_size <= map->n_bits || prefix_size == (uint) ~0));
   set_if_smaller(prefix_size, map->n_bits);
   if ((prefix_bytes= prefix_size / 8))
     memset(m, 0xff, prefix_bytes);

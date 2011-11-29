@@ -52,8 +52,8 @@ typedef struct {
 */
 
 static int my_aes_create_key(KEYINSTANCE *aes_key,
-			     enum encrypt_dir direction, const char *key,
-			     int key_length)
+                 enum encrypt_dir direction, const char *key,
+                 int key_length)
 {
   uint8 rkey[AES_KEY_LENGTH/8];	 /* The real key to be used for encryption */
   uint8 *rkey_end=rkey+AES_KEY_LENGTH/8; /* Real key boundary */
@@ -119,7 +119,7 @@ static int my_aes_create_key(KEYINSTANCE *aes_key,
 */
 
 int my_aes_encrypt(const char* source, int source_length, char* dest,
-		   const char* key, int key_length)
+           const char* key, int key_length)
 {
   KEYINSTANCE aes_key;
   uint8 block[AES_BLOCK_SIZE];	/* 128 bit block used for padding */
@@ -136,7 +136,7 @@ int my_aes_encrypt(const char* source, int source_length, char* dest,
   for (i = num_blocks; i > 0; i--)   /* Encode complete blocks */
   {
     rijndaelEncrypt(aes_key.rk, aes_key.nr, (const uint8*) source,
-		    (uint8*) dest);
+            (uint8*) dest);
     source+= AES_BLOCK_SIZE;
     dest+= AES_BLOCK_SIZE;
   }
@@ -166,7 +166,7 @@ int my_aes_encrypt(const char* source, int source_length, char* dest,
 */
 
 int my_aes_decrypt(const char *source, int source_length, char *dest,
-		   const char *key, int key_length)
+           const char *key, int key_length)
 {
   KEYINSTANCE aes_key;
   uint8 block[AES_BLOCK_SIZE];	/* 128 bit block used for padding */
@@ -186,7 +186,7 @@ int my_aes_decrypt(const char *source, int source_length, char *dest,
   for (i = num_blocks-1; i > 0; i--)   /* Decode all but last blocks */
   {
     rijndaelDecrypt(aes_key.rk, aes_key.nr, (const uint8*) source,
-		    (uint8*) dest);
+            (uint8*) dest);
     source+= AES_BLOCK_SIZE;
     dest+= AES_BLOCK_SIZE;
   }

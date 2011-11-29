@@ -328,7 +328,7 @@ int my_xml_parse(MY_XML_PARSER *p,const char *str, size_t len)
       else
       {
         sprintf(p->errstr,"%s unexpected (ident or '/' wanted)",
-		lex2str(lex));
+        lex2str(lex));
         return MY_XML_ERROR;
       }
 
@@ -350,7 +350,7 @@ int my_xml_parse(MY_XML_PARSER *p,const char *str, size_t len)
           else
           {
             sprintf(p->errstr,"%s unexpected (ident or string wanted)",
-		    lex2str(lex));
+            lex2str(lex));
             return MY_XML_ERROR;
           }
         }
@@ -439,22 +439,22 @@ void my_xml_parser_free(MY_XML_PARSER *p  __attribute__((unused)))
 }
 
 void my_xml_set_value_handler(MY_XML_PARSER *p,
-			      int (*action)(MY_XML_PARSER *p, const char *s,
-					    size_t l))
+                  int (*action)(MY_XML_PARSER *p, const char *s,
+                        size_t l))
 {
   p->value=action;
 }
 
 void my_xml_set_enter_handler(MY_XML_PARSER *p,
-			      int (*action)(MY_XML_PARSER *p, const char *s,
-					    size_t l))
+                  int (*action)(MY_XML_PARSER *p, const char *s,
+                        size_t l))
 {
   p->enter=action;
 }
 
 void my_xml_set_leave_handler(MY_XML_PARSER *p,
-			      int (*action)(MY_XML_PARSER *p, const char *s,
-					    size_t l))
+                  int (*action)(MY_XML_PARSER *p, const char *s,
+                        size_t l))
 {
   p->leave_xml=action;
 }
