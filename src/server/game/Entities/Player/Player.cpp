@@ -2616,9 +2616,18 @@ void Player::RegenerateAll()
 
     // Runes act as cooldowns, and they don't need to send any data
     if (getClass() == CLASS_DEATH_KNIGHT)
-        for (uint8 i = 0; i < MAX_RUNES; ++i)
-            if (uint32 cd = GetRuneCooldown(i))
-                SetRuneCooldown(i, (cd > m_regenTimer) ? cd - m_regenTimer : 0);
+    {
+        for (uint32 i = 0; i < MAX_RUNES; i += 2)
+        {
+            uint32 cd1 = GetRuneCooldown(i);
+            uint32 cd2 = GetRuneCooldown(i + 1);
+
+            if (cd1 && (!cd2 || cd1 <= cd2))
+                SetRuneCooldown(i, (cd1 > m_regenTimer) ? cd1 - m_regenTimer : 0);
+            else if (cd2)
+                SetRuneCooldown(i + 1, (cd2 > m_regenTimer) ? cd2 - m_regenTimer : 0);
+        }
+    }
 
     if (m_regenTimerCount >= 2000)
     {
