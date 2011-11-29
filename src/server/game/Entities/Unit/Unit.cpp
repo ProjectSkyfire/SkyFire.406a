@@ -7809,42 +7809,6 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                 triggered_spell_id = 50526;
                 break;
             }
-            // Sudden Doom
-            if (dummySpell->SpellIconID == 1939 && GetTypeId() == TYPEID_PLAYER)
-            {
-                SpellChainNode const* chain = NULL;
-                // get highest rank of the Death Coil spell
-                PlayerSpellMap const& sp_list = ToPlayer()->GetSpellMap();
-                for (PlayerSpellMap::const_iterator itr = sp_list.begin(); itr != sp_list.end(); ++itr)
-                {
-                    // check if shown in spell book
-                    if (!itr->second->active || itr->second->disabled || itr->second->state == PLAYERSPELL_REMOVED)
-                        continue;
-
-                    SpellInfo const* spellProto = sSpellMgr->GetSpellInfo(itr->first);
-                    if (!spellProto)
-                        continue;
-
-                    if (spellProto->SpellFamilyName == SPELLFAMILY_DEATHKNIGHT
-                        && spellProto->SpellFamilyFlags[0] & 0x2000)
-                    {
-                        SpellChainNode const* newChain = sSpellMgr->GetSpellChainNode(itr->first);
-
-                        // No chain entry or entry lower than found entry
-                        if (!chain || !newChain || (chain->rank < newChain->rank))
-                        {
-                            triggered_spell_id = itr->first;
-                            chain = newChain;
-                        }
-                        else
-                            continue;
-                        // Found spell is last in chain - do not need to look more
-                        // Optimisation for most common case
-                        if (chain && chain->last->Id == itr->first)
-                            break;
-                    }
-                }
-            }
             // Item - Death Knight T10 Melee 4P Bonus
             if (dummySpell->Id == 70656)
             {
@@ -8836,6 +8800,22 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
 
                     trigger_spell_id = 50475;
                     basepoints0 = CalculatePctN(int32(damage), triggerAmount);
+                }
+                // Sudden Doom
+                else if(auraSpellInfo->SpellIconID == 1939)
+                {
+                    // Select chance based on weapon speed
+                    float speed = GetWeaponForAttack(BASE_ATTACK)->GetTemplate()->Delay / 1000;
+                    int32 modifier = 1;
+                    
+                    if(auraSpellInfo->Id == 49530) // Rank 3
+                        modifier = 4;
+                    else if(auraSpellInfo->Id == 49529) // Rank 2
+                        modifier = 3;
+                    
+                    // ToDo: Check this, its based on a wowhead comment
+                    if(!roll_chance_f(speed * modifier))
+                        return false;
                 }
                 break;
             }
