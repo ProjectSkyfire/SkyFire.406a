@@ -7098,7 +7098,6 @@ void ObjectMgr::LoadQuestPOI()
 
         do
         {
-
             fields = points->Fetch();
 
             uint32 questId            = fields[0].GetUInt32();

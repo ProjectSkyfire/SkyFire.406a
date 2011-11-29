@@ -1980,10 +1980,10 @@ void Unit::AttackerStateUpdate (Unit* victim, WeaponAttackType attType, bool ext
 
         CalcDamageInfo damageInfo;
         CalculateMeleeDamage(victim, 0, &damageInfo, attType);
-        
+
         if(attType == BASE_ATTACK)
             damageInfo.damage *= GetTotalAuraModifier(SPELL_AURA_MOD_AUTOATTACK_DAMAGE) / 100;
-        
+
         // Send log damage message to client
         DealDamageMods(victim, damageInfo.damage, &damageInfo.absorb);
         SendAttackStateUpdate(&damageInfo);
@@ -6804,7 +6804,7 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                     if (!bp0 || !bp1)
                         return false;
 
-                    if (victim && victim->IsFriendlyTo(this))  
+                    if (victim && victim->IsFriendlyTo(this))
                         CastCustomSpell(victim,86678,&bp0,&bp1,0,true,NULL,triggeredByAura,0);
                     else
                         CastCustomSpell(this,86678,&bp0,&bp1,0,true,NULL,triggeredByAura,0);
@@ -6817,17 +6817,17 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                     triggered_spell_id = 86700;
                     break;
                 }
-                // Uncomment this once the guardian is receiving the aura via 
+                // Uncomment this once the guardian is receiving the aura via
                 // creature template addon and redirect aura procs to the owner
                 // Ancient Crusader - Guardian
                 /*
                 case 86703:
                 {
                     Unit* owner = this->GetOwner();
-     
+
                     if (!owner)
                         return false;
-     
+
                     owner->CastSpell(owner, 86700, true);
                     return true;
                 }*/
@@ -9019,7 +9019,7 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
         {
             if(GetTypeId() != TYPEID_PLAYER)
                 return false;
-                
+
             if(!HealthBelowPctDamaged(30, damage)) // Only proc if it brings us below 30% health
                 return false;
 
@@ -9028,7 +9028,6 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
             cooldown = 45000; // Can only happen once in 45 seconds
             break;
         }
-        
     }
     // Sword Specialization
     if (auraSpellInfo->SpellFamilyName == SPELLFAMILY_GENERIC && auraSpellInfo->SpellIconID == 1462 && procSpell)

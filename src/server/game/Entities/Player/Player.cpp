@@ -4577,7 +4577,6 @@ bool Player::resetTalents(bool no_cost)
         }
     }
 
-
     for (uint32 talentId = 0; talentId < sTalentStore.GetNumRows(); ++talentId)
     {
         TalentEntry const* talentInfo = sTalentStore.LookupEntry(talentId);

@@ -408,11 +408,11 @@ class spell_pal_word_of_glory : public SpellScriptLoader
 {
 public:
     spell_pal_word_of_glory() : SpellScriptLoader("spell_pal_word_of_glory") { }
- 
+
     class spell_pal_word_of_glory_heal_SpellScript : public SpellScript
     {
         PrepareSpellScript(spell_pal_word_of_glory_heal_SpellScript);
- 
+
         uint32 totalheal;
 
         bool Load()

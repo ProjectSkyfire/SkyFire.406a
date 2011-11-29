@@ -2730,7 +2730,7 @@ public:
 };
 
 // Uncomment this once guardians are able to cast spells
-// on owner at AI initialization and be able to cast spells based on owner's triggered spellcasts. 
+// on owner at AI initialization and be able to cast spells based on owner's triggered spellcasts.
 /*
 enum GuardianSpellsAndEntries
 {
@@ -2742,7 +2742,6 @@ enum GuardianSpellsAndEntries
     SPELL_ANCIENT_CRUSADER_GUARDIAN = 86701
 };
 
-
 class npc_guardian_of_ancient_kings : public CreatureScript
 {
 public:
@@ -2750,7 +2749,7 @@ public:
 
     struct npc_guardian_of_ancient_kingsAI : public ScriptedAI
     {
-        npc_guardian_of_ancient_kingsAI(Creature *pCreature) : ScriptedAI(pCreature) 
+        npc_guardian_of_ancient_kingsAI(Creature *pCreature) : ScriptedAI(pCreature)
         {
             _healcount = 0;
         }

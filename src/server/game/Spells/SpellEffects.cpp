@@ -5720,7 +5720,7 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
             {
                 if (!unitTarget || !unitTarget->isAlive())
                     return;
-                
+
                 uint32 spellId = 0;
 
                 // Seal of Truth and Seal of Righteoussness have a dummy aura on effect 2

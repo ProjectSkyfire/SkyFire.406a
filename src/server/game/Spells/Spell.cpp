@@ -4587,7 +4587,7 @@ void Spell::HandleThreatSpells()
 // Disclaimer: this function is needed and called on handle_finish_phase
 // due to the fact that the current spellsystem applyes power-based spellmods
 // taking the remaining power as base for its calculations, since holy power abilities
-// leaves no holy power on the player, its undoable to handle it either on CalculatePowerCost  or 
+// leaves no holy power on the player, its undoable to handle it either on CalculatePowerCost  or
 // TakePower functions.
 void Spell::HandleHolyPower(Player* caster)
 {
@@ -4609,7 +4609,7 @@ void Spell::HandleHolyPower(Player* caster)
             {
                 if (ihit->targetGUID == targetGUID)
                 {
-                    if (ihit->missCondition != SPELL_MISS_NONE) 
+                    if (ihit->missCondition != SPELL_MISS_NONE)
                     {
                         hit = false;
                         // Without this, the player will loose all charges of holy power on a failed hit.
