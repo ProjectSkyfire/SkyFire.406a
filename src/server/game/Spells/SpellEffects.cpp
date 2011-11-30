@@ -1083,6 +1083,101 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                         m_caster->DealDamage(unitTarget, unitTarget->CountPctFromMaxHealth(93));
                         return;
                 }
+                case 47176: // Infect Ice Troll
+                {
+                    // Spell has wrong areaGroupid, so it can not be casted where expected.
+                    // TODO: research if spells casted by NPC, having TARGET_SCRIPT, can have disabled area check
+                    if (!unitTarget)
+                        return;
+
+                    // Plague Effect Self
+                    unitTarget->CastSpell(unitTarget, 47178, true);
+                    return;
+                }
+                case 47305: // Potent Explosive Charge
+                {
+                    if (!unitTarget || unitTarget->GetTypeId() != TYPEID_UNIT)
+                        return;
+
+                    // only if below 80% hp
+                    if (unitTarget->GetHealthPct() > 80.0f)
+                        return;
+
+                    // Issues with explosion animation (remove insta kill spell resolves the issue)
+
+                    // Quest - Jormungar Explosion Spell Spawn
+                    unitTarget->CastSpell(unitTarget, 47311, true);
+
+                    // Potent Explosive Charge
+                    unitTarget->CastSpell(unitTarget, 47306, true);
+
+                    return;
+                }
+                case 47381: // Reagent Check (Frozen Mojo)
+                case 47386: // Reagent Check (Zim'Bo's Mojo)
+                case 47389: // Reagent Check (Desperate Mojo)
+                case 47408: // Reagent Check (Sacred Mojo)
+                case 50441: // Reagent Check (Survival Mojo)
+                {
+                    if (m_caster->GetTypeId() != TYPEID_PLAYER)
+                        return;
+
+                    switch(m_spellInfo->Id)
+                    {
+                        case 47381:
+                            // Envision Drakuru
+                            m_caster->CastSpell(m_caster, 47118, true);
+                            break;
+                        case 47386:
+                            m_caster->CastSpell(m_caster, 47150, true);
+                            break;
+                        case 47389:
+                            m_caster->CastSpell(m_caster, 47317, true);
+                            break;
+                        case 47408:
+                            m_caster->CastSpell(m_caster, 47406, true);
+                            break;
+                        case 50441:
+                            m_caster->CastSpell(m_caster, 50440, true);
+                            break;
+                    }
+
+                    return;
+                }
+                case 48046: // Use Camera
+                {
+                    if (!unitTarget)
+                        return;
+
+                    // No despawn expected, nor any change in dynamic flags/other flags.
+                    // Need internal way to track if credit has been given for this object.
+
+                    // Iron Dwarf Snapshot Credit
+                    m_caster->CastSpell(m_caster, 48047, true, m_CastItem, NULL, unitTarget->GetGUID());
+                    return;
+                }
+                case 48386: // Ymiron Summon Fountain
+                {
+                    m_caster->CastSpell(m_caster, 48385, true);
+                    return;
+                }
+                case 48593: // Summon Avenging Spirit
+                {
+                    for (int i = 0; i < 4; ++i)
+                    {
+                        m_caster->CastSpell(m_caster, 48592, true);
+                    }
+                    return;
+                }
+                case 48790: // Neltharion's Flame
+                {
+                    if (!unitTarget)
+                        return;
+
+                    // Neltharion's Flame Fire Bunny: Periodic Fire Aura
+                    unitTarget->CastSpell(unitTarget, 48786, false);
+                    return;
+                }
                 case 49357:                                 // Brewfest Mount Transformation
                     if (m_caster->GetTypeId() != TYPEID_PLAYER)
                         return;
