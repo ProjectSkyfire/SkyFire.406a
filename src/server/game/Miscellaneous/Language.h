@@ -20,7 +20,7 @@
 #ifndef __TRINITY_LANGUAGE_H
 #define __TRINITY_LANGUAGE_H
 
-enum TrinityStrings
+enum SkyFireStrings
 {
     // for chat commands
     LANG_SELECT_CHAR_OR_CREATURE        = 1,
@@ -734,7 +734,8 @@ enum TrinityStrings
     LANG_COMMAND_CREATURESTORAGE_NOTFOUND  = 818,
 
     LANG_CHANNEL_CITY                   = 819,
-    // Room for in-game strings           820-999 not used
+    LANG_FAIL_ENTER_SPECTRAL_REALM      = 820,
+    // Room for in-game strings           821-999 not used
 
     // Level 4 (CLI only commands)
     LANG_COMMAND_EXIT                   = 1000,
@@ -948,7 +949,7 @@ enum TrinityStrings
     LANG_GOINFO_LOOTID                  = 5028,
     LANG_COMMAND_LOOKUP_MAX_RESULTS     = 5029,
     LANG_FLEE                           = 5030,
-	// Room for more Trinity strings      5031-9999
+    // Room for more Trinity strings      5031-9999
 
     // Level requirement notifications
     LANG_SAY_REQ                        = 6604,

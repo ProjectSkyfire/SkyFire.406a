@@ -1030,6 +1030,38 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                     }
                     return;
                 }
+                // Spectral Realm
+                case 44845:
+                {
+                    if (!unitTarget)
+                        return;
+
+                    // teleport all targets which have the spectral realm aura
+                    if (unitTarget->HasAura(46021))
+                    {
+                        unitTarget->RemoveAurasDueToSpell(46021);
+                        unitTarget->CastSpell(unitTarget, 46020, true);
+                        unitTarget->CastSpell(unitTarget, 44867, true);
+                    }
+
+                    return;
+                }
+                // Spectral Blast
+                case 44869:
+                {
+                    if (!unitTarget || unitTarget->GetTypeId() != TYPEID_PLAYER)
+                        return;
+
+                    // If target has spectral exhaustion or spectral realm aura return
+                    if (unitTarget->HasAura(44867) || unitTarget->HasAura(46021))
+                        return;
+
+                    // Cast the spectral realm effect spell, visual spell and spectral blast rift summoning
+                    unitTarget->CastSpell(unitTarget, 44866, true, NULL, NULL, m_caster->GetGUID());
+                    unitTarget->CastSpell(unitTarget, 46648, true, NULL, NULL, m_caster->GetGUID());
+                    unitTarget->CastSpell(unitTarget, 44811, true);
+                    return;
+                }
                 case 44875:                                 // Complete Raptor Capture
                 {
                     if (!unitTarget || unitTarget->GetTypeId() != TYPEID_UNIT)
@@ -5103,8 +5135,34 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
                     }
                     break;
                 }
+                // Spectral Realm
+                case 44811:
+                {
+                    if (!unitTarget || unitTarget->GetTypeId() != TYPEID_PLAYER)
+                        return;
+
+                    // If the player can't be teleported, send him a notification
+                    if (unitTarget->HasAura(44867))
+                    {
+                        ((Player*)unitTarget)->GetSession()->SendNotification(LANG_FAIL_ENTER_SPECTRAL_REALM);
+                        return;
+                    }
+
+                    // Teleport target to the spectral realm, add debuff and force faction
+                    unitTarget->CastSpell(unitTarget, 44852, true);
+                    unitTarget->CastSpell(unitTarget, 46019, true);
+                    unitTarget->CastSpell(unitTarget, 46021, true);
+                    return;
+                }
                 // Brutallus - Burn
                 case 45141:
+                {
+                    if (!unitTarget)
+                        return;
+
+                    unitTarget->CastSpell(unitTarget, 46394, true, NULL, NULL, m_caster->GetGUID());
+                    return;
+                }
                 case 45151:
                 {
                     //Workaround for Range ... should be global for every ScriptEffect

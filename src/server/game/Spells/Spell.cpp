@@ -2585,7 +2585,7 @@ uint32 Spell::SelectEffectTargets(uint32 i, SpellImplicitTargetInfo const& cur)
                         {
                             SearchAreaTarget(unitList, 300.0f, pushType, SPELL_TARGETS_ALLY);
                             break;
-                        }					
+                        }
                         case 46584: // Raise Dead
                         {
                             if (WorldObject* result = FindCorpseUsing<Trinity::RaiseDeadObjectCheck> ())
@@ -2735,6 +2735,7 @@ uint32 Spell::SelectEffectTargets(uint32 i, SpellImplicitTargetInfo const& cur)
                 case SPELLFAMILY_GENERIC:
                     switch (m_spellInfo->Id)
                     {
+                        case 44869: // Spectral Blast
                         case 52759: // Ancestral Awakening
                         case 71610: // Echoes of Light (Althor's Abacus normal version)
                         case 71641: // Echoes of Light (Althor's Abacus heroic version)
