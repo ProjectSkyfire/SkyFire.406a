@@ -8809,14 +8809,14 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
 
                     // Select chance based on weapon speed
                     float speed = ToPlayer()->GetWeaponForAttack(BASE_ATTACK)->GetTemplate()->Delay / 1000;
-                    
+
                     int32 modifier = 1;
-                    
+
                     if(auraSpellInfo->Id == 49530) // Rank 3
                         modifier = 4;
                     else if(auraSpellInfo->Id == 49529) // Rank 2
                         modifier = 3;
-                    
+
                     // ToDo: Check this, its based on a wowhead comment
                     if(!roll_chance_f(speed * modifier))
                         return false;
@@ -9244,7 +9244,7 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
             // Proc only from healing part of Death Coil. Check is essential as all Death Coil spells have 0x2000 mask in SpellFamilyFlags
             if (!procSpell || !(procSpell->SpellFamilyName == SPELLFAMILY_DEATHKNIGHT && procSpell->SpellFamilyFlags[0] == 0x80002000))
                 return false;
-            
+
             target = this;
             break;
         }

@@ -1483,7 +1483,7 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
 
                 if(unitTarget && !unitTarget->isInCombat())
                     return;
-                    
+
                 m_caster->CastSpell(unitTarget, damage, true);
                 return;
             }
@@ -1658,7 +1658,7 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                     if(bp < int32(m_caster->CountPctFromMaxHealth(aurEff->GetAmount())))
                         if(m_caster->HasAura(48265) || m_caster->HasAura(48266)) // Only in frost/unholy presence
                             bp = m_caster->CountPctFromMaxHealth(aurEff->GetAmount());
-                
+
                 if (m_caster->ToPlayer()->HasAuraType(SPELL_AURA_MASTERY))
                 {
                     if (m_caster->ToPlayer()->HasSpell(50029)) //Temp check for spec
@@ -1746,7 +1746,7 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
 
         targets.SetUnitTarget(unitTarget);
         Spell* spell = new Spell(m_caster, spellInfo, triggered ? TRIGGERED_FULL_MASK : TRIGGERED_NONE, m_originalCasterGUID, true);
-        if (bp) 
+        if (bp)
             spell->SetSpellValue(SPELLVALUE_BASE_POINT0, bp);
         spell->prepare(&targets);
     }
