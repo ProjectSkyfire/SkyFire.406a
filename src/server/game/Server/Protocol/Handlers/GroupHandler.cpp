@@ -62,10 +62,12 @@ void WorldSession::HandleGroupInviteOpcode(WorldPacket & recv_data)
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_GROUP_INVITE");
 
     std::string membername;
+
+    for (int i = 0; i < 10; ++i)
+        recv_data.read_skip<std::string>();
+
     recv_data >> membername;
     recv_data.read_skip<uint32>();
-
-    // attempt add selected player
 
     // cheating
     if (!normalizePlayerName(membername))
