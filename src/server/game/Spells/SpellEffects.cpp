@@ -907,11 +907,11 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                 }
                 case 26074:                                 // Holiday Cheer
                     // implemented at client side
-                    return;               
+                    return;
                 case 28089:                                 // Polarity Shift
                     if (unitTarget)
                         unitTarget->CastSpell(unitTarget, roll_chance_i(50) ? 28059 : 28084, true, NULL, NULL, m_caster->GetGUID());
-                    break;             
+                    break;
                 case 39096:                                 // Polarity Shift
                     if (unitTarget)
                         unitTarget->CastSpell(unitTarget, roll_chance_i(50) ? 39088 : 39091, true, NULL, NULL, m_caster->GetGUID());
@@ -1064,6 +1064,15 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
 
                     //cast spell Raptor Capture Credit
                     m_caster->CastSpell(m_caster, 42337, true, NULL);
+                    return;
+                }
+                case 45989: // Summon Void Sentinel Summoner Visual
+                {
+                    if (!unitTarget)
+                        return;
+
+                    // summon void sentinel
+                    unitTarget->CastSpell(unitTarget, 45988, true);
                     return;
                 }
                 case 47170:                                 // Impale Leviroth
