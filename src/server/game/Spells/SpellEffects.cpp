@@ -853,19 +853,19 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
 
                     return;
                 }
-                case 23448:                                 // Transporter Arrival - Ultrasafe Transporter: Gadgetzan - backfires
+                case 23448:                                  // Transporter Arrival - Ultrasafe Transporter: Gadgetzan - backfires
                 {
                     int32 r = irand(0, 119);
-                    if (r < 20)                           // Transporter Malfunction - 1/6 polymorph
+                    if (r < 20)                             // Transporter Malfunction - 1/6 polymorph
                         m_caster->CastSpell(m_caster, 23444, true);
-                    else if (r < 100)                     // Evil Twin               - 4/6 evil twin
+                    else if (r < 100)                       // Evil Twin               - 4/6 evil twin
                         m_caster->CastSpell(m_caster, 23445, true);
                     else                                    // Transporter Malfunction - 1/6 miss the target
                         m_caster->CastSpell(m_caster, 36902, true);
                     return;
                 }
                 case 23453:                                 // Gnomish Transporter - Ultrasafe Transporter: Gadgetzan
-                    if (roll_chance_i(50))                // Gadgetzan Transporter         - success
+                    if (roll_chance_i(50))                  // Gadgetzan Transporter         - success
                         m_caster->CastSpell(m_caster, 23441, true);
                     else                                    // Gadgetzan Transporter Failure - failure
                         m_caster->CastSpell(m_caster, 23446, true);
@@ -907,14 +907,12 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                 }
                 case 26074:                                 // Holiday Cheer
                     // implemented at client side
-                    return;
-                // Polarity Shift
-                case 28089:
+                    return;               
+                case 28089:                                 // Polarity Shift
                     if (unitTarget)
                         unitTarget->CastSpell(unitTarget, roll_chance_i(50) ? 28059 : 28084, true, NULL, NULL, m_caster->GetGUID());
-                    break;
-                // Polarity Shift
-                case 39096:
+                    break;             
+                case 39096:                                 // Polarity Shift
                     if (unitTarget)
                         unitTarget->CastSpell(unitTarget, roll_chance_i(50) ? 39088 : 39091, true, NULL, NULL, m_caster->GetGUID());
                     break;
@@ -975,8 +973,7 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                     m_caster->CastCustomSpell(unitTarget, 37675, &basepoints0, NULL, NULL, true);
                     return;
                 }
-                // Wrath of the Astromancer
-                case 42784:
+                case 42784:                                // Wrath of the Astromancer
                 {
                     uint32 count = 0;
                     for (std::list<TargetInfo>::iterator ihit= m_UniqueTargetInfo.begin(); ihit != m_UniqueTargetInfo.end(); ++ihit)
@@ -998,8 +995,7 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
 
                     return;
                 }
-                // Shadowmeld
-                case 58984:
+                case 58984:                               // Shadowmeld
                 {
                     m_caster->InterruptSpell(CURRENT_AUTOREPEAT_SPELL); // break Auto Shot and auto hit
                     m_caster->InterruptSpell(CURRENT_CHANNELED_SPELL); // break channeled spells
@@ -1009,8 +1005,7 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                         m_caster->ToPlayer()->SendAttackSwingCancelAttack();
                     return;
                 }
-                // Demon Broiled Surprise
-                case 43723:
+                case 43723:                             // Demon Broiled Surprise
                 {
                     if (m_caster->GetTypeId() != TYPEID_PLAYER)
                         return;
@@ -1030,8 +1025,7 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                     }
                     return;
                 }
-                // Spectral Realm
-                case 44845:
+                case 44845:                            // Spectral Realm
                 {
                     if (!unitTarget)
                         return;
@@ -1046,8 +1040,7 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
 
                     return;
                 }
-                // Spectral Blast
-                case 44869:
+                case 44869:                          // Spectral Blast
                 {
                     if (!unitTarget || unitTarget->GetTypeId() != TYPEID_PLAYER)
                         return;
@@ -1501,7 +1494,7 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
             // Starfall
             if (m_spellInfo->SpellFamilyFlags[2] & SPELLFAMILYFLAG2_DRUID_STARFALL)
             {
-                //Shapeshifting into an animal form or mounting cancels the effect.
+                // Shapeshifting into an animal form or mounting cancels the effect.
                 if (m_caster->GetCreatureType() == CREATURE_TYPE_BEAST || m_caster->IsMounted())
                 {
                     if (m_triggeredByAuraSpell)
@@ -1509,7 +1502,7 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                     return;
                 }
 
-                //Any effect which causes you to lose control of your character will supress the starfall effect.
+                // Any effect which causes you to lose control of your character will supress the starfall effect.
                 if (m_caster->HasUnitState(UNIT_STAT_CONTROLLED))
                     return;
 
