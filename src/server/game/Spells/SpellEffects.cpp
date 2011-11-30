@@ -1094,25 +1094,6 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                     unitTarget->CastSpell(unitTarget, 47178, true);
                     return;
                 }
-                case 47305: // Potent Explosive Charge
-                {
-                    if (!unitTarget || unitTarget->GetTypeId() != TYPEID_UNIT)
-                        return;
-
-                    // only if below 80% hp
-                    if (unitTarget->GetHealthPct() > 80.0f)
-                        return;
-
-                    // Issues with explosion animation (remove insta kill spell resolves the issue)
-
-                    // Quest - Jormungar Explosion Spell Spawn
-                    unitTarget->CastSpell(unitTarget, 47311, true);
-
-                    // Potent Explosive Charge
-                    unitTarget->CastSpell(unitTarget, 47306, true);
-
-                    return;
-                }
                 case 47381: // Reagent Check (Frozen Mojo)
                 case 47386: // Reagent Check (Zim'Bo's Mojo)
                 case 47389: // Reagent Check (Desperate Mojo)
