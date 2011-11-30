@@ -839,6 +839,11 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                     }
                     return;
                 }
+                case 17770:                                 // Wolfshead Helm Energy
+                {
+                    m_caster->CastSpell(m_caster, 29940, true, NULL);
+                    return;
+                }				
                 case 23019:                                 // Crystal Prison Dummy DND
                 {
                     if (!unitTarget || !unitTarget->isAlive() || unitTarget->GetTypeId() != TYPEID_UNIT || unitTarget->ToCreature()->isPet())
