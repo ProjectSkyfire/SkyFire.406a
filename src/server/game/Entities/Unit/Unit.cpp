@@ -7820,6 +7820,21 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                     if (player->GetRuneCooldown(i) == 0)
                         return false;
             }
+            // Dark Simulacrum
+            if(dummySpell->Id == 77606)
+            {
+                if(!procSpell || procSpell->PowerType != POWER_MANA || (procSpell->ManaCost == 0 && procSpell->ManaCostPercentage == 0 && procSpell->ManaCostPerLevel == 0))
+                    return false;
+                
+                Unit* caster = triggeredByAura->GetCaster();
+                
+                if(!caster)
+                    return false;
+                
+                triggered_spell_id = 77616;
+                basepoints0 = procSpell->Id;
+                target = caster;
+            }
             break;
         }
         case SPELLFAMILY_POTION:
