@@ -5855,6 +5855,19 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
                 }
             }
         }
+        case SPELLFAMILY_DRUID:
+        {
+            switch(m_spellInfo->Id)
+            {
+                case 80863: // Blood In The Water
+                {
+                    if(unitTarget->HealthBelowPct(25))
+                        if(Aura* rip = unitTarget->GetAura(1079, m_caster->GetGUID()))
+                            rip->RefreshDuration();
+                }
+            }
+            break;
+        }
     }
 
     // normal DB scripted effect

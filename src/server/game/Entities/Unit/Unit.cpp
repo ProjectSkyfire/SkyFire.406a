@@ -8549,7 +8549,7 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
                     case 93399: // Rank 2
                     {
                         if (GetTypeId() == TYPEID_PLAYER)
-                            ToPlayer()->RemoveSpellCooldown(78674,true); // Remove cooldown of Starsurge
+                            ToPlayer()->RemoveSpellCooldown(78674, true); // Remove cooldown of Starsurge
                         break;
                     }
                     default:
