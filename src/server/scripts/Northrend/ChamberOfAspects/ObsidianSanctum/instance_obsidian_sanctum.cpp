@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -38,34 +39,34 @@ public:
     {
         instance_obsidian_sanctum_InstanceMapScript(Map* map) : InstanceScript(map) {}
 
-        uint32 m_auiEncounter[MAX_ENCOUNTER];
-        uint64 m_uiSartharionGUID;
-        uint64 m_uiTenebronGUID;
-        uint64 m_uiShadronGUID;
-        uint64 m_uiVesperonGUID;
+        uint32 Encounter[MAX_ENCOUNTER];
+        uint64 SartharionGUID;
+        uint64 TenebronGUID;
+        uint64 ShadronGUID;
+        uint64 VesperonGUID;
 
-        bool m_bTenebronKilled;
-        bool m_bShadronKilled;
-        bool m_bVesperonKilled;
+        bool _bTenebronKilled;
+        bool _bShadronKilled;
+        bool _bVesperonKilled;
 
         void Initialize()
         {
-            memset(&m_auiEncounter, 0, sizeof(m_auiEncounter));
+            memset(&Encounter, 0, sizeof(Encounter));
 
-            m_uiSartharionGUID = 0;
-            m_uiTenebronGUID   = 0;
-            m_uiShadronGUID    = 0;
-            m_uiVesperonGUID   = 0;
+            SartharionGUID = 0;
+            TenebronGUID   = 0;
+            ShadronGUID    = 0;
+            VesperonGUID   = 0;
 
-            m_bTenebronKilled = false;
-            m_bShadronKilled = false;
-            m_bVesperonKilled = false;
+            _bTenebronKilled = false;
+            _bShadronKilled = false;
+            _bVesperonKilled = false;
         }
 
         bool IsEncounterInProgress() const
         {
             for (uint8 i = 0; i < MAX_ENCOUNTER; ++i)
-                if (m_auiEncounter[i] == IN_PROGRESS)
+                if (Encounter[i] == IN_PROGRESS)
                     return true;
 
             return false;
@@ -76,47 +77,47 @@ public:
             switch (creature->GetEntry())
             {
                 case NPC_SARTHARION:
-                    m_uiSartharionGUID = creature->GetGUID();
+                    SartharionGUID = creature->GetGUID();
                     break;
                 //three dragons below set to active state once created.
                 //we must expect bigger raid to encounter main boss, and then three dragons must be active due to grid differences
                 case NPC_TENEBRON:
-                    m_uiTenebronGUID = creature->GetGUID();
+                    TenebronGUID = creature->GetGUID();
                     creature->setActive(true);
                     break;
                 case NPC_SHADRON:
-                    m_uiShadronGUID = creature->GetGUID();
+                    ShadronGUID = creature->GetGUID();
                     creature->setActive(true);
                     break;
                 case NPC_VESPERON:
-                    m_uiVesperonGUID = creature->GetGUID();
+                    VesperonGUID = creature->GetGUID();
                     creature->setActive(true);
                     break;
             }
         }
 
-        void SetData(uint32 uiType, uint32 uiData)
+        void SetData(uint32 Type, uint32 uiData)
         {
-            if (uiType == TYPE_SARTHARION_EVENT)
-                m_auiEncounter[0] = uiData;
-            else if (uiType == TYPE_TENEBRON_PREKILLED)
-                m_bTenebronKilled = true;
-            else if (uiType == TYPE_SHADRON_PREKILLED)
-                m_bShadronKilled = true;
-            else if (uiType == TYPE_VESPERON_PREKILLED)
-                m_bVesperonKilled = true;
+            if (Type == TYPE_SARTHARION_EVENT)
+                Encounter[0] = uiData;
+            else if (Type == TYPE_TENEBRON_PREKILLED)
+                _bTenebronKilled = true;
+            else if (Type == TYPE_SHADRON_PREKILLED)
+                _bShadronKilled = true;
+            else if (Type == TYPE_VESPERON_PREKILLED)
+                _bVesperonKilled = true;
         }
 
-        uint32 GetData(uint32 uiType)
+        uint32 GetData(uint32 Type)
         {
-            if (uiType == TYPE_SARTHARION_EVENT)
-                return m_auiEncounter[0];
-            else if (uiType == TYPE_TENEBRON_PREKILLED)
-                return m_bTenebronKilled;
-            else if (uiType == TYPE_SHADRON_PREKILLED)
-                return m_bShadronKilled;
-            else if (uiType == TYPE_VESPERON_PREKILLED)
-                return m_bVesperonKilled;
+            if (Type == TYPE_SARTHARION_EVENT)
+                return Encounter[0];
+            else if (Type == TYPE_TENEBRON_PREKILLED)
+                return _bTenebronKilled;
+            else if (Type == TYPE_SHADRON_PREKILLED)
+                return _bShadronKilled;
+            else if (Type == TYPE_VESPERON_PREKILLED)
+                return _bVesperonKilled;
 
             return 0;
         }
@@ -126,13 +127,13 @@ public:
             switch (uiData)
             {
                 case DATA_SARTHARION:
-                    return m_uiSartharionGUID;
+                    return SartharionGUID;
                 case DATA_TENEBRON:
-                    return m_uiTenebronGUID;
+                    return TenebronGUID;
                 case DATA_SHADRON:
-                    return m_uiShadronGUID;
+                    return ShadronGUID;
                 case DATA_VESPERON:
-                    return m_uiVesperonGUID;
+                    return VesperonGUID;
             }
             return 0;
         }
