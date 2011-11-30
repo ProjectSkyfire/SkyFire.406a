@@ -2579,7 +2579,7 @@ uint32 Spell::SelectEffectTargets(uint32 i, SpellImplicitTargetInfo const& cur)
                     // TODO: move these to sql
                     switch (m_spellInfo->Id)
                     {
-                        //Icecrown Citadel: Highlord Tirion Fordring's Mass Resurrection
+                        //Icecrown Citadel: Terenas Menethil's Mass Resurrection
                         //Requires players to have at least friendly reputation with Argent Crusade
                         case 72429:
                         {
