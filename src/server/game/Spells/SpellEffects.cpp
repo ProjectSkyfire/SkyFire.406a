@@ -5836,6 +5836,13 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
                     unitTarget->CastSpell(unitTarget, spellTarget[urand(0, 4)], true);
                     break;
                 }
+                case 72034:                                // Whiteout
+                case 72096:                                // Whiteout (heroic)
+                {
+                    // cast Whiteout visual
+                    m_caster->CastSpell(unitTarget, 72036, true);
+                    return;
+                }               
                 case 64142:                                 // Upper Deck - Create Foam Sword
                     if (unitTarget->GetTypeId() != TYPEID_PLAYER)
                         return;
