@@ -35,23 +35,24 @@ int mp_mul_2(mp_int * a, mp_int * b)
 
     /* alias for source */
     tmpa = a->dp;
-
+    
     /* alias for dest */
     tmpb = b->dp;
 
     /* carry */
     r = 0;
     for (x = 0; x < a->used; x++) {
-      /* get what will be the *next* carry bit from the
-       * MSB of the current digit
+    
+      /* get what will be the *next* carry bit from the 
+       * MSB of the current digit 
        */
       rr = *tmpa >> ((mp_digit)(DIGIT_BIT - 1));
-
+      
       /* now shift up this digit, add in the carry [from the previous] */
       *tmpb++ = ((*tmpa++ << ((mp_digit)1)) | r) & MP_MASK;
-
-      /* copy the carry that would be from the source
-       * digit into the next iteration
+      
+      /* copy the carry that would be from the source 
+       * digit into the next iteration 
        */
       r = rr;
     }
@@ -63,8 +64,8 @@ int mp_mul_2(mp_int * a, mp_int * b)
       ++(b->used);
     }
 
-    /* now zero any excess digits on the destination
-     * that we didn't write to
+    /* now zero any excess digits on the destination 
+     * that we didn't write to 
      */
     tmpb = b->dp + b->used;
     for (x = b->used; x < oldused; x++) {
@@ -76,6 +77,6 @@ int mp_mul_2(mp_int * a, mp_int * b)
 }
 #endif
 
-/* $Source: /cvs/libtom/libtommath/bn_mp_mul_2.c, v $ */
+/* $Source: /cvs/libtom/libtommath/bn_mp_mul_2.c,v $ */
 /* $Revision: 1.4 $ */
 /* $Date: 2006/12/28 01:25:13 $ */

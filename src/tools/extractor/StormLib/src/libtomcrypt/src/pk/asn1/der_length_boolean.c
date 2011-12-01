@@ -17,7 +17,7 @@
 
 #ifdef LTC_DER
 /**
-  Gets length of DER encoding of a BOOLEAN
+  Gets length of DER encoding of a BOOLEAN 
   @param outlen [out] The length of the DER encoding
   @return CRYPT_OK if successful
 */
@@ -30,6 +30,6 @@ int der_length_boolean(unsigned long *outlen)
 
 #endif
 
-/* $Source: /cvs/libtom/libtomcrypt/src/pk/asn1/der/boolean/der_length_boolean.c, v $ */
+/* $Source: /cvs/libtom/libtomcrypt/src/pk/asn1/der/boolean/der_length_boolean.c,v $ */
 /* $Revision: 1.3 $ */
 /* $Date: 2006/12/28 01:27:24 $ */

@@ -70,6 +70,6 @@ int mp_toradix (mp_int * a, char *str, int radix)
 
 #endif
 
-/* $Source: /cvs/libtom/libtommath/bn_mp_toradix.c, v $ */
+/* $Source: /cvs/libtom/libtommath/bn_mp_toradix.c,v $ */
 /* $Revision: 1.4 $ */
 /* $Date: 2006/12/28 01:25:13 $ */

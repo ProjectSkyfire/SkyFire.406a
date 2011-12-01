@@ -39,6 +39,6 @@ int mp_cmp_d(mp_int * a, mp_digit b)
 }
 #endif
 
-/* $Source: /cvs/libtom/libtommath/bn_mp_cmp_d.c, v $ */
+/* $Source: /cvs/libtom/libtommath/bn_mp_cmp_d.c,v $ */
 /* $Revision: 1.4 $ */
 /* $Date: 2006/12/28 01:25:13 $ */

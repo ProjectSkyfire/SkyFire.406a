@@ -9,7 +9,7 @@
 #define ZCONF_H
 
 /*
- * If you *really* need a unique prefix for all types and library functions, 
+ * If you *really* need a unique prefix for all types and library functions,
  * compile with -DZ_PREFIX. The "standard" zlib should be compiled without it.
  */
 #ifdef Z_PREFIX
@@ -174,7 +174,7 @@
 /* The following definitions for FAR are needed only for MSDOS mixed
  * model programming (small or medium model with some far allocations).
  * This was tested only with MSC; for other MSDOS compilers you may have
- * to define NO_MEMCPY in zutil.h.  If you don't need the mixed model, 
+ * to define NO_MEMCPY in zutil.h.  If you don't need the mixed model,
  * just define FAR to be empty.
  */
 #ifdef SYS16BIT
@@ -211,7 +211,7 @@
 #      endif
 #    endif
 #  endif  /* ZLIB_DLL */
-   /* If building or using zlib with the WINAPI/WINAPIV calling convention, 
+   /* If building or using zlib with the WINAPI/WINAPIV calling convention,
     * define ZLIB_WINAPI.
     * Caution: the standard ZLIB1.DLL is NOT compiled using ZLIB_WINAPI.
     */
@@ -314,19 +314,19 @@ typedef uLong FAR uLongf;
 
 /* MVS linker does not support external names larger than 8 bytes */
 #if defined(__MVS__)
-#   pragma map(deflateInit_, "DEIN")
-#   pragma map(deflateInit2_, "DEIN2")
-#   pragma map(deflateEnd, "DEEND")
-#   pragma map(deflateBound, "DEBND")
-#   pragma map(inflateInit_, "ININ")
-#   pragma map(inflateInit2_, "ININ2")
-#   pragma map(inflateEnd, "INEND")
-#   pragma map(inflateSync, "INSY")
-#   pragma map(inflateSetDictionary, "INSEDI")
-#   pragma map(compressBound, "CMBND")
-#   pragma map(inflate_table, "INTABL")
-#   pragma map(inflate_fast, "INFA")
-#   pragma map(inflate_copyright, "INCOPY")
+#   pragma map(deflateInit_,"DEIN")
+#   pragma map(deflateInit2_,"DEIN2")
+#   pragma map(deflateEnd,"DEEND")
+#   pragma map(deflateBound,"DEBND")
+#   pragma map(inflateInit_,"ININ")
+#   pragma map(inflateInit2_,"ININ2")
+#   pragma map(inflateEnd,"INEND")
+#   pragma map(inflateSync,"INSY")
+#   pragma map(inflateSetDictionary,"INSEDI")
+#   pragma map(compressBound,"CMBND")
+#   pragma map(inflate_table,"INTABL")
+#   pragma map(inflate_fast,"INFA")
+#   pragma map(inflate_copyright,"INCOPY")
 #endif
 
 #endif /* ZCONF_H */

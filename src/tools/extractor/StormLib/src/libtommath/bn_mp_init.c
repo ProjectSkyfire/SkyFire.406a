@@ -41,6 +41,6 @@ int mp_init (mp_int * a)
 }
 #endif
 
-/* $Source: /cvs/libtom/libtommath/bn_mp_init.c, v $ */
+/* $Source: /cvs/libtom/libtommath/bn_mp_init.c,v $ */
 /* $Revision: 1.4 $ */
 /* $Date: 2006/12/28 01:25:13 $ */

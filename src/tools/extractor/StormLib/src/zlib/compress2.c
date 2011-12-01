@@ -16,7 +16,7 @@
    12 bytes. Upon exit, destLen is the actual size of the compressed buffer.
 
      compress2 returns Z_OK if success, Z_MEM_ERROR if there was not enough
-   memory, Z_BUF_ERROR if there was not enough room in the output buffer, 
+   memory, Z_BUF_ERROR if there was not enough room in the output buffer,
    Z_STREAM_ERROR if the level parameter is invalid.
 */
 int ZEXPORT compress2 (dest, destLen, source, sourceLen, level)

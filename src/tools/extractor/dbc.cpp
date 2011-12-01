@@ -1,21 +1,20 @@
 /*
- * Copyright (C) 2005-2011 MaNGOS <http://www.getmangos.com/>
- * Copyright (C) 2008-2011 Trinity <http://www.trinitycore.org/>
  * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
  *
- * This program is distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "dbc.h"
@@ -28,24 +27,24 @@
 void ExtractDBCFiles(int locale, bool basicLocale)
 {
     printf("Extracting dbc files...\n");
-
+	
     std::set<std::pair<int, std::string> > dbcfiles;
-
+	
     int foundCount = 0;
-
-    for (int i = 0; i < PATCH_REV_COUNT + 1; i++)
+	
+    for(int i = 0; i < PATCH_REV_COUNT + 1; i++)
     {
         TMPQArchive * archive = (TMPQArchive *)localeMPQ[i];
         TFileEntry * pFileEntry = archive->pFileTable;
         TFileEntry * pFileTableEnd = archive->pFileTable + archive->dwFileTableSize;
-
+		
         // Parse the entire block table
-        while (pFileEntry < pFileTableEnd)
+        while(pFileEntry < pFileTableEnd)
         {
             // Only take existing files
-            if ( pFileEntry->dwFlags & MPQ_FILE_EXISTS &&
-			   (pFileEntry->dwFlags & MPQ_FILE_PATCH_FILE) == 0 &&
-			   (pFileEntry->dwFlags & MPQ_FILE_DELETE_MARKER) == 0 &&
+            if ( pFileEntry->dwFlags & MPQ_FILE_EXISTS && 
+			   (pFileEntry->dwFlags & MPQ_FILE_PATCH_FILE) == 0 && 
+			   (pFileEntry->dwFlags & MPQ_FILE_DELETE_MARKER) == 0 && 
 			   pFileEntry->szFileName != NULL)
             {
                 std::string name = pFileEntry->szFileName;
@@ -59,7 +58,7 @@ void ExtractDBCFiles(int locale, bool basicLocale)
                         continue;
                     }
                 }
-
+				
                 if (name.rfind(".dbc") == name.length() - strlen(".dbc") ||
 					name.rfind(".db2") == name.length() - strlen(".db2"))
                 {
@@ -67,7 +66,7 @@ void ExtractDBCFiles(int locale, bool basicLocale)
                     if (i != 0)
                     {
                         bool alreadyExist = false;
-                        for (std::set<std::pair<int, std::string> >::iterator itr = dbcfiles.begin(); itr != dbcfiles.end(); itr++)
+                        for(std::set<std::pair<int, std::string> >::iterator itr = dbcfiles.begin(); itr != dbcfiles.end(); itr++)
                         {
                             if (itr->second == name)
                             {
@@ -85,13 +84,13 @@ void ExtractDBCFiles(int locale, bool basicLocale)
                     foundCount++;
                 }
             }
-
+			
             // Move to the next file entry
             pFileEntry++;
         }
     }
     printf("Found %i dbc files\n", foundCount);
-
+	
     std::string path = "./dbc/";
     if (!basicLocale)
     {
@@ -99,20 +98,21 @@ void ExtractDBCFiles(int locale, bool basicLocale)
         path += "/";
     }
 	CreateDir(path);
-
+	
     // extract DBCs
     int count = 0;
     for (std::set<std::pair<int, std::string> >::iterator iter = dbcfiles.begin(); iter != dbcfiles.end(); ++iter)
     {
         std::string filename = path;
         filename += (iter->second.c_str() + strlen("DBFilesClient\\"));
-
+		
         if (ExtractFileToHardDrive(localeMPQ[iter->first], iter->second.c_str(), filename.c_str()) == ERROR_SUCCESS)
             ++count;
-        else
-        {
-            assert(false);
-        }
+        // Need to do a proper fix. Only commented out to make extractor not crash.
+        //else
+        //{
+        //    assert(false);
+        //}
     }
     printf("Extracted %u DBC files\n\n", count);
 }
@@ -121,16 +121,16 @@ uint32 ReadMapDBC()
 {
     printf("Read Map.dbc file... ");
     DBCFile dbc("DBFilesClient\\Map.dbc");
-
+    
     if (!dbc.open())
     {
         printf("Fatal error: Invalid Map.dbc file format!\n");
         exit(1);
     }
-
+    
     size_t map_count = dbc.getRecordCount();
     map_ids = new map_id[map_count];
-    for (uint32 x = 0; x < map_count; ++x)
+    for(uint32 x = 0; x < map_count; ++x)
     {
         map_ids[x].id = dbc.getRecord(x).getUInt(0);
         strcpy(map_ids[x].name, dbc.getRecord(x).getString(1));
@@ -143,23 +143,23 @@ void ReadAreaTableDBC()
 {
     printf("Read AreaTable.dbc file...");
     DBCFile dbc("DBFilesClient\\AreaTable.dbc");
-
+    
     if (!dbc.open())
     {
         printf("Fatal error: Invalid AreaTable.dbc file format!\n");
         assert(false);
     }
-
+    
     size_t area_count = dbc.getRecordCount();
     size_t maxid = dbc.getMaxId();
     areas = new uint16[maxid + 1];
     memset(areas, 0xff, (maxid + 1) * sizeof(uint16));
-
-    for (uint32 x = 0; x < area_count; ++x)
+    
+    for(uint32 x = 0; x < area_count; ++x)
         areas[dbc.getRecord(x).getUInt(0)] = dbc.getRecord(x).getUInt(3);
-
+    
     maxAreaId = dbc.getMaxId();
-
+    
     printf("Done! (%u areas loaded)\n", area_count);
 }
 
@@ -172,14 +172,14 @@ void ReadLiquidTypeTableDBC()
         printf("Fatal error: Invalid LiquidType.dbc file format!\n");
         exit(1);
     }
-
+    
     size_t LiqType_count = dbc.getRecordCount();
     size_t LiqType_maxid = dbc.getMaxId();
     LiqType = new uint16[LiqType_maxid + 1];
     memset(LiqType, 0xff, (LiqType_maxid + 1) * sizeof(uint16));
-
-    for (uint32 x = 0; x < LiqType_count; ++x)
+    
+    for(uint32 x = 0; x < LiqType_count; ++x)
         LiqType[dbc.getRecord(x).getUInt(0)] = dbc.getRecord(x).getUInt(3);
-
+    
     printf("Done! (%u LiqTypes loaded)\n", LiqType_count);
 }

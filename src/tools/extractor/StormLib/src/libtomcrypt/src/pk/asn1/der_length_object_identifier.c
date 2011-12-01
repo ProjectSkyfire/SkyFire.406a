@@ -29,26 +29,28 @@ unsigned long der_object_identifier_bits(unsigned long x)
    return c;
 }
 
+
 /**
   Gets length of DER encoding of Object Identifier
-  @param nwords   The number of OID words
+  @param nwords   The number of OID words 
   @param words    The actual OID words to get the size of
   @param outlen   [out] The length of the DER encoding for the given string
   @return CRYPT_OK if successful
 */
 int der_length_object_identifier(unsigned long *words, unsigned long nwords, unsigned long *outlen)
 {
-   unsigned long y, z, t, wordbuf;
+   unsigned long y, z, t, wordbuf;   
 
    LTC_ARGCHK(words  != NULL);
    LTC_ARGCHK(outlen != NULL);
+
 
    /* must be >= 2 words */
    if (nwords < 2) {
       return CRYPT_INVALID_ARG;
    }
 
-   /* word1 = 0, 1, 2, 3 and word2 0..39 */
+   /* word1 = 0,1,2,3 and word2 0..39 */
    if (words[0] > 3 || (words[0] < 2 && words[1] > 39)) {
       return CRYPT_INVALID_ARG;
    }
@@ -82,6 +84,6 @@ int der_length_object_identifier(unsigned long *words, unsigned long nwords, uns
 
 #endif
 
-/* $Source: /cvs/libtom/libtomcrypt/src/pk/asn1/der/object_identifier/der_length_object_identifier.c, v $ */
+/* $Source: /cvs/libtom/libtomcrypt/src/pk/asn1/der/object_identifier/der_length_object_identifier.c,v $ */
 /* $Revision: 1.5 $ */
 /* $Date: 2006/12/28 01:27:24 $ */

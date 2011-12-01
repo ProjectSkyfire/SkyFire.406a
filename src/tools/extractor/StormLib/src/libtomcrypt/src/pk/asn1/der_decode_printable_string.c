@@ -15,6 +15,7 @@
   ASN.1 DER, encode a printable STRING, Tom St Denis
 */
 
+
 #ifdef LTC_DER
 
 /**
@@ -25,7 +26,7 @@
   @param outlen  [in/out] The number of octets stored
   @return CRYPT_OK if successful
 */
-int der_decode_printable_string(const unsigned char *in, unsigned long inlen, 
+int der_decode_printable_string(const unsigned char *in, unsigned long inlen,
                                 unsigned char *out, unsigned long *outlen)
 {
    unsigned long x, y, len;
@@ -48,7 +49,7 @@ int der_decode_printable_string(const unsigned char *in, unsigned long inlen,
 
    /* decode the length */
    if (in[x] & 0x80) {
-      /* valid # of bytes in length are 1, 2, 3 */
+      /* valid # of bytes in length are 1,2,3 */
       y = in[x] & 0x7F;
       if ((y == 0) || (y > 3) || ((x + y) > inlen)) {
          return CRYPT_INVALID_PACKET;
@@ -87,9 +88,9 @@ int der_decode_printable_string(const unsigned char *in, unsigned long inlen,
 
    return CRYPT_OK;
 }
-
+ 
 #endif
 
-/* $Source: /cvs/libtom/libtomcrypt/src/pk/asn1/der/printable_string/der_decode_printable_string.c, v $ */
+/* $Source: /cvs/libtom/libtomcrypt/src/pk/asn1/der/printable_string/der_decode_printable_string.c,v $ */
 /* $Revision: 1.4 $ */
 /* $Date: 2006/12/28 01:27:24 $ */

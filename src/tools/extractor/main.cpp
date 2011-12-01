@@ -1,21 +1,20 @@
 /*
- * Copyright (C) 2005-2011 MaNGOS <http://www.getmangos.com/>
- * Copyright (C) 2008-2011 Trinity <http://www.trinitycore.org/>
  * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
  *
- * This program is distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "headers.h"
@@ -50,11 +49,11 @@ int main(int argc, char * arg[])
 {
     printf("DBC/Map Extractor\n");
     printf("===================\n\n");
-
+    
     bool extractDBC = true;
     bool extractMap = true;
-
-    for (int i = 0; i < argc; ++i)
+    
+    for (int i = 0; i < argc; ++i)  
     {
         if (strcmp(arg[i], ARG_MAP) == 0)
             extractMap = true;
@@ -65,10 +64,10 @@ int main(int argc, char * arg[])
         if (strcmp(arg[i], ARG_NODBC) == 0)
             extractDBC = false;
     }
-
+    
     int FirstLocale = -1;
     int build = 0;
-
+	
     for (int i = 0; i < LANG_COUNT; i++)
     {
         char tmp1[512];
@@ -76,10 +75,10 @@ int main(int argc, char * arg[])
         if (FileExists(tmp1))
         {
             printf("Detected locale: %s\n", langs[i]);
-
+			
             //Open MPQs
             LoadLocaleMPQFiles(i);
-
+			
             //Extract DBC files
             if (FirstLocale < 0)
             {
@@ -98,15 +97,15 @@ int main(int argc, char * arg[])
                 ExtractDBCFiles(i, false);
         }
     }
-
+	
     if (FirstLocale < 0)
     {
         printf("No locales detected\n");
         return 0;
     }
-
+    
     if (extractMap)
         ExtractMapsFromMpq(build);
-
+	
     return 0;
 }

@@ -22,6 +22,6 @@ int mp_signed_bin_size (mp_int * a)
 }
 #endif
 
-/* $Source: /cvs/libtom/libtommath/bn_mp_signed_bin_size.c, v $ */
+/* $Source: /cvs/libtom/libtommath/bn_mp_signed_bin_size.c,v $ */
 /* $Revision: 1.4 $ */
 /* $Date: 2006/12/28 01:25:13 $ */

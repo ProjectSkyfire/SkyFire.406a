@@ -123,18 +123,18 @@ typedef struct
 #endif
 
 unsigned int PKEXPORT implode(
-   unsigned int (*read_buf)(char *buf, unsigned int *size, void *param), 
-   void         (*write_buf)(char *buf, unsigned int *size, void *param), 
-   char         *work_buf, 
-   void         *param, 
-   unsigned int *type, 
+   unsigned int (*read_buf)(char *buf, unsigned int *size, void *param),
+   void         (*write_buf)(char *buf, unsigned int *size, void *param),
+   char         *work_buf,
+   void         *param,
+   unsigned int *type,
    unsigned int *dsize);
 
 
 unsigned int PKEXPORT explode(
-   unsigned int (*read_buf)(char *buf, unsigned  int *size, void *param), 
-   void         (*write_buf)(char *buf, unsigned  int *size, void *param), 
-   char         *work_buf, 
+   unsigned int (*read_buf)(char *buf, unsigned  int *size, void *param),
+   void         (*write_buf)(char *buf, unsigned  int *size, void *param),
+   char         *work_buf,
    void         *param);
 
 // The original name "crc32" was changed to "crc32pk" due

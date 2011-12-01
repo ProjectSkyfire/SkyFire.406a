@@ -72,13 +72,13 @@
 #define STORE32H(x, y)           \
 asm __volatile__ (               \
    "bswapl %0     \n\t"          \
-   "movl   %0, (%1)\n\t"          \
+   "movl   %0,(%1)\n\t"          \
    "bswapl %0     \n\t"          \
       ::"r"(x), "r"(y));
 
 #define LOAD32H(x, y)          \
 asm __volatile__ (             \
-   "movl (%1), %0\n\t"          \
+   "movl (%1),%0\n\t"          \
    "bswapl %0\n\t"             \
    :"=r"(x): "r"(y));
 
@@ -103,13 +103,13 @@ asm __volatile__ (             \
 #define STORE64H(x, y)           \
 asm __volatile__ (               \
    "bswapq %0     \n\t"          \
-   "movq   %0, (%1)\n\t"          \
+   "movq   %0,(%1)\n\t"          \
    "bswapq %0     \n\t"          \
       ::"r"(x), "r"(y));
 
 #define LOAD64H(x, y)          \
 asm __volatile__ (             \
-   "movq (%1), %0\n\t"          \
+   "movq (%1),%0\n\t"          \
    "bswapq %0\n\t"             \
    :"=r"(x): "r"(y));
 
@@ -236,27 +236,27 @@ asm __volatile__ (             \
 
 /* instrinsic rotate */
 #include <stdlib.h>
-#pragma intrinsic(_lrotr, _lrotl)
-#define ROR(x, n) _lrotr(x, n)
-#define ROL(x, n) _lrotl(x, n)
-#define RORc(x, n) _lrotr(x, n)
-#define ROLc(x, n) _lrotl(x, n)
+#pragma intrinsic(_lrotr,_lrotl)
+#define ROR(x,n) _lrotr(x,n)
+#define ROL(x,n) _lrotl(x,n)
+#define RORc(x,n) _lrotr(x,n)
+#define ROLc(x,n) _lrotl(x,n)
 
 #elif !defined(__STRICT_ANSI__) && defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__)) && !defined(INTEL_CC) && !defined(LTC_NO_ASM)
 
 static inline unsigned ROL(unsigned word, int i)
 {
-   asm ("roll %%cl, %0"
+   asm ("roll %%cl,%0"
       :"=r" (word)
-      :"0" (word), "c" (i));
+      :"0" (word),"c" (i));
    return word;
 }
 
 static inline unsigned ROR(unsigned word, int i)
 {
-   asm ("rorl %%cl, %0"
+   asm ("rorl %%cl,%0"
       :"=r" (word)
-      :"0" (word), "c" (i));
+      :"0" (word),"c" (i));
    return word;
 }
 
@@ -264,17 +264,17 @@ static inline unsigned ROR(unsigned word, int i)
 
 static inline unsigned ROLc(unsigned word, const int i)
 {
-   asm ("roll %2, %0"
+   asm ("roll %2,%0"
       :"=r" (word)
-      :"0" (word), "I" (i));
+      :"0" (word),"I" (i));
    return word;
 }
 
 static inline unsigned RORc(unsigned word, const int i)
 {
-   asm ("rorl %2, %0"
+   asm ("rorl %2,%0"
       :"=r" (word)
-      :"0" (word), "I" (i));
+      :"0" (word),"I" (i));
    return word;
 }
 
@@ -289,17 +289,17 @@ static inline unsigned RORc(unsigned word, const int i)
 
 static inline unsigned ROL(unsigned word, int i)
 {
-   asm ("rotlw %0, %0, %2"
+   asm ("rotlw %0,%0,%2"
       :"=r" (word)
-      :"0" (word), "r" (i));
+      :"0" (word),"r" (i));
    return word;
 }
 
 static inline unsigned ROR(unsigned word, int i)
 {
-   asm ("rotlw %0, %0, %2"
+   asm ("rotlw %0,%0,%2"
       :"=r" (word)
-      :"0" (word), "r" (32-i));
+      :"0" (word),"r" (32-i));
    return word;
 }
 
@@ -307,17 +307,17 @@ static inline unsigned ROR(unsigned word, int i)
 
 static inline unsigned ROLc(unsigned word, const int i)
 {
-   asm ("rotlwi %0, %0, %2"
+   asm ("rotlwi %0,%0,%2"
       :"=r" (word)
-      :"0" (word), "I" (i));
+      :"0" (word),"I" (i));
    return word;
 }
 
 static inline unsigned RORc(unsigned word, const int i)
 {
-   asm ("rotrwi %0, %0, %2"
+   asm ("rotrwi %0,%0,%2"
       :"=r" (word)
-      :"0" (word), "I" (i));
+      :"0" (word),"I" (i));
    return word;
 }
 
@@ -345,17 +345,17 @@ static inline unsigned RORc(unsigned word, const int i)
 
 static inline unsigned long ROL64(unsigned long word, int i)
 {
-   asm("rolq %%cl, %0"
+   asm("rolq %%cl,%0"
       :"=r" (word)
-      :"0" (word), "c" (i));
+      :"0" (word),"c" (i));
    return word;
 }
 
 static inline unsigned long ROR64(unsigned long word, int i)
 {
-   asm("rorq %%cl, %0"
+   asm("rorq %%cl,%0"
       :"=r" (word)
-      :"0" (word), "c" (i));
+      :"0" (word),"c" (i));
    return word;
 }
 
@@ -363,17 +363,17 @@ static inline unsigned long ROR64(unsigned long word, int i)
 
 static inline unsigned long ROL64c(unsigned long word, const int i)
 {
-   asm("rolq %2, %0"
+   asm("rolq %2,%0"
       :"=r" (word)
-      :"0" (word), "J" (i));
+      :"0" (word),"J" (i));
    return word;
 }
 
 static inline unsigned long ROR64c(unsigned long word, const int i)
 {
-   asm("rorq %2, %0"
+   asm("rorq %2,%0"
       :"=r" (word)
-      :"0" (word), "J" (i));
+      :"0" (word),"J" (i));
    return word;
 }
 
@@ -419,6 +419,6 @@ static inline unsigned long ROR64c(unsigned long word, const int i)
    #define byte(x, n) (((x) >> (8 * (n))) & 255)
 #endif   
 
-/* $Source: /cvs/libtom/libtomcrypt/src/headers/tomcrypt_macros.h, v $ */
+/* $Source: /cvs/libtom/libtomcrypt/src/headers/tomcrypt_macros.h,v $ */
 /* $Revision: 1.15 $ */
 /* $Date: 2006/11/29 23:43:57 $ */

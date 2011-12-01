@@ -153,8 +153,8 @@ typedef struct
 
 typedef enum
 {
-  SZ_SEEK_SET = 0, 
-  SZ_SEEK_CUR = 1, 
+  SZ_SEEK_SET = 0,
+  SZ_SEEK_CUR = 1,
   SZ_SEEK_END = 2
 } ESzSeek;
 

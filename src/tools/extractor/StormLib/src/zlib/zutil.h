@@ -55,7 +55,7 @@ extern const char * const z_errmsg[10]; /* indexed by 2-zlib_error */
 
 #define ERR_MSG(err) z_errmsg[Z_NEED_DICT-(err)]
 
-#define ERR_RETURN(strm, err) \
+#define ERR_RETURN(strm,err) \
   return (strm->msg = (char*)ERR_MSG(err), (err))
 /* To be used only when the state is known to be valid */
 
@@ -89,7 +89,7 @@ extern const char * const z_errmsg[10]; /* indexed by 2-zlib_error */
 #if defined(MSDOS) || (defined(WINDOWS) && !defined(WIN32))
 #  define OS_CODE  0x00
 #  if defined(__TURBOC__) || defined(__BORLANDC__)
-#    if (__STDC__ == 1) && (defined(__LARGE__) || defined(__COMPACT__))
+#    if(__STDC__ == 1) && (defined(__LARGE__) || defined(__COMPACT__))
        /* Allow compilation with ANSI keywords only enabled */
        void _Cdecl farfree( void *block );
        void *_Cdecl farmalloc( unsigned long nbytes );
@@ -128,7 +128,7 @@ extern const char * const z_errmsg[10]; /* indexed by 2-zlib_error */
 #    include <unix.h> /* for fdopen */
 #  else
 #    ifndef fdopen
-#      define fdopen(fd, mode) NULL /* No fdopen() */
+#      define fdopen(fd,mode) NULL /* No fdopen() */
 #    endif
 #  endif
 #endif
@@ -148,18 +148,18 @@ extern const char * const z_errmsg[10]; /* indexed by 2-zlib_error */
 #endif
 
 #if defined(_BEOS_) || defined(RISCOS)
-#  define fdopen(fd, mode) NULL /* No fdopen() */
+#  define fdopen(fd,mode) NULL /* No fdopen() */
 #endif
 
 #if (defined(_MSC_VER) && (_MSC_VER > 600))
 #  if defined(_WIN32_WCE)
-#    define fdopen(fd, mode) NULL /* No fdopen() */
+#    define fdopen(fd,mode) NULL /* No fdopen() */
 #    ifndef _PTRDIFF_T_DEFINED
        typedef int ptrdiff_t;
 #      define _PTRDIFF_T_DEFINED
 #    endif
 #  else
-#    define fdopen(fd, type)  _fdopen(fd, type)
+#    define fdopen(fd,type)  _fdopen(fd,type)
 #  endif
 #endif
 
@@ -187,7 +187,7 @@ extern const char * const z_errmsg[10]; /* indexed by 2-zlib_error */
 #endif
 #ifndef HAVE_VSNPRINTF
 #  ifdef MSDOS
-     /* vsnprintf may exist on some MS-DOS compilers (DJGPP?), 
+     /* vsnprintf may exist on some MS-DOS compilers (DJGPP?),
         but for now we just assume it doesn't. */
 #    define NO_vsnprintf
 #  endif
@@ -242,19 +242,19 @@ extern const char * const z_errmsg[10]; /* indexed by 2-zlib_error */
 #  include <stdio.h>
    extern int z_verbose;
    extern void z_error    OF((char *m));
-#  define Assert(cond, msg) {if (!(cond)) z_error(msg);}
+#  define Assert(cond,msg) {if(!(cond)) z_error(msg);}
 #  define Trace(x) {if (z_verbose>=0) fprintf x ;}
 #  define Tracev(x) {if (z_verbose>0) fprintf x ;}
 #  define Tracevv(x) {if (z_verbose>1) fprintf x ;}
-#  define Tracec(c, x) {if (z_verbose>0 && (c)) fprintf x ;}
-#  define Tracecv(c, x) {if (z_verbose>1 && (c)) fprintf x ;}
+#  define Tracec(c,x) {if (z_verbose>0 && (c)) fprintf x ;}
+#  define Tracecv(c,x) {if (z_verbose>1 && (c)) fprintf x ;}
 #else
-#  define Assert(cond, msg)
+#  define Assert(cond,msg)
 #  define Trace(x)
 #  define Tracev(x)
 #  define Tracevv(x)
-#  define Tracec(c, x)
-#  define Tracecv(c, x)
+#  define Tracec(c,x)
+#  define Tracecv(c,x)
 #endif
 
 

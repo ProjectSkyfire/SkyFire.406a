@@ -20,7 +20,7 @@
 static const struct {
    int code, value;
 } ia5_table[] = {
-{ '\0', 0 }, 
+{ '\0', 0 },
 { '\a', 7 }, 
 { '\b', 8 }, 
 { '\t', 9 }, 
@@ -145,10 +145,10 @@ int der_ia5_value_decode(int v)
    }
    return -1;
 }
-
+   
 /**
-  Gets length of DER encoding of IA5 STRING
-  @param octets   The values you want to encode
+  Gets length of DER encoding of IA5 STRING 
+  @param octets   The values you want to encode 
   @param noctets  The number of octets in the string to encode
   @param outlen   [out] The length of the DER encoding for the given string
   @return CRYPT_OK if successful
@@ -188,6 +188,7 @@ int der_length_ia5_string(const unsigned char *octets, unsigned long noctets, un
 
 #endif
 
-/* $Source: /cvs/libtom/libtomcrypt/src/pk/asn1/der/ia5/der_length_ia5_string.c, v $ */
+
+/* $Source: /cvs/libtom/libtomcrypt/src/pk/asn1/der/ia5/der_length_ia5_string.c,v $ */
 /* $Revision: 1.3 $ */
 /* $Date: 2006/12/28 01:27:24 $ */

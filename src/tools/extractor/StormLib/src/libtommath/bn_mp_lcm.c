@@ -21,6 +21,7 @@ int mp_lcm (mp_int * a, mp_int * b, mp_int * c)
   int     res;
   mp_int  t1, t2;
 
+
   if ((res = mp_init_multi (&t1, &t2, NULL)) != MP_OKAY) {
     return res;
   }
@@ -54,6 +55,6 @@ LBL_T:
 }
 #endif
 
-/* $Source: /cvs/libtom/libtommath/bn_mp_lcm.c, v $ */
+/* $Source: /cvs/libtom/libtommath/bn_mp_lcm.c,v $ */
 /* $Revision: 1.4 $ */
 /* $Date: 2006/12/28 01:25:13 $ */

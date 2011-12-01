@@ -11,6 +11,7 @@
 #include "../../headers/tomcrypt.h"
 #include <stdarg.h>
 
+
 /**
   @file der_decode_sequence_multi.c
   ASN.1 DER, decode a SEQUENCE, Tom St Denis
@@ -24,7 +25,7 @@
   @param inlen Length of input in octets
   @remark <...> is of the form <type, size, data> (int, unsigned long, void*)
   @return CRYPT_OK on success
-*/
+*/  
 int der_decode_sequence_multi(const unsigned char *in, unsigned long inlen, ...)
 {
    int           err, type;
@@ -43,7 +44,7 @@ int der_decode_sequence_multi(const unsigned char *in, unsigned long inlen, ...)
        size = va_arg(args, unsigned long);
        data = va_arg(args, void*);
 
-       if (type == LTC_ASN1_EOL) {
+       if (type == LTC_ASN1_EOL) { 
           break;
        }
 
@@ -63,9 +64,9 @@ int der_decode_sequence_multi(const unsigned char *in, unsigned long inlen, ...)
            case LTC_ASN1_SETOF:
            case LTC_ASN1_SEQUENCE:
            case LTC_ASN1_CHOICE:
-                ++x;
+                ++x; 
                 break;
-
+          
            default:
                va_end(args);
                return CRYPT_INVALID_ARG;
@@ -91,7 +92,7 @@ int der_decode_sequence_multi(const unsigned char *in, unsigned long inlen, ...)
        size = va_arg(args, unsigned long);
        data = va_arg(args, void*);
 
-       if (type == LTC_ASN1_EOL) {
+       if (type == LTC_ASN1_EOL) { 
           break;
        }
 
@@ -109,13 +110,13 @@ int der_decode_sequence_multi(const unsigned char *in, unsigned long inlen, ...)
            case LTC_ASN1_UTCTIME:
            case LTC_ASN1_SEQUENCE:
            case LTC_ASN1_SET:
-           case LTC_ASN1_SETOF:
+           case LTC_ASN1_SETOF:          
            case LTC_ASN1_CHOICE:
                 list[x].type   = type;
                 list[x].size   = size;
                 list[x++].data = data;
                 break;
-
+         
            default:
                va_end(args);
                err = CRYPT_INVALID_ARG;
@@ -132,6 +133,7 @@ LBL_ERR:
 
 #endif
 
-/* $Source: /cvs/libtom/libtomcrypt/src/pk/asn1/der/sequence/der_decode_sequence_multi.c, v $ */
+
+/* $Source: /cvs/libtom/libtomcrypt/src/pk/asn1/der/sequence/der_decode_sequence_multi.c,v $ */
 /* $Revision: 1.13 $ */
 /* $Date: 2006/12/28 01:27:24 $ */

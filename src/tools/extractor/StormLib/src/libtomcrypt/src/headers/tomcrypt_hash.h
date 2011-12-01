@@ -184,8 +184,8 @@ extern  struct ltc_hash_descriptor {
     int (*test)(void);
 
     /* accelerated hmac callback: if you need to-do multiple packets just use the generic hmac_memory and provide a hash callback */
-    int  (*hmac_block)(const unsigned char *key, unsigned long  keylen, 
-                       const unsigned char *in, unsigned long  inlen, 
+    int  (*hmac_block)(const unsigned char *key, unsigned long  keylen,
+                       const unsigned char *in,  unsigned long  inlen, 
                              unsigned char *out, unsigned long *outlen);
 
 } hash_descriptor[];
@@ -329,9 +329,9 @@ int hash_is_valid(int idx);
 LTC_MUTEX_PROTO(ltc_hash_mutex)
 
 int hash_memory(int hash, 
-                const unsigned char *in, unsigned long inlen, 
+                const unsigned char *in,  unsigned long inlen, 
                       unsigned char *out, unsigned long *outlen);
-int hash_memory_multi(int hash, unsigned char *out, unsigned long *outlen, 
+int hash_memory_multi(int hash, unsigned char *out, unsigned long *outlen,
                       const unsigned char *in, unsigned long inlen, ...);
 int hash_filehandle(int hash, FILE *in, unsigned char *out, unsigned long *outlen);
 int hash_file(int hash, const char *fname, unsigned char *out, unsigned long *outlen);
@@ -373,6 +373,6 @@ int func_name (hash_state * md, const unsigned char *in, unsigned long inlen)   
     return CRYPT_OK;                                                                        \
 }
 
-/* $Source: /cvs/libtom/libtomcrypt/src/headers/tomcrypt_hash.h, v $ */
+/* $Source: /cvs/libtom/libtomcrypt/src/headers/tomcrypt_hash.h,v $ */
 /* $Revision: 1.22 $ */
 /* $Date: 2007/05/12 14:32:35 $ */

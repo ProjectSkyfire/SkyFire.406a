@@ -111,7 +111,7 @@ typedef struct internal_state {
     uInt  w_mask;        /* w_size - 1 */
 
     Bytef *window;
-    /* Sliding window. Input bytes are read into the second half of the window, 
+    /* Sliding window. Input bytes are read into the second half of the window,
      * and move to the first half later to keep a dictionary of at least wSize
      * bytes. With this organization, matches are limited to a distance of
      * wSize-MAX_MATCH bytes, but this ensures that IO is always
@@ -281,10 +281,10 @@ typedef struct internal_state {
         /* in trees.c */
 void _tr_init         OF((deflate_state *s));
 int  _tr_tally        OF((deflate_state *s, unsigned dist, unsigned lc));
-void _tr_flush_block  OF((deflate_state *s, charf *buf, ulg stored_len, 
+void _tr_flush_block  OF((deflate_state *s, charf *buf, ulg stored_len,
                           int eof));
 void _tr_align        OF((deflate_state *s));
-void _tr_stored_block OF((deflate_state *s, charf *buf, ulg stored_len, 
+void _tr_stored_block OF((deflate_state *s, charf *buf, ulg stored_len,
                           int eof));
 
 #define d_code(dist) \

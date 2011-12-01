@@ -15,11 +15,11 @@
  * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
  */
 
-/* Karatsuba squaring, computes b = a*a using three
+/* Karatsuba squaring, computes b = a*a using three 
  * half size squarings
  *
- * See comments of karatsuba_mul for details.  It
- * is essentially the same algorithm but merely
+ * See comments of karatsuba_mul for details.  It 
+ * is essentially the same algorithm but merely 
  * tuned to perform recursive squarings.
  */
 int mp_karatsuba_sqr (mp_int * a, mp_int * b)
@@ -116,6 +116,6 @@ ERR:
 }
 #endif
 
-/* $Source: /cvs/libtom/libtommath/bn_mp_karatsuba_sqr.c, v $ */
+/* $Source: /cvs/libtom/libtommath/bn_mp_karatsuba_sqr.c,v $ */
 /* $Revision: 1.6 $ */
 /* $Date: 2006/12/28 01:25:13 $ */

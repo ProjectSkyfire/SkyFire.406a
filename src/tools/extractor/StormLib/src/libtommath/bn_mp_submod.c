@@ -22,6 +22,7 @@ mp_submod (mp_int * a, mp_int * b, mp_int * c, mp_int * d)
   int     res;
   mp_int  t;
 
+
   if ((res = mp_init (&t)) != MP_OKAY) {
     return res;
   }
@@ -36,6 +37,6 @@ mp_submod (mp_int * a, mp_int * b, mp_int * c, mp_int * d)
 }
 #endif
 
-/* $Source: /cvs/libtom/libtommath/bn_mp_submod.c, v $ */
+/* $Source: /cvs/libtom/libtommath/bn_mp_submod.c,v $ */
 /* $Revision: 1.4 $ */
 /* $Date: 2006/12/28 01:25:13 $ */

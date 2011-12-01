@@ -97,7 +97,7 @@ local int updatewindow OF((z_streamp strm, unsigned out));
 #ifdef BUILDFIXED
    void makefixed OF((void));
 #endif
-local unsigned syncsearch OF((unsigned FAR *have, unsigned char FAR *buf, 
+local unsigned syncsearch OF((unsigned FAR *have, unsigned char FAR *buf,
                               unsigned len));
 
 int ZEXPORT inflateReset(strm)
@@ -286,10 +286,10 @@ void makefixed()
     low = 0;
     for (;;) {
         if ((low % 7) == 0) printf("\n        ");
-        printf("{%u, %u, %d}", state.lencode[low].op, state.lencode[low].bits, 
+        printf("{%u,%u,%d}", state.lencode[low].op, state.lencode[low].bits,
                state.lencode[low].val);
         if (++low == size) break;
-        putchar(', ');
+        putchar(',');
     }
     puts("\n    };");
     size = 1U << 5;
@@ -297,10 +297,10 @@ void makefixed()
     low = 0;
     for (;;) {
         if ((low % 6) == 0) printf("\n        ");
-        printf("{%u, %u, %d}", state.distcode[low].op, state.distcode[low].bits, 
+        printf("{%u,%u,%d}", state.distcode[low].op, state.distcode[low].bits,
                state.distcode[low].val);
         if (++low == size) break;
-        putchar(', ');
+        putchar(',');
     }
     puts("\n    };");
 }
@@ -332,7 +332,7 @@ unsigned out;
     /* if it hasn't been done already, allocate space for the window */
     if (state->window == Z_NULL) {
         state->window = (unsigned char FAR *)
-                        ZALLOC(strm, 1U << state->wbits, 
+                        ZALLOC(strm, 1U << state->wbits,
                                sizeof(unsigned char));
         if (state->window == Z_NULL) return 1;
     }
@@ -531,7 +531,7 @@ unsigned out;
    complete that state.  Those states are copying stored data, writing a
    literal byte, and copying a matching string.
 
-   When returning, a "goto inf_leave" is used to update the total counters, 
+   When returning, a "goto inf_leave" is used to update the total counters,
    update the check value, and determine whether any progress has been made
    during that inflate() call in order to return the proper return code.
    Progress is defined as a change in either strm->avail_in or strm->avail_out.
@@ -685,7 +685,7 @@ int flush;
                     if (state->head != Z_NULL &&
                         state->head->extra != Z_NULL) {
                         len = state->head->extra_len - state->length;
-                        zmemcpy(state->head->extra + len, next, 
+                        zmemcpy(state->head->extra + len, next,
                                 len + copy > state->head->extra_max ?
                                 state->head->extra_max - len : copy);
                     }
@@ -783,18 +783,18 @@ int flush;
             DROPBITS(1);
             switch (BITS(2)) {
             case 0:                             /* stored block */
-                Tracev((stderr, "inflate:     stored block%s\n", 
+                Tracev((stderr, "inflate:     stored block%s\n",
                         state->last ? " (last)" : ""));
                 state->mode = STORED;
                 break;
             case 1:                             /* fixed block */
                 fixedtables(state);
-                Tracev((stderr, "inflate:     fixed codes block%s\n", 
+                Tracev((stderr, "inflate:     fixed codes block%s\n",
                         state->last ? " (last)" : ""));
                 state->mode = LEN;              /* decode codes */
                 break;
             case 2:                             /* dynamic block */
-                Tracev((stderr, "inflate:     dynamic codes block%s\n", 
+                Tracev((stderr, "inflate:     dynamic codes block%s\n",
                         state->last ? " (last)" : ""));
                 state->mode = TABLE;
                 break;
@@ -813,7 +813,7 @@ int flush;
                 break;
             }
             state->length = (unsigned)hold & 0xffff;
-            Tracev((stderr, "inflate:       stored length %u\n", 
+            Tracev((stderr, "inflate:       stored length %u\n",
                     state->length));
             INITBITS();
             state->mode = COPY;
@@ -863,7 +863,7 @@ int flush;
             state->next = state->codes;
             state->lencode = (code const FAR *)(state->next);
             state->lenbits = 7;
-            ret = inflate_table(CODES, state->lens, 19, &(state->next), 
+            ret = inflate_table(CODES, state->lens, 19, &(state->next),
                                 &(state->lenbits), state->work);
             if (ret) {
                 strm->msg = (char *)"invalid code lengths set";
@@ -929,7 +929,7 @@ int flush;
             state->next = state->codes;
             state->lencode = (code const FAR *)(state->next);
             state->lenbits = 9;
-            ret = inflate_table(LENS, state->lens, state->nlen, &(state->next), 
+            ret = inflate_table(LENS, state->lens, state->nlen, &(state->next),
                                 &(state->lenbits), state->work);
             if (ret) {
                 strm->msg = (char *)"invalid literal/lengths set";
@@ -938,7 +938,7 @@ int flush;
             }
             state->distcode = (code const FAR *)(state->next);
             state->distbits = 6;
-            ret = inflate_table(DISTS, state->lens + state->nlen, state->ndist, 
+            ret = inflate_table(DISTS, state->lens + state->nlen, state->ndist,
                             &(state->next), &(state->distbits), state->work);
             if (ret) {
                 strm->msg = (char *)"invalid distances set";
@@ -1194,12 +1194,12 @@ uInt dictLength;
         return Z_MEM_ERROR;
     }
     if (dictLength > state->wsize) {
-        zmemcpy(state->window, dictionary + dictLength - state->wsize, 
+        zmemcpy(state->window, dictionary + dictLength - state->wsize,
                 state->wsize);
         state->whave = state->wsize;
     }
     else {
-        zmemcpy(state->window + state->wsize - dictLength, dictionary, 
+        zmemcpy(state->window + state->wsize - dictLength, dictionary,
                 dictLength);
         state->whave = dictLength;
     }
@@ -1307,7 +1307,7 @@ z_streamp strm;
    Z_SYNC_FLUSH or Z_FULL_FLUSH. This function is used by one PPP
    implementation to provide an additional safety check. PPP uses
    Z_SYNC_FLUSH but removes the length bytes of the resulting empty stored
-   block. When decompressing, PPP checks that at the end of input packet, 
+   block. When decompressing, PPP checks that at the end of input packet,
    inflate is waiting for these length bytes.
  */
 int ZEXPORT inflateSyncPoint(strm)

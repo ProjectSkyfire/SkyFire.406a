@@ -50,6 +50,6 @@ int mp_read_unsigned_bin (mp_int * a, const unsigned char *b, int c)
 }
 #endif
 
-/* $Source: /cvs/libtom/libtommath/bn_mp_read_unsigned_bin.c, v $ */
+/* $Source: /cvs/libtom/libtommath/bn_mp_read_unsigned_bin.c,v $ */
 /* $Revision: 1.5 $ */
 /* $Date: 2006/12/28 01:25:13 $ */

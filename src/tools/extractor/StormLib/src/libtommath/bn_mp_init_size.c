@@ -21,8 +21,8 @@ int mp_init_size (mp_int * a, int size)
   int x;
 
   /* pad size so there are always extra digits */
-  size += (MP_PREC * 2) - (size % MP_PREC);
-
+  size += (MP_PREC * 2) - (size % MP_PREC);	
+  
   /* alloc mem */
   a->dp = OPT_CAST(mp_digit) XMALLOC (sizeof (mp_digit) * size);
   if (a->dp == NULL) {
@@ -43,6 +43,6 @@ int mp_init_size (mp_int * a, int size)
 }
 #endif
 
-/* $Source: /cvs/libtom/libtommath/bn_mp_init_size.c, v $ */
+/* $Source: /cvs/libtom/libtommath/bn_mp_init_size.c,v $ */
 /* $Revision: 1.4 $ */
 /* $Date: 2006/12/28 01:25:13 $ */

@@ -15,7 +15,7 @@
  * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
  */
 
-/* trim unused digits
+/* trim unused digits 
  *
  * This is used to ensure that leading zero digits are
  * trimed and the leading "used" digit will be non-zero
@@ -39,6 +39,6 @@ mp_clamp (mp_int * a)
 }
 #endif
 
-/* $Source: /cvs/libtom/libtommath/bn_mp_clamp.c, v $ */
+/* $Source: /cvs/libtom/libtommath/bn_mp_clamp.c,v $ */
 /* $Revision: 1.4 $ */
 /* $Date: 2006/12/28 01:25:13 $ */

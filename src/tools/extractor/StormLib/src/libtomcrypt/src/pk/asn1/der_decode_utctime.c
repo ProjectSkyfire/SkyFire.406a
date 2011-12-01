@@ -46,7 +46,7 @@ static int char_to_int(unsigned char x)
   @param out    [out] Destination of UTC time structure
   @return CRYPT_OK   if successful
 */
-int der_decode_utctime(const unsigned char *in, unsigned long *inlen, 
+int der_decode_utctime(const unsigned char *in, unsigned long *inlen,
                              ltc_utctime   *out)
 {
    unsigned char buf[32];
@@ -72,7 +72,8 @@ int der_decode_utctime(const unsigned char *in, unsigned long *inlen,
    }
    *inlen = 2 + x;
 
-   /* possible encodings are
+
+   /* possible encodings are 
 YYMMDDhhmmZ
 YYMMDDhhmm+hh'mm'
 YYMMDDhhmm-hh'mm'
@@ -80,7 +81,7 @@ YYMMDDhhmmssZ
 YYMMDDhhmmss+hh'mm'
 YYMMDDhhmmss-hh'mm'
 
-    So let's do a trivial decode upto [including] mm
+    So let's do a trivial decode upto [including] mm 
    */
 
     x = 0;
@@ -121,6 +122,6 @@ YYMMDDhhmmss-hh'mm'
 
 #endif
 
-/* $Source: /cvs/libtom/libtomcrypt/src/pk/asn1/der/utctime/der_decode_utctime.c, v $ */
+/* $Source: /cvs/libtom/libtomcrypt/src/pk/asn1/der/utctime/der_decode_utctime.c,v $ */
 /* $Revision: 1.9 $ */
 /* $Date: 2006/12/28 01:27:24 $ */

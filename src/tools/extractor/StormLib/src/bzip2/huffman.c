@@ -1,3 +1,4 @@
+
 /*-------------------------------------------------------------*/
 /*--- Huffman coding low-level stuff                        ---*/
 /*---                                             huffman.c ---*/
@@ -10,23 +11,24 @@
    bzip2/libbzip2 version 1.0.5 of 10 December 2007
    Copyright (C) 1996-2007 Julian Seward <jseward@bzip.org>
 
-   Please read the WARNING, DISCLAIMER and PATENTS sections in the
+   Please read the WARNING, DISCLAIMER and PATENTS sections in the 
    README file.
 
    This program is released under the terms of the license contained
    in the file LICENSE.
    ------------------------------------------------------------------ */
 
+
 #include "bzlib_private.h"
 
 /*---------------------------------------------------*/
 #define WEIGHTOF(zz0)  ((zz0) & 0xffffff00)
 #define DEPTHOF(zz1)   ((zz1) & 0x000000ff)
-#define MYMAX(zz2, zz3) ((zz2) > (zz3) ? (zz2) : (zz3))
+#define MYMAX(zz2,zz3) ((zz2) > (zz3) ? (zz2) : (zz3))
 
-#define ADDWEIGHTS(zw1, zw2)                           \
+#define ADDWEIGHTS(zw1,zw2)                           \
    (WEIGHTOF(zw1)+WEIGHTOF(zw2)) |                    \
-   (1 + MYMAX(DEPTHOF(zw1), DEPTHOF(zw2)))
+   (1 + MYMAX(DEPTHOF(zw1),DEPTHOF(zw2)))
 
 #define UPHEAP(z)                                     \
 {                                                     \
@@ -56,10 +58,11 @@
    heap[zz] = tmp;                                    \
 }
 
+
 /*---------------------------------------------------*/
 void BZ2_hbMakeCodeLengths ( UChar *len, 
-                             Int32 *freq, 
-                             Int32 alphaSize, 
+                             Int32 *freq,
+                             Int32 alphaSize,
                              Int32 maxLen )
 {
    /*--
@@ -71,12 +74,13 @@ void BZ2_hbMakeCodeLengths ( UChar *len,
 
    Int32 heap   [ BZ_MAX_ALPHA_SIZE + 2 ];
    Int32 weight [ BZ_MAX_ALPHA_SIZE * 2 ];
-   Int32 parent [ BZ_MAX_ALPHA_SIZE * 2 ];
+   Int32 parent [ BZ_MAX_ALPHA_SIZE * 2 ]; 
 
    for (i = 0; i < alphaSize; i++)
       weight[i+1] = (freq[i] == 0 ? 1 : freq[i]) << 8;
 
    while (True) {
+
       nNodes = alphaSize;
       nHeap = 0;
 
@@ -92,7 +96,7 @@ void BZ2_hbMakeCodeLengths ( UChar *len,
       }
 
       AssertH( nHeap < (BZ_MAX_ALPHA_SIZE+2), 2001 );
-
+   
       while (nHeap > 1) {
          n1 = heap[1]; heap[1] = heap[nHeap]; nHeap--; DOWNHEAP(1);
          n2 = heap[1]; heap[1] = heap[nHeap]; nHeap--; DOWNHEAP(1);
@@ -115,15 +119,15 @@ void BZ2_hbMakeCodeLengths ( UChar *len,
          len[i-1] = j;
          if (j > maxLen) tooLong = True;
       }
-
+      
       if (! tooLong) break;
 
       /* 17 Oct 04: keep-going condition for the following loop used
-         to be 'i < alphaSize', which missed the last element, 
+         to be 'i < alphaSize', which missed the last element,
          theoretically leading to the possibility of the compressor
          looping.  However, this count-scaling step is only needed if
          one of the generated Huffman code words is longer than
-         maxLen, which up to and including version 1.0.2 was 20 bits, 
+         maxLen, which up to and including version 1.0.2 was 20 bits,
          which is extremely unlikely.  In version 1.0.3 maxLen was
          changed to 17 bits, which has minimal effect on compression
          ratio, but does mean this scaling step is used from time to
@@ -143,11 +147,12 @@ void BZ2_hbMakeCodeLengths ( UChar *len,
    }
 }
 
+
 /*---------------------------------------------------*/
-void BZ2_hbAssignCodes ( Int32 *code, 
-                         UChar *length, 
-                         Int32 minLen, 
-                         Int32 maxLen, 
+void BZ2_hbAssignCodes ( Int32 *code,
+                         UChar *length,
+                         Int32 minLen,
+                         Int32 maxLen,
                          Int32 alphaSize )
 {
    Int32 n, vec, i;
@@ -160,13 +165,14 @@ void BZ2_hbAssignCodes ( Int32 *code,
    }
 }
 
+
 /*---------------------------------------------------*/
-void BZ2_hbCreateDecodeTables ( Int32 *limit, 
-                                Int32 *base, 
-                                Int32 *perm, 
-                                UChar *length, 
-                                Int32 minLen, 
-                                Int32 maxLen, 
+void BZ2_hbCreateDecodeTables ( Int32 *limit,
+                                Int32 *base,
+                                Int32 *perm,
+                                UChar *length,
+                                Int32 minLen,
+                                Int32 maxLen,
                                 Int32 alphaSize )
 {
    Int32 pp, i, j, vec;
@@ -192,6 +198,7 @@ void BZ2_hbCreateDecodeTables ( Int32 *limit,
    for (i = minLen + 1; i <= maxLen; i++)
       base[i] = ((limit[i-1] + 1) << 1) - base[i];
 }
+
 
 /*-------------------------------------------------------------*/
 /*--- end                                         huffman.c ---*/

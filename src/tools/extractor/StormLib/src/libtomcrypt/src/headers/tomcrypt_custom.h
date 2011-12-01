@@ -419,6 +419,6 @@
 
 
 
-/* $Source: /cvs/libtom/libtomcrypt/src/headers/tomcrypt_custom.h, v $ */
+/* $Source: /cvs/libtom/libtomcrypt/src/headers/tomcrypt_custom.h,v $ */
 /* $Revision: 1.73 $ */
 /* $Date: 2007/05/12 14:37:41 $ */

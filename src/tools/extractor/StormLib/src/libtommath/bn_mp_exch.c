@@ -15,7 +15,7 @@
  * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
  */
 
-/* swap the elements of two integers, for cases where you can't simply swap the
+/* swap the elements of two integers, for cases where you can't simply swap the 
  * mp_int pointers around
  */
 void
@@ -29,6 +29,6 @@ mp_exch (mp_int * a, mp_int * b)
 }
 #endif
 
-/* $Source: /cvs/libtom/libtommath/bn_mp_exch.c, v $ */
+/* $Source: /cvs/libtom/libtommath/bn_mp_exch.c,v $ */
 /* $Revision: 1.4 $ */
 /* $Date: 2006/12/28 01:25:13 $ */

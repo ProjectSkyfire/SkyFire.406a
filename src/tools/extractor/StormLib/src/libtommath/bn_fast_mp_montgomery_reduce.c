@@ -167,6 +167,6 @@ int fast_mp_montgomery_reduce (mp_int * x, mp_int * n, mp_digit rho)
 }
 #endif
 
-/* $Source: /cvs/libtom/libtommath/bn_fast_mp_montgomery_reduce.c, v $ */
+/* $Source: /cvs/libtom/libtommath/bn_fast_mp_montgomery_reduce.c,v $ */
 /* $Revision: 1.4 $ */
 /* $Date: 2006/12/28 01:25:13 $ */

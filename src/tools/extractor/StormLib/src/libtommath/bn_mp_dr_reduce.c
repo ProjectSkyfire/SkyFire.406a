@@ -20,7 +20,7 @@
  * Based on algorithm from the paper
  *
  * "Generating Efficient Primes for Discrete Log Cryptosystems"
- *                 Chae Hoon Lim, Pil Joong Lee, 
+ *                 Chae Hoon Lim, Pil Joong Lee,
  *          POSTECH Information Research Laboratories
  *
  * The modulus must be of a special format [see manual]
@@ -89,6 +89,6 @@ top:
 }
 #endif
 
-/* $Source: /cvs/libtom/libtommath/bn_mp_dr_reduce.c, v $ */
+/* $Source: /cvs/libtom/libtommath/bn_mp_dr_reduce.c,v $ */
 /* $Revision: 1.4 $ */
 /* $Date: 2006/12/28 01:25:13 $ */
