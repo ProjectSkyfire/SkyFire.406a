@@ -77,6 +77,11 @@
 #include "AccountMgr.h"
 #include "DBCEnums.h"
 #include "Object.h"
+#include "DB2fmt.h"
+#include "DB2Store.h"
+#include "DB2Stores.h"
+#include "DB2Stores.h"
+#include "DB2Structure.h"
 
 #include <cmath>
 

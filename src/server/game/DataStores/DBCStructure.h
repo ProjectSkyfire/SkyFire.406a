@@ -1182,21 +1182,6 @@ struct ItemDamageEntry
 #define MAX_ITEM_EXT_COST_ITEMS         5
 #define MAX_ITEM_EXT_COST_CURRENCIES    5
 
-struct ItemExtendedCostEntry
-{
-    uint32      ID;                                         // 0 extended-cost entry id
-    //uint32    reqhonorpoints;                             // 1 required honor points
-    //uint32    reqarenapoints;                             // 2 required arena points
-    uint32      RequiredArenaSlot;                          // 3 arena slot restrictions (min slot value)
-    uint32      RequiredItem[MAX_ITEM_EXT_COST_ITEMS];      // 4-8 required item id
-    uint32      RequiredItemCount[MAX_ITEM_EXT_COST_ITEMS]; // 9-13 required count of 1st item
-    uint32      RequiredPersonalArenaRating;                // 14 required personal arena rating
-    //uint32    ItemPurchaseGroup;                          // 15
-    uint32      RequiredCurrency[MAX_ITEM_EXT_COST_CURRENCIES];// 16-20 required curency id
-    uint32      RequiredCurrencyCount[MAX_ITEM_EXT_COST_CURRENCIES];// 21-25 required curency count
-    //uint32    something[5];                               // 26-30
-};
-
 struct ItemLimitCategoryEntry
 {
     uint32      ID;                                                 // 0 Id
@@ -1553,12 +1538,11 @@ struct SkillLineEntry
 {
     uint32    id;                                           // 0        m_ID
     int32     categoryId;                                   // 1        m_categoryID
-    //uint32    skillCostID;                                // 2        m_skillCostsID
-    DBCString name;                                         // 3        m_displayName_lang
-    //DBCString description;                                // 4        m_description_lang
-    uint32    spellIcon;                                    // 5        m_spellIconID
-    //DBCString alternateVerb;                              // 6        m_alternateVerb_lang
-    uint32    canLink;                                      // 7        m_canLink (prof. with recipes)
+    DBCString name;                                         // 2        m_displayName_lang
+    //DBCString description;                                // 3        m_description_lang
+    uint32    spellIcon;                                    // 4        m_spellIconID
+    //DBCString alternateVerb;                              // 5        m_alternateVerb_lang
+    uint32    canLink;                                      // 6        m_canLink (prof. with recipes)
 };
 
 struct SkillLineAbilityEntry
@@ -2323,7 +2307,7 @@ struct TaxiPathNodePtr
 typedef Path<TaxiPathNodePtr, TaxiPathNodeEntry const> TaxiPathNodeList;
 typedef std::vector<TaxiPathNodeList> TaxiPathNodesByPath;
 
-#define TaxiMaskSize 22
+#define TaxiMaskSize 17
 typedef uint32 TaxiMask[TaxiMaskSize];
 
 #endif
