@@ -2307,7 +2307,7 @@ struct TaxiPathNodePtr
 typedef Path<TaxiPathNodePtr, TaxiPathNodeEntry const> TaxiPathNodeList;
 typedef std::vector<TaxiPathNodeList> TaxiPathNodesByPath;
 
-#define TaxiMaskSize 17
+#define TaxiMaskSize 29
 typedef uint32 TaxiMask[TaxiMaskSize];
 
 #endif
