@@ -82,7 +82,7 @@
 
 #define ZONE_UPDATE_INTERVAL (1*IN_MILLISECONDS)
 
-#define PLAYER_SKILL_INDEX(x)       (PLAYER_SKILL_INFO_1_1 + ((x)*3))
+#define PLAYER_SKILL_INDEX(x)       (PLAYER_SKILL_LINEID_0 + ((x)*3))
 #define PLAYER_SKILL_VALUE_INDEX(x) (PLAYER_SKILL_INDEX(x)+1)
 #define PLAYER_SKILL_BONUS_INDEX(x) (PLAYER_SKILL_INDEX(x)+2)
 
@@ -4712,22 +4712,12 @@ void Player::InitVisibleBits()
     updateVisualBits.SetBit(UNIT_FIELD_POWER3);
     updateVisualBits.SetBit(UNIT_FIELD_POWER4);
     updateVisualBits.SetBit(UNIT_FIELD_POWER5);
-    updateVisualBits.SetBit(UNIT_FIELD_POWER6);
-    updateVisualBits.SetBit(UNIT_FIELD_POWER7);
-    updateVisualBits.SetBit(UNIT_FIELD_POWER8);
-    updateVisualBits.SetBit(UNIT_FIELD_POWER9);
-    updateVisualBits.SetBit(UNIT_FIELD_POWER10);
     updateVisualBits.SetBit(UNIT_FIELD_MAXHEALTH);
     updateVisualBits.SetBit(UNIT_FIELD_MAXPOWER1);
     updateVisualBits.SetBit(UNIT_FIELD_MAXPOWER2);
     updateVisualBits.SetBit(UNIT_FIELD_MAXPOWER3);
     updateVisualBits.SetBit(UNIT_FIELD_MAXPOWER4);
     updateVisualBits.SetBit(UNIT_FIELD_MAXPOWER5);
-    updateVisualBits.SetBit(UNIT_FIELD_MAXPOWER6);
-    updateVisualBits.SetBit(UNIT_FIELD_MAXPOWER7);
-    updateVisualBits.SetBit(UNIT_FIELD_MAXPOWER8);
-    updateVisualBits.SetBit(UNIT_FIELD_MAXPOWER9);
-    updateVisualBits.SetBit(UNIT_FIELD_MAXPOWER10);
     updateVisualBits.SetBit(UNIT_FIELD_LEVEL);
     updateVisualBits.SetBit(UNIT_FIELD_FACTIONTEMPLATE);
     updateVisualBits.SetBit(UNIT_VIRTUAL_ITEM_SLOT_ID + 0);
