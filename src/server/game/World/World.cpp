@@ -1526,10 +1526,10 @@ void World::SetInitialWorldSettings()
 
     sLog->outString("Loading Achievements...");
     sAchievementMgr->LoadAchievementReferenceList();
-    sLog->outString("Loading Achievement Criteria Lists...");
+    /*sLog->outString("Loading Achievement Criteria Lists...");
     sAchievementMgr->LoadAchievementCriteriaList();
     sLog->outString("Loading Achievement Criteria Data...");
-    sAchievementMgr->LoadAchievementCriteriaData();
+    sAchievementMgr->LoadAchievementCriteriaData();*/
     sLog->outString("Loading Achievement Rewards...");
     sAchievementMgr->LoadRewards();
     sLog->outString("Loading Achievement Reward Locales...");
