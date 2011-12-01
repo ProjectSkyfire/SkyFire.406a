@@ -2455,16 +2455,46 @@ inline void Unit::SendMonsterMoveByPath(Path<Elem, Node> const& path, uint32 sta
     data << GetPositionZ();
     data << uint32(getMSTime());
     data << uint8(0);
-    data << uint32(((GetUnitMovementFlags() & MOVEMENTFLAG_LEVITATING) || isInFlight()) ? (SPLINEFLAG_FLYING|SPLINEFLAG_WALKING) : SPLINEFLAG_WALKING);
-    data << uint32(traveltime);
-    data << uint32(pathSize);
+    uint32 splineflags = ((GetUnitMovementFlags() & MOVEMENTFLAG_LEVITATING) || isInFlight()) ? (SPLINEFLAG_FLYING|SPLINEFLAG_WALKING) : SPLINEFLAG_WALKING;
+    data << uint32(splineflags);
+    data << uint32(traveltime / pathSize);
+    data << uint32(1/*pathSize*/);
 
-    for (uint32 i = start; i < end; ++i)
+    
+    data << float(path[end -1].x);
+    data << float(path[end -1].y);
+    data << float(path[end -1].z);
+
+    /*for(uint32 i = start + 1; i < end - 1; ++i)
     {
         data << float(path[i].x);
         data << float(path[i].y);
         data << float(path[i].z);
+    }*/
+    /*if(!(splineflags & SPLINEFLAG_FLYING))
+    {
+        data << float(path[end - 1].x);
+        data << float(path[end - 1].y);
+        data << float(path[end - 1].z);
+        
+        for(uint32 i = start; i < end - 1; ++i)
+        {
+            uint32 packed = 0;
+            packed |= ((int32)(path[i].x / 0.25f) & 0x7FF);
+            packed |= ((int32)(path[i].y / 0.25f) & 0x7FF) << 11;
+            packed |= ((int32)(path[i].z / 0.25f) & 0x3FF) << 22;
+            data << uint32(packed);
+        }
     }
+    else
+    {
+        for (uint32 i = start; i < end; ++i)
+        {
+            data << float(path[i].x);
+            data << float(path[i].y);
+            data << float(path[i].z);
+        }
+    }*/
 
     SendMessageToSet(&data, true);
 }
