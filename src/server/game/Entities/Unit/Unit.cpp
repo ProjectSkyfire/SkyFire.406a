@@ -8816,26 +8816,6 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
                     trigger_spell_id = 50475;
                     basepoints0 = CalculatePctN(int32(damage), triggerAmount);
                 }
-                // Sudden Doom
-                else if(auraSpellInfo->SpellIconID == 1939)
-                {
-                    if(GetTypeId() != TYPEID_PLAYER)
-                        return false;
-
-                    // Select chance based on weapon speed
-                    float speed = ToPlayer()->GetWeaponForAttack(BASE_ATTACK)->GetTemplate()->Delay / 1000;
-
-                    int32 modifier = 1;
-
-                    if(auraSpellInfo->Id == 49530) // Rank 3
-                        modifier = 4;
-                    else if(auraSpellInfo->Id == 49529) // Rank 2
-                        modifier = 3;
-
-                    // ToDo: Check this, its based on a wowhead comment
-                    if(!roll_chance_f(speed * modifier))
-                        return false;
-                }
                 break;
             }
             default:
@@ -9028,6 +9008,29 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
             ToPlayer()->RemoveSpellCooldown(48982,true); // Remove cooldown of rune tap
             CastSpell(this,96171,true); // next rune tap wont cost runes
             cooldown = 45000; // Can only happen once in 45 seconds
+            break;
+        }
+        // Sudden Doom
+        case 49018:
+        case 49529:
+        case 49530:
+        {
+            if(GetTypeId() != TYPEID_PLAYER)
+                return false;
+
+            // Select chance based on weapon speed
+            float speed = ToPlayer()->GetWeaponForAttack(BASE_ATTACK)->GetTemplate()->Delay / 1000;
+
+            int32 modifier = 1;
+
+            if(auraSpellInfo->Id == 49530) // Rank 3
+                modifier = 4;
+            else if(auraSpellInfo->Id == 49529) // Rank 2
+                modifier = 3;
+
+            // ToDo: Check this, its based on a wowhead comment
+            if(!roll_chance_f(speed * modifier))
+                return false;
             break;
         }
     }
