@@ -736,6 +736,10 @@ int WorldSocket::ProcessIncoming (WorldPacket* new_pct)
                 sLog->outStaticDebug ("CMSG_KEEP_ALIVE , size: " UI64FMTD, uint64(new_pct->size()));
                 sScriptMgr->OnPacketReceive(this, WorldPacket(*new_pct));
                 return 0;
+            case CMSG_LOG_DISCONNECT:
+                sLog->outStaticDebug("CMSG_LOG_DISCONNECT , size: " UI64FMTD, uint64(new_pct->size()));
+                sScriptMgr->OnPacketReceive(this, WorldPacket(*new_pct));
+                return 0;
             default:
             {
                 ACE_GUARD_RETURN (LockType, Guard, m_SessionLock, -1);
