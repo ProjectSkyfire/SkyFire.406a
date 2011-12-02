@@ -45,10 +45,10 @@ enum Opcodes
     SMSG_GODMODE                                     = 0x023EC, // 4.0.6a 13623
     SMSG_DESTRUCTIBLE_BUILDING_DAMAGE                = 0x0A0E0, // 4.0.6a 13623
     CMSG_CHAR_CREATE                                 = 0x02A86, // 4.3.0 15005
-    CMSG_CHAR_ENUM                                   = 0x06AA4, // 4.0.6a 13623
+    CMSG_CHAR_ENUM                                   = 0x04B06, // 4.3.0 15005
     CMSG_CHAR_DELETE                                 = 0x038A4, // 4.3.0 15005
     SMSG_CHAR_CREATE                                 = 0x0F7EC, // 4.0.6a 13623
-    SMSG_CHAR_ENUM                                   = 0x0ECCC, // 4.0.6a 13623
+    SMSG_CHAR_ENUM                                   = 0x004AC, // 4.3.0 15005
     SMSG_CHAR_DELETE                                 = 0x0BC80, // 4.0.6a 13623
     CMSG_PLAYER_LOGIN                                = 0x08180, // 4.0.6a 13623
     SMSG_NEW_WORLD                                   = 0x0451E, // 4.0.6a 13623
@@ -510,7 +510,7 @@ enum Opcodes
     SMSG_ITEM_ENCHANT_TIME_UPDATE                    = 0x066A0, // 4.0.6a 13623
     SMSG_AUTH_CHALLENGE                              = 0x01723, // 4.3.0 15005
     CMSG_AUTH_SESSION                                = 0x01100, // 4.3.0 15005
-    SMSG_AUTH_RESPONSE                               = 0x06882, // 4.3.0 15005
+    SMSG_AUTH_RESPONSE                               = 0x01406, // 4.3.0 15005
     MSG_GM_SHOWLABEL                                 = 0x1008D, // Unknown opcode ID
     CMSG_PET_CAST_SPELL                              = 0x02888, // 4.0.6a 13623
     MSG_SAVE_GUILD_EMBLEM                            = 0x031AC, // 4.0.6a 13623
@@ -537,7 +537,7 @@ enum Opcodes
     SMSG_GMTICKET_CREATE                             = 0x0A8A0, // 4.0.6a 13623
     CMSG_GMTICKET_UPDATETEXT                         = 0x07F8C, // 4.0.6a 13623
     SMSG_GMTICKET_UPDATETEXT                         = 0x0A5E8, // 4.0.6a 13623
-    SMSG_ACCOUNT_DATA_TIMES                          = 0x00C81, // 4.3.0 15005
+    SMSG_ACCOUNT_DATA_TIMES                          = 0x00C80, // 4.3.0 15005
     CMSG_REQUEST_ACCOUNT_DATA                        = 0x0EEAC, // 4.0.6a 13623
     CMSG_UPDATE_ACCOUNT_DATA                         = 0x072A4, // 4.0.6a 13623
     SMSG_UPDATE_ACCOUNT_DATA                         = 0x01EA3, // 4.3.0 15005
@@ -921,7 +921,7 @@ enum Opcodes
     SMSG_FLIGHT_SPLINE_SYNC                          = 0x0BFAC, // 4.0.6a 13623
     CMSG_SET_TAXI_BENCHMARK_MODE                     = 0x073C4, // 4.0.6a 13623
     //SMSG_JOINED_BATTLEGROUND_QUEUE                   = 0x0090E, // 4.0.6a 13623 :redefinition; previous def was 'enumerator'
-    SMSG_REALM_SPLIT                                 = 0x01821, // 4.3.0.15005
+    SMSG_REALM_SPLIT                                 = 0x01820, // 4.3.0 15005
     CMSG_REALM_SPLIT                                 = 0x01680, // 4.3.0 15005
     CMSG_MOVE_CHNG_TRANSPORT                         = 0x10158, // Unknown opcode ID
     MSG_PARTY_ASSIGNMENT                             = 0x028AC, // 4.0.6a 13623
@@ -1316,7 +1316,7 @@ enum Opcodes
     CMSG_AUTO_DECLINE_GUILD_INVITES                  = 0x0EDAC, // 4.0.6a 13623
     CMSG_SET_PRIMARY_TALENT_TREE                     = 0x0FEA8, // 4.0.6a 13623
     CMSG_GROUP_SET_ROLES                             = 0x08509, // 4.0.6a 13623
-    CMSG_WORLD_LOGIN                                 = 0x08508, // 4.0.6a 13623
+    CMSG_WORLD_LOGIN                                 = 0x00976, // 4.3.0 15005
     SMSG_UNKNOWN_65508                               = 0x0FFE4, // Unknown opcode Name, 4.0.6a 13623
     //SMSG_INIT_CURRENCY                               = 0x0091C, // 4.0.6a 13623 :redefinition; previous def was 'enumerator'
     //SMSG_UPDATE_CURRENCY                             = 0x0405E, // 4.0.6a 13623 :redefinition; previous def was 'enumerator'
