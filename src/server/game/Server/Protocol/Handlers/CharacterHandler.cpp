@@ -247,7 +247,7 @@ void WorldSession::HandleCharEnumOpcode(WorldPacket & /*recv_data*/)
                 "characters.zone, characters.map, characters.position_x, characters.position_y, characters.position_z, guild_member.guildid, characters.playerFlags, "
             //  15                    16                   17                     18                   19                         20
                 "characters.at_login, character_pet.entry, character_pet.modelid, character_pet.level, characters.equipmentCache, character_banned.guid "
-                "FROM characters LEFT JOIN character_pet ON characters.guid=character_pet.owner AND character_pet.slot='%u' "
+                "FROM characters LEFT JOIN character_pet ON characters.guid=character_pet.owner AND character_pet.slot=characters.currentPetSlot "
                 "LEFT JOIN guild_member ON characters.guid = guild_member.guid "
                 "LEFT JOIN character_banned ON characters.guid = character_banned.guid AND character_banned.active = 1 "
                 "WHERE characters.account = '%u' ORDER BY characters.guid"
@@ -259,12 +259,12 @@ void WorldSession::HandleCharEnumOpcode(WorldPacket & /*recv_data*/)
                 "characters.zone, characters.map, characters.position_x, characters.position_y, characters.position_z, guild_member.guildid, characters.playerFlags, "
             //  15                    16                   17                     18                   19                         20                     21
                 "characters.at_login, character_pet.entry, character_pet.modelid, character_pet.level, characters.equipmentCache, character_banned.guid, character_declinedname.genitive "
-                "FROM characters LEFT JOIN character_pet ON characters.guid = character_pet.owner AND character_pet.slot='%u' "
+                "FROM characters LEFT JOIN character_pet ON characters.guid = character_pet.owner AND character_pet.slot=characters.currentPetSlot "
                 "LEFT JOIN character_declinedname ON characters.guid = character_declinedname.guid "
                 "LEFT JOIN guild_member ON characters.guid = guild_member.guid "
                 "LEFT JOIN character_banned ON characters.guid = character_banned.guid AND character_banned.active = 1 "
                 "WHERE characters.account = '%u' ORDER BY characters.guid",
-                PET_SAVE_AS_CURRENT, GetAccountId()
+                GetAccountId()
             );
 }
 
@@ -682,6 +682,65 @@ void WorldSession::HandleCharCreateCallback(PreparedQueryResult result, Characte
 
             LoginDatabase.CommitTransaction(trans);
 
+            QueryResult result2 = CharacterDatabase.PQuery("SELECT id FROM character_pet ORDER BY id DESC LIMIT 1");
+            uint32 pet_id = 1;
+            if (result2)
+            {
+                Field* fields = result2->Fetch();
+                pet_id = fields[0].GetUInt32();
+                pet_id += 1;
+            }
+
+            if (createInfo->Class == CLASS_WARLOCK)
+            {
+                CharacterDatabase.PExecute("REPLACE INTO character_pet (`id`, `entry`, `owner`, `modelid`, `CreatedBySpell`, `PetType`, `level`, `exp`, `Reactstate`, `name`, `renamed`, `slot`, `curhealth`, `curmana`, `curhappiness`, `savetime`, `abdata`) VALUES (%u, 416, %u, 4449, 0, 0, 1, 0, 0, 'Imp', 1, 100, 282, 72, 0, 1295721046, '7 2 7 1 7 0 129 3110 1 0 1 0 1 0 6 2 6 1 6 0 ')",  pet_id, newChar.GetGUIDLow());
+                CharacterDatabase.PExecute("UPDATE characters SET currentPetSlot = '100', petSlotUsed = '3452816845' WHERE guid = %u", newChar.GetGUIDLow());
+                newChar.SetTemporaryUnsummonedPetNumber(pet_id);
+            }
+            
+            if (createInfo->Class == CLASS_HUNTER)
+            {
+                switch(createInfo->Race)
+                {
+                    case RACE_HUMAN:
+                        CharacterDatabase.PExecute("REPLACE INTO character_pet (`id`, `entry`, `owner`, `modelid`, `CreatedBySpell`, `PetType`, `level`, `exp`, `Reactstate`, `name`, `renamed`, `slot`, `curhealth`, `curmana`, `curhappiness`, `savetime`, `abdata`) VALUES (%u, 42717, %u, 903, 13481, 1, 1, 0, 0, 'Wolf', 0, 0, 192, 0, 166500, 1295727347, '7 2 7 1 7 0 129 2649 129 17253 1 0 1 0 6 2 6 1 6 0 ')",  pet_id, newChar.GetGUIDLow());
+                        break;
+                    case RACE_DWARF:
+                        CharacterDatabase.PExecute("REPLACE INTO character_pet (`id`, `entry`, `owner`, `modelid`, `CreatedBySpell`, `PetType`, `level`, `exp`, `Reactstate`, `name`, `renamed`, `slot`, `curhealth`, `curmana`, `curhappiness`, `savetime`, `abdata`) VALUES (%u, 42713, %u, 822, 13481, 1, 1, 0, 0, 'Bear', 0, 0, 212, 0, 166500, 1295727650, '7 2 7 1 7 0 129 2649 129 16827 1 0 1 0 6 2 6 1 6 0 ')",  pet_id, newChar.GetGUIDLow());
+                        break;
+                    case RACE_ORC:
+                        CharacterDatabase.PExecute("REPLACE INTO character_pet (`id`, `entry`, `owner`, `modelid`, `CreatedBySpell`, `PetType`, `level`, `exp`, `Reactstate`, `name`, `renamed`, `slot`, `curhealth`, `curmana`, `curhappiness`, `savetime`, `abdata`) VALUES (%u, 42719, %u, 744, 13481, 1, 1, 0, 0, 'Boar', 0, 0, 212, 0, 166500, 1295727175, '7 2 7 1 7 0 129 2649 129 17253 1 0 1 0 6 2 6 1 6 0 ')",  pet_id, newChar.GetGUIDLow());
+                        break;
+                    case RACE_NIGHTELF:
+                        CharacterDatabase.PExecute("REPLACE INTO character_pet (`id`, `entry`, `owner`, `modelid`, `CreatedBySpell`, `PetType`, `level`, `exp`, `Reactstate`, `name`, `renamed`, `slot`, `curhealth`, `curmana`, `curhappiness`, `savetime`, `abdata`) VALUES (%u, 42718, %u,  17090, 13481, 1, 1, 0, 0, 'Cat', 0, 0, 192, 0, 166500, 1295727501, '7 2 7 1 7 0 129 2649 129 16827 1 0 1 0 6 2 6 1 6 0 ')",  pet_id, newChar.GetGUIDLow());
+                        break;
+                    case RACE_UNDEAD_PLAYER:
+                        CharacterDatabase.PExecute("REPLACE INTO character_pet (`id`, `entry`, `owner`, `modelid`, `CreatedBySpell`, `PetType`, `level`, `exp`, `Reactstate`, `name`, `renamed`, `slot`, `curhealth`, `curmana`, `curhappiness`, `savetime`, `abdata`) VALUES (%u, 51107, %u,  368, 13481, 1, 1, 0, 0, 'Spider', 0, 0, 202, 0, 166500, 1295727821, '7 2 7 1 7 0 129 2649 129 17253 1 0 1 0 6 2 6 1 6 0 ')",  pet_id, newChar.GetGUIDLow());
+                        break;
+                    case RACE_TAUREN:
+                        CharacterDatabase.PExecute("REPLACE INTO character_pet (`id`, `entry`, `owner`, `modelid`, `CreatedBySpell`, `PetType`, `level`, `exp`, `Reactstate`, `name`, `renamed`, `slot`, `curhealth`, `curmana`, `curhappiness`, `savetime`, `abdata`) VALUES (%u, 42720, %u,  29057, 13481, 1, 1, 0, 0, 'Tallstrider', 0, 0, 192, 0, 166500, 1295727912, '7 2 7 1 7 0 129 2649 129 16827 1 0 1 0 6 2 6 1 6 0 ')",  pet_id, newChar.GetGUIDLow());
+                        break;
+                    case RACE_TROLL:
+                        CharacterDatabase.PExecute("REPLACE INTO character_pet (`id`, `entry`, `owner`, `modelid`, `CreatedBySpell`, `PetType`, `level`, `exp`, `Reactstate`, `name`, `renamed`, `slot`, `curhealth`, `curmana`, `curhappiness`, `savetime`, `abdata`) VALUES (%u, 42721, %u,  23518, 13481, 1, 1, 0, 0, 'Raptor', 0, 0, 192, 0, 166500, 1295727987, '7 2 7 1 7 0 129 2649 129 50498 129 16827 1 0 6 2 6 1 6 0 ')",  pet_id, newChar.GetGUIDLow());
+                        break;
+                    case RACE_GOBLIN:
+                        CharacterDatabase.PExecute("REPLACE INTO character_pet (`id`, `entry`, `owner`, `modelid`, `CreatedBySpell`, `PetType`, `level`, `exp`, `Reactstate`, `name`, `renamed`, `slot`, `curhealth`, `curmana`, `curhappiness`, `savetime`, `abdata`) VALUES (%u, 42715, %u, 27692, 13481, 1, 1, 0, 0, 'Crab', 0, 0, 212, 0, 166500, 1295720595, '7 2 7 1 7 0 129 2649 129 16827 1 0 1 0 6 2 6 1 6 0 ')",  pet_id, newChar.GetGUIDLow());
+                        break;
+                    case RACE_BLOODELF:
+                        CharacterDatabase.PExecute("REPLACE INTO character_pet (`id`, `entry`, `owner`, `modelid`, `CreatedBySpell`, `PetType`, `level`, `exp`, `Reactstate`, `name`, `renamed`, `slot`, `curhealth`, `curmana`, `curhappiness`, `savetime`, `abdata`) VALUES (%u, 42710, %u, 23515, 13481, 1, 1, 0, 0, 'Dragonhawk', 0, 0, 202, 0, 166500, 1295728068, '7 2 7 1 7 0 129 2649 129 17253 1 0 1 0 6 2 6 1 6 0 ')",  pet_id, newChar.GetGUIDLow());
+                        break;
+                    case RACE_DRAENEI:
+                        CharacterDatabase.PExecute("REPLACE INTO character_pet (`id`, `entry`, `owner`, `modelid`, `CreatedBySpell`, `PetType`, `level`, `exp`, `Reactstate`, `name`, `renamed`, `slot`, `curhealth`, `curmana`, `curhappiness`, `savetime`, `abdata`) VALUES (%u, 42712, %u, 29056, 13481, 1, 1, 0, 0, 'Moth', 0, 0, 192, 0, 166500, 1295728128, '7 2 7 1 7 0 129 2649 129 49966 1 0 1 0 6 2 6 1 6 0 ')",  pet_id, newChar.GetGUIDLow());
+                        break;
+                    case RACE_WORGEN:
+                        CharacterDatabase.PExecute("REPLACE INTO character_pet (`id`, `entry`, `owner`, `modelid`, `CreatedBySpell`, `PetType`, `level`, `exp`, `Reactstate`, `name`, `renamed`, `slot`, `curhealth`, `curmana`, `curhappiness`, `savetime`, `abdata`) VALUES (%u, 42722, %u, 30221, 13481, 1, 1, 0, 0, 'Dog', 0, 0, 192, 0, 166500, 1295728219, '7 2 7 1 7 0 129 2649 129 17253 1 0 1 0 6 2 6 1 6 0 ')",  pet_id, newChar.GetGUIDLow());
+                        break;
+                }
+                
+                CharacterDatabase.PExecute("UPDATE characters SET currentPetSlot = '0', petSlotUsed = '1' WHERE guid = %u", newChar.GetGUIDLow());
+                newChar.SetTemporaryUnsummonedPetNumber(pet_id);
+            }
+            
             newChar.CleanupsBeforeDelete();
 
             WorldPacket data(SMSG_CHAR_CREATE, 1);

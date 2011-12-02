@@ -10057,7 +10057,7 @@ Unit* Unit::GetCharm() const
     return NULL;
 }
 
-void Unit::SetMinion(Minion *minion, bool apply)
+void Unit::SetMinion(Minion *minion, bool apply, PetSlot slot)
 {
     sLog->outDebug(LOG_FILTER_UNITS, "SetMinion %u for %u, apply %u", minion->GetEntry(), GetEntry(), apply);
 
@@ -10086,7 +10086,7 @@ void Unit::SetMinion(Minion *minion, bool apply)
                 {
                     // remove existing minion pet
                     if (oldPet->isPet())
-                        ((Pet*)oldPet)->Remove(PET_SAVE_AS_CURRENT);
+                        ((Pet*)oldPet)->Remove(PET_SLOT_ACTUAL_PET_SLOT);
                     else
                         oldPet->UnSummon();
                     SetPetGUID(minion->GetGUID());
@@ -10097,6 +10097,29 @@ void Unit::SetMinion(Minion *minion, bool apply)
             {
                 SetPetGUID(minion->GetGUID());
                 SetMinionGUID(0);
+            }
+        }
+        
+        if (slot == PET_SLOT_UNK_SLOT)
+        {
+            if (minion->isPet() && minion->ToPet()->getPetType() == HUNTER_PET)
+                ASSERT(false);
+                
+            slot = PET_SLOT_OTHER_PET;
+        }
+       
+        if (GetTypeId() == TYPEID_PLAYER)
+        {
+            if(!minion->isHunterPet()) //If its not a Hunter Pet, well lets not try to use it for hunters then.
+            {   
+                ToPlayer()->m_currentPetSlot = slot;
+                ToPlayer()->m_petSlotUsed = 3452816845; // the same as 100 so that the pet is only that and nothing more
+                // ToPlayer()->setPetSlotUsed(slot, true);
+            }
+            if(slot >= PET_SLOT_HUNTER_FIRST && slot <= PET_SLOT_HUNTER_LAST) // Always save thoose spots where hunter is correct
+            {
+                ToPlayer()->m_currentPetSlot = slot;
+                ToPlayer()->setPetSlotUsed(slot, true);       
             }
         }
 
