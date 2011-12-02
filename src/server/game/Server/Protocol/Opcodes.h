@@ -492,8 +492,8 @@ enum Opcodes
     SMSG_START_MIRROR_TIMER                          = 0x0B4A8, // 4.0.6a 13623
     SMSG_PAUSE_MIRROR_TIMER                          = 0x021EC, // 4.0.6a 13623
     SMSG_STOP_MIRROR_TIMER                           = 0x0A68C, // 4.0.6a 13623
-    CMSG_PING                                        = 0x0064E, // 4.0.6a 13623
-    SMSG_PONG                                        = 0x0A01B, // 4.0.6a 13623
+    CMSG_PING                                        = 0x00100, // 4.3.0 15005
+    SMSG_PONG                                        = 0x00302, // 4.3.0 15005
     SMSG_CLEAR_COOLDOWN                              = 0x036CC, // 4.0.6a 13623
     SMSG_GAMEOBJECT_PAGETEXT                         = 0x0E5C8, // 4.0.6a 13623
     CMSG_SETSHEATHED                                 = 0x0AAE4, // 4.0.6a 13623
@@ -508,9 +508,9 @@ enum Opcodes
     MSG_GM_SUMMON                                    = 0x1008C, // Unknown opcode ID
     SMSG_ITEM_TIME_UPDATE                            = 0x066A4, // 4.0.6a 13623
     SMSG_ITEM_ENCHANT_TIME_UPDATE                    = 0x066A0, // 4.0.6a 13623
-    SMSG_AUTH_CHALLENGE                              = 0x06019, // 4.0.6a 13623
+    SMSG_AUTH_CHALLENGE                              = 0x01723, // 4.3.0 15005
     CMSG_AUTH_SESSION                                = 0x01100, // 4.3.0 15005
-    SMSG_AUTH_RESPONSE                               = 0x0B28C, // 4.0.6a 13623
+    SMSG_AUTH_RESPONSE                               = 0x06882, // 4.3.0 15005
     MSG_GM_SHOWLABEL                                 = 0x1008D, // Unknown opcode ID
     CMSG_PET_CAST_SPELL                              = 0x02888, // 4.0.6a 13623
     MSG_SAVE_GUILD_EMBLEM                            = 0x031AC, // 4.0.6a 13623
@@ -922,7 +922,7 @@ enum Opcodes
     CMSG_SET_TAXI_BENCHMARK_MODE                     = 0x073C4, // 4.0.6a 13623
     //SMSG_JOINED_BATTLEGROUND_QUEUE                   = 0x0090E, // 4.0.6a 13623 :redefinition; previous def was 'enumerator'
     SMSG_REALM_SPLIT                                 = 0x025EC, // 4.0.6a 13623
-    CMSG_REALM_SPLIT                                 = 0x060AC, // 4.0.6a 13623
+    CMSG_REALM_SPLIT                                 = 0x01680, // 4.3.0 15005
     CMSG_MOVE_CHNG_TRANSPORT                         = 0x10158, // Unknown opcode ID
     MSG_PARTY_ASSIGNMENT                             = 0x028AC, // 4.0.6a 13623
     SMSG_OFFER_PETITION_ERROR                        = 0x07DC0, // 4.0.6a 13623
@@ -1279,12 +1279,12 @@ enum Opcodes
     CMSG_SET_ALLOW_LOW_LEVEL_RAID2                   = 0x029C4, // 4.0.6a 13623
     SMSG_CAMERA_SHAKE                                = 0x0A2E4, // 4.0.6a 13623
     SMSG_UPDATE_ITEM_ENCHANTMENTS                    = 0x020E8, // 4.0.6a 13623
-    SMSG_REDIRECT_CLIENT                             = 0x0201B, // 4.0.6a 13623
+    SMSG_REDIRECT_CLIENT                             = 0x00703, // 4.3.0 15005
     CMSG_REDIRECTION_FAILED                          = 0x10007, // Unknown opcode ID
     SMSG_UNKNOWN_1295                                = 0x10008, // Unknown opcode Name, 4.0.6  13529
     CMSG_UNKNOWN_1296                                = 0x10009, // Unknown opcode Name, 4.0.6  13529
     SMSG_FORCE_SEND_QUEUED_PACKETS                   = 0x02880, // 4.0.6a 13623
-    CMSG_REDIRECTION_AUTH_PROOF                      = 0x00E4C, // 4.0.6a 13623
+    CMSG_REDIRECTION_AUTH_PROOF                      = 0x04108, // 4.3.0 15005
     SMSG_COMBAT_LOG_MULTIPLE                         = 0x033A8, // 4.0.6a 13623
     SMSG_LFG_OPEN_FROM_GOSSIP                        = 0x071EC, // 4.0.6a 13623
     SMSG_UNKNOWN_1302                                = 0x10010, // Unknown opcode Name, ID
@@ -1345,6 +1345,7 @@ enum Opcodes
     CMSG_GET_GUILD_MEMBER_RECIPES                    = 0x0212D, // 4.0.6a 13623
     CMSG_QUERY_GUILD_MEMBERS_FOR_RECIPE              = 0x0210D, // 4.0.6a 13623
     CMSG_GUILD_NEWS_SET_STICKY                       = 0x0252D, // 4.0.6a 13623
+    CMSG_LOG_DISCONNECT                              = 0x00108, // 4.3.0 15005
     NUM_MSG_TYPES                                    = 0x102B8  // last unknown opcode + 1.
 };
 
