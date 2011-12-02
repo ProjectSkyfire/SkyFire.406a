@@ -571,7 +571,7 @@ enum Opcodes
     CMSG_GUILD_DEL_RANK                              = 0x02129, // 4.0.6a 13623
     CMSG_GUILD_SWITCH_RANK                           = 0x03309, // Unknown opcode ID
     CMSG_GUILD_SET_NOTE                              = 0x0232D, // 4.0.6a 13623
-    SMSG_LOGIN_VERIFY_WORLD                          = 0x028C0, // 4.0.6a 13623
+    SMSG_LOGIN_VERIFY_WORLD                          = 0x01C80, // 4.3.5 15005
     CMSG_CLEAR_EXPLORATION                           = 0x100A9, // Unknown opcode ID
     CMSG_SEND_MAIL                                   = 0x02DEC, // 4.0.6a 13623
     SMSG_SEND_MAIL_RESULT                            = 0x0E5C0, // 4.0.6a 13623
@@ -759,7 +759,7 @@ enum Opcodes
     SMSG_BATTLEGROUND_PLAYER_JOINED                  = 0x0494C, // 4.0.6a 13623
     SMSG_BATTLEGROUND_PLAYER_LEFT                    = 0x00D1C, // 4.0.6a 13623
     CMSG_BATTLEMASTER_JOIN                           = 0x00137, // Unknown opcode ID
-    SMSG_ADDON_INFO                                  = 0x0EA80, // 4.0.6a 13623
+    SMSG_ADDON_INFO                                  = 0x004A0, // 4.3.0 15005
     CMSG_PET_UNLEARN                                 = 0x10105, // Unknown opcode ID
     SMSG_PET_UNLEARN_CONFIRM                         = 0x10106, // Unknown opcode ID
     SMSG_PARTY_MEMBER_STATS_FULL                     = 0x0BA8C, // 4.0.6a 13623

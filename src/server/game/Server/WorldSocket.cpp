@@ -697,6 +697,12 @@ int WorldSocket::ProcessIncoming (WorldPacket* new_pct)
     if (closing_)
         return -1;
 
+	sLog->outString("CLIENT:\nSOCKET: %u\nLENGTH: %u\nOPCODE: %s (0x%.4X)\nDATA:\n",
+                 (uint32) get_handle(),
+                 new_pct->size(),
+                 LookupOpcodeName (new_pct->GetOpcode()),
+                 new_pct->GetOpcode());
+
     // Dump received packet.
     if (sWorldLog->LogWorld())
     {
