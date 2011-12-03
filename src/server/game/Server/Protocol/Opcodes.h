@@ -50,7 +50,7 @@ enum Opcodes
     SMSG_CHAR_CREATE                                 = 0x0F7EC, // 4.0.6a 13623
     SMSG_CHAR_ENUM                                   = 0x004AC, // 4.3.0 15050
     SMSG_CHAR_DELETE                                 = 0x0BC80, // 4.0.6a 13623
-    CMSG_PLAYER_LOGIN                                = 0x08180, // 4.0.6a 13623
+    CMSG_PLAYER_LOGIN                                = 0x00326, // 4.3.0 15050
     SMSG_NEW_WORLD                                   = 0x0451E, // 4.0.6a 13623
     SMSG_TRANSFER_PENDING                            = 0x07BE0, // 4.0.6a 13623
     SMSG_TRANSFER_ABORTED                            = 0x02BE0, // 4.0.6a 13623
@@ -1046,7 +1046,7 @@ enum Opcodes
     SMSG_SPELL_CHANCE_RESIST_PUSHBACK                = 0x1019C, // Unknown opcode ID
     CMSG_IGNORE_DIMINISHING_RETURNS_CHEAT            = 0x1019D, // Unknown opcode ID
     SMSG_IGNORE_DIMINISHING_RETURNS_CHEAT            = 0x0747E, // 4.0.3a 13329 - 403
-    CMSG_KEEP_ALIVE                                  = 0x02CE0, // 4.0.6a 13623
+    CMSG_KEEP_ALIVE                                  = 0x066A0, // 4.3.0 15050
     SMSG_RAID_READY_CHECK_ERROR                      = 0x0547E, // 4.0.3a 13329 - 403
     CMSG_OPT_OUT_OF_LOOT                             = 0x075A4, // 4.0.6a 13623
     MSG_QUERY_GUILD_BANK_TEXT                        = 0x0A2C4, // 4.0.6a 13623
@@ -1282,8 +1282,8 @@ enum Opcodes
     SMSG_REDIRECT_CLIENT                             = 0x00703, // 4.3.0 15050
     CMSG_REDIRECTION_FAILED                          = 0x10007, // Unknown opcode ID
     SMSG_UNKNOWN_1295                                = 0x10008, // Unknown opcode Name, 4.0.6  13529
-    CMSG_UNKNOWN_1296                                = 0x10009, // Unknown opcode Name, 4.0.6  13529
-    SMSG_FORCE_SEND_QUEUED_PACKETS                   = 0x02880, // 4.0.6a 13623
+    CMSG_UNKNOWN_1296                                = 0x05108, // 4.3.0 15050, // Unknown opcode Name
+    SMSG_FORCE_SEND_QUEUED_PACKETS                   = 0x01322, // 4.3.0 15050
     CMSG_REDIRECTION_AUTH_PROOF                      = 0x04108, // 4.3.0 15050
     SMSG_COMBAT_LOG_MULTIPLE                         = 0x033A8, // 4.0.6a 13623
     SMSG_LFG_OPEN_FROM_GOSSIP                        = 0x071EC, // 4.0.6a 13623
