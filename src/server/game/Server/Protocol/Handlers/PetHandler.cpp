@@ -252,7 +252,7 @@ void WorldSession::HandlePetActionHelper(Unit* pet, uint64 guid1, uint16 spellid
                         if (pet->isPet())
                         {
                             if (((Pet*)pet)->getPetType() == HUNTER_PET)
-                                GetPlayer()->RemovePet((Pet*)pet, PET_SAVE_AS_DELETED);
+                                GetPlayer()->RemovePet((Pet*)pet, PET_SLOT_DELETED);
                             else
                                 //dismissing a summoned pet is like killing them (this prevents returning a soulshard...)
                                 pet->setDeathState(CORPSE);
@@ -681,7 +681,7 @@ void WorldSession::HandlePetAbandon(WorldPacket & recv_data)
                 pet->SetPower(POWER_HAPPINESS , feelty > 50000 ? (feelty-50000) : 0);
             }
 
-            _player->RemovePet((Pet*)pet, PET_SAVE_AS_DELETED);
+            _player->RemovePet((Pet*)pet, PET_SLOT_DELETED);
         }
         else if (pet->GetGUID() == _player->GetCharmGUID())
             _player->StopCastingCharm();

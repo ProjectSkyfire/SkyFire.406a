@@ -1,0 +1,2 @@
+ALTER TABLE character_version CHANGE COLUMN required_2011_12_02_00_characters_version required_2011_12_02_02_characters_version_test bit;
+-- Example Version update to be added at the top of each update.

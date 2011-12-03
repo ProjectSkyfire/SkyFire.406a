@@ -1729,7 +1729,7 @@ class Unit : public WorldObject
         Player* GetCharmerOrOwnerPlayerOrPlayerItself() const;
         Player* GetAffectingPlayer() const;
 
-        void SetMinion(Minion *minion, bool apply);
+        void SetMinion(Minion *minion, bool apply, PetSlot slot);
         void GetAllMinionsByEntry(std::list<Creature*>& Minions, uint32 entry);
         void RemoveAllMinionsByEntry(uint32 entry);
         void SetCharm(Unit* target, bool apply);
@@ -1812,7 +1812,7 @@ class Unit : public WorldObject
         void RemoveAurasWithInterruptFlags(uint32 flag, uint32 except = 0);
         void RemoveAurasWithAttribute(uint32 flags);
         void RemoveAurasWithFamily(SpellFamilyNames family, uint32 familyFlag1, uint32 familyFlag2, uint32 familyFlag3, uint64 casterGUID);
-        void RemoveAurasWithMechanic(uint32 mechanic_mask, AuraRemoveMode removemode = AURA_REMOVE_BY_DEFAULT, uint32 except=0);
+        void RemoveAurasWithMechanic(uint32 mechanic_mask, AuraRemoveMode removemode = AURA_REMOVE_BY_DEFAULT, uint32 except = 0, int32 count = 0);
         void RemoveMovementImpairingAuras();
 
         void RemoveAreaAurasDueToLeaveWorld();
@@ -2456,21 +2456,16 @@ inline void Unit::SendMonsterMoveByPath(Path<Elem, Node> const& path, uint32 sta
     data << uint32(getMSTime());
     data << uint8(0);
     uint32 splineflags = ((GetUnitMovementFlags() & MOVEMENTFLAG_LEVITATING) || isInFlight()) ? (SPLINEFLAG_FLYING|SPLINEFLAG_WALKING) : SPLINEFLAG_WALKING;
-    data << uint32(splineflags);
-    data << uint32(traveltime / pathSize);
-    data << uint32(1/*pathSize*/);
+    data << uint32(splineflags | SPLINEFLAG_UNKNOWN31);
+    data << uint32(traveltime);
+    data << uint32(pathSize);
 
-    
-    data << float(path[end -1].x);
-    data << float(path[end -1].y);
-    data << float(path[end -1].z);
-
-    /*for(uint32 i = start + 1; i < end - 1; ++i)
+    for(uint32 i = start + 1; i < end - 1; ++i)
     {
         data << float(path[i].x);
         data << float(path[i].y);
         data << float(path[i].z);
-    }*/
+    }
     /*if(!(splineflags & SPLINEFLAG_FLYING))
     {
         data << float(path[end - 1].x);
