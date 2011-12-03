@@ -2414,13 +2414,6 @@ void Spell::EffectApplyAura(SpellEffIndex effIndex)
     if (!m_spellAura || !unitTarget)
         return;
 
-    switch (m_spellAura->GetId())
-    {
-        case 38177:  // Blackwhelp Net
-            if (unitTarget->GetEntry() != 21387) //Wyrmcult Blackwhelp
-                return;
-    }
-
     ASSERT(unitTarget == m_spellAura->GetOwner());
     m_spellAura->_ApplyEffectForTargets(effIndex);
 }
