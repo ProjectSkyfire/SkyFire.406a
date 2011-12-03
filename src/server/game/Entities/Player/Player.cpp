@@ -1876,12 +1876,12 @@ void Player::BuildEnumData(QueryResult result, WorldPacket * p_data)
     if (result && !(playerFlags & PLAYER_FLAGS_GHOST) && (pClass == CLASS_WARLOCK || pClass == CLASS_HUNTER || pClass == CLASS_DEATH_KNIGHT))	
     {
         uint32 entry = fields[16].GetUInt32();
-        CreatureInfo const* cInfo = sCreatureStorage.LookupEntry<CreatureInfo>(entry);
-        if (cInfo)
+        CreatureTemplate const* creatureInfo = sObjectMgr->GetCreatureTemplate(entry);
+        if (creatureInfo)
         {
             petDisplayId = fields[17].GetUInt32();
             petLevel     = fields[18].GetUInt16();
-            petFamily    = cInfo->family;
+            petFamily    = creatureInfo->family;
         }
     }
 
@@ -1929,7 +1929,7 @@ void Player::BuildEnumData(QueryResult result, WorldPacket * p_data)
     {
         uint32 visualbase = slot * 2;
         uint32 item_id = GetUInt32ValueFromArray(data, visualbase);
-        const ItemPrototype * proto = ObjectMgr::GetItemPrototype(item_id);
+        const ItemTemplate * proto = sObjectMgr->GetItemTemplate(item_id);
         if (!proto)
         {
             *p_data << uint32(0);
