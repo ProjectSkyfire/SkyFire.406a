@@ -1276,4 +1276,5 @@ void InitOpcodeTable()
     OPCODE( CMSG_RETURN_TO_GRAVEYARD,                     STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
     OPCODE( CMSG_REFORGE_ITEM,                            STATUS_LOGGEDIN, PROCESS_INPLACE,       &WorldSession::HandleReforgeItem               );
     OPCODE( CMSG_LOG_DISCONNECT,                          STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_EarlyProccess            );
+    OPCODE( MSG_CHECK_CONNECTION,                         STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_EarlyProccess            );
 };

@@ -1346,6 +1346,7 @@ enum Opcodes
 	CMSG_QUERY_GUILD_MEMBERS_FOR_RECIPE              = 0x0210D, // 4.0.6a 13623
 	CMSG_GUILD_NEWS_SET_STICKY                       = 0x0252D, // 4.0.6a 13623
 	CMSG_LOG_DISCONNECT                              = 0x00108, // 4.3.0 15050
+    MSG_CHECK_CONNECTION                             = 0x04F57, // 4.3.0 15050
 	NUM_MSG_TYPES                                    = 0x102B8  // last unknown opcode + 1.
 };
 

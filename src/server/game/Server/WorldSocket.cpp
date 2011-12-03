@@ -733,6 +733,9 @@ int WorldSocket::ProcessIncoming (WorldPacket* new_pct)
     {
         switch (opcode)
         {
+            case MSG_CHECK_CONNECTION:
+                sScriptMgr->OnPacketReceive(this, WorldPacket(*new_pct));
+                return HandleAuthConnection(*new_pct);
             case CMSG_PING:
                 return HandlePing (*new_pct);
             case CMSG_AUTH_SESSION:
