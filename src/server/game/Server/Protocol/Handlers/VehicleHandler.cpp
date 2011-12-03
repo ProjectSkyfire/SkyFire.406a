@@ -51,7 +51,7 @@ void WorldSession::HandleDismissControlledVehicle(WorldPacket &recv_data)
 }
 
 void WorldSession::HandleChangeSeatsOnControlledVehicle(WorldPacket &recv_data)
-{ /*
+{
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Recvd CMSG_CHANGE_SEATS_ON_CONTROLLED_VEHICLE");
 
     Unit* vehicle_base = GetPlayer()->GetVehicleBase();
@@ -122,7 +122,7 @@ void WorldSession::HandleChangeSeatsOnControlledVehicle(WorldPacket &recv_data)
         }
         default:
             break;
-    }*/
+    }
 }
 
 void WorldSession::HandleEnterPlayerVehicle(WorldPacket &data)

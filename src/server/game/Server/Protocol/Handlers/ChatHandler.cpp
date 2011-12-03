@@ -66,7 +66,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 {
     uint32 type;
     uint32 lang;
-    /*
+
     switch (recv_data.GetOpcode())
     {
         case CMSG_MESSAGECHAT_SAY:
@@ -120,7 +120,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
         default:
             break;
     }
-    */
+
     if (type != CHAT_MSG_EMOTE && type != CHAT_MSG_AFK && type != CHAT_MSG_DND)
         recv_data >> lang;
     else
