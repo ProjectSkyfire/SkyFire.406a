@@ -268,15 +268,25 @@ int WorldSocket::open (void *a)
 
     m_Address = remote_addr.get_host_addr();
 
+    WorldPacket packet (0 , 45);   // 4.1 hack
+    packet.SetOpcode(((uint32)'O' << 8) | (uint32)'W');
+    packet << "RLD OF WARCRAFT CONNECTION - SERVER TO CLIENT";
+    if (SendPacket(packet) == -1)
+        return -1;
+
     // Send startup packet.
-    WorldPacket packet(SMSG_AUTH_CHALLENGE, 37);
+    packet.Initialize(SMSG_AUTH_CHALLENGE, 37);
 
-    for (uint32 i = 0; i < 8; i++)
-        packet << uint32(0);
+    BigNumber seed1;
+    seed1.SetRand(16 * 8);
+    packet.append(seed1.AsByteArray(16), 16);               // new encryption seeds
 
-    packet << m_Seed;
+    packet << uint32(m_Seed);
     packet << uint8(1);
-    return SendPacket(packet);
+
+    BigNumber seed2;
+    seed2.SetRand(16 * 8);
+    packet.append(seed2.AsByteArray(16), 16);               // new encryption seeds
 
     if (SendPacket(packet) == -1)
         return -1;
@@ -693,7 +703,7 @@ int WorldSocket::ProcessIncoming (WorldPacket* new_pct)
     if (closing_)
         return -1;
 
-	sLog->outString("CLIENT:\nSOCKET: %u\nLENGTH: %u\nOPCODE: %s (0x%.4X)\nDATA:\n",
+    sLog->outString("CLIENT:\nSOCKET: %u\nLENGTH: %u\nOPCODE: %s (0x%.4X)\nDATA:\n",
                  (uint32) get_handle(),
                  new_pct->size(),
                  LookupOpcodeName (new_pct->GetOpcode()),
@@ -761,6 +771,17 @@ int WorldSocket::ProcessIncoming (WorldPacket* new_pct)
                 }
                 else
                 {
+                    if(opcode == 0)
+                    {
+                        // 4.1 plaintext init message BS
+                        std::string msg;
+                        (*new_pct) >> msg;
+                        if(!msg.empty() && msg.compare(std::string("D OF WARCRAFT CONNECTION - CLIENT TO SERVER")) == 0)
+                        {
+                            // just ignore
+                            return 0;
+                        }
+                    }
                     sLog->outError ("WorldSocket::ProcessIncoming: Client not authed opcode = %u", uint32(opcode));
                     return -1;
                 }
