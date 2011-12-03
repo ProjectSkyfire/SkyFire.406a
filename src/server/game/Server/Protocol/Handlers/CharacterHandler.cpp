@@ -205,27 +205,93 @@ void WorldSession::HandleCharEnum(QueryResult result)
 {
     WorldPacket data(SMSG_CHAR_ENUM, 100);                  // we guess size
 
-    uint8 num = 0;
+    uint32 num = 0;
 
+    data << uint8(1 << 7); // 0 causes the client to free memory of charlist
+    data << uint32(0); // unk loop counter
     data << num;
 
     _allowedCharsToLogin.clear();
     if (result)
     {
+        uint8 curRes = 0;
+        uint8 curPos = 0;
         do
         {
             uint32 guidlow = (*result)[0].GetUInt32();
-            sLog->outDetail("Loading char guid %u from account %u.", guidlow, GetAccountId());
-            if (Player::BuildEnumData(result, &data))
+            uint8 pRace = (*result)[2].GetUInt8();
+            uint8 pClass = (*result)[3].GetUInt8();
+            uint32 atLoginFlags = (*result)[15].GetUInt32();
+
+            PlayerInfo const *info = sObjectMgr->GetPlayerInfo(pRace, pClass);
+            if (info != NULL)
             {
                 _allowedCharsToLogin.insert(guidlow);
                 ++num;
             }
+            else
+            {
+                sLog->outError("Player %u has incorrect race/class pair. Don't build enum.", guidlow);
+                continue;
+            }
+
+            for (int i = 0; i < 17; ++i)
+            {
+                if (curPos == 8)
+                {
+                    data << curRes;
+                    curRes = curPos = 0;
+                }
+
+                ++curPos;
+                uint8 offset = 8-curPos;
+                // Low PlayerGUID
+                if (i == 0) // v79
+                {
+                    if (uint8(guidlow) != 0)
+                        curRes |= (1 << offset);
+                }
+                else if (i == 7) // v68
+                {
+                    if (uint8(guidlow >> 8) != 0)
+                        curRes |= (1 << offset);
+                }
+                else if (i == 12) // v70
+                {
+                    if (uint8(guidlow >> 16) != 0)
+                        curRes |= (1 << offset);
+                }
+                else if (i == 11) // v78
+                {
+                    if (uint8(guidlow >> 24) != 0)
+                        curRes |= (1 << offset);
+                }
+                // Low PlayerGUID end
+                // First Login
+                else if (i == 1)
+                {
+                    if (atLoginFlags & AT_LOGIN_FIRST)
+                        curRes |= (1 << offset);
+                }
+                // Also sent in packet stream: Player High GUID, Guild GUID (8 bytes)
+            }
+        } while(result->NextRow(true));
+
+        // If some data is still there, but we didn't reach the max bit
+        if (curPos != 8 && curPos != 0)
+            data << curRes;
+
+        result->Reset();
+        do
+        {
+            uint32 guidlow = (*result)[0].GetUInt32();
+            sLog->outDetail("Loading char guid %u from account %u.",guidlow,GetAccountId());
+            Player::BuildEnumData(result, &data);
         }
         while (result->NextRow());
     }
 
-    data.put<uint8>(0, num);
+    data.put<uint32>(5, num);
 
     SendPacket(&data);
 }

@@ -146,7 +146,10 @@ PreparedResultSet::~PreparedResultSet()
         delete[] m_rows[i];
 }
 
-bool ResultSet::NextRow()
+// set no_cleanup to true if you don't want the query result to be deleted  
+// upon reaching the last row (for example if you wanna re-iterate the resultset) 
+bool ResultSet::NextRow(bool no_cleanup) 
+
 {
     MYSQL_ROW row;
 
@@ -156,7 +159,8 @@ bool ResultSet::NextRow()
     row = mysql_fetch_row(m_result);
     if (!row)
     {
-        CleanUp();
+        if (!no_cleanup) 
+            CleanUp(); 
         return false;
     }
 

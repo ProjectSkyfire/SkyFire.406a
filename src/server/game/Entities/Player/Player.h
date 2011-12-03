@@ -1152,7 +1152,7 @@ class Player : public Unit, public GridObject<Player>
 
         void Update(uint32 time);
 
-        static bool BuildEnumData(QueryResult result, WorldPacket* data);
+        static void BuildEnumData(QueryResult result,  WorldPacket* p_data);
 
         void SetInWater(bool apply);
 
