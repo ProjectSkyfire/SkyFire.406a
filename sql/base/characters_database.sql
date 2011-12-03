@@ -757,6 +757,17 @@ LOCK TABLES `character_tutorial` WRITE;
 /*!40000 ALTER TABLE `character_tutorial` DISABLE KEYS */;
 /*!40000 ALTER TABLE `character_tutorial` ENABLE KEYS */;
 UNLOCK TABLES;
+DROP TABLE IF EXISTS `character_version`;
+CREATE TABLE `character_version` (
+  `core_version` varchar(120) NOT NULL DEFAULT 'SkyFireEMU Rebase 4.0.6a' COMMENT 'Core revision dumped at startup.',
+  `2011_12_02_00_characters_version.sql` date NOT NULL COMMENT 'Version of world DB.'
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=FIXED COMMENT='Version Notes';
+
+LOCK TABLES `character_version` WRITE;
+/*!40000 ALTER TABLE `character_version` DISABLE KEYS */;
+INSERT INTO `character_version` VALUES ('SkyFireEMU Rebase 4.0.6a','2011-12-02');
+/*!40000 ALTER TABLE `character_version` ENABLE KEYS */;
+UNLOCK TABLES;
 DROP TABLE IF EXISTS `characters`;
 CREATE TABLE `characters` (
   `guid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Global Unique Identifier',
