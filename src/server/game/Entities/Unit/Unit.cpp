@@ -3960,16 +3960,20 @@ void Unit::RemoveMovementImpairingAuras()
     RemoveAurasWithMechanic((1<<MECHANIC_SNARE)|(1<<MECHANIC_ROOT));
 }
 
-void Unit::RemoveAurasWithMechanic(uint32 mechanic_mask, AuraRemoveMode removemode, uint32 except)
+void Unit::RemoveAurasWithMechanic(uint32 mechanic_mask, AuraRemoveMode removemode, uint32 except, int32 count)
 {
     for (AuraApplicationMap::iterator iter = m_appliedAuras.begin(); iter != m_appliedAuras.end();)
     {
+        int32 auracount = 0;
         Aura const* aura = iter->second->GetBase();
         if (!except || aura->GetId() != except)
         {
             if (aura->GetSpellInfo()->GetAllEffectsMechanicMask() & mechanic_mask)
             {
                 RemoveAura(iter, removemode);
+                auracount++;
+                if (count && auracount == count)
+                    break;
                 continue;
             }
         }
@@ -8816,26 +8820,6 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
                     trigger_spell_id = 50475;
                     basepoints0 = CalculatePctN(int32(damage), triggerAmount);
                 }
-                // Sudden Doom
-                else if(auraSpellInfo->SpellIconID == 1939)
-                {
-                    if(GetTypeId() != TYPEID_PLAYER)
-                        return false;
-
-                    // Select chance based on weapon speed
-                    float speed = ToPlayer()->GetWeaponForAttack(BASE_ATTACK)->GetTemplate()->Delay / 1000;
-
-                    int32 modifier = 1;
-
-                    if(auraSpellInfo->Id == 49530) // Rank 3
-                        modifier = 4;
-                    else if(auraSpellInfo->Id == 49529) // Rank 2
-                        modifier = 3;
-
-                    // ToDo: Check this, its based on a wowhead comment
-                    if(!roll_chance_f(speed * modifier))
-                        return false;
-                }
                 break;
             }
             default:
@@ -9028,6 +9012,29 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
             ToPlayer()->RemoveSpellCooldown(48982,true); // Remove cooldown of rune tap
             CastSpell(this,96171,true); // next rune tap wont cost runes
             cooldown = 45000; // Can only happen once in 45 seconds
+            break;
+        }
+        // Sudden Doom
+        case 49018:
+        case 49529:
+        case 49530:
+        {
+            if(GetTypeId() != TYPEID_PLAYER)
+                return false;
+
+            // Select chance based on weapon speed
+            float speed = ToPlayer()->GetWeaponForAttack(BASE_ATTACK)->GetTemplate()->Delay / 1000;
+
+            int32 modifier = 1;
+
+            if(auraSpellInfo->Id == 49530) // Rank 3
+                modifier = 4;
+            else if(auraSpellInfo->Id == 49529) // Rank 2
+                modifier = 3;
+
+            // ToDo: Check this, its based on a wowhead comment
+            if(!roll_chance_f(speed * modifier))
+                return false;
             break;
         }
     }
@@ -10054,7 +10061,7 @@ Unit* Unit::GetCharm() const
     return NULL;
 }
 
-void Unit::SetMinion(Minion *minion, bool apply)
+void Unit::SetMinion(Minion *minion, bool apply, PetSlot slot)
 {
     sLog->outDebug(LOG_FILTER_UNITS, "SetMinion %u for %u, apply %u", minion->GetEntry(), GetEntry(), apply);
 
@@ -10083,7 +10090,7 @@ void Unit::SetMinion(Minion *minion, bool apply)
                 {
                     // remove existing minion pet
                     if (oldPet->isPet())
-                        ((Pet*)oldPet)->Remove(PET_SAVE_AS_CURRENT);
+                        ((Pet*)oldPet)->Remove(PET_SLOT_ACTUAL_PET_SLOT);
                     else
                         oldPet->UnSummon();
                     SetPetGUID(minion->GetGUID());
@@ -10094,6 +10101,29 @@ void Unit::SetMinion(Minion *minion, bool apply)
             {
                 SetPetGUID(minion->GetGUID());
                 SetMinionGUID(0);
+            }
+        }
+        
+        if (slot == PET_SLOT_UNK_SLOT)
+        {
+            if (minion->isPet() && minion->ToPet()->getPetType() == HUNTER_PET)
+                ASSERT(false);
+                
+            slot = PET_SLOT_OTHER_PET;
+        }
+       
+        if (GetTypeId() == TYPEID_PLAYER)
+        {
+            if(!minion->isHunterPet()) //If its not a Hunter Pet, well lets not try to use it for hunters then.
+            {   
+                ToPlayer()->m_currentPetSlot = slot;
+                ToPlayer()->m_petSlotUsed = 3452816845; // the same as 100 so that the pet is only that and nothing more
+                // ToPlayer()->setPetSlotUsed(slot, true);
+            }
+            if(slot >= PET_SLOT_HUNTER_FIRST && slot <= PET_SLOT_HUNTER_LAST) // Always save thoose spots where hunter is correct
+            {
+                ToPlayer()->m_currentPetSlot = slot;
+                ToPlayer()->setPetSlotUsed(slot, true);       
             }
         }
 

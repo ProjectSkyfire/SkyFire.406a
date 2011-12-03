@@ -843,7 +843,7 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                 {
                     m_caster->CastSpell(m_caster, 29940, true, NULL);
                     return;
-                }				
+                }
                 case 23019:                                 // Crystal Prison Dummy DND
                 {
                     if (!unitTarget || !unitTarget->isAlive() || unitTarget->GetTypeId() != TYPEID_UNIT || unitTarget->ToCreature()->isPet())
@@ -1601,6 +1601,17 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
 
                 m_caster->CastSpell(unitTarget, damage, true);
                 return;
+
+                switch(m_spellInfo->Id)
+                {
+                    case 50286: m_caster->CastSpell(unitTarget, 50288, true); return;
+                    //case 53196: m_caster->CastSpell(unitTarget, 53191, true); return;  //depreciated?
+                    //case 53197: m_caster->CastSpell(unitTarget, 53194, true); return;  //depreciated?
+                    //case 53198: m_caster->CastSpell(unitTarget, 53195, true); return;  //depreciated?
+                    default:
+                        sLog->outError("Spell::EffectDummy: Unhandled Starfall spell rank %u", m_spellInfo->Id);
+                        return;
+                }
             }
             break;
         }
@@ -4201,6 +4212,13 @@ void Spell::EffectTameCreature(SpellEffIndex /*effIndex*/)
     if (m_caster->getClass() != CLASS_HUNTER)
         return;
 
+    // If we have a full list we shoulden't be able to create a new one.
+    if (m_caster->ToPlayer()->getSlotForNewPet() == PET_SLOT_FULL_LIST)
+    {
+        m_caster->ToPlayer()->SendPetTameResult(PET_TAME_ERROR_TOO_MANY_PETS);
+        return;
+    }
+
     // cast finish successfully
     //SendChannelUpdate(0);
     finish();
@@ -4224,13 +4242,13 @@ void Spell::EffectTameCreature(SpellEffIndex /*effIndex*/)
     pet->SetUInt32Value(UNIT_FIELD_LEVEL, level);
 
     // caster have pet now
-    m_caster->SetMinion(pet, true);
+    m_caster->SetMinion(pet, true , m_caster->ToPlayer()->getSlotForNewPet());
 
     pet->InitTalentForLevel();
 
     if (m_caster->GetTypeId() == TYPEID_PLAYER)
     {
-        pet->SavePetToDB(PET_SAVE_AS_CURRENT);
+        pet->SavePetToDB(PET_SLOT_ACTUAL_PET_SLOT);
         m_caster->ToPlayer()->PetSpellInitialize();
     }
 }
@@ -4288,14 +4306,14 @@ void Spell::EffectSummonPet(SpellEffIndex effIndex)
         }
 
         if (owner->GetTypeId() == TYPEID_PLAYER)
-            owner->ToPlayer()->RemovePet(OldSummon, (OldSummon->getPetType() == HUNTER_PET ? PET_SAVE_AS_DELETED : PET_SAVE_NOT_IN_SLOT), false);
+            owner->ToPlayer()->RemovePet(OldSummon, PET_SLOT_DELETED, false);
         else
             return;
     }
 
     float x, y, z;
     owner->GetClosePoint(x, y, z, owner->GetObjectSize());
-    Pet* pet = owner->SummonPet(petentry, x, y, z, owner->GetOrientation(), SUMMON_PET, 0);
+    Pet* pet = owner->SummonPet(petentry, x, y, z, owner->GetOrientation(), SUMMON_PET, m_caster->CalcSpellDuration(m_spellInfo), PetSlot(m_spellInfo->Effects[effIndex].BasePoints));
     if (!pet)
         return;
 
@@ -4339,7 +4357,7 @@ void Spell::EffectLearnPetSpell(SpellEffIndex effIndex)
         return;
 
     pet->learnSpell(learn_spellproto->Id);
-    pet->SavePetToDB(PET_SAVE_AS_CURRENT);
+    pet->SavePetToDB(PET_SLOT_ACTUAL_PET_SLOT);
     pet->GetOwner()->PetSpellInitialize();
 }
 
@@ -4634,12 +4652,6 @@ void Spell::EffectWeaponDmg(SpellEffIndex effIndex)
             if (m_spellInfo->SpellFamilyFlags[1] & 0x20000)
             {
                 AddPctF(totalDamagePercentMod, m_spellInfo->Effects[EFFECT_2].CalcValue() * unitTarget->GetDiseasesByCaster(m_caster->GetGUID(), false) / 2.0f);
-                break;
-            }
-            // Scourge Strike ( for each of your diseases on your target, you deal an additional 18% of the Physical damage done as Shadow damage.)
-            if(m_spellInfo->SpellFamilyFlags[1] & 0x8000000)
-            {
-                AddPctF(totalDamagePercentMod, m_spellInfo->Effects[EFFECT_2].CalcValue() * unitTarget->GetDiseasesByCaster(m_caster->GetGUID(), false));
                 break;
             }
             // Blood-Caked Strike - Blood-Caked Blade
@@ -5842,7 +5854,7 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
                     // cast Whiteout visual
                     m_caster->CastSpell(unitTarget, 72036, true);
                     return;
-                }               
+                }
                 case 64142:                                 // Upper Deck - Create Foam Sword
                     if (unitTarget->GetTypeId() != TYPEID_PLAYER)
                         return;
@@ -6417,7 +6429,7 @@ void Spell::EffectDismissPet(SpellEffIndex effIndex)
     Pet* pet = unitTarget->ToPet();
 
     ExecuteLogEffectUnsummonObject(effIndex, pet);
-    pet->GetOwner()->RemovePet(pet, PET_SAVE_NOT_IN_SLOT);
+    pet->GetOwner()->RemovePet(pet, PET_SLOT_ACTUAL_PET_SLOT);
 }
 
 void Spell::EffectSummonObject(SpellEffIndex effIndex)
@@ -6961,7 +6973,7 @@ void Spell::EffectSummonDeadPet(SpellEffIndex /*effIndex*/)
 
     //pet->AIM_Initialize();
     //_player->PetSpellInitialize();
-    pet->SavePetToDB(PET_SAVE_AS_CURRENT);
+    pet->SavePetToDB(PET_SLOT_ACTUAL_PET_SLOT);
 }
 
 void Spell::EffectDestroyAllTotems(SpellEffIndex /*effIndex*/)
@@ -7521,13 +7533,14 @@ void Spell::EffectCreateTamedPet(SpellEffIndex effIndex)
     pet->GetMap()->AddToMap(pet->ToCreature());
 
     // unitTarget has pet now
-    unitTarget->SetMinion(pet, true);
+    unitTarget->SetMinion(pet, true, PET_SLOT_ACTUAL_PET_SLOT);
 
     pet->InitTalentForLevel();
 
     if (unitTarget->GetTypeId() == TYPEID_PLAYER)
     {
-        pet->SavePetToDB(PET_SAVE_AS_CURRENT);
+        m_caster->ToPlayer()->m_currentPetSlot = m_caster->ToPlayer()->getSlotForNewPet();
+        pet->SavePetToDB(m_caster->ToPlayer()->m_currentPetSlot);
         unitTarget->ToPlayer()->PetSpellInitialize();
     }
 }

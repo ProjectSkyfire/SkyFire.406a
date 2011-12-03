@@ -2174,11 +2174,11 @@ SpellSpecificType SpellInfo::GetSpellSpecific() const
         }
         case SPELLFAMILY_PALADIN:
         {
-            // Collection of all the seal family flags.
-            (SpellFamilyFlags[1] & 0x80000000 // Seal of Justice
-            || SpellFamilyFlags[1] & 0x20000000 // Seal of Righteoussness
-            || SpellFamilyFlags[1] & 0x00000800  // Seal of Truth
-            || SpellFamilyFlags[1] & 0x02000000); // Seal of Insigth
+            // Collection of all the seal ids.
+            if (Id == 20164 // Seal of Justice
+            || Id == 20154 // Seal of Righteoussness
+            || Id == 31801  // Seal of Truth
+            || Id == 20165) // Seal of Insigth
                 return SPELL_SPECIFIC_SEAL;
 
             if (SpellFamilyFlags[0] & 0x00002190)

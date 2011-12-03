@@ -1,4 +1,4 @@
-DELETE FROM spell_bonus_data WHERE entry IN (50288,50294);
+DELETE FROM spell_bonus_data WHERE entry IN (48505,50286);
 INSERT INTO spell_bonus_data VALUES
-(50288,0.3,0,0,0,'Druid - Starfall'),
-(50294,0.13,0,0,0,'Druid - Starfall AOE');
+(48505,0.3,0,0,0,'Druid - Starfall'),
+(50286,0.13,0,0,0,'Druid - Starfall (AOE)');

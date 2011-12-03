@@ -5390,18 +5390,35 @@ SpellCastResult Spell::CheckCast(bool strict)
 
                         if (!m_targets.GetUnitTarget() || m_targets.GetUnitTarget()->GetTypeId() == TYPEID_PLAYER)
                             return SPELL_FAILED_BAD_IMPLICIT_TARGETS;
+                            
+                        // Check if there are to many so that you don't get mixed with pets
+                        // being there from the begining
+                        if (m_caster->ToPlayer()->getSlotForNewPet() == PET_SLOT_FULL_LIST)
+                        {   
+                            m_caster->ToPlayer()->SendPetTameResult(PET_TAME_ERROR_TOO_MANY_PETS);
+                            return SPELL_FAILED_NO_ACTIONS;
+                        }
+
 
                         Creature* target = m_targets.GetUnitTarget()->ToCreature();
 
                         if (target->getLevel() > m_caster->getLevel())
-                            return SPELL_FAILED_HIGHLEVEL;
+                        {
+                            m_caster->ToPlayer()->SendPetTameResult(PET_TAME_ERROR_TOO_HIGH_LEVEL);
+                            return SPELL_FAILED_NO_ACTIONS;
+                        }
 
-                        // use SMSG_PET_TAME_FAILURE?
                         if (!target->GetCreatureInfo()->isTameable (m_caster->ToPlayer()->CanTameExoticPets()))
-                            return SPELL_FAILED_BAD_TARGETS;
+                        {
+                            m_caster->ToPlayer()->SendPetTameResult(PET_TAME_ERROR_CANT_CONTROL_EXOTIC);
+                            return SPELL_FAILED_NO_ACTIONS;
+                        }
 
                         if (m_caster->GetPetGUID())
-                            return SPELL_FAILED_ALREADY_HAVE_SUMMON;
+                        {
+                            m_caster->ToPlayer()->SendPetTameResult(PET_TAME_ERROR_ANOTHER_SUMMON_ACTIVE);
+                            return SPELL_FAILED_NO_ACTIONS;
+                        }
 
                         if (m_caster->GetCharmGUID())
                             return SPELL_FAILED_ALREADY_HAVE_CHARM;

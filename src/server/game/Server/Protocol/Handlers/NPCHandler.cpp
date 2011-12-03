@@ -461,7 +461,7 @@ void WorldSession::SendBindPoint(Creature *npc)
 void WorldSession::HandleListStabledPetsOpcode(WorldPacket & recv_data)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Recv MSG_LIST_STABLED_PETS");
-    uint64 npcGUID;
+    /*uint64 npcGUID;
 
     recv_data >> npcGUID;
 
@@ -476,16 +476,16 @@ void WorldSession::HandleListStabledPetsOpcode(WorldPacket & recv_data)
     if (GetPlayer()->IsMounted())
         GetPlayer()->RemoveAurasByType(SPELL_AURA_MOUNTED);
 
-    SendStablePet(npcGUID);
+    SendStablePet(npcGUID);*/
 }
 
 void WorldSession::SendStablePet(uint64 guid)
 {
-    _sendStabledPetCallback.SetParam(guid);
+    /*_sendStabledPetCallback.SetParam(guid);
     _sendStabledPetCallback.SetFutureResult(
         CharacterDatabase.AsyncPQuery("SELECT owner, id, entry, level, name FROM character_pet WHERE owner = '%u' AND slot >= '%u' AND slot <= '%u' ORDER BY slot",
             _player->GetGUIDLow(), PET_SAVE_FIRST_STABLE_SLOT, PET_SAVE_LAST_STABLE_SLOT)
-        );
+        );*/
 }
 
 void WorldSession::SendStablePetCallback(QueryResult result, uint64 guid)
@@ -495,7 +495,7 @@ void WorldSession::SendStablePetCallback(QueryResult result, uint64 guid)
 
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Recv MSG_LIST_STABLED_PETS Send.");
 
-    WorldPacket data(MSG_LIST_STABLED_PETS, 200);           // guess size
+    /*WorldPacket data(MSG_LIST_STABLED_PETS, 200);           // guess size
 
     data << uint64 (guid);
 
@@ -537,7 +537,7 @@ void WorldSession::SendStablePetCallback(QueryResult result, uint64 guid)
     }
 
     data.put<uint8>(wpos, num);                             // set real data to placeholder
-    SendPacket(&data);
+    SendPacket(&data);*/
 }
 
 void WorldSession::SendStableResult(uint8 res)
@@ -550,7 +550,7 @@ void WorldSession::SendStableResult(uint8 res)
 void WorldSession::HandleStablePet(WorldPacket & recv_data)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Recv CMSG_STABLE_PET");
-    uint64 npcGUID;
+    /*uint64 npcGUID;
 
     recv_data >> npcGUID;
 
@@ -580,12 +580,12 @@ void WorldSession::HandleStablePet(WorldPacket & recv_data)
     }
 
     _stablePetCallback = CharacterDatabase.AsyncPQuery("SELECT owner, slot, id FROM character_pet WHERE owner = '%u'  AND slot >= '%u' AND slot <= '%u' ORDER BY slot ",
-        _player->GetGUIDLow(), PET_SAVE_FIRST_STABLE_SLOT, PET_SAVE_LAST_STABLE_SLOT);
+        _player->GetGUIDLow(), PET_SAVE_FIRST_STABLE_SLOT, PET_SAVE_LAST_STABLE_SLOT);*/
 }
 
 void WorldSession::HandleStablePetCallback(QueryResult result)
 {
-    if (!GetPlayer())
+    /*if (!GetPlayer())
         return;
 
     uint32 free_slot = 1;
@@ -614,13 +614,13 @@ void WorldSession::HandleStablePetCallback(QueryResult result)
         SendStableResult(STABLE_SUCCESS_STABLE);
     }
     else
-        SendStableResult(STABLE_ERR_STABLE);
+        SendStableResult(STABLE_ERR_STABLE);*/
 }
 
 void WorldSession::HandleUnstablePet(WorldPacket & recv_data)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Recv CMSG_UNSTABLE_PET.");
-    uint64 npcGUID;
+    /*uint64 npcGUID;
     uint32 petnumber;
 
     recv_data >> npcGUID >> petnumber;
@@ -639,12 +639,12 @@ void WorldSession::HandleUnstablePet(WorldPacket & recv_data)
     _unstablePetCallback.SetFutureResult(
             CharacterDatabase.AsyncPQuery("SELECT entry FROM character_pet WHERE owner = '%u' AND id = '%u' AND slot >='%u' AND slot <= '%u'",
                 _player->GetGUIDLow(), petnumber, PET_SAVE_FIRST_STABLE_SLOT, PET_SAVE_LAST_STABLE_SLOT)
-            );
+            );*/
 }
 
 void WorldSession::HandleUnstablePetCallback(QueryResult result, uint32 petnumber)
 {
-    if (!GetPlayer())
+    /*if (!GetPlayer())
         return;
 
     uint32 creature_id = 0;
@@ -691,13 +691,13 @@ void WorldSession::HandleUnstablePetCallback(QueryResult result, uint32 petnumbe
         return;
     }
 
-    SendStableResult(STABLE_SUCCESS_UNSTABLE);
+    SendStableResult(STABLE_SUCCESS_UNSTABLE);*/
 }
 
 void WorldSession::HandleBuyStableSlot(WorldPacket & recv_data)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Recv CMSG_BUY_STABLE_SLOT.");
-    uint64 npcGUID;
+    /*uint64 npcGUID;
 
     recv_data >> npcGUID;
 
@@ -721,10 +721,10 @@ void WorldSession::HandleBuyStableSlot(WorldPacket & recv_data)
             SendStableResult(STABLE_SUCCESS_BUY_SLOT);
         }
         else
-            SendStableResult(STABLE_ERR_MONEY);*/
+            SendStableResult(STABLE_ERR_MONEY);
     }
     else
-        SendStableResult(STABLE_ERR_STABLE);
+        SendStableResult(STABLE_ERR_STABLE);*/
 }
 
 void WorldSession::HandleStableRevivePet(WorldPacket &/* recv_data */)
@@ -735,7 +735,7 @@ void WorldSession::HandleStableRevivePet(WorldPacket &/* recv_data */)
 void WorldSession::HandleStableSwapPet(WorldPacket & recv_data)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Recv CMSG_STABLE_SWAP_PET.");
-    uint64 npcGUID;
+    /*uint64 npcGUID;
     uint32 pet_number;
 
     recv_data >> npcGUID >> pet_number;
@@ -763,12 +763,12 @@ void WorldSession::HandleStableSwapPet(WorldPacket & recv_data)
     _stableSwapCallback.SetFutureResult(
             CharacterDatabase.PQuery("SELECT slot, entry FROM character_pet WHERE owner = '%u' AND id = '%u'",
                 _player->GetGUIDLow(), pet_number)
-            );
+            );*/
 }
 
 void WorldSession::HandleStableSwapPetCallback(QueryResult result, uint32 petnumber)
 {
-    if (!GetPlayer())
+    /*if (!GetPlayer())
         return;
 
     if (!result)
@@ -812,7 +812,7 @@ void WorldSession::HandleStableSwapPetCallback(QueryResult result, uint32 petnum
         SendStableResult(STABLE_ERR_STABLE);
     }
     else
-        SendStableResult(STABLE_SUCCESS_UNSTABLE);
+        SendStableResult(STABLE_SUCCESS_UNSTABLE);*/
 }
 
 void WorldSession::HandleRepairItemOpcode(WorldPacket & recv_data)
