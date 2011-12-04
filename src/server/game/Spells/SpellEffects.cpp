@@ -1325,10 +1325,12 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
             break;
         }
         case SPELLFAMILY_HUNTER:
-
-            if (m_spellInfo->SpellFamilyFlags[2] & 0x20)
-                m_caster->CastSpell(m_caster, 51755, true);
-            break;
+            {
+                if (m_spellInfo->SpellFamilyFlags[2] & 0x20)
+                    m_caster->CastSpell(m_caster, 51755, true);
+                    
+                break;
+            }
         case SPELLFAMILY_PRIEST:
             {
                 switch (m_spellInfo->Id)
@@ -1347,14 +1349,10 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                 if (m_spellInfo->SpellFamilyFlags[0] & SPELLFAMILYFLAG1_MAGE_CONEOFCOLD)
                 {
                     if (m_caster->HasAura(11190)) // Improved Cone of Cold Rank 1
-                    {
                         m_caster->CastCustomSpell(unitTarget, 83301, &bp, NULL, NULL, true, 0);
-                    }
 
                     if (m_caster->HasAura(12489)) // Improved Cone of Cold Rank 2
-                    {
                         m_caster->CastCustomSpell(unitTarget, 83302, &bp, NULL, NULL, true, 0);
-                    }
                 }
                 switch (m_spellInfo->Id)
                 {
