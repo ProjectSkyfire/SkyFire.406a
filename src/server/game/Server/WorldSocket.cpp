@@ -304,7 +304,15 @@ int WorldSocket::open (void *a)
     return 0;
 }
 
-int WorldSocket::close (int)
+int WorldSocket::HandleAuthConnection(WorldPacket& recvPacket)
+{
+    std::string ClientToServerMsg;
+    recvPacket >> ClientToServerMsg;
+
+    return 0;
+}
+
+int WorldSocket::close (u_long)
 {
     shutdown();
 

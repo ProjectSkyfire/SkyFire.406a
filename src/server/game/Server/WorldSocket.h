@@ -87,9 +87,11 @@ typedef ACE_Svc_Handler<ACE_SOCK_STREAM, ACE_NULL_SYNCH> WorldHandler;
  * notification.
  *
  */
-class WorldSocket : protected WorldHandler
+class WorldSocket : public WorldHandler
 {
     public:
+        WorldSocket (void);
+        virtual ~WorldSocket (void);
         /// Declare some friends
         friend class ACE_Acceptor< WorldSocket, ACE_SOCK_ACCEPTOR >;
         friend class WorldSocketMgr;
@@ -122,10 +124,7 @@ class WorldSocket : protected WorldHandler
         /// Remove reference to this object.
         long RemoveReference (void);
 
-    protected:
         /// things called by ACE framework.
-        WorldSocket (void);
-        virtual ~WorldSocket (void);
 
         /// Called on open , the void* is the acceptor.
         int SendAuthConnection();
@@ -133,7 +132,7 @@ class WorldSocket : protected WorldHandler
         virtual int open (void *);
 
         /// Called on failures inside of the acceptor, don't call from your code.
-        virtual int close (int);
+        virtual int close (u_long);
 
         /// Called when we can read from the socket.
         virtual int handle_input (ACE_HANDLE = ACE_INVALID_HANDLE);
