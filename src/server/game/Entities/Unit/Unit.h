@@ -758,39 +758,39 @@ enum MovementFlags2
 };
 enum SplineFlags
 {
-    SPLINEFLAG_NONE           = 0x00000000,
-    SPLINEFLAG_FORWARD        = 0x00000001,
-    SPLINEFLAG_BACKWARD       = 0x00000002,
-    SPLINEFLAG_STRAFE_LEFT    = 0x00000004,
-    SPLINEFLAG_STRAFE_RIGHT   = 0x00000008,
-    SPLINEFLAG_LEFT           = 0x00000010,
-    SPLINEFLAG_RIGHT          = 0x00000020,
-    SPLINEFLAG_PITCH_UP       = 0x00000040,
-    SPLINEFLAG_PITCH_DOWN     = 0x00000080,
-    SPLINEFLAG_DONE           = 0x00000100,
-    SPLINEFLAG_FALLING        = 0x00000200,
-    SPLINEFLAG_NO_SPLINE      = 0x00000400,
-    SPLINEFLAG_TRAJECTORY     = 0x00000800,
-    SPLINEFLAG_WALKING        = 0x00001000,
-    SPLINEFLAG_FLYING         = 0x00002000,
-    SPLINEFLAG_KNOCKBACK      = 0x00004000,
-    SPLINEFLAG_FINAL_POINT    = 0x00008000,
-    SPLINEFLAG_FINAL_TARGET   = 0x00010000,
-    SPLINEFLAG_FINAL_FACING   = 0x00020000,
-    SPLINEFLAG_CATMULL_ROM    = 0x00040000,
-    SPLINEFLAG_UNKNOWN20      = 0x00080000,
-    SPLINEFLAG_UNKNOWN21      = 0x00100000,
-    SPLINEFLAG_ANIMATIONTIER  = 0x00200000,
-    SPLINEFLAG_UNKNOWN23      = 0x00400000,
-    SPLINEFLAG_TRANSPORT      = 0x00800000,
-    SPLINEFLAG_EXIT_VEHICLE   = 0x01000000,
-    SPLINEFLAG_UNKNOWN26      = 0x02000000,
-    SPLINEFLAG_UNKNOWN27      = 0x04000000,
-    SPLINEFLAG_UNKNOWN28      = 0x08000000,
-    SPLINEFLAG_UNKNOWN29      = 0x10000000,
-    SPLINEFLAG_ANIMATION      = 0x20000000,
-    SPLINEFLAG_UNKNOWN31      = 0x40000000,
-    SPLINEFLAG_UNKNOWN32      = 0x80000000,
+    SPLINEFLAG_NONE                 = 0x00000000,
+    SPLINEFLAG_FORWARD              = 0x00000001,
+    SPLINEFLAG_BACKWARD             = 0x00000002,
+    SPLINEFLAG_STRAFE_LEFT          = 0x00000004,
+    SPLINEFLAG_STRAFE_RIGHT         = 0x00000008,
+    SPLINEFLAG_LEFT                 = 0x00000010,
+    SPLINEFLAG_RIGHT                = 0x00000020,
+    SPLINEFLAG_PITCH_UP             = 0x00000040,
+    SPLINEFLAG_PITCH_DOWN           = 0x00000080,
+    SPLINEFLAG_DONE                 = 0x00000100,
+    SPLINEFLAG_FALLING              = 0x00000200,
+    SPLINEFLAG_NO_SPLINE            = 0x00000400,
+    SPLINEFLAG_TRAJECTORY           = 0x00000800,
+    SPLINEFLAG_WALKING              = 0x00001000,
+    SPLINEFLAG_FLYING               = 0x00002000,
+    SPLINEFLAG_KNOCKBACK            = 0x00004000,
+    SPLINEFLAG_FINAL_POINT          = 0x00008000,
+    SPLINEFLAG_FINAL_TARGET         = 0x00010000,
+    SPLINEFLAG_FINAL_FACING         = 0x00020000,
+    SPLINEFLAG_CATMULL_ROM          = 0x00040000,
+    SPLINEFLAG_CYCLIC               = 0x00080000,
+    SPLINEFLAG_ENTER_CIRCLE         = 0x00100000,
+    SPLINEFLAG_ANIMATIONTIER        = 0x00200000,
+    SPLINEFLAG_FROZEN               = 0x00400000,
+    SPLINEFLAG_TRANSPORT            = 0x00800000,
+    SPLINEFLAG_EXIT_VEHICLE         = 0x01000000,
+    SPLINEFLAG_UNKNOWN26            = 0x02000000,
+    SPLINEFLAG_UNKNOWN27            = 0x04000000,
+    SPLINEFLAG_MOVE_BACKWARDS       = 0x08000000,
+    SPLINEFLAG_USE_PATH_SMOOTHING   = 0x10000000,
+    SPLINEFLAG_ANIMATION            = 0x20000000,
+    SPLINEFLAG_UNCOMPRESSED_PATH    = 0x40000000,
+    SPLINEFLAG_UNKNOWN32            = 0x80000000,
 
     SPLINEFLAG_GLIDE = SPLINEFLAG_WALKING | SPLINEFLAG_FLYING,
 };
@@ -2456,40 +2456,16 @@ inline void Unit::SendMonsterMoveByPath(Path<Elem, Node> const& path, uint32 sta
     data << uint32(getMSTime());
     data << uint8(0);
     uint32 splineflags = ((GetUnitMovementFlags() & MOVEMENTFLAG_LEVITATING) || isInFlight()) ? (SPLINEFLAG_FLYING|SPLINEFLAG_WALKING) : SPLINEFLAG_WALKING;
-    data << uint32(splineflags | SPLINEFLAG_UNKNOWN31);
+    data << uint32(splineflags | SPLINEFLAG_USE_PATH_SMOOTHING | SPLINEFLAG_UNCOMPRESSED_PATH | SPLINEFLAG_UNKNOWN32 | SPLINEFLAG_UNKNOWN26 | SPLINEFLAG_ENTER_CIRCLE | SPLINEFLAG_CATMULL_ROM);
     data << uint32(traveltime);
     data << uint32(pathSize);
 
-    for(uint32 i = start + 1; i < end - 1; ++i)
+    for(uint32 i = start; i < end; ++i)
     {
         data << float(path[i].x);
         data << float(path[i].y);
         data << float(path[i].z);
     }
-    /*if(!(splineflags & SPLINEFLAG_FLYING))
-    {
-        data << float(path[end - 1].x);
-        data << float(path[end - 1].y);
-        data << float(path[end - 1].z);
-        
-        for(uint32 i = start; i < end - 1; ++i)
-        {
-            uint32 packed = 0;
-            packed |= ((int32)(path[i].x / 0.25f) & 0x7FF);
-            packed |= ((int32)(path[i].y / 0.25f) & 0x7FF) << 11;
-            packed |= ((int32)(path[i].z / 0.25f) & 0x3FF) << 22;
-            data << uint32(packed);
-        }
-    }
-    else
-    {
-        for (uint32 i = start; i < end; ++i)
-        {
-            data << float(path[i].x);
-            data << float(path[i].y);
-            data << float(path[i].z);
-        }
-    }*/
 
     SendMessageToSet(&data, true);
 }
