@@ -2910,6 +2910,10 @@ void SpellMgr::LoadSpellCustomAttr()
 
         switch (spellInfo->Id)
         {
+            case 86914: // Firestarter
+                spellInfo->Effects[0].BasePoints = 0;
+                spellInfo->Effects[0].MiscValue = 0;
+                break;
             case 93072: // Bring our Boys back
                 spellInfo->Effects[0].TargetA = TARGET_UNIT_NEARBY_ENTRY;
                 break;
