@@ -7452,12 +7452,7 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
             // Frozen Power
             if (dummySpell->SpellIconID == 3780)
             {
-                if (!target)
-                    return false;
-                if (GetDistance(target) < 15.0f)
-                    return false;
-                float chance = (float)triggerAmount;
-                if (!roll_chance_f(chance))
+                if (IsWithinDistInMap(target, 15.0f)
                     return false;
 
                 triggered_spell_id = 63685;
