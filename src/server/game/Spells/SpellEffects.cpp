@@ -518,11 +518,6 @@ void Spell::EffectSchoolDMG(SpellEffIndex effIndex)
                         }
                     }
                 }
-                // Shadow Bite
-                else if (m_spellInfo->SpellFamilyFlags[1] & 0x400000)
-                    if (m_caster->GetTypeId() == TYPEID_UNIT && m_caster->ToCreature()->isPet())
-                        if (Player* owner = m_caster->GetOwner()->ToPlayer())
-                            damage += damage * unitTarget->GetDoTsByCaster(owner->GetGUID()) * m_spellInfo->Effects[EFFECT_1].BasePoints;
                 break;
             }
            case SPELLFAMILY_PRIEST:
