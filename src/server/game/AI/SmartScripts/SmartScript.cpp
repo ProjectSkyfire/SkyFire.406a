@@ -132,6 +132,15 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
     if (Unit* tempInvoker = GetLastInvoker())
         sLog->outDebug(LOG_FILTER_DATABASE_AI, "SmartScript::ProcessAction: Invoker: %s (guidlow: %u)", tempInvoker->GetName(), tempInvoker->GetGUIDLow());
 
+    if(e.GetTargetType() == SMART_TARGET_CREATURE_ENTRY_POS) // set x, y, z and o
+    {
+        ObjectList* objs = GetTargets(e, unit);
+        e.target.x = (*objs->front()).GetPositionX();
+        e.target.y = (*objs->front()).GetPositionY();
+        e.target.z = (*objs->front()).GetPositionZ();
+        e.target.o = (*objs->front()).GetOrientation();
+    }
+    
     switch (e.GetActionType())
     {
         case SMART_ACTION_TALK:
@@ -1092,7 +1101,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 delete targets;
             }
 
-            if (e.GetTargetType() != SMART_TARGET_POSITION)
+            if (e.GetTargetType() != SMART_TARGET_POSITION && e.GetTargetType() != SMART_TARGET_CREATURE_ENTRY_POS)
                 return;
 
             if (Creature* summon = GetBaseObject()->SummonCreature(e.action.summonCreature.creature, e.target.x, e.target.y, e.target.z, e.target.o, (TempSummonType)e.action.summonCreature.type, e.action.summonCreature.duration))
@@ -1121,7 +1130,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 delete targets;
             }
 
-            if (e.GetTargetType() != SMART_TARGET_POSITION)
+            if (e.GetTargetType() != SMART_TARGET_POSITION && e.GetTargetType() != SMART_TARGET_CREATURE_ENTRY_POS)
                 return;
 
             GetBaseObject()->SummonGameObject(e.action.summonGO.entry, e.target.x, e.target.y, e.target.z, e.target.o, 0, 0, 0, 0, e.action.summonGO.despawnTime);
@@ -1979,6 +1988,7 @@ ObjectList* SmartScript::GetTargets(SmartScriptHolder const& e, Unit* invoker /*
                                 l->push_back(member);
             }
             break;
+        case SMART_TARGET_CREATURE_ENTRY_POS:
         case SMART_TARGET_CREATURE_RANGE:
         {
             // will always return a valid pointer, even if empty list

@@ -2910,37 +2910,40 @@ void SpellMgr::LoadSpellCustomAttr()
 
         switch (spellInfo->Id)
         {
-        case 77515: // Mastery: Dreadblade
-            spellInfo->Effects[0].BasePoints = 20;
-            break;
-        case 77514: // Mastery: Frozen Heart
-            spellInfo->Effects[0].BasePoints = 16;
-            break;
-        case 77493: // Mastery: Razor Claws
-            spellInfo->Effects[0].BasePoints = 25;
-            break;
-        case 76658: // Mastery: Essence of the Viper
-            spellInfo->Effects[0].BasePoints = 8;
-            break;
-        case 76657: // Mastery: Master of Beasts
-            spellInfo->Effects[0].BasePoints = 13;
-            break;
-        case 76595: // Mastery: Flashburn
-            spellInfo->Effects[0].BasePoints = 22;
-            break;
-        case 76671: // Mastery: Divine Bulwark
-            spellInfo->Effects[0].BasePoints = 18;
-            break;
-        case 77220: // Mastery: Fiery Apocalypse
-            spellInfo->Effects[0].BasePoints = 10;
-            break;
-        case 76857: // Mastery: Critical Block
-            spellInfo->Effects[0].BasePoints = 12;
-            spellInfo->Effects[1].BasePoints = 12;
-            break;
-        case 77489: // Mastery: Echo of Light
-            spellInfo->StackAmount = 100; // should be inf
-            break;
+            case 93072: // Bring our Boys back
+                spellInfo->Effects[0].TargetA = TARGET_UNIT_NEARBY_ENTRY;
+                break;
+            case 77515: // Mastery: Dreadblade
+                spellInfo->Effects[0].BasePoints = 20;
+                break;
+            case 77514: // Mastery: Frozen Heart
+                spellInfo->Effects[0].BasePoints = 16;
+                break;
+            case 77493: // Mastery: Razor Claws
+                spellInfo->Effects[0].BasePoints = 25;
+                break;
+            case 76658: // Mastery: Essence of the Viper
+                spellInfo->Effects[0].BasePoints = 8;
+                break;
+            case 76657: // Mastery: Master of Beasts
+                spellInfo->Effects[0].BasePoints = 13;
+                break;
+            case 76595: // Mastery: Flashburn
+                spellInfo->Effects[0].BasePoints = 22;
+                break;
+            case 76671: // Mastery: Divine Bulwark
+                spellInfo->Effects[0].BasePoints = 18;
+                break;
+            case 77220: // Mastery: Fiery Apocalypse
+                spellInfo->Effects[0].BasePoints = 10;
+                break;
+            case 76857: // Mastery: Critical Block
+                spellInfo->Effects[0].BasePoints = 12;
+                spellInfo->Effects[1].BasePoints = 12;
+                break;
+            case 77489: // Mastery: Echo of Light
+                spellInfo->StackAmount = 100; // should be inf
+                break;
             case 42835: // Spout
                 spellInfo->Effects[0].Effect = 0; // remove damage effect, only anim is needed
                 break;

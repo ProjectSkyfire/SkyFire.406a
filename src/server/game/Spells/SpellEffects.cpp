@@ -518,11 +518,6 @@ void Spell::EffectSchoolDMG(SpellEffIndex effIndex)
                         }
                     }
                 }
-                // Shadow Bite
-                else if (m_spellInfo->SpellFamilyFlags[1] & 0x400000)
-                    if (m_caster->GetTypeId() == TYPEID_UNIT && m_caster->ToCreature()->isPet())
-                        if (Player* owner = m_caster->GetOwner()->ToPlayer())
-                            damage += damage * unitTarget->GetDoTsByCaster(owner->GetGUID()) * m_spellInfo->Effects[EFFECT_1].BasePoints;
                 break;
             }
            case SPELLFAMILY_PRIEST:
@@ -576,20 +571,6 @@ void Spell::EffectSchoolDMG(SpellEffIndex effIndex)
                         m_caster->CastSpell(m_caster,87118,true);   // Dark Evangelism
                 }
                 break;*/
-                if (m_caster->HasAura(14751)) // Chakra
-                {
-                    switch(m_spellInfo->Id)
-                    {
-                        case   585:  // Smite
-                        case 73510:  // Mind Spike
-                            {
-                                m_caster->CastSpell(m_caster, 81209, true); // Chakra : Chastise
-                                break;
-                            }
-                        default:
-                            break;
-                    }
-                }
             }
             case SPELLFAMILY_DRUID:
             {
@@ -770,14 +751,6 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
         {
             switch (m_spellInfo->Id)
             {
-                case 8593:                                  // Symbol of life (restore creature to life)
-                case 31225:                                 // Shimmering Vessel (restore creature to life)
-                {
-                    if (!unitTarget || unitTarget->GetTypeId() != TYPEID_UNIT)
-                        return;
-                    unitTarget->ToCreature()->setDeathState(JUST_ALIVED);
-                    return;
-                }
                 case 12162:                                 // Deep wounds
                 case 12850:                                 // (now good common check for this spells)
                 case 12868:
@@ -839,25 +812,6 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                     }
                     return;
                 }
-                case 17770:                                 // Wolfshead Helm Energy
-                {
-                    m_caster->CastSpell(m_caster, 29940, true, NULL);
-                    return;
-                }
-                case 23019:                                 // Crystal Prison Dummy DND
-                {
-                    if (!unitTarget || !unitTarget->isAlive() || unitTarget->GetTypeId() != TYPEID_UNIT || unitTarget->ToCreature()->isPet())
-                        return;
-
-                    Creature* creatureTarget = unitTarget->ToCreature();
-
-                    m_caster->SummonGameObject(179644, creatureTarget->GetPositionX(), creatureTarget->GetPositionY(), creatureTarget->GetPositionZ(), creatureTarget->GetOrientation(), 0, 0, 0, 0, uint32(creatureTarget->GetRespawnTime()-time(NULL)));
-                    sLog->outDebug(LOG_FILTER_SPELLS_AURAS, "SummonGameObject at SpellEfects.cpp EffectDummy for Spell 23019");
-
-                    creatureTarget->DespawnOrUnsummon();
-
-                    return;
-                }
                 case 23448:                                  // Transporter Arrival - Ultrasafe Transporter: Gadgetzan - backfires
                 {
                     int32 r = irand(0, 119);
@@ -904,15 +858,6 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
 
                     return;
                 }
-                case 56989: // Glyph of Dragon's Breath
-                {
-                    if (unitTarget)
-                        m_caster->CastSpell(m_caster, 56373, false, NULL);
-                    return;
-                }
-                case 26074:                                 // Holiday Cheer
-                    // implemented at client side
-                    return;
                 case 28089:                                 // Polarity Shift
                     if (unitTarget)
                         unitTarget->CastSpell(unitTarget, roll_chance_i(50) ? 28059 : 28084, true, NULL, NULL, m_caster->GetGUID());
@@ -1015,7 +960,7 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                     if (m_caster->GetTypeId() != TYPEID_PLAYER)
                         return;
 
-                    Player* player = (Player*)m_caster;
+                    Player* player = m_caster->ToPlayer();
 
                     if (player && player->GetQuestStatus(11379) == QUEST_STATUS_INCOMPLETE)
                     {
@@ -1058,17 +1003,6 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                     unitTarget->CastSpell(unitTarget, 44866, true, NULL, NULL, m_caster->GetGUID());
                     unitTarget->CastSpell(unitTarget, 46648, true, NULL, NULL, m_caster->GetGUID());
                     unitTarget->CastSpell(unitTarget, 44811, true);
-                    return;
-                }
-                case 44875:                                 // Complete Raptor Capture
-                {
-                    if (!unitTarget || unitTarget->GetTypeId() != TYPEID_UNIT)
-                        return;
-
-                    unitTarget->ToCreature()->DespawnOrUnsummon();
-
-                    //cast spell Raptor Capture Credit
-                    m_caster->CastSpell(m_caster, 42337, true, NULL);
                     return;
                 }
                 case 45989: // Summon Void Sentinel Summoner Visual
@@ -1382,33 +1316,16 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                     unitTarget->CastSpell(unitTarget, 42726, true);
                     m_caster->ToPlayer()->KilledMonsterCredit(KillCredit, NULL);
                 }
-                case 79751:                                 // Destroy Mechano-Tank
-                {
-                    if (m_caster->GetTypeId() != TYPEID_PLAYER)
-                        return;
-                    if (unitTarget->GetEntry() != 42224)
-                        return;
-
-                    m_caster->Kill(unitTarget, false);
-                    m_caster->ToPlayer()->KilledMonsterCredit(unitTarget->GetEntry(), unitTarget->GetGUID());
-                }
-                case 93072:                                 // Get Our Boys Back
-                {
-                    if (Creature* Injured = m_caster->FindNearestCreature(50047, 3.0f, true))
-                    {
-                        Injured->SetCreatorGUID(m_caster->GetGUID());
-                        Injured->CastSpell(Injured, 93097, true);
-                        return;
-                    }
-                }
             }
             break;
         }
         case SPELLFAMILY_HUNTER:
-
-            if (m_spellInfo->SpellFamilyFlags[2] & 0x20)
-                m_caster->CastSpell(m_caster, 51755, true);
-            break;
+            {
+                if (m_spellInfo->SpellFamilyFlags[2] & 0x20)
+                    m_caster->CastSpell(m_caster, 51755, true);
+                    
+                break;
+            }
         case SPELLFAMILY_PRIEST:
             {
                 switch (m_spellInfo->Id)
@@ -1427,14 +1344,10 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                 if (m_spellInfo->SpellFamilyFlags[0] & SPELLFAMILYFLAG1_MAGE_CONEOFCOLD)
                 {
                     if (m_caster->HasAura(11190)) // Improved Cone of Cold Rank 1
-                    {
                         m_caster->CastCustomSpell(unitTarget, 83301, &bp, NULL, NULL, true, 0);
-                    }
 
                     if (m_caster->HasAura(12489)) // Improved Cone of Cold Rank 2
-                    {
                         m_caster->CastCustomSpell(unitTarget, 83302, &bp, NULL, NULL, true, 0);
-                    }
                 }
                 switch (m_spellInfo->Id)
                 {
@@ -2414,13 +2327,6 @@ void Spell::EffectApplyAura(SpellEffIndex effIndex)
     if (!m_spellAura || !unitTarget)
         return;
 
-    switch (m_spellAura->GetId())
-    {
-        case 38177:  // Blackwhelp Net
-            if (unitTarget->GetEntry() != 21387) //Wyrmcult Blackwhelp
-                return;
-    }
-
     ASSERT(unitTarget == m_spellAura->GetOwner());
     m_spellAura->_ApplyEffectForTargets(effIndex);
 }
@@ -2571,24 +2477,10 @@ void Spell::EffectHeal(SpellEffIndex /*effIndex*/)
 {
     if (effectHandleMode != SPELL_EFFECT_HANDLE_HIT_TARGET)
         return;
-
-    // Chakra Talent
-    if (m_caster->HasAura(14571))
-    {
-        switch(m_spellInfo->Id)
-        {
-            case  2050:     // Heal
-            case  2060:     // Greater Heal
-            case  2061:     // Flash Heal
-            case 32546:     // Binding Heal
-               m_caster->CastSpell(m_caster, 81208, true); // Chakra: Serenity
-               break;
-            case 596:       // Prayer of Healing
-               m_caster->CastSpell(m_caster, 81206, true); // Chakra: Sanctuary
-               break;
-        }
-    }
+        
 }
+
+
 void Spell::SpellDamageHeal(SpellEffIndex effIndex)
 {
     if (effectHandleMode != SPELL_EFFECT_HANDLE_LAUNCH_TARGET)

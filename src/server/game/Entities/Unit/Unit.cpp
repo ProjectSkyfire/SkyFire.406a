@@ -7452,12 +7452,7 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
             // Frozen Power
             if (dummySpell->SpellIconID == 3780)
             {
-                if (!target)
-                    return false;
-                if (GetDistance(target) < 15.0f)
-                    return false;
-                float chance = (float)triggerAmount;
-                if (!roll_chance_f(chance))
+                if (IsWithinDistInMap(target, 15.0f)
                     return false;
 
                 triggered_spell_id = 63685;
@@ -10812,35 +10807,12 @@ uint32 Unit::SpellDamageBonus(Unit* victim, SpellInfo const* spellProto, uint32 
                 }
         break;
         case SPELLFAMILY_PRIEST:
-            // Mind Flay
-            if (spellProto->SpellFamilyFlags[0] & 0x800000)
-            {
-                // Glyph of Shadow Word: Pain
-                if (AuraEffect* aurEff = GetAuraEffect(55687, 0))
-                    // Increase Mind Flay damage if Shadow Word: Pain present on target
-                    if (victim->GetAuraEffect(SPELL_AURA_PERIODIC_DAMAGE, SPELLFAMILY_PRIEST, 0x8000, 0, 0, GetGUID()))
-                        AddPctN(DoneTotalMod, aurEff->GetAmount());
-
-                // Twisted Faith - Mind Flay part
-                if (AuraEffect* aurEff = GetAuraEffect(SPELL_AURA_OVERRIDE_CLASS_SCRIPTS, SPELLFAMILY_PRIEST, 2848, 1))
-                    // Increase Mind Flay damage if Shadow Word: Pain present on target
-                    if (victim->GetAuraEffect(SPELL_AURA_PERIODIC_DAMAGE, SPELLFAMILY_PRIEST, 0x8000, 0, 0, GetGUID()))
-                        AddPctN(DoneTotalMod, aurEff->GetAmount());
-            }
             // Smite
-            else if (spellProto->SpellFamilyFlags[0] & 0x80)
+            if (spellProto->SpellFamilyFlags[0] & 0x80)
             {
                 // Glyph of Smite
                 if (AuraEffect* aurEff = GetAuraEffect(55692, 0))
                     if (victim->GetAuraEffect(SPELL_AURA_PERIODIC_DAMAGE, SPELLFAMILY_PRIEST, 0x100000, 0, 0, GetGUID()))
-                        AddPctN(DoneTotalMod, aurEff->GetAmount());
-            }
-            // Shadow Word: Death
-            else if (spellProto->SpellFamilyFlags[1] & 0x2)
-            {
-                // Glyph of Shadow Word: Death
-                if (AuraEffect* aurEff = GetAuraEffect(55682, 1))
-                    if (victim->HasAuraState(AURA_STATE_HEALTHLESS_35_PERCENT))
                         AddPctN(DoneTotalMod, aurEff->GetAmount());
             }
         break;
@@ -10862,15 +10834,6 @@ uint32 Unit::SpellDamageBonus(Unit* victim, SpellInfo const* spellProto, uint32 
                     AddPctU(DoneTotalMod, 10 * stacks);
             }
         break;
-        case SPELLFAMILY_DRUID:
-            // Thorns
-            if (spellProto->SpellFamilyFlags[0] & 0x100)
-            {
-                // Brambles
-                if (AuraEffect* aurEff = GetAuraEffectOfRankedSpell(16836, 0))
-                    AddPctN(DoneTotalMod, aurEff->GetAmount());
-            }
-        break;
         case SPELLFAMILY_WARLOCK:
             // Fire and Brimstone
             if (spellProto->SpellFamilyFlags[1] & 0x00020040)
@@ -10884,62 +10847,10 @@ uint32 Unit::SpellDamageBonus(Unit* victim, SpellInfo const* spellProto, uint32 
                             break;
                         }
                 }
-            // Drain Soul - increased damage for targets under 25 % HP
-            if (spellProto->SpellFamilyFlags[0] & 0x00004000)
-                if (HasAura(100001))
-                    DoneTotalMod *= 4;
             // Shadow Bite (15% increase from each dot)
             if (spellProto->SpellFamilyFlags[1] & 0x00400000 && isPet())
                 if (uint8 count = victim->GetDoTsByCaster(GetOwnerGUID()))
                     AddPctN(DoneTotalMod, 15 * count);
-        break;
-        case SPELLFAMILY_HUNTER:
-            // Steady Shot
-            if (spellProto->SpellFamilyFlags[1] & 0x1)
-                if (AuraEffect* aurEff = GetAuraEffect(56826, 0))  // Glyph of Steady Shot
-                    if (victim->GetAuraEffect(SPELL_AURA_PERIODIC_DAMAGE, SPELLFAMILY_HUNTER, 0x00004000, 0, 0, GetGUID()))
-                        AddPctN(DoneTotalMod, aurEff->GetAmount());
-        break;
-        case SPELLFAMILY_DEATHKNIGHT:
-            // Improved Icy Touch
-            if (spellProto->SpellFamilyFlags[0] & 0x2)
-                if (AuraEffect* aurEff = GetDummyAuraEffect(SPELLFAMILY_DEATHKNIGHT, 2721, 0))
-                    AddPctN(DoneTotalMod, aurEff->GetAmount());
-
-            // Sigil of the Vengeful Heart
-            if (spellProto->SpellFamilyFlags[0] & 0x2000)
-                if (AuraEffect* aurEff = GetAuraEffect(64962, EFFECT_1))
-                    AddPctN(DoneTotal, aurEff->GetAmount());
-
-            // Glacier Rot
-            if (spellProto->SpellFamilyFlags[0] & 0x2 || spellProto->SpellFamilyFlags[1] & 0x6)
-                if (AuraEffect* aurEff = GetDummyAuraEffect(SPELLFAMILY_DEATHKNIGHT, 196, 0))
-                    if (victim->GetDiseasesByCaster(owner->GetGUID()) > 0)
-                        AddPctN(DoneTotalMod, aurEff->GetAmount());
-
-            // Impurity (dummy effect)
-            if (GetTypeId() == TYPEID_PLAYER)
-            {
-                PlayerSpellMap playerSpells = ToPlayer()->GetSpellMap();
-                for (PlayerSpellMap::const_iterator itr = playerSpells.begin(); itr != playerSpells.end(); ++itr)
-                {
-                    if (itr->second->state == PLAYERSPELL_REMOVED || itr->second->disabled)
-                        continue;
-                    switch (itr->first)
-                    {
-                        case 49220:
-                        case 49633:
-                        case 49635:
-                        case 49636:
-                        case 49638:
-                        {
-                            if (SpellInfo const* proto = sSpellMgr->GetSpellInfo(itr->first))
-                                AddPctN(ApCoeffMod, proto->Effects[0].CalcValue());
-                        }
-                        break;
-                    }
-                }
-            }
         break;
     }
 
@@ -10951,7 +10862,7 @@ uint32 Unit::SpellDamageBonus(Unit* victim, SpellInfo const* spellProto, uint32 
     TakenTotalMod *= victim->GetTotalAuraMultiplierByMiscMask(SPELL_AURA_MOD_DAMAGE_PERCENT_TAKEN, spellProto->GetSchoolMask());
 
     // .. taken pct: dummy auras
-    AuraEffectList const& mDummyAuras = victim->GetAuraEffectsByType(SPELL_AURA_DUMMY);
+    /*AuraEffectList const& mDummyAuras = victim->GetAuraEffectsByType(SPELL_AURA_DUMMY);
     for (AuraEffectList::const_iterator i = mDummyAuras.begin(); i != mDummyAuras.end(); ++i)
     {
         switch ((*i)->GetSpellInfo()->SpellIconID)
@@ -10960,14 +10871,14 @@ uint32 Unit::SpellDamageBonus(Unit* victim, SpellInfo const* spellProto, uint32 
             case 2109:
                 if ((*i)->GetMiscValue() & SPELL_SCHOOL_MASK_NORMAL)
                 {
-                    /*if (victim->GetTypeId() != TYPEID_PLAYER)
+                    if (victim->GetTypeId() != TYPEID_PLAYER)
                         continue;
                     float mod = victim->ToPlayer()->GetRatingBonusValue(CR_CRIT_TAKEN_MELEE) * (-8.0f);
-                    AddPctF(TakenTotalMod, std::max(mod, float((*i)->GetAmount())));*/
+                    AddPctF(TakenTotalMod, std::max(mod, float((*i)->GetAmount())));
                 }
                 break;
         }
-    }
+    }*/
 
     // From caster spells
     AuraEffectList const& mOwnerTaken = victim->GetAuraEffectsByType(SPELL_AURA_MOD_DAMAGE_FROM_CASTER);
