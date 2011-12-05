@@ -201,73 +201,105 @@ bool LoginQueryHolder::Initialize()
     return res;
 }
 
+struct charEnumInfo
+{
+    uint8 nameLenghts;
+    bool firstLogin;
+};
+
 void WorldSession::HandleCharEnum(QueryResult result)
 {
-    WorldPacket data(SMSG_CHAR_ENUM, 100);                  // we guess size
+    WorldPacket data(SMSG_CHAR_ENUM, 270);                  // we guess size
+
+    data.writeBits(result ? (*result).GetRowCount() : 0 , 17);
+
+    std::vector<charEnumInfo> charInfoList;
+    charInfoList.resize(result ? (*result).GetRowCount() : 0);
 
     _allowedCharsToLogin.clear();
     if (result)
     {
-        uint32 num = (uint32)result->GetRowCount();
-        data.writeBits<uint32>(num, 17);
+        typedef std::pair<uint32, uint64> Guids;
+        std::vector<Guids> guidsVect;
+        ByteBuffer buffer;
+        _allowedCharsToLogin.clear();
+        int charCount = 0;
         do
         {
-            uint32 guidlow = (*result)[0].GetUInt32();
-            uint8 _race = (*result)[2].GetUInt8();
-            uint8 _class = (*result)[3].GetUInt8();
-            uint32 atLoginFlags = (*result)[15].GetUInt32();
-            std::string name = (*result)[1].GetString();
-            uint32 nameLen = name.length();
+            uint32 GuidLow = (*result)[0].GetUInt32();
+            uint64 GuildGuid = (*result)[13].GetUInt32();//TODO: store as uin64
 
-            /*PlayerInfo const *info = sObjectMgr->GetPlayerInfo(_race, _class);
-            if (info != NULL)
-                _allowedCharsToLogin.insert(guidlow);
-            else
-            {
-                sLog->outError("Player %u has incorrect race/class pair. Don't build enum.", guidlow);
-                continue;
-            }*/
+            charEnumInfo charInfo = charEnumInfo();
+            charInfo.nameLenghts =  (*result)[1].GetString().size();
+            charInfo.firstLogin = (*result)[15].GetUInt32() & AT_LOGIN_FIRST ? true : false;
+            charInfoList[charCount] = charInfo;
+            charCount++;
 
-            uint8 highGuid[8];
-            *(uint64*)highGuid = MAKE_NEW_GUID(guidlow, 0, HIGHGUID_PLAYER);
+            guidsVect.push_back(std::make_pair(GuidLow, GuildGuid));
 
-            data.writeBit(0); // Guild guid byte 2
-            data.writeBit((highGuid[2] != 0) ? highGuid[2] ^ 0 : highGuid[2]); // The client will do this -> PlayerHighGuid[2] ^ 0
-            data.writeBit((highGuid[6] != 0) ? highGuid[6] ^ 0 : highGuid[6]); // The client will do this -> PlayerHighGuid[6] ^ 0
-            data.writeBit((highGuid[5] != 0) ? highGuid[5] ^ 0 : highGuid[5]); // The client will do this -> PlayerHighGuid[5] ^ 0
-            data.writeBit((highGuid[4] != 0) ? highGuid[4] ^ 0 : highGuid[4]); // The client will do this -> PlayerHighGuid[4] ^ 0
-            data.writeBit(0); // guild guid byte 4 
-            data.writeBit(0);// guild guid byte 3
-            data.writeBit(0); // guild guid byte 7
-            data.writeBits<uint32>(nameLen, 7); // 7 bits lenght for an uint32 ? wtflol?
-            data.writeBit(0); // guild byte 0
-            data.writeBit((highGuid[0] != 0) ? highGuid[0] ^ 0 : highGuid[0]); // The client will do this -> PlayerHighGuid[0] ^ 0
-            data.writeBit((highGuid[3] != 0) ? highGuid[3] ^ 0 : highGuid[3]); // The client will do this -> PlayerHighGuid[3] ^ 0
-            data.writeBit((highGuid[1] != 0) ? highGuid[1] ^ 0 : highGuid[1]); // The client will do this -> PlayerHighGuid[1] ^ 0
+            sLog->outDetail("Loading char guid %u from account %u.", GuidLow, GetAccountId());
 
-            if (atLoginFlags & AT_LOGIN_FIRST)
-                data.writeBit(1);
-            else
-                data.writeBit(0);
-
-            data.writeBit(0); // guild guid byte 5
-            data.writeBit((highGuid[7] != 0) ? highGuid[7] ^ 0 : highGuid[7]); // The client will do this -> PlayerHighGuid[7] ^ 0
-            data.writeBit(0); // guild guid byte 6
-            data.writeBit(0); // guild guid byte 1
-
-        } while(result->NextRow(true));
-
-        data.writeBits<uint32>(0, 23); // lolwut?
-        data.writeBit(0);
-
-        result->Reset();
-        do
-        {
-            uint32 guidlow = (*result)[0].GetUInt32();
-            sLog->outDetail("Loading char guid %u from account %u.", guidlow, GetAccountId());
-            Player::BuildEnumData(result, &data);
+            _allowedCharsToLogin.insert(GuidLow);
         }
         while (result->NextRow());
+
+        int counter = 0;
+        for (std::vector<Guids>::iterator itr = guidsVect.begin(); itr != guidsVect.end(); ++itr)
+        {
+            uint32 GuidLow = (*itr).first;
+            uint64 GuildGuid = (*itr).second;
+
+            uint8 Guid0 = uint8(GuidLow);
+            uint8 Guid1 = uint8(GuidLow >> 8);
+            uint8 Guid2 = uint8(GuidLow >> 16);
+            uint8 Guid3 = uint8(GuidLow >> 24);
+
+            // On envoye pas le guild guid, high guid == 0 pour les joueurs
+            for (uint8 i = 0; i < 18; ++i) 
+            {
+                switch(i)
+                {
+                    // guidlow[0]
+                case 10:
+                    data.writeBit(Guid0 ? 1 : 0);
+                    break;
+                    // guidlow[1]
+                case 12:
+                    data.writeBit(Guid1 ? 1 : 0);
+                    break;
+                    // guidlow[2]
+                case 1:
+                    data.writeBit(Guid2 ? 1 : 0);
+                    break;
+                    // guidlow[3]
+                case 11:
+                    data.writeBit(Guid3 ? 1 : 0);
+                    break;
+                case 8:
+                    data.writeBits(charInfoList[counter].nameLenghts, 7);
+                    break;
+                case 13:
+                    data.writeBit(charInfoList[counter].firstLogin ? 1 : 0);
+                    break;
+                default:
+                    data.writeBit(0);
+                    break;
+                }
+            }
+
+            counter++;
+        }
+        data.writeBits(0x0, 23); // unk counter 4.3
+        data.writeBit(1);
+
+        data.flushBits();
+        data.append(buffer);
+    }
+    else
+    {
+        data.writeBits(0x0, 23);
+        data.writeBit(1);
+        data.flushBits();
     }
 
     SendPacket(&data);
