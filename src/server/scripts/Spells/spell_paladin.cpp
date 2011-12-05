@@ -411,12 +411,14 @@ public:
 
     class spell_pal_word_of_glory_heal_SpellScript : public SpellScript
     {
-        PrepareSpellScript(spell_pal_word_of_glory_heal_SpellScript);
+        PrepareSpellScript(spell_pal_word_of_glory_heal_SpellScript)
 
-        uint32 totalheal;
+        int32 totalheal;
 
         bool Load()
         {
+            totalheal = GetSpellInfo()->Effects[EFFECT_0].CalcValue();
+
             if (GetCaster()->GetTypeId() != TYPEID_PLAYER)
                 return false;
             return true;
@@ -432,7 +434,7 @@ public:
 
             if (GetCaster()->HasAura(SPELL_DIVINE_PURPOSE_PROC))
             {
-                totalheal = GetHitHeal() * 3;
+                totalheal *= 3;
 
                 // Selfless Healer
                 if (AuraEffect const* auraEff = caster->GetAuraEffect(SPELL_AURA_DUMMY, SPELLFAMILY_PALADIN, 3924, EFFECT_0))
@@ -445,21 +447,22 @@ public:
 
             switch (caster->GetPower(POWER_HOLY_POWER))
             {
-                case 0: // 1 Holy Power
+                case 1: // 1 Holy Power
                 {
-                    totalheal = GetHitHeal();
+                    totalheal = totalheal;
                     break;
                 }
-                case 1: // 2 Holy Power
+                case 2: // 2 Holy Power
                 {
-                    totalheal = GetHitHeal() * 2;
+                    totalheal *= 2;
                     break;
                 }
-                case 2: // 3 Holy Power
+                case 3: // 3 Holy Power
                 {
-                    totalheal = GetHitHeal() * 3;
+                    totalheal *= 3;
                     break;
                 }
+
             }
             // Selfless Healer
             if (AuraEffect const* auraEff = caster->GetDummyAuraEffect(SPELLFAMILY_PALADIN, 3924, EFFECT_0))
@@ -469,11 +472,50 @@ public:
             SetHitHeal(totalheal);
         }
 
+        void HandlePeriodic()
+        {
+            // Glyph of Long Word
+            if (!GetCaster()->HasAura(93466))
+                PreventHitAura();
+        }
+
         void Register()
         {
-            OnEffectHit += SpellEffectFn(spell_pal_word_of_glory_heal_SpellScript::ChangeHeal, EFFECT_0, SPELL_EFFECT_HEAL);
+            OnEffectHitTarget += SpellEffectFn(spell_pal_word_of_glory_heal_SpellScript::ChangeHeal, EFFECT_0, SPELL_EFFECT_HEAL);
+            AfterHit += SpellHitFn(spell_pal_word_of_glory_heal_SpellScript::HandlePeriodic);
         }
     };
+
+    class spell_pal_word_of_glory_heal_AuraScript : public AuraScript
+    {
+        PrepareAuraScript(spell_pal_word_of_glory_heal_AuraScript)
+
+        bool Load()
+        {
+            if (GetCaster()->GetTypeId() != TYPEID_PLAYER)
+                return false;
+            return true;
+        }
+        
+        void CalculateOvertime(AuraEffect const* aurEff, int32& amount, bool& canBeRecalculated)
+        {
+            if (AuraEffect const* longWord = GetCaster()->GetDummyAuraEffect(SPELLFAMILY_PALADIN, 4127, 1))
+            {
+                canBeRecalculated = true;
+                amount = ((GetSpellInfo()->Effects[EFFECT_0].CalcValue() * longWord->GetAmount()) / 100)  / 3;
+            }
+        }
+        
+        void Register()
+        {
+            DoEffectCalcAmount += AuraEffectCalcAmountFn(spell_pal_word_of_glory_heal_AuraScript::CalculateOvertime, EFFECT_1, SPELL_AURA_PERIODIC_HEAL);
+        }
+    };
+
+    AuraScript* GetAuraScript() const
+    {
+        return new spell_pal_word_of_glory_heal_AuraScript();
+    }
 
     SpellScript* GetSpellScript() const
     {

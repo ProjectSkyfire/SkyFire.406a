@@ -11210,6 +11210,15 @@ bool Unit::isSpellCrit(Unit* victim, SpellInfo const* spellProto, SpellSchoolMas
                                 return true;
                             break;
                         }
+                        // Word of Glory
+                        else if (spellProto->SpellFamilyFlags[2] & 0x4000)
+                        {
+                            // Last Word
+                            if (AuraEffect const* aurEff = GetDummyAuraEffect(SPELLFAMILY_PALADIN, 2139, 0))
+                                if (victim->HasAuraState(AURA_STATE_HEALTHLESS_35_PERCENT))
+                                    crit_chance += aurEff->GetAmount();
+                            break;
+                        }
                     break;
                     case SPELLFAMILY_SHAMAN:
                         // Lava Burst
