@@ -3479,8 +3479,8 @@ void Spell::_handle_finish_phase()
         if (m_comboPointGain)
             m_caster->m_movedPlayer->GainSpellComboPoints(m_comboPointGain);
 
-        // Handle holy power only after the spell has made its job
-        if (m_caster->m_movedPlayer->getClass() == CLASS_PALADIN)
+        // Handle holy power only for: 1) Player, 2) HolyPower spells, AND, after the spell has made its job
+        if (m_caster->m_movedPlayer->getClass() == CLASS_PALADIN && m_spellInfo->PowerType == POWER_HOLY_POWER)
             HandleHolyPower(m_caster->m_movedPlayer);
     }
 
@@ -4298,6 +4298,11 @@ void Spell::TakePower()
         return;
 
     Powers powerType = Powers(m_spellInfo->PowerType);
+
+    // We will handle holy power on Spell::_handle_finish_phase
+    if (powerType == POWER_HOLY_POWER)
+        return;
+
     bool hit = true;
     if (m_caster->GetTypeId() == TYPEID_PLAYER)
     {
