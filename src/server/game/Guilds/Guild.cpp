@@ -1221,7 +1221,7 @@ void Guild::OnPlayerStatusChange(Player* plr, uint32 flag, bool state)
 }
 
 // HANDLE CLIENT COMMANDS
-void Guild::HandleRoster(WorldSession *session /*= NULL*/)
+void Guild::HandleRoster(WorldSession* session /*= NULL*/)
 {
     // Guess size
     WorldPacket data(SMSG_GUILD_ROSTER, (4 + m_motd.length() + 1 + m_info.length() + 1 + 2 + 4 + 2 + _GetRanksSize() * 100));

@@ -2532,9 +2532,9 @@ void DynObjAura::FillTargetMap(std::map<Unit* , uint8> & targets, Unit* /*caster
         }
         else if (GetSpellInfo()->Effects[effIndex].TargetB.GetTarget() == TARGET_DEST_DYNOBJ_ALL_UNITS)
         {
-           Trinity::AnyUnitInObjectRangeCheck u_check(GetDynobjOwner(), radius);
-           Trinity::UnitListSearcher<Trinity::AnyUnitInObjectRangeCheck> searcher(GetDynobjOwner(), targetList, u_check);
-           GetDynobjOwner()->VisitNearbyObject(radius, searcher);
+            Trinity::AnyUnitInObjectRangeCheck u_check(GetDynobjOwner(), radius);
+            Trinity::UnitListSearcher<Trinity::AnyUnitInObjectRangeCheck> searcher(GetDynobjOwner(), targetList, u_check);
+            GetDynobjOwner()->VisitNearbyObject(radius, searcher);
         }		
         else
         {
