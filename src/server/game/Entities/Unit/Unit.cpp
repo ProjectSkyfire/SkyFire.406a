@@ -6018,6 +6018,14 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
             }
             switch (dummySpell->Id)
             {
+                case 18119: // Improved Soul Fire rank 1
+                case 18120: // Improved Soul Fire rank 2
+                {
+                    triggered_spell_id = 85383;
+                    basepoints0 = triggerAmount;
+                    target = this;
+                    break;
+                }
                 case 28176: // Fel Armor
                 {
                     triggered_spell_id = 96379;
