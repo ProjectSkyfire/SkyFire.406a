@@ -73,6 +73,9 @@ void WorldSession::HandleUseItemOpcode(WorldPacket& recvPacket)
     if (pUser->m_mover != pUser)
         return;
 
+    if (pUser->GetEmoteState())
+       pUser->SetEmoteState(0);
+
     uint8 bagIndex, slot, castFlags;
     uint8 castCount;                                       // next cast if exists (single or not)
     uint64 itemGUID;
@@ -188,7 +191,7 @@ void WorldSession::HandleUseItemOpcode(WorldPacket& recvPacket)
     if (!sScriptMgr->OnItemUse(pUser, pItem, targets))
     {
         // no script or script not process request by self
-        pUser->CastItemUseSpell(pItem, targets, castCount, glyphIndex);
+        pUser->CastItemUseSpell(pItem, targets, castCount);
     }
 }
 
@@ -350,6 +353,9 @@ void WorldSession::HandleCastSpellOpcode(WorldPacket& recvPacket)
 
     if (mover->GetTypeId() == TYPEID_PLAYER)
     {
+        if (mover->ToPlayer()->GetEmoteState())
+           mover->ToPlayer()->SetEmoteState(0);
+
         // not have spell in spellbook or spell passive and not casted by client
         if (!mover->ToPlayer()->HasActiveSpell (spellId) || spellInfo->IsPassive())
         {

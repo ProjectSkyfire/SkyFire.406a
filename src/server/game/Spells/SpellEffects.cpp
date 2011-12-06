@@ -6190,7 +6190,21 @@ void Spell::EffectApplyGlyph(SpellEffIndex effIndex)
             player->CastSpell(m_caster, gp->SpellId, true);
             player->SetGlyph(m_glyphIndex, glyph);
             player->SendTalentsInfoData(false);
+            player->learnSpell(gp->SpellId, true);
         }
+    }
+    else
+    {
+        // Glyph removal
+        if (uint32 oldglyph = player->GetGlyph(m_glyphIndex))
+        {
+            if (GlyphPropertiesEntry const *old_gp = sGlyphPropertiesStore.LookupEntry(oldglyph))
+            {
+                player->RemoveAurasDueToSpell(old_gp->SpellId);
+                player->SetGlyph(m_glyphIndex, 0);
+            }
+        }
+
     }
 }
 
