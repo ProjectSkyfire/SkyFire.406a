@@ -10713,7 +10713,7 @@ uint32 Unit::SpellDamageBonus(Unit* victim, SpellInfo const* spellProto, uint32 
             // Ice Lance
             if (spellProto->SpellIconID == 186)
                 if (victim->HasAuraState(AURA_STATE_FROZEN, spellProto, this))
-                    DoneTotalMod += 2.0f;
+                    AddPctN(DoneTotalMod, 2);
 
             // Torment the weak
             if (spellProto->SpellFamilyFlags[0] & 0x20600021 || spellProto->SpellFamilyFlags[1] & 0x9000)
@@ -10773,6 +10773,12 @@ uint32 Unit::SpellDamageBonus(Unit* victim, SpellInfo const* spellProto, uint32 
             if (spellProto->SpellFamilyFlags[1] & 0x00400000 && isPet())
                 if (uint8 count = victim->GetDoTsByCaster(GetOwnerGUID()))
                     AddPctN(DoneTotalMod, 15 * count);
+        break;
+        case SPELLFAMILY_WARRIOR:
+            // Slam
+            if(spellProto->SpellFamilyFlags[2] & 0x200000)
+                if(HasAura(46916)) // Bloodsurge
+                    AddPctN(DoneTotalMod, 20); // 20% more damage
         break;
     }
 
