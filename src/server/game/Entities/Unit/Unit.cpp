@@ -6018,6 +6018,12 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
             }
             switch (dummySpell->Id)
             {
+                case 28176: // Fel Armor
+                {
+                    triggered_spell_id = 96379;
+                    basepoints0 = CalculatePctN(int32(damage), triggerAmount);
+                    break;
+                }
                 // Glyph of Shadowflame
                 case 63310:
                 {
@@ -6043,28 +6049,22 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                     AuraEffectList const& SoulLeechAuras = GetAuraEffectsByType(SPELL_AURA_DUMMY);
                     for (Unit::AuraEffectList::const_iterator i = SoulLeechAuras.begin(); i != SoulLeechAuras.end(); ++i)
                     {
-                        if ((*i)->GetId() == 54117 || (*i)->GetId() == 54118)
+                        if ((*i)->GetId() == 54118)
                         {
                             if ((*i)->GetEffIndex() != 0)
                                 continue;
+                                
                             basepoints0 = int32((*i)->GetAmount());
                             target = GetGuardianPet();
                             if (target)
-                            {
-                                // regen mana for pet
-                                CastCustomSpell(target, 54607, &basepoints0, NULL, NULL, true, castItem, triggeredByAura);
-                            }
+                                CastCustomSpell(target, 54607, &basepoints0, NULL, NULL, true, castItem, triggeredByAura); // regen mana for pet
+                                
                             // regen mana for caster
                             CastCustomSpell(this, 59117, &basepoints0, NULL, NULL, true, castItem, triggeredByAura);
                             // Get second aura of spell for replenishment effect on party
                             if (AuraEffect const* aurEff = (*i)->GetBase()->GetEffect(EFFECT_1))
-                            {
-                                // Replenishment - roll chance
-                                if (roll_chance_i(aurEff->GetAmount()))
-                                {
+                                if (roll_chance_i(aurEff->GetAmount()))     // Replenishment - roll chance
                                     CastSpell(this, 57669, true, castItem, triggeredByAura);
-                                }
-                            }
                             break;
                         }
                     }
