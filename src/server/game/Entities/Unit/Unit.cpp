@@ -6203,7 +6203,7 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                     basepoints0 = CalculatePctN(int32(damage), triggerAmount) / tickcount;
                     break;
                 }
-                // Improved Shadowform
+                // Phantasm
                 case 47570:
                 case 47569:
                 {
