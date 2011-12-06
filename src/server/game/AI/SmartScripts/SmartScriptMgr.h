@@ -861,7 +861,7 @@ struct SmartAction
         struct
         {
             uint32 gossipMenuId;
-            uint32 gossipOptionId;
+            uint32 gossipNpcTextId;
         } sendGossipMenu;
 
         struct
