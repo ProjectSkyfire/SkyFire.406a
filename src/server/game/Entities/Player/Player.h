@@ -1342,7 +1342,7 @@ class Player : public Unit, public GridObject<Player>
 
         void ApplyEquipCooldown(Item* pItem);
 
-		void SetAmmo(uint32 item);
+        void SetAmmo(uint32 item);
         void RemoveAmmo();
         bool CheckAmmoCompatibility(const ItemTemplate *ammo_proto) const;
 

@@ -11202,9 +11202,9 @@ uint32 Unit::SpellCriticalDamageBonus(SpellInfo const* spellProto, uint32 damage
             break;
         default:
             if (modOwner && (modOwner->getClass() == CLASS_MAGE || modOwner->getClass() == CLASS_WARLOCK))
-               crit_bonus = damage; // 100% bonus for Mages and Warlocks in Cataclysm
-           else
-               crit_bonus = damage / 2;                        // for spells is 50%
+                crit_bonus = damage; // 100% bonus for Mages and Warlocks in Cataclysm
+            else
+                crit_bonus = damage / 2;                        // for spells is 50%
             break;
     }
 
