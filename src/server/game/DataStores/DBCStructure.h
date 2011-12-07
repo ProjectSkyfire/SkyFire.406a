@@ -596,7 +596,7 @@ struct AuctionHouseEntry
     uint32    faction;                                      // 1 id of faction.dbc for player factions associated with city
     uint32    depositPercent;                               // 2 1/3 from real
     uint32    cutPercent;                                   // 3
-    //char*     name[16];                                   // 4-19
+    // DBCString   name;                                   // 4-19
                                                             // 20 string flag, unused
 };
 
@@ -610,7 +610,7 @@ struct BarberShopStyleEntry
 {
     uint32  Id;                                             // 0
     uint32  type;                                           // 1 value 0 -> hair, value 2 -> facialhair
-    //DBCString  name;                                  // 2        m_DisplayName_lang
+    //DBCString  name;                                      // 2        m_DisplayName_lang
     //uint32  unk_name;                                     // 3        m_Description_lang
     //float   CostMultiplier;                               // 4        m_Cost_Modifier
     uint32  race;                                           // 5        m_race
@@ -619,7 +619,7 @@ struct BarberShopStyleEntry
 };
 struct BattlemasterListEntry
 {
-    uint32  id;                                             // 0
+    uint32  id;                                             // 0 m_id
     int32   mapid[8];                                       // 1-8 mapid
     uint32  type;                                           // 9 (3 - BG, 4 - arena)
     //uint32 canJoinAsGroup;                                // 10 (0 or 1)
@@ -628,10 +628,10 @@ struct BattlemasterListEntry
     uint32 HolidayWorldStateId;                             // 13 new 3.1
     uint32 minLevel;                                        // 14, min level (sync with PvPDifficulty.dbc content)
     uint32 maxLevel;                                        // 15, max level (sync with PvPDifficulty.dbc content)
-    //uint32 maxGroupSizeRated;                             // 16 4.0.1
-    //uint32 unk;                                           // 17 - 4.0.6.13596
-    //uint32 maxPlayers;                                    // 18 4.0.1
-    //uint32 unk1;                                          // 19 4.0.3, value 2 for Rated Battlegrounds
+    uint32 maxGroupSizeRated;                               // 16 4.0.1
+    uint32 maxPlayers;                                      // 17 4.0.1
+    uint32 rated;                                           // 18 4.0.3 value 2 for Rated Battlegrounds
+    //uint32 unknown                                        // 19 4.0.x
 };
 
 #define MAX_OUTFIT_ITEMS 24
@@ -1440,7 +1440,8 @@ struct ScalingStatDistributionEntry
     uint32  Id;                                             // 0
     int32   StatMod[10];                                    // 1-10
     uint32  Modifier[10];                                   // 11-20
-    uint32  MaxLevel;                                       // 21
+    //uint32 unk1;                                          // 21
+    uint32  MaxLevel;                                       // 22
 };
 
 struct ScalingStatValuesEntry
@@ -1485,6 +1486,7 @@ struct ScalingStatValuesEntry
         }
         return 0;
     }
+
     uint32 getDPSMod(uint32 mask) const
     {
         if (mask&0x7E00)
@@ -1498,11 +1500,13 @@ struct ScalingStatValuesEntry
         }
         return 0;
     }
+
     uint32 getSpellBonus(uint32 mask) const
     {
         if (mask & 0x00008000) return spellBonus;
         return 0;
     }
+
     uint32 getFeralBonus(uint32 mask) const                 // removed in 3.2.x?
     {
         if (mask & 0x00010000) return 0;                    // not used?
@@ -1958,6 +1962,7 @@ struct SummonPropertiesEntry
 #define MAX_TALENT_RANK 5
 #define MAX_PET_TALENT_RANK 3                               // use in calculations, expected <= MAX_TALENT_RANK
 #define MAX_TALENT_TABS 3
+#define MAX_TALENT_MASTERY_SPELLS 2
 
 struct TalentEntry
 {
@@ -1966,17 +1971,14 @@ struct TalentEntry
     uint32    Row;                                          // 2
     uint32    Col;                                          // 3
     uint32    RankID[MAX_TALENT_RANK];                      // 4-8
-                                                            // 9-12 not used, always 0, maybe not used high ranks
-    uint32    DependsOn;                                    // 13 index in Talent.dbc (TalentEntry)
-                                                            // 14-15 not used
-    uint32    DependsOnRank;                                // 16
-                                                            // 17-18 not used
-    //uint32  needAddInSpellBook;                           // 19  also need disable higest ranks on reset talent tree
-    //uint32  unk2;                                         // 20, all 0
-    //uint64  allowForPet;                                  // 21 its a 64 bit mask for pet 1<<m_categoryEnumID in CreatureFamily.dbc
+    uint32    DependsOn;                                    // 9 index in Talent.dbc (TalentEntry)
+                                                            // 10-11 not used
+    uint32    DependsOnRank;                                // 12
+                                                            // 13-14 not used
+    //uint32  needAddInSpellBook;                           // 15  also need disable higest ranks on reset talent tree
+    //uint32  unk2;                                         // 16, all 0
+    //uint64  allowForPet;                                  // 17 its a 64 bit mask for pet 1<<m_categoryEnumID in CreatureFamily.dbc
 };
-
-#define MAX_TALENT_MASTERY_SPELLS 2
 
 struct TalentTabEntry
 {

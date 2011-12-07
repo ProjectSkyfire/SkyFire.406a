@@ -1357,16 +1357,8 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                         {
                             std::list<Unit*> PartyMembers;
                             m_caster->GetPartyMembers(PartyMembers);
-                            bool Continue = false;
-                            uint32 player = 0;
-                            for (std::list<Unit*>::iterator itr = PartyMembers.begin(); itr != PartyMembers.end(); ++itr) // If caster is in party with a player
-                            {
-                                ++player;
-                                if (Continue == false && player > 1)
-                                    Continue = true;
-                            }
-
-                            if (Continue == true)
+                            
+                            if (PartyMembers.size() >= 1)
                                 m_caster->CastSpell(unitTarget, 79058, true); // Arcane Brilliance (For all)
                             else
                                 m_caster->CastSpell(unitTarget, 79057, true); // Arcane Brilliance (Only for caster)
@@ -1513,7 +1505,6 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                     return;
 
                 m_caster->CastSpell(unitTarget, damage, true);
-                return;
 
                 switch(m_spellInfo->Id)
                 {
@@ -6190,7 +6181,21 @@ void Spell::EffectApplyGlyph(SpellEffIndex effIndex)
             player->CastSpell(m_caster, gp->SpellId, true);
             player->SetGlyph(m_glyphIndex, glyph);
             player->SendTalentsInfoData(false);
+            player->learnSpell(gp->SpellId, true);
         }
+    }
+    else
+    {
+        // Glyph removal
+        if (uint32 oldglyph = player->GetGlyph(m_glyphIndex))
+        {
+            if (GlyphPropertiesEntry const *old_gp = sGlyphPropertiesStore.LookupEntry(oldglyph))
+            {
+                player->RemoveAurasDueToSpell(old_gp->SpellId);
+                player->SetGlyph(m_glyphIndex, 0);
+            }
+        }
+
     }
 }
 

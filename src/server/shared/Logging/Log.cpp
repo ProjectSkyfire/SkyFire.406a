@@ -174,7 +174,7 @@ void Log::Initialize()
     m_dbLogLevel   = ConfigMgr::GetIntDefault("DBLogLevel", LOGL_NORMAL);
     m_sqlDriverQueryLogging  = ConfigMgr::GetBoolDefault("SQLDriverQueryLogging", false);
 
-    m_DebugLogMask = DebugLogFilters(ConfigMgr::GetIntDefault("DebugLogMask", LOG_FILTER_NONE));
+    _DebugLogMask = DebugLogFilters(ConfigMgr::GetIntDefault("DebugLogMask", LOG_FILTER_NONE));
 
     // Char log settings
     m_charLog_Dump = ConfigMgr::GetBoolDefault("CharLogDump", false);
@@ -194,7 +194,7 @@ void Log::ReloadConfig()
     m_logFileLevel = ConfigMgr::GetIntDefault("LogFileLevel", LOGL_NORMAL);
     m_dbLogLevel   = ConfigMgr::GetIntDefault("DBLogLevel", LOGL_NORMAL);
 
-    m_DebugLogMask = DebugLogFilters(ConfigMgr::GetIntDefault("DebugLogMask", LOG_FILTER_NONE));
+    _DebugLogMask = DebugLogFilters(ConfigMgr::GetIntDefault("DebugLogMask", LOG_FILTER_NONE));
 }
 
 FILE* Log::openLogFile(char const* configFileName, char const* configTimeStampFlag, char const* mode)
@@ -757,7 +757,7 @@ void Log::outSQLDev(const char* str, ...)
 
 void Log::outDebug(DebugLogFilters f, const char * str, ...)
 {
-    if (!(m_DebugLogMask & f))
+    if (!(_DebugLogMask & f))
         return;
 
     if (!str)
@@ -1051,4 +1051,11 @@ void Log::outErrorST(const char * str, ...)
 
     ACE_Stack_Trace st;
     outError("%s [Stacktrace: %s]", nnew_str, st.c_str());
+}
+
+void Log::outOpCode(uint32 op, const char * name, bool smsg)
+{
+   if (!(_DebugLogMask & LOG_FILTER_OPCODES))
+       return;
+   outString("%s: %s 0x%.4X (%u)", smsg ? "S->C" : "C->S", name, op, op);
 }

@@ -280,6 +280,15 @@ int32 GetDiminishingReturnsLimitDuration(DiminishingGroup group, SpellInfo const
             // Faerie Fire - limit to 40 seconds in PvP (3.1)
             if (spellproto->SpellFamilyFlags[0] & 0x400)
                 return 40 * IN_MILLISECONDS;
+            // Entangling Roots - limit to 8 seconds in PvP (4.0.6a)
+            if(spellproto->SpellFamilyFlags[0] & 0x200)
+                return 8 * IN_MILLISECONDS;
+            // Hibernate - limit to 8 seconds in PvP (4.0.6a)
+            if(spellproto->Id == 2637)
+                return 8 * IN_MILLISECONDS;
+            // Infected Wounds - limit to 8 seconds in PvP (4.0.6a)
+            if(spellproto->Id == 58179 || spellproto->Id == 58180)
+                return 8 * IN_MILLISECONDS;
             break;
         }
         case SPELLFAMILY_HUNTER:
@@ -290,6 +299,12 @@ int32 GetDiminishingReturnsLimitDuration(DiminishingGroup group, SpellInfo const
             // Hunter's Mark
             if (spellproto->SpellFamilyFlags[0] & 0x400)
                 return 120 * IN_MILLISECONDS;
+            // Freezing Trap - limit to 8 seconds in PvP (4.0.6a)
+            if(spellproto->SpellFamilyFlags[0] & 0x8)
+                return 8 * IN_MILLISECONDS;
+            // Wing Clip - limit to 8 seconds in PvP (4.0.6a)
+            if(spellproto->SpellFamilyFlags[0] & 0x40)
+                return 8 * IN_MILLISECONDS;
             break;
         }
         case SPELLFAMILY_PALADIN:
@@ -310,12 +325,57 @@ int32 GetDiminishingReturnsLimitDuration(DiminishingGroup group, SpellInfo const
             // Curse of Elements - limit to 120 seconds in PvP
             else if (spellproto->SpellFamilyFlags[1] & 0x200)
                return 120 * IN_MILLISECONDS;
+            // Fear - limit to 8 seconds in PvP (4.0.6a)
+            else if (spellproto->SpellFamilyFlags[1] & 0x400)
+                return 8 * IN_MILLISECONDS;
+            // Seduction (Succubus) - limit to 8 seconds in PvP (4.0.6a)
+            else if (spellproto->SpellFamilyFlags[1] & 0x10000000)
+                return 8 * IN_MILLISECONDS;
             break;
         }
         case SPELLFAMILY_DEATHKNIGHT:
         {
-            // Hungering Cold - limit to 8 seconds in PvP
+            // Hungering Cold - limit to 8 seconds in PvP (4.0.6a)
             if (spellproto->Id == 51209)
+                return 8 * IN_MILLISECONDS;
+            break;
+        }
+        case SPELLFAMILY_MAGE:
+        {
+            // Polymorph - limit to 8 seconds in PvP (4.0.6a)
+            if(spellproto->SpellFamilyFlags[0] & 0x1000000)
+                return 8 * IN_MILLISECONDS;
+            // Slow - limit to 8 seconds in PvP (4.0.6a)
+            if(spellproto->SpellFamilyFlags[0] & 0x80000000)
+                return 8 * IN_MILLISECONDS;
+            break;
+        }
+        case SPELLFAMILY_PRIEST:
+        {
+            // Mind Control - limit to 8 seconds in PvP (4.0.6a)
+            if(spellproto->SpellFamilyFlags[0] & 0x00020000)
+                return 8 * IN_MILLISECONDS;
+            break;
+        }
+        case SPELLFAMILY_ROGUE:
+        {
+            // Blind - limit to 8 seconds in PvP (4.0.6a)
+            if (spellproto->SpellFamilyFlags[0] & 0x1000000)
+                return 8 * IN_MILLISECONDS;
+
+            // Crippling Poison - limit to 8 seconds in PvP (4.0.6a)
+            if (spellproto->Id == 3409)
+                return 8 * IN_MILLISECONDS;
+
+            // Sap - limit to 8 seconds in PvP (4.0.6a)
+            if(spellproto->SpellFamilyFlags[0] & 0x80)
+                return 8 * IN_MILLISECONDS;
+            break;
+        }
+        case SPELLFAMILY_SHAMAN:
+        {
+            // Hex - limit to 8 seconds in PvP (4.0.6a)
+            if(spellproto->SpellFamilyFlags[1] & 0x8000)
                 return 8 * IN_MILLISECONDS;
             break;
         }
