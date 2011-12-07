@@ -425,7 +425,7 @@ void WorldSession::HandleGuildRankOpcode(WorldPacket& recvPacket)
 
     GuildBankRightsAndSlotsVec rightsAndSlots(GUILD_BANK_MAX_TABS);
 
-	if (old_rankId != GR_GUILDMASTER)
+    if (old_rankId != GR_GUILDMASTER)
     {
         for (uint8 tabId = 0; tabId < GUILD_BANK_MAX_TABS; ++tabId)
         {
@@ -435,7 +435,7 @@ void WorldSession::HandleGuildRankOpcode(WorldPacket& recvPacket)
         guild->HandleSetRankInfo(this, new_rankId, rankName, new_rights, money, rightsAndSlots);
     }
 
-	if (old_rankId != new_rankId && old_rankId != GR_GUILDMASTER && new_rankId != GR_GUILDMASTER)
+    if (old_rankId != new_rankId && old_rankId != GR_GUILDMASTER && new_rankId != GR_GUILDMASTER)
         guild->ChangeMemberRank(old_rankId, new_rankId);
 }
 

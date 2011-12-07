@@ -748,7 +748,6 @@ Player::Player (WorldSession *session): Unit(), m_achievementMgr(this), m_reputa
     m_canBlock = false;
     m_canDualWield = false;
     m_canTitanGrip = false;
-    m_ammoDPS = 0.0f;
 
     m_temporaryUnsummonedPetNumber = 0;
     //cache for UNIT_CREATED_BY_SPELL to allow
@@ -12657,14 +12656,10 @@ void Player::SetAmmo(uint32 item)
             return;
         }
     }
-
-   // _ApplyAmmoBonuses();
 }
 
 void Player::RemoveAmmo()
 {
-    m_ammoDPS = 0.0f;
-
     if (CanModifyStats())
         UpdateDamagePhysical(RANGED_ATTACK);
 }
