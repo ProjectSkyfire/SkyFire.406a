@@ -287,7 +287,7 @@ int32 GetDiminishingReturnsLimitDuration(DiminishingGroup group, SpellInfo const
             if(spellproto->Id == 2637)
                 return 8 * IN_MILLISECONDS;
             // Infected Wounds - limit to 8 seconds in PvP (4.0.6a)
-            if(spellproto->Id == 58179 || spellProto->Id == 58180)
+            if(spellproto->Id == 58179 || spellproto->Id == 58180)
                 return 8 * IN_MILLISECONDS;
             break;
         }
