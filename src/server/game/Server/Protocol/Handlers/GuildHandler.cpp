@@ -676,9 +676,8 @@ void WorldSession::HandleGuildBankBuyTab(WorldPacket & recv_data)
     uint8 tabId;
     recv_data >> tabId;
 
-    if (GetPlayer()->GetGameObjectIfCanInteractWith(GoGuid, GAMEOBJECT_TYPE_GUILD_BANK))
-        if (Guild* guild = _GetPlayerGuild(this))
-            guild->HandleBuyBankTab(this, tabId);
+    if (Guild* guild = _GetPlayerGuild(this))
+        guild->HandleBuyBankTab(this, tabId);
 }
 
 void WorldSession::HandleGuildBankUpdateTab(WorldPacket & recv_data)
