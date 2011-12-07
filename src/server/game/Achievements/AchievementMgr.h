@@ -257,8 +257,8 @@ class AchievementMgr
         void UpdateAchievementCriteria(AchievementCriteriaTypes type, uint32 miscValue1 = 0, uint32 miscValue2 = 0, Unit* unit = NULL);
         void CompletedAchievement(AchievementEntry const* entry);
         void CheckAllAchievementCriteria();
-        void SendAllAchievementData() const;
-        void SendRespondInspectAchievements(Player* player) const;
+        void SendAllAchievementData();
+        void SendRespondInspectAchievements(Player* player);
         bool HasAchieved(AchievementEntry const* achievement) const;
         Player* GetPlayer() const { return m_player; }
         void UpdateTimedAchievements(uint32 timeDiff);

@@ -596,7 +596,7 @@ struct AuctionHouseEntry
     uint32    faction;                                      // 1 id of faction.dbc for player factions associated with city
     uint32    depositPercent;                               // 2 1/3 from real
     uint32    cutPercent;                                   // 3
-    //char*     name[16];                                   // 4-19
+    // DBCString   name;                                   // 4-19
                                                             // 20 string flag, unused
 };
 
@@ -610,7 +610,7 @@ struct BarberShopStyleEntry
 {
     uint32  Id;                                             // 0
     uint32  type;                                           // 1 value 0 -> hair, value 2 -> facialhair
-    //DBCString  name;                                  // 2        m_DisplayName_lang
+    //DBCString  name;                                      // 2        m_DisplayName_lang
     //uint32  unk_name;                                     // 3        m_Description_lang
     //float   CostMultiplier;                               // 4        m_Cost_Modifier
     uint32  race;                                           // 5        m_race
@@ -619,7 +619,7 @@ struct BarberShopStyleEntry
 };
 struct BattlemasterListEntry
 {
-    uint32  id;                                             // 0
+    uint32  id;                                             // 0 m_id
     int32   mapid[8];                                       // 1-8 mapid
     uint32  type;                                           // 9 (3 - BG, 4 - arena)
     //uint32 canJoinAsGroup;                                // 10 (0 or 1)
@@ -628,10 +628,10 @@ struct BattlemasterListEntry
     uint32 HolidayWorldStateId;                             // 13 new 3.1
     uint32 minLevel;                                        // 14, min level (sync with PvPDifficulty.dbc content)
     uint32 maxLevel;                                        // 15, max level (sync with PvPDifficulty.dbc content)
-    //uint32 maxGroupSizeRated;                             // 16 4.0.1
-    //uint32 unk;                                           // 17 - 4.0.6.13596
-    //uint32 maxPlayers;                                    // 18 4.0.1
-    //uint32 unk1;                                          // 19 4.0.3, value 2 for Rated Battlegrounds
+    uint32 maxGroupSizeRated;                               // 16 4.0.1
+    uint32 maxPlayers;                                      // 17 4.0.1
+    uint32 rated;                                           // 18 4.0.3 value 2 for Rated Battlegrounds
+    //uint32 unknown                                        // 19 4.0.x
 };
 
 #define MAX_OUTFIT_ITEMS 24
