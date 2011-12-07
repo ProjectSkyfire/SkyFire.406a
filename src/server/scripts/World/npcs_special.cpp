@@ -1,6 +1,6 @@
 /*
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2006-2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -17,10 +17,10 @@
  */
 
 /* ScriptData
-SDName: Npcs_Special
-SD%Complete: 100
-SDComment: To be used for special NPCs that are located globally.
-SDCategory: NPCs
+SFName: Npcs_Special
+SF%Complete: 100
+SFComment: To be used for special NPCs that are located globally.
+SFCategory: NPCs
 EndScriptData
 */
 
@@ -2749,7 +2749,7 @@ public:
 
     struct npc_guardian_of_ancient_kingsAI : public ScriptedAI
     {
-        npc_guardian_of_ancient_kingsAI(Creature *pCreature) : ScriptedAI(pCreature)
+        npc_guardian_of_ancient_kingsAI(Creature *creature) : ScriptedAI(creature)
         {
             _healcount = 0;
         }
@@ -2800,11 +2800,102 @@ public:
             uint32 _healcount;
     };
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new npc_guardian_of_ancient_kingsAI(pCreature);
+        return new npc_guardian_of_ancient_kingsAI(creature);
     }
 };*/
+
+class npc_ring_of_frost : public CreatureScript
+{
+    public:
+    npc_ring_of_frost() : CreatureScript("npc_ring_of_frost") { }
+
+    struct npc_ring_of_frostAI : public ScriptedAI
+    {
+        npc_ring_of_frostAI(Creature *creature) : ScriptedAI(creature) {}
+        bool Isready;
+        uint32 timer;
+
+        void Reset()
+        {
+            timer = 3000; // 3sec
+            Isready = false;
+        }
+
+        void InitializeAI()
+        {
+            ScriptedAI::InitializeAI();
+            Unit* owner = me->GetOwner();
+            if (!owner || owner->GetTypeId() != TYPEID_PLAYER)
+                return;
+
+            me->SetReactState(REACT_PASSIVE);
+            me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+            me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+
+            // Remove other ring spawned by the player
+            std::list<Creature*> templist;
+            float x, y, z;
+            me->GetPosition(x, y, z);
+            {
+                CellCoord pair(Trinity::ComputeCellCoord(x, y));
+                Cell cell(pair);
+                cell.SetNoCreate();
+
+                Trinity::AllFriendlyCreaturesInGrid check(me);
+                Trinity::CreatureListSearcher<Trinity::AllFriendlyCreaturesInGrid> searcher(me, templist, check);
+
+                TypeContainerVisitor<Trinity::CreatureListSearcher<Trinity::AllFriendlyCreaturesInGrid>, GridTypeMapContainer> cSearcher(searcher);
+
+                cell.Visit(pair, cSearcher, *(me->GetMap()), *me, me->GetGridActivationRange());
+
+                if (!templist.empty())
+                    for (std::list<Creature*>::const_iterator itr = templist.begin(); itr != templist.end(); ++itr)
+                        if ((*itr)->GetOwner() == me->GetOwner() && *itr != me)
+                            (*itr)->DisappearAndDie();
+                            templist.clear();
+            }
+        }
+
+        void EnterEvadeMode() { return; }
+
+        void CheckIfMoveInRing(Unit* who)
+        {
+            if (who->isAlive() && me->IsInRange(who, 2.0f, 4.7f) && !who->HasAura(82691)/*<= target already frozen*/ && !who->HasAura(91264)/*<= target is immune*/ && me->IsWithinLOSInMap(who) && Isready)
+                me->CastSpell(who, 82691, true);
+        }
+
+        void UpdateAI(const uint32 diff)
+        {
+            if (timer <= diff)
+            {
+                if (!Isready)
+                {
+                    Isready = true;
+                    timer = 9000; // 9sec
+                }
+                else
+                    me->DisappearAndDie();
+            }
+            else
+                timer -= diff;
+
+            // Find all the enemies
+            std::list<Unit*> targets;
+            Trinity::AnyUnfriendlyUnitInObjectRangeCheck u_check(me, me, 5.0f);
+            Trinity::UnitListSearcher<Trinity::AnyUnfriendlyUnitInObjectRangeCheck> searcher(me, targets, u_check);
+            me->VisitNearbyObject(5.0f, searcher);
+            for (std::list<Unit*>::const_iterator iter = targets.begin(); iter != targets.end(); ++iter)
+                CheckIfMoveInRing(*iter);
+        }
+    };
+
+    CreatureAI* GetAI(Creature* creature) const
+    {
+        return new npc_ring_of_frostAI(creature);
+    }
+};
 
 void AddSC_npcs_special()
 {
@@ -2837,5 +2928,6 @@ void AddSC_npcs_special()
     new npc_tabard_vendor;
     new npc_experience;
     new npc_flame_orb;
+    new npc_ring_of_frost;
     //new npc_guardian_of_ancient_kings;
 }
