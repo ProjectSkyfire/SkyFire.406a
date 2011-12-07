@@ -362,11 +362,11 @@ int32 GetDiminishingReturnsLimitDuration(DiminishingGroup group, SpellInfo const
             // Blind - limit to 8 seconds in PvP (4.0.6a)
             if (spellproto->SpellFamilyFlags[0] & 0x1000000)
                 return 8 * IN_MILLISECONDS;
-            
+
             // Crippling Poison - limit to 8 seconds in PvP (4.0.6a)
             if (spellproto->Id == 3409)
                 return 8 * IN_MILLISECONDS;
-                
+
             // Sap - limit to 8 seconds in PvP (4.0.6a)
             if(spellproto->SpellFamilyFlags[0] & 0x80)
                 return 8 * IN_MILLISECONDS;
