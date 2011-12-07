@@ -287,7 +287,7 @@ int32 GetDiminishingReturnsLimitDuration(DiminishingGroup group, SpellInfo const
             if(spellproto->Id == 2637)
                 return 8 * IN_MILLISECONDS;
             // Infected Wounds - limit to 8 seconds in PvP (4.0.6a)
-            if(spellproto->Id == 58179 || spellProto->Id == 58180)
+            if(spellproto->Id == 58179 || spellproto->Id == 58180)
                 return 8 * IN_MILLISECONDS;
             break;
         }
@@ -362,11 +362,11 @@ int32 GetDiminishingReturnsLimitDuration(DiminishingGroup group, SpellInfo const
             // Blind - limit to 8 seconds in PvP (4.0.6a)
             if (spellproto->SpellFamilyFlags[0] & 0x1000000)
                 return 8 * IN_MILLISECONDS;
-            
+
             // Crippling Poison - limit to 8 seconds in PvP (4.0.6a)
             if (spellproto->Id == 3409)
                 return 8 * IN_MILLISECONDS;
-                
+
             // Sap - limit to 8 seconds in PvP (4.0.6a)
             if(spellproto->SpellFamilyFlags[0] & 0x80)
                 return 8 * IN_MILLISECONDS;
