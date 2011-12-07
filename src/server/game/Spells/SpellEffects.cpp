@@ -1505,7 +1505,6 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                     return;
 
                 m_caster->CastSpell(unitTarget, damage, true);
-                return;
 
                 switch(m_spellInfo->Id)
                 {
