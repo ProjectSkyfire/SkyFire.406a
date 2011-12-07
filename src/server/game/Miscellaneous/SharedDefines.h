@@ -2439,7 +2439,7 @@ enum QuestSort
     QUEST_SORT_UNDERCITY_OLD       = 23,
     QUEST_SORT_HERBALISM           = 24,
     QUEST_SORT_BATTLEGROUNDS       = 25,
-    QUEST_SORT_ULDAMN_OLD          = 41,
+    QUEST_SORT_ULDAMAN_OLD          = 41,
     QUEST_SORT_WARLOCK             = 61,
     QUEST_SORT_WARRIOR             = 81,
     QUEST_SORT_SHAMAN              = 82,
