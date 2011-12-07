@@ -52,6 +52,7 @@ enum DebugLogFilters
     LOG_FILTER_GUILD                    = 0x00200000,   // Guild related
     LOG_FILTER_TRANSPORTS               = 0x00400000,   // Transport related
     LOG_FILTER_BATTLEFIELD              = 0x00800000,   // Battlefield related
+    LOG_FILTER_OPCODES                  = 0x01000000,   // OpCode related
 };
 
 enum LogTypes
@@ -139,6 +140,7 @@ class Log
         void outArena( const char * str, ... )                  ATTR_PRINTF(2, 3);
         void outSQLDriver( const char* str, ... )               ATTR_PRINTF(2, 3);
         void outCharDump( const char * str, uint32 account_id, uint32 guid, const char * name );
+        void outOpCode(uint32 op, const char * name, bool smsg = true);
 
         static void outTimestamp(FILE* file);
         static std::string GetTimestampStr();
@@ -204,7 +206,7 @@ class Log
         bool m_charLog_Dump_Separate;
         std::string m_dumpsDir;
 
-        DebugLogFilters m_DebugLogMask;
+        DebugLogFilters _DebugLogMask;
 };
 
 #define sLog ACE_Singleton<Log, ACE_Thread_Mutex>::instance()

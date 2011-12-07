@@ -2325,7 +2325,7 @@ uint32 Spell::SelectEffectTargets(uint32 i, SpellImplicitTargetInfo const& cur)
             {
                 case TARGET_DEST_DYNOBJ_ENEMY:
                 case TARGET_DEST_DYNOBJ_ALLY:
-                case TARGET_DEST_DYNOBJ_NONE:
+                case TARGET_DEST_DYNOBJ_ALL_UNITS:
                 case TARGET_DEST_DEST:
                     return effectMask;
                 case TARGET_DEST_TRAJ:
@@ -3797,8 +3797,6 @@ void Spell::SendSpellStart()
     if ((IsTriggered() && !m_spellInfo->IsAutoRepeatRangedSpell()) || m_triggeredByAuraSpell)
         castFlags |= CAST_FLAG_PENDING;
 
-    //if (m_spellInfo->Attributes & SPELL_ATTR0_REQ_AMMO)
-        //castFlags |= CAST_FLAG_AMMO;
     if ((m_caster->GetTypeId() == TYPEID_PLAYER ||
         (m_caster->GetTypeId() == TYPEID_UNIT && m_caster->ToCreature()->isPet()))
          && m_spellInfo->PowerType != POWER_HEALTH)
@@ -3850,8 +3848,6 @@ void Spell::SendSpellGo()
     if ((IsTriggered() && !m_spellInfo->IsAutoRepeatRangedSpell()) || m_triggeredByAuraSpell)
         castFlags |= CAST_FLAG_PENDING;
 
-    if (m_spellInfo->Attributes & SPELL_ATTR0_REQ_AMMO)
-        castFlags |= CAST_FLAG_AMMO;                        // arrows/bullets visual
     if ((m_caster->GetTypeId() == TYPEID_PLAYER ||
         (m_caster->GetTypeId() == TYPEID_UNIT && m_caster->ToCreature()->isPet()))
         && m_spellInfo->PowerType != POWER_HEALTH)
@@ -4850,8 +4846,13 @@ SpellCastResult Spell::CheckCast(bool strict)
             if ((m_spellInfo->AttributesCu & SPELL_ATTR0_CU_REQ_TARGET_FACING_CASTER) && !target->HasInArc(static_cast<float>(M_PI), m_caster))
                 return SPELL_FAILED_NOT_INFRONT;
 
-            if (!(m_spellInfo->AttributesEx2 & SPELL_ATTR2_CAN_TARGET_NOT_IN_LOS) && VMAP::VMapFactory::checkSpellForLoS(m_spellInfo->Id) && !m_caster->IsWithinLOSInMap(target))
-                return SPELL_FAILED_LINE_OF_SIGHT;
+            if (!IsTriggered())
+            {
+                if (!(m_spellInfo->AttributesEx2 & SPELL_ATTR2_CAN_TARGET_NOT_IN_LOS) && VMAP::VMapFactory::checkSpellForLoS(m_spellInfo->Id) && !m_caster->IsWithinLOSInMap(target))
+                    return SPELL_FAILED_LINE_OF_SIGHT;
+                if (m_caster->IsVisionObscured(target))
+                    return SPELL_FAILED_VISION_OBSCURED; // smoke bomb, camouflage...
+            }
 
             if (m_spellInfo->AttributesEx7 & SPELL_ATTR7_HAS_CHARGE_EFFECT)
             {
@@ -4865,14 +4866,6 @@ SpellCastResult Spell::CheckCast(bool strict)
                    if (fabs(z_mid - z_ground) > 1.0f)
                        return SPELL_FAILED_NOPATH;
                }
-            }
-
-            if (!m_triggeredByAuraSpell)
-            {
-                if (VMAP::VMapFactory::checkSpellForLoS(m_spellInfo->Id) && !m_caster->IsWithinLOSInMap(target))
-                    return SPELL_FAILED_LINE_OF_SIGHT;
-                if (m_caster->IsVisionObscured(target))
-                    return SPELL_FAILED_VISION_OBSCURED; // smoke bomb, camouflage...
             }
         }
         else
@@ -5395,15 +5388,14 @@ SpellCastResult Spell::CheckCast(bool strict)
 
                         if (!m_targets.GetUnitTarget() || m_targets.GetUnitTarget()->GetTypeId() == TYPEID_PLAYER)
                             return SPELL_FAILED_BAD_IMPLICIT_TARGETS;
-                            
+
                         // Check if there are to many so that you don't get mixed with pets
                         // being there from the begining
                         if (m_caster->ToPlayer()->getSlotForNewPet() == PET_SLOT_FULL_LIST)
-                        {   
+                        {
                             m_caster->ToPlayer()->SendPetTameResult(PET_TAME_ERROR_TOO_MANY_PETS);
                             return SPELL_FAILED_NO_ACTIONS;
                         }
-
 
                         Creature* target = m_targets.GetUnitTarget()->ToCreature();
 
@@ -6275,19 +6267,6 @@ SpellCastResult Spell::CheckItems()
                 if (!pItem || pItem->IsBroken())
                     return SPELL_FAILED_EQUIPPED_ITEM;
 
-                switch (pItem->GetTemplate()->SubClass)
-                {
-                    case ITEM_SUBCLASS_WEAPON_THROWN:
-                    {
-                        uint32 ammo = pItem->GetEntry();
-                        if (!m_caster->ToPlayer()->HasItemCount(ammo, 1))
-                            return SPELL_FAILED_NO_AMMO;
-                    };  break;
-                    case ITEM_SUBCLASS_WEAPON_WAND:
-                        break;
-                    default:
-                        break;
-                }
                 break;
             }
             case SPELL_EFFECT_CREATE_MANA_GEM:

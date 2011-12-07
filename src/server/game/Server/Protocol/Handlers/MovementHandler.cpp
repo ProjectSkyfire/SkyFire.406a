@@ -352,8 +352,13 @@ void WorldSession::HandleMovementOpcodes(WorldPacket & recv_data)
 
     mover->UpdatePosition(movementInfo.pos);
 
-    if (plMover)                                            // nothing is charmed, or player charmed
+    if (plMover)                     // nothing is charmed, or player charmed
     {
+        if (plMover->GetEmoteState() != 0 && opcode == MSG_MOVE_START_FORWARD && opcode != MSG_MOVE_SET_FACING &&
+           opcode != MSG_MOVE_START_TURN_LEFT && opcode != MSG_MOVE_START_TURN_RIGHT &&
+           opcode != MSG_MOVE_STOP_TURN)
+           plMover->SetEmoteState(0);
+	
         plMover->UpdateFallInformationIfNeed(movementInfo, opcode);
 
         float underMapValue = -500.0f;
@@ -474,6 +479,17 @@ void WorldSession::HandleSetActiveMoverOpcode(WorldPacket &recv_data)
 
     uint64 guid;
     recv_data >> guid;
+
+   // do not reset the active mover if it didn't change
+   if (guid == _player->m_mover->GetGUID())
+       return;
+   // Anti-cheat check
+   if (guid != _player->GetCharmGUID() && guid != _player->GetGUID())
+   {
+       sLog->outError("Player %s is trying to change mover to an invalid value!", _player->GetName());
+		GetPlayer()->SetMover(GetPlayer());
+       return;
+   }
 
     if (GetPlayer()->IsInWorld())
     {

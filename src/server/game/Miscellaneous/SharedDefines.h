@@ -1413,7 +1413,7 @@ enum Targets
     TARGET_DEST_DEST_FRONT_LEFT        = 85,
     TARGET_DEST_DEST_RANDOM            = 86,
     TARGET_DEST_DEST                   = 87,
-    TARGET_DEST_DYNOBJ_NONE            = 88,
+    TARGET_DEST_DYNOBJ_ALL_UNITS       = 88,
     TARGET_DEST_TRAJ                   = 89,
     TARGET_UNIT_TARGET_MINIPET         = 90,
     TARGET_DEST_DEST_RADIUS            = 91,

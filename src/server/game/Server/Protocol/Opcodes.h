@@ -621,7 +621,6 @@ enum Opcodes
     SMSG_AUCTION_BIDDER_LIST_RESULT                  = 0x0A1A8, // 4.0.6a 13623
     SMSG_SET_FLAT_SPELL_MODIFIER                     = 0x02BC8, // 4.0.6a 13623
     SMSG_SET_PCT_SPELL_MODIFIER                      = 0x0A6E8, // 4.0.6a 13623
-    CMSG_SET_AMMO                                    = 0x100BF, // Unknown opcode ID
     SMSG_CORPSE_RECLAIM_DELAY                        = 0x031C4, // 4.0.6a 13623
     CMSG_SET_ACTIVE_MOVER                            = 0x06CA0, // 4.0.6a 13623
     CMSG_PET_CANCEL_AURA                             = 0x0F6C0, // 4.0.6a 13623
