@@ -7667,24 +7667,18 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
             // Dancing Rune Weapon
             if (dummySpell->Id == 49028)
             {
-                // 1 dummy aura for dismiss rune blade
-                if (effIndex != 1)
-                    return false;
-
-                Unit* pPet = NULL;
+                Unit* pet = NULL;
                 for (ControlList::const_iterator itr = m_Controlled.begin(); itr != m_Controlled.end(); ++itr) // Find Rune Weapon
                     if ((*itr)->GetEntry() == 27893)
                     {
-                        pPet = *itr;
+                        pet = *itr;
                         break;
                     }
 
-                if (pPet && pPet->getVictim() && damage && procSpell)
+                if (pet && pet->getVictim() && damage && procSpell)
                 {
-                    uint32 procDmg = damage / 2;
-                    pPet->SendSpellNonMeleeDamageLog(pPet->getVictim(), procSpell->Id, procDmg, procSpell->GetSchoolMask(), 0, 0, false, 0, false);
-                    pPet->DealDamage(pPet->getVictim(), procDmg, NULL, SPELL_DIRECT_DAMAGE, procSpell->GetSchoolMask(), procSpell, true);
-                    break;
+                    pet->CastSpell(pet->getVictim(), procSpell->Id, true);
+                    return true;
                 }
                 else
                     return false;
