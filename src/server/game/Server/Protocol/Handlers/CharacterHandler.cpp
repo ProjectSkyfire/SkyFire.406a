@@ -232,18 +232,18 @@ void WorldSession::HandleCharEnum(QueryResult result)
             *(uint64*)highGuid = MAKE_NEW_GUID(guidlow, 0, HIGHGUID_PLAYER);
 
             data.writeBit(0); // Guild guid byte 2
-            data.writeBit((highGuid[2] != 0) ? highGuid[2] ^ 1 : highGuid[2]); // The client will do this -> PlayerHighGuid[2] ^ 0
-            data.writeBit((highGuid[6] != 0) ? highGuid[6] ^ 1 : highGuid[6]); // The client will do this -> PlayerHighGuid[6] ^ 0
-            data.writeBit((highGuid[5] != 0) ? highGuid[5] ^ 1 : highGuid[5]); // The client will do this -> PlayerHighGuid[5] ^ 0
-            data.writeBit((highGuid[4] != 0) ? highGuid[4] ^ 1 : highGuid[4]); // The client will do this -> PlayerHighGuid[4] ^ 0
+            data.writeBit((highGuid[2] != 0) ? highGuid[2] ^ 0 : highGuid[2]); // The client will do this -> PlayerHighGuid[2] ^ 0
+            data.writeBit((highGuid[6] != 0) ? highGuid[6] ^ 0 : highGuid[6]); // The client will do this -> PlayerHighGuid[6] ^ 0
+            data.writeBit((highGuid[5] != 0) ? highGuid[5] ^ 0 : highGuid[5]); // The client will do this -> PlayerHighGuid[5] ^ 0
+            data.writeBit((highGuid[4] != 0) ? highGuid[4] ^ 0 : highGuid[4]); // The client will do this -> PlayerHighGuid[4] ^ 0
             data.writeBit(0); // guild guid byte 4 
             data.writeBit(0);// guild guid byte 3
             data.writeBit(0); // guild guid byte 7
             data.writeBits<uint32>(nameLen, 7); // 7 bits lenght for an uint32 ? wtflol?
             data.writeBit(0); // guild byte 0
-            data.writeBit((highGuid[0] != 0) ? highGuid[0] ^ 1 : highGuid[0]); // The client will do this -> PlayerHighGuid[0] ^ 0
-            data.writeBit((highGuid[3] != 0) ? highGuid[3] ^ 1 : highGuid[3]); // The client will do this -> PlayerHighGuid[3] ^ 0
-            data.writeBit((highGuid[1] != 0) ? highGuid[1] ^ 1 : highGuid[1]); // The client will do this -> PlayerHighGuid[1] ^ 0
+            data.writeBit((highGuid[0] != 0) ? highGuid[0] ^ 0 : highGuid[0]); // The client will do this -> PlayerHighGuid[0] ^ 0
+            data.writeBit((highGuid[3] != 0) ? highGuid[3] ^ 0 : highGuid[3]); // The client will do this -> PlayerHighGuid[3] ^ 0
+            data.writeBit((highGuid[1] != 0) ? highGuid[1] ^ 0 : highGuid[1]); // The client will do this -> PlayerHighGuid[1] ^ 0
 
             if (atLoginFlags & AT_LOGIN_FIRST)
                 data.writeBit(1);
@@ -251,7 +251,7 @@ void WorldSession::HandleCharEnum(QueryResult result)
                 data.writeBit(0);
 
             data.writeBit(0); // guild guid byte 5
-            data.writeBit((highGuid[7] != 0) ? highGuid[7] ^ 1 : highGuid[7]); // The client will do this -> PlayerHighGuid[7] ^ 0
+            data.writeBit((highGuid[7] != 0) ? highGuid[7] ^ 0 : highGuid[7]); // The client will do this -> PlayerHighGuid[7] ^ 0
             data.writeBit(0); // guild guid byte 6
             data.writeBit(0); // guild guid byte 1
 
