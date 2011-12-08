@@ -304,7 +304,7 @@ enum CharacterDatabaseStatements
     CHAR_ADD_GM_SURVEY,
     CHAR_ADD_GM_SUBSURVEY,
     CHAR_ADD_LAG_REPORT,
-    
+
     CHAR_ADD_CHARACTER,
     CHAR_UPD_CHARACTER,
 

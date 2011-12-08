@@ -2535,7 +2535,7 @@ void DynObjAura::FillTargetMap(std::map<Unit* , uint8> & targets, Unit* /*caster
             Trinity::AnyUnitInObjectRangeCheck u_check(GetDynobjOwner(), radius);
             Trinity::UnitListSearcher<Trinity::AnyUnitInObjectRangeCheck> searcher(GetDynobjOwner(), targetList, u_check);
             GetDynobjOwner()->VisitNearbyObject(radius, searcher);
-        }		
+        }
         else
         {
             Trinity::AnyAoETargetUnitInObjectRangeCheck u_check(GetDynobjOwner(), dynObjOwnerCaster, radius);

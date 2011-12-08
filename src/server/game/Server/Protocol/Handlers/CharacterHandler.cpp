@@ -697,7 +697,7 @@ void WorldSession::HandleCharCreateCallback(PreparedQueryResult result, Characte
                 CharacterDatabase.PExecute("UPDATE characters SET currentPetSlot = '100', petSlotUsed = '3452816845' WHERE guid = %u", newChar.GetGUIDLow());
                 newChar.SetTemporaryUnsummonedPetNumber(pet_id);
             }
-            
+
             if (createInfo->Class == CLASS_HUNTER)
             {
                 switch(createInfo->Race)
@@ -736,11 +736,11 @@ void WorldSession::HandleCharCreateCallback(PreparedQueryResult result, Characte
                         CharacterDatabase.PExecute("REPLACE INTO character_pet (`id`, `entry`, `owner`, `modelid`, `CreatedBySpell`, `PetType`, `level`, `exp`, `Reactstate`, `name`, `renamed`, `slot`, `curhealth`, `curmana`, `curhappiness`, `savetime`, `abdata`) VALUES (%u, 42722, %u, 30221, 13481, 1, 1, 0, 0, 'Dog', 0, 0, 192, 0, 166500, 1295728219, '7 2 7 1 7 0 129 2649 129 17253 1 0 1 0 6 2 6 1 6 0 ')",  pet_id, newChar.GetGUIDLow());
                         break;
                 }
-                
+
                 CharacterDatabase.PExecute("UPDATE characters SET currentPetSlot = '0', petSlotUsed = '1' WHERE guid = %u", newChar.GetGUIDLow());
                 newChar.SetTemporaryUnsummonedPetNumber(pet_id);
             }
-            
+
             newChar.CleanupsBeforeDelete();
 
             WorldPacket data(SMSG_CHAR_CREATE, 1);

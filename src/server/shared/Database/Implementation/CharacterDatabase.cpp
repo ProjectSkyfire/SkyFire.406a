@@ -303,7 +303,7 @@ void CharacterDatabaseConnection::DoPrepareStatements()
 
     //  For loading and deleting expired auctions at startup
     PREPARE_STATEMENT(CHAR_LOAD_EXPIRED_AUCTIONS, "SELECT id, auctioneerguid, itemguid, itemEntry, itemowner, buyoutprice, time, buyguid, lastbid, startbid, deposit FROM auctionhouse ah INNER JOIN item_instance ii ON ii.guid = ah.itemguid WHERE ah.time <= ?", CONNECTION_SYNCH)
-    
+
     // Player saving
     PREPARE_STATEMENT(CHAR_ADD_CHARACTER, "INSERT INTO characters (guid, account, name, race, class, gender, level, xp, money, playerBytes, playerBytes2, playerFlags, "
     "map, instance_id, instance_mode_mask, position_x, position_y, position_z, orientation, "

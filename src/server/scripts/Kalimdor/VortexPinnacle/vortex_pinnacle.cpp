@@ -17,7 +17,7 @@
 
 #include "InstanceScript.h"
 #include "ScriptedGossip.h"
-#include "ScriptPCH.h" 
+#include "ScriptPCH.h"
 #include "vortex_pinnacle.h"
 
 class npc_slipstream : public CreatureScript

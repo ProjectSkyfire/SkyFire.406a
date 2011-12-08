@@ -358,7 +358,7 @@ void WorldSession::HandleMovementOpcodes(WorldPacket & recv_data)
            opcode != MSG_MOVE_START_TURN_LEFT && opcode != MSG_MOVE_START_TURN_RIGHT &&
            opcode != MSG_MOVE_STOP_TURN)
            plMover->SetEmoteState(0);
-	
+
         plMover->UpdateFallInformationIfNeed(movementInfo, opcode);
 
         float underMapValue = -500.0f;

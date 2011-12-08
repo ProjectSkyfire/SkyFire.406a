@@ -2748,5 +2748,5 @@ void AddSC_npcs_special()
     new npc_locksmith;
     new npc_tabard_vendor;
     new npc_experience;
-    new npc_guardian_of_ancient_kings;	
+    new npc_guardian_of_ancient_kings;
 }
