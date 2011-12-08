@@ -219,14 +219,14 @@ void WorldSession::HandleCharEnum(QueryResult result)
             std::string name = (*result)[1].GetString();
             uint32 nameLen = name.length();
 
-            PlayerInfo const *info = sObjectMgr->GetPlayerInfo(_race, _class);
+            /*PlayerInfo const *info = sObjectMgr->GetPlayerInfo(_race, _class);
             if (info != NULL)
                 _allowedCharsToLogin.insert(guidlow);
             else
             {
                 sLog->outError("Player %u has incorrect race/class pair. Don't build enum.", guidlow);
                 continue;
-            }
+            }*/
 
             uint8 highGuid[8];
             *(uint64*)highGuid = MAKE_NEW_GUID(guidlow, 0, HIGHGUID_PLAYER);
