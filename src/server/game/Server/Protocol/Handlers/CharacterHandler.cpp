@@ -219,7 +219,7 @@ void WorldSession::HandleCharEnum(QueryResult result)
             std::string name = (*result)[1].GetString();
             uint32 nameLen = name.length();
 
-            PlayerInfo const *info = sObjectMgr->GetPlayerInfo(pRace, pClass);
+            PlayerInfo const *info = sObjectMgr->GetPlayerInfo(_player->getRace(), _player->getClass());
             if (info != NULL)
                 _allowedCharsToLogin.insert(guidlow);
             else
