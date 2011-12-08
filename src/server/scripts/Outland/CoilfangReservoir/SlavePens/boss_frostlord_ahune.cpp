@@ -15,7 +15,12 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
- #include <LFGMgr.h>
+#include "ScriptedCreature.h"
+#include "ScriptedGossip.h"
+#include "ScriptMgr.h"
+#include "LFGMgr.h"
+#include "CreatureAI.h"
+#include "GameObject.h"
 
 // npc_frostlord_ahune
 #define EMOTE_SUBMERGE      "Ahune Retreats. His Defenses Diminish."
