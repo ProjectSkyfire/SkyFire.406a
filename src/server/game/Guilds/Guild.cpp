@@ -1224,7 +1224,7 @@ void Guild::OnPlayerStatusChange(Player* plr, uint32 flag, bool state)
 void Guild::HandleRoster(WorldSession* session /*= NULL*/)
 {
     // Guess size
-    WorldPacket data(SMSG_GUILD_ROSTER, (4 + m_motd.length() + 1 + m_info.length() + 1 + 2 + 4 + 2 + _GetRanksSize() * 100));
+    WorldPacket data(SMSG_GUILD_ROSTER, (4 + m_motd.length() + 1 + m_info.length() + 1 + 4 + _GetRanksSize() * (4 + 4 + GUILD_BANK_MAX_TABS * (4 + 4)) + m_members.size() * 50));
     data << m_motd;
     data << uint32(m_members.size());
 
