@@ -2644,7 +2644,7 @@ public:
 
 // Uncomment this once guardians are able to cast spells
 // on owner at AI initialization and be able to cast spells based on owner's triggered spellcasts.
-/*
+
 enum GuardianSpellsAndEntries
 {
     NPC_PROTECTION_GUARDIAN         = 46490,
@@ -2693,17 +2693,16 @@ public:
                 DoMeleeAttackIfReady();  // at least is what i saw on vids.
         }
 
-        void SpellHitTarget(Unit* /*target*/ /*SpellEntry const* spell)
+        void SpellHitTarget(Unit* /*target*/, SpellInfo const* spell)
         {
             if (me->GetEntry() == NPC_HOLY_GUARDIAN) // Holy paladin guardian
             {
                 for (uint32 i = 0; i = MAX_SPELL_EFFECTS;)
                 {
-                    if (spell->Effect[i] == SPELL_EFFECT_HEAL // if the spell is a heal...
-                        && spell->EffectImplicitTargetA[i] == TARGET_UNIT_TARGET_ALLY) //... and is single target
+                    if (spell->Effects[i].Effect == SPELL_EFFECT_HEAL // if the spell is a heal...
+                        && spell->Effects[i].TargetA.GetTarget() == TARGET_UNIT_TARGET_ALLY); //... and is single target
                         _healcount++;
-                    else
-                        i++;
+
                     if (_healcount == 5) // "Your Guardian of Ancient Spirits heals the target of your next 5 heals for the same amount as your heal"
                         me->DespawnOrUnsummon();
                 }
@@ -2717,7 +2716,7 @@ public:
     {
         return new npc_guardian_of_ancient_kingsAI(creature);
     }
-};*/
+};
 
 void AddSC_npcs_special()
 {
@@ -2749,5 +2748,4 @@ void AddSC_npcs_special()
     new npc_locksmith;
     new npc_tabard_vendor;
     new npc_experience;
-    //new npc_guardian_of_ancient_kings;
 }

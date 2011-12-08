@@ -232,6 +232,16 @@ pEffect SpellEffects[TOTAL_SPELL_EFFECTS]=
     &Spell::EffectActivateSpec,                             //162 SPELL_EFFECT_TALENT_SPEC_SELECT       activate primary/secondary spec
     &Spell::EffectNULL,                                     //163 unused
     &Spell::EffectRemoveAura,                               //164 SPELL_EFFECT_REMOVE_AURA
+    &Spell::EffectNULL,                                     //165
+    &Spell::EffectNULL,                                     //166
+    &Spell::EffectNULL,                                     //167
+    &Spell::EffectNULL,                                     //168
+    &Spell::EffectNULL,                                     //169
+    &Spell::EffectNULL,                                     //170
+    &Spell::EffectNULL,                                     //171
+    &Spell::EffectNULL,                                     //172
+    &Spell::EffectNULL,                                     //173
+    &Spell::EffectNULL,                                     //174
 };
 
 void Spell::EffectNULL(SpellEffIndex /*effIndex*/)
@@ -334,6 +344,10 @@ void Spell::EffectSchoolDMG(SpellEffIndex effIndex)
 
                 switch (m_spellInfo->Id)                     // better way to check unknown
                 {
+                    case 86150: // Guardian of Ancient Kings
+                        if (unitTarget)
+                        m_caster->CastSpell(m_caster, 86698, false, NULL);
+                    return;
                     // Positive/Negative Charge
                     case 28062:
                     case 28085:
@@ -1323,7 +1337,7 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
             {
                 if (m_spellInfo->SpellFamilyFlags[2] & 0x20)
                     m_caster->CastSpell(m_caster, 51755, true);
-                    
+
                 break;
             }
         case SPELLFAMILY_PRIEST:
@@ -1357,7 +1371,7 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                         {
                             std::list<Unit*> PartyMembers;
                             m_caster->GetPartyMembers(PartyMembers);
-                            
+
                             if (PartyMembers.size() >= 1)
                                 m_caster->CastSpell(unitTarget, 79058, true); // Arcane Brilliance (For all)
                             else
@@ -2468,9 +2482,7 @@ void Spell::EffectHeal(SpellEffIndex /*effIndex*/)
 {
     if (effectHandleMode != SPELL_EFFECT_HANDLE_HIT_TARGET)
         return;
-        
 }
-
 
 void Spell::SpellDamageHeal(SpellEffIndex effIndex)
 {
@@ -6195,7 +6207,6 @@ void Spell::EffectApplyGlyph(SpellEffIndex effIndex)
                 player->SetGlyph(m_glyphIndex, 0);
             }
         }
-
     }
 }
 
