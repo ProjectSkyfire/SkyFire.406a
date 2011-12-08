@@ -205,93 +205,70 @@ void WorldSession::HandleCharEnum(QueryResult result)
 {
     WorldPacket data(SMSG_CHAR_ENUM, 100);                  // we guess size
 
-    uint32 num = 0;
-
-    data << uint8(1 << 7); // 0 causes the client to free memory of charlist
-    data << uint32(0); // unk loop counter
-    data << num;
-
     _allowedCharsToLogin.clear();
     if (result)
     {
-        uint8 curRes = 0;
-        uint8 curPos = 0;
+        uint32 num = (uint32)result->GetRowCount();
+        data.writeBits<uint32>(num, 17);
         do
         {
             uint32 guidlow = (*result)[0].GetUInt32();
-            uint8 pRace = (*result)[2].GetUInt8();
-            uint8 pClass = (*result)[3].GetUInt8();
+            uint8 _race = (*result)[2].GetUInt8();
+            uint8 _class = (*result)[3].GetUInt8();
             uint32 atLoginFlags = (*result)[15].GetUInt32();
+            std::string name = (*result)[1].GetString();
+            uint32 nameLen = name.length();
 
             PlayerInfo const *info = sObjectMgr->GetPlayerInfo(pRace, pClass);
             if (info != NULL)
-            {
                 _allowedCharsToLogin.insert(guidlow);
-                ++num;
-            }
             else
             {
                 sLog->outError("Player %u has incorrect race/class pair. Don't build enum.", guidlow);
                 continue;
             }
 
-            for (int i = 0; i < 17; ++i)
-            {
-                if (curPos == 8)
-                {
-                    data << curRes;
-                    curRes = curPos = 0;
-                }
+            uint8 highGuid[8];
+            *(uint64*)highGuid = MAKE_NEW_GUID(guidlow, 0, HIGHGUID_PLAYER);
 
-                ++curPos;
-                uint8 offset = 8-curPos;
-                // Low PlayerGUID
-                if (i == 0) // v79
-                {
-                    if (uint8(guidlow) != 0)
-                        curRes |= (1 << offset);
-                }
-                else if (i == 7) // v68
-                {
-                    if (uint8(guidlow >> 8) != 0)
-                        curRes |= (1 << offset);
-                }
-                else if (i == 12) // v70
-                {
-                    if (uint8(guidlow >> 16) != 0)
-                        curRes |= (1 << offset);
-                }
-                else if (i == 11) // v78
-                {
-                    if (uint8(guidlow >> 24) != 0)
-                        curRes |= (1 << offset);
-                }
-                // Low PlayerGUID end
-                // First Login
-                else if (i == 1)
-                {
-                    if (atLoginFlags & AT_LOGIN_FIRST)
-                        curRes |= (1 << offset);
-                }
-                // Also sent in packet stream: Player High GUID, Guild GUID (8 bytes)
-            }
+            data.writeBit(0); // Guild guid byte 2
+            data.writeBit((highGuid[2] != 0) ? highGuid[2] ^ 1 : highGuid[2]); // The client will do this -> PlayerHighGuid[2] ^ 0
+            data.writeBit((highGuid[6] != 0) ? highGuid[6] ^ 1 : highGuid[6]); // The client will do this -> PlayerHighGuid[6] ^ 0
+            data.writeBit((highGuid[5] != 0) ? highGuid[5] ^ 1 : highGuid[5]); // The client will do this -> PlayerHighGuid[5] ^ 0
+            data.writeBit((highGuid[4] != 0) ? highGuid[4] ^ 1 : highGuid[4]); // The client will do this -> PlayerHighGuid[4] ^ 0
+            data.writeBit(0); // guild guid byte 4 
+            data.writeBit(0);// guild guid byte 3
+            data.writeBit(0); // guild guid byte 7
+            data.writeBits<uint32>(nameLen, 7); // 7 bits lenght for an uint32 ? wtflol?
+            data.writeBit(0); // guild byte 0
+            data.writeBit((highGuid[0] != 0) ? highGuid[0] ^ 1 : highGuid[0]); // The client will do this -> PlayerHighGuid[0] ^ 0
+            data.writeBit((highGuid[3] != 0) ? highGuid[3] ^ 1 : highGuid[3]); // The client will do this -> PlayerHighGuid[3] ^ 0
+            data.writeBit((highGuid[1] != 0) ? highGuid[1] ^ 1 : highGuid[1]); // The client will do this -> PlayerHighGuid[1] ^ 0
+
+            if (atLoginFlags & AT_LOGIN_FIRST)
+                data.writeBit(1);
+            else
+                data.writeBit(0);
+
+            data.writeBit(0); // guild guid byte 5
+            data.writeBit((highGuid[7] != 0) ? highGuid[7] ^ 1 : highGuid[7]); // The client will do this -> PlayerHighGuid[7] ^ 0
+            data.writeBit(0); // guild guid byte 6
+            data.writeBit(0); // guild guid byte 1
+
         } while(result->NextRow(true));
 
-        // If some data is still there, but we didn't reach the max bit
-        if (curPos != 8 && curPos != 0)
-            data << curRes;
+        data.writeBits<uint32>(0, 23); // lolwut?
+        data.writeBit(0);
 
         result->Reset();
         do
         {
             uint32 guidlow = (*result)[0].GetUInt32();
-            sLog->outDetail("Loading char guid %u from account %u.",guidlow,GetAccountId());
+            sLog->outDetail("Loading char guid %u from account %u.", guidlow, GetAccountId());
             Player::BuildEnumData(result, &data);
         }
         while (result->NextRow());
     }
-
-    data.put<uint32>(5, num);
 
     SendPacket(&data);
 }
