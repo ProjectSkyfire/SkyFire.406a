@@ -285,83 +285,83 @@ bool AchievementCriteriaData::IsValid(AchievementCriteriaEntry const* criteria)
 
 bool AchievementCriteriaData::Meets(uint32 criteria_id, Player const* source, Unit const* target, uint32 miscvalue1 /*= 0*/) const
 {
-	const AchievementCriteriaEntry* criteria = sAchievementCriteriaStore.LookupEntry(criteria_id);
+    const AchievementCriteriaEntry* criteria = sAchievementCriteriaStore.LookupEntry(criteria_id);
 
-	bool met = true;
-	for(uint32 i = 0; i < 3; ++i)
-	{
-		uint32 checkType = criteria->moreRequirement[i];
+    bool met = true;
+    for(uint32 i = 0; i < 3; ++i)
+    {
+        uint32 checkType = criteria->moreRequirement[i];
 
-		if(checkType == 0)
-			break;
+        if(checkType == 0)
+            break;
 
-		uint32 checkValue = criteria->moreRequirementValue[i];
+        uint32 checkValue = criteria->moreRequirementValue[i];
 
-		switch(checkType)
-		{
-			case ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_ITEM_LEVEL:
+        switch(checkType)
+        {
+            case ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_ITEM_LEVEL:
             {
-				ItemTemplate const *item = sObjectMgr->GetItemTemplate(miscvalue1);
-				if (!item)
-					return false;
-				if(!(item->ItemLevel >= checkValue))
-					return false;
-				break;
+                ItemTemplate const *item = sObjectMgr->GetItemTemplate(miscvalue1);
+                if (!item)
+                    return false;
+                if(!(item->ItemLevel >= checkValue))
+                    return false;
+                break;
             }
-			case ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_CREATURE_ID:
-				if(target->GetEntry() != checkValue)
-					return false;
-				break;
-			case ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_TARGET_TYPE:
-				if(checkValue == 0 && target->GetTypeId() != TYPEID_PLAYER)
-					return false;
-				break;
-			case ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_SPELL:
-				if(!source->HasAura(checkValue))
-					return false;
-				break;
-			case ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_SPELL_ON_TARGET:
-				if(!target->HasAura(checkValue))
-					return false;
-				break;
-			case ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_MOUNTED:
-				if(!target->IsMounted())
-					return false;
-				break;
-			case ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_ITEM_QUALITY_EQUIPPED:
+            case ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_CREATURE_ID:
+                if(target->GetEntry() != checkValue)
+                    return false;
+                break;
+            case ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_TARGET_TYPE:
+                if(checkValue == 0 && target->GetTypeId() != TYPEID_PLAYER)
+                    return false;
+                break;
+            case ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_SPELL:
+                if(!source->HasAura(checkValue))
+                    return false;
+                break;
+            case ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_SPELL_ON_TARGET:
+                if(!target->HasAura(checkValue))
+                    return false;
+                break;
+            case ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_MOUNTED:
+                if(!target->IsMounted())
+                    return false;
+                break;
+            case ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_ITEM_QUALITY_EQUIPPED:
             {
-				ItemTemplate const *item2 = sObjectMgr->GetItemTemplate(miscvalue1);
-				if (!item2)
-					return false;
-				if(!(item2->Quality >= checkValue))
-					return false;
-				break;
+                ItemTemplate const *item2 = sObjectMgr->GetItemTemplate(miscvalue1);
+                if (!item2)
+                    return false;
+                if(!(item2->Quality >= checkValue))
+                    return false;
+                break;
             }
-			case ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_ITEM_QUALITY_LOOTED:
+            case ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_ITEM_QUALITY_LOOTED:
             {
-				ItemTemplate const *item3 = sObjectMgr->GetItemTemplate(miscvalue1);
-				if (!item3)
-					return false;
-				if(!(item3->Quality == checkValue))
-					return false;
-				break;
+                ItemTemplate const *item3 = sObjectMgr->GetItemTemplate(miscvalue1);
+                if (!item3)
+                    return false;
+                if(!(item3->Quality == checkValue))
+                    return false;
+                break;
             }
-			case ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_AREA_ID:
-			case ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_AREA_ID2:
-			case ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_AREA_ID3:
-				if(source->GetAreaId() != checkValue && source->GetZoneId() != checkValue)
-					return false;
-				break;
-			case ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_RAID_DIFFICULTY:
+            case ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_AREA_ID:
+            case ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_AREA_ID2:
+            case ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_AREA_ID3:
+                if(source->GetAreaId() != checkValue && source->GetZoneId() != checkValue)
+                    return false;
+                break;
+            case ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_RAID_DIFFICULTY:
             {
-				Map* map = source->GetMap();
-				if(uint32(map->GetDifficulty()) != checkValue)
-					return false;
-				break;
+                Map* map = source->GetMap();
+                if(uint32(map->GetDifficulty()) != checkValue)
+                    return false;
+                break;
             }
-			// ToDo: Implement the rest, research more on it
-		}
-	}
+            // ToDo: Implement the rest, research more on it
+        }
+    }
 
     switch (dataType)
     {
@@ -2157,28 +2157,83 @@ void AchievementMgr::CompletedAchievement(AchievementEntry const* achievement)
     }
 }
 
-void AchievementMgr::SendAllAchievementData() const
+void AchievementMgr::SendAllAchievementData()
 {
     uint32 criterias = m_criteriaProgress.size();
     uint32 achievements = m_completedAchievements.size();
     // 2 is flag count, 8 is bits in byte
     uint32 flagBytesCount = uint32(ceil(float(criterias) * 2.0f / 8.0f));
 
+    // since we don't know the exact size of the packed GUIDs this is just an approximation
     WorldPacket data(SMSG_ALL_ACHIEVEMENT_DATA, 4 + criterias * (8 + 4 + 4 + 8) + 8 + 4 + achievements * (4 + 4 + 4) + flagBytesCount);
-    BuildAllDataPacket(&data);
+
+    data << uint32(achievements);
+    data << uint32(criterias);
+
+    for (CompletedAchievementMap::const_iterator iter = m_completedAchievements.begin(); iter!=m_completedAchievements.end(); ++iter)
+        data << uint32(iter->first);
+    for (CompletedAchievementMap::const_iterator iter = m_completedAchievements.begin(); iter!=m_completedAchievements.end(); ++iter)
+        data << uint32(secsToTimeBitFields(iter->second.date));
+
+    for (CriteriaProgressMap::const_iterator iter = m_criteriaProgress.begin(); iter!=m_criteriaProgress.end(); ++iter)
+        data << uint64(iter->second.counter);
+
+    time_t now = time(NULL);
+    for (CriteriaProgressMap::const_iterator iter = m_criteriaProgress.begin(); iter!=m_criteriaProgress.end(); ++iter)
+        data << uint32(now - iter->second.date);
+    for (CriteriaProgressMap::const_iterator iter = m_criteriaProgress.begin(); iter!=m_criteriaProgress.end(); ++iter)
+        data << uint32(secsToTimeBitFields(iter->second.date));
+    for (uint32 i = 0; i < criterias; ++i)
+        data.append(GetPlayer()->GetPackGUID());
+    for (CriteriaProgressMap::const_iterator iter = m_criteriaProgress.begin(); iter!=m_criteriaProgress.end(); ++iter)
+        data << uint32(now - iter->second.date);
+
+    for (uint32 i = 0; i < flagBytesCount; ++i)
+        data << uint8(0);
+
+    for (CriteriaProgressMap::const_iterator iter = m_criteriaProgress.begin(); iter!=m_criteriaProgress.end(); ++iter)
+        data << uint32(iter->first);
+
     GetPlayer()->GetSession()->SendPacket(&data);
 }
 
-void AchievementMgr::SendRespondInspectAchievements(Player* player) const
+void AchievementMgr::SendRespondInspectAchievements(Player* player)
 {
     uint32 criterias = m_criteriaProgress.size();
     uint32 achievements = m_completedAchievements.size();
     // 2 is flag count, 8 is bits in byte
     uint32 flagBytesCount = uint32(ceil(float(criterias) * 2.0f / 8.0f));
 
+    // since we don't know the exact size of the packed GUIDs this is just an approximation
     WorldPacket data(SMSG_RESPOND_INSPECT_ACHIEVEMENTS, 4 + criterias * (8 + 4 + 4 + 8) + 8 + 4 + achievements * (4 + 4 + 4) + flagBytesCount);
+
+    data << uint32(criterias);
+
+    for (CriteriaProgressMap::const_iterator iter = m_criteriaProgress.begin(); iter!=m_criteriaProgress.end(); ++iter)
+        data << uint64(iter->second.counter);
+    for (CriteriaProgressMap::const_iterator iter = m_criteriaProgress.begin(); iter!=m_criteriaProgress.end(); ++iter)
+        data << uint32(iter->second.date);
+    for (CriteriaProgressMap::const_iterator iter = m_criteriaProgress.begin(); iter!=m_criteriaProgress.end(); ++iter)
+        data << uint32(iter->first);
+
     data.append(GetPlayer()->GetPackGUID());
-    BuildAllDataPacket(&data);
+
+    for (uint32 i = 0; i < criterias; ++i)
+        data.append(GetPlayer()->GetPackGUID());
+
+    data << uint32(achievements);
+
+    for (CompletedAchievementMap::const_iterator iter = m_completedAchievements.begin(); iter!=m_completedAchievements.end(); ++iter)
+        data << uint32(iter->first);
+    for (CompletedAchievementMap::const_iterator iter = m_completedAchievements.begin(); iter!=m_completedAchievements.end(); ++iter)
+        data << uint32(secsToTimeBitFields(iter->second.date));
+
+    for (uint32 i = 0; i < flagBytesCount; ++i)
+        data << uint8(0);
+
+    for (CompletedAchievementMap::const_iterator iter = m_completedAchievements.begin(); iter!=m_completedAchievements.end(); ++iter)
+        data << uint32(secsToTimeBitFields(iter->second.date));
+
     player->GetSession()->SendPacket(&data);
 }
 

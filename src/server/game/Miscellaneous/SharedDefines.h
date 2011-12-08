@@ -1413,7 +1413,7 @@ enum Targets
     TARGET_DEST_DEST_FRONT_LEFT        = 85,
     TARGET_DEST_DEST_RANDOM            = 86,
     TARGET_DEST_DEST                   = 87,
-    TARGET_DEST_DYNOBJ_NONE            = 88,
+    TARGET_DEST_DYNOBJ_ALL_UNITS       = 88,
     TARGET_DEST_TRAJ                   = 89,
     TARGET_UNIT_TARGET_MINIPET         = 90,
     TARGET_DEST_DEST_RADIUS            = 91,
@@ -1706,20 +1706,9 @@ enum TextEmotes
     TEXT_EMOTE_LOVE                 = 225,
     TEXT_EMOTE_MOO                  = 226,
     TEXT_EMOTE_COMMEND              = 243,
-    TEXT_EMOTE_TRAIN                = 264,
-    TEXT_EMOTE_HELPME               = 303,
-    TEXT_EMOTE_INCOMING             = 304,
-    TEXT_EMOTE_CHARGE               = 305,
-    TEXT_EMOTE_FLEE                 = 306,
-    TEXT_EMOTE_ATTACKMYTARGET       = 307,
-    TEXT_EMOTE_OOM                  = 323,
-    TEXT_EMOTE_FOLLOW               = 324,
-    TEXT_EMOTE_HELP                 = 325,
-    TEXT_EMOTE_HEALME               = 326,
     TEXT_EMOTE_OPENFIRE             = 327,
     TEXT_EMOTE_FLIRT                = 328,
     TEXT_EMOTE_JOKE                 = 329,
-    TEXT_EMOTE_GOLFCLAP             = 343,
     TEXT_EMOTE_WINK                 = 363,
     TEXT_EMOTE_PAT                  = 364,
     TEXT_EMOTE_SERIOUS              = 365,
@@ -1736,6 +1725,7 @@ enum TextEmotes
     TEXT_EMOTE_ENEMY                = 376,
     TEXT_EMOTE_EYEBROW              = 377,
     TEXT_EMOTE_TOAST                = 378,
+    TEXT_EMOTE_FAIL                 = 379,
     TEXT_EMOTE_HIGHFIVE             = 380,
     TEXT_EMOTE_ABSENT               = 381,
     TEXT_EMOTE_ARM                  = 382,
@@ -1790,6 +1780,7 @@ enum TextEmotes
     TEXT_EMOTE_SNEEZE               = 436,
     TEXT_EMOTE_SNORT                = 437,
     TEXT_EMOTE_SQUEAL               = 438,
+    TEXT_EMOTE_STOPATTACK           = 439,
     TEXT_EMOTE_SUSPICIOUS           = 440,
     TEXT_EMOTE_THINK                = 441,
     TEXT_EMOTE_TRUCE                = 442,
@@ -1802,7 +1793,7 @@ enum TextEmotes
     TEXT_EMOTE_LOOK                 = 449,
     TEXT_EMOTE_OBJECT               = 450,
     TEXT_EMOTE_SWEAT                = 451,
-    TEXT_EMOTE_YW                   = 453,
+    TEXT_EMOTE_YW                   = 453
 };
 
 enum Emote
@@ -1971,7 +1962,23 @@ enum Emote
     EMOTE_STATE_SIT_CHAIR_LOW          = 461,
     EMOTE_ONE_SHOT_STUN                = 462,
     EMOTE_ONESHOT_SPELLCAST_OMNI       = 463,
-    EMOTE_STATE_READYTHROWN            = 464
+    EMOTE_STATE_READYTHROWN            = 465,
+    EMOTE_ONESHOT_WORK_CHOPWOOD        = 466,
+    EMOTE_ONESHOT_WORK_MINING          = 467,
+    EMOTE_STATE_SPELL_CHANNEL_OMNI     = 468,
+    EMOTE_STATE_SPELL_CHANNEL_DIRECTED = 469,
+    EMOTE_STAND_STATE_NONE             = 470,
+    EMOTE_STATE_READYJOUST             = 471,
+    EMOTE_STATE_STRANGULATE            = 472,
+    EMOTE_STATE_STRANGULATE2           = 473,
+    EMOTE_STATE_READYSPELLOMNI         = 474,
+    EMOTE_STATE_HOLD_JOUST             = 475,
+    EMOTE_ONESHOT_CRY_JP               = 476,                // Only Jaina Proudmoore
+    EMOTE_ONESHOT_SPECIALUNARMED       = 477,
+    EMOTE_STATE_DANCE_NOSHEATHE        = 478,
+    EMOTE_ONESHOT_SNIFF                = 479,
+    EMOTE_ONESHOT_DRAGONSTOMP          = 480,
+    EMOTE_ONESHOT_KNOCKDOWN            = 482
 };
 
 enum Anim
@@ -2271,47 +2278,56 @@ uint32 const CREATURE_TYPEMASK_MECHANICAL_OR_ELEMENTAL = (1 << (CREATURE_TYPE_ME
 // CreatureFamily.dbc
 enum CreatureFamily
 {
-    CREATURE_FAMILY_WOLF           = 1,
-    CREATURE_FAMILY_CAT            = 2,
-    CREATURE_FAMILY_SPIDER         = 3,
-    CREATURE_FAMILY_BEAR           = 4,
-    CREATURE_FAMILY_BOAR           = 5,
-    CREATURE_FAMILY_CROCOLISK      = 6,
-    CREATURE_FAMILY_CARRION_BIRD   = 7,
-    CREATURE_FAMILY_CRAB           = 8,
-    CREATURE_FAMILY_GORILLA        = 9,
-    CREATURE_FAMILY_HORSE_CUSTOM   = 10,                    // not exist in DBC but used for horse like beasts in DB
-    CREATURE_FAMILY_RAPTOR         = 11,
-    CREATURE_FAMILY_TALLSTRIDER    = 12,
-    CREATURE_FAMILY_FELHUNTER      = 15,
-    CREATURE_FAMILY_VOIDWALKER     = 16,
-    CREATURE_FAMILY_SUCCUBUS       = 17,
-    CREATURE_FAMILY_DOOMGUARD      = 19,
-    CREATURE_FAMILY_SCORPID        = 20,
-    CREATURE_FAMILY_TURTLE         = 21,
-    CREATURE_FAMILY_IMP            = 23,
-    CREATURE_FAMILY_BAT            = 24,
-    CREATURE_FAMILY_HYENA          = 25,
-    CREATURE_FAMILY_BIRD_OF_PREY   = 26,
-    CREATURE_FAMILY_WIND_SERPENT   = 27,
-    CREATURE_FAMILY_REMOTE_CONTROL = 28,
-    CREATURE_FAMILY_FELGUARD       = 29,
-    CREATURE_FAMILY_DRAGONHAWK     = 30,
-    CREATURE_FAMILY_RAVAGER        = 31,
-    CREATURE_FAMILY_WARP_STALKER   = 32,
-    CREATURE_FAMILY_SPOREBAT       = 33,
-    CREATURE_FAMILY_NETHER_RAY     = 34,
-    CREATURE_FAMILY_SERPENT        = 35,
-    CREATURE_FAMILY_MOTH           = 37,
-    CREATURE_FAMILY_CHIMAERA       = 38,
-    CREATURE_FAMILY_DEVILSAUR      = 39,
-    CREATURE_FAMILY_GHOUL          = 40,
-    CREATURE_FAMILY_SILITHID       = 41,
-    CREATURE_FAMILY_WORM           = 42,
-    CREATURE_FAMILY_RHINO          = 43,
-    CREATURE_FAMILY_WASP           = 44,
-    CREATURE_FAMILY_CORE_HOUND     = 45,
-    CREATURE_FAMILY_SPIRIT_BEAST   = 46
+    CREATURE_FAMILY_WOLF            = 1,
+    CREATURE_FAMILY_CAT             = 2,
+    CREATURE_FAMILY_SPIDER          = 3,
+    CREATURE_FAMILY_BEAR            = 4,
+    CREATURE_FAMILY_BOAR            = 5,
+    CREATURE_FAMILY_CROCOLISK       = 6,
+    CREATURE_FAMILY_CARRION_BIRD    = 7,
+    CREATURE_FAMILY_CRAB            = 8,
+    CREATURE_FAMILY_GORILLA         = 9,
+    CREATURE_FAMILY_HORSE_CUSTOM    = 10,                    // not exist in DBC but used for horse like beasts in DB
+    CREATURE_FAMILY_RAPTOR          = 11,
+    CREATURE_FAMILY_TALLSTRIDER     = 12,
+    CREATURE_FAMILY_FELHUNTER       = 15,
+    CREATURE_FAMILY_VOIDWALKER      = 16,
+    CREATURE_FAMILY_SUCCUBUS        = 17,
+    CREATURE_FAMILY_DOOMGUARD       = 19,
+    CREATURE_FAMILY_SCORPID         = 20,
+    CREATURE_FAMILY_TURTLE          = 21,
+    CREATURE_FAMILY_IMP             = 23,
+    CREATURE_FAMILY_BAT             = 24,
+    CREATURE_FAMILY_HYENA           = 25,
+    CREATURE_FAMILY_BIRD_OF_PREY    = 26,
+    CREATURE_FAMILY_WIND_SERPENT    = 27,
+    CREATURE_FAMILY_REMOTE_CONTROL  = 28,
+    CREATURE_FAMILY_FELGUARD        = 29,
+    CREATURE_FAMILY_DRAGONHAWK      = 30,
+    CREATURE_FAMILY_RAVAGER         = 31,
+    CREATURE_FAMILY_WARP_STALKER    = 32,
+    CREATURE_FAMILY_SPOREBAT        = 33,
+    CREATURE_FAMILY_NETHER_RAY      = 34,
+    CREATURE_FAMILY_SERPENT         = 35,
+    CREATURE_FAMILY_MOTH            = 37,
+    CREATURE_FAMILY_CHIMAERA        = 38,
+    CREATURE_FAMILY_DEVILSAUR       = 39,
+    CREATURE_FAMILY_GHOUL           = 40,
+    CREATURE_FAMILY_SILITHID        = 41,
+    CREATURE_FAMILY_WORM            = 42,
+    CREATURE_FAMILY_RHINO           = 43,
+    CREATURE_FAMILY_WASP            = 44,
+    CREATURE_FAMILY_CORE_HOUND      = 45,
+    CREATURE_FAMILY_SPIRIT_BEAST    = 46,
+    CREATURE_FAMILY_WATER_ELEMENTAL = 49,
+    CREATURE_FAMILY_FOX             = 50,
+    CREATURE_FAMILY_MONKEY          = 51,
+    CREATURE_FAMILY_DOG             = 52,
+    CREATURE_FAMILY_BEETLE          = 53,
+    CREATURE_FAMILY_SHALE_SPIDER    = 55,
+    CREATURE_FAMILY_ZOMBIE          = 56,
+    CREATURE_FAMILY_BEETLE_ZZOLD    = 57,
+    CREATURE_FAMILY_SILITHID2       = 59
 };
 
 enum CreatureTypeFlags
@@ -2389,13 +2405,13 @@ enum HolidayIds
     HOLIDAY_WOTLK_LAUNCH             = 406,
     HOLIDAY_DAY_OF_DEAD              = 409,
     HOLIDAY_CALL_TO_ARMS_IC          = 420,
-    HOLIDAY_423                      = 423, // Rename
-    HOLIDAY_KALU_AK_FISHING_DERBY    = 424,
-    HOLIDAY_CALL_TO_ARMS_GILNEAS     = 435,
-    HOLIDAY_CALL_TO_ARMS_TWINPEAKS   = 436,
-    HOLIDAY_442                      = 442, // Rename
-    HOLIDAY_443                      = 443, // Rename
-    HOLIDAY_467                      = 467  // Rename
+    HOLIDAY_LOVE_IN_THE_AIR          = 423,
+    HOLIDAY_KALUAK_FISHIN_DERBY      = 424,
+    HOLIDAY_CALL_TO_ARMS_BG          = 435,                 // Call to Arms: The Battle for Gilneas
+    HOLIDAY_CALL_TO_ARMS_TP          = 436,                 // Call to Arms: Twin Peaks
+    HOLIDAY_10_V_10                  = 441,                 // Rated BG: 10v10
+    HOLIDAY_15_V_15                  = 442,                 // Rated BG: 15v15
+    HOLIDAY_25_V_25                  = 443                  // Rated BG: 25v25
 };
 
 // values based at QuestInfo.dbc
@@ -2417,13 +2433,13 @@ enum QuestTypes
 // values based at QuestSort.dbc
 enum QuestSort
 {
-    QUEST_SORT_GROUP               = 1,
-    QUEST_SORT_HALLOW_END          = 21,
+    QUEST_SORT_EPIC                = 1,
+    QUEST_SORT_WAILING_CAVERNS_OLD = 21,
     QUEST_SORT_SEASONAL            = 22,
-    QUEST_SORT_CATACLYSM           = 23,
+    QUEST_SORT_UNDERCITY_OLD       = 23,
     QUEST_SORT_HERBALISM           = 24,
     QUEST_SORT_BATTLEGROUNDS       = 25,
-    QUEST_SORT_DAY_OF_THE_DEAD     = 41,
+    QUEST_SORT_ULDAMAN_OLD          = 41,
     QUEST_SORT_WARLOCK             = 61,
     QUEST_SORT_WARRIOR             = 81,
     QUEST_SORT_SHAMAN              = 82,
@@ -2436,7 +2452,7 @@ enum QuestSort
     QUEST_SORT_LEATHERWORKING      = 182,
     QUEST_SORT_ENGINEERING          = 201,
     QUEST_SORT_TREASURE_MAP        = 221,
-    QUEST_SORT_TOURNAMENT          = 241,
+    QUEST_SORT_SUNKEN_TEMPLE_OLD   = 241,
     QUEST_SORT_HUNTER              = 261,
     QUEST_SORT_PRIEST              = 262,
     QUEST_SORT_DRUID               = 263,
@@ -2456,13 +2472,9 @@ enum QuestSort
     QUEST_SORT_DEATH_KNIGHT        = 372,
     QUEST_SORT_JEWELCRAFTING       = 373,
     QUEST_SORT_NOBLEGARDEN         = 374,
-    QUEST_SORT_PILGRIM_BOUNTY      = 375,
+    QUEST_SORT_PILGRIMS_BOUNTY     = 375,
     QUEST_SORT_LOVE_IS_IN_THE_AIR  = 376,
-    QUEST_SORT_ARCHAEOLOGY         = 377,
-    QUEST_SORT_CHILDREN_WEEK       = 378,
-    // QUEST_SORT_FIRELANDS_INVASION  = 379, // 4.20a 14480
-    QUEST_SORT_THE_ZANDALARI       = 380,
-    QUEST_SORT_ELEMENTAL_BONDS     = 381
+    QUEST_SORT_ARCHAEOLOGY         = 377
 };
 
 inline uint8 ClassByQuestSort(int32 QuestSort)
@@ -2544,7 +2556,7 @@ enum SkillType
     SKILL_PET_IMP                  = 188,
     SKILL_PET_FELHUNTER            = 189,
     SKILL_TAILORING                = 197,
-    SKILL_ENGINEERING               = 202,
+    SKILL_ENGINEERING              = 202,
     SKILL_PET_SPIDER               = 203,
     SKILL_PET_VOIDWALKER           = 204,
     SKILL_PET_SUCCUBUS             = 205,
@@ -2651,14 +2663,22 @@ enum SkillType
     SKILL_GENERAL_SHAMAN           = 801,
     SKILL_GENERAL_WARLOCK          = 802,
     SKILL_GENERAL_WARRIOR          = 803,
-    SKILL_GENERAL_PRIEST           = 804
+    SKILL_GENERAL_PRIEST           = 804,
+    SKILL_PET_WATER_ELEMENTAL      = 805,
+    SKILL_PET_FOX                  = 808,
+    SKILL_GLYPHS_ALL               = 810,
+    SKILL_PET_DOG                  = 811,
+    SKILL_MONKEY                   = 815,
+    SKILL_SHALE_SPIDER             = 817,
+    SKILL_BEETLE                   = 818,
+    SKILL_GUILD_PERKS_ALL          = 821
 };
 
-#define MAX_SKILL_TYPE               805
+#define MAX_SKILL_TYPE               822
 
 inline SkillType SkillByLockType(LockType locktype)
 {
-    switch (locktype)
+    switch(locktype)
     {
         case LOCKTYPE_PICKLOCK:    return SKILL_LOCKPICKING;
         case LOCKTYPE_HERBALISM:   return SKILL_HERBALISM;
@@ -2680,7 +2700,7 @@ inline uint32 SkillByQuestSort(int32 QuestSort)
         case QUEST_SORT_BLACKSMITHING:  return SKILL_BLACKSMITHING;
         case QUEST_SORT_ALCHEMY:        return SKILL_ALCHEMY;
         case QUEST_SORT_LEATHERWORKING: return SKILL_LEATHERWORKING;
-        case QUEST_SORT_ENGINEERING:     return SKILL_ENGINEERING;
+        case QUEST_SORT_ENGINEERING:    return SKILL_ENGINEERING;
         case QUEST_SORT_TAILORING:      return SKILL_TAILORING;
         case QUEST_SORT_COOKING:        return SKILL_COOKING;
         case QUEST_SORT_FIRST_AID:      return SKILL_FIRST_AID;
@@ -2735,7 +2755,7 @@ enum TotemCategory
     TC_HAMMER_PICK                 = 167,
     TC_BLADED_PICKAXE              = 168,
     TC_FLINT_AND_TINDER            = 169,
-    TC_RUNED_COBALT_ROD            = 189, // not use
+    TC_RUNED_COBALT_ROD            = 189,
     TC_RUNED_TITANIUM_ROD          = 190,
     TC_RUNED_ELEMENTIUM_ROD        = 209,
     TC_HIGH_POWERED_BOLT_GUN       = 210
@@ -2854,6 +2874,15 @@ enum PetDiet
 };
 
 #define MAX_PET_DIET 9
+
+enum PetTalentType
+{
+    PET_TALENT_TYPE_NOT_HUNTER_PET = -1,
+    PET_TALENT_TYPE_FEROCITY       = 0,
+    PET_TALENT_TYPE_TENACITY       = 1,
+    PET_TALENT_TYPE_CUNNING        = 2
+};
+
 #define CHAIN_SPELL_JUMP_RADIUS 8
 #define GUILD_BANKLOG_MAX_RECORDS   25
 #define GUILD_EVENTLOG_MAX_RECORDS  100
@@ -3160,16 +3189,16 @@ enum PetSlot
     //Some not-in-db slots
     PET_SLOT_FULL_LIST       =  -4,        //Used when there is no slot free for tameing
     PET_SLOT_UNK_SLOT        =  -3,        // Used in some scripts.
-   
+
     PET_SLOT_ACTUAL_PET_SLOT =  -2,        // Save the pet in his actual slot.
     PET_SLOT_DELETED         =  -1,        // Delete the pet
-   
+
     //Hunter pet slots, sended to client at stable.
     PET_SLOT_HUNTER_FIRST    =   0,        // PetType == HUNTER_PET
     PET_SLOT_HUNTER_LAST     =   4,        // PetType == HUNTER_PET
     PET_SLOT_STABLE_FIRST    =   5,
     PET_SLOT_STABLE_LAST     =  24,
-   
+
     //Non-hunter pet slot
     PET_SLOT_OTHER_PET       = 100,        // PetType != HUNTER_PET
 };
