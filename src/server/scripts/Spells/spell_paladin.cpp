@@ -588,5 +588,4 @@ void AddSC_paladin_spell_scripts()
     new spell_pal_judgements_of_the_bold();
     new spell_pal_word_of_glory();
     new spell_pal_selfless_healer();
-    //new spell_pal_guardian_kings();
 }
