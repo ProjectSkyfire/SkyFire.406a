@@ -18,6 +18,7 @@
  */
 
 #include "ItemInfoMgr.h"
+#include "Timer.h"
 
 /* ItemInfoMgr */
 

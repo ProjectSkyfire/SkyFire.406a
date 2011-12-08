@@ -19,6 +19,7 @@
 
 #include "DB2Stores.h"
 
+#include "Entities/Item/ItemPrototype.h"
 #include "Logging/Log.h"
 #include "SharedDefines.h"
 #include "SpellMgr.h"
