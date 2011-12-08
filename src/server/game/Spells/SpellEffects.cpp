@@ -7543,8 +7543,7 @@ void Spell::SummonGuardian(uint32 i, uint32 entry, SummonPropertiesEntry const* 
             amount = 1;
             break;
         case 49028: // Dancing Rune Weapon
-            if (AuraEffect* aurEff = m_originalCaster->GetAuraEffect(63330, 0)) // glyph of Dancing Rune Weapon
-                duration += aurEff->GetAmount();
+            m_originalCaster->CastSpell(m_originalCaster, 81256, true); // Parry increase
             break;
     }
     if (Player* modOwner = m_originalCaster->GetSpellModOwner())
