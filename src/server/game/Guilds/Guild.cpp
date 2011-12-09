@@ -3080,7 +3080,7 @@ void Guild::SaveXP()
     {
         m_lastXPSave = getMSTime();
 
-        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_GUILD_SAVE_XP);
+        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SET_GUILD_SAVE_XP);
         stmt->setUInt64(0, m_xp);
         stmt->setUInt64(1, m_today_xp);
         stmt->setUInt64(2, m_xp_cap);

@@ -154,7 +154,7 @@ void CharacterDatabaseConnection::DoPrepareStatements()
     PREPARE_STATEMENT(CHAR_SET_GUILD_LEADER, "UPDATE guild SET leaderguid = ? WHERE guildid = ?", CONNECTION_ASYNC) // 0: uint32, 1: uint32
     PREPARE_STATEMENT(CHAR_SET_GUILD_RANK_NAME, "UPDATE guild_rank SET rname = ? WHERE rid = ? AND guildid = ?", CONNECTION_ASYNC) // 0: string, 1: uint8, 2: uint32
     PREPARE_STATEMENT(CHAR_SET_GUILD_RANK_RIGHTS, "UPDATE guild_rank SET rights = ? WHERE rid = ? AND guildid = ?", CONNECTION_ASYNC) // 0: uint32, 1: uint8, 2: uint32
-    PREPARE_STATEMENT(CHAR_GUILD_SAVE_XP, "UPDATE guild SET totalXP = ?, todayXP = ?, XPCap = ?, level = ? WHERE guildid = ?", CONNECTION_ASYNC); // 1: uint64, 2,3: uint32
+    PREPARE_STATEMENT(CHAR_SET_GUILD_SAVE_XP, "UPDATE guild SET totalXP = ?, todayXP = ?, XPCap = ?, level = ? WHERE guildid = ?", CONNECTION_ASYNC); // 1: uint64, 2,3: uint32
     // 0-5: uint32
     PREPARE_STATEMENT(CHAR_SET_GUILD_EMBLEM_INFO, "UPDATE guild SET EmblemStyle = ?, EmblemColor = ?, BorderStyle = ?, BorderColor = ?, BackgroundColor = ? WHERE guildid = ?", CONNECTION_ASYNC)
     // 0: string, 1: string, 2: uint32, 3: uint8
