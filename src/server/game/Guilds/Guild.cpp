@@ -1368,13 +1368,13 @@ void Guild::HandleRoster(WorldSession* session /*= NULL*/)
 
 void Guild::HandleQuery(WorldSession* session)
 {
-    WorldPacket data(SMSG_GUILD_QUERY_RESPONSE, 8+2*15+10*15*2+10*4+10*4+200+4);      // Guess size
+    WorldPacket data(SMSG_GUILD_QUERY_RESPONSE, 8*32+200);      // Guess size
 
     uint64 guid = MAKE_NEW_GUID(m_id, 0, HIGHGUID_GUILD);
     data << uint64(guid);
     data << m_name;
 
-    for (uint8 i = 0 ; i < GUILD_RANKS_MAX_COUNT; ++i)              // Alwayse show 10 ranks
+    for (uint8 i = 0 ; i < GUILD_RANKS_MAX_COUNT; ++i)              // Always show 10 ranks
     {
         if (i < _GetRanksSize())
             data << m_ranks[i].GetName();
@@ -1389,15 +1389,15 @@ void Guild::HandleQuery(WorldSession* session)
         else
             data << uint32(0);
     }
-
-    for (int i = 0; i < GUILD_RANKS_MAX_COUNT; ++i)
+    
+	/*for (int i = 0; i < GUILD_RANKS_MAX_COUNT; ++i)
     {
         if (i < _GetRanksSize())
             data << uint32(i);
         else
             data << uint32(0);
-    }
-
+    }*/
+   
     m_emblemInfo.WritePacket(data);
     data << uint32(7);                                                // Something new in WotLK
 
