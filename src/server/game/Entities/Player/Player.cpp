@@ -19223,7 +19223,7 @@ void Player::SaveToDB(bool create /*=false*/)
         stmt->setUInt16(index++, GetUInt16Value(PLAYER_FIELD_KILLS, 0));
         stmt->setUInt16(index++, GetUInt16Value(PLAYER_FIELD_KILLS, 1));
         stmt->setUInt32(index++, GetUInt32Value(PLAYER_CHOSEN_TITLE));
-        stmt->setUInt64(index++, 0/*GetUInt64Value(PLAYER_FIELD_KNOWN_CURRENCIES)*/);
+        stmt->setUInt64(index++, 0 /*GetUInt64Value(PLAYER_FIELD_KNOWN_CURRENCIES)*/);
         stmt->setUInt32(index++, GetUInt32Value(PLAYER_FIELD_WATCHED_FACTION_INDEX));
         stmt->setUInt16(index++, (uint16)(GetUInt32Value(PLAYER_BYTES_3) & 0xFFFE));
         stmt->setUInt32(index++, GetHealth());
@@ -19257,7 +19257,7 @@ void Player::SaveToDB(bool create /*=false*/)
         }
 
         stmt->setString(index++, ss.str());
-        stmt->setUInt32(index++, 0 /*GetUInt32Value(PLAYER_AMMO_ID)*/);
+        /*stmt->setUInt32(index++, 0 GetUInt32Value(PLAYER_AMMO_ID));*/
 
         ss.str().clear();
         for (uint32 i = 0; i < KNOWN_TITLES_SIZE * 2; ++i)
