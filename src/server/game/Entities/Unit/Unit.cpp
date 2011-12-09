@@ -543,23 +543,23 @@ void Unit::SendMonsterMoveExitVehicle(Position const* newPos)
 void Unit::SendMonsterMoveTransport(Unit* vehicleOwner)
 {
     // TODO: Turn into BuildMonsterMoveTransport packet and allow certain variables (for npc movement aboard vehicles)
-    WorldPacket data(SMSG_MONSTER_MOVE_TRANSPORT, GetPackGUID().size()+vehicleOwner->GetPackGUID().size() + 47);  //406a
+    WorldPacket data(SMSG_MONSTER_MOVE_TRANSPORT, GetPackGUID().size()+vehicleOwner->GetPackGUID().size());
     data.append(GetPackGUID());
     data.append(vehicleOwner->GetPackGUID());
     data << int8(GetTransSeat());
-    data << uint8(GetTypeId() == TYPEID_PLAYER ? 1 : 0); // boolean
+    data << uint8(0);
     data << GetPositionX() - vehicleOwner->GetPositionX();
     data << GetPositionY() - vehicleOwner->GetPositionY();
     data << GetPositionZ() - vehicleOwner->GetPositionZ();
-    data << uint32(getMSTime());            // should be an increasing constant that indicates movement packet count
-    data << uint8(SPLINETYPE_FACING_ANGLE);
-    data << GetTransOffsetO();              // facing angle?
-    data << uint32(SPLINEFLAG_TRANSPORT);
-    data << uint32(GetTransTime());         // move time
-    data << uint32(1);                      // amount of waypoints
-    data << uint32(0);                      // waypoint X
-    data << uint32(0);                      // waypoint Y
-    data << uint32(0);                      // waypoint Z
+    data << uint32(getMSTime());
+    data << uint8(4); // type
+    data << GetTransOffsetO();
+    data << uint32(SPLINEFLAG_TRANSPORT); // flag
+    data << uint32(0);
+    data << uint32(1);
+    data << float(0);//GetTransOffsetX();
+    data << float(0);//GetTransOffsetY();
+    data << float(0);//GetTransOffsetZ();
     SendMessageToSet(&data, true);
 }
 
