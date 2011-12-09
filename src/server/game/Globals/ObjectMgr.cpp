@@ -6631,6 +6631,13 @@ uint32 ObjectMgr::GetXPForLevel(uint8 level)
     return 0;
 }
 
+uint32 ObjectMgr::GetXPForGuildLevel(uint8 level)
+{
+    if (level < mGuildXPperLevel.size())
+        return mGuildXPperLevel[level];
+    return 0;
+}
+
 void ObjectMgr::LoadPetNames()
 {
     uint32 oldMSTime = getMSTime();

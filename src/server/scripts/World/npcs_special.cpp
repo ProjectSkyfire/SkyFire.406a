@@ -2700,7 +2700,7 @@ public:
                 for (uint32 i = 0; i = MAX_SPELL_EFFECTS;)
                 {
                     if (spell->Effects[i].Effect == SPELL_EFFECT_HEAL // if the spell is a heal...
-                        && spell->Effects[i].TargetA.GetTarget() == TARGET_UNIT_TARGET_ALLY); //... and is single target
+                        && spell->Effects[i].TargetA.GetTarget() == TARGET_UNIT_TARGET_ALLY) //... and is single target
                         _healcount++;
 
                     if (_healcount == 5) // "Your Guardian of Ancient Spirits heals the target of your next 5 heals for the same amount as your heal"
