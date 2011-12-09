@@ -462,7 +462,6 @@ public:
                     totalheal *= 3;
                     break;
                 }
-
             }
             // Selfless Healer
             if (AuraEffect const* auraEff = caster->GetDummyAuraEffect(SPELLFAMILY_PALADIN, 3924, EFFECT_0))
@@ -496,7 +495,7 @@ public:
                 return false;
             return true;
         }
-        
+
         void CalculateOvertime(AuraEffect const* aurEff, int32& amount, bool& canBeRecalculated)
         {
             if (AuraEffect const* longWord = GetCaster()->GetDummyAuraEffect(SPELLFAMILY_PALADIN, 4127, 1))
@@ -505,7 +504,7 @@ public:
                 amount = ((GetSpellInfo()->Effects[EFFECT_0].CalcValue() * longWord->GetAmount()) / 100)  / 3;
             }
         }
-        
+
         void Register()
         {
             DoEffectCalcAmount += AuraEffectCalcAmountFn(spell_pal_word_of_glory_heal_AuraScript::CalculateOvertime, EFFECT_1, SPELL_AURA_PERIODIC_HEAL);

@@ -644,6 +644,10 @@ public:
     const std::string& GetMOTD() const { return m_motd; }
     const std::string& GetInfo() const { return m_info; }
 
+    void SwitchRank(uint32 oldRank, uint32 newRank);
+
+    uint32 GetMembersCount() { return m_members.size(); }
+
     // Handle client commands
     void HandleRoster(WorldSession* session = NULL);          // NULL = broadcast
     void HandleQuery(WorldSession* session);
@@ -666,9 +670,14 @@ public:
     bool HandleMemberWithdrawMoney(WorldSession* session, uint32 amount, bool repair = false);
     void HandleMemberLogout(WorldSession* session);
     void HandleDisband(WorldSession* session);
+
     void UpdateMemberData(Player* player, uint8 dataid, uint32 value);
     void OnPlayerStatusChange(Player* player, uint32 flag, bool state);
     void SendUpdateRoster(WorldSession* session = NULL);
+
+    // Guild experience system
+    uint64 GetTodayXPLimit();
+
     // Send info to client
     void SendInfo(WorldSession* session) const;
     void SendEventLog(WorldSession* session) const;
@@ -721,9 +730,13 @@ public:
     // Guild advancement
     uint8 GetLevel() { return m_level; }
     uint64 GetCurrentXP() { return m_xp; }
+    uint64 GetTodayXP() { return m_today_xp; }
+    uint64 GetXPCap() { return m_xp_cap; }
     uint64 GetNextLevelXP() { return m_nextLevelXP; }
     uint64 GetGuildMoney() { return m_bankMoney; }
     uint64 SetGuildMoney(uint64 add) { return m_bankMoney += add; }
+    void ResetTodayXP() { m_today_xp = 0; }
+    void GenerateXPCap();
 
     void GainXP(uint64 xp);
     void LevelUp();
@@ -738,6 +751,8 @@ protected:
 
     uint8 m_level;
     uint64 m_xp;
+    uint64 m_today_xp;
+    uint64 m_xp_cap;
     uint64 m_nextLevelXP;
 
     EmblemInfo m_emblemInfo;
@@ -747,6 +762,8 @@ protected:
     Ranks m_ranks;
     Members m_members;
     BankTabs m_bankTabs;
+
+    uint32 m_lastXPSave;
 
     // These are actually ordered lists. The first element is the oldest entry.
     LogHolder* m_eventLog;
@@ -788,6 +805,8 @@ private:
         stmt->setUInt32(0, lowguid);
         CharacterDatabase.Execute(stmt);
     }
+
+    void SaveXP();
 
     // Creates log holders (either when loading or when creating guild)
     void _CreateLogHolders();

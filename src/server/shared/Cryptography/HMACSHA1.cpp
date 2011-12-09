@@ -20,6 +20,8 @@
 #include "HMACSHA1.h"
 #include "BigNumber.h"
 
+#include <assert.h>
+
 HmacHash::HmacHash(uint32 len, uint8 *seed)
 {
     HMAC_CTX_init(&m_ctx);

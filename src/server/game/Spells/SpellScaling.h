@@ -21,6 +21,7 @@
 #define _SPELLSCALING_H
 
 #include "SharedDefines.h"
+#include "DBCStores.h"
 
 class SpellInfo;
 

@@ -1,0 +1,7 @@
+ALTER TABLE `guild` ADD COLUMN `totalXP` BIGINT(20) AFTER `BankMoney`;
+
+ALTER TABLE `guild` ADD COLUMN `todayXP` BIGINT(20) AFTER `totalXP`;
+
+ALTER TABLE `guild` ADD COLUMN `XPCap` BIGINT(20) AFTER `todayXP`;
+
+ALTER TABLE `guild` ADD COLUMN `level` INT(10) AFTER `XPCap`;

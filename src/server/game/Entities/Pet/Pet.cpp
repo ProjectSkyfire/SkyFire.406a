@@ -99,7 +99,7 @@ bool Pet::LoadPetFromDB(Player* owner, uint32 petentry, uint32 petnumber, bool c
 
     if (slotID == PET_SLOT_ACTUAL_PET_SLOT)
         slotID = owner->m_currentPetSlot;
-        
+
     uint32 ownerid = owner->GetGUIDLow();
 
     QueryResult result;

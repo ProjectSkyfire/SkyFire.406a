@@ -140,7 +140,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
         e.target.z = (*objs->front()).GetPositionZ();
         e.target.o = (*objs->front()).GetOrientation();
     }
-    
+
     switch (e.GetActionType())
     {
         case SMART_ACTION_TALK:

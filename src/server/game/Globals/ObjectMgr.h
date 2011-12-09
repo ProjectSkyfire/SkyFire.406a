@@ -932,6 +932,7 @@ class ObjectMgr
         std::string GeneratePetName(uint32 entry);
         uint32 GetBaseXP(uint8 level);
         uint32 GetXPForLevel(uint8 level);
+        uint32 GetXPForGuildLevel(uint8 level);
 
         int32 GetFishingBaseSkillLevel(uint32 entry) const
         {
@@ -1305,6 +1306,9 @@ class ObjectMgr
 
         typedef std::map<uint32, uint32> BaseXPMap;          // [area level][base xp]
         BaseXPMap mBaseXPTable;
+
+        typedef std::vector<uint64> GuildXPperLevel;         // [level]
+        GuildXPperLevel mGuildXPperLevel;
 
         typedef std::map<uint32, int32> FishingBaseSkillMap; // [areaId][base skill level]
         FishingBaseSkillMap mFishingBaseForArea;
