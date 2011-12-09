@@ -547,7 +547,7 @@ private:
         virtual bool IsBank() const = 0;
         // Initializes item pointer. Returns true, if item exists, false otherwise.
         virtual bool InitItem() = 0;
-        // Checks splited amount against item. Splited amount cannot be more that number of items in stack.
+        // Checks the split amount against item. Split amount cannot be more that number of items in stack.
         virtual bool CheckItem(uint32& splitedAmount);
         // Defines if player has rights to save item in container
         virtual bool HasStoreRights(MoveItemData* /*pOther*/) const { return true; }
@@ -557,7 +557,7 @@ private:
         bool CanStore(Item* pItem, bool swap, bool sendError);
         // Clones stored item
         bool CloneItem(uint32 count);
-        // Remove item from container (if splited update items fields)
+        // Remove item from container (if split update items fields)
         virtual void RemoveItem(SQLTransaction& trans, MoveItemData* pOther, uint32 splitedAmount = 0) = 0;
         // Saves item to container
         virtual Item* StoreItem(SQLTransaction& trans, Item* pItem) = 0;

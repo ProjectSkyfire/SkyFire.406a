@@ -384,7 +384,7 @@ public:
 
         void CheckIfMoveInRing(Unit* who)
         {
-            if (who->isAlive() && me->IsInRange(who, 2.0f, 4.7f) && !who->HasAura(82691)/*<= target already frozen*/ && !who->HasAura(91264)/*<= target is immune*/ && me->IsWithinLOSInMap(who) && Isready)
+            if (who->isAlive() && me->IsInRange(who, 2.0f, 4.7f) && !who->HasAura(82691)/*<= target already frozen*/ && !Isready)
                 me->CastSpell(who, 82691, true);
         }
 
