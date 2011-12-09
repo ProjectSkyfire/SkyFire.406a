@@ -1389,15 +1389,15 @@ void Guild::HandleQuery(WorldSession* session)
         else
             data << uint32(0);
     }
-    
-	/*for (int i = 0; i < GUILD_RANKS_MAX_COUNT; ++i)
+
+    for (int i = 0; i < GUILD_RANKS_MAX_COUNT; ++i)
     {
         if (i < _GetRanksSize())
             data << uint32(i);
         else
             data << uint32(0);
-    }*/
-   
+    }
+
     m_emblemInfo.WritePacket(data);
     data << uint32(7);                                                // Something new in WotLK
 

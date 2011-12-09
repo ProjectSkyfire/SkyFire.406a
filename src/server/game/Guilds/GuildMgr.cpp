@@ -99,9 +99,9 @@ void GuildMgr::LoadGuilds()
     {
         uint32 oldMSTime = getMSTime();
 
-                                                     //          0          1       2             3              4              5              6
+                                                //           0          1       2             3              4              5              6
         QueryResult result = CharacterDatabase.Query("SELECT g.guildid, g.name, g.leaderguid, g.EmblemStyle, g.EmblemColor, g.BorderStyle, g.BorderColor, "
-                                                     //   7                  8       9       10            11           12
+                                                //    7                  8       9       10            11           12         13         14       15
                                                      "g.BackgroundColor, g.info, g.motd, g.createdate, g.BankMoney, g.totalXP, g.todayXP, g.XPCap, g.level, COUNT(gbt.guildid) "
                                                      "FROM guild g LEFT JOIN guild_bank_tab gbt ON g.guildid = gbt.guildid GROUP BY g.guildid ORDER BY g.guildid ASC");
 

@@ -19257,7 +19257,7 @@ void Player::SaveToDB(bool create /*=false*/)
         }
 
         stmt->setString(index++, ss.str());
-        stmt->setUInt32(index++, 0/*GetUInt32Value(PLAYER_AMMO_ID)*/);
+        stmt->setUInt32(index++, 0 /*GetUInt32Value(PLAYER_AMMO_ID)*/);
 
         ss.str().clear();
         for (uint32 i = 0; i < KNOWN_TITLES_SIZE * 2; ++i)
@@ -19265,7 +19265,7 @@ void Player::SaveToDB(bool create /*=false*/)
 
         stmt->setString(index++, ss.str());
         stmt->setUInt8(index++, GetByteValue(PLAYER_FIELD_BYTES, 2));
-        stmt->setUInt32(index++, m_currentPetSlot);
+        stmt->setInt8(index++, m_currentPetSlot);
         stmt->setUInt32(index++, m_petSlotUsed);
         stmt->setUInt32(index++, m_grantableLevels);
     }
