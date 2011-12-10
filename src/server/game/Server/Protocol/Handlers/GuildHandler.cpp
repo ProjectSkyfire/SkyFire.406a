@@ -138,8 +138,8 @@ void WorldSession::HandleGuildRosterOpcode(WorldPacket& recvPacket)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_GUILD_ROSTER");
 
-    recvPacket.read_skip<uint64>(); // Guild guid, not used
-    recvPacket.read_skip<uint64>(); // player guid, not used
+    //recvPacket.read_skip<uint64>(); // Guild guid, not used
+    //recvPacket.read_skip<uint64>(); // player guid, not used
 
     if (Guild* guild = _GetPlayerGuild(this))
         guild->HandleRoster(this);
@@ -226,19 +226,18 @@ void WorldSession::HandleGuildMOTDOpcode(WorldPacket& recvPacket)
         guild->HandleSetMOTD(this, motd);
 }
 
-// Not implemented yet!!!
-/*void WorldSession::HandleGuildExperienceOpcode(WorldPacket& recvPacket)
+void WorldSession::HandleGuildExperienceOpcode(WorldPacket& recvPacket)
 {
     recvPacket.read_skip<uint64>();
 
-    if (Guild* guild = sObjectMgr->GetGuildById(_player->GetGuildId()))
+    if (Guild* guild = sGuildMgr->GetGuildById(_player->GetGuildId()))
     {
         WorldPacket data(SMSG_GUILD_XP_UPDATE, 8*5);
-        data << uint64(0x37); // max daily xp
+        data << uint64(guild->GetXPCap());       // max daily xp
         data << uint64(guild->GetNextLevelXP()); // next level XP
-        data << uint64(0x37); // weekly xp
-        data << uint64(guild->GetCurrentXP()); // Curr exp
-        data << uint64(0); // Today exp (unsupported)
+        data << uint64(guild->GetXPCap());       // weekly xp
+        data << uint64(guild->GetCurrentXP());   // Curr exp
+        data << uint64(guild->GetTodayXP());     // Today exp
         SendPacket(&data);
     }
 }
@@ -247,9 +246,12 @@ void WorldSession::HandleGuildMaxExperienceOpcode(WorldPacket& recvPacket)
 {
     recvPacket.read_skip<uint64>();
 
-    WorldPacket data(SMSG_GUILD_MAX_DAILY_XP, 8);
-    data << uint64(67800000); // Constant value for now
-    SendPacket(&data);
+    if (Guild* guild = sGuildMgr->GetGuildById(_player->GetGuildId()))
+    {
+        WorldPacket data(SMSG_GUILD_MAX_DAILY_XP, 8);
+        data << uint64(guild->GetXPCap());
+        SendPacket(&data);
+    }
 }
 
 void WorldSession::HandleGuildRewardsOpcode(WorldPacket& recvPacket)
@@ -280,72 +282,11 @@ void WorldSession::HandleGuildRewardsOpcode(WorldPacket& recvPacket)
         data << uint32(vec[i]->achievement); // Achievement requirement
 
     for(uint32 i = 0; i < vec.size(); ++i)
-        data << uint32(vec[i]->standing); // // Reputation level (REP_HONORED, REP_FRIENDLY, etc)
+        data << uint32(vec[i]->standing); // Reputation level (REP_HONORED, REP_FRIENDLY, etc)
 
     for(uint32 i = 0; i < vec.size(); ++i)
         data << uint32(vec[i]->item); // item entry
     SendPacket(&data);
-}*/
-
-void WorldSession::HandleGuildExperienceOpcode(WorldPacket& recvPacket)
-{
-    recvPacket.read_skip<uint64>();
-
-    if (Guild* guild = sGuildMgr->GetGuildById(_player->GetGuildId()))
-    {
-        WorldPacket data(SMSG_GUILD_XP_UPDATE, 8*5);
-        data << uint64(0x37);                      // max daily xp
-        data << uint64(guild->GetNextLevelXP());   // next level XP
-        data << uint64(0x37);                      // weekly xp
-        data << uint64(guild->GetCurrentXP());     // Curr exp
-        data << uint64(0);                         // Today exp (unsupported)
-        SendPacket(&data);
-    }
-}
-
-void WorldSession::HandleGuildMaxExperienceOpcode(WorldPacket& recvPacket)
-{
-    recvPacket.read_skip<uint64>();
-
-    WorldPacket data(SMSG_GUILD_MAX_DAILY_XP, 8);
-    data << uint64(67800000); // Constant value for now
-    SendPacket(&data);
-}
-
-void WorldSession::HandleGuildRewardsOpcode(WorldPacket& recvPacket)
-{
-    if (!_player->GetGuildId()/* || !sWorld->getBoolConfig(CONFIG_GUILD_ADVANCEMENT_ENABLED)*/)
-        return;
-
-    recvPacket.read_skip<uint64>();
-
-    // TODO:
-    //ObjectMgr::GuildRewardsVector const& vec = sObjectMgr->GetGuildRewards();
-    //if (vec.empty())
-    //    return;
-
-    /*WorldPacket data(SMSG_GUILD_REWARDS_LIST, 8);
-    data << uint32(_player->GetGuildId()) ;
-    data << uint32(vec.size()); // counter
-
-    for(uint32 i = 0; i < vec.size(); ++i)
-        data << uint32(0); // unk (only found 0 in retail logs)
-
-    for(uint32 i = 0; i < vec.size(); ++i)
-        data << uint32(0); // unk
-
-    for(uint32 i = 0; i < vec.size(); ++i)
-        data << uint64(vec[i]->price); // money price
-
-    for(uint32 i = 0; i < vec.size(); ++i)
-        data << uint32(vec[i]->achievement); // Achievement requirement
-
-    for(uint32 i = 0; i < vec.size(); ++i)
-        data << uint32(vec[i]->standing); // // Reputation level (REP_HONORED, REP_FRIENDLY, etc)
-
-    for(uint32 i = 0; i < vec.size(); ++i)
-        data << uint32(vec[i]->item); // item entry
-    SendPacket(&data);*/
 }
 
 void WorldSession::HandleGuildSetNoteOpcode(WorldPacket& recvPacket)
@@ -399,6 +340,8 @@ void WorldSession::HandleGuildRankOpcode(WorldPacket& recvPacket)
 
     std::string rankName;
     recvPacket >> rankName;
+
+    sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_GUILD_RANK");
 
     if (GetPlayer()->GetGUID() != playerGuid)
     {
@@ -559,8 +502,9 @@ void WorldSession::HandleGuildBankDepositMoney(WorldPacket & recv_data)
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received (CMSG_GUILD_BANK_DEPOSIT_MONEY)");
 
     uint64 GoGuid;
-    uint64 money;
     recv_data >> GoGuid;
+
+    uint64 money;
     recv_data >> money;
 
     if (GetPlayer()->GetGameObjectIfCanInteractWith(GoGuid, GAMEOBJECT_TYPE_GUILD_BANK))
@@ -574,8 +518,9 @@ void WorldSession::HandleGuildBankWithdrawMoney(WorldPacket & recv_data)
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received (CMSG_GUILD_BANK_WITHDRAW_MONEY)");
 
     uint64 GoGuid;
-    uint64 money;
     recv_data >> GoGuid;
+
+    uint64 money;
     recv_data >> money;
 
     if (money)
@@ -593,15 +538,14 @@ void WorldSession::HandleGuildBankSwapItems(WorldPacket & recv_data)
 
     if (!GetPlayer()->GetGameObjectIfCanInteractWith(GoGuid, GAMEOBJECT_TYPE_GUILD_BANK))
     {
-        recv_data.rfinish();                   // Prevent additional spam at rejected packet
+        recv_data.rpos(recv_data.wpos());                   // Prevent additional spam at rejected packet
         return;
     }
 
     Guild* guild = _GetPlayerGuild(this);
-
-	if (!guild)
+    if (!guild)
     {
-        recv_data.rfinish();                   // Prevent additional spam at rejected packet
+        recv_data.rpos(recv_data.wpos());                   // Prevent additional spam at rejected packet
         return;
     }
 
@@ -676,8 +620,9 @@ void WorldSession::HandleGuildBankBuyTab(WorldPacket & recv_data)
     uint8 tabId;
     recv_data >> tabId;
 
-    if (Guild* guild = _GetPlayerGuild(this))
-        guild->HandleBuyBankTab(this, tabId);
+    if (GetPlayer()->GetGameObjectIfCanInteractWith(GoGuid, GAMEOBJECT_TYPE_GUILD_BANK))
+       if (Guild* guild = _GetPlayerGuild(this))
+           guild->HandleBuyBankTab(this, tabId);
 }
 
 void WorldSession::HandleGuildBankUpdateTab(WorldPacket & recv_data)
@@ -685,7 +630,6 @@ void WorldSession::HandleGuildBankUpdateTab(WorldPacket & recv_data)
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received (CMSG_GUILD_BANK_UPDATE_TAB)");
 
     uint64 GoGuid;
-
     recv_data >> GoGuid;
 
     uint8 tabId;

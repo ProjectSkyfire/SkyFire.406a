@@ -969,18 +969,22 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder * holder)
         if (Guild* guild = sGuildMgr->GetGuildById(pCurrChar->GetGuildId()))
         {
             guild->SendLoginInfo(this);
-            /*pCurrChar->SetUInt32Value(PLAYER_GUILDLEVEL, uint32(guild->GetLevel()));
-            pCurrChar->SetFlag(PLAYER_FLAGS, PLAYER_FLAGS_GLEVEL_ENABLED);
+            pCurrChar->SetUInt32Value(PLAYER_GUILDLEVEL, uint32(guild->GetLevel()));
+            
+			if (sWorld->getBoolConfig(CONFIG_GUILD_ADVANCEMENT_ENABLED))
+            {
+                pCurrChar->SetFlag(PLAYER_FLAGS, PLAYER_FLAGS_GLEVEL_ENABLED);
 
-            /// Learn perks to him
-            for(int i = 0; i < guild->GetLevel(); ++i)
-                if(const GuildPerksEntry* perk = sGuildPerksStore.LookupEntry(i)) //Since row id 25 does not exist, it just skip it
-                    pCurrChar->learnSpell(perk->SpellId, true);*/
+                /// Learn perks to him
+                for(int i = 0; i < guild->GetLevel(); ++i)
+                    if (const GuildPerksEntry* perk = sGuildPerksStore.LookupEntry(i))
+                        pCurrChar->learnSpell(perk->SpellId, true);
+            }
         }
         else
         {
             // remove wrong guild data
-            sLog->outError("Player %s (GUID: %u) marked as member of not existing guild (id: %u), removing guild membership for player.", pCurrChar->GetName(), pCurrChar->GetGUIDLow(), pCurrChar->GetGuildId());
+            sLog->outError("Player %s (GUID: %u) marked as member of a guild that does not exist(id: %u), removing guild membership for player.", pCurrChar->GetName(), pCurrChar->GetGUIDLow(), pCurrChar->GetGuildId());
             pCurrChar->SetInGuild(0);
         }
     }

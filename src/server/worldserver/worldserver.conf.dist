@@ -1273,6 +1273,30 @@ Guild.EventLogRecordsCount = 100
 Guild.BankEventLogRecordsCount = 25
 
 #
+#    GuildAdvancement.Enabled
+#        Enables the cataclysm guild leveling system. 
+#        It's currently far from being complete. 
+#        Use on your own risk!
+#        Default: 0 - disabled
+
+GuildAdvancement.Enabled = 0
+
+#        
+#    GuildAdvancement.MaxLevel
+#        Max level a guild can reach. 
+#        Only has effect if Guild Advancement is enabled
+#        Default: 25
+
+GuildAdvancement.MaxLevel = 25
+
+#        
+#    GuildAdvancement.ResetHour
+#        Reset Daily XP Cap at specified hour of the day (0-23)
+#        Default: 3
+
+GuildAdvancement.ResetHour = 3
+
+#
 #    MaxPrimaryTradeSkill
 #        Description: Maximum number of primary professions a character can learn.
 #        Range:       0-10
