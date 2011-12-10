@@ -1101,7 +1101,7 @@ CREATE TABLE `guild` (
   `m_today_xp` BIGINT(20) NOT NULL,
   `m_xp_cap` BIGINT(20) NOT NULL,
   PRIMARY KEY (`guildid`)
-) ENGINE=INNODB DEFAULT CHARSET=utf8 COMMENT='Guild System';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Guild System';
 
 LOCK TABLES `guild` WRITE;
 /*!40000 ALTER TABLE `guild` DISABLE KEYS */;
