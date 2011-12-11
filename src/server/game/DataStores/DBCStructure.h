@@ -2015,6 +2015,7 @@ struct TalentTreePrimarySpellsEntry
     uint32 Id;                                              // 0
     uint32 TalentTabID;                                     // 1
     uint32 SpellID;                                         // 2
+    uint32 unk;                                             // 3	
 };
 
 struct TaxiNodesEntry

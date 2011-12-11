@@ -24491,6 +24491,13 @@ void Player::LearnTalent(uint32 talentId, uint32 talentRank, bool one)
 
     sLog->outDetail("TalentID: %u Rank: %u Spell: %u Spec: %u\n", talentId, talentRank, spellid, m_activeSpec);
 
+    // Save Talents
+    SQLTransaction trans = CharacterDatabase.BeginTransaction();
+    _SaveTalents(trans);
+    _SaveTalentBranchSpecs(trans);
+    _SaveSpells(trans);
+    CharacterDatabase.CommitTransaction(trans);
+
     // update free talent points
     SetFreeTalentPoints(CurTalentPoints - (talentRank - curtalent_maxrank + 1));
 }

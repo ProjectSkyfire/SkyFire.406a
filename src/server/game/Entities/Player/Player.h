@@ -2750,7 +2750,8 @@ class Player : public Unit, public GridObject<Player>
 
         uint8 m_activeSpec;
         uint8 m_specsCount;
-        uint32 m_branchSpec[MAX_TALENT_SPECS];
+        uint32 m_branchSpec[MAX_TALENT_SPECS];              // tabId of the main talent bran
+        uint32 m_talentSpec[MAX_TALENT_SPECS];              // S[1,MAX_TALENT_TABS] { (numTalentsInTab << (tabPageIndex*8) }
         uint32 m_freeTalentPoints;
 
         uint32 m_emote;
