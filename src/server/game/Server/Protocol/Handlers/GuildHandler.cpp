@@ -469,13 +469,8 @@ void WorldSession::HandleGuildBankerActivate(WorldPacket & recv_data)
     uint8 unk;
     recv_data >> unk;
 
-    if (GetPlayer()->GetGameObjectIfCanInteractWith(GoGuid, GAMEOBJECT_TYPE_GUILD_BANK))
-    {
-        if (Guild* guild = _GetPlayerGuild(this))
-            guild->SendBankTabsInfo(this);
-        else
-            Guild::SendCommandResult(this, GUILD_UNK1, ERR_GUILD_PLAYER_NOT_IN_GUILD);
-    }
+    if (Guild* guild = _GetPlayerGuild(this))
+        guild->HandleBuyBankTab(this, tabId);
 }
 
 // Called when opening guild bank tab only (first one)
