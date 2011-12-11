@@ -971,7 +971,7 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder * holder)
             guild->SendLoginInfo(this);
             pCurrChar->SetUInt32Value(PLAYER_GUILDLEVEL, uint32(guild->GetLevel()));
             
-			if (sWorld->getBoolConfig(CONFIG_GUILD_ADVANCEMENT_ENABLED))
+            if (sWorld->getBoolConfig(CONFIG_GUILD_ADVANCEMENT_ENABLED))
             {
                 pCurrChar->SetFlag(PLAYER_FLAGS, PLAYER_FLAGS_GLEVEL_ENABLED);
 
