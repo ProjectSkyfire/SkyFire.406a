@@ -2015,7 +2015,7 @@ struct TalentTreePrimarySpellsEntry
     uint32 Id;                                              // 0
     uint32 TalentTabID;                                     // 1
     uint32 SpellID;                                         // 2
-    uint32 unk;                                             // 3	
+    uint32 unk;                                             // 3
 };
 
 struct TaxiNodesEntry
@@ -2154,7 +2154,7 @@ struct VehicleSeatEntry
     //uint32 unk3;                                          // 65 4.0.1
 
     bool CanEnterOrExit() const { return m_flags & VEHICLE_SEAT_FLAG_CAN_ENTER_OR_EXIT; }
-    bool CanSwitchFromSeat() const { return m_flags & VEHICLE_SEAT_FLAG_B_CANSWITCH; }
+    bool CanSwitchFromSeat() const { return m_flags & VEHICLE_SEAT_FLAG_CAN_SWITCH; }
     bool IsUsableByOverride() const { return (m_flags & VEHICLE_SEAT_FLAG_UNCONTROLLED)
                                     || (m_flagsB & (VEHICLE_SEAT_FLAG_B_USABLE_FORCED | VEHICLE_SEAT_FLAG_B_USABLE_FORCED_2 | VEHICLE_SEAT_FLAG_B_USABLE_FORCED_3)); }
     bool IsEjectable() const { return m_flagsB & VEHICLE_SEAT_FLAG_B_EJECTABLE; }

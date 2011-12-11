@@ -199,7 +199,7 @@ void WorldSession::HandleLootMoneyOpcode(WorldPacket & /*recv_data*/)
                 }
                 else
                     data << uint32(0);
-                    
+
                 (*i)->GetSession()->SendPacket(&data);
             }
         }
