@@ -3077,7 +3077,7 @@ void Guild::LevelUp()
 
     // Find perk to gain
     uint32 spellId = 0;
-    if (const GuildPerksEntry* perk = sGuildPerksStore.LookupEntry(level-1))
+    if (const GuildPerksEntry* perk = sGuildPerksStore.LookupEntry(level))
         spellId = perk->SpellId;
 
     // Notify players of level change

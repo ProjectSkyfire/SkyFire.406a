@@ -1,3 +1,4 @@
+
 -- fix Saurfang spawn time
 UPDATE `creature` SET `spawntimesecs` = 86400 WHERE `id` = 37813;
 
@@ -130,11 +131,13 @@ INSERT INTO `creature_text` (`entry`,`groupid`,`id`,`text`,`type`,`language`,`pr
 (38017,1,0,'These blades, Krasus... They were made long ago, when things were... different.',0,0,100,1,0,0,'Kalecgos'),
 (38017,2,0,'Our enemies once turned our strongest weapon against us. What makes you think the prismatic blades will be any different?',0,0,100,1,0,0,'Kalecgos'),
 (38017,3,0,'As you wish, my queen. I will not stand in their way, but I will keep a close watch.',0,0,100,16,0,0,'Kalecgos');
+
 -- waypoints for Kalecgos
 DELETE FROM `waypoints` WHERE `entry`=38017;
 INSERT INTO `waypoints` (`entry`,`pointid`,`position_x`,`position_y`,`position_z`,`point_comment`) VALUES
 (38017,1,3541.156,276.041,342.721,'talk point'),
 (38017,2,3545.989,287.278,342.721,'home point');
+
 -- SAI for Kalecgos
 UPDATE `creature_template` SET `AIName`= 'SmartAI' WHERE `entry`=38017;
 DELETE FROM `smart_scripts` WHERE `source_type`=0 AND `entryorguid`=38017;
@@ -150,6 +153,7 @@ INSERT INTO `smart_scripts` (`entryorguid`,`source_type`,`id`,`link`,`event_type
 (3801700,9,1,0,0,0,100,0,0,0,0,0,53,0,38017,0,0,0,0,1,0,0,0,0,0,0,0, 'wp start'),
 (3801701,9,0,0,0,0,100,0,0,0,0,0,45,0,0,0,0,0,0,1,0,0,0,0,0,0,0, 'dataset 0 0'),
 (3801701,9,1,0,0,0,100,0,0,0,0,0,65,0,0,0,0,0,0,1,0,0,0,0,0,0,0, 'wp resume');
+
 -- SAI for Alexstrasza
 UPDATE `creature_template` SET `AIName`= 'SmartAI' WHERE `entry`=26917;
 DELETE FROM `smart_scripts` WHERE `source_type`=0 AND `entryorguid`=26917;
@@ -200,4 +204,3 @@ DELETE FROM `smart_scripts` WHERE `entryorguid`=@ENTRY AND `source_type`=@SOURCE
 UPDATE creature_template SET AIName="SmartAI" WHERE entry=@ENTRY LIMIT 1;
 INSERT INTO `smart_scripts` (`entryorguid`,`source_type`,`id`,`link`,`event_type`,`event_phase_mask`,`event_chance`,`event_flags`,`event_param1`,`event_param2`,`event_param3`,`event_param4`,`action_type`,`action_param1`,`action_param2`,`action_param3`,`action_param4`,`action_param5`,`action_param6`,`target_type`,`target_param1`,`target_param2`,`target_param3`,`target_x`,`target_y`,`target_z`,`target_o`,`comment`) VALUES
 (@ENTRY,@SOURCETYPE,0,0,62,0,100,0,10857,1,0,0,56,49698,1,0,0,0,0,7,0,0,0,0.0,0.0,0.0,0.0,"Arcanum Core - Script for - http://wowhead.com/quest=20439");
-
