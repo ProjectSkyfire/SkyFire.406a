@@ -1084,22 +1084,22 @@ LOCK TABLES `groups` WRITE;
 UNLOCK TABLES;
 DROP TABLE IF EXISTS `guild`;
 CREATE TABLE `guild` (
-  `guildid` INT(10) UNSIGNED NOT NULL DEFAULT '0',
-  `name` VARCHAR(24) NOT NULL DEFAULT '',
-  `leaderguid` INT(10) UNSIGNED NOT NULL DEFAULT '0',
-  `EmblemStyle` TINYINT(3) UNSIGNED NOT NULL DEFAULT '0',
-  `EmblemColor` TINYINT(3) UNSIGNED NOT NULL DEFAULT '0',
-  `BorderStyle` TINYINT(3) UNSIGNED NOT NULL DEFAULT '0',
-  `BorderColor` TINYINT(3) UNSIGNED NOT NULL DEFAULT '0',
-  `BackgroundColor` TINYINT(3) UNSIGNED NOT NULL DEFAULT '0',
-  `info` TEXT NOT NULL,
-  `motd` VARCHAR(128) NOT NULL DEFAULT '',
-  `createdate` INT(10) UNSIGNED NOT NULL DEFAULT '0',
-  `BankMoney` BIGINT(20) UNSIGNED NOT NULL DEFAULT '0',
-  `xp` BIGINT(20) UNSIGNED NOT NULL,
-  `level` INT(10) UNSIGNED NOT NULL,
-  `m_today_xp` BIGINT(20) NOT NULL,
-  `m_xp_cap` BIGINT(20) NOT NULL,
+  `guildid` int(10) unsigned NOT NULL DEFAULT '0',
+  `name` varchar(24) NOT NULL DEFAULT '',
+  `leaderguid` int(10) unsigned NOT NULL DEFAULT '0',
+  `EmblemStyle` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `EmblemColor` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `BorderStyle` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `BorderColor` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `BackgroundColor` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `info` text NOT NULL,
+  `motd` varchar(128) NOT NULL DEFAULT '',
+  `createdate` int(10) unsigned NOT NULL DEFAULT '0',
+  `BankMoney` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `xp` bigint(20) unsigned NOT NULL,
+  `level` int(10) unsigned NOT NULL,
+  `m_today_xp` bigint(20) NOT NULL,
+  `m_xp_cap` bigint(20) NOT NULL,
   PRIMARY KEY (`guildid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Guild System';
 
