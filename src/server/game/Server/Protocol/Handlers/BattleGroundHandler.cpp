@@ -326,7 +326,7 @@ void WorldSession::HandleBattlefieldListOpcode(WorldPacket &recv_data)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Recvd CMSG_BATTLEFIELD_LIST Message");
 
-    uint8 bgTypeId;
+    uint32 bgTypeId;
     recv_data >> bgTypeId;                                  // id from DBC
 
     uint8 fromWhere;

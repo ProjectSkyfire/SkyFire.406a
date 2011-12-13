@@ -158,6 +158,7 @@ enum WorldBoolConfigs
     CONFIG_AUTOBROADCAST,
     CONFIG_PREVENT_PLAYERS_ACCESS_TO_GMISLAND,
     CONFIG_ALLOW_TICKETS,
+    CONFIG_GUILD_ADVANCEMENT_ENABLED,
     CONFIG_DB2_ENFORCE_ITEM_ATTRIBUTES,
     CONFIG_PRESERVE_CUSTOM_CHANNELS,
     CONFIG_PDUMP_NO_PATHS,
@@ -298,6 +299,7 @@ enum WorldIntConfigs
     CONFIG_CLIENTCACHE_VERSION,
     CONFIG_GUILD_EVENT_LOG_COUNT,
     CONFIG_GUILD_BANK_EVENT_LOG_COUNT,
+    CONFIG_GUILD_DAILY_XP_RESET_HOUR,
     CONFIG_MIN_LEVEL_STAT_SAVE,
     CONFIG_RANDOM_BG_RESET_HOUR,
     CONFIG_CHARDELETE_KEEP_DAYS,
@@ -310,6 +312,7 @@ enum WorldIntConfigs
     CONFIG_PRESERVE_CUSTOM_CHANNEL_DURATION,
     CONFIG_PERSISTENT_CHARACTER_CLEAN_FLAGS,
     CONFIG_MAX_INSTANCES_PER_HOUR,
+    CONFIG_GUILD_ADVANCEMENT_MAX_LEVEL,
     CONFIG_WINTERGRASP_PLAYER_MAX,
     CONFIG_WINTERGRASP_PLAYER_MIN,
     CONFIG_WINTERGRASP_PLAYER_MIN_LVL,
@@ -458,8 +461,10 @@ enum RealmZone
 
 enum WorldStates
 {
-    WS_WEEKLY_QUEST_RESET_TIME = 20002,                      // Next weekly reset time
-    WS_BG_DAILY_RESET_TIME     = 20003                       // Next daily BG reset time
+    WS_WEEKLY_QUEST_RESET_TIME    = 20002,                      // Next weekly reset time
+    WS_BG_DAILY_RESET_TIME        = 20003,                      // Next daily BG reset time
+    WS_CURRENCY_RESET_TIME        = 20004,                      // Next currency week cap reset time
+    WS_GUILD_AD_DAILY_RESET_TIME  = 20005                       // Next daily Guild Advancement XP reset time
 };
 
 // DB scripting commands
@@ -622,6 +627,7 @@ class World
         time_t GetNextDailyQuestsResetTime() const { return m_NextDailyQuestReset; }
         time_t GetNextWeeklyQuestsResetTime() const { return m_NextWeeklyQuestReset; }
         time_t GetNextRandomBGResetTime() const { return m_NextRandomBGReset; }
+        time_t GetGuildAdvancementDailyXPResetTime() const { return m_NextDailyXPReset; }
 
         /// Get the maximum skill level a player can reach
         uint16 GetConfigMaxSkillValue() const
@@ -762,8 +768,10 @@ class World
         void InitDailyQuestResetTime();
         void InitWeeklyQuestResetTime();
         void InitRandomBGResetTime();
+        void InitGuildAdvancementDailyResetTime();
         void ResetDailyQuests();
         void ResetWeeklyQuests();
+        void ResetGuildAdvancementDailyXP();
         void ResetRandomBG();
     private:
         static volatile bool m_stopEvent;
@@ -825,6 +833,7 @@ class World
         time_t m_NextDailyQuestReset;
         time_t m_NextWeeklyQuestReset;
         time_t m_NextRandomBGReset;
+        time_t m_NextDailyXPReset;
 
         //Player Queue
         Queue m_QueuedPlayer;

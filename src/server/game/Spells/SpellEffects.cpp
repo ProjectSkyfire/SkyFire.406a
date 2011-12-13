@@ -2355,12 +2355,12 @@ void Spell::EffectUnlearnSpecialization(SpellEffIndex effIndex)
     if (!unitTarget || unitTarget->GetTypeId() != TYPEID_PLAYER)
         return;
 
-    Player* _player = unitTarget->ToPlayer();
+    Player* player = unitTarget->ToPlayer();
     uint32 spellToUnlearn = m_spellInfo->Effects[effIndex].TriggerSpell;
 
-    _player->removeSpell(spellToUnlearn);
+    player->removeSpell(spellToUnlearn);
 
-    sLog->outDebug(LOG_FILTER_SPELLS_AURAS, "Spell: Player %u has unlearned spell %u from NpcGUID: %u", _player->GetGUIDLow(), spellToUnlearn, m_caster->GetGUIDLow());
+    sLog->outDebug(LOG_FILTER_SPELLS_AURAS, "Spell: Player %u has unlearned spell %u from NpcGUID: %u", player->GetGUIDLow(), spellToUnlearn, m_caster->GetGUIDLow());
 }
 
 void Spell::EffectPowerDrain(SpellEffIndex effIndex)

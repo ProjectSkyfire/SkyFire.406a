@@ -595,7 +595,7 @@ bool Guild::Member::LoadFromDB(Field* fields)
     SetStats(fields[19].GetString(),
              fields[20].GetUInt8(),
              fields[21].GetUInt8(),
-             fields[22].GetUInt32(),
+             fields[22].GetUInt16(),
              fields[23].GetUInt32());
     m_logoutTime    = fields[24].GetUInt32();
 
@@ -1087,12 +1087,12 @@ bool Guild::Create(Player* pLeader, const std::string& name)
     m_info = "";
     m_motd = "No message set.";
     m_bankMoney = 0;
+    m_createdDate = ::time(NULL);
     m_level = 1;
     m_xp = 0;
     m_today_xp = 0;
     GenerateXPCap();
     m_nextLevelXP = sObjectMgr->GetXPForGuildLevel(m_level);
-    m_createdDate = ::time(NULL);
     _CreateLogHolders();
 
     sLog->outDebug(LOG_FILTER_GUILD, "GUILD: creating guild [%s] for leader %s (%u)",
@@ -1126,6 +1126,8 @@ bool Guild::Create(Player* pLeader, const std::string& name)
     trans->Append(stmt);
 
     CharacterDatabase.CommitTransaction(trans);
+    // Add reputation to leader
+    pLeader->SetReputation(1168, 1);
     // Create default ranks
     _CreateDefaultGuildRanks(pLeaderSession->GetSessionDbLocaleIndex());
     // Add guildmaster
@@ -1202,6 +1204,7 @@ void Guild::UpdateMemberData(Player* plr, uint8 dataid, uint32 value)
             break;
             case GUILD_MEMBER_DATA_LEVEL:
                 member->SetLevel(value);
+            break;
             default:
 
             sLog->outError("Guild::UpdateMemberData: Called with incorrect DATAID %u (value %u)", dataid, value);
@@ -1212,7 +1215,7 @@ void Guild::UpdateMemberData(Player* plr, uint8 dataid, uint32 value)
 
 void Guild::SendUpdateRoster(WorldSession* session /*= NULL*/)
 {
-    if(!session)
+    if (!session)
         _BroadcastEvent(GE_UPDATE_ROSTER, 0);
     else
     {
@@ -1281,7 +1284,7 @@ void Guild::HandleRoster(WorldSession* session /*= NULL*/)
         data << uint8(0); // unk
 
     for (Members::const_iterator itr = m_members.begin(); itr != m_members.end(); ++itr)
-        data << uint64(itr->second->GetGUID()); // unk uint64 (2)
+        data << uint64(itr->second->GetGUID()); // guid
 
     for (Members::const_iterator itr = m_members.begin(); itr != m_members.end(); ++itr)
         data << uint8(itr->second->GetClass()); // class id
@@ -1308,7 +1311,7 @@ void Guild::HandleRoster(WorldSession* session /*= NULL*/)
 
     for (Members::const_iterator itr = m_members.begin(); itr != m_members.end(); ++itr)
     {
-        // two primary professions
+        // two primary professions (todo)
         for(int i = 0; i < 2; ++i)
         {
             data << uint32(0); // profession title
@@ -1332,7 +1335,16 @@ void Guild::HandleRoster(WorldSession* session /*= NULL*/)
     else
         BroadcastPacket(&data);
 
-    // TODO !
+    SendGuildRankInfo(session);
+
+   // This is to make client refresh the list
+   SendUpdateRoster(session);
+
+   sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Sent (SMSG_GUILD_ROSTER)");
+}
+
+void Guild::SendGuildRankInfo(WorldSession* session)
+{
     WorldPacket data7(SMSG_GUILD_RANK);
     data7 << uint32(_GetRanksSize());
     for(uint32 i = 0; i < _GetRanksSize(); i++)
@@ -1344,26 +1356,17 @@ void Guild::HandleRoster(WorldSession* session /*= NULL*/)
         data7 << uint32(m_ranks[i].GetRights());
 
         for(int j = 0; j < GUILD_BANK_MAX_TABS; j++)
-            //    data7 << uint32(m_ranks[i].m_bankMoneyPerDay);
             data7 << uint32(0xFFFFFFFF);
         for(int j = 0; j < GUILD_BANK_MAX_TABS; j++)
-            //data7 << uint32(m_ranks[i].m_rights);
             data7 << uint32(0xFFFFFFFF);
 
         data7 << uint32(0xFFFFFFFF); // GuildBankRightsAndSlots
-
-        //data7 << (uint32)/*GuildBankRightsAndSlots(i)*/0;
     }
 
     if (session)
         session->SendPacket(&data7);
     else
         BroadcastPacket(&data7);
-
-    // This is to make client refresh the list
-    SendUpdateRoster(session);
-
-    sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Sent (SMSG_GUILD_ROSTER)");
 }
 
 void Guild::HandleQuery(WorldSession* session)
@@ -1382,7 +1385,7 @@ void Guild::HandleQuery(WorldSession* session)
             data << uint8(0);                                       // Empty string
     }
 
-    for (int i = 0; i < GUILD_RANKS_MAX_COUNT; ++i)
+    for (uint8 i = 0; i < GUILD_RANKS_MAX_COUNT; ++i)
     {
         if (i < _GetRanksSize())
             data << uint32(i);
@@ -1390,7 +1393,7 @@ void Guild::HandleQuery(WorldSession* session)
             data << uint32(0);
     }
 
-    for (int i = 0; i < GUILD_RANKS_MAX_COUNT; ++i)
+    for (uint8 i = 0; i < GUILD_RANKS_MAX_COUNT; ++i)
     {
         if (i < _GetRanksSize())
             data << uint32(i);
@@ -1608,6 +1611,7 @@ void Guild::HandleInviteMember(WorldSession* session, const std::string& name)
     pInvitee->SetGuildIdInvited(m_id);
     _LogEvent(GUILD_EVENT_LOG_INVITE_PLAYER, player->GetGUIDLow(), pInvitee->GetGUIDLow());
 
+    uint64 guid = MAKE_NEW_GUID(m_id, 0, HIGHGUID_GUILD);
     WorldPacket data(SMSG_GUILD_INVITE, 8 + 10);              // Guess size
     data << uint32(1); // unk
     data << uint32(2); // unk
@@ -1618,7 +1622,7 @@ void Guild::HandleInviteMember(WorldSession* session, const std::string& name)
     data << player->GetName();
     data << uint32(5);
     data << uint32(6);
-    data << uint64(MAKE_NEW_GUID(m_id, 0, HIGHGUID_GUILD));
+    data << uint64(guid);
     data << std::string(GetName());
     pInvitee->GetSession()->SendPacket(&data);
 
@@ -2029,8 +2033,9 @@ void Guild::SendLoginInfo(WorldSession* session)
 {
     WorldPacket data(SMSG_GUILD_EVENT, 1 + 1 + m_motd.size() + 1);
     data << uint8(GE_MOTD);
-    data << uint8(1);
+    data << uint8(2);
     data << m_motd;
+    data << uint8(0);
     session->SendPacket(&data);
     sLog->outDebug(LOG_FILTER_GUILD, "WORLD: Sent guild MOTD (SMSG_GUILD_EVENT)");
 
@@ -2328,7 +2333,7 @@ bool Guild::AddMember(uint64 guid, uint8 rankId)
         member->SetStats(player);
 
         // Learn our perks to him
-        for(int i = 0; i < m_level-1; ++i)
+        for(int i = 0; i < m_level; ++i)
             if(const GuildPerksEntry* perk = sGuildPerksStore.LookupEntry(i))
                 player->learnSpell(perk->SpellId, true);
     }
@@ -2347,7 +2352,7 @@ bool Guild::AddMember(uint64 guid, uint8 rankId)
                 fields[0].GetString(),
                 fields[1].GetUInt8(),
                 fields[2].GetUInt8(),
-                fields[3].GetUInt16(),
+                fields[3].GetUInt32(),
                 fields[4].GetUInt32());
 
             ok = member->CheckStats();
@@ -3014,7 +3019,9 @@ void Guild::GainXP(uint64 xp)
     if (!xp)
         return;
 
-    if (GetLevel() >= 25)
+    if (!sWorld->getBoolConfig(CONFIG_GUILD_ADVANCEMENT_ENABLED))
+        return;
+    if (GetLevel() >= sWorld->getIntConfig(CONFIG_GUILD_ADVANCEMENT_MAX_LEVEL))
         return;
 
     uint64 new_xp = m_xp + xp;
@@ -3024,7 +3031,7 @@ void Guild::GainXP(uint64 xp)
     if(new_xp > m_xp_cap)
         return;
 
-    while (new_xp >= nextLvlXP && level < 25)
+    if (level < sWorld->getIntConfig(CONFIG_GUILD_ADVANCEMENT_MAX_LEVEL))
     {
         new_xp -= nextLvlXP;
 
@@ -3036,6 +3043,10 @@ void Guild::GainXP(uint64 xp)
         }
     }
 
+    m_xp = new_xp;
+    m_today_xp += xp;
+    SaveXP();
+
     WorldPacket data(SMSG_GUILD_XP_UPDATE, 8*5);
     data << uint64(GetXPCap());       // max daily xp
     data << uint64(GetNextLevelXP()); // next level XP
@@ -3044,23 +3055,29 @@ void Guild::GainXP(uint64 xp)
     data << uint64(GetTodayXP());     // Today exp
 
     for (Members::const_iterator itr = m_members.begin(); itr != m_members.end(); ++itr)
-        if (Player *player = itr->second->FindPlayer())
+        if (Player* player = itr->second->FindPlayer())
             player->GetSession()->SendPacket(&data);
-
-    m_xp = new_xp;
-    m_today_xp += xp;
-    SaveXP();
 }
 
 void Guild::LevelUp()
 {
+    if (!sWorld->getBoolConfig(CONFIG_GUILD_ADVANCEMENT_ENABLED))
+        return;
+
     uint8 level = m_level + 1;
     m_level = level;
     m_nextLevelXP = sObjectMgr->GetXPForGuildLevel(level);
 
+    WorldPacket data(SMSG_GUILD_XP_UPDATE, 8*5);
+    data << uint64(GetXPCap());       // max daily xp
+    data << uint64(GetNextLevelXP()); // next level XP
+    data << uint64(GetXPCap());       // weekly xp
+    data << uint64(GetCurrentXP());   // Curr exp
+    data << uint64(GetTodayXP());     // Today exp
+
     // Find perk to gain
     uint32 spellId = 0;
-    if(const GuildPerksEntry* perk = sGuildPerksStore.LookupEntry(level-1))
+    if (const GuildPerksEntry* perk = sGuildPerksStore.LookupEntry(level))
         spellId = perk->SpellId;
 
     // Notify players of level change
@@ -3068,9 +3085,10 @@ void Guild::LevelUp()
         if (Player *player = itr->second->FindPlayer())
         {
             player->SetUInt32Value(PLAYER_GUILDLEVEL, level);
+            player->GetSession()->SendPacket(&data);
 
             if (spellId)
-                player->learnSpell(spellId, true);
+               player->learnSpell(spellId, true);
         }
 }
 

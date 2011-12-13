@@ -116,7 +116,7 @@ class npc_wg_demolisher_engineer : public CreatureScript
             }
             //spell 49899 Emote : 406 from sniff
             //INSERT INTO `spell_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `dataint`, `x`, `y`, `z`, `o`) VALUES ('49899', '0', '1', '406', '0', '0', '0', '0', '0', '0');
-            if (Creature* creature = creature->FindNearestCreature(27852, 30.0f, true))
+            if (Creature* creature = creature->FindNearestCreature(27852, 30.0f, true)) //fix me
                 creature->CastSpell(creature, SPELL_ACTIVATE_ROBOTIC_ARMS, true);
         }
         return true;

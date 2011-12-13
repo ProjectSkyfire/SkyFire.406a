@@ -135,6 +135,10 @@ struct CoordPair
         y_coord = std::min(y_coord, LIMIT - 1);
         return *this;
     }
+    uint32 GetId() const
+    {
+        return y_coord * LIMIT + x_coord;
+    }
 
     uint32 x_coord;
     uint32 y_coord;

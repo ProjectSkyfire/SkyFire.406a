@@ -4883,8 +4883,7 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
                     caster->CastSpell(caster,86674,true);
                     break;
                 }
-                    // Sudden Death Cataclysm Proc
-                case 52437:
+                case 52437:  // Sudden Death Cataclysm Proc
                 {
                     if (caster && caster->ToPlayer()->HasSpellCooldown(86346))
                         caster->ToPlayer()->RemoveSpellCooldown(86346,true);

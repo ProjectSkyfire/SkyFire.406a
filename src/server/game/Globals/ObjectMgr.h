@@ -36,8 +36,11 @@
 #include "Map.h"
 #include "ObjectAccessor.h"
 #include "ObjectDefines.h"
-#include <ace/Singleton.h>
+#include "Guild.h"
+#include "GuildMgr.h"
 #include "VehicleDefines.h"
+
+#include <ace/Singleton.h>
 #include <string>
 #include <map>
 #include <limits>
@@ -508,6 +511,14 @@ typedef std::multimap<uint32, GossipMenuItems> GossipMenuItemsMap;
 typedef std::pair<GossipMenuItemsMap::const_iterator, GossipMenuItemsMap::const_iterator> GossipMenuItemsMapBounds;
 typedef std::pair<GossipMenuItemsMap::iterator, GossipMenuItemsMap::iterator> GossipMenuItemsMapBoundsNonConst;
 
+struct GuildRewardsEntry
+{
+    uint32 item;
+    uint32 price;
+    uint32 achievement;
+    uint32 standing;
+};
+
 struct QuestPOIPoint
 {
     int32 x;
@@ -605,6 +616,8 @@ class ObjectMgr
         ~ObjectMgr();
 
     public:
+        typedef std::vector <Guild *> GuildMap;
+
         typedef UNORDERED_MAP<uint32, Item*> ItemMap;
 
         typedef UNORDERED_MAP<uint32, Quest*> QuestMap;
@@ -624,6 +637,8 @@ class ObjectMgr
         typedef std::vector<std::string> ScriptNameMap;
 
         typedef std::map<uint32, uint32> CharacterConversionMap;
+
+        typedef std::vector <GuildRewardsEntry *> GuildRewardsVector;
 
         Player* GetPlayerByLowGUID(uint32 lowguid) const;
 
@@ -695,6 +710,8 @@ class ObjectMgr
             return itr != mQuestTemplates.end() ? itr->second : NULL;
         }
         QuestMap const& GetQuestTemplates() const { return mQuestTemplates; }
+
+        GuildRewardsVector const& GetGuildRewards() { return mGuildRewards; }
 
         uint32 GetQuestForAreaTrigger(uint32 Trigger_ID) const
         {
@@ -1229,6 +1246,9 @@ class ObjectMgr
         typedef UNORDERED_MAP<uint32, uint32> QuestAreaTriggerMap;
         typedef std::set<uint32> TavernAreaTriggerSet;
         typedef std::set<uint32> GameObjectForQuestSet;
+
+        GuildMap            mGuildMap;
+        GuildRewardsVector  mGuildRewards;
 
         QuestAreaTriggerMap mQuestAreaTriggerMap;
         TavernAreaTriggerSet mTavernAreaTriggerSet;
