@@ -2545,7 +2545,8 @@ void AchievementGlobalMgr::LoadCompletedAchievements()
         Field *fields = result->Fetch();
 
         uint32 achievement_id = fields[0].GetUInt32();
-        if (!sAchievementStore.LookupEntry(achievement_id))
+        const AchievementEntry* achievement = sAchievementStore.LookupEntry(achievement_id);
+        if (!achievement)
         {
             // we will remove not existed achievement for all characters
             sLog->outError("Non-existing achievement %u data removed from table `character_achievement`.", achievement_id);
