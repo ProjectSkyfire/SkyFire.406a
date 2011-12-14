@@ -2811,7 +2811,6 @@ void World::ResetRandomBG()
 
 void World::ResetGuildAdvancementDailyXP()
 {
-    sLog->outDetail("Guild Advancement Daily XP status reset for all characters.");
     QueryResult result = CharacterDatabase.Query("SELECT level,xp,guildid FROM guild");
 
     if (!result)
@@ -2841,6 +2840,7 @@ void World::ResetGuildAdvancementDailyXP()
     }
     while (result->NextRow());
 
+    sLog->outDetail("Guild Advancement Daily XP status reset for all characters.");	
     m_NextDailyXPReset = time_t(m_NextDailyXPReset + DAY);
     sWorld->setWorldState(WS_GUILD_AD_DAILY_RESET_TIME, uint64(m_NextDailyXPReset));
 }
