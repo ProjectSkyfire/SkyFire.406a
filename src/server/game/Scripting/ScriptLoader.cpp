@@ -653,7 +653,7 @@ void AddSC_shattrath_city();
 void AddSC_terokkar_forest();
 void AddSC_zangarmarsh();
 
-// Maelstrome
+// Maelstrom
 void AddSC_deepholm();
 void AddSC_kezan();
 
@@ -685,7 +685,7 @@ void AddScripts()
     AddKalimdorScripts();
     AddOutlandScripts();
     AddNorthrendScripts();
-    AddMaelstromeScripts();
+    AddMaelstromScripts();
     AddBattlegroundScripts();
     AddOutdoorPvPScripts();
     AddCustomScripts();
@@ -1350,11 +1350,11 @@ void AddNorthrendScripts()
 #endif
 }
 
-void AddMaelstromeScripts()
+void AddMaelstromScripts()
 {
 #ifdef SCRIPTS
     AddSC_deepholm();
-	AddSC_kezan();
+    AddSC_kezan();
 #endif
 }
 
