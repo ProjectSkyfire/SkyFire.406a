@@ -127,7 +127,7 @@ class npc_slaincrewmember : public CreatureScript
                         break;
                 }
             }
-			else sayTimer -= diff;
+            else sayTimer -= diff;
         }
     };
 
