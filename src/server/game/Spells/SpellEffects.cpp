@@ -1645,10 +1645,10 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                     if (m_triggeredByAuraSpell)
                         damage = int32(owner->SpellHealingBonus(unitTarget, m_triggeredByAuraSpell, damage, HEAL));
 
-                    // Restorative Totems				
+                    // Restorative Totems
                     if (AuraEffect* dummy = owner->GetAuraEffect(SPELL_AURA_DUMMY, SPELLFAMILY_SHAMAN, 338, 1))
                         AddPctN(damage, dummy->GetAmount());
-						
+
                     // Glyph of Healing Stream Totem
                     if (AuraEffect const* aurEff = owner->GetAuraEffect(55456, EFFECT_0))
                         AddPctN(damage, aurEff->GetAmount());

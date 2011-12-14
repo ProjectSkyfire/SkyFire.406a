@@ -474,7 +474,7 @@ bool SmartAIMgr::IsEventValid(SmartScriptHolder& e)
                     if (e.event.gameEvent.gameEventId >= events.size() || !events[e.event.gameEvent.gameEventId].isValid())
                         return false;
                     break;
-                }				
+                }
             case SMART_EVENT_TIMED_EVENT_TRIGGERED:
             case SMART_EVENT_INSTANCE_PLAYER_ENTER:
             case SMART_EVENT_TRANSPORT_RELOCATE:
