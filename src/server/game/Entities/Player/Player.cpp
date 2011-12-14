@@ -19190,7 +19190,7 @@ void Player::SaveToDB(bool create /*=false*/)
 
         stmt->setString(index++, ss.str());
         stmt->setUInt8(index++, GetByteValue(PLAYER_FIELD_BYTES, 2));
-        stmt->setInt8(index++, m_currentPetSlot);
+        stmt->setUInt32(index++, m_currentPetSlot);
         stmt->setUInt32(index++, m_petSlotUsed);
         stmt->setUInt32(index++, m_grantableLevels);
     }
