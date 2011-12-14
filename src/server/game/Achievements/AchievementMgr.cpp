@@ -2554,7 +2554,8 @@ void AchievementGlobalMgr::LoadCompletedAchievements()
             continue;
         }
 
-        m_allCompletedAchievements.insert(achievement_id);
+        else if (achievement->flags & (ACHIEVEMENT_FLAG_REALM_FIRST_REACH | ACHIEVEMENT_FLAG_REALM_FIRST_KILL))
+            m_allCompletedAchievements.insert(achievement_id);
     } while (result->NextRow());
 
     sLog->outString(">> Loaded %lu completed achievements in %u ms", (unsigned long)m_allCompletedAchievements.size(), GetMSTimeDiffToNow(oldMSTime));
