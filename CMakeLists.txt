@@ -47,6 +47,11 @@ include(CheckPlatform)
 find_package(PCHSupport)
 find_package(ACE REQUIRED)
 find_package(OpenSSL REQUIRED)
+
+if( USE_RUBY )
+    find_package(Ruby REQUIRED)
+endif()
+
 if( NOT USE_MYSQL_SOURCES )
   find_package(MySQL REQUIRED)
 endif()

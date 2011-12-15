@@ -70,6 +70,12 @@ else()
   message("* Use coreside debug     : No  (default)")
 endif()
 
+if( USE_RUBY )
+    message("* Use Ruby scripting   : Yes")
+else()
+    message("* Use Ruby scripting   : No")
+endif()
+
 if( WIN32 )
   if( USE_MYSQL_SOURCES )
     message("* Use MySQL sourcetree   : Yes (default)")

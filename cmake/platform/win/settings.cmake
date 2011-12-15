@@ -24,5 +24,6 @@ endif()
 #    endif()
 #  endif()
 #endif()
-
-include(${CMAKE_SOURCE_DIR}/cmake/compiler/msvc/settings.cmake)
+if(MSVC)
+    include(${CMAKE_SOURCE_DIR}/cmake/compiler/msvc/settings.cmake)
+endif()

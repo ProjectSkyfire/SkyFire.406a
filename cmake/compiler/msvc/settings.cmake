@@ -53,3 +53,7 @@ if(NOT WITH_WARNINGS)
     message(STATUS "MSVC: Disabled generic compiletime warnings")
   endif()
 endif()
+
+if( USE_RUBY )
+    set(RUBY_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/dep/ruby)
+endif()

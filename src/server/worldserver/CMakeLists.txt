@@ -18,6 +18,10 @@ if( USE_COREPCH )
   include_directories(${CMAKE_CURRENT_BINARY_DIR})
 endif()
 
+if( USE_RUBY )
+    include_directories(${RUBY_INCLUDE_DIR})
+endif()
+
 if ( USE_COREPCH AND MSVC )
   set(worldserver_SRCS
     PrecompiledHeaders/worldPCH.cpp
@@ -174,6 +178,7 @@ target_link_libraries(worldserver
   ${OPENSSL_EXTRA_LIBRARIES}
   ${ZLIB_LIBRARIES}
   ${OSX_LIBS}
+  ${RUBY_LIBRARY}
 )
 
 if( WIN32 )

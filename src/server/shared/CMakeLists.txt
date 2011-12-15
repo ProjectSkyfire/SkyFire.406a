@@ -21,9 +21,13 @@ file(GLOB_RECURSE sources_Logging Logging/*.cpp Logging/*.h)
 file(GLOB_RECURSE sources_Packets Packets/*.cpp Packets/*.h)
 file(GLOB_RECURSE sources_Threading Threading/*.cpp Threading/*.h)
 file(GLOB_RECURSE sources_Utilities Utilities/*.cpp Utilities/*.h)
+file(GLOB_RECURSE sources_Ruby Ruby/*.cpp Ruby/*.h)
 
 file(GLOB sources_localdir *.cpp *.h)
 
+if( USE_RUBY )
+    include_directories(${RUBY_INCLUDE_DIR})
+endif()
 #
 # Build shared sourcelist
 #
@@ -46,6 +50,7 @@ set(shared_STAT_SRCS
   ${sources_Packets}
   ${sources_Threading}
   ${sources_Utilities}
+  ${sources_Ruby}
   ${sources_localdir}
   Debugging/Errors.h
 )
@@ -84,6 +89,7 @@ add_library(shared STATIC ${shared_STAT_SRCS})
 
 target_link_libraries(shared
   ${ACE_LIBRARY}
+  ${RUBY_LIBRARIES}
 )
 
 # Generate precompiled header

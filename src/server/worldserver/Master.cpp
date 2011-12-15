@@ -39,6 +39,7 @@
 #include "Util.h"
 #include "AuthSocket.h"
 #include "BigNumber.h"
+#include "Ruby/RubyEngine.h"
 
 #include <ace/Sig_Handler.h>
 
@@ -150,7 +151,8 @@ int Master::Run()
 
         sLog->outString("Daemon PID: %u\n", pid);
     }
-
+    
+    sRubyEngine->Initialize();
     ///- Start the databases
     if (!_StartDB())
         return 1;
