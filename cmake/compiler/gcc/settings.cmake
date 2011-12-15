@@ -26,5 +26,5 @@ if( WITH_COREDEBUG )
 endif()
 
 if(WIN32)
-    add_definitions(-lws2_32)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lws2_32")
 endif()

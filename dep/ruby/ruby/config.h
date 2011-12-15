@@ -9,7 +9,7 @@
 #define HAVE_STRINGS_H 1
 #define HAVE_INTTYPES_H 1
 #define HAVE_STDINT_H 1
-//#define HAVE_UNISTD_H 1
+#define HAVE_UNISTD_H 1
 #define __EXTENSIONS__ 1
 #define _ALL_SOURCE 1
 #define _GNU_SOURCE 1
@@ -52,12 +52,12 @@
 #define STRINGIZE(expr) STRINGIZE0(expr)
 #define HAVE_STDARG_PROTOTYPES 1
 #define HAVE_VA_ARGS_MACRO 1
-#define NORETURN(x) __declspec (noreturn) x
-#define DEPRECATED(x) __declspec (deprecated) x
-#define NOINLINE(x) __declspec (noinline) x
-#define FUNC_STDCALL(x) __stdcall x
-#define FUNC_CDECL(x) __cdecl x
-#define FUNC_FASTCALL(x) __fastcall x
+#define NORETURN(x) __attribute__ ((noreturn)) x
+#define DEPRECATED(x) __attribute__ ((deprecated)) x
+#define NOINLINE(x) __attribute__ ((noinline)) x
+#define FUNC_STDCALL(x) __attribute__ ((stdcall)) x
+#define FUNC_CDECL(x) __attribute__ ((cdecl)) x
+#define FUNC_FASTCALL(x) __attribute__ ((fastcall)) x
 #define RUBY_ALIAS_FUNCTION_TYPE(type, prot, name, args) type prot __attribute__((alias(#name)));
 #define RUBY_ALIAS_FUNCTION_VOID(prot, name, args) RUBY_ALIAS_FUNCTION_TYPE(void, prot, name, args)
 #define HAVE_DECL_SYS_NERR 1
