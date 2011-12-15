@@ -319,6 +319,7 @@ enum WorldIntConfigs
     CONFIG_WINTERGRASP_BATTLETIME,
     CONFIG_WINTERGRASP_NOBATTLETIME,
     CONFIG_WINTERGRASP_RESTART_AFTER_CRASH,
+    CONFIG_IGNORING_MAPS_VERSION,
     INT_CONFIG_VALUE_COUNT
 };
 
@@ -649,7 +650,8 @@ class World
         void SendServerMessage(ServerMessageType type, const char *text = "", Player* player = NULL);
 
         /// Are we in the middle of a shutdown?
-        bool IsShutdowning() const { return m_ShutdownTimer > 0; }
+        bool IsShuttingDown() const { return m_ShutdownTimer > 0; }
+        uint32 const GetShutDownTimeLeft() { return m_ShutdownTimer; }
         void ShutdownServ(uint32 time, uint32 options, uint8 exitcode);
         void ShutdownCancel();
         void ShutdownMsg(bool show = false, Player* player = NULL);

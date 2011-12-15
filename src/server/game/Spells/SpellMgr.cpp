@@ -3535,6 +3535,11 @@ void SpellMgr::LoadSpellCustomAttr()
             case 58563: // Assassinate Restless Lookout
                 spellInfo->AttributesCu |= SPELL_ATTR0_CU_REQ_CASTER_BEHIND_TARGET;
                 break;
+            case 24131: // Wyvern Sting (rank 1)
+            case 24134: // Wyvern Sting (rank 2)
+            case 24135: // Wyvern Sting (rank 3)
+                spellInfo->AttributesCu |= SPELL_ATTR0_CU_NEGATIVE_EFF0;
+                break;
             case 26029: // Dark Glare
             case 37433: // Spout
             case 43140: // Flame Breath
