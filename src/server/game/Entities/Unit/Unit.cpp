@@ -3739,8 +3739,19 @@ void Unit::RemoveAurasDueToSpellByDispel(uint32 spellId, uint64 casterGUID, Unit
                             if (triggeredSpellId)
                                 caster->CastSpell(caster, triggeredSpellId, true);
                         }
+                        break;
                     }
-                    break;
+                    // Wyvern Sting
+                    if (aura->GetSpellInfo()->SpellFamilyName == SPELLFAMILY_HUNTER && (aura->GetSpellInfo()->SpellFamilyFlags[1] & 0x1000))
+                    {
+                        Unit * caster = aura->GetCaster();
+                        if (caster && !(dispeller->GetTypeId() == TYPEID_UNIT && dispeller->ToCreature()->isTotem()))
+                            // Noxious Stings
+                            if (AuraEffect * auraEff = caster->GetAuraEffect(SPELL_AURA_OVERRIDE_CLASS_SCRIPTS, SPELLFAMILY_HUNTER, 3521, 1))
+                                if (Aura * newAura = caster->AddAura(aura->GetId(), dispeller))
+                                    newAura->SetDuration(aura->GetDuration() / 100 * auraEff->GetAmount());
+                    }
+                    return;
                 }
                 default:
                     break;
