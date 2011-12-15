@@ -27,3 +27,7 @@ endif()
 if(MSVC)
     include(${CMAKE_SOURCE_DIR}/cmake/compiler/msvc/settings.cmake)
 endif()
+
+if( MINGW OR MSYS)
+    include(${CMAKE_SOURCE_DIR}/cmake/compiler/gcc/settings.cmake)
+endif()

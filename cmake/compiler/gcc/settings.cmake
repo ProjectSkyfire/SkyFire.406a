@@ -24,3 +24,7 @@ if( WITH_COREDEBUG )
   add_definitions(-ggdb3)
   message(STATUS "GCC: Debug-flags set (-ggdb3)")
 endif()
+
+if(WIN32)
+    add_definitions(-lws2_32)
+endif()
