@@ -19,7 +19,7 @@
 
 #include "HMACSHA1.h"
 #include "BigNumber.h"
-
+#include "Debugging/Errors.h"
 #include <assert.h>
 
 HmacHash::HmacHash(uint32 len, uint8 *seed)

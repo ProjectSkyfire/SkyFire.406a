@@ -1,3 +1,4 @@
+if (MSVC)
 # set up output paths for executable binaries (.exe-files, and .dll-files on DLL-capable platforms)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
@@ -57,3 +58,4 @@ endif()
 if( USE_RUBY )
     set(RUBY_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/dep/ruby)
 endif()
+endif( MSVC )

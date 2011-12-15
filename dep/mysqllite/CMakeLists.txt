@@ -255,7 +255,7 @@ configure_file(config.h.cmake ${CMAKE_BINARY_DIR}/my_config.h)
 configure_file(config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/internal/mysql_version.h.in ${CMAKE_BINARY_DIR}/mysql_version.h)
 
-add_version_info(libmysql CLIENT_SOURCES)
+#add_version_info(libmysql CLIENT_SOURCES)
 add_library(libmysql SHARED ${CLIENT_SOURCES} ${DBUG_SOURCES} ${MYSYS_SOURCES} ${STRINGS_SOURCES} ${VIO_SOURCES} ${CMAKE_CURRENT_SOURCE_DIR}/libmysql/libmysql_exports.def)
 target_link_libraries(libmysql zlib ${OPENSSL_LIBRARIES} ${OPENSSL_EXTRA_LIBRARIES} ws2_32)
 
