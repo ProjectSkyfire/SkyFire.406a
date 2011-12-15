@@ -10,4 +10,5 @@ UPDATE `creature_template` SET `ScriptName` = 'npc_oathsworn_scorpid_keeper' WHE
 UPDATE `creature_template` SET `ScriptName` = 'npc_oathsworn_skinner' WHERE `creature_template`.`entry` =44981;
 UPDATE `creature_template` SET `ScriptName` = 'npc_pygmy_brute' WHERE `creature_template`.`entry` =44896;
 UPDATE `creature_template` SET `ScriptName` = 'npc_pygmy_firebreather' WHERE `creature_template`.`entry` =44898;
+UPDATE `creature_template` SET `ScriptName` = 'npc_pygmy_scout' WHERE `creature_template`.`entry` =44897;
 
