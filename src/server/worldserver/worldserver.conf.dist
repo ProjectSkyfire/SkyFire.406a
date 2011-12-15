@@ -2689,6 +2689,14 @@ CharDelete.MinLevel = 0
 CharDelete.KeepDays = 30
 
 #
+#   IgnoringMapsVersion
+#        Disable startup error => Maps version mismatch.
+#        Default: 0 - off
+#                 1 - on
+
+IgnoringMapsVersion = 0
+
+#
 ###################################################################################################
 
 ###################################################################################################
