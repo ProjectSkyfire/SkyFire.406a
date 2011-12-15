@@ -5772,9 +5772,33 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
             }
             break;
         }
+        case SPELLFAMILY_WARLOCK:
+        {
+            // Demon Soul
+            if (m_spellInfo->Id == 77801)
+            {
+                sLog->outDebug(LOG_FILTER_NETWORKIO, "Spell: Casted Demon Soul");
+                if (m_caster)
+                {
+                    if (!unitTarget || !unitTarget->isAlive())
+                        return;
+                    if(unitTarget->GetEntry() == 416)            // Summoned Imp
+                        m_caster->CastSpell(m_caster,79459,true);
+                    if(unitTarget->GetEntry() == 1860)           // Summoned Voidwalker
+                        m_caster->CastSpell(m_caster,79464,true);
+                    if(unitTarget->GetEntry() == 417)            // Summoned Felhunter
+                        m_caster->CastSpell(m_caster,79460,true);
+                    if(unitTarget->GetEntry() == 1863)           // Summoned Succubus
+                        m_caster->CastSpell(m_caster,79463,true);
+                    if(unitTarget->GetEntry() == 17252)          // Summoned Felguard
+                        m_caster->CastSpell(m_caster,79462,true);
+                }
+            }
+            break;
+        }
         case SPELLFAMILY_PALADIN:
         {
-            // Judgement (seal trigger)
+            // Judgment (seal trigger)
             if (m_spellInfo->Category == SPELLCATEGORY_JUDGEMENT)
             {
                 if (!unitTarget || !unitTarget->isAlive())
