@@ -25,15 +25,12 @@ void RubyEngine::Finalize()
 
 RubyEngine::RubyEngine()
 {
-    if(running)
-        return;
+    running = false;
     //Initialize();
 }
 
 RubyEngine::~RubyEngine()
 {
-    if(!running)
-        return;
-
-    //Finalize();
+    if(running)
+        Finalize();
 }
