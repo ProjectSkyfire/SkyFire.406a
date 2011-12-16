@@ -530,7 +530,7 @@ void AchievementMgr::ResetAchievementCriteria(AchievementCriteriaTypes type, uin
             continue;
 
         // don't update already completed criteria if not forced or achievement already complete
-        if ((IsCompletedCriteria(achievementCriteria, achievement) && !evenIfCriteriaComplete) || HasAchieved(achievement))
+        if ((IsCompletedCriteria(achievementCriteria, achievement) && !evenIfCriteriaComplete) || HasAchieved(achievement->ID))
             continue;
 
         for (uint8 j = 0; j < MAX_CRITERIA_REQUIREMENTS; ++j)
@@ -1859,7 +1859,7 @@ void AchievementMgr::CompletedCriteriaFor(AchievementEntry const* achievement)
         return;
 
     // already completed and stored
-    if (HasAchieved(achievement))
+    if (HasAchieved(achievement->ID))
         return;
 
     if (IsCompletedAchievement(achievement))
@@ -2093,7 +2093,7 @@ void AchievementMgr::CompletedAchievement(AchievementEntry const* achievement)
     if (m_player->isGameMaster())
         return;
 
-    if (achievement->flags & ACHIEVEMENT_FLAG_COUNTER || HasAchieved(achievement))
+    if (achievement->flags & ACHIEVEMENT_FLAG_COUNTER || HasAchieved(achievement->ID))
         return;
 
     SendAchievementEarned(achievement);
@@ -2281,9 +2281,9 @@ void AchievementMgr::BuildAllDataPacket(WorldPacket *data) const
         *data << uint32(iter->first);
 }
 
-bool AchievementMgr::HasAchieved(AchievementEntry const* achievement) const
+bool AchievementMgr::HasAchieved(uint32 achievementId) const
 {
-    return m_completedAchievements.find(achievement->ID) != m_completedAchievements.end();
+    return m_completedAchievements.find(achievementId) != m_completedAchievements.end();
 }
 
 bool AchievementMgr::CanUpdateCriteria(AchievementCriteriaEntry const* criteria, AchievementEntry const* achievement)
@@ -2545,7 +2545,8 @@ void AchievementGlobalMgr::LoadCompletedAchievements()
         Field *fields = result->Fetch();
 
         uint32 achievement_id = fields[0].GetUInt32();
-        if (!sAchievementStore.LookupEntry(achievement_id))
+        const AchievementEntry* achievement = sAchievementStore.LookupEntry(achievement_id);
+        if (!achievement)
         {
             // we will remove not existed achievement for all characters
             sLog->outError("Non-existing achievement %u data removed from table `character_achievement`.", achievement_id);
@@ -2553,7 +2554,8 @@ void AchievementGlobalMgr::LoadCompletedAchievements()
             continue;
         }
 
-        m_allCompletedAchievements.insert(achievement_id);
+        else if (achievement->flags & (ACHIEVEMENT_FLAG_REALM_FIRST_REACH | ACHIEVEMENT_FLAG_REALM_FIRST_KILL))
+            m_allCompletedAchievements.insert(achievement_id);
     } while (result->NextRow());
 
     sLog->outString(">> Loaded %lu completed achievements in %u ms", (unsigned long)m_allCompletedAchievements.size(), GetMSTimeDiffToNow(oldMSTime));

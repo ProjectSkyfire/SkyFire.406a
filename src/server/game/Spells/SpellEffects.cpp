@@ -683,7 +683,7 @@ void Spell::EffectSchoolDMG(SpellEffIndex effIndex)
                     if (uint32 combo = ((Player*)m_caster)->GetComboPoints())
                     {
                         float ap = m_caster->GetTotalAttackPowerValue(BASE_ATTACK);
-                        damage += irand(int32(ap * combo * 0.03f), int32(ap * combo * 0.07f));
+                        damage += int32(ap * combo * 0.091f);
 
                         // Eviscerate and Envenom Bonus Damage (item set effect)
                         if (m_caster->HasAura(37169))
@@ -1640,11 +1640,19 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                 if (!unitTarget)
                     return;
 
-                // Restorative Totems
                 if (Unit* owner = m_caster->GetOwner())
+                {
+                    if (m_triggeredByAuraSpell)
+                        damage = int32(owner->SpellHealingBonus(unitTarget, m_triggeredByAuraSpell, damage, HEAL));
+
+                    // Restorative Totems
                     if (AuraEffect* dummy = owner->GetAuraEffect(SPELL_AURA_DUMMY, SPELLFAMILY_SHAMAN, 338, 1))
                         AddPctN(damage, dummy->GetAmount());
 
+                    // Glyph of Healing Stream Totem
+                    if (AuraEffect const* aurEff = owner->GetAuraEffect(55456, EFFECT_0))
+                        AddPctN(damage, aurEff->GetAmount());
+                }
                 m_caster->CastCustomSpell(unitTarget, 52042, &damage, 0, 0, true, 0, 0, m_originalCasterGUID);
                 return;
             }
@@ -5764,9 +5772,33 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
             }
             break;
         }
+        case SPELLFAMILY_WARLOCK:
+        {
+            // Demon Soul
+            if (m_spellInfo->Id == 77801)
+            {
+                sLog->outDebug(LOG_FILTER_NETWORKIO, "Spell: Casted Demon Soul");
+                if (m_caster)
+                {
+                    if (!unitTarget || !unitTarget->isAlive())
+                        return;
+                    if(unitTarget->GetEntry() == 416)            // Summoned Imp
+                        m_caster->CastSpell(m_caster,79459,true);
+                    if(unitTarget->GetEntry() == 1860)           // Summoned Voidwalker
+                        m_caster->CastSpell(m_caster,79464,true);
+                    if(unitTarget->GetEntry() == 417)            // Summoned Felhunter
+                        m_caster->CastSpell(m_caster,79460,true);
+                    if(unitTarget->GetEntry() == 1863)           // Summoned Succubus
+                        m_caster->CastSpell(m_caster,79463,true);
+                    if(unitTarget->GetEntry() == 17252)          // Summoned Felguard
+                        m_caster->CastSpell(m_caster,79462,true);
+                }
+            }
+            break;
+        }
         case SPELLFAMILY_PALADIN:
         {
-            // Judgement (seal trigger)
+            // Judgment (seal trigger)
             if (m_spellInfo->Category == SPELLCATEGORY_JUDGEMENT)
             {
                 if (!unitTarget || !unitTarget->isAlive())

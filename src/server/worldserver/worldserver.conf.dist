@@ -1824,7 +1824,8 @@ Channel.RestrictedLfg = 1
 
 #
 #    Channel.SilentlyGMJoin
-#        Description: Silently join GM characters to channels
+#        Description: Silently join GM characters to channels. If set to 1, channel kick and ban
+#                     commands issued by a GM will not be broadcasted.
 #        Default:     0 - (Disabled, Join with announcement)
 #                     1 - (Enabled, Join without announcement)
 
@@ -2687,6 +2688,14 @@ CharDelete.MinLevel = 0
 #                     0  - (Disabled, Don't delete any characters)
 
 CharDelete.KeepDays = 30
+
+#
+#   IgnoringMapsVersion
+#        Disable startup error => Maps version mismatch.
+#        Default: 0 - off
+#                 1 - on
+
+IgnoringMapsVersion = 0
 
 #
 ###################################################################################################
