@@ -1145,7 +1145,7 @@ enum Opcodes
     SMSG_ACHIEVEMENT_EARNED                          = 0x0F5E4, // 4.0.6a 13623
     SMSG_DYNAMIC_DROP_ROLL_RESULT                    = 0x101D7, // Unknown opcode ID
     SMSG_CRITERIA_UPDATE                             = 0x0AFC8, // 4.0.6a 13623
-    CMSG_QUERY_INSPECT_ACHIEVEMENTS                  = 0x028EC, // 4.0.6a 13623
+    CMSG_QUERY_INSPECT_ACHIEVEMENTS                  = 0x069A0, // 4.0.6a 13623
     SMSG_RESPOND_INSPECT_ACHIEVEMENTS                = 0x0041C, // 4.0.6a 13623
     CMSG_DISMISS_CONTROLLED_VEHICLE                  = 0x0E3C0, // 4.0.6a 13623
     CMSG_COMPLETE_ACHIEVEMENT_CHEAT                  = 0x101DC, // Unknown opcode ID
@@ -1205,7 +1205,7 @@ enum Opcodes
     SMSG_SERVER_INFO_RESPONSE                        = 0x101F7, // Unknown opcode ID
     CMSG_CHECK_LOGIN_CRITERIA                        = 0x101F8, // Unknown opcode ID
     SMSG_SERVER_BUCK_DATA_START                      = 0x101F9, // Unknown opcode ID
-    CMSG_QUERY_VEHICLE_STATUS                        = 0x069A0, // 4.0.6a 13623
+    CMSG_QUERY_VEHICLE_STATUS                        = 0x101F0, // 4.0.6a 13623
     SMSG_BATTLEGROUND_INFO_THROTTLED                 = 0x00093, // 4.0.6a 13623
     SMSG_PLAYER_VEHICLE_DATA                         = 0x0A5A4, // 4.0.6a 13623
     CMSG_PLAYER_VEHICLE_ENTER                        = 0x0AEC8, // 4.0.6a 13623
