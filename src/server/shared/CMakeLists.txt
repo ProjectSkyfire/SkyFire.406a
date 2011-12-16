@@ -26,8 +26,7 @@ file(GLOB_RECURSE sources_Ruby Ruby/*.cpp Ruby/*.h)
 file(GLOB sources_localdir *.cpp *.h)
 
 if( USE_RUBY )
-    include_directories(${RUBY_INCLUDE_DIR})
-    include_directories(${RUBY_ARCH_DIR})
+    include_directories(${RUBY_INCLUDE_DIRS})
 endif()
 #
 # Build shared sourcelist

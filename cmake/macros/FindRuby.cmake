@@ -244,3 +244,9 @@ MARK_AS_ADVANCED(
 SET(RUBY_POSSIBLE_LIB_PATH ${RUBY_POSSIBLE_LIB_DIR})
 SET(RUBY_RUBY_LIB_PATH ${RUBY_RUBY_LIB_DIR})
 SET(RUBY_INCLUDE_PATH ${RUBY_INCLUDE_DIRS})
+
+IF (UNIX OR MSYS)
+    # Execute ln in *nix and MSYS to ensure the include of the ruby/config.h file
+    # ln -s ${RUBY_ARCH_DIR}/ruby/config.h ${RUBY_HDR_DIR}/ruby/config.h
+    EXECUTE_PROCESS(COMMAND ln -s ${RUBY_ARCH_DIR}/ruby/config.h ${RUBY_HDR_DIR}/ruby/config.h)
+ENDIF()

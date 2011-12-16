@@ -19,8 +19,7 @@ if( USE_COREPCH )
 endif()
 
 if( USE_RUBY )
-    include_directories(${RUBY_INCLUDE_DIR})
-    include_directories(${RUBY_ARCH_DIR})
+    include_directories(${RUBY_INCLUDE_DIRS})
 endif()
 
 if ( USE_COREPCH AND MSVC )
