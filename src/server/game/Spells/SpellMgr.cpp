@@ -3029,9 +3029,9 @@ void SpellMgr::LoadSpellCustomAttr()
                 spellInfo->Effects[2].RadiusEntry = sSpellRadiusStore.LookupEntry (14);
                 break;
             case 50622: // Whirlwind (triggered by Bladestorm)
-                spellInfo->Effects[0].RadiusEntry =sSpellRadiusStore.LookupEntry (14);
-                spellInfo->Effects[1].RadiusEntry =sSpellRadiusStore.LookupEntry (14);
-                spellInfo->Effects[3].RadiusEntry =sSpellRadiusStore.LookupEntry (14);
+                spellInfo->Effects[0].RadiusEntry = sSpellRadiusStore.LookupEntry (14);
+                spellInfo->Effects[1].RadiusEntry = sSpellRadiusStore.LookupEntry (14);
+                spellInfo->Effects[3].RadiusEntry = sSpellRadiusStore.LookupEntry (14);
                 break;
             case 44543: // Fingers of Frost rank 1
                 spellInfo->ProcChance = 7;
