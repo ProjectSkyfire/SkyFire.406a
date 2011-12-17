@@ -43,12 +43,12 @@ public:
     // Must be static because of the hidden 'this' pointer
     static VALUE protected_call0(VALUE data) // Deepest level of abstraction (lol?)
     {
-        VALUE* real_data = reinterpret_cast<VALUE*>(data);
+        VALUE* real_data = (VALUE*)(data);
         VALUE self = real_data[0];
-        long argc = reinterpret_cast<long>(real_data[1]);
-        ID mid = reinterpret_cast<ID>(real_data[2]);
+        int argc = (int)(real_data[1]);
+        ID mid = (ID)(real_data[2]);
         
-        VALUE* argv = reinterpret_cast<VALUE*>(real_data[3]);
+        VALUE* argv = (VALUE*)(real_data[3]);
         
         return rb_funcall2(self, mid, argc, argv);
     }
@@ -60,7 +60,7 @@ public:
         va_list ap;
         
         va_start(ap, mid);
-        long i = 0;
+        int i = 0;
         VALUE current = va_arg(ap, VALUE);
         
         while(current) {
@@ -74,12 +74,12 @@ public:
         // Use a little hack here
         VALUE* data;
         data[0] = self;
-        data[1] = reinterpret_cast<VALUE>(i); // here, 'i' is the total length of the array, due to one extra increment made in the last iteration
-        data[2] = reinterpret_cast<VALUE>(mid);
-        data[3] = reinterpret_cast<VALUE>(argv);
+        data[1] = (VALUE)(i); // here, 'i' is the total length of the array, due to one extra increment made in the last iteration
+        data[2] = (VALUE)(mid);
+        data[3] = (VALUE)(argv);
         
         int status = 0;
-        VALUE res = rb_protect(protected_call0, reinterpret_cast<VALUE>(data), &status);
+        VALUE res = rb_protect(protected_call0, (VALUE)(data), &status);
         if(status)
         {
             sLog->outString("An error occurred when executing a Ruby statement");
