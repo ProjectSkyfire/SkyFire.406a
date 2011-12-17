@@ -61,7 +61,7 @@ public:
     
     bool require(const char* str)
     {
-        int status = 0;
+        int status;
         rb_protect(require_prot, (VALUE)str, &status);
         if(status)
             return false;
@@ -94,7 +94,7 @@ public:
         data[2] = (VALUE)(mid);
         data[3] = (VALUE)(argv);
         
-        int status = 0;
+        int status;
         VALUE res = rb_protect(protected_call0, (VALUE)(data), &status);
         if(status)
         {

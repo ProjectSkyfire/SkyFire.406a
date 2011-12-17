@@ -7,8 +7,8 @@ void RubyEngine::Initialize()
 
     RUBY_INIT_STACK;
 #ifdef _WIN32
-    int argc = 0;
-    char** argv = NULL;
+    int argc = 1;
+    char** argv = { NULL };
     NtInitialize(&argc, &argv);
 #endif
     ruby_init();
