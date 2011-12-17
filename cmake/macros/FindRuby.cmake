@@ -250,3 +250,25 @@ IF (UNIX OR MSYS)
     # ln -s ${RUBY_ARCH_DIR}/ruby/config.h ${RUBY_HDR_DIR}/ruby/config.h
     EXECUTE_PROCESS(COMMAND ln -s ${RUBY_ARCH_DIR}/ruby/config.h ${RUBY_HDR_DIR}/ruby/config.h)
 ENDIF()
+
+SET(RICE_LIBRARY "")
+SET(RICE_INCLUDE_DIR "")
+
+IF (RUBY_EXECUTABLE)
+    EXECUTE_PROCESS(COMMAND ${RUBY_EXECUTABLE} -r rubygems -e "rice_ = Gem::Specification.find_by_name 'rice'; print rice_.name + '-' + rice_.version.to_s"
+      OUTPUT_VARIABLE RICE_VERSION)
+    
+    EXECUTE_PROCESS(COMMAND gem environment gemdir
+      OUTPUT_VARIABLE GEM_DIR)
+      
+    SET(RICE_DIR "${GEM_DIR}/gems/${RICE_VERSION}")
+    SET(RICE_INCLUDE_DIR "${RICE_DIR}/ruby/lib/include")
+    SET(RICE_LIBRARY "${RICE_DIR}/ruby/lib/lib/librice.a")
+    
+    IF(RICE_VERSION AND GEM_DIR)
+        MESSAGE(STATUS "Found rice: " ${RICE_VERSION})
+        MESSAGE(STATUS "Rice include directory: " ${RICE_INCLUDE_DIR})
+        MESSAGE(STATUS "Rice library: " ${RICE_LIBRARY})
+        SET(RUBY_INCLUDE_DIRS ${RUBY_INCLUDE_DIRS} ${RICE_INCLUDE_DIR})
+    ENDIF()
+ENDIF()

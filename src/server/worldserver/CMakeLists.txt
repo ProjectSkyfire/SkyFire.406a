@@ -179,6 +179,7 @@ target_link_libraries(worldserver
   ${ZLIB_LIBRARIES}
   ${OSX_LIBS}
   ${RUBY_LIBRARY}
+  ${RICE_LIBRARY}
 )
 
 if( WIN32 )

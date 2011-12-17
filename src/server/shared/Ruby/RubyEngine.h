@@ -4,6 +4,7 @@
 #include <ace/Singleton.h>
 #include "ruby.h"
 #include "Common.h"
+#include "rice/Class.hpp"
 
 template <typename T>
 struct is_void
@@ -17,19 +18,6 @@ struct is_void<void>
     static const bool value = true;
 };
 
-
-template<typename T>
-VALUE to_ruby(T& t)
-{
-    return INT2NUM(42);
-}
-    
-template<typename T>
-T from_ruby(VALUE val)
-{
-    return T(0);
-}
-
 class RubyEngine
 {
 public:
@@ -39,6 +27,11 @@ public:
     void Finalize();
     template<typename T>
     VALUE Wrap(T& t) { return VALUE(to_ruby(t)); }
+    
+    static VALUE method_missing(VALUE method, VALUE args, VALUE block)
+    {
+        sLog->outString("Tried to call unexistant ruby kernel method %s", from_ruby<std::string>(method));
+    }
     
     void PrintError(int error)
     {
