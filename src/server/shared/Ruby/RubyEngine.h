@@ -53,9 +53,20 @@ public:
         return rb_funcall2(self, mid, argc, argv);
     }
     
-    void require(const char* str)
+    static VALUE require_prot(VALUE str)
     {
-        rb_require_safe(rb_str_new2(str), rb_safe_level());
+        rb_require((const char*)str);
+        return Qnil;
+    }
+    
+    bool require(const char* str)
+    {
+        int status = 0;
+        rb_protect(require_prot, (VALUE)str, &status);
+        if(status)
+            return false;
+        
+        return true;
     }
     
     VALUE protected_call_function(VALUE self, ID mid, ...)

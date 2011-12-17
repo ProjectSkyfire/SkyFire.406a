@@ -13,9 +13,14 @@ void RubyEngine::Initialize()
 #endif
     ruby_init();
     int status = 0;
-    require("./all.rb");
+    if(!require("./all.rb"))
+    {
+        sLog->outString("Error occurred when loading all.rb, please make sure that the file exists");
+        return;
+    }
     running = true;
     call_function<void>(Qnil, "test1");
+    sLog->outString("Ruby engine initialized correctly");
 }
 
 void RubyEngine::Finalize()
