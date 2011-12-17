@@ -69,28 +69,24 @@ public:
         return true;
     }
     
-    VALUE protected_call_function(VALUE self, ID mid, ...)
+    VALUE protected_call_function(VALUE self, ID mid, int num, ...)
     {
         // ToDo: Implement rb_protect here
         VALUE* argv;
         va_list ap;
         
-        va_start(ap, mid);
-        int i = 0;
-        VALUE current = va_arg(ap, VALUE);
+        va_start(ap, num);
+        int i;
         
-        while(current) {
-            argv[i] = current;
-            current = va_arg(ap, VALUE);
-            ++i;
-        }
+        for(i = 0; i < num; ++i)
+            argv[i] = va_arg(ap, VALUE);
         
         va_end(ap);
         
         // Use a little hack here
         VALUE* data;
         data[0] = self;
-        data[1] = (VALUE)(i); // here, 'i' is the total length of the array, due to one extra increment made in the last iteration
+        data[1] = (VALUE)(num);
         data[2] = (VALUE)(mid);
         data[3] = (VALUE)(argv);
         
@@ -107,7 +103,7 @@ public:
     template<typename Ret>
     Ret call_function(VALUE self, std::string name)
     {
-        VALUE res = protected_call_function(self, rb_intern(name.c_str()));
+        VALUE res = protected_call_function(self, rb_intern(name.c_str()), 0);
         if(!is_void<Ret>::value)
             return from_ruby<Ret>(res);
     }
@@ -115,7 +111,7 @@ public:
     template<typename Ret, typename Arg1>
     Ret call_function(VALUE self, std::string name, Arg1& a1)
     {
-        VALUE res = protected_call_function(self, rb_intern(name.c_str()), Wrap(a1));
+        VALUE res = protected_call_function(self, rb_intern(name.c_str()), 1, Wrap(a1));
         if(!is_void<Ret>::value)
             return from_ruby<Ret>(res);
     }
