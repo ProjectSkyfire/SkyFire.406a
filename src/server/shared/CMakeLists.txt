@@ -27,6 +27,7 @@ file(GLOB sources_localdir *.cpp *.h)
 
 if( USE_RUBY )
     include_directories(${RUBY_INCLUDE_DIRS})
+    include_directories(${RICE_INCLUDE_DIR})
 endif()
 #
 # Build shared sourcelist

@@ -262,7 +262,7 @@ IF (RUBY_EXECUTABLE)
       OUTPUT_VARIABLE GEM_DIR)
       
     SET(RICE_DIR "${GEM_DIR}/gems/${RICE_VERSION}")
-    SET(RICE_INCLUDE_DIR "${RICE_DIR}/ruby/lib/include")
+    SET(RICE_INCLUDE_DIR "${RICE_DIR}/ruby/lib/include/")
     SET(RICE_LIBRARY "${RICE_DIR}/ruby/lib/lib/librice.a")
     
     IF(RICE_VERSION AND GEM_DIR)
