@@ -40,6 +40,14 @@ public:
     template<typename T>
     VALUE Wrap(T& t) { return VALUE(to_ruby(t)); }
     
+    void PrintError(int error)
+    {
+        if(!error)
+            return;
+        rb_eval_string_protect("if (e = $!) then STDERR.puts(\"#{e.class}:"
+        "#{e.message}\", e.backtrace.map {|s| \"\tfrom #{s}\" }) end", &error);
+    }
+    
     // Must be static because of the hidden 'this' pointer
     static VALUE protected_call0(VALUE data) // Deepest level of abstraction (lol?)
     {
@@ -63,6 +71,7 @@ public:
     {
         int status;
         rb_protect(require_prot, (VALUE)str, &status);
+        PrintError(status);
         if(status)
             return false;
         
@@ -94,7 +103,8 @@ public:
         VALUE res = rb_protect(protected_call0, (VALUE)(data), &status);
         if(status)
         {
-            sLog->outString("An error occurred when executing a Ruby statement");
+            sLog->outString("Caught an unhandled Ruby exception! \n");
+            PrintError(status);
             return Qnil;
         }
         return res; 

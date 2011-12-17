@@ -12,7 +12,6 @@ void RubyEngine::Initialize()
     NtInitialize(&argc, &argv);
 #endif
     ruby_init();
-    int status = 0;
     if(!require("./all.rb"))
     {
         sLog->outString("Error occurred when loading all.rb, please make sure that the file exists");
