@@ -3008,6 +3008,40 @@ void SpellMgr::LoadSpellCustomAttr()
             case 77489: // Mastery: Echo of Light
                 spellInfo->StackAmount = 100; // should be inf
                 break;
+            case 51514: // Hex
+            case 118:   // Polymorph
+            case 61305: // Polymorph (other animal)
+            case 28272: // polymorph (other animal)
+            case 61721: // Polymorph (other animal)
+            case 61780: // Polymorph (other animal)
+            case 28271: // Polymorph (other animal)
+            case 8122:  // Physic Scream
+            case 5484:  // Howl of Terror
+                spellInfo->AuraInterruptFlags = AURA_INTERRUPT_FLAG_TAKE_DAMAGE;
+                break;
+            case 85673: // Word of Glory
+            case 89023: // Blessed life (spell, not talent)
+                spellInfo->Effects[1].Effect = 0;
+                break;
+            case 1680: // Whirlwind  (Fury)
+                spellInfo->Effects[0].RadiusEntry = sSpellRadiusStore.LookupEntry (14);
+                spellInfo->Effects[1].RadiusEntry = sSpellRadiusStore.LookupEntry (14);
+                spellInfo->Effects[2].RadiusEntry = sSpellRadiusStore.LookupEntry (14);
+                break;
+            case 50622: // Whirlwind (triggered by Bladestorm)
+                spellInfo->Effects[0].RadiusEntry = sSpellRadiusStore.LookupEntry (14);
+                spellInfo->Effects[1].RadiusEntry = sSpellRadiusStore.LookupEntry (14);
+                spellInfo->Effects[3].RadiusEntry = sSpellRadiusStore.LookupEntry (14);
+                break;
+            case 44543: // Fingers of Frost rank 1
+                spellInfo->ProcChance = 7;
+                break;
+            case 44545: // Fingers of Frost rank 2
+                spellInfo->ProcChance = 14;
+                break;
+            case 83074: // Fingers of Frost rank 3
+                spellInfo->ProcChance = 20;
+                break;
             case 42835: // Spout
                 spellInfo->Effects[0].Effect = 0; // remove damage effect, only anim is needed
                 break;

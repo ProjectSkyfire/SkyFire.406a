@@ -4655,15 +4655,29 @@ void AuraEffect::HandleModDamageDone(AuraApplication const* aurApp, uint8 mode, 
             }
         }
         else
-        {
             for (int i = SPELL_SCHOOL_HOLY; i < MAX_SPELL_SCHOOL; i++)
             {
                 if ((GetMiscValue() & (1<<i)) != 0)
                     target->ApplyModUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_NEG+i, GetAmount(), apply);
             }
+            if (Guardian* pet = target->ToPlayer()->GetGuardianPet())
+                pet->UpdateAttackPowerAndDamage();
+
+        if (GetSpellInfo()->Id == 84963) //Inquisition
+        {
+            switch (GetBase()->GetUnitOwner()->GetPower(POWER_HOLY_POWER))
+            {
+                case 0: // 1HP
+                    GetBase()->SetDuration(4000, true);
+                    break;
+                case 1: // 2HP
+                    GetBase()->SetDuration(8000, true);
+                    break;
+                case 2: // 3HP
+                    GetBase()->SetDuration(12000, true);
+                    break;
+            }
         }
-        if (Guardian* pet = target->ToPlayer()->GetGuardianPet())
-            pet->UpdateAttackPowerAndDamage();
     }
 }
 

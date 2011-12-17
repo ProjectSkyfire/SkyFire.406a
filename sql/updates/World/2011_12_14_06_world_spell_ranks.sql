@@ -9,7 +9,7 @@ INSERT INTO spell_ranks (first_spell_id, spell_id, rank) VALUES
 (78670, 89721, 6),
 (78670, 89722, 7);
 
-- COOKING (PROFESSION)
+-- COOKING (PROFESSION)
 DELETE FROM spell_ranks WHERE first_spell_id=2550;
 INSERT INTO spell_ranks (first_spell_id, spell_id, rank) VALUES 
 (2550, 2550, 1),
@@ -20,7 +20,7 @@ INSERT INTO spell_ranks (first_spell_id, spell_id, rank) VALUES
 (2550, 51296, 6),
 (2550, 88053, 7);
 
-- FIRST AID (PROFESSION)
+-- FIRST AID (PROFESSION)
 DELETE FROM spell_ranks WHERE first_spell_id=3273;
 INSERT INTO spell_ranks (first_spell_id, spell_id, rank) VALUES 
 (3273, 3273, 1),
@@ -31,7 +31,7 @@ INSERT INTO spell_ranks (first_spell_id, spell_id, rank) VALUES
 (3273, 45542, 6),
 (3273, 74559, 7);
 
-- FISHING (PROFESSION)
+-- FISHING (PROFESSION)
 DELETE FROM spell_ranks WHERE first_spell_id=7620;
 INSERT INTO spell_ranks (first_spell_id, spell_id, rank) VALUES 
 (7620, 7620, 1),
@@ -42,7 +42,7 @@ INSERT INTO spell_ranks (first_spell_id, spell_id, rank) VALUES
 (7620, 51294, 6),
 (7620, 88868, 7);
 
-- RIDING (PROFESSION)
+-- RIDING (PROFESSION)
 DELETE FROM spell_ranks WHERE first_spell_id=33388;
 INSERT INTO spell_ranks (first_spell_id, spell_id, rank) VALUES 
 (33388, 33388, 1),
