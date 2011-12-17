@@ -18,7 +18,7 @@ void RubyEngine::Initialize()
         return;
     }
     running = true;
-    rb_define_method(rb_mKernel, "method_missing", method_missing, -1); /// Define this here so we avoid crashes
+    define_global_function("method_missing", &method_missing); /// Define this here so we avoid crashes
     call_function<void>(Qnil, "test1");
     sLog->outString("Ruby engine initialized correctly");
 }
