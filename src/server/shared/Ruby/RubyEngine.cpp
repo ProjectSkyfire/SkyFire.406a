@@ -13,12 +13,7 @@ void RubyEngine::Initialize()
 #endif
     ruby_init();
     int status = 0;
-    rb_protect(rb_require, rb_str_new2("./all.rb"), &status);
-    if(status)
-    {
-        sLog->outString("Could not load Ruby file 'all.rb' please make sure it exists");
-        return;
-    }
+    require("./all.rb");
     running = true;
     call_function<void>(Qnil, "test1");
 }

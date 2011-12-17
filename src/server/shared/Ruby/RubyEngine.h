@@ -53,6 +53,11 @@ public:
         return rb_funcall2(self, mid, argc, argv);
     }
     
+    void require(const char* str)
+    {
+        rb_require_safe(rb_str_new2(str), rb_safe_level());
+    }
+    
     VALUE protected_call_function(VALUE self, ID mid, ...)
     {
         // ToDo: Implement rb_protect here
@@ -83,7 +88,7 @@ public:
         if(status)
         {
             sLog->outString("An error occurred when executing a Ruby statement");
-            return VALUE(0);
+            return Qnil;
         }
         return res; 
     }
