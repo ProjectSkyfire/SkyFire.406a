@@ -40,10 +40,58 @@ public:
     template<typename T>
     VALUE Wrap(T& t) { return VALUE(to_ruby(t)); }
     
+    // Must be static because of the hidden 'this' pointer
+    static VALUE protected_call0(VALUE data) // Deepest level of abstraction (lol?)
+    {
+        VALUE* real_data = reinterpret_cast<VALUE*>(data);
+        VALUE self = real_data[0];
+        long argc = reinterpret_cast<long>(real_data[1]);
+        ID mid = reinterpret_cast<ID>(real_data[2]);
+        
+        VALUE* argv = reinterpret_cast<VALUE*>(real_data[3]);
+        
+        return rb_funcall2(self, mid, argc, argv);
+    }
+    
+    VALUE protected_call_function(VALUE self, ID mid, ...)
+    {
+        // ToDo: Implement rb_protect here
+        VALUE* argv;
+        va_list ap;
+        
+        va_start(ap, mid);
+        long i = 0;
+        VALUE current = va_arg(ap, VALUE);
+        
+        while(current) {
+            argv[i] = current;
+            current = va_arg(ap, VALUE);
+            ++i;
+        }
+        
+        va_end(ap);
+        
+        // Use a little hack here
+        VALUE* data;
+        data[0] = self;
+        data[1] = reinterpret_cast<VALUE>(i); // here, 'i' is the total length of the array, due to one extra increment made in the last iteration
+        data[2] = reinterpret_cast<VALUE>(mid);
+        data[3] = reinterpret_cast<VALUE>(argv);
+        
+        int status = 0;
+        VALUE res = rb_protect(protected_call0, reinterpret_cast<VALUE>(data), &status);
+        if(status)
+        {
+            sLog->outString("An error occurred when executing a Ruby statement");
+            return VALUE(0);
+        }
+        return res; 
+    }
+    
     template<typename Ret>
     Ret call_function(VALUE self, std::string name)
     {
-        VALUE res = rb_funcall(self, rb_intern(name.c_str()), 0);
+        VALUE res = protected_call_function(self, rb_intern(name.c_str()));
         if(!is_void<Ret>::value)
             return from_ruby<Ret>(res);
     }
@@ -51,7 +99,7 @@ public:
     template<typename Ret, typename Arg1>
     Ret call_function(VALUE self, std::string name, Arg1& a1)
     {
-        VALUE res = rb_funcall(self, rb_intern(name.c_str()), 1, Wrap(a1));
+        VALUE res = protected_call_function(self, rb_intern(name.c_str()), Wrap(a1));
         if(!is_void<Ret>::value)
             return from_ruby<Ret>(res);
     }
