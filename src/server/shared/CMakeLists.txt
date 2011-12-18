@@ -91,6 +91,7 @@ add_library(shared STATIC ${shared_STAT_SRCS})
 target_link_libraries(shared
   ${ACE_LIBRARY}
   ${RUBY_LIBRARIES}
+  ${RICE_LIBRARY}
 )
 
 # Generate precompiled header
