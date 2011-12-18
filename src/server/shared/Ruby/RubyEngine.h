@@ -42,10 +42,11 @@ public:
     template<typename T>
     VALUE Wrap(T& t) { return VALUE(to_ruby(t)); }
     
-    static VALUE method_missing(VALUE method, VALUE args, VALUE block)
+    static VALUE method_missing(VALUE method, VALUE args = Qnil, VALUE block = Qnil)
     {
         sLog->outString("Tried to call unexistant ruby kernel method %s", from_ruby<std::string>(method));
     }
+
     
     void PrintError(int error)
     {

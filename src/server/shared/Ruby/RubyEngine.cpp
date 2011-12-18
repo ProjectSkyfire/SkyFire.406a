@@ -18,7 +18,7 @@ void RubyEngine::Initialize()
         return;
     }
     running = true;
-    define_global_function("method_missing", &method_missing); /// Define this here so we avoid crashes
+    define_global_function("method_missing", &method_missing, (Arg("method"), Arg("args") = Qnil, Arg("block") = Qnil)); /// Define this here so we avoid crashes, Comma operator YAY!
     call_function<VALUE>(Qnil, "test1");
     sLog->outString("Ruby engine initialized correctly");
 }
