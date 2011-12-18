@@ -7,7 +7,18 @@
 #include "rice/Class.hpp"
 #include "rice/global_function.hpp"
 using namespace Rice;
-#define IS_VOID(T) ("void" == ##T)
+
+template<typename T>
+struct is_void<T>
+{
+    static bool value = false;
+};
+
+template<>
+struct is_void<void>
+{
+    static bool value = true;
+};
 
 class RubyEngine
 {
@@ -98,7 +109,7 @@ public:
     Ret call_function(VALUE self, std::string name)
     {
         VALUE res = protected_call_function(self, rb_intern(name.c_str()), 0);
-        if(!IS_VOID(Ret))
+        if(!is_void<Ret>)
             return from_ruby<Ret>(res);
     }
 
@@ -106,7 +117,7 @@ public:
     Ret call_function(VALUE self, std::string name, Arg1& a1)
     {
         VALUE res = protected_call_function(self, rb_intern(name.c_str()), 1, Wrap(a1));
-        if(!IS_VOID(Ret))
+        if(!is_void<Ret>)
             return from_ruby<Ret>(res);
     }
    
