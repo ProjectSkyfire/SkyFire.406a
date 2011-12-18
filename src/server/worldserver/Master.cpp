@@ -115,9 +115,6 @@ Master::~Master() {}
 /// Main function
 int Master::Run()
 {
-    BigNumber seed1;
-    seed1.SetRand(16 * 8);
-
     sLog->outString("%s (worldserver-daemon)", _FULLVERSION);
     sLog->outString("<Ctrl-C> to stop.\n");
 

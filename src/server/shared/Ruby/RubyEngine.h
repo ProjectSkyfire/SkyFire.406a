@@ -6,7 +6,11 @@
 #include "Common.h"
 #include "rice/Class.hpp"
 #include "rice/global_function.hpp"
-using namespace Rice;
+#include "Object.h"
+#include "ByteBuffer.h"
+#include "rice/Enum.hpp"
+#include "rice/Director.hpp"
+#include "ScriptMgr.h"
 
 template<typename T>
 struct is_void
@@ -32,6 +36,32 @@ struct is_value<VALUE>
     static const bool value = true;
 };
 
+class ServerScriptDirector : public ServerScript, public Rice::Director
+{
+public:
+    ServerScriptDirector(Object self, std::string name) : Rice::Director(self), ServerScript(name.c_str()) { }
+    
+    void default_OnNetworkStart()
+    {
+        ServerScript::OnNetworkStart();
+    }
+    
+    virtual void OnNetworkStart()
+    {
+        getSelf().call("OnNetworkStart");
+    }
+    
+    void default_OnNetworkStop()
+    {
+        ServerScript::OnNetworkStop();
+    }
+    
+    virtual void OnNetworkStop()
+    {
+        getSelf().call("OnNetworkStop");
+    }
+};
+
 class RubyEngine
 {
 public:
@@ -40,13 +70,18 @@ public:
     void Initialize();
     void Finalize();
     template<typename T>
-    VALUE Wrap(T& t) { return VALUE(to_ruby(t)); }
+    VALUE Wrap(T& t) { return VALUE(Rice::to_ruby(t)); }
+    void SetupRuby();
     
     static VALUE method_missing(VALUE method, VALUE args = Qnil, VALUE block = Qnil)
     {
-        sLog->outString("Tried to call unexistant ruby kernel method %s", from_ruby<std::string>(method));
+        sLog->outString("Tried to call unexistant ruby kernel method %s", Rice::from_ruby<std::string>(method));
     }
-
+    
+    static void AddSC(std::string name)
+    {
+        script_adders.push_back(name);
+    }
     
     void PrintError(int error)
     {
@@ -123,7 +158,7 @@ public:
     {
         VALUE res = protected_call_function(self, rb_intern(name.c_str()), 0);
         if(!is_value<Ret>::value)
-            return from_ruby<Ret>(res);
+            return Rice::from_ruby<Ret>(res);
         else
             return res;
     }
@@ -133,17 +168,34 @@ public:
     {
         VALUE res = protected_call_function(self, rb_intern(name.c_str()), 1, Wrap(a1));
         if(!is_value<Ret>::value)
-            return from_ruby<Ret>(res);
+            return Rice::from_ruby<Ret>(res);
         else
             return res;
     }
    
     // , typename Arg2, typename Arg3, typename Arg4, typename Arg5, typename Arg6, typename Arg7, typename Arg8, typename Arg9, typename Arg10>
     // , Arg2& a2, Arg3& a3 = Arg3(NULL), Arg4& a4 = Arg4(NULL), Arg5& a5 = Arg5(NULL), Arg6& a6 = Arg6(NULL), Arg7& a7 = Arg7(NULL), Arg8& a8 = Arg8(NULL), Arg9& a9 = Arg9(NULL), Arg10& a10 = Arg10(NULL))
+    static Rice::Enum<TypeID> typeid_enum_type;
+    template<>
+    TypeID from_ruby<TypeID>(Object x)
+    {
+        Data_Object<TypeID> d(x, typeid_enum_type);
+        return *d;
+    }
+    static std::list<std::string> script_adders;
 private:
     bool running;
     friend class ACE_Singleton<RubyEngine, ACE_Thread_Mutex>;
 };
 
 #define sRubyEngine ACE_Singleton<RubyEngine, ACE_Thread_Mutex>::instance()
+
+namespace RubyEngine_
+{
+    void CallAddSC()
+    {
+        for(std::list<std::string>::iterator itr = RubyEngine::script_adders.begin(); itr != RubyEngine::script_adders.end(); ++itr)
+            sRubyEngine->call_function<VALUE>(Qnil, (*itr));
+    }
+}
 #endif

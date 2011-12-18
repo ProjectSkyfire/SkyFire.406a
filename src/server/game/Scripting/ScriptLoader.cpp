@@ -18,6 +18,7 @@
  */
 
 #include "ScriptLoader.h"
+#include "RubyEngine.h"
 
 //examples
 void AddSC_example_creature();
@@ -679,6 +680,7 @@ void AddScripts()
     AddSpellScripts();
     AddSC_SmartSCripts();
     AddCommandScripts();
+    RubyEngine_::CallAddSC();
 #ifdef SCRIPTS
     AddWorldScripts();
     AddEasternKingdomsScripts();

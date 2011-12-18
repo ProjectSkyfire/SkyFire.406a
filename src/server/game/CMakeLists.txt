@@ -13,7 +13,8 @@ if( USE_COREPCH )
 endif()
 
 if( USE_RUBY )
-    include_directories(${RUBY_INCLUDE_DIR})
+    include_directories(${RUBY_INCLUDE_DIRS})
+    include_directories(${RICE_INCLUDE_DIR})
 endif()
 
 file(GLOB_RECURSE sources_Accounts Accounts/*.cpp Accounts/*.h)

@@ -487,7 +487,88 @@ class ByteBuffer
             }
             sLog->outDebugInLine("\n");
         }
-
+        
+        /// Used by the Ruby engine
+        uint8 ReadUInt8()
+        {
+            return read<uint8>();
+        }
+        
+        uint16 ReadUInt16()
+        {
+            return read<uint16>();
+        }
+        
+        uint32 ReadUInt32()
+        {
+            return read<uint16>();
+        }
+        
+        uint64 ReadUInt64()
+        {
+            return read<uint64>();
+        }
+        
+        int8 ReadInt8()
+        {
+            return read<int8>();
+        }
+        
+        int16 ReadInt16()
+        {
+            return read<int16>();
+        }
+        
+        int32 ReadInt32()
+        {
+            return read<int16>();
+        }
+        
+        int64 ReadInt64()
+        {
+            return read<int64>();
+        }
+        
+        void WriteUInt8(uint8 val)
+        {
+            this << val;
+        }
+        
+        void WriteUInt16(uint16 val)
+        {
+            this << val;
+        }
+        
+        void WriteUInt32(uint32 val)
+        {
+            this << val;
+        }
+        
+        void WriteUInt64(uint64 val)
+        {
+            this << val;
+        }
+        
+        void WriteInt8(int8 val)
+        {
+            this << val;
+        }
+        
+        void WriteInt16(int16 val)
+        {
+            this << val;
+        }
+        
+        void WriteInt32(int32 val)
+        {
+            this << val;
+        }
+        
+        void WriteInt64(int64 val)
+        {
+            this << val;
+        }
+        
     protected:
         size_t _rpos, _wpos;
         std::vector<uint8> _storage;
