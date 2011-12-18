@@ -1,5 +1,4 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
@@ -127,8 +126,7 @@ Map* MapInstanced::CreateInstanceForPlayer(const uint32 mapId, Player* player)
         if (!NewInstanceId) return NULL;
         map = FindInstanceMap(NewInstanceId);
         if (!map)
-            if (Battleground* NewBattleground = player->GetBattleground())
-                map = CreateBattleground(NewInstanceId, NewBattleground);
+            map = CreateBattleground(NewInstanceId, player->GetBattleground());
     }
     else
     {

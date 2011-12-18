@@ -22,7 +22,9 @@
 #include "Grid.h"
 #include "Log.h"
 
-void InvalidState::Update(Map &, NGridType &, GridInfo &, const uint32) const {}
+void InvalidState::Update(Map &, NGridType &, GridInfo &, const uint32) const
+{
+}
 
 void ActiveState::Update(Map &m, NGridType &grid, GridInfo & info, const uint32 t_diff) const
 {
@@ -62,7 +64,9 @@ void RemovalState::Update(Map &m, NGridType &grid, GridInfo &info, const uint32 
             if (!m.UnloadGrid(grid, false))
             {
                 sLog->outDebug(LOG_FILTER_MAPS, "Grid[%u, %u] for map %u differed unloading due to players or active objects nearby", grid.getX(), grid.getY(), m.GetId());
+                m.ResetGridExpiry(grid);
             }
         }
     }
 }
+
