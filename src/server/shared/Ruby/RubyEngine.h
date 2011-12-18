@@ -7,24 +7,6 @@
 #include "rice/Class.hpp"
 #include "rice/global_function.hpp"
 
-template <typename T>
-struct is_void
-{
-    static const bool value = false;
-};
-
-template <>
-struct is_void<void>
-{
-    static const bool value = true;
-};
-
-template <>
-struct is_void<void*> // cannot make from_ruby<void*> because of unknown referenced type, only concrete types are allowed there
-{
-    static const bool value = true;
-};
-
 class RubyEngine
 {
 public:
@@ -111,18 +93,18 @@ public:
     }
     
     template<typename Ret>
-    Ret call_function(VALUE self, std::string name)
+    Ret call_function(bool ret, VALUE self, std::string name)
     {
         VALUE res = protected_call_function(self, rb_intern(name.c_str()), 0);
-        if(!(is_void<Ret>::value))
+        if(ret)
             return from_ruby<Ret>(res);
     }
 
     template<typename Ret, typename Arg1>
-    Ret call_function(VALUE self, std::string name, Arg1& a1)
+    Ret call_function(bool ret, VALUE self, std::string name, Arg1& a1)
     {
         VALUE res = protected_call_function(self, rb_intern(name.c_str()), 1, Wrap(a1));
-        if(!(is_void<Ret>::value))
+        if(ret)
             return from_ruby<Ret>(res);
     }
    
