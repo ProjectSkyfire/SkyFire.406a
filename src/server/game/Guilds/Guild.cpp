@@ -1269,7 +1269,7 @@ void Guild::HandleRoster(WorldSession* session /*= NULL*/)
     for (Members::const_iterator itr = m_members.begin(); itr != m_members.end(); ++itr)
     {
         // Achievement Points
-        //data << uint32(itr->second->GetAchievementPoints());
+        data << uint32(itr->second->GetAchievementPoints());
         data << uint32(100);
     }
 
