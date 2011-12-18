@@ -6,6 +6,7 @@
 #include "Common.h"
 #include "rice/Class.hpp"
 #include "rice/global_function.hpp"
+using namespace Rice;
 
 class RubyEngine
 {
