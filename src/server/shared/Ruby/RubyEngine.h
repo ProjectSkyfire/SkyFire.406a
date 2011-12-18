@@ -38,10 +38,21 @@ struct is_value<VALUE>
     static const bool value = true;
 };
 
-class ServerScriptDirector : public ServerScript, public Rice::Director
+Rice::Enum<TypeID> typeid_enum_type;
+template<>
+TypeID from_ruby<TypeID>(Rice::Object x)
+{
+    Rice::Data_Object<TypeID> d(x, typeid_enum_type);
+    return *d;
+}
+
+class ServerScriptDirector : public ServerScript, public Rice::Director 
 {
 public:
-    ServerScriptDirector(Object self, std::string name) : Rice::Director(self), ServerScript(name.c_str()) { }
+    ServerScriptDirector(Object self, std::string name) : ServerScript(name.c_str()), Rice::Director(self) 
+    { 
+        sLog->outString("Initialized ServerScriptDirector with name %s", name.c_str());
+    }
     
     void default_OnNetworkStart()
     {
@@ -177,13 +188,6 @@ public:
    
     // , typename Arg2, typename Arg3, typename Arg4, typename Arg5, typename Arg6, typename Arg7, typename Arg8, typename Arg9, typename Arg10>
     // , Arg2& a2, Arg3& a3 = Arg3(NULL), Arg4& a4 = Arg4(NULL), Arg5& a5 = Arg5(NULL), Arg6& a6 = Arg6(NULL), Arg7& a7 = Arg7(NULL), Arg8& a8 = Arg8(NULL), Arg9& a9 = Arg9(NULL), Arg10& a10 = Arg10(NULL))
-    static Rice::Enum<TypeID> typeid_enum_type;
-    template<>
-    static TypeID from_ruby<TypeID>(Rice::Object x)
-    {
-        Rice::Data_Object<TypeID> d(x, typeid_enum_type);
-        return *d;
-    }
     static std::list<std::string> script_adders;
 private:
     bool running;
