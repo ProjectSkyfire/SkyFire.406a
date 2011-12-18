@@ -9,7 +9,7 @@
 using namespace Rice;
 
 template<typename T>
-struct is_void<T>
+struct is_void
 {
     static const bool value = false;
 };
@@ -21,7 +21,7 @@ struct is_void<void>
 };
 
 template<typename T>
-struct is_value<T>
+struct is_value
 {
     static const bool value = false;
 };
