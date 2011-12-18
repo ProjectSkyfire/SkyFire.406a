@@ -121,7 +121,7 @@ public:
     Ret call_function(VALUE self, std::string name)
     {
         VALUE res = protected_call_function(self, rb_intern(name.c_str()), 0);
-        if(!is_value<Ret>)
+        if(!is_value<Ret>::value)
             return from_ruby<Ret>(res);
         else
             return res;
@@ -131,7 +131,7 @@ public:
     Ret call_function(VALUE self, std::string name, Arg1& a1)
     {
         VALUE res = protected_call_function(self, rb_intern(name.c_str()), 1, Wrap(a1));
-        if(!is_value<Ret>)
+        if(!is_value<Ret>::value)
             return from_ruby<Ret>(res);
         else
             return res;
