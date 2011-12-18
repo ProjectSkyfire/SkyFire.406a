@@ -20,6 +20,7 @@ endif()
 
 if( USE_RUBY )
     include_directories(${RUBY_INCLUDE_DIRS})
+    include_directories(${RICE_INCLUDE_DIR})
 endif()
 
 if ( USE_COREPCH AND MSVC )
