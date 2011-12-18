@@ -3019,7 +3019,6 @@ void SpellMgr::LoadSpellCustomAttr()
             case 5484:  // Howl of Terror
                 spellInfo->AuraInterruptFlags = AURA_INTERRUPT_FLAG_TAKE_DAMAGE;
                 break;
-            case 85673: // Word of Glory
             case 89023: // Blessed life (spell, not talent)
                 spellInfo->Effects[1].Effect = 0;
                 break;
