@@ -19,7 +19,7 @@ void RubyEngine::Initialize()
     }
     running = true;
     define_global_function("method_missing", &method_missing); /// Define this here so we avoid crashes
-    call_function<void>(false, Qnil, "test1");
+    call_function<void>(Qnil, "test1");
     sLog->outString("Ruby engine initialized correctly");
 }
 

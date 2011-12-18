@@ -7,6 +7,7 @@
 #include "rice/Class.hpp"
 #include "rice/global_function.hpp"
 using namespace Rice;
+#define IS_VOID(T) ("void" == ##T)
 
 class RubyEngine
 {
@@ -94,18 +95,18 @@ public:
     }
     
     template<typename Ret>
-    Ret call_function(bool ret, VALUE self, std::string name)
+    Ret call_function(VALUE self, std::string name)
     {
         VALUE res = protected_call_function(self, rb_intern(name.c_str()), 0);
-        if(ret)
+        if(!IS_VOID(Ret))
             return from_ruby<Ret>(res);
     }
 
     template<typename Ret, typename Arg1>
-    Ret call_function(bool ret, VALUE self, std::string name, Arg1& a1)
+    Ret call_function(VALUE self, std::string name, Arg1& a1)
     {
         VALUE res = protected_call_function(self, rb_intern(name.c_str()), 1, Wrap(a1));
-        if(ret)
+        if(!IS_VOID(Ret))
             return from_ruby<Ret>(res);
     }
    
