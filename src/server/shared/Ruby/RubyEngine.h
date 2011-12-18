@@ -20,6 +20,18 @@ struct is_void<void>
     static bool value = true;
 };
 
+template<typename T>
+struct is_value<T>
+{
+    static bool value = false;
+};
+
+template<>
+struct is_value<VALUE>
+{
+    static bool value = true;
+};
+
 class RubyEngine
 {
 public:
@@ -109,16 +121,20 @@ public:
     Ret call_function(VALUE self, std::string name)
     {
         VALUE res = protected_call_function(self, rb_intern(name.c_str()), 0);
-        if(!is_void<Ret>)
+        if(!is_value<Ret>)
             return from_ruby<Ret>(res);
+        else
+            return res;
     }
 
     template<typename Ret, typename Arg1>
     Ret call_function(VALUE self, std::string name, Arg1& a1)
     {
         VALUE res = protected_call_function(self, rb_intern(name.c_str()), 1, Wrap(a1));
-        if(!is_void<Ret>)
+        if(!is_value<Ret>)
             return from_ruby<Ret>(res);
+        else
+            return res;
     }
    
     // , typename Arg2, typename Arg3, typename Arg4, typename Arg5, typename Arg6, typename Arg7, typename Arg8, typename Arg9, typename Arg10>
