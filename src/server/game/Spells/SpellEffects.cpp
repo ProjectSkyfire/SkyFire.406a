@@ -716,18 +716,8 @@ void Spell::EffectSchoolDMG(SpellEffIndex effIndex)
                 //Shield of  Righteous
                 if (m_spellInfo->Id == 53600)
                 {
-                    switch(m_caster->GetPower(POWER_HOLY_POWER))
-                    {
-                        case 0:
-                            damage = int32(damage * 1.16f);
-                            break;
-                        case 1:
-                            damage = int32((damage * 1.16f) * 3);
-                            break;
-                        case 2:
-                            damage = int32((damage * 1.16f) * 6);
-                            break;
-                    }
+                    int32 mult = m_caster->GetPower(POWER_HOLY_POWER) * 3;
+                    damage = int32(damage * 1.16f * (mult ? mult : 1));
                 }
 
              break;
