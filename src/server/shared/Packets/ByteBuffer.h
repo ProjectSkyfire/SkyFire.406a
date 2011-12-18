@@ -531,42 +531,42 @@ class ByteBuffer
         
         void WriteUInt8(uint8 val)
         {
-            this << val;
+            *this << val;
         }
         
         void WriteUInt16(uint16 val)
         {
-            this << val;
+            *this << val;
         }
         
         void WriteUInt32(uint32 val)
         {
-            this << val;
+            *this << val;
         }
         
         void WriteUInt64(uint64 val)
         {
-            this << val;
+            *this << val;
         }
         
         void WriteInt8(int8 val)
         {
-            this << val;
+            *this << val;
         }
         
         void WriteInt16(int16 val)
         {
-            this << val;
+            *this << val;
         }
         
         void WriteInt32(int32 val)
         {
-            this << val;
+            *this << val;
         }
         
         void WriteInt64(int64 val)
         {
-            this << val;
+            *this << val;
         }
         
     protected:
