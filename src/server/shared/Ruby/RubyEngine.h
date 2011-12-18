@@ -11,6 +11,8 @@
 #include "rice/Enum.hpp"
 #include "rice/Director.hpp"
 #include "ScriptMgr.h"
+#include "rice/Data_Type.hpp"
+#include "rice/Constructor.hpp"
 
 template<typename T>
 struct is_void
