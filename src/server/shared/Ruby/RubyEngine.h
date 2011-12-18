@@ -70,7 +70,7 @@ public:
     void Initialize();
     void Finalize();
     template<typename T>
-    VALUE Wrap(T& t) { return VALUE(Rice::to_ruby(t)); }
+    VALUE Wrap(T& t) { return VALUE(to_ruby(t)); }
     void SetupRuby();
     
     static VALUE method_missing(VALUE method, VALUE args = Qnil, VALUE block = Qnil)
@@ -158,7 +158,7 @@ public:
     {
         VALUE res = protected_call_function(self, rb_intern(name.c_str()), 0);
         if(!is_value<Ret>::value)
-            return Rice::from_ruby<Ret>(res);
+            return from_ruby<Ret>(res);
         else
             return res;
     }
@@ -168,7 +168,7 @@ public:
     {
         VALUE res = protected_call_function(self, rb_intern(name.c_str()), 1, Wrap(a1));
         if(!is_value<Ret>::value)
-            return Rice::from_ruby<Ret>(res);
+            return from_ruby<Ret>(res);
         else
             return res;
     }
@@ -177,9 +177,9 @@ public:
     // , Arg2& a2, Arg3& a3 = Arg3(NULL), Arg4& a4 = Arg4(NULL), Arg5& a5 = Arg5(NULL), Arg6& a6 = Arg6(NULL), Arg7& a7 = Arg7(NULL), Arg8& a8 = Arg8(NULL), Arg9& a9 = Arg9(NULL), Arg10& a10 = Arg10(NULL))
     static Rice::Enum<TypeID> typeid_enum_type;
     template<>
-    TypeID from_ruby<TypeID>(Object x)
+    static TypeID from_ruby<TypeID>(Rice::Object x)
     {
-        Data_Object<TypeID> d(x, typeid_enum_type);
+        Rice::Data_Object<TypeID> d(x, typeid_enum_type);
         return *d;
     }
     static std::list<std::string> script_adders;
