@@ -49,9 +49,9 @@ TypeID from_ruby<TypeID>(Rice::Object x)
 class ServerScriptDirector : public ServerScript, public Rice::Director 
 {
 public:
-    ServerScriptDirector(Object self/*, std::string name*/) : ServerScript("test_world_script_from_ruby"), Rice::Director(self) 
+    ServerScriptDirector(Object self, std::string name) : ServerScript(name.c_str()), Director(self)
     { 
-        //sLog->outString("Initialized ServerScriptDirector with name %s", name.c_str());
+        sLog->outString("Initialized ServerScriptDirector with name %s", name.c_str());
     }
     
     void default_OnNetworkStart()
