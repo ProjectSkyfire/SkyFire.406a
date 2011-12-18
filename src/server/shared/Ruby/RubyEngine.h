@@ -11,25 +11,25 @@ using namespace Rice;
 template<typename T>
 struct is_void<T>
 {
-    static bool value = false;
+    static const bool value = false;
 };
 
 template<>
 struct is_void<void>
 {
-    static bool value = true;
+    static const bool value = true;
 };
 
 template<typename T>
 struct is_value<T>
 {
-    static bool value = false;
+    static const bool value = false;
 };
 
 template<>
 struct is_value<VALUE>
 {
-    static bool value = true;
+    static const bool value = true;
 };
 
 class RubyEngine
