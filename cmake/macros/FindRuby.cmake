@@ -228,11 +228,13 @@ SET(RICE_LIBRARY "")
 SET(RICE_INCLUDE_DIR "")
 
 IF (RUBY_EXECUTABLE)
-    EXECUTE_PROCESS(COMMAND ${RUBY_EXECUTABLE} -r rubygems -e "rice_ = Gem::Specification.find_by_name 'rice'; ric_ = rice_.name + '-' + rice_.version.to_s; print ric_.chop"
+    EXECUTE_PROCESS(COMMAND ${RUBY_EXECUTABLE} -r rubygems -e "rice_ = Gem::Specification.find_by_name 'rice'; ric_ = rice_.name + '-' + rice_.version.to_s; print ric_"
       OUTPUT_VARIABLE RICE_VERSION)
     
     EXECUTE_PROCESS(COMMAND gem environment gemdir
       OUTPUT_VARIABLE GEM_DIR)
+    
+    STRING(STRIP ${GEM_DIR} GEM_DIR)
       
     SET(RICE_DIR ${GEM_DIR}/gems/${RICE_VERSION})
     SET(RICE_INCLUDE_DIR ${RICE_DIR}/ruby/lib/include)
