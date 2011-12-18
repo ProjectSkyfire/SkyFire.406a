@@ -49,9 +49,9 @@ TypeID from_ruby<TypeID>(Rice::Object x)
 class ServerScriptDirector : public ServerScript, public Rice::Director 
 {
 public:
-    ServerScriptDirector(Object self, std::string name) : ServerScript(name.c_str()), Rice::Director(self) 
+    ServerScriptDirector(Object self/*, std::string name*/) : ServerScript("test_world_script_from_ruby"), Rice::Director(self) 
     { 
-        sLog->outString("Initialized ServerScriptDirector with name %s", name.c_str());
+        //sLog->outString("Initialized ServerScriptDirector with name %s", name.c_str());
     }
     
     void default_OnNetworkStart()
@@ -88,7 +88,7 @@ public:
     
     static VALUE method_missing(VALUE method, VALUE args = Qnil, VALUE block = Qnil)
     {
-        sLog->outString("Tried to call unexistant ruby kernel method %s", Rice::from_ruby<std::string>(method));
+        sLog->outString("Tried to call unexistant ruby kernel method %s", from_ruby<std::string>(method));
     }
     
     static void AddSC(std::string name)

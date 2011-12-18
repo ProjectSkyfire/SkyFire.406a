@@ -18,7 +18,7 @@ void RubyEngine::Initialize()
         return;
     }
     running = true;
-    Rice::define_global_function("method_missing", &method_missing, (Arg("method"), Arg("args") = Qnil, Arg("block") = Qnil)); /// Define this here so we avoid crashes, Comma operator YAY!
+    Rice::define_global_function("method_missing", &method_missing, (Rice::Arg("method"), Rice::Arg("args") = Qnil, Rice::Arg("block") = Qnil)); /// Define this here so we avoid crashes
     Rice::define_global_function("AddSC", &AddSC);
     SetupRuby();
     call_function<VALUE>(Qnil, "test1");
