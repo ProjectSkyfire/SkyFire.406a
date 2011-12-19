@@ -3031,7 +3031,7 @@ void SpellMgr::LoadSpellCustomAttr()
                 spellInfo->Effects[0].RadiusEntry = sSpellRadiusStore.LookupEntry (14);
                 spellInfo->Effects[1].RadiusEntry = sSpellRadiusStore.LookupEntry (14);
                 spellInfo->Effects[3].RadiusEntry = sSpellRadiusStore.LookupEntry (14);
-                break;				
+                break;
             case 42835: // Spout
                 spellInfo->Effects[0].Effect = 0; // remove damage effect, only anim is needed
                 break;
@@ -3305,6 +3305,13 @@ void SpellMgr::LoadSpellCustomAttr()
             case 70893: // Culling The Herd (needs target selection script)
                 spellInfo->Effects[0].TargetA = TARGET_UNIT_CASTER;
                 spellInfo->Effects[0].TargetB = TARGET_UNIT_MASTER;
+                break;
+            case 81782: // Power Word: Barrier
+                spellInfo->Effects[0].TargetA = TARGET_UNIT_TARGET_ALLY;
+                spellInfo->Effects[1].TargetA = TARGET_UNIT_TARGET_ALLY;
+                spellInfo->Effects[0].TargetB = TARGET_NONE;
+                spellInfo->Effects[1].TargetB = TARGET_NONE;
+                spellInfo->DurationEntry = sSpellDurationStore.LookupEntry(39);
                 break;
             case 54800: // Sigil of the Frozen Conscience - change class mask to custom extended flags of Icy Touch
                         // this is done because another spell also uses the same SpellFamilyFlags as Icy Touch
