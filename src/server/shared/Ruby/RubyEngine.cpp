@@ -103,7 +103,6 @@ void RubyEngine::SetupRuby()
         .define_method("OnNetworkStop", &ServerScriptDirector::default_OnNetworkStop);
     
     _kernel->define_method("AddSC", &AddSC);
-    _kernel->define_method("method_missing", &method_missing, (Rice::Arg("method"), Rice::Arg("args") = Qnil, Rice::Arg("block") = Qnil));
 }
 
 void CallRubyAddSC()
