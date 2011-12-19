@@ -14,15 +14,15 @@ void RubyEngine::Initialize()
     NtInitialize(&argc, &argv);
 #endif
     ruby_init();
+    Rice::define_global_function("method_missing", &method_missing, (Rice::Arg("method"), Rice::Arg("args") = Qnil, Rice::Arg("block") = Qnil)); /// Define this here so we avoid crashes
+    Rice::define_global_function("AddSC", &AddSC);
+    SetupRuby();
     if(!require("./all.rb"))
     {
         sLog->outString("Error occurred when loading all.rb, please make sure that the file exists");
         return;
     }
     running = true;
-    Rice::define_global_function("method_missing", &method_missing, (Rice::Arg("method"), Rice::Arg("args") = Qnil, Rice::Arg("block") = Qnil)); /// Define this here so we avoid crashes
-    Rice::define_global_function("AddSC", &AddSC);
-    SetupRuby();
     call_function<VALUE>(Qnil, "test1");
     sLog->outString("Ruby engine initialized correctly");
 }
