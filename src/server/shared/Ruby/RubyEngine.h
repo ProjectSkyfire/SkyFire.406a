@@ -83,11 +83,6 @@ public:
         sLog->outString("Tried to call unexistant ruby kernel method %s", from_ruby<std::string>(method));
     }
     
-    static void AddSC(std::string name)
-    {
-        script_adders.push_back(name);
-    }
-    
     void PrintError(int error)
     {
         if(!error)
@@ -189,4 +184,5 @@ private:
 
 std::list<std::string> script_adders;
 void CallRubyAddSC();
+void AddSC(std::string name);
 #endif

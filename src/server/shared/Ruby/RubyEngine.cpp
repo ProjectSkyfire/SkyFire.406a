@@ -106,3 +106,8 @@ void CallRubyAddSC()
     for(std::list<std::string>::iterator itr = script_adders.begin(); itr != script_adders.end(); ++itr)
         sRubyEngine->call_function<VALUE>(Qnil, (*itr));
 }
+
+void AddSC(std::string name)
+{
+    script_adders.push_back(name);
+}
