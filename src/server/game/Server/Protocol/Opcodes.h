@@ -482,7 +482,7 @@ enum Opcodes
     SMSG_QUERY_TIME_RESPONSE                         = 0x0F1AC, // 4.0.6a 13623
     SMSG_LOG_XPGAIN                                  = 0x0B880, // 4.0.6a 13623
     SMSG_AURACASTLOG                                 = 0x10080, // Unknown opcode ID
-    CMSG_RECLAIM_CORPSE                              = 0x069E8, // 4.0.6a 13623
+    CMSG_RECLAIM_CORPSE                              = 0x07CC8, // 4.0.6a 13623
     CMSG_WRAP_ITEM                                   = 0x07CC4, // 4.0.6a 13623
     SMSG_LEVELUP_INFO                                = 0x0B9C4, // 4.0.6a 13623
     MSG_MINIMAP_PING                                 = 0x0C475, // Unknown opcode ID
