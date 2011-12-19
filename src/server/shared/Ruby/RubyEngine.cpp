@@ -45,7 +45,7 @@ RubyEngine::~RubyEngine()
 
 void RubyEngine::SetupRuby()
 {
-    _kernel = rb_mKernel;
+    _kernel = new Rice::Module(rb_mKernel);
     
     Rice::define_enum<TypeID>("TypeID")
         .define_value("TYPEID_OBJECT", TYPEID_OBJECT)
@@ -102,8 +102,8 @@ void RubyEngine::SetupRuby()
         .define_method("OnNetworkStart", &ServerScriptDirector::default_OnNetworkStart)
         .define_method("OnNetworkStop", &ServerScriptDirector::default_OnNetworkStop);
     
-    _kernel.define_method("AddSC", &AddSC);
-    _kernel.define_method("method_missing", &method_missing, (Rice::Arg("method"), Rice::Arg("args") = Qnil, Rice::Arg("block") = Qnil));
+    _kernel->define_method("AddSC", &AddSC);
+    _kernel->define_method("method_missing", &method_missing, (Rice::Arg("method"), Rice::Arg("args") = Qnil, Rice::Arg("block") = Qnil));
 }
 
 void CallRubyAddSC()

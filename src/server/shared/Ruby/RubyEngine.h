@@ -179,7 +179,7 @@ public:
 private:
     bool running;
     friend class ACE_Singleton<RubyEngine, ACE_Thread_Mutex>;
-    Rice::Module _kernel;
+    Rice::Module* _kernel;
 };
 
 #define sRubyEngine ACE_Singleton<RubyEngine, ACE_Thread_Mutex>::instance()
