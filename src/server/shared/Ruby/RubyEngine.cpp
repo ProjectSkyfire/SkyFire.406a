@@ -101,7 +101,7 @@ void RubyEngine::SetupRuby()
         .define_method("OnNetworkStop", &ServerScriptDirector::default_OnNetworkStop);
 }
 
-void RubyEngine::CallRubyAddSC()
+void CallRubyAddSC()
 {
     for(std::list<std::string>::iterator itr = script_adders.begin(); itr != script_adders.end(); ++itr)
         sRubyEngine->call_function<VALUE>(Qnil, (*itr));
