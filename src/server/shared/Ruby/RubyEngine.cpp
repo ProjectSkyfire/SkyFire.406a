@@ -1,5 +1,7 @@
 #include "RubyEngine.h"
 
+std::list<std::string> _ruby_script_adders;
+
 void RubyEngine::Initialize()
 {
     if(running)

@@ -182,7 +182,8 @@ private:
 
 #define sRubyEngine ACE_Singleton<RubyEngine, ACE_Thread_Mutex>::instance()
 
-std::list<std::string> _ruby_script_adders;
+/// Theese things need to be moved somewhere else
+extern std::list<std::string> _ruby_script_adders;
 void CallRubyAddSC();
 void AddSC(std::string name);
 #endif
