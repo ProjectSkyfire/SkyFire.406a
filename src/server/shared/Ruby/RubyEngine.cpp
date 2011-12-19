@@ -104,7 +104,6 @@ void RubyEngine::SetupRuby()
     
     _kernel.define_method("AddSC", &AddSC);
     _kernel.define_method("method_missing", &method_missing, (Rice::Arg("method"), Rice::Arg("args") = Qnil, Rice::Arg("block") = Qnil));
-    Rice::define_global_function("AddSC", &AddSC);
 }
 
 void CallRubyAddSC()
