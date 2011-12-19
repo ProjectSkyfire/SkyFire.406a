@@ -40,18 +40,19 @@ void WorldSession::HandleLearnPreviewTalents(WorldPacket& recvPacket)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "CMSG_LEARN_PREVIEW_TALENTS");
 
-    uint32 spec, talentsCount;
+    uint32 spec;
+    uint32 talentsCount;
     recvPacket >> spec >> talentsCount;
 
-    if(spec != ((uint32)-1))
+    if (spec != ((uint32)-1))
     {
         uint32 specID = 0;
-        for (uint32 i = 0; i < sTalentTabStore.GetNumRows(); i++)
+        for(uint32 i = 0; i < sTalentTabStore.GetNumRows(); i++)
         {
             TalentTabEntry const * entry = sTalentTabStore.LookupEntry(i);
-            if(entry)
+            if (entry)
             {
-                if(entry->ClassMask == _player->getClassMask() && entry->tabpage == spec)
+                if (entry->ClassMask == _player->getClassMask() && entry->tabpage == spec)
                 {
                     specID = entry->TalentTabID;
                     break;
@@ -65,12 +66,11 @@ void WorldSession::HandleLearnPreviewTalents(WorldPacket& recvPacket)
                 _player->resetTalents();
 
             _player->SetTalentBranchSpec(specID, _player->m_activeSpec);
-
             for (uint32 i = 0; i < sTalentTreePrimarySpellsStore.GetNumRows(); ++i)
             {
                 TalentTreePrimarySpellsEntry const *talentInfo = sTalentTreePrimarySpellsStore.LookupEntry(i);
 
-                if (!talentInfo || talentInfo->TalentTabID != _player->GetTalentBranchSpec(_player->m_activeSpec))
+                if (!talentInfo || talentInfo->TalentTabID != specID)
                     continue;
 
                 _player->learnSpell(talentInfo->SpellID, true);
@@ -91,10 +91,9 @@ void WorldSession::HandleLearnPreviewTalents(WorldPacket& recvPacket)
 
     bool inOtherBranch = false;
     uint32 pointInBranchSpec = 0;
-
-    for (PlayerTalentMap::iterator itr = _player->m_talents[_player->m_activeSpec]->begin(); itr != _player->m_talents[_player->m_activeSpec]->end(); itr++)
+    for(PlayerTalentMap::iterator itr = _player->m_talents[_player->m_activeSpec]->begin(); itr != _player->m_talents[_player->m_activeSpec]->end(); itr++)
     {
-        for (uint32 i = 0; i < sTalentStore.GetNumRows(); i++)
+        for(uint32 i = 0; i < sTalentStore.GetNumRows(); i++)
         {
             const TalentEntry * thisTalent = sTalentStore.LookupEntry(i);
             if (thisTalent)
@@ -136,7 +135,7 @@ void WorldSession::HandleLearnPreviewTalents(WorldPacket& recvPacket)
 
 void WorldSession::HandleTalentWipeConfirmOpcode(WorldPacket & recv_data)
 {
-    sLog->outDebug(LOG_FILTER_NETWORKIO, "MSG_TALENT_WIPE_CONFIRM");
+    sLog->outDetail("MSG_TALENT_WIPE_CONFIRM");
     uint64 guid;
     recv_data >> guid;
 
@@ -153,7 +152,7 @@ void WorldSession::HandleTalentWipeConfirmOpcode(WorldPacket & recv_data)
 
     if (!(_player->resetTalents()))
     {
-        WorldPacket data(MSG_TALENT_WIPE_CONFIRM, 8+4);    //you have not any talent
+        WorldPacket data(MSG_TALENT_WIPE_CONFIRM, 8+4);    //you do not have any talents
         data << uint64(0);
         data << uint32(0);
         SendPacket(&data);
@@ -161,7 +160,7 @@ void WorldSession::HandleTalentWipeConfirmOpcode(WorldPacket & recv_data)
     }
 
     _player->SendTalentsInfoData(false);
-    unit->CastSpell(_player, 14867, true);                  //spell: "Untalent Visual Effect"
+    unit->CastSpell(_player, 14867, true);                  //spell: "Untalented Visual Effect"
 }
 
 void WorldSession::HandleUnlearnSkillOpcode(WorldPacket & recv_data)

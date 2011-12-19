@@ -110,7 +110,7 @@ public:
                 handler->SendSysMessage(LANG_ACCOUNT_TOO_LONG);
                 handler->SetSentErrorMessage(true);
                 return false;
-            case AOR_NAME_ALREDY_EXIST:
+            case AOR_NAME_ALREADY_EXIST:
                 handler->SendSysMessage(LANG_ACCOUNT_ALREADY_EXIST);
                 handler->SetSentErrorMessage(true);
                 return false;
@@ -167,7 +167,7 @@ public:
             case AOR_OK:
                 handler->PSendSysMessage(LANG_ACCOUNT_DELETED, accountName.c_str());
                 break;
-            case AOR_NAME_NOT_EXIST:
+            case AOR_NAME_DOES_NOT_EXIST:
                 handler->PSendSysMessage(LANG_ACCOUNT_NOT_EXIST, accountName.c_str());
                 handler->SetSentErrorMessage(true);
                 return false;
@@ -527,7 +527,7 @@ public:
             case AOR_OK:
                 handler->SendSysMessage(LANG_COMMAND_PASSWORD);
                 break;
-            case AOR_NAME_NOT_EXIST:
+            case AOR_NAME_DOES_NOT_EXIST:
                 handler->PSendSysMessage(LANG_ACCOUNT_NOT_EXIST, accountName.c_str());
                 handler->SetSentErrorMessage(true);
                 return false;

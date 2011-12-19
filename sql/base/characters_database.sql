@@ -1,4 +1,3 @@
-
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
@@ -894,7 +893,6 @@ CREATE TABLE `corpse` (
   `itemCache` text NOT NULL,
   `bytes1` int(10) unsigned NOT NULL DEFAULT '0',
   `bytes2` int(10) unsigned NOT NULL DEFAULT '0',
-  `guildId` int(10) unsigned NOT NULL DEFAULT '0',
   `flags` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `dynFlags` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `time` int(10) unsigned NOT NULL DEFAULT '0',

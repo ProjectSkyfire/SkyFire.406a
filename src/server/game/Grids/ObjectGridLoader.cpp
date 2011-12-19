@@ -65,13 +65,11 @@ class ObjectWorldLoader
         uint32 i_corpses;
 };
 
-template<class T>
-void ObjectGridLoader::SetObjectCell(T* /*obj*/, CellCoord const& /*cellCoord*/)
+template<class T> void ObjectGridLoader::SetObjectCell(T* /*obj*/, CellCoord const& /*cellCoord*/)
 {
 }
 
-template<>
-void ObjectGridLoader::SetObjectCell(Creature* obj, CellCoord const& cellCoord)
+template<> void ObjectGridLoader::SetObjectCell(Creature* obj, CellCoord const& cellCoord)
 {
     Cell cell(cellCoord);
 
@@ -142,13 +140,8 @@ void LoadHelper(CellCorpseSet const& cell_corpses, CellCoord &cell, CorpseMapTyp
 
 void ObjectGridLoader::Visit(GameObjectMapType &m)
 {
-    uint32 x = (i_cell.GridX()*MAX_NUMBER_OF_CELLS) + i_cell.CellX();
-    uint32 y = (i_cell.GridY()*MAX_NUMBER_OF_CELLS) + i_cell.CellY();
-    CellCoord cellCoord(x, y);
-    uint32 cell_id = (cellCoord.y_coord*TOTAL_NUMBER_OF_CELLS_PER_MAP) + cellCoord.x_coord;
-
-    CellObjectGuids const& cell_guids = sObjectMgr->GetCellObjectGuids(i_map->GetId(), i_map->GetSpawnMode(), cell_id);
-
+    CellCoord cellCoord = i_cell.GetCellCoord();
+    CellObjectGuids const& cell_guids = sObjectMgr->GetCellObjectGuids(i_map->GetId(), i_map->GetSpawnMode(), cellCoord.GetId());
     LoadHelper(cell_guids.gameobjects, cellCoord, m, i_gameObjects, i_map);
 }
 

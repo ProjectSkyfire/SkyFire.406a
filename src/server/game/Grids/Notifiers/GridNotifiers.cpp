@@ -75,7 +75,7 @@ void VisibleNotifier::SendToSelf()
 
 void VisibleChangesNotifier::Visit(PlayerMapType &m)
 {
-    for (PlayerMapType::iterator iter=m.begin(); iter != m.end(); ++iter)
+    for (PlayerMapType::iterator iter = m.begin(); iter != m.end(); ++iter)
     {
         if (iter->getSource() == &i_object)
             continue;
