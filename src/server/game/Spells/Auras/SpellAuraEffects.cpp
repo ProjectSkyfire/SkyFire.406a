@@ -4655,6 +4655,7 @@ void AuraEffect::HandleModDamageDone(AuraApplication const* aurApp, uint8 mode, 
             }
         }
         else
+        {
             for (int i = SPELL_SCHOOL_HOLY; i < MAX_SPELL_SCHOOL; i++)
             {
                 if ((GetMiscValue() & (1<<i)) != 0)
@@ -4663,19 +4664,20 @@ void AuraEffect::HandleModDamageDone(AuraApplication const* aurApp, uint8 mode, 
             if (Guardian* pet = target->ToPlayer()->GetGuardianPet())
                 pet->UpdateAttackPowerAndDamage();
 
-        if (GetSpellInfo()->Id == 84963) //Inquisition
-        {
-            switch (GetBase()->GetUnitOwner()->GetPower(POWER_HOLY_POWER))
+            if (GetSpellInfo()->Id == 84963) //Inquisition
             {
-                case 0: // 1HP
-                    GetBase()->SetDuration(4000, true);
-                    break;
-                case 1: // 2HP
-                    GetBase()->SetDuration(8000, true);
-                    break;
-                case 2: // 3HP
-                    GetBase()->SetDuration(12000, true);
-                    break;
+                switch (GetBase()->GetUnitOwner()->GetPower(POWER_HOLY_POWER))
+                {
+                    case 0: // 1HP
+                        GetBase()->SetDuration((GetBase()->GetUnitOwner()->GetPower(POWER_HOLY_POWER) + 1) * 4000, true);
+                        break;
+                    case 1: // 2HP
+                        GetBase()->SetDuration((GetBase()->GetUnitOwner()->GetPower(POWER_HOLY_POWER) + 2) * 8000, true);
+                        break;
+                    case 2: // 3HP
+                        GetBase()->SetDuration((GetBase()->GetUnitOwner()->GetPower(POWER_HOLY_POWER) + 3) * 12000, true);
+                        break;
+                }
             }
         }
     }

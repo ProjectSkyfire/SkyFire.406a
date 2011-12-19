@@ -35,7 +35,7 @@ AccountOpResult CreateAccount(std::string username, std::string password)
     normalizeString(password);
 
     if (GetId(username))
-        return AOR_NAME_ALREDY_EXIST;                       // username does already exist
+        return AOR_NAME_ALREADY_EXIST;                       // username does already exist
 
     LoginDatabase.PExecute("INSERT INTO account(username, sha_pass_hash, joindate) VALUES('%s', '%s', NOW())", username.c_str(), CalculateShaPassHash(username, password).c_str());
     LoginDatabase.Execute("INSERT INTO realmcharacters (realmid, acctid, numchars) SELECT realmlist.id, account.id, 0 FROM realmlist, account LEFT JOIN realmcharacters ON acctid=account.id WHERE acctid IS NULL");
@@ -47,7 +47,7 @@ AccountOpResult DeleteAccount(uint32 accountId)
 {
     QueryResult result = LoginDatabase.PQuery("SELECT 1 FROM account WHERE id='%d'", accountId);
     if (!result)
-        return AOR_NAME_NOT_EXIST;                          // account doesn't exist
+        return AOR_NAME_DOES_NOT_EXIST;                          // account doesn't exist
 
     // existed characters list
     result = CharacterDatabase.PQuery("SELECT guid FROM characters WHERE account='%d'", accountId);
@@ -93,7 +93,7 @@ AccountOpResult ChangeUsername(uint32 accountId, std::string newUsername, std::s
 {
     QueryResult result = LoginDatabase.PQuery("SELECT 1 FROM account WHERE id='%d'", accountId);
     if (!result)
-        return AOR_NAME_NOT_EXIST;                          // account doesn't exist
+        return AOR_NAME_DOES_NOT_EXIST;                          // account doesn't exist
 
     if (utf8length(newUsername) > MAX_ACCOUNT_STR)
         return AOR_NAME_TOO_LONG;
@@ -118,7 +118,7 @@ AccountOpResult ChangePassword(uint32 accountId, std::string newPassword)
     std::string username;
 
     if (!GetName(accountId, username))
-        return AOR_NAME_NOT_EXIST;                          // account doesn't exist
+        return AOR_NAME_DOES_NOT_EXIST;                          // account doesn't exist
 
     if (utf8length(newPassword) > MAX_ACCOUNT_STR)
         return AOR_PASS_TOO_LONG;
