@@ -45,7 +45,7 @@ RubyEngine::~RubyEngine()
 
 void RubyEngine::SetupRuby()
 {
-    typeid_enum_type = Rice::define_enum<TypeID>("TypeID")
+    Rice::define_enum<TypeID>("TypeID")
         .define_value("TYPEID_OBJECT", TYPEID_OBJECT)
         .define_value("TYPEID_ITEM", TYPEID_ITEM)
         .define_value("TYPEID_CONTAINER", TYPEID_CONTAINER)
@@ -99,4 +99,10 @@ void RubyEngine::SetupRuby()
         .define_constructor(Rice::Constructor<ServerScriptDirector, Rice::Object, std::string>())
         .define_method("OnNetworkStart", &ServerScriptDirector::default_OnNetworkStart)
         .define_method("OnNetworkStop", &ServerScriptDirector::default_OnNetworkStop);
+}
+
+void RubyEngine::CallRubyAddSC()
+{
+    for(std::list<std::string>::iterator itr = script_adders.begin(); itr != script_adders.end(); ++itr)
+        sRubyEngine->call_function<VALUE>(Qnil, (*itr));
 }

@@ -680,7 +680,7 @@ void AddScripts()
     AddSpellScripts();
     AddSC_SmartSCripts();
     AddCommandScripts();
-    RubyEngine_::CallAddSC();
+    RubyEngine::CallRubyAddSC();
 #ifdef SCRIPTS
     AddWorldScripts();
     AddEasternKingdomsScripts();
