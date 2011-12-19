@@ -13,6 +13,7 @@
 #include "ScriptMgr.h"
 #include "rice/Data_Type.hpp"
 #include "rice/Constructor.hpp"
+#include "rice/Module.hpp"
 
 template<typename T>
 struct is_void
@@ -178,6 +179,7 @@ public:
 private:
     bool running;
     friend class ACE_Singleton<RubyEngine, ACE_Thread_Mutex>;
+    Module _kernel;
 };
 
 #define sRubyEngine ACE_Singleton<RubyEngine, ACE_Thread_Mutex>::instance()

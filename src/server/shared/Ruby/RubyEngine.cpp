@@ -45,6 +45,8 @@ RubyEngine::~RubyEngine()
 
 void RubyEngine::SetupRuby()
 {
+    _kernel = rb_mKernel;
+    
     Rice::define_enum<TypeID>("TypeID")
         .define_value("TYPEID_OBJECT", TYPEID_OBJECT)
         .define_value("TYPEID_ITEM", TYPEID_ITEM)
@@ -99,8 +101,9 @@ void RubyEngine::SetupRuby()
         .define_constructor(Rice::Constructor<ServerScriptDirector, Rice::Object, std::string>())
         .define_method("OnNetworkStart", &ServerScriptDirector::default_OnNetworkStart)
         .define_method("OnNetworkStop", &ServerScriptDirector::default_OnNetworkStop);
-        
-    //Rice::define_global_function("method_missing", &method_missing, (Rice::Arg("method"), Rice::Arg("args") = Qnil, Rice::Arg("block") = Qnil)); /// Define this here so we avoid crashes
+    
+    _kernel.define_method("AddSC", &AddSC);
+    _kernel.define_method("method_missing", &method_missing, (Rice::Arg("method"), Rice::Arg("args") = Qnil, Rice::Arg("block") = Qnil));
     Rice::define_global_function("AddSC", &AddSC);
 }
 
