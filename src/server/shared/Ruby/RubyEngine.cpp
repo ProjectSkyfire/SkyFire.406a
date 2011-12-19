@@ -14,10 +14,7 @@ void RubyEngine::Initialize()
     NtInitialize(&argc, &argv);
 #endif
     ruby_init();
-    //rb_load_file("./all.rb");
     SetupRuby();
-    //Rice::define_global_function("method_missing", &method_missing, (Rice::Arg("method"), Rice::Arg("args") = Qnil, Rice::Arg("block") = Qnil)); /// Define this here so we avoid crashes
-    //Rice::define_global_function("AddSC", &AddSC);
     if(!require("./all.rb"))
     {
         sLog->outString("Error occurred when loading all.rb, please make sure that the file exists");
@@ -102,6 +99,9 @@ void RubyEngine::SetupRuby()
         .define_constructor(Rice::Constructor<ServerScriptDirector, Rice::Object, std::string>())
         .define_method("OnNetworkStart", &ServerScriptDirector::default_OnNetworkStart)
         .define_method("OnNetworkStop", &ServerScriptDirector::default_OnNetworkStop);
+        
+    Rice::define_global_function("method_missing", &method_missing, (Rice::Arg("method"), Rice::Arg("args") = Qnil, Rice::Arg("block") = Qnil)); /// Define this here so we avoid crashes
+    Rice::define_global_function("AddSC", &AddSC);
 }
 
 void CallRubyAddSC()
