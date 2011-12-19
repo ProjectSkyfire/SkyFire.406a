@@ -32,6 +32,13 @@
 #include <set>
 #include <vector>
 
+// GCC has alternative #pragma pack(N) syntax and old gcc version does not support pack(push, N), also any gcc version does not support it at some platform
+#if defined(__GNUC__)
+#pragma pack(1)
+#else
+#pragma pack(push, 1)
+#endif
+
 // Structures using to access raw DB2 data and required packing to portability
 struct ItemEntry
 {
@@ -115,5 +122,12 @@ struct ItemSparseEntry
     int32      Field130;                                     // 129
     int32      Field131;                                     // 130
 };
+
+// GCC has alternative #pragma pack(N) syntax and old gcc version does not support pack(push, N), also any gcc version does not support it at some platform
+#if defined(__GNUC__)
+#pragma pack()
+#else
+#pragma pack(pop)
+#endif
 
 #endif
