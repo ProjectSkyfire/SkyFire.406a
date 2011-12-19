@@ -101,7 +101,7 @@ void RubyEngine::SetupRuby()
         .define_method("OnNetworkStop", &ServerScriptDirector::default_OnNetworkStop);
         
     Rice::define_global_function("method_missing", &method_missing, (Rice::Arg("method"), Rice::Arg("args") = Qnil, Rice::Arg("block") = Qnil)); /// Define this here so we avoid crashes
-    Rice::define_global_function("AddSC", &AddSC);
+    //Rice::define_global_function("AddSC", &AddSC); this produces an infinite recursion? wut?
 }
 
 void CallRubyAddSC()
