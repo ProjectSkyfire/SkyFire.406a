@@ -79,7 +79,7 @@ void RubyEngine::SetupRuby()
         .define_method("WriteInt32", &ByteBuffer::WriteInt32)
         .define_method("WriteInt64", &ByteBuffer::WriteInt64);
     
-    Rice::define_class<Object>("Object")
+    Rice::define_class<Object>("WoWObject")
         .define_method("IsInWorld", &Object::IsInWorld)
         .define_method("AddToWorld", &Object::AddToWorld)
         .define_method("GetGUID", &Object::GetGUID)
