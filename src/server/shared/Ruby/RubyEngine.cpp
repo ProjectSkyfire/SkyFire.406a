@@ -15,7 +15,7 @@ void RubyEngine::Initialize()
 #endif
     ruby_init();
     //rb_load_file("./all.rb");
-    //SetupRuby();
+    SetupRuby();
     //Rice::define_global_function("method_missing", &method_missing, (Rice::Arg("method"), Rice::Arg("args") = Qnil, Rice::Arg("block") = Qnil)); /// Define this here so we avoid crashes
     //Rice::define_global_function("AddSC", &AddSC);
     if(!require("./all.rb"))
