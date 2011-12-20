@@ -778,6 +778,7 @@ Player::Player (WorldSession *session): Unit(), m_achievementMgr(this), m_reputa
     for (uint8 i = 0; i < MAX_MOVE_TYPE; ++i)
         m_forced_speed_changes[i] = 0;
 
+    m_currentPetSlot = PET_SLOT_NULL;
     /////////////////// Instance System /////////////////////
 
     m_HomebindTimer = 0;
@@ -17285,7 +17286,7 @@ bool Player::LoadFromDB(uint32 guid, SQLQueryHolder *holder)
     // set which actionbars the client has active - DO NOT REMOVE EVER AGAIN (can be changed though, if it does change fieldwise)
     SetByteValue(PLAYER_FIELD_BYTES, 2, fields[64].GetUInt8());
 
-    m_currentPetSlot = (PetSlot)fields[68].GetUInt32();
+    m_currentPetSlot = (PetSlot)fields[68].GetUInt8();
     m_petSlotUsed = fields[69].GetUInt32();
 
     InitDisplayIds();
@@ -19193,7 +19194,7 @@ void Player::SaveToDB(bool create /*=false*/)
 
         stmt->setString(index++, ss.str());
         stmt->setUInt8(index++, GetByteValue(PLAYER_FIELD_BYTES, 2));
-        stmt->setUInt32(index++, m_currentPetSlot);
+        stmt->setUInt8(index++, m_currentPetSlot);
         stmt->setUInt32(index++, m_petSlotUsed);
         stmt->setUInt32(index++, m_grantableLevels);
     }
@@ -19304,7 +19305,7 @@ void Player::SaveToDB(bool create /*=false*/)
 
         stmt->setString(index++, ss.str());
         stmt->setUInt8(index++, GetByteValue(PLAYER_FIELD_BYTES, 2));
-        stmt->setUInt32(index++, m_currentPetSlot);
+        stmt->setUInt8(index++, m_currentPetSlot);
         stmt->setUInt32(index++, m_petSlotUsed);
         stmt->setUInt32(index++, m_grantableLevels);
 

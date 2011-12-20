@@ -3206,6 +3206,7 @@ enum PetSlot
 };
 
 #define MAX_PET_STABLES         PET_SLOT_STABLE_LAST
+#define PET_SLOT_NULL           0
 
 enum TradeStatus
 {
