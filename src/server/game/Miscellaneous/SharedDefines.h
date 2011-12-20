@@ -3188,6 +3188,7 @@ enum SpellFamilyNames
 // stored in character_pet.slot
 enum PetSlot
 {
+    PET_SLOT_DEFAULT         =   0,
     //Some not-in-db slots
     PET_SLOT_FULL_LIST       =  -4,        //Used when there is no slot free for tameing
     PET_SLOT_UNK_SLOT        =  -3,        // Used in some scripts.
