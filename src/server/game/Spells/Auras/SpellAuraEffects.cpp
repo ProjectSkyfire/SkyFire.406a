@@ -5187,12 +5187,30 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
                                     bf->RemovePlayerFromResurrectQueue(target->GetGUID());
                             }
                             break;
-                        case 36730:                                     // Flame Strike
+                            case 12774: // (DND) Belnistrasz Idol Shutdown Visual
+                            {
+                                if (aurApp->GetRemoveMode() != AURA_REMOVE_BY_EXPIRE)
+                                return;
+
+                                // Idom Rool Camera Shake <- wtf, don't drink while making spellnames?
+                                if (Unit* caster = GetCaster())
+                                    caster->CastSpell(caster, 12816, true);
+
+                                return;
+                            }
+                            case 32286: // Focus Target Visual
+                            {
+                                if (aurApp->GetRemoveMode() != AURA_REMOVE_BY_EXPIRE)
+                                    target->CastSpell(target, 32301, true, NULL, this);
+
+                                return;
+                            }
+                        case 36730: // Flame Strike
                         {
                             target->CastSpell(target, 36731, true, NULL, this);
                             break;
                         }
-                        case 44191:                                     // Flame Strike
+                        case 44191: // Flame Strike
                         {
                             if (target->GetMap()->IsDungeon())
                             {
