@@ -660,7 +660,7 @@ void WorldSession::HandleBuyItemInSlotOpcode(WorldPacket & recv_data)
     uint32 item, slot, count;
     uint8 bagslot, unk;
 
-    recv_data >> vendorguid >> item  >> slot >> bagguid >> bagslot >> count >> unk;
+    recv_data >> vendorguid >> unk >> item  >> slot >> count >> bagguid >> bagslot;
 
     // client expects count starting at 1, and we send vendorslot+1 to client already
     if (slot > 0)
@@ -756,7 +756,7 @@ void WorldSession::SendListInventory(uint64 vendorGuid)
     VendorItemData const* items = vendor->GetVendorItems();
     if (!items)
     {
-        WorldPacket data(SMSG_LIST_INVENTORY, (8 + 1 + 1 + 2));   // Checked in 406
+        WorldPacket data(SMSG_LIST_INVENTORY, 8 + 1 + 1 + 2);   // Checked in 406
         data << uint64(vendorGuid);
         data << uint8(0);                                   // count==0, next will be error code
         data << uint8(0);                                   // "Vendor has no inventory"
@@ -767,7 +767,7 @@ void WorldSession::SendListInventory(uint64 vendorGuid)
     uint32 itemCount = items->GetItemCount();
     uint8 count = 0;
 
-    WorldPacket data(SMSG_LIST_INVENTORY, (8+1+itemCount*9*4+1*itemCount+2));  // Checked in 406
+    WorldPacket data(SMSG_LIST_INVENTORY, 8+1+itemCount*9*4+1*itemCount+2);  // Checked in 406
     data << uint64(vendorGuid);
 
     size_t countPos = data.wpos();
@@ -806,11 +806,11 @@ void WorldSession::SendListInventory(uint64 vendorGuid)
                 data << uint32(item->item);
                 data << uint32(itemTemplate->DisplayInfoID);
                 data << int32(leftInStock);
-                data << int32(price);
+                data << uint32(price);
                 data << uint32(itemTemplate->MaxDurability);
                 data << uint32(itemTemplate->BuyCount);
                 data << uint32(item->ExtendedCost);
-                data << uint32(0); // unk 4.0.1
+                data << uint8(0); // unk 4.0.1
             }
         }
     }
