@@ -949,7 +949,8 @@ enum SkyFireStrings
     LANG_GOINFO_LOOTID                  = 5028,
     LANG_COMMAND_LOOKUP_MAX_RESULTS     = 5029,
     LANG_FLEE                           = 5030,
-    // Room for more Trinity strings      5031-9999
+    LANG_NPCINFO_AIINFO                 = 5031,
+    // Room for more SkyFire strings      5032-9999
 
     // Level requirement notifications
     LANG_SAY_REQ                        = 6604,
