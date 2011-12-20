@@ -17283,7 +17283,7 @@ bool Player::LoadFromDB(uint32 guid, SQLQueryHolder *holder)
     //SetUInt64Value(PLAYER_FIELD_KNOWN_CURRENCIES, fields[47].GetUInt64());
 
     // set which actionbars the client has active - DO NOT REMOVE EVER AGAIN (can be changed though, if it does change fieldwise)
-    SetByteValue(PLAYER_FIELD_BYTES, 2, fields[65].GetUInt8());
+    SetByteValue(PLAYER_FIELD_BYTES, 2, fields[66].GetUInt8());
 
     m_currentPetSlot = (PetSlot)fields[67].GetUInt8();
     m_petSlotUsed = fields[68].GetUInt64();
