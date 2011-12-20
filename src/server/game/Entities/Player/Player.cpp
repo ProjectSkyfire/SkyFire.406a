@@ -778,7 +778,7 @@ Player::Player (WorldSession *session): Unit(), m_achievementMgr(this), m_reputa
     for (uint8 i = 0; i < MAX_MOVE_TYPE; ++i)
         m_forced_speed_changes[i] = 0;
 
-    m_currentPetSlot = PET_SLOT_NULL;
+    m_currentPetSlot = PET_SLOT_ACTUAL_PET_SLOT;
     /////////////////// Instance System /////////////////////
 
     m_HomebindTimer = 0;
