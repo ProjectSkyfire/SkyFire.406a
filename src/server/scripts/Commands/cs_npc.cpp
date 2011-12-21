@@ -148,9 +148,12 @@ public:
         uint32 db_guid = creature->GetDBTableGUIDLow();
 
         // To call _LoadGoods(); _LoadQuests(); CreateTrainerSpells();
-        creature->LoadFromDB(db_guid, map);
+        if (!creature->LoadCreatureFromDB(db_guid, map))
+        {
+            delete creature;
+            return false;
+        }
 
-        map->AddToMap(creature);
         sObjectMgr->AddCreatureToGrid(db_guid, sObjectMgr->GetCreatureData(db_guid));
         return true;
     }
@@ -551,7 +554,7 @@ public:
         handler->PSendSysMessage(LANG_NPCINFO_ARMOR, target->GetArmor());
         handler->PSendSysMessage(LANG_NPCINFO_POSITION, float(target->GetPositionX()), float(target->GetPositionY()), float(target->GetPositionZ()));
         handler->PSendSysMessage(LANG_NPCINFO_AIINFO, target->GetAIName().c_str(), target->GetScriptName().c_str());
-		
+
         if (npcflags & UNIT_NPC_FLAG_VENDOR)
             handler->SendSysMessage(LANG_NPCINFO_VENDOR);
 
