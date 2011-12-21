@@ -223,6 +223,8 @@ bool WorldSession::Update(uint32 diff, PacketFilter& updater)
     ///- Retrieve packets from the receive queue and call the appropriate handlers
     /// not process packets if socket already closed
     WorldPacket* packet = NULL;
+    //! Delete packet after processing by default
+    bool deletePacket = true;
     while (m_Socket && !m_Socket->IsClosed() && _recvQueue.next(packet, updater))
     {
         OpcodeHandler const &opHandle = opcodeTable[packet->GetOpcode()];
@@ -239,8 +241,18 @@ bool WorldSession::Update(uint32 diff, PacketFilter& updater)
                     if (!_player)
                     {
                         // skip STATUS_LOGGEDIN opcode unexpected errors if player logout sometime ago - this can be network lag delayed packets
+                        //! If player didn't log out a while ago, it means packets are being sent while the server does not recognize
+                        //! the client to be in world yet. We will re-add the packets to the bottom of the queue and process them later.
                         if (!m_playerRecentlyLogout)
-                            LogUnexpectedOpcode(packet, "STATUS_LOGGEDIN", "the player has not logged in yet");
+                        {
+                            //! Because checking a bool is faster than reallocating memory
+                            deletePacket = false;
+                            //! Re-enqueue
+                            QueuePacket(packet);
+                            //! Log
+                            sLog->outDebug(LOG_FILTER_NETWORKIO, "Re-enqueueing packet with opcode %s (0x%.4X) with with status STATUS_LOGGEDIN. "
+                                "Player is currently not in world yet.", opHandle.name, packet->GetOpcode());
+                        }
                     }
                     else if (_player->IsInWorld())
                     {
@@ -318,7 +330,8 @@ bool WorldSession::Update(uint32 diff, PacketFilter& updater)
             }
         }
 
-        delete packet;
+        if (deletePacket)
+            delete packet;
     }
 
     ProcessQueryCallbacks();
@@ -342,6 +355,7 @@ bool WorldSession::Update(uint32 diff, PacketFilter& updater)
         if (!m_Socket)
             return false;                                       //Will remove this session from the world session map
     }
+
     return true;
 }
 
