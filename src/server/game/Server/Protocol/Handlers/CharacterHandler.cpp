@@ -176,7 +176,7 @@ bool LoginQueryHolder::Initialize()
     stmt = CharacterDatabase.GetPreparedStatement(CHAR_LOAD_PLAYER_TALENTBRANCHSPECS);
     stmt->setUInt32(0, lowGuid);
     res &= SetPreparedQuery(PLAYER_LOGIN_QUERY_LOADTALENTBRANCHSPECS, stmt);
-	
+
     stmt = CharacterDatabase.GetPreparedStatement(CHAR_LOAD_PLAYER_TALENTS);
     stmt->setUInt32(0, lowGuid);
     res &= SetPreparedQuery(PLAYER_LOGIN_QUERY_LOADTALENTS, stmt);
@@ -326,7 +326,7 @@ void WorldSession::HandleCharCreateOpcode(WorldPacket & recv_data)
     }
 
     ChrRacesEntry const* raceEntry = sChrRacesStore.LookupEntry(race_);
-    if (!classEntry || !raceEntry)
+    if (!raceEntry)
     {
         data << (uint8)CHAR_CREATE_FAILED;
         SendPacket(&data);
