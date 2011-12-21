@@ -43,6 +43,9 @@
 #include "Util.h"
 #include "ScriptMgr.h"
 #include "Battleground.h"
+#include "BattlefieldWG.h"
+#include "BattlefieldTB.h"
+#include "BattlefieldMgr.h"
 #include "AccountMgr.h"
 
 class LoginQueryHolder : public SQLQueryHolder
@@ -1028,6 +1031,30 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder * holder)
 
     sObjectAccessor->AddObject(pCurrChar);
     //sLog->outDebug("Player %s added to Map.", pCurrChar->GetName());
+
+    //Send WG timer to player at login
+    if (sWorld->getBoolConfig(CONFIG_WINTERGRASP_ENABLE))
+    {
+        if (Battlefield *bfWG = sBattlefieldMgr.GetBattlefieldByBattleId(1))
+        {
+            if (bfWG->IsWarTime())
+                pCurrChar->SendUpdateWorldState(ClockWorldState[1], uint32(time(NULL)));
+            else // Time to next battle
+                pCurrChar->SendUpdateWorldState(ClockWorldState[1], uint32(bfWG->GetTimer()));
+        }
+    }
+
+    //Send TB timer to player at login
+    if (sWorld->getBoolConfig(CONFIG_TOL_BARAD_ENABLE))
+    {
+        if (Battlefield * bfTB = sBattlefieldMgr.GetBattlefieldToZoneId(5095))
+        {
+            if (bfTB->IsWarTime())
+                pCurrChar->SendUpdateWorldState(TBClockWorldState[1], uint32(time(NULL)));
+            else // Time to next battle
+                pCurrChar->SendUpdateWorldState(TBClockWorldState[1], uint32(bfTB->GetTimer()));
+        }
+    }
 
     pCurrChar->SendInitialPacketsAfterAddToMap();
 
