@@ -561,7 +561,6 @@ public:
         if (npcflags & UNIT_NPC_FLAG_TRAINER)
             handler->SendSysMessage(LANG_NPCINFO_TRAINER);
 
-
         return true;
     }
 

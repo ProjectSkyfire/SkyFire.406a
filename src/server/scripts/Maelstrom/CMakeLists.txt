@@ -6,6 +6,7 @@ set(scripts_STAT_SRCS
   Maelstrom/lost_isles.cpp
   Maelstrom/tolbarad_peninsula.cpp
   Maelstrom/the_maelstrom.cpp
+  Maelstrom/tol_barad.cpp
 )
 
 message("  -> Prepared: The Maelstrom")

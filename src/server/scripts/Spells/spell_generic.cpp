@@ -28,7 +28,7 @@
 #include "GridNotifiers.h"
 #include "Group.h"
 #include "LFGMgr.h"
- 
+
 class spell_gen_absorb0_hitlimit1 : public SpellScriptLoader
 {
     public:
@@ -1435,5 +1435,5 @@ void AddSC_generic_spell_scripts()
     new spell_gen_launch();
     new spell_gen_vehicle_scaling();
     new spell_gen_oracle_wolvar_reputation();
-    new spell_gen_luck_of_the_draw();	
+    new spell_gen_luck_of_the_draw();
 }

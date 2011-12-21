@@ -2326,7 +2326,7 @@ bool InstanceMap::AddPlayerToMap(Player* player)
                     if (LFGDungeonEntry const* dungeon = sLFGDungeonStore.LookupEntry(dungeonId))
                         if (LFGDungeonEntry const* randomDungeon = sLFGDungeonStore.LookupEntry(*(sLFGMgr->GetSelectedDungeons(player->GetGUID()).begin())))
                             if (dungeon->map == GetId() && dungeon->difficulty == GetDifficulty() && randomDungeon->type == LFG_TYPE_RANDOM)
-                                player->CastSpell(player, LFG_SPELL_LUCK_OF_THE_DRAW, true);			
+                                player->CastSpell(player, LFG_SPELL_LUCK_OF_THE_DRAW, true);
         }
 
         // for normal instances cancel the reset schedule when the

@@ -1216,6 +1216,14 @@ void World::LoadConfigSettings(bool reload)
     m_int_configs[CONFIG_WINTERGRASP_NOBATTLETIME] = ConfigMgr::GetIntDefault("Wintergrasp.NoBattleTimer", 150);
     m_int_configs[CONFIG_WINTERGRASP_RESTART_AFTER_CRASH] = ConfigMgr::GetIntDefault("Wintergrasp.CrashRestartTimer", 10);
 
+    // TOL BARAD
+    m_bool_configs[CONFIG_TOL_BARAD_ENABLE] = ConfigMgr::GetBoolDefault("Tol Barad.Enable", false);
+    m_int_configs[CONFIG_TOL_BARAD_PLR_MAX] = ConfigMgr::GetIntDefault("Tol Barad.PlayerMax", 100);
+    m_int_configs[CONFIG_TOL_BARAD_PLR_MIN] = ConfigMgr::GetIntDefault("Tol Barad.PlayerMin", 0);
+    m_int_configs[CONFIG_TOL_BARAD_PLR_MIN_LVL] = ConfigMgr::GetIntDefault("Tol Barad.PlayerMinLvl", 80);
+    m_int_configs[CONFIG_TOL_BARAD_BATTLETIME] = ConfigMgr::GetIntDefault("Tol Barad.BattleTimer", 15);
+    m_int_configs[CONFIG_TOL_BARAD_NOBATTLETIME] = ConfigMgr::GetIntDefault("Tol Barad.NoBattleTimer", 150);
+
     // misc
     m_bool_configs[CONFIG_PDUMP_NO_PATHS] = ConfigMgr::GetBoolDefault("PlayerDump.DisallowPaths", true);
     m_bool_configs[CONFIG_PDUMP_NO_OVERWRITE] = ConfigMgr::GetBoolDefault("PlayerDump.DisallowOverwrite", true);

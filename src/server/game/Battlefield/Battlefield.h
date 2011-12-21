@@ -36,6 +36,7 @@ enum BattlefieldTypes
 enum BattlefieldIDs
 {
     BATTLEFIELD_BATTLEID_WG                      = 1,       // Wintergrasp battle
+    BATTLEFIELD_BATTLEID_TB                      = 21       //Tol Barad battle
 };
 
 enum BattlefieldObjectiveStates
@@ -291,9 +292,9 @@ class Battlefield:public ZoneScript
     virtual void OnPlayerEnterZone(Player * /*player */ ) {};
 
     WorldPacket BuildWarningAnnPacket(std::string msg);
-    void SendWarningToAllInZone(uint32 entry);
-    //void SendWarningToAllInWar(int32 entry, ...); -- UNUSED
-    void SendWarningToPlayer(Player* player, uint32 entry);
+    void SendWarningToAllInZone(int32 entry, ...);
+    void SendWarningToAllInWar(int32 entry, ...);
+    void SendWarningToPlayer(Player* player, int32 entry, ...);
 
     void PlayerAcceptInviteToQueue(Player* player);
     void PlayerAcceptInviteToWar(Player* player);
@@ -332,6 +333,7 @@ protected:
     uint64 StalkerGuid;
     uint32 m_Timer;                                         // Global timer for event
     bool m_enable;
+    bool m_WarTime;
     bool m_BattlefieldActive;
     TeamId m_DefenderTeam;
 
@@ -356,9 +358,11 @@ protected:
     uint32 m_BattleTime;                                    // Length of a battle
     uint32 m_NoWarBattleTime;                               // Time between two battles
     uint32 m_RestartAfterCrash;                             // Delay to restart Wintergrasp if the server crashed during a running battle.
-    uint32 m_TimeForAcceptInvite;
+    uint64 m_TimeForAcceptInvite;
     uint32 m_uiKickDontAcceptTimer;
     WorldLocation KickPosition;                             // Position where player is teleport if they switch to afk during battle or if they dont accept invitation
+    WorldLocation KickPositionA;
+    WorldLocation KickPositionH;
 
     uint32 m_uiKickAfkTimer;                                // Timer for check Afk in war
 
