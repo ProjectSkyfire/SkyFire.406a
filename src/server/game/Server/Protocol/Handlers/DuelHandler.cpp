@@ -52,6 +52,12 @@ void WorldSession::HandleDuelAcceptedOpcode(WorldPacket& recvPacket)
 
     player->SendDuelCountdown(3000);
     plTarget->SendDuelCountdown(3000);
+    player->RemoveAllSpellCooldown();
+    plTarget->RemoveAllSpellCooldown();
+    player->SetHealth(player->GetMaxHealth());
+    player->SetPower(POWER_MANA, player->GetMaxPower(POWER_MANA));
+    plTarget->SetHealth(plTarget->GetMaxHealth());
+    plTarget->SetPower(POWER_MANA,  plTarget->GetMaxPower(POWER_MANA));
 }
 
 void WorldSession::HandleDuelCancelledOpcode(WorldPacket& recvPacket)
