@@ -697,11 +697,11 @@ inline void Guild::Member::ResetMoneyTime()
 // EmblemInfo
 void EmblemInfo::LoadFromDB(Field* fields)
 {
-    m_style             = fields[3].GetUInt8();
-    m_color             = fields[4].GetUInt8();
-    m_borderStyle       = fields[5].GetUInt8();
-    m_borderColor       = fields[6].GetUInt8();
-    m_backgroundColor   = fields[7].GetUInt8();
+    m_style             = fields[3].GetUInt32();
+    m_color             = fields[4].GetUInt32();
+    m_borderStyle       = fields[5].GetUInt32();
+    m_borderColor       = fields[6].GetUInt32();
+    m_backgroundColor   = fields[7].GetUInt32();
 }
 
 void EmblemInfo::WritePacket(WorldPacket& data) const
