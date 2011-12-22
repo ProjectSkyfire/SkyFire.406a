@@ -411,17 +411,17 @@ class spell_warr_deep_wounds : public SpellScriptLoader
                 Unit* target = GetHitUnit();
                 Unit* caster = GetCaster();
                 int32 damage = 0;
-                
+
                 // apply percent damage mods
                 damage = caster->SpellDamageBonus(target, GetSpellInfo(), damage, SPELL_DIRECT_DAMAGE);
 
                 switch (GetSpellInfo()->Id)
                 {
-                    case 12162: 
+                    case 12162:
                         ApplyPctN(damage, 16); break; // Rank 1
-                    case 12850: 
+                    case 12850:
                         ApplyPctN(damage, 32); break; // Rank 2
-                    case 12868: 
+                    case 12868:
                         ApplyPctN(damage, 48); break; // Rank 3
                     default:
                         break;
@@ -440,7 +440,7 @@ class spell_warr_deep_wounds : public SpellScriptLoader
 
             void Register()
             {
-                OnEffectHitTarget += SpellEffectFn(HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
+                OnEffectHitTarget += SpellEffectFn(spell_warr_deep_wounds_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
             }
         };
 
