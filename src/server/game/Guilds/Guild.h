@@ -47,7 +47,7 @@ enum GuildMemberFlags
     GUILD_MEMBER_FLAG_ONLINE            = 0x01,
     GUILD_MEMBER_FLAG_AFK               = 0x02,
     GUILD_MEMBER_FLAG_DND               = 0x04,
-    GUILD_MEMBER_FLAG_MOBILE            = 0x08, // Not used; On retail it's set if the plr is logged on with Mobile Armory
+    GUILD_MEMBER_FLAG_MOBILE            = 0x08, // Not used; On retail it's set if the player is logged on with Mobile Armory
 };
 
 enum GuildMemberData

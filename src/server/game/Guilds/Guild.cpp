@@ -1190,9 +1190,9 @@ void Guild::Disband()
     sGuildMgr->RemoveGuild(m_id);
 }
 
-void Guild::UpdateMemberData(Player* plr, uint8 dataid, uint32 value)
+void Guild::UpdateMemberData(Player* player, uint8 dataid, uint32 value)
 {
-   if (Member* member = GetMember(plr->GetGUID()))
+   if (Member* member = GetMember(player->GetGUID()))
    {
         switch(dataid)
         {
@@ -1227,9 +1227,9 @@ void Guild::SendUpdateRoster(WorldSession* session /*= NULL*/)
     }
 }
 
-void Guild::OnPlayerStatusChange(Player* plr, uint32 flag, bool state)
+void Guild::OnPlayerStatusChange(Player* player, uint32 flag, bool state)
 {
-    if (Member* member = GetMember(plr->GetGUID()))
+    if (Member* member = GetMember(player->GetGUID()))
     {
         if(state)
             member->AddFlag(flag);
@@ -1289,7 +1289,7 @@ void Guild::HandleRoster(WorldSession* session /*= NULL*/)
         data << uint8(itr->second->GetClass()); // class id
 
     for (Members::const_iterator itr = m_members.begin(); itr != m_members.end(); ++itr)
-        data << itr->second->GetName(); // plr name
+        data << itr->second->GetName(); // player name
 
     for (Members::const_iterator itr = m_members.begin(); itr != m_members.end(); ++itr)
         data << uint32(0); // unk
