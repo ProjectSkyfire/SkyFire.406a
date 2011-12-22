@@ -157,28 +157,28 @@ void WorldSession::SendTrainerList(uint64 guid, const std::string &strTitle)
     WorldPacket data(SMSG_TRAINER_LIST, 8 + 4 + 4 + trainer_spells->spellList.size() * 38 + strTitle.size() + 1);
     data << guid;
     data << uint32(trainer_spells->trainerType);
-    data << uint32(0xF);                                      // 4.0.6
+    data << uint32(1);
 
     size_t count_pos = data.wpos();
     data << uint32(trainer_spells->spellList.size());
 
     // reputation discount
-    uint32 count = 0;
     float fDiscountMod = _player->GetReputationPriceDiscount(unit);
 
+    uint32 count = 0;
     for (TrainerSpellMap::const_iterator itr = trainer_spells->spellList.begin(); itr != trainer_spells->spellList.end(); ++itr)
     {
         TrainerSpell const* tSpell = &itr->second;
-
         TrainerSpellState state = _player->GetTrainerSpellState(tSpell);
 
         data << uint32(tSpell->spell);                      // learned spell (or cast-spell in profession case)
         data << uint8(state);
         data << uint32(floor(tSpell->spellCost * fDiscountMod));
+
         data << uint8(tSpell->reqLevel);
         data << uint32(tSpell->reqSkill);
         data << uint32(tSpell->reqSkillValue);
-        data << uint32(0);                                  // 4.0.3
+        data << uint32(0);
         data << uint32(0);
         data << uint32(0);
         data << uint32(0);
@@ -195,7 +195,7 @@ void WorldSession::SendTrainerList(uint64 guid, const std::string &strTitle)
 void WorldSession::HandleTrainerBuySpellOpcode(WorldPacket & recv_data)
 {
     uint64 guid;
-    uint32 spellId, unk, result = ERR_TRAINER_OK;
+    uint32 spellId, unk = 0, result = ERR_TRAINER_OK;
 
     recv_data >> guid >> unk >> spellId;
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_TRAINER_BUY_SPELL NpcGUID=%u, learn spell id is: %u", uint32(GUID_LOPART(guid)), spellId);

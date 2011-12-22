@@ -44,7 +44,7 @@ enum SkyFireStrings
     LANG_GMS_NOT_LOGGED                 = 17,
     LANG_YOU_IN_FLIGHT                  = 18,
     LANG_UPDATE_DIFF                    = 19,
-    LANG_SHUTDOWN_TIMELEFT              = 20,	
+    LANG_SHUTDOWN_TIMELEFT              = 20,
     LANG_CHAR_IN_FLIGHT                 = 21,
     LANG_CHAR_NON_MOUNTED               = 22,
     LANG_YOU_IN_COMBAT                  = 23,
@@ -949,7 +949,8 @@ enum SkyFireStrings
     LANG_GOINFO_LOOTID                  = 5028,
     LANG_COMMAND_LOOKUP_MAX_RESULTS     = 5029,
     LANG_FLEE                           = 5030,
-    // Room for more Trinity strings      5031-9999
+    LANG_NPCINFO_AIINFO                 = 5031,
+    // Room for more SkyFire strings      5032-9999
 
     // Level requirement notifications
     LANG_SAY_REQ                        = 6604,

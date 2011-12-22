@@ -713,24 +713,7 @@ void Spell::EffectSchoolDMG(SpellEffIndex effIndex)
                     damage += count * int32(average * IN_MILLISECONDS) / m_caster->GetAttackTime(BASE_ATTACK);
                     break;
                 }
-                //Shield of  Righteous
-                if (m_spellInfo->Id == 53600)
-                {
-                    switch(m_caster->GetPower(POWER_HOLY_POWER))
-                    {
-                        case 0:
-                            damage = int32(damage * 1.16f);
-                            break;
-                        case 1:
-                            damage = int32((damage * 1.16f) * 3);
-                            break;
-                        case 2:
-                            damage = int32((damage * 1.16f) * 6);
-                            break;
-                    }
-                }
-
-             break;
+                break;
             }
             case SPELLFAMILY_DEATHKNIGHT:
             {
@@ -2647,26 +2630,6 @@ void Spell::SpellDamageHeal(SpellEffIndex effIndex)
         // Remove Grievious bite if fully healed
         if (unitTarget->HasAura(48920) && (unitTarget->GetHealth() + addhealth >= unitTarget->GetMaxHealth()))
             unitTarget->RemoveAura(48920);
-        if (m_spellInfo->Id == 85673) // Word of Glory
-        {
-            int32 dmg;
-            switch (m_caster->GetPower(POWER_HOLY_POWER))
-            {
-                case 1:
-                    dmg = int32(addhealth + 1*(m_caster->SpellBaseHealingBonus(SPELL_SCHOOL_MASK_HOLY) * 0.85));
-                    addhealth = dmg;
-                    break;
-                case 2:
-                    dmg = int32(addhealth + 2*(m_caster->SpellBaseHealingBonus(SPELL_SCHOOL_MASK_HOLY) * 0.85));
-                    addhealth = dmg;
-                    break;
-                case 3:
-                    dmg = int32(addhealth + 3*(m_caster->SpellBaseHealingBonus(SPELL_SCHOOL_MASK_HOLY) * 0.85));
-                    addhealth = dmg;
-                    break;
-            }
-            m_caster->SetPower(POWER_HOLY_POWER,0);
-        }
 
         m_damage -= addhealth;
     }
@@ -2918,13 +2881,11 @@ void Spell::EffectPersistentAA(SpellEffIndex effIndex)
         if (!caster->IsInWorld())
             return;
         DynamicObject* dynObj = new DynamicObject();
-        if (!dynObj->Create(sObjectMgr->GenerateLowGuid(HIGHGUID_DYNAMICOBJECT), caster, m_spellInfo->Id, *m_targets.GetDst(), radius, false, DYNAMIC_OBJECT_AREA_SPELL))
+        if (!dynObj->CreateDynamicObject(sObjectMgr->GenerateLowGuid(HIGHGUID_DYNAMICOBJECT), caster, m_spellInfo->Id, *m_targets.GetDst(), radius, false, DYNAMIC_OBJECT_AREA_SPELL))
         {
             delete dynObj;
             return;
         }
-
-        dynObj->GetMap()->AddToMap(dynObj);
 
         if (Aura* aura = Aura::TryCreate(m_spellInfo, MAX_EFFECT_MASK, dynObj, caster, &m_spellValue->EffectBasePoints[0]))
         {
@@ -3771,16 +3732,13 @@ void Spell::EffectAddFarsight(SpellEffIndex effIndex)
         return;
 
     DynamicObject* dynObj = new DynamicObject();
-    if (!dynObj->Create(sObjectMgr->GenerateLowGuid(HIGHGUID_DYNAMICOBJECT), m_caster, m_spellInfo->Id, *m_targets.GetDst(), radius, true, DYNAMIC_OBJECT_FARSIGHT_FOCUS))
+    if (!dynObj->CreateDynamicObject(sObjectMgr->GenerateLowGuid(HIGHGUID_DYNAMICOBJECT), m_caster, m_spellInfo->Id, *m_targets.GetDst(), radius, true, DYNAMIC_OBJECT_FARSIGHT_FOCUS))
     {
         delete dynObj;
         return;
     }
 
     dynObj->SetDuration(duration);
-
-    dynObj->setActive(true);    //must before add to map to be put in world container
-    dynObj->GetMap()->AddToMap(dynObj); //grid will also be loaded
     dynObj->SetCasterViewpoint();
 }
 

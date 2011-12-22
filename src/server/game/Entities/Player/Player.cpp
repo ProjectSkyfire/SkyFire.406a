@@ -783,6 +783,8 @@ Player::Player (WorldSession *session): Unit(), m_achievementMgr(this), m_reputa
     for (uint8 i = 0; i < MAX_MOVE_TYPE; ++i)
         m_forced_speed_changes[i] = 0;
 
+    m_currentPetSlot = PET_SLOT_DEFAULT;
+    m_petSlotUsed = 0;
     /////////////////// Instance System /////////////////////
 
     m_HomebindTimer = 0;
@@ -6342,7 +6344,7 @@ bool Player::UpdateFishingSkill()
 // levels sync. with spell requirement for skill levels to learn
 // bonus abilities in sSkillLineAbilityStore
 // Used only to avoid scan DBC at each skill grow
-static uint32 bonusSkillLevels[] = {75, 150, 225, 300, 375, 450};
+static uint32 bonusSkillLevels[] = { 75, 150, 225, 300, 375, 450, 525 };
 
 bool Player::UpdateSkillPro(uint16 SkillId, int32 Chance, uint32 step)
 {
@@ -13591,6 +13593,8 @@ void Player::SwapItem(uint16 src, uint16 dst)
 
             RemoveItem(srcbag, srcslot, true);
             StoreItem(dest, pSrcItem, true);
+            if (IsBankPos(src))
+                ItemAddedQuestCheck(pSrcItem->GetEntry(), pSrcItem->GetCount());
         }
         else if (IsBankPos (dst))
         {
@@ -13604,6 +13608,7 @@ void Player::SwapItem(uint16 src, uint16 dst)
 
             RemoveItem(srcbag, srcslot, true);
             BankItem(dest, pSrcItem, true);
+            ItemRemovedQuestCheck(pSrcItem->GetEntry(), pSrcItem->GetCount());
         }
         else if (IsEquipmentPos (dst))
         {
@@ -17190,8 +17195,8 @@ bool Player::LoadFromDB(uint32 guid, SQLQueryHolder *holder)
     //"resettalents_time, trans_x, trans_y, trans_z, trans_o, transguid, extra_flags, at_login, zone, online, death_expire_time, taxi_path, instance_mode_mask, "
     // 38           39                40                 41                    42          43          44              45           46               47              48
     //"arenaPoints, totalHonorPoints, todayHonorPoints, yesterdayHonorPoints, totalKills, todayKills, yesterdayKills, chosenTitle, knownCurrencies, watchedFaction, drunk, "
-    // 49      50      51      52      53      54      55      56      57      58      69       60           61         62          63             64              65      66           67            68               69            70
-    //"health, power1, power2, power3, power4, power5, power6, power7, power8, power9, power10, instance_id, speccount, activespec, exploredZones, equipmentCache, ammoId, knownTitles, actionBars, currentpetslot, petslotused, grantableLevels FROM characters WHERE guid = '%u'", guid);
+    // 49      50      51      52      53      54      55      56      57      58      59       60           61         62          63             64              65           66          67              68           69
+    //"health, power1, power2, power3, power4, power5, power6, power7, power8, power9, power10, instance_id, speccount, activespec, exploredZones, equipmentCache, knownTitles, actionBars, currentPetSlot, petSlotUsed, grantableLevels FROM characters WHERE guid = '%u'", guid);
     PreparedQueryResult result = holder->GetPreparedResult(PLAYER_LOGIN_QUERY_LOADFROM);
 
     if (!result)
@@ -17278,13 +17283,11 @@ bool Player::LoadFromDB(uint32 guid, SQLQueryHolder *holder)
 
     //SetUInt64Value(PLAYER_FIELD_KNOWN_CURRENCIES, fields[47].GetUInt64());
 
-    //SetUInt32Value(PLAYER_AMMO_ID, fields[66].GetUInt32());
-
     // set which actionbars the client has active - DO NOT REMOVE EVER AGAIN (can be changed though, if it does change fieldwise)
-    SetByteValue(PLAYER_FIELD_BYTES, 2, fields[64].GetUInt8());
+    SetByteValue(PLAYER_FIELD_BYTES, 2, fields[66].GetUInt8());
 
-    m_currentPetSlot = (PetSlot)fields[68].GetUInt32();
-    m_petSlotUsed = fields[69].GetUInt32();
+    m_currentPetSlot = (PetSlot)fields[67].GetUInt8();
+    m_petSlotUsed = fields[68].GetUInt64();
 
     InitDisplayIds();
 
@@ -17818,7 +17821,7 @@ bool Player::LoadFromDB(uint32 guid, SQLQueryHolder *holder)
     }
 
     // RaF stuff.
-    m_grantableLevels = fields[70].GetUInt32();
+    m_grantableLevels = fields[69].GetUInt32();
     if (GetSession()->IsARecruiter() || (GetSession()->GetRecruiterId() != 0))
         SetFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_REFER_A_FRIEND);
 
@@ -19191,8 +19194,8 @@ void Player::SaveToDB(bool create /*=false*/)
 
         stmt->setString(index++, ss.str());
         stmt->setUInt8(index++, GetByteValue(PLAYER_FIELD_BYTES, 2));
-        stmt->setUInt32(index++, m_currentPetSlot);
-        stmt->setUInt32(index++, m_petSlotUsed);
+        stmt->setUInt8(index++, m_currentPetSlot);
+        stmt->setUInt64(index++, m_petSlotUsed);
         stmt->setUInt32(index++, m_grantableLevels);
     }
     else
@@ -19302,8 +19305,8 @@ void Player::SaveToDB(bool create /*=false*/)
 
         stmt->setString(index++, ss.str());
         stmt->setUInt8(index++, GetByteValue(PLAYER_FIELD_BYTES, 2));
-        stmt->setUInt32(index++, m_currentPetSlot);
-        stmt->setUInt32(index++, m_petSlotUsed);
+        stmt->setUInt8(index++, m_currentPetSlot);
+        stmt->setUInt64(index++, m_petSlotUsed);
         stmt->setUInt32(index++, m_grantableLevels);
 
         stmt->setUInt8(index++, IsInWorld() ? 1 : 0);
