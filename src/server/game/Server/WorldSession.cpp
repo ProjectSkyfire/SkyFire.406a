@@ -230,7 +230,7 @@ bool WorldSession::Update(uint32 diff, PacketFilter& updater)
         // Added this line for debugging. Just comment out if you don't want opcode spam.
         sLog->outString("SESSION: Received opcode 0x%.4X (%s)", packet->GetOpcode(), packet->GetOpcode()>OPCODE_NOT_FOUND?"nf":LookupOpcodeName(packet->GetOpcode()));
 
-		// !=NULL checked in WorldSocket
+        // !=NULL checked in WorldSocket
         try
         {
             switch (opHandle.status)
