@@ -2204,7 +2204,8 @@ void ObjectMgr::LoadItemTemplates()
         itemTemplate.RandomSuffix   = fields[96].GetInt32();
         itemTemplate.Block          = fields[97].GetUInt32();
         itemTemplate.ItemSet        = fields[98].GetUInt32();
-        itemTemplate.MaxDurability  = uint32(fields[99].GetUInt16());
+        //itemTemplate.MaxDurability  = uint32(fields[99].GetUInt16()); // For Reference only
+        itemTemplate.MaxDurability  = 0;
         itemTemplate.Area           = fields[100].GetUInt32();
         itemTemplate.Map            = uint32(fields[101].GetUInt16());
         itemTemplate.BagFamily      = fields[102].GetUInt32();

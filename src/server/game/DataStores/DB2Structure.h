@@ -51,6 +51,9 @@ struct ItemSparseEntry
     uint32     Quality;                                      // 1
     uint32     Flags;                                        // 2
     uint32     Flags2;                                       // 3
+    //uint32   Flags3                                        // add in 4.3.0
+    //uint32   Flags4                                        // add in 4.3.0
+    //uint32   Flags5                                        // add in 4.3.0
     uint32     BuyPrice;                                     // 4
     uint32     SellPrice;                                    // 5
     uint32     InventoryType;                                // 6
@@ -98,7 +101,7 @@ struct ItemSparseEntry
     uint32     RandomProperty;                               // 108
     uint32     RandomSuffix;                                 // 109
     uint32     ItemSet;                                      // 110
-    uint32     MaxDurability;                                // 111
+    //uint32     MaxDurability;                                // 111
     uint32     Area;                                         // 112
     uint32     Map;                                          // 113
     uint32     BagFamily;                                    // 114

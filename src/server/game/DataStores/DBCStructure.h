@@ -1236,22 +1236,27 @@ struct ItemReforgeEntry
 struct LFGDungeonEntry
 {
     uint32  ID;                                             // 0
-    //DBCString   name[16];                                 // 1-17 Name lang
-    uint32  minlevel;                                       // 18
-    uint32  maxlevel;                                       // 19
-    uint32  reclevel;                                       // 20
-    uint32  recminlevel;                                    // 21
-    uint32  recmaxlevel;                                    // 22
-    int32  map;                                             // 23
-    uint32  difficulty;                                     // 24
-    //uint32  flags;                                        // 25
-    uint32  type;                                           // 26
-    //uint32  unk;                                          // 27
-    //DBCString   iconname;                                 // 28
-    uint32  expansion;                                      // 29
-    //uint32  unk4;                                         // 30
-    uint32  grouptype;                                      // 31
-    //DBCString   desc[16];                                 // 32-47 Description
+    //char* name                                        // 1
+    uint32  minlevel;                                       // 2
+    uint32  maxlevel;                                       // 3
+    uint32  reclevel;                                       // 4
+    uint32  recminlevel;                                    // 5
+    uint32  recmaxlevel;                                    // 6
+    int32  map;                                             // 7
+    uint32  difficulty;                                     // 8
+    //uint32  unk;                                          // 9
+    uint32  type;                                           // 10
+    //uint32  unk2;                                         // 11
+    //char*  unk3;                                      // 12
+    uint32  expansion;                                      // 13
+    //uint32  unk4;                                         // 14
+    uint32  grouptype;                                      // 15
+    //uint32 unk5                                           // 16 - 4.2.0
+    //uint32 unk6                                           // 17 - 4.2.0
+    //uint32 unk7                                           // 18 - 4.3.0
+    //uint32 unk8                                           // 19 - 4.3.0
+    //uint32 unk9                                           // 20 - 4.3.0
+
     // Helpers
     uint32 Entry() const { return ID + (type << 24); }
 };
@@ -1571,20 +1576,21 @@ struct SoundEntriesEntry
 {
     uint32    Id;                                           // 0        m_ID
     //uint32    Type;                                       // 1        m_soundType
-    //DBCString     InternalName;                           // 2        m_name
-    //DBCString     FileName;                               // 3-12     m_File[10]
+    //char*     InternalName;                               // 2        m_name
+    //char*     FileName[10];                               // 3-12     m_File[10]
     //uint32    Unk13[10];                                  // 13-22    m_Freq[10]
-    //DBCString     Path;                                   // 23       m_DirectoryBase
-                                                            // 24       m_volumeFloat
-                                                            // 25       m_flags
-                                                            // 26       m_minDistance
-                                                            // 27       m_distanceCutoff
-                                                            // 28       m_EAXDef
-                                                            // 29       m_soundEntriesAdvancedID, new in 3.1
+    //char*     Path;                                       // 23       m_DirectoryBase
+    //unk                                                   // 24       m_volumeFloat
+    //unk													// 25       m_flags
+    //unk													// 26       m_minDistance
+    //unk													// 27       m_distanceCutoff
+    //unk													// 28       m_EAXDef
+    //unk													// 29       m_soundEntriesAdvancedID, new in 3.1
     //unk                                                   // 30       4.0.0
     //unk                                                   // 31       4.0.0
     //unk                                                   // 32       4.0.0
     //unk                                                   // 33       4.0.0
+    //unk                                                   // 34       4.3.0
 };
 
 #define MAX_SPELL_EFFECTS 3
@@ -1720,12 +1726,13 @@ struct SpellLevelsEntry
 struct SpellPowerEntry
 {
     uint32    Id;                                           // 0        m_ID
-    uint32    manaCost;                                     // 1        m_manaCost
-    uint32    manaCostPerlevel;                             // 2        m_manaCostPerLevel
-    uint32    ManaCostPercentage;                           // 3        m_manaCostPct
-    uint32    manaPerSecond;                                // 4        m_manaPerSecond
-    //uint32  PowerDisplayId;                               // 5        PowerDisplay.dbc, new in 3.1
-    //uint32  unk1;                                         // 6        4.0.0
+    uint32    manaCost;                                     // 1         m_manaCost
+    uint32    manaCostPerlevel;                             // 2         m_manaCostPerLevel
+    uint32    ManaCostPercentage;                           // 3         m_manaCostPct
+    uint32    manaPerSecond;                                // 4         m_manaPerSecond
+    //uint32  PowerDisplayId;                               // 5         m_powerDisplayID - id from PowerDisplay.dbc, new in 3.1
+    //uint32  unk1;                                         // 6         4.0.0
+    //uint32  unk2;                                         // 7         4.3.0
 };
 
 // SpellReagents.dbc
@@ -1921,15 +1928,15 @@ struct SpellItemEnchantmentEntry
     uint32      amount[MAX_ITEM_ENCHANTMENT_EFFECTS];       // 5-7      m_effectPointsMin[MAX_ITEM_ENCHANTMENT_EFFECTS]
     //uint32      amount2[MAX_ITEM_ENCHANTMENT_EFFECTS]     // 8-10     m_effectPointsMax[MAX_ITEM_ENCHANTMENT_EFFECTS]
     uint32      spellid[MAX_ITEM_ENCHANTMENT_EFFECTS];      // 11-13    m_effectArg[MAX_ITEM_ENCHANTMENT_EFFECTS]
-    DBCString   description;                                // 14       m_name
-    //uint32      descriptionFlags;                         // 15       name flags
-    uint32      aura_id;                                    // 16       m_itemVisual
-    uint32      slot;                                       // 17       m_flags
-    uint32      GemID;                                      // 18       m_src_itemID
-    uint32      EnchantmentCondition;                       // 19       m_condition_id
-    uint32      requiredSkill;                              // 20       m_requiredSkillID
-    uint32      requiredSkillValue;                         // 21       m_requiredSkillRank
-    uint32      requiredLevel;                              // 22       m_requiredLevel
+    char*   description;									// 14       m_name_lang
+    uint32      aura_id;                                    // 15       m_itemVisual
+    uint32      slot;                                       // 16       m_flags
+    uint32      GemID;                                      // 17       m_src_itemID
+    uint32      EnchantmentCondition;                       // 18       m_condition_id
+    uint32      requiredSkill;                              // 19       m_requiredSkillID
+    uint32      requiredSkillValue;                         // 20       m_requiredSkillRank
+    uint32      requiredLevel;                              // 21       new in 3.1
+    //unk													// 22       new in 3.1
 };
 
 struct SpellItemEnchantmentConditionEntry
@@ -2168,15 +2175,17 @@ struct WorldMapAreaEntry
     //uint32  ID;                                           // 0
     uint32  map_id;                                         // 1
     uint32  area_id;                                        // 2 index (continent 0 areas ignored)
-    //DBCString internal_name                               // 3
+    //char* internal_name                                   // 3
     float   y1;                                             // 4
     float   y2;                                             // 5
     float   x1;                                             // 6
     float   x2;                                             // 7
     int32   virtual_map_id;                                 // 8 -1 (map_id have correct map) other: virtual map where zone show (map_id - where zone in fact internally)
-    // int32   dungeonMap_id;                               // 9 pointer to DungeonMap.dbc (owerride x1, x2, y1, y2 coordinates)
-    // uint32  someMapID;                                   // 10
+    //int32   dungeonMap_id;                                // 9 pointer to DungeonMap.dbc (owerride x1,x2,y1,y2 coordinates)
+    //uint32  someMapID;                                    // 10
     //uint32   unk1;                                        // 11 4.0.0
+    //uint32   minAreaLevel                                 // 12 4.3.0
+    //uint32   maxAreaLevel                                 // 13 4.3.0
 };
 
 #define MAX_WORLD_MAP_OVERLAY_AREA_IDX 4
