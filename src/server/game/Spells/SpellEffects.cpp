@@ -959,7 +959,7 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                 {
                     if (!unitTarget || (unitTarget->GetEntry() != 26452 && unitTarget->HealthAbovePct(95)))
                         return;
-                    
+
                     int32 bp = unitTarget->CountPctFromMaxHealth(93);
                     unitTarget->CastCustomSpell(unitTarget, 49882, &bp, NULL, NULL, true);
                     return;
