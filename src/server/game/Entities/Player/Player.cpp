@@ -1941,7 +1941,6 @@ void Player::BuildEnumData(QueryResult result, WorldPacket * data)
     *data << uint8(playerBytes >> 8);                     // face
     *data << uint32(petDisplayId);                        // Pet DisplayID
 
-
     *data << uint8(gender);                               // Gender
     *data << uint8(level);                                // Level
     *data << uint32(petLevel);                            // pet level
@@ -2014,7 +2013,6 @@ void Player::BuildEnumData(QueryResult result, WorldPacket * data)
         *data << uint8(Guid2^1);
 
     *data << uint8(playerClass);                          // class
-
 }
 
 bool Player::ToggleAFK()
