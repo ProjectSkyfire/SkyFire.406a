@@ -363,6 +363,35 @@ class spell_dru_mark_of_the_wild : public SpellScriptLoader
         }
 };
 
+// Berserk
+// Spellid: 50334
+class spell_dru_berserk : public SpellScriptLoader
+{
+   public:
+       spell_dru_berserk() : SpellScriptLoader("spell_dru_berserk") {}
+
+       class spell_dru_berserk_AuraScript : public AuraScript
+       {
+           PrepareAuraScript(spell_dru_berserk_AuraScript);
+           void HandleEffectApply(AuraEffect const * /*aurEff*/, AuraEffectHandleModes /*mode*/)
+           {
+               if (Unit* target = GetTarget())
+                   if (target->GetTypeId() == TYPEID_PLAYER)
+                       target->ToPlayer()->RemoveSpellCategoryCooldown(971, true);
+           }
+
+           void Register()
+           {
+               OnEffectApply += AuraEffectApplyFn(spell_dru_berserk_AuraScript::HandleEffectApply, EFFECT_2, SPELL_AURA_MECHANIC_IMMUNITY, AURA_EFFECT_HANDLE_REAL);
+           }
+       };
+
+       AuraScript* GetAuraScript() const
+       {
+           return new spell_dru_berserk_AuraScript();
+       }
+};
+
 void AddSC_druid_spell_scripts()
 {
     new spell_dru_glyph_of_starfire();
@@ -373,4 +402,5 @@ void AddSC_druid_spell_scripts()
     new spell_dru_swift_flight_passive();
     new spell_dru_ferocious_bite();
     new spell_dru_mark_of_the_wild();
+    new spell_dru_berserk();	
 }
