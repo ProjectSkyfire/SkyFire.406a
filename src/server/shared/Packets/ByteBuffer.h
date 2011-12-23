@@ -95,7 +95,7 @@ class ByteBuffer
                 _curbitval |= (1 << (_bitpos));
 
             if (_bitpos == 0)
-            { 
+            {
                 _bitpos = 8;
                 append((uint8 *)&_curbitval, sizeof(_curbitval));
                 _curbitval = 0;

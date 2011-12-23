@@ -47,11 +47,11 @@ class ResultSet
             return m_currentRow[index];
         }
 
-        void Reset() 
-        { 
-            mysql_data_seek(m_result, 0); 
-            NextRow(true); // neccessary 
-        } 
+        void Reset()
+        {
+            mysql_data_seek(m_result, 0);
+            NextRow(true); // neccessary
+        }
 
     protected:
         Field* m_currentRow;

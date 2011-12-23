@@ -261,8 +261,8 @@ void WorldSession::HandleCharEnum(QueryResult result)
             uint8 Guid2 = uint8(GuidLow >> 16);
             uint8 Guid3 = uint8(GuidLow >> 24);
 
-            // On envoye pas le guild guid, high guid == 0 pour les joueurs
-            for (uint8 i = 0; i < 18; ++i) 
+            // We dont send guild guid, high guid == 0 for players
+            for (uint8 i = 0; i < 18; ++i)
             {
                 switch(i)
                 {

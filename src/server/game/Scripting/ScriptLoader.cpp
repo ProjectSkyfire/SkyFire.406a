@@ -874,7 +874,7 @@ void AddEasternKingdomsScripts()
     //AddSC_boss_majordomus();
     //AddSC_boss_rhyolith();
     //AddSC_boss_shannox();
-    //AddSC_instance_firelands();	
+    //AddSC_instance_firelands();
     AddSC_boss_lucifron();                  //Molten core
     AddSC_boss_magmadar();
     AddSC_boss_gehennas();
