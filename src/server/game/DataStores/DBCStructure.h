@@ -1691,6 +1691,9 @@ struct SpellEffectEntry
     uint32    EffectImplicitTargetB;                        // 21       m_implicitTargetB
     uint32    EffectSpellId;                                // 22       new 4.0.0
     uint32    EffectIndex;                                  // 23       new 4.0.0
+    //uint32    Unk0                                        // 25       new 4.2.0
+    //uint32    Unk1                                        // 26       new 4.3.0
+    //uint32    Unk2                                        // 27       new 4.3.0
 };
 
 // SpellEquippedItems.dbc
