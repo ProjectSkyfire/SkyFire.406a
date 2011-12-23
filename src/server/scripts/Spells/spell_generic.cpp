@@ -1404,6 +1404,92 @@ class spell_gen_luck_of_the_draw : public SpellScriptLoader
         }
 };
 
+class spell_gen_spirit_healer_res : public SpellScriptLoader
+{
+    public:
+        spell_gen_spirit_healer_res() : SpellScriptLoader("spell_gen_spirit_healer_res") {}
+
+        class spell_gen_spirit_healer_res_SpellScript : public SpellScript
+        {
+            PrepareSpellScript(spell_gen_spirit_healer_res_SpellScript);
+            
+            void HandleDummy(SpellEffIndex /*effIndex*/)
+            {
+                Unit* caster = GetOriginalCaster();
+                Unit* target = GetHitUnit();
+                
+                if(caster->GetTypeId() != TYPEID_PLAYER)
+                    return;
+                
+                WorldPacket data(SMSG_SPIRIT_HEALER_CONFIRM, 8);
+                data << uint64(target->GetGUID());
+                caster->ToPlayer()->GetSession()->SendPacket(&data);
+            }
+
+            void Register()
+            {
+                OnEffectHitTarget += SpellEffectFn(spell_gen_spirit_healer_res_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
+            }
+        };
+
+        SpellScript* GetSpellScript() const
+        {
+            return new spell_gen_spirit_healer_res_SpellScript();
+        }
+};
+
+class spell_gen_reindeer_transformation : public SpellScriptLoader
+{
+    public:
+        spell_gen_reindeer_transformation() : SpellScriptLoader("spell_gen_reindeer_transformation") {}
+
+        class spell_gen_reindeer_transformation_SpellScript : public SpellScript
+        {
+            PrepareSpellScript(spell_gen_reindeer_transformation_SpellScript);
+            
+            void HandleDummy(SpellEffIndex /*effIndex*/)
+            {
+                Unit* caster = GetCaster();
+                Unit* target = GetHitUnit();
+                
+                if (!caster->HasAuraType(SPELL_AURA_MOUNTED))
+                    return;
+
+                float flyspeed = caster->GetSpeedRate(MOVE_FLIGHT);
+                float speed = caster->GetSpeedRate(MOVE_RUN);
+
+                caster->RemoveAurasByType(SPELL_AURA_MOUNTED);
+
+                //5 different spells used depending on mounted speed and if mount can fly or not
+                if (flyspeed >= 4.1f)
+                    // Flying Reindeer
+                    caster->CastSpell(caster, 44827, true); //310% flying Reindeer
+                else if (flyspeed >= 3.8f)
+                    // Flying Reindeer
+                    caster->CastSpell(caster, 44825, true); //280% flying Reindeer
+                else if (flyspeed >= 1.6f)
+                    // Flying Reindeer
+                    caster->CastSpell(caster, 44824, true); //60% flying Reindeer
+                else if (speed >= 2.0f)
+                    // Reindeer
+                    caster->CastSpell(caster, 25859, true); //100% ground Reindeer
+                else
+                    // Reindeer
+                    caster->CastSpell(caster, 25858, true); //60% ground Reindeer
+            }
+
+            void Register()
+            {
+                OnEffectHitTarget += SpellEffectFn(spell_gen_reindeer_transformation_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
+            }
+        };
+
+        SpellScript* GetSpellScript() const
+        {
+            return new spell_gen_reindeer_transformation_SpellScript();
+        }
+};
+
 void AddSC_generic_spell_scripts()
 {
     new spell_gen_absorb0_hitlimit1();
@@ -1436,4 +1522,6 @@ void AddSC_generic_spell_scripts()
     new spell_gen_vehicle_scaling();
     new spell_gen_oracle_wolvar_reputation();
     new spell_gen_luck_of_the_draw();
+    new spell_gen_spirit_healer_res();
+    new spell_gen_reindeer_transformation();
 }

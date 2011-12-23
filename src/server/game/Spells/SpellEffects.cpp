@@ -765,37 +765,6 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
         {
             switch (m_spellInfo->Id)
             {
-                case 12162:                                 // Deep wounds
-                case 12850:                                 // (now good common check for this spells)
-                case 12868:
-                {
-                    if (!unitTarget)
-                        return;
-
-                    // apply percent damage mods
-                    damage = m_caster->SpellDamageBonus(unitTarget, m_spellInfo, damage, SPELL_DIRECT_DAMAGE);
-
-                    switch (m_spellInfo->Id)
-                    {
-                        case 12162: ApplyPctN(damage, 16); break; // Rank 1
-                        case 12850: ApplyPctN(damage, 32); break; // Rank 2
-                        case 12868: ApplyPctN(damage, 48); break; // Rank 3
-                        default:
-                            sLog->outError("Spell::EffectDummy: Spell %u not handled in DW", m_spellInfo->Id);
-                            return;
-                    }
-
-                    SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(12721);
-                    uint32 ticks = spellInfo->GetDuration() / spellInfo->Effects[EFFECT_0].Amplitude;
-
-                    // Add remaining ticks to damage done
-                    if (AuraEffect const* aurEff = unitTarget->GetAuraEffect(12721, EFFECT_0, m_caster->GetGUID()))
-                        damage += aurEff->GetAmount() * (ticks - aurEff->GetTickNumber());
-
-                    damage = damage / ticks;
-                    m_caster->CastCustomSpell(unitTarget, 12721, &damage, NULL, NULL, true);
-                    return;
-                }
                 case 13567:                                 // Dummy Trigger
                 {
                     // can be used for different aura triggering, so select by aura
@@ -810,19 +779,6 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                         default:
                             sLog->outError("EffectDummy: Non-handled case for spell 13567 for triggered aura %u", m_triggeredByAuraSpell->Id);
                             break;
-                    }
-                    return;
-                }
-                case 17251:                                 // Spirit Healer Res
-                {
-                    if (!unitTarget || !m_originalCaster)
-                        return;
-
-                    if (m_originalCaster->GetTypeId() == TYPEID_PLAYER)
-                    {
-                        WorldPacket data(SMSG_SPIRIT_HEALER_CONFIRM, 8);
-                        data << uint64(unitTarget->GetGUID());
-                        m_originalCaster->ToPlayer()->GetSession()->SendPacket(&data);
                     }
                     return;
                 }
@@ -843,35 +799,6 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                     else                                    // Gadgetzan Transporter Failure - failure
                         m_caster->CastSpell(m_caster, 23446, true);
                     return;
-                case 25860:                                 // Reindeer Transformation
-                {
-                    if (!m_caster->HasAuraType(SPELL_AURA_MOUNTED))
-                        return;
-
-                    float flyspeed = m_caster->GetSpeedRate(MOVE_FLIGHT);
-                    float speed = m_caster->GetSpeedRate(MOVE_RUN);
-
-                    m_caster->RemoveAurasByType(SPELL_AURA_MOUNTED);
-
-                    //5 different spells used depending on mounted speed and if mount can fly or not
-                    if (flyspeed >= 4.1f)
-                        // Flying Reindeer
-                        m_caster->CastSpell(m_caster, 44827, true); //310% flying Reindeer
-                    else if (flyspeed >= 3.8f)
-                        // Flying Reindeer
-                        m_caster->CastSpell(m_caster, 44825, true); //280% flying Reindeer
-                    else if (flyspeed >= 1.6f)
-                        // Flying Reindeer
-                        m_caster->CastSpell(m_caster, 44824, true); //60% flying Reindeer
-                    else if (speed >= 2.0f)
-                        // Reindeer
-                        m_caster->CastSpell(m_caster, 25859, true); //100% ground Reindeer
-                    else
-                        // Reindeer
-                        m_caster->CastSpell(m_caster, 25858, true); //60% ground Reindeer
-
-                    return;
-                }
                 case 28089:                                 // Polarity Shift
                     if (unitTarget)
                         unitTarget->CastSpell(unitTarget, roll_chance_i(50) ? 28059 : 28084, true, NULL, NULL, m_caster->GetGUID());
@@ -1032,9 +959,10 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                 {
                     if (!unitTarget || (unitTarget->GetEntry() != 26452 && unitTarget->HealthAbovePct(95)))
                         return;
-
-                        m_caster->DealDamage(unitTarget, unitTarget->CountPctFromMaxHealth(93));
-                        return;
+                    
+                    int32 bp = unitTarget->CountPctFromMaxHealth(93);
+                    unitTarget->CastCustomSpell(unitTarget, 49882, &bp, NULL, NULL, true);
+                    return;
                 }
                 case 47176: // Infect Ice Troll
                 {
@@ -1214,9 +1142,6 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                     m_caster->CastCustomSpell(unitTarget, 54172, &damage, 0, 0, true);
                     return;
                 }
-                case 58418:                                 // Portal to Orgrimmar
-                case 58420:                                 // Portal to Stormwind
-                    return;                                 // implemented in EffectScript[0]
                 case 62324: // Throw Passenger
                 {
                     if (m_targets.HasTraj())
@@ -1333,13 +1258,6 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
             }
             break;
         }
-        case SPELLFAMILY_HUNTER:
-            {
-                if (m_spellInfo->SpellFamilyFlags[2] & 0x20)
-                    m_caster->CastSpell(m_caster, 51755, true);
-
-                break;
-            }
         case SPELLFAMILY_PRIEST:
             {
                 switch (m_spellInfo->Id)
@@ -6675,14 +6593,14 @@ void Spell::EffectCharge(SpellEffIndex /*effIndex*/)
     {
         if (!unitTarget)
             return;
-    // temp to try and stop the stair climbing agro...
-    float angle = unitTarget->GetAngle(m_caster) - unitTarget->GetOrientation();
-    Position pos;
 
-    unitTarget->GetContactPoint(m_caster, pos.m_positionX, pos.m_positionY, pos.m_positionZ);
-    unitTarget->GetFirstCollisionPosition(pos, unitTarget->GetObjectSize(), angle);
+        float angle = unitTarget->GetRelativeAngle(m_caster);
+        Position pos;
 
-    m_caster->GetMotionMaster()->MoveCharge(pos.m_positionX, pos.m_positionY, pos.m_positionZ + unitTarget->GetObjectSize());
+        unitTarget->GetContactPoint(m_caster, pos.m_positionX, pos.m_positionY, pos.m_positionZ);
+        unitTarget->GetFirstCollisionPosition(pos, unitTarget->GetObjectSize(), angle);
+
+        m_caster->GetMotionMaster()->MoveCharge(pos.m_positionX, pos.m_positionY, pos.m_positionZ + unitTarget->GetObjectSize());
     }
 
     if (effectHandleMode == SPELL_EFFECT_HANDLE_HIT_TARGET)
@@ -6703,9 +6621,12 @@ void Spell::EffectChargeDest(SpellEffIndex /*effIndex*/)
 
     if (m_targets.HasDst())
     {
-        float x, y, z;
-        m_targets.GetDst()->GetPosition(x, y, z);
-        m_caster->GetMotionMaster()->MoveCharge(x, y, z);
+        Position pos;
+        m_targets.GetDst()->GetPosition(&pos);
+        float angle = m_caster->GetRelativeAngle(pos.GetPositionX(), pos.GetPositionY());
+        float dist = m_caster->GetDistance(pos);
+        m_caster->GetFirstCollisionPosition(pos, dist, angle);
+        m_caster->GetMotionMaster()->MoveCharge(pos.m_positionX, pos.m_positionY, pos.m_positionZ);
     }
 }
 

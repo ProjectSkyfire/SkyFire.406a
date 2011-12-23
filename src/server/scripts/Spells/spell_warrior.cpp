@@ -394,12 +394,67 @@ class spell_warr_thunderclap : public SpellScriptLoader
         }
 };
 
+// Deep Wounds
+// Spell Id: 12834, 12849, 12867
+// Triggered Spell Id: 12162, 12850, 12868
+class spell_warr_deep_wounds : public SpellScriptLoader
+{
+    public:
+        spell_warr_deep_wounds() : SpellScriptLoader("spell_warr_deep_wounds") { }
+
+        class spell_warr_deep_wounds_SpellScript : public SpellScript
+        {
+            PrepareSpellScript(spell_warr_deep_wounds_SpellScript);
+
+            void HandleDummy(SpellEffIndex /*effect*/)
+            {
+                Unit* target = GetHitUnit();
+                Unit* caster = GetCaster();
+                int32 damage = 0;
+
+                // apply percent damage mods
+                damage = caster->SpellDamageBonus(target, GetSpellInfo(), damage, SPELL_DIRECT_DAMAGE);
+
+                switch (GetSpellInfo()->Id)
+                {
+                    case 12162:
+                        ApplyPctN(damage, 16); break; // Rank 1
+                    case 12850:
+                        ApplyPctN(damage, 32); break; // Rank 2
+                    case 12868:
+                        ApplyPctN(damage, 48); break; // Rank 3
+                    default:
+                        break;
+                }
+
+                SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(12721);
+                uint32 ticks = spellInfo->GetDuration() / spellInfo->Effects[EFFECT_0].Amplitude;
+
+                // Add remaining ticks to damage done
+                if (AuraEffect const* aurEff = target->GetAuraEffect(12721, EFFECT_0, caster->GetGUID()))
+                    damage += aurEff->GetAmount() * (ticks - aurEff->GetTickNumber());
+
+                damage /= ticks;
+                caster->CastCustomSpell(target, 12721, &damage, NULL, NULL, true);
+            }
+
+            void Register()
+            {
+                OnEffectHitTarget += SpellEffectFn(spell_warr_deep_wounds_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
+            }
+        };
+
+        SpellScript* GetSpellScript() const
+        {
+            return new spell_warr_deep_wounds_SpellScript();
+        }
+};
+
 void AddSC_warrior_spell_scripts()
 {
     new spell_warr_last_stand();
     new spell_warr_improved_spell_reflection();
     new spell_warr_bloodthirst();
-
 	new spell_warr_victory_rush();
     new spell_warr_cleave();
     new spell_warr_intercept_triggered();
@@ -407,4 +462,5 @@ void AddSC_warrior_spell_scripts()
     new spell_warr_heroic_strike();
     new spell_warr_shockwave();
     new spell_warr_thunderclap();
+    new spell_warr_deep_wounds();
 }
