@@ -1261,16 +1261,10 @@ void Guild::HandleRoster(WorldSession* session /*= NULL*/)
         data << uint8(itr->second->GetFlags()); // GUILD_MEMBER_FLAGS enum
 
     for (Members::const_iterator itr = m_members.begin(); itr != m_members.end(); ++itr)
-    {
-        // Zone ID: Use cached value as zone id does get updated
-        data << uint32(itr->second->GetZoneId());
-    }
-
-    for (Members::const_iterator itr = m_members.begin(); itr != m_members.end(); ++itr)
-    {
-        // Achievement Points
-        data << uint32(itr->second->GetAchievementPoints());
-    }
+        data << uint32(itr->second->GetZoneId()); // Zone ID: Use cached value as zone id does get updated
+    
+	for (Members::const_iterator itr = m_members.begin(); itr != m_members.end(); ++itr)
+        data << uint32(itr->second->GetAchievementPoints()); // Achievement Points
 
     for (Members::const_iterator itr = m_members.begin(); itr != m_members.end(); ++itr)
         data << itr->second->GetOfficerNote();
