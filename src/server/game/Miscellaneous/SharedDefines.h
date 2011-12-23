@@ -559,6 +559,7 @@ enum SpellAttr7
 #define MAX_TALENT_SPEC         1
 #define MIN_TALENT_SPECS        1
 #define MAX_TALENT_SPECS        2
+#define MIN_TALENT_TABS         1
 #define MAX_GLYPH_SLOT_INDEX    9
 
 // Custom values
@@ -1331,6 +1332,7 @@ enum SpellImmunity
 // TARGET_[OBJECT_TYPE]_[REFERENCE_TYPE(skipped for caster)]_[SELECTION_TYPE(skipped for default)]_[additional specifiers(friendly, BACK_LEFT, etc.]
 enum Targets
 {
+    TARGET_NONE                        = 0,
     TARGET_UNIT_CASTER                 = 1,
     TARGET_UNIT_NEARBY_ENEMY           = 2,
     TARGET_UNIT_NEARBY_PARTY           = 3,
@@ -3186,6 +3188,7 @@ enum SpellFamilyNames
 // stored in character_pet.slot
 enum PetSlot
 {
+    PET_SLOT_DEFAULT         =   0,
     //Some not-in-db slots
     PET_SLOT_FULL_LIST       =  -4,        //Used when there is no slot free for tameing
     PET_SLOT_UNK_SLOT        =  -3,        // Used in some scripts.

@@ -259,7 +259,7 @@ class AchievementMgr
         void CheckAllAchievementCriteria();
         void SendAllAchievementData();
         void SendRespondInspectAchievements(Player* player);
-        bool HasAchieved(AchievementEntry const* achievement) const;
+        bool HasAchieved(uint32 achievementId) const;
         Player* GetPlayer() const { return m_player; }
         void UpdateTimedAchievements(uint32 timeDiff);
         void StartTimedAchievement(AchievementCriteriaTimedTypes type, uint32 entry, uint32 timeLost = 0);

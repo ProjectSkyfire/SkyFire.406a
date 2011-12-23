@@ -1502,9 +1502,13 @@ bool Unit::IsDamageReducedByArmor(SpellSchoolMask schoolMask, SpellInfo const* s
             return false;
 
         // bleeding effects are not reduced by armor
-        if (effIndex != MAX_SPELL_EFFECTS && spellInfo->Effects[effIndex].ApplyAuraName == SPELL_AURA_PERIODIC_DAMAGE)
-            if (spellInfo->GetEffectMechanicMask(effIndex) & (1<<MECHANIC_BLEED))
-                return false;
+        if (effIndex != MAX_SPELL_EFFECTS)
+        {
+            if (spellInfo->Effects[effIndex].ApplyAuraName == SPELL_AURA_PERIODIC_DAMAGE ||
+                spellInfo->Effects[effIndex].Effect == SPELL_EFFECT_SCHOOL_DAMAGE)
+                if (spellInfo->GetEffectMechanicMask(effIndex) & (1<<MECHANIC_BLEED))
+                    return false;
+        }
     }
     return true;
 }
@@ -3735,8 +3739,19 @@ void Unit::RemoveAurasDueToSpellByDispel(uint32 spellId, uint64 casterGUID, Unit
                             if (triggeredSpellId)
                                 caster->CastSpell(caster, triggeredSpellId, true);
                         }
+                        break;
                     }
-                    break;
+                    // Wyvern Sting
+                    if (aura->GetSpellInfo()->SpellFamilyName == SPELLFAMILY_HUNTER && (aura->GetSpellInfo()->SpellFamilyFlags[1] & 0x1000))
+                    {
+                        Unit * caster = aura->GetCaster();
+                        if (caster && !(dispeller->GetTypeId() == TYPEID_UNIT && dispeller->ToCreature()->isTotem()))
+                            // Noxious Stings
+                            if (AuraEffect * auraEff = caster->GetAuraEffect(SPELL_AURA_OVERRIDE_CLASS_SCRIPTS, SPELLFAMILY_HUNTER, 3521, 1))
+                                if (Aura * newAura = caster->AddAura(aura->GetId(), dispeller))
+                                    newAura->SetDuration(aura->GetDuration() / 100 * auraEff->GetAmount());
+                    }
+                    return;
                 }
                 default:
                     break;
@@ -9021,6 +9036,20 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
         {
             if (!procSpell || procSpell->PowerType != POWER_MANA || (procSpell->ManaCost == 0 && procSpell->ManaCostPercentage == 0 && procSpell->ManaCostPerlevel == 0))
                 return false;
+            break;
+        }
+        case 46916:  // Slam! (Bloodsurge proc)
+        case 52437:  // Sudden Death
+        {
+            // Item - Warrior T10 Melee 4P Bonus
+            if (AuraEffect const* aurEff = GetAuraEffect(70847, 0))
+            {
+                if (!roll_chance_i(aurEff->GetAmount()))
+                    break;
+                CastSpell(this, 70849, true, castItem, triggeredByAura); // Extra Charge!
+                CastSpell(this, 71072, true, castItem, triggeredByAura); // Slam GCD Reduced
+                CastSpell(this, 71069, true, castItem, triggeredByAura); // Execute GCD Reduced
+            }
             break;
         }
         // Sword and Board
@@ -15626,29 +15655,17 @@ void Unit::Kill(Unit* victim, bool durabilityLoss)
     }
 
     // Hook for OnPVPKill Event
-    if (GetTypeId() == TYPEID_PLAYER)
+    if (Player* killerPlr = ToPlayer())
     {
-        if (victim->GetTypeId() == TYPEID_PLAYER)
-        {
-            Player* killer = ToPlayer();
-            Player* killed = victim->ToPlayer();
-            sScriptMgr->OnPVPKill(killer, killed);
-        }
-        else if (victim->GetTypeId() == TYPEID_UNIT)
-        {
-            Player* killer = ToPlayer();
-            Creature* killed = victim->ToCreature();
-            sScriptMgr->OnCreatureKill(killer, killed);
-        }
+        if (Player* killedPlr = victim->ToPlayer())
+            sScriptMgr->OnPVPKill(killerPlr, killedPlr);
+        else if (Creature* killedCre = victim->ToCreature())
+            sScriptMgr->OnCreatureKill(killerPlr, killedCre);
     }
-    else if (GetTypeId() == TYPEID_UNIT)
+    else if (Creature* killerCre = ToCreature())
     {
-        if (victim->GetTypeId() == TYPEID_PLAYER)
-        {
-            Creature* killer = ToCreature();
-            Player* killed = victim->ToPlayer();
-            sScriptMgr->OnPlayerKilledByCreature(killer, killed);
-        }
+        if (Player* killed = victim->ToPlayer())
+            sScriptMgr->OnPlayerKilledByCreature(killerCre, killed);
     }
 
     if (victim->GetVehicle())

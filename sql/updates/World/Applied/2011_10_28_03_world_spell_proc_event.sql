@@ -1,3 +1,0 @@
-DELETE FROM `spell_proc_event` WHERE entry IN ('83340', '83356');
-insert into `spell_proc_event` (`entry`, `SchoolMask`, `SpellFamilyName`, `SpellFamilyMask0`, `SpellFamilyMask1`, `SpellFamilyMask2`, `procFlags`, `procEx`, `ppmRate`, `CustomChance`, `Cooldown`) values('83340','0','9','133120','2147483648','0','0','2','0','100','0');
-insert into `spell_proc_event` (`entry`, `SchoolMask`, `SpellFamilyName`, `SpellFamilyMask0`, `SpellFamilyMask1`, `SpellFamilyMask2`, `procFlags`, `procEx`, `ppmRate`, `CustomChance`, `Cooldown`) values('83356','0','9','133120','2147483648','0','0','2','0','100','0');

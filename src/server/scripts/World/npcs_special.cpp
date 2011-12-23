@@ -1622,46 +1622,44 @@ public:
 ## npc_winter_reveler
 ####*/
 
+enum WinterReveler
+{
+    SPELL_MISTLETOE_DEBUFF       = 26218,
+    SPELL_CREATE_MISTLETOE       = 26206,
+    SPELL_CREATE_HOLLY           = 26207,
+    SPELL_CREATE_SNOWFLAKES      = 45036,
+};
+
 class npc_winter_reveler : public CreatureScript
 {
-public:
-    npc_winter_reveler() : CreatureScript("npc_winter_reveler") { }
+    public:
+        npc_winter_reveler() : CreatureScript("npc_winter_reveler") { }
 
-    struct npc_winter_revelerAI : public ScriptedAI
-    {
-        npc_winter_revelerAI(Creature* c) : ScriptedAI(c) {}
-        void ReceiveEmote(Player* player, uint32 emote)
+        struct npc_winter_revelerAI : public ScriptedAI
         {
-            if (!IsHolidayActive(HOLIDAY_FEAST_OF_WINTER_VEIL))
-                return;
-            //TODO: check auralist.
-            if (player->HasAura(26218))
-                return;
+            npc_winter_revelerAI(Creature* c) : ScriptedAI(c) {}
 
-            if (emote == TEXT_EMOTE_KISS)
+            void ReceiveEmote(Player* player, uint32 emote)
             {
-                me->CastSpell(me, 26218, false);
-                player->CastSpell(player, 26218, false);
-                switch (urand(0, 2))
+                if (player->HasAura(SPELL_MISTLETOE_DEBUFF))
+                    return;
+
+                if (!IsHolidayActive(HOLIDAY_FEAST_OF_WINTER_VEIL))
+                    return;
+
+                if (emote == TEXT_EMOTE_KISS)
                 {
-                    case 0:
-                        me->CastSpell(player, 26207, false);
-                        break;
-                    case 1:
-                        me->CastSpell(player, 26206, false);
-                        break;
-                    case 2:
-                        me->CastSpell(player, 45036, false);
-                        break;
+                    uint32 spellId = RAND<uint32>(SPELL_CREATE_MISTLETOE, SPELL_CREATE_HOLLY, SPELL_CREATE_SNOWFLAKES);
+                    me->CastSpell(player, spellId, false);
+                    me->CastSpell(player, SPELL_MISTLETOE_DEBUFF, false);
                 }
             }
-        }
-    };
+        };
 
-    CreatureAI* GetAI(Creature* creature) const
-    {
-        return new npc_winter_revelerAI(creature);
-    }
+        CreatureAI* GetAI(Creature* creature) const
+        {
+            return new npc_winter_revelerAI(creature);
+        }
 };
 
 /*####
@@ -1676,8 +1674,6 @@ public:
 #define VIPER_TIMER 3000
 
 #define C_VIPER 19921
-
-#define RAND 5
 
 class npc_snake_trap : public CreatureScript
 {
@@ -1725,7 +1721,7 @@ public:
                 float attackRadius = me->GetAttackDistance(who);
                 if (me->IsWithinDistInMap(who, attackRadius) && me->IsWithinLOSInMap(who))
                 {
-                    if (!(rand() % RAND))
+                    if (!(rand() % 5))
                     {
                         me->setAttackTimer(BASE_ATTACK, (rand() % 10) * 100);
                         SpellTimer = (rand() % 10) * 100;
@@ -2718,6 +2714,85 @@ public:
     }
 };
 
+/* Power Word Barrier */
+
+class npc_power_word_barrier : public CreatureScript
+{
+    public:
+    npc_power_word_barrier() : CreatureScript("npc_power_word_barrier") { }
+
+    struct npc_power_word_barrierAI : public ScriptedAI
+    {
+        npc_power_word_barrierAI(Creature *creature) : ScriptedAI(creature) {}
+
+        bool checker;
+        uint32 cron; // Duration
+
+        void Reset()
+        {
+            checker = false;
+            cron = 10000;
+            DoCast(me, 81781);
+        }
+
+        void InitializeAI()
+        {
+            ScriptedAI::InitializeAI();
+            Unit* owner = me->GetOwner();
+            if (!owner || owner->GetTypeId() != TYPEID_PLAYER)
+                return;
+
+            me->SetReactState(REACT_PASSIVE);
+            me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+            me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+        }
+
+        void BarrierChecker(Unit* who)
+        {
+            if (who->isAlive() && !who->HasAura(81782))
+            {
+                me->CastSpell(who, 81782, true);
+            }
+
+            if (who->isAlive() && who->HasAura(81782))
+            {
+                if (AuraEffect const* aur = who->GetAuraEffect(81782, 0))
+                    aur->GetBase()->SetDuration(aur->GetSpellInfo()->GetMaxDuration(), true);
+            }
+        }
+
+        void UpdateAI(const uint32 diff)
+        {
+            if (cron <= diff)
+            {
+                if (!checker)
+                {
+                    checker = true;
+                    cron = 10000;   //10 seconds
+                }
+                else
+                    me->DisappearAndDie();
+            }
+            else
+                cron -= diff;
+
+           //Check friendly entities
+           std::list<Unit*> targets;
+            Trinity::AnyFriendlyUnitInObjectRangeCheck u_check(me, me, 7.0f);
+            Trinity::UnitListSearcher<Trinity::AnyFriendlyUnitInObjectRangeCheck> searcher(me, targets, u_check);
+
+            me->VisitNearbyObject(7.0f, searcher);
+            for (std::list<Unit*>::const_iterator iter = targets.begin(); iter != targets.end(); ++iter)
+                BarrierChecker(*iter);
+        }
+    };
+
+    CreatureAI* GetAI(Creature* creature) const
+    {
+        return new npc_power_word_barrierAI(creature);
+    }
+};
+
 void AddSC_npcs_special()
 {
     new npc_air_force_bots;
@@ -2749,4 +2824,5 @@ void AddSC_npcs_special()
     new npc_tabard_vendor;
     new npc_experience;
     new npc_guardian_of_ancient_kings;
+    new npc_power_word_barrier;
 }

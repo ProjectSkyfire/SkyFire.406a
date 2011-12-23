@@ -33,7 +33,7 @@ enum GuildMisc
     GUILD_BANK_MAX_TABS                 = 8,                    // send by client for money log also
     GUILD_BANK_MAX_SLOTS                = 98,
     GUILD_BANK_MONEY_LOGS_TAB           = 100,                  // used for money log in DB
-    GUILD_RANKS_MIN_COUNT               = 3,
+    GUILD_RANKS_MIN_COUNT               = 3,                    // Seems to be 3 starting from Cataclysm
     GUILD_RANKS_MAX_COUNT               = 10,
     GUILD_RANK_NONE                     = 0xFF,
     GUILD_WITHDRAW_MONEY_UNLIMITED      = 0xFFFFFFFF,
@@ -343,16 +343,16 @@ private:
         uint32 m_zoneId;
         uint8  m_level;
         uint8  m_class;
+        uint8 m_flags;
         uint64 m_logoutTime;
         uint32 m_accountId;
-        uint8 m_flags;
         // Fields from guild_member table
         uint8  m_rankId;
         std::string m_publicNote;
         std::string m_officerNote;
-        uint32 m_achievementPoints;
 
         RemainingValue m_bankRemaining[GUILD_BANK_MAX_TABS + 1];
+        uint32 m_achievementPoints;
         Profession professions[2];
     };
 
@@ -688,6 +688,7 @@ public:
     void SendPermissions(WorldSession* session) const;
     void SendMoneyInfo(WorldSession* session) const;
     void SendLoginInfo(WorldSession* session);
+    void SendGuildRankInfo(WorldSession* session);
 
     // Load from DB
     bool LoadFromDB(Field* fields);
@@ -719,6 +720,7 @@ public:
     bool AddMember(uint64 guid, uint8 rankId = GUILD_RANK_NONE);
     void DeleteMember(uint64 guid, bool isDisbanding = false, bool isKicked = false);
     bool ChangeMemberRank(uint64 guid, uint8 newRank);
+    RankInfo & GetRankInfo(uint32 rankId) {return m_ranks[rankId]; }
 
     // Bank
     void SwapItems(Player* player, uint8 tabId, uint8 slotId, uint8 destTabId, uint8 destSlotId, uint32 splitedAmount);
@@ -735,11 +737,11 @@ public:
     uint64 GetNextLevelXP() { return m_nextLevelXP; }
     uint64 GetGuildMoney() { return m_bankMoney; }
     uint64 SetGuildMoney(uint64 add) { return m_bankMoney += add; }
-    void ResetTodayXP() { m_today_xp = 0; }
-    void GenerateXPCap();
 
     void GainXP(uint64 xp);
     void LevelUp();
+    void ResetTodayXP() { m_today_xp = 0; }
+    void GenerateXPCap();
 
 protected:
     uint32 m_id;
@@ -751,9 +753,9 @@ protected:
 
     uint8 m_level;
     uint64 m_xp;
+    uint64 m_nextLevelXP;
     uint64 m_today_xp;
     uint64 m_xp_cap;
-    uint64 m_nextLevelXP;
 
     EmblemInfo m_emblemInfo;
     uint32 m_accountsNumber;

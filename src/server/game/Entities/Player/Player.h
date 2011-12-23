@@ -146,9 +146,10 @@ typedef UNORDERED_MAP<uint32 /*instanceId*/, time_t/*releaseTime*/> InstanceTime
 
 enum TrainerSpellState
 {
-   TRAINER_SPELL_GRAY  = 0,
-   TRAINER_SPELL_GREEN = 1,
-   TRAINER_SPELL_RED   = 2
+   TRAINER_SPELL_GREEN = 01,
+   TRAINER_SPELL_RED   = 02,
+   TRAINER_SPELL_GRAY  = 00,
+   TRAINER_SPELL_GREEN_DISABLED = 10   // custom value, not send to client: formally green but learn not allowed
 };
 
 enum TalentBranchSpec
@@ -1129,13 +1130,11 @@ class Player : public Unit, public GridObject<Player>
         void RemoveFromWorld();
 
         bool TeleportTo(uint32 mapid, float x, float y, float z, float orientation, uint32 options = 0);
-        void TeleportOutOfMap(Map *oldMap);
 
         bool TeleportTo(WorldLocation const &loc, uint32 options = 0)
         {
             return TeleportTo(loc.GetMapId(), loc.GetPositionX(), loc.GetPositionY(), loc.GetPositionZ(), loc.GetOrientation(), options);
         }
-
         bool TeleportToBGEntryPoint();
 
         void SetSummonPoint(uint32 mapid, float x, float y, float z)
@@ -2750,7 +2749,8 @@ class Player : public Unit, public GridObject<Player>
 
         uint8 m_activeSpec;
         uint8 m_specsCount;
-        uint32 m_branchSpec[MAX_TALENT_SPECS];
+        uint32 m_branchSpec[MAX_TALENT_SPECS];              // tabId of the main talent bran
+        uint32 m_talentSpec[MAX_TALENT_SPECS];              // S[1,MAX_TALENT_TABS] { (numTalentsInTab << (tabPageIndex*8) }
         uint32 m_freeTalentPoints;
 
         uint32 m_emote;

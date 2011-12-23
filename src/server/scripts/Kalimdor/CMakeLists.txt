@@ -64,6 +64,16 @@ set(scripts_STAT_SRCS
   Kalimdor/BlackfathomDeeps/boss_aku_mai.cpp
   Kalimdor/BlackfathomDeeps/blackfathom_deeps.h
 
+  #Kalimdor/Firelands/boss_alysrazar.cpp
+  #Kalimdor/Firelands/boss_baloroc_the_doorkeeper.cpp
+  #Kalimdor/Firelands/boss_beth'tilac.cpp
+  #Kalimdor/Firelands/boss_majordomus.cpp
+  #Kalimdor/Firelands/boss_ragnaros.cpp
+  #Kalimdor/Firelands/boss_rhyolith.cpp
+  #Kalimdor/Firelands/boss_shannox.cpp
+  #Kalimdor/Firelands/firelands.h
+  #Kalimdor/Firelands/instance_firelands.cpp 
+
   Kalimdor/LostCityOfTheTolvir/instance_lost_city_of_the_tolvir.cpp
   Kalimdor/LostCityOfTheTolvir/lost_city_of_the_tolvir.cpp
   Kalimdor/LostCityOfTheTolvir/lost_city_of_the_tolvir.h

@@ -127,8 +127,7 @@ Map* MapInstanced::CreateInstanceForPlayer(const uint32 mapId, Player* player)
         if (!NewInstanceId) return NULL;
         map = FindInstanceMap(NewInstanceId);
         if (!map)
-            if (Battleground* NewBattleground = player->GetBattleground())
-                map = CreateBattleground(NewInstanceId, NewBattleground);
+            map = CreateBattleground(NewInstanceId, player->GetBattleground());
     }
     else
     {

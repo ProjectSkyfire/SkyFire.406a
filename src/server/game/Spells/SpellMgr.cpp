@@ -3008,6 +3008,30 @@ void SpellMgr::LoadSpellCustomAttr()
             case 77489: // Mastery: Echo of Light
                 spellInfo->StackAmount = 100; // should be inf
                 break;
+            case 51514: // Hex
+            case 118:   // Polymorph
+            case 61305: // Polymorph (other animal)
+            case 28272: // polymorph (other animal)
+            case 61721: // Polymorph (other animal)
+            case 61780: // Polymorph (other animal)
+            case 28271: // Polymorph (other animal)
+            case 8122:  // Physic Scream
+            case 5484:  // Howl of Terror
+                spellInfo->AuraInterruptFlags = AURA_INTERRUPT_FLAG_TAKE_DAMAGE;
+                break;
+            case 89023: // Blessed life (spell, not talent)
+                spellInfo->Effects[1].Effect = 0;
+                break;
+            case 1680: // Whirlwind  (Fury)
+                spellInfo->Effects[0].RadiusEntry = sSpellRadiusStore.LookupEntry (14);
+                spellInfo->Effects[1].RadiusEntry = sSpellRadiusStore.LookupEntry (14);
+                spellInfo->Effects[2].RadiusEntry = sSpellRadiusStore.LookupEntry (14);
+                break;
+            case 50622: // Whirlwind (triggered by Bladestorm)
+                spellInfo->Effects[0].RadiusEntry = sSpellRadiusStore.LookupEntry (14);
+                spellInfo->Effects[1].RadiusEntry = sSpellRadiusStore.LookupEntry (14);
+                spellInfo->Effects[3].RadiusEntry = sSpellRadiusStore.LookupEntry (14);
+                break;
             case 42835: // Spout
                 spellInfo->Effects[0].Effect = 0; // remove damage effect, only anim is needed
                 break;
@@ -3282,6 +3306,13 @@ void SpellMgr::LoadSpellCustomAttr()
                 spellInfo->Effects[0].TargetA = TARGET_UNIT_CASTER;
                 spellInfo->Effects[0].TargetB = TARGET_UNIT_MASTER;
                 break;
+            case 81782: // Power Word: Barrier
+                spellInfo->Effects[0].TargetA = TARGET_UNIT_TARGET_ALLY;
+                spellInfo->Effects[1].TargetA = TARGET_UNIT_TARGET_ALLY;
+                spellInfo->Effects[0].TargetB = TARGET_NONE;
+                spellInfo->Effects[1].TargetB = TARGET_NONE;
+                spellInfo->DurationEntry = sSpellDurationStore.LookupEntry(39);
+                break;
             case 54800: // Sigil of the Frozen Conscience - change class mask to custom extended flags of Icy Touch
                         // this is done because another spell also uses the same SpellFamilyFlags as Icy Touch
                         // SpellFamilyFlags[0] & 0x00000040 in SPELLFAMILY_DEATHKNIGHT is currently unused (3.3.5a)
@@ -3527,11 +3558,18 @@ void SpellMgr::LoadSpellCustomAttr()
             case 48689:
             case 48690:
             case 48691:
+            case 6785:  // Ravage
+            case 81170:
             case 21987: // Lash of Pain
             case 23959: // Test Stab R50
             case 24825: // Test Backstab
             case 58563: // Assassinate Restless Lookout
                 spellInfo->AttributesCu |= SPELL_ATTR0_CU_REQ_CASTER_BEHIND_TARGET;
+                break;
+            case 24131: // Wyvern Sting (rank 1)
+            case 24134: // Wyvern Sting (rank 2)
+            case 24135: // Wyvern Sting (rank 3)
+                spellInfo->AttributesCu |= SPELL_ATTR0_CU_NEGATIVE_EFF0;
                 break;
             case 26029: // Dark Glare
             case 37433: // Spout

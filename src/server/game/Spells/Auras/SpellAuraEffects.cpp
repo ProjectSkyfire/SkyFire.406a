@@ -736,7 +736,7 @@ int32 AuraEffect::CalculateAmount(Unit* caster)
                 if (caster->GetTypeId() == TYPEID_PLAYER)
                 // Bonus from talent Spiritual Healing
                 if (AuraEffect* modHealing = caster->GetAuraEffect(SPELL_AURA_ADD_PCT_MODIFIER, SPELLFAMILY_PRIEST, 46, 1))
-
+                    AddPctN(amount, modHealing->GetAmount());
                 // Bonus from Glyph of Lightwell
                 if (AuraEffect* modHealing = caster->GetAuraEffect(55673, 0))
                     AddPctN(amount, modHealing->GetAmount());
@@ -4661,9 +4661,25 @@ void AuraEffect::HandleModDamageDone(AuraApplication const* aurApp, uint8 mode, 
                 if ((GetMiscValue() & (1<<i)) != 0)
                     target->ApplyModUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_NEG+i, GetAmount(), apply);
             }
+            if (Guardian* pet = target->ToPlayer()->GetGuardianPet())
+                pet->UpdateAttackPowerAndDamage();
+
+            if (GetSpellInfo()->Id == 84963) //Inquisition
+            {
+                switch (GetBase()->GetUnitOwner()->GetPower(POWER_HOLY_POWER))
+                {
+                    case 0: // 1HP
+                        GetBase()->SetDuration((GetBase()->GetUnitOwner()->GetPower(POWER_HOLY_POWER) + 1) * 4000, true);
+                        break;
+                    case 1: // 2HP
+                        GetBase()->SetDuration((GetBase()->GetUnitOwner()->GetPower(POWER_HOLY_POWER) + 2) * 8000, true);
+                        break;
+                    case 2: // 3HP
+                        GetBase()->SetDuration((GetBase()->GetUnitOwner()->GetPower(POWER_HOLY_POWER) + 3) * 12000, true);
+                        break;
+                }
+            }
         }
-        if (Guardian* pet = target->ToPlayer()->GetGuardianPet())
-            pet->UpdateAttackPowerAndDamage();
     }
 }
 
@@ -4883,8 +4899,7 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
                     caster->CastSpell(caster,86674,true);
                     break;
                 }
-                    // Sudden Death Cataclysm Proc
-                case 52437:
+                case 52437:  // Sudden Death Cataclysm Proc
                 {
                     if (caster && caster->ToPlayer()->HasSpellCooldown(86346))
                         caster->ToPlayer()->RemoveSpellCooldown(86346,true);
@@ -5172,12 +5187,30 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
                                     bf->RemovePlayerFromResurrectQueue(target->GetGUID());
                             }
                             break;
-                        case 36730:                                     // Flame Strike
+                            case 12774: // (DND) Belnistrasz Idol Shutdown Visual
+                            {
+                                if (aurApp->GetRemoveMode() != AURA_REMOVE_BY_EXPIRE)
+                                return;
+
+                                // Idom Rool Camera Shake <- wtf, don't drink while making spellnames?
+                                if (Unit* caster = GetCaster())
+                                    caster->CastSpell(caster, 12816, true);
+
+                                return;
+                            }
+                            case 32286: // Focus Target Visual
+                            {
+                                if (aurApp->GetRemoveMode() != AURA_REMOVE_BY_EXPIRE)
+                                    target->CastSpell(target, 32301, true, NULL, this);
+
+                                return;
+                            }
+                        case 36730: // Flame Strike
                         {
                             target->CastSpell(target, 36731, true, NULL, this);
                             break;
                         }
-                        case 44191:                                     // Flame Strike
+                        case 44191: // Flame Strike
                         {
                             if (target->GetMap()->IsDungeon())
                             {

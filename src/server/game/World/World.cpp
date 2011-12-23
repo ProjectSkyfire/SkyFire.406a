@@ -839,6 +839,21 @@ void World::LoadConfigSettings(bool reload)
     m_bool_configs[CONFIG_ALL_TAXI_PATHS] = ConfigMgr::GetBoolDefault("AllFlightPaths", false);
     m_bool_configs[CONFIG_INSTANT_TAXI] = ConfigMgr::GetBoolDefault("InstantFlightPaths", false);
 
+    m_bool_configs[CONFIG_GUILD_ADVANCEMENT_ENABLED] = ConfigMgr::GetBoolDefault("GuildAdvancement.Enabled", false);// Not yet complete
+    m_int_configs[CONFIG_GUILD_ADVANCEMENT_MAX_LEVEL] = ConfigMgr::GetIntDefault("GuildAdvancement.MaxLevel", 25);
+    if (m_int_configs[CONFIG_GUILD_ADVANCEMENT_MAX_LEVEL] == 0 || m_int_configs[CONFIG_GUILD_ADVANCEMENT_MAX_LEVEL] > 255)
+    {
+        sLog->outError("GuildAdvancement.MaxLevel must be in range 1-25. Setting to default 25");
+        m_int_configs[CONFIG_GUILD_ADVANCEMENT_MAX_LEVEL] = 25;
+    }
+
+    m_int_configs[CONFIG_GUILD_DAILY_XP_RESET_HOUR] = ConfigMgr::GetIntDefault("GuildAdvancement.ResetHour", 3);
+    if (m_int_configs[CONFIG_GUILD_DAILY_XP_RESET_HOUR] > 23)
+    {
+        sLog->outError("GuildAdvancement.ResetHour (%i) can not be loaded. Set to default 3.", m_int_configs[CONFIG_GUILD_DAILY_XP_RESET_HOUR]);
+        m_int_configs[CONFIG_GUILD_DAILY_XP_RESET_HOUR] = 3;
+    }
+
     m_bool_configs[CONFIG_INSTANCE_IGNORE_LEVEL] = ConfigMgr::GetBoolDefault("Instance.IgnoreLevel", false);
     m_bool_configs[CONFIG_INSTANCE_IGNORE_RAID]  = ConfigMgr::GetBoolDefault("Instance.IgnoreRaid", false);
 
@@ -1107,6 +1122,8 @@ void World::LoadConfigSettings(bool reload)
     m_int_configs[CONFIG_CHARDELETE_MIN_LEVEL] = ConfigMgr::GetIntDefault("CharDelete.MinLevel", 0);
     m_int_configs[CONFIG_CHARDELETE_KEEP_DAYS] = ConfigMgr::GetIntDefault("CharDelete.KeepDays", 30);
 
+    m_int_configs[CONFIG_IGNORING_MAPS_VERSION] = ConfigMgr::GetIntDefault("IgnoringMapsVersion", 0);
+
     ///- Read the "Data" directory from the config file
     std::string dataPath = ConfigMgr::GetStringDefault("DataDir", "./");
     if (dataPath.at(dataPath.length()-1) != '/' && dataPath.at(dataPath.length()-1) != '\\')
@@ -1199,6 +1216,14 @@ void World::LoadConfigSettings(bool reload)
     m_int_configs[CONFIG_WINTERGRASP_NOBATTLETIME] = ConfigMgr::GetIntDefault("Wintergrasp.NoBattleTimer", 150);
     m_int_configs[CONFIG_WINTERGRASP_RESTART_AFTER_CRASH] = ConfigMgr::GetIntDefault("Wintergrasp.CrashRestartTimer", 10);
 
+    // TOL BARAD
+    m_bool_configs[CONFIG_TOL_BARAD_ENABLE] = ConfigMgr::GetBoolDefault("Tol Barad.Enable", false);
+    m_int_configs[CONFIG_TOL_BARAD_PLR_MAX] = ConfigMgr::GetIntDefault("Tol Barad.PlayerMax", 100);
+    m_int_configs[CONFIG_TOL_BARAD_PLR_MIN] = ConfigMgr::GetIntDefault("Tol Barad.PlayerMin", 0);
+    m_int_configs[CONFIG_TOL_BARAD_PLR_MIN_LVL] = ConfigMgr::GetIntDefault("Tol Barad.PlayerMinLvl", 80);
+    m_int_configs[CONFIG_TOL_BARAD_BATTLETIME] = ConfigMgr::GetIntDefault("Tol Barad.BattleTimer", 15);
+    m_int_configs[CONFIG_TOL_BARAD_NOBATTLETIME] = ConfigMgr::GetIntDefault("Tol Barad.NoBattleTimer", 150);
+
     // misc
     m_bool_configs[CONFIG_PDUMP_NO_PATHS] = ConfigMgr::GetBoolDefault("PlayerDump.DisallowPaths", true);
     m_bool_configs[CONFIG_PDUMP_NO_OVERWRITE] = ConfigMgr::GetBoolDefault("PlayerDump.DisallowOverwrite", true);
@@ -1224,19 +1249,22 @@ void World::SetInitialWorldSettings()
     ///- Init highest guids before any table loading to prevent using not initialized guids in some code.
     sObjectMgr->SetHighestGuids();
 
-    ///- Check the existence of the map files for all races' startup areas.
-    if (!MapManager::ExistMapAndVMap(0, -6240.32f, 331.033f)
-        || !MapManager::ExistMapAndVMap(0, -8949.95f, -132.493f)
-        || !MapManager::ExistMapAndVMap(1, -618.518f, -4251.67f)
-        || !MapManager::ExistMapAndVMap(0, 1676.35f, 1677.45f)
-        || !MapManager::ExistMapAndVMap(1, 10311.3f, 832.463f)
-        || !MapManager::ExistMapAndVMap(1, -2917.58f, -257.98f)
-        || (m_int_configs[CONFIG_EXPANSION] && (
+    if (sWorld->getIntConfig(CONFIG_IGNORING_MAPS_VERSION) == 0)
+    {
+        ///- Check the existence of the map files for all races' startup areas.
+        if (!MapManager::ExistMapAndVMap(0, -6240.32f, 331.033f)
+            || !MapManager::ExistMapAndVMap(0, -8949.95f, -132.493f)
+            || !MapManager::ExistMapAndVMap(1, -618.518f, -4251.67f)
+            || !MapManager::ExistMapAndVMap(0, 1676.35f, 1677.45f)
+            || !MapManager::ExistMapAndVMap(1, 10311.3f, 832.463f)
+            || !MapManager::ExistMapAndVMap(1, -2917.58f, -257.98f)
+            || (m_int_configs[CONFIG_EXPANSION] && (
             !MapManager::ExistMapAndVMap(530, 10349.6f, -6357.29f) ||
             !MapManager::ExistMapAndVMap(530, -3961.64f, -13931.2f))))
-    {
-        sLog->outError("Correct *.map files not found in path '%smaps' or *.vmtree/*.vmtile files in '%svmaps'. Please place *.map/*.vmtree/*.vmtile files in appropriate directories or correct the DataDir value in the worldserver.conf file.", m_dataPath.c_str(), m_dataPath.c_str());
-        exit(1);
+        {
+            sLog->outError("Correct *.map files not found in path '%smaps' or *.vmtree/*.vmtile files in '%svmaps'. Please place *.map/*.vmtree/*.vmtile files in appropriate directories or correct the DataDir value in the worldserver.conf file.", m_dataPath.c_str(), m_dataPath.c_str());
+            exit(1);
+        }
     }
 
     ///- Initialize pool manager
@@ -1405,7 +1433,7 @@ void World::SetInitialWorldSettings()
     sLog->outString("Loading pet default spells additional to levelup spells...");
     sSpellMgr->LoadPetDefaultSpells();
 
-    sLog->outString("Loading Creature Template Addon Data...");
+    sLog->outString("Loading Creature Addon Data...");
     sObjectMgr->LoadCreatureAddons();                            // must be after LoadCreatureTemplates() and LoadCreatures()
 
     sLog->outString("Loading Creature Respawn Data...");         // must be after PackInstances()
@@ -1749,6 +1777,9 @@ void World::SetInitialWorldSettings()
     sLog->outString("Calculate random battleground reset time..." );
     InitRandomBGResetTime();
 
+    sLog->outString("Calculate guild Advancement XP daily reset time..." );
+    InitGuildAdvancementDailyResetTime();
+
     LoadCharacterNameData();
 
     // possibly enable db logging; avoid massive startup spam by doing it here.
@@ -1909,6 +1940,9 @@ void World::Update(uint32 diff)
 
     if (m_gameTime > m_NextWeeklyQuestReset)
         ResetWeeklyQuests();
+
+    if (m_gameTime > m_NextDailyXPReset)
+        ResetGuildAdvancementDailyXP();
 
     if (m_gameTime > m_NextRandomBGReset)
         ResetRandomBG();
@@ -2707,6 +2741,33 @@ void World::InitRandomBGResetTime()
         sWorld->setWorldState(WS_BG_DAILY_RESET_TIME, uint64(m_NextRandomBGReset));
 }
 
+void World::InitGuildAdvancementDailyResetTime()
+{
+    time_t dailyxptime = uint64(sWorld->getWorldState(WS_GUILD_AD_DAILY_RESET_TIME));
+    if (!dailyxptime)
+        m_NextDailyXPReset = time_t(time(NULL));         // game time not yet init
+
+    // generate time by config
+    time_t curTime = time(NULL);
+    tm localTm = *localtime(&curTime);
+    localTm.tm_hour = getIntConfig(CONFIG_GUILD_DAILY_XP_RESET_HOUR);
+    localTm.tm_min = 0;
+    localTm.tm_sec = 0;
+
+    // current day reset time
+    time_t nextDayResetTime = mktime(&localTm);
+
+    // next reset time before current moment
+    if (curTime >= nextDayResetTime)
+        nextDayResetTime += DAY;
+
+    // normalize reset time
+    m_NextDailyXPReset = dailyxptime < curTime ? nextDayResetTime - DAY : nextDayResetTime;
+
+    if (!dailyxptime)
+        sWorld->setWorldState(WS_GUILD_AD_DAILY_RESET_TIME, uint64(m_NextDailyXPReset));
+}
+
 void World::ResetDailyQuests()
 {
     sLog->outDetail("Daily quests reset for all characters.");
@@ -2759,6 +2820,42 @@ void World::ResetRandomBG()
 
     m_NextRandomBGReset = time_t(m_NextRandomBGReset + DAY);
     sWorld->setWorldState(WS_BG_DAILY_RESET_TIME, uint64(m_NextRandomBGReset));
+}
+
+void World::ResetGuildAdvancementDailyXP()
+{
+    QueryResult result = CharacterDatabase.Query("SELECT level,xp,guildid FROM guild");
+
+    if (!result)
+        return;
+
+    uint32 count = 0;
+
+    do
+    {
+        Field *fields = result->Fetch();
+        uint8 level = fields[0].GetUInt32();
+        uint64 m_xp = fields[1].GetUInt64();
+        uint64 guildid = fields[2].GetUInt64();
+
+        uint64 baseXP = sObjectMgr->GetXPForGuildLevel(level);
+        uint64 diff = (uint64)(baseXP * 15 / 100);
+        uint64 m_xp_cap = 0;
+
+        if(diff < baseXP)
+            m_xp_cap = diff + m_xp;
+        else
+            m_xp_cap = baseXP;
+
+        CharacterDatabase.PExecute("UPDATE guild SET m_xp_cap = %u, m_today_xp = '0' WHERE guildid = %u", m_xp_cap,guildid);
+
+        ++count;
+    }
+    while (result->NextRow());
+
+    sLog->outDetail("Guild Advancement Daily XP status reset for all characters.");
+    m_NextDailyXPReset = time_t(m_NextDailyXPReset + DAY);
+    sWorld->setWorldState(WS_GUILD_AD_DAILY_RESET_TIME, uint64(m_NextDailyXPReset));
 }
 
 void World::UpdateMaxSessionCounters()

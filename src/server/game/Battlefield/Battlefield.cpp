@@ -459,15 +459,7 @@ WorldPacket Battlefield::BuildWarningAnnPacket(std::string msg)
     return data;
 }
 
-void Battlefield::SendWarningToAllInZone(uint32 entry)
-{
-    if (Unit* unit = sObjectAccessor->FindUnit(StalkerGuid))
-        if (Creature* stalker = unit->ToCreature())
-            // FIXME: replaced CHAT_TYPE_END with CHAT_MSG_BG_SYSTEM_NEUTRAL to fix compile, it's a guessed change :/
-            sCreatureTextMgr->SendChat(stalker, (uint8) entry, NULL, CHAT_MSG_BG_SYSTEM_NEUTRAL, LANG_ADDON, TEXT_RANGE_ZONE);
-}
-
-/*void Battlefield::SendWarningToAllInWar(int32 entry,...)
+void Battlefield::SendWarningToAllInZone(int32 entry,...)
 {
     const char *format = sObjectMgr->GetSkyFireStringForDBCLocale(entry);
     va_list ap;
@@ -476,26 +468,48 @@ void Battlefield::SendWarningToAllInZone(uint32 entry)
     vsnprintf(str,1024,format, ap);
     va_end(ap);
     std::string msg = (std::string)str;
+    WorldPacket data = BuildWarningAnnPacket(msg);
+    BroadcastPacketZone(data);
+}
+
+void Battlefield::SendWarningToAllInWar(int32 entry,...)
+{
+    const char *format = sObjectMgr->GetSkyFireStringForDBCLocale(entry);
+    va_list ap;
+    char str [1024];
+    va_start(ap, entry);
+    vsnprintf(str, 1024, format, ap);
+    va_end(ap);
+    std::string msg = (std::string)str;
 
     WorldPacket data = BuildWarningAnnPacket(msg);
     BroadcastPacketWar(data);
-}*/
-void Battlefield::SendWarningToPlayer(Player *player, uint32 entry)
-{
-    if (!player)
-        return;
+}
 
-    if (Unit* unit = sObjectAccessor->FindUnit(StalkerGuid))
-        if (Creature* stalker = unit->ToCreature())
-            sCreatureTextMgr->SendChat(stalker, (uint8)entry, player->GetGUID());
+void Battlefield::SendWarningToPlayer(Player* player, int32 entry, ...)
+{
+    const char *format = sObjectMgr->GetSkyFireStringForDBCLocale(entry);
+    va_list ap;
+    char str [1024];
+    va_start(ap, entry);
+    vsnprintf(str, 1024, format, ap);
+    va_end(ap);
+    std::string msg = (std::string)str;
+
+    WorldPacket data = BuildWarningAnnPacket(msg);
+
+    if (player->GetSession())
+        player->GetSession()->SendPacket(&data);
 }
 
 void Battlefield::SendUpdateWorldState(uint32 field, uint32 value)
 {
-    for (uint8 i = 0; i < BG_TEAMS_COUNT; ++i)
-        for (GuidSet::iterator itr = m_players[i].begin(); itr != m_players[i].end(); ++itr)
-            if (Player* player = ObjectAccessor::FindPlayer(*itr))
+    for(int i = 0; i < 2; ++i)
+        for(GuidSet::iterator itr = m_players[i].begin(); itr != m_players[i].end(); ++itr)
+        {
+            if (Player *player = sObjectAccessor->FindPlayer((*itr)))
                 player->SendUpdateWorldState(field, value);
+        }
 }
 
 void Battlefield::RegisterZone(uint32 zoneId)

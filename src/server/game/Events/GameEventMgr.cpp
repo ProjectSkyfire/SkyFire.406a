@@ -28,6 +28,8 @@
 #include "GossipDef.h"
 #include "Player.h"
 #include "BattlegroundMgr.h"
+#include "UnitAI.h"
+#include "GameObjectAI.h"
 
 bool GameEventMgr::CheckOneGameEvent(uint16 entry) const
 {
@@ -1060,6 +1062,8 @@ uint32 GameEventMgr::Update()                               // return the next e
 void GameEventMgr::UnApplyEvent(uint16 event_id)
 {
     sLog->outDetail("GameEvent %u \"%s\" removed.", event_id, mGameEvent[event_id].description.c_str());
+    //! Run SAI scripts with SMART_EVENT_GAME_EVENT_END
+    RunSmartAIScripts(event_id, false);
     // un-spawn positive event tagged objects
     GameEventUnspawn(event_id);
     // spawn negative event tagget objects
@@ -1090,6 +1094,9 @@ void GameEventMgr::ApplyNewEvent(uint16 event_id)
     }
 
     sLog->outDetail("GameEvent %u \"%s\" started.", event_id, mGameEvent[event_id].description.c_str());
+
+    //! Run SAI scripts with SMART_EVENT_GAME_EVENT_END
+    RunSmartAIScripts(event_id, true);
 
     // spawn positive event tagget objects
     GameEventSpawn(event_id);
@@ -1177,10 +1184,8 @@ void GameEventMgr::GameEventSpawn(int16 event_id)
             {
                 Creature* creature = new Creature;
                 //sLog->outDebug("Spawning creature %u", *itr);
-                if (!creature->LoadFromDB(*itr, map))
+                if (!creature->LoadCreatureFromDB(*itr, map))
                     delete creature;
-                else
-                    map->AddToMap(creature);
             }
         }
     }
@@ -1206,7 +1211,8 @@ void GameEventMgr::GameEventSpawn(int16 event_id)
             {
                 GameObject* pGameobject = new GameObject;
                 //sLog->outDebug("Spawning gameobject %u", *itr);
-                if (!pGameobject->LoadFromDB(*itr, map))
+                //TODO: find out when it is add to map
+                if (!pGameobject->LoadGameObjectFromDB(*itr, map, false))
                     delete pGameobject;
                 else
                 {
@@ -1600,6 +1606,26 @@ void GameEventMgr::SendWorldStateUpdate(Player* player, uint16 event_id)
             player->SendUpdateWorldState(itr->second.done_world_state, (uint32)(itr->second.done));
         if (itr->second.max_world_state)
             player->SendUpdateWorldState(itr->second.max_world_state, (uint32)(itr->second.reqNum));
+    }
+}
+
+void GameEventMgr::RunSmartAIScripts(uint16 event_id, bool activate)
+{
+    //! Iterate over every supported source type (creature and gameobject)
+    //! Not entirely sure how this will affect units in non-loaded grids.
+    {
+        TRINITY_READ_GUARD(HashMapHolder<Creature>::LockType, *HashMapHolder<Creature>::GetLock());
+        HashMapHolder<Creature>::MapType const& m = ObjectAccessor::GetCreatures();
+        for (HashMapHolder<Creature>::MapType::const_iterator iter = m.begin(); iter != m.end(); ++iter)
+            if (iter->second->IsInWorld())
+                iter->second->AI()->sOnGameEvent(activate, event_id);
+    }
+    {
+        TRINITY_READ_GUARD(HashMapHolder<GameObject>::LockType, *HashMapHolder<GameObject>::GetLock());
+        HashMapHolder<GameObject>::MapType const& m = ObjectAccessor::GetGameObjects();
+        for (HashMapHolder<GameObject>::MapType::const_iterator iter = m.begin(); iter != m.end(); ++iter)
+            if (iter->second->IsInWorld())
+                iter->second->AI()->OnGameEvent(activate, event_id);
     }
 }
 

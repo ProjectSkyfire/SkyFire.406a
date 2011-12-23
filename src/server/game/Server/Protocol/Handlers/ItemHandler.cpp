@@ -660,7 +660,7 @@ void WorldSession::HandleBuyItemInSlotOpcode(WorldPacket & recv_data)
     uint32 item, slot, count;
     uint8 bagslot, unk;
 
-    recv_data >> vendorguid >> item  >> slot >> bagguid >> bagslot >> count >> unk;
+    recv_data >> vendorguid >> unk >> item  >> slot >> count >> bagguid >> bagslot;
 
     // client expects count starting at 1, and we send vendorslot+1 to client already
     if (slot > 0)
@@ -697,21 +697,26 @@ void WorldSession::HandleBuyItemInSlotOpcode(WorldPacket & recv_data)
 
 void WorldSession::HandleBuyItemOpcode(WorldPacket & recv_data)
 {
-    sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_BUY_ITEM");
-    uint64 vendorguid;
-    uint8 unk, unk2;
-    uint32 item, slot, count;
-    uint64 unk1;
+	sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_BUY_ITEM");
+	uint64 vendorguid;
+	uint8 unk;
+	uint32 item, slot, count;
+	uint64 unk1;
+	uint8 unk2;
 
-    recv_data >> vendorguid >> item >> slot >> count >> unk >> unk1 >> unk2;
+	recv_data >> vendorguid;
+	recv_data >> unk;                                       // 4.0.6
+	recv_data >> item >> slot >> count;
+	recv_data >> unk1;                                      // 4.0.6
+	recv_data >> unk2;
 
-    // client expects count starting at 1, and we send vendorslot+1 to client already
-    if (slot > 0)
-        --slot;
-    else
-        return; // cheating
+	// client expects count starting at 1, and we send vendorslot+1 to client already
+	if (slot > 0)
+		--slot;
+	else
+		return; // cheating
 
-    GetPlayer()->BuyItemFromVendorSlot(vendorguid, slot, item, count, NULL_BAG, NULL_SLOT);
+	GetPlayer()->BuyItemFromVendorSlot(vendorguid, slot, item, count, NULL_BAG, NULL_SLOT);
 }
 
 void WorldSession::HandleListInventoryOpcode(WorldPacket & recv_data)
@@ -751,7 +756,7 @@ void WorldSession::SendListInventory(uint64 vendorGuid)
     VendorItemData const* items = vendor->GetVendorItems();
     if (!items)
     {
-        WorldPacket data(SMSG_LIST_INVENTORY, (8 + 1 + 1 + 2));   // Checked in 406
+        WorldPacket data(SMSG_LIST_INVENTORY, 8 + 1 + 1 + 2);   // Checked in 406
         data << uint64(vendorGuid);
         data << uint8(0);                                   // count==0, next will be error code
         data << uint8(0);                                   // "Vendor has no inventory"
@@ -762,7 +767,7 @@ void WorldSession::SendListInventory(uint64 vendorGuid)
     uint32 itemCount = items->GetItemCount();
     uint8 count = 0;
 
-    WorldPacket data(SMSG_LIST_INVENTORY, (8+1+itemCount*9*4+1*itemCount+2));  // Checked in 406
+    WorldPacket data(SMSG_LIST_INVENTORY, 8+1+itemCount*9*4+1*itemCount+2);  // Checked in 406
     data << uint64(vendorGuid);
 
     size_t countPos = data.wpos();
@@ -801,11 +806,11 @@ void WorldSession::SendListInventory(uint64 vendorGuid)
                 data << uint32(item->item);
                 data << uint32(itemTemplate->DisplayInfoID);
                 data << int32(leftInStock);
-                data << int32(price);
+                data << uint32(price);
                 data << uint32(itemTemplate->MaxDurability);
                 data << uint32(itemTemplate->BuyCount);
                 data << uint32(item->ExtendedCost);
-                data << uint32(0); // unk 4.0.1
+                data << uint8(0); // unk 4.0.1
             }
         }
     }
@@ -952,6 +957,7 @@ void WorldSession::HandleAutoBankItemOpcode(WorldPacket& recvPacket)
     }
 
     _player->RemoveItem(srcbag, srcslot, true);
+    _player->ItemRemovedQuestCheck(pItem->GetEntry(), pItem->GetCount());
     _player->BankItem(dest, pItem, true);
 }
 
@@ -979,6 +985,7 @@ void WorldSession::HandleAutoStoreBankItemOpcode(WorldPacket& recvPacket)
 
         _player->RemoveItem(srcbag, srcslot, true);
         _player->StoreItem(dest, pItem, true);
+        _player->ItemAddedQuestCheck(pItem->GetEntry(), pItem->GetCount());
     }
     else                                                    // moving from inventory to bank
     {
@@ -1460,7 +1467,7 @@ void WorldSession::HandleReforgeItem(WorldPacket& recv_data)
    item->SetState(ITEM_CHANGED,GetPlayer()); // Set the 'changed' state to allow items to be saved to DB if they are equipped
    if(reforgeId == 0) // Reset item
    {
-       if(item->IsEquipped()) // Item must be equipped to avoid aditional stat loose
+       if(item->IsEquipped()) // Item must be equipped to avoid additional stat loose
            GetPlayer()->ApplyReforgedStats(item,false);
        item->SetEnchantment(REFORGE_ENCHANTMENT_SLOT, 0, 0, 0);
        SQLTransaction trans = CharacterDatabase.BeginTransaction();
