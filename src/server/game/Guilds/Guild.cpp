@@ -1263,7 +1263,7 @@ void Guild::HandleRoster(WorldSession* session /*= NULL*/)
     for (Members::const_iterator itr = m_members.begin(); itr != m_members.end(); ++itr)
         data << uint32(itr->second->GetZoneId()); // Zone ID: Use cached value as zone id does get updated
     
-	for (Members::const_iterator itr = m_members.begin(); itr != m_members.end(); ++itr)
+    for (Members::const_iterator itr = m_members.begin(); itr != m_members.end(); ++itr)
         data << uint32(itr->second->GetAchievementPoints()); // Achievement Points
 
     for (Members::const_iterator itr = m_members.begin(); itr != m_members.end(); ++itr)
