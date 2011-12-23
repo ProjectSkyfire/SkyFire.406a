@@ -76,7 +76,7 @@ DBCStorage <CreatureDisplayInfoEntry> sCreatureDisplayInfoStore(CreatureDisplayI
 DBCStorage <CreatureFamilyEntry> sCreatureFamilyStore(CreatureFamilyfmt);
 DBCStorage <CreatureSpellDataEntry> sCreatureSpellDataStore(CreatureSpellDatafmt);
 DBCStorage <CreatureTypeEntry> sCreatureTypeStore(CreatureTypefmt);
-DBCStorage <CurrencyTypesEntry> sCurrenCharTitlesEntryfmtcyTypesStore(CurrencyTypesfmt);
+DBCStorage <CurrencyTypesEntry> sCurrencyTypesStore(CurrencyTypesfmt);
 
 DBCStorage <DestructibleModelDataEntry> sDestructibleModelDataStore(DestructibleModelDatafmt);
 DBCStorage <DungeonEncounterEntry> sDungeonEncounterStore(DungeonEncounterfmt);
