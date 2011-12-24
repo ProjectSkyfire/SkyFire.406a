@@ -146,12 +146,12 @@ bool BattlefieldTB::SetupBattlefield()
 
     // Hide battle npcs
     for(GuidSet::const_iterator itr = WarCreature[GetDefenderTeam()].begin(); itr != WarCreature[GetDefenderTeam()].end(); ++itr)
-        if (Unit* unit = sObjectAccessor->FindUnit((*itr)))
+        if (Unit* unit = ObjectAccessor::FindUnit((*itr)))
             if (Creature* creature = unit->ToCreature())
                 HideNpc(creature);
 
     for(GuidSet::const_iterator itr = WarCreature[GetAttackerTeam()].begin(); itr != WarCreature[GetAttackerTeam()].end(); ++itr)
-        if (Unit* unit = sObjectAccessor->FindUnit((*itr)))
+        if (Unit* unit = ObjectAccessor::FindUnit((*itr)))
             if (Creature* creature = unit->ToCreature())
                 HideNpc(creature);
 
@@ -189,7 +189,7 @@ bool BattlefieldTB::Update(uint32 diff)
         m_saveTimer -= diff;
 
     for(GuidSet::const_iterator itr = m_PlayersIsSpellImu.begin(); itr != m_PlayersIsSpellImu.end(); ++itr)
-        if (Player* player = sObjectAccessor->FindPlayer((*itr)))
+        if (Player* player = ObjectAccessor::FindPlayer((*itr)))
         {
             if (player->HasAura(SPELL_SPIRITUAL_IMMUNITY_TB))
             {
@@ -212,7 +212,7 @@ void BattlefieldTB::AddPlayerToResurrectQueue(uint64 npc_guid, uint64 player_gui
     Battlefield::AddPlayerToResurrectQueue(npc_guid, player_guid);
     if (IsWarTime())
     {
-        if (Player* player = sObjectAccessor->FindPlayer(player_guid))
+        if (Player* player = ObjectAccessor::FindPlayer(player_guid))
         {
             if (!player->HasAura(SPELL_SPIRITUAL_IMMUNITY_TB))
             {
@@ -301,13 +301,13 @@ void BattlefieldTB::OnBattleEnd(bool endbytimer)
         /*//Change all npc out of keep
         for(GuidSet::const_iterator itr = OutsideCreature[GetDefenderTeam()].begin(); itr != OutsideCreature[GetDefenderTeam()].end(); ++itr)
         {
-            if (Unit* unit = sObjectAccessor->FindUnit((*itr)))
+            if (Unit* unit = ObjectAccessor::FindUnit((*itr)))
                 if (Creature* creature = unit->ToCreature())
                     HideNpc(creature);
         }
         for(GuidSet::const_iterator itr = OutsideCreature[GetAttackerTeam()].begin(); itr != OutsideCreature[GetAttackerTeam()].end(); ++itr)
         {
-            if (Unit* unit = sObjectAccessor->FindUnit((*itr)))
+            if (Unit* unit = ObjectAccessor::FindUnit((*itr)))
                 if (Creature* creature = unit->ToCreature())
                     ShowNpc(creature,true);
         }*/
@@ -341,7 +341,7 @@ void BattlefieldTB::OnBattleEnd(bool endbytimer)
 
     for(GuidSet::const_iterator itr = m_PlayersInWar[GetDefenderTeam()].begin(); itr != m_PlayersInWar[GetDefenderTeam()].end(); ++itr)
     {
-        if (Player* player = sObjectAccessor->FindPlayer((*itr)))
+        if (Player* player = ObjectAccessor::FindPlayer((*itr)))
         {
             if (player->GetTeamId() == TEAM_HORDE)
             {
@@ -362,7 +362,7 @@ void BattlefieldTB::OnBattleEnd(bool endbytimer)
     }
     for(GuidSet::const_iterator itr = m_PlayersInWar[GetAttackerTeam()].begin(); itr != m_PlayersInWar[GetAttackerTeam()].end(); ++itr)
     {
-        if (Player* player = sObjectAccessor->FindPlayer((*itr)))
+        if (Player* player = ObjectAccessor::FindPlayer((*itr)))
         {
             player->CastSpell(player, SPELL_TOL_BARAD_DEFEAT, true);
         }
@@ -372,7 +372,7 @@ void BattlefieldTB::OnBattleEnd(bool endbytimer)
     {
         for(GuidSet::const_iterator itr = m_PlayersInWar[team].begin(); itr != m_PlayersInWar[team].end(); ++itr)
         {
-            if (Player* player = sObjectAccessor->FindPlayer((*itr)))
+            if (Player* player = ObjectAccessor::FindPlayer((*itr)))
             {
                 player->RemoveAura(SPELL_TOWER_BONUS);
                 player->RemoveAurasDueToSpell(SPELL_VETERAN);
@@ -535,7 +535,7 @@ void BattlefieldTB::SendInitWorldStatesToAll()
     WorldPacket data = BuildInitWorldStates();
     for(uint8 team = 0; team<2; team++)
         for (GuidSet::iterator itr = m_players[team].begin(); itr != m_players[team].end(); ++itr)
-            if(Player* player = sObjectAccessor->FindPlayer((*itr)))
+            if(Player* player = ObjectAccessor::FindPlayer((*itr)))
                 player->GetSession()->SendPacket(&data);
 }
 
@@ -548,12 +548,12 @@ void BattlefieldTB::AddBrokenTower(TeamId team)
     {
         // Remove buff stack
         for(GuidSet::const_iterator itr = m_PlayersInWar[GetDefenderTeam()].begin(); itr != m_PlayersInWar[GetDefenderTeam()].end(); ++itr)
-            if (Player* player = sObjectAccessor->FindPlayer((*itr)))
+            if (Player* player = ObjectAccessor::FindPlayer((*itr)))
                 player->RemoveAuraFromStack(SPELL_TOWER_BONUS);
 
         // Add buff stack
         for(GuidSet::const_iterator itr = m_PlayersInWar[GetAttackerTeam()].begin(); itr != m_PlayersInWar[GetAttackerTeam()].end(); ++itr)
-            if (Player* player = sObjectAccessor->FindPlayer((*itr)))
+            if (Player* player = ObjectAccessor::FindPlayer((*itr)))
             {
                 player->CastSpell(player, SPELL_TOWER_BONUS, true);
                 //DoCompleteOrIncrementAchievement(ACHIEVEMENTS_TB_TOWER_DESTROY, player); TODO

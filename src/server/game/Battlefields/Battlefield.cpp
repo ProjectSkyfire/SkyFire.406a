@@ -221,7 +221,7 @@ void Battlefield::InvitePlayerInQueueToWar()
     {
         for (GuidSet::const_iterator itr = m_PlayersInQueue[team].begin(); itr != m_PlayersInQueue[team].end(); ++itr)
         {
-            if (Player* player = sObjectAccessor->FindPlayer(*itr))
+            if (Player* player = ObjectAccessor::FindPlayer(*itr))
             {
                 if (m_PlayersInWar[player->GetTeamId()].size() + m_InvitedPlayers[player->GetTeamId()].size() < m_MaxPlayer)
                     InvitePlayerToWar(player);
@@ -297,14 +297,14 @@ void Battlefield::KickAfk()
 {
     for (uint8 team = 0; team < BG_TEAMS_COUNT; ++team)
         for (GuidSet::const_iterator itr = m_PlayersInWar[team].begin(); itr != m_PlayersInWar[team].end(); ++itr)
-            if (Player* player = sObjectAccessor->FindPlayer(*itr))
+            if (Player* player = ObjectAccessor::FindPlayer(*itr))
                 if (player->isAFK())
                     KickPlayerFromBf(*itr);
 }
 
 void Battlefield::KickPlayerFromBf(uint64 guid)
 {
-    if (Player* player = sObjectAccessor->FindPlayer(guid))
+    if (Player* player = ObjectAccessor::FindPlayer(guid))
         if (player->GetZoneId() == GetZoneId())
             player->TeleportTo(KickPosition);
 }
@@ -507,7 +507,7 @@ void Battlefield::SendUpdateWorldState(uint32 field, uint32 value)
     for(int i = 0; i < 2; ++i)
         for(GuidSet::iterator itr = m_players[i].begin(); itr != m_players[i].end(); ++itr)
         {
-            if (Player *player = sObjectAccessor->FindPlayer((*itr)))
+            if (Player *player = ObjectAccessor::FindPlayer((*itr)))
                 player->SendUpdateWorldState(field, value);
         }
 }
@@ -805,7 +805,7 @@ void BfGraveYard::Resurrect()
             if (m_SpiritGuide[m_ControlTeam])
                 m_SpiritGuide[m_ControlTeam]->CastSpell(m_SpiritGuide[m_ControlTeam], SPELL_SPIRIT_HEAL, true);
 
-        // Resurect player
+        // Resurrect player
         player->CastSpell(player, SPELL_RESURRECTION_VISUAL, true);
         player->ResurrectPlayer(1.0f);
         player->CastSpell(player, 6962, true);
