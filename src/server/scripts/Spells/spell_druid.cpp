@@ -402,5 +402,5 @@ void AddSC_druid_spell_scripts()
     new spell_dru_swift_flight_passive();
     new spell_dru_ferocious_bite();
     new spell_dru_mark_of_the_wild();
-    new spell_dru_berserk();	
+    new spell_dru_berserk();
 }

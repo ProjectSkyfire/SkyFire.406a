@@ -23,7 +23,7 @@
 #elif defined(__APPLE__)
  #include <mysql.h>
 #else
- #include <mysql/mysql.h>  
+ #include <mysql/mysql.h>
 #endif
 
 #include "MySQLConnection.h"
