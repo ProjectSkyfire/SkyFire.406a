@@ -1840,7 +1840,7 @@ void Group::SetLootThreshold(ItemQualities threshold)
     m_lootThreshold = threshold;
 }
 
-void Group::SetLfgRoles(uint64 guid, const uint8 roles)
+void Group::SetRoles(uint64 guid, const uint8 roles)
 {
     member_witerator slot = _getMemberWSlot(guid);
     if (slot == m_memberSlots.end())

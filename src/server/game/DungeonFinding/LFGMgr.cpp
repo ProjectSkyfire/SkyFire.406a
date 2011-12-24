@@ -1373,7 +1373,7 @@ void LFGMgr::UpdateProposal(uint32 proposalId, const uint64& guid, bool accept)
                     m_WaitTimeAvg = int32((m_WaitTimeAvg * m_NumWaitTimeAvg + waitTimesMap[player->GetGUID()]) / ++m_NumWaitTimeAvg);
                     break;
             }
-            group->SetLfgRoles(pguid, pProposal->players[pguid]->role);
+            group->SetRoles(pguid, pProposal->players[pguid]->role);
             SetState(pguid, LFG_STATE_DUNGEON);
         }
 

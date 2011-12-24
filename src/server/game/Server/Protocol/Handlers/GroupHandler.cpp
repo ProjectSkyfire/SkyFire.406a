@@ -53,6 +53,7 @@ void WorldSession::SendPartyResult(PartyOperation operation, const std::string& 
     data << member;
     data << uint32(res);
     data << uint32(val);                                    // LFD cooldown related (used with ERR_PARTY_LFG_BOOT_COOLDOWN_S and ERR_PARTY_LFG_BOOT_NOT_ELIGIBLE_S)
+    data << uint64(0);                                      // GUID?
 
     SendPacket(&data);
 }
@@ -62,11 +63,11 @@ void WorldSession::HandleGroupInviteOpcode(WorldPacket & recv_data)
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_GROUP_INVITE");
 
     std::string membername;
-    for (int i = 0; i < 10; ++i)
-        recv_data.read_skip<std::string>();
-
+    uint32 unk; //groupType?
     recv_data >> membername;
-    recv_data.read_skip<uint32>();
+    recv_data >> unk; //in CMSG_GROUP_ACCEPT too.
+
+    // attempt add selected player
 
     // cheating
     if (!normalizePlayerName(membername))
@@ -198,20 +199,24 @@ void WorldSession::HandleGroupAcceptOpcode(WorldPacket& recv_data)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_GROUP_ACCEPT");
 
-    recv_data.read_skip<uint32>();
+    uint32 unk;
+    recv_data >> unk;
+
     Group* group = GetPlayer()->GetGroupInvite();
-
-    if (!group)
-        return;
-
-    // Remove player from invitees in any case
-    group->RemoveInvite(GetPlayer());
+    if (!group) return;
 
     if (group->GetLeaderGUID() == GetPlayer()->GetGUID())
     {
         sLog->outError("HandleGroupAcceptOpcode: player %s(%d) tried to accept an invite to his own group", GetPlayer()->GetName(), GetPlayer()->GetGUIDLow());
         return;
     }
+
+    // Remove player from invitees in any case
+    group->RemoveInvite(GetPlayer());
+
+    /********************/
+    /** error handling **/
+    /********************/
 
     // Group is full
     if (group->IsFull())
@@ -396,6 +401,7 @@ void WorldSession::HandleGroupDisbandOpcode(WorldPacket & /*recv_data*/)
         return;
     }
 
+    /********************/
     /** error handling **/
     /********************/
 
@@ -478,6 +484,7 @@ void WorldSession::HandleMinimapPingOpcode(WorldPacket& recv_data)
 
     //sLog->outDebug("Received opcode MSG_MINIMAP_PING X: %f, Y: %f", x, y);
 
+    /********************/
     /** error handling **/
     /********************/
 

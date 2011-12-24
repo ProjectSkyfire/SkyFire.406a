@@ -200,7 +200,15 @@ class Group
         void   UpdateLooterGuid(WorldObject* pLootedObject, bool ifneed = false);
         void   SetLootThreshold(ItemQualities threshold);
         void   Disband(bool hideDestroy=false);
-        void   SetLfgRoles(uint64 guid, const uint8 roles);
+        void   SetRoles(uint64 guid, const uint8 roles);
+        uint8 GetRoles(uint64 guid)
+        {
+            member_witerator slot = _getMemberWSlot(guid);
+            if (slot == m_memberSlots.end())
+                return 0;
+
+            return slot->roles;
+        }
 
         // properties accessories
         bool IsFull() const;
@@ -240,7 +248,9 @@ class Group
 
         void ConvertToLFG();
         void ConvertToRaid();
+        void ConvertToGroup();
 
+        // some additional raid methods
         void SetBattlegroundGroup(Battleground* bg);
         void SetBattlefieldGroup(Battlefield* bf);
         GroupJoinBattlegroundResult CanJoinBattlegroundQueue(Battleground const* bgOrTemplate, BattlegroundQueueTypeId bgQueueTypeId, uint32 MinPlayerCount, uint32 MaxPlayerCount, bool isRated, uint32 arenaSlot);

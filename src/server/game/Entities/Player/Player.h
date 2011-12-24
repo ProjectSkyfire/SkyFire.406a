@@ -2526,6 +2526,7 @@ class Player : public Unit, public GridObject<Player>
         void SetAuraUpdateMaskForRaid(uint8 slot) { m_auraRaidUpdateMask |= (uint64(1) << slot); }
         Player* GetNextRandomRaidMember(float radius);
         PartyResult CanUninviteFromGroup() const;
+
         // Battleground Group System
         void SetBattlegroundOrBattlefieldRaid(Group *group, int8 subgroup = -1);
         void RemoveFromBattlegroundOrBattlefieldRaid();
