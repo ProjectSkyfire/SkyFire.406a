@@ -221,6 +221,29 @@ void Group::ConvertToRaid()
             player->UpdateForQuestWorldObjects();
 }
 
+void Group::ConvertToGroup()
+{
+    if(m_memberSlots.size() > 5)
+        return;
+
+    m_groupType = GroupType(GROUPTYPE_NORMAL);
+
+    if (m_subGroupsCounts)
+    {
+        delete[] m_subGroupsCounts;
+        m_subGroupsCounts = NULL;;
+    }
+
+    if (!isBGGroup())
+        CharacterDatabase.PExecute("UPDATE groups SET groupType='%u' WHERE guid='%u'", uint8(m_groupType), GUID_LOPART(m_guid));
+    SendUpdate();
+
+    // update quest related GO states (quest activity dependent from raid membership)
+    for (member_citerator citr = m_memberSlots.begin(); citr != m_memberSlots.end(); ++citr)
+        if (Player* player = sObjectAccessor->FindPlayer(citr->guid))
+            player->UpdateForQuestWorldObjects();
+}
+
 bool Group::AddInvite(Player* player)
 {
     if (!player || player->GetGroupInvite())
