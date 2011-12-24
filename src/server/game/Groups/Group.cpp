@@ -231,7 +231,7 @@ void Group::ConvertToGroup()
     if (m_subGroupsCounts)
     {
         delete[] m_subGroupsCounts;
-        m_subGroupsCounts = NULL;;
+        m_subGroupsCounts = NULL;
     }
 
     if (!isBGGroup())
