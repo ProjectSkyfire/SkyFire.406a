@@ -1,0 +1,1 @@
+ALTER TABLE `spelleffect_dbc` ADD COLUMN `effectUnk_430` INT(10) AFTER `effectIndex`;
