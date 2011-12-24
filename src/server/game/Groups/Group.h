@@ -27,7 +27,7 @@
 #include "QueryResult.h"
 #include "SharedDefines.h"
 #include "Player.h"
-#include "BattlefieldMgr.h"
+#include "../Battlefields/Battlefield.h" // TODO: Fix this!
 
 class Creature;
 class GroupReference;
@@ -116,6 +116,7 @@ enum GroupUpdateFlags
     GROUP_UPDATE_FLAG_PET_MAX_POWER     = 0x00020000,       // uint16 pet max power
     GROUP_UPDATE_FLAG_PET_AURAS         = 0x00040000,       // uint64 mask, for each bit set uint32 spellid + uint8 unk, pet auras...
     GROUP_UPDATE_FLAG_VEHICLE_SEAT      = 0x00080000,       // uint32 vehicle_seat_id (index from VehicleSeat.dbc)
+    GROUP_UPDATE_FLAG_PHASE             = 0x00100000,       // uint32, uint32 phase, string (unconfirmed)
     GROUP_UPDATE_PET                    = 0x0007FC00,       // all pet flags
     GROUP_UPDATE_FULL                   = 0x0007FFFF,       // all known flags
 };
@@ -200,15 +201,11 @@ class Group
         void   UpdateLooterGuid(WorldObject* pLootedObject, bool ifneed = false);
         void   SetLootThreshold(ItemQualities threshold);
         void   Disband(bool hideDestroy=false);
-        void   SetRoles(uint64 guid, const uint8 roles);
-        uint8 GetRoles(uint64 guid)
-        {
-            member_witerator slot = _getMemberWSlot(guid);
-            if (slot == m_memberSlots.end())
-                return 0;
 
-            return slot->roles;
-        }
+        // Dungeon Finder
+        void SetLfgRoles(uint64& guid, const uint8 roles);
+        void SetRoles(uint64 guid, const uint8 roles);
+        uint8 GetRoles(uint64 guid);
 
         // properties accessories
         bool IsFull() const;

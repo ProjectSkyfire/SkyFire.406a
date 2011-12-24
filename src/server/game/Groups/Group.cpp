@@ -1840,6 +1840,16 @@ void Group::SetLootThreshold(ItemQualities threshold)
     m_lootThreshold = threshold;
 }
 
+void Group::SetLfgRoles(uint64& guid, const uint8 roles)
+{
+    member_witerator slot = _getMemberWSlot(guid);
+    if (slot == m_memberSlots.end())
+        return;
+
+    slot->roles = roles;
+    SendUpdate();
+}
+
 void Group::SetRoles(uint64 guid, const uint8 roles)
 {
     member_witerator slot = _getMemberWSlot(guid);
@@ -1848,6 +1858,15 @@ void Group::SetRoles(uint64 guid, const uint8 roles)
 
     slot->roles = roles;
          SendUpdate();
+}
+
+uint8 Group::GetRoles(uint64 guid)
+{
+    member_witerator slot = _getMemberWSlot(guid);
+    if (slot == m_memberSlots.end())
+        return 0;
+
+    return slot->roles;
 }
 
 bool Group::IsFull() const
