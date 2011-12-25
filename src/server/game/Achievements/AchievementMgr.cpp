@@ -2283,9 +2283,9 @@ void AchievementMgr::BuildAllDataPacket(WorldPacket *data) const
 void AchievementMgr::SendGuildAchievementData()
 {
     uint32 count = 0;
-    AchievementEntry const *achievement;
+    AchievementEntry const* achievement;
 
-    for (CompletedAchievementMap::const_iterator iter = m_completedAchievements.begin(); iter!=m_completedAchievements.end(); ++iter)
+    for (CompletedAchievementMap::const_iterator iter = m_completedAchievements.begin(); iter!= m_completedAchievements.end(); ++iter)
     {
         achievement = sAchievementStore.LookupEntry(iter->first);
         if (achievement->flags & ACHIEVEMENT_FLAG_GUILD_ACHIEVEMENT)
@@ -2296,14 +2296,14 @@ void AchievementMgr::SendGuildAchievementData()
 
     data << uint32(count);
 
-    for (CompletedAchievementMap::const_iterator iter = m_completedAchievements.begin(); iter!=m_completedAchievements.end(); ++iter)
+    for (CompletedAchievementMap::const_iterator iter = m_completedAchievements.begin(); iter!= m_completedAchievements.end(); ++iter)
     {
         achievement = sAchievementStore.LookupEntry(iter->first);
         if (achievement->flags & ACHIEVEMENT_FLAG_GUILD_ACHIEVEMENT)
             data << uint32(iter->first);
     }
 
-    for (CompletedAchievementMap::const_iterator iter = m_completedAchievements.begin(); iter!=m_completedAchievements.end(); ++iter)
+    for (CompletedAchievementMap::const_iterator iter = m_completedAchievements.begin(); iter!= m_completedAchievements.end(); ++iter)
     {
         achievement = sAchievementStore.LookupEntry(iter->first);
         if (achievement->flags & ACHIEVEMENT_FLAG_GUILD_ACHIEVEMENT)
