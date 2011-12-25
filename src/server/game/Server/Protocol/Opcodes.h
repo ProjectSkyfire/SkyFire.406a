@@ -750,7 +750,7 @@ enum Opcodes
     CMSG_AREA_SPIRIT_HEALER_QUEUE                    = 0x10299, //
     SMSG_AREA_SPIRIT_HEALER_TIME                     = 0x1029A, //
     CMSG_GM_UNTEACH                                  = 0x1029B, //
-    SMSG_WARDEN_DATA                                 = 0x1029C, //
+    SMSG_WARDEN_DATA                                 = 0x004BE, // 4.3.0 15050
     CMSG_WARDEN_DATA                                 = 0x04934, // 4.3.0 15050
     SMSG_GROUP_JOINED_BATTLEGROUND                   = 0x1029D, //
     CMSG_BATTLEGROUND_PLAYER_POSITIONS               = 0x1029E, //
