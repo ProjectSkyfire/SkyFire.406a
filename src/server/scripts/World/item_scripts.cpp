@@ -27,7 +27,6 @@ EndScriptData */
 item_draenei_fishing_net(i23654)    Hacklike implements chance to spawn item or creature
 item_nether_wraith_beacon(i31742)   Summons creatures for quest Becoming a Spellfire Tailor (q10832)
 item_flying_machine(i34060, i34061)  Engineering crafted flying machines
-item_gor_dreks_ointment(i30175)     Protecting Our Own(q10488)
 item_only_for_flight                Items which should only useable while flying
 EndContentData */
 
@@ -138,47 +137,6 @@ public:
                 nether->AI()->AttackStart(player);
         }
         return false;
-    }
-};
-
-/*#####
-# item_gor_dreks_ointment
-#####*/
-
-class item_gor_dreks_ointment : public ItemScript
-{
-public:
-    item_gor_dreks_ointment() : ItemScript("item_gor_dreks_ointment") { }
-
-    bool OnUse(Player* player, Item* pItem, SpellCastTargets const& targets)
-    {
-        if (targets.GetUnitTarget() && targets.GetUnitTarget()->GetTypeId() == TYPEID_UNIT &&
-            targets.GetUnitTarget()->GetEntry() == 20748 && !targets.GetUnitTarget()->HasAura(32578))
-            return false;
-
-        player->SendEquipError(EQUIP_ERR_CANT_DO_RIGHT_NOW, pItem, NULL);
-        return true;
-    }
-};
-
-/*#####
-# item_incendiary_explosives
-#####*/
-
-class item_incendiary_explosives : public ItemScript
-{
-public:
-    item_incendiary_explosives() : ItemScript("item_incendiary_explosives") { }
-
-    bool OnUse(Player* player, Item* pItem, SpellCastTargets const & /*targets*/)
-    {
-        if (player->FindNearestCreature(26248, 15) || player->FindNearestCreature(26249, 15))
-            return false;
-        else
-        {
-            player->SendEquipError(EQUIP_ERR_OUT_OF_RANGE, pItem, NULL);
-            return true;
-        }
     }
 };
 
@@ -396,71 +354,14 @@ public:
     }
 };
 
-enum TheEmissary
-{
-    QUEST_THE_EMISSARY      =   11626,
-    NPC_LEVIROTH            =   26452
-};
-
-class item_trident_of_nazjan : public ItemScript
-{
-public:
-    item_trident_of_nazjan() : ItemScript("item_Trident_of_Nazjan") { }
-
-    bool OnUse(Player* player, Item* pItem, const SpellCastTargets & /*pTargets*/)
-    {
-        if (player->GetQuestStatus(QUEST_THE_EMISSARY) == QUEST_STATUS_INCOMPLETE)
-        {
-            if (Creature* pLeviroth = player->FindNearestCreature(NPC_LEVIROTH, 10.0f)) // spell range
-            {
-                pLeviroth->AI()->AttackStart(player);
-                return false;
-            } else
-                player->SendEquipError(EQUIP_ERR_OUT_OF_RANGE, pItem, NULL);
-        } else
-            player->SendEquipError(EQUIP_ERR_CANT_DO_RIGHT_NOW , pItem, NULL);
-        return true;
-    }
-};
-
-enum eCapturedFrog
-{
-    QUEST_THE_PERFECT_SPIES      = 25444,
-    NPC_VANIRAS_SENTRY_TOTEM     = 40187
-};
-
-class item_captured_frog : public ItemScript
-{
-public:
-    item_captured_frog() : ItemScript("item_captured_frog") { }
-
-    bool OnUse(Player* player, Item* pItem, SpellCastTargets const& /*targets*/)
-    {
-        if (player->GetQuestStatus(QUEST_THE_PERFECT_SPIES) == QUEST_STATUS_INCOMPLETE)
-        {
-            if (player->FindNearestCreature(NPC_VANIRAS_SENTRY_TOTEM, 10.0f))
-                return false;
-            else
-                player->SendEquipError(EQUIP_ERR_OUT_OF_RANGE, pItem, NULL);
-        }
-        else
-            player->SendEquipError(EQUIP_ERR_CANT_DO_RIGHT_NOW, pItem, NULL);
-        return true;
-    }
-};
-
 void AddSC_item_scripts()
 {
     new item_only_for_flight();
     new item_draenei_fishing_net();
     new item_nether_wraith_beacon();
-    new item_gor_dreks_ointment();
-    new item_incendiary_explosives();
     new item_mysterious_egg();
     new item_disgusting_jar();
     new item_pile_fake_furs();
     new item_petrov_cluster_bombs();
     new item_dehta_trap_smasher();
-    new item_trident_of_nazjan();
-    new item_captured_frog();
-}
+ }
