@@ -280,7 +280,7 @@ World::AddSession_(WorldSession* s)
 
     s->SendTutorialsData();
 
-    s->SendAccountDataTimes(GLOBAL_CACHE_MASK);
+    //s->SendAccountDataTimes(GLOBAL_CACHE_MASK);
 
     UpdateMaxSessionCounters();
 
@@ -379,7 +379,7 @@ bool World::RemoveQueuedPlayer(WorldSession* sess)
 
         pop_sess->SendTutorialsData();
 
-        pop_sess->SendAccountDataTimes(GLOBAL_CACHE_MASK);
+        //pop_sess->SendAccountDataTimes(GLOBAL_CACHE_MASK);
 
         m_QueuedPlayer.pop_front();
 

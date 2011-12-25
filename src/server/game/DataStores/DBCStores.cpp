@@ -587,7 +587,7 @@ void LoadDBCStores(const std::string& dataPath, uint32& availableDbcLocales)
     }
 
     // Check loaded DBC files proper version for version 4.3.0 15505
-    if (!sAreaStore.LookupEntry(5995)              ||       // last area (areaflag) added in 4.3.0
+    /*if (!sAreaStore.LookupEntry(5995)              ||       // last area (areaflag) added in 4.3.0
         !sCharTitlesStore.LookupEntry(287)         ||       // last char title added in 4.3.0
         !sGemPropertiesStore.LookupEntry(2250)     ||       // last gem property added in 4.3.0
         !sMapStore.LookupEntry(980)                ||       // last map added in 4.3.0
@@ -595,7 +595,7 @@ void LoadDBCStores(const std::string& dataPath, uint32& availableDbcLocales)
     {
         sLog->outError("You have _outdated_ DBC files. Please extract correct versions from current using client.");
         exit(1);
-    }
+    }*/
 
     sLog->outString(">> Initialized %d data stores in %u ms", DBCFileCount, GetMSTimeDiffToNow(oldMSTime));
     sLog->outString();

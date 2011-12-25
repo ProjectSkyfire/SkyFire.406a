@@ -22076,10 +22076,10 @@ void Player::SendInitialPacketsBeforeAddToMap()
 
 void Player::SendInitialPacketsAfterAddToMap()
 {
-    WorldPacket Datas(SMSG_UPDATE_ACCOUNT_DATA_COMPLETE); 
-    Datas << uint32(0x07); 
-    Datas << uint32(0x00); 
-    GetSession()->SendPacket(&Datas); 
+    //WorldPacket Datas(SMSG_UPDATE_ACCOUNT_DATA_COMPLETE); 
+    //Datas << uint32(0x07); 
+    //Datas << uint32(0x00); 
+    //GetSession()->SendPacket(&Datas); 
     UpdateVisibilityForPlayer();
 
     // update zone
