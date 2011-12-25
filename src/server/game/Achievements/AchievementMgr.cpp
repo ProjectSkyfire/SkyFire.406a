@@ -2479,6 +2479,7 @@ void AchievementMgr::BuildAllDataPacket(WorldPacket *data) const
 
     for (CompletedAchievementMap::const_iterator iter = m_completedAchievements.begin(); iter!=m_completedAchievements.end(); ++iter)
         *data << uint32(iter->first);
+
     for (CompletedAchievementMap::const_iterator iter = m_completedAchievements.begin(); iter!=m_completedAchievements.end(); ++iter)
         *data << uint32(secsToTimeBitFields(iter->second.date));
 
@@ -2488,12 +2489,16 @@ void AchievementMgr::BuildAllDataPacket(WorldPacket *data) const
     time_t now = time(NULL);
     for (CriteriaProgressMap::const_iterator iter = m_criteriaProgress.begin(); iter!=m_criteriaProgress.end(); ++iter)
         *data << uint32(now - iter->second.date);
+
     for (CriteriaProgressMap::const_iterator iter = m_criteriaProgress.begin(); iter!=m_criteriaProgress.end(); ++iter)
         *data << uint32(secsToTimeBitFields(iter->second.date));
+
     /*for (uint32 i = 0; i < criterias; ++i)
         data->append(GetPlayer()->GetPackGUID());*/
+
     for (CriteriaProgressMap::const_iterator iter = m_criteriaProgress.begin(); iter!=m_criteriaProgress.end(); ++iter)
         *data << uint64(iter->second.counter);
+
     for (CriteriaProgressMap::const_iterator iter = m_criteriaProgress.begin(); iter!=m_criteriaProgress.end(); ++iter)
         *data << uint32(now - iter->second.date);
 
