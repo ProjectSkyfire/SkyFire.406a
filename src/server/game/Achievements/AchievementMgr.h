@@ -65,10 +65,9 @@ enum AchievementCriteriaDataType
     ACHIEVEMENT_CRITERIA_DATA_INSTANCE_SCRIPT          = 18, // 0              0             maker instance script call for check current criteria requirements fit
     ACHIEVEMENT_CRITERIA_DATA_TYPE_S_EQUIPED_ITEM      = 19, // item_level     item_quality  for equipped item in slot to check item level and quality
     ACHIEVEMENT_CRITERIA_DATA_TYPE_MAP_ID              = 20, // map_id         0             player must be on map with id in map_id
-    ACHIEVEMENT_CRITERIA_DATA_TYPE_ARENA_TYPE          = 21, // arena_type     0             player must be in the arena bracket specified by arena_type
 };
 
-#define MAX_ACHIEVEMENT_CRITERIA_DATA_TYPE               22 // maximum value in AchievementCriteriaDataType enum
+#define MAX_ACHIEVEMENT_CRITERIA_DATA_TYPE               21 // maximum value in AchievementCriteriaDataType enum
 
 class Player;
 class Unit;
@@ -171,11 +170,6 @@ struct AchievementCriteriaData
         {
             uint32 mapId;
         } map_id;
-        // ACHIEVEMENT_CRITERIA_DATA_TYPE_ARENA_TYPE        = 21
-        struct
-        {
-            uint32 arenaType;
-        } arena_type;
         // ...
         struct
         {
@@ -256,15 +250,12 @@ class AchievementMgr
         ~AchievementMgr();
 
         void Reset();
-        enum ProgressType { PROGRESS_SET, PROGRESS_ACCUMULATE, PROGRESS_HIGHEST };
         static void DeleteFromDB(uint32 lowguid);
         void LoadFromDB(PreparedQueryResult achievementResult, PreparedQueryResult criteriaResult);
         void SaveToDB(SQLTransaction& trans);
-        void ResetAchievementCriteria(AchievementCriteriaTypes type, uint64 miscvalue1 = 0, uint64 miscvalue2 = 0, bool evenIfCriteriaComplete = false);
-        void UpdateAchievementCriteria(AchievementCriteriaTypes type, uint64 miscValue1 = 0, uint64 miscValue2 = 0, Unit* unit = NULL, bool fGuildUpdate = false);
-        void SetCriteriaProgress(AchievementCriteriaEntry const* entry, uint32 changeValue, ProgressType ptype = PROGRESS_SET, bool fGuildUpdate = false);
-        void CompletedAchievement(AchievementEntry const* entry, bool fGuildUpdate = false);
-        void SetGuildCriteriaProgress(CriteriaProgressMap p);
+        void ResetAchievementCriteria(AchievementCriteriaTypes type, uint32 miscvalue1 = 0, uint32 miscvalue2 = 0, bool evenIfCriteriaComplete = false);
+        void UpdateAchievementCriteria(AchievementCriteriaTypes type, uint32 miscValue1 = 0, uint32 miscValue2 = 0, Unit* unit = NULL);
+        void CompletedAchievement(AchievementEntry const* entry);
         void CheckAllAchievementCriteria();
         void SendAllAchievementData();
         void SendGuildAchievementData();
@@ -274,13 +265,15 @@ class AchievementMgr
         void UpdateTimedAchievements(uint32 timeDiff);
         void StartTimedAchievement(AchievementCriteriaTimedTypes type, uint32 entry, uint32 timeLost = 0);
         void RemoveTimedAchievement(AchievementCriteriaTimedTypes type, uint32 entry);   // used for quest and scripted timed achievements
-        //void RemoveAchievement(uint32 entry);
+
         uint32 GetAchievementPoints() const { return m_achievementPoints; }
 
     private:
+        enum ProgressType { PROGRESS_SET, PROGRESS_ACCUMULATE, PROGRESS_HIGHEST };
         void SendAchievementEarned(AchievementEntry const* achievement) const;
         void SendCriteriaUpdate(AchievementCriteriaEntry const* entry, CriteriaProgress const* progress, uint32 timeElapsed, bool timedCompleted) const;
         CriteriaProgress* GetCriteriaProgress(AchievementCriteriaEntry const* entry);
+        void SetCriteriaProgress(AchievementCriteriaEntry const* entry, uint32 changeValue, ProgressType ptype = PROGRESS_SET);
         void RemoveCriteriaProgress(AchievementCriteriaEntry const* entry);
         void CompletedCriteriaFor(AchievementEntry const* achievement);
         bool IsCompletedCriteria(AchievementCriteriaEntry const* achievementCriteria, AchievementEntry const* achievement);
@@ -289,11 +282,9 @@ class AchievementMgr
         void BuildAllDataPacket(WorldPacket* data) const;
 
         Player* m_player;
-        CriteriaProgressMap m_criteriaProgress;
-        CriteriaProgressMap m_GuildcriteriaProgress;
-        CompletedAchievementMap m_completedAchievements;
-        CompletedAchievementMap m_completedGuildAchievements;
         uint32 m_achievementPoints;
+        CriteriaProgressMap m_criteriaProgress;
+        CompletedAchievementMap m_completedAchievements;
         typedef std::map<uint32, uint32> TimedAchievementMap;
         TimedAchievementMap m_timedAchievements;      // Criteria id/time left in MS
 };
@@ -374,7 +365,6 @@ class AchievementGlobalMgr
 
         typedef std::set<uint32> AllCompletedAchievements;
         AllCompletedAchievements m_allCompletedAchievements;
-        AllCompletedAchievements m_allGuildCompletedAchievements;
 
         AchievementRewards m_achievementRewards;
         AchievementRewardLocales m_achievementRewardLocales;

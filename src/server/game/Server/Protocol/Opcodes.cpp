@@ -1274,7 +1274,7 @@ void InitOpcodeTable()
     OPCODE( CMSG_AUTO_DECLINE_GUILD_INVITES,              STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
     OPCODE( CMSG_SET_PRIMARY_TALENT_TREE,                 STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
     OPCODE( CMSG_GROUP_SET_ROLES,                         STATUS_LOGGEDIN, PROCESS_INPLACE,       &WorldSession::HandleGroupSetRoles             );
-    OPCODE( CMSG_GUILD_UPDATE_PARTY_STATE,                STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleGuildPartyStateUpdate     );
+    OPCODE( CMSG_GUILD_UPDATE_PARTY_STATE,                STATUS_LOGGEDIN, PROCESS_INPLACE,       &WorldSession::HandleGuildPartyStateUpdate     );
     OPCODE( SMSG_UNKNOWN_1310,                            STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( CMSG_RETURN_TO_GRAVEYARD,                     STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
     OPCODE( CMSG_REFORGE_ITEM,                            STATUS_LOGGEDIN, PROCESS_INPLACE,       &WorldSession::HandleReforgeItem               );
