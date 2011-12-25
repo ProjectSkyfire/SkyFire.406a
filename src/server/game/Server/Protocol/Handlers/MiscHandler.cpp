@@ -1673,6 +1673,20 @@ void WorldSession::HandleQueryInspectAchievements(WorldPacket & recv_data)
     player->GetAchievementMgr().SendRespondInspectAchievements(_player);
 }
 
+void WorldSession::HandleGuildPartyStateUpdate(WorldPacket & /*recv_data*/)
+{
+    sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: CMSG_GUILD_UPDATE_PARTY_STATE");
+
+    // TODO: implement
+
+    WorldPacket packet(SMSG_GUILD_UPDATE_PARTY_STATE, 1+4+4+4);
+    packet << uint8(0);         // IsInGuildParty
+    packet << uint32(0);        // numGuildRequired
+    packet << uint32(0);        // numGuildPresent
+    packet << float(0);         // guildXpMultiplier
+    SendPacket(&packet);
+}
+
 void WorldSession::HandleWorldStateUITimerUpdate(WorldPacket& /*recv_data*/)
 {
     // empty opcode

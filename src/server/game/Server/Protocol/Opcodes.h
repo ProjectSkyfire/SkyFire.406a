@@ -143,7 +143,6 @@ enum Opcodes
     SMSG_GUILD_UPDATE_ROSTER                         = 0x0085E, // 4.0.6a 13623
     SMSG_GUILD_RANKS_UPDATE                          = 0x0004C, // 4.0.6a 13623
     SMSG_GUILD_REWARDS_LIST                          = 0x00C4C, // 4.0.6a 13623
-    SMSG_GUILD_TRADESKILL_UPDATE                     = 0x0454E, // 4.0.6a 13623
     SMSG_GUILD_MAX_DAILY_XP                          = 0x0441C, // 4.0.6a 13623
     SMSG_GUILD_NEWS_UPDATE                           = 0x0485E, // 4.0.6a 13623
     CMSG_GUILD_REQUEST_NEWS                          = 0x03129, // 4.0.6a 13623
@@ -565,12 +564,14 @@ enum Opcodes
     SMSG_GOSSIP_POI                                  = 0x0B9AC, // 4.0.6a 13623
     CMSG_CHAT_IGNORED                                = 0x0A78C, // 4.0.6a 13623
     CMSG_GUILD_RANK                                  = 0x02709, // 4.0.6a 13623
-    SMSG_GUILD_RANK                                  = 0x0411E, // 4.0.6a 13623
     CMSG_GUILD_RANKS                                 = 0x03129, // 4.0.6a 13623
+    SMSG_GUILD_RANK                                  = 0x0411E, // 4.0.6a 13623
     CMSG_GUILD_ADD_RANK                              = 0x02309, // 4.0.6a 13623
     CMSG_GUILD_DEL_RANK                              = 0x02129, // 4.0.6a 13623
     CMSG_GUILD_SWITCH_RANK                           = 0x03309, // Unknown opcode ID
     CMSG_GUILD_SET_NOTE                              = 0x0232D, // 4.0.6a 13623
+    CMSG_GUILD_QUERY_TRADESKILL                      = 0x02329, // 4.0.6a 13623
+    SMSG_GUILD_TRADESKILL_UPDATE                     = 0x0454E, // 4.0.6a 13623
     SMSG_LOGIN_VERIFY_WORLD                          = 0x028C0, // 4.0.6a 13623
     CMSG_CLEAR_EXPLORATION                           = 0x100A9, // Unknown opcode ID
     CMSG_SEND_MAIL                                   = 0x02DEC, // 4.0.6a 13623

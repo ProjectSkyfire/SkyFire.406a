@@ -258,6 +258,7 @@ class AchievementMgr
         void CompletedAchievement(AchievementEntry const* entry);
         void CheckAllAchievementCriteria();
         void SendAllAchievementData();
+        void SendGuildAchievementData();
         void SendRespondInspectAchievements(Player* player);
         bool HasAchieved(uint32 achievementId) const;
         Player* GetPlayer() const { return m_player; }

@@ -52,12 +52,15 @@ void WorldSession::HandleGuildQueryOpcode(WorldPacket& recvPacket)
     // Use received guild id to access guild method (not player's guild id)
     uint32 lowGuildId = GUID_LOPART(guildId);
     if (Guild* guild = sGuildMgr->GetGuildById(lowGuildId))
+    {
         guild->HandleQuery(this);
+    }
     else
+    {
         Guild::SendCommandResult(this, GUILD_CREATE_S, ERR_GUILD_PLAYER_NOT_IN_GUILD);
+    }
 }
 
-// Cata status: Not used.
 void WorldSession::HandleGuildCreateOpcode(WorldPacket& recvPacket)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_GUILD_CREATE");
@@ -75,9 +78,6 @@ void WorldSession::HandleGuildCreateOpcode(WorldPacket& recvPacket)
     }
 }
 
-// Cata Status: Done
-// Functional, but there are many unknown values in the SMSG_GUILD_INVITE
-// However, until guild leveling system finds some use in emulating, those aren't needed
 void WorldSession::HandleGuildInviteOpcode(WorldPacket& recvPacket)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_GUILD_INVITE");
@@ -90,7 +90,6 @@ void WorldSession::HandleGuildInviteOpcode(WorldPacket& recvPacket)
             guild->HandleInviteMember(this, invitedName);
 }
 
-// Cata Status: Done
 void WorldSession::HandleGuildRemoveOpcode(WorldPacket& recvPacket)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_GUILD_REMOVE");
@@ -105,7 +104,7 @@ void WorldSession::HandleGuildRemoveOpcode(WorldPacket& recvPacket)
 
 void WorldSession::HandleGuildAcceptOpcode(WorldPacket& recvPacket)
 {
-    recvPacket.read_skip<uint64>();
+    //recvPacket.read_skip<uint64>();
 
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_GUILD_ACCEPT");
     //recvPacket.read_skip<uint64>();
@@ -138,8 +137,9 @@ void WorldSession::HandleGuildRosterOpcode(WorldPacket& recvPacket)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_GUILD_ROSTER");
 
-    //recvPacket.read_skip<uint64>(); // Guild guid, not used
-    //recvPacket.read_skip<uint64>(); // player guid, not used
+    uint64 guildGUID, playerGUID;
+
+    recvPacket >> guildGUID >> playerGUID;
 
     if (Guild* guild = _GetPlayerGuild(this))
         guild->HandleRoster(this);
@@ -190,9 +190,9 @@ void WorldSession::HandleGuildLeaderOpcode(WorldPacket& recvPacket)
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_GUILD_LEADER");
 
     std::string name;
+    recvPacket >> name;
     recvPacket.read_skip<uint64>(); // guild GUID
     recvPacket.read_skip<uint64>(); // user's guid?
-    recvPacket >> name;
 
     if (normalizePlayerName(name))
         if (Guild* guild = _GetPlayerGuild(this, true))
@@ -350,6 +350,7 @@ void WorldSession::HandleGuildRankOpcode(WorldPacket& recvPacket)
         Guild::SendCommandResult(this, GUILD_CREATE_S, ERR_GUILD_PLAYER_NOT_IN_GUILD);
         return;
     }
+
     if (GetPlayer()->GetGuildId() != GUID_LOPART(guildId))
     {
         printf("CMSG_GUILD_RANK: This player is not in the guild.\n");
@@ -359,7 +360,6 @@ void WorldSession::HandleGuildRankOpcode(WorldPacket& recvPacket)
     }
 
     Guild* guild = _GetPlayerGuild(this, true);
-
     if (!guild)
     {
         recvPacket.rpos(recvPacket.wpos());
@@ -367,7 +367,6 @@ void WorldSession::HandleGuildRankOpcode(WorldPacket& recvPacket)
     }
 
     GuildBankRightsAndSlotsVec rightsAndSlots(GUILD_BANK_MAX_TABS);
-
     if (old_rankId != GR_GUILDMASTER)
     {
         for (uint8 tabId = 0; tabId < GUILD_BANK_MAX_TABS; ++tabId)
@@ -380,6 +379,24 @@ void WorldSession::HandleGuildRankOpcode(WorldPacket& recvPacket)
 
     if (old_rankId != new_rankId && old_rankId != GR_GUILDMASTER && new_rankId != GR_GUILDMASTER)
         guild->ChangeMemberRank(old_rankId, new_rankId);
+}
+
+void WorldSession::HandleGuildRanksOpcode(WorldPacket& recvPacket)
+{
+    sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_GUILD_RANKS");
+
+    uint64 guildGUID;
+
+    recvPacket >> guildGUID;
+
+    Guild* guild = _GetPlayerGuild(this, true);
+    if (!guild)
+    {
+        Guild::SendCommandResult(this, GUILD_CREATE_S, ERR_GUILD_PLAYER_NOT_IN_GUILD);
+        return;
+    }
+
+    guild->SendGuildRankInfo(this);
 }
 
 void WorldSession::HandleGuildAddRankOpcode(WorldPacket& recvPacket)
@@ -396,6 +413,7 @@ void WorldSession::HandleGuildAddRankOpcode(WorldPacket& recvPacket)
 void WorldSession::HandleGuildDelRankOpcode(WorldPacket& recvPacket)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_GUILD_DEL_RANK");
+
     uint32 rankid;
     recvPacket >> rankid;
 
@@ -680,4 +698,17 @@ void WorldSession::HandleSetGuildBankTabText(WorldPacket &recv_data)
 
     if (Guild* guild = _GetPlayerGuild(this))
         guild->SetBankTabText(tabId, text);
+}
+
+void WorldSession::HandleGuildQueryTradeSkill(WorldPacket &recv_data)
+{
+    sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_GUILD_QUERY_TRADESKILL");
+
+    if (Guild* pGuild = _GetPlayerGuild(this))
+    {
+        WorldPacket data(SMSG_GUILD_TRADESKILL_UPDATE, 4);
+        data << uint32(0);
+
+        SendPacket(&data);
+    }
 }

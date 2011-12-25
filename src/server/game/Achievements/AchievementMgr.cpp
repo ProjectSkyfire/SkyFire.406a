@@ -2280,6 +2280,39 @@ void AchievementMgr::BuildAllDataPacket(WorldPacket *data) const
         *data << uint32(iter->first);
 }
 
+void AchievementMgr::SendGuildAchievementData()
+{
+    uint32 count = 0;
+    AchievementEntry const *achievement;
+
+    for (CompletedAchievementMap::const_iterator iter = m_completedAchievements.begin(); iter!=m_completedAchievements.end(); ++iter)
+    {
+        achievement = sAchievementStore.LookupEntry(iter->first);
+        if (achievement->flags & ACHIEVEMENT_FLAG_GUILD_ACHIEVEMENT)
+            count++;
+    }
+
+    WorldPacket data(SMSG_GUILD_ACHIEVEMENT_DATA, 4 + count * 8);
+
+    data << uint32(count);
+
+    for (CompletedAchievementMap::const_iterator iter = m_completedAchievements.begin(); iter!=m_completedAchievements.end(); ++iter)
+    {
+        achievement = sAchievementStore.LookupEntry(iter->first);
+        if (achievement->flags & ACHIEVEMENT_FLAG_GUILD_ACHIEVEMENT)
+            data << uint32(iter->first);
+    }
+
+    for (CompletedAchievementMap::const_iterator iter = m_completedAchievements.begin(); iter!=m_completedAchievements.end(); ++iter)
+    {
+        achievement = sAchievementStore.LookupEntry(iter->first);
+        if (achievement->flags & ACHIEVEMENT_FLAG_GUILD_ACHIEVEMENT)
+            data << uint32(secsToTimeBitFields(iter->second.date));
+    }
+
+    GetPlayer()->GetSession()->SendPacket(&data);
+}
+
 bool AchievementMgr::HasAchieved(uint32 achievementId) const
 {
     return m_completedAchievements.find(achievementId) != m_completedAchievements.end();
