@@ -575,6 +575,7 @@ class WorldSession
         void HandleGuildRewardsOpcode(WorldPacket& recvPacket);
         void HandleGuildSetNoteOpcode(WorldPacket& recvPacket);
         void HandleGuildRankOpcode(WorldPacket& recvPacket);
+        void HandleGuildRanksOpcode(WorldPacket& recvPacket);
         void HandleGuildAddRankOpcode(WorldPacket& recvPacket);
         void HandleGuildDelRankOpcode(WorldPacket& recvPacket);
         void HandleGuildSwitchRankOpcode(WorldPacket& recvPacket);
@@ -790,6 +791,7 @@ class WorldSession
         void HandleWhoisOpcode(WorldPacket& recv_data);
         void HandleResetInstancesOpcode(WorldPacket& recv_data);
         void HandleHearthAndResurrect(WorldPacket& recv_data);
+        void HandleGuildPartyStateUpdate(WorldPacket& recv_data);
         void HandleInstanceLockResponse(WorldPacket& recvPacket);
 
         // Battlefield
@@ -876,6 +878,7 @@ class WorldSession
         void HandleGuildBankBuyTab(WorldPacket& recv_data);
         void HandleQueryGuildBankTabText(WorldPacket& recv_data);
         void HandleSetGuildBankTabText(WorldPacket& recv_data);
+        void HandleGuildQueryTradeSkill(WorldPacket& recv_data);
 
         // Refer-a-Friend
         void HandleGrantLevel(WorldPacket& recv_data);
