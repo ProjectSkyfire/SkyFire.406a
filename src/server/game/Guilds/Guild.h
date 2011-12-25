@@ -623,13 +623,13 @@ private:
         void CanStoreItemInTab(Item* pItem, uint8 skipSlotId, bool merge, uint32& count);
     };
 
-    typedef UNORDERED_MAP<uint32, Member*> Members;
     typedef std::vector<RankInfo> Ranks;
     typedef std::vector<BankTab*> BankTabs;
 
 public:
     static void SendCommandResult(WorldSession* session, GuildCommandType type, GuildCommandError errCode, const std::string& param = "");
     static void SendSaveEmblemResult(WorldSession* session, GuildEmblemError errCode);
+    typedef UNORDERED_MAP<uint32, Member*> Members;
 
     Guild();
     ~Guild();
@@ -643,10 +643,14 @@ public:
     const std::string& GetName() const { return m_name; }
     const std::string& GetMOTD() const { return m_motd; }
     const std::string& GetInfo() const { return m_info; }
-
     void SwitchRank(uint32 oldRank, uint32 newRank);
-
-    uint32 GetMembersCount() { return m_members.size(); }
+    uint32 GetMembersCount() const { return m_members.size(); }
+    Members GetAllMembers() const { return m_members; }
+    CriteriaProgressMap m_criteriaProgress;
+    uint32 AchievementPoints;
+    void SetGuildCriteriaProgress(CriteriaProgressMap progress, uint64 updaterGUID);
+    CriteriaProgressMap GetGuildCriteriaProgress() { return m_criteriaProgress; }
+    void SetBankTabRights(WorldSession* session, uint32 rankId,uint32 rights[GUILD_BANK_MAX_TABS], uint32 stacks[GUILD_BANK_MAX_TABS]);
 
     // Handle client commands
     void HandleRoster(WorldSession* session = NULL);          // NULL = broadcast

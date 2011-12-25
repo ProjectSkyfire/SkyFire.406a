@@ -1888,6 +1888,9 @@ void Guild::HandleMemberLogout(WorldSession* session)
         member->ResetFlags();
     }
     _BroadcastEvent(GE_SIGNED_OFF, player->GetGUID(), player->GetName());
+    for(Members::iterator itr = m_members.begin(); itr != m_members.end(); ++itr)
+        if(Player* player = itr->second->FindPlayer())
+            player->GetAchievementMgr().SetGuildCriteriaProgress(m_criteriaProgress);
 }
 
 void Guild::HandleDisband(WorldSession* session)
@@ -2040,6 +2043,9 @@ void Guild::SendLoginInfo(WorldSession* session)
     {
         member->SetStats(session->GetPlayer());
         member->AddFlag(GUILD_MEMBER_FLAG_ONLINE);
+        for(Members::iterator itr = m_members.begin(); itr != m_members.end(); ++itr)
+            if(Player* player = itr->second->FindPlayer())
+                player->GetAchievementMgr().SetGuildCriteriaProgress(m_criteriaProgress);
     }
 }
 
@@ -2315,7 +2321,7 @@ bool Guild::AddMember(uint64 guid, uint8 rankId)
 
     uint32 lowguid = GUID_LOPART(guid);
 
-    // If rank was not passed, assing lowest possible rank
+    // If rank was not passed, passing lowest possible rank
     if (rankId == GUILD_RANK_NONE)
         rankId = _GetLowestRankId();
 
@@ -2342,11 +2348,11 @@ bool Guild::AddMember(uint64 guid, uint8 rankId)
         {
             Field* fields = result->Fetch();
             member->SetStats(
-                fields[0].GetString(),
-                fields[1].GetUInt8(),
-                fields[2].GetUInt8(),
-                fields[3].GetUInt32(),
-                fields[4].GetUInt32());
+                fields[0].GetString(), // name
+                fields[1].GetUInt8(), // level
+                fields[2].GetUInt8(), // class
+                fields[3].GetUInt32(), // zone
+                fields[4].GetUInt32()); // account
 
             ok = member->CheckStats();
         }
@@ -2359,7 +2365,7 @@ bool Guild::AddMember(uint64 guid, uint8 rankId)
     m_members[lowguid] = member;
 
     if (m_members.size() > 1)
-       HandleRoster();
+        HandleRoster();
 
     SQLTransaction trans(NULL);
     member->SaveToDB(trans);
@@ -2376,8 +2382,9 @@ bool Guild::AddMember(uint64 guid, uint8 rankId)
     // Call scripts if member was successfully added (and stored to database)
     sScriptMgr->OnGuildAddMember(this, player, rankId);
 
-    if (player)
-        player->SetReputation(1168, 0);
+    for(Members::iterator itr = m_members.begin(); itr != m_members.end(); ++itr)
+        if(Player* player = itr->second->FindPlayer())
+            player->GetAchievementMgr().SetGuildCriteriaProgress(m_criteriaProgress);
 
     return true;
 }
@@ -2428,7 +2435,7 @@ void Guild::DeleteMember(uint64 guid, bool isDisbanding, bool isKicked)
     m_members.erase(lowguid);
 
     if (!m_members.empty())
-       HandleRoster();
+        HandleRoster();
 
     // If player not online data in data field will be loaded from guild tabs no need to update it !!
     if (player)
@@ -2446,6 +2453,9 @@ void Guild::DeleteMember(uint64 guid, bool isDisbanding, bool isKicked)
     _DeleteMemberFromDB(lowguid);
     if (!isDisbanding)
         _UpdateAccountsNumber();
+    for(Members::iterator itr = m_members.begin(); itr != m_members.end(); ++itr)
+        if(Player* player = itr->second->FindPlayer())
+            player->GetAchievementMgr().SetGuildCriteriaProgress(m_criteriaProgress);
 }
 
 bool Guild::ChangeMemberRank(uint64 guid, uint8 newRank)
@@ -3099,4 +3109,25 @@ void Guild::SaveXP()
         stmt->setUInt32(4, m_id);
         CharacterDatabase.Execute(stmt);
     }
+}
+
+void Guild::SetGuildCriteriaProgress(CriteriaProgressMap progress, uint64 updaterGUID)
+{
+    for(CriteriaProgressMap::iterator itr = progress.begin(); itr != progress.end(); ++itr)
+    {
+        if(AchievementCriteriaEntry const* e = sAchievementCriteriaStore.LookupEntry(itr->first))
+        {
+            if(e->completionFlag & ACHIEVEMENT_FLAG_GUILD_ACHIEVEMENT)
+            {
+                CriteriaProgress& p = m_criteriaProgress[itr->first];
+                p.date = itr->second.date;
+                p.counter = itr->second.counter;
+                p.changed = itr->second.changed;
+            }
+        }
+    }
+    for(Members::iterator itr = m_members.begin(); itr != m_members.end(); ++itr)
+        if(Player* player = itr->second->FindPlayer())
+            if(updaterGUID != player->GetGUID())
+                player->GetAchievementMgr().SetGuildCriteriaProgress(m_criteriaProgress);
 }
