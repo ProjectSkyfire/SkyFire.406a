@@ -301,11 +301,11 @@ bool AchievementCriteriaData::Meets(uint32 criteria_id, Player const* source, Un
     const AchievementCriteriaEntry* criteria = sAchievementCriteriaStore.LookupEntry(criteria_id);
 
     bool met = true;
-    for(uint32 i = 0; i < 3; ++i)
+    for (uint32 i = 0; i < 3; ++i)
     {
         uint32 checkType = criteria->moreRequirement[i];
 
-        if(checkType == 0)
+        if (checkType == 0)
             break;
 
         uint32 checkValue = criteria->moreRequirementValue[i];
@@ -322,11 +322,11 @@ bool AchievementCriteriaData::Meets(uint32 criteria_id, Player const* source, Un
                 break;
             }
             case ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_CREATURE_ID:
-                if(target->GetEntry() != checkValue)
+                if (target->GetEntry() != checkValue)
                     return false;
                 break;
             case ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_TARGET_TYPE:
-                if(checkValue == 0 && target->GetTypeId() != TYPEID_PLAYER)
+                if (checkValue == 0 && target->GetTypeId() != TYPEID_PLAYER)
                     return false;
                 break;
             case ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_SPELL:
@@ -362,13 +362,13 @@ bool AchievementCriteriaData::Meets(uint32 criteria_id, Player const* source, Un
             case ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_AREA_ID:
             case ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_AREA_ID2:
             case ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_AREA_ID3:
-                if(source->GetAreaId() != checkValue && source->GetZoneId() != checkValue)
+                if (source->GetAreaId() != checkValue && source->GetZoneId() != checkValue)
                     return false;
                 break;
             case ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_RAID_DIFFICULTY:
             {
                 Map* map = source->GetMap();
-                if(uint32(map->GetDifficulty()) != checkValue)
+                if (uint32(map->GetDifficulty()) != checkValue)
                     return false;
                 break;
             }
@@ -627,8 +627,6 @@ void AchievementMgr::SaveToDB(SQLTransaction& trans)
             if(!(achi->flags & ACHIEVEMENT_FLAG_GUILD_ACHIEVEMENT))
                 continue;
 
-            //sLog->outString("Player guid is : %u", GetPlayer()->GetGUIDLow());
-
             /// first new/changed record prefix
             if (!need_execute)
             {
@@ -652,9 +650,9 @@ void AchievementMgr::SaveToDB(SQLTransaction& trans)
 
         if (need_execute)
         {
-            if(save_player)
+            if (save_player)
                 ssdel << ')';
-            if(save_guild)
+            if (save_guild)
                 guilddel << ')';
         }
 
@@ -914,12 +912,12 @@ void AchievementMgr::UpdateAchievementCriteria(AchievementCriteriaTypes type, ui
 
         if ((achievement->flags & ACHIEVEMENT_FLAG_GUILD_ACHIEVEMENT) && !fGuildUpdate)
         {
-            if(Guild* guild = sGuildMgr->GetGuildById(GetPlayer()->GetGuildId()))
+            if (Guild* guild = sGuildMgr->GetGuildById(GetPlayer()->GetGuildId()))
             {
                 Guild::Members m = guild->GetAllMembers();
-                for(Guild::Members::iterator gitr = m.begin(); gitr != m.end(); ++gitr)
+                for (Guild::Members::iterator gitr = m.begin(); gitr != m.end(); ++gitr)
                 {
-                    if(Player* player = gitr->second->FindPlayer())
+                    if (Player* player = gitr->second->FindPlayer())
                         player->GetAchievementMgr().UpdateAchievementCriteria(type, miscValue1, miscValue2, unit, true);
                 }
             }
@@ -2153,7 +2151,7 @@ void AchievementMgr::SetCriteriaProgress(AchievementCriteriaEntry const* entry, 
 
     SendCriteriaUpdate(entry, progress, timeElapsed, timedCompleted);
 
-    if(Guild* guild = sGuildMgr->GetGuildById(GetPlayer()->GetGuildId()))
+    if (Guild* guild = sGuildMgr->GetGuildById(GetPlayer()->GetGuildId()))
         guild->SetGuildCriteriaProgress(m_criteriaProgress,GetPlayer()->GetGUID());
 }
 
@@ -2255,12 +2253,12 @@ void AchievementMgr::CompletedAchievement(AchievementEntry const* achievement, b
         SendAchievementEarned(achievement);
         if(!fGuildUpdate)
         {
-            if(Guild* guild = sGuildMgr->GetGuildById(GetPlayer()->GetGuildId()))
+            if (Guild* guild = sGuildMgr->GetGuildById(GetPlayer()->GetGuildId()))
             {
                 Guild::Members m = guild->GetAllMembers();
-                for(Guild::Members::iterator gitr = m.begin(); gitr != m.end(); ++gitr)
-                    if(Player* player = gitr->second->FindPlayer())
-                        if(player->GetGUID() != GetPlayer()->GetGUID())
+                for (Guild::Members::iterator gitr = m.begin(); gitr != m.end(); ++gitr)
+                    if (Player* player = gitr->second->FindPlayer())
+                        if (player->GetGUID() != GetPlayer()->GetGUID())
                             player->GetAchievementMgr().CompletedAchievement(achievement);
 
                 guild->AchievementPoints += achievement->points;
@@ -2354,16 +2352,16 @@ void AchievementMgr::SendAllAchievementData()
     for (CompletedAchievementMap::const_iterator iter = m_completedAchievements.begin(); iter!= m_completedAchievements.end(); ++iter)
         data << uint32(iter->first);
 
-    for(CompletedAchievementMap::const_iterator iter = m_completedGuildAchievements.begin(); iter!= m_completedGuildAchievements.end(); ++iter)
+    for (CompletedAchievementMap::const_iterator iter = m_completedGuildAchievements.begin(); iter!= m_completedGuildAchievements.end(); ++iter)
         data << uint32(iter->first);
 
     for (CompletedAchievementMap::const_iterator iter = m_completedAchievements.begin(); iter!= m_completedAchievements.end(); ++iter)
         data << uint32(secsToTimeBitFields(iter->second.date));
 
-    for(CompletedAchievementMap::const_iterator iter = m_completedGuildAchievements.begin(); iter!= m_completedGuildAchievements.end(); ++iter)
+    for (CompletedAchievementMap::const_iterator iter = m_completedGuildAchievements.begin(); iter!= m_completedGuildAchievements.end(); ++iter)
         data << uint32(secsToTimeBitFields(iter->second.date));
 
-    for(CriteriaProgressMap::const_iterator iter = m_criteriaProgress.begin(); iter!=m_criteriaProgress.end(); ++iter)
+    for (CriteriaProgressMap::const_iterator iter = m_criteriaProgress.begin(); iter!=m_criteriaProgress.end(); ++iter)
     {
         data << uint64(iter->second.counter);
         //data.appendPackGUID(iter->second.counter);
@@ -2376,24 +2374,24 @@ void AchievementMgr::SendAllAchievementData()
     for (CriteriaProgressMap::const_iterator iter = m_criteriaProgress.begin(); iter!= m_criteriaProgress.end(); ++iter)
         data << uint32(secsToTimeBitFields(iter->second.date));
 
-    /*for(uint32 i = 0; i < criterias; ++i)
+    /*for (uint32 i = 0; i < criterias; ++i)
     {
         //data.append(GetPlayer()->GetPackGUID());
         data << uint64();
     }*/
-    for(CriteriaProgressMap::const_iterator iter = m_criteriaProgress.begin(); iter!= m_criteriaProgress.end(); ++iter)
+    for (CriteriaProgressMap::const_iterator iter = m_criteriaProgress.begin(); iter!= m_criteriaProgress.end(); ++iter)
     {
         data << uint64(iter->second.counter);
         //data.appendPackGUID(iter->second.counter);
     }
 
-    for(CriteriaProgressMap::const_iterator iter = m_criteriaProgress.begin(); iter!= m_criteriaProgress.end(); ++iter)
+    for (CriteriaProgressMap::const_iterator iter = m_criteriaProgress.begin(); iter!= m_criteriaProgress.end(); ++iter)
         data << uint32(now - iter->second.date);
 
     for (uint32 i = 0; i < flagBytesCount; ++i)
         data << uint8(0);
 
-    for(CriteriaProgressMap::const_iterator iter = m_criteriaProgress.begin(); iter!= m_criteriaProgress.end(); ++iter)
+    for (CriteriaProgressMap::const_iterator iter = m_criteriaProgress.begin(); iter!= m_criteriaProgress.end(); ++iter)
         data << uint32(iter->first);
 
     GetPlayer()->GetSession()->SendPacket(&data);
@@ -2401,11 +2399,11 @@ void AchievementMgr::SendAllAchievementData()
 
 void AchievementMgr::SetGuildCriteriaProgress(CriteriaProgressMap p)
 {
-    for(CriteriaProgressMap::iterator itr = p.begin(); itr != p.end(); ++itr)
+    for (CriteriaProgressMap::iterator itr = p.begin(); itr != p.end(); ++itr)
     {
-        if(AchievementCriteriaEntry const* e = sAchievementCriteriaStore.LookupEntry(itr->first))
+        if (AchievementCriteriaEntry const* e = sAchievementCriteriaStore.LookupEntry(itr->first))
         {
-            if(e->completionFlag & ACHIEVEMENT_FLAG_GUILD_ACHIEVEMENT)
+            if (e->completionFlag & ACHIEVEMENT_FLAG_GUILD_ACHIEVEMENT)
             {
                 CriteriaProgress& pr = m_criteriaProgress[itr->first];
                 pr.date = itr->second.date;
@@ -2440,7 +2438,7 @@ void AchievementMgr::SendRespondInspectAchievements(Player* player)
 
     data << uint64(GetPlayer()->GetGUID());
 
-    for(CriteriaProgressMap::const_iterator iter = m_criteriaProgress.begin(); iter!=m_criteriaProgress.end(); ++iter)
+    for (CriteriaProgressMap::const_iterator iter = m_criteriaProgress.begin(); iter!=m_criteriaProgress.end(); ++iter)
     {
         data << uint64(iter->second.counter);
         //data << uint64(GetPlayer()->GetGUID());
@@ -2494,7 +2492,7 @@ void AchievementMgr::BuildAllDataPacket(WorldPacket *data) const
         *data << uint32(secsToTimeBitFields(iter->second.date));
     /*for (uint32 i = 0; i < criterias; ++i)
         data->append(GetPlayer()->GetPackGUID());*/
-    for(CriteriaProgressMap::const_iterator iter = m_criteriaProgress.begin(); iter!=m_criteriaProgress.end(); ++iter)
+    for (CriteriaProgressMap::const_iterator iter = m_criteriaProgress.begin(); iter!=m_criteriaProgress.end(); ++iter)
         *data << uint64(iter->second.counter);
     for (CriteriaProgressMap::const_iterator iter = m_criteriaProgress.begin(); iter!=m_criteriaProgress.end(); ++iter)
         *data << uint32(now - iter->second.date);
