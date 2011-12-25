@@ -376,15 +376,13 @@ void WorldSession::HandleCharCreateOpcode(WorldPacket & recv_data)
             uint32 team = Player::TeamForRace(race_);
             switch (team)
             {
-                case ALLIANCE: disabled = mask & (1 << 0);
-                    break;
-                case HORDE: disabled = mask & (1 << 1);
-                    break;
+                case ALLIANCE: disabled = mask & (1 << 0); break;
+                case HORDE:    disabled = mask & (1 << 1); break;
             }
 
             if (disabled)
             {
-                data << (uint8)CHAR_CREATE_DISABLED;
+                data << uint8(CHAR_CREATE_DISABLED);
                 SendPacket(&data);
                 return;
             }
@@ -394,7 +392,7 @@ void WorldSession::HandleCharCreateOpcode(WorldPacket & recv_data)
     ChrClassesEntry const* classEntry = sChrClassesStore.LookupEntry(class_);
     if (!classEntry)
     {
-        data << (uint8)CHAR_CREATE_FAILED;
+        data << uint8(CHAR_CREATE_FAILED);
         SendPacket(&data);
         sLog->outError("Class (%u) not found in DBC while creating new char for account (ID: %u): wrong DBC files or cheater?", class_, GetAccountId());
         return;
@@ -403,7 +401,7 @@ void WorldSession::HandleCharCreateOpcode(WorldPacket & recv_data)
     ChrRacesEntry const* raceEntry = sChrRacesStore.LookupEntry(race_);
     if (!raceEntry)
     {
-        data << (uint8)CHAR_CREATE_FAILED;
+        data << uint8(CHAR_CREATE_FAILED);
         SendPacket(&data);
         sLog->outError("Race (%u) not found in DBC while creating new char for account (ID: %u): wrong DBC files or cheater?", race_, GetAccountId());
         return;
@@ -412,7 +410,7 @@ void WorldSession::HandleCharCreateOpcode(WorldPacket & recv_data)
     // prevent character creating Expansion race without Expansion account
     if (raceEntry->expansion > Expansion())
     {
-        data << (uint8)CHAR_CREATE_EXPANSION;
+        data << uint8(CHAR_CREATE_EXPANSION);
         sLog->outError("Expansion %u account:[%d] tried to Create character with expansion %u race (%u)", Expansion(), GetAccountId(), raceEntry->expansion, race_);
         SendPacket(&data);
         return;
@@ -421,7 +419,7 @@ void WorldSession::HandleCharCreateOpcode(WorldPacket & recv_data)
     // prevent character creating Expansion class without Expansion account
     if (classEntry->expansion > Expansion())
     {
-        data << (uint8)CHAR_CREATE_EXPANSION_CLASS;
+        data << uint8(CHAR_CREATE_EXPANSION_CLASS);
         sLog->outError("Expansion %u account:[%d] tried to Create character with expansion %u class (%u)", Expansion(), GetAccountId(), classEntry->expansion, class_);
         SendPacket(&data);
         return;
@@ -449,7 +447,7 @@ void WorldSession::HandleCharCreateOpcode(WorldPacket & recv_data)
     // prevent character creating with invalid name
     if (!normalizePlayerName(name))
     {
-        data << (uint8)CHAR_NAME_NO_NAME;
+        data << uint8(CHAR_NAME_NO_NAME);
         SendPacket(&data);
         sLog->outError("Account:[%d] but tried to Create character with empty [name] ", GetAccountId());
         return;
@@ -466,7 +464,7 @@ void WorldSession::HandleCharCreateOpcode(WorldPacket & recv_data)
 
     if (AccountMgr::IsPlayerAccount(GetSecurity()) && sObjectMgr->IsReservedName(name))
     {
-        data << (uint8)CHAR_NAME_RESERVED;
+        data << uint8(CHAR_NAME_RESERVED);
         SendPacket(&data);
         return;
     }
@@ -475,7 +473,7 @@ void WorldSession::HandleCharCreateOpcode(WorldPacket & recv_data)
     uint32 heroic_free_slots = sWorld->getIntConfig(CONFIG_HEROIC_CHARACTERS_PER_REALM);
     if (heroic_free_slots == 0 && AccountMgr::IsPlayerAccount(GetSecurity()) && class_ == CLASS_DEATH_KNIGHT)
     {
-        data << (uint8)CHAR_CREATE_UNIQUE_CLASS_LIMIT;
+        data << uint8(CHAR_CREATE_UNIQUE_CLASS_LIMIT);
         SendPacket(&data);
         return;
     }
@@ -484,7 +482,7 @@ void WorldSession::HandleCharCreateOpcode(WorldPacket & recv_data)
     uint32 req_level_for_heroic = sWorld->getIntConfig(CONFIG_CHARACTER_CREATING_MIN_LEVEL_FOR_HEROIC_CHARACTER);
     if (AccountMgr::IsPlayerAccount(GetSecurity()) && class_ == CLASS_DEATH_KNIGHT && req_level_for_heroic > sWorld->getIntConfig(CONFIG_MAX_PLAYER_LEVEL))
     {
-        data << (uint8)CHAR_CREATE_LEVEL_REQUIREMENT;
+        data << uint8(CHAR_CREATE_LEVEL_REQUIREMENT);
         SendPacket(&data);
         return;
     }
@@ -500,7 +498,7 @@ void WorldSession::HandleCharCreateCallback(PreparedQueryResult result, Characte
 {
     /** This is a series of callbacks executed consecutively as a result from the database becomes available.
         This is much more efficient than synchronous requests on packet handler, and much less DoS prone.
-        It also prevents data syncrhonisation errors.
+        It also prevents data synchronization errors.
     */
     switch (createInfo->Stage)
     {
@@ -672,14 +670,14 @@ void WorldSession::HandleCharCreateCallback(PreparedQueryResult result, Characte
                         break;
 
                     field = result->Fetch();
-                    accRace = field[1].GetUInt32();
+                    accRace = field[1].GetUInt8();
 
                     if (!haveSameRace)
                         haveSameRace = createInfo->Race == accRace;
 
                     if (AccountMgr::IsPlayerAccount(GetSecurity()) && createInfo->Class == CLASS_DEATH_KNIGHT)
                     {
-                        uint8 acc_class = field[2].GetUInt32();
+                        uint8 acc_class = field[2].GetUInt8();
                         if (acc_class == CLASS_DEATH_KNIGHT)
                         {
                             if (freeHeroicSlots > 0)
@@ -699,7 +697,7 @@ void WorldSession::HandleCharCreateCallback(PreparedQueryResult result, Characte
 
                         if (!hasHeroicReqLevel)
                         {
-                            uint8 acc_level = field[0].GetUInt32();
+                            uint8 acc_level = field[0].GetUInt8();
                             if (acc_level >= heroicReqLevel)
                                 hasHeroicReqLevel = true;
                         }
@@ -845,8 +843,14 @@ void WorldSession::HandleCharCreateCallback(PreparedQueryResult result, Characte
 
 void WorldSession::HandleCharDeleteOpcode(WorldPacket & recv_data)
 {
-    uint64 guid;
-    recv_data >> guid;
+    uint64 guid = 0;
+    uint8 packetGuid, byte;
+
+    sLog->outStaticDebug("WORLD: Received Player Delete Message");
+    recv_data >> packetGuid;
+    recv_data >> byte;
+    recv_data.read_skip<uint16>();
+    recv_data.read_skip<uint32>();
 
     // can't delete loaded character
     if (ObjectAccessor::FindPlayer(guid))
@@ -983,7 +987,7 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder * holder)
     SendAccountDataTimes(PER_CHARACTER_CACHE_MASK);
 
     // 4.3 <packet date = "344698529" direction"StoC" opcode = "20010">29000000 02 1C 02 0000 A0</packet>
-    data.Initialize(SMSG_FEATURE_SYSTEM_STATUS, 2);         // added in 2.2.0
+    data.Initialize(SMSG_FEATURE_SYSTEM_STATUS, 7);         // added in 4.2.2
     /*data << uint8(2);                                       // unknown value
     data << uint8(2);                                       // unknown value
     data << uint8(0);                                       // enable(1)/disable(0) voice chat interface in client
@@ -1083,8 +1087,9 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder * holder)
         }
     }
 
-    data.Initialize(SMSG_LEARNED_DANCE_MOVES, 8);
-    data << uint64(0);
+    data.Initialize(SMSG_LEARNED_DANCE_MOVES, 4+4);
+    data << uint32(0);
+    data << uint32(0);
     SendPacket(&data);
 
     pCurrChar->SendInitialPacketsBeforeAddToMap();
@@ -1146,7 +1151,7 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder * holder)
     pCurrChar->SendInitialPacketsAfterAddToMap();
 
     CharacterDatabase.PExecute("UPDATE characters SET online = 1 WHERE guid = '%u'", pCurrChar->GetGUIDLow());
-    LoginDatabase.PExecute("UPDATE account SET online = 1 WHERE id = '%u'", GetAccountId());
+    LoginDatabase.PExecute("UPDATE account SET online = %d WHERE id = '%u'", realmID, GetAccountId());
     pCurrChar->SetInGameTime(getMSTime());
 
     // announce group about member online (must be after add to player list to receive announce to self)
@@ -1320,10 +1325,14 @@ void WorldSession::HandleShowingCloakOpcode(WorldPacket& recv_data)
 
 void WorldSession::HandleCharRenameOpcode(WorldPacket& recv_data)
 {
-    uint64 guid;
+    uint64 guid = 0;
+    uint8 packetGuid, byte;
     std::string newname;
 
-    recv_data >> guid;
+    sLog->outStaticDebug("World: Received CMSG_CHAR_RENAME");
+
+    recv_data >> packetGuid;
+    recv_data >> byte;
     recv_data >> newname;
 
     // prevent character rename to invalid name
@@ -1580,7 +1589,7 @@ void WorldSession::HandleCharCustomize(WorldPacket& recv_data)
     }
 
     Field *fields = result->Fetch();
-    uint32 at_loginFlags = fields[0].GetUInt32();
+    uint32 at_loginFlags = fields[0].GetUInt16();
 
     if (!(at_loginFlags & AT_LOGIN_CUSTOMIZE))
     {
@@ -1714,7 +1723,6 @@ void WorldSession::HandleEquipmentSetUse(WorldPacket &recv_data)
         return;
 
     sLog->outDebug(LOG_FILTER_NETWORKIO, "CMSG_EQUIPMENT_SET_USE");
-    recv_data.hexlike();
 
     for (uint32 i = 0; i < EQUIPMENT_SLOT_END; ++i)
     {
@@ -1783,7 +1791,7 @@ void WorldSession::HandleCharFactionOrRaceChange(WorldPacket& recv_data)
     Field *fields = result->Fetch();
     uint32 playerClass = fields[0].GetUInt32();
     uint32 level = fields[1].GetUInt32();
-    uint32 at_loginFlags = fields[2].GetUInt32();
+    uint32 at_loginFlags = fields[2].GetUInt16();
     uint32 used_loginFlag = ((recv_data.GetOpcode() == CMSG_CHAR_RACE_CHANGE) ? AT_LOGIN_CHANGE_RACE : AT_LOGIN_CHANGE_FACTION);
 
     if (!sObjectMgr->GetPlayerInfo(race, playerClass))
