@@ -526,22 +526,14 @@ int32 AuraEffect::CalculateAmount(Unit* caster)
             }
             break;
         case SPELL_AURA_SCHOOL_ABSORB:
-            m_canBeRecalculated = false;
-            if (!caster)
-                break;
-            // Absorb spells should benefit from spell power
-            amount = caster->SpellHealingBonus(GetBase()->GetUnitOwner(), GetSpellInfo(), amount, SPELL_DIRECT_DAMAGE);
-            break;
         case SPELL_AURA_MANA_SHIELD:
             m_canBeRecalculated = false;
+            
             if (!caster)
                 break;
-            // Mana Shield
-            if (GetSpellInfo()->SpellFamilyName == SPELLFAMILY_MAGE && GetSpellInfo()->SpellFamilyFlags[0] & 0x8000 && m_spellInfo->SpellFamilyFlags[2] & 0x8)
-            {
-                // +80.53% from +spd bonus
-                DoneActualBenefit += caster->SpellBaseDamageBonus(m_spellInfo->GetSchoolMask()) * 0.8053f;;
-            }
+                
+            // Absorb spells should benefit from spell power
+            amount = caster->SpellHealingBonus(GetBase()->GetUnitOwner(), GetSpellInfo(), amount, SPELL_DIRECT_DAMAGE);
             break;
         case SPELL_AURA_DUMMY:
             if (!caster)
