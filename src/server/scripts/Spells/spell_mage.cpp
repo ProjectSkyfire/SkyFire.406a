@@ -36,6 +36,7 @@ enum MageSpells
     SPELL_MAGE_SUMMON_WATER_ELEMENTAL_PERMANENT  = 70908,
     SPELL_MAGE_SUMMON_WATER_ELEMENTAL_TEMPORARY  = 70907,
     SPELL_MAGE_GLYPH_OF_BLAST_WAVE               = 62126,
+    SPELL_MAGE_GLYPH_OF_ICE_BARRIER              = 63095,
 };
 
 class spell_mage_blast_wave : public SpellScriptLoader
@@ -506,6 +507,37 @@ public:
     }
 };
 
+// Ice Barrier
+// Spell Id: 11426
+class spell_mage_ice_barrier : public SpellScriptLoader
+{
+    public:
+        spell_mage_ice_barrier() : SpellScriptLoader("spell_mage_ice_barrier") { }
+
+        class spell_mage_ice_barrier_AuraScript : public AuraScript
+        {
+            PrepareAuraScript(spell_mage_ice_barrier_AuraScript);
+            
+            void CalculateAmount(AuraEffect const* aurEff, int32 & amount, bool & canBeRecalculated)
+            {
+                if(AuraEffect const* glyph = GetCaster()->GetAuraEffect(SPELL_MAGE_GLYPH_OF_ICE_BARRIER, 0))
+                    amount += glyph->GetAmount(); // 30% increase absorb from glyph
+                    
+                canBeRecalculated = false;
+            }
+
+            void Register()
+            {
+                DoEffectCalcAmount += AuraEffectCalcAmountFn(spell_mage_ice_barrier_AuraScript::CalculateAmount, EFFECT_0, SPELL_AURA_SCHOOL_ABSORB);
+            }
+        };
+
+        AuraScript* GetAuraScript() const
+        {
+            return new spell_mage_ice_barrier_AuraScript();
+        }
+};
+
 void AddSC_mage_spell_scripts()
 {
     new spell_mage_blast_wave;
@@ -517,4 +549,5 @@ void AddSC_mage_spell_scripts()
     new spell_mage_summon_water_elemental;
     new npc_flame_orb;
     new npc_ring_of_frost;
+    new spell_mage_ice_barrier;
 }
