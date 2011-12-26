@@ -588,13 +588,6 @@ int32 AuraEffect::CalculateAmount(Unit* caster)
                 float mwb_max = caster->GetWeaponDamageRange(BASE_ATTACK, MAXDAMAGE);
                 float mwb = ((mwb_min + mwb_max) / 2 + ap * mws / 14000) * 0.2f;
                 amount += int32(caster->ApplyEffectModifiers(m_spellInfo, m_effIndex, mwb));
-                // "If used while your target is above 75% health, Rend does 35% more damage."
-                // as for 3.1.3 only ranks above 9 (wrong tooltip?)
-                if (m_spellInfo->GetRank() >= 9)
-                {
-                    if (GetBase()->GetUnitOwner()->HasAuraState(AURA_STATE_HEALTH_ABOVE_75_PERCENT, m_spellInfo, caster))
-                        AddPctN(amount, m_spellInfo->Effects[EFFECT_2].CalcValue(caster));
-                }
             }
             // Unholy Blight damage over time effect
             else if (GetId() == 50536)
