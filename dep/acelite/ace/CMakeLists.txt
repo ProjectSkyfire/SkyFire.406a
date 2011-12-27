@@ -325,6 +325,14 @@ include_directories(
   ${CMAKE_SOURCE_DIR}/dep/zlib
 )
 
+if( WIN32 )
+    if (MSYS OR MINGW)
+        SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -lws2_32")
+        SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -lws2_32")
+        SET(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -lws2_32")
+    endif()
+endif()
+
 # Needed for PCH support
 set_source_files_properties(Atomic_Op_Sparc.c Rtems_init.c PROPERTIES LANGUAGE CXX)
 

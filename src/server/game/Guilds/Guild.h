@@ -744,7 +744,8 @@ public:
     void LevelUp();
     void ResetTodayXP() { m_today_xp = 0; }
     void GenerateXPCap();
-    GuildAchievementMgr GetAchievementMgr() { return m_achievementMgr; }
+    GuildAchievementMgr& GetAchievementMgr() { return m_achievementMgr; }
+    GuildAchievementMgr const& GetAchievementMgr() const { return m_achievementMgr; }
 
 protected:
     uint32 m_id;

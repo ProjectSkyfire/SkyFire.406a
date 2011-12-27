@@ -272,12 +272,8 @@ void GuildAchievementMgr::SendAchievementEarned(AchievementEntry const* achievem
     if (!(achievement->flags & ACHIEVEMENT_FLAG_GUILD_ACHIEVEMENT))
         return;
         
-    /*Trinity::AchievementChatBuilder say_builder(*GetPlayer(), CHAT_MSG_GUILD_ACHIEVEMENT, LANG_ACHIEVEMENT_EARNED, achievement->ID);
-    Trinity::LocalizedPacketDo<Trinity::AchievementChatBuilder> say_do(say_builder);
-    m_guild->BroadcastWorker(say_do, GetPlayer());*/
     sLog->outString("Guild %u earned achievement %u", m_guild->GetId(), achievement->ID);
     
-    // ToDo: Check structure
     WorldPacket data(SMSG_GUILD_ACHIEVEMENT_EARNED, 8+4+8);
     data << uint32(achievement->ID);
     data << uint64(MAKE_NEW_GUID(m_guild->GetId(), 0, HIGHGUID_GUILD));
