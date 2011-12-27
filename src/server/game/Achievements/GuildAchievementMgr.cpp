@@ -678,26 +678,26 @@ void GuildAchievementMgr::SendAllAchievementData()
     data2 << uint32(m_criteriaProgress.size());
     
     for (CriteriaProgressMap::const_iterator iter = m_criteriaProgress.begin(); iter != m_criteriaProgress.end(); ++iter)
-        data << uint64(iter->second.counter);
+        data2 << uint64(iter->second.counter);
         
     time_t now = time(NULL);
     for (CriteriaProgressMap::const_iterator iter = m_criteriaProgress.begin(); iter != m_criteriaProgress.end(); ++iter)
-        data << uint32(now - iter->second.date);
+        data2 << uint32(now - iter->second.date);
         
     for (CriteriaProgressMap::const_iterator iter = m_criteriaProgress.begin(); iter != m_criteriaProgress.end(); ++iter)
-        data << uint32(secsToTimeBitFields(iter->second.date));
+        data2 << uint32(secsToTimeBitFields(iter->second.date));
     
     for(CriteriaProgressMap::const_iterator iter = m_criteriaProgress.begin(); iter != m_criteriaProgress.end(); ++iter)
-        data << uint64(iter->second.counter);
+        data2 << uint64(iter->second.counter);
         
     for (CriteriaProgressMap::const_iterator iter = m_criteriaProgress.begin(); iter != m_criteriaProgress.end(); ++iter)
-        data << uint32(now - iter->second.date);
+        data2 << uint32(now - iter->second.date);
         
     for (CriteriaProgressMap::const_iterator iter = m_criteriaProgress.begin(); iter != m_criteriaProgress.end(); ++iter)
-        data << uint32(iter->first);
+        data2 << uint32(iter->first);
         
     for (CriteriaProgressMap::const_iterator iter = m_criteriaProgress.begin(); iter != m_criteriaProgress.end(); ++iter)
-        data << uint32(0); // Unk
+        data2 << uint32(0); // Unk
         
     SendDirectMessageToAll(&data2);
 }
