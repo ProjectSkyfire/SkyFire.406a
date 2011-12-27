@@ -281,7 +281,7 @@ MACRO(ADD_NATIVE_PRECOMPILED_HEADER _targetName _input)
         SET(oldProps "")
     endif(${oldProps} MATCHES NOTFOUND)
 	
-	GET_FILENAME_COMPONENT(_name ${_input} NAME)
+    GET_FILENAME_COMPONENT(_name ${_input} NAME)
 
     SET(newProperties "${oldProps} /Yu\"${_name}.h\"")
     IF( NOT "${ARGN}" STREQUAL "0")
