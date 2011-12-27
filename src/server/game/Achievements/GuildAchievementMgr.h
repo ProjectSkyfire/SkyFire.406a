@@ -26,7 +26,7 @@ class GuildAchievementMgr
         void CheckAllAchievementCriteria();
         void DeleteFromDB(uint32 guid_low);
         void SendDirectMessageToAll(WorldPacket* data);
-        void LoadFromDB(PreparedQueryResult achievementResult, PreparedQueryResult criteriaResult);
+        void LoadFromDB();
         void SaveToDB(SQLTransaction& trans);
         Guild* GetGuild() { return m_guild; }
         void ResetAchievementCriteria(AchievementCriteriaTypes type, uint32 miscvalue1 = 0, uint32 miscvalue2 = 0, bool evenIfCriteriaComplete = false);
