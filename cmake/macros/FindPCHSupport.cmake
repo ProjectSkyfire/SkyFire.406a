@@ -265,11 +265,11 @@ ENDMACRO(GET_NATIVE_PRECOMPILED_HEADER)
 
 MACRO(ADD_NATIVE_PRECOMPILED_HEADER _targetName _input)
 
-    IF( "${ARGN}" STREQUAL "0")
-    SET(_dowarn 0)
-    ELSE( "${ARGN}" STREQUAL "0")
-    SET(_dowarn 1)
-    ENDIF("${ARGN}" STREQUAL "0")
+    #IF( "${ARGN}" STREQUAL "0")
+    #SET(_dowarn 0)
+    #ELSE( "${ARGN}" STREQUAL "0")
+    #SET(_dowarn 1)
+    #ENDIF("${ARGN}" STREQUAL "0")
 
     if(CMAKE_GENERATOR MATCHES Visual*)
     # Auto include the precompile (useful for moc processing, since the use of
@@ -280,12 +280,20 @@ MACRO(ADD_NATIVE_PRECOMPILED_HEADER _targetName _input)
     if (${oldProps} MATCHES NOTFOUND)
         SET(oldProps "")
     endif(${oldProps} MATCHES NOTFOUND)
+	
+	GET_FILENAME_COMPONENT(_name ${_input} NAME)
 
-    SET(newProperties "${oldProps} /Yu\"${_input}.h\" /FI\"${_input}.h\"")
+    SET(newProperties "${oldProps} /Yu\"${_name}.h\"")
+    IF( NOT "${ARGN}" STREQUAL "0")
+    SET(newProperties "${newProperties}  /FI\"${_name}.h\"")
+    ELSE( NOT "${ARGN}" STREQUAL "0")
+    # enable edit and continue if PCH is handled properly and we are building in debug
+    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /ZI")
+    ENDIF( NOT "${ARGN}" STREQUAL "0")
     SET_TARGET_PROPERTIES(${_targetName} PROPERTIES COMPILE_FLAGS "${newProperties}")
 
     #also inlude ${oldProps} to have the same compile options
-    SET_SOURCE_FILES_PROPERTIES(${_input}.cpp PROPERTIES COMPILE_FLAGS "${oldProps} /Yc\"${_input}.h\"")
+    SET_SOURCE_FILES_PROPERTIES(${_input}.cpp PROPERTIES COMPILE_FLAGS "${oldProps} /Yc\"${_name}.h\"")
 
     else(CMAKE_GENERATOR MATCHES Visual*)
 
