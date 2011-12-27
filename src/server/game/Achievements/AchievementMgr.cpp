@@ -2166,36 +2166,10 @@ void AchievementMgr::SendAllAchievementData()
     uint32 achievements = m_completedAchievements.size();
     // 2 is flag count, 8 is bits in byte
     uint32 flagBytesCount = uint32(ceil(float(criterias) * 2.0f / 8.0f));
-
     // since we don't know the exact size of the packed GUIDs this is just an approximation
     WorldPacket data(SMSG_ALL_ACHIEVEMENT_DATA, 4 + criterias * (8 + 4 + 4 + 8) + 8 + 4 + achievements * (4 + 4 + 4) + flagBytesCount);
 
-    data << uint32(achievements);
-    data << uint32(criterias);
-
-    for (CompletedAchievementMap::const_iterator iter = m_completedAchievements.begin(); iter!=m_completedAchievements.end(); ++iter)
-        data << uint32(iter->first);
-    for (CompletedAchievementMap::const_iterator iter = m_completedAchievements.begin(); iter!=m_completedAchievements.end(); ++iter)
-        data << uint32(secsToTimeBitFields(iter->second.date));
-
-    for (CriteriaProgressMap::const_iterator iter = m_criteriaProgress.begin(); iter!=m_criteriaProgress.end(); ++iter)
-        data << uint64(iter->second.counter);
-
-    time_t now = time(NULL);
-    for (CriteriaProgressMap::const_iterator iter = m_criteriaProgress.begin(); iter!=m_criteriaProgress.end(); ++iter)
-        data << uint32(now - iter->second.date);
-    for (CriteriaProgressMap::const_iterator iter = m_criteriaProgress.begin(); iter!=m_criteriaProgress.end(); ++iter)
-        data << uint32(secsToTimeBitFields(iter->second.date));
-    for (uint32 i = 0; i < criterias; ++i)
-        data.append(GetPlayer()->GetPackGUID());
-    for (CriteriaProgressMap::const_iterator iter = m_criteriaProgress.begin(); iter!=m_criteriaProgress.end(); ++iter)
-        data << uint32(now - iter->second.date);
-
-    for (uint32 i = 0; i < flagBytesCount; ++i)
-        data << uint8(0);
-
-    for (CriteriaProgressMap::const_iterator iter = m_criteriaProgress.begin(); iter!=m_criteriaProgress.end(); ++iter)
-        data << uint32(iter->first);
+    BuildAllDataPacket(&data);
 
     GetPlayer()->GetSession()->SendPacket(&data);
 }
@@ -2280,39 +2254,6 @@ void AchievementMgr::BuildAllDataPacket(WorldPacket *data) const
         *data << uint32(iter->first);
 }
 
-void AchievementMgr::SendGuildAchievementData()
-{
-    uint32 count = 0;
-    AchievementEntry const* achievement;
-
-    for (CompletedAchievementMap::const_iterator iter = m_completedAchievements.begin(); iter!= m_completedAchievements.end(); ++iter)
-    {
-        achievement = sAchievementStore.LookupEntry(iter->first);
-        if (achievement->flags & ACHIEVEMENT_FLAG_GUILD_ACHIEVEMENT)
-            count++;
-    }
-
-    WorldPacket data(SMSG_GUILD_ACHIEVEMENT_DATA, 4 + count * 8);
-
-    data << uint32(count);
-
-    for (CompletedAchievementMap::const_iterator iter = m_completedAchievements.begin(); iter!= m_completedAchievements.end(); ++iter)
-    {
-        achievement = sAchievementStore.LookupEntry(iter->first);
-        if (achievement->flags & ACHIEVEMENT_FLAG_GUILD_ACHIEVEMENT)
-            data << uint32(iter->first);
-    }
-
-    for (CompletedAchievementMap::const_iterator iter = m_completedAchievements.begin(); iter!= m_completedAchievements.end(); ++iter)
-    {
-        achievement = sAchievementStore.LookupEntry(iter->first);
-        if (achievement->flags & ACHIEVEMENT_FLAG_GUILD_ACHIEVEMENT)
-            data << uint32(secsToTimeBitFields(iter->second.date));
-    }
-
-    GetPlayer()->GetSession()->SendPacket(&data);
-}
-
 bool AchievementMgr::HasAchieved(uint32 achievementId) const
 {
     return m_completedAchievements.find(achievementId) != m_completedAchievements.end();
@@ -2320,6 +2261,9 @@ bool AchievementMgr::HasAchieved(uint32 achievementId) const
 
 bool AchievementMgr::CanUpdateCriteria(AchievementCriteriaEntry const* criteria, AchievementEntry const* achievement)
 {
+    if (achievement->flags & ACHIEVEMENT_FLAG_GUILD_ACHIEVEMENT)
+        return false;
+        
     if (DisableMgr::IsDisabledFor(DISABLE_TYPE_ACHIEVEMENT_CRITERIA, criteria->ID, NULL))
         return false;
 

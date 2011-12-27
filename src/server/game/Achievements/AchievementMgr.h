@@ -239,6 +239,13 @@ struct CompletedAchievementData
 typedef UNORDERED_MAP<uint32, CriteriaProgress> CriteriaProgressMap;
 typedef UNORDERED_MAP<uint32, CompletedAchievementData> CompletedAchievementMap;
 
+enum ProgressType 
+{ 
+    PROGRESS_SET, 
+    PROGRESS_ACCUMULATE, 
+    PROGRESS_HIGHEST 
+};
+
 class Unit;
 class Player;
 class WorldPacket;
@@ -258,7 +265,6 @@ class AchievementMgr
         void CompletedAchievement(AchievementEntry const* entry);
         void CheckAllAchievementCriteria();
         void SendAllAchievementData();
-        void SendGuildAchievementData();
         void SendRespondInspectAchievements(Player* player);
         bool HasAchieved(uint32 achievementId) const;
         Player* GetPlayer() const { return m_player; }
@@ -269,7 +275,6 @@ class AchievementMgr
         uint32 GetAchievementPoints() const { return m_achievementPoints; }
 
     private:
-        enum ProgressType { PROGRESS_SET, PROGRESS_ACCUMULATE, PROGRESS_HIGHEST };
         void SendAchievementEarned(AchievementEntry const* achievement) const;
         void SendCriteriaUpdate(AchievementCriteriaEntry const* entry, CriteriaProgress const* progress, uint32 timeElapsed, bool timedCompleted) const;
         CriteriaProgress* GetCriteriaProgress(AchievementCriteriaEntry const* entry);

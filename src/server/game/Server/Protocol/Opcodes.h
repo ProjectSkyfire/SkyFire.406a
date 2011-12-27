@@ -1319,9 +1319,6 @@ enum Opcodes
     CMSG_GROUP_SET_ROLES                             = 0x08509, // 4.0.6a 13623
     CMSG_WORLD_LOGIN                                 = 0x08508, // 4.0.6a 13623
     SMSG_UNKNOWN_65508                               = 0x0FFE4, // Unknown opcode Name, 4.0.6a 13623
-    //SMSG_INIT_CURRENCY                               = 0x0091C, // 4.0.6a 13623 :redefinition; previous def was 'enumerator'
-    //SMSG_UPDATE_CURRENCY                             = 0x0405E, // 4.0.6a 13623 :redefinition; previous def was 'enumerator'
-    //SMSG_UPDATE_CURRENCY_WEEK_LIMIT                  = 0x04C5C, // 4.0.6a 13623 :redefinition; previous def was 'enumerator'
     SMSG_GUILD_ACHIEVEMENT_EARNED                    = 0x00D5C, // 4.0.6a 13623
     SMSG_GUILD_ACHIEVEMENT_DATA                      = 0x0491E, // 4.0.6a 13623
     CMSG_UI_TIME_REQUEST                             = 0x03FA8, // 4.0.6a 13623
@@ -1346,6 +1343,7 @@ enum Opcodes
     CMSG_GET_GUILD_MEMBER_RECIPES                    = 0x0212D, // 4.0.6a 13623
     CMSG_QUERY_GUILD_MEMBERS_FOR_RECIPE              = 0x0210D, // 4.0.6a 13623
     CMSG_GUILD_NEWS_SET_STICKY                       = 0x0252D, // 4.0.6a 13623
+    SMSG_GUILD_CRITERIA_DELETED                      = 0x0000C, // 4.0.6a 13623
     NUM_MSG_TYPES                                    = 0x102B8  // last unknown opcode + 1.
 };
 
