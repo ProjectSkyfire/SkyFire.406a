@@ -213,6 +213,8 @@ class Pet : public Guardian
         bool    m_removed;                                  // prevent overwrite pet state in DB at next Pet::Update if pet already removed(saved)
 
         Player* GetOwner() { return m_owner; }
+
+        PetTalentType GetTalentType();
     protected:
         Player* m_owner;
         uint32  m_happinessTimer;
