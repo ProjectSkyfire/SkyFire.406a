@@ -573,6 +573,7 @@ enum Opcodes
     CMSG_GUILD_SWITCH_RANK                           = 0x101DC, //
     CMSG_GUILD_SET_NOTE                              = 0x101DD, //
     CMSG_GUILD_QUERY_TRADESKILL                      = 0x101DE, //
+    SMSG_GUILD_CRITERIA_DELETED                      = 0x101DF, //
     SMSG_LOGIN_VERIFY_WORLD                          = 0x01C80, // 4.3.0 15050
     CMSG_CLEAR_EXPLORATION                           = 0x101DE, //
     CMSG_SEND_MAIL                                   = 0x101DF, //
