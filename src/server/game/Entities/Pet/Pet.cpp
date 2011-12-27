@@ -167,7 +167,7 @@ bool Pet::LoadPetFromDB(Player* owner, uint32 petentry, uint32 petnumber, bool c
     }
     else if (pet_type == SUMMON_PET && summon_spell_id && !owner->HasSpell(summon_spell_id))
     {
-		// pet is summon but owner has no summon spell (e.g.: Water Elemental)
+        // pet is summon but owner has no summon spell (e.g.: Water Elemental)
         m_loading = false;
         return false;
     }
@@ -921,6 +921,12 @@ bool Guardian::InitStatsForLevel(uint8 petlevel)
                     SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float(petlevel * 4 + petlevel));
                     break;
                 }
+                case 28017: // Bloodworms
+                    {
+                        SetCreateHealth(4 * petlevel);
+                        SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, float(petlevel - 30 - (petlevel / 4)) + m_owner->GetTotalAttackPowerValue(BASE_ATTACK) * 0.006f);
+                        SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float(petlevel - 30 + (petlevel / 4)) + m_owner->GetTotalAttackPowerValue(BASE_ATTACK) * 0.006f);
+                    }
                 case 19668: // Shadowfiend
                 {
                     if (!pInfo)

@@ -9052,16 +9052,14 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
             }
             break;
         }
-        // Sword and Board
-        case 50227:
+        case 50227: // Sword and Board
         {
             // Remove cooldown on Shield Slam
             if (GetTypeId() == TYPEID_PLAYER)
                 ToPlayer()->RemoveSpellCategoryCooldown(1209, true);
             break;
         }
-        // Maelstrom Weapon
-        case 53817:
+        case 53817: // Maelstrom Weapon
         {
             // Item - Shaman T10 Enhancement 4P Bonus
             if (AuraEffect const* aurEff = GetAuraEffect(70832, 0))
@@ -9077,8 +9075,7 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
                 return false;
             break;
         }
-        // Astral Shift
-        case 52179:
+        case 52179: // Astral Shift
         {
             if (procSpell == 0 || !(procEx & (PROC_EX_NORMAL_HIT|PROC_EX_CRITICAL_HIT)) || this == victim)
                 return false;
