@@ -291,7 +291,7 @@ class LFGMgr
         LfgState GetState(const uint64& guid);
         const LfgDungeonSet& GetSelectedDungeons(const uint64& guid);
         uint32 GetDungeon(const uint64& guid, bool asId = true);
-		void SetState(const uint64& guid, LfgState state);
+        void SetState(const uint64& guid, LfgState state);
         void ClearState(const uint64& guid);
         void RemovePlayerData(const uint64& guid);
         void RemoveGroupData(const uint64& guid);

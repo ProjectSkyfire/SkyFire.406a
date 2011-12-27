@@ -6433,14 +6433,10 @@ void ObjectMgr::LoadGameObjectTemplate()
         got.size           = fields[9].GetFloat();
 
         for (uint8 i = 0; i < MAX_GAMEOBJECT_QUEST_ITEMS; ++i)
-        {
             got.questItems[i] = fields[10 + i].GetUInt32();
-        }
 
         for (uint8 i = 0; i < MAX_GAMEOBJECT_DATA; ++i)
-        {
             got.raw.data[i] = fields[16 + i].GetUInt32();
-        }
 
         got.AIName = fields[40].GetString();
         got.ScriptId = GetScriptId(fields[41].GetCString());

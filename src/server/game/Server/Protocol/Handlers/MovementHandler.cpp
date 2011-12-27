@@ -354,9 +354,7 @@ void WorldSession::HandleMovementOpcodes(WorldPacket & recv_data)
 
     if (plMover)                     // nothing is charmed, or player charmed
     {
-        if (plMover->GetEmoteState() != 0 && opcode == MSG_MOVE_START_FORWARD && opcode != MSG_MOVE_SET_FACING &&
-           opcode != MSG_MOVE_START_TURN_LEFT && opcode != MSG_MOVE_START_TURN_RIGHT &&
-           opcode != MSG_MOVE_STOP_TURN)
+        if (plMover->GetEmoteState() != 0 && opcode == MSG_MOVE_START_FORWARD)
            plMover->SetEmoteState(0);
 
         plMover->UpdateFallInformationIfNeed(movementInfo, opcode);

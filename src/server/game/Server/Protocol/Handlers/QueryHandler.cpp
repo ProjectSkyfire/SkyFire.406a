@@ -307,8 +307,8 @@ void WorldSession::HandleNpcTextQueryOpcode(WorldPacket & recv_data)
         std::string Text_0[MAX_LOCALES], Text_1[MAX_LOCALES];
         for (int i = 0; i < MAX_GOSSIP_TEXT_OPTIONS; ++i)
         {
-            Text_0[i]=pGossip->Options[i].Text_0;
-            Text_1[i]=pGossip->Options[i].Text_1;
+            Text_0[i] = pGossip->Options[i].Text_0;
+            Text_1[i] = pGossip->Options[i].Text_1;
         }
 
         int loc_idx = GetSessionDbLocaleIndex();

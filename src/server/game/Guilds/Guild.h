@@ -25,6 +25,7 @@
 #include "WorldPacket.h"
 #include "ObjectMgr.h"
 #include "Player.h"
+#include "GuildAchievementMgr.h"
 
 class Item;
 
@@ -623,11 +624,11 @@ private:
         void CanStoreItemInTab(Item* pItem, uint8 skipSlotId, bool merge, uint32& count);
     };
 
+public:
     typedef UNORDERED_MAP<uint32, Member*> Members;
     typedef std::vector<RankInfo> Ranks;
     typedef std::vector<BankTab*> BankTabs;
-
-public:
+    
     static void SendCommandResult(WorldSession* session, GuildCommandType type, GuildCommandError errCode, const std::string& param = "");
     static void SendSaveEmblemResult(WorldSession* session, GuildEmblemError errCode);
 
@@ -721,6 +722,7 @@ public:
     void DeleteMember(uint64 guid, bool isDisbanding = false, bool isKicked = false);
     bool ChangeMemberRank(uint64 guid, uint8 newRank);
     RankInfo & GetRankInfo(uint32 rankId) {return m_ranks[rankId]; }
+    Members GetMembers() { return m_members; }
 
     // Bank
     void SwapItems(Player* player, uint8 tabId, uint8 slotId, uint8 destTabId, uint8 destSlotId, uint32 splitedAmount);
@@ -742,6 +744,7 @@ public:
     void LevelUp();
     void ResetTodayXP() { m_today_xp = 0; }
     void GenerateXPCap();
+    GuildAchievementMgr GetAchievementMgr() { return m_achievementMgr; }
 
 protected:
     uint32 m_id;
@@ -770,6 +773,7 @@ protected:
     // These are actually ordered lists. The first element is the oldest entry.
     LogHolder* m_eventLog;
     LogHolder* m_bankEventLog[GUILD_BANK_MAX_TABS + 1];
+    GuildAchievementMgr m_achievementMgr;
 
 private:
     inline uint8 _GetRanksSize() const { return uint8(m_ranks.size()); }

@@ -221,6 +221,29 @@ void Group::ConvertToRaid()
             player->UpdateForQuestWorldObjects();
 }
 
+void Group::ConvertToGroup()
+{
+    if(m_memberSlots.size() > 5)
+        return;
+
+    m_groupType = GroupType(GROUPTYPE_NORMAL);
+
+    if (m_subGroupsCounts)
+    {
+        delete[] m_subGroupsCounts;
+        m_subGroupsCounts = NULL;
+    }
+
+    if (!isBGGroup())
+        CharacterDatabase.PExecute("UPDATE groups SET groupType='%u' WHERE guid='%u'", uint8(m_groupType), GUID_LOPART(m_guid));
+    SendUpdate();
+
+    // update quest related GO states (quest activity dependent from raid membership)
+    for (member_citerator citr = m_memberSlots.begin(); citr != m_memberSlots.end(); ++citr)
+        if (Player* player = ObjectAccessor::FindPlayer(citr->guid))
+            player->UpdateForQuestWorldObjects();
+}
+
 bool Group::AddInvite(Player* player)
 {
     if (!player || player->GetGroupInvite())
@@ -1840,7 +1863,17 @@ void Group::SetLootThreshold(ItemQualities threshold)
     m_lootThreshold = threshold;
 }
 
-void Group::SetLfgRoles(uint64 guid, const uint8 roles)
+void Group::SetLfgRoles(uint64& guid, const uint8 roles)
+{
+    member_witerator slot = _getMemberWSlot(guid);
+    if (slot == m_memberSlots.end())
+        return;
+
+    slot->roles = roles;
+    SendUpdate();
+}
+
+void Group::SetRoles(uint64 guid, const uint8 roles)
 {
     member_witerator slot = _getMemberWSlot(guid);
     if (slot == m_memberSlots.end())
@@ -1848,6 +1881,15 @@ void Group::SetLfgRoles(uint64 guid, const uint8 roles)
 
     slot->roles = roles;
          SendUpdate();
+}
+
+uint8 Group::GetRoles(uint64 guid)
+{
+    member_witerator slot = _getMemberWSlot(guid);
+    if (slot == m_memberSlots.end())
+        return 0;
+
+    return slot->roles;
 }
 
 bool Group::IsFull() const

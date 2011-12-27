@@ -32,6 +32,7 @@
 #include "Util.h"
 #include "SpellAuras.h"
 #include "Vehicle.h"
+#include "LFGMgr.h"
 
 class Aura;
 
@@ -53,6 +54,7 @@ void WorldSession::SendPartyResult(PartyOperation operation, const std::string& 
     data << member;
     data << uint32(res);
     data << uint32(val);                                    // LFD cooldown related (used with ERR_PARTY_LFG_BOOT_COOLDOWN_S and ERR_PARTY_LFG_BOOT_NOT_ELIGIBLE_S)
+    data << uint64(0);                                      // GUID?
 
     SendPacket(&data);
 }
@@ -62,11 +64,11 @@ void WorldSession::HandleGroupInviteOpcode(WorldPacket & recv_data)
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_GROUP_INVITE");
 
     std::string membername;
-    for (int i = 0; i < 10; ++i)
-        recv_data.read_skip<std::string>();
-
+    uint32 unk; //groupType?
     recv_data >> membername;
-    recv_data.read_skip<uint32>();
+    recv_data >> unk; //in CMSG_GROUP_ACCEPT too.
+
+    // attempt add selected player
 
     // cheating
     if (!normalizePlayerName(membername))
@@ -198,20 +200,24 @@ void WorldSession::HandleGroupAcceptOpcode(WorldPacket& recv_data)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_GROUP_ACCEPT");
 
-    recv_data.read_skip<uint32>();
+    uint32 unk;
+    recv_data >> unk;
+
     Group* group = GetPlayer()->GetGroupInvite();
-
-    if (!group)
-        return;
-
-    // Remove player from invitees in any case
-    group->RemoveInvite(GetPlayer());
+    if (!group) return;
 
     if (group->GetLeaderGUID() == GetPlayer()->GetGUID())
     {
         sLog->outError("HandleGroupAcceptOpcode: player %s(%d) tried to accept an invite to his own group", GetPlayer()->GetName(), GetPlayer()->GetGUIDLow());
         return;
     }
+
+    // Remove player from invitees in any case
+    group->RemoveInvite(GetPlayer());
+
+    /********************/
+    /** error handling **/
+    /********************/
 
     // Group is full
     if (group->IsFull())
@@ -396,6 +402,7 @@ void WorldSession::HandleGroupDisbandOpcode(WorldPacket & /*recv_data*/)
         return;
     }
 
+    /********************/
     /** error handling **/
     /********************/
 
@@ -478,6 +485,7 @@ void WorldSession::HandleMinimapPingOpcode(WorldPacket& recv_data)
 
     //sLog->outDebug("Received opcode MSG_MINIMAP_PING X: %f, Y: %f", x, y);
 
+    /********************/
     /** error handling **/
     /********************/
 
@@ -773,7 +781,11 @@ void WorldSession::BuildPartyMemberStatsChangedPacket(Player* player, WorldPacke
     if (mask & GROUP_UPDATE_FLAG_AURAS)
     {
         uint64 auramask = player->GetAuraUpdateMaskForRaid();
+        *data << uint8(0); // if true client clears auras that are not covered by auramask
+        // TODO: looks like now client requires all active auras to be in the beginning of the auramask
+        // e.g. if you have holes in the aura mask the values after are ignored.
         *data << uint64(auramask);
+        *data << uint32(64);  // how many bits client reads from auramask
         for (uint32 i = 0; i < MAX_AURAS; ++i)
         {
             if (auramask & (uint64(1) << i))
@@ -875,6 +887,13 @@ void WorldSession::BuildPartyMemberStatsChangedPacket(Player* player, WorldPacke
         else
             *data << (uint64) 0;
     }
+
+    if (mask & GROUP_UPDATE_FLAG_PHASE)   // 4.0.6 unk
+    {
+        *data << (uint32) 0;
+        *data << (uint32) 0;
+        // string
+    }
 }
 
 /*this procedure handles clients CMSG_REQUEST_PARTY_MEMBER_STATS request*/
@@ -920,8 +939,12 @@ void WorldSession::HandleRequestPartyMemberStatsOpcode(WorldPacket &recv_data)
     data << (uint16) player->GetPositionY();                // GROUP_UPDATE_FLAG_POSITION
 
     uint64 auramask = 0;
+    data << uint8(0); // if true client clears auras that are not covered by auramask
+    // TODO: looks like now client requires all active auras to be in the beginning of the auramask
+    // e.g. if you have holes in the aura mask the values after are ignored.
     size_t maskPos = data.wpos();
     data << (uint64) auramask;                              // placeholder
+    data << uint32(64);  // how many bits client reads from auramask
     for (uint8 i = 0; i < MAX_AURAS; ++i)
     {
         if (AuraApplication * aurApp = player->GetVisibleAura(i))
@@ -946,8 +969,12 @@ void WorldSession::HandleRequestPartyMemberStatsOpcode(WorldPacket &recv_data)
         data << (uint16) pet->GetMaxPower(petpowertype);    // GROUP_UPDATE_FLAG_PET_MAX_POWER
 
         uint64 petauramask = 0;
+         data << uint8(0); // if true client clears auras that are not covered by auramask
+        // TODO: looks like now client requires all active auras to be in the beginning of the auramask
+        // e.g. if you have holes in the aura mask the values after are ignored.
         size_t petMaskPos = data.wpos();
         data << (uint64) petauramask;                       // placeholder
+        data << uint32(64);  // how many bits client reads from auramask
         for (uint8 i = 0; i < MAX_AURAS; ++i)
         {
             if (AuraApplication * auraApp = pet->GetVisibleAura(i))
@@ -962,7 +989,9 @@ void WorldSession::HandleRequestPartyMemberStatsOpcode(WorldPacket &recv_data)
     else
     {
         data << (uint8)  0;                                 // GROUP_UPDATE_FLAG_PET_NAME
+        data << (uint8) 0;                                    // GROUP_UPDATE_FLAG_PET_AURAS
         data << (uint64) 0;                                 // GROUP_UPDATE_FLAG_PET_AURAS
+        data << (uint32) 0;
     }
 
     SendPacket(&data);
@@ -995,4 +1024,40 @@ void WorldSession::HandleOptOutOfLootOpcode(WorldPacket & recv_data)
     }
 
     GetPlayer()->SetPassOnGroupLoot(passOnLoot);
+}
+
+void WorldSession::HandleGroupSetRoles(WorldPacket &recv_data)
+{
+    uint32 roles;
+    uint64 guid = GetPlayer()->GetGUID();
+    recv_data >> roles;                                     // Player Group Roles
+    recv_data >> guid;
+
+    Player* player = sObjectAccessor->FindPlayer(guid);
+    if (!player)
+    {
+        sLog->outDebug(LOG_FILTER_NETWORKIO, "CMSG_GROUP_SET_ROLES [" UI64FMTD "] Player not found", guid);
+        return;
+    }
+
+    Group* group = player->GetGroup();
+    if (!group)
+    {
+        sLog->outDebug(LOG_FILTER_NETWORKIO, "CMSG_GROUP_SET_ROLES [" UI64FMTD "] Not in group", player->GetGUID());
+        return;
+    }
+    else if (group != GetPlayer()->GetGroup())
+    {
+        sLog->outDebug(LOG_FILTER_NETWORKIO, "CMSG_GROUP_SET_ROLES [" UI64FMTD "]  and [" UI64FMTD "] Not in group same group", player->GetGUID(), GetPlayer()->GetGUID());
+        return;
+    }
+    else
+        sLog->outDebug(LOG_FILTER_NETWORKIO, "CMSG_GROUP_SET_ROLES [" UI64FMTD "] Roles: %u", player->GetGUID(), roles);
+
+    player->SetRoles(roles);
+    if (group->isLFGGroup())
+    {
+        uint64 gguid = group->GetGUID();
+        sLFGMgr->UpdateRoleCheck(gguid, guid, roles);
+    }
 }

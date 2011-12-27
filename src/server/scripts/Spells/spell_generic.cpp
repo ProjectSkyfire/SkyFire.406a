@@ -1412,15 +1412,15 @@ class spell_gen_spirit_healer_res : public SpellScriptLoader
         class spell_gen_spirit_healer_res_SpellScript : public SpellScript
         {
             PrepareSpellScript(spell_gen_spirit_healer_res_SpellScript);
-            
+
             void HandleDummy(SpellEffIndex /*effIndex*/)
             {
                 Unit* caster = GetOriginalCaster();
                 Unit* target = GetHitUnit();
-                
+
                 if(caster->GetTypeId() != TYPEID_PLAYER)
                     return;
-                
+
                 WorldPacket data(SMSG_SPIRIT_HEALER_CONFIRM, 8);
                 data << uint64(target->GetGUID());
                 caster->ToPlayer()->GetSession()->SendPacket(&data);
@@ -1446,12 +1446,12 @@ class spell_gen_reindeer_transformation : public SpellScriptLoader
         class spell_gen_reindeer_transformation_SpellScript : public SpellScript
         {
             PrepareSpellScript(spell_gen_reindeer_transformation_SpellScript);
-            
+
             void HandleDummy(SpellEffIndex /*effIndex*/)
             {
                 Unit* caster = GetCaster();
                 Unit* target = GetHitUnit();
-                
+
                 if (!caster->HasAuraType(SPELL_AURA_MOUNTED))
                     return;
 
