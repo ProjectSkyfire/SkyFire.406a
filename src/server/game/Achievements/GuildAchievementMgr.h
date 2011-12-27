@@ -34,7 +34,7 @@ class GuildAchievementMgr
         void UpdateTimedAchievements(uint32 timeDiff);
         void StartTimedAchievement(AchievementCriteriaTimedTypes type, uint32 entry, uint32 timeLost = 0); // ToDo
         void RemoveTimedAchievement(AchievementCriteriaTimedTypes type, uint32 entry);   // used for quest and scripted timed achievements ToDo
-        void CompletedAchievement(AchievementEntry const* entry);
+        void CompletedAchievement(AchievementEntry const* entry, Player* player);
         void SendAllAchievementData();
         bool HasAchieved(uint32 achievementId);
         
@@ -44,12 +44,13 @@ class GuildAchievementMgr
         void SendAchievementEarned(AchievementEntry const* achievement);
         void SendCriteriaUpdate(AchievementCriteriaEntry const* entry, CriteriaProgress const* progress, uint32 timeElapsed, bool timedCompleted, Player* completer);
         bool IsCompletedCriteria(AchievementCriteriaEntry const* achievementCriteria, AchievementEntry const* achievement);
-        void CompletedCriteriaFor(AchievementEntry const* achievement);
+        void CompletedCriteriaFor(AchievementEntry const* achievement, Player* player);
         bool IsCompletedAchievement(AchievementEntry const* entry);
         CriteriaProgress* GetCriteriaProgress(AchievementCriteriaEntry const* entry);
         void SetCriteriaProgress(AchievementCriteriaEntry const* entry, uint32 changeValue, Player* player, ProgressType ptype = PROGRESS_SET);
         void RemoveCriteriaProgress(AchievementCriteriaEntry const* entry);
         bool CanUpdateCriteria(AchievementCriteriaEntry const* criteria, AchievementEntry const* achievement, Player* player);
+        bool IsCriteriaMet(AchievementCriteriaEntry const* criteria, AchievementEntry const* achievement, Player* player, uint32 miscValue1, uint32 miscValue2, Unit* unit);
         Guild* m_guild;
         uint32 m_achievementPoints;
         CriteriaProgressMap m_criteriaProgress;

@@ -324,7 +324,7 @@ bool GuildAchievementMgr::IsCriteriaMet(AchievementCriteriaEntry const* criteria
         {
             case ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_GUILD_REP:
             {
-                if (player->GetReputationMgr().GetReputation(1168) < criteria->moreRequirementValue[i])
+                if (uint32(player->GetReputationMgr().GetReputation(1168)) < criteria->moreRequirementValue[i])
                     return false;
                 break;
             }
@@ -338,6 +338,8 @@ bool GuildAchievementMgr::IsCriteriaMet(AchievementCriteriaEntry const* criteria
                 break;
         }
     }
+    
+    return true;
 }
 
 void GuildAchievementMgr::UpdateAchievementCriteria(AchievementCriteriaTypes type, Player* player /*=NULL*/, uint32 miscValue1 /*= 0*/, uint32 miscValue2 /*= 0*/, Unit* unit /*= NULL*/)
@@ -386,31 +388,31 @@ void GuildAchievementMgr::UpdateAchievementCriteria(AchievementCriteriaTypes typ
             {
                 if (!miscValue1)
                     continue;
-                SetCriteriaProgress(achievementCriteria, 1, PROGRESS_ACCUMULATE);
+                SetCriteriaProgress(achievementCriteria, 1, player, PROGRESS_ACCUMULATE);
                 break;
             }
             case ACHIEVEMENT_CRITERIA_TYPE_KILL_CREATURE_TYPE_GUILD:
             {
                 if (!miscValue1)
                     continue;
-                SetCriteriaProgress(achievementCriteria, miscValue2, PROGRESS_ACCUMULATE);
+                SetCriteriaProgress(achievementCriteria, miscValue2, player, PROGRESS_ACCUMULATE);
                 break;
             }
         }
 
         if (IsCompletedCriteria(achievementCriteria, achievement))
-            CompletedCriteriaFor(achievement);
+            CompletedCriteriaFor(achievement, player);
 
         // check again the completeness for SUMM and REQ COUNT achievements,
         // as they don't depend on the completed criteria but on the sum of the progress of each individual criteria
         if (achievement->flags & ACHIEVEMENT_FLAG_SUMM)
             if (IsCompletedAchievement(achievement))
-                CompletedAchievement(achievement);
+                CompletedAchievement(achievement, player);
 
         if (AchievementEntryList const* achRefList = sAchievementMgr->GetAchievementByReferencedId(achievement->ID))
             for (AchievementEntryList::const_iterator itr = achRefList->begin(); itr != achRefList->end(); ++itr)
                 if (IsCompletedAchievement(*itr))
-                    CompletedAchievement(*itr);
+                    CompletedAchievement(*itr, player);
     }
 }
 
@@ -445,7 +447,7 @@ bool GuildAchievementMgr::IsCompletedCriteria(AchievementCriteriaEntry const* ac
     return false;
 }
 
-void GuildAchievementMgr::CompletedCriteriaFor(AchievementEntry const* achievement)
+void GuildAchievementMgr::CompletedCriteriaFor(AchievementEntry const* achievement, Player* player)
 {
     if (!(achievement->flags & ACHIEVEMENT_FLAG_GUILD_ACHIEVEMENT))
         return;
@@ -459,7 +461,7 @@ void GuildAchievementMgr::CompletedCriteriaFor(AchievementEntry const* achieveme
         return;
 
     if (IsCompletedAchievement(achievement))
-        CompletedAchievement(achievement);
+        CompletedAchievement(achievement, player);
 }
 
 bool GuildAchievementMgr::IsCompletedAchievement(AchievementEntry const* entry)
@@ -641,7 +643,7 @@ void GuildAchievementMgr::UpdateTimedAchievements(uint32 timeDiff)
     }
 }
 
-void GuildAchievementMgr::CompletedAchievement(AchievementEntry const* achievement)
+void GuildAchievementMgr::CompletedAchievement(AchievementEntry const* achievement, Player* player)
 {
     if (!(achievement->flags & ACHIEVEMENT_FLAG_GUILD_ACHIEVEMENT))
         return;
@@ -654,7 +656,7 @@ void GuildAchievementMgr::CompletedAchievement(AchievementEntry const* achieveme
     ca.date = time(NULL);
     ca.changed = true;
     
-    UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_COMPLETE_ACHIEVEMENT, NULL);
+    UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_COMPLETE_ACHIEVEMENT, player);
 }
 
 void GuildAchievementMgr::SendAllAchievementData()

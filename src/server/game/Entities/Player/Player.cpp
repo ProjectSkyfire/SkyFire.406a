@@ -16497,7 +16497,11 @@ void Player::KilledMonsterCredit(uint32 entry, uint64 guid)
     GetAchievementMgr().StartTimedAchievement(ACHIEVEMENT_TIMED_TYPE_CREATURE, real_entry);   // MUST BE CALLED FIRST
     GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_KILL_CREATURE, real_entry, addkillcount, guid ? GetMap()->GetCreature(guid) : NULL);
     if(Creature* killed = GetMap()->GetCreature(guid))
-        GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_KILL_CREATURE_TYPE_GUILD, killed->GetCreatureInfo()->type, addkillcount, killed);
+    {
+        GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_KILL_CREATURE_TYPE, killed->GetCreatureInfo()->type, addkillcount, killed);
+        if(Guild* guild = sGuildMgr->GetGuildById(GetGuildId()))
+            guild->GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_KILL_CREATURE_TYPE_GUILD, this, killed->GetCreatureInfo()->type, addkillcount, killed);
+    }
 
     for (uint8 i = 0; i < MAX_QUEST_LOG_SIZE; ++i)
     {

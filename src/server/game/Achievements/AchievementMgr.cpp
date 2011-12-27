@@ -919,10 +919,10 @@ void AchievementMgr::UpdateAchievementCriteria(AchievementCriteriaTypes type, ui
                 bool cont = false;
                 for(uint32 i = 0; i < 3; ++i)
                 {
-                    if(criteria->moreRequirement[i] != ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_CREATURE_TYPE)
+                    if(achievementCriteria->moreRequirement[i] != ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_CREATURE_TYPE)
                         continue;
                     
-                    if(criteria->moreRequirementValue[i] != miscValue1)
+                    if(achievementCriteria->moreRequirementValue[i] != miscValue1)
                     {
                         cont = true;
                         break;
@@ -1681,7 +1681,6 @@ void AchievementMgr::UpdateAchievementCriteria(AchievementCriteriaTypes type, ui
             case ACHIEVEMENT_CRITERIA_TYPE_PLAY_ARENA:
             case ACHIEVEMENT_CRITERIA_TYPE_OWN_RANK:
             case ACHIEVEMENT_CRITERIA_TYPE_EARNED_PVP_TITLE:
-            case ACHIEVEMENT_CRITERIA_TYPE_KILL_CREATURE_TYPE:
             case ACHIEVEMENT_CRITERIA_TYPE_TOTAL:
                 break;                                   // Not implemented yet :(
         }
