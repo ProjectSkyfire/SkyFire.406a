@@ -607,6 +607,7 @@ bool Guild::Member::LoadFromDB(Field* fields)
         sLog->outError("Player (GUID: %u) has broken zone-data", GUID_LOPART(m_guid));
         m_zoneId = Player::GetZoneIdFromDB(m_guid);
     }
+    ResetFlags();
     return true;
 }
 
@@ -1247,14 +1248,14 @@ void Guild::HandleRoster(WorldSession* session /*= NULL*/)
     data << uint32(m_members.size());
 
     // Packed uint8 - each bit resembles some flag.
-    uint32 totalBytesToSend = uint32(uint32(m_members.size()) / uint32(8)) + 1;
+    uint32 totalBytesToSend = uint32(ceil(float(m_members.size()) / 8.0f));
     for(uint32 i = 0; i < totalBytesToSend; ++i)
         data << uint8(0); //unk
 
     for (Members::const_iterator itr = m_members.begin(); itr != m_members.end(); ++itr)
         data << itr->second->GetPublicNote();
     for (Members::const_iterator itr = m_members.begin(); itr != m_members.end(); ++itr)
-        data << uint64(0); // unk uint64
+        data << uint64(0); // week activity
 
     data << m_info;
 
@@ -1272,7 +1273,7 @@ void Guild::HandleRoster(WorldSession* session /*= NULL*/)
 
     for (Members::const_iterator itr = m_members.begin(); itr != m_members.end(); ++itr)
         //data << uint64(itr->second->GetGUID()); // unk uint64
-        data << uint64(0);
+        data << uint64(0); // total activity
 
     for (Members::const_iterator itr = m_members.begin(); itr != m_members.end(); ++itr)
         data << uint8(0); // unk
@@ -1315,13 +1316,14 @@ void Guild::HandleRoster(WorldSession* session /*= NULL*/)
     }
 
     for (Members::const_iterator itr = m_members.begin(); itr != m_members.end(); ++itr)
-        data << uint32(0); // unk
+        data << uint32(0); // remaining guild rep
 
     for (Members::const_iterator itr = m_members.begin(); itr != m_members.end(); ++itr)
     {
         if(itr->second->IsOnline())
             data << float(0); // unk
-        else data << float(float(::time(NULL) - itr->second->GetLogoutTime()) / DAY);
+        else 
+            data << float(float(::time(NULL) - itr->second->GetLogoutTime()) / DAY);
     }
 
     if (session)
@@ -1350,11 +1352,11 @@ void Guild::SendGuildRankInfo(WorldSession* session)
         data7 << uint32(m_ranks[i].GetRights());
 
         for(int j = 0; j < GUILD_BANK_MAX_TABS; j++)
-            data7 << uint32(0xFFFFFFFF);
+            data7 << uint32(m_ranks[i].GetBankTabRights(j));
         for(int j = 0; j < GUILD_BANK_MAX_TABS; j++)
-            data7 << uint32(0xFFFFFFFF);
+            data7 << uint32(m_ranks[i].GetBankTabSlotsPerDay(j));
 
-        data7 << uint32(0xFFFFFFFF); // GuildBankRightsAndSlots
+        data7 << uint32(m_ranks[i].GetBankMoneyPerDay()); // GuildBankRightsAndSlots
     }
 
     if (session)
@@ -1396,7 +1398,7 @@ void Guild::HandleQuery(WorldSession* session)
     }
 
     m_emblemInfo.WritePacket(data);
-    data << uint32(7);                                                // Something new in WotLK
+    data << uint32(_GetRanksSize());                                                // Something new in WotLK
 
     session->SendPacket(&data);
     HandleRoster(session);
@@ -2055,7 +2057,6 @@ void Guild::SendLoginInfo(WorldSession* session)
         member->AddFlag(GUILD_MEMBER_FLAG_ONLINE);
     }
     HandleRoster();
-    m_achievementMgr.SendAllAchievementData();
 }
 
 // Loading methods

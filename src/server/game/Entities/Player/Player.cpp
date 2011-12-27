@@ -22224,6 +22224,8 @@ void Player::SendInitialPacketsBeforeAddToMap()
     SendInitialActionButtons();
     m_reputationMgr.SendInitialReputations();
     m_achievementMgr.SendAllAchievementData();
+    if(Guild* guild = sGuildMgr->GetGuildById(GetGuildId()))
+        guild->GetAchievementMgr().SendAllAchievementData();
 
     SendCurrencies();
     SendEquipmentSetList();
