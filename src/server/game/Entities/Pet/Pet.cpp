@@ -1921,3 +1921,16 @@ void Pet::SynchronizeLevelWithOwner()
             break;
     }
 }
+
+PetTalentType Pet::GetTalentType()
+{
+    CreatureTemplate const* cInfo = GetCreatureInfo();
+    if (!cInfo)
+        return PET_TALENT_TYPE_NOT_HUNTER_PET;
+
+    CreatureFamilyEntry const *pet_family = sCreatureFamilyStore.LookupEntry(cInfo->family);
+    if (!pet_family)
+        return PET_TALENT_TYPE_NOT_HUNTER_PET;
+
+    return (PetTalentType)pet_family->petTalentType;
+}
