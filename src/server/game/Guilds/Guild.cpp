@@ -2055,6 +2055,7 @@ void Guild::SendLoginInfo(WorldSession* session)
         member->AddFlag(GUILD_MEMBER_FLAG_ONLINE);
     }
     HandleRoster();
+    m_achievementMgr.SendAllAchievementData();
 }
 
 // Loading methods
@@ -2091,6 +2092,7 @@ bool Guild::LoadFromDB(Field* fields)
     m_nextLevelXP = sObjectMgr->GetXPForGuildLevel(m_level);
 
     _CreateLogHolders();
+    m_achievementMgr.LoadFromDB();
     return true;
 }
 
@@ -2396,6 +2398,7 @@ bool Guild::AddMember(uint64 guid, uint8 rankId)
         player->SetReputation(1168, 0);
 
     HandleRoster();
+    m_achievementMgr.SendAllAchievementData();
     return true;
 }
 

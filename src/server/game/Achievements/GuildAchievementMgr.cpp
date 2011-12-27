@@ -209,8 +209,10 @@ void GuildAchievementMgr::SaveToDB(SQLTransaction& trans)
     }
 }
 
-void GuildAchievementMgr::LoadFromDB(PreparedQueryResult achievementResult, PreparedQueryResult criteriaResult)
+void GuildAchievementMgr::LoadFromDB()
 {
+    QueryResult achievementResult = CharacterDatabase.PQuery("SELECT achievement, date FROM guild_achievement WHERE id = %u", m_guild->GetId());
+    QueryResult criteriaResult = CharacterDatabase.PQuery("SELECT criteria, counter, date FROM guild_achievement_progress WHERE id = %u", m_guild->GetId());
     if (achievementResult)
     {
         do
@@ -657,9 +659,47 @@ void GuildAchievementMgr::CompletedAchievement(AchievementEntry const* achieveme
 
 void GuildAchievementMgr::SendAllAchievementData()
 {
-    // ToDo
-    //WorldPacket data(SMSG_GUILD_ACHIEVEMENT_DATA);
     // handler at 0x8C30 (not rebased)
+    // Looks like only completed achievements data is sent in this packet
+    WorldPacket data(SMSG_GUILD_ACHIEVEMENT_DATA, m_completedAchievements.size() * 4 * 4);
+    
+    data << uint32(m_completedAchievements.size());
+    
+    for (CompletedAchievementMap::const_iterator iter = m_completedAchievements.begin(); iter != m_completedAchievements.end(); ++iter)
+        data << uint32(secsToTimeBitFields(iter->second.date));
+    
+    for (CompletedAchievementMap::const_iterator iter = m_completedAchievements.begin(); iter != m_completedAchievements.end(); ++iter)
+        data << uint32(iter->first);
+        
+    SendDirectMessageToAll(&data);
+    
+    WorldPacket data2(SMSG_GUILD_CRITERIA_DATA);
+    
+    data2 << uint32(m_criteriaProgress.size());
+    
+    for (CriteriaProgressMap::const_iterator iter = m_criteriaProgress.begin(); iter != m_criteriaProgress.end(); ++iter)
+        data << uint64(iter->second.counter);
+        
+    time_t now = time(NULL);
+    for (CriteriaProgressMap::const_iterator iter = m_criteriaProgress.begin(); iter != m_criteriaProgress.end(); ++iter)
+        data << uint32(now - iter->second.date);
+        
+    for (CriteriaProgressMap::const_iterator iter = m_criteriaProgress.begin(); iter != m_criteriaProgress.end(); ++iter)
+        data << uint32(secsToTimeBitFields(iter->second.date));
+    
+    for(CriteriaProgressMap::const_iterator iter = m_criteriaProgress.begin(); iter != m_criteriaProgress.end(); ++iter)
+        data << uint64(iter->second.counter);
+        
+    for (CriteriaProgressMap::const_iterator iter = m_criteriaProgress.begin(); iter != m_criteriaProgress.end(); ++iter)
+        data << uint32(now - iter->second.date);
+        
+    for (CriteriaProgressMap::const_iterator iter = m_criteriaProgress.begin(); iter != m_criteriaProgress.end(); ++iter)
+        data << uint32(iter->first);
+        
+    for (CriteriaProgressMap::const_iterator iter = m_criteriaProgress.begin(); iter != m_criteriaProgress.end(); ++iter)
+        data << uint32(0); // Unk
+        
+    SendDirectMessageToAll(&data2);
 }
 
 bool GuildAchievementMgr::HasAchieved(uint32 achievementId)
