@@ -33,6 +33,7 @@
 #include <ace/Sig_Handler.h>
 #include <openssl/opensslv.h>
 #include <openssl/crypto.h>
+#include <vld.h>
 
 #ifndef _AUTHSERVER_CONFIG
 # define _AUTHSERVER_CONFIG  "authserver.conf"

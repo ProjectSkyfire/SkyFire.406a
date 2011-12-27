@@ -107,12 +107,159 @@ void GuildAchievementMgr::DeleteFromDB(uint32 id)
 
 void GuildAchievementMgr::SaveToDB(SQLTransaction& trans)
 {
-    // ToDo...
+    if (!m_completedAchievements.empty())
+    {
+        bool need_execute = false;
+        std::ostringstream ssdel;
+        std::ostringstream ssins;
+        for (CompletedAchievementMap::iterator iter = m_completedAchievements.begin(); iter != m_completedAchievements.end(); ++iter)
+        {
+            if (!iter->second.changed)
+                continue;
+
+            /// first new/changed record prefix
+            if (!need_execute)
+            {
+                ssdel << "DELETE FROM guild_achievement WHERE id = " << m_guild->GetId() << " AND achievement IN (";
+                ssins << "INSERT INTO guild_achievement (id, achievement, date) VALUES ";
+                need_execute = true;
+            }
+            /// next new/changed record prefix
+            else
+            {
+                ssdel << ',';
+                ssins << ',';
+            }
+
+            // new/changed record data
+            ssdel << iter->first;
+            ssins << '(' << m_guild->GetId() << ',' << iter->first << ',' << uint64(iter->second.date) << ')';
+
+            /// mark as saved in db
+            iter->second.changed = false;
+        }
+
+        if (need_execute)
+        {
+            ssdel << ')';
+            trans->Append(ssdel.str().c_str());
+            trans->Append(ssins.str().c_str());
+        }
+    }
+    
+    if (!m_criteriaProgress.empty())
+    {
+        /// prepare deleting and insert
+        bool need_execute_del = false;
+        bool need_execute_ins = false;
+        std::ostringstream ssdel;
+        std::ostringstream ssins;
+        for (CriteriaProgressMap::iterator iter = m_criteriaProgress.begin(); iter != m_criteriaProgress.end(); ++iter)
+        {
+            if (!iter->second.changed)
+                continue;
+
+            // deleted data (including 0 progress state)
+            {
+                /// first new/changed record prefix (for any counter value)
+                if (!need_execute_del)
+                {
+                    ssdel << "DELETE FROM guild_achievement_progress WHERE id = " << m_guild->GetId() << " AND criteria IN (";
+                    need_execute_del = true;
+                }
+                /// next new/changed record prefix
+                else
+                    ssdel << ',';
+
+                // new/changed record data
+                ssdel << iter->first;
+            }
+
+            // store data only for real progress
+            if (iter->second.counter != 0)
+            {
+                /// first new/changed record prefix
+                if (!need_execute_ins)
+                {
+                    ssins << "INSERT INTO guild_achievement_progress (id, criteria, counter, date) VALUES ";
+                    need_execute_ins = true;
+                }
+                /// next new/changed record prefix
+                else
+                    ssins << ',';
+
+                // new/changed record data
+                ssins << '(' << m_guild->GetId() << ',' << iter->first << ',' << iter->second.counter << ',' << iter->second.date << ')';
+            }
+
+            /// mark as updated in db
+            iter->second.changed = false;
+        }
+
+        if (need_execute_del)                                // DELETE ... IN (.... _)_
+            ssdel << ')';
+
+        if (need_execute_del || need_execute_ins)
+        {
+            if (need_execute_del)
+                trans->Append(ssdel.str().c_str());
+            if (need_execute_ins)
+                trans->Append(ssins.str().c_str());
+        }
+    }
 }
 
 void GuildAchievementMgr::LoadFromDB(PreparedQueryResult achievementResult, PreparedQueryResult criteriaResult)
 {
-    // ToDo...
+    if (achievementResult)
+    {
+        do
+        {
+            Field* fields = achievementResult->Fetch();
+            uint32 achievementid = fields[0].GetUInt16();
+
+            // must not happen: cleanup at server startup in sAchievementMgr->LoadCompletedAchievements()
+            AchievementEntry const* achievement = sAchievementStore.LookupEntry(achievementid);
+            if (!achievement)
+                continue;
+                
+            if(!(achievement->flags & ACHIEVEMENT_FLAG_GUILD_ACHIEVEMENT))
+                continue;
+
+            CompletedAchievementData& ca = m_completedAchievements[achievementid];
+            ca.date = time_t(fields[1].GetUInt32());
+            ca.changed = false;
+
+        } while (achievementResult->NextRow());
+    }
+    
+    if (criteriaResult)
+    {
+        do
+        {
+            Field* fields  = criteriaResult->Fetch();
+            uint32 id      = fields[0].GetUInt16();
+            uint32 counter = fields[1].GetUInt32();
+            time_t date    = time_t(fields[2].GetUInt32());
+
+            AchievementCriteriaEntry const* criteria = sAchievementCriteriaStore.LookupEntry(id);
+            if (!criteria)
+            {
+                // we will remove not existed criteria for all characters
+                sLog->outError("Non-existing achievement criteria %u data removed from table `guild_achievement_progress`.", id);
+                CharacterDatabase.PExecute("DELETE FROM guild_achievement_progress WHERE criteria = %u", id);
+                continue;
+            }
+
+            if (criteria->timeLimit && time_t(date + criteria->timeLimit) < time(NULL))
+                continue;
+
+            CriteriaProgress& progress = m_criteriaProgress[id];
+            progress.counter = counter;
+            progress.date    = date;
+            progress.changed = false;
+        } while (criteriaResult->NextRow());
+    }
 }
 
 void GuildAchievementMgr::SendAchievementEarned(AchievementEntry const* achievement)
@@ -164,6 +311,33 @@ void GuildAchievementMgr::CheckAllAchievementCriteria()
         UpdateAchievementCriteria(AchievementCriteriaTypes(i), NULL); // ToDO: Fix this
 }
 
+bool GuildAchievementMgr::IsCriteriaMet(AchievementCriteriaEntry const* criteria, AchievementEntry const* achievement, Player* player, uint32 miscValue1, uint32 miscValue2, Unit* unit)
+{
+    for(uint32 i = 0; i < 3; ++i)
+    {
+        if(!criteria->moreRequirement[i])
+            continue;
+            
+        switch(criteria->moreRequirement[i])
+        {
+            case ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_GUILD_REP:
+            {
+                if (player->GetReputationMgr().GetReputation(1168) < criteria->moreRequirementValue[i])
+                    return false;
+                break;
+            }
+            case ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_CREATURE_TYPE:
+            {
+                if(miscValue1 != criteria->moreRequirementValue[i])
+                    return false;
+                break;
+            }
+            default:
+                break;
+        }
+    }
+}
+
 void GuildAchievementMgr::UpdateAchievementCriteria(AchievementCriteriaTypes type, Player* player /*=NULL*/, uint32 miscValue1 /*= 0*/, uint32 miscValue2 /*= 0*/, Unit* unit /*= NULL*/)
 {
     AchievementCriteriaEntryList const& achievementCriteriaList = sAchievementMgr->GetAchievementCriteriaByType(type);
@@ -178,6 +352,9 @@ void GuildAchievementMgr::UpdateAchievementCriteria(AchievementCriteriaTypes typ
             continue;
 
         if (!CanUpdateCriteria(achievementCriteria, achievement, player))
+            continue;
+            
+        if(!IsCriteriaMet(achievementCriteria, achievement, player, miscValue1, miscValue2, unit))
             continue;
         
         sLog->outString("Updating criteria for guild achievement %u", achievement->ID);
@@ -200,7 +377,21 @@ void GuildAchievementMgr::UpdateAchievementCriteria(AchievementCriteriaTypes typ
             case ACHIEVEMENT_CRITERIA_TYPE_COMPLETE_ACHIEVEMENT:
             {
                 if (m_completedAchievements.find(achievementCriteria->complete_achievement.linkedAchievement) != m_completedAchievements.end())
-                    SetCriteriaProgress(achievementCriteria, 1, NULL);
+                    SetCriteriaProgress(achievementCriteria, 1, player);
+                break;
+            }
+            case ACHIEVEMENT_CRITERIA_TYPE_COMPLETE_DAILY_QUEST:
+            {
+                if (!miscValue1)
+                    continue;
+                SetCriteriaProgress(achievementCriteria, 1, PROGRESS_ACCUMULATE);
+                break;
+            }
+            case ACHIEVEMENT_CRITERIA_TYPE_KILL_CREATURE_TYPE_GUILD:
+            {
+                if (!miscValue1)
+                    continue;
+                SetCriteriaProgress(achievementCriteria, miscValue2, PROGRESS_ACCUMULATE);
                 break;
             }
         }
@@ -242,10 +433,10 @@ bool GuildAchievementMgr::IsCompletedCriteria(AchievementCriteriaEntry const* ac
             return progress->counter >= achievementCriteria->own_item.itemCount;
         case ACHIEVEMENT_CRITERIA_TYPE_COMPLETE_ACHIEVEMENT:
             return progress->counter >= 1;
-        /*
-        case ACHIEVEMENT_CRITERIA_TYPE_WIN_BG:
-            return progress->counter >= achievementCriteria->win_bg.winCount;
-        */
+        case ACHIEVEMENT_CRITERIA_TYPE_COMPLETE_DAILY_QUEST:
+            return progress->counter >= achievementCriteria->complete_daily_quest.questCount;
+        case ACHIEVEMENT_CRITERIA_TYPE_KILL_CREATURE_TYPE_GUILD:
+            return progress->counter >= achievementCriteria->kill_creature_type.count;
         default:
             break;
     }
@@ -487,6 +678,7 @@ bool GuildAchievementMgr::CanUpdateCriteria(AchievementCriteriaEntry const* crit
     if (achievement->mapID != -1 && player->GetMapId() != uint32(achievement->mapID))
         return false;
 
+    
     // ToDo: Enable this later
     /*if ((achievement->requiredFaction == ACHIEVEMENT_FACTION_HORDE    && player->GetTeam() != HORDE) ||
         (achievement->requiredFaction == ACHIEVEMENT_FACTION_ALLIANCE && player->GetTeam() != ALLIANCE))
