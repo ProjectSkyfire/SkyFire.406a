@@ -1103,7 +1103,7 @@ void Creature::UpdateDamagePhysical(WeaponAttackType attType)
 ########                         ########
 #######################################*/
 
-enum PetTalents
+enum ClassPets
 {
  ENTRY_INFERNAL         = 89,
  ENTRY_IMP              = 416,
