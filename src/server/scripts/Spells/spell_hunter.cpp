@@ -423,8 +423,11 @@ public:
             if (!caster)
                 return;
 
-            uint32 spellId = SPELL_SNIPER_TRAINING_BUFF_R1 + GetId() - SPELL_SNIPER_TRAINING_R1;
             Unit* target = GetTarget();
+            if (!target->ToPlayer()->isInCombat())
+                return;
+
+            uint32 spellId = SPELL_SNIPER_TRAINING_BUFF_R1 + GetId() - SPELL_SNIPER_TRAINING_R1;
             if (!target->HasAura(spellId))
             {
                 SpellInfo const* triggeredSpellInfo = sSpellMgr->GetSpellInfo(spellId);
