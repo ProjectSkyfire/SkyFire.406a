@@ -1103,17 +1103,20 @@ void Creature::UpdateDamagePhysical(WeaponAttackType attType)
 ########                         ########
 #######################################*/
 
-#define ENTRY_INFERNAL          89
-#define ENTRY_IMP               416
-#define ENTRY_VOIDWALKER        1860
-#define ENTRY_SUCCUBUS          1863
-#define ENTRY_FELHUNTER         417
-#define ENTRY_FELGUARD          17252
-#define ENTRY_WATER_ELEMENTAL   510
-#define ENTRY_TREANT            1964
-#define ENTRY_FIRE_ELEMENTAL    15438
-#define ENTRY_GHOUL             26125
-#define ENTRY_BLOODWORM         28017
+enum ClassPets
+{
+    ENTRY_INFERNAL         = 89,
+    ENTRY_IMP              = 416,
+    ENTRY_VOIDWALKER       = 1860,
+    ENTRY_SUCCUBUS         = 1863,
+    ENTRY_FELHUNTER        = 417,
+    ENTRY_FELGUARD         = 17252,
+    ENTRY_WATER_ELEMENTAL  = 510,
+    ENTRY_TREANT           = 1964,
+    ENTRY_FIRE_ELEMENTAL   = 15438,
+    ENTRY_GHOUL            = 26125,
+    ENTRY_BLOODWORM        = 28017,
+};
 
 bool Guardian::UpdateStats(Stats stat)
 {
