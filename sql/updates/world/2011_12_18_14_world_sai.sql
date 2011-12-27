@@ -546,8 +546,8 @@ UPDATE `creature_template` SET `InhabitType`=4 WHERE `entry` IN (21173,21170,224
 UPDATE `creature_template` SET `unit_flags`=`unit_flags`|2048 WHERE `entry` IN (21170,22404,22405,22406);
 
 -- Add missing Zeth'Gor Quest Credit Marker, They Must Burn
-INSERT INTO `creature` (`guid`,`id`,`map`,`spawnMask`,`phaseMask`,`modelid`,`equipment_id`,`position_x`,`position_y`,`position_z`,`orientation`,`spawntimesecs`,`spawndist`,`currentwaypoint`,`curhealth`,`curmana`,`DeathState`,`MovementType`) VALUES 
-(78738,21173,530,1,1,0,0,-1162.911377,2248.195313,152.24733,4.815845,120,0,0,1,0,0,0);
+INSERT INTO `creature` (`guid`,`id`,`map`,`spawnMask`,`phaseMask`,`modelid`,`equipment_id`,`position_x`,`position_y`,`position_z`,`orientation`,`spawntimesecs`,`spawndist`,`currentwaypoint`,`curhealth`,`curmana`,`MovementType`) VALUES 
+(78738,21173,530,1,1,0,0,-1162.911377,2248.195313,152.24733,4.815845,120,0,0,1,0,0);
 
 -- Add missing Go
 DELETE FROM `gameobject_template` WHERE `entry`=183929;
