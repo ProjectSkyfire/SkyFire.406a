@@ -49,7 +49,7 @@
 #define __fastcall
 #endif
 
-#ifdef _MSC_VER 
+#if defined(_MSC_VER) || defined(_WIN32) || defined(WIN32) || defined(__MINGW32__)
     #define G3D_WIN32
 #elif  defined(__FreeBSD__) || defined(__OpenBSD__)
     #define G3D_FREEBSD
