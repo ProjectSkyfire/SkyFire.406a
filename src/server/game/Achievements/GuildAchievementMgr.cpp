@@ -131,8 +131,8 @@ void GuildAchievementMgr::SendAchievementEarned(AchievementEntry const* achievem
     // ToDo: Check structure
     WorldPacket data(SMSG_GUILD_ACHIEVEMENT_EARNED, 8+4+8);
     data << uint32(achievement->ID);
-    data << uint64(time(NULL));
-    data << uint32(0);
+    data << uint64(MAKE_NEW_GUID(m_guild->GetId(), 0, HIGHGUID_GUILD));
+    data << uint32(secsToTimeBitFields(time(NULL)));
     SendDirectMessageToAll(&data);
 }
 

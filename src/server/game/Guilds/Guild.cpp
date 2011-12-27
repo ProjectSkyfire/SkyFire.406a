@@ -2383,6 +2383,8 @@ bool Guild::AddMember(uint64 guid, uint8 rankId)
         player->SetInGuild(m_id);
         player->SetRank(rankId);
         player->SetGuildIdInvited(0);
+        player->SetFlag(PLAYER_FLAGS, PLAYER_FLAGS_GLEVEL_ENABLED);
+        player->SetUInt32Value(PLAYER_GUILDLEVEL, uint32(GetLevel()));
     }
 
     _UpdateAccountsNumber();
