@@ -13645,6 +13645,7 @@ void Unit::SetPower(Powers power, uint32 val)
 
     WorldPacket data(SMSG_POWER_UPDATE);
     data.append(GetPackGUID());
+    data << uint32(1);  // count of updates. uint8 and uint32 for each	
     data << uint8(power);
     data << uint32(val);
     SendMessageToSet(&data, GetTypeId() == TYPEID_PLAYER ? true : false);
