@@ -670,6 +670,9 @@ void AchievementMgr::LoadFromDB(PreparedQueryResult achievementResult, PreparedQ
             if (!achievement)
                 continue;
 
+            if(achievement->flags & ACHIEVEMENT_FLAG_GUILD_ACHIEVEMENT)
+                continue;
+                
             CompletedAchievementData& ca = m_completedAchievements[achievementid];
             ca.date = time_t(fields[1].GetUInt32());
             ca.changed = false;
@@ -906,6 +909,28 @@ void AchievementMgr::UpdateAchievementCriteria(AchievementCriteriaTypes type, ui
                     continue;
 
                 SetCriteriaProgress(achievementCriteria, miscValue1, PROGRESS_ACCUMULATE);
+                break;
+            }
+            case ACHIEVEMENT_CRITERIA_TYPE_KILL_CREATURE_TYPE:
+            {
+                if (!miscValue1)
+                    continue;
+                // ToDo: Implement this in another way
+                bool cont = false;
+                for(uint32 i = 0; i < 3; ++i)
+                {
+                    if(criteria->moreRequirement[i] != ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_CREATURE_TYPE)
+                        continue;
+                    
+                    if(criteria->moreRequirementValue[i] != miscValue1)
+                    {
+                        cont = true;
+                        break;
+                    }
+                }
+                if(cont)
+                    continue;
+                SetCriteriaProgress(achievementCriteria, miscValue2, PROGRESS_ACCUMULATE);
                 break;
             }
             case ACHIEVEMENT_CRITERIA_TYPE_KILL_CREATURE:

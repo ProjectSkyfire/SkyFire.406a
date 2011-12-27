@@ -986,9 +986,11 @@ bool Player::Create(uint32 guidlow, CharacterCreateInfo* createInfo)
     SetByteValue(PLAYER_BYTES_3, 0, createInfo->Gender);
     SetByteValue(PLAYER_BYTES_3, 3, 0);                     // BattlefieldArenaFaction (0 or 1)
 
-    //SetUInt32Value(PLAYER_GUILDID, 0);
+    SetInGuild(0);
     SetUInt32Value(PLAYER_GUILDRANK, 0);
     SetUInt32Value(PLAYER_GUILD_TIMESTAMP, 0);
+    SetUInt32Value(PLAYER_GUILDDELETE_DATE, 0);
+    SetUInt32Value(PLAYER_GUILDLEVEL, 1);
 
     for (int i = 0; i < KNOWN_TITLES_SIZE; ++i)
         SetUInt64Value(PLAYER__FIELD_KNOWN_TITLES + i, 0);  // 0=disabled
@@ -4743,8 +4745,8 @@ void Player::InitVisibleBits()
     updateVisualBits.SetBit(PLAYER_DUEL_ARBITER + 0);
     updateVisualBits.SetBit(PLAYER_DUEL_ARBITER + 1);
     updateVisualBits.SetBit(PLAYER_FLAGS);
-    //updateVisualBits.SetBit(PLAYER_GUILDID);
     updateVisualBits.SetBit(PLAYER_GUILDRANK);
+    updateVisualBits.SetBit(PLAYER_GUILDLEVEL);
     updateVisualBits.SetBit(PLAYER_BYTES);
     updateVisualBits.SetBit(PLAYER_BYTES_2);
     updateVisualBits.SetBit(PLAYER_BYTES_3);
@@ -15689,6 +15691,8 @@ void Player::RewardQuest(Quest const *quest, uint32 reward, Object* questGiver, 
         {
             GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_COMPLETE_DAILY_QUEST, quest_id);
             GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_COMPLETE_DAILY_QUEST_DAILY, quest_id);
+            if(Guild* guild = sGuildMgr->GetGuildById(GetGuildId()))
+                guild->GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_COMPLETE_DAILY_QUEST, this, quest_id);
         }
     }
     else if (quest->IsWeekly())
@@ -16492,6 +16496,8 @@ void Player::KilledMonsterCredit(uint32 entry, uint64 guid)
 
     GetAchievementMgr().StartTimedAchievement(ACHIEVEMENT_TIMED_TYPE_CREATURE, real_entry);   // MUST BE CALLED FIRST
     GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_KILL_CREATURE, real_entry, addkillcount, guid ? GetMap()->GetCreature(guid) : NULL);
+    if(Creature* killed = GetMap()->GetCreature(guid))
+        GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_KILL_CREATURE_TYPE_GUILD, killed->GetCreatureInfo()->type, addkillcount, killed);
 
     for (uint8 i = 0; i < MAX_QUEST_LOG_SIZE; ++i)
     {
@@ -17265,13 +17271,13 @@ bool Player::LoadFromDB(uint32 guid, SQLQueryHolder *holder)
     SetFloatValue(UNIT_FIELD_COMBATREACH, 1.5f);
     SetFloatValue(UNIT_FIELD_HOVERHEIGHT, 1.0f);
 
+    // load achievements before anything else to prevent multiple gains for the same achievement/criteria on every loading (as loading does call UpdateAchievementCriteria)
+    m_achievementMgr.LoadFromDB(holder->GetPreparedResult(PLAYER_LOGIN_QUERY_LOADACHIEVEMENTS), holder->GetPreparedResult(PLAYER_LOGIN_QUERY_LOADCRITERIAPROGRESS));
+    
     SetUInt32Value(PLAYER_GUILDRANK, 0);
     SetUInt32Value(PLAYER_GUILD_TIMESTAMP, 0);
     SetUInt32Value(PLAYER_GUILDDELETE_DATE, 0);
     SetUInt32Value(PLAYER_GUILDLEVEL, 1);
-
-    // load achievements before anything else to prevent multiple gains for the same achievement/criteria on every loading (as loading does call UpdateAchievementCriteria)
-    m_achievementMgr.LoadFromDB(holder->GetPreparedResult(PLAYER_LOGIN_QUERY_LOADACHIEVEMENTS), holder->GetPreparedResult(PLAYER_LOGIN_QUERY_LOADCRITERIAPROGRESS));
 
     uint32 money = fields[8].GetUInt32();
     if (money > MAX_MONEY_AMOUNT)
@@ -19337,6 +19343,10 @@ void Player::SaveToDB(bool create /*=false*/)
     _SaveSkills(trans);
     m_achievementMgr.SaveToDB(trans);
     m_reputationMgr.SaveToDB(trans);
+    
+    if (Guild* guild = sGuildMgr->GetGuildById(GetGuildId()))
+        guild->GetAchievementMgr().SaveToDB(trans);
+        
     _SaveEquipmentSets(trans);
     GetSession()->SaveTutorialsData(trans);                 // changed only while character in game
     _SaveGlyphs(trans);

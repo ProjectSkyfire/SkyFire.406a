@@ -435,6 +435,13 @@ struct AchievementCriteriaEntry
             uint32  unused;                                 // 3
             uint32  duelCount;                              // 4
         } win_duel;
+        
+        // ACHIEVEMENT_CRITERIA_KILL_CREATURE_TYPE          = 78
+        struct
+        {
+            uint32  unused;                                 // 3
+            uint32  count;                                 // 4
+        } kill_creature_type;
 
         // ACHIEVEMENT_CRITERIA_TYPE_HIGHEST_POWER          = 96
         struct
