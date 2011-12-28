@@ -273,6 +273,7 @@ class WorldSession
 
         void LogoutPlayer(bool Save);
         void KickPlayer();
+        void HandleMoveToGraveyard(WorldPacket &recv_data);
 
         void QueuePacket(WorldPacket* new_packet);
         bool Update(uint32 diff, PacketFilter& updater);

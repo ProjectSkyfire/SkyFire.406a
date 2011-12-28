@@ -1206,8 +1206,8 @@ enum Opcodes
     SMSG_SERVER_INFO_RESPONSE                        = 0x101F7, // Unknown opcode ID
     CMSG_CHECK_LOGIN_CRITERIA                        = 0x101F8, // Unknown opcode ID
     SMSG_SERVER_BUCK_DATA_START                      = 0x101F9, // Unknown opcode ID
-    CMSG_QUERY_VEHICLE_STATUS                        = 0x101F0, // 4.0.6a 13623
-    SMSG_BATTLEGROUND_INFO_THROTTLED                 = 0x00093, // 4.0.6a 13623
+    CMSG_QUERY_VEHICLE_STATUS                        = 0x101F0, // 69A0 ????
+    SMSG_BATTLEGROUND_INFO_THROTTLED                 = 0x075C4, // 4.0.6a 13623
     SMSG_PLAYER_VEHICLE_DATA                         = 0x0A5A4, // 4.0.6a 13623
     CMSG_PLAYER_VEHICLE_ENTER                        = 0x0AEC8, // 4.0.6a 13623
     CMSG_EJECT_PASSENGER                             = 0x0F688, // 4.0.6a 13623
@@ -1323,7 +1323,6 @@ enum Opcodes
     SMSG_GUILD_ACHIEVEMENT_DATA                      = 0x0491E, // 4.0.6a 13623
     CMSG_UI_TIME_REQUEST                             = 0x03FA8, // 4.0.6a 13623
     SMSG_UI_TIME                                     = 0x0618C, // 4.0.6a 13623
-    CMSG_RETURN_TO_GRAVEYARD                         = 0x00593, // 4.0.6a 13623
     SMSG_UNKNOWN_1330                                = 0x0618C, // 4.0.6a 13623
     CMSG_REFORGE_ITEM                                = 0x00313, // 4.0.6a 13623
     CMSG_COMPLETED_ARTIFACTS                         = 0x00A13, // 4.0.6a 13623
@@ -1345,6 +1344,7 @@ enum Opcodes
     CMSG_GUILD_NEWS_SET_STICKY                       = 0x0252D, // 4.0.6a 13623
     SMSG_GUILD_CRITERIA_DELETED                      = 0x0000C, // 4.0.6a 13623
     SMSG_GUILD_CRITERIA_DATA                         = 0x0400E, // 4.0.6a 13623
+    CMSG_RETURN_TO_GRAVEYARD                         = 0x00593, // 4.0.6a 13623
     NUM_MSG_TYPES                                    = 0x102B8  // last unknown opcode + 1.
 };
 

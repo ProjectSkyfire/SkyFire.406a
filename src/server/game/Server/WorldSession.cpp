@@ -532,6 +532,13 @@ void WorldSession::KickPlayer()
         m_Socket->CloseSocket();
 }
 
+void WorldSession::HandleMoveToGraveyard(WorldPacket &recv_data)
+{
+   if (_player->isAlive() || !_player->HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_GHOST))
+       return;
+   _player->RepopAtGraveyard();
+}
+
 void WorldSession::SendNotification(const char *format, ...)
 {
     if (format)

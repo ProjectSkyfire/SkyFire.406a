@@ -637,7 +637,7 @@ void InitOpcodeTable()
     OPCODE( CMSG_ENABLE_DAMAGE_LOG,                       STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
     OPCODE( CMSG_GROUP_CHANGE_SUB_GROUP,                  STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleGroupChangeSubGroupOpcode );
     OPCODE( CMSG_REQUEST_PARTY_MEMBER_STATS,              STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleRequestPartyMemberStatsOpcode);
-    OPCODE( CMSG_GROUP_SWAP_SUB_GROUP,                    STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
+    OPCODE( CMSG_GROUP_SWAP_SUB_GROUP,                    STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );	
     OPCODE( CMSG_RESET_FACTION_CHEAT,                     STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
     OPCODE( CMSG_AUTOSTORE_BANK_ITEM,                     STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleAutoStoreBankItemOpcode   );
     OPCODE( CMSG_AUTOBANK_ITEM,                           STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleAutoBankItemOpcode        );
@@ -1139,7 +1139,7 @@ void InitOpcodeTable()
     OPCODE( CMSG_SET_CRITERIA_CHEAT,                      STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
     OPCODE( SMSG_CALENDAR_UPDATE_INVITE_LIST3,            STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( CMSG_UNITANIMTIER_CHEAT,                      STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
-    OPCODE( CMSG_CHAR_CUSTOMIZE,                          STATUS_AUTHED,   PROCESS_THREADUNSAFE, &WorldSession::HandleCharCustomize             );
+    OPCODE( CMSG_CHAR_CUSTOMIZE,                          STATUS_AUTHED,   PROCESS_THREADUNSAFE, &WorldSession::HandleCharCustomize              );
     OPCODE( SMSG_CHAR_CUSTOMIZE,                          STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( SMSG_PET_RENAMEABLE,                          STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( CMSG_REQUEST_VEHICLE_EXIT,                    STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleRequestVehicleExit        );
@@ -1193,7 +1193,7 @@ void InitOpcodeTable()
     OPCODE( SMSG_BATTLEGROUND_INFO_THROTTLED,             STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( SMSG_PLAYER_VEHICLE_DATA,                     STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( CMSG_PLAYER_VEHICLE_ENTER,                    STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleEnterPlayerVehicle        );
-    OPCODE( CMSG_EJECT_PASSENGER,                         STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleEjectPassenger             );
+    OPCODE( CMSG_EJECT_PASSENGER,                         STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleEjectPassenger            );
     OPCODE( SMSG_PET_GUIDS,                               STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( SMSG_CLIENTCACHE_VERSION,                     STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( SMSG_ITEM_REFUND_INFO_RESPONSE,               STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
@@ -1246,10 +1246,10 @@ void InitOpcodeTable()
     OPCODE( SMSG_GMRESPONSE_STATUS_UPDATE,                STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( CMSG_WORLD_STATE_UI_TIMER_UPDATE,             STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleWorldStateUITimerUpdate   );
     OPCODE( SMSG_WORLD_STATE_UI_TIMER_UPDATE,             STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
-    OPCODE( CMSG_CHAR_RACE_CHANGE,                        STATUS_AUTHED,   PROCESS_THREADUNSAFE, &WorldSession::HandleCharFactionOrRaceChange   );
+    OPCODE( CMSG_CHAR_RACE_CHANGE,                        STATUS_AUTHED,   PROCESS_THREADUNSAFE, &WorldSession::HandleCharFactionOrRaceChange    );
     OPCODE( SMSG_TALENTS_INVOLUNTARILY_RESET,             STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( SMSG_LOOT_SLOT_CHANGED,                       STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
-    OPCODE( CMSG_READY_FOR_ACCOUNT_DATA_TIMES,            STATUS_AUTHED,   PROCESS_THREADUNSAFE, &WorldSession::HandleReadyForAccountDataTimes  );
+    OPCODE( CMSG_READY_FOR_ACCOUNT_DATA_TIMES,            STATUS_AUTHED,   PROCESS_THREADUNSAFE, &WorldSession::HandleReadyForAccountDataTimes   );
     OPCODE( CMSG_QUERY_QUESTS_COMPLETED,                  STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleQueryQuestsCompleted      );
     OPCODE( SMSG_QUERY_QUESTS_COMPLETED_RESPONSE,         STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( CMSG_GM_REPORT_LAG,                           STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleReportLag                 );
@@ -1276,6 +1276,6 @@ void InitOpcodeTable()
     OPCODE( CMSG_GROUP_SET_ROLES,                         STATUS_LOGGEDIN, PROCESS_INPLACE,       &WorldSession::HandleGroupSetRoles             );
     OPCODE( CMSG_GUILD_UPDATE_PARTY_STATE,                STATUS_LOGGEDIN, PROCESS_INPLACE,       &WorldSession::HandleGuildPartyStateUpdate     );
     OPCODE( SMSG_UNKNOWN_1310,                            STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
-    OPCODE( CMSG_RETURN_TO_GRAVEYARD,                     STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
+    OPCODE( CMSG_RETURN_TO_GRAVEYARD,                     STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleMoveToGraveyard           );
     OPCODE( CMSG_REFORGE_ITEM,                            STATUS_LOGGEDIN, PROCESS_INPLACE,       &WorldSession::HandleReforgeItem               );
 };
