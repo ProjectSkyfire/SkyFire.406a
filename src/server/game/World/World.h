@@ -471,7 +471,7 @@ enum WorldStates
     WS_WEEKLY_QUEST_RESET_TIME    = 20002,                      // Next weekly reset time
     WS_BG_DAILY_RESET_TIME        = 20003,                      // Next daily BG reset time
     WS_CURRENCY_RESET_TIME        = 20004,                      // Next currency week cap reset time
-    WS_GUILD_AD_DAILY_RESET_TIME  = 20005                       // Next daily Guild Advancement XP reset time
+    WS_GUILD_AD_HOURLY_RESET_TIME  = 20005                       // Next daily Guild Advancement XP reset time
 };
 
 // DB scripting commands
@@ -634,7 +634,7 @@ class World
         time_t GetNextDailyQuestsResetTime() const { return m_NextDailyQuestReset; }
         time_t GetNextWeeklyQuestsResetTime() const { return m_NextWeeklyQuestReset; }
         time_t GetNextRandomBGResetTime() const { return m_NextRandomBGReset; }
-        time_t GetGuildAdvancementDailyXPResetTime() const { return m_NextDailyXPReset; }
+        time_t GetGuildAdvancementDailyXPResetTime() const { return m_NextHourlyGuildXPReset; }
 
         /// Get the maximum skill level a player can reach
         uint16 GetConfigMaxSkillValue() const
@@ -842,6 +842,7 @@ class World
         time_t m_NextWeeklyQuestReset;
         time_t m_NextRandomBGReset;
         time_t m_NextDailyXPReset;
+		time_t m_NextHourlyGuildXPReset;
 
         //Player Queue
         Queue m_QueuedPlayer;

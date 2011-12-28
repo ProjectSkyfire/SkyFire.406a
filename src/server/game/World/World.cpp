@@ -2746,9 +2746,9 @@ void World::InitRandomBGResetTime()
 
 void World::InitGuildAdvancementDailyResetTime()
 {
-    time_t dailyxptime = uint64(sWorld->getWorldState(WS_GUILD_AD_DAILY_RESET_TIME));
-    if (!dailyxptime)
-        m_NextDailyXPReset = time_t(time(NULL));         // game time not yet init
+    time_t Hourlyxptime = uint64(sWorld->getWorldState(WS_GUILD_AD_HOURLY_RESET_TIME));
+    if (!Hourlyxptime)
+        m_NextHourlyGuildXPReset = time_t(time(NULL));         // game time not yet init
 
     // generate time by config
     time_t curTime = time(NULL);
@@ -2758,23 +2758,23 @@ void World::InitGuildAdvancementDailyResetTime()
     localTm.tm_sec = 0;
 
     // current day reset time
-    time_t nextDayResetTime = mktime(&localTm);
+    time_t nextHourlyResetTime = mktime(&localTm);
 
     // next reset time before current moment
-    if (curTime >= nextDayResetTime)
-        nextDayResetTime += DAY;
+    if (curTime >= nextHourlyResetTime)
+        nextHourlyResetTime += HOUR;
 
     // normalize reset time
-    m_NextDailyXPReset = dailyxptime < curTime ? nextDayResetTime - DAY : nextDayResetTime;
+    m_NextHourlyGuildXPReset = Hourlyxptime < curTime ? nextHourlyResetTime - HOUR : nextHourlyResetTime;
 
-    if (!dailyxptime)
-        sWorld->setWorldState(WS_GUILD_AD_DAILY_RESET_TIME, uint64(m_NextDailyXPReset));
+    if (!Hourlyxptime)
+        sWorld->setWorldState(WS_GUILD_AD_HOURLY_RESET_TIME, uint64(m_NextHourlyGuildXPReset));
 }
 
 void World::ResetGuildAdvancementDailyXP()
 {
     sLog->outDetail("Guild Advancement Daily XP status reset for all characters.");
-    QueryResult result = CharacterDatabase.Query("SELECT level,xp,guildid FROM guild");
+    QueryResult result = CharacterDatabase.Query("SELECT level, xp, guildid FROM guild");
     if (!result)
         return;
 
@@ -2796,14 +2796,14 @@ void World::ResetGuildAdvancementDailyXP()
         else
             m_xp_cap = baseXP;
 
-        CharacterDatabase.PExecute("UPDATE guild SET m_xp_cap = %u, m_today_xp = '0' WHERE guildid = %u", m_xp_cap,guildid);
+        CharacterDatabase.PExecute("UPDATE guild SET m_xp_cap = %u, m_today_xp = '0' WHERE guildid = %u", m_xp_cap, guildid);
 
         ++count;
     }
     while (result->NextRow());
 
-    m_NextDailyXPReset = time_t(m_NextDailyXPReset + DAY);
-    sWorld->setWorldState(WS_GUILD_AD_DAILY_RESET_TIME, uint64(m_NextDailyXPReset));
+    m_NextHourlyGuildXPReset = time_t(m_NextHourlyGuildXPReset + DAY);
+    sWorld->setWorldState(WS_GUILD_AD_HOURLY_RESET_TIME, uint64(m_NextHourlyGuildXPReset));
 }
 
 void World::ResetDailyQuests()

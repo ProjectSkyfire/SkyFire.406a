@@ -1292,7 +1292,7 @@ GuildAdvancement.MaxLevel = 25
 
 #        
 #    GuildAdvancement.ResetHour
-#        Reset Daily XP Cap at specified hour of the day (0-23)
+#        Reset Hourly XP Cap at specified hour of the day (0-23)
 #        Default: 3
 
 GuildAdvancement.ResetHour = 3
