@@ -1302,8 +1302,8 @@ void World::SetInitialWorldSettings()
     LoadDB2Stores(m_dataPath);
     DetectDBCLang();
 
-    sLog->outString("Loading spell dbc data corrections...");
-    /*sSpellMgr->LoadDbcDataCorrections();*/           ///-needs added to spellmgr
+    /*sLog->outString("Loading spell dbc data corrections...");
+    sSpellMgr->LoadDbcDataCorrections();*/  ///-is now merged to custom attri needs redirected
 
     sLog->outString("Loading SpellInfo store...");
     sSpellMgr->LoadSpellInfoStore();
@@ -1577,6 +1577,9 @@ void World::SetInitialWorldSettings()
 
     sGuildMgr->LoadGuilds();
 
+    sLog->outString("Loading Guild Rewards...");
+    sGuildMgr->LoadGuildRewards();
+
     sLog->outString("Loading ArenaTeams...");
     sArenaTeamMgr->LoadArenaTeams();
 
@@ -1777,8 +1780,8 @@ void World::SetInitialWorldSettings()
     sLog->outString("Calculate random battleground reset time..." );
     InitRandomBGResetTime();
 
-    sLog->outString("Calculate guild Advancement XP daily reset time..." );
-    InitGuildAdvancementDailyResetTime();
+    // sLog->outString("Calculate guild Advancement XP daily reset time..." );
+    // InitGuildAdvancementDailyResetTime();
 
     LoadCharacterNameData();
 
@@ -2768,6 +2771,41 @@ void World::InitGuildAdvancementDailyResetTime()
         sWorld->setWorldState(WS_GUILD_AD_DAILY_RESET_TIME, uint64(m_NextDailyXPReset));
 }
 
+void World::ResetGuildAdvancementDailyXP()
+{
+    sLog->outDetail("Guild Advancement Daily XP status reset for all characters.");
+    QueryResult result = CharacterDatabase.Query("SELECT level,xp,guildid FROM guild");
+    if (!result)
+        return;
+
+    uint32 count = 0;
+
+    do
+    {
+        Field *fields = result->Fetch();
+        uint8 level = fields[0].GetUInt32();
+        uint64 m_xp = fields[1].GetUInt64();
+        uint64 guildid = fields[2].GetUInt64();
+
+        uint64 baseXP = sObjectMgr->GetXPForGuildLevel(level);
+        uint64 diff = (uint64)(baseXP * 15 / 100);
+        uint64 m_xp_cap = 0;
+
+        if(diff < baseXP)
+            m_xp_cap = diff + m_xp;
+        else
+            m_xp_cap = baseXP;
+
+        CharacterDatabase.PExecute("UPDATE guild SET m_xp_cap = %u, m_today_xp = '0' WHERE guildid = %u", m_xp_cap,guildid);
+
+        ++count;
+    }
+    while (result->NextRow());
+
+    m_NextDailyXPReset = time_t(m_NextDailyXPReset + DAY);
+    sWorld->setWorldState(WS_GUILD_AD_DAILY_RESET_TIME, uint64(m_NextDailyXPReset));
+}
+
 void World::ResetDailyQuests()
 {
     sLog->outDetail("Daily quests reset for all characters.");
@@ -2820,42 +2858,6 @@ void World::ResetRandomBG()
 
     m_NextRandomBGReset = time_t(m_NextRandomBGReset + DAY);
     sWorld->setWorldState(WS_BG_DAILY_RESET_TIME, uint64(m_NextRandomBGReset));
-}
-
-void World::ResetGuildAdvancementDailyXP()
-{
-    QueryResult result = CharacterDatabase.Query("SELECT level,xp,guildid FROM guild");
-
-    if (!result)
-        return;
-
-    uint32 count = 0;
-
-    do
-    {
-        Field *fields = result->Fetch();
-        uint8 level = fields[0].GetUInt32();
-        uint64 m_xp = fields[1].GetUInt64();
-        uint64 guildid = fields[2].GetUInt64();
-
-        uint64 baseXP = sObjectMgr->GetXPForGuildLevel(level);
-        uint64 diff = (uint64)(baseXP * 15 / 100);
-        uint64 m_xp_cap = 0;
-
-        if(diff < baseXP)
-            m_xp_cap = diff + m_xp;
-        else
-            m_xp_cap = baseXP;
-
-        CharacterDatabase.PExecute("UPDATE guild SET m_xp_cap = %u, m_today_xp = '0' WHERE guildid = %u", m_xp_cap,guildid);
-
-        ++count;
-    }
-    while (result->NextRow());
-
-    sLog->outDetail("Guild Advancement Daily XP status reset for all characters.");
-    m_NextDailyXPReset = time_t(m_NextDailyXPReset + DAY);
-    sWorld->setWorldState(WS_GUILD_AD_DAILY_RESET_TIME, uint64(m_NextDailyXPReset));
 }
 
 void World::UpdateMaxSessionCounters()

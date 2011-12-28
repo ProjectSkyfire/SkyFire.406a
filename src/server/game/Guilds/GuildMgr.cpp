@@ -29,6 +29,8 @@ GuildMgr::~GuildMgr()
 {
     for (GuildContainer::iterator itr = GuildStore.begin(); itr != GuildStore.end(); ++itr)
         delete itr->second;
+    for (GuildRewardsVector::iterator itr = mGuildRewards.begin(); itr != mGuildRewards.end(); ++itr)
+        delete (*itr);
 }
 
 void GuildMgr::AddGuild(Guild* guild)
@@ -417,4 +419,36 @@ void GuildMgr::LoadGuilds()
         sLog->outString(">> Validated data of loaded guilds in %u ms", GetMSTimeDiffToNow(oldMSTime));
         sLog->outString();
     }
+}
+
+uint32 GetXPForLevel(uint8 level);
+uint32 GetXPForGuildLevel(uint8 level);
+
+void GuildMgr::LoadGuildRewards()
+{
+    QueryResult result = WorldDatabase.Query("SELECT item_entry,price,achievement,standing FROM guild_rewards");
+
+    if (!result)
+    {
+        sLog->outString();
+        sLog->outString(">> Loaded 0 guild reward definitions");
+    }
+
+    uint32 count = 0;
+    do
+    {
+        Field *fields = result->Fetch();
+
+        GuildRewardsEntry* ptr = new GuildRewardsEntry;
+        ptr->item = fields[0].GetUInt32();
+        ptr->price = fields[1].GetUInt32();
+        ptr->achievement = fields[2].GetUInt32();
+        ptr->standing = fields[3].GetUInt32();
+        mGuildRewards.push_back(ptr);
+
+        ++count;
+    }while (result->NextRow());
+
+    sLog->outString();
+    sLog->outString(">> Loaded %u guild reward definitions.");
 }

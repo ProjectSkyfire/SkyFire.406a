@@ -1322,7 +1322,7 @@ void Guild::HandleRoster(WorldSession* session /*= NULL*/)
     {
         if(itr->second->IsOnline())
             data << float(0); // unk
-        else 
+        else
             data << float(float(::time(NULL) - itr->second->GetLogoutTime()) / DAY);
     }
 

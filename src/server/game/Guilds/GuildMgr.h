@@ -25,12 +25,22 @@
 class GuildMgr
 {
     friend class ACE_Singleton<GuildMgr, ACE_Null_Mutex>;
+
 private:
     GuildMgr();
     ~GuildMgr();
 
+struct GuildRewardsEntry
+{
+    uint32 item;
+    uint32 price;
+    uint32 achievement;
+    uint32 standing;
+};
+
 public:
     typedef UNORDERED_MAP<uint32, Guild*> GuildContainer;
+    typedef std::vector<GuildRewardsEntry*> GuildRewardsVector;
 
     Guild* GetGuildByLeader(uint64 guid) const;
     Guild* GetGuildById(uint32 guildId) const;
@@ -44,9 +54,12 @@ public:
     uint32 GenerateGuildId();
     void SetNextGuildId(uint32 Id) { NextGuildId = Id; }
 
+    void LoadGuildRewards();
+    //void LoadGuildMemberProfessions(std::vector<Guild*>& GuildVector, QueryResult& result);  // g.professions aren't finished yet
 protected:
     uint32 NextGuildId;
     GuildContainer GuildStore;
+    GuildRewardsVector  mGuildRewards;
 };
 
 #define sGuildMgr ACE_Singleton<GuildMgr, ACE_Null_Mutex>::instance()
