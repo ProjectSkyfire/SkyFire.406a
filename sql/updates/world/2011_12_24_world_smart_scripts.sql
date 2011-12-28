@@ -1,8 +1,8 @@
 -- Fix [Q] Protecting our own (10488)
 -- P.D: Merry Xmas!
 DELETE FROM `conditions` WHERE `SourceTypeOrReferenceID`=17 AND `SourceEntry`=32578 AND `SourceGroup`=0;
-INSERT INTO `conditions` (`SourceTypeOrReferenceId`,`SourceGroup`,`SourceEntry`,`ConditionTypeOrReference`,`elseGroup`,`ConditionValue1`,`ConditionValue2`,`ConditionValue3`,`ErrorTextId`,`Comment`) VALUES (17,0,32578,11,0,32578,0,0,0,'Gor 'drek's Ointment - should only target Thunderlord Dire Wolf without aura 32578');
-INSERT INTO `conditions` (`SourceTypeOrReferenceId`,`SourceGroup`,`SourceEntry`,`ConditionTypeOrReference`,`elseGroup`,`ConditionValue1`,`ConditionValue2`,`ConditionValue3`,`ErrorTextId`,`Comment`) VALUES (17,0,32578,19,0,20748,0,0,0,'Gor'drek's Ointment - should only target Thunderlord Dire Wolf without aura 32578');
+INSERT INTO `conditions` (`SourceTypeOrReferenceId`,`SourceGroup`,`SourceEntry`,`ConditionTypeOrReference`,`elseGroup`,`ConditionValue1`,`ConditionValue2`,`ConditionValue3`,`ErrorTextId`,`Comment`) VALUES (17,0,32578,11,0,32578,0,0,0,"Gor 'drek's Ointment - should only target Thunderlord Dire Wolf without aura 32578");
+INSERT INTO `conditions` (`SourceTypeOrReferenceId`,`SourceGroup`,`SourceEntry`,`ConditionTypeOrReference`,`elseGroup`,`ConditionValue1`,`ConditionValue2`,`ConditionValue3`,`ErrorTextId`,`Comment`) VALUES (17,0,32578,19,0,20748,0,0,0,"Gor'drek's Ointment - should only target Thunderlord Dire Wolf without aura 32578");
 
 -- Thunderlord Dire Wolf SAI
 SET @ENTRY := 20748;
