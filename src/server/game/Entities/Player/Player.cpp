@@ -22224,9 +22224,7 @@ void Player::SendInitialPacketsBeforeAddToMap()
     SendInitialActionButtons();
     m_reputationMgr.SendInitialReputations();
     m_achievementMgr.SendAllAchievementData();
-    if(Guild* guild = sGuildMgr->GetGuildById(GetGuildId()))
-        guild->GetAchievementMgr().SendAllAchievementData();
-
+    
     SendCurrencies();
     SendEquipmentSetList();
 
@@ -22301,6 +22299,9 @@ void Player::SendInitialPacketsAfterAddToMap()
     }
     else if (GetRaidDifficulty() != GetStoredRaidDifficulty())
         SendRaidDifficulty(GetGroup() != NULL);
+
+    if(Guild* guild = sGuildMgr->GetGuildById(GetGuildId()))
+        guild->GetAchievementMgr().SendAllAchievementData();
 }
 
 void Player::SendUpdateToOutOfRangeGroupMembers()
