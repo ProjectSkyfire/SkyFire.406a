@@ -2802,7 +2802,7 @@ void World::ResetGuildAdvancementDailyXP()
     }
     while (result->NextRow());
 
-    m_NextHourlyXPReset = time_t(m_NextHourlyXPReset + DAY);
+    m_NextHourlyXPReset = time_t(m_NextHourlyXPReset + HOUR);
     sWorld->setWorldState(WS_GUILD_AD_HOURLY_RESET_TIME, uint64(m_NextHourlyXPReset));
 }
 
