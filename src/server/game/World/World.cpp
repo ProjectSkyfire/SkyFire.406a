@@ -1780,8 +1780,8 @@ void World::SetInitialWorldSettings()
     sLog->outString("Calculate random battleground reset time..." );
     InitRandomBGResetTime();
 
-    // sLog->outString("Calculate guild Advancement XP daily reset time..." );
-    // InitGuildAdvancementDailyResetTime();
+    sLog->outString("Calculate guild Advancement XP daily reset time..." );
+    InitGuildAdvancementDailyResetTime();
 
     LoadCharacterNameData();
 
