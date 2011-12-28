@@ -2748,7 +2748,7 @@ void World::InitGuildAdvancementDailyResetTime()
 {
     time_t Hourlyxptime = uint64(sWorld->getWorldState(WS_GUILD_AD_HOURLY_RESET_TIME));
     if (!Hourlyxptime)
-        m_NextHourlyGuildXPReset = time_t(time(NULL));         // game time not yet init
+        m_NextHourlyXPReset = time_t(time(NULL));         // game time not yet init
 
     // generate time by config
     time_t curTime = time(NULL);
@@ -2765,10 +2765,10 @@ void World::InitGuildAdvancementDailyResetTime()
         nextHourlyResetTime += HOUR;
 
     // normalize reset time
-    m_NextHourlyGuildXPReset = Hourlyxptime < curTime ? nextHourlyResetTime - HOUR : nextHourlyResetTime;
+    m_NextHourlyXPReset = Hourlyxptime < curTime ? nextHourlyResetTime - HOUR : nextHourlyResetTime;
 
     if (!Hourlyxptime)
-        sWorld->setWorldState(WS_GUILD_AD_HOURLY_RESET_TIME, uint64(m_NextHourlyGuildXPReset));
+        sWorld->setWorldState(WS_GUILD_AD_HOURLY_RESET_TIME, uint64(m_NextHourlyXPReset));
 }
 
 void World::ResetGuildAdvancementDailyXP()
@@ -2802,8 +2802,8 @@ void World::ResetGuildAdvancementDailyXP()
     }
     while (result->NextRow());
 
-    m_NextHourlyGuildXPReset = time_t(m_NextHourlyGuildXPReset + DAY);
-    sWorld->setWorldState(WS_GUILD_AD_HOURLY_RESET_TIME, uint64(m_NextHourlyGuildXPReset));
+    m_NextHourlyXPReset = time_t(m_NextHourlyXPReset + DAY);
+    sWorld->setWorldState(WS_GUILD_AD_HOURLY_RESET_TIME, uint64(m_NextHourlyXPReset));
 }
 
 void World::ResetDailyQuests()
