@@ -1045,26 +1045,26 @@ void WorldSession::SendItemEnchantTimeUpdate(uint64 Playerguid, uint64 Itemguid,
 
 void WorldSession::HandleItemNameQueryOpcode(WorldPacket & recv_data)
 {
-   uint32 itemid;
-   recv_data >> itemid;
-   recv_data.read_skip<uint64>();                          // guid
+    uint32 itemid;
+    recv_data >> itemid;
+    recv_data.read_skip<uint64>();                          // guid
 
-   sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: CMSG_ITEM_NAME_QUERY %u", itemid);
-   ItemSetNameEntry const *pName = sObjectMgr->GetItemSetNameEntry(itemid);
-   if (pName)
-   {
-       std::string Name = pName->name;
-       int loc_idx = GetSessionDbLocaleIndex();
-       if (loc_idx >= 0)
-           if (ItemSetNameLocale const *isnl = sObjectMgr->GetItemSetNameLocale(itemid))
-               ObjectMgr::GetLocaleString(isnl->Name, loc_idx, Name);
+    sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: CMSG_ITEM_NAME_QUERY %u", itemid);
+    ItemSetNameEntry const *pName = sObjectMgr->GetItemSetNameEntry(itemid);
+    if (pName)
+    {
+        std::string Name = pName->name;
+        int loc_idx = GetSessionDbLocaleIndex();
+        if (loc_idx >= 0)
+            if (ItemSetNameLocale const *isnl = sObjectMgr->GetItemSetNameLocale(itemid))
+                ObjectMgr::GetLocaleString(isnl->Name, loc_idx, Name);
 
-       WorldPacket data(SMSG_ITEM_NAME_QUERY_RESPONSE, (4+Name.size()+1+4));
-       data << uint32(itemid);
-       data << Name;
-       data << uint32(pName->InventoryType);
-       SendPacket(&data);
-   }
+        WorldPacket data(SMSG_ITEM_NAME_QUERY_RESPONSE, (4+Name.size()+1+4));
+        data << uint32(itemid);
+        data << Name;
+        data << uint32(pName->InventoryType);
+        SendPacket(&data);
+    }
 }
 
 void WorldSession::HandleWrapItemOpcode(WorldPacket& recv_data)
@@ -1451,44 +1451,44 @@ void WorldSession::HandleItemTextQuery(WorldPacket & recv_data )
 
 void WorldSession::HandleReforgeItem(WorldPacket& recv_data)
 {
-   sLog->outDebug(LOG_FILTER_NETWORKIO, "CMSG_REFORGE_ITEM");
+    sLog->outDebug(LOG_FILTER_NETWORKIO, "CMSG_REFORGE_ITEM");
 
-   uint32 slotId, reforgeId;
-   uint64 GUID;
-   uint32 bag;
-   recv_data >> slotId >> reforgeId;
-   recv_data >> GUID >> bag;
+    uint32 slotId, reforgeId;
+    uint64 GUID;
+    uint32 bag;
+    recv_data >> slotId >> reforgeId;
+    recv_data >> GUID >> bag;
 
-   Item* item = GetPlayer()->GetItemByPos(bag,slotId);
+    Item* item = GetPlayer()->GetItemByPos(bag,slotId);
 
-   if(!item)       // cheating?
-       return;
+    if(!item)       // cheating?
+        return;
 
-   item->SetState(ITEM_CHANGED,GetPlayer()); // Set the 'changed' state to allow items to be saved to DB if they are equipped
-   if(reforgeId == 0) // Reset item
-   {
-       if(item->IsEquipped()) // Item must be equipped to avoid additional stat loose
-           GetPlayer()->ApplyReforgedStats(item,false);
-       item->SetEnchantment(REFORGE_ENCHANTMENT_SLOT, 0, 0, 0);
-       SQLTransaction trans = CharacterDatabase.BeginTransaction();
-       item->SaveToDB(trans);
-       CharacterDatabase.CommitTransaction(trans);
-   }
+    item->SetState(ITEM_CHANGED,GetPlayer()); // Set the 'changed' state to allow items to be saved to DB if they are equipped
+    if(reforgeId == 0) // Reset item
+    {
+        if(item->IsEquipped()) // Item must be equipped to avoid additional stat loose
+            GetPlayer()->ApplyReforgedStats(item,false);
+        item->SetEnchantment(REFORGE_ENCHANTMENT_SLOT, 0, 0, 0);
+        SQLTransaction trans = CharacterDatabase.BeginTransaction();
+        item->SaveToDB(trans);
+        CharacterDatabase.CommitTransaction(trans);
+    }
 
-   const ItemReforgeEntry* stats = sItemReforgeStore.LookupEntry(reforgeId);
-   if(!stats)        // cheating?
-       return;
+    const ItemReforgeEntry* stats = sItemReforgeStore.LookupEntry(reforgeId);
+    if(!stats)        // cheating?
+        return;
 
-   uint32 money = item->GetTemplate()->SellPrice;
+    uint32 money = item->GetTemplate()->SellPrice;
 
-   if(!GetPlayer()->HasEnoughMoney((int32)money))
-       return; // Cheating?
+    if(!GetPlayer()->HasEnoughMoney((int32)money))
+        return; // Cheating?
 
-   GetPlayer()->ModifyMoney(-int32(money));
-   item->SetEnchantment(REFORGE_ENCHANTMENT_SLOT,reforgeId, 0, 0);
-   SQLTransaction trans = CharacterDatabase.BeginTransaction();
-   item->SaveToDB(trans);
-   CharacterDatabase.CommitTransaction(trans);
-   if(item->IsEquipped()) // Item must be equipped to get the new stats
-       GetPlayer()->ApplyReforgedStats(item,true);
+    GetPlayer()->ModifyMoney(-int32(money));
+    item->SetEnchantment(REFORGE_ENCHANTMENT_SLOT,reforgeId, 0, 0);
+    SQLTransaction trans = CharacterDatabase.BeginTransaction();
+    item->SaveToDB(trans);
+    CharacterDatabase.CommitTransaction(trans);
+    if(item->IsEquipped()) // Item must be equipped to get the new stats
+        GetPlayer()->ApplyReforgedStats(item,true);
 }
