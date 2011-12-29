@@ -96,7 +96,7 @@ void LoadDB2Stores(const std::string& dataPath)
     uint32 availableDb2Locales = 0xFFFFFFFF;
 
     LoadDB2(availableDb2Locales, bad_db2_files, sItemStore,                   db2Path, "Item.db2");
-    LoadDB2(availableDb2Locales, bad_db2_files, sItemSparseStore,             db2Path, "Item-sparse.db2");
+    //LoadDB2(availableDb2Locales, bad_db2_files, sItemSparseStore,             db2Path, "Item-sparse.db2");
     LoadDB2(availableDb2Locales, bad_db2_files, sItemExtendedCostStore,       db2Path, "ItemExtendedCost.db2");
 
     for (uint32 i = 0; i < sItemStore.GetNumRows(); ++i)
@@ -123,7 +123,7 @@ void LoadDB2Stores(const std::string& dataPath)
     {
         sLog->outString("");
         sLog->outError("Please extract correct db2 files from client 4.0.6a 13623.");
-        exit(1);
+        //exit(1);
     }
 
     sLog->outString(">> Initialized %d data stores.", DB2FilesCount);
