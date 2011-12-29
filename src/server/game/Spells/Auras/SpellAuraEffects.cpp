@@ -2871,7 +2871,7 @@ void AuraEffect::HandleAuraMounted(AuraApplication const* aurApp, uint8 mode, bo
     }
     else
     {
-        target->Unmount();
+        target->Dismount();
 
         if(player)
             player->RemoveAurasDueToSpell(spellId);

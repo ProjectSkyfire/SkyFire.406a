@@ -527,13 +527,13 @@ public:
                     NPCChangeTarget(OrbazGUID);
                     NPCChangeTarget(ThassarianGUID);
 
-                    me->Unmount();
+                    me->Dismount();
                     me->CastSpell(me, SPELL_THE_MIGHT_OF_MOGRAINE, true); // need to fix, on player only
 
                     if (Creature* temp = Unit::GetCreature(*me, KoltiraGUID))
-                        temp->Unmount();
+                        temp->Dismount();
                     if (Creature* temp = Unit::GetCreature(*me, ThassarianGUID))
-                        temp->Unmount();
+                        temp->Dismount();
 
                     bIsBattle = true;
                     break;

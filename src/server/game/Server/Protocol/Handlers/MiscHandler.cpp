@@ -1622,7 +1622,7 @@ void WorldSession::HandleCancelMountAuraOpcode(WorldPacket & /*recv_data*/)
         return;
     }
 
-    _player->Unmount();
+    _player->Dismount();
     _player->RemoveAurasByType(SPELL_AURA_MOUNTED);
 }
 
