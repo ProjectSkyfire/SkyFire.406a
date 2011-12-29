@@ -257,8 +257,8 @@ uint32 MasteryScript::GetMasteryBaseAmount()
 {
     if (dummyEffectIndex >= 0 && dummyEffectIndex < MAX_SPELL_EFFECTS)
     {
-        if (SpellEntry const* spellInfo = GetAura()->GetSpellProto())
-            return spellInfo->EffectBasePoints[dummyEffectIndex] ? spellInfo->EffectBasePoints[dummyEffectIndex] : defaultBaseAmount;
+        if (SpellInfo const* spellInfo = GetAura()->GetSpellInfo())
+            return spellInfo->Effects[dummyEffectIndex].BasePoints ? spellInfo->Effects[dummyEffectIndex].BasePoints : defaultBaseAmount;
         //if (AuraEffect* effect = GetAura()->GetEffect(dummyEffectIndex))
         //    return effect->GetBaseAmount()/*GetAmount()*/;
     }
@@ -493,7 +493,7 @@ public:
     class spell_sha_elemental_overlord_AuraScript : public MasteryScript
     {
     public:
-        void OnProc(AuraEffect const * aurEff, Unit* pUnit, Unit *pVictim, uint32 damage, SpellEntry const* procSpell, uint32 procFlag, uint32 procExtra, WeaponAttackType attType, int32 cooldown)
+        void OnProc(AuraEffect const * aurEff, Unit* pUnit, Unit *pVictim, uint32 damage, SpellInfo const* procSpell, uint32 procFlag, uint32 procExtra, WeaponAttackType attType, int32 cooldown)
         {
             PreventDefaultAction();
             if (!(procFlag & PROC_FLAG_DONE_SPELL_MAGIC_DMG_CLASS_NEG))
@@ -598,7 +598,7 @@ public:
 
                 spellMod->type = SPELLMOD_PCT;
                 spellMod->spellId = aurEff->GetId(); // 16188 Nature's Swiftness
-                spellMod->mask = GetSpellProto()->EffectSpellClassMask[aurEff->GetEffIndex()];
+                spellMod->mask = GetSpellInfo()->Effects[aurEff->GetEffIndex()].SpellClassMask;
                 spellMod->charges = GetAura()->GetCharges();
 
                 //sLog->outDetail("Deep Healing : creating spell mod");
