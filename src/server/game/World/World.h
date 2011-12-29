@@ -776,10 +776,10 @@ class World
         void InitDailyQuestResetTime();
         void InitWeeklyQuestResetTime();
         void InitRandomBGResetTime();
-        void InitGuildAdvancementDailyResetTime();
+        //void InitGuildAdvancementDailyResetTime();
         void ResetDailyQuests();
         void ResetWeeklyQuests();
-        void ResetGuildAdvancementDailyXP();
+        //void ResetGuildAdvancementDailyXP();
         void ResetRandomBG();
     private:
         static volatile bool m_stopEvent;
