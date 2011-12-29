@@ -2100,21 +2100,6 @@ void AuraEffect::HandleAuraModShapeshift(AuraApplication const* aurApp, uint8 mo
                     if (AuraEffect const* aurEff = target->IsScriptOverriden(m_spellInfo, 831))
                         Rage_val += aurEff->GetAmount() * 10;
                 }
-                // Stance mastery + Tactical mastery (both passive, and last have aura only in defense stance, but need apply at any stance switch)
-                if (target->GetTypeId() == TYPEID_PLAYER)
-                {
-                    PlayerSpellMap const& sp_list = target->ToPlayer()->GetSpellMap();
-                    for (PlayerSpellMap::const_iterator itr = sp_list.begin(); itr != sp_list.end(); ++itr)
-                    {
-                        if (itr->second->state == PLAYERSPELL_REMOVED || itr->second->disabled) continue;
-                        SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(itr->first);
-                        if (spellInfo && spellInfo->SpellFamilyName == SPELLFAMILY_WARRIOR && spellInfo->SpellIconID == 139)
-                            Rage_val += target->CalculateSpellDamage(target, spellInfo, 0) * 10;
-                    }
-                }
-                if (target->GetPower(POWER_RAGE) > Rage_val)
-                    target->SetPower(POWER_RAGE, Rage_val);
-                break;
             }
             default:
                 break;
