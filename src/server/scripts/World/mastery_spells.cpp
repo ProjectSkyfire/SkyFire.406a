@@ -247,9 +247,9 @@ public:
     }
 
     virtual uint32 GetMasteryBaseAmount();
-    virtual void OnProc(AuraEffect const * aurEff, Unit* pUnit, Unit *pVictim, uint32 damage, SpellEntry const* procSpell, uint32 procFlag, uint32 procExtra, WeaponAttackType attType, int32 cooldown) {}
+    virtual void OnProc(AuraEffect const * aurEff, Unit* pUnit, Unit *pVictim, uint32 damage, SpellInfo const* procSpell, uint32 procFlag, uint32 procExtra, WeaponAttackType attType, int32 cooldown) {}
     virtual void CalcAmount(AuraEffect const* /*aurEffect*/, int32& /*amount*/, bool& /*canBeRecalculated*/);
-    virtual void CalcSpellMod(AuraEffect const * /*aurEff*/, SpellModifier *& /*spellMod*/, SpellEntry const * /*spellInfo*/, Unit * /*target*/) {}
+    virtual void CalcSpellMod(AuraEffect const * /*aurEff*/, SpellModifier *& /*spellMod*/, SpellInfo const * /*spellInfo*/, Unit * /*target*/) {}
     virtual void Register();
 };
 
@@ -311,7 +311,7 @@ public:
     class spell_hunter_wild_quiver_AuraScript : public MasteryScript
     {
     public:
-        void OnProc(AuraEffect const * aurEff, Unit* pUnit, Unit *pVictim, uint32 damage, SpellEntry const* procSpell, uint32 procFlag, uint32 procExtra, WeaponAttackType attType, int32 cooldown)
+        void OnProc(AuraEffect const * aurEff, Unit* pUnit, Unit *pVictim, uint32 damage, SpellInfo const* procSpell, uint32 procFlag, uint32 procExtra, WeaponAttackType attType, int32 cooldown)
         {
             PreventDefaultAction();
             if (attType != BASE_ATTACK && attType != OFF_ATTACK)
@@ -378,7 +378,7 @@ public:
 
     class spell_mage_mana_adept_AuraScript : public MasteryScript
     {
-        void CalcSpellMod(AuraEffect const * aurEff, SpellModifier *& spellMod, SpellEntry const * /*spellInfo*/, Unit * /*target*/)
+        void CalcSpellMod(AuraEffect const * aurEff, SpellModifier *& spellMod, SpellInfo const * /*spellInfo*/, Unit * /*target*/)
         {
             int32 bonus = 0;
             if (Unit* caster = GetCaster())
@@ -403,7 +403,7 @@ public:
                 spellMod->op = SPELLMOD_DAMAGE/*SPELLMOD_ALL_EFFECTS*/;
 
                 spellMod->type = SPELLMOD_PCT;
-                spellMod->spellId = aurEff->GetId(); // 12042 Arcance Power : 685904631, 102472, 0
+                spellMod->spellId = aurEff->GetId(); // 12042 Arcane Power : 685904631, 102472, 0
                 spellMod->mask = flag96(0xFFFFFFFF,0xFFFFFFFF,0xFFFFFFFF);//GetSpellProto()->EffectSpellClassMask[aurEff->GetEffIndex()];
                 spellMod->charges = GetAura()->GetCharges();
 
@@ -462,7 +462,7 @@ public:
                 spellMod->op = SPELLMOD_DAMAGE/*SPELLMOD_ALL_EFFECTS*/;
 
                 spellMod->type = SPELLMOD_PCT;
-                spellMod->spellId = aurEff->GetId(); // 12042 Arcance Power : 685904631, 102472, 0
+                spellMod->spellId = aurEff->GetId(); // 12042 Arcane Power : 685904631, 102472, 0
                 spellMod->mask = flag96(0xFFFFFFFF,0xFFFFFFFF,0xFFFFFFFF);//GetSpellProto()->EffectSpellClassMask[aurEff->GetEffIndex()];
                 spellMod->charges = GetAura()->GetCharges();
 
@@ -529,7 +529,8 @@ public:
                 // Chain lightning has [LightOverload_Proc_Chance] / [Max_Number_of_Targets] chance to proc of each individual target hit.
                 // A maxed LO would have a 33% / 3 = 11% chance to proc of each target.
                 // LO chance was already "accounted" at the proc chance roll, now need to divide the chance by [Max_Number_of_Targets]
-                float chance = 100.0f / procSpell->EffectChainTarget[0];
+                SpellEffectInfo const* procEffect = new SpellEffectInfo();
+                float chance = 100.0f / !procEffect && procEffect->ChainTarget;
                 if (!roll_chance_f(chance))
                     return;
 
@@ -579,7 +580,7 @@ public:
     class spell_sha_deep_healing_AuraScript : public MasteryScript
     {
     public:
-        void CalcSpellMod(AuraEffect const * aurEff, SpellModifier *& spellMod, SpellEntry const * /*spellInfo*/, Unit * target)
+        void CalcSpellMod(AuraEffect const * aurEff, SpellModifier *& spellMod, SpellInfo const * /*spellInfo*/, Unit * target)
         {
             int32 bonus = 0;
             float pct = 0.0f;
