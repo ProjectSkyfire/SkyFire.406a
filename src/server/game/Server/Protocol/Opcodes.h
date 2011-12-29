@@ -52,6 +52,7 @@ enum Opcodes
     SMSG_CHAR_ENUM                                   = 0x004AC, // 4.3.0 15050
     SMSG_CHAR_DELETE                                 = 0x02A02, // 4.3.0 15050
     CMSG_PLAYER_LOGIN                                = 0x00326, // 4.3.0 15050
+    CMSG_LOAD_SCREEN_NOTIFY                          = 0x00976, // 4.3.0 15050
     SMSG_NEW_WORLD                                   = 0x064AC, // 4.3.0 15050
     SMSG_TRANSFER_PENDING                            = 0x10009, //
     SMSG_TRANSFER_ABORTED                            = 0x1000A, //
@@ -314,10 +315,10 @@ enum Opcodes
     SMSG_SET_FACTION_STANDING                        = 0x100E3, //
     CMSG_SET_FACTION_ATWAR                           = 0x100E4, //
     CMSG_SET_FACTION_CHEAT                           = 0x100E5, //
-    SMSG_SET_PROFICIENCY                             = 0x100E6, //
+    SMSG_SET_PROFICIENCY                             = 0x00EA2, // 4.3.0 15050
     CMSG_SET_ACTION_BUTTON                           = 0x100E7, //
     SMSG_ACTION_BUTTONS                              = 0x100E8, //
-    SMSG_INITIAL_SPELLS                              = 0x100E9, //
+    SMSG_INITIAL_SPELLS                              = 0x008A6, // 4.3.0 15050
     SMSG_LEARNED_SPELL                               = 0x100EA, //
     SMSG_SUPERCEDED_SPELL                            = 0x100EB, //
     CMSG_NEW_SPELL_SLOT                              = 0x100EC, //
@@ -710,7 +711,7 @@ enum Opcodes
     CMSG_SET_EXPLORATION                             = 0x10270, //
     CMSG_SET_ACTIONBAR_TOGGLES                       = 0x10271, //
     MSG_PETITION_RENAME                              = 0x10272, //
-    SMSG_INIT_WORLD_STATES                           = 0x10273, //
+    SMSG_INIT_WORLD_STATES                           = 0x03E80, // 4.3.0 15050
     SMSG_UPDATE_WORLD_STATE                          = 0x10274, //
     CMSG_ITEM_NAME_QUERY                             = 0x10275, //
     SMSG_ITEM_NAME_QUERY_RESPONSE                    = 0x10276, //
@@ -930,7 +931,7 @@ enum Opcodes
     MSG_PARTY_ASSIGNMENT                             = 0x103A7, //
     SMSG_OFFER_PETITION_ERROR                        = 0x103A8, //
     SMSG_TIME_SYNC_REQ                               = 0x103A9, //
-    CMSG_TIME_SYNC_RESP                              = 0x103AA, //
+    CMSG_TIME_SYNC_RESP                              = 0x07293, // 4.3.0 15050
     CMSG_SEND_LOCAL_EVENT                            = 0x103AB, //
     CMSG_SEND_GENERAL_TRIGGER                        = 0x103AC, //
     CMSG_SEND_COMBAT_TRIGGER                         = 0x103AD, //
@@ -1127,7 +1128,7 @@ enum Opcodes
     SMSG_DANCE_QUERY_RESPONSE                        = 0x02280, // 4.3.0 15050
     SMSG_INVALIDATE_DANCE                            = 0x1046B, //
     CMSG_DELETE_DANCE                                = 0x1046C, //
-    SMSG_LEARNED_DANCE_MOVES                         = 0x1046D, //
+    SMSG_LEARNED_DANCE_MOVES                         = 0x00886, // 4.3.0 15050
     CMSG_LEARN_DANCE_MOVE                            = 0x1046E, //
     CMSG_UNLEARN_DANCE_MOVE                          = 0x1046F, //
     CMSG_SET_RUNE_COUNT                              = 0x10470, //
@@ -1170,7 +1171,7 @@ enum Opcodes
     CMSG_PET_LEARN_TALENT                            = 0x10494, //
     CMSG_PET_UNLEARN_TALENTS                         = 0x10495, //
     SMSG_SET_PHASE_SHIFT                             = 0x10496, //
-    SMSG_ALL_ACHIEVEMENT_DATA                        = 0x10497, //
+    SMSG_ALL_ACHIEVEMENT_DATA                        = 0x0069A, // 4.3.0 15050
     CMSG_FORCE_SAY_CHEAT                             = 0x10498, //
     SMSG_HEALTH_UPDATE                               = 0x10499, //
     SMSG_POWER_UPDATE                                = 0x1049A, //
@@ -1229,7 +1230,7 @@ enum Opcodes
     CMSG_EQUIPMENT_SET_SAVE                          = 0x104CE, //
     CMSG_UPDATE_PROJECTILE_POSITION                  = 0x104CF, //
     SMSG_SET_PROJECTILE_POSITION                     = 0x104D0, //
-    SMSG_TALENTS_INFO                                = 0x104D1, //
+    SMSG_TALENTS_INFO                                = 0x01AA0, // 4.3.0 15050
     CMSG_LEARN_PREVIEW_TALENTS                       = 0x104D2, //
     CMSG_LEARN_PREVIEW_TALENTS_PET                   = 0x104D3, //
     SMSG_ARENA_OPPONENT_UPDATE                       = 0x104D4, //
@@ -1319,7 +1320,6 @@ enum Opcodes
     CMSG_AUTO_DECLINE_GUILD_INVITES                  = 0x10520, //
     CMSG_SET_PRIMARY_TALENT_TREE                     = 0x10521, //
     CMSG_GROUP_SET_ROLES                             = 0x10522, //
-    CMSG_WORLD_LOGIN                                 = 0x00976, // 4.3.0 15050
     SMSG_UNKNOWN_65508                               = 0x10523, //
     //SMSG_INIT_CURRENCY                               = 0x10524, // :redefinition; previous def was 'enumerator'
     //SMSG_UPDATE_CURRENCY                             = 0x10525, // :redefinition; previous def was 'enumerator'
@@ -1350,6 +1350,7 @@ enum Opcodes
     CMSG_GUILD_NEWS_SET_STICKY                       = 0x10541, //
     CMSG_LOG_DISCONNECT                              = 0x00108, // 4.3.0 15050
     MSG_VERIFY_CONNECTIVITY                          = 0x04F57,
+    CMSG_VIOLENCE_LEVEL                              = 0x07291, // 4.3.0 15050
     NUM_MSG_TYPES                                    = 0x10542  // last unknown opcode + 1.
 };
 

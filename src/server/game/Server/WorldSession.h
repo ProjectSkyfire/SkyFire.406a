@@ -404,7 +404,7 @@ class WorldSession
         void HandleCharCreateCallback(PreparedQueryResult result, CharacterCreateInfo* createInfo);
         void HandlePlayerLoginOpcode(WorldPacket& recvPacket);
 
-        void HandleWorldLoginOpcode(WorldPacket& recvPacket);
+        void HandleLoadScreenNotifyOpcode(WorldPacket& recvPacket);
 
         void HandleCharEnum(QueryResult result);
         void HandlePlayerLogin(LoginQueryHolder * holder);

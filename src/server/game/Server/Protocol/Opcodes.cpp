@@ -58,7 +58,7 @@ void InitOpcodeTable()
     OPCODE( SMSG_CHAR_CREATE,                             STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( SMSG_CHAR_ENUM,                               STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( SMSG_CHAR_DELETE,                             STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
-    OPCODE( CMSG_WORLD_LOGIN,                             STATUS_AUTHED,   PROCESS_THREADUNSAFE,  &WorldSession::HandleWorldLoginOpcode          );
+    OPCODE( CMSG_LOAD_SCREEN_NOTIFY,                      STATUS_AUTHED,   PROCESS_THREADUNSAFE,  &WorldSession::HandleLoadScreenNotifyOpcode    );
     OPCODE( CMSG_PLAYER_LOGIN,                            STATUS_AUTHED,   PROCESS_THREADUNSAFE,  &WorldSession::HandlePlayerLoginOpcode         );
     OPCODE( SMSG_NEW_WORLD,                               STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( SMSG_TRANSFER_PENDING,                        STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
@@ -1281,4 +1281,5 @@ void InitOpcodeTable()
     OPCODE( CMSG_REFORGE_ITEM,                            STATUS_LOGGEDIN, PROCESS_INPLACE,       &WorldSession::HandleReforgeItem               );
     OPCODE( CMSG_LOG_DISCONNECT,                          STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_EarlyProccess            );
     OPCODE( MSG_VERIFY_CONNECTIVITY,                      STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_EarlyProccess            );
+    OPCODE( CMSG_VIOLENCE_LEVEL,                          STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
 };

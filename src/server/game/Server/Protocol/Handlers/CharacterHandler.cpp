@@ -916,14 +916,6 @@ void WorldSession::HandleCharDeleteOpcode(WorldPacket & recv_data)
     SendPacket(&data);
 }
 
-void WorldSession::HandleWorldLoginOpcode(WorldPacket& recv_data)
-{
-    sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Recvd World Login Message");
-    uint32 unk;
-    uint8 unk1;
-    recv_data >> unk >> unk1;
-}
-
 void WorldSession::HandlePlayerLoginOpcode(WorldPacket & recv_data)
 {
     if (PlayerLoading() || GetPlayer() != NULL)
@@ -967,6 +959,16 @@ void WorldSession::HandlePlayerLoginOpcode(WorldPacket & recv_data)
     }
 
     _charLoginCallback = CharacterDatabase.DelayQueryHolder((SQLQueryHolder*)holder);
+}
+
+void WorldSession::HandleLoadScreenNotifyOpcode(WorldPacket& recvPacket)
+{
+    sLog->outStaticDebug("WORLD: Recvd CMSG_LOAD_SCREEN_NOTIFY");
+    uint8 unkMask; // Loading start: 0x80, loading end: 0x0
+    uint32 mapID;
+    recvPacket >> unkMask >> mapID;
+
+    // TODO: Do something with this packet
 }
 
 void WorldSession::HandlePlayerLogin(LoginQueryHolder * holder)
