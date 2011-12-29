@@ -79,7 +79,7 @@ enum Opcodes
     SMSG_GUILD_QUERY_RESPONSE                        = 0x01AA4, // 4.3.0 15050
     CMSG_COMMENTATOR_START_WARGAME                   = 0x10020, //
     SMSG_DB_REPLY                                    = 0x10021, //
-    SMSG_HOTFIX_NOTIFY_BLOP                          = 0x10022, // sent after SMSG_AUTH_RESPONSE
+    SMSG_HOTFIX_NOTIFY_BLOP                          = 0x0261E, // 4.3.0 15050 - sent after SMSG_AUTH_RESPONSE
     SMSG_HOTFIX_NOTIFY                               = 0x10023, // can be sent while ingame
     CMSG_REQUEST_HOTFIX                              = 0x10024, // the client sends this after we send SMSG_HOTFIX_NOTIFY[_BLOP], only sent for the items that the player has in his inventory, that are flagged to be hotfixed
     CMSG_PAGE_TEXT_QUERY                             = 0x07E84, // 4.3.0 15050
@@ -279,7 +279,7 @@ enum Opcodes
     CMSG_TUTORIAL_RESET                              = 0x100BF, //
     CMSG_STANDSTATECHANGE                            = 0x100C0, //
     CMSG_EMOTE                                       = 0x100C1, //
-    SMSG_EMOTE                                       = 0x100C2, //
+    SMSG_EMOTE                                       = 0x036A2, // 4.3.0 15050
     CMSG_TEXT_EMOTE                                  = 0x100C3, //
     SMSG_TEXT_EMOTE                                  = 0x100C4, //
     CMSG_AUTOEQUIP_GROUND_ITEM                       = 0x100C5, //
@@ -809,7 +809,7 @@ enum Opcodes
     MSG_MOVE_TIME_SKIPPED                            = 0x1032F, //
     SMSG_SPLINE_MOVE_ROOT                            = 0x10330, //
     CMSG_SET_EXPLORATION_ALL                         = 0x10331, //
-    SMSG_INVALIDATE_PLAYER                           = 0x10332, //
+    SMSG_INVALIDATE_PLAYER                           = 0x07484, // 4.3.0 15050
     CMSG_RESET_INSTANCES                             = 0x10333, //
     SMSG_INSTANCE_RESET                              = 0x10334, //
     SMSG_INSTANCE_RESET_FAILED                       = 0x10335, //

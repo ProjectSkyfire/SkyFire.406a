@@ -933,13 +933,16 @@ void WorldSession::HandlePlayerLoginOpcode(WorldPacket & recv_data)
 
     ByteBuffer bytes(8, true);
 
-    // We do not do just that first 3 bytes (0xFFFFFF == max guid), high_guid == 0x00 for player
-    if(mask[7]) bytes[1] = recv_data.ReadUInt8()^1;
-    if(mask[0]) bytes[0] = recv_data.ReadUInt8()^1;
-    if(mask[6]) bytes[2] = recv_data.ReadUInt8()^1;
-    
+    if (mask[3]) bytes[4] = recv_data.ReadUInt8() ^ 1;
+    if (mask[7]) bytes[1] = recv_data.ReadUInt8() ^ 1;
+    if (mask[4]) bytes[7] = recv_data.ReadUInt8() ^ 1;
+    if (mask[6]) bytes[2] = recv_data.ReadUInt8() ^ 1;
+    if (mask[5]) bytes[6] = recv_data.ReadUInt8() ^ 1;
+    if (mask[1]) bytes[5] = recv_data.ReadUInt8() ^ 1;
+    if (mask[2]) bytes[3] = recv_data.ReadUInt8() ^ 1;
+    if (mask[0]) bytes[0] = recv_data.ReadUInt8() ^ 1;
 
-    playerGuid = bytes[2] != 0 ? (bytes[0]*(0xFFFF+1) + bytes[1] * (0xFF+1) + bytes[2]) : BitConverter::ToUInt64(bytes);
+    playerGuid = BitConverter::ToUInt64(bytes);
 
     sLog->outDebug(LOG_FILTER_NETWORKIO, "Character (Guid: %u) logging in", playerGuid);
 
