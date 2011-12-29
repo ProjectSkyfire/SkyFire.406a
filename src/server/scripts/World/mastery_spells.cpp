@@ -446,7 +446,7 @@ public:
 
     class spell_mage_frostburn_AuraScript : public MasteryScript
     {
-        void CalcSpellMod(AuraEffect const * aurEff, SpellModifier *& spellMod, SpellEntry const *spellInfo, Unit * target)
+        void CalcSpellMod(AuraEffect const * aurEff, SpellModifier *& spellMod, SpellInfo const *spellInfo, Unit * target)
         {
             int32 bonus = 0;
             if (target && target->HasAuraState(AURA_STATE_FROZEN, spellInfo, GetCaster()))
