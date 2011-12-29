@@ -1645,23 +1645,6 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                 if (GetId() == 25771 && target->HasAura(61988) && !target->HasAura(61987))
                     target->RemoveAura(61988);
                 break;
-            case SPELLFAMILY_DEATHKNIGHT:
-                // Blood of the North
-                // Reaping
-                // Death Rune Mastery
-                if (GetSpellInfo()->SpellIconID == 3041 || GetSpellInfo()->SpellIconID == 22 || GetSpellInfo()->SpellIconID == 2622)
-                {
-                    if (!GetEffect(0) || GetEffect(0)->GetAuraType() != SPELL_AURA_PERIODIC_DUMMY)
-                        break;
-                    if (target->GetTypeId() != TYPEID_PLAYER)
-                        break;
-                    if (target->ToPlayer()->getClass() != CLASS_DEATH_KNIGHT)
-                        break;
-
-                     // aura removed - remove death runes
-                    target->ToPlayer()->RemoveRunesByAuraEffect(GetEffect(0));
-                }
-                break;
         }
     }
 
@@ -1727,23 +1710,6 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
         case SPELLFAMILY_PALADIN:
             switch (GetId())
             {
-                case 19746:
-                case 31821:
-                    // Aura Mastery Triggered Spell Handler
-                    // If apply Concentration Aura -> trigger -> apply Aura Mastery Immunity
-                    // If remove Concentration Aura -> trigger -> remove Aura Mastery Immunity
-                    // If remove Aura Mastery -> trigger -> remove Aura Mastery Immunity
-                    // Do effects only on aura owner
-                    if (GetCasterGUID() != target->GetGUID())
-                        break;
-                    if (apply)
-                    {
-                        if ((GetSpellInfo()->Id == 31821 && target->HasAura(19746, GetCasterGUID())) || (GetSpellInfo()->Id == 19746 && target->HasAura(31821)))
-                            target->CastSpell(target, 64364, true);
-                    }
-                    else
-                        target->RemoveAurasDueToSpell(64364, GetCasterGUID());
-                    break;
                 case 31842: // Divine Illumination
                     // Item - Paladin T10 Holy 2P Bonus
                     if (target->HasAura(70755))
@@ -2409,6 +2375,25 @@ void Aura::CallScriptEffectAfterManaShieldHandlers(AuraEffect* aurEff, AuraAppli
         }
         (*scritr)->_FinishScriptCall();
     }
+}
+
+bool Aura::CallScriptEffectProc(AuraEffect const * aurEff, Unit* pUnit, Unit *pVictim, uint32 damage, SpellEntry const* procSpell, uint32 procFlag, uint32 procExtra, WeaponAttackType attType, int32 cooldown)
+{
+    bool preventDefault = false;
+    for(std::list<AuraScript *>::iterator scritr = m_loadedScripts.begin(); scritr != m_loadedScripts.end() ; ++scritr)
+    {
+        (*scritr)->_PrepareScriptCall(AURA_SCRIPT_HOOK_EFFECT_PROC/*, aurApp*/);
+        std::list<AuraScript::EffectProcHandler>::iterator effEndItr = (*scritr)->OnEffectProc.end(), effItr = (*scritr)->OnEffectProc.begin();
+        for(; effItr != effEndItr ; ++effItr)
+        {
+            if ((*effItr).IsEffectAffected(m_spellInfo, aurEff->GetEffIndex()))
+                (*effItr).Call(*scritr, aurEff, pUnit, pVictim, damage, procSpell, procFlag, procExtra, attType, cooldown);
+        }
+        if (!preventDefault)
+            preventDefault = (*scritr)->_IsDefaultActionPrevented();
+        (*scritr)->_FinishScriptCall();
+    }
+    return preventDefault;
 }
 
 UnitAura::UnitAura(SpellInfo const* spellproto, uint8 effMask, WorldObject* owner, Unit* caster, int32 *baseAmount, Item* castItem, uint64 casterGUID)
