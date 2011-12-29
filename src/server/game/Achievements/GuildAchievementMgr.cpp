@@ -101,8 +101,8 @@ void GuildAchievementMgr::ResetAchievementCriteria(AchievementCriteriaTypes type
 void GuildAchievementMgr::DeleteFromDB(uint32 id)
 {
     SQLTransaction trans = CharacterDatabase.BeginTransaction();
-    trans->PAppend("DELETE FROM guild_achievement WHERE id = %u", id);
-    trans->PAppend("DELETE FROM guild_achievement_progress WHERE id = %u", id);
+    trans->PAppend("DELETE FROM guild_achievement WHERE guildid = %u", id);
+    trans->PAppend("DELETE FROM guild_achievement_progress WHERE guildid = %u", id);
     CharacterDatabase.CommitTransaction(trans);
 }
 
@@ -121,8 +121,8 @@ void GuildAchievementMgr::SaveToDB(SQLTransaction& trans)
             /// first new/changed record prefix
             if (!need_execute)
             {
-                ssdel << "DELETE FROM guild_achievement WHERE id = " << m_guild->GetId() << " AND achievement IN (";
-                ssins << "INSERT INTO guild_achievement (id, achievement, date) VALUES ";
+                ssdel << "DELETE FROM guild_achievement WHERE guildid = " << m_guild->GetId() << " AND achievement IN (";
+                ssins << "INSERT INTO guild_achievement (guildid, achievement, date) VALUES ";
                 need_execute = true;
             }
             /// next new/changed record prefix
@@ -165,7 +165,7 @@ void GuildAchievementMgr::SaveToDB(SQLTransaction& trans)
                 /// first new/changed record prefix (for any counter value)
                 if (!need_execute_del)
                 {
-                    ssdel << "DELETE FROM guild_achievement_progress WHERE id = " << m_guild->GetId() << " AND criteria IN (";
+                    ssdel << "DELETE FROM guild_achievement_progress WHERE guildid = " << m_guild->GetId() << " AND criteria IN (";
                     need_execute_del = true;
                 }
                 /// next new/changed record prefix
@@ -182,7 +182,7 @@ void GuildAchievementMgr::SaveToDB(SQLTransaction& trans)
                 /// first new/changed record prefix
                 if (!need_execute_ins)
                 {
-                    ssins << "INSERT INTO guild_achievement_progress (id, criteria, counter, date) VALUES ";
+                    ssins << "INSERT INTO guild_achievement_progress (guildid, criteria, counter, date) VALUES ";
                     need_execute_ins = true;
                 }
                 /// next new/changed record prefix
@@ -212,8 +212,8 @@ void GuildAchievementMgr::SaveToDB(SQLTransaction& trans)
 
 void GuildAchievementMgr::LoadFromDB()
 {
-    QueryResult achievementResult = CharacterDatabase.PQuery("SELECT achievement, date FROM guild_achievement WHERE id = %u", m_guild->GetId());
-    QueryResult criteriaResult = CharacterDatabase.PQuery("SELECT criteria, counter, date FROM guild_achievement_progress WHERE id = %u", m_guild->GetId());
+    QueryResult achievementResult = CharacterDatabase.PQuery("SELECT achievement, date FROM guild_achievement WHERE guildid = %u", m_guild->GetId());
+    QueryResult criteriaResult = CharacterDatabase.PQuery("SELECT criteria, counter, date FROM guild_achievement_progress WHERE guildid = %u", m_guild->GetId());
     if (achievementResult)
     {
         do
