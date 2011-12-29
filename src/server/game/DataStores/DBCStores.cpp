@@ -464,7 +464,7 @@ void LoadDBCStores(const std::string& dataPath, uint32& availableDbcLocales)
     LoadDBC(availableDbcLocales, bad_dbc_files, sTalentStore,                 dbcPath, "Talent.dbc");
 
     // Create Spelldifficulty searcher
-    /* for (uint32 i = 0; i < sSpellDifficultyStore.GetNumRows(); ++i)
+    for (uint32 i = 0; i < sSpellDifficultyStore.GetNumRows(); ++i)
     {
         SpellDifficultyEntry const *spellDiff = sSpellDifficultyStore.LookupEntry(i);
         if (!spellDiff)
@@ -489,7 +489,7 @@ void LoadDBCStores(const std::string& dataPath, uint32& availableDbcLocales)
         for (int x = 0; x < MAX_DIFFICULTY; ++x)
             sSpellMgr->SetSpellDifficultyId(uint32(newEntry.SpellID[x]), spellDiff->ID);
     }
-	*/
+	
     // create talent spells set
     for (unsigned int i = 0; i < sTalentStore.GetNumRows(); ++i)
     {
@@ -590,8 +590,8 @@ void LoadDBCStores(const std::string& dataPath, uint32& availableDbcLocales)
     if (!sAreaStore.LookupEntry(5995)              ||       // last area (areaflag) added in 4.3.0
         !sCharTitlesStore.LookupEntry(287)         ||       // last char title added in 4.3.0
         !sGemPropertiesStore.LookupEntry(2250)     ||       // last gem property added in 4.3.0
-        !sMapStore.LookupEntry(980)                )       // last map added in 4.3.0
-        //!sSpellStore.LookupEntry(110966)            )       // last added spell in 4.3.0
+        !sMapStore.LookupEntry(980)                ||       // last map added in 4.3.0
+        !sSpellStore.LookupEntry(110966)            )       // last added spell in 4.3.0
     {
         sLog->outError("You have _outdated_ DBC files. Please extract correct versions from current using client.");
         //exit(1);
