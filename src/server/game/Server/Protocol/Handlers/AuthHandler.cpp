@@ -24,7 +24,7 @@
 int WorldSocket::SendAuthConnection()
 {
     std::string ServerToClient = "RLD OF WARCRAFT CONNECTION - SERVER TO CLIENT";
-    WorldPacket data(SMSG_VERIFY_CONNECTIVITY, 46);
+    WorldPacket data(MSG_VERIFY_CONNECTIVITY, 46);
 
     data << ServerToClient;
 
