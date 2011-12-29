@@ -245,6 +245,12 @@ void WorldSession::HandleCharEnum(QueryResult result)
             guidsVect.push_back(std::make_pair(GuidLow, GuildGuid));
 
             sLog->outDetail("Loading char guid %u from account %u.", GuidLow, GetAccountId());
+ 
+            if (!Player::BuildEnumData(result, &buffer))
+            {
+                sLog->outError("Building enum data for SMSG_CHAR_ENUM has failed, aborting");
+                return;
+            }
 
             _allowedCharsToLogin.insert(GuidLow);
         }
