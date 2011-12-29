@@ -336,7 +336,7 @@ struct AchievementCriteriaEntry
             uint32  rollValue;                              // 3
             uint32  count;                                  // 4
         } roll_need_on_loot;
-       // ACHIEVEMENT_CRITERIA_TYPE_ROLL_GREED_ON_LOOT      = 51
+        // ACHIEVEMENT_CRITERIA_TYPE_ROLL_GREED_ON_LOOT     = 51
         struct
         {
             uint32  rollValue;                              // 3
@@ -593,8 +593,8 @@ struct AreaTriggerEntry
 
 struct ArmorLocationEntry
 {
-  uint32    InventoryType;                                  // 0
-  float     Value[5];                                       // 1-5 multiplier for armor types (cloth...plate, no armor?)
+    uint32    InventoryType;                                // 0
+    float     Value[5];                                     // 1-5 multiplier for armor types (cloth...plate, no armor?)
 };
 
 struct AuctionHouseEntry
@@ -720,9 +720,9 @@ struct ChrRacesEntry
 
 struct ChrPowerTypesEntry
 {
-   uint32 entry;                                               // 0
-   uint32 classId;                                             // 1
-   uint32 power;                                               // 2
+    uint32 entry;                                           // 0
+    uint32 classId;                                         // 1
+    uint32 power;                                           // 2
 };
 
 /* not used
@@ -1121,23 +1121,23 @@ struct HolidaysEntry
 
 struct ItemArmorQualityEntry
 {
-  uint32    Id;                                             // 0 item level
-  float     Value[7];                                       // 1-7 multiplier for item quality
-  uint32    Id2;                                            // 8 item level
+    uint32    Id;                                           // 0 item level
+    float     Value[7];                                     // 1-7 multiplier for item quality
+    uint32    Id2;                                          // 8 item level
 };
 
 struct ItemArmorShieldEntry
 {
-  uint32    Id;                                             // 0 item level
-  uint32    Id2;                                            // 1 item level
-  float     Value[7];                                       // 2-8 multiplier for item quality
+    uint32    Id;                                           // 0 item level
+    uint32    Id2;                                          // 1 item level
+    float     Value[7];                                     // 2-8 multiplier for item quality
 };
 
 struct ItemArmorTotalEntry
 {
-  uint32    Id;                                             // 0 item level
-  uint32    Id2;                                            // 1 item level
-  float     Value[4];                                       // 2-5 multiplier for armor types (cloth...plate)
+    uint32    Id;                                           // 0 item level
+    uint32    Id2;                                          // 1 item level
+    float     Value[4];                                     // 2-5 multiplier for armor types (cloth...plate)
 };
 
 struct ItemBagFamilyEntry
@@ -1181,9 +1181,9 @@ struct ItemDisplayInfoEntry
 // ItemDamageWand.dbc
 struct ItemDamageEntry
 {
-  uint32    Id;                                             // 0 item level
-  float     Value[7];                                       // 1-7 multiplier for item quality
-  uint32    Id2;                                            // 8 item level
+    uint32    Id;                                           // 0 item level
+    float     Value[7];                                     // 1-7 multiplier for item quality
+    uint32    Id2;                                          // 8 item level
 };
 
 #define MAX_ITEM_EXT_COST_ITEMS         5
@@ -1783,6 +1783,7 @@ struct SpellShapeshiftEntry
 struct SpellTargetRestrictionsEntry
 {
     uint32    Id;                                           // 0        m_ID
+    //uint32    Unk1                                        // 1 4.2.0 (nevim co toe)
     uint32    MaxAffectedTargets;                           // 1        m_maxTargets
     uint32    MaxTargetLevel;                               // 2        m_maxTargetLevel
     uint32    TargetCreatureType;                           // 3        m_targetCreatureType
@@ -2157,7 +2158,7 @@ struct VehicleSeatEntry
     bool CanEnterOrExit() const { return m_flags & VEHICLE_SEAT_FLAG_CAN_ENTER_OR_EXIT; }
     bool CanSwitchFromSeat() const { return m_flags & VEHICLE_SEAT_FLAG_CAN_SWITCH; }
     bool IsUsableByOverride() const { return (m_flags & VEHICLE_SEAT_FLAG_UNCONTROLLED)
-                                    || (m_flagsB & (VEHICLE_SEAT_FLAG_B_USABLE_FORCED | VEHICLE_SEAT_FLAG_B_USABLE_FORCED_2 | VEHICLE_SEAT_FLAG_B_USABLE_FORCED_3)); }
+        || (m_flagsB & (VEHICLE_SEAT_FLAG_B_USABLE_FORCED | VEHICLE_SEAT_FLAG_B_USABLE_FORCED_2 | VEHICLE_SEAT_FLAG_B_USABLE_FORCED_3)); }
     bool IsEjectable() const { return m_flagsB & VEHICLE_SEAT_FLAG_B_EJECTABLE; }
 };
 
