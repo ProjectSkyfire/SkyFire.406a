@@ -2744,6 +2744,18 @@ void World::InitRandomBGResetTime()
         sWorld->setWorldState(WS_BG_DAILY_RESET_TIME, uint64(m_NextRandomBGReset));
 }
 
+void World::ResetDailyQuests()
+{
+    sLog->outDetail("Daily quests reset for all characters.");
+    CharacterDatabase.Execute("DELETE FROM character_queststatus_daily");
+    for (SessionMap::const_iterator itr = m_sessions.begin(); itr != m_sessions.end(); ++itr)
+        if (itr->second->GetPlayer())
+            itr->second->GetPlayer()->ResetDailyQuestStatus();
+
+    // change available dailies
+    sPoolMgr->ChangeDailyQuests();
+}
+
 void World::InitGuildAdvancementDailyResetTime()
 {
     time_t Hourlyxptime = uint64(sWorld->getWorldState(WS_GUILD_AD_HOURLY_RESET_TIME));
@@ -2773,8 +2785,8 @@ void World::InitGuildAdvancementDailyResetTime()
 
 void World::ResetGuildAdvancementDailyXP()
 {
-    sLog->outDetail("Guild Advancement Daily XP status reset for all characters.");
-    QueryResult result = CharacterDatabase.Query("SELECT level, xp, guildid FROM guild");
+    QueryResult result = CharacterDatabase.Query("SELECT level, xp, guildid FROM guild"); // todo: fix the spam, use "SQLDriverQueryLogging=1" in configs to see it in console.
+
     if (!result)
         return;
 
@@ -2804,18 +2816,8 @@ void World::ResetGuildAdvancementDailyXP()
 
     m_NextHourlyXPReset = time_t(m_NextHourlyXPReset + HOUR);
     sWorld->setWorldState(WS_GUILD_AD_HOURLY_RESET_TIME, uint64(m_NextHourlyXPReset));
-}
 
-void World::ResetDailyQuests()
-{
-    sLog->outDetail("Daily quests reset for all characters.");
-    CharacterDatabase.Execute("DELETE FROM character_queststatus_daily");
-    for (SessionMap::const_iterator itr = m_sessions.begin(); itr != m_sessions.end(); ++itr)
-        if (itr->second->GetPlayer())
-            itr->second->GetPlayer()->ResetDailyQuestStatus();
-
-    // change available dailies
-    sPoolMgr->ChangeDailyQuests();
+	sLog->outDetail("Guild Advancement Daily XP status was reset for all characters.");
 }
 
 void World::LoadDBAllowedSecurityLevel()
