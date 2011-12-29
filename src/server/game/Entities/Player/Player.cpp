@@ -1852,7 +1852,8 @@ void Player::setDeathState(DeathState s)
 }
 
 //void Player::BuildEnumData(QueryResult result, ByteBuffer* P_data)
-void Player::BuildEnumData(QueryResult result, WorldPacket * data)
+//void Player::BuildEnumData(QueryResult result, WorldPacket * data)
+bool Player::BuildEnumData(QueryResult result, ByteBuffer* data)
 {
     //             0               1                2                3                 4                  5                       6                        7
     //    "SELECT characters.guid, characters.name, characters.race, characters.class, characters.gender, characters.playerBytes, characters.playerBytes2, characters.level, "
@@ -2013,6 +2014,8 @@ void Player::BuildEnumData(QueryResult result, WorldPacket * data)
         *data << uint8(Guid2^1);
 
     *data << uint8(playerClass);                          // class
+
+    return true;
 }
 
 bool Player::ToggleAFK()
