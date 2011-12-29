@@ -27,6 +27,7 @@
 GuildAchievementMgr::GuildAchievementMgr(Guild* guild)
 {
     m_guild = guild;
+    m_achievementPoints = 0;
 }
 
 GuildAchievementMgr::~GuildAchievementMgr()
@@ -651,6 +652,8 @@ void GuildAchievementMgr::CompletedAchievement(AchievementEntry const* achieveme
     CompletedAchievementData& ca =  m_completedAchievements[achievement->ID];
     ca.date = time(NULL);
     ca.changed = true;
+    
+    m_achievementPoints += achievement->points;
     
     UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_COMPLETE_ACHIEVEMENT, player);
 }

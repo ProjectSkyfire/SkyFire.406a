@@ -250,7 +250,31 @@ class Unit;
 class Player;
 class WorldPacket;
 
-class AchievementMgr
+// Pure virtual class
+/*class AchievementMgrBase
+{
+    public:
+        virtual ~AchievementMgrBase() = 0;
+        virtual void SendAllAchievementData() = 0;
+        virtual bool HasAchieved(uint32) = 0;
+        virtual void CompletedAchievement(AchievementEntry const*) = 0;
+        virtual void LoadFromDB() { }
+        virtual void LoadFromDB(PreparedQueryResult achievementResult, PreparedQueryResult criteriaResult) { }
+};*/
+
+/*class AchievementMgrHandler
+{
+    public:
+        static void UpdateAchievementCriteria(AchievementCriteriaTypes type, Player* player, uint32 miscValue1 = 0, uint32 miscValue2 = 0, Unit* unit = NULL)
+        {
+            player->GetAchievementMgr().UpdateAchievementCriteria(type, miscValue1, miscValue2, unit);
+            
+            if(Guild* guild = sGuildMgr->GetGuildById(player->GetGuildId()))
+                guild->GetAchievementMgr().UpdateAchievementCriteria(type, player, miscValue1, miscValue2, unit);
+        }
+};*/
+
+class AchievementMgr/* : public AchievementMgrBase*/
 {
     public:
         AchievementMgr(Player* player);
