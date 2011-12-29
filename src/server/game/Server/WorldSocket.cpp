@@ -268,21 +268,17 @@ int WorldSocket::open (void *a)
 
     m_Address = remote_addr.get_host_addr();
 
-    WorldPacket packet (0 , 45);   // 4.1 hack
-    packet.SetOpcode(((uint32)'O' << 8) | (uint32)'W');
-    packet << "RLD OF WARCRAFT CONNECTION - SERVER TO CLIENT";
-    if (SendPacket(packet) == -1)
-        return -1;
+    SendAuthConnection();
 
-    // Send startup packet.
-    packet.Initialize(SMSG_AUTH_CHALLENGE, 37);
-
+    WorldPacket packet(SMSG_AUTH_CHALLENGE, 37);
     for (uint32 i = 0; i < 8; i++)
         packet << uint32(0);
 
     packet << m_Seed;
     packet << uint8(1);
-    return SendPacket(packet);
+
+    if (SendPacket(packet) == -1)
+        return -1;
 
     // Register with ACE Reactor
     if (reactor()->register_handler(this, ACE_Event_Handler::READ_MASK | ACE_Event_Handler::WRITE_MASK) == -1)
@@ -735,7 +731,6 @@ int WorldSocket::ProcessIncoming (WorldPacket* new_pct)
         switch (opcode)
         {
             case MSG_CHECK_CONNECTION:
-                sScriptMgr->OnPacketReceive(this, WorldPacket(*new_pct));
                 return HandleAuthConnection(*new_pct);
             case CMSG_PING:
                 return HandlePing (*new_pct);
@@ -846,20 +841,14 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     recvPacket >> clientSeed;
     recvPacket.read(digest, 2);
 
-    recvPacket >> m_addonSize;
-    uint8 * tableauAddon = new uint8[m_addonSize];
-    WorldPacket packetAddon;
-    for (uint32 i = 0; i < m_addonSize; i++)
-    {
-        uint8 ByteSize = 0;
-        recvPacket >> ByteSize;
-        tableauAddon[i] = ByteSize;
-        packetAddon << ByteSize;
-    }
-    delete tableauAddon;
+    recvPacket >> m_addonSize; // addon data size
+
+    size_t addonInfoPos = recvPacket.rpos();
+    recvPacket.rpos(recvPacket.rpos() + m_addonSize); // skip it
 
     recvPacket.read_skip<uint8>();
     recvPacket.read_skip<uint8>();
+
     recvPacket >> account;
 
     if (sWorld->IsClosed())
@@ -1067,8 +1056,8 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
 
     m_Session->LoadGlobalAccountData();
     m_Session->LoadTutorialsData();
-    packetAddon.rpos(0);
-    m_Session->ReadAddonsInfo(packetAddon);
+    recvPacket.rpos(addonInfoPos);
+    m_Session->ReadAddonsInfo(recvPacket);
 
     // Sleep this Network thread for
     uint32 sleepTime = sWorld->getIntConfig(CONFIG_SESSION_ADD_DELAY);
