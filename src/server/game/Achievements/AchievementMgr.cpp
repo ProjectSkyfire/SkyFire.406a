@@ -482,6 +482,7 @@ bool AchievementCriteriaDataSet::Meets(Player const* source, Unit const* target,
 AchievementMgr::AchievementMgr(Player* player)
 {
     m_player = player;
+    m_achievementPoints = 0;
 }
 
 AchievementMgr::~AchievementMgr()
@@ -676,6 +677,8 @@ void AchievementMgr::LoadFromDB(PreparedQueryResult achievementResult, PreparedQ
             CompletedAchievementData& ca = m_completedAchievements[achievementid];
             ca.date = time_t(fields[1].GetUInt32());
             ca.changed = false;
+            
+            m_achievementPoints += achievement->points;
 
             // title achievement rewards are retroactive
             if (AchievementReward const* reward = sAchievementMgr->GetAchievementReward(achievement))
@@ -1552,13 +1555,7 @@ void AchievementMgr::UpdateAchievementCriteria(AchievementCriteriaTypes type, ui
             case ACHIEVEMENT_CRITERIA_TYPE_EARN_ACHIEVEMENT_POINTS:
             {
                 if (!miscValue1)
-                {
-                    uint32 points = 0;
-                    for (CompletedAchievementMap::iterator itr =  m_completedAchievements.begin(); itr != m_completedAchievements.end(); ++itr)
-                        if (AchievementEntry const* pAchievement = sAchievementStore.LookupEntry(itr->first))
-                            points += pAchievement->points;
-                    SetCriteriaProgress(achievementCriteria, points, PROGRESS_SET);
-                }
+                    SetCriteriaProgress(achievementCriteria, m_achievementPoints, PROGRESS_SET);
                 else
                     SetCriteriaProgress(achievementCriteria, miscValue1, PROGRESS_ACCUMULATE);
                 break;
@@ -2128,6 +2125,7 @@ void AchievementMgr::CompletedAchievement(AchievementEntry const* achievement)
     UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_COMPLETE_ACHIEVEMENT);
     UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_EARN_ACHIEVEMENT_POINTS, achievement->points);
 
+    m_achievementPoints += achievement->points;
     // reward items and titles if any
     AchievementReward const* reward = sAchievementMgr->GetAchievementReward(achievement);
 
