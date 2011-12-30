@@ -1514,7 +1514,7 @@ class Unit : public WorldObject
 
         void ApplyResilience(const Unit* victim, int32 * damage, CombatRating type) const;
 
-        float MeleeSpellMissChance(const Unit* victim, WeaponAttackType attType, int32 skillDiff, uint32 spellId) const;
+        float MeleeSpellMissChance(const Unit* victim, WeaponAttackType attType, uint32 spellId) const;
         SpellMissInfo MeleeSpellHitResult(Unit* victim, SpellInfo const *spell);
         SpellMissInfo MagicSpellHitResult(Unit* victim, SpellInfo const *spell);
         SpellMissInfo SpellHitResult(Unit* victim, SpellInfo const *spell, bool canReflect = false);
