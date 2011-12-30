@@ -4925,10 +4925,13 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
                     break;
                 case 63322: // Saronite Vapors
                 {
-                    int32 mana = int32(GetAmount() * pow(2.0f, GetBase()->GetStackAmount())); // mana restore - bp * 2^stackamount
-                    int32 damage = mana * 2; // damage
-                    caster->CastCustomSpell(target, 63337, &mana, NULL, NULL, true);
-                    caster->CastCustomSpell(target, 63338, &damage, NULL, NULL, true);
+                    if (caster)
+                    {
+                        int32 mana = int32(GetAmount() * pow(2.0f, GetBase()->GetStackAmount())); // mana restore - bp * 2^stackamount
+                        int32 damage = mana * 2; // damage
+                        caster->CastCustomSpell(target, 63337, &mana, NULL, NULL, true);
+                        caster->CastCustomSpell(target, 63338, &damage, NULL, NULL, true);
+                    }
                     break;
                 }
                 case 75572: // Eject Spell!
@@ -5504,7 +5507,7 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
             if (!(mode & AURA_EFFECT_HANDLE_REAL))
                 break;
             // Sentry Totem
-            if (GetId() == 6495 && caster->GetTypeId() == TYPEID_PLAYER)
+            if (GetId() == 6495 && caster && caster->GetTypeId() == TYPEID_PLAYER)
             {
                 if (apply)
                 {
