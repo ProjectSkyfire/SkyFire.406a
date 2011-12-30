@@ -336,7 +336,7 @@ enum Opcodes
     MSG_CHANNEL_START                                = 0x100F8, //
     MSG_CHANNEL_UPDATE                               = 0x100F9, //
     CMSG_CANCEL_CHANNELLING                          = 0x100FA, //
-    SMSG_AI_REACTION                                 = 0x100FB, //
+    SMSG_AI_REACTION                                 = 0x02EA2, // 4.3.0 15050
     CMSG_SET_SELECTION                               = 0x100FC, //
     CMSG_EQUIPMENT_SET_DELETE                        = 0x100FD, //
     CMSG_INSTANCE_LOCK_WARNING_RESPONSE              = 0x100FE, //
@@ -406,7 +406,7 @@ enum Opcodes
     CMSG_NPC_TEXT_QUERY                              = 0x03406, // 4.3.0 15050
     SMSG_NPC_TEXT_UPDATE                             = 0x000A0, // 4.3.0 15050
     SMSG_NPC_WONT_TALK                               = 0x1013E, //
-    CMSG_QUESTGIVER_STATUS_QUERY                     = 0x1013F, //
+    CMSG_QUESTGIVER_STATUS_QUERY                     = 0x07E86, // 4.3.0 15050
     SMSG_QUESTGIVER_STATUS                           = 0x10140, //
     CMSG_QUESTGIVER_HELLO                            = 0x10141, //
     SMSG_QUESTGIVER_QUEST_LIST                       = 0x10142, //
@@ -712,7 +712,7 @@ enum Opcodes
     CMSG_SET_ACTIONBAR_TOGGLES                       = 0x10271, //
     MSG_PETITION_RENAME                              = 0x10272, //
     SMSG_INIT_WORLD_STATES                           = 0x03E80, // 4.3.0 15050
-    SMSG_UPDATE_WORLD_STATE                          = 0x10274, //
+    SMSG_UPDATE_WORLD_STATE                          = 0x04082, // 4.3.0 15050
     CMSG_ITEM_NAME_QUERY                             = 0x10275, //
     SMSG_ITEM_NAME_QUERY_RESPONSE                    = 0x10276, //
     SMSG_PET_ACTION_FEEDBACK                         = 0x10277, //
@@ -1177,7 +1177,7 @@ enum Opcodes
     SMSG_POWER_UPDATE                                = 0x1049A, //
     CMSG_GAMEOBJ_REPORT_USE                          = 0x1049B, //
     SMSG_HIGHEST_THREAT_UPDATE                       = 0x1049C, //
-    SMSG_THREAT_UPDATE                               = 0x1049D, //
+    SMSG_THREAT_UPDATE                               = 0x00286, // 4.3.0 15050
     SMSG_THREAT_REMOVE                               = 0x1049E, //
     SMSG_THREAT_CLEAR                                = 0x1049F, //
     SMSG_CONVERT_RUNE                                = 0x104A0, //
