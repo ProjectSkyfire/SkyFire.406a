@@ -1011,7 +1011,7 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder * holder)
     SendAccountDataTimes(PER_CHARACTER_CACHE_MASK);
 
     // 4.3 <packet date = "344698529" direction"StoC" opcode = "20010">29000000 02 1C 02 0000 A0</packet>
-    data.Initialize(SMSG_FEATURE_SYSTEM_STATUS, 7);         // added in 4.2.2
+    data.Initialize(SMSG_FEATURE_SYSTEM_STATUS, 10);         // added in 4.2.2
     /*data << uint8(2);                                       // unknown value
     data << uint8(2);                                       // unknown value
     data << uint8(0);                                       // enable(1)/disable(0) voice chat interface in client
