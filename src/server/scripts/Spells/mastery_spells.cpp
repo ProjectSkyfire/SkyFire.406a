@@ -356,6 +356,39 @@ public:
     }
 };
 
+// 76659 Wild Quiver
+class spell_hun_wild_quiver : public SpellScriptLoader
+{
+public:
+    spell_hun_wild_quiver() : SpellScriptLoader("spell_hun_wild_quiver") { }
+
+    class spell_hun_wild_quiver_AuraScript : public MasteryScript
+    {
+    public:
+        void OnProc(AuraEffect const* aurEff, Unit* unit, Unit* victim, uint32 damage, SpellInfo const* procSpell, uint32 procFlag, uint32 procExtra, WeaponAttackType attType, int32 cooldown)
+        {
+            PreventDefaultAction();
+            if (attType != RANGED_ATTACK && attType != OFF_ATTACK)
+                return;
+            uint32 procSpellId = procSpell ? procSpell->Id : 0;
+            if ((procSpellId != 76663) && roll_chance_i(aurEff->GetAmount()))
+            {
+                unit->CastSpell(victim, 76663, true); // Wild Quiver on auto-shot
+                if (cooldown && unit->GetTypeId() == TYPEID_PLAYER)
+                    unit->ToPlayer()->AddSpellCooldown(76663, 0, time(NULL) + cooldown);
+            }
+        }
+    };
+
+    AuraScript *GetAuraScript() const
+    {
+        spell_hun_wild_quiver_AuraScript* script = new spell_hun_wild_quiver_AuraScript();
+        script->SetMasteryAura(EFFECT_0, SPELL_AURA_DUMMY, true);
+        script->SetMasteryBaseAmount(EFFECT_1, 180);
+        return script;
+    }
+};
+
 void AddSC_mastery_spells()
 {
     new player_scripts_spec;
@@ -368,4 +401,5 @@ void AddSC_mastery_spells()
     new spell_sha_elemental_overlord;
     new spell_sha_enhanced_elements;
     new spell_sha_deep_healing;
+    new spell_hun_wild_quiver;
 }
