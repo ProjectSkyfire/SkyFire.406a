@@ -3713,7 +3713,8 @@ void AuraEffect::HandleAuraModMastery(AuraApplication const* aurApp, uint8 mode,
     if(!target || target->GetTypeId() != TYPEID_PLAYER)
         return;
 
-    target->ToPlayer()->ApplyRatingMod(CR_MASTERY, GetAmount(), apply);
+    int32 rating = target->ToPlayer()->CalculateMasteryRating(GetAmount());
+    target->ToPlayer()->ApplyRatingMod(CR_MASTERY, rating, apply);
 
     target->ToPlayer()->UpdateMastery();
 }

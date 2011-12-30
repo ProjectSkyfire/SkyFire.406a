@@ -14554,6 +14554,8 @@ void Unit::ProcDamageAndSpellFor(bool isVictim, Unit* target, uint32 procFlag, u
                         break;
                 } // switch (triggeredByAura->GetAuraType())
             } // for (uint8 effIndex = 0; effIndex < MAX_SPELL_EFFECTS; ++effIndex)
+            
+            i->aura->CallScriptEffectProc(triggeredByAura, this, victim, damage, procSpell, procFlag, procExtra, attType, cooldown);
         } // if (!handled)
 
         // Remove charge (aura can be removed by triggers)
