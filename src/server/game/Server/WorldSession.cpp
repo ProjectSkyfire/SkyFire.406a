@@ -739,7 +739,7 @@ void WorldSession::SaveTutorialsData(SQLTransaction& trans)
     m_TutorialsChanged = false;
 }
 
-void WorldSession::ReadMovementInfo(WorldPacket &data, MovementInfo *mi)
+void WorldSession::ReadMovementInfo(WorldPacket &data, MovementInfo* mi)
 {
     data >> mi->flags;
     data >> mi->flags2;
@@ -756,37 +756,56 @@ void WorldSession::ReadMovementInfo(WorldPacket &data, MovementInfo *mi)
 
         if (mi->HasExtraMovementFlag(MOVEMENTFLAG2_INTERPOLATED_MOVEMENT))
             data >> mi->t_time2;
-
-        if (mi->pos.m_positionX != mi->t_pos.m_positionX)
-            if (GetPlayer()->GetTransport())
-                GetPlayer()->GetTransport()->UpdatePosition(mi);
     }
 
     if (mi->HasMovementFlag(MovementFlags(MOVEMENTFLAG_SWIMMING | MOVEMENTFLAG_FLYING)) || (mi->HasExtraMovementFlag(MOVEMENTFLAG2_ALWAYS_ALLOW_PITCHING)))
-    {
         data >> mi->pitch;
-    }
 
-    if (mi->HasExtraMovementFlag(MOVEMENTFLAG2_INTERPOLATED_TURNING))    // 4.0.6
+    data >> mi->fallTime;
+
+    if (mi->HasMovementFlag(MOVEMENTFLAG_FALLING))
     {
-         data >> mi->fallTime;
-         data >> mi->j_zspeed;
-
-        if (mi->HasMovementFlag(MOVEMENTFLAG_JUMPING))
-        {
-           data >> mi->j_sinAngle;
-           data >> mi->j_cosAngle;
-           data >> mi->j_xyspeed;
-        }
+        data >> mi->j_zspeed;
+        data >> mi->j_sinAngle;
+        data >> mi->j_cosAngle;
+        data >> mi->j_xyspeed;
     }
 
-    if (mi->HasMovementFlag(MOVEMENTFLAG_SPLINE_ELEVATION))
-    {
-        data >> mi->splineElevation;
-    }
+    //if (mi->HasMovementFlag(MOVEMENTFLAG_SPLINE_ELEVATION))
+    //    data >> mi->splineElevation;
+
+    // This must be a packet spoofing attempt. MOVEMENTFLAG_ROOT sent from the client is not valid,
+    // and when used in conjunction with any of the moving movement flags such as MOVEMENTFLAG_FORWARD
+    // it will freeze clients that receive this player's movement info.
+    if (mi->HasMovementFlag(MOVEMENTFLAG_ROOT))
+        mi->flags &= ~MOVEMENTFLAG_ROOT;
+
+    // Cannot hover and jump at the same time
+   if (mi->HasMovementFlag(MOVEMENTFLAG_HOVER) && mi->HasMovementFlag(MOVEMENTFLAG_JUMPING))
+        mi->flags &= ~MOVEMENTFLAG_FALLING;
+
+    // Cannot ascend and descend at the same time
+    if (mi->HasMovementFlag(MOVEMENTFLAG_ASCENDING) && mi->HasMovementFlag(MOVEMENTFLAG_DESCENDING))
+        mi->flags &= ~(MOVEMENTFLAG_ASCENDING | MOVEMENTFLAG_DESCENDING);
+
+    // Cannot move left and right at the same time
+    if (mi->HasMovementFlag(MOVEMENTFLAG_LEFT) && mi->HasMovementFlag(MOVEMENTFLAG_RIGHT))
+        mi->flags &= ~(MOVEMENTFLAG_LEFT | MOVEMENTFLAG_RIGHT);
+
+    // Cannot strafe left and right at the same time
+    if (mi->HasMovementFlag(MOVEMENTFLAG_STRAFE_LEFT) && mi->HasMovementFlag(MOVEMENTFLAG_STRAFE_RIGHT))
+        mi->flags &= ~(MOVEMENTFLAG_STRAFE_LEFT | MOVEMENTFLAG_STRAFE_RIGHT);
+
+    // Cannot pitch up and down at the same time
+    if (mi->HasMovementFlag(MOVEMENTFLAG_PITCH_UP) && mi->HasMovementFlag(MOVEMENTFLAG_PITCH_DOWN))
+        mi->flags &= ~(MOVEMENTFLAG_PITCH_UP | MOVEMENTFLAG_PITCH_DOWN);
+
+    // Cannot move forwards and backwards at the same time
+    if (mi->HasMovementFlag(MOVEMENTFLAG_FORWARD) && mi->HasMovementFlag(MOVEMENTFLAG_BACKWARD))
+        mi->flags &= ~(MOVEMENTFLAG_FORWARD | MOVEMENTFLAG_BACKWARD);
 }
 
-void WorldSession::WriteMovementInfo(WorldPacket *data, MovementInfo *mi)
+void WorldSession::WriteMovementInfo(WorldPacket* data, MovementInfo* mi)
 {
     data->appendPackGUID(mi->guid);
 
@@ -802,33 +821,23 @@ void WorldSession::WriteMovementInfo(WorldPacket *data, MovementInfo *mi)
        *data << mi->t_pos.PositionXYZOStream();
        *data << mi->t_time;
        *data << mi->t_seat;
-
-        if (mi->flags2 & MOVEMENTFLAG2_INTERPOLATED_MOVEMENT)
-            *data << mi->t_time2;
     }
 
-    if ((mi->HasMovementFlag(MovementFlags(MOVEMENTFLAG_SWIMMING | MOVEMENTFLAG_FLYING))) || (mi->flags2 & MOVEMENTFLAG2_ALWAYS_ALLOW_PITCHING))
-    {
+    if (mi->HasMovementFlag(MovementFlags(MOVEMENTFLAG_SWIMMING | MOVEMENTFLAG_FLYING)) || mi->HasExtraMovementFlag(MOVEMENTFLAG2_ALWAYS_ALLOW_PITCHING))
         *data << mi->pitch;
-    }
 
-    if (mi->HasExtraMovementFlag(MOVEMENTFLAG2_INTERPOLATED_TURNING))    // 4.0.6
+    *data << mi->fallTime;
+
+    if (mi->HasMovementFlag(MOVEMENTFLAG_FALLING))
     {
-        *data << mi->fallTime;
         *data << mi->j_zspeed;
-
-        if (mi->HasMovementFlag(MOVEMENTFLAG_JUMPING))
-        {
-           *data << mi->j_sinAngle;
-           *data << mi->j_cosAngle;
-           *data << mi->j_xyspeed;
-        }
+        *data << mi->j_sinAngle;
+        *data << mi->j_cosAngle;
+        *data << mi->j_xyspeed;
     }
 
-    if (mi->HasMovementFlag(MOVEMENTFLAG_SPLINE_ELEVATION))
-    {
-        *data << mi->splineElevation;
-    }
+    //if (mi->HasMovementFlag(MOVEMENTFLAG_SPLINE_ELEVATION))
+    //    *data << mi->splineElevation;
 }
 
 void WorldSession::ReadAddonsInfo(WorldPacket &data)

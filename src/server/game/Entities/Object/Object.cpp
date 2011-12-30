@@ -47,8 +47,6 @@
 #include "Totem.h"
 #include "OutdoorPvPMgr.h"
 
-#define TERRAIN_LOS_STEP_DISTANCE   3.0f        // sample distance for terrain LoS this may need adjusting.
-
 uint32 GuidHigh2TypeId(uint32 guid_hi)
 {
     switch (guid_hi)
@@ -136,17 +134,12 @@ void Object::_Create(uint32 guidlow, uint32 entry, HighGuid guidhigh)
     uint64 guid = MAKE_NEW_GUID(guidlow, entry, guidhigh);
     SetUInt64Value(OBJECT_FIELD_GUID, guid);
     uint32 type = 0;
-    switch (m_objectType)
-    {
-        //case TYPEID_ITEM:       type = 3; break;
-        //case TYPEID_CONTAINER:  type = 7; break;   //+4
-        //case TYPEID_UNIT:       type = 9; break;   //+2
-        //case TYPEID_PLAYER:     type = 25; break;  //+16
-        //case TYPEID_GAMEOBJECT: type = 33; break;  //+8
-        case TYPEID_DYNAMICOBJECT: type = 65; break;  //+32
-        //case TYPEID_CORPSE:     type = 129; break;  //+64
-        default: type = m_objectType; break;
-    }
+
+    if (m_objectType == TYPEID_DYNAMICOBJECT)
+        type = 65;
+    else
+        type = m_objectType;
+
     SetUInt32Value(OBJECT_FIELD_TYPE, type);
     //SetUInt32Value(OBJECT_FIELD_TYPE, m_objectType);
     m_PackGUID.wpos(0);
@@ -264,14 +257,14 @@ void Object::BuildValuesUpdateBlockForPlayer(UpdateData* data, Player* target) c
 {
     ByteBuffer buf(500);
 
-    buf << (uint8) UPDATETYPE_VALUES;
+    buf << (uint8) UPDATETYPE_MOVEMENT;
     buf.append(GetPackGUID());
 
     UpdateMask updateMask;
     updateMask.SetCount(m_valuesCount);
 
     _SetUpdateBits(&updateMask, target);
-    _BuildValuesUpdate(UPDATETYPE_VALUES, &buf, &updateMask, target);
+    _BuildValuesUpdate(UPDATETYPE_MOVEMENT, &buf, &updateMask, target);
 
     data->AddUpdateBlock(buf);
 }
@@ -374,7 +367,7 @@ void Object::_BuildMovementUpdate(ByteBuffer * data, uint16 flags) const
         bool swimming = ((ToUnit()->GetUnitMovementFlags() & (MOVEMENTFLAG_SWIMMING | MOVEMENTFLAG_FLYING))
             || (ToUnit()->GetExtraUnitMovementFlags() & MOVEMENTFLAG2_ALWAYS_ALLOW_PITCHING));
         bool interPolatedTurning = ToUnit()->GetExtraUnitMovementFlags() & MOVEMENTFLAG2_INTERPOLATED_TURNING;
-        bool jumping = ToUnit()->GetUnitMovementFlags() & MOVEMENTFLAG_JUMPING;
+        bool jumping = ToUnit()->GetUnitMovementFlags() & MOVEMENTFLAG_FALLING;
 
         data->writeBit(!swimming); // inversé
         data->writeBit(interPolatedTurning);
@@ -503,7 +496,7 @@ void Object::_BuildMovementUpdate(ByteBuffer * data, uint16 flags) const
          bool swimming = ((ToUnit()->GetUnitMovementFlags() & (MOVEMENTFLAG_SWIMMING | MOVEMENTFLAG_FLYING))
             || (ToUnit()->GetExtraUnitMovementFlags() & MOVEMENTFLAG2_ALWAYS_ALLOW_PITCHING));
         bool interPolatedTurning = ToUnit()->GetExtraUnitMovementFlags() & MOVEMENTFLAG2_INTERPOLATED_TURNING;
-        bool jumping = ToUnit()->GetUnitMovementFlags() & MOVEMENTFLAG_JUMPING;
+        bool jumping = ToUnit()->GetUnitMovementFlags() & MOVEMENTFLAG_FALLING;
 
         *data << ToUnit()->GetSpeed(MOVE_TURN_RATE);
         *data << ToUnit()->GetPositionX();
@@ -761,12 +754,10 @@ void Object::_BuildValuesUpdate(uint8 updatetype, ByteBuffer * data, UpdateMask*
         else if (isType(TYPEMASK_UNIT))
         {
             if (((Unit*)this)->HasFlag(UNIT_FIELD_AURASTATE, PER_CASTER_AURA_STATE_MASK))
-            {
                 updateMask->SetBit(UNIT_FIELD_AURASTATE);
-            }
         }
     }
-    else                                                    // case UPDATETYPE_VALUES
+    else                                                    // case UPDATETYPE_MOVEMENT
     {
         if (isType(TYPEMASK_GAMEOBJECT) && !((GameObject*)this)->IsTransport())
         {
@@ -1464,11 +1455,8 @@ void MovementInfo::OutDebug()
         sLog->outString("pitch: %f", pitch);
 
     sLog->outString("fallTime: %u", fallTime);
-    if (flags & MOVEMENTFLAG_JUMPING)
+    if (flags & MOVEMENTFLAG_FALLING_SLOW)
         sLog->outString("j_zspeed: %f j_sinAngle: %f j_cosAngle: %f j_xyspeed: %f", j_zspeed, j_sinAngle, j_cosAngle, j_xyspeed);
-
-    if (flags & MOVEMENTFLAG_SPLINE_ELEVATION)
-        sLog->outString("splineElevation: %f", splineElevation);
 }
 
 WorldObject::WorldObject(): WorldLocation(),
@@ -1606,34 +1594,9 @@ bool WorldObject::IsWithinLOS(float ox, float oy, float oz) const
 {
     float x, y, z;
     GetPosition(x, y, z);
-    z += 2.0f;
-    oz += 2.0f;
-
-    // check for line of sight because of terrain height differences
-    if (!GetMap()->IsDungeon()) // avoid unnecessary calculation inside raid/dungeons
-    {
-        float dx = ox - x, dy = oy - y, dz = oz - z;
-        float dist = sqrt(dx*dx + dy*dy + dz*dz);
-        if (dist > ATTACK_DISTANCE && dist < MAX_VISIBILITY_DISTANCE)
-        {
-            uint32 steps = uint32(dist / TERRAIN_LOS_STEP_DISTANCE);
-            float step_dist = dist / (float)steps; // to make sampling intervals symmetric in both directions
-            float inc_factor = step_dist / dist;
-            float incx = dx*inc_factor, incy = dy*inc_factor, incz = dz*inc_factor;
-            float px = x, py = y, pz = z;
-            for (; steps; --steps)
-            {
-                if (GetBaseMap()->GetHeight(px, py, pz, false) > pz)
-                    return false; // found intersection with ground
-                px += incx;
-                py += incy;
-                pz += incz;
-            }
-        }
-    }
 
     VMAP::IVMapManager *vMapManager = VMAP::VMapFactory::createOrGetVMapManager();
-    return vMapManager->isInLineOfSight(GetMapId(), x, y, z, ox, oy, oz);
+    return vMapManager->isInLineOfSight(GetMapId(), x, y, z+2.0f, ox, oy, oz+2.0f);
 }
 
 bool WorldObject::GetDistanceOrder(WorldObject const* obj1, WorldObject const* obj2, bool is3D /* = true */) const
@@ -2469,12 +2432,7 @@ void WorldObject::SetZoneScript()
         if (map->IsDungeon())
             m_zoneScript = (ZoneScript*)((InstanceMap*)map)->GetInstanceScript();
         else if (!map->IsBattlegroundOrArena())
-        {
-            if (Battlefield* bf = sBattlefieldMgr.GetBattlefieldToZoneId(GetZoneId()))
-                m_zoneScript = bf;
-            else
-                m_zoneScript = sOutdoorPvPMgr->GetZoneScript(GetZoneId());
-        }
+            m_zoneScript = sOutdoorPvPMgr->GetZoneScript(GetZoneId());
     }
 }
 
@@ -2999,6 +2957,23 @@ void WorldObject::UpdateObjectVisibility(bool /*forced*/)
     //updates object's visibility for nearby players
     Trinity::VisibleChangesNotifier notifier(*this);
     VisitNearbyWorldObject(GetVisibilityRange(), notifier);
+}
+
+Player* WorldObject::FindNearestPlayer(float range, bool alive)
+{
+    Player* player = NULL;
+    Trinity::AnyPlayerInObjectRangeCheck checker(this, range, alive);
+    Trinity::PlayerSearcher<Trinity::AnyPlayerInObjectRangeCheck> searcher(this, player, checker);
+    VisitNearbyWorldObject(range, searcher);
+    return player;
+}
+
+std::list<Player*> WorldObject::GetNearestPlayersList(float range, bool alive) {
+    std::list<Player*> players;
+    Trinity::AnyPlayerInObjectRangeCheck checker(this, range, alive);
+    Trinity::PlayerListSearcher<Trinity::AnyPlayerInObjectRangeCheck> searcher(this, players, checker);
+    VisitNearbyWorldObject(range, searcher);
+    return players;
 }
 
 struct WorldObjectChangeAccumulator
