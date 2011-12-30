@@ -1305,6 +1305,26 @@ void ScriptMgr::OnPlayerBindToInstance(Player* player, Difficulty difficulty, ui
     FOREACH_SCRIPT(PlayerScript)->OnBindToInstance(player, difficulty, mapid, permanent);
 }
 
+void ScriptMgr::OnActivateSpec(Player* player, uint8 spec)
+{
+    FOREACH_SCRIPT(PlayerScript)->OnActivateSpec(player, spec);
+}
+
+void ScriptMgr::OnTalentBranchSpecChanged(Player* player, uint8 spec, uint32 newSpecID)
+{
+    FOREACH_SCRIPT(PlayerScript)->OnTalentBranchSpecChanged(player, spec, newSpecID);
+}
+
+void ScriptMgr::OnAddSpell(Player* player, uint32 spell_id, bool learning)
+{
+    FOREACH_SCRIPT(PlayerScript)->OnAddSpell(player, spell_id, learning);
+}
+
+void ScriptMgr::OnUpdateRating(Player* player, CombatRating cr, int32& amount)
+{
+    FOREACH_SCRIPT(PlayerScript)->OnUpdateRating(player, cr, amount);
+}
+
 // Guild
 void ScriptMgr::OnGuildAddMember(Guild* guild, Player* player, uint8& plRank)
 {

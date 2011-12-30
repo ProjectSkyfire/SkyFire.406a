@@ -77,7 +77,6 @@
 #include "SmartAI.h"
 #include "Channel.h"
 #include "DB2Stores.h"
-#include "ItemInfo.h"
 
 volatile bool World::m_stopEvent = false;
 uint8 World::m_ExitCode = SHUTDOWN_EXIT_CODE;

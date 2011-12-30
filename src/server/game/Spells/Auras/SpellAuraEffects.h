@@ -204,6 +204,7 @@ class AuraEffect
         void HandleModResistancePercent(AuraApplication const* aurApp, uint8 mode, bool apply) const;
         void HandleModBaseResistance(AuraApplication const* aurApp, uint8 mode, bool apply) const;
         void HandleModTargetResistance(AuraApplication const* aurApp, uint8 mode, bool apply) const;
+        void HandleAuraModMastery(AuraApplication const* aurApp, uint8 mode, bool apply) const;
         //    stat
         void HandleAuraModStat(AuraApplication const* aurApp, uint8 mode, bool apply) const;
         void HandleModPercentStat(AuraApplication const* aurApp, uint8 mode, bool apply) const;

@@ -1629,17 +1629,6 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                         if(m_caster->HasAura(48265) || m_caster->HasAura(48266)) // Only in frost/unholy presence
                             bp = m_caster->CountPctFromMaxHealth(aurEff->GetAmount());
 
-                if (m_caster->ToPlayer()->HasAuraType(SPELL_AURA_MASTERY))
-                {
-                    if (m_caster->ToPlayer()->HasSpell(50029)) //Temp check for spec
-                    {
-                        if (m_caster->HasAura(48263))
-                        {
-                            int32 shield = int32(bp * (50.0f + (6.25f * m_caster->ToPlayer()->GetMasteryPoints())) / 100.0f);
-                            m_caster->CastCustomSpell(m_caster, 77535, &shield, NULL, NULL, false);
-                        }
-                    }
-                }
                 m_caster->CastCustomSpell(m_caster, 45470, &bp, NULL, NULL, false);
                 return;
             }
@@ -2435,19 +2424,6 @@ void Spell::SpellDamageHeal(SpellEffIndex effIndex)
             {
                 damageAmount+= aurEff->GetAmount();
                 m_caster->RemoveAurasDueToSpell(45062);
-            }
-        }
-
-        //Echo of Light
-        if (m_caster->getClass() == CLASS_PRIEST)
-        {
-            if (m_caster->HasAuraType(SPELL_AURA_MASTERY))
-            {
-                if (m_caster->ToPlayer()->GetTalentBranchSpec(m_caster->ToPlayer()->GetActiveSpec()) == BS_PRIEST_HOLY)
-                {
-                    int32 bp0 = int32 (addhealth * (10.0f + (1.25f * m_caster->ToPlayer()->GetMasteryPoints())) / 100);
-                    m_caster->CastCustomSpell(m_caster, 77489, &bp0, NULL, NULL, true);
-                }
             }
         }
 

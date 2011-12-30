@@ -4029,6 +4029,8 @@ bool Player::addSpell(uint32 spell_id, bool active, bool learning, bool dependen
 
         GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_LEARN_SPELL, spell_id);
     }
+    
+    sScriptMgr->OnAddSpell(this, spell_id, learning);
 
     // return true (for send learn packet) only if spell active (in case ranked spells) and not replace old spell
     return active && !disabled && !superceded_old;
@@ -6117,6 +6119,9 @@ void Player::UpdateRating(CombatRating cr)
             amount += int32(CalculatePctN(GetStat(Stats((*i)->GetMiscValueB())), (*i)->GetAmount()));
     if (amount < 0)
         amount = 0;
+    
+    sScriptMgr->OnUpdateRating(this, cr, amount);
+    
     SetUInt32Value(PLAYER_FIELD_COMBAT_RATING_1 + cr, uint32(amount));
 
     bool affectStats = CanModifyStats();
@@ -8356,7 +8361,7 @@ void Player::_ApplyItemBonuses(ItemTemplate const *proto, uint8 slot, bool apply
     if (ssd && ssd_level > ssd->MaxLevel)
         ssd_level = ssd->MaxLevel;
 
-    ScalingStatValuesEntry const *ssv = proto->ScalingStatValue ? sScalingStatValuesStore.LookupEntry(ssd_level) : NULL;
+    ScalingStatValuesEntry const* ssv = ssd ? sScalingStatValuesStore.LookupEntry(ssd_level) : NULL;
     if (only_level_scale && !ssv)
         return;
 
@@ -8370,7 +8375,7 @@ void Player::_ApplyItemBonuses(ItemTemplate const *proto, uint8 slot, bool apply
             if (ssd->StatMod[i] < 0)
                 continue;
             statType = ssd->StatMod[i];
-            val = (ssv->getssdMultiplier(proto->ScalingStatValue) * ssd->Modifier[i]) / 10000;
+            val = (ssv->GetStatMultiplier(proto->InventoryType) * ssd->Modifier[i]) / 10000;
         }
         else
         {
@@ -8543,15 +8548,14 @@ void Player::_ApplyItemBonuses(ItemTemplate const *proto, uint8 slot, bool apply
     }
 
     // Apply Spell Power from ScalingStatValue if set
-    if (ssv)
-        if (int32 spellbonus = ssv->getSpellBonus(proto->ScalingStatValue))
+    if (ssv && proto->Flags2 & ITEM_FLAGS_EXTRA_CASTER_WEAPON)
+        if (int32 spellbonus = int32(ssv->Spellpower))
             ApplySpellPowerBonus(spellbonus, apply);
 
     // If set ScalingStatValue armor get it or use item armor
     uint32 armor = proto->GetArmor();
-    if (ssv)
-        if (uint32 ssvarmor = ssv->getArmorMod(proto->ScalingStatValue))
-            armor = ssvarmor;
+    if (ssv && proto->Class == ITEM_CLASS_ARMOR)
+        armor = ssv->GetArmor(proto->InventoryType, proto->SubClass - 1);
 
     if (armor)
     {
@@ -8591,16 +8595,6 @@ void Player::_ApplyItemBonuses(ItemTemplate const *proto, uint8 slot, bool apply
 
     if (CanUseAttackType(attType))
         _ApplyWeaponDamage(slot, proto, ssv, apply);
-
-    // Apply feral bonus from ScalingStatValue if set
-    if (ssv)
-        if (int32 feral_bonus = ssv->getFeralBonus(proto->ScalingStatValue))
-            ApplyFeralAPBonus(feral_bonus, apply);
-
-    // Druids get feral AP bonus from weapon dps (lso use DPS from ScalingStatValue)
-    if (getClass() == CLASS_DRUID)
-        if (int32 feral_bonus = proto->getFeralBonus(ssv->getDPSMod(proto->ScalingStatValue)))
-            ApplyFeralAPBonus(feral_bonus, apply);
 }
 
 void Player::_ApplyWeaponDamage(uint8 slot, ItemTemplate const *proto, ScalingStatValuesEntry const *ssv, bool apply)
@@ -8623,14 +8617,16 @@ void Player::_ApplyWeaponDamage(uint8 slot, ItemTemplate const *proto, ScalingSt
     float maxDamage = proto->GetMaxDamage();
 
     // If set dpsMod in ScalingStatValue use it for min (70% from average), max (130% from average) damage
+    int32 extraDPS = 0;
     if (ssv)
     {
-        int32 extraDPS = ssv->getDPSMod(proto->ScalingStatValue);
+        float damageMultiplier = 0.0f;
+        extraDPS = ssv->GetDPSAndDamageMultiplier(proto->SubClass, proto->Flags2 & ITEM_FLAGS_EXTRA_CASTER_WEAPON, &damageMultiplier);
         if (extraDPS)
         {
             float average = extraDPS * proto->Delay / 1000.0f;
-            minDamage = 0.7f * average;
-            maxDamage = 1.3f * average;
+            minDamage = (1.0f - damageMultiplier) * average;
+            maxDamage = (1.0f + damageMultiplier) * average;
         }
     }
 
@@ -8662,6 +8658,11 @@ void Player::_ApplyWeaponDamage(uint8 slot, ItemTemplate const *proto, ScalingSt
 
     if (CanModifyStats() && (damage || proto->Delay))
         UpdateDamagePhysical(attType);
+
+    // Druids get feral AP bonus from weapon dps (lso use DPS from ScalingStatValue)
+    if (getClass() == CLASS_DRUID)
+        if (int32 feral_bonus = proto->getFeralBonus(extraDPS))
+            ApplyFeralAPBonus(feral_bonus, apply);
 }
 
 void Player::_ApplyWeaponDependentAuraMods(Item *item, WeaponAttackType attackType, bool apply)
@@ -25330,6 +25331,7 @@ void Player::ActivateSpec(uint8 spec)
         SetPower(POWER_MANA, 0); // Mana must be 0 even if it isn't the active power type.
 
     SetPower(pw, 0);
+    sScriptMgr->OnActivateSpec(this, spec);
 }
 
 void Player::ResetTimeSync()
@@ -25691,4 +25693,70 @@ void Player::SendPetTameResult(PetTameResult result)
     WorldPacket data(SMSG_PET_TAME_FAILURE, 4);
     data << uint32(result); // The result
     GetSession()->SendPacket(&data);
+}
+
+void Player::UpdateMasteryAuras(uint32 branch)
+{
+    bool canHaveMastery = HasAuraType(SPELL_AURA_MASTERY);
+    TalentTabEntry const* tab = sTalentTabStore.LookupEntry(branch);
+    
+    if(!tab)
+        return;
+        
+    if(!canHaveMastery)
+    {
+        // Remove all mastery spells
+        for (int i = 0; i < MAX_TALENT_MASTERY_SPELLS; i ++)
+            if(tab->masterySpell[i] && HasSpell(tab->masterySpell[i]))
+            {
+                RemoveAura(tab->masterySpell[i]);
+                removeSpell(tab->masterySpell[i]);
+            }
+        return;
+    }
+    
+    for (int i = 0; i < MAX_TALENT_MASTERY_SPELLS; i ++)
+    {
+        if(tab->masterySpell[i] && !HasSpell(tab->masterySpell[i]))
+        {
+            sLog->outDebug(LOG_FILTER_SPELLS_AURAS, "Learn mastery %u to player %s", tab->masterySpell[i], GetName());
+            learnSpell(tab->masterySpell[i], true);
+            CastSpell(this, tab->masterySpell[i], true); // Need to cast it
+        }
+    }
+    
+    // Now remove all the mastery spells for all branch except this one
+    for(uint32 i = 0; i < sTalentTabStore.GetNumRows(); ++i)
+    {
+        if(branch != i)
+            if (TalentTabEntry const* tabi = sTalentTabStore.LookupEntry(i))
+                for (uint32 j = 0; j < MAX_TALENT_MASTERY_SPELLS; j++)
+                    if(tabi->masterySpell[j] && HasSpell(tabi->masterySpell[j]))
+                    {
+                        RemoveAura(tab->masterySpell[i]);
+                        removeSpell(tabi->masterySpell[j]);
+                    }
+                
+    }
+}
+
+void Player::RecalculateMasteryAuraEffects(uint32 branch)
+{
+    TalentTabEntry const* tab = sTalentTabStore.LookupEntry(branch);
+    
+    if(!tab)
+        return;
+        
+    for (int i = 0; i < MAX_TALENT_MASTERY_SPELLS; i ++)
+    {
+        if(tab->masterySpell[i])
+            if(Aura* aura = GetAura(tab->masterySpell[i]))
+                aura->RecalculateAmountOfEffects();
+    }
+}
+
+void Player::SetTalentBranchSpec(uint32 branchSpec, uint8 spec)
+{
+    m_branchSpec[spec] = branchSpec;
+    sScriptMgr->OnTalentBranchSpecChanged(this, spec, branchSpec);
 }

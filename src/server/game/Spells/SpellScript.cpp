@@ -19,6 +19,7 @@
 #include <string>
 #include "Spell.h"
 #include "SpellAuras.h"
+#include "SpellAuraEffects.h"
 #include "SpellScript.h"
 #include "SpellMgr.h"
 
@@ -235,10 +236,6 @@ bool SpellScript::_Validate(SpellInfo const* entry)
     for (std::list<UnitTargetHandler>::iterator itr = OnUnitTargetSelect.begin(); itr != OnUnitTargetSelect.end();  ++itr)
         if (!(*itr).GetAffectedEffectsMask(entry))
             sLog->outError("TSCR: Spell `%u` Effect `%s` of script `%s` did not match dbc effect data - handler bound to hook `OnUnitTargetSelect` of SpellScript won't be executed", entry->Id, (*itr).ToString().c_str(), m_scriptName->c_str());
-
-    for (std::list<EffectProcHandler>::iterator itr = OnEffectProc.begin(); itr != OnEffectProc.end();  ++itr)
-        if (!(*itr).GetAffectedEffectsMask(entry))
-            sLog->outError("TSCR: Spell `%u` Effect `%s` of script`%s` did not match dbc effect data - bound handler won't be executed", entry->Id, (*itr).ToString().c_str(), m_scriptName->c_str());
 
     return _SpellScript::_Validate(entry);
 }
@@ -583,6 +580,10 @@ bool AuraScript::_Validate(SpellInfo const* entry)
     for (std::list<EffectManaShieldHandler>::iterator itr = AfterEffectManaShield.begin(); itr != AfterEffectManaShield.end();  ++itr)
         if (!(*itr).GetAffectedEffectsMask(entry))
             sLog->outError("TSCR: Spell `%u` Effect `%s` of script `%s` did not match dbc effect data - handler bound to hook `AfterEffectManaShield` of AuraScript won't be executed", entry->Id, (*itr).ToString().c_str(), m_scriptName->c_str());
+            
+    for (std::list<EffectProcHandler>::iterator itr = OnEffectProc.begin(); itr != OnEffectProc.end();  ++itr)
+        if (!(*itr).GetAffectedEffectsMask(entry))
+            sLog->outError("TSCR: Spell `%u` Effect `%s` of script `%s` did not match dbc effect data - handler boud to hook `OnEffectProc` of AuraScript won't be executed", entry->Id, (*itr).ToString().c_str(), m_scriptName->c_str());
 
     return _SpellScript::_Validate(entry);
 }
@@ -708,7 +709,7 @@ AuraScript::EffectProcHandler::EffectProcHandler(AuraEffectProcFnType _pEffectPr
     pEffectProcScript = _pEffectProcScript;
 }
 
-void AuraScript::EffectProcHandler::Call(AuraScript * auraScript, AuraEffect const * _aurEff, Unit* pUnit, Unit *pVictim, uint32 damage, SpellEntry const* procSpell, uint32 procFlag, uint32 procExtra, WeaponAttackType attType, int32 cooldown)
+void AuraScript::EffectProcHandler::Call(AuraScript * auraScript, AuraEffect const * _aurEff, Unit* pUnit, Unit *pVictim, uint32 damage, SpellInfo const* procSpell, uint32 procFlag, uint32 procExtra, WeaponAttackType attType, int32 cooldown)
 {
     (auraScript->*pEffectProcScript)(_aurEff, pUnit, pVictim, damage, procSpell, procFlag, procExtra, attType, cooldown);
 }
@@ -955,4 +956,51 @@ Unit* AuraScript::GetTarget() const
 AuraApplication const* AuraScript::GetTargetApplication() const
 {
     return m_auraApplication;
+}
+
+
+uint32 MasteryScript::GetMasteryBaseAmount()
+{
+    if (dummyEffectIndex >= 0 && dummyEffectIndex < MAX_SPELL_EFFECTS)
+    {
+        if (SpellInfo const* spellInfo = GetAura()->GetSpellInfo())
+            return spellInfo->Effects[dummyEffectIndex].BasePoints ? spellInfo->Effects[dummyEffectIndex].BasePoints : defaultBaseAmount;
+        //if (AuraEffect* effect = GetAura()->GetEffect(dummyEffectIndex))
+        //    return effect->GetBaseAmount()/*GetAmount()*/;
+    }
+    return defaultBaseAmount;
+}
+
+void MasteryScript::CalcAmount(AuraEffect const* aurEff, int32& amount, bool& canBeRecalculated)
+{
+    if (Unit* caster = GetCaster())
+    {
+        if (Player* player = caster->ToPlayer())
+        {
+            uint32 baseAmount = GetMasteryBaseAmount();
+            float mastery = player->GetMasteryPoints();
+            int32 newAmount = int32(mastery * baseAmount / 100.0f);
+            if (amount != newAmount)
+            {
+                amount = newAmount;
+                sLog->outDetail("Mastery spell %u eff %u: mastery %.2f, amount %u, bonus %d", aurEff->GetId(), aurEff->GetEffIndex(), mastery, baseAmount, newAmount);
+            }
+        }
+    }
+    canBeRecalculated = true;
+}
+
+void MasteryScript::Register()
+{
+    for (uint8 i = EFFECT_0; i < MAX_SPELL_EFFECTS; i++)
+    {
+        if (masteryAuras[i].auraType != SPELL_AURA_NONE)
+        {
+            sLog->outDetail("MasteryScript::Register mastery aura %u : %u", i, masteryAuras[i].auraType);
+            DoEffectCalcAmount += AuraEffectCalcAmountFn(MasteryScript::CalcAmount, i, masteryAuras[i].auraType);
+            DoEffectCalcSpellMod += AuraEffectCalcSpellModFn(MasteryScript::CalcSpellMod, i, masteryAuras[i].auraType);
+            if (masteryAuras[i].handleProc)
+                OnEffectProc += AuraEffectProcFn(MasteryScript::OnProc, i, masteryAuras[i].auraType);
+        }
+    }
 }

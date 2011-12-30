@@ -383,7 +383,7 @@ class AuraScript : public _SpellScript
         typedef void(CLASSNAME::*AuraEffectCalcPeriodicFnType)(AuraEffect const* , bool &, int32 &); \
         typedef void(CLASSNAME::*AuraEffectCalcSpellModFnType)(AuraEffect const* , SpellModifier* &, SpellInfo const *, Unit *); \
         typedef void(CLASSNAME::*AuraEffectAbsorbFnType)(AuraEffect* , DamageInfo &, uint32 &); \
-        typedef void(CLASSNAME::*AuraEffectProcFnType)(AuraEffect const *, Unit *, Unit *, uint32, SpellEntry const*, uint32, uint32, WeaponAttackType, int32); \
+        typedef void(CLASSNAME::*AuraEffectProcFnType)(AuraEffect const *, Unit *, Unit *, uint32, SpellInfo const*, uint32, uint32, WeaponAttackType, int32); \
 
         AURASCRIPT_FUNCTION_TYPE_DEFINES(AuraScript)
 
@@ -463,7 +463,7 @@ class AuraScript : public _SpellScript
         {
             public:
                 EffectProcHandler(AuraEffectProcFnType _pEffectProcScript, uint8 _effIndex, uint16 _effName);
-                void Call(AuraScript * auraScript, AuraEffect const * _aurEff, Unit* pUnit, Unit *pVictim, uint32 damage, SpellEntry const* procSpell, uint32 procFlag, uint32 procExtra, WeaponAttackType attType, int32 cooldown);
+                void Call(AuraScript * auraScript, AuraEffect const * _aurEff, Unit* pUnit, Unit *pVictim, uint32 damage, SpellInfo const* procSpell, uint32 procFlag, uint32 procExtra, WeaponAttackType attType, int32 cooldown);
             private:
                 AuraEffectProcFnType pEffectProcScript;
         };
@@ -597,7 +597,7 @@ class AuraScript : public _SpellScript
 
         // executed when aura effect proc event occurs
         // example: OnEffectProc += AuraEffectProcFn(class::function, EffectIndexSpecifier, EffectAuraNameSpecifier);
-        // where function is: void function (AuraEffect const * aurEff, Unit* pUnit, Unit *pVictim, uint32 damage, SpellEntry const* procSpell, uint32 procFlag, uint32 procExtra, WeaponAttackType attType, int32 cooldown);
+        // where function is: void function (AuraEffect const * aurEff, Unit* pUnit, Unit *pVictim, uint32 damage, SpellInfo const* procSpell, uint32 procFlag, uint32 procExtra, WeaponAttackType attType, int32 cooldown);
         HookList<EffectProcHandler> OnEffectProc;
         #define AuraEffectProcFn(F, I, N) EffectProcHandlerFunction(&F, I, N)
 
@@ -686,6 +686,50 @@ class AuraScript : public _SpellScript
         Unit* GetTarget() const;
         // returns AuraApplication object of currently processed target
         AuraApplication const* GetTargetApplication() const;
+};
+
+// Mastery helper class
+class MasteryScript : public AuraScript
+{
+    PrepareAuraScript(MasteryScript);
+
+protected:
+    struct MasteryAuraData
+    {
+        AuraType auraType;
+        bool handleProc;
+    };
+
+    MasteryAuraData masteryAuras[MAX_SPELL_EFFECTS];
+    int32 dummyEffectIndex;
+    uint32 defaultBaseAmount;
+
+public:
+    MasteryScript(AuraType auraType = SPELL_AURA_NONE, SpellEffIndex _dummyEffIndex = EFFECT_1, uint32 baseAmount = 0)
+        : dummyEffectIndex(_dummyEffIndex), defaultBaseAmount(baseAmount)
+    {
+        SetMasteryAura(EFFECT_0, auraType);
+        SetMasteryAura(EFFECT_1, SPELL_AURA_NONE);
+        SetMasteryAura(EFFECT_2, SPELL_AURA_NONE);
+    }
+
+    void SetMasteryAura(SpellEffIndex effIndex, AuraType auraType, bool handleProc = false)
+    {
+        masteryAuras[effIndex].auraType = auraType;
+        masteryAuras[effIndex].handleProc = handleProc;
+    }
+
+    void SetMasteryBaseAmount(int32 effIndex = EFFECT_1, uint32 baseAmount = 0)
+    {
+        dummyEffectIndex = effIndex;
+        defaultBaseAmount = baseAmount;
+    }
+
+    virtual uint32 GetMasteryBaseAmount();
+    virtual void OnProc(AuraEffect const * aurEff, Unit* pUnit, Unit *pVictim, uint32 damage, SpellInfo const* procSpell, uint32 procFlag, uint32 procExtra, WeaponAttackType attType, int32 cooldown) { }
+    virtual void CalcAmount(AuraEffect const* /*aurEffect*/, int32& /*amount*/, bool& /*canBeRecalculated*/);
+    virtual void CalcSpellMod(AuraEffect const * /*aurEff*/, SpellModifier *& /*spellMod*/, SpellInfo const * /*spellInfo*/, Unit * /*target*/) { }
+    virtual void Register();
 };
 
 //

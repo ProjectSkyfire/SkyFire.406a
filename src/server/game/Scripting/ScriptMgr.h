@@ -728,6 +728,14 @@ class PlayerScript : public ScriptObject
 
         // Called when a player is bound to an instance
         virtual void OnBindToInstance(Player* /*player*/, Difficulty /*difficulty*/, uint32 /*mapId*/, bool /*permanent*/) { }
+        
+        virtual void OnActivateSpec(Player* /*player*/, uint8 /*spec*/) { }
+        
+        virtual void OnTalentBranchSpecChanged(Player* /*player*/, uint8 /*spec*/, uint32 /*newSpecID*/) { }
+        
+        virtual void OnAddSpell(Player* /*player*/, uint32 /*spell_id*/, bool /*learning*/) { }
+        
+        virtual void OnUpdateRating(Player* /*player*/, CombatRating /*cr*/, int32& /*amount*/) { }
 };
 
 class GuildScript : public ScriptObject
@@ -998,6 +1006,10 @@ class ScriptMgr
         void OnPlayerCreate(Player* player);
         void OnPlayerDelete(uint64 guid);
         void OnPlayerBindToInstance(Player* player, Difficulty difficulty, uint32 mapid, bool permanent);
+        void OnActivateSpec(Player* player, uint8 spec);
+        void OnTalentBranchSpecChanged(Player* player, uint8 spec, uint32 newSpecID);
+        void OnAddSpell(Player* player, uint32 spell_id, bool learning);
+        void OnUpdateRating(Player* player, CombatRating cr, int32& amount);
 
     public: /* GuildScript */
 
