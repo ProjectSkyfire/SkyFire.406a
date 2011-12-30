@@ -979,7 +979,7 @@ void MasteryScript::CalcAmount(AuraEffect const* aurEff, int32& amount, bool& ca
         {
             uint32 baseAmount = GetMasteryBaseAmount();
             float mastery = player->GetMasteryPoints();
-            int32 newAmount = int32((mastery + 8.0f) * baseAmount / 100.0f); // mastery points based on 8.00
+            int32 newAmount = int32(mastery * baseAmount / 100.0f);
             if (amount != newAmount)
             {
                 amount = newAmount;
