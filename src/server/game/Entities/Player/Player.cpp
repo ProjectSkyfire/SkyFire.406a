@@ -22286,9 +22286,23 @@ void Player::SendInitialPacketsBeforeAddToMap()
     GetReputationMgr().SendForceReactions();                // SMSG_SET_FORCED_REACTIONS
 
     // SMSG_TALENTS_INFO x 2 for pet (unspent points and talents in separate packets...)
-    // SMSG_PET_GUIDS
     // SMSG_UPDATE_WORLD_STATE
     // SMSG_POWER_UPDATE
+}
+
+void Player::SendPetGUIDs()
+{
+    // Should send all 5 GUIDS for hunters, not used for any other class
+    // The current handlind of the pet system wont allow to send them all,
+    // because the pet guids are generated at runtime when the pet is summoned
+    // ToDo/FixMe: Rewrite the pet system and fix this packet
+    if(Pet* pet = GetPet())
+    {
+        WorldPacket data(SMSG_PET_GUIDS, 4 + (8 * 1));
+        data << uint32(1);
+        data << uint64(pet->GetGUID());
+        GetSession()->SendPacket(&data);
+    }
 }
 
 void Player::SendInitialPacketsAfterAddToMap()
@@ -22329,7 +22343,7 @@ void Player::SendInitialPacketsAfterAddToMap()
     {
         WorldPacket data2(SMSG_FORCE_MOVE_ROOT, 10);
         data2.append(GetPackGUID());
-        data2 << (uint32)2;
+        data2 << uint32(2);
         SendMessageToSet(&data2, true);
     }
 
@@ -22350,7 +22364,9 @@ void Player::SendInitialPacketsAfterAddToMap()
         SendRaidDifficulty(GetGroup() != NULL);
 
     if(Guild* guild = sGuildMgr->GetGuildById(GetGuildId()))
-        guild->GetAchievementMgr().SendAllAchievementData();
+        guild->GetAchievementMgr().SendAllAchievementData(); // must be after add to map
+
+    SendPetGUIDs();
 }
 
 void Player::SendUpdateToOutOfRangeGroupMembers()

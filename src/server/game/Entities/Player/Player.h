@@ -1160,6 +1160,8 @@ class Player : public Unit, public GridObject<Player>
         bool IsUnderWater() const;
         bool IsFalling() { return GetPositionZ() < m_lastFallZ; }
 
+        void SendPetGUIDs();
+
         void SendInitialPacketsBeforeAddToMap();
         void SendInitialPacketsAfterAddToMap();
         void SendTransferAborted(uint32 mapid, TransferAbortReason reason, uint8 arg = 0);
