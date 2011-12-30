@@ -3298,7 +3298,7 @@ void ObjectMgr::LoadPlayerInfo()
 
         if (!result)
         {
-            sLog->outErrorDb(">> Loaded 0 level health/mana definitions. DB table `game_event_condition` is empty.");
+            sLog->outErrorDb(">> Loaded 0 level health/mana definitions. DB table `player_classlevelstats` is empty.");
             sLog->outString();
             exit(1);
         }
