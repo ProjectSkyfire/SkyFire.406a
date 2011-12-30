@@ -21,7 +21,7 @@ class GuildAchievementMgr
     public:
         GuildAchievementMgr(Guild* guild);
         ~GuildAchievementMgr();
-        
+
         void Reset();
         void CheckAllAchievementCriteria();
         void DeleteFromDB(uint32 guid_low);
@@ -37,9 +37,9 @@ class GuildAchievementMgr
         void CompletedAchievement(AchievementEntry const* entry, Player* player);
         void SendAllAchievementData();
         bool HasAchieved(uint32 achievementId);
-        
+
         uint32 GetAchievementPoints() const { return m_achievementPoints; }
-    
+
     private:
         void SendAchievementEarned(AchievementEntry const* achievement);
         void SendCriteriaUpdate(AchievementCriteriaEntry const* entry, CriteriaProgress const* progress, uint32 timeElapsed, bool timedCompleted, Player* completer);

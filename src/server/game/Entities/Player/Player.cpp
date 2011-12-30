@@ -4029,7 +4029,7 @@ bool Player::addSpell(uint32 spell_id, bool active, bool learning, bool dependen
 
         GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_LEARN_SPELL, spell_id);
     }
-    
+
     sScriptMgr->OnAddSpell(this, spell_id, learning);
 
     // return true (for send learn packet) only if spell active (in case ranked spells) and not replace old spell
@@ -6119,9 +6119,9 @@ void Player::UpdateRating(CombatRating cr)
             amount += int32(CalculatePctN(GetStat(Stats((*i)->GetMiscValueB())), (*i)->GetAmount()));
     if (amount < 0)
         amount = 0;
-    
+
     sScriptMgr->OnUpdateRating(this, cr, amount);
-    
+
     SetUInt32Value(PLAYER_FIELD_COMBAT_RATING_1 + cr, uint32(amount));
 
     bool affectStats = CanModifyStats();
@@ -25699,10 +25699,10 @@ void Player::UpdateMasteryAuras(uint32 branch)
 {
     bool canHaveMastery = HasAuraType(SPELL_AURA_MASTERY);
     TalentTabEntry const* tab = sTalentTabStore.LookupEntry(branch);
-    
+
     if(!tab)
         return;
-        
+
     if(!canHaveMastery)
     {
         // Remove all mastery spells
@@ -25714,7 +25714,7 @@ void Player::UpdateMasteryAuras(uint32 branch)
             }
         return;
     }
-    
+
     for (int i = 0; i < MAX_TALENT_MASTERY_SPELLS; i ++)
     {
         if(tab->masterySpell[i] && !HasSpell(tab->masterySpell[i]))
@@ -25724,7 +25724,7 @@ void Player::UpdateMasteryAuras(uint32 branch)
             CastSpell(this, tab->masterySpell[i], true); // Need to cast it
         }
     }
-    
+
     // Now remove all the mastery spells for all branch except this one
     for(uint32 i = 0; i < sTalentTabStore.GetNumRows(); ++i)
     {
@@ -25736,17 +25736,16 @@ void Player::UpdateMasteryAuras(uint32 branch)
                         RemoveAura(tab->masterySpell[i]);
                         removeSpell(tabi->masterySpell[j]);
                     }
-                
     }
 }
 
 void Player::RecalculateMasteryAuraEffects(uint32 branch)
 {
     TalentTabEntry const* tab = sTalentTabStore.LookupEntry(branch);
-    
+
     if(!tab)
         return;
-        
+
     for (int i = 0; i < MAX_TALENT_MASTERY_SPELLS; i ++)
     {
         if(tab->masterySpell[i])

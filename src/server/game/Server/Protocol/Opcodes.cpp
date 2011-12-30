@@ -637,7 +637,7 @@ void InitOpcodeTable()
     OPCODE( CMSG_ENABLE_DAMAGE_LOG,                       STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
     OPCODE( CMSG_GROUP_CHANGE_SUB_GROUP,                  STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleGroupChangeSubGroupOpcode );
     OPCODE( CMSG_REQUEST_PARTY_MEMBER_STATS,              STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleRequestPartyMemberStatsOpcode);
-    OPCODE( CMSG_GROUP_SWAP_SUB_GROUP,                    STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );	
+    OPCODE( CMSG_GROUP_SWAP_SUB_GROUP,                    STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
     OPCODE( CMSG_RESET_FACTION_CHEAT,                     STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
     OPCODE( CMSG_AUTOSTORE_BANK_ITEM,                     STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleAutoStoreBankItemOpcode   );
     OPCODE( CMSG_AUTOBANK_ITEM,                           STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleAutoBankItemOpcode        );

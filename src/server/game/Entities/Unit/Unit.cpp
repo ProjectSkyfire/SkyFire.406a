@@ -14494,7 +14494,7 @@ void Unit::ProcDamageAndSpellFor(bool isVictim, Unit* target, uint32 procFlag, u
             }
             i->aura->CallScriptEffectProc(triggeredByAura, this, target, damage, procSpell, procFlag, procExtra, attType, cooldown);
         }
-        
+
         // Remove charge (aura can be removed by triggers)
         if (useCharges && takeCharges)
             i->aura->DropCharge(AURA_REMOVE_BY_EXPIRE);

@@ -673,11 +673,11 @@ void AchievementMgr::LoadFromDB(PreparedQueryResult achievementResult, PreparedQ
 
             if(achievement->flags & ACHIEVEMENT_FLAG_GUILD_ACHIEVEMENT)
                 continue;
-                
+
             CompletedAchievementData& ca = m_completedAchievements[achievementid];
             ca.date = time_t(fields[1].GetUInt32());
             ca.changed = false;
-            
+
             m_achievementPoints += achievement->points;
 
             // title achievement rewards are retroactive
@@ -924,7 +924,7 @@ void AchievementMgr::UpdateAchievementCriteria(AchievementCriteriaTypes type, ui
                 {
                     if(achievementCriteria->moreRequirement[i] != ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_CREATURE_TYPE)
                         continue;
-                    
+
                     if(achievementCriteria->moreRequirementValue[i] != miscValue1)
                     {
                         cont = true;
@@ -2281,7 +2281,7 @@ bool AchievementMgr::CanUpdateCriteria(AchievementCriteriaEntry const* criteria,
 {
     if (achievement->flags & ACHIEVEMENT_FLAG_GUILD_ACHIEVEMENT)
         return false;
-        
+
     if (DisableMgr::IsDisabledFor(DISABLE_TYPE_ACHIEVEMENT_CRITERIA, criteria->ID, NULL))
         return false;
 

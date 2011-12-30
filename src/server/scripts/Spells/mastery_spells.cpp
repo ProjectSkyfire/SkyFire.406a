@@ -142,7 +142,7 @@ public:
 
             if (!spellMod)
                 spellMod = new SpellModifier(GetAura(), const_cast<AuraEffect*>(aurEff));
-                
+
             spellMod->op = SPELLMOD_DAMAGE/*SPELLMOD_ALL_EFFECTS*/;
 
             spellMod->type = SPELLMOD_PCT;
@@ -199,7 +199,7 @@ public:
 
             if (!spellMod)
                 spellMod = new SpellModifier(GetAura(), const_cast<AuraEffect*>(aurEff));
-            
+
             spellMod->op = SPELLMOD_DAMAGE/*SPELLMOD_ALL_EFFECTS*/;
             spellMod->type = SPELLMOD_PCT;
             spellMod->spellId = aurEff->GetId(); // 12042 Arcane Power : 685904631, 102472, 0
@@ -218,8 +218,6 @@ public:
         return script;
     }
 };
-
-
 
 // 77222 Elemental Overlord
 class spell_sha_elemental_overlord : public SpellScriptLoader
@@ -251,15 +249,15 @@ public:
             {
                 // Lightning Bolt
                 case 403:
-                    spellId = 45284; 
+                    spellId = 45284;
                     break;
                 // Chain Lightning
                 case 421:
-                    spellId = 45297; 
+                    spellId = 45297;
                     break;
                 // Lava Burst
-                case 51505: 
-                    spellId = 77451; 
+                case 51505:
+                    spellId = 77451;
                     break;
                 default:
                     return;
@@ -337,7 +335,7 @@ public:
 
             if (!spellMod)
                 spellMod = new SpellModifier(GetAura(), const_cast<AuraEffect*>(aurEff));
-                
+
             spellMod->op = SPELLMOD_DAMAGE/*SPELLMOD_ALL_EFFECTS*/;
 
             spellMod->type = SPELLMOD_PCT;

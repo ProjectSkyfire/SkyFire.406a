@@ -435,7 +435,7 @@ struct AchievementCriteriaEntry
             uint32  unused;                                 // 3
             uint32  duelCount;                              // 4
         } win_duel;
-        
+
         // ACHIEVEMENT_CRITERIA_KILL_CREATURE_TYPE          = 78
         struct
         {
@@ -487,7 +487,7 @@ struct AchievementCriteriaEntry
             uint32  unused;                                 // 3
             uint32  killCount;                              // 4
         } honorable_kill;
-        
+
         // ACHIEVEMENT_CRITERIA_TYPE_REACH_GUILD_LEVEL    = 125
         struct
         {

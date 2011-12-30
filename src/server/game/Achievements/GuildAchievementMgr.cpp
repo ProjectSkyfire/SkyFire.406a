@@ -69,7 +69,7 @@ void GuildAchievementMgr::Reset()
 void GuildAchievementMgr::ResetAchievementCriteria(AchievementCriteriaTypes type, uint32 miscvalue1, uint32 miscvalue2, bool evenIfCriteriaComplete)
 {
     AchievementCriteriaEntryList const& achievementCriteriaList = sAchievementMgr->GetAchievementCriteriaByType(type);
-    
+
     for (AchievementCriteriaEntryList::const_iterator i = achievementCriteriaList.begin(); i != achievementCriteriaList.end(); ++i)
     {
         AchievementCriteriaEntry const *achievementCriteria = (*i);
@@ -77,14 +77,14 @@ void GuildAchievementMgr::ResetAchievementCriteria(AchievementCriteriaTypes type
         AchievementEntry const *achievement = sAchievementStore.LookupEntry(achievementCriteria->referredAchievement);
         if (!achievement)
             continue;
-        
+
         if (!(achievement->flags & ACHIEVEMENT_FLAG_GUILD_ACHIEVEMENT))
             continue;
-            
+
         // don't update already completed criteria if not forced or achievement already complete
         if ((IsCompletedCriteria(achievementCriteria, achievement) && !evenIfCriteriaComplete) || HasAchieved(achievement->ID))
             continue;
-            
+
         for (uint8 j = 0; j < MAX_CRITERIA_REQUIREMENTS; ++j)
         {
             if (achievementCriteria->additionalRequirements[j].additionalRequirement_type == miscvalue1 &&
@@ -147,7 +147,7 @@ void GuildAchievementMgr::SaveToDB(SQLTransaction& trans)
             trans->Append(ssins.str().c_str());
         }
     }
-    
+
     if (!m_criteriaProgress.empty())
     {
         /// prepare deleting and insert
@@ -225,17 +225,16 @@ void GuildAchievementMgr::LoadFromDB()
             AchievementEntry const* achievement = sAchievementStore.LookupEntry(achievementid);
             if (!achievement)
                 continue;
-                
+
             if(!(achievement->flags & ACHIEVEMENT_FLAG_GUILD_ACHIEVEMENT))
                 continue;
 
             CompletedAchievementData& ca = m_completedAchievements[achievementid];
             ca.date = time_t(fields[1].GetUInt32());
             ca.changed = false;
-
         } while (achievementResult->NextRow());
     }
-    
+
     if (criteriaResult)
     {
         do
@@ -269,12 +268,12 @@ void GuildAchievementMgr::SendAchievementEarned(AchievementEntry const* achievem
 {
     if (achievement->flags & ACHIEVEMENT_FLAG_HIDDEN)
         return;
-    
+
     if (!(achievement->flags & ACHIEVEMENT_FLAG_GUILD_ACHIEVEMENT))
         return;
-        
+
     sLog->outString("Guild %u earned achievement %u", m_guild->GetId(), achievement->ID);
-    
+
     WorldPacket data(SMSG_GUILD_ACHIEVEMENT_EARNED, 8+4+8);
     data << uint32(achievement->ID);
     data << uint64(MAKE_NEW_GUID(m_guild->GetId(), 0, HIGHGUID_GUILD));
@@ -316,7 +315,7 @@ bool GuildAchievementMgr::IsCriteriaMet(AchievementCriteriaEntry const* criteria
     {
         if(!criteria->moreRequirement[i])
             continue;
-            
+
         switch(criteria->moreRequirement[i])
         {
             case ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_GUILD_REP:
@@ -335,7 +334,7 @@ bool GuildAchievementMgr::IsCriteriaMet(AchievementCriteriaEntry const* criteria
                 break;
         }
     }
-    
+
     return true;
 }
 
@@ -348,16 +347,16 @@ void GuildAchievementMgr::UpdateAchievementCriteria(AchievementCriteriaTypes typ
         AchievementEntry const *achievement = sAchievementStore.LookupEntry(achievementCriteria->referredAchievement);
         if (!achievement)
             continue;
-            
+
         if (!(achievement->flags & ACHIEVEMENT_FLAG_GUILD_ACHIEVEMENT))
             continue;
 
         if (!CanUpdateCriteria(achievementCriteria, achievement, player))
             continue;
-            
+
         if(!IsCriteriaMet(achievementCriteria, achievement, player, miscValue1, miscValue2, unit))
             continue;
-        
+
         sLog->outString("Updating criteria for guild achievement %u", achievement->ID);
         switch (type)
         {
@@ -417,15 +416,15 @@ bool GuildAchievementMgr::IsCompletedCriteria(AchievementCriteriaEntry const* ac
 {
     if (!(achievement->flags & ACHIEVEMENT_FLAG_GUILD_ACHIEVEMENT))
         return false;
-            
+
     // counter can never complete
     if (achievement->flags & ACHIEVEMENT_FLAG_COUNTER)
         return false;
-        
+
     CriteriaProgress const* progress = GetCriteriaProgress(achievementCriteria);
     if (!progress)
         return false;
-        
+
     switch (achievementCriteria->requiredType)
     {
         case ACHIEVEMENT_CRITERIA_TYPE_REACH_GUILD_LEVEL:
@@ -448,7 +447,7 @@ void GuildAchievementMgr::CompletedCriteriaFor(AchievementEntry const* achieveme
 {
     if (!(achievement->flags & ACHIEVEMENT_FLAG_GUILD_ACHIEVEMENT))
         return;
-        
+
     // counter can never complete
     if (achievement->flags & ACHIEVEMENT_FLAG_COUNTER)
         return;
@@ -465,11 +464,11 @@ bool GuildAchievementMgr::IsCompletedAchievement(AchievementEntry const* entry)
 {
     if (!(entry->flags & ACHIEVEMENT_FLAG_GUILD_ACHIEVEMENT))
         return false;
-        
+
     // counter can never complete
     if (entry->flags & ACHIEVEMENT_FLAG_COUNTER)
         return false;
-        
+
     // for achievement with referenced achievement criterias get from referenced and counter from self
     uint32 achievmentForTestId = entry->refAchievement ? entry->refAchievement : entry->ID;
     uint32 achievmentForTestCount = entry->count;
@@ -542,7 +541,7 @@ void GuildAchievementMgr::SetCriteriaProgress(AchievementCriteriaEntry const* en
     TimedAchievementMap::iterator timedIter = m_timedAchievements.find(entry->ID);
     if (entry->timeLimit && timedIter == m_timedAchievements.end())
         return;
-        
+
     CriteriaProgress* progress = GetCriteriaProgress(entry);
     if (!progress)
     {
@@ -573,7 +572,7 @@ void GuildAchievementMgr::SetCriteriaProgress(AchievementCriteriaEntry const* en
                 newValue = progress->counter < changeValue ? changeValue : progress->counter;
                 break;
             default:
-                break;        
+                break;
         }
 
         // not update (not mark as changed) if counter will have same value
@@ -644,17 +643,17 @@ void GuildAchievementMgr::CompletedAchievement(AchievementEntry const* achieveme
 {
     if (!(achievement->flags & ACHIEVEMENT_FLAG_GUILD_ACHIEVEMENT))
         return;
-        
+
     if (achievement->flags & ACHIEVEMENT_FLAG_COUNTER || HasAchieved(achievement->ID))
         return;
-    
+
     SendAchievementEarned(achievement);
     CompletedAchievementData& ca =  m_completedAchievements[achievement->ID];
     ca.date = time(NULL);
     ca.changed = true;
-    
+
     m_achievementPoints += achievement->points;
-    
+
     UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_COMPLETE_ACHIEVEMENT, player);
 }
 
@@ -663,43 +662,43 @@ void GuildAchievementMgr::SendAllAchievementData()
     // handler at 0x8C30 (not rebased)
     // Looks like only completed achievements data is sent in this packet
     WorldPacket data(SMSG_GUILD_ACHIEVEMENT_DATA, m_completedAchievements.size() * 4 * 4);
-    
+
     data << uint32(m_completedAchievements.size());
-    
+
     for (CompletedAchievementMap::const_iterator iter = m_completedAchievements.begin(); iter != m_completedAchievements.end(); ++iter)
         data << uint32(secsToTimeBitFields(iter->second.date));
-    
+
     for (CompletedAchievementMap::const_iterator iter = m_completedAchievements.begin(); iter != m_completedAchievements.end(); ++iter)
         data << uint32(iter->first);
-        
+
     SendDirectMessageToAll(&data);
-    
+
     WorldPacket data2(SMSG_GUILD_CRITERIA_DATA);
-    
+
     data2 << uint32(m_criteriaProgress.size());
-    
+
     for (CriteriaProgressMap::const_iterator iter = m_criteriaProgress.begin(); iter != m_criteriaProgress.end(); ++iter)
         data2 << uint64(iter->second.counter);
-        
+
     time_t now = time(NULL);
     for (CriteriaProgressMap::const_iterator iter = m_criteriaProgress.begin(); iter != m_criteriaProgress.end(); ++iter)
         data2 << uint32(now - iter->second.date);
-        
+
     for (CriteriaProgressMap::const_iterator iter = m_criteriaProgress.begin(); iter != m_criteriaProgress.end(); ++iter)
         data2 << uint32(secsToTimeBitFields(iter->second.date));
-    
+
     for(CriteriaProgressMap::const_iterator iter = m_criteriaProgress.begin(); iter != m_criteriaProgress.end(); ++iter)
         data2 << uint64(iter->second.counter);
-        
+
     for (CriteriaProgressMap::const_iterator iter = m_criteriaProgress.begin(); iter != m_criteriaProgress.end(); ++iter)
         data2 << uint32(now - iter->second.date);
-        
+
     for (CriteriaProgressMap::const_iterator iter = m_criteriaProgress.begin(); iter != m_criteriaProgress.end(); ++iter)
         data2 << uint32(iter->first);
-        
+
     for (CriteriaProgressMap::const_iterator iter = m_criteriaProgress.begin(); iter != m_criteriaProgress.end(); ++iter)
         data2 << uint32(0); // Unk
-        
+
     SendDirectMessageToAll(&data2);
 }
 
@@ -712,14 +711,13 @@ bool GuildAchievementMgr::CanUpdateCriteria(AchievementCriteriaEntry const* crit
 {
     if (DisableMgr::IsDisabledFor(DISABLE_TYPE_ACHIEVEMENT_CRITERIA, criteria->ID, NULL))
         return false;
-        
+
     if (!(achievement->flags & ACHIEVEMENT_FLAG_GUILD_ACHIEVEMENT))
         return false;
 
     if (achievement->mapID != -1 && player->GetMapId() != uint32(achievement->mapID))
         return false;
 
-    
     // ToDo: Enable this later
     /*if ((achievement->requiredFaction == ACHIEVEMENT_FACTION_HORDE    && player->GetTeam() != HORDE) ||
         (achievement->requiredFaction == ACHIEVEMENT_FACTION_ALLIANCE && player->GetTeam() != ALLIANCE))

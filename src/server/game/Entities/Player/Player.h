@@ -1722,7 +1722,7 @@ class Player : public Unit, public GridObject<Player>
         bool AddTalent(uint32 spell, uint8 spec, bool learning);
         bool HasTalent(uint32 spell_id, uint8 spec) const;
 
-        void SetTalentBranchSpec(uint32 branchSpec, uint8 spec); 
+        void SetTalentBranchSpec(uint32 branchSpec, uint8 spec);
         uint32 GetTalentBranchSpec(uint8 spec) const { return m_branchSpec[spec]; }
         void RecalculateMasteryAuraEffects(uint32 branch);
         void UpdateMasteryAuras(uint32 branch);

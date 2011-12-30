@@ -239,11 +239,11 @@ struct CompletedAchievementData
 typedef UNORDERED_MAP<uint32, CriteriaProgress> CriteriaProgressMap;
 typedef UNORDERED_MAP<uint32, CompletedAchievementData> CompletedAchievementMap;
 
-enum ProgressType 
-{ 
-    PROGRESS_SET, 
-    PROGRESS_ACCUMULATE, 
-    PROGRESS_HIGHEST 
+enum ProgressType
+{
+    PROGRESS_SET,
+    PROGRESS_ACCUMULATE,
+    PROGRESS_HIGHEST
 };
 
 class Unit;
@@ -268,7 +268,7 @@ class WorldPacket;
         static void UpdateAchievementCriteria(AchievementCriteriaTypes type, Player* player, uint32 miscValue1 = 0, uint32 miscValue2 = 0, Unit* unit = NULL)
         {
             player->GetAchievementMgr().UpdateAchievementCriteria(type, miscValue1, miscValue2, unit);
-            
+
             if(Guild* guild = sGuildMgr->GetGuildById(player->GetGuildId()))
                 guild->GetAchievementMgr().UpdateAchievementCriteria(type, player, miscValue1, miscValue2, unit);
         }
