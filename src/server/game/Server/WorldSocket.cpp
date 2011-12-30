@@ -1016,11 +1016,12 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     // No SQL injection, username escaped.
     LoginDatabase.EscapeString (address);
 
-    LoginDatabase.PExecute ("UPDATE account "
-                            "SET last_ip = '%s' "
-                            "WHERE username = '%s'",
-                            address.c_str(),
-                            safe_account.c_str());
+    PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_UPDATE_LAST_IP);
+
+    stmt->setString(0, address);
+    stmt->setString(1, account);
+
+    LoginDatabase.Execute(stmt);
 
     // NOTE ATM the socket is single-threaded, have this in mind ...
     ACE_NEW_RETURN (m_Session, WorldSession (id, this, AccountTypes(security), expansion, mutetime, locale, recruiter, isRecruiter), -1);

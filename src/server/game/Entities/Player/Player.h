@@ -1695,7 +1695,7 @@ class Player : public Unit, public GridObject<Player>
 
         void SendProficiency(ItemClass itemClass, uint32 itemSubclassMask);
         void SendInitialSpells();
-        bool addSpell(uint32 spell_id, bool active, bool learning, bool dependent, bool disabled, bool loading = false);
+        bool addSpell(uint32 spellId, bool active, bool learning, bool dependent, bool disabled, bool loading = false);
         void learnSpell(uint32 spell_id, bool dependent);
         void removeSpell(uint32 spell_id, bool disabled = false, bool learn_low_rank = true);
         void resetSpells(bool myClassOnly = false);
@@ -1719,7 +1719,7 @@ class Player : public Unit, public GridObject<Player>
         void LearnTalent(uint32 talentId, uint32 talentRank, bool one = true);
         void LearnPetTalent(uint64 petGuid, uint32 talentId, uint32 talentRank);
 
-        bool AddTalent(uint32 spell, uint8 spec, bool learning);
+        bool AddTalent(uint32 spellId, uint8 spec, bool learning);
         bool HasTalent(uint32 spell_id, uint8 spec) const;
 
         void SetTalentBranchSpec(uint32 branchSpec, uint8 spec);
