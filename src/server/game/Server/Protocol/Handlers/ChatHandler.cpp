@@ -135,16 +135,14 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
     if (type == CHAT_MSG_CHANNEL || type == CHAT_MSG_WHISPER)
         recv_data >> channelOrWhisperName;
 
-    if (msg.empty())
+    if (msg.empty() && (type != CHAT_MSG_AFK && type != CHAT_MSG_DND))
         return;
 
-    if (ChatHandler(this).ParseCommands(msg.c_str()))
-        return;
+    if (type != CHAT_MSG_AFK && type != CHAT_MSG_DND)
+        if (ChatHandler(this).ParseCommands(msg.c_str()))
+            return;
 
     if (!processChatmessageFurtherAfterSecurityChecks(msg, lang))
-        return;
-
-    if (msg.empty())
         return;
 
     Player* sender = GetPlayer();
@@ -449,7 +447,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
         } break;
         case CHAT_MSG_AFK:
         {
-            if ((msg.empty() || !sender->isAFK()) && !sender->isInCombat())
+            if (!sender->isInCombat())
             {
                 if (!sender->isAFK())
                 {
@@ -467,21 +465,18 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
         } break;
         case CHAT_MSG_DND:
         {
-            if (msg.empty() || !_player->isDND())
+            if (!_player->isDND())
             {
-                if (!_player->isDND())
-                {
-                    if (msg.empty())
-                        msg = GetSkyFireString(LANG_PLAYER_DND_DEFAULT);
-                    _player->dndMsg = msg;
-                }
-
-                sScriptMgr->OnPlayerChat(_player, type, lang, msg);
-
-                _player->ToggleDND();
-                if (_player->isDND() && _player->isAFK())
-                    _player->ToggleAFK();
+                if (msg.empty())
+                    msg = GetSkyFireString(LANG_PLAYER_DND_DEFAULT);
+                _player->dndMsg = msg;
             }
+
+            sScriptMgr->OnPlayerChat(_player, type, lang, msg);
+
+            _player->ToggleDND();
+            if (_player->isDND() && _player->isAFK())
+                _player->ToggleAFK();
         } break;
         default:
             sLog->outError("CHAT: unknown message type %u, lang: %u", type, lang);
