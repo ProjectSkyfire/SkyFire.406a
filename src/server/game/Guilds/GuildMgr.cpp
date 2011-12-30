@@ -187,7 +187,9 @@ void GuildMgr::LoadGuilds()
                                                      "BankResetTimeTab0, BankRemSlotsTab0, BankResetTimeTab1, BankRemSlotsTab1, BankResetTimeTab2, BankRemSlotsTab2, "
                                                      //   13                 14                15                 16                17                 18
                                                      "BankResetTimeTab3, BankRemSlotsTab3, BankResetTimeTab4, BankRemSlotsTab4, BankResetTimeTab5, BankRemSlotsTab5, "
-                                                     //   19      20       21       22      23         24
+                                                     //   19                 20                21                 22
+                                                     "BankResetTimeTab6, BankRemSlotsTab6, BankResetTimeTab7, BankRemSlotsTab7, "
+                                                     //   23      24       25       26      27         28
                                                      "c.name, c.level, c.class, c.zone, c.account, c.logout_time "
                                                      "FROM guild_member gm LEFT JOIN characters c ON c.guid = gm.guid ORDER BY guildid ASC");
 
@@ -402,18 +404,19 @@ void GuildMgr::LoadGuilds()
     sLog->outString("Validating data of loaded guilds...");
     {
         uint32 oldMSTime = getMSTime();
+        std::set<Guild*> rm; // temporary storage to avoid modifying GuildStore with RemoveGuild() while iterating
 
         for (GuildContainer::iterator itr = GuildStore.begin(); itr != GuildStore.end(); ++itr)
         {
             Guild* guild = itr->second;
-            if (guild)
-            {
-                if (!guild->Validate())
-                {
-                    RemoveGuild(guild->GetId());
-                    delete guild;
-                }
-            }
+            if (guild && !guild->Validate())
+                rm.insert(guild);
+        }
+        for (std::set<Guild*>::iterator itr = rm.begin(); itr != rm.end(); ++itr)
+        {
+            Guild* guild = *itr;
+            RemoveGuild(guild->GetId());
+            delete guild;
         }
 
         sLog->outString(">> Validated data of loaded guilds in %u ms", GetMSTimeDiffToNow(oldMSTime));
