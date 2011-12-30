@@ -1885,8 +1885,8 @@ bool Player::BuildEnumData(PreparedQueryResult result, WorldPacket * p_data)
     *p_data << uint8(playerBytes2 & 0xFF);                  // facial hair
 
     *p_data << uint8(fields[7].GetUInt8());                 // level
-    *p_data << uint32(fields[8].GetUInt32());               // zone
-    *p_data << uint32(fields[9].GetUInt32());               // map
+    *p_data << uint32(fields[8].GetUInt16());               // zone
+    *p_data << uint32(fields[9].GetUInt8());                // map
 
     *p_data << fields[10].GetFloat();                       // x
     *p_data << fields[11].GetFloat();                       // y
