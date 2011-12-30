@@ -488,7 +488,7 @@ void WorldSession::SendStablePet(uint64 guid)
         );*/
 }
 
-void WorldSession::SendStablePetCallback(QueryResult result, uint64 guid)
+void WorldSession::SendStablePetCallback(PreparedQueryResult result, uint64 guid)
 {
     if (!GetPlayer())
         return;
@@ -583,7 +583,7 @@ void WorldSession::HandleStablePet(WorldPacket & recv_data)
         _player->GetGUIDLow(), PET_SAVE_FIRST_STABLE_SLOT, PET_SAVE_LAST_STABLE_SLOT);*/
 }
 
-void WorldSession::HandleStablePetCallback(QueryResult result)
+void WorldSession::HandleStablePetCallback(PreparedQueryResult result)
 {
     /*if (!GetPlayer())
         return;
@@ -642,7 +642,7 @@ void WorldSession::HandleUnstablePet(WorldPacket & recv_data)
             );*/
 }
 
-void WorldSession::HandleUnstablePetCallback(QueryResult result, uint32 petnumber)
+void WorldSession::HandleUnstablePetCallback(PreparedQueryResult result, uint32 petnumber)
 {
     /*if (!GetPlayer())
         return;
@@ -766,7 +766,7 @@ void WorldSession::HandleStableSwapPet(WorldPacket & recv_data)
             );*/
 }
 
-void WorldSession::HandleStableSwapPetCallback(QueryResult result, uint32 petnumber)
+void WorldSession::HandleStableSwapPetCallback(PreparedQueryResult result, uint32 petnumber)
 {
     /*if (!GetPlayer())
         return;

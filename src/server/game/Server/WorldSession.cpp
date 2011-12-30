@@ -56,7 +56,7 @@ bool MapSessionFilter::Process(WorldPacket* packet)
     if (opHandle.packetProcessing == PROCESS_THREADUNSAFE)
         return false;
 
-    Player *player = m_pSession->GetPlayer();
+    Player* player = m_pSession->GetPlayer();
     if (!player)
         return false;
 
@@ -78,7 +78,7 @@ bool WorldSessionFilter::Process(WorldPacket* packet)
         return true;
 
     //no player attached? -> our client! ^^
-    Player *player = m_pSession->GetPlayer();
+    Player* player = m_pSession->GetPlayer();
     if (!player)
         return true;
 
@@ -87,7 +87,7 @@ bool WorldSessionFilter::Process(WorldPacket* packet)
 }
 
 /// WorldSession constructor
-WorldSession::WorldSession(uint32 id, WorldSocket *sock, AccountTypes sec, uint8 expansion, time_t mute_time, LocaleConstant locale, uint32 recruiter, bool isARecruiter):
+WorldSession::WorldSession(uint32 id, WorldSocket* sock, AccountTypes sec, uint8 expansion, time_t mute_time, LocaleConstant locale, uint32 recruiter, bool isARecruiter):
 m_muteTime(mute_time), m_timeOutTime(0), _player(NULL), m_Socket(sock),
 _security(sec), _accountId(id), m_expansion(expansion), _logoutTime(0),
 m_inQueue(false), m_playerLoading(false), m_playerLogout(false),
@@ -138,13 +138,13 @@ void WorldSession::SizeError(WorldPacket const &packet, uint32 size) const
 }
 
 /// Get the player name
-char const *WorldSession::GetPlayerName() const
+char const* WorldSession::GetPlayerName() const
 {
     return GetPlayer() ? GetPlayer()->GetName() : "<none>";
 }
 
 /// Send a packet to the client
-void WorldSession::SendPacket(WorldPacket const *packet)
+void WorldSession::SendPacket(WorldPacket const* packet)
 {
     if (!m_Socket)
         return;
@@ -188,7 +188,7 @@ void WorldSession::SendPacket(WorldPacket const *packet)
 }
 
 /// Add an incoming packet to the queue
-void WorldSession::QueuePacket(WorldPacket *new_packet)
+void WorldSession::QueuePacket(WorldPacket* new_packet)
 {
     _recvQueue.add(new_packet);
 }
@@ -258,7 +258,7 @@ bool WorldSession::Update(uint32 diff, PacketFilter& updater)
                             //! Prevent infinite loop
                             if (!firstDelayedPacket)
                                 firstDelayedPacket = packet;
-							//! Because checking a bool is faster than reallocating memory
+                            //! Because checking a bool is faster than reallocating memory
                             deletePacket = false;
                             QueuePacket(packet);
                             //! Log
@@ -401,10 +401,10 @@ void WorldSession::LogoutPlayer(bool Save)
             _player->RemoveAllAurasOnDeath();
 
             // build set of player who attack _player or who have pet attacking of _player
-            std::set<Player *> aset;
+            std::set<Player*> aset;
             for (Unit::AttackerSet::const_iterator itr = _player->getAttackers().begin(); itr != _player->getAttackers().end(); ++itr)
             {
-                Unit *owner = (*itr)->GetOwner();           // including player controlled case
+                Unit* owner = (*itr)->GetOwner();           // including player controlled case
                 if (owner && owner->GetTypeId() == TYPEID_PLAYER)
                     aset.insert(owner->ToPlayer());
                 else if ((*itr)->GetTypeId() == TYPEID_PLAYER)
@@ -417,13 +417,13 @@ void WorldSession::LogoutPlayer(bool Save)
             _player->RepopAtGraveyard();
 
             // give honor to all attackers from set like group case
-            for (std::set<Player *>::const_iterator itr = aset.begin(); itr != aset.end(); ++itr)
+            for (std::set<Player*>::const_iterator itr = aset.begin(); itr != aset.end(); ++itr)
                 (*itr)->RewardHonor(_player, aset.size());
 
             // give bg rewards and update counters like kill by first from attackers
             // this can't be called for all attackers.
             if (!aset.empty())
-                if (Battleground *bg = _player->GetBattleground())
+                if (Battleground* bg = _player->GetBattleground())
                     bg->HandleKillPlayer(_player, *aset.begin());
         }
         else if (_player->HasAuraType(SPELL_AURA_SPIRIT_OF_REDEMPTION))
@@ -441,7 +441,7 @@ void WorldSession::LogoutPlayer(bool Save)
         }
 
         //drop a flag if player is carrying it
-        if (Battleground *bg = _player->GetBattleground())
+        if (Battleground* bg = _player->GetBattleground())
             bg->EventPlayerLoggedOut(_player);
 
         ///- Teleport to home if the player is in an invalid instance
@@ -465,7 +465,7 @@ void WorldSession::LogoutPlayer(bool Save)
             HandleMoveWorldportAckOpcode();
 
         ///- If the player is in a guild, update the guild roster and broadcast a logout message to other guild members
-        if (Guild *guild = sGuildMgr->GetGuildById(_player->GetGuildId()))
+        if (Guild* guild = sGuildMgr->GetGuildById(_player->GetGuildId()))
             guild->HandleMemberLogout(this);
 
         ///- Remove pet
@@ -516,8 +516,8 @@ void WorldSession::LogoutPlayer(bool Save)
         // e.g if he got disconnected during a transfer to another map
         // calls to GetMap in this case may cause crashes
         _player->CleanupsBeforeDelete();
-        sLog->outChar("Account: %d (IP: %s) Logout Character:[%s] (GUID: %u)", GetAccountId(), GetRemoteAddress().c_str(), _player->GetName() , _player->GetGUIDLow());
-        Map *_map = _player->GetMap();
+        sLog->outChar("Account: %d (IP: %s) Logout Character:[%s] (GUID: %u)", GetAccountId(), GetRemoteAddress().c_str(), _player->GetName(), _player->GetGUIDLow());
+        Map* _map = _player->GetMap();
         _map->RemovePlayerFromMap(_player, true);
         SetPlayer(NULL);                                    // deleted in Remove call
 
@@ -527,7 +527,13 @@ void WorldSession::LogoutPlayer(bool Save)
 
         ///- Since each account can only have one online character at any given time, ensure all characters for active account are marked as offline
         //No SQL injection as AccountId is uint32
-        CharacterDatabase.PExecute("UPDATE characters SET online = 0 WHERE account = '%u'", GetAccountId());
+
+        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_ACCOUNT_ONLINE);
+
+        stmt->setUInt32(0, GetAccountId());
+
+        CharacterDatabase.Execute(stmt);
+
         sLog->outDebug(LOG_FILTER_NETWORKIO, "SESSION: Sent SMSG_LOGOUT_COMPLETE Message");
     }
 
@@ -556,7 +562,7 @@ void WorldSession::SendNotification(const char *format, ...)
     if (format)
     {
         va_list ap;
-        char szStr [1024];
+        char szStr[1024];
         szStr[0] = '\0';
         va_start(ap, format);
         vsnprintf(szStr, 1024, format, ap);
@@ -574,13 +580,13 @@ void WorldSession::SendNotification(uint32 string_id, ...)
     if (format)
     {
         va_list ap;
-        char szStr [1024];
+        char szStr[1024];
         szStr[0] = '\0';
         va_start(ap, string_id);
         vsnprintf(szStr, 1024, format, ap);
         va_end(ap);
 
-        WorldPacket data(SMSG_NOTIFICATION, (strlen(szStr)+1));
+        WorldPacket data(SMSG_NOTIFICATION, (strlen(szStr) + 1));
         data << szStr;
         SendPacket(&data);
     }
@@ -631,9 +637,9 @@ void WorldSession::SendAuthWaitQue(uint32 position)
 
 void WorldSession::LoadGlobalAccountData()
 {
-    PreparedStatement* stime_t = CharacterDatabase.GetPreparedStatement(CHAR_LOAD_ACCOUNT_DATA);
-    stime_t->setUInt32(0, GetAccountId());
-    LoadAccountData(CharacterDatabase.Query(stime_t), GLOBAL_CACHE_MASK);
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_LOAD_ACCOUNT_DATA);
+    stmt->setUInt32(0, GetAccountId());
+    LoadAccountData(CharacterDatabase.Query(stmt), GLOBAL_CACHE_MASK);
 }
 
 void WorldSession::LoadAccountData(PreparedQueryResult result, uint32 mask)
@@ -686,12 +692,12 @@ void WorldSession::SetAccountData(AccountDataType type, time_t time_, std::strin
         index = CHAR_SET_PLAYER_ACCOUNT_DATA;
     }
 
-    PreparedStatement* stime_t = CharacterDatabase.GetPreparedStatement(index);
-    stime_t->setUInt32(0, id);
-    stime_t->setUInt8 (1, type);
-    stime_t->setUInt32(2, uint32(time_));
-    stime_t->setString(3, data);
-    CharacterDatabase.Execute(stime_t);
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(index);
+    stmt->setUInt32(0, id);
+    stmt->setUInt8 (1, type);
+    stmt->setUInt32(2, uint32(time_));
+    stmt->setString(3, data);
+    CharacterDatabase.Execute(stmt);
 
     m_accountData[type].Time = time_;
     m_accountData[type].Data = data;
@@ -738,7 +744,7 @@ void WorldSession::SendTutorialsData()
     SendPacket(&data);
 }
 
-void WorldSession::SaveTutorialsData(SQLTransaction& trans)
+void WorldSession::SaveTutorialsData(SQLTransaction &trans)
 {
     if (!m_TutorialsChanged)
         return;
@@ -758,7 +764,7 @@ void WorldSession::SaveTutorialsData(SQLTransaction& trans)
     m_TutorialsChanged = false;
 }
 
-void WorldSession::ReadMovementInfo(WorldPacket &data, MovementInfo *mi)
+void WorldSession::ReadMovementInfo(WorldPacket &data, MovementInfo* mi)
 {
     data >> mi->flags;
     data >> mi->flags2;
@@ -803,9 +809,38 @@ void WorldSession::ReadMovementInfo(WorldPacket &data, MovementInfo *mi)
     {
         data >> mi->splineElevation;
     }
+    // This must be a packet spoofing attempt. MOVEMENTFLAG_ROOT sent from the client is not valid,
+    // and when used in conjunction with any of the moving movement flags such as MOVEMENTFLAG_FORWARD
+    // it will freeze clients that receive this player's movement info.
+    if (mi->HasMovementFlag(MOVEMENTFLAG_ROOT))
+        mi->flags &= ~MOVEMENTFLAG_ROOT;
+
+    // Cannot hover and jump at the same time
+    if (mi->HasMovementFlag(MOVEMENTFLAG_HOVER) && mi->HasMovementFlag(MOVEMENTFLAG_JUMPING))
+        mi->flags &= ~MOVEMENTFLAG_JUMPING;
+
+    // Cannot ascend and descend at the same time
+    if (mi->HasMovementFlag(MOVEMENTFLAG_ASCENDING) && mi->HasMovementFlag(MOVEMENTFLAG_DESCENDING))
+        mi->flags &= ~(MOVEMENTFLAG_ASCENDING | MOVEMENTFLAG_DESCENDING);
+
+    // Cannot move left and right at the same time
+    if (mi->HasMovementFlag(MOVEMENTFLAG_LEFT) && mi->HasMovementFlag(MOVEMENTFLAG_RIGHT))
+        mi->flags &= ~(MOVEMENTFLAG_LEFT | MOVEMENTFLAG_RIGHT);
+
+    // Cannot strafe left and right at the same time
+    if (mi->HasMovementFlag(MOVEMENTFLAG_STRAFE_LEFT) && mi->HasMovementFlag(MOVEMENTFLAG_STRAFE_RIGHT))
+        mi->flags &= ~(MOVEMENTFLAG_STRAFE_LEFT | MOVEMENTFLAG_STRAFE_RIGHT);
+
+    // Cannot pitch up and down at the same time
+    if (mi->HasMovementFlag(MOVEMENTFLAG_PITCH_UP) && mi->HasMovementFlag(MOVEMENTFLAG_PITCH_DOWN))
+        mi->flags &= ~(MOVEMENTFLAG_PITCH_UP | MOVEMENTFLAG_PITCH_DOWN);
+
+    // Cannot move forwards and backwards at the same time
+    if (mi->HasMovementFlag(MOVEMENTFLAG_FORWARD) && mi->HasMovementFlag(MOVEMENTFLAG_BACKWARD))
+        mi->flags &= ~(MOVEMENTFLAG_FORWARD | MOVEMENTFLAG_BACKWARD);
 }
 
-void WorldSession::WriteMovementInfo(WorldPacket *data, MovementInfo *mi)
+void WorldSession::WriteMovementInfo(WorldPacket* data, MovementInfo* mi)
 {
     data->appendPackGUID(mi->guid);
 
@@ -873,7 +908,7 @@ void WorldSession::ReadAddonsInfo(WorldPacket &data)
     ByteBuffer addonInfo;
     addonInfo.resize(size);
 
-    if (uncompress(const_cast<uint8*>(addonInfo.contents()), &uSize, const_cast<uint8*>(data.contents() + pos), data.size() - pos) == Z_OK)
+    if (uncompress(const_cast<uint8 *>(addonInfo.contents()), &uSize, const_cast<uint8*>(data.contents() + pos), data.size() - pos) == Z_OK)
     {
         uint32 addonsCount;
         addonInfo >> addonsCount;                         // addons count
@@ -885,7 +920,7 @@ void WorldSession::ReadAddonsInfo(WorldPacket &data)
             uint32 crc, unk1;
 
             // check next addon data format correctness
-            if (addonInfo.rpos()+1 > addonInfo.size())
+            if (addonInfo.rpos() + 1 > addonInfo.size())
                 return;
 
             addonInfo >> addonName;
@@ -959,7 +994,7 @@ void WorldSession::SendAddonsInfo()
                 data.append(addonPublicKey, sizeof(addonPublicKey));
             }
 
-            data << uint32(/*itr->CRC*/ 0);                 // TODO: Find out the meaning of this.
+            data << uint32(0);                 // TODO: Find out the meaning of this.
         }
 
         uint8 unk3 = 0;                                     // 0 is sent here
@@ -987,7 +1022,7 @@ void WorldSession::SendAddonsInfo()
     SendPacket(&data);
 }
 
-void WorldSession::SetPlayer(Player *player)
+void WorldSession::SetPlayer(Player* player)
 {
     _player = player;
 
@@ -1005,7 +1040,7 @@ void WorldSession::InitializeQueryCallbackParameters()
 
 void WorldSession::ProcessQueryCallbacks()
 {
-    QueryResult result;
+    PreparedQueryResult result;
 
     //! HandleCharEnumOpcode
     if (_charEnumCallback.ready())
@@ -1017,9 +1052,8 @@ void WorldSession::ProcessQueryCallbacks()
 
     if (_charCreateCallback.IsReady())
     {
-        PreparedQueryResult pResult;
-        _charCreateCallback.GetResult(pResult);
-        HandleCharCreateCallback(pResult, _charCreateCallback.GetParam());
+        _charCreateCallback.GetResult(result);
+        HandleCharCreateCallback(result, _charCreateCallback.GetParam());
         // Don't call FreeResult() here, the callback handler will do that depending on the events in the callback chain
     }
     //! HandlePlayerLoginOpcode
