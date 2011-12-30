@@ -138,7 +138,7 @@ bool ForcedDespawnDelayEvent::Execute(uint64 /*e_time*/, uint32 /*p_time*/)
     return true;
 }
 
-Creature::Creature(): Unit(), MapCreature(),
+Creature::Creature(bool isWorldObject): Unit(isWorldObject), MapCreature(),
 lootForPickPocketed(false), lootForBody(false), m_groupLootTimer(0), lootingGroupLowGUID(0),
 m_PlayerDamageReq(0), m_lootMoney(0), m_lootRecipient(0), m_lootRecipientGroup(0), m_corpseRemoveTime(0), m_respawnTime(0),
 m_respawnDelay(300), m_corpseDelay(60), m_respawnradius(0.0f), m_reactState(REACT_AGGRESSIVE),
@@ -161,6 +161,7 @@ m_creatureInfo(NULL), m_creatureData(NULL), m_formation(NULL)
 
     ResetLootMode(); // restore default loot mode
     TriggerJustRespawned = false;
+    m_isTempWorldObject = false;	
 }
 
 Creature::~Creature()

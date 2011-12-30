@@ -6715,9 +6715,15 @@ void ObjectMgr::LoadCorpses()
     {
         Field *fields = result->Fetch();
         uint32 guid = fields[16].GetUInt32();
-
-        Corpse* corpse = new Corpse();
-        if (!corpse->LoadFromDB(guid, fields))
+        CorpseType type = CorpseType(fields[13].GetUInt8());
+        if (type >= MAX_CORPSE_TYPE)
+        {
+            sLog->outError("Corpse (guid: %u) have wrong corpse type (%u), not loading.", guid, type);
+            continue;
+        }
+ 
+        Corpse* corpse = new Corpse(type);
+        if (!corpse->LoadCorpseFromDB(guid, fields))
         {
             delete corpse;
             continue;

@@ -2292,7 +2292,7 @@ class Unit : public WorldObject
         float GetAbsorbHeal() const { return m_AbsorbHeal; };
         void SetAbsorbHeal(float heal) { m_AbsorbHeal = heal; };
     protected:
-        explicit Unit ();
+        explicit Unit (bool isWorldObject);
 
         UnitAI *i_AI, *i_disabledAI;
 
