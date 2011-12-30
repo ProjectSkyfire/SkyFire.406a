@@ -3199,6 +3199,9 @@ void SpellMgr::LoadSpellCustomAttr()
             case 64904: // Hymn of Hope
                spellInfo->Effects[1].ApplyAuraName = SPELL_AURA_MOD_INCREASE_ENERGY_PERCENT;
                break;
+            case 19465: // Improved Stings (Rank 2)
+                spellInfo->Effects[EFFECT_2].TargetA = TARGET_UNIT_CASTER;
+                break;			   
             case 30421: // Nether Portal - Perseverance
                 spellInfo->Effects[2].BasePoints += 30000;
                 break;
