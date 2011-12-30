@@ -389,6 +389,21 @@ public:
     }
 };
 
+// 76657 Master of Beasts
+class spell_hun_master_of_beasts : public SpellScriptLoader
+{
+public:
+    spell_hun_master_of_beasts() : SpellScriptLoader("spell_hun_master_of_beasts") { }
+
+    AuraScript *GetAuraScript() const
+    {
+        MasteryScript* script = new MasteryScript();
+        script->SetMasteryAura(EFFECT_0, SPELL_AURA_ADD_FLAT_MODIFIER);
+        script->SetMasteryBaseAmount(EFFECT_1, 170);
+        return script;
+    }
+};
+
 void AddSC_mastery_spells()
 {
     new player_scripts_spec;
@@ -402,4 +417,5 @@ void AddSC_mastery_spells()
     new spell_sha_enhanced_elements;
     new spell_sha_deep_healing;
     new spell_hun_wild_quiver;
+    new spell_hun_master_of_beasts;
 }
