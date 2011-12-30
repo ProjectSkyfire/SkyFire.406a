@@ -2970,9 +2970,10 @@ void SpellMgr::LoadSpellCustomAttr()
 
         switch (spellInfo->Id)
         {
-            case 86914: // Firestarter
-                spellInfo->Effects[0].BasePoints = 0;
-                spellInfo->Effects[0].MiscValue = 0;
+            case 76547: // Mana Adept
+            case 77226: // Deep Healing
+            case 76613: // Frostburn
+                spellInfo->Effects[0].ApplyAuraName = SPELL_AURA_ADD_PCT_MODIFIER;
                 break;
             case 93072: // Bring our Boys back
                 spellInfo->Effects[0].TargetA = TARGET_UNIT_NEARBY_ENTRY;

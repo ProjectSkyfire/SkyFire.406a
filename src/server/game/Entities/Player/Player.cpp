@@ -4029,6 +4029,8 @@ bool Player::addSpell(uint32 spell_id, bool active, bool learning, bool dependen
 
         GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_LEARN_SPELL, spell_id);
     }
+    
+    sScriptMgr->OnAddSpell(this, spell_id, learning);
 
     // return true (for send learn packet) only if spell active (in case ranked spells) and not replace old spell
     return active && !disabled && !superceded_old;
@@ -6117,6 +6119,9 @@ void Player::UpdateRating(CombatRating cr)
             amount += int32(CalculatePctN(GetStat(Stats((*i)->GetMiscValueB())), (*i)->GetAmount()));
     if (amount < 0)
         amount = 0;
+    
+    sScriptMgr->OnUpdateRating(this, cr, amount);
+    
     SetUInt32Value(PLAYER_FIELD_COMBAT_RATING_1 + cr, uint32(amount));
 
     bool affectStats = CanModifyStats();
@@ -25330,6 +25335,7 @@ void Player::ActivateSpec(uint8 spec)
         SetPower(POWER_MANA, 0); // Mana must be 0 even if it isn't the active power type.
 
     SetPower(pw, 0);
+    sScriptMgr->OnActivateSpec(this, spec);
 }
 
 void Player::ResetTimeSync()
@@ -25691,4 +25697,70 @@ void Player::SendPetTameResult(PetTameResult result)
     WorldPacket data(SMSG_PET_TAME_FAILURE, 4);
     data << uint32(result); // The result
     GetSession()->SendPacket(&data);
+}
+
+void Player::UpdateMasteryAuras(uint32 branch)
+{
+    bool canHaveMastery = HasAuraType(SPELL_AURA_MASTERY);
+    TalentTabEntry const* tab = sTalentTabStore.LookupEntry(branch);
+    
+    if(!tab)
+        return;
+        
+    if(!canHaveMastery)
+    {
+        // Remove all mastery spells
+        for (int i = 0; i < MAX_TALENT_MASTERY_SPELLS; i ++)
+            if(tab->masterySpell[i] && HasSpell(tab->masterySpell[i]))
+            {
+                RemoveAura(tab->masterySpell[i]);
+                removeSpell(tab->masterySpell[i]);
+            }
+        return;
+    }
+    
+    for (int i = 0; i < MAX_TALENT_MASTERY_SPELLS; i ++)
+    {
+        if(tab->masterySpell[i] && !HasSpell(tab->masterySpell[i]))
+        {
+            sLog->outDebug(LOG_FILTER_SPELLS_AURAS, "Learn mastery %u to player %s", tab->masterySpell[i], GetName());
+            learnSpell(tab->masterySpell[i], true);
+            CastSpell(this, tab->masterySpell[i], true); // Need to cast it
+        }
+    }
+    
+    // Now remove all the mastery spells for all branch except this one
+    for(uint32 i = 0; i < sTalentTabStore.GetNumRows(); ++i)
+    {
+        if(branch != i)
+            if (TalentTabEntry const* tabi = sTalentTabStore.LookupEntry(i))
+                for (uint32 j = 0; j < MAX_TALENT_MASTERY_SPELLS; j++)
+                    if(tabi->masterySpell[j] && HasSpell(tabi->masterySpell[j]))
+                    {
+                        RemoveAura(tab->masterySpell[i]);
+                        removeSpell(tabi->masterySpell[j]);
+                    }
+                
+    }
+}
+
+void Player::RecalculateMasteryAuraEffects(uint32 branch)
+{
+    TalentTabEntry const* tab = sTalentTabStore.LookupEntry(branch);
+    
+    if(!tab)
+        return;
+        
+    for (int i = 0; i < MAX_TALENT_MASTERY_SPELLS; i ++)
+    {
+        if(tab->masterySpell[i])
+            if(Aura* aura = GetAura(tab->masterySpell[i]))
+                aura->RecalculateAmountOfEffects();
+    }
+}
+
+void Player::SetTalentBranchSpec(uint32 branchSpec, uint8 spec)
+{
+    m_branchSpec[spec] = branchSpec;
+    sScriptMgr->OnTalentBranchSpecChanged(this, spec, branchSpec);
 }
