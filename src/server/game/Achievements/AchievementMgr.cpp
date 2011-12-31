@@ -2405,6 +2405,9 @@ bool AchievementMgrBase::CanUpdateCriteria(AchievementCriteriaEntry const* crite
             }
             case ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_TARGET_RACE:
             {
+                if(!unit)
+                    return false;
+
                 if(unit->GetTypeId() != TYPEID_PLAYER)
                     return false;
                 
@@ -2413,6 +2416,9 @@ bool AchievementMgrBase::CanUpdateCriteria(AchievementCriteriaEntry const* crite
             }
             case ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_TARGET_CLASS:
             {
+                if(!unit)
+                    return false;
+
                 if(unit->GetTypeId() != TYPEID_PLAYER)
                     return false;
                 
