@@ -718,7 +718,7 @@ int32 AuraEffect::CalculateAmount(Unit* caster)
 
                     uint32 spellId = 0;
                     uint32 plrskill = player->GetSkillValue(SKILL_RIDING);
-                    uint32 map = player->GetMapId();
+                    uint32 map = GetVirtualMapForMapAndZone(player->GetMapId(), player->GetZoneId());
                     uint32 maxSkill = 0;
                     for(int i = 0; i < MAX_MOUNT_TYPE_COLUMN; i++)
                     {
@@ -2815,10 +2815,22 @@ void AuraEffect::HandleAuraMounted(AuraApplication const* aurApp, uint8 mode, bo
     Unit* target = aurApp->GetTarget();
     uint32 spellId = (uint32)GetAmount();
     Player *player = target->ToPlayer();
-    if(player && spellId < 2)
+    
+    switch(GetId())
     {
-        return;
+        case 55164: // Spectral Gryphon
+            spellId = 86460;
+            break;
+        case 64731: // Sea Turtle
+            spellId = 86496;
+            break;
+        default:
+            break;
     }
+    
+    if(player && spellId < 2)
+        return;
+        
     if (apply)
     {
         uint32 creatureEntry = GetMiscValue();
@@ -2853,6 +2865,9 @@ void AuraEffect::HandleAuraMounted(AuraApplication const* aurApp, uint8 mode, bo
                 displayID = 0;
 
         target->Mount(displayID, ci->VehicleId, GetMiscValue());
+        
+        if(player)
+            player->CastSpell(player, spellId, true);
     }
     else
     {
