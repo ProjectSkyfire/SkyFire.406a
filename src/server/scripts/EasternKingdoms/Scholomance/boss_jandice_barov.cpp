@@ -168,7 +168,7 @@ public:
 
         void Reset()
         {
-            Cleave_Timer = urand(2000, 8000)
+            Cleave_Timer = urand(2000, 8000);
             me->ApplySpellImmune(0, IMMUNITY_DAMAGE, SPELL_SCHOOL_MASK_MAGIC, true);
         }
 
