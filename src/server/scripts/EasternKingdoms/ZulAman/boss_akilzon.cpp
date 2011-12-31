@@ -406,7 +406,7 @@ class mob_akilzon_eagle : public CreatureScript
 
             void Reset()
             {
-                EagleSwoop_Timer = 5000 + rand()%5000;
+                EagleSwoop_Timer = urand(5000, 10000);
                 arrived = true;
                 TargetGUID = 0;
                 me->SetUnitMovementFlags(MOVEMENTFLAG_LEVITATING);
@@ -425,7 +425,7 @@ class mob_akilzon_eagle : public CreatureScript
                         DoCast(target, SPELL_EAGLE_SWOOP, true);
                     TargetGUID = 0;
                     me->SetSpeed(MOVE_RUN, 1.2f);
-                    EagleSwoop_Timer = 5000 + rand()%5000;
+                    EagleSwoop_Timer = urand(5000, 10000);
                 }
             }
 
