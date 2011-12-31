@@ -249,18 +249,40 @@ enum ProgressType
 class Unit;
 class Player;
 class WorldPacket;
+class Guild;
 
 // Pure virtual class
-/*class AchievementMgrBase
+class AchievementMgrBase
 {
     public:
-        virtual ~AchievementMgrBase() = 0;
-        virtual void SendAllAchievementData() = 0;
-        virtual bool HasAchieved(uint32) = 0;
-        virtual void CompletedAchievement(AchievementEntry const*) = 0;
-        virtual void LoadFromDB() { }
-        virtual void LoadFromDB(PreparedQueryResult achievementResult, PreparedQueryResult criteriaResult) { }
-};*/
+        AchievementMgrBase(Player* player = NULL, Guild* guild = NULL) : m_player(player), m_guild(guild), m_achievementPoints(0) { }
+        virtual ~AchievementMgrBase() { };
+        virtual bool HasAchieved(uint32) const;
+        virtual bool CanUpdateCriteria(AchievementCriteriaEntry const* criteria, AchievementEntry const* achievement, Player* player, uint32 miscValue1 = 0, uint32 miscValue2 = 0, Unit* unit = NULL);
+        virtual bool IsCompletedCriteria(AchievementCriteriaEntry const* achievementCriteria, AchievementEntry const* achievement, Player* player);
+        virtual CriteriaProgress* GetCriteriaProgress(AchievementCriteriaEntry const* entry);
+        virtual void SetCriteriaProgress(AchievementCriteriaEntry const* entry, uint32 changeValue, Player* player, ProgressType ptype = PROGRESS_SET);
+        void SendCriteriaUpdate(AchievementCriteriaEntry const* entry, CriteriaProgress const* progress, uint32 timeElapsed, bool timedCompleted, Player* completer);
+        void SendDirectMessageToAll(WorldPacket* data);
+        virtual void UpdateAchievementCriteria(AchievementCriteriaTypes type, Player* player, uint32 miscValue1 = 0, uint32 miscValue2 = 0, Unit* unit = NULL);
+        virtual bool IsCompletedAchievement(AchievementEntry const* entry, Player* player);
+        uint32 GetAchievementPoints() const { return m_achievementPoints; }
+        void ResetAchievementCriteria(AchievementCriteriaTypes type, Player* player, uint32 miscvalue1 = 0, uint32 miscvalue2 = 0, bool evenIfCriteriaComplete = false);
+        void RemoveCriteriaProgress(AchievementCriteriaEntry const* entry, Player* player);
+        void CompletedCriteriaFor(AchievementEntry const* achievement, Player* player);
+        virtual void CompletedAchievement(AchievementEntry const* entry) { }
+        virtual void CompletedAchievement(AchievementEntry const* entry, Player* player) { }
+
+        uint32 m_achievementPoints;
+        CriteriaProgressMap m_criteriaProgress;
+        CompletedAchievementMap m_completedAchievements;
+        typedef std::map<uint32, uint32> TimedAchievementMap;
+        TimedAchievementMap m_timedAchievements;      // Criteria id/time left in MS
+        
+        Player* m_player;
+        Guild* m_guild;
+        
+};
 
 /*class AchievementMgrHandler
 {
@@ -274,7 +296,7 @@ class WorldPacket;
         }
 };*/
 
-class AchievementMgr/* : public AchievementMgrBase*/
+class AchievementMgr : public AchievementMgrBase
 {
     public:
         AchievementMgr(Player* player);
@@ -284,38 +306,18 @@ class AchievementMgr/* : public AchievementMgrBase*/
         static void DeleteFromDB(uint32 lowguid);
         void LoadFromDB(PreparedQueryResult achievementResult, PreparedQueryResult criteriaResult);
         void SaveToDB(SQLTransaction& trans);
-        void ResetAchievementCriteria(AchievementCriteriaTypes type, uint32 miscvalue1 = 0, uint32 miscvalue2 = 0, bool evenIfCriteriaComplete = false);
-        void UpdateAchievementCriteria(AchievementCriteriaTypes type, uint32 miscValue1 = 0, uint32 miscValue2 = 0, Unit* unit = NULL);
         void CompletedAchievement(AchievementEntry const* entry);
         void CheckAllAchievementCriteria();
         void SendAllAchievementData();
         void SendRespondInspectAchievements(Player* player);
-        bool HasAchieved(uint32 achievementId) const;
-        Player* GetPlayer() const { return m_player; }
         void UpdateTimedAchievements(uint32 timeDiff);
         void StartTimedAchievement(AchievementCriteriaTimedTypes type, uint32 entry, uint32 timeLost = 0);
         void RemoveTimedAchievement(AchievementCriteriaTimedTypes type, uint32 entry);   // used for quest and scripted timed achievements
-
-        uint32 GetAchievementPoints() const { return m_achievementPoints; }
+        Player* GetPlayer() const { return m_player; }
 
     private:
         void SendAchievementEarned(AchievementEntry const* achievement) const;
-        void SendCriteriaUpdate(AchievementCriteriaEntry const* entry, CriteriaProgress const* progress, uint32 timeElapsed, bool timedCompleted) const;
-        CriteriaProgress* GetCriteriaProgress(AchievementCriteriaEntry const* entry);
-        void SetCriteriaProgress(AchievementCriteriaEntry const* entry, uint32 changeValue, ProgressType ptype = PROGRESS_SET);
-        void RemoveCriteriaProgress(AchievementCriteriaEntry const* entry);
-        void CompletedCriteriaFor(AchievementEntry const* achievement);
-        bool IsCompletedCriteria(AchievementCriteriaEntry const* achievementCriteria, AchievementEntry const* achievement);
-        bool IsCompletedAchievement(AchievementEntry const* entry);
-        bool CanUpdateCriteria(AchievementCriteriaEntry const* criteria, AchievementEntry const* achievement);
         void BuildAllDataPacket(WorldPacket* data) const;
-
-        Player* m_player;
-        uint32 m_achievementPoints;
-        CriteriaProgressMap m_criteriaProgress;
-        CompletedAchievementMap m_completedAchievements;
-        typedef std::map<uint32, uint32> TimedAchievementMap;
-        TimedAchievementMap m_timedAchievements;      // Criteria id/time left in MS
 };
 
 class AchievementGlobalMgr
