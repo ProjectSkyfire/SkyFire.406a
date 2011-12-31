@@ -447,6 +447,11 @@ bool Group::AddMember(Player* player)
 
         if (m_maxEnchantingLevel < player->GetSkillValue(SKILL_ENCHANTING))
             m_maxEnchantingLevel = player->GetSkillValue(SKILL_ENCHANTING);
+            
+        if(IsGuildGroup())
+            SendGuildGroupStateUpdate(true);
+        else
+            SendGuildGroupStateUpdate(false);
     }
 
     return true;
@@ -2278,4 +2283,57 @@ void Group::ToggleGroupMemberFlag(member_witerator slot, uint8 flag, bool apply)
         slot->flags |= flag;
     else
         slot->flags &= ~flag;
+}
+
+bool Group::IsGuildGroup(bool AllInSameMap, bool AllInSameInstanceId)
+{
+    uint32 guildId = 0;
+    uint32 mapId = 0;
+    uint32 InstanceId = 0;
+    for (GroupReference *itr = GetFirstMember(); itr != NULL; itr = itr->next()) // Loop trought all members
+    {
+        if (Player *player = itr->getSource())
+        {
+            if (player->GetGuildId() != 0) // Check if it has a guild
+            {
+                if (guildId == 0) // If this is the first member with a guild
+                    guildId = player->GetGuildId(); // Store it
+                
+                if (mapId == 0)
+                    mapId = player->GetMapId();
+                    
+                if (InstanceId == 0)
+                    InstanceId = player->GetInstanceId();
+                    
+                if (player->GetGuildId() != guildId) // If another member has another guildid, then its not a guild group
+                    return false;
+                
+                if (AllInSameMap && (player->GetMapId() != mapId))
+                    return false;
+                    
+                if (AllInSameInstanceId && (player->GetInstanceId() != InstanceId))
+                    return false;
+            } 
+            else // If he does not have a guild, then its not a guild group
+                return false;
+        }
+    }
+    return true;
+}
+
+void Group::SendGuildGroupStateUpdate(bool guild)
+{
+    for(GroupReference *itr = GetFirstMember(); itr != NULL; itr = itr->next()) // Loop trought all members
+    {
+        if(Player* player = itr->getSource())
+        {
+            WorldPacket data(SMSG_GUILD_PARTY_STATE_UPDATE, 1+4+4+4);
+            data << uint8(guild ? 1 << 7 : 0);
+            data << uint32(0); // numGuildRequired, not used
+            data << uint32(0); // numGuildPresent, not used
+            data << float(1.0f / 100.0f); // xpMultiplier
+            if(player->GetSession())
+                player->GetSession()->SendPacket(&data);
+        }
+    }
 }

@@ -2425,6 +2425,15 @@ bool AchievementMgrBase::CanUpdateCriteria(AchievementCriteriaEntry const* crite
                 if(unit->ToPlayer()->getClass() != value)
                     return false;
             }
+            case ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_REQUIRES_GUILD_GROUP:
+            {
+                Group* group = player->GetGroup();
+                if(!group)
+                    return false;
+                
+                if(!group->IsGuildGroup(true, true))
+                    return false;
+            }
             default:
                 break;
         }
