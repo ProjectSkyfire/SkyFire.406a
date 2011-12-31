@@ -2362,11 +2362,11 @@ bool AchievementMgrBase::CanUpdateCriteria(AchievementCriteriaEntry const* crite
     {
         if(!criteria->moreRequirement[i])
             continue;
+        
+        uint32 value = criteria->moreRequirementValue[i];
 
         switch(criteria->moreRequirement[i])
         {
-            uint32 value = criteria->moreRequirementValue[i];
-            
             case ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_GUILD_REP:
             {
                 if (uint32(player->GetReputationMgr().GetReputation(1168)) < value) // 1168 = Guild faction
