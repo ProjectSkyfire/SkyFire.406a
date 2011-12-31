@@ -480,21 +480,21 @@ public:
             {
                 Shout();
                 DoCast(me, SPELL_RENEW);
-                Renew_timer = rand(1000, 6000);
+                Renew_timer = urand(1000, 6000);
             } else Renew_timer -= diff;
 
             if (Inquisitor_Penance_timer <= diff)
             {
                 Shout();
                 DoCast(me->getVictim(), SPELL_INQUISITOR_PENANCE);
-                Inquisitor_Penance_timer = rand(2000, 7000);
+                Inquisitor_Penance_timer = urand(2000, 7000);
             } else Inquisitor_Penance_timer -= diff;
 
             if (Valroth_Smite_timer <= diff)
             {
                 Shout();
                 DoCast(me->getVictim(), SPELL_VALROTH_SMITE);
-                Valroth_Smite_timer = rand(1000, 6000);
+                Valroth_Smite_timer = urand(1000, 6000);
             } else Valroth_Smite_timer -= diff;
 
             DoMeleeAttackIfReady();
