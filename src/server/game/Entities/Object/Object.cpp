@@ -1209,7 +1209,7 @@ void WorldObject::SetWorldObject(bool on)
 
     GetMap()->AddObjectToSwitchList(this, on);
 }
- 
+
 bool WorldObject::IsWorldObject() const
 {
     if (m_isWorldObject)

@@ -428,7 +428,7 @@ void AddSC_areatrigger_scripts()
     new AreaTrigger_at_scent_larkorwi();
     new AreaTrigger_at_last_rites();
     new AreaTrigger_at_sholazar_waygate();
-    new AreaTrigger_at_nats_landing();	
+    new AreaTrigger_at_nats_landing();
     new AreaTrigger_at_bring_your_orphan_to();
     new AreaTrigger_at_brewfest();
 }

@@ -161,7 +161,7 @@ m_creatureInfo(NULL), m_creatureData(NULL), m_formation(NULL)
 
     ResetLootMode(); // restore default loot mode
     TriggerJustRespawned = false;
-    m_isTempWorldObject = false;	
+    m_isTempWorldObject = false;
 }
 
 Creature::~Creature()

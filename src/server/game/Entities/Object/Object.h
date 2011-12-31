@@ -804,7 +804,7 @@ class WorldObject : public Object, public WorldLocation
         void SetWorldObject(bool apply);
         bool IsPermanentWorldObject() const { return m_isWorldObject; }
         bool IsWorldObject() const;
-		
+
         template<class NOTIFIER> void VisitNearbyObject(float const& radius, NOTIFIER& notifier) const { if (IsInWorld()) GetMap()->VisitAll(GetPositionX(), GetPositionY(), radius, notifier); }
         template<class NOTIFIER> void VisitNearbyGridObject(float const& radius, NOTIFIER& notifier) const { if (IsInWorld()) GetMap()->VisitGrid(GetPositionX(), GetPositionY(), radius, notifier); }
         template<class NOTIFIER> void VisitNearbyWorldObject(float const& radius, NOTIFIER& notifier) const { if (IsInWorld()) GetMap()->VisitWorld(GetPositionX(), GetPositionY(), radius, notifier); }
@@ -834,7 +834,7 @@ class WorldObject : public Object, public WorldLocation
     protected:
         std::string m_name;
         bool m_isActive;
-        const bool m_isWorldObject;		
+        const bool m_isWorldObject;
         ZoneScript* m_zoneScript;
 
         // transports

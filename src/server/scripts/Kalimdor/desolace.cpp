@@ -173,7 +173,7 @@ public:
 ## Hand of Iruxos
 ######*/
 
-enum 
+enum
 {
     QUEST_HAND_IRUXOS   = 5381,
     NPC_DEMON_SPIRIT    = 11876,

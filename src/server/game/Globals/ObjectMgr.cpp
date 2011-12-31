@@ -6721,7 +6721,7 @@ void ObjectMgr::LoadCorpses()
             sLog->outError("Corpse (guid: %u) have wrong corpse type (%u), not loading.", guid, type);
             continue;
         }
- 
+
         Corpse* corpse = new Corpse(type);
         if (!corpse->LoadCorpseFromDB(guid, fields))
         {

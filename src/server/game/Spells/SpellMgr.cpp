@@ -3201,7 +3201,7 @@ void SpellMgr::LoadSpellCustomAttr()
                break;
             case 19465: // Improved Stings (Rank 2)
                 spellInfo->Effects[EFFECT_2].TargetA = TARGET_UNIT_CASTER;
-                break;			   
+                break;
             case 30421: // Nether Portal - Perseverance
                 spellInfo->Effects[2].BasePoints += 30000;
                 break;

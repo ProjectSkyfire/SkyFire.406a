@@ -76,7 +76,7 @@ bool ChatHandler::HandleMuteCommand(const char* args)
     // must have strong lesser security level
     if (HasLowerSecurity (target, target_guid, true))
         return false;
-		
+
     PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_UPDATE_MUTE_TIME);
 
     if (target)
@@ -100,7 +100,7 @@ bool ChatHandler::HandleMuteCommand(const char* args)
     stmt->setUInt32(1, accountId);
 
     LoginDatabase.Execute(stmt);
-	
+
     std::string nameLink = playerLink(target_name);
 
     PSendSysMessage(target ? LANG_YOU_DISABLE_CHAT : LANG_COMMAND_DISABLE_CHAT_DELAYED, nameLink.c_str(), notspeaktime, mutereasonstr.c_str());
@@ -502,7 +502,7 @@ bool ChatHandler::HandleCharacterCustomizeCommand(const char* args)
     PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPDATE_AT_LOGIN_FLAG);
 
     stmt->setUInt16(0, uint16(AT_LOGIN_CUSTOMIZE));
-		
+
     if (target)
     {
         PSendSysMessage(LANG_CUSTOMIZE_PLAYER, GetNameLink(target).c_str());
@@ -518,7 +518,7 @@ bool ChatHandler::HandleCharacterCustomizeCommand(const char* args)
 
         PSendSysMessage(LANG_CUSTOMIZE_PLAYER_GUID, oldNameLink.c_str(), GUID_LOPART(targetGuid));
     }
- 
+
     CharacterDatabase.Execute(stmt);
 
     return true;
@@ -532,7 +532,7 @@ bool ChatHandler::HandleCharacterChangeFactionCommand(const char* args)
 
     if (!extractPlayerTarget((char*)args, &target, &targetGuid, &targetName))
         return false;
- 
+
     PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPDATE_AT_LOGIN_FLAG);
 
     stmt->setUInt16(0, uint16(AT_LOGIN_CHANGE_FACTION));
@@ -552,7 +552,7 @@ bool ChatHandler::HandleCharacterChangeFactionCommand(const char* args)
 
         stmt->setUInt32(1, GUID_LOPART(targetGuid));
     }
- 
+
     CharacterDatabase.Execute(stmt);
 
     return true;
@@ -565,7 +565,7 @@ bool ChatHandler::HandleCharacterChangeRaceCommand(const char * args)
     std::string targetName;
     if (!extractPlayerTarget((char*)args, &target, &targetGuid, &targetName))
         return false;
- 
+
     PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPDATE_AT_LOGIN_FLAG);
 
     stmt->setUInt16(0, uint16(AT_LOGIN_CHANGE_FACTION));
@@ -587,7 +587,7 @@ bool ChatHandler::HandleCharacterChangeRaceCommand(const char * args)
 
         stmt->setUInt32(1, GUID_LOPART(targetGuid));
     }
- 
+
     CharacterDatabase.Execute(stmt);
 
     return true;
