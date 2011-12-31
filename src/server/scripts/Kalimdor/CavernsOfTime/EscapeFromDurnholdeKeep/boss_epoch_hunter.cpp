@@ -69,8 +69,8 @@ public:
 
         void Reset()
         {
-            SandBreath_Timer        = 8000 + rand()%8000;
-            ImpendingDeath_Timer    = 25000 + rand()%5000;
+            SandBreath_Timer        = urand(8000, 16000);
+            ImpendingDeath_Timer    = urand(25000, 30000);
             WingBuffet_Timer        = 35000;
             Mda_Timer               = 40000;
         }
@@ -109,16 +109,16 @@ public:
 
                 DoScriptText(RAND(SAY_BREATH1, SAY_BREATH2), me);
 
-                SandBreath_Timer = 10000 + rand()%10000;
+                SandBreath_Timer = urand(10000, 20000);
             }
-			else SandBreath_Timer -= diff;
+            else SandBreath_Timer -= diff;
 
             if (ImpendingDeath_Timer <= diff)
             {
                 DoCast(me->getVictim(), SPELL_IMPENDING_DEATH);
                 ImpendingDeath_Timer = 25000+rand()%5000;
             }
-			else ImpendingDeath_Timer -= diff;
+            else ImpendingDeath_Timer -= diff;
 
             if (WingBuffet_Timer <= diff)
             {
@@ -126,14 +126,14 @@ public:
                     DoCast(target, SPELL_WING_BUFFET);
                 WingBuffet_Timer = 25000+rand()%10000;
             }
-			else WingBuffet_Timer -= diff;
+            else WingBuffet_Timer -= diff;
 
             if (Mda_Timer <= diff)
             {
                 DoCast(me, SPELL_MAGIC_DISRUPTION_AURA);
                 Mda_Timer = 15000;
             }
-			else Mda_Timer -= diff;
+            else Mda_Timer -= diff;
 
             DoMeleeAttackIfReady();
         }

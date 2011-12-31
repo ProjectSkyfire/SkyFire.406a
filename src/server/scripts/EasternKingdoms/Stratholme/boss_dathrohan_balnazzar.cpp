@@ -132,7 +132,7 @@ public:
                 if (MindBlast_Timer <= Diff)
                 {
                     DoCast(me->getVictim(), SPELL_MINDBLAST);
-                    MindBlast_Timer = 15000 + rand()%5000;
+                    MindBlast_Timer = urand(15000, 20000);
                 } else MindBlast_Timer -= Diff;
 
                 //CrusadersHammer
@@ -174,7 +174,7 @@ public:
                 if (MindBlast_Timer <= Diff)
                 {
                     DoCast(me->getVictim(), SPELL_MINDBLAST);
-                    MindBlast_Timer = 15000 + rand()%5000;
+                    MindBlast_Timer = urand(15000, 20000);
                 } else MindBlast_Timer -= Diff;
 
                 //ShadowShock

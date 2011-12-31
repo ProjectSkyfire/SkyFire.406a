@@ -1352,31 +1352,31 @@ public:
                 if (uiAnti_magic_zone <= diff)
                 {
                     DoCast(me, SPELL_ANTI_MAGIC_ZONE1);
-                    uiAnti_magic_zone = 25000 + rand()%5000;
+                    uiAnti_magic_zone = urand(25000, 30000);
                 } else uiAnti_magic_zone -= diff;
 
                 if (Death_strike <= diff)
                 {
                     DoCast(me->getVictim(), SPELL_DEATH_STRIKE);
-                    Death_strike = 5000 + rand()%5000;
+                    Death_strike = urand(5000, 10000);
                 } else Death_strike -= diff;
 
                 if (Death_embrace <= diff)
                 {
                     DoCast(me->getVictim(), SPELL_DEATH_EMBRACE);
-                    Death_embrace = 5000 + rand()%5000;
+                    Death_embrace = urand(5000, 10000);
                 } else Death_embrace -= diff;
 
                 if (Icy_touch <= diff)
                 {
                     DoCast(me->getVictim(), SPELL_ICY_TOUCH1);
-                    Icy_touch = 5000 + rand()%5000;
+                    Icy_touch = urand(5000, 10000);
                 } else Icy_touch -= diff;
 
                 if (Unholy_blight <= diff)
                 {
                     DoCast(me->getVictim(), SPELL_UNHOLY_BLIGHT);
-                    Unholy_blight = 5000 + rand()%5000;
+                    Unholy_blight = urand(5000, 10000);
                 } else Unholy_blight -= diff;
 
                 if (Fight_speech <= diff)
@@ -1387,7 +1387,7 @@ public:
                                       SAY_LIGHT_OF_DAWN18, SAY_LIGHT_OF_DAWN19, SAY_LIGHT_OF_DAWN20,
                                       SAY_LIGHT_OF_DAWN21, SAY_LIGHT_OF_DAWN22, SAY_LIGHT_OF_DAWN23,
                                       SAY_LIGHT_OF_DAWN24), me);
-                    Fight_speech = 15000 + rand()%5000;
+                    Fight_speech = urand(15000, 20000);
                 } else Fight_speech -= diff;
 
                 // Check spawns
