@@ -45,14 +45,7 @@ struct CriteriaProgress
 enum AchievementCriteriaDataType
 {                                                           // value1         value2        comment
     ACHIEVEMENT_CRITERIA_DATA_TYPE_NONE                = 0, // 0              0
-    ACHIEVEMENT_CRITERIA_DATA_TYPE_T_CREATURE          = 1, // creature_id    0
-    ACHIEVEMENT_CRITERIA_DATA_TYPE_T_PLAYER_CLASS_RACE = 2, // class_id       race_id
-    ACHIEVEMENT_CRITERIA_DATA_TYPE_T_PLAYER_LESS_HEALTH= 3, // health_percent 0
     ACHIEVEMENT_CRITERIA_DATA_TYPE_T_PLAYER_DEAD       = 4, // own_team       0             not corpse (not released body), own_team == false if enemy team expected
-    ACHIEVEMENT_CRITERIA_DATA_TYPE_S_AURA              = 5, // spell_id       effect_idx
-    ACHIEVEMENT_CRITERIA_DATA_TYPE_S_AREA              = 6, // area id        0
-    ACHIEVEMENT_CRITERIA_DATA_TYPE_T_AURA              = 7, // spell_id       effect_idx
-    ACHIEVEMENT_CRITERIA_DATA_TYPE_VALUE               = 8, // minvalue                     value provided with achievement update must be not less that limit
     ACHIEVEMENT_CRITERIA_DATA_TYPE_T_LEVEL             = 9, // minlevel                     minlevel of target
     ACHIEVEMENT_CRITERIA_DATA_TYPE_T_GENDER            = 10, // gender                       0=male; 1=female
     ACHIEVEMENT_CRITERIA_DATA_TYPE_SCRIPT              = 11, // scripted requirement
@@ -63,7 +56,6 @@ enum AchievementCriteriaDataType
     ACHIEVEMENT_CRITERIA_DATA_TYPE_HOLIDAY             = 16, // holiday_id     0             event in holiday time
     ACHIEVEMENT_CRITERIA_DATA_TYPE_BG_LOSS_TEAM_SCORE  = 17, // min_score      max_score     player's team win bg and opposition team have team score in range
     ACHIEVEMENT_CRITERIA_DATA_INSTANCE_SCRIPT          = 18, // 0              0             maker instance script call for check current criteria requirements fit
-    ACHIEVEMENT_CRITERIA_DATA_TYPE_S_EQUIPED_ITEM      = 19, // item_level     item_quality  for equipped item in slot to check item level and quality
     ACHIEVEMENT_CRITERIA_DATA_TYPE_MAP_ID              = 20, // map_id         0             player must be on map with id in map_id
 };
 
@@ -77,45 +69,11 @@ struct AchievementCriteriaData
     AchievementCriteriaDataType dataType;
     union
     {
-        // ACHIEVEMENT_CRITERIA_DATA_TYPE_NONE              = 0 (no data)
-        // ACHIEVEMENT_CRITERIA_DATA_TYPE_T_CREATURE        = 1
-        struct
-        {
-            uint32 id;
-        } creature;
-        // ACHIEVEMENT_CRITERIA_DATA_TYPE_T_PLAYER_CLASS_RACE = 2
-        struct
-        {
-            uint32 class_id;
-            uint32 race_id;
-        } classRace;
-        // ACHIEVEMENT_CRITERIA_DATA_TYPE_T_PLAYER_LESS_HEALTH = 3
-        struct
-        {
-            uint32 percent;
-        } health;
         // ACHIEVEMENT_CRITERIA_DATA_TYPE_T_PLAYER_DEAD     = 4
         struct
         {
             uint32 own_team_flag;
         } player_dead;
-        // ACHIEVEMENT_CRITERIA_DATA_TYPE_S_AURA            = 5
-        // ACHIEVEMENT_CRITERIA_DATA_TYPE_T_AURA            = 7
-        struct
-        {
-            uint32 spell_id;
-            uint32 effect_idx;
-        } aura;
-        // ACHIEVEMENT_CRITERIA_DATA_TYPE_S_AREA            = 6
-        struct
-        {
-            uint32 id;
-        } area;
-        // ACHIEVEMENT_CRITERIA_DATA_TYPE_VALUE             = 8
-        struct
-        {
-            uint32 minvalue;
-        } value;
         // ACHIEVEMENT_CRITERIA_DATA_TYPE_T_LEVEL           = 9
         struct
         {
@@ -142,11 +100,6 @@ struct AchievementCriteriaData
         {
             uint32 team;
         } team;
-        // ACHIEVEMENT_CRITERIA_DATA_TYPE_S_DRUNK           = 15
-        struct
-        {
-            uint32 state;
-        } drunk;
         // ACHIEVEMENT_CRITERIA_DATA_TYPE_HOLIDAY           = 16
         struct
         {
@@ -158,13 +111,6 @@ struct AchievementCriteriaData
             uint32 min_score;
             uint32 max_score;
         } bg_loss_team_score;
-        // ACHIEVEMENT_CRITERIA_DATA_INSTANCE_SCRIPT        = 18 (no data)
-        // ACHIEVEMENT_CRITERIA_DATA_TYPE_S_EQUIPED_ITEM    = 19
-        struct
-        {
-            uint32 item_level;
-            uint32 item_quality;
-        } equipped_item;
         // ACHIEVEMENT_CRITERIA_DATA_TYPE_MAP_ID            = 20
         struct
         {
