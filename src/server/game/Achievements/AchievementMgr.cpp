@@ -927,13 +927,6 @@ void AchievementMgrBase::UpdateAchievementCriteria(AchievementCriteriaTypes type
                 if (!miscValue1)
                     continue;
 
-                if (achievement->categoryId == CATEGORY_CHILDRENS_WEEK)
-                {
-                    AchievementCriteriaDataSet const* data = sAchievementMgr->GetCriteriaDataSet(achievementCriteria);
-                    if (!data || !data->Meets(player, NULL))
-                        continue;
-                }
-
                 SetCriteriaProgress(achievementCriteria, 1, player, PROGRESS_ACCUMULATE);
                 break;
             }
@@ -956,21 +949,6 @@ void AchievementMgrBase::UpdateAchievementCriteria(AchievementCriteriaTypes type
             case ACHIEVEMENT_CRITERIA_TYPE_KILL_CREATURE_TYPE:
             {
                 if (!miscValue1)
-                    continue;
-                // ToDo: Implement this in another way
-                bool cont = false;
-                for(uint32 i = 0; i < 3; ++i)
-                {
-                    if(achievementCriteria->moreRequirement[i] != ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_CREATURE_TYPE)
-                        continue;
-
-                    if(achievementCriteria->moreRequirementValue[i] != miscValue1)
-                    {
-                        cont = true;
-                        break;
-                    }
-                }
-                if(cont)
                     continue;
                 SetCriteriaProgress(achievementCriteria, miscValue2, player, PROGRESS_ACCUMULATE);
                 break;
@@ -2387,17 +2365,59 @@ bool AchievementMgrBase::CanUpdateCriteria(AchievementCriteriaEntry const* crite
 
         switch(criteria->moreRequirement[i])
         {
+            uint32 value = criteria->moreRequirementValue[i];
+            
             case ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_GUILD_REP:
             {
-                if (uint32(player->GetReputationMgr().GetReputation(1168)) < criteria->moreRequirementValue[i])
+                if (uint32(player->GetReputationMgr().GetReputation(1168)) < value) // 1168 = Guild faction
                     return false;
                 break;
             }
             case ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_CREATURE_TYPE:
             {
-                if(miscValue1 != criteria->moreRequirementValue[i])
+                if(miscValue1 != value)
                     return false;
                 break;
+            }
+            case ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_SPELL:
+            {
+                if(!player->HasAura(value))
+                    return false;
+                break;
+            }
+            case ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_RAID_DIFFICULTY:
+            {
+                if(uint32(player->GetRaidDifficulty()) != value)
+                    return false;
+                break;
+            }
+            case ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_PLAYER_CLASS:
+            {
+                if(player->getClass() != value)
+                    return false;
+                break;
+            }
+            case ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_PLAYER_RACE:
+            {
+                if(player->getRace() != value)
+                    return false;
+                break;
+            }
+            case ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_TARGET_RACE:
+            {
+                if(unit->GetTypeId() != TYPEID_PLAYER)
+                    return false;
+                
+                if(unit->ToPlayer()->getRace() != value)
+                    return false;
+            }
+            case ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_TARGET_CLASS:
+            {
+                if(unit->GetTypeId() != TYPEID_PLAYER)
+                    return false;
+                
+                if(unit->ToPlayer()->getClass() != value)
+                    return false;
             }
             default:
                 break;
