@@ -567,6 +567,15 @@ void KillRewarder::_RewardPlayer(Player* player, bool isDungeon)
             // If killer is in dungeon then all members receive full reputation at kill.
             _RewardOnKill(player, isDungeon ? 1.0f : rate);
             _RewardKillCredit(player);
+            
+            // Reward Guild reputation
+            if (player->GetGuildId() != 0 && _victim->GetTypeId() == TYPEID_UNIT && _victim->ToCreature()->IsDungeonBoss() && player->GetGroup() && player->GetGroup()->IsGuildGroup())
+            {
+                uint32 guildRep = uint32(_xp / 450);
+                if (guildRep < 1)
+                    guildRep = 1;
+                player->GetReputationMgr().ModifyReputation(sFactionStore.LookupEntry(1168), guildRep);
+            }
         }
     }
 }
@@ -15684,6 +15693,21 @@ void Player::RewardQuest(Quest const *quest, uint32 reward, Object* questGiver, 
     else
         moneyRew = int32(quest->GetRewMoneyMaxLevel() * sWorld->getRate(RATE_DROP_MONEY));
 
+    // If the player has a guild, it should gain 1/4 of his experience.
+    // Also, player should get 1/450XP as reputation.
+    // Despite of him being at max level or not.
+    if (Guild* guild = sGuildMgr->GetGuildById(GetGuildId()))
+    {
+        uint32 guildXP = XP / 4;
+        uint32 guildRep = uint32(guildXP / 450 / 4);
+
+        if (guildRep < 1)
+            guildRep = 1;
+
+        guild->GainXP(guildXP);
+        GetReputationMgr().ModifyReputation(sFactionStore.LookupEntry(1168), guildRep);
+    }
+    
     // Give player extra money if GetRewOrReqMoney > 0 and get ReqMoney if negative
     if (quest->GetRewOrReqMoney())
         moneyRew += quest->GetRewOrReqMoney();
