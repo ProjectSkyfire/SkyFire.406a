@@ -1,1 +1,1 @@
-UPDATE quest_template SET reqcreatureorgoid1 = 36123, reqcreatureorgocount1 = 5 where entry = 14311
+UPDATE quest_template SET reqcreatureorgoid1 = 36123, reqcreatureorgocount1 = 5 where entry = 14311;
