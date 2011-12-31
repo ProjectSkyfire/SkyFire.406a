@@ -242,7 +242,7 @@ public:
         void Reset()
         {
             Dynamite_Timer = 8000;
-            Emote_Timer = 120000 + rand()%30000;
+            Emote_Timer = urand(120000, 150000);
 
             me->setFaction(NormFaction);
             me->SetUInt32Value(UNIT_NPC_FLAGS, NpcFlags);
