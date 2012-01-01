@@ -594,15 +594,6 @@ bool Item::LoadFromDB(uint32 guid, uint64 owner_guid, Field* fields, uint32 entr
     return true;
 }
 
-float ItemTemplate::getDPS() const
-{
-    ItemDamageEntry const* id = FindItemDamageEntry();
-    if (id)
-        return id->Value[Quality];
-
-    return 0.0f;
-}
-
 /*static*/
 void Item::DeleteFromDB(SQLTransaction& trans, uint32 itemGuid)
 {

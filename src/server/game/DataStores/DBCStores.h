@@ -125,6 +125,7 @@ extern DBCStorage <ItemDamageEntry>              sItemDamageThrownStore;
 extern DBCStorage <ItemDamageEntry>              sItemDamageTwoHandStore;
 extern DBCStorage <ItemDamageEntry>              sItemDamageTwoHandCasterStore;
 extern DBCStorage <ItemDamageEntry>              sItemDamageWandStore;
+extern DBCStorage <ItemDisenchantLootEntry>      sItemDisenchantLootStore;
 //extern DBCStorage <ItemDisplayInfoEntry>      sItemDisplayInfoStore; -- not used currently
 extern DBCStorage <ItemExtendedCostEntry>        sItemExtendedCostStore;
 extern DBCStorage <ItemLimitCategoryEntry>       sItemLimitCategoryStore;

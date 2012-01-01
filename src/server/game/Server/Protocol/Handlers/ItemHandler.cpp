@@ -360,7 +360,7 @@ void WorldSession::HandleRequestHotFix(WorldPacket & recv_data)
                     data << uint32(0);
 
                 data << uint32(proto->ScalingStatDistribution);
-                data << uint32(proto->damageType);
+                data << uint32(proto->DamageType);
                 data << uint32(proto->Delay);
                 data << float(proto->RangedModRange);
 

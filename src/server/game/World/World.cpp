@@ -1384,17 +1384,20 @@ void World::SetInitialWorldSettings()
     sLog->outString("Loading Item Random Enchantments Table...");
     LoadRandomEnchantmentsTable();
 
-    sLog->outString("Loading Disables");
+    sLog->outString("Loading Disables...");
     DisableMgr::LoadDisables();                                  // must be before loading quests and items
 
     sLog->outString("Loading Items...");                         // must be after LoadRandomEnchantmentsTable and LoadPageTexts
     sObjectMgr->LoadItemTemplates();
 
-    sLog->outString("Loading Item set names...");                // must be after LoadItemPrototypes
-    sObjectMgr->LoadItemSetNames();
+    sLog->outString("Loading Item Extra Data...");              // must be after LoadItemPrototypes
+    sObjectMgr->LoadItemTemplateAddon();
 
-    //sLog->outString("Loading Items Info...");
-    //sItemInfoMgr->LoadItemInfo();
+    sLog->outString("Loading Item Scripts...");                 // must be after LoadItemPrototypes
+    sObjectMgr->LoadItemScriptNames();
+
+    sLog->outString("Loading Item set names...");               // must be after LoadItemPrototypes
+    sObjectMgr->LoadItemSetNames();
 
     sLog->outString("Loading Creature Model Based Info Data...");
     sObjectMgr->LoadCreatureModelInfo();
