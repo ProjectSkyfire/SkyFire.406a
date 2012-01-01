@@ -511,14 +511,6 @@ typedef std::multimap<uint32, GossipMenuItems> GossipMenuItemsMap;
 typedef std::pair<GossipMenuItemsMap::const_iterator, GossipMenuItemsMap::const_iterator> GossipMenuItemsMapBounds;
 typedef std::pair<GossipMenuItemsMap::iterator, GossipMenuItemsMap::iterator> GossipMenuItemsMapBoundsNonConst;
 
-struct GuildRewardsEntry
-{
-    uint32 item;
-    uint32 price;
-    uint32 achievement;
-    uint32 standing;
-};
-
 struct QuestPOIPoint
 {
     int32 x;
@@ -638,8 +630,6 @@ class ObjectMgr
 
         typedef std::map<uint32, uint32> CharacterConversionMap;
 
-        typedef std::vector <GuildRewardsEntry *> GuildRewardsVector;
-
         Player* GetPlayerByLowGUID(uint32 lowguid) const;
 
         GameObjectTemplate const* GetGameObjectTemplate(uint32 entry);
@@ -710,8 +700,6 @@ class ObjectMgr
             return itr != mQuestTemplates.end() ? itr->second : NULL;
         }
         QuestMap const& GetQuestTemplates() const { return mQuestTemplates; }
-
-        GuildRewardsVector const& GetGuildRewards() { return mGuildRewards; }
 
         uint32 GetQuestForAreaTrigger(uint32 Trigger_ID) const
         {
@@ -1248,7 +1236,6 @@ class ObjectMgr
         typedef std::set<uint32> GameObjectForQuestSet;
 
         GuildMap            mGuildMap;
-        GuildRewardsVector  mGuildRewards;
 
         QuestAreaTriggerMap mQuestAreaTriggerMap;
         TavernAreaTriggerSet mTavernAreaTriggerSet;

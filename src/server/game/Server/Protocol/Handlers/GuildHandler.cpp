@@ -261,7 +261,7 @@ void WorldSession::HandleGuildRewardsOpcode(WorldPacket& recvPacket)
 
     recvPacket.read_skip<uint64>();
 
-    ObjectMgr::GuildRewardsVector const& vec = sObjectMgr->GetGuildRewards();
+    GuildRewardsVector const& vec = sGuildMgr->GetGuildRewards();
     if (vec.empty())
         return;
 
@@ -276,16 +276,16 @@ void WorldSession::HandleGuildRewardsOpcode(WorldPacket& recvPacket)
         data << uint32(0); // unk
 
     for(uint32 i = 0; i < vec.size(); ++i)
-        data << uint64(vec[i]->price); // money price
+        data << uint64(vec[i].price); // money price
 
     for(uint32 i = 0; i < vec.size(); ++i)
-        data << uint32(vec[i]->achievement); // Achievement requirement
+        data << uint32(vec[i].achievement); // Achievement requirement
 
     for(uint32 i = 0; i < vec.size(); ++i)
-        data << uint32(vec[i]->standing); // Reputation level (REP_HONORED, REP_FRIENDLY, etc)
+        data << uint32(vec[i].standing); // Reputation level (REP_HONORED, REP_FRIENDLY, etc)
 
     for(uint32 i = 0; i < vec.size(); ++i)
-        data << uint32(vec[i]->item); // item entry
+        data << uint32(vec[i].item); // item entry
     SendPacket(&data);
 }
 

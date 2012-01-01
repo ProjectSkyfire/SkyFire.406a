@@ -429,12 +429,13 @@ uint32 GetXPForGuildLevel(uint8 level);
 
 void GuildMgr::LoadGuildRewards()
 {
-    QueryResult result = WorldDatabase.Query("SELECT item_entry,price,achievement,standing FROM guild_rewards");
+    QueryResult result = WorldDatabase.Query("SELECT item_entry, price, achievement, standing FROM guild_rewards");
 
     if (!result)
     {
         sLog->outString();
         sLog->outString(">> Loaded 0 guild reward definitions");
+        return;
     }
 
     uint32 count = 0;
@@ -442,12 +443,12 @@ void GuildMgr::LoadGuildRewards()
     {
         Field *fields = result->Fetch();
 
-        GuildRewardsEntry* ptr = new GuildRewardsEntry;
-        ptr->item = fields[0].GetUInt32();
-        ptr->price = fields[1].GetUInt32();
-        ptr->achievement = fields[2].GetUInt32();
-        ptr->standing = fields[3].GetUInt32();
-        mGuildRewards.push_back(ptr);
+        GuildRewardsEntry reward;
+        reward.item = fields[0].GetUInt32();
+        reward.price = fields[1].GetUInt32();
+        reward.achievement = fields[2].GetUInt32();
+        reward.standing = fields[3].GetUInt32();
+        mGuildRewards.push_back(reward);
 
         ++count;
     }while (result->NextRow());
