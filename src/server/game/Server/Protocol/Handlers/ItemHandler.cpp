@@ -1022,26 +1022,6 @@ void WorldSession::HandleAutoStoreBankItemOpcode(WorldPacket& recvPacket)
     }
 }
 
-///- this needs checked and removed if not needed in cata!
-void WorldSession::HandleSetAmmoOpcode(WorldPacket & recv_data)
-{
-    if (!GetPlayer()->isAlive())
-    {
-        GetPlayer()->SendEquipError(EQUIP_ERR_YOU_ARE_DEAD, NULL, NULL);
-        return;
-    }
-
-    sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: CMSG_SET_AMMO");
-    uint32 item;
-
-    recv_data >> item;
-
-    if (!item)
-        GetPlayer()->RemoveAmmo();
-    else
-        GetPlayer()->SetAmmo(item);
-}
-
 void WorldSession::SendEnchantmentLog(uint64 Target, uint64 Caster, uint32 ItemID, uint32 SpellID)
 {
     WorldPacket data(SMSG_ENCHANTMENTLOG, (8 + 8 + 4 + 4 + 1));     // last check 4.0.6a
