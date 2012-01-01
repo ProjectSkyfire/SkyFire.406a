@@ -29,7 +29,7 @@ struct GuildRewardsEntry
     uint32 achievement;
     uint32 standing;
 };
-
+typedef std::vector<GuildRewardsEntry> GuildRewardsVector;
 class GuildMgr
 {
     friend class ACE_Singleton<GuildMgr, ACE_Null_Mutex>;
@@ -40,7 +40,6 @@ private:
 
 public:
     typedef UNORDERED_MAP<uint32, Guild*> GuildContainer;
-    typedef std::vector<GuildRewardsEntry> GuildRewardsVector;
 
     Guild* GetGuildByLeader(uint64 guid) const;
     Guild* GetGuildById(uint32 guildId) const;

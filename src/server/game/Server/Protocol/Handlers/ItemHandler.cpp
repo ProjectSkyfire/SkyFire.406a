@@ -798,9 +798,8 @@ void WorldSession::SendListInventory(uint64 vendorGuid)
                     Field *fields = res->Fetch();
 
                     // Check for achievement
-                    if(AchievementEntry const* achievement = sAchievementStore.LookupEntry(fields[0].GetUInt32()))
-                        if(!guild->GetAchievementMgr().HasAchieved(achievement))
-                            continue;
+                    if(!guild->GetAchievementMgr().HasAchieved(fields[0].GetUInt32()))
+                        continue;
 
                     // Check for standing
                     uint32 repReq = fields[1].GetUInt32();
