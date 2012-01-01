@@ -833,6 +833,7 @@ class WorldSession
         void SendLfgTeleportError(uint8 err);
 
         // Arena Team
+        void HandleArenaTeamCreate(WorldPacket& recv_packet);
         void HandleInspectArenaTeamsOpcode(WorldPacket& recv_data);
         void HandleArenaTeamQueryOpcode(WorldPacket& recv_data);
         void HandleArenaTeamRosterOpcode(WorldPacket& recv_data);
