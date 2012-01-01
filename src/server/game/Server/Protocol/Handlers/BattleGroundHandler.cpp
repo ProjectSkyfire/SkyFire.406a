@@ -73,17 +73,16 @@ void WorldSession::SendBattlegGroundList(uint64 guid, BattlegroundTypeId bgTypeI
 
 void WorldSession::HandleBattlemasterJoinOpcode(WorldPacket & recv_data)
 {
-    uint64 guid;
-    uint32 bgTypeId_;
-    uint32 instanceId;
     uint8 joinAsGroup;
+    uint32 bgTypeId_;
+    uint32 unk, unk2;
     bool isPremade = false;
-    Group * group = NULL;
+    Group* group = NULL;
 
-    recv_data >> guid;                                      // battlemaster guid
-    recv_data >> bgTypeId_;                                 // battleground type id (DBC id)
-    recv_data >> instanceId;                                // instance id, 0 if First Available selected
-    recv_data >> joinAsGroup;                               // join as group
+    recv_data >> joinAsGroup; // join as group (join as group = 0x80, else 0x0)
+    recv_data >> unk; // unk
+    recv_data >> bgTypeId_; // battleground type id (DBC id)
+    recv_data >> unk2; // unk
 
     if (!sBattlemasterListStore.LookupEntry(bgTypeId_))
     {
@@ -109,13 +108,8 @@ void WorldSession::HandleBattlemasterJoinOpcode(WorldPacket & recv_data)
     if (_player->InBattleground())
         return;
 
-    // get bg instance or bg template if instance not found
-    Battleground *bg = NULL;
-    if (instanceId)
-        bg = sBattlegroundMgr->GetBattlegroundThroughClientInstance(instanceId, bgTypeId);
-
-    if (!bg)
-        bg = sBattlegroundMgr->GetBattlegroundTemplate(bgTypeId);
+    // get bg template
+    Battleground *bg = sBattlegroundMgr->GetBattlegroundTemplate(bgTypeId);
     if (!bg)
         return;
 
@@ -216,7 +210,7 @@ void WorldSession::HandleBattlemasterJoinOpcode(WorldPacket & recv_data)
 
         for (GroupReference *itr = group->GetFirstMember(); itr != NULL; itr = itr->next())
         {
-            Player *member = itr->getSource();
+            Player* member = itr->getSource();
             if (!member) continue;   // this should never happen
 
             WorldPacket data;
