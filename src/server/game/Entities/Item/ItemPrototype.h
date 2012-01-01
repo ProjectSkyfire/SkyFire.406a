@@ -713,12 +713,6 @@ struct ItemTemplate
         return itemLevel;
     }
 
-    // Remove this.
-    uint32 GetArmor() const;
-    ItemDamageEntry const* FindItemDamageEntry() const;
-    float GetMinDamage() const { return floor(DPS * float(Delay) / 1000.0f * 0.8f + 0.5f); }
-    float GetMaxDamage() const { return floor(DPS * float(Delay) / 1000.0f * 1.2f + 0.5f); }
-
     bool IsPotion() const { return Class == ITEM_CLASS_CONSUMABLE && SubClass == ITEM_SUBCLASS_POTION; }
     bool IsArmorVellum() const { return Class == ITEM_CLASS_TRADE_GOODS && SubClass == ITEM_SUBCLASS_ARMOR_ENCHANTMENT; }
     bool IsConjuredConsumable() const { return Class == ITEM_CLASS_CONSUMABLE && (Flags & ITEM_PROTO_FLAG_CONJURED); }

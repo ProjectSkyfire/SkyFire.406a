@@ -8613,7 +8613,7 @@ void Player::_ApplyItemBonuses(ItemTemplate const *proto, uint8 slot, bool apply
             ApplySpellPowerBonus(spellbonus, apply);
 
     // If set ScalingStatValue armor get it or use item armor
-    uint32 armor = proto->GetArmor();
+    uint32 armor = proto->Armor;
     if (ssv && proto->Class == ITEM_CLASS_ARMOR)
         armor = ssv->GetArmor(proto->InventoryType, proto->SubClass - 1);
 
@@ -8673,9 +8673,8 @@ void Player::_ApplyWeaponDamage(uint8 slot, ItemTemplate const *proto, ScalingSt
         attType = OFF_ATTACK;
     }
 
-    //TODO: Change this.
-    float minDamage = proto->GetMinDamage();
-    float maxDamage = proto->GetMaxDamage();
+    float minDamage = proto->DamageMin;
+    float maxDamage = proto->DamageMax;
 
     // If set dpsMod in ScalingStatValue use it for min (70% from average), max (130% from average) damage
     int32 extraDPS = 0;
