@@ -346,19 +346,16 @@ char* DBCFileLoader::AutoProduceStrings(const char* format, char* dataTable, uin
                 offset+=1;
                 break;
             case FT_STRING:
-                DBCStringHolder** slot = (DBCStringHolder**)(&dataTable[offset]);
-                if (*slot) // ensure the strings array holder is filled
                 {
-                    const char * st = getRecord(y).getString(x);
-                    if (locale == 0)
+                    // fill only not filled entries
+                    char** slot = (char**)(&dataTable[offset]);
+                    if (!*slot || !**slot)
                     {
-                        // default locale, fill all unfilled locale entries
-                        for (uint8 loc = 0; loc < TOTAL_LOCALES; loc++)
-                            if (!(*slot)->Strings[loc])
-                                (*slot)->Strings[loc] = stringPool+(st-(const char*)stringTable);
+                        const char * st = getRecord(y).getString(x);
+                        *slot=stringPool+(st-(const char*)stringTable);
                     }
-                    else // specific locale, overwrite locale entry
-                        (*slot)->Strings[locale] = stringPool+(st-(const char*)stringTable);
+                    offset += sizeof(char*);
+                    break;
                 }
                 offset+=sizeof(char*);
                 break;
