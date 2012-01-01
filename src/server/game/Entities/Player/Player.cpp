@@ -8086,7 +8086,7 @@ void Player::ApplyReforgedStats(Item* item, bool apply)
         return;
 
     const ItemTemplate* proto = item->GetTemplate();
-    for(uint32 i = 0; i <= MAX_ITEM_PROTO_STATS; ++i)
+    for (uint32 i = 0; i <= MAX_ITEM_PROTO_STATS; ++i)
     {
         if (proto->ItemStat[i].ItemStatValue == 0)
             continue;
@@ -24404,15 +24404,15 @@ void Player::LearnTalent(uint32 talentId, uint32 talentRank, bool one)
     if(one && talentTabInfo->TalentTabID != GetTalentBranchSpec(m_activeSpec))
     {
         uint32 pointInBranchSpec = 0;
-        for(PlayerTalentMap::iterator itr = m_talents[m_activeSpec]->begin(); itr != m_talents[m_activeSpec]->end(); itr++)
+        for (PlayerTalentMap::iterator itr = m_talents[m_activeSpec]->begin(); itr != m_talents[m_activeSpec]->end(); itr++)
         {
-            for(uint32 i = 0; i < sTalentStore.GetNumRows(); i++)
+            for (uint32 i = 0; i < sTalentStore.GetNumRows(); i++)
             {
                 const TalentEntry * thisTalent = sTalentStore.LookupEntry(i);
                 if(thisTalent)
                 {
                     int thisrank = -1;
-                    for(int j = 0; j < 5; j++)
+                    for (int j = 0; j < 5; j++)
                         if(thisTalent->RankID[j] == itr->first)
                         {
                             thisrank = j;
@@ -25821,7 +25821,7 @@ void Player::UpdateMasteryAuras(uint32 branch)
     }
 
     // Now remove all the mastery spells for all branch except this one
-    for(uint32 i = 0; i < sTalentTabStore.GetNumRows(); ++i)
+    for (uint32 i = 0; i < sTalentTabStore.GetNumRows(); ++i)
     {
         if(branch != i)
             if (TalentTabEntry const* tabi = sTalentTabStore.LookupEntry(i))

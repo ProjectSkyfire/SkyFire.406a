@@ -588,30 +588,30 @@ struct BfTBGameObjectBuilding
 
     void UpdateCreatureAndGo()
     {
-        for(GuidSet::const_iterator itr = m_CreatureTopList[m_TB->GetDefenderTeam()].begin(); itr != m_CreatureTopList[m_TB->GetDefenderTeam()].end(); ++itr)
+        for (GuidSet::const_iterator itr = m_CreatureTopList[m_TB->GetDefenderTeam()].begin(); itr != m_CreatureTopList[m_TB->GetDefenderTeam()].end(); ++itr)
               if (Unit* unit = ObjectAccessor::FindUnit((*itr)))
                 if (Creature* creature = unit->ToCreature())
                     m_TB->HideNpc(creature);
 
-        for(GuidSet::const_iterator itr = m_CreatureTopList[m_TB->GetAttackerTeam()].begin(); itr != m_CreatureTopList[m_TB->GetAttackerTeam()].end(); ++itr)
+        for (GuidSet::const_iterator itr = m_CreatureTopList[m_TB->GetAttackerTeam()].begin(); itr != m_CreatureTopList[m_TB->GetAttackerTeam()].end(); ++itr)
             if (Unit* unit = ObjectAccessor::FindUnit((*itr)))
                 if (Creature* creature = unit->ToCreature())
                     m_TB->ShowNpc(creature, true);
 
-        for(GuidSet::const_iterator itr = m_CreatureBottomList[m_TB->GetDefenderTeam()].begin(); itr != m_CreatureBottomList[m_TB->GetDefenderTeam()].end(); ++itr)
+        for (GuidSet::const_iterator itr = m_CreatureBottomList[m_TB->GetDefenderTeam()].begin(); itr != m_CreatureBottomList[m_TB->GetDefenderTeam()].end(); ++itr)
             if (Unit* unit = ObjectAccessor::FindUnit((*itr)))
                 if (Creature* creature = unit->ToCreature())
                     m_TB->HideNpc(creature);
 
-        for(GuidSet::const_iterator itr = m_CreatureBottomList[m_TB->GetAttackerTeam()].begin(); itr != m_CreatureBottomList[m_TB->GetAttackerTeam()].end(); ++itr)
+        for (GuidSet::const_iterator itr = m_CreatureBottomList[m_TB->GetAttackerTeam()].begin(); itr != m_CreatureBottomList[m_TB->GetAttackerTeam()].end(); ++itr)
             if (Unit* unit = ObjectAccessor::FindUnit((*itr)))
                 if (Creature* creature = unit->ToCreature())
                     m_TB->ShowNpc(creature, true);
 
-        for(TBGameObjectSet::const_iterator itr = m_GameObjectList[m_TB->GetDefenderTeam()].begin(); itr != m_GameObjectList[m_TB->GetDefenderTeam()].end(); ++itr)
+        for (TBGameObjectSet::const_iterator itr = m_GameObjectList[m_TB->GetDefenderTeam()].begin(); itr != m_GameObjectList[m_TB->GetDefenderTeam()].end(); ++itr)
             (*itr)->SetRespawnTime(RESPAWN_ONE_DAY);
 
-        for(TBGameObjectSet::const_iterator itr = m_GameObjectList[m_TB->GetAttackerTeam()].begin(); itr != m_GameObjectList[m_TB->GetAttackerTeam()].end(); ++itr)
+        for (TBGameObjectSet::const_iterator itr = m_GameObjectList[m_TB->GetAttackerTeam()].begin(); itr != m_GameObjectList[m_TB->GetAttackerTeam()].end(); ++itr)
             (*itr)->SetRespawnTime(RESPAWN_IMMEDIATELY);
     }
 
@@ -686,11 +686,11 @@ struct BfTBWorkShopData
             case BATTLEFIELD_TB_TEAM_ALLIANCE:
             {
                 // Show Alliance gameobject
-                for(TBGameObjectSet::const_iterator itr = m_GameObjectOnPoint[TEAM_ALLIANCE].begin(); itr != m_GameObjectOnPoint[TEAM_ALLIANCE].end(); ++itr)
+                for (TBGameObjectSet::const_iterator itr = m_GameObjectOnPoint[TEAM_ALLIANCE].begin(); itr != m_GameObjectOnPoint[TEAM_ALLIANCE].end(); ++itr)
                     (*itr)->SetRespawnTime(RESPAWN_IMMEDIATELY);
 
                 // Hide Horde gameobject
-                for(TBGameObjectSet::const_iterator itr = m_GameObjectOnPoint[TEAM_HORDE].begin(); itr != m_GameObjectOnPoint[TEAM_HORDE].end(); ++itr)
+                for (TBGameObjectSet::const_iterator itr = m_GameObjectOnPoint[TEAM_HORDE].begin(); itr != m_GameObjectOnPoint[TEAM_HORDE].end(); ++itr)
                     (*itr)->SetRespawnTime(RESPAWN_ONE_DAY);
 
                 // Updating worldstate
@@ -713,11 +713,11 @@ struct BfTBWorkShopData
             case BATTLEFIELD_TB_TEAM_HORDE:
             {
                 // Hide Alliance gameobject
-                for(TBGameObjectSet::const_iterator itr = m_GameObjectOnPoint[TEAM_ALLIANCE].begin(); itr != m_GameObjectOnPoint[TEAM_ALLIANCE].end(); ++itr)
+                for (TBGameObjectSet::const_iterator itr = m_GameObjectOnPoint[TEAM_ALLIANCE].begin(); itr != m_GameObjectOnPoint[TEAM_ALLIANCE].end(); ++itr)
                     (*itr)->SetRespawnTime(RESPAWN_ONE_DAY);
 
                 // Show Horde gameobject
-                for(TBGameObjectSet::const_iterator itr = m_GameObjectOnPoint[TEAM_HORDE].begin(); itr != m_GameObjectOnPoint[TEAM_HORDE].end(); ++itr)
+                for (TBGameObjectSet::const_iterator itr = m_GameObjectOnPoint[TEAM_HORDE].begin(); itr != m_GameObjectOnPoint[TEAM_HORDE].end(); ++itr)
                     (*itr)->SetRespawnTime(RESPAWN_IMMEDIATELY);
 
                 // Update worlstate

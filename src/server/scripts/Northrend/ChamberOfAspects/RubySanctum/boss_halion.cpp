@@ -261,7 +261,7 @@ public:
             Map* map = me->GetMap();
             Map::PlayerList const &pList = map->GetPlayers();
                 if (pList.isEmpty()) return;
-            for(Map::PlayerList::const_iterator i = pList.begin(); i != pList.end(); ++i)
+            for (Map::PlayerList::const_iterator i = pList.begin(); i != pList.end(); ++i)
             {
                 if (Player* player = i->getSource())
                 {
@@ -1131,7 +1131,7 @@ public:
                 Map::PlayerList const &pList = map->GetPlayers();
                     if (pList.isEmpty()) return;
 
-                for(Map::PlayerList::const_iterator i = pList.begin(); i != pList.end(); ++i)
+                for (Map::PlayerList::const_iterator i = pList.begin(); i != pList.end(); ++i)
                 {
                     if (Player* player = i->getSource())
                     {
@@ -1411,7 +1411,7 @@ public:
             else ConsumptTimer -= diff;
 
             Map::PlayerList const &players = instance->instance->GetPlayers();
-            for(Map::PlayerList::const_iterator i = players.begin(); i != players.end(); ++i)
+            for (Map::PlayerList::const_iterator i = players.begin(); i != players.end(); ++i)
             {
                 if(Player* player = i->getSource())
                 {
@@ -1491,7 +1491,7 @@ public:
             } else ConbustTimer -= diff;
 
             Map::PlayerList const &players = instance->instance->GetPlayers();
-            for(Map::PlayerList::const_iterator i = players.begin(); i != players.end(); ++i)
+            for (Map::PlayerList::const_iterator i = players.begin(); i != players.end(); ++i)
             {
                 if(Player* player = i->getSource())
                 {
@@ -1591,7 +1591,7 @@ public:
                         direction = 2.0f*M_PI*((float)urand(0,15)/16.0f);
                         float x, y, radius;
                         radius = 0.0f;
-                        for(uint8 i = 0; i < RAID_MODE(TARGETS_10,TARGETS_25,TARGETS_10,TARGETS_25); ++i)
+                        for (uint8 i = 0; i < RAID_MODE(TARGETS_10,TARGETS_25,TARGETS_10,TARGETS_25); ++i)
                         {
                             radius = radius + 5.0f;
                             me->GetNearPoint2D(x, y, radius, direction);
@@ -1604,7 +1604,7 @@ public:
                         direction = direction + M_PI/4;
                         float x, y, radius;
                         radius = 0.0f;
-                        for(uint8 i = 0; i < RAID_MODE(TARGETS_10,TARGETS_25,TARGETS_10,TARGETS_25); ++i)
+                        for (uint8 i = 0; i < RAID_MODE(TARGETS_10,TARGETS_25,TARGETS_10,TARGETS_25); ++i)
                         {
                             radius = radius + 5.0f;
                             me->GetNearPoint2D(x, y, radius, direction);

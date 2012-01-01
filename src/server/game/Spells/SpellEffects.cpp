@@ -1498,7 +1498,7 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                         m_caster->GetPartyMembers(PartyMembers);
                         bool Continue = false;
                         uint32 player = 0;
-                        for(std::list<Unit*>::iterator itr = PartyMembers.begin(); itr != PartyMembers.end(); ++itr) // If caster is in party with a player
+                        for (std::list<Unit*>::iterator itr = PartyMembers.begin(); itr != PartyMembers.end(); ++itr) // If caster is in party with a player
                         {
                             ++player;
                             if (Continue == false && player > 1)

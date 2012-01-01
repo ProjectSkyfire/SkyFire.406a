@@ -504,8 +504,8 @@ void Battlefield::SendWarningToPlayer(Player* player, int32 entry, ...)
 
 void Battlefield::SendUpdateWorldState(uint32 field, uint32 value)
 {
-    for(int i = 0; i < 2; ++i)
-        for(GuidSet::iterator itr = m_players[i].begin(); itr != m_players[i].end(); ++itr)
+    for (int i = 0; i < 2; ++i)
+        for (GuidSet::iterator itr = m_players[i].begin(); itr != m_players[i].end(); ++itr)
         {
             if (Player *player = ObjectAccessor::FindPlayer((*itr)))
                 player->SendUpdateWorldState(field, value);

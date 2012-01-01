@@ -376,7 +376,7 @@ public:
                     }
                     if (data == FAIL)
                     {
-                        for(uint8 i = 0; i<4; i++)
+                        for (uint8 i = 0; i<4; i++)
                             OpenDoor(WallID[i]);
 
                         CloseDoor(RunDoor);

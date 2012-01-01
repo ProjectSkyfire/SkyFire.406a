@@ -2461,7 +2461,7 @@ inline void Unit::SendMonsterMoveByPath(Path<Elem, Node> const& path, uint32 sta
     data << uint32(traveltime);
     data << uint32(pathSize);
 
-    for(uint32 i = start; i < end; ++i)
+    for (uint32 i = start; i < end; ++i)
     {
         data << float(path[i].x);
         data << float(path[i].y);

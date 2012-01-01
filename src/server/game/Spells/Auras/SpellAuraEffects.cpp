@@ -720,7 +720,7 @@ int32 AuraEffect::CalculateAmount(Unit* caster)
                     uint32 plrskill = player->GetSkillValue(SKILL_RIDING);
                     uint32 map = GetVirtualMapForMapAndZone(player->GetMapId(), player->GetZoneId());
                     uint32 maxSkill = 0;
-                    for(int i = 0; i < MAX_MOUNT_TYPE_COLUMN; i++)
+                    for (int i = 0; i < MAX_MOUNT_TYPE_COLUMN; i++)
                     {
                         const MountCapabilityEntry *cap = sMountCapabilityStore.LookupEntry(type->capabilities[i]);
                         if(!cap)

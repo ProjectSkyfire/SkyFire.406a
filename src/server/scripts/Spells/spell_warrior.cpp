@@ -371,7 +371,7 @@ class spell_warr_thunderclap : public SpellScriptLoader
                                 if(target->HasAura(94009)) // If the target has Rend
                                 {
                                     CheckAgain = false;
-                                    for(std::list<Unit*>::iterator itr = targetList.begin(); itr != targetList.end(); ++itr)
+                                    for (std::list<Unit*>::iterator itr = targetList.begin(); itr != targetList.end(); ++itr)
                                         if(Unit* curTrg = (*itr))
                                             caster->CastSpell(curTrg,94009,true);
                                 }

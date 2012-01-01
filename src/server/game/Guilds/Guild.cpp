@@ -1249,7 +1249,7 @@ void Guild::HandleRoster(WorldSession* session /*= NULL*/)
 
     // Packed uint8 - each bit resembles some flag.
     uint32 totalBytesToSend = uint32(ceil(float(m_members.size()) / 8.0f));
-    for(uint32 i = 0; i < totalBytesToSend; ++i)
+    for (uint32 i = 0; i < totalBytesToSend; ++i)
         data << uint8(0); //unk
 
     for (Members::const_iterator itr = m_members.begin(); itr != m_members.end(); ++itr)
@@ -1307,7 +1307,7 @@ void Guild::HandleRoster(WorldSession* session /*= NULL*/)
     for (Members::const_iterator itr = m_members.begin(); itr != m_members.end(); ++itr)
     {
         // two primary professions (todo)
-        for(int i = 0; i < 2; ++i)
+        for (int i = 0; i < 2; ++i)
         {
             data << uint32(0); // profession title
             data << uint32(0); // profession level?
@@ -1343,7 +1343,7 @@ void Guild::SendGuildRankInfo(WorldSession* session)
 {
     WorldPacket data7(SMSG_GUILD_RANK);
     data7 << uint32(_GetRanksSize());
-    for(uint32 i = 0; i < _GetRanksSize(); i++)
+    for (uint32 i = 0; i < _GetRanksSize(); i++)
     {
         //data7 << uint32(m_ranks[i].GetId());
         data7 << uint32(i);
@@ -1351,9 +1351,9 @@ void Guild::SendGuildRankInfo(WorldSession* session)
         data7 << m_ranks[i].GetName();
         data7 << uint32(m_ranks[i].GetRights());
 
-        for(int j = 0; j < GUILD_BANK_MAX_TABS; j++)
+        for (int j = 0; j < GUILD_BANK_MAX_TABS; j++)
             data7 << uint32(m_ranks[i].GetBankTabRights(j));
-        for(int j = 0; j < GUILD_BANK_MAX_TABS; j++)
+        for (int j = 0; j < GUILD_BANK_MAX_TABS; j++)
             data7 << uint32(m_ranks[i].GetBankTabSlotsPerDay(j));
 
         data7 << uint32(m_ranks[i].GetBankMoneyPerDay()); // GuildBankRightsAndSlots
@@ -1644,7 +1644,7 @@ void Guild::HandleAcceptMember(WorldSession* session)
         player->SetUInt32Value(PLAYER_GUILDLEVEL, uint32(GetLevel()));
         player->SetFlag(PLAYER_FLAGS, PLAYER_FLAGS_GLEVEL_ENABLED);
         /// Learn perks to him
-        for(int i = 0; i < GetLevel()-1; ++i)
+        for (int i = 0; i < GetLevel()-1; ++i)
             if(const GuildPerksEntry* perk = sGuildPerksStore.LookupEntry(i))
                 player->learnSpell(perk->SpellId, true);
 
@@ -2007,7 +2007,7 @@ void Guild::SendPermissions(WorldSession* session) const
 
     WorldPacket data7(SMSG_GUILD_RANK);
     data7 << uint32(_GetRanksSize());
-    for(uint32 i = 0; i < _GetRanksSize(); i++)
+    for (uint32 i = 0; i < _GetRanksSize(); i++)
     {
         //data7 << uint32(m_ranks[i].GetId());
         data7 << uint32(i);
@@ -2015,10 +2015,10 @@ void Guild::SendPermissions(WorldSession* session) const
         data7 << m_ranks[i].GetName();
         data7 << uint32(m_ranks[i].GetRights());
 
-        for(int j = 0; j < GUILD_BANK_MAX_TABS; j++)
+        for (int j = 0; j < GUILD_BANK_MAX_TABS; j++)
             data7 << uint32(m_ranks[i].GetBankMoneyPerDay());
             //data7 << uint32(0xFFFFFFFF);
-        for(int j = 0; j < GUILD_BANK_MAX_TABS; j++)
+        for (int j = 0; j < GUILD_BANK_MAX_TABS; j++)
             data7 << uint32(m_ranks[i].GetRights());
             //data7 << uint32(0xFFFFFFFF);
 
@@ -2343,7 +2343,7 @@ bool Guild::AddMember(uint64 guid, uint8 rankId)
         member->SetStats(player);
 
         // Learn our perks to him
-        for(int i = 0; i < m_level; ++i)
+        for (int i = 0; i < m_level; ++i)
             if(const GuildPerksEntry* perk = sGuildPerksStore.LookupEntry(i))
                 player->learnSpell(perk->SpellId, true);
     }

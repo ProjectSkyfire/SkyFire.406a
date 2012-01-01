@@ -2323,7 +2323,7 @@ bool Group::IsGuildGroup(bool AllInSameMap, bool AllInSameInstanceId)
 
 void Group::SendGuildGroupStateUpdate(bool guild)
 {
-    for(GroupReference *itr = GetFirstMember(); itr != NULL; itr = itr->next()) // Loop trought all members
+    for (GroupReference *itr = GetFirstMember(); itr != NULL; itr = itr->next()) // Loop trought all members
     {
         if(Player* player = itr->getSource())
         {

@@ -2381,7 +2381,7 @@ void Aura::CallScriptEffectAfterManaShieldHandlers(AuraEffect* aurEff, AuraAppli
 bool Aura::CallScriptEffectProc(AuraEffect const * aurEff, Unit* pUnit, Unit *pVictim, uint32 damage, SpellInfo const* procSpell, uint32 procFlag, uint32 procExtra, WeaponAttackType attType, int32 cooldown)
 {
     bool preventDefault = false;
-    for(std::list<AuraScript *>::iterator scritr = m_loadedScripts.begin(); scritr != m_loadedScripts.end() ; ++scritr)
+    for (std::list<AuraScript *>::iterator scritr = m_loadedScripts.begin(); scritr != m_loadedScripts.end() ; ++scritr)
     {
         (*scritr)->_PrepareScriptCall(AURA_SCRIPT_HOOK_EFFECT_PROC/*, aurApp*/);
         std::list<AuraScript::EffectProcHandler>::iterator effEndItr = (*scritr)->OnEffectProc.end(), effItr = (*scritr)->OnEffectProc.begin();

@@ -560,7 +560,7 @@ void LoadDBCStores(const std::string& dataPath, uint32& availableDbcLocales)
     LoadDBC(availableDbcLocales, bad_dbc_files, sVehicleSeatStore,            dbcPath, "VehicleSeat.dbc");
 
     LoadDBC(availableDbcLocales, bad_dbc_files, sWMOAreaTableStore,           dbcPath, "WMOAreaTable.dbc");
-    for(uint32 i = 0; i < sWMOAreaTableStore.GetNumRows(); ++i)
+    for (uint32 i = 0; i < sWMOAreaTableStore.GetNumRows(); ++i)
     {
         if (WMOAreaTableEntry const* entry = sWMOAreaTableStore.LookupEntry(i))
         {

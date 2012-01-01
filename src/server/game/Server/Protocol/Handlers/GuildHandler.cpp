@@ -269,22 +269,22 @@ void WorldSession::HandleGuildRewardsOpcode(WorldPacket& recvPacket)
     data << uint32(_player->GetGuildId()) ;
     data << uint32(vec.size()); // counter
 
-    for(uint32 i = 0; i < vec.size(); ++i)
+    for (uint32 i = 0; i < vec.size(); ++i)
         data << uint32(0); // unk (only found 0 in retail logs)
 
-    for(uint32 i = 0; i < vec.size(); ++i)
+    for (uint32 i = 0; i < vec.size(); ++i)
         data << uint32(0); // unk
 
-    for(uint32 i = 0; i < vec.size(); ++i)
+    for (uint32 i = 0; i < vec.size(); ++i)
         data << uint64(vec[i].price); // money price
 
-    for(uint32 i = 0; i < vec.size(); ++i)
+    for (uint32 i = 0; i < vec.size(); ++i)
         data << uint32(vec[i].achievement); // Achievement requirement
 
-    for(uint32 i = 0; i < vec.size(); ++i)
+    for (uint32 i = 0; i < vec.size(); ++i)
         data << uint32(vec[i].standing); // Reputation level (REP_HONORED, REP_FRIENDLY, etc)
 
-    for(uint32 i = 0; i < vec.size(); ++i)
+    for (uint32 i = 0; i < vec.size(); ++i)
         data << uint32(vec[i].item); // item entry
     SendPacket(&data);
 }
@@ -310,7 +310,7 @@ void WorldSession::HandleGuildSetNoteOpcode(WorldPacket& recvPacket)
 void WorldSession::HandleGuildRankOpcode(WorldPacket& recvPacket)
 {
     uint32 BankStacks[GUILD_BANK_MAX_TABS];
-    for(uint32 i = 0; i < GUILD_BANK_MAX_TABS; i++)
+    for (uint32 i = 0; i < GUILD_BANK_MAX_TABS; i++)
         recvPacket >> BankStacks[i];
 
     uint32 new_rights;
@@ -323,7 +323,7 @@ void WorldSession::HandleGuildRankOpcode(WorldPacket& recvPacket)
     recvPacket >> old_rankId;
 
     uint32 BankRights[GUILD_BANK_MAX_TABS];
-    for(uint32 i = 0; i < GUILD_BANK_MAX_TABS; i++)
+    for (uint32 i = 0; i < GUILD_BANK_MAX_TABS; i++)
         recvPacket >> BankRights[i];
 
     uint64 guildId;

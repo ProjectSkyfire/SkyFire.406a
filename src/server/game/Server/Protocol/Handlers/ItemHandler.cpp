@@ -292,7 +292,7 @@ void WorldSession::HandleRequestHotFix(WorldPacket & recv_data)
         return;
     }
 
-    for(uint32 i = 0; i < count; ++i)
+    for (uint32 i = 0; i < count; ++i)
     {
         uint32 item;
         recv_data >> item;
@@ -349,14 +349,14 @@ void WorldSession::HandleRequestHotFix(WorldPacket & recv_data)
                 data << int32(proto->Stackable);
                 data << uint32(proto->ContainerSlots);
 
-                for(uint32 x = 0; x < MAX_ITEM_PROTO_STATS; ++x)
+                for (uint32 x = 0; x < MAX_ITEM_PROTO_STATS; ++x)
                     data << uint32(proto->ItemStat[x].ItemStatType);
 
-                for(uint32 x = 0; x < MAX_ITEM_PROTO_STATS; ++x)
+                for (uint32 x = 0; x < MAX_ITEM_PROTO_STATS; ++x)
                     data << int32(proto->ItemStat[x].ItemStatValue);
 
                 // Till here we are going good, now we start with the unk shit
-                for(uint32 x = 0; x < 20; ++x) // 20 unk fields
+                for (uint32 x = 0; x < 20; ++x) // 20 unk fields
                     data << uint32(0);
 
                 data << uint32(proto->ScalingStatDistribution);
@@ -364,22 +364,22 @@ void WorldSession::HandleRequestHotFix(WorldPacket & recv_data)
                 data << uint32(proto->Delay);
                 data << float(proto->RangedModRange);
 
-                for(uint32 x = 0; x < MAX_ITEM_PROTO_SPELLS; ++x)
+                for (uint32 x = 0; x < MAX_ITEM_PROTO_SPELLS; ++x)
                     data << int32(proto->Spells[x].SpellId);
 
-                for(uint32 x = 0; x < MAX_ITEM_PROTO_SPELLS; ++x)
+                for (uint32 x = 0; x < MAX_ITEM_PROTO_SPELLS; ++x)
                     data << uint32(proto->Spells[x].SpellTrigger);
 
-                for(uint32 x = 0; x < MAX_ITEM_PROTO_SPELLS; ++x)
+                for (uint32 x = 0; x < MAX_ITEM_PROTO_SPELLS; ++x)
                     data << int32(proto->Spells[x].SpellCharges);
 
-                for(uint32 x = 0; x < MAX_ITEM_PROTO_SPELLS; ++x)
+                for (uint32 x = 0; x < MAX_ITEM_PROTO_SPELLS; ++x)
                     data << int32(proto->Spells[x].SpellCooldown);
 
-                for(uint32 x = 0; x < MAX_ITEM_PROTO_SPELLS; ++x)
+                for (uint32 x = 0; x < MAX_ITEM_PROTO_SPELLS; ++x)
                     data << uint32(proto->Spells[x].SpellCategory);
 
-                for(uint32 x = 0; x < MAX_ITEM_PROTO_SPELLS; ++x)
+                for (uint32 x = 0; x < MAX_ITEM_PROTO_SPELLS; ++x)
                     data << int32(proto->Spells[x].SpellCategoryCooldown);
 
                 data << uint32(proto->Bonding);
@@ -389,7 +389,7 @@ void WorldSession::HandleRequestHotFix(WorldPacket & recv_data)
                 data << uint16(strlen(str) + 1);
                 data << str;
 
-                for(uint32 x = 0; x < 3; ++x) // other 3 names
+                for (uint32 x = 0; x < 3; ++x) // other 3 names
                 {
                     const char* str = (const char*)"";
                     data << uint16(strlen(str) + 1);
@@ -418,10 +418,10 @@ void WorldSession::HandleRequestHotFix(WorldPacket & recv_data)
                 data << uint32(proto->BagFamily);
                 data << uint32(proto->TotemCategory);
 
-                for(uint32 x = 0; x < MAX_ITEM_PROTO_SOCKETS; ++x)
+                for (uint32 x = 0; x < MAX_ITEM_PROTO_SOCKETS; ++x)
                     data << uint32(proto->Socket[x].Color);
 
-                for(uint32 x = 0; x < MAX_ITEM_PROTO_SOCKETS; ++x)
+                for (uint32 x = 0; x < MAX_ITEM_PROTO_SOCKETS; ++x)
                     data << uint32(proto->Socket[x].Content);
 
                 data << uint32(proto->socketBonus);
