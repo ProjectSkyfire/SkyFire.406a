@@ -90,11 +90,11 @@ struct ItemSparseEntry
     int32      SpellCategory[MAX_ITEM_PROTO_SPELLS];         // 85 - 89
     int32      SpellCategoryCooldown[MAX_ITEM_PROTO_SPELLS]; // 90 - 94
     uint32     Bonding;                                      // 95
-    DB2String  Name;                                         // 96
-    DB2String  Name2;                                        // 97
-    DB2String  Name3;                                        // 98
-    DB2String  Name4;                                        // 99
-    DB2String  Description;                                  // 100
+    std::string  Name;                                         // 96
+    std::string  Name2;                                        // 97
+    std::string  Name3;                                        // 98
+    std::string  Name4;                                        // 99
+    std::string  Description;                                  // 100
     uint32     PageText;                                     // 101
     uint32     LanguageID;                                   // 102
     uint32     PageMaterial;                                 // 103
