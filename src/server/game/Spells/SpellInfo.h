@@ -332,7 +332,7 @@ public:
     uint32 SpellVisual[2];                                  // 16-17    m_spellVisualID
     uint32 SpellIconID;                                     // 18       m_spellIconID
     uint32 ActiveIconID;                                    // 19       m_activeIconID
-    DBCString SpellName;                                    // 20       m_name
+    char* SpellName;                                        // 20       m_name
     uint32 SpellShapeshiftId;                               // 21       SpellShapeshift.dbc
     //DBCString Description;                                // 22       m_description_lang not used
     //DBCString ToolTip;                                    // 23       m_auraDescription_lang not used
