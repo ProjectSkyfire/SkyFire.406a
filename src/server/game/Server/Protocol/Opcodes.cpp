@@ -1282,4 +1282,5 @@ void InitOpcodeTable()
     OPCODE( CMSG_LOG_DISCONNECT,                          STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_EarlyProccess            );
     OPCODE( MSG_VERIFY_CONNECTIVITY,                      STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_EarlyProccess            );
     OPCODE( CMSG_VIOLENCE_LEVEL,                          STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
+    OPCODE( SMSG_PLAYER_MOVE,                             STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
 };

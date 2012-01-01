@@ -530,7 +530,7 @@ void Unit::SendMonsterMoveExitVehicle(Position const* newPos)
 
     data << uint8(SPLINETYPE_FACING_ANGLE);
     data << float(GetOrientation());                        // guess
-    data << uint32(SPLINEFLAG_EXIT_VEHICLE);
+    data << uint32(0);                                      // was SPLINEFLAG_EXIT_VEHICLE
     data << uint32(0);                                      // Time in between points
     data << uint32(1);                                      // 1 single waypoint
     data << newPos->GetPositionX();
@@ -554,7 +554,7 @@ void Unit::SendMonsterMoveTransport(Unit* vehicleOwner)
     data << uint32(getMSTime());
     data << uint8(4); // type
     data << GetTransOffsetO();
-    data << uint32(SPLINEFLAG_TRANSPORT); // flag
+    data << uint32(SPLINEFLAG_SMOOTH_PATHING);  // used to be SPLINEFLAG_TRANSPORT
     data << uint32(0);
     data << uint32(1);
     data << float(0);//GetTransOffsetX();
@@ -2543,8 +2543,9 @@ SpellMissInfo Unit::MagicSpellHitResult(Unit* victim, SpellInfo const* spell)
             modHitChance -= victim->GetTotalAuraModifier(SPELL_AURA_MOD_AOE_AVOIDANCE);
 
         // Decrease hit chance from victim rating bonus
-        if (victim->GetTypeId() == TYPEID_PLAYER)
-            modHitChance -= int32(victim->ToPlayer()->GetRatingBonusValue(CR_HIT_TAKEN_SPELL));
+        // looks like it was removed as of 4.2.0. The rating scaling is set to 0 in DBC
+        //if (victim->GetTypeId() == TYPEID_PLAYER)
+        //    modHitChance -= int32(victim->ToPlayer()->GetRatingBonusValue(CR_HIT_TAKEN_SPELL));
     }
 
     int32 HitChance = modHitChance * 100;
@@ -17802,10 +17803,7 @@ void Unit::AddSpellMod(SpellModifier* mod, bool apply)
                 }
                 val += apply ? mod->value : -(mod->value);
                 data << uint8(eff);
-                if (isFlat)
-                    data << int32(val);
-                else
-                    data << float(val);
+                data << float(val);
                 modcount++;
             }
         }

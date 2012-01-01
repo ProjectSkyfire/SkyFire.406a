@@ -31,6 +31,7 @@
 #include "WaypointMovementGenerator.h"
 #include "InstanceSaveMgr.h"
 #include "ObjectMgr.h"
+#include "MovementStructures.h"
 
 void WorldSession::HandleMoveWorldportAckOpcode(WorldPacket & /*recv_data*/)
 {
@@ -335,7 +336,7 @@ void WorldSession::HandleMovementOpcodes(WorldPacket & recv_data)
     /*----------------------*/
 
     /* process position-change */
-    WorldPacket data(opcode, recv_data.size());
+    WorldPacket data(SMSG_PLAYER_MOVE/*recv_data.GetOpcode()*/, recv_data.size());
     movementInfo.time = getMSTime();
     movementInfo.guid = mover->GetGUID();
     WriteMovementInfo(&data, &movementInfo);
