@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -115,6 +115,8 @@ enum CharacterDatabaseStatements
     CHAR_GET_ENUM,
     CHAR_GET_ENUM_DECLINED_NAME,
     CHAR_DEL_QUEST_STATUS_DAILY,
+    CHAR_DEL_QUEST_STATUS_WEEKLY,
+    CHAR_DEL_BATTLEGROUND_RANDOM,
 
     // Auction
     CHAR_LOAD_AUCTION_ITEMS,

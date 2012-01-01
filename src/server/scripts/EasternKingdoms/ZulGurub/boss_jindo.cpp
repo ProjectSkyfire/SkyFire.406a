@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2006-2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2006-2012 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -84,7 +84,7 @@ class boss_jindo : public CreatureScript
                 if (BrainWashTotem_Timer <= diff)
                 {
                     DoCast(me, SPELL_BRAINWASHTOTEM);
-                    BrainWashTotem_Timer = 18000 + rand()%8000;
+                    BrainWashTotem_Timer = urand(18000, 26000);
                 } else BrainWashTotem_Timer -= diff;
 
                 //HealingWard_Timer
@@ -92,7 +92,7 @@ class boss_jindo : public CreatureScript
                 {
                     //DoCast(me, SPELL_POWERFULLHEALINGWARD);
                     me->SummonCreature(14987, me->GetPositionX()+3, me->GetPositionY()-2, me->GetPositionZ(), 0, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 30000);
-                    HealingWard_Timer = 14000 + rand()%6000;
+                    HealingWard_Timer = urand(14000, 20000);
                 } else HealingWard_Timer -= diff;
 
                 //Hex_Timer
@@ -103,7 +103,7 @@ class boss_jindo : public CreatureScript
                     if (DoGetThreat(me->getVictim()))
                         DoModifyThreatPercent(me->getVictim(), -80);
 
-                    Hex_Timer = 12000 + rand()%8000;
+                    Hex_Timer = urand(12000, 20000);
                 } else Hex_Timer -= diff;
 
                 //Casting the delusion curse with a shade. So shade will attack the same target with the curse.
@@ -118,7 +118,7 @@ class boss_jindo : public CreatureScript
                             Shade->AI()->AttackStart(target);
                     }
 
-                    Delusions_Timer = 4000 + rand()%8000;
+                    Delusions_Timer = urand(4000, 12000);
                 } else Delusions_Timer -= diff;
 
                 //Teleporting a random gamer and spawning 9 skeletons that will attack this gamer
@@ -163,7 +163,7 @@ class boss_jindo : public CreatureScript
                             Skeletons->AI()->AttackStart(target);
                     }
 
-                    Teleport_Timer = 15000 + rand()%8000;
+                    Teleport_Timer = urand(15000, 23000);
                 } else Teleport_Timer -= diff;
 
                 DoMeleeAttackIfReady();

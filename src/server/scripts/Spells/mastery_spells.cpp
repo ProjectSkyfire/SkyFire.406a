@@ -404,18 +404,97 @@ public:
     }
 };
 
+// 76803 Potent Poisons
+class spell_rog_potent_poisons : public SpellScriptLoader
+{
+public:
+    spell_rog_potent_poisons() : SpellScriptLoader("spell_rog_potent_poisons") { }
+
+    AuraScript *GetAuraScript() const
+    {
+        MasteryScript* script = new MasteryScript();
+        script->SetMasteryAura(EFFECT_0, SPELL_AURA_ADD_PCT_MODIFIER);
+        script->SetMasteryAura(EFFECT_1, SPELL_AURA_ADD_PCT_MODIFIER);
+        script->SetMasteryBaseAmount(EFFECT_2, 350);
+        return script;
+    }
+};
+
+// 76806 Main Gauche
+class spell_rog_main_gauche : public SpellScriptLoader
+{
+public:
+    spell_rog_main_gauche() : SpellScriptLoader("spell_rog_main_gauche") { }
+
+    class spell_rog_main_gauche_AuraScript : public MasteryScript
+    {
+    public:
+        void OnProc(AuraEffect const* aurEff, Unit* unit, Unit* victim, uint32 damage, SpellInfo const* procSpell, uint32 procFlag, uint32 procExtra, WeaponAttackType attType, int32 cooldown)
+        {
+            PreventDefaultAction();
+            if (attType != BASE_ATTACK)
+                return;
+            uint32 procSpellId = procSpell ? procSpell->Id : 0;
+            if ((procSpellId != 86392) && roll_chance_i(aurEff->GetAmount()))
+            {
+                unit->CastSpell(victim, 86392, true); // Main Gauche on melee
+                if (cooldown && unit->GetTypeId() == TYPEID_PLAYER)
+                    unit->ToPlayer()->AddSpellCooldown(86392, 0, time(NULL) + cooldown);
+            }
+        }
+    };
+
+    AuraScript *GetAuraScript() const
+    {
+        spell_rog_main_gauche_AuraScript* script = new spell_rog_main_gauche_AuraScript();
+        script->SetMasteryAura(EFFECT_0, SPELL_AURA_DUMMY, true);
+        script->SetMasteryBaseAmount(EFFECT_1, 200);
+        return script;
+    }
+};
+
+// 76808 Executioner
+class spell_rog_executioner : public SpellScriptLoader
+{
+public:
+    spell_rog_executioner() : SpellScriptLoader("spell_rog_executioner") { }
+
+    AuraScript *GetAuraScript() const
+    {
+        MasteryScript* script = new MasteryScript();
+        script->SetMasteryAura(EFFECT_0, SPELL_AURA_ADD_PCT_MODIFIER);
+        script->SetMasteryAura(EFFECT_1, SPELL_AURA_ADD_PCT_MODIFIER);
+        script->SetMasteryAura(EFFECT_2, SPELL_AURA_ADD_PCT_MODIFIER);
+        script->SetMasteryBaseAmount(EFFECT_0, 250);
+        return script;
+    }
+};
+
 void AddSC_mastery_spells()
 {
     new player_scripts_spec;
+
+    // Warrior masteries
     new spell_war_strikes_of_opportunity;
     new spell_war_unshackled_fury;
     new spell_war_critical_block;
+
+    // Mage masteries
     new spell_mage_mana_adept;
     new spell_mage_flashburn;
     new spell_mage_frostburn;
+
+    // Shaman masteries
     new spell_sha_elemental_overlord;
     new spell_sha_enhanced_elements;
     new spell_sha_deep_healing;
+
+    // Hunter masteries
     new spell_hun_wild_quiver;
     new spell_hun_master_of_beasts;
+
+    // Rogue masteries
+    new spell_rog_potent_poisons;
+    new spell_rog_main_gauche;
+    new spell_rog_executioner;
 }

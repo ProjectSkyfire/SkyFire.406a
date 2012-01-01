@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -29,8 +29,6 @@ GuildMgr::~GuildMgr()
 {
     for (GuildContainer::iterator itr = GuildStore.begin(); itr != GuildStore.end(); ++itr)
         delete itr->second;
-    for (GuildRewardsVector::iterator itr = mGuildRewards.begin(); itr != mGuildRewards.end(); ++itr)
-        delete (*itr);
 }
 
 void GuildMgr::AddGuild(Guild* guild)
@@ -187,7 +185,9 @@ void GuildMgr::LoadGuilds()
                                                      "BankResetTimeTab0, BankRemSlotsTab0, BankResetTimeTab1, BankRemSlotsTab1, BankResetTimeTab2, BankRemSlotsTab2, "
                                                      //   13                 14                15                 16                17                 18
                                                      "BankResetTimeTab3, BankRemSlotsTab3, BankResetTimeTab4, BankRemSlotsTab4, BankResetTimeTab5, BankRemSlotsTab5, "
-                                                     //   19      20       21       22      23         24
+                                                     //   19                 20                21                 22
+                                                     "BankResetTimeTab6, BankRemSlotsTab6, BankResetTimeTab7, BankRemSlotsTab7, "
+                                                     //   23      24       25       26      27         28
                                                      "c.name, c.level, c.class, c.zone, c.account, c.logout_time "
                                                      "FROM guild_member gm LEFT JOIN characters c ON c.guid = gm.guid ORDER BY guildid ASC");
 
@@ -402,18 +402,19 @@ void GuildMgr::LoadGuilds()
     sLog->outString("Validating data of loaded guilds...");
     {
         uint32 oldMSTime = getMSTime();
+        std::set<Guild*> rm; // temporary storage to avoid modifying GuildStore with RemoveGuild() while iterating
 
         for (GuildContainer::iterator itr = GuildStore.begin(); itr != GuildStore.end(); ++itr)
         {
             Guild* guild = itr->second;
-            if (guild)
-            {
-                if (!guild->Validate())
-                {
-                    RemoveGuild(guild->GetId());
-                    delete guild;
-                }
-            }
+            if (guild && !guild->Validate())
+                rm.insert(guild);
+        }
+        for (std::set<Guild*>::iterator itr = rm.begin(); itr != rm.end(); ++itr)
+        {
+            Guild* guild = *itr;
+            RemoveGuild(guild->GetId());
+            delete guild;
         }
 
         sLog->outString(">> Validated data of loaded guilds in %u ms", GetMSTimeDiffToNow(oldMSTime));
@@ -426,12 +427,13 @@ uint32 GetXPForGuildLevel(uint8 level);
 
 void GuildMgr::LoadGuildRewards()
 {
-    QueryResult result = WorldDatabase.Query("SELECT item_entry,price,achievement,standing FROM guild_rewards");
+    QueryResult result = WorldDatabase.Query("SELECT item_entry, price, achievement, standing FROM guild_rewards");
 
     if (!result)
     {
         sLog->outString();
         sLog->outString(">> Loaded 0 guild reward definitions");
+        return;
     }
 
     uint32 count = 0;
@@ -439,12 +441,12 @@ void GuildMgr::LoadGuildRewards()
     {
         Field *fields = result->Fetch();
 
-        GuildRewardsEntry* ptr = new GuildRewardsEntry;
-        ptr->item = fields[0].GetUInt32();
-        ptr->price = fields[1].GetUInt32();
-        ptr->achievement = fields[2].GetUInt32();
-        ptr->standing = fields[3].GetUInt32();
-        mGuildRewards.push_back(ptr);
+        GuildRewardsEntry reward;
+        reward.item = fields[0].GetUInt32();
+        reward.price = fields[1].GetUInt32();
+        reward.achievement = fields[2].GetUInt32();
+        reward.standing = fields[3].GetUInt32();
+        mGuildRewards.push_back(reward);
 
         ++count;
     }while (result->NextRow());

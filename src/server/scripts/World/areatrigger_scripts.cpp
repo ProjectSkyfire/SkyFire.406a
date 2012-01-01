@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2006-2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2006-2012 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -276,7 +276,7 @@ class AreaTrigger_at_nats_landing : public AreaTriggerScript
     public:
         AreaTrigger_at_nats_landing() : AreaTriggerScript("at_nats_landing") { }
 
-        bool OnTrigger(Player* player, AreaTriggerEntry const* trigger)
+        bool OnTrigger(Player* player, AreaTriggerEntry const* /*trigger*/)
         {
             if (!player->isAlive() || !player->HasAura(SPELL_FISH_PASTE))
                 return false;
@@ -402,11 +402,11 @@ class AreaTrigger_at_brewfest : public AreaTriggerScript
             {
                 case AT_BREWFEST_DUROTAR:
                     if (Creature* tapper = player->FindNearestCreature(NPC_TAPPER_SWINDLEKEG, 20.0f))
-                    tapper->AI()->Talk(SAY_WELCOME, player->GetGUID());
+                        tapper->AI()->Talk(SAY_WELCOME, player->GetGUID());
                     break;
                 case AT_BREWFEST_DUN_MOROGH:
                     if (Creature* ipfelkofer = player->FindNearestCreature(NPC_IPFELKOFER_IRONKEG, 20.0f))
-                    ipfelkofer->AI()->Talk(SAY_WELCOME, player->GetGUID());
+                        ipfelkofer->AI()->Talk(SAY_WELCOME, player->GetGUID());
                     break;
                 default:
                     break;
@@ -428,7 +428,7 @@ void AddSC_areatrigger_scripts()
     new AreaTrigger_at_scent_larkorwi();
     new AreaTrigger_at_last_rites();
     new AreaTrigger_at_sholazar_waygate();
-    new AreaTrigger_at_nats_landing();	
+    new AreaTrigger_at_nats_landing();
     new AreaTrigger_at_bring_your_orphan_to();
     new AreaTrigger_at_brewfest();
 }

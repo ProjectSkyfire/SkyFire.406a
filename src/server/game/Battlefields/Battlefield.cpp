@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -504,8 +504,8 @@ void Battlefield::SendWarningToPlayer(Player* player, int32 entry, ...)
 
 void Battlefield::SendUpdateWorldState(uint32 field, uint32 value)
 {
-    for(int i = 0; i < 2; ++i)
-        for(GuidSet::iterator itr = m_players[i].begin(); itr != m_players[i].end(); ++itr)
+    for (int i = 0; i < 2; ++i)
+        for (GuidSet::iterator itr = m_players[i].begin(); itr != m_players[i].end(); ++itr)
         {
             if (Player *player = ObjectAccessor::FindPlayer((*itr)))
                 player->SendUpdateWorldState(field, value);

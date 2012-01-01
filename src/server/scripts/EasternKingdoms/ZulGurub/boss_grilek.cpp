@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2006-2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2006-2012 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -44,8 +44,9 @@ class boss_grilek : public CreatureScript
 
             void Reset()
             {
+                Avartar_Timer = urand(15000, 25000);
                 Avartar_Timer      = 15000 + rand()%10000;
-                GroundTremor_Timer = 8000 + rand()%8000;
+                GroundTremor_Timer = urand(8000, 16000);
             }
 
             void EnterCombat(Unit* /*who*/) {}
@@ -69,14 +70,14 @@ class boss_grilek : public CreatureScript
                     if (target)
                         AttackStart(target);
 
-                    Avartar_Timer = 25000 + rand()%10000;
+                    Avartar_Timer = urand(25000, 35000);
                 } else Avartar_Timer -= diff;
 
                 //GroundTremor_Timer
                 if (GroundTremor_Timer <= diff)
                 {
                     DoCast(me->getVictim(), SPELL_GROUNDTREMOR);
-                    GroundTremor_Timer = 12000 + rand()%4000;
+                    GroundTremor_Timer = urand(12000, 16000);
                 } else GroundTremor_Timer -= diff;
 
                 DoMeleeAttackIfReady();

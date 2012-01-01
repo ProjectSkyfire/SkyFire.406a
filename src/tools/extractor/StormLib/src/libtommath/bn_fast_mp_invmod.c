@@ -15,7 +15,7 @@
  * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
  */
 
-/* computes the modular inverse via binary extended euclidean algorithm, 
+/* computes the modular inverse via binary extended euclidean algorithm,
  * that is c = 1/a mod b
  *
  * Based on slow invmod except this is optimized for the case where b is

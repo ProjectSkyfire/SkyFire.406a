@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -76,7 +76,7 @@ bool ChatHandler::HandleMuteCommand(const char* args)
     // must have strong lesser security level
     if (HasLowerSecurity (target, target_guid, true))
         return false;
-		
+
     PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_UPDATE_MUTE_TIME);
 
     if (target)
@@ -100,7 +100,7 @@ bool ChatHandler::HandleMuteCommand(const char* args)
     stmt->setUInt32(1, accountId);
 
     LoginDatabase.Execute(stmt);
-	
+
     std::string nameLink = playerLink(target_name);
 
     PSendSysMessage(target ? LANG_YOU_DISABLE_CHAT : LANG_COMMAND_DISABLE_CHAT_DELAYED, nameLink.c_str(), notspeaktime, mutereasonstr.c_str());
@@ -502,7 +502,7 @@ bool ChatHandler::HandleCharacterCustomizeCommand(const char* args)
     PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPDATE_AT_LOGIN_FLAG);
 
     stmt->setUInt16(0, uint16(AT_LOGIN_CUSTOMIZE));
-		
+
     if (target)
     {
         PSendSysMessage(LANG_CUSTOMIZE_PLAYER, GetNameLink(target).c_str());
@@ -518,7 +518,7 @@ bool ChatHandler::HandleCharacterCustomizeCommand(const char* args)
 
         PSendSysMessage(LANG_CUSTOMIZE_PLAYER_GUID, oldNameLink.c_str(), GUID_LOPART(targetGuid));
     }
- 
+
     CharacterDatabase.Execute(stmt);
 
     return true;
@@ -532,7 +532,7 @@ bool ChatHandler::HandleCharacterChangeFactionCommand(const char* args)
 
     if (!extractPlayerTarget((char*)args, &target, &targetGuid, &targetName))
         return false;
- 
+
     PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPDATE_AT_LOGIN_FLAG);
 
     stmt->setUInt16(0, uint16(AT_LOGIN_CHANGE_FACTION));
@@ -552,7 +552,7 @@ bool ChatHandler::HandleCharacterChangeFactionCommand(const char* args)
 
         stmt->setUInt32(1, GUID_LOPART(targetGuid));
     }
- 
+
     CharacterDatabase.Execute(stmt);
 
     return true;
@@ -565,7 +565,7 @@ bool ChatHandler::HandleCharacterChangeRaceCommand(const char * args)
     std::string targetName;
     if (!extractPlayerTarget((char*)args, &target, &targetGuid, &targetName))
         return false;
- 
+
     PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPDATE_AT_LOGIN_FLAG);
 
     stmt->setUInt16(0, uint16(AT_LOGIN_CHANGE_FACTION));
@@ -587,7 +587,7 @@ bool ChatHandler::HandleCharacterChangeRaceCommand(const char * args)
 
         stmt->setUInt32(1, GUID_LOPART(targetGuid));
     }
- 
+
     CharacterDatabase.Execute(stmt);
 
     return true;
@@ -707,18 +707,31 @@ bool ChatHandler::HandleCombatStopCommand(const char* args)
 
 bool ChatHandler::HandleLookupPlayerIpCommand(const char* args)
 {
-    if (!*args)
-        return false;
+    std::string ip;
+    int32 limit;
+    char* limit_str;
 
-    std::string ip = strtok ((char*)args, " ");
-    char* limit_str = strtok (NULL, " ");
-    int32 limit = limit_str ? atoi (limit_str) : -1;
+    Player *chr = getSelectedPlayer();
+    if (chr == NULL)
+    {
+        if (!*args)
+            return false;
 
-    LoginDatabase.EscapeString (ip);
+        ip = strtok ((char*)args, " ");
+        limit_str = strtok (NULL, " ");
+        limit = limit_str ? atoi (limit_str) : -1;
+    }
+    else
+    {
+        ip = chr->GetSession()->GetRemoteAddress();
+        limit = -1;
+    }
 
-    QueryResult result = LoginDatabase.PQuery ("SELECT id, username FROM account WHERE last_ip = '%s'", ip.c_str ());
+    LoginDatabase.EscapeString(ip);
 
-    return LookupPlayerSearchCommand (result, limit);
+    QueryResult result = LoginDatabase.PQuery("SELECT id, username FROM account WHERE last_ip = '%s'", ip.c_str());
+
+    return LookupPlayerSearchCommand(result, limit);
 }
 
 bool ChatHandler::HandleLookupPlayerAccountCommand(const char* args)

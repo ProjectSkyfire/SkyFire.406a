@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -261,31 +261,31 @@ void WorldSession::HandleGuildRewardsOpcode(WorldPacket& recvPacket)
 
     recvPacket.read_skip<uint64>();
 
-    ObjectMgr::GuildRewardsVector const& vec = sObjectMgr->GetGuildRewards();
+    GuildRewardsVector const& vec = sGuildMgr->GetGuildRewards();
     if (vec.empty())
         return;
 
-    WorldPacket data(SMSG_GUILD_REWARDS_LIST, 8);
+    WorldPacket data(SMSG_GUILD_REWARDS_LIST, 4 + 4 + ((4 + 4 + 8 + 4 + 4 + 4) * vec.size()));
     data << uint32(_player->GetGuildId()) ;
     data << uint32(vec.size()); // counter
 
-    for(uint32 i = 0; i < vec.size(); ++i)
+    for (uint32 i = 0; i < vec.size(); ++i)
         data << uint32(0); // unk (only found 0 in retail logs)
 
-    for(uint32 i = 0; i < vec.size(); ++i)
+    for (uint32 i = 0; i < vec.size(); ++i)
         data << uint32(0); // unk
 
-    for(uint32 i = 0; i < vec.size(); ++i)
-        data << uint64(vec[i]->price); // money price
+    for (uint32 i = 0; i < vec.size(); ++i)
+        data << uint64(vec[i].price); // money price
 
-    for(uint32 i = 0; i < vec.size(); ++i)
-        data << uint32(vec[i]->achievement); // Achievement requirement
+    for (uint32 i = 0; i < vec.size(); ++i)
+        data << uint32(vec[i].achievement); // Achievement requirement
 
-    for(uint32 i = 0; i < vec.size(); ++i)
-        data << uint32(vec[i]->standing); // Reputation level (REP_HONORED, REP_FRIENDLY, etc)
+    for (uint32 i = 0; i < vec.size(); ++i)
+        data << uint32(vec[i].standing); // Reputation level (REP_HONORED, REP_FRIENDLY, etc)
 
-    for(uint32 i = 0; i < vec.size(); ++i)
-        data << uint32(vec[i]->item); // item entry
+    for (uint32 i = 0; i < vec.size(); ++i)
+        data << uint32(vec[i].item); // item entry
     SendPacket(&data);
 }
 
@@ -310,7 +310,7 @@ void WorldSession::HandleGuildSetNoteOpcode(WorldPacket& recvPacket)
 void WorldSession::HandleGuildRankOpcode(WorldPacket& recvPacket)
 {
     uint32 BankStacks[GUILD_BANK_MAX_TABS];
-    for(uint32 i = 0; i < GUILD_BANK_MAX_TABS; i++)
+    for (uint32 i = 0; i < GUILD_BANK_MAX_TABS; i++)
         recvPacket >> BankStacks[i];
 
     uint32 new_rights;
@@ -323,7 +323,7 @@ void WorldSession::HandleGuildRankOpcode(WorldPacket& recvPacket)
     recvPacket >> old_rankId;
 
     uint32 BankRights[GUILD_BANK_MAX_TABS];
-    for(uint32 i = 0; i < GUILD_BANK_MAX_TABS; i++)
+    for (uint32 i = 0; i < GUILD_BANK_MAX_TABS; i++)
         recvPacket >> BankRights[i];
 
     uint64 guildId;

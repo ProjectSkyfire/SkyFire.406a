@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2006-2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2006-2012 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -101,7 +101,7 @@ class boss_gatewatcher_iron_hand : public CreatureScript
                     if (Shadow_Power_Timer <= diff)
                     {
                         DoCast(me, SPELL_SHADOW_POWER);
-                        Shadow_Power_Timer = 20000 + rand()%8000;
+                        Shadow_Power_Timer = urand(20000, 28000);
                     }
                     else
                         Shadow_Power_Timer -= diff;
@@ -127,7 +127,7 @@ class boss_gatewatcher_iron_hand : public CreatureScript
                     if (Stream_of_Machine_Fluid_Timer <= diff)
                     {
                         DoCast(me->getVictim(), SPELL_STREAM_OF_MACHINE_FLUID);
-                        Stream_of_Machine_Fluid_Timer = 35000 + rand()%15000;
+                        Stream_of_Machine_Fluid_Timer = urand(35000, 50000);
                     }
                     else
                         Stream_of_Machine_Fluid_Timer -= diff;

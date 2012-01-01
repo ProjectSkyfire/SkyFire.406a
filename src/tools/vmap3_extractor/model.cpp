@@ -1,14 +1,14 @@
 /*
  * Copyright (C) 2005-2011 MaNGOS <http://www.getmangos.com/>
  * Copyright (C) 2008-2011 Trinity <http://www.trinitycore.org/>
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, 
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
@@ -194,14 +194,14 @@ ModelInstance::ModelInstance(MPQFile &f, const char* ModelInstName, uint32 mapID
     int realx2 = (int) ((float) pos.x / 533.333333f);
     int realy2 = (int) ((float) pos.z / 533.333333f);
 
-    fprintf(pDirfile, "%s/%s %f, %f, %f_%f, %f, %f %f %d %d %d, %d %d\n", 
-        MapName, 
-        ModelInstName, 
-        (float) pos.x, (float) pos.y, (float) pos.z, 
-        (float) rot.x, (float) rot.y, (float) rot.z, 
-        sc, 
-        nVertices, 
-        realx1, realy1, 
+    fprintf(pDirfile, "%s/%s %f, %f, %f_%f, %f, %f %f %d %d %d, %d %d\n",
+        MapName,
+        ModelInstName,
+        (float) pos.x, (float) pos.y, (float) pos.z,
+        (float) rot.x, (float) rot.y, (float) rot.z,
+        sc,
+        nVertices,
+        realx1, realy1,
         realx2, realy2
         ); */
 }

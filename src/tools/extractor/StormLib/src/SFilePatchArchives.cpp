@@ -150,7 +150,7 @@ static int LoadMpqPatch_BSD0(TMPQFile * hf, TPatchHeader * pPatchHeader)
 }
 
 static int ApplyMpqPatch_COPY(
-    TMPQFile * hf, 
+    TMPQFile * hf,
     TPatchHeader * pPatchHeader)
 {
     LPBYTE pbNewFileData;
@@ -175,7 +175,7 @@ static int ApplyMpqPatch_COPY(
 }
 
 static int ApplyMpqPatch_BSD0(
-    TMPQFile * hf, 
+    TMPQFile * hf,
     TPatchHeader * pPatchHeader)
 {
     PBLIZZARD_BSDIFF40_FILE pBsdiff;
@@ -325,7 +325,7 @@ static int LoadMpqPatch(TMPQFile * hf)
 }
 
 static int ApplyMpqPatch(
-    TMPQFile * hf, 
+    TMPQFile * hf,
     TPatchHeader * pPatchHeader)
 {
     unsigned char md5_digest[MD5_DIGEST_SIZE];
@@ -456,9 +456,9 @@ int PatchFileData(TMPQFile * hf)
 //
 
 bool WINAPI SFileOpenPatchArchive(
-    HANDLE hMpq, 
-    const char * szPatchMpqName, 
-    const char * szPatchPathPrefix, 
+    HANDLE hMpq,
+    const char * szPatchMpqName,
+    const char * szPatchPathPrefix,
     DWORD dwFlags)
 {
     TMPQArchive * haPatch;

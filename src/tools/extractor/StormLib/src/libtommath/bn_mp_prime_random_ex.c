@@ -15,7 +15,7 @@
  * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
  */
 
-/* makes a truly random prime of a given size (bits), 
+/* makes a truly random prime of a given size (bits),
  *
  * Flags are as follows:
  *

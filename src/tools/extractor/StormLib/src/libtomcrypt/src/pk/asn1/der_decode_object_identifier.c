@@ -24,7 +24,7 @@
   @param outlen  [in/out] The number of OID words
   @return CRYPT_OK if successful
 */
-int der_decode_object_identifier(const unsigned char *in,   unsigned long  inlen, 
+int der_decode_object_identifier(const unsigned char *in,   unsigned long  inlen,
                                        unsigned long *words, unsigned long *outlen)
 {
    unsigned long x, y, t, len;

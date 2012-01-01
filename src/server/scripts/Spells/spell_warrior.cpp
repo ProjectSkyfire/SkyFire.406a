@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -371,7 +371,7 @@ class spell_warr_thunderclap : public SpellScriptLoader
                                 if(target->HasAura(94009)) // If the target has Rend
                                 {
                                     CheckAgain = false;
-                                    for(std::list<Unit*>::iterator itr = targetList.begin(); itr != targetList.end(); ++itr)
+                                    for (std::list<Unit*>::iterator itr = targetList.begin(); itr != targetList.end(); ++itr)
                                         if(Unit* curTrg = (*itr))
                                             caster->CastSpell(curTrg,94009,true);
                                 }

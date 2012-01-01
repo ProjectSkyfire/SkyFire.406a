@@ -24,7 +24,7 @@
    @param outlen [out] The length required in octets to store it
    @return CRYPT_OK on success
 */
-int der_length_sequence(ltc_asn1_list *list, unsigned long inlen, 
+int der_length_sequence(ltc_asn1_list *list, unsigned long inlen,
                         unsigned long *outlen)
 {
    int           err, type;

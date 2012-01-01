@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2006-2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2006-2012 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -162,20 +162,20 @@ public:
                     me->InterruptNonMeleeSpells(true);
 
                 DoCast(me, SPELL_FROSTNOVA);
-                FrostNova_Timer  = 17500 + rand()%7500;
+                FrostNova_Timer  = urand(17500, 25000);
                 CanBlink = true;
             } else FrostNova_Timer -= diff;
 
             if (Frostbolt_Timer <= diff)
             {
                 DoCast(me->getVictim(), SPELL_FROSTBOLT);
-                Frostbolt_Timer = 4500 + rand()%1500;
+                Frostbolt_Timer = urand(4500, 6000);
             } else Frostbolt_Timer -= diff;
 
             if (FireBall_Timer <= diff)
             {
                 DoCast(me->getVictim(), SPELL_FIREBALL);
-                FireBall_Timer = 4500 + rand()%1500;
+                FireBall_Timer = urand(4500, 6000);
             } else FireBall_Timer -= diff;
 
             if (CanBlink)
@@ -191,7 +191,7 @@ public:
                         me->GetMotionMaster()->MovementExpired();
 
                     DoCast(me, SPELL_BLINK);
-                    Blink_Timer = 1000 + rand()%1500;
+                    Blink_Timer = urand(1000, 2500);
                     CanBlink = false;
                 } else Blink_Timer -= diff;
             }
@@ -289,7 +289,7 @@ public:
             if (ArcaneBolt_Timer <= diff)
             {
                 DoCast(me->getVictim(), SPELL_ARCANE_BOLT);
-                ArcaneBolt_Timer = 2000 + rand()%2500;
+                ArcaneBolt_Timer = urand(2000, 4500);
             } else ArcaneBolt_Timer -= diff;
 
             if (Apprentice_Timer <= diff)

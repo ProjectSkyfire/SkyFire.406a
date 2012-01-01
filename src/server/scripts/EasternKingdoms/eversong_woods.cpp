@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2006-2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2006-2012 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -203,7 +203,7 @@ public:
                 if (timerJustice <= diff)
                 {
                     DoCast(me, SPELL_SEAL_OF_JUSTICE);
-                    timerJustice = 10000 + rand()%10000;
+                    timerJustice = urand(10000, 20000);
                 }
                 else
                     timerJustice -= diff;
@@ -214,7 +214,7 @@ public:
                 if (timerJudLight <= diff)
                 {
                     DoCast(me, SPELL_JUDGEMENT_OF_LIGHT);
-                    timerJudLight = 10000 + rand()%10000;
+                    timerJudLight = urand(10000, 20000);
                 }
                 else
                     timerJudLight -= diff;
@@ -225,7 +225,7 @@ public:
                   if (timerCommand <= diff)
                   {
                       DoCast(me, SPELL_SEAL_OF_COMMAND);
-                      timerCommand = 20000 + rand()%20000;
+                      timerCommand = urand(20000, 40000);
                   }
                   else
                       timerCommand -= diff;

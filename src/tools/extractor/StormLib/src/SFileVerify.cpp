@@ -160,7 +160,7 @@ static bool decode_base64_key(const char * szKeyBase64, rsa_key * key)
 
 // Calculate begin and end of the MPQ archive
 static void CalculateArchiveRange(
-    TMPQArchive * ha, 
+    TMPQArchive * ha,
     PMPQ_SIGNATURE_INFO pSI)
 {
     TMPQHeader * pHeader = ha->pHeader;
@@ -183,7 +183,7 @@ static void CalculateArchiveRange(
     }
 
     // Get the MPQ data end. The end is calculated as the biggest
-    // value of (end of the last file), (end of block table), 
+    // value of (end of the last file), (end of block table),
     // (end of ext block table), (end of hash table)
     FindFreeMpqSpace(ha, &MaxPos);
 
@@ -213,7 +213,7 @@ static void CalculateArchiveRange(
 }
 
 static bool QueryMpqSignatureInfo(
-    TMPQArchive * ha, 
+    TMPQArchive * ha,
     PMPQ_SIGNATURE_INFO pSI)
 {
     ULONGLONG ExtraBytes;
@@ -244,7 +244,7 @@ static bool QueryMpqSignatureInfo(
         return (dwFileSize == (MPQ_WEAK_SIGNATURE_SIZE + 8)) ? true : false;
     }
 
-    // If there is extra bytes beyond the end of the archive, 
+    // If there is extra bytes beyond the end of the archive,
     // it's the strong signature
     ExtraBytes = pSI->EndOfFile - pSI->EndMpqData;
     if (ExtraBytes >= (MPQ_STRONG_SIGNATURE_SIZE + 4))
@@ -266,8 +266,8 @@ static bool QueryMpqSignatureInfo(
 }
 
 static bool CalculateMpqHashMd5(
-    TMPQArchive * ha, 
-    PMPQ_SIGNATURE_INFO pSI, 
+    TMPQArchive * ha,
+    PMPQ_SIGNATURE_INFO pSI,
     LPBYTE pMd5Digest)
 {
     hash_state md5_state;
@@ -342,7 +342,7 @@ static bool CalculateMpqHashMd5(
 }
 
 static void AddTailToSha1(
-    hash_state * psha1_state, 
+    hash_state * psha1_state,
     const char * szTail)
 {
     unsigned char szUpperCase[0x200];
@@ -360,10 +360,10 @@ static void AddTailToSha1(
 }
 
 static bool CalculateMpqHashSha1(
-    TMPQArchive * ha, 
-    PMPQ_SIGNATURE_INFO pSI, 
-    unsigned char * sha1_tail0, 
-    unsigned char * sha1_tail1, 
+    TMPQArchive * ha,
+    PMPQ_SIGNATURE_INFO pSI,
+    unsigned char * sha1_tail0,
+    unsigned char * sha1_tail1,
     unsigned char * sha1_tail2)
 {
     ULONGLONG BeginBuffer;
@@ -427,8 +427,8 @@ static bool CalculateMpqHashSha1(
 }
 
 static int VerifyRawMpqData(
-    TMPQArchive * ha, 
-    ULONGLONG ByteOffset, 
+    TMPQArchive * ha,
+    ULONGLONG ByteOffset,
     DWORD dwDataSize)
 {
     hash_state md5_state;
@@ -510,7 +510,7 @@ static int VerifyRawMpqData(
 }
 
 static DWORD VerifyWeakSignature(
-    TMPQArchive * ha, 
+    TMPQArchive * ha,
     PMPQ_SIGNATURE_INFO pSI)
 {
     BYTE RevSignature[MPQ_WEAK_SIGNATURE_SIZE];
@@ -538,8 +538,8 @@ static DWORD VerifyWeakSignature(
 }
 
 static DWORD VerifyStrongSignatureWithKey(
-    unsigned char * reversed_signature, 
-    unsigned char * padded_digest, 
+    unsigned char * reversed_signature,
+    unsigned char * padded_digest,
     const char * szPublicKey)
 {
     rsa_key key;
@@ -562,7 +562,7 @@ static DWORD VerifyStrongSignatureWithKey(
 }
 
 static DWORD VerifyStrongSignature(
-    TMPQArchive * ha, 
+    TMPQArchive * ha,
     PMPQ_SIGNATURE_INFO pSI)
 {
     unsigned char reversed_signature[MPQ_STRONG_SIGNATURE_SIZE];
