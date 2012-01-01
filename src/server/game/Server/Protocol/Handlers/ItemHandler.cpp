@@ -788,6 +788,27 @@ void WorldSession::SendListInventory(uint64 vendorGuid)
                 if (!_player->isGameMaster() && ((itemTemplate->Flags2 & ITEM_FLAGS_EXTRA_HORDE_ONLY && _player->GetTeam() == ALLIANCE) || (itemTemplate->Flags2 == ITEM_FLAGS_EXTRA_ALLIANCE_ONLY && _player->GetTeam() == HORDE)))
                     continue;
 
+                // If the item is a guild reward, dont display it if the player does not fit the requirements
+                // ToDo: Theese items must have a flag, find it
+                if(QueryResult res = WorldDatabase.PQuery("SELECT achievement, standing FROM guild_rewards WHERE item_entry = %u", item->item))
+                {
+                    Guild* guild = sGuildMgr->GetGuildById(_player->GetGuildId());
+                    if(!guild)
+                        continue;
+                    Field *fields = res->Fetch();
+
+                    // Check for achievement
+                    if(AchievementEntry const* achievement = sAchievementStore.LookupEntry(fields[0].GetUInt32()))
+                        if(!guild->GetAchievementMgr().HasAchieved(achievement))
+                            continue;
+
+                    // Check for standing
+                    uint32 repReq = fields[1].GetUInt32();
+                    if(repReq)
+                        if(ReputationRank(repReq) > _player->GetReputationRank(1168)) // Does not have enough reputation
+                            continue;
+                }
+                
                 // Items sold out are not displayed in list
                 uint32 leftInStock = !item->maxcount ? 0xFFFFFFFF : vendor->GetVendorItemCurrentCount(item);
                 if (!_player->isGameMaster() && !leftInStock)
