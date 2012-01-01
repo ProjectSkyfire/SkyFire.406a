@@ -2511,7 +2511,6 @@ void WorldObject::GetNearPoint(WorldObject const* /*searcher*/, float &x, float 
     {
         CellCoord p(Trinity::ComputeCellCoord(GetPositionX(), GetPositionY()));
         Cell cell(p);
-        cell.data.Part.reserved = ALL_DISTRICT;
         cell.SetNoCreate();
 
         Trinity::NearUsedPosDo u_do(*this, searcher, absAngle, selector);
