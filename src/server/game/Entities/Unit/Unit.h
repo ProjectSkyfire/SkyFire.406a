@@ -1926,7 +1926,10 @@ class Unit : public WorldObject
         uint64 m_SummonSlot[MAX_SUMMON_SLOT];
         uint64 m_ObjectSlot[MAX_GAMEOBJECT_SLOT];
 
-        ShapeshiftForm GetShapeshiftForm() const { return ShapeshiftForm(GetByteValue(UNIT_FIELD_BYTES_2, 3)); }
+        ShapeshiftForm GetShapeshiftForm() const
+        {
+            return ShapeshiftForm(GetByteValue(UNIT_FIELD_BYTES_2, 3));
+        }
         void SetShapeshiftForm(ShapeshiftForm form)
         {
             SetByteValue(UNIT_FIELD_BYTES_2, 3, form);
