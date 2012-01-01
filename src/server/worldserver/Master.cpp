@@ -126,7 +126,7 @@ int Master::Run()
     sLog->outString("  \\ \\___  \\ \\  _'-\\ \\____ \\ \\  __\\ \\ \\ \\  __<\\ \\  __\\ ");
     sLog->outString("   \\/\\_____\\ \\_\\ \\_\\/\\_____\\ \\_\\  \\ \\_\\ \\_\\ \\_\\ \\_____\\ ");
     sLog->outString("    \\/_____/\\/_/\\/_/\\/_____/\\/_/   \\/_/\\/_/ /_/\\/_____/ ");
-    sLog->outString("  Project SkyFireEmu 2011(c) Open-sourced Game Emulation ");
+    sLog->outString("  Project SkyFireEmu 2012(c) Open-sourced Game Emulation ");
     sLog->outString("           <http://www.projectskyfire.org/> ");
     sLog->outString(" ");
 
