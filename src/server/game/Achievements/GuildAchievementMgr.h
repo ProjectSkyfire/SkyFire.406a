@@ -10,7 +10,7 @@
 #include "DBCEnums.h"
 #include "DBCStores.h"
 #include "Guild.h"
-#include "AchievementMgr.h"
+#include "AchievementMgrBase.h"
 
 class Player;
 class Unit;
