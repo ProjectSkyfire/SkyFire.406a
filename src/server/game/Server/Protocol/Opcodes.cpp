@@ -142,9 +142,9 @@ void InitOpcodeTable()
     OPCODE( CMSG_GUILD_DISBAND,                           STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleGuildDisbandOpcode        );
     OPCODE( CMSG_GUILD_LEADER,                            STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleGuildLeaderOpcode         );
     OPCODE( CMSG_GUILD_MOTD,                              STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleGuildMOTDOpcode           );
-    OPCODE( CMSG_QUERY_GUILD_REWARDS,                     STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
-    OPCODE( CMSG_QUERY_GUILD_XP,                          STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
-    OPCODE( CMSG_QUERY_GUILD_MAX_XP,                      STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
+    OPCODE( CMSG_QUERY_GUILD_REWARDS,                     STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleGuildRewardsOpcode        );
+    OPCODE( CMSG_QUERY_GUILD_XP,                          STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleGuildExperienceOpcode     );
+    OPCODE( CMSG_QUERY_GUILD_MAX_XP,                      STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleGuildMaxExperienceOpcode  );
     OPCODE( SMSG_GUILD_MAX_DAILY_XP,                      STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( SMSG_GUILD_XP_UPDATE,                         STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( SMSG_GUILD_REWARDS_LIST,                      STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );

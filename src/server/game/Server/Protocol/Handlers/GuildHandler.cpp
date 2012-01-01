@@ -265,7 +265,7 @@ void WorldSession::HandleGuildRewardsOpcode(WorldPacket& recvPacket)
     if (vec.empty())
         return;
 
-    WorldPacket data(SMSG_GUILD_REWARDS_LIST, 8);
+    WorldPacket data(SMSG_GUILD_REWARDS_LIST, 4 + 4 + ((4 + 4 + 8 + 4 + 4 + 4) * vec.size()));
     data << uint32(_player->GetGuildId()) ;
     data << uint32(vec.size()); // counter
 
