@@ -371,7 +371,7 @@ void Player::UpdateAttackPowerAndDamage(bool ranged)
                         break;
                     case FORM_BEAR:
                     case FORM_DIREBEAR:
-                        val2 = (GetStat(STAT_STRENGTH) * 2) - 20.0f + (GetShapeShiftForm() == FORM_BEAR ? 30.0f : 120.0f);
+                        val2 = (GetStat(STAT_STRENGTH) * 2) - 20.0f + (GetShapeshiftForm() == FORM_BEAR ? 30.0f : 120.0f);
                         break;
                     default:
                         val2 = (GetStat(STAT_STRENGTH) * 2.0f) - 20.0f;
