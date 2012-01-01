@@ -2307,16 +2307,16 @@ bool Player::TeleportTo(uint32 mapid, float x, float y, float z, float orientati
             if (!GetSession()->PlayerLogout())
             {
                 WorldPacket data(SMSG_NEW_WORLD, 4 + 4 + 4 + 4 + 4);
-				if (m_transport)
-					data << m_movementInfo.t_pos.PositionXYZStream();
-				else
-					data << m_teleport_dest.PositionXYZStream();
+                if (m_transport)
+                    data << m_movementInfo.t_pos.PositionXYZStream();
+                else
+                    data << m_teleport_dest.PositionXYZStream();
 
-				data << uint32(mapid);
-				if (m_transport)
-					data << m_movementInfo.t_pos.GetOrientation();
-				else
-					data << m_teleport_dest.GetOrientation();
+                data << uint32(mapid);
+                if (m_transport)
+                    data << m_movementInfo.t_pos.GetOrientation();
+                else
+                    data << m_teleport_dest.GetOrientation();
 
                 GetSession()->SendPacket(&data);
                 SendSavedInstances();
@@ -9370,7 +9370,7 @@ void Player::SendUpdateWorldState(uint32 Field, uint32 Value)
     WorldPacket data(SMSG_UPDATE_WORLD_STATE, 9);
     data << Field;
     data << Value;
-	data << uint8(0);
+    data << uint8(0);
     GetSession()->SendPacket(&data);
 }
 
