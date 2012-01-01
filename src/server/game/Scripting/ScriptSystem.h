@@ -61,10 +61,10 @@ typedef std::vector<ScriptPointMove> ScriptPointVector;
 
 struct StringTextData
 {
-    uint32 uiSoundId;
-    uint8  uiType;
-    uint32 uiLanguage;
-    uint32 uiEmote;
+    uint32 SoundId;
+    uint8  Type;
+    uint32 Language;
+    uint32 Emote;
 };
 
 class SystemMgr
