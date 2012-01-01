@@ -10999,8 +10999,7 @@ bool Player::HasItemOrGemWithLimitCategoryEquipped(uint32 limitCategory, uint32 
 InventoryResult Player::CanTakeMoreSimilarItems(uint32 entry, uint32 count, Item* pItem, uint32* no_space_count) const
 {
     ItemTemplate const *pProto = sObjectMgr->GetItemTemplate(entry);
-    ItemSparseEntry const* sparse = sItemSparseStore.LookupEntry(entry);
-    if (!pProto || !sparse)
+    if (!pProto)
     {
         if (no_space_count)
             *no_space_count = count;
@@ -11011,16 +11010,16 @@ InventoryResult Player::CanTakeMoreSimilarItems(uint32 entry, uint32 count, Item
         return EQUIP_ERR_ALREADY_LOOTED;
 
     // no maximum
-    if ((sparse->MaxCount <= 0 && sparse->ItemLimitCategory == 0) || sparse->MaxCount == 2147483647)
+    if ((pProto->MaxCount <= 0 && pProto->ItemLimitCategory == 0) || pProto->MaxCount == 2147483647)
         return EQUIP_ERR_OK;
 
-    if (sparse->MaxCount > 0)
+    if (pProto->MaxCount > 0)
     {
         uint32 curcount = GetItemCount(pProto->ItemId, true, pItem);
-        if (curcount + count > uint32(sparse->MaxCount))
+        if (curcount + count > uint32(pProto->MaxCount))
         {
             if (no_space_count)
-                *no_space_count = count + curcount - sparse->MaxCount;
+                *no_space_count = count + curcount - pProto->MaxCount;
             return EQUIP_ERR_CANT_CARRY_MORE_OF_THIS;
         }
     }
@@ -16937,11 +16936,10 @@ bool Player::HasQuestForItem(uint32 itemid) const
                 // examined item is a source item
                 if (qinfo->ReqSourceId[j] == itemid)
                 {
-                    ItemTemplate const *pProto = sObjectMgr->GetItemTemplate(itemid);
-                    ItemSparseEntry const* sparse = sItemSparseStore.LookupEntry(itemid);
+                    ItemTemplate const *proto = sObjectMgr->GetItemTemplate(itemid);
 
                     // 'unique' item
-                    if (sparse->MaxCount && int32(GetItemCount(itemid, true)) < sparse->MaxCount)
+                    if (proto->MaxCount && int32(GetItemCount(itemid, true)) < proto->MaxCount)
                         return true;
 
                     // allows custom amount drop when not 0
@@ -16949,7 +16947,7 @@ bool Player::HasQuestForItem(uint32 itemid) const
                     {
                         if (GetItemCount(itemid, true) < qinfo->ReqSourceCount[j])
                             return true;
-                    } else if (GetItemCount(itemid, true) < pProto->GetMaxStackSize())
+                    } else if (GetItemCount(itemid, true) < proto->GetMaxStackSize())
                         return true;
                 }
             }
