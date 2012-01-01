@@ -29,8 +29,6 @@ GuildMgr::~GuildMgr()
 {
     for (GuildContainer::iterator itr = GuildStore.begin(); itr != GuildStore.end(); ++itr)
         delete itr->second;
-    for (GuildRewardsVector::iterator itr = mGuildRewards.begin(); itr != mGuildRewards.end(); ++itr)
-        delete (*itr);
 }
 
 void GuildMgr::AddGuild(Guild* guild)
