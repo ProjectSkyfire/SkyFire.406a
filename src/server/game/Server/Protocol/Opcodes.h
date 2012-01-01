@@ -325,7 +325,7 @@ enum Opcodes
     CMSG_CAST_SPELL                                  = 0x100ED, //
     CMSG_CANCEL_CAST                                 = 0x100EE, //
     SMSG_CAST_FAILED                                 = 0x100EF, //
-    SMSG_SPELL_START                                 = 0x100F0, //
+    SMSG_SPELL_START                                 = 0x02084, // 4.3.0 15050
     SMSG_SPELL_GO                                    = 0x07686, // 4.3.0 15050
     SMSG_SPELL_FAILURE                               = 0x100F2, //
     SMSG_SPELL_COOLDOWN                              = 0x100F3, //
@@ -350,7 +350,7 @@ enum Opcodes
     SMSG_INSTANCE_LOCK_WARNING_QUERY                 = 0x10106, //
     SMSG_ATTACKSWING_DEADTARGET                      = 0x10107, //
     SMSG_ATTACKSWING_CANT_ATTACK                     = 0x10108, //
-    SMSG_ATTACKERSTATEUPDATE                         = 0x10109, //
+    SMSG_ATTACKERSTATEUPDATE                         = 0x03A04, // 4.3.0 15050
     SMSG_BATTLEFIELD_PORT_DENIED                     = 0x1010A, //
     SMSG_DAMAGE_DONE_OBSOLETE                        = 0x1010B, //
     SMSG_UNIT_SPELLCAST_START                        = 0x1010C, //
@@ -478,7 +478,7 @@ enum Opcodes
     SMSG_FISH_ESCAPED                                = 0x10183, //
     CMSG_BUG                                         = 0x10184, //
     SMSG_NOTIFICATION                                = 0x10185, //
-    CMSG_PLAYED_TIME                                 = 0x10186, //
+    CMSG_PLAYED_TIME                                 = 0x024A2, // 4.3.0 15050
     SMSG_PLAYED_TIME                                 = 0x10187, //
     CMSG_QUERY_TIME                                  = 0x10188, //
     SMSG_QUERY_TIME_RESPONSE                         = 0x10189, //
@@ -627,7 +627,7 @@ enum Opcodes
     SMSG_SET_PCT_SPELL_MODIFIER                      = 0x1021D, //
     CMSG_SET_AMMO                                    = 0x1021E, //
     SMSG_CORPSE_RECLAIM_DELAY                        = 0x1021F, //
-    CMSG_SET_ACTIVE_MOVER                            = 0x10220, //
+    CMSG_SET_ACTIVE_MOVER                            = 0x06693, // 4.3.0 15050
     CMSG_PET_CANCEL_AURA                             = 0x10221, //
     CMSG_PLAYER_AI_CHEAT                             = 0x10222, //
     CMSG_CANCEL_AUTO_REPEAT_SPELL                    = 0x10223, //
@@ -1196,7 +1196,7 @@ enum Opcodes
     CMSG_ENABLETAXI                                  = 0x104AD, //
     SMSG_PRE_RESURRECT                               = 0x104AE, //
     SMSG_AURA_UPDATE_ALL                             = 0x05426, // 4.3.0 15050
-    SMSG_AURA_UPDATE                                 = 0x104B0, //
+    SMSG_AURA_UPDATE                                 = 0x00C20, // 4.3.0 15050
     CMSG_FLOOD_GRACE_CHEAT                           = 0x104B1, //
     SMSG_SERVER_FIRST_ACHIEVEMENT                    = 0x104B2, //
     SMSG_PET_LEARNED_SPELL                           = 0x104B3, //
@@ -1349,9 +1349,10 @@ enum Opcodes
     CMSG_QUERY_GUILD_MEMBERS_FOR_RECIPE              = 0x10540, //
     CMSG_GUILD_NEWS_SET_STICKY                       = 0x10541, //
     CMSG_LOG_DISCONNECT                              = 0x00108, // 4.3.0 15050
-    MSG_VERIFY_CONNECTIVITY                          = 0x04F57, // 4.3.0 15050
+    MSG_VERIFY_CONNECTIVITY                          = 0x04F57,
     CMSG_VIOLENCE_LEVEL                              = 0x07291, // 4.3.0 15050
-    SMSG_PLAYER_MOVE                                 = 0x04418, // 4.3.0 15050
+    //SMSG_CUF_PROFILES_LOAD                           = 0x02428, // 4.3.0 15050
+	SMSG_PLAYER_MOVE                                 = 0x04418, // 4.3.0 15050
     NUM_MSG_TYPES                                    = 0x10542  // last unknown opcode + 1.
 };
 
