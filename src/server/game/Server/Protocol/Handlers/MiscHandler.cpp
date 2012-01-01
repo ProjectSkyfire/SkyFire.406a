@@ -1683,12 +1683,8 @@ void WorldSession::HandleGuildPartyStateUpdate(WorldPacket & /*recv_data*/)
 
     // TODO: implement
 
-    WorldPacket packet(SMSG_GUILD_UPDATE_PARTY_STATE, 1+4+4+4);
-    packet << uint8(0);         // IsInGuildParty
-    packet << uint32(0);        // numGuildRequired
-    packet << uint32(0);        // numGuildPresent
-    packet << float(0);         // guildXpMultiplier
-    SendPacket(&packet);
+    if(Group* group = GetPlayer()->GetGroup())
+        group->SendGuildGroupStateUpdate(group->IsGuildGroup());
 }
 
 void WorldSession::HandleWorldStateUITimerUpdate(WorldPacket& /*recv_data*/)

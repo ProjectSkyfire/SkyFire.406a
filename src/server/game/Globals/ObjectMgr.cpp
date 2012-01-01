@@ -3369,6 +3369,67 @@ void ObjectMgr::LoadPlayerInfo()
         sLog->outString();
     }
 
+    // Load data for guilds
+    sLog->outString("Loading Guild XP Data...");
+    {
+        mGuildXPperLevel.resize(sWorld->getIntConfig(CONFIG_GUILD_ADVANCEMENT_MAX_LEVEL));
+        
+        for (uint8 level = 0; level < sWorld->getIntConfig(CONFIG_GUILD_ADVANCEMENT_MAX_LEVEL); ++level)
+            mGuildXPperLevel[level] = 0;
+
+        //                                                 0    1
+        QueryResult result  = WorldDatabase.Query("SELECT lvl, xp_for_next_level FROM guild_xp_for_level");
+
+        uint32 count = 0;
+
+        if (!result)
+        {
+            sLog->outString();
+            sLog->outString(">> Loaded %u xp for guild level definitions", count);
+            sLog->outErrorDb("Error loading `guild_xp_for_level` table or empty table.");
+        }
+        else
+        {
+            do
+            {
+                Field* fields = result->Fetch();
+
+                uint32 level = fields[0].GetUInt32();
+                uint32 xp    = fields[1].GetUInt32();
+
+                if (level >= sWorld->getIntConfig(CONFIG_GUILD_ADVANCEMENT_MAX_LEVEL))
+                {
+                    if (level > STRONG_MAX_LEVEL)        // hardcoded level maximum
+                        sLog->outErrorDb("Wrong (> %u) level %u in `guild_xp_for_level` table, ignoring.", STRONG_MAX_LEVEL, level);
+                    else
+                    {
+                        sLog->outDetail("Unused (> MaxLevel in worldserver.conf) level %u in `guild_xp_for_levels` table, ignoring.", level);
+                        ++count;                                // make result loading percent "expected" correct in case disabled detail mode for example.
+                    }
+                    continue;
+                }
+
+                mGuildXPperLevel[level] = xp;
+
+                ++count;
+            }
+            while (result->NextRow());
+
+            // Fill XP gaps
+            for (uint8 level = 1; level < sWorld->getIntConfig(CONFIG_GUILD_ADVANCEMENT_MAX_LEVEL); ++level)
+            {
+                if (mGuildXPperLevel[level] == 0)
+                {
+                    sLog->outErrorDb("GUILD Level %i does not have XP for level data. Using data of level [%i] + 10000.", level + 1, level);
+                    mGuildXPperLevel[level] = mGuildXPperLevel[level - 1] + 10000;
+                }
+            }
+        
+            sLog->outString();
+            sLog->outString(">> Loaded %u xp for guild level definitions", count);
+        }
+    }
+
     // Loading levels data (class/race dependent)
     sLog->outString("Loading Player Create Level Stats Data...");
     {
