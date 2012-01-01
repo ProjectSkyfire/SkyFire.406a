@@ -596,10 +596,10 @@ void AchievementMgrBase::SendCriteriaUpdate(AchievementCriteriaEntry const* entr
         data << uint32(timeElapsed);    // time elapsed in seconds
         data << uint32(0);              // unk
         player->SendDirectMessage(&data);
-        
+
         return;
     }
-    
+
     WorldPacket data(SMSG_CRITERIA_UPDATE, 8+4+8);
     data << uint32(entry->ID);
 
@@ -633,13 +633,12 @@ void AchievementMgrBase::SendDirectMessageToAll(WorldPacket* data)
 {
     if (!m_guild)
         return;
-        
+
     Guild::Members list = m_guild->GetMembers();
     for (Guild::Members::iterator itr = list.begin(); itr != list.end(); ++itr)
         if (Player* player = itr->second->FindPlayer())
             player->SendDirectMessage(data);
 }
-
 
 static const uint32 achievIdByArenaSlot[MAX_ARENA_SLOT] = { 1057, 1107, 1108 };
 static const uint32 achievIdForDungeon[][4] =
@@ -2121,10 +2120,10 @@ bool AchievementMgrBase::CanUpdateCriteria(AchievementCriteriaEntry const* crite
 
     if (m_guild && !(achievement->flags & ACHIEVEMENT_FLAG_GUILD_ACHIEVEMENT))
         return false;
-        
+
     if (!m_guild && (achievement->flags & ACHIEVEMENT_FLAG_GUILD_ACHIEVEMENT))
         return false;
-        
+
     if (achievement->mapID != -1 && player->GetMapId() != uint32(achievement->mapID))
         return false;
 
@@ -2151,12 +2150,12 @@ bool AchievementMgrBase::CanUpdateCriteria(AchievementCriteriaEntry const* crite
                 break;
         }
     }
-    
+
     for (uint32 i = 0; i < 3; ++i)
     {
         if(!criteria->moreRequirement[i])
             continue;
-        
+
         uint32 value = criteria->moreRequirementValue[i];
 
         switch(criteria->moreRequirement[i])
@@ -2183,7 +2182,7 @@ bool AchievementMgrBase::CanUpdateCriteria(AchievementCriteriaEntry const* crite
             {
                 if (!unit)
                     return false;
-                
+
                 if(!unit->HasAura(value))
                     return false;
                 break;
@@ -2213,7 +2212,7 @@ bool AchievementMgrBase::CanUpdateCriteria(AchievementCriteriaEntry const* crite
 
                 if (unit->GetTypeId() != TYPEID_PLAYER)
                     return false;
-                
+
                 if (unit->ToPlayer()->getRace() != value)
                     return false;
                 break;
@@ -2225,7 +2224,7 @@ bool AchievementMgrBase::CanUpdateCriteria(AchievementCriteriaEntry const* crite
 
                 if (unit->GetTypeId() != TYPEID_PLAYER)
                     return false;
-                
+
                 if (unit->ToPlayer()->getClass() != value)
                     return false;
                 break;
@@ -2235,7 +2234,7 @@ bool AchievementMgrBase::CanUpdateCriteria(AchievementCriteriaEntry const* crite
                 Group* group = player->GetGroup();
                 if (!group)
                     return false;
-                
+
                 if (!group->IsGuildGroup(true, true))
                     return false;
                 break;
@@ -2244,7 +2243,7 @@ bool AchievementMgrBase::CanUpdateCriteria(AchievementCriteriaEntry const* crite
             {
                 if (!unit || unit->GetTypeId() != TYPEID_UNIT)
                     return false;
-                
+
                 if (unit->GetEntry() != value)
                     return false;
                 break;
@@ -2253,7 +2252,7 @@ bool AchievementMgrBase::CanUpdateCriteria(AchievementCriteriaEntry const* crite
             {
                 if (!unit)
                     return false;
-                
+
                 if (unit->GetHealthPct() > value)
                     return false;
                 break;
@@ -2262,7 +2261,7 @@ bool AchievementMgrBase::CanUpdateCriteria(AchievementCriteriaEntry const* crite
             {
                 if (player->GetZoneId() != value)
                     return false;
-                    
+
                 break;
             }
             case ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_DRUNKEN_STATE:
@@ -2282,7 +2281,7 @@ bool AchievementMgrBase::CanUpdateCriteria(AchievementCriteriaEntry const* crite
                 ItemTemplate const* proto = sObjectMgr->GetItemTemplate(miscValue1);
                 if (!proto)
                     return false;
-                
+
                 if (proto->ItemLevel < value)
                     return false;
                 break;
@@ -2293,10 +2292,10 @@ bool AchievementMgrBase::CanUpdateCriteria(AchievementCriteriaEntry const* crite
                 ItemTemplate const* proto = sObjectMgr->GetItemTemplate(miscValue1);
                 if (!proto)
                     return false;
-                
+
                 if (proto->Quality < value)
                     return false;
-                
+
                 break;
             }
             default:

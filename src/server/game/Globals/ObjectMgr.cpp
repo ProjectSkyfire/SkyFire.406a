@@ -3373,7 +3373,7 @@ void ObjectMgr::LoadPlayerInfo()
     sLog->outString("Loading Guild XP Data...");
     {
         mGuildXPperLevel.resize(sWorld->getIntConfig(CONFIG_GUILD_ADVANCEMENT_MAX_LEVEL));
-        
+
         for (uint8 level = 0; level < sWorld->getIntConfig(CONFIG_GUILD_ADVANCEMENT_MAX_LEVEL); ++level)
             mGuildXPperLevel[level] = 0;
 
@@ -3424,7 +3424,7 @@ void ObjectMgr::LoadPlayerInfo()
                     mGuildXPperLevel[level] = mGuildXPperLevel[level - 1] + 10000;
                 }
             }
-        
+
             sLog->outString();
             sLog->outString(">> Loaded %u xp for guild level definitions", count);
         }

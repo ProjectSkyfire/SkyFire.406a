@@ -807,7 +807,7 @@ void WorldSession::SendListInventory(uint64 vendorGuid)
                         if(ReputationRank(repReq) > _player->GetReputationRank(1168)) // Does not have enough reputation
                             continue;
                 }
-                
+
                 // Items sold out are not displayed in list
                 uint32 leftInStock = !item->maxcount ? 0xFFFFFFFF : vendor->GetVendorItemCurrentCount(item);
                 if (!_player->isGameMaster() && !leftInStock)

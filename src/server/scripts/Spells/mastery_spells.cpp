@@ -473,26 +473,26 @@ public:
 void AddSC_mastery_spells()
 {
     new player_scripts_spec;
-    
+
     // Warrior masteries
     new spell_war_strikes_of_opportunity;
     new spell_war_unshackled_fury;
     new spell_war_critical_block;
-    
+
     // Mage masteries
     new spell_mage_mana_adept;
     new spell_mage_flashburn;
     new spell_mage_frostburn;
-    
+
     // Shaman masteries
     new spell_sha_elemental_overlord;
     new spell_sha_enhanced_elements;
     new spell_sha_deep_healing;
-    
+
     // Hunter masteries
     new spell_hun_wild_quiver;
     new spell_hun_master_of_beasts;
-    
+
     // Rogue masteries
     new spell_rog_potent_poisons;
     new spell_rog_main_gauche;

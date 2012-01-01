@@ -24,7 +24,7 @@
   @param out     [out]  The boolean to decode
   @return CRYPT_OK if successful
 */
-int der_decode_boolean(const unsigned char *in, unsigned long inlen, 
+int der_decode_boolean(const unsigned char *in, unsigned long inlen,
                                        int *out)
 {
    LTC_ARGCHK(in  != NULL);

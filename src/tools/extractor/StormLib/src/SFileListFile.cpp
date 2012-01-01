@@ -209,7 +209,7 @@ static int CompareFileNodes(const void * p1, const void * p2)
 }
 
 static int WriteListFileLine(
-    TMPQFile * hf, 
+    TMPQFile * hf,
     const char * szLine)
 {
     char szNewLine[2] = {0x0D, 0x0A};
@@ -226,7 +226,7 @@ static int WriteListFileLine(
 //-----------------------------------------------------------------------------
 // Local functions (listfile nodes)
 
-// Adds a name into the list of all names. For each locale in the MPQ, 
+// Adds a name into the list of all names. For each locale in the MPQ,
 // one entry will be created
 // If the file name is already there, does nothing.
 int SListFileCreateNodeForAllLocales(TMPQArchive * ha, const char * szFileName)
@@ -283,9 +283,9 @@ int SListFileSaveToMpq(TMPQArchive * ha)
         return ERROR_NOT_ENOUGH_MEMORY;
 
     // Construct the sort table
-    // Note: in MPQs with multiple locale versions of the same file, 
+    // Note: in MPQs with multiple locale versions of the same file,
     // this code causes adding multiple listfile entries.
-    // Since those MPQs were last time used in Starcraft II, 
+    // Since those MPQs were last time used in Starcraft II,
     // we leave it as it is.
     for (pFileEntry = ha->pFileTable; pFileEntry < pFileTableEnd; pFileEntry++)
     {
@@ -323,11 +323,11 @@ int SListFileSaveToMpq(TMPQArchive * ha)
         }
 
         // Create the listfile in the MPQ
-        nError = SFileAddFile_Init(ha, LISTFILE_NAME, 
-                                       NULL, 
-                                       dwFileSize, 
-                                       LANG_NEUTRAL, 
-                                       MPQ_FILE_ENCRYPTED | MPQ_FILE_COMPRESS | MPQ_FILE_REPLACEEXISTING, 
+        nError = SFileAddFile_Init(ha, LISTFILE_NAME,
+                                       NULL,
+                                       dwFileSize,
+                                       LANG_NEUTRAL,
+                                       MPQ_FILE_ENCRYPTED | MPQ_FILE_COMPRESS | MPQ_FILE_REPLACEEXISTING,
                                       &hf);
 
         // Add all file names
@@ -353,11 +353,11 @@ int SListFileSaveToMpq(TMPQArchive * ha)
     {
         // Create the listfile in the MPQ
         dwFileSize = (DWORD)strlen(LISTFILE_NAME) + 2;
-        nError = SFileAddFile_Init(ha, LISTFILE_NAME, 
-                                       NULL, 
-                                       dwFileSize, 
-                                       LANG_NEUTRAL, 
-                                       MPQ_FILE_ENCRYPTED | MPQ_FILE_COMPRESS | MPQ_FILE_REPLACEEXISTING, 
+        nError = SFileAddFile_Init(ha, LISTFILE_NAME,
+                                       NULL,
+                                       dwFileSize,
+                                       LANG_NEUTRAL,
+                                       MPQ_FILE_ENCRYPTED | MPQ_FILE_COMPRESS | MPQ_FILE_REPLACEEXISTING,
                                       &hf);
 
         // Just add "(listfile)" there

@@ -34,9 +34,9 @@
   @param modulus  Modulus for curve
   @return CRYPT_OK on success
 */
-int ltc_ecc_mul2add(ecc_point *A, void *kA, 
-                    ecc_point *B, void *kB, 
-                    ecc_point *C, 
+int ltc_ecc_mul2add(ecc_point *A, void *kA,
+                    ecc_point *B, void *kB,
+                    ecc_point *C,
                          void *modulus)
 {
   ecc_point     *precomp[16];

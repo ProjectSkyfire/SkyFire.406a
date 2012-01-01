@@ -224,10 +224,9 @@ class AchievementMgrBase
         CompletedAchievementMap m_completedAchievements;
         typedef std::map<uint32, uint32> TimedAchievementMap;
         TimedAchievementMap m_timedAchievements;      // Criteria id/time left in MS
-        
+
         Player* m_player;
         Guild* m_guild;
-        
 };
 
 /*class AchievementMgrHandler

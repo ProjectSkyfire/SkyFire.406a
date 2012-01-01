@@ -84,7 +84,7 @@ bool CheckWildCard(const char * szString, const char * szWildCard)
             nSubStringLength = (int)(szSubString - szWildCard);
             nMatchCount = 0;
 
-            // Now we have to find a substring in szString, 
+            // Now we have to find a substring in szString,
             // that matches the substring in szWildCard
             while (*szString != 0)
             {

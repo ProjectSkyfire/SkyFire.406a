@@ -8,7 +8,7 @@
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, 
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
@@ -138,7 +138,7 @@ WMORoot::~WMORoot()
 {
 }
 
-WMOGroup::WMOGroup(std::string &filename) : filename(filename), 
+WMOGroup::WMOGroup(std::string &filename) : filename(filename),
         MOPY(0), MOVI(0), MoviEx(0), MOVT(0), MOBA(0), MobaEx(0), hlq(0), LiquEx(0), LiquBytes(0)
 {
 }
@@ -510,13 +510,13 @@ WMOInstance::WMOInstance(MPQFile &f, const char* WmoInstName, uint32 mapID, uint
     fwrite(&nlen, sizeof(uint32), 1, pDirfile);
     fwrite(WmoInstName, sizeof(char), nlen, pDirfile);
 
-    /* fprintf(pDirfile, "%s/%s %f, %f, %f_%f, %f, %f 1.0 %d %d %d, %d %d\n", 
-        MapName, 
-        WmoInstName, 
-        (float) x, (float) pos.y, (float) z, 
-        (float) rot.x, (float) rot.y, (float) rot.z, 
-        nVertices, 
-        realx1, realy1, 
+    /* fprintf(pDirfile, "%s/%s %f, %f, %f_%f, %f, %f 1.0 %d %d %d, %d %d\n",
+        MapName,
+        WmoInstName,
+        (float) x, (float) pos.y, (float) z,
+        (float) rot.x, (float) rot.y, (float) rot.z,
+        nVertices,
+        realx1, realy1,
         realx2, realy2
         ); */
 

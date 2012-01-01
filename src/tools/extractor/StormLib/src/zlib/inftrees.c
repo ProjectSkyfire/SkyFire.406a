@@ -19,10 +19,10 @@ const char inflate_copyright[] =
 
 /*
    Build a set of tables to decode the provided canonical Huffman code.
-   The code lengths are lens[0..codes-1].  The result starts at *table, 
+   The code lengths are lens[0..codes-1].  The result starts at *table,
    whose indices are 0..2^bits-1.  work is a writable array of at least
    lens shorts, which is used as a work area.  type is the type of code
-   to be generated, CODES, LENS, or DISTS.  On return, zero is success, 
+   to be generated, CODES, LENS, or DISTS.  On return, zero is success,
    -1 is an invalid code, and +1 means that ENOUGH isn't enough.  table
    on return points to the next available entry's address.  bits is the
    requested root table index bits, and on return it is the actual root
@@ -58,18 +58,18 @@ unsigned short FAR *work;
     unsigned short count[MAXBITS+1];    /* number of codes of each length */
     unsigned short offs[MAXBITS+1];     /* offsets in table for each length */
     static const unsigned short lbase[31] = { /* Length codes 257..285 base */
-        3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 15, 17, 19, 23, 27, 31, 
+        3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 15, 17, 19, 23, 27, 31,
         35, 43, 51, 59, 67, 83, 99, 115, 131, 163, 195, 227, 258, 0, 0};
     static const unsigned short lext[31] = { /* Length codes 257..285 extra */
-        16, 16, 16, 16, 16, 16, 16, 16, 17, 17, 17, 17, 18, 18, 18, 18, 
+        16, 16, 16, 16, 16, 16, 16, 16, 17, 17, 17, 17, 18, 18, 18, 18,
         19, 19, 19, 19, 20, 20, 20, 20, 21, 21, 21, 21, 16, 201, 196};
     static const unsigned short dbase[32] = { /* Distance codes 0..29 base */
-        1, 2, 3, 4, 5, 7, 9, 13, 17, 25, 33, 49, 65, 97, 129, 193, 
-        257, 385, 513, 769, 1025, 1537, 2049, 3073, 4097, 6145, 
+        1, 2, 3, 4, 5, 7, 9, 13, 17, 25, 33, 49, 65, 97, 129, 193,
+        257, 385, 513, 769, 1025, 1537, 2049, 3073, 4097, 6145,
         8193, 12289, 16385, 24577, 0, 0};
     static const unsigned short dext[32] = { /* Distance codes 0..29 extra */
-        16, 16, 16, 16, 17, 17, 18, 18, 19, 19, 20, 20, 21, 21, 22, 22, 
-        23, 23, 24, 24, 25, 25, 26, 26, 27, 27, 
+        16, 16, 16, 16, 17, 17, 18, 18, 19, 19, 20, 20, 21, 21, 22, 22,
+        23, 23, 24, 24, 25, 25, 26, 26, 27, 27,
         28, 28, 29, 29, 64, 64};
 
     /*
@@ -90,7 +90,7 @@ unsigned short FAR *work;
        1..MAXBITS is interpreted as that code length.  zero means that that
        symbol does not occur in this code.
 
-       The codes are sorted by computing a count of codes for each length, 
+       The codes are sorted by computing a count of codes for each length,
        creating from that a table of starting indices for each length in the
        sorted table, and then entering the symbols in order in the sorted
        table.  The sorted table is work[], with that space being provided by
@@ -150,7 +150,7 @@ unsigned short FAR *work;
        Create and fill in decoding tables.  In this loop, the table being
        filled is at next and has curr index bits.  The code being used is huff
        with length len.  That code is converted to an index by dropping drop
-       bits off of the bottom.  For codes where len is less than drop + curr, 
+       bits off of the bottom.  For codes where len is less than drop + curr,
        those top drop + curr - len bits are incremented through all values to
        fill the table with replicated entries.
 

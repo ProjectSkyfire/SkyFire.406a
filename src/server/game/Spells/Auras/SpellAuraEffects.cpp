@@ -2815,7 +2815,7 @@ void AuraEffect::HandleAuraMounted(AuraApplication const* aurApp, uint8 mode, bo
     Unit* target = aurApp->GetTarget();
     uint32 spellId = (uint32)GetAmount();
     Player *player = target->ToPlayer();
-    
+
     switch(GetId())
     {
         case 55164: // Spectral Gryphon
@@ -2827,10 +2827,10 @@ void AuraEffect::HandleAuraMounted(AuraApplication const* aurApp, uint8 mode, bo
         default:
             break;
     }
-    
+
     if(player && spellId < 2)
         return;
-        
+
     if (apply)
     {
         uint32 creatureEntry = GetMiscValue();
@@ -2865,7 +2865,7 @@ void AuraEffect::HandleAuraMounted(AuraApplication const* aurApp, uint8 mode, bo
                 displayID = 0;
 
         target->Mount(displayID, ci->VehicleId, GetMiscValue());
-        
+
         if(player)
             player->CastSpell(player, spellId, true);
     }

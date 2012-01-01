@@ -46,7 +46,7 @@ static int char_to_int(unsigned char x)
   @param out    [out] Destination of UTC time structure
   @return CRYPT_OK   if successful
 */
-int der_decode_utctime(const unsigned char *in, unsigned long *inlen, 
+int der_decode_utctime(const unsigned char *in, unsigned long *inlen,
                              ltc_utctime   *out)
 {
    unsigned char buf[32];

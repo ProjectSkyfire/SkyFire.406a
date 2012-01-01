@@ -568,7 +568,7 @@ void KillRewarder::_RewardPlayer(Player* player, bool isDungeon)
             // If killer is in dungeon then all members receive full reputation at kill.
             _RewardOnKill(player, isDungeon ? 1.0f : rate);
             _RewardKillCredit(player);
-            
+
             // Reward Guild reputation
             if (player->GetGuildId() != 0 && _victim->GetTypeId() == TYPEID_UNIT && _victim->ToCreature()->IsDungeonBoss() && player->GetGroup() && player->GetGroup()->IsGuildGroup())
             {
@@ -15709,7 +15709,7 @@ void Player::RewardQuest(Quest const *quest, uint32 reward, Object* questGiver, 
         guild->GainXP(guildXP);
         GetReputationMgr().ModifyReputation(sFactionStore.LookupEntry(1168), guildRep);
     }
-    
+
     // Give player extra money if GetRewOrReqMoney > 0 and get ReqMoney if negative
     if (quest->GetRewOrReqMoney())
         moneyRew += quest->GetRewOrReqMoney();
@@ -24371,7 +24371,7 @@ void Player::HandleFall(MovementInfo const& movementInfo)
 void Player::UpdateAchievementCriteria(AchievementCriteriaTypes type, uint32 miscValue1 /*= 0*/, uint32 miscValue2 /*= 0*/, Unit* unit /*= NULL*/)
 {
     GetAchievementMgr().UpdateAchievementCriteria(type, this, miscValue1, miscValue2, unit);
-    
+
     if(Guild* guild = sGuildMgr->GetGuildById(GetGuildId()))
         guild->GetAchievementMgr().UpdateAchievementCriteria(type, this, miscValue1, miscValue2, unit);
 }

@@ -27,7 +27,7 @@ then use c as the hash value.  If you have a variable length array of
 a character string), use hashlittle().  If you have several byte arrays, or
 a mix of things, see the comments above hashlittle().
 
-Why is this so big?  I read 12 bytes at a time into 3 4-byte integers, 
+Why is this so big?  I read 12 bytes at a time into 3 4-byte integers,
 then mix those integers.  This is fast (you can do a lot more thorough
 mixing with 12*3 instructions on 3 integers than you can with 3 instructions
 on 1 byte), but shoehorning those bytes into integers efficiently is messy.
@@ -170,7 +170,7 @@ and these came close:
  -- that the length be the number of uint32_t's in the key
 
  The function hashword() is identical to hashlittle() on little-endian
- machines, and identical to hashbig() on big-endian machines, 
+ machines, and identical to hashbig() on big-endian machines,
  except that the length has to be measured in uint32_ts rather than in
  bytes.  hashlittle() is more complicated than hashword() only because
  hashlittle() has to dance around fitting the key bytes into registers.
@@ -267,7 +267,7 @@ the return value.  Two keys differing by one or two bits will have
 totally different hash values.
 
 The best hash table sizes are powers of 2.  There is no need to do
-mod a prime (mod is sooo slow!).  If you need less than 32 bits, 
+mod a prime (mod is sooo slow!).  If you need less than 32 bits,
 use a bitmask.  For example, if you need only 10 bits, do
   h = (h & hashmask(10));
 In which case, the hash table should have hashsize(10) elements.
@@ -835,7 +835,7 @@ void driver2()
 	  if (k == MAXPAIR)
 	  {
 	     printf("Some bit didn't change: ");
-	     printf("%.8x %.8x %.8x %.8x %.8x %.8x  ", 
+	     printf("%.8x %.8x %.8x %.8x %.8x %.8x  ",
 	            e[0], f[0], g[0], h[0], x[0], y[0]);
 	     printf("i %d j %d m %d len %d\n", i, j, m, hlen);
 	  }
@@ -869,41 +869,41 @@ void driver3()
   uint8_t *p;
 
   printf("Endianness.  These lines should all be the same (for values filled in):\n");
-  printf("%.8x                            %.8x                            %.8x\n", 
-         hashword((const uint32_t *)q, (sizeof(q)-1)/4, 13), 
-         hashword((const uint32_t *)q, (sizeof(q)-5)/4, 13), 
+  printf("%.8x                            %.8x                            %.8x\n",
+         hashword((const uint32_t *)q, (sizeof(q)-1)/4, 13),
+         hashword((const uint32_t *)q, (sizeof(q)-5)/4, 13),
          hashword((const uint32_t *)q, (sizeof(q)-9)/4, 13));
   p = q;
-  printf("%.8x %.8x %.8x %.8x %.8x %.8x %.8x %.8x %.8x %.8x %.8x %.8x\n", 
-         hashlittle(p, sizeof(q)-1, 13), hashlittle(p, sizeof(q)-2, 13), 
-         hashlittle(p, sizeof(q)-3, 13), hashlittle(p, sizeof(q)-4, 13), 
-         hashlittle(p, sizeof(q)-5, 13), hashlittle(p, sizeof(q)-6, 13), 
-         hashlittle(p, sizeof(q)-7, 13), hashlittle(p, sizeof(q)-8, 13), 
-         hashlittle(p, sizeof(q)-9, 13), hashlittle(p, sizeof(q)-10, 13), 
+  printf("%.8x %.8x %.8x %.8x %.8x %.8x %.8x %.8x %.8x %.8x %.8x %.8x\n",
+         hashlittle(p, sizeof(q)-1, 13), hashlittle(p, sizeof(q)-2, 13),
+         hashlittle(p, sizeof(q)-3, 13), hashlittle(p, sizeof(q)-4, 13),
+         hashlittle(p, sizeof(q)-5, 13), hashlittle(p, sizeof(q)-6, 13),
+         hashlittle(p, sizeof(q)-7, 13), hashlittle(p, sizeof(q)-8, 13),
+         hashlittle(p, sizeof(q)-9, 13), hashlittle(p, sizeof(q)-10, 13),
          hashlittle(p, sizeof(q)-11, 13), hashlittle(p, sizeof(q)-12, 13));
   p = &qq[1];
-  printf("%.8x %.8x %.8x %.8x %.8x %.8x %.8x %.8x %.8x %.8x %.8x %.8x\n", 
-         hashlittle(p, sizeof(q)-1, 13), hashlittle(p, sizeof(q)-2, 13), 
-         hashlittle(p, sizeof(q)-3, 13), hashlittle(p, sizeof(q)-4, 13), 
-         hashlittle(p, sizeof(q)-5, 13), hashlittle(p, sizeof(q)-6, 13), 
-         hashlittle(p, sizeof(q)-7, 13), hashlittle(p, sizeof(q)-8, 13), 
-         hashlittle(p, sizeof(q)-9, 13), hashlittle(p, sizeof(q)-10, 13), 
+  printf("%.8x %.8x %.8x %.8x %.8x %.8x %.8x %.8x %.8x %.8x %.8x %.8x\n",
+         hashlittle(p, sizeof(q)-1, 13), hashlittle(p, sizeof(q)-2, 13),
+         hashlittle(p, sizeof(q)-3, 13), hashlittle(p, sizeof(q)-4, 13),
+         hashlittle(p, sizeof(q)-5, 13), hashlittle(p, sizeof(q)-6, 13),
+         hashlittle(p, sizeof(q)-7, 13), hashlittle(p, sizeof(q)-8, 13),
+         hashlittle(p, sizeof(q)-9, 13), hashlittle(p, sizeof(q)-10, 13),
          hashlittle(p, sizeof(q)-11, 13), hashlittle(p, sizeof(q)-12, 13));
   p = &qqq[2];
-  printf("%.8x %.8x %.8x %.8x %.8x %.8x %.8x %.8x %.8x %.8x %.8x %.8x\n", 
-         hashlittle(p, sizeof(q)-1, 13), hashlittle(p, sizeof(q)-2, 13), 
-         hashlittle(p, sizeof(q)-3, 13), hashlittle(p, sizeof(q)-4, 13), 
-         hashlittle(p, sizeof(q)-5, 13), hashlittle(p, sizeof(q)-6, 13), 
-         hashlittle(p, sizeof(q)-7, 13), hashlittle(p, sizeof(q)-8, 13), 
-         hashlittle(p, sizeof(q)-9, 13), hashlittle(p, sizeof(q)-10, 13), 
+  printf("%.8x %.8x %.8x %.8x %.8x %.8x %.8x %.8x %.8x %.8x %.8x %.8x\n",
+         hashlittle(p, sizeof(q)-1, 13), hashlittle(p, sizeof(q)-2, 13),
+         hashlittle(p, sizeof(q)-3, 13), hashlittle(p, sizeof(q)-4, 13),
+         hashlittle(p, sizeof(q)-5, 13), hashlittle(p, sizeof(q)-6, 13),
+         hashlittle(p, sizeof(q)-7, 13), hashlittle(p, sizeof(q)-8, 13),
+         hashlittle(p, sizeof(q)-9, 13), hashlittle(p, sizeof(q)-10, 13),
          hashlittle(p, sizeof(q)-11, 13), hashlittle(p, sizeof(q)-12, 13));
   p = &qqqq[3];
-  printf("%.8x %.8x %.8x %.8x %.8x %.8x %.8x %.8x %.8x %.8x %.8x %.8x\n", 
-         hashlittle(p, sizeof(q)-1, 13), hashlittle(p, sizeof(q)-2, 13), 
-         hashlittle(p, sizeof(q)-3, 13), hashlittle(p, sizeof(q)-4, 13), 
-         hashlittle(p, sizeof(q)-5, 13), hashlittle(p, sizeof(q)-6, 13), 
-         hashlittle(p, sizeof(q)-7, 13), hashlittle(p, sizeof(q)-8, 13), 
-         hashlittle(p, sizeof(q)-9, 13), hashlittle(p, sizeof(q)-10, 13), 
+  printf("%.8x %.8x %.8x %.8x %.8x %.8x %.8x %.8x %.8x %.8x %.8x %.8x\n",
+         hashlittle(p, sizeof(q)-1, 13), hashlittle(p, sizeof(q)-2, 13),
+         hashlittle(p, sizeof(q)-3, 13), hashlittle(p, sizeof(q)-4, 13),
+         hashlittle(p, sizeof(q)-5, 13), hashlittle(p, sizeof(q)-6, 13),
+         hashlittle(p, sizeof(q)-7, 13), hashlittle(p, sizeof(q)-8, 13),
+         hashlittle(p, sizeof(q)-9, 13), hashlittle(p, sizeof(q)-10, 13),
          hashlittle(p, sizeof(q)-11, 13), hashlittle(p, sizeof(q)-12, 13));
   printf("\n");
 
@@ -918,7 +918,7 @@ void driver3()
   i=47, j=0;
   hashword2(&len, 1, &i, &j);
   if (hashword(&len, 1, 47) != i)
-    printf("hashword2 and hashword mismatch %x %x\n", 
+    printf("hashword2 and hashword mismatch %x %x\n",
 	   i, hashword(&len, 1, 47));
 
   /* check hashlittle doesn't read before or after the ends of the string */
@@ -937,7 +937,7 @@ void driver3()
       y = hashlittle(b, len, (uint32_t)1);
       if ((ref != x) || (ref != y))
       {
-	printf("alignment error: %.8x %.8x %.8x %d %d\n", ref, x, y, 
+	printf("alignment error: %.8x %.8x %.8x %d %d\n", ref, x, y,
                h, i);
       }
     }

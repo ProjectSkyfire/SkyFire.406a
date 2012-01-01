@@ -447,7 +447,7 @@ bool Group::AddMember(Player* player)
 
         if (m_maxEnchantingLevel < player->GetSkillValue(SKILL_ENCHANTING))
             m_maxEnchantingLevel = player->GetSkillValue(SKILL_ENCHANTING);
-            
+
         if(IsGuildGroup())
             SendGuildGroupStateUpdate(true);
         else
@@ -2298,22 +2298,22 @@ bool Group::IsGuildGroup(bool AllInSameMap, bool AllInSameInstanceId)
             {
                 if (guildId == 0) // If this is the first member with a guild
                     guildId = player->GetGuildId(); // Store it
-                
+
                 if (mapId == 0)
                     mapId = player->GetMapId();
-                    
+
                 if (InstanceId == 0)
                     InstanceId = player->GetInstanceId();
-                    
+
                 if (player->GetGuildId() != guildId) // If another member has another guildid, then its not a guild group
                     return false;
-                
+
                 if (AllInSameMap && (player->GetMapId() != mapId))
                     return false;
-                    
+
                 if (AllInSameInstanceId && (player->GetInstanceId() != InstanceId))
                     return false;
-            } 
+            }
             else // If he does not have a guild, then its not a guild group
                 return false;
         }

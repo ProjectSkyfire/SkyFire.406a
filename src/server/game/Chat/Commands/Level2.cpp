@@ -710,13 +710,13 @@ bool ChatHandler::HandleLookupPlayerIpCommand(const char* args)
     std::string ip;
     int32 limit;
     char* limit_str;
- 
+
     Player *chr = getSelectedPlayer();
     if (chr == NULL)
     {
         if (!*args)
             return false;
- 
+
         ip = strtok ((char*)args, " ");
         limit_str = strtok (NULL, " ");
         limit = limit_str ? atoi (limit_str) : -1;
@@ -726,7 +726,7 @@ bool ChatHandler::HandleLookupPlayerIpCommand(const char* args)
         ip = chr->GetSession()->GetRemoteAddress();
         limit = -1;
     }
-	
+
     LoginDatabase.EscapeString(ip);
 
     QueryResult result = LoginDatabase.PQuery("SELECT id, username FROM account WHERE last_ip = '%s'", ip.c_str());
