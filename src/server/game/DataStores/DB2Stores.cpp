@@ -32,6 +32,8 @@ DB2Storage <ItemSparseEntry> sItemSparseStore (ItemSparsefmt);
 
 typedef std::list<std::string> StoreProblemList1;
 
+uint32 DB2FilesCount = 0;
+
 static bool LoadDB2_assert_print(uint32 fsize, uint32 rsize, const std::string& filename)
 {
     sLog->outError("Size of '%s' setted by format string (%u) not equal size of C++ structure (%u).", filename.c_str(), fsize, rsize);
@@ -56,6 +58,7 @@ inline void LoadDB2(uint32& availableDb2Locales, StoreProblemList1& errlist, DB2
     // compatibility format and C++ structure sizes
     ASSERT(DB2FileLoader::GetFormatRecordSize(storage.GetFormat()) == sizeof(T) || LoadDB2_assert_print(DB2FileLoader::GetFormatRecordSize(storage.GetFormat()), sizeof(T), filename));
 
+    ++DB2FilesCount;
     std::string db2_filename = db2_path + filename;
     if (storage.Load(db2_filename.c_str()))
     {
@@ -89,8 +92,6 @@ void LoadDB2Stores(const std::string& dataPath)
 {
     std::string db2Path = dataPath + "dbc/";
 
-    const uint32 DB2FilesCount = 2;
-
     StoreProblemList1 bad_db2_files;
     uint32 availableDb2Locales = 0xFFFFFFFF;
 
@@ -99,7 +100,7 @@ void LoadDB2Stores(const std::string& dataPath)
 
     for (uint32 i = 0; i < sItemStore.GetNumRows(); ++i)
     {
-        const ItemEntry* itemEntry = sItemStore.LookupEntry(i);
+        ItemEntry const* itemEntry = sItemStore.LookupEntry(i);
         if (!itemEntry)
             continue;
 
