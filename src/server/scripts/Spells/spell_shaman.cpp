@@ -314,6 +314,50 @@ class spell_sha_heroism : public SpellScriptLoader
         }
 };
 
+// 73920 - Healing Rain
+class spell_sha_healing_rain : public SpellScriptLoader
+{
+    public:
+        spell_sha_healing_rain() : SpellScriptLoader("spell_sha_healing_rain") { }
+
+        class spell_sha_healing_rain_AuraScript : public AuraScript
+        {
+            PrepareAuraScript(spell_sha_healing_rain_AuraScript);
+
+            void OnTick(AuraEffect const* aurEff)
+            {
+                targetList.clear();
+                if (DynamicObject* dynObj = GetCaster()->GetDynObject(73920))
+                {
+                    Aura::ApplicationMap applications = dynObj->GetAura()->GetApplicationMap();
+                    for (Aura::ApplicationMap::iterator itr = applications.begin(); itr != applications.end(); ++itr)
+                    {
+                        uint8 effectsToApply = itr->second->GetEffectsToApply();
+                        if (effectsToApply & (1 << 0))
+                            targetList.push_back(itr->second->GetTarget());
+                    }
+                }
+
+                for (UnitList::iterator itr = targetList.begin(); itr != targetList.end(); ++itr)
+                    GetCaster()->CastSpell((*itr)->GetPositionX(), (*itr)->GetPositionY(), (*itr)->GetPositionZ(), 73921, true);
+            }
+
+            void Register()
+            {
+                //DoCheckAreaTarget += AuraCheckAreaTargetFn(spell_sha_healing_rain_AuraScript::Target);
+                OnEffectPeriodic += AuraEffectPeriodicFn(spell_sha_healing_rain_AuraScript::OnTick, EFFECT_1, SPELL_AURA_PERIODIC_DUMMY);
+            }
+            
+            public:
+                std::list<Unit*> targetList;
+        };
+        
+        AuraScript* GetAuraScript() const
+        {
+            return new spell_sha_healing_rain_AuraScript();
+        }
+};
+
 void AddSC_shaman_spell_scripts()
 {
     new spell_sha_astral_shift();
@@ -322,4 +366,5 @@ void AddSC_shaman_spell_scripts()
     new spell_sha_earthbind_totem();
     new spell_sha_bloodlust();
     new spell_sha_heroism();
+    new spell_sha_healing_rain();
 }

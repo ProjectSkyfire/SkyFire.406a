@@ -1290,16 +1290,6 @@ void AuraEffect::PeriodicTick(AuraApplication * aurApp, Unit* caster) const
         case SPELL_AURA_PERIODIC_DAMAGE:
         case SPELL_AURA_PERIODIC_DAMAGE_PERCENT:
             HandlePeriodicDamageAurasTick(target, caster);
-
-            /* Dark Evangelism */
-            if (target->HasAura(15407)) //Mind Flay
-            {
-                if (caster->HasAura(81659)) //Rank 1
-                    caster->CastSpell(caster, 87117, true);
-                else
-                    if (caster->HasAura(81662)) //Rank 2
-                        caster->CastSpell(caster, 87118, true);
-            }
             break;
         case SPELL_AURA_PERIODIC_LEECH:
             HandlePeriodicHealthLeechAuraTick(target, caster);
