@@ -42,6 +42,7 @@ SET @LESSER_CEL = 52718;
 SET @MAELSTROM_CRYSTAL = 52722;
 
 TRUNCATE `disenchant_loot_template`;
+
 INSERT INTO `disenchant_loot_template` (`entry`,`item`,`ChanceOrQuestChance`,`lootmode`,`groupid`,`mincountOrRef`,`maxcount`) VALUES
 (3,@STRANGE_DUST,20,1,1,1,2),
 (4,@STRANGE_DUST,80,1,1,1,2),

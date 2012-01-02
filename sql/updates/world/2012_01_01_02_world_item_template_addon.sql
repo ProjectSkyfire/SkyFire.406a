@@ -1,4 +1,5 @@
 DROP TABLE IF EXISTS `item_template_addon`;
+
 CREATE TABLE `item_template_addon` (
 `Id` int(10) unsigned not null,
 `BuyCount` tinyint(3) unsigned not null default 1,
