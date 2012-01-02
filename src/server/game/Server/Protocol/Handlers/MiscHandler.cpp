@@ -1815,3 +1815,9 @@ void WorldSession::HandleInstanceLockResponse(WorldPacket& recvPacket)
 
     _player->SetPendingBind(0, 0);
 }
+
+void WorldSession::PlayerViolenceLevel(WorldPacket& recvPacket)
+{
+  sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: CMSG_VIOLENCE_LEVEL");
+  recvPacket.read_skip<uint8>();    // violenceLevel
+}

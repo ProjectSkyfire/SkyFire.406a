@@ -280,8 +280,6 @@ World::AddSession_(WorldSession* s)
 
     s->SendTutorialsData();
 
-    //s->SendAccountDataTimes(GLOBAL_CACHE_MASK);
-
     UpdateMaxSessionCounters();
 
     // Updates the population
@@ -376,10 +374,8 @@ bool World::RemoveQueuedPlayer(WorldSession* sess)
         pop_sess->SendAddonsInfo();
 
         pop_sess->SendClientCacheVersion(sWorld->getIntConfig(CONFIG_CLIENTCACHE_VERSION));
-
+        pop_sess->SendAccountDataTimes(GLOBAL_CACHE_MASK);
         pop_sess->SendTutorialsData();
-
-        //pop_sess->SendAccountDataTimes(GLOBAL_CACHE_MASK);
 
         m_QueuedPlayer.pop_front();
 

@@ -4548,6 +4548,8 @@ void Player::InitVisibleBits()
 
     updateVisualBits.SetBit(OBJECT_FIELD_GUID);
     updateVisualBits.SetBit(OBJECT_FIELD_TYPE);
+    updateVisualBits.SetBit(OBJECT_FIELD_DATA + 0);
+    updateVisualBits.SetBit(OBJECT_FIELD_DATA + 1);
     updateVisualBits.SetBit(OBJECT_FIELD_ENTRY);
     updateVisualBits.SetBit(OBJECT_FIELD_SCALE_X);
     updateVisualBits.SetBit(UNIT_FIELD_CHARM + 0);
@@ -22089,10 +22091,10 @@ void Player::SendInitialPacketsBeforeAddToMap()
 
 void Player::SendInitialPacketsAfterAddToMap()
 {
-    //WorldPacket Datas(SMSG_UPDATE_ACCOUNT_DATA_COMPLETE); 
-    //Datas << uint32(0x07); 
-    //Datas << uint32(0x00); 
-    //GetSession()->SendPacket(&Datas); 
+    WorldPacket Datas(SMSG_UPDATE_ACCOUNT_DATA_COMPLETE); 
+    Datas << uint32(0x07); 
+    Datas << uint32(0x00); 
+    GetSession()->SendPacket(&Datas); 
     UpdateVisibilityForPlayer();
 
     // update zone
