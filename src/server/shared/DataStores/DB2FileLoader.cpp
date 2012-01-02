@@ -382,14 +382,6 @@ char* DB2FileLoader::AutoProduceStrings(const char* format, char* dataTable, uin
     if (strlen(format) != fieldCount)
         return NULL;
 
-    struct DB2StringHolder
-    {
-        char const* Strings[TOTAL_LOCALES];
-    };
-
-    // each string field at load have array of string for each locale
-    size_t stringHolderSize = sizeof(char*) * TOTAL_LOCALES;
-
     char* stringPool= new char[stringSize];
     memcpy(stringPool, stringTable, stringSize);
 
@@ -410,20 +402,14 @@ char* DB2FileLoader::AutoProduceStrings(const char* format, char* dataTable, uin
                 break;
             case FT_STRING:
             {
-                DB2StringHolder** slot = (DB2StringHolder**)(&dataTable[offset]);
-                if (*slot) // ensure the strings array holder is filled
+                // fill only not filled entries
+                char** slot = (char**)(&dataTable[offset]);
+                if (**((char***)slot) == nullStr)
                 {
                     const char * st = getRecord(y).getString(x);
-                    if (locale == 0)
-                    {
-                        // default locale, fill all unfilled locale entries
-                        for (uint8 loc = 0; loc < TOTAL_LOCALES; loc++)
-                            if (!(*slot)->Strings[loc] || (*slot)->Strings[loc] == nullStr)
-                                (*slot)->Strings[loc] = stringPool+(st-(const char*)stringTable);
-                    }
-                    else // specific locale, overwrite locale entry
-                        (*slot)->Strings[locale] = stringPool+(st-(const char*)stringTable);
+                    *slot=stringPool + (st-(const char*)stringTable);
                 }
+
                 offset+=sizeof(char*);
                 break;
             }

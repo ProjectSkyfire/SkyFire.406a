@@ -253,24 +253,27 @@ inline void LoadDBC(uint32& availableDbcLocales, StoreProblemList& errors, DBCSt
 
     if (storage.Load(dbcFilename.c_str(), sql))
     {
-        for (uint8 loc = 1; loc < TOTAL_LOCALES; ++loc)
+        for (uint8 i = 0; i < TOTAL_LOCALES; ++i)
         {
-            if (!(availableDbcLocales & (1 << loc)))
+            if (!(availableDbcLocales & (1 << i)))
                 continue;
 
-            std::string localizedFileName = dbcPath + localeNames[loc] + '/' + filename;
-            if (!storage.LoadStringsFrom(localizedFileName.c_str(), loc))
-                availableDbcLocales &= ~(1<<loc);             // mark locale as not available
+            std::string localizedName(dbcPath);
+            localizedName.append(localeNames[i]);
+            localizedName.push_back('/');
+            localizedName.append(filename);
+
+            if (!storage.LoadStringsFrom(localizedName.c_str()))
+                availableDbcLocales &= ~(1<<i);             // mark as not available for speedup next checks
         }
     }
     else
     {
         // sort problematic dbc to (1) non compatible and (2) non-existed
-        FILE * f=fopen(dbcFilename.c_str(), "rb");
-        if (f)
+        if (FILE* f = fopen(dbcFilename.c_str(), "rb"))
         {
             char buf[100];
-            snprintf(buf, 100, " (exist, but have %d fields instead " SIZEFMTD ") Wrong client version DBC file?", storage.GetFieldCount(), strlen(storage.GetFormat()));
+            snprintf(buf, 100, " (exists, but has %u fields instead of " SIZEFMTD ") Possible wrong client version.", storage.GetFieldCount(), strlen(storage.GetFormat()));
             errors.push_back(dbcFilename + buf);
             fclose(f);
         }

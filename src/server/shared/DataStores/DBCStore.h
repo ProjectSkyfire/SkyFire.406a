@@ -87,7 +87,7 @@ class DBCStorage
         char const* GetFormat() const { return fmt; }
         uint32 GetFieldCount() const { return fieldCount; }
 
-        bool Load(char const* fn, SqlDbc * sql)
+        bool Load(char const* fn, SqlDbc* sql)
         {
             DBCFileLoader dbc;
             // Check if load was sucessful, only then continue
@@ -126,8 +126,6 @@ class DBCStorage
             char * sqlDataTable;
             fieldCount = dbc.GetCols();
             dataTable = (T*)dbc.AutoProduceData(fmt, nCount, indexTable.asChar, sqlRecordCount, sqlHighestIndex, sqlDataTable);
-
-            stringPoolList.push_back(dbc.AutoProduceStringsArrayHolders(fmt, (char*)dataTable));
 
             stringPoolList.push_back(dbc.AutoProduceStrings(fmt, (char*)dataTable));
 
@@ -235,7 +233,7 @@ class DBCStorage
            return indexTable.asT!= NULL;
         }
 
-        bool LoadStringsFrom(char const* fn, uint8 locale)
+        bool LoadStringsFrom(char const* fn)
         {
             // DBC must be already loaded using Load
             if (!indexTable.asT)
@@ -246,7 +244,7 @@ class DBCStorage
             if (!dbc.Load(fn, fmt))
                 return false;
 
-            stringPoolList.push_back(dbc.AutoProduceStrings(fmt, (char*)dataTable, locale));
+            stringPoolList.push_back(dbc.AutoProduceStrings(fmt, (char*)dataTable));
 
             return true;
         }
