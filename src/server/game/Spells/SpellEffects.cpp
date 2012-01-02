@@ -4504,6 +4504,7 @@ void Spell::EffectWeaponDmg(SpellEffIndex effIndex)
 
     int32 weaponDamage = m_caster->CalculateDamage(m_attackType, normalized, true);
 
+    int32 AddDamage = 0;
     // Sequence is important
     for (int j = 0; j < MAX_SPELL_EFFECTS; ++j)
     {
@@ -4514,14 +4515,16 @@ void Spell::EffectWeaponDmg(SpellEffIndex effIndex)
             case SPELL_EFFECT_WEAPON_DAMAGE:
             case SPELL_EFFECT_WEAPON_DAMAGE_NOSCHOOL:
             case SPELL_EFFECT_NORMALIZED_WEAPON_DMG:
-                weaponDamage += fixed_bonus;
+                AddDamage += fixed_bonus;
                 break;
             case SPELL_EFFECT_WEAPON_PERCENT_DAMAGE:
-                weaponDamage = int32(weaponDamage* weaponDamagePercentMod);
+                weaponDamage = int32(weaponDamage * weaponDamagePercentMod);
             default:
                 break;                                      // not weapon damage effect, just skip
         }
     }
+
+    weaponDamage += AddDamage;
 
     if (spell_bonus)
         weaponDamage += spell_bonus;
