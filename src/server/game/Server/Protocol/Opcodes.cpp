@@ -841,7 +841,7 @@ void InitOpcodeTable()
     OPCODE( CMSG_MOVE_SET_CAN_FLY_ACK,                    STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleMoveSetCanFlyAckOpcode    );
     OPCODE( CMSG_MOVE_SET_FLY,                            STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleMovementOpcodes           );
     OPCODE( CMSG_SOCKET_GEMS,                             STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleSocketOpcode              );
-    OPCODE( CMSG_ARENA_TEAM_CREATE,                       STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
+    OPCODE( CMSG_ARENA_TEAM_CREATE,                       STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleArenaTeamCreate           );
     OPCODE( SMSG_ARENA_TEAM_COMMAND_RESULT,               STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( CMSG_ARENA_TEAM_QUERY,                        STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleArenaTeamQueryOpcode      );
     OPCODE( SMSG_ARENA_TEAM_QUERY_RESPONSE,               STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );

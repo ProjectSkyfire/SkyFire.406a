@@ -28,6 +28,29 @@
 #include "SocialMgr.h"
 #include "ArenaTeamMgr.h"
 
+void WorldSession::HandleArenaTeamCreate(WorldPacket & recv_data)
+{
+    sLog->outDebug(LOG_FILTER_NETWORKIO, "CMSG_ARENA_TEAM_CREATE");
+
+    uint32 type, icon, iconcolor, border, bordercolor, background;
+    std::string name;
+
+    recv_data >> background >> icon >> iconcolor >> border >> bordercolor;
+    recv_data >> type;
+    recv_data >> name;
+
+    ArenaTeam* at = new ArenaTeam;
+    if (!at->Create(GUID_LOPART(_player->GetGUID()), type, name, background, icon, iconcolor, border, bordercolor))
+    {
+        sLog->outError("ArenaTeamHandler: arena team create failed.");
+        delete at;
+        return;
+    }
+
+    // register team and add captain
+    sObjectMgr->AddArenaTeam(at);
+}
+
 void WorldSession::HandleInspectArenaTeamsOpcode(WorldPacket & recvData)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "MSG_INSPECT_ARENA_TEAMS");

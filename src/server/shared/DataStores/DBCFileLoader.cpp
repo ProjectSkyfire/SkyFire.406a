@@ -346,19 +346,17 @@ char* DBCFileLoader::AutoProduceStrings(const char* format, char* dataTable, uin
                 offset+=1;
                 break;
             case FT_STRING:
+            {
+                // fill only not filled entries
+                char** slot = (char**)(&dataTable[offset]);
+                if (!*slot || !**slot)
                 {
-                    // fill only not filled entries
-                    char** slot = (char**)(&dataTable[offset]);
-                    if (!*slot || !**slot)
-                    {
-                        const char * st = getRecord(y).getString(x);
-                        *slot=stringPool+(st-(const char*)stringTable);
-                    }
-                    offset += sizeof(char*);
-                    break;
+                    const char* st = getRecord(y).getString(x);
+                    *slot=stringPool+(st-(const char*)stringTable);
                 }
-                offset+=sizeof(char*);
+                offset += sizeof(char*);
                 break;
+            }
         }
     }
 

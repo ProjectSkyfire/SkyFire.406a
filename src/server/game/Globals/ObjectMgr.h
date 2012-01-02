@@ -39,7 +39,7 @@
 #include "Guild.h"
 #include "GuildMgr.h"
 #include "VehicleDefines.h"
-
+#include "ArenaTeam.h"
 #include <ace/Singleton.h>
 #include <string>
 #include <map>
@@ -614,6 +614,8 @@ class ObjectMgr
 
         typedef UNORDERED_MAP<uint32, Quest*> QuestMap;
 
+        typedef UNORDERED_MAP<uint32, ArenaTeam*> ArenaTeamMap;
+
         typedef UNORDERED_MAP<uint32, AreaTrigger> AreaTriggerMap;
 
         typedef UNORDERED_MAP<uint32, uint32> AreaTriggerScriptMap;
@@ -642,6 +644,8 @@ class ObjectMgr
         CreatureTemplate const* GetCreatureTemplate(uint32 entry);
         CreatureTemplateContainer const* GetCreatureTemplates() { return &CreatureTemplateStore; }
         CreatureModelInfo const* GetCreatureModelInfo(uint32 modelId);
+        void AddArenaTeam(ArenaTeam* arenaTeam);
+        void RemoveArenaTeam(uint32 Id);
         CreatureModelInfo const* GetCreatureModelRandomGender(uint32* displayID);
         static uint32 ChooseDisplayId(uint32 team, const CreatureTemplate* cinfo, const CreatureData* data = NULL);
         static void ChooseCreatureFlags(const CreatureTemplate* cinfo, uint32& npcflag, uint32& unit_flags, uint32& dynamicflags, const CreatureData* data = NULL);
@@ -1238,7 +1242,7 @@ class ObjectMgr
         typedef std::set<uint32> GameObjectForQuestSet;
 
         GuildMap            mGuildMap;
-
+        ArenaTeamMap mArenaTeamMap;
         QuestAreaTriggerMap mQuestAreaTriggerMap;
         TavernAreaTriggerSet mTavernAreaTriggerSet;
         GameObjectForQuestSet mGameObjectForQuestSet;

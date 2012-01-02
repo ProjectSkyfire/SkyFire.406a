@@ -1344,10 +1344,6 @@ class Player : public Unit, public GridObject<Player>
 
         void ApplyEquipCooldown(Item* pItem);
 
-        void SetAmmo(uint32 item);
-        void RemoveAmmo();
-        bool CheckAmmoCompatibility(const ItemTemplate *ammo_proto) const;
-
         void QuickEquipItem(uint16 pos, Item *pItem);
         void VisualizeItem(uint8 slot, Item *pItem);
         void SetVisibleItemSlot(uint8 slot, Item *pItem);
