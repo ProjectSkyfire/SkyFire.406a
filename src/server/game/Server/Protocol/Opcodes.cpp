@@ -314,6 +314,7 @@ void InitOpcodeTable()
     OPCODE( SMSG_SET_PROFICIENCY,                         STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( CMSG_SET_ACTION_BUTTON,                       STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleSetActionButtonOpcode     );
     OPCODE( SMSG_ACTION_BUTTONS,                          STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
+    OPCODE( SMSG_INIT_CURRENCY,                           STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( SMSG_INITIAL_SPELLS,                          STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( SMSG_LEARNED_SPELL,                           STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( SMSG_SUPERCEDED_SPELL,                        STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
@@ -1281,6 +1282,6 @@ void InitOpcodeTable()
     OPCODE( CMSG_REFORGE_ITEM,                            STATUS_LOGGEDIN, PROCESS_INPLACE,       &WorldSession::HandleReforgeItem               );
     OPCODE( CMSG_LOG_DISCONNECT,                          STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_EarlyProccess            );
     OPCODE( MSG_VERIFY_CONNECTIVITY,                      STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_EarlyProccess            );
-    OPCODE( CMSG_VIOLENCE_LEVEL,                          STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::PlayerViolenceLevel             );
+    OPCODE( CMSG_VIOLENCE_LEVEL,                          STATUS_AUTHED,   PROCESS_THREADUNSAFE,  &WorldSession::PlayerViolenceLevel             );
     OPCODE( SMSG_PLAYER_MOVE,                             STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
 };

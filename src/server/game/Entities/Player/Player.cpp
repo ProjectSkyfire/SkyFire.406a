@@ -2279,6 +2279,21 @@ bool Player::TeleportTo(uint32 mapid, float x, float y, float z, float orientati
                     data << m_transport->GetEntry() << GetMapId();
 
                 GetSession()->SendPacket(&data);
+
+                data.Initialize(SMSG_NEW_WORLD, (20));
+                if (m_transport)
+                    data << m_movementInfo.t_pos.PositionXYZStream();
+                else
+                    data << m_teleport_dest.PositionXYZStream();
+
+                data << uint32(mapid);
+                if (m_transport)
+                    data << m_movementInfo.t_pos.GetOrientation();
+                else
+                    data << m_teleport_dest.GetOrientation();
+
+                GetSession()->SendPacket(&data);
+                SendSavedInstances();
             }
 
             // remove from old map now
@@ -2306,17 +2321,19 @@ bool Player::TeleportTo(uint32 mapid, float x, float y, float z, float orientati
 
             if (!GetSession()->PlayerLogout())
             {
-                WorldPacket data(SMSG_NEW_WORLD, 4 + 4 + 4 + 4 + 4);
+                WorldPacket data(SMSG_NEW_WORLD, (3 * 4) + 4 + 4);
                 if (m_transport)
+                {
                     data << m_movementInfo.t_pos.PositionXYZStream();
-                else
-                    data << m_teleport_dest.PositionXYZStream();
-
-                data << uint32(mapid);
-                if (m_transport)
+                    data << uint32(mapid);
                     data << m_movementInfo.t_pos.GetOrientation();
+                }
                 else
+                {
+                    data << m_teleport_dest.PositionXYZStream();
+                    data << uint32(mapid);
                     data << m_teleport_dest.GetOrientation();
+                }
 
                 GetSession()->SendPacket(&data);
                 SendSavedInstances();

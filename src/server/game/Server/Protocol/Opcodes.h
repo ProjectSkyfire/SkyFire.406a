@@ -219,7 +219,7 @@ enum Opcodes
     MSG_MOVE_TELEPORT_CHEAT                          = 0x10098, //
     MSG_MOVE_TELEPORT_ACK                            = 0x10099, //
     MSG_MOVE_TOGGLE_FALL_LOGGING                     = 0x1009A, //
-    MSG_MOVE_FALL_LAND                               = 0x1009B, //
+    MSG_MOVE_FALL_LAND                               = 0x02403, // 4.3.0 15050
     MSG_MOVE_START_SWIM                              = 0x02291, // 4.3.0 15050
     MSG_MOVE_STOP_SWIM                               = 0x022B1, // 4.3.0 15050
     MSG_MOVE_SET_RUN_SPEED_CHEAT                     = 0x1009C, //
@@ -269,12 +269,12 @@ enum Opcodes
     CMSG_MOVE_HOVER_ACK                              = 0x100B5, //
     MSG_MOVE_HOVER                                   = 0x100B6, //
     CMSG_TRIGGER_CINEMATIC_CHEAT                     = 0x100B7, //
-    CMSG_OPENING_CINEMATIC                           = 0x100B8, //
-    SMSG_TRIGGER_CINEMATIC                           = 0x100B9, //
-    CMSG_NEXT_CINEMATIC_CAMERA                       = 0x100BA, //
-    CMSG_COMPLETE_CINEMATIC                          = 0x100BB, //
+    CMSG_OPENING_CINEMATIC                           = 0x03800, // 4.3.0 15050
+    SMSG_TRIGGER_CINEMATIC                           = 0x00E04, // 4.3.0 15050
+    CMSG_NEXT_CINEMATIC_CAMERA                       = 0x01684, // 4.3.0 15050
+    CMSG_COMPLETE_CINEMATIC                          = 0x06682, // 4.3.0 15050
     SMSG_TUTORIAL_FLAGS                              = 0x06E20, // 4.3.0 15050
-    CMSG_TUTORIAL_FLAG                               = 0x100BD, //
+    CMSG_TUTORIAL_FLAG                               = 0x03E84, // 4.3.0 15050
     CMSG_TUTORIAL_CLEAR                              = 0x100BE, //
     CMSG_TUTORIAL_RESET                              = 0x100BF, //
     CMSG_STANDSTATECHANGE                            = 0x100C0, //
@@ -520,7 +520,7 @@ enum Opcodes
     SMSG_PLAY_SPELL_VISUAL                           = 0x101A8, //
     CMSG_ZONEUPDATE                                  = 0x03600, // 4.3.0 15050
     SMSG_PARTYKILLLOG                                = 0x06886, // 4.3.0 15050
-    SMSG_COMPRESSED_UPDATE_OBJECT                    = 0x101AB, //
+    SMSG_COMPRESSED_UPDATE_OBJECT                    = 0x01CC3, // 4.3.0 15050
     SMSG_PLAY_SPELL_IMPACT                           = 0x101AC, //
     SMSG_EXPLORATION_EXPERIENCE                      = 0x101AD, //
     CMSG_GM_SET_SECURITY_GROUP                       = 0x101AE, //
@@ -683,7 +683,7 @@ enum Opcodes
     SMSG_LOOT_ROLL                                   = 0x10254, //
     CMSG_LOOT_MASTER_GIVE                            = 0x10255, //
     SMSG_LOOT_MASTER_LIST                            = 0x10256, //
-    SMSG_SET_FORCED_REACTIONS                        = 0x10257, //
+    SMSG_SET_FORCED_REACTIONS                        = 0x04A20, // 4.3.0 15050
     SMSG_SPELL_FAILED_OTHER                          = 0x10258, //
     SMSG_GAMEOBJECT_RESET_STATE                      = 0x10259, //
     CMSG_REPAIR_ITEM                                 = 0x1025A, //
