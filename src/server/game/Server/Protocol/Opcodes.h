@@ -37,7 +37,7 @@
 /// List of Opcodes
 enum Opcodes
 {
-    CMSG_WORLD_TELEPORT                              = 0x10000, //
+    CMSG_WORLD_TELEPORT                              = 0x04164, // 4.3.0 15050
     CMSG_TELEPORT_TO_UNIT                            = 0x10001, //
     SMSG_CHECK_FOR_BOTS                              = 0x10002, //
     CMSG_BOT_DETECTED2                               = 0x10003, //
@@ -167,10 +167,10 @@ enum Opcodes
     CMSG_MESSAGECHAT_BATTLEGROUND                    = 0x10073, //
     CMSG_MESSAGECHAT_BATTLEGROUND_LEADER             = 0x10074, //
     CMSG_MESSAGECHAT_RAID_WARNING                    = 0x10075, //
-    SMSG_MESSAGECHAT                                 = 0x10076, //
+    SMSG_MESSAGECHAT                                 = 0x03884, // 4.3.0 15050
     CMSG_JOIN_CHANNEL                                = 0x0074C, // 4.3.0 15050
-    CMSG_LEAVE_CHANNEL                               = 0x10078, //
-    SMSG_CHANNEL_NOTIFY                              = 0x10079, //
+    CMSG_LEAVE_CHANNEL                               = 0x0070E, // 4.3.0 15050
+    SMSG_CHANNEL_NOTIFY                              = 0x07A26, // 4.3.0 15050
     CMSG_CHANNEL_LIST                                = 0x1007A, //
     SMSG_CHANNEL_LIST                                = 0x1007B, //
     CMSG_CHANNEL_PASSWORD                            = 0x1007C, //
@@ -185,7 +185,7 @@ enum Opcodes
     CMSG_CHANNEL_ROSTER_INFO                         = 0x10085, //
     CMSG_CHANNEL_BAN                                 = 0x10086, //
     CMSG_CHANNEL_UNBAN                               = 0x10087, //
-    CMSG_CHANNEL_ANNOUNCEMENTS                       = 0x10088, //
+    CMSG_CHANNEL_ANNOUNCEMENTS                       = 0x0056E, // 4.3.0 15050
     CMSG_CHANNEL_MODERATE                            = 0x10089, //
     SMSG_UPDATE_OBJECT                               = 0x04606, // 4.3.0 15050
     SMSG_DESTROY_OBJECT                              = 0x07E80, // 4.3.0 15050
@@ -198,7 +198,7 @@ enum Opcodes
     CMSG_GAMEOBJ_USE                                 = 0x10092, //
     CMSG_DESTROY_ITEMS                               = 0x10093, //
     SMSG_GAMEOBJECT_CUSTOM_ANIM                      = 0x10094, //
-    CMSG_AREATRIGGER                                 = 0x10095, //
+    CMSG_AREATRIGGER                                 = 0x05E84, // 4.3.0 15050
     MSG_MOVE_START_FORWARD                           = 0x06683, // 4.3.0 15050
     MSG_MOVE_START_BACKWARD                          = 0x02623, // 4.3.0 15050
     MSG_MOVE_STOP                                    = 0x02483, // 4.3.0 15050
@@ -213,11 +213,11 @@ enum Opcodes
     MSG_MOVE_START_PITCH_DOWN                        = 0x06491, // 4.3.0 15050
     MSG_MOVE_STOP_PITCH                              = 0x07033, // 4.3.0 15050
     MSG_MOVE_SET_RUN_MODE                            = 0x072B1, // 4.3.0 15050
-    MSG_MOVE_SET_WALK_MODE                           = 0x10096, //
+    MSG_MOVE_SET_WALK_MODE                           = 0x03211, // 4.3.0 15050
     MSG_MOVE_TOGGLE_LOGGING                          = 0x10097, //
     MSG_MOVE_TELEPORT                                = 0x0063A, // 4.3.0 15050
-    MSG_MOVE_TELEPORT_CHEAT                          = 0x10098, //
-    MSG_MOVE_TELEPORT_ACK                            = 0x10099, //
+    MSG_MOVE_TELEPORT_CHEAT                          = 0x074B3, // 4.3.0 15050
+    MSG_MOVE_TELEPORT_ACK                            = 0x036A1, // 4.3.0 15050
     MSG_MOVE_TOGGLE_FALL_LOGGING                     = 0x1009A, //
     MSG_MOVE_FALL_LAND                               = 0x02403, // 4.3.0 15050
     MSG_MOVE_START_SWIM                              = 0x02291, // 4.3.0 15050
