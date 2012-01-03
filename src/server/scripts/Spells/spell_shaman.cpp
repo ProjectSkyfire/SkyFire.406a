@@ -326,31 +326,14 @@ class spell_sha_healing_rain : public SpellScriptLoader
 
             void OnTick(AuraEffect const* aurEff)
             {
-                targetList.clear();
                 if (DynamicObject* dynObj = GetCaster()->GetDynObject(73920))
-                {
-                    Aura::ApplicationMap applications = dynObj->GetAura()->GetApplicationMap();
-                    for (Aura::ApplicationMap::iterator itr = applications.begin(); itr != applications.end(); ++itr)
-                    {
-                        uint8 effectsToApply = itr->second->GetEffectsToApply();
-                        if (effectsToApply & (1 << 0))
-                            if(itr->second->GetTarget()->GetTypeId() == TYPEID_PLAYER)
-                                targetList.push_back(itr->second->GetTarget()); 
-                    }
-                }
-
-                for (UnitList::iterator itr = targetList.begin(); itr != targetList.end(); ++itr)
-                    GetCaster()->CastSpell((*itr)->GetPositionX(), (*itr)->GetPositionY(), (*itr)->GetPositionZ(), 73921, true);
+                    GetCaster()->CastSpell(dynObj->GetPositionX(), dynObj->GetPositionY(), dynObj->GetPositionZ(), 73921, true);
             }
 
             void Register()
             {
-                //DoCheckAreaTarget += AuraCheckAreaTargetFn(spell_sha_healing_rain_AuraScript::Target);
                 OnEffectPeriodic += AuraEffectPeriodicFn(spell_sha_healing_rain_AuraScript::OnTick, EFFECT_1, SPELL_AURA_PERIODIC_DUMMY);
             }
-            
-            public:
-                std::list<Unit*> targetList;
         };
         
         AuraScript* GetAuraScript() const
