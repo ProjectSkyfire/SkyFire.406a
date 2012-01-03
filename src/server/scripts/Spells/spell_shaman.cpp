@@ -334,7 +334,8 @@ class spell_sha_healing_rain : public SpellScriptLoader
                     {
                         uint8 effectsToApply = itr->second->GetEffectsToApply();
                         if (effectsToApply & (1 << 0))
-                            targetList.push_back(itr->second->GetTarget());
+                            if(itr->second->GetTarget()->GetTypeId() == TYPEID_PLAYER)
+                                targetList.push_back(itr->second->GetTarget()); 
                     }
                 }
 
