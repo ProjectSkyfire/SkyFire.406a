@@ -1712,7 +1712,7 @@ bool AchievementMgrBase::CanUpdateCriteria(AchievementCriteriaEntry const* crite
                 if (!group)
                     return false;
 
-                if (!group->IsGuildGroup(true, true))
+                if (!group->IsGuildGroup(player->GetGuildId(),true, true))
                     return false;
                 break;
             }
