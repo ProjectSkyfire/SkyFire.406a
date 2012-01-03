@@ -2305,7 +2305,7 @@ bool Group::IsGuildGroup(uint32 guildId, bool AllInSameMap, bool AllInSameInstan
                 InstanceId = player->GetInstanceId();
                 
             if (player->GetMap()->IsNonRaidDungeon() && !ret)
-                if (count >= 4)
+                if (count >= 3)
                     ret = true;
                     
             if (player->GetMap()->IsRaid() && !ret)
