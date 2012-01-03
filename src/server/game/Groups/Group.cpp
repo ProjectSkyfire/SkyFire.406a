@@ -2298,7 +2298,8 @@ bool Group::IsGuildGroup(uint32 guildId, bool AllInSameMap, bool AllInSameInstan
                 members.push_back(player);
     
     bool ret = false;
-    for(std::vector<Player*>::iterator itr = members->second.begin(); itr != members->second.end(); ++itr) // Iterate through players
+    count = members.size();
+    for(std::vector<Player*>::iterator itr = members.begin(); itr != members.end(); ++itr) // Iterate through players
     {
         if (Player* player = (*itr))
         {
