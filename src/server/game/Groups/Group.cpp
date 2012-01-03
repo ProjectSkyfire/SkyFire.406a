@@ -447,11 +447,6 @@ bool Group::AddMember(Player* player)
 
         if (m_maxEnchantingLevel < player->GetSkillValue(SKILL_ENCHANTING))
             m_maxEnchantingLevel = player->GetSkillValue(SKILL_ENCHANTING);
-
-        if(IsGuildGroup())
-            SendGuildGroupStateUpdate(true);
-        else
-            SendGuildGroupStateUpdate(false);
     }
 
     return true;

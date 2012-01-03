@@ -569,7 +569,7 @@ void KillRewarder::_RewardPlayer(Player* player, bool isDungeon)
             _RewardKillCredit(player);
 
             // Reward Guild reputation
-            if (player->GetGuildId() != 0 && _victim->GetTypeId() == TYPEID_UNIT && _victim->ToCreature()->IsDungeonBoss() && player->GetGroup() && player->GetGroup()->IsGuildGroup())
+            if (player->GetGuildId() != 0 && _victim->GetTypeId() == TYPEID_UNIT && _victim->ToCreature()->IsDungeonBoss() && player->GetGroup() && player->GetGroup()->IsGuildGroup(player->GetGuildId()))
             {
                 uint32 guildRep = uint32(_xp / 450);
                 if (guildRep < 1)
