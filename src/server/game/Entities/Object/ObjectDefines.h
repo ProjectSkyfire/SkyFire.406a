@@ -119,6 +119,7 @@ inline char const* GetLogNameForGuid(uint64 guid)
         case HIGHGUID_CORPSE:       return "corpse";
         case HIGHGUID_MO_TRANSPORT: return "mo_transport";
         case HIGHGUID_GROUP:        return "group";
+        case HIGHGUID_GUILD:        return "guild";
         default:
             return "<unknown>";
     }
