@@ -17338,11 +17338,11 @@ void Unit::BuildMovementPacket(ByteBuffer *data) const
             break;
         case TYPEID_PLAYER:
             // remove unknown, unused etc flags for now
-            const_cast<Unit*>(this)->RemoveUnitMovementFlag(MOVEMENTFLAG_SPLINE_ENABLED);
+            const_cast<Unit*>(this)->RemoveUnitMovementFlag(MOVEMENTFLAG_UNKNOWN);
             if (isInFlight())
             {
                 WPAssert(const_cast<Unit*>(this)->GetMotionMaster()->GetCurrentMovementGeneratorType() == FLIGHT_MOTION_TYPE);
-                const_cast<Unit*>(this)->AddUnitMovementFlag(MOVEMENTFLAG_FORWARD | MOVEMENTFLAG_SPLINE_ENABLED);
+                const_cast<Unit*>(this)->AddUnitMovementFlag(MOVEMENTFLAG_FORWARD | MOVEMENTFLAG_UNKNOWN);
             }
             break;
         default:
@@ -17399,7 +17399,7 @@ void Unit::BuildMovementPacket(ByteBuffer *data) const
     }
 
     // 0x04000000
-    if (GetUnitMovementFlags() & MOVEMENTFLAG_SPLINE_ELEVATION)
+    if (GetUnitMovementFlags() & MOVEMENTFLAG_WATERWALKING)
         *data << (float)m_movementInfo.splineElevation;
 }
 
