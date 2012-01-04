@@ -25787,5 +25787,14 @@ void Player::RecalculateMasteryAuraEffects(uint32 branch)
 void Player::SetTalentBranchSpec(uint32 branchSpec, uint8 spec)
 {
     m_branchSpec[spec] = branchSpec;
+    for (uint32 i = 0; i < sTalentTreePrimarySpellsStore.GetNumRows(); ++i)
+    {
+        TalentTreePrimarySpellsEntry const *talentInfo = sTalentTreePrimarySpellsStore.LookupEntry(i);
+
+        if (!talentInfo || talentInfo->TalentTabID != branchSpec)
+            continue;
+
+        learnSpell(talentInfo->SpellID, true);
+    }
     sScriptMgr->OnTalentBranchSpecChanged(this, spec, branchSpec);
 }
