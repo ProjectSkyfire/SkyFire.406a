@@ -447,11 +447,6 @@ bool Group::AddMember(Player* player)
 
         if (m_maxEnchantingLevel < player->GetSkillValue(SKILL_ENCHANTING))
             m_maxEnchantingLevel = player->GetSkillValue(SKILL_ENCHANTING);
-
-        if(IsGuildGroup())
-            SendGuildGroupStateUpdate(true);
-        else
-            SendGuildGroupStateUpdate(false);
     }
 
     return true;
@@ -2285,40 +2280,72 @@ void Group::ToggleGroupMemberFlag(member_witerator slot, uint8 flag, bool apply)
         slot->flags &= ~flag;
 }
 
-bool Group::IsGuildGroup(bool AllInSameMap, bool AllInSameInstanceId)
+bool Group::IsGuildGroup(uint32 guildId, bool AllInSameMap, bool AllInSameInstanceId)
 {
-    uint32 guildId = 0;
     uint32 mapId = 0;
     uint32 InstanceId = 0;
+    uint32 count = 0;
+    std::vector<Player*> members;
+    // First we populate the array
     for (GroupReference *itr = GetFirstMember(); itr != NULL; itr = itr->next()) // Loop trought all members
-    {
         if (Player *player = itr->getSource())
+            if (player->GetGuildId() == guildId) // Check if it has a guild
+                members.push_back(player);
+    
+    bool ret = false;
+    count = members.size();
+    for(std::vector<Player*>::iterator itr = members.begin(); itr != members.end(); ++itr) // Iterate through players
+    {
+        if (Player* player = (*itr))
         {
-            if (player->GetGuildId() != 0) // Check if it has a guild
+            if (mapId == 0)
+                mapId = player->GetMapId();
+                
+            if (InstanceId == 0)
+                InstanceId = player->GetInstanceId();
+                
+            if (player->GetMap()->IsNonRaidDungeon() && !ret)
+                if (count >= 3)
+                    ret = true;
+                    
+            if (player->GetMap()->IsRaid() && !ret)
             {
-                if (guildId == 0) // If this is the first member with a guild
-                    guildId = player->GetGuildId(); // Store it
-
-                if (mapId == 0)
-                    mapId = player->GetMapId();
-
-                if (InstanceId == 0)
-                    InstanceId = player->GetInstanceId();
-
-                if (player->GetGuildId() != guildId) // If another member has another guildid, then its not a guild group
-                    return false;
-
-                if (AllInSameMap && (player->GetMapId() != mapId))
-                    return false;
-
-                if (AllInSameInstanceId && (player->GetInstanceId() != InstanceId))
-                    return false;
+                switch (player->GetMap()->GetDifficulty())
+                {
+                    case RAID_DIFFICULTY_10MAN_NORMAL:
+                    case RAID_DIFFICULTY_10MAN_HEROIC:
+                        if (count >= 8)
+                            ret = true;
+                        break;
+                    
+                    case RAID_DIFFICULTY_25MAN_NORMAL:
+                    case RAID_DIFFICULTY_25MAN_HEROIC:
+                        if (count >= 20)
+                            ret = true;
+                        break;
+                }
             }
-            else // If he does not have a guild, then its not a guild group
+            
+            if (player->GetMap()->IsBattleArena() && !ret)
+                if (count == GetMembersCount())
+                    ret = true;
+                    
+            if (player->GetMap()->IsBattleground() && !ret)
+                if (Battleground* bg = player->GetBattleground())
+                    if (count >= uint32(bg->GetMaxPlayers() * 0.8f))
+                        ret = true;
+                    
+            // ToDo: Check 40-player raids: 10/40
+            
+            if (AllInSameMap && (mapId != player->GetMapId()))
+                return false;
+                
+            if (AllInSameInstanceId && (InstanceId != player->GetInstanceId()))
                 return false;
         }
     }
-    return true;
+    
+    return ret;
 }
 
 void Group::SendGuildGroupStateUpdate(bool guild)

@@ -569,7 +569,7 @@ void KillRewarder::_RewardPlayer(Player* player, bool isDungeon)
             _RewardKillCredit(player);
 
             // Reward Guild reputation
-            if (player->GetGuildId() != 0 && _victim->GetTypeId() == TYPEID_UNIT && _victim->ToCreature()->IsDungeonBoss() && player->GetGroup() && player->GetGroup()->IsGuildGroup())
+            if (player->GetGuildId() != 0 && _victim->GetTypeId() == TYPEID_UNIT && _victim->ToCreature()->IsDungeonBoss() && player->GetGroup() && player->GetGroup()->IsGuildGroup(player->GetGuildId()))
             {
                 uint32 guildRep = uint32(_xp / 450);
                 if (guildRep < 1)
@@ -25787,5 +25787,14 @@ void Player::RecalculateMasteryAuraEffects(uint32 branch)
 void Player::SetTalentBranchSpec(uint32 branchSpec, uint8 spec)
 {
     m_branchSpec[spec] = branchSpec;
+    for (uint32 i = 0; i < sTalentTreePrimarySpellsStore.GetNumRows(); ++i)
+    {
+        TalentTreePrimarySpellsEntry const *talentInfo = sTalentTreePrimarySpellsStore.LookupEntry(i);
+
+        if (!talentInfo || talentInfo->TalentTabID != branchSpec)
+            continue;
+
+        learnSpell(talentInfo->SpellID, true);
+    }
     sScriptMgr->OnTalentBranchSpecChanged(this, spec, branchSpec);
 }

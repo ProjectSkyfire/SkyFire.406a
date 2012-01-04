@@ -222,7 +222,7 @@ class Group
         LootMethod GetLootMethod() const;
         uint64 GetLooterGuid() const;
         ItemQualities GetLootThreshold() const;
-        bool IsGuildGroup(bool AllInSameMap = false, bool AllInSameInstanceId = false);
+        bool IsGuildGroup(uint32 guildId, bool AllInSameMap = false, bool AllInSameInstanceId = false);
 
         uint32 GetDbStoreId() const { return m_dbStoreId; };
 

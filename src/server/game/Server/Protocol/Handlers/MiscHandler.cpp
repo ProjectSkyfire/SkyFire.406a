@@ -1684,7 +1684,7 @@ void WorldSession::HandleGuildPartyStateUpdate(WorldPacket & /*recv_data*/)
     // TODO: implement
 
     if(Group* group = GetPlayer()->GetGroup())
-        group->SendGuildGroupStateUpdate(group->IsGuildGroup());
+        group->SendGuildGroupStateUpdate(group->IsGuildGroup(GetPlayer()->GetGuildId()));
 }
 
 void WorldSession::HandleWorldStateUITimerUpdate(WorldPacket& /*recv_data*/)
