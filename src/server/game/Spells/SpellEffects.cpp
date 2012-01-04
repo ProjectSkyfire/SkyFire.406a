@@ -4343,68 +4343,6 @@ void Spell::EffectWeaponDmg(SpellEffIndex effIndex)
             }
             break;
         }
-        case SPELLFAMILY_HUNTER:
-        {
-            float shotMod = 0;
-            switch(m_spellInfo->Id)
-            {
-                case 53351: // Kill Shot
-                {
-                    // "You attempt to finish the wounded target off, firing a long range attack dealing % weapon damage plus RAP*0.30+543."
-                    shotMod = 0.3f;
-                    break;
-                }
-                case 56641: // Steady Shot
-                {
-                    // "A steady shot that causes % weapon damage plus RAP*0.021+280. Generates 9 Focus."
-                    // focus effect done in dummy
-                    shotMod = 0.021f;
-                    break;
-                }
-                case 19434: // Aimed Shot
-                    {
-                        // "A powerful aimed shot that deals % ranged weapon damage plus (RAP * 0.724)+776."
-                        shotMod = 0.724f;
-                        break;
-                    }
-                case 77767: // Cobra Shot
-                {
-                    // "Deals weapon damage plus (276 + (RAP * 0.017)) in the form of Nature damage and increases the duration of your Serpent Sting on the target by 6 sec. Generates 9 Focus."
-                    shotMod = 0.017f;
-                    break;
-                }
-                case 3044: // Arcane Shot
-                case 63741: // Chimera Shot
-                {
-                    // "An instant shot that causes % weapon damage plus (RAP * 0.0483)+289 as Arcane damage."
-                    if (m_spellInfo->SpellFamilyFlags[0] & 0x800)
-                        shotMod = 0.0483f;
-
-                    // "An instant shot that causes ranged weapon damage plus RAP*0.732+1620, refreshing the duration of  your Serpent Sting and healing you for 5% of your total health."
-                    if (m_spellInfo->SpellFamilyFlags[2] & 0x1)
-                        shotMod = 0.732f;
-
-                    // Marked for Death 1, 2
-                    if (m_caster->HasAuraEffect(53241, 0, 0))
-                        if (roll_chance_i(m_spellInfo->Effects[EFFECT_0].BasePoints))
-                        {
-                            m_caster->CastSpell(m_caster->ToPlayer()->GetSelectedUnit(), 88691, true);
-                            break;
-                        }
-                        if (m_caster->HasAuraEffect(53243, 0, 0))
-                            if (roll_chance_i(m_spellInfo->Effects[EFFECT_0].BasePoints))
-                            {
-                                m_caster->CastSpell(m_caster->ToPlayer()->GetSelectedUnit(), 88691, true);
-                                break;
-                            }
-                            break;
-                }
-                default:
-                    break;
-            }
-            spell_bonus += int32((shotMod*m_caster->GetTotalAttackPowerValue(RANGED_ATTACK)));
-            break;
-        }
         case SPELLFAMILY_DEATHKNIGHT:
         {
             // Plague Strike

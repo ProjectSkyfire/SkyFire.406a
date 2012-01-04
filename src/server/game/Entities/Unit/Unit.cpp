@@ -6647,6 +6647,15 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
         {
             switch (dummySpell->SpellIconID)
             {
+                case 3524: // Marked for Death
+                {
+                    if(!roll_chance_i(triggerAmount))
+                        return false;
+                        
+                    triggered_spell_id = 88691;
+                    target = victim;
+                    break;
+                }
                 case 267: // Improved Mend Pet
                 {
                     int32 chance = triggeredByAura->GetSpellInfo()->Effects[triggeredByAura->GetEffIndex()].CalcValue();
@@ -11690,29 +11699,6 @@ void Unit::MeleeDamageBonus(Unit* victim, uint32 *pdamage, WeaponAttackType attT
             {
                 if (victim->GetAuraEffect(SPELL_AURA_PERIODIC_DAMAGE, SPELLFAMILY_DEATHKNIGHT, 0, 0x02000000, 0))
                     AddPctF(DoneTotalMod, (*i)->GetSpellInfo()->GetRank() * 2.0f);
-                break;
-            }
-            // Marked for Death
-            case 7598:
-            case 7599:
-            case 7600:
-            case 7601:
-            case 7602:
-            {
-                if (victim->GetAuraEffect(SPELL_AURA_MOD_STALKED, SPELLFAMILY_HUNTER, 0x400, 0, 0))
-                    AddPctN(DoneTotalMod, (*i)->GetAmount());
-                break;
-            }
-            // Dirty Deeds
-            case 6427:
-            case 6428:
-            {
-                if (victim->HasAuraState(AURA_STATE_HEALTHLESS_35_PERCENT, spellProto, this))
-                {
-                    // effect 0 have expected value but in negative state
-                    int32 bonus = -(*i)->GetBase()->GetEffect(0)->GetAmount();
-                    AddPctN(DoneTotalMod, bonus);
-                }
                 break;
             }
         }
