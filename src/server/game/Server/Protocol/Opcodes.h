@@ -66,11 +66,11 @@ enum Opcodes
     CMSG_SERVERTIME                                  = 0x10012, //
     SMSG_SERVERTIME                                  = 0x02680, // 4.3.0 15050
     CMSG_PLAYER_LOGOUT                               = 0x10014, //
-    CMSG_LOGOUT_REQUEST                              = 0x10015, //
-    SMSG_LOGOUT_RESPONSE                             = 0x10016, //
-    SMSG_LOGOUT_COMPLETE                             = 0x10017, //
+    CMSG_LOGOUT_REQUEST                              = 0x04826, // 4.3.0 15050
+    SMSG_LOGOUT_RESPONSE                             = 0x04E00, // 4.3.0 15050
+    SMSG_LOGOUT_COMPLETE                             = 0x02A82, // 4.3.0 15050
     CMSG_LOGOUT_CANCEL                               = 0x10018, //
-    SMSG_LOGOUT_CANCEL_ACK                           = 0x10019, //
+    SMSG_LOGOUT_CANCEL_ACK                           = 0x03C22, //
     CMSG_NAME_QUERY                                  = 0x07220, // 4.3.0 15050
     SMSG_NAME_QUERY_RESPONSE                         = 0x05E20, // 4.3.0 15050
     CMSG_PET_NAME_QUERY                              = 0x00AA2, // 4.3.0 15050
@@ -354,7 +354,7 @@ enum Opcodes
     SMSG_BATTLEFIELD_PORT_DENIED                     = 0x1010A, //
     SMSG_DAMAGE_DONE_OBSOLETE                        = 0x1010B, //
     SMSG_UNIT_SPELLCAST_START                        = 0x1010C, //
-    SMSG_CANCEL_COMBAT                               = 0x1010D, //
+    SMSG_CANCEL_COMBAT                               = 0x012A6, // 4.3.0 15050
     SMSG_SPELLBREAKLOG                               = 0x1010E, //
     SMSG_SPELLHEALLOG                                = 0x1010F, //
     SMSG_SPELLENERGIZELOG                            = 0x10110, //
@@ -362,7 +362,7 @@ enum Opcodes
     CMSG_SAVE_PLAYER                                 = 0x10112, //
     CMSG_SETDEATHBINDPOINT                           = 0x10113, //
     SMSG_BINDPOINTUPDATE                             = 0x05080, // 4.3.0 15050
-    CMSG_GETDEATHBINDZONE                            = 0x10115, //
+    CMSG_GETDEATHBINDZONE                            = 0x03691, // 4.3.0 15050
     SMSG_BINDZONEREPLY                               = 0x10116, //
     SMSG_PLAYERBOUND                                 = 0x10117, //
     SMSG_CLIENT_CONTROL_UPDATE                       = 0x07002, // 4.3.0 15050
@@ -484,7 +484,7 @@ enum Opcodes
     SMSG_QUERY_TIME_RESPONSE                         = 0x10189, //
     SMSG_LOG_XPGAIN                                  = 0x1018A, //
     SMSG_AURACASTLOG                                 = 0x1018B, //
-    CMSG_RECLAIM_CORPSE                              = 0x1018C, //
+    CMSG_RECLAIM_CORPSE                              = 0x04282, // 4.3.0 15050
     CMSG_WRAP_ITEM                                   = 0x1018D, //
     SMSG_LEVELUP_INFO                                = 0x1018E, //
     MSG_MINIMAP_PING                                 = 0x1018F, //
@@ -552,7 +552,7 @@ enum Opcodes
     CMSG_UNLEARN_TALENTS                             = 0x101C6, //
     SMSG_UPDATE_INSTANCE_ENCOUNTER_UNIT              = 0x101C7, // wtf::SMSG_GAMEOBJECT_SPAWN_ANIM_OBSOLETE
     SMSG_GAMEOBJECT_DESPAWN_ANIM                     = 0x101C8, //
-    MSG_CORPSE_QUERY                                 = 0x101C9, //
+    MSG_CORPSE_QUERY                                 = 0x05006, // 4.3.0 15050
     CMSG_GMTICKET_DELETETICKET                       = 0x101CA, //
     SMSG_GMTICKET_DELETETICKET                       = 0x101CB, //
     SMSG_CHAT_WRONG_FACTION                          = 0x101CC, //
@@ -903,9 +903,9 @@ enum Opcodes
     CMSG_CANCEL_MOUNT_AURA                           = 0x1038D, //  not sure
     SMSG_ARENA_ERROR                                 = 0x1038E, //
     MSG_INSPECT_ARENA_TEAMS                          = 0x1038F, //
-    SMSG_DEATH_RELEASE_LOC                           = 0x10390, //
+    SMSG_DEATH_RELEASE_LOC                           = 0x03A84, // 4.3.0 15050
     CMSG_CANCEL_TEMP_ENCHANTMENT                     = 0x10391, //
-    SMSG_FORCED_DEATH_UPDATE                         = 0x10392, //
+    SMSG_FORCED_DEATH_UPDATE                         = 0x06400, // 4.3.0 15050
     CMSG_CHEAT_SET_HONOR_CURRENCY                    = 0x10393, //
     CMSG_CHEAT_SET_ARENA_CURRENCY                    = 0x10394, //
     SMSG_INIT_CURRENCY                               = 0x00E0E, // 4.3.0 15050
@@ -1221,7 +1221,7 @@ enum Opcodes
     CMSG_ITEM_REFUND_INFO                            = 0x104C5, //
     CMSG_ITEM_REFUND                                 = 0x104C6, //
     SMSG_ITEM_REFUND_RESULT                          = 0x104C7, //
-    CMSG_CORPSE_MAP_POSITION_QUERY                   = 0x104C8, //
+    CMSG_CORPSE_MAP_POSITION_QUERY                   = 0x02E20, // 4.3.0 15050
     SMSG_CORPSE_MAP_POSITION_QUERY_RESPONSE          = 0x104C9, //
     CMSG_LFG_SET_ROLES_2                             = 0x104CA, //
     CMSG_CALENDAR_CONTEXT_EVENT_SIGNUP               = 0x104CB, //
@@ -1278,7 +1278,7 @@ enum Opcodes
     CMSG_QUERY_QUESTS_COMPLETED                      = 0x104FC, //
     SMSG_QUERY_QUESTS_COMPLETED_RESPONSE             = 0x104FD, //
     CMSG_GM_REPORT_LAG                               = 0x104FE, //
-    SMSG_CORPSE_NOT_IN_INSTANCE                      = 0x104FF, //
+    SMSG_CORPSE_NOT_IN_INSTANCE                      = 0x03282, // 4.3.0 15050
     CMSG_SET_ALLOW_LOW_LEVEL_RAID1                   = 0x10500, //
     CMSG_SET_ALLOW_LOW_LEVEL_RAID2                   = 0x10501, //
     SMSG_CAMERA_SHAKE                                = 0x10502, //
