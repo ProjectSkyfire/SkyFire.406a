@@ -11745,33 +11745,30 @@ void Unit::MeleeDamageBonus(Unit* victim, uint32 *pdamage, WeaponAttackType attT
         }
     }
 
-    // .. taken pct: dummy auras
-    AuraEffectList const& mDummyAuras = victim->GetAuraEffectsByType(SPELL_AURA_DUMMY);
-    for (AuraEffectList::const_iterator i = mDummyAuras.begin(); i != mDummyAuras.end(); ++i)
+    // Check for bonus data
+    if(spellProto)
     {
-        switch ((*i)->GetSpellInfo()->SpellIconID)
+        SpellBonusEntry const* bonus = sSpellMgr->GetSpellBonusData(spellProto->Id);
+        if (bonus)
         {
-            // Cheat Death
-            case 2109:
-                if ((*i)->GetMiscValue() & SPELL_SCHOOL_MASK_NORMAL)
+            if (damagetype == DOT)
+            {
+                if (bonus->ap_dot_bonus > 0)
                 {
-                    /*if (victim->GetTypeId() != TYPEID_PLAYER)
-                        continue;
-                    float mod = victim->ToPlayer()->GetRatingBonusValue(CR_CRIT_TAKEN_MELEE) * (-8.0f);
-                    AddPctF(TakenTotalMod, std::max(mod, float((*i)->GetAmount())));*/
+                    float APbonus = GetTotalAttackPowerValue(attType);
+                    DoneFlatBenefit += int32(bonus->ap_dot_bonus * APbonus);
                 }
-                break;
+            }
+            else
+            {
+                if (bonus->ap_bonus > 0)
+                {
+                    float APbonus = GetTotalAttackPowerValue(attType);
+                    DoneFlatBenefit += int32(bonus->ap_bonus * APbonus);
+                }
+            }
         }
     }
-
-    // .. taken pct: class scripts
-    /*AuraEffectList const& mclassScritAuras = GetAuraEffectsByType(SPELL_AURA_OVERRIDE_CLASS_SCRIPTS);
-    for (AuraEffectList::const_iterator i = mclassScritAuras.begin(); i != mclassScritAuras.end(); ++i)
-    {
-        switch ((*i)->GetMiscValue())
-        {
-        }
-    }*/
 
     if (attType != RANGED_ATTACK)
     {

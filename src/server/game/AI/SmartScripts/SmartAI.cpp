@@ -435,7 +435,7 @@ void SmartAI::EnterEvadeMode()
     if (!me->isAlive())
         return;
 
-    me->RemoveAllAuras();
+    me->RemoveAllAurasExceptType(SPELL_AURA_CONTROL_VEHICLE);
     me->DeleteThreatList();
     me->CombatStop(true);
     me->LoadCreaturesAddon();
