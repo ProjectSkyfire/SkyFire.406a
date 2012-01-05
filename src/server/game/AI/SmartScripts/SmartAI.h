@@ -195,6 +195,8 @@ class SmartAI : public CreatureAI
         }
         void StartDespawn() { mDespawnState = 2; }
 
+        void RemoveAuras();
+
     private:
         uint32 mFollowCreditType;
         uint32 mFollowArrivedTimer;

@@ -11751,21 +11751,10 @@ void Unit::MeleeDamageBonus(Unit* victim, uint32 *pdamage, WeaponAttackType attT
         SpellBonusEntry const* bonus = sSpellMgr->GetSpellBonusData(spellProto->Id);
         if (bonus)
         {
-            if (damagetype == DOT)
+            if (bonus->ap_bonus > 0)
             {
-                if (bonus->ap_dot_bonus > 0)
-                {
-                    float APbonus = GetTotalAttackPowerValue(attType);
-                    DoneFlatBenefit += int32(bonus->ap_dot_bonus * APbonus);
-                }
-            }
-            else
-            {
-                if (bonus->ap_bonus > 0)
-                {
-                    float APbonus = GetTotalAttackPowerValue(attType);
-                    DoneFlatBenefit += int32(bonus->ap_bonus * APbonus);
-                }
+                float APbonus = GetTotalAttackPowerValue(attType);
+                DoneFlatBenefit += int32(bonus->ap_bonus * APbonus);
             }
         }
     }
