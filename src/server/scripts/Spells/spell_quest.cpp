@@ -107,64 +107,6 @@ public:
     }
 };
 
-// http://www.wowhead.com/quest=6124 Curing the Sick (A)
-// http://www.wowhead.com/quest=6129 Curing the Sick (H)
-// 19512 Apply Salve
-enum eQuests6124_6129Data
-{
-    NPC_SICKLY_GAZELLE  = 12296,
-    NPC_CURED_GAZELLE   = 12297,
-    NPC_SICKLY_DEER     = 12298,
-    NPC_CURED_DEER      = 12299,
-    DESPAWN_TIME        = 30000
-};
-
-class spell_q6124_6129_apply_salve : public SpellScriptLoader
-{
-public:
-    spell_q6124_6129_apply_salve() : SpellScriptLoader("spell_q6124_6129_apply_salve") { }
-
-    class spell_q6124_6129_apply_salve_SpellScript : public SpellScript
-    {
-        PrepareSpellScript(spell_q6124_6129_apply_salve_SpellScript)
-        void HandleDummy(SpellEffIndex /*effIndex*/)
-        {
-            if (GetCastItem())
-                if (Player* pCaster = GetCaster()->ToPlayer())
-                    if (Creature* creatureTarget = GetHitCreature())
-                    {
-                        uint32 uiNewEntry = 0;
-                        switch (pCaster->GetTeam())
-                        {
-                            case HORDE:
-                                if (creatureTarget->GetEntry() == NPC_SICKLY_GAZELLE)
-                                    uiNewEntry = NPC_CURED_GAZELLE;
-                                break;
-                            case ALLIANCE:
-                                if (creatureTarget->GetEntry() == NPC_SICKLY_DEER)
-                                    uiNewEntry = NPC_CURED_DEER;
-                                break;
-                        }
-                        if (uiNewEntry)
-                        {
-                            creatureTarget->UpdateEntry(uiNewEntry);
-                            creatureTarget->DespawnOrUnsummon(DESPAWN_TIME);
-                        }
-                    }
-        }
-
-        void Register()
-        {
-            OnEffectHitTarget += SpellEffectFn(spell_q6124_6129_apply_salve_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
-        }
-    };
-
-    SpellScript* GetSpellScript() const
-    {
-        return new spell_q6124_6129_apply_salve_SpellScript();
-    }
-};
-
 // http://www.wowhead.com/quest=10255 Testing the Antidote
 // 34665 Administer Antidote
 enum eQuest10255Data
@@ -1007,7 +949,6 @@ public:
 void AddSC_quest_spell_scripts()
 {
     new spell_q27389_test_fetid_skull();
-    new spell_q6124_6129_apply_salve();
     new spell_q10255_administer_antidote();
     new spell_q11396_11399_force_shield_arcane_purple_x3();
     new spell_q11396_11399_scourging_crystal_controller();
