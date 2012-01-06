@@ -37,7 +37,6 @@ if( EXAMPLES )
   add_definitions(-EXAMPLES)
 else()
   message("* Build example scripts  : No (default)")
-  set(USE_SCRIPTPCH 0)
 endif()
 
 if( TOOLS )
