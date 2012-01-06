@@ -60,41 +60,22 @@ public:
     }
 };
 
-// http://www.wowhead.com/quest=55 Morbent Fel
-// 8913 Sacred Cleansing
-enum eQuest55Data
-{
-    NPC_MORBENT             = 1200,
-    NPC_WEAKENED_MORBENT    = 24782,
-};
-
-class spell_q55_sacred_cleansing : public SpellScriptLoader
-{
-public:
-    spell_q55_sacred_cleansing() : SpellScriptLoader("spell_q55_sacred_cleansing") { }
-
-    SpellScript* GetSpellScript() const
-    {
-        return new spell_generic_quest_update_entry_SpellScript(SPELL_EFFECT_DUMMY, EFFECT_1, NPC_MORBENT, NPC_WEAKENED_MORBENT, true);
-    }
-};
-
-// http://www.wowhead.com/quest=5206 Marauders of Darrowshire
+// http://www.wowhead.com/quest=27389 Marauders of Darrowshire
 // 17271 Test Fetid Skull
-enum eQuest5206Data
+enum eQuest27389Data
 {
     SPELL_CREATE_RESONATING_SKULL = 17269,
     SPELL_CREATE_BONE_DUST = 17270
 };
 
-class spell_q5206_test_fetid_skull : public SpellScriptLoader
+class spell_q27389_test_fetid_skull : public SpellScriptLoader
 {
 public:
-    spell_q5206_test_fetid_skull() : SpellScriptLoader("spell_q5206_test_fetid_skull") { }
+    spell_q27389_test_fetid_skull() : SpellScriptLoader("spell_q27389_test_fetid_skull") { }
 
-    class spell_q5206_test_fetid_skull_SpellScript : public SpellScript
+    class spell_q27389_test_fetid_skull_SpellScript : public SpellScript
     {
-        PrepareSpellScript(spell_q5206_test_fetid_skull_SpellScript)
+        PrepareSpellScript(spell_q27389_test_fetid_skull_SpellScript)
         bool Validate(SpellInfo const* /*spellEntry*/)
         {
             if (!sSpellMgr->GetSpellInfo(SPELL_CREATE_RESONATING_SKULL))
@@ -116,13 +97,13 @@ public:
 
         void Register()
         {
-            OnEffectHit += SpellEffectFn(spell_q5206_test_fetid_skull_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
+            OnEffectHit += SpellEffectFn(spell_q27389_test_fetid_skull_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
         }
     };
 
     SpellScript* GetSpellScript() const
     {
-        return new spell_q5206_test_fetid_skull_SpellScript();
+        return new spell_q27389_test_fetid_skull_SpellScript();
     }
 };
 
@@ -1025,8 +1006,7 @@ public:
 
 void AddSC_quest_spell_scripts()
 {
-    new spell_q55_sacred_cleansing();
-    new spell_q5206_test_fetid_skull();
+    new spell_q27389_test_fetid_skull();
     new spell_q6124_6129_apply_salve();
     new spell_q10255_administer_antidote();
     new spell_q11396_11399_force_shield_arcane_purple_x3();
