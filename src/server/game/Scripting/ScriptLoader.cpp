@@ -19,12 +19,14 @@
 
 #include "ScriptLoader.h"
 
+#ifdef EXAMPLES
 //examples
 void AddSC_example_creature();
 void AddSC_example_escort();
 void AddSC_example_gossip_codebox();
 void AddSC_example_misc();
 void AddSC_example_commandscript();
+#endif
 
 // spells
 void AddSC_deathknight_spell_scripts();
@@ -677,7 +679,6 @@ void AddSC_chat_log();
 
 void AddScripts()
 {
-    AddExampleScripts();
     AddSpellScripts();
     AddSC_SmartSCripts();
     AddCommandScripts();
@@ -694,6 +695,7 @@ void AddScripts()
 #endif
 }
 
+#ifdef EXAMPLES
 void AddExampleScripts()
 {
     AddSC_example_creature();
@@ -701,7 +703,9 @@ void AddExampleScripts()
     AddSC_example_gossip_codebox();
     AddSC_example_misc();
     AddSC_example_commandscript();
+	AddSC_example_spell_scripts();
 }
+#endif
 
 void AddSpellScripts()
 {
@@ -719,7 +723,6 @@ void AddSpellScripts()
     AddSC_mastery_spells();
     AddSC_quest_spell_scripts();
     AddSC_item_spell_scripts();
-    AddSC_example_spell_scripts();
 }
 
 void AddCommandScripts()
