@@ -739,6 +739,8 @@ public:
     }
 };
 
+// http://www.wowhead.com/item=46725 Red Rider Air Rifle
+// 67533 Shoot Air Rifle
 enum AirRifleSpells
 {
     SPELL_AIR_RIFLE_HOLD_VISUAL = 65582,
@@ -848,6 +850,8 @@ class spell_item_create_heart_candy : public SpellScriptLoader
         }
 };
 
+// http://www.wowhead.com/item=45912 Book of Glyph Mastery
+// 64323 Book of Glyph Mastery
 class spell_item_book_of_glyph_mastery : public SpellScriptLoader
 {
     public:
@@ -880,6 +884,8 @@ class spell_item_book_of_glyph_mastery : public SpellScriptLoader
         }
 };
 
+// http://www.wowhead.com/item=39253 Gift of the Harvester
+// 52481 Gift of the Harvester
 enum GiftOfTheHarvester
 {
     NPC_GHOUL   = 28845,
@@ -920,6 +926,8 @@ class spell_item_gift_of_the_harvester : public SpellScriptLoader
         }
 };
 
+// http://www.wowhead.com/item=34920 Map of the Geyser Fields
+// 45853 Survey Sinkholes
 enum Sinkholes
 {
     NPC_SOUTH_SINKHOLE      = 25664,
