@@ -3501,10 +3501,6 @@ void SpellMgr::LoadSpellCustomAttr()
                 spellInfo->Effects[0].BasePoints = 20*1000;
             break;
             case 1776: // Gouge
-            case 1777:
-            case 8629:
-            case 11285:
-            case 11286:
             case 12540:
             case 13579:
             case 24698:
@@ -3512,52 +3508,14 @@ void SpellMgr::LoadSpellCustomAttr()
             case 29425:
             case 34940:
             case 36862:
-            case 38764:
             case 38863:
             case 52743: // Head Smack
                 spellInfo->AttributesCu |= SPELL_ATTR0_CU_REQ_TARGET_FACING_CASTER;
                 break;
             case 53: // Backstab
-            case 2589:
-            case 2590:
-            case 2591:
-            case 8721:
-            case 11279:
-            case 11280:
-            case 11281:
-            case 25300:
-            case 26863:
-            case 48656:
-            case 48657:
             case 703: // Garrote
-            case 8631:
-            case 8632:
-            case 8633:
-            case 11289:
-            case 11290:
-            case 26839:
-            case 26884:
-            case 48675:
-            case 48676:
             case 5221: // Shred
-            case 6800:
-            case 8992:
-            case 9829:
-            case 9830:
-            case 27001:
-            case 27002:
-            case 48571:
-            case 48572:
             case 8676: // Ambush
-            case 8724:
-            case 8725:
-            case 11267:
-            case 11268:
-            case 11269:
-            case 27441:
-            case 48689:
-            case 48690:
-            case 48691:
             case 6785:  // Ravage
             case 81170:
             case 21987: // Lash of Pain
