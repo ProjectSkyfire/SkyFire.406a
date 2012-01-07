@@ -430,12 +430,41 @@ void SmartAI::MovementInform(uint32 MovementType, uint32 Data)
     MovepointReached(Data);
 }
 
+void SmartAI::RemoveAuras()
+{
+    Unit::AuraApplicationMap appliedAuras = me->GetAppliedAuras();
+    for (Unit::AuraApplicationMap::iterator iter = appliedAuras.begin(); iter != appliedAuras.end();)
+    {
+        Aura const* aura = iter->second->GetBase();
+        if (!aura->GetSpellInfo()->HasAura(SPELL_AURA_CONTROL_VEHICLE) && aura->GetCaster() != me)
+            me->_UnapplyAura(iter, AURA_REMOVE_BY_DEFAULT);
+        else
+            ++iter;
+        
+        if (iter == appliedAuras.end())
+            break;
+    }
+
+    Unit::AuraMap ownedAuras = me->GetOwnedAuras();
+    for (Unit::AuraMap::iterator iter = ownedAuras.begin(); iter != ownedAuras.end();)
+    {
+        Aura* aura = iter->second;
+        if (!aura->IsPassive() && !aura->GetSpellInfo()->HasAura(SPELL_AURA_CONTROL_VEHICLE))
+            me->RemoveOwnedAura(iter, AURA_REMOVE_BY_DEFAULT);
+        else
+            ++iter;
+
+        if (iter == ownedAuras.end())
+            break;
+    }
+}
+
 void SmartAI::EnterEvadeMode()
 {
     if (!me->isAlive())
         return;
 
-    me->RemoveAllAuras();
+    RemoveAuras();
     me->DeleteThreatList();
     me->CombatStop(true);
     me->LoadCreaturesAddon();
