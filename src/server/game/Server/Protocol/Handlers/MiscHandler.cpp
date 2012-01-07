@@ -1821,3 +1821,11 @@ void WorldSession::PlayerViolenceLevel(WorldPacket& recvPacket)
   sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: CMSG_VIOLENCE_LEVEL");
   recvPacket.read_skip<uint8>();    // violenceLevel
 }
+
+void WorldSession::HandleSendCemetryList(WorldPacket& recvPacket)
+{
+    sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Recvd CMSG_REQUEST_CEMETERY_LIST Message");
+
+    WorldPacket data(SMSG_REQUEST_CEMETERY_LIST_RESPONSE, 4);
+    data << uint32();       // AreaPOISortedWorldState? (NYI?) 
+}

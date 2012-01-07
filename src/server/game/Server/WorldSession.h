@@ -918,6 +918,7 @@ class WorldSession
         void HandleEnterPlayerVehicle(WorldPacket& data);
         void HandleUpdateProjectilePosition(WorldPacket& recvPacket);
         void HandleReforgeItem(WorldPacket& recv_data);
+        void HandleSendCemetryList(WorldPacket& recvPacket);
 
 		void PlayerViolenceLevel(WorldPacket& recvPacket);
 
