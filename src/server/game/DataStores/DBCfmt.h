@@ -184,6 +184,6 @@ const char WMOAreaTableEntryfmt[]="niiixxxxxiixxxx";
 const char WorldMapAreaEntryfmt[]="xinxffffixxx";
 const char WorldMapOverlayEntryfmt[]="nxiiiixxxxxxxxx";
 const char WorldSafeLocsEntryfmt[]="nifffx";
-// const char WorldStateEntryfmt[]="niiixxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxixxxxxxxxxxxxxxxxxxxxxxx";  //this needs checked for 406
+const char WorldStateEntryfmt[]="niiissisiisssisiii";
 
 #endif
