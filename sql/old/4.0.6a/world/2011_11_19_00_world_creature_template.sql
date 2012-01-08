@@ -1,0 +1,1 @@
+UPDATE `creature_template` SET `ScriptName` = 'npc_vladof_butcher' WHERE `entry`=30022;
