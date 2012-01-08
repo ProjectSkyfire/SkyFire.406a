@@ -126,29 +126,29 @@ set(scripts_STAT_SRCS
   Kalimdor/OnyxiasLair/onyxias_lair.h
   Kalimdor/OnyxiasLair/instance_onyxias_lair.cpp 
 
-  Kalimdor/stonetalon_mountains.cpp
-  Kalimdor/silithus.cpp
-  Kalimdor/moonglade.cpp  
-  Kalimdor/azuremyst_isle.cpp
-  Kalimdor/orgrimmar.cpp
-  Kalimdor/desolace.cpp
-  Kalimdor/feralas.cpp 
-  Kalimdor/darkshore.cpp  
-  Kalimdor/mulgore.cpp
-  Kalimdor/bloodmyst_isle.cpp
-  Kalimdor/thunder_bluff.cpp
-  Kalimdor/azshara.cpp
-  Kalimdor/the_barrens.cpp
-  Kalimdor/ungoro_crater.cpp
-  Kalimdor/durotar.cpp
-  Kalimdor/felwood.cpp
-  Kalimdor/boss_azuregos.cpp
-  Kalimdor/tanaris.cpp
-  Kalimdor/dustwallow_marsh.cpp
-  Kalimdor/winterspring.cpp
-  Kalimdor/thousand_needles.cpp
-  Kalimdor/ashenvale.cpp
-  Kalimdor/teldrassil.cpp
+  Kalimdor/Zones/thunder_bluff.cpp
+  Kalimdor/Zones/azshara.cpp
+  Kalimdor/Zones/orgrimmar.cpp
+  Kalimdor/Zones/desolace.cpp
+  Kalimdor/Zones/feralas.cpp
+  Kalimdor/Zones/stonetalon_mountains.cpp
+  Kalimdor/Zones/silithus.cpp
+  Kalimdor/Zones/moonglade.cpp
+  Kalimdor/Zones/bloodmyst_isle.cpp
+  Kalimdor/Zones/azuremyst_isle.cpp
+  Kalimdor/Zones/mulgore.cpp
+  Kalimdor/Zones/darkshore.cpp
+  Kalimdor/Zones/the_barrens.cpp
+  Kalimdor/Zones/ungoro_crater.cpp
+  Kalimdor/Zones/durotar.cpp
+  Kalimdor/Zones/felwood.cpp
+  Kalimdor/Zones/boss_azuregos.cpp
+  Kalimdor/Zones/tanaris.cpp
+  Kalimdor/Zones/dustwallow_marsh.cpp
+  Kalimdor/Zones/winterspring.cpp
+  Kalimdor/Zones/thousand_needles.cpp
+  Kalimdor/Zones/ashenvale.cpp
+  Kalimdor/Zones/teldrassil.cpp
 )
 
 message("  -> Prepared: Kalimdor")
