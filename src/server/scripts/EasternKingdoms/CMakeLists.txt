@@ -259,32 +259,32 @@ set(scripts_STAT_SRCS
   EasternKingdoms/ZulAman/zulaman.cpp
   EasternKingdoms/ZulAman/zulaman.h 
   
-  EasternKingdoms/ghostlands.cpp
-  EasternKingdoms/eversong_woods.cpp
-  EasternKingdoms/gilneas.cpp
-  EasternKingdoms/isle_of_queldanas.cpp
-  EasternKingdoms/boss_kruul.cpp
-  EasternKingdoms/searing_gorge.cpp
-  EasternKingdoms/wetlands.cpp
-  EasternKingdoms/arathi_highlands.cpp
-  EasternKingdoms/redridge_mountains.cpp  
-  EasternKingdoms/ironforge.cpp
-  EasternKingdoms/eastern_plaguelands.cpp  
-  EasternKingdoms/duskwood.cpp  
-  EasternKingdoms/undercity.cpp
-  EasternKingdoms/silvermoon_city.cpp
-  EasternKingdoms/loch_modan.cpp  
-  EasternKingdoms/burning_steppes.cpp  
-  EasternKingdoms/blasted_lands.cpp
-  EasternKingdoms/stormwind_city.cpp
-  EasternKingdoms/hinterlands.cpp
-  EasternKingdoms/western_plaguelands.cpp
-  EasternKingdoms/alterac_mountains.cpp
-  EasternKingdoms/westfall.cpp
-  EasternKingdoms/silverpine_forest.cpp
-  EasternKingdoms/stranglethorn_vale.cpp
-  EasternKingdoms/swamp_of_sorrows.cpp
-  EasternKingdoms/tirisfal_glades.cpp 
+  EasternKingdoms/Zones/ghostlands.cpp
+  EasternKingdoms/Zones/eversong_woods.cpp
+  EasternKingdoms/Zones/gilneas.cpp
+  EasternKingdoms/Zones/isle_of_queldanas.cpp
+  EasternKingdoms/Zones/boss_kruul.cpp
+  EasternKingdoms/Zones/searing_gorge.cpp
+  EasternKingdoms/Zones/wetlands.cpp
+  EasternKingdoms/Zones/arathi_highlands.cpp
+  EasternKingdoms/Zones/redridge_mountains.cpp  
+  EasternKingdoms/Zones/ironforge.cpp
+  EasternKingdoms/Zones/eastern_plaguelands.cpp  
+  EasternKingdoms/Zones/duskwood.cpp  
+  EasternKingdoms/Zones/undercity.cpp
+  EasternKingdoms/Zones/silvermoon_city.cpp
+  EasternKingdoms/Zones/loch_modan.cpp  
+  EasternKingdoms/Zones/burning_steppes.cpp  
+  EasternKingdoms/Zones/blasted_lands.cpp
+  EasternKingdoms/Zones/stormwind_city.cpp
+  EasternKingdoms/Zones/hinterlands.cpp
+  EasternKingdoms/Zones/western_plaguelands.cpp
+  EasternKingdoms/Zones/alterac_mountains.cpp
+  EasternKingdoms/Zones/westfall.cpp
+  EasternKingdoms/Zones/silverpine_forest.cpp
+  EasternKingdoms/Zones/stranglethorn_vale.cpp
+  EasternKingdoms/Zones/swamp_of_sorrows.cpp
+  EasternKingdoms/Zones/tirisfal_glades.cpp 
 )
 
 message("  -> Prepared: Eastern Kingdoms")
