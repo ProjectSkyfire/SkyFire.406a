@@ -1,0 +1,11 @@
+DELETE FROM playercreateinfo_spell WHERE spell = 79684;
+INSERT INTO playercreateinfo_spell (race, class, spell, note) VALUES (1, 8, 79684, "Mages - Offensive State (DND) - Enables Arcane Missiles");
+INSERT INTO playercreateinfo_spell (race, class, spell, note) VALUES (2, 8, 79684, "Mages - Offensive State (DND) - Enables Arcane Missiles");
+INSERT INTO playercreateinfo_spell (race, class, spell, note) VALUES (3, 8, 79684, "Mages - Offensive State (DND) - Enables Arcane Missiles");
+INSERT INTO playercreateinfo_spell (race, class, spell, note) VALUES (4, 8, 79684, "Mages - Offensive State (DND) - Enables Arcane Missiles");
+INSERT INTO playercreateinfo_spell (race, class, spell, note) VALUES (5, 8, 79684, "Mages - Offensive State (DND) - Enables Arcane Missiles");
+INSERT INTO playercreateinfo_spell (race, class, spell, note) VALUES (6, 8, 79684, "Mages - Offensive State (DND) - Enables Arcane Missiles");
+INSERT INTO playercreateinfo_spell (race, class, spell, note) VALUES (7, 8, 79684, "Mages - Offensive State (DND) - Enables Arcane Missiles");
+INSERT INTO playercreateinfo_spell (race, class, spell, note) VALUES (8, 8, 79684, "Mages - Offensive State (DND) - Enables Arcane Missiles");
+INSERT INTO playercreateinfo_spell (race, class, spell, note) VALUES (10, 8, 79684, "Mages - Offensive State (DND) - Enables Arcane Missiles");
+INSERT INTO playercreateinfo_spell (race, class, spell, note) VALUES (11, 8, 79684, "Mages - Offensive State (DND) - Enables Arcane Missiles");
