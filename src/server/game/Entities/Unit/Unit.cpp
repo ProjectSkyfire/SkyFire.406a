@@ -13590,9 +13590,6 @@ void Unit::SetMaxHealth(uint32 val)
 
 void Unit::SetPower(Powers power, int32 val)
 {
-    if (GetPower(power) == val)
-        return;
-
     int32 maxPower = GetMaxPower(power);
     if (maxPower < val)
         val = maxPower;
