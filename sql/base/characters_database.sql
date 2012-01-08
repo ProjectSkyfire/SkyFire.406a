@@ -118,28 +118,6 @@ LOCK TABLES `addons` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `allies`
---
-
-DROP TABLE IF EXISTS `allies`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `allies` (
-  `race` int(255) NOT NULL,
-  `allie` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin2;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `allies`
---
-
-LOCK TABLES `allies` WRITE;
-/*!40000 ALTER TABLE `allies` DISABLE KEYS */;
-/*!40000 ALTER TABLE `allies` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `arena_team`
 --
 
@@ -201,94 +179,6 @@ CREATE TABLE `arena_team_member` (
 LOCK TABLES `arena_team_member` WRITE;
 /*!40000 ALTER TABLE `arena_team_member` DISABLE KEYS */;
 /*!40000 ALTER TABLE `arena_team_member` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `arena_team_stats`
---
-
-DROP TABLE IF EXISTS `arena_team_stats`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `arena_team_stats` (
-  `arenateamid` int(10) unsigned NOT NULL DEFAULT '0',
-  `rating` int(10) unsigned NOT NULL DEFAULT '0',
-  `games` int(10) unsigned NOT NULL DEFAULT '0',
-  `wins` int(10) unsigned NOT NULL DEFAULT '0',
-  `played` int(10) unsigned NOT NULL DEFAULT '0',
-  `wins2` int(10) unsigned NOT NULL DEFAULT '0',
-  `rank` int(10) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`arenateamid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `arena_team_stats`
---
-
-LOCK TABLES `arena_team_stats` WRITE;
-/*!40000 ALTER TABLE `arena_team_stats` DISABLE KEYS */;
-/*!40000 ALTER TABLE `arena_team_stats` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `armory_character_stats`
---
-
-DROP TABLE IF EXISTS `armory_character_stats`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `armory_character_stats` (
-  `guid` int(11) NOT NULL,
-  `data` longtext NOT NULL,
-  `save_date` int(11) NOT NULL,
-  PRIMARY KEY (`guid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='World of Warcraft Armory table';
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `armory_character_stats`
---
-
-LOCK TABLES `armory_character_stats` WRITE;
-/*!40000 ALTER TABLE `armory_character_stats` DISABLE KEYS */;
-/*!40000 ALTER TABLE `armory_character_stats` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `armory_game_chart`
---
-
-DROP TABLE IF EXISTS `armory_game_chart`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `armory_game_chart` (
-  `gameid` int(11) NOT NULL,
-  `teamid` int(11) NOT NULL,
-  `guid` int(11) NOT NULL,
-  `changeType` int(11) NOT NULL,
-  `ratingChange` int(11) NOT NULL,
-  `teamRating` int(11) NOT NULL,
-  `damageDone` int(11) NOT NULL,
-  `deaths` int(11) NOT NULL,
-  `healingDone` int(11) NOT NULL,
-  `damageTaken` bigint(20) NOT NULL,
-  `healingTaken` int(11) NOT NULL,
-  `killingBlows` int(11) NOT NULL,
-  `mapId` int(11) NOT NULL,
-  `start` int(11) NOT NULL,
-  `end` int(11) NOT NULL,
-  PRIMARY KEY (`gameid`,`teamid`,`guid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='WoWArmory Game Chart';
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `armory_game_chart`
---
-
-LOCK TABLES `armory_game_chart` WRITE;
-/*!40000 ALTER TABLE `armory_game_chart` DISABLE KEYS */;
-/*!40000 ALTER TABLE `armory_game_chart` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -2153,32 +2043,6 @@ LOCK TABLES `instance` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `instance_encounters`
---
-
-DROP TABLE IF EXISTS `instance_encounters`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `instance_encounters` (
-  `entry` int(10) unsigned NOT NULL COMMENT 'Unique entry from DungeonEncounter.dbc',
-  `creditType` tinyint(3) unsigned NOT NULL DEFAULT '0',
-  `creditEntry` int(10) unsigned NOT NULL DEFAULT '0',
-  `lastEncounterDungeon` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT 'If not 0, LfgDungeon.dbc entry for the instance it is last encounter in',
-  `comment` varchar(255) NOT NULL DEFAULT '',
-  PRIMARY KEY (`entry`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `instance_encounters`
---
-
-LOCK TABLES `instance_encounters` WRITE;
-/*!40000 ALTER TABLE `instance_encounters` DISABLE KEYS */;
-/*!40000 ALTER TABLE `instance_encounters` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `instance_reset`
 --
 
@@ -2639,32 +2503,6 @@ LOCK TABLES `reserved_name` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `tblwowitems`
---
-
-DROP TABLE IF EXISTS `tblwowitems`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `tblwowitems` (
-  `itemnumber` int(5) NOT NULL,
-  `itemname` varchar(30) NOT NULL,
-  `itemquality` tinyint(1) NOT NULL DEFAULT '0',
-  `itemhtml` blob,
-  `itemicon` varchar(100) NOT NULL,
-  PRIMARY KEY (`itemnumber`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `tblwowitems`
---
-
-LOCK TABLES `tblwowitems` WRITE;
-/*!40000 ALTER TABLE `tblwowitems` DISABLE KEYS */;
-/*!40000 ALTER TABLE `tblwowitems` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `worldstates`
 --
 
@@ -2697,4 +2535,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-01-08  7:42:28
+-- Dump completed on 2012-01-08  8:42:16
