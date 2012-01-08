@@ -2068,33 +2068,6 @@ LOCK TABLES `instance_reset` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `item_insert`
---
-
-DROP TABLE IF EXISTS `item_insert`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `item_insert` (
-  `index` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `ownerguid` bigint(20) unsigned NOT NULL DEFAULT '0',
-  `entry` int(10) unsigned NOT NULL DEFAULT '0',
-  `count` int(10) unsigned NOT NULL DEFAULT '0',
-  `isBound` tinyint(3) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`index`),
-  KEY `ownerguid` (`ownerguid`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `item_insert`
---
-
-LOCK TABLES `item_insert` WRITE;
-/*!40000 ALTER TABLE `item_insert` DISABLE KEYS */;
-/*!40000 ALTER TABLE `item_insert` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `item_instance`
 --
 
@@ -2240,57 +2213,6 @@ CREATE TABLE `mail` (
 LOCK TABLES `mail` WRITE;
 /*!40000 ALTER TABLE `mail` DISABLE KEYS */;
 /*!40000 ALTER TABLE `mail` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `mail_external`
---
-
-DROP TABLE IF EXISTS `mail_external`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `mail_external` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `sender` bigint(20) DEFAULT NULL,
-  `receiver` bigint(20) DEFAULT NULL,
-  `subject` varchar(200) COLLATE latin1_general_ci DEFAULT NULL,
-  `message` varchar(500) COLLATE latin1_general_ci DEFAULT NULL,
-  `money` bigint(20) DEFAULT NULL,
-  `stationery` int(10) DEFAULT '41',
-  `sent` tinyint(4) DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `mail_external`
---
-
-LOCK TABLES `mail_external` WRITE;
-/*!40000 ALTER TABLE `mail_external` DISABLE KEYS */;
-/*!40000 ALTER TABLE `mail_external` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `mail_external_items`
---
-
-DROP TABLE IF EXISTS `mail_external_items`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `mail_external_items` (
-  `mail_id` bigint(20) DEFAULT NULL,
-  `item` bigint(20) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `mail_external_items`
---
-
-LOCK TABLES `mail_external_items` WRITE;
-/*!40000 ALTER TABLE `mail_external_items` DISABLE KEYS */;
-/*!40000 ALTER TABLE `mail_external_items` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
