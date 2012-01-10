@@ -31,17 +31,22 @@
 typedef ACE_TSS<SFMTRand> SFMTRandTSS;
 static SFMTRandTSS sfmtRand;
 
-int32 irand (int32 min, int32 max)
+int32 irand(int32 min, int32 max)
 {
     return int32(sfmtRand->IRandom(min, max));
 }
 
-uint32 urand (uint32 min, uint32 max)
+uint32 urand(uint32 min, uint32 max)
 {
     return sfmtRand->URandom(min, max);
 }
 
-int32 rand32 ()
+float frand(float min, float max)
+{
+    return float(sfmtRand->Random() * (max - min) + min);
+}
+
+int32 rand32()
 {
     return int32(sfmtRand->BRandom());
 }
@@ -51,7 +56,7 @@ double rand_norm(void)
     return sfmtRand->Random();
 }
 
-double rand_chance (void)
+double rand_chance(void)
 {
     return sfmtRand->Random() * 100.0;
 }
@@ -69,9 +74,14 @@ uint32 urand(uint32 min, uint32 max)
     return mtRand->randInt (max - min) + min;
 }
 
+float frand(float min, float max)
+{
+    return float(mtRand->randExc(max - min) + min);
+}
+
 int32 rand32()
 {
-    return mtRand->randInt ();
+    return mtRand->randInt();
 }
 
 double rand_norm(void)

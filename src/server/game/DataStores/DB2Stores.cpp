@@ -120,11 +120,11 @@ void LoadDB2Stores(const std::string& dataPath)
     if (!sItemStore.LookupEntry(68815) ||                   // last client known item added in 4.0.6a
         !sItemSparseStore.LookupEntry(68815))               // last client known item added in 4.0.6a
     {
-        sLog->outString("");
+        sLog->outString();
         sLog->outError("Please extract correct db2 files from client 4.0.6a 13623.");
         exit(1);
     }
 
-    sLog->outString(">> Initialized %d data stores.", DB2FilesCount);
+    sLog->outString(">> Initialized DB2 %d data stores.", DB2FilesCount);
     sLog->outString();
 }
