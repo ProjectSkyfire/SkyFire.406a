@@ -727,7 +727,7 @@ int32 AuraEffect::CalculateAmount(Unit* caster)
                             continue;
                         if(cap->map != -1 && cap->map != map)
                             continue;
-                        if(cap->reqSkillLevel > plrskill || cap->reqSkillLevel <= maxSkill)
+                        if (cap->reqSkillLevel && (cap->reqSkillLevel > plrskill || cap->reqSkillLevel <= maxSkill))
                             continue;
                         if(cap->reqSpell && !player->HasSpell(cap->reqSpell))
                             continue;
