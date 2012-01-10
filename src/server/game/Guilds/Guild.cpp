@@ -3091,11 +3091,12 @@ void Guild::LevelUp()
 
     // Find perk to gain
     uint32 spellId = 0;
-    if (const GuildPerksEntry* perk = sGuildPerksStore.LookupEntry(level))
+    if (GuildPerksEntry const* perk = sGuildPerksStore.LookupEntry(level))
         spellId = perk->SpellId;
 
     // Notify players of level change
     for (Members::const_iterator itr = m_members.begin(); itr != m_members.end(); ++itr)
+    {
         if (Player *player = itr->second->FindPlayer())
         {
             player->SetUInt32Value(PLAYER_GUILDLEVEL, level);
@@ -3103,8 +3104,10 @@ void Guild::LevelUp()
 
             if (spellId)
                player->learnSpell(spellId, true);
+            
+            GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_REACH_GUILD_LEVEL, player);
         }
-    GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_REACH_GUILD_LEVEL, NULL);
+    }
 }
 
 void Guild::SaveXP()
