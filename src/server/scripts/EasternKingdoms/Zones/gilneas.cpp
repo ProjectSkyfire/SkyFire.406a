@@ -37,14 +37,16 @@ enum eGilneasCityPhase1
     SAY_PANICKED_CITIZEN_2                             = -1638017,
     SAY_PANICKED_CITIZEN_3                             = -1638018,
     SAY_PANICKED_CITIZEN_4                             = -1638019,
-    #define DELAY_EMOTE_PANICKED_CITIZEN urand(5000, 15000) //5-15 second time
-    #define DELAY_SAY_PANICKED_CITIZEN urand(30000, 120000) //30sec - 1.5min
 
     SAY_GILNEAS_CITY_GUARD_GATE_1                      = -1638022,
     SAY_GILNEAS_CITY_GUARD_GATE_2                      = -1638023,
     SAY_GILNEAS_CITY_GUARD_GATE_3                      = -1638024,
-    #define DELAY_SAY_GILNEAS_CITY_GUARD_GATE urand(30000, 120000) //30sec - 1.5min
 };
+
+#define DELAY_EMOTE_PANICKED_CITIZEN urand(5000, 15000) //5-15 second time
+#define DELAY_SAY_PANICKED_CITIZEN urand(30000, 120000) //30sec - 1.5min
+#define DELAY_SAY_GILNEAS_CITY_GUARD_GATE urand(30000, 120000) //30sec - 1.5min
+
 //Phase 2
 enum eGilneasCityPhase2
 {
@@ -146,10 +148,11 @@ public:
 
 uint32 guid_panicked_nextsay = 0; //GUID of the Panicked Citizen that will say random text, this is to prevent more than 1 npc speaking
 uint32 tSay_panicked = 30000; //Time left to say
+
 class npc_panicked_citizen : public CreatureScript
 {
 public:
-    npc_panicked_citizen() : CreatureScript("npc_panicked_citizen") { }
+    npc_panicked_citizen() : CreatureScript("npc_panicked_citizen") {}
 
     CreatureAI* GetAI(Creature* creature) const
     {
@@ -235,10 +238,7 @@ public:
 ## npc_panicked_citizen_2
 ######*/
 
-enum ePanicked_citizen_2
-{
-    #define PATHS_COUNT_PANICKED_CITIZEN 8  //Why is this define, within a enum? was this purposeful?
-};
+#define PATHS_COUNT_PANICKED_CITIZEN      8
 
 struct Waypoint
 {
@@ -249,7 +249,7 @@ struct Waypoint
 class npc_panicked_citizen_2 : public CreatureScript
 {
 public:
-    npc_panicked_citizen_2() : CreatureScript("npc_panicked_citizen_2") { }
+    npc_panicked_citizen_2() : CreatureScript("npc_panicked_citizen_2") {}
 
     CreatureAI* GetAI(Creature* creature) const
     {
@@ -264,7 +264,7 @@ public:
         uint32 pathID, runDelay;
         Waypoint firstWaypoints[PATHS_COUNT_PANICKED_CITIZEN];
 
-        void LoadWaypoints(Waypoint *waypoints)
+        void LoadWaypoints(Waypoint* waypoints)
         {
             QueryResult result[PATHS_COUNT_PANICKED_CITIZEN];
             result[0] = WorldDatabase.Query("SELECT `id`, `position_x`, `position_y` FROM waypoint_data WHERE id = 34851000 and `point` = 1");
@@ -285,7 +285,7 @@ public:
             }
         }
 
-        uint32 FindNearestPath(Waypoint *paths)
+        uint32 FindNearestPath(Waypoint* paths)
         {
             uint32 pathIDs[PATHS_COUNT_PANICKED_CITIZEN], nearestPathID;
             float distances[PATHS_COUNT_PANICKED_CITIZEN], minDist;
@@ -353,7 +353,7 @@ public:
 class npc_lieutenant_walden : public CreatureScript
 {
 public:
-    npc_lieutenant_walden() : CreatureScript("npc_lieutenant_walden") { }
+    npc_lieutenant_walden() : CreatureScript("npc_lieutenant_walden") {}
 
     CreatureAI* GetAI(Creature* creature) const
     {
@@ -364,7 +364,7 @@ public:
     {
         npc_lieutenant_waldenAI(Creature* creature) : ScriptedAI(creature) {}
 
-        void sQuestReward(Player *player, const Quest *quest, uint32 data)
+        void sQuestReward(Player* player, const Quest* quest, uint32 data)
         {
             if (quest->GetQuestId() == QUEST_LOCKDOWN && player->GetPhaseMask() == 1)
                 player->SetAuraStack(SPELL_PHASE_2, player, 1); //phaseshift
@@ -375,10 +375,11 @@ public:
 /*######
 ## npc_gilneas_city_guard_phase1
 ######*/
+
 class npc_gilneas_city_guard_phase1 : public CreatureScript
 {
 public:
-    npc_gilneas_city_guard_phase1() : CreatureScript("npc_gilneas_city_guard_phase1") { }
+    npc_gilneas_city_guard_phase1() : CreatureScript("npc_gilneas_city_guard_phase1") {}
 
     CreatureAI* GetAI(Creature* creature) const
     {
@@ -433,7 +434,7 @@ public:
 class npc_gilneas_city_guard_phase2 : public CreatureScript
 {
 public:
-    npc_gilneas_city_guard_phase2() : CreatureScript("npc_gilneas_city_guard_phase2") { }
+    npc_gilneas_city_guard_phase2() : CreatureScript("npc_gilneas_city_guard_phase2") {}
 
     CreatureAI* GetAI(Creature* creature) const
     {
@@ -456,7 +457,7 @@ public:
             tSeek      = urand(1000, 2000);
         }
 
-        void DamageTaken(Unit * who, uint32 &Damage)
+        void DamageTaken(Unit* who, uint32 &Damage)
         {
             if (who->GetTypeId() == TYPEID_PLAYER)
             {
@@ -530,7 +531,7 @@ public:
 class npc_prince_liam_greymane_phase2 : public CreatureScript
 {
 public:
-    npc_prince_liam_greymane_phase2() : CreatureScript("npc_prince_liam_greymane_phase2") { }
+    npc_prince_liam_greymane_phase2() : CreatureScript("npc_prince_liam_greymane_phase2") {}
 
     CreatureAI* GetAI(Creature* creature) const
     {
@@ -555,7 +556,7 @@ public:
             tYell     = DELAY_YELL_PRINCE_LIAM_GREYMANE;
         }
 
-        void sGossipHello(Player *player)
+        void sGossipHello(Player* player)
         {
             if ((player->GetQuestStatus(14094) == QUEST_STATUS_REWARDED) && (player->GetPhaseMask() == 2))
                 player->SetAuraStack(SPELL_PHASE_4, player, 1); //phaseshift
@@ -664,14 +665,15 @@ public:
 
 enum eRampaging_worgen
 {
-    #define SPELL_ENRAGE 8599
-    #define CD_ENRAGE 30000
+    SPELL_ENRAGE    = 8599
 };
+
+#define CD_ENRAGE      30000
 
 class npc_rampaging_worgen : public CreatureScript
 {
 public:
-    npc_rampaging_worgen() : CreatureScript("npc_rampaging_worgen") { }
+    npc_rampaging_worgen() : CreatureScript("npc_rampaging_worgen") {}
 
     CreatureAI* GetAI(Creature* creature) const
     {
@@ -701,10 +703,10 @@ public:
         void DamageDealt(Unit* target, uint32& damage, DamageEffectType damageType)
         {
             if (target->GetEntry() == NPC_GILNEAS_CITY_GUARD || target->GetEntry() == NPC_PRINCE_LIAM_GREYMANE)
-                dmgCount ++;
+                dmgCount++;
         }
 
-        void DamageTaken(Unit * who, uint32 &Damage)
+        void DamageTaken(Unit* who, uint32 &Damage)
         {
             if (who->GetTypeId() == TYPEID_PLAYER)
             {
@@ -771,7 +773,7 @@ public:
 class npc_rampaging_worgen2 : public CreatureScript
 {
 public:
-    npc_rampaging_worgen2() : CreatureScript("npc_rampaging_worgen2") { }
+    npc_rampaging_worgen2() : CreatureScript("npc_rampaging_worgen2") {}
 
     CreatureAI* GetAI(Creature* creature) const
     {
@@ -831,14 +833,15 @@ public:
 
 enum eMerchant_square_door
 {
-    #define SUMMON1_TTL 300000             // Agian, with the defines within enums
-    #define QUEST_EVAC_MERC_SQUA 14098
+    QUEST_EVAC_MERC_SQUA      = 14098
 };
+
+#define SUMMON1_TTL       300000
 
 class go_merchant_square_door : public GameObjectScript
 {
 public:
-    go_merchant_square_door() : GameObjectScript("go_merchant_square_door") { }
+    go_merchant_square_door() : GameObjectScript("go_merchant_square_door") {}
 
     float x, y, z, wx, wy, angle, tQuestCredit;
     bool opened;
@@ -846,7 +849,7 @@ public:
     Player* aPlayer;
     GameObject* go;
 
-    bool OnGossipHello(Player *player, GameObject *go)
+    bool OnGossipHello(Player* player, GameObject* go)
     {
         if (player->GetQuestStatus(QUEST_EVAC_MERC_SQUA) == QUEST_STATUS_INCOMPLETE)
         {
@@ -855,16 +858,16 @@ public:
             tQuestCredit     = 2500;
             go->Use(player);
             spawnKind = urand(1, 3); //1, 2=citizen, 3=citizen&worgen (66%, 33%)
-            angle=go->GetOrientation();
-            x=go->GetPositionX()-cos(angle)*2;
-            y=go->GetPositionY()-sin(angle)*2;
-            z=go->GetPositionZ();
+            angle = go->GetOrientation();
+            x = go->GetPositionX()-cos(angle)*2;
+            y = go->GetPositionY()-sin(angle)*2;
+            z = go->GetPositionZ();
             wx = x-cos(angle)*2;
             wy = y-sin(angle)*2;
 
             if (spawnKind < 3)
             {
-                if (Creature *spawnedCreature = go->SummonCreature(NPC_FRIGHTENED_CITIZEN_1, x, y, z, angle, TEMPSUMMON_TIMED_DESPAWN, SUMMON1_TTL))
+                if (Creature* spawnedCreature = go->SummonCreature(NPC_FRIGHTENED_CITIZEN_1, x, y, z, angle, TEMPSUMMON_TIMED_DESPAWN, SUMMON1_TTL))
                 {
                     spawnedCreature->SetPhaseMask(6, 1);
                     spawnedCreature->Respawn(1);
@@ -872,7 +875,7 @@ public:
             }
             else
             {
-                if (Creature *spawnedCreature = go->SummonCreature(NPC_FRIGHTENED_CITIZEN_2, x, y, z, angle, TEMPSUMMON_TIMED_DESPAWN, SUMMON1_TTL))
+                if (Creature* spawnedCreature = go->SummonCreature(NPC_FRIGHTENED_CITIZEN_2, x, y, z, angle, TEMPSUMMON_TIMED_DESPAWN, SUMMON1_TTL))
                 {
                     spawnedCreature->SetPhaseMask(6, 1);
                     spawnedCreature->Respawn(1);
@@ -883,7 +886,7 @@ public:
         return false;
     }
 
-    void OnUpdate(GameObject *go, uint32 diff)
+    void OnUpdate(GameObject* go, uint32 diff)
     {
         if (opened == 1)
         {
@@ -893,7 +896,7 @@ public:
                 aPlayer->KilledMonsterCredit(35830, 0);
                 if (spawnKind == 3)
                 {
-                    if (Creature *spawnedCreature = go->SummonCreature(NPC_RAMPAGING_WORGEN_2, wx, wy, z, angle, TEMPSUMMON_TIMED_DESPAWN, SUMMON1_TTL))
+                    if (Creature* spawnedCreature = go->SummonCreature(NPC_RAMPAGING_WORGEN_2, wx, wy, z, angle, TEMPSUMMON_TIMED_DESPAWN, SUMMON1_TTL))
                     {
                         spawnedCreature->SetPhaseMask(6, 1);
                         spawnedCreature->Respawn(1);
@@ -927,8 +930,9 @@ enum eFrightened_citizen
     SAY_CITIZEN_3b               = -1638013,
     SAY_CITIZEN_4b               = -1638014,
     SAY_CITIZEN_5b               = -1638015,
-    #define PATHS_COUNT          2
 };
+
+#define PATHS_COUNT  2
 
 struct Point
 {
@@ -949,7 +953,7 @@ struct Paths
 class npc_frightened_citizen : public CreatureScript
 {
 public:
-    npc_frightened_citizen() : CreatureScript("npc_frightened_citizen") { }
+    npc_frightened_citizen() : CreatureScript("npc_frightened_citizen") {}
 
     CreatureAI* GetAI(Creature* creature) const
     {
@@ -968,7 +972,6 @@ public:
 
         Paths LoadPaths()
         {
-            Paths paths;
             QueryResult result[PATHS_COUNT];
             result[0] = WorldDatabase.Query("SELECT `id`, `point`, `position_x`, `position_y` FROM waypoint_data WHERE id = 349810 ORDER BY `point`");
             result[1] = WorldDatabase.Query("SELECT `id`, `point`, `position_x`, `position_y` FROM waypoint_data WHERE id = 349811 ORDER BY `point`");
@@ -997,7 +1000,6 @@ public:
                 }
                 while (result[i]->NextRow());
             }
-
             return paths;
         }
 
@@ -1221,7 +1223,8 @@ public:
                         phase = 1;
                         in_progress = false;
                     }
-                } else phaseTime -= diff;
+                }
+                else phaseTime -= diff;
             }
 
             DoMeleeAttackIfReady();
@@ -1232,9 +1235,9 @@ public:
 class npc_josiah_avery : public CreatureScript
 {
 public:
-    npc_josiah_avery() : CreatureScript("npc_josiah_avery") { }
+    npc_josiah_avery() : CreatureScript("npc_josiah_avery") {}
 
-    bool OnQuestComplete(Player* player, Creature* creature, const Quest *_Quest)
+    bool OnQuestComplete(Player* player, Creature* creature, const Quest* _Quest)
     {
         if (_Quest->GetQuestId() == 14159)
         {
@@ -1254,7 +1257,7 @@ public:
 class npc_king_genn_greymane : public CreatureScript
 {
 public:
-    npc_king_genn_greymane() : CreatureScript("npc_king_genn_greymane") { }
+    npc_king_genn_greymane() : CreatureScript("npc_king_genn_greymane") {}
 
     bool OnQuestAccept(Player* player, Creature* creature, Quest const* quest)
     {
@@ -1271,7 +1274,7 @@ public:
 class npc_lord_darius_crowley_c2 : public CreatureScript
 {
 public:
-    npc_lord_darius_crowley_c2() : CreatureScript("npc_lord_darius_crowley_c2") { }
+    npc_lord_darius_crowley_c2() : CreatureScript("npc_lord_darius_crowley_c2") {}
 
     bool OnQuestAccept(Player* player, Creature* creature, Quest const* quest)
     {
@@ -1286,7 +1289,7 @@ public:
 class npc_lord_darius_crowley_c3 : public CreatureScript
 {
 public:
-    npc_lord_darius_crowley_c3() : CreatureScript("npc_lord_darius_crowley_c3") { }
+    npc_lord_darius_crowley_c3() : CreatureScript("npc_lord_darius_crowley_c3") {}
 
     bool OnQuestComplete(Player* player, Creature* creature, Quest const* quest)
     {
@@ -1320,7 +1323,7 @@ public:
 class npc_king_genn_greymane_c2 : public CreatureScript
 {
 public:
-    npc_king_genn_greymane_c2() : CreatureScript("npc_king_genn_greymane_c2") { }
+    npc_king_genn_greymane_c2() : CreatureScript("npc_king_genn_greymane_c2") {}
 
     bool OnQuestComplete(Player* player, Creature* creature, Quest const* quest)
     {
@@ -1334,7 +1337,7 @@ public:
 class spell_keg_placed : public SpellScriptLoader
 {
     public:
-        spell_keg_placed() : SpellScriptLoader("spell_keg_placed") { }
+        spell_keg_placed() : SpellScriptLoader("spell_keg_placed") {}
 
         class spell_keg_placed_AuraScript : public AuraScript
         {
@@ -1342,13 +1345,13 @@ class spell_keg_placed : public SpellScriptLoader
 
             uint32 tick, tickcount;
 
-            void HandleEffectApply(AuraEffect const * /*aurEff*/, AuraEffectHandleModes /*mode*/)
+            void HandleEffectApply(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
             {
                 tick = urand(1, 4);
                 tickcount = 0;
             }
 
-            void HandlePeriodic(AuraEffect const * aurEff)
+            void HandlePeriodic(AuraEffect const* aurEff)
             {
                 PreventDefaultAction();
                 if (Unit* caster = GetCaster())
@@ -1359,7 +1362,7 @@ class spell_keg_placed : public SpellScriptLoader
                             return;
 
                         caster->ToPlayer()->KilledMonsterCredit(36233, 0);
-                        if (Unit * target = GetTarget())
+                        if (Unit* target = GetTarget())
                             target->Kill(target);
                     }
                     tickcount++;
