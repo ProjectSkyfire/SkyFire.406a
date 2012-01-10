@@ -8151,6 +8151,10 @@ bool Unit::HandleAuraProc(Unit* victim, uint32 damage, Aura* triggeredByAura, Sp
             break;
 
         case SPELLFAMILY_PRIEST:
+        {
+            if (!procSpell)
+                return false;
+
             switch(procSpell->Id)
             {
                 case 2050:
@@ -8158,31 +8162,27 @@ bool Unit::HandleAuraProc(Unit* victim, uint32 damage, Aura* triggeredByAura, Sp
                 case 2061:
                 case 32546:
                 {
-                    CastSpell(this,81208,true);
+                    CastSpell(this, 81208, true);
                     *handled = true;
-                    break;
+                    return true;
                 }
-
                 case 33076:
                 case 596:
                 {
-                    CastSpell(this,81206,true);
+                    CastSpell(this, 81206, true);
                     *handled = true;
-                    break;
+                    return true;
                 }
-
                 case 585:
                 case 73510:
                 {
-                    CastSpell(this,81209,true);
+                    CastSpell(this, 81209, true);
                     *handled = true;
                     break;
                 }
+                break;
             }
-            return true;
-
-            break;
-
+        }
         case SPELLFAMILY_PALADIN:
         {
             // Infusion of Light
