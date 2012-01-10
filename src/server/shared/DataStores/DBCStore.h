@@ -77,6 +77,7 @@ class DBCStorage
         {
             indexTable.asT = NULL;
         }
+        ~DBCStorage() { Clear(); }
 
         T const* LookupEntry(uint32 id) const
         {

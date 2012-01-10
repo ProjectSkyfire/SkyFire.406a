@@ -143,6 +143,9 @@ MapDifficultyMap sMapDifficultyMap;
 
 DBCStorage <MovieEntry> sMovieStore(MovieEntryfmt);
 
+DBCStorage <NameGenEntry> sNameGenStore(NameGenfmt);
+GenNameVectorArraysMap sGenNameVectoArraysMap;
+
 DBCStorage <MountCapabilityEntry> sMountCapabilityStore(MountCapabilityfmt);
 DBCStorage <MountTypeEntry> sMountTypeStore(MountTypefmt);
 
@@ -416,6 +419,12 @@ void LoadDBCStores(const std::string& dataPath, uint32& availableDbcLocales)
         if (MapDifficultyEntry const* entry = sMapDifficultyStore.LookupEntry(i))
             sMapDifficultyMap[MAKE_PAIR32(entry->MapId, entry->Difficulty)] = MapDifficulty(entry->resetTime, entry->maxPlayers, entry->areaTriggerText > 0);
 
+    LoadDBC(availableDbcLocales, bad_dbc_files, sNameGenStore,                dbcPath, "NameGen.dbc");//14545
+    for (uint32 i = 0; i < sNameGenStore.GetNumRows(); ++i)
+        if (NameGenEntry const* entry = sNameGenStore.LookupEntry(i))
+            sGenNameVectoArraysMap[entry->race].stringVectorArray[entry->gender].push_back(std::string(entry->name));
+    sNameGenStore.Clear();
+
     // HACK for map 0, data removed in 4.0 - by LordJZ
     /// ToDo: Find a way to correctly fix this
     sMapDifficultyMap[MAKE_PAIR32(0/*map*/, 0/*difficulty*/)] = MapDifficulty(0/*resetTime*/ ,0/*mapPlayers*/, false /*HasErrorMessage*/);
@@ -609,7 +618,7 @@ void LoadDBCStores(const std::string& dataPath, uint32& availableDbcLocales)
         exit(1);
     }
 
-    sLog->outString(">> Initialized %d data stores in %u ms", DBCFileCount, GetMSTimeDiffToNow(oldMSTime));
+    sLog->outString(">> Initialized %d DBC data stores in %u ms", DBCFileCount, GetMSTimeDiffToNow(oldMSTime));
     sLog->outString();
 }
 
