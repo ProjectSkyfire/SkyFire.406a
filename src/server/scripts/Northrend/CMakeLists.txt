@@ -217,7 +217,8 @@ set(scripts_STAT_SRCS
   Northrend/Zones/storm_peaks.cpp     
   Northrend/Zones/borean_tundra.cpp
   Northrend/Zones/howling_fjord.cpp
-  Northrend/Zones/dalaran.cpp  
+  Northrend/Zones/dalaran.cpp
+  Northrend/Zones/argent_tournament.cpp
 )
 
 message("  -> Prepared: Northrend")
