@@ -335,7 +335,7 @@ class spell_sha_healing_rain : public SpellScriptLoader
                 OnEffectPeriodic += AuraEffectPeriodicFn(spell_sha_healing_rain_AuraScript::OnTick, EFFECT_1, SPELL_AURA_PERIODIC_DUMMY);
             }
         };
-        
+
         AuraScript* GetAuraScript() const
         {
             return new spell_sha_healing_rain_AuraScript();

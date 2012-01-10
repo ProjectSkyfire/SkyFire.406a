@@ -578,10 +578,10 @@ public:
         void OnApply(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
         {
             Unit* caster = GetCaster();
-            
+
             if (!caster)
                 return;
-            
+
             if (Unit* target = GetTarget())
             {
                 if (AuraEffect const* aurEff = caster->GetAuraEffect(SPELL_AURA_DUMMY, SPELLFAMILY_HUNTER, 536, EFFECT_0))

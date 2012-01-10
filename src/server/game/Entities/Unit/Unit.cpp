@@ -6651,7 +6651,7 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                 {
                     if(!roll_chance_i(triggerAmount))
                         return false;
-                        
+
                     triggered_spell_id = 88691;
                     target = victim;
                     break;

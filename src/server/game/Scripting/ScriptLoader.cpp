@@ -1343,7 +1343,7 @@ void AddNorthrendScripts()
     AddSC_boss_general_zarithrian();
     //AddSC_boss_halion();
 
-    AddSC_argen_tournament();	
+    AddSC_argen_tournament();
     AddSC_dalaran();
     AddSC_borean_tundra();
     AddSC_dragonblight();

@@ -2291,7 +2291,7 @@ bool Group::IsGuildGroup(uint32 guildId, bool AllInSameMap, bool AllInSameInstan
         if (Player *player = itr->getSource())
             if (player->GetGuildId() == guildId) // Check if it has a guild
                 members.push_back(player);
-    
+
     bool ret = false;
     count = members.size();
     for(std::vector<Player*>::iterator itr = members.begin(); itr != members.end(); ++itr) // Iterate through players
@@ -2300,14 +2300,14 @@ bool Group::IsGuildGroup(uint32 guildId, bool AllInSameMap, bool AllInSameInstan
         {
             if (mapId == 0)
                 mapId = player->GetMapId();
-                
+
             if (InstanceId == 0)
                 InstanceId = player->GetInstanceId();
-                
+
             if (player->GetMap()->IsNonRaidDungeon() && !ret)
                 if (count >= 3)
                     ret = true;
-                    
+
             if (player->GetMap()->IsRaid() && !ret)
             {
                 switch (player->GetMap()->GetDifficulty())
@@ -2317,7 +2317,7 @@ bool Group::IsGuildGroup(uint32 guildId, bool AllInSameMap, bool AllInSameInstan
                         if (count >= 8)
                             ret = true;
                         break;
-                    
+
                     case RAID_DIFFICULTY_25MAN_NORMAL:
                     case RAID_DIFFICULTY_25MAN_HEROIC:
                         if (count >= 20)
@@ -2325,26 +2325,26 @@ bool Group::IsGuildGroup(uint32 guildId, bool AllInSameMap, bool AllInSameInstan
                         break;
                 }
             }
-            
+
             if (player->GetMap()->IsBattleArena() && !ret)
                 if (count == GetMembersCount())
                     ret = true;
-                    
+
             if (player->GetMap()->IsBattleground() && !ret)
                 if (Battleground* bg = player->GetBattleground())
                     if (count >= uint32(bg->GetMaxPlayers() * 0.8f))
                         ret = true;
-                    
+
             // ToDo: Check 40-player raids: 10/40
-            
+
             if (AllInSameMap && (mapId != player->GetMapId()))
                 return false;
-                
+
             if (AllInSameInstanceId && (InstanceId != player->GetInstanceId()))
                 return false;
         }
     }
-    
+
     return ret;
 }
 
