@@ -432,30 +432,13 @@ void SmartAI::MovementInform(uint32 MovementType, uint32 Data)
 
 void SmartAI::RemoveAuras()
 {
+    // Only loop throught the applied auras, because here is where all auras on the current unit are stored
     Unit::AuraApplicationMap appliedAuras = me->GetAppliedAuras();
-    for (Unit::AuraApplicationMap::iterator iter = appliedAuras.begin(); iter != appliedAuras.end();)
+    for (Unit::AuraApplicationMap::iterator iter = appliedAuras.begin(); iter != appliedAuras.end(); ++iter)
     {
         Aura const* aura = iter->second->GetBase();
-        if (!aura->GetSpellInfo()->HasAura(SPELL_AURA_CONTROL_VEHICLE) && aura->GetCaster() != me)
-            me->_UnapplyAura(iter, AURA_REMOVE_BY_DEFAULT);
-        else
-            ++iter;
-        
-        if (iter == appliedAuras.end())
-            break;
-    }
-
-    Unit::AuraMap ownedAuras = me->GetOwnedAuras();
-    for (Unit::AuraMap::iterator iter = ownedAuras.begin(); iter != ownedAuras.end();)
-    {
-        Aura* aura = iter->second;
-        if (!aura->IsPassive() && !aura->GetSpellInfo()->HasAura(SPELL_AURA_CONTROL_VEHICLE))
-            me->RemoveOwnedAura(iter, AURA_REMOVE_BY_DEFAULT);
-        else
-            ++iter;
-
-        if (iter == ownedAuras.end())
-            break;
+        if (!aura->GetSpellInfo()->IsPassive() && !aura->GetSpellInfo()->HasAura(SPELL_AURA_CONTROL_VEHICLE) && aura->GetCaster() != me)
+            me->RemoveAurasDueToSpell(aura->GetId());
     }
 }
 
