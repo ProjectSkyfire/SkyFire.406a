@@ -249,11 +249,11 @@ void WorldSession::HandleBattlegroundPlayerPositionsOpcode(WorldPacket & /*recv_
         {
             uint32 count = 0;
 
-            Player* aplayer = ObjectAccessor::FindPlayer(((BattlegroundWS*)bg)->GetAllianceFlagPickerGUID());
+            Player* aplayer = ObjectAccessor::FindPlayer(((BattlegroundWS*)bg)->GetFlagPickerGUID(BG_TEAM_ALLIANCE));
             if (aplayer)
                 ++count;
 
-            Player* hplayer = ObjectAccessor::FindPlayer(((BattlegroundWS*)bg)->GetHordeFlagPickerGUID());
+            Player* hplayer = ObjectAccessor::FindPlayer(((BattlegroundWS*)bg)->GetFlagPickerGUID(BG_TEAM_HORDE));
             if (hplayer)
                 ++count;
 
