@@ -2973,7 +2973,7 @@ void SpellMgr::LoadSpellCustomAttr()
             case 76547: // Mana Adept
             case 77226: // Deep Healing
             case 76613: // Frostburn
-                spellInfo->Effects[0].ApplyAuraName = SPELL_AURA_ADD_PCT_MODIFIER;
+                spellInfo->Effects[0].MiscValue = 0;
                 break;
             case 93072: // Bring our Boys back
                 spellInfo->Effects[0].TargetA = TARGET_UNIT_NEARBY_ENTRY;
