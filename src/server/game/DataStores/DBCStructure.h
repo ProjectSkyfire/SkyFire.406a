@@ -1397,6 +1397,14 @@ struct MovieEntry
     //uint32      unk2;                                     // 3 4.0.0
 };
 
+struct NameGenEntry
+{
+    //uint32 id;
+    char*  name;
+    uint32 race;
+    uint32 gender;
+};
+
 #define MAX_OVERRIDE_SPELL 10
 
 struct OverrideSpellDataEntry
@@ -2285,6 +2293,13 @@ struct WorldStateUI
 #else
 #pragma pack(pop)
 #endif
+
+struct VectorArray
+{
+    std::vector<std::string> stringVectorArray[2];
+};
+
+typedef std::map<uint32, VectorArray> GenNameVectorArraysMap;
 
 // Structures not used for casting to loaded DBC data and not required then packing
 struct MapDifficulty
