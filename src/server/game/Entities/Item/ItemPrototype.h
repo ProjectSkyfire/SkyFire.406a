@@ -723,7 +723,6 @@ struct ItemSetNameEntry
 struct ItemSetNameLocale
 {
     StringVector Name;
-    StringVector Description;
 };
 
 // GCC have alternative #pragma pack() syntax and old gcc version not support pack(pop), also any gcc version not support it at some platform
