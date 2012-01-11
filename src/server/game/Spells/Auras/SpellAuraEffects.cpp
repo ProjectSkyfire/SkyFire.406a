@@ -5231,13 +5231,6 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
                             }
                             break;
                         }
-                        case 25771:  // Forbearance
-                        {
-                            target->ApplySpellImmune(GetId(), IMMUNITY_ID, 1022, apply);  // Hand of Protection
-                            target->ApplySpellImmune(GetId(), IMMUNITY_ID, 642, apply);   // Divine Shield
-                            target->ApplySpellImmune(GetId(), IMMUNITY_ID, 633, apply);  // Lay on Hands
-                            break;
-                        }
                     }
                 }
                 default:
