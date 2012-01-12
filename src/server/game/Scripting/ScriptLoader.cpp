@@ -343,7 +343,7 @@ void AddSC_instance_culling_of_stratholme();
 //void AddSC_npc_pusillin();                   //Dire maul
 void AddSC_instance_halls_of_origination();  //Halls of Origination
 void AddSC_boss_temple_guardian_anhuur();
-void AddSC_boss_earthrager_ptah();
+void AddSC_boss_ptah();
 void AddSC_boss_anraphet();
 void AddSC_boss_ammunae();
 void AddSC_boss_setesh();
@@ -1032,9 +1032,9 @@ void AddKalimdorScripts()
     AddSC_culling_of_stratholme();
     AddSC_instance_culling_of_stratholme();
     //AddSC_npc_pusillin();                   //Dire maul
-    AddSC_instance_halls_of_origination();  //Halls of Origination
+    AddSC_instance_halls_of_origination();    //Halls of Origination
     AddSC_boss_temple_guardian_anhuur();
-    AddSC_boss_earthrager_ptah();
+    AddSC_boss_ptah();
     AddSC_boss_anraphet();
     AddSC_boss_ammunae();
     AddSC_boss_setesh();
