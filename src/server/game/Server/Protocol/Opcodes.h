@@ -194,7 +194,7 @@ enum Opcodes
     SMSG_ITEM_COOLDOWN                               = 0x06CC8, // 4.0.6a 13623
     CMSG_GAMEOBJ_USE                                 = 0x029E4, // 4.0.6a 13623
     CMSG_DESTROY_ITEMS                               = 0x0B8A8, // 4.0.6a 13623
-    SMSG_GAMEOBJECT_CUSTOM_ANIM                      = 0x036A0, // 4.0.6a 13623
+    SMSG_GAMEOBJECT_CUSTOM_ANIM                      = 0x02E8C, // (0x8230)(0x00B3) // 4.0.6a 13623
     CMSG_AREATRIGGER                                 = 0x0ADA8, // 4.0.6a 13623
     MSG_MOVE_START_FORWARD                           = 0x0EBAC, // 4.0.6a 13623
     MSG_MOVE_START_BACKWARD                          = 0x072E4, // 4.0.6a 13623
