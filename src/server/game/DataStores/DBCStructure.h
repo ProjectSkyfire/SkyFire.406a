@@ -1775,7 +1775,7 @@ struct SpellTotemsEntry
 };
 
 // Spell.dbc
-struct SpellEntry //Structure of the true Spell.dbc
+struct SpellEntry
 {
     uint32    Id;                                           // 0        m_ID
     uint32    Attributes;                                   // 1        m_attribute

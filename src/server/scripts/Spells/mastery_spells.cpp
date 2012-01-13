@@ -56,7 +56,7 @@ public:
     class spell_war_strikes_of_opportunity_AuraScript : public MasteryScript
     {
     public:
-        void OnProc(AuraEffect const * aurEff, Unit* pUnit, Unit *pVictim, uint32 damage, SpellInfo const* procSpell, uint32 procFlag, uint32 procExtra, WeaponAttackType attType, int32 cooldown)
+        void OnProc(AuraEffect const* aurEff, Unit* pUnit, Unit* pVictim, uint32 damage, SpellInfo const* procSpell, uint32 procFlag, uint32 procExtra, WeaponAttackType attType, int32 cooldown)
         {
             PreventDefaultAction();
             if (attType != BASE_ATTACK && attType != OFF_ATTACK)
@@ -72,7 +72,7 @@ public:
         }
     };
 
-    AuraScript *GetAuraScript() const
+    AuraScript* GetAuraScript() const
     {
         spell_war_strikes_of_opportunity_AuraScript* script = new spell_war_strikes_of_opportunity_AuraScript();
         script->SetMasteryAura(EFFECT_0, SPELL_AURA_DUMMY, true);
@@ -87,7 +87,7 @@ class spell_war_unshackled_fury : public SpellScriptLoader
 public:
     spell_war_unshackled_fury() : SpellScriptLoader("spell_war_unshackled_fury") { }
 
-    AuraScript *GetAuraScript() const
+    AuraScript* GetAuraScript() const
     {
         MasteryScript* script = new MasteryScript();
         script->SetMasteryAura(EFFECT_0, SPELL_AURA_ADD_PCT_MODIFIER);
@@ -103,7 +103,7 @@ class spell_war_critical_block : public SpellScriptLoader
 public:
     spell_war_critical_block() : SpellScriptLoader("spell_war_critical_block") { }
 
-    AuraScript *GetAuraScript() const
+    AuraScript* GetAuraScript() const
     {
         MasteryScript* script = new MasteryScript();
         script->SetMasteryAura(EFFECT_0, SPELL_AURA_MOD_BLOCK_CRIT_CHANCE);
@@ -121,7 +121,7 @@ public:
 
     class spell_mage_mana_adept_AuraScript : public MasteryScript
     {
-        void CalcSpellMod(AuraEffect const * aurEff, SpellModifier *& spellMod, SpellInfo const * /*spellInfo*/, Unit * /*target*/)
+        void CalcSpellMod(AuraEffect const* aurEff, SpellModifier*& spellMod, SpellInfo const* /*spellInfo*/, Unit* /*target*/)
         {
             int32 bonus = 0;
             if (Unit* caster = GetCaster())
@@ -155,7 +155,7 @@ public:
         }
     };
 
-    AuraScript *GetAuraScript() const
+    AuraScript* GetAuraScript() const
     {
         spell_mage_mana_adept_AuraScript *script = new spell_mage_mana_adept_AuraScript();
         script->SetMasteryAura(EFFECT_0, SPELL_AURA_ADD_PCT_MODIFIER/*SPELL_AURA_DUMMY*/); // changed in SpellMgr
@@ -170,7 +170,7 @@ class spell_mage_flashburn : public SpellScriptLoader
 public:
     spell_mage_flashburn() : SpellScriptLoader("spell_mage_flashburn") { }
 
-    AuraScript *GetAuraScript() const
+    AuraScript* GetAuraScript() const
     {
         MasteryScript* script = new MasteryScript();
         script->SetMasteryAura(EFFECT_0, SPELL_AURA_ADD_PCT_MODIFIER);
@@ -210,7 +210,7 @@ public:
         }
     };
 
-    AuraScript *GetAuraScript() const
+    AuraScript* GetAuraScript() const
     {
         spell_mage_frostburn_AuraScript *script = new spell_mage_frostburn_AuraScript();
         script->SetMasteryAura(EFFECT_0, SPELL_AURA_ADD_PCT_MODIFIER/*SPELL_AURA_DUMMY*/); // changed in SpellMgr
@@ -228,7 +228,7 @@ public:
     class spell_sha_elemental_overlord_AuraScript : public MasteryScript
     {
     public:
-        void OnProc(AuraEffect const * aurEff, Unit* unit, Unit *victim, uint32 damage, SpellInfo const* procSpell, uint32 procFlag, uint32 procExtra, WeaponAttackType attType, int32 cooldown)
+        void OnProc(AuraEffect const* aurEff, Unit* unit, Unit* victim, uint32 damage, SpellInfo const* procSpell, uint32 procFlag, uint32 procExtra, WeaponAttackType attType, int32 cooldown)
         {
             PreventDefaultAction();
             if (!(procFlag & PROC_FLAG_DONE_SPELL_MAGIC_DMG_CLASS_NEG))
@@ -288,7 +288,7 @@ public:
         }
     };
 
-    AuraScript *GetAuraScript() const
+    AuraScript* GetAuraScript() const
     {
         spell_sha_elemental_overlord_AuraScript* script = new spell_sha_elemental_overlord_AuraScript();
         script->SetMasteryAura(EFFECT_0, SPELL_AURA_DUMMY, true);
@@ -321,7 +321,7 @@ public:
     class spell_sha_deep_healing_AuraScript : public MasteryScript
     {
     public:
-        void CalcSpellMod(AuraEffect const * aurEff, SpellModifier *& spellMod, SpellInfo const * /*spellInfo*/, Unit * target)
+        void CalcSpellMod(AuraEffect const* aurEff, SpellModifier*& spellMod, SpellInfo const* /*spellInfo*/, Unit* target)
         {
             int32 bonus = 0;
             float pct = 0.0f;
@@ -380,7 +380,7 @@ public:
         }
     };
 
-    AuraScript *GetAuraScript() const
+    AuraScript* GetAuraScript() const
     {
         spell_hun_wild_quiver_AuraScript* script = new spell_hun_wild_quiver_AuraScript();
         script->SetMasteryAura(EFFECT_0, SPELL_AURA_DUMMY, true);
@@ -410,7 +410,7 @@ class spell_rog_potent_poisons : public SpellScriptLoader
 public:
     spell_rog_potent_poisons() : SpellScriptLoader("spell_rog_potent_poisons") { }
 
-    AuraScript *GetAuraScript() const
+    AuraScript* GetAuraScript() const
     {
         MasteryScript* script = new MasteryScript();
         script->SetMasteryAura(EFFECT_0, SPELL_AURA_ADD_PCT_MODIFIER);
@@ -444,7 +444,7 @@ public:
         }
     };
 
-    AuraScript *GetAuraScript() const
+    AuraScript* GetAuraScript() const
     {
         spell_rog_main_gauche_AuraScript* script = new spell_rog_main_gauche_AuraScript();
         script->SetMasteryAura(EFFECT_0, SPELL_AURA_DUMMY, true);
@@ -459,7 +459,7 @@ class spell_rog_executioner : public SpellScriptLoader
 public:
     spell_rog_executioner() : SpellScriptLoader("spell_rog_executioner") { }
 
-    AuraScript *GetAuraScript() const
+    AuraScript* GetAuraScript() const
     {
         MasteryScript* script = new MasteryScript();
         script->SetMasteryAura(EFFECT_0, SPELL_AURA_ADD_PCT_MODIFIER);
