@@ -144,6 +144,9 @@ MapDifficultyMap sMapDifficultyMap;
 
 DBCStorage <MovieEntry> sMovieStore(MovieEntryfmt);
 
+DBCStorage <NameGenEntry> sNameGenStore(NameGenfmt);
+GenNameVectorArraysMap sGenNameVectoArraysMap;
+
 DBCStorage <MountCapabilityEntry> sMountCapabilityStore(MountCapabilityfmt);
 DBCStorage <MountTypeEntry> sMountTypeStore(MountTypefmt);
 
