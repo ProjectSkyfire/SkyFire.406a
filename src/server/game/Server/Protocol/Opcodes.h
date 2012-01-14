@@ -1352,10 +1352,12 @@ enum Opcodes
     MSG_VERIFY_CONNECTIVITY                          = 0x04F57, // 4.3.0 15050
     CMSG_VIOLENCE_LEVEL                              = 0x07291, // 4.3.0 15050
     //SMSG_CUF_PROFILES_LOAD                           = 0x02428, // 4.3.0 15050
-	SMSG_PLAYER_MOVE                                 = 0x04418, // 4.3.0 15050
+    SMSG_PLAYER_MOVE                                 = 0x04418, // 4.3.0 15050
     CMSG_REQUEST_CEMETERY_LIST                       = 0x02081, // 4.3.0 15050
     SMSG_REQUEST_CEMETERY_LIST_RESPONSE              = 0x00CB8, // 4.3.0 15050
-    NUM_MSG_TYPES                                    = 0x10542  // last unknown opcode + 1.
+    CMSG_RANDOMIZE_CHAR_NAME                         = 0x04326, // 4.3.0 15050
+    SMSG_RANDOMIZE_CHAR_NAME                         = 0x024BA, // 4.3.0 15050
+    NUM_MSG_TYPES                                    = 0x10544  // last unknown opcode + 1.
 };
 
 extern void InitOpcodeTable();

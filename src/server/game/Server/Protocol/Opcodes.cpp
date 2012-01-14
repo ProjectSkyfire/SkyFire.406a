@@ -1286,4 +1286,6 @@ void InitOpcodeTable()
     OPCODE( SMSG_PLAYER_MOVE,                             STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( CMSG_REQUEST_CEMETERY_LIST,                   STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::HandleSendCemetryList           );
     OPCODE( SMSG_REQUEST_CEMETERY_LIST_RESPONSE,          STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide   );
+    OPCODE( CMSG_RANDOMIZE_CHAR_NAME,                     STATUS_AUTHED,   PROCESS_THREADUNSAFE,  &WorldSession::HandleRandomizeCharNameOpcode   );
+    OPCODE( SMSG_RANDOMIZE_CHAR_NAME,                     STATUS_AUTHED,   PROCESS_THREADUNSAFE,  &WorldSession::HandleRandomizeCharNameOpcode   );
 };

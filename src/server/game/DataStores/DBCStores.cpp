@@ -413,6 +413,14 @@ void LoadDBCStores(const std::string& dataPath, uint32& availableDbcLocales)
 
     sMapDifficultyStore.Clear();
 
+    LoadDBC(availableDbcLocales, bad_dbc_files, sNameGenStore,                dbcPath, "NameGen.dbc");//14545
+    for (uint32 i = 0; i < sNameGenStore.GetNumRows(); ++i)
+    {
+        if (NameGenEntry const* entry = sNameGenStore.LookupEntry(i))
+            sGenNameVectoArraysMap[entry->race].stringVectorArray[entry->gender].push_back(std::string(entry->name));
+    }
+    sNameGenStore.Clear();
+
     LoadDBC(availableDbcLocales, bad_dbc_files, sMovieStore,                  dbcPath, "Movie.dbc");
     LoadDBC(availableDbcLocales, bad_dbc_files, sMountCapabilityStore,        dbcPath, "MountCapability.dbc");
     LoadDBC(availableDbcLocales, bad_dbc_files, sMountTypeStore,              dbcPath, "MountType.dbc");
@@ -492,7 +500,7 @@ void LoadDBCStores(const std::string& dataPath, uint32& availableDbcLocales)
         for (int x = 0; x < MAX_DIFFICULTY; ++x)
             sSpellMgr->SetSpellDifficultyId(uint32(newEntry.SpellID[x]), spellDiff->ID);
     }
-	
+    
     // create talent spells set
     for (unsigned int i = 0; i < sTalentStore.GetNumRows(); ++i)
     {

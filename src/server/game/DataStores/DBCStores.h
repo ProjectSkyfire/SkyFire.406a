@@ -46,10 +46,10 @@ const std::string* GetRandomCharacterName(uint8 race, uint8 gender);
 
 enum ContentLevels
 {
-	CONTENT_1_60 = 0,
-	CONTENT_61_70,
-	CONTENT_71_80,
-	CONTENT_81_85
+    CONTENT_1_60 = 0,
+    CONTENT_61_70,
+    CONTENT_71_80,
+    CONTENT_81_85
 };
 ContentLevels GetContentLevelsForMapAndZone(uint32 mapid, uint32 zoneId);
 

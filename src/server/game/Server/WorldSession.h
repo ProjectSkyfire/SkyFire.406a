@@ -410,6 +410,8 @@ class WorldSession
         void HandlePlayerLogin(LoginQueryHolder * holder);
         void HandleCharFactionOrRaceChange(WorldPacket& recv_data);
 
+        void HandleRandomizeCharNameOpcode(WorldPacket& recv_data);
+
         // played time
         void HandlePlayedTime(WorldPacket& recvPacket);
 
@@ -920,7 +922,7 @@ class WorldSession
         void HandleReforgeItem(WorldPacket& recv_data);
         void HandleSendCemetryList(WorldPacket& recvPacket);
 
-		void PlayerViolenceLevel(WorldPacket& recvPacket);
+        void PlayerViolenceLevel(WorldPacket& recvPacket);
 
     private:
         void InitializeQueryCallbackParameters();
