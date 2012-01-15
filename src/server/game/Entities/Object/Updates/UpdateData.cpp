@@ -44,28 +44,50 @@ void UpdateData::AddUpdateBlock(const ByteBuffer &block)
     ++m_blockCount;
 }
 
-bool UpdateData::BuildPacket(WorldPacket* packet)
+bool UpdateData::BuildPacket(WorldPacket *packet)
 {
     ASSERT(packet->empty());                                // shouldn't happen
 
-    packet->Initialize(SMSG_UPDATE_OBJECT, 2 + 4 + (m_outOfRangeGUIDs.empty() ? 0 : 1 + 4 + 9 * m_outOfRangeGUIDs.size()) + m_data.wpos());
+    ByteBuffer buf(2 + 4 + (m_outOfRangeGUIDs.empty() ? 0 : 1 + 4 + 9 * m_outOfRangeGUIDs.size()) + m_data.wpos());
 
-    *packet << uint16(m_map);
-    *packet << uint32(m_blockCount);
+    buf << uint16(m_map);
+    buf << uint32(!m_outOfRangeGUIDs.empty() ? m_blockCount + 1 : m_blockCount);
 
     if (!m_outOfRangeGUIDs.empty())
     {
-        *packet << uint8(UPDATETYPE_OUT_OF_RANGE_OBJECTS);
-        *packet << uint32(m_outOfRangeGUIDs.size());
+        buf << uint8(UPDATETYPE_OUT_OF_RANGE_OBJECTS);
+        buf << uint32(m_outOfRangeGUIDs.size());
 
         for (std::set<uint64>::const_iterator i = m_outOfRangeGUIDs.begin(); i != m_outOfRangeGUIDs.end(); ++i)
-            packet->appendPackGUID(*i);
+        {
+            buf.appendPackGUID(*i);
+        }
     }
 
-    packet->append(m_data);
+    buf.append(m_data);
 
-    //if (packet->wpos() > 100)
-    //    packet->compress(SMSG_COMPRESSED_UPDATE_OBJECT);
+    // Disabled
+    /*
+    size_t pSize = buf.wpos();                             // use real used data size
+
+    if (pSize > 100)                                       // compress large packets
+    {
+        uint32 destsize = compressBound(pSize);
+        packet->resize(destsize + sizeof(uint32));
+
+        packet->put<uint32>(0, pSize);
+        Compress(const_cast<uint8*>(packet->contents()) + sizeof(uint32), &destsize, (void*)buf.contents(), pSize);
+        if (destsize == 0)
+            return false;
+
+        packet->resize(destsize + sizeof(uint32));
+        packet->SetOpcode(SMSG_COMPRESSED_UPDATE_OBJECT);
+    }
+    else                                                    // send small packets without compression
+    {*/
+        packet->append(buf);
+        packet->SetOpcode(SMSG_UPDATE_OBJECT);
+    //}
 
     return true;
 }

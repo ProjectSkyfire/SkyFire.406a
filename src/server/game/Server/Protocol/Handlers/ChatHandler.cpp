@@ -128,6 +128,9 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 
     sLog->outDebug(LOG_FILTER_NETWORKIO, "CHAT: packet received. type %u, lang %u", type, lang );
 
+    recv_data.ReadInt8();   // unk 4.3
+    recv_data.ReadInt8();   // unk 4.3
+
     std::string msg = "";
     recv_data >> msg;
 
