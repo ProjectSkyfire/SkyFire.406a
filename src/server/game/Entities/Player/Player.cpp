@@ -4830,7 +4830,7 @@ void Player::DeleteFromDB(uint64 playerguid, uint32 accountId, bool updateRealmC
     // bones will be deleted by corpse/bones deleting thread shortly
     sObjectAccessor->ConvertCorpseForPlayer(playerguid);
 
-    if (uint32 guildId = GetGuildIdFromDB(playerguid))
+    if (uint32 guildId = GetGuildIdFromGuid(playerguid))
         if (Guild* guild = sGuildMgr->GetGuildById(guildId))
             guild->DeleteMember(guid);
 
@@ -7411,14 +7411,14 @@ void Player::ModifyArenaPoints(int32 value, SQLTransaction* trans /*=NULL*/)
         (*trans)->PAppend("UPDATE characters SET arenaPoints=%u WHERE guid=%u", newValue, GetGUIDLow());
 }
 
-uint32 Player::GetGuildIdFromDB(uint64 guid)
+uint32 Player::GetGuildIdFromGuid(uint64 guid)
 {
-    QueryResult result = CharacterDatabase.PQuery("SELECT guildid FROM guild_member WHERE guid='%u'", GUID_LOPART(guid));
-    if (!result)
-        return 0;
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_GET_GUILD_ID);
+    stmt->setUInt64(0, guid);
+    if (PreparedQueryResult result = CharacterDatabase.Query(stmt))
+        return (*result)[0].GetUInt32();
 
-    uint32 id = result->Fetch()[0].GetUInt32();
-    return id;
+    return 0;
 }
 
 uint8 Player::GetRankFromDB(uint64 guid)

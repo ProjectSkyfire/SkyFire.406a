@@ -103,7 +103,7 @@ class spell_warr_bloodthirst : public SpellScriptLoader
             void CalculateDamage(SpellEffIndex /*effect*/)
             {
                 // Formula: AttackPower * BasePoints / 100
-                if(Unit* caster = GetCaster())
+                if (Unit* caster = GetCaster())
                 {
                     int32 dmg = int32(GetHitDamage() * caster->GetTotalAttackPowerValue(BASE_ATTACK) / 100);
                     SetHitDamage(dmg);

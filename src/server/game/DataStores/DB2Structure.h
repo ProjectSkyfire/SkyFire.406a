@@ -39,7 +39,7 @@
 #pragma pack(push, 1)
 #endif
 
-// Structures using to access raw DB2 data and required packing to portability
+// Structures used to access raw DB2 data and required packing to portability
 struct ItemEntry
 {
    uint32   ID;                                             // 0

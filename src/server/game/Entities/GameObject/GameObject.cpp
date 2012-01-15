@@ -852,7 +852,7 @@ void GameObject::SaveRespawnTime()
         sObjectMgr->SaveGORespawnTime(m_DBTableGuid, GetInstanceId(), m_respawnTime);
 }
 
-bool GameObject::isAlwaysVisibleFor(WorldObject const* seer) const
+bool GameObject::IsAlwaysVisibleFor(WorldObject const* seer) const
 {
     if (WorldObject::IsAlwaysVisibleFor(seer))
         return true;
@@ -1298,8 +1298,8 @@ void GameObject::Use(Unit* user)
                     {
                         player->UpdateFishingSkill();
                         //TODO: I do not understand this hack. Need some explanation.
+                        // prevent removing GO at spell cancel
                         RemoveFromOwner();
-                        player->RemoveGameObject(this, false);
                         SetOwnerGUID(player->GetGUID());
 
                         //TODO: find reasonable value for fishing hole search
@@ -1875,4 +1875,10 @@ void GameObject::SetDestructibleState(GameObjectDestructibleState state, Player*
             break;
         }
     }
+}
+
+void GameObject::SetLootState(LootState s)
+{
+    m_lootState = s;
+    AI()->OnStateChanged(s);
 }

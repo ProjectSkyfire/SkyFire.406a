@@ -716,7 +716,7 @@ class GameObject : public WorldObject, public GridObject<GameObject>
         void Use(Unit* user);
 
         LootState getLootState() const { return m_lootState; }
-        void SetLootState(LootState s) { m_lootState = s; }
+        void SetLootState(LootState s);
 
         uint16 GetLootMode() { return m_LootMode; }
         bool HasLootMode(uint16 lootMode) { return m_LootMode & lootMode; }
@@ -756,7 +756,7 @@ class GameObject : public WorldObject, public GridObject<GameObject>
 
         void TriggeringLinkedGameObject(uint32 trapEntry, Unit* target);
 
-        bool isAlwaysVisibleFor(WorldObject const* seer) const;
+        bool IsAlwaysVisibleFor(WorldObject const* seer) const;
         bool IsInvisibleDueToDespawn() const;
 
         uint8 getLevelForTarget(WorldObject const* target) const
