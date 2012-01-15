@@ -15,7 +15,7 @@ CREATE TABLE `account_data` (
   `time` int(10) unsigned NOT NULL DEFAULT '0',
   `data` blob NOT NULL,
   PRIMARY KEY (`accountId`,`type`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 LOCK TABLES `account_data` WRITE;
 /*!40000 ALTER TABLE `account_data` DISABLE KEYS */;
@@ -27,7 +27,7 @@ CREATE TABLE `account_instance_times` (
   `instanceId` int(10) unsigned NOT NULL DEFAULT '0',
   `releaseTime` bigint(20) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`accountId`,`instanceId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 LOCK TABLES `account_instance_times` WRITE;
 /*!40000 ALTER TABLE `account_instance_times` DISABLE KEYS */;
@@ -45,7 +45,7 @@ CREATE TABLE `account_tutorial` (
   `tut6` int(10) unsigned NOT NULL DEFAULT '0',
   `tut7` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`accountId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Player System';
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Player System';
 
 LOCK TABLES `account_tutorial` WRITE;
 /*!40000 ALTER TABLE `account_tutorial` DISABLE KEYS */;
@@ -56,7 +56,7 @@ CREATE TABLE `addons` (
   `name` varchar(120) NOT NULL DEFAULT '',
   `crc` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Addons';
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Addons';
 
 LOCK TABLES `addons` WRITE;
 /*!40000 ALTER TABLE `addons` DISABLE KEYS */;
@@ -90,7 +90,7 @@ CREATE TABLE `arena_team` (
   `borderStyle` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `borderColor` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`arenaTeamId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 LOCK TABLES `arena_team` WRITE;
 /*!40000 ALTER TABLE `arena_team` DISABLE KEYS */;
@@ -106,7 +106,7 @@ CREATE TABLE `arena_team_member` (
   `seasonGames` smallint(5) unsigned NOT NULL DEFAULT '0',
   `seasonWins` smallint(5) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`arenaTeamId`,`guid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 LOCK TABLES `arena_team_member` WRITE;
 /*!40000 ALTER TABLE `arena_team_member` DISABLE KEYS */;
@@ -122,7 +122,7 @@ CREATE TABLE `arena_team_stats` (
   `wins2` int(10) unsigned NOT NULL DEFAULT '0',
   `rank` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`arenateamid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 LOCK TABLES `arena_team_stats` WRITE;
 /*!40000 ALTER TABLE `arena_team_stats` DISABLE KEYS */;
@@ -178,7 +178,7 @@ CREATE TABLE `auctionhouse` (
   `deposit` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `item_guid` (`itemguid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 LOCK TABLES `auctionhouse` WRITE;
 /*!40000 ALTER TABLE `auctionhouse` DISABLE KEYS */;
@@ -190,7 +190,7 @@ CREATE TABLE `bugreport` (
   `type` longtext NOT NULL,
   `content` longtext NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Debug System';
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Debug System';
 
 LOCK TABLES `bugreport` WRITE;
 /*!40000 ALTER TABLE `bugreport` DISABLE KEYS */;
@@ -206,7 +206,7 @@ CREATE TABLE `channels` (
   `bannedList` text,
   `lastUsed` int(10) unsigned NOT NULL,
   PRIMARY KEY (`name`,`team`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Channel System';
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Channel System';
 
 LOCK TABLES `channels` WRITE;
 /*!40000 ALTER TABLE `channels` DISABLE KEYS */;
@@ -219,7 +219,7 @@ CREATE TABLE `character_account_data` (
   `time` int(10) unsigned NOT NULL DEFAULT '0',
   `data` blob NOT NULL,
   PRIMARY KEY (`guid`,`type`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 LOCK TABLES `character_account_data` WRITE;
 /*!40000 ALTER TABLE `character_account_data` DISABLE KEYS */;
@@ -231,7 +231,7 @@ CREATE TABLE `character_achievement` (
   `achievement` smallint(5) unsigned NOT NULL,
   `date` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`guid`,`achievement`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 LOCK TABLES `character_achievement` WRITE;
 /*!40000 ALTER TABLE `character_achievement` DISABLE KEYS */;
@@ -244,7 +244,7 @@ CREATE TABLE `character_achievement_progress` (
   `counter` int(10) unsigned NOT NULL,
   `date` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`guid`,`criteria`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 LOCK TABLES `character_achievement_progress` WRITE;
 /*!40000 ALTER TABLE `character_achievement_progress` DISABLE KEYS */;
@@ -258,7 +258,7 @@ CREATE TABLE `character_action` (
   `action` int(10) unsigned NOT NULL DEFAULT '0',
   `type` tinyint(3) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`guid`,`spec`,`button`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 LOCK TABLES `character_action` WRITE;
 /*!40000 ALTER TABLE `character_action` DISABLE KEYS */;
@@ -270,7 +270,7 @@ CREATE TABLE `character_arena_stats` (
   `slot` tinyint(3) NOT NULL,
   `matchMakerRating` smallint(5) NOT NULL,
   PRIMARY KEY (`guid`,`slot`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 LOCK TABLES `character_arena_stats` WRITE;
 /*!40000 ALTER TABLE `character_arena_stats` DISABLE KEYS */;
@@ -295,7 +295,7 @@ CREATE TABLE `character_aura` (
   `remaintime` int(11) NOT NULL DEFAULT '0',
   `remaincharges` tinyint(3) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`guid`,`caster_guid`,`item_guid`,`spell`,`effect_mask`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Player System';
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Player System';
 
 LOCK TABLES `character_aura` WRITE;
 /*!40000 ALTER TABLE `character_aura` DISABLE KEYS */;
@@ -310,7 +310,7 @@ CREATE TABLE `character_banned` (
   `banreason` varchar(255) NOT NULL,
   `active` tinyint(3) unsigned NOT NULL DEFAULT '1',
   PRIMARY KEY (`guid`,`bandate`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Ban List';
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Ban List';
 
 LOCK TABLES `character_banned` WRITE;
 /*!40000 ALTER TABLE `character_banned` DISABLE KEYS */;
@@ -330,7 +330,7 @@ CREATE TABLE `character_battleground_data` (
   `taxiEnd` int(10) unsigned NOT NULL DEFAULT '0',
   `mountSpell` mediumint(8) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`guid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Player System';
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Player System';
 
 LOCK TABLES `character_battleground_data` WRITE;
 /*!40000 ALTER TABLE `character_battleground_data` DISABLE KEYS */;
@@ -340,7 +340,7 @@ DROP TABLE IF EXISTS `character_battleground_random`;
 CREATE TABLE `character_battleground_random` (
   `guid` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`guid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 LOCK TABLES `character_battleground_random` WRITE;
 /*!40000 ALTER TABLE `character_battleground_random` DISABLE KEYS */;
@@ -365,7 +365,7 @@ CREATE TABLE `character_currency` (
   `count` smallint(5) unsigned NOT NULL,
   `thisweek` smallint(5) unsigned NOT NULL,
   PRIMARY KEY (`guid`,`currency`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 LOCK TABLES `character_currency` WRITE;
 /*!40000 ALTER TABLE `character_currency` DISABLE KEYS */;
@@ -380,7 +380,7 @@ CREATE TABLE `character_declinedname` (
   `instrumental` varchar(15) NOT NULL DEFAULT '',
   `prepositional` varchar(15) NOT NULL DEFAULT '',
   PRIMARY KEY (`guid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 LOCK TABLES `character_declinedname` WRITE;
 /*!40000 ALTER TABLE `character_declinedname` DISABLE KEYS */;
@@ -415,7 +415,7 @@ CREATE TABLE `character_equipmentsets` (
   PRIMARY KEY (`setguid`),
   UNIQUE KEY `idx_set` (`guid`,`setguid`,`setindex`) USING BTREE,
   KEY `Idx_setindex` (`setindex`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=265 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=265 DEFAULT CHARSET=utf8;
 
 LOCK TABLES `character_equipmentsets` WRITE;
 /*!40000 ALTER TABLE `character_equipmentsets` DISABLE KEYS */;
@@ -445,7 +445,7 @@ CREATE TABLE `character_gifts` (
   `flags` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`item_guid`),
   KEY `idx_guid` (`guid`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 LOCK TABLES `character_gifts` WRITE;
 /*!40000 ALTER TABLE `character_gifts` DISABLE KEYS */;
@@ -465,7 +465,7 @@ CREATE TABLE `character_glyphs` (
   `glyph8` smallint(5) unsigned DEFAULT '0',
   `glyph9` int(11) unsigned DEFAULT '0',
   PRIMARY KEY (`guid`,`spec`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 LOCK TABLES `character_glyphs` WRITE;
 /*!40000 ALTER TABLE `character_glyphs` DISABLE KEYS */;
@@ -480,7 +480,7 @@ CREATE TABLE `character_homebind` (
   `posY` float NOT NULL DEFAULT '0',
   `posZ` float NOT NULL DEFAULT '0',
   PRIMARY KEY (`guid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Player System';
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Player System';
 
 LOCK TABLES `character_homebind` WRITE;
 /*!40000 ALTER TABLE `character_homebind` DISABLE KEYS */;
@@ -493,7 +493,7 @@ CREATE TABLE `character_instance` (
   `permanent` tinyint(3) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`guid`,`instance`),
   KEY `instance` (`instance`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 LOCK TABLES `character_instance` WRITE;
 /*!40000 ALTER TABLE `character_instance` DISABLE KEYS */;
@@ -507,7 +507,7 @@ CREATE TABLE `character_inventory` (
   `item` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Item Global Unique Identifier',
   PRIMARY KEY (`item`),
   KEY `idx_guid` (`guid`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Player System';
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Player System';
 
 LOCK TABLES `character_inventory` WRITE;
 /*!40000 ALTER TABLE `character_inventory` DISABLE KEYS */;
@@ -535,7 +535,7 @@ CREATE TABLE `character_pet` (
   PRIMARY KEY (`id`),
   KEY `owner` (`owner`) USING BTREE,
   KEY `idx_slot` (`slot`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Pet System';
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Pet System';
 
 LOCK TABLES `character_pet` WRITE;
 /*!40000 ALTER TABLE `character_pet` DISABLE KEYS */;
@@ -552,7 +552,7 @@ CREATE TABLE `character_pet_declinedname` (
   `prepositional` varchar(12) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   KEY `owner_key` (`owner`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 LOCK TABLES `character_pet_declinedname` WRITE;
 /*!40000 ALTER TABLE `character_pet_declinedname` DISABLE KEYS */;
@@ -575,7 +575,7 @@ CREATE TABLE `character_queststatus` (
   `itemcount4` smallint(5) unsigned NOT NULL DEFAULT '0',
   `playercount` smallint(5) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`guid`,`quest`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Player System';
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Player System';
 
 LOCK TABLES `character_queststatus` WRITE;
 /*!40000 ALTER TABLE `character_queststatus` DISABLE KEYS */;
@@ -588,7 +588,7 @@ CREATE TABLE `character_queststatus_daily` (
   `time` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`guid`,`quest`),
   KEY `idx_guid` (`guid`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Player System';
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Player System';
 
 LOCK TABLES `character_queststatus_daily` WRITE;
 /*!40000 ALTER TABLE `character_queststatus_daily` DISABLE KEYS */;
@@ -599,7 +599,7 @@ CREATE TABLE `character_queststatus_rewarded` (
   `guid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Global Unique Identifier',
   `quest` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Quest Identifier',
   PRIMARY KEY (`guid`,`quest`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Player System';
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Player System';
 
 LOCK TABLES `character_queststatus_rewarded` WRITE;
 /*!40000 ALTER TABLE `character_queststatus_rewarded` DISABLE KEYS */;
@@ -611,7 +611,7 @@ CREATE TABLE `character_queststatus_weekly` (
   `quest` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Quest Identifier',
   PRIMARY KEY (`guid`,`quest`),
   KEY `idx_guid` (`guid`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Player System';
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Player System';
 
 LOCK TABLES `character_queststatus_weekly` WRITE;
 /*!40000 ALTER TABLE `character_queststatus_weekly` DISABLE KEYS */;
@@ -624,7 +624,7 @@ CREATE TABLE `character_reputation` (
   `standing` int(11) NOT NULL DEFAULT '0',
   `flags` smallint(5) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`guid`,`faction`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Player System';
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Player System';
 
 LOCK TABLES `character_reputation` WRITE;
 /*!40000 ALTER TABLE `character_reputation` DISABLE KEYS */;
@@ -637,7 +637,7 @@ CREATE TABLE `character_skills` (
   `value` smallint(5) unsigned NOT NULL,
   `max` smallint(5) unsigned NOT NULL,
   PRIMARY KEY (`guid`,`skill`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Player System';
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Player System';
 
 LOCK TABLES `character_skills` WRITE;
 /*!40000 ALTER TABLE `character_skills` DISABLE KEYS */;
@@ -651,7 +651,7 @@ CREATE TABLE `character_social` (
   `note` varchar(48) NOT NULL DEFAULT '' COMMENT 'Friend Note',
   PRIMARY KEY (`guid`,`friend`,`flags`),
   KEY `friend` (`friend`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Player System';
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Player System';
 
 LOCK TABLES `character_social` WRITE;
 /*!40000 ALTER TABLE `character_social` DISABLE KEYS */;
@@ -664,7 +664,7 @@ CREATE TABLE `character_spell` (
   `active` tinyint(3) unsigned NOT NULL DEFAULT '1',
   `disabled` tinyint(3) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`guid`,`spell`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Player System';
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Player System';
 
 LOCK TABLES `character_spell` WRITE;
 /*!40000 ALTER TABLE `character_spell` DISABLE KEYS */;
@@ -677,7 +677,7 @@ CREATE TABLE `character_spell_cooldown` (
   `item` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Item Identifier',
   `time` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`guid`,`spell`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 LOCK TABLES `character_spell_cooldown` WRITE;
 /*!40000 ALTER TABLE `character_spell_cooldown` DISABLE KEYS */;
@@ -720,7 +720,7 @@ CREATE TABLE `character_stats` (
   `spellPower` int(10) unsigned NOT NULL DEFAULT '0',
   `resilience` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`guid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 LOCK TABLES `character_stats` WRITE;
 /*!40000 ALTER TABLE `character_stats` DISABLE KEYS */;
@@ -732,7 +732,7 @@ CREATE TABLE `character_talent` (
   `spell` mediumint(8) unsigned NOT NULL,
   `spec` tinyint(3) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`guid`,`spell`,`spec`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 LOCK TABLES `character_talent` WRITE;
 /*!40000 ALTER TABLE `character_talent` DISABLE KEYS */;
@@ -750,7 +750,7 @@ CREATE TABLE `character_tutorial` (
   `tut6` int(10) unsigned NOT NULL DEFAULT '0',
   `tut7` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`account`)
-) ENGINE=InnoDB AUTO_INCREMENT=17959 DEFAULT CHARSET=utf8 COMMENT='Player System';
+) ENGINE=MyISAM AUTO_INCREMENT=17959 DEFAULT CHARSET=utf8 COMMENT='Player System';
 
 LOCK TABLES `character_tutorial` WRITE;
 /*!40000 ALTER TABLE `character_tutorial` DISABLE KEYS */;
@@ -848,7 +848,7 @@ CREATE TABLE `characters` (
   KEY `idx_account` (`account`) USING BTREE,
   KEY `idx_online` (`online`) USING BTREE,
   KEY `idx_name` (`name`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Player System';
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Player System';
 
 LOCK TABLES `characters` WRITE;
 /*!40000 ALTER TABLE `characters` DISABLE KEYS */;
@@ -903,7 +903,7 @@ CREATE TABLE `corpse` (
   KEY `idx_instance` (`instanceId`) USING BTREE,
   KEY `idx_player` (`guid`) USING BTREE,
   KEY `idx_time` (`time`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Death System';
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Death System';
 
 LOCK TABLES `corpse` WRITE;
 /*!40000 ALTER TABLE `corpse` DISABLE KEYS */;
@@ -932,7 +932,7 @@ CREATE TABLE `creature_respawn` (
   `instanceId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Instance Identifier',
   PRIMARY KEY (`guid`,`instanceId`),
   KEY `idx_instance` (`instanceId`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Grid Loading System';
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Grid Loading System';
 
 LOCK TABLES `creature_respawn` WRITE;
 /*!40000 ALTER TABLE `creature_respawn` DISABLE KEYS */;
@@ -944,7 +944,7 @@ CREATE TABLE `game_event_condition_save` (
   `condition_id` int(10) unsigned NOT NULL DEFAULT '0',
   `done` float DEFAULT '0',
   PRIMARY KEY (`eventEntry`,`condition_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 LOCK TABLES `game_event_condition_save` WRITE;
 /*!40000 ALTER TABLE `game_event_condition_save` DISABLE KEYS */;
@@ -956,7 +956,7 @@ CREATE TABLE `game_event_save` (
   `state` tinyint(3) unsigned NOT NULL DEFAULT '1',
   `next_start` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`eventEntry`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 LOCK TABLES `game_event_save` WRITE;
 /*!40000 ALTER TABLE `game_event_save` DISABLE KEYS */;
@@ -969,7 +969,7 @@ CREATE TABLE `gameobject_respawn` (
   `instanceId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Instance Identifier',
   PRIMARY KEY (`guid`,`instanceId`),
   KEY `idx_instance` (`instanceId`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Grid Loading System';
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Grid Loading System';
 
 LOCK TABLES `gameobject_respawn` WRITE;
 /*!40000 ALTER TABLE `gameobject_respawn` DISABLE KEYS */;
@@ -982,7 +982,7 @@ CREATE TABLE `gm_subsurveys` (
   `rank` int(10) unsigned NOT NULL DEFAULT '0',
   `comment` text NOT NULL,
   PRIMARY KEY (`surveyId`,`subsurveyId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Player System';
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Player System';
 
 LOCK TABLES `gm_subsurveys` WRITE;
 /*!40000 ALTER TABLE `gm_subsurveys` DISABLE KEYS */;
@@ -996,7 +996,7 @@ CREATE TABLE `gm_surveys` (
   `overallComment` longtext NOT NULL,
   `createTime` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`surveyId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Player System';
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Player System';
 
 LOCK TABLES `gm_surveys` WRITE;
 /*!40000 ALTER TABLE `gm_surveys` DISABLE KEYS */;
@@ -1021,7 +1021,7 @@ CREATE TABLE `gm_tickets` (
   `escalated` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `viewed` tinyint(3) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`ticketId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Player System';
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Player System';
 
 LOCK TABLES `gm_tickets` WRITE;
 /*!40000 ALTER TABLE `gm_tickets` DISABLE KEYS */;
@@ -1034,7 +1034,7 @@ CREATE TABLE `group_instance` (
   `permanent` tinyint(3) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`guid`,`instance`),
   KEY `instance` (`instance`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 LOCK TABLES `group_instance` WRITE;
 /*!40000 ALTER TABLE `group_instance` DISABLE KEYS */;
@@ -1048,7 +1048,7 @@ CREATE TABLE `group_member` (
   `subgroup` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `roles` tinyint(3) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`memberGuid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Groups';
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Groups';
 
 LOCK TABLES `group_member` WRITE;
 /*!40000 ALTER TABLE `group_member` DISABLE KEYS */;
@@ -1074,7 +1074,7 @@ CREATE TABLE `groups` (
   `raiddifficulty` tinyint(3) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`guid`),
   KEY `leaderGuid` (`leaderGuid`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Groups';
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Groups';
 
 LOCK TABLES `groups` WRITE;
 /*!40000 ALTER TABLE `groups` DISABLE KEYS */;
@@ -1099,7 +1099,7 @@ CREATE TABLE `guild` (
   `m_today_xp` bigint(20) NOT NULL,
   `m_xp_cap` bigint(20) NOT NULL,
   PRIMARY KEY (`guildid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Guild System';
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Guild System';
 
 LOCK TABLES `guild` WRITE;
 /*!40000 ALTER TABLE `guild` DISABLE KEYS */;
@@ -1120,7 +1120,7 @@ CREATE TABLE `guild_bank_eventlog` (
   KEY `guildid_key` (`guildid`),
   KEY `Idx_PlayerGuid` (`PlayerGuid`),
   KEY `Idx_LogGuid` (`LogGuid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 LOCK TABLES `guild_bank_eventlog` WRITE;
 /*!40000 ALTER TABLE `guild_bank_eventlog` DISABLE KEYS */;
@@ -1135,7 +1135,7 @@ CREATE TABLE `guild_bank_item` (
   PRIMARY KEY (`guildid`,`TabId`,`SlotId`),
   KEY `guildid_key` (`guildid`),
   KEY `Idx_item_guid` (`item_guid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 LOCK TABLES `guild_bank_item` WRITE;
 /*!40000 ALTER TABLE `guild_bank_item` DISABLE KEYS */;
@@ -1150,7 +1150,7 @@ CREATE TABLE `guild_bank_right` (
   `SlotPerDay` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`guildid`,`TabId`,`rid`),
   KEY `guildid_key` (`guildid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 LOCK TABLES `guild_bank_right` WRITE;
 /*!40000 ALTER TABLE `guild_bank_right` DISABLE KEYS */;
@@ -1165,7 +1165,7 @@ CREATE TABLE `guild_bank_tab` (
   `TabText` varchar(500) DEFAULT NULL,
   PRIMARY KEY (`guildid`,`TabId`),
   KEY `guildid_key` (`guildid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 LOCK TABLES `guild_bank_tab` WRITE;
 /*!40000 ALTER TABLE `guild_bank_tab` DISABLE KEYS */;
@@ -1184,7 +1184,7 @@ CREATE TABLE `guild_eventlog` (
   KEY `Idx_PlayerGuid1` (`PlayerGuid1`),
   KEY `Idx_PlayerGuid2` (`PlayerGuid2`),
   KEY `Idx_LogGuid` (`LogGuid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Guild Eventlog';
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Guild Eventlog';
 
 LOCK TABLES `guild_eventlog` WRITE;
 /*!40000 ALTER TABLE `guild_eventlog` DISABLE KEYS */;
@@ -1214,7 +1214,7 @@ CREATE TABLE `guild_member` (
   UNIQUE KEY `guid_key` (`guid`),
   KEY `guildid_key` (`guildid`),
   KEY `guildid_rank_key` (`guildid`,`rank`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Guild System';
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Guild System';
 
 LOCK TABLES `guild_member` WRITE;
 /*!40000 ALTER TABLE `guild_member` DISABLE KEYS */;
@@ -1229,7 +1229,7 @@ CREATE TABLE `guild_rank` (
   `BankMoneyPerDay` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`guildid`,`rid`),
   KEY `Idx_rid` (`rid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Guild System';
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Guild System';
 
 LOCK TABLES `guild_rank` WRITE;
 /*!40000 ALTER TABLE `guild_rank` DISABLE KEYS */;
@@ -1247,7 +1247,7 @@ CREATE TABLE `instance` (
   KEY `map` (`map`) USING BTREE,
   KEY `resettime` (`resettime`) USING BTREE,
   KEY `difficulty` (`difficulty`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 LOCK TABLES `instance` WRITE;
 /*!40000 ALTER TABLE `instance` DISABLE KEYS */;
@@ -1274,7 +1274,7 @@ CREATE TABLE `instance_reset` (
   `resettime` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`mapid`,`difficulty`),
   KEY `difficulty` (`difficulty`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 LOCK TABLES `instance_reset` WRITE;
 /*!40000 ALTER TABLE `instance_reset` DISABLE KEYS */;
@@ -1313,7 +1313,7 @@ CREATE TABLE `item_instance` (
   `text` text,
   PRIMARY KEY (`guid`),
   KEY `idx_owner_guid` (`owner_guid`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Item System';
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Item System';
 
 LOCK TABLES `item_instance` WRITE;
 /*!40000 ALTER TABLE `item_instance` DISABLE KEYS */;
@@ -1326,7 +1326,7 @@ CREATE TABLE `item_refund_instance` (
   `paidMoney` int(10) unsigned NOT NULL DEFAULT '0',
   `paidExtendedCost` smallint(5) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`item_guid`,`player_guid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Item Refund System';
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Item Refund System';
 
 LOCK TABLES `item_refund_instance` WRITE;
 /*!40000 ALTER TABLE `item_refund_instance` DISABLE KEYS */;
@@ -1337,7 +1337,7 @@ CREATE TABLE `item_soulbound_trade_data` (
   `itemGuid` int(10) unsigned NOT NULL COMMENT 'Item GUID',
   `allowedPlayers` text NOT NULL COMMENT 'Space separated GUID list of players who can receive this item in trade',
   PRIMARY KEY (`itemGuid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Item Refund System';
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Item Refund System';
 
 LOCK TABLES `item_soulbound_trade_data` WRITE;
 /*!40000 ALTER TABLE `item_soulbound_trade_data` DISABLE KEYS */;
@@ -1353,7 +1353,7 @@ CREATE TABLE `lag_reports` (
   `posY` float NOT NULL DEFAULT '0',
   `posZ` float NOT NULL DEFAULT '0',
   PRIMARY KEY (`reportId`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COMMENT='Player System';
+) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COMMENT='Player System';
 
 LOCK TABLES `lag_reports` WRITE;
 /*!40000 ALTER TABLE `lag_reports` DISABLE KEYS */;
@@ -1377,7 +1377,7 @@ CREATE TABLE `mail` (
   `checked` tinyint(3) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `idx_receiver` (`receiver`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Mail System';
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Mail System';
 
 LOCK TABLES `mail` WRITE;
 /*!40000 ALTER TABLE `mail` DISABLE KEYS */;
@@ -1418,7 +1418,7 @@ CREATE TABLE `mail_items` (
   PRIMARY KEY (`item_guid`),
   KEY `idx_receiver` (`receiver`) USING BTREE,
   KEY `idx_mail_id` (`mail_id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 LOCK TABLES `mail_items` WRITE;
 /*!40000 ALTER TABLE `mail_items` DISABLE KEYS */;
@@ -1442,7 +1442,7 @@ CREATE TABLE `pet_aura` (
   `remaintime` int(11) NOT NULL DEFAULT '0',
   `remaincharges` tinyint(3) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`guid`,`spell`,`effect_mask`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Pet System';
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Pet System';
 
 LOCK TABLES `pet_aura` WRITE;
 /*!40000 ALTER TABLE `pet_aura` DISABLE KEYS */;
@@ -1454,7 +1454,7 @@ CREATE TABLE `pet_spell` (
   `spell` mediumint(8) unsigned NOT NULL DEFAULT '0' COMMENT 'Spell Identifier',
   `active` tinyint(3) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`guid`,`spell`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Pet System';
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Pet System';
 
 LOCK TABLES `pet_spell` WRITE;
 /*!40000 ALTER TABLE `pet_spell` DISABLE KEYS */;
@@ -1466,7 +1466,7 @@ CREATE TABLE `pet_spell_cooldown` (
   `spell` mediumint(8) unsigned NOT NULL DEFAULT '0' COMMENT 'Spell Identifier',
   `time` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`guid`,`spell`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 LOCK TABLES `pet_spell_cooldown` WRITE;
 /*!40000 ALTER TABLE `pet_spell_cooldown` DISABLE KEYS */;
@@ -1480,7 +1480,7 @@ CREATE TABLE `petition` (
   `type` tinyint(3) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`ownerguid`,`type`),
   UNIQUE KEY `index_ownerguid_petitionguid` (`ownerguid`,`petitionguid`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Guild System';
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Guild System';
 
 LOCK TABLES `petition` WRITE;
 /*!40000 ALTER TABLE `petition` DISABLE KEYS */;
@@ -1496,7 +1496,7 @@ CREATE TABLE `petition_sign` (
   PRIMARY KEY (`petitionguid`,`playerguid`),
   KEY `Idx_playerguid` (`playerguid`) USING BTREE,
   KEY `Idx_ownerguid` (`ownerguid`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Guild System';
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Guild System';
 
 LOCK TABLES `petition_sign` WRITE;
 /*!40000 ALTER TABLE `petition_sign` DISABLE KEYS */;
@@ -1507,7 +1507,7 @@ CREATE TABLE `pool_quest_save` (
   `pool_id` int(10) unsigned NOT NULL DEFAULT '0',
   `quest_id` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`pool_id`,`quest_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 LOCK TABLES `pool_quest_save` WRITE;
 /*!40000 ALTER TABLE `pool_quest_save` DISABLE KEYS */;
@@ -1517,7 +1517,7 @@ DROP TABLE IF EXISTS `reserved_name`;
 CREATE TABLE `reserved_name` (
   `name` varchar(12) NOT NULL DEFAULT '',
   PRIMARY KEY (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Player Reserved Names';
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Player Reserved Names';
 
 LOCK TABLES `reserved_name` WRITE;
 /*!40000 ALTER TABLE `reserved_name` DISABLE KEYS */;
@@ -1563,7 +1563,7 @@ CREATE TABLE `worldstates` (
   `value` int(10) unsigned NOT NULL DEFAULT '0',
   `comment` tinytext,
   PRIMARY KEY (`entry`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Variable Saves';
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Variable Saves';
 
 LOCK TABLES `worldstates` WRITE;
 /*!40000 ALTER TABLE `worldstates` DISABLE KEYS */;
