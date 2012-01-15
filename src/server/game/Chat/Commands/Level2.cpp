@@ -570,7 +570,7 @@ bool ChatHandler::HandleCharacterChangeRaceCommand(const char * args)
 
     PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPDATE_AT_LOGIN_FLAG);
 
-    stmt->setUInt16(0, uint16(AT_LOGIN_CHANGE_FACTION));
+    stmt->setUInt16(0, uint16(AT_LOGIN_CHANGE_RACE));
 
     if (target)
     {
