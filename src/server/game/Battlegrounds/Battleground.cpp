@@ -448,7 +448,7 @@ inline void Battleground::_ProcessJoin(uint32 diff)
     {
         m_Events |= BG_STARTING_EVENT_1;
 
-        if(!GetBgMap())
+        if (!FindBgMap())
         {
             sLog->outError("Battleground::_ProcessJoin: map (map id: %u, instance id: %u) is not created!", m_MapId, m_InstanceID);
             EndNow();
@@ -1269,8 +1269,6 @@ void Battleground::EventPlayerLoggedOut(Player* player)
             if (GetAlivePlayersCountByTeam(player->GetTeam()) <= 1 && GetPlayersCountByTeam(GetOtherTeam(player->GetTeam())))
                 EndBattleground(GetOtherTeam(player->GetTeam()));
     }
-
-    player->LeaveBattleground();
 }
 
 // This method should be called only once ... it adds pointer to queue
@@ -1438,7 +1436,7 @@ bool Battleground::AddObject(uint32 type, uint32 entry, float x, float y, float 
     // If the assert is called, means that m_BgObjects must be resized!
     ASSERT(type < m_BgObjects.size());
 
-    Map *map = GetBgMap();
+    Map* map = FindBgMap();
     if (!map)
         return false;
     // Must be created this way, adding to godatamap would add it to the base map of the instance
@@ -1530,7 +1528,7 @@ GameObject* Battleground::GetBGObject(uint32 type)
 
 Creature* Battleground::GetBGCreature(uint32 type)
 {
-    Creature *creature = GetBgMap()->GetCreature(m_BgCreatures[type]);
+    Creature* creature = GetBgMap()->GetCreature(m_BgCreatures[type]);
     if (!creature)
         sLog->outError("Battleground::GetBGCreature: creature (type: %u, GUID: %u) not found for BG (map: %u, instance id: %u)!",
             type, GUID_LOPART(m_BgCreatures[type]), m_MapId, m_InstanceID);
@@ -1539,7 +1537,7 @@ Creature* Battleground::GetBGCreature(uint32 type)
 
 void Battleground::SpawnBGObject(uint32 type, uint32 respawntime)
 {
-    if (Map* map = GetBgMap())
+    if (Map* map = FindBgMap())
         if (GameObject* obj = map->GetGameObject(m_BgObjects[type]))
         {
             if (respawntime)
@@ -1558,7 +1556,7 @@ Creature* Battleground::AddCreature(uint32 entry, uint32 type, uint32 teamval, f
     // If the assert is called, means that m_BgCreatures must be resized!
     ASSERT(type < m_BgCreatures.size());
 
-    Map* map = GetBgMap();
+    Map* map = FindBgMap();
     if (!map)
         return NULL;
 
