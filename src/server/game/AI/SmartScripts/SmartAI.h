@@ -185,6 +185,7 @@ class SmartAI : public CreatureAI
         void sQuestReward(Player* player, Quest const* quest, uint32 opt);
         bool sOnDummyEffect(Unit* caster, uint32 spellId, SpellEffIndex effIndex);
         void sOnGameEvent(bool start, uint16 eventId);
+        void OnStateChanged(uint32 state);
 
         uint32 mEscortQuestID;
 
