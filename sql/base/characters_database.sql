@@ -128,42 +128,6 @@ LOCK TABLES `arena_team_stats` WRITE;
 /*!40000 ALTER TABLE `arena_team_stats` DISABLE KEYS */;
 /*!40000 ALTER TABLE `arena_team_stats` ENABLE KEYS */;
 UNLOCK TABLES;
-DROP TABLE IF EXISTS `armory_character_stats`;
-CREATE TABLE `armory_character_stats` (
-  `guid` int(11) NOT NULL,
-  `data` longtext NOT NULL,
-  `save_date` int(11) NOT NULL,
-  PRIMARY KEY (`guid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='World of Warcraft Armory table';
-
-LOCK TABLES `armory_character_stats` WRITE;
-/*!40000 ALTER TABLE `armory_character_stats` DISABLE KEYS */;
-/*!40000 ALTER TABLE `armory_character_stats` ENABLE KEYS */;
-UNLOCK TABLES;
-DROP TABLE IF EXISTS `armory_game_chart`;
-CREATE TABLE `armory_game_chart` (
-  `gameid` int(11) NOT NULL,
-  `teamid` int(11) NOT NULL,
-  `guid` int(11) NOT NULL,
-  `changeType` int(11) NOT NULL,
-  `ratingChange` int(11) NOT NULL,
-  `teamRating` int(11) NOT NULL,
-  `damageDone` int(11) NOT NULL,
-  `deaths` int(11) NOT NULL,
-  `healingDone` int(11) NOT NULL,
-  `damageTaken` bigint(20) NOT NULL,
-  `healingTaken` int(11) NOT NULL,
-  `killingBlows` int(11) NOT NULL,
-  `mapId` int(11) NOT NULL,
-  `start` int(11) NOT NULL,
-  `end` int(11) NOT NULL,
-  PRIMARY KEY (`gameid`,`teamid`,`guid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='WoWArmory Game Chart';
-
-LOCK TABLES `armory_game_chart` WRITE;
-/*!40000 ALTER TABLE `armory_game_chart` DISABLE KEYS */;
-/*!40000 ALTER TABLE `armory_game_chart` ENABLE KEYS */;
-UNLOCK TABLES;
 DROP TABLE IF EXISTS `auctionhouse`;
 CREATE TABLE `auctionhouse` (
   `id` int(10) unsigned NOT NULL DEFAULT '0',
@@ -909,22 +873,6 @@ LOCK TABLES `corpse` WRITE;
 /*!40000 ALTER TABLE `corpse` DISABLE KEYS */;
 /*!40000 ALTER TABLE `corpse` ENABLE KEYS */;
 UNLOCK TABLES;
-DROP TABLE IF EXISTS `creature_loot_template`;
-CREATE TABLE `creature_loot_template` (
-  `entry` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `item` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `ChanceOrQuestChance` float NOT NULL DEFAULT '100',
-  `lootmode` smallint(5) unsigned NOT NULL DEFAULT '1',
-  `groupid` tinyint(3) unsigned NOT NULL DEFAULT '0',
-  `mincountOrRef` mediumint(9) NOT NULL DEFAULT '1',
-  `maxcount` tinyint(3) unsigned NOT NULL DEFAULT '1',
-  PRIMARY KEY (`entry`,`item`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Loot System';
-
-LOCK TABLES `creature_loot_template` WRITE;
-/*!40000 ALTER TABLE `creature_loot_template` DISABLE KEYS */;
-/*!40000 ALTER TABLE `creature_loot_template` ENABLE KEYS */;
-UNLOCK TABLES;
 DROP TABLE IF EXISTS `creature_respawn`;
 CREATE TABLE `creature_respawn` (
   `guid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Global Unique Identifier',
@@ -1522,20 +1470,6 @@ CREATE TABLE `reserved_name` (
 LOCK TABLES `reserved_name` WRITE;
 /*!40000 ALTER TABLE `reserved_name` DISABLE KEYS */;
 /*!40000 ALTER TABLE `reserved_name` ENABLE KEYS */;
-UNLOCK TABLES;
-DROP TABLE IF EXISTS `tblwowitems`;
-CREATE TABLE `tblwowitems` (
-  `itemnumber` int(5) NOT NULL,
-  `itemname` varchar(30) NOT NULL,
-  `itemquality` tinyint(1) NOT NULL DEFAULT '0',
-  `itemhtml` blob,
-  `itemicon` varchar(100) NOT NULL,
-  PRIMARY KEY (`itemnumber`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-
-LOCK TABLES `tblwowitems` WRITE;
-/*!40000 ALTER TABLE `tblwowitems` DISABLE KEYS */;
-/*!40000 ALTER TABLE `tblwowitems` ENABLE KEYS */;
 UNLOCK TABLES;
 DROP TABLE IF EXISTS `waypoint_scripts`;
 CREATE TABLE `waypoint_scripts` (
