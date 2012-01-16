@@ -1784,10 +1784,10 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
         case SMART_ACTION_GO_SET_LOOT_STATE:
         {
             ObjectList* targets = GetTargets(e, unit);
-            
+
             if (!targets)
                 return;
-                
+
             for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
                 if (IsGameObject(*itr))
                     (*itr)->ToGameObject()->SetLootState((LootState)e.action.setGoLootState.state);
@@ -2902,7 +2902,6 @@ void SmartScript::OnMoveInLineOfSight(Unit* who)
         return;
 
     ProcessEventsFor(SMART_EVENT_IC_LOS, who);
-
 }
 
 /*

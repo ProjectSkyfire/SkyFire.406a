@@ -401,13 +401,13 @@ class boss_valithria_dreamwalker : public CreatureScript
             {
                 if (summon->GetEntry() == NPC_DREAM_PORTAL_PRE_EFFECT)
                 {
-                    summon->m_Events.AddEvent(new DelayedCastEvent(summon, SPELL_SUMMON_DREAM_PORTAL, me->GetGUID(), 6000), summon->m_Events.CalculateTime(15000));
-                    summon->m_Events.AddEvent(new AuraRemoveEvent(summon, SPELL_DREAM_PORTAL_VISUAL_PRE), summon->m_Events.CalculateTime(15000));
+                    summon->_Events.AddEvent(new DelayedCastEvent(summon, SPELL_SUMMON_DREAM_PORTAL, me->GetGUID(), 6000), summon->_Events.CalculateTime(15000));
+                    summon->_Events.AddEvent(new AuraRemoveEvent(summon, SPELL_DREAM_PORTAL_VISUAL_PRE), summon->_Events.CalculateTime(15000));
                 }
                 else if (summon->GetEntry() == NPC_NIGHTMARE_PORTAL_PRE_EFFECT)
                 {
-                    summon->m_Events.AddEvent(new DelayedCastEvent(summon, SPELL_SUMMON_NIGHTMARE_PORTAL, me->GetGUID(), 6000), summon->m_Events.CalculateTime(15000));
-                    summon->m_Events.AddEvent(new AuraRemoveEvent(summon, SPELL_NIGHTMARE_PORTAL_VISUAL_PRE), summon->m_Events.CalculateTime(15000));
+                    summon->_Events.AddEvent(new DelayedCastEvent(summon, SPELL_SUMMON_NIGHTMARE_PORTAL, me->GetGUID(), 6000), summon->_Events.CalculateTime(15000));
+                    summon->_Events.AddEvent(new AuraRemoveEvent(summon, SPELL_NIGHTMARE_PORTAL_VISUAL_PRE), summon->_Events.CalculateTime(15000));
                 }
             }
 
@@ -536,7 +536,7 @@ class npc_green_dragon_combat_trigger : public CreatureScript
                 if (action == ACTION_DEATH)
                 {
                     instance->SetBossState(DATA_VALITHRIA_DREAMWALKER, NOT_STARTED);
-                    me->m_Events.AddEvent(new ValithriaDespawner(me), me->m_Events.CalculateTime(5000));
+                    me->_Events.AddEvent(new ValithriaDespawner(me), me->_Events.CalculateTime(5000));
                 }
             }
 
@@ -724,7 +724,7 @@ class npc_risen_archmage : public CreatureScript
             void JustSummoned(Creature* summon)
             {
                 if (summon->GetEntry() == NPC_COLUMN_OF_FROST)
-                    summon->m_Events.AddEvent(new DelayedCastEvent(summon, SPELL_COLUMN_OF_FROST_DAMAGE, 0, 8000), summon->m_Events.CalculateTime(2000));
+                    summon->_Events.AddEvent(new DelayedCastEvent(summon, SPELL_COLUMN_OF_FROST_DAMAGE, 0, 8000), summon->_Events.CalculateTime(2000));
                 else if (summon->GetEntry() == NPC_MANA_VOID)
                     summon->DespawnOrUnsummon(36000);
             }

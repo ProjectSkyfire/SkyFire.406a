@@ -150,7 +150,7 @@ Unit::Unit(bool isWorldObject): WorldObject(isWorldObject),
 m_movedPlayer(NULL), m_lastSanctuaryTime(0), IsAIEnabled(false), NeedChangeAI(false),
 m_ControlledByPlayer(false), i_AI(NULL), i_disabledAI(NULL), m_procDeep(0),
 m_removedAurasCount(0), i_motionMaster(this), m_ThreatManager(this), m_vehicle(NULL),
-m_vehicleKit(NULL), m_unitTypeMask(UNIT_MASK_NONE), m_HostileRefManager(this)
+_vehicleKit(NULL), m_unitTypeMask(UNIT_MASK_NONE), m_HostileRefManager(this)
 {
 #ifdef _MSC_VER
 #pragma warning(default:4355)
@@ -173,7 +173,7 @@ m_vehicleKit(NULL), m_unitTypeMask(UNIT_MASK_NONE), m_HostileRefManager(this)
     m_rootTimes = 0;
 
     m_state = 0;
-    m_deathState = ALIVE;
+    _deathState = ALIVE;
 
     for (uint8 i = 0; i < CURRENT_MAX_SPELL; ++i)
         m_currentSpells[i] = NULL;
@@ -242,7 +242,7 @@ m_vehicleKit(NULL), m_unitTypeMask(UNIT_MASK_NONE), m_HostileRefManager(this)
     m_cleanupDone = false;
     m_duringRemoveFromWorld = false;
 
-    m_serverSideVisibility.SetValue(SERVERSIDE_VISIBILITY_GHOST, GHOST_VISIBILITY_ALIVE);
+    _serverSideVisibility.SetValue(SERVERSIDE_VISIBILITY_GHOST, GHOST_VISIBILITY_ALIVE);
 
     _focusSpell = NULL;
     _targetLocked = false;
@@ -283,7 +283,7 @@ Unit::~Unit()
     _DeleteRemovedAuras();
 
     delete m_charmInfo;
-    delete m_vehicleKit;
+    delete _vehicleKit;
 
     ASSERT(!m_duringRemoveFromWorld);
     ASSERT(!m_attacking);
@@ -302,7 +302,7 @@ void Unit::Update(uint32 p_time)
     // WARNING! Order of execution here is important, do not change.
     // Spells must be processed with event system BEFORE they go to _UpdateSpells.
     // Or else we may have some SPELL_STATE_FINISHED spells stalled in pointers, that is bad.
-    m_Events.Update(p_time);
+    _Events.Update(p_time);
 
     if (!IsInWorld())
         return;
@@ -9759,7 +9759,7 @@ void Unit::ModifyAuraState(AuraStateType flag, bool apply)
             }
             else if (Pet* pet = ToCreature()->ToPet())
             {
-                for (PetSpellMap::const_iterator itr = pet->m_spells.begin(); itr != pet->m_spells.end(); ++itr)
+                for (PetSpellMap::const_iterator itr = pet->_spells.begin(); itr != pet->_spells.end(); ++itr)
                 {
                     if (itr->second.state == PETSPELL_REMOVED)
                         continue;
@@ -12423,9 +12423,9 @@ bool Unit::IsAlwaysDetectableFor(WorldObject const* seer) const
 void Unit::SetVisible(bool x)
 {
     if (!x)
-        m_serverSideVisibility.SetValue(SERVERSIDE_VISIBILITY_GM, SEC_GAMEMASTER);
+        _serverSideVisibility.SetValue(SERVERSIDE_VISIBILITY_GM, SEC_GAMEMASTER);
     else
-        m_serverSideVisibility.SetValue(SERVERSIDE_VISIBILITY_GM, SEC_PLAYER);
+        _serverSideVisibility.SetValue(SERVERSIDE_VISIBILITY_GM, SEC_PLAYER);
 
     UpdateObjectVisibility();
 }
@@ -12687,8 +12687,8 @@ void Unit::setDeathState(DeathState s)
 {
     // death state needs to be updated before RemoveAllAurasOnDeath() calls HandleChannelDeathItem(..) so that
     // it can be used to check creation of death items (such as soul shards).
-    DeathState oldDeathState = m_deathState;
-    m_deathState = s;
+    DeathState oldDeathState = _deathState;
+    _deathState = s;
 
     if (s != ALIVE && s != JUST_ALIVED)
     {
@@ -12957,7 +12957,7 @@ Unit* Creature::SelectVictim()
     // search nearby enemy before enter evade mode
     if (HasReactState(REACT_AGGRESSIVE))
     {
-        target = SelectNearestTargetInAttackDistance(m_CombatDistance ? m_CombatDistance : ATTACK_DISTANCE);
+        target = SelectNearestTargetInAttackDistance(_CombatDistance ? _CombatDistance : ATTACK_DISTANCE);
 
         if (target && _IsTargetAcceptable(target))
             return target;
@@ -13761,7 +13761,7 @@ void Unit::CleanupBeforeRemoveFromMap(bool finalCleanup)
     if (finalCleanup)
         m_cleanupDone = true;
 
-    m_Events.KillAllEvents(false);                      // non-delatable (currently casted spells) will not deleted now but it will deleted at call in Map::RemoveAllObjectsInRemoveList
+    _Events.KillAllEvents(false);                      // non-delatable (currently casted spells) will not deleted now but it will deleted at call in Map::RemoveAllObjectsInRemoveList
     CombatStop();
     ClearComboPointHolders();
     DeleteThreatList();
@@ -13787,7 +13787,7 @@ void Unit::CleanupsBeforeDelete(bool finalCleanup)
     if (finalCleanup)
         m_cleanupDone = true;
 
-    m_Events.KillAllEvents(false);                      // non-delatable (currently casted spells) will not deleted now but it will deleted at call in Map::RemoveAllObjectsInRemoveList
+    _Events.KillAllEvents(false);                      // non-delatable (currently casted spells) will not deleted now but it will deleted at call in Map::RemoveAllObjectsInRemoveList
     CombatStop();
     ClearComboPointHolders();
     DeleteThreatList();
@@ -13901,7 +13901,7 @@ void CharmInfo::InitPossessCreateSpells()
     {
         for (uint32 i = 0; i < CREATURE_MAX_SPELLS; ++i)
         {
-            uint32 spellId = m_unit->ToCreature()->m_spells[i];
+            uint32 spellId = m_unit->ToCreature()->_spells[i];
             SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(spellId);
             if (spellInfo && !(spellInfo->Attributes & SPELL_ATTR0_CASTABLE_WHILE_DEAD))
             {
@@ -13926,7 +13926,7 @@ void CharmInfo::InitCharmCreateSpells()
 
     for (uint32 x = 0; x < MAX_SPELL_CHARM; ++x)
     {
-        uint32 spellId = m_unit->ToCreature()->m_spells[x];
+        uint32 spellId = m_unit->ToCreature()->_spells[x];
         SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(spellId);
 
         if (!spellInfo || spellInfo->Attributes & SPELL_ATTR0_CASTABLE_WHILE_DEAD)
@@ -16145,7 +16145,7 @@ bool Unit::CreateVehicleKit(uint32 id, uint32 creatureEntry)
     if (!vehInfo)
         return false;
 
-    m_vehicleKit = new Vehicle(this, vehInfo, creatureEntry);
+    _vehicleKit = new Vehicle(this, vehInfo, creatureEntry);
     m_updateFlag |= UPDATEFLAG_VEHICLE;
     m_unitTypeMask |= UNIT_MASK_VEHICLE;
     return true;
@@ -16153,13 +16153,13 @@ bool Unit::CreateVehicleKit(uint32 id, uint32 creatureEntry)
 
 void Unit::RemoveVehicleKit()
 {
-    if (!m_vehicleKit)
+    if (!_vehicleKit)
         return;
 
-    m_vehicleKit->Uninstall();
-    delete m_vehicleKit;
+    _vehicleKit->Uninstall();
+    delete _vehicleKit;
 
-    m_vehicleKit = NULL;
+    _vehicleKit = NULL;
 
     m_updateFlag &= ~UPDATEFLAG_VEHICLE;
     m_unitTypeMask &= ~UNIT_MASK_VEHICLE;

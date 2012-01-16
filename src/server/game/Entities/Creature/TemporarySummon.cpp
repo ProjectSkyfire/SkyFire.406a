@@ -40,7 +40,7 @@ void TempSummon::Update(uint32 diff)
 {
     Creature::Update(diff);
 
-    if (m_deathState == DEAD)
+    if (_deathState == DEAD)
     {
         UnSummon();
         return;
@@ -80,7 +80,7 @@ void TempSummon::Update(uint32 diff)
 
         case TEMPSUMMON_CORPSE_TIMED_DESPAWN:
         {
-            if (m_deathState == CORPSE)
+            if (_deathState == CORPSE)
             {
                 if (m_timer <= diff)
                 {
@@ -94,8 +94,8 @@ void TempSummon::Update(uint32 diff)
         }
         case TEMPSUMMON_CORPSE_DESPAWN:
         {
-            // if m_deathState is DEAD, CORPSE was skipped
-            if (m_deathState == CORPSE || m_deathState == DEAD)
+            // if _deathState is DEAD, CORPSE was skipped
+            if (_deathState == CORPSE || _deathState == DEAD)
             {
                 UnSummon();
                 return;
@@ -105,7 +105,7 @@ void TempSummon::Update(uint32 diff)
         }
         case TEMPSUMMON_DEAD_DESPAWN:
         {
-            if (m_deathState == DEAD)
+            if (_deathState == DEAD)
             {
                 UnSummon();
                 return;
@@ -114,8 +114,8 @@ void TempSummon::Update(uint32 diff)
         }
         case TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN:
         {
-            // if m_deathState is DEAD, CORPSE was skipped
-            if (m_deathState == CORPSE || m_deathState == DEAD)
+            // if _deathState is DEAD, CORPSE was skipped
+            if (_deathState == CORPSE || _deathState == DEAD)
             {
                 UnSummon();
                 return;
@@ -137,8 +137,8 @@ void TempSummon::Update(uint32 diff)
         }
         case TEMPSUMMON_TIMED_OR_DEAD_DESPAWN:
         {
-            // if m_deathState is DEAD, CORPSE was skipped
-            if (m_deathState == DEAD)
+            // if _deathState is DEAD, CORPSE was skipped
+            if (_deathState == DEAD)
             {
                 UnSummon();
                 return;
@@ -177,7 +177,7 @@ void TempSummon::InitStats(uint32 duration)
 
     Unit* owner = GetSummoner();
 
-    if (owner && isTrigger() && m_spells[0])
+    if (owner && isTrigger() && _spells[0])
     {
         setFaction(owner->getFaction());
         SetLevel(owner->getLevel());
@@ -231,7 +231,7 @@ void TempSummon::UnSummon(uint32 msTime)
     {
         ForcedUnsummonDelayEvent* pEvent = new ForcedUnsummonDelayEvent(*this);
 
-        m_Events.AddEvent(pEvent, m_Events.CalculateTime(msTime));
+        _Events.AddEvent(pEvent, _Events.CalculateTime(msTime));
         return;
     }
 
@@ -252,7 +252,7 @@ void TempSummon::UnSummon(uint32 msTime)
 
 bool ForcedUnsummonDelayEvent::Execute(uint64 /*e_time*/, uint32 /*p_time*/)
 {
-    m_owner.UnSummon();
+    _owner.UnSummon();
     return true;
 }
 
@@ -273,9 +273,9 @@ void TempSummon::RemoveFromWorld()
     Creature::RemoveFromWorld();
 }
 
-Minion::Minion(SummonPropertiesEntry const* properties, Unit* owner, bool isWorldObject) : TempSummon(properties, owner, isWorldObject), m_owner(owner)
+Minion::Minion(SummonPropertiesEntry const* properties, Unit* owner, bool isWorldObject) : TempSummon(properties, owner, isWorldObject), _owner(owner)
 {
-    ASSERT(m_owner);
+    ASSERT(_owner);
     m_unitTypeMask |= UNIT_MASK_MINION;
     m_followAngle = PET_FOLLOW_ANGLE;
 }
@@ -286,10 +286,10 @@ void Minion::InitStats(uint32 duration)
 
     SetReactState(REACT_PASSIVE);
 
-    SetCreatorGUID(m_owner->GetGUID());
-    setFaction(m_owner->getFaction());
+    SetCreatorGUID(_owner->GetGUID());
+    setFaction(_owner->getFaction());
 
-    m_owner->SetMinion(this, true, PET_SLOT_UNK_SLOT);
+    _owner->SetMinion(this, true, PET_SLOT_UNK_SLOT);
 }
 
 void Minion::RemoveFromWorld()
@@ -297,7 +297,7 @@ void Minion::RemoveFromWorld()
     if (!IsInWorld())
         return;
 
-    m_owner->SetMinion(this, false, PET_SLOT_UNK_SLOT);
+    _owner->SetMinion(this, false, PET_SLOT_UNK_SLOT);
     TempSummon::RemoveFromWorld();
 }
 
@@ -321,9 +321,9 @@ void Guardian::InitStats(uint32 duration)
 {
     Minion::InitStats(duration);
 
-    InitStatsForLevel(m_owner->getLevel());
+    InitStatsForLevel(_owner->getLevel());
 
-    if (m_owner->GetTypeId() == TYPEID_PLAYER && HasUnitTypeMask(UNIT_MASK_CONTROLABLE_GUARDIAN))
+    if (_owner->GetTypeId() == TYPEID_PLAYER && HasUnitTypeMask(UNIT_MASK_CONTROLABLE_GUARDIAN))
         m_charmInfo->InitCharmCreateSpells();
 
     SetReactState(REACT_AGGRESSIVE);
@@ -333,30 +333,30 @@ void Guardian::InitSummon()
 {
     TempSummon::InitSummon();
 
-    if (m_owner->GetTypeId() == TYPEID_PLAYER
-        && m_owner->GetMinionGUID() == GetGUID()
-        && !m_owner->GetCharmGUID())
-        m_owner->ToPlayer()->CharmSpellInitialize();
+    if (_owner->GetTypeId() == TYPEID_PLAYER
+        && _owner->GetMinionGUID() == GetGUID()
+        && !_owner->GetCharmGUID())
+        _owner->ToPlayer()->CharmSpellInitialize();
 }
 
 Puppet::Puppet(SummonPropertiesEntry const* properties, Unit* owner) : Minion(properties, owner, false) //maybe true?
 {
     ASSERT(owner->GetTypeId() == TYPEID_PLAYER);
-    m_owner = (Player*)owner;
+    _owner = (Player*)owner;
     m_unitTypeMask |= UNIT_MASK_PUPPET;
 }
 
 void Puppet::InitStats(uint32 duration)
 {
     Minion::InitStats(duration);
-    SetLevel(m_owner->getLevel());
+    SetLevel(_owner->getLevel());
     SetReactState(REACT_PASSIVE);
 }
 
 void Puppet::InitSummon()
 {
     Minion::InitSummon();
-    if (!SetCharmedBy(m_owner, CHARM_TYPE_POSSESS))
+    if (!SetCharmedBy(_owner, CHARM_TYPE_POSSESS))
         ASSERT(false);
 }
 

@@ -165,16 +165,16 @@ public:
         void SetGUID(uint64 guid, int32 /*param*/)
         {
             victimGUID = guid;
-            if (me->m_spells[0] && victimGUID)
+            if (me->_spells[0] && victimGUID)
                 if (Unit* victim = Unit::GetUnit(*me, victimGUID))
-                    victim->CastSpell(victim, me->m_spells[0], true, NULL, NULL, me->GetGUID());
+                    victim->CastSpell(victim, me->_spells[0], true, NULL, NULL, me->GetGUID());
         }
 
         void JustDied(Unit* /*killer*/)
         {
-            if (me->m_spells[0] && victimGUID)
+            if (me->_spells[0] && victimGUID)
                 if (Unit* victim = Unit::GetUnit(*me, victimGUID))
-                    victim->RemoveAurasDueToSpell(me->m_spells[0], me->GetGUID());
+                    victim->RemoveAurasDueToSpell(me->_spells[0], me->GetGUID());
         }
     };
 };

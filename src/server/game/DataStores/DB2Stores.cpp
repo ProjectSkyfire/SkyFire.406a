@@ -99,7 +99,7 @@ void LoadDB2Stores(const std::string& dataPath)
         sLog->outError("\nSome required *.db2 files (%u from %d) not found or not compatible:\n%s", (uint32)bad_db2_files.size(), DB2FilesCount,str.c_str());
         exit(1);
     }
-    
+
     for (uint32 i = 0; i < sItemStore.GetNumRows(); ++i)
     {
         ItemEntry const* itemEntry = sItemStore.LookupEntry(i);

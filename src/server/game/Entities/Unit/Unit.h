@@ -1682,10 +1682,10 @@ class Unit : public WorldObject
 
         void BuildHeartBeatMsg(WorldPacket *data) const;
 
-        bool isAlive() const { return (m_deathState == ALIVE); };
-        bool isDying() const { return (m_deathState == JUST_DIED); };
-        bool isDead() const { return (m_deathState == DEAD || m_deathState == CORPSE); };
-        DeathState getDeathState() { return m_deathState; };
+        bool isAlive() const { return (_deathState == ALIVE); };
+        bool isDying() const { return (_deathState == JUST_DIED); };
+        bool isDead() const { return (_deathState == DEAD || _deathState == CORPSE); };
+        DeathState getDeathState() { return _deathState; };
         virtual void setDeathState(DeathState s);           // overwrited in Creature/Player/Pet
 
         uint64 GetOwnerGUID() const { return  GetUInt64Value(UNIT_FIELD_SUMMONEDBY); }
@@ -1951,7 +1951,7 @@ class Unit : public WorldObject
         float m_modAttackSpeedPct[3];
 
         // Event handler
-        EventProcessor m_Events;
+        EventProcessor _Events;
 
         // stat system
         bool HandleStatModifier(UnitMods unitMod, UnitModifierType modifierType, float amount, bool apply);
@@ -1986,7 +1986,7 @@ class Unit : public WorldObject
         void SetFacingToObject(WorldObject* pObject);
 
         // Visibility system
-        bool IsVisible() const { return (m_serverSideVisibility.GetValue(SERVERSIDE_VISIBILITY_GM) > SEC_PLAYER) ? false : true; }
+        bool IsVisible() const { return (_serverSideVisibility.GetValue(SERVERSIDE_VISIBILITY_GM) > SEC_PLAYER) ? false : true; }
         void SetVisible(bool x);
 
         // common function for visibility checks for player/creatures with detection code
@@ -2183,7 +2183,7 @@ class Unit : public WorldObject
         bool IsAIEnabled, NeedChangeAI;
         bool CreateVehicleKit(uint32 id, uint32 creatureEntry);
         void RemoveVehicleKit();
-        Vehicle *GetVehicleKit()const { return m_vehicleKit; }
+        Vehicle *GetVehicleKit()const { return _vehicleKit; }
         Vehicle *GetVehicle()   const { return m_vehicle; }
         bool IsOnVehicle(const Unit* vehicle) const { return m_vehicle && m_vehicle == vehicle->GetVehicleKit(); }
         Unit* GetVehicleBase()  const;
@@ -2307,7 +2307,7 @@ class Unit : public WorldObject
         AttackerSet m_attackers;
         Unit* m_attacking;
 
-        DeathState m_deathState;
+        DeathState _deathState;
 
         int32 m_procDeep;
 
@@ -2348,12 +2348,12 @@ class Unit : public WorldObject
         MotionMaster i_motionMaster;
 
         uint32 m_reactiveTimer[MAX_REACTIVE];
-        uint32 m_regenTimer;
+        uint32 _regenTimer;
 
         ThreatManager m_ThreatManager;
 
         Vehicle *m_vehicle;
-        Vehicle *m_vehicleKit;
+        Vehicle *_vehicleKit;
 
         uint32 m_unitTypeMask;
 

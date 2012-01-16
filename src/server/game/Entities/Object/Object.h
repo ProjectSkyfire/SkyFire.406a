@@ -153,38 +153,38 @@ class Object
 
         int32 GetInt32Value(uint16 index) const
         {
-            ASSERT(index < m_valuesCount || PrintIndexError(index, false));
+            ASSERT(index < _valuesCount || PrintIndexError(index, false));
             return m_int32Values[index];
         }
 
         uint32 GetUInt32Value(uint16 index) const
         {
-            ASSERT(index < m_valuesCount || PrintIndexError(index, false));
+            ASSERT(index < _valuesCount || PrintIndexError(index, false));
             return m_uint32Values[index];
         }
 
         uint64 GetUInt64Value(uint16 index) const
         {
-            ASSERT(index + 1 < m_valuesCount || PrintIndexError(index, false));
+            ASSERT(index + 1 < _valuesCount || PrintIndexError(index, false));
             return *((uint64*)&(m_uint32Values[index]));
         }
 
         float GetFloatValue(uint16 index) const
         {
-            ASSERT(index < m_valuesCount || PrintIndexError(index, false));
+            ASSERT(index < _valuesCount || PrintIndexError(index, false));
             return m_floatValues[index];
         }
 
         uint8 GetByteValue(uint16 index, uint8 offset) const
         {
-            ASSERT(index < m_valuesCount || PrintIndexError(index, false));
+            ASSERT(index < _valuesCount || PrintIndexError(index, false));
             ASSERT(offset < 4);
             return *(((uint8*)&m_uint32Values[index])+offset);
         }
 
         uint16 GetUInt16Value(uint16 index, uint8 offset) const
         {
-            ASSERT(index < m_valuesCount || PrintIndexError(index, false));
+            ASSERT(index < _valuesCount || PrintIndexError(index, false));
             ASSERT(offset < 2);
             return *(((uint16*)&m_uint32Values[index])+offset);
         }
@@ -229,7 +229,7 @@ class Object
 
         bool HasFlag(uint16 index, uint32 flag) const
         {
-            if (index >= m_valuesCount && !PrintIndexError(index, false)) return false;
+            if (index >= _valuesCount && !PrintIndexError(index, false)) return false;
             return (m_uint32Values[index] & flag) != 0;
         }
 
@@ -246,7 +246,7 @@ class Object
 
         bool HasByteFlag(uint16 index, uint8 offset, uint8 flag) const
         {
-            ASSERT(index < m_valuesCount || PrintIndexError(index, false));
+            ASSERT(index < _valuesCount || PrintIndexError(index, false));
             ASSERT(offset < 4);
             return (((uint8*)&m_uint32Values[index])[offset] & flag) != 0;
         }
@@ -280,7 +280,7 @@ class Object
 
         bool HasFlag64(uint16 index, uint64 flag) const
         {
-            ASSERT(index < m_valuesCount || PrintIndexError(index, false));
+            ASSERT(index < _valuesCount || PrintIndexError(index, false));
             return (GetUInt64Value(index) & flag) != 0;
         }
 
@@ -291,7 +291,7 @@ class Object
 
         void ClearUpdateMask(bool remove);
 
-        uint16 GetValuesCount() const { return m_valuesCount; }
+        uint16 GetValuesCount() const { return _valuesCount; }
 
         virtual bool hasQuest(uint32 /* quest_id */) const { return false; }
         virtual bool hasInvolvedQuest(uint32 /* quest_id */) const { return false; }
@@ -342,7 +342,7 @@ class Object
 
         bool* _changedFields;
 
-        uint16 m_valuesCount;
+        uint16 _valuesCount;
 
         bool m_objectUpdated;
 
@@ -374,37 +374,37 @@ struct Position
     float m_positionX;
     float m_positionY;
     float m_positionZ;
-    float m_orientation;
+    float _orientation;
 
     void Relocate(float x, float y)
         { m_positionX = x; m_positionY = y;}
     void Relocate(float x, float y, float z)
         { m_positionX = x; m_positionY = y; m_positionZ = z; }
     void Relocate(float x, float y, float z, float orientation)
-        { m_positionX = x; m_positionY = y; m_positionZ = z; m_orientation = orientation; }
+        { m_positionX = x; m_positionY = y; m_positionZ = z; _orientation = orientation; }
     void Relocate(const Position &pos)
-        { m_positionX = pos.m_positionX; m_positionY = pos.m_positionY; m_positionZ = pos.m_positionZ; m_orientation = pos.m_orientation; }
+        { m_positionX = pos.m_positionX; m_positionY = pos.m_positionY; m_positionZ = pos.m_positionZ; _orientation = pos._orientation; }
     void Relocate(const Position* pos)
-        { m_positionX = pos->m_positionX; m_positionY = pos->m_positionY; m_positionZ = pos->m_positionZ; m_orientation = pos->m_orientation; }
+        { m_positionX = pos->m_positionX; m_positionY = pos->m_positionY; m_positionZ = pos->m_positionZ; _orientation = pos->_orientation; }
     void RelocateOffset(const Position &offset);
     void SetOrientation(float orientation)
-        { m_orientation = orientation; }
+        { _orientation = orientation; }
 
     float GetPositionX() const { return m_positionX; }
     float GetPositionY() const { return m_positionY; }
     float GetPositionZ() const { return m_positionZ; }
-    float GetOrientation() const { return m_orientation; }
+    float GetOrientation() const { return _orientation; }
 
     void GetPosition(float &x, float &y) const
         { x = m_positionX; y = m_positionY; }
     void GetPosition(float &x, float &y, float &z) const
         { x = m_positionX; y = m_positionY; z = m_positionZ; }
     void GetPosition(float &x, float &y, float &z, float &o) const
-        { x = m_positionX; y = m_positionY; z = m_positionZ; o = m_orientation; }
+        { x = m_positionX; y = m_positionY; z = m_positionZ; o = _orientation; }
     void GetPosition(Position* pos) const
     {
         if (pos)
-            pos->Relocate(m_positionX, m_positionY, m_positionZ, m_orientation);
+            pos->Relocate(m_positionX, m_positionY, m_positionZ, _orientation);
     }
 
     Position::PositionXYZStreamer PositionXYZStream()
@@ -440,8 +440,8 @@ struct Position
     float GetAngle(const Position* pos) const;
     float GetAngle(float x, float y) const;
     float GetRelativeAngle(const Position* pos) const
-        { return GetAngle(pos) - m_orientation; }
-    float GetRelativeAngle(float x, float y) const { return GetAngle(x, y) - m_orientation; }
+        { return GetAngle(pos) - _orientation; }
+    float GetRelativeAngle(float x, float y) const { return GetAngle(x, y) - _orientation; }
     void GetSinCos(float x, float y, float &vsin, float &vcos) const;
 
     bool IsInDist2d(float x, float y, float dist) const
@@ -614,7 +614,7 @@ class WorldObject : public Object, public WorldLocation
 
         float GetObjectSize() const
         {
-            return (m_valuesCount > UNIT_FIELD_COMBATREACH) ? m_floatValues[UNIT_FIELD_COMBATREACH] : DEFAULT_WORLD_OBJECT_SIZE;
+            return (_valuesCount > UNIT_FIELD_COMBATREACH) ? m_floatValues[UNIT_FIELD_COMBATREACH] : DEFAULT_WORLD_OBJECT_SIZE;
         }
         void UpdateGroundPositionZ(float x, float y, float &z) const;
 
@@ -749,8 +749,8 @@ class WorldObject : public Object, public WorldLocation
         FlaggedValuesArray32<int32, uint32, InvisibilityType, TOTAL_INVISIBILITY_TYPES> m_invisibility;
         FlaggedValuesArray32<int32, uint32, InvisibilityType, TOTAL_INVISIBILITY_TYPES> m_invisibilityDetect;
 
-        FlaggedValuesArray32<int32, uint32, ServerSideVisibilityType, TOTAL_SERVERSIDE_VISIBILITY_TYPES> m_serverSideVisibility;
-        FlaggedValuesArray32<int32, uint32, ServerSideVisibilityType, TOTAL_SERVERSIDE_VISIBILITY_TYPES> m_serverSideVisibilityDetect;
+        FlaggedValuesArray32<int32, uint32, ServerSideVisibilityType, TOTAL_SERVERSIDE_VISIBILITY_TYPES> _serverSideVisibility;
+        FlaggedValuesArray32<int32, uint32, ServerSideVisibilityType, TOTAL_SERVERSIDE_VISIBILITY_TYPES> _serverSideVisibilityDetect;
 
         // Low Level Packets
         void SendPlaySound(uint32 Sound, bool OnlySelf);
@@ -765,7 +765,7 @@ class WorldObject : public Object, public WorldLocation
         Map const* GetBaseMap() const;
 
         void SetZoneScript();
-        ZoneScript* GetZoneScript() const { return m_zoneScript; }
+        ZoneScript* GetZoneScript() const { return _zoneScript; }
 
         TempSummon* SummonCreature(uint32 id, const Position &pos, TempSummonType spwtype = TEMPSUMMON_MANUAL_DESPAWN, uint32 despwtime = 0, uint32 vehId = 0) const;
         TempSummon* SummonCreature(uint32 id, float x, float y, float z, float ang = 0, TempSummonType spwtype = TEMPSUMMON_MANUAL_DESPAWN, uint32 despwtime = 0)
@@ -835,7 +835,7 @@ class WorldObject : public Object, public WorldLocation
         std::string m_name;
         bool m_isActive;
         const bool m_isWorldObject;
-        ZoneScript* m_zoneScript;
+        ZoneScript* _zoneScript;
 
         // transports
         Transport* m_transport;

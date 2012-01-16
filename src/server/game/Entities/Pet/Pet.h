@@ -189,7 +189,7 @@ class Pet : public Guardian
         bool removeSpell(uint32 spell_id, bool learn_prev, bool clear_ab = true);
         void CleanupActionBar();
 
-        PetSpellMap     m_spells;
+        PetSpellMap     _spells;
         AutoSpellList   m_autospells;
 
         void InitPetCreateSpells();
@@ -212,17 +212,17 @@ class Pet : public Guardian
 
         bool    m_removed;                                  // prevent overwrite pet state in DB at next Pet::Update if pet already removed(saved)
 
-        Player* GetOwner() { return m_owner; }
+        Player* GetOwner() { return _owner; }
 
         PetTalentType GetTalentType();
     protected:
-        Player* m_owner;
+        Player* _owner;
         uint32  m_happinessTimer;
         PetType m_petType;
         int32   m_duration;                                 // time until unsummon (used mostly for summoned guardians and not used for controlled pets)
         uint64  m_auraRaidUpdateMask;
         bool    m_loading;
-        uint32  m_regenTimer;
+        uint32  _regenTimer;
 
         DeclinedName *m_declinedname;
 

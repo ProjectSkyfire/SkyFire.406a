@@ -859,7 +859,7 @@ void BfGraveYard::RelocateDeadPlayers()
 //Method for spawn creature on map
 Creature *Battlefield::SpawnCreature(uint32 entry, Position pos, TeamId team)
 {
-    return SpawnCreature(entry, pos.m_positionX, pos.m_positionY, pos.m_positionZ, pos.m_orientation, team);
+    return SpawnCreature(entry, pos.m_positionX, pos.m_positionY, pos.m_positionZ, pos._orientation, team);
 }
 
 Creature *Battlefield::SpawnCreature(uint32 entry, float x, float y, float z, float o, TeamId team)

@@ -792,7 +792,7 @@ struct CreatureFamilyEntry
 struct CreatureSpellDataEntry
 {
     uint32    ID;                                           // 0        m_ID
-    uint32    spellId[MAX_CREATURE_SPELL_DATA_SLOT];        // 1-4      m_spells[4]
+    uint32    spellId[MAX_CREATURE_SPELL_DATA_SLOT];        // 1-4      _spells[4]
     //uint32    availability[MAX_CREATURE_SPELL_DATA_SLOT]; // 4-7      m_availability[4]
 };
 
@@ -1790,7 +1790,7 @@ struct SpellEntry
     // uint32 unk_400_1;                                    // 10       4.0.0
     uint32    CastingTimeIndex;                             // 11       m_castingTimeIndex
     uint32    DurationIndex;                                // 12       m_durationIndex
-    uint32    powerType;                                    // 13       m_powerType
+    uint32    powerType;                                    // 13       _powerType
     uint32    rangeIndex;                                   // 14       m_rangeIndex
     float     speed;                                        // 15       m_speed
     uint32    SpellVisual[2];                               // 16-17    m_spellVisualID
@@ -2054,7 +2054,7 @@ struct VehicleEntry
     float   m_cameraFadeDistScalarMin;                      // 15
     float   m_cameraFadeDistScalarMax;                      // 16
     float   m_cameraPitchOffset;                            // 17
-    //int     m_powerType[3];                               //       removed in 3.1
+    //int     _powerType[3];                               //       removed in 3.1
     //int     m_powerToken[3];                              //       removed in 3.1
     float   m_facingLimitRight;                             // 18
     float   m_facingLimitLeft;                              // 19
@@ -2073,7 +2073,7 @@ struct VehicleEntry
     uint32  m_uiLocomotionType;                             // 34
     float   m_msslTrgtImpactTexRadius;                      // 35
     uint32  m_uiSeatIndicatorType;                          // 36
-    uint32  m_powerType;                                    // 37, new in 3.1
+    uint32  _powerType;                                    // 37, new in 3.1
                                                             // 38, new in 3.1
                                                             // 39, new in 3.1
 };

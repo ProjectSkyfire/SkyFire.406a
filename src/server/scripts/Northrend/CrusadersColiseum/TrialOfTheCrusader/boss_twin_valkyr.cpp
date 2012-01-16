@@ -239,7 +239,7 @@ struct boss_twin_baseAI : public ScriptedAI
                 m_pInstance->DoRemoveAurasDueToSpellOnPlayers(SPELL_POWERING_UP_HELPER);
                 break;
             case NPC_BULLET_CONTROLLER:
-                me->m_Events.AddEvent(new OrbsDespawner(me), me->m_Events.CalculateTime(100));
+                me->_Events.AddEvent(new OrbsDespawner(me), me->_Events.CalculateTime(100));
                 break;
         }
         Summons.Despawn(summoned);

@@ -691,7 +691,7 @@ class boss_the_lich_king : public CreatureScript
                         summon->CastSpell(summon, SPELL_RISEN_WITCH_DOCTOR_SPAWN, true);
                         summon->SetReactState(REACT_PASSIVE);
                         summon->HandleEmoteCommand(EMOTE_ONESHOT_EMERGE);
-                        summon->m_Events.AddEvent(new StartMovementEvent(me, summon), summon->m_Events.CalculateTime(5000));
+                        summon->_Events.AddEvent(new StartMovementEvent(me, summon), summon->_Events.CalculateTime(5000));
                         break;
                     case NPC_ICE_SPHERE:
                     {
@@ -735,7 +735,7 @@ class boss_the_lich_king : public CreatureScript
                         summon->SetReactState(REACT_PASSIVE);
                         summon->SetSpeed(MOVE_FLIGHT, 0.5f);
                         summon->GetMotionMaster()->MoveRandom(10.0f);
-                        summon->m_Events.AddEvent(new VileSpiritActivateEvent(summon), summon->m_Events.CalculateTime(15000));
+                        summon->_Events.AddEvent(new VileSpiritActivateEvent(summon), summon->_Events.CalculateTime(15000));
                         return;
                     }
                     case NPC_STRANGULATE_VEHICLE:
@@ -1114,8 +1114,8 @@ class boss_the_lich_king : public CreatureScript
                 summon->SetReactState(REACT_PASSIVE);
                 summon->NearTeleportTo(dest.GetPositionX(), dest.GetPositionY(), dest.GetPositionZ(), dest.GetOrientation());
                 summon->SetSpeed(MOVE_FLIGHT, 0.5f);
-                summon->m_Events.KillAllEvents(true);
-                summon->m_Events.AddEvent(new VileSpiritActivateEvent(summon), summon->m_Events.CalculateTime(1000));
+                summon->_Events.KillAllEvents(true);
+                summon->_Events.AddEvent(new VileSpiritActivateEvent(summon), summon->_Events.CalculateTime(1000));
             }
 
             void SendMusicToPlayers(uint32 musicId) const
