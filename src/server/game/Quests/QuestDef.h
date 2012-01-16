@@ -326,8 +326,6 @@ class Quest
         uint32 m_reqCreatureOrGOcount;
         uint32 m_rewchoiceitemscount;
         uint32 m_rewitemscount;
-        //additional data needed for seasonal quest events
-        uint16 SeasonalQuestEvent;
 
         // table data
     protected:

@@ -49,7 +49,6 @@ Quest::Quest(Field* questRecord)
     PlayersSlain                = questRecord[23].GetUInt32();
     BonusTalents                = questRecord[24].GetUInt32();
     RewArenaPoints              = questRecord[25].GetInt32();
-    SeasonalQuestEvent = 0;
     PrevQuestId                 = questRecord[26].GetInt32();
     NextQuestId                 = questRecord[27].GetInt32();
     ExclusiveGroup              = questRecord[28].GetInt32();
@@ -226,7 +225,7 @@ uint32 Quest::XPValue(Player* player) const
     return 0;
 }
 
-int32  Quest::GetRewOrReqMoney() const
+int32 Quest::GetRewOrReqMoney() const
 {
     if (RewOrReqMoney <= 0)
         return RewOrReqMoney;
