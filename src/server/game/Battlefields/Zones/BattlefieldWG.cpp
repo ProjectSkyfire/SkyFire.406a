@@ -39,7 +39,7 @@ bool BattlefieldWG::SetupBattlefield()
     m_TypeId = BATTLEFIELD_WG;                              // See enum BattlefieldTypes
     m_BattleId = BATTLEFIELD_BATTLEID_WG;
     m_ZoneId = BATTLEFIELD_WG_ZONEID;
-    m_MapId = BATTLEFIELD_WG_MAPID;
+    _MapId = BATTLEFIELD_WG_MAPID;
 
     m_MaxPlayer = sWorld->getIntConfig(CONFIG_WINTERGRASP_PLAYER_MAX);
     m_enable = sWorld->getBoolConfig(CONFIG_WINTERGRASP_ENABLE);
@@ -56,7 +56,7 @@ bool BattlefieldWG::SetupBattlefield()
     m_tenacityStack = 0;
 
     KickPosition.Relocate(5728.117f, 2714.346f, 697.733f, 0);
-    KickPosition.m_mapId = m_MapId;
+    KickPosition.m_mapId = _MapId;
 
     RegisterZone(m_ZoneId);
 
@@ -884,7 +884,7 @@ WorldPacket BattlefieldWG::BuildInitWorldStates()
 {
     WorldPacket data(SMSG_INIT_WORLD_STATES, (4 + 4 + 4 + 2 + (BuildingsInZone.size() * 8) + (WorkShopList.size() * 8)));
 
-    data << uint32(m_MapId);
+    data << uint32(_MapId);
     data << uint32(m_ZoneId);
     data << uint32(0);
     data << uint16(4 + 2 + 4 + BuildingsInZone.size() + WorkShopList.size());

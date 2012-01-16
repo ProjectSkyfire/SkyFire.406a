@@ -181,8 +181,8 @@ void WorldSession::HandlePetitionBuyOpcode(WorldPacket & recv_data)
         }
     }
 
-    ItemTemplate const* pProto = sObjectMgr->GetItemTemplate(charterid);
-    if (!pProto)
+    ItemTemplate const* proto = sObjectMgr->GetItemTemplate(charterid);
+    if (!proto)
     {
         _player->SendBuyError(BUY_ERR_ITEM_NOT_FOUND, NULL, charterid, 0);
         return;
@@ -195,7 +195,7 @@ void WorldSession::HandlePetitionBuyOpcode(WorldPacket & recv_data)
     }
 
     ItemPosCountVec dest;
-    InventoryResult msg = _player->CanStoreNewItem(NULL_BAG, NULL_SLOT, dest, charterid, pProto->BuyCount);
+    InventoryResult msg = _player->CanStoreNewItem(NULL_BAG, NULL_SLOT, dest, charterid, proto->BuyCount);
     if (msg != EQUIP_ERR_OK)
     {
         _player->SendEquipError(msg, NULL, NULL, charterid);

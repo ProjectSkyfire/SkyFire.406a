@@ -3782,9 +3782,9 @@ void Spell::SendCastResult(Player* caster, SpellInfo const* spellInfo, uint8 cas
              for (int8 x = 0; x < 3; x++)
                  if (spellInfo->Effects[x].ItemType)
                      item = spellInfo->Effects[x].ItemType;
-             ItemTemplate const* pProto = sObjectMgr->GetItemTemplate(item);
-             if (pProto && pProto->ItemLimitCategory)
-                 data << uint32(pProto->ItemLimitCategory);
+             ItemTemplate const* proto = sObjectMgr->GetItemTemplate(item);
+             if (proto && proto->ItemLimitCategory)
+                 data << uint32(proto->ItemLimitCategory);
              break;
         }
         case SPELL_FAILED_CUSTOM_ERROR:
@@ -3960,11 +3960,11 @@ void Spell::WriteAmmoToPacket(WorldPacket * data)
                 uint32 ammoID = m_caster->ToPlayer()->GetUInt32Value(PLAYER_AMMO_ID);
                 if (ammoID)
                 {
-                    ItemPrototype const *pProto = ObjectMgr::GetItemPrototype(ammoID);
-                    if (pProto)
+                    ItemPrototype const *proto = ObjectMgr::GetItemPrototype(ammoID);
+                    if (proto)
                     {
-                        ammoDisplayID = pProto->DisplayInfoID;
-                        ammoInventoryType = pProto->InventoryType;
+                        ammoDisplayID = proto->DisplayInfoID;
+                        ammoInventoryType = proto->InventoryType;
                     }
                 }
                 else if (m_caster->HasAura(46699))      // Requires No Ammo
@@ -6055,9 +6055,9 @@ SpellCastResult Spell::CheckItems()
                     InventoryResult msg = p_caster->CanStoreNewItem(NULL_BAG, NULL_SLOT, dest, m_spellInfo->Effects[i].ItemType, 1);
                     if (msg != EQUIP_ERR_OK)
                     {
-                        ItemTemplate const* pProto = sObjectMgr->GetItemTemplate(m_spellInfo->Effects[i].ItemType);
+                        ItemTemplate const* proto = sObjectMgr->GetItemTemplate(m_spellInfo->Effects[i].ItemType);
                         // TODO: Needs review
-                        if (pProto && !(pProto->ItemLimitCategory))
+                        if (proto && !(proto->ItemLimitCategory))
                         {
                             p_caster->SendEquipError(msg, NULL, NULL, m_spellInfo->Effects[i].ItemType);
                             return SPELL_FAILED_DONT_REPORT;
@@ -6242,15 +6242,15 @@ SpellCastResult Spell::CheckItems()
             case SPELL_EFFECT_CREATE_MANA_GEM:
             {
                  uint32 item_id = m_spellInfo->Effects[i].ItemType;
-                 ItemTemplate const* pProto = sObjectMgr->GetItemTemplate(item_id);
+                 ItemTemplate const* proto = sObjectMgr->GetItemTemplate(item_id);
 
-                 if (!pProto)
+                 if (!proto)
                      return SPELL_FAILED_ITEM_AT_MAX_CHARGES;
 
                  if (Item* pitem = p_caster->GetItemByEntry(item_id))
                  {
                      for (int x = 0; x < MAX_ITEM_PROTO_SPELLS; ++x)
-                         if (pProto->Spells[x].SpellCharges != 0 && pitem->GetSpellCharges(x) == pProto->Spells[x].SpellCharges)
+                         if (proto->Spells[x].SpellCharges != 0 && pitem->GetSpellCharges(x) == proto->Spells[x].SpellCharges)
                              return SPELL_FAILED_ITEM_AT_MAX_CHARGES;
                  }
                  break;

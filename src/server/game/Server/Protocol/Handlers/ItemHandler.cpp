@@ -559,10 +559,10 @@ void WorldSession::HandleSellItemOpcode(WorldPacket & recv_data)
             }
         }
 
-        ItemTemplate const* pProto = pItem->GetTemplate();
-        if (pProto)
+        ItemTemplate const* proto = pItem->GetTemplate();
+        if (proto)
         {
-            if (pProto->SellPrice > 0)
+            if (proto->SellPrice > 0)
             {
                 if (count < pItem->GetCount())               // need split items
                 {
@@ -592,7 +592,7 @@ void WorldSession::HandleSellItemOpcode(WorldPacket & recv_data)
                     _player->AddItemToBuyBackSlot(pItem);
                 }
 
-                uint32 money = pProto->SellPrice * count;
+                uint32 money = proto->SellPrice * count;
                 _player->ModifyMoney(money);
                 _player->UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_MONEY_FROM_VENDORS, money);
             }

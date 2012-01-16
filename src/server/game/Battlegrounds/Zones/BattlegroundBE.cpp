@@ -27,17 +27,17 @@
 
 BattlegroundBE::BattlegroundBE()
 {
-    m_BgObjects.resize(BG_BE_OBJECT_MAX);
+    _BgObjects.resize(BG_BE_OBJECT_MAX);
 
-    m_StartDelayTimes[BG_STARTING_EVENT_FIRST]  = BG_START_DELAY_1M;
-    m_StartDelayTimes[BG_STARTING_EVENT_SECOND] = BG_START_DELAY_30S;
-    m_StartDelayTimes[BG_STARTING_EVENT_THIRD]  = BG_START_DELAY_15S;
-    m_StartDelayTimes[BG_STARTING_EVENT_FOURTH] = BG_START_DELAY_NONE;
+    _StartDelayTimes[BG_STARTING_EVENT_FIRST]  = BG_START_DELAY_1M;
+    _StartDelayTimes[BG_STARTING_EVENT_SECOND] = BG_START_DELAY_30S;
+    _StartDelayTimes[BG_STARTING_EVENT_THIRD]  = BG_START_DELAY_15S;
+    _StartDelayTimes[BG_STARTING_EVENT_FOURTH] = BG_START_DELAY_NONE;
     //we must set messageIds
-    m_StartMessageIds[BG_STARTING_EVENT_FIRST]  = LANG_ARENA_ONE_MINUTE;
-    m_StartMessageIds[BG_STARTING_EVENT_SECOND] = LANG_ARENA_THIRTY_SECONDS;
-    m_StartMessageIds[BG_STARTING_EVENT_THIRD]  = LANG_ARENA_FIFTEEN_SECONDS;
-    m_StartMessageIds[BG_STARTING_EVENT_FOURTH] = LANG_ARENA_HAS_BEGUN;
+    _StartMessageIds[BG_STARTING_EVENT_FIRST]  = LANG_ARENA_ONE_MINUTE;
+    _StartMessageIds[BG_STARTING_EVENT_SECOND] = LANG_ARENA_THIRTY_SECONDS;
+    _StartMessageIds[BG_STARTING_EVENT_THIRD]  = LANG_ARENA_FIFTEEN_SECONDS;
+    _StartMessageIds[BG_STARTING_EVENT_FOURTH] = LANG_ARENA_HAS_BEGUN;
 }
 
 BattlegroundBE::~BattlegroundBE()
@@ -68,7 +68,7 @@ void BattlegroundBE::AddPlayer(Player* player)
     //create score and add it to map, default values are set in constructor
     BattlegroundBEScore* sc = new BattlegroundBEScore;
 
-    m_PlayerScores[player->GetGUID()] = sc;
+    _PlayerScores[player->GetGUID()] = sc;
 
     UpdateArenaWorldState();
 }
@@ -116,10 +116,10 @@ void BattlegroundBE::HandleAreaTrigger(Player* Source, uint32 Trigger)
     switch (Trigger)
     {
         case 4538:                                          // buff trigger?
-            //buff_guid = m_BgObjects[BG_BE_OBJECT_BUFF_1];
+            //buff_guid = _BgObjects[BG_BE_OBJECT_BUFF_1];
             break;
         case 4539:                                          // buff trigger?
-            //buff_guid = m_BgObjects[BG_BE_OBJECT_BUFF_2];
+            //buff_guid = _BgObjects[BG_BE_OBJECT_BUFF_2];
             break;
         default:
             sLog->outError("WARNING: Unhandled AreaTrigger in Battleground: %u", Trigger);
@@ -163,8 +163,8 @@ bool BattlegroundBE::SetupBattleground()
 
 void BattlegroundBE::UpdatePlayerScore(Player* Source, uint32 type, uint32 value, bool doAddHonor)
 {
-    BattlegroundScoreMap::iterator itr = m_PlayerScores.find(Source->GetGUID());
-    if (itr == m_PlayerScores.end())                         // player not found...
+    BattlegroundScoreMap::iterator itr = _PlayerScores.find(Source->GetGUID());
+    if (itr == _PlayerScores.end())                         // player not found...
         return;
 
     //there is nothing special in this score

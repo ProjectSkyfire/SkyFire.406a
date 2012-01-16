@@ -906,13 +906,13 @@ void AchievementMgrBase::UpdateAchievementCriteria(AchievementCriteriaTypes type
                 if (miscValue2 != achievementCriteria->roll_greed_on_loot.rollValue)
                     continue;
 
-                ItemTemplate const *pProto = sObjectMgr->GetItemTemplate(miscValue1);
-                if (!pProto)
+                ItemTemplate const *proto = sObjectMgr->GetItemTemplate(miscValue1);
+                if (!proto)
                     continue;
 
                 // check item level via achievement_criteria_data
                 AchievementCriteriaDataSet const* data = sAchievementMgr->GetCriteriaDataSet(achievementCriteria);
-                if (!data || !data->Meets(player, 0, pProto->ItemLevel))
+                if (!data || !data->Meets(player, 0, proto->ItemLevel))
                     continue;
 
                 SetCriteriaProgress(achievementCriteria, 1, player, PROGRESS_ACCUMULATE);

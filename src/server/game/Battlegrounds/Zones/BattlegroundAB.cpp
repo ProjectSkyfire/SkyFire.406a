@@ -42,14 +42,14 @@ uint32 BG_AB_ReputationScoreTicks[BG_HONOR_MODE_NUM] = {
 
 BattlegroundAB::BattlegroundAB()
 {
-    m_BuffChange = true;
-    m_BgObjects.resize(BG_AB_OBJECT_MAX);
-    m_BgCreatures.resize(BG_AB_ALL_NODES_COUNT + 5);//+5 for aura triggers
+    _BuffChange = true;
+    _BgObjects.resize(BG_AB_OBJECT_MAX);
+    _BgCreatures.resize(BG_AB_ALL_NODES_COUNT + 5);//+5 for aura triggers
 
-    m_StartMessageIds[BG_STARTING_EVENT_FIRST]  = LANG_BG_AB_START_TWO_MINUTES;
-    m_StartMessageIds[BG_STARTING_EVENT_SECOND] = LANG_BG_AB_START_ONE_MINUTE;
-    m_StartMessageIds[BG_STARTING_EVENT_THIRD]  = LANG_BG_AB_START_HALF_MINUTE;
-    m_StartMessageIds[BG_STARTING_EVENT_FOURTH] = LANG_BG_AB_HAS_BEGUN;
+    _StartMessageIds[BG_STARTING_EVENT_FIRST]  = LANG_BG_AB_START_TWO_MINUTES;
+    _StartMessageIds[BG_STARTING_EVENT_SECOND] = LANG_BG_AB_START_ONE_MINUTE;
+    _StartMessageIds[BG_STARTING_EVENT_THIRD]  = LANG_BG_AB_START_HALF_MINUTE;
+    _StartMessageIds[BG_STARTING_EVENT_FOURTH] = LANG_BG_AB_HAS_BEGUN;
 }
 
 BattlegroundAB::~BattlegroundAB()
@@ -126,7 +126,7 @@ void BattlegroundAB::PostUpdateImpl(uint32 diff)
             if (m_lastTick[team] > BG_AB_TickIntervals[points])
             {
                 m_lastTick[team] -= BG_AB_TickIntervals[points];
-                m_TeamScores[team] += BG_AB_TickPoints[points];
+                _TeamScores[team] += BG_AB_TickPoints[points];
                 m_HonorScoreTics[team] += BG_AB_TickPoints[points];
                 m_ReputationScoreTics[team] += BG_AB_TickPoints[points];
                 if (m_ReputationScoreTics[team] >= m_ReputationTics)
@@ -139,7 +139,7 @@ void BattlegroundAB::PostUpdateImpl(uint32 diff)
                     RewardHonorToTeam(GetBonusHonorFromKill(1), (team == BG_TEAM_ALLIANCE) ? ALLIANCE : HORDE);
                     m_HonorScoreTics[team] -= m_HonorTics;
                 }
-                if (!m_IsInformedNearVictory && m_TeamScores[team] > BG_AB_WARNING_NEAR_VICTORY_SCORE)
+                if (!m_IsInformedNearVictory && _TeamScores[team] > BG_AB_WARNING_NEAR_VICTORY_SCORE)
                 {
                     if (team == BG_TEAM_ALLIANCE)
                         SendMessageToAll(LANG_BG_AB_A_NEAR_VICTORY, CHAT_MSG_BG_SYSTEM_NEUTRAL);
@@ -149,24 +149,24 @@ void BattlegroundAB::PostUpdateImpl(uint32 diff)
                     m_IsInformedNearVictory = true;
                 }
 
-                if (m_TeamScores[team] > BG_AB_MAX_TEAM_SCORE)
-                    m_TeamScores[team] = BG_AB_MAX_TEAM_SCORE;
+                if (_TeamScores[team] > BG_AB_MAX_TEAM_SCORE)
+                    _TeamScores[team] = BG_AB_MAX_TEAM_SCORE;
                 if (team == BG_TEAM_ALLIANCE)
-                    UpdateWorldState(BG_AB_OP_RESOURCES_ALLY, m_TeamScores[team]);
+                    UpdateWorldState(BG_AB_OP_RESOURCES_ALLY, _TeamScores[team]);
                 if (team == BG_TEAM_HORDE)
-                    UpdateWorldState(BG_AB_OP_RESOURCES_HORDE, m_TeamScores[team]);
+                    UpdateWorldState(BG_AB_OP_RESOURCES_HORDE, _TeamScores[team]);
                 // update achievement flags
-                // we increased m_TeamScores[team] so we just need to check if it is 500 more than other teams resources
+                // we increased _TeamScores[team] so we just need to check if it is 500 more than other teams resources
                 uint8 otherTeam = (team + 1) % BG_TEAMS_COUNT;
-                if (m_TeamScores[team] > m_TeamScores[otherTeam] + 500)
+                if (_TeamScores[team] > _TeamScores[otherTeam] + 500)
                     m_TeamScores500Disadvantage[otherTeam] = true;
             }
         }
 
         // Test win condition
-        if (m_TeamScores[BG_TEAM_ALLIANCE] >= BG_AB_MAX_TEAM_SCORE)
+        if (_TeamScores[BG_TEAM_ALLIANCE] >= BG_AB_MAX_TEAM_SCORE)
             EndBattleground(ALLIANCE);
-        if (m_TeamScores[BG_TEAM_HORDE] >= BG_AB_MAX_TEAM_SCORE)
+        if (_TeamScores[BG_TEAM_HORDE] >= BG_AB_MAX_TEAM_SCORE)
             EndBattleground(HORDE);
     }
 }
@@ -211,7 +211,7 @@ void BattlegroundAB::AddPlayer(Player* player)
     //create score and add it to map, default values are set in the constructor
     BattlegroundABScore* sc = new BattlegroundABScore;
 
-    m_PlayerScores[player->GetGUID()] = sc;
+    _PlayerScores[player->GetGUID()] = sc;
 }
 
 void BattlegroundAB::RemovePlayer(Player* /*player*/, uint64 /*guid*/, uint32 /*team*/)
@@ -330,8 +330,8 @@ void BattlegroundAB::FillInitialWorldStates(WorldPacket& data)
     // Team scores
     data << uint32(BG_AB_OP_RESOURCES_MAX)      << uint32(BG_AB_MAX_TEAM_SCORE);
     data << uint32(BG_AB_OP_RESOURCES_WARNING)  << uint32(BG_AB_WARNING_NEAR_VICTORY_SCORE);
-    data << uint32(BG_AB_OP_RESOURCES_ALLY)     << uint32(m_TeamScores[BG_TEAM_ALLIANCE]);
-    data << uint32(BG_AB_OP_RESOURCES_HORDE)    << uint32(m_TeamScores[BG_TEAM_HORDE]);
+    data << uint32(BG_AB_OP_RESOURCES_ALLY)     << uint32(_TeamScores[BG_TEAM_ALLIANCE]);
+    data << uint32(BG_AB_OP_RESOURCES_HORDE)    << uint32(_TeamScores[BG_TEAM_HORDE]);
 
     // other unknown
     data << uint32(0x745) << uint32(0x2);           // 37 1861 unk
@@ -403,7 +403,7 @@ void BattlegroundAB::_NodeDeOccupied(uint8 node)
         DelCreature(node+7);//NULL checks are in DelCreature! 0-6 spirit guides
 
     // Those who are waiting to resurrect at this node are taken to the closest own node's graveyard
-    std::vector<uint64> ghost_list = m_ReviveQueue[m_BgCreatures[node]];
+    std::vector<uint64> ghost_list = _ReviveQueue[_BgCreatures[node]];
     if (!ghost_list.empty())
     {
         WorldSafeLocsEntry const* ClosestGrave = NULL;
@@ -421,7 +421,7 @@ void BattlegroundAB::_NodeDeOccupied(uint8 node)
         }
     }
 
-    if (m_BgCreatures[node])
+    if (_BgCreatures[node])
         DelCreature(node);
 
     // buff object isn't despawned
@@ -434,11 +434,11 @@ void BattlegroundAB::EventPlayerClickedOnFlag(Player* source, GameObject* /*targ
         return;
 
     uint8 node = BG_AB_NODE_STABLES;
-    GameObject* obj = GetBgMap()->GetGameObject(m_BgObjects[node*8+7]);
+    GameObject* obj = GetBgMap()->GetGameObject(_BgObjects[node*8+7]);
     while ((node < BG_AB_DYNAMIC_NODES_COUNT) && ((!obj) || (!source->IsWithinDistInMap(obj, 10))))
     {
         ++node;
-        obj = GetBgMap()->GetGameObject(m_BgObjects[node*8+BG_AB_OBJECT_AURA_CONTESTED]);
+        obj = GetBgMap()->GetGameObject(_BgObjects[node*8+BG_AB_OBJECT_AURA_CONTESTED]);
     }
 
     if (node == BG_AB_DYNAMIC_NODES_COUNT)
@@ -598,8 +598,8 @@ void BattlegroundAB::Reset()
     //call parent's class reset
     Battleground::Reset();
 
-    m_TeamScores[BG_TEAM_ALLIANCE]          = 0;
-    m_TeamScores[BG_TEAM_HORDE]             = 0;
+    _TeamScores[BG_TEAM_ALLIANCE]          = 0;
+    _TeamScores[BG_TEAM_HORDE]             = 0;
     m_lastTick[BG_TEAM_ALLIANCE]            = 0;
     m_lastTick[BG_TEAM_HORDE]               = 0;
     m_HonorScoreTics[BG_TEAM_ALLIANCE]      = 0;
@@ -622,7 +622,7 @@ void BattlegroundAB::Reset()
     }
 
     for (uint8 i = 0; i < BG_AB_ALL_NODES_COUNT + 5; ++i)//+5 for aura triggers
-        if (m_BgCreatures[i])
+        if (_BgCreatures[i])
             DelCreature(i);
 }
 
@@ -681,8 +681,8 @@ WorldSafeLocsEntry const* BattlegroundAB::GetClosestGraveYard(Player* player)
 
 void BattlegroundAB::UpdatePlayerScore(Player* Source, uint32 type, uint32 value, bool doAddHonor)
 {
-    BattlegroundScoreMap::iterator itr = m_PlayerScores.find(Source->GetGUID());
-    if (itr == m_PlayerScores.end())                         // player not found...
+    BattlegroundScoreMap::iterator itr = _PlayerScores.find(Source->GetGUID());
+    if (itr == _PlayerScores.end())                         // player not found...
         return;
 
     switch (type)

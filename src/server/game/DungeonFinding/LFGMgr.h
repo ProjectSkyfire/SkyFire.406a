@@ -355,7 +355,7 @@ class LFGMgr
         LfgRoleCheckMap m_RoleChecks;                      ///< Current Role checks
         LfgProposalMap m_Proposals;                        ///< Current Proposals
         LfgPlayerBootMap m_Boots;                          ///< Current player kicks
-        LfgPlayerDataMap m_Players;                        ///< Player data
+        LfgPlayerDataMap _Players;                        ///< Player data
         LfgGroupDataMap m_Groups;                          ///< Group data
 };
 

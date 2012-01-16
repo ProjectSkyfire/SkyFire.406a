@@ -155,7 +155,7 @@ public:
     void RelocateDeadPlayers();
 
     bool HasNpc(uint64 guid) { return (m_SpiritGuide[0]->GetGUID() == guid || m_SpiritGuide[1]->GetGUID() == guid); }
-    bool HasPlayer(uint64 guid) { return m_ResurrectQueue.find(guid) != m_ResurrectQueue.end(); }
+    bool HasPlayer(uint64 guid) { return _ResurrectQueue.find(guid) != _ResurrectQueue.end(); }
     uint32 GetGraveYardId() { return m_GraveyardId; }
 
 protected:
@@ -163,7 +163,7 @@ protected:
     TeamId m_ControlTeam;
     uint32 m_GraveyardId;
     Creature *m_SpiritGuide[2];
-    GuidSet m_ResurrectQueue;
+    GuidSet _ResurrectQueue;
     Battlefield *m_Bf;
 };
 
@@ -351,7 +351,7 @@ protected:
     uint32 m_TypeId;                                        // See enum BattlefieldTypes
     uint32 m_BattleId;                                      // BattleID (for packet)
     uint32 m_ZoneId;                                        // ZoneID of Wintergrasp = 4197
-    uint32 m_MapId;                                         // MapId where is Battlefield
+    uint32 _MapId;                                         // MapId where is Battlefield
     uint32 m_MaxPlayer;                                     // Maximum number of player that participated to Battlefield
     uint32 m_MinPlayer;                                     // Minimum number of player for Battlefield start
     uint32 m_MinLevel;                                      // Required level to participate at Battlefield

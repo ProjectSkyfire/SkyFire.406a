@@ -2589,8 +2589,8 @@ void Spell::DoCreateItem(uint32 /*i*/, uint32 itemtype)
     Player* player = unitTarget->ToPlayer();
 
     uint32 newitemid = itemtype;
-    ItemTemplate const* pProto = sObjectMgr->GetItemTemplate(newitemid);
-    if (!pProto)
+    ItemTemplate const* proto = sObjectMgr->GetItemTemplate(newitemid);
+    if (!proto)
     {
         player->SendEquipError(EQUIP_ERR_ITEM_NOT_FOUND, NULL, NULL);
         return;
@@ -2620,8 +2620,8 @@ void Spell::DoCreateItem(uint32 /*i*/, uint32 itemtype)
 
     if (num_to_add < 1)
         num_to_add = 1;
-    if (num_to_add > pProto->GetMaxStackSize())
-        num_to_add = pProto->GetMaxStackSize();
+    if (num_to_add > proto->GetMaxStackSize())
+        num_to_add = proto->GetMaxStackSize();
 
     // init items_count to 1, since 1 item will be created regardless of specialization
     int items_count=1;
@@ -7636,8 +7636,8 @@ void Spell::EffectRechargeManaGem(SpellEffIndex /*effIndex*/)
 
     uint32 item_id = m_spellInfo->Effects[EFFECT_0].ItemType;
 
-    ItemTemplate const* pProto = sObjectMgr->GetItemTemplate(item_id);
-    if (!pProto)
+    ItemTemplate const* proto = sObjectMgr->GetItemTemplate(item_id);
+    if (!proto)
     {
         player->SendEquipError(EQUIP_ERR_ITEM_NOT_FOUND, NULL, NULL);
         return;
@@ -7646,7 +7646,7 @@ void Spell::EffectRechargeManaGem(SpellEffIndex /*effIndex*/)
     if (Item* pItem = player->GetItemByEntry(item_id))
     {
         for (int x = 0; x < MAX_ITEM_PROTO_SPELLS; ++x)
-            pItem->SetSpellCharges(x, pProto->Spells[x].SpellCharges);
+            pItem->SetSpellCharges(x, proto->Spells[x].SpellCharges);
         pItem->SetState(ITEM_CHANGED, player);
     }
 }

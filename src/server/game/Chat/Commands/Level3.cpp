@@ -264,8 +264,8 @@ bool ChatHandler::HandleAddItemCommand(const char *args)
 
     sLog->outDetail(GetSkyFireString(LANG_ADDITEM), itemId, count);
 
-    ItemTemplate const* pProto = sObjectMgr->GetItemTemplate(itemId);
-    if (!pProto)
+    ItemTemplate const* proto = sObjectMgr->GetItemTemplate(itemId);
+    if (!proto)
     {
         PSendSysMessage(LANG_COMMAND_ITEMIDINVALID, itemId);
         SetSentErrorMessage(true);

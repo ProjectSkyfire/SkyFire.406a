@@ -328,7 +328,7 @@ struct VendorItem
     uint32 ExtendedCost;
 
     //helpers
-    bool IsGoldRequired(ItemTemplate const* pProto) const { return pProto->Flags2 & ITEM_FLAGS_EXTRA_EXT_COST_REQUIRES_GOLD || !ExtendedCost; }
+    bool IsGoldRequired(ItemTemplate const* proto) const { return proto->Flags2 & ITEM_FLAGS_EXTRA_EXT_COST_REQUIRES_GOLD || !ExtendedCost; }
 };
 typedef std::vector<VendorItem*> VendorItemList;
 
