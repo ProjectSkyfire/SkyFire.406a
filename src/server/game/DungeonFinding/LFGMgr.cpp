@@ -1889,7 +1889,7 @@ LfgState LFGMgr::GetState(const uint64& guid)
     if (IS_GROUP(guid))
         return m_Groups[guid].GetState();
     else
-        return m_Players[guid].GetState();
+        return _Players[guid].GetState();
 }
 
 uint32 LFGMgr::GetDungeon(const uint64& guid, bool asId /*= true*/)
@@ -1901,25 +1901,25 @@ uint32 LFGMgr::GetDungeon(const uint64& guid, bool asId /*= true*/)
 uint8 LFGMgr::GetRoles(const uint64& guid)
 {
     sLog->outDebug(LOG_FILTER_LFG, "LFGMgr::GetRoles: [" UI64FMTD "]", guid);
-    return m_Players[guid].GetRoles();
+    return _Players[guid].GetRoles();
 }
 
 const std::string& LFGMgr::GetComment(const uint64& guid)
 {
     sLog->outDebug(LOG_FILTER_LFG, "LFGMgr::GetComment: [" UI64FMTD "]", guid);
-    return m_Players[guid].GetComment();
+    return _Players[guid].GetComment();
 }
 
 const LfgDungeonSet& LFGMgr::GetSelectedDungeons(const uint64& guid)
 {
     sLog->outDebug(LOG_FILTER_LFG, "LFGMgr::GetSelectedDungeons: [" UI64FMTD "]", guid);
-    return m_Players[guid].GetSelectedDungeons();
+    return _Players[guid].GetSelectedDungeons();
 }
 
 const LfgLockMap& LFGMgr::GetLockedDungeons(const uint64& guid)
 {
     sLog->outDebug(LOG_FILTER_LFG, "LFGMgr::GetLockedDungeons: [" UI64FMTD "]", guid);
-    return m_Players[guid].GetLockedDungeons();
+    return _Players[guid].GetLockedDungeons();
 }
 
 uint8 LFGMgr::GetKicksLeft(const uint64& guid)
@@ -1943,7 +1943,7 @@ void LFGMgr::RestoreState(const uint64& guid)
 void LFGMgr::ClearState(const uint64& guid)
 {
     sLog->outDebug(LOG_FILTER_LFG, "LFGMgr::ClearState: [" UI64FMTD "]", guid);
-    m_Players[guid].ClearState();
+    _Players[guid].ClearState();
 }
 
 void LFGMgr::SetState(const uint64& guid, LfgState state)
@@ -1952,7 +1952,7 @@ void LFGMgr::SetState(const uint64& guid, LfgState state)
     if (IS_GROUP(guid))
         m_Groups[guid].SetState(state);
     else
-        m_Players[guid].SetState(state);
+        _Players[guid].SetState(state);
 }
 
 void LFGMgr::SetDungeon(const uint64& guid, uint32 dungeon)
@@ -1964,25 +1964,25 @@ void LFGMgr::SetDungeon(const uint64& guid, uint32 dungeon)
 void LFGMgr::SetRoles(const uint64& guid, uint8 roles)
 {
     sLog->outDebug(LOG_FILTER_LFG, "LFGMgr::SetRoles: [" UI64FMTD "] roles: %u", guid, roles);
-    m_Players[guid].SetRoles(roles);
+    _Players[guid].SetRoles(roles);
 }
 
 void LFGMgr::SetComment(const uint64& guid, const std::string& comment)
 {
     sLog->outDebug(LOG_FILTER_LFG, "LFGMgr::SetComment: [" UI64FMTD "] comment: %s", guid, comment.c_str());
-    m_Players[guid].SetComment(comment);
+    _Players[guid].SetComment(comment);
 }
 
 void LFGMgr::SetSelectedDungeons(const uint64& guid, const LfgDungeonSet& dungeons)
 {
     sLog->outDebug(LOG_FILTER_LFG, "LFGMgr::SetSelectedDungeons: [" UI64FMTD "]", guid);
-    m_Players[guid].SetSelectedDungeons(dungeons);
+    _Players[guid].SetSelectedDungeons(dungeons);
 }
 
 void LFGMgr::SetLockedDungeons(const uint64& guid, const LfgLockMap& lock)
 {
     sLog->outDebug(LOG_FILTER_LFG, "LFGMgr::SetLockedDungeons: [" UI64FMTD "]", guid);
-    m_Players[guid].SetLockedDungeons(lock);
+    _Players[guid].SetLockedDungeons(lock);
 }
 
 void LFGMgr::DecreaseKicksLeft(const uint64& guid)
@@ -1994,9 +1994,9 @@ void LFGMgr::DecreaseKicksLeft(const uint64& guid)
 void LFGMgr::RemovePlayerData(const uint64& guid)
 {
     sLog->outDebug(LOG_FILTER_LFG, "LFGMgr::RemovePlayerData: [" UI64FMTD "]", guid);
-    LfgPlayerDataMap::iterator it = m_Players.find(guid);
-    if (it != m_Players.end())
-        m_Players.erase(it);
+    LfgPlayerDataMap::iterator it = _Players.find(guid);
+    if (it != _Players.end())
+        _Players.erase(it);
 }
 
 void LFGMgr::RemoveGroupData(const uint64& guid)

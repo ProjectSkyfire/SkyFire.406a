@@ -37,18 +37,18 @@ uint32 BG_EY_HonorScoreTicks[BG_HONOR_MODE_NUM] = {
 
 BattlegroundEY::BattlegroundEY()
 {
-    m_BuffChange = true;
-    m_BgObjects.resize(BG_EY_OBJECT_MAX);
-    m_BgCreatures.resize(BG_EY_CREATURES_MAX);
+    _BuffChange = true;
+    _BgObjects.resize(BG_EY_OBJECT_MAX);
+    _BgCreatures.resize(BG_EY_CREATURES_MAX);
     m_Points_Trigger[FEL_REAVER] = TR_FEL_REAVER_BUFF;
     m_Points_Trigger[BLOOD_ELF] = TR_BLOOD_ELF_BUFF;
     m_Points_Trigger[DRAENEI_RUINS] = TR_DRAENEI_RUINS_BUFF;
     m_Points_Trigger[MAGE_TOWER] = TR_MAGE_TOWER_BUFF;
 
-    m_StartMessageIds[BG_STARTING_EVENT_FIRST]  = LANG_BG_EY_START_TWO_MINUTES;
-    m_StartMessageIds[BG_STARTING_EVENT_SECOND] = LANG_BG_EY_START_ONE_MINUTE;
-    m_StartMessageIds[BG_STARTING_EVENT_THIRD]  = LANG_BG_EY_START_HALF_MINUTE;
-    m_StartMessageIds[BG_STARTING_EVENT_FOURTH] = LANG_BG_EY_HAS_BEGUN;
+    _StartMessageIds[BG_STARTING_EVENT_FIRST]  = LANG_BG_EY_START_TWO_MINUTES;
+    _StartMessageIds[BG_STARTING_EVENT_SECOND] = LANG_BG_EY_START_ONE_MINUTE;
+    _StartMessageIds[BG_STARTING_EVENT_THIRD]  = LANG_BG_EY_START_HALF_MINUTE;
+    _StartMessageIds[BG_STARTING_EVENT_FOURTH] = LANG_BG_EY_HAS_BEGUN;
 }
 
 BattlegroundEY::~BattlegroundEY()
@@ -126,7 +126,7 @@ void BattlegroundEY::StartingEventOpenDoors()
 void BattlegroundEY::AddPoints(uint32 Team, uint32 Points)
 {
     BattlegroundTeamId team_index = GetTeamIndexByTeamId(Team);
-    m_TeamScores[team_index] += Points;
+    _TeamScores[team_index] += Points;
     m_HonorScoreTics[team_index] += Points;
     if (m_HonorScoreTics[team_index] >= m_HonorTics)
     {
@@ -141,7 +141,7 @@ void BattlegroundEY::CheckSomeoneJoinedPoint()
     GameObject* obj = NULL;
     for (uint8 i = 0; i < EY_POINTS_MAX; ++i)
     {
-        obj = HashMapHolder<GameObject>::Find(m_BgObjects[BG_EY_OBJECT_TOWER_CAP_FEL_REAVER + i]);
+        obj = HashMapHolder<GameObject>::Find(_BgObjects[BG_EY_OBJECT_TOWER_CAP_FEL_REAVER + i]);
         if (obj)
         {
             uint8 j = 0;
@@ -181,7 +181,7 @@ void BattlegroundEY::CheckSomeoneLeftPoint()
     GameObject* obj = NULL;
     for (uint8 i = 0; i < EY_POINTS_MAX; ++i)
     {
-        obj = HashMapHolder<GameObject>::Find(m_BgObjects[BG_EY_OBJECT_TOWER_CAP_FEL_REAVER + i]);
+        obj = HashMapHolder<GameObject>::Find(_BgObjects[BG_EY_OBJECT_TOWER_CAP_FEL_REAVER + i]);
         if (obj)
         {
             uint8 j = 0;
@@ -339,7 +339,7 @@ void BattlegroundEY::AddPlayer(Player* player)
 
     m_PlayersNearPoint[EY_POINTS_MAX].push_back(player->GetGUID());
 
-    m_PlayerScores[player->GetGUID()] = sc;
+    _PlayerScores[player->GetGUID()] = sc;
 }
 
 void BattlegroundEY::RemovePlayer(Player* player, uint64 guid, uint32 /*team*/)
@@ -515,8 +515,8 @@ void BattlegroundEY::Reset()
     //call parent's class reset
     Battleground::Reset();
 
-    m_TeamScores[BG_TEAM_ALLIANCE] = 0;
-    m_TeamScores[BG_TEAM_HORDE] = 0;
+    _TeamScores[BG_TEAM_ALLIANCE] = 0;
+    _TeamScores[BG_TEAM_HORDE] = 0;
     m_TeamPointsCount[BG_TEAM_ALLIANCE] = 0;
     m_TeamPointsCount[BG_TEAM_HORDE] = 0;
     m_HonorScoreTics[BG_TEAM_ALLIANCE] = 0;
@@ -734,7 +734,7 @@ void BattlegroundEY::EventTeamCapturedPoint(Player* Source, uint32 Point)
     else
         SendMessageToAll(m_CapturingPointTypes[Point].MessageIdHorde, CHAT_MSG_BG_SYSTEM_HORDE, Source);
 
-    if (m_BgCreatures[Point])
+    if (_BgCreatures[Point])
         DelCreature(Point);
 
     WorldSafeLocsEntry const* sg = NULL;
@@ -806,8 +806,8 @@ void BattlegroundEY::EventPlayerCapturedFlag(Player* Source, uint32 BgObjectType
 
 void BattlegroundEY::UpdatePlayerScore(Player* Source, uint32 type, uint32 value, bool doAddHonor)
 {
-    BattlegroundScoreMap::iterator itr = m_PlayerScores.find(Source->GetGUID());
-    if (itr == m_PlayerScores.end())                         // player not found
+    BattlegroundScoreMap::iterator itr = _PlayerScores.find(Source->GetGUID());
+    if (itr == _PlayerScores.end())                         // player not found
         return;
 
     switch (type)

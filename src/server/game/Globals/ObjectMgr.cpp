@@ -2695,18 +2695,18 @@ void ObjectMgr::LoadItemSetNames()
 
     if (!itemSetItems.empty())
     {
-        ItemTemplate const* pProto;
+        ItemTemplate const* proto;
         for (std::set<uint32>::iterator itr = itemSetItems.begin(); itr != itemSetItems.end(); ++itr)
         {
             uint32 entry = *itr;
             // add data from item_template if available
-            pProto = sObjectMgr->GetItemTemplate(entry);
-            if (pProto)
+            proto = sObjectMgr->GetItemTemplate(entry);
+            if (proto)
             {
                 sLog->outErrorDb("Item set part (Entry: %u) does not have entry in `item_set_names`, adding data from `item_template`.", entry);
                 ItemSetNameEntry &data = mItemSetNameMap[entry];
-                data.name = pProto->Name1;
-                data.InventoryType = pProto->InventoryType;
+                data.name = proto->Name1;
+                data.InventoryType = proto->InventoryType;
                 ++count;
             }
             else
@@ -6053,8 +6053,8 @@ void ObjectMgr::LoadAccessRequirements()
 
         if (ar.item)
         {
-            ItemTemplate const *pProto = sObjectMgr->GetItemTemplate(ar.item);
-            if (!pProto)
+            ItemTemplate const *proto = sObjectMgr->GetItemTemplate(ar.item);
+            if (!proto)
             {
                 sLog->outError("Key item %u does not exist for map %u difficulty %u, removing key requirement.", ar.item, mapid, difficulty);
                 ar.item = 0;
@@ -6063,8 +6063,8 @@ void ObjectMgr::LoadAccessRequirements()
 
         if (ar.item2)
         {
-            ItemTemplate const *pProto = sObjectMgr->GetItemTemplate(ar.item2);
-            if (!pProto)
+            ItemTemplate const *proto = sObjectMgr->GetItemTemplate(ar.item2);
+            if (!proto)
             {
                 sLog->outError("Second item %u does not exist for map %u difficulty %u, removing key requirement.", ar.item2, mapid, difficulty);
                 ar.item2 = 0;

@@ -24,7 +24,7 @@ bool BattlefieldTB::SetupBattlefield()
     m_TypeId                     = BATTLEFIELD_TB;    //View enum BattlefieldTypes
     m_BattleId                   = BATTLEFIELD_BATTLEID_TB;
     m_ZoneId                     = 5095; // Tol Barad
-    m_MapId                      = 732;  // Map X
+    _MapId                      = 732;  // Map X
     m_MaxPlayer                  = sWorld->getIntConfig(CONFIG_TOL_BARAD_PLR_MAX);
     m_enable                     = sWorld->getBoolConfig(CONFIG_TOL_BARAD_ENABLE);
     m_MinPlayer                  = sWorld->getIntConfig(CONFIG_TOL_BARAD_PLR_MIN);
@@ -35,9 +35,9 @@ bool BattlefieldTB::SetupBattlefield()
     m_StartGroupingTimer         = 15*60*1000; // in ms
     m_StartGrouping=false;
     KickPositionA.Relocate(-363.897f, 1047.931f, 22, 0);
-    KickPositionA.m_mapId        = m_MapId;
+    KickPositionA.m_mapId        = _MapId;
     KickPositionH.Relocate(-609.336f, 1392.194f, 21.5f, 0);
-    KickPositionH.m_mapId        = m_MapId;
+    KickPositionH.m_mapId        = _MapId;
     RegisterZone(m_ZoneId);
     m_Data32.resize(BATTLEFIELD_TB_DATA_MAX);
     m_saveTimer                  = 60000;
@@ -497,7 +497,7 @@ WorldPacket BattlefieldTB::BuildInitWorldStates()
 {
     WorldPacket data(SMSG_INIT_WORLD_STATES, (4+4+4+2+(BuildingsInZone.size()*8)+(WorkShopList.size()*8)));
 
-    data << uint32(m_MapId);
+    data << uint32(_MapId);
     data << uint32(m_ZoneId);
     data << uint32(0);
     data << uint16(4+2+4+BuildingsInZone.size()+WorkShopList.size());

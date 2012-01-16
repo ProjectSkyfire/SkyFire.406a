@@ -44,7 +44,7 @@ Battlefield::Battlefield()
     m_TypeId                   = 0;
     m_BattleId                 = 0;
     m_ZoneId                   = 0;
-    m_MapId                    = 0;
+    _MapId                    = 0;
     m_MaxPlayer                = 0;
     m_MinPlayer                = 0;
     m_BattleTime               = 0;
@@ -734,7 +734,7 @@ BfGraveYard::BfGraveYard(Battlefield *Bf)
     m_ControlTeam = TEAM_NEUTRAL;
     m_SpiritGuide[0] = NULL;
     m_SpiritGuide[1] = NULL;
-    m_ResurrectQueue.clear();
+    _ResurrectQueue.clear();
 }
 
 void BfGraveYard::Init(uint32 horde_entry, uint32 alliance_entry, float x, float y, float z, float o, TeamId startcontrol, uint32 gy)
@@ -771,9 +771,9 @@ float BfGraveYard::GetDistance(Player *player)
 
 void BfGraveYard::AddPlayer(uint64 player_guid)
 {
-    if (!m_ResurrectQueue.count(player_guid))
+    if (!_ResurrectQueue.count(player_guid))
     {
-        m_ResurrectQueue.insert(player_guid);
+        _ResurrectQueue.insert(player_guid);
 
         if (Player* player = ObjectAccessor::FindPlayer(player_guid))
             player->CastSpell(player, SPELL_WAITING_FOR_RESURRECT, true);
@@ -782,7 +782,7 @@ void BfGraveYard::AddPlayer(uint64 player_guid)
 
 void BfGraveYard::RemovePlayer(uint64 player_guid)
 {
-    m_ResurrectQueue.erase(m_ResurrectQueue.find(player_guid));
+    _ResurrectQueue.erase(_ResurrectQueue.find(player_guid));
 
     if (Player* player = ObjectAccessor::FindPlayer(player_guid))
         player->RemoveAurasDueToSpell(SPELL_WAITING_FOR_RESURRECT);
@@ -790,10 +790,10 @@ void BfGraveYard::RemovePlayer(uint64 player_guid)
 
 void BfGraveYard::Resurrect()
 {
-    if (m_ResurrectQueue.empty())
+    if (_ResurrectQueue.empty())
         return;
 
-    for (GuidSet::const_iterator itr = m_ResurrectQueue.begin(); itr != m_ResurrectQueue.end(); ++itr)
+    for (GuidSet::const_iterator itr = _ResurrectQueue.begin(); itr != _ResurrectQueue.end(); ++itr)
     {
         // Get player object from his guid
         Player* player = ObjectAccessor::FindPlayer(*itr);
@@ -814,7 +814,7 @@ void BfGraveYard::Resurrect()
         sObjectAccessor->ConvertCorpseForPlayer(player->GetGUID());
     }
 
-    m_ResurrectQueue.clear();
+    _ResurrectQueue.clear();
 }
 
 // For changing graveyard control
@@ -834,7 +834,7 @@ void BfGraveYard::ChangeControl(TeamId team)
 void BfGraveYard::RelocateDeadPlayers()
 {
     WorldSafeLocsEntry const* ClosestGrave = NULL;
-    for (GuidSet::const_iterator itr = m_ResurrectQueue.begin(); itr != m_ResurrectQueue.end(); ++itr)
+    for (GuidSet::const_iterator itr = _ResurrectQueue.begin(); itr != _ResurrectQueue.end(); ++itr)
     {
         Player* player = ObjectAccessor::FindPlayer(*itr);
         if (!player)
@@ -865,7 +865,7 @@ Creature *Battlefield::SpawnCreature(uint32 entry, Position pos, TeamId team)
 Creature *Battlefield::SpawnCreature(uint32 entry, float x, float y, float z, float o, TeamId team)
 {
     //Get map object
-    Map* map = const_cast < Map * >(sMapMgr->CreateBaseMap(m_MapId));
+    Map* map = const_cast < Map * >(sMapMgr->CreateBaseMap(_MapId));
     if (!map)
     {
         sLog->outError("Can't create creature entry: %u map not found", entry);

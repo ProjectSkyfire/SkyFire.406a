@@ -138,7 +138,7 @@ class BGQueueInviteEvent : public BasicEvent
 {
     public:
         BGQueueInviteEvent(uint64 pl_guid, uint32 BgInstanceGUID, BattlegroundTypeId BgTypeId, uint8 arenaType, uint32 removeTime) :
-          m_PlayerGuid(pl_guid), m_BgInstanceGUID(BgInstanceGUID), m_BgTypeId(BgTypeId), m_ArenaType(arenaType), m_RemoveTime(removeTime)
+          m_PlayerGuid(pl_guid), m_BgInstanceGUID(BgInstanceGUID), m_BgTypeId(BgTypeId), _ArenaType(arenaType), m_RemoveTime(removeTime)
           {
           };
         virtual ~BGQueueInviteEvent() {};
@@ -149,7 +149,7 @@ class BGQueueInviteEvent : public BasicEvent
         uint64 m_PlayerGuid;
         uint32 m_BgInstanceGUID;
         BattlegroundTypeId m_BgTypeId;
-        uint8  m_ArenaType;
+        uint8  _ArenaType;
         uint32 m_RemoveTime;
 };
 

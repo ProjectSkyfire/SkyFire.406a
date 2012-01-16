@@ -311,14 +311,14 @@ void BattlegroundMgr::BuildPvpLogDataPacket(WorldPacket *data, Battleground *bg)
         // it seems this must be according to BG_WINNER_A/H and _NOT_ BG_TEAM_A/H
         for (int8 i = 1; i >= 0; --i)
         {
-            uint32 pointsLost = bg->m_ArenaTeamRatingChanges[i] < 0 ? abs(bg->m_ArenaTeamRatingChanges[i]) : 0;
-            uint32 pointsGained = bg->m_ArenaTeamRatingChanges[i] > 0 ? bg->m_ArenaTeamRatingChanges[i] : 0;
+            uint32 pointsLost = bg->_ArenaTeamRatingChanges[i] < 0 ? abs(bg->_ArenaTeamRatingChanges[i]) : 0;
+            uint32 pointsGained = bg->_ArenaTeamRatingChanges[i] > 0 ? bg->_ArenaTeamRatingChanges[i] : 0;
             uint32 MatchmakerRating = bg->m_ArenaTeamMMR[i];
 
             *data << uint32(pointsLost);                    // Rating Lost
             *data << uint32(pointsGained);                  // Rating gained
             *data << uint32(MatchmakerRating);              // Matchmaking Value
-            sLog->outDebug(LOG_FILTER_BATTLEGROUND, "rating change: %d", bg->m_ArenaTeamRatingChanges[i]);
+            sLog->outDebug(LOG_FILTER_BATTLEGROUND, "rating change: %d", bg->_ArenaTeamRatingChanges[i]);
         }
     }
 

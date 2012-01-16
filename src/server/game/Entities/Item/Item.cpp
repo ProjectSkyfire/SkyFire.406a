@@ -169,9 +169,9 @@ void RemoveItemsSetItem(Player*player, ItemTemplate const* proto)
     }
 }
 
-bool ItemCanGoIntoBag(ItemTemplate const* pProto, ItemTemplate const* pBagProto)
+bool ItemCanGoIntoBag(ItemTemplate const* proto, ItemTemplate const* pBagProto)
 {
-    if (!pProto || !pBagProto)
+    if (!proto || !pBagProto)
         return false;
 
     switch (pBagProto->Class)
@@ -182,35 +182,35 @@ bool ItemCanGoIntoBag(ItemTemplate const* pProto, ItemTemplate const* pBagProto)
                 case ITEM_SUBCLASS_CONTAINER:
                     return true;
                 case ITEM_SUBCLASS_SOUL_CONTAINER:
-                    if (!(pProto->BagFamily & BAG_FAMILY_MASK_SOUL_SHARDS))
+                    if (!(proto->BagFamily & BAG_FAMILY_MASK_SOUL_SHARDS))
                         return false;
                     return true;
                 case ITEM_SUBCLASS_HERB_CONTAINER:
-                    if (!(pProto->BagFamily & BAG_FAMILY_MASK_HERBS))
+                    if (!(proto->BagFamily & BAG_FAMILY_MASK_HERBS))
                         return false;
                     return true;
                 case ITEM_SUBCLASS_ENCHANTING_CONTAINER:
-                    if (!(pProto->BagFamily & BAG_FAMILY_MASK_ENCHANTING_SUPP))
+                    if (!(proto->BagFamily & BAG_FAMILY_MASK_ENCHANTING_SUPP))
                         return false;
                     return true;
                 case ITEM_SUBCLASS_MINING_CONTAINER:
-                    if (!(pProto->BagFamily & BAG_FAMILY_MASK_MINING_SUPP))
+                    if (!(proto->BagFamily & BAG_FAMILY_MASK_MINING_SUPP))
                         return false;
                     return true;
                 case ITEM_SUBCLASS_ENGINEERING_CONTAINER:
-                    if (!(pProto->BagFamily & BAG_FAMILY_MASK_ENGINEERING_SUPP))
+                    if (!(proto->BagFamily & BAG_FAMILY_MASK_ENGINEERING_SUPP))
                         return false;
                     return true;
                 case ITEM_SUBCLASS_GEM_CONTAINER:
-                    if (!(pProto->BagFamily & BAG_FAMILY_MASK_GEMS))
+                    if (!(proto->BagFamily & BAG_FAMILY_MASK_GEMS))
                         return false;
                     return true;
                 case ITEM_SUBCLASS_LEATHERWORKING_CONTAINER:
-                    if (!(pProto->BagFamily & BAG_FAMILY_MASK_LEATHERWORKING_SUPP))
+                    if (!(proto->BagFamily & BAG_FAMILY_MASK_LEATHERWORKING_SUPP))
                         return false;
                     return true;
                 case ITEM_SUBCLASS_INSCRIPTION_CONTAINER:
-                    if (!(pProto->BagFamily & BAG_FAMILY_MASK_INSCRIPTION_SUPP))
+                    if (!(proto->BagFamily & BAG_FAMILY_MASK_INSCRIPTION_SUPP))
                         return false;
                     return true;
                 default:
@@ -220,11 +220,11 @@ bool ItemCanGoIntoBag(ItemTemplate const* pProto, ItemTemplate const* pBagProto)
             switch (pBagProto->SubClass)
             {
                 case ITEM_SUBCLASS_QUIVER:
-                    if (!(pProto->BagFamily & BAG_FAMILY_MASK_ARROWS))
+                    if (!(proto->BagFamily & BAG_FAMILY_MASK_ARROWS))
                         return false;
                     return true;
                 case ITEM_SUBCLASS_AMMO_POUCH:
-                    if (!(pProto->BagFamily & BAG_FAMILY_MASK_BULLETS))
+                    if (!(proto->BagFamily & BAG_FAMILY_MASK_BULLETS))
                         return false;
                     return true;
                 default:
@@ -1030,15 +1030,15 @@ Item* Item::CreateItem(uint32 item, uint32 count, Player const* player)
     if (count < 1)
         return NULL;                                        //don't create item at zero count
 
-    ItemTemplate const* pProto = sObjectMgr->GetItemTemplate(item);
-    if (pProto)
+    ItemTemplate const* proto = sObjectMgr->GetItemTemplate(item);
+    if (proto)
     {
-        if (count > pProto->GetMaxStackSize())
-            count = pProto->GetMaxStackSize();
+        if (count > proto->GetMaxStackSize())
+            count = proto->GetMaxStackSize();
 
-        ASSERT(count !=0 && "pProto->Stackable == 0 but checked at loading already");
+        ASSERT(count !=0 && "proto->Stackable == 0 but checked at loading already");
 
-        Item* pItem = NewItemOrBag(pProto);
+        Item* pItem = NewItemOrBag(proto);
         if (pItem->Create(sObjectMgr->GenerateLowGuid(HIGHGUID_ITEM), item, player))
         {
             pItem->SetCount(count);

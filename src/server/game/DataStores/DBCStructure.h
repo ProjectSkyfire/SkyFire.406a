@@ -1235,7 +1235,7 @@ struct ItemLimitCategoryEntry
 struct ItemRandomPropertiesEntry
 {
     uint32    ID;                                           // 0        m_ID
-    //char* internalName                                    // 1        m_Name
+    //char* internalName                                    // 1        _Name
     uint32    enchant_id[MAX_ITEM_ENCHANTMENT_EFFECTS];     // 2-4      m_Enchantment
                                                             // 5-6      unused
     char* nameSuffix;                                       // 7        m_name_lang

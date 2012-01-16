@@ -249,9 +249,9 @@ bool LootStoreItem::Roll(bool rate) const
     if (mincountOrRef < 0)                                   // reference case
         return roll_chance_f(chance* (rate ? sWorld->getRate(RATE_DROP_ITEM_REFERENCED) : 1.0f));
 
-    ItemTemplate const* pProto = sObjectMgr->GetItemTemplate(itemid);
+    ItemTemplate const* proto = sObjectMgr->GetItemTemplate(itemid);
 
-    float qualityModifier = pProto && rate ? sWorld->getRate(qualityToRate[pProto->Quality]) : 1.0f;
+    float qualityModifier = proto && rate ? sWorld->getRate(qualityToRate[proto->Quality]) : 1.0f;
 
     return roll_chance_f(chance*qualityModifier);
 }
@@ -343,19 +343,19 @@ bool LootItem::AllowedForPlayer(Player const* player) const
     if (!sConditionMgr->IsPlayerMeetToConditions(const_cast<Player*>(player), conditions))
         return false;
 
-    ItemTemplate const* pProto = sObjectMgr->GetItemTemplate(itemid);
-    if (!pProto)
+    ItemTemplate const* proto = sObjectMgr->GetItemTemplate(itemid);
+    if (!proto)
         return false;
 
     // not show loot for players without profession or those who already know the recipe
-    if ((pProto->Flags & ITEM_PROTO_FLAG_SMART_LOOT) && (!player->HasSkill(pProto->RequiredSkill) || player->HasSpell(pProto->Spells[1].SpellId)))
+    if ((proto->Flags & ITEM_PROTO_FLAG_SMART_LOOT) && (!player->HasSkill(proto->RequiredSkill) || player->HasSpell(proto->Spells[1].SpellId)))
         return false;
 
     // not show loot for not own team
-    if ((pProto->Flags2 & ITEM_FLAGS_EXTRA_HORDE_ONLY) && player->GetTeam() != HORDE)
+    if ((proto->Flags2 & ITEM_FLAGS_EXTRA_HORDE_ONLY) && player->GetTeam() != HORDE)
         return false;
 
-    if ((pProto->Flags2 & ITEM_FLAGS_EXTRA_ALLIANCE_ONLY) && player->GetTeam() != ALLIANCE)
+    if ((proto->Flags2 & ITEM_FLAGS_EXTRA_ALLIANCE_ONLY) && player->GetTeam() != ALLIANCE)
         return false;
 
     if (needs_quest)
@@ -367,7 +367,7 @@ bool LootItem::AllowedForPlayer(Player const* player) const
     else
     {
         // Not quest only drop (check quest starting items for already accepted non-repeatable quests)
-        if (pProto->StartQuest && player->GetQuestStatus(pProto->StartQuest) != QUEST_STATUS_NONE && !player->HasQuestForItem(itemid))
+        if (proto->StartQuest && player->GetQuestStatus(proto->StartQuest) != QUEST_STATUS_NONE && !player->HasQuestForItem(itemid))
             return false;
     }
 

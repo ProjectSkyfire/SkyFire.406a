@@ -384,11 +384,11 @@ class BattlegroundEY : public Battleground
         void UpdatePointStatuses();
 
         /* Scorekeeping */
-        uint32 GetTeamScore(uint32 Team) const { return m_TeamScores[GetTeamIndexByTeamId(Team)]; }
+        uint32 GetTeamScore(uint32 Team) const { return _TeamScores[GetTeamIndexByTeamId(Team)]; }
         void AddPoints(uint32 Team, uint32 Points);
 
-        void RemovePoint(uint32 TeamID, uint32 Points = 1) { m_TeamScores[GetTeamIndexByTeamId(TeamID)] -= Points; }
-        void SetTeamPoint(uint32 TeamID, uint32 Points = 0) { m_TeamScores[GetTeamIndexByTeamId(TeamID)] = Points; }
+        void RemovePoint(uint32 TeamID, uint32 Points = 1) { _TeamScores[GetTeamIndexByTeamId(TeamID)] -= Points; }
+        void SetTeamPoint(uint32 TeamID, uint32 Points = 0) { _TeamScores[GetTeamIndexByTeamId(TeamID)] = Points; }
 
         uint32 m_HonorScoreTics[2];
         uint32 m_TeamPointsCount[2];
