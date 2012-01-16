@@ -190,6 +190,7 @@ class Quest
 
         bool HasFlag(uint32 flag) const { return (QuestFlags & flag) != 0; }
         void SetFlag(uint32 flag) { QuestFlags |= flag; }
+        void SetSeasonalQuestEvent(uint16 event_id) { SeasonalQuestEvent = event_id; }
 
         // table data accessors:
         uint32 GetQuestId() const { return QuestId; }
@@ -270,11 +271,13 @@ class Quest
         uint32 GetRequiredSpell() const { return RequiredSpell; }
         uint32 GetQuestStartScript() const { return QuestStartScript; }
         uint32 GetQuestCompleteScript() const { return QuestCompleteScript; }
+        uint16 GetSeasonalQuestEvent() const {return SeasonalQuestEvent; }
         bool   IsRepeatable() const { return QuestFlags & QUEST_TRINITY_FLAGS_REPEATABLE; }
         bool   IsAutoComplete() const;
         uint32 GetFlags() const { return QuestFlags; }
         bool   IsDaily() const { return QuestFlags & QUEST_FLAGS_DAILY; }
         bool   IsWeekly() const { return QuestFlags & QUEST_FLAGS_WEEKLY; }
+        bool   IsSeasonal() const { return ZoneOrSort == -22; }
         bool   IsDailyOrWeekly() const { return QuestFlags & (QUEST_FLAGS_DAILY | QUEST_FLAGS_WEEKLY); }
         bool   IsAutoAccept() const { return QuestFlags & QUEST_FLAGS_AUTO_ACCEPT; }
         bool   IsRaidQuest() const { return Type == QUEST_TYPE_RAID || Type == QUEST_TYPE_RAID_10 || Type == QUEST_TYPE_RAID_25 || Type == QUEST_TYPE_PVP; }
@@ -323,6 +326,8 @@ class Quest
         uint32 m_reqCreatureOrGOcount;
         uint32 m_rewchoiceitemscount;
         uint32 m_rewitemscount;
+        //additional data needed for seasonal quest events
+        uint16 SeasonalQuestEvent;
 
         // table data
     protected:
