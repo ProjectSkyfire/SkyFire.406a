@@ -718,9 +718,17 @@ void WorldSession::HandleInitiateTradeOpcode(WorldPacket& recvPacket)
     _player->m_trade = new TradeData(_player, pOther);
     pOther->m_trade = new TradeData(pOther, _player);
 
-    WorldPacket data(SMSG_TRADE_STATUS, 12);
-    data << uint32(TRADE_STATUS_BEGIN_TRADE);
+    WorldPacket data(SMSG_TRADE_STATUS, 1+8+4+4+4+1+4+4+4);
+    data << uint8(0);
     data << uint64(_player->GetGUID());
+
+    data << uint32(0);
+    data << uint32(TRADE_STATUS_BEGIN_TRADE);
+    data << uint32(0);
+    data << uint8(0);
+    data << uint32(0);
+    data << uint32(0);
+    data << uint32(0);
     pOther->GetSession()->SendPacket(&data);
 }
 
