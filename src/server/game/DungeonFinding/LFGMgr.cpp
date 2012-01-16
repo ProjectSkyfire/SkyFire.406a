@@ -1478,7 +1478,7 @@ void LFGMgr::UpdateProposal(uint32 proposalId, const uint64& guid, bool accept)
         uint64 gguid = group->GetGUID();
         SetDungeon(gguid, dungeon->Entry());
         SetState(gguid, LFG_STATE_DUNGEON);
-        _SaveToDB(gguid, grp->GetDbStoreId());
+        _SaveToDB(gguid, group->GetDbStoreId());
 
         // Remove players/groups from Queue
         for (LfgGuidList::const_iterator it = pProposal->queues.begin(); it != pProposal->queues.end(); ++it)
