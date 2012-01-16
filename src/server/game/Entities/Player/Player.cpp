@@ -22228,6 +22228,8 @@ void Player::SendInitialPacketsBeforeAddToMap()
     // SMSG_TALENTS_INFO x 2 for pet (unspent points and talents in separate packets...)
     // SMSG_UPDATE_WORLD_STATE
     // SMSG_POWER_UPDATE
+
+    SetMover(this);
 }
 
 void Player::SendPetGUIDs()
