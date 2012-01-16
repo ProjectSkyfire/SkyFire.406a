@@ -2954,9 +2954,6 @@ void Spell::SendLoot(uint64 guid, LootType loottype)
                 return;
 
             case GAMEOBJECT_TYPE_QUESTGIVER:
-                /*// start or end quest
-                player->PrepareQuestMenu(guid);
-                player->SendPreparedQuest(guid);*/
                 player->PrepareGossipMenu(gameObjTarget, gameObjTarget->GetGOInfo()->questgiver.gossipID);
                 player->SendPreparedGossip(gameObjTarget);
                 return;
