@@ -56,7 +56,7 @@ void Vehicle::Install()
 {
     if (Creature* creature = _me->ToCreature())
     {
-        switch (_vehicleInfo->m_powerType)
+        switch (_vehicleInfo->_powerType)
         {
             case POWER_STEAM:
             case POWER_HEAT:
@@ -73,10 +73,10 @@ void Vehicle::Install()
             default:
                 for (uint32 i = 0; i < MAX_SPELL_VEHICLE; ++i)
                 {
-                    if (!creature->m_spells[i])
+                    if (!creature->_spells[i])
                         continue;
 
-                    SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(creature->m_spells[i]);
+                    SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(creature->_spells[i]);
                     if (!spellInfo)
                         continue;
 
@@ -350,7 +350,7 @@ bool Vehicle::AddPassenger(Unit* unit, int8 seatId)
     unit->m_movementInfo.t_pos.m_positionX = veSeat->m_attachmentOffsetX;
     unit->m_movementInfo.t_pos.m_positionY = veSeat->m_attachmentOffsetY;
     unit->m_movementInfo.t_pos.m_positionZ = veSeat->m_attachmentOffsetZ;
-    unit->m_movementInfo.t_pos.m_orientation = 0;
+    unit->m_movementInfo.t_pos._orientation = 0;
     unit->m_movementInfo.t_time = 0; // 1 for player
     unit->m_movementInfo.t_seat = seat->first;
 
@@ -448,7 +448,7 @@ void Vehicle::RelocatePassengers(float x, float y, float z, float ang)
             float px = x + passenger->m_movementInfo.t_pos.m_positionX;
             float py = y + passenger->m_movementInfo.t_pos.m_positionY;
             float pz = z + passenger->m_movementInfo.t_pos.m_positionZ;
-            float po = ang + passenger->m_movementInfo.t_pos.m_orientation;
+            float po = ang + passenger->m_movementInfo.t_pos._orientation;
 
             passenger->UpdatePosition(px, py, pz, po);
         }

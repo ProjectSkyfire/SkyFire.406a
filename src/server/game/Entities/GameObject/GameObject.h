@@ -636,7 +636,7 @@ class GameObject : public WorldObject, public GridObject<GameObject>
         bool IsDynTransport() const;
         bool IsDestructibleBuilding() const;
 
-        uint32 GetDBTableGUIDLow() const { return m_DBTableGuid; }
+        uint32 GetDBTableGUIDLow() const { return _DBTableGuid; }
 
         void UpdateRotationFields(float rotation2 = 0.0f, float rotation3 = 0.0f);
 
@@ -675,27 +675,27 @@ class GameObject : public WorldObject, public GridObject<GameObject>
         }
         uint32 GetSpellId() const { return m_spellId;}
 
-        time_t GetRespawnTime() const { return m_respawnTime; }
+        time_t GetRespawnTime() const { return _respawnTime; }
         time_t GetRespawnTimeEx() const
         {
             time_t now = time(NULL);
-            if (m_respawnTime > now)
-                return m_respawnTime;
+            if (_respawnTime > now)
+                return _respawnTime;
             else
                 return now;
         }
 
         void SetRespawnTime(int32 respawn)
         {
-            m_respawnTime = respawn > 0 ? time(NULL) + respawn : 0;
+            _respawnTime = respawn > 0 ? time(NULL) + respawn : 0;
             m_respawnDelayTime = respawn > 0 ? respawn : 0;
         }
         void Respawn();
         bool isSpawned() const
         {
             return m_respawnDelayTime == 0 ||
-                (m_respawnTime > 0 && !m_spawnedByDefault) ||
-                (m_respawnTime == 0 && m_spawnedByDefault);
+                (_respawnTime > 0 && !m_spawnedByDefault) ||
+                (_respawnTime == 0 && m_spawnedByDefault);
         }
         bool isSpawnedByDefault() const { return m_spawnedByDefault; }
         void SetSpawnedByDefault(bool b) { m_spawnedByDefault = b; }
@@ -744,7 +744,7 @@ class GameObject : public WorldObject, public GridObject<GameObject>
 
         Loot        loot;
 
-        uint32 m_groupLootTimer;                            // (msecs)timer used for group loot
+        uint32 _groupLootTimer;                            // (msecs)timer used for group loot
         uint32 lootingGroupLowGUID;                         // used to find group which is looting
 
         bool hasQuest(uint32 quest_id) const;
@@ -795,7 +795,7 @@ class GameObject : public WorldObject, public GridObject<GameObject>
     protected:
         bool AIM_Initialize();
         uint32      m_spellId;
-        time_t      m_respawnTime;                          // (secs) time of next respawn (or despawn if GO have owner()),
+        time_t      _respawnTime;                          // (secs) time of next respawn (or despawn if GO have owner()),
         uint32      m_respawnDelayTime;                     // (secs) if 0 then current GO state no dependent from timer
         LootState   m_lootState;
         bool        m_spawnedByDefault;
@@ -810,7 +810,7 @@ class GameObject : public WorldObject, public GridObject<GameObject>
         typedef std::map<uint32, uint64> ChairSlotAndUser;
         ChairSlotAndUser ChairListSlots;
 
-        uint32 m_DBTableGuid;                               ///< For new or temporary gameobjects is 0 for saved it is lowguid
+        uint32 _DBTableGuid;                               ///< For new or temporary gameobjects is 0 for saved it is lowguid
         GameObjectTemplate const* m_goInfo;
         GameObjectData const* m_goData;
         GameObjectValue * const m_goValue;

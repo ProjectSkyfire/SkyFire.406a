@@ -793,8 +793,8 @@ public:
             tEnrage = 0;
             tRun = 500;
             onceRun = true;
-            x = me->m_positionX+cos(me->m_orientation)*8;
-            y = me->m_positionY+sin(me->m_orientation)*8;
+            x = me->m_positionX+cos(me->_orientation)*8;
+            y = me->m_positionY+sin(me->_orientation)*8;
             z = me->m_positionZ;
             willCastEnrage = urand(0, 1);
         }
@@ -1058,8 +1058,8 @@ public:
             tRun2          = 2500;
             tSay           = 1000;
             onceRun = onceRun2 = onceSay = onceGet = true;
-            x = me->m_positionX+cos(me->m_orientation)*5;
-            y = me->m_positionY+sin(me->m_orientation)*5;
+            x = me->m_positionX+cos(me->_orientation)*5;
+            y = me->m_positionY+sin(me->_orientation)*5;
             z = me->m_positionZ;
         }
 
@@ -1312,7 +1312,7 @@ public:
             loc.m_positionX   = -1818.4f;
             loc.m_positionY   = 2294.25f;
             loc.m_positionZ   = 42.2135f;
-            loc.m_orientation = 3.14f;
+            loc._orientation = 3.14f;
 
             player->SetHomebind(loc, 4786);
         }

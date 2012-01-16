@@ -1223,7 +1223,7 @@ public:
                 {
                     if (Creature* temp = Unit::GetCreature(*me, *itr))
                     {
-                        temp->m_CombatDistance = 100.0f; // ugly hack? we are not in a instance sorry. :(
+                        temp->_CombatDistance = 100.0f; // ugly hack? we are not in a instance sorry. :(
                         temp->AI()->AttackStart(unit);
                     }
                 }

@@ -288,7 +288,7 @@ void Map::SwitchGridContainers(Creature* obj, bool on)
         grid.AddGridObject(obj);
         RemoveWorldObject(obj);
     }
-    obj->m_isTempWorldObject = on;
+    obj->_isTempWorldObject = on;
 }
 
 template<class T>

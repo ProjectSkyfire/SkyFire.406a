@@ -35,7 +35,7 @@ DynamicObject::DynamicObject(bool isWorldObject) : WorldObject(isWorldObject), _
 
     m_updateFlag = (UPDATEFLAG_HAS_POSITION | UPDATEFLAG_POSITION);
 
-    m_valuesCount = DYNAMICOBJECT_END;
+    _valuesCount = DYNAMICOBJECT_END;
 }
 
 DynamicObject::~DynamicObject()

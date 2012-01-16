@@ -892,12 +892,12 @@ void Group::GroupLoot(Loot *loot, WorldObject* pLootedObject)
 
                 if (Creature* creature = pLootedObject->ToCreature())
                 {
-                    creature->m_groupLootTimer = 60000;
+                    creature->_groupLootTimer = 60000;
                     creature->lootingGroupLowGUID = GetLowGUID();
                 }
                 else if (GameObject* go = pLootedObject->ToGameObject())
                 {
-                    go->m_groupLootTimer = 60000;
+                    go->_groupLootTimer = 60000;
                     go->lootingGroupLowGUID = GetLowGUID();
                 }
             }
@@ -983,7 +983,7 @@ void Group::NeedBeforeGreed(Loot *loot, WorldObject* pLootedObject)
 
                 if (Creature* creature = pLootedObject->ToCreature())
                 {
-                    creature->m_groupLootTimer = 60000;
+                    creature->_groupLootTimer = 60000;
                     creature->lootingGroupLowGUID = GetLowGUID();
                 }
             }

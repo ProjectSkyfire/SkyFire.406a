@@ -145,7 +145,7 @@ Battleground::Battleground()
     m_Winner            = 2;
     m_StartTime         = 0;
     m_ResetStatTimer    = 0;
-    m_Events            = 0;
+    _Events            = 0;
     m_IsRated           = false;
     m_BuffChange        = false;
     m_IsRandom          = false;
@@ -444,9 +444,9 @@ inline void Battleground::_ProcessJoin(uint32 diff)
                 player->ResetAllPowers();
     }
 
-    if (!(m_Events & BG_STARTING_EVENT_1))
+    if (!(_Events & BG_STARTING_EVENT_1))
     {
-        m_Events |= BG_STARTING_EVENT_1;
+        _Events |= BG_STARTING_EVENT_1;
 
         if (!FindBgMap())
         {
@@ -468,21 +468,21 @@ inline void Battleground::_ProcessJoin(uint32 diff)
         SendMessageToAll(m_StartMessageIds[BG_STARTING_EVENT_FIRST], CHAT_MSG_BG_SYSTEM_NEUTRAL);
     }
     // After 1 minute or 30 seconds, warning is signalled
-    else if (GetStartDelayTime() <= m_StartDelayTimes[BG_STARTING_EVENT_SECOND] && !(m_Events & BG_STARTING_EVENT_2))
+    else if (GetStartDelayTime() <= m_StartDelayTimes[BG_STARTING_EVENT_SECOND] && !(_Events & BG_STARTING_EVENT_2))
     {
-        m_Events |= BG_STARTING_EVENT_2;
+        _Events |= BG_STARTING_EVENT_2;
         SendMessageToAll(m_StartMessageIds[BG_STARTING_EVENT_SECOND], CHAT_MSG_BG_SYSTEM_NEUTRAL);
     }
     // After 30 or 15 seconds, warning is signalled
-    else if (GetStartDelayTime() <= m_StartDelayTimes[BG_STARTING_EVENT_THIRD] && !(m_Events & BG_STARTING_EVENT_3))
+    else if (GetStartDelayTime() <= m_StartDelayTimes[BG_STARTING_EVENT_THIRD] && !(_Events & BG_STARTING_EVENT_3))
     {
-        m_Events |= BG_STARTING_EVENT_3;
+        _Events |= BG_STARTING_EVENT_3;
         SendMessageToAll(m_StartMessageIds[BG_STARTING_EVENT_THIRD], CHAT_MSG_BG_SYSTEM_NEUTRAL);
     }
     // Delay expired (atfer 2 or 1 minute)
-    else if (GetStartDelayTime() <= 0 && !(m_Events & BG_STARTING_EVENT_4))
+    else if (GetStartDelayTime() <= 0 && !(_Events & BG_STARTING_EVENT_4))
     {
-        m_Events |= BG_STARTING_EVENT_4;
+        _Events |= BG_STARTING_EVENT_4;
 
         StartingEventOpenDoors();
 
@@ -1062,7 +1062,7 @@ void Battleground::Reset()
     SetArenaType(0);
     SetRated(false);
 
-    m_Events = 0;
+    _Events = 0;
 
     if (m_InvitedAlliance > 0 || m_InvitedHorde > 0)
         sLog->outError("Battleground::Reset: one of the counters is not 0 (alliance: %u, horde: %u) for BG (map: %u, instance id: %u)!",

@@ -657,7 +657,7 @@ Player::Player(WorldSession* session): Unit(true), m_achievementMgr(this), m_rep
     m_objectType |= TYPEMASK_PLAYER;
     m_objectTypeId = TYPEID_PLAYER;
 
-    m_valuesCount = PLAYER_END;
+    _valuesCount = PLAYER_END;
 
     m_session = session;
 
@@ -680,7 +680,7 @@ Player::Player(WorldSession* session): Unit(true), m_achievementMgr(this), m_rep
     m_usedTalentCount = 0;
     m_questRewardTalentCount = 0;
 
-    m_regenTimer = 0;
+    _regenTimer = 0;
     m_regenTimerCount = 0;
     m_weaponChangeTimer = 0;
 
@@ -880,7 +880,7 @@ Player::~Player ()
     for (uint8 i = 0; i < PLAYER_SLOTS_COUNT; ++i)
         delete m_items[i];
 
-    for (PlayerSpellMap::const_iterator itr = m_spells.begin(); itr != m_spells.end(); ++itr)
+    for (PlayerSpellMap::const_iterator itr = _spells.begin(); itr != _spells.end(); ++itr)
         delete itr->second;
 
     for (uint8 i = 0; i < MAX_TALENT_SPECS; ++i)
@@ -1708,11 +1708,11 @@ void Player::Update(uint32 p_time)
 
     if (isAlive())
     {
-        m_regenTimer += p_time;
+        _regenTimer += p_time;
         RegenerateAll();
     }
 
-    if (m_deathState == JUST_DIED)
+    if (_deathState == JUST_DIED)
         KillPlayer();
 
     if (m_nextSave > 0)
@@ -2443,10 +2443,10 @@ void Player::RemoveFromWorld()
 
 void Player::RegenerateAll()
 {
-    //if (m_regenTimer <= 500)
+    //if (_regenTimer <= 500)
     //    return;
 
-    m_regenTimerCount += m_regenTimer;
+    m_regenTimerCount += _regenTimer;
 
     Regenerate(POWER_ENERGY);
     Regenerate(POWER_FOCUS);
@@ -2461,9 +2461,9 @@ void Player::RegenerateAll()
             uint32 cd2 = GetRuneCooldown(i + 1);
 
             if (cd1 && (!cd2 || cd1 <= cd2))
-                SetRuneCooldown(i, (cd1 > m_regenTimer) ? cd1 - m_regenTimer : 0);
+                SetRuneCooldown(i, (cd1 > _regenTimer) ? cd1 - _regenTimer : 0);
             else if (cd2)
-                SetRuneCooldown(i + 1, (cd2 > m_regenTimer) ? cd2 - m_regenTimer : 0);
+                SetRuneCooldown(i + 1, (cd2 > _regenTimer) ? cd2 - _regenTimer : 0);
         }
     }
 
@@ -2489,7 +2489,7 @@ void Player::RegenerateAll()
         m_regenTimerCount -= 2000;
     }
 
-    m_regenTimer = 0;
+    _regenTimer = 0;
 }
 
 void Player::Regenerate(Powers power)
@@ -2520,9 +2520,9 @@ void Player::Regenerate(Powers power)
                 ManaIncreaseRate = sWorld->getRate(RATE_POWER_MANA) * (2.066f - (getLevel() * 0.066f));
 
             if (recentCast) // Trinity Updates Mana in intervals of 2s, which is correct
-                addvalue += GetFloatValue(UNIT_FIELD_POWER_REGEN_INTERRUPTED_FLAT_MODIFIER) *  ManaIncreaseRate * 0.001f * m_regenTimer * haste;
+                addvalue += GetFloatValue(UNIT_FIELD_POWER_REGEN_INTERRUPTED_FLAT_MODIFIER) *  ManaIncreaseRate * 0.001f * _regenTimer * haste;
             else
-                addvalue += GetFloatValue(UNIT_FIELD_POWER_REGEN_FLAT_MODIFIER) * ManaIncreaseRate * 0.001f * m_regenTimer * haste;
+                addvalue += GetFloatValue(UNIT_FIELD_POWER_REGEN_FLAT_MODIFIER) * ManaIncreaseRate * 0.001f * _regenTimer * haste;
             break;
         }
         case POWER_RAGE:                                    // Regenerate rage
@@ -2541,7 +2541,7 @@ void Player::Regenerate(Powers power)
             break;
         }
         case POWER_ENERGY:                                  // Regenerate energy (rogue)
-            addvalue += 0.01f * m_regenTimer * sWorld->getRate(RATE_POWER_ENERGY) * haste;
+            addvalue += 0.01f * _regenTimer * sWorld->getRate(RATE_POWER_ENERGY) * haste;
             break;
         case POWER_FOCUS:
             addvalue += 4.0f * m_modAttackSpeedPct[RANGED_ATTACK] * sWorld->getRate(RATE_POWER_FOCUS) * haste;
@@ -2573,7 +2573,7 @@ void Player::Regenerate(Powers power)
 
         // Butchery requires combat for this effect
         if (power != POWER_RUNIC_POWER || isInCombat())
-            addvalue += GetTotalAuraModifierByMiscValue(SPELL_AURA_MOD_POWER_REGEN, power) * ((power != POWER_ENERGY) ? m_regenTimerCount : m_regenTimer) / (5 * IN_MILLISECONDS);
+            addvalue += GetTotalAuraModifierByMiscValue(SPELL_AURA_MOD_POWER_REGEN, power) * ((power != POWER_ENERGY) ? m_regenTimerCount : _regenTimer) / (5 * IN_MILLISECONDS);
     }
 
     if (addvalue < 0.0f)
@@ -2840,7 +2840,7 @@ void Player::SetGameMaster(bool on)
         CombatStopWithPets();
 
         SetPhaseMask(uint32(PHASEMASK_ANYWHERE), false);    // see and visible in all phases
-        m_serverSideVisibilityDetect.SetValue(SERVERSIDE_VISIBILITY_GM, GetSession()->GetSecurity());
+        _serverSideVisibilityDetect.SetValue(SERVERSIDE_VISIBILITY_GM, GetSession()->GetSecurity());
     }
     else
     {
@@ -2875,7 +2875,7 @@ void Player::SetGameMaster(bool on)
         UpdateArea(m_areaUpdateId);
 
         getHostileRefManager().setOnlineOfflineState(true);
-        m_serverSideVisibilityDetect.SetValue(SERVERSIDE_VISIBILITY_GM, SEC_PLAYER);
+        _serverSideVisibilityDetect.SetValue(SERVERSIDE_VISIBILITY_GM, SEC_PLAYER);
     }
 
     UpdateObjectVisibility();
@@ -2886,7 +2886,7 @@ void Player::SetGMVisible(bool on)
     if (on)
     {
         m_ExtraFlags &= ~PLAYER_EXTRA_GM_INVISIBLE;         //remove flag
-        m_serverSideVisibility.SetValue(SERVERSIDE_VISIBILITY_GM, SEC_PLAYER);
+        _serverSideVisibility.SetValue(SERVERSIDE_VISIBILITY_GM, SEC_PLAYER);
     }
     else
     {
@@ -2895,7 +2895,7 @@ void Player::SetGMVisible(bool on)
         SetAcceptWhispers(false);
         SetGameMaster(true);
 
-        m_serverSideVisibility.SetValue(SERVERSIDE_VISIBILITY_GM, GetSession()->GetSecurity());
+        _serverSideVisibility.SetValue(SERVERSIDE_VISIBILITY_GM, GetSession()->GetSecurity());
     }
 }
 
@@ -3334,13 +3334,13 @@ void Player::SendInitialSpells()
 
     uint16 spellCount = 0;
 
-    WorldPacket data(SMSG_INITIAL_SPELLS, (1+2+4*m_spells.size()+2+m_spellCooldowns.size()*(2+2+2+4+4)));
+    WorldPacket data(SMSG_INITIAL_SPELLS, (1+2+4*_spells.size()+2+m_spellCooldowns.size()*(2+2+2+4+4)));
     data << uint8(0);
 
     size_t countPos = data.wpos();
     data << uint16(spellCount);                             // spell count placeholder
 
-    for (PlayerSpellMap::const_iterator itr = m_spells.begin(); itr != m_spells.end(); ++itr)
+    for (PlayerSpellMap::const_iterator itr = _spells.begin(); itr != _spells.end(); ++itr)
     {
         if (itr->second->state == PLAYERSPELL_REMOVED)
             continue;
@@ -3586,12 +3586,12 @@ bool Player::addSpell(uint32 spellId, bool active, bool learning, bool dependent
     bool disabled_case = false;
     bool superceded_old = false;
 
-    PlayerSpellMap::iterator itr = m_spells.find(spellId);
+    PlayerSpellMap::iterator itr = _spells.find(spellId);
 
     // Remove temporary spell if found to prevent conflicts
-    if (itr != m_spells.end() && itr->second->state == PLAYERSPELL_TEMPORARY)
+    if (itr != _spells.end() && itr->second->state == PLAYERSPELL_TEMPORARY)
         RemoveTemporarySpell(spellId);
-    else if (itr != m_spells.end())
+    else if (itr != _spells.end())
     {
         uint32 next_active_spell_id = 0;
         // fix activate state for non-stackable low rank (and find next spell for !active case)
@@ -3681,7 +3681,7 @@ bool Player::addSpell(uint32 spellId, bool active, bool learning, bool dependent
             case PLAYERSPELL_REMOVED:                       // re-learning removed not saved spell
             {
                 delete itr->second;
-                m_spells.erase(itr);
+                _spells.erase(itr);
                 state = PLAYERSPELL_CHANGED;
                 break;                                      // need re-add
             }
@@ -3732,7 +3732,7 @@ bool Player::addSpell(uint32 spellId, bool active, bool learning, bool dependent
         // replace spells in action bars and spellbook to bigger rank if only one spell rank must be accessible
         if (newspell->active && !newspell->disabled && !spellInfo->IsStackableWithRanks() && spellInfo->IsRanked() != 0)
         {
-            for (PlayerSpellMap::iterator itr2 = m_spells.begin(); itr2 != m_spells.end(); ++itr2)
+            for (PlayerSpellMap::iterator itr2 = _spells.begin(); itr2 != _spells.end(); ++itr2)
             {
                 if (itr2->second->state == PLAYERSPELL_REMOVED) continue;
                 SpellInfo const *i_spellInfo = sSpellMgr->GetSpellInfo(itr2->first);
@@ -3778,7 +3778,7 @@ bool Player::addSpell(uint32 spellId, bool active, bool learning, bool dependent
             }
         }
 
-        m_spells[spellId] = newspell;
+        _spells[spellId] = newspell;
 
         // return false if spell disabled
         if (newspell->disabled)
@@ -3912,29 +3912,29 @@ bool Player::addSpell(uint32 spellId, bool active, bool learning, bool dependent
 
 void Player::AddTemporarySpell(uint32 spellId)
 {
-    PlayerSpellMap::iterator itr = m_spells.find(spellId);
+    PlayerSpellMap::iterator itr = _spells.find(spellId);
     // spell already added - do not do anything
-    if (itr != m_spells.end())
+    if (itr != _spells.end())
         return;
     PlayerSpell *newspell = new PlayerSpell;
     newspell->state     = PLAYERSPELL_TEMPORARY;
     newspell->active    = true;
     newspell->dependent = false;
     newspell->disabled  = false;
-    m_spells[spellId]   = newspell;
+    _spells[spellId]   = newspell;
 }
 
 void Player::RemoveTemporarySpell(uint32 spellId)
 {
-    PlayerSpellMap::iterator itr = m_spells.find(spellId);
+    PlayerSpellMap::iterator itr = _spells.find(spellId);
     // spell already not in list - do not do anything
-    if (itr == m_spells.end())
+    if (itr == _spells.end())
         return;
     // spell has other state than temporary - do not change it
     if (itr->second->state != PLAYERSPELL_TEMPORARY)
         return;
     delete itr->second;
-    m_spells.erase(itr);
+    _spells.erase(itr);
 }
 
 bool Player::IsNeedCastPassiveSpellAtLearn(SpellInfo const* spellInfo) const
@@ -3951,9 +3951,9 @@ bool Player::IsNeedCastPassiveSpellAtLearn(SpellInfo const* spellInfo) const
 
 void Player::learnSpell(uint32 spell_id, bool dependent)
 {
-    PlayerSpellMap::iterator itr = m_spells.find(spell_id);
+    PlayerSpellMap::iterator itr = _spells.find(spell_id);
 
-    bool disabled = (itr != m_spells.end()) ? itr->second->disabled : false;
+    bool disabled = (itr != _spells.end()) ? itr->second->disabled : false;
     bool active = disabled ? itr->second->active : true;
 
     bool learning = addSpell(spell_id, active, true, dependent, false);
@@ -3972,16 +3972,16 @@ void Player::learnSpell(uint32 spell_id, bool dependent)
     {
         if (uint32 nextSpell = sSpellMgr->GetNextSpellInChain(spell_id))
         {
-            PlayerSpellMap::iterator iter = m_spells.find(nextSpell);
-            if (iter != m_spells.end() && iter->second->disabled)
+            PlayerSpellMap::iterator iter = _spells.find(nextSpell);
+            if (iter != _spells.end() && iter->second->disabled)
                 learnSpell(nextSpell, false);
         }
 
         SpellsRequiringSpellMapBounds spellsRequiringSpell = sSpellMgr->GetSpellsRequiringSpellBounds(spell_id);
         for (SpellsRequiringSpellMap::const_iterator itr2 = spellsRequiringSpell.first; itr2 != spellsRequiringSpell.second; ++itr2)
         {
-            PlayerSpellMap::iterator iter2 = m_spells.find(itr2->second);
-            if (iter2 != m_spells.end() && iter2->second->disabled)
+            PlayerSpellMap::iterator iter2 = _spells.find(itr2->second);
+            if (iter2 != _spells.end() && iter2->second->disabled)
                 learnSpell(itr2->second, false);
         }
     }
@@ -3989,8 +3989,8 @@ void Player::learnSpell(uint32 spell_id, bool dependent)
 
 void Player::removeSpell(uint32 spell_id, bool disabled, bool learn_low_rank)
 {
-    PlayerSpellMap::iterator itr = m_spells.find(spell_id);
-    if (itr == m_spells.end())
+    PlayerSpellMap::iterator itr = _spells.find(spell_id);
+    if (itr == _spells.end())
         return;
 
     if (itr->second->state == PLAYERSPELL_REMOVED || (disabled && itr->second->disabled) || itr->second->state == PLAYERSPELL_TEMPORARY)
@@ -4008,8 +4008,8 @@ void Player::removeSpell(uint32 spell_id, bool disabled, bool learn_low_rank)
         removeSpell(itr2->second, disabled);
 
     // re-search, it can be corrupted in prev loop
-    itr = m_spells.find(spell_id);
-    if (itr == m_spells.end())
+    itr = _spells.find(spell_id);
+    if (itr == _spells.end())
         return;                                             // already unleared
 
     bool giveTalentPoints = disabled || !itr->second->disabled;
@@ -4028,7 +4028,7 @@ void Player::removeSpell(uint32 spell_id, bool disabled, bool learn_low_rank)
         if (itr->second->state == PLAYERSPELL_NEW)
         {
             delete itr->second;
-            m_spells.erase(itr);
+            _spells.erase(itr);
         }
         else
             itr->second->state = PLAYERSPELL_REMOVED;
@@ -4154,8 +4154,8 @@ void Player::removeSpell(uint32 spell_id, bool disabled, bool learn_low_rank)
         else if (cur_active && !spellInfo->IsStackableWithRanks() && spellInfo->IsRanked())
         {
             // need manually update dependence state (learn spell ignore like attempts)
-            PlayerSpellMap::iterator prev_itr = m_spells.find(prev_id);
-            if (prev_itr != m_spells.end())
+            PlayerSpellMap::iterator prev_itr = _spells.find(prev_id);
+            if (prev_itr != _spells.end())
             {
                 if (prev_itr->second->dependent != cur_dependent)
                 {
@@ -4206,7 +4206,7 @@ bool Player::Has310Flyer(bool checkAllSpells, uint32 excludeSpellId)
     {
         SetHas310Flyer(false);
         SpellInfo const *pSpellInfo;
-        for (PlayerSpellMap::iterator itr = m_spells.begin(); itr != m_spells.end(); ++itr)
+        for (PlayerSpellMap::iterator itr = _spells.begin(); itr != _spells.end(); ++itr)
         {
             if (itr->first == excludeSpellId)
                 continue;
@@ -4290,11 +4290,11 @@ void Player::RemoveArenaSpellCooldowns(bool removeActivePetCooldowns)
         if (Pet* pet = GetPet())
         {
             // notify player
-            for (CreatureSpellCooldowns::const_iterator itr2 = pet->m_CreatureSpellCooldowns.begin(); itr2 != pet->m_CreatureSpellCooldowns.end(); ++itr2)
+            for (CreatureSpellCooldowns::const_iterator itr2 = pet->_CreatureSpellCooldowns.begin(); itr2 != pet->_CreatureSpellCooldowns.end(); ++itr2)
                 SendClearCooldown(itr2->first, pet);
 
             // actually clear cooldowns
-            pet->m_CreatureSpellCooldowns.clear();
+            pet->_CreatureSpellCooldowns.clear();
         }
 }
 
@@ -4535,7 +4535,7 @@ void Player::_SetCreateBits(UpdateMask *updateMask, Player *target) const
         Object::_SetCreateBits(updateMask, target);
     else
     {
-        for (uint16 index = 0; index < m_valuesCount; index++)
+        for (uint16 index = 0; index < _valuesCount; index++)
             if (GetUInt32Value(index) != 0 && updateVisualBits.GetBit(index))
                 updateMask->SetBit(index);
     }
@@ -4712,8 +4712,8 @@ void Player::DestroyForPlayer(Player *target, bool anim) const
 
 bool Player::HasSpell(uint32 spell) const
 {
-    PlayerSpellMap::const_iterator itr = m_spells.find(spell);
-    return (itr != m_spells.end() && itr->second->state != PLAYERSPELL_REMOVED &&
+    PlayerSpellMap::const_iterator itr = _spells.find(spell);
+    return (itr != _spells.end() && itr->second->state != PLAYERSPELL_REMOVED &&
         !itr->second->disabled);
 }
 
@@ -4725,8 +4725,8 @@ bool Player::HasTalent(uint32 spell, uint8 spec) const
 
 bool Player::HasActiveSpell(uint32 spell) const
 {
-    PlayerSpellMap::const_iterator itr = m_spells.find(spell);
-    return (itr != m_spells.end() && itr->second->state != PLAYERSPELL_REMOVED &&
+    PlayerSpellMap::const_iterator itr = _spells.find(spell);
+    return (itr != _spells.end() && itr->second->state != PLAYERSPELL_REMOVED &&
         itr->second->active && !itr->second->disabled);
 }
 
@@ -14567,7 +14567,7 @@ void Player::PrepareGossipMenu(WorldObject* source, uint32 menuId /*= 0*/, bool 
                         canTalk = false;
                     break;
                 case GOSSIP_OPTION_UNLEARNPETTALENTS:
-                    if (!GetPet() || GetPet()->getPetType() != HUNTER_PET || GetPet()->m_spells.size() <= 1 || creature->GetCreatureInfo()->trainer_type != TRAINER_TYPE_PETS || creature->GetCreatureInfo()->trainer_class != CLASS_HUNTER)
+                    if (!GetPet() || GetPet()->getPetType() != HUNTER_PET || GetPet()->_spells.size() <= 1 || creature->GetCreatureInfo()->trainer_type != TRAINER_TYPE_PETS || creature->GetCreatureInfo()->trainer_class != CLASS_HUNTER)
                         canTalk = false;
                     break;
                 case GOSSIP_OPTION_TAXIVENDOR:
@@ -17269,13 +17269,13 @@ bool Player::LoadFromDB(uint32 guid, SQLQueryHolder *holder)
 
         if (!Trinity::IsValidMapCoord(
             GetPositionX()+m_movementInfo.t_pos.m_positionX, GetPositionY()+m_movementInfo.t_pos.m_positionY,
-            GetPositionZ()+m_movementInfo.t_pos.m_positionZ, GetOrientation()+m_movementInfo.t_pos.m_orientation) ||
+            GetPositionZ()+m_movementInfo.t_pos.m_positionZ, GetOrientation()+m_movementInfo.t_pos._orientation) ||
             // transport size limited
             m_movementInfo.t_pos.m_positionX > 250 || m_movementInfo.t_pos.m_positionY > 250 || m_movementInfo.t_pos.m_positionZ > 250)
         {
             sLog->outError("Player (guidlow %d) have invalid transport coordinates (X: %f Y: %f Z: %f O: %f). Teleport to bind location.",
                 guid, GetPositionX()+m_movementInfo.t_pos.m_positionX, GetPositionY()+m_movementInfo.t_pos.m_positionY,
-                GetPositionZ()+m_movementInfo.t_pos.m_positionZ, GetOrientation()+m_movementInfo.t_pos.m_orientation);
+                GetPositionZ()+m_movementInfo.t_pos.m_positionZ, GetOrientation()+m_movementInfo.t_pos._orientation);
 
             RelocateToHomebind();
         }
@@ -17552,7 +17552,7 @@ bool Player::LoadFromDB(uint32 guid, SQLQueryHolder *holder)
     _LoadGlyphAuras();
     // add ghost flag (must be after aura load: PLAYER_FLAGS_GHOST set in aura)
     if (HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_GHOST))
-        m_deathState = DEAD;
+        _deathState = DEAD;
 
     // after spell load, learn rewarded spell if need also
     _LoadQuestStatus(holder->GetPreparedResult(PLAYER_LOGIN_QUERY_LOADQUESTSTATUS));
@@ -19595,7 +19595,7 @@ void Player::_SaveSkills(SQLTransaction& trans)
 
 void Player::_SaveSpells(SQLTransaction& trans)
 {
-    for (PlayerSpellMap::iterator itr = m_spells.begin(); itr != m_spells.end();)
+    for (PlayerSpellMap::iterator itr = _spells.begin(); itr != _spells.end();)
     {
         if (itr->second->state == PLAYERSPELL_REMOVED || itr->second->state == PLAYERSPELL_CHANGED)
             trans->PAppend("DELETE FROM character_spell WHERE guid = '%u' and spell = '%u'", GetGUIDLow(), itr->first);
@@ -19607,7 +19607,7 @@ void Player::_SaveSpells(SQLTransaction& trans)
         if (itr->second->state == PLAYERSPELL_REMOVED)
         {
             delete itr->second;
-            m_spells.erase(itr++);
+            _spells.erase(itr++);
         }
         else
         {
@@ -20218,7 +20218,7 @@ void Player::PetSpellInitialize()
     if (pet->IsPermanentPetFor(this))
     {
         // spells loop
-        for (PetSpellMap::iterator itr = pet->m_spells.begin(); itr != pet->m_spells.end(); ++itr)
+        for (PetSpellMap::iterator itr = pet->_spells.begin(); itr != pet->_spells.end(); ++itr)
         {
             if (itr->second.state == PETSPELL_REMOVED)
                 continue;
@@ -20230,12 +20230,12 @@ void Player::PetSpellInitialize()
 
     data.put<uint8>(spellsCountPos, addlist);
 
-    uint8 cooldownsCount = pet->m_CreatureSpellCooldowns.size() + pet->m_CreatureCategoryCooldowns.size();
+    uint8 cooldownsCount = pet->_CreatureSpellCooldowns.size() + pet->_CreatureCategoryCooldowns.size();
     data << uint8(cooldownsCount);
 
     time_t curTime = time(NULL);
 
-    for (CreatureSpellCooldowns::const_iterator itr = pet->m_CreatureSpellCooldowns.begin(); itr != pet->m_CreatureSpellCooldowns.end(); ++itr)
+    for (CreatureSpellCooldowns::const_iterator itr = pet->_CreatureSpellCooldowns.begin(); itr != pet->_CreatureSpellCooldowns.end(); ++itr)
     {
         time_t cooldown = (itr->second > curTime) ? (itr->second - curTime) * IN_MILLISECONDS : 0;
 
@@ -20245,7 +20245,7 @@ void Player::PetSpellInitialize()
         data << uint32(0);                                  // category cooldown
     }
 
-    for (CreatureSpellCooldowns::const_iterator itr = pet->m_CreatureCategoryCooldowns.begin(); itr != pet->m_CreatureCategoryCooldowns.end(); ++itr)
+    for (CreatureSpellCooldowns::const_iterator itr = pet->_CreatureCategoryCooldowns.begin(); itr != pet->_CreatureCategoryCooldowns.end(); ++itr)
     {
         time_t cooldown = (itr->second > curTime) ? (itr->second - curTime) * IN_MILLISECONDS : 0;
 
@@ -20292,7 +20292,7 @@ void Player::VehicleSpellInitialize()
     if (!veh)
         return;
 
-    uint8 cooldownCount = veh->m_CreatureSpellCooldowns.size() + veh->m_CreatureCategoryCooldowns.size();
+    uint8 cooldownCount = veh->_CreatureSpellCooldowns.size() + veh->_CreatureCategoryCooldowns.size();
 
     WorldPacket data(SMSG_PET_SPELLS, 8 + 2 + 4 + 4 + 4 * 10 + 1 + 1 + cooldownCount * (4 + 2 + 4 + 4));
     data << uint64(veh->GetGUID());
@@ -20305,7 +20305,7 @@ void Player::VehicleSpellInitialize()
 
     for (uint32 i = 0; i < CREATURE_MAX_SPELLS; ++i)
     {
-        uint32 spellId = veh->m_spells[i];
+        uint32 spellId = veh->_spells[i];
         SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(spellId);
         if (!spellInfo)
         {
@@ -20345,7 +20345,7 @@ void Player::VehicleSpellInitialize()
 
     time_t now = sWorld->GetGameTime();
     CreatureSpellCooldowns::const_iterator itr;
-    for (itr = veh->m_CreatureSpellCooldowns.begin(); itr != veh->m_CreatureSpellCooldowns.end(); ++itr)
+    for (itr = veh->_CreatureSpellCooldowns.begin(); itr != veh->_CreatureSpellCooldowns.end(); ++itr)
     {
         time_t cooldown = (itr->second > now) ? (itr->second - now) * IN_MILLISECONDS : 0;
         data << uint32(itr->first); // SpellId
@@ -20354,7 +20354,7 @@ void Player::VehicleSpellInitialize()
         data << uint32(0);          // category cooldown
     }
 
-    for (itr = veh->m_CreatureCategoryCooldowns.begin(); itr != veh->m_CreatureCategoryCooldowns.end(); ++itr)
+    for (itr = veh->_CreatureCategoryCooldowns.begin(); itr != veh->_CreatureCategoryCooldowns.end(); ++itr)
     {
         time_t cooldown = (itr->second > now) ? (itr->second - now) * IN_MILLISECONDS : 0;
         data << uint32(itr->first); // SpellId
@@ -20813,11 +20813,11 @@ void Player::ContinueTaxiFlight()
 void Player::ProhibitSpellSchool(SpellSchoolMask idSchoolMask, uint32 unTimeMs)
 {
                                                             // last check 2.0.10
-    WorldPacket data(SMSG_SPELL_COOLDOWN, 8+1+m_spells.size()*8);
+    WorldPacket data(SMSG_SPELL_COOLDOWN, 8+1+_spells.size()*8);
     data << uint64(GetGUID());
     data << uint8(0x0);                                     // flags (0x1, 0x2)
     time_t curTime = time(NULL);
-    for (PlayerSpellMap::const_iterator itr = m_spells.begin(); itr != m_spells.end(); ++itr)
+    for (PlayerSpellMap::const_iterator itr = _spells.begin(); itr != _spells.end(); ++itr)
     {
         if (itr->second->state == PLAYERSPELL_REMOVED)
             continue;
@@ -22367,7 +22367,7 @@ void Player::learnQuestRewardedSpells(Quest const* quest)
             if (learnedInfo->Effects[0].Effect == SPELL_EFFECT_TRADE_SKILL && learnedInfo->Effects[1].Effect == 0 && profSpell)
             {
                 // search other specialization for same prof
-                for (PlayerSpellMap::const_iterator itr = m_spells.begin(); itr != m_spells.end(); ++itr)
+                for (PlayerSpellMap::const_iterator itr = _spells.begin(); itr != _spells.end(); ++itr)
                 {
                     if (itr->second->state == PLAYERSPELL_REMOVED || itr->first == learned_0)
                         continue;

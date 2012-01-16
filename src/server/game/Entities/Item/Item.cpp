@@ -241,7 +241,7 @@ Item::Item()
 
     m_updateFlag = 0;
 
-    m_valuesCount = ITEM_END;
+    _valuesCount = ITEM_END;
     m_slot = 0;
     uState = ITEM_NEW;
     uQueuePos = -1;

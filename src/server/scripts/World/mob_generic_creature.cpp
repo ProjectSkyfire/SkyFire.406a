@@ -175,7 +175,7 @@ public:
     {
         trigger_periodicAI(Creature* c) : NullCreatureAI(c)
         {
-            spell = me->m_spells[0] ? sSpellMgr->GetSpellInfo(me->m_spells[0]) : NULL;
+            spell = me->_spells[0] ? sSpellMgr->GetSpellInfo(me->_spells[0]) : NULL;
             interval = me->GetAttackTime(BASE_ATTACK);
             timer = interval;
         }
@@ -212,8 +212,8 @@ public:
         trigger_deathAI(Creature* c) : NullCreatureAI(c) {}
         void JustDied(Unit* killer)
         {
-            if (me->m_spells[0])
-                me->CastSpell(killer, me->m_spells[0], true);
+            if (me->_spells[0])
+                me->CastSpell(killer, me->_spells[0], true);
         }
     };
 

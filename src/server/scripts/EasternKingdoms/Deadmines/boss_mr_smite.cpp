@@ -150,7 +150,7 @@ public:
                             break;
                         case 3:
                             SetCombatMovement(true);
-                            me->GetMotionMaster()->MoveChase(me->getVictim(), me->m_CombatDistance);
+                            me->GetMotionMaster()->MoveChase(me->getVictim(), me->_CombatDistance);
                             Phase = 0;
                             break;
                     }

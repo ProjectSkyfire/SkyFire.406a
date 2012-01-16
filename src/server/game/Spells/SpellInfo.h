@@ -326,7 +326,7 @@ public:
     // uint32 unk_400_1;                                    // 10       4.0.0
     SpellCastTimesEntry const* CastTimeEntry;               // 11       m_castingTimeIndex
     SpellDurationEntry const* DurationEntry;                // 12       m_durationIndex
-    uint32 PowerType;                                       // 13       m_powerType
+    uint32 PowerType;                                       // 13       _powerType
     SpellRangeEntry const* RangeEntry;                      // 14       m_rangeIndex
     float  Speed;                                           // 15       m_speed
     uint32 SpellVisual[2];                                  // 16-17    m_spellVisualID

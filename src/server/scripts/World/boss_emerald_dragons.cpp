@@ -91,8 +91,8 @@ struct emerald_dragonAI : public WorldBossAI
 {
     emerald_dragonAI(Creature* creature) : WorldBossAI(creature)
     {
-//        me->m_CombatDistance = 12.0f;
-//        me->m_SightDistance  = 60.0f;
+//        me->_CombatDistance = 12.0f;
+//        me->_SightDistance  = 60.0f;
     }
 
     void Reset()

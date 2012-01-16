@@ -35,7 +35,7 @@ Totem::Totem(SummonPropertiesEntry const* properties, Unit* owner) : Minion(prop
 
 void Totem::Update(uint32 time)
 {
-    if (!m_owner->isAlive() || !isAlive())
+    if (!_owner->isAlive() || !isAlive())
     {
         UnSummon();                                         // remove self
         return;
@@ -55,7 +55,7 @@ void Totem::Update(uint32 time)
 void Totem::InitStats(uint32 duration)
 {
     // client requires SMSG_TOTEM_CREATED to be sent before adding to world and before removing old totem
-    if (m_owner->GetTypeId() == TYPEID_PLAYER
+    if (_owner->GetTypeId() == TYPEID_PLAYER
         && m_Properties->Slot >= SUMMON_SLOT_TOTEM
         && m_Properties->Slot < MAX_TOTEM_SLOT)
     {
@@ -64,10 +64,10 @@ void Totem::InitStats(uint32 duration)
         data << uint64(GetGUID());
         data << uint32(duration);
         data << uint32(GetUInt32Value(UNIT_CREATED_BY_SPELL));
-        m_owner->ToPlayer()->SendDirectMessage(&data);
+        _owner->ToPlayer()->SendDirectMessage(&data);
 
         // set display id depending on caster's race
-        SetDisplayId(m_owner->GetModelForTotem(PlayerTotemType(m_Properties->Id)));
+        SetDisplayId(_owner->GetModelForTotem(PlayerTotemType(m_Properties->Id)));
     }
 
     Minion::InitStats(duration);
@@ -82,7 +82,7 @@ void Totem::InitStats(uint32 duration)
 
     m_duration = duration;
 
-    SetLevel(m_owner->getLevel());
+    SetLevel(_owner->getLevel());
 }
 
 void Totem::InitSummon()
@@ -115,17 +115,17 @@ void Totem::UnSummon()
     // clear owner's totem slot
     for (int i = SUMMON_SLOT_TOTEM; i < MAX_TOTEM_SLOT; ++i)
     {
-        if (m_owner->m_SummonSlot[i] == GetGUID())
+        if (_owner->m_SummonSlot[i] == GetGUID())
         {
-            m_owner->m_SummonSlot[i] = 0;
+            _owner->m_SummonSlot[i] = 0;
             break;
         }
     }
 
-    m_owner->RemoveAurasDueToSpell(GetSpell());
+    _owner->RemoveAurasDueToSpell(GetSpell());
 
     //remove aura all party members too
-    if (Player* owner = m_owner->ToPlayer())
+    if (Player* owner = _owner->ToPlayer())
     {
         owner->SendAutoRepeatCancel(this);
 

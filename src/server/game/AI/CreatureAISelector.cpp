@@ -64,7 +64,7 @@ namespace FactorySelector
                 ai_factory = ai_registry.GetRegistryItem("TotemAI");
             else if (creature->isTrigger())
             {
-                if (creature->m_spells[0])
+                if (creature->_spells[0])
                     ai_factory = ai_registry.GetRegistryItem("TriggerAI");
                 else
                     ai_factory = ai_registry.GetRegistryItem("NullCreatureAI");

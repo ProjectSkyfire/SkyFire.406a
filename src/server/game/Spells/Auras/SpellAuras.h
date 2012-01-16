@@ -102,9 +102,9 @@ class Aura
         uint64 GetCastItemGUID() const { return m_castItemGuid; }
         uint64 GetCasterGUID() const { return m_casterGuid; }
         Unit* GetCaster() const;
-        WorldObject* GetOwner() const { return m_owner; }
-        Unit* GetUnitOwner() const { ASSERT(GetType() == UNIT_AURA_TYPE); return (Unit*)m_owner; }
-        DynamicObject* GetDynobjOwner() const { ASSERT(GetType() == DYNOBJ_AURA_TYPE); return (DynamicObject*)m_owner; }
+        WorldObject* GetOwner() const { return _owner; }
+        Unit* GetUnitOwner() const { ASSERT(GetType() == UNIT_AURA_TYPE); return (Unit*)_owner; }
+        DynamicObject* GetDynobjOwner() const { ASSERT(GetType() == DYNOBJ_AURA_TYPE); return (DynamicObject*)_owner; }
 
         AuraObjectType GetType() const;
 
@@ -221,7 +221,7 @@ class Aura
         uint64 const m_casterGuid;
         uint64 const m_castItemGuid;                        // it is NOT safe to keep a pointer to the item because it may get deleted
         time_t const m_applyTime;
-        WorldObject* const m_owner;                        //
+        WorldObject* const _owner;                        //
 
         int32 m_maxDuration;                                // Max aura duration
         int32 m_duration;                                   // Current time

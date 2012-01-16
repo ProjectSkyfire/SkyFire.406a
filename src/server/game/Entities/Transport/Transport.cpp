@@ -683,7 +683,7 @@ uint32 Transport::AddNPCPassenger(uint32 tguid, uint32 entry, float x, float y, 
 
 void Transport::UpdatePosition(MovementInfo* mi)
 {
-    float transport_o = mi->pos.m_orientation - mi->t_pos.m_orientation;
+    float transport_o = mi->pos._orientation - mi->t_pos._orientation;
     float transport_x = mi->pos.m_positionX - (mi->t_pos.m_positionX * cos(transport_o) - mi->t_pos.m_positionY*sin(transport_o));
     float transport_y = mi->pos.m_positionY - (mi->t_pos.m_positionY * cos(transport_o) + mi->t_pos.m_positionX*sin(transport_o));
     float transport_z = mi->pos.m_positionZ - mi->t_pos.m_positionZ;
@@ -699,7 +699,7 @@ void Transport::UpdateNPCPositions()
         Creature* npc = *itr;
 
         float x, y, z, o;
-        o = GetOrientation() + npc->m_movementInfo.t_pos.m_orientation;
+        o = GetOrientation() + npc->m_movementInfo.t_pos._orientation;
         x = GetPositionX() + (npc->m_movementInfo.t_pos.m_positionX * cos(GetOrientation()) + npc->m_movementInfo.t_pos.m_positionY * sin(GetOrientation() + M_PI));
         y = GetPositionY() + (npc->m_movementInfo.t_pos.m_positionY * cos(GetOrientation()) + npc->m_movementInfo.t_pos.m_positionX * sin(GetOrientation()));
         z = GetPositionZ() + npc->m_movementInfo.t_pos.m_positionZ;

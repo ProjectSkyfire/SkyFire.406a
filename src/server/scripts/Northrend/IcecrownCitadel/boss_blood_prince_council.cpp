@@ -493,7 +493,7 @@ class boss_prince_keleseth_icc : public CreatureScript
                         me->RemoveFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_DEAD);
                         me->RemoveFlag(UNIT_FIELD_FLAGS_2, UNIT_FLAG2_FEIGN_DEATH);
                         me->ForceValuesUpdateAtIndex(UNIT_NPC_FLAGS);   // was in sniff. don't ask why
-                        me->m_Events.AddEvent(new StandUpEvent(*me), me->m_Events.CalculateTime(1000));
+                        me->_Events.AddEvent(new StandUpEvent(*me), me->_Events.CalculateTime(1000));
                         break;
                     case ACTION_CAST_INVOCATION:
                         Talk(SAY_KELESETH_INVOCATION);
@@ -711,7 +711,7 @@ class boss_prince_taldaram_icc : public CreatureScript
                         me->RemoveFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_DEAD);
                         me->RemoveFlag(UNIT_FIELD_FLAGS_2, UNIT_FLAG2_FEIGN_DEATH);
                         me->ForceValuesUpdateAtIndex(UNIT_NPC_FLAGS);   // was in sniff. don't ask why
-                        me->m_Events.AddEvent(new StandUpEvent(*me), me->m_Events.CalculateTime(1000));
+                        me->_Events.AddEvent(new StandUpEvent(*me), me->_Events.CalculateTime(1000));
                         break;
                     case ACTION_CAST_INVOCATION:
                         Talk(SAY_TALDARAM_INVOCATION);
@@ -948,7 +948,7 @@ class boss_prince_valanar_icc : public CreatureScript
                         me->RemoveFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_DEAD);
                         me->RemoveFlag(UNIT_FIELD_FLAGS_2, UNIT_FLAG2_FEIGN_DEATH);
                         me->ForceValuesUpdateAtIndex(UNIT_NPC_FLAGS);   // was in sniff. don't ask why
-                        me->m_Events.AddEvent(new StandUpEvent(*me), me->m_Events.CalculateTime(1000));
+                        me->_Events.AddEvent(new StandUpEvent(*me), me->_Events.CalculateTime(1000));
                         break;
                     case ACTION_CAST_INVOCATION:
                         Talk(SAY_VALANAR_INVOCATION);

@@ -607,7 +607,7 @@ class Battleground
         std::map<uint64, std::vector<uint64> >  m_ReviveQueue;
 
         // these are important variables used for starting messages
-        uint8 m_Events;
+        uint8 _Events;
         BattlegroundStartTimeIntervals  m_StartDelayTimes[BG_STARTING_EVENT_COUNT];
         // this must be filled in constructors!
         uint32 m_StartMessageIds[BG_STARTING_EVENT_COUNT];
