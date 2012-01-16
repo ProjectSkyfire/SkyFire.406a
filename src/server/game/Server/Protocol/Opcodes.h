@@ -615,8 +615,8 @@ enum Opcodes
     SMSG_AUCTION_COMMAND_RESULT                      = 0x10211, //
     SMSG_AUCTION_LIST_RESULT                         = 0x10212, //
     SMSG_AUCTION_OWNER_LIST_RESULT                   = 0x10213, //
-    SMSG_AUCTION_BIDDER_NOTIFICATION                 = 0x10214, //
-    SMSG_AUCTION_OWNER_NOTIFICATION                  = 0x10215, //
+    SMSG_AUCTION_BIDDER_NOTIFICATION                 = 0x06E82, // 4.3.0 15050
+    SMSG_AUCTION_OWNER_NOTIFICATION                  = 0x032A4, // 4.3.0 15050
     SMSG_PROCRESIST                                  = 0x10216, //
     SMSG_STANDSTATE_CHANGE_FAILURE_OBSOLETE          = 0x10217, //
     SMSG_DISPEL_FAILED                               = 0x10218, //
