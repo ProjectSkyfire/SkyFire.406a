@@ -3,7 +3,7 @@
 # Server version:               5.5.19
 # Server OS:                    Win64
 # HeidiSQL version:             6.0.0.3603
-# Date/time:                    2012-01-16 19:10:48
+# Date/time:                    2012-01-16 19:14:57
 # --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -1295,6 +1295,22 @@ CREATE TABLE IF NOT EXISTS `item_soulbound_trade_data` (
   `allowedPlayers` text NOT NULL COMMENT 'Space separated GUID list of players who can receive this item in trade',
   PRIMARY KEY (`itemGuid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Item Refund System';
+
+# Data exporting was unselected.
+
+
+# Dumping structure for table characters.lag_reports
+DROP TABLE IF EXISTS `lag_reports`;
+CREATE TABLE IF NOT EXISTS `lag_reports` (
+  `reportId` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `guid` int(10) unsigned NOT NULL DEFAULT '0',
+  `lagType` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `mapId` smallint(5) unsigned NOT NULL DEFAULT '0',
+  `posX` float NOT NULL DEFAULT '0',
+  `posY` float NOT NULL DEFAULT '0',
+  `posZ` float NOT NULL DEFAULT '0',
+  PRIMARY KEY (`reportId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Player System';
 
 # Data exporting was unselected.
 
