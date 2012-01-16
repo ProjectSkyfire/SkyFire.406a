@@ -578,9 +578,9 @@ enum Opcodes
     SMSG_LOGIN_VERIFY_WORLD                          = 0x01C80, // 4.3.0 15050
     CMSG_CLEAR_EXPLORATION                           = 0x101DE, //
     CMSG_SEND_MAIL                                   = 0x101DF, //
-    SMSG_SEND_MAIL_RESULT                            = 0x101F0, //
-    CMSG_GET_MAIL_LIST                               = 0x101F1, //
-    SMSG_MAIL_LIST_RESULT                            = 0x101F2, //
+    SMSG_SEND_MAIL_RESULT                            = 0x00C86, // 4.3.0 15050
+    CMSG_GET_MAIL_LIST                               = 0x05222, // 4.3.0 15050
+    SMSG_MAIL_LIST_RESULT                            = 0x03222, // 4.3.0 15050
     CMSG_BATTLEFIELD_LIST                            = 0x101F3, //
     SMSG_BATTLEFIELD_LIST                            = 0x101F4, //
     CMSG_BATTLEFIELD_JOIN                            = 0x101F5, //
@@ -590,11 +590,11 @@ enum Opcodes
     CMSG_JOIN_RATED_BATTLEFIELD                      = 0x101F9, //
     CMSG_ITEM_TEXT_QUERY                             = 0x101FA, //
     SMSG_ITEM_TEXT_QUERY_RESPONSE                    = 0x101FB, //
-    CMSG_MAIL_TAKE_MONEY                             = 0x101FC, //
-    CMSG_MAIL_TAKE_ITEM                              = 0x101FD, //
+    CMSG_MAIL_TAKE_MONEY                             = 0x06426, // 4.3.0 15050
+    CMSG_MAIL_TAKE_ITEM                              = 0x07C06, // 4.3.0 15050
     CMSG_MAIL_MARK_AS_READ                           = 0x101FE, //
     CMSG_MAIL_RETURN_TO_SENDER                       = 0x101FF, //
-    CMSG_MAIL_DELETE                                 = 0x10200, //
+    CMSG_MAIL_DELETE                                 = 0x01E26, // 4.3.0 15050
     CMSG_MAIL_CREATE_TEXT_ITEM                       = 0x10201, //
     SMSG_SPELLLOGMISS                                = 0x10202, //
     SMSG_SPELLLOGEXECUTE                             = 0x10203, //
