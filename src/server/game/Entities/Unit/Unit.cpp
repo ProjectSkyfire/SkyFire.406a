@@ -13636,21 +13636,45 @@ void Unit::SetMaxHealth(uint32 val)
         SetHealth(val);
 }
 
+uint32 Unit::GetPowerIndexByClass(uint32 powerId, uint32 classId) const
+{
+    ChrClassesEntry const* m_class = sChrClassesStore.LookupEntry(classId);
+
+    ASSERT(m_class && "Class not found");
+
+    uint32 index = 0;
+
+    for (uint32 i = 0; i <= sChrPowerTypesStore.GetNumRows(); i++)
+    {
+        ChrPowerTypesEntry const* cEntry = sChrPowerTypesStore.LookupEntry(i);
+
+        if (!cEntry)
+            continue;
+
+        if (classId != cEntry->classId)
+            continue;
+
+        if (powerId == cEntry->power)
+            return index;
+
+        index++;
+    }
+    return 0;
+};
+
 void Unit::SetPower(Powers power, uint32 val)
 {
-    if (GetPower(power) == val)
-        return;
-
     uint32 maxPower = GetMaxPower(power);
     if (maxPower < val)
         val = maxPower;
 
-    SetStatInt32Value(UNIT_FIELD_POWER1 + power, val);
+    SetStatInt32Value(UNIT_FIELD_POWER1 + GetPowerIndexByClass(power, getClass()), val);
 
     WorldPacket data(SMSG_POWER_UPDATE);
     data.append(GetPackGUID());
-    data << uint8(power);
-    data << uint32(val);
+    data << uint32(1);//unk
+    data << uint8(GetPowerIndexByClass(power, getClass()));
+    data << int32(val);
     SendMessageToSet(&data, GetTypeId() == TYPEID_PLAYER ? true : false);
 
     // group update
