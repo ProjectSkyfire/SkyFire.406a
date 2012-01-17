@@ -606,13 +606,13 @@ enum Opcodes
     SMSG_RESURRECT_FAILED                            = 0x0D557, //
     CMSG_TOGGLE_PVP                                  = 0x10209, //
     SMSG_ZONE_UNDER_ATTACK                           = 0x1020A, //
-    MSG_AUCTION_HELLO                                = 0x1020B, //
+    MSG_AUCTION_HELLO                                = 0x00680, // 4.3.0 15050
     CMSG_AUCTION_SELL_ITEM                           = 0x1020C, //
     CMSG_AUCTION_REMOVE_ITEM                         = 0x1020D, //
     CMSG_AUCTION_LIST_ITEMS                          = 0x1020E, //
     CMSG_AUCTION_LIST_OWNER_ITEMS                    = 0x1020F, //
     CMSG_AUCTION_PLACE_BID                           = 0x10210, //
-    SMSG_AUCTION_COMMAND_RESULT                      = 0x10211, //
+    SMSG_AUCTION_COMMAND_RESULT                      = 0x04086, // 4.3.0 15050
     SMSG_AUCTION_LIST_RESULT                         = 0x10212, //
     SMSG_AUCTION_OWNER_LIST_RESULT                   = 0x10213, //
     SMSG_AUCTION_BIDDER_NOTIFICATION                 = 0x06E82, // 4.3.0 15050
@@ -622,7 +622,7 @@ enum Opcodes
     SMSG_DISPEL_FAILED                               = 0x10218, //
     SMSG_SPELLORDAMAGE_IMMUNE                        = 0x10219, //
     CMSG_AUCTION_LIST_BIDDER_ITEMS                   = 0x1021A, //
-    SMSG_AUCTION_BIDDER_LIST_RESULT                  = 0x1021B, //
+    SMSG_AUCTION_BIDDER_LIST_RESULT                  = 0x04020, // 4.3.0 15050
     SMSG_SET_FLAT_SPELL_MODIFIER                     = 0x1021C, //
     SMSG_SET_PCT_SPELL_MODIFIER                      = 0x1021D, //
     CMSG_SET_AMMO                                    = 0x1021E, //
@@ -659,7 +659,7 @@ enum Opcodes
     CMSG_DEL_PVP_MEDAL_CHEAT                         = 0x1023C, //
     CMSG_SET_PVP_TITLE                               = 0x1023D, //
     SMSG_PVP_CREDIT                                  = 0x1023E, //
-    SMSG_AUCTION_REMOVED_NOTIFICATION                = 0x1023F, //
+    SMSG_AUCTION_REMOVED_NOTIFICATION                = 0x00A86, // 4.3.0 15050
     CMSG_GROUP_RAID_CONVERT                          = 0x10240, //
     CMSG_GROUP_ASSISTANT_LEADER                      = 0x10241, //
     CMSG_BUYBACK_ITEM                                = 0x10242, //
