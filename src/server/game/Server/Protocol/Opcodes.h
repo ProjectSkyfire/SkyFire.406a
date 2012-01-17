@@ -703,8 +703,8 @@ enum Opcodes
     SMSG_SCRIPT_MESSAGE                              = 0x10268, //
     SMSG_DUEL_COUNTDOWN                              = 0x10269, //
     SMSG_AREA_TRIGGER_MESSAGE                        = 0x1026A, //
-    CMSG_SHOWING_HELM                                = 0x1026B, //
-    CMSG_SHOWING_CLOAK                               = 0x1026C, //
+    CMSG_SHOWING_HELM                                = 0x000A2, // 4.3.0 15050
+    CMSG_SHOWING_CLOAK                               = 0x03826, // 4.3.0 15050
     SMSG_LFG_ROLE_CHOSEN                             = 0x1026D, //
     SMSG_PLAYER_SKINNED                              = 0x1026E, //
     SMSG_DURABILITY_DAMAGE_DEATH                     = 0x07684, // 4.3.0 15050
