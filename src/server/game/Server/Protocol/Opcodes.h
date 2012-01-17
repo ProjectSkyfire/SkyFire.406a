@@ -1357,6 +1357,18 @@ enum Opcodes
     SMSG_REQUEST_CEMETERY_LIST_RESPONSE              = 0x00CB8, // 4.3.0 15050
     CMSG_RANDOMIZE_CHAR_NAME                         = 0x04326, // 4.3.0 15050
     SMSG_RANDOMIZE_CHAR_NAME                         = 0x024BA, // 4.3.0 15050
+    CMSG_TRANSMOGRIFY_ITEMS                          = 0x03081, // 4.3.0 15050
+    SMSG_ITEM_EXPIRE_PURCHASE_REFUND                 = 0x02C08, // 4.3.0 15050
+    SMSG_ITEM_QUERY_SINGLE_RESPONSE                  = 0x06E8C, // 4.3.0 15050
+    CMSG_UNLOCK_VOID_STORAGE                         = 0x02681, // 4.3.0 15050
+    CMSG_VOID_STORAGE_TRANSFER                       = 0x02011, // 4.3.0 15050
+    SMSG_VOID_ITEM_SWAP_RESPONSE                     = 0x00C1C, // 4.3.0 15050
+    SMSG_VOID_STORAGE_CONTENTS                       = 0x00A8A, // 4.3.0 15050
+    SMSG_VOID_STORAGE_FAILED                         = 0x0263C, // 4.3.0 15050
+    SMSG_VOID_STORAGE_TRANSFER_CHANGES               = 0x04CAE, // 4.3.0 15050
+    SMSG_VOID_TRANSFER_RESULT                        = 0x02CA8, // 4.3.0 15050
+    CMSG_QUERY_VOID_STORAGE                          = 0x03431, // 4.3.0 15050
+    CMSG_SWAP_VOID_ITEM                              = 0x03291, // 4.3.0 15050
     NUM_MSG_TYPES                                    = 0x10544  // last unknown opcode + 1.
 };
 
