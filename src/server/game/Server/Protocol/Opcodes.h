@@ -288,7 +288,7 @@ enum Opcodes
     CMSG_STORE_LOOT_IN_SLOT                          = 0x100C8, //
     CMSG_AUTOEQUIP_ITEM                              = 0x03A80, // 4.3.0 15050
     CMSG_AUTOSTORE_BAG_ITEM                          = 0x03680, // 4.3.0 15050
-    CMSG_SWAP_ITEM                                   = 0x100CB, //
+    CMSG_SWAP_ITEM                                   = 0x06404, // 4.3.0 15050
     CMSG_SWAP_INV_ITEM                               = 0x100CC, //
     CMSG_SPLIT_ITEM                                  = 0x03206, // 4.3.0 15050
     CMSG_AUTOEQUIP_ITEM_SLOT                         = 0x01E22, // 4.3.0 15050
