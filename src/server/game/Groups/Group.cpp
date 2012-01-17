@@ -1013,7 +1013,7 @@ void Group::NeedBeforeGreed(Loot *loot, WorldObject* lootedObject)
                 loot->items[itemSlot].is_blocked = true;
 
                 //Broadcast Pass and Send Rollstart
-                for (Roll::PlayerVote::const_iterator itr=r->playerVote.begin(); itr != r->playerVote.end(); ++itr)
+                for (Roll::PlayerVote::const_iterator itr = r->playerVote.begin(); itr != r->playerVote.end(); ++itr)
                 {
                     Player* p = ObjectAccessor::FindPlayer(itr->first);
                     if (!p || !p->GetSession())

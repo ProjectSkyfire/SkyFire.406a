@@ -302,7 +302,7 @@ class LFGMgr
         uint8 GetVotesNeeded(const uint64& gguid);
         bool IsTeleported(uint64 pguid);
         void SetRoles(const uint64& guid, uint8 roles);
-        void SetSelectedDungeons(uint64 guid, const LfgDungeonSet& dungeons);
+        void SetSelectedDungeons(const uint64& guid, const LfgDungeonSet& dungeons);
 
     private:
 

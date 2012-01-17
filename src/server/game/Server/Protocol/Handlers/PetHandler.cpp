@@ -78,6 +78,17 @@ void WorldSession::HandlePetAction(WorldPacket & recv_data)
         return;
     }
 
+    float pos_x = pet->GetPositionX();
+    float pos_y = pet->GetPositionY();
+    float pos_z = pet->GetPositionZ();
+
+    recv_data >> pos_x;                                     // 4.0.3, x
+    recv_data >> pos_y;                                     // 4.0.3, y
+    recv_data >> pos_z;                                     // 4.0.3, z
+
+    // used also for charmed creature
+    sLog->outDetail("HandlePetAction: Pet %u - flag: %u, spellid: %u, target: %u.", uint32(GUID_LOPART(guid1)), uint32(flag), spellid, uint32(GUID_LOPART(guid2)));
+
     if (pet != GetPlayer()->GetFirstControlled())
     {
         sLog->outError("HandlePetAction: Pet (GUID: %u) does not belong to player '%s'", uint32(GUID_LOPART(guid1)), GetPlayer()->GetName());
@@ -109,6 +120,9 @@ void WorldSession::HandlePetAction(WorldPacket & recv_data)
         for (std::vector<Unit*>::iterator itr = controlled.begin(); itr != controlled.end(); ++itr)
             HandlePetActionHelper(*itr, guid1, spellid, flag, guid2);
     }
+
+    if (pet->GetTypeId() != TYPEID_PLAYER && flag == ACT_COMMAND && spellid == COMMAND_MOVE)
+        pet->SendMonsterMove(pos_x, pos_y, pos_z, 3000);
 }
 
 void WorldSession::HandlePetStopAttack(WorldPacket &recv_data)
