@@ -536,9 +536,9 @@ enum Opcodes
     SMSG_REMOVED_SPELL                               = 0x101B8, //
     CMSG_DECHARGE                                    = 0x101B9, //
     CMSG_GMTICKET_CREATE                             = 0x101BA, //
-    SMSG_GMTICKET_CREATE                             = 0x101BB, //
-    CMSG_GMTICKET_UPDATETEXT                         = 0x101BC, //
-    SMSG_GMTICKET_UPDATETEXT                         = 0x101BD, //
+    SMSG_GMTICKET_CREATE                             = 0x06CA4, // 4.3.0 15050
+    CMSG_GMTICKET_UPDATETEXT                         = 0x032A0, // 4.3.0 15050
+    SMSG_GMTICKET_UPDATETEXT                         = 0x01C84, // 4.3.0 15050
     SMSG_ACCOUNT_DATA_TIMES                          = 0x00C80, // 4.3.0 15050
     CMSG_REQUEST_ACCOUNT_DATA                        = 0x04002, // 4.3.0 15050
     CMSG_UPDATE_ACCOUNT_DATA                         = 0x002A0, // 4.3.0 15050
@@ -776,7 +776,7 @@ enum Opcodes
     SMSG_MINIGAME_MOVE_FAILED                        = 0x1030E, //
     SMSG_RAID_INSTANCE_MESSAGE                       = 0x1030F, //
     SMSG_COMPRESSED_MOVES                            = 0x10310, //
-    CMSG_GUILD_INFO_TEXT                             = 0x10311, //
+    CMSG_GUILD_INFO_TEXT                             = 0x00808, //
     SMSG_GUILD_PARTY_STATE_UPDATE                    = 0x10312, // structure: uint8(isGuildGroup << 7) uint32(numGuildRequired) uint32(numGuildPresent) float(xpMultiplier) NOTE: xpMultiplier/100.0f
     SMSG_CHAT_RESTRICTED                             = 0x10313, //
     SMSG_SPLINE_SET_RUN_SPEED                        = 0x10314, //
@@ -822,7 +822,7 @@ enum Opcodes
     SMSG_PET_DISMISS_SOUND                           = 0x1033C, //
     SMSG_GHOSTEE_GONE                                = 0x1033D, //
     CMSG_GM_UPDATE_TICKET_STATUS                     = 0x1033E, //
-    SMSG_GM_TICKET_STATUS_UPDATE                     = 0x1033F, //
+    SMSG_GM_TICKET_STATUS_UPDATE                     = 0x01E04, //
     MSG_SET_DUNGEON_DIFFICULTY                       = 0x07006, // 4.3.0 15050
     CMSG_GMSURVEY_SUBMIT                             = 0x10341, //
     SMSG_UPDATE_INSTANCE_OWNERSHIP                   = 0x10342, //
@@ -965,7 +965,7 @@ enum Opcodes
     SMSG_VOICE_SESSION_ENABLE                        = 0x103C9, //
     SMSG_VOICE_PARENTAL_CONTROLS                     = 0x103CA, //
     CMSG_GM_WHISPER                                  = 0x103CB, //
-    SMSG_GM_MESSAGECHAT                              = 0x103CC, //
+    SMSG_GM_MESSAGECHAT                              = 0x00AA4, // 4.3.0 15050
     MSG_GM_GEARRATING                                = 0x103CD, //
     CMSG_COMMENTATOR_ENABLE                          = 0x103CE, //
     SMSG_COMMENTATOR_STATE_CHANGED                   = 0x103CF, //
@@ -1277,7 +1277,7 @@ enum Opcodes
     CMSG_READY_FOR_ACCOUNT_DATA_TIMES                = 0x01E80, // 4.3.0 15050
     CMSG_QUERY_QUESTS_COMPLETED                      = 0x104FC, //
     SMSG_QUERY_QUESTS_COMPLETED_RESPONSE             = 0x104FD, //
-    CMSG_GM_REPORT_LAG                               = 0x104FE, //
+    CMSG_GM_REPORT_LAG                               = 0x06CA6, // 4.3.0 15050
     SMSG_CORPSE_NOT_IN_INSTANCE                      = 0x03282, // 4.3.0 15050
     CMSG_SET_ALLOW_LOW_LEVEL_RAID1                   = 0x10500, //
     CMSG_SET_ALLOW_LOW_LEVEL_RAID2                   = 0x10501, //
