@@ -302,7 +302,7 @@ void Object::_BuildMovementUpdate(ByteBuffer * data, uint16 flags) const
     data->writeBit(flags & UPDATEFLAG_LIVING);
     data->writeBit((flags & UPDATEFLAG_LIVING) == 0);
     data->writeBits(0, 24); // unk counter
-    data->writeBit(true);
+    data->writeBit(GetTypeId() == TYPEID_PLAYER ? true : false);
 
 
     if (flags & UPDATEFLAG_LIVING)
