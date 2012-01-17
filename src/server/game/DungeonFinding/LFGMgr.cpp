@@ -2080,7 +2080,7 @@ void LFGMgr::SetComment(const uint64& guid, const std::string& comment)
     _Players[guid].SetComment(comment);
 }
 
-void LFGMgr::SetSelectedDungeons(uint64 guid, const LfgDungeonSet& dungeons)
+void LFGMgr::SetSelectedDungeons(const uint64& guid, const LfgDungeonSet& dungeons)
 {
     sLog->outDebug(LOG_FILTER_LFG, "LFGMgr::SetSelectedDungeons: [" UI64FMTD "]", guid);
     _Players[guid].SetSelectedDungeons(dungeons);
