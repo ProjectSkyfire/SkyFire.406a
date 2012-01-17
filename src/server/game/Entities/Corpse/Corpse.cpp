@@ -30,8 +30,8 @@
 Corpse::Corpse(CorpseType type) : WorldObject(type != CORPSE_BONES)
 , m_type(type)
 {
-    m_objectType |= TYPEMASK_CORPSE;
-    m_objectTypeId = TYPEID_CORPSE;
+    _objectType |= TYPEMASK_CORPSE;
+    _objectTypeId = TYPEID_CORPSE;
 
     m_updateFlag = (UPDATEFLAG_HAS_POSITION | UPDATEFLAG_POSITION);
 

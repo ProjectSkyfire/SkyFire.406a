@@ -63,11 +63,11 @@ TrainerSpell const* TrainerSpellData::Find(uint32 spell_id) const
 bool VendorItemData::RemoveItem(uint32 item_id)
 {
     bool found = false;
-    for (VendorItemList::iterator i = m_items.begin(); i != m_items.end();)
+    for (VendorItemList::iterator i = _items.begin(); i != _items.end();)
     {
         if ((*i)->item == item_id)
         {
-            i = m_items.erase(i++);
+            i = _items.erase(i++);
             found = true;
         }
         else
@@ -78,7 +78,7 @@ bool VendorItemData::RemoveItem(uint32 item_id)
 
 VendorItem const* VendorItemData::FindItemCostPair(uint32 item_id, uint32 extendedCost) const
 {
-    for (VendorItemList::const_iterator i = m_items.begin(); i != m_items.end(); ++i)
+    for (VendorItemList::const_iterator i = _items.begin(); i != _items.end(); ++i)
         if ((*i)->item == item_id && (*i)->ExtendedCost == extendedCost)
             return *i;
     return NULL;
@@ -171,7 +171,7 @@ Creature::~Creature()
     delete i_AI;
     i_AI = NULL;
 
-    //if (m_uint32Values)
+    //if (_uint32Values)
     //    sLog->outError("Deconstruct Creature Entry = %u", GetEntry());
 }
 

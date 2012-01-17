@@ -5353,7 +5353,7 @@ void ObjectMgr::ReturnOrDeleteOldMails(bool serverUp)
         if (serverUp)
             player = ObjectAccessor::FindPlayer((uint64)m->receiver);
 
-        if (player && player->m_mailsLoaded)
+        if (player && player->_mailsLoaded)
         {                                                   // this code will run very improbably (the time is between 4 and 5 am, in game is online a player, who has old mail
             // his in mailbox and he has already listed his mails)
             delete m;

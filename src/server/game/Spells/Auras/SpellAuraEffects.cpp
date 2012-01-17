@@ -1615,15 +1615,15 @@ void AuraEffect::HandleModInvisibilityDetect(AuraApplication const* aurApp, uint
 
     if (apply)
     {
-        target->m_invisibilityDetect.AddFlag(type);
-        target->m_invisibilityDetect.AddValue(type, GetAmount());
+        target->_invisibilityDetect.AddFlag(type);
+        target->_invisibilityDetect.AddValue(type, GetAmount());
     }
     else
     {
         if (!target->HasAuraType(SPELL_AURA_MOD_INVISIBILITY_DETECT))
-            target->m_invisibilityDetect.DelFlag(type);
+            target->_invisibilityDetect.DelFlag(type);
 
-        target->m_invisibilityDetect.AddValue(type, -GetAmount());
+        target->_invisibilityDetect.AddValue(type, -GetAmount());
     }
 
     // call functions which may have additional effects after chainging state of unit
@@ -2891,7 +2891,7 @@ void AuraEffect::HandleAuraAllowFlight(AuraApplication const* aurApp, uint8 mode
     if (target->GetTypeId() == TYPEID_UNIT)
         target->SetFlying(apply);
 
-    if (Player* player = target->m_movedPlayer)
+    if (Player* player = target->_movedPlayer)
     {
         // allow flying
         WorldPacket data;
@@ -3317,7 +3317,7 @@ void AuraEffect::HandleAuraModIncreaseFlightSpeed(AuraApplication const* aurApp,
         // do not remove unit flag if there are more than this auraEffect of that kind on unit on unit
         if (mode & AURA_EFFECT_HANDLE_SEND_FOR_CLIENT_MASK && (apply || (!target->HasAuraType(SPELL_AURA_MOD_INCREASE_MOUNTED_FLIGHT_SPEED) && !target->HasAuraType(SPELL_AURA_FLY))))
         {
-            if (Player* player = target->m_movedPlayer)
+            if (Player* player = target->_movedPlayer)
             {
                 WorldPacket data;
                 if (apply)
@@ -5811,8 +5811,8 @@ void AuraEffect::HandleAuraModFakeInebriation(AuraApplication const* aurApp, uin
 
     if (apply)
     {
-        target->m_invisibilityDetect.AddFlag(INVISIBILITY_DRUNK);
-        target->m_invisibilityDetect.AddValue(INVISIBILITY_DRUNK, GetAmount());
+        target->_invisibilityDetect.AddFlag(INVISIBILITY_DRUNK);
+        target->_invisibilityDetect.AddValue(INVISIBILITY_DRUNK, GetAmount());
 
         if (target->GetTypeId() == TYPEID_PLAYER)
         {
@@ -5824,7 +5824,7 @@ void AuraEffect::HandleAuraModFakeInebriation(AuraApplication const* aurApp, uin
     {
         bool removeDetect = !target->HasAuraType(SPELL_AURA_MOD_FAKE_INEBRIATE);
 
-        target->m_invisibilityDetect.AddValue(INVISIBILITY_DRUNK, -GetAmount());
+        target->_invisibilityDetect.AddValue(INVISIBILITY_DRUNK, -GetAmount());
 
         if (target->GetTypeId() == TYPEID_PLAYER)
         {
@@ -5836,7 +5836,7 @@ void AuraEffect::HandleAuraModFakeInebriation(AuraApplication const* aurApp, uin
         }
 
         if (removeDetect)
-            target->m_invisibilityDetect.DelFlag(INVISIBILITY_DRUNK);
+            target->_invisibilityDetect.DelFlag(INVISIBILITY_DRUNK);
     }
 
     // call functions which may have additional effects after chainging state of unit

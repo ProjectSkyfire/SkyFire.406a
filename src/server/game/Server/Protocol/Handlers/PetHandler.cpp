@@ -781,13 +781,13 @@ void WorldSession::HandlePetCastSpellOpcode(WorldPacket& recvPacket)
     caster->ClearUnitState(UNIT_STAT_FOLLOW);
 
     Spell* spell = new Spell(caster, spellInfo, TRIGGERED_NONE);
-    spell->m_cast_count = castCount;                    // probably pending spell cast
+    spell->_cast_count = castCount;                    // probably pending spell cast
     spell->m_targets = targets;
 
     // TODO: need to check victim?
     SpellCastResult result;
-    if (caster->m_movedPlayer)
-        result = spell->CheckPetCast(caster->m_movedPlayer->GetSelectedUnit());
+    if (caster->_movedPlayer)
+        result = spell->CheckPetCast(caster->_movedPlayer->GetSelectedUnit());
     else
         result = spell->CheckPetCast(NULL);
     if (result == SPELL_CAST_OK)

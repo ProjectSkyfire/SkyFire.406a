@@ -597,13 +597,13 @@ void BattlefieldTB::ProcessEvent(GameObject* obj, uint32 eventId)
 
 void BfCapturePointTB::ChangeTeam(TeamId /*oldteam*/)
 {
-    m_WorkShop->ChangeControl(m_team, false);
+    m_WorkShop->ChangeControl(_team, false);
 }
 
 BfCapturePointTB::BfCapturePointTB(BattlefieldTB* bf, TeamId control) : BfCapturePoint(bf)
 {
     m_Bf = bf;
-    m_team = control;
+    _team = control;
 }
 
 BfGraveYardTB::BfGraveYardTB(BattlefieldTB* bf) : BfGraveYard(bf)

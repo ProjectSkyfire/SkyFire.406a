@@ -76,7 +76,7 @@ class Transport : public GameObject
         WayPointMap::const_iterator m_curr;
         WayPointMap::const_iterator m_next;
         uint32 m_pathTime;
-        uint32 m_timer;
+        uint32 _timer;
 
         PlayerSet m_passengers;
 

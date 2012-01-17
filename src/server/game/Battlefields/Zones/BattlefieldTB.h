@@ -176,7 +176,7 @@ class BfCapturePointTB: public BfCapturePoint
     void LinkToWorkShop(BfTBWorkShopData* ws) {m_WorkShop = ws;}
 
     void ChangeTeam(TeamId oldteam);
-    TeamId GetTeam() const { return m_team; }
+    TeamId GetTeam() const { return _team; }
 
 protected:
     BfTBWorkShopData* m_WorkShop;

@@ -334,26 +334,26 @@ typedef std::vector<VendorItem*> VendorItemList;
 
 struct VendorItemData
 {
-    VendorItemList m_items;
+    VendorItemList _items;
 
     VendorItem* GetItem(uint32 slot) const
     {
-        if (slot >= m_items.size()) return NULL;
-        return m_items[slot];
+        if (slot >= _items.size()) return NULL;
+        return _items[slot];
     }
-    bool Empty() const { return m_items.empty(); }
-    uint8 GetItemCount() const { return m_items.size(); }
+    bool Empty() const { return _items.empty(); }
+    uint8 GetItemCount() const { return _items.size(); }
     void AddItem(uint32 item, int32 maxcount, uint32 ptime, uint32 ExtendedCost)
     {
-        m_items.push_back(new VendorItem(item, maxcount, ptime, ExtendedCost));
+        _items.push_back(new VendorItem(item, maxcount, ptime, ExtendedCost));
     }
     bool RemoveItem(uint32 item_id);
     VendorItem const* FindItemCostPair(uint32 item_id, uint32 extendedCost) const;
     void Clear()
     {
-        for (VendorItemList::const_iterator itr = m_items.begin(); itr != m_items.end(); ++itr)
+        for (VendorItemList::const_iterator itr = _items.begin(); itr != _items.end(); ++itr)
             delete (*itr);
-        m_items.clear();
+        _items.clear();
     }
 };
 

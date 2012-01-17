@@ -86,7 +86,7 @@ class Weather
         uint32 m_zone;
         WeatherType m_type;
         float m_grade;
-        IntervalTimer m_timer;
+        IntervalTimer _timer;
         WeatherData const* m_weatherChances;
 };
 #endif

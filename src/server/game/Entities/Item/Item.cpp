@@ -236,8 +236,8 @@ bool ItemCanGoIntoBag(ItemTemplate const* proto, ItemTemplate const* pBagProto)
 
 Item::Item()
 {
-    m_objectType |= TYPEMASK_ITEM;
-    m_objectTypeId = TYPEID_ITEM;
+    _objectType |= TYPEMASK_ITEM;
+    _objectTypeId = TYPEID_ITEM;
 
     m_updateFlag = 0;
 
@@ -246,7 +246,7 @@ Item::Item()
     uState = ITEM_NEW;
     uQueuePos = -1;
     m_container = NULL;
-    m_lootGenerated = false;
+    _lootGenerated = false;
     mb_in_trade = false;
     m_lastPlayedTimeUpdate = time(NULL);
 
@@ -716,7 +716,7 @@ void Item::AddToUpdateQueueOf(Player* player)
         return;
     }
 
-    if (player->m_itemUpdateQueueBlocked)
+    if (player->_itemUpdateQueueBlocked)
         return;
 
     player->m_itemUpdateQueue.push_back(this);
@@ -736,7 +736,7 @@ void Item::RemoveFromUpdateQueueOf(Player* player)
         return;
     }
 
-    if (player->m_itemUpdateQueueBlocked)
+    if (player->_itemUpdateQueueBlocked)
         return;
 
     player->m_itemUpdateQueue[uQueuePos] = NULL;
@@ -755,7 +755,7 @@ bool Item::IsEquipped() const
 
 bool Item::CanBeTraded(bool mail, bool trade) const
 {
-    if (m_lootGenerated)
+    if (_lootGenerated)
         return false;
 
     if ((!mail || !IsBoundAccountWide()) && (IsSoulBound() && (!HasFlag(ITEM_FIELD_FLAGS, ITEM_FLAG_BOP_TRADEABLE) || !trade)))
@@ -818,7 +818,7 @@ bool Item::IsBoundByEnchant() const
 InventoryResult Item::CanBeMergedPartlyWith(ItemTemplate const* proto) const
 {
     // not allow merge looting currently items
-    if (m_lootGenerated)
+    if (_lootGenerated)
         return EQUIP_ERR_ALREADY_LOOTED;
 
     // check item type

@@ -56,19 +56,19 @@ void AchievementMgr::Reset()
     {
         WorldPacket data(SMSG_ACHIEVEMENT_DELETED, 4);
         data << uint32(iter->first);
-        m_player->SendDirectMessage(&data);
+        _player->SendDirectMessage(&data);
     }
 
     for (CriteriaProgressMap::const_iterator iter = m_criteriaProgress.begin(); iter != m_criteriaProgress.end(); ++iter)
     {
         WorldPacket data(SMSG_CRITERIA_DELETED, 4);
         data << uint32(iter->first);
-        m_player->SendDirectMessage(&data);
+        _player->SendDirectMessage(&data);
     }
 
     m_completedAchievements.clear();
     m_criteriaProgress.clear();
-    DeleteFromDB(m_player->GetGUIDLow());
+    DeleteFromDB(_player->GetGUIDLow());
 
     // re-fill data
     CheckAllAchievementCriteria();
@@ -313,7 +313,7 @@ void AchievementMgr::CheckAllAchievementCriteria()
 {
     // suppress sending packets
     for (uint32 i=0; i<ACHIEVEMENT_CRITERIA_TYPE_TOTAL; ++i)
-        UpdateAchievementCriteria(AchievementCriteriaTypes(i), m_player);
+        UpdateAchievementCriteria(AchievementCriteriaTypes(i), _player);
 }
 
 void AchievementMgr::UpdateTimedAchievements(uint32 timeDiff)
@@ -326,7 +326,7 @@ void AchievementMgr::UpdateTimedAchievements(uint32 timeDiff)
             if (itr->second <= timeDiff)
             {
                 AchievementCriteriaEntry const *entry = sAchievementCriteriaStore.LookupEntry(itr->first);
-                RemoveCriteriaProgress(entry, m_player);
+                RemoveCriteriaProgress(entry, _player);
                 m_timedAchievements.erase(itr++);
             }
             else
@@ -347,7 +347,7 @@ void AchievementMgr::StartTimedAchievement(AchievementCriteriaTimedTypes type, u
             continue;
 
         AchievementEntry const *achievement = sAchievementStore.LookupEntry((*i)->referredAchievement);
-        if (m_timedAchievements.find((*i)->ID) == m_timedAchievements.end() && !IsCompletedCriteria(*i, achievement, m_player))
+        if (m_timedAchievements.find((*i)->ID) == m_timedAchievements.end() && !IsCompletedCriteria(*i, achievement, _player))
         {
             // Start the timer
             if ((*i)->timeLimit * IN_MILLISECONDS > timeLost)
@@ -355,7 +355,7 @@ void AchievementMgr::StartTimedAchievement(AchievementCriteriaTimedTypes type, u
                 m_timedAchievements[(*i)->ID] = (*i)->timeLimit * IN_MILLISECONDS - timeLost;
 
                 // and at client too
-                SetCriteriaProgress(*i, 0, m_player, PROGRESS_SET);
+                SetCriteriaProgress(*i, 0, _player, PROGRESS_SET);
             }
         }
     }
@@ -375,7 +375,7 @@ void AchievementMgr::RemoveTimedAchievement(AchievementCriteriaTimedTypes type, 
             continue;
 
         // remove progress
-        RemoveCriteriaProgress(*i, m_player);
+        RemoveCriteriaProgress(*i, _player);
 
         // Remove the timer
         m_timedAchievements.erase(timedIter);
@@ -387,7 +387,7 @@ void AchievementMgr::CompletedAchievement(AchievementEntry const* achievement)
     sLog->outDetail("AchievementMgr::CompletedAchievement(%u)", achievement->ID);
 
     // disable for gamemasters with GM-mode enabled
-    if (m_player->isGameMaster())
+    if (_player->isGameMaster())
         return;
 
     if (achievement->flags & ACHIEVEMENT_FLAG_COUNTER || HasAchieved(achievement->ID))
@@ -403,8 +403,8 @@ void AchievementMgr::CompletedAchievement(AchievementEntry const* achievement)
     if (!(achievement->flags & ACHIEVEMENT_FLAG_REALM_FIRST_KILL))
         sAchievementMgr->SetRealmCompleted(achievement);
 
-    UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_COMPLETE_ACHIEVEMENT, m_player);
-    UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_EARN_ACHIEVEMENT_POINTS, m_player, achievement->points);
+    UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_COMPLETE_ACHIEVEMENT, _player);
+    UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_EARN_ACHIEVEMENT_POINTS, _player, achievement->points);
 
     m_achievementPoints += achievement->points;
     // reward items and titles if any

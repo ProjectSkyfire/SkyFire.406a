@@ -259,7 +259,7 @@ class BfCapturePointWG : public BfCapturePoint
         void ChangeTeam(TeamId oldteam);
         TeamId GetTeam() const
         {
-            return m_team;
+            return _team;
         }
 
     protected:

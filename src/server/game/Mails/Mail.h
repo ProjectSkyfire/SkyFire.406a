@@ -128,20 +128,20 @@ class MailDraft
 
     public:                                                 // Constructors
         explicit MailDraft(uint16 mailTemplateId, bool need_items = true)
-            : m_mailTemplateId(mailTemplateId), m_mailTemplateItemsNeed(need_items), m_money(0), m_COD(0)
+            : m_mailTemplateId(mailTemplateId), m_mailTemplateItemsNeed(need_items), _money(0), m_COD(0)
         {}
         MailDraft(std::string subject, std::string body)
-            : m_mailTemplateId(0), m_mailTemplateItemsNeed(false), m_subject(subject), m_body(body), m_money(0), m_COD(0) {}
+            : m_mailTemplateId(0), m_mailTemplateItemsNeed(false), m_subject(subject), m_body(body), _money(0), m_COD(0) {}
     public:                                                 // Accessors
         uint16 GetMailTemplateId() const { return m_mailTemplateId; }
         std::string const& GetSubject() const { return m_subject; }
-        uint64 GetMoney() const { return m_money; }
+        uint64 GetMoney() const { return _money; }
         uint64 GetCOD() const { return m_COD; }
         std::string const& GetBody() const { return m_body; }
 
     public:                                                 // modifiers
         MailDraft& AddItem(Item* item);
-        MailDraft& AddMoney(uint64 money) { m_money = money; return *this; }
+        MailDraft& AddMoney(uint64 money) { _money = money; return *this; }
         MailDraft& AddCOD(uint64 COD) { m_COD = COD; return *this; }
 
     public:                                                 // finishers
@@ -157,9 +157,9 @@ class MailDraft
         std::string m_subject;
         std::string m_body;
 
-        MailItemMap m_items;                                // Keep the items in a map to avoid duplicate guids (which can happen), store only low part of guid
+        MailItemMap _items;                                // Keep the items in a map to avoid duplicate guids (which can happen), store only low part of guid
 
-        uint64 m_money;
+        uint64 _money;
         uint64 m_COD;
 };
 

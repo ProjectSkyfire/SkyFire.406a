@@ -398,7 +398,7 @@ void WorldSession::DoLootRelease(uint64 lguid)
         // destroy only 5 items from stack in case prospecting and milling
         if (proto->Flags & (ITEM_PROTO_FLAG_PROSPECTABLE | ITEM_PROTO_FLAG_MILLABLE))
         {
-            pItem->m_lootGenerated = false;
+            pItem->_lootGenerated = false;
             pItem->loot.clear();
 
             uint32 count = pItem->GetCount();

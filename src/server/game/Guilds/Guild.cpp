@@ -363,7 +363,7 @@ bool Guild::BankTab::LoadItemFromDB(Field* fields)
     }
 
     pItem->AddToWorld();
-    m_items[slotId] = pItem;
+    _items[slotId] = pItem;
     return true;
 }
 
@@ -371,7 +371,7 @@ bool Guild::BankTab::LoadItemFromDB(Field* fields)
 void Guild::BankTab::Delete(SQLTransaction& trans, bool removeItemsFromDB)
 {
     for (uint8 slotId = 0; slotId < GUILD_BANK_MAX_SLOTS; ++slotId)
-        if (Item* pItem = m_items[slotId])
+        if (Item* pItem = _items[slotId])
         {
             pItem->RemoveFromWorld();
             if (removeItemsFromDB)
@@ -467,7 +467,7 @@ bool Guild::BankTab::SetItem(SQLTransaction& trans, uint8 slotId, Item* pItem)
     if (slotId >= GUILD_BANK_MAX_SLOTS)
         return false;
 
-    m_items[slotId] = pItem;
+    _items[slotId] = pItem;
 
     PreparedStatement* stmt = NULL;
 
@@ -1046,7 +1046,7 @@ InventoryResult Guild::BankMoveItemData::CanStore(Item* pItem, bool swap)
 }
 
 // Guild
-Guild::Guild() : m_id(0), m_leaderGuid(0), m_createdDate(0), m_accountsNumber(0), m_bankMoney(0), m_eventLog(NULL), m_lastXPSave(0), m_achievementMgr(this)
+Guild::Guild() : m_id(0), m_leaderGuid(0), m_createdDate(0), m_accountsNumber(0), m_bankMoney(0), m_eventLog(NULL), m_lastXPSave(0), _achievementMgr(this)
 {
     memset(&m_bankEventLog, 0, (GUILD_BANK_MAX_TABS + 1) * sizeof(LogHolder*));
 }
@@ -2093,7 +2093,7 @@ bool Guild::LoadFromDB(Field* fields)
     m_nextLevelXP = sObjectMgr->GetXPForGuildLevel(m_level);
 
     _CreateLogHolders();
-    m_achievementMgr.LoadFromDB();
+    _achievementMgr.LoadFromDB();
     return true;
 }
 
@@ -2399,7 +2399,7 @@ bool Guild::AddMember(uint64 guid, uint8 rankId)
         player->SetReputation(1168, 0);
 
     HandleRoster();
-    m_achievementMgr.SendAllAchievementData();
+    _achievementMgr.SendAllAchievementData();
     return true;
 }
 

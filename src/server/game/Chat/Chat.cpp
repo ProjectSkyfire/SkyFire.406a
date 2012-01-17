@@ -473,13 +473,13 @@ std::string ChatHandler::PGetParseString(int32 entry, ...) const
 
 const char *ChatHandler::GetSkyFireString(int32 entry) const
 {
-    return m_session->GetSkyFireString(entry);
+    return _session->GetSkyFireString(entry);
 }
 
 bool ChatHandler::isAvailable(ChatCommand const& cmd) const
 {
     // check security level only for simple  command (without child commands)
-    return m_session->GetSecurity() >= AccountTypes(cmd.SecurityLevel);
+    return _session->GetSecurity() >= AccountTypes(cmd.SecurityLevel);
 }
 
 bool ChatHandler::HasLowerSecurity(Player* target, uint64 guid, bool strong)
@@ -507,11 +507,11 @@ bool ChatHandler::HasLowerSecurityAccount(WorldSession* target, uint32 target_ac
     uint32 target_sec;
 
     // allow everything from console and RA console
-    if (!m_session)
+    if (!_session)
         return false;
 
     // ignore only for non-players for non strong checks (when allow apply command at least to same sec level)
-    if (!AccountMgr::IsPlayerAccount(m_session->GetSecurity()) && !strong && !sWorld->getBoolConfig(CONFIG_GM_LOWER_SECURITY))
+    if (!AccountMgr::IsPlayerAccount(_session->GetSecurity()) && !strong && !sWorld->getBoolConfig(CONFIG_GM_LOWER_SECURITY))
         return false;
 
     if (target)
@@ -522,7 +522,7 @@ bool ChatHandler::HasLowerSecurityAccount(WorldSession* target, uint32 target_ac
         return true;                                        // caller must report error for (target == NULL && target_account == 0)
 
     AccountTypes target_ac_sec = AccountTypes(target_sec);
-    if (m_session->GetSecurity() < target_ac_sec || (strong && m_session->GetSecurity() <= target_ac_sec))
+    if (_session->GetSecurity() < target_ac_sec || (strong && _session->GetSecurity() <= target_ac_sec))
     {
         SendSysMessage(LANG_YOURS_SECURITY_IS_LOW);
         SetSentErrorMessage(true);
@@ -568,7 +568,7 @@ void ChatHandler::SendSysMessage(const char *str)
     while (char* line = LineFromMessage(pos))
     {
         FillSystemMessageData(&data, line);
-        m_session->SendPacket(&data);
+        _session->SendPacket(&data);
     }
 
     free(buf);
@@ -700,12 +700,12 @@ bool ChatHandler::ExecuteCommandInTable(ChatCommand* table, const char* text, co
             if (!AccountMgr::IsPlayerAccount(table[i].SecurityLevel))
             {
                 // chat case
-                if (m_session)
+                if (_session)
                 {
-                    Player* p = m_session->GetPlayer();
+                    Player* p = _session->GetPlayer();
                     uint64 sel_guid = p->GetSelection();
-                    sLog->outCommand(m_session->GetAccountId(), "Command: %s [Player: %s (Account: %u) X: %f Y: %f Z: %f Map: %u Selected %s: %s (GUID: %u)]",
-                        fullcmd.c_str(), p->GetName(), m_session->GetAccountId(), p->GetPositionX(), p->GetPositionY(), p->GetPositionZ(), p->GetMapId(),
+                    sLog->outCommand(_session->GetAccountId(), "Command: %s [Player: %s (Account: %u) X: %f Y: %f Z: %f Map: %u Selected %s: %s (GUID: %u)]",
+                        fullcmd.c_str(), p->GetName(), _session->GetAccountId(), p->GetPositionX(), p->GetPositionY(), p->GetPositionZ(), p->GetMapId(),
                         GetLogNameForGuid(sel_guid), (p->GetSelectedUnit()) ? p->GetSelectedUnit()->GetName() : "", GUID_LOPART(sel_guid));
                 }
             }
@@ -787,11 +787,11 @@ int ChatHandler::ParseCommands(const char* text)
 
     std::string fullcmd = text;
 
-    if (m_session && AccountMgr::IsPlayerAccount(m_session->GetSecurity()) && !sWorld->getBoolConfig(CONFIG_ALLOW_PLAYER_COMMANDS))
+    if (_session && AccountMgr::IsPlayerAccount(_session->GetSecurity()) && !sWorld->getBoolConfig(CONFIG_ALLOW_PLAYER_COMMANDS))
        return 0;
 
     /// chat case (.command or !command format)
-    if (m_session)
+    if (_session)
     {
         if (text[0] != '!' && text[0] != '.')
             return 0;
@@ -812,7 +812,7 @@ int ChatHandler::ParseCommands(const char* text)
 
     if (!ExecuteCommandInTable(getCommandTable(), text, fullcmd))
     {
-        if (m_session && AccountMgr::IsPlayerAccount(m_session->GetSecurity()))
+        if (_session && AccountMgr::IsPlayerAccount(_session->GetSecurity()))
             return 0;
 
         SendSysMessage(LANG_NO_CMD);
@@ -893,7 +893,7 @@ bool ChatHandler::ShowHelpForSubCommands(ChatCommand* table, char const* cmd, ch
         if (*subcmd && !hasStringAbbr(table[i].Name, subcmd))
             continue;
 
-        if (m_session)
+        if (_session)
             list += "\n    ";
         else
             list += "\n\r    ";
@@ -1058,49 +1058,49 @@ void ChatHandler::FillMessageData(WorldPacket* data, WorldSession* session, uint
 
 Player* ChatHandler::getSelectedPlayer()
 {
-    if (!m_session)
+    if (!_session)
         return NULL;
 
-    uint64 guid  = m_session->GetPlayer()->GetSelection();
+    uint64 guid  = _session->GetPlayer()->GetSelection();
 
     if (guid == 0)
-        return m_session->GetPlayer();
+        return _session->GetPlayer();
 
     return ObjectAccessor::FindPlayer(guid);
 }
 
 Unit* ChatHandler::getSelectedUnit()
 {
-    if (!m_session)
+    if (!_session)
         return NULL;
 
-    uint64 guid = m_session->GetPlayer()->GetSelection();
+    uint64 guid = _session->GetPlayer()->GetSelection();
 
     if (guid == 0)
-        return m_session->GetPlayer();
+        return _session->GetPlayer();
 
-    return ObjectAccessor::GetUnit(*m_session->GetPlayer(), guid);
+    return ObjectAccessor::GetUnit(*_session->GetPlayer(), guid);
 }
 
 WorldObject* ChatHandler::getSelectedObject()
 {
-    if (!m_session)
+    if (!_session)
         return NULL;
 
-    uint64 guid = m_session->GetPlayer()->GetSelection();
+    uint64 guid = _session->GetPlayer()->GetSelection();
 
     if (guid == 0)
         return GetNearbyGameObject();
 
-    return ObjectAccessor::GetUnit(*m_session->GetPlayer(), guid);
+    return ObjectAccessor::GetUnit(*_session->GetPlayer(), guid);
 }
 
 Creature* ChatHandler::getSelectedCreature()
 {
-    if (!m_session)
+    if (!_session)
         return NULL;
 
-    return ObjectAccessor::GetCreatureOrPetOrVehicle(*m_session->GetPlayer(), m_session->GetPlayer()->GetSelection());
+    return ObjectAccessor::GetCreatureOrPetOrVehicle(*_session->GetPlayer(), _session->GetPlayer()->GetSelection());
 }
 
 char* ChatHandler::extractKeyFromLink(char* text, char const* linkType, char** something1)
@@ -1217,10 +1217,10 @@ char* ChatHandler::extractKeyFromLink(char* text, char const* const* linkTypes, 
 
 GameObject* ChatHandler::GetNearbyGameObject()
 {
-    if (!m_session)
+    if (!_session)
         return NULL;
 
-    Player* pl = m_session->GetPlayer();
+    Player* pl = _session->GetPlayer();
     GameObject* obj = NULL;
     Trinity::NearestGameObjectCheck check(*pl);
     Trinity::GameObjectLastSearcher<Trinity::NearestGameObjectCheck> searcher(pl, obj, check);
@@ -1230,10 +1230,10 @@ GameObject* ChatHandler::GetNearbyGameObject()
 
 GameObject* ChatHandler::GetObjectGlobalyWithGuidOrNearWithDbGuid(uint32 lowguid, uint32 entry)
 {
-    if (!m_session)
+    if (!_session)
         return NULL;
 
-    Player* player = m_session->GetPlayer();
+    Player* player = _session->GetPlayer();
 
     GameObject* obj = player->GetMap()->GetGameObject(MAKE_NEW_GUID(lowguid, entry, HIGHGUID_GAMEOBJECT));
 
@@ -1510,18 +1510,18 @@ char* ChatHandler::extractQuotedArg(char* args)
 
 bool ChatHandler::needReportToTarget(Player* chr) const
 {
-    Player* pl = m_session->GetPlayer();
+    Player* pl = _session->GetPlayer();
     return pl != chr && pl->IsVisibleGloballyFor(chr);
 }
 
 LocaleConstant ChatHandler::GetSessionDbcLocale() const
 {
-    return m_session->GetSessionDbcLocale();
+    return _session->GetSessionDbcLocale();
 }
 
 int ChatHandler::GetSessionDbLocaleIndex() const
 {
-    return m_session->GetSessionDbLocaleIndex();
+    return _session->GetSessionDbLocaleIndex();
 }
 
 const char *CliHandler::GetSkyFireString(int32 entry) const
@@ -1585,7 +1585,7 @@ bool ChatHandler::GetPlayerGroupAndGUIDByName(const char* cname, Player* &player
         if (getSelectedPlayer())
             player = getSelectedPlayer();
         else
-            player = m_session->GetPlayer();
+            player = _session->GetPlayer();
 
         if (!guid || !offline)
             guid  = player->GetGUID();

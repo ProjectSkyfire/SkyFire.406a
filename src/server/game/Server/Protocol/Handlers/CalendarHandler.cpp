@@ -69,7 +69,7 @@ void WorldSession::HandleCalendarGetCalendar(WorldPacket& /*recv_data*/)
     data << uint32(counter);                               // instance save count
 
     for (uint8 i = 0; i < MAX_DIFFICULTY; ++i)
-        for (Player::BoundInstancesMap::const_iterator itr = _player->m_boundInstances[i].begin(); itr != _player->m_boundInstances[i].end(); ++itr)
+        for (Player::BoundInstancesMap::const_iterator itr = _player->_boundInstances[i].begin(); itr != _player->_boundInstances[i].end(); ++itr)
             if (itr->second.perm)
             {
                 InstanceSave const* save = itr->second.save;

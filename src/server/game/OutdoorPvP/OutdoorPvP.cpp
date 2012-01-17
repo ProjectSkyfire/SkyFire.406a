@@ -33,7 +33,7 @@
 
 OPvPCapturePoint::OPvPCapturePoint(OutdoorPvP* pvp):
 m_capturePointGUID(0), m_capturePoint(NULL), m_maxValue(0), m_maxSpeed(0),
-m_value(0), m_team(TEAM_NEUTRAL), m_OldState(OBJECTIVESTATE_NEUTRAL),
+m_value(0), _team(TEAM_NEUTRAL), m_OldState(OBJECTIVESTATE_NEUTRAL),
 m_State(OBJECTIVESTATE_NEUTRAL), m_neutralValuePct(0), m_PvP(pvp)
 {
 }
@@ -337,7 +337,7 @@ bool OPvPCapturePoint::Update(uint32 diff)
     }
 
     float oldValue = m_value;
-    TeamId oldTeam = m_team;
+    TeamId oldTeam = _team;
 
     m_OldState = m_State;
 
@@ -348,14 +348,14 @@ bool OPvPCapturePoint::Update(uint32 diff)
         if (m_value < -m_maxValue)
             m_value = -m_maxValue;
         m_State = OBJECTIVESTATE_HORDE;
-        m_team = TEAM_HORDE;
+        _team = TEAM_HORDE;
     }
     else if (m_value > m_minValue) // blue
     {
         if (m_value > m_maxValue)
             m_value = m_maxValue;
         m_State = OBJECTIVESTATE_ALLIANCE;
-        m_team = TEAM_ALLIANCE;
+        _team = TEAM_ALLIANCE;
     }
     else if (oldValue * m_value <= 0) // grey, go through mid point
     {
@@ -365,7 +365,7 @@ bool OPvPCapturePoint::Update(uint32 diff)
         // if challenger is horde, then n->h challenge
         else if (Challenger == HORDE)
             m_State = OBJECTIVESTATE_NEUTRAL_HORDE_CHALLENGE;
-        m_team = TEAM_NEUTRAL;
+        _team = TEAM_NEUTRAL;
     }
     else // grey, did not go through mid point
     {
@@ -374,7 +374,7 @@ bool OPvPCapturePoint::Update(uint32 diff)
             m_State = OBJECTIVESTATE_HORDE_ALLIANCE_CHALLENGE;
         else if (Challenger == HORDE && (m_OldState == OBJECTIVESTATE_ALLIANCE || m_OldState == OBJECTIVESTATE_NEUTRAL_ALLIANCE_CHALLENGE))
             m_State = OBJECTIVESTATE_ALLIANCE_HORDE_CHALLENGE;
-        m_team = TEAM_NEUTRAL;
+        _team = TEAM_NEUTRAL;
     }
 
     if (m_value != oldValue)
@@ -383,7 +383,7 @@ bool OPvPCapturePoint::Update(uint32 diff)
     if (m_OldState != m_State)
     {
         //sLog->outError("%u->%u", m_OldState, m_State);
-        if (oldTeam != m_team)
+        if (oldTeam != _team)
             ChangeTeam(oldTeam);
         ChangeState();
         return true;

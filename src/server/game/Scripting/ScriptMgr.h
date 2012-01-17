@@ -159,12 +159,12 @@ class ScriptObject
         // whether or not this script type must be assigned in the database.
         virtual bool IsDatabaseBound() const { return false; }
 
-        const std::string& GetName() const { return _name; }
+        const std::string& GetName() const { return m_name; }
 
     protected:
 
         ScriptObject(const char* name)
-            : _name(std::string(name))
+            : m_name(std::string(name))
         {
         }
 
@@ -174,7 +174,7 @@ class ScriptObject
 
     private:
 
-        const std::string _name;
+        const std::string m_name;
 };
 
 template<class TObject> class UpdatableScript

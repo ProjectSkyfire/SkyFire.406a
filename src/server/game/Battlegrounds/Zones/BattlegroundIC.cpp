@@ -98,10 +98,10 @@ void BattlegroundIC::DoAction(uint32 action, uint64 var)
 
     player->SetTransport(player->GetTeamId() == TEAM_ALLIANCE ? gunshipAlliance : gunshipHorde);
 
-    player->m_movementInfo.t_pos.m_positionX = TransportMovementInfo.GetPositionX();
-    player->m_movementInfo.t_pos.m_positionY = TransportMovementInfo.GetPositionY();
-    player->m_movementInfo.t_pos.m_positionZ = TransportMovementInfo.GetPositionZ();
-    player->m_movementInfo.t_guid = (player->GetTeamId() == TEAM_ALLIANCE ? gunshipAlliance : gunshipHorde)->GetGUID();
+    player->_movementInfo.t_pos.m_positionX = TransportMovementInfo.GetPositionX();
+    player->_movementInfo.t_pos.m_positionY = TransportMovementInfo.GetPositionY();
+    player->_movementInfo.t_pos.m_positionZ = TransportMovementInfo.GetPositionZ();
+    player->_movementInfo.t_guid = (player->GetTeamId() == TEAM_ALLIANCE ? gunshipAlliance : gunshipHorde)->GetGUID();
 
     player->TeleportTo(GetMapId(), TeleportToTransportPosition.GetPositionX(), TeleportToTransportPosition.GetPositionY(), TeleportToTransportPosition.GetPositionZ(), TeleportToTransportPosition.GetOrientation(), TELE_TO_NOT_LEAVE_TRANSPORT);
 }

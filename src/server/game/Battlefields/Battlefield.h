@@ -105,7 +105,7 @@ public:
     bool SetCapturePointData(uint32 entry, uint32 map, float x, float y, float z, float o);
     GameObject *GetCapturePointGo() { return m_capturePoint; }
 
-    TeamId GetTeamId() {return m_team;}
+    TeamId GetTeamId() {return _team;}
 protected:
     bool DelCapturePoint();
 
@@ -121,7 +121,7 @@ protected:
 
     // the status of the objective
     float m_value;
-    TeamId m_team;
+    TeamId _team;
 
     // objective states
     BattlefieldObjectiveStates m_OldState;

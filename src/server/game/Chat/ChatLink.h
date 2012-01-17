@@ -51,7 +51,7 @@ public:
     void RemoveLink(std::string& msg) { msg.erase(_startPos, _endPos - _startPos); }
 protected:
     uint32 _color;
-    std::string _name;
+    std::string m_name;
     std::istringstream::pos_type _startPos;
     std::istringstream::pos_type _endPos;
 };
@@ -90,12 +90,12 @@ protected:
 class SpellChatLink : public ChatLink
 {
 public:
-    SpellChatLink() : ChatLink(), _spell(NULL) { }
+    SpellChatLink() : ChatLink(), m_spell(NULL) { }
     virtual bool Initialize(std::istringstream& iss);
     virtual bool ValidateName(char* buffer, const char* context);
 
 protected:
-    SpellInfo const* _spell;
+    SpellInfo const* m_spell;
 };
 
 // AchievementChatLink - link to quest

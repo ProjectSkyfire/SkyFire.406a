@@ -938,7 +938,7 @@ private:
     uint32 _spellTypeMask;
     uint32 _spellPhaseMask;
     uint32 _hitMask;
-    Spell* _spell;
+    Spell* m_spell;
     DamageInfo* _damageInfo;
     HealInfo* _healInfo;
 public:
@@ -1308,15 +1308,15 @@ class Unit : public WorldObject
         uint32 getAttackTimer(WeaponAttackType type) const { return m_attackTimer[type]; }
         bool isAttackReady(WeaponAttackType type = BASE_ATTACK) const { return m_attackTimer[type] == 0; }
         bool haveOffhandWeapon() const;
-        bool CanDualWield() const { return m_canDualWield; }
-        void SetCanDualWield(bool value) { m_canDualWield = value; }
+        bool CanDualWield() const { return _canDualWield; }
+        void SetCanDualWield(bool value) { _canDualWield = value; }
         float GetCombatReach() const { return m_floatValues[UNIT_FIELD_COMBATREACH]; }
         float GetMeleeReach() const { float reach = m_floatValues[UNIT_FIELD_COMBATREACH]; return reach > MIN_MELEE_REACH ? reach : MIN_MELEE_REACH; }
         bool IsWithinCombatRange(const Unit* obj, float dist2compare) const;
         bool IsWithinMeleeRange(const Unit* obj, float dist = MELEE_RANGE) const;
         void GetRandomContactPoint(const Unit* target, float &x, float &y, float &z, float distance2dMin, float distance2dMax) const;
-        uint32 m_extraAttacks;
-        bool m_canDualWield;
+        uint32 _extraAttacks;
+        bool _canDualWield;
 
         void _addAttacker(Unit* pAttacker)                  // must be called only from Unit::Attack(Unit*)
         {
@@ -1418,11 +1418,11 @@ class Unit : public WorldObject
 
         uint32 GetAttackTime(WeaponAttackType att) const
         {
-           float f_BaseAttackTime = GetFloatValue(UNIT_FIELD_BASEATTACKTIME+att) / m_modAttackSpeedPct[att];
+           float f_BaseAttackTime = GetFloatValue(UNIT_FIELD_BASEATTACKTIME+att) / _modAttackSpeedPct[att];
            return (uint32)f_BaseAttackTime;
         }
 
-        void SetAttackTime(WeaponAttackType att, uint32 val) { SetFloatValue(UNIT_FIELD_BASEATTACKTIME+att, val*m_modAttackSpeedPct[att]); }
+        void SetAttackTime(WeaponAttackType att, uint32 val) { SetFloatValue(UNIT_FIELD_BASEATTACKTIME+att, val*_modAttackSpeedPct[att]); }
         void ApplyAttackTimePercentMod(WeaponAttackType att, float val, bool apply);
         void ApplyCastTimePercentMod(float val, bool apply);
 
@@ -1701,7 +1701,7 @@ class Unit : public WorldObject
         void SetCritterGUID(uint64 guid) { SetUInt64Value(UNIT_FIELD_CRITTER, guid); }
         uint64 GetCritterGUID() const { return GetUInt64Value(UNIT_FIELD_CRITTER); }
 
-        bool IsControlledByPlayer() const { return m_ControlledByPlayer; }
+        bool IsControlledByPlayer() const { return _ControlledByPlayer; }
         uint64 GetCharmerOrOwnerGUID() const { return GetCharmerGUID() ? GetCharmerGUID() : GetOwnerGUID(); }
         uint64 GetCharmerOrOwnerOrOwnGUID() const
         {
@@ -1759,7 +1759,7 @@ class Unit : public WorldObject
         void DeleteCharmInfo();
         void UpdateCharmAI();
         //Player* GetMoverSource() const;
-        Player* m_movedPlayer;
+        Player* _movedPlayer;
         SharedVisionList const& GetSharedVisionList() { return m_sharedVision; }
         void AddPlayerToVision(Player* player);
         void RemovePlayerFromVision(Player* player);
@@ -1948,14 +1948,14 @@ class Unit : public WorldObject
         int32 m_baseSpellCritChance;
 
         float m_threatModifier[MAX_SPELL_SCHOOL];
-        float m_modAttackSpeedPct[3];
+        float _modAttackSpeedPct[3];
 
         // Event handler
         EventProcessor _Events;
 
         // stat system
         bool HandleStatModifier(UnitMods unitMod, UnitModifierType modifierType, float amount, bool apply);
-        void SetModifierValue(UnitMods unitMod, UnitModifierType modifierType, float value) { m_auraModifiersGroup[unitMod][modifierType] = value; }
+        void SetModifierValue(UnitMods unitMod, UnitModifierType modifierType, float value) { _auraModifiersGroup[unitMod][modifierType] = value; }
         float GetModifierValue(UnitMods unitMod, UnitModifierType modifierType) const;
         float GetTotalStatValue(Stats stat) const;
         float GetTotalAuraModValue(UnitMods unitMod) const;
@@ -2115,17 +2115,17 @@ class Unit : public WorldObject
         bool IsStopped() const { return !(HasUnitState(UNIT_STAT_MOVING)); }
         void StopMoving();
 
-        void AddUnitMovementFlag(uint32 f) { m_movementInfo.flags |= f; }
-        void RemoveUnitMovementFlag(uint32 f) { m_movementInfo.flags &= ~f; }
-        uint32 HasUnitMovementFlag(uint32 f) const { return m_movementInfo.flags & f; }
-        uint32 GetUnitMovementFlags() const { return m_movementInfo.flags; }
-        void SetUnitMovementFlags(uint32 f) { m_movementInfo.flags = f; }
+        void AddUnitMovementFlag(uint32 f) { _movementInfo.flags |= f; }
+        void RemoveUnitMovementFlag(uint32 f) { _movementInfo.flags &= ~f; }
+        uint32 HasUnitMovementFlag(uint32 f) const { return _movementInfo.flags & f; }
+        uint32 GetUnitMovementFlags() const { return _movementInfo.flags; }
+        void SetUnitMovementFlags(uint32 f) { _movementInfo.flags = f; }
 
-        void AddExtraUnitMovementFlag(uint16 f) { m_movementInfo.flags2 |= f; }
-        void RemoveExtraUnitMovementFlag(uint16 f) { m_movementInfo.flags2 &= ~f; }
-        uint16 HasExtraUnitMovementFlag(uint16 f) const { return m_movementInfo.flags2 & f; }
-        uint16 GetExtraUnitMovementFlags() const { return m_movementInfo.flags2; }
-        void SetExtraUnitMovementFlags(uint16 f) { m_movementInfo.flags2 = f; }
+        void AddExtraUnitMovementFlag(uint16 f) { _movementInfo.flags2 |= f; }
+        void RemoveExtraUnitMovementFlag(uint16 f) { _movementInfo.flags2 &= ~f; }
+        uint16 HasExtraUnitMovementFlag(uint16 f) const { return _movementInfo.flags2 & f; }
+        uint16 GetExtraUnitMovementFlags() const { return _movementInfo.flags2; }
+        void SetExtraUnitMovementFlags(uint16 f) { _movementInfo.flags2 = f; }
 
         void SetControlled(bool apply, UnitState state);
 
@@ -2188,15 +2188,15 @@ class Unit : public WorldObject
         bool IsOnVehicle(const Unit* vehicle) const { return m_vehicle && m_vehicle == vehicle->GetVehicleKit(); }
         Unit* GetVehicleBase()  const;
         Creature *GetVehicleCreatureBase() const;
-        float GetTransOffsetX() const { return m_movementInfo.t_pos.GetPositionX(); }
-        float GetTransOffsetY() const { return m_movementInfo.t_pos.GetPositionY(); }
-        float GetTransOffsetZ() const { return m_movementInfo.t_pos.GetPositionZ(); }
-        float GetTransOffsetO() const { return m_movementInfo.t_pos.GetOrientation(); }
-        uint32 GetTransTime()   const { return m_movementInfo.t_time; }
-        int8 GetTransSeat()     const { return m_movementInfo.t_seat; }
+        float GetTransOffsetX() const { return _movementInfo.t_pos.GetPositionX(); }
+        float GetTransOffsetY() const { return _movementInfo.t_pos.GetPositionY(); }
+        float GetTransOffsetZ() const { return _movementInfo.t_pos.GetPositionZ(); }
+        float GetTransOffsetO() const { return _movementInfo.t_pos.GetOrientation(); }
+        uint32 GetTransTime()   const { return _movementInfo.t_time; }
+        int8 GetTransSeat()     const { return _movementInfo.t_seat; }
         uint64 GetTransGUID()   const;
 
-        bool m_ControlledByPlayer;
+        bool _ControlledByPlayer;
 
         bool HandleSpellClick(Unit* clicker, int8 seatId = -1);
         void EnterVehicle(Unit* base, int8 seatId = -1);
@@ -2209,10 +2209,10 @@ class Unit : public WorldObject
 
         void BuildMovementPacket(ByteBuffer *data) const;
 
-        bool isMoving() const   { return m_movementInfo.HasMovementFlag(MOVEMENTFLAG_MASK_MOVING); }
-        bool isTurning() const  { return m_movementInfo.HasMovementFlag(MOVEMENTFLAG_MASK_TURNING); }
-        bool canFly() const     { return m_movementInfo.HasMovementFlag(MOVEMENTFLAG_CAN_FLY); }
-        bool IsFlying() const   { return m_movementInfo.HasMovementFlag(MOVEMENTFLAG_FLYING); }
+        bool isMoving() const   { return _movementInfo.HasMovementFlag(MOVEMENTFLAG_MASK_MOVING); }
+        bool isTurning() const  { return _movementInfo.HasMovementFlag(MOVEMENTFLAG_MASK_TURNING); }
+        bool canFly() const     { return _movementInfo.HasMovementFlag(MOVEMENTFLAG_CAN_FLY); }
+        bool IsFlying() const   { return _movementInfo.HasMovementFlag(MOVEMENTFLAG_FLYING); }
         void SetFlying(bool apply);
 
         void RewardRage(uint32 damage, uint32 weaponSpeedHitFactor, bool attacker);
@@ -2333,7 +2333,7 @@ class Unit : public WorldObject
         AuraStateAurasMap m_auraStateAuras;        // Used for improve performance of aura state checks on aura apply/remove
         uint32 m_interruptMask;
 
-        float m_auraModifiersGroup[UNIT_MOD_END][MODIFIER_TYPE_END];
+        float _auraModifiersGroup[UNIT_MOD_END][MODIFIER_TYPE_END];
         float m_weaponDamage[MAX_ATTACK][2];
         bool m_canModifyStats;
         VisibleAuraMap m_visibleAuras;

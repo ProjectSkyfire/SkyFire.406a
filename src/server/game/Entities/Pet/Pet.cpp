@@ -35,9 +35,9 @@
 #define PET_XP_FACTOR 0.05f
 
 Pet::Pet(Player* owner, PetType type) : Guardian(NULL, owner, true),
-m_usedTalentCount(0), m_removed(false), _owner(owner),
+_usedTalentCount(0), m_removed(false), _owner(owner),
 m_happinessTimer(7500), m_petType(type), m_duration(0),
-m_auraRaidUpdateMask(0), m_loading(false), m_declinedname(NULL)
+_auraRaidUpdateMask(0), m_loading(false), _declinedname(NULL)
 {
     m_unitTypeMask |= UNIT_MASK_PET;
     if (type == HUNTER_PET)
@@ -55,7 +55,7 @@ m_auraRaidUpdateMask(0), m_loading(false), m_declinedname(NULL)
 
 Pet::~Pet()
 {
-    delete m_declinedname;
+    delete _declinedname;
 }
 
 void Pet::AddToWorld()
@@ -96,7 +96,7 @@ bool Pet::LoadPetFromDB(Player* owner, uint32 petentry, uint32 petnumber, bool c
     m_loading = true;
 
     if (slotID == PET_SLOT_ACTUAL_PET_SLOT)
-        slotID = owner->m_currentPetSlot;
+        slotID = owner->_currentPetSlot;
 
     uint32 ownerid = owner->GetGUIDLow();
 
@@ -324,12 +324,12 @@ bool Pet::LoadPetFromDB(Player* owner, uint32 petentry, uint32 petnumber, bool c
 
         if (result)
         {
-            delete m_declinedname;
-            m_declinedname = new DeclinedName;
+            delete _declinedname;
+            _declinedname = new DeclinedName;
             Field* fields2 = result->Fetch();
             for (uint8 i = 0; i < MAX_DECLINED_NAME_CASES; ++i)
             {
-                m_declinedname->name[i] = fields2[i].GetString();
+                _declinedname->name[i] = fields2[i].GetString();
             }
         }
     }
@@ -361,10 +361,10 @@ void Pet::SavePetToDB(PetSlot mode)
         return;
 
     if(mode == PET_SLOT_ACTUAL_PET_SLOT)
-        mode = owner->m_currentPetSlot;
+        mode = owner->_currentPetSlot;
 
     // not save pet as current if another pet temporary unsummoned
-    if (mode == owner->m_currentPetSlot && owner->GetTemporaryUnsummonedPetNumber() &&
+    if (mode == owner->_currentPetSlot && owner->GetTemporaryUnsummonedPetNumber() &&
         owner->GetTemporaryUnsummonedPetNumber() != m_charmInfo->GetPetNumber())
     {
         // pet will lost anyway at restore temporary unsummoned
@@ -435,8 +435,8 @@ void Pet::SavePetToDB(PetSlot mode)
     // delete
     else
     {
-        if (owner->m_currentPetSlot >= PET_SLOT_HUNTER_FIRST && owner->m_currentPetSlot <= PET_SLOT_HUNTER_LAST)
-            owner->setPetSlotUsed(owner->m_currentPetSlot, false);
+        if (owner->_currentPetSlot >= PET_SLOT_HUNTER_FIRST && owner->_currentPetSlot <= PET_SLOT_HUNTER_LAST)
+            owner->setPetSlotUsed(owner->_currentPetSlot, false);
         RemoveAllAuras();
         DeleteFromDB(m_charmInfo->GetPetNumber());
     }
@@ -1385,9 +1385,9 @@ bool Pet::addSpell(uint32 spellId, ActiveStates active /*= ACT_DECIDE*/, PetSpel
     if (talentCost)
     {
         int32 free_points = GetMaxTalentPointsForLevel(getLevel());
-        m_usedTalentCount += talentCost;
+        _usedTalentCount += talentCost;
         // update free talent points
-        free_points-=m_usedTalentCount;
+        free_points-=_usedTalentCount;
         SetFreeTalentPoints(free_points > 0 ? free_points : 0);
     }
     return true;
@@ -1482,12 +1482,12 @@ bool Pet::removeSpell(uint32 spell_id, bool learn_prev, bool clear_ab)
     uint32 talentCost = GetTalentSpellCost(spell_id);
     if (talentCost > 0)
     {
-        if (m_usedTalentCount > talentCost)
-            m_usedTalentCount -= talentCost;
+        if (_usedTalentCount > talentCost)
+            _usedTalentCount -= talentCost;
         else
-            m_usedTalentCount = 0;
+            _usedTalentCount = 0;
         // update free talent points
-        int32 free_points = GetMaxTalentPointsForLevel(getLevel()) - m_usedTalentCount;
+        int32 free_points = GetMaxTalentPointsForLevel(getLevel()) - _usedTalentCount;
         SetFreeTalentPoints(free_points > 0 ? free_points : 0);
     }
 
@@ -1564,7 +1564,7 @@ bool Pet::resetTalents()
     uint8 level = getLevel();
     uint32 talentPointsForLevel = GetMaxTalentPointsForLevel(level);
 
-    if (m_usedTalentCount == 0)
+    if (_usedTalentCount == 0)
     {
         SetFreeTalentPoints(talentPointsForLevel);
         return false;
@@ -1700,10 +1700,10 @@ void Pet::InitTalentForLevel()
     uint8 level = getLevel();
     uint32 talentPointsForLevel = GetMaxTalentPointsForLevel(level);
     // Reset talents in case low level (on level down) or wrong points for level (hunter can unlearn TP increase talent)
-    if (talentPointsForLevel == 0 || m_usedTalentCount > talentPointsForLevel)
+    if (talentPointsForLevel == 0 || _usedTalentCount > talentPointsForLevel)
         resetTalents(); // Remove all talent points
 
-    SetFreeTalentPoints(talentPointsForLevel - m_usedTalentCount);
+    SetFreeTalentPoints(talentPointsForLevel - _usedTalentCount);
 
     Unit* owner = GetOwner();
     if (!owner || owner->GetTypeId() != TYPEID_PLAYER)

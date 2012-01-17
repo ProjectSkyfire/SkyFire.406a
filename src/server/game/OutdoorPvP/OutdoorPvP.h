@@ -170,7 +170,7 @@ class OPvPCapturePoint
         // the status of the objective
         float m_value;
 
-        TeamId m_team;
+        TeamId _team;
 
         // objective states
         ObjectiveStates m_OldState;

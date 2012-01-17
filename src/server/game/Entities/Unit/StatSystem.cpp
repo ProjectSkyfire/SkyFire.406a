@@ -135,7 +135,7 @@ bool Player::UpdateStats(Stats stat)
 
 void Player::ApplySpellPowerBonus(int32 amount, bool apply)
 {
-    apply = _ModifyUInt32(apply, m_baseSpellPower, amount);
+    apply = _ModifyUInt32(apply, _baseSpellPower, amount);
 
     // For speed just update for client
     ApplyModUInt32Value(PLAYER_FIELD_MOD_HEALING_DONE_POS, amount, apply);
@@ -237,11 +237,11 @@ void Player::UpdateSpellPower()
     uint32 spellPowerFromIntellect = GetStat(STAT_INTELLECT) - 10;
 
     //apply only the diff between the last and the new value.
-    ApplyModUInt32Value(PLAYER_FIELD_MOD_HEALING_DONE_POS, spellPowerFromIntellect - m_spellPowerFromIntellect, true);
+    ApplyModUInt32Value(PLAYER_FIELD_MOD_HEALING_DONE_POS, spellPowerFromIntellect - _spellPowerFromIntellect, true);
     for (int i = SPELL_SCHOOL_HOLY; i < MAX_SPELL_SCHOOL; ++i)
-        ApplyModUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_POS + i, spellPowerFromIntellect - m_spellPowerFromIntellect, true);
+        ApplyModUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_POS + i, spellPowerFromIntellect - _spellPowerFromIntellect, true);
 
-    m_spellPowerFromIntellect = spellPowerFromIntellect;
+    _spellPowerFromIntellect = spellPowerFromIntellect;
 }
 
 float Player::GetHealthBonusFromStamina()
@@ -810,13 +810,13 @@ void Player::UpdateExpertise(WeaponAttackType attack)
 
 void Player::ApplyManaRegenBonus(int32 amount, bool apply)
 {
-    _ModifyUInt32(apply, m_baseManaRegen, amount);
+    _ModifyUInt32(apply, _baseManaRegen, amount);
     UpdateManaRegen();
 }
 
 void Player::ApplyHealthRegenBonus(int32 amount, bool apply)
 {
-    _ModifyUInt32(apply, m_baseHealthRegen, amount);
+    _ModifyUInt32(apply, _baseHealthRegen, amount);
 }
 
 void Player::UpdateManaRegen()
@@ -889,7 +889,7 @@ void Player::UpdateMastery()
 {
     if (HasAuraType(SPELL_AURA_MASTERY))
     {
-        SetInt32Value(PLAYER_FIELD_COMBAT_RATING_1 + CR_MASTERY, m_baseRatingValue[CR_MASTERY]);
+        SetInt32Value(PLAYER_FIELD_COMBAT_RATING_1 + CR_MASTERY, _baseRatingValue[CR_MASTERY]);
         SetFloatValue(PLAYER_MASTERY, GetMasteryPoints());
     }
 }

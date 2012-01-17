@@ -139,8 +139,8 @@ class Object
         uint32 GetEntry() const { return GetUInt32Value(OBJECT_FIELD_ENTRY); }
         void SetEntry(uint32 entry) { SetUInt32Value(OBJECT_FIELD_ENTRY, entry); }
 
-        TypeID GetTypeId() const { return m_objectTypeId; }
-        bool isType(uint16 mask) const { return (mask & m_objectType); }
+        TypeID GetTypeId() const { return _objectTypeId; }
+        bool isType(uint16 mask) const { return (mask & _objectType); }
 
         virtual void BuildCreateUpdateBlockForPlayer(UpdateData* data, Player* target) const;
         void SendUpdateToPlayer(Player* player);
@@ -160,13 +160,13 @@ class Object
         uint32 GetUInt32Value(uint16 index) const
         {
             ASSERT(index < _valuesCount || PrintIndexError(index, false));
-            return m_uint32Values[index];
+            return _uint32Values[index];
         }
 
         uint64 GetUInt64Value(uint16 index) const
         {
             ASSERT(index + 1 < _valuesCount || PrintIndexError(index, false));
-            return *((uint64*)&(m_uint32Values[index]));
+            return *((uint64*)&(_uint32Values[index]));
         }
 
         float GetFloatValue(uint16 index) const
@@ -179,14 +179,14 @@ class Object
         {
             ASSERT(index < _valuesCount || PrintIndexError(index, false));
             ASSERT(offset < 4);
-            return *(((uint8*)&m_uint32Values[index])+offset);
+            return *(((uint8*)&_uint32Values[index])+offset);
         }
 
         uint16 GetUInt16Value(uint16 index, uint8 offset) const
         {
             ASSERT(index < _valuesCount || PrintIndexError(index, false));
             ASSERT(offset < 2);
-            return *(((uint16*)&m_uint32Values[index])+offset);
+            return *(((uint16*)&_uint32Values[index])+offset);
         }
 
         void SetInt32Value(uint16 index, int32 value);
@@ -230,7 +230,7 @@ class Object
         bool HasFlag(uint16 index, uint32 flag) const
         {
             if (index >= _valuesCount && !PrintIndexError(index, false)) return false;
-            return (m_uint32Values[index] & flag) != 0;
+            return (_uint32Values[index] & flag) != 0;
         }
 
         void SetByteFlag(uint16 index, uint8 offset, uint8 newFlag);
@@ -248,7 +248,7 @@ class Object
         {
             ASSERT(index < _valuesCount || PrintIndexError(index, false));
             ASSERT(offset < 4);
-            return (((uint8*)&m_uint32Values[index])[offset] & flag) != 0;
+            return (((uint8*)&_uint32Values[index])[offset] & flag) != 0;
         }
 
         void ApplyModFlag(uint16 index, uint32 flag, bool apply)
@@ -328,15 +328,15 @@ class Object
         void _BuildMovementUpdate(ByteBuffer * data, uint16 flags) const;
         void _BuildValuesUpdate(uint8 updatetype, ByteBuffer *data, UpdateMask* updateMask, Player* target) const;
 
-        uint16 m_objectType;
+        uint16 _objectType;
 
-        TypeID m_objectTypeId;
+        TypeID _objectTypeId;
         uint16 m_updateFlag;
 
         union
         {
             int32  *m_int32Values;
-            uint32 *m_uint32Values;
+            uint32 *_uint32Values;
             float  *m_floatValues;
         };
 
@@ -747,7 +747,7 @@ class WorldObject : public Object, public WorldLocation
         FlaggedValuesArray32<int32, uint32, StealthType, TOTAL_STEALTH_TYPES> m_stealthDetect;
 
         FlaggedValuesArray32<int32, uint32, InvisibilityType, TOTAL_INVISIBILITY_TYPES> m_invisibility;
-        FlaggedValuesArray32<int32, uint32, InvisibilityType, TOTAL_INVISIBILITY_TYPES> m_invisibilityDetect;
+        FlaggedValuesArray32<int32, uint32, InvisibilityType, TOTAL_INVISIBILITY_TYPES> _invisibilityDetect;
 
         FlaggedValuesArray32<int32, uint32, ServerSideVisibilityType, TOTAL_SERVERSIDE_VISIBILITY_TYPES> _serverSideVisibility;
         FlaggedValuesArray32<int32, uint32, ServerSideVisibilityType, TOTAL_SERVERSIDE_VISIBILITY_TYPES> _serverSideVisibilityDetect;
@@ -799,7 +799,7 @@ class WorldObject : public Object, public WorldLocation
         void SetNotified(uint16 f) { m_executed_notifies |= f;}
         void ResetAllNotifies() { m_notifyflags = 0; m_executed_notifies = 0; }
 
-        bool isActiveObject() const { return m_isActive; }
+        bool isActiveObject() const { return _isActive; }
         void setActive(bool isActiveObject);
         void SetWorldObject(bool apply);
         bool IsPermanentWorldObject() const { return m_isWorldObject; }
@@ -820,7 +820,7 @@ class WorldObject : public Object, public WorldLocation
         uint32  LastUsedScriptID;
 
         // Transports
-        Transport* GetTransport() const { return m_transport; }
+        Transport* GetTransport() const { return _transport; }
         virtual float GetTransOffsetX() const { return 0; }
         virtual float GetTransOffsetY() const { return 0; }
         virtual float GetTransOffsetZ() const { return 0; }
@@ -828,17 +828,17 @@ class WorldObject : public Object, public WorldLocation
         virtual uint32 GetTransTime()   const { return 0; }
         virtual int8 GetTransSeat()     const { return -1; }
         virtual uint64 GetTransGUID()   const;
-        void SetTransport(Transport* t) { m_transport = t; }
+        void SetTransport(Transport* t) { _transport = t; }
 
-        MovementInfo m_movementInfo;
+        MovementInfo _movementInfo;
     protected:
         std::string m_name;
-        bool m_isActive;
+        bool _isActive;
         const bool m_isWorldObject;
         ZoneScript* _zoneScript;
 
         // transports
-        Transport* m_transport;
+        Transport* _transport;
 
         //these functions are used mostly for Relocate() and Corpse/Player specific stuff...
         //use them ONLY in LoadFromDB()/Create() funcs and nowhere else!

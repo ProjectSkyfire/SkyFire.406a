@@ -503,7 +503,7 @@ int32 SpellScript::GetEffectValue()
 
 Item* SpellScript::GetCastItem()
 {
-    return m_spell->m_CastItem;
+    return m_spell->_CastItem;
 }
 
 void SpellScript::CreateItem(uint32 effIndex, uint32 itemId)

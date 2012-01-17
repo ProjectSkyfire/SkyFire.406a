@@ -457,9 +457,9 @@ class Spell
         void HandleThreatSpells();
 
         SpellInfo const* const m_spellInfo;
-        Item* m_CastItem;
+        Item* _CastItem;
         uint64 m_castItemGUID;
-        uint8 m_cast_count;
+        uint8 _cast_count;
         uint32 m_glyphIndex;
         uint32 m_preCastSpell;
         SpellCastTargets m_targets;
@@ -471,7 +471,7 @@ class Spell
         int32 GetCastTime() const { return m_casttime; }
         bool IsAutoRepeat() const { return m_autoRepeat; }
         void SetAutoRepeat(bool rep) { m_autoRepeat = rep; }
-        void ReSetTimer() { m_timer = m_casttime > 0 ? m_casttime : 0; }
+        void ReSetTimer() { _timer = m_casttime > 0 ? m_casttime : 0; }
         bool IsNextMeleeSwingSpell() const;
         bool IsTriggered() const {return _triggeredCastFlags & TRIGGERED_FULL_MASK;};
         bool IsChannelActive() const { return m_caster->GetUInt32Value(UNIT_CHANNEL_SPELL) != 0; }
@@ -665,7 +665,7 @@ class Spell
         // -------------------------------------------
 
         uint32 m_spellState;
-        int32 m_timer;
+        int32 _timer;
 
         TriggerCastFlags _triggeredCastFlags;
 

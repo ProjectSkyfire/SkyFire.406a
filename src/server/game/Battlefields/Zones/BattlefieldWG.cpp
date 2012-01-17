@@ -1118,13 +1118,13 @@ void BattlefieldWG::UpdateTenacity()
 
 void BfCapturePointWG::ChangeTeam(TeamId /*oldTeam */ )
 {
-    m_WorkShop->ChangeControl(m_team, false);
+    m_WorkShop->ChangeControl(_team, false);
 }
 
 BfCapturePointWG::BfCapturePointWG(BattlefieldWG* bf, TeamId control) : BfCapturePoint(bf)
 {
     m_Bf = bf;
-    m_team = control;
+    _team = control;
 }
 
 BfGraveYardWG::BfGraveYardWG(BattlefieldWG* bf) : BfGraveYard(bf)

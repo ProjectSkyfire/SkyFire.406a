@@ -448,11 +448,11 @@ void WorldSession::SendBindPoint(Creature *npc)
     stmt->setUInt32(5, _player->GetGUIDLow());
     CharacterDatabase.Execute(stmt);
 
-    _player->m_homebindMapId = _player->GetMapId();
+    _player->_homebindMapId = _player->GetMapId();
     _player->m_homebindAreaId = _player->GetAreaId();
-    _player->m_homebindX = _player->GetPositionX();
-    _player->m_homebindY = _player->GetPositionY();
-    _player->m_homebindZ = _player->GetPositionZ();
+    _player->_homebindX = _player->GetPositionX();
+    _player->_homebindY = _player->GetPositionY();
+    _player->_homebindZ = _player->GetPositionZ();
 
     // send spell for homebinding (3286)
     npc->CastSpell(_player, bindspell, true);

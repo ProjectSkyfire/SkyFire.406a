@@ -209,7 +209,7 @@ bool LoginQueryHolder::Initialize()
     stmt = CharacterDatabase.GetPreparedStatement(CHAR_LOAD_ACCOUNT_INSTANCELOCKTIMES);
     stmt->setUInt32(0, m_accountId);
     res &= SetPreparedQuery(PLAYER_LOGIN_QUERY_LOADINSTANCELOCKTIMES, stmt);
-    
+
     return res;
 }
 
@@ -1010,7 +1010,7 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder* holder)
         if (at)
             pCurrChar->TeleportTo(at->target_mapId, at->target_X, at->target_Y, at->target_Z, pCurrChar->GetOrientation());
         else
-            pCurrChar->TeleportTo(pCurrChar->m_homebindMapId, pCurrChar->m_homebindX, pCurrChar->m_homebindY, pCurrChar->m_homebindZ, pCurrChar->GetOrientation());
+            pCurrChar->TeleportTo(pCurrChar->_homebindMapId, pCurrChar->_homebindX, pCurrChar->_homebindY, pCurrChar->_homebindZ, pCurrChar->GetOrientation());
     }
 
     sObjectAccessor->AddObject(pCurrChar);

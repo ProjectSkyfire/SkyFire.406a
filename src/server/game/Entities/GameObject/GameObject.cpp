@@ -33,8 +33,8 @@
 
 GameObject::GameObject() : WorldObject(false), m_goValue(new GameObjectValue), m_AI(NULL)
 {
-    m_objectType |= TYPEMASK_GAMEOBJECT;
-    m_objectTypeId = TYPEID_GAMEOBJECT;
+    _objectType |= TYPEMASK_GAMEOBJECT;
+    _objectTypeId = TYPEID_GAMEOBJECT;
 
     m_updateFlag = (UPDATEFLAG_HAS_POSITION | UPDATEFLAG_POSITION | UPDATEFLAG_ROTATION);
 
@@ -63,7 +63,7 @@ GameObject::~GameObject()
 {
     delete m_goValue;
     delete m_AI;
-    //if (m_uint32Values)                                      // field array can be not exist if GameOBject not loaded
+    //if (_uint32Values)                                      // field array can be not exist if GameOBject not loaded
     //    CleanupsBeforeDelete();
 }
 
@@ -89,7 +89,7 @@ void GameObject::CleanupsBeforeDelete(bool /*finalCleanup*/)
     if (IsInWorld())
         RemoveFromWorld();
 
-    if (m_uint32Values)                                      // field array can be not exist if GameOBject not loaded
+    if (_uint32Values)                                      // field array can be not exist if GameOBject not loaded
         RemoveFromOwner();
 }
 

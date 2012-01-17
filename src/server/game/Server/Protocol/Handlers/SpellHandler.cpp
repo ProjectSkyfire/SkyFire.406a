@@ -70,7 +70,7 @@ void WorldSession::HandleUseItemOpcode(WorldPacket& recvPacket)
     Player* pUser = _player;
 
     // ignore for remote control state
-    if (pUser->m_mover != pUser)
+    if (pUser->_mover != pUser)
         return;
 
     if (pUser->GetEmoteState())
@@ -208,7 +208,7 @@ void WorldSession::HandleOpenItemOpcode(WorldPacket& recvPacket)
     Player* pUser = _player;
 
     // ignore for remote control state
-    if (pUser->m_mover != pUser)
+    if (pUser->_mover != pUser)
         return;
 
     uint8 bagIndex, slot;
@@ -301,7 +301,7 @@ void WorldSession::HandleGameObjectUseOpcode(WorldPacket & recv_data)
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Recvd CMSG_GAMEOBJ_USE Message [guid=%u]", GUID_LOPART(guid));
 
     // ignore for remote control state
-    if (_player->m_mover != _player)
+    if (_player->_mover != _player)
         return;
 
     if (GameObject* obj = GetPlayer()->GetMap()->GetGameObject(guid))
@@ -316,7 +316,7 @@ void WorldSession::HandleGameobjectReportUse(WorldPacket& recvPacket)
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Recvd CMSG_GAMEOBJ_REPORT_USE Message [in game guid: %u]", GUID_LOPART(guid));
 
     // ignore for remote control state
-    if (_player->m_mover != _player)
+    if (_player->_mover != _player)
         return;
 
     GameObject* go = GetPlayer()->GetMap()->GetGameObject(guid);
@@ -340,7 +340,7 @@ void WorldSession::HandleCastSpellOpcode(WorldPacket& recvPacket)
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: got cast spell packet, castCount: %u, spellId: %u, glyphIndex: %u, castFlags: %u, data length = %u", castCount, spellId, glyphIndex, castFlags, (uint32)recvPacket.size());
 
     // ignore for remote control state (for player case)
-    Unit* mover = _player->m_mover;
+    Unit* mover = _player->_mover;
     if (mover != _player && mover->GetTypeId() == TYPEID_PLAYER)
     {
         recvPacket.rfinish(); // prevent spam at ignore packet
@@ -412,7 +412,7 @@ void WorldSession::HandleCastSpellOpcode(WorldPacket& recvPacket)
     }
 
     Spell* spell = new Spell(mover, spellInfo, TRIGGERED_NONE, 0, false);
-    spell->m_cast_count = castCount;                       // set count of casts
+    spell->_cast_count = castCount;                       // set count of casts
     spell->m_glyphIndex = glyphIndex;
     spell->prepare(&targets);
 }
@@ -516,7 +516,7 @@ void WorldSession::HandleCancelChanneling(WorldPacket & recv_data)
     recv_data.read_skip<uint32>();                          // spellid, not used
 
     // ignore for remote control state (for player case)
-    Unit* mover = _player->m_mover;
+    Unit* mover = _player->_mover;
     if (mover != _player && mover->GetTypeId() == TYPEID_PLAYER)
         return;
 
@@ -526,7 +526,7 @@ void WorldSession::HandleCancelChanneling(WorldPacket & recv_data)
 void WorldSession::HandleTotemDestroyed(WorldPacket& recvPacket)
 {
     // ignore for remote control state
-    if (_player->m_mover != _player)
+    if (_player->_mover != _player)
         return;
 
     uint8 slotId;

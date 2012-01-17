@@ -98,7 +98,7 @@ inline bool ReadHex(std::istringstream& iss, uint32& res, uint32 length)
 
 bool ChatLink::ValidateName(char* buffer, const char* /*context*/)
 {
-    _name = buffer;
+    m_name = buffer;
     return true;
 }
 
@@ -271,8 +271,8 @@ bool SpellChatLink::Initialize(std::istringstream& iss)
         return false;
     }
     // Validate spell
-    _spell = sSpellMgr->GetSpellInfo(spellId);
-    if (!_spell)
+    m_spell = sSpellMgr->GetSpellInfo(spellId);
+    if (!m_spell)
     {
         sLog->outDebug(LOG_FILTER_CHATSYS, "ChatHandler::isValidChatMessage('%s'): got invalid spell id %u in |spell command", iss.str().c_str(), spellId);
         return false;
@@ -285,18 +285,18 @@ bool SpellChatLink::ValidateName(char* buffer, const char* context)
     ChatLink::ValidateName(buffer, context);
 
     // spells with that flag have a prefix of "$PROFESSION: "
-    if (_spell->Attributes & SPELL_ATTR0_TRADESPELL)
+    if (m_spell->Attributes & SPELL_ATTR0_TRADESPELL)
     {
-        SkillLineAbilityMapBounds bounds = sSpellMgr->GetSkillLineAbilityMapBounds(_spell->Id);
+        SkillLineAbilityMapBounds bounds = sSpellMgr->GetSkillLineAbilityMapBounds(m_spell->Id);
         if (bounds.first == bounds.second)
         {
-            sLog->outDebug(LOG_FILTER_CHATSYS, "ChatHandler::isValidChatMessage('%s'): skill line not found for spell %u", context, _spell->Id);
+            sLog->outDebug(LOG_FILTER_CHATSYS, "ChatHandler::isValidChatMessage('%s'): skill line not found for spell %u", context, m_spell->Id);
             return false;
         }
         SkillLineAbilityEntry const *skillInfo = bounds.first->second;
         if (!skillInfo)
         {
-            sLog->outDebug(LOG_FILTER_CHATSYS, "ChatHandler::isValidChatMessage('%s'): skill line ability not found for spell %u", context, _spell->Id);
+            sLog->outDebug(LOG_FILTER_CHATSYS, "ChatHandler::isValidChatMessage('%s'): skill line ability not found for spell %u", context, m_spell->Id);
             return false;
         }
         SkillLineEntry const *skillLine = sSkillLineStore.LookupEntry(skillInfo->skillId);
@@ -316,10 +316,10 @@ bool SpellChatLink::ValidateName(char* buffer, const char* context)
         }
     }
 
-    if (*_spell->SpellName && strcmp(_spell->SpellName, buffer) == 0)
+    if (*m_spell->SpellName && strcmp(m_spell->SpellName, buffer) == 0)
         return true;
 
-    sLog->outDebug(LOG_FILTER_CHATSYS, "ChatHandler::isValidChatMessage('%s'): linked spell (id: %u) name wasn't found in any localization", context, _spell->Id);
+    sLog->outDebug(LOG_FILTER_CHATSYS, "ChatHandler::isValidChatMessage('%s'): linked spell (id: %u) name wasn't found in any localization", context, m_spell->Id);
     return false;
 }
 
@@ -393,8 +393,8 @@ bool TradeChatLink::Initialize(std::istringstream& iss)
         return false;
     }
     // Validate spell
-    _spell = sSpellMgr->GetSpellInfo(spellId);
-    if (!_spell)
+    m_spell = sSpellMgr->GetSpellInfo(spellId);
+    if (!m_spell)
     {
         sLog->outDebug(LOG_FILTER_CHATSYS, "ChatHandler::isValidChatMessage('%s'): got invalid spell id %u in |trade command", iss.str().c_str(), spellId);
         return false;
@@ -451,8 +451,8 @@ bool TalentChatLink::Initialize(std::istringstream& iss)
         return false;
     }
     // Validate talent's spell
-    _spell = sSpellMgr->GetSpellInfo(talentInfo->RankID[0]);
-    if (!_spell)
+    m_spell = sSpellMgr->GetSpellInfo(talentInfo->RankID[0]);
+    if (!m_spell)
     {
         sLog->outDebug(LOG_FILTER_CHATSYS, "ChatHandler::isValidChatMessage('%s'): got invalid spell id %u in |trade command", iss.str().c_str(), talentInfo->RankID[0]);
         return false;
@@ -483,8 +483,8 @@ bool EnchantmentChatLink::Initialize(std::istringstream& iss)
         return false;
     }
     // Validate spell
-    _spell = sSpellMgr->GetSpellInfo(spellId);
-    if (!_spell)
+    m_spell = sSpellMgr->GetSpellInfo(spellId);
+    if (!m_spell)
     {
         sLog->outDebug(LOG_FILTER_CHATSYS, "ChatHandler::isValidChatMessage('%s'): got invalid spell id %u in |enchant command", iss.str().c_str(), spellId);
         return false;
@@ -522,8 +522,8 @@ bool GlyphChatLink::Initialize(std::istringstream& iss)
         return false;
     }
     // Validate glyph's spell
-    _spell = sSpellMgr->GetSpellInfo(_glyph->SpellId);
-    if (!_spell)
+    m_spell = sSpellMgr->GetSpellInfo(_glyph->SpellId);
+    if (!m_spell)
     {
         sLog->outDebug(LOG_FILTER_CHATSYS, "ChatHandler::isValidChatMessage('%s'): got invalid spell id %u in |glyph command", iss.str().c_str(), _glyph->SpellId);
         return false;

@@ -320,7 +320,7 @@ class Item : public Object
         void  SetSpellCharges(uint8 index/*0..5*/, int32 value) { SetInt32Value(ITEM_FIELD_SPELL_CHARGES + index, value); }
 
         Loot loot;
-        bool m_lootGenerated;
+        bool _lootGenerated;
 
         // Update States
         ItemUpdateState GetState() const { return uState; }

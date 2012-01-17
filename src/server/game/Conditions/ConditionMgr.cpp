@@ -225,7 +225,7 @@ bool Condition::Meets(Player* player, Unit* invoker)
         refMeets = true;
 
     if (sendErrorMsg && ErrorTextd && (!condMeets || !refMeets))//send special error from DB
-        player->m_ConditionErrorMsgId = ErrorTextd;
+        player->_ConditionErrorMsgId = ErrorTextd;
 
     bool script = sScriptMgr->OnConditionCheck(this, player, invoker); // Returns true by default.
     return condMeets && refMeets && script;
@@ -297,13 +297,13 @@ bool ConditionMgr::IsPlayerMeetToConditions(Player* player, ConditionList const&
         return true;
 
     if (player)
-        player->m_ConditionErrorMsgId = 0;
+        player->_ConditionErrorMsgId = 0;
 
     sLog->outDebug(LOG_FILTER_CONDITIONSYS, "ConditionMgr::IsPlayerMeetToConditions");
     bool result = IsPlayerMeetToConditionList(player, conditions, invoker);
 
-    if (player && player->m_ConditionErrorMsgId && player->GetSession() && !result)
-        player->GetSession()->SendNotification(player->m_ConditionErrorMsgId);  //m_ConditionErrorMsgId is set only if a condition was not met
+    if (player && player->_ConditionErrorMsgId && player->GetSession() && !result)
+        player->GetSession()->SendNotification(player->_ConditionErrorMsgId);  //_ConditionErrorMsgId is set only if a condition was not met
 
     return result;
 }

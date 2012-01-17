@@ -505,7 +505,7 @@ private:
     public:
         BankTab(uint32 guildId, uint8 tabId) : m_guildId(guildId), m_tabId(tabId)
         {
-            memset(m_items, 0, GUILD_BANK_MAX_SLOTS * sizeof(Item*));
+            memset(_items, 0, GUILD_BANK_MAX_SLOTS * sizeof(Item*));
         }
 
         bool LoadFromDB(Field* fields);
@@ -524,14 +524,14 @@ private:
         void SetText(const std::string& text);
         void SendText(const Guild* guild, WorldSession* session) const;
 
-        inline Item* GetItem(uint8 slotId) const { return slotId < GUILD_BANK_MAX_SLOTS ?  m_items[slotId] : NULL; }
+        inline Item* GetItem(uint8 slotId) const { return slotId < GUILD_BANK_MAX_SLOTS ?  _items[slotId] : NULL; }
         bool SetItem(SQLTransaction& trans, uint8 slotId, Item* pItem);
 
     private:
         uint32 m_guildId;
         uint8 m_tabId;
 
-        Item* m_items[GUILD_BANK_MAX_SLOTS];
+        Item* _items[GUILD_BANK_MAX_SLOTS];
         std::string m_name;
         std::string m_icon;
         std::string m_text;
@@ -744,8 +744,8 @@ public:
     void LevelUp();
     void ResetTodayXP() { m_today_xp = 0; }
     void GenerateXPCap();
-    GuildAchievementMgr& GetAchievementMgr() { return m_achievementMgr; }
-    GuildAchievementMgr const& GetAchievementMgr() const { return m_achievementMgr; }
+    GuildAchievementMgr& GetAchievementMgr() { return _achievementMgr; }
+    GuildAchievementMgr const& GetAchievementMgr() const { return _achievementMgr; }
 
 protected:
     uint32 m_id;
@@ -774,7 +774,7 @@ protected:
     // These are actually ordered lists. The first element is the oldest entry.
     LogHolder* m_eventLog;
     LogHolder* m_bankEventLog[GUILD_BANK_MAX_TABS + 1];
-    GuildAchievementMgr m_achievementMgr;
+    GuildAchievementMgr _achievementMgr;
 
 private:
     inline uint8 _GetRanksSize() const { return uint8(m_ranks.size()); }

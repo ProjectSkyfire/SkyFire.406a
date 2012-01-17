@@ -45,7 +45,7 @@ void WorldSession::HandleDismissControlledVehicle(WorldPacket &recv_data)
     mi.guid = guid;
     ReadMovementInfo(recv_data, &mi);
 
-    _player->m_movementInfo = mi;
+    _player->_movementInfo = mi;
 
     _player->ExitVehicle();
 }
@@ -83,7 +83,7 @@ void WorldSession::HandleChangeSeatsOnControlledVehicle(WorldPacket &recv_data)
             uint64 guid;        // current vehicle guid
             recv_data.readPackGUID(guid);
 
-            ReadMovementInfo(recv_data, &vehicle_base->m_movementInfo);
+            ReadMovementInfo(recv_data, &vehicle_base->_movementInfo);
 
             uint64 accessory;        //  accessory guid
             recv_data.readPackGUID(accessory);

@@ -25,7 +25,7 @@
 
 TempSummon::TempSummon(SummonPropertiesEntry const* properties, Unit* owner, bool isWorldObject) :
 Creature(isWorldObject), m_Properties(properties), m_type(TEMPSUMMON_MANUAL_DESPAWN),
-m_timer(0), m_lifetime(0)
+_timer(0), m_lifetime(0)
 {
     m_summonerGUID = owner ? owner->GetGUID() : 0;
     m_unitTypeMask |= UNIT_MASK_SUMMON;
@@ -51,29 +51,29 @@ void TempSummon::Update(uint32 diff)
             break;
         case TEMPSUMMON_TIMED_DESPAWN:
         {
-            if (m_timer <= diff)
+            if (_timer <= diff)
             {
                 UnSummon();
                 return;
             }
 
-            m_timer -= diff;
+            _timer -= diff;
             break;
         }
         case TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT:
         {
             if (!isInCombat())
             {
-                if (m_timer <= diff)
+                if (_timer <= diff)
                 {
                     UnSummon();
                     return;
                 }
 
-                m_timer -= diff;
+                _timer -= diff;
             }
-            else if (m_timer != m_lifetime)
-                m_timer = m_lifetime;
+            else if (_timer != m_lifetime)
+                _timer = m_lifetime;
 
             break;
         }
@@ -82,13 +82,13 @@ void TempSummon::Update(uint32 diff)
         {
             if (_deathState == CORPSE)
             {
-                if (m_timer <= diff)
+                if (_timer <= diff)
                 {
                     UnSummon();
                     return;
                 }
 
-                m_timer -= diff;
+                _timer -= diff;
             }
             break;
         }
@@ -123,16 +123,16 @@ void TempSummon::Update(uint32 diff)
 
             if (!isInCombat())
             {
-                if (m_timer <= diff)
+                if (_timer <= diff)
                 {
                     UnSummon();
                     return;
                 }
                 else
-                    m_timer -= diff;
+                    _timer -= diff;
             }
-            else if (m_timer != m_lifetime)
-                m_timer = m_lifetime;
+            else if (_timer != m_lifetime)
+                _timer = m_lifetime;
             break;
         }
         case TEMPSUMMON_TIMED_OR_DEAD_DESPAWN:
@@ -146,16 +146,16 @@ void TempSummon::Update(uint32 diff)
 
             if (!isInCombat() && isAlive())
             {
-                if (m_timer <= diff)
+                if (_timer <= diff)
                 {
                     UnSummon();
                     return;
                 }
                 else
-                    m_timer -= diff;
+                    _timer -= diff;
             }
-            else if (m_timer != m_lifetime)
-                m_timer = m_lifetime;
+            else if (_timer != m_lifetime)
+                _timer = m_lifetime;
             break;
         }
         default:
@@ -169,7 +169,7 @@ void TempSummon::InitStats(uint32 duration)
 {
     ASSERT(!isPet());
 
-    m_timer = duration;
+    _timer = duration;
     m_lifetime = duration;
 
     if (m_type == TEMPSUMMON_MANUAL_DESPAWN)
@@ -182,7 +182,7 @@ void TempSummon::InitStats(uint32 duration)
         setFaction(owner->getFaction());
         SetLevel(owner->getLevel());
         if (owner->GetTypeId() == TYPEID_PLAYER)
-            m_ControlledByPlayer = true;
+            _ControlledByPlayer = true;
     }
 
     if (!m_Properties)

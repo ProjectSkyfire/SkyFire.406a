@@ -85,7 +85,7 @@ void VisibleChangesNotifier::Visit(PlayerMapType &m)
         if (!iter->getSource()->GetSharedVisionList().empty())
             for (SharedVisionList::const_iterator i = iter->getSource()->GetSharedVisionList().begin();
                 i != iter->getSource()->GetSharedVisionList().end(); ++i)
-                if ((*i)->m_seer == iter->getSource())
+                if ((*i)->_seer == iter->getSource())
                     (*i)->UpdateVisibilityOf(&i_object);
     }
 }
@@ -96,7 +96,7 @@ void VisibleChangesNotifier::Visit(CreatureMapType &m)
         if (!iter->getSource()->GetSharedVisionList().empty())
             for (SharedVisionList::const_iterator i = iter->getSource()->GetSharedVisionList().begin();
                 i != iter->getSource()->GetSharedVisionList().end(); ++i)
-                if ((*i)->m_seer == iter->getSource())
+                if ((*i)->_seer == iter->getSource())
                     (*i)->UpdateVisibilityOf(&i_object);
 }
 
@@ -105,7 +105,7 @@ void VisibleChangesNotifier::Visit(DynamicObjectMapType &m)
     for (DynamicObjectMapType::iterator iter = m.begin(); iter != m.end(); ++iter)
         if (IS_PLAYER_GUID(iter->getSource()->GetCasterGUID()))
             if (Player* caster = (Player*)iter->getSource()->GetCaster())
-                if (caster->m_seer == iter->getSource())
+                if (caster->_seer == iter->getSource())
                     caster->UpdateVisibilityOf(&i_object);
 }
 
@@ -129,7 +129,7 @@ void PlayerRelocationNotifier::Visit(PlayerMapType &m)
 
         i_player.UpdateVisibilityOf(player, i_data, i_visibleNow);
 
-        if (player->m_seer->isNeedNotify(NOTIFY_VISIBILITY_CHANGED))
+        if (player->_seer->isNeedNotify(NOTIFY_VISIBILITY_CHANGED))
             continue;
 
         player->UpdateVisibilityOf(&i_player);
@@ -138,7 +138,7 @@ void PlayerRelocationNotifier::Visit(PlayerMapType &m)
 
 void PlayerRelocationNotifier::Visit(CreatureMapType &m)
 {
-    bool relocated_for_ai = (&i_player == i_player.m_seer);
+    bool relocated_for_ai = (&i_player == i_player._seer);
 
     for (CreatureMapType::iterator iter=m.begin(); iter != m.end(); ++iter)
     {
@@ -159,7 +159,7 @@ void CreatureRelocationNotifier::Visit(PlayerMapType &m)
     {
         Player* player = iter->getSource();
 
-        if (!player->m_seer->isNeedNotify(NOTIFY_VISIBILITY_CHANGED))
+        if (!player->_seer->isNeedNotify(NOTIFY_VISIBILITY_CHANGED))
             player->UpdateVisibilityOf(&i_creature);
 
         CreatureUnitRelocationWorker(&i_creature, player);
@@ -204,7 +204,7 @@ void DelayedUnitRelocation::Visit(PlayerMapType &m)
     for (PlayerMapType::iterator iter = m.begin(); iter != m.end(); ++iter)
     {
         Player* player = iter->getSource();
-        WorldObject const* viewPoint = player->m_seer;
+        WorldObject const* viewPoint = player->_seer;
 
         if (!viewPoint->isNeedNotify(NOTIFY_VISIBILITY_CHANGED))
             continue;
@@ -254,11 +254,11 @@ void MessageDistDeliverer::Visit(PlayerMapType &m)
         {
             SharedVisionList::const_iterator i = target->GetSharedVisionList().begin();
             for (; i != target->GetSharedVisionList().end(); ++i)
-                if ((*i)->m_seer == target)
+                if ((*i)->_seer == target)
                     SendPacket(*i);
         }
 
-        if (target->m_seer == target || target->GetVehicle())
+        if (target->_seer == target || target->GetVehicle())
             SendPacket(target);
     }
 }
@@ -279,7 +279,7 @@ void MessageDistDeliverer::Visit(CreatureMapType &m)
         {
             SharedVisionList::const_iterator i = target->GetSharedVisionList().begin();
             for (; i != target->GetSharedVisionList().end(); ++i)
-                if ((*i)->m_seer == target)
+                if ((*i)->_seer == target)
                     SendPacket(*i);
         }
     }
@@ -300,7 +300,7 @@ void MessageDistDeliverer::Visit(DynamicObjectMapType &m)
         {
             // Send packet back to the caster if the caster has vision of dynamic object
             Player* caster = (Player*)target->GetCaster();
-            if (caster && caster->m_seer == target)
+            if (caster && caster->_seer == target)
                 SendPacket(caster);
         }
     }

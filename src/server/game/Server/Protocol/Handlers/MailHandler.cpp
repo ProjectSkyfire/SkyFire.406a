@@ -307,7 +307,7 @@ void WorldSession::HandleMailMarkAsRead(WorldPacket & recv_data)
         if (player->unReadMails)
             --player->unReadMails;
         m->checked = m->checked | MAIL_CHECK_MASK_READ;
-        player->m_mailsUpdated = true;
+        player->_mailsUpdated = true;
         m->state = MAIL_STATE_CHANGED;
     }
 }
@@ -326,7 +326,7 @@ void WorldSession::HandleMailDelete(WorldPacket & recv_data)
 
     Mail* m = _player->GetMail(mailId);
     Player* player = _player;
-    player->m_mailsUpdated = true;
+    player->_mailsUpdated = true;
     if (m)
     {
         // delete shouldn't show up for COD mails
@@ -477,7 +477,7 @@ void WorldSession::HandleMailTakeItem(WorldPacket & recv_data)
         }
         m->COD = 0;
         m->state = MAIL_STATE_CHANGED;
-        player->m_mailsUpdated = true;
+        player->_mailsUpdated = true;
         player->RemoveMItem(it->GetGUIDLow());
 
         uint32 count = it->GetCount();                      // save counts before store and possible merge with deleting
@@ -518,7 +518,7 @@ void WorldSession::HandleMailTakeMoney(WorldPacket & recv_data)
     player->ModifyMoney(m->money);
     m->money = 0;
     m->state = MAIL_STATE_CHANGED;
-    player->m_mailsUpdated = true;
+    player->_mailsUpdated = true;
 
     // save money and mail to prevent cheating
     SQLTransaction trans = CharacterDatabase.BeginTransaction();
@@ -539,7 +539,7 @@ void WorldSession::HandleGetMailList(WorldPacket & recv_data)
     Player* player = _player;
 
     //load players mails, and mailed items
-    if (!player->m_mailsLoaded)
+    if (!player->_mailsLoaded)
         player ->_LoadMail();
 
     // client can't work with packets > max int16 value
@@ -653,7 +653,7 @@ void WorldSession::HandleGetMailList(WorldPacket & recv_data)
     data.put<uint8>(4, mailsCount);                        // set real send mails to client
     SendPacket(&data);
 
-    // recalculate m_nextMailDelivereTime and unReadMails
+    // recalculate _nextMailDelivereTime and unReadMails
     _player->UpdateNextMailTimeAndUnreads();
 }
 
@@ -711,7 +711,7 @@ void WorldSession::HandleMailCreateTextItem(WorldPacket & recv_data)
     {
         m->checked = m->checked | MAIL_CHECK_MASK_COPIED;
         m->state = MAIL_STATE_CHANGED;
-        player->m_mailsUpdated = true;
+        player->_mailsUpdated = true;
 
         player->StoreItem(dest, bodyItem, true);
         player->SendMailResult(mailId, MAIL_MADE_PERMANENT, MAIL_OK);
@@ -728,7 +728,7 @@ void WorldSession::HandleQueryNextMailTime(WorldPacket & /*recv_data*/)
 {
     WorldPacket data(MSG_QUERY_NEXT_MAIL_TIME, 8);
 
-    if (!_player->m_mailsLoaded)
+    if (!_player->_mailsLoaded)
         _player->_LoadMail();
 
     if (_player->unReadMails > 0)

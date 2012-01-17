@@ -137,7 +137,7 @@ void DamageInfo::BlockDamage(uint32 amount)
 
 ProcEventInfo::ProcEventInfo(Unit* actor, Unit* actionTarget, Unit* procTarget, uint32 typeMask, uint32 spellTypeMask, uint32 spellPhaseMask, uint32 hitMask, Spell* spell, DamageInfo* damageInfo, HealInfo* healInfo)
 :_actor(actor), _actionTarget(actionTarget), _procTarget(procTarget), _typeMask(typeMask), _spellTypeMask(spellTypeMask), _spellPhaseMask(spellPhaseMask),
-_hitMask(hitMask), _spell(spell), _damageInfo(damageInfo), _healInfo(healInfo)
+_hitMask(hitMask), m_spell(spell), _damageInfo(damageInfo), _healInfo(healInfo)
 {
 }
 
@@ -147,28 +147,28 @@ _hitMask(hitMask), _spell(spell), _damageInfo(damageInfo), _healInfo(healInfo)
 #pragma warning(disable:4355)
 #endif
 Unit::Unit(bool isWorldObject): WorldObject(isWorldObject),
-m_movedPlayer(NULL), m_lastSanctuaryTime(0), IsAIEnabled(false), NeedChangeAI(false),
-m_ControlledByPlayer(false), i_AI(NULL), i_disabledAI(NULL), m_procDeep(0),
+_movedPlayer(NULL), m_lastSanctuaryTime(0), IsAIEnabled(false), NeedChangeAI(false),
+_ControlledByPlayer(false), i_AI(NULL), i_disabledAI(NULL), m_procDeep(0),
 m_removedAurasCount(0), i_motionMaster(this), m_ThreatManager(this), m_vehicle(NULL),
 _vehicleKit(NULL), m_unitTypeMask(UNIT_MASK_NONE), m_HostileRefManager(this)
 {
 #ifdef _MSC_VER
 #pragma warning(default:4355)
 #endif
-    m_objectType |= TYPEMASK_UNIT;
-    m_objectTypeId = TYPEID_UNIT;
+    _objectType |= TYPEMASK_UNIT;
+    _objectTypeId = TYPEID_UNIT;
 
     m_updateFlag = (UPDATEFLAG_LIVING | UPDATEFLAG_HAS_POSITION);
 
     m_attackTimer[BASE_ATTACK] = 0;
     m_attackTimer[OFF_ATTACK] = 0;
     m_attackTimer[RANGED_ATTACK] = 0;
-    m_modAttackSpeedPct[BASE_ATTACK] = 1.0f;
-    m_modAttackSpeedPct[OFF_ATTACK] = 1.0f;
-    m_modAttackSpeedPct[RANGED_ATTACK] = 1.0f;
+    _modAttackSpeedPct[BASE_ATTACK] = 1.0f;
+    _modAttackSpeedPct[OFF_ATTACK] = 1.0f;
+    _modAttackSpeedPct[RANGED_ATTACK] = 1.0f;
 
-    m_extraAttacks = 0;
-    m_canDualWield = false;
+    _extraAttacks = 0;
+    _canDualWield = false;
 
     m_rootTimes = 0;
 
@@ -197,13 +197,13 @@ _vehicleKit(NULL), m_unitTypeMask(UNIT_MASK_NONE), m_HostileRefManager(this)
 
     for (uint8 i = 0; i < UNIT_MOD_END; ++i)
     {
-        m_auraModifiersGroup[i][BASE_VALUE] = 0.0f;
-        m_auraModifiersGroup[i][BASE_PCT] = 1.0f;
-        m_auraModifiersGroup[i][TOTAL_VALUE] = 0.0f;
-        m_auraModifiersGroup[i][TOTAL_PCT] = 1.0f;
+        _auraModifiersGroup[i][BASE_VALUE] = 0.0f;
+        _auraModifiersGroup[i][BASE_PCT] = 1.0f;
+        _auraModifiersGroup[i][TOTAL_VALUE] = 0.0f;
+        _auraModifiersGroup[i][TOTAL_PCT] = 1.0f;
     }
                                                             // implement 50% base damage from offhand
-    m_auraModifiersGroup[UNIT_MOD_DAMAGE_OFFHAND][TOTAL_PCT] = 0.5f;
+    _auraModifiersGroup[UNIT_MOD_DAMAGE_OFFHAND][TOTAL_PCT] = 0.5f;
 
     for (uint8 i = 0; i < MAX_ATTACK; ++i)
     {
@@ -314,7 +314,7 @@ void Unit::Update(uint32 p_time)
     //ASSERT(!m_spellModTakingSpell);
     if (m_spellModTakingSpell)
     {
-        //sLog->outCrash("Unit has m_pad %u during update!", m_pad);
+        //sLog->outCrash("Unit has _pad %u during update!", _pad);
         //if (m_spellModTakingSpell)
         sLog->outCrash("Unit has m_spellModTakingSpell %u during update!", m_spellModTakingSpell->m_spellInfo->Id);
         m_spellModTakingSpell = NULL;
@@ -369,7 +369,7 @@ bool Unit::haveOffhandWeapon() const
     if (GetTypeId() == TYPEID_PLAYER)
         return ToPlayer()->GetWeaponForAttack(OFF_ATTACK, true);
     else
-        return m_canDualWield;
+        return _canDualWield;
 }
 
 void Unit::SendMonsterMoveWithSpeedToCurrentDestination(Player* player)
@@ -565,7 +565,7 @@ void Unit::SendMonsterMoveTransport(Unit* vehicleOwner)
 
 void Unit::resetAttackTimer(WeaponAttackType type)
 {
-    m_attackTimer[type] = uint32(GetAttackTime(type) * m_modAttackSpeedPct[type]);
+    m_attackTimer[type] = uint32(GetAttackTime(type) * _modAttackSpeedPct[type]);
 }
 
 bool Unit::IsWithinCombatRange(const Unit* obj, float dist2compare) const
@@ -914,7 +914,7 @@ void Unit::CastSpell(SpellCastTargets const& targets, SpellInfo const* spellInfo
         for (CustomSpellValues::const_iterator itr = value->begin(); itr != value->end(); ++itr)
             spell->SetSpellValue(itr->first, itr->second);
 
-    spell->m_CastItem = castItem;
+    spell->_CastItem = castItem;
     spell->prepare(&targets, triggeredByAura);
 }
 
@@ -2002,10 +2002,10 @@ void Unit::AttackerStateUpdate (Unit* victim, WeaponAttackType attType, bool ext
 
 void Unit::HandleProcExtraAttackFor(Unit* victim)
 {
-    while (m_extraAttacks)
+    while (_extraAttacks)
     {
         AttackerStateUpdate(victim, BASE_ATTACK, true);
-        --m_extraAttacks;
+        --_extraAttacks;
     }
 }
 
@@ -8697,7 +8697,7 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
     }
 
     // not allow proc extra attack spell at extra attack
-    if (m_extraAttacks && triggerEntry->HasEffect(SPELL_EFFECT_ADD_EXTRA_ATTACKS))
+    if (_extraAttacks && triggerEntry->HasEffect(SPELL_EFFECT_ADD_EXTRA_ATTACKS))
         return false;
 
     // Custom requirements (not listed in procEx) Warning! damage dealing after this
@@ -9925,7 +9925,7 @@ void Unit::SetMinion(Minion *minion, bool apply, PetSlot slot)
 
         if (GetTypeId() == TYPEID_PLAYER)
         {
-            minion->m_ControlledByPlayer = true;
+            minion->_ControlledByPlayer = true;
             minion->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PVP_ATTACKABLE);
         }
 
@@ -9964,13 +9964,13 @@ void Unit::SetMinion(Minion *minion, bool apply, PetSlot slot)
         {
             if(!minion->isHunterPet()) //If its not a Hunter Pet, well lets not try to use it for hunters then.
             {
-                ToPlayer()->m_currentPetSlot = slot;
-                ToPlayer()->m_petSlotUsed = 3452816845; // the same as 100 so that the pet is only that and nothing more
+                ToPlayer()->_currentPetSlot = slot;
+                ToPlayer()->_petSlotUsed = 3452816845; // the same as 100 so that the pet is only that and nothing more
                 // ToPlayer()->setPetSlotUsed(slot, true);
             }
             if(slot >= PET_SLOT_HUNTER_FIRST && slot <= PET_SLOT_HUNTER_LAST) // Always save thoose spots where hunter is correct
             {
-                ToPlayer()->m_currentPetSlot = slot;
+                ToPlayer()->_currentPetSlot = slot;
                 ToPlayer()->setPetSlotUsed(slot, true);
             }
         }
@@ -10119,12 +10119,12 @@ void Unit::SetCharm(Unit* charm, bool apply)
             if (!AddUInt64Value(UNIT_FIELD_CHARM, charm->GetGUID()))
                 sLog->outCrash("Player %s is trying to charm unit %u, but it already has a charmed unit " UI64FMTD "", GetName(), charm->GetEntry(), GetCharmGUID());
 
-            charm->m_ControlledByPlayer = true;
+            charm->_ControlledByPlayer = true;
             // TODO: maybe we can use this flag to check if controlled by player
             charm->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PVP_ATTACKABLE);
         }
         else
-            charm->m_ControlledByPlayer = false;
+            charm->_ControlledByPlayer = false;
 
         // PvP, FFAPvP
         charm->SetByteValue(UNIT_FIELD_BYTES_2, 1, GetByteValue(UNIT_FIELD_BYTES_2, 1));
@@ -10153,19 +10153,19 @@ void Unit::SetCharm(Unit* charm, bool apply)
 
         if (charm->GetTypeId() == TYPEID_PLAYER)
         {
-            charm->m_ControlledByPlayer = true;
+            charm->_ControlledByPlayer = true;
             charm->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PVP_ATTACKABLE);
             charm->ToPlayer()->UpdatePvPState();
         }
         else if (Player* player = charm->GetCharmerOrOwnerPlayerOrPlayerItself())
         {
-            charm->m_ControlledByPlayer = true;
+            charm->_ControlledByPlayer = true;
             charm->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PVP_ATTACKABLE);
             charm->SetByteValue(UNIT_FIELD_BYTES_2, 1, player->GetByteValue(UNIT_FIELD_BYTES_2, 1));
         }
         else
         {
-            charm->m_ControlledByPlayer = false;
+            charm->_ControlledByPlayer = false;
             charm->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PVP_ATTACKABLE);
             charm->SetByteValue(UNIT_FIELD_BYTES_2, 1, 0);
         }
@@ -12632,7 +12632,7 @@ void Unit::SetSpeed(UnitMoveType mtype, float rate, bool forced)
         {
             // register forced speed changes for WorldSession::HandleForceSpeedChangeAck
             // and do it only for real sent packets and use run for run/mounted as client expected
-            ++ToPlayer()->m_forced_speed_changes[mtype];
+            ++ToPlayer()->_forced_speed_changes[mtype];
 
             if (!isInCombat())
                 if (Pet* pet = ToPlayer()->GetPet())
@@ -13022,7 +13022,7 @@ int32 Unit::CalculateSpellDamage(Unit const* target, SpellInfo const* spellProto
 
 int32 Unit::CalcSpellDuration(SpellInfo const* spellProto)
 {
-    uint8 comboPoints = m_movedPlayer ? m_movedPlayer->GetComboPoints() : 0;
+    uint8 comboPoints = _movedPlayer ? _movedPlayer->GetComboPoints() : 0;
 
     int32 minduration = spellProto->GetDuration();
     int32 maxduration = spellProto->GetMaxDuration();
@@ -13150,7 +13150,7 @@ void Unit::ModSpellCastTime(SpellInfo const* spellProto, int32 & castTime, Spell
     if (!(spellProto->Attributes & (SPELL_ATTR0_ABILITY|SPELL_ATTR0_TRADESPELL)) && spellProto->SpellFamilyName)
         castTime = int32(float(castTime) * GetFloatValue(UNIT_MOD_CAST_SPEED));
     else if (spellProto->Attributes & SPELL_ATTR0_REQ_AMMO && !(spellProto->AttributesEx2 & SPELL_ATTR2_AUTOREPEAT_FLAG))
-        castTime = int32(float(castTime) * m_modAttackSpeedPct[RANGED_ATTACK]);
+        castTime = int32(float(castTime) * _modAttackSpeedPct[RANGED_ATTACK]);
     else if (spellProto->SpellVisual[0] == 3881 && HasAura(67556)) // cooking with Chef Hat.
         castTime = 500;
 }
@@ -13342,11 +13342,11 @@ bool Unit::HandleStatModifier(UnitMods unitMod, UnitModifierType modifierType, f
     {
         case BASE_VALUE:
         case TOTAL_VALUE:
-            m_auraModifiersGroup[unitMod][modifierType] += apply ? amount : -amount;
+            _auraModifiersGroup[unitMod][modifierType] += apply ? amount : -amount;
             break;
         case BASE_PCT:
         case TOTAL_PCT:
-            ApplyPercentModFloatVar(m_auraModifiersGroup[unitMod][modifierType], amount, apply);
+            ApplyPercentModFloatVar(_auraModifiersGroup[unitMod][modifierType], amount, apply);
             break;
         default:
             break;
@@ -13407,24 +13407,24 @@ float Unit::GetModifierValue(UnitMods unitMod, UnitModifierType modifierType) co
         return 0.0f;
     }
 
-    if (modifierType == TOTAL_PCT && m_auraModifiersGroup[unitMod][modifierType] <= 0.0f)
+    if (modifierType == TOTAL_PCT && _auraModifiersGroup[unitMod][modifierType] <= 0.0f)
         return 0.0f;
 
-    return m_auraModifiersGroup[unitMod][modifierType];
+    return _auraModifiersGroup[unitMod][modifierType];
 }
 
 float Unit::GetTotalStatValue(Stats stat) const
 {
     UnitMods unitMod = UnitMods(UNIT_MOD_STAT_START + stat);
 
-    if (m_auraModifiersGroup[unitMod][TOTAL_PCT] <= 0.0f)
+    if (_auraModifiersGroup[unitMod][TOTAL_PCT] <= 0.0f)
         return 0.0f;
 
     // value = ((base_value * base_pct) + total_value) * total_pct
-    float value  = m_auraModifiersGroup[unitMod][BASE_VALUE] + GetCreateStat(stat);
-    value *= m_auraModifiersGroup[unitMod][BASE_PCT];
-    value += m_auraModifiersGroup[unitMod][TOTAL_VALUE];
-    value *= m_auraModifiersGroup[unitMod][TOTAL_PCT];
+    float value  = _auraModifiersGroup[unitMod][BASE_VALUE] + GetCreateStat(stat);
+    value *= _auraModifiersGroup[unitMod][BASE_PCT];
+    value += _auraModifiersGroup[unitMod][TOTAL_VALUE];
+    value *= _auraModifiersGroup[unitMod][TOTAL_PCT];
 
     return value;
 }
@@ -13437,13 +13437,13 @@ float Unit::GetTotalAuraModValue(UnitMods unitMod) const
         return 0.0f;
     }
 
-    if (m_auraModifiersGroup[unitMod][TOTAL_PCT] <= 0.0f)
+    if (_auraModifiersGroup[unitMod][TOTAL_PCT] <= 0.0f)
         return 0.0f;
 
-    float value = m_auraModifiersGroup[unitMod][BASE_VALUE];
-    value *= m_auraModifiersGroup[unitMod][BASE_PCT];
-    value += m_auraModifiersGroup[unitMod][TOTAL_VALUE];
-    value *= m_auraModifiersGroup[unitMod][TOTAL_PCT];
+    float value = _auraModifiersGroup[unitMod][BASE_VALUE];
+    value *= _auraModifiersGroup[unitMod][BASE_PCT];
+    value += _auraModifiersGroup[unitMod][TOTAL_VALUE];
+    value *= _auraModifiersGroup[unitMod][TOTAL_PCT];
 
     return value;
 }
@@ -14901,18 +14901,18 @@ Unit* Unit::SelectNearbyTarget(float dist) const
 
 void Unit::ApplyAttackTimePercentMod(WeaponAttackType att, float val, bool apply)
 {
-    float remainingTimePct = (float)m_attackTimer[att] / (GetAttackTime(att) * m_modAttackSpeedPct[att]);
+    float remainingTimePct = (float)m_attackTimer[att] / (GetAttackTime(att) * _modAttackSpeedPct[att]);
     if (val > 0)
     {
-        ApplyPercentModFloatVar(m_modAttackSpeedPct[att], val, !apply);
+        ApplyPercentModFloatVar(_modAttackSpeedPct[att], val, !apply);
         ApplyPercentModFloatValue(UNIT_FIELD_BASEATTACKTIME+att, val, !apply);
     }
     else
     {
-        ApplyPercentModFloatVar(m_modAttackSpeedPct[att], -val, apply);
+        ApplyPercentModFloatVar(_modAttackSpeedPct[att], -val, apply);
         ApplyPercentModFloatValue(UNIT_FIELD_BASEATTACKTIME+att, -val, apply);
     }
-    m_attackTimer[att] = uint32(GetAttackTime(att) * m_modAttackSpeedPct[att] * remainingTimePct);
+    m_attackTimer[att] = uint32(GetAttackTime(att) * _modAttackSpeedPct[att] * remainingTimePct);
 }
 
 void Unit::ApplyCastTimePercentMod(float val, bool apply)
@@ -16555,7 +16555,7 @@ void Unit::KnockbackFrom(float x, float y, float speedXY, float speedZ)
     else if (Unit* charmer = GetCharmer())
     {
         player = charmer->ToPlayer();
-        if (player && player->m_mover != this)
+        if (player && player->_mover != this)
             player = NULL;
     }
 
@@ -17311,7 +17311,7 @@ void Unit::BuildMovementPacket(ByteBuffer *data) const
     }
 
     *data << uint32(GetUnitMovementFlags()); // movement flags
-    *data << uint16(m_movementInfo.flags2);    // 2.3.0
+    *data << uint16(_movementInfo.flags2);    // 2.3.0
     *data << uint32(getMSTime());            // time
     *data << GetPositionX();
     *data << GetPositionY();
@@ -17335,33 +17335,33 @@ void Unit::BuildMovementPacket(ByteBuffer *data) const
         *data << uint32(GetTransTime());
         *data << uint8 (GetTransSeat());
 
-        if (m_movementInfo.flags2 & MOVEMENTFLAG2_INTERPOLATED_MOVEMENT)             // & 0x400, 4.0.3
-            *data << uint32(m_movementInfo.t_time2);
+        if (_movementInfo.flags2 & MOVEMENTFLAG2_INTERPOLATED_MOVEMENT)             // & 0x400, 4.0.3
+            *data << uint32(_movementInfo.t_time2);
     }
 
     // 0x02200000
     if ((GetUnitMovementFlags() & (MOVEMENTFLAG_SWIMMING | MOVEMENTFLAG_FLYING))
-        || (m_movementInfo.flags2 & MOVEMENTFLAG2_ALWAYS_ALLOW_PITCHING))
-        *data << (float)m_movementInfo.pitch;
+        || (_movementInfo.flags2 & MOVEMENTFLAG2_ALWAYS_ALLOW_PITCHING))
+        *data << (float)_movementInfo.pitch;
 
     //4.0.6
-    if (m_movementInfo.flags2 & MOVEMENTFLAG2_INTERPOLATED_TURNING)    // & 0x800, 4.0.6
+    if (_movementInfo.flags2 & MOVEMENTFLAG2_INTERPOLATED_TURNING)    // & 0x800, 4.0.6
     {
-        *data << (uint32)m_movementInfo.fallTime;
-        *data << (float)m_movementInfo.j_zspeed;
+        *data << (uint32)_movementInfo.fallTime;
+        *data << (float)_movementInfo.j_zspeed;
 
         // 0x00001000
         if (GetUnitMovementFlags() & MOVEMENTFLAG_JUMPING)
         {
-            *data << (float)m_movementInfo.j_sinAngle;
-            *data << (float)m_movementInfo.j_cosAngle;
-            *data << (float)m_movementInfo.j_xyspeed;
+            *data << (float)_movementInfo.j_sinAngle;
+            *data << (float)_movementInfo.j_cosAngle;
+            *data << (float)_movementInfo.j_xyspeed;
         }
     }
 
     // 0x04000000
     if (GetUnitMovementFlags() & MOVEMENTFLAG_SPLINE_ELEVATION)
-        *data << (float)m_movementInfo.splineElevation;
+        *data << (float)_movementInfo.splineElevation;
 }
 
 void Unit::SetFlying(bool apply)

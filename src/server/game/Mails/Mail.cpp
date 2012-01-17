@@ -79,7 +79,7 @@ MailReceiver::MailReceiver(Player* receiver, uint64 receiver_lowguid) : m_receiv
 
 MailDraft& MailDraft::AddItem(Item* item)
 {
-    m_items[item->GetGUIDLow()] = item; return *this;
+    _items[item->GetGUIDLow()] = item; return *this;
 }
 
 void MailDraft::prepareItems(Player* receiver, SQLTransaction& trans)
@@ -95,7 +95,7 @@ void MailDraft::prepareItems(Player* receiver, SQLTransaction& trans)
     mailLoot.FillLoot(m_mailTemplateId, LootTemplates_Mail, receiver, true, true);
 
     uint32 max_slot = mailLoot.GetMaxSlotInLootFor(receiver);
-    for (uint32 i = 0; m_items.size() < MAX_MAIL_ITEMS && i < max_slot; ++i)
+    for (uint32 i = 0; _items.size() < MAX_MAIL_ITEMS && i < max_slot; ++i)
     {
         if (LootItem* lootitem = mailLoot.LootItemInSlot(i, receiver))
         {
@@ -110,7 +110,7 @@ void MailDraft::prepareItems(Player* receiver, SQLTransaction& trans)
 
 void MailDraft::deleteIncludedItems(SQLTransaction& trans, bool inDB /*= false*/ )
 {
-    for (MailItemMap::iterator mailItemIter = m_items.begin(); mailItemIter != m_items.end(); ++mailItemIter)
+    for (MailItemMap::iterator mailItemIter = _items.begin(); mailItemIter != _items.end(); ++mailItemIter)
     {
         Item* item = mailItemIter->second;
 
@@ -124,7 +124,7 @@ void MailDraft::deleteIncludedItems(SQLTransaction& trans, bool inDB /*= false*/
         delete item;
     }
 
-    m_items.clear();
+    _items.clear();
 }
 
 void MailDraft::SendReturnToSender(uint32 sender_acc, uint32 sender_guid, uint32 receiver_guid, SQLTransaction& trans)
@@ -144,13 +144,13 @@ void MailDraft::SendReturnToSender(uint32 sender_acc, uint32 sender_guid, uint32
     // prepare mail and send in other case
     bool needItemDelay = false;
 
-    if (!m_items.empty())
+    if (!_items.empty())
     {
         // if item send to character at another account, then apply item delivery delay
         needItemDelay = sender_acc != rc_account;
 
         // set owner to new receiver (to prevent delete item with sender char deleting)
-        for (MailItemMap::iterator mailItemIter = m_items.begin(); mailItemIter != m_items.end(); ++mailItemIter)
+        for (MailItemMap::iterator mailItemIter = _items.begin(); mailItemIter != _items.end(); ++mailItemIter)
         {
             Item* item = mailItemIter->second;
             item->SaveToDB(trans);                      // item not in inventory and can be save standalone
@@ -185,7 +185,7 @@ void MailDraft::SendMailTo(SQLTransaction& trans, MailReceiver const& receiver, 
     uint32 expire_delay;
 
     // auction mail without any items and money
-    if (sender.GetMailMessageType() == MAIL_AUCTION && m_items.empty() && !m_money)
+    if (sender.GetMailMessageType() == MAIL_AUCTION && _items.empty() && !_money)
         expire_delay = sWorld->getIntConfig(CONFIG_MAIL_DELIVERY_DELAY);
     // mail from battlemaster (rewardmarks) should last only one day
     else if (sender.GetMailMessageType() == MAIL_CREATURE && sBattlegroundMgr->GetBattleMasterBG(sender.GetSenderId()) != BATTLEGROUND_TYPE_NONE)
@@ -210,15 +210,15 @@ void MailDraft::SendMailTo(SQLTransaction& trans, MailReceiver const& receiver, 
     stmt->setUInt32(++index, receiver.GetPlayerGUIDLow());
     stmt->setString(++index, GetSubject());
     stmt->setString(++index, GetBody());
-    stmt->setBool  (++index, !m_items.empty());
+    stmt->setBool  (++index, !_items.empty());
     stmt->setUInt64(++index, uint64(expire_time));
     stmt->setUInt64(++index, uint64(deliver_time));
-    stmt->setUInt32(++index, m_money);
+    stmt->setUInt32(++index, _money);
     stmt->setUInt32(++index, m_COD);
     stmt->setUInt8 (++index, uint8(checked));
     trans->Append(stmt);
 
-    for (MailItemMap::const_iterator mailItemIter = m_items.begin(); mailItemIter != m_items.end(); ++mailItemIter)
+    for (MailItemMap::const_iterator mailItemIter = _items.begin(); mailItemIter != _items.end(); ++mailItemIter)
     {
         Item* pItem = mailItemIter->second;
         stmt = CharacterDatabase.GetPreparedStatement(CHAR_ADD_MAIL_ITEM);
@@ -243,7 +243,7 @@ void MailDraft::SendMailTo(SQLTransaction& trans, MailReceiver const& receiver, 
             m->money = GetMoney();
             m->COD = GetCOD();
 
-            for (MailItemMap::const_iterator mailItemIter = m_items.begin(); mailItemIter != m_items.end(); ++mailItemIter)
+            for (MailItemMap::const_iterator mailItemIter = _items.begin(); mailItemIter != _items.end(); ++mailItemIter)
             {
                 Item* item = mailItemIter->second;
                 m->AddItem(item->GetGUIDLow(), item->GetEntry());
@@ -260,19 +260,19 @@ void MailDraft::SendMailTo(SQLTransaction& trans, MailReceiver const& receiver, 
 
             pReceiver->AddMail(m);                           // to insert new mail to beginning of maillist
 
-            if (!m_items.empty())
+            if (!_items.empty())
             {
-                for (MailItemMap::iterator mailItemIter = m_items.begin(); mailItemIter != m_items.end(); ++mailItemIter)
+                for (MailItemMap::iterator mailItemIter = _items.begin(); mailItemIter != _items.end(); ++mailItemIter)
                     pReceiver->AddMItem(mailItemIter->second);
             }
         }
-        else if (!m_items.empty())
+        else if (!_items.empty())
         {
             SQLTransaction temp = SQLTransaction(NULL);
             deleteIncludedItems(temp);
         }
     }
-    else if (!m_items.empty())
+    else if (!_items.empty())
     {
         SQLTransaction temp = SQLTransaction(NULL);
         deleteIncludedItems(temp);

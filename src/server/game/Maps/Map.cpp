@@ -995,7 +995,7 @@ void Map::RemoveAllPlayers()
             {
                 // this is happening for bg
                 sLog->outError("Map::UnloadAll: player %s is still in map %u during unload, this should not happen!", player->GetName(), GetId());
-                player->TeleportTo(player->m_homebindMapId, player->m_homebindX, player->m_homebindY, player->m_homebindZ, player->GetOrientation());
+                player->TeleportTo(player->_homebindMapId, player->_homebindX, player->_homebindY, player->_homebindZ, player->GetOrientation());
             }
         }
     }
@@ -2427,7 +2427,7 @@ bool InstanceMap::Reset(uint8 method)
             if (method == INSTANCE_RESET_GLOBAL)
                 // set the homebind timer for players inside (1 minute)
                 for (MapRefManager::iterator itr = m_mapRefManager.begin(); itr != m_mapRefManager.end(); ++itr)
-                    itr->getSource()->m_InstanceValid = false;
+                    itr->getSource()->_InstanceValid = false;
 
             // the unload timer is not started
             // instead the map will unload immediately after the players have left
@@ -2588,7 +2588,7 @@ bool BattlegroundMap::AddPlayerToMap(Player* player)
         //if (!CanEnter(player))
             //return false;
         // reset instance validity, battleground maps do not homebind
-        player->m_InstanceValid = true;
+        player->_InstanceValid = true;
     }
     return Map::AddPlayerToMap(player);
 }

@@ -170,7 +170,7 @@ void MapManager::LoadTransportNPCs()
     sLog->outString();
 }
 
-Transport::Transport(uint32 period, uint32 script) : GameObject(), m_pathTime(0), m_timer(0),
+Transport::Transport(uint32 period, uint32 script) : GameObject(), m_pathTime(0), _timer(0),
 currenttguid(0), m_period(period), ScriptId(script), m_nextNodeTime(0)
 {
     m_updateFlag = (UPDATEFLAG_TRANSPORT | UPDATEFLAG_HAS_POSITION | UPDATEFLAG_ROTATION);
@@ -539,8 +539,8 @@ void Transport::Update(uint32 p_diff)
     if (m_WayPoints.size() <= 1)
         return;
 
-    m_timer = getMSTime() % m_period;
-    while (((m_timer - m_curr->first) % m_pathTime) > ((m_next->first - m_curr->first) % m_pathTime))
+    _timer = getMSTime() % m_period;
+    while (((_timer - m_curr->first) % m_pathTime) > ((m_next->first - m_curr->first) % m_pathTime))
     {
         DoEventIfAny(*m_curr, true);
 
@@ -644,8 +644,8 @@ uint32 Transport::AddNPCPassenger(uint32 tguid, uint32 entry, float x, float y, 
 
     creature->SetTransport(this);
     creature->AddUnitMovementFlag(MOVEMENTFLAG_ONTRANSPORT);
-    creature->m_movementInfo.guid = GetGUID();
-    creature->m_movementInfo.t_pos.Relocate(x, y, z, o);
+    creature->_movementInfo.guid = GetGUID();
+    creature->_movementInfo.t_pos.Relocate(x, y, z, o);
 
     if (anim)
         creature->SetUInt32Value(UNIT_NPC_EMOTESTATE, anim);
@@ -699,10 +699,10 @@ void Transport::UpdateNPCPositions()
         Creature* npc = *itr;
 
         float x, y, z, o;
-        o = GetOrientation() + npc->m_movementInfo.t_pos._orientation;
-        x = GetPositionX() + (npc->m_movementInfo.t_pos.m_positionX * cos(GetOrientation()) + npc->m_movementInfo.t_pos.m_positionY * sin(GetOrientation() + M_PI));
-        y = GetPositionY() + (npc->m_movementInfo.t_pos.m_positionY * cos(GetOrientation()) + npc->m_movementInfo.t_pos.m_positionX * sin(GetOrientation()));
-        z = GetPositionZ() + npc->m_movementInfo.t_pos.m_positionZ;
+        o = GetOrientation() + npc->_movementInfo.t_pos._orientation;
+        x = GetPositionX() + (npc->_movementInfo.t_pos.m_positionX * cos(GetOrientation()) + npc->_movementInfo.t_pos.m_positionY * sin(GetOrientation() + M_PI));
+        y = GetPositionY() + (npc->_movementInfo.t_pos.m_positionY * cos(GetOrientation()) + npc->_movementInfo.t_pos.m_positionX * sin(GetOrientation()));
+        z = GetPositionZ() + npc->_movementInfo.t_pos.m_positionZ;
         npc->SetHomePosition(x, y, z, o);
         GetMap()->CreatureRelocation(npc, x, y, z, o, false);
     }

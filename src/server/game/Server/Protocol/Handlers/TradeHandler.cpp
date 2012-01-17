@@ -326,13 +326,13 @@ static void clearAcceptTradeMode(Item* *myItems, Item* *hisItems)
 
 void WorldSession::HandleAcceptTradeOpcode(WorldPacket& /*recvPacket*/)
 {
-    TradeData* my_trade = _player->m_trade;
+    TradeData* my_trade = _player->_trade;
     if (!my_trade)
         return;
 
     Player* trader = my_trade->GetTrader();
 
-    TradeData* his_trade = trader->m_trade;
+    TradeData* his_trade = trader->_trade;
     if (!his_trade)
         return;
 
@@ -420,7 +420,7 @@ void WorldSession::HandleAcceptTradeOpcode(WorldPacket& /*recvPacket*/)
             }
 
             my_spell = new Spell(_player, spellEntry, TRIGGERED_FULL_MASK);
-            my_spell->m_CastItem = castItem;
+            my_spell->_CastItem = castItem;
             my_targets.SetTradeItemTarget(_player);
             my_spell->m_targets = my_targets;
 
@@ -455,7 +455,7 @@ void WorldSession::HandleAcceptTradeOpcode(WorldPacket& /*recvPacket*/)
             }
 
             his_spell = new Spell(trader, spellEntry, TRIGGERED_FULL_MASK);
-            his_spell->m_CastItem = castItem;
+            his_spell->_CastItem = castItem;
             his_targets.SetTradeItemTarget(trader);
             his_spell->m_targets = his_targets;
 
@@ -557,10 +557,10 @@ void WorldSession::HandleAcceptTradeOpcode(WorldPacket& /*recvPacket*/)
 
         // cleanup
         clearAcceptTradeMode(my_trade, his_trade);
-        delete _player->m_trade;
-        _player->m_trade = NULL;
-        delete trader->m_trade;
-        trader->m_trade = NULL;
+        delete _player->_trade;
+        _player->_trade = NULL;
+        delete trader->_trade;
+        trader->_trade = NULL;
 
         // desynchronized with the other saves here (SaveInventoryAndGoldToDB() not have own transaction guards)
         SQLTransaction trans = CharacterDatabase.BeginTransaction();
@@ -588,7 +588,7 @@ void WorldSession::HandleUnacceptTradeOpcode(WorldPacket& /*recvPacket*/)
 
 void WorldSession::HandleBeginTradeOpcode(WorldPacket& /*recvPacket*/)
 {
-    TradeData* my_trade = _player->m_trade;
+    TradeData* my_trade = _player->_trade;
     if (!my_trade)
         return;
 
@@ -613,7 +613,7 @@ void WorldSession::HandleCancelTradeOpcode(WorldPacket& /*recvPacket*/)
 
 void WorldSession::HandleInitiateTradeOpcode(WorldPacket& recvPacket)
 {
-    if (GetPlayer()->m_trade)
+    if (GetPlayer()->_trade)
     {
         recvPacket.rfinish();
         return;
@@ -660,7 +660,7 @@ void WorldSession::HandleInitiateTradeOpcode(WorldPacket& recvPacket)
         return;
     }
 
-    if (pOther == GetPlayer() || pOther->m_trade)
+    if (pOther == GetPlayer() || pOther->_trade)
     {
         SendTradeStatus(TRADE_STATUS_BUSY);
         return;
@@ -715,8 +715,8 @@ void WorldSession::HandleInitiateTradeOpcode(WorldPacket& recvPacket)
     }
 
     // OK start trade
-    _player->m_trade = new TradeData(_player, pOther);
-    pOther->m_trade = new TradeData(pOther, _player);
+    _player->_trade = new TradeData(_player, pOther);
+    pOther->_trade = new TradeData(pOther, _player);
 
     WorldPacket data(SMSG_TRADE_STATUS, 1+8+4+4+4+1+4+4+4);
     data << uint8(0);
@@ -793,7 +793,7 @@ void WorldSession::HandleClearTradeItemOpcode(WorldPacket& recvPacket)
     uint8 tradeSlot;
     recvPacket >> tradeSlot;
 
-    TradeData* my_trade = _player->m_trade;
+    TradeData* my_trade = _player->_trade;
     if (!my_trade)
         return;
 
