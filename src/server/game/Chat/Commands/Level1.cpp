@@ -687,11 +687,11 @@ bool ChatHandler::HandleGroupSummonCommand(const char* args)
     if (HasLowerSecurity(target, 0))
         return false;
 
-    Group* grp = target->GetGroup();
+    Group* group = target->GetGroup();
 
     std::string nameLink = GetNameLink(target);
 
-    if (!grp)
+    if (!group)
     {
         PSendSysMessage(LANG_NOT_IN_GROUP, nameLink.c_str());
         SetSentErrorMessage(true);
@@ -703,7 +703,7 @@ bool ChatHandler::HandleGroupSummonCommand(const char* args)
 
     // we are in instance, and can summon only player in our group with us as lead
     if (to_instance && (
-        !_session->GetPlayer()->GetGroup() || (grp->GetLeaderGUID() != _session->GetPlayer()->GetGUID()) ||
+        !_session->GetPlayer()->GetGroup() || (group->GetLeaderGUID() != _session->GetPlayer()->GetGUID()) ||
         (_session->GetPlayer()->GetGroup()->GetLeaderGUID() != _session->GetPlayer()->GetGUID())))
         // the last check is a bit excessive, but let it be, just in case
     {
@@ -712,7 +712,7 @@ bool ChatHandler::HandleGroupSummonCommand(const char* args)
         return false;
     }
 
-    for (GroupReference* itr = grp->GetFirstMember(); itr != NULL; itr = itr->next())
+    for (GroupReference* itr = group->GetFirstMember(); itr != NULL; itr = itr->next())
     {
         Player* player = itr->getSource();
 

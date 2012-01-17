@@ -7637,10 +7637,10 @@ void Player::UpdateZone(uint32 newZone, uint32 newArea)
     if (GetGroup())
     {
         SetGroupUpdateFlag(GROUP_UPDATE_FULL);
-        Group* grp = GetGroup();
-        if (GetSession() && grp->isLFGGroup() && sLFGMgr->IsTeleported(GetGUID()))
+        Group* group = GetGroup();
+        if (GetSession() && group->isLFGGroup() && sLFGMgr->IsTeleported(GetGUID()))
         {
-            for (GroupReference* itr = grp->GetFirstMember(); itr != NULL; itr = itr->next())
+            for (GroupReference* itr = group->GetFirstMember(); itr != NULL; itr = itr->next())
             {
                 Player* tempplr = itr->getSource();
                 if (tempplr)
@@ -23493,13 +23493,13 @@ Player* Player::GetNextRandomRaidMember(float radius)
 
 PartyResult Player::CanUninviteFromGroup() const
 {
-    const Group* grp = GetGroup();
-    if (!grp)
+    const Group* group = GetGroup();
+    if (!group)
         return ERR_NOT_IN_GROUP;
 
-    if (grp->isLFGGroup())
+    if (group->isLFGGroup())
     {
-        uint64 gguid = grp->GetGUID();
+        uint64 gguid = group->GetGUID();
         if (!sLFGMgr->GetKicksLeft(gguid))
             return ERR_PARTY_LFG_BOOT_LIMIT;
 
@@ -23507,13 +23507,13 @@ PartyResult Player::CanUninviteFromGroup() const
         if (state == LFG_STATE_BOOT)
             return ERR_PARTY_LFG_BOOT_IN_PROGRESS;
 
-        if (grp->GetMembersCount() <= sLFGMgr->GetVotesNeeded(gguid))
+        if (group->GetMembersCount() <= sLFGMgr->GetVotesNeeded(gguid))
             return ERR_PARTY_LFG_BOOT_TOO_FEW_PLAYERS;
 
         if (state == LFG_STATE_FINISHED_DUNGEON)
             return ERR_PARTY_LFG_BOOT_DUNGEON_COMPLETE;
 
-        if (grp->isRollLootActive())
+        if (group->isRollLootActive())
             return ERR_PARTY_LFG_BOOT_LOOT_ROLLS;
 
         /* Missing support for these types
@@ -23524,7 +23524,7 @@ PartyResult Player::CanUninviteFromGroup() const
     }
     else
     {
-        if (!grp->IsLeader(GetGUID()) && !grp->IsAssistant(GetGUID()))
+        if (!group->IsLeader(GetGUID()) && !group->IsAssistant(GetGUID()))
             return ERR_NOT_LEADER;
 
         if (InBattleground())

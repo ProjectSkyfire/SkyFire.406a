@@ -242,15 +242,15 @@ public:
 
         std::string nameLink = handler->GetNameLink(target);
 
-        Group* grp = target->GetGroup();
-        if (!grp)
+        Group* group = target->GetGroup();
+        if (!group)
         {
             handler->PSendSysMessage(LANG_NOT_IN_GROUP, nameLink.c_str());
             handler->SetSentErrorMessage(true);
             return false;
         }
 
-        for (GroupReference* itr = grp->GetFirstMember(); itr != NULL; itr = itr->next())
+        for (GroupReference* itr = group->GetFirstMember(); itr != NULL; itr = itr->next())
         {
             Player* player = itr->getSource();
 

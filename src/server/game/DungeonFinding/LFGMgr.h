@@ -268,7 +268,7 @@ class LFGMgr
 
         // Queue
         void Join(Player* player, uint8 roles, const LfgDungeonSet& dungeons, const std::string& comment);
-        void Leave(Player* player, Group* grp = NULL);
+        void Leave(Player* player, Group* group = NULL);
 
         // Role Check
         void UpdateRoleCheck(uint64& gguid, uint64 guid = 0, uint8 roles = ROLE_NONE);
@@ -280,9 +280,9 @@ class LFGMgr
         void TeleportPlayer(Player* player, bool out, bool fromOpcode = false);
 
         // Vote kick
-        void InitBoot(Group* grp, const uint64& kguid, const uint64& vguid, std::string reason);
+        void InitBoot(Group* group, const uint64& kguid, const uint64& vguid, std::string reason);
         void UpdateBoot(Player* player, bool accept);
-        void OfferContinue(Group* grp);
+        void OfferContinue(Group* group);
 
         void InitializeLockedDungeons(Player* player);
 
