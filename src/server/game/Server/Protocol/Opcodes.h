@@ -402,7 +402,7 @@ enum Opcodes
     CMSG_GOSSIP_HELLO                                = 0x03622, // 4.3.0 15050
     CMSG_GOSSIP_SELECT_OPTION                        = 0x00280, // 4.3.0 15050
     SMSG_GOSSIP_MESSAGE                              = 0x06082, // 4.3.0 15050
-    SMSG_GOSSIP_COMPLETE                             = 0x1013B, //
+    SMSG_GOSSIP_COMPLETE                             = 0x02E82, // 4.3.0 15050
     CMSG_NPC_TEXT_QUERY                              = 0x03406, // 4.3.0 15050
     SMSG_NPC_TEXT_UPDATE                             = 0x000A0, // 4.3.0 15050
     SMSG_NPC_WONT_TALK                               = 0x1013E, //
@@ -1270,7 +1270,7 @@ enum Opcodes
     CMSG_GMRESPONSE_RESOLVE                          = 0x104F5, //
     SMSG_GMRESPONSE_STATUS_UPDATE                    = 0x104F6, //
     CMSG_WORLD_STATE_UI_TIMER_UPDATE                 = 0x00884, // 4.3.0 15050
-    SMSG_WORLD_STATE_UI_TIMER_UPDATE                 = 0x104F8, //
+    SMSG_WORLD_STATE_UI_TIMER_UPDATE                 = 0x06222, // 4.3.0 15050
     CMSG_CHAR_RACE_CHANGE                            = 0x104F9, //
     SMSG_TALENTS_INVOLUNTARILY_RESET                 = 0x104FA, //
     SMSG_LOOT_SLOT_CHANGED                           = 0x104FB, //
@@ -1328,7 +1328,7 @@ enum Opcodes
     SMSG_GUILD_ACHIEVEMENT_DATA                      = 0x10528, //
     CMSG_UI_TIME_REQUEST                             = 0x10529, //
     SMSG_UI_TIME                                     = 0x1052A, //
-    CMSG_RETURN_TO_GRAVEYARD                         = 0x1052B, //
+    CMSG_RETURN_TO_GRAVEYARD                         = 0x06603, // 4.3.0 15050
     SMSG_UNKNOWN_1330                                = 0x1052C, //
     CMSG_REFORGE_ITEM                                = 0x1052D, //
     CMSG_COMPLETED_ARTIFACTS                         = 0x1052E, //
