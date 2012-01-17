@@ -322,7 +322,7 @@ enum Opcodes
     SMSG_LEARNED_SPELL                               = 0x100EA, //
     SMSG_SUPERCEDED_SPELL                            = 0x100EB, //
     CMSG_NEW_SPELL_SLOT                              = 0x100EC, //
-    CMSG_CAST_SPELL                                  = 0x100ED, //
+    CMSG_CAST_SPELL                                  = 0x00A84, // 4.3.0 15050
     CMSG_CANCEL_CAST                                 = 0x100EE, //
     SMSG_CAST_FAILED                                 = 0x100EF, //
     SMSG_SPELL_START                                 = 0x02084, // 4.3.0 15050
