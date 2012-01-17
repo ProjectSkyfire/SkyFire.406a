@@ -87,12 +87,12 @@ void WorldSession::SendAuctionCommandResult(uint32 auctionId, uint32 Action, uin
 //this function sends notification, if bidder is online
 void WorldSession::SendAuctionBidderNotification(uint32 location, uint32 auctionId, uint64 bidder, uint32 bidSum, uint32 diff, uint32 item_template)
 {
-    WorldPacket data(SMSG_AUCTION_BIDDER_NOTIFICATION, (8 * 4));
+    WorldPacket data(SMSG_AUCTION_BIDDER_NOTIFICATION, (2 * 4) + (3 * 8) + (2 * 4));
     data << uint32(location);
     data << uint32(auctionId);
     data << uint64(bidder);
-    data << uint32(bidSum);
-    data << uint32(diff);
+    data << uint64(bidSum);
+    data << uint64(diff);
     data << uint32(item_template);
     data << uint32(0);
     SendPacket(&data);
@@ -101,14 +101,14 @@ void WorldSession::SendAuctionBidderNotification(uint32 location, uint32 auction
 //this void causes on client to display: "Your auction sold"
 void WorldSession::SendAuctionOwnerNotification(AuctionEntry* auction)
 {
-    WorldPacket data(SMSG_AUCTION_OWNER_NOTIFICATION, ((2 * 4) + (2 * 8) + (3 * 4)));
-    data << auction->Id;
-    data << auction->bid;
-    data << (uint32) 0;                                     //unk
-    data << (uint32) 0;                                     //unk
-    data << (uint32) 0;                                     //unk
-    data << auction->item_template;
-    data << (uint32) 0;                                     //unk
+    WorldPacket data(SMSG_AUCTION_OWNER_NOTIFICATION, 4 + (3 * 8) + (3 * 4));
+    data << uint32(auction->Id);
+    data << uint64(auction->bid);
+    data << uint64(0);                                      //unk
+    data << uint64(0);                                      //unk
+    data << uint32(auction->item_template);
+    data << uint32(0);                                      //unk
+    data << float(0);                                       //unk (time?)
     SendPacket(&data);
 }
 
