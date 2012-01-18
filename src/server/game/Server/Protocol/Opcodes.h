@@ -609,12 +609,12 @@ enum Opcodes
     MSG_AUCTION_HELLO                                = 0x00680, // 4.3.0 15050
     CMSG_AUCTION_SELL_ITEM                           = 0x1020C, //
     CMSG_AUCTION_REMOVE_ITEM                         = 0x1020D, //
-    CMSG_AUCTION_LIST_ITEMS                          = 0x1020E, //
+    CMSG_AUCTION_LIST_ITEMS                          = 0x02C26, // 4.3.0 15050
     CMSG_AUCTION_LIST_OWNER_ITEMS                    = 0x1020F, //
     CMSG_AUCTION_PLACE_BID                           = 0x10210, //
     SMSG_AUCTION_COMMAND_RESULT                      = 0x04086, // 4.3.0 15050
-    SMSG_AUCTION_LIST_RESULT                         = 0x10212, //
-    SMSG_AUCTION_OWNER_LIST_RESULT                   = 0x10213, //
+    SMSG_AUCTION_LIST_RESULT                         = 0x00426, // 4.3.0 15050
+    SMSG_AUCTION_OWNER_LIST_RESULT                   = 0x058A2, // 4.3.0 15050
     SMSG_AUCTION_BIDDER_NOTIFICATION                 = 0x06E82, // 4.3.0 15050
     SMSG_AUCTION_OWNER_NOTIFICATION                  = 0x032A4, // 4.3.0 15050
     SMSG_PROCRESIST                                  = 0x10216, //
