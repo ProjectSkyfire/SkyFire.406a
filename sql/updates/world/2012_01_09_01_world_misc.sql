@@ -129,7 +129,6 @@ INSERT INTO `conditions` (`SourceTypeOrReferenceId`,`SourceGroup`,`SourceEntry`,
 (15,@G_MoC_1,0,1,9,13839,0,0,0,'','show Gossip Option if Player has rewarded Quest 13839'),
 (15,@G_MoC_1,0,1,1,63034,0,0,0,'','show Gossip Option if Player has Aura: Ride Vehicle');
 
-
 -- ## Dailys
 -- Req: Up To The Challenge active and not rewarded
 DELETE FROM conditions WHERE SourceTypeOrReferenceId = -13672; 
@@ -1310,7 +1309,7 @@ DELETE FROM  creature_ai_scripts WHERE `creature_id`=33498;
  
 DELETE FROM `smart_scripts` WHERE `source_type`=0 AND `entryorguid`=33498;
 INSERT INTO `smart_scripts` (`entryorguid`,`source_type`,`id`,`link`,`event_type`,`event_phase_mask`,`event_chance`,`event_flags`,`event_param1`,`event_param2`,`event_param3`,`event_param4`,`action_type`,`action_param1`,`action_param2`,`action_param3`,`action_param4`,`action_param5`,`action_param6`,`target_type`,`target_param1`,`target_param2`,`target_param3`,`target_x`,`target_y`,`target_z`,`target_o`,`comment`) VALUES
-(33498,0,0,0,23,0,100,0,63124,1,0,0,81,16777216,0,0,0,0,0,1,0,0,0,0,0,0,0,'Maloric - on Aura: Incapacitate Maloric - set npcflag: Spellklick'),
+(33498,0,0,0,23,0,100,0,63124,1,0,0,81,0,0,0,0,0,0,1,0,0,0,0,0,0,0,'Maloric - on Aura: Incapacitate Maloric - set npcflag: Spellklick'),
 (33498,0,1,0,23,0,100,0,63124,0,0,0,81,0,0,0,0,0,0,1,0,0,0,0,0,0,0,'Maloric - on NoAura: Incapacitate Maloric - set npcflag: none');
  
 DELETE FROM `npc_spellclick_spells` WHERE `npc_entry`=33498;
@@ -2249,7 +2248,7 @@ UPDATE `creature_template` SET `AIName` = '', `ScriptName` = 'npc_fallen_caravan
 DELETE FROM `creature_ai_scripts` WHERE `creature_id` IN (25342,25343);
 -- Quest "The Collapse" http://www.wowhead.com/quest=11706 & "Deploy the Shake-n-Quake!" http://www.wowhead.com/quest=11723
 UPDATE `creature_template` SET `KillCredit1` = 25742, `KillCredit2` = 25794 WHERE `entry` = 25629;
-UPDATE `item_template` SET `ScriptName` = 'item_snq_control_unit' WHERE `entry` = 34981;
+UPDATE `item_script_names` SET `ScriptName` = 'item_snq_control_unit' WHERE `id` = 34981;
 -- SAI for Steam Rager
 SET @ENTRY := 24601;
 UPDATE `creature_template` SET `ScriptName`='',`AIName`='SmartAI' WHERE `entry`=@ENTRY;
@@ -2259,7 +2258,7 @@ INSERT INTO `smart_scripts` (`entryorguid`,`source_type`,`id`,`link`,`event_type
 (@ENTRY,0,0,0,11,0,100,0,0,0,0,0,11,36151,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Steam Rager - On spawn - Cast Cosmetic: Steam Aura on self'),
 (@ENTRY,0,1,0,0,0,100,0,4000,8000,11000,14000,11,50375,1,0,0,0,0,2,0,0,0,0,0,0,0, 'Steam Rager - Combat - Cast Steam Blast on victom');
 -- Quest "Postponing the Inevitable" http://www.wowhead.com/quest=11905
-UPDATE `item_template` SET `ScriptName` = 'item_interdimensional_refabricator' WHERE `entry` = 35479;
+UPDATE `item_script_names` SET `ScriptName` = 'item_interdimensional_refabricator' WHERE `id` = 35479;
 
 -- Dalaran
 INSERT INTO npc_text (ID,text0_0) VALUES 
@@ -2370,7 +2369,6 @@ UPDATE creature_template SET scriptname = 'npc_slain_tualiq_villager' WHERE entr
 DELETE FROM spell_script_names WHERE spell_id IN (66588);
 INSERT INTO spell_script_names (spell_id,Scriptname) VALUES 
 (66588,'spell_flaming_spear_targeting');
-
 
 -- ICECROWN
 
