@@ -30,8 +30,8 @@ INSERT INTO `smart_scripts` (`entryorguid`,`source_type`,`id`,`link`,`event_type
 (@ENTRY,0,0,1,62,0,100,0,@GOSSIP,0,0,0,72,0,0,0,0,0,0,7,0,0,0,0,0,0,0,'Brann Barbabronce - On gossip option select - Close gossip'),
 (@ENTRY,0,1,0,61,0,100,0,0,0,0,0,9,0,0,0,0,0,0,15,202309,120,0,0.0,0.0,0.0,0.0,"Brann Barbabronce - Abre la puerta cuando habla");
 DELETE FROM `creature` WHERE `id` = 39908 AND map =644; --
-INSERT INTO `creature` (`id`, `map`, `spawnMask`, `phaseMask`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecs`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `DeathState`, `MovementType`, `npcflag`, `unit_flags`, `dynamicflags`) VALUES
-('39908','644','3','1','0','0','-446.498','367.005','90.1698','0.0874934','3600','0','0','42','0','0','0','0','0','0');
+INSERT INTO `creature` (`id`, `map`, `spawnMask`, `phaseMask`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecs`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `MovementType`, `npcflag`, `unit_flags`, `dynamicflags`) VALUES
+('39908','644','3','1','0','0','-446.498','367.005','90.1698','0.0874934','3600','0','0','42','0','0','0','0','0');
 -- Temple Guardian Anhuur
 SET @ENTRY := 39425;
 SET @SOURCETYPE := 0;
