@@ -1,387 +1,385 @@
 DROP TABLE IF EXISTS `game_event_seasonal_questrelation`;
 CREATE TABLE `game_event_seasonal_questrelation` (
-  `quest` mediumint(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Global Unique Identifier',
-  `event` mediumint(10) NOT NULL DEFAULT '0' COMMENT 'Quest Identifier',
-  PRIMARY KEY (`quest`,`event`),
-  KEY `idx_quest` (`quest`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Player System';
-
-INSERT INTO `game_event_seasonal_questrelation` (`quest`,`event`) VALUES
-	(1657, 12),
-	(1658, 12),
-	(6961, 2),
-	(6962, 2),
-	(6963, 2),
-	(6964, 2),
-	(6983, 3),
-	(6984, 3),
-	(7021, 2),
-	(7022, 2),
-	(7023, 2),
-	(7024, 2),
-	(7025, 2),
-	(7042, 2),
-	(7043, 2),
-	(7045, 2),
-	(7061, 2),
-	(7062, 2),
-	(7063, 2),
-	(8149, 11),
-	(8150, 11),
-	(8311, 12),
-	(8312, 12),
-	(8322, 12),
-	(8353, 12),
-	(8354, 12),
-	(8355, 12),
-	(8356, 12),
-	(8357, 12),
-	(8358, 12),
-	(8359, 12),
-	(8360, 12),
-	(8373, 12),
-	(8409, 12),
-	(8744, 52),
-	(8746, 2),
-	(8762, 2),
-	(8763, 2),
-	(8767, 52),
-	(8768, 52),
-	(8769, 52),
-	(8788, 52),
-	(8799, 2),
-	(8803, 52),
-	(8827, 2),
-	(8828, 2),
-	(8860, 6),
-	(8861, 6),
-	(8868, 7),
-	(8897, 8),
-	(8898, 8),
-	(8899, 8),
-	(8900, 8),
-	(8901, 8),
-	(8902, 8),
-	(8903, 8),
-	(8904, 8),
-	(8971, -1),
-	(8972, -1),
-	(8973, -1),
-	(8974, -1),
-	(8975, -1),
-	(8976, -1),
-	(8979, 8),
-	(8980, 8),
-	(8981, 8),
-	(8982, 8),
-	(8983, 8),
-	(8984, 8),
-	(8993, 8),
-	(9024, 8),
-	(9025, 8),
-	(9026, 8),
-	(9027, 8),
-	(9028, 8),
-	(11131, 12),
-	(11135, 12),
-	(11219, 12),
-	(11220, 12),
-	(11242, 12),
-	(11356, 12),
-	(11357, 12),
-	(11360, 12),
-	(11361, 12),
-	(11392, 12),
-	(11401, 12),
-	(11403, 12),
-	(11404, 12),
-	(11405, 12),
-	(11435, 12),
-	(11439, 12),
-	(11440, 12),
-	(11449, 12),
-	(11450, 12),
-	(11528, 52),
-	(11558, 8),
-	(11580, 1),
-	(11581, 1),
-	(11583, 1),
-	(11584, 1),
-	(11696, 1),
-	(11732, 1),
-	(11734, 1),
-	(11735, 1),
-	(11736, 1),
-	(11737, 1),
-	(11738, 1),
-	(11739, 1),
-	(11740, 1),
-	(11741, 1),
-	(11742, 1),
-	(11743, 1),
-	(11744, 1),
-	(11745, 1),
-	(11746, 1),
-	(11747, 1),
-	(11748, 1),
-	(11749, 1),
-	(11750, 1),
-	(11751, 1),
-	(11752, 1),
-	(11753, 1),
-	(11754, 1),
-	(11755, 1),
-	(11756, 1),
-	(11757, 1),
-	(11758, 1),
-	(11759, 1),
-	(11760, 1),
-	(11761, 1),
-	(11762, 1),
-	(11763, 1),
-	(11764, 1),
-	(11765, 1),
-	(11766, 1),
-	(11767, 1),
-	(11768, 1),
-	(11769, 1),
-	(11770, 1),
-	(11771, 1),
-	(11772, 1),
-	(11773, 1),
-	(11774, 1),
-	(11775, 1),
-	(11776, 1),
-	(11777, 1),
-	(11778, 1),
-	(11779, 1),
-	(11780, 1),
-	(11781, 1),
-	(11782, 1),
-	(11783, 1),
-	(11784, 1),
-	(11785, 1),
-	(11786, 1),
-	(11787, 1),
-	(11799, 1),
-	(11800, 1),
-	(11801, 1),
-	(11802, 1),
-	(11803, 1),
-	(11804, 1),
-	(11805, 1),
-	(11806, 1),
-	(11807, 1),
-	(11808, 1),
-	(11809, 1),
-	(11810, 1),
-	(11811, 1),
-	(11812, 1),
-	(11813, 1),
-	(11814, 1),
-	(11815, 1),
-	(11816, 1),
-	(11817, 1),
-	(11818, 1),
-	(11819, 1),
-	(11820, 1),
-	(11821, 1),
-	(11822, 1),
-	(11823, 1),
-	(11824, 1),
-	(11825, 1),
-	(11826, 1),
-	(11827, 1),
-	(11828, 1),
-	(11829, 1),
-	(11830, 1),
-	(11831, 1),
-	(11832, 1),
-	(11833, 1),
-	(11834, 1),
-	(11835, 1),
-	(11836, 1),
-	(11837, 1),
-	(11838, 1),
-	(11839, 1),
-	(11840, 1),
-	(11841, 1),
-	(11842, 1),
-	(11843, 1),
-	(11844, 1),
-	(11845, 1),
-	(11846, 1),
-	(11847, 1),
-	(11848, 1),
-	(11849, 1),
-	(11850, 1),
-	(11851, 1),
-	(11852, 1),
-	(11853, 1),
-	(11854, 1),
-	(11855, 1),
-	(11856, 1),
-	(11857, 1),
-	(11858, 1),
-	(11859, 1),
-	(11860, 1),
-	(11861, 1),
-	(11862, 1),
-	(11863, 1),
-	(11937, 1),
-	(11976, 1),
-	(12133, 12),
-	(12135, 12),
-	(12139, 12),
-	(12155, 12),
-	(12286, -1),
-	(12313, 24),
-	(12331, 12),
-	(12332, 12),
-	(12333, 12),
-	(12334, 12),
-	(12335, 12),
-	(12336, 12),
-	(12337, 12),
-	(12338, 12),
-	(12339, 12),
-	(12340, 12),
-	(12341, 12),
-	(12342, 12),
-	(12343, 12),
-	(12344, 12),
-	(12345, 12),
-	(12346, 12),
-	(12347, 12),
-	(12348, 12),
-	(12349, 12),
-	(12350, 12),
-	(12351, 12),
-	(12352, 12),
-	(12353, 12),
-	(12354, 12),
-	(12355, 12),
-	(12356, 12),
-	(12357, 12),
-	(12358, 12),
-	(12359, 12),
-	(12360, 12),
-	(12361, 12),
-	(12362, 12),
-	(12363, 12),
-	(12364, 12),
-	(12365, 12),
-	(12366, 12),
-	(12367, 12),
-	(12368, 12),
-	(12369, 12),
-	(12370, 12),
-	(12371, 12),
-	(12373, 12),
-	(12374, 12),
-	(12375, 12),
-	(12376, 12),
-	(12377, 12),
-	(12378, 12),
-	(12379, 12),
-	(12380, 12),
-	(12381, 12),
-	(12382, 12),
-	(12383, 12),
-	(12384, 12),
-	(12385, 12),
-	(12386, 12),
-	(12387, 12),
-	(12388, 12),
-	(12389, 12),
-	(12390, 12),
-	(12391, 12),
-	(12392, 12),
-	(12393, 12),
-	(12394, 12),
-	(12395, 12),
-	(12396, 12),
-	(12397, 12),
-	(12398, 12),
-	(12399, 12),
-	(12400, 12),
-	(12401, 12),
-	(12402, 12),
-	(12403, 12),
-	(12404, 12),
-	(12405, 12),
-	(12406, 12),
-	(12407, 12),
-	(12408, 12),
-	(12409, 12),
-	(12410, 12),
-	(12940, 12),
-	(12941, 12),
-	(12944, 12),
-	(12945, 12),
-	(12946, 12),
-	(12947, 12),
-	(12950, 12),
-	(13203, 52),
-	(13433, 12),
-	(13434, 12),
-	(13435, 12),
-	(13436, 12),
-	(13437, 12),
-	(13438, 12),
-	(13439, 12),
-	(13440, 12),
-	(13441, 12),
-	(13442, 12),
-	(13443, 12),
-	(13444, 12),
-	(13445, 12),
-	(13446, 12),
-	(13447, 12),
-	(13448, 12),
-	(13449, 12),
-	(13450, 12),
-	(13451, 12),
-	(13452, 12),
-	(13453, 12),
-	(13454, 12),
-	(13455, 12),
-	(13456, 12),
-	(13457, 12),
-	(13458, 12),
-	(13459, 12),
-	(13460, 12),
-	(13461, 12),
-	(13462, 12),
-	(13463, 12),
-	(13464, 12),
-	(13465, 12),
-	(13466, 12),
-	(13467, 12),
-	(13468, 12),
-	(13469, 12),
-	(13470, 12),
-	(13471, 12),
-	(13472, 12),
-	(13473, 12),
-	(13474, 12),
-	(13485, 1),
-	(13486, 1),
-	(13487, 1),
-	(13488, 1),
-	(13489, 1),
-	(13490, 1),
-	(13491, 1),
-	(13492, 1),
-	(13493, 1),
-	(13494, 1),
-	(13495, 1),
-	(13496, 1),
-	(13497, 1),
-	(13498, 1),
-	(13499, 1),
-	(13500, 1),
-	(13501, 12),
-	(13548, 12),
-	(13966, 52);
-
+  `questId` INT(10) UNSIGNED NOT NULL COMMENT 'Quest Identifier',
+  `eventEntry` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0 COMMENT 'Entry of the game event',
+  PRIMARY KEY (`questId`)
+) ENGINE=MYISAM DEFAULT CHARSET=latin1 COMMENT='GameEvent System';
+LOCK TABLES `game_event_seasonal_questrelation` WRITE;
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (1657,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (1658,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (6961,2);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (6962,2);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (6963,2);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (6964,2);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (6983,3);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (6984,3);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (7021,2);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (7022,2);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (7023,2);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (7024,2);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (7025,2);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (7042,2);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (7043,2);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (7045,2);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (7061,2);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (7062,2);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (7063,2);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (8149,11);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (8150,11);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (8311,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (8312,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (8322,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (8353,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (8354,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (8355,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (8356,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (8357,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (8358,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (8359,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (8360,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (8373,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (8409,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (8744,52);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (8746,2);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (8762,2);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (8763,2);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (8767,52);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (8768,52);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (8769,52);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (8788,52);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (8799,2);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (8803,52);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (8827,2);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (8828,2);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (8860,6);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (8861,6);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (8868,7);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (8897,8);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (8898,8);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (8899,8);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (8900,8);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (8901,8);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (8902,8);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (8903,8);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (8904,8);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (8971,8);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (8972,8);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (8973,8);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (8974,8);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (8975,8);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (8976,8);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (8979,8);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (8980,8);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (8981,8);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (8982,8);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (8983,8);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (8984,8);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (8993,8);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (9024,8);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (9025,8);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (9026,8);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (9027,8);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (9028,8);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11131,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11135,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11219,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11220,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11242,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11356,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11357,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11360,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11361,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11392,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11401,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11403,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11404,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11405,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11435,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11439,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11440,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11449,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11450,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11528,52);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11558,8);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11580,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11581,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11583,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11584,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11696,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11732,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11734,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11735,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11736,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11737,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11738,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11739,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11740,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11741,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11742,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11743,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11744,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11745,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11746,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11747,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11748,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11749,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11750,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11751,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11752,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11753,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11754,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11755,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11756,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11757,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11758,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11759,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11760,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11761,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11762,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11763,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11764,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11765,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11766,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11767,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11768,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11769,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11770,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11771,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11772,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11773,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11774,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11775,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11776,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11777,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11778,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11779,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11780,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11781,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11782,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11783,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11784,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11785,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11786,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11787,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11799,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11800,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11801,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11802,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11803,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11804,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11805,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11806,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11807,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11808,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11809,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11810,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11811,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11812,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11813,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11814,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11815,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11816,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11817,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11818,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11819,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11820,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11821,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11822,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11823,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11824,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11825,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11826,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11827,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11828,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11829,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11830,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11831,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11832,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11833,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11834,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11835,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11836,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11837,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11838,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11839,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11840,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11841,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11842,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11843,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11844,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11845,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11846,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11847,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11848,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11849,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11850,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11851,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11852,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11853,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11854,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11855,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11856,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11857,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11858,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11859,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11860,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11861,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11862,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11863,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11937,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (11976,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12133,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12135,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12139,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12155,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12286,8);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12313,24);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12331,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12332,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12333,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12334,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12335,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12336,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12337,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12338,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12339,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12340,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12341,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12342,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12343,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12344,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12345,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12346,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12347,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12348,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12349,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12350,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12351,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12352,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12353,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12354,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12355,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12356,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12357,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12358,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12359,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12360,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12361,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12362,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12363,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12364,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12365,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12366,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12367,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12368,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12369,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12370,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12371,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12373,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12374,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12375,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12376,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12377,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12378,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12379,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12380,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12381,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12382,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12383,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12384,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12385,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12386,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12387,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12388,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12389,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12390,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12391,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12392,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12393,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12394,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12395,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12396,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12397,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12398,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12399,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12400,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12401,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12402,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12403,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12404,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12405,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12406,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12407,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12408,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12409,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12410,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12940,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12941,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12944,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12945,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12946,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12947,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (12950,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (13203,52);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (13433,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (13434,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (13435,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (13436,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (13437,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (13438,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (13439,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (13440,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (13441,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (13442,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (13443,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (13444,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (13445,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (13446,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (13447,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (13448,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (13449,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (13450,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (13451,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (13452,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (13453,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (13454,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (13455,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (13456,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (13457,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (13458,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (13459,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (13460,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (13461,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (13462,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (13463,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (13464,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (13465,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (13466,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (13467,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (13468,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (13469,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (13470,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (13471,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (13472,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (13473,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (13474,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (13485,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (13486,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (13487,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (13488,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (13489,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (13490,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (13491,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (13492,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (13493,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (13494,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (13495,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (13496,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (13497,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (13498,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (13499,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (13500,1);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (13501,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (13548,12);
+INSERT  INTO `game_event_seasonal_questrelation` VALUES (13966,52);
+UNLOCK TABLES;
