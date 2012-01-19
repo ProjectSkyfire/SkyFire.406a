@@ -79,7 +79,7 @@ typedef ACE_UINT32 uint32;
 typedef ACE_UINT16 uint16;
 typedef ACE_UINT8 uint8;
 
-enum DBCFormer
+enum /*DBCFormer*/
 {
     FT_NA='x',                                              //not used or unknown, 4 byte size
     FT_NA_BYTE='X',                                         //not used or unknown, byte
