@@ -429,7 +429,7 @@ const BfTBCapturePointDataBase TBCapturePointDataBase[TB_MAX_WORKSHOP]=
 //*********************************
 
 //********************************************************************
-//*                Structs using for Building,Graveyard,Workshop         *
+// *                Structs using for Building,Graveyard,Workshop         *
 //********************************************************************
 
 // Structure for different building witch can be destroy during battle

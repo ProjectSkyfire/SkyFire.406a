@@ -2356,7 +2356,7 @@ bool Group::IsGuildGroup(uint32 guildId, bool AllInSameMap, bool AllInSameInstan
 
     bool ret = false;
     count = members.size();
-    for(std::vector<Player*>::iterator itr = members.begin(); itr != members.end(); ++itr) // Iterate through players
+    for (std::vector<Player*>::iterator itr = members.begin(); itr != members.end(); ++itr) // Iterate through players
     {
         if (Player* player = (*itr))
         {
