@@ -145,6 +145,7 @@ enum Opcodes
     SMSG_GUILD_REWARDS_LIST                          = 0x00C4C, // 4.0.6a 13623
     SMSG_GUILD_MAX_DAILY_XP                          = 0x0441C, // 4.0.6a 13623
     SMSG_GUILD_NEWS_UPDATE                           = 0x0485E, // 4.0.6a 13623
+    CMSG_GUILD_QUERY_NEWS                            = 0x03529, // 4.0.6a 13623
     CMSG_GUILD_REQUEST_NEWS                          = 0x03129, // 4.0.6a 13623
     SMSG_GUILD_XP_UPDATE                             = 0x0440E, // 4.0.6a 13623
     SMSG_GUILD_COMMAND_RESULT                        = 0x023C0, // 4.0.6a 13623

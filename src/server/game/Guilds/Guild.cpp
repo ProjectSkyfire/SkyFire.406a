@@ -1339,6 +1339,35 @@ void Guild::HandleRoster(WorldSession* session /*= NULL*/)
    sLog->outDebug(LOG_FILTER_GUILD, "WORLD: Sent (SMSG_GUILD_ROSTER)");
 }
 
+void Guild::SetGuildNews(WorldPacket &data)
+{
+    data << uint32(m_guild_news.size());
+
+    for(GuildNewsList::iterator itr = m_guild_news.begin(); itr != m_guild_news.end(); ++itr)
+        data << uint32(0);
+
+    for(GuildNewsList::iterator itr = m_guild_news.begin(); itr != m_guild_news.end(); ++itr)
+        data << uint32(getMSTime() - itr->m_timestamp);
+
+    for(GuildNewsList::iterator itr = m_guild_news.begin(); itr != m_guild_news.end(); ++itr)
+        data << uint64(MAKE_NEW_GUID(itr->m_source_guid, 0, HIGHGUID_PLAYER));
+
+    for(GuildNewsList::iterator itr = m_guild_news.begin(); itr != m_guild_news.end(); ++itr)
+    {
+        data << uint32(itr->m_value1);
+        data << uint32(itr->m_value2);
+    }
+
+    for(GuildNewsList::iterator itr = m_guild_news.begin(); itr != m_guild_news.end(); ++itr)
+        data << uint32(itr->m_type);
+
+    for(GuildNewsList::iterator itr = m_guild_news.begin(); itr != m_guild_news.end(); ++itr)
+        data << uint32(itr->m_flags);
+
+    for(GuildNewsList::iterator itr = m_guild_news.begin(); itr != m_guild_news.end(); ++itr)
+        data << uint32(0);
+}
+
 void Guild::SendGuildRankInfo(WorldSession* session)
 {
     WorldPacket data7(SMSG_GUILD_RANK);
@@ -2095,6 +2124,20 @@ bool Guild::LoadFromDB(Field* fields)
     _CreateLogHolders();
     _achievementMgr.LoadFromDB();
     return true;
+}
+
+void Guild::LoadGuildNewsFromDB(Field* fields)
+{
+    GuildNews gNews;
+
+    gNews.m_type = fields[0].GetUInt32();
+    gNews.m_timestamp = fields[1].GetUInt64();
+    gNews.m_value1 = fields[2].GetUInt32();
+    gNews.m_value2 = fields[3].GetUInt32();
+    gNews.m_source_guid = fields[4].GetUInt64();
+    gNews.m_flags = fields[5].GetUInt32();
+
+    m_guild_news.push_back(gNews);
 }
 
 void Guild::GenerateXPCap()
@@ -3068,6 +3111,8 @@ void Guild::GainXP(uint64 xp)
     data << uint64(GetCurrentXP());   // Curr exp
     data << uint64(GetTodayXP());     // Today exp
 
+    AddGuildNews(GUILD_NEWS_GUILD_LEVEL_REACHED, 0, level, 0);
+
     for (Members::const_iterator itr = m_members.begin(); itr != m_members.end(); ++itr)
         if (Player* player = itr->second->FindPlayer())
             player->GetSession()->SendPacket(&data);
@@ -3124,4 +3169,45 @@ void Guild::SaveXP()
         stmt->setUInt32(4, m_id);
         CharacterDatabase.Execute(stmt);
     }
+}
+
+void Guild::AddGuildNews(uint32 type, uint64 source_guild, int value1, int value2, int flags)
+{
+    GuildNews gNews;
+
+    gNews.m_type = type;
+    gNews.m_timestamp = getMSTime();
+    gNews.m_value1 = value1;
+    gNews.m_value2 = value2;
+    gNews.m_source_guid = source_guild;
+    gNews.m_flags = flags;
+
+    SQLTransaction trans = CharacterDatabase.BeginTransaction();
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_ADD_GUILD_NEWS);
+    stmt->setUInt32(0, GetId());
+    stmt->setUInt32(1, type);
+    stmt->setUInt8 (2, gNews.m_timestamp);
+    stmt->setUInt32(3, value1);
+    stmt->setUInt32(4, value2);
+    stmt->setUInt8 (5, source_guild);
+    stmt->setUInt64(6, flags);
+    CharacterDatabase.ExecuteOrAppend(trans, stmt);
+
+    WorldPacket data(SMSG_GUILD_NEWS_UPDATE, 8*5);
+    data << uint32(1);
+    data << uint32(0);
+    data << uint32(0);
+    data << uint64(source_guild);
+    data << uint32(value1);
+    data << uint32(value2);
+    data << uint32(type);
+    data << uint32(0);
+    data << uint32(0);
+
+    for (Members::const_iterator itr = m_members.begin(); itr != m_members.end(); ++itr)
+        if (Player *player = itr->second->FindPlayer())
+            player->GetSession()->SendPacket(&data);
+
+
+    m_guild_news.push_back(gNews);
 }

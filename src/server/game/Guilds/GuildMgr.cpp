@@ -124,6 +124,12 @@ void GuildMgr::LoadGuilds()
                     delete guild;
                     continue;
                 }
+                QueryResult gNews = CharacterDatabase.PQuery("SELECT type, date, value1, value2, source_guid, flags FROM guild_news WHERE guildid = %u ORDER BY date DESC", guild->GetId());
+                if (gNews)
+                {
+                    Field* fields = gNews->Fetch();
+                    guild->LoadGuildNewsFromDB(fields);
+                }
                 AddGuild(guild);
 
                 ++count;
