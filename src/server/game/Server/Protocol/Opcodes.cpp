@@ -567,7 +567,7 @@ void InitOpcodeTable()
     OPCODE( CMSG_GUILD_ADD_RANK,                          STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleGuildAddRankOpcode        );
     OPCODE( CMSG_GUILD_DEL_RANK,                          STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleGuildDelRankOpcode        );
     OPCODE( CMSG_GUILD_SWITCH_RANK,                       STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
-    OPCODE( CMSG_GUILD_SET_NOTE,                          STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
+    OPCODE( CMSG_GUILD_SET_NOTE,                          STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleGuildSetNoteOpcode        );
     OPCODE( CMSG_GUILD_QUERY_TRADESKILL,                  STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleGuildQueryTradeSkill      );
     OPCODE( SMSG_LOGIN_VERIFY_WORLD,                      STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( CMSG_CLEAR_EXPLORATION,                       STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
