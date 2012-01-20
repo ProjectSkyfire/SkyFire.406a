@@ -880,6 +880,7 @@ class WorldSession
         void HandleGuildBankBuyTab(WorldPacket& recv_data);
         void HandleQueryGuildBankTabText(WorldPacket& recv_data);
         void HandleSetGuildBankTabText(WorldPacket& recv_data);
+        void HandleGuildQueryNews(WorldPacket& recv_data);
         void HandleGuildQueryTradeSkill(WorldPacket& recv_data);
 
         // Refer-a-Friend
