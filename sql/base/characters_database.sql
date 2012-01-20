@@ -1799,6 +1799,55 @@ LOCK TABLES `guild` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `guild_achievement`
+--
+
+DROP TABLE IF EXISTS `guild_achievement`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `guild_achievement` (
+  `guildid` INT(20) UNSIGNED NOT NULL,
+  `achievement` SMALLINT(10) UNSIGNED NOT NULL,
+  `date` INT(20) UNSIGNED DEFAULT NULL,
+  PRIMARY KEY (`guildid`,`achievement`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `guild_achievement`
+--
+
+LOCK TABLES `guild_achievement` WRITE;
+/*!40000 ALTER TABLE `guild_achievement` DISABLE KEYS */;
+/*!40000 ALTER TABLE `guild_achievement` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `guild_achievement_progress`
+--
+
+DROP TABLE IF EXISTS `guild_achievement_progress`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `guild_achievement_progress` (
+	`guildid` INT(10) UNSIGNED NOT NULL,
+	`criteria` SMALLINT(5) UNSIGNED NOT NULL,
+	`counter` INT(10) UNSIGNED NOT NULL,
+	`date` INT(10) UNSIGNED NOT NULL DEFAULT '0',
+	PRIMARY KEY (`guildid`, `criteria`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `guild_achievement_progress`
+--
+
+LOCK TABLES `guild_achievement_progress` WRITE;
+/*!40000 ALTER TABLE `guild_achievement_progress` DISABLE KEYS */;
+/*!40000 ALTER TABLE `guild_achievement_progress` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `guild_bank_eventlog`
 --
 
@@ -1970,6 +2019,10 @@ CREATE TABLE `guild_member` (
   `BankRemSlotsTab4` int(10) unsigned NOT NULL DEFAULT '0',
   `BankResetTimeTab5` int(10) unsigned NOT NULL DEFAULT '0',
   `BankRemSlotsTab5` int(10) unsigned NOT NULL DEFAULT '0',
+  `BankResetTimeTab6` int(10) unsigned NOT NULL DEFAULT '0',
+  `BankRemSlotsTab6` int(10) unsigned NOT NULL DEFAULT '0',
+  `BankResetTimeTab7` int(10) unsigned NOT NULL DEFAULT '0',
+  `BankRemSlotsTab7` int(10) unsigned NOT NULL DEFAULT '0',
   UNIQUE KEY `guid_key` (`guid`),
   KEY `guildid_key` (`guildid`),
   KEY `guildid_rank_key` (`guildid`,`rank`)
