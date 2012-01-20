@@ -156,14 +156,15 @@ void ArenaTeamMgr::DistributeArenaPoints()
     SQLTransaction trans = CharacterDatabase.BeginTransaction();
 
     // Cycle that gives points to all players
-    for (std::map<uint32, uint32>::iterator playerItr = PlayerPoints.begin(); playerItr != PlayerPoints.end(); ++playerItr)
-    {
-        // Add points to player if online
-        if (Player* player = HashMapHolder<Player>::Find(playerItr->first))
-            player->ModifyArenaPoints(playerItr->second, &trans);
-        else    // Update database
-            trans->PAppend("UPDATE characters SET arenaPoints=arenaPoints+%u WHERE guid=%u", playerItr->second, playerItr->first);
-    }
+    //TODO: Fix it after implementing ModifyConquestPoints
+    //for (std::map<uint32, uint32>::iterator playerItr = PlayerPoints.begin(); playerItr != PlayerPoints.end(); ++playerItr)
+    //{
+    //    // Add points to player if online
+    //    if (Player* player = HashMapHolder<Player>::Find(playerItr->first))
+    //        player->ModifyConquestPoints(playerItr->second, &trans);
+    //    else    // Update database
+    //        trans->PAppend("UPDATE characters SET conquestPoints = conquestPoints + %u WHERE guid=%u", playerItr->second, playerItr->first);
+    //}
 
     CharacterDatabase.CommitTransaction(trans);
 

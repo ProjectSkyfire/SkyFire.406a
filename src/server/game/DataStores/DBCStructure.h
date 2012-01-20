@@ -813,6 +813,12 @@ struct CurrencyCategoryEntry
 };
 */
 
+struct ItemCurrencyCostEntry
+{
+    //uint32  Id;
+    uint32  ItemId;
+};
+
 struct CurrencyTypesEntry
 {
     uint32    ID;                                           // 0        not used
