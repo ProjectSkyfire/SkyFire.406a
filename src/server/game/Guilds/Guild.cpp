@@ -3045,7 +3045,7 @@ void Guild::GainXP(uint64 xp)
     if(new_xp > m_xp_cap)
         return;
 
-    if (level < sWorld->getIntConfig(CONFIG_GUILD_ADVANCEMENT_MAX_LEVEL))
+    if (new_xp >= nextLvlXP && level < sWorld->getIntConfig(CONFIG_GUILD_ADVANCEMENT_MAX_LEVEL))
     {
         new_xp -= nextLvlXP;
 
