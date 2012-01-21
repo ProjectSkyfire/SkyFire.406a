@@ -7492,7 +7492,6 @@ void Player::ModifyCurrency(uint32 id, int32 count, bool force)
     }
 }
 
-
 void Player::SetCurrency(uint32 id, uint32 count)
 {
     ModifyCurrency(id, int32(count) - GetCurrency(id));

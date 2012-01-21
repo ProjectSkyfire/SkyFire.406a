@@ -47,7 +47,7 @@ struct GuildNews
     uint32 m_value2;
     uint64 m_source_guid;
     uint32 m_flags;
-}; 
+};
 
 enum GuildMisc
 {

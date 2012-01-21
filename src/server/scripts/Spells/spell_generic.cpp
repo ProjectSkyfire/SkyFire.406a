@@ -1383,13 +1383,12 @@ class spell_gen_luck_of_the_draw : public SpellScriptLoader
 
                 const LfgDungeonSet dungeons = sLFGMgr->GetSelectedDungeons(GetUnitOwner()->GetGUID());
                 LfgDungeonSet::const_iterator itr = dungeons.begin();
-                
+
                 if (itr == dungeons.end())
                 {
                     Remove(AURA_REMOVE_BY_DEFAULT);
                     return;
                 }
-
 
                 LFGDungeonEntry const* randomDungeon = sLFGDungeonStore.LookupEntry(*itr);
                 Group* group = GetUnitOwner()->ToPlayer()->GetGroup();

@@ -3208,6 +3208,5 @@ void Guild::AddGuildNews(uint32 type, uint64 source_guild, int value1, int value
         if (Player *player = itr->second->FindPlayer())
             player->GetSession()->SendPacket(&data);
 
-
     m_guild_news.push_back(guildNews);
 }
