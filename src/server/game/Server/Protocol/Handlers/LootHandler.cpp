@@ -33,11 +33,14 @@
 
 void WorldSession::HandleAutostoreLootItemOpcode(WorldPacket & recv_data)
 {
+    bool isCurrency = recv_data.GetOpcode() == CMSG_AUTOSTORE_LOOT_CURRENCY;
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: CMSG_AUTOSTORE_LOOT_ITEM");
     Player* player = GetPlayer();
     uint64 lguid = player->GetLootGUID();
     Loot* loot = NULL;
     uint8 lootSlot = 0;
+    uint32 objEntry = 0;
+    uint32 objType = 0;
 
     recv_data >> lootSlot;
 
@@ -52,6 +55,8 @@ void WorldSession::HandleAutostoreLootItemOpcode(WorldPacket & recv_data)
             return;
         }
 
+        objEntry = go->GetGOInfo()->entry;
+        objType = 3;
         loot = &go->loot;
     }
     else if (IS_ITEM_GUID(lguid))
@@ -64,6 +69,8 @@ void WorldSession::HandleAutostoreLootItemOpcode(WorldPacket & recv_data)
             return;
         }
 
+        objEntry = pItem->GetTemplate()->ItemId;
+        objType = 2;
         loot = &pItem->loot;
     }
     else if (IS_CORPSE_GUID(lguid))
@@ -89,10 +96,24 @@ void WorldSession::HandleAutostoreLootItemOpcode(WorldPacket & recv_data)
             return;
         }
 
+        objEntry = creature->GetCreatureInfo()->Entry;
+        objType = 1;
         loot = &creature->loot;
     }
 
-    player->StoreLootItem(lootSlot, loot);
+    if (isCurrency && loot)
+    {
+        uint8 currencys = 0;
+        std::list<CurrencyLoot> temp = sObjectMgr->GetCurrencyLoot(objEntry, objType);
+        for (std::list<CurrencyLoot>::iterator i = temp.begin(); i != temp.end(); ++i)
+        {
+			if (currencys == lootSlot)
+				player->SetCurrency(i->CurrencyId, i->CurrencyAmount * 100);
+			++currencys;
+        }
+    }
+    else if (loot)
+        player->StoreLootItem(lootSlot, loot);
 }
 
 void WorldSession::HandleLootMoneyOpcode(WorldPacket & /*recv_data*/)

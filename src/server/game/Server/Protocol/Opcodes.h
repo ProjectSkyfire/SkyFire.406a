@@ -283,6 +283,7 @@ enum Opcodes
     CMSG_AUTOEQUIP_GROUND_ITEM                       = 0x10044, // Unknown opcode ID
     CMSG_AUTOSTORE_GROUND_ITEM                       = 0x02FC8, // 4.0.6a 13623
     CMSG_AUTOSTORE_LOOT_ITEM                         = 0x0B2E8, // 4.0.6a 13623
+    CMSG_AUTOSTORE_LOOT_CURRENCY                     = 0x00991, // 4.0.6a 13623
     CMSG_STORE_LOOT_IN_SLOT                          = 0x07FCC, // 4.0.6a 13623
     CMSG_AUTOEQUIP_ITEM                              = 0x0E1C0, // 4.0.6a 13623
     CMSG_AUTOSTORE_BAG_ITEM                          = 0x0EDCC, // 4.0.6a 13623

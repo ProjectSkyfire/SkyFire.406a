@@ -125,6 +125,18 @@ struct LootStoreItem
                                                             // Checks correctness of values
 };
 
+struct CurrencyLoot
+{
+    uint32 Entry;
+    uint8 Type;
+    uint32 CurrencyId;
+    uint32 CurrencyAmount;
+
+    CurrencyLoot(uint32 _entry, uint8 _type, uint32 _CurrencyId, uint32 _CurrencyAmount) : Entry(_entry), Type(_type), CurrencyId(_CurrencyId), CurrencyAmount(_CurrencyAmount)
+    {
+    }
+};
+
 typedef std::set<uint32> AllowedLooterSet;
 
 struct LootItem
@@ -358,10 +370,12 @@ struct Loot
 struct LootView
 {
     Loot &loot;
-    Player* viewer;
+    Player *viewer;
     PermissionTypes permission;
-    LootView(Loot &_loot, Player* _viewer, PermissionTypes _permission = ALL_PERMISSION)
-        : loot(_loot), viewer(_viewer), permission(_permission) {}
+    uint32 objEntry;
+    uint8 objType;
+    LootView(Loot &_loot, Player *_viewer, uint32 _entry, uint8 _type, PermissionTypes _permission = ALL_PERMISSION)
+        : loot(_loot), viewer(_viewer), objEntry(_entry), objType(_type),  permission(_permission) {}
 };
 
 extern LootStore LootTemplates_Creature;

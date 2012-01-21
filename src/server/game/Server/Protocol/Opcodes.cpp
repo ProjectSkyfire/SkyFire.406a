@@ -281,6 +281,7 @@ void InitOpcodeTable()
     OPCODE( CMSG_AUTOEQUIP_GROUND_ITEM,                   STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
     OPCODE( CMSG_AUTOSTORE_GROUND_ITEM,                   STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
     OPCODE( CMSG_AUTOSTORE_LOOT_ITEM,                     STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleAutostoreLootItemOpcode   );
+    OPCODE( CMSG_AUTOSTORE_LOOT_CURRENCY,                 STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleAutostoreLootItemOpcode   );
     OPCODE( CMSG_STORE_LOOT_IN_SLOT,                      STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
     OPCODE( CMSG_AUTOEQUIP_ITEM,                          STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleAutoEquipItemOpcode       );
     OPCODE( CMSG_AUTOSTORE_BAG_ITEM,                      STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleAutoStoreBagItemOpcode    );

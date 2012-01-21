@@ -9535,7 +9535,36 @@ void Player::SendLoot(uint64 guid, LootType loot_type)
 
     data << uint64(guid);
     data << uint8(loot_type);
-    data << LootView(*loot, this, permission);
+
+    uint32 objEntry = 0;
+    uint8 objType = 0;
+
+    if (IS_ITEM_GUID(guid))
+    {
+        if (Item *item = GetItemByGuid(guid))
+        {
+			objEntry = item->GetTemplate()->ItemId;
+            objType = 2;
+        }
+    }
+    else if (IS_CREATURE_GUID(guid))
+    {
+        if (Creature* creature = GetMap()->GetCreature(guid))
+        {
+            objEntry = creature->GetCreatureInfo()->Entry;
+            objType = 1;
+        }
+    }
+    else
+    {
+        if (GameObject *gobject = GetMap()->GetGameObject(guid))
+        {
+			objEntry = gobject->GetGOInfo()->entry;
+            objType = 3;
+        }
+    }
+
+    data << LootView(*loot, this, objEntry, objType, permission);
 
     SendDirectMessage(&data);
 

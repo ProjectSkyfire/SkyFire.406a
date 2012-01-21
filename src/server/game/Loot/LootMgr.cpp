@@ -952,6 +952,16 @@ ByteBuffer& operator<<(ByteBuffer& b, LootView const& lv)
             }
         }
     }
+	
+    uint8 currencys = 0;
+	 std::list<CurrencyLoot> temp = sObjectMgr->GetCurrencyLoot(lv.objEntry, lv.objType);
+    for (std::list<CurrencyLoot>::iterator i = temp.begin(); i != temp.end(); ++i)
+    {
+        b << uint8(currencys);
+        b << uint32(i->CurrencyId);
+        b << uint32(i->CurrencyAmount);
+        ++currencys;
+    }
 
     //update number of items shown
     b.put<uint8>(count_pos, itemsShown);

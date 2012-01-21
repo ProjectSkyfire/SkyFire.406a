@@ -287,6 +287,17 @@ ObjectMgr::~ObjectMgr()
     m_mCacheTrainerSpellMap.clear();
 }
 
+std::list<CurrencyLoot> ObjectMgr::GetCurrencyLoot(uint32 entry, uint8 type)
+{
+    std::list<CurrencyLoot> temp;
+    for (CurrencysLoot::iterator itr = mCurrencysLoot.begin(); itr != mCurrencysLoot.end(); ++itr)
+    {
+        if (itr->Entry == entry && itr->Type == type)
+            temp.push_back(*itr);
+    }
+    return temp;
+}
+
 void ObjectMgr::AddArenaTeam(ArenaTeam* arenaTeam)
 {
     mArenaTeamMap[arenaTeam->GetId()] = arenaTeam;
@@ -6713,6 +6724,45 @@ std::string ObjectMgr::GeneratePetName(uint32 entry)
 uint32 ObjectMgr::GeneratePetNumber()
 {
     return ++m_hiPetNumber;
+}
+
+void ObjectMgr::LoadCurrencysLoot()
+{
+    QueryResult result = WorldDatabase.PQuery("SELECT entry, type, currencyId, currencyAmount FROM currency_loot");
+    if (!result)
+        return;
+
+    uint32 count = 0;
+    do
+    {
+        Field* field = result->Fetch();
+
+        uint32 entry = field[0].GetUInt32();
+        uint8 type = field[1].GetInt8();
+        uint32 currencyId = field[2].GetUInt32();
+        uint32 currencyAmount = field[3].GetUInt32();
+
+        if (type < 1)
+        {
+            sLog->outString("Currency 'type' can not be < 1 (entry = %u type = %i)", entry, type);
+            continue;
+        }
+        else if (type > 3)
+        {
+            sLog->outString("Currency 'type' can not be > 3 (entry = %u type = %i)", entry, type);
+            continue;
+        }
+
+        CurrencyLoot loot = CurrencyLoot(entry, type, currencyId, currencyAmount);
+        mCurrencysLoot.push_back(loot);
+        ++count;
+    }
+    while (result->NextRow());
+
+    if (count)
+        sLog->outString("Loaded %u currency loot defination", count);
+    else
+        sLog->outString("Loaded 0 currency loot defination. Table is empty!");
 }
 
 void ObjectMgr::LoadCorpses()
