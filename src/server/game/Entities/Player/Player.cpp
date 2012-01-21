@@ -326,11 +326,11 @@ Item* TradeData::GetSpellCastItem() const
     return _spellCastItem ? _player->GetItemByGuid(_spellCastItem) : NULL;
 }
 
-void TradeData::SetItem(TradeSlots slot, Item* item, bool update)
+void TradeData::SetItem(TradeSlots slot, Item* item)
 {
     uint64 itemGuid = item ? item->GetGUID() : 0;
 
-    if (_items[slot] == itemGuid && !update)
+    if (_items[slot] == itemGuid)
         return;
 
     _items[slot] = itemGuid;
@@ -13329,6 +13329,14 @@ void Player::SplitItem(uint16 src, uint16 dst, uint32 count)
         return;
     }
 
+    //! If trading
+    if (TradeData* tradeData = GetTradeData())
+    {
+        //! If current item is in trade window (only possible with packet spoofing - silent return)
+        if (tradeData->GetTradeSlotForItem(pSrcItem->GetGUID()) != TRADE_SLOT_INVALID)
+            return;
+    }
+
     sLog->outDebug(LOG_FILTER_PLAYER_ITEMS, "STORAGE:  SplitItem bag = %u, slot = %u, item = %u, count = %u", dstbag, dstslot, pSrcItem->GetEntry(), count);
     Item *pNewItem = pSrcItem->CloneItem(count, this);
     if (!pNewItem)
@@ -13398,17 +13406,6 @@ void Player::SplitItem(uint16 src, uint16 dst, uint32 count)
         EquipItem(dest, pNewItem, true);
         AutoUnequipOffhandIfNeed();
     }
-
-    //! Make sure that code below only is executed when trading
-    if (!GetTradeData())
-        return;
-
-    //! Update item count in trade window, prevent spoofing
-    //! Since pSrcItem has its count updated (see above), Item::GetCount() will return the new count
-    //! in the underlying packet builder function
-    TradeSlots const slot = GetTradeData()->GetTradeSlotForItem(pSrcItem->GetGUID());
-    if (slot != TRADE_SLOT_INVALID)
-        GetTradeData()->SetItem(slot, pSrcItem, true);
 }
 
 void Player::SwapItem(uint16 src, uint16 dst)
