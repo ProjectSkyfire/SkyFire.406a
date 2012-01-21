@@ -27,7 +27,7 @@ class GuildAchievementMgr : public AchievementMgrBase
         static void DeleteFromDB(uint32 guid_low);
         void LoadFromDB();
         void SaveToDB(SQLTransaction& trans);
-        Guild* GetGuild() { return m_guild; }
+        Guild* GetGuild() { return _guild; }
         void ResetAchievementCriteria(AchievementCriteriaTypes type, uint32 miscvalue1 = 0, uint32 miscvalue2 = 0, bool evenIfCriteriaComplete = false);
         void CompletedAchievement(AchievementEntry const* entry, Player* player);
         void SendAllAchievementData();

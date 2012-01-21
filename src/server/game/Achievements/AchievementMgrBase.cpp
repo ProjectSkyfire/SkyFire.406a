@@ -303,7 +303,7 @@ void AchievementMgrBase::ResetAchievementCriteria(AchievementCriteriaTypes type,
 
 void AchievementMgrBase::SendCriteriaUpdate(AchievementCriteriaEntry const* entry, CriteriaProgress const* progress, uint32 timeElapsed, bool timedCompleted, Player* player)
 {
-    if(!m_guild)
+    if(!_guild)
     {
         WorldPacket data(SMSG_CRITERIA_UPDATE, 8+4+8);
         data << uint32(entry->ID);
@@ -330,7 +330,7 @@ void AchievementMgrBase::SendCriteriaUpdate(AchievementCriteriaEntry const* entr
     // the counter is packed like a packed Guid
     data.appendPackGUID(progress->counter);
 
-    uint64 guid = MAKE_NEW_GUID(m_guild->GetId(), 0, HIGHGUID_GUILD);
+    uint64 guid = MAKE_NEW_GUID(_guild->GetId(), 0, HIGHGUID_GUILD);
     data.appendPackGUID(guid);
 
     if (!entry->timeLimit)
@@ -345,10 +345,10 @@ void AchievementMgrBase::SendCriteriaUpdate(AchievementCriteriaEntry const* entr
 
 void AchievementMgrBase::SendDirectMessageToAll(WorldPacket* data)
 {
-    if (!m_guild)
+    if (!_guild)
         return;
 
-    Guild::Members list = m_guild->GetMembers();
+    Guild::Members list = _guild->GetMembers();
     for (Guild::Members::iterator itr = list.begin(); itr != list.end(); ++itr)
         if (Player* player = itr->second->FindPlayer())
             player->SendDirectMessage(data);
@@ -1415,7 +1415,7 @@ void AchievementMgrBase::CompletedCriteriaFor(AchievementEntry const* achievemen
 
     if (IsCompletedAchievement(achievement, player))
     {
-        if(m_guild)
+        if(_guild)
             CompletedAchievement(achievement, player);
         else
             CompletedAchievement(achievement);
@@ -1568,7 +1568,7 @@ void AchievementMgrBase::RemoveCriteriaProgress(const AchievementCriteriaEntry *
     if (criteriaProgress == m_criteriaProgress.end())
         return;
 
-    if(!m_guild)
+    if(!_guild)
     {
         WorldPacket data(SMSG_CRITERIA_DELETED, 4);
         data << uint32(entry->ID);
@@ -1595,10 +1595,10 @@ bool AchievementMgrBase::CanUpdateCriteria(AchievementCriteriaEntry const* crite
     if (DisableMgr::IsDisabledFor(DISABLE_TYPE_ACHIEVEMENT_CRITERIA, criteria->ID, NULL))
         return false;
 
-    if (m_guild && !(achievement->flags & ACHIEVEMENT_FLAG_GUILD_ACHIEVEMENT))
+    if (_guild && !(achievement->flags & ACHIEVEMENT_FLAG_GUILD_ACHIEVEMENT))
         return false;
 
-    if (!m_guild && (achievement->flags & ACHIEVEMENT_FLAG_GUILD_ACHIEVEMENT))
+    if (!_guild && (achievement->flags & ACHIEVEMENT_FLAG_GUILD_ACHIEVEMENT))
         return false;
 
     if (achievement->mapID != -1 && player->GetMapId() != uint32(achievement->mapID))

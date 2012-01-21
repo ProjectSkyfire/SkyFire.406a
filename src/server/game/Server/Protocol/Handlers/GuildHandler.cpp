@@ -704,7 +704,7 @@ void WorldSession::HandleGuildQueryTradeSkill(WorldPacket &recv_data)
 {
     sLog->outDebug(LOG_FILTER_GUILD, "WORLD: Received CMSG_GUILD_QUERY_TRADESKILL");
 
-    if (Guild* pGuild = _GetPlayerGuild(this))
+    if (Guild* guild = _GetPlayerGuild(this))
     {
         WorldPacket data(SMSG_GUILD_TRADESKILL_UPDATE, 4);
         data << uint32(0);
@@ -718,10 +718,10 @@ void WorldSession::HandleGuildQueryNews(WorldPacket &recv_data)
     sLog->outDebug(LOG_FILTER_GUILD, "WORLD: Received CMSG_GUILD_QUERY_NEWS");
 
     // Sending guild news
-    if (Guild* pGuild = _GetPlayerGuild(this))
+    if (Guild* guild = _GetPlayerGuild(this))
     {
         WorldPacket data(SMSG_GUILD_NEWS_UPDATE, 4);
-        pGuild->SetGuildNews(data);
+        guild->SetGuildNews(data);
         SendPacket(&data);
     }
 }

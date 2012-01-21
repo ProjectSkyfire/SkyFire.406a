@@ -219,7 +219,7 @@ namespace Trinity
 class AchievementMgrBase
 {
     public:
-        AchievementMgrBase(Player* player = NULL, Guild* guild = NULL) : _player(player), m_guild(guild), m_achievementPoints(0) { }
+        AchievementMgrBase(Player* player = NULL, Guild* guild = NULL) : _player(player), _guild(guild), m_achievementPoints(0) { }
         virtual ~AchievementMgrBase() { };
         virtual bool HasAchieved(uint32) const;
         virtual bool CanUpdateCriteria(AchievementCriteriaEntry const* criteria, AchievementEntry const* achievement, Player* player, uint32 miscValue1 = 0, uint32 miscValue2 = 0, Unit* unit = NULL);
@@ -244,6 +244,6 @@ class AchievementMgrBase
         TimedAchievementMap m_timedAchievements;      // Criteria id/time left in MS
 
         Player* _player;
-        Guild* m_guild;
+        Guild* _guild;
 };
 #endif

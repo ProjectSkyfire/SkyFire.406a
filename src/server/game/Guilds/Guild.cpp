@@ -2128,16 +2128,16 @@ bool Guild::LoadFromDB(Field* fields)
 
 void Guild::LoadGuildNewsFromDB(Field* fields)
 {
-    GuildNews gNews;
+    GuildNews guildNews;
 
-    gNews.m_type = fields[0].GetUInt32();
-    gNews.m_timestamp = fields[1].GetUInt64();
-    gNews.m_value1 = fields[2].GetUInt32();
-    gNews.m_value2 = fields[3].GetUInt32();
-    gNews.m_source_guid = fields[4].GetUInt64();
-    gNews.m_flags = fields[5].GetUInt32();
+    guildNews.m_type = fields[0].GetUInt32();
+    guildNews.m_timestamp = fields[1].GetUInt64();
+    guildNews.m_value1 = fields[2].GetUInt32();
+    guildNews.m_value2 = fields[3].GetUInt32();
+    guildNews.m_source_guid = fields[4].GetUInt64();
+    guildNews.m_flags = fields[5].GetUInt32();
 
-    m_guild_news.push_back(gNews);
+    m_guild_news.push_back(guildNews);
 }
 
 void Guild::GenerateXPCap()
@@ -3173,20 +3173,20 @@ void Guild::SaveXP()
 
 void Guild::AddGuildNews(uint32 type, uint64 source_guild, int value1, int value2, int flags)
 {
-    GuildNews gNews;
+    GuildNews guildNews;
 
-    gNews.m_type = type;
-    gNews.m_timestamp = getMSTime();
-    gNews.m_value1 = value1;
-    gNews.m_value2 = value2;
-    gNews.m_source_guid = source_guild;
-    gNews.m_flags = flags;
+    guildNews.m_type = type;
+    guildNews.m_timestamp = getMSTime();
+    guildNews.m_value1 = value1;
+    guildNews.m_value2 = value2;
+    guildNews.m_source_guid = source_guild;
+    guildNews.m_flags = flags;
 
     SQLTransaction trans = CharacterDatabase.BeginTransaction();
     PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_ADD_GUILD_NEWS);
     stmt->setUInt32(0, GetId());
     stmt->setUInt32(1, type);
-    stmt->setUInt8 (2, gNews.m_timestamp);
+    stmt->setUInt8 (2, guildNews.m_timestamp);
     stmt->setUInt32(3, value1);
     stmt->setUInt32(4, value2);
     stmt->setUInt8 (5, source_guild);
@@ -3209,5 +3209,5 @@ void Guild::AddGuildNews(uint32 type, uint64 source_guild, int value1, int value
             player->GetSession()->SendPacket(&data);
 
 
-    m_guild_news.push_back(gNews);
+    m_guild_news.push_back(guildNews);
 }
