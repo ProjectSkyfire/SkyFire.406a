@@ -21,8 +21,6 @@
 #define TRINITY_FLEEINGMOVEMENTGENERATOR_H
 
 #include "MovementGenerator.h"
-#include "DestinationHolder.h"
-#include "Traveller.h"
 
 template<class T>
 class FleeingMovementGenerator
@@ -34,8 +32,7 @@ class FleeingMovementGenerator
         void Initialize(T &);
         void Finalize(T &);
         void Reset(T &);
-        bool Update(T &, const uint32);
-        bool GetDestination(float &x, float &y, float &z) const;
+        bool Update(T &, const uint32 &);
 
         MovementGeneratorType GetMovementGeneratorType() { return FLEEING_MOTION_TYPE; }
 
@@ -57,8 +54,6 @@ class FleeingMovementGenerator
         float i_cur_angle;
         uint64 i_frightGUID;
         TimeTracker i_nextCheckTime;
-
-        DestinationHolder< Traveller<T> > i_destinationHolder;
 };
 
 class TimedFleeingMovementGenerator
@@ -78,3 +73,4 @@ class TimedFleeingMovementGenerator
 };
 
 #endif
+

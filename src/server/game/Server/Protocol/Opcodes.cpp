@@ -1221,8 +1221,8 @@ void InitOpcodeTable()
     OPCODE( SMSG_MOVE_GRAVITY_ENABLE,                     STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( CMSG_MOVE_GRAVITY_ENABLE_ACK,                 STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
     OPCODE( SMSG_MOVE_LEVITATING,                         STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
-    OPCODE( SMSG_SPLINE_MOVE_UNKNOWN_1235,                STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
-    OPCODE( SMSG_SPLINE_MOVE_UNKNOWN_1236,                STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
+    OPCODE( SMSG_SPLINE_MOVE_GRAVITY_DISABLE,             STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
+    OPCODE( SMSG_SPLINE_MOVE_GRAVITY_ENABLE,              STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( CMSG_EQUIPMENT_SET_USE,                       STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleEquipmentSetUse           );
     OPCODE( SMSG_EQUIPMENT_SET_USE_RESULT,                STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( SMSG_UNKNOWN_1240,                            STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );

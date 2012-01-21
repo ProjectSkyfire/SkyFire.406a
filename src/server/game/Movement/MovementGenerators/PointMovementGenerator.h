@@ -21,8 +21,6 @@
 #define TRINITY_POINTMOVEMENTGENERATOR_H
 
 #include "MovementGenerator.h"
-#include "DestinationHolder.h"
-#include "Traveller.h"
 #include "FollowerReference.h"
 
 template<class T>
@@ -30,13 +28,13 @@ class PointMovementGenerator
 : public MovementGeneratorMedium< T, PointMovementGenerator<T> >
 {
     public:
-        PointMovementGenerator(uint32 _id, float _x, float _y, float _z) : id(_id),
-            i_x(_x), i_y(_y), i_z(_z), i_nextMoveTime(0), arrived(false) {}
+        PointMovementGenerator(uint32 _id, float _x, float _y, float _z, float _speed = 0.0f) : id(_id),
+            i_x(_x), i_y(_y), i_z(_z), speed(_speed) {}
 
         void Initialize(T &);
-        void Finalize(T &unit);
-        void Reset(T &unit){unit.StopMoving();}
-        bool Update(T &, const uint32 diff);
+        void Finalize(T &);
+        void Reset(T &);
+        bool Update(T &, const uint32 &);
 
         void MovementInform(T &);
 
@@ -46,9 +44,7 @@ class PointMovementGenerator
     private:
         uint32 id;
         float i_x, i_y, i_z;
-        TimeTracker i_nextMoveTime;
-        DestinationHolder< Traveller<T> > i_destinationHolder;
-        bool arrived;
+        float speed;
 };
 
 class AssistanceMovementGenerator
@@ -62,4 +58,19 @@ class AssistanceMovementGenerator
         void Finalize(Unit &);
 };
 
+// Does almost nothing - just doesn't allows previous movegen interrupt current effect.
+class EffectMovementGenerator : public MovementGenerator
+{
+    public:
+        explicit EffectMovementGenerator(uint32 Id) : m_Id(Id) {}
+        void Initialize(Unit &) {}
+        void Finalize(Unit &unit);
+        void Reset(Unit &) {}
+        bool Update(Unit &u, const uint32);
+        MovementGeneratorType GetMovementGeneratorType() { return EFFECT_MOTION_TYPE; }
+    private:
+        uint32 m_Id;
+};
+
 #endif
+

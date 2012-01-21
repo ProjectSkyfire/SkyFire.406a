@@ -54,7 +54,7 @@ class RotateMovementGenerator : public MovementGenerator
 class DistractMovementGenerator : public MovementGenerator
 {
     public:
-        explicit DistractMovementGenerator(uint32 timer) : _timer(timer) {}
+        explicit DistractMovementGenerator(uint32 timer) : m_timer(timer) {}
 
         void Initialize(Unit& owner);
         void Finalize(Unit& owner);
@@ -63,7 +63,7 @@ class DistractMovementGenerator : public MovementGenerator
         MovementGeneratorType GetMovementGeneratorType() { return DISTRACT_MOTION_TYPE; }
 
     private:
-        uint32 _timer;
+        uint32 m_timer;
 };
 
 class AssistanceDistractMovementGenerator : public DistractMovementGenerator
@@ -77,3 +77,4 @@ class AssistanceDistractMovementGenerator : public DistractMovementGenerator
 };
 
 #endif
+

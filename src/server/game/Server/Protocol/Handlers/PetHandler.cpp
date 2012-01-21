@@ -122,7 +122,7 @@ void WorldSession::HandlePetAction(WorldPacket & recv_data)
     }
 
     if (pet->GetTypeId() != TYPEID_PLAYER && flag == ACT_COMMAND && spellid == COMMAND_MOVE)
-        pet->SendMonsterMove(pos_x, pos_y, pos_z, 3000);
+        pet->MonsterMoveWithSpeed(pos_x, pos_y, pos_z, 3000);
 }
 
 void WorldSession::HandlePetStopAttack(WorldPacket &recv_data)

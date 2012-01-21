@@ -1239,8 +1239,8 @@ enum Opcodes
     SMSG_MOVE_GRAVITY_ENABLE                         = 0x1021B, // Unknown opcode ID
     CMSG_MOVE_GRAVITY_ENABLE_ACK                     = 0x07DE8, // 4.0.6a 13623
     SMSG_MOVE_LEVITATING                             = 0x0B8AC, // 4.0.6a 13623
-    SMSG_SPLINE_MOVE_UNKNOWN_1235                    = 0x1021E, // Unknown opcode ID
-    SMSG_SPLINE_MOVE_UNKNOWN_1236                    = 0x1022F, // 4.0.6a 13623
+    SMSG_SPLINE_MOVE_GRAVITY_DISABLE                 = 0x1021E, // Unknown opcode ID
+    SMSG_SPLINE_MOVE_GRAVITY_ENABLE                  = 0x1022F, // 4.0.6a 13623
     CMSG_EQUIPMENT_SET_USE                           = 0x0E8A0, // 4.0.6a 13623
     SMSG_EQUIPMENT_SET_USE_RESULT                    = 0x076AC, // 4.0.6a 13623
     SMSG_UNKNOWN_1240                                = 0x0B8E0, // 4.0.6a 13623

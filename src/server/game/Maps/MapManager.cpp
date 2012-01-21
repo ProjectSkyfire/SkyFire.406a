@@ -26,7 +26,6 @@
 #include "GridDefines.h"
 #include "MapInstanced.h"
 #include "InstanceScript.h"
-#include "DestinationHolderImp.h"
 #include "Config.h"
 #include "World.h"
 #include "CellImpl.h"

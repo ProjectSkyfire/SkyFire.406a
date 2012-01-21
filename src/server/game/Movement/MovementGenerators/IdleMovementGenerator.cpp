@@ -96,10 +96,10 @@ DistractMovementGenerator::Finalize(Unit& owner)
 bool
 DistractMovementGenerator::Update(Unit& /*owner*/, const uint32 time_diff)
 {
-    if (time_diff > _timer)
+    if (time_diff > m_timer)
         return false;
 
-    _timer -= time_diff;
+    m_timer -= time_diff;
     return true;
 }
 
@@ -109,3 +109,4 @@ AssistanceDistractMovementGenerator::Finalize(Unit &unit)
     unit.ClearUnitState(UNIT_STAT_DISTRACTED);
     unit.ToCreature()->SetReactState(REACT_AGGRESSIVE);
 }
+
