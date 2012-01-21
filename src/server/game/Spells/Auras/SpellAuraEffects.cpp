@@ -3148,15 +3148,9 @@ void AuraEffect::HandleModPossess(AuraApplication const* aurApp, uint8 mode, boo
     }
 
     if (apply)
-    {
-        if (target->SetCharmedBy(caster, CHARM_TYPE_POSSESS, aurApp))
-            caster->ToPlayer()->SetMover(target);
-    }
+        target->SetCharmedBy(caster, CHARM_TYPE_POSSESS, aurApp);
     else
-    {
         target->RemoveCharmedBy(caster);
-        caster->ToPlayer()->SetMover(caster);
-    }
 }
 
 // only one spell has this aura
@@ -3184,13 +3178,11 @@ void AuraEffect::HandleModPossessPet(AuraApplication const* aurApp, uint8 mode, 
         if (caster->ToPlayer()->GetPet() != pet)
             return;
 
-        if (pet->SetCharmedBy(caster, CHARM_TYPE_POSSESS, aurApp))
-            caster->ToPlayer()->SetMover(pet);
+        pet->SetCharmedBy(caster, CHARM_TYPE_POSSESS, aurApp);
     }
     else
     {
         pet->RemoveCharmedBy(caster);
-        caster->ToPlayer()->SetMover(caster);
 
         if (!pet->IsWithinDistInMap(caster, pet->GetMap()->GetVisibilityRange()))
             pet->Remove(PET_SLOT_ACTUAL_PET_SLOT, true);
