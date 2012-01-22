@@ -383,7 +383,7 @@ void LoadDBCStores(const std::string& dataPath, uint32& availableDbcLocales)
     LoadDBC(availableDbcLocales, bad_dbc_files, sItemBagFamilyStore,           dbcPath, "ItemBagFamily.dbc");
  // LoadDBC(availableDbcLocales, bad_dbc_files, sItemDisplayInfoStore,         dbcPath, "ItemDisplayInfo.dbc");     -- not used currently
  // LoadDBC(availableDbcLocales, bad_dbc_files, sItemCondExtCostsStore,        dbcPath, "ItemCondExtCosts.dbc");
-    LoadDBC(availableDbcLocales, bad_dbc_files, sItemExtendedCostStore,        dbcPath, "ItemExtendedCost.dbc");
+ // LoadDBC(availableDbcLocales, bad_dbc_files, sItemExtendedCostStore,        dbcPath, "ItemExtendedCost.dbc");
     LoadDBC(availableDbcLocales, bad_dbc_files, sItemLimitCategoryStore,       dbcPath, "ItemLimitCategory.dbc");
     LoadDBC(availableDbcLocales, bad_dbc_files, sItemRandomPropertiesStore,    dbcPath, "ItemRandomProperties.dbc");
     LoadDBC(availableDbcLocales, bad_dbc_files, sItemRandomSuffixStore,        dbcPath, "ItemRandomSuffix.dbc");
@@ -656,13 +656,12 @@ void LoadDBCStores(const std::string& dataPath, uint32& availableDbcLocales)
         exit(1);
     }
 
-    // Check loaded DBC files proper version
-    if (!sAreaStore.LookupEntry(4445)              ||       // last area (areaflag) added in 4.0.6a
-        !sCharTitlesStore.LookupEntry(229)         ||       // last char title added in 4.0.6a
-        !sGemPropertiesStore.LookupEntry(1858)     ||       // last gem property added in 4.0.6a
-        !sItemExtendedCostStore.LookupEntry(3400)  ||       // last item extended cost added in 4.0.6a
-        !sMapStore.LookupEntry(767)                ||       // last map added in 4.0.6a
-        !sSpellStore.LookupEntry(96539)            )        // last added spell in 4.0.6a
+    // Check loaded DBC files proper version for 4.3.0 15050
+    if (!sAreaStore.LookupEntry(5995)              ||       // last area (areaflag) added in 4.3.0
+        !sCharTitlesStore.LookupEntry(287)         ||       // last char title added in 4.3.0
+        !sGemPropertiesStore.LookupEntry(2250)     ||       // last gem property added in 4.3.0
+        !sMapStore.LookupEntry(980)                ||       // last map added in 4.3.0
+        !sSpellStore.LookupEntry(110966)           )        // last added spell in 4.3.0
     {
         sLog->outError("You have _outdated_ DBC files. Please extract correct versions from current using client.");
         exit(1);
