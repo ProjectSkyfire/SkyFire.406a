@@ -128,6 +128,8 @@ class WorldSocket : protected WorldHandler
         virtual ~WorldSocket (void);
 
         /// Called on open , the void* is the acceptor.
+        int SendAuthConnection();
+        int HandleAuthConnection(WorldPacket& recvPacket);
         virtual int open (void *);
 
         /// Called on failures inside of the acceptor, don't call from your code.
@@ -166,6 +168,9 @@ class WorldSocket : protected WorldHandler
 
         /// Called by ProcessIncoming() on CMSG_AUTH_SESSION.
         int HandleAuthSession (WorldPacket& recvPacket);
+
+        /// Called by ProcessIncoming() on MSG_VERIFY_CONNECTIVITY.
+        int HandleSendAuthSession();
 
         /// Called by ProcessIncoming() on CMSG_PING.
         int HandlePing (WorldPacket& recvPacket);
