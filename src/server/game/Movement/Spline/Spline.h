@@ -23,7 +23,6 @@
 #include <G3D/Vector3.h>
 
 namespace Movement {
-
 class SplineBase
 {
 public:
@@ -204,7 +203,6 @@ public:
     void set_length(index_type i, length_type length) { lengths[i] = length;}
     void clear();
 };
-
 }
 
 #include "SplineImpl.h"

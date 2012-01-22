@@ -6760,9 +6760,9 @@ void ObjectMgr::LoadCurrencysLoot()
     while (result->NextRow());
 
     if (count)
-        sLog->outString("Loaded %u currency loot defination", count);
+        sLog->outString("Loaded %u currency loot definition", count);
     else
-        sLog->outString("Loaded 0 currency loot defination. Table is empty!");
+        sLog->outString("Loaded 0 currency loot definition. Table is empty!");
 }
 
 void ObjectMgr::LoadCorpses()
@@ -7835,7 +7835,7 @@ bool ObjectMgr::LoadSkyFireStrings(char const* table, int32 min_value, int32 max
             return false;
         }
 
-        // real range (max+1, min+1) exaple: (-10, -1000) -> -999...-10+1
+        // real range (max+1, min+1) example: (-10, -1000) -> -999...-10+1
         std::swap(start_value, end_value);
         ++start_value;
         ++end_value;
@@ -8783,7 +8783,7 @@ void ObjectMgr::LoadDbScriptStrings()
 
 bool LoadTrinityStrings(char const* table, int32 start_value, int32 end_value)
 {
-    // MAX_DB_SCRIPT_STRING_ID is max allowed negative value for scripts (scrpts can use only more deep negative values
+    // MAX_DB_SCRIPT_STRING_ID is max allowed negative value for scripts (scripts can use only more deep negative values
     // start/end reversed for negative values
     if (start_value > MAX_DB_SCRIPT_STRING_ID || end_value >= start_value)
     {
