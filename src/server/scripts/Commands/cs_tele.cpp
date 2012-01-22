@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -129,7 +129,7 @@ public:
         if (strcmp(teleStr, "$home") == 0)    // References target's homebind
         {
             if (target)
-                target->TeleportTo(target->m_homebindMapId, target->m_homebindX, target->m_homebindY, target->m_homebindZ, target->GetOrientation());
+                target->TeleportTo(target->_homebindMapId, target->_homebindX, target->_homebindY, target->_homebindZ, target->GetOrientation());
             else
             {
                 QueryResult resultDB = CharacterDatabase.PQuery("SELECT mapId, zoneId, posX, posY, posZ FROM character_homebind WHERE guid = %u", target_guid);
@@ -242,15 +242,15 @@ public:
 
         std::string nameLink = handler->GetNameLink(target);
 
-        Group* grp = target->GetGroup();
-        if (!grp)
+        Group* group = target->GetGroup();
+        if (!group)
         {
             handler->PSendSysMessage(LANG_NOT_IN_GROUP, nameLink.c_str());
             handler->SetSentErrorMessage(true);
             return false;
         }
 
-        for (GroupReference* itr = grp->GetFirstMember(); itr != NULL; itr = itr->next())
+        for (GroupReference* itr = group->GetFirstMember(); itr != NULL; itr = itr->next())
         {
             Player* player = itr->getSource();
 

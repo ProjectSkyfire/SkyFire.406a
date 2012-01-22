@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2006-2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2006-2012 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -819,7 +819,7 @@ class boss_kaelthas : public CreatureScript
                                 me->GetMotionMaster()->Clear();
                                 me->GetMotionMaster()->MoveIdle();
                                 me->SetPosition(afGravityPos[0], afGravityPos[1], afGravityPos[2], 0);
-                                me->SendMonsterMove(afGravityPos[0], afGravityPos[1], afGravityPos[2], 0, 0, 0);
+                                me->MonsterMoveWithSpeed(afGravityPos[0], afGravityPos[1], afGravityPos[2], 1);
 
                                 me->InterruptNonMeleeSpells(false);
                                 DoCast(me, SPELL_FULLPOWER);
@@ -885,7 +885,7 @@ class boss_kaelthas : public CreatureScript
                                         me->GetMotionMaster()->Clear();
                                         me->GetMotionMaster()->MoveIdle();
                                         me->SetPosition(afGravityPos[0], afGravityPos[1], afGravityPos[2], 0);
-                                        me->SendMonsterMove(afGravityPos[0], afGravityPos[1], afGravityPos[2], 0, MOVEMENTFLAG_NONE, 0);
+                                        me->MonsterMoveWithSpeed(afGravityPos[0], afGravityPos[1], afGravityPos[2], 0);
 
                                         // 1) Kael'thas will portal the whole raid right into his body
                                         for (i = me->getThreatManager().getThreatList().begin(); i!= me->getThreatManager().getThreatList().end(); ++i)
@@ -920,8 +920,7 @@ class boss_kaelthas : public CreatureScript
                                                 unit->CastSpell(unit, SPELL_GRAVITY_LAPSE_AURA, true, 0, 0, me->GetGUID());
 
                                                 //Using packet workaround
-                                                WorldPacket data(12);
-                                                data.SetOpcode(SMSG_MOVE_SET_CAN_FLY);
+                                                WorldPacket data(SMSG_MOVE_SET_CAN_FLY, 12);
                                                 data.append(unit->GetPackGUID());
                                                 data << uint32(0);
                                                 unit->SendMessageToSet(&data, true);
@@ -947,8 +946,7 @@ class boss_kaelthas : public CreatureScript
                                             if (Unit* unit = Unit::GetUnit((*me), (*i)->getUnitGuid()))
                                             {
                                                 //Using packet workaround
-                                                WorldPacket data(12);
-                                                data.SetOpcode(SMSG_MOVE_UNSET_CAN_FLY);
+                                                WorldPacket data(SMSG_MOVE_UNSET_CAN_FLY, 12);
                                                 data.append(unit->GetPackGUID());
                                                 data << uint32(0);
                                                 unit->SendMessageToSet(&data, true);

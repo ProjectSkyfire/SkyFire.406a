@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -32,7 +32,7 @@
 # define _ENDIAN_STRING "little-endian"
 #endif
 
-#define _CLIENT_BUILD_REVISION "4.0.6a - 13623"
+#define _CLIENT_BUILD_REVISION "4.3.0 - 15050"
 
 #if PLATFORM == PLATFORM_WINDOWS
 # ifdef _WIN64

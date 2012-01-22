@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -77,6 +77,7 @@ class DBCStorage
         {
             indexTable.asT = NULL;
         }
+        ~DBCStorage() { Clear(); }
 
         T const* LookupEntry(uint32 id) const
         {
@@ -87,7 +88,7 @@ class DBCStorage
         char const* GetFormat() const { return fmt; }
         uint32 GetFieldCount() const { return fieldCount; }
 
-        bool Load(char const* fn, SqlDbc * sql)
+        bool Load(char const* fn, SqlDbc* sql)
         {
             DBCFileLoader dbc;
             // Check if load was sucessful, only then continue
@@ -126,8 +127,6 @@ class DBCStorage
             char * sqlDataTable;
             fieldCount = dbc.GetCols();
             dataTable = (T*)dbc.AutoProduceData(fmt, nCount, indexTable.asChar, sqlRecordCount, sqlHighestIndex, sqlDataTable);
-
-            stringPoolList.push_back(dbc.AutoProduceStringsArrayHolders(fmt, (char*)dataTable));
 
             stringPoolList.push_back(dbc.AutoProduceStrings(fmt, (char*)dataTable));
 
@@ -235,7 +234,7 @@ class DBCStorage
            return indexTable.asT!= NULL;
         }
 
-        bool LoadStringsFrom(char const* fn, uint8 locale)
+        bool LoadStringsFrom(char const* fn)
         {
             // DBC must be already loaded using Load
             if (!indexTable.asT)
@@ -246,7 +245,7 @@ class DBCStorage
             if (!dbc.Load(fn, fmt))
                 return false;
 
-            stringPoolList.push_back(dbc.AutoProduceStrings(fmt, (char*)dataTable, locale));
+            stringPoolList.push_back(dbc.AutoProduceStrings(fmt, (char*)dataTable));
 
             return true;
         }

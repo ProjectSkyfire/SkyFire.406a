@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -221,7 +221,7 @@ class Quest
         uint32 GetBonusTalents() const { return BonusTalents; }
         int32  GetRewArenaPoints() const
         {
-            for(uint8 i = 0; i < QUEST_CURRENCY_COUNT; i++)
+            for (uint8 i = 0; i < QUEST_CURRENCY_COUNT; i++)
             {
                 if(RewCurrencyId[i] == 390) // Conquest points
                     return RewCurrencyCount[i];
@@ -275,6 +275,7 @@ class Quest
         uint32 GetFlags() const { return QuestFlags; }
         bool   IsDaily() const { return QuestFlags & QUEST_FLAGS_DAILY; }
         bool   IsWeekly() const { return QuestFlags & QUEST_FLAGS_WEEKLY; }
+        bool   IsSeasonal() const { return ZoneOrSort == -QUEST_SORT_SEASONAL; }
         bool   IsDailyOrWeekly() const { return QuestFlags & (QUEST_FLAGS_DAILY | QUEST_FLAGS_WEEKLY); }
         bool   IsAutoAccept() const { return QuestFlags & QUEST_FLAGS_AUTO_ACCEPT; }
         bool   IsRaidQuest() const { return Type == QUEST_TYPE_RAID || Type == QUEST_TYPE_RAID_10 || Type == QUEST_TYPE_RAID_25 || Type == QUEST_TYPE_PVP; }
@@ -400,17 +401,17 @@ class Quest
 
 struct QuestStatusData
 {
-    QuestStatusData(): m_status(QUEST_STATUS_NONE), m_explored(false), m_timer(0), m_playercount(0)
+    QuestStatusData(): _status(QUEST_STATUS_NONE), _explored(false), _timer(0), _playercount(0)
     {
-        memset(m_itemcount, 0, QUEST_ITEM_OBJECTIVES_COUNT * sizeof(uint16));
-        memset(m_creatureOrGOcount, 0, QUEST_OBJECTIVES_COUNT * sizeof(uint16));
+        memset(_itemcount, 0, QUEST_ITEM_OBJECTIVES_COUNT * sizeof(uint16));
+        memset(_creatureOrGOcount, 0, QUEST_OBJECTIVES_COUNT * sizeof(uint16));
     }
 
-    QuestStatus m_status;
-    bool m_explored;
-    uint32 m_timer;
-    uint16 m_itemcount[QUEST_ITEM_OBJECTIVES_COUNT];
-    uint16 m_creatureOrGOcount[QUEST_OBJECTIVES_COUNT];
-    uint16 m_playercount;
+    QuestStatus _status;
+    bool _explored;
+    uint32 _timer;
+    uint16 _itemcount[QUEST_ITEM_OBJECTIVES_COUNT];
+    uint16 _creatureOrGOcount[QUEST_OBJECTIVES_COUNT];
+    uint16 _playercount;
 };
 #endif

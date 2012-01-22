@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2006-2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2006-2012 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -148,7 +148,7 @@ class boss_mandokir : public CreatureScript
                     if (!CombatStart)
                     {
                         //At combat Start Mandokir is mounted so we must unmount it first
-                        me->Unmount();
+                        me->Dismount();
 
                         //And summon his raptor
                         me->SummonCreature(14988, me->getVictim()->GetPositionX(), me->getVictim()->GetPositionY(), me->getVictim()->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 35000);
@@ -321,7 +321,7 @@ class mob_ohgan : public CreatureScript
                 if (SunderArmor_Timer <= diff)
                 {
                     DoCast(me->getVictim(), SPELL_SUNDERARMOR);
-                    SunderArmor_Timer = 10000 + rand()%5000;
+                    SunderArmor_Timer = urand(10000, 15000);
                 } else SunderArmor_Timer -= diff;
 
                 DoMeleeAttackIfReady();

@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
+* Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
 *
 * This program is free software; you can redistribute it and/or modify it
 * under the terms of the GNU General Public License as published by the
@@ -48,7 +48,7 @@ public:
         if (BfTB)
         {
             GraveYardVect gy = BfTB->GetGraveYardVect();
-            for(uint8 i = 0; i<gy.size(); i++)
+            for (uint8 i = 0; i<gy.size(); i++)
             {
                 if (gy[i]->GetControlTeamId() == player->GetTeamId())
                 {
@@ -69,7 +69,7 @@ public:
         if (BfTB)
         {
             GraveYardVect gy = BfTB->GetGraveYardVect();
-            for(uint8 i = 0; i<gy.size(); i++)
+            for (uint8 i = 0; i<gy.size(); i++)
             {
                 if (action-GOSSIP_ACTION_INFO_DEF == i && gy[i]->GetControlTeamId() == player->GetTeamId())
                 {

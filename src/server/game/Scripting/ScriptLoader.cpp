@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -19,12 +19,14 @@
 
 #include "ScriptLoader.h"
 
+#ifdef EXAMPLES
 //examples
 void AddSC_example_creature();
 void AddSC_example_escort();
 void AddSC_example_gossip_codebox();
 void AddSC_example_misc();
 void AddSC_example_commandscript();
+#endif
 
 // spells
 void AddSC_deathknight_spell_scripts();
@@ -38,6 +40,7 @@ void AddSC_rogue_spell_scripts();
 void AddSC_shaman_spell_scripts();
 void AddSC_warlock_spell_scripts();
 void AddSC_warrior_spell_scripts();
+void AddSC_mastery_spells();
 void AddSC_quest_spell_scripts();
 void AddSC_item_spell_scripts();
 void AddSC_example_spell_scripts();
@@ -340,7 +343,7 @@ void AddSC_instance_culling_of_stratholme();
 //void AddSC_npc_pusillin();                   //Dire maul
 void AddSC_instance_halls_of_origination();  //Halls of Origination
 void AddSC_boss_temple_guardian_anhuur();
-void AddSC_boss_earthrager_ptah();
+void AddSC_boss_ptah();
 void AddSC_boss_anraphet();
 void AddSC_boss_ammunae();
 void AddSC_boss_setesh();
@@ -558,6 +561,7 @@ void AddSC_boss_saviana_ragefire();
 void AddSC_boss_general_zarithrian();
 //void AddSC_boss_halion();
 
+void AddSC_argen_tournament();
 void AddSC_dalaran();
 void AddSC_borean_tundra();
 void AddSC_dragonblight();
@@ -676,7 +680,6 @@ void AddSC_chat_log();
 
 void AddScripts()
 {
-    AddExampleScripts();
     AddSpellScripts();
     AddSC_SmartSCripts();
     AddCommandScripts();
@@ -693,6 +696,7 @@ void AddScripts()
 #endif
 }
 
+#ifdef EXAMPLES
 void AddExampleScripts()
 {
     AddSC_example_creature();
@@ -700,7 +704,9 @@ void AddExampleScripts()
     AddSC_example_gossip_codebox();
     AddSC_example_misc();
     AddSC_example_commandscript();
+	AddSC_example_spell_scripts();
 }
+#endif
 
 void AddSpellScripts()
 {
@@ -715,9 +721,9 @@ void AddSpellScripts()
     AddSC_shaman_spell_scripts();
     AddSC_warlock_spell_scripts();
     AddSC_warrior_spell_scripts();
+    AddSC_mastery_spells();
     AddSC_quest_spell_scripts();
     AddSC_item_spell_scripts();
-    AddSC_example_spell_scripts();
 }
 
 void AddCommandScripts()
@@ -1026,9 +1032,9 @@ void AddKalimdorScripts()
     AddSC_culling_of_stratholme();
     AddSC_instance_culling_of_stratholme();
     //AddSC_npc_pusillin();                   //Dire maul
-    AddSC_instance_halls_of_origination();  //Halls of Origination
+    AddSC_instance_halls_of_origination();    //Halls of Origination
     AddSC_boss_temple_guardian_anhuur();
-    AddSC_boss_earthrager_ptah();
+    AddSC_boss_ptah();
     AddSC_boss_anraphet();
     AddSC_boss_ammunae();
     AddSC_boss_setesh();
@@ -1337,6 +1343,7 @@ void AddNorthrendScripts()
     AddSC_boss_general_zarithrian();
     //AddSC_boss_halion();
 
+    AddSC_argen_tournament();
     AddSC_dalaran();
     AddSC_borean_tundra();
     AddSC_dragonblight();

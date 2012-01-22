@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -27,12 +27,12 @@
 
 BattlegroundSA::BattlegroundSA()
 {
-    m_StartMessageIds[BG_STARTING_EVENT_FIRST]  = LANG_BG_SA_START_TWO_MINUTES;
-    m_StartMessageIds[BG_STARTING_EVENT_SECOND] = LANG_BG_SA_START_ONE_MINUTE;
-    m_StartMessageIds[BG_STARTING_EVENT_THIRD]  = LANG_BG_SA_START_HALF_MINUTE;
-    m_StartMessageIds[BG_STARTING_EVENT_FOURTH] = LANG_BG_SA_HAS_BEGUN;
-    m_BgObjects.resize(BG_SA_MAXOBJ);
-    m_BgCreatures.resize(BG_SA_MAXNPC + BG_SA_MAX_GY);
+    _StartMessageIds[BG_STARTING_EVENT_FIRST]  = LANG_BG_SA_START_TWO_MINUTES;
+    _StartMessageIds[BG_STARTING_EVENT_SECOND] = LANG_BG_SA_START_ONE_MINUTE;
+    _StartMessageIds[BG_STARTING_EVENT_THIRD]  = LANG_BG_SA_START_HALF_MINUTE;
+    _StartMessageIds[BG_STARTING_EVENT_FOURTH] = LANG_BG_SA_HAS_BEGUN;
+    _BgObjects.resize(BG_SA_MAXOBJ);
+    _BgCreatures.resize(BG_SA_MAXNPC + BG_SA_MAX_GY);
     TimerEnabled = false;
     UpdateWaitTimer = 0;
     SignaledRoundTwo = false;
@@ -460,7 +460,7 @@ void BattlegroundSA::AddPlayer(Player* player)
             player->TeleportTo(607, 1209.7f, -65.16f, 70.1f, 0.0f, 0);
     }
     SendTransportInit(player);
-    m_PlayerScores[player->GetGUID()] = sc;
+    _PlayerScores[player->GetGUID()] = sc;
 }
 
 void BattlegroundSA::RemovePlayer(Player* /*player*/, uint64 /*guid*/, uint32 /*team*/)
@@ -476,8 +476,8 @@ void BattlegroundSA::HandleAreaTrigger(Player* /*Source*/, uint32 /*Trigger*/)
 
 void BattlegroundSA::UpdatePlayerScore(Player* Source, uint32 type, uint32 value, bool doAddHonor)
 {
-    BattlegroundScoreMap::iterator itr = m_PlayerScores.find(Source->GetGUID());
-    if (itr == m_PlayerScores.end())                         // player not found...
+    BattlegroundScoreMap::iterator itr = _PlayerScores.find(Source->GetGUID());
+    if (itr == _PlayerScores.end())                         // player not found...
         return;
 
     if (type == SCORE_DESTROYED_DEMOLISHER)
@@ -563,7 +563,7 @@ void BattlegroundSA::HandleKillUnit(Creature* unit, Player* killer)
  */
 void BattlegroundSA::OverrideGunFaction()
 {
-    if (!m_BgCreatures[0])
+    if (!_BgCreatures[0])
         return;
 
     for (uint8 i = BG_SA_GUN_1; i <= BG_SA_GUN_10;i++)
@@ -581,7 +581,7 @@ void BattlegroundSA::OverrideGunFaction()
 
 void BattlegroundSA::DemolisherStartState(bool start)
 {
-    if (!m_BgCreatures[0])
+    if (!_BgCreatures[0])
         return;
 
     for (uint8 i = BG_SA_DEMOLISHER_1; i <= BG_SA_DEMOLISHER_4; i++)
@@ -783,7 +783,7 @@ void BattlegroundSA::CaptureGraveyard(BG_SA_Graveyards i, Player* Source)
 
 void BattlegroundSA::EventPlayerUsedGO(Player* Source, GameObject* object)
 {
-    if (object->GetEntry() == BG_SA_ObjEntries[BG_SA_TITAN_RELIC] && GateStatus[BG_SA_ANCIENT_GATE] == BG_SA_GATE_DESTROYED)
+    if (object->GetEntry() == BG_SA_ObjEntries[BG_SA_TITAN_RELIC] && GateStatus[BG_SA_ANCIENT_GATE] == BG_SA_GATE_DESTROYED && GateStatus[BG_SA_YELLOW_GATE] == BG_SA_GATE_DESTROYED && (GateStatus[BG_SA_PURPLE_GATE] == BG_SA_GATE_DESTROYED || GateStatus[BG_SA_RED_GATE] == BG_SA_GATE_DESTROYED) && (GateStatus[BG_SA_GREEN_GATE] == BG_SA_GATE_DESTROYED || GateStatus[BG_SA_BLUE_GATE] == BG_SA_GATE_DESTROYED))
     {
         if (Source->GetTeamId() == Attackers)
         {
@@ -863,7 +863,7 @@ void BattlegroundSA::UpdateDemolisherSpawns()
 {
     for (uint8 i = BG_SA_DEMOLISHER_1; i <= BG_SA_DEMOLISHER_4; i++)
     {
-        if (m_BgCreatures[i])
+        if (_BgCreatures[i])
         {
             if (Creature *Demolisher = GetBGCreature(i))
             {
@@ -898,12 +898,12 @@ void BattlegroundSA::UpdateDemolisherSpawns()
 
 void BattlegroundSA::SendTransportInit(Player* player)
 {
-    if (m_BgObjects[BG_SA_BOAT_ONE] ||  m_BgObjects[BG_SA_BOAT_TWO])
+    if (_BgObjects[BG_SA_BOAT_ONE] ||  _BgObjects[BG_SA_BOAT_TWO])
     {
         UpdateData transData(player->GetMapId());
-        if (m_BgObjects[BG_SA_BOAT_ONE])
+        if (_BgObjects[BG_SA_BOAT_ONE])
             GetBGObject(BG_SA_BOAT_ONE)->BuildCreateUpdateBlockForPlayer(&transData, player);
-        if (m_BgObjects[BG_SA_BOAT_TWO])
+        if (_BgObjects[BG_SA_BOAT_TWO])
             GetBGObject(BG_SA_BOAT_TWO)->BuildCreateUpdateBlockForPlayer(&transData, player);
         WorldPacket packet;
         transData.BuildPacket(&packet);
@@ -913,12 +913,12 @@ void BattlegroundSA::SendTransportInit(Player* player)
 
 void BattlegroundSA::SendTransportsRemove(Player* player)
 {
-    if (m_BgObjects[BG_SA_BOAT_ONE] ||  m_BgObjects[BG_SA_BOAT_TWO])
+    if (_BgObjects[BG_SA_BOAT_ONE] ||  _BgObjects[BG_SA_BOAT_TWO])
     {
         UpdateData transData(player->GetMapId());
-        if (m_BgObjects[BG_SA_BOAT_ONE])
+        if (_BgObjects[BG_SA_BOAT_ONE])
             GetBGObject(BG_SA_BOAT_ONE)->BuildOutOfRangeUpdateBlock(&transData);
-        if (m_BgObjects[BG_SA_BOAT_TWO])
+        if (_BgObjects[BG_SA_BOAT_TWO])
             GetBGObject(BG_SA_BOAT_TWO)->BuildOutOfRangeUpdateBlock(&transData);
         WorldPacket packet;
         transData.BuildPacket(&packet);

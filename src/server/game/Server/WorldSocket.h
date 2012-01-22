@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -128,6 +128,8 @@ class WorldSocket : protected WorldHandler
         virtual ~WorldSocket (void);
 
         /// Called on open , the void* is the acceptor.
+        int SendAuthConnection();
+        int HandleAuthConnection(WorldPacket& recvPacket);
         virtual int open (void *);
 
         /// Called on failures inside of the acceptor, don't call from your code.
@@ -166,6 +168,9 @@ class WorldSocket : protected WorldHandler
 
         /// Called by ProcessIncoming() on CMSG_AUTH_SESSION.
         int HandleAuthSession (WorldPacket& recvPacket);
+
+        /// Called by ProcessIncoming() on MSG_VERIFY_CONNECTIVITY.
+        int HandleSendAuthSession();
 
         /// Called by ProcessIncoming() on CMSG_PING.
         int HandlePing (WorldPacket& recvPacket);

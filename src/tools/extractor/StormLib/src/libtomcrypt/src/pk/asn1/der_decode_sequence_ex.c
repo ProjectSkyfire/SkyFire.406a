@@ -27,7 +27,7 @@
    @param ordered  Search an unordeded or ordered list
    @return CRYPT_OK on success
 */
-int der_decode_sequence_ex(const unsigned char *in, unsigned long  inlen, 
+int der_decode_sequence_ex(const unsigned char *in, unsigned long  inlen,
                            ltc_asn1_list *list,    unsigned long  outlen, int ordered)
 {
    int           err, type;

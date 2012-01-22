@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -202,7 +202,7 @@ void CreatureGroup::FormationReset(bool dismiss)
             if (dismiss)
                 itr->first->GetMotionMaster()->Initialize();
             else
-                itr->first->GetMotionMaster()->MoveIdle(MOTION_SLOT_IDLE);
+                itr->first->GetMotionMaster()->MoveIdle();
             sLog->outDebug(LOG_FILTER_UNITS, "Set %s movement for member GUID: %u", dismiss ? "default" : "idle", itr->first->GetGUIDLow());
         }
     }
@@ -211,10 +211,12 @@ void CreatureGroup::FormationReset(bool dismiss)
 
 void CreatureGroup::LeaderMoveTo(float x, float y, float z)
 {
+    //! To do: This should probably get its own movement generator or use WaypointMovementGenerator.
+    //! If the leader's path is known, member's path can be plotted as well using formation offsets.
     if (!m_leader)
         return;
 
-    float pathangle    = atan2(m_leader->GetPositionY() - y, m_leader->GetPositionX() - x);
+    float pathangle = atan2(m_leader->GetPositionY() - y, m_leader->GetPositionX() - x);
 
     for (CreatureGroupMemberType::iterator itr = m_members.begin(); itr != m_members.end(); ++itr)
     {

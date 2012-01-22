@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -65,6 +65,23 @@ enum LoginDatabaseStatements
     LOGIN_DEL_REALMCHARACTERS,
     LOGIN_ADD_REALMCHARACTERS,
     LOGIN_GET_SUM_REALMCHARS,
+    LOGIN_ADD_ACCOUNT,
+    LOGIN_ADD_REALM_CHARS,
+    LOGIN_DEL_OLD_BANS,
+    LOGIN_DEL_OLD_IP_BANS,
+    LOGIN_UPDATE_EXPANSION,
+    LOGIN_UPDATE_ACCOUNT_LOCK,
+    LOGIN_ADD_LOG,
+    LOGIN_UPDATE_USERNAME,
+    LOGIN_UPDATE_PASSWORD,
+    LOGIN_UPDATE_MUTE_TIME,
+    LOGIN_UPDATE_LAST_IP,
+    LOGIN_UPDATE_ACCOUNT_ONLINE,
+    LOGIN_UPDATE_UPTIME_PLAYERS,
+    LOGIN_DEL_OLD_LOGS,
+    LOGIN_DEL_ACCOUNT_ACCESS,
+    LOGIN_DEL_ACCOUNT_ACCESS_BY_REALM,
+    LOGIN_INS_ACCOUNT_ACCESS,
 
     MAX_LOGINDATABASE_STATEMENTS,
 };

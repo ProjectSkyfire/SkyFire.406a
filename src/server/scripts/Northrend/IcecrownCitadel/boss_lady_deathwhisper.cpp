@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -316,7 +316,7 @@ class boss_lady_deathwhisper : public CreatureScript
                         darnavan->CombatStop(true);
                         darnavan->GetMotionMaster()->MoveIdle();
                         darnavan->SetReactState(REACT_PASSIVE);
-                        darnavan->m_Events.AddEvent(new DaranavanMoveEvent(*darnavan), darnavan->m_Events.CalculateTime(10000));
+                        darnavan->_Events.AddEvent(new DaranavanMoveEvent(*darnavan), darnavan->_Events.CalculateTime(10000));
                         darnavan->AI()->Talk(SAY_DARNAVAN_RESCUED);
                         if (Player* owner = killer->GetCharmerOrOwnerPlayerOrPlayerItself())
                         {
@@ -357,7 +357,7 @@ class boss_lady_deathwhisper : public CreatureScript
             void DamageTaken(Unit* /*damageDealer*/, uint32& damage)
             {
                 // phase transition
-                if (events.GetPhaseMask() & PHASE_ONE_MASK && damage > me->GetPower(POWER_MANA))
+                if (events.GetPhaseMask() & PHASE_ONE_MASK && damage > uint32(me->GetPower(POWER_MANA)))
                 {
                     Talk(SAY_PHASE_2);
                     Talk(EMOTE_PHASE_2);

@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -277,10 +277,35 @@ ObjectMgr::~ObjectMgr()
         for (int class_ = 0; class_ < MAX_CLASSES; ++class_)
             delete[] playerInfo[race][class_].levelInfo;
 
+    for (ArenaTeamMap::iterator itr = mArenaTeamMap.begin();
+        itr != mArenaTeamMap.end(); ++itr)
+            delete itr->second;
+
     for (CacheVendorItemMap::iterator itr = m_mCacheVendorItemMap.begin(); itr != m_mCacheVendorItemMap.end(); ++itr)
         itr->second.Clear();
 
     m_mCacheTrainerSpellMap.clear();
+}
+
+std::list<CurrencyLoot> ObjectMgr::GetCurrencyLoot(uint32 entry, uint8 type)
+{
+    std::list<CurrencyLoot> temp;
+    for (CurrencysLoot::iterator itr = mCurrencysLoot.begin(); itr != mCurrencysLoot.end(); ++itr)
+    {
+        if (itr->Entry == entry && itr->Type == type)
+            temp.push_back(*itr);
+    }
+    return temp;
+}
+
+void ObjectMgr::AddArenaTeam(ArenaTeam* arenaTeam)
+{
+    mArenaTeamMap[arenaTeam->GetId()] = arenaTeam;
+}
+
+void ObjectMgr::RemoveArenaTeam(uint32 Id)
+{
+    mArenaTeamMap.erase(Id);
 }
 
 void ObjectMgr::AddLocaleString(std::string const& s, LocaleConstant locale, StringVector& data)
@@ -2081,552 +2106,408 @@ void ObjectMgr::LoadItemLocales()
     sLog->outString();
 }
 
-void ObjectMgr::LoadItemTemplates()
+void FillItemDamageFields(float* minDamage, float* maxDamage, float* dps, uint32 itemLevel, uint32 itemClass, uint32 itemSubClass, uint32 quality, uint32 delay, float statScalingFactor, uint32 inventoryType, uint32 flags2)
 {
-    uint32 oldMSTime = getMSTime();
+    *minDamage = *maxDamage = *dps = 0.0f;
+    if (itemClass != ITEM_CLASS_WEAPON || quality > ITEM_QUALITY_ARTIFACT)
+        return;
 
-    //                                                 0      1       2       3     4        5        6       7          8         9        10        11           12
-    QueryResult result = WorldDatabase.Query("SELECT entry, class, subclass, unk0, name, displayid, Quality, Flags, FlagsExtra, BuyCount, BuyPrice, SellPrice, InventoryType, "
-    //                                              13              14           15          16             17               18                19              20
-                                             "AllowableClass, AllowableRace, ItemLevel, RequiredLevel, RequiredSkill, RequiredSkillRank, requiredspell, requiredhonorrank, "
-    //                                              21                      22                       23               24        25          26
-                                             "RequiredCityRank, RequiredReputationFaction, RequiredReputationRank, maxcount, stackable, ContainerSlots, "
-    //                                            27           28           29          30           31           32          33           34           35           36
-                                             "stat_type1, stat_value1, stat_type2, stat_value2, stat_type3, stat_value3, stat_type4, stat_value4, stat_type5, stat_value5,  "
-    //                                            37           38           39          40           41           42          43           44           45           46
-                                             "stat_type6, stat_value6, stat_type7, stat_value7, stat_type8, stat_value8, stat_type9, stat_value9, stat_type10, stat_value10, "
-    //                                                   47                    48        49      50               51        52              53
-                                             "ScalingStatDistribution, ScalingStatValue, delay, RangedModRange, spellid_1, spelltrigger_1, spellcharges_1, "
-    //                                           54               55               56              57                      58          59            60
-                                             "spellppmRate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, spellid_2, spelltrigger_2, spellcharges_2, "
-    //                                            61              62               63               64                      65        66               67
-                                             "spellppmRate_2, spellcooldown_2, spellcategory_2, spellcategorycooldown_2, spellid_3, spelltrigger_3, spellcharges_3, "
-    //                                             68				69				70				71						72			73				74
-                                             "spellppmRate_3, spellcooldown_3, spellcategory_3, spellcategorycooldown_3, spellid_4, spelltrigger_4, spellcharges_4, "
-    //                                            75				76				77					78					79			80				81
-                                             "spellppmRate_4, spellcooldown_4, spellcategory_4, spellcategorycooldown_4, spellid_5, spelltrigger_5, spellcharges_5, "
-    //                                            82				83				84					85					86			87			88		89				90
-                                             "spellppmRate_5, spellcooldown_5, spellcategory_5, spellcategorycooldown_5, bonding, description, PageText, LanguageID, PageMaterial, "
-    //                                          91			92		93		 94			95				96			97		98		99			  100  101    102
-                                             "startquest, lockid, Material, sheath, RandomProperty, RandomSuffix, block, itemset, MaxDurability, area, Map, BagFamily, "
-    //                                          103				104				105				106				107				108				109				110
-                                             "TotemCategory, socketColor_1, socketContent_1, socketColor_2, socketContent_2, socketColor_3, socketContent_3, socketBonus, "
-    //                                          111				112							113				  114			115				116			117			118
-                                             "GemProperties, RequiredDisenchantSkill, ArmorDamageModifier, Duration, ItemLimitCategory, HolidayId, ScriptName, DisenchantID, "
-    //											119			120				121
-                                             "FoodType, minMoneyLoot, maxMoneyLoot FROM item_template");
+    DBCStorage<ItemDamageEntry>* store = NULL;
+    // get the right store here
+    if (inventoryType > 0xD + 13)
+        return;
 
-    if (!result)
+    switch (inventoryType)
     {
-        sLog->outString(">> Loaded 0 item templates. DB table `item_template` is empty.");
-        sLog->outString();
+    case INVTYPE_AMMO:
+        store = &sItemDamageAmmoStore;
+        break;
+    case INVTYPE_2HWEAPON:
+        if (flags2 & ITEM_FLAGS_EXTRA_CASTER_WEAPON)
+            store = &sItemDamageTwoHandCasterStore;
+        else
+            store = &sItemDamageTwoHandStore;
+        break;
+    case INVTYPE_RANGED:
+    case INVTYPE_THROWN:
+    case INVTYPE_RANGEDRIGHT:
+        switch (itemSubClass)
+        {
+        case ITEM_SUBCLASS_WEAPON_WAND:
+            store = &sItemDamageWandStore;
+            break;
+        case ITEM_SUBCLASS_WEAPON_THROWN:
+            store = &sItemDamageThrownStore;
+            break;
+        case ITEM_SUBCLASS_WEAPON_BOW:
+        case ITEM_SUBCLASS_WEAPON_GUN:
+        case ITEM_SUBCLASS_WEAPON_CROSSBOW:
+            store = &sItemDamageRangedStore;
+            break;
+        default:
+            return;
+        }
+        break;
+    case INVTYPE_WEAPON:
+    case INVTYPE_WEAPONMAINHAND:
+    case INVTYPE_WEAPONOFFHAND:
+        if (flags2 & ITEM_FLAGS_EXTRA_CASTER_WEAPON)
+            store = &sItemDamageOneHandCasterStore;
+        else
+            store = &sItemDamageOneHandStore;
+        break;
+    default:
         return;
     }
 
-    uint32 count = 0;
-    bool enforceDB2Attributes = sWorld->getBoolConfig(CONFIG_DB2_ENFORCE_ITEM_ATTRIBUTES);
+    if (!store)
+        return;
 
-    do
+    ItemDamageEntry const* damageInfo = store->LookupEntry(itemLevel);
+    if (!damageInfo)
+        return;
+
+    *dps = damageInfo->DPS[quality];
+    float avgDamage = *dps * delay * 0.001f;
+    *minDamage = (statScalingFactor * -0.5f + 1.0f) * avgDamage;
+    *maxDamage = floor(float(avgDamage * (statScalingFactor * 0.5f + 1.0f) + 0.5f));
+}
+
+uint32 FillItemArmor(uint32 itemlevel, uint32 itemClass, uint32 itemSubclass, uint32 quality, uint32 inventoryType)
+{
+    if (quality > ITEM_QUALITY_ARTIFACT)
+        return 0;
+
+    // all items but shields
+    if (itemClass != ITEM_CLASS_ARMOR || itemSubclass != ITEM_SUBCLASS_ARMOR_SHIELD)
     {
-        Field* fields = result->Fetch();
+        ItemArmorQualityEntry const* armorQuality = sItemArmorQualityStore.LookupEntry(itemlevel);
+        ItemArmorTotalEntry const* armorTotal = sItemArmorTotalStore.LookupEntry(itemlevel);
+        if (!armorQuality || !armorTotal)
+            return 0;
 
-        uint32 entry = fields[0].GetUInt32();
+        if (inventoryType == INVTYPE_ROBE)
+            inventoryType = INVTYPE_CHEST;
 
-        ItemTemplate& itemTemplate = ItemTemplateStore[entry];
+        ArmorLocationEntry const* location = sArmorLocationStore.LookupEntry(inventoryType);
+        if (!location)
+            return 0;
 
-        itemTemplate.ItemId                    = entry;
-        itemTemplate.Class                     = uint32(fields[1].GetUInt8());
-        itemTemplate.SubClass                  = uint32(fields[2].GetUInt8());
-        itemTemplate.Unk0                      = fields[3].GetInt32();
-        itemTemplate.Name1                     = fields[4].GetString();
-        itemTemplate.DisplayInfoID             = fields[5].GetUInt32();
-        itemTemplate.Quality                   = uint32(fields[6].GetUInt8());
-        itemTemplate.Flags                     = uint32(fields[7].GetInt64());
-        itemTemplate.Flags2                    = fields[8].GetUInt32();
-        itemTemplate.BuyCount                  = uint32(fields[9].GetUInt8());
-        itemTemplate.BuyPrice                  = int32(fields[10].GetInt64());
-        itemTemplate.SellPrice                 = fields[11].GetUInt32();
-        itemTemplate.InventoryType             = uint32(fields[12].GetUInt8());
-        itemTemplate.AllowableClass            = fields[13].GetInt32();
-        itemTemplate.AllowableRace             = fields[14].GetInt32();
-        itemTemplate.ItemLevel                 = uint32(fields[15].GetUInt16());
-        itemTemplate.RequiredLevel             = uint32(fields[16].GetUInt8());
-        itemTemplate.RequiredSkill             = uint32(fields[17].GetUInt16());
-        itemTemplate.RequiredSkillRank         = uint32(fields[18].GetUInt16());
-        itemTemplate.RequiredSpell             = fields[19].GetUInt32();
-        itemTemplate.RequiredHonorRank         = fields[20].GetUInt32();
-        itemTemplate.RequiredCityRank          = fields[21].GetUInt32();
-        itemTemplate.RequiredReputationFaction = uint32(fields[22].GetUInt16());
-        itemTemplate.RequiredReputationRank    = uint32(fields[23].GetUInt16());
-        itemTemplate.MaxCount                  = fields[24].GetInt32();
-        itemTemplate.Stackable                 = fields[25].GetInt32();
-        itemTemplate.ContainerSlots            = uint32(fields[26].GetUInt8());
+        if (itemSubclass < ITEM_SUBCLASS_ARMOR_CLOTH)
+            return 0;
 
-        for (uint8 i = 0; i < MAX_ITEM_PROTO_STATS; ++i)
-        {
-            itemTemplate.ItemStat[i].ItemStatType  = uint32(fields[27 + i*2].GetUInt8());
-            itemTemplate.ItemStat[i].ItemStatValue = int32(fields[28 + i*2].GetInt16());
-        }
-
-        itemTemplate.ScalingStatDistribution = uint32(fields[47].GetUInt16());
-        itemTemplate.ScalingStatValue        = fields[48].GetInt32();
-
-        const ItemSparseEntry* info = sItemSparseStore.LookupEntry(entry);
-        if(info)
-            itemTemplate.damageType = info->DamageType;
-        else
-            itemTemplate.damageType     = 0;
-
-        itemTemplate.Delay          = uint32(fields[49].GetUInt16());
-        itemTemplate.RangedModRange = fields[50].GetFloat();
-
-        for (uint8 i = 0; i < MAX_ITEM_PROTO_SPELLS; ++i)
-        {
-            itemTemplate.Spells[i].SpellId               = fields[51 + i*7  ].GetInt32();
-            itemTemplate.Spells[i].SpellTrigger          = uint32(fields[52 + i*7].GetUInt8());
-            itemTemplate.Spells[i].SpellCharges          = int32(fields[53 + i*7].GetInt16());
-            itemTemplate.Spells[i].SpellPPMRate          = fields[54 + i*7].GetFloat();
-            itemTemplate.Spells[i].SpellCooldown         = fields[55 + i*7].GetInt32();
-            itemTemplate.Spells[i].SpellCategory         = uint32(fields[56 + i*7].GetUInt16());
-            itemTemplate.Spells[i].SpellCategoryCooldown = fields[57 + i*7].GetInt32();
-        }
-
-        itemTemplate.Bonding        = uint32(fields[86].GetUInt8());
-        itemTemplate.Description    = fields[87].GetString();
-        itemTemplate.PageText       = fields[88].GetUInt32();
-        itemTemplate.LanguageID     = uint32(fields[89].GetUInt8());
-        itemTemplate.PageMaterial   = uint32(fields[90].GetUInt8());
-        itemTemplate.StartQuest     = fields[91].GetUInt32();
-        itemTemplate.LockID         = fields[92].GetUInt32();
-        itemTemplate.Material       = int32(fields[93].GetInt8());
-        itemTemplate.Sheath         = uint32(fields[94].GetUInt8());
-        itemTemplate.RandomProperty = fields[95].GetUInt32();
-        itemTemplate.RandomSuffix   = fields[96].GetInt32();
-        itemTemplate.Block          = fields[97].GetUInt32();
-        itemTemplate.ItemSet        = fields[98].GetUInt32();
-        itemTemplate.MaxDurability  = uint32(fields[99].GetUInt16());
-        itemTemplate.Area           = fields[100].GetUInt32();
-        itemTemplate.Map            = uint32(fields[101].GetUInt16());
-        itemTemplate.BagFamily      = fields[102].GetUInt32();
-        itemTemplate.TotemCategory  = fields[103].GetUInt32();
-
-        for (uint8 i = 0; i < MAX_ITEM_PROTO_SOCKETS; ++i)
-        {
-            itemTemplate.Socket[i].Color   = uint32(fields[104 + i*2].GetUInt8());
-            itemTemplate.Socket[i].Content = fields[105 + i*2].GetUInt32();
-        }
-
-        itemTemplate.socketBonus             = fields[110].GetUInt32();
-        itemTemplate.GemProperties           = fields[111].GetUInt32();
-        itemTemplate.RequiredDisenchantSkill = uint32(fields[112].GetInt16());
-        itemTemplate.ArmorDamageModifier     = fields[113].GetFloat();
-        itemTemplate.Duration                = fields[114].GetInt32();
-        itemTemplate.ItemLimitCategory       = uint32(fields[115].GetInt16());
-        itemTemplate.HolidayId               = fields[116].GetUInt32();
-        itemTemplate.ScriptId                = sObjectMgr->GetScriptId(fields[117].GetCString());
-        itemTemplate.DisenchantID            = fields[118].GetUInt32();
-        itemTemplate.FoodType                = uint32(fields[119].GetUInt8());
-        itemTemplate.MinMoneyLoot            = fields[120].GetUInt32();
-        itemTemplate.MaxMoneyLoot            = fields[121].GetUInt32();
-
-        // Checks
-
-        ItemEntry const *db2item = sItemStore.LookupEntry(entry);
-
-        if (db2item)
-        {
-            if (itemTemplate.Class != db2item->Class)
-            {
-                sLog->outErrorDb("Item (Entry: %u) does not have a correct class %u, must be %u .", entry, itemTemplate.Class, db2item->Class);
-                if (enforceDB2Attributes)
-                    itemTemplate.Class = db2item->Class;
-            }
-            if (itemTemplate.Unk0 != db2item->Unk0)
-            {
-                sLog->outErrorDb("Item (Entry: %u) does not have a correct Unk0 (%i) , must be %i .", entry, itemTemplate.Unk0, db2item->Unk0);
-                if (enforceDB2Attributes)
-                    itemTemplate.Unk0 = db2item->Unk0;
-            }
-            if (itemTemplate.Material != db2item->Material)
-            {
-                sLog->outErrorDb("Item (Entry: %u) does not have a correct material (%i), must be %i .", entry, itemTemplate.Material, db2item->Material);
-                if (enforceDB2Attributes)
-                    itemTemplate.Material = db2item->Material;
-            }
-            if (itemTemplate.InventoryType != db2item->InventoryType)
-            {
-                sLog->outErrorDb("Item (Entry: %u) does not have a correct inventory type (%u), must be %u .", entry, itemTemplate.InventoryType, db2item->InventoryType);
-                if (enforceDB2Attributes)
-                    itemTemplate.InventoryType = db2item->InventoryType;
-            }
-            if (itemTemplate.DisplayInfoID != db2item->DisplayId)
-            {
-                sLog->outErrorDb("Item (Entry: %u) does not have a correct display id (%u), must be %u .", entry, itemTemplate.DisplayInfoID, db2item->DisplayId);
-                if (enforceDB2Attributes)
-                    itemTemplate.DisplayInfoID = db2item->DisplayId;
-            }
-            if (itemTemplate.Sheath != db2item->Sheath)
-            {
-                sLog->outErrorDb("Item (Entry: %u) does not have a correct sheathid (%u), must be %u .", entry, itemTemplate.Sheath, db2item->Sheath);
-                if (enforceDB2Attributes)
-                    itemTemplate.Sheath = db2item->Sheath;
-            }
-        }
-        else
-            sLog->outErrorDb("Item (Entry: %u) does not exist in item.db2! (not correct id?).", entry);
-
-        if (itemTemplate.Class >= MAX_ITEM_CLASS)
-        {
-            sLog->outErrorDb("Item (Entry: %u) has wrong Class value (%u)", entry, itemTemplate.Class);
-            itemTemplate.Class = ITEM_CLASS_MISC;
-        }
-
-        if (itemTemplate.SubClass >= MaxItemSubclassValues[itemTemplate.Class])
-        {
-            sLog->outErrorDb("Item (Entry: %u) has wrong Subclass value (%u) for class %u", entry, itemTemplate.SubClass, itemTemplate.Class);
-            itemTemplate.SubClass = 0;// exist for all item classes
-        }
-
-        if (itemTemplate.Quality >= MAX_ITEM_QUALITY)
-        {
-            sLog->outErrorDb("Item (Entry: %u) has wrong Quality value (%u)", entry, itemTemplate.Quality);
-            itemTemplate.Quality = ITEM_QUALITY_NORMAL;
-        }
-
-        if (itemTemplate.Flags2 & ITEM_FLAGS_EXTRA_HORDE_ONLY)
-        {
-            if (FactionEntry const* faction = sFactionStore.LookupEntry(HORDE))
-                if ((itemTemplate.AllowableRace & faction->BaseRepRaceMask[0]) == 0)
-                    sLog->outErrorDb("Item (Entry: %u) has value (%u) in `AllowableRace` races, not compatible with ITEM_FLAGS_EXTRA_HORDE_ONLY (%u) in Flags field, item cannot be equipped or used by these races.",
-                        entry, itemTemplate.AllowableRace, ITEM_FLAGS_EXTRA_HORDE_ONLY);
-
-            if (itemTemplate.Flags2 & ITEM_FLAGS_EXTRA_ALLIANCE_ONLY)
-                sLog->outErrorDb("Item (Entry: %u) has value (%u) in `Flags2` flags (ITEM_FLAGS_EXTRA_ALLIANCE_ONLY) and ITEM_FLAGS_EXTRA_HORDE_ONLY (%u) in Flags field, this is a wrong combination.",
-                    entry, ITEM_FLAGS_EXTRA_ALLIANCE_ONLY, ITEM_FLAGS_EXTRA_HORDE_ONLY);
-        }
-        else if (itemTemplate.Flags2 & ITEM_FLAGS_EXTRA_ALLIANCE_ONLY)
-        {
-            if (FactionEntry const* faction = sFactionStore.LookupEntry(ALLIANCE))
-                if ((itemTemplate.AllowableRace & faction->BaseRepRaceMask[0]) == 0)
-                    sLog->outErrorDb("Item (Entry: %u) has value (%u) in `AllowableRace` races, not compatible with ITEM_FLAGS_EXTRA_ALLIANCE_ONLY (%u) in Flags field, item cannot be equipped or used by these races.",
-                        entry, itemTemplate.AllowableRace, ITEM_FLAGS_EXTRA_ALLIANCE_ONLY);
-        }
-
-        if (itemTemplate.BuyCount <= 0)
-        {
-            sLog->outErrorDb("Item (Entry: %u) has wrong BuyCount value (%u), set to default(1).", entry, itemTemplate.BuyCount);
-            itemTemplate.BuyCount = 1;
-        }
-
-        if (itemTemplate.InventoryType >= MAX_INVTYPE)
-        {
-            sLog->outErrorDb("Item (Entry: %u) has wrong InventoryType value (%u)", entry, itemTemplate.InventoryType);
-            itemTemplate.InventoryType = INVTYPE_NON_EQUIP;
-        }
-
-        if (itemTemplate.RequiredSkill >= MAX_SKILL_TYPE)
-        {
-            sLog->outErrorDb("Item (Entry: %u) has wrong RequiredSkill value (%u)", entry, itemTemplate.RequiredSkill);
-            itemTemplate.RequiredSkill = 0;
-        }
-
-        {
-            // can be used in equip slot, as page read use in inventory, or spell casting at use
-            bool req = itemTemplate.InventoryType != INVTYPE_NON_EQUIP || itemTemplate.PageText;
-            if (!req)
-                for (uint8 j = 0; j < MAX_ITEM_PROTO_SPELLS; ++j)
-                {
-                    if (itemTemplate.Spells[j].SpellId)
-                    {
-                        req = true;
-                        break;
-                    }
-                }
-
-            if (req)
-            {
-                if (!(itemTemplate.AllowableClass & CLASSMASK_ALL_PLAYABLE))
-                    sLog->outErrorDb("Item (Entry: %u) does not have any playable classes (%u) in `AllowableClass` and can't be equipped or used.", entry, itemTemplate.AllowableClass);
-
-                if (!(itemTemplate.AllowableRace & RACEMASK_ALL_PLAYABLE))
-                    sLog->outErrorDb("Item (Entry: %u) does not have any playable races (%u) in `AllowableRace` and can't be equipped or used.", entry, itemTemplate.AllowableRace);
-            }
-        }
-
-        if (itemTemplate.RequiredSpell && !sSpellMgr->GetSpellInfo(itemTemplate.RequiredSpell))
-        {
-            sLog->outErrorDb("Item (Entry: %u) has a wrong (non-existing) spell in RequiredSpell (%u)", entry, itemTemplate.RequiredSpell);
-            itemTemplate.RequiredSpell = 0;
-        }
-
-        if (itemTemplate.RequiredReputationRank >= MAX_REPUTATION_RANK)
-            sLog->outErrorDb("Item (Entry: %u) has wrong reputation rank in RequiredReputationRank (%u), item can't be used.", entry, itemTemplate.RequiredReputationRank);
-
-        if (itemTemplate.RequiredReputationFaction)
-        {
-            if (!sFactionStore.LookupEntry(itemTemplate.RequiredReputationFaction))
-            {
-                sLog->outErrorDb("Item (Entry: %u) has wrong (not existing) faction in RequiredReputationFaction (%u)", entry, itemTemplate.RequiredReputationFaction);
-                itemTemplate.RequiredReputationFaction = 0;
-            }
-
-            if (itemTemplate.RequiredReputationRank == MIN_REPUTATION_RANK)
-                sLog->outErrorDb("Item (Entry: %u) has min. reputation rank in RequiredReputationRank (0) but RequiredReputationFaction > 0, faction setting is useless.", entry);
-        }
-
-        if (itemTemplate.MaxCount < -1)
-        {
-            sLog->outErrorDb("Item (Entry: %u) has too large negative in maxcount (%i), replace by value (-1) no storing limits.", entry, itemTemplate.MaxCount);
-            itemTemplate.MaxCount = -1;
-        }
-
-        if (itemTemplate.Stackable == 0)
-        {
-            sLog->outErrorDb("Item (Entry: %u) has wrong value in stackable (%i), replace by default 1.", entry, itemTemplate.Stackable);
-            itemTemplate.Stackable = 1;
-        }
-        else if (itemTemplate.Stackable < -1)
-        {
-            sLog->outErrorDb("Item (Entry: %u) has too large negative in stackable (%i), replace by value (-1) no stacking limits.", entry, itemTemplate.Stackable);
-            itemTemplate.Stackable = -1;
-        }
-
-        if (itemTemplate.ContainerSlots > MAX_BAG_SIZE)
-        {
-            sLog->outErrorDb("Item (Entry: %u) has too large value in ContainerSlots (%u), replace by hardcoded limit (%u).", entry, itemTemplate.ContainerSlots, MAX_BAG_SIZE);
-            itemTemplate.ContainerSlots = MAX_BAG_SIZE;
-        }
-
-        for (uint8 j = 0; j < MAX_ITEM_PROTO_STATS; ++j)
-        {
-            // for ItemStatValue != 0
-            if (itemTemplate.ItemStat[j].ItemStatValue && itemTemplate.ItemStat[j].ItemStatType >= MAX_ITEM_MOD)
-            {
-                sLog->outErrorDb("Item (Entry: %u) has wrong (non-existing?) stat_type%d (%u)", entry, j+1, itemTemplate.ItemStat[j].ItemStatType);
-                itemTemplate.ItemStat[j].ItemStatType = 0;
-            }
-
-            switch (itemTemplate.ItemStat[j].ItemStatType)
-            {
-                case ITEM_MOD_SPELL_HEALING_DONE:
-                case ITEM_MOD_SPELL_DAMAGE_DONE:
-                    sLog->outErrorDb("Item (Entry: %u) has deprecated stat_type%d (%u)", entry, j+1, itemTemplate.ItemStat[j].ItemStatType);
-                    break;
-                default:
-                    break;
-            }
-        }
-
-            if (itemTemplate.damageType >= MAX_SPELL_SCHOOL)
-            {
-                sLog->outErrorDb("Item (Entry: %u) has wrong damageType (%u)", entry, itemTemplate.damageType);
-                itemTemplate.damageType = 0;
-            }
-
-        // special format
-        if ((itemTemplate.Spells[0].SpellId == 483) || (itemTemplate.Spells[0].SpellId == 55884))
-        {
-            // spell_1
-            if (itemTemplate.Spells[0].SpellTrigger != ITEM_SPELLTRIGGER_ON_USE)
-            {
-                sLog->outErrorDb("Item (Entry: %u) has wrong item spell trigger value in spelltrigger_%d (%u) for special learning format", entry, 0+1, itemTemplate.Spells[0].SpellTrigger);
-                itemTemplate.Spells[0].SpellId = 0;
-                itemTemplate.Spells[0].SpellTrigger = ITEM_SPELLTRIGGER_ON_USE;
-                itemTemplate.Spells[1].SpellId = 0;
-                itemTemplate.Spells[1].SpellTrigger = ITEM_SPELLTRIGGER_ON_USE;
-            }
-
-            // spell_2 have learning spell
-            if (itemTemplate.Spells[1].SpellTrigger != ITEM_SPELLTRIGGER_LEARN_SPELL_ID)
-            {
-                sLog->outErrorDb("Item (Entry: %u) has wrong item spell trigger value in spelltrigger_%d (%u) for special learning format.", entry, 1+1, itemTemplate.Spells[1].SpellTrigger);
-                itemTemplate.Spells[0].SpellId = 0;
-                itemTemplate.Spells[1].SpellId = 0;
-                itemTemplate.Spells[1].SpellTrigger = ITEM_SPELLTRIGGER_ON_USE;
-            }
-            else if (!itemTemplate.Spells[1].SpellId)
-            {
-                sLog->outErrorDb("Item (Entry: %u) does not have an expected spell in spellid_%d in special learning format.", entry, 1+1);
-                itemTemplate.Spells[0].SpellId = 0;
-                itemTemplate.Spells[1].SpellTrigger = ITEM_SPELLTRIGGER_ON_USE;
-            }
-            else if (itemTemplate.Spells[1].SpellId != -1)
-            {
-                SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(itemTemplate.Spells[1].SpellId);
-                if (!spellInfo && !DisableMgr::IsDisabledFor(DISABLE_TYPE_SPELL, itemTemplate.Spells[1].SpellId, NULL))
-                {
-                    sLog->outErrorDb("Item (Entry: %u) has wrong (not existing) spell in spellid_%d (%d)", entry, 1+1, itemTemplate.Spells[1].SpellId);
-                    itemTemplate.Spells[0].SpellId = 0;
-                    itemTemplate.Spells[1].SpellId = 0;
-                    itemTemplate.Spells[1].SpellTrigger = ITEM_SPELLTRIGGER_ON_USE;
-                }
-                // allowed only in special format
-                else if ((itemTemplate.Spells[1].SpellId == 483) || (itemTemplate.Spells[1].SpellId == 55884))
-                {
-                    sLog->outErrorDb("Item (Entry: %u) has broken spell in spellid_%d (%d)", entry, 1+1, itemTemplate.Spells[1].SpellId);
-                    itemTemplate.Spells[0].SpellId = 0;
-                    itemTemplate.Spells[1].SpellId = 0;
-                    itemTemplate.Spells[1].SpellTrigger = ITEM_SPELLTRIGGER_ON_USE;
-                }
-            }
-
-            // spell_3*, spell_4*, spell_5* is empty
-            for (uint8 j = 2; j < MAX_ITEM_PROTO_SPELLS; ++j)
-            {
-                if (itemTemplate.Spells[j].SpellTrigger != ITEM_SPELLTRIGGER_ON_USE)
-                {
-                    sLog->outErrorDb("Item (Entry: %u) has wrong item spell trigger value in spelltrigger_%d (%u)", entry, j+1, itemTemplate.Spells[j].SpellTrigger);
-                    itemTemplate.Spells[j].SpellId = 0;
-                    itemTemplate.Spells[j].SpellTrigger = ITEM_SPELLTRIGGER_ON_USE;
-                }
-                else if (itemTemplate.Spells[j].SpellId != 0)
-                {
-                    sLog->outErrorDb("Item (Entry: %u) has wrong spell in spellid_%d (%d) for learning special format", entry, j+1, itemTemplate.Spells[j].SpellId);
-                    itemTemplate.Spells[j].SpellId = 0;
-                }
-            }
-        }
-        // normal spell list
-        else
-        {
-            for (uint8 j = 0; j < MAX_ITEM_PROTO_SPELLS; ++j)
-            {
-                if (itemTemplate.Spells[j].SpellTrigger >= MAX_ITEM_SPELLTRIGGER || itemTemplate.Spells[j].SpellTrigger == ITEM_SPELLTRIGGER_LEARN_SPELL_ID)
-                {
-                    sLog->outErrorDb("Item (Entry: %u) has wrong item spell trigger value in spelltrigger_%d (%u)", entry, j+1, itemTemplate.Spells[j].SpellTrigger);
-                    itemTemplate.Spells[j].SpellId = 0;
-                    itemTemplate.Spells[j].SpellTrigger = ITEM_SPELLTRIGGER_ON_USE;
-                }
-
-                if (itemTemplate.Spells[j].SpellId && itemTemplate.Spells[j].SpellId != -1)
-                {
-                    SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(itemTemplate.Spells[j].SpellId);
-                    if (!spellInfo && !DisableMgr::IsDisabledFor(DISABLE_TYPE_SPELL, itemTemplate.Spells[j].SpellId, NULL))
-                    {
-                        sLog->outErrorDb("Item (Entry: %u) has wrong (not existing) spell in spellid_%d (%d)", entry, j+1, itemTemplate.Spells[j].SpellId);
-                        itemTemplate.Spells[j].SpellId = 0;
-                    }
-                    // allowed only in special format
-                    else if ((itemTemplate.Spells[j].SpellId == 483) || (itemTemplate.Spells[j].SpellId == 55884))
-                    {
-                        sLog->outErrorDb("Item (Entry: %u) has broken spell in spellid_%d (%d)", entry, j+1, itemTemplate.Spells[j].SpellId);
-                        itemTemplate.Spells[j].SpellId = 0;
-                    }
-                }
-            }
-        }
-
-        if (itemTemplate.Bonding >= MAX_BIND_TYPE)
-            sLog->outErrorDb("Item (Entry: %u) has wrong Bonding value (%u)", entry, itemTemplate.Bonding);
-
-        if (itemTemplate.PageText && !GetPageText(itemTemplate.PageText))
-            sLog->outErrorDb("Item (Entry: %u) has non existing first page (Id:%u)", entry, itemTemplate.PageText);
-
-        if (itemTemplate.LockID && !sLockStore.LookupEntry(itemTemplate.LockID))
-            sLog->outErrorDb("Item (Entry: %u) has wrong LockID (%u)", entry, itemTemplate.LockID);
-
-        if (itemTemplate.Sheath >= MAX_SHEATHETYPE)
-        {
-            sLog->outErrorDb("Item (Entry: %u) has wrong Sheath (%u)", entry, itemTemplate.Sheath);
-            itemTemplate.Sheath = SHEATHETYPE_NONE;
-        }
-
-        if (itemTemplate.RandomProperty)
-        {
-            // To be implemented later
-            if (itemTemplate.RandomProperty == -1)
-                itemTemplate.RandomProperty = 0;
-
-            else if (!sItemRandomPropertiesStore.LookupEntry(GetItemEnchantMod(itemTemplate.RandomProperty)))
-            {
-                sLog->outErrorDb("Item (Entry: %u) has unknown (wrong or not listed in `item_enchantment_template`) RandomProperty (%u)", entry, itemTemplate.RandomProperty);
-                itemTemplate.RandomProperty = 0;
-            }
-        }
-
-        if (itemTemplate.RandomSuffix && !sItemRandomSuffixStore.LookupEntry(GetItemEnchantMod(itemTemplate.RandomSuffix)))
-        {
-            sLog->outErrorDb("Item (Entry: %u) has wrong RandomSuffix (%u)", entry, itemTemplate.RandomSuffix);
-            itemTemplate.RandomSuffix = 0;
-        }
-
-        if (itemTemplate.ItemSet && !sItemSetStore.LookupEntry(itemTemplate.ItemSet))
-        {
-            sLog->outErrorDb("Item (Entry: %u) have wrong ItemSet (%u)", entry, itemTemplate.ItemSet);
-            itemTemplate.ItemSet = 0;
-        }
-
-        if (itemTemplate.Area && !GetAreaEntryByAreaID(itemTemplate.Area))
-            sLog->outErrorDb("Item (Entry: %u) has wrong Area (%u)", entry, itemTemplate.Area);
-
-        if (itemTemplate.Map && !sMapStore.LookupEntry(itemTemplate.Map))
-            sLog->outErrorDb("Item (Entry: %u) has wrong Map (%u)", entry, itemTemplate.Map);
-
-        if (itemTemplate.BagFamily)
-        {
-            // check bits
-            for (uint32 j = 0; j < sizeof(itemTemplate.BagFamily)*8; ++j)
-            {
-                uint32 mask = 1 << j;
-                if ((itemTemplate.BagFamily & mask) == 0)
-                    continue;
-
-                ItemBagFamilyEntry const* bf = sItemBagFamilyStore.LookupEntry(j+1);
-                if (!bf)
-                {
-                    sLog->outErrorDb("Item (Entry: %u) has bag family bit set not listed in ItemBagFamily.dbc, remove bit", entry);
-                    itemTemplate.BagFamily &= ~mask;
-                    continue;
-                }
-
-                if (BAG_FAMILY_MASK_CURRENCY_TOKENS & mask)
-                {
-                    CurrencyTypesEntry const* ctEntry = sCurrencyTypesStore.LookupEntry(itemTemplate.ItemId);
-                    if (!ctEntry)
-                    {
-                        sLog->outErrorDb("Item (Entry: %u) has currency bag family bit set in BagFamily but not listed in CurrencyTypes.dbc, remove bit", entry);
-                        itemTemplate.BagFamily &= ~mask;
-                    }
-                }
-            }
-        }
-
-        if (itemTemplate.TotemCategory && !sTotemCategoryStore.LookupEntry(itemTemplate.TotemCategory))
-            sLog->outErrorDb("Item (Entry: %u) has wrong TotemCategory (%u)", entry, itemTemplate.TotemCategory);
-
-        for (uint8 j = 0; j < MAX_ITEM_PROTO_SOCKETS; ++j)
-        {
-            if (itemTemplate.Socket[j].Color && (itemTemplate.Socket[j].Color & SOCKET_COLOR_ALL) != itemTemplate.Socket[j].Color)
-            {
-                sLog->outErrorDb("Item (Entry: %u) has wrong socketColor_%d (%u)", entry, j+1, itemTemplate.Socket[j].Color);
-                itemTemplate.Socket[j].Color = 0;
-            }
-        }
-
-        if (itemTemplate.GemProperties && !sGemPropertiesStore.LookupEntry(itemTemplate.GemProperties))
-            sLog->outErrorDb("Item (Entry: %u) has wrong GemProperties (%u)", entry, itemTemplate.GemProperties);
-
-        if (itemTemplate.FoodType >= MAX_PET_DIET)
-        {
-            sLog->outErrorDb("Item (Entry: %u) has wrong FoodType value (%u)", entry, itemTemplate.FoodType);
-            itemTemplate.FoodType = 0;
-        }
-
-        if (itemTemplate.ItemLimitCategory && !sItemLimitCategoryStore.LookupEntry(itemTemplate.ItemLimitCategory))
-        {
-            sLog->outErrorDb("Item (Entry: %u) has wrong LimitCategory value (%u)", entry, itemTemplate.ItemLimitCategory);
-            itemTemplate.ItemLimitCategory = 0;
-        }
-
-        if (itemTemplate.HolidayId && !sHolidaysStore.LookupEntry(itemTemplate.HolidayId))
-        {
-            sLog->outErrorDb("Item (Entry: %u) has wrong HolidayId value (%u)", entry, itemTemplate.HolidayId);
-            itemTemplate.HolidayId = 0;
-        }
-
-        ++count;
+        return uint32(armorQuality->Value[quality] * armorTotal->Value[itemSubclass - 1] * location->Value[itemSubclass - 1] + 0.5f);
     }
-    while (result->NextRow());
+
+    // shields
+    ItemArmorShieldEntry const* shield = sItemArmorShieldStore.LookupEntry(itemlevel);
+    if (!shield)
+        return 0;
+
+    return uint32(shield->Value[quality] + 0.5f);
+}
+
+void FillDisenchantFields(uint32* disenchantID, uint32* requiredDisenchantSkill, ItemTemplate const& itemTemplate)
+{
+    *disenchantID = 0;
+    *(int32*)requiredDisenchantSkill = -1;
+    if ((itemTemplate.Flags & (ITEM_PROTO_FLAG_CONJURED | ITEM_PROTO_FLAG_UNK6)) ||
+        itemTemplate.Bonding == BIND_QUEST_ITEM || itemTemplate.Area || itemTemplate.Map ||
+        itemTemplate.Stackable > 1 ||
+        !(itemTemplate.SellPrice) || sItemCurrencyCostStore.LookupEntry(itemTemplate.ItemId))
+        return;
+
+    for (uint32 i = 0; i < sItemDisenchantLootStore.GetNumRows(); ++i)
+    {
+        ItemDisenchantLootEntry const* disenchant = sItemDisenchantLootStore.LookupEntry(i);
+        if (!disenchant)
+            continue;
+
+        if (disenchant->ItemClass == itemTemplate.Class &&
+            disenchant->ItemQuality == itemTemplate.Quality &&
+            disenchant->MinItemLevel <= itemTemplate.ItemLevel &&
+            disenchant->MaxItemLevel >= itemTemplate.ItemLevel)
+        {
+            // extra check for epics in range 90 - 99
+            if (disenchant->MinItemLevel < 90)
+            {
+                if (itemTemplate.RequiredLevel > 60 || itemTemplate.RequiredSkillRank > 300)
+                    continue;
+            }
+            else
+            {
+                if (itemTemplate.RequiredLevel <= 60 || itemTemplate.RequiredSkillRank <= 300)
+                    continue;
+            }
+
+            *disenchantID = disenchant->Id;
+            *requiredDisenchantSkill = disenchant->RequiredDisenchantSkill;
+            return;
+        }
+    }
+}
+
+void ObjectMgr::LoadItemTemplates()
+{
+    uint32 oldMSTime = getMSTime();
+    uint32 sparseCount = 0;
+    uint32 dbCount = 0;
+
+    for (uint32 itemId = 0; itemId < sItemSparseStore.GetNumRows(); ++itemId)
+    {
+        ItemSparseEntry const* sparse = sItemSparseStore.LookupEntry(itemId);
+        ItemEntry const* db2Data = sItemStore.LookupEntry(itemId);
+        if (!sparse || !db2Data)
+            continue;
+
+        ItemTemplate& itemTemplate = ItemTemplateStore[itemId];
+
+        itemTemplate.ItemId = itemId;
+        itemTemplate.Class = db2Data->Class;
+        itemTemplate.SubClass = db2Data->SubClass;
+        itemTemplate.Unk0 = db2Data->Unk0;
+        itemTemplate.Name1 = sparse->Name;
+        itemTemplate.DisplayInfoID = db2Data->DisplayId;
+        itemTemplate.Quality = sparse->Quality;
+        itemTemplate.Flags = sparse->Flags;
+        itemTemplate.Flags2 = sparse->Flags2;
+        itemTemplate.BuyCount = 1;
+        itemTemplate.BuyPrice = sparse->BuyPrice;
+        itemTemplate.SellPrice = sparse->SellPrice;
+        itemTemplate.InventoryType = db2Data->InventoryType;
+        itemTemplate.AllowableClass = sparse->AllowableClass;
+        itemTemplate.AllowableRace = sparse->AllowableRace;
+        itemTemplate.ItemLevel = sparse->ItemLevel;
+        itemTemplate.RequiredLevel = sparse->RequiredLevel;
+        itemTemplate.RequiredSkill = sparse->RequiredSkill;
+        itemTemplate.RequiredSkillRank = sparse->RequiredSkillRank;
+        itemTemplate.RequiredSpell = sparse->RequiredSpell;
+        itemTemplate.RequiredHonorRank = sparse->RequiredHonorRank;
+        itemTemplate.RequiredCityRank = sparse->RequiredCityRank;
+        itemTemplate.RequiredReputationFaction = sparse->RequiredReputationFaction;
+        itemTemplate.RequiredReputationRank = sparse->RequiredReputationRank;
+        itemTemplate.MaxCount = sparse->MaxCount;
+        itemTemplate.Stackable = sparse->Stackable;
+        itemTemplate.ContainerSlots = sparse->ContainerSlots;
+        for (uint32 i = 0; i < MAX_ITEM_PROTO_STATS; ++i)
+        {
+            itemTemplate.ItemStat[i].ItemStatType = sparse->ItemStatType[i];
+            itemTemplate.ItemStat[i].ItemStatValue = sparse->ItemStatValue[i];
+            itemTemplate.ItemStat[i].ItemStatUnk1 = sparse->ItemStatUnk1[i];
+            itemTemplate.ItemStat[i].ItemStatUnk2 = sparse->ItemStatUnk2[i];
+        }
+
+        itemTemplate.ScalingStatDistribution = sparse->ScalingStatDistribution;
+
+        // cache item damage
+        FillItemDamageFields(&itemTemplate.DamageMin, &itemTemplate.DamageMax, &itemTemplate.DPS, sparse->ItemLevel,
+            db2Data->Class, db2Data->SubClass, sparse->Quality, sparse->Delay, sparse->StatScalingFactor,
+            sparse->InventoryType, sparse->Flags2);
+
+        itemTemplate.DamageType = sparse->DamageType;
+        itemTemplate.Armor = FillItemArmor(sparse->ItemLevel, db2Data->Class, db2Data->SubClass, sparse->Quality, sparse->InventoryType);
+        itemTemplate.Delay = sparse->Delay;
+        itemTemplate.RangedModRange = sparse->RangedModRange;
+        for (uint32 i = 0; i < MAX_ITEM_PROTO_SPELLS; ++i)
+        {
+            itemTemplate.Spells[i].SpellId = sparse->SpellId[i];
+            itemTemplate.Spells[i].SpellTrigger = sparse->SpellTrigger[i];
+            itemTemplate.Spells[i].SpellCharges = sparse->SpellCharges[i];
+            itemTemplate.Spells[i].SpellCooldown = sparse->SpellCooldown[i];
+            itemTemplate.Spells[i].SpellCategory = sparse->SpellCategory[i];
+            itemTemplate.Spells[i].SpellCategoryCooldown = sparse->SpellCategoryCooldown[i];
+        }
+
+        itemTemplate.SpellPPMRate = 0.0f;
+        itemTemplate.Bonding = sparse->Bonding;
+        itemTemplate.Description = sparse->Description;
+        itemTemplate.PageText = sparse->PageText;
+        itemTemplate.LanguageID = sparse->LanguageID;
+        itemTemplate.PageMaterial = sparse->PageMaterial;
+        itemTemplate.StartQuest = sparse->StartQuest;
+        itemTemplate.LockID = sparse->LockID;
+        itemTemplate.Material = sparse->Material;
+        itemTemplate.Sheath = sparse->Sheath;
+        itemTemplate.RandomProperty = sparse->RandomProperty;
+        itemTemplate.RandomSuffix = sparse->RandomSuffix;
+        itemTemplate.ItemSet = sparse->ItemSet;
+        itemTemplate.MaxDurability = sparse->MaxDurability;
+        itemTemplate.Area = sparse->Area;
+        itemTemplate.Map = sparse->Map;
+        itemTemplate.BagFamily = sparse->BagFamily;
+        itemTemplate.TotemCategory = sparse->TotemCategory;
+        for (uint32 i = 0; i < MAX_ITEM_PROTO_SOCKETS; ++i)
+        {
+            itemTemplate.Socket[i].Color = sparse->Color[i];
+            itemTemplate.Socket[i].Content = sparse->Content[i];
+        }
+
+        itemTemplate.socketBonus = sparse->SocketBonus;
+        itemTemplate.GemProperties = sparse->GemProperties;
+        FillDisenchantFields(&itemTemplate.DisenchantID, &itemTemplate.RequiredDisenchantSkill, itemTemplate);
+
+        itemTemplate.ArmorDamageModifier = sparse->ArmorDamageModifier;
+        itemTemplate.Duration = sparse->Duration;
+        itemTemplate.ItemLimitCategory = sparse->ItemLimitCategory;
+        itemTemplate.HolidayId = sparse->HolidayId;
+        itemTemplate.StatScalingFactor = sparse->StatScalingFactor;
+        itemTemplate.Field130 = sparse->Field130;
+        itemTemplate.Field131 = sparse->Field131;
+        itemTemplate.ScriptId = 0;
+        itemTemplate.FoodType = 0;
+        itemTemplate.MinMoneyLoot = 0;
+        itemTemplate.MaxMoneyLoot = 0;
+        ++sparseCount;
+    }
+
+    // Load missing items from item_template AND overwrite data from Item-sparse.db2 (item_template is supposed to contain Item-sparse.adb data)
+    //                                               0      1      2         3     4     5          6        7      8           9         10         11
+    QueryResult result = WorldDatabase.Query("SELECT entry, Class, SubClass, Unk0, Name, DisplayId, Quality, Flags, FlagsExtra, BuyPrice, SellPrice, InventoryType, "
+        //      12              13             14         15             16             17                 18             19
+        "AllowableClass, AllowableRace, ItemLevel, RequiredLevel, RequiredSkill, RequiredSkillRank, RequiredSpell, RequiredHonorRank, "
+        //      20                21                         22                      23        24         25
+        "RequiredCityRank, RequiredReputationFaction, RequiredReputationRank, MaxCount, Stackable, ContainerSlots, "
+        //                                        26          27           28           29           30          31           32           33
+        "stat_type1, stat_value1, stat_unk1_1, stat_unk2_1, stat_type2, stat_value2, stat_unk1_2, stat_unk2_2, "
+        //                                        34          35           36           37           38          39           40           41
+        "stat_type3, stat_value3, stat_unk1_3, stat_unk2_3, stat_type4, stat_value4, stat_unk1_4, stat_unk2_4, "
+        //                                        42          43           44           45           46          47           48           49
+        "stat_type5, stat_value5, stat_unk1_5, stat_unk2_5, stat_type6, stat_value6, stat_unk1_6, stat_unk2_6, "
+        //                                        50          51           52           53           54          55           56           57
+        "stat_type7, stat_value7, stat_unk1_7, stat_unk2_7, stat_type8, stat_value8, stat_unk1_8, stat_unk2_8, "
+        //                                        58          59           60           61           62           63            64            65
+        "stat_type9, stat_value9, stat_unk1_9, stat_unk2_9, stat_type10, stat_value10, stat_unk1_10, stat_unk2_10, "
+        //                                        66                       67          68     69
+        "ScalingStatDistribution, DamageType, Delay, RangedModRange, "
+        //                                        70         71              72              73               74               75
+        "spellid_1, spelltrigger_1, spellcharges_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, "
+        //                                        76         77              78              79               80               81
+        "spellid_2, spelltrigger_2, spellcharges_2, spellcooldown_2, spellcategory_2, spellcategorycooldown_2, "
+        //                                        82         83              84              85               86               87
+        "spellid_3, spelltrigger_3, spellcharges_3, spellcooldown_3, spellcategory_3, spellcategorycooldown_3, "
+        //                                        88         89              90              91               92               93
+        "spellid_4, spelltrigger_4, spellcharges_4, spellcooldown_4, spellcategory_4, spellcategorycooldown_4, "
+        //                                        94         95              96              97               98               99
+        "spellid_5, spelltrigger_5, spellcharges_5, spellcooldown_5, spellcategory_5, spellcategorycooldown_5, "
+        //                                        100      101          102       103         104           105         106     107
+        "Bonding, Description, PageText, LanguageID, PageMaterial, StartQuest, LockID, Material, "
+        //                                        108     109             110           111      112            113   114  115        116
+        "Sheath, RandomProperty, RandomSuffix, ItemSet, MaxDurability, Area, Map, BagFamily, TotemCategory, "
+        //  117            118              119            120              121            122              123
+        "SocketColor_1, SocketContent_1, SocketColor_2, SocketContent_2, SocketColor_3, SocketContent_3, SocketBonus, "
+        //  124            125         126       127                128        129      130       131
+        "GemProperties, ArmorDamageModifier, Duration, ItemLimitCategory, HolidayId, FoodType, minMoneyLoot, maxMoneyLoot,Field132, Field133 "
+        "FROM item_template");
+
+    if (result)
+    {
+        do
+        {
+            Field* fields = result->Fetch();
+            uint32 itemId = fields[0].GetUInt32();
+            if (ItemTemplateStore.find(itemId) != ItemTemplateStore.end())
+                --sparseCount;
+
+            ItemTemplate& itemTemplate = ItemTemplateStore[itemId];
+
+            itemTemplate.ItemId = itemId;
+            itemTemplate.Class = fields[1].GetUInt32();
+            itemTemplate.SubClass = fields[2].GetUInt32();
+            itemTemplate.Unk0 = fields[3].GetInt32();
+            itemTemplate.Name1 = fields[4].GetString();
+            itemTemplate.DisplayInfoID = fields[5].GetUInt32();
+            itemTemplate.Quality = fields[6].GetUInt32();
+            itemTemplate.Flags = fields[7].GetUInt32();
+            itemTemplate.Flags2 = fields[8].GetUInt32();
+            itemTemplate.BuyCount = 1;
+            itemTemplate.BuyPrice = fields[9].GetInt32();
+            itemTemplate.SellPrice = fields[10].GetUInt32();
+            itemTemplate.InventoryType = fields[11].GetUInt32();
+            itemTemplate.AllowableClass = fields[12].GetUInt32();
+            itemTemplate.AllowableRace = fields[13].GetUInt32();
+            itemTemplate.ItemLevel = fields[14].GetUInt32();
+            itemTemplate.RequiredLevel = fields[15].GetUInt32();
+            itemTemplate.RequiredSkill = fields[16].GetUInt32();
+            itemTemplate.RequiredSkillRank = fields[17].GetUInt32();
+            itemTemplate.RequiredSpell = fields[18].GetUInt32();
+            itemTemplate.RequiredHonorRank = fields[19].GetUInt32();
+            itemTemplate.RequiredCityRank = fields[20].GetUInt32();
+            itemTemplate.RequiredReputationFaction = fields[21].GetUInt32();
+            itemTemplate.RequiredReputationRank = fields[22].GetUInt32();
+            itemTemplate.MaxCount = fields[23].GetInt32();
+            itemTemplate.Stackable = fields[24].GetInt32();
+            itemTemplate.ContainerSlots = fields[25].GetUInt32();
+            for (uint32 i = 0; i < MAX_ITEM_PROTO_STATS; ++i)
+            {
+                itemTemplate.ItemStat[i].ItemStatType = fields[26 + i * 4].GetUInt32();
+                itemTemplate.ItemStat[i].ItemStatValue = fields[26 + i * 4 + 1].GetInt32();
+                itemTemplate.ItemStat[i].ItemStatUnk1 = fields[26 + i * 4 + 2].GetInt32();
+                itemTemplate.ItemStat[i].ItemStatUnk2 = fields[26 + i * 4 + 3].GetInt32();
+            }
+
+            itemTemplate.ScalingStatDistribution = fields[66].GetUInt32();
+
+            // cache item damage
+            FillItemDamageFields(&itemTemplate.DamageMin, &itemTemplate.DamageMax, &itemTemplate.DPS, itemTemplate.ItemLevel,
+                itemTemplate.Class, itemTemplate.SubClass, itemTemplate.Quality, fields[68].GetUInt32(),
+                fields[129].GetFloat(), itemTemplate.InventoryType, itemTemplate.Flags2);
+
+            itemTemplate.DamageType = fields[67].GetUInt32();
+            itemTemplate.Armor = FillItemArmor(itemTemplate.ItemLevel, itemTemplate.Class, itemTemplate.SubClass, itemTemplate.Quality, itemTemplate.InventoryType);
+            itemTemplate.Delay = fields[68].GetUInt32();
+            itemTemplate.RangedModRange = fields[69].GetFloat();
+            for (uint32 i = 0; i < MAX_ITEM_PROTO_SPELLS; ++i)
+            {
+                itemTemplate.Spells[i].SpellId = fields[70 + 6 * i].GetInt32();
+                itemTemplate.Spells[i].SpellTrigger = fields[70 + 6 * i + 1].GetUInt32();
+                itemTemplate.Spells[i].SpellCharges = fields[70 + 6 * i + 2].GetInt32();
+                itemTemplate.Spells[i].SpellCooldown = fields[70 + 6 * i + 3].GetInt32();
+                itemTemplate.Spells[i].SpellCategory = fields[70 + 6 * i + 4].GetUInt32();
+                itemTemplate.Spells[i].SpellCategoryCooldown = fields[70 + 6 * i + 5].GetInt32();
+            }
+
+            itemTemplate.SpellPPMRate = 0.0f;
+            itemTemplate.Bonding = fields[100].GetUInt32();
+            itemTemplate.Description = fields[101].GetString();
+            itemTemplate.PageText = fields[102].GetUInt32();
+            itemTemplate.LanguageID = fields[103].GetUInt32();
+            itemTemplate.PageMaterial = fields[104].GetUInt32();
+            itemTemplate.StartQuest = fields[105].GetUInt32();
+            itemTemplate.LockID = fields[106].GetUInt32();
+            itemTemplate.Material = fields[107].GetInt32();
+            itemTemplate.Sheath = fields[108].GetUInt32();
+            itemTemplate.RandomProperty = fields[109].GetInt32();
+            itemTemplate.RandomSuffix = fields[110].GetInt32();
+            itemTemplate.ItemSet = fields[111].GetUInt32();
+            itemTemplate.MaxDurability = fields[112].GetUInt32();
+            itemTemplate.Area = fields[113].GetUInt32();
+            itemTemplate.Map = fields[114].GetUInt32();
+            itemTemplate.BagFamily = fields[115].GetUInt32();
+            itemTemplate.TotemCategory = fields[116].GetUInt32();
+            for (uint32 i = 0; i < MAX_ITEM_PROTO_SOCKETS; ++i)
+            {
+                itemTemplate.Socket[i].Color = fields[117 + i * 2].GetUInt32();
+                itemTemplate.Socket[i].Content = fields[117 + i * 2 + 1].GetUInt32();
+            }
+
+            itemTemplate.socketBonus = fields[123].GetUInt32();
+            itemTemplate.GemProperties = fields[124].GetUInt32();
+            FillDisenchantFields(&itemTemplate.DisenchantID, &itemTemplate.RequiredDisenchantSkill, itemTemplate);
+
+            itemTemplate.ArmorDamageModifier = fields[125].GetFloat();
+            itemTemplate.Duration = fields[126].GetUInt32();
+            itemTemplate.ItemLimitCategory = fields[127].GetUInt32();
+            itemTemplate.HolidayId = fields[128].GetUInt32();
+            itemTemplate.StatScalingFactor = fields[129].GetFloat();
+            itemTemplate.Field130 = fields[130].GetInt32();
+            itemTemplate.Field131 = fields[131].GetInt32();
+            itemTemplate.ScriptId = 0;
+            itemTemplate.FoodType = 0;
+            itemTemplate.MinMoneyLoot = 0;
+            itemTemplate.MaxMoneyLoot = 0;
+            ++dbCount;
+        } while (result->NextRow());
+    }
 
     // Check if item templates for DBC referenced character start outfit are present
     std::set<uint32> notFoundOutfit;
@@ -2643,7 +2524,7 @@ void ObjectMgr::LoadItemTemplates()
 
             uint32 item_id = entry->ItemId[j];
 
-            if (!sObjectMgr->GetItemTemplate(item_id))
+            if (!GetItemTemplate(item_id))
                 notFoundOutfit.insert(item_id);
         }
     }
@@ -2651,7 +2532,82 @@ void ObjectMgr::LoadItemTemplates()
     for (std::set<uint32>::const_iterator itr = notFoundOutfit.begin(); itr != notFoundOutfit.end(); ++itr)
         sLog->outErrorDb("Item (Entry: %u) does not exist in `item_template` but is referenced in `CharStartOutfit.dbc`", *itr);
 
-    sLog->outString(">> Loaded %u item templates in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+    sLog->outString(">> Loaded %u item templates from Item-sparse.db2 and %u from database in %u ms", sparseCount, dbCount, GetMSTimeDiffToNow(oldMSTime));
+    sLog->outString();
+}
+
+void ObjectMgr::LoadItemTemplateAddon()
+{
+    uint32 oldMSTime = getMSTime();
+    uint32 count = 0;
+
+    QueryResult result = WorldDatabase.Query("SELECT Id, BuyCount, FoodType, MinMoneyLoot, MaxMoneyLoot, SpellPPMChance FROM item_template_addon");
+    if (result)
+    {
+        do
+        {
+            Field* fields = result->Fetch();
+            uint32 itemId = fields[0].GetUInt32();
+            if (!GetItemTemplate(itemId))
+            {
+                sLog->outErrorDb("Item %u specified in `item_template_addon` does not exist, skipped.", itemId);
+                continue;
+            }
+
+            uint8 buyCount = fields[1].GetUInt8();
+            if (!buyCount)
+            {
+                sLog->outErrorDb("Item %u has BuyCount set to 0, corrected to 1.", itemId);
+                buyCount = 1;
+            }
+
+            uint8 foodType = fields[2].GetUInt8();
+            uint32 minMoneyLoot = fields[3].GetUInt32();
+            uint32 maxMoneyLoot = fields[4].GetUInt32();
+            if (minMoneyLoot > maxMoneyLoot)
+            {
+                sLog->outErrorDb("Minimum money loot specified in `item_template_addon` for item %u was greater than maximum amount, swapping.", itemId);
+                std::swap(minMoneyLoot, maxMoneyLoot);
+            }
+
+            ItemTemplate& itemTemplate = ItemTemplateStore[itemId];
+            itemTemplate.BuyCount = buyCount;
+            itemTemplate.FoodType = foodType;
+            itemTemplate.MinMoneyLoot = minMoneyLoot;
+            itemTemplate.MaxMoneyLoot = maxMoneyLoot;
+            itemTemplate.SpellPPMRate = fields[5].GetFloat();
+            ++count;
+        } while (result->NextRow());
+    }
+
+    sLog->outString(">> Loaded %u item addon templates in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+    sLog->outString();
+}
+
+void ObjectMgr::LoadItemScriptNames()
+{
+    uint32 oldMSTime = getMSTime();
+    uint32 count = 0;
+
+    QueryResult result = WorldDatabase.Query("SELECT Id, ScriptName FROM item_script_names");
+    if (result)
+    {
+        do
+        {
+            Field* fields = result->Fetch();
+            uint32 itemId = fields[0].GetUInt32();
+            if (!GetItemTemplate(itemId))
+            {
+                sLog->outErrorDb("Item %u specified in `item_script_names` does not exist, skipped.", itemId);
+                continue;
+            }
+
+            ItemTemplateStore[itemId].ScriptId = GetScriptId(fields[1].GetCString());
+            ++count;
+        } while (result->NextRow());
+    }
+
+    sLog->outString(">> Loaded %u item script names in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
     sLog->outString();
 }
 
@@ -2750,18 +2706,18 @@ void ObjectMgr::LoadItemSetNames()
 
     if (!itemSetItems.empty())
     {
-        ItemTemplate const* pProto;
+        ItemTemplate const* proto;
         for (std::set<uint32>::iterator itr = itemSetItems.begin(); itr != itemSetItems.end(); ++itr)
         {
             uint32 entry = *itr;
             // add data from item_template if available
-            pProto = sObjectMgr->GetItemTemplate(entry);
-            if (pProto)
+            proto = sObjectMgr->GetItemTemplate(entry);
+            if (proto)
             {
                 sLog->outErrorDb("Item set part (Entry: %u) does not have entry in `item_set_names`, adding data from `item_template`.", entry);
                 ItemSetNameEntry &data = mItemSetNameMap[entry];
-                data.name = pProto->Name1;
-                data.InventoryType = pProto->InventoryType;
+                data.name = proto->Name1;
+                data.InventoryType = proto->InventoryType;
                 ++count;
             }
             else
@@ -3298,7 +3254,7 @@ void ObjectMgr::LoadPlayerInfo()
 
         if (!result)
         {
-            sLog->outErrorDb(">> Loaded 0 level health/mana definitions. DB table `game_event_condition` is empty.");
+            sLog->outErrorDb(">> Loaded 0 level health/mana definitions. DB table `player_classlevelstats` is empty.");
             sLog->outString();
             exit(1);
         }
@@ -3367,6 +3323,67 @@ void ObjectMgr::LoadPlayerInfo()
 
         sLog->outString(">> Loaded %u level health/mana definitions in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
         sLog->outString();
+    }
+
+    // Load data for guilds
+    sLog->outString("Loading Guild XP Data...");
+    {
+        mGuildXPperLevel.resize(sWorld->getIntConfig(CONFIG_GUILD_ADVANCEMENT_MAX_LEVEL));
+
+        for (uint8 level = 0; level < sWorld->getIntConfig(CONFIG_GUILD_ADVANCEMENT_MAX_LEVEL); ++level)
+            mGuildXPperLevel[level] = 0;
+
+        //                                                 0    1
+        QueryResult result  = WorldDatabase.Query("SELECT lvl, xp_for_next_level FROM guild_xp_for_level");
+
+        uint32 count = 0;
+
+        if (!result)
+        {
+            sLog->outString();
+            sLog->outString(">> Loaded %u xp for guild level definitions", count);
+            sLog->outErrorDb("Error loading `guild_xp_for_level` table or empty table.");
+        }
+        else
+        {
+            do
+            {
+                Field* fields = result->Fetch();
+
+                uint32 level = fields[0].GetUInt32();
+                uint32 xp    = fields[1].GetUInt32();
+
+                if (level >= sWorld->getIntConfig(CONFIG_GUILD_ADVANCEMENT_MAX_LEVEL))
+                {
+                    if (level > STRONG_MAX_LEVEL)        // hardcoded level maximum
+                        sLog->outErrorDb("Wrong (> %u) level %u in `guild_xp_for_level` table, ignoring.", STRONG_MAX_LEVEL, level);
+                    else
+                    {
+                        sLog->outDetail("Unused (> MaxLevel in worldserver.conf) level %u in `guild_xp_for_levels` table, ignoring.", level);
+                        ++count;                                // make result loading percent "expected" correct in case disabled detail mode for example.
+                    }
+                    continue;
+                }
+
+                mGuildXPperLevel[level] = xp;
+
+                ++count;
+            }
+            while (result->NextRow());
+
+            // Fill XP gaps
+            for (uint8 level = 1; level < sWorld->getIntConfig(CONFIG_GUILD_ADVANCEMENT_MAX_LEVEL); ++level)
+            {
+                if (mGuildXPperLevel[level] == 0)
+                {
+                    sLog->outErrorDb("GUILD Level %i does not have XP for level data. Using data of level [%i] + 10000.", level + 1, level);
+                    mGuildXPperLevel[level] = mGuildXPperLevel[level - 1] + 10000;
+                }
+            }
+
+            sLog->outString();
+            sLog->outString(">> Loaded %u xp for guild level definitions", count);
+        }
     }
 
     // Loading levels data (class/race dependent)
@@ -5130,7 +5147,7 @@ void ObjectMgr::LoadInstanceEncounters()
 
         if (lastEncounterDungeon && !sLFGDungeonStore.LookupEntry(lastEncounterDungeon))
         {
-            sLog->outErrorDb("Table `instance_encounters` has an encounter %u (%s) marked as final for invalid dungeon id %u, skipped!", entry, dungeonEncounter->encounterName[0], lastEncounterDungeon);
+            sLog->outErrorDb("Table `instance_encounters` has an encounter %u (%s) marked as final for invalid dungeon id %u, skipped!", entry, dungeonEncounter->encounterName, lastEncounterDungeon);
             continue;
         }
 
@@ -5139,7 +5156,7 @@ void ObjectMgr::LoadInstanceEncounters()
         {
             if (itr != dungeonLastBosses.end())
             {
-                sLog->outErrorDb("Table `instance_encounters` specified encounter %u (%s) as last encounter but %u (%s) is already marked as one, skipped!", entry, dungeonEncounter->encounterName[0], itr->second->id, itr->second->encounterName[0]);
+                sLog->outErrorDb("Table `instance_encounters` specified encounter %u (%s) as last encounter but %u (%s) is already marked as one, skipped!", entry, dungeonEncounter->encounterName, itr->second->id, itr->second->encounterName);
                 continue;
             }
 
@@ -5153,7 +5170,7 @@ void ObjectMgr::LoadInstanceEncounters()
                 CreatureTemplate const* creatureInfo = GetCreatureTemplate(creditEntry);
                 if (!creatureInfo)
                 {
-                    sLog->outErrorDb("Table `instance_encounters` has an invalid creature (entry %u) linked to the encounter %u (%s), skipped!", creditEntry, entry, dungeonEncounter->encounterName[0]);
+                    sLog->outErrorDb("Table `instance_encounters` has an invalid creature (entry %u) linked to the encounter %u (%s), skipped!", creditEntry, entry, dungeonEncounter->encounterName);
                     continue;
                 }
                 const_cast<CreatureTemplate*>(creatureInfo)->flags_extra |= CREATURE_FLAG_EXTRA_DUNGEON_BOSS;
@@ -5162,12 +5179,12 @@ void ObjectMgr::LoadInstanceEncounters()
             case ENCOUNTER_CREDIT_CAST_SPELL:
                 if (!sSpellMgr->GetSpellInfo(creditEntry))
                 {
-                    sLog->outErrorDb("Table `instance_encounters` has an invalid spell (entry %u) linked to the encounter %u (%s), skipped!", creditEntry, entry, dungeonEncounter->encounterName[0]);
+                    sLog->outErrorDb("Table `instance_encounters` has an invalid spell (entry %u) linked to the encounter %u (%s), skipped!", creditEntry, entry, dungeonEncounter->encounterName);
                     continue;
                 }
                 break;
             default:
-                sLog->outErrorDb("Table `instance_encounters` has an invalid credit type (%u) for encounter %u (%s), skipped!", creditType, entry, dungeonEncounter->encounterName[0]);
+                sLog->outErrorDb("Table `instance_encounters` has an invalid credit type (%u) for encounter %u (%s), skipped!", creditType, entry, dungeonEncounter->encounterName);
                 continue;
         }
 
@@ -5347,7 +5364,7 @@ void ObjectMgr::ReturnOrDeleteOldMails(bool serverUp)
         if (serverUp)
             player = ObjectAccessor::FindPlayer((uint64)m->receiver);
 
-        if (player && player->m_mailsLoaded)
+        if (player && player->_mailsLoaded)
         {                                                   // this code will run very improbably (the time is between 4 and 5 am, in game is online a player, who has old mail
             // his in mailbox and he has already listed his mails)
             delete m;
@@ -5867,7 +5884,7 @@ GraveYardData const* ObjectMgr::FindGraveYardData(uint32 id, uint32 zoneId)
     return NULL;
 }
 
-bool ObjectMgr::AddGraveYardLink(uint32 id, uint32 zoneId, uint32 team, bool inDB)
+bool ObjectMgr::AddGraveYardLink(uint32 id, uint32 zoneId, uint32 team, bool persist /*= true*/)
 {
     if (FindGraveYardData(id, zoneId))
         return false;
@@ -5880,16 +5897,21 @@ bool ObjectMgr::AddGraveYardLink(uint32 id, uint32 zoneId, uint32 team, bool inD
     mGraveYardMap.insert(GraveYardMap::value_type(zoneId, data));
 
     // add link to DB
-    if (inDB)
+    if (persist)
     {
-        WorldDatabase.PExecute("INSERT INTO game_graveyard_zone (id, ghost_zone, faction) "
-            "VALUES ('%u', '%u', '%u')", id, zoneId, team);
+        PreparedStatement* stmt = WorldDatabase.GetPreparedStatement(WORLD_INS_GRAVEYARD_ZONE);
+
+        stmt->setUInt32(0, id);
+        stmt->setUInt32(1, zoneId);
+        stmt->setUInt16(2, uint16(team));
+
+        WorldDatabase.Execute(stmt);
     }
 
     return true;
 }
 
-void ObjectMgr::RemoveGraveYardLink(uint32 id, uint32 zoneId, uint32 team, bool inDB)
+void ObjectMgr::RemoveGraveYardLink(uint32 id, uint32 zoneId, uint32 team, bool persist /*= false*/)
 {
     GraveYardMap::iterator graveLow  = mGraveYardMap.lower_bound(zoneId);
     GraveYardMap::iterator graveUp   = mGraveYardMap.upper_bound(zoneId);
@@ -5928,9 +5950,15 @@ void ObjectMgr::RemoveGraveYardLink(uint32 id, uint32 zoneId, uint32 team, bool 
     mGraveYardMap.erase(itr);
 
     // remove link from DB
-    if (inDB)
+    if (persist)
     {
-        WorldDatabase.PExecute("DELETE FROM game_graveyard_zone WHERE id = '%u' AND ghost_zone = '%u' AND faction = '%u'", id, zoneId, team);
+        PreparedStatement* stmt = WorldDatabase.GetPreparedStatement(WORLD_DEL_GRAVEYARD_ZONE);
+
+        stmt->setUInt32(0, id);
+        stmt->setUInt32(1, zoneId);
+        stmt->setUInt16(2, uint16(team));
+
+        WorldDatabase.Execute(stmt);
     }
 
     return;
@@ -6036,8 +6064,8 @@ void ObjectMgr::LoadAccessRequirements()
 
         if (ar.item)
         {
-            ItemTemplate const *pProto = sObjectMgr->GetItemTemplate(ar.item);
-            if (!pProto)
+            ItemTemplate const *proto = sObjectMgr->GetItemTemplate(ar.item);
+            if (!proto)
             {
                 sLog->outError("Key item %u does not exist for map %u difficulty %u, removing key requirement.", ar.item, mapid, difficulty);
                 ar.item = 0;
@@ -6046,8 +6074,8 @@ void ObjectMgr::LoadAccessRequirements()
 
         if (ar.item2)
         {
-            ItemTemplate const *pProto = sObjectMgr->GetItemTemplate(ar.item2);
-            if (!pProto)
+            ItemTemplate const *proto = sObjectMgr->GetItemTemplate(ar.item2);
+            if (!proto)
             {
                 sLog->outError("Second item %u does not exist for map %u difficulty %u, removing key requirement.", ar.item2, mapid, difficulty);
                 ar.item2 = 0;
@@ -6153,10 +6181,10 @@ void ObjectMgr::SetHighestGuids()
         m_hiItemGuid = (*result)[0].GetUInt32()+1;
 
     // Cleanup other tables from not existed guids ( >= m_hiItemGuid)
-    CharacterDatabase.PExecute("DELETE FROM character_inventory WHERE item >= '%u'", m_hiItemGuid);
-    CharacterDatabase.PExecute("DELETE FROM mail_items WHERE item_guid >= '%u'", m_hiItemGuid);
-    CharacterDatabase.PExecute("DELETE FROM auctionhouse WHERE itemguid >= '%u'", m_hiItemGuid);
-    CharacterDatabase.PExecute("DELETE FROM guild_bank_item WHERE item_guid >= '%u'", m_hiItemGuid);
+    CharacterDatabase.PExecute("DELETE FROM character_inventory WHERE item >= '%u'", m_hiItemGuid);     // One-time query
+    CharacterDatabase.PExecute("DELETE FROM mail_items WHERE item_guid >= '%u'", m_hiItemGuid);         // One-time query
+    CharacterDatabase.PExecute("DELETE FROM auctionhouse WHERE itemguid >= '%u'", m_hiItemGuid);        // One-time query
+    CharacterDatabase.PExecute("DELETE FROM guild_bank_item WHERE item_guid >= '%u'", m_hiItemGuid);    // One-time query
 
     result = WorldDatabase.Query("SELECT MAX(guid) FROM gameobject");
     if (result)
@@ -6698,6 +6726,45 @@ uint32 ObjectMgr::GeneratePetNumber()
     return ++m_hiPetNumber;
 }
 
+void ObjectMgr::LoadCurrencysLoot()
+{
+    QueryResult result = WorldDatabase.PQuery("SELECT entry, type, currencyId, currencyAmount FROM currency_loot");
+    if (!result)
+        return;
+
+    uint32 count = 0;
+    do
+    {
+        Field* field = result->Fetch();
+
+        uint32 entry = field[0].GetUInt32();
+        uint8 type = field[1].GetInt8();
+        uint32 currencyId = field[2].GetUInt32();
+        uint32 currencyAmount = field[3].GetUInt32();
+
+        if (type < 1)
+        {
+            sLog->outString("Currency 'type' can not be < 1 (entry = %u type = %i)", entry, type);
+            continue;
+        }
+        else if (type > 3)
+        {
+            sLog->outString("Currency 'type' can not be > 3 (entry = %u type = %i)", entry, type);
+            continue;
+        }
+
+        CurrencyLoot loot = CurrencyLoot(entry, type, currencyId, currencyAmount);
+        mCurrencysLoot.push_back(loot);
+        ++count;
+    }
+    while (result->NextRow());
+
+    if (count)
+        sLog->outString("Loaded %u currency loot defination", count);
+    else
+        sLog->outString("Loaded 0 currency loot defination. Table is empty!");
+}
+
 void ObjectMgr::LoadCorpses()
 {
     uint32 oldMSTime = getMSTime();
@@ -6715,9 +6782,15 @@ void ObjectMgr::LoadCorpses()
     {
         Field *fields = result->Fetch();
         uint32 guid = fields[16].GetUInt32();
+        CorpseType type = CorpseType(fields[12].GetUInt8());
+        if (type >= MAX_CORPSE_TYPE)
+        {
+            sLog->outError("Corpse (guid: %u) have wrong corpse type (%u), not loading.", guid, type);
+            continue;
+        }
 
-        Corpse* corpse = new Corpse();
-        if (!corpse->LoadFromDB(guid, fields))
+        Corpse* corpse = new Corpse(type);
+        if (!corpse->LoadCorpseFromDB(guid, fields))
         {
             delete corpse;
             continue;
@@ -8059,11 +8132,18 @@ bool ObjectMgr::AddGameTele(GameTele& tele)
 
     m_GameTeleMap[new_id] = tele;
 
-    std::string safeName(tele.name);
-    WorldDatabase.EscapeString(safeName);
+    PreparedStatement* stmt = WorldDatabase.GetPreparedStatement(WORLD_INS_GAME_TELE);
 
-    WorldDatabase.PExecute("INSERT INTO game_tele (id, position_x, position_y, position_z, orientation, map, name) VALUES (%u, %f, %f, %f, %f, %d, '%s')",
-        new_id, tele.position_x, tele.position_y, tele.position_z, tele.orientation, tele.mapId, safeName.c_str());
+    stmt->setUInt32(0, new_id);
+    stmt->setFloat(1, tele.position_x);
+    stmt->setFloat(2, tele.position_y);
+    stmt->setFloat(3, tele.position_z);
+    stmt->setFloat(4, tele.orientation);
+    stmt->setUInt16(5, uint16(tele.mapId));
+    stmt->setString(6, tele.name);
+
+    WorldDatabase.Execute(stmt);
+
     return true;
 }
 
@@ -8081,7 +8161,12 @@ bool ObjectMgr::DeleteGameTele(const std::string& name)
     {
         if (itr->second.wnameLow == wname)
         {
-            WorldDatabase.PExecute("DELETE FROM game_tele WHERE name = '%s'", itr->second.name.c_str());
+            PreparedStatement* stmt = WorldDatabase.GetPreparedStatement(WORLD_DEL_GAME_TELE);
+
+            stmt->setString(0, itr->second.name);
+
+            WorldDatabase.Execute(stmt);
+
             m_GameTeleMap.erase(itr);
             return true;
         }
@@ -8463,16 +8548,26 @@ void ObjectMgr::LoadGossipMenuItems()
     sLog->outString();
 }
 
-void ObjectMgr::AddVendorItem(uint32 entry, uint32 item, int32 maxcount, uint32 incrtime, uint32 extendedcost, bool savetodb)
+void ObjectMgr::AddVendorItem(uint32 entry, uint32 item, int32 maxcount, uint32 incrtime, uint32 extendedCost, bool persist /*= true*/)
 {
     VendorItemData& vList = m_mCacheVendorItemMap[entry];
-    vList.AddItem(item, maxcount, incrtime, extendedcost);
+    vList.AddItem(item, maxcount, incrtime, extendedCost);
 
-    if (savetodb)
-        WorldDatabase.PExecute("INSERT INTO npc_vendor (entry, item, maxcount, incrtime, extendedcost) VALUES('%u', '%u', '%u', '%u', '%u')", entry, item, maxcount, incrtime, extendedcost);
+    if (persist)
+    {
+        PreparedStatement* stmt = WorldDatabase.GetPreparedStatement(WORLD_INS_NPC_VENODR);
+
+        stmt->setUInt32(0, entry);
+        stmt->setUInt32(1, item);
+        stmt->setUInt8(2, maxcount);
+        stmt->setUInt32(3, incrtime);
+        stmt->setUInt32(4, extendedCost);
+
+        WorldDatabase.Execute(stmt);
+    }
 }
 
-bool ObjectMgr::RemoveVendorItem(uint32 entry, uint32 item, bool savetodb)
+bool ObjectMgr::RemoveVendorItem(uint32 entry, uint32 item, bool persist /*= true*/)
 {
     CacheVendorItemMap::iterator  iter = m_mCacheVendorItemMap.find(entry);
     if (iter == m_mCacheVendorItemMap.end())
@@ -8481,7 +8576,16 @@ bool ObjectMgr::RemoveVendorItem(uint32 entry, uint32 item, bool savetodb)
     if (!iter->second.RemoveItem(item))
         return false;
 
-    if (savetodb) WorldDatabase.PExecute("DELETE FROM npc_vendor WHERE entry='%u' AND item='%u'", entry, item);
+    if (persist)
+    {
+        PreparedStatement* stmt = WorldDatabase.GetPreparedStatement(WORLD_DEL_NPC_VENDOR);
+
+        stmt->setUInt32(0, entry);
+        stmt->setUInt32(1, item);
+
+        WorldDatabase.Execute(stmt);
+    }
+
     return true;
 }
 
@@ -8586,7 +8690,7 @@ void ObjectMgr::LoadScriptNames()
       "UNION "
       "SELECT DISTINCT(ScriptName) FROM gameobject_template WHERE ScriptName <> '' "
       "UNION "
-      "SELECT DISTINCT(ScriptName) FROM item_template WHERE ScriptName <> '' "
+      "SELECT DISTINCT(ScriptName) FROM item_script_names WHERE ScriptName <> '' "
       "UNION "
       "SELECT DISTINCT(ScriptName) FROM areatrigger_scripts WHERE ScriptName <> '' "
       "UNION "

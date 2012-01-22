@@ -169,8 +169,8 @@ ULONGLONG HashStringJenkins(const char * szFileName)
 // This function converts the MPQ header so it always looks like version 4
 
 void ConvertMpqHeaderToFormat4(
-    TMPQArchive * ha, 
-    ULONGLONG FileSize, 
+    TMPQArchive * ha,
+    ULONGLONG FileSize,
     DWORD dwFlags)
 {
     ULONGLONG ByteOffset;
@@ -205,7 +205,7 @@ void ConvertMpqHeaderToFormat4(
             if (pHeader->dwArchiveSize != dwExpectedArchiveSize)
             {
                 // Note: dwExpectedArchiveSize might be incorrect at this point.
-                // MPQs version 1.0 can have strong digital signature appended at the end, 
+                // MPQs version 1.0 can have strong digital signature appended at the end,
                 // or they might just have arbitrary data there.
                 // In either case, we recalculate the archive size later when
                 // block table is loaded and positions of all files is known.
@@ -250,7 +250,7 @@ void ConvertMpqHeaderToFormat4(
                             ArchiveSize64 = ByteOffset;
                     }
 
-                    // We need to recalculate archive size later, 
+                    // We need to recalculate archive size later,
                     // when block table is loaded and the position of files is known
                     ha->dwFlags |= MPQ_FLAG_NEED_FIX_SIZE;
                 }
@@ -388,7 +388,7 @@ void DecryptMpqTable(void * pvMpqTable, DWORD dwLength, const char * szKey)
 // Functions tries to get file decryption key. The trick comes from sector
 // positions which are stored at the begin of each compressed file. We know the
 // file size, that means we know number of sectors that means we know the first
-// DWORD value in sector position. And if we know encrypted and decrypted value, 
+// DWORD value in sector position. And if we know encrypted and decrypted value,
 // we can find the decryption key !!!
 //
 // hf            - MPQ file handle
@@ -418,7 +418,7 @@ DWORD DetectFileKeyBySectorSize(LPDWORD SectorOffsets, DWORD decrypted)
         // Add 1 because we are decrypting sector positions
         saveKey1 = seed1 + 1;
 
-        // If OK, continue and test the second value. We don't know exactly the value, 
+        // If OK, continue and test the second value. We don't know exactly the value,
         // but we know that the second one has lower 16 bits set to zero
         // (no compressed sector is larger than 0xFFFF bytes)
         seed1  = ((~seed1 << 0x15) + 0x11111111) | (seed1 >> 0x0B);
@@ -518,9 +518,9 @@ DWORD DetectFileKeyByContent(void * pvFileContent, DWORD dwFileSize)
 }
 
 DWORD DecryptFileKey(
-    const char * szFileName, 
-    ULONGLONG MpqPos, 
-    DWORD dwFileSize, 
+    const char * szFileName,
+    ULONGLONG MpqPos,
+    DWORD dwFileSize,
     DWORD dwFlags)
 {
     DWORD dwFileKey;
@@ -610,7 +610,7 @@ TMPQHash * GetNextHashEntry(TMPQArchive * ha, TMPQHash * pFirstHash, TMPQHash * 
     DWORD dwName1 = pPrevHash->dwName1;
     DWORD dwName2 = pPrevHash->dwName2;
 
-    // Now go for any next entry that follows the pPrevHash, 
+    // Now go for any next entry that follows the pPrevHash,
     // until either free hash entry was found, or the start entry was reached
     for (;;)
     {
@@ -726,11 +726,11 @@ TMPQFile * CreateMpqFile(TMPQArchive * ha)
 // Loads a table from MPQ.
 // Can be used for hash table, block table, sector offset table or sector checksum table
 int LoadMpqTable(
-    TMPQArchive * ha, 
-    ULONGLONG ByteOffset, 
-    void * pvTable, 
-    DWORD dwCompressedSize, 
-    DWORD dwRealSize, 
+    TMPQArchive * ha,
+    ULONGLONG ByteOffset,
+    void * pvTable,
+    DWORD dwCompressedSize,
+    DWORD dwRealSize,
     DWORD dwKey)
 {
     ULONGLONG ByteOffsetLi;
@@ -785,8 +785,8 @@ int LoadMpqTable(
 }
 
 void CalculateRawSectorOffset(
-    ULONGLONG & RawFilePos, 
-    TMPQFile * hf, 
+    ULONGLONG & RawFilePos,
+    TMPQFile * hf,
     DWORD dwSectorOffset)
 {
     //
@@ -846,7 +846,7 @@ int AllocatePatchInfo(TMPQFile * hf, bool bLoadFromFile)
 
 __AllocateAndLoadPatchInfo:
 
-    // Allocate space for patch header. Start with default size, 
+    // Allocate space for patch header. Start with default size,
     // and if its size if bigger, then we reload them
     hf->PatchInfo = (TPatchInfo *)ALLOCMEM(BYTE, dwLength);
     if (hf->PatchInfo == NULL)
@@ -980,7 +980,7 @@ int AllocateSectorOffsets(TMPQFile * hf, bool bLoadFromFile)
             }
 
             //
-            // I've seen MPQs that had MPQ_FILE_SECTOR_CRC flag absent, 
+            // I've seen MPQs that had MPQ_FILE_SECTOR_CRC flag absent,
             // but there was one extra entry in the sector offset table
             // (Example: expansion-locale-frFR.MPQ from WoW Cataclysm BETA)
             // We detect such behavior here by verifying the value
@@ -1267,7 +1267,7 @@ bool IsInternalMpqFileName(const char * szFileName)
 #ifndef PLATFORM_LITTLE_ENDIAN
 
 //
-// Note that those functions are implemented for Mac operating system, 
+// Note that those functions are implemented for Mac operating system,
 // as this is the only supported platform that uses big endian.
 //
 

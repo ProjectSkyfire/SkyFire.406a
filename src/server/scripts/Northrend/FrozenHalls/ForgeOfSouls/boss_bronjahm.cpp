@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -201,7 +201,7 @@ class mob_corrupted_soul_fragment : public CreatureScript
 
             void MovementInform(uint32 type, uint32 id)
             {
-                if (type != TARGETED_MOTION_TYPE)
+                if (type != CHASE_MOTION_TYPE)
                     return;
 
                 if (instance)
@@ -215,7 +215,6 @@ class mob_corrupted_soul_fragment : public CreatureScript
                         if (Creature* bronjahm = ObjectAccessor::GetCreature(*me, BronjahmGUID))
                             me->CastSpell(bronjahm, SPELL_CONSUME_SOUL, true);
 
-                        summ->GetMotionMaster()->MoveIdle();
                         summ->UnSummon();
                     }
                 }

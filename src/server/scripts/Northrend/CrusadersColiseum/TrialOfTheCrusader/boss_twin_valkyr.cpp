@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2006-2010 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2006-2012 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -239,7 +239,7 @@ struct boss_twin_baseAI : public ScriptedAI
                 m_pInstance->DoRemoveAurasDueToSpellOnPlayers(SPELL_POWERING_UP_HELPER);
                 break;
             case NPC_BULLET_CONTROLLER:
-                me->m_Events.AddEvent(new OrbsDespawner(me), me->m_Events.CalculateTime(100));
+                me->_Events.AddEvent(new OrbsDespawner(me), me->_Events.CalculateTime(100));
                 break;
         }
         Summons.Despawn(summoned);

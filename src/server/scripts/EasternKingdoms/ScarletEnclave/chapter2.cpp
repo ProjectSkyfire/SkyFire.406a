@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -248,7 +248,7 @@ public:
                     me->Mount(MODEL_DEATH_KNIGHT_MOUNT);
                     break;
                 case 10:
-                    me->Unmount();
+                    me->Dismount();
                     break;
             }
         }
@@ -377,7 +377,7 @@ public:
         void EnterCombat(Unit* /*who*/)
         {
             DoScriptText(SAY_TREE2, me);
-            me->Unmount();
+            me->Dismount();
             Stage = 0;
         }
 
@@ -480,21 +480,21 @@ public:
             {
                 Shout();
                 DoCast(me, SPELL_RENEW);
-                Renew_timer = 1000 + rand()%5000;
+                Renew_timer = urand(1000, 6000);
             } else Renew_timer -= diff;
 
             if (Inquisitor_Penance_timer <= diff)
             {
                 Shout();
                 DoCast(me->getVictim(), SPELL_INQUISITOR_PENANCE);
-                Inquisitor_Penance_timer = 2000 + rand()%5000;
+                Inquisitor_Penance_timer = urand(2000, 7000);
             } else Inquisitor_Penance_timer -= diff;
 
             if (Valroth_Smite_timer <= diff)
             {
                 Shout();
                 DoCast(me->getVictim(), SPELL_VALROTH_SMITE);
-                Valroth_Smite_timer = 1000 + rand()%5000;
+                Valroth_Smite_timer = urand(1000, 6000);
             } else Valroth_Smite_timer -= diff;
 
             DoMeleeAttackIfReady();

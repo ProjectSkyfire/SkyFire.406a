@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -2775,8 +2775,14 @@ void SpellMgr::LoadSpellInfoStore()
                 for (int j = 0; j < MAX_SPELL_EFFECTS; ++j)
                     if (sInfo->Effects[j].Effect == SPELL_EFFECT_SEND_TAXI)
                         spellPaths.insert(sInfo->Effects[j].MiscValue);
+		// Test 4.3.0a
+		//ASSERT(((sTaxiNodesStore.GetNumRows()-1)/22) < TaxiMaskSize && "TaxiMaskSize needs to be increased");
+		// uint8  field   = (uint8)((i - 1) / 42);
+        // uint32 submask = 1<<((i-1)%42);
 
-        ASSERT(((sTaxiNodesStore.GetNumRows()-1)/32) < TaxiMaskSize && "TaxiMaskSize needs to be increased");
+
+
+        ASSERT(((sTaxiNodesStore.GetNumRows()-1)/42) < TaxiMaskSize && "TaxiMaskSize needs to be increased");
         memset(sTaxiNodesMask, 0, sizeof(sTaxiNodesMask));
         memset(sOldContinentsNodesMask, 0, sizeof(sOldContinentsNodesMask));
         memset(sHordeTaxiNodesMask, 0, sizeof(sHordeTaxiNodesMask));
@@ -2807,8 +2813,8 @@ void SpellMgr::LoadSpellInfoStore()
             }
 
             // valid taxi network node
-            uint8  field   = (uint8)((i - 1) / 32);
-            uint32 submask = 1<<((i-1)%32);
+            uint8  field   = (uint8)((i - 1) / 42);
+            uint32 submask = 1<<((i-1)%42);
             sTaxiNodesMask[field] |= submask;
 
             if (node->MountCreatureID[0] && node->MountCreatureID[0] != 32981)
@@ -2970,43 +2976,14 @@ void SpellMgr::LoadSpellCustomAttr()
 
         switch (spellInfo->Id)
         {
-            case 86914: // Firestarter
-                spellInfo->Effects[0].BasePoints = 0;
+            case 76547: // Mana Adept
+            case 77226: // Deep Healing
+            case 76613: // Frostburn
+                spellInfo->Effects[0].ApplyAuraName = SPELL_AURA_ADD_PCT_MODIFIER;
                 spellInfo->Effects[0].MiscValue = 0;
                 break;
             case 93072: // Bring our Boys back
                 spellInfo->Effects[0].TargetA = TARGET_UNIT_NEARBY_ENTRY;
-                break;
-            case 77515: // Mastery: Dreadblade
-                spellInfo->Effects[0].BasePoints = 20;
-                break;
-            case 77514: // Mastery: Frozen Heart
-                spellInfo->Effects[0].BasePoints = 16;
-                break;
-            case 77493: // Mastery: Razor Claws
-                spellInfo->Effects[0].BasePoints = 25;
-                break;
-            case 76658: // Mastery: Essence of the Viper
-                spellInfo->Effects[0].BasePoints = 8;
-                break;
-            case 76657: // Mastery: Master of Beasts
-                spellInfo->Effects[0].BasePoints = 13;
-                break;
-            case 76595: // Mastery: Flashburn
-                spellInfo->Effects[0].BasePoints = 22;
-                break;
-            case 76671: // Mastery: Divine Bulwark
-                spellInfo->Effects[0].BasePoints = 18;
-                break;
-            case 77220: // Mastery: Fiery Apocalypse
-                spellInfo->Effects[0].BasePoints = 10;
-                break;
-            case 76857: // Mastery: Critical Block
-                spellInfo->Effects[0].BasePoints = 12;
-                spellInfo->Effects[1].BasePoints = 12;
-                break;
-            case 77489: // Mastery: Echo of Light
-                spellInfo->StackAmount = 100; // should be inf
                 break;
             case 51514: // Hex
             case 118:   // Polymorph
@@ -3158,6 +3135,8 @@ void SpellMgr::LoadSpellCustomAttr()
                 spellInfo->MaxAffectedTargets = 1;
                 spellInfo->Effects[0].TriggerSpell = 33760;
                 break;
+            case 83359: // Sic 'Em Rank 1
+            case 89388: // Sic 'Em Rank 2
             case 17941: // Shadow Trance
             case 22008: // Netherwind Focus
             case 31834: // Light's Grace
@@ -3229,6 +3208,9 @@ void SpellMgr::LoadSpellCustomAttr()
             case 64904: // Hymn of Hope
                spellInfo->Effects[1].ApplyAuraName = SPELL_AURA_MOD_INCREASE_ENERGY_PERCENT;
                break;
+            case 19465: // Improved Stings (Rank 2)
+                spellInfo->Effects[EFFECT_2].TargetA = TARGET_UNIT_CASTER;
+                break;
             case 30421: // Nether Portal - Perseverance
                 spellInfo->Effects[2].BasePoints += 30000;
                 break;

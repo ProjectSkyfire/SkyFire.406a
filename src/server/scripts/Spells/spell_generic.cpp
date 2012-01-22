@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -566,6 +566,9 @@ class spell_creature_permanent_feign_death : public SpellScriptLoader
                 Unit* target = GetTarget();
                 target->SetFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_DEAD);
                 target->SetFlag(UNIT_FIELD_FLAGS_2, UNIT_FLAG2_FEIGN_DEATH);
+
+                if (target->GetTypeId() == TYPEID_UNIT)
+                    target->ToCreature()->SetReactState(REACT_PASSIVE);
             }
 
             void Register()
@@ -774,7 +777,7 @@ class spell_gen_parachute_ic : public SpellScriptLoader
                 if (!target->ToPlayer())
                     return;
 
-                if (target->ToPlayer()->m_movementInfo.fallTime > 2000)
+                if (target->ToPlayer()->_movementInfo.fallTime > 2000)
                     target->CastSpell(target, SPELL_PARACHUTE_IC, true);
             }
 
@@ -1378,7 +1381,16 @@ class spell_gen_luck_of_the_draw : public SpellScriptLoader
                 if (GetUnitOwner()->GetTypeId() != TYPEID_PLAYER)
                     return;
 
-                LFGDungeonEntry const* randomDungeon = sLFGDungeonStore.LookupEntry(*(sLFGMgr->GetSelectedDungeons(GetUnitOwner()->GetGUID()).begin()));
+                const LfgDungeonSet dungeons = sLFGMgr->GetSelectedDungeons(GetUnitOwner()->GetGUID());
+                LfgDungeonSet::const_iterator itr = dungeons.begin();
+
+                if (itr == dungeons.end())
+                {
+                    Remove(AURA_REMOVE_BY_DEFAULT);
+                    return;
+                }
+
+                LFGDungeonEntry const* randomDungeon = sLFGDungeonStore.LookupEntry(*itr);
                 Group* group = GetUnitOwner()->ToPlayer()->GetGroup();
                 Map const* map = GetUnitOwner()->GetMap();
                 if (group && group->isLFGGroup())

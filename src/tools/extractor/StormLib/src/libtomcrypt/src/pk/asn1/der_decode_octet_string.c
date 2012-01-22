@@ -25,7 +25,7 @@
   @param outlen  [in/out] The number of octets stored
   @return CRYPT_OK if successful
 */
-int der_decode_octet_string(const unsigned char *in, unsigned long inlen, 
+int der_decode_octet_string(const unsigned char *in, unsigned long inlen,
                                   unsigned char *out, unsigned long *outlen)
 {
    unsigned long x, y, len;

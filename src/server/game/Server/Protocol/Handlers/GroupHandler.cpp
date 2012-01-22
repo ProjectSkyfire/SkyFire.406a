@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -298,23 +298,23 @@ void WorldSession::HandleGroupUninviteGuidOpcode(WorldPacket & recv_data)
         return;
     }
 
-    Group* grp = GetPlayer()->GetGroup();
-    if (!grp)
+    Group* group = GetPlayer()->GetGroup();
+    if (!group)
         return;
 
-    if (grp->IsLeader(guid))
+    if (group->IsLeader(guid))
     {
         SendPartyResult(PARTY_OP_UNINVITE, "", ERR_NOT_LEADER);
         return;
     }
 
-    if (grp->IsMember(guid))
+    if (group->IsMember(guid))
     {
-        Player::RemoveFromGroup(grp, guid, GROUP_REMOVEMETHOD_KICK, GetPlayer()->GetGUID(), reason.c_str());
+        Player::RemoveFromGroup(group, guid, GROUP_REMOVEMETHOD_KICK, GetPlayer()->GetGUID(), reason.c_str());
         return;
     }
 
-    if (Player* player = grp->GetInvited(guid))
+    if (Player* player = group->GetInvited(guid))
     {
         player->UninviteFromGroup();
         return;
@@ -348,17 +348,17 @@ void WorldSession::HandleGroupUninviteOpcode(WorldPacket & recv_data)
         return;
     }
 
-    Group* grp = GetPlayer()->GetGroup();
-    if (!grp)
+    Group* group = GetPlayer()->GetGroup();
+    if (!group)
         return;
 
-    if (uint64 guid = grp->GetMemberGUID(membername))
+    if (uint64 guid = group->GetMemberGUID(membername))
     {
-        Player::RemoveFromGroup(grp, guid, GROUP_REMOVEMETHOD_KICK, GetPlayer()->GetGUID());
+        Player::RemoveFromGroup(group, guid, GROUP_REMOVEMETHOD_KICK, GetPlayer()->GetGUID());
         return;
     }
 
-    if (Player* player = grp->GetInvited(membername))
+    if (Player* player = group->GetInvited(membername))
     {
         player->UninviteFromGroup();
         return;
@@ -392,8 +392,8 @@ void WorldSession::HandleGroupDisbandOpcode(WorldPacket & /*recv_data*/)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_GROUP_DISBAND");
 
-    Group* grp = GetPlayer()->GetGroup();
-    if (!grp)
+    Group* group = GetPlayer()->GetGroup();
+    if (!group)
         return;
 
     if (_player->InBattleground())
@@ -464,10 +464,10 @@ void WorldSession::HandleLootRoll(WorldPacket &recv_data)
     switch (rollType)
     {
         case ROLL_NEED:
-            GetPlayer()->GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_ROLL_NEED, 1);
+            GetPlayer()->UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_ROLL_NEED, 1);
             break;
         case ROLL_GREED:
-            GetPlayer()->GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_ROLL_GREED, 1);
+            GetPlayer()->UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_ROLL_GREED, 1);
             break;
     }
 }
@@ -865,7 +865,7 @@ void WorldSession::BuildPartyMemberStatsChangedPacket(Player* player, WorldPacke
     if (mask & GROUP_UPDATE_FLAG_VEHICLE_SEAT)
     {
         if (Vehicle* veh = player->GetVehicle())
-            *data << (uint32) veh->GetVehicleInfo()->m_seatID[player->m_movementInfo.t_seat];
+            *data << (uint32) veh->GetVehicleInfo()->m_seatID[player->_movementInfo.t_seat];
     }
 
     if (mask & GROUP_UPDATE_FLAG_PET_AURAS)

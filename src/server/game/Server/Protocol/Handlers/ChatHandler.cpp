@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -135,16 +135,14 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
     if (type == CHAT_MSG_CHANNEL || type == CHAT_MSG_WHISPER)
         recv_data >> channelOrWhisperName;
 
-    if (msg.empty())
+    if (msg.empty() && (type != CHAT_MSG_AFK && type != CHAT_MSG_DND))
         return;
 
-    if (ChatHandler(this).ParseCommands(msg.c_str()))
-        return;
+    if (type != CHAT_MSG_AFK && type != CHAT_MSG_DND)
+        if (ChatHandler(this).ParseCommands(msg.c_str()))
+            return;
 
     if (!processChatmessageFurtherAfterSecurityChecks(msg, lang))
-        return;
-
-    if (msg.empty())
         return;
 
     Player* sender = GetPlayer();
@@ -449,7 +447,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
         } break;
         case CHAT_MSG_AFK:
         {
-            if ((msg.empty() || !sender->isAFK()) && !sender->isInCombat())
+            if (!sender->isInCombat())
             {
                 if (!sender->isAFK())
                 {
@@ -467,21 +465,18 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
         } break;
         case CHAT_MSG_DND:
         {
-            if (msg.empty() || !_player->isDND())
+            if (!_player->isDND())
             {
-                if (!_player->isDND())
-                {
-                    if (msg.empty())
-                        msg = GetSkyFireString(LANG_PLAYER_DND_DEFAULT);
-                    _player->dndMsg = msg;
-                }
-
-                sScriptMgr->OnPlayerChat(_player, type, lang, msg);
-
-                _player->ToggleDND();
-                if (_player->isDND() && _player->isAFK())
-                    _player->ToggleAFK();
+                if (msg.empty())
+                    msg = GetSkyFireString(LANG_PLAYER_DND_DEFAULT);
+                _player->dndMsg = msg;
             }
+
+            sScriptMgr->OnPlayerChat(_player, type, lang, msg);
+
+            _player->ToggleDND();
+            if (_player->isDND() && _player->isAFK())
+                _player->ToggleAFK();
         } break;
         default:
             sLog->outError("CHAT: unknown message type %u, lang: %u", type, lang);
@@ -587,7 +582,7 @@ void WorldSession::HandleTextEmoteOpcode(WorldPacket & recv_data)
     TypeContainerVisitor<Trinity::PlayerDistWorker<Trinity::LocalizedPacketDo<Trinity::EmoteChatBuilder> >, WorldTypeMapContainer> message(emote_worker);
     cell.Visit(p, message, *GetPlayer()->GetMap(), *GetPlayer(), sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_TEXTEMOTE));
 
-    GetPlayer()->GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_DO_EMOTE, text_emote, 0, unit);
+    GetPlayer()->UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_DO_EMOTE, text_emote, 0, unit);
 
     //Send scripted event call
     if (unit && unit->GetTypeId() == TYPEID_UNIT && ((Creature*)unit)->AI())

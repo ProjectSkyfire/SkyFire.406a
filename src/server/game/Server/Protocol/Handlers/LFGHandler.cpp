@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -50,7 +50,8 @@ void BuildPartyLockDungeonBlock(WorldPacket& data, const LfgLockPartyMap& lockMa
 void WorldSession::HandleLfgJoinOpcode(WorldPacket& recv_data)
 {
     if (!sWorld->getBoolConfig(CONFIG_DUNGEON_FINDER_ENABLE) ||
-        (GetPlayer()->GetGroup() && GetPlayer()->GetGroup()->GetLeaderGUID() != GetPlayer()->GetGUID()))
+        (GetPlayer()->GetGroup() && GetPlayer()->GetGroup()->GetLeaderGUID() != GetPlayer()->GetGUID() &&
+        (GetPlayer()->GetGroup()->GetMembersCount() == MAXGROUPSIZE || !GetPlayer()->GetGroup()->isLFGGroup())))
     {
         recv_data.rfinish();
         return;
@@ -87,13 +88,13 @@ void WorldSession::HandleLfgJoinOpcode(WorldPacket& recv_data)
 
 void WorldSession::HandleLfgLeaveOpcode(WorldPacket&  /*recv_data*/)
 {
-    Group* grp = GetPlayer()->GetGroup();
+    Group* group = GetPlayer()->GetGroup();
 
-    sLog->outDebug(LOG_FILTER_NETWORKIO, "CMSG_LFG_LEAVE [" UI64FMTD "] in group: %u", GetPlayer()->GetGUID(), grp ? 1 : 0);
+    sLog->outDebug(LOG_FILTER_NETWORKIO, "CMSG_LFG_LEAVE [" UI64FMTD "] in group: %u", GetPlayer()->GetGUID(), group ? 1 : 0);
 
     // Check cheating - only leader can leave the queue
-    if (!grp || grp->GetLeaderGUID() == GetPlayer()->GetGUID())
-        sLFGMgr->Leave(GetPlayer(), grp);
+    if (!group || group->GetLeaderGUID() == GetPlayer()->GetGUID())
+        sLFGMgr->Leave(GetPlayer(), group);
 }
 
 void WorldSession::HandleLfgProposalResultOpcode(WorldPacket& recv_data)
@@ -112,13 +113,13 @@ void WorldSession::HandleLfgSetRolesOpcode(WorldPacket& recv_data)
     uint8 roles;
     recv_data >> roles;                                    // Player Group Roles
     uint64 guid = GetPlayer()->GetGUID();
-    Group* grp = GetPlayer()->GetGroup();
-    if (!grp)
+    Group* group = GetPlayer()->GetGroup();
+    if (!group)
     {
         sLog->outDebug(LOG_FILTER_NETWORKIO, "CMSG_LFG_SET_ROLES [" UI64FMTD "] Not in group", guid);
         return;
     }
-    uint64 gguid = grp->GetGUID();
+    uint64 gguid = group->GetGUID();
     sLog->outDebug(LOG_FILTER_NETWORKIO, "CMSG_LFG_SET_ROLES: Group [" UI64FMTD "], Player [" UI64FMTD "], Roles: %u", gguid, guid, roles);
     sLFGMgr->UpdateRoleCheck(gguid, guid, roles);
 }
@@ -237,13 +238,13 @@ void WorldSession::HandleLfgPartyLockInfoRequestOpcode(WorldPacket&  /*recv_data
     uint64 guid = GetPlayer()->GetGUID();
     sLog->outDebug(LOG_FILTER_NETWORKIO, "CMSG_LFD_PARTY_LOCK_INFO_REQUEST [" UI64FMTD "]", guid);
 
-    Group* grp = GetPlayer()->GetGroup();
-    if (!grp)
+    Group* group = GetPlayer()->GetGroup();
+    if (!group)
         return;
 
     // Get the locked dungeons of the other party members
     LfgLockPartyMap lockMap;
-    for (GroupReference* itr = grp->GetFirstMember(); itr != NULL; itr = itr->next())
+    for (GroupReference* itr = group->GetFirstMember(); itr != NULL; itr = itr->next())
     {
         Player* plrg = itr->getSource();
         if (!plrg)
@@ -557,13 +558,13 @@ void WorldSession::SendLfgUpdateProposal(uint32 proposalId, const LfgProposal* p
     uint32 dungeonId = pProp->dungeonId;
     bool isSameDungeon = false;
     bool isContinue = false;
-    Group* grp = dLowGuid ? sGroupMgr->GetGroupByGUID(dLowGuid) : NULL;
+    Group* group = dLowGuid ? sGroupMgr->GetGroupByGUID(dLowGuid) : NULL;
     uint32 completedEncounters = 0;
-    if (grp)
+    if (group)
     {
-        uint64 gguid = grp->GetGUID();
-        isContinue = grp->isLFGGroup() && sLFGMgr->GetState(gguid) != LFG_STATE_FINISHED_DUNGEON;
-        isSameDungeon = GetPlayer()->GetGroup() == grp && isContinue;
+        uint64 gguid = group->GetGUID();
+        isContinue = group->isLFGGroup() && sLFGMgr->GetState(gguid) != LFG_STATE_FINISHED_DUNGEON;
+        isSameDungeon = GetPlayer()->GetGroup() == group && isContinue;
     }
 
     sLog->outDebug(LOG_FILTER_NETWORKIO, "SMSG_LFG_PROPOSAL_UPDATE [" UI64FMTD "] state: %u", GetPlayer()->GetGUID(), pProp->state);
@@ -581,9 +582,9 @@ void WorldSession::SendLfgUpdateProposal(uint32 proposalId, const LfgProposal* p
         dungeonId = dungeon->Entry();
 
         // Select a player inside to be get completed encounters from
-        if (grp)
+        if (group)
         {
-            for (GroupReference* itr = grp->GetFirstMember(); itr != NULL; itr = itr->next())
+            for (GroupReference* itr = group->GetFirstMember(); itr != NULL; itr = itr->next())
             {
                 Player* groupMember = itr->getSource();
                 if (groupMember && groupMember->GetMapId() == uint32(dungeon->map))

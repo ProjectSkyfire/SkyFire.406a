@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -493,9 +493,9 @@ enum SkyFireStrings
     LANG_MOVEGENS_WAYPOINT              = 529,
     LANG_MOVEGENS_ANIMAL_RANDOM         = 530,
     LANG_MOVEGENS_CONFUSED              = 531,
-    LANG_MOVEGENS_TARGETED_PLAYER       = 532,
-    LANG_MOVEGENS_TARGETED_CREATURE     = 533,
-    LANG_MOVEGENS_TARGETED_NULL         = 534,
+    LANG_MOVEGENS_CHASE_PLAYER          = 532,
+    LANG_MOVEGENS_CHASE_CREATURE        = 533,
+    LANG_MOVEGENS_CHASE_NULL            = 534,
     LANG_MOVEGENS_HOME_CREATURE         = 535,
     LANG_MOVEGENS_HOME_PLAYER           = 536,
     LANG_MOVEGENS_FLIGHT                = 537,
@@ -809,7 +809,11 @@ enum SkyFireStrings
     LANG_CHAR_NOT_BANNED                = 1136,
     LANG_DEV_ON                         = 1137,
     LANG_DEV_OFF                        = 1138,
-    // Room for more level 3              1139-1199 not used
+    LANG_MOVEGENS_FOLLOW_PLAYER         = 1139,
+    LANG_MOVEGENS_FOLLOW_CREATURE       = 1140,
+    LANG_MOVEGENS_FOLLOW_NULL           = 1141,
+    LANG_MOVEGENS_EFFECT                = 1142,
+    // Room for more level 3              1143-1199 not used
 
     // Debug commands
     LANG_CINEMATIC_NOT_EXIST            = 1200,

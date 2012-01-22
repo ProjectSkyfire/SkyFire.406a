@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -683,7 +683,7 @@ class mob_boombot : public CreatureScript
                     // so that can't be the issue
                     // See BoomEvent class
                     // Schedule 1s delayed
-                    me->m_Events.AddEvent(new BoomEvent(me), me->m_Events.CalculateTime(1*IN_MILLISECONDS));
+                    me->_Events.AddEvent(new BoomEvent(me), me->_Events.CalculateTime(1*IN_MILLISECONDS));
                 }
             }
 

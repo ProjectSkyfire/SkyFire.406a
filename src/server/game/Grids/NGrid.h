@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -159,12 +159,26 @@ class NGrid
             GetGridType(x, y).Visit(visitor);
         }
 
-        unsigned int ActiveObjectsInGrid(void) const
+        //This gets the player count in grid
+        //I disable this to avoid confusion (active object usually means something else)
+        /*
+        uint32 GetActiveObjectCountInGrid() const
         {
-            unsigned int count=0;
-            for (unsigned int x=0; x < N; ++x)
-                for (unsigned int y=0; y < N; ++y)
+            uint32 count = 0;
+            for (uint32 x = 0; x < N; ++x)
+                for (uint32 y = 0; y < N; ++y)
                     count += i_cells[x][y].ActiveObjectsInGrid();
+            return count;
+        }
+        */
+
+        template<class T>
+        uint32 GetWorldObjectCountInNGrid() const
+        {
+            uint32 count = 0;
+            for (uint32 x = 0; x < N; ++x)
+                for (uint32 y = 0; y < N; ++y)
+                    count += i_cells[x][y].template GetWorldObjectCountInGrid<T>();
             return count;
         }
 

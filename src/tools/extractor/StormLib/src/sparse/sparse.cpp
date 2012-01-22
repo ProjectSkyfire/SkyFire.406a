@@ -94,7 +94,7 @@ void CompressSparse(unsigned char * pbOutBuffer, int * pcbOutBuffer, unsigned ch
             }
 
             // BUGBUG: The following code will be triggered if the NumberOfNonZeros
-            // was 0x81 before. It will copy just one byte. This seems like a bug to me, 
+            // was 0x81 before. It will copy just one byte. This seems like a bug to me,
             // but since I want StormLib to be exact like Blizzard code is, I will keep
             // it that way here
             if (NumberOfNonZeros > 0x80)

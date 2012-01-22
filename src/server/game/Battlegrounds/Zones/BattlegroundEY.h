@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -384,11 +384,11 @@ class BattlegroundEY : public Battleground
         void UpdatePointStatuses();
 
         /* Scorekeeping */
-        uint32 GetTeamScore(uint32 Team) const { return m_TeamScores[GetTeamIndexByTeamId(Team)]; }
+        uint32 GetTeamScore(uint32 Team) const { return _TeamScores[GetTeamIndexByTeamId(Team)]; }
         void AddPoints(uint32 Team, uint32 Points);
 
-        void RemovePoint(uint32 TeamID, uint32 Points = 1) { m_TeamScores[GetTeamIndexByTeamId(TeamID)] -= Points; }
-        void SetTeamPoint(uint32 TeamID, uint32 Points = 0) { m_TeamScores[GetTeamIndexByTeamId(TeamID)] = Points; }
+        void RemovePoint(uint32 TeamID, uint32 Points = 1) { _TeamScores[GetTeamIndexByTeamId(TeamID)] -= Points; }
+        void SetTeamPoint(uint32 TeamID, uint32 Points = 0) { _TeamScores[GetTeamIndexByTeamId(TeamID)] = Points; }
 
         uint32 m_HonorScoreTics[2];
         uint32 m_TeamPointsCount[2];

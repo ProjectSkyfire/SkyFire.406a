@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -28,7 +28,6 @@
 #include "UpdateMask.h"
 #include "Path.h"
 #include "WaypointMovementGenerator.h"
-#include "DestinationHolderImp.h"
 
 void WorldSession::HandleTaxiNodeStatusQueryOpcode(WorldPacket & recv_data)
 {
@@ -60,7 +59,7 @@ void WorldSession::SendTaxiStatus(uint64 guid)
 
     WorldPacket data(SMSG_TAXINODE_STATUS, 9);
     data << guid;
-    data << uint8(GetPlayer()->m_taxi.IsTaximaskNodeKnown(curloc) ? 1 : 0);
+    data << uint8(GetPlayer()->_taxi.IsTaximaskNodeKnown(curloc) ? 1 : 0);
     SendPacket(&data);
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Sent SMSG_TAXINODE_STATUS");
 }
@@ -110,7 +109,7 @@ void WorldSession::SendTaxiMenu(Creature* unit)
     data << uint64(unit->GetGUID());
     data << uint32(curloc);
     data << uint8((sTaxiNodesStore.GetNumRows() >> 6) + 1); // This is 11 as of 4.0.6 13623 (count of following uint64's)
-    GetPlayer()->m_taxi.AppendTaximaskTo(data, GetPlayer()->isTaxiCheater());
+    GetPlayer()->_taxi.AppendTaximaskTo(data, GetPlayer()->isTaxiCheater());
     SendPacket(&data);
 
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Sent SMSG_SHOWTAXINODES");
@@ -141,7 +140,7 @@ bool WorldSession::SendLearnNewTaxiNode(Creature* unit)
     if (curloc == 0)
         return true;                                        // `true` send to avoid WorldSession::SendTaxiMenu call with one more curlock seartch with same false result.
 
-    if (GetPlayer()->m_taxi.SetTaximaskNode(curloc))
+    if (GetPlayer()->_taxi.SetTaximaskNode(curloc))
     {
         WorldPacket msg(SMSG_NEW_TAXI_PATH, 0);
         SendPacket(&msg);
@@ -159,7 +158,7 @@ bool WorldSession::SendLearnNewTaxiNode(Creature* unit)
 
 void WorldSession::SendDiscoverNewTaxiNode(uint32 nodeid)
 {
-    if (GetPlayer()->m_taxi.SetTaximaskNode(nodeid))
+    if (GetPlayer()->_taxi.SetTaximaskNode(nodeid))
     {
         WorldPacket msg(SMSG_NEW_TAXI_PATH, 0);
         SendPacket(&msg);
@@ -215,7 +214,7 @@ void WorldSession::HandleMoveSplineDoneOpcode(WorldPacket& recv_data)
     // 2) switch from one map to other in case multim-map taxi path
     // we need process only (1)
 
-    uint32 curDest = GetPlayer()->m_taxi.GetTaxiDestination();
+    uint32 curDest = GetPlayer()->_taxi.GetTaxiDestination();
     if (!curDest)
         return;
 
@@ -238,16 +237,16 @@ void WorldSession::HandleMoveSplineDoneOpcode(WorldPacket& recv_data)
         return;
     }
 
-    uint32 destinationnode = GetPlayer()->m_taxi.NextTaxiDestination();
+    uint32 destinationnode = GetPlayer()->_taxi.NextTaxiDestination();
     if (destinationnode > 0)                              // if more destinations to go
     {
         // current source node for next destination
-        uint32 sourcenode = GetPlayer()->m_taxi.GetTaxiSource();
+        uint32 sourcenode = GetPlayer()->_taxi.GetTaxiSource();
 
         // Add to taximask middle hubs in taxicheat mode (to prevent having player with disabled taxicheat and not having back flight path)
         if (GetPlayer()->isTaxiCheater())
         {
-            if (GetPlayer()->m_taxi.SetTaximaskNode(sourcenode))
+            if (GetPlayer()->_taxi.SetTaximaskNode(sourcenode))
             {
                 WorldPacket data(SMSG_NEW_TAXI_PATH, 0);
                 _player->GetSession()->SendPacket(&data);
@@ -264,11 +263,11 @@ void WorldSession::HandleMoveSplineDoneOpcode(WorldPacket& recv_data)
         if (path && mountDisplayId)
             SendDoFlight(mountDisplayId, path, 1);        // skip start fly node
         else
-            GetPlayer()->m_taxi.ClearTaxiDestinations();    // clear problematic path and next
+            GetPlayer()->_taxi.ClearTaxiDestinations();    // clear problematic path and next
         return;
     }
     else
-        GetPlayer()->m_taxi.ClearTaxiDestinations();        // not destinations, clear source node
+        GetPlayer()->_taxi.ClearTaxiDestinations();        // not destinations, clear source node
 
     GetPlayer()->CleanupAfterTaxiFlight();
     GetPlayer()->SetFallInformation(0, GetPlayer()->GetPositionZ());

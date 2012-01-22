@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2006-2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2006-2012 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -467,7 +467,7 @@ struct boss_priestess_lackey_commonAI : public ScriptedAI
         if (ResetThreatTimer <= diff)
         {
             DoResetThreat();
-            ResetThreatTimer = 5000 + rand()%15000;
+            ResetThreatTimer = urand(5000, 20000);
         } else ResetThreatTimer -= diff;
     }
 };

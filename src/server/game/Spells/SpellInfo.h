@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -326,13 +326,13 @@ public:
     // uint32 unk_400_1;                                    // 10       4.0.0
     SpellCastTimesEntry const* CastTimeEntry;               // 11       m_castingTimeIndex
     SpellDurationEntry const* DurationEntry;                // 12       m_durationIndex
-    uint32 PowerType;                                       // 13       m_powerType
+    uint32 PowerType;                                       // 13       _powerType
     SpellRangeEntry const* RangeEntry;                      // 14       m_rangeIndex
     float  Speed;                                           // 15       m_speed
     uint32 SpellVisual[2];                                  // 16-17    m_spellVisualID
     uint32 SpellIconID;                                     // 18       m_spellIconID
     uint32 ActiveIconID;                                    // 19       m_activeIconID
-    DBCString SpellName;                                    // 20       m_name
+    char* SpellName;                                        // 20       m_name
     uint32 SpellShapeshiftId;                               // 21       SpellShapeshift.dbc
     //DBCString Description;                                // 22       m_description_lang not used
     //DBCString ToolTip;                                    // 23       m_auraDescription_lang not used
@@ -535,6 +535,7 @@ public:
     uint32 GetEffectMechanicMask(uint8 effIndex) const;
     uint32 GetSpellMechanicMaskByEffectMask(uint32 effectMask) const;
     Mechanics GetEffectMechanic(uint8 effIndex) const;
+    bool HasAnyEffectMechanic() const;
     uint32 GetDispelMask() const;
     static uint32 GetDispelMask(DispelType type);
     uint32 GetExplicitTargetMask() const;

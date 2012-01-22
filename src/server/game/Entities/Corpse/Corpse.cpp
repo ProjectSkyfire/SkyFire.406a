@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -27,22 +27,19 @@
 #include "GossipDef.h"
 #include "World.h"
 
-Corpse::Corpse(CorpseType type) : WorldObject()
+Corpse::Corpse(CorpseType type) : WorldObject(type != CORPSE_BONES)
 , m_type(type)
 {
-    m_objectType |= TYPEMASK_CORPSE;
-    m_objectTypeId = TYPEID_CORPSE;
+    _objectType |= TYPEMASK_CORPSE;
+    _objectTypeId = TYPEID_CORPSE;
 
     m_updateFlag = (UPDATEFLAG_HAS_POSITION | UPDATEFLAG_POSITION);
 
-    m_valuesCount = CORPSE_END;
+    _valuesCount = CORPSE_END;
 
     m_time = time(NULL);
 
     lootForBody = false;
-
-    if (type != CORPSE_BONES)
-        m_isWorldObject = true;
 }
 
 Corpse::~Corpse()
@@ -163,19 +160,11 @@ void Corpse::DeleteFromDB(SQLTransaction& trans)
     trans->Append(stmt);
 }
 
-bool Corpse::LoadFromDB(uint32 guid, Field* fields)
+bool Corpse::LoadCorpseFromDB(uint32 guid, Field* fields)
 {
     //        0     1     2     3            4      5          6          7       8       9      10        11    12          13          14         15          16
     // SELECT posX, posY, posZ, orientation, mapId, displayId, itemCache, bytes1, bytes2, flags, dynFlags, time, corpseType, instanceId, phaseMask, corpseGuid, guid FROM corpse WHERE corpseType <> 0
     uint32 ownerGuid = fields[16].GetUInt32();
-    m_type = CorpseType(fields[12].GetUInt8());
-    if (m_type >= MAX_CORPSE_TYPE)
-    {
-        sLog->outError("Corpse (guid: %u, owner: %u) have wrong corpse type (%u), not loading.", guid, ownerGuid, m_type);
-        return false;
-    }
-    if (m_type != CORPSE_BONES)
-        m_isWorldObject = true;
 
     float posX   = fields[0].GetFloat();
     float posY   = fields[1].GetFloat();

@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -56,7 +56,7 @@ void Vehicle::Install()
 {
     if (Creature* creature = _me->ToCreature())
     {
-        switch (_vehicleInfo->m_powerType)
+        switch (_vehicleInfo->_powerType)
         {
             case POWER_STEAM:
             case POWER_HEAT:
@@ -73,10 +73,10 @@ void Vehicle::Install()
             default:
                 for (uint32 i = 0; i < MAX_SPELL_VEHICLE; ++i)
                 {
-                    if (!creature->m_spells[i])
+                    if (!creature->_spells[i])
                         continue;
 
-                    SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(creature->m_spells[i]);
+                    SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(creature->_spells[i]);
                     if (!spellInfo)
                         continue;
 
@@ -347,12 +347,12 @@ bool Vehicle::AddPassenger(Unit* unit, int8 seatId)
 
     unit->AddUnitMovementFlag(MOVEMENTFLAG_ONTRANSPORT);
     VehicleSeatEntry const* veSeat = seat->second.SeatInfo;
-    unit->m_movementInfo.t_pos.m_positionX = veSeat->m_attachmentOffsetX;
-    unit->m_movementInfo.t_pos.m_positionY = veSeat->m_attachmentOffsetY;
-    unit->m_movementInfo.t_pos.m_positionZ = veSeat->m_attachmentOffsetZ;
-    unit->m_movementInfo.t_pos.m_orientation = 0;
-    unit->m_movementInfo.t_time = 0; // 1 for player
-    unit->m_movementInfo.t_seat = seat->first;
+    unit->_movementInfo.t_pos.m_positionX = veSeat->m_attachmentOffsetX;
+    unit->_movementInfo.t_pos.m_positionY = veSeat->m_attachmentOffsetY;
+    unit->_movementInfo.t_pos.m_positionZ = veSeat->m_attachmentOffsetZ;
+    unit->_movementInfo.t_pos._orientation = 0;
+    unit->_movementInfo.t_time = 0; // 1 for player
+    unit->_movementInfo.t_seat = seat->first;
 
     if (_me->GetTypeId() == TYPEID_UNIT
         && unit->GetTypeId() == TYPEID_PLAYER
@@ -416,9 +416,13 @@ void Vehicle::RemovePassenger(Unit* unit)
     if (_me->IsInWorld())
     {
         unit->RemoveUnitMovementFlag(MOVEMENTFLAG_ONTRANSPORT);
-        unit->m_movementInfo.t_pos.Relocate(0, 0, 0, 0);
-        unit->m_movementInfo.t_time = 0;
-        unit->m_movementInfo.t_seat = 0;
+        unit->_movementInfo.t_pos.Relocate(0, 0, 0, 0);
+        unit->_movementInfo.t_time = 0;
+        unit->_movementInfo.t_seat = 0;
+        unit->SetUnitMovementFlags(0);
+        unit->SetExtraUnitMovementFlags(0);
+        if (unit->HasUnitState(UNIT_STAT_NOT_MOVE))
+            unit->ClearUnitState(UNIT_STAT_NOT_MOVE);
     }
 
     if (_me->GetTypeId() == TYPEID_UNIT && _me->ToCreature()->IsAIEnabled)
@@ -445,10 +449,10 @@ void Vehicle::RelocatePassengers(float x, float y, float z, float ang)
             ASSERT(passenger->IsOnVehicle(GetBase()));
             ASSERT(GetSeatForPassenger(passenger));
 
-            float px = x + passenger->m_movementInfo.t_pos.m_positionX;
-            float py = y + passenger->m_movementInfo.t_pos.m_positionY;
-            float pz = z + passenger->m_movementInfo.t_pos.m_positionZ;
-            float po = ang + passenger->m_movementInfo.t_pos.m_orientation;
+            float px = x + passenger->_movementInfo.t_pos.m_positionX;
+            float py = y + passenger->_movementInfo.t_pos.m_positionY;
+            float pz = z + passenger->_movementInfo.t_pos.m_positionZ;
+            float po = ang + passenger->_movementInfo.t_pos._orientation;
 
             passenger->UpdatePosition(px, py, pz, po);
         }
@@ -466,7 +470,7 @@ void Vehicle::Dismiss()
 void Vehicle::TeleportVehicle(float x, float y, float z, float ang)
 {
     vehiclePlayers.clear();
-    for(int8 i = 0; i < 8; i++)
+    for (int8 i = 0; i < 8; i++)
         if (Unit* player = GetPassenger(i))
             vehiclePlayers.insert(player->GetGUID());
 

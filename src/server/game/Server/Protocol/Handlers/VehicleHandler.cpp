@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -45,7 +45,7 @@ void WorldSession::HandleDismissControlledVehicle(WorldPacket &recv_data)
     mi.guid = guid;
     ReadMovementInfo(recv_data, &mi);
 
-    _player->m_movementInfo = mi;
+    _player->_movementInfo = mi;
 
     _player->ExitVehicle();
 }
@@ -83,7 +83,7 @@ void WorldSession::HandleChangeSeatsOnControlledVehicle(WorldPacket &recv_data)
             uint64 guid;        // current vehicle guid
             recv_data.readPackGUID(guid);
 
-            ReadMovementInfo(recv_data, &vehicle_base->m_movementInfo);
+            ReadMovementInfo(recv_data, &vehicle_base->_movementInfo);
 
             uint64 accessory;        //  accessory guid
             recv_data.readPackGUID(accessory);

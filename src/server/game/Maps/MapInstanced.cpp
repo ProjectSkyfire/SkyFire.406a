@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -125,9 +125,17 @@ Map* MapInstanced::CreateInstanceForPlayer(const uint32 mapId, Player* player)
         // the instance id is set in battlegroundid
         NewInstanceId = player->GetBattlegroundId();
         if (!NewInstanceId) return NULL;
-        map = FindInstanceMap(NewInstanceId);
+        map = sMapMgr->FindMap(mapId, NewInstanceId);
         if (!map)
-            map = CreateBattleground(NewInstanceId, player->GetBattleground());
+        {
+            if (Battleground* bg = player->GetBattleground())
+                map = CreateBattleground(NewInstanceId, bg);
+            else
+            {
+                player->TeleportToBGEntryPoint();
+                return NULL;
+            }
+        }
     }
     else
     {

@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -40,7 +40,7 @@ class Totem : public Minion
         void InitStats(uint32 duration);
         void InitSummon();
         void UnSummon();
-        uint32 GetSpell(uint8 slot = 0) const { return m_spells[slot]; }
+        uint32 GetSpell(uint8 slot = 0) const { return _spells[slot]; }
         uint32 GetTotemDuration() const { return m_duration; }
         void SetTotemDuration(uint32 duration) { m_duration = duration; }
         TotemType GetTotemType() const { return m_type; }

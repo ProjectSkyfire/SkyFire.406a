@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -207,7 +207,7 @@ std::string ChatHandler::GenerateDeletedCharacterGUIDsWhereStr(DeletedInfoList::
  */
 void ChatHandler::HandleCharacterDeletedListHelper(DeletedInfoList const& foundList)
 {
-    if (!m_session)
+    if (!_session)
     {
         SendSysMessage(LANG_CHARACTER_DELETED_LIST_BAR);
         SendSysMessage(LANG_CHARACTER_DELETED_LIST_HEADER);
@@ -218,7 +218,7 @@ void ChatHandler::HandleCharacterDeletedListHelper(DeletedInfoList const& foundL
     {
         std::string dateStr = TimeToTimestampStr(itr->deleteDate);
 
-        if (!m_session)
+        if (!_session)
             PSendSysMessage(LANG_CHARACTER_DELETED_LIST_LINE_CONSOLE,
                 itr->lowguid, itr->name.c_str(), itr->accountName.empty() ? "<Does not exist>" : itr->accountName.c_str(),
                 itr->accountId, dateStr.c_str());
@@ -228,7 +228,7 @@ void ChatHandler::HandleCharacterDeletedListHelper(DeletedInfoList const& foundL
                 itr->accountId, dateStr.c_str());
     }
 
-    if (!m_session)
+    if (!_session)
         SendSysMessage(LANG_CHARACTER_DELETED_LIST_BAR);
 }
 
@@ -291,8 +291,13 @@ void ChatHandler::HandleCharacterDeletedRestoreHelper(DeletedInfo const& delInfo
         return;
     }
 
-    CharacterDatabase.PExecute("UPDATE characters SET name='%s', account='%u', deleteDate=NULL, deleteInfos_Name=NULL, deleteInfos_Account=NULL WHERE deleteDate IS NOT NULL AND guid = %u",
-        delInfo.name.c_str(), delInfo.accountId, delInfo.lowguid);
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UDP_RESTORE_DELETE_INFO);
+
+    stmt->setString(0, delInfo.name);
+    stmt->setUInt32(1, delInfo.accountId);
+    stmt->setUInt32(2, delInfo.lowguid);
+
+    CharacterDatabase.Execute(stmt);
 }
 
 /**

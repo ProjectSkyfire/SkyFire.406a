@@ -165,7 +165,7 @@ int SAttrFileSaveToMpq(TMPQArchive * ha)
     DWORD i;
     int nError = ERROR_SUCCESS;
 
-    // If the (attributes) is not in the file table yet, 
+    // If the (attributes) is not in the file table yet,
     // we have to increase the final block table size
     pFileEntry = GetFileEntryExact(ha, ATTRIBUTES_NAME, LANG_NEUTRAL);
     if (pFileEntry != NULL)
@@ -204,11 +204,11 @@ int SAttrFileSaveToMpq(TMPQArchive * ha)
     }
 
     // Create the attributes file in the MPQ
-    nError = SFileAddFile_Init(ha, ATTRIBUTES_NAME, 
-                                   NULL, 
-                                   dwFileSize, 
-                                   LANG_NEUTRAL, 
-                                   MPQ_FILE_COMPRESS | MPQ_FILE_REPLACEEXISTING, 
+    nError = SFileAddFile_Init(ha, ATTRIBUTES_NAME,
+                                   NULL,
+                                   dwFileSize,
+                                   LANG_NEUTRAL,
+                                   MPQ_FILE_COMPRESS | MPQ_FILE_REPLACEEXISTING,
                                   &hf);
 
     // Write all parts of the (attributes) file

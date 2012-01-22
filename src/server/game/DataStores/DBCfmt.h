@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -22,14 +22,15 @@
 
 const char Achievementfmt[]="niixsxiixixxii";
 const std::string CustomAchievementfmt="pppaaaapapaapp";
-const std::string CustomAchievementIndex = "ID";
+const std::string CustomAchievementIndex="ID";
 const char AchievementCriteriafmt[]="niiiiiiiisiiiiixxiiiiii";
-const char AreaTableEntryfmt[]="iiinixxxxxisixxxxxxxxxxxx";
+const char AreaTableEntryfmt[]="iiinixxxxxisixxxxxxxxxxxxx";
 const char AreaGroupEntryfmt[]="niiiiiii";
 const char AreaPOIEntryfmt[]="niiiiiiiiiiiffixixxixx";
 const char AreaTriggerEntryfmt[]="nifffxxxfffff";
 const char ArmorLocationfmt[]="nfffff";
 const char AuctionHouseEntryfmt[]="niiix";
+
 const char BankBagSlotPricesEntryfmt[]="ni";
 const char BarberShopStyleEntryfmt[]="nixxxiii";
 const char BattlemasterListEntryfmt[]="niiiiiiiiixsiiiiiiix";
@@ -49,7 +50,7 @@ const char DestructibleModelDatafmt[]="ixxixxxixxxixxxixxxxxxxx";
 const char DungeonEncounterfmt[]="niixisxx";
 const char DurabilityCostsfmt[]="niiiiiiiiiiiiiiiiiiiiiiiiiiiii";
 const char DurabilityQualityfmt[]="nf";
-const char EmotesEntryfmt[]="nxxiiix";
+const char EmotesEntryfmt[]="nxxiiixx";
 const char EmotesTextEntryfmt[]="nxixxxxxxxxxxxxxxxx";
 const char FactionEntryfmt[]="niiiiiiiiiiiiiiiiiiffixsxx";
 const char FactionTemplateEntryfmt[]="niiiiiiiiiiiii";
@@ -70,7 +71,7 @@ const char GtRegenHPPerSptfmt[]="xf";
 const char gtOCTHpPerStaminafmt[]="xf";
 const char GtRegenMPPerSptfmt[]="xf";
 const char GtSpellScalingfmt[]="nf";
-const char Holidaysfmt[]="nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
+const char Holidaysfmt[]="nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";       // this needs checked for 406a
 const char ItemArmorQualityfmt[]="nfffffffi";
 const char ItemArmorShieldfmt[]="nifffffff";
 const char ItemArmorTotalfmt[]="niffff";
@@ -78,13 +79,13 @@ const char ItemBagFamilyfmt[]="nx";
 //const char ItemDisplayTemplateEntryfmt[]="nxxxxxxxxxxixxxxxxxxxxx";
 //const char ItemCondExtCostsEntryfmt[]="xiii";
 const char ItemDamagefmt[]="nfffffffi";
-const char ItemExtendedCostEntryfmt[]="nxxiiiiiiiiiiiixiiiiiiiiiixxxxx";
+const char ItemDisenchantLootfmt[]="niiiiii";
 const char ItemLimitCategoryEntryfmt[]="nxii";
 const char ItemRandomPropertiesfmt[]="nxiiixxs";
 const char ItemRandomSuffixfmt[]="nsxiiiiiiiiii";;
 const char ItemReforgefmt[]="nifif";
 const char ItemSetEntryfmt[]="dsiiiiiiiiiixxxxxxxiiiiiiiiiiiiiiiiii";
-const char LFGDungeonEntryfmt[]="nxiiiiiiixixxixix";
+const char LFGDungeonEntryfmt[]="nxiiiiiiixixxixixxxxx";
 //const char LiquidTypeEntryfmt[]="nsiiiiffffifiiisssssiiffffffffffffffffffiiii";  // unused atm... still tc values.
 const char LockEntryfmt[]="niiiiiiiiiiiiiiiiiiiiiiiixxxxxxxx";
 const char MailTemplateEntryfmt[]="nxs";
@@ -93,6 +94,7 @@ const char MapDifficultyEntryfmt[]="diisiix";
 const char MountCapabilityfmt[]="niixxiii";
 const char MountTypefmt[]="niiiiiiiiiiiiiiiiixxxxxxx";
 const char MovieEntryfmt[]="nxxx";
+const char NameGenfmt[]="dsii";
 const char OverrideSpellDatafmt[]="niiiiiiiiiixx";
 const char QuestSortEntryfmt[]="nx";
 const char QuestXPfmt[]="niiiiiiiiii";
@@ -101,18 +103,18 @@ const char PvPDifficultyfmt[]="diiiii";
 const char PhaseEntryfmt[]="nsi";
 const char RandomPropertiesPointsfmt[]="niiiiiiiiiiiiiii";
 const char ScalingStatDistributionfmt[]="niiiiiiiiiiiiiiiiiiiixi";
-const char ScalingStatValuesfmt[]="iniiiiiiiiiiiiiiiiiiiixxxxxxxxxxxxxxxxxxxxxxxxx";
-const char SkillLinefmt[]="nixsxixi";
+const char ScalingStatValuesfmt[]="iniiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii";
+const char SkillLinefmt[]="niisxix";
 const char SkillLineAbilityfmt[]="niiiixxiiiiiix";
-const char SoundEntriesfmt[]="nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
+const char SoundEntriesfmt[]="nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
 const char SpellCastTimefmt[]="nixx";
-const char SpellDifficultyfmt[] = "niiii";
+const char SpellDifficultyfmt[]="niiii";
 const std::string CustomSpellDifficultyfmt="ppppp";
 const std::string CustomSpellDifficultyIndex="id";
 const char SpellDurationfmt[]="niii";
-const char SpellEntryfmt[]=           "niiiiiiiiixiiiifiiiissxxiixxixiiiiiiixiiiiiiiix";
-const std::string CustomSpellEntryfmt="ppppppppppapppppppppaaaappaapapppppppappppppppa";
-const std::string CustomSpellEntryIndex = "id";
+const char SpellEntryfmt[]="niiiiiiiiixxiiiifiiiissxxiixxixiiiiiiixiiiiiiiix";
+const std::string CustomSpellEntryfmt="ppppppppppaapppppppppaaaappaapapppppppappppppppa";
+const std::string CustomSpellEntryIndex="id";
 const char SpellAuraOptionsfmt[]="niiii";
 const std::string CustomSpellAuraOptionsEntryfmt="ppppp";
 const std::string CustomSpellAuraOptionsEntryIndex="id";
@@ -131,7 +133,7 @@ const std::string CustomSpellClassOptionsEntryIndex="id";
 const char SpellCooldownsfmt[]="niii";
 const std::string CustomSpellCooldownsEntryfmt="pppp";
 const std::string CustomSpellCooldownsEntryIndex="id";
-const char SpellEffectfmt[]=                "nifiiiffiiiiiifiifiiiiiiii";
+const char SpellEffectfmt[]="nifiiiffiiiiiifiifiiiiiiiix";
 const std::string CustomSpellEffectEntryfmt="pppppppppppppppppppppppppp";
 const std::string CustomSpellEffectEntryIndex="id";
 const char SpellEquippedItemsfmt[]="niii";
@@ -143,7 +145,7 @@ const std::string CustomSpellInterruptsEntryIndex="id";
 const char SpellLevelsfmt[]="niii";
 const std::string CustomSpellLevelsEntryfmt="pppp";
 const std::string CustomSpellLevelsEntryIndex="id";
-const char SpellPowerfmt[]="niiiixx";
+const char SpellPowerfmt[]="niiiixxx";
 const std::string CustomSpellPowerEntryfmt="pppppaa";
 const std::string CustomSpellPowerEntryIndex="id";
 const char SpellReagentsfmt[]="niiiiiiiiiiiiiiii";
@@ -155,7 +157,7 @@ const std::string CustomSpellScalingEntryIndex="id";
 const char SpellShapeshiftfmt[]="nixixx";
 const std::string CustomSpellShapeshiftEntryfmt="ppapaa";
 const std::string CustomSpellShapeshiftEntryIndex="id";
-const char SpellTargetRestrictionsfmt[]="niiii";
+const char SpellTargetRestrictionsfmt[]="niiiix";
 const std::string CustomSpellTargetRestrictionsEntryfmt="ppppp";
 const std::string CustomSpellTargetRestrictionsEntryIndex="id";
 const char SpellTotemsfmt[]="niiii";
@@ -168,22 +170,21 @@ const char SpellRadiusfmt[]="nfxf";
 const char SpellRangefmt[]="nffffixx";
 const char SpellRuneCostfmt[]="niiii";
 const char SpellShapeshiftFormfmt[]="nxxiixiiixxiiiiiiiixx";
-const char SummonPropertiesfmt[] = "niiiii";
-const char GuildPerksfmt[] = "nii";
+const char SummonPropertiesfmt[]="niiiii";
+const char GuildPerksfmt[]="nii";
 const char TalentEntryfmt[]="niiiiiiiiixxixxxxxx";
 const char TalentTabEntryfmt[]="nxxiiixxxii";
 const char TalentTreePrimarySpellsfmt[]="niii";
-const char TaxiNodesEntryfmt[]="nifffsii";
+const char TaxiNodesEntryfmt[]="nifffsiixxx";
 const char TaxiPathEntryfmt[]="niii";
-const char TaxiPathNodeEntryfmt[]="diiifffiiii";
-//const char TeamContributionPointsfmt[]="df"; Not used in 4.0.6a
+const char TaxiPathNodeEntryfmt[]="niiifffiiii";
 const char TotemCategoryEntryfmt[]="nxii";
 const char VehicleEntryfmt[]="niffffiiiiiiiifffffffffffffffssssfifiixx";
 const char VehicleSeatEntryfmt[]="niiffffffffffiiiiiifffffffiiifffiiiiiiiffiiiiixxxxxxxxxxxxxxxxxxxx";
 const char WMOAreaTableEntryfmt[]="niiixxxxxiixxxx";
-const char WorldMapAreaEntryfmt[]="xinxffffixxx";
+const char WorldMapAreaEntryfmt[]="xinxffffixxxxx";
 const char WorldMapOverlayEntryfmt[]="nxiiiixxxxxxxxx";
 const char WorldSafeLocsEntryfmt[]="nifffx";
-// const char WorldStateEntryfmt[]="niiixxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxixxxxxxxxxxxxxxxxxxxxxxx";  //this needs checked for 406
+const char WorldStateEntryfmt[]="niiissisiisssisiii";
 
 #endif

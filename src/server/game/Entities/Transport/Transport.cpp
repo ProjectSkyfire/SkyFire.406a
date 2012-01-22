@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -170,7 +170,7 @@ void MapManager::LoadTransportNPCs()
     sLog->outString();
 }
 
-Transport::Transport(uint32 period, uint32 script) : GameObject(), m_pathTime(0), m_timer(0),
+Transport::Transport(uint32 period, uint32 script) : GameObject(), m_pathTime(0), _timer(0),
 currenttguid(0), m_period(period), ScriptId(script), m_nextNodeTime(0)
 {
     m_updateFlag = (UPDATEFLAG_TRANSPORT | UPDATEFLAG_HAS_POSITION | UPDATEFLAG_ROTATION);
@@ -539,8 +539,8 @@ void Transport::Update(uint32 p_diff)
     if (m_WayPoints.size() <= 1)
         return;
 
-    m_timer = getMSTime() % m_period;
-    while (((m_timer - m_curr->first) % m_pathTime) > ((m_next->first - m_curr->first) % m_pathTime))
+    _timer = getMSTime() % m_period;
+    while (((_timer - m_curr->first) % m_pathTime) > ((m_next->first - m_curr->first) % m_pathTime))
     {
         DoEventIfAny(*m_curr, true);
 
@@ -595,7 +595,7 @@ void Transport::UpdateForMap(Map const* targetMap)
     }
     else
     {
-        UpdateData transData(GetMapId());
+        UpdateData transData(targetMap->GetId());
         BuildOutOfRangeUpdateBlock(&transData);
         WorldPacket out_packet;
         transData.BuildPacket(&out_packet);
@@ -633,7 +633,8 @@ void Transport::BuildStopMovePacket(Map const* targetMap)
 uint32 Transport::AddNPCPassenger(uint32 tguid, uint32 entry, float x, float y, float z, float o, uint32 anim)
 {
     Map* map = GetMap();
-    Creature* creature = new Creature;
+    //make it world object so it will not be unloaded with grid
+    Creature* creature = new Creature(true);
 
     if (!creature->Create(sObjectMgr->GenerateLowGuid(HIGHGUID_UNIT), map, GetPhaseMask(), entry, 0, GetGOInfo()->faction, 0, 0, 0, 0))
     {
@@ -643,8 +644,8 @@ uint32 Transport::AddNPCPassenger(uint32 tguid, uint32 entry, float x, float y, 
 
     creature->SetTransport(this);
     creature->AddUnitMovementFlag(MOVEMENTFLAG_ONTRANSPORT);
-    creature->m_movementInfo.guid = GetGUID();
-    creature->m_movementInfo.t_pos.Relocate(x, y, z, o);
+    creature->_movementInfo.guid = GetGUID();
+    creature->_movementInfo.t_pos.Relocate(x, y, z, o);
 
     if (anim)
         creature->SetUInt32Value(UNIT_NPC_EMOTESTATE, anim);
@@ -666,7 +667,6 @@ uint32 Transport::AddNPCPassenger(uint32 tguid, uint32 entry, float x, float y, 
 
     map->AddToMap(creature);
     m_NPCPassengerSet.insert(creature);
-    creature->SetWorldObject(true); //so it will not be unloaded with grid
 
     if (tguid == 0)
     {
@@ -683,7 +683,7 @@ uint32 Transport::AddNPCPassenger(uint32 tguid, uint32 entry, float x, float y, 
 
 void Transport::UpdatePosition(MovementInfo* mi)
 {
-    float transport_o = mi->pos.m_orientation - mi->t_pos.m_orientation;
+    float transport_o = mi->pos._orientation - mi->t_pos._orientation;
     float transport_x = mi->pos.m_positionX - (mi->t_pos.m_positionX * cos(transport_o) - mi->t_pos.m_positionY*sin(transport_o));
     float transport_y = mi->pos.m_positionY - (mi->t_pos.m_positionY * cos(transport_o) + mi->t_pos.m_positionX*sin(transport_o));
     float transport_z = mi->pos.m_positionZ - mi->t_pos.m_positionZ;
@@ -699,10 +699,10 @@ void Transport::UpdateNPCPositions()
         Creature* npc = *itr;
 
         float x, y, z, o;
-        o = GetOrientation() + npc->m_movementInfo.t_pos.m_orientation;
-        x = GetPositionX() + (npc->m_movementInfo.t_pos.m_positionX * cos(GetOrientation()) + npc->m_movementInfo.t_pos.m_positionY * sin(GetOrientation() + M_PI));
-        y = GetPositionY() + (npc->m_movementInfo.t_pos.m_positionY * cos(GetOrientation()) + npc->m_movementInfo.t_pos.m_positionX * sin(GetOrientation()));
-        z = GetPositionZ() + npc->m_movementInfo.t_pos.m_positionZ;
+        o = GetOrientation() + npc->_movementInfo.t_pos._orientation;
+        x = GetPositionX() + (npc->_movementInfo.t_pos.m_positionX * cos(GetOrientation()) + npc->_movementInfo.t_pos.m_positionY * sin(GetOrientation() + M_PI));
+        y = GetPositionY() + (npc->_movementInfo.t_pos.m_positionY * cos(GetOrientation()) + npc->_movementInfo.t_pos.m_positionX * sin(GetOrientation()));
+        z = GetPositionZ() + npc->_movementInfo.t_pos.m_positionZ;
         npc->SetHomePosition(x, y, z, o);
         GetMap()->CreatureRelocation(npc, x, y, z, o, false);
     }

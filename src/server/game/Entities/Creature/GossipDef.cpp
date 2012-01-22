@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -285,11 +285,11 @@ void PlayerMenu::SendQuestGiverQuestList(QEmote eEmote, const std::string& Title
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Sent SMSG_QUESTGIVER_QUEST_LIST NPC Guid=%u", GUID_LOPART(npcGUID));
 }
 
-void PlayerMenu::SendQuestGiverStatus(uint8 questStatus, uint64 npcGUID) const
+void PlayerMenu::SendQuestGiverStatus(uint32 questStatus, uint64 npcGUID) const
 {
     WorldPacket data(SMSG_QUESTGIVER_STATUS, 11);
     data << uint64(npcGUID);
-    data << uint32(questStatus);
+    data << questStatus;
 
     _session->SendPacket(&data);
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Sent SMSG_QUESTGIVER_STATUS NPC Guid=%u, status=%u", GUID_LOPART(npcGUID), questStatus);
@@ -303,7 +303,6 @@ void PlayerMenu::SendQuestGiverQuestDetails(Quest const* quest, uint64 npcGUID, 
     std::string EndText    = quest->GetEndText();
     std::string questTargetTextWindow = quest->GetQuestGiverPortraitText();
     std::string questTargetName  = quest->GetQuestGiverPortraitUnk();
-    std::string unk        = "";
 
     int locale = _session->GetSessionDbLocaleIndex();
     if (locale >= 0)
@@ -388,10 +387,10 @@ void PlayerMenu::SendQuestGiverQuestDetails(Quest const* quest, uint64 npcGUID, 
     data << int32(quest->GetRewSpellCast());
     data << uint32(0); // unknown 4.0.6a Spellcast?
 
-    for(int i = 0; i < QUEST_CURRENCY_COUNT; i++)
+    for (int i = 0; i < QUEST_CURRENCY_COUNT; i++)
         data << uint32(quest->RewCurrencyId[i]);
 
-    for(int i = 0; i < QUEST_CURRENCY_COUNT; i++)
+    for (int i = 0; i < QUEST_CURRENCY_COUNT; i++)
         data << uint32(quest->RewCurrencyCount[i]);
 
     data << uint32(0);
@@ -546,13 +545,13 @@ void PlayerMenu::SendQuestQueryResponse(Quest const* quest) const
     for (uint32 i = 0; i < QUEST_OBJECTIVES_COUNT; ++i)
         data << questObjectiveText[i];
 
-    for(uint32 i = 0; i < 4; ++i)                               // 4.0.0 currency reward id and count
+    for (uint32 i = 0; i < 4; ++i)                               // 4.0.0 currency reward id and count
     {
         data << uint32(quest->RewCurrencyId[i]);
         data << uint32(quest->RewCurrencyCount[i]);
     }
 
-    for(uint32 i = 0; i < 4; ++i)                               // 4.0.0 currency required id and count
+    for (uint32 i = 0; i < 4; ++i)                               // 4.0.0 currency required id and count
     {
         data << uint32(quest->ReqCurrencyId[i]);
         data << uint32(quest->ReqCurrencyCount[i]);
@@ -675,10 +674,10 @@ void PlayerMenu::SendQuestGiverOfferReward(Quest const* quest, uint64 npcGUID, b
     data << int32(quest->GetRewSpellCast());
     data << uint32(0); // Maybe invisible spell cast
 
-    for(int i = 0; i < QUEST_CURRENCY_COUNT; i++)
+    for (int i = 0; i < QUEST_CURRENCY_COUNT; i++)
         data << uint32(quest->RewCurrencyId[i]);
 
-    for(int i = 0; i < QUEST_CURRENCY_COUNT; i++)
+    for (int i = 0; i < QUEST_CURRENCY_COUNT; i++)
         data << uint32(quest->RewCurrencyCount[i]);
 
     data << uint32(0);
@@ -755,7 +754,7 @@ void PlayerMenu::SendQuestGiverRequestItems(Quest const* quest, uint64 npcGUID, 
     // Added in 4.0.1
     uint32 counter = 0;
     data << counter;
-    for(uint32 i = 0; i < counter; i++)
+    for (uint32 i = 0; i < counter; i++)
     {
         data << uint32(0);
         data << uint32(0);

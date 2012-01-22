@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
+* Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
 *
 * This program is free software; you can redistribute it and/or modify it
 * under the terms of the GNU General Public License as published by the
@@ -24,7 +24,7 @@ bool BattlefieldTB::SetupBattlefield()
     m_TypeId                     = BATTLEFIELD_TB;    //View enum BattlefieldTypes
     m_BattleId                   = BATTLEFIELD_BATTLEID_TB;
     m_ZoneId                     = 5095; // Tol Barad
-    m_MapId                      = 732;  // Map X
+    _MapId                      = 732;  // Map X
     m_MaxPlayer                  = sWorld->getIntConfig(CONFIG_TOL_BARAD_PLR_MAX);
     m_enable                     = sWorld->getBoolConfig(CONFIG_TOL_BARAD_ENABLE);
     m_MinPlayer                  = sWorld->getIntConfig(CONFIG_TOL_BARAD_PLR_MIN);
@@ -35,9 +35,9 @@ bool BattlefieldTB::SetupBattlefield()
     m_StartGroupingTimer         = 15*60*1000; // in ms
     m_StartGrouping=false;
     KickPositionA.Relocate(-363.897f, 1047.931f, 22, 0);
-    KickPositionA.m_mapId        = m_MapId;
+    KickPositionA.m_mapId        = _MapId;
     KickPositionH.Relocate(-609.336f, 1392.194f, 21.5f, 0);
-    KickPositionH.m_mapId        = m_MapId;
+    KickPositionH.m_mapId        = _MapId;
     RegisterZone(m_ZoneId);
     m_Data32.resize(BATTLEFIELD_TB_DATA_MAX);
     m_saveTimer                  = 60000;
@@ -62,7 +62,7 @@ bool BattlefieldTB::SetupBattlefield()
         m_Timer = 10 * 60 * 1000;
     }
 
-    for(uint8 i=0; i<BATTLEFIELD_TB_GY_MAX; i++)
+    for (uint8 i=0; i<BATTLEFIELD_TB_GY_MAX; i++)
     {
         BfGraveYardTB* gy = new BfGraveYardTB(this);
         if (TBGraveYard[i].startcontrol == TEAM_NEUTRAL)
@@ -77,13 +77,13 @@ bool BattlefieldTB::SetupBattlefield()
     }
 
     // Pop des gameobject et creature du TBWorkShop
-    for(uint8 i = 0; i<TB_MAX_WORKSHOP; i++)
+    for (uint8 i = 0; i<TB_MAX_WORKSHOP; i++)
     {
         BfTBWorkShopData* ws = new BfTBWorkShopData(this); // Create new object
         // Init:setup variable
         ws->Init(TBCapturePointDataBase[i].worldstate, TBCapturePointDataBase[i].type, TBCapturePointDataBase[i].nameid);
         // Spawn associate gameobject on this point (Horde/Alliance flags)
-        for(int g = 0; g<TBCapturePointDataBase[i].nbgob; g++)
+        for (int g = 0; g<TBCapturePointDataBase[i].nbgob; g++)
         {
             ws->AddGameObject(TBCapturePointDataBase[i].GameObjectData[g]);
         }
@@ -117,7 +117,7 @@ bool BattlefieldTB::SetupBattlefield()
     }
 
     // Spawning npc in keep
-    for(uint8 i = 0; i<TB_MAX_KEEP_NPC; i++)
+    for (uint8 i = 0; i<TB_MAX_KEEP_NPC; i++)
     {
         // Horde npc
         if(Creature* creature = SpawnCreature(TBKeepNPC[i].entryh, TBKeepNPC[i].x, TBKeepNPC[i].y, TBKeepNPC[i].z, TBKeepNPC[i].o, TEAM_HORDE))
@@ -128,13 +128,13 @@ bool BattlefieldTB::SetupBattlefield()
     }
 
     // Hide keep npc
-    for(GuidSet::const_iterator itr = KeepCreature[GetAttackerTeam()].begin(); itr != KeepCreature[GetAttackerTeam()].end(); ++itr)
+    for (GuidSet::const_iterator itr = KeepCreature[GetAttackerTeam()].begin(); itr != KeepCreature[GetAttackerTeam()].end(); ++itr)
         if (Unit* unit = ObjectAccessor::FindUnit((*itr)))
             if (Creature* creature = unit->ToCreature())
                 HideNpc(creature);
 
     // Spawning battle npcs
-    for(uint8 i = 0; i<TB_MAX_KEEP_NPC; i++)
+    for (uint8 i = 0; i<TB_MAX_KEEP_NPC; i++)
     {
         // Horde npc
         if (Creature* creature = SpawnCreature(TBWarNPC[i].entryh, TBWarNPC[i].x, TBWarNPC[i].y, TBWarNPC[i].z, TBWarNPC[i].o, TEAM_HORDE))
@@ -145,18 +145,18 @@ bool BattlefieldTB::SetupBattlefield()
     }
 
     // Hide battle npcs
-    for(GuidSet::const_iterator itr = WarCreature[GetDefenderTeam()].begin(); itr != WarCreature[GetDefenderTeam()].end(); ++itr)
+    for (GuidSet::const_iterator itr = WarCreature[GetDefenderTeam()].begin(); itr != WarCreature[GetDefenderTeam()].end(); ++itr)
         if (Unit* unit = ObjectAccessor::FindUnit((*itr)))
             if (Creature* creature = unit->ToCreature())
                 HideNpc(creature);
 
-    for(GuidSet::const_iterator itr = WarCreature[GetAttackerTeam()].begin(); itr != WarCreature[GetAttackerTeam()].end(); ++itr)
+    for (GuidSet::const_iterator itr = WarCreature[GetAttackerTeam()].begin(); itr != WarCreature[GetAttackerTeam()].end(); ++itr)
         if (Unit* unit = ObjectAccessor::FindUnit((*itr)))
             if (Creature* creature = unit->ToCreature())
                 HideNpc(creature);
 
     //Spawning Buiding
-    for(uint8 i = 0; i<TB_MAX_OBJ; i++)
+    for (uint8 i = 0; i<TB_MAX_OBJ; i++)
     {
         GameObject* go = SpawnGameObject(TBGameObjectBuillding[i].entry, TBGameObjectBuillding[i].x, TBGameObjectBuillding[i].y, TBGameObjectBuillding[i].z, TBGameObjectBuillding[i].o);
         if (go)
@@ -188,7 +188,7 @@ bool BattlefieldTB::Update(uint32 diff)
     else
         m_saveTimer -= diff;
 
-    for(GuidSet::const_iterator itr = m_PlayersIsSpellImu.begin(); itr != m_PlayersIsSpellImu.end(); ++itr)
+    for (GuidSet::const_iterator itr = m_PlayersIsSpellImu.begin(); itr != m_PlayersIsSpellImu.end(); ++itr)
         if (Player* player = ObjectAccessor::FindPlayer((*itr)))
         {
             if (player->HasAura(SPELL_SPIRITUAL_IMMUNITY_TB))
@@ -226,7 +226,7 @@ void BattlefieldTB::AddPlayerToResurrectQueue(uint64 npc_guid, uint64 player_gui
 void BattlefieldTB::OnBattleStart()
 {
     // Rebuild all wall
-    /*for(TBGameObjectBuilding::const_iterator itr = BuildingsInZone.begin(); itr != BuildingsInZone.end(); ++itr)
+    /*for (TBGameObjectBuilding::const_iterator itr = BuildingsInZone.begin(); itr != BuildingsInZone.end(); ++itr)
         if ((*itr))
             (*itr)->Rebuild();*/
 
@@ -235,31 +235,31 @@ void BattlefieldTB::OnBattleStart()
     m_Data32[BATTLEFIELD_TB_DATA_CAPTURED_FORT_ATT] = 0;
 
     // Update graveyard (in no war time all graveyard is to deffender, in war time, depend of base)
-    for(TBWorkShop::const_iterator itr = WorkShopList.begin(); itr != WorkShopList.end(); ++itr)
+    for (TBWorkShop::const_iterator itr = WorkShopList.begin(); itr != WorkShopList.end(); ++itr)
     {
         if ((*itr))
             (*itr)->UpdateGraveYardAndWorkshop();
     }
 
     //Hide keep npc
-    for(GuidSet::const_iterator itr = KeepCreature[GetAttackerTeam()].begin(); itr != KeepCreature[GetAttackerTeam()].end(); ++itr)
+    for (GuidSet::const_iterator itr = KeepCreature[GetAttackerTeam()].begin(); itr != KeepCreature[GetAttackerTeam()].end(); ++itr)
         if (Unit* unit = ObjectAccessor::FindUnit((*itr)))
             if (Creature* creature = unit->ToCreature())
                 HideNpc(creature);
 
-    for(GuidSet::const_iterator itr = KeepCreature[GetDefenderTeam()].begin(); itr != KeepCreature[GetDefenderTeam()].end(); ++itr)
-        if (Unit* unit = ObjectAccessor::FindUnit((*itr)))
-            if (Creature* creature = unit->ToCreature())
-                HideNpc(creature);
-
-    //Show battle npcs
-    for(GuidSet::const_iterator itr = WarCreature[GetDefenderTeam()].begin(); itr != WarCreature[GetDefenderTeam()].end(); ++itr)
+    for (GuidSet::const_iterator itr = KeepCreature[GetDefenderTeam()].begin(); itr != KeepCreature[GetDefenderTeam()].end(); ++itr)
         if (Unit* unit = ObjectAccessor::FindUnit((*itr)))
             if (Creature* creature = unit->ToCreature())
                 HideNpc(creature);
 
     //Show battle npcs
-    for(GuidSet::const_iterator itr = WarCreature[GetAttackerTeam()].begin(); itr != WarCreature[GetAttackerTeam()].end(); ++itr)
+    for (GuidSet::const_iterator itr = WarCreature[GetDefenderTeam()].begin(); itr != WarCreature[GetDefenderTeam()].end(); ++itr)
+        if (Unit* unit = ObjectAccessor::FindUnit((*itr)))
+            if (Creature* creature = unit->ToCreature())
+                HideNpc(creature);
+
+    //Show battle npcs
+    for (GuidSet::const_iterator itr = WarCreature[GetAttackerTeam()].begin(); itr != WarCreature[GetAttackerTeam()].end(); ++itr)
         if (Unit* unit = ObjectAccessor::FindUnit((*itr)))
             if (Creature* creature = unit->ToCreature())
                 HideNpc(creature);
@@ -273,39 +273,39 @@ void BattlefieldTB::OnBattleEnd(bool endbytimer)
     if(!endbytimer)
     {
         //Change all npc in keep
-        for(GuidSet::const_iterator itr = KeepCreature[GetAttackerTeam()].begin(); itr != KeepCreature[GetAttackerTeam()].end(); ++itr)
+        for (GuidSet::const_iterator itr = KeepCreature[GetAttackerTeam()].begin(); itr != KeepCreature[GetAttackerTeam()].end(); ++itr)
         {
             if (Unit* unit = ObjectAccessor::FindUnit((*itr)))
                 if (Creature* creature = unit->ToCreature())
                     HideNpc(creature);
         }
-        for(GuidSet::const_iterator itr = KeepCreature[GetDefenderTeam()].begin(); itr != KeepCreature[GetDefenderTeam()].end(); ++itr)
+        for (GuidSet::const_iterator itr = KeepCreature[GetDefenderTeam()].begin(); itr != KeepCreature[GetDefenderTeam()].end(); ++itr)
         {
             if (Unit* unit = ObjectAccessor::FindUnit((*itr)))
                 if (Creature* creature = unit->ToCreature())
                     ShowNpc(creature,true);
         }
         // Hide creatures that should be visible only when battle is on.
-        for(GuidSet::const_iterator itr = WarCreature[GetAttackerTeam()].begin(); itr != WarCreature[GetAttackerTeam()].end(); ++itr)
+        for (GuidSet::const_iterator itr = WarCreature[GetAttackerTeam()].begin(); itr != WarCreature[GetAttackerTeam()].end(); ++itr)
         {
             if (Unit* unit = ObjectAccessor::FindUnit((*itr)))
                 if (Creature* creature = unit->ToCreature())
                     HideNpc(creature);
         }
-        for(GuidSet::const_iterator itr = WarCreature[GetDefenderTeam()].begin(); itr != WarCreature[GetDefenderTeam()].end(); ++itr)
+        for (GuidSet::const_iterator itr = WarCreature[GetDefenderTeam()].begin(); itr != WarCreature[GetDefenderTeam()].end(); ++itr)
         {
             if (Unit* unit = ObjectAccessor::FindUnit((*itr)))
                 if (Creature* creature = unit->ToCreature())
                     HideNpc(creature);
         }
         /*//Change all npc out of keep
-        for(GuidSet::const_iterator itr = OutsideCreature[GetDefenderTeam()].begin(); itr != OutsideCreature[GetDefenderTeam()].end(); ++itr)
+        for (GuidSet::const_iterator itr = OutsideCreature[GetDefenderTeam()].begin(); itr != OutsideCreature[GetDefenderTeam()].end(); ++itr)
         {
             if (Unit* unit = ObjectAccessor::FindUnit((*itr)))
                 if (Creature* creature = unit->ToCreature())
                     HideNpc(creature);
         }
-        for(GuidSet::const_iterator itr = OutsideCreature[GetAttackerTeam()].begin(); itr != OutsideCreature[GetAttackerTeam()].end(); ++itr)
+        for (GuidSet::const_iterator itr = OutsideCreature[GetAttackerTeam()].begin(); itr != OutsideCreature[GetAttackerTeam()].end(); ++itr)
         {
             if (Unit* unit = ObjectAccessor::FindUnit((*itr)))
                 if (Creature* creature = unit->ToCreature())
@@ -313,13 +313,13 @@ void BattlefieldTB::OnBattleEnd(bool endbytimer)
         }*/
     }
 
-    for(TBGameObjectBuilding::const_iterator itr = BuildingsInZone.begin(); itr != BuildingsInZone.end(); ++itr)
+    for (TBGameObjectBuilding::const_iterator itr = BuildingsInZone.begin(); itr != BuildingsInZone.end(); ++itr)
         if ((*itr))
             if (!endbytimer)
                 (*itr)->Rebuild();
 
     // Update all graveyard, control is to defender when no wartime
-    for(uint8 i = 0; i<BATTLEFIELD_TB_GY_HORDE; i++)
+    for (uint8 i = 0; i<BATTLEFIELD_TB_GY_HORDE; i++)
     {
         if(GetGraveYardById(i))
         {
@@ -327,19 +327,19 @@ void BattlefieldTB::OnBattleEnd(bool endbytimer)
         }
     }
 
-    for(TBGameObjectSet::const_iterator itr = m_KeepGameObject[GetDefenderTeam()].begin(); itr != m_KeepGameObject[GetDefenderTeam()].end(); ++itr)
+    for (TBGameObjectSet::const_iterator itr = m_KeepGameObject[GetDefenderTeam()].begin(); itr != m_KeepGameObject[GetDefenderTeam()].end(); ++itr)
         (*itr)->SetRespawnTime(RESPAWN_IMMEDIATELY);
 
-    for(TBGameObjectSet::const_iterator itr = m_KeepGameObject[GetAttackerTeam()].begin(); itr != m_KeepGameObject[GetAttackerTeam()].end(); ++itr)
+    for (TBGameObjectSet::const_iterator itr = m_KeepGameObject[GetAttackerTeam()].begin(); itr != m_KeepGameObject[GetAttackerTeam()].end(); ++itr)
         (*itr)->SetRespawnTime(RESPAWN_ONE_DAY);
 
     //Saving data
-    for(TBGameObjectBuilding::const_iterator itr = BuildingsInZone.begin(); itr != BuildingsInZone.end(); ++itr)
+    for (TBGameObjectBuilding::const_iterator itr = BuildingsInZone.begin(); itr != BuildingsInZone.end(); ++itr)
         (*itr)->Save();
-    for(TBWorkShop::const_iterator itr = WorkShopList.begin(); itr != WorkShopList.end(); ++itr)
+    for (TBWorkShop::const_iterator itr = WorkShopList.begin(); itr != WorkShopList.end(); ++itr)
         (*itr)->Save();
 
-    for(GuidSet::const_iterator itr = m_PlayersInWar[GetDefenderTeam()].begin(); itr != m_PlayersInWar[GetDefenderTeam()].end(); ++itr)
+    for (GuidSet::const_iterator itr = m_PlayersInWar[GetDefenderTeam()].begin(); itr != m_PlayersInWar[GetDefenderTeam()].end(); ++itr)
     {
         if (Player* player = ObjectAccessor::FindPlayer((*itr)))
         {
@@ -360,7 +360,7 @@ void BattlefieldTB::OnBattleEnd(bool endbytimer)
                 DoCompleteOrIncrementAchievement(ACHIEVEMENTS_WIN_TB_TIMER_10, player);*/
         }
     }
-    for(GuidSet::const_iterator itr = m_PlayersInWar[GetAttackerTeam()].begin(); itr != m_PlayersInWar[GetAttackerTeam()].end(); ++itr)
+    for (GuidSet::const_iterator itr = m_PlayersInWar[GetAttackerTeam()].begin(); itr != m_PlayersInWar[GetAttackerTeam()].end(); ++itr)
     {
         if (Player* player = ObjectAccessor::FindPlayer((*itr)))
         {
@@ -368,9 +368,9 @@ void BattlefieldTB::OnBattleEnd(bool endbytimer)
         }
     }
 
-    for(uint8 team = 0; team < 2; ++team)
+    for (uint8 team = 0; team < 2; ++team)
     {
-        for(GuidSet::const_iterator itr = m_PlayersInWar[team].begin(); itr != m_PlayersInWar[team].end(); ++itr)
+        for (GuidSet::const_iterator itr = m_PlayersInWar[team].begin(); itr != m_PlayersInWar[team].end(); ++itr)
         {
             if (Player* player = ObjectAccessor::FindPlayer((*itr)))
             {
@@ -381,7 +381,7 @@ void BattlefieldTB::OnBattleEnd(bool endbytimer)
         }
         m_PlayersInWar[team].clear();
 
-        for(GuidSet::const_iterator itr = m_vehicles[team].begin(); itr != m_vehicles[team].end(); ++itr)
+        for (GuidSet::const_iterator itr = m_vehicles[team].begin(); itr != m_vehicles[team].end(); ++itr)
         {
             if (Unit* unit = ObjectAccessor::FindUnit((*itr)))
                 if (Creature* creature = unit->ToCreature())
@@ -497,7 +497,7 @@ WorldPacket BattlefieldTB::BuildInitWorldStates()
 {
     WorldPacket data(SMSG_INIT_WORLD_STATES, (4+4+4+2+(BuildingsInZone.size()*8)+(WorkShopList.size()*8)));
 
-    data << uint32(m_MapId);
+    data << uint32(_MapId);
     data << uint32(m_ZoneId);
     data << uint32(0);
     data << uint16(4+2+4+BuildingsInZone.size()+WorkShopList.size());
@@ -513,11 +513,11 @@ WorldPacket BattlefieldTB::BuildInitWorldStates()
     for (uint32 i = 0; i < 2; ++i)
         data << TBClockWorldState[i] << uint32(time(NULL)+(m_Timer / 1000));
 
-    for(TBGameObjectBuilding::const_iterator itr = BuildingsInZone.begin(); itr != BuildingsInZone.end(); ++itr)
+    for (TBGameObjectBuilding::const_iterator itr = BuildingsInZone.begin(); itr != BuildingsInZone.end(); ++itr)
     {
         data << (*itr)->m_WorldState << (*itr)->m_State;
     }
-    for(TBWorkShop::const_iterator itr = WorkShopList.begin(); itr != WorkShopList.end(); ++itr)
+    for (TBWorkShop::const_iterator itr = WorkShopList.begin(); itr != WorkShopList.end(); ++itr)
     {
         data << (*itr)->m_WorldState << (*itr)->m_State;
     }
@@ -533,7 +533,7 @@ void BattlefieldTB::SendInitWorldStatesTo(Player* player)
 void BattlefieldTB::SendInitWorldStatesToAll()
 {
     WorldPacket data = BuildInitWorldStates();
-    for(uint8 team = 0; team<2; team++)
+    for (uint8 team = 0; team<2; team++)
         for (GuidSet::iterator itr = m_players[team].begin(); itr != m_players[team].end(); ++itr)
             if(Player* player = ObjectAccessor::FindPlayer((*itr)))
                 player->GetSession()->SendPacket(&data);
@@ -547,12 +547,12 @@ void BattlefieldTB::AddBrokenTower(TeamId team)
     if (team == GetDefenderTeam())
     {
         // Remove buff stack
-        for(GuidSet::const_iterator itr = m_PlayersInWar[GetDefenderTeam()].begin(); itr != m_PlayersInWar[GetDefenderTeam()].end(); ++itr)
+        for (GuidSet::const_iterator itr = m_PlayersInWar[GetDefenderTeam()].begin(); itr != m_PlayersInWar[GetDefenderTeam()].end(); ++itr)
             if (Player* player = ObjectAccessor::FindPlayer((*itr)))
                 player->RemoveAuraFromStack(SPELL_TOWER_BONUS);
 
         // Add buff stack
-        for(GuidSet::const_iterator itr = m_PlayersInWar[GetAttackerTeam()].begin(); itr != m_PlayersInWar[GetAttackerTeam()].end(); ++itr)
+        for (GuidSet::const_iterator itr = m_PlayersInWar[GetAttackerTeam()].begin(); itr != m_PlayersInWar[GetAttackerTeam()].end(); ++itr)
             if (Player* player = ObjectAccessor::FindPlayer((*itr)))
             {
                 player->CastSpell(player, SPELL_TOWER_BONUS, true);
@@ -580,7 +580,7 @@ void BattlefieldTB::ProcessEvent(GameObject* obj, uint32 eventId)
         EndBattle(false);
 
     //if destroy or damage event, search the wall/tower and update worldstate/send warning message
-    for(TBGameObjectBuilding::const_iterator itr = BuildingsInZone.begin(); itr != BuildingsInZone.end(); ++itr)
+    for (TBGameObjectBuilding::const_iterator itr = BuildingsInZone.begin(); itr != BuildingsInZone.end(); ++itr)
     {
         if (obj->GetEntry() == (*itr)->m_Build->GetEntry())
         {
@@ -597,13 +597,13 @@ void BattlefieldTB::ProcessEvent(GameObject* obj, uint32 eventId)
 
 void BfCapturePointTB::ChangeTeam(TeamId /*oldteam*/)
 {
-    m_WorkShop->ChangeControl(m_team, false);
+    m_WorkShop->ChangeControl(_team, false);
 }
 
 BfCapturePointTB::BfCapturePointTB(BattlefieldTB* bf, TeamId control) : BfCapturePoint(bf)
 {
     m_Bf = bf;
-    m_team = control;
+    _team = control;
 }
 
 BfGraveYardTB::BfGraveYardTB(BattlefieldTB* bf) : BfGraveYard(bf)

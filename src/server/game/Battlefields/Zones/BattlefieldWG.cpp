@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -39,7 +39,7 @@ bool BattlefieldWG::SetupBattlefield()
     m_TypeId = BATTLEFIELD_WG;                              // See enum BattlefieldTypes
     m_BattleId = BATTLEFIELD_BATTLEID_WG;
     m_ZoneId = BATTLEFIELD_WG_ZONEID;
-    m_MapId = BATTLEFIELD_WG_MAPID;
+    _MapId = BATTLEFIELD_WG_MAPID;
 
     m_MaxPlayer = sWorld->getIntConfig(CONFIG_WINTERGRASP_PLAYER_MAX);
     m_enable = sWorld->getBoolConfig(CONFIG_WINTERGRASP_ENABLE);
@@ -56,7 +56,7 @@ bool BattlefieldWG::SetupBattlefield()
     m_tenacityStack = 0;
 
     KickPosition.Relocate(5728.117f, 2714.346f, 697.733f, 0);
-    KickPosition.m_mapId = m_MapId;
+    KickPosition.m_mapId = _MapId;
 
     RegisterZone(m_ZoneId);
 
@@ -884,7 +884,7 @@ WorldPacket BattlefieldWG::BuildInitWorldStates()
 {
     WorldPacket data(SMSG_INIT_WORLD_STATES, (4 + 4 + 4 + 2 + (BuildingsInZone.size() * 8) + (WorkShopList.size() * 8)));
 
-    data << uint32(m_MapId);
+    data << uint32(_MapId);
     data << uint32(m_ZoneId);
     data << uint32(0);
     data << uint16(4 + 2 + 4 + BuildingsInZone.size() + WorkShopList.size());
@@ -1118,13 +1118,13 @@ void BattlefieldWG::UpdateTenacity()
 
 void BfCapturePointWG::ChangeTeam(TeamId /*oldTeam */ )
 {
-    m_WorkShop->ChangeControl(m_team, false);
+    m_WorkShop->ChangeControl(_team, false);
 }
 
 BfCapturePointWG::BfCapturePointWG(BattlefieldWG* bf, TeamId control) : BfCapturePoint(bf)
 {
     m_Bf = bf;
-    m_team = control;
+    _team = control;
 }
 
 BfGraveYardWG::BfGraveYardWG(BattlefieldWG* bf) : BfGraveYard(bf)

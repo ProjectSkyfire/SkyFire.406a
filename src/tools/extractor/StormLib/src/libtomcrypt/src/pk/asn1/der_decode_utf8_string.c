@@ -25,7 +25,7 @@
   @param outlen  [in/out] The number of utf8s stored
   @return CRYPT_OK if successful
 */
-int der_decode_utf8_string(const unsigned char *in, unsigned long inlen, 
+int der_decode_utf8_string(const unsigned char *in, unsigned long inlen,
                                        wchar_t *out, unsigned long *outlen)
 {
    wchar_t       tmp;

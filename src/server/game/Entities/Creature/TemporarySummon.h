@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -25,7 +25,7 @@
 class TempSummon : public Creature
 {
     public:
-        explicit TempSummon(SummonPropertiesEntry const* properties, Unit* owner);
+        explicit TempSummon(SummonPropertiesEntry const* properties, Unit* owner, bool isWorldObject);
         virtual ~TempSummon() {}
         void Update(uint32 time);
         virtual void InitStats(uint32 lifetime);
@@ -41,7 +41,7 @@ class TempSummon : public Creature
         const SummonPropertiesEntry* const m_Properties;
     private:
         TempSummonType m_type;
-        uint32 m_timer;
+        uint32 _timer;
         uint32 m_lifetime;
         uint64 m_summonerGUID;
 };
@@ -49,23 +49,23 @@ class TempSummon : public Creature
 class Minion : public TempSummon
 {
     public:
-        Minion(SummonPropertiesEntry const* properties, Unit* owner);
+        Minion(SummonPropertiesEntry const* properties, Unit* owner, bool isWorldObject);
         void InitStats(uint32 duration);
         void RemoveFromWorld();
-        Unit* GetOwner() { return m_owner; }
+        Unit* GetOwner() { return _owner; }
         float GetFollowAngle() const { return m_followAngle; }
         void SetFollowAngle(float angle) { m_followAngle = angle; }
         bool IsPetGhoul() const {return GetEntry() == 26125;} // Ghoul may be guardian or pet
         bool IsGuardianPet() const;
     protected:
-        Unit* const m_owner;
+        Unit* const _owner;
         float m_followAngle;
 };
 
 class Guardian : public Minion
 {
     public:
-        Guardian(SummonPropertiesEntry const* properties, Unit* owner);
+        Guardian(SummonPropertiesEntry const* properties, Unit* owner, bool isWorldObject);
         void InitStats(uint32 duration);
         bool InitStatsForLevel(uint8 level);
         void InitSummon();
@@ -95,16 +95,16 @@ class Puppet : public Minion
         void Update(uint32 time);
         void RemoveFromWorld();
     protected:
-        Player* m_owner;
+        Player* _owner;
 };
 
 class ForcedUnsummonDelayEvent : public BasicEvent
 {
 public:
-    ForcedUnsummonDelayEvent(TempSummon& owner) : BasicEvent(), m_owner(owner) { }
+    ForcedUnsummonDelayEvent(TempSummon& owner) : BasicEvent(), _owner(owner) { }
     bool Execute(uint64 e_time, uint32 p_time);
 
 private:
-    TempSummon& m_owner;
+    TempSummon& _owner;
 };
 #endif

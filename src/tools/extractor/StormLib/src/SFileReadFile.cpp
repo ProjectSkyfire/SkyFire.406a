@@ -147,7 +147,7 @@ static int ReadMpqSectors(TMPQFile * hf, LPBYTE pbBuffer, DWORD dwByteOffset, DW
         DWORD dwBytesInThisSector = ha->dwSectorSize;
         DWORD dwIndex = dwSectorIndex + i;
 
-        // If there is not enough bytes in the last sector, 
+        // If there is not enough bytes in the last sector,
         // cut the number of bytes in this sector
         if (dwRawBytesInThisSector > dwBytesToRead)
             dwRawBytesInThisSector = dwBytesToRead;
@@ -304,9 +304,9 @@ static int ReadMpqFileSingleUnit(TMPQFile * hf, void * pvBuffer, DWORD dwToRead,
             if (pbCompressed[0] != 'P' || pbCompressed[1] != 'T' || pbCompressed[2] != 'C' || pbCompressed[3] != 'H')
             {
                 int cbOutBuffer = (int)hf->dwDataSize;
-                int nResult = SCompDecompress((char *)hf->pbFileSector, 
-                                                     &cbOutBuffer, 
-                                              (char *)pbCompressed, 
+                int nResult = SCompDecompress((char *)hf->pbFileSector,
+                                                     &cbOutBuffer,
+                                              (char *)pbCompressed,
                                                  (int)pFileEntry->dwCmpSize);
                 if (nResult == 0)
                 {
@@ -611,7 +611,7 @@ bool WINAPI SFileReadFile(HANDLE hFile, void * pvBuffer, DWORD dwToRead, LPDWORD
         ULONGLONG FilePosition2;
 
         // Because stream I/O functions are designed to read
-        // "all or nothing", we compare file position before and after, 
+        // "all or nothing", we compare file position before and after,
         // and if they differ, we assume that number of bytes read
         // is the difference between them
 
@@ -660,7 +660,7 @@ bool WINAPI SFileReadFile(HANDLE hFile, void * pvBuffer, DWORD dwToRead, LPDWORD
     if (pdwRead != NULL)
         *pdwRead = dwBytesRead;
 
-    // If the read operation succeeded, but not full number of bytes was read, 
+    // If the read operation succeeded, but not full number of bytes was read,
     // set the last error to ERROR_HANDLE_EOF
     if (nError == ERROR_SUCCESS && (dwBytesRead < dwToRead))
         nError = ERROR_HANDLE_EOF;
@@ -937,10 +937,10 @@ bool WINAPI SFileGetFileName(HANDLE hFile, char * szFileName)
     *((LPDWORD)pvFileInfo) = val;
 
 bool WINAPI SFileGetFileInfo(
-    HANDLE hMpqOrFile, 
-    DWORD dwInfoType, 
-    void * pvFileInfo, 
-    DWORD cbFileInfo, 
+    HANDLE hMpqOrFile,
+    DWORD dwInfoType,
+    void * pvFileInfo,
+    DWORD cbFileInfo,
     LPDWORD pcbLengthNeeded)
 {
     ULONGLONG * pFileTime;
@@ -1114,7 +1114,7 @@ bool WINAPI SFileGetFileInfo(
             break;
     }
 
-    // If the caller specified pointer to length needed, 
+    // If the caller specified pointer to length needed,
     // give it to him
     if (pcbLengthNeeded != NULL)
         *pcbLengthNeeded = cbLengthNeeded;

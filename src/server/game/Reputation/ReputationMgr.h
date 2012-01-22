@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -65,7 +65,7 @@ class Player;
 class ReputationMgr
 {
     public:                                                 // constructors and global modifiers
-        explicit ReputationMgr(Player* owner) : m_player(owner),
+        explicit ReputationMgr(Player* owner) : _player(owner),
             m_visibleFactionCount(0), m_honoredFactionCount(0), m_reveredFactionCount(0), m_exaltedFactionCount(0) {}
         ~ReputationMgr() {}
 
@@ -150,7 +150,7 @@ class ReputationMgr
         void SendVisible(FactionState const* faction) const;
         void UpdateRankCounters(ReputationRank old_rank, ReputationRank new_rank);
     private:
-        Player* m_player;
+        Player* _player;
         FactionStateList m_factions;
         ForcedReactions m_forcedReactions;
         uint8 m_visibleFactionCount :8;

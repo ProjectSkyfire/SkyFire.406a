@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -29,13 +29,13 @@
 
 BattlegroundIC::BattlegroundIC()
 {
-    m_BgObjects.resize(MAX_NORMAL_GAMEOBJECTS_SPAWNS + MAX_AIRSHIPS_SPAWNS + MAX_HANGAR_TELEPORTERS_SPAWNS + MAX_FORTRESS_TELEPORTERS_SPAWNS);
-    m_BgCreatures.resize(MAX_NORMAL_NPCS_SPAWNS + MAX_WORKSHOP_SPAWNS + MAX_DOCKS_SPAWNS + MAX_SPIRIT_GUIDES_SPAWNS);
+    _BgObjects.resize(MAX_NORMAL_GAMEOBJECTS_SPAWNS + MAX_AIRSHIPS_SPAWNS + MAX_HANGAR_TELEPORTERS_SPAWNS + MAX_FORTRESS_TELEPORTERS_SPAWNS);
+    _BgCreatures.resize(MAX_NORMAL_NPCS_SPAWNS + MAX_WORKSHOP_SPAWNS + MAX_DOCKS_SPAWNS + MAX_SPIRIT_GUIDES_SPAWNS);
 
-    m_StartMessageIds[BG_STARTING_EVENT_FIRST]  = LANG_BG_IC_START_TWO_MINUTES;
-    m_StartMessageIds[BG_STARTING_EVENT_SECOND] = LANG_BG_IC_START_ONE_MINUTE;
-    m_StartMessageIds[BG_STARTING_EVENT_THIRD]  = LANG_BG_IC_START_HALF_MINUTE;
-    m_StartMessageIds[BG_STARTING_EVENT_FOURTH] = LANG_BG_IC_HAS_BEGUN;
+    _StartMessageIds[BG_STARTING_EVENT_FIRST]  = LANG_BG_IC_START_TWO_MINUTES;
+    _StartMessageIds[BG_STARTING_EVENT_SECOND] = LANG_BG_IC_START_ONE_MINUTE;
+    _StartMessageIds[BG_STARTING_EVENT_THIRD]  = LANG_BG_IC_START_HALF_MINUTE;
+    _StartMessageIds[BG_STARTING_EVENT_FOURTH] = LANG_BG_IC_HAS_BEGUN;
 
     for (uint8 i = 0; i < 2; i++)
         factionReinforcements[i] = MAX_REINFORCEMENTS;
@@ -72,7 +72,7 @@ void BattlegroundIC::SendTransportInit(Player* player)
     if (!gunshipAlliance || !gunshipHorde)
         return;
 
-    UpdateData transData(GetMapId());
+    UpdateData transData(player->GetMapId());
 
     gunshipAlliance->BuildCreateUpdateBlockForPlayer(&transData, player);
     gunshipHorde->BuildCreateUpdateBlockForPlayer(&transData, player);
@@ -98,10 +98,10 @@ void BattlegroundIC::DoAction(uint32 action, uint64 var)
 
     player->SetTransport(player->GetTeamId() == TEAM_ALLIANCE ? gunshipAlliance : gunshipHorde);
 
-    player->m_movementInfo.t_pos.m_positionX = TransportMovementInfo.GetPositionX();
-    player->m_movementInfo.t_pos.m_positionY = TransportMovementInfo.GetPositionY();
-    player->m_movementInfo.t_pos.m_positionZ = TransportMovementInfo.GetPositionZ();
-    player->m_movementInfo.t_guid = (player->GetTeamId() == TEAM_ALLIANCE ? gunshipAlliance : gunshipHorde)->GetGUID();
+    player->_movementInfo.t_pos.m_positionX = TransportMovementInfo.GetPositionX();
+    player->_movementInfo.t_pos.m_positionY = TransportMovementInfo.GetPositionY();
+    player->_movementInfo.t_pos.m_positionZ = TransportMovementInfo.GetPositionZ();
+    player->_movementInfo.t_guid = (player->GetTeamId() == TEAM_ALLIANCE ? gunshipAlliance : gunshipHorde)->GetGUID();
 
     player->TeleportTo(GetMapId(), TeleportToTransportPosition.GetPositionX(), TeleportToTransportPosition.GetPositionY(), TeleportToTransportPosition.GetPositionZ(), TeleportToTransportPosition.GetOrientation(), TELE_TO_NOT_LEAVE_TRANSPORT);
 }
@@ -295,7 +295,7 @@ void BattlegroundIC::AddPlayer(Player* player)
     //create score and add it to map, default values are set in constructor
     BattlegroundICScore* sc = new BattlegroundICScore;
 
-    m_PlayerScores[player->GetGUID()] = sc;
+    _PlayerScores[player->GetGUID()] = sc;
 
     if (nodePoint[NODE_TYPE_QUARRY].nodeState == (player->GetTeamId() == TEAM_ALLIANCE ? NODE_STATE_CONTROLLED_A : NODE_STATE_CONTROLLED_H))
         player->CastSpell(player, SPELL_QUARRY, true);
@@ -324,9 +324,9 @@ void BattlegroundIC::HandleAreaTrigger(Player* /*Source*/, uint32 /*Trigger*/)
 
 void BattlegroundIC::UpdatePlayerScore(Player* Source, uint32 type, uint32 value, bool doAddHonor)
 {
-    std::map<uint64, BattlegroundScore*>::iterator itr = m_PlayerScores.find(Source->GetGUID());
+    std::map<uint64, BattlegroundScore*>::iterator itr = _PlayerScores.find(Source->GetGUID());
 
-    if (itr == m_PlayerScores.end())                         // player not found...
+    if (itr == _PlayerScores.end())                         // player not found...
         return;
 
     switch (type)
@@ -473,7 +473,7 @@ void BattlegroundIC::EndBattleground(uint32 winner)
 void BattlegroundIC::RealocatePlayers(ICNodePointType nodeType)
 {
     // Those who are waiting to resurrect at this node are taken to the closest own node's graveyard
-    std::vector<uint64> ghost_list = m_ReviveQueue[m_BgCreatures[BG_IC_NPC_SPIRIT_GUIDE_1+nodeType-2]];
+    std::vector<uint64> ghost_list = _ReviveQueue[_BgCreatures[BG_IC_NPC_SPIRIT_GUIDE_1+nodeType-2]];
     if (!ghost_list.empty())
     {
         WorldSafeLocsEntry const* ClosestGrave = NULL;
@@ -525,7 +525,7 @@ void BattlegroundIC::EventPlayerClickedOnFlag(Player* player, GameObject* target
                 // if we are here means that the point has been lost, or it is the first capture
 
                 if (nodePoint[i].nodeType != NODE_TYPE_REFINERY && nodePoint[i].nodeType != NODE_TYPE_QUARRY)
-                    if (m_BgCreatures[BG_IC_NPC_SPIRIT_GUIDE_1+(nodePoint[i].nodeType)-2])
+                    if (_BgCreatures[BG_IC_NPC_SPIRIT_GUIDE_1+(nodePoint[i].nodeType)-2])
                         DelCreature(BG_IC_NPC_SPIRIT_GUIDE_1+(nodePoint[i].nodeType)-2);
 
                 UpdatePlayerScore(player, SCORE_BASES_ASSAULTED, 1);

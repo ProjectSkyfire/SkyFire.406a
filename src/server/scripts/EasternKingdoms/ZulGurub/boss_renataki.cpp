@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2006-2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2006-2012 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -54,11 +54,11 @@ class boss_renataki : public CreatureScript
 
             void Reset()
             {
-                Invisible_Timer      = 8000 + rand()%10000;
+                Invisible_Timer      = urand(8000, 18000);
                 Ambush_Timer         = 3000;
                 Visible_Timer        = 4000;
-                Aggro_Timer          = 15000 + rand()%10000;
-                ThousandBlades_Timer = 4000 + rand()%4000;
+                Aggro_Timer          = urand(15000, 25000);
+                ThousandBlades_Timer = urand(4000, 8000);
 
                 Invisible            = false;
                 Ambushed             = false;
@@ -82,7 +82,7 @@ class boss_renataki : public CreatureScript
                     me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                     Invisible = true;
 
-                    Invisible_Timer = 15000 + rand()%15000;
+                    Invisible_Timer = urand(15000, 30000);
                 } else Invisible_Timer -= diff;
 
                 if (Invisible)
@@ -132,13 +132,13 @@ class boss_renataki : public CreatureScript
                         if (target)
                             AttackStart(target);
 
-                        Aggro_Timer = 7000 + rand()%13000;
+                        Aggro_Timer = urand(7000, 20000);
                     } else Aggro_Timer -= diff;
 
                     if (ThousandBlades_Timer <= diff)
                     {
                         DoCast(me->getVictim(), SPELL_THOUSANDBLADES);
-                        ThousandBlades_Timer = 7000 + rand()%5000;
+                        ThousandBlades_Timer = urand(7000, 12000);
                     } else ThousandBlades_Timer -= diff;
                 }
 

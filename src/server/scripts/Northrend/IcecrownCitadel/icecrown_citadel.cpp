@@ -751,7 +751,7 @@ class boss_sister_svalna : public CreatureScript
                     {
                         if (crusader->isAlive() && crusader->GetEntry() == crusader->GetCreatureData()->id)
                         {
-                            crusader->m_Events.AddEvent(new CaptainSurviveTalk(*crusader), crusader->m_Events.CalculateTime(delay));
+                            crusader->_Events.AddEvent(new CaptainSurviveTalk(*crusader), crusader->_Events.CalculateTime(delay));
                             delay += 6000;
                         }
                     }
@@ -1264,7 +1264,7 @@ struct npc_argent_captainAI : public ScriptedAI
         void EnterEvadeMode()
         {
             // not yet following
-            if (me->GetMotionMaster()->GetMotionSlotType(MOTION_SLOT_IDLE) != TARGETED_MOTION_TYPE || IsUndead)
+            if (me->GetMotionMaster()->GetMotionSlotType(MOTION_SLOT_IDLE) != CHASE_MOTION_TYPE || IsUndead)
             {
                 ScriptedAI::EnterEvadeMode();
                 return;

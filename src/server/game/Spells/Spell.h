@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -44,7 +44,7 @@ enum SpellCastFlags
     CAST_FLAG_UNKNOWN_3          = 0x00000004,
     CAST_FLAG_UNKNOWN_4          = 0x00000008,              // ignore AOE visual
     CAST_FLAG_UNKNOWN_5          = 0x00000010,
-    CAST_FLAG_AMMO               = 0x00000020,              // Projectiles visual
+    CAST_FLAG_UNKNOWN_6          = 0x00000020,
     CAST_FLAG_UNKNOWN_7          = 0x00000040,
     CAST_FLAG_UNKNOWN_8          = 0x00000080,
     CAST_FLAG_UNKNOWN_9          = 0x00000100,
@@ -417,7 +417,6 @@ class Spell
 
         void DoCreateItem(uint32 i, uint32 itemtype);
         void WriteSpellGoTargets(WorldPacket* data);
-        void WriteAmmoToPacket(WorldPacket* data);
 
         void InitExplicitTargets(SpellCastTargets const& targets);
         void SelectSpellTargets();
@@ -457,9 +456,9 @@ class Spell
         void HandleThreatSpells();
 
         SpellInfo const* const m_spellInfo;
-        Item* m_CastItem;
+        Item* _CastItem;
         uint64 m_castItemGUID;
-        uint8 m_cast_count;
+        uint8 _cast_count;
         uint32 m_glyphIndex;
         uint32 m_preCastSpell;
         SpellCastTargets m_targets;
@@ -471,7 +470,7 @@ class Spell
         int32 GetCastTime() const { return m_casttime; }
         bool IsAutoRepeat() const { return m_autoRepeat; }
         void SetAutoRepeat(bool rep) { m_autoRepeat = rep; }
-        void ReSetTimer() { m_timer = m_casttime > 0 ? m_casttime : 0; }
+        void ReSetTimer() { _timer = m_casttime > 0 ? m_casttime : 0; }
         bool IsNextMeleeSwingSpell() const;
         bool IsTriggered() const {return _triggeredCastFlags & TRIGGERED_FULL_MASK;};
         bool IsChannelActive() const { return m_caster->GetUInt32Value(UNIT_CHANNEL_SPELL) != 0; }
@@ -628,9 +627,6 @@ class Spell
         bool IsValidDeadOrAliveTarget(Unit const* target) const;
         void HandleLaunchPhase();
         void DoAllEffectOnLaunchTarget(TargetInfo& targetInfo, float* multiplier);
-        void SpellDamageSchoolDmg(SpellEffIndex effIndex);
-        void SpellDamageWeaponDmg(SpellEffIndex effIndex);
-        void SpellDamageHeal(SpellEffIndex effIndex);
 
         void PrepareTargetProcessing();
         void FinishTargetProcessing();
@@ -642,6 +638,9 @@ class Spell
 
         // Scripting system
         void LoadScripts();
+        void CallScriptBeforeCastHandlers();
+        void CallScriptOnCastHandlers();
+        void CallScriptAfterCastHandlers();
         SpellCastResult CallScriptCheckCastHandlers();
         void PrepareScriptHitHandlers();
         bool CallScriptEffectHandlers(SpellEffIndex effIndex, SpellEffectHandleMode mode);
@@ -665,7 +664,7 @@ class Spell
         // -------------------------------------------
 
         uint32 m_spellState;
-        uint32 m_timer;
+        int32 _timer;
 
         TriggerCastFlags _triggeredCastFlags;
 

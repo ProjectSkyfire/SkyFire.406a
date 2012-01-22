@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -68,47 +68,47 @@ enum AchievementFlags
     ACHIEVEMENT_FLAG_BAR                    = 0x00000080,        // Show as progress bar (value / max vale) depend from other flag (by def use last criteria value)
     ACHIEVEMENT_FLAG_REALM_FIRST_REACH      = 0x00000100,        //
     ACHIEVEMENT_FLAG_REALM_FIRST_KILL       = 0x00000200,        //
-    ACHIEVEMENT_FLAG_UNK3                   = 0x00000400,   // ACHIEVEMENT_FLAG_HIDE_NAME_IN_TIE
-    ACHIEVEMENT_FLAG_REALM_FIRST_GUILD      = 0x00000800,   // first guild on realm done something
-    ACHIEVEMENT_FLAG_UNK4                   = 0x00001000,   // as guild group?
-    ACHIEVEMENT_FLAG_UNK5                   = 0x00002000,   // as guild group?
-    ACHIEVEMENT_FLAG_GUILD_ACHIEVEMENT      = 0x00004000,   //
-    ACHIEVEMENT_FLAG_SHOW_GUILD_MEMBERS	    = 0x00008000,   //
-    ACHIEVEMENT_FLAG_SHOW_CRITERIA_MEMBERS  = 0x00010000,   //
+    ACHIEVEMENT_FLAG_UNK3                   = 0x00000400,        // ACHIEVEMENT_FLAG_HIDE_NAME_IN_TIE
+    ACHIEVEMENT_FLAG_REALM_FIRST_GUILD      = 0x00000800,        // first guild on realm done something
+    ACHIEVEMENT_FLAG_UNK4                   = 0x00001000,        // as guild group?
+    ACHIEVEMENT_FLAG_UNK5                   = 0x00002000,        // as guild group?
+    ACHIEVEMENT_FLAG_GUILD_ACHIEVEMENT      = 0x00004000,        //
+    ACHIEVEMENT_FLAG_SHOW_GUILD_MEMBERS	    = 0x00008000,        //
+    ACHIEVEMENT_FLAG_SHOW_CRITERIA_MEMBERS  = 0x00010000,        //
 };
 
 #define MAX_CRITERIA_REQUIREMENTS 2
 
 enum AchievementCriteriaCondition
 {
-    ACHIEVEMENT_CRITERIA_CONDITION_NONE         = 0,
-    ACHIEVEMENT_CRITERIA_CONDITION_NO_DEATH     = 1,    // reset progress on death
-    ACHIEVEMENT_CRITERIA_CONDITION_UNK1         = 2,    // only used in "Complete a daily quest every day for five consecutive days"
-    ACHIEVEMENT_CRITERIA_CONDITION_BG_MAP       = 3,    // requires you to be on specific map, reset at change
-    ACHIEVEMENT_CRITERIA_CONDITION_NO_LOSE      = 4,    // only used in "Win 10 arenas without losing"
-    ACHIEVEMENT_CRITERIA_CONDITION_UNK2         = 9,    // unk
-    ACHIEVEMENT_CRITERIA_CONDITION_NOT_IN_GROUP = 10,   // requires the player not to be in group
-    ACHIEVEMENT_CRITERIA_CONDITION_UNK3         = 13,   // unk
+    ACHIEVEMENT_CRITERIA_CONDITION_NONE            = 0,
+    ACHIEVEMENT_CRITERIA_CONDITION_NO_DEATH        = 1,          // reset progress on death
+    ACHIEVEMENT_CRITERIA_CONDITION_UNK1            = 2,          // only used in "Complete a daily quest every day for five consecutive days"
+    ACHIEVEMENT_CRITERIA_CONDITION_BG_MAP          = 3,          // requires you to be on specific map, reset at change
+    ACHIEVEMENT_CRITERIA_CONDITION_NO_LOSE         = 4,          // only used in "Win 10 arenas without losing"
+    ACHIEVEMENT_CRITERIA_CONDITION_NO_SPELL_HIT    = 9,          // requires the player not to be hit by specific spell
+    ACHIEVEMENT_CRITERIA_CONDITION_NOT_IN_GROUP    = 10,         // requires the player not to be in group
+    ACHIEVEMENT_CRITERIA_CONDITION_UNK3            = 13,         // unk
 };
 
 enum AchievementCriteriaFlags
 {
-    ACHIEVEMENT_CRITERIA_FLAG_SHOW_PROGRESS_BAR = 0x00000001,         // Show progress as bar
-    ACHIEVEMENT_CRITERIA_FLAG_HIDDEN            = 0x00000002,         // Not show criteria in client
-    ACHIEVEMENT_CRITERIA_FLAG_UNK3              = 0x00000004,         // BG related??
-    ACHIEVEMENT_CRITERIA_FLAG_UNK4              = 0x00000008,         //
-    ACHIEVEMENT_CRITERIA_FLAG_UNK5              = 0x00000010,         // not used
-    ACHIEVEMENT_CRITERIA_FLAG_MONEY_COUNTER     = 0x00000020,         // Displays counter as money
+    ACHIEVEMENT_CRITERIA_FLAG_SHOW_PROGRESS_BAR = 0x00000001,    // Show progress as bar
+    ACHIEVEMENT_CRITERIA_FLAG_HIDDEN            = 0x00000002,    // Not show criteria in client
+    ACHIEVEMENT_CRITERIA_FLAG_UNK3              = 0x00000004,    // BG related??
+    ACHIEVEMENT_CRITERIA_FLAG_UNK4              = 0x00000008,    //
+    ACHIEVEMENT_CRITERIA_FLAG_UNK5              = 0x00000010,    // not used
+    ACHIEVEMENT_CRITERIA_FLAG_MONEY_COUNTER     = 0x00000020,    // Displays counter as money
 };
 
 enum AchievementCriteriaTimedTypes
 {
-    ACHIEVEMENT_TIMED_TYPE_EVENT            = 1,    // Timer is started by internal event with id in timerStartEvent
-    ACHIEVEMENT_TIMED_TYPE_QUEST            = 2,    // Timer is started by acceting quest with entry in timerStartEvent
-    ACHIEVEMENT_TIMED_TYPE_SPELL_CASTER     = 5,    // Timer is started by casting a spell with entry in timerStartEvent
-    ACHIEVEMENT_TIMED_TYPE_SPELL_TARGET     = 6,    // Timer is started by being target of spell with entry in timerStartEvent
-    ACHIEVEMENT_TIMED_TYPE_CREATURE         = 7,    // Timer is started by killing creature with entry in timerStartEvent
-    ACHIEVEMENT_TIMED_TYPE_ITEM             = 9,    // Timer is started by using item with entry in timerStartEvent
+    ACHIEVEMENT_TIMED_TYPE_EVENT            = 1,                 // Timer is started by internal event with id in timerStartEvent
+    ACHIEVEMENT_TIMED_TYPE_QUEST            = 2,                 // Timer is started by accepting quest with entry in timerStartEvent
+    ACHIEVEMENT_TIMED_TYPE_SPELL_CASTER     = 5,                 // Timer is started by casting a spell with entry in timerStartEvent
+    ACHIEVEMENT_TIMED_TYPE_SPELL_TARGET     = 6,                 // Timer is started by being target of spell with entry in timerStartEvent
+    ACHIEVEMENT_TIMED_TYPE_CREATURE         = 7,                 // Timer is started by killing creature with entry in timerStartEvent
+    ACHIEVEMENT_TIMED_TYPE_ITEM             = 9,                 // Timer is started by using item with entry in timerStartEvent
 
     ACHIEVEMENT_TIMED_TYPE_MAX,
 };
@@ -252,8 +252,8 @@ enum AchievementCriteriaMoreReqType
     ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_ITEM_LEVEL             = 3,
     ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_CREATURE_ID            = 4,
     ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_TARGET_TYPE			  = 5,
-    ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_SPELL                  = 8,
-    ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_SPELL_ON_TARGET        = 10,
+    ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_AURA                   = 8,
+    ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_AURA_ON_TARGET         = 10,
     ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_MOUNTED				  = 11,
     ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_ITEM_QUALITY_EQUIPPED  = 14,
     ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_ITEM_QUALITY_LOOTED    = 15,
@@ -261,9 +261,10 @@ enum AchievementCriteriaMoreReqType
     ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_AREA_ID2               = 18,
     ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_RAID_DIFFICULTY        = 20,
     ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_ARENA_TYPE             = 24,
+    ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_PLAYER_RACE            = 25,
     ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_PLAYER_CLASS           = 26,
-    ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_PLAYER_RACE            = 27,
-    ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_PLAYER_CLASS2          = 28,
+    ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_TARGET_RACE            = 27,
+    ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_TARGET_CLASS           = 28,
     ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_NUM_PLAYERS_IN_ZONE    = 29,
     ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_CREATURE_TYPE          = 30,
     ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_MAP_ID                 = 32,
@@ -272,8 +273,9 @@ enum AchievementCriteriaMoreReqType
     ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_PLAYER_TITLE           = 38,
     ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_PLAYER_LEVEL           = 39,
     ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_PLAYER_LEVEL2          = 40,
-    ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_AREA_ID3               = 41,
-    ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_HEALTH_UNDER_PCT	      = 46,
+    ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_ZONE_ID                = 41,
+    ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_T_HEALTH_UNDER_PCT	  = 46, // target
+    ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_REQUIRES_GUILD_GROUP   = 61,
     ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_GUILD_REP              = 62,
 };
 
@@ -337,36 +339,36 @@ enum Difficulty
 
 enum SpawnMask
 {
-    SPAWNMASK_CONTINENT         = (1 << REGULAR_DIFFICULTY), // any any maps without spawn modes
+    SPAWNMASK_CONTINENT           = (1 << REGULAR_DIFFICULTY), // any any maps without spawn modes
 
-    SPAWNMASK_DUNGEON_NORMAL    = (1 << DUNGEON_DIFFICULTY_NORMAL),
-    SPAWNMASK_DUNGEON_HEROIC    = (1 << DUNGEON_DIFFICULTY_HEROIC),
-    SPAWNMASK_DUNGEON_ALL       = (SPAWNMASK_DUNGEON_NORMAL | SPAWNMASK_DUNGEON_HEROIC),
+    SPAWNMASK_DUNGEON_NORMAL      = (1 << DUNGEON_DIFFICULTY_NORMAL),
+    SPAWNMASK_DUNGEON_HEROIC      = (1 << DUNGEON_DIFFICULTY_HEROIC),
+    SPAWNMASK_DUNGEON_ALL         = (SPAWNMASK_DUNGEON_NORMAL | SPAWNMASK_DUNGEON_HEROIC),
 
-    SPAWNMASK_RAID_10MAN_NORMAL = (1 << RAID_DIFFICULTY_10MAN_NORMAL),
-    SPAWNMASK_RAID_25MAN_NORMAL = (1 << RAID_DIFFICULTY_25MAN_NORMAL),
-    SPAWNMASK_RAID_NORMAL_ALL   = (SPAWNMASK_RAID_10MAN_NORMAL | SPAWNMASK_RAID_25MAN_NORMAL),
+    SPAWNMASK_RAID_10MAN_NORMAL   = (1 << RAID_DIFFICULTY_10MAN_NORMAL),
+    SPAWNMASK_RAID_25MAN_NORMAL   = (1 << RAID_DIFFICULTY_25MAN_NORMAL),
+    SPAWNMASK_RAID_NORMAL_ALL     = (SPAWNMASK_RAID_10MAN_NORMAL | SPAWNMASK_RAID_25MAN_NORMAL),
 
-    SPAWNMASK_RAID_10MAN_HEROIC = (1 << RAID_DIFFICULTY_10MAN_HEROIC),
-    SPAWNMASK_RAID_25MAN_HEROIC = (1 << RAID_DIFFICULTY_25MAN_HEROIC),
-    SPAWNMASK_RAID_HEROIC_ALL   = (SPAWNMASK_RAID_10MAN_HEROIC | SPAWNMASK_RAID_25MAN_HEROIC),
+    SPAWNMASK_RAID_10MAN_HEROIC   = (1 << RAID_DIFFICULTY_10MAN_HEROIC),
+    SPAWNMASK_RAID_25MAN_HEROIC   = (1 << RAID_DIFFICULTY_25MAN_HEROIC),
+    SPAWNMASK_RAID_HEROIC_ALL     = (SPAWNMASK_RAID_10MAN_HEROIC | SPAWNMASK_RAID_25MAN_HEROIC),
 
-    SPAWNMASK_RAID_ALL          = (SPAWNMASK_RAID_NORMAL_ALL | SPAWNMASK_RAID_HEROIC_ALL),
+    SPAWNMASK_RAID_ALL            = (SPAWNMASK_RAID_NORMAL_ALL | SPAWNMASK_RAID_HEROIC_ALL),
 };
 
 enum FactionTemplateFlags
 {
-    FACTION_TEMPLATE_FLAG_PVP               = 0x00000800,   // flagged for PvP
-    FACTION_TEMPLATE_FLAG_CONTESTED_GUARD   = 0x00001000,   // faction will attack players that were involved in PvP combats
-    FACTION_TEMPLATE_FLAG_HOSTILE_BY_DEFAULT= 0x00002000,
+    FACTION_TEMPLATE_FLAG_PVP                  = 0x00000800,   // flagged for PvP
+    FACTION_TEMPLATE_FLAG_CONTESTED_GUARD      = 0x00001000,   // faction will attack players that were involved in PvP combats
+    FACTION_TEMPLATE_FLAG_HOSTILE_BY_DEFAULT   = 0x00002000,
 };
 
 enum FactionMasks
 {
-    FACTION_MASK_PLAYER   = 1,                              // any player
-    FACTION_MASK_ALLIANCE = 2,                              // player or creature from alliance team
-    FACTION_MASK_HORDE    = 4,                              // player or creature from horde team
-    FACTION_MASK_MONSTER  = 8                               // aggressive creature from monster team
+    FACTION_MASK_PLAYER          = 1,                       // any player
+    FACTION_MASK_ALLIANCE        = 2,                       // player or creature from alliance team
+    FACTION_MASK_HORDE           = 4,                       // player or creature from horde team
+    FACTION_MASK_MONSTER         = 8                        // aggressive creature from monster team
     // if none flags set then non-aggressive creature
 };
 
@@ -400,46 +402,46 @@ enum ItemEnchantmentType
 
 enum ItemLimitCategoryMode
 {
-    ITEM_LIMIT_CATEGORY_MODE_HAVE  = 0,                      // limit applied to amount items in inventory/bank
-    ITEM_LIMIT_CATEGORY_MODE_EQUIP = 1,                      // limit applied to amount equipped items (including used gems)
+    ITEM_LIMIT_CATEGORY_MODE_HAVE          = 0,             // limit applied to amount items in inventory/bank
+    ITEM_LIMIT_CATEGORY_MODE_EQUIP         = 1,             // limit applied to amount equipped items (including used gems)
 };
 
 enum TotemCategoryType
 {
-    TOTEM_CATEGORY_TYPE_KNIFE   = 1,
-    TOTEM_CATEGORY_TYPE_TOTEM   = 2,
-    TOTEM_CATEGORY_TYPE_ROD     = 3,
-    TOTEM_CATEGORY_TYPE_PICK    = 21,
-    TOTEM_CATEGORY_TYPE_STONE   = 22,
-    TOTEM_CATEGORY_TYPE_HAMMER  = 23,
-    TOTEM_CATEGORY_TYPE_SPANNER = 24
+    TOTEM_CATEGORY_TYPE_KNIFE              = 1,
+    TOTEM_CATEGORY_TYPE_TOTEM              = 2,
+    TOTEM_CATEGORY_TYPE_ROD                = 3,
+    TOTEM_CATEGORY_TYPE_PICK               = 21,
+    TOTEM_CATEGORY_TYPE_STONE              = 22,
+    TOTEM_CATEGORY_TYPE_HAMMER             = 23,
+    TOTEM_CATEGORY_TYPE_SPANNER            = 24
 };
 
 // SummonProperties.dbc, col 1
 enum SummonPropGroup
 {
-    SUMMON_PROP_GROUP_UNKNOWN1       = 0,                   // 1160 spells in 3.0.3
-    SUMMON_PROP_GROUP_UNKNOWN2       = 1,                   // 861 spells in 3.0.3
-    SUMMON_PROP_GROUP_PETS           = 2,                   // 52 spells in 3.0.3, pets mostly
-    SUMMON_PROP_GROUP_CONTROLLABLE   = 3,                   // 13 spells in 3.0.3, mostly controllable
-    SUMMON_PROP_GROUP_UNKNOWN3       = 4                    // 86 spells in 3.0.3, taxi/mounts
+    SUMMON_PROP_GROUP_UNKNOWN1             = 0,             // 1160 spells in 3.0.3
+    SUMMON_PROP_GROUP_UNKNOWN2             = 1,             // 861 spells in 3.0.3
+    SUMMON_PROP_GROUP_PETS                 = 2,             // 52 spells in 3.0.3, pets mostly
+    SUMMON_PROP_GROUP_CONTROLLABLE         = 3,             // 13 spells in 3.0.3, mostly controllable
+    SUMMON_PROP_GROUP_UNKNOWN3             = 4              // 86 spells in 3.0.3, taxi/mounts
 };
 
 // SummonProperties.dbc, col 3
 enum SummonPropType
 {
-    SUMMON_PROP_TYPE_UNKNOWN         = 0,                   // different summons, 1330 spells in 3.0.3
-    SUMMON_PROP_TYPE_SUMMON          = 1,                   // generic summons, 49 spells in 3.0.3
-    SUMMON_PROP_TYPE_GUARDIAN        = 2,                   // summon guardian, 393 spells in 3.0.3
-    SUMMON_PROP_TYPE_ARMY            = 3,                   // summon army, 5 spells in 3.0.3
-    SUMMON_PROP_TYPE_TOTEM           = 4,                   // summon totem, 169 spells in 3.0.3
-    SUMMON_PROP_TYPE_CRITTER         = 5,                   // critter/minipet, 195 spells in 3.0.3
-    SUMMON_PROP_TYPE_DK              = 6,                   // summon DRW/Ghoul, 2 spells in 3.0.3
-    SUMMON_PROP_TYPE_BOMB            = 7,                   // summon bot/bomb, 4 spells in 3.0.3
-    SUMMON_PROP_TYPE_PHASING         = 8,                   // something todo with DK prequest line, 2 spells in 3.0.3
-    SUMMON_PROP_TYPE_SIEGE_VEH       = 9,                   // summon different vehicles, 14 spells in 3.0.3
-    SUMMON_PROP_TYPE_DRAKE_VEH       = 10,                  // summon drake (vehicle), 3 spells
-    SUMMON_PROP_TYPE_LIGHTWELL       = 11                   // summon lightwell, 6 spells in 3.0.3
+    SUMMON_PROP_TYPE_UNKNOWN               = 0,             // different summons, 1330 spells in 3.0.3
+    SUMMON_PROP_TYPE_SUMMON                = 1,             // generic summons, 49 spells in 3.0.3
+    SUMMON_PROP_TYPE_GUARDIAN              = 2,             // summon guardian, 393 spells in 3.0.3
+    SUMMON_PROP_TYPE_ARMY                  = 3,             // summon army, 5 spells in 3.0.3
+    SUMMON_PROP_TYPE_TOTEM                 = 4,             // summon totem, 169 spells in 3.0.3
+    SUMMON_PROP_TYPE_CRITTER               = 5,             // critter/minipet, 195 spells in 3.0.3
+    SUMMON_PROP_TYPE_DK                    = 6,             // summon DRW/Ghoul, 2 spells in 3.0.3
+    SUMMON_PROP_TYPE_BOMB                  = 7,             // summon bot/bomb, 4 spells in 3.0.3
+    SUMMON_PROP_TYPE_PHASING               = 8,             // something todo with DK prequest line, 2 spells in 3.0.3
+    SUMMON_PROP_TYPE_SIEGE_VEH             = 9,             // summon different vehicles, 14 spells in 3.0.3
+    SUMMON_PROP_TYPE_DRAKE_VEH             = 10,            // summon drake (vehicle), 3 spells
+    SUMMON_PROP_TYPE_LIGHTWELL             = 11             // summon lightwell, 6 spells in 3.0.3
 };
 
 // SummonProperties.dbc, col 5
@@ -484,6 +486,7 @@ enum VehicleSeatFlagsB
     VEHICLE_SEAT_FLAG_B_EJECTABLE                = 0x00000020,           // ejectable
     VEHICLE_SEAT_FLAG_B_USABLE_FORCED_2          = 0x00000040,
     VEHICLE_SEAT_FLAG_B_USABLE_FORCED_3          = 0x00000100,
+    VEHICLE_SEAT_FLAG_B_USABLE_FORCED_4          = 0x02000000,
     VEHICLE_SEAT_FLAG_B_VEHICLE_PLAYERFRAME_UI   = 0x80000000,           // Lua_UnitHasVehiclePlayerFrameUI - actually checked for flagsb &~ 0x80000000
 };
 
@@ -497,14 +500,14 @@ enum CurrencyTypes
 
 enum DB2Types
 {
-    DB2TYPE_ITEM_SPARSE             = 2442913102, // hash of item-sparse.db2
-    DB2TYPE_ITEM                    = 1344507586, // hash of item.db2
-    ITEM_TEMPLATE_UPDATE_REGISTER   = 1091717232, // what is this for?
+    DB2TYPE_ITEM_SPARSE                          = 2442913102,           // hash of item-sparse.db2
+    DB2TYPE_ITEM                                 = 1344507586,           // hash of item.db2
+    ITEM_TEMPLATE_UPDATE_REGISTER                = 1091717232,           // what is this for?
 };
 
-#define MAX_ITEM_PROTO_DAMAGES 2                            // changed in 3.1.0
-#define MAX_ITEM_PROTO_SOCKETS 3
-#define MAX_ITEM_PROTO_SPELLS  5
-#define MAX_ITEM_PROTO_STATS  10
+#define MAX_ITEM_PROTO_DAMAGES         2                                 // changed in 3.1.0
+#define MAX_ITEM_PROTO_SOCKETS         3
+#define MAX_ITEM_PROTO_SPELLS          5
+#define MAX_ITEM_PROTO_STATS           10
 
 #endif

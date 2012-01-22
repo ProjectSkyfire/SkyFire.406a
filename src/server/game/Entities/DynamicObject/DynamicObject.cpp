@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -28,15 +28,14 @@
 #include "GridNotifiersImpl.h"
 #include "ScriptMgr.h"
 
-DynamicObject::DynamicObject() : WorldObject(),
-    _aura(NULL), _removedAura(NULL), _caster(NULL), _duration(0), _isViewpoint(false)
+DynamicObject::DynamicObject(bool isWorldObject) : WorldObject(isWorldObject), _aura(NULL), _removedAura(NULL), _caster(NULL), _duration(0), _isViewpoint(false)
 {
-    m_objectType |= TYPEMASK_DYNAMICOBJECT;
-    m_objectTypeId = TYPEID_DYNAMICOBJECT;
+    _objectType |= TYPEMASK_DYNAMICOBJECT;
+    _objectTypeId = TYPEID_DYNAMICOBJECT;
 
     m_updateFlag = (UPDATEFLAG_HAS_POSITION | UPDATEFLAG_POSITION);
 
-    m_valuesCount = DYNAMICOBJECT_END;
+    _valuesCount = DYNAMICOBJECT_END;
 }
 
 DynamicObject::~DynamicObject()
@@ -80,7 +79,7 @@ void DynamicObject::RemoveFromWorld()
     }
 }
 
-bool DynamicObject::CreateDynamicObject(uint32 guidlow, Unit* caster, uint32 spellId, Position const& pos, float radius, bool active, DynamicObjectType type)
+bool DynamicObject::CreateDynamicObject(uint32 guidlow, Unit* caster, uint32 spellId, Position const& pos, float radius, DynamicObjectType type)
 {
     SetMap(caster->GetMap());
     Relocate(pos);
@@ -106,8 +105,7 @@ bool DynamicObject::CreateDynamicObject(uint32 guidlow, Unit* caster, uint32 spe
     SetFloatValue(DYNAMICOBJECT_RADIUS, radius);
     SetUInt32Value(DYNAMICOBJECT_CASTTIME, getMSTime());
 
-    m_isWorldObject = active;
-    if (active)
+    if (IsWorldObject())
         setActive(true);    //must before add to map to be put in world container
 
     if (!GetMap()->AddToMap(this))

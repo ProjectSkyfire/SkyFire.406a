@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -98,7 +98,7 @@ inline bool ReadHex(std::istringstream& iss, uint32& res, uint32 length)
 
 bool ChatLink::ValidateName(char* buffer, const char* /*context*/)
 {
-    _name = buffer;
+    m_name = buffer;
     return true;
 }
 
@@ -167,7 +167,7 @@ bool ItemChatLink::Initialize(std::istringstream& iss)
     return true;
 }
 
-inline std::string ItemChatLink::FormatName(uint8 index, ItemLocale const *locale, DBCString suffixStrings) const
+inline std::string ItemChatLink::FormatName(uint8 index, ItemLocale const *locale, char* suffixStrings) const
 {
     std::stringstream ss;
     if (locale == NULL || index >= locale->Name.size())
@@ -183,7 +183,7 @@ bool ItemChatLink::ValidateName(char* buffer, const char* context)
 {
     ChatLink::ValidateName(buffer, context);
 
-    DBCString suffixStrings = _suffix ? _suffix->nameSuffix : (_property ? _property->nameSuffix : NULL);
+    char* suffixStrings = _suffix ? _suffix->nameSuffix : (_property ? _property->nameSuffix : NULL);
 
     bool res = (FormatName(LOCALE_enUS, NULL, suffixStrings) == buffer);
     if (!res)
@@ -271,8 +271,8 @@ bool SpellChatLink::Initialize(std::istringstream& iss)
         return false;
     }
     // Validate spell
-    _spell = sSpellMgr->GetSpellInfo(spellId);
-    if (!_spell)
+    m_spell = sSpellMgr->GetSpellInfo(spellId);
+    if (!m_spell)
     {
         sLog->outDebug(LOG_FILTER_CHATSYS, "ChatHandler::isValidChatMessage('%s'): got invalid spell id %u in |spell command", iss.str().c_str(), spellId);
         return false;
@@ -285,18 +285,18 @@ bool SpellChatLink::ValidateName(char* buffer, const char* context)
     ChatLink::ValidateName(buffer, context);
 
     // spells with that flag have a prefix of "$PROFESSION: "
-    if (_spell->Attributes & SPELL_ATTR0_TRADESPELL)
+    if (m_spell->Attributes & SPELL_ATTR0_TRADESPELL)
     {
-        SkillLineAbilityMapBounds bounds = sSpellMgr->GetSkillLineAbilityMapBounds(_spell->Id);
+        SkillLineAbilityMapBounds bounds = sSpellMgr->GetSkillLineAbilityMapBounds(m_spell->Id);
         if (bounds.first == bounds.second)
         {
-            sLog->outDebug(LOG_FILTER_CHATSYS, "ChatHandler::isValidChatMessage('%s'): skill line not found for spell %u", context, _spell->Id);
+            sLog->outDebug(LOG_FILTER_CHATSYS, "ChatHandler::isValidChatMessage('%s'): skill line not found for spell %u", context, m_spell->Id);
             return false;
         }
         SkillLineAbilityEntry const *skillInfo = bounds.first->second;
         if (!skillInfo)
         {
-            sLog->outDebug(LOG_FILTER_CHATSYS, "ChatHandler::isValidChatMessage('%s'): skill line ability not found for spell %u", context, _spell->Id);
+            sLog->outDebug(LOG_FILTER_CHATSYS, "ChatHandler::isValidChatMessage('%s'): skill line ability not found for spell %u", context, m_spell->Id);
             return false;
         }
         SkillLineEntry const *skillLine = sSkillLineStore.LookupEntry(skillInfo->skillId);
@@ -306,30 +306,21 @@ bool SpellChatLink::ValidateName(char* buffer, const char* context)
             return false;
         }
 
-        for (uint8 i = 0; i < TOTAL_LOCALES; ++i)
+        uint32 skillLineNameLength = strlen(skillLine->name);
+        if (skillLineNameLength > 0 && strncmp(skillLine->name, buffer, skillLineNameLength) == 0)
         {
-            uint32 skillLineNameLength = strlen(skillLine->name[i]);
-            if (skillLineNameLength > 0 && strncmp(skillLine->name[i], buffer, skillLineNameLength) == 0)
-            {
-                // found the prefix, remove it to perform spellname validation below
-                // -2 = strlen(": ")
-                uint32 spellNameLength = strlen(buffer) - skillLineNameLength - 2;
-                memcpy(buffer, buffer + skillLineNameLength + 2, spellNameLength + 1);
-            }
+            // found the prefix, remove it to perform spellname validation below
+            // -2 = strlen(": ")
+            uint32 spellNameLength = strlen(buffer) - skillLineNameLength - 2;
+            memcpy(buffer, buffer + skillLineNameLength + 2, spellNameLength + 1);
         }
     }
 
-    bool res = false;
-    for (uint8 i = 0; i < TOTAL_LOCALES; ++i)
-        if (*_spell->SpellName[i] && strcmp(_spell->SpellName[i], buffer) == 0)
-        {
-            res = true;
-            break;
-        }
+    if (*m_spell->SpellName && strcmp(m_spell->SpellName, buffer) == 0)
+        return true;
 
-        if (!res)
-            sLog->outDebug(LOG_FILTER_CHATSYS, "ChatHandler::isValidChatMessage('%s'): linked spell (id: %u) name wasn't found in any localization", context, _spell->Id);
-        return res;
+    sLog->outDebug(LOG_FILTER_CHATSYS, "ChatHandler::isValidChatMessage('%s'): linked spell (id: %u) name wasn't found in any localization", context, m_spell->Id);
+    return false;
 }
 
 // |color|Hachievement:achievement_id:player_guid:0:0:0:0:0:0:0:0|h[name]|h|r
@@ -381,17 +372,11 @@ bool AchievementChatLink::ValidateName(char* buffer, const char* context)
 {
     ChatLink::ValidateName(buffer, context);
 
-    bool res = false;
-    for (uint8 i = 0; i < TOTAL_LOCALES; ++i)
-        if (*_achievement->name[i] && strcmp(_achievement->name[i], buffer) == 0)
-        {
-            res = true;
-            break;
-        }
+    if (*_achievement->name && strcmp(_achievement->name, buffer) == 0)
+        return true;
 
-        if (!res)
-            sLog->outDebug(LOG_FILTER_CHATSYS, "ChatHandler::isValidChatMessage('%s'): linked achievement (id: %u) name wasn't found in any localization", context, _achievement->ID);
-        return res;
+    sLog->outDebug(LOG_FILTER_CHATSYS, "ChatHandler::isValidChatMessage('%s'): linked achievement (id: %u) name wasn't found in any localization", context, _achievement->ID);
+    return false;
 }
 
 // |color|Htrade:spell_id:cur_value:max_value:player_guid:base64_data|h[name]|h|r
@@ -408,8 +393,8 @@ bool TradeChatLink::Initialize(std::istringstream& iss)
         return false;
     }
     // Validate spell
-    _spell = sSpellMgr->GetSpellInfo(spellId);
-    if (!_spell)
+    m_spell = sSpellMgr->GetSpellInfo(spellId);
+    if (!m_spell)
     {
         sLog->outDebug(LOG_FILTER_CHATSYS, "ChatHandler::isValidChatMessage('%s'): got invalid spell id %u in |trade command", iss.str().c_str(), spellId);
         return false;
@@ -466,8 +451,8 @@ bool TalentChatLink::Initialize(std::istringstream& iss)
         return false;
     }
     // Validate talent's spell
-    _spell = sSpellMgr->GetSpellInfo(talentInfo->RankID[0]);
-    if (!_spell)
+    m_spell = sSpellMgr->GetSpellInfo(talentInfo->RankID[0]);
+    if (!m_spell)
     {
         sLog->outDebug(LOG_FILTER_CHATSYS, "ChatHandler::isValidChatMessage('%s'): got invalid spell id %u in |trade command", iss.str().c_str(), talentInfo->RankID[0]);
         return false;
@@ -498,8 +483,8 @@ bool EnchantmentChatLink::Initialize(std::istringstream& iss)
         return false;
     }
     // Validate spell
-    _spell = sSpellMgr->GetSpellInfo(spellId);
-    if (!_spell)
+    m_spell = sSpellMgr->GetSpellInfo(spellId);
+    if (!m_spell)
     {
         sLog->outDebug(LOG_FILTER_CHATSYS, "ChatHandler::isValidChatMessage('%s'): got invalid spell id %u in |enchant command", iss.str().c_str(), spellId);
         return false;
@@ -537,8 +522,8 @@ bool GlyphChatLink::Initialize(std::istringstream& iss)
         return false;
     }
     // Validate glyph's spell
-    _spell = sSpellMgr->GetSpellInfo(_glyph->SpellId);
-    if (!_spell)
+    m_spell = sSpellMgr->GetSpellInfo(_glyph->SpellId);
+    if (!m_spell)
     {
         sLog->outDebug(LOG_FILTER_CHATSYS, "ChatHandler::isValidChatMessage('%s'): got invalid spell id %u in |glyph command", iss.str().c_str(), _glyph->SpellId);
         return false;

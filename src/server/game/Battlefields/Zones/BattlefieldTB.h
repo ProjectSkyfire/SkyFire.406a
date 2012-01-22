@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
+* Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
 *
 * This program is free software; you can redistribute it and/or modify it
 * under the terms of the GNU General Public License as published by the
@@ -176,7 +176,7 @@ class BfCapturePointTB: public BfCapturePoint
     void LinkToWorkShop(BfTBWorkShopData* ws) {m_WorkShop = ws;}
 
     void ChangeTeam(TeamId oldteam);
-    TeamId GetTeam() const { return m_team; }
+    TeamId GetTeam() const { return _team; }
 
 protected:
     BfTBWorkShopData* m_WorkShop;
@@ -426,11 +426,9 @@ const BfTBCapturePointDataBase TBCapturePointDataBase[TB_MAX_WORKSHOP]=
     },
 };
 
-//*********************************
-
-//********************************************************************
-//*                Structs using for Building,Graveyard,Workshop         *
-//********************************************************************
+/********************************************************************
+*                Structs using for Building,Graveyard,Workshop      *
+********************************************************************/
 
 // Structure for different building witch can be destroy during battle
 struct BfTBGameObjectBuilding
@@ -588,30 +586,30 @@ struct BfTBGameObjectBuilding
 
     void UpdateCreatureAndGo()
     {
-        for(GuidSet::const_iterator itr = m_CreatureTopList[m_TB->GetDefenderTeam()].begin(); itr != m_CreatureTopList[m_TB->GetDefenderTeam()].end(); ++itr)
+        for (GuidSet::const_iterator itr = m_CreatureTopList[m_TB->GetDefenderTeam()].begin(); itr != m_CreatureTopList[m_TB->GetDefenderTeam()].end(); ++itr)
               if (Unit* unit = ObjectAccessor::FindUnit((*itr)))
                 if (Creature* creature = unit->ToCreature())
                     m_TB->HideNpc(creature);
 
-        for(GuidSet::const_iterator itr = m_CreatureTopList[m_TB->GetAttackerTeam()].begin(); itr != m_CreatureTopList[m_TB->GetAttackerTeam()].end(); ++itr)
+        for (GuidSet::const_iterator itr = m_CreatureTopList[m_TB->GetAttackerTeam()].begin(); itr != m_CreatureTopList[m_TB->GetAttackerTeam()].end(); ++itr)
             if (Unit* unit = ObjectAccessor::FindUnit((*itr)))
                 if (Creature* creature = unit->ToCreature())
                     m_TB->ShowNpc(creature, true);
 
-        for(GuidSet::const_iterator itr = m_CreatureBottomList[m_TB->GetDefenderTeam()].begin(); itr != m_CreatureBottomList[m_TB->GetDefenderTeam()].end(); ++itr)
+        for (GuidSet::const_iterator itr = m_CreatureBottomList[m_TB->GetDefenderTeam()].begin(); itr != m_CreatureBottomList[m_TB->GetDefenderTeam()].end(); ++itr)
             if (Unit* unit = ObjectAccessor::FindUnit((*itr)))
                 if (Creature* creature = unit->ToCreature())
                     m_TB->HideNpc(creature);
 
-        for(GuidSet::const_iterator itr = m_CreatureBottomList[m_TB->GetAttackerTeam()].begin(); itr != m_CreatureBottomList[m_TB->GetAttackerTeam()].end(); ++itr)
+        for (GuidSet::const_iterator itr = m_CreatureBottomList[m_TB->GetAttackerTeam()].begin(); itr != m_CreatureBottomList[m_TB->GetAttackerTeam()].end(); ++itr)
             if (Unit* unit = ObjectAccessor::FindUnit((*itr)))
                 if (Creature* creature = unit->ToCreature())
                     m_TB->ShowNpc(creature, true);
 
-        for(TBGameObjectSet::const_iterator itr = m_GameObjectList[m_TB->GetDefenderTeam()].begin(); itr != m_GameObjectList[m_TB->GetDefenderTeam()].end(); ++itr)
+        for (TBGameObjectSet::const_iterator itr = m_GameObjectList[m_TB->GetDefenderTeam()].begin(); itr != m_GameObjectList[m_TB->GetDefenderTeam()].end(); ++itr)
             (*itr)->SetRespawnTime(RESPAWN_ONE_DAY);
 
-        for(TBGameObjectSet::const_iterator itr = m_GameObjectList[m_TB->GetAttackerTeam()].begin(); itr != m_GameObjectList[m_TB->GetAttackerTeam()].end(); ++itr)
+        for (TBGameObjectSet::const_iterator itr = m_GameObjectList[m_TB->GetAttackerTeam()].begin(); itr != m_GameObjectList[m_TB->GetAttackerTeam()].end(); ++itr)
             (*itr)->SetRespawnTime(RESPAWN_IMMEDIATELY);
     }
 
@@ -686,11 +684,11 @@ struct BfTBWorkShopData
             case BATTLEFIELD_TB_TEAM_ALLIANCE:
             {
                 // Show Alliance gameobject
-                for(TBGameObjectSet::const_iterator itr = m_GameObjectOnPoint[TEAM_ALLIANCE].begin(); itr != m_GameObjectOnPoint[TEAM_ALLIANCE].end(); ++itr)
+                for (TBGameObjectSet::const_iterator itr = m_GameObjectOnPoint[TEAM_ALLIANCE].begin(); itr != m_GameObjectOnPoint[TEAM_ALLIANCE].end(); ++itr)
                     (*itr)->SetRespawnTime(RESPAWN_IMMEDIATELY);
 
                 // Hide Horde gameobject
-                for(TBGameObjectSet::const_iterator itr = m_GameObjectOnPoint[TEAM_HORDE].begin(); itr != m_GameObjectOnPoint[TEAM_HORDE].end(); ++itr)
+                for (TBGameObjectSet::const_iterator itr = m_GameObjectOnPoint[TEAM_HORDE].begin(); itr != m_GameObjectOnPoint[TEAM_HORDE].end(); ++itr)
                     (*itr)->SetRespawnTime(RESPAWN_ONE_DAY);
 
                 // Updating worldstate
@@ -713,11 +711,11 @@ struct BfTBWorkShopData
             case BATTLEFIELD_TB_TEAM_HORDE:
             {
                 // Hide Alliance gameobject
-                for(TBGameObjectSet::const_iterator itr = m_GameObjectOnPoint[TEAM_ALLIANCE].begin(); itr != m_GameObjectOnPoint[TEAM_ALLIANCE].end(); ++itr)
+                for (TBGameObjectSet::const_iterator itr = m_GameObjectOnPoint[TEAM_ALLIANCE].begin(); itr != m_GameObjectOnPoint[TEAM_ALLIANCE].end(); ++itr)
                     (*itr)->SetRespawnTime(RESPAWN_ONE_DAY);
 
                 // Show Horde gameobject
-                for(TBGameObjectSet::const_iterator itr = m_GameObjectOnPoint[TEAM_HORDE].begin(); itr != m_GameObjectOnPoint[TEAM_HORDE].end(); ++itr)
+                for (TBGameObjectSet::const_iterator itr = m_GameObjectOnPoint[TEAM_HORDE].begin(); itr != m_GameObjectOnPoint[TEAM_HORDE].end(); ++itr)
                     (*itr)->SetRespawnTime(RESPAWN_IMMEDIATELY);
 
                 // Update worlstate

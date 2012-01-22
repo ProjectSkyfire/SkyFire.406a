@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -33,7 +33,7 @@ void UpdateData::AddOutOfRangeGUID(std::set<uint64>& guids)
     m_outOfRangeGUIDs.insert(guids.begin(), guids.end());
 }
 
-void UpdateData::AddOutOfRangeGUID(const uint64 guid)
+void UpdateData::AddOutOfRangeGUID(uint64 guid)
 {
     m_outOfRangeGUIDs.insert(guid);
 }
@@ -50,8 +50,8 @@ bool UpdateData::BuildPacket(WorldPacket* packet)
 
     packet->Initialize(SMSG_UPDATE_OBJECT, 2 + 4 + (m_outOfRangeGUIDs.empty() ? 0 : 1 + 4 + 9 * m_outOfRangeGUIDs.size()) + m_data.wpos());
 
-    *packet << uint16 (m_map);
-    *packet << uint32 (!m_outOfRangeGUIDs.empty() ? m_blockCount + 1 : m_blockCount);
+    *packet << uint16(m_map);
+    *packet << uint32(m_blockCount);
 
     if (!m_outOfRangeGUIDs.empty())
     {
@@ -65,7 +65,7 @@ bool UpdateData::BuildPacket(WorldPacket* packet)
     packet->append(m_data);
 
     if (packet->wpos() > 100)
-        packet->compress(SMSG_COMPRESSED_UPDATE_OBJECT);
+        packet->Compress(SMSG_COMPRESSED_UPDATE_OBJECT);
 
     return true;
 }

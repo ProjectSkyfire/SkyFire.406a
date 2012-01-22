@@ -253,7 +253,7 @@ class boss_sindragosa : public CreatureScript
                     me->SetSpeed(MOVE_FLIGHT, 4.0f);
                     me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
                     float moveTime = me->GetExactDist(&SindragosaFlyPos) / (me->GetSpeed(MOVE_FLIGHT) * 0.001f);
-                    me->m_Events.AddEvent(new FrostwyrmLandEvent(*me, SindragosaLandPos), me->m_Events.CalculateTime(uint64(moveTime) + 250));
+                    me->_Events.AddEvent(new FrostwyrmLandEvent(*me, SindragosaLandPos), me->_Events.CalculateTime(uint64(moveTime) + 250));
                     me->GetMotionMaster()->MovePoint(POINT_FROSTWYRM_FLY_IN, SindragosaFlyPos);
                     DoCast(me, SPELL_SINDRAGOSA_S_FURY);
                 }
@@ -268,7 +268,7 @@ class boss_sindragosa : public CreatureScript
 
             void MovementInform(uint32 type, uint32 point)
             {
-                if (type != POINT_MOTION_TYPE)
+                if (type != POINT_MOTION_TYPE && type != EFFECT_MOTION_TYPE)
                     return;
 
                 switch (point)
@@ -636,9 +636,9 @@ class npc_spinestalker : public CreatureScript
                     me->SetSpeed(MOVE_FLIGHT, 2.0f);
                     me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
                     float moveTime = me->GetExactDist(&SpinestalkerFlyPos) / (me->GetSpeed(MOVE_FLIGHT) * 0.001f);
-                    me->m_Events.AddEvent(new FrostwyrmLandEvent(*me, SpinestalkerLandPos), me->m_Events.CalculateTime(uint64(moveTime) + 250));
+                    me->_Events.AddEvent(new FrostwyrmLandEvent(*me, SpinestalkerLandPos), me->_Events.CalculateTime(uint64(moveTime) + 250));
                     me->SetDefaultMovementType(IDLE_MOTION_TYPE);
-                    me->GetMotionMaster()->MoveIdle(MOTION_SLOT_IDLE);
+                    me->GetMotionMaster()->MoveIdle();
                     me->StopMoving();
                     me->GetMotionMaster()->MovePoint(POINT_FROSTWYRM_FLY_IN, SpinestalkerFlyPos);
                 }
@@ -751,9 +751,9 @@ class npc_rimefang : public CreatureScript
                     me->SetSpeed(MOVE_FLIGHT, 2.0f);
                     me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_OOC_NOT_ATTACKABLE);
                     float moveTime = me->GetExactDist(&RimefangFlyPos) / (me->GetSpeed(MOVE_FLIGHT) * 0.001f);
-                    me->m_Events.AddEvent(new FrostwyrmLandEvent(*me, RimefangLandPos), me->m_Events.CalculateTime(uint64(moveTime) + 250));
+                    me->_Events.AddEvent(new FrostwyrmLandEvent(*me, RimefangLandPos), me->_Events.CalculateTime(uint64(moveTime) + 250));
                     me->SetDefaultMovementType(IDLE_MOTION_TYPE);
-                    me->GetMotionMaster()->MoveIdle(MOTION_SLOT_IDLE);
+                    me->GetMotionMaster()->MoveIdle();
                     me->StopMoving();
                     me->GetMotionMaster()->MovePoint(POINT_FROSTWYRM_FLY_IN, RimefangFlyPos);
                 }

@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -51,7 +51,7 @@ public:
     void RemoveLink(std::string& msg) { msg.erase(_startPos, _endPos - _startPos); }
 protected:
     uint32 _color;
-    std::string _name;
+    std::string m_name;
     std::istringstream::pos_type _startPos;
     std::istringstream::pos_type _endPos;
 };
@@ -65,7 +65,7 @@ public:
     virtual bool ValidateName(char* buffer, const char* context);
 
 protected:
-    std::string FormatName(uint8 index, ItemLocale const* locale, DBCString suffixStrings) const;
+    std::string FormatName(uint8 index, ItemLocale const* locale, char* suffixStrings) const;
 
     ItemTemplate const* _item;
     int32 _data[8];
@@ -90,12 +90,12 @@ protected:
 class SpellChatLink : public ChatLink
 {
 public:
-    SpellChatLink() : ChatLink(), _spell(NULL) { }
+    SpellChatLink() : ChatLink(), m_spell(NULL) { }
     virtual bool Initialize(std::istringstream& iss);
     virtual bool ValidateName(char* buffer, const char* context);
 
 protected:
-    SpellInfo const* _spell;
+    SpellInfo const* m_spell;
 };
 
 // AchievementChatLink - link to quest

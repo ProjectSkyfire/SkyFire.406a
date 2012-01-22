@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -135,7 +135,7 @@ bool Player::UpdateStats(Stats stat)
 
 void Player::ApplySpellPowerBonus(int32 amount, bool apply)
 {
-    apply = _ModifyUInt32(apply, m_baseSpellPower, amount);
+    apply = _ModifyUInt32(apply, _baseSpellPower, amount);
 
     // For speed just update for client
     ApplyModUInt32Value(PLAYER_FIELD_MOD_HEALING_DONE_POS, amount, apply);
@@ -211,7 +211,6 @@ void Player::UpdateArmor()
 
     value  = GetModifierValue(unitMod, BASE_VALUE);         // base armor (from items)
     value *= GetModifierValue(unitMod, BASE_PCT);           // armor percent from items
-    value += GetStat(STAT_AGILITY) * 2.0f;                  // armor bonus from stats
     value += GetModifierValue(unitMod, TOTAL_VALUE);
 
     //add dynamic flat mods
@@ -238,11 +237,11 @@ void Player::UpdateSpellPower()
     uint32 spellPowerFromIntellect = GetStat(STAT_INTELLECT) - 10;
 
     //apply only the diff between the last and the new value.
-    ApplyModUInt32Value(PLAYER_FIELD_MOD_HEALING_DONE_POS, spellPowerFromIntellect - m_spellPowerFromIntellect, true);
+    ApplyModUInt32Value(PLAYER_FIELD_MOD_HEALING_DONE_POS, spellPowerFromIntellect - _spellPowerFromIntellect, true);
     for (int i = SPELL_SCHOOL_HOLY; i < MAX_SPELL_SCHOOL; ++i)
-        ApplyModUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_POS + i, spellPowerFromIntellect - m_spellPowerFromIntellect, true);
+        ApplyModUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_POS + i, spellPowerFromIntellect - _spellPowerFromIntellect, true);
 
-    m_spellPowerFromIntellect = spellPowerFromIntellect;
+    _spellPowerFromIntellect = spellPowerFromIntellect;
 }
 
 float Player::GetHealthBonusFromStamina()
@@ -291,12 +290,6 @@ void Player::UpdateMaxPower(Powers power)
     SetMaxPower(power, uint32(value));
 }
 
-void Player::ApplyFeralAPBonus(int32 amount, bool apply)
-{
-    _ModifyUInt32(apply, m_baseFeralAP, amount);
-    UpdateAttackPowerAndDamage();
-}
-
 void Player::UpdateAttackPowerAndDamage(bool ranged)
 {
     float val2 = 0.0f;
@@ -320,7 +313,7 @@ void Player::UpdateAttackPowerAndDamage(bool ranged)
         switch (getClass())
         {
             case CLASS_HUNTER:
-                val2 = level * 2.0f + GetStat(STAT_AGILITY) - 10.0f;
+                val2 = (level * 2.0f) + GetStat(STAT_AGILITY) - 10.0f;
                 break;
             case CLASS_ROGUE:
                 val2 = level + GetStat(STAT_AGILITY) - 10.0f;
@@ -347,73 +340,40 @@ void Player::UpdateAttackPowerAndDamage(bool ranged)
         switch (getClass())
         {
             case CLASS_WARRIOR:
-                val2 = level * 3.0f + GetStat(STAT_STRENGTH) * 2.0f - 20.0f;
+                val2 = (level * 3.0f) + (GetStat(STAT_STRENGTH) * 2.0f) - 20.0f;
                 break;
             case CLASS_PALADIN:
-                val2 = level * 3.0f + GetStat(STAT_STRENGTH) * 2.0f - 20.0f;
+                val2 = (level * 3.0f) + (GetStat(STAT_STRENGTH) * 2.0f) - 20.0f;
                 break;
             case CLASS_DEATH_KNIGHT:
-                val2 = level * 3.0f + GetStat(STAT_STRENGTH) * 2.0f - 20.0f;
+                val2 = (level * 3.0f) + (GetStat(STAT_STRENGTH) * 2.0f) - 20.0f;
                 break;
             case CLASS_ROGUE:
-                val2 = level * 2.0f + GetStat(STAT_STRENGTH) + GetStat(STAT_AGILITY) - 20.0f;
+                val2 = (level * 2.0f) + GetStat(STAT_STRENGTH) + GetStat(STAT_AGILITY) - 20.0f;
                 break;
             case CLASS_HUNTER:
-                val2 = level * 2.0f + GetStat(STAT_STRENGTH) + GetStat(STAT_AGILITY) - 20.0f;
+                val2 = (level * 2.0f) + GetStat(STAT_STRENGTH) + GetStat(STAT_AGILITY) - 20.0f;
                 break;
             case CLASS_SHAMAN:
-                val2 = level * 2.0f + GetStat(STAT_STRENGTH) + GetStat(STAT_AGILITY) - 20.0f;
+                val2 = (level * 2.0f) + (GetStat(STAT_STRENGTH) - 10.0f) + ((GetStat(STAT_AGILITY) * 2) - 20.0f);
                 break;
             case CLASS_DRUID:
             {
                 // Check if Predatory Strikes is skilled
                 float mLevelMult = 0.0f;
                 float weapon_bonus = 0.0f;
-                if (IsInFeralForm())
-                {
-                    Unit::AuraEffectList const& mDummy = GetAuraEffectsByType(SPELL_AURA_DUMMY);
-                    for (Unit::AuraEffectList::const_iterator itr = mDummy.begin(); itr != mDummy.end(); ++itr)
-                    {
-                        AuraEffect* aurEff = *itr;
-                        if (aurEff->GetSpellInfo()->SpellIconID == 1563)
-                        {
-                            switch (aurEff->GetEffIndex())
-                            {
-                                case 0: // Predatory Strikes (effect 0)
-                                    mLevelMult = CalculatePctN(1.0f, aurEff->GetAmount());
-                                    break;
-                                case 1: // Predatory Strikes (effect 1)
-                                    if (Item* mainHand = m_items[EQUIPMENT_SLOT_MAINHAND])
-                                    {
-                                        // also gains % attack power from equipped weapon
-                                        ItemTemplate const *proto = mainHand->GetTemplate();
-                                        if (!proto)
-                                            continue;
-
-                                        weapon_bonus = CalculatePctN(float(proto->getFeralBonus()), aurEff->GetAmount());
-                                    }
-                                    break;
-                                default:
-                                    break;
-                            }
-                        }
-                    }
-                }
 
                 switch (GetShapeshiftForm())
                 {
                     case FORM_CAT:
-                        val2 = getLevel() * (mLevelMult + 2.0f) + GetStat(STAT_STRENGTH) * 2.0f + GetStat(STAT_AGILITY) - 20.0f + weapon_bonus + m_baseFeralAP;
+                        val2 = (GetStat(STAT_STRENGTH) * 2) + GetStat(STAT_AGILITY) + 40.0f - 20.0f;
                         break;
                     case FORM_BEAR:
                     case FORM_DIREBEAR:
-                        val2 = getLevel() * (mLevelMult + 3.0f) + GetStat(STAT_STRENGTH) * 2.0f - 20.0f + weapon_bonus + m_baseFeralAP;
-                        break;
-                    case FORM_MOONKIN:
-                        val2 = getLevel() * (mLevelMult + 1.5f) + GetStat(STAT_STRENGTH) * 2.0f - 20.0f + m_baseFeralAP;
+                        val2 = (GetStat(STAT_STRENGTH) * 2) - 20.0f + (GetShapeshiftForm() == FORM_BEAR ? 30.0f : 120.0f);
                         break;
                     default:
-                        val2 = GetStat(STAT_STRENGTH) * 2.0f - 20.0f;
+                        val2 = (GetStat(STAT_STRENGTH) * 2.0f) - 20.0f;
                         break;
                 }
                 break;
@@ -537,16 +497,7 @@ void Player::CalculateMinMaxDamage(WeaponAttackType attType, bool normalized, bo
     float weapon_mindamage = GetWeaponDamageRange(attType, MINDAMAGE);
     float weapon_maxdamage = GetWeaponDamageRange(attType, MAXDAMAGE);
 
-    if (IsInFeralForm())                                    //check if player is druid and in cat or bear forms
-    {
-        uint8 lvl = getLevel();
-        if (lvl > 60)
-            lvl = 60;
-
-        weapon_mindamage = lvl*0.85f*att_speed;
-        weapon_maxdamage = lvl*1.25f*att_speed;
-    }
-    else if (!CanUseAttackType(attType))      //check if player not in form but still can't use (disarm case)
+    if (!CanUseAttackType(attType))      //check if player not in form but still can't use (disarm case)
     {
         //cannot use ranged/off attack, set values to 0
         if (attType != BASE_ATTACK)
@@ -603,8 +554,6 @@ void Player::UpdateBlockPercentage()
     {
         // Base value
         value = 5.0f;
-        // Modify value from defense skill
-        value += (int32(GetDefenseSkillValue()) - int32(GetMaxSkillValueForLevel())) * 0.04f;
         // Increase from SPELL_AURA_MOD_BLOCK_PERCENT aura
         value += GetTotalAuraModifier(SPELL_AURA_MOD_BLOCK_PERCENT);
         // Increase from rating
@@ -861,13 +810,13 @@ void Player::UpdateExpertise(WeaponAttackType attack)
 
 void Player::ApplyManaRegenBonus(int32 amount, bool apply)
 {
-    _ModifyUInt32(apply, m_baseManaRegen, amount);
+    _ModifyUInt32(apply, _baseManaRegen, amount);
     UpdateManaRegen();
 }
 
 void Player::ApplyHealthRegenBonus(int32 amount, bool apply)
 {
-    _ModifyUInt32(apply, m_baseHealthRegen, amount);
+    _ModifyUInt32(apply, _baseHealthRegen, amount);
 }
 
 void Player::UpdateManaRegen()
@@ -940,7 +889,7 @@ void Player::UpdateMastery()
 {
     if (HasAuraType(SPELL_AURA_MASTERY))
     {
-        SetInt32Value(PLAYER_FIELD_COMBAT_RATING_1 + CR_MASTERY, m_baseRatingValue[CR_MASTERY]);
+        SetInt32Value(PLAYER_FIELD_COMBAT_RATING_1 + CR_MASTERY, _baseRatingValue[CR_MASTERY]);
         SetFloatValue(PLAYER_MASTERY, GetMasteryPoints());
     }
 }
@@ -1182,11 +1131,11 @@ bool Guardian::UpdateStats(Stats stat)
                         break;
                 }
 
-                PetSpellMap::const_iterator itr = (ToPet()->m_spells.find(62758)); // Wild Hunt rank 1
-                if (itr == ToPet()->m_spells.end())
-                    itr = ToPet()->m_spells.find(62762);                            // Wild Hunt rank 2
+                PetSpellMap::const_iterator itr = (ToPet()->_spells.find(62758)); // Wild Hunt rank 1
+                if (itr == ToPet()->_spells.end())
+                    itr = ToPet()->_spells.find(62762);                            // Wild Hunt rank 2
 
-                if (itr != ToPet()->m_spells.end())                                 // If pet has Wild Hunt
+                if (itr != ToPet()->_spells.end())                                 // If pet has Wild Hunt
                 {
                     SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(itr->first); // Then get the SpellProto and add the dummy effect value
                     AddPctN(mod, spellInfo->Effects[EFFECT_0].CalcValue());
@@ -1246,7 +1195,7 @@ void Guardian::UpdateResistances(uint32 school)
 
         // hunter and warlock pets gain 40% of owner's resistance
         if (isPet())
-            value += float(CalculatePctN(m_owner->GetResistance(SpellSchools(school)), 40));
+            value += float(CalculatePctN(_owner->GetResistance(SpellSchools(school)), 40));
 
         SetResistance(SpellSchools(school), int32(value));
     }
@@ -1278,7 +1227,7 @@ void Guardian::UpdateArmor()
             mod = 0.6f;
             break;
         }
-        bonus_armor = mod * float(m_owner->GetArmor());
+        bonus_armor = mod * float(_owner->GetArmor());
     }
 
     value  = GetModifierValue(unitMod, BASE_VALUE);
@@ -1362,11 +1311,11 @@ void Guardian::UpdateAttackPowerAndDamage(bool ranged)
             float mod = 1.0f;                                                 //Hunter contribution modifier
             if (isPet())
             {
-                PetSpellMap::const_iterator itr = ToPet()->m_spells.find(62758);    //Wild Hunt rank 1
-                if (itr == ToPet()->m_spells.end())
-                    itr = ToPet()->m_spells.find(62762);                            //Wild Hunt rank 2
+                PetSpellMap::const_iterator itr = ToPet()->_spells.find(62758);    //Wild Hunt rank 1
+                if (itr == ToPet()->_spells.end())
+                    itr = ToPet()->_spells.find(62762);                            //Wild Hunt rank 2
 
-                if (itr != ToPet()->m_spells.end())                                 // If pet has Wild Hunt
+                if (itr != ToPet()->_spells.end())                                 // If pet has Wild Hunt
                 {
                     SpellInfo const* sProto = sSpellMgr->GetSpellInfo(itr->first); // Then get the SpellProto and add the dummy effect value
                     mod += CalculatePctN(1.0f, sProto->Effects[1].CalcValue());
@@ -1445,19 +1394,19 @@ void Guardian::UpdateDamagePhysical(WeaponAttackType attType)
         return;
 
     float bonusDamage = 0.0f;
-    if (m_owner->GetTypeId() == TYPEID_PLAYER)
+    if (_owner->GetTypeId() == TYPEID_PLAYER)
     {
         //force of nature
         if (GetEntry() == ENTRY_TREANT)
         {
-            int32 spellDmg = int32(m_owner->GetUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_POS + SPELL_SCHOOL_NATURE)) - m_owner->GetUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_NEG + SPELL_SCHOOL_NATURE);
+            int32 spellDmg = int32(_owner->GetUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_POS + SPELL_SCHOOL_NATURE)) - _owner->GetUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_NEG + SPELL_SCHOOL_NATURE);
             if (spellDmg > 0)
                 bonusDamage = spellDmg * 0.09f;
         }
         //greater fire elemental
         else if (GetEntry() == ENTRY_FIRE_ELEMENTAL)
         {
-            int32 spellDmg = int32(m_owner->GetUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_POS + SPELL_SCHOOL_FIRE)) - m_owner->GetUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_NEG + SPELL_SCHOOL_FIRE);
+            int32 spellDmg = int32(_owner->GetUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_POS + SPELL_SCHOOL_FIRE)) - _owner->GetUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_NEG + SPELL_SCHOOL_FIRE);
             if (spellDmg > 0)
                 bonusDamage = spellDmg * 0.4f;
         }

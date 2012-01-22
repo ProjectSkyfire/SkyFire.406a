@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -627,9 +627,9 @@ int32 SpellEffectInfo::CalcValue(Unit const* caster, int32 const* bp, Unit const
     if (caster)
     {
         // bonus amount from combo points
-        if (caster->m_movedPlayer)
+        if (caster->_movedPlayer)
         {
-            if (uint8 comboPoints = caster->m_movedPlayer->GetComboPoints())
+            if (uint8 comboPoints = caster->_movedPlayer->GetComboPoints())
             {
                 if (float comboDamage = PointsPerComboPoint)
                 {
@@ -1976,6 +1976,14 @@ Mechanics SpellInfo::GetEffectMechanic(uint8 effIndex) const
     if (Mechanic)
         return Mechanics(Mechanic);
     return MECHANIC_NONE;
+}
+
+bool SpellInfo::HasAnyEffectMechanic() const
+{
+    for (uint8 i = 0; i < MAX_SPELL_EFFECTS; ++i)
+        if (Effects[i].Mechanic)
+            return true;
+    return false;
 }
 
 uint32 SpellInfo::GetDispelMask() const

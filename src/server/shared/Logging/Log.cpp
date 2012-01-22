@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -371,13 +371,16 @@ void Log::outDB(LogTypes type, const char * str)
     if (!str || type >= MAX_LOG_TYPES)
          return;
 
-    std::string new_str(str);
-    if (new_str.empty())
+    std::string logStr(str);
+    if (logStr.empty())
         return;
-    LoginDatabase.EscapeString(new_str);
+    PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_ADD_LOG);
 
-    LoginDatabase.PExecute("INSERT INTO logs (time, realm, type, string) "
-        "VALUES (" UI64FMTD ", %u, %u, '%s');", uint64(time(0)), realm, type, new_str.c_str());
+    stmt->setInt32(0, realm);
+    stmt->setInt32(1, type);
+    stmt->setString(2, logStr);
+
+    LoginDatabase.Execute(stmt);
 }
 
 void Log::outString(const char * str, ...)
@@ -603,7 +606,7 @@ void Log::outErrorDb(const char * err, ...)
 
     if (dberLogfile)
     {
-        outTimestamp(dberLogfile);
+        //outTimestamp(dberLogfile);
         va_start(ap, err);
         vfprintf(dberLogfile, err, ap);
         va_end(ap);

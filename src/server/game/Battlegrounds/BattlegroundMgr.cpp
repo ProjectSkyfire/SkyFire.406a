@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -115,6 +115,10 @@ void BattlegroundMgr::Update(uint32 diff)
             }
         }
     }
+
+    // update events timer
+    for (int qtype = BATTLEGROUND_QUEUE_NONE; qtype < MAX_BATTLEGROUND_QUEUE_TYPES; ++qtype)
+        m_BattlegroundQueues[qtype].UpdateEvents(diff);
 
     // update scheduled queues
     if (!m_QueueUpdateScheduler.empty())
@@ -307,14 +311,14 @@ void BattlegroundMgr::BuildPvpLogDataPacket(WorldPacket *data, Battleground *bg)
         // it seems this must be according to BG_WINNER_A/H and _NOT_ BG_TEAM_A/H
         for (int8 i = 1; i >= 0; --i)
         {
-            uint32 pointsLost = bg->m_ArenaTeamRatingChanges[i] < 0 ? abs(bg->m_ArenaTeamRatingChanges[i]) : 0;
-            uint32 pointsGained = bg->m_ArenaTeamRatingChanges[i] > 0 ? bg->m_ArenaTeamRatingChanges[i] : 0;
+            uint32 pointsLost = bg->_ArenaTeamRatingChanges[i] < 0 ? abs(bg->_ArenaTeamRatingChanges[i]) : 0;
+            uint32 pointsGained = bg->_ArenaTeamRatingChanges[i] > 0 ? bg->_ArenaTeamRatingChanges[i] : 0;
             uint32 MatchmakerRating = bg->m_ArenaTeamMMR[i];
 
             *data << uint32(pointsLost);                    // Rating Lost
             *data << uint32(pointsGained);                  // Rating gained
             *data << uint32(MatchmakerRating);              // Matchmaking Value
-            sLog->outDebug(LOG_FILTER_BATTLEGROUND, "rating change: %d", bg->m_ArenaTeamRatingChanges[i]);
+            sLog->outDebug(LOG_FILTER_BATTLEGROUND, "rating change: %d", bg->_ArenaTeamRatingChanges[i]);
         }
     }
 
@@ -863,7 +867,7 @@ void BattlegroundMgr::CreateInitialBattlegrounds()
 
         selectionWeight = fields[9].GetUInt8();
         data.scriptId = sObjectMgr->GetScriptId(fields[10].GetCString());
-        data.BattlegroundName = bl->name[sWorld->GetDefaultDbcLocale()];
+        data.BattlegroundName = bl->name;
         data.MapID = bl->mapid[0];
 
         if (!CreateBattleground(data))

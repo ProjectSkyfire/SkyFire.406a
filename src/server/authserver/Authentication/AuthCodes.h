@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -66,7 +66,7 @@ enum LoginResult
     LOGIN_LOCKED_ENFORCED                        = 0x10,
 };
 
-#define POST_WOTLK_ACCEPTED_CLIENT_BUILD              {14480, 14333, 13623, 13596, 13329, 0}
+#define POST_WOTLK_ACCEPTED_CLIENT_BUILD              {15050, 14480, 14333, 13623, 13596, 13329, 0}
 #define POST_BC_ACCEPTED_CLIENT_BUILD                 {13205, 13164, 12340, 11723, 11403, 11159, 10571, 10505, 10146, 9947, 8606, 0}
 #define PRE_BC_ACCEPTED_CLIENT_BUILD                  {5875, 6005, 0}
 

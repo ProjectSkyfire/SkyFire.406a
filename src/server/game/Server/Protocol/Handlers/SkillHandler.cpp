@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -47,7 +47,7 @@ void WorldSession::HandleLearnPreviewTalents(WorldPacket& recvPacket)
     if (spec != ((uint32)-1))
     {
         uint32 specID = 0;
-        for(uint32 i = 0; i < sTalentTabStore.GetNumRows(); i++)
+        for (uint32 i = 0; i < sTalentTabStore.GetNumRows(); i++)
         {
             TalentTabEntry const * entry = sTalentTabStore.LookupEntry(i);
             if (entry)
@@ -60,23 +60,14 @@ void WorldSession::HandleLearnPreviewTalents(WorldPacket& recvPacket)
             }
         }
 
-        if (_player->m_usedTalentCount == 0 || _player->GetTalentBranchSpec(_player->m_activeSpec) == 0)
+        if (_player->_usedTalentCount == 0 || _player->GetTalentBranchSpec(_player->_activeSpec) == 0)
         {
-            if (_player->m_usedTalentCount != 0)
+            if (_player->_usedTalentCount != 0)
                 _player->resetTalents();
 
-            _player->SetTalentBranchSpec(specID, _player->m_activeSpec);
-            for (uint32 i = 0; i < sTalentTreePrimarySpellsStore.GetNumRows(); ++i)
-            {
-                TalentTreePrimarySpellsEntry const *talentInfo = sTalentTreePrimarySpellsStore.LookupEntry(i);
-
-                if (!talentInfo || talentInfo->TalentTabID != specID)
-                    continue;
-
-                _player->learnSpell(talentInfo->SpellID, true);
-            }
+            _player->SetTalentBranchSpec(specID, _player->_activeSpec);
         }
-        else if (_player->GetTalentBranchSpec(_player->m_activeSpec) != specID) //cheat
+        else if (_player->GetTalentBranchSpec(_player->_activeSpec) != specID) //cheat
             return;
     }
 
@@ -91,9 +82,9 @@ void WorldSession::HandleLearnPreviewTalents(WorldPacket& recvPacket)
 
     bool inOtherBranch = false;
     uint32 pointInBranchSpec = 0;
-    for(PlayerTalentMap::iterator itr = _player->m_talents[_player->m_activeSpec]->begin(); itr != _player->m_talents[_player->m_activeSpec]->end(); itr++)
+    for (PlayerTalentMap::iterator itr = _player->_talents[_player->_activeSpec]->begin(); itr != _player->_talents[_player->_activeSpec]->end(); itr++)
     {
-        for(uint32 i = 0; i < sTalentStore.GetNumRows(); i++)
+        for (uint32 i = 0; i < sTalentStore.GetNumRows(); i++)
         {
             const TalentEntry * thisTalent = sTalentStore.LookupEntry(i);
             if (thisTalent)
@@ -107,12 +98,12 @@ void WorldSession::HandleLearnPreviewTalents(WorldPacket& recvPacket)
                     }
                 if (thisrank != -1)
                 {
-                    if (thisTalent->TalentTab == _player->GetTalentBranchSpec(_player->m_activeSpec))
+                    if (thisTalent->TalentTab == _player->GetTalentBranchSpec(_player->_activeSpec))
                     {
                         int8 curtalent_maxrank = -1;
                         for (int8 rank = MAX_TALENT_RANK-1; rank >= 0; --rank)
                         {
-                            if (thisTalent->RankID[rank] && _player->HasTalent(thisTalent->RankID[rank], _player->m_activeSpec))
+                            if (thisTalent->RankID[rank] && _player->HasTalent(thisTalent->RankID[rank], _player->_activeSpec))
                             {
                                 curtalent_maxrank = rank;
                                 break;

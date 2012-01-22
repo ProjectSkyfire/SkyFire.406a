@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -489,7 +489,7 @@ class spell_ulduar_squeezed_lifeless : public SpellScriptLoader
                 pos.m_positionX = 1756.25f + irand(-3, 3);
                 pos.m_positionY = -8.3f + irand(-3, 3);
                 pos.m_positionZ = 448.8f;
-                pos.m_orientation = M_PI;
+                pos._orientation = M_PI;
                 GetHitPlayer()->DestroyForNearbyPlayers();
                 GetHitPlayer()->ExitVehicle(&pos);
                 GetHitPlayer()->UpdateObjectVisibility(false);

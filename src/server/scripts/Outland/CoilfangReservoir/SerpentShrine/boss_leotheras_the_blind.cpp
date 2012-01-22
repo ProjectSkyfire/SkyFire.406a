@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2006-2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2006-2012 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -688,8 +688,8 @@ public:
 
         void Reset()
         {
-            Mindblast_Timer  = 3000 + rand()%5000;
-            Earthshock_Timer = 5000 + rand()%5000;
+            Mindblast_Timer  = urand(3000, 8000);
+            Earthshock_Timer = urand(5000, 10000);
 
             if (instance)
             {
@@ -761,7 +761,7 @@ public:
 
                 if (target)DoCast(target, SPELL_MINDBLAST);
 
-                Mindblast_Timer = 10000 + rand()%5000;
+                Mindblast_Timer = urand(10000, 15000);
             } else Mindblast_Timer -= diff;
 
             if (Earthshock_Timer <= diff)
@@ -784,7 +784,7 @@ public:
                         }
                     }
                 }
-                Earthshock_Timer = 8000 + rand()%7000;
+                Earthshock_Timer = urand(8000, 15000);
             } else Earthshock_Timer -= diff;
             DoMeleeAttackIfReady();
         }

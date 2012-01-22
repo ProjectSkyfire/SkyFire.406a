@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -60,7 +60,7 @@ Map::~Map()
     while (!i_worldObjects.empty())
     {
         WorldObject* obj = *i_worldObjects.begin();
-        ASSERT(obj->m_isWorldObject);
+        ASSERT(obj->IsWorldObject());
         //ASSERT(obj->GetTypeId() == TYPEID_CORPSE);
         obj->RemoveFromWorld();
         obj->ResetMap();
@@ -239,7 +239,7 @@ template<class T>
 void Map::AddToGrid(T* obj, Cell const& cell)
 {
     NGridType* grid = getNGrid(cell.GridX(), cell.GridY());
-    if (obj->m_isWorldObject)
+    if (obj->IsWorldObject())
         grid->GetGridType(cell.CellX(), cell.CellY()).template AddWorldObject<T>(obj);
     else
         grid->GetGridType(cell.CellX(), cell.CellY()).template AddGridObject<T>(obj);
@@ -249,7 +249,7 @@ template<>
 void Map::AddToGrid(Creature* obj, Cell const& cell)
 {
     NGridType* grid = getNGrid(cell.GridX(), cell.GridY());
-    if (obj->m_isWorldObject)
+    if (obj->IsWorldObject())
         grid->GetGridType(cell.CellX(), cell.CellY()).AddWorldObject(obj);
     else
         grid->GetGridType(cell.CellX(), cell.CellY()).AddGridObject(obj);
@@ -257,9 +257,9 @@ void Map::AddToGrid(Creature* obj, Cell const& cell)
     obj->SetCurrentCell(cell);
 }
 
-template<class T>
-void Map::SwitchGridContainers(T* obj, bool on)
+void Map::SwitchGridContainers(Creature* obj, bool on)
 {
+    ASSERT(!obj->IsPermanentWorldObject());
     CellCoord p = Trinity::ComputeCellCoord(obj->GetPositionX(), obj->GetPositionY());
     if (!p.IsCoordValid())
     {
@@ -279,14 +279,17 @@ void Map::SwitchGridContainers(T* obj, bool on)
 
     obj->RemoveFromGrid(); //This step is not really necessary but we want to do ASSERT in remove/add
     if (on)
-        grid.AddWorldObject<T>(obj);
+    {
+        grid.AddWorldObject(obj);
+        AddWorldObject(obj);
+    }
     else
-        grid.AddGridObject<T>(obj);
-    obj->m_isWorldObject = on;
+    {
+        grid.AddGridObject(obj);
+        RemoveWorldObject(obj);
+    }
+    obj->_isTempWorldObject = on;
 }
-
-template void Map::SwitchGridContainers(Creature*, bool);
-//template void Map::SwitchGridContainers(DynamicObject*, bool);
 
 template<class T>
 void Map::DeleteFromWorld(T* obj)
@@ -762,7 +765,7 @@ void Map::RemoveCreatureFromMoveList(Creature* c)
 void Map::MoveAllCreaturesInMoveList()
 {
     _creatureToMoveLock = true;
-    for(std::vector<Creature*>::iterator itr = _creaturesToMove.begin(); itr != _creaturesToMove.end(); ++itr)
+    for (std::vector<Creature*>::iterator itr = _creaturesToMove.begin(); itr != _creaturesToMove.end(); ++itr)
     {
         Creature* c = *itr;
         if(c->FindMap() != this) //pet is teleported to another map
@@ -910,8 +913,15 @@ bool Map::UnloadGrid(NGridType& ngrid, bool unloadAll)
     const uint32 y = ngrid.getY();
 
     {
-        if (!unloadAll && ActiveObjectsNearGrid(ngrid))
-             return false;
+        if (!unloadAll)
+        {
+            //pets, possessed creatures (must be active), transport passengers
+            if (ngrid.GetWorldObjectCountInNGrid<Creature>())
+                return false;
+
+            if (ActiveObjectsNearGrid(ngrid))
+                return false;
+        }
 
         sLog->outDebug(LOG_FILTER_MAPS, "Unloading grid[%u, %u] for map %u", x, y, GetId());
 
@@ -985,7 +995,7 @@ void Map::RemoveAllPlayers()
             {
                 // this is happening for bg
                 sLog->outError("Map::UnloadAll: player %s is still in map %u during unload, this should not happen!", player->GetName(), GetId());
-                player->TeleportTo(player->m_homebindMapId, player->m_homebindX, player->m_homebindY, player->m_homebindZ, player->GetOrientation());
+                player->TeleportTo(player->_homebindMapId, player->_homebindX, player->_homebindY, player->_homebindZ, player->GetOrientation());
             }
         }
     }
@@ -1530,6 +1540,24 @@ inline GridMap* Map::GetGrid(float x, float y)
     return GridMaps[gx][gy];
 }
 
+float Map::GetWaterOrGroundLevel(float x, float y, float z, float* ground /*= NULL*/, bool swim /*= false*/) const
+{
+    if (const_cast<Map*>(this)->GetGrid(x, y))
+    {
+        // we need ground level (including grid height version) for proper return water level in point
+        float ground_z = GetHeight(x, y, z, true, 50.0f);
+        if (ground)
+            *ground = ground_z;
+
+        LiquidData liquid_status;
+
+        ZLiquidStatus res = getLiquidStatus(x, y, ground_z, MAP_ALL_LIQUIDS, &liquid_status);
+        return res ? ( swim ? liquid_status.level - 2.0f : liquid_status.level) : ground_z;
+    }
+
+    return VMAP_INVALID_HEIGHT_VALUE;
+}
+
 float Map::GetHeight(float x, float y, float z, bool checkVMap /*= true*/, float maxSearchDist /*= DEFAULT_HEIGHT_SEARCH*/) const
 {
     // find raw .map surface under Z coordinates
@@ -1808,7 +1836,7 @@ bool Map::CheckGridIntegrity(Creature* c, bool moved) const
 
 char const* Map::GetMapName() const
 {
-    return i_mapEntry ? i_mapEntry->name[sWorld->GetDefaultDbcLocale()] : "UNNAMEDMAP\x0";
+    return i_mapEntry ? i_mapEntry->name : "UNNAMEDMAP\x0";
 }
 
 void Map::UpdateObjectVisibility(WorldObject* obj, Cell cell, CellCoord cellpair)
@@ -1837,7 +1865,7 @@ void Map::SendInitSelf(Player* player)
 {
     sLog->outDetail("Creating player data for himself %u", player->GetGUIDLow());
 
-    UpdateData data(GetId());
+    UpdateData data(player->GetMapId());
 
     // attach to player data current transport data
     if (Transport* transport = player->GetTransport())
@@ -1874,7 +1902,7 @@ void Map::SendInitTransports(Player* player)
     if (tmap.find(player->GetMapId()) == tmap.end())
         return;
 
-    UpdateData transData(GetId());
+    UpdateData transData(player->GetMapId());
 
     MapManager::TransportSet& tset = tmap[player->GetMapId()];
 
@@ -1901,7 +1929,7 @@ void Map::SendRemoveTransports(Player* player)
     if (tmap.find(player->GetMapId()) == tmap.end())
         return;
 
-    UpdateData transData(GetId());
+    UpdateData transData(player->GetMapId());
 
     MapManager::TransportSet& tset = tmap[player->GetMapId()];
 
@@ -1976,15 +2004,8 @@ void Map::RemoveAllObjectsInRemoveList()
         bool on = itr->second;
         i_objectsToSwitch.erase(itr);
 
-        switch (obj->GetTypeId())
-        {
-            case TYPEID_UNIT:
-                if (!obj->ToCreature()->isPet())
-                    SwitchGridContainers(obj->ToCreature(), on);
-                break;
-            default:
-                break;
-        }
+        if (obj->GetTypeId() == TYPEID_UNIT && !obj->IsPermanentWorldObject())
+            SwitchGridContainers(obj->ToCreature(), on);
     }
 
     //sLog->outDebug(LOG_FILTER_MAPS, "Object remover 1 check.");
@@ -2424,7 +2445,7 @@ bool InstanceMap::Reset(uint8 method)
             if (method == INSTANCE_RESET_GLOBAL)
                 // set the homebind timer for players inside (1 minute)
                 for (MapRefManager::iterator itr = m_mapRefManager.begin(); itr != m_mapRefManager.end(); ++itr)
-                    itr->getSource()->m_InstanceValid = false;
+                    itr->getSource()->_InstanceValid = false;
 
             // the unload timer is not started
             // instead the map will unload immediately after the players have left
@@ -2585,7 +2606,7 @@ bool BattlegroundMap::AddPlayerToMap(Player* player)
         //if (!CanEnter(player))
             //return false;
         // reset instance validity, battleground maps do not homebind
-        player->m_InstanceValid = true;
+        player->_InstanceValid = true;
     }
     return Map::AddPlayerToMap(player);
 }

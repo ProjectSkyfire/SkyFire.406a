@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -633,7 +633,7 @@ class boss_stormcaller_brundir : public CreatureScript
 
                 // Prevent to have Brundir somewhere in the air when he die in Air phase
                 if (me->GetPositionZ() > FLOOR_Z)
-                    me->GetMotionMaster()->MoveFall(FLOOR_Z);
+                    me->GetMotionMaster()->MoveFall();
             }
 
             void KilledUnit(Unit* /*who*/)

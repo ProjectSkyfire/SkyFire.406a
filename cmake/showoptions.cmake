@@ -32,6 +32,13 @@ else()
   set(USE_SCRIPTPCH 0)
 endif()
 
+if( EXAMPLES )
+  message("* Build example scripts  : Yes")
+  add_definitions(-EXAMPLES)
+else()
+  message("* Build example scripts  : No (default)")
+endif()
+
 if( TOOLS )
   message("* Build map/vmap tools   : Yes")
 else()

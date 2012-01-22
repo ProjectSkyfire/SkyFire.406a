@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -63,7 +63,7 @@ bool Condition::Meets(Player* player, Unit* invoker)
         case CONDITION_REPUTATION_RANK:
         {
             if (FactionEntry const* faction = sFactionStore.LookupEntry(mConditionValue1))
-                condMeets = uint32(player->GetReputationMgr().GetRank(faction)) == mConditionValue2;
+                condMeets = (mConditionValue2 & (1 << player->GetReputationMgr().GetRank(faction)));
             break;
         }
         case CONDITION_ACHIEVEMENT:
@@ -225,7 +225,7 @@ bool Condition::Meets(Player* player, Unit* invoker)
         refMeets = true;
 
     if (sendErrorMsg && ErrorTextd && (!condMeets || !refMeets))//send special error from DB
-        player->m_ConditionErrorMsgId = ErrorTextd;
+        player->_ConditionErrorMsgId = ErrorTextd;
 
     bool script = sScriptMgr->OnConditionCheck(this, player, invoker); // Returns true by default.
     return condMeets && refMeets && script;
@@ -297,13 +297,13 @@ bool ConditionMgr::IsPlayerMeetToConditions(Player* player, ConditionList const&
         return true;
 
     if (player)
-        player->m_ConditionErrorMsgId = 0;
+        player->_ConditionErrorMsgId = 0;
 
     sLog->outDebug(LOG_FILTER_CONDITIONSYS, "ConditionMgr::IsPlayerMeetToConditions");
     bool result = IsPlayerMeetToConditionList(player, conditions, invoker);
 
-    if (player && player->m_ConditionErrorMsgId && player->GetSession() && !result)
-        player->GetSession()->SendNotification(player->m_ConditionErrorMsgId);  //m_ConditionErrorMsgId is set only if a condition was not met
+    if (player && player->_ConditionErrorMsgId && player->GetSession() && !result)
+        player->GetSession()->SendNotification(player->_ConditionErrorMsgId);  //_ConditionErrorMsgId is set only if a condition was not met
 
     return result;
 }

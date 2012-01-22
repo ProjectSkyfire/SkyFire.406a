@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -28,6 +28,26 @@
 #include "GuildAchievementMgr.h"
 
 class Item;
+
+enum sGuildNews
+{
+    GUILD_NEWS_GUILD_ACHIEVENT_EARNED = 1,
+    GUILD_NEWS_MEMBER_ACHIEVEMENT_EARNED,
+    GUILD_NEWS_EPIC_ITEM_LOOTED,
+    GUILD_NEWS_EPIC_ITEM_CRAFTED,
+    GUILD_NEWS_EPIC_ITEM_PURCHASED,
+    GUILD_NEWS_GUILD_LEVEL_REACHED,
+};
+
+struct GuildNews
+{
+    uint32 m_type;
+    uint64 m_timestamp;
+    uint32 m_value1;
+    uint32 m_value2;
+    uint64 m_source_guid;
+    uint32 m_flags;
+};
 
 enum GuildMisc
 {
@@ -357,6 +377,8 @@ private:
         Profession professions[2];
     };
 
+    typedef UNORDERED_MAP<uint32, GuildNews*> sGuildNews;
+
     // Base class for event entries
     class LogEntry
     {
@@ -505,7 +527,7 @@ private:
     public:
         BankTab(uint32 guildId, uint8 tabId) : m_guildId(guildId), m_tabId(tabId)
         {
-            memset(m_items, 0, GUILD_BANK_MAX_SLOTS * sizeof(Item*));
+            memset(_items, 0, GUILD_BANK_MAX_SLOTS * sizeof(Item*));
         }
 
         bool LoadFromDB(Field* fields);
@@ -524,14 +546,14 @@ private:
         void SetText(const std::string& text);
         void SendText(const Guild* guild, WorldSession* session) const;
 
-        inline Item* GetItem(uint8 slotId) const { return slotId < GUILD_BANK_MAX_SLOTS ?  m_items[slotId] : NULL; }
+        inline Item* GetItem(uint8 slotId) const { return slotId < GUILD_BANK_MAX_SLOTS ?  _items[slotId] : NULL; }
         bool SetItem(SQLTransaction& trans, uint8 slotId, Item* pItem);
 
     private:
         uint32 m_guildId;
         uint8 m_tabId;
 
-        Item* m_items[GUILD_BANK_MAX_SLOTS];
+        Item* _items[GUILD_BANK_MAX_SLOTS];
         std::string m_name;
         std::string m_icon;
         std::string m_text;
@@ -628,6 +650,7 @@ public:
     typedef UNORDERED_MAP<uint32, Member*> Members;
     typedef std::vector<RankInfo> Ranks;
     typedef std::vector<BankTab*> BankTabs;
+    typedef std::list<GuildNews> GuildNewsList;
 
     static void SendCommandResult(WorldSession* session, GuildCommandType type, GuildCommandError errCode, const std::string& param = "");
     static void SendSaveEmblemResult(WorldSession* session, GuildEmblemError errCode);
@@ -672,6 +695,8 @@ public:
     void HandleMemberLogout(WorldSession* session);
     void HandleDisband(WorldSession* session);
 
+    void SetGuildNews(WorldPacket &data);
+
     void UpdateMemberData(Player* player, uint8 dataid, uint32 value);
     void OnPlayerStatusChange(Player* player, uint32 flag, bool state);
     void SendUpdateRoster(WorldSession* session = NULL);
@@ -693,6 +718,7 @@ public:
 
     // Load from DB
     bool LoadFromDB(Field* fields);
+    void LoadGuildNewsFromDB(Field* fields);
     void LoadRankFromDB(Field* fields);
     bool LoadMemberFromDB(Field* fields);
     bool LoadEventLogFromDB(Field* fields);
@@ -744,8 +770,9 @@ public:
     void LevelUp();
     void ResetTodayXP() { m_today_xp = 0; }
     void GenerateXPCap();
-    GuildAchievementMgr& GetAchievementMgr() { return m_achievementMgr; }
-    GuildAchievementMgr const& GetAchievementMgr() const { return m_achievementMgr; }
+    void AddGuildNews(uint32 type, uint64 source_guild, int value1, int value2, int flags = 0);
+    GuildAchievementMgr& GetAchievementMgr() { return _achievementMgr; }
+    GuildAchievementMgr const& GetAchievementMgr() const { return _achievementMgr; }
 
 protected:
     uint32 m_id;
@@ -769,12 +796,14 @@ protected:
     Members m_members;
     BankTabs m_bankTabs;
 
+    GuildNewsList m_guild_news;
+
     uint32 m_lastXPSave;
 
     // These are actually ordered lists. The first element is the oldest entry.
     LogHolder* m_eventLog;
     LogHolder* m_bankEventLog[GUILD_BANK_MAX_TABS + 1];
-    GuildAchievementMgr m_achievementMgr;
+    GuildAchievementMgr _achievementMgr;
 
 private:
     inline uint8 _GetRanksSize() const { return uint8(m_ranks.size()); }

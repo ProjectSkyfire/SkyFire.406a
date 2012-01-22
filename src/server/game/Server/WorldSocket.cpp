@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -268,19 +268,8 @@ int WorldSocket::open (void *a)
 
     m_Address = remote_addr.get_host_addr();
 
-    // Send startup packet.
-    WorldPacket packet (SMSG_AUTH_CHALLENGE, 37);
-
-    BigNumber seed1;
-    seed1.SetRand(16 * 8);
-    packet.append(seed1.AsByteArray(16), 16);               // new encryption seeds
-
-    packet << uint8(1);
-    packet << uint32(m_Seed);
-
-    BigNumber seed2;
-    seed2.SetRand(16 * 8);
-    packet.append(seed2.AsByteArray(16), 16);               // new encryption seeds
+    WorldPacket packet(MSG_VERIFY_CONNECTIVITY); 
+    packet << "RLD OF WARCRAFT CONNECTION - SERVER TO CLIENT"; 
 
     if (SendPacket(packet) == -1)
         return -1;
@@ -507,7 +496,7 @@ int WorldSocket::handle_input_header (void)
     if ((header.size < 4) || (header.size > 10240))
     {
         Player *_player = m_Session ? m_Session->GetPlayer() : NULL;
-        sLog->outError ("WorldSocket::handle_input_header(): client (account: %u, char [GUID: %u, name: %s]) sent malformed packet (size: %d , cmd: %d)",
+        sLog->outError("WorldSocket::handle_input_header(): client (account: %u, char [GUID: %u, name: %s]) sent malformed packet (size: %d , cmd: %d)",
             m_Session ? m_Session->GetAccountId() : 0,
             _player ? _player->GetGUIDLow() : 0,
             _player ? _player->GetName() : "<none>",
@@ -519,12 +508,12 @@ int WorldSocket::handle_input_header (void)
 
     header.size -= 4;
 
-    ACE_NEW_RETURN (m_RecvWPct, WorldPacket ((uint16) header.cmd, header.size), -1);
+    ACE_NEW_RETURN(m_RecvWPct, WorldPacket(Opcodes(header.cmd), header.size), -1);
 
     if (header.size > 0)
     {
         m_RecvWPct->resize (header.size);
-        m_RecvPct.base ((char*) m_RecvWPct->contents(), m_RecvWPct->size());
+        m_RecvPct.base ((char*)m_RecvWPct->contents(), m_RecvWPct->size());
     }
     else
     {
@@ -733,9 +722,14 @@ int WorldSocket::ProcessIncoming (WorldPacket* new_pct)
                 sScriptMgr->OnPacketReceive(this, WorldPacket(*new_pct));
                 return HandleAuthSession (*new_pct);
             case CMSG_KEEP_ALIVE:
-                sLog->outStaticDebug ("CMSG_KEEP_ALIVE , size: " UI64FMTD, uint64(new_pct->size()));
+                sLog->outStaticDebug ("CMSG_KEEP_ALIVE, size: " UI64FMTD, uint64(new_pct->size()));
                 sScriptMgr->OnPacketReceive(this, WorldPacket(*new_pct));
                 return 0;
+            case MSG_VERIFY_CONNECTIVITY: 
+                sLog->outStaticDebug("MSG_VERIFY_CONNECTIVITY , size: " UI64FMTD, uint64(new_pct->size())); 
+                sScriptMgr->OnPacketReceive(this, WorldPacket(*new_pct)); 
+                return HandleSendAuthSession(); 
+
             default:
             {
                 ACE_GUARD_RETURN (LockType, Guard, m_SessionLock, -1);
@@ -746,7 +740,7 @@ int WorldSocket::ProcessIncoming (WorldPacket* new_pct)
                     // Catches people idling on the login screen and any lingering ingame connections.
                     m_Session->ResetTimeOutTime();
 
-                    // OK , give the packet to WorldSession
+                    // OK, give the packet to WorldSession
                     aptr.release();
                     // WARNINIG here we call it with locks held.
                     // Its possible to cause deadlock if QueuePacket calls back
@@ -777,14 +771,24 @@ int WorldSocket::ProcessIncoming (WorldPacket* new_pct)
     ACE_NOTREACHED (return 0);
 }
 
+int WorldSocket::HandleSendAuthSession() 
+{ 
+    WorldPacket packet(SMSG_AUTH_CHALLENGE, 37); 
+ 
+    for (uint32 i = 0; i < 8; i++) 
+        packet << uint32(0); 
+ 
+    packet << m_Seed; 
+    packet << uint8(1); 
+    return SendPacket(packet); 
+} 
+
 int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
 {
     uint8 digest[20];
     uint16 clientBuild, security;
     uint32 id;
     uint32 m_addonSize;
-    //uint32 m_addonLenCompressed;
-    //uint8* m_addonCompressed;
     uint32 clientSeed;
     std::string account;
     LocaleConstant locale;
@@ -793,22 +797,22 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     BigNumber v, s, g, N, K;
     WorldPacket packet;
 
-    recvPacket.read(digest, 7);
     recvPacket.read_skip<uint32>();
-    recvPacket.read(digest, 1);
+    recvPacket.read_skip<uint8>();
     recvPacket.read_skip<uint64>();
     recvPacket.read_skip<uint32>();
-    recvPacket.read(digest, 1);
-    recvPacket.read_skip<uint8>();
-    recvPacket.read(digest, 2);
-    recvPacket >> clientSeed;
-    recvPacket.read_skip<uint32>();
-    recvPacket.read(digest, 6);
-    recvPacket >> clientBuild;
-    recvPacket.read(digest, 1);
     recvPacket.read_skip<uint8>();
     recvPacket.read_skip<uint32>();
-    recvPacket.read(digest, 2);
+    recvPacket.read_skip<uint8>();
+    recvPacket.read_skip<uint32>();
+    recvPacket.read(digest, 7);
+    recvPacket >> clientBuild; 
+    recvPacket.read(digest, 8); 
+    recvPacket.read_skip<uint8>(); 
+    recvPacket.read_skip<uint8>(); 
+    recvPacket >> clientSeed; 
+    recvPacket.read_skip<uint8>(); 
+    recvPacket.read_skip<uint8>(); 
 
     recvPacket >> m_addonSize;
     uint8 * tableauAddon = new uint8[m_addonSize];
@@ -822,6 +826,8 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     }
     delete tableauAddon;
 
+    recvPacket.read_skip<uint8>(); 
+    recvPacket.read_skip<uint8>(); 
     recvPacket >> account;
 
     if (sWorld->IsClosed())
@@ -830,7 +836,7 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
         packet << uint8(AUTH_REJECT);
         SendPacket (packet);
 
-        sLog->outError ("WorldSocket::HandleAuthSession: World closed, denying client (%s).", GetRemoteAddress().c_str());
+        sLog->outError("WorldSocket::HandleAuthSession: World closed, denying client (%s).", GetRemoteAddress().c_str());
         return -1;
     }
 
@@ -845,20 +851,20 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     // No SQL injection, username escaped.
 
     QueryResult result =
-          LoginDatabase.PQuery ("SELECT "
-                                "id, "                      //0
-                                "sessionkey, "              //1
-                                "last_ip, "                 //2
-                                "locked, "                  //3
-                                "v, "                       //4
-                                "s, "                       //5
-                                "expansion, "               //6
-                                "mutetime, "                //7
-                                "locale, "                  //8
-                                "recruiter "                //9
-                                "FROM account "
-                                "WHERE username = '%s'",
-                                safe_account.c_str());
+        LoginDatabase.PQuery ("SELECT " 
+        "id, "                      //0 
+        "sessionkey, "              //1 
+        "last_ip, "                 //2 
+        "locked, "                  //3 
+        "v, "                       //4 
+        "s, "                       //5 
+        "expansion, "               //6 
+        "mutetime, "                //7 
+        "locale, "                  //8 
+        "recruiter "                //9 
+        "FROM account " 
+        "WHERE username = '%s'", 
+        safe_account.c_str()); 
 
     // Stop if the account is not found
     if (!result)
@@ -878,7 +884,6 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     uint32 world_expansion = sWorld->getIntConfig(CONFIG_EXPANSION);
     if (expansion > world_expansion)
         expansion = world_expansion;
-    //expansion = ((sWorld->getIntConfig(CONFIG_EXPANSION) > fields[6].GetUInt8()) ? fields[6].GetUInt8() : sWorld->getIntConfig(CONFIG_EXPANSION));
 
     N.SetHexStr ("894B645E89E1535BBDAD5B8B290650530801B18EBFBF5E8FAB3C82872A3E9BB7");
     g.SetDword (7);
@@ -890,8 +895,8 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     const char* vStr = v.AsHexStr();                       //Must be freed by OPENSSL_free()
 
     sLog->outStaticDebug ("WorldSocket::HandleAuthSession: (s, v) check s: %s v: %s",
-                sStr,
-                vStr);
+        sStr,
+        vStr);
 
     OPENSSL_free ((void*) sStr);
     OPENSSL_free ((void*) vStr);
@@ -927,15 +932,15 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     uint32 recruiter = fields[9].GetUInt32();
 
     // Checks gmlevel per Realm
-    result =
-        LoginDatabase.PQuery ("SELECT "
-                              "RealmID, "            //0
-                              "gmlevel "             //1
-                              "FROM account_access "
-                              "WHERE id = '%d'"
-                              " AND (RealmID = '%d'"
-                              " OR RealmID = '-1')",
-                              id, realmID);
+    result = LoginDatabase.PQuery ("SELECT " 
+        "RealmID, "            //0 
+        "gmlevel "             //1 
+        "FROM account_access " 
+        "WHERE id = '%d'" 
+        " AND (RealmID = '%d'" 
+        " OR RealmID = '-1')", 
+        id, realmID); 
+
     if (!result)
         security = 0;
     else
@@ -1016,11 +1021,12 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     // No SQL injection, username escaped.
     LoginDatabase.EscapeString (address);
 
-    LoginDatabase.PExecute ("UPDATE account "
-                            "SET last_ip = '%s' "
-                            "WHERE username = '%s'",
-                            address.c_str(),
-                            safe_account.c_str());
+    PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_UPDATE_LAST_IP);
+
+    stmt->setString(0, address);
+    stmt->setString(1, account);
+
+    LoginDatabase.Execute(stmt);
 
     // NOTE ATM the socket is single-threaded, have this in mind ...
     ACE_NEW_RETURN (m_Session, WorldSession (id, this, AccountTypes(security), expansion, mutetime, locale, recruiter, isRecruiter), -1);

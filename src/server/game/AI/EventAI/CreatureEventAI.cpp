@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -475,7 +475,7 @@ void CreatureEventAI::ProcessAction(CreatureEventAI_Action const& action, uint32
                         //Melee current victim if flag not set
                         if (!(action.cast.castFlags & CAST_NO_MELEE_IF_OOM))
                         {
-                            if (me->GetMotionMaster()->GetCurrentMovementGeneratorType() == TARGETED_MOTION_TYPE)
+                            if (me->GetMotionMaster()->GetCurrentMovementGeneratorType() == CHASE_MOTION_TYPE)
                             {
                                 m_AttackDistance = 0.0f;
                                 m_AttackAngle = 0.0f;
@@ -593,7 +593,7 @@ void CreatureEventAI::ProcessAction(CreatureEventAI_Action const& action, uint32
                         me->ClearUnitState(UNIT_STAT_MELEE_ATTACKING);
                         me->SendMeleeAttackStop(victim);
                     }
-                    if (me->GetMotionMaster()->GetCurrentMovementGeneratorType() == TARGETED_MOTION_TYPE)
+                    if (me->GetMotionMaster()->GetCurrentMovementGeneratorType() == CHASE_MOTION_TYPE)
                         me->GetMotionMaster()->MoveIdle();
                 }
             }
@@ -836,7 +836,7 @@ void CreatureEventAI::ProcessAction(CreatureEventAI_Action const& action, uint32
                     me->Mount(action.mount.modelId);
             }
             else
-                me->Unmount();
+                me->Dismount();
 
             break;
         }
@@ -1307,7 +1307,7 @@ bool CreatureEventAI::CanCast(Unit* target, SpellInfo const* spell, bool trigger
         return false;
 
     //Check for power
-    if (!triggered && me->GetPower((Powers)spell->PowerType) < spell->CalcPowerCost(me, spell->GetSchoolMask()))
+    if (!triggered && (uint32)me->GetPower((Powers)spell->PowerType) < int32(spell->CalcPowerCost(me, spell->GetSchoolMask())))
         return false;
 
     //Unit is out of range of this spell

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -414,11 +414,11 @@ class spell_pri_power_word_shield : public SpellScriptLoader
                 // Improved Power Word: Shield rank 1
                 if(AuraEffect const* improved = GetCaster()->GetAuraEffect(PRIEST_SPELL_IMPROVED_POWER_WORD_SHIELD_R1, EFFECT_0))
                     amount += improved->GetAmount();
-                
-                // Improved Power Word: Shield rank 2                
+
+                // Improved Power Word: Shield rank 2
                 if(AuraEffect const* improved = GetCaster()->GetAuraEffect(PRIEST_SPELL_IMPROVED_POWER_WORD_SHIELD_R2, EFFECT_0))
                     amount += improved->GetAmount();
-                   
+
                 amount *= GetCaster()->GetTotalAuraMultiplier(SPELL_AURA_MOD_HEALING_DONE_PERCENT);
             }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -517,12 +517,12 @@ class spell_mage_ice_barrier : public SpellScriptLoader
         class spell_mage_ice_barrier_AuraScript : public AuraScript
         {
             PrepareAuraScript(spell_mage_ice_barrier_AuraScript);
-            
+
             void CalculateAmount(AuraEffect const* aurEff, int32 & amount, bool & canBeRecalculated)
             {
                 if(AuraEffect const* glyph = GetCaster()->GetAuraEffect(SPELL_MAGE_GLYPH_OF_ICE_BARRIER, 0))
                     amount += glyph->GetAmount(); // 30% increase absorb from glyph
-                    
+
                 canBeRecalculated = false;
             }
 

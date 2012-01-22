@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2006-2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2006-2012 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -168,7 +168,7 @@ public:
 
         void Reset()
         {
-            Cleave_Timer = 2000 + rand()%6000;
+            Cleave_Timer = urand(2000, 8000);
             me->ApplySpellImmune(0, IMMUNITY_DAMAGE, SPELL_SCHOOL_MASK_MAGIC, true);
         }
 
@@ -189,7 +189,7 @@ public:
                 DoCast(me->getVictim(), SPELL_CLEAVE);
 
                 //5-8 seconds
-                Cleave_Timer = 5000 + rand()%3000;
+                Cleave_Timer = urand(5000, 8000);
             } else Cleave_Timer -= diff;
 
             DoMeleeAttackIfReady();

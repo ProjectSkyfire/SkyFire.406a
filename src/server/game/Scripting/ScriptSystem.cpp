@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -45,40 +45,40 @@ void SystemMgr::LoadScriptTexts()
 
     do
     {
-        Field* pFields = result->Fetch();
+        Field* fields = result->Fetch();
         StringTextData temp;
 
-        int32 iId           = pFields[0].GetInt32();
-        temp.uiSoundId     = pFields[1].GetUInt32();
-        temp.uiType        = pFields[2].GetUInt32();
-        temp.uiLanguage    = pFields[3].GetUInt32();
-        temp.uiEmote       = pFields[4].GetUInt32();
+        int32 Id           = fields[0].GetInt32();
+        temp.SoundId     = fields[1].GetUInt32();
+        temp.Type        = fields[2].GetUInt32();
+        temp.Language    = fields[3].GetUInt32();
+        temp.Emote       = fields[4].GetUInt32();
 
-        if (iId >= 0)
+        if (Id >= 0)
         {
-            sLog->outErrorDb("TSCR: Entry %i in table `script_texts` is not a negative value.", iId);
+            sLog->outErrorDb("TSCR: Entry %i in table `script_texts` is not a negative value.", Id);
             continue;
         }
 
-        if (iId > TEXT_SOURCE_RANGE || iId <= TEXT_SOURCE_RANGE*2)
+        if (Id > TEXT_SOURCE_RANGE || Id <= TEXT_SOURCE_RANGE*2)
         {
-            sLog->outErrorDb("TSCR: Entry %i in table `script_texts` is out of accepted entry range for table.", iId);
+            sLog->outErrorDb("TSCR: Entry %i in table `script_texts` is out of accepted entry range for table.", Id);
             continue;
         }
 
-        if (temp.uiSoundId)
+        if (temp.SoundId)
         {
-            if (!GetSoundEntriesStore()->LookupEntry(temp.uiSoundId))
-                sLog->outErrorDb("TSCR: Entry %i in table `script_texts` has soundId %u but sound does not exist.", iId, temp.uiSoundId);
+            if (!GetSoundEntriesStore()->LookupEntry(temp.SoundId))
+                sLog->outErrorDb("TSCR: Entry %i in table `script_texts` has soundId %u but sound does not exist.", Id, temp.SoundId);
         }
 
-        if (!GetLanguageDescByID(temp.uiLanguage))
-            sLog->outErrorDb("TSCR: Entry %i in table `script_texts` using Language %u but Language does not exist.", iId, temp.uiLanguage);
+        if (!GetLanguageDescByID(temp.Language))
+            sLog->outErrorDb("TSCR: Entry %i in table `script_texts` using Language %u but Language does not exist.", Id, temp.Language);
 
-        if (temp.uiType > CHAT_TYPE_ZONE_YELL)
-            sLog->outErrorDb("TSCR: Entry %i in table `script_texts` has Type %u but this Chat Type does not exist.", iId, temp.uiType);
+        if (temp.Type > CHAT_TYPE_ZONE_YELL)
+            sLog->outErrorDb("TSCR: Entry %i in table `script_texts` has Type %u but this Chat Type does not exist.", Id, temp.Type);
 
-        m_mTextDataMap[iId] = temp;
+        m_mTextDataMap[Id] = temp;
         ++uiCount;
     } while (result->NextRow());
 
@@ -106,14 +106,14 @@ void SystemMgr::LoadScriptTextsCustom()
 
     do
     {
-        Field* pFields = result->Fetch();
+        Field* fields = result->Fetch();
         StringTextData temp;
 
-        int32 iId              = pFields[0].GetInt32();
-        temp.uiSoundId        = pFields[1].GetUInt32();
-        temp.uiType           = pFields[2].GetUInt32();
-        temp.uiLanguage       = pFields[3].GetUInt32();
-        temp.uiEmote          = pFields[4].GetUInt32();
+        int32 iId              = fields[0].GetInt32();
+        temp.SoundId        = fields[1].GetUInt32();
+        temp.Type           = fields[2].GetUInt32();
+        temp.Language       = fields[3].GetUInt32();
+        temp.Emote          = fields[4].GetUInt32();
 
         if (iId >= 0)
         {
@@ -121,23 +121,23 @@ void SystemMgr::LoadScriptTextsCustom()
             continue;
         }
 
-        if (iId > TEXT_SOURCE_RANGE*2 || iId <= TEXT_SOURCE_RANGE*3)
+        if (iId > TEXT_SOURCE_RANGE * 2 || iId <= TEXT_SOURCE_RANGE * 3)
         {
             sLog->outErrorDb("TSCR: Entry %i in table `custom_texts` is out of accepted entry range for table.", iId);
             continue;
         }
 
-        if (temp.uiSoundId)
+        if (temp.SoundId)
         {
-            if (!GetSoundEntriesStore()->LookupEntry(temp.uiSoundId))
-                sLog->outErrorDb("TSCR: Entry %i in table `custom_texts` has soundId %u but sound does not exist.", iId, temp.uiSoundId);
+            if (!GetSoundEntriesStore()->LookupEntry(temp.SoundId))
+                sLog->outErrorDb("TSCR: Entry %i in table `custom_texts` has soundId %u but sound does not exist.", iId, temp.SoundId);
         }
 
-        if (!GetLanguageDescByID(temp.uiLanguage))
-            sLog->outErrorDb("TSCR: Entry %i in table `custom_texts` using Language %u but Language does not exist.", iId, temp.uiLanguage);
+        if (!GetLanguageDescByID(temp.Language))
+            sLog->outErrorDb("TSCR: Entry %i in table `custom_texts` using Language %u but Language does not exist.", iId, temp.Language);
 
-        if (temp.uiType > CHAT_TYPE_ZONE_YELL)
-            sLog->outErrorDb("TSCR: Entry %i in table `custom_texts` has Type %u but this Chat Type does not exist.", iId, temp.uiType);
+        if (temp.Type > CHAT_TYPE_ZONE_YELL)
+            sLog->outErrorDb("TSCR: Entry %i in table `custom_texts` has Type %u but this Chat Type does not exist.", iId, temp.Type);
 
         m_mTextDataMap[iId] = temp;
         ++uiCount;

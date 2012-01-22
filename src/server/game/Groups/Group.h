@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -201,6 +201,7 @@ class Group
         void   UpdateLooterGuid(WorldObject* pLootedObject, bool ifneed = false);
         void   SetLootThreshold(ItemQualities threshold);
         void   Disband(bool hideDestroy=false);
+        void   SendGuildGroupStateUpdate(bool guild);
 
         // Dungeon Finder
         void SetLfgRoles(uint64& guid, const uint8 roles);
@@ -221,6 +222,7 @@ class Group
         LootMethod GetLootMethod() const;
         uint64 GetLooterGuid() const;
         ItemQualities GetLootThreshold() const;
+        bool IsGuildGroup(uint32 guildId, bool AllInSameMap = false, bool AllInSameInstanceId = false);
 
         uint32 GetDbStoreId() const { return m_dbStoreId; };
 
@@ -284,6 +286,7 @@ class Group
 
         bool isRollLootActive() const;
         void SendLootStartRoll(uint32 CountDown, uint32 mapid, const Roll &r);
+        void SendLootStartRollToPlayer(uint32 countDown, uint32 mapId, Player* p, bool canNeed, Roll const& r);
         void SendLootRoll(uint64 SourceGuid, uint64 TargetGuid, uint8 RollNumber, uint8 RollType, const Roll &r);
         void SendLootRollWon(uint64 SourceGuid, uint64 TargetGuid, uint8 RollNumber, uint8 RollType, const Roll &r);
         void SendLootAllPassed(uint32 NumberOfPlayers, const Roll &r);
@@ -300,7 +303,7 @@ class Group
         void ResetMaxEnchantingLevel();
 
         void LinkMember(GroupReference* pRef);
-        void DelinkMember(GroupReference* /*pRef*/) const;
+        void DelinkMember(uint64 guid);
 
         InstanceGroupBind* BindToInstance(InstanceSave* save, bool permanent, bool load = false);
         void UnbindInstance(uint32 mapid, uint8 difficulty, bool unload = false);
@@ -338,7 +341,7 @@ class Group
         ItemQualities       m_lootThreshold;
         uint64              m_looterGuid;
         Rolls               RollId;
-        BoundInstancesMap   m_boundInstances[MAX_DIFFICULTY];
+        BoundInstancesMap   _boundInstances[MAX_DIFFICULTY];
         uint8*              m_subGroupsCounts;
         uint64              m_guid;
         uint32              m_counter;                      // used only in SMSG_GROUP_LIST

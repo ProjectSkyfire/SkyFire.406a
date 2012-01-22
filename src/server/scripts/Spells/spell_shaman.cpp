@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -314,6 +314,34 @@ class spell_sha_heroism : public SpellScriptLoader
         }
 };
 
+// 73920 - Healing Rain
+class spell_sha_healing_rain : public SpellScriptLoader
+{
+    public:
+        spell_sha_healing_rain() : SpellScriptLoader("spell_sha_healing_rain") { }
+
+        class spell_sha_healing_rain_AuraScript : public AuraScript
+        {
+            PrepareAuraScript(spell_sha_healing_rain_AuraScript);
+
+            void OnTick(AuraEffect const* aurEff)
+            {
+                if (DynamicObject* dynObj = GetCaster()->GetDynObject(73920))
+                    GetCaster()->CastSpell(dynObj->GetPositionX(), dynObj->GetPositionY(), dynObj->GetPositionZ(), 73921, true);
+            }
+
+            void Register()
+            {
+                OnEffectPeriodic += AuraEffectPeriodicFn(spell_sha_healing_rain_AuraScript::OnTick, EFFECT_1, SPELL_AURA_PERIODIC_DUMMY);
+            }
+        };
+
+        AuraScript* GetAuraScript() const
+        {
+            return new spell_sha_healing_rain_AuraScript();
+        }
+};
+
 void AddSC_shaman_spell_scripts()
 {
     new spell_sha_astral_shift();
@@ -322,4 +350,5 @@ void AddSC_shaman_spell_scripts()
     new spell_sha_earthbind_totem();
     new spell_sha_bloodlust();
     new spell_sha_heroism();
+    new spell_sha_healing_rain();
 }

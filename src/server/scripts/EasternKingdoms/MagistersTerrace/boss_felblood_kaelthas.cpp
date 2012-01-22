@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2006-2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2006-2012 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -242,8 +242,7 @@ public:
                     // Also needs an exception in spell system.
                     unit->CastSpell(unit, SPELL_GRAVITY_LAPSE_FLY, true, 0, 0, me->GetGUID());
                     // Use packet hack
-                    WorldPacket data(12);
-                    data.SetOpcode(SMSG_MOVE_SET_CAN_FLY);
+                    WorldPacket data(SMSG_MOVE_SET_CAN_FLY, 12);
                     data.append(unit->GetPackGUID());
                     data << uint32(0);
                     unit->SendMessageToSet(&data, true);
@@ -262,8 +261,7 @@ public:
                     unit->RemoveAurasDueToSpell(SPELL_GRAVITY_LAPSE_FLY);
                     unit->RemoveAurasDueToSpell(SPELL_GRAVITY_LAPSE_DOT);
 
-                    WorldPacket data(12);
-                    data.SetOpcode(SMSG_MOVE_UNSET_CAN_FLY);
+                    WorldPacket data(SMSG_MOVE_UNSET_CAN_FLY, 12);
                     data.append(unit->GetPackGUID());
                     data << uint32(0);
                     unit->SendMessageToSet(&data, true);

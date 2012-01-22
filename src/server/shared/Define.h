@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -78,10 +78,8 @@ typedef ACE_UINT64 uint64;
 typedef ACE_UINT32 uint32;
 typedef ACE_UINT16 uint16;
 typedef ACE_UINT8 uint8;
-typedef char const* const* DBCString;                       //char* DBCStrings[MAX_LOCALE];
-typedef char const* const* DB2String;                       //char* DB2Strings[MAX_LOCALE];
 
-enum
+enum /*DBCFormer*/
 {
     FT_NA='x',                                              //not used or unknown, 4 byte size
     FT_NA_BYTE='X',                                         //not used or unknown, byte

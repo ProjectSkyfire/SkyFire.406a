@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -142,9 +142,9 @@ void InitOpcodeTable()
     OPCODE( CMSG_GUILD_DISBAND,                           STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleGuildDisbandOpcode        );
     OPCODE( CMSG_GUILD_LEADER,                            STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleGuildLeaderOpcode         );
     OPCODE( CMSG_GUILD_MOTD,                              STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleGuildMOTDOpcode           );
-    OPCODE( CMSG_QUERY_GUILD_REWARDS,                     STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
-    OPCODE( CMSG_QUERY_GUILD_XP,                          STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
-    OPCODE( CMSG_QUERY_GUILD_MAX_XP,                      STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
+    OPCODE( CMSG_QUERY_GUILD_REWARDS,                     STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleGuildRewardsOpcode        );
+    OPCODE( CMSG_QUERY_GUILD_XP,                          STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleGuildExperienceOpcode     );
+    OPCODE( CMSG_QUERY_GUILD_MAX_XP,                      STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleGuildMaxExperienceOpcode  );
     OPCODE( SMSG_GUILD_MAX_DAILY_XP,                      STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( SMSG_GUILD_XP_UPDATE,                         STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( SMSG_GUILD_REWARDS_LIST,                      STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
@@ -281,6 +281,7 @@ void InitOpcodeTable()
     OPCODE( CMSG_AUTOEQUIP_GROUND_ITEM,                   STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
     OPCODE( CMSG_AUTOSTORE_GROUND_ITEM,                   STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
     OPCODE( CMSG_AUTOSTORE_LOOT_ITEM,                     STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleAutostoreLootItemOpcode   );
+    OPCODE( CMSG_AUTOSTORE_LOOT_CURRENCY,                 STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleAutostoreLootItemOpcode   );
     OPCODE( CMSG_STORE_LOOT_IN_SLOT,                      STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
     OPCODE( CMSG_AUTOEQUIP_ITEM,                          STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleAutoEquipItemOpcode       );
     OPCODE( CMSG_AUTOSTORE_BAG_ITEM,                      STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleAutoStoreBagItemOpcode    );
@@ -567,7 +568,7 @@ void InitOpcodeTable()
     OPCODE( CMSG_GUILD_ADD_RANK,                          STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleGuildAddRankOpcode        );
     OPCODE( CMSG_GUILD_DEL_RANK,                          STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleGuildDelRankOpcode        );
     OPCODE( CMSG_GUILD_SWITCH_RANK,                       STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
-    OPCODE( CMSG_GUILD_SET_NOTE,                          STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
+    OPCODE( CMSG_GUILD_SET_NOTE,                          STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleGuildSetNoteOpcode        );
     OPCODE( CMSG_GUILD_QUERY_TRADESKILL,                  STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleGuildQueryTradeSkill      );
     OPCODE( SMSG_LOGIN_VERIFY_WORLD,                      STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( CMSG_CLEAR_EXPLORATION,                       STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
@@ -637,7 +638,7 @@ void InitOpcodeTable()
     OPCODE( CMSG_ENABLE_DAMAGE_LOG,                       STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
     OPCODE( CMSG_GROUP_CHANGE_SUB_GROUP,                  STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleGroupChangeSubGroupOpcode );
     OPCODE( CMSG_REQUEST_PARTY_MEMBER_STATS,              STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleRequestPartyMemberStatsOpcode);
-    OPCODE( CMSG_GROUP_SWAP_SUB_GROUP,                    STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );	
+    OPCODE( CMSG_GROUP_SWAP_SUB_GROUP,                    STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
     OPCODE( CMSG_RESET_FACTION_CHEAT,                     STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
     OPCODE( CMSG_AUTOSTORE_BANK_ITEM,                     STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleAutoStoreBankItemOpcode   );
     OPCODE( CMSG_AUTOBANK_ITEM,                           STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleAutoBankItemOpcode        );
@@ -841,7 +842,7 @@ void InitOpcodeTable()
     OPCODE( CMSG_MOVE_SET_CAN_FLY_ACK,                    STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleMoveSetCanFlyAckOpcode    );
     OPCODE( CMSG_MOVE_SET_FLY,                            STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleMovementOpcodes           );
     OPCODE( CMSG_SOCKET_GEMS,                             STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleSocketOpcode              );
-    OPCODE( CMSG_ARENA_TEAM_CREATE,                       STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
+    OPCODE( CMSG_ARENA_TEAM_CREATE,                       STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleArenaTeamCreate           );
     OPCODE( SMSG_ARENA_TEAM_COMMAND_RESULT,               STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( CMSG_ARENA_TEAM_QUERY,                        STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleArenaTeamQueryOpcode      );
     OPCODE( SMSG_ARENA_TEAM_QUERY_RESPONSE,               STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
@@ -1220,8 +1221,8 @@ void InitOpcodeTable()
     OPCODE( SMSG_MOVE_GRAVITY_ENABLE,                     STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( CMSG_MOVE_GRAVITY_ENABLE_ACK,                 STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
     OPCODE( SMSG_MOVE_LEVITATING,                         STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
-    OPCODE( SMSG_SPLINE_MOVE_UNKNOWN_1235,                STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
-    OPCODE( SMSG_SPLINE_MOVE_UNKNOWN_1236,                STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
+    OPCODE( SMSG_SPLINE_MOVE_GRAVITY_DISABLE,             STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
+    OPCODE( SMSG_SPLINE_MOVE_GRAVITY_ENABLE,              STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( CMSG_EQUIPMENT_SET_USE,                       STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleEquipmentSetUse           );
     OPCODE( SMSG_EQUIPMENT_SET_USE_RESULT,                STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( SMSG_UNKNOWN_1240,                            STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
@@ -1275,7 +1276,9 @@ void InitOpcodeTable()
     OPCODE( CMSG_SET_PRIMARY_TALENT_TREE,                 STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
     OPCODE( CMSG_GROUP_SET_ROLES,                         STATUS_LOGGEDIN, PROCESS_INPLACE,       &WorldSession::HandleGroupSetRoles             );
     OPCODE( CMSG_GUILD_UPDATE_PARTY_STATE,                STATUS_LOGGEDIN, PROCESS_INPLACE,       &WorldSession::HandleGuildPartyStateUpdate     );
+    OPCODE( CMSG_GUILD_QUERY_NEWS,                        STATUS_LOGGEDIN, PROCESS_INPLACE,       &WorldSession::HandleGuildQueryNews            );
     OPCODE( SMSG_UNKNOWN_1310,                            STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( CMSG_RETURN_TO_GRAVEYARD,                     STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleMoveToGraveyard           );
     OPCODE( CMSG_REFORGE_ITEM,                            STATUS_LOGGEDIN, PROCESS_INPLACE,       &WorldSession::HandleReforgeItem               );
+    OPCODE( MSG_VERIFY_CONNECTIVITY,                      STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_EarlyProccess            );
 };

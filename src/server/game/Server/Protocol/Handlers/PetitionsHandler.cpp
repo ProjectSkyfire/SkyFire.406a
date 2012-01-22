@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -181,8 +181,8 @@ void WorldSession::HandlePetitionBuyOpcode(WorldPacket & recv_data)
         }
     }
 
-    ItemTemplate const* pProto = sObjectMgr->GetItemTemplate(charterid);
-    if (!pProto)
+    ItemTemplate const* proto = sObjectMgr->GetItemTemplate(charterid);
+    if (!proto)
     {
         _player->SendBuyError(BUY_ERR_ITEM_NOT_FOUND, NULL, charterid, 0);
         return;
@@ -195,7 +195,7 @@ void WorldSession::HandlePetitionBuyOpcode(WorldPacket & recv_data)
     }
 
     ItemPosCountVec dest;
-    InventoryResult msg = _player->CanStoreNewItem(NULL_BAG, NULL_SLOT, dest, charterid, pProto->BuyCount);
+    InventoryResult msg = _player->CanStoreNewItem(NULL_BAG, NULL_SLOT, dest, charterid, proto->BuyCount);
     if (msg != EQUIP_ERR_OK)
     {
         _player->SendEquipError(msg, NULL, NULL, charterid);
@@ -377,18 +377,18 @@ void WorldSession::HandlePetitionRenameOpcode(WorldPacket & recv_data)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "Received opcode MSG_PETITION_RENAME");   // ok
 
-    uint64 petitionguid;
+    uint64 petitionGuid;
     uint32 type;
-    std::string newname;
+    std::string newName;
 
-    recv_data >> petitionguid;                              // guid
-    recv_data >> newname;                                   // new name
+    recv_data >> petitionGuid;                              // guid
+    recv_data >> newName;                                   // new name
 
-    Item* item = _player->GetItemByGuid(petitionguid);
+    Item* item = _player->GetItemByGuid(petitionGuid);
     if (!item)
         return;
 
-    QueryResult result = CharacterDatabase.PQuery("SELECT type FROM petition WHERE petitionguid = '%u'", GUID_LOPART(petitionguid));
+    QueryResult result = CharacterDatabase.PQuery("SELECT type FROM petition WHERE petitionguid = '%u'", GUID_LOPART(petitionGuid));
 
     if (result)
     {
@@ -397,46 +397,48 @@ void WorldSession::HandlePetitionRenameOpcode(WorldPacket & recv_data)
     }
     else
     {
-        sLog->outDebug(LOG_FILTER_NETWORKIO, "CMSG_PETITION_QUERY failed for petition (GUID: %u)", GUID_LOPART(petitionguid));
+        sLog->outDebug(LOG_FILTER_NETWORKIO, "CMSG_PETITION_QUERY failed for petition (GUID: %u)", GUID_LOPART(petitionGuid));
         return;
     }
 
     if (type == GUILD_CHARTER_TYPE)
     {
-        if (sGuildMgr->GetGuildByName(newname))
+        if (sGuildMgr->GetGuildByName(newName))
         {
-            Guild::SendCommandResult(this, GUILD_CREATE_S, ERR_GUILD_NAME_EXISTS_S, newname);
+            Guild::SendCommandResult(this, GUILD_CREATE_S, ERR_GUILD_NAME_EXISTS_S, newName);
             return;
         }
-        if (sObjectMgr->IsReservedName(newname) || !ObjectMgr::IsValidCharterName(newname))
+        if (sObjectMgr->IsReservedName(newName) || !ObjectMgr::IsValidCharterName(newName))
         {
-            Guild::SendCommandResult(this, GUILD_CREATE_S, ERR_GUILD_NAME_INVALID, newname);
+            Guild::SendCommandResult(this, GUILD_CREATE_S, ERR_GUILD_NAME_INVALID, newName);
             return;
         }
     }
     else
     {
-        if (sArenaTeamMgr->GetArenaTeamByName(newname))
+        if (sArenaTeamMgr->GetArenaTeamByName(newName))
         {
-            SendArenaTeamCommandResult(ERR_ARENA_TEAM_CREATE_S, newname, "", ERR_ARENA_TEAM_NAME_EXISTS_S);
+            SendArenaTeamCommandResult(ERR_ARENA_TEAM_CREATE_S, newName, "", ERR_ARENA_TEAM_NAME_EXISTS_S);
             return;
         }
-        if (sObjectMgr->IsReservedName(newname) || !ObjectMgr::IsValidCharterName(newname))
+        if (sObjectMgr->IsReservedName(newName) || !ObjectMgr::IsValidCharterName(newName))
         {
-            SendArenaTeamCommandResult(ERR_ARENA_TEAM_CREATE_S, newname, "", ERR_ARENA_TEAM_NAME_INVALID);
+            SendArenaTeamCommandResult(ERR_ARENA_TEAM_CREATE_S, newName, "", ERR_ARENA_TEAM_NAME_INVALID);
             return;
         }
     }
 
-    std::string db_newname = newname;
-    CharacterDatabase.EscapeString(db_newname);
-    CharacterDatabase.PExecute("UPDATE petition SET name = '%s' WHERE petitionguid = '%u'",
-        db_newname.c_str(), GUID_LOPART(petitionguid));
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_PETITION_NAME);
 
-    sLog->outDebug(LOG_FILTER_NETWORKIO, "Petition (GUID: %u) renamed to '%s'", GUID_LOPART(petitionguid), newname.c_str());
-    WorldPacket data(MSG_PETITION_RENAME, (8+newname.size()+1));
-    data << uint64(petitionguid);
-    data << newname;
+    stmt->setString(0, newName);
+    stmt->setUInt32(1, GUID_LOPART(petitionGuid));
+
+    CharacterDatabase.Execute(stmt);
+
+    sLog->outDebug(LOG_FILTER_NETWORKIO, "Petition (GUID: %u) renamed to '%s'", GUID_LOPART(petitionGuid), newName.c_str());
+    WorldPacket data(MSG_PETITION_RENAME, (8+newName.size()+1));
+    data << uint64(petitionGuid);
+    data << newName;
     SendPacket(&data);
 }
 
@@ -445,34 +447,34 @@ void WorldSession::HandlePetitionSignOpcode(WorldPacket & recv_data)
     sLog->outDebug(LOG_FILTER_NETWORKIO, "Received opcode CMSG_PETITION_SIGN");    // ok
 
     Field* fields;
-    uint64 petitionguid;
+    uint64 petitionGuid;
     uint8 unk;
-    recv_data >> petitionguid;                              // petition guid
+    recv_data >> petitionGuid;                              // petition guid
     recv_data >> unk;
 
     QueryResult result = CharacterDatabase.PQuery(
         "SELECT ownerguid, "
         "  (SELECT COUNT(playerguid) FROM petition_sign WHERE petition_sign.petitionguid = '%u') AS signs, "
         "  type "
-        "FROM petition WHERE petitionguid = '%u'", GUID_LOPART(petitionguid), GUID_LOPART(petitionguid));
+        "FROM petition WHERE petitionguid = '%u'", GUID_LOPART(petitionGuid), GUID_LOPART(petitionGuid));
 
     if (!result)
     {
-        sLog->outError("Petition %u is not found for player %u %s", GUID_LOPART(petitionguid), GetPlayer()->GetGUIDLow(), GetPlayer()->GetName());
+       sLog->outError("Petition %u is not found for player %u %s", GUID_LOPART(petitionGuid), GetPlayer()->GetGUIDLow(), GetPlayer()->GetName());
         return;
     }
 
     fields = result->Fetch();
-    uint64 ownerguid = MAKE_NEW_GUID(fields[0].GetUInt32(), 0, HIGHGUID_PLAYER);
+    uint64 ownerGuid = MAKE_NEW_GUID(fields[0].GetUInt32(), 0, HIGHGUID_PLAYER);
     uint8 signs = fields[1].GetUInt8();
     uint32 type = fields[2].GetUInt32();
 
-    uint32 plguidlo = _player->GetGUIDLow();
-    if (GUID_LOPART(ownerguid) == plguidlo)
+    uint32 playerGuid = _player->GetGUIDLow();
+    if (GUID_LOPART(ownerGuid) == playerGuid)
         return;
 
     // not let enemies sign guild charter
-    if (!sWorld->getBoolConfig(CONFIG_ALLOW_TWO_SIDE_INTERACTION_GUILD) && GetPlayer()->GetTeam() != sObjectMgr->GetPlayerTeamByGUID(ownerguid))
+    if (!sWorld->getBoolConfig(CONFIG_ALLOW_TWO_SIDE_INTERACTION_GUILD) && GetPlayer()->GetTeam() != sObjectMgr->GetPlayerTeamByGUID(ownerGuid))
     {
         if (type != GUILD_CHARTER_TYPE)
             SendArenaTeamCommandResult(ERR_ARENA_TEAM_INVITE_SS, "", "", ERR_ARENA_TEAM_NOT_ALLIED);
@@ -524,12 +526,12 @@ void WorldSession::HandlePetitionSignOpcode(WorldPacket & recv_data)
 
     //client doesn't allow to sign petition two times by one character, but not check sign by another character from same account
     //not allow sign another player from already sign player account
-    result = CharacterDatabase.PQuery("SELECT playerguid FROM petition_sign WHERE player_account = '%u' AND petitionguid = '%u'", GetAccountId(), GUID_LOPART(petitionguid));
+    result = CharacterDatabase.PQuery("SELECT playerguid FROM petition_sign WHERE player_account = '%u' AND petitionguid = '%u'", GetAccountId(), GUID_LOPART(petitionGuid));
 
     if (result)
     {
         WorldPacket data(SMSG_PETITION_SIGN_RESULTS, (8+8+4));
-        data << uint64(petitionguid);
+        data << uint64(petitionGuid);
         data << uint64(_player->GetGUID());
         data << (uint32)PETITION_SIGN_ALREADY_SIGNED;
 
@@ -537,17 +539,24 @@ void WorldSession::HandlePetitionSignOpcode(WorldPacket & recv_data)
         SendPacket(&data);
 
         // update for owner if online
-        if (Player* owner = ObjectAccessor::FindPlayer(ownerguid))
+        if (Player* owner = ObjectAccessor::FindPlayer(ownerGuid))
             owner->GetSession()->SendPacket(&data);
         return;
     }
 
-    CharacterDatabase.PExecute("INSERT INTO petition_sign (ownerguid, petitionguid, playerguid, player_account) VALUES ('%u', '%u', '%u', '%u')", GUID_LOPART(ownerguid), GUID_LOPART(petitionguid), plguidlo, GetAccountId());
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_ADD_PETITION_SIGNATURE);
 
-    sLog->outDebug(LOG_FILTER_NETWORKIO, "PETITION SIGN: GUID %u by player: %s (GUID: %u Account: %u)", GUID_LOPART(petitionguid), _player->GetName(), plguidlo, GetAccountId());
+    stmt->setUInt32(0, GUID_LOPART(ownerGuid));
+    stmt->setUInt32(1, GUID_LOPART(petitionGuid));
+    stmt->setUInt32(2, playerGuid);
+    stmt->setUInt32(3, GetAccountId());
+
+    CharacterDatabase.Execute(stmt);
+
+    sLog->outDebug(LOG_FILTER_NETWORKIO, "PETITION SIGN: GUID %u by player: %s (GUID: %u Account: %u)", GUID_LOPART(petitionGuid), _player->GetName(), playerGuid, GetAccountId());
 
     WorldPacket data(SMSG_PETITION_SIGN_RESULTS, (8+8+4));
-    data << uint64(petitionguid);
+    data << uint64(petitionGuid);
     data << uint64(_player->GetGUID());
     data << uint32(PETITION_SIGN_OK);
 
@@ -560,7 +569,7 @@ void WorldSession::HandlePetitionSignOpcode(WorldPacket & recv_data)
     //    item->SetUInt32Value(ITEM_FIELD_ENCHANTMENT_1_1+1, signs);
 
     // update for owner if online
-    if (Player* owner = ObjectAccessor::FindPlayer(ownerguid))
+    if (Player* owner = ObjectAccessor::FindPlayer(ownerGuid))
         owner->GetSession()->SendPacket(&data);
 }
 

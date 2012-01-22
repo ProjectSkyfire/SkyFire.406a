@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2006-2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2006-2012 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -107,14 +107,14 @@ public:
             if (ShadowShield_Timer <= diff)
             {
                 DoCast(me, SPELL_SHADOWSHIELD);
-                ShadowShield_Timer = 14000 + rand()%14000;
+                ShadowShield_Timer = urand(14000, 28000);
             } else ShadowShield_Timer -= diff;
 
             //Curse_Timer
             if (Curse_Timer <= diff)
             {
                 DoCast(me->getVictim(), SPELL_CURSE);
-                Curse_Timer = 15000 + rand()%12000;
+                Curse_Timer = urand(15000, 27000);
             } else Curse_Timer -= diff;
 
             //Teleporting Random Target to one of the six pre boss rooms and spawn 3-4 skeletons near the gamer.
@@ -213,7 +213,7 @@ public:
                                 break;
                         }
                     }
-                    Teleport_Timer = 20000 + rand()%15000;
+                    Teleport_Timer = urand(20000, 35000);
                 } else Teleport_Timer -= diff;
             }
 

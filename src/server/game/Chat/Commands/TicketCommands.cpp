@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -126,7 +126,7 @@ bool ChatHandler::HandleGMTicketCloseByIdCommand(const char* args)
 
     // Ticket should be assigned to the player who tries to close it.
     // Console can override though
-    Player* player = m_session ? m_session->GetPlayer() : NULL;
+    Player* player = _session ? _session->GetPlayer() : NULL;
     if (player && ticket->IsAssignedNotTo(player->GetGUID()))
     {
         PSendSysMessage(LANG_COMMAND_TICKETCANNOTCLOSE, ticket->GetId());
@@ -196,7 +196,7 @@ bool ChatHandler::HandleGMTicketAssignToCommand(const char* args)
 
     // If assigned to different player other than current, leave
     //! Console can override though
-    Player* player = m_session ? m_session->GetPlayer() : NULL;
+    Player* player = _session ? _session->GetPlayer() : NULL;
     if (player && ticket->IsAssignedNotTo(player->GetGUID()))
     {
         PSendSysMessage(LANG_COMMAND_TICKETALREADYASSIGNED, ticket->GetId(), target.c_str());
@@ -246,8 +246,8 @@ bool ChatHandler::HandleGMTicketUnAssignCommand(const char* args)
     }
 
     // Check security
-    //! If no m_session present it means we're issuing this command from the console
-    uint32 mySecurity = m_session ? m_session->GetSecurity() : SEC_CONSOLE;
+    //! If no _session present it means we're issuing this command from the console
+    uint32 mySecurity = _session ? _session->GetSecurity() : SEC_CONSOLE;
     if (security > mySecurity)
     {
         SendSysMessage(LANG_COMMAND_TICKETUNASSIGNSECURITY);
@@ -260,7 +260,7 @@ bool ChatHandler::HandleGMTicketUnAssignCommand(const char* args)
     sTicketMgr->UpdateLastChange();
 
     std::string msg = ticket->FormatMessageString(*this, NULL, ticket->GetAssignedToName().c_str(),
-        m_session ? m_session->GetPlayer()->GetName() : "Console", NULL);
+        _session ? _session->GetPlayer()->GetName() : "Console", NULL);
     SendGlobalGMSysMessage(msg.c_str());
     return true;
 }
@@ -286,7 +286,7 @@ bool ChatHandler::HandleGMTicketCommentCommand(const char* args)
 
     // Cannot comment ticket assigned to someone else
     //! Console excluded
-    Player* player = m_session ? m_session->GetPlayer() : NULL;
+    Player* player = _session ? _session->GetPlayer() : NULL;
     if (player && ticket->IsAssignedNotTo(player->GetGUID()))
     {
         PSendSysMessage(LANG_COMMAND_TICKETALREADYASSIGNED, ticket->GetId());
@@ -324,7 +324,7 @@ bool ChatHandler::HandleGMTicketDeleteByIdCommand(const char* args)
         return true;
     }
 
-    std::string msg = ticket->FormatMessageString(*this, NULL, NULL, NULL, m_session ? m_session->GetPlayer()->GetName() : "Console");
+    std::string msg = ticket->FormatMessageString(*this, NULL, NULL, NULL, _session ? _session->GetPlayer()->GetName() : "Console");
     SendGlobalGMSysMessage(msg.c_str());
 
     sTicketMgr->RemoveTicket(ticket->GetId());
@@ -432,7 +432,7 @@ inline bool ChatHandler::_HandleGMTicketResponseAppendCommand(const char* args, 
 
     // Cannot add response to ticket, assigned to someone else
     //! Console excluded
-    Player* player = m_session ? m_session->GetPlayer() : NULL;
+    Player* player = _session ? _session->GetPlayer() : NULL;
     if (player && ticket->IsAssignedNotTo(player->GetGUID()))
     {
         PSendSysMessage(LANG_COMMAND_TICKETALREADYASSIGNED, ticket->GetId());

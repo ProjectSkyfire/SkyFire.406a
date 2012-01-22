@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -170,39 +170,39 @@ void DoScriptText(int32 iTextEntry, WorldObject* pSource, Unit* target)
         return;
     }
 
-    const StringTextData* pData = sScriptSystemMgr->GetTextData(iTextEntry);
+    const StringTextData* data = sScriptSystemMgr->GetTextData(iTextEntry);
 
-    if (!pData)
+    if (!data)
     {
         sLog->outError("TSCR: DoScriptText with source entry %u (TypeId=%u, guid=%u) could not find text entry %i.", pSource->GetEntry(), pSource->GetTypeId(), pSource->GetGUIDLow(), iTextEntry);
         return;
     }
 
-    sLog->outDebug(LOG_FILTER_TSCR, "TSCR: DoScriptText: text entry=%i, Sound=%u, Type=%u, Language=%u, Emote=%u", iTextEntry, pData->uiSoundId, pData->uiType, pData->uiLanguage, pData->uiEmote);
+    sLog->outDebug(LOG_FILTER_TSCR, "TSCR: DoScriptText: text entry=%i, Sound=%u, Type=%u, Language=%u, Emote=%u", iTextEntry, data->SoundId, data->Type, data->Language, data->Emote);
 
-    if (pData->uiSoundId)
+    if (data->SoundId)
     {
-        if (GetSoundEntriesStore()->LookupEntry(pData->uiSoundId))
-            pSource->SendPlaySound(pData->uiSoundId, false);
+        if (GetSoundEntriesStore()->LookupEntry(data->SoundId))
+            pSource->SendPlaySound(data->SoundId, false);
         else
-            sLog->outError("TSCR: DoScriptText entry %i tried to process invalid sound id %u.", iTextEntry, pData->uiSoundId);
+            sLog->outError("TSCR: DoScriptText entry %i tried to process invalid sound id %u.", iTextEntry, data->SoundId);
     }
 
-    if (pData->uiEmote)
+    if (data->Emote)
     {
         if (pSource->GetTypeId() == TYPEID_UNIT || pSource->GetTypeId() == TYPEID_PLAYER)
-            ((Unit*)pSource)->HandleEmoteCommand(pData->uiEmote);
+            ((Unit*)pSource)->HandleEmoteCommand(data->Emote);
         else
             sLog->outError("TSCR: DoScriptText entry %i tried to process emote for invalid TypeId (%u).", iTextEntry, pSource->GetTypeId());
     }
 
-    switch (pData->uiType)
+    switch (data->Type)
     {
         case CHAT_TYPE_SAY:
-            pSource->MonsterSay(iTextEntry, pData->uiLanguage, target ? target->GetGUID() : 0);
+            pSource->MonsterSay(iTextEntry, data->Language, target ? target->GetGUID() : 0);
             break;
         case CHAT_TYPE_YELL:
-            pSource->MonsterYell(iTextEntry, pData->uiLanguage, target ? target->GetGUID() : 0);
+            pSource->MonsterYell(iTextEntry, data->Language, target ? target->GetGUID() : 0);
             break;
         case CHAT_TYPE_TEXT_EMOTE:
             pSource->MonsterTextEmote(iTextEntry, target ? target->GetGUID() : 0);
@@ -229,7 +229,7 @@ void DoScriptText(int32 iTextEntry, WorldObject* pSource, Unit* target)
             break;
         }
         case CHAT_TYPE_ZONE_YELL:
-            pSource->MonsterYellToZone(iTextEntry, pData->uiLanguage, target ? target->GetGUID() : 0);
+            pSource->MonsterYellToZone(iTextEntry, data->Language, target ? target->GetGUID() : 0);
             break;
     }
 }
@@ -1303,6 +1303,26 @@ void ScriptMgr::OnPlayerDelete(uint64 guid)
 void ScriptMgr::OnPlayerBindToInstance(Player* player, Difficulty difficulty, uint32 mapid, bool permanent)
 {
     FOREACH_SCRIPT(PlayerScript)->OnBindToInstance(player, difficulty, mapid, permanent);
+}
+
+void ScriptMgr::OnActivateSpec(Player* player, uint8 spec)
+{
+    FOREACH_SCRIPT(PlayerScript)->OnActivateSpec(player, spec);
+}
+
+void ScriptMgr::OnTalentBranchSpecChanged(Player* player, uint8 spec, uint32 newSpecID)
+{
+    FOREACH_SCRIPT(PlayerScript)->OnTalentBranchSpecChanged(player, spec, newSpecID);
+}
+
+void ScriptMgr::OnAddSpell(Player* player, uint32 spell_id, bool learning)
+{
+    FOREACH_SCRIPT(PlayerScript)->OnAddSpell(player, spell_id, learning);
+}
+
+void ScriptMgr::OnUpdateRating(Player* player, CombatRating cr, int32& amount)
+{
+    FOREACH_SCRIPT(PlayerScript)->OnUpdateRating(player, cr, amount);
 }
 
 // Guild

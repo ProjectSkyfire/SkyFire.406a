@@ -27,8 +27,8 @@
    @param key        The RSA key to use
    @return CRYPT_OK if successful
 */
-int rsa_exptmod(const unsigned char *in,  unsigned long inlen, 
-                      unsigned char *out, unsigned long *outlen, int which, 
+int rsa_exptmod(const unsigned char *in,  unsigned long inlen,
+                      unsigned char *out, unsigned long *outlen, int which,
                       rsa_key *key)
 {
    void         *tmp, *tmpa, *tmpb;

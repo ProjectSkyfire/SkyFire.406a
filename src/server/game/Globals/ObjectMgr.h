@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -39,7 +39,7 @@
 #include "Guild.h"
 #include "GuildMgr.h"
 #include "VehicleDefines.h"
-
+#include "ArenaTeam.h"
 #include <ace/Singleton.h>
 #include <string>
 #include <map>
@@ -511,14 +511,6 @@ typedef std::multimap<uint32, GossipMenuItems> GossipMenuItemsMap;
 typedef std::pair<GossipMenuItemsMap::const_iterator, GossipMenuItemsMap::const_iterator> GossipMenuItemsMapBounds;
 typedef std::pair<GossipMenuItemsMap::iterator, GossipMenuItemsMap::iterator> GossipMenuItemsMapBoundsNonConst;
 
-struct GuildRewardsEntry
-{
-    uint32 item;
-    uint32 price;
-    uint32 achievement;
-    uint32 standing;
-};
-
 struct QuestPOIPoint
 {
     int32 x;
@@ -622,6 +614,8 @@ class ObjectMgr
 
         typedef UNORDERED_MAP<uint32, Quest*> QuestMap;
 
+        typedef UNORDERED_MAP<uint32, ArenaTeam*> ArenaTeamMap;
+
         typedef UNORDERED_MAP<uint32, AreaTrigger> AreaTriggerMap;
 
         typedef UNORDERED_MAP<uint32, uint32> AreaTriggerScriptMap;
@@ -638,7 +632,8 @@ class ObjectMgr
 
         typedef std::map<uint32, uint32> CharacterConversionMap;
 
-        typedef std::vector <GuildRewardsEntry *> GuildRewardsVector;
+        typedef std::list<CurrencyLoot> CurrencysLoot;
+        std::list<CurrencyLoot> GetCurrencyLoot(uint32 entry, uint8 type);
 
         Player* GetPlayerByLowGUID(uint32 lowguid) const;
 
@@ -652,6 +647,8 @@ class ObjectMgr
         CreatureTemplate const* GetCreatureTemplate(uint32 entry);
         CreatureTemplateContainer const* GetCreatureTemplates() { return &CreatureTemplateStore; }
         CreatureModelInfo const* GetCreatureModelInfo(uint32 modelId);
+        void AddArenaTeam(ArenaTeam* arenaTeam);
+        void RemoveArenaTeam(uint32 Id);
         CreatureModelInfo const* GetCreatureModelRandomGender(uint32* displayID);
         static uint32 ChooseDisplayId(uint32 team, const CreatureTemplate* cinfo, const CreatureData* data = NULL);
         static void ChooseCreatureFlags(const CreatureTemplate* cinfo, uint32& npcflag, uint32& unit_flags, uint32& dynamicflags, const CreatureData* data = NULL);
@@ -692,6 +689,7 @@ class ObjectMgr
                 return NULL;
             return info;
         }
+
         void GetPlayerLevelInfo(uint32 race, uint32 class_, uint8 level, PlayerLevelInfo* info) const;
 
         uint64 GetPlayerGUIDByName(std::string name) const;
@@ -709,9 +707,8 @@ class ObjectMgr
             QuestMap::const_iterator itr = mQuestTemplates.find(quest_id);
             return itr != mQuestTemplates.end() ? itr->second : NULL;
         }
-        QuestMap const& GetQuestTemplates() const { return mQuestTemplates; }
 
-        GuildRewardsVector const& GetGuildRewards() { return mGuildRewards; }
+        QuestMap const& GetQuestTemplates() const { return mQuestTemplates; }
 
         uint32 GetQuestForAreaTrigger(uint32 Trigger_ID) const
         {
@@ -720,6 +717,7 @@ class ObjectMgr
                 return itr->second;
             return 0;
         }
+
         bool IsTavernAreaTrigger(uint32 Trigger_ID) const
         {
             return mTavernAreaTriggerSet.find(Trigger_ID) != mTavernAreaTriggerSet.end();
@@ -734,8 +732,8 @@ class ObjectMgr
 
         WorldSafeLocsEntry const* GetDefaultGraveYard(uint32 team);
         WorldSafeLocsEntry const* GetClosestGraveYard(float x, float y, float z, uint32 MapId, uint32 team);
-        bool AddGraveYardLink(uint32 id, uint32 zone, uint32 team, bool inDB = true);
-        void RemoveGraveYardLink(uint32 id, uint32 zone, uint32 team, bool inDB = false);
+        bool AddGraveYardLink(uint32 id, uint32 zoneId, uint32 team, bool persist = true);
+        void RemoveGraveYardLink(uint32 id, uint32 zoneId, uint32 team, bool persist = false);
         void LoadGraveyardZones();
         GraveYardData const* FindGraveYardData(uint32 id, uint32 zone);
 
@@ -812,7 +810,7 @@ class ObjectMgr
                 return &itr->second;
             return NULL;
         }
-
+        void LoadCurrencysLoot();
         void LoadQuests();
         void LoadQuestRelations()
         {
@@ -894,6 +892,8 @@ class ObjectMgr
         void LoadGameobjects();
         void LoadGameobjectRespawnTimes();
         void LoadItemTemplates();
+        void LoadItemTemplateAddon();
+        void LoadItemScriptNames();
         void LoadItemLocales();
         void LoadItemSetNames();
         void LoadItemSetNameLocales();
@@ -1168,8 +1168,8 @@ class ObjectMgr
 
             return &iter->second;
         }
-        void AddVendorItem(uint32 entry, uint32 item, int32 maxcount, uint32 incrtime, uint32 ExtendedCost, bool savetodb = true); // for event
-        bool RemoveVendorItem(uint32 entry, uint32 item, bool savetodb = true); // for event
+        void AddVendorItem(uint32 entry, uint32 item, int32 maxcount, uint32 incrtime, uint32 extendedCost, bool persist = true); // for event
+        bool RemoveVendorItem(uint32 entry, uint32 item, bool persist = true); // for event
         bool IsVendorItemValid(uint32 vendor_entry, uint32 item, int32 maxcount, uint32 ptime, uint32 ExtendedCost, Player* player = NULL, std::set<uint32>* skip_vendors = NULL, uint32 ORnpcflag = 0) const;
 
         void LoadScriptNames();
@@ -1248,8 +1248,7 @@ class ObjectMgr
         typedef std::set<uint32> GameObjectForQuestSet;
 
         GuildMap            mGuildMap;
-        GuildRewardsVector  mGuildRewards;
-
+        ArenaTeamMap mArenaTeamMap;
         QuestAreaTriggerMap mQuestAreaTriggerMap;
         TavernAreaTriggerSet mTavernAreaTriggerSet;
         GameObjectForQuestSet mGameObjectForQuestSet;
@@ -1273,6 +1272,7 @@ class ObjectMgr
         QuestRelations mGOQuestInvolvedRelations;
         QuestRelations mCreatureQuestRelations;
         QuestRelations mCreatureQuestInvolvedRelations;
+        CurrencysLoot mCurrencysLoot;
 
         //character reserved names
         typedef std::set<std::wstring> ReservedNamesMap;

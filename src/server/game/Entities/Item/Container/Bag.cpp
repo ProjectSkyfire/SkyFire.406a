@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -27,10 +27,10 @@
 
 Bag::Bag(): Item()
 {
-    m_objectType |= TYPEMASK_CONTAINER;
-    m_objectTypeId = TYPEID_CONTAINER;
+    _objectType |= TYPEMASK_CONTAINER;
+    _objectTypeId = TYPEID_CONTAINER;
 
-    m_valuesCount = CONTAINER_END;
+    _valuesCount = CONTAINER_END;
 
     memset(m_bagslot, 0, sizeof(Item *) * MAX_BAG_SIZE);
 }
@@ -218,8 +218,8 @@ uint32 Bag::GetItemCountWithLimitCategory(uint32 limitCategory, Item* skipItem) 
     for (uint32 i = 0; i < GetBagSize(); ++i)
         if (Item* pItem = m_bagslot[i])
             if (pItem != skipItem)
-                if (ItemTemplate const* pProto = pItem->GetTemplate())
-                    if (pProto->ItemLimitCategory == limitCategory)
+                if (ItemTemplate const* proto = pItem->GetTemplate())
+                    if (proto->ItemLimitCategory == limitCategory)
                         count += m_bagslot[i]->GetCount();
 
     return count;

@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -34,25 +34,25 @@
 Weather::Weather(uint32 zone, WeatherData const* weatherChances)
     : m_zone(zone), m_weatherChances(weatherChances)
 {
-    m_timer.SetInterval(sWorld->getIntConfig(CONFIG_INTERVAL_CHANGEWEATHER));
+    _timer.SetInterval(sWorld->getIntConfig(CONFIG_INTERVAL_CHANGEWEATHER));
     m_type = WEATHER_TYPE_FINE;
     m_grade = 0;
 
-    sLog->outDetail("WORLD: Starting weather system for zone %u (change every %u minutes).", m_zone, (uint32)(m_timer.GetInterval() / (MINUTE*IN_MILLISECONDS)));
+    sLog->outDetail("WORLD: Starting weather system for zone %u (change every %u minutes).", m_zone, (uint32)(_timer.GetInterval() / (MINUTE*IN_MILLISECONDS)));
 }
 
 /// Launch a weather update
 bool Weather::Update(uint32 diff)
 {
-    if (m_timer.GetCurrent() >= 0)
-        m_timer.Update(diff);
+    if (_timer.GetCurrent() >= 0)
+        _timer.Update(diff);
     else
-        m_timer.SetCurrent(0);
+        _timer.SetCurrent(0);
 
     ///- If the timer has passed, ReGenerate the weather
-    if (m_timer.Passed())
+    if (_timer.Passed())
     {
-        m_timer.Reset();
+        _timer.Reset();
         // update only if Regenerate has changed the weather
         if (ReGenerate())
         {

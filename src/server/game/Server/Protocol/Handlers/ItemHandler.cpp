@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -292,7 +292,7 @@ void WorldSession::HandleRequestHotFix(WorldPacket & recv_data)
         return;
     }
 
-    for(uint32 i = 0; i < count; ++i)
+    for (uint32 i = 0; i < count; ++i)
     {
         uint32 item;
         recv_data >> item;
@@ -349,37 +349,37 @@ void WorldSession::HandleRequestHotFix(WorldPacket & recv_data)
                 data << int32(proto->Stackable);
                 data << uint32(proto->ContainerSlots);
 
-                for(uint32 x = 0; x < MAX_ITEM_PROTO_STATS; ++x)
+                for (uint32 x = 0; x < MAX_ITEM_PROTO_STATS; ++x)
                     data << uint32(proto->ItemStat[x].ItemStatType);
 
-                for(uint32 x = 0; x < MAX_ITEM_PROTO_STATS; ++x)
+                for (uint32 x = 0; x < MAX_ITEM_PROTO_STATS; ++x)
                     data << int32(proto->ItemStat[x].ItemStatValue);
 
                 // Till here we are going good, now we start with the unk shit
-                for(uint32 x = 0; x < 20; ++x) // 20 unk fields
+                for (uint32 x = 0; x < 20; ++x) // 20 unk fields
                     data << uint32(0);
 
                 data << uint32(proto->ScalingStatDistribution);
-                data << uint32(proto->damageType);
+                data << uint32(proto->DamageType);
                 data << uint32(proto->Delay);
                 data << float(proto->RangedModRange);
 
-                for(uint32 x = 0; x < MAX_ITEM_PROTO_SPELLS; ++x)
+                for (uint32 x = 0; x < MAX_ITEM_PROTO_SPELLS; ++x)
                     data << int32(proto->Spells[x].SpellId);
 
-                for(uint32 x = 0; x < MAX_ITEM_PROTO_SPELLS; ++x)
+                for (uint32 x = 0; x < MAX_ITEM_PROTO_SPELLS; ++x)
                     data << uint32(proto->Spells[x].SpellTrigger);
 
-                for(uint32 x = 0; x < MAX_ITEM_PROTO_SPELLS; ++x)
+                for (uint32 x = 0; x < MAX_ITEM_PROTO_SPELLS; ++x)
                     data << int32(proto->Spells[x].SpellCharges);
 
-                for(uint32 x = 0; x < MAX_ITEM_PROTO_SPELLS; ++x)
+                for (uint32 x = 0; x < MAX_ITEM_PROTO_SPELLS; ++x)
                     data << int32(proto->Spells[x].SpellCooldown);
 
-                for(uint32 x = 0; x < MAX_ITEM_PROTO_SPELLS; ++x)
+                for (uint32 x = 0; x < MAX_ITEM_PROTO_SPELLS; ++x)
                     data << uint32(proto->Spells[x].SpellCategory);
 
-                for(uint32 x = 0; x < MAX_ITEM_PROTO_SPELLS; ++x)
+                for (uint32 x = 0; x < MAX_ITEM_PROTO_SPELLS; ++x)
                     data << int32(proto->Spells[x].SpellCategoryCooldown);
 
                 data << uint32(proto->Bonding);
@@ -389,7 +389,7 @@ void WorldSession::HandleRequestHotFix(WorldPacket & recv_data)
                 data << uint16(strlen(str) + 1);
                 data << str;
 
-                for(uint32 x = 0; x < 3; ++x) // other 3 names
+                for (uint32 x = 0; x < 3; ++x) // other 3 names
                 {
                     const char* str = (const char*)"";
                     data << uint16(strlen(str) + 1);
@@ -418,10 +418,10 @@ void WorldSession::HandleRequestHotFix(WorldPacket & recv_data)
                 data << uint32(proto->BagFamily);
                 data << uint32(proto->TotemCategory);
 
-                for(uint32 x = 0; x < MAX_ITEM_PROTO_SOCKETS; ++x)
+                for (uint32 x = 0; x < MAX_ITEM_PROTO_SOCKETS; ++x)
                     data << uint32(proto->Socket[x].Color);
 
-                for(uint32 x = 0; x < MAX_ITEM_PROTO_SOCKETS; ++x)
+                for (uint32 x = 0; x < MAX_ITEM_PROTO_SOCKETS; ++x)
                     data << uint32(proto->Socket[x].Content);
 
                 data << uint32(proto->socketBonus);
@@ -559,10 +559,10 @@ void WorldSession::HandleSellItemOpcode(WorldPacket & recv_data)
             }
         }
 
-        ItemTemplate const* pProto = pItem->GetTemplate();
-        if (pProto)
+        ItemTemplate const* proto = pItem->GetTemplate();
+        if (proto)
         {
-            if (pProto->SellPrice > 0)
+            if (proto->SellPrice > 0)
             {
                 if (count < pItem->GetCount())               // need split items
                 {
@@ -592,9 +592,9 @@ void WorldSession::HandleSellItemOpcode(WorldPacket & recv_data)
                     _player->AddItemToBuyBackSlot(pItem);
                 }
 
-                uint32 money = pProto->SellPrice * count;
+                uint32 money = proto->SellPrice * count;
                 _player->ModifyMoney(money);
-                _player->GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_MONEY_FROM_VENDORS, money);
+                _player->UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_MONEY_FROM_VENDORS, money);
             }
             else
                 _player->SendSellError(SELL_ERR_CANT_SELL_ITEM, creature, itemguid, 0);
@@ -642,7 +642,7 @@ void WorldSession::HandleBuybackItem(WorldPacket & recv_data)
             _player->ModifyMoney(-(int32)price);
             _player->RemoveItemFromBuyBackSlot(slot, false);
             _player->ItemAddedQuestCheck(pItem->GetEntry(), pItem->GetCount());
-            _player->GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_RECEIVE_EPIC_ITEM, pItem->GetEntry(), pItem->GetCount());
+            _player->UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_RECEIVE_EPIC_ITEM, pItem->GetEntry(), pItem->GetCount());
             _player->StoreItem(dest, pItem, true);
         }
         else
@@ -788,6 +788,26 @@ void WorldSession::SendListInventory(uint64 vendorGuid)
                 if (!_player->isGameMaster() && ((itemTemplate->Flags2 & ITEM_FLAGS_EXTRA_HORDE_ONLY && _player->GetTeam() == ALLIANCE) || (itemTemplate->Flags2 == ITEM_FLAGS_EXTRA_ALLIANCE_ONLY && _player->GetTeam() == HORDE)))
                     continue;
 
+                // If the item is a guild reward, dont display it if the player does not fit the requirements
+                // ToDo: Theese items must have a flag, find it
+                if(QueryResult res = WorldDatabase.PQuery("SELECT achievement, standing FROM guild_rewards WHERE item_entry = %u", item->item))
+                {
+                    Guild* guild = sGuildMgr->GetGuildById(_player->GetGuildId());
+                    if(!guild)
+                        continue;
+                    Field *fields = res->Fetch();
+
+                    // Check for achievement
+                    if(!guild->GetAchievementMgr().HasAchieved(fields[0].GetUInt32()))
+                        continue;
+
+                    // Check for standing
+                    uint32 repReq = fields[1].GetUInt32();
+                    if(repReq)
+                        if(ReputationRank(repReq) > _player->GetReputationRank(1168)) // Does not have enough reputation
+                            continue;
+                }
+
                 // Items sold out are not displayed in list
                 uint32 leftInStock = !item->maxcount ? 0xFFFFFFFF : vendor->GetVendorItemCurrentCount(item);
                 if (!_player->isGameMaster() && !leftInStock)
@@ -927,7 +947,7 @@ void WorldSession::HandleBuyBankSlotOpcode(WorldPacket& recvPacket)
      data << uint32(ERR_BANKSLOT_OK);
      SendPacket(&data);
 
-    _player->GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_BUY_BANK_SLOT);
+    _player->UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_BUY_BANK_SLOT);
 }
 
 void WorldSession::HandleAutoBankItemOpcode(WorldPacket& recvPacket)
@@ -1000,26 +1020,6 @@ void WorldSession::HandleAutoStoreBankItemOpcode(WorldPacket& recvPacket)
         _player->RemoveItem(srcbag, srcslot, true);
         _player->BankItem(dest, pItem, true);
     }
-}
-
-///- this needs checked and removed if not needed in cata!
-void WorldSession::HandleSetAmmoOpcode(WorldPacket & recv_data)
-{
-    if (!GetPlayer()->isAlive())
-    {
-        GetPlayer()->SendEquipError(EQUIP_ERR_YOU_ARE_DEAD, NULL, NULL);
-        return;
-    }
-
-    sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: CMSG_SET_AMMO");
-    uint32 item;
-
-    recv_data >> item;
-
-    if (!item)
-        GetPlayer()->RemoveAmmo();
-    else
-        GetPlayer()->SetAmmo(item);
 }
 
 void WorldSession::SendEnchantmentLog(uint64 Target, uint64 Caster, uint32 ItemID, uint32 SpellID)

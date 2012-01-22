@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2006-2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2006-2012 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -164,7 +164,7 @@ public:
 
         void Reset()
         {
-            ShadowBoltVolley_Timer = 7000 + rand()%7000;
+            ShadowBoltVolley_Timer = urand(7000, 14000);
             DrawShadows_Timer = 45000;
             summonTraveler_Timer = 90000;
             banish_Timer = 17000;
@@ -268,7 +268,7 @@ public:
             if (ShadowBoltVolley_Timer <= diff)
             {
                 DoCast(me, SPELL_SHADOWBOLT_VOLLEY);
-                ShadowBoltVolley_Timer = 15000 + rand()%15000;
+                ShadowBoltVolley_Timer = urand(15000, 30000);
             } else ShadowBoltVolley_Timer -= diff;
 
             if (IsHeroic() && banish_Timer <= diff)

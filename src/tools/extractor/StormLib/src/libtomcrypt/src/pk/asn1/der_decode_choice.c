@@ -25,7 +25,7 @@
    @param outlen   The number of items in the list
    @return CRYPT_OK on success
 */
-int der_decode_choice(const unsigned char *in,  unsigned long *inlen, 
+int der_decode_choice(const unsigned char *in,  unsigned long *inlen,
                             ltc_asn1_list *list, unsigned long  outlen)
 {
    unsigned long size, x, z;

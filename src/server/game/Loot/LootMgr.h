@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -123,6 +123,18 @@ struct LootStoreItem
     bool Roll(bool rate) const;                             // Checks if the entry takes it's chance (at loot generation)
     bool IsValid(LootStore const& store, uint32 entry) const;
                                                             // Checks correctness of values
+};
+
+struct CurrencyLoot
+{
+    uint32 Entry;
+    uint8 Type;
+    uint32 CurrencyId;
+    uint32 CurrencyAmount;
+
+    CurrencyLoot(uint32 _entry, uint8 _type, uint32 _CurrencyId, uint32 _CurrencyAmount) : Entry(_entry), Type(_type), CurrencyId(_CurrencyId), CurrencyAmount(_CurrencyAmount)
+    {
+    }
 };
 
 typedef std::set<uint32> AllowedLooterSet;
@@ -358,10 +370,12 @@ struct Loot
 struct LootView
 {
     Loot &loot;
-    Player* viewer;
+    Player *viewer;
     PermissionTypes permission;
-    LootView(Loot &_loot, Player* _viewer, PermissionTypes _permission = ALL_PERMISSION)
-        : loot(_loot), viewer(_viewer), permission(_permission) {}
+    uint32 objEntry;
+    uint8 objType;
+    LootView(Loot &_loot, Player *_viewer, uint32 _entry, uint8 _type, PermissionTypes _permission = ALL_PERMISSION)
+        : loot(_loot), viewer(_viewer), objEntry(_entry), objType(_type),  permission(_permission) {}
 };
 
 extern LootStore LootTemplates_Creature;

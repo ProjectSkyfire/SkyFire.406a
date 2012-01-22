@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -70,7 +70,7 @@ void WorldSession::HandleUseItemOpcode(WorldPacket& recvPacket)
     Player* pUser = _player;
 
     // ignore for remote control state
-    if (pUser->m_mover != pUser)
+    if (pUser->_mover != pUser)
         return;
 
     if (pUser->GetEmoteState())
@@ -208,7 +208,7 @@ void WorldSession::HandleOpenItemOpcode(WorldPacket& recvPacket)
     Player* pUser = _player;
 
     // ignore for remote control state
-    if (pUser->m_mover != pUser)
+    if (pUser->_mover != pUser)
         return;
 
     uint8 bagIndex, slot;
@@ -217,26 +217,26 @@ void WorldSession::HandleOpenItemOpcode(WorldPacket& recvPacket)
 
     sLog->outDetail("bagIndex: %u, slot: %u", bagIndex, slot);
 
-    Item* pItem = pUser->GetItemByPos(bagIndex, slot);
-    if (!pItem)
+    Item* item = pUser->GetItemByPos(bagIndex, slot);
+    if (!item)
     {
         pUser->SendEquipError(EQUIP_ERR_ITEM_NOT_FOUND, NULL, NULL);
         return;
     }
 
-    ItemTemplate const* proto = pItem->GetTemplate();
+    ItemTemplate const* proto = item->GetTemplate();
     if (!proto)
     {
-        pUser->SendEquipError(EQUIP_ERR_ITEM_NOT_FOUND, pItem, NULL);
+        pUser->SendEquipError(EQUIP_ERR_ITEM_NOT_FOUND, item, NULL);
         return;
     }
 
     // Verify that the bag is an actual bag or wrapped item that can be used "normally"
-    if (!(proto->Flags & ITEM_PROTO_FLAG_OPENABLE) && !pItem->HasFlag(ITEM_FIELD_FLAGS, ITEM_FLAG_WRAPPED))
+    if (!(proto->Flags & ITEM_PROTO_FLAG_OPENABLE) && !item->HasFlag(ITEM_FIELD_FLAGS, ITEM_FLAG_WRAPPED))
     {
-        pUser->SendEquipError(EQUIP_ERR_CANT_DO_RIGHT_NOW, pItem, NULL);
+        pUser->SendEquipError(EQUIP_ERR_CANT_DO_RIGHT_NOW, item, NULL);
         sLog->outError("Possible hacking attempt: Player %s [guid: %u] tried to open item [guid: %u, entry: %u] which is not openable!",
-                pUser->GetName(), pUser->GetGUIDLow(), pItem->GetGUIDLow(), proto->ItemId);
+                pUser->GetName(), pUser->GetGUIDLow(), item->GetGUIDLow(), proto->ItemId);
         return;
     }
 
@@ -248,43 +248,48 @@ void WorldSession::HandleOpenItemOpcode(WorldPacket& recvPacket)
 
         if (!lockInfo)
         {
-            pUser->SendEquipError(EQUIP_ERR_ITEM_LOCKED, pItem, NULL);
-            sLog->outError("WORLD::OpenItem: item [guid = %u] has an unknown lockId: %u!", pItem->GetGUIDLow(), lockId);
+            pUser->SendEquipError(EQUIP_ERR_ITEM_LOCKED, item, NULL);
+            sLog->outError("WORLD::OpenItem: item [guid = %u] has an unknown lockId: %u!", item->GetGUIDLow(), lockId);
             return;
         }
 
         // was not unlocked yet
-        if (pItem->IsLocked())
+        if (item->IsLocked())
         {
-            pUser->SendEquipError(EQUIP_ERR_ITEM_LOCKED, pItem, NULL);
+            pUser->SendEquipError(EQUIP_ERR_ITEM_LOCKED, item, NULL);
             return;
         }
     }
 
-    if (pItem->HasFlag(ITEM_FIELD_FLAGS, ITEM_FLAG_WRAPPED))// wrapped?
+    if (item->HasFlag(ITEM_FIELD_FLAGS, ITEM_FLAG_WRAPPED)) // wrapped?
     {
-        QueryResult result = CharacterDatabase.PQuery("SELECT entry, flags FROM character_gifts WHERE item_guid = '%u'", pItem->GetGUIDLow());
+        QueryResult result = CharacterDatabase.PQuery("SELECT entry, flags FROM character_gifts WHERE item_guid = '%u'", item->GetGUIDLow());
         if (result)
         {
             Field* fields = result->Fetch();
             uint32 entry = fields[0].GetUInt32();
             uint32 flags = fields[1].GetUInt32();
 
-            pItem->SetUInt64Value(ITEM_FIELD_GIFTCREATOR, 0);
-            pItem->SetEntry(entry);
-            pItem->SetUInt32Value(ITEM_FIELD_FLAGS, flags);
-            pItem->SetState(ITEM_CHANGED, pUser);
+            item->SetUInt64Value(ITEM_FIELD_GIFTCREATOR, 0);
+            item->SetEntry(entry);
+            item->SetUInt32Value(ITEM_FIELD_FLAGS, flags);
+            item->SetState(ITEM_CHANGED, pUser);
         }
         else
         {
-            sLog->outError("Wrapped item %u don't have record in character_gifts table and will deleted", pItem->GetGUIDLow());
-            pUser->DestroyItem(pItem->GetBagSlot(), pItem->GetSlot(), true);
+            sLog->outError("Wrapped item %u don't have record in character_gifts table and will deleted", item->GetGUIDLow());
+            pUser->DestroyItem(item->GetBagSlot(), item->GetSlot(), true);
             return;
         }
-        CharacterDatabase.PExecute("DELETE FROM character_gifts WHERE item_guid = '%u'", pItem->GetGUIDLow());
+
+        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_GIFT);
+
+        stmt->setUInt32(0, item->GetGUIDLow());
+
+        CharacterDatabase.Execute(stmt);
     }
     else
-        pUser->SendLoot(pItem->GetGUID(), LOOT_CORPSE);
+        pUser->SendLoot(item->GetGUID(), LOOT_CORPSE);
 }
 
 void WorldSession::HandleGameObjectUseOpcode(WorldPacket & recv_data)
@@ -296,7 +301,7 @@ void WorldSession::HandleGameObjectUseOpcode(WorldPacket & recv_data)
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Recvd CMSG_GAMEOBJ_USE Message [guid=%u]", GUID_LOPART(guid));
 
     // ignore for remote control state
-    if (_player->m_mover != _player)
+    if (_player->_mover != _player)
         return;
 
     if (GameObject* obj = GetPlayer()->GetMap()->GetGameObject(guid))
@@ -311,7 +316,7 @@ void WorldSession::HandleGameobjectReportUse(WorldPacket& recvPacket)
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Recvd CMSG_GAMEOBJ_REPORT_USE Message [in game guid: %u]", GUID_LOPART(guid));
 
     // ignore for remote control state
-    if (_player->m_mover != _player)
+    if (_player->_mover != _player)
         return;
 
     GameObject* go = GetPlayer()->GetMap()->GetGameObject(guid);
@@ -323,7 +328,7 @@ void WorldSession::HandleGameobjectReportUse(WorldPacket& recvPacket)
 
     go->AI()->GossipHello(_player);
 
-    _player->GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_USE_GAMEOBJECT, go->GetEntry());
+    _player->UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_USE_GAMEOBJECT, go->GetEntry());
 }
 
 void WorldSession::HandleCastSpellOpcode(WorldPacket& recvPacket)
@@ -335,7 +340,7 @@ void WorldSession::HandleCastSpellOpcode(WorldPacket& recvPacket)
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: got cast spell packet, castCount: %u, spellId: %u, glyphIndex: %u, castFlags: %u, data length = %u", castCount, spellId, glyphIndex, castFlags, (uint32)recvPacket.size());
 
     // ignore for remote control state (for player case)
-    Unit* mover = _player->m_mover;
+    Unit* mover = _player->_mover;
     if (mover != _player && mover->GetTypeId() == TYPEID_PLAYER)
     {
         recvPacket.rfinish(); // prevent spam at ignore packet
@@ -407,7 +412,7 @@ void WorldSession::HandleCastSpellOpcode(WorldPacket& recvPacket)
     }
 
     Spell* spell = new Spell(mover, spellInfo, TRIGGERED_NONE, 0, false);
-    spell->m_cast_count = castCount;                       // set count of casts
+    spell->_cast_count = castCount;                       // set count of casts
     spell->m_glyphIndex = glyphIndex;
     spell->prepare(&targets);
 }
@@ -511,7 +516,7 @@ void WorldSession::HandleCancelChanneling(WorldPacket & recv_data)
     recv_data.read_skip<uint32>();                          // spellid, not used
 
     // ignore for remote control state (for player case)
-    Unit* mover = _player->m_mover;
+    Unit* mover = _player->_mover;
     if (mover != _player && mover->GetTypeId() == TYPEID_PLAYER)
         return;
 
@@ -521,7 +526,7 @@ void WorldSession::HandleCancelChanneling(WorldPacket & recv_data)
 void WorldSession::HandleTotemDestroyed(WorldPacket& recvPacket)
 {
     // ignore for remote control state
-    if (_player->m_mover != _player)
+    if (_player->_mover != _player)
         return;
 
     uint8 slotId;

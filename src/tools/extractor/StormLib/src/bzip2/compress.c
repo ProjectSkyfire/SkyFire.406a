@@ -116,13 +116,13 @@ void generateMTFValues ( EState* s )
    Int32   EOB;
 
    /*
-      After sorting (eg, here), 
-         s->arr1 [ 0 .. s->nblock-1 ] holds sorted order, 
+      After sorting (eg, here),
+         s->arr1 [ 0 .. s->nblock-1 ] holds sorted order,
          and
          ((UChar*)s->arr2) [ 0 .. s->nblock-1 ]
          holds the original block data.
 
-      The first thing to do is generate the MTF values, 
+      The first thing to do is generate the MTF values,
       and put them in
          ((UInt16*)s->arr1) [ 0 .. s->nblock-1 ].
       Because there are strictly fewer or equal MTF values
@@ -133,7 +133,7 @@ void generateMTFValues ( EState* s )
       area starting at
          (UChar*) (&((UChar*)s->arr2)[s->nblock])
 
-      These storage aliases are set up in bzCompressInit(), 
+      These storage aliases are set up in bzCompressInit(),
       except for the last one, which is arranged in
       compressBlock().
    */
@@ -246,7 +246,7 @@ void sendMTFValues ( EState* s )
 
    if (s->verbosity >= 3)
       VPrintf3( "      %d in block, %d after MTF & 1-2 coding, "
-                "%d+2 syms in use\n", 
+                "%d+2 syms in use\n",
                 s->nblock, s->nMTF, s->nInUse );
 
    alphaSize = s->nInUse+2;
@@ -287,8 +287,8 @@ void sendMTFValues ( EState* s )
 
          if (s->verbosity >= 3)
             VPrintf5( "      initial group %d, [%d .. %d], "
-                      "has %d syms (%4.1f%%)\n", 
-                      nPart, gs, ge, aFreq, 
+                      "has %d syms (%4.1f%%)\n",
+                      nPart, gs, ge, aFreq,
                       (100.0 * (float)aFreq) / (float)(s->nMTF) );
 
          for (v = 0; v < alphaSize; v++)
@@ -376,7 +376,7 @@ void sendMTFValues ( EState* s )
          }
 
          /*--
-            Find the coding table which is best for this group, 
+            Find the coding table which is best for this group,
             and record its identity in the selector table.
          --*/
          bc = 999999999; bt = -1;
@@ -416,7 +416,7 @@ void sendMTFValues ( EState* s )
          gs = ge+1;
       }
       if (s->verbosity >= 3) {
-         VPrintf2 ( "      pass %d: size is %d, grp uses are ", 
+         VPrintf2 ( "      pass %d: size is %d, group uses are ",
                    iter+1, totc/8 );
          for (t = 0; t < nGroups; t++)
             VPrintf1 ( "%d ", fave[t] );
@@ -429,13 +429,13 @@ void sendMTFValues ( EState* s )
       /* maxLen was changed from 20 to 17 in bzip2-1.0.3.  See
          comment in huffman.c for details. */
       for (t = 0; t < nGroups; t++)
-         BZ2_hbMakeCodeLengths ( &(s->len[t][0]), &(s->rfreq[t][0]), 
+         BZ2_hbMakeCodeLengths ( &(s->len[t][0]), &(s->rfreq[t][0]),
                                  alphaSize, 17 /*20*/ );
    }
 
    AssertH( nGroups < 8, 3002 );
    AssertH( nSelectors < 32768 &&
-            nSelectors <= (2 + (900000 / BZ_G_SIZE)), 
+            nSelectors <= (2 + (900000 / BZ_G_SIZE)),
             3003 );
 
    /*--- Compute MTF values for the selectors. ---*/
@@ -467,7 +467,7 @@ void sendMTFValues ( EState* s )
       }
       AssertH ( !(maxLen > 17 /*20*/ ), 3004 );
       AssertH ( !(minLen < 1), 3005 );
-      BZ2_hbAssignCodes ( &(s->code[t][0]), &(s->len[t][0]), 
+      BZ2_hbAssignCodes ( &(s->code[t][0]), &(s->len[t][0]),
                           minLen, maxLen, alphaSize );
    }
 
@@ -560,8 +560,8 @@ void sendMTFValues ( EState* s )
       } else {
 	 /*--- slow version which correctly handles all situations ---*/
          for (i = gs; i <= ge; i++) {
-            bsW ( s, 
-                  s->len  [s->selector[selCtr]] [mtfv[i]], 
+            bsW ( s,
+                  s->len  [s->selector[selCtr]] [mtfv[i]],
                   s->code [s->selector[selCtr]] [mtfv[i]] );
          }
       }
@@ -586,7 +586,7 @@ void BZ2_compressBlock ( EState* s, Bool is_last_block )
 
       if (s->verbosity >= 2)
          VPrintf4( "    block %d: crc = 0x%08x, "
-                   "combined CRC = 0x%08x, size = %d\n", 
+                   "combined CRC = 0x%08x, size = %d\n",
                    s->blockNo, s->blockCRC, s->combinedCRC, s->nblock );
 
       BZ2_blockSort ( s );
