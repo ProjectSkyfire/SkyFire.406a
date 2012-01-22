@@ -335,7 +335,7 @@ void WorldSession::HandleMovementOpcodes(WorldPacket & recv_data)
     /*----------------------*/
 
     /* process position-change */
-    WorldPacket data(opcode, recv_data.size());
+    WorldPacket data(Opcodes(opcode), recv_data.size());
     movementInfo.time = getMSTime();
     movementInfo.guid = mover->GetGUID();
     WriteMovementInfo(&data, &movementInfo);

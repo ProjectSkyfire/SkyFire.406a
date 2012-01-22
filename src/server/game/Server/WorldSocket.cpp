@@ -507,7 +507,7 @@ int WorldSocket::handle_input_header (void)
     if ((header.size < 4) || (header.size > 10240))
     {
         Player *_player = m_Session ? m_Session->GetPlayer() : NULL;
-        sLog->outError ("WorldSocket::handle_input_header(): client (account: %u, char [GUID: %u, name: %s]) sent malformed packet (size: %d , cmd: %d)",
+        sLog->outError("WorldSocket::handle_input_header(): client (account: %u, char [GUID: %u, name: %s]) sent malformed packet (size: %d , cmd: %d)",
             m_Session ? m_Session->GetAccountId() : 0,
             _player ? _player->GetGUIDLow() : 0,
             _player ? _player->GetName() : "<none>",
@@ -519,12 +519,12 @@ int WorldSocket::handle_input_header (void)
 
     header.size -= 4;
 
-    ACE_NEW_RETURN (m_RecvWPct, WorldPacket ((uint16) header.cmd, header.size), -1);
+    ACE_NEW_RETURN(m_RecvWPct, WorldPacket(Opcodes(header.cmd), header.size), -1);
 
     if (header.size > 0)
     {
         m_RecvWPct->resize (header.size);
-        m_RecvPct.base ((char*) m_RecvWPct->contents(), m_RecvWPct->size());
+        m_RecvPct.base ((char*)m_RecvWPct->contents(), m_RecvWPct->size());
     }
     else
     {

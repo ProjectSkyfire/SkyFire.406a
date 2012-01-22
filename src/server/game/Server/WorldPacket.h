@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -21,34 +21,39 @@
 #define TRINITYCORE_WORLDPACKET_H
 
 #include "Common.h"
+#include "Opcodes.h"
 #include "ByteBuffer.h"
 
 class WorldPacket : public ByteBuffer
 {
     public:
                                                             // just container for later use
-        WorldPacket()                                       : ByteBuffer(0), m_opcode(0)
-        {
-        }
-        explicit WorldPacket(uint32 opcode, size_t res = 200) : ByteBuffer(res), m_opcode(opcode) { }
-                                                            // copy constructor
-        WorldPacket(const WorldPacket &packet)              : ByteBuffer(packet), m_opcode(packet.m_opcode)
+        WorldPacket() : ByteBuffer(0), m_opcode(UNKNOWN_OPCODE)
         {
         }
 
-        void Initialize(uint32 opcode, size_t newres = 200)
+        WorldPacket(Opcodes opcode, size_t res = 200) : ByteBuffer(res), m_opcode(opcode)
+        {
+        }
+                                                            // copy constructor
+        WorldPacket(WorldPacket const& packet) : ByteBuffer(packet), m_opcode(packet.m_opcode)
+        {
+        }
+
+        void Initialize(Opcodes opcode, size_t newres = 200)
         {
             clear();
             _storage.reserve(newres);
             m_opcode = opcode;
         }
 
-        uint32 GetOpcode() const { return m_opcode; }
-        void SetOpcode(uint32 opcode) { m_opcode = opcode; }
+        Opcodes GetOpcode() const { return m_opcode; }
+        void SetOpcode(Opcodes opcode) { m_opcode = opcode; }
+        void Compress(Opcodes opcode);
 
-        void compress(uint32 opcode);
     protected:
-        uint32 m_opcode;
-        void _compress(void* dst, uint32 *dst_size, const void* src, int src_size);
+        Opcodes m_opcode;
+        void Compress(void* dst, uint32 *dst_size, const void* src, int src_size);
 };
 #endif
+

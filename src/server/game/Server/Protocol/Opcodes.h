@@ -36,6 +36,10 @@
 /// List of Opcodes
 enum Opcodes
 {
+    NUM_OPCODE_HANDLERS = (0xFFFF+1),
+    UNKNOWN_OPCODE = NUM_OPCODE_HANDLERS,
+    NULL_OPCODE                                      = 0,
+
     CMSG_WORLD_TELEPORT                              = 0x08100, // 4.0.6a 13623
     CMSG_TELEPORT_TO_UNIT                            = 0x0E1AC, // 4.0.6a 13623
     SMSG_CHECK_FOR_BOTS                              = 0x0FEC8, // 4.0.6a 13623

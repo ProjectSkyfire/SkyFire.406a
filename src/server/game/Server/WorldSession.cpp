@@ -149,6 +149,14 @@ void WorldSession::SendPacket(WorldPacket const* packet)
     if (!m_Socket)
         return;
 
+    if (packet->GetOpcode() == UNKNOWN_OPCODE)
+    {
+        sLog->outError("Sending unknown opcode - prevented. Trace:");
+        ACE_Stack_Trace trace;
+        sLog->outError("%s", trace.c_str());
+        return;
+    }
+
 #ifdef TRINITY_DEBUG
     // Code for network use statistic
     static uint64 sendPacketCount = 0;

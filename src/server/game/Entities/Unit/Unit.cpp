@@ -17629,9 +17629,9 @@ void Unit::AddSpellMod(SpellModifier* mod, bool apply)
     if (Player* player = this->ToPlayer())
     {
         bool isFlat = mod->type == SPELLMOD_FLAT;
-        uint32 Opcode = (isFlat) ? SMSG_SET_FLAT_SPELL_MODIFIER : SMSG_SET_PCT_SPELL_MODIFIER;
+        uint32 opcode = (isFlat) ? SMSG_SET_FLAT_SPELL_MODIFIER : SMSG_SET_PCT_SPELL_MODIFIER;
 
-        WorldPacket data(Opcode, (1+1+4));
+        WorldPacket data(Opcodes(opcode), 1 + 1 + 4);
         data << uint32(1); //number of spell mod to add
         size_t wpos_modcount = data.wpos();
         uint32 modcount = 0;
