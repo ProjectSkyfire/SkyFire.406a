@@ -21,6 +21,19 @@
 #include "WorldSession.h"
 #include "WorldPacket.h"
 
+int WorldSocket::SendAuthConnection()
+{
+    std::string ServerToClient = "RLD OF WARCRAFT CONNECTION - SERVER TO CLIENT";
+    WorldPacket data(MSG_VERIFY_CONNECTIVITY, 46);
+    
+    data << ServerToClient;
+    
+    if (SendPacket(data) == -1)
+        return -1;
+
+    return 0;
+}
+
 void WorldSession::SendAuthResponse(uint8 code, bool shortForm, uint32 queuePos)
 {
     WorldPacket packet(SMSG_AUTH_RESPONSE, 1 + 4 + 1 + 4 + 2 + 1);
@@ -28,15 +41,14 @@ void WorldSession::SendAuthResponse(uint8 code, bool shortForm, uint32 queuePos)
     packet << uint32(0);                                   // BillingTimeRemaining
     packet << uint8(0);                                    // BillingPlanFlags
     packet << uint32(0);                                   // BillingTimeRested
-	packet << uint8(Expansion());                          // | 0 - normal | 1 - TBC | 2 - WOTLK | 3 - CATA |
-	packet << uint8(Expansion());                          // Server Expansion
+    packet << uint8(Expansion());                          // | 0 - normal | 1 - TBC | 2 - WOTLK | 3 - CATA |
+    packet << uint8(Expansion());                          // Server Expansion
 
-    if (!shortForm)
+    if (!shortForm)    
     {
-		packet << uint32(queuePos);                        // Queue position
-		packet << uint8(0);                                // Unk 3.3.0
+        packet << uint32(queuePos);                        // Queue position
+        packet << uint8(0);                                // Unk 3.3.0
     }
-
     SendPacket(&packet);
 }
 
