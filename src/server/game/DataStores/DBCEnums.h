@@ -124,6 +124,7 @@ enum AchievementCriteriaTypes
     // you have to complete a daily quest x times in a row
     ACHIEVEMENT_CRITERIA_TYPE_COMPLETE_DAILY_QUEST_DAILY             = 10,
     ACHIEVEMENT_CRITERIA_TYPE_COMPLETE_QUESTS_IN_ZONE                = 11,
+    // ACHIEVEMENT_CRITERIA_TYPE_CURRENCY                               = 12,    //todo
     ACHIEVEMENT_CRITERIA_TYPE_DAMAGE_DONE                            = 13,
     ACHIEVEMENT_CRITERIA_TYPE_COMPLETE_DAILY_QUEST                   = 14,
     ACHIEVEMENT_CRITERIA_TYPE_COMPLETE_BATTLEGROUND                  = 15,
@@ -314,7 +315,8 @@ enum AreaFlags
     AREA_FLAG_INSIDE           = 0x02000000,                // used for determinating spell related inside/outside questions in Map::IsOutdoors
     AREA_FLAG_OUTSIDE          = 0x04000000,                // used for determinating spell related inside/outside questions in Map::IsOutdoors
     AREA_FLAG_WINTERGRASP_2    = 0x08000000,                // Wintergrasp and it's subzones
-    AREA_FLAG_NO_FLY_ZONE      = 0x20000000                 // Marks zones where you cannot fly
+    AREA_FLAG_NO_FLY_ZONE      = 0x20000000,                // Marks zones where you cannot fly
+    AREA_FLAG_UNK9             = 0x40000000,
 };
 
 enum Difficulty

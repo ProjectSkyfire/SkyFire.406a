@@ -1184,6 +1184,17 @@ void AchievementMgrBase::UpdateAchievementCriteria(AchievementCriteriaTypes type
 
                 break;
             }
+            // todo
+            /*case ACHIEVEMENT_CRITERIA_TYPE_CURRENCY:
+                if (!miscValue1 || !miscValue2)
+                    continue;
+                if (miscValue1 != achievementCriteria->currencyGain.currency)
+                    continue;
+                if (int64(miscValue2) < 0)
+                    continue;
+                SetCriteriaProgress(achievementCriteria, miscValue2, PROGRESS_ACCUMULATE);
+                break;*/
+            // std case: not exist in DBC, not triggered in code as result
             case ACHIEVEMENT_CRITERIA_TYPE_KILL_CREATURE_TYPE_GUILD:
             {
                 if (!miscValue1)
@@ -1363,6 +1374,9 @@ bool AchievementMgrBase::IsCompletedCriteria(AchievementCriteriaEntry const* ach
             return progress->counter >= achievementCriteria->reach_guild_level.level;
         case ACHIEVEMENT_CRITERIA_TYPE_KILL_CREATURE_TYPE_GUILD:
             return progress->counter >= achievementCriteria->kill_creature_type.count;
+        // todo
+        /*case ACHIEVEMENT_CRITERIA_TYPE_CURRENCY:
+            return progress->counter >= achievementCriteria->currencyGain.count;*/
         // handle all statistic-only criteria here
         case ACHIEVEMENT_CRITERIA_TYPE_COMPLETE_BATTLEGROUND:
         case ACHIEVEMENT_CRITERIA_TYPE_DEATH_AT_MAP:

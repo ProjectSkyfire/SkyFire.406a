@@ -1756,8 +1756,8 @@ class Player : public Unit, public GridObject<Player>
         }
         uint32 GetGlyph(uint8 slot) { return _Glyphs[_activeSpec][slot]; }
 
-        uint32 GetFreePrimaryProfessionPoints() const { return profPoints; }
-        void SetFreePrimaryProfessions(uint16 profs) { profPoints, profs; }
+        uint32 GetFreePrimaryProfessionPoints() const { return GetUInt32Value(PLAYER_CHARACTER_POINTS); }
+        void SetFreePrimaryProfessions(uint16 profs) { SetUInt32Value(PLAYER_CHARACTER_POINTS, profs); }
         void InitPrimaryProfessions();
 
         PlayerSpellMap const& GetSpellMap() const { return _spells; }
