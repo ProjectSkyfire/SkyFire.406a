@@ -29,7 +29,7 @@
 #include "AddonMgr.h"
 #include "DatabaseEnv.h"
 #include "World.h"
-//#include "WorldPacket.h"
+#include "WorldPacket.h"
 
 struct ItemTemplate;
 struct AuctionEntry;
@@ -149,6 +149,7 @@ public:
 
     virtual bool Process(WorldPacket* /*packet*/) { return true; }
     virtual bool ProcessLogout() const { return true; }
+    static Opcodes DropHighBytes(Opcodes opcode);
 
 protected:
     WorldSession* const m_pSession;

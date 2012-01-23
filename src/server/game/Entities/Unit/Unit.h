@@ -36,6 +36,7 @@
 #include "SpellInfo.h"
 #include "Path.h"
 #include "WorldPacket.h"
+#include "WorldSession.h"
 #include "Timer.h"
 #include <list>
 

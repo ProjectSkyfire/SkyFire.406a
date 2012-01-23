@@ -44,16 +44,25 @@
 #include "ScriptMgr.h"
 #include "Transport.h"
 
+Opcodes PacketFilter::DropHighBytes(Opcodes opcode)
+{
+   if (opcode & 0xFFFF0000) // check if any High byte is present
+       return Opcodes(opcode >> 16);
+
+   return Opcodes(opcode);
+}
+
 bool MapSessionFilter::Process(WorldPacket* packet)
 {
-    OpcodeHandler const &opHandle = opcodeTable[packet->GetOpcode()];
+    Opcodes opcode = DropHighBytes(packet->GetOpcode());
+    OpcodeHandler const* opHandle = opcodeTable[opcode];
 
     //let's check if our opcode can be really processed in Map::Update()
-    if (opHandle.packetProcessing == PROCESS_INPLACE)
+    if (opHandle->packetProcessing == PROCESS_INPLACE)
         return true;
 
     //we do not process thread-unsafe packets
-    if (opHandle.packetProcessing == PROCESS_THREADUNSAFE)
+    if (opHandle->packetProcessing == PROCESS_THREADUNSAFE)
         return false;
 
     Player* player = m_pSession->GetPlayer();
@@ -68,13 +77,14 @@ bool MapSessionFilter::Process(WorldPacket* packet)
 //OR packet handler is not thread-safe!
 bool WorldSessionFilter::Process(WorldPacket* packet)
 {
-    OpcodeHandler const &opHandle = opcodeTable[packet->GetOpcode()];
+    Opcodes opcode = DropHighBytes(packet->GetOpcode());
+    OpcodeHandler const* opHandle = opcodeTable[opcode];
     //check if packet handler is supposed to be safe
-    if (opHandle.packetProcessing == PROCESS_INPLACE)
+    if (opHandle->packetProcessing == PROCESS_INPLACE)
         return true;
 
     //thread-unsafe packets should be processed in World::UpdateSessions()
-    if (opHandle.packetProcessing == PROCESS_THREADUNSAFE)
+    if (opHandle->packetProcessing == PROCESS_THREADUNSAFE)
         return true;
 
     //no player attached? -> our client! ^^
@@ -149,11 +159,11 @@ void WorldSession::SendPacket(WorldPacket const* packet)
     if (!m_Socket)
         return;
 
-    if (packet->GetOpcode() == UNKNOWN_OPCODE)
+    if (packet->GetOpcode() == NULL_OPCODE || packet->GetOpcode() == UNKNOWN_OPCODE)
     {
-        sLog->outError("Sending unknown opcode - prevented. Trace:");
-        ACE_Stack_Trace trace;
-        sLog->outError("%s", trace.c_str());
+        sLog->outError("Prevented sending of %s", packet->GetOpcode() == NULL_OPCODE ? "NULL_OPCODE" : "UNKNOWN_OPCODE");
+        //ACE_Stack_Trace trace;
+        //sLog->outError("%s", trace.c_str());
         return;
     }
 
@@ -245,15 +255,12 @@ bool WorldSession::Update(uint32 diff, PacketFilter& updater)
             !_recvQueue.empty() && _recvQueue.peek(true) != firstDelayedPacket &&
             _recvQueue.next(packet, updater))
     {
-        OpcodeHandler const &opHandle = opcodeTable[packet->GetOpcode()];
-
-		// Opcode display while only while debugging.
-        sLog->outDebug(LOG_FILTER_OPCODES, "SESSION: Received opcode 0x%.4X (%s)", packet->GetOpcode(), packet->GetOpcode()>OPCODE_NOT_FOUND?"nf":LookupOpcodeName(packet->GetOpcode()));
+        OpcodeHandler const* opHandle = opcodeTable[packet->GetOpcode()];
 
         // !=NULL checked in WorldSocket
         try
         {
-            switch (opHandle.status)
+            switch (opHandle->status)
             {
                 case STATUS_LOGGEDIN:
                     if (!_player)
@@ -271,13 +278,13 @@ bool WorldSession::Update(uint32 diff, PacketFilter& updater)
                             QueuePacket(packet);
                             //! Log
                             sLog->outDebug(LOG_FILTER_NETWORKIO, "Re-enqueueing packet with opcode %s (0x%.4X) with with status STATUS_LOGGEDIN. "
-                                "Player is currently not in world yet.", opHandle.name, packet->GetOpcode());
+                                "Player is currently not in world yet.", opHandle->name, packet->GetOpcode());
                         }
                     }
                     else if (_player->IsInWorld())
                     {
                         sScriptMgr->OnPacketReceive(m_Socket, WorldPacket(*packet));
-                        (this->*opHandle.handler)(*packet);
+                        (this->*opHandle->handler)(*packet);
                         if (sLog->IsOutDebug() && packet->rpos() < packet->wpos())
                             LogUnprocessedTail(packet);
                     }
@@ -291,7 +298,7 @@ bool WorldSession::Update(uint32 diff, PacketFilter& updater)
                     {
                         // not expected _player or must checked in packet hanlder
                         sScriptMgr->OnPacketReceive(m_Socket, WorldPacket(*packet));
-                        (this->*opHandle.handler)(*packet);
+                        (this->*opHandle->handler)(*packet);
                         if (sLog->IsOutDebug() && packet->rpos() < packet->wpos())
                             LogUnprocessedTail(packet);
                     }
@@ -304,7 +311,7 @@ bool WorldSession::Update(uint32 diff, PacketFilter& updater)
                     else
                     {
                         sScriptMgr->OnPacketReceive(m_Socket, WorldPacket(*packet));
-                        (this->*opHandle.handler)(*packet);
+                        (this->*opHandle->handler)(*packet);
                         if (sLog->IsOutDebug() && packet->rpos() < packet->wpos())
                             LogUnprocessedTail(packet);
                     }
@@ -323,7 +330,7 @@ bool WorldSession::Update(uint32 diff, PacketFilter& updater)
                         m_playerRecentlyLogout = false;
 
                     sScriptMgr->OnPacketReceive(m_Socket, WorldPacket(*packet));
-                    (this->*opHandle.handler)(*packet);
+                    (this->*opHandle->handler)(*packet);
                     if (sLog->IsOutDebug() && packet->rpos() < packet->wpos())
                         LogUnprocessedTail(packet);
                     break;
@@ -339,7 +346,7 @@ bool WorldSession::Update(uint32 diff, PacketFilter& updater)
                     break;
             }
         }
-        catch (ByteBufferException &)
+        catch (ByteBufferException&)
         {
             sLog->outError("WorldSession::Update ByteBufferException occured while parsing a packet (opcode: %u) from client %s, accountid=%i. Skipped packet.",
                     packet->GetOpcode(), GetRemoteAddress().c_str(), GetAccountId());
