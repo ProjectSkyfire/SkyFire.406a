@@ -41,8 +41,8 @@
 #include "StormLib/src/StormCommon.h"
 #include "typedefs.h"
 
-static int const patchRev[] = {13164, 13205, 13287, 13329, 13596, 13623};
-#define PATCH_REV_COUNT 6
+static int const patchRev[] = {13164, 13205, 13287, 13329, 13596, 13623, 13914, 14007, 14333, 14480, 14545, 14946, 15005, 15050};
+#define PATCH_REV_COUNT 14
 #define CLIENT_BUILD 15050
 
 static const char* const langs[] = {"enGB", "enUS", "deDE", "esES", "frFR", "koKR", "zhCN", "zhTW", "enCN", "enTW", "esMX", "ruRU" };
