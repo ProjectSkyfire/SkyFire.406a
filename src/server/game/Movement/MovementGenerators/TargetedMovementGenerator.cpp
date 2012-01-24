@@ -79,7 +79,6 @@ void TargetedMovementGeneratorMedium<T,D>::_setTargetLocation(T &owner)
             return;
     */
 
-
     D::_addUnitStateMove(owner);
     i_targetReached = false;
     i_recalculateTravel = false;

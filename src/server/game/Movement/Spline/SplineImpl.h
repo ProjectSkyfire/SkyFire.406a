@@ -93,5 +93,4 @@ template<typename length_type> void Spline<length_type>::clear()
     SplineBase::clear();
     lengths.clear();
 }
-
 }

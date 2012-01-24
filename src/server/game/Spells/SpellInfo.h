@@ -334,8 +334,8 @@ public:
     uint32 ActiveIconID;                                    // 19       m_activeIconID
     char* SpellName;                                        // 20       m_name
     uint32 SpellShapeshiftId;                               // 21       SpellShapeshift.dbc
-    //DBCString Description;                                // 22       m_description_lang not used
-    //DBCString ToolTip;                                    // 23       m_auraDescription_lang not used
+    //char* Description;                                    // 22       m_description_lang not used
+    //char* ToolTip;                                        // 23       m_auraDescription_lang not used
     uint32 SchoolMask;                                      // 24       m_schoolMask
     uint32 RuneCostID;                                      // 25       m_runeCostID
     //uint32    spellMissileID;                             // 26       m_spellMissileID not used

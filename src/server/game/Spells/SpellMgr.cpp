@@ -2775,14 +2775,8 @@ void SpellMgr::LoadSpellInfoStore()
                 for (int j = 0; j < MAX_SPELL_EFFECTS; ++j)
                     if (sInfo->Effects[j].Effect == SPELL_EFFECT_SEND_TAXI)
                         spellPaths.insert(sInfo->Effects[j].MiscValue);
-		// Test 4.3.0a
-		//ASSERT(((sTaxiNodesStore.GetNumRows()-1)/22) < TaxiMaskSize && "TaxiMaskSize needs to be increased");
-		// uint8  field   = (uint8)((i - 1) / 42);
-        // uint32 submask = 1<<((i-1)%42);
 
-
-
-        ASSERT(((sTaxiNodesStore.GetNumRows()-1)/42) < TaxiMaskSize && "TaxiMaskSize needs to be increased");
+        ASSERT(((sTaxiNodesStore.GetNumRows()-1)/32) < TaxiMaskSize && "TaxiMaskSize needs to be increased");
         memset(sTaxiNodesMask, 0, sizeof(sTaxiNodesMask));
         memset(sOldContinentsNodesMask, 0, sizeof(sOldContinentsNodesMask));
         memset(sHordeTaxiNodesMask, 0, sizeof(sHordeTaxiNodesMask));
@@ -2813,8 +2807,8 @@ void SpellMgr::LoadSpellInfoStore()
             }
 
             // valid taxi network node
-            uint8  field   = (uint8)((i - 1) / 42);
-            uint32 submask = 1<<((i-1)%42);
+            uint8  field   = (uint8)((i - 1) / 32);
+            uint32 submask = 1<<((i-1)%32);
             sTaxiNodesMask[field] |= submask;
 
             if (node->MountCreatureID[0] && node->MountCreatureID[0] != 32981)

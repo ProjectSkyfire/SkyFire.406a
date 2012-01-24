@@ -1555,7 +1555,7 @@ void World::SetInitialWorldSettings()
     sLog->outString("Loading Skill Fishing base level requirements...");
     sObjectMgr->LoadFishingBaseSkillLevel();
 
-   /* sLog->outString("Loading Achievements...");
+    sLog->outString("Loading Achievements...");
     sAchievementMgr->LoadAchievementReferenceList();
     sLog->outString("Loading Achievement Criteria Lists...");
     sAchievementMgr->LoadAchievementCriteriaList();
@@ -1567,7 +1567,7 @@ void World::SetInitialWorldSettings()
     sAchievementMgr->LoadRewardLocales();
     sLog->outString("Loading Completed Achievements...");
     sAchievementMgr->LoadCompletedAchievements();
-	*/
+
     // Delete expired auctions before loading
     sLog->outString("Deleting expired auctions...");
     sAuctionMgr->DeleteExpiredAuctionsAtStartup();
@@ -1797,6 +1797,9 @@ void World::SetInitialWorldSettings()
     }
     else
         sLog->SetLogDB(false);
+
+    sLog->outString("Initializing Opcodes...");
+    InitOpcodes();
 
     uint32 startupDuration = GetMSTimeDiffToNow(startupBegin);
     sLog->outString();

@@ -2351,21 +2351,22 @@ void ObjectMgr::LoadItemTemplates()
         itemTemplate.ItemLimitCategory = sparse->ItemLimitCategory;
         itemTemplate.HolidayId = sparse->HolidayId;
         itemTemplate.StatScalingFactor = sparse->StatScalingFactor;
-        itemTemplate.Field130 = sparse->Field130;
-        itemTemplate.Field131 = sparse->Field131;
+		itemTemplate.MinMoneyLoot = sparse->minMoneyLoot;
+        itemTemplate.MaxMoneyLoot = sparse->maxMoneyLoot;
+        itemTemplate.Field132 = 0;
+        itemTemplate.Field133 = 0;
         itemTemplate.ScriptId = 0;
         itemTemplate.FoodType = 0;
-        itemTemplate.MinMoneyLoot = 0;
-        itemTemplate.MaxMoneyLoot = 0;
+        
         ++sparseCount;
     }
 
     // Load missing items from item_template AND overwrite data from Item-sparse.db2 (item_template is supposed to contain Item-sparse.adb data)
     //                                               0      1      2         3     4     5          6        7      8           9         10         11
     QueryResult result = WorldDatabase.Query("SELECT entry, Class, SubClass, Unk0, Name, DisplayId, Quality, Flags, FlagsExtra, BuyPrice, SellPrice, InventoryType, "
-        //      12              13             14         15             16             17                 18             19
+        //                                        12              13             14         15             16             17                 18             19
         "AllowableClass, AllowableRace, ItemLevel, RequiredLevel, RequiredSkill, RequiredSkillRank, RequiredSpell, RequiredHonorRank, "
-        //      20                21                         22                      23        24         25
+        //                                        20                21                         22                      23        24         25
         "RequiredCityRank, RequiredReputationFaction, RequiredReputationRank, MaxCount, Stackable, ContainerSlots, "
         //                                        26          27           28           29           30          31           32           33
         "stat_type1, stat_value1, stat_unk1_1, stat_unk2_1, stat_type2, stat_value2, stat_unk1_2, stat_unk2_2, "
@@ -2393,10 +2394,10 @@ void ObjectMgr::LoadItemTemplates()
         "Bonding, Description, PageText, LanguageID, PageMaterial, StartQuest, LockID, Material, "
         //                                        108     109             110           111      112            113   114  115        116
         "Sheath, RandomProperty, RandomSuffix, ItemSet, MaxDurability, Area, Map, BagFamily, TotemCategory, "
-        //  117            118              119            120              121            122              123
+        //                                        117            118              119            120              121            122              123
         "SocketColor_1, SocketContent_1, SocketColor_2, SocketContent_2, SocketColor_3, SocketContent_3, SocketBonus, "
-        //  124            125         126       127                128        129      130       131
-        "GemProperties, ArmorDamageModifier, Duration, ItemLimitCategory, HolidayId, FoodType, minMoneyLoot, maxMoneyLoot,Field132, Field133 "
+        //                                        124            125                  126       127                128        129                130       131
+        "GemProperties, ArmorDamageModifier, Duration, ItemLimitCategory, HolidayId, StatScalingFactor, Field130, Field131 "
         "FROM item_template");
 
     if (result)
@@ -2499,8 +2500,8 @@ void ObjectMgr::LoadItemTemplates()
             itemTemplate.ItemLimitCategory = fields[127].GetUInt32();
             itemTemplate.HolidayId = fields[128].GetUInt32();
             itemTemplate.StatScalingFactor = fields[129].GetFloat();
-            itemTemplate.Field130 = fields[130].GetInt32();
-            itemTemplate.Field131 = fields[131].GetInt32();
+            itemTemplate.Field132 = fields[130].GetInt32();
+            itemTemplate.Field133 = fields[131].GetInt32();
             itemTemplate.ScriptId = 0;
             itemTemplate.FoodType = 0;
             itemTemplate.MinMoneyLoot = 0;
@@ -6760,9 +6761,9 @@ void ObjectMgr::LoadCurrencysLoot()
     while (result->NextRow());
 
     if (count)
-        sLog->outString("Loaded %u currency loot defination", count);
+        sLog->outString("Loaded %u currency loot definition", count);
     else
-        sLog->outString("Loaded 0 currency loot defination. Table is empty!");
+        sLog->outString("Loaded 0 currency loot definition. Table is empty!");
 }
 
 void ObjectMgr::LoadCorpses()
@@ -7835,7 +7836,7 @@ bool ObjectMgr::LoadSkyFireStrings(char const* table, int32 min_value, int32 max
             return false;
         }
 
-        // real range (max+1, min+1) exaple: (-10, -1000) -> -999...-10+1
+        // real range (max+1, min+1) example: (-10, -1000) -> -999...-10+1
         std::swap(start_value, end_value);
         ++start_value;
         ++end_value;
@@ -8783,7 +8784,7 @@ void ObjectMgr::LoadDbScriptStrings()
 
 bool LoadTrinityStrings(char const* table, int32 start_value, int32 end_value)
 {
-    // MAX_DB_SCRIPT_STRING_ID is max allowed negative value for scripts (scrpts can use only more deep negative values
+    // MAX_DB_SCRIPT_STRING_ID is max allowed negative value for scripts (scripts can use only more deep negative values
     // start/end reversed for negative values
     if (start_value > MAX_DB_SCRIPT_STRING_ID || end_value >= start_value)
     {

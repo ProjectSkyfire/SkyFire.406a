@@ -77,7 +77,7 @@ namespace Movement
             data << splineflags.getAnimationId();
             data << move_spline.effect_start_time;
         }
-        
+
         data << move_spline.Duration();
 
         if (splineflags.parabolic)

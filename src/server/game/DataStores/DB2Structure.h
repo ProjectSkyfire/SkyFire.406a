@@ -38,29 +38,8 @@
 #else
 #pragma pack(push, 1)
 #endif
+
 // Structures used to access raw DB2 data and required packing to portability
-
-
-#define MAX_ITEM_EXT_COST_ITEMS         5
-#define MAX_ITEM_EXT_COST_CURRENCIES    5
-
-struct ItemExtendedCostEntry
-{
-    uint32      ID;                                         // 0 extended-cost entry id
-    //uint32    reqhonorpoints;                             // 1 required honor points
-    //uint32    reqarenapoints;                             // 2 required arena points
-    uint32      RequiredArenaSlot;                          // 3 arena slot restrictions (min slot value)
-    uint32      RequiredItem[MAX_ITEM_EXT_COST_ITEMS];      // 4-8 required item id
-    uint32      RequiredItemCount[MAX_ITEM_EXT_COST_ITEMS]; // 9-13 required count of 1st item
-    uint32      RequiredPersonalArenaRating;                // 14 required personal arena rating
-    //uint32    ItemPurchaseGroup;                          // 15
-    uint32      RequiredCurrency[MAX_ITEM_EXT_COST_CURRENCIES];// 16-20 required curency id
-    uint32      RequiredCurrencyCount[MAX_ITEM_EXT_COST_CURRENCIES];// 21-25 required curency count
-    //uint32    something[5];                               // 26-30
-};
-
-
-
 struct ItemEntry
 {
    uint32   ID;                                             // 0
@@ -79,8 +58,11 @@ struct ItemSparseEntry
     uint32     Quality;                                      // 1
     uint32     Flags;                                        // 2
     uint32     Flags2;                                       // 3
-    float      BuyPrice;                                     // 4
-    float      SellPrice;                                    // 5
+	uint32      unk_0;				                         // 131 4.3.0a 15050	
+	uint32      unk_1;					                     // 132 4.3.0a 15050
+	uint32     MaxDurability;				                 // 131 4.3.0a 15050	 //Test
+    uint32     BuyPrice;                                     // 4
+    uint32     SellPrice;                                    // 5
     uint32     InventoryType;                                // 6
     int32      AllowableClass;                               // 7
     int32      AllowableRace;                                // 8
@@ -126,7 +108,7 @@ struct ItemSparseEntry
     uint32     RandomProperty;                               // 108
     uint32     RandomSuffix;                                 // 109
     uint32     ItemSet;                                      // 110
-    uint32     MaxDurability;                                // 111
+   // uint32     MaxDurability;                                // 111
     uint32     Area;                                         // 112
     uint32     Map;                                          // 113
     uint32     BagFamily;                                    // 114
@@ -135,15 +117,20 @@ struct ItemSparseEntry
     uint32     Content[MAX_ITEM_PROTO_SOCKETS];              // 119 - 121
     int32      SocketBonus;                                  // 122
     uint32     GemProperties;                                // 123
-    uint32      ArmorDamageModifier;                          // 124
+    float      ArmorDamageModifier;                          // 124
     uint32     Duration;                                     // 125
     uint32     ItemLimitCategory;                            // 126
     uint32     HolidayId;                                    // 127
-    uint32     StatScalingFactor;                            // 128
-    int32      Field130;                                     // 129
-    float      Field131;                                     // 130
-	int32	   Field132;									 // 131
-    int32      Field133;                                     // 132
+    float      StatScalingFactor;                            // 128
+    int32      minMoneyLoot;                                 // 129
+    int32      maxMoneyLoot;                                 // 130
+	
+};
+
+struct ItemCurrencyCostEntry
+{
+    //uint32  Id;
+    uint32  ItemId;
 };
 
 // GCC has alternative #pragma pack(N) syntax and old gcc version does not support pack(push, N), also any gcc version does not support it at some platform

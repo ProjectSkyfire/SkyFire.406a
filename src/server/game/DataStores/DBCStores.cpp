@@ -119,13 +119,13 @@ DBCStorage <ItemDamageEntry>              sItemDamageTwoHandCasterStore(ItemDama
 DBCStorage <ItemDamageEntry>              sItemDamageWandStore(ItemDamagefmt);
 DBCStorage <ItemDisenchantLootEntry>      sItemDisenchantLootStore(ItemDisenchantLootfmt);
 //DBCStorage <ItemDisplayInfoEntry>         sItemDisplayInfoStore(ItemDisplayTemplateEntryfmt); -- not used currently
-
+DBCStorage <ItemExtendedCostEntry>        sItemExtendedCostStore(ItemExtendedCostEntryfmt);
 DBCStorage <ItemLimitCategoryEntry>       sItemLimitCategoryStore(ItemLimitCategoryEntryfmt);
 DBCStorage <ItemRandomPropertiesEntry>    sItemRandomPropertiesStore(ItemRandomPropertiesfmt);
 DBCStorage <ItemRandomSuffixEntry>        sItemRandomSuffixStore(ItemRandomSuffixfmt);
 DBCStorage <ItemSetEntry>                 sItemSetStore(ItemSetEntryfmt);
 DBCStorage <ItemReforgeEntry>             sItemReforgeStore(ItemReforgefmt);
-//DBCStorage <ItemCurrencyCostEntry>        sItemCurrencyCostStore(ItemCurrencyCostfmt);
+
 
 DBCStorage <LFGDungeonEntry> sLFGDungeonStore(LFGDungeonEntryfmt);
 
@@ -382,6 +382,7 @@ void LoadDBCStores(const std::string& dataPath, uint32& availableDbcLocales)
     LoadDBC(availableDbcLocales, bad_dbc_files, sItemBagFamilyStore,           dbcPath, "ItemBagFamily.dbc");
  // LoadDBC(availableDbcLocales, bad_dbc_files, sItemDisplayInfoStore,         dbcPath, "ItemDisplayInfo.dbc");     -- not used currently
  // LoadDBC(availableDbcLocales, bad_dbc_files, sItemCondExtCostsStore,        dbcPath, "ItemCondExtCosts.dbc");
+ // LoadDBC(availableDbcLocales, bad_dbc_files, sItemExtendedCostStore,        dbcPath, "ItemExtendedCost.dbc");
     LoadDBC(availableDbcLocales, bad_dbc_files, sItemLimitCategoryStore,       dbcPath, "ItemLimitCategory.dbc");
     LoadDBC(availableDbcLocales, bad_dbc_files, sItemRandomPropertiesStore,    dbcPath, "ItemRandomProperties.dbc");
     LoadDBC(availableDbcLocales, bad_dbc_files, sItemRandomSuffixStore,        dbcPath, "ItemRandomSuffix.dbc");
@@ -443,7 +444,7 @@ void LoadDBCStores(const std::string& dataPath, uint32& availableDbcLocales)
 
     LoadDBC(availableDbcLocales, bad_dbc_files, sScalingStatDistributionStore, dbcPath, "ScalingStatDistribution.dbc");
     LoadDBC(availableDbcLocales, bad_dbc_files, sScalingStatValuesStore,       dbcPath, "ScalingStatValues.dbc");
-    LoadDBC(availableDbcLocales, bad_dbc_files, sSkillLineStore,               dbcPath, "SkillLine.dbc");
+  //  LoadDBC(availableDbcLocales, bad_dbc_files, sSkillLineStore,               dbcPath, "SkillLine.dbc");
     LoadDBC(availableDbcLocales, bad_dbc_files, sSkillLineAbilityStore,        dbcPath, "SkillLineAbility.dbc");
     LoadDBC(availableDbcLocales, bad_dbc_files, sSoundEntriesStore,            dbcPath, "SoundEntries.dbc");
     LoadDBC(availableDbcLocales, bad_dbc_files, sSpellAuraOptionsStore,        dbcPath, "SpellAuraOptions.dbc"/*, &CustomSpellAuraOptionsEntryfmt, &CustomSpellAuraOptionsEntryIndex*/);
@@ -654,12 +655,12 @@ void LoadDBCStores(const std::string& dataPath, uint32& availableDbcLocales)
         exit(1);
     }
 
-    //Check loaded DBC files proper version for 4.3.0 15050
-    if (!sAreaStore.LookupEntry(4713)              ||       // last area (areaflag) added in 4.3.0a
-        !sCharTitlesStore.LookupEntry(287)         ||       // last char title added in 4.3.0a
-        !sGemPropertiesStore.LookupEntry(2250)     ||       // last gem property added in 4.3.0a
-        !sMapStore.LookupEntry(980)                ||       // last map added in 4.3.0a
-        !sSpellStore.LookupEntry(110966)            )        // last added spell in 4.3.0a
+    // Check loaded DBC files proper version for 4.3.0 15050
+    if (!sAreaStore.LookupEntry(4712)              ||       // last area (areaflag) added in 4.3.0
+        !sCharTitlesStore.LookupEntry(287)         ||       // last char title added in 4.3.0
+        !sGemPropertiesStore.LookupEntry(2250)     ||       // last gem property added in 4.3.0
+        !sMapStore.LookupEntry(980)                ||       // last map added in 4.3.0
+        !sSpellStore.LookupEntry(110966)           )        // last added spell in 4.3.0
     {
         sLog->outError("You have _outdated_ DBC files. Please extract correct versions from current using client.");
         exit(1);

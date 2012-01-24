@@ -21,7 +21,6 @@
 #include <G3D/Matrix4.h>
 
 namespace Movement{
-
 SplineBase::EvaluationMethtod SplineBase::evaluators[SplineBase::ModesEnd] =
 {
     &SplineBase::EvaluateLinear,
@@ -303,5 +302,4 @@ std::string SplineBase::ToString() const
 
     return str.str();
 }
-
 }

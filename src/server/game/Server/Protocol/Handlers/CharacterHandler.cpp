@@ -213,36 +213,117 @@ bool LoginQueryHolder::Initialize()
     return res;
 }
 
+struct charEnumInfo
+{
+    uint8 nameLenghts;
+    bool firstLogin;
+};
+
 void WorldSession::HandleCharEnum(PreparedQueryResult result)
 {
-    WorldPacket data(SMSG_CHAR_ENUM, 100);                  // we guess size
+    WorldPacket data(SMSG_CHAR_ENUM, 270);                  // we guess size
 
-    uint8 num = 0;
+    data.WriteBits(result ? (*result).GetRowCount() : 0 , 17);
 
-    data << num;
+    std::vector<charEnumInfo> charInfoList;
+    charInfoList.resize(result ? (*result).GetRowCount() : 0);
 
     _allowedCharsToLogin.clear();
     if (result)
     {
+        typedef std::pair<uint32, uint64> Guids;
+        std::vector<Guids> guidsVect;
+        ByteBuffer buffer;
+        _allowedCharsToLogin.clear();
+        int charCount = 0;
         do
         {
-            uint32 guidlow = (*result)[0].GetUInt32();
-            sLog->outDetail("Loading char guid %u from account %u.", guidlow, GetAccountId());
-            if (Player::BuildEnumData(result, &data))
+            uint32 GuidLow = (*result)[0].GetUInt32();
+            uint64 GuildGuid = (*result)[13].GetUInt32();//TODO: store as uin64
+
+            charEnumInfo charInfo = charEnumInfo();
+            charInfo.nameLenghts =  (*result)[1].GetString().size();
+            charInfo.firstLogin = (*result)[15].GetUInt32() & AT_LOGIN_FIRST ? true : false;
+            charInfoList[charCount] = charInfo;
+            charCount++;
+
+            guidsVect.push_back(std::make_pair(GuidLow, GuildGuid));
+
+            sLog->outDetail("Loading char guid %u from account %u.", GuidLow, GetAccountId());
+
+            if (!Player::BuildEnumData(result, &buffer))
             {
-                _allowedCharsToLogin.insert(guidlow);
-                ++num;
+                sLog->outError("Building enum data for SMSG_CHAR_ENUM has failed, aborting");
+                return;
             }
+
+            _allowedCharsToLogin.insert(GuidLow);
         }
         while (result->NextRow());
-    }
 
-    data.put<uint8>(0, num);
+        int counter = 0;
+        for (std::vector<Guids>::iterator itr = guidsVect.begin(); itr != guidsVect.end(); ++itr)
+        {
+            uint32 GuidLow = (*itr).first;
+            uint64 GuildGuid = (*itr).second;
+
+            uint8 Guid0 = uint8(GuidLow);
+            uint8 Guid1 = uint8(GuidLow >> 8);
+            uint8 Guid2 = uint8(GuidLow >> 16);
+            uint8 Guid3 = uint8(GuidLow >> 24);
+
+            // We dont send guild guid, high guid == 0 for players
+            for (uint8 i = 0; i < 18; ++i)
+            {
+                switch(i)
+                {
+                    // guidlow[0]
+                case 10:
+                    data.WriteBit(Guid0 ? 1 : 0);
+                    break;
+                    // guidlow[1]
+                case 12:
+                    data.WriteBit(Guid1 ? 1 : 0);
+                    break;
+                    // guidlow[2]
+                case 1:
+                    data.WriteBit(Guid2 ? 1 : 0);
+                    break;
+                    // guidlow[3]
+                case 11:
+                    data.WriteBit(Guid3 ? 1 : 0);
+                    break;
+                case 8:
+                    data.WriteBits(charInfoList[counter].nameLenghts, 7);
+                    break;
+                case 13:
+                    data.WriteBit(charInfoList[counter].firstLogin ? 1 : 0);
+                    break;
+                default:
+                    data.WriteBit(0);
+                    break;
+                }
+            }
+
+            counter++;
+        }
+        data.WriteBits(0x0, 23); // unk counter 4.3
+        data.WriteBit(1);
+
+        data.FlushBits();
+        data.append(buffer);
+    }
+    else
+    {
+        data.WriteBits(0x0, 23);
+        data.WriteBit(1);
+        data.FlushBits();
+    }
 
     SendPacket(&data);
 }
 
-void WorldSession::HandleCharEnumOpcode(WorldPacket & /*recv_data*/)
+void WorldSession::HandleCharEnumOpcode(WorldPacket& /*recv_data*/)
 {
     // remove expired bans
     PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_EXPIRED_BANS);
@@ -822,7 +903,20 @@ void WorldSession::HandlePlayerLoginOpcode(WorldPacket & recv_data)
 
     sLog->outStaticDebug("WORLD: Recvd Player Logon Message");
 
-    recv_data >> playerGuid;
+    BitStream mask = recv_data.ReadBitStream(8);
+
+    ByteBuffer bytes(8, true);
+
+    recv_data.ReadXorByte(mask[3], bytes[4]);
+    recv_data.ReadXorByte(mask[7], bytes[1]);
+    recv_data.ReadXorByte(mask[4], bytes[7]);
+    recv_data.ReadXorByte(mask[6], bytes[2]);
+    recv_data.ReadXorByte(mask[5], bytes[6]);
+    recv_data.ReadXorByte(mask[1], bytes[5]);
+    recv_data.ReadXorByte(mask[2], bytes[3]);
+    recv_data.ReadXorByte(mask[0], bytes[0]);
+
+    playerGuid = BitConverter::ToUInt64(bytes);
 
     if (!CharCanLogin(GUID_LOPART(playerGuid)))
     {

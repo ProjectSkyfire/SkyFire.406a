@@ -2870,7 +2870,7 @@ uint32 Spell::SelectEffectTargets(uint32 i, SpellImplicitTargetInfo const& cur)
             {
                 Unit::AuraEffectList const& Auras = m_caster->GetAuraEffectsByType(SPELL_AURA_MOD_MAX_AFFECTED_TARGETS);
                 for (Unit::AuraEffectList::const_iterator j = Auras.begin(); j != Auras.end(); ++j)
-                    if ((*j)->IsAffectedOnSpell(m_spellInfo))
+                    if ((*j)->IsAffectingSpell(m_spellInfo))
                         maxTargets += (*j)->GetAmount();
 
                 if (m_spellInfo->Id == 5246) //Intimidating Shout
@@ -2890,7 +2890,7 @@ uint32 Spell::SelectEffectTargets(uint32 i, SpellImplicitTargetInfo const& cur)
             {
                 Unit::AuraEffectList const& Auras = m_caster->GetAuraEffectsByType(SPELL_AURA_MOD_MAX_AFFECTED_TARGETS);
                 for (Unit::AuraEffectList::const_iterator j = Auras.begin(); j != Auras.end(); ++j)
-                    if ((*j)->IsAffectedOnSpell(m_spellInfo))
+                    if ((*j)->IsAffectingSpell(m_spellInfo))
                         maxTargets += (*j)->GetAmount();
 
                 Trinity::RandomResizeList(gobjectList, maxTargets);
@@ -3680,7 +3680,7 @@ void Spell::finish(bool ok)
         Unit::AuraEffectList const& vIgnoreReset = m_caster->GetAuraEffectsByType(SPELL_AURA_IGNORE_MELEE_RESET);
         for (Unit::AuraEffectList::const_iterator i = vIgnoreReset.begin(); i != vIgnoreReset.end(); ++i)
         {
-            if ((*i)->IsAffectedOnSpell(m_spellInfo))
+            if ((*i)->IsAffectingSpell(m_spellInfo))
             {
                 found = true;
                 break;
@@ -4660,7 +4660,7 @@ SpellCastResult Spell::CheckCast(bool strict)
         Unit::AuraEffectList const& ignore = m_caster->GetAuraEffectsByType(SPELL_AURA_MOD_IGNORE_SHAPESHIFT);
         for (Unit::AuraEffectList::const_iterator i = ignore.begin(); i != ignore.end(); ++i)
         {
-            if (!(*i)->IsAffectedOnSpell(m_spellInfo))
+            if (!(*i)->IsAffectingSpell(m_spellInfo))
                 continue;
             checkForm = false;
             break;
@@ -4686,7 +4686,7 @@ SpellCastResult Spell::CheckCast(bool strict)
     Unit::AuraEffectList const& stateAuras = m_caster->GetAuraEffectsByType(SPELL_AURA_ABILITY_IGNORE_AURASTATE);
     for (Unit::AuraEffectList::const_iterator j = stateAuras.begin(); j != stateAuras.end(); ++j)
     {
-        if ((*j)->IsAffectedOnSpell(m_spellInfo))
+        if ((*j)->IsAffectingSpell(m_spellInfo))
         {
             m_needComboPoints = false;
             if ((*j)->GetMiscValue() == 1)
@@ -6589,7 +6589,7 @@ void Spell::HandleLaunchPhase()
     Unit::AuraEffectList const& Auras = m_caster->GetAuraEffectsByType(SPELL_AURA_ABILITY_CONSUME_NO_AMMO);
     for (Unit::AuraEffectList::const_iterator j = Auras.begin(); j != Auras.end(); ++j)
     {
-        if ((*j)->IsAffectedOnSpell(m_spellInfo))
+        if ((*j)->IsAffectingSpell(m_spellInfo))
             usesAmmo=false;
     }
 
@@ -7184,7 +7184,7 @@ void Spell::PrepareTriggersExecutedOnHit()
     Unit::AuraEffectList const& targetTriggers = m_caster->GetAuraEffectsByType(SPELL_AURA_ADD_TARGET_TRIGGER);
     for (Unit::AuraEffectList::const_iterator i = targetTriggers.begin(); i != targetTriggers.end(); ++i)
     {
-        if (!(*i)->IsAffectedOnSpell(m_spellInfo))
+        if (!(*i)->IsAffectingSpell(m_spellInfo))
             continue;
         SpellInfo const* auraSpellInfo = (*i)->GetSpellInfo();
         uint32 auraSpellIdx = (*i)->GetEffIndex();
