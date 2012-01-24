@@ -193,8 +193,8 @@ void GuildMgr::LoadGuilds()
                                                      "BankResetTimeTab3, BankRemSlotsTab3, BankResetTimeTab4, BankRemSlotsTab4, BankResetTimeTab5, BankRemSlotsTab5, "
                                                      //   19                 20                21                 22
                                                      "BankResetTimeTab6, BankRemSlotsTab6, BankResetTimeTab7, BankRemSlotsTab7, "
-                                                     //   23      24       25       26      27         28
-                                                     "c.name, c.level, c.class, c.zone, c.account, c.logout_time "
+                                                     //   23      24       25       26      27         28               29               30               31               32                33                34
+                                                     "c.name, c.level, c.class, c.zone, c.account, c.logout_time, FirstProffLevel, FirstProffSkill, FirstProffRank, SecondProffLevel, SecondProffSkill, SecondProffRank "
                                                      "FROM guild_member gm LEFT JOIN characters c ON c.guid = gm.guid ORDER BY guildid ASC");
 
         if (!result)

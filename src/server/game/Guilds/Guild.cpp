@@ -222,6 +222,7 @@ void Guild::RankInfo::SaveToDB(SQLTransaction& trans) const
 
 void Guild::RankInfo::WritePacket(WorldPacket& data) const
 {
+    data << m_name;
     data << uint32(m_rights);
     data << uint32(m_bankMoneyPerDay);                  // In game set in gold, in packet set in bronze.
     for (uint8 i = 0; i < GUILD_BANK_MAX_TABS; ++i)
@@ -515,6 +516,40 @@ void Guild::Member::SetStats(Player* player)
     m_zoneId    = player->GetZoneId();
     m_accountId = player->GetSession()->GetAccountId();
     m_achievementPoints = player->GetAchievementMgr().GetAchievementPoints();
+	
+    uint8 count_prof = 0;
+    for (PlayerSpellMap::const_iterator spellIter = player->GetSpellMap().begin(); spellIter != player->GetSpellMap().end(); ++spellIter)
+    {
+        if(count_prof >= 2)
+            break;
+    
+        SpellInfo const *spellInfo = sSpellMgr->GetSpellInfo(spellIter->first);
+            if (!spellInfo)
+                continue;
+
+        if(spellInfo->IsPrimaryProfession())
+        {
+            uint32 skill = 0;
+
+            for (uint8 i = 0 ; i < MAX_SPELL_EFFECTS ; ++i)
+            {
+                if (spellInfo->Effects[i].Effect == SPELL_EFFECT_SKILL)
+                {
+                    uint32 skill = spellInfo->Effects[i].MiscValue;
+                    break; 
+                }
+            }
+
+            uint32 value = (uint32)player->GetSkillValue(skill);
+            uint32 rank = sSpellMgr->GetSpellRank(spellIter->first);
+
+            SetProfession((uint32)count_prof, value, skill, rank);
+            count_prof++;
+        }
+    }
+    if (count_prof < 2)
+        for (uint8 i = 0; i < (2 - count_prof); i++)
+            SetProfession((uint32)(count_prof + i), 0, 0, 0);
 }
 
 void Guild::Member::SetStats(const std::string& name, uint8 level, uint8 _class, uint32 zoneId, uint32 accountId)
@@ -524,6 +559,9 @@ void Guild::Member::SetStats(const std::string& name, uint8 level, uint8 _class,
     m_class     = _class;
     m_zoneId    = zoneId;
     m_accountId = accountId;
+	
+    for (int i = 0; i < 2; i++)
+        SetProfession(i, 0, 0, 0);
 }
 
 void Guild::Member::SetPublicNote(const std::string& publicNote)
@@ -574,6 +612,12 @@ void Guild::Member::SaveToDB(SQLTransaction& trans) const
     stmt->setUInt8 (2, m_rankId);
     stmt->setString(3, m_publicNote);
     stmt->setString(4, m_officerNote);
+    stmt->setUInt32(5, professions[0].level);
+    stmt->setUInt32(6, professions[0].skillID);
+    stmt->setUInt32(7, professions[0].rank);
+    stmt->setUInt32(8, professions[1].level);
+    stmt->setUInt32(9, professions[1].skillID);
+    stmt->setUInt32(10,professions[1].rank);
     CharacterDatabase.ExecuteOrAppend(trans, stmt);
 }
 
@@ -598,6 +642,9 @@ bool Guild::Member::LoadFromDB(Field* fields)
              fields[26].GetUInt16(),
              fields[27].GetUInt32());
     m_logoutTime    = fields[28].GetUInt32();
+	
+    SetProfession(0, fields[29].GetUInt32(), fields[30].GetUInt32(), fields[31].GetUInt32());
+    SetProfession(1, fields[32].GetUInt32(), fields[33].GetUInt32(), fields[34].GetUInt32());
 
     if (!CheckStats())
         return false;
@@ -1193,8 +1240,8 @@ void Guild::Disband()
 
 void Guild::UpdateMemberData(Player* player, uint8 dataid, uint32 value)
 {
-   if (Member* member = GetMember(player->GetGUID()))
-   {
+    if (Member* member = GetMember(player->GetGUID()))
+    {
         switch(dataid)
         {
             case GUILD_MEMBER_DATA_ZONEID:
@@ -1206,12 +1253,49 @@ void Guild::UpdateMemberData(Player* player, uint8 dataid, uint32 value)
             case GUILD_MEMBER_DATA_LEVEL:
                 member->SetLevel(value);
             break;
-            default:
+            case GUILD_MEMBER_DATA_PROFESSIONS:
+            {
+                uint8 count_prof = 0;
+                for (PlayerSpellMap::const_iterator spellIter = player->GetSpellMap().begin(); spellIter != player->GetSpellMap().end(); ++spellIter)
+                {
+                    if(count_prof >= 2)
+                        break;
 
-            sLog->outError("Guild::UpdateMemberData: Called with incorrect DATAID %u (value %u)", dataid, value);
+                    SpellInfo const *spellInfo = sSpellMgr->GetSpellInfo(spellIter->first);
+                        if (!spellInfo)
+                            continue;
+
+                    if(spellInfo->IsPrimaryProfession())
+                    {
+                        uint32 skill = 0;
+
+                        for (uint8 i = 0 ; i < MAX_SPELL_EFFECTS ; ++i)
+                        {
+                            if (spellInfo->Effects[i].Effect == SPELL_EFFECT_SKILL)
+                            {
+                                skill = spellInfo->Effects[i].MiscValue;
+                                break; 
+                            }
+                        }
+                        
+                        uint32 value = (uint32)player->GetSkillValue(skill);
+                        uint32 rank = sSpellMgr->GetSpellRank(spellIter->first);
+
+                        member->SetProfession((uint32)count_prof, value, skill, rank);
+                        count_prof++;
+                    }
+                }
+				
+                if (count_prof < 2)
+                    for (uint8 i = 0; i < (2 - count_prof); i++)
+                        member->SetProfession((uint32)(count_prof + i), 0, 0, 0);
+                break;
+            }
+            default:
+                sLog->outError("Guild::UpdateMemberData: Called with incorrect DATAID %u (value %u)", dataid, value);
             break;
         }
-   }
+    }
 }
 
 void Guild::SendUpdateRoster(WorldSession* session /*= NULL*/)
@@ -1309,9 +1393,9 @@ void Guild::HandleRoster(WorldSession* session /*= NULL*/)
         // two primary professions (todo)
         for (int i = 0; i < 2; ++i)
         {
-            data << uint32(0); // profession title
-            data << uint32(0); // profession level?
-            data << uint32(0); // skillid
+            data << uint32(itr->second->professions[i].level);
+            data << uint32(itr->second->professions[i].skillID);
+            data << uint32(itr->second->professions[i].rank);
         }
     }
 
@@ -1396,7 +1480,7 @@ void Guild::SendGuildRankInfo(WorldSession* session)
 
 void Guild::HandleQuery(WorldSession* session)
 {
-    WorldPacket data(SMSG_GUILD_QUERY_RESPONSE, 8*32+200);      // Guess size
+    WorldPacket data(SMSG_GUILD_QUERY_RESPONSE, 8+2*15+10*15*2+10*4+10*4+200+4);      // Guess size
 
     uint64 guid = MAKE_NEW_GUID(m_id, 0, HIGHGUID_GUILD);
     data << uint64(guid);
