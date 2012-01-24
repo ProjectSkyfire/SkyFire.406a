@@ -2214,7 +2214,7 @@ void FillDisenchantFields(uint32* disenchantID, uint32* requiredDisenchantSkill,
     if ((itemTemplate.Flags & (ITEM_PROTO_FLAG_CONJURED | ITEM_PROTO_FLAG_UNK6)) ||
         itemTemplate.Bonding == BIND_QUEST_ITEM || itemTemplate.Area || itemTemplate.Map ||
         itemTemplate.Stackable > 1 ||
-        !(itemTemplate.SellPrice) || sItemCurrencyCostStore.LookupEntry(itemTemplate.ItemId))
+        !(itemTemplate.SellPrice))// || sItemCurrencyCostStore.LookupEntry(itemTemplate.ItemId)) // Fix this later
         return;
 
     for (uint32 i = 0; i < sItemDisenchantLootStore.GetNumRows(); ++i)

@@ -125,7 +125,7 @@ DBCStorage <ItemRandomPropertiesEntry>    sItemRandomPropertiesStore(ItemRandomP
 DBCStorage <ItemRandomSuffixEntry>        sItemRandomSuffixStore(ItemRandomSuffixfmt);
 DBCStorage <ItemSetEntry>                 sItemSetStore(ItemSetEntryfmt);
 DBCStorage <ItemReforgeEntry>             sItemReforgeStore(ItemReforgefmt);
-DBCStorage <ItemCurrencyCostEntry>        sItemCurrencyCostStore(ItemCurrencyCostfmt);
+//DBCStorage <ItemCurrencyCostEntry>        sItemCurrencyCostStore(ItemCurrencyCostfmt);
 
 DBCStorage <LFGDungeonEntry> sLFGDungeonStore(LFGDungeonEntryfmt);
 
