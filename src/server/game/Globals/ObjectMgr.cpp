@@ -2331,7 +2331,7 @@ void ObjectMgr::LoadItemTemplates()
         itemTemplate.RandomProperty = sparse->RandomProperty;
         itemTemplate.RandomSuffix = sparse->RandomSuffix;
         itemTemplate.ItemSet = sparse->ItemSet;
-        itemTemplate.MaxDurability = sparse->MaxDurability;
+        itemTemplate.MaxDurability = 0;
         itemTemplate.Area = sparse->Area;
         itemTemplate.Map = sparse->Map;
         itemTemplate.BagFamily = sparse->BagFamily;
