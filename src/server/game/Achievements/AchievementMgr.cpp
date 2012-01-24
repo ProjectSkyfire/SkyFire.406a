@@ -565,7 +565,7 @@ void AchievementGlobalMgr::LoadAchievementCriteriaList()
         return;
     }
 
-    for (uint32 entryId = 0; entryId < sAchievementCriteriaStore.GetNumRows(); ++entryId)
+  /*  for (uint32 entryId = 0; entryId < sAchievementCriteriaStore.GetNumRows(); ++entryId)
     {
         AchievementCriteriaEntry const* criteria = sAchievementCriteriaStore.LookupEntry(entryId);
         if (!criteria)
@@ -577,7 +577,7 @@ void AchievementGlobalMgr::LoadAchievementCriteriaList()
         if (criteria->timeLimit)
             m_AchievementCriteriasByTimedType[criteria->timedCriteriaStartType].push_back(criteria);
     }
-
+	*/
     sLog->outString(">> Loaded %lu achievement criteria in %u ms", (unsigned long)m_AchievementCriteriasByType->size(), GetMSTimeDiffToNow(oldMSTime));
     sLog->outString();
 }

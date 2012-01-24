@@ -2768,7 +2768,9 @@ void SpellMgr::LoadSpellInfoStore()
 
     // Initialize global taxinodes mask
     // include existed nodes that have at least single not spell base (scripted) path
-    {
+    
+	//Disable add to DBCStore.ccp after load TaxiNodes.dbc
+	/* {
         std::set<uint32> spellPaths;
         for (uint32 i = 1; i < sSpellStore.GetNumRows (); ++i)
             if (SpellInfo const* sInfo = GetSpellInfo(i))
@@ -2828,7 +2830,7 @@ void SpellMgr::LoadSpellInfoStore()
             }
         }
     }
-
+	*/
     sLog->outString(">> Loaded spell custom attributes in %u ms", GetMSTimeDiffToNow(oldMSTime));
     sLog->outString();
 }

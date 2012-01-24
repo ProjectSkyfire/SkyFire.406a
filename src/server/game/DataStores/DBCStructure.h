@@ -2011,9 +2011,9 @@ struct TaxiNodesEntry
     float     z;                                            // 4        m_z
     char* name;                                             // 5        m_Name_lang
     uint32    MountCreatureID[2];                           // 6-7      m_MountCreatureID[2]
-	uint16	unk;											// 8
-	float   unk1;											// 9
-	float   unk2;											// 10	
+	//uint16	unk;										// 8		4.3.0a 15050
+	//float   unk1;											// 9		4.3.0a 15050	
+	//float   unk2;											// 10		4.3.0a 15050
 
 };
 
