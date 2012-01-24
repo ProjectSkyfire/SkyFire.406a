@@ -58,8 +58,8 @@ struct ItemSparseEntry
     uint32     Quality;                                      // 1
     uint32     Flags;                                        // 2
     uint32     Flags2;                                       // 3
-	uint32      unk_0;				                         // 131 4.3.0a 15050	
-	uint32      unk_1;					                     // 132 4.3.0a 15050
+	float      unk_0;				                         // 131 4.3.0a 15050	
+	float      unk_1;					                     // 132 4.3.0a 15050
 	uint32     MaxDurability;				                 // 131 4.3.0a 15050	 //Test
     uint32     BuyPrice;                                     // 4
     uint32     SellPrice;                                    // 5
@@ -108,8 +108,8 @@ struct ItemSparseEntry
     uint32     RandomProperty;                               // 108
     uint32     RandomSuffix;                                 // 109
     uint32     ItemSet;                                      // 110
-   // uint32     MaxDurability;                                // 111
-    uint32     Area;                                         // 112
+   // uint32     MaxDurability;                                // 111 --Disable from 15050 dbc
+     uint32     Area;                                         // 112
     uint32     Map;                                          // 113
     uint32     BagFamily;                                    // 114
     uint32     TotemCategory;                                // 115
@@ -131,6 +131,21 @@ struct ItemCurrencyCostEntry
 {
     //uint32  Id;
     uint32  ItemId;
+};
+
+struct ItemExtendedCostEntry
+{
+    uint32      ID;                                         // 0 extended-cost entry id
+    //uint32    reqhonorpoints;                             // 1 required honor points
+    //uint32    reqarenapoints;                             // 2 required arena points
+    uint32      RequiredArenaSlot;                          // 3 arena slot restrictions (min slot value)
+    uint32      RequiredItem[MAX_ITEM_EXT_COST_ITEMS];      // 4-8 required item id
+    uint32      RequiredItemCount[MAX_ITEM_EXT_COST_ITEMS]; // 9-13 required count of 1st item
+    uint32      RequiredPersonalArenaRating;                // 14 required personal arena rating
+    //uint32    ItemPurchaseGroup;                          // 15
+    uint32      RequiredCurrency[MAX_ITEM_EXT_COST_CURRENCIES];// 16-20 required curency id
+    uint32      RequiredCurrencyCount[MAX_ITEM_EXT_COST_CURRENCIES];// 21-25 required curency count
+    //uint32    something[5];                               // 26-30
 };
 
 // GCC has alternative #pragma pack(N) syntax and old gcc version does not support pack(push, N), also any gcc version does not support it at some platform

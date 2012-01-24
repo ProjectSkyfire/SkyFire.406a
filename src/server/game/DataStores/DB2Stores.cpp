@@ -30,6 +30,7 @@
 DB2Storage <ItemEntry>						sItemStore(Itemfmt);
 DB2Storage <ItemSparseEntry>				sItemSparseStore (ItemSparsefmt);
 DB2Storage <ItemCurrencyCostEntry>			sItemCurrencyCostStore(ItemCurrencyCostfmt);
+DB2Storage <ItemExtendedCostEntry>			sItemExtendedCostStore(ItemExtendedCostEntryfmt);
 
 
 typedef std::list<std::string> StoreProblemList1;
@@ -86,6 +87,7 @@ void LoadDB2Stores(const std::string& dataPath)
     LoadDB2(bad_db2_files, sItemStore,                   db2Path, "Item.db2");
     LoadDB2(bad_db2_files, sItemSparseStore,             db2Path, "Item-sparse.db2");
 	LoadDB2(bad_db2_files, sItemCurrencyCostStore,       db2Path, "ItemCurrencyCost.db2");
+	LoadDB2(bad_db2_files, sItemExtendedCostStore,		 db2Path, "ItemExtendedCost.db2");
 
     // error checks
     if (bad_db2_files.size() >= DB2FilesCount)
@@ -122,7 +124,7 @@ void LoadDB2Stores(const std::string& dataPath)
     }
 
     // Check loaded DB2 files proper version
-    if (!sItemStore.LookupEntry(79063) ||                   // last client known item added in 4.3.0a 15050
+    if (!sItemStore.LookupEntry(79062) ||                   // last client known item added in 4.3.0a 15050
         !sItemSparseStore.LookupEntry(78930))               // last client known item added in 4.3.0a 15050
     {
         sLog->outString();
