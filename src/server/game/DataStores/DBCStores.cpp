@@ -460,7 +460,7 @@ void LoadDBCStores(const std::string& dataPath, uint32& availableDbcLocales)
 
     LoadDBC(availableDbcLocales, bad_dbc_files, sSpellCooldownsStore,          dbcPath, "SpellCooldowns.dbc"/*, &CustomSpellCooldownsEntryfmt, &CustomSpellCooldownsEntryIndex*/);
 
-    LoadDBC(availableDbcLocales, bad_dbc_files, sSpellEffectStore,             dbcPath, "SpellEffect.dbc", &CustomSpellEffectEntryfmt, &CustomSpellEffectEntryIndex);
+    LoadDBC(availableDbcLocales, bad_dbc_files, sSpellEffectStore,             dbcPath, "SpellEffect.dbc"/*, &CustomSpellEffectEntryfmt, &CustomSpellEffectEntryIndex*/);
 
     LoadDBC(availableDbcLocales, bad_dbc_files, sSpellEquippedItemsStore,      dbcPath, "SpellEquippedItems.dbc"/*, &CustomSpellEquippedItemsEntryfmt, &CustomSpellEquippedItemsEntryIndex*/);
 
@@ -520,7 +520,7 @@ void LoadDBCStores(const std::string& dataPath, uint32& availableDbcLocales)
 
     LoadDBC(availableDbcLocales, bad_dbc_files, sSpellCastTimesStore,          dbcPath, "SpellCastTimes.dbc");
 
-    LoadDBC(availableDbcLocales, bad_dbc_files, sSpellDifficultyStore,         dbcPath, "SpellDifficulty.dbc", &CustomSpellDifficultyfmt, &CustomSpellDifficultyIndex);
+    LoadDBC(availableDbcLocales, bad_dbc_files, sSpellDifficultyStore,         dbcPath, "SpellDifficulty.dbc"/*, &CustomSpellDifficultyfmt, &CustomSpellDifficultyIndex*/);
 
     LoadDBC(availableDbcLocales, bad_dbc_files, sSpellDurationStore,           dbcPath, "SpellDuration.dbc");
     LoadDBC(availableDbcLocales, bad_dbc_files, sSpellFocusObjectStore,        dbcPath, "SpellFocusObject.dbc");
@@ -657,11 +657,11 @@ void LoadDBCStores(const std::string& dataPath, uint32& availableDbcLocales)
     }
 
     // Check loaded DBC files proper version for 4.3.0 15050
-    if (!sAreaStore.LookupEntry(5995)              ||       // last area (areaflag) added in 4.3.0
-        !sCharTitlesStore.LookupEntry(287)         ||       // last char title added in 4.3.0
-        !sGemPropertiesStore.LookupEntry(2250)     ||       // last gem property added in 4.3.0
-        !sMapStore.LookupEntry(980)                ||       // last map added in 4.3.0
-        !sSpellStore.LookupEntry(110966)           )        // last added spell in 4.3.0
+    if (!sAreaStore.LookupEntry(4995)              ||       // last area (areaflag) added in 4.3.0
+        !sCharTitlesStore.LookupEntry(279)         ||       // last char title added in 4.3.0
+        !sGemPropertiesStore.LookupEntry(1860)     ||       // last gem property added in 4.3.0
+        !sMapStore.LookupEntry(968)                ||       // last map added in 4.3.0
+        !sSpellStore.LookupEntry(102129)           )        // last added spell in 4.3.0
     {
         sLog->outError("You have _outdated_ DBC files. Please extract correct versions from current using client.");
         exit(1);
