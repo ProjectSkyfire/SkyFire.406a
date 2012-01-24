@@ -903,7 +903,20 @@ void WorldSession::HandlePlayerLoginOpcode(WorldPacket & recv_data)
 
     sLog->outStaticDebug("WORLD: Recvd Player Logon Message");
 
-    recv_data >> playerGuid;
+    BitStream mask = recv_data.ReadBitStream(8);
+
+    ByteBuffer bytes(8, true);
+
+    recv_data.ReadXorByte(mask[3], bytes[4]);
+    recv_data.ReadXorByte(mask[7], bytes[1]);
+    recv_data.ReadXorByte(mask[4], bytes[7]);
+    recv_data.ReadXorByte(mask[6], bytes[2]);
+    recv_data.ReadXorByte(mask[5], bytes[6]);
+    recv_data.ReadXorByte(mask[1], bytes[5]);
+    recv_data.ReadXorByte(mask[2], bytes[3]);
+    recv_data.ReadXorByte(mask[0], bytes[0]);
+
+    playerGuid = BitConverter::ToUInt64(bytes);
 
     if (!CharCanLogin(GUID_LOPART(playerGuid)))
     {
