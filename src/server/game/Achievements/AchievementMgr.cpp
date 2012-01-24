@@ -565,18 +565,18 @@ void AchievementGlobalMgr::LoadAchievementCriteriaList()
         return;
     }
 
-    for (uint32 entryId = 0; entryId < sAchievementCriteriaStore.GetNumRows(); ++entryId)
-    {
-        AchievementCriteriaEntry const* criteria = sAchievementCriteriaStore.LookupEntry(entryId);
-        if (!criteria)
-            continue;
+    //for (uint32 entryId = 0; entryId < sAchievementCriteriaStore.GetNumRows(); ++entryId)
+    //{
+    //    AchievementCriteriaEntry const* criteria = sAchievementCriteriaStore.LookupEntry(entryId);
+    //    if (!criteria)
+    //        continue;
 
-        m_AchievementCriteriasByType[criteria->requiredType].push_back(criteria);
-        m_AchievementCriteriaListByAchievement[criteria->referredAchievement].push_back(criteria);
+    //    m_AchievementCriteriasByType[criteria->requiredType].push_back(criteria);
+    //    m_AchievementCriteriaListByAchievement[criteria->referredAchievement].push_back(criteria);
 
-        if (criteria->timeLimit)
-            m_AchievementCriteriasByTimedType[criteria->timedCriteriaStartType].push_back(criteria);
-    }
+    //    if (criteria->timeLimit)
+    //        m_AchievementCriteriasByTimedType[criteria->timedCriteriaStartType].push_back(criteria);
+    //}
 
     sLog->outString(">> Loaded %lu achievement criteria in %u ms", (unsigned long)m_AchievementCriteriasByType->size(), GetMSTimeDiffToNow(oldMSTime));
     sLog->outString();
