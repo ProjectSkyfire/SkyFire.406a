@@ -896,7 +896,7 @@ struct DurabilityQualityEntry
 struct EmotesEntry
 {
     uint32  Id;                                             // 0
-    //DBCString Name;                                       // 1, internal name
+    //char* Name;                                           // 1, internal name
     //uint32  AnimationId;                                  // 2, ref to animationData
     uint32  Flags;                                          // 3, bitmask, may be unit_flags
     uint32  EmoteType;                                      // 4, Can be 0, 1 or 2 (determine how emote are shown)
@@ -1554,9 +1554,9 @@ struct SkillLineEntry
     uint32    id;                                           // 0        m_ID
     int32     categoryId;                                   // 1        m_categoryID
     char* name;                                             // 2        m_displayName_lang
-    //DBCString description;                                // 3        m_description_lang
+    //char* description;                                    // 3        m_description_lang
     uint32    spellIcon;                                    // 4        m_spellIconID
-    //DBCString alternateVerb;                              // 5        m_alternateVerb_lang
+    //char* alternateVerb;                                  // 5        m_alternateVerb_lang
     uint32    canLink;                                      // 6        m_canLink (prof. with recipes)
 };
 
@@ -1821,8 +1821,8 @@ struct SpellEntry
     uint32    activeIconID;                                 // 19       m_activeIconID
     char* SpellName;                                        // 20       m_name_lang
     char* Rank;                                             // 21       m_rank_lang
-    //DBCString Description;                                // 22       m_description_lang not used
-    //DBCString ToolTip;                                    // 23       m_auraDescription_lang not used
+    //char* Description;                                    // 22       m_description_lang not used
+    //char* ToolTip;                                        // 23       m_auraDescription_lang not used
     uint32    SchoolMask;                                   // 24       m_schoolMask
     uint32    runeCostID;                                   // 25       m_runeCostID
     //uint32    spellMissileID;                             // 26       m_spellMissileID not used
@@ -2212,7 +2212,7 @@ struct WorldMapOverlayEntry
     //uint32    worldMapAreaId;                             // 1 idx in WorldMapArea.dbc
     uint32    areatableID[MAX_WORLD_MAP_OVERLAY_AREA_IDX];  // 2-5
                                                             // 6-7 always 0, possible part of areatableID[]
-    //DBCString internal_name                               // 8
+    //char* internal_name                                   // 8
                                                             // 9-14 some ints
 };
 
@@ -2223,7 +2223,7 @@ struct WorldSafeLocsEntry
     float     x;                                            // 2
     float     y;                                            // 3
     float     z;                                            // 4
-    //DBCString name;                                       // 5 name, unused
+    //char* name;                                           // 5 name, unused
 };
 
 /*
