@@ -242,9 +242,13 @@ enum AchievementCriteriaTypes
     ACHIEVEMENT_CRITERIA_TYPE_BUY_GUILD_TABARD                       = 133,
     ACHIEVEMENT_CRITERIA_TYPE_COMPLETE_QUESTS_GUILD                  = 134,
     ACHIEVEMENT_CRITERIA_TYPE_HONORABLE_KILLS_GUILD                  = 135,
-    ACHIEVEMENT_CRITERIA_TYPE_KILL_CREATURE_TYPE_GUILD               = 136,
-    // 0..136 => 137 criteria types total
-    ACHIEVEMENT_CRITERIA_TYPE_TOTAL                                  = 137,
+	ACHIEVEMENT_CRITERIA_TYPE_KILL_CREATURE_TYPE_GUILD               = 136,
+	 // 137 - not valid on 4.3.0a 15050
+    ACHIEVEMENT_CRITERIA_TYPE_UNK1						             = 138, // Complete 50 guild raid challenges,Complete 50 guild rated battleground challenges,Complete 50 guild dungeon challenges
+    ACHIEVEMENT_CRITERIA_TYPE_UNK2						             = 139, // Complete 100 guild challenges,Complete 50 guild challenges,Complete a guild challenge
+	//139 .. 150 valid on 4.3.0a 15050
+	// 0..150 => 151 criteria types total
+    ACHIEVEMENT_CRITERIA_TYPE_TOTAL                                  = 151,
 };
 
 enum AchievementCriteriaMoreReqType

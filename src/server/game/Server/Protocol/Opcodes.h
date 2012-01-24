@@ -1348,7 +1348,6 @@ enum Opcodes
     CMSG_QUERY_GUILD_MEMBERS_FOR_RECIPE              = 0x00,
     CMSG_GUILD_NEWS_SET_STICKY                       = 0x00,
     CMSG_LOG_DISCONNECT                              = 0x00108, // 4.3.0 15050
-    MSG_VERIFY_CONNECTIVITY                          = 0x04F57, // 4.3.0 15050
     CMSG_VIOLENCE_LEVEL                              = 0x07291, // 4.3.0 15050
     //SMSG_CUF_PROFILES_LOAD                           = 0x02428, // 4.3.0 15050
     SMSG_PLAYER_MOVE                                 = 0x04418, // 4.3.0 15050
@@ -1369,6 +1368,10 @@ enum Opcodes
     CMSG_QUERY_VOID_STORAGE                          = 0x03431, // 4.3.0 15050
     CMSG_SWAP_VOID_ITEM                              = 0x03291, // 4.3.0 15050
     CMSG_OBJECT_UPDATE_FAILURE                       = 0x07233, // 4.3.0 15050
+	//Authentication		
+	SMSG_VERIFY_CONNECTIVITY                         = 0x04F57, // 4.3.0 15050
+    CMSG_VERIFY_CONNECTIVITY_RESPONSE                = 0x04C52, // 4.3.0 15050
+
 };
 
 extern void InitOpcodeTable();
