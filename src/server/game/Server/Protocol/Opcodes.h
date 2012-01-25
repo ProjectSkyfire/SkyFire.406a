@@ -101,8 +101,8 @@ enum Opcodes
     CMSG_ADD_FRIEND                                  = 0x072A6, // 4.3.0 15050
     CMSG_DEL_FRIEND                                  = 0x06EA0, // 4.3.0 15050
     CMSG_SET_CONTACT_NOTES                           = 0x02402, // 4.3.0 15050
-    CMSG_ADD_IGNORE                                  = 0x056A6, // 4.3.0 15050
-    CMSG_DEL_IGNORE                                  = 0x02CA6, // 4.3.0 15050
+    CMSG_ADD_IGNORE                                  = 0x056A6, // 4.3.0 15050 
+    CMSG_DEL_IGNORE                                  = 0x02CA6, // 4.3.0 15050 
     CMSG_GROUP_INVITE                                = 0x00114, // 4.3.0 15050
     SMSG_GROUP_INVITE                                = 0x02C8A, // 4.3.0 15050
     CMSG_GROUP_CANCEL                                = 0x00,
@@ -131,7 +131,7 @@ enum Opcodes
     SMSG_GUILD_INFO                                  = 0x00,
     CMSG_GUILD_ROSTER                                = 0x00,
     CMSG_REQUEST_GUILD_ROSTER                        = 0x00,
-    SMSG_GUILD_ROSTER                                = 0x00,
+    SMSG_GUILD_ROSTER                                = 0x00C1E, // 4.3.0 15050
     CMSG_GUILD_PROMOTE                               = 0x00,
     CMSG_GUILD_DEMOTE                                = 0x00,
     CMSG_GUILD_LEAVE                                 = 0x00,
@@ -139,13 +139,13 @@ enum Opcodes
     CMSG_GUILD_DISBAND                               = 0x00,
     CMSG_GUILD_LEADER                                = 0x00,
     CMSG_GUILD_MOTD                                  = 0x00,
-    CMSG_QUERY_GUILD_REWARDS                         = 0x00,
+    CMSG_QUERY_GUILD_REWARDS                         = 0x00088, // 4.3.0 15050 - Possible
     CMSG_QUERY_GUILD_MAX_XP                          = 0x00,
     CMSG_QUERY_GUILD_XP                              = 0x00,
     SMSG_GUILD_EVENT                                 = 0x00,
     SMSG_GUILD_UPDATE_ROSTER                         = 0x00,
     SMSG_GUILD_RANKS_UPDATE                          = 0x00,
-    SMSG_GUILD_REWARDS_LIST                          = 0x00,
+    SMSG_GUILD_REWARDS_LIST                          = 0x004A8, // 4.3.0 15050 - Possible
     SMSG_GUILD_TRADESKILL_UPDATE                     = 0x00,
     SMSG_GUILD_MAX_DAILY_XP                          = 0x00,
     SMSG_GUILD_NEWS_UPDATE                           = 0x00,
@@ -326,7 +326,7 @@ enum Opcodes
     SMSG_SUPERCEDED_SPELL                            = 0x00,
     CMSG_NEW_SPELL_SLOT                              = 0x00,
     CMSG_CAST_SPELL                                  = 0x00A84, // 4.3.0 15050
-    CMSG_CANCEL_CAST                                 = 0x00,
+    CMSG_CANCEL_CAST                                 = 0x06620, // 4.3.0 15050
     SMSG_CAST_FAILED                                 = 0x00800, // 4.3.0 15050
     SMSG_SPELL_START                                 = 0x02084, // 4.3.0 15050
     SMSG_SPELL_GO                                    = 0x07686, // 4.3.0 15050
@@ -388,7 +388,7 @@ enum Opcodes
     SMSG_DUEL_COMPLETE                               = 0x044A4, // 4.3.0 15050
     SMSG_DUEL_WINNER                                 = 0x07086, // 4.3.0 15050
     CMSG_DUEL_ACCEPTED                               = 0x03824, // 4.3.0 15050
-    CMSG_DUEL_CANCELLED                              = 0x00,
+    CMSG_DUEL_CANCELLED                              = 0x034A6, // 4.3.0 15050
     SMSG_MOUNTRESULT                                 = 0x07A00, // 4.3.0 15050
     SMSG_DISMOUNTRESULT                              = 0x046A2, // 4.3.0 15050
     SMSG_PUREMOUNT_CANCELLED_OBSOLETE                = 0x00,
@@ -443,7 +443,7 @@ enum Opcodes
     SMSG_SELL_ITEM                                   = 0x04C02, // 4.3.0 15050
     CMSG_BUY_ITEM                                    = 0x01086, // 4.3.0 15050
     SMSG_BUY_ITEM                                    = 0x07E20, // 4.3.0 15050
-    SMSG_BUY_FAILED                                  = 0x00,
+    SMSG_BUY_FAILED                                  = 0x00C3E, // 4.3.0 15050
     CMSG_TAXICLEARALLNODES                           = 0x00,
     CMSG_TAXIENABLEALLNODES                          = 0x00,
     CMSG_TAXISHOWNODES                               = 0x00,
@@ -456,8 +456,8 @@ enum Opcodes
     SMSG_NEW_TAXI_PATH                               = 0x00,
     CMSG_TRAINER_LIST                                = 0x00,
     SMSG_TRAINER_LIST                                = 0x00,
-    CMSG_TRAINER_BUY_SPELL                           = 0x00,
-    SMSG_TRAINER_BUY_RESULT                          = 0x00,
+    CMSG_TRAINER_BUY_SPELL                           = 0x07EA0, // 4.3.0 15050
+    SMSG_TRAINER_BUY_RESULT                          = 0x0460C, // 4.3.0 15050 - Possible - or 3C20
     CMSG_BINDER_ACTIVATE                             = 0x00,
     SMSG_PLAYERBINDERROR                             = 0x00,
     CMSG_BANKER_ACTIVATE                             = 0x00,
@@ -538,7 +538,7 @@ enum Opcodes
     CMSG_UNLEARN_SKILL                               = 0x00,
     SMSG_REMOVED_SPELL                               = 0x00,
     CMSG_DECHARGE                                    = 0x00,
-    CMSG_GMTICKET_CREATE                             = 0x00,
+    CMSG_GMTICKET_CREATE                             = 0x06C82, // 4.3.0 15050
     SMSG_GMTICKET_CREATE                             = 0x06CA4, // 4.3.0 15050
     CMSG_GMTICKET_UPDATETEXT                         = 0x032A0, // 4.3.0 15050
     SMSG_GMTICKET_UPDATETEXT                         = 0x01C84, // 4.3.0 15050
@@ -556,8 +556,8 @@ enum Opcodes
     SMSG_UPDATE_INSTANCE_ENCOUNTER_UNIT              = 0x00,
     SMSG_GAMEOBJECT_DESPAWN_ANIM                     = 0x00,
     MSG_CORPSE_QUERY                                 = 0x05006, // 4.3.0 15050
-    CMSG_GMTICKET_DELETETICKET                       = 0x00,
-    SMSG_GMTICKET_DELETETICKET                       = 0x00,
+    CMSG_GMTICKET_DELETETICKET                       = 0x046AC, // 4.3.0 15050
+    SMSG_GMTICKET_DELETETICKET                       = 0x060A6, // 4.3.0 15050
     SMSG_CHAT_WRONG_FACTION                          = 0x00,
     CMSG_GMTICKET_SYSTEMSTATUS                       = 0x00,
     SMSG_GMTICKET_SYSTEMSTATUS                       = 0x00,
@@ -570,7 +570,7 @@ enum Opcodes
     SMSG_GOSSIP_POI                                  = 0x00,
     CMSG_CHAT_IGNORED                                = 0x00,
     CMSG_GUILD_RANK                                  = 0x00,
-    SMSG_GUILD_RANK                                  = 0x00,
+    SMSG_GUILD_RANK                                  = 0x06C1A, // 4.3.0 15050 - Possible
     CMSG_GUILD_RANKS                                 = 0x00,
     CMSG_GUILD_ADD_RANK                              = 0x00,
     CMSG_GUILD_DEL_RANK                              = 0x00,
@@ -666,7 +666,7 @@ enum Opcodes
     CMSG_GROUP_RAID_CONVERT                          = 0x00,
     CMSG_GROUP_ASSISTANT_LEADER                      = 0x00,
     CMSG_BUYBACK_ITEM                                = 0x04AA6, // 4.3.0 15050
-    SMSG_SERVER_MESSAGE                              = 0x00,
+    SMSG_SERVER_MESSAGE                              = 0x01084, // 4.3.0 15050
     CMSG_SET_SAVED_INSTANCE_EXTEND                   = 0x00,
     SMSG_LFG_OFFER_CONTINUE                          = 0x00,
     CMSG_MEETINGSTONE_CHEAT                          = 0x00,
@@ -1208,7 +1208,7 @@ enum Opcodes
     SMSG_CRITERIA_DELETED                            = 0x00,
     SMSG_ACHIEVEMENT_DELETED                         = 0x00,
     CMSG_SERVER_INFO_QUERY                           = 0x00,
-    SMSG_SERVER_INFO_RESPONSE                        = 0x00,
+    SMSG_SERVER_INFO_RESPONSE                        = 0x048A0, // 4.3.0 15050
     CMSG_CHECK_LOGIN_CRITERIA                        = 0x00,
     SMSG_SERVER_BUCK_DATA_START                      = 0x00,
     CMSG_QUERY_VEHICLE_STATUS                        = 0x00,
