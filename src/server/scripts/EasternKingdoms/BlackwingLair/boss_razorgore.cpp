@@ -28,15 +28,21 @@ EndScriptData */
 
 //Razorgore Phase 2 Script
 
-#define SAY_EGGS_BROKEN1        -1469022
-#define SAY_EGGS_BROKEN2        -1469023
-#define SAY_EGGS_BROKEN3        -1469024
-#define SAY_DEATH               -1469025
+enum Say
+{
+    SAY_EGGS_BROKEN1        = -1469022,
+    SAY_EGGS_BROKEN2        = -1469023,
+    SAY_EGGS_BROKEN3        = -1469024,
+    SAY_DEATH               = -1469025
+};
 
-#define SPELL_CLEAVE            22540
-#define SPELL_WARSTOMP          24375
-#define SPELL_FIREBALLVOLLEY    22425
-#define SPELL_CONFLAGRATION     23023
+enum Spells
+{
+    SPELL_CLEAVE            = 22540,
+    SPELL_WARSTOMP          = 24375,
+    SPELL_FIREBALLVOLLEY    = 22425,
+    SPELL_CONFLAGRATION     = 23023
+};
 
 class boss_razorgore : public CreatureScript
 {

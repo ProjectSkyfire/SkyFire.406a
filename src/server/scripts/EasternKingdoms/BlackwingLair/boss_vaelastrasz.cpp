@@ -26,20 +26,26 @@ EndScriptData */
 
 #include "ScriptPCH.h"
 
-#define SAY_LINE1           -1469026
-#define SAY_LINE2           -1469027
-#define SAY_LINE3           -1469028
-#define SAY_HALFLIFE        -1469029
-#define SAY_KILLTARGET      -1469030
+enum Says
+{
+   SAY_LINE1           = -1469026,
+   SAY_LINE2           = -1469027,
+   SAY_LINE3           = -1469028,
+   SAY_HALFLIFE        = -1469029,
+   SAY_KILLTARGET      = -1469030
+};
 
 #define GOSSIP_ITEM         "Start Event <Needs Gossip Text>"
 
-#define SPELL_ESSENCEOFTHERED       23513
-#define SPELL_FLAMEBREATH           23461
-#define SPELL_FIRENOVA              23462
-#define SPELL_TAILSWIPE             15847
-#define SPELL_BURNINGADRENALINE     23620
-#define SPELL_CLEAVE                20684                   //Chain cleave is most likely named something different and contains a dummy effect
+enum Spells
+{
+   SPELL_ESSENCEOFTHERED       = 23513,
+   SPELL_FLAMEBREATH           = 23461,
+   SPELL_FIRENOVA              = 23462,
+   SPELL_TAILSWIPE             = 15847,
+   SPELL_BURNINGADRENALINE     = 23620,
+   SPELL_CLEAVE                = 20684   //Chain cleave is most likely named something different and contains a dummy effect
+};
 
 class boss_vaelastrasz : public CreatureScript
 {
@@ -103,17 +109,17 @@ public:
 
         void Reset()
         {
-            PlayerGUID = 0;
-            SpeechTimer = 0;
-            SpeechNum = 0;
-            Cleave_Timer = 8000;                                //These times are probably wrong
-            FlameBreath_Timer = 11000;
-            BurningAdrenalineCaster_Timer = 15000;
-            BurningAdrenalineTank_Timer = 45000;
-            FireNova_Timer = 5000;
-            TailSwipe_Timer = 20000;
-            HasYelled = false;
-            DoingSpeech = false;
+            PlayerGUID             = 0;
+            SpeechTimer            = 0;
+            SpeechNum              = 0;
+            Cleave_Timer           = 8000;     //These times are probably wrong
+            FlameBreath_Timer      = 11000;
+            BurningAdrenalineCaster_Timer    = 15000;
+            BurningAdrenalineTank_Timer      = 45000;
+            FireNova_Timer         = 5000;
+            TailSwipe_Timer        = 20000;
+            HasYelled              = false;
+            DoingSpeech            = false;
         }
 
         void BeginSpeech(Unit* target)
@@ -214,7 +220,7 @@ public:
                 Unit* target = NULL;
 
                 uint8 i = 0;
-                while (i < 3)                                   // max 3 tries to get a random target with power_mana
+                while (i < 3)   // max 3 tries to get a random target with power_mana
                 {
                     ++i;
                     target = SelectTarget(SELECT_TARGET_RANDOM, 1, 100, true); //not aggro leader
