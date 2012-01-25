@@ -335,7 +335,7 @@ void WorldSession::HandleMovementOpcodes(WorldPacket & recv_data)
     /*----------------------*/
 
     /* process position-change */
-    WorldPacket data(Opcodes(opcode), recv_data.size());
+    WorldPacket data(SMSG_PLAYER_MOVE, recv_data.size());
     movementInfo.time = getMSTime();
     movementInfo.guid = mover->GetGUID();
     WriteMovementInfo(&data, &movementInfo);
@@ -429,8 +429,8 @@ void WorldSession::HandleForceSpeedChangeAck(WorldPacket &recv_data)
 
     static char const* move_type_name[MAX_MOVE_TYPE] = {  "Walk", "Run", "RunBack", "Swim", "SwimBack", "TurnRate", "Flight", "FlightBack", "PitchRate" };
 
-    switch (opcode)
-    {
+   //witch (opcode)
+   //
         //case CMSG_FORCE_WALK_SPEED_CHANGE_ACK:          move_type = MOVE_WALK;          force_move_type = MOVE_WALK;        break;
         //case CMSG_FORCE_RUN_SPEED_CHANGE_ACK:           move_type = MOVE_RUN;           force_move_type = MOVE_RUN;         break;
         //case CMSG_FORCE_RUN_BACK_SPEED_CHANGE_ACK:      move_type = MOVE_RUN_BACK;      force_move_type = MOVE_RUN_BACK;    break;
@@ -440,10 +440,10 @@ void WorldSession::HandleForceSpeedChangeAck(WorldPacket &recv_data)
         //case CMSG_FORCE_FLIGHT_SPEED_CHANGE_ACK:        move_type = MOVE_FLIGHT;        force_move_type = MOVE_FLIGHT;      break;
         //case CMSG_FORCE_FLIGHT_BACK_SPEED_CHANGE_ACK:   move_type = MOVE_FLIGHT_BACK;   force_move_type = MOVE_FLIGHT_BACK; break;
         //case CMSG_FORCE_PITCH_RATE_CHANGE_ACK:          move_type = MOVE_PITCH_RATE;    force_move_type = MOVE_PITCH_RATE;  break;
-        default:
-            sLog->outError("WorldSession::HandleForceSpeedChangeAck: Unknown move type opcode: %u", opcode);
-            return;
-    }
+   //   default:
+     //     sLog->outError("WorldSession::HandleForceSpeedChangeAck: Unknown move type opcode: %u", opcode);
+   //       return;
+  //}
 
     // skip all forced speed changes except last and unexpected
     // in run/mounted case used one ACK and it must be skipped._forced_speed_changes[MOVE_RUN} store both.
@@ -591,4 +591,15 @@ void WorldSession::HandleSummonResponseOpcode(WorldPacket& recv_data)
     recv_data >> agree;
 
     _player->SummonIfPossible(agree);
+}
+void WorldSession::HandleMovementPlayerMoveOpcodes(WorldPacket& recv_data)
+{
+	 sLog->outDebug(LOG_FILTER_NETWORKIO, "CMSG_PLAYER_MOVE");
+	 //ClientToServer: CMSG_PLAYER_MOVE (0x0005) Length: 16 Time: 01/05/2012 02:09:28.400 Number: 135
+	//X: -8914.57
+	//Y: -133.909
+	//Z: 80.5378
+	//O: 0
+	 float test_x,test_y,test_z,test_o;
+	 recv_data >> test_x >> test_y >> test_z >> test_o;
 }

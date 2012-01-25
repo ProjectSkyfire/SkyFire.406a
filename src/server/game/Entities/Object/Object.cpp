@@ -294,83 +294,129 @@ void Object::DestroyForPlayer(Player* target, bool anim) const
 
 void Object::_BuildMovementUpdate(ByteBuffer * data, uint16 flags) const
 {
-    *data << (uint16)flags;                                  // update flags
+    data->WriteBit(flags & UPDATEFLAG_HAS_TARGET);
+    data->WriteBit(false);
+    data->WriteBit(flags & UPDATEFLAG_VEHICLE);
+    data->WriteBit(false);
+    data->WriteBit(false);
+    data->WriteBit(false);
+    data->WriteBit(flags & UPDATEFLAG_TRANSPORT);
+    data->WriteBit(false); // position transport pour dynamicobject/GO
 
-    // 0x20
+    data->WriteBit(false); // unk field
+    data->WriteBit(false); // unk field
+
+    data->WriteBit(false); // Packed GameObject Rotation
+    data->WriteBit(flags & UPDATEFLAG_LIVING);
+    data->WriteBit((flags & UPDATEFLAG_LIVING) == 0);
+    data->WriteBits(0, 24); // unk counter
+    data->WriteBit(GetTypeId() == TYPEID_PLAYER ? true : false);
+
     if (flags & UPDATEFLAG_LIVING)
     {
-        ((Unit*)this)->BuildMovementPacket(data);
+        const Player* player = ToPlayer();
+        const Unit* unit = ToUnit();
 
-        *data << ((Unit*)this)->GetSpeed(MOVE_WALK);
-        *data << ((Unit*)this)->GetSpeed(MOVE_RUN);
-        *data << ((Unit*)this)->GetSpeed(MOVE_RUN_BACK);
-        *data << ((Unit*)this)->GetSpeed(MOVE_SWIM);
-        *data << ((Unit*)this)->GetSpeed(MOVE_SWIM_BACK);
-        *data << ((Unit*)this)->GetSpeed(MOVE_FLIGHT);
-        *data << ((Unit*)this)->GetSpeed(MOVE_FLIGHT_BACK);
-        *data << ((Unit*)this)->GetSpeed(MOVE_TURN_RATE);
-        *data << ((Unit*)this)->GetSpeed(MOVE_PITCH_RATE);
-
-        // 0x08000000
-        if (((Unit*)this)->_movementInfo.GetMovementFlags() & MOVEMENTFLAG_SPLINE_ENABLED)
-            Movement::PacketBuilder::WriteCreate(*((Unit*)this)->movespline, *data);
-    }
-    else
-    {
-        if (flags & UPDATEFLAG_POSITION)
+        data->WriteBit(ToUnit()->GetUnitMovementFlags() & MOVEMENTFLAG_ONTRANSPORT);
+        if(ToUnit()->GetUnitMovementFlags() & MOVEMENTFLAG_ONTRANSPORT)
         {
-            *data << uint8(0);                              // unk PGUID!
-            *data << ((WorldObject*)this)->GetPositionX();
-            *data << ((WorldObject*)this)->GetPositionY();
-            *data << ((WorldObject*)this)->GetPositionZ();
-            *data << ((WorldObject*)this)->GetPositionX();
-            *data << ((WorldObject*)this)->GetPositionY();
-            *data << ((WorldObject*)this)->GetPositionZ();
-            *data << ((WorldObject*)this)->GetOrientation();
+            data->WriteBit(unit->GetTransGUIDIndex(2));
+            data->WriteBit(unit->GetTransGUIDIndex(7));
+            data->WriteBit(unit->GetTransGUIDIndex(5));
+            data->WriteBit(false); // HaveTransportTime3
+            data->WriteBit(unit->GetTransGUIDIndex(3));
+            data->WriteBit(unit->GetTransGUIDIndex(0));
+            data->WriteBit(unit->GetTransGUIDIndex(4));
+            data->WriteBit(unit->GetTransGUIDIndex(1));
+            data->WriteBit(ToUnit()->GetExtraUnitMovementFlags() & MOVEMENTFLAG2_INTERPOLATED_MOVEMENT);
+            data->WriteBit(unit->GetTransGUIDIndex(6));
+        }
 
-            if (GetTypeId() == TYPEID_CORPSE)
-                *data << float(((WorldObject*)this)->GetOrientation());
-            else
-                *data << float(0);
+        data->WriteBit(player && player->isInFlight()); // unknow field
+        data->WriteBit(GetGUIDIndex(7));
+        data->WriteBit(GetGUIDIndex(6));
+        data->WriteBit(GetGUIDIndex(5));
+        data->WriteBit(GetGUIDIndex(2));
+        data->WriteBit(GetGUIDIndex(4));
+        data->WriteBit(!(unit->GetUnitMovementFlags() != 0));
+        data->WriteBit(GetGUIDIndex(1));
+        data->WriteBit(false); // unknow field
+        data->WriteBit(false); // timestamp, inverse
+        data->WriteBit(!unit->GetMovementInfo().flags2); // m_movementInfo.flags2, inversé
+
+        if(player && player->isInFlight())
+        {
+            data->WriteBit(true); // HaveSpline
+            data->WriteBit(false); // field F8
+            data->WriteBits(SPLINEFLAG_GLIDE, 25);
+            data->WriteBits(SPLINEMODE_LINEAR, 2);
+            data->WriteBit(false); // field 100
+
+            FlightPathMovementGenerator *fmg =
+                (FlightPathMovementGenerator*)(player->GetMotionMaster()->top());
+            TaxiPathNodeList const& path = fmg->GetPath();
+
+            float x, y, z;
+            player->GetPosition(x, y, z);
+
+            uint32 inflighttime = uint32(path.GetPassedLength(fmg->GetCurrentNode(), x, y, z) * 32);
+            uint32 traveltime = uint32(path.GetTotalLength() * 32);
+
+            data->WriteBits(path.size(), 22);
+            data->WriteBits(SPLINETYPE_NORMAL, 2);
+        }
+
+        data->WriteBit(GetGUIDIndex(3));
+
+        if(unit->GetUnitMovementFlags() != 0)
+            data->WriteBits(ToUnit()->GetUnitMovementFlags(), 30);
+
+        bool swimming = ((ToUnit()->GetUnitMovementFlags() & (MOVEMENTFLAG_SWIMMING | MOVEMENTFLAG_FLYING))
+            || (ToUnit()->GetExtraUnitMovementFlags() & MOVEMENTFLAG2_ALWAYS_ALLOW_PITCHING));
+        bool interPolatedTurning = ToUnit()->GetExtraUnitMovementFlags() & MOVEMENTFLAG2_INTERPOLATED_TURNING;
+        bool jumping = ToUnit()->GetUnitMovementFlags() & MOVEMENTFLAG_FALLING;
+
+        data->WriteBit(!swimming); // inversé
+        data->WriteBit(interPolatedTurning);
+
+        if(unit->GetMovementInfo().flags2)
+            data->WriteBits(ToUnit()->GetExtraUnitMovementFlags(), 12);
+
+        data->WriteBit(GetGUIDIndex(0));
+        data->WriteBit(false); // HaveOrientation, inversé
+
+        if(interPolatedTurning)
+            data->WriteBit(jumping);
+
+        data->WriteBit(true); // HaveSplineElevation, inversé
+    }
+
+    if(flags & UPDATEFLAG_HAS_TARGET)
+    {
+        if (Unit *victim = ToUnit()->getVictim())
+        {
+            data->WriteBit(victim->GetGUIDIndex(3));
+            data->WriteBit(victim->GetGUIDIndex(4));
+            data->WriteBit(victim->GetGUIDIndex(6));
+            data->WriteBit(victim->GetGUIDIndex(0));
+            data->WriteBit(victim->GetGUIDIndex(1));
+            data->WriteBit(victim->GetGUIDIndex(7));
+            data->WriteBit(victim->GetGUIDIndex(5));
+            data->WriteBit(victim->GetGUIDIndex(2));
         }
         else
-        {
-            // 0x40
-            if (flags & UPDATEFLAG_HAS_POSITION)
-            {
-                // 0x02
-                if (flags & UPDATEFLAG_TRANSPORT && ((GameObject*)this)->GetGoType() == GAMEOBJECT_TYPE_MO_TRANSPORT)
-                {
-                    *data << (float)0;
-                    *data << (float)0;
-                    *data << (float)0;
-                    *data << ((WorldObject*)this)->GetOrientation();
-                }
-                else
-                {
-                    *data << ((WorldObject*)this)->GetPositionX();
-                    *data << ((WorldObject*)this)->GetPositionY();
-                    *data << ((WorldObject*)this)->GetPositionZ();
-                    *data << ((WorldObject*)this)->GetOrientation();
-                }
-            }
-        }
+            data->WriteBits(0, 8);
     }
 
-    // 0x4
-    if (flags & UPDATEFLAG_HAS_TARGET)                       // packed guid (current target guid)
-    {
-        if (Unit* victim = ((Unit*)this)->getVictim())
-            data->append(victim->GetPackGUID());
-        else
-            *data << uint8(0);
-    }
+   data->FlushBits();
 
-    // 0x2
-    if (flags & UPDATEFLAG_TRANSPORT)
-    {
-        *data << uint32(getMSTime());                       // ms time
-    }
+   if((flags & UPDATEFLAG_LIVING) == 0)
+   {
+       *data << ((WorldObject*)this)->GetPositionZ();
+       *data << ((WorldObject*)this)->GetOrientation();
+       *data << ((WorldObject*)this)->GetPositionX();
+       *data << ((WorldObject*)this)->GetPositionY();
+   }
 
     // 0x80
     if (flags & UPDATEFLAG_VEHICLE)                          // unused for now
@@ -379,28 +425,164 @@ void Object::_BuildMovementUpdate(ByteBuffer * data, uint16 flags) const
         *data << float(((Creature*)this)->GetOrientation());  // facing adjustment
     }
 
-    // 0x200
-    if (flags & UPDATEFLAG_ROTATION)
+    if (flags & UPDATEFLAG_LIVING)
     {
-        *data << int64(((GameObject*)this)->GetRotation());
+        const Player* player = ToPlayer();
+        if(player && player->isInFlight())
+        {
+            FlightPathMovementGenerator *fmg =
+                (FlightPathMovementGenerator*)(player->GetMotionMaster()->top());
+            TaxiPathNodeList const& path = fmg->GetPath();
+
+            float x, y, z;
+            player->GetPosition(x, y, z);
+
+            uint32 inflighttime = uint32(path.GetPassedLength(fmg->GetCurrentNode(), x, y, z) * 32);
+            uint32 traveltime = uint32(path.GetTotalLength() * 32);
+
+            uint32 poscount = uint32(path.size());
+
+            for (uint32 i = 0; i < poscount; ++i)
+            {
+                *data << float(path[i].x);
+                *data << float(path[i].y);
+                *data << float(path[i].z);
+            }
+
+             *data << (float)0;
+             *data << (float)0;
+             *data << (uint32)0;
+             *data << (uint32)0;
+
+            *data << float(path[poscount-1].z);
+            *data << (uint32)0;
+            *data << float(path[poscount-1].x);
+            *data << float(path[poscount-1].y);
+        }
+
+        *data << ToUnit()->GetSpeed(MOVE_PITCH_RATE);
+
+        if(flags & UPDATEFLAG_TRANSPORT)
+        {
+            const Unit* unit = ToUnit();
+            if(unit->GetTransGUIDIndex(4))
+                *data << uint8(unit->GetTransGUIDIndex(4) ^ 1);
+
+            *data << ToUnit()->GetTransOffsetZ();
+
+            if(unit->GetTransGUIDIndex(7))
+                *data << uint8(unit->GetTransGUIDIndex(7) ^ 1);
+            if(unit->GetTransGUIDIndex(5))
+                *data << uint8(unit->GetTransGUIDIndex(5) ^ 1);
+            if(unit->GetTransGUIDIndex(2))
+                *data << uint8(unit->GetTransGUIDIndex(2) ^ 1);
+
+            *data << ToUnit()->GetTransOffsetX();
+
+            if(unit->GetTransGUIDIndex(3))
+                *data << uint8(unit->GetTransGUIDIndex(3) ^ 1);
+            if(unit->GetTransGUIDIndex(6))
+                *data << uint8(unit->GetTransGUIDIndex(6) ^ 1);
+
+            *data << ToUnit()->GetTransOffsetY();
+            *data << ToUnit()->GetTransSeat();
+            *data << ToUnit()->GetTransOffsetO();
+
+            if(ToUnit()->GetExtraUnitMovementFlags() & MOVEMENTFLAG2_INTERPOLATED_MOVEMENT)
+                *data << uint32(0);
+
+            if(unit->GetTransGUIDIndex(2))
+                *data << uint8(unit->GetTransGUIDIndex(2) ^ 1);
+
+            *data << ToUnit()->GetTransTime();
+
+            if(unit->GetTransGUIDIndex(0))
+                *data << uint8(unit->GetTransGUIDIndex(0) ^ 1);
+        }
+
+         bool swimming = ((ToUnit()->GetUnitMovementFlags() & (MOVEMENTFLAG_SWIMMING | MOVEMENTFLAG_FLYING))
+            || (ToUnit()->GetExtraUnitMovementFlags() & MOVEMENTFLAG2_ALWAYS_ALLOW_PITCHING));
+        bool interPolatedTurning = ToUnit()->GetExtraUnitMovementFlags() & MOVEMENTFLAG2_INTERPOLATED_TURNING;
+        bool jumping = ToUnit()->GetUnitMovementFlags() & MOVEMENTFLAG_FALLING;
+
+        *data << ToUnit()->GetSpeed(MOVE_TURN_RATE);
+        *data << ToUnit()->GetPositionX();
+
+        if(swimming)
+            *data << ToUnit()->GetMovementPitch();
+
+    if (interPolatedTurning)
+    {
+        *data << (uint32)ToUnit()->GetMovementInfo().fallTime;
+
+        if (jumping)
+        {
+            *data << (float)ToUnit()->GetMovementInfo().j_sinAngle;
+            *data << (float)ToUnit()->GetMovementInfo().j_cosAngle;
+            *data << (float)ToUnit()->GetMovementInfo().j_xyspeed;
+        }
+
+        *data << (float)ToUnit()->GetMovementInfo().j_zspeed;
     }
 
-   // 0x0800
-   if (flags & UPDATEFLAG_UNK11)
-   {
-       *data << uint16(0);
-       *data << uint16(0);
-       *data << uint16(0);
-   }
+            if(GetGUIDIndex(7))
+                *data << uint8(GetGUIDIndex(7) ^ 1);
 
-   // 0x1000
-   if (flags & UPDATEFLAG_UNK12)
-   {
-       uint8 bytes = 0;
-       *data << bytes;
-       for (uint8 i = 0; i < bytes; i++)
-           *data << uint32(0);
-   }
+            *data << ToUnit()->GetSpeed(MOVE_RUN_BACK);
+
+            if(GetGUIDIndex(0))
+                *data << uint8(GetGUIDIndex(0) ^ 1);
+            if(GetGUIDIndex(5))
+                *data << uint8(GetGUIDIndex(5));
+
+            *data << uint32(getMSTime());
+            *data << ToUnit()->GetPositionZ();
+            *data << ToUnit()->GetSpeed(MOVE_FLIGHT_BACK);
+
+            if(GetGUIDIndex(1))
+                *data << uint8(GetGUIDIndex(1) ^ 1);
+
+            *data << ToUnit()->GetSpeed(MOVE_SWIM_BACK);
+            *data << ToUnit()->GetSpeed(MOVE_FLIGHT);
+            *data << ToUnit()->GetSpeed(MOVE_SWIM);
+            *data << ToUnit()->GetSpeed(MOVE_WALK);
+
+            if(GetGUIDIndex(3))
+                *data << uint8(GetGUIDIndex(3) ^ 1);
+            if(GetGUIDIndex(4))
+                *data << uint8(GetGUIDIndex(4) ^ 1);
+            if(GetGUIDIndex(2))
+                *data << uint8(GetGUIDIndex(2) ^ 1);
+            if(GetGUIDIndex(6))
+                *data << uint8(GetGUIDIndex(6) ^ 1);
+
+            *data << ToUnit()->GetPositionY();
+            *data << ToUnit()->GetOrientation();
+            *data << ToUnit()->GetSpeed(MOVE_RUN);
+    }
+
+    if(flags & UPDATEFLAG_TRANSPORT)
+        *data << uint32(getMSTime());
+
+    if(flags & UPDATEFLAG_HAS_TARGET)
+    {
+        if (Unit *victim = ToUnit()->getVictim())
+        {
+            *data << victim->GetGUIDIndex(3);
+            *data << victim->GetGUIDIndex(5);
+            *data << victim->GetGUIDIndex(0);
+            *data << victim->GetGUIDIndex(7);
+            *data << victim->GetGUIDIndex(2);
+            *data << victim->GetGUIDIndex(4);
+            *data << victim->GetGUIDIndex(6);
+            *data << victim->GetGUIDIndex(1);
+        }
+        else
+        {
+            for(int i = 0; i < 8; i++)
+                *data << uint8(0);
+        }
+    }
 }
 
 void Object::_BuildValuesUpdate(uint8 updatetype, ByteBuffer * data, UpdateMask* updateMask, Player* target) const

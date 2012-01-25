@@ -1820,3 +1820,24 @@ void WorldSession::HandleInstanceLockResponse(WorldPacket& recvPacket)
 
     _player->SetPendingBind(0, 0);
 }
+
+void WorldSession::HandleSendCemetryListResponse(WorldPacket& recvPacket)
+{
+    uint32 unk;
+
+    recvPacket >> unk;
+
+    // TODO Implement it.
+}
+
+void WorldSession::PlayerRequestCemeteryList(WorldPacket& recvPacket)
+{
+  // Empty Opcode
+  sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: CMSG_REQUEST_CEMETERY_LIST");
+}
+
+void WorldSession::HandleViolenceLevelOpcode(WorldPacket& recvPacket)
+{
+  sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: CMSG_VIOLENCE_LEVEL");
+  recvPacket.read_skip<uint8>();    // violenceLevel
+}

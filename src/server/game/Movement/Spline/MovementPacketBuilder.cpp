@@ -19,6 +19,7 @@
 #include "MovementPacketBuilder.h"
 #include "MoveSpline.h"
 #include "WorldPacket.h"
+#include "Unit.h"
 
 namespace Movement
 {
@@ -139,7 +140,58 @@ namespace Movement
             WriteLinearPath(spline, data);
     }
 
-    void PacketBuilder::WriteCreate(const MoveSpline& move_spline, ByteBuffer& data)
+	void PacketBuilder::WriteBytes(const MoveSpline& move_spline, ByteBuffer& data)
+    {
+        uint32 nodes = move_spline.getPath().size();
+
+        data.WriteBit(false);
+        data.WriteBits(SPLINEFLAG_GLIDE, 25);
+        data.WriteBits(SPLINEMODE_LINEAR, 2);
+        data.WriteBit(false);
+        data.WriteBits(nodes, 22);
+        data.WriteBits(SPLINETYPE_NORMAL, 2);
+
+        MoveSplineFlag splineFlags = move_spline.splineflags;
+
+        if (splineFlags.walkmode)
+        {
+            uint8 guidMask[] = { 7, 3, 4, 2, 1, 6, 0, 5 };
+            data.WriteGuidMask(move_spline.facing.target, guidMask, 8);
+        }
+    }
+	
+	void PacketBuilder::WriteData(const MoveSpline& move_spline, ByteBuffer& data)
+    {
+        MoveSplineFlag splineFlags = move_spline.splineflags;
+        uint32 nodes = move_spline.getPath().size();
+
+        data.append<Vector3>(&move_spline.getPath()[0], nodes);
+        data << float(1.f);                             // splineInfo.duration_mod; added in 3.1
+
+        if (splineFlags.walkmode)
+        {
+            uint8 guidBytes[] = { 3, 4, 5, 7, 2, 0, 6, 1 };
+            data.WriteGuidBytes(move_spline.facing.target, guidBytes, 8, 0);
+        }
+
+        if(splineFlags.flying)
+            data << move_spline.facing.f.x << move_spline.facing.f.y << move_spline.facing.f.z;
+
+        data << splineFlags.raw();
+
+        if (splineFlags.orientationFixed)
+            data << move_spline.facing.angle;
+
+        data << move_spline.timePassed();
+        data << move_spline.Duration();
+        data << move_spline.GetId();
+
+        data << move_spline.FinalDestination().z;
+        data << move_spline.FinalDestination().y;
+        data << uint32(0);
+        data << move_spline.FinalDestination().x;
+    }
+    /*void PacketBuilder::WriteCreate(const MoveSpline& move_spline, ByteBuffer& data)
     {
         //WriteClientStatus(mov,data);
         //data.append<float>(&mov.m_float_values[SpeedWalk], SpeedMaxCount);
@@ -178,5 +230,5 @@ namespace Movement
             data << uint8(move_spline.spline.mode());       // added in 3.1
             data << (move_spline.isCyclic() ? Vector3::zero() : move_spline.FinalDestination());
         }
-    }
+    }*/
 }

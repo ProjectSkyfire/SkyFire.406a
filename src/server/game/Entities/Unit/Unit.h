@@ -769,15 +769,57 @@ enum MovementFlags2
 
 enum SplineFlags
 {
-    SPLINEFLAG_WALKMODE     = 0x00001000,
-    SPLINEFLAG_FLYING       = 0x00002000,
-    SPLINEFLAG_TRANSPORT    = 0x00800000,
-    SPLINEFLAG_EXIT_VEHICLE = 0x01000000,
+    SPLINEFLAG_NONE           = 0x00000000,
+    SPLINEFLAG_FORWARD        = 0x00000001,
+    SPLINEFLAG_BACKWARD       = 0x00000002,
+    SPLINEFLAG_STRAFE_LEFT    = 0x00000004,
+    SPLINEFLAG_STRAFE_RIGHT   = 0x00000008,
+    SPLINEFLAG_LEFT           = 0x00000010,
+    SPLINEFLAG_RIGHT          = 0x00000020,
+    SPLINEFLAG_PITCH_UP       = 0x00000040,
+    SPLINEFLAG_PITCH_DOWN     = 0x00000080,
+    SPLINEFLAG_DONE           = 0x00000100,
+    SPLINEFLAG_FALLING        = 0x00000200,
+    SPLINEFLAG_NO_SPLINE      = 0x00000400,
+    SPLINEFLAG_TRAJECTORY     = 0x00000800,
+    SPLINEFLAG_WALKING        = 0x00001000,
+    SPLINEFLAG_FLYING         = 0x00002000,
+    SPLINEFLAG_KNOCKBACK      = 0x00004000,
+    SPLINEFLAG_FINAL_POINT    = 0x00008000,
+    SPLINEFLAG_FINAL_TARGET   = 0x00010000,
+    SPLINEFLAG_FINAL_FACING   = 0x00020000,
+    SPLINEFLAG_CATMULL_ROM    = 0x00040000,
+    SPLINEFLAG_UNKNOWN20      = 0x00080000,
+    SPLINEFLAG_UNKNOWN21      = 0x00100000,
+    SPLINEFLAG_ANIMATIONTIER  = 0x00200000,
+    SPLINEFLAG_UNKNOWN23      = 0x00400000,
+    SPLINEFLAG_TRANSPORT      = 0x00800000,
+    SPLINEFLAG_EXIT_VEHICLE   = 0x01000000,
+    SPLINEFLAG_UNKNOWN26      = 0x02000000,
+    SPLINEFLAG_UNKNOWN27      = 0x04000000,
+    SPLINEFLAG_UNKNOWN28      = 0x08000000,
+    SPLINEFLAG_UNKNOWN29      = 0x10000000,
+    SPLINEFLAG_ANIMATION      = 0x20000000,
+    SPLINEFLAG_UNKNOWN31      = 0x40000000,
+    SPLINEFLAG_UNKNOWN32      = 0x80000000,
+
+    SPLINEFLAG_GLIDE = SPLINEFLAG_WALKING | SPLINEFLAG_FLYING,
+};
+
+enum SplineMode
+{
+    SPLINEMODE_LINEAR       = 0,
+    SPLINEMODE_CATMULL_ROM  = 1,
+    SPLINEMODE_BEZIER3      = 2
 };
 
 enum SplineType
 {
-    SPLINETYPE_FACING_ANGLE  = 4,
+    SPLINETYPE_NORMAL        = 0,
+    SPLINETYPE_STOP          = 1,
+    SPLINETYPE_FACING_SPOT   = 2,
+    SPLINETYPE_FACING_TARGET = 3,
+    SPLINETYPE_FACING_ANGLE  = 4
 };
 
 enum UnitTypeMask
@@ -2086,6 +2128,9 @@ class Unit : public WorldObject
         uint32 GetUnitMovementFlags() const { return _movementInfo.flags; }
         void SetUnitMovementFlags(uint32 f) { _movementInfo.flags = f; }
 
+		float GetMovementPitch() const { return _movementInfo.pitch; }
+		MovementInfo GetMovementInfo() const { return _movementInfo; }
+
         void AddExtraUnitMovementFlag(uint16 f) { _movementInfo.flags2 |= f; }
         void RemoveExtraUnitMovementFlag(uint16 f) { _movementInfo.flags2 &= ~f; }
         uint16 HasExtraUnitMovementFlag(uint16 f) const { return _movementInfo.flags2 & f; }
@@ -2160,6 +2205,7 @@ class Unit : public WorldObject
         uint32 GetTransTime()   const { return _movementInfo.t_time; }
         int8 GetTransSeat()     const { return _movementInfo.t_seat; }
         uint64 GetTransGUID()   const;
+		uint8 GetTransGUIDIndex(uint8 index) const;
 
         bool _ControlledByPlayer;
 

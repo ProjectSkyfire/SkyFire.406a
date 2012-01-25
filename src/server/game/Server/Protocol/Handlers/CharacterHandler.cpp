@@ -970,10 +970,14 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder* holder)
     LoadAccountData(holder->GetPreparedResult(PLAYER_LOGIN_QUERY_LOADACCOUNTDATA), PER_CHARACTER_CACHE_MASK);
     SendAccountDataTimes(PER_CHARACTER_CACHE_MASK);
 
-    data.Initialize(SMSG_FEATURE_SYSTEM_STATUS, 2);         // added in 2.2.0
-    data << uint8(2);                                       // unknown value
-    data << uint8(0);                                       // enable(1)/disable(0) voice chat interface in client
-    SendPacket(&data);
+	data.Initialize(SMSG_FEATURE_SYSTEM_STATUS, 10);         // added in 4.3.0a 
+    data << uint32(0x01); 
+    data << uint8(0x02); 
+    data << uint8(0x12); 
+    data << uint8(0x05); 
+    data << uint16(0x00); 
+    data << uint8(0x20); 
+	SendPacket(&data);
 
     // Send MOTD
     {
@@ -1239,6 +1243,16 @@ void WorldSession::HandleSetFactionAtWar(WorldPacket & recv_data)
     recv_data >> flag;
 
     GetPlayer()->GetReputationMgr().SetAtWar(repListID, flag);
+}
+
+void WorldSession::HandleLoadScreenOpcode(WorldPacket& recvPacket) //Also named CMSG_LOADING_SCREEN_NOTIFY
+{
+    sLog->outStaticDebug("WORLD: Recvd CMSG_LOAD_SCREEN");
+    uint8 unkMask; // Loading start: 0x80, loading end: 0x0
+    uint32 mapID;
+    recvPacket >> unkMask >> mapID;
+
+    // TODO: Do something with this packet
 }
 
 //I think this function is never used :/ I dunno, but i guess this opcode not exists

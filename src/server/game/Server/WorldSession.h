@@ -406,7 +406,7 @@ class WorldSession
         void HandleCharCreateOpcode(WorldPacket& recvPacket);
         void HandleCharCreateCallback(PreparedQueryResult result, CharacterCreateInfo* createInfo);
         void HandlePlayerLoginOpcode(WorldPacket& recvPacket);
-
+		void HandleLoadScreenOpcode(WorldPacket& recvPacket);
         void HandleWorldLoginOpcode(WorldPacket& recvPacket);
 
         void HandleCharEnum(PreparedQueryResult result);
@@ -420,6 +420,7 @@ class WorldSession
         void HandleMoveUnRootAck(WorldPacket& recvPacket);
         void HandleMoveRootAck(WorldPacket& recvPacket);
         void HandleLookingForGroup(WorldPacket& recvPacket);
+		
 
         // new inspect
         void HandleInspectOpcode(WorldPacket& recvPacket);
@@ -514,6 +515,7 @@ class WorldSession
         void HandleMoveWorldportAckOpcode(WorldPacket& recvPacket);
         void HandleMoveWorldportAckOpcode();                // for server-side calls
 
+		//Movement
         void HandleMovementOpcodes(WorldPacket& recvPacket);
         void HandleSetActiveMoverOpcode(WorldPacket& recv_data);
         void HandleMoveNotActiveMover(WorldPacket& recv_data);
@@ -521,8 +523,12 @@ class WorldSession
         void HandleRequestVehicleExit(WorldPacket& recv_data);
         void HandleChangeSeatsOnControlledVehicle(WorldPacket& recv_data);
         void HandleMoveTimeSkippedOpcode(WorldPacket& recv_data);
-
-        void HandleRequestRaidInfoOpcode(WorldPacket& recv_data);
+		//Test 4.3.0 15050
+		void HandleMovementPlayerMoveOpcodes(WorldPacket& recv_data);
+		
+		
+        
+		void HandleRequestRaidInfoOpcode(WorldPacket& recv_data);
 
         void HandleBattlefieldStatusOpcode(WorldPacket& recv_data);
         void HandleBattleMasterHelloOpcode(WorldPacket& recv_data);
@@ -922,6 +928,11 @@ class WorldSession
         void HandleEnterPlayerVehicle(WorldPacket& data);
         void HandleUpdateProjectilePosition(WorldPacket& recvPacket);
         void HandleReforgeItem(WorldPacket& recv_data);
+		// new 4.3.0 15050
+		void HandleViolenceLevelOpcode(WorldPacket& recvPacket);
+        void HandleSendCemetryListResponse(WorldPacket& recvPacket);
+		void PlayerRequestCemeteryList(WorldPacket& recvPacket);
+		
 
     private:
         void InitializeQueryCallbackParameters();

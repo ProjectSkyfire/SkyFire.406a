@@ -53,7 +53,7 @@ enum Opcodes
     SMSG_CHAR_DELETE                                 = 0x02A02, // 4.3.0 15050
     CMSG_WORLD_LOGIN                                 = 0x00,
     CMSG_PLAYER_LOGIN                                = 0x00326, // 4.3.0 15050
-    CMSG_LOAD_SCREEN_NOTIFY                          = 0x00976, // 4.3.0 15050
+    CMSG_LOAD_SCREEN		                         = 0x00976, // 4.3.0 15050
     SMSG_NEW_WORLD                                   = 0x064AC, // 4.3.0 15050
     SMSG_TRANSFER_PENDING                            = 0x00,
     SMSG_TRANSFER_ABORTED                            = 0x00AA6, // 4.3.0 15050
@@ -1351,6 +1351,7 @@ enum Opcodes
     CMSG_VIOLENCE_LEVEL                              = 0x07291, // 4.3.0 15050
     //SMSG_CUF_PROFILES_LOAD                           = 0x02428, // 4.3.0 15050
     SMSG_PLAYER_MOVE                                 = 0x04418, // 4.3.0 15050
+	CMSG_PLAYER_MOVE                                 = 0x00005, // 4.3.0 15050
     CMSG_REQUEST_CEMETERY_LIST                       = 0x02081, // 4.3.0 15050
     SMSG_REQUEST_CEMETERY_LIST_RESPONSE              = 0x00CB8, // 4.3.0 15050
     CMSG_RANDOMIZE_CHAR_NAME                         = 0x04326, // 4.3.0 15050

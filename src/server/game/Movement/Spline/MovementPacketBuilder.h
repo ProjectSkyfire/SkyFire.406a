@@ -31,7 +31,9 @@ namespace Movement
     public:
 
         static void WriteMonsterMove(const MoveSpline& mov, WorldPacket& data);
-        static void WriteCreate(const MoveSpline& mov, ByteBuffer& data);
+        //static void WriteCreate(const MoveSpline& mov, ByteBuffer& data);
+		static void WriteBytes(const MoveSpline& mov, ByteBuffer& data);
+        static void WriteData(const MoveSpline& mov, ByteBuffer& data);
     };
 }
 #endif // TRINITYSERVER_PACKET_BUILDER_H
