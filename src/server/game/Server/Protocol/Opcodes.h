@@ -455,8 +455,8 @@ enum Opcodes
     SMSG_ACTIVATETAXIREPLY                           = 0x00,
     SMSG_NEW_TAXI_PATH                               = 0x00,
     CMSG_TRAINER_LIST                                = 0x00,
-    SMSG_TRAINER_LIST                                = 0x00,
-    CMSG_TRAINER_BUY_SPELL                           = 0x00,
+    SMSG_TRAINER_LIST                                = 0x4C80, // 4.3.0 15050
+    CMSG_TRAINER_BUY_SPELL                           = 0x7EA0, // 4.3.0 15050
     SMSG_TRAINER_BUY_RESULT                          = 0x00,
     CMSG_BINDER_ACTIVATE                             = 0x00,
     SMSG_PLAYERBINDERROR                             = 0x00,
