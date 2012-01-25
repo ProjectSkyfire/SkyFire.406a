@@ -377,7 +377,7 @@ bool Unit::haveOffhandWeapon() const
 void Unit::MonsterMoveWithSpeed(float x, float y, float z, float speed)
 {
     Movement::MoveSplineInit init(*this);
-    init.MoveTo(x,y,z);
+    init.MoveTo(x, y, z);
     init.SetVelocity(speed);
     init.Launch();
 }
@@ -405,9 +405,9 @@ void Unit::UpdateSplineMovement(uint32 t_diff)
         Movement::Location loc = movespline->ComputePosition();
 
         if (GetTypeId() == TYPEID_PLAYER)
-            ((Player*)this)->UpdatePosition(loc.x,loc.y,loc.z,loc.orientation);
+            ((Player*)this)->UpdatePosition(loc.x, loc.y, loc.z, loc.orientation);
         else
-            GetMap()->CreatureRelocation((Creature*)this,loc.x,loc.y,loc.z,loc.orientation);
+            GetMap()->CreatureRelocation((Creature*)this, loc.x, loc.y, loc.z, loc.orientation);
     }
 }
 
@@ -1874,7 +1874,7 @@ void Unit::AttackerStateUpdate (Unit* victim, WeaponAttackType attType, bool ext
         CalcDamageInfo damageInfo;
         CalculateMeleeDamage(victim, 0, &damageInfo, attType);
 
-        if(attType == BASE_ATTACK)
+        if (attType == BASE_ATTACK)
         {
             float mod = GetTotalAuraModifier(SPELL_AURA_MOD_AUTOATTACK_DAMAGE) / 100;
             damageInfo.damage += uint32(damageInfo.damage * mod);
@@ -6759,9 +6759,9 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                         return false;
 
                     if (victim && victim->IsFriendlyTo(this))
-                        CastCustomSpell(victim,86678,&bp0,&bp1,0,true,NULL,triggeredByAura,0);
+                        CastCustomSpell(victim, 86678,&bp0,&bp1, 0, true, NULL, triggeredByAura, 0);
                     else
-                        CastCustomSpell(this,86678,&bp0,&bp1,0,true,NULL,triggeredByAura,0);
+                        CastCustomSpell(this, 86678,&bp0,&bp1, 0, true, NULL, triggeredByAura, 0);
                     return true;
                 }
                 // Ancient Crusader - Player
@@ -7763,7 +7763,7 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                         return false;
             }
             // Dark Simulacrum
-            if(dummySpell->Id == 77606)
+            if (dummySpell->Id == 77606)
             {
                 if(!procSpell || procSpell->PowerType != POWER_MANA || (procSpell->ManaCost == 0 && procSpell->ManaCostPercentage == 0 && procSpell->ManaCostPerlevel == 0))
                     return false;
@@ -8043,7 +8043,7 @@ bool Unit::HandleAuraProc(Unit* victim, uint32 damage, Aura* triggeredByAura, Sp
             if (!procSpell)
                 return false;
 
-            switch(procSpell->Id)
+            switch (procSpell->Id)
             {
                 case 2050:
                 case 2060:
@@ -8730,14 +8730,14 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
         case 81163: // Will Of The Necropolis Rank 2
         case 81164: // Will Of The Necropolis Rank 3
         {
-            if(GetTypeId() != TYPEID_PLAYER)
+            if (GetTypeId() != TYPEID_PLAYER)
                 return false;
 
             if(!HealthBelowPctDamaged(30, damage)) // Only proc if it brings us below 30% health
                 return false;
 
-            ToPlayer()->RemoveSpellCooldown(48982,true); // Remove cooldown of rune tap
-            CastSpell(this,96171,true); // next rune tap wont cost runes
+            ToPlayer()->RemoveSpellCooldown(48982, true); // Remove cooldown of rune tap
+            CastSpell(this, 96171, true); // next rune tap wont cost runes
             cooldown = 45000; // Can only happen once in 45 seconds
             break;
         }
@@ -8746,7 +8746,7 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
         case 49529:
         case 49530:
         {
-            if(GetTypeId() != TYPEID_PLAYER)
+            if (GetTypeId() != TYPEID_PLAYER)
                 return false;
 
             // Select chance based on weapon speed
@@ -8754,9 +8754,9 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
 
             int32 modifier = 1;
 
-            if(auraSpellInfo->Id == 49530) // Rank 3
+            if (auraSpellInfo->Id == 49530) // Rank 3
                 modifier = 4;
-            else if(auraSpellInfo->Id == 49529) // Rank 2
+            else if (auraSpellInfo->Id == 49529) // Rank 2
                 modifier = 3;
 
             // ToDo: Check this, its based on a wowhead comment
@@ -9855,7 +9855,7 @@ void Unit::SetMinion(Minion *minion, bool apply, PetSlot slot)
                 ToPlayer()->_petSlotUsed = 3452816845; // the same as 100 so that the pet is only that and nothing more
                 // ToPlayer()->setPetSlotUsed(slot, true);
             }
-            if(slot >= PET_SLOT_HUNTER_FIRST && slot <= PET_SLOT_HUNTER_LAST) // Always save thoose spots where hunter is correct
+            if (slot >= PET_SLOT_HUNTER_FIRST && slot <= PET_SLOT_HUNTER_LAST) // Always save thoose spots where hunter is correct
             {
                 ToPlayer()->_currentPetSlot = slot;
                 ToPlayer()->setPetSlotUsed(slot, true);
@@ -10516,8 +10516,8 @@ uint32 Unit::SpellDamageBonus(Unit* victim, SpellInfo const* spellProto, uint32 
         break;
         case SPELLFAMILY_WARRIOR:
             // Slam
-            if(spellProto->SpellFamilyFlags[2] & 0x200000)
-                if(HasAura(46916)) // Bloodsurge
+            if (spellProto->SpellFamilyFlags[2] & 0x200000)
+                if (HasAura(46916)) // Bloodsurge
                     AddPctN(DoneTotalMod, 20); // 20% more damage
         break;
     }
@@ -11642,7 +11642,7 @@ void Unit::MeleeDamageBonus(Unit* victim, uint32 *pdamage, WeaponAttackType attT
     }
 
     // Check for bonus data
-    if(spellProto)
+    if (spellProto)
     {
         SpellBonusEntry const* bonus = sSpellMgr->GetSpellBonusData(spellProto->Id);
         if (bonus)
@@ -15676,7 +15676,7 @@ void Unit::SetRooted(bool apply)
         {
             WorldPacket data(SMSG_SPLINE_MOVE_ROOT, 8);
             data.append(GetPackGUID());
-            SendMessageToSet(&data,true);
+            SendMessageToSet(&data, true);
             ToCreature()->StopMoving();
         }
     }

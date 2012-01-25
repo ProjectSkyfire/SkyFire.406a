@@ -169,7 +169,7 @@ public:
             Unit* target = NULL;
             target = me->SelectNearestTarget(5.0f);
             if (target && target->GetTypeId() == TYPEID_PLAYER)
-                if(target->ToPlayer()->GetQuestStatus(28414) == QUEST_STATUS_INCOMPLETE)
+                if (target->ToPlayer()->GetQuestStatus(28414) == QUEST_STATUS_INCOMPLETE)
                     target->ToPlayer()->KilledMonsterCredit(37203, 0);
         }
     };

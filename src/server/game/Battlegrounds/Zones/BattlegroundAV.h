@@ -360,7 +360,7 @@ const float BG_AV_ObjectPos[AV_OPLACE_MAX][4] = {
     {669.007f, -294.078f, 30.2909f, 2.77507f }, //stormpike
     {77.8013f, -404.7f, 46.7549f, -0.872665f }, //stone grave
     {-202.581f, -112.73f, 78.4876f, -0.715585f }, //snowfall
-    {-611.962f, -396.17f, 60.8351f, 2.53682f},  //iceblood grave
+    {-611.962f, -396.17f, 60.8351f, 2.53682f}, //iceblood grave
     {-1082.45f, -346.823f, 54.9219f, -1.53589f }, //frostwolf grave
     {-1402.21f, -307.431f, 89.4424f, 0.191986f }, //frostwolf hut
     {553.779f, -78.6566f, 51.9378f, -1.22173f }, //dunnbaldar south
@@ -368,9 +368,9 @@ const float BG_AV_ObjectPos[AV_OPLACE_MAX][4] = {
     {203.281f, -360.366f, 56.3869f, -0.925024f }, //icew
     {-152.437f, -441.758f, 40.3982f, -1.95477f }, //stone
     {-571.88f, -262.777f, 75.0087f, -0.802851f }, //ice tower
-    {-768.907f, -363.71f, 90.8949f, 1.07991f},  //tower point
+    {-768.907f, -363.71f, 90.8949f, 1.07991f}, //tower point
     {-1302.9f, -316.981f, 113.867f, 2.00713f }, //frostwolf etower
-    {-1297.5f, -266.767f, 114.15f, 3.31044f},   //frostwolf wtower
+    {-1297.5f, -266.767f, 114.15f, 3.31044f},  //frostwolf wtower
     //bigbanner:
     {555.848f, -84.4151f, 64.4397f, 3.12414f }, //duns
     {679.339f, -136.468f, 73.9626f, -2.16421f }, //dunn
@@ -527,7 +527,7 @@ const float BG_AV_ObjectPos[AV_OPLACE_MAX][4] = {
 };
 
 const float BG_AV_DoorPositons[2][4] = {
-    {780.487f, -493.024f, 99.9553f, 3.0976f},   //alliance
+    {780.487f, -493.024f, 99.9553f, 3.0976f},  //alliance
     {-1375.193f, -538.981f, 55.2824f, 0.72178f} //horde
 };
 
@@ -958,24 +958,24 @@ const float BG_AV_CreaturePos[AV_CPLACE_MAX][4] = {
     //herald
     {-48.459f, -288.802f, 55.47f, 1.0f},
     //triggers
-    {637.083f, -32.6603f, 45.9715f, 1.14353f},         //firstaid_station
-    {669.007f, -294.078f, 30.2909f, 2.77507f},     //stormpike_grave
-    {77.8013f, -404.7f, 46.7549f, -0.872665f},     //stoneheart_grave
-    {-202.581f, -112.73f, 78.4876f, -0.715585f},   //snowfall_grave
-    {-611.962f, -396.17f, 60.8351f, 2.53682f},     //iceblood_grave
-    {-1082.45f, -346.823f, 54.9219f, -1.53589f},   //frostwolf_grave
-    {-1402.21f, -307.431f, 89.4424f, 0.191986f},   //frostwolf_hut
-    {553.779f, -78.6566f, 51.9378f, -1.22173f},    //dunbaldar_south
-    {674.001f, -143.125f, 63.6615f, 0.994838f},    //dunbaldar_north
-    {203.281f, -360.366f, 56.3869f, -0.925024f},    //icewing_bunker
-    {-152.437f, -441.758f, 40.3982f, -1.95477f},   //stoneheart_bunker
-    {-571.88f, -262.777f, 75.0087f, -0.802851f},   //iceblood_tower
-    {-768.907f, -363.71f, 90.8949f, 1.07991f},     //tower_point
-    {-1302.9f, -316.981f, 113.867f, 2.00713f},     //frostwolf_etower
-    {-1297.5f, -266.767f, 114.15f, 3.31044f},      //frostwolf_wtower
-    {-57.7891f, -286.597f, 15.6479f, 6.02139f},    //AV_NPC_A_CAPTAIN balinda
-    {722.43f, -10.9982f, 50.7046f, 3.42085f},      //AV_NPC_A_BOSS vanndar
-    {-545.23f, -165.35f, 57.7886f, 3.01145f},      //AV_NPC_H_CAPTAIN galvangar
+    {637.083f, -32.6603f, 45.9715f, 1.14353f},        //firstaid_station
+    {669.007f, -294.078f, 30.2909f, 2.77507f},    //stormpike_grave
+    {77.8013f, -404.7f, 46.7549f, -0.872665f},    //stoneheart_grave
+    {-202.581f, -112.73f, 78.4876f, -0.715585f},  //snowfall_grave
+    {-611.962f, -396.17f, 60.8351f, 2.53682f},    //iceblood_grave
+    {-1082.45f, -346.823f, 54.9219f, -1.53589f},  //frostwolf_grave
+    {-1402.21f, -307.431f, 89.4424f, 0.191986f},  //frostwolf_hut
+    {553.779f, -78.6566f, 51.9378f, -1.22173f},   //dunbaldar_south
+    {674.001f, -143.125f, 63.6615f, 0.994838f},   //dunbaldar_north
+    {203.281f, -360.366f, 56.3869f, -0.925024f},   //icewing_bunker
+    {-152.437f, -441.758f, 40.3982f, -1.95477f},  //stoneheart_bunker
+    {-571.88f, -262.777f, 75.0087f, -0.802851f},  //iceblood_tower
+    {-768.907f, -363.71f, 90.8949f, 1.07991f},    //tower_point
+    {-1302.9f, -316.981f, 113.867f, 2.00713f},    //frostwolf_etower
+    {-1297.5f, -266.767f, 114.15f, 3.31044f},     //frostwolf_wtower
+    {-57.7891f, -286.597f, 15.6479f, 6.02139f},   //AV_NPC_A_CAPTAIN balinda
+    {722.43f, -10.9982f, 50.7046f, 3.42085f},     //AV_NPC_A_BOSS vanndar
+    {-545.23f, -165.35f, 57.7886f, 3.01145f},     //AV_NPC_H_CAPTAIN galvangar
     {-1370.9f, -219.793f, 98.4258f, 5.04381f}      //AV_NPC_H_BOSS drek thar
 };
 

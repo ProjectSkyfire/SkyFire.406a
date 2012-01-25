@@ -92,7 +92,7 @@ LogFile = "Auth.log"
 #                     will be logged.
 #        Possible flags:
 #
-#                  64 - Anything related to network input/output,
+#                  64 - Anything related to network input/output, 
 #                        such as packet handlers and netcode logs
 #
 #                       Simply add the values together to create a bitmask.

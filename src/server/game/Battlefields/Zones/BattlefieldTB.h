@@ -23,7 +23,7 @@
 #include "WorldPacket.h"
 #include "World.h"
 
-const uint32 TBClockWorldState[2] = {5333,5332};
+const uint32 TBClockWorldState[2] = {5333, 5332};
 const uint32 TolBaradFaction[3] = {2354, 2355, 35};
 
 class BattlefieldTB;
@@ -289,7 +289,7 @@ struct BfTBObjectPosition
 };
 
 //*********************************************************
-//************Destructible (Wall,Tower..)******************
+//************Destructible (Wall, Tower..)******************
 //*********************************************************
 
 struct BfTBBuildingSpawnData
@@ -314,7 +314,7 @@ const BfTBBuildingSpawnData TBGameObjectBuillding[TB_MAX_OBJ] =
 };
 
 //*********************************************************
-//**********Keep Element(GameObject,Creature)**************
+//**********Keep Element(GameObject, Creature)**************
 //*********************************************************
 
 #define TB_MAX_WAR_NPC 10
@@ -326,11 +326,11 @@ const BfTBObjectPosition TBWarNPC[TB_MAX_WAR_NPC] =
     {-722.751f, 1178.52f, 103.649f, 6.25959f,   BATTLEFIELD_TB_NPC_GUARD_A, BATTLEFIELD_TB_NPC_GUARD_H}, // Guard - bridge
     {-818.092f, 1180.13f, 111.991f, 6.2753f,    BATTLEFIELD_TB_NPC_GUARD_A, BATTLEFIELD_TB_NPC_GUARD_H}, // Guard - bridge
     {-1438.67f, 1140.87f, 123.549f, 4.57729f, 45344, 45344}, // Abandoned Siege Engine
-    {-1442.58f, 1094.62f, 120.946f, 5.9321f, 45344, 45344},  // Abandoned Siege Engine
-    {-1274.5f, 798.2f, 120.436f, 1.95014f, 45344, 45344},    // Abandoned Siege Engine
-    {-1206.68f, 793.54f, 121.123f, 4.78543f, 45344, 45344},  // Abandoned Siege Engine
+    {-1442.58f, 1094.62f, 120.946f, 5.9321f, 45344, 45344}, // Abandoned Siege Engine
+    {-1274.5f, 798.2f, 120.436f, 1.95014f, 45344, 45344},   // Abandoned Siege Engine
+    {-1206.68f, 793.54f, 121.123f, 4.78543f, 45344, 45344}, // Abandoned Siege Engine
     {-1096.55f, 1086.82f, 124.975f, 2.88555f, 45344, 45344}, // Abandoned Siege Engine
-    {-1109.07f, 1201.8f, 122.709f, 4.32284f, 45344, 45344},  // Abandoned Siege Engine
+    {-1109.07f, 1201.8f, 122.709f, 4.32284f, 45344, 45344}, // Abandoned Siege Engine
 };
 
 //Here there is all npc keeper spawn point
@@ -346,25 +346,25 @@ const BfTBObjectPosition TBKeepNPC[TB_MAX_KEEP_NPC] =
     {-1248.83f, 1012.51f, 119.728f, 1.60629f,  BATTLEFIELD_TB_NPC_GUARD_H, BATTLEFIELD_TB_NPC_GUARD_A}, // Guard
     {-1217.35f, 1013.63f, 119.728f, 1.60629f,  BATTLEFIELD_TB_NPC_GUARD_H, BATTLEFIELD_TB_NPC_GUARD_A}, // Guard
     {-1208.71f, 963.233f, 119.728f, 0.171371f, BATTLEFIELD_TB_NPC_GUARD_H, BATTLEFIELD_TB_NPC_GUARD_A}, // Guard
-    {-1454.06f, 1270.45f, 133.584f, 0, BATTLEFIELD_TB_NPC_HUNTER_A, BATTLEFIELD_TB_NPC_DRUID_H},        // Trash
-    {-1421.28f, 1304.17f, 133.584f, 0, BATTLEFIELD_TB_NPC_MAGE_A, BATTLEFIELD_TB_NPC_MAGE_H},           // Trash
-    {-1443.37f, 1338.5f, 133.828f, 0,  BATTLEFIELD_TB_NPC_HUNTER_A, BATTLEFIELD_TB_NPC_MAGE_H},         // Trash
-    {-1497.46f, 1386.06f, 133.591f, 0, BATTLEFIELD_TB_NPC_MAGE_A, BATTLEFIELD_TB_NPC_SHAMAN_H},         // Trash
-    {-1545.21f, 1361.79f, 133.585f, 0, BATTLEFIELD_TB_NPC_HUNTER_A, BATTLEFIELD_TB_NPC_SHAMAN_H},       // Trash
-    {-1570.75f, 1318.13f, 133.585f, 0, BATTLEFIELD_TB_NPC_MAGE_A, BATTLEFIELD_TB_NPC_ROGUE_H},          // Trash
-    {-1536.95f, 1276.91f, 133.585f, 0, BATTLEFIELD_TB_NPC_PALADIN_A, BATTLEFIELD_TB_NPC_ROGUE_H},       // Trash
-    {-1490.08f, 1238.24f, 133.584f, 0, BATTLEFIELD_TB_NPC_PALADIN_A, BATTLEFIELD_TB_NPC_SHAMAN_H},      // Trash
-    {-1474.11f, 643.198f, 123.422f, 0, BATTLEFIELD_TB_NPC_PALADIN_A, BATTLEFIELD_TB_NPC_SHAMAN_H},      // Trash
-    {-1414.45f, 711.19f, 123.422f, 0,  BATTLEFIELD_TB_NPC_PALADIN_A, BATTLEFIELD_TB_NPC_ROGUE_H},       // Trash
-    {-1446.55f, 756.924f, 123.422f, 0, BATTLEFIELD_TB_NPC_MAGE_A, BATTLEFIELD_TB_NPC_ROGUE_H},          // Trash
-    {-1518.74f, 680.033f, 123.422f, 0, BATTLEFIELD_TB_NPC_MAGE_A, BATTLEFIELD_TB_NPC_MAGE_H},    // Trash
-    {-1474.18f, 721.503f, 123.423f, 0, BATTLEFIELD_TB_NPC_MAGE_A, BATTLEFIELD_TB_NPC_MAGE_H},    // Trash
-    {-1440.74f, 592.324f, 123.422f, 0, BATTLEFIELD_TB_NPC_MAGE_A, BATTLEFIELD_TB_NPC_DRUID_H},   // Trash
-    {-1365, 688.187f, 123.423f, 0,     BATTLEFIELD_TB_NPC_MAGE_A, BATTLEFIELD_TB_NPC_DRUID_H},   // Trash
-    {-956.408f, 929.511f, 121.442f, 0, BATTLEFIELD_TB_NPC_MAGE_A, BATTLEFIELD_TB_NPC_DRUID_H},   // Trash
-    {-954.937f, 978.588f, 121.441f, 0, BATTLEFIELD_TB_NPC_MAGE_A, BATTLEFIELD_TB_NPC_DRUID_H},   // Trash
-    {-945.342f, 1026.22f, 121.441f, 0, BATTLEFIELD_TB_NPC_MAGE_A, BATTLEFIELD_TB_NPC_MAGE_H},    // Trash
-    {-832.92f, 969.778f, 121.441f, 0,  BATTLEFIELD_TB_NPC_HUNTER_A, BATTLEFIELD_TB_NPC_MAGE_H},  // Trash
+    {-1454.06f, 1270.45f, 133.584f, 0, BATTLEFIELD_TB_NPC_HUNTER_A, BATTLEFIELD_TB_NPC_DRUID_H},       // Trash
+    {-1421.28f, 1304.17f, 133.584f, 0, BATTLEFIELD_TB_NPC_MAGE_A, BATTLEFIELD_TB_NPC_MAGE_H},          // Trash
+    {-1443.37f, 1338.5f, 133.828f, 0,  BATTLEFIELD_TB_NPC_HUNTER_A, BATTLEFIELD_TB_NPC_MAGE_H},        // Trash
+    {-1497.46f, 1386.06f, 133.591f, 0, BATTLEFIELD_TB_NPC_MAGE_A, BATTLEFIELD_TB_NPC_SHAMAN_H},        // Trash
+    {-1545.21f, 1361.79f, 133.585f, 0, BATTLEFIELD_TB_NPC_HUNTER_A, BATTLEFIELD_TB_NPC_SHAMAN_H},      // Trash
+    {-1570.75f, 1318.13f, 133.585f, 0, BATTLEFIELD_TB_NPC_MAGE_A, BATTLEFIELD_TB_NPC_ROGUE_H},         // Trash
+    {-1536.95f, 1276.91f, 133.585f, 0, BATTLEFIELD_TB_NPC_PALADIN_A, BATTLEFIELD_TB_NPC_ROGUE_H},      // Trash
+    {-1490.08f, 1238.24f, 133.584f, 0, BATTLEFIELD_TB_NPC_PALADIN_A, BATTLEFIELD_TB_NPC_SHAMAN_H},     // Trash
+    {-1474.11f, 643.198f, 123.422f, 0, BATTLEFIELD_TB_NPC_PALADIN_A, BATTLEFIELD_TB_NPC_SHAMAN_H},     // Trash
+    {-1414.45f, 711.19f, 123.422f, 0,  BATTLEFIELD_TB_NPC_PALADIN_A, BATTLEFIELD_TB_NPC_ROGUE_H},      // Trash
+    {-1446.55f, 756.924f, 123.422f, 0, BATTLEFIELD_TB_NPC_MAGE_A, BATTLEFIELD_TB_NPC_ROGUE_H},         // Trash
+    {-1518.74f, 680.033f, 123.422f, 0, BATTLEFIELD_TB_NPC_MAGE_A, BATTLEFIELD_TB_NPC_MAGE_H},   // Trash
+    {-1474.18f, 721.503f, 123.423f, 0, BATTLEFIELD_TB_NPC_MAGE_A, BATTLEFIELD_TB_NPC_MAGE_H},   // Trash
+    {-1440.74f, 592.324f, 123.422f, 0, BATTLEFIELD_TB_NPC_MAGE_A, BATTLEFIELD_TB_NPC_DRUID_H},  // Trash
+    {-1365, 688.187f, 123.423f, 0,     BATTLEFIELD_TB_NPC_MAGE_A, BATTLEFIELD_TB_NPC_DRUID_H},  // Trash
+    {-956.408f, 929.511f, 121.442f, 0, BATTLEFIELD_TB_NPC_MAGE_A, BATTLEFIELD_TB_NPC_DRUID_H},  // Trash
+    {-954.937f, 978.588f, 121.441f, 0, BATTLEFIELD_TB_NPC_MAGE_A, BATTLEFIELD_TB_NPC_DRUID_H},  // Trash
+    {-945.342f, 1026.22f, 121.441f, 0, BATTLEFIELD_TB_NPC_MAGE_A, BATTLEFIELD_TB_NPC_MAGE_H},   // Trash
+    {-832.92f, 969.778f, 121.441f, 0,  BATTLEFIELD_TB_NPC_HUNTER_A, BATTLEFIELD_TB_NPC_MAGE_H}, // Trash
     {-881.724f, 1025.98f, 121.44f, 0,  BATTLEFIELD_TB_NPC_HUNTER_A, BATTLEFIELD_TB_NPC_ROGUE_H}, // Trash
     {-883.355f, 934.504f, 121.44f, 0,  BATTLEFIELD_TB_NPC_HUNTER_A, BATTLEFIELD_TB_NPC_ROGUE_H}, // Trash
     {-883.944f, 976.156f, 121.441f, 5.41424f,  BATTLEFIELD_TB_NPC_PALADIN_A, BATTLEFIELD_TB_NPC_SHAMAN_H}, // Trash
@@ -394,7 +394,7 @@ struct BfTBCapturePointDataBase
 const BfTBCapturePointDataBase TBCapturePointDataBase[TB_MAX_WORKSHOP]=
 {
     // Ironclad
-    {192031, 5429, BATTLEFIELD_TB_FORT_IRONGLAD,BATTLEFIELD_TB_TEXT_IRONCLAD_GARRISON_NAME,
+    {192031, 5429, BATTLEFIELD_TB_FORT_IRONGLAD, BATTLEFIELD_TB_TEXT_IRONCLAD_GARRISON_NAME,
         {-877.823f, 980.493f, 121.441f, 3.05341f, BATTLEFIELD_TB_GAMEOBJECT_CAPTURE_NORTH, BATTLEFIELD_TB_GAMEOBJECT_CAPTURE_NORTH},
         2,
         //gameobject
@@ -405,7 +405,7 @@ const BfTBCapturePointDataBase TBCapturePointDataBase[TB_MAX_WORKSHOP]=
     },
 
     // Warden's
-    {192030, 5424, BATTLEFIELD_TB_FORT_WARDENS_VIGIL,BATTLEFIELD_TB_TEXT_WARDENS_VIGIL_NAME,
+    {192030, 5424, BATTLEFIELD_TB_FORT_WARDENS_VIGIL, BATTLEFIELD_TB_TEXT_WARDENS_VIGIL_NAME,
         {-1492.85f, 1310.62f, 152.962f, 5.4646f, BATTLEFIELD_TB_GAMEOBJECT_CAPTURE_WEST, BATTLEFIELD_TB_GAMEOBJECT_CAPTURE_WEST},
         2,
         //gameobject
@@ -415,7 +415,7 @@ const BfTBCapturePointDataBase TBCapturePointDataBase[TB_MAX_WORKSHOP]=
         }
     },
     // Slagworks
-    {192033, 5429, BATTLEFIELD_TB_FORT_SLAGWORKS,BATTLEFIELD_TB_TEXT_SLAGWORKS_NAME,
+    {192033, 5429, BATTLEFIELD_TB_FORT_SLAGWORKS, BATTLEFIELD_TB_TEXT_SLAGWORKS_NAME,
         {-1438.86f, 685.013f, 123.422f, 0.795405f, BATTLEFIELD_TB_GAMEOBJECT_CAPTURE_EAST, BATTLEFIELD_TB_GAMEOBJECT_CAPTURE_EAST},
         2,
         //gameobject
@@ -427,7 +427,7 @@ const BfTBCapturePointDataBase TBCapturePointDataBase[TB_MAX_WORKSHOP]=
 };
 
 /********************************************************************
-*                Structs using for Building,Graveyard,Workshop      *
+*                Structs using for Building, Graveyard, Workshop      *
 ********************************************************************/
 
 // Structure for different building witch can be destroy during battle
@@ -501,7 +501,7 @@ struct BfTBGameObjectBuilding
         m_State = BATTLEFIELD_TB_OBJECTSTATE_ALLIANCE_DAMAGE-(m_Team*3);
         m_TB->SendUpdateWorldState(m_WorldState, m_State);
         // Send warning message
-        if(m_NameId)
+        if (m_NameId)
             m_TB->SendWarningToAllInZone(m_NameId);
     }
 
@@ -512,7 +512,7 @@ struct BfTBGameObjectBuilding
         m_State = BATTLEFIELD_TB_OBJECTSTATE_ALLIANCE_DESTROY-(m_Team*3);
         m_TB->SendUpdateWorldState(m_WorldState, m_State);
         // Warning
-        if(m_NameId)
+        if (m_NameId)
             m_TB->SendWarningToAllInZone(m_NameId);
         switch (m_Type)
         {
@@ -547,12 +547,12 @@ struct BfTBGameObjectBuilding
         {
             case BATTLEFIELD_TB_OBJECTSTATE_ALLIANCE_INTACT:
             case BATTLEFIELD_TB_OBJECTSTATE_HORDE_INTACT:
-                if(m_Build)
+                if (m_Build)
                     m_Build->SetDestructibleState(GO_DESTRUCTIBLE_REBUILDING, NULL, true);
                 break;
             case BATTLEFIELD_TB_OBJECTSTATE_ALLIANCE_DESTROY:
             case BATTLEFIELD_TB_OBJECTSTATE_HORDE_DESTROY:
-                if(m_Build)
+                if (m_Build)
                 {
                     m_Build->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_DAMAGED);
                     m_Build->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_DESTROYED);
@@ -561,7 +561,7 @@ struct BfTBGameObjectBuilding
                 break;
             case BATTLEFIELD_TB_OBJECTSTATE_ALLIANCE_DAMAGE:
             case BATTLEFIELD_TB_OBJECTSTATE_HORDE_DAMAGE:
-                if(m_Build)
+                if (m_Build)
                 {
                     m_Build->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_DAMAGED);
                     m_Build->SetUInt32Value(GAMEOBJECT_DISPLAYID, m_Build->GetGOInfo()->building.damagedDisplayId);

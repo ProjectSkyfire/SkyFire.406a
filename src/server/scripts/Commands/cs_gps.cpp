@@ -36,8 +36,8 @@ public:
     {
         static ChatCommand commandTable[] =
         {
-            { "gps",      SEC_ADMINISTRATOR,  false, &HandleGPSCommand,                  "", NULL },
-            { "wpgps",    SEC_ADMINISTRATOR,  false, &HandleWPGPSCommand,                "", NULL },
+            { "gps",     SEC_ADMINISTRATOR,  false, &HandleGPSCommand,                  "", NULL },
+            { "wpgps",   SEC_ADMINISTRATOR,  false, &HandleWPGPSCommand,                "", NULL },
             { NULL,       0,                  false, NULL,                               "", NULL }
         };
         return commandTable;
@@ -129,7 +129,7 @@ public:
     {
         Player* player = handler->GetSession()->GetPlayer();
 
-        sLog->outSQLDev("(@PATH, XX, %.3f, %.3f, %.5f, 0,0, 0,100, 0),", player->GetPositionX(), player->GetPositionY(), player->GetPositionZ());
+        sLog->outSQLDev("(@PATH, XX, %.3f, %.3f, %.5f, 0, 0, 0, 100, 0),", player->GetPositionX(), player->GetPositionY(), player->GetPositionZ());
 
         handler->PSendSysMessage("Waypoint SQL written to SQL Developer log");
         return true;

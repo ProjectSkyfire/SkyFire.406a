@@ -525,7 +525,7 @@ struct BfWGObjectPosition
 };
 
 // *********************************************************
-// ************Destructible (Wall,Tower..)******************
+// ************Destructible (Wall, Tower..)******************
 // *********************************************************
 
 struct BfWGBuildingSpawnData
@@ -589,7 +589,7 @@ const BfWGBuildingSpawnData WGGameObjectBuillding[WG_MAX_OBJ] = {
 };
 
 // *********************************************************
-// **********Keep Element(GameObject,Creature)**************
+// **********Keep Element(GameObject, Creature)**************
 // *********************************************************
 
 // Keep gameobject
@@ -634,49 +634,49 @@ const BfWGBuildingSpawnData WGGameObjectBuillding[WG_MAX_OBJ] = {
 // 192351 : 1 in sql, 1 in header
 #define WG_KEEPGAMEOBJECT_MAX 44
 const BfWGObjectPosition WGKeepGameObject[WG_KEEPGAMEOBJECT_MAX] = {
-    { 5262.540039f, 3047.949951f, 432.054993f, 3.106650f, 192488, 192501 },       // Flag on tower
-    { 5272.939941f, 2976.550049f, 444.492004f, 3.124120f, 192374, 192416 },       // Flag on Wall Intersect
-    { 5235.189941f, 2941.899902f, 444.278015f, 1.588250f, 192375, 192416 },       // Flag on Wall Intersect
-    { 5163.129883f, 2952.590088f, 433.502991f, 1.535890f, 192488, 192501 },       // Flag on tower
-    { 5145.109863f, 2935.000000f, 433.385986f, 3.141590f, 192488, 192501 },       // Flag on tower
-    { 5158.810059f, 2883.129883f, 431.618011f, 3.141590f, 192488, 192416 },       // Flag on wall
-    { 5154.490234f, 2862.149902f, 445.011993f, 3.141590f, 192336, 192416 },       // Flag on Wall Intersect
-    { 5154.520020f, 2853.310059f, 409.183014f, 3.141590f, 192255, 192269 },       // Flag on the floor
-    { 5154.459961f, 2828.939941f, 409.188995f, 3.141590f, 192254, 192269 },       // Flag on the floor
-    { 5155.310059f, 2820.739990f, 444.979004f, -3.13286f, 192349, 192416 },       // Flag on wall intersect
-    { 5160.339844f, 2798.610107f, 430.769012f, 3.141590f, 192488, 192416 },       // Flag on wall
-    { 5146.040039f, 2747.209961f, 433.584015f, 3.071770f, 192488, 192501 },       // Flag on tower
-    { 5163.779785f, 2729.679932f, 433.394012f, -1.58825f, 192488, 192501 },       // Flag on tower
-    { 5236.270020f, 2739.459961f, 444.992004f, -1.59698f, 192366, 192416 },       // Flag on wall intersect
-    { 5271.799805f, 2704.870117f, 445.183014f, -3.13286f, 192367, 192416 },       // Flag on wall intersect
-    { 5260.819824f, 2631.800049f, 433.324005f, 3.054330f, 192488, 192501 },       // Flag on tower
-    { 5278.379883f, 2613.830078f, 433.408997f, -1.58825f, 192488, 192501 },       // Flag on tower
-    { 5350.879883f, 2622.719971f, 444.686005f, -1.57080f, 192364, 192416 },       // Flag on wall intersect
-    { 5392.270020f, 2639.739990f, 435.330994f, 1.509710f, 192370, 192416 },       // Flag on wall intersect
-    { 5350.950195f, 2640.360107f, 435.407990f, 1.570800f, 192369, 192416 },       // Flag on wall intersect
-    { 5289.459961f, 2704.679932f, 435.875000f, -0.01745f, 192368, 192416 },       // Flag on wall intersect
-    { 5322.120117f, 2763.610107f, 444.973999f, -1.55334f, 192362, 192416 },       // Flag on wall intersect
-    { 5363.609863f, 2763.389893f, 445.023987f, -1.54462f, 192363, 192416 },       // Flag on wall intersect
-    { 5363.419922f, 2781.030029f, 435.763000f, 1.570800f, 192379, 192416 },       // Flag on wall intersect
-    { 5322.020020f, 2781.129883f, 435.811005f, 1.570800f, 192378, 192416 },       // Flag on wall intersect
-    { 5288.919922f, 2820.219971f, 435.721008f, 0.017452f, 192355, 192416 },       // Flag on wall intersect
-    { 5288.410156f, 2861.790039f, 435.721008f, 0.017452f, 192354, 192416 },       // Flag on wall intersect
-    { 5322.229980f, 2899.429932f, 435.808014f, -1.58825f, 192358, 192416 },       // Flag on wall intersect
-    { 5364.350098f, 2899.399902f, 435.838989f, -1.57080f, 192359, 192416 },       // Flag on wall intersect
-    { 5397.759766f, 2873.080078f, 455.460999f, 3.106650f, 192338, 192416 },       // Flag on keep
-    { 5397.390137f, 2809.330078f, 455.343994f, 3.106650f, 192339, 192416 },       // Flag on keep
-    { 5372.479980f, 2862.500000f, 409.049011f, 3.141590f, 192284, 192269 },       // Flag on floor
-    { 5371.490234f, 2820.800049f, 409.177002f, 3.141590f, 192285, 192269 },       // Flag on floor
-    { 5364.290039f, 2916.939941f, 445.330994f, 1.579520f, 192371, 192416 },       // Flag on wall intersect
-    { 5322.859863f, 2916.949951f, 445.153992f, 1.562070f, 192372, 192416 },       // Flag on wall intersect
-    { 5290.350098f, 2976.560059f, 435.221008f, 0.017452f, 192373, 192416 },       // Flag on wall intersect
-    { 5352.370117f, 3037.090088f, 435.252014f, -1.57080f, 192360, 192416 },       // Flag on wall intersect
-    { 5392.649902f, 3037.110107f, 433.713013f, -1.52716f, 192361, 192416 },       // Flag on wall intersect
-    { 5237.069824f, 2757.030029f, 435.795990f, 1.518440f, 192356, 192416 },       // Flag on wall intersect
-    { 5173.020020f, 2820.929932f, 435.720001f, 0.017452f, 192352, 192416 },       // Flag on wall intersect
-    { 5172.109863f, 2862.570068f, 435.721008f, 0.017452f, 192353, 192416 },       // Flag on wall intersect
-    { 5235.339844f, 2924.340088f, 435.040009f, -1.57080f, 192357, 192416 },       // Flag on wall intersect
-    { 5270.689941f, 2861.780029f, 445.058014f, -3.11539f, 192350, 192416 },       // Flag on wall intersect
+    { 5262.540039f, 3047.949951f, 432.054993f, 3.106650f, 192488, 192501 },      // Flag on tower
+    { 5272.939941f, 2976.550049f, 444.492004f, 3.124120f, 192374, 192416 },      // Flag on Wall Intersect
+    { 5235.189941f, 2941.899902f, 444.278015f, 1.588250f, 192375, 192416 },      // Flag on Wall Intersect
+    { 5163.129883f, 2952.590088f, 433.502991f, 1.535890f, 192488, 192501 },      // Flag on tower
+    { 5145.109863f, 2935.000000f, 433.385986f, 3.141590f, 192488, 192501 },      // Flag on tower
+    { 5158.810059f, 2883.129883f, 431.618011f, 3.141590f, 192488, 192416 },      // Flag on wall
+    { 5154.490234f, 2862.149902f, 445.011993f, 3.141590f, 192336, 192416 },      // Flag on Wall Intersect
+    { 5154.520020f, 2853.310059f, 409.183014f, 3.141590f, 192255, 192269 },      // Flag on the floor
+    { 5154.459961f, 2828.939941f, 409.188995f, 3.141590f, 192254, 192269 },      // Flag on the floor
+    { 5155.310059f, 2820.739990f, 444.979004f, -3.13286f, 192349, 192416 },      // Flag on wall intersect
+    { 5160.339844f, 2798.610107f, 430.769012f, 3.141590f, 192488, 192416 },      // Flag on wall
+    { 5146.040039f, 2747.209961f, 433.584015f, 3.071770f, 192488, 192501 },      // Flag on tower
+    { 5163.779785f, 2729.679932f, 433.394012f, -1.58825f, 192488, 192501 },      // Flag on tower
+    { 5236.270020f, 2739.459961f, 444.992004f, -1.59698f, 192366, 192416 },      // Flag on wall intersect
+    { 5271.799805f, 2704.870117f, 445.183014f, -3.13286f, 192367, 192416 },      // Flag on wall intersect
+    { 5260.819824f, 2631.800049f, 433.324005f, 3.054330f, 192488, 192501 },      // Flag on tower
+    { 5278.379883f, 2613.830078f, 433.408997f, -1.58825f, 192488, 192501 },      // Flag on tower
+    { 5350.879883f, 2622.719971f, 444.686005f, -1.57080f, 192364, 192416 },      // Flag on wall intersect
+    { 5392.270020f, 2639.739990f, 435.330994f, 1.509710f, 192370, 192416 },      // Flag on wall intersect
+    { 5350.950195f, 2640.360107f, 435.407990f, 1.570800f, 192369, 192416 },      // Flag on wall intersect
+    { 5289.459961f, 2704.679932f, 435.875000f, -0.01745f, 192368, 192416 },      // Flag on wall intersect
+    { 5322.120117f, 2763.610107f, 444.973999f, -1.55334f, 192362, 192416 },      // Flag on wall intersect
+    { 5363.609863f, 2763.389893f, 445.023987f, -1.54462f, 192363, 192416 },      // Flag on wall intersect
+    { 5363.419922f, 2781.030029f, 435.763000f, 1.570800f, 192379, 192416 },      // Flag on wall intersect
+    { 5322.020020f, 2781.129883f, 435.811005f, 1.570800f, 192378, 192416 },      // Flag on wall intersect
+    { 5288.919922f, 2820.219971f, 435.721008f, 0.017452f, 192355, 192416 },      // Flag on wall intersect
+    { 5288.410156f, 2861.790039f, 435.721008f, 0.017452f, 192354, 192416 },      // Flag on wall intersect
+    { 5322.229980f, 2899.429932f, 435.808014f, -1.58825f, 192358, 192416 },      // Flag on wall intersect
+    { 5364.350098f, 2899.399902f, 435.838989f, -1.57080f, 192359, 192416 },      // Flag on wall intersect
+    { 5397.759766f, 2873.080078f, 455.460999f, 3.106650f, 192338, 192416 },      // Flag on keep
+    { 5397.390137f, 2809.330078f, 455.343994f, 3.106650f, 192339, 192416 },      // Flag on keep
+    { 5372.479980f, 2862.500000f, 409.049011f, 3.141590f, 192284, 192269 },      // Flag on floor
+    { 5371.490234f, 2820.800049f, 409.177002f, 3.141590f, 192285, 192269 },      // Flag on floor
+    { 5364.290039f, 2916.939941f, 445.330994f, 1.579520f, 192371, 192416 },      // Flag on wall intersect
+    { 5322.859863f, 2916.949951f, 445.153992f, 1.562070f, 192372, 192416 },      // Flag on wall intersect
+    { 5290.350098f, 2976.560059f, 435.221008f, 0.017452f, 192373, 192416 },      // Flag on wall intersect
+    { 5352.370117f, 3037.090088f, 435.252014f, -1.57080f, 192360, 192416 },      // Flag on wall intersect
+    { 5392.649902f, 3037.110107f, 433.713013f, -1.52716f, 192361, 192416 },      // Flag on wall intersect
+    { 5237.069824f, 2757.030029f, 435.795990f, 1.518440f, 192356, 192416 },      // Flag on wall intersect
+    { 5173.020020f, 2820.929932f, 435.720001f, 0.017452f, 192352, 192416 },      // Flag on wall intersect
+    { 5172.109863f, 2862.570068f, 435.721008f, 0.017452f, 192353, 192416 },      // Flag on wall intersect
+    { 5235.339844f, 2924.340088f, 435.040009f, -1.57080f, 192357, 192416 },      // Flag on wall intersect
+    { 5270.689941f, 2861.780029f, 445.058014f, -3.11539f, 192350, 192416 },      // Flag on wall intersect
     { 5271.279785f, 2820.159912f, 445.200989f, -3.13286f, 192351, 192416 }        // Flag on wall intersect
 };
 
@@ -713,50 +713,50 @@ const BfWGTurretPos WGTurret[WG_MAX_TURRET] = {
 const BfWGObjectPosition WGKeepNPC[WG_MAX_KEEP_NPC] = {
     // X          Y            Z           O         horde                          alliance
     // North East
-    { 5326.203125f, 2660.026367f, 409.100891f, 2.543383f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },       // Roaming Guard
+    { 5326.203125f, 2660.026367f, 409.100891f, 2.543383f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },      // Roaming Guard
     { 5298.430176f, 2738.760010f, 409.316010f, 3.971740f, BATTLEFIELD_WG_NPC_VIERON_BLAZEFEATHER, BATTLEFIELD_WG_NPC_BOWYER_RANDOLPH }, // Vieron Plumembrase
-    { 5335.310059f, 2764.110107f, 409.274994f, 4.834560f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },       // Standing Guard
-    { 5349.810059f, 2763.629883f, 409.333008f, 4.660030f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },       // Standing Guard
+    { 5335.310059f, 2764.110107f, 409.274994f, 4.834560f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },      // Standing Guard
+    { 5349.810059f, 2763.629883f, 409.333008f, 4.660030f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },      // Standing Guard
     // North
     { 5373.470215f, 2789.060059f, 409.322998f, 2.600540f, BATTLEFIELD_WG_NPC_STONE_GUARD_MUKAR, BATTLEFIELD_WG_NPC_KNIGHT_DAMERON }, // Stone Guard Mukar
     { 5296.560059f, 2789.870117f, 409.274994f, 0.733038f, BATTLEFIELD_WG_NPC_HOODOO_MASTER_FU_JIN, BATTLEFIELD_WG_NPC_SORCERESS_KAYLANA }, // Voodoo Master Fu'jin
     { 5372.670000f, 2786.740000f, 409.442000f, 2.809980f, BATTLEFIELD_WG_NPC_CHAMPION_ROS_SLAI, BATTLEFIELD_WG_NPC_MARSHAL_MAGRUDER }, // Wintergrasp Quartermaster
-    { 5368.709961f, 2856.360107f, 409.322998f, 2.949610f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },       // Standing Guard
-    { 5367.910156f, 2826.520020f, 409.322998f, 3.333580f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },       // Standing Guard
-    { 5389.270020f, 2847.370117f, 418.759003f, 3.106690f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },       // Standing Guard
-    { 5388.560059f, 2834.770020f, 418.759003f, 3.071780f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },       // Standing Guard
+    { 5368.709961f, 2856.360107f, 409.322998f, 2.949610f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },      // Standing Guard
+    { 5367.910156f, 2826.520020f, 409.322998f, 3.333580f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },      // Standing Guard
+    { 5389.270020f, 2847.370117f, 418.759003f, 3.106690f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },      // Standing Guard
+    { 5388.560059f, 2834.770020f, 418.759003f, 3.071780f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },      // Standing Guard
     { 5359.129883f, 2837.989990f, 409.364014f, 4.698930f, BATTLEFIELD_WG_NPC_COMMANDER_DARDOSH, BATTLEFIELD_WG_NPC_COMMANDER_ZANNETH }, // Commander Dardosh
     { 5366.129883f, 2833.399902f, 409.322998f, 3.141590f, BATTLEFIELD_WG_NPC_TACTICAL_OFFICER_KILRATH, BATTLEFIELD_WG_NPC_TACTICAL_OFFICER_AHBRAMIS }, // Tactical Officer Kilrath
     // X          Y            Z           O         horde  alliance
     // North West
-    { 5350.680176f, 2917.010010f, 409.274994f, 1.466080f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },       // Standing Guard
-    { 5335.120117f, 2916.800049f, 409.444000f, 1.500980f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },       // Standing Guard
+    { 5350.680176f, 2917.010010f, 409.274994f, 1.466080f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },      // Standing Guard
+    { 5335.120117f, 2916.800049f, 409.444000f, 1.500980f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },      // Standing Guard
     { 5295.560059f, 2926.669922f, 409.274994f, 0.872665f, BATTLEFIELD_WG_NPC_SIEGESMITH_STRONGHOOF, BATTLEFIELD_WG_NPC_SIEGE_MASTER_STOUTHANDLE }, // Stronghoof
     { 5371.399902f, 3026.510010f, 409.205994f, 3.250030f, BATTLEFIELD_WG_NPC_PRIMALIST_MULFORT, BATTLEFIELD_WG_NPC_ANCHORITE_TESSA }, // Primalist Mulfort
-    { 5392.123535f, 3031.110352f, 409.187683f, 3.677212f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },       // Roaming Guard
+    { 5392.123535f, 3031.110352f, 409.187683f, 3.677212f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },      // Roaming Guard
     // South
-    { 5270.060059f, 2847.550049f, 409.274994f, 3.071780f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },       // Standing Guard
-    { 5270.160156f, 2833.479980f, 409.274994f, 3.124140f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },       // Standing Guard
-    { 5179.109863f, 2837.129883f, 409.274994f, 3.211410f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },       // Standing Guard
-    { 5179.669922f, 2846.600098f, 409.274994f, 3.089230f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },       // Standing Guard
+    { 5270.060059f, 2847.550049f, 409.274994f, 3.071780f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },      // Standing Guard
+    { 5270.160156f, 2833.479980f, 409.274994f, 3.124140f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },      // Standing Guard
+    { 5179.109863f, 2837.129883f, 409.274994f, 3.211410f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },      // Standing Guard
+    { 5179.669922f, 2846.600098f, 409.274994f, 3.089230f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },      // Standing Guard
     { 5234.970215f, 2883.399902f, 409.274994f, 4.293510f, BATTLEFIELD_WG_NPC_LIEUTENANT_MURP, BATTLEFIELD_WG_NPC_SENIOR_DEMOLITIONIST_LEGOSO }, // Lieutenant Murp
     // X          Y            Z           O         horde  alliance
     // Portal guards (from around the fortress)
-    { 5319.209473f, 3055.947754f, 409.176636f, 1.020201f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },       // Standing Guard
-    { 5311.612305f, 3061.207275f, 408.734161f, 0.965223f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },       // Standing Guard
-    { 5264.713379f, 3017.283447f, 408.479706f, 3.482424f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },       // Standing Guard
-    { 5269.096191f, 3008.315918f, 408.826294f, 3.843706f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },       // Standing Guard
-    { 5201.414551f, 2945.096924f, 409.190735f, 0.945592f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },       // Standing Guard
-    { 5193.386230f, 2949.617188f, 409.190735f, 1.145859f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },       // Standing Guard
-    { 5148.116211f, 2904.761963f, 409.193756f, 3.368532f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },       // Standing Guard
-    { 5153.355957f, 2895.501465f, 409.199310f, 3.549174f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },       // Standing Guard
-    { 5154.353027f, 2787.349365f, 409.250183f, 2.555644f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },       // Standing Guard
-    { 5150.066406f, 2777.876953f, 409.343903f, 2.708797f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },       // Standing Guard
-    { 5193.706543f, 2732.882812f, 409.189514f, 4.845073f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },       // Standing Guard
-    { 5202.126953f, 2737.570557f, 409.189514f, 5.375215f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },       // Standing Guard
-    { 5269.181152f, 2671.174072f, 409.098999f, 2.457459f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },       // Standing Guard
-    { 5264.960938f, 2662.332520f, 409.098999f, 2.598828f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },       // Standing Guard
-    { 5307.111816f, 2616.006836f, 409.095734f, 5.355575f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },       // Standing Guard
+    { 5319.209473f, 3055.947754f, 409.176636f, 1.020201f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },      // Standing Guard
+    { 5311.612305f, 3061.207275f, 408.734161f, 0.965223f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },      // Standing Guard
+    { 5264.713379f, 3017.283447f, 408.479706f, 3.482424f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },      // Standing Guard
+    { 5269.096191f, 3008.315918f, 408.826294f, 3.843706f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },      // Standing Guard
+    { 5201.414551f, 2945.096924f, 409.190735f, 0.945592f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },      // Standing Guard
+    { 5193.386230f, 2949.617188f, 409.190735f, 1.145859f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },      // Standing Guard
+    { 5148.116211f, 2904.761963f, 409.193756f, 3.368532f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },      // Standing Guard
+    { 5153.355957f, 2895.501465f, 409.199310f, 3.549174f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },      // Standing Guard
+    { 5154.353027f, 2787.349365f, 409.250183f, 2.555644f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },      // Standing Guard
+    { 5150.066406f, 2777.876953f, 409.343903f, 2.708797f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },      // Standing Guard
+    { 5193.706543f, 2732.882812f, 409.189514f, 4.845073f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },      // Standing Guard
+    { 5202.126953f, 2737.570557f, 409.189514f, 5.375215f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },      // Standing Guard
+    { 5269.181152f, 2671.174072f, 409.098999f, 2.457459f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },      // Standing Guard
+    { 5264.960938f, 2662.332520f, 409.098999f, 2.598828f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },      // Standing Guard
+    { 5307.111816f, 2616.006836f, 409.095734f, 5.355575f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },      // Standing Guard
     { 5316.770996f, 2619.430176f, 409.027740f, 5.363431f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A }        // Standing Guard
 };
 
@@ -809,7 +809,7 @@ const BfWGWGTeleporterData WGPortalDefenderData[WG_MAX_TELEPORTER] =
 };
 
 // *********************************************************
-// **********Tower Element(GameObject,Creature)*************
+// **********Tower Element(GameObject, Creature)*************
 // *********************************************************
 
 struct BfWGTowerData
@@ -834,16 +834,16 @@ const BfWGTowerData AttackTowers[WG_MAX_ATTACKTOWERS] = {
         190356,
         6,
         {
-            { 4559.109863f, 3606.219971f, 419.998993f, -1.483530f, 192488, 192501 },    // Flag on tower
-            { 4539.419922f, 3622.489990f, 420.033997f, -3.071770f, 192488, 192501 },    // Flag on tower
-            { 4555.259766f, 3641.649902f, 419.973999f, 1.675510f, 192488, 192501 },     // Flag on tower
-            { 4574.870117f, 3625.909912f, 420.079010f, 0.080117f, 192488, 192501 },     // Flag on tower
-            { 4433.899902f, 3534.139893f, 360.274994f, -1.850050f, 192269, 192278 },    // Flag near workshop
+            { 4559.109863f, 3606.219971f, 419.998993f, -1.483530f, 192488, 192501 },   // Flag on tower
+            { 4539.419922f, 3622.489990f, 420.033997f, -3.071770f, 192488, 192501 },   // Flag on tower
+            { 4555.259766f, 3641.649902f, 419.973999f, 1.675510f, 192488, 192501 },    // Flag on tower
+            { 4574.870117f, 3625.909912f, 420.079010f, 0.080117f, 192488, 192501 },    // Flag on tower
+            { 4433.899902f, 3534.139893f, 360.274994f, -1.850050f, 192269, 192278 },   // Flag near workshop
             { 4572.930176f, 3475.520020f, 363.009003f, 1.42240f, 192269, 192278 }       // Flag near bridge
         },
         1,
         {
-            { 4418.688477f, 3506.251709f, 358.975494f, 4.293305f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },     // Roaming Guard
+            { 4418.688477f, 3506.251709f, 358.975494f, 4.293305f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },    // Roaming Guard
             { 0, 0, 0, 0, 0, 0 },
             { 0, 0, 0, 0, 0, 0 },
             { 0, 0, 0, 0, 0, 0 },
@@ -868,21 +868,21 @@ const BfWGTowerData AttackTowers[WG_MAX_ATTACKTOWERS] = {
         190357,
         5,
         {
-            { 4416.000000f, 2822.669922f, 429.851013f, -0.017452f, 192488, 192501 },    // Flag on tower
-            { 4398.819824f, 2804.699951f, 429.791992f, -1.588250f, 192488, 192501 },    // Flag on tower
-            { 4387.620117f, 2719.570068f, 389.934998f, -1.544620f, 192366, 192414 },    // Flag near tower
-            { 4464.120117f, 2855.449951f, 406.110992f, 0.829032f, 192366, 192429 },     // Flag near tower
-            { 4526.459961f, 2810.179932f, 391.200012f, -2.993220f, 192269, 192278 },    // Flag near bridge
+            { 4416.000000f, 2822.669922f, 429.851013f, -0.017452f, 192488, 192501 },   // Flag on tower
+            { 4398.819824f, 2804.699951f, 429.791992f, -1.588250f, 192488, 192501 },   // Flag on tower
+            { 4387.620117f, 2719.570068f, 389.934998f, -1.544620f, 192366, 192414 },   // Flag near tower
+            { 4464.120117f, 2855.449951f, 406.110992f, 0.829032f, 192366, 192429 },    // Flag near tower
+            { 4526.459961f, 2810.179932f, 391.200012f, -2.993220f, 192269, 192278 },   // Flag near bridge
             { 0, 0, 0, 0, 0, 0 },
         },
         6,
         {
-            { 4452.859863f, 2808.870117f, 402.604004f, 6.056290f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },     // Standing Guard
-            { 4455.899902f, 2835.958008f, 401.122559f, 0.034907f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },     // Standing Guard
-            { 4412.649414f, 2953.792236f, 374.799957f, 0.980838f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },     // Roaming Guard
-            { 4362.089844f, 2811.510010f, 407.337006f, 3.193950f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },     // Standing Guard
-            { 4412.290039f, 2753.790039f, 401.015015f, 5.829400f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },     // Standing Guard
-            { 4421.939941f, 2773.189941f, 400.894989f, 5.707230f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },     // Standing Guard
+            { 4452.859863f, 2808.870117f, 402.604004f, 6.056290f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },    // Standing Guard
+            { 4455.899902f, 2835.958008f, 401.122559f, 0.034907f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },    // Standing Guard
+            { 4412.649414f, 2953.792236f, 374.799957f, 0.980838f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },    // Roaming Guard
+            { 4362.089844f, 2811.510010f, 407.337006f, 3.193950f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },    // Standing Guard
+            { 4412.290039f, 2753.790039f, 401.015015f, 5.829400f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },    // Standing Guard
+            { 4421.939941f, 2773.189941f, 400.894989f, 5.707230f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },    // Standing Guard
             { 0, 0, 0, 0, 0, 0},
             { 0, 0, 0, 0, 0, 0},
             { 0, 0, 0, 0, 0, 0},
@@ -902,20 +902,20 @@ const BfWGTowerData AttackTowers[WG_MAX_ATTACKTOWERS] = {
         190358,
         4,
         {
-            { 4466.790039f, 1960.420044f, 459.144012f, 1.151920f, 192488, 192501 },     // Flag on tower
-            { 4475.350098f, 1937.030029f, 459.070007f, -0.43633f, 192488, 192501 },     // Flag on tower
-            { 4451.759766f, 1928.099976f, 459.075989f, -2.00713f, 192488, 192501 },     // Flag on tower
-            { 4442.990234f, 1951.900024f, 459.092987f, 2.740160f, 192488, 192501 },     // Flag on tower
+            { 4466.790039f, 1960.420044f, 459.144012f, 1.151920f, 192488, 192501 },    // Flag on tower
+            { 4475.350098f, 1937.030029f, 459.070007f, -0.43633f, 192488, 192501 },    // Flag on tower
+            { 4451.759766f, 1928.099976f, 459.075989f, -2.00713f, 192488, 192501 },    // Flag on tower
+            { 4442.990234f, 1951.900024f, 459.092987f, 2.740160f, 192488, 192501 },    // Flag on tower
             { 0, 0, 0, 0, 0, 0 },
             { 0, 0, 0, 0, 0, 0 },
         },
         5,
         {
-            { 4501.060059f, 1990.280029f, 431.157013f, 1.029740f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },     // Standing Guard
-            { 4463.830078f, 2015.180054f, 430.299988f, 1.431170f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },     // Standing Guard
-            { 4494.580078f, 1943.760010f, 435.627014f, 6.195920f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },     // Standing Guard
-            { 4450.149902f, 1897.579956f, 435.045013f, 4.398230f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },     // Standing Guard
-            { 4428.870117f, 1906.869995f, 432.648010f, 3.996800f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },     // Standing Guard
+            { 4501.060059f, 1990.280029f, 431.157013f, 1.029740f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },    // Standing Guard
+            { 4463.830078f, 2015.180054f, 430.299988f, 1.431170f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },    // Standing Guard
+            { 4494.580078f, 1943.760010f, 435.627014f, 6.195920f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },    // Standing Guard
+            { 4450.149902f, 1897.579956f, 435.045013f, 4.398230f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },    // Standing Guard
+            { 4428.870117f, 1906.869995f, 432.648010f, 3.996800f, BATTLEFIELD_WG_NPC_GUARD_H, BATTLEFIELD_WG_NPC_GUARD_A },    // Standing Guard
             { 0, 0, 0, 0, 0, 0 },
             { 0, 0, 0, 0, 0, 0 },
             { 0, 0, 0, 0, 0, 0 },
@@ -1300,7 +1300,7 @@ const BfWGWorkShopDataBase WGWorkShopDataBase[WG_MAX_WORKSHOP] = {
 };
 
 // ********************************************************************
-// *         Structs using for Building,Graveyard,Workshop            *
+// *         Structs using for Building, Graveyard, Workshop            *
 // ********************************************************************
 // Structure for different buildings that can be destroyed during battle
 struct BfWGGameObjectBuilding

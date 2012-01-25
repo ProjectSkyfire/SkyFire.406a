@@ -375,7 +375,7 @@ struct LootView
     uint32 objEntry;
     uint8 objType;
     LootView(Loot &_loot, Player *_viewer, uint32 _entry, uint8 _type, PermissionTypes _permission = ALL_PERMISSION)
-        : loot(_loot), viewer(_viewer), objEntry(_entry), objType(_type),  permission(_permission) {}
+        : loot(_loot), viewer(_viewer), objEntry(_entry), objType(_type), permission(_permission) {}
 };
 
 extern LootStore LootTemplates_Creature;

@@ -35,7 +35,7 @@ enum
     //NEED SCRIPT
     SPELL_TAIL_LASH 				= 74531, // A sweeping tail strike hits all enemies behind the caster, inflicting 3063 to 3937 damage and stunning them for 2 sec.
     SPELL_TWILIGHT_DIVISION 		= 75063, // Phases the caster, allowing him to exist and act simultaneously in both the material and Twilight realms.
-    SPELL_TWILIGHT_CUTTER 			= 77844, // Inflicts 13,875 to 16,125 Shadow damage every second to players touched by the shadow beam
+    SPELL_TWILIGHT_CUTTER 			= 77844, // Inflicts 13, 875 to 16, 125 Shadow damage every second to players touched by the shadow beam
     SPELL_TWILIGHT_CUTTER_CHANNEL 	= 74768, // Channeling shadow cutter visual + trigger 74769
 
     //CORPOREALITY
@@ -53,32 +53,32 @@ enum
     //METEOR STRIKE
     SPELL_METEOR					= 74637, // Script Start (summon NPC_METEOR_STRIKE)
     SPELL_METEOR_IMPACT				= 74641, // IMPACT ZONE FOR METEOR
-    SPELL_METEOR_STRIKE				= 74648, // Inflicts 18,750 to 21,250 Fire damage to enemies within 12 yards of the targeted area. Takes about 5 seconds to land.
+    SPELL_METEOR_STRIKE				= 74648, // Inflicts 18, 750 to 21, 250 Fire damage to enemies within 12 yards of the targeted area. Takes about 5 seconds to land.
     SPELL_METEOR_FLAME				= 74718, // FLAME FROM METEOR
     //N10
-    SPELL_FLAME_BREATH				= 74525, // Inflicts 17,500 to 22,500 Fire damage to players in front of Halion
-    SPELL_DARK_BREATH				= 74806, // Inflicts 17,500 to 22,500 Shadow damage to players in front of Halion
-    SPELL_DUSK_SHROUD				= 75484, // Inflicts 3,000 Shadow damage every 2 seconds to everyone in the Twilight Realm
+    SPELL_FLAME_BREATH				= 74525, // Inflicts 17, 500 to 22, 500 Fire damage to players in front of Halion
+    SPELL_DARK_BREATH				= 74806, // Inflicts 17, 500 to 22, 500 Shadow damage to players in front of Halion
+    SPELL_DUSK_SHROUD				= 75484, // Inflicts 3, 000 Shadow damage every 2 seconds to everyone in the Twilight Realm
     //Combustion
-    NPC_COMBUSTION					= 40001,
+    NPC_COMBUSTION					= 40001, 
     SPELL_MARK_OF_COMBUSTION		= 74567, // Dummy effect only
-    SPELL_FIERY_COMBUSTION			= 74562, // Inflicts 4,000 Fire damage every 2 seconds for 30 seconds to a random raider. Every time Fiery Combustion does damage, it applies a stackable Mark of Combustion.
-    SPELL_COMBUSTION_EXPLODE		= 74607,
-    SPELL_COMBUSTION_AURA			= 74629,
+    SPELL_FIERY_COMBUSTION			= 74562, // Inflicts 4, 000 Fire damage every 2 seconds for 30 seconds to a random raider. Every time Fiery Combustion does damage, it applies a stackable Mark of Combustion.
+    SPELL_COMBUSTION_EXPLODE		= 74607, 
+    SPELL_COMBUSTION_AURA			= 74629, 
     //Consumption
-    NPC_CONSUMPTION					= 40135,
+    NPC_CONSUMPTION					= 40135, 
     SPELL_MARK_OF_CONSUMPTION		= 74795, // Dummy effect only
-    SPELL_SOUL_CONSUMPTION			= 74792, // Inflicts 4,000 Shadow damage every 2 seconds for 30 seconds to a random raider. Every time Soul Consumption does damage, it applies a stackable Mark of Consumption.
-    SPELL_CONSUMPTION_EXPLODE		= 74799,
-    SPELL_CONSUMPTION_AURA			= 74803,
-    SPELL_GROW_UP					= 36300,
+    SPELL_SOUL_CONSUMPTION			= 74792, // Inflicts 4, 000 Shadow damage every 2 seconds for 30 seconds to a random raider. Every time Soul Consumption does damage, it applies a stackable Mark of Consumption.
+    SPELL_CONSUMPTION_EXPLODE		= 74799, 
+    SPELL_CONSUMPTION_AURA			= 74803, 
+    SPELL_GROW_UP					= 36300, 
     //Summons
     NPC_METEOR_STRIKE				= 40029, //casts "impact zone" then meteor
-    NPC_METEOR_STRIKE_1				= 40041,
-    NPC_METEOR_STRIKE_2				= 40042,
-    NPC_ORB_CUTTER					= 40081,
+    NPC_METEOR_STRIKE_1				= 40041, 
+    NPC_METEOR_STRIKE_2				= 40042, 
+    NPC_ORB_CUTTER					= 40081, 
 
-    FR_RADIUS						= 45,
+    FR_RADIUS						= 45, 
 
     //SAYS
     SAY_HALION_SPAWN				= -1666100, //17499 Meddlesome insects, you're too late! The Ruby Sanctum is lost.
@@ -164,10 +164,10 @@ public:
             IntroTimer = 1*IN_MILLISECONDS;
             IntroAppTimer = 30*IN_MILLISECONDS;
             Enrage = 600*IN_MILLISECONDS;
-            FlameTimer = urand(10*IN_MILLISECONDS,18*IN_MILLISECONDS);
-            FieryTimer = urand(30*IN_MILLISECONDS,40*IN_MILLISECONDS);
-            MeteorTimer = urand(30*IN_MILLISECONDS,35*IN_MILLISECONDS);
-            TailLashTimer = urand(15*IN_MILLISECONDS,25*IN_MILLISECONDS);
+            FlameTimer = urand(10*IN_MILLISECONDS, 18*IN_MILLISECONDS);
+            FieryTimer = urand(30*IN_MILLISECONDS, 40*IN_MILLISECONDS);
+            MeteorTimer = urand(30*IN_MILLISECONDS, 35*IN_MILLISECONDS);
+            TailLashTimer = urand(15*IN_MILLISECONDS, 25*IN_MILLISECONDS);
             Rdmg = 0;
             SetCombatMovement(true);
             me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
@@ -203,7 +203,7 @@ public:
             {
                 if (!intro && who->IsWithinDistInMap(me, 60.0f))
                     {
-                        DoScriptText(-1666100,me);
+                        DoScriptText(-1666100, me);
                         intro = true;
                     }
 
@@ -214,7 +214,7 @@ public:
                     me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
                     me->SetInCombatWith(who);
                     SetCombatMovement(false);
-                    me->SetFlag(UNIT_FIELD_FLAGS,UNIT_FLAG_DISABLE_MOVE);
+                    me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISABLE_MOVE);
                     me->GetMotionMaster()->MoveIdle();
                     setStage(10);
                 }
@@ -246,7 +246,7 @@ public:
                 return;
             if (GameObject* goPortal = me->FindNearestGameObject(GO_HALION_PORTAL_1, 50.0f))
                 goPortal->Delete();
-            DoScriptText(-1666104,me);
+            DoScriptText(-1666104, me);
             if (Creature* pclone = me->GetMap()->GetCreature(instance->GetData64(NPC_HALION_TWILIGHT)))
             {
                 if (pclone->isAlive())
@@ -275,13 +275,13 @@ public:
 
         void KilledUnit(Unit* victim)
         {
-            switch (urand(0,1))
+            switch (urand(0, 1))
             {
                 case 0:
-                    DoScriptText(-1666106,me,victim);
+                    DoScriptText(-1666106, me, victim);
                     break;
                 case 1:
-                    DoScriptText(-1666107,me,victim);
+                    DoScriptText(-1666107, me, victim);
                     break;
             }
         }
@@ -294,7 +294,7 @@ public:
             DoCast(SPELL_TWILIGHT_PRECISION);
             me->SetInCombatWithZone();
             instance->SetData(TYPE_HALION, IN_PROGRESS);
-            DoScriptText(-1666101,me);
+            DoScriptText(-1666101, me);
         }
 
         void MovementInform(uint32 type, uint32 id)
@@ -358,7 +358,7 @@ public:
                         me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_OOC_NOT_ATTACKABLE);
                         me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                         me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
-                        me->RemoveFlag(UNIT_FIELD_FLAGS,UNIT_FLAG_DISABLE_MOVE);
+                        me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISABLE_MOVE);
                         DoCast(SPELL_FIERY_EXPLOSION);
                         me->SetDisplayId(31952);
                         SetCombatMovement(true);
@@ -371,13 +371,13 @@ public:
                     if (FlameTimer <= Diff)
                     {
                         DoCast(SPELL_FLAME_BREATH);
-                        FlameTimer = urand(12*IN_MILLISECONDS,20*IN_MILLISECONDS);
+                        FlameTimer = urand(12*IN_MILLISECONDS, 20*IN_MILLISECONDS);
                     } else FlameTimer -= Diff;
 
                     if (TailLashTimer <= Diff)
                     {
                         DoCast(SPELL_TAIL_LASH);
-                        TailLashTimer = urand(10*IN_MILLISECONDS,20*IN_MILLISECONDS);
+                        TailLashTimer = urand(10*IN_MILLISECONDS, 20*IN_MILLISECONDS);
                     } else TailLashTimer -= Diff;
 
                     if (FieryTimer <= Diff)
@@ -386,13 +386,13 @@ public:
                             DoCast(target, SPELL_FIERY_COMBUSTION);
                         else if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 45.0f, true))
                             DoCast(target, SPELL_FIERY_COMBUSTION);
-                        FieryTimer = urand(25*IN_MILLISECONDS,40*IN_MILLISECONDS);
+                        FieryTimer = urand(25*IN_MILLISECONDS, 40*IN_MILLISECONDS);
                     } else FieryTimer -= Diff;
 
                     if (MeteorTimer <= Diff)
                     {
                         DoCast(SPELL_METEOR);
-                        MeteorTimer = urand(30*IN_MILLISECONDS,35*IN_MILLISECONDS);
+                        MeteorTimer = urand(30*IN_MILLISECONDS, 35*IN_MILLISECONDS);
                     } else MeteorTimer -= Diff;
 
                     if (HealthBelowPct(76))
@@ -407,7 +407,7 @@ public:
                     break;
                 case 1: // Switch to phase 2
                     {
-                        DoScriptText(-1666108,me);
+                        DoScriptText(-1666108, me);
                         instance->SetData(TYPE_HALION_EVENT, NOT_STARTED);
                         StartMovement(0);
                         {
@@ -428,9 +428,9 @@ public:
                     DoCast(me, SPELL_SUMMON_TWILIGHT_PORTAL);
                     setStage(3);
                     if (GameObject* goPortal = instance->instance->GetGameObject(instance->GetData64(GO_HALION_PORTAL_1)))
-                          goPortal->SetPhaseMask(31,true);
+                          goPortal->SetPhaseMask(31, true);
                     if (GameObject* goRing = instance->instance->GetGameObject(instance->GetData64(GO_FLAME_RING)))
-                          goRing->SetPhaseMask(65535,true);
+                          goRing->SetPhaseMask(65535, true);
                     break;
                 case 3:
                     if (me->IsNonMeleeSpellCasted(false)) return;
@@ -476,7 +476,7 @@ public:
                         }
                     return;
                 case 6: // Switch to phase 3
-                    DoScriptText(-1666109,me);
+                    DoScriptText(-1666109, me);
                     instance->SetData(TYPE_HALION_EVENT, SPECIAL);
                     setStage(7);
                     break;
@@ -488,19 +488,19 @@ public:
                     setStage(8);
                     break;
                 case 8: //PHASE 3 BOTH REALMS
-                    if(Creature* pTwilight = me->GetMap()->GetCreature(instance->GetData64(NPC_HALION_TWILIGHT)))
+                    if (Creature* pTwilight = me->GetMap()->GetCreature(instance->GetData64(NPC_HALION_TWILIGHT)))
                         if (pTwilight->isAlive())
                             me->SetHealth(pTwilight->GetHealth());
                     if (FlameTimer <= Diff)
                     {
                          DoCast(SPELL_FLAME_BREATH);
-                         FlameTimer = urand(12*IN_MILLISECONDS,20*IN_MILLISECONDS);
+                         FlameTimer = urand(12*IN_MILLISECONDS, 20*IN_MILLISECONDS);
                     } else FlameTimer -= Diff;
 
                     if (TailLashTimer <= Diff)
                     {
                          DoCast(SPELL_TAIL_LASH);
-                         TailLashTimer = urand(10*IN_MILLISECONDS,20*IN_MILLISECONDS);
+                         TailLashTimer = urand(10*IN_MILLISECONDS, 20*IN_MILLISECONDS);
                     } else TailLashTimer -= Diff;
 
                     if (FieryTimer <= Diff)
@@ -509,13 +509,13 @@ public:
                             DoCast(target, SPELL_FIERY_COMBUSTION);
                         else if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 45.0f, true))
                             DoCast(target, SPELL_FIERY_COMBUSTION);
-                        FieryTimer = urand(25*IN_MILLISECONDS,40*IN_MILLISECONDS);
+                        FieryTimer = urand(25*IN_MILLISECONDS, 40*IN_MILLISECONDS);
                     } else FieryTimer -= Diff;
 
                     if (MeteorTimer <= Diff)
                     {
                         DoCast(SPELL_METEOR);
-                        MeteorTimer = urand(30*IN_MILLISECONDS,35*IN_MILLISECONDS);
+                        MeteorTimer = urand(30*IN_MILLISECONDS, 35*IN_MILLISECONDS);
                     } else MeteorTimer -= Diff;
                     break;
                 default:
@@ -526,7 +526,7 @@ public:
             {
                  DoCast(SPELL_BERSERK);
                  Enrage = 600*IN_MILLISECONDS;
-                 DoScriptText(-1666105,me);
+                 DoScriptText(-1666105, me);
             } else Enrage -= Diff;
 
             DoMeleeAttackIfReady();
@@ -576,9 +576,9 @@ public:
             Enrage = 600*IN_MILLISECONDS;
             DuskTimer = 2*IN_MILLISECONDS;
             Tdmg = 0;
-            DarkBreathTimer = urand(12*IN_MILLISECONDS,20*IN_MILLISECONDS);
-            SoulCunsumTimer = urand(30*IN_MILLISECONDS,40*IN_MILLISECONDS);
-            TailLashTimer = urand(10*IN_MILLISECONDS,20*IN_MILLISECONDS);
+            DarkBreathTimer = urand(12*IN_MILLISECONDS, 20*IN_MILLISECONDS);
+            SoulCunsumTimer = urand(30*IN_MILLISECONDS, 40*IN_MILLISECONDS);
+            TailLashTimer = urand(10*IN_MILLISECONDS, 20*IN_MILLISECONDS);
 
             me->SetInCombatWithZone();
             if (Creature* pControl = me->GetMap()->GetCreature(instance->GetData64(NPC_HALION_CONTROL)))
@@ -663,13 +663,13 @@ public:
 
         void KilledUnit(Unit* victim)
         {
-            switch (urand(0,1))
+            switch (urand(0, 1))
             {
                 case 0:
-                    DoScriptText(-1666106,me,victim);
+                    DoScriptText(-1666106, me, victim);
                     break;
                 case 1:
-                    DoScriptText(-1666107,me,victim);
+                    DoScriptText(-1666107, me, victim);
                     break;
             }
         }
@@ -734,13 +734,13 @@ public:
                     if (DarkBreathTimer <= Diff)
                     {
                         DoCast(SPELL_DARK_BREATH);
-                        DarkBreathTimer = urand(12*IN_MILLISECONDS,20*IN_MILLISECONDS);
+                        DarkBreathTimer = urand(12*IN_MILLISECONDS, 20*IN_MILLISECONDS);
                     } else DarkBreathTimer -= Diff;
 
                     if (TailLashTimer <= Diff)
                     {
                         DoCast(SPELL_TAIL_LASH);
-                        TailLashTimer = urand(10*IN_MILLISECONDS,20*IN_MILLISECONDS);
+                        TailLashTimer = urand(10*IN_MILLISECONDS, 20*IN_MILLISECONDS);
                     } else TailLashTimer -= Diff;
 
                     if (SoulCunsumTimer <= Diff)
@@ -749,17 +749,17 @@ public:
                             DoCast(target, SPELL_SOUL_CONSUMPTION);
                         else if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 45.0f, true))
                             DoCast(target, SPELL_SOUL_CONSUMPTION);
-                        SoulCunsumTimer = urand(25*IN_MILLISECONDS,40*IN_MILLISECONDS);
+                        SoulCunsumTimer = urand(25*IN_MILLISECONDS, 40*IN_MILLISECONDS);
                     } else SoulCunsumTimer -= Diff;
 
                     if (HealthBelowPct(51))	{setStage(2);}
                     break;
                 case 2: //To two realms
                     instance->SetData(TYPE_HALION_EVENT, IN_PROGRESS);
-                    DoScriptText(-1666109,me);
+                    DoScriptText(-1666109, me);
                     if (GameObject* goPortal = me->SummonGameObject(GO_HALION_PORTAL_3, SpawnLoc[0].x, SpawnLoc[0].y, SpawnLoc[0].z, 4.47206f, 0, 0, 0.786772f, -0.617243f, 99999999))
                     {
-                        goPortal->SetPhaseMask(32,true);
+                        goPortal->SetPhaseMask(32, true);
                         goPortal->SetRespawnTime(9999999);
                         goPortal->SetOwnerGUID(NULL);
                     }
@@ -777,13 +777,13 @@ public:
                     if (DarkBreathTimer <= Diff)
                     {
                         DoCast(SPELL_DARK_BREATH);
-                        DarkBreathTimer = urand(12*IN_MILLISECONDS,20*IN_MILLISECONDS);
+                        DarkBreathTimer = urand(12*IN_MILLISECONDS, 20*IN_MILLISECONDS);
                     } else DarkBreathTimer -= Diff;
 
                     if (TailLashTimer <= Diff)
                     {
                         DoCast(SPELL_TAIL_LASH);
-                        TailLashTimer = urand(10*IN_MILLISECONDS,20*IN_MILLISECONDS);
+                        TailLashTimer = urand(10*IN_MILLISECONDS, 20*IN_MILLISECONDS);
                     } else TailLashTimer -= Diff;
 
                     if (SoulCunsumTimer <= Diff)
@@ -792,7 +792,7 @@ public:
                             DoCast(target, SPELL_SOUL_CONSUMPTION);
                         else if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 30.0f, true))
                             DoCast(target, SPELL_SOUL_CONSUMPTION);
-                        SoulCunsumTimer = urand(25*IN_MILLISECONDS,40*IN_MILLISECONDS);
+                        SoulCunsumTimer = urand(25*IN_MILLISECONDS, 40*IN_MILLISECONDS);
                     } else SoulCunsumTimer -= Diff;
                     break;
                 default:
@@ -803,7 +803,7 @@ public:
             {
                 DoCast(SPELL_BERSERK);
                 Enrage = 600*IN_MILLISECONDS;
-                DoScriptText(-1666105,me);
+                DoScriptText(-1666105, me);
             } else Enrage -= Diff;
 
             DoMeleeAttackIfReady();
@@ -1067,7 +1067,7 @@ public:
             _pulsar_N = me->GetMap()->GetCreature(instance->GetData64(NPC_SHADOW_PULSAR_N));
             if (!_pulsar_N )
             {
-                float x,y;
+                float x, y;
                 me->GetNearPoint2D(x, y, FR_RADIUS, _direction);
                 _pulsar_N = me->SummonCreature(NPC_SHADOW_PULSAR_N, x, y, me->GetPositionZ(), 0, TEMPSUMMON_MANUAL_DESPAWN, 5000);
             } else if (!_pulsar_N->isAlive())
@@ -1076,7 +1076,7 @@ public:
             _pulsar_S = me->GetMap()->GetCreature(instance->GetData64(NPC_SHADOW_PULSAR_S));
             if (!_pulsar_S)
             {
-                float x,y;
+                float x, y;
                 me->GetNearPoint2D(x, y, FR_RADIUS, _direction + M_PI);
                 _pulsar_S = me->SummonCreature(NPC_SHADOW_PULSAR_S, x, y, me->GetPositionZ(), 0, TEMPSUMMON_MANUAL_DESPAWN, 5000);
             } else if (!_pulsar_S->isAlive())
@@ -1109,7 +1109,7 @@ public:
 
             if (_timer%30000 - 3000 <= Diff && !_warning)
             {
-                DoScriptText(-1666110,me);
+                DoScriptText(-1666110, me);
                 _warning = true;
             }
 
@@ -1156,7 +1156,7 @@ public:
 
             if (_timer <= Diff)
             {
-                float x,y;
+                float x, y;
                 me->GetNearPoint2D(x, y, FR_RADIUS, _nextdirection);
                 me->SummonCreature(NPC_ORB_CARRIER, x, y, me->GetPositionZ(), 0, TEMPSUMMON_MANUAL_DESPAWN, 5000);
                 _timer = 50000;
@@ -1189,7 +1189,7 @@ public:
 
         InstanceScript* instance;
 
-        float _direction,m_delta;
+        float _direction, m_delta;
         uint32 _flag;
         uint32 _flag1;
         bool MovementStarted;
@@ -1249,7 +1249,7 @@ public:
         {
             if (!instance) return;
             nextPoint = id;
-            float x,y;
+            float x, y;
             instance->SetData(_flag, IN_PROGRESS);
             MovementStarted = true;
             _direction = ((float)instance->GetData(DATA_ORB_DIRECTION)/1000 + m_delta);
@@ -1339,7 +1339,7 @@ public:
 
             if (!MovementStarted)
             {
-                float x,y;
+                float x, y;
                 float _direction = ((float)instance->GetData(DATA_ORB_DIRECTION)/1000.0f + M_PI - M_PI/32.0f);
                 if (_direction > 2.0f*M_PI) _direction = _direction - 2.0f*M_PI;
                 if (Creature* focus = me->GetMap()->GetCreature(instance->GetData64(NPC_ORB_ROTATION_FOCUS)))
@@ -1383,7 +1383,7 @@ public:
 
         void Reset()
         {
-            me->SetPhaseMask(32,true);
+            me->SetPhaseMask(32, true);
             SetCombatMovement(false);
             ConsumptTimer = 60*IN_MILLISECONDS;
             me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
@@ -1401,7 +1401,7 @@ public:
 
         void UpdateAI(const uint32 diff)
         {
-            if(instance && instance->GetData(TYPE_HALION) != IN_PROGRESS)
+            if (instance && instance->GetData(TYPE_HALION) != IN_PROGRESS)
                 me->ForcedDespawn();
 
             if (ConsumptTimer <= diff)
@@ -1413,9 +1413,9 @@ public:
             Map::PlayerList const &players = instance->instance->GetPlayers();
             for (Map::PlayerList::const_iterator i = players.begin(); i != players.end(); ++i)
             {
-                if(Player* player = i->getSource())
+                if (Player* player = i->getSource())
                 {
-                    if(player->isAlive() && player->HasAura(SPELL_MARK_OF_CONSUMPTION))
+                    if (player->isAlive() && player->HasAura(SPELL_MARK_OF_CONSUMPTION))
                     {
                         Aura *aura = player->GetAura(SPELL_MARK_OF_CONSUMPTION);
                         uint32 stacs;
@@ -1464,7 +1464,7 @@ public:
 
         void Reset()
         {
-            me->SetPhaseMask(1,true);
+            me->SetPhaseMask(1, true);
             ConbustTimer = 60*IN_MILLISECONDS;
             SetCombatMovement(false);
             me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
@@ -1482,7 +1482,7 @@ public:
 
         void UpdateAI(const uint32 diff)
         {
-            if(instance && instance->GetData(TYPE_HALION) != IN_PROGRESS)
+            if (instance && instance->GetData(TYPE_HALION) != IN_PROGRESS)
                 me->ForcedDespawn();
 
             if (ConbustTimer <= diff)
@@ -1493,9 +1493,9 @@ public:
             Map::PlayerList const &players = instance->instance->GetPlayers();
             for (Map::PlayerList::const_iterator i = players.begin(); i != players.end(); ++i)
             {
-                if(Player* player = i->getSource())
+                if (Player* player = i->getSource())
                 {
-                    if(player->isAlive() && player->HasAura(SPELL_MARK_OF_COMBUSTION))
+                    if (player->isAlive() && player->HasAura(SPELL_MARK_OF_COMBUSTION))
                     {
                         Aura *aura = player->GetAura(SPELL_MARK_OF_COMBUSTION);
                         uint32 stacs;
@@ -1588,10 +1588,10 @@ public:
                 case 2:
                     // Place summon flames there
                     {
-                        direction = 2.0f*M_PI*((float)urand(0,15)/16.0f);
+                        direction = 2.0f*M_PI*((float)urand(0, 15)/16.0f);
                         float x, y, radius;
                         radius = 0.0f;
-                        for (uint8 i = 0; i < RAID_MODE(TARGETS_10,TARGETS_25,TARGETS_10,TARGETS_25); ++i)
+                        for (uint8 i = 0; i < RAID_MODE(TARGETS_10, TARGETS_25, TARGETS_10, TARGETS_25); ++i)
                         {
                             radius = radius + 5.0f;
                             me->GetNearPoint2D(x, y, radius, direction);
@@ -1604,7 +1604,7 @@ public:
                         direction = direction + M_PI/4;
                         float x, y, radius;
                         radius = 0.0f;
-                        for (uint8 i = 0; i < RAID_MODE(TARGETS_10,TARGETS_25,TARGETS_10,TARGETS_25); ++i)
+                        for (uint8 i = 0; i < RAID_MODE(TARGETS_10, TARGETS_25, TARGETS_10, TARGETS_25); ++i)
                         {
                             radius = radius + 5.0f;
                             me->GetNearPoint2D(x, y, radius, direction);
@@ -1678,7 +1678,7 @@ class go_halion_portal_twilight : public GameObjectScript
         {
             InstanceScript* instance = (InstanceScript*)go->GetInstanceScript();
             if(!instance) return false;
-            player->CastSpell(player,SPELL_TWILIGHT_ENTER,false);
+            player->CastSpell(player, SPELL_TWILIGHT_ENTER, false);
             return true;
         }
 };
@@ -1713,7 +1713,7 @@ class spell_halion_fiery_combustion : public SpellScriptLoader
             PrepareAuraScript(spell_halion_fiery_combustion_AuraScript)
             enum Spells
             {
-                SPELL_MARK_OF_COMBUSTION = 74567,
+                SPELL_MARK_OF_COMBUSTION = 74567, 
                 SPELL_COMBUSTION_EXPLODE = 74607
             };
 
@@ -1772,7 +1772,7 @@ class spell_halion_soul_consumption : public SpellScriptLoader
             PrepareAuraScript(spell_halion_soul_consumption_AuraScript)
             enum Spells
             {
-                SPELL_MARK_OF_CONSUMPTION = 74795,
+                SPELL_MARK_OF_CONSUMPTION = 74795, 
                 SPELL_CONSUMPTION_EXPLODE = 74799
             };
 

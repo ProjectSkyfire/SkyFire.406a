@@ -554,7 +554,7 @@ void Spell::EffectSchoolDMG(SpellEffIndex effIndex)
 
                         if (m_caster->HasAura(33191)) // Harnessed Shadows rank1
                             chance += 4;
-                        else if(m_caster->HasAura(78228))  // Harnessed Shadows rank2
+                        else if (m_caster->HasAura(78228))  // Harnessed Shadows rank2
                             chance += 8;
 
                         if (roll_chance_i(chance))
@@ -577,12 +577,12 @@ void Spell::EffectSchoolDMG(SpellEffIndex effIndex)
                 /*if (m_caster->HasAura(81659))                     // Evangelism rank 1
                 {
                     if (m_spellInfo->Id == 15407)                   //  Mind Flay
-                        m_caster->CastSpell(m_caster,87117,true);   // Dark Evangelism
+                        m_caster->CastSpell(m_caster, 87117, true);   // Dark Evangelism
                 }
                 else if (m_caster->HasAura(81662))                  // Evangelism rank 2
                 {
                     if (m_spellInfo->Id == 15407)                   //  Mind Flay
-                        m_caster->CastSpell(m_caster,87118,true);   // Dark Evangelism
+                        m_caster->CastSpell(m_caster, 87118, true);   // Dark Evangelism
                 }
                 break;*/
             }
@@ -984,7 +984,7 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                     if (m_caster->GetTypeId() != TYPEID_PLAYER)
                         return;
 
-                    switch(m_spellInfo->Id)
+                    switch (m_spellInfo->Id)
                     {
                         case 47381:
                             // Envision Drakuru
@@ -1433,12 +1433,12 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                 if (m_caster->HasUnitState(UNIT_STAT_CONTROLLED))
                     return;
 
-                if(unitTarget && !unitTarget->isInCombat())
+                if (unitTarget && !unitTarget->isInCombat())
                     return;
 
                 m_caster->CastSpell(unitTarget, damage, true);
 
-                switch(m_spellInfo->Id)
+                switch (m_spellInfo->Id)
                 {
                     case 50286: m_caster->CastSpell(unitTarget, 50288, true); return;
                     //case 53196: m_caster->CastSpell(unitTarget, 53191, true); return;  //depreciated?
@@ -1469,11 +1469,11 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                 case 86150:
                 {
                     if (m_caster->ToPlayer()->HasSpell(20473)) // Holy Shock
-                        m_caster->CastSpell(m_caster,86669,true);
+                        m_caster->CastSpell(m_caster, 86669, true);
                     if (m_caster->ToPlayer()->HasSpell(85256)) // Templar's Verdict
-                        m_caster->CastSpell(m_caster,86698,true);
+                        m_caster->CastSpell(m_caster, 86698, true);
                     if (m_caster->ToPlayer()->HasSpell(31935)) // Avenger's shield
-                        m_caster->CastSpell(m_caster,86659,true);
+                        m_caster->CastSpell(m_caster, 86659, true);
                     return;
                 }
                 case 19740: // Blessing of Might
@@ -1624,9 +1624,9 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                     AddPctN(bp, m_caster->CalculateSpellDamage(m_caster, aurEff->GetSpellInfo(), 2));
 
                 // Glyph of Dark Succor
-                if(AuraEffect const* aurEff = m_caster->GetAuraEffect(96279, 0))
-                    if(bp < int32(m_caster->CountPctFromMaxHealth(aurEff->GetAmount())))
-                        if(m_caster->HasAura(48265) || m_caster->HasAura(48266)) // Only in frost/unholy presence
+                if (AuraEffect const* aurEff = m_caster->GetAuraEffect(96279, 0))
+                    if (bp < int32(m_caster->CountPctFromMaxHealth(aurEff->GetAmount())))
+                        if (m_caster->HasAura(48265) || m_caster->HasAura(48266)) // Only in frost/unholy presence
                             bp = m_caster->CountPctFromMaxHealth(aurEff->GetAmount());
 
                 m_caster->CastCustomSpell(m_caster, 45470, &bp, NULL, NULL, false);
@@ -1669,7 +1669,7 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                 if (m_caster->GetTypeId() != TYPEID_PLAYER)
                     return;
 
-                if(effIndex != 0)
+                if (effIndex != 0)
                     return;
                 // Do we have talent Master of Ghouls?
                 if (m_caster->HasAura(52143))
@@ -4837,7 +4837,7 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
                     if (!pArea || (canFly && (pArea->flags & AREA_FLAG_NO_FLY_ZONE)))
                         canFly = false;
 
-                    switch(unitTarget->ToPlayer()->GetBaseSkillValue(SKILL_RIDING))
+                    switch (unitTarget->ToPlayer()->GetBaseSkillValue(SKILL_RIDING))
                     {
                     case 75: unitTarget->CastSpell(unitTarget, 51621, true); break;
                     case 150: unitTarget->CastSpell(unitTarget, 48024, true); break;
@@ -4887,7 +4887,7 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
                     if (!pArea || (canFly && (pArea->flags & AREA_FLAG_NO_FLY_ZONE)))
                         canFly = false;
 
-                    switch(unitTarget->ToPlayer()->GetBaseSkillValue(SKILL_RIDING))
+                    switch (unitTarget->ToPlayer()->GetBaseSkillValue(SKILL_RIDING))
                     {
                     case 75: unitTarget->CastSpell(unitTarget, 42680, true); break;
                     case 150: unitTarget->CastSpell(unitTarget, 42683, true); break;
@@ -5252,7 +5252,7 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
                     if (!pArea || (canFly && (pArea->flags & AREA_FLAG_NO_FLY_ZONE)))
                         canFly = false;
 
-                    switch(unitTarget->ToPlayer()->GetBaseSkillValue(SKILL_RIDING))
+                    switch (unitTarget->ToPlayer()->GetBaseSkillValue(SKILL_RIDING))
                     {
                     case 0: unitTarget->CastSpell(unitTarget, 71343, true); break;
                     case 75: unitTarget->CastSpell(unitTarget, 71344, true); break;
@@ -5301,7 +5301,7 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
                     if (!pArea || (canFly && (pArea->flags & AREA_FLAG_NO_FLY_ZONE)))
                         canFly = false;
 
-                    switch(unitTarget->ToPlayer()->GetBaseSkillValue(SKILL_RIDING))
+                    switch (unitTarget->ToPlayer()->GetBaseSkillValue(SKILL_RIDING))
                     {
                     case 75: unitTarget->CastSpell(unitTarget, 72281, true); break;
                     case 150: unitTarget->CastSpell(unitTarget, 72282, true); break;
@@ -5367,7 +5367,7 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
                     if (!pArea || (canFly && (pArea->flags & AREA_FLAG_NO_FLY_ZONE)))
                         canFly = false;
 
-                    switch(unitTarget->ToPlayer()->GetBaseSkillValue(SKILL_RIDING))
+                    switch (unitTarget->ToPlayer()->GetBaseSkillValue(SKILL_RIDING))
                     {
                     case 75: unitTarget->CastSpell(unitTarget, 75619, true); break;
                     case 150: unitTarget->CastSpell(unitTarget, 75620, true); break;
@@ -5580,16 +5580,16 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
                 {
                     if (!unitTarget || !unitTarget->isAlive())
                         return;
-                    if(unitTarget->GetEntry() == 416)            // Summoned Imp
-                        m_caster->CastSpell(m_caster,79459,true);
-                    if(unitTarget->GetEntry() == 1860)           // Summoned Voidwalker
-                        m_caster->CastSpell(m_caster,79464,true);
-                    if(unitTarget->GetEntry() == 417)            // Summoned Felhunter
-                        m_caster->CastSpell(m_caster,79460,true);
-                    if(unitTarget->GetEntry() == 1863)           // Summoned Succubus
-                        m_caster->CastSpell(m_caster,79463,true);
-                    if(unitTarget->GetEntry() == 17252)          // Summoned Felguard
-                        m_caster->CastSpell(m_caster,79462,true);
+                    if (unitTarget->GetEntry() == 416)            // Summoned Imp
+                        m_caster->CastSpell(m_caster, 79459, true);
+                    if (unitTarget->GetEntry() == 1860)           // Summoned Voidwalker
+                        m_caster->CastSpell(m_caster, 79464, true);
+                    if (unitTarget->GetEntry() == 417)            // Summoned Felhunter
+                        m_caster->CastSpell(m_caster, 79460, true);
+                    if (unitTarget->GetEntry() == 1863)           // Summoned Succubus
+                        m_caster->CastSpell(m_caster, 79463, true);
+                    if (unitTarget->GetEntry() == 17252)          // Summoned Felguard
+                        m_caster->CastSpell(m_caster, 79462, true);
                 }
             }
             break;
@@ -5646,7 +5646,7 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
                     {
                         case 31876:
                         {
-                            m_caster->CastSpell((Unit*)NULL,57669,true);
+                            m_caster->CastSpell((Unit*)NULL, 57669, true);
                             break;
                         }
                     }
@@ -5730,11 +5730,11 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
         }
         case SPELLFAMILY_HUNTER:
         {
-            switch(m_spellInfo->Id)
+            switch (m_spellInfo->Id)
             {
                 case 77767: // Cobra Shot
                 {
-                    if(Aura* SS = unitTarget->GetAura(1978, m_caster->GetGUID())) // Find Serpent Sting
+                    if (Aura* SS = unitTarget->GetAura(1978, m_caster->GetGUID())) // Find Serpent Sting
                         SS->SetDuration(SS->GetDuration() + (m_spellInfo->Effects[EFFECT_1].BasePoints * 1000)); // Increase duration of the Serpent Sting aura
                     break;
                 }
@@ -5742,12 +5742,12 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
         }
         case SPELLFAMILY_DRUID:
         {
-            switch(m_spellInfo->Id)
+            switch (m_spellInfo->Id)
             {
                 case 80863: // Blood In The Water
                 {
-                    if(unitTarget->HealthBelowPct(25))
-                        if(Aura* rip = unitTarget->GetAura(1079, m_caster->GetGUID()))
+                    if (unitTarget->HealthBelowPct(25))
+                        if (Aura* rip = unitTarget->GetAura(1079, m_caster->GetGUID()))
                             rip->RefreshDuration();
                 }
             }

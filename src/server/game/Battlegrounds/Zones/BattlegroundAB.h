@@ -187,10 +187,10 @@ enum BG_AB_Objectives
 
 // x, y, z, o
 const float BG_AB_NodePositions[BG_AB_DYNAMIC_NODES_COUNT][4] = {
-    {1166.785f, 1200.132f, -56.70859f, 0.9075713f},         // stables
-    {977.0156f, 1046.616f, -44.80923f, -2.600541f},         // blacksmith
-    {806.1821f, 874.2723f, -55.99371f, -2.303835f},         // farm
-    {856.1419f, 1148.902f, 11.18469f, -2.303835f},          // lumber mill
+    {1166.785f, 1200.132f, -56.70859f, 0.9075713f},        // stables
+    {977.0156f, 1046.616f, -44.80923f, -2.600541f},        // blacksmith
+    {806.1821f, 874.2723f, -55.99371f, -2.303835f},        // farm
+    {856.1419f, 1148.902f, 11.18469f, -2.303835f},         // lumber mill
     {1146.923f, 848.1782f, -110.917f, -0.7330382f}          // gold mine
 };
 
@@ -209,21 +209,21 @@ const uint32 BG_AB_GraveyardIds[BG_AB_ALL_NODES_COUNT] = {895, 894, 893, 897, 89
 
 // x, y, z, o
 const float BG_AB_BuffPositions[BG_AB_DYNAMIC_NODES_COUNT][4] = {
-    {1185.71f, 1185.24f, -56.36f, 2.56f},                   // stables
-    {990.75f, 1008.18f, -42.60f, 2.43f},                    // blacksmith
-    {817.66f, 843.34f, -56.54f, 3.01f},                     // farm
-    {807.46f, 1189.16f, 11.92f, 5.44f},                     // lumber mill
+    {1185.71f, 1185.24f, -56.36f, 2.56f},                  // stables
+    {990.75f, 1008.18f, -42.60f, 2.43f},                   // blacksmith
+    {817.66f, 843.34f, -56.54f, 3.01f},                    // farm
+    {807.46f, 1189.16f, 11.92f, 5.44f},                    // lumber mill
     {1146.62f, 816.94f, -98.49f, 6.14f}                     // gold mine
 };
 
 // x, y, z, o
 const float BG_AB_SpiritGuidePos[BG_AB_ALL_NODES_COUNT][4] = {
-    {1200.03f, 1171.09f, -56.47f, 5.15f},                   // stables
-    {1017.43f, 960.61f, -42.95f, 4.88f},                    // blacksmith
-    {833.00f, 793.00f, -57.25f, 5.27f},                     // farm
-    {775.17f, 1206.40f, 15.79f, 1.90f},                     // lumber mill
-    {1207.48f, 787.00f, -83.36f, 5.51f},                    // gold mine
-    {1354.05f, 1275.48f, -11.30f, 4.77f},                   // alliance starting base
+    {1200.03f, 1171.09f, -56.47f, 5.15f},                  // stables
+    {1017.43f, 960.61f, -42.95f, 4.88f},                   // blacksmith
+    {833.00f, 793.00f, -57.25f, 5.27f},                    // farm
+    {775.17f, 1206.40f, 15.79f, 1.90f},                    // lumber mill
+    {1207.48f, 787.00f, -83.36f, 5.51f},                   // gold mine
+    {1354.05f, 1275.48f, -11.30f, 4.77f},                  // alliance starting base
     {714.61f, 646.15f, -10.87f, 4.34f}                      // horde starting base
 };
 

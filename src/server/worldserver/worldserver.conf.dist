@@ -281,7 +281,7 @@ vmap.enableHeight = 1
 #    vmap.ignoreSpellIds
 #        Description: These spells are ignored for LoS calculation.
 #                     List of ids with delimiter ','.
-#        Example:     "7720,1337"
+#        Example:     "7720, 1337"
 #        Default:     "7720"
 
 vmap.ignoreSpellIds = "7720"
@@ -452,7 +452,7 @@ LogFileLevel = 0
 #                   8 - Anything related to C++ AI, instance scripts, etc.
 #                  16 - Anything related to DB AI, such as SAI, EAI, CreatureAI
 #                  32 - Anything related to DB map scripts
-#                  64 - Anything related to network input/output,
+#                  64 - Anything related to network input/output, 
 #                        such as packet handlers and netcode logs
 #                 128 - Anything related to the spellsystem and aurasystem
 #                 256 - Anything related to the achievement system
@@ -849,7 +849,7 @@ RealmZone = 1
 #                     creation and forces rename request if not allowed symbols are used
 #        Default:     0 - (Disable, Limited server timezone dependent client check)
 #                     1 - (Enabled, Strictly basic Latin characters)
-#                     2 - (Enabled, Strictly realm zone specific, See RealmZone setting,
+#                     2 - (Enabled, Strictly realm zone specific, See RealmZone setting, 
 #                         Note: Client needs to have the appropriate fonts installed which support
 #                         the charset. For non-official localization, custom fonts need to be
 #                         placed in clientdir/Fonts.
@@ -863,7 +863,7 @@ StrictPlayerNames = 0
 #                     Prevents charter creation if not allowed symbols are used.
 #        Default:     0 - (Disable, Limited server timezone dependent client check)
 #                     1 - (Enabled, Strictly basic Latin characters)
-#                     2 - (Enabled, Strictly realm zone specific, See RealmZone setting,
+#                     2 - (Enabled, Strictly realm zone specific, See RealmZone setting, 
 #                         Note: Client needs to have the appropriate fonts installed which support
 #                         the charset. For non-official localization, custom fonts need to be
 #                         placed in clientdir/Fonts.
@@ -877,7 +877,7 @@ StrictCharterNames = 0
 #                     Prevents pet naming if not allowed symbols are used.
 #        Default:     0 - (Disable, Limited server timezone dependent client check)
 #                     1 - (Enabled, Strictly basic Latin characters)
-#                     2 - (Enabled, Strictly realm zone specific, See RealmZone setting,
+#                     2 - (Enabled, Strictly realm zone specific, See RealmZone setting, 
 #                         Note: Client needs to have the appropriate fonts installed which support
 #                         the charset. For non-official localization, custom fonts need to be
 #                         placed in clientdir/Fonts.
@@ -2112,7 +2112,7 @@ Rate.Damage.Fall = 1
 #    Rate.Auction.Time
 #    Rate.Auction.Deposit
 #    Rate.Auction.Cut
-#        Description: Auction rates (auction time, deposit get at auction start,
+#        Description: Auction rates (auction time, deposit get at auction start, 
 #                     auction cut from price at auction end)
 #        Default:     1 - (Rate.Auction.Time)
 #                     1 - (Rate.Auction.Deposit)
@@ -2286,8 +2286,8 @@ DurabilityLossChance.Block = 0.05
 #
 #    Death.SicknessLevel
 #        Description: Starting level for resurrection sickness.
-#        Example:     11 - (Level 1-10 characters will not be affected,
-#                           Level 11-19 characters will be affected for 1 minute,
+#        Example:     11 - (Level 1-10 characters will not be affected, 
+#                           Level 11-19 characters will be affected for 1 minute, 
 #                           Level 20-MaxPlayerLevel characters will be affected for 10 minutes)
 #         Default:    11               - (Enabled, See Example)
 #                     MaxPlayerLevel+1 - (Disabled)
@@ -2308,7 +2308,7 @@ Death.CorpseReclaimDelay.PvE = 0
 #
 #    Death.Bones.World
 #    Death.Bones.BattlegroundOrArena
-#        Description: Create bones instead of corpses at resurrection in normal zones, instances,
+#        Description: Create bones instead of corpses at resurrection in normal zones, instances, 
 #                     battleground or arenas.
 #        Default:     1 - (Enabled, Death.Bones.World)
 #                     1 - (Enabled, Death.Bones.BattlegroundOrArena)
@@ -2386,7 +2386,7 @@ Battleground.QueueAnnouncer.PlayerOnly = 0
 #
 #    Battleground.InvitationType
 #        Description: Set Battleground invitation type.
-#        Default:     0 - (Normal, Invite as much players to battlegrounds as queued,
+#        Default:     0 - (Normal, Invite as much players to battlegrounds as queued, 
 #                          Don't bother with balance)
 #                     1 - (Experimental, Don't allow to invite much more players
 #                          of one faction)
@@ -2789,7 +2789,7 @@ HonorPointsAfterDuel = 0
 
 #
 #    AlwaysMaxWeaponSkill
-#        Description: Players will automatically gain max weapon/defense skill when logging in,
+#        Description: Players will automatically gain max weapon/defense skill when logging in, 
 #                     or leveling.
 #        Default:     0 - (Disabled)
 #                     1 - (Enabled)

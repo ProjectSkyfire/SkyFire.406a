@@ -207,12 +207,12 @@ void FlightPathMovementGenerator::Finalize(Player & player)
     player.ClearUnitState(UNIT_STAT_IN_FLIGHT);
 
     player.Dismount();
-    player.RemoveFlag(UNIT_FIELD_FLAGS,UNIT_FLAG_DISABLE_MOVE | UNIT_FLAG_TAXI_FLIGHT);
+    player.RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISABLE_MOVE | UNIT_FLAG_TAXI_FLIGHT);
 
     if (player._taxi.empty())
     {
         player.getHostileRefManager().setOnlineOfflineState(true);
-        if(player.pvpInfo.inHostileArea)
+        if (player.pvpInfo.inHostileArea)
             player.CastSpell(&player, 2479, true);
 
         // update z position to ground and orientation for landing point

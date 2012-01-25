@@ -52,7 +52,7 @@ public:
             {
                 if (gy[i]->GetControlTeamId() == player->GetTeamId())
                 {
-                   player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT,sObjectMgr->GetSkyFireStringForDBCLocale(((BfGraveYardTB*)gy[i])->GetTextId()), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+i);
+                   player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, sObjectMgr->GetSkyFireStringForDBCLocale(((BfGraveYardTB*)gy[i])->GetTextId()), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+i);
                 }
             }
         }
@@ -106,7 +106,7 @@ class npc_tol_barad_battlemage : public CreatureScript
                 player->SendUpdateWorldState(5332, time(NULL)+uiTime);
                 if (uiTime < 15 * MINUTE)
                 {
-                    player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT,sObjectMgr->GetSkyFireStringForDBCLocale(TB_NPCQUEUE_TEXTOPTION_JOIN), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF);
+                    player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, sObjectMgr->GetSkyFireStringForDBCLocale(TB_NPCQUEUE_TEXTOPTION_JOIN), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF);
                     player->SEND_GOSSIP_MENU(BfTB->GetDefenderTeam() ? TB_NPCQUEUE_TEXT_H_QUEUE : TB_NPCQUEUE_TEXT_A_QUEUE, creature->GetGUID());
                 }
                 else
@@ -125,7 +125,7 @@ class npc_tol_barad_battlemage : public CreatureScript
         BattlefieldTB* BfTB = (BattlefieldTB*)sBattlefieldMgr.GetBattlefieldByBattleId(BATTLEFIELD_BATTLEID_TB);
         if (BfTB)
         {
-            if(BfTB->IsWarTime()){
+            if (BfTB->IsWarTime()){
                 BfTB->InvitePlayerToWar(player);
             }
             else

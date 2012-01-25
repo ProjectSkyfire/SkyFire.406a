@@ -1429,7 +1429,7 @@ void AchievementMgrBase::CompletedCriteriaFor(AchievementEntry const* achievemen
 
     if (IsCompletedAchievement(achievement, player))
     {
-        if(_guild)
+        if (_guild)
             CompletedAchievement(achievement, player);
         else
             CompletedAchievement(achievement);
@@ -1649,7 +1649,7 @@ bool AchievementMgrBase::CanUpdateCriteria(AchievementCriteriaEntry const* crite
 
         uint32 value = criteria->moreRequirementValue[i];
 
-        switch(criteria->moreRequirement[i])
+        switch (criteria->moreRequirement[i])
         {
             case ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_GUILD_REP:
             {

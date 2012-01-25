@@ -28,11 +28,11 @@ class npc_lodestone : public CreatureScript
 
         void JustDied(Unit* killer)
         {
-            if(Player* player = killer->ToPlayer())
+            if (Player* player = killer->ToPlayer())
             {
-                if(player->GetQuestStatus(27136) == QUEST_STATUS_INCOMPLETE)
+                if (player->GetQuestStatus(27136) == QUEST_STATUS_INCOMPLETE)
                 {
-                    if(Creature* totem = me->FindNearestCreature(45088, 20.0f, true))
+                    if (Creature* totem = me->FindNearestCreature(45088, 20.0f, true))
                     {
                         totem->CastSpell(totem, 84163, true);
                         player->KilledMonsterCredit(45091, 0);
@@ -74,7 +74,7 @@ class npc_slaincrewmember : public CreatureScript
         }
         void SetData(uint32 Id,  uint32 Value)
         {
-            switch(Id)
+            switch (Id)
             {
                 case 1: // Set the GUID of the player
                 {
@@ -94,9 +94,9 @@ class npc_slaincrewmember : public CreatureScript
             if(!player)
                 return;
 
-            if(sayTimer <= diff)
+            if (sayTimer <= diff)
             {
-                switch(RAND(0, 1, 2, 3, 4))
+                switch (RAND(0, 1, 2, 3, 4))
                 {
                     case 0:
                         me->MonsterSay(CREW_SAY_1, LANG_UNIVERSAL, NULL);

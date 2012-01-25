@@ -296,9 +296,9 @@ class spell_dru_ferocious_bite : public SpellScriptLoader
 
             void CalculateDamage(SpellEffIndex /*effIndex*/)
             {
-                if(Unit* caster = GetCaster())
+                if (Unit* caster = GetCaster())
                 {
-                    if(caster->GetTypeId() != TYPEID_PLAYER)
+                    if (caster->GetTypeId() != TYPEID_PLAYER)
                         return;
 
                     int32 damage = GetHitDamage();
@@ -336,9 +336,9 @@ class spell_dru_mark_of_the_wild : public SpellScriptLoader
 
             void HandleDummy(SpellEffIndex /*effIndex*/)
             {
-                if(Unit* caster = GetCaster())
+                if (Unit* caster = GetCaster())
                 {
-                    if(caster->GetTypeId() != TYPEID_PLAYER)
+                    if (caster->GetTypeId() != TYPEID_PLAYER)
                         return;
 
                     std::list<Unit*> PartyMembers;

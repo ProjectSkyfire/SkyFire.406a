@@ -215,13 +215,13 @@ class spell_warl_create_healthstone : public SpellScriptLoader
 };
 
 uint32 const spell_warl_create_healthstone::spell_warl_create_healthstone_SpellScript::iTypes[8][3] = {
-    { 5512, 19004, 19005},              // Minor Healthstone
-    { 5511, 19006, 19007},              // Lesser Healthstone
-    { 5509, 19008, 19009},              // Healthstone
-    { 5510, 19010, 19011},              // Greater Healthstone
-    { 9421, 19012, 19013},              // Major Healthstone
-    {22103, 22104, 22105},              // Master Healthstone
-    {36889, 36890, 36891},              // Demonic Healthstone
+    { 5512, 19004, 19005},             // Minor Healthstone
+    { 5511, 19006, 19007},             // Lesser Healthstone
+    { 5509, 19008, 19009},             // Healthstone
+    { 5510, 19010, 19011},             // Greater Healthstone
+    { 9421, 19012, 19013},             // Major Healthstone
+    {22103, 22104, 22105},             // Master Healthstone
+    {36889, 36890, 36891},             // Demonic Healthstone
     {36892, 36893, 36894}               // Fel Healthstone
 };
 
@@ -321,9 +321,9 @@ public:
 
         SpellCastResult CheckCast()
         {
-            if(Unit* caster = GetCaster())
+            if (Unit* caster = GetCaster())
             {
-                if(caster->CountPctFromMaxHealth(GetSpellInfo()->Effects[EFFECT_2].CalcValue()) >= caster->GetHealth()) // You cant kill yourself with this
+                if (caster->CountPctFromMaxHealth(GetSpellInfo()->Effects[EFFECT_2].CalcValue()) >= caster->GetHealth()) // You cant kill yourself with this
                     return SPELL_FAILED_FIZZLE;
 
                 return SPELL_CAST_OK;
@@ -333,7 +333,7 @@ public:
 
         void HandleDummy(SpellEffIndex /*EffIndex*/)
         {
-            if(Unit* caster = GetCaster())
+            if (Unit* caster = GetCaster())
             {
                 int32 damage = int32(caster->CountPctFromMaxHealth(GetSpellInfo()->Effects[EFFECT_2].CalcValue()));
                 int32 mana = 0;
@@ -366,7 +366,7 @@ public:
         void Register()
         {
             OnCheckCast += SpellCheckCastFn(spell_warl_life_tap_SpellScript::CheckCast);
-            OnEffectHitTarget += SpellEffectFn(spell_warl_life_tap_SpellScript::HandleDummy,EFFECT_0,SPELL_EFFECT_DUMMY);
+            OnEffectHitTarget += SpellEffectFn(spell_warl_life_tap_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
         }
     };
 
@@ -437,8 +437,8 @@ public:
             int32 bp = 2; // Normal, restore 2% of health
 
             // Check for Death's Embrace
-            if(AuraEffect const* aurEff = GetCaster()->GetAuraEffect(SPELL_AURA_DUMMY, SPELLFAMILY_WARLOCK, 3223, 0))
-                if(GetCaster()->HealthBelowPct(25))
+            if (AuraEffect const* aurEff = GetCaster()->GetAuraEffect(SPELL_AURA_DUMMY, SPELLFAMILY_WARLOCK, 3223, 0))
+                if (GetCaster()->HealthBelowPct(25))
                     bp += int32(aurEff->GetAmount());
 
             GetCaster()->CastCustomSpell(GetCaster(), 89653, &bp, NULL, NULL, true);

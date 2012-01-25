@@ -123,14 +123,14 @@ public:
             events.Reset();
             events.SetPhase(PHASE_HUMAN);
 
-            events.ScheduleEvent(EVENT_CLEAVE, urand(6,12)*IN_MILLISECONDS, 0, PHASE_HUMAN);
-            events.ScheduleEvent(EVENT_STAGGERING_ROAR, urand(18,21)*IN_MILLISECONDS, 0, PHASE_HUMAN);
-            events.ScheduleEvent(EVENT_ENRAGE, urand(7,14)*IN_MILLISECONDS, 0, PHASE_HUMAN);
-            events.ScheduleEvent(EVENT_SMASH, urand(12,17)*IN_MILLISECONDS, 0, PHASE_HUMAN);
+            events.ScheduleEvent(EVENT_CLEAVE, urand(6, 12)*IN_MILLISECONDS, 0, PHASE_HUMAN);
+            events.ScheduleEvent(EVENT_STAGGERING_ROAR, urand(18, 21)*IN_MILLISECONDS, 0, PHASE_HUMAN);
+            events.ScheduleEvent(EVENT_ENRAGE, urand(7, 14)*IN_MILLISECONDS, 0, PHASE_HUMAN);
+            events.ScheduleEvent(EVENT_SMASH, urand(12, 17)*IN_MILLISECONDS, 0, PHASE_HUMAN);
 
-            events.ScheduleEvent(EVENT_DARK_SMASH, urand(14,22)*IN_MILLISECONDS, 0, PHASE_UNDEAD);
-            events.ScheduleEvent(EVENT_DREADFUL_ROAR, urand(18,21)*IN_MILLISECONDS, 0, PHASE_UNDEAD);
-            events.ScheduleEvent(EVENT_WOE_STRIKE, urand(10,14)*IN_MILLISECONDS, 0, PHASE_UNDEAD);
+            events.ScheduleEvent(EVENT_DARK_SMASH, urand(14, 22)*IN_MILLISECONDS, 0, PHASE_UNDEAD);
+            events.ScheduleEvent(EVENT_DREADFUL_ROAR, urand(18, 21)*IN_MILLISECONDS, 0, PHASE_UNDEAD);
+            events.ScheduleEvent(EVENT_WOE_STRIKE, urand(10, 14)*IN_MILLISECONDS, 0, PHASE_UNDEAD);
             events.ScheduleEvent(EVENT_SHADOW_AXE, 30*IN_MILLISECONDS, 0, PHASE_UNDEAD);
 
             uiSpawnResTimer = 3000;
@@ -239,32 +239,32 @@ public:
                     // PHASE ONE
                     case EVENT_CLEAVE:
                         DoCastVictim(SPELL_CLEAVE);
-                        events.ScheduleEvent(EVENT_CLEAVE, urand(6,12)*IN_MILLISECONDS, 0, PHASE_HUMAN);
+                        events.ScheduleEvent(EVENT_CLEAVE, urand(6, 12)*IN_MILLISECONDS, 0, PHASE_HUMAN);
                         break;
                     case EVENT_STAGGERING_ROAR:
                         DoCast(me, SPELL_STAGGERING_ROAR);
-                        events.ScheduleEvent(EVENT_STAGGERING_ROAR, urand(18,21)*IN_MILLISECONDS, 0, PHASE_HUMAN);
+                        events.ScheduleEvent(EVENT_STAGGERING_ROAR, urand(18, 21)*IN_MILLISECONDS, 0, PHASE_HUMAN);
                         break;
                     case EVENT_ENRAGE:
                         DoCast(me, SPELL_ENRAGE);
-                        events.ScheduleEvent(EVENT_ENRAGE, urand(7,14)*IN_MILLISECONDS, 0, PHASE_HUMAN);
+                        events.ScheduleEvent(EVENT_ENRAGE, urand(7, 14)*IN_MILLISECONDS, 0, PHASE_HUMAN);
                         break;
                     case EVENT_SMASH:
                         DoCastVictim(SPELL_SMASH);
-                        events.ScheduleEvent(EVENT_SMASH, urand(12,17)*IN_MILLISECONDS, 0, PHASE_HUMAN);
+                        events.ScheduleEvent(EVENT_SMASH, urand(12, 17)*IN_MILLISECONDS, 0, PHASE_HUMAN);
                         break;
                     // PHASE TWO
                     case EVENT_DARK_SMASH:
                         DoCastVictim(SPELL_DARK_SMASH);
-                        events.ScheduleEvent(EVENT_DARK_SMASH, urand(14,22)*IN_MILLISECONDS, 0, PHASE_UNDEAD);
+                        events.ScheduleEvent(EVENT_DARK_SMASH, urand(14, 22)*IN_MILLISECONDS, 0, PHASE_UNDEAD);
                         break;
                     case EVENT_DREADFUL_ROAR:
                         DoCast(me, SPELL_DREADFUL_ROAR);
-                        events.ScheduleEvent(EVENT_DREADFUL_ROAR, urand(18,21)*IN_MILLISECONDS, 0, PHASE_UNDEAD);
+                        events.ScheduleEvent(EVENT_DREADFUL_ROAR, urand(18, 21)*IN_MILLISECONDS, 0, PHASE_UNDEAD);
                         break;
                     case EVENT_WOE_STRIKE:
                         DoCastVictim(SPELL_WOE_STRIKE);
-                        events.ScheduleEvent(EVENT_WOE_STRIKE, urand(10,14)*IN_MILLISECONDS, 0, PHASE_UNDEAD);
+                        events.ScheduleEvent(EVENT_WOE_STRIKE, urand(10, 14)*IN_MILLISECONDS, 0, PHASE_UNDEAD);
                         break;
                     case EVENT_SHADOW_AXE:
                         if (Unit* target = SelectTarget(SELECT_TARGET_TOPAGGRO, 1))

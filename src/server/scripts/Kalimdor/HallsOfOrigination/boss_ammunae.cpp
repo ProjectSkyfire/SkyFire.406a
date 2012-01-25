@@ -135,7 +135,7 @@ class boss_ammunae : public CreatureScript
                 Trinity::AllCreaturesOfEntryInRange checker(me, entry, distance);
                 Trinity::CreatureListSearcher<Trinity::AllCreaturesOfEntryInRange> searcher(me, pCreatureList, checker);
                 me->VisitNearbyObject(distance, searcher);
-                if(pCreatureList.empty())
+                if (pCreatureList.empty())
                     return;
 
                 std::list<Creature*>::iterator itr = pCreatureList.begin();

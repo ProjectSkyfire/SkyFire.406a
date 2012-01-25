@@ -137,9 +137,9 @@ enum eEnum
 
 const Position HallsofReflectionLocs[]=
 {
-    {5283.234863f, 1990.946777f, 707.695679f, 0.929097f},   // 2 Loralen Follows
-    {5408.031250f, 2102.918213f, 707.695251f, 0.792756f},   // 9 Sylvanas Follows
-    {5401.866699f, 2110.837402f, 707.695251f, 0.800610f},   // 10 Loralen follows
+    {5283.234863f, 1990.946777f, 707.695679f, 0.929097f},  // 2 Loralen Follows
+    {5408.031250f, 2102.918213f, 707.695251f, 0.792756f},  // 9 Sylvanas Follows
+    {5401.866699f, 2110.837402f, 707.695251f, 0.800610f},  // 10 Loralen follows
 };
 
 const Position SpawnPos              = {5262.540527f, 1949.693726f, 707.695007f, 0.808736f}; // Jaina/Sylvanas Beginning Position

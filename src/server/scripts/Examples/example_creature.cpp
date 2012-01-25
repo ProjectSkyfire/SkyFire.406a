@@ -42,30 +42,30 @@ enum Yells
     //List of text id's. The text is stored in database, also in a localized version
     //(if translation not exist for the textId, default english text will be used)
     //Not required to define in this way, but simplify if changes are needed.
-    SAY_AGGRO                                   = -1999900,
-    SAY_RANDOM_0                                = -1999901,
-    SAY_RANDOM_1                                = -1999902,
-    SAY_RANDOM_2                                = -1999903,
-    SAY_RANDOM_3                                = -1999904,
-    SAY_RANDOM_4                                = -1999905,
-    SAY_BERSERK                                 = -1999906,
-    SAY_PHASE                                   = -1999907,
-    SAY_DANCE                                   = -1999908,
-    SAY_SALUTE                                  = -1999909,
-    SAY_EVADE                                   = -1999910,
+    SAY_AGGRO                                   = -1999900, 
+    SAY_RANDOM_0                                = -1999901, 
+    SAY_RANDOM_1                                = -1999902, 
+    SAY_RANDOM_2                                = -1999903, 
+    SAY_RANDOM_3                                = -1999904, 
+    SAY_RANDOM_4                                = -1999905, 
+    SAY_BERSERK                                 = -1999906, 
+    SAY_PHASE                                   = -1999907, 
+    SAY_DANCE                                   = -1999908, 
+    SAY_SALUTE                                  = -1999909, 
+    SAY_EVADE                                   = -1999910, 
 };
 
 enum Spells
 {
     // List of spells.
     // Not required to define them in this way, but will make it easier to maintain in case spellId change
-    SPELL_BUFF                                  = 25661,
-    SPELL_ONE                                   = 12555,
-    SPELL_ONE_ALT                               = 24099,
-    SPELL_TWO                                   = 10017,
-    SPELL_THREE                                 = 26027,
-    SPELL_FRENZY                                = 23537,
-    SPELL_BERSERK                               = 32965,
+    SPELL_BUFF                                  = 25661, 
+    SPELL_ONE                                   = 12555, 
+    SPELL_ONE_ALT                               = 24099, 
+    SPELL_TWO                                   = 10017, 
+    SPELL_THREE                                 = 26027, 
+    SPELL_FRENZY                                = 23537, 
+    SPELL_BERSERK                               = 32965, 
 };
 
 enum eEnums

@@ -10,7 +10,7 @@ public:
     void OnAddSpell(Player* player, uint32 spell_id, bool learning)
     {
         // learning Mastery at level 80
-        switch(spell_id)
+        switch (spell_id)
         {
             case 86470: // 87491 Druid
             case 86471: // 87492 Death Knight
@@ -147,7 +147,7 @@ public:
 
             spellMod->type = SPELLMOD_PCT;
             spellMod->spellId = aurEff->GetId(); // 12042 Arcane Power : 685904631, 102472, 0
-            spellMod->mask = flag96(0xFFFFFFFF,0xFFFFFFFF,0xFFFFFFFF);//GetSpellProto()->EffectSpellClassMask[aurEff->GetEffIndex()];
+            spellMod->mask = flag96(0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF);//GetSpellProto()->EffectSpellClassMask[aurEff->GetEffIndex()];
             spellMod->charges = GetAura()->GetCharges();
 
             //spellMod->spellId = aurEff->GetId(); // 12042
@@ -203,7 +203,7 @@ public:
             spellMod->op = SPELLMOD_DAMAGE/*SPELLMOD_ALL_EFFECTS*/;
             spellMod->type = SPELLMOD_PCT;
             spellMod->spellId = aurEff->GetId(); // 12042 Arcane Power : 685904631, 102472, 0
-            spellMod->mask = flag96(0xFFFFFFFF,0xFFFFFFFF,0xFFFFFFFF);//GetSpellProto()->EffectSpellClassMask[aurEff->GetEffIndex()];
+            spellMod->mask = flag96(0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF);//GetSpellProto()->EffectSpellClassMask[aurEff->GetEffIndex()];
             spellMod->charges = GetAura()->GetCharges();
             //spellMod->spellId = aurEff->GetId(); // 12042
             spellMod->value = bonus;

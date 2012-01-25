@@ -407,7 +407,7 @@ public:
                         Creature* creature;
                         for (uint8 i = 0; i < 4; ++i)
                         {
-                            creature = me->SummonCreature(SHIED_GENERATOR_CHANNEL, ShieldGeneratorChannelPos[i][0],  ShieldGeneratorChannelPos[i][1],  ShieldGeneratorChannelPos[i][2],  ShieldGeneratorChannelPos[i][3], TEMPSUMMON_CORPSE_DESPAWN, 0);
+                            creature = me->SummonCreature(SHIED_GENERATOR_CHANNEL, ShieldGeneratorChannelPos[i][0], ShieldGeneratorChannelPos[i][1], ShieldGeneratorChannelPos[i][2], ShieldGeneratorChannelPos[i][3], TEMPSUMMON_CORPSE_DESPAWN, 0);
                             if (creature)
                                 ShieldGeneratorChannel[i] = creature->GetGUID();
                         }

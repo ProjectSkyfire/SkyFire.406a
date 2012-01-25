@@ -26,40 +26,49 @@ EndScriptData */
 
 #include "ScriptPCH.h"
 
-#define SAY_GAMESBEGIN_1        -1469004
-#define SAY_GAMESBEGIN_2        -1469005
-#define SAY_VAEL_INTRO          -1469006                    //when he corrupts Vaelastrasz
+enum Says
+{
+    SAY_GAMESBEGIN_1        = -1469004,
+    SAY_GAMESBEGIN_2        = -1469005,
+    SAY_VAEL_INTRO          = -1469006                    //when he corrupts Vaelastrasz
+};
 
 #define GOSSIP_ITEM_1           "I've made no mistakes."
 #define GOSSIP_ITEM_2           "You have lost your mind, Nefarius. You speak in riddles."
 #define GOSSIP_ITEM_3           "Please do."
 
-#define CREATURE_BRONZE_DRAKANOID       14263
-#define CREATURE_BLUE_DRAKANOID         14261
-#define CREATURE_RED_DRAKANOID          14264
-#define CREATURE_GREEN_DRAKANOID        14262
-#define CREATURE_BLACK_DRAKANOID        14265
+enum Creatures
+{
+    CREATURE_BRONZE_DRAKANOID       = 14263,
+    CREATURE_BLUE_DRAKANOID         = 14261,
+    CREATURE_RED_DRAKANOID          = 14264,
+    CREATURE_GREEN_DRAKANOID        = 14262,
+    CREATURE_BLACK_DRAKANOID        = 14265,
 
-#define CREATURE_CHROMATIC_DRAKANOID    14302
-#define CREATURE_NEFARIAN               11583
+    CREATURE_CHROMATIC_DRAKANOID    = 14302,
+    CREATURE_NEFARIAN               = 11583
+};
 
-#define ADD_X1 -7591.151855f
-#define ADD_X2 -7514.598633f
-#define ADD_Y1 -1204.051880f
-#define ADD_Y2 -1150.448853f
-#define ADD_Z1 476.800476f
-#define ADD_Z2 476.796570f
+#define ADD_X1    -7591.151855f
+#define ADD_X2    -7514.598633f
+#define ADD_Y1    -1204.051880f
+#define ADD_Y2    -1150.448853f
+#define ADD_Z1    476.800476f
+#define ADD_Z2    476.796570f
 
-#define NEF_X   -7445
-#define NEF_Y   -1332
-#define NEF_Z   536
+#define NEF_X     -7445
+#define NEF_Y     -1332
+#define NEF_Z     536
 
-#define HIDE_X  -7592
-#define HIDE_Y  -1264
-#define HIDE_Z  481
+#define HIDE_X   -7592
+#define HIDE_Y   -1264
+#define HIDE_Z   481
 
-#define SPELL_SHADOWBOLT        21077
-#define SPELL_FEAR              26070
+enum Spells
+{
+   SPELL_SHADOWBOLT        = 21077,
+   SPELL_FEAR              = 26070
+};
 
 //This script is complicated
 //Instead of morphing Victor Nefarius we will have him control phase 1
@@ -212,13 +221,13 @@ public:
 
         void Reset()
         {
-            SpawnedAdds = 0;
-            AddSpawnTimer = 10000;
-            ShadowBoltTimer = 5000;
-            FearTimer = 8000;
-            ResetTimer = 900000;                                //On official it takes him 15 minutes(900 seconds) to reset. We are only doing 1 minute to make testing easier
-            NefarianGUID = 0;
-            NefCheckTime = 2000;
+            SpawnedAdds       = 0;
+            AddSpawnTimer     = 10000;
+            ShadowBoltTimer   = 5000;
+            FearTimer         = 8000;
+            ResetTimer        = 900000; //On official it takes him 15 minutes(900 seconds) to reset. We are only doing 1 minute to make testing easier
+            NefarianGUID      = 0;
+            NefCheckTime      = 2000;
 
             me->SetUInt32Value(UNIT_NPC_FLAGS, 1);
             me->setFaction(35);

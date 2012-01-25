@@ -286,7 +286,7 @@ void WorldSession::HandleRequestHotFix(WorldPacket & recv_data)
     uint32 count, type;
     recv_data >> count >> type;
 
-    if(type != DB2TYPE_ITEM_SPARSE && type != DB2TYPE_ITEM)
+    if (type != DB2TYPE_ITEM_SPARSE && type != DB2TYPE_ITEM)
     {
         sLog->outString("Client tried to request update item data from non-handled update type");
         return;
@@ -297,7 +297,7 @@ void WorldSession::HandleRequestHotFix(WorldPacket & recv_data)
         uint32 item;
         recv_data >> item;
         recv_data.read_skip(8);
-        WorldPacket data2(SMSG_DB_REPLY,700);
+        WorldPacket data2(SMSG_DB_REPLY, 700);
         ByteBuffer data;
 
         data2 << uint32(type); // Needed?
@@ -315,7 +315,7 @@ void WorldSession::HandleRequestHotFix(WorldPacket & recv_data)
         else
         {
             data << uint32(item);
-            if(type == DB2TYPE_ITEM) // Update the base item shit
+            if (type == DB2TYPE_ITEM) // Update the base item shit
             {
                 data << uint32(proto->Class);
                 data << uint32(proto->SubClass);
@@ -325,7 +325,7 @@ void WorldSession::HandleRequestHotFix(WorldPacket & recv_data)
                 data << uint32(proto->InventoryType);
                 data << uint32(proto->Sheath);
             }
-            else if(type == DB2TYPE_ITEM_SPARSE) // Send more advanced shit
+            else if (type == DB2TYPE_ITEM_SPARSE) // Send more advanced shit
             {
                 data << uint32(proto->Quality);
                 data << uint32(proto->Flags);
@@ -790,7 +790,7 @@ void WorldSession::SendListInventory(uint64 vendorGuid)
 
                 // If the item is a guild reward, dont display it if the player does not fit the requirements
                 // ToDo: Theese items must have a flag, find it
-                if(QueryResult res = WorldDatabase.PQuery("SELECT achievement, standing FROM guild_rewards WHERE item_entry = %u", item->item))
+                if (QueryResult res = WorldDatabase.PQuery("SELECT achievement, standing FROM guild_rewards WHERE item_entry = %u", item->item))
                 {
                     Guild* guild = sGuildMgr->GetGuildById(_player->GetGuildId());
                     if(!guild)
@@ -803,8 +803,8 @@ void WorldSession::SendListInventory(uint64 vendorGuid)
 
                     // Check for standing
                     uint32 repReq = fields[1].GetUInt32();
-                    if(repReq)
-                        if(ReputationRank(repReq) > _player->GetReputationRank(1168)) // Does not have enough reputation
+                    if (repReq)
+                        if (ReputationRank(repReq) > _player->GetReputationRank(1168)) // Does not have enough reputation
                             continue;
                 }
 
@@ -1459,16 +1459,16 @@ void WorldSession::HandleReforgeItem(WorldPacket& recv_data)
     recv_data >> slotId >> reforgeId;
     recv_data >> GUID >> bag;
 
-    Item* item = GetPlayer()->GetItemByPos(bag,slotId);
+    Item* item = GetPlayer()->GetItemByPos(bag, slotId);
 
     if(!item)       // cheating?
         return;
 
-    item->SetState(ITEM_CHANGED,GetPlayer()); // Set the 'changed' state to allow items to be saved to DB if they are equipped
-    if(reforgeId == 0) // Reset item
+    item->SetState(ITEM_CHANGED, GetPlayer()); // Set the 'changed' state to allow items to be saved to DB if they are equipped
+    if (reforgeId == 0) // Reset item
     {
-        if(item->IsEquipped()) // Item must be equipped to avoid additional stat loose
-            GetPlayer()->ApplyReforgedStats(item,false);
+        if (item->IsEquipped()) // Item must be equipped to avoid additional stat loose
+            GetPlayer()->ApplyReforgedStats(item, false);
         item->SetEnchantment(REFORGE_ENCHANTMENT_SLOT, 0, 0, 0);
         SQLTransaction trans = CharacterDatabase.BeginTransaction();
         item->SaveToDB(trans);
@@ -1485,10 +1485,10 @@ void WorldSession::HandleReforgeItem(WorldPacket& recv_data)
         return; // Cheating?
 
     GetPlayer()->ModifyMoney(-int32(money));
-    item->SetEnchantment(REFORGE_ENCHANTMENT_SLOT,reforgeId, 0, 0);
+    item->SetEnchantment(REFORGE_ENCHANTMENT_SLOT, reforgeId, 0, 0);
     SQLTransaction trans = CharacterDatabase.BeginTransaction();
     item->SaveToDB(trans);
     CharacterDatabase.CommitTransaction(trans);
-    if(item->IsEquipped()) // Item must be equipped to get the new stats
-        GetPlayer()->ApplyReforgedStats(item,true);
+    if (item->IsEquipped()) // Item must be equipped to get the new stats
+        GetPlayer()->ApplyReforgedStats(item, true);
 }

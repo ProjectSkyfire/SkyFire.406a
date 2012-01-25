@@ -28,11 +28,11 @@ EndScriptData */
 
 enum eEnums
 {
-    SPELL_POLYMORPH         = 12826,
-    SPELL_MARK_OF_THE_WILD  = 26990,
+    SPELL_POLYMORPH         = 12826, 
+    SPELL_MARK_OF_THE_WILD  = 26990, 
 
-    SAY_NOT_INTERESTED      = -1999922,
-    SAY_WRONG               = -1999923,
+    SAY_NOT_INTERESTED      = -1999922, 
+    SAY_WRONG               = -1999923, 
     SAY_CORRECT             = -1999924
 };
 

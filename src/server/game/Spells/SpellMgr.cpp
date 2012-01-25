@@ -281,13 +281,13 @@ int32 GetDiminishingReturnsLimitDuration(DiminishingGroup group, SpellInfo const
             if (spellproto->SpellFamilyFlags[0] & 0x400)
                 return 40 * IN_MILLISECONDS;
             // Entangling Roots - limit to 8 seconds in PvP (4.0.6a)
-            if(spellproto->SpellFamilyFlags[0] & 0x200)
+            if (spellproto->SpellFamilyFlags[0] & 0x200)
                 return 8 * IN_MILLISECONDS;
             // Hibernate - limit to 8 seconds in PvP (4.0.6a)
-            if(spellproto->Id == 2637)
+            if (spellproto->Id == 2637)
                 return 8 * IN_MILLISECONDS;
             // Infected Wounds - limit to 8 seconds in PvP (4.0.6a)
-            if(spellproto->Id == 58179 || spellproto->Id == 58180)
+            if (spellproto->Id == 58179 || spellproto->Id == 58180)
                 return 8 * IN_MILLISECONDS;
             break;
         }
@@ -300,10 +300,10 @@ int32 GetDiminishingReturnsLimitDuration(DiminishingGroup group, SpellInfo const
             if (spellproto->SpellFamilyFlags[0] & 0x400)
                 return 120 * IN_MILLISECONDS;
             // Freezing Trap - limit to 8 seconds in PvP (4.0.6a)
-            if(spellproto->SpellFamilyFlags[0] & 0x8)
+            if (spellproto->SpellFamilyFlags[0] & 0x8)
                 return 8 * IN_MILLISECONDS;
             // Wing Clip - limit to 8 seconds in PvP (4.0.6a)
-            if(spellproto->SpellFamilyFlags[0] & 0x40)
+            if (spellproto->SpellFamilyFlags[0] & 0x40)
                 return 8 * IN_MILLISECONDS;
             break;
         }
@@ -343,17 +343,17 @@ int32 GetDiminishingReturnsLimitDuration(DiminishingGroup group, SpellInfo const
         case SPELLFAMILY_MAGE:
         {
             // Polymorph - limit to 8 seconds in PvP (4.0.6a)
-            if(spellproto->SpellFamilyFlags[0] & 0x1000000)
+            if (spellproto->SpellFamilyFlags[0] & 0x1000000)
                 return 8 * IN_MILLISECONDS;
             // Slow - limit to 8 seconds in PvP (4.0.6a)
-            if(spellproto->SpellFamilyFlags[0] & 0x80000000)
+            if (spellproto->SpellFamilyFlags[0] & 0x80000000)
                 return 8 * IN_MILLISECONDS;
             break;
         }
         case SPELLFAMILY_PRIEST:
         {
             // Mind Control - limit to 8 seconds in PvP (4.0.6a)
-            if(spellproto->SpellFamilyFlags[0] & 0x00020000)
+            if (spellproto->SpellFamilyFlags[0] & 0x00020000)
                 return 8 * IN_MILLISECONDS;
             break;
         }
@@ -368,14 +368,14 @@ int32 GetDiminishingReturnsLimitDuration(DiminishingGroup group, SpellInfo const
                 return 8 * IN_MILLISECONDS;
 
             // Sap - limit to 8 seconds in PvP (4.0.6a)
-            if(spellproto->SpellFamilyFlags[0] & 0x80)
+            if (spellproto->SpellFamilyFlags[0] & 0x80)
                 return 8 * IN_MILLISECONDS;
             break;
         }
         case SPELLFAMILY_SHAMAN:
         {
             // Hex - limit to 8 seconds in PvP (4.0.6a)
-            if(spellproto->SpellFamilyFlags[1] & 0x8000)
+            if (spellproto->SpellFamilyFlags[1] & 0x8000)
                 return 8 * IN_MILLISECONDS;
             break;
         }
@@ -1856,7 +1856,7 @@ void SpellMgr::LoadSpellProcEvents()
     } while (result->NextRow());
 
     if (customProc)
-        sLog->outString(">> Loaded %u extra and %u custom spell proc event conditions in %u ms",  count, customProc, GetMSTimeDiffToNow(oldMSTime));
+        sLog->outString(">> Loaded %u extra and %u custom spell proc event conditions in %u ms", count, customProc, GetMSTimeDiffToNow(oldMSTime));
     else
         sLog->outString(">> Loaded %u extra spell proc event conditions in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
     sLog->outString();

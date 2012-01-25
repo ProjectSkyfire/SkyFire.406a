@@ -29,7 +29,7 @@ namespace Movement
     union FacingInfo
     {
         struct{
-            float x,y,z;
+            float x, y, z;
         }f;
         uint64  target;
         float   angle;

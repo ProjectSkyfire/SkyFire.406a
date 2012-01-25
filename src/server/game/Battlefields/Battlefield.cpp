@@ -465,7 +465,7 @@ void Battlefield::SendWarningToAllInZone(int32 entry,...)
     va_list ap;
     char str [1024];
     va_start(ap, entry);
-    vsnprintf(str,1024,format, ap);
+    vsnprintf(str, 1024, format, ap);
     va_end(ap);
     std::string msg = (std::string)str;
     WorldPacket data = BuildWarningAnnPacket(msg);

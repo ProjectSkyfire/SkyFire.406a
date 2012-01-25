@@ -35,12 +35,12 @@ public:
     {
         static ChatCommand achievementCommandTable[] =
         {
-            { "add",            SEC_ADMINISTRATOR,  false,  &HandleAchievementAddCommand,      "", NULL },
+            { "add",           SEC_ADMINISTRATOR,  false,  &HandleAchievementAddCommand,      "", NULL },
             { NULL,             0,                  false,  NULL,                              "", NULL }
         };
         static ChatCommand commandTable[] =
         {
-            { "achievement",    SEC_ADMINISTRATOR,  false, NULL,            "", achievementCommandTable },
+            { "achievement",   SEC_ADMINISTRATOR,  false, NULL,            "", achievementCommandTable },
             { NULL,             0,                  false, NULL,                               "", NULL }
         };
         return commandTable;

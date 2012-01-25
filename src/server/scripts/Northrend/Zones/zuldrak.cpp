@@ -304,28 +304,28 @@ static BossAndAdd Boss[]=
 
 const Position SpawnPosition[] =
 {
-    {5754.692f, -2939.46f, 286.276123f, 5.156380f},         // stinkbeard || orinoko || korrak
-    {5762.054199f, -2954.385010f, 273.826955f, 5.108289f},  // yggdras
-    {5776.855f, -2989.77979f, 272.96814f, 5.194f},          // elementals
+    {5754.692f, -2939.46f, 286.276123f, 5.156380f},        // stinkbeard || orinoko || korrak
+    {5762.054199f, -2954.385010f, 273.826955f, 5.108289f}, // yggdras
+    {5776.855f, -2989.77979f, 272.96814f, 5.194f},         // elementals
     {5774.388672f, -2980.124756f, 273.078613f, 5.156132f}   // vladof butcher
 };
 
 const Position AddSpawnPosition[] =
 {
-    {5722.487f, -3010.75f, 312.751648f, 0.478f},            // caster location
+    {5722.487f, -3010.75f, 312.751648f, 0.478f},           // caster location
     {5724.983f, -2969.89551f, 286.359619f, 0.478f},
     {5733.76025f, -3000.34644f, 286.359619f, 0.478f},
-    {5739.8125f, -2981.524f, 290.7671f, 0.478f},            // caster location
+    {5739.8125f, -2981.524f, 290.7671f, 0.478f},           // caster location
     {5742.101f, -2950.75586f, 286.2643f, 5.21f},
-    {5743.305f, -3011.29736f, 290.7671f, 0.478f},           // caster location
+    {5743.305f, -3011.29736f, 290.7671f, 0.478f},          // caster location
     {5744.417f, -3025.528f, 286.35965f, 0.478f},
     {5763.189f, -3029.67529f, 290.7671f, 0.478f},
     {5769.401f, -2935.121f, 286.335754f, 5.21f},
     {5793.061f, -2934.593f, 286.359619f, 3.53f},
-    {5797.32129f, -2955.26855f, 290.7671f, 3.53f},          // caster location
+    {5797.32129f, -2955.26855f, 290.7671f, 3.53f},         // caster location
     {5813.94531f, -2956.74683f, 286.359619f, 3.53f},
-    {5816.85547f, -2974.476f, 290.7671f, 3.53f},            // caster location
-    {5820.30859f, -3002.83716f, 290.7671f, 3.53f},          // caster location
+    {5816.85547f, -2974.476f, 290.7671f, 3.53f},           // caster location
+    {5820.30859f, -3002.83716f, 290.7671f, 3.53f},         // caster location
     {5828.50244f, -2981.737f, 286.359619f, 3.53f},
     {5828.899f, -2960.15479f, 312.751648f, 3.53f}           // caster location
 };
@@ -376,10 +376,10 @@ public:
             bRemoveFlag = true;
             me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
 
-            switch(Id)
+            switch (Id)
             {
                 case 1:
-                    switch(value)
+                    switch (value)
                     {
                         case QUEST_AMPHITHEATER_ANGUISH_TUSKARRMAGEDDON:
                             DoScriptText(SAY_QUEST_ACCEPT_TUSKARRMAGEDON, me);
@@ -434,7 +434,7 @@ public:
 
                 if (Timer <= diff)
                 {
-                    switch(Phase)
+                    switch (Phase)
                     {
                         case 1:
                             if (Creature* summon = me->SummonCreature(NPC_ORINOKO_TUSKBREAKER, SpawnPosition[0], TEMPSUMMON_CORPSE_DESPAWN, 1000))
@@ -641,7 +641,7 @@ public:
             DoCast(me, SPELL_BLOOD_PRESENCE, true);
 
             events.ScheduleEvent(EVENT_BLOOD_PLAGUE, 3000);
-            events.ScheduleEvent(EVENT_BLOOD_BOIL, urand(5000,8000));
+            events.ScheduleEvent(EVENT_BLOOD_BOIL, urand(5000, 8000));
             events.ScheduleEvent(EVENT_WHIRLWIND, 10000);
         }
 
@@ -669,7 +669,7 @@ public:
 
             while (uint32 eventId = events.ExecuteEvent())
             {
-                switch(eventId)
+                switch (eventId)
                 {
                     case EVENT_BLOOD_PLAGUE:
                         DoCastVictim(SPELL_BLOOD_PLAGUE);
@@ -804,7 +804,7 @@ public:
 
         void JustSummoned(Creature* summon)
         {
-            switch(summon->GetEntry())
+            switch (summon->GetEntry())
             {
                 case NPC_WHISKER:
                     summon->AI()->AttackStart(me->getVictim());
@@ -877,7 +877,7 @@ public:
 
         void WaypointReached(uint32 uiI)
         {
-            switch(uiI)
+            switch (uiI)
             {
                 case 6:
                     me->SetHomePosition(me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), 0);
@@ -1071,7 +1071,7 @@ public:
 
         void WaypointReached(uint32 uiI)
         {
-            switch(uiI)
+            switch (uiI)
             {
                 case 7:
                     me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_OOC_NOT_ATTACKABLE);
@@ -1447,7 +1447,7 @@ public:
             {
                 if (m_Timer <= diff)
                 {
-                    switch(m_Phase)
+                    switch (m_Phase)
                     {
                         case 1:
                             // say random text

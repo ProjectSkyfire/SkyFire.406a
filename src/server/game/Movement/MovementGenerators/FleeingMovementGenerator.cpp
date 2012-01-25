@@ -48,7 +48,7 @@ FleeingMovementGenerator<T>::_setTargetLocation(T &owner)
     owner.AddUnitState(UNIT_STAT_FLEEING_MOVE);
 
     Movement::MoveSplineInit init(owner);
-    init.MoveTo(x,y,z);
+    init.MoveTo(x, y, z);
     init.SetWalk(false);
     init.Launch();
 }
@@ -67,7 +67,7 @@ FleeingMovementGenerator<T>::_getPoint(T &owner, float &x, float &y, float &z)
     float temp_x, temp_y, angle;
     const Map* _map = owner.GetBaseMap();
     //primitive path-finding
-    for(uint8 i = 0; i < 18; ++i)
+    for (uint8 i = 0; i < 18; ++i)
     {
         if (i_only_forward && i > 2)
             break;
@@ -150,9 +150,9 @@ FleeingMovementGenerator<T>::_getPoint(T &owner, float &x, float &y, float &z)
         Trinity::NormalizeMapCoord(temp_y);
         if (owner.IsWithinLOS(temp_x, temp_y, z))
         {
-            bool is_water_now = _map->IsInWater(x,y,z);
+            bool is_water_now = _map->IsInWater(x, y, z);
 
-            if (is_water_now && _map->IsInWater(temp_x,temp_y,z))
+            if (is_water_now && _map->IsInWater(temp_x, temp_y, z))
             {
                 x = temp_x;
                 y = temp_y;
@@ -170,8 +170,8 @@ FleeingMovementGenerator<T>::_getPoint(T &owner, float &x, float &y, float &z)
 
             if (!(new_z - z) || distance / fabs(new_z - z) > 1.0f)
             {
-                float new_z_left = _map->GetHeight(temp_x + 1.0f*cos(angle+static_cast<float>(M_PI/2)),temp_y + 1.0f*sin(angle+static_cast<float>(M_PI/2)),z,true);
-                float new_z_right = _map->GetHeight(temp_x + 1.0f*cos(angle-static_cast<float>(M_PI/2)),temp_y + 1.0f*sin(angle-static_cast<float>(M_PI/2)),z,true);
+                float new_z_left = _map->GetHeight(temp_x + 1.0f*cos(angle+static_cast<float>(M_PI/2)),temp_y + 1.0f*sin(angle+static_cast<float>(M_PI/2)),z, true);
+                float new_z_right = _map->GetHeight(temp_x + 1.0f*cos(angle-static_cast<float>(M_PI/2)),temp_y + 1.0f*sin(angle-static_cast<float>(M_PI/2)),z, true);
                 if (fabs(new_z_left - new_z) < 1.2f && fabs(new_z_right - new_z) < 1.2f)
                 {
                     x = temp_x;
@@ -183,7 +183,7 @@ FleeingMovementGenerator<T>::_getPoint(T &owner, float &x, float &y, float &z)
         }
     }
     i_to_distance_from_caster = 0.0f;
-    i_nextCheckTime.Reset( urand(500,1000) );
+    i_nextCheckTime.Reset( urand(500, 1000) );
     return false;
 }
 
@@ -207,7 +207,7 @@ FleeingMovementGenerator<T>::_setMoveData(T &owner)
         {
             // we are very far or too close, stopping
             i_to_distance_from_caster = 0.0f;
-            i_nextCheckTime.Reset( urand(500,1000) );
+            i_nextCheckTime.Reset( urand(500, 1000) );
             return false;
         }
         else

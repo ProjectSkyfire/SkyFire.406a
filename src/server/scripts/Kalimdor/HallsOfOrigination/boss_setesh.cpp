@@ -266,7 +266,7 @@ public:
         {
             if (SummonTimer <= diff)
             {
-                uint8 summon = urand(0,1);
+                uint8 summon = urand(0, 1);
                 Summon(summon);
                 SummonTimer = 15000;
             } else SummonTimer -= diff;

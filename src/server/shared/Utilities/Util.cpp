@@ -416,12 +416,12 @@ std::wstring GetMainPartOfName(std::wstring wname, uint32 declension)
     static wchar_t const j_End[]    = { wchar_t(1), wchar_t(0x0439), wchar_t(0x0000)};
 
     static wchar_t const* const dropEnds[6][8] = {
-        { &a_End[1],  &o_End[1],    &ya_End[1],   &ie_End[1],  &soft_End[1], &j_End[1],    NULL,       NULL },
-        { &a_End[1],  &ya_End[1],   &yeru_End[1], &i_End[1],   NULL,         NULL,         NULL,       NULL },
-        { &ie_End[1], &u_End[1],    &yu_End[1],   &i_End[1],   NULL,         NULL,         NULL,       NULL },
-        { &u_End[1],  &yu_End[1],   &o_End[1],    &ie_End[1],  &soft_End[1], &ya_End[1],   &a_End[1],  NULL },
+        { &a_End[1], &o_End[1],   &ya_End[1],  &ie_End[1], &soft_End[1], &j_End[1],   NULL,       NULL },
+        { &a_End[1], &ya_End[1],  &yeru_End[1], &i_End[1],  NULL,         NULL,         NULL,       NULL },
+        { &ie_End[1], &u_End[1],   &yu_End[1],  &i_End[1],  NULL,         NULL,         NULL,       NULL },
+        { &u_End[1], &yu_End[1],  &o_End[1],   &ie_End[1], &soft_End[1], &ya_End[1],  &a_End[1], NULL },
         { &oj_End[1], &io_j_End[1], &ie_j_End[1], &o_m_End[1], &io_m_End[1], &ie_m_End[1], &yu_End[1], NULL },
-        { &ie_End[1], &i_End[1],    NULL,         NULL,        NULL,         NULL,         NULL,       NULL }
+        { &ie_End[1], &i_End[1],   NULL,         NULL,        NULL,         NULL,         NULL,       NULL }
     };
 
     for (wchar_t const* const* itr = &dropEnds[declension][0]; *itr; ++itr)

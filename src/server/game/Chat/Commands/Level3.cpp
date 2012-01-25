@@ -3691,8 +3691,8 @@ bool ChatHandler::HandleMovegensCommand(const char* /*args*/)
     PSendSysMessage(LANG_MOVEGENS_LIST, (unit->GetTypeId() == TYPEID_PLAYER ? "Player" : "Creature"), unit->GetGUIDLow());
 
     MotionMaster* mm = unit->GetMotionMaster();
-    float x,y,z;
-    mm->GetDestination(x,y,z);
+    float x, y, z;
+    mm->GetDestination(x, y, z);
 
     for (uint8 i = 0; i < MAX_MOTION_SLOT; ++i)
     {
@@ -4120,7 +4120,7 @@ bool ChatHandler::HandleInstanceListBindsCommand(const char* /*args*/)
         {
             InstanceSave* save = itr->second.save;
             std::string timeleft = GetTimeString(save->GetResetTime() - time(NULL));
-            PSendSysMessage("map: %d inst: %d perm: %s diff: %d canReset: %s TTR: %s", itr->first, save->GetInstanceId(), itr->second.perm ? "yes" : "no",  save->GetDifficulty(), save->CanReset() ? "yes" : "no", timeleft.c_str());
+            PSendSysMessage("map: %d inst: %d perm: %s diff: %d canReset: %s TTR: %s", itr->first, save->GetInstanceId(), itr->second.perm ? "yes" : "no", save->GetDifficulty(), save->CanReset() ? "yes" : "no", timeleft.c_str());
             counter++;
         }
     }
@@ -4136,7 +4136,7 @@ bool ChatHandler::HandleInstanceListBindsCommand(const char* /*args*/)
             {
                 InstanceSave* save = itr->second.save;
                 std::string timeleft = GetTimeString(save->GetResetTime() - time(NULL));
-                PSendSysMessage("map: %d inst: %d perm: %s diff: %d canReset: %s TTR: %s", itr->first, save->GetInstanceId(), itr->second.perm ? "yes" : "no",  save->GetDifficulty(), save->CanReset() ? "yes" : "no", timeleft.c_str());
+                PSendSysMessage("map: %d inst: %d perm: %s diff: %d canReset: %s TTR: %s", itr->first, save->GetInstanceId(), itr->second.perm ? "yes" : "no", save->GetDifficulty(), save->CanReset() ? "yes" : "no", timeleft.c_str());
                 counter++;
             }
         }

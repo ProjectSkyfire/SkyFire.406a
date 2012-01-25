@@ -204,7 +204,7 @@ bool BattlegroundDS::SetupBattleground()
 
 void BattlegroundDS::KnockBackPlayer(Unit *player, float angle, float horizontalSpeed, float verticalSpeed)
 {
-    if(player->GetTypeId() == TYPEID_PLAYER)
+    if (player->GetTypeId() == TYPEID_PLAYER)
     {
         WorldPacket data(SMSG_MOVE_KNOCK_BACK, 8+4+4+4+4+2);   // this needs checked for cataclysm!
         data.append(player->GetPackGUID());

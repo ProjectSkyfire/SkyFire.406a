@@ -227,7 +227,7 @@ void BattlegroundMgr::BuildBattlegroundStatusPacket(WorldPacket *data, Battlegro
             *data << uint8(arenatype);                                      // teamsize (0 if not arena)
             *data << uint32(Time1);                                         // port expiration time
 
-            if(bg->GetTypeID() != BATTLEGROUND_RB)
+            if (bg->GetTypeID() != BATTLEGROUND_RB)
                 *data << uint32(bg->GetMapId());                            // mapid
             else *data << uint32(0);
 

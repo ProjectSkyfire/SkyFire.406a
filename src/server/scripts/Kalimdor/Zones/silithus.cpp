@@ -455,10 +455,10 @@ struct WaveData
 
 static WaveData WavesInfo[] =
 {
-    {30,  0, 15423, 0, 0, 24000, 0},    // Kaldorei Soldier
-    { 3, 35, 15424, 0, 0, 24000, 0},    // Anubisath Conqueror
-    {12, 38, 15414, 0, 0, 24000, 0},    // Qiraji Wasps
-    { 6, 50, 15422, 0, 0, 24000, 0},    // Qiraji Tanks
+    {30,  0, 15423, 0, 0, 24000, 0},   // Kaldorei Soldier
+    { 3, 35, 15424, 0, 0, 24000, 0},   // Anubisath Conqueror
+    {12, 38, 15414, 0, 0, 24000, 0},   // Qiraji Wasps
+    { 6, 50, 15422, 0, 0, 24000, 0},   // Qiraji Tanks
     {15, 15, 15423, 0, 0, 24000, 0}     // Kaldorei Soldier
 };
 
@@ -469,10 +469,10 @@ struct SpawnSpells
 
 static SpawnSpells SpawnCast[]=//
 {
-    {100000, 2000, 33652},   // Stop Time
-    {38500, 300000, 28528},  // Poison Cloud
-    {58000, 300000, 35871},  // Frost Debuff (need correct spell)
-    {80950, 300000, 42075},  // Fire Explosion (need correct spell however this one looks cool)
+    {100000, 2000, 33652},  // Stop Time
+    {38500, 300000, 28528}, // Poison Cloud
+    {58000, 300000, 35871}, // Frost Debuff (need correct spell)
+    {80950, 300000, 42075}, // Fire Explosion (need correct spell however this one looks cool)
 };
 /*#####
 # npc_anachronos_the_ancient

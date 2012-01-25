@@ -56,7 +56,7 @@ bool BattlefieldTB::SetupBattlefield()
         m_WarTime                = sWorld->getWorldState(5387);
         m_DefenderTeam           = (TeamId)sWorld->getWorldState(5384);
         m_Timer                  = sWorld->getWorldState(TBClockWorldState[0]);
-    if(m_WarTime)
+    if (m_WarTime)
     {
         m_WarTime = false;
         m_Timer = 10 * 60 * 1000;
@@ -97,7 +97,7 @@ bool BattlefieldTB::SetupBattlefield()
             // Create Object
             BfCapturePointTB* TBWorkShop = new BfCapturePointTB(this, GetAttackerTeam());
             // Spawn gameobject associate (see in OnGameObjectCreate, of OutdoorPvP for see association)
-            if(TBWorkShop->SetCapturePointData(TBCapturePointDataBase[i].CapturePoint.entryh, 732,
+            if (TBWorkShop->SetCapturePointData(TBCapturePointDataBase[i].CapturePoint.entryh, 732,
                 TBCapturePointDataBase[i].CapturePoint.x,
                 TBCapturePointDataBase[i].CapturePoint.y,
                 TBCapturePointDataBase[i].CapturePoint.z,
@@ -120,10 +120,10 @@ bool BattlefieldTB::SetupBattlefield()
     for (uint8 i = 0; i<TB_MAX_KEEP_NPC; i++)
     {
         // Horde npc
-        if(Creature* creature = SpawnCreature(TBKeepNPC[i].entryh, TBKeepNPC[i].x, TBKeepNPC[i].y, TBKeepNPC[i].z, TBKeepNPC[i].o, TEAM_HORDE))
+        if (Creature* creature = SpawnCreature(TBKeepNPC[i].entryh, TBKeepNPC[i].x, TBKeepNPC[i].y, TBKeepNPC[i].z, TBKeepNPC[i].o, TEAM_HORDE))
             KeepCreature[TEAM_HORDE].insert(creature->GetGUID());
         // Alliance npc
-        if(Creature* creature = SpawnCreature(TBKeepNPC[i].entrya, TBKeepNPC[i].x, TBKeepNPC[i].y, TBKeepNPC[i].z, TBKeepNPC[i].o, TEAM_ALLIANCE))
+        if (Creature* creature = SpawnCreature(TBKeepNPC[i].entrya, TBKeepNPC[i].x, TBKeepNPC[i].y, TBKeepNPC[i].z, TBKeepNPC[i].o, TEAM_ALLIANCE))
             KeepCreature[TEAM_ALLIANCE].insert(creature->GetGUID());
     }
 
@@ -283,7 +283,7 @@ void BattlefieldTB::OnBattleEnd(bool endbytimer)
         {
             if (Unit* unit = ObjectAccessor::FindUnit((*itr)))
                 if (Creature* creature = unit->ToCreature())
-                    ShowNpc(creature,true);
+                    ShowNpc(creature, true);
         }
         // Hide creatures that should be visible only when battle is on.
         for (GuidSet::const_iterator itr = WarCreature[GetAttackerTeam()].begin(); itr != WarCreature[GetAttackerTeam()].end(); ++itr)
@@ -309,7 +309,7 @@ void BattlefieldTB::OnBattleEnd(bool endbytimer)
         {
             if (Unit* unit = ObjectAccessor::FindUnit((*itr)))
                 if (Creature* creature = unit->ToCreature())
-                    ShowNpc(creature,true);
+                    ShowNpc(creature, true);
         }*/
     }
 
@@ -321,7 +321,7 @@ void BattlefieldTB::OnBattleEnd(bool endbytimer)
     // Update all graveyard, control is to defender when no wartime
     for (uint8 i = 0; i<BATTLEFIELD_TB_GY_HORDE; i++)
     {
-        if(GetGraveYardById(i))
+        if (GetGraveYardById(i))
         {
             GetGraveYardById(i)->ChangeControl(GetDefenderTeam());
         }
@@ -411,7 +411,7 @@ void BattlefieldTB::DoCompleteOrIncrementAchievement(uint32 achievement, Player*
 {
     /*AchievementEntry const* AE = GetAchievementStore()->LookupEntry(achievement);
 
-    switch(achievement)
+    switch (achievement)
     {
         case ACHIEVEMENTS_WIN_TB_100 :
         {
@@ -535,7 +535,7 @@ void BattlefieldTB::SendInitWorldStatesToAll()
     WorldPacket data = BuildInitWorldStates();
     for (uint8 team = 0; team<2; team++)
         for (GuidSet::iterator itr = m_players[team].begin(); itr != m_players[team].end(); ++itr)
-            if(Player* player = ObjectAccessor::FindPlayer((*itr)))
+            if (Player* player = ObjectAccessor::FindPlayer((*itr)))
                 player->GetSession()->SendPacket(&data);
 }
 

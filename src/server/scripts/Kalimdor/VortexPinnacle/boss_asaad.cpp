@@ -78,7 +78,7 @@ public:
                 if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                     me->CastSpell(target, DUNGEON_MODE(SPELL_CHAIN_LIGHTNING_N, SPELL_CHAIN_LIGHTNING_H), true);
 
-                ChainLightningTimer = urand(12*IN_MILLISECONDS,17*IN_MILLISECONDS);
+                ChainLightningTimer = urand(12*IN_MILLISECONDS, 17*IN_MILLISECONDS);
             } else ChainLightningTimer -= diff;
 
             DoMeleeAttackIfReady();

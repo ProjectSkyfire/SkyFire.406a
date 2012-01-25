@@ -117,13 +117,13 @@ bool Pet::LoadPetFromDB(Player* owner, uint32 petentry, uint32 petnumber, bool c
         //                                        0   1      2(?)   3        4      5    6           7     8     9        10         11       12           13       14        15              16
         result = CharacterDatabase.PQuery("SELECT id, entry, owner, modelid, level, exp, Reactstate, slot, name, renamed, curhealth, curmana, curhappiness, abdata, savetime, CreatedBySpell, PetType "
             "FROM character_pet WHERE owner = '%u' AND entry = '%u' AND ((slot >= '%u' AND slot <= '%u') OR slot > '%u')",
-            ownerid, petentry, PET_SLOT_HUNTER_FIRST,PET_SLOT_HUNTER_LAST, PET_SLOT_STABLE_LAST);
+            ownerid, petentry, PET_SLOT_HUNTER_FIRST, PET_SLOT_HUNTER_LAST, PET_SLOT_STABLE_LAST);
     else
         // any current or other non-stabled pet (for hunter "call pet")
         //                                        0   1      2(?)   3        4      5    6           7     8     9        10         11       12            13      14        15              16
         result = CharacterDatabase.PQuery("SELECT id, entry, owner, modelid, level, exp, Reactstate, slot, name, renamed, curhealth, curmana, curhappiness, abdata, savetime, CreatedBySpell, PetType "
             "FROM character_pet WHERE owner = '%u' AND ((slot >= '%u' AND slot <= '%u') OR slot > '%u')",
-            ownerid, PET_SLOT_HUNTER_FIRST, PET_SLOT_HUNTER_LAST,PET_SLOT_STABLE_LAST);
+            ownerid, PET_SLOT_HUNTER_FIRST, PET_SLOT_HUNTER_LAST, PET_SLOT_STABLE_LAST);
 
     if (!result)
     {
@@ -360,7 +360,7 @@ void Pet::SavePetToDB(PetSlot mode)
     if (!owner)
         return;
 
-    if(mode == PET_SLOT_ACTUAL_PET_SLOT)
+    if (mode == PET_SLOT_ACTUAL_PET_SLOT)
         mode = owner->_currentPetSlot;
 
     // not save pet as current if another pet temporary unsummoned
