@@ -376,10 +376,10 @@ public:
             bRemoveFlag = true;
             me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
 
-            switch(Id)
+            switch (Id)
             {
                 case 1:
-                    switch(value)
+                    switch (value)
                     {
                         case QUEST_AMPHITHEATER_ANGUISH_TUSKARRMAGEDDON:
                             DoScriptText(SAY_QUEST_ACCEPT_TUSKARRMAGEDON, me);
@@ -434,7 +434,7 @@ public:
 
                 if (Timer <= diff)
                 {
-                    switch(Phase)
+                    switch (Phase)
                     {
                         case 1:
                             if (Creature* summon = me->SummonCreature(NPC_ORINOKO_TUSKBREAKER, SpawnPosition[0], TEMPSUMMON_CORPSE_DESPAWN, 1000))
@@ -669,7 +669,7 @@ public:
 
             while (uint32 eventId = events.ExecuteEvent())
             {
-                switch(eventId)
+                switch (eventId)
                 {
                     case EVENT_BLOOD_PLAGUE:
                         DoCastVictim(SPELL_BLOOD_PLAGUE);
@@ -804,7 +804,7 @@ public:
 
         void JustSummoned(Creature* summon)
         {
-            switch(summon->GetEntry())
+            switch (summon->GetEntry())
             {
                 case NPC_WHISKER:
                     summon->AI()->AttackStart(me->getVictim());
@@ -877,7 +877,7 @@ public:
 
         void WaypointReached(uint32 uiI)
         {
-            switch(uiI)
+            switch (uiI)
             {
                 case 6:
                     me->SetHomePosition(me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), 0);
@@ -1071,7 +1071,7 @@ public:
 
         void WaypointReached(uint32 uiI)
         {
-            switch(uiI)
+            switch (uiI)
             {
                 case 7:
                     me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_OOC_NOT_ATTACKABLE);
@@ -1447,7 +1447,7 @@ public:
             {
                 if (m_Timer <= diff)
                 {
-                    switch(m_Phase)
+                    switch (m_Phase)
                     {
                         case 1:
                             // say random text

@@ -1225,7 +1225,7 @@ public:
     //bool OnGossipSelect(Player* player, Creature* creature, uint32 Sender, uint32 action)
     //{
     //    player->PlayerTalkClass->ClearMenus();
-    //    switch(action)
+    //    switch (action)
     //    {
     //        case GOSSIP_ACTION_INFO_DEF+1:
     //            if (player)

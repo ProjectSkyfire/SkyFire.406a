@@ -563,7 +563,7 @@ public:
 
         void WaypointReached(uint32 PointId)
         {
-            switch(PointId)
+            switch (PointId)
             {
                 case 3:
                 {

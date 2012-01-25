@@ -984,7 +984,7 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                     if (m_caster->GetTypeId() != TYPEID_PLAYER)
                         return;
 
-                    switch(m_spellInfo->Id)
+                    switch (m_spellInfo->Id)
                     {
                         case 47381:
                             // Envision Drakuru
@@ -1438,7 +1438,7 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
 
                 m_caster->CastSpell(unitTarget, damage, true);
 
-                switch(m_spellInfo->Id)
+                switch (m_spellInfo->Id)
                 {
                     case 50286: m_caster->CastSpell(unitTarget, 50288, true); return;
                     //case 53196: m_caster->CastSpell(unitTarget, 53191, true); return;  //depreciated?
@@ -4837,7 +4837,7 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
                     if (!pArea || (canFly && (pArea->flags & AREA_FLAG_NO_FLY_ZONE)))
                         canFly = false;
 
-                    switch(unitTarget->ToPlayer()->GetBaseSkillValue(SKILL_RIDING))
+                    switch (unitTarget->ToPlayer()->GetBaseSkillValue(SKILL_RIDING))
                     {
                     case 75: unitTarget->CastSpell(unitTarget, 51621, true); break;
                     case 150: unitTarget->CastSpell(unitTarget, 48024, true); break;
@@ -4887,7 +4887,7 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
                     if (!pArea || (canFly && (pArea->flags & AREA_FLAG_NO_FLY_ZONE)))
                         canFly = false;
 
-                    switch(unitTarget->ToPlayer()->GetBaseSkillValue(SKILL_RIDING))
+                    switch (unitTarget->ToPlayer()->GetBaseSkillValue(SKILL_RIDING))
                     {
                     case 75: unitTarget->CastSpell(unitTarget, 42680, true); break;
                     case 150: unitTarget->CastSpell(unitTarget, 42683, true); break;
@@ -5252,7 +5252,7 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
                     if (!pArea || (canFly && (pArea->flags & AREA_FLAG_NO_FLY_ZONE)))
                         canFly = false;
 
-                    switch(unitTarget->ToPlayer()->GetBaseSkillValue(SKILL_RIDING))
+                    switch (unitTarget->ToPlayer()->GetBaseSkillValue(SKILL_RIDING))
                     {
                     case 0: unitTarget->CastSpell(unitTarget, 71343, true); break;
                     case 75: unitTarget->CastSpell(unitTarget, 71344, true); break;
@@ -5301,7 +5301,7 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
                     if (!pArea || (canFly && (pArea->flags & AREA_FLAG_NO_FLY_ZONE)))
                         canFly = false;
 
-                    switch(unitTarget->ToPlayer()->GetBaseSkillValue(SKILL_RIDING))
+                    switch (unitTarget->ToPlayer()->GetBaseSkillValue(SKILL_RIDING))
                     {
                     case 75: unitTarget->CastSpell(unitTarget, 72281, true); break;
                     case 150: unitTarget->CastSpell(unitTarget, 72282, true); break;
@@ -5367,7 +5367,7 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
                     if (!pArea || (canFly && (pArea->flags & AREA_FLAG_NO_FLY_ZONE)))
                         canFly = false;
 
-                    switch(unitTarget->ToPlayer()->GetBaseSkillValue(SKILL_RIDING))
+                    switch (unitTarget->ToPlayer()->GetBaseSkillValue(SKILL_RIDING))
                     {
                     case 75: unitTarget->CastSpell(unitTarget, 75619, true); break;
                     case 150: unitTarget->CastSpell(unitTarget, 75620, true); break;
@@ -5730,7 +5730,7 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
         }
         case SPELLFAMILY_HUNTER:
         {
-            switch(m_spellInfo->Id)
+            switch (m_spellInfo->Id)
             {
                 case 77767: // Cobra Shot
                 {
@@ -5742,7 +5742,7 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
         }
         case SPELLFAMILY_DRUID:
         {
-            switch(m_spellInfo->Id)
+            switch (m_spellInfo->Id)
             {
                 case 80863: // Blood In The Water
                 {

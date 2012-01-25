@@ -411,7 +411,7 @@ void BattlefieldTB::DoCompleteOrIncrementAchievement(uint32 achievement, Player*
 {
     /*AchievementEntry const* AE = GetAchievementStore()->LookupEntry(achievement);
 
-    switch(achievement)
+    switch (achievement)
     {
         case ACHIEVEMENTS_WIN_TB_100 :
         {

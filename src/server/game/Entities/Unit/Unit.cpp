@@ -8043,7 +8043,7 @@ bool Unit::HandleAuraProc(Unit* victim, uint32 damage, Aura* triggeredByAura, Sp
             if (!procSpell)
                 return false;
 
-            switch(procSpell->Id)
+            switch (procSpell->Id)
             {
                 case 2050:
                 case 2060:

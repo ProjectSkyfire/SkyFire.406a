@@ -1242,7 +1242,7 @@ void Guild::UpdateMemberData(Player* player, uint8 dataid, uint32 value)
 {
     if (Member* member = GetMember(player->GetGUID()))
     {
-        switch(dataid)
+        switch (dataid)
         {
             case GUILD_MEMBER_DATA_ZONEID:
                 member->SetZoneID(value);

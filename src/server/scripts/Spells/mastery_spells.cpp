@@ -10,7 +10,7 @@ public:
     void OnAddSpell(Player* player, uint32 spell_id, bool learning)
     {
         // learning Mastery at level 80
-        switch(spell_id)
+        switch (spell_id)
         {
             case 86470: // 87491 Druid
             case 86471: // 87492 Death Knight

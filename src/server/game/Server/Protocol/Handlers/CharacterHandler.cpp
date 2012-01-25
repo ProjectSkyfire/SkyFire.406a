@@ -678,7 +678,7 @@ void WorldSession::HandleCharCreateCallback(PreparedQueryResult result, Characte
 
             if (createInfo->Class == CLASS_HUNTER)
             {
-                switch(createInfo->Race)
+                switch (createInfo->Race)
                 {
                     case RACE_HUMAN:
                         CharacterDatabase.PExecute("REPLACE INTO character_pet (`id`, `entry`, `owner`, `modelid`, `CreatedBySpell`, `PetType`, `level`, `exp`, `Reactstate`, `name`, `renamed`, `slot`, `curhealth`, `curmana`, `curhappiness`, `savetime`, `abdata`) VALUES (%u, 42717, %u, 903, 13481, 1, 1, 0, 0, 'Wolf', 0, 0, 192, 0, 166500, 1295727347, '7 2 7 1 7 0 129 2649 129 17253 1 0 1 0 6 2 6 1 6 0 ')",  pet_id, newChar.GetGUIDLow());

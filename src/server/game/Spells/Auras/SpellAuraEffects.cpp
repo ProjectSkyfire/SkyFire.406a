@@ -895,7 +895,7 @@ void AuraEffect::CalculateSpellMod(SpellInfo const *spellInfo, Unit * target)
                     break;
             }
         case SPELL_AURA_MOD_SPELL_CRIT_CHANCE:
-            switch(GetId())
+            switch (GetId())
             {
                 case 51466: // Elemental oath
                 case 51470: // Elemental oath
@@ -2814,7 +2814,7 @@ void AuraEffect::HandleAuraMounted(AuraApplication const* aurApp, uint8 mode, bo
     uint32 spellId = (uint32)GetAmount();
     Player *player = target->ToPlayer();
 
-    switch(GetId())
+    switch (GetId())
     {
         case 55164: // Spectral Gryphon
             spellId = 86460;
@@ -4959,7 +4959,7 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
                     if (target->GetTypeId() != TYPEID_PLAYER)
                         return;
                     // Server send SMSG_PLAY_OBJECT_SOUND with train sound for each race
-                    switch(target->getRace())
+                    switch (target->getRace())
                     {
                     case RACE_BLOODELF:
                         if (target->getGender()==GENDER_MALE)

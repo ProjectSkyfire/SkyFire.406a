@@ -74,7 +74,7 @@ class npc_slaincrewmember : public CreatureScript
         }
         void SetData(uint32 Id,  uint32 Value)
         {
-            switch(Id)
+            switch (Id)
             {
                 case 1: // Set the GUID of the player
                 {
@@ -96,7 +96,7 @@ class npc_slaincrewmember : public CreatureScript
 
             if (sayTimer <= diff)
             {
-                switch(RAND(0, 1, 2, 3, 4))
+                switch (RAND(0, 1, 2, 3, 4))
                 {
                     case 0:
                         me->MonsterSay(CREW_SAY_1, LANG_UNIVERSAL, NULL);

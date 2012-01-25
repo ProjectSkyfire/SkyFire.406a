@@ -1236,7 +1236,7 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                 if (!caster)
                     break;
 
-                switch(GetId())
+                switch (GetId())
                 {
                     case 50227: // Warrior - Sword and Board
                     {
@@ -1263,7 +1263,7 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                 if (!caster)
                     break;
 
-                switch(GetId())
+                switch (GetId())
                 {
                     case 82925: // Master Marksman
                     {
@@ -1615,7 +1615,7 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                     GetSpellInfo()->SpellFamilyFlags[1] & 0x1000 && caster)
                 {
                     uint32 spell_id = 0;
-                    switch(GetId())
+                    switch (GetId())
                     {
                         case 19386: spell_id = 24131; break;
                         case 24132: spell_id = 24134; break;
