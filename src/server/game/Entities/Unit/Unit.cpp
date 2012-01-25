@@ -13571,7 +13571,7 @@ int32 Unit::GetCreatePowers(Powers power) const
             return 0;
         case POWER_HEALTH:
             return 0;
-        case POWER_SOULSHARD:
+        case POWER_SOULSHARDS:
             return (GetTypeId() == TYPEID_PLAYER && ToPlayer()->getClass() == CLASS_WARLOCK ? 3 : 0);
         case POWER_ECLIPSE:
             return (GetTypeId() == TYPEID_PLAYER && ToPlayer()->getClass() == CLASS_DRUID ? 100 : 0); // Should be -100 to 100 this needs the power to be int32 instead of uint32
