@@ -1802,9 +1802,9 @@ DROP TABLE IF EXISTS `guild_achievement`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `guild_achievement` (
-  `guildid` INT(20) UNSIGNED NOT NULL,
-  `achievement` SMALLINT(10) UNSIGNED NOT NULL,
-  `date` INT(20) UNSIGNED DEFAULT NULL,
+  `guildid` int(20) unsigned NOT NULL,
+  `achievement` smallint(10) unsigned NOT NULL,
+  `date` int(20) unsigned DEFAULT NULL,
   PRIMARY KEY (`guildid`,`achievement`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -1826,11 +1826,11 @@ DROP TABLE IF EXISTS `guild_achievement_progress`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `guild_achievement_progress` (
-	`guildid` INT(10) UNSIGNED NOT NULL,
-	`criteria` SMALLINT(5) UNSIGNED NOT NULL,
-	`counter` INT(10) UNSIGNED NOT NULL,
-	`date` INT(10) UNSIGNED NOT NULL DEFAULT '0',
-	PRIMARY KEY (`guildid`, `criteria`)
+  `guildid` int(10) unsigned NOT NULL,
+  `criteria` smallint(5) unsigned NOT NULL,
+  `counter` int(10) unsigned NOT NULL,
+  `date` int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`guildid`,`criteria`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -2019,6 +2019,12 @@ CREATE TABLE `guild_member` (
   `BankRemSlotsTab6` int(10) unsigned NOT NULL DEFAULT '0',
   `BankResetTimeTab7` int(10) unsigned NOT NULL DEFAULT '0',
   `BankRemSlotsTab7` int(10) unsigned NOT NULL DEFAULT '0',
+  `FirstProffLevel` int(11) unsigned NOT NULL DEFAULT '0',
+  `FirstProffSkill` int(11) unsigned NOT NULL DEFAULT '0',
+  `FirstProffRank` int(11) unsigned NOT NULL DEFAULT '0',
+  `SecondProffLevel` int(11) unsigned NOT NULL DEFAULT '0',
+  `SecondProffSkill` int(11) unsigned NOT NULL DEFAULT '0',
+  `SecondProffRank` int(11) unsigned NOT NULL DEFAULT '0',
   UNIQUE KEY `guid_key` (`guid`),
   KEY `guildid_key` (`guildid`),
   KEY `guildid_rank_key` (`guildid`,`rank`)
@@ -2032,6 +2038,34 @@ CREATE TABLE `guild_member` (
 LOCK TABLES `guild_member` WRITE;
 /*!40000 ALTER TABLE `guild_member` DISABLE KEYS */;
 /*!40000 ALTER TABLE `guild_member` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `guild_news`
+--
+
+DROP TABLE IF EXISTS `guild_news`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `guild_news` (
+  `guildid` int(12) NOT NULL,
+  `type` int(10) NOT NULL,
+  `date` int(12) NOT NULL,
+  `value1` int(10) NOT NULL,
+  `value2` int(10) NOT NULL,
+  `source_guid` int(12) NOT NULL,
+  `flags` int(10) NOT NULL,
+  PRIMARY KEY (`guildid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `guild_news`
+--
+
+LOCK TABLES `guild_news` WRITE;
+/*!40000 ALTER TABLE `guild_news` DISABLE KEYS */;
+/*!40000 ALTER TABLE `guild_news` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -2617,4 +2651,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-01-16 19:57:19
+-- Dump completed on 2012-01-25 14:16:30
