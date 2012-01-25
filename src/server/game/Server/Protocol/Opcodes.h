@@ -604,7 +604,7 @@ enum Opcodes
     SMSG_DEBUGAURAPROC                               = 0x00,
     SMSG_PERIODICAURALOG                             = 0x03486, // 4.3.0 15050
     SMSG_SPELLDAMAGESHIELD                           = 0x00,
-    SMSG_SPELLNONMELEEDAMAGELOG                      = 0x00,
+    SMSG_SPELLNONMELEEDAMAGELOG                      = 0x7224,  // 4.3.0 15050
     CMSG_LEARN_TALENT                                = 0x00,
     SMSG_RESURRECT_FAILED                            = 0x00,
     CMSG_TOGGLE_PVP                                  = 0x00,
