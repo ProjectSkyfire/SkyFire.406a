@@ -58,7 +58,7 @@ struct ItemSparseEntry
     uint32     Quality;                                      // 1
     uint32     Flags;                                        // 2
     uint32     Flags2;                                       // 3
-    //uint32   Flags3                                        // add in 4.3.0
+    //float    Flags3                                        // add in 4.3.0
     //uint32   Flags4                                        // add in 4.3.0
     //uint32   Flags5                                        // add in 4.3.0
     uint32     BuyPrice;                                     // 4
