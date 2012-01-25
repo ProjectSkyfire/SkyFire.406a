@@ -77,7 +77,7 @@ void
 ACE_ODB::dump_objects (void)
 {
   ACE_TRACE ("ACE_ODB::dump_objects");
-  for (int i = 0; i < this->current_size_; ++i)
+  for (int i = 0; i < this->current_size_; i++)
     {
       if (this->object_table_[i].this_ != 0)
         // Dump the state of the object.
@@ -95,7 +95,7 @@ ACE_ODB::register_object (const ACE_Dumpable *dumper)
   int i;
   int slot = 0;
 
-  for (i = 0; i < this->current_size_; ++i)
+  for (i = 0; i < this->current_size_; i++)
     {
       if (this->object_table_[i].this_ == 0)
         slot = i;
@@ -121,7 +121,7 @@ ACE_ODB::remove_object (const void *this_ptr)
   ACE_TRACE ("ACE_ODB::remove_object");
   int i;
 
-  for (i = 0; i < this->current_size_; ++i)
+  for (i = 0; i < this->current_size_; i++)
     {
       if (this->object_table_[i].this_ == this_ptr)
         break;

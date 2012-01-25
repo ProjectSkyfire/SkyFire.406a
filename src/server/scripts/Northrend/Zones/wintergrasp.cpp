@@ -139,7 +139,7 @@ class npc_wg_spirit_guide : public CreatureScript
         if (BfWG)
         {
             GraveYardVect gy = BfWG->GetGraveYardVect();
-            for (uint8 i = 0; i < gy.size(); ++i)
+            for (uint8 i = 0; i < gy.size(); i++)
             {
                 if (gy[i]->GetControlTeamId() == player->GetTeamId())
                 {
@@ -161,7 +161,7 @@ class npc_wg_spirit_guide : public CreatureScript
         if (BfWG)
         {
             GraveYardVect gy = BfWG->GetGraveYardVect();
-            for (uint8 i = 0; i < gy.size(); ++i)
+            for (uint8 i = 0; i < gy.size(); i++)
             {
                 if (action - GOSSIP_ACTION_INFO_DEF == i && gy[i]->GetControlTeamId() == player->GetTeamId())
                 {
@@ -254,7 +254,7 @@ class go_wg_vehicle_teleporter : public GameObjectScript
         {
             if (uiCheckTimer <= diff)
             {
-                for (uint8 i = 0; i < 4; ++i)
+                for (uint8 i = 0; i < 4; i++)
                     if (Creature* vehicle = go->FindNearestCreature(Vehicles[i], 3.0f, true))
                         if (!vehicle->HasAura(SPELL_VEHICLE_TELEPORT))
                         {

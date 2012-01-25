@@ -310,7 +310,7 @@ void WorldSession::HandleGuildSetNoteOpcode(WorldPacket& recvPacket)
 void WorldSession::HandleGuildRankOpcode(WorldPacket& recvPacket)
 {
     uint32 BankStacks[GUILD_BANK_MAX_TABS];
-    for (uint32 i = 0; i < GUILD_BANK_MAX_TABS; ++i)
+    for (uint32 i = 0; i < GUILD_BANK_MAX_TABS; i++)
         recvPacket >> BankStacks[i];
 
     uint32 new_rights;
@@ -323,7 +323,7 @@ void WorldSession::HandleGuildRankOpcode(WorldPacket& recvPacket)
     recvPacket >> old_rankId;
 
     uint32 BankRights[GUILD_BANK_MAX_TABS];
-    for (uint32 i = 0; i < GUILD_BANK_MAX_TABS; ++i)
+    for (uint32 i = 0; i < GUILD_BANK_MAX_TABS; i++)
         recvPacket >> BankRights[i];
 
     uint64 guildId;

@@ -153,7 +153,7 @@ bool DB2FileLoader::Load(const char *filename, const char *fmt)
 
     fieldsOffset = new uint32[fieldCount];
     fieldsOffset[0] = 0;
-    for (uint32 i = 1; i < fieldCount; ++i)
+    for (uint32 i = 1; i < fieldCount; i++)
     {
         fieldsOffset[i] = fieldsOffset[i - 1];
         if (fmt[i - 1] == 'b' || fmt[i - 1] == 'X')  // byte fields

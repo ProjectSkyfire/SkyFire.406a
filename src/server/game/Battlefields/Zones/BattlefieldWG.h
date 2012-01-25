@@ -1510,7 +1510,7 @@ struct BfWGGameObjectBuilding
         if (towerid > 3)
         {
             // Spawn associate gameobjects
-            for (uint8 i = 0; i < AttackTowers[towerid - 4].nbObject; ++i)
+            for (uint8 i = 0; i < AttackTowers[towerid - 4].nbObject; i++)
             {
                 BfWGObjectPosition gob = AttackTowers[towerid - 4].GameObject[i];
                 if (GameObject *go = m_WG->SpawnGameObject(gob.entryh, gob.x, gob.y, gob.z, gob.o))
@@ -1520,7 +1520,7 @@ struct BfWGGameObjectBuilding
             }
 
             // Spawn associate npc bottom
-            for (uint8 i = 0; i < AttackTowers[towerid - 4].nbCreatureBottom; ++i)
+            for (uint8 i = 0; i < AttackTowers[towerid - 4].nbCreatureBottom; i++)
             {
                 BfWGObjectPosition crea = AttackTowers[towerid - 4].CreatureBottom[i];
                 if (Creature *creature = m_WG->SpawnCreature(crea.entryh, crea.x, crea.y, crea.z, crea.o, TEAM_HORDE))
@@ -1530,7 +1530,7 @@ struct BfWGGameObjectBuilding
             }
 
             // Spawn associate npc top
-            for (uint8 i = 0; i < AttackTowers[towerid - 4].nbCreatureTop; ++i)
+            for (uint8 i = 0; i < AttackTowers[towerid - 4].nbCreatureTop; i++)
             {
                 BfWGObjectPosition crea = AttackTowers[towerid - 4].CreatureTop[i];
                 if (Creature *creature = m_WG->SpawnCreature(crea.entryh, crea.x, crea.y, crea.z, crea.o, TEAM_HORDE))
@@ -1543,7 +1543,7 @@ struct BfWGGameObjectBuilding
         if (towerid >= 0)
         {
             // Spawn Turret bottom
-            for (uint8 i = 0; i < TowerTurret[towerid].nbTurretBottom; ++i)
+            for (uint8 i = 0; i < TowerTurret[towerid].nbTurretBottom; i++)
             {
                 BfWGTurretPos turretpos = TowerTurret[towerid].TurretBottom[i];
                 if (Creature *turret = m_WG->SpawnCreature(28366, turretpos.x, turretpos.y, turretpos.z, turretpos.o, TeamId(0)))
@@ -1572,7 +1572,7 @@ struct BfWGGameObjectBuilding
             }
 
             // Spawn Turret top
-            for (uint8 i = 0; i < TowerTurret[towerid].nbTurretTop; ++i)
+            for (uint8 i = 0; i < TowerTurret[towerid].nbTurretTop; i++)
             {
                 BfWGTurretPos turretpos = TowerTurret[towerid].TurretTop[i];
                 if (Creature *turret = m_WG->SpawnCreature(28366, turretpos.x, turretpos.y, turretpos.z, turretpos.o, TeamId(0)))

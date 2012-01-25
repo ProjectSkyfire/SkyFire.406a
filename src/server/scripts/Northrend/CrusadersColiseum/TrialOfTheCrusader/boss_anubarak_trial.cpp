@@ -214,7 +214,7 @@ public:
             if (m_instance)
                 m_instance->SetData(TYPE_ANUBARAK, FAIL);
             //Summon Scarab Swarms neutral at random places
-            for (int i=0; i < 10; ++i)
+            for (int i=0; i < 10; i++)
                 if (Creature* temp = me->SummonCreature(NPC_SCARAB, AnubarakLoc[1].GetPositionX()+urand(0, 50)-25, AnubarakLoc[1].GetPositionY()+urand(0, 50)-25, AnubarakLoc[1].GetPositionZ()))
                     temp->setFaction(31);
         }
@@ -265,10 +265,10 @@ public:
             //Despawn Scarab Swarms neutral
             Summons.DoAction(NPC_SCARAB, ACTION_SCARAB_SUBMERGE);
             //Spawn Burrow
-            for (int i=0; i < 4; ++i)
+            for (int i=0; i < 4; i++)
                 me->SummonCreature(NPC_BURROW, AnubarakLoc[i+2]);
             //Spawn Frost Spheres
-            for (int i=0; i < 6; ++i)
+            for (int i=0; i < 6; i++)
                 if (Unit* summoned = me->SummonCreature(NPC_FROST_SPHERE, SphereSpawn[i]))
                     m_aSphereGUID[i] = summoned->GetGUID();
         }
@@ -409,6 +409,7 @@ public:
             DoMeleeAttackIfReady();
         }
     };
+
 };
 
 class mob_swarm_scarab : public CreatureScript
@@ -475,6 +476,7 @@ public:
             DoMeleeAttackIfReady();
         }
     };
+
 };
 
 class mob_nerubian_burrower : public CreatureScript
@@ -551,6 +553,7 @@ public:
             DoMeleeAttackIfReady();
         }
     };
+
 };
 
 class mob_frost_sphere : public CreatureScript
@@ -700,6 +703,7 @@ public:
             }
         }
     };
+
 };
 
 void AddSC_boss_anubarak_trial()

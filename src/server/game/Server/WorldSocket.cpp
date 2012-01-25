@@ -813,7 +813,7 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     recvPacket >> m_addonSize;
     uint8 * tableauAddon = new uint8[m_addonSize];
     WorldPacket packetAddon;
-    for (uint32 i = 0; i < m_addonSize; ++i)
+    for (uint32 i = 0; i < m_addonSize; i++)
     {
         uint8 ByteSize = 0;
         recvPacket >> ByteSize;

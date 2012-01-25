@@ -858,7 +858,7 @@ int rijndaelKeySetupDec(uint32 rk[/*4*(Nr + 1)*/], const uint8 cipherKey[],
     Apply the inverse MixColumn transform to all round keys but the first
     and the last:
   */
-  for (i = 1; i < nr; ++i)
+  for (i = 1; i < nr; i++)
   {
     rk += 4;
 

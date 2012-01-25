@@ -647,7 +647,7 @@ ACE_Get_Opt::permute_args (void)
 
   this->optind = this->optind - nnonopts;
 
-  for (i = 0; i < ncycle; ++i)
+  for (i = 0; i < ncycle; i++)
     {
       cstart = this->nonopt_end_ + i;
       pos = cstart;

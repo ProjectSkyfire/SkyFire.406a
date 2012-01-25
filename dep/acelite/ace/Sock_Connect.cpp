@@ -587,7 +587,7 @@ get_ip_interfaces_win32 (size_t &count,
   ACE_TCHAR dev_name[16];
 
   count = 0;
-  for (i = 0; count < ACE_MAX_ETS_DEVICES; ++i, ++count)
+  for (i = 0; count < ACE_MAX_ETS_DEVICES; i++, ++count)
     {
       // Ethernet.
       ACE_OS::sprintf (dev_name,
@@ -597,7 +597,7 @@ get_ip_interfaces_win32 (size_t &count,
       if (ip_dev[count] == 0)
         break;
     }
-  for (i = 0; count < ACE_MAX_ETS_DEVICES; ++i, ++count)
+  for (i = 0; count < ACE_MAX_ETS_DEVICES; i++, ++count)
     {
       // SLIP.
       ACE_OS::sprintf (dev_name,
@@ -607,7 +607,7 @@ get_ip_interfaces_win32 (size_t &count,
       if (ip_dev[count] == 0)
         break;
     }
-  for (i = 0; count < ACE_MAX_ETS_DEVICES; ++i, ++count)
+  for (i = 0; count < ACE_MAX_ETS_DEVICES; i++, ++count)
     {
       // PPP.
       ACE_OS::sprintf (dev_name,
@@ -625,7 +625,7 @@ get_ip_interfaces_win32 (size_t &count,
   else
     addrs = 0;
 
-  for (i = 0, j = 0; i < count; ++i)
+  for (i = 0, j = 0; i < count; i++)
     {
       devp = EtsTCPGetDeviceCfg (ip_dev[i]);
       if (devp != 0)
@@ -740,7 +740,7 @@ get_ip_interfaces_win32 (size_t &count,
 # if defined (ACE_HAS_IPV6) && defined (SIO_ADDRESS_LIST_QUERY)
   // Now go through the list and transfer the good ones to the list of
   // because they're down or don't have an IP address.
-  for (i = 0; i < n_v6_interfaces; ++i)
+  for (i = 0; i < n_v6_interfaces; i++)
     {
       struct sockaddr_in6 *addr6p;
 
@@ -937,7 +937,7 @@ get_ip_interfaces_hpux (size_t &count,
 
   for (size_t i = 0;
        i < num_ifs_found;
-       ++i)
+       i++)
     {
         struct sockaddr_in *addr =
             reinterpret_cast<sockaddr_in *> (&pcur->ifr_addr);
@@ -996,7 +996,7 @@ get_ip_interfaces_hpux (size_t &count,
 
       for (size_t i = 0;
            i < num_ifs_found;
-           ++i)
+           i++)
         {
             struct sockaddr_in *addr =
                 reinterpret_cast<sockaddr_in *> (&plcur->iflr_addr);
@@ -1253,7 +1253,7 @@ ACE::get_ip_interfaces (size_t &count, ACE_INET_Addr *&addrs)
 
   for (size_t i = 0;
        i < num_ifs_found;
-       ++i)
+       i++)
     {
       if (pcur->IFR_ADDR.SA_FAMILY == AF_INET
 #  if defined (ACE_HAS_IPV6)
@@ -1429,7 +1429,7 @@ return 0;
   // interface to mark the end of the returned interfaces.
   for (i = 0;
        i < num_ifs;
-       ++i)
+       i++)
     {
       /* In OpenBSD, the length of the list is returned. */
       ifcfg.ifc_len -= sizeof (struct ifreq);

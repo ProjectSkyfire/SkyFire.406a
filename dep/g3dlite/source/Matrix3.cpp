@@ -691,7 +691,7 @@ void Matrix3::singularValueDecomposition (Matrix3& kL, Vector3& kS,
     Matrix3 kA = *this;
     bidiagonalize(kA, kL, kR);
 
-    for (int i = 0; i < ms_iSvdMaxIterations; ++i) {
+    for (int i = 0; i < ms_iSvdMaxIterations; i++) {
         float fTmp, fTmp0, fTmp1;
         float fSin0, fCos0, fTan0;
         float fSin1, fCos1, fTan1;
@@ -1117,7 +1117,7 @@ float Matrix3::maxCubicRoot (float afCoeff[3]) {
     // Newton's method to find root
     float fTwoC2 = 2.0f * afCoeff[2];
 
-    for (int i = 0; i < 16; ++i) {
+    for (int i = 0; i < 16; i++) {
         fPoly = afCoeff[0] + fX * (afCoeff[1] + fX * (afCoeff[2] + fX));
 
         if ( G3D::abs(fPoly) <= fEpsilon )
@@ -1797,7 +1797,7 @@ void Matrix3::eigenSolveSymmetric (float afEigenvalue[3],
     kMatrix.tridiagonal(afEigenvalue, afSubDiag);
     kMatrix.qLAlgorithm(afEigenvalue, afSubDiag);
 
-    for (int i = 0; i < 3; ++i) {
+    for (int i = 0; i < 3; i++) {
         akEigenvector[i][0] = kMatrix[0][i];
         akEigenvector[i][1] = kMatrix[1][i];
         akEigenvector[i][2] = kMatrix[2][i];

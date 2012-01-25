@@ -84,11 +84,11 @@ int find_type(const char *x, const TYPELIB *typelib, uint flags)
     for (i=x ;
         *i && (!(flags & FIND_TYPE_COMMA_TERM) || !is_field_separator(*i)) &&
         my_toupper(&my_charset_latin1,*i) ==
-            my_toupper(&my_charset_latin1,*j) ; ++i, j++) ;
+            my_toupper(&my_charset_latin1,*j) ; i++, j++) ;
     if (! *j)
     {
       while (*i == ' ')
-    ++i;					/* skip_end_space */
+    i++;					/* skip_end_space */
       if (! *i || ((flags & FIND_TYPE_COMMA_TERM) && is_field_separator(*i)))
     DBUG_RETURN(pos+1);
     }
@@ -229,7 +229,7 @@ TYPELIB *copy_typelib(MEM_ROOT *root, TYPELIB *from)
   else
     to->name= NULL;
 
-  for (i= 0; i < from->count; ++i)
+  for (i= 0; i < from->count; i++)
   {
     if (!(to->type_names[i]= strmake_root(root, from->type_names[i],
                                           from->type_lengths[i])))

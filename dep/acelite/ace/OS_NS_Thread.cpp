@@ -5204,7 +5204,7 @@ add_to_argv (int& argc, char** argv, int max_args, char* string)
   if (length > 0)
     {
       // We use <= to make sure that we get the last argument
-      for (size_t i = 0; i <= length; ++i)
+      for (size_t i = 0; i <= length; i++)
         {
           // Is it a double quote that hasn't been escaped?
           if (string[i] == '\"' && (i == 0 || string[i - 1] != '\\'))

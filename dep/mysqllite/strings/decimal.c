@@ -295,7 +295,7 @@ int decimal_actual_fraction(decimal_t *from)
   if (frac > 0)
   {
     for (i= DIG_PER_DEC1 - ((frac - 1) % DIG_PER_DEC1);
-         *buf0 % powers10[++i] == 0;
+         *buf0 % powers10[i++] == 0;
          frac--) ;
   }
   return frac;
@@ -489,7 +489,7 @@ static void digits_bounds(decimal_t *from, int *start_result, int *end_result)
     stop= (int) ((buf_end - from->buf + 1) * DIG_PER_DEC1);
     i= 1;
   }
-  for (; *buf_end % powers10[++i] == 0; stop--) ;
+  for (; *buf_end % powers10[i++] == 0; stop--) ;
   *end_result= stop; /* index of position after last decimal digit (from 0) */
 }
 
@@ -2396,7 +2396,7 @@ void dump_decimal(decimal_t *d)
 {
   int i;
   printf("/* intg=%d, frac=%d, sign=%d, buf[]={", d->intg, d->frac, d->sign);
-  for (i=0; i < ROUND_UP(d->frac)+ROUND_UP(d->intg)-1; ++i)
+  for (i=0; i < ROUND_UP(d->frac)+ROUND_UP(d->intg)-1; i++)
     printf("%09d, ", d->buf[i]);
   printf("%09d} */ ", d->buf[i]);
 }
@@ -2502,7 +2502,7 @@ void test_d2b2d(const char *str, int p, int s, const char *orig, int ex)
   if (full)
   {
     printf("0x");
-    for (i=0; i < size; ++i)
+    for (i=0; i < size; i++)
       printf("%02x", ((uchar *)buf)[i]);
   }
   res=bin2decimal(buf, &a, p, s);

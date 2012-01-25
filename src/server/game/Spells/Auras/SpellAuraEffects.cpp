@@ -720,7 +720,7 @@ int32 AuraEffect::CalculateAmount(Unit* caster)
                     uint32 plrskill = player->GetSkillValue(SKILL_RIDING);
                     uint32 map = GetVirtualMapForMapAndZone(player->GetMapId(), player->GetZoneId());
                     uint32 maxSkill = 0;
-                    for (int i = 0; i < MAX_MOUNT_TYPE_COLUMN; ++i)
+                    for (int i = 0; i < MAX_MOUNT_TYPE_COLUMN; i++)
                     {
                         const MountCapabilityEntry *cap = sMountCapabilityStore.LookupEntry(type->capabilities[i]);
                         if(!cap)
@@ -2448,7 +2448,7 @@ void AuraEffect::HandleFeignDeath(AuraApplication const* aurApp, uint8 mode, boo
             if (!(*iter)->HasUnitState(UNIT_STAT_CASTING))
                 continue;
 
-            for (uint32 i = CURRENT_FIRST_NON_MELEE_SPELL; i < CURRENT_MAX_SPELL; ++i)
+            for (uint32 i = CURRENT_FIRST_NON_MELEE_SPELL; i < CURRENT_MAX_SPELL; i++)
             {
                 if ((*iter)->GetCurrentSpell(i)
                 && (*iter)->GetCurrentSpell(i)->m_targets.GetUnitTargetGUID() == target->GetGUID())
@@ -3683,7 +3683,7 @@ void AuraEffect::HandleModResistancePercent(AuraApplication const* aurApp, uint8
 
     Unit* target = aurApp->GetTarget();
 
-    for (int8 i = SPELL_SCHOOL_NORMAL; i < MAX_SPELL_SCHOOL; ++i)
+    for (int8 i = SPELL_SCHOOL_NORMAL; i < MAX_SPELL_SCHOOL; i++)
     {
         if (GetMiscValue() & int32(1<<i))
         {
@@ -3713,7 +3713,7 @@ void AuraEffect::HandleModBaseResistance(AuraApplication const* aurApp, uint8 mo
     }
     else
     {
-        for (int i = SPELL_SCHOOL_NORMAL; i < MAX_SPELL_SCHOOL; ++i)
+        for (int i = SPELL_SCHOOL_NORMAL; i < MAX_SPELL_SCHOOL; i++)
             if (GetMiscValue() & (1<<i))
                 target->HandleStatModifier(UnitMods(UNIT_MOD_RESISTANCE_START + i), TOTAL_VALUE, float(GetAmount()), apply);
     }
@@ -3767,7 +3767,7 @@ void AuraEffect::HandleAuraModStat(AuraApplication const* aurApp, uint8 mode, bo
         return;
     }
 
-    for (int32 i = STAT_STRENGTH; i < MAX_STATS; ++i)
+    for (int32 i = STAT_STRENGTH; i < MAX_STATS; i++)
     {
         // -1 or -2 is all stats (misc < -2 checked in function beginning)
         if (GetMiscValue() < 0 || GetMiscValue() == i)
@@ -3889,7 +3889,7 @@ void AuraEffect::HandleModTotalPercentStat(AuraApplication const* aurApp, uint8 
     uint32 curHPValue = target->GetHealth();
     uint32 maxHPValue = target->GetMaxHealth();
 
-    for (int32 i = STAT_STRENGTH; i < MAX_STATS; ++i)
+    for (int32 i = STAT_STRENGTH; i < MAX_STATS; i++)
     {
         if (GetMiscValueB() & (1<<i))
         {
@@ -4556,7 +4556,7 @@ void AuraEffect::HandleModDamageDone(AuraApplication const* aurApp, uint8 mode, 
     {
         if (GetAmount() > 0)
         {
-            for (int i = SPELL_SCHOOL_HOLY; i < MAX_SPELL_SCHOOL; ++i)
+            for (int i = SPELL_SCHOOL_HOLY; i < MAX_SPELL_SCHOOL; i++)
             {
                 if ((GetMiscValue() & (1<<i)) != 0)
                     target->ApplyModUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_POS+i, GetAmount(), apply);
@@ -4564,7 +4564,7 @@ void AuraEffect::HandleModDamageDone(AuraApplication const* aurApp, uint8 mode, 
         }
         else
         {
-            for (int i = SPELL_SCHOOL_HOLY; i < MAX_SPELL_SCHOOL; ++i)
+            for (int i = SPELL_SCHOOL_HOLY; i < MAX_SPELL_SCHOOL; i++)
             {
                 if ((GetMiscValue() & (1<<i)) != 0)
                     target->ApplyModUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_NEG+i, GetAmount(), apply);

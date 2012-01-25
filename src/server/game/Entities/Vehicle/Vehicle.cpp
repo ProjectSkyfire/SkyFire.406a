@@ -470,7 +470,7 @@ void Vehicle::Dismiss()
 void Vehicle::TeleportVehicle(float x, float y, float z, float ang)
 {
     vehiclePlayers.clear();
-    for (int8 i = 0; i < 8; ++i)
+    for (int8 i = 0; i < 8; i++)
         if (Unit* player = GetPassenger(i))
             vehiclePlayers.insert(player->GetGUID());
 

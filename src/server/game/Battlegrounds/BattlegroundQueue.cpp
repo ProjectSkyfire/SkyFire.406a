@@ -585,7 +585,7 @@ bool BattlegroundQueue::CheckPremadeMatch(BattlegroundBracketId bracket_id, uint
             //add groups/players from normal queue to size of bigger group
             uint32 maxPlayers = std::min(m_SelectionPools[BG_TEAM_ALLIANCE].GetPlayerCount(), m_SelectionPools[BG_TEAM_HORDE].GetPlayerCount());
             GroupsQueueType::const_iterator itr;
-            for (uint32 i = 0; i < BG_TEAMS_COUNT; ++i)
+            for (uint32 i = 0; i < BG_TEAMS_COUNT; i++)
             {
                 for (itr = m_QueuedGroups[bracket_id][BG_QUEUE_NORMAL_ALLIANCE + i].begin(); itr != m_QueuedGroups[bracket_id][BG_QUEUE_NORMAL_ALLIANCE + i].end(); ++itr)
                 {
@@ -603,7 +603,7 @@ bool BattlegroundQueue::CheckPremadeMatch(BattlegroundBracketId bracket_id, uint
     // if first is invited to BG and seconds timer expired, but we can ignore it, because players have only 80 seconds to click to enter bg
     // and when they click or after 80 seconds the queue info is removed from queue
     uint32 time_before = getMSTime() - sWorld->getIntConfig(CONFIG_BATTLEGROUND_PREMADE_GROUP_WAIT_FOR_MATCH);
-    for (uint32 i = 0; i < BG_TEAMS_COUNT; ++i)
+    for (uint32 i = 0; i < BG_TEAMS_COUNT; i++)
     {
         if (!m_QueuedGroups[bracket_id][BG_QUEUE_PREMADE_ALLIANCE + i].empty())
         {
@@ -624,7 +624,7 @@ bool BattlegroundQueue::CheckPremadeMatch(BattlegroundBracketId bracket_id, uint
 bool BattlegroundQueue::CheckNormalMatch(Battleground* bg_template, BattlegroundBracketId bracket_id, uint32 minPlayers, uint32 maxPlayers)
 {
     GroupsQueueType::const_iterator itr_team[BG_TEAMS_COUNT];
-    for (uint32 i = 0; i < BG_TEAMS_COUNT; ++i)
+    for (uint32 i = 0; i < BG_TEAMS_COUNT; i++)
     {
         itr_team[i] = m_QueuedGroups[bracket_id][BG_QUEUE_NORMAL_ALLIANCE + i].begin();
         for (; itr_team[i] != m_QueuedGroups[bracket_id][BG_QUEUE_NORMAL_ALLIANCE + i].end(); ++(itr_team[i]))
@@ -843,7 +843,7 @@ void BattlegroundQueue::BattlegroundQueueUpdate(uint32 /*diff*/, BattlegroundTyp
                 return;
             }
             //invite those selection pools
-            for (uint32 i = 0; i < BG_TEAMS_COUNT; ++i)
+            for (uint32 i = 0; i < BG_TEAMS_COUNT; i++)
                 for (GroupsQueueType::const_iterator citr = m_SelectionPools[BG_TEAM_ALLIANCE + i].SelectedGroups.begin(); citr != m_SelectionPools[BG_TEAM_ALLIANCE + i].SelectedGroups.end(); ++citr)
                     InviteGroupToBG((*citr), bg2, (*citr)->Team);
             //start bg
@@ -870,7 +870,7 @@ void BattlegroundQueue::BattlegroundQueueUpdate(uint32 /*diff*/, BattlegroundTyp
             }
 
             // invite those selection pools
-            for (uint32 i = 0; i < BG_TEAMS_COUNT; ++i)
+            for (uint32 i = 0; i < BG_TEAMS_COUNT; i++)
                 for (GroupsQueueType::const_iterator citr = m_SelectionPools[BG_TEAM_ALLIANCE + i].SelectedGroups.begin(); citr != m_SelectionPools[BG_TEAM_ALLIANCE + i].SelectedGroups.end(); ++citr)
                     InviteGroupToBG((*citr), bg2, (*citr)->Team);
             // start bg
@@ -919,7 +919,7 @@ void BattlegroundQueue::BattlegroundQueueUpdate(uint32 /*diff*/, BattlegroundTyp
         uint8 found = 0;
         uint8 team = 0;
 
-        for (uint8 i = BG_QUEUE_PREMADE_ALLIANCE; i < BG_QUEUE_NORMAL_ALLIANCE; ++i)
+        for (uint8 i = BG_QUEUE_PREMADE_ALLIANCE; i < BG_QUEUE_NORMAL_ALLIANCE; i++)
         {
             // take the group that joined first
             GroupsQueueType::iterator itr2 = m_QueuedGroups[bracket_id][i].begin();

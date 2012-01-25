@@ -172,7 +172,7 @@ void my_print_open_files(void)
   if (my_file_opened | my_stream_opened)
   {
     uint i;
-    for (i= 0 ; i < my_file_limit ; ++i)
+    for (i= 0 ; i < my_file_limit ; i++)
     {
       if (my_file_info[i].type != UNOPEN)
       {

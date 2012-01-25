@@ -209,7 +209,7 @@ ACE_Multihomed_INET_Addr::set_port_number (u_short port_number, int encode)
 {
   size_t i = 0;
   while (i < secondaries_.size())
-    secondaries_[++i].set_port_number(port_number, encode);
+    secondaries_[i++].set_port_number(port_number, encode);
 
   this->ACE_INET_Addr::set_port_number(port_number, encode);
 }

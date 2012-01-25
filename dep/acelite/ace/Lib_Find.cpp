@@ -663,7 +663,7 @@ ACE::strrepl (char *s, char search, char replace)
 
   size_t replaced = 0;
 
-  for (size_t i = 0; s[i] != '\0'; ++i)
+  for (size_t i = 0; s[i] != '\0'; i++)
     if (s[i] == search)
       {
         s[i] = replace;
@@ -750,7 +750,7 @@ ACE::strrepl (wchar_t *s, wchar_t search, wchar_t replace)
 
   size_t replaced = 0;
 
-  for (size_t i = 0; s[i] != '\0'; ++i)
+  for (size_t i = 0; s[i] != '\0'; i++)
     if (s[i] == search)
       {
         s[i] = replace;

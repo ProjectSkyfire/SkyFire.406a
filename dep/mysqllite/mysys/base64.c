@@ -67,17 +67,17 @@ base64_encode(const void *src, size_t src_len, char *dst)
       *dst++= '\n';
     }
 
-    c= s[++i];
+    c= s[i++];
     c <<= 8;
 
     if (i < src_len)
       c += s[i];
     c <<= 8;
-    ++i;
+    i++;
 
     if (i < src_len)
       c += s[i];
-    ++i;
+    i++;
 
     *dst++= base64_table[(c >> 18) & 0x3f];
     *dst++= base64_table[(c >> 12) & 0x3f];
@@ -107,7 +107,7 @@ pos(unsigned char c)
 {                                                               \
   while (i < size && my_isspace(&my_charset_latin1, * src))     \
   {                                                             \
-    ++i;                                                        \
+    i++;                                                        \
     src++;                                                      \
   }                                                             \
   if (i == size)                                                \
@@ -166,13 +166,13 @@ base64_decode(const char *src_base, size_t len,
 
     c += pos(*src++);
     c <<= 6;
-    ++i;
+    i++;
 
     SKIP_SPACE(src, i, len);
 
     c += pos(*src++);
     c <<= 6;
-    ++i;
+    i++;
 
     SKIP_SPACE(src, i, len);
 
@@ -187,7 +187,7 @@ base64_decode(const char *src_base, size_t len,
       goto end;
     }
     c <<= 6;
-    ++i;
+    i++;
 
     SKIP_SPACE(src, i, len);
 
@@ -200,7 +200,7 @@ base64_decode(const char *src_base, size_t len,
       mark= 1;
       goto end;
     }
-    ++i;
+    i++;
 
   end:
     b[0]= (c >> 16) & 0xff;
@@ -239,7 +239,7 @@ main(void)
   size_t dst_len;
   size_t needed_length;
 
-  for (i= 0; i < 500; ++i)
+  for (i= 0; i < 500; i++)
   {
     /* Create source data */
     const size_t src_len= rand() % 1000 + 1;

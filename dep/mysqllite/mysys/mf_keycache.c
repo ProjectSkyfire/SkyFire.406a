@@ -1521,7 +1521,7 @@ restart:
     {
       int i;
       for (i=0, hash_link= *start ;
-           i < cnt ; ++i, hash_link= hash_link->next)
+           i < cnt ; i++, hash_link= hash_link->next)
       {
         KEYCACHE_DBUG_PRINT("get_hash_link", ("fd: %u  pos: %lu",
             (uint) hash_link->file,(ulong) hash_link->diskpos));
@@ -4246,7 +4246,7 @@ static void keycache_dump(KEY_CACHE *keycache)
     }
     while (thread != last);
 
-  for (i=0 ; i< keycache->blocks_used ; ++i)
+  for (i=0 ; i< keycache->blocks_used ; i++)
   {
     int j;
     block= &keycache->block_root[i];

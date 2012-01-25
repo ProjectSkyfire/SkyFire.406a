@@ -307,7 +307,7 @@ bool World::HasRecentlyDisconnected(WorldSession* session)
                 ++i;
             }
             else
-                m_disconnects.erase(++i);
+                m_disconnects.erase(i++);
         }
     }
     return false;

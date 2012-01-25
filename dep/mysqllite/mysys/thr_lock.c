@@ -1519,11 +1519,11 @@ static void *test_thread(void *arg)
   printf("Thread %s (%d) started\n",my_thread_name(),param); fflush(stdout);
 
   thr_lock_info_init(&lock_info);
-  for (i=0; i < lock_counts[param] ; ++i)
+  for (i=0; i < lock_counts[param] ; i++)
     thr_lock_data_init(locks+tests[param][i].lock_nr,data+i,NULL);
   for (j=1 ; j < 10 ; j++)		/* try locking 10 times */
   {
-    for (i=0; i < lock_counts[param] ; ++i)
+    for (i=0; i < lock_counts[param] ; i++)
     {					/* Init multi locks */
       multi_locks[i]= &data[i];
       data[i].type= tests[param][i].lock_type;
@@ -1581,7 +1581,7 @@ int main(int argc __attribute__((unused)),char **argv __attribute__((unused)))
     exit(1);
   }
 
-  for (i=0 ; i < (int) array_elements(locks) ; ++i)
+  for (i=0 ; i < (int) array_elements(locks) ; i++)
   {
     thr_lock_init(locks+i);
     locks[i].check_status= test_check_status;
@@ -1613,7 +1613,7 @@ int main(int argc __attribute__((unused)),char **argv __attribute__((unused)))
 #ifdef HAVE_THR_SETCONCURRENCY
   (void) thr_setconcurrency(2);
 #endif
-  for (i=0 ; i < (int) array_elements(lock_counts) ; ++i)
+  for (i=0 ; i < (int) array_elements(lock_counts) ; i++)
   {
     param=(int*) malloc(sizeof(int));
     *param=i;
@@ -1647,7 +1647,7 @@ int main(int argc __attribute__((unused)),char **argv __attribute__((unused)))
   }
   if ((error= mysql_mutex_unlock(&LOCK_thread_count)))
     fprintf(stderr, "Got error: %d from mysql_mutex_unlock\n", error);
-  for (i=0 ; i < (int) array_elements(locks) ; ++i)
+  for (i=0 ; i < (int) array_elements(locks) ; i++)
     thr_lock_delete(locks+i);
 #ifdef EXTRA_DEBUG
   if (found_errors)

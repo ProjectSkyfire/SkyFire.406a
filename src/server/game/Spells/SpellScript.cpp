@@ -1006,7 +1006,7 @@ void MasteryScript::CalcAmount(AuraEffect const* aurEff, int32& amount, bool& ca
 
 void MasteryScript::Register()
 {
-    for (uint8 i = EFFECT_0; i < MAX_SPELL_EFFECTS; ++i)
+    for (uint8 i = EFFECT_0; i < MAX_SPELL_EFFECTS; i++)
     {
         if (masteryAuras[i].auraType != SPELL_AURA_NONE)
         {

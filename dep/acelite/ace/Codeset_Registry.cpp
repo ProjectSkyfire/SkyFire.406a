@@ -30,7 +30,7 @@ ACE_Codeset_Registry::locale_to_registry_i (const ACE_CString &locale,
                                             ACE_CDR::UShort **char_sets)
 {
   registry_entry const *element = 0;
-  for (size_t i = 0; element == 0 && i < num_registry_entries_; ++i)
+  for (size_t i = 0; element == 0 && i < num_registry_entries_; i++)
     if (ACE_OS::strcmp (registry_db_[i].loc_name_, locale.c_str ()) == 0)
       element = &registry_db_[i];
   if (element == 0)
@@ -54,7 +54,7 @@ ACE_Codeset_Registry::registry_to_locale_i (ACE_CDR::ULong codeset_id,
                                             ACE_CDR::UShort **char_sets)
 {
   registry_entry const *element = 0;
-  for (size_t i = 0; element == 0 && i < num_registry_entries_; ++i)
+  for (size_t i = 0; element == 0 && i < num_registry_entries_; i++)
     if (codeset_id == registry_db_[i].codeset_id_)
       element = &registry_db_[i];
   if (element == 0)
@@ -77,7 +77,7 @@ ACE_Codeset_Registry::is_compatible_i (ACE_CDR::ULong codeset_id,
 {
   registry_entry const *lhs = 0;
   registry_entry const *rhs = 0;
-  for (size_t i = 0; (lhs == 0 || rhs == 0) && i < num_registry_entries_; ++i)
+  for (size_t i = 0; (lhs == 0 || rhs == 0) && i < num_registry_entries_; i++)
     {
       if (codeset_id == registry_db_[i].codeset_id_)
         lhs = &registry_db_[i];
@@ -98,7 +98,7 @@ ACE_Codeset_Registry::is_compatible_i (ACE_CDR::ULong codeset_id,
 ACE_CDR::Short
 ACE_Codeset_Registry::get_max_bytes_i (ACE_CDR::ULong codeset_id)
 {
-  for (size_t i = 0; i < num_registry_entries_; ++i)
+  for (size_t i = 0; i < num_registry_entries_; i++)
     if (codeset_id == registry_db_[i].codeset_id_)
       return registry_db_[i].max_bytes_;
   return 0;

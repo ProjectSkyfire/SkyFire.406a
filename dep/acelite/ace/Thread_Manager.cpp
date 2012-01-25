@@ -711,7 +711,7 @@ ACE_Thread_Manager::spawn_n (size_t n,
   if (grp_id == -1)
     grp_id = this->grp_id_++; // Increment the group id.
 
-  for (size_t i = 0; i < n; ++i)
+  for (size_t i = 0; i < n; i++)
     {
       // @@ What should happen if this fails?! e.g., should we try to
       // cancel the other threads that we've already spawned or what?
@@ -754,7 +754,7 @@ ACE_Thread_Manager::spawn_n (ACE_thread_t thread_ids[],
   if (grp_id == -1)
     grp_id = this->grp_id_++; // Increment the group id.
 
-  for (size_t i = 0; i < n; ++i)
+  for (size_t i = 0; i < n; i++)
     {
       // @@ What should happen if this fails?! e.g., should we try to
       // cancel the other threads that we've already spawned or what?
@@ -1526,7 +1526,7 @@ ACE_Thread_Manager::wait_grp (int grp_id)
 
   for (int i = 0;
        i < copy_count && result != -1;
-       ++i)
+       i++)
     {
       if (ACE_Thread::join (copy_table[i].thr_handle_) == -1)
         result = -1;
@@ -1789,7 +1789,7 @@ ACE_Thread_Manager::wait_task (ACE_Task_Base *task)
 
   for (int i = 0;
        i < copy_count && result != -1;
-       ++i)
+       i++)
     {
       if (ACE_Thread::join (copy_table[i].thr_handle_) == -1)
         result = -1;

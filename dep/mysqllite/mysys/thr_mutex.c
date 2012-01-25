@@ -418,7 +418,7 @@ ulong mutex_delay(ulong delayloops)
 
   j = 0;
 
-  for (i = 0; i < delayloops * 50; ++i)
+  for (i = 0; i < delayloops * 50; i++)
     j += i;
 
   return(j);
@@ -469,7 +469,7 @@ int my_pthread_fastmutex_lock(my_pthread_fastmutex_t *mp)
   uint  i;
   uint  maxdelay= MY_PTHREAD_FASTMUTEX_DELAY;
 
-  for (i= 0; i < mp->spins; ++i)
+  for (i= 0; i < mp->spins; i++)
   {
     res= pthread_mutex_trylock(&mp->mutex);
 

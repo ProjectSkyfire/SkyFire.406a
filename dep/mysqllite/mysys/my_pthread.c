@@ -140,7 +140,7 @@ void sigwait_setup(sigset_t *set)
   sigemptyset(&unblock_mask);
   pthread_sigmask(SIG_UNBLOCK,(sigset_t*) 0,&rev_sigwait_set);
 
-  for (i = 1; i <= sizeof(sigwait_set)*8; ++i)
+  for (i = 1; i <= sizeof(sigwait_set)*8; i++)
   {
     if (sigismember(set,i))
     {
@@ -251,7 +251,7 @@ void *sigwait_thread(void *set_arg)
   memcpy(&sact.sa_mask, set, sizeof(*set));    /* handler isn't thread_safe */
   sigemptyset(&pending_set);
 
-  for (i = 1; i <= sizeof(pending_set)*8; ++i)
+  for (i = 1; i <= sizeof(pending_set)*8; i++)
   {
     if (sigismember(set,i))
     {

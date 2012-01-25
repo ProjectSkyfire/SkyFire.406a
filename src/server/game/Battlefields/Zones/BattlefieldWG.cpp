@@ -86,7 +86,7 @@ bool BattlefieldWG::SetupBattlefield()
         m_Timer = m_RestartAfterCrash;
     }
 
-    for (uint8 i = 0; i < BATTLEFIELD_WG_GY_MAX; ++i)
+    for (uint8 i = 0; i < BATTLEFIELD_WG_GY_MAX; i++)
     {
         BfGraveYardWG *gy = new BfGraveYardWG(this);
         if (WGGraveYard[i].startcontrol == TEAM_NEUTRAL) // When between games, the graveyard is controlled by the defending team
@@ -98,7 +98,7 @@ bool BattlefieldWG::SetupBattlefield()
     }
 
     // Spawn workshop creatures and gameobjects
-    for (uint8 i = 0; i < WG_MAX_WORKSHOP; ++i)
+    for (uint8 i = 0; i < WG_MAX_WORKSHOP; i++)
     {
         BfWGWorkShopData *ws = new BfWGWorkShopData(this);      // Create new object
         // Init:setup variable
@@ -129,7 +129,7 @@ bool BattlefieldWG::SetupBattlefield()
         WorkShopList.insert(ws);
     }
     // Spawning npc in keep
-    for (uint8 i = 0; i < WG_MAX_KEEP_NPC; ++i)
+    for (uint8 i = 0; i < WG_MAX_KEEP_NPC; i++)
     {
         // Horde npc
         if (Creature* creature = SpawnCreature(WGKeepNPC[i].entryh, WGKeepNPC[i].x, WGKeepNPC[i].y, WGKeepNPC[i].z, WGKeepNPC[i].o, TEAM_HORDE))
@@ -145,11 +145,11 @@ bool BattlefieldWG::SetupBattlefield()
                 HideNpc(creature);
     // Spawn out of keep npc
     // Horde npc
-    for (uint8 i = 0; i < WG_OUTSIDE_ALLIANCE_NPC; ++i)
+    for (uint8 i = 0; i < WG_OUTSIDE_ALLIANCE_NPC; i++)
         if (Creature* creature = SpawnCreature(WGOutsideNPC[i].entryh, WGOutsideNPC[i].x, WGOutsideNPC[i].y, WGOutsideNPC[i].z, WGOutsideNPC[i].o, TEAM_HORDE))
             OutsideCreature[TEAM_HORDE].insert(creature->GetGUID());
     // Alliance npc
-    for (uint8 i = WG_OUTSIDE_ALLIANCE_NPC; i < WG_MAX_OUTSIDE_NPC; ++i)
+    for (uint8 i = WG_OUTSIDE_ALLIANCE_NPC; i < WG_MAX_OUTSIDE_NPC; i++)
         if (Creature* creature = SpawnCreature(WGOutsideNPC[i].entrya, WGOutsideNPC[i].x, WGOutsideNPC[i].y, WGOutsideNPC[i].z, WGOutsideNPC[i].o, TEAM_ALLIANCE))
             OutsideCreature[TEAM_ALLIANCE].insert(creature->GetGUID());
     // Hide outside npc
@@ -157,7 +157,7 @@ bool BattlefieldWG::SetupBattlefield()
         if (Unit* unit = ObjectAccessor::FindUnit(*itr))
             if (Creature* creature = unit->ToCreature())
                 HideNpc(creature);
-    for (uint8 i = 0; i < WG_MAX_TURRET; ++i)
+    for (uint8 i = 0; i < WG_MAX_TURRET; i++)
     {
         if (Creature* creature = SpawnCreature(28366, WGTurret[i].x, WGTurret[i].y, WGTurret[i].z, WGTurret[i].o, TeamId(0)))
         {
@@ -166,7 +166,7 @@ bool BattlefieldWG::SetupBattlefield()
         }
     }
     // Spawning Buiding
-    for (uint8 i = 0; i < WG_MAX_OBJ; ++i)
+    for (uint8 i = 0; i < WG_MAX_OBJ; i++)
     {
         GameObject* go =
             SpawnGameObject(WGGameObjectBuillding[i].entry, WGGameObjectBuillding[i].x, WGGameObjectBuillding[i].y, WGGameObjectBuillding[i].z, WGGameObjectBuillding[i].o);
@@ -175,7 +175,7 @@ bool BattlefieldWG::SetupBattlefield()
         BuildingsInZone.insert(b);
     }
     // Spawning portal defender
-    for (uint8 i = 0; i < WG_MAX_TELEPORTER; ++i)
+    for (uint8 i = 0; i < WG_MAX_TELEPORTER; i++)
     {
         GameObject* go = SpawnGameObject(WGPortalDefenderData[i].entry, WGPortalDefenderData[i].x, WGPortalDefenderData[i].y, WGPortalDefenderData[i].z, WGPortalDefenderData[i].o);
         DefenderPortalList.insert(go);
@@ -183,7 +183,7 @@ bool BattlefieldWG::SetupBattlefield()
     }
 
     // Spawn banner in keep
-    for (uint8 i = 0; i < WG_KEEPGAMEOBJECT_MAX; ++i)
+    for (uint8 i = 0; i < WG_KEEPGAMEOBJECT_MAX; i++)
     {
         if (GameObject* go = SpawnGameObject(WGKeepGameObject[i].entryh, WGKeepGameObject[i].x, WGKeepGameObject[i].y, WGKeepGameObject[i].z, WGKeepGameObject[i].o))
         {
@@ -429,7 +429,7 @@ void BattlefieldWG::OnBattleEnd(bool endbytimer)
     }
 
     // Update all graveyard, control is to defender when no wartime
-    for (uint8 i = 0; i < BATTLEFIELD_WG_GY_HORDE; ++i)
+    for (uint8 i = 0; i < BATTLEFIELD_WG_GY_HORDE; i++)
     {
         if (GetGraveYardById(i))
         {

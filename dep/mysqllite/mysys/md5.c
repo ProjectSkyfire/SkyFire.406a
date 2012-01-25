@@ -313,7 +313,7 @@ main (int argc, char **argv)
     my_MD5Init (&context);
     my_MD5Update (&context, argv[j], strlen (argv[j]));
     my_MD5Final (checksum, &context);
-    for (i = 0; i < 16; ++i)
+    for (i = 0; i < 16; i++)
     {
       printf ("%02x", (unsigned int) checksum[i]);
     }

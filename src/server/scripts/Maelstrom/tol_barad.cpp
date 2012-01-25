@@ -48,7 +48,7 @@ public:
         if (BfTB)
         {
             GraveYardVect gy = BfTB->GetGraveYardVect();
-            for (uint8 i = 0; i<gy.size(); ++i)
+            for (uint8 i = 0; i<gy.size(); i++)
             {
                 if (gy[i]->GetControlTeamId() == player->GetTeamId())
                 {
@@ -69,7 +69,7 @@ public:
         if (BfTB)
         {
             GraveYardVect gy = BfTB->GetGraveYardVect();
-            for (uint8 i = 0; i<gy.size(); ++i)
+            for (uint8 i = 0; i<gy.size(); i++)
             {
                 if (action-GOSSIP_ACTION_INFO_DEF == i && gy[i]->GetControlTeamId() == player->GetTeamId())
                 {

@@ -115,17 +115,17 @@ size_t my_fcvt(double x, int precision, char *to, my_bool *error)
   {
     *dst++= '0';
     *dst++= '.';
-    for (i= decpt; i < 0; ++i)
+    for (i= decpt; i < 0; i++)
       *dst++= '0';
   }
 
-  for (i= 1; i <= len; ++i)
+  for (i= 1; i <= len; i++)
   {
     *dst++= *src++;
     if (i == decpt && i < len)
       *dst++= '.';
   }
-  while (++i <= decpt)
+  while (i++ <= decpt)
     *dst++= '0';
 
   if (precision > 0)
@@ -356,13 +356,13 @@ size_t my_gcvt(double x, my_gcvt_arg_type type, int width, char *to,
         *dst++= '0';
     }
 
-    for (i= 1; i <= len && dst < dend; ++i)
+    for (i= 1; i <= len && dst < dend; i++)
     {
       *dst++= *src++;
       if (i == decpt && i < len && dst < dend)
         *dst++= '.';
     }
-    while (++i <= decpt && dst < dend)
+    while (i++ <= decpt && dst < dend)
       *dst++= '0';
   }
   else
@@ -795,7 +795,7 @@ static Bigint *s2b(const char *s, int nd0, int nd, ULong y9, Stack_alloc *alloc)
   }
   else
     s+= 10;
-  for(; i < nd; ++i)
+  for(; i < nd; i++)
     b= multadd(b, 10, *s++ - '0', alloc);
   return b;
 }
@@ -1036,7 +1036,7 @@ static Bigint *lshift(Bigint *b, int k, Stack_alloc *alloc)
     k1++;
   b1= Balloc(k1, alloc);
   x1= b1->p.x;
-  for (i= 0; i < n; ++i)
+  for (i= 0; i < n; i++)
     *x1++= 0;
   x= b->p.x;
   xe= x + b->wds;
@@ -1389,7 +1389,7 @@ static double my_strtod_int(const char *s00, char **se, int *error, char *buf, s
       if (c-= '0')
       {
         nf+= nz;
-        for (i= 1; i < nz; ++i)
+        for (i= 1; i < nz; i++)
           if (nd++ < 9)
             y*= 10;
           else if (nd <= DBL_DIG + 1)
@@ -2347,7 +2347,7 @@ static char *dtoa(double dd, int mode, int ndigits, int *decpt, int *sign,
         dval(&u)/= bigtens[n_bigtens-1];
         ieps++;
       }
-      for (; j; j>>= 1, ++i)
+      for (; j; j>>= 1, i++)
       {
         if (j & 1)
         {
@@ -2360,7 +2360,7 @@ static char *dtoa(double dd, int mode, int ndigits, int *decpt, int *sign,
     else if ((j1= -k))
     {
       dval(&u)*= tens[j1 & 0xf];
-      for (j= j1 >> 4; j; j>>= 1, ++i)
+      for (j= j1 >> 4; j; j>>= 1, i++)
       {
         if (j & 1)
         {
@@ -2413,7 +2413,7 @@ static char *dtoa(double dd, int mode, int ndigits, int *decpt, int *sign,
     {
       /* Generate ilim digits, then fix them up. */
       dval(&eps)*= tens[ilim-1];
-      for (i= 1;; ++i, dval(&u)*= 10.)
+      for (i= 1;; i++, dval(&u)*= 10.)
       {
         L= (Long)(dval(&u));
         if (!(dval(&u)-= L))
@@ -2453,7 +2453,7 @@ static char *dtoa(double dd, int mode, int ndigits, int *decpt, int *sign,
         goto no_digits;
       goto one_digit;
     }
-    for (i= 1;; ++i, dval(&u)*= 10.)
+    for (i= 1;; i++, dval(&u)*= 10.)
     {
       L= (Long)(dval(&u) / ds);
       dval(&u)-= L*ds;
@@ -2629,7 +2629,7 @@ one_digit:
       mhi= lshift(mhi, Log2P, &alloc);
     }
 
-    for (i= 1;;++i)
+    for (i= 1;;i++)
     {
       dig= quorem(b,S) + '0';
       /* Do we yet have the shortest decimal string that will round to d? */
@@ -2707,7 +2707,7 @@ keep_dig:
     }
   }
   else
-    for (i= 1;; ++i)
+    for (i= 1;; i++)
     {
       *s++= dig= quorem(b,S) + '0';
       if (!b->p.x[0] && b->wds <= 1)

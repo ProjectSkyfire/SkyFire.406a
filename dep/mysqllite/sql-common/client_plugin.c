@@ -266,7 +266,7 @@ void mysql_client_plugin_deinit()
   if (!initialized)
     return;
 
-  for (i=0; i < MYSQL_CLIENT_MAX_PLUGINS; ++i)
+  for (i=0; i < MYSQL_CLIENT_MAX_PLUGINS; i++)
     for (p= plugin_list[i]; p; p= p->next)
     {
       if (p->plugin->deinit)

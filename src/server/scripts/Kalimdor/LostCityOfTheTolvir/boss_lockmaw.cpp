@@ -128,7 +128,7 @@ class boss_lockmaw : public CreatureScript
                         case EVENT_SCENT_OF_BLOOD:
                             if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, true))
                                 DoCast(me->getVictim(), SPELL_SCENT_OF_BLOOD);
-                                for (uint8 i=0; i<4; ++i)
+                                for (uint8 i=0; i<4; i++)
                                 {
                                   Creature* Crocolisk = me->SummonCreature(NPC_FRENZIED_CROCOLISK, SummonLocations[i], TEMPSUMMON_CORPSE_DESPAWN);
                                   Crocolisk->AddThreat(me->getVictim(), 0.0f);

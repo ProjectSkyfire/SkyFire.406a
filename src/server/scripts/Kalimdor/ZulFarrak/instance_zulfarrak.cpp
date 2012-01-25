@@ -309,7 +309,7 @@ public:
         }
 
         void SpawnPyramidWave(uint32 wave){
-            for (int i = 0; i < pyramidSpawnTotal; ++i)
+            for (int i = 0; i < pyramidSpawnTotal; i++)
             {
                 if (pyramidSpawns[i][0] == (float)wave)
                 {

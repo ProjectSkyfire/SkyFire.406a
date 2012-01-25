@@ -72,7 +72,7 @@ ACE_Capabilities::parse (const ACE_TCHAR *buf, ACE_TString &cap)
               int oc = 0;
               for (int i = 0;
                    i < 3 && *buf && ACE_OS::ace_isdigit (*buf);
-                   ++i)
+                   i++)
                 oc = oc * 8 + (*buf++ - ACE_TEXT ('0'));
 
               cap += (ACE_TCHAR) oc;

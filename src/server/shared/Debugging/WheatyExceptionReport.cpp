@@ -594,7 +594,7 @@ PVOID addr, PTSTR szModule, DWORD len, DWORD& section, DWORD_PTR& offset)
     // the linear address.
     for (unsigned i = 0;
         i < pNtHdr->FileHeader.NumberOfSections;
-        ++i, pSection++)
+        i++, pSection++)
     {
         DWORD_PTR sectionStart = pSection->VirtualAddress;
         DWORD_PTR sectionEnd = sectionStart
@@ -895,7 +895,7 @@ char* /*Name*/)
     pszCurrBuffer += sprintf(pszCurrBuffer, "\r\n");
 
     // Iterate through each of the children
-    for (unsigned i = 0; i < dwChildrenCount; ++i)
+    for (unsigned i = 0; i < dwChildrenCount; i++)
     {
         // Add appropriate indentation level (since this routine is recursive)
         for (unsigned j = 0; j <= nestingLevel+1; j++)

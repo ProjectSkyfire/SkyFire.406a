@@ -699,7 +699,7 @@ ACE_DLL_Manager::find_dll (const ACE_TCHAR *dll_name) const
 {
   ACE_TRACE ("ACE_DLL_Manager::find_dll");
 
-  for (int i = 0; i < this->current_size_; ++i)
+  for (int i = 0; i < this->current_size_; i++)
     if (this->handle_vector_[i] &&
         ACE_OS::strcmp (this->handle_vector_[i]->dll_name (), dll_name) == 0)
       {

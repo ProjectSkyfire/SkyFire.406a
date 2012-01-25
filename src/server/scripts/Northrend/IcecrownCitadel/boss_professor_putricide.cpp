@@ -408,7 +408,7 @@ class boss_professor_putricide : public CreatureScript
                             {
                                 std::list<Creature*>::iterator itr = list.begin();
                                 std::advance(itr, urand(0, list.size()-1));
-                                _oozeFloodDummyGUIDs[++i] = (*itr)->GetGUID();
+                                _oozeFloodDummyGUIDs[i++] = (*itr)->GetGUID();
                                 list.erase(itr);
                             }
                         }

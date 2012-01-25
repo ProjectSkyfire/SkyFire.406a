@@ -175,7 +175,7 @@ ACE_TLI_Request_Queue::close (void)
   ACE_TRACE ("ACE_TLI_Request_Queue::close");
   int res = 0;
 
-  for (int i = 0; i < this->size_; ++i)
+  for (int i = 0; i < this->size_; i++)
     {
       ACE_TLI_Request &item = this->base_[i];
 
@@ -203,7 +203,7 @@ ACE_TLI_Request_Queue::open (ACE_HANDLE f, int sz)
 
   // Initialize the ACE_Queue and the free list.
 
-  for (int i = 0; i < this->size_; ++i)
+  for (int i = 0; i < this->size_; i++)
     {
       ACE_TLI_Request *item = &this->base_[i];
       this->free (item);

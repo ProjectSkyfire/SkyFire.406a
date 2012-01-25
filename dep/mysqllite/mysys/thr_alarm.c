@@ -253,7 +253,7 @@ void thr_end_alarm(thr_alarm_t *alarmed)
   mysql_mutex_lock(&LOCK_alarm);
 
   alarm_data= (ALARM*) ((uchar*) *alarmed - offsetof(ALARM,alarmed));
-  for (i=0 ; i < alarm_queue.elements ; ++i)
+  for (i=0 ; i < alarm_queue.elements ; i++)
   {
     if ((ALARM*) queue_element(&alarm_queue,i) == alarm_data)
     {
@@ -358,7 +358,7 @@ static sig_handler process_alarm_part2(int sig __attribute__((unused)))
       queue_remove(&alarm_queue,i);		/* No thread. Remove alarm */
     }
     else
-      ++i;					/* Signal next thread */
+      i++;					/* Signal next thread */
       }
 #ifndef USE_ALARM_THREAD
       if (alarm_queue.elements)
@@ -480,7 +480,7 @@ void thr_alarm_kill(my_thread_id thread_id)
   if (alarm_aborted)
     return;
   mysql_mutex_lock(&LOCK_alarm);
-  for (i=0 ; i < alarm_queue.elements ; ++i)
+  for (i=0 ; i < alarm_queue.elements ; i++)
   {
     if (((ALARM*) queue_element(&alarm_queue,i))->thread_id == thread_id)
     {
@@ -702,7 +702,7 @@ static void *test_thread(void *arg)
   FD_ZERO(&fd);
   my_thread_init();
   printf("Thread %d (%s) started\n",param,my_thread_name()); fflush(stdout);
-  for (i=1 ; i <= 10 ; ++i)
+  for (i=1 ; i <= 10 ; i++)
   {
     wait_time=param ? 11-i : i;
     start_time= my_time(0);
@@ -905,7 +905,7 @@ int main(int argc __attribute__((unused)),char **argv __attribute__((unused)))
   thr_setconcurrency(3);
   pthread_attr_setscope(&thr_attr,PTHREAD_SCOPE_PROCESS);
   printf("Main thread: %s\n",my_thread_name());
-  for (i=0 ; i < 2 ; ++i)
+  for (i=0 ; i < 2 ; i++)
   {
     param=(int*) malloc(sizeof(int));
     *param= i;

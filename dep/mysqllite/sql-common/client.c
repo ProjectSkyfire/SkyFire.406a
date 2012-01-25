@@ -421,7 +421,7 @@ HANDLE create_named_pipe(MYSQL *mysql, uint connect_timeout, char **arg_host,
        unix_socket, NullS);
   DBUG_PRINT("info",("Server name: '%s'.  Named Pipe: %s", host, unix_socket));
 
-  for (i=0 ; i < 100 ; ++i)			/* Don't retry forever */
+  for (i=0 ; i < 100 ; i++)			/* Don't retry forever */
   {
     if ((hPipe = CreateFile(pipe_name,
                 GENERIC_READ | GENERIC_WRITE,
@@ -541,7 +541,7 @@ HANDLE create_shared_memory(MYSQL *mysql,NET *net, uint connect_timeout)
     shared_memory_base_name is unique value for each server
     unique_part is uniquel value for each object (events and file-mapping)
   */
-  for (i = 0; i< array_elements(name_prefixes); ++i)
+  for (i = 0; i< array_elements(name_prefixes); i++)
   {
     prefix= name_prefixes[i];
     suffix_pos = strxmov(tmp, prefix , shared_memory_base_name, "_", NullS);

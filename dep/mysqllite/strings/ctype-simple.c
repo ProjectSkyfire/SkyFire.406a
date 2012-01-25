@@ -1068,7 +1068,7 @@ skip:
     j= search+1;
 
     while (j != search_end)
-      if (cs->sort_order[*++i] != cs->sort_order[*j++])
+      if (cs->sort_order[*i++] != cs->sort_order[*j++])
             goto skip;
 
     if (nmatch > 0)
@@ -1130,7 +1130,7 @@ static my_bool create_fromuni(CHARSET_INFO *cs, void *(*alloc)(size_t))
   bzero(idx,sizeof(idx));
 
   /* Count number of characters in each plane */
-  for (i=0; i< 0x100; ++i)
+  for (i=0; i< 0x100; i++)
   {
     uint16 wc=cs->tab_to_uni[i];
     int pl= PLANE_NUMBER(wc);
@@ -1153,7 +1153,7 @@ static my_bool create_fromuni(CHARSET_INFO *cs, void *(*alloc)(size_t))
   /* Sort planes in descending order */
   qsort(&idx,PLANE_NUM,sizeof(uni_idx),&pcmp);
 
-  for (i=0; i < PLANE_NUM; ++i)
+  for (i=0; i < PLANE_NUM; i++)
   {
     int ch,numchars;
 
@@ -1183,7 +1183,7 @@ static my_bool create_fromuni(CHARSET_INFO *cs, void *(*alloc)(size_t))
   if (!(cs->tab_from_uni= (MY_UNI_IDX*) alloc(sizeof(MY_UNI_IDX)*(n+1))))
     return TRUE;
 
-  for (i=0; i< n; ++i)
+  for (i=0; i< n; i++)
     cs->tab_from_uni[i]= idx[i].uidx;
 
   /* Set end-of-list marker */
@@ -1208,7 +1208,7 @@ static void set_max_sort_char(CHARSET_INFO *cs)
     return;
 
   max_char=cs->sort_order[(uchar) cs->max_sort_char];
-  for (i= 0; i < 256; ++i)
+  for (i= 0; i < 256; i++)
   {
     if ((uchar) cs->sort_order[i] > max_char)
     {

@@ -387,10 +387,10 @@ void PlayerMenu::SendQuestGiverQuestDetails(Quest const* quest, uint64 npcGUID, 
     data << int32(quest->GetRewSpellCast());
     data << uint32(0); // unknown 4.0.6a Spellcast?
 
-    for (int i = 0; i < QUEST_CURRENCY_COUNT; ++i)
+    for (int i = 0; i < QUEST_CURRENCY_COUNT; i++)
         data << uint32(quest->RewCurrencyId[i]);
 
-    for (int i = 0; i < QUEST_CURRENCY_COUNT; ++i)
+    for (int i = 0; i < QUEST_CURRENCY_COUNT; i++)
         data << uint32(quest->RewCurrencyCount[i]);
 
     data << uint32(0);
@@ -674,10 +674,10 @@ void PlayerMenu::SendQuestGiverOfferReward(Quest const* quest, uint64 npcGUID, b
     data << int32(quest->GetRewSpellCast());
     data << uint32(0); // Maybe invisible spell cast
 
-    for (int i = 0; i < QUEST_CURRENCY_COUNT; ++i)
+    for (int i = 0; i < QUEST_CURRENCY_COUNT; i++)
         data << uint32(quest->RewCurrencyId[i]);
 
-    for (int i = 0; i < QUEST_CURRENCY_COUNT; ++i)
+    for (int i = 0; i < QUEST_CURRENCY_COUNT; i++)
         data << uint32(quest->RewCurrencyCount[i]);
 
     data << uint32(0);
@@ -754,7 +754,7 @@ void PlayerMenu::SendQuestGiverRequestItems(Quest const* quest, uint64 npcGUID, 
     // Added in 4.0.1
     uint32 counter = 0;
     data << counter;
-    for (uint32 i = 0; i < counter; ++i)
+    for (uint32 i = 0; i < counter; i++)
     {
         data << uint32(0);
         data << uint32(0);

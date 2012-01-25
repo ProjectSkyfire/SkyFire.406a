@@ -1888,7 +1888,7 @@ int main(int argc, char** argv)
   if (!(block=(char*)my_malloc(max_block,MYF(MY_WME))))
     die("Not enough memory to allocate test block");
   block_end = block + max_block;
-  for (p = block,i=0; p < block_end;++i)
+  for (p = block,i=0; p < block_end;i++)
   {
     *p++ = (char)i;
   }
@@ -1898,7 +1898,7 @@ int main(int argc, char** argv)
       die("Delete of %s failed, aborting", fname);
     }
   open_file(fname,&sra_cache, cache_size);
-  for (i = 0; i < num_loops; ++i)
+  for (i = 0; i < num_loops; i++)
   {
     char buf[4];
     int block_size = abs(rand() % max_block);

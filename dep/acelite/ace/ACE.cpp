@@ -314,7 +314,7 @@ ACE::hash_pjw (const char *str, size_t len)
 {
   u_long hash = 0;
 
-  for (size_t i = 0; i < len; ++i)
+  for (size_t i = 0; i < len; i++)
     {
       const char temp = str[i];
       hash = (hash << 4) + (temp * 13);
@@ -343,7 +343,7 @@ ACE::hash_pjw (const wchar_t *str, size_t len)
 {
   u_long hash = 0;
 
-  for (size_t i = 0; i < len; ++i)
+  for (size_t i = 0; i < len; i++)
     {
       // @@ UNICODE: Does this function do the correct thing with wchar's?
 
@@ -930,7 +930,7 @@ ACE::recv (ACE_HANDLE handle, size_t n, ...)
 
   va_start (argp, n);
 
-  for (int i = 0; i < total_tuples; ++i)
+  for (int i = 0; i < total_tuples; i++)
     {
       iovp[i].iov_base = va_arg (argp, char *);
       iovp[i].iov_len = va_arg (argp, int);
@@ -1703,7 +1703,7 @@ ACE::send (ACE_HANDLE handle, size_t n, ...)
 
   va_start (argp, n);
 
-  for (int i = 0; i < total_tuples; ++i)
+  for (int i = 0; i < total_tuples; i++)
     {
       iovp[i].iov_base = va_arg (argp, char *);
       iovp[i].iov_len = va_arg (argp, int);
@@ -2290,7 +2290,7 @@ ACE::format_hexdump (const char *buffer,
   size_t i;
 
   size_t const lines = size / 16;
-  for (i = 0; i < lines; ++i)
+  for (i = 0; i < lines; i++)
     {
       size_t j;
 
@@ -2326,7 +2326,7 @@ ACE::format_hexdump (const char *buffer,
 
   if (size % 16)
     {
-      for (i = 0 ; i < size % 16; ++i)
+      for (i = 0 ; i < size % 16; i++)
         {
           c = (u_char) buffer[size - size % 16 + i];
           ACE_OS::sprintf (obuf,
@@ -2342,7 +2342,7 @@ ACE::format_hexdump (const char *buffer,
           textver[i] = ACE_OS::ace_isprint (c) ? c : '.';
         }
 
-      for (i = size % 16; i < 16; ++i)
+      for (i = size % 16; i < 16; i++)
         {
           ACE_OS::sprintf (obuf,
                            ACE_TEXT ("   "));

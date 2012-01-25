@@ -187,7 +187,7 @@ public:
 
                 // not sure about the amount, and if we should despawn previous spawns (dragon trashs)
                 summons.DespawnAll();
-                for (uint8 i = 0; i < 6; ++i)
+                for (uint8 i = 0; i < 6; i++)
                     DoCast(SPELL_PLANAR_ANOMALIES);
             }
         }
@@ -221,7 +221,7 @@ public:
                         events.ScheduleEvent(EVENT_ENRAGED_ASSAULT, urand(35, 50) * IN_MILLISECONDS, 0, PHASE_NORMAL);
                         break;
                     case EVENT_SUMMON_LEY_WHELP:
-                        for (uint8 i = 0; i < 3; ++i)
+                        for (uint8 i = 0; i < 3; i++)
                             DoCast(SPELL_SUMMON_LEY_WHELP);
                         events.ScheduleEvent(EVENT_SUMMON_LEY_WHELP, urand(15, 30) * IN_MILLISECONDS, 0, PHASE_NORMAL);
                         break;

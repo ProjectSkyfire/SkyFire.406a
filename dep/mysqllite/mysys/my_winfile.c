@@ -58,7 +58,7 @@ File my_open_osfhandle(HANDLE handle, int oflag)
   DBUG_ENTER("my_open_osfhandle");
 
   mysql_mutex_lock(&THR_LOCK_open);
-  for(i= MY_FILE_MIN; i < my_file_limit;++i)
+  for(i= MY_FILE_MIN; i < my_file_limit;i++)
   {
     if(my_file_info[i].fhandle == 0)
     {
@@ -495,7 +495,7 @@ File my_win_fileno(FILE *file)
 
   DBUG_ENTER("my_win_fileno");
 
-  for(i= MY_FILE_MIN; i < my_file_limit; ++i)
+  for(i= MY_FILE_MIN; i < my_file_limit; i++)
   {
     if(my_file_info[i].fhandle == hFile)
     {

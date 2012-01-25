@@ -188,7 +188,7 @@ static void my_demangle_symbols(char **addrs, int n)
   int status, i;
   char *begin, *end, *demangled;
 
-  for (i= 0; i < n; ++i)
+  for (i= 0; i < n; i++)
   {
     demangled= NULL;
     begin= strchr(addrs[i], '(');
@@ -584,7 +584,7 @@ void my_print_stacktrace(uchar* unused1, ulong unused2)
   package.sym.MaxNameLength= sizeof(package.name);
 
   /*Walk the stack, output useful information*/
-  for(i= 0; i< STACKWALK_MAX_FRAMES;++i)
+  for(i= 0; i< STACKWALK_MAX_FRAMES;i++)
   {
     DWORD64 function_offset= 0;
     DWORD line_offset= 0;
