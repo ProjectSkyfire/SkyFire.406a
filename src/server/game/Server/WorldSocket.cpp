@@ -259,7 +259,7 @@ int WorldSocket::open (void *a)
 
     m_Address = remote_addr.get_host_addr();
 
-    WorldPacket packet(MSG_VERIFY_CONNECTIVITY); 
+    WorldPacket packet(SMSG_VERIFY_CONNECTIVITY);
     packet << "RLD OF WARCRAFT CONNECTION - SERVER TO CLIENT"; 
 
     if (SendPacket(packet) == -1)
@@ -718,9 +718,9 @@ int WorldSocket::ProcessIncoming (WorldPacket* new_pct)
                 sLog->outStaticDebug("CMSG_LOG_DISCONNECT , size: " UI64FMTD, uint64(new_pct->size()));
                 sScriptMgr->OnPacketReceive(this, WorldPacket(*new_pct));
                 return 0;
-            case MSG_VERIFY_CONNECTIVITY: 
-                sLog->outStaticDebug("MSG_VERIFY_CONNECTIVITY , size: " UI64FMTD, uint64(new_pct->size())); 
-                sScriptMgr->OnPacketReceive(this, WorldPacket(*new_pct)); 
+            case CMSG_VERIFY_CONNECTIVITY_RESPONSE:
+                sLog->outStaticDebug("CSMSG_VERIFY_CONNECTIVITY_RESPONSE , size: " UI64FMTD, uint64(new_pct->size()));
+                sScriptMgr->OnPacketReceive(this, WorldPacket(*new_pct));
                 return HandleSendAuthSession(); 
 
             default:
@@ -770,14 +770,19 @@ int WorldSocket::ProcessIncoming (WorldPacket* new_pct)
 
 int WorldSocket::HandleSendAuthSession() 
 { 
-    WorldPacket packet(SMSG_AUTH_CHALLENGE, 33); 
- 
-    for (uint32 i = 0; i < 8; i++) 
-        packet << uint32(0); 
- 
-    packet << m_Seed; 
-    packet << uint8(1); 
-    return SendPacket(packet); 
+    WorldPacket packet(SMSG_AUTH_CHALLENGE, 37);
+    packet << uint32(0);
+    packet << uint32(0);
+    packet << uint32(0);
+    packet << uint32(0);
+    packet << m_Seed;
+    packet << uint8(1);
+    packet << uint32(0);
+    packet << uint32(0);
+    packet << uint32(0);
+    packet << uint32(0);
+
+    return SendPacket(packet);
 } 
 
 int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
