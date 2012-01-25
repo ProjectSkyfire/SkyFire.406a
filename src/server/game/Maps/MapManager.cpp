@@ -74,7 +74,7 @@ void MapManager::InitializeVisibilityDistanceInfo()
 void MapManager::checkAndCorrectGridStatesArray()
 {
     bool ok = true;
-    for (int i=0; i<MAX_GRID_STATE; i++)
+    for (int i=0; i<MAX_GRID_STATE; ++i)
     {
         if (i_GridStates[i] != si_GridStates[i])
         {

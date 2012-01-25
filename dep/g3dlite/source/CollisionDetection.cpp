@@ -181,7 +181,7 @@ bool CollisionDetection::parallelAxisForSolidBoxSolidBox(
         int & axis1,
         int & axis2) {
     const double parallelDot = 1.0 - epsilon;
-    for (int i = 0; i < 9; i++) {
+    for (int i = 0; i < 9; ++i) {
         if (ca[i] >= parallelDot) {
             axis1 = i / 3;
             axis2 = i % 3;
@@ -213,14 +213,14 @@ void CollisionDetection::fillSolidBoxSolidBoxInfo(
     // corresponds to c[row * 3 + col] for this 9 element array.
     //
     // c[] holds signed values, ca[] hold absolute values
-    for (int i = 0; i < 9; i++) {
+    for (int i = 0; i < 9; ++i) {
         c[i] = dot(box1.axis(i / 3), box2.axis(i % 3));
         ca[i] = fabs(c[i]);
     }
 
     // store all possible dot products between the axes of box1 and D,
     // as well as the axes of box2 and D
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < 3; ++i) {
         ad[i] = dot(box1.axis(i), D);
         bd[i] = dot(box2.axis(i), D);
     }
@@ -272,7 +272,7 @@ bool CollisionDetection::fixedSolidBoxIntersectsFixedSolidBox(
     // any of the three axes of box1, any of the three axes of box2,
     // or any of the 9 possible cross products of axes from box1
     // and box2
-    for (int i = 0; i < 15; i++) {
+    for (int i = 0; i < 15; ++i) {
         // do not need to check edge-edge cases if any two of
         // the axes are parallel
         if (parallelAxes && i == 6) {
@@ -372,7 +372,7 @@ float CollisionDetection::penetrationDepthForFixedBoxFixedBox(
 	float penetration = -finf();
     int penetrationAxisIndex = -1;
 
-    for (int i = 0; i < 6; i++) {
+    for (int i = 0; i < 6; ++i) {
         float projectedDistance =
             projectedDistanceForSolidBoxSolidBox(i, a, b, D, c, ca, ad, bd);
 
@@ -395,7 +395,7 @@ float CollisionDetection::penetrationDepthForFixedBoxFixedBox(
 	    double edgeDistances[9];
 
 		// run through edge-edge cases to see if we can find a separating axis
-		for (int i = 6; i < 15; i++) {
+		for (int i = 6; i < 15; ++i) {
 			float projectedDistance =
 				projectedDistanceForSolidBoxSolidBox(i, a, b, D, c, ca, ad, bd);
 
@@ -412,7 +412,7 @@ float CollisionDetection::penetrationDepthForFixedBoxFixedBox(
 
 		// no separating axis found, the boxes do intersect,
 		// correct the magnitudes of the projectedDistance values
-		for (int i = 6; i < 15; i++) {
+		for (int i = 6; i < 15; ++i) {
 			// find the negative penetration value with the smallest magnitude,
 			// the adjustment done for the edge-edge cases only increases
 			// magnitude by dividing by a number smaller than 1 and greater than 0
@@ -464,7 +464,7 @@ float CollisionDetection::penetrationDepthForFixedBoxFixedBox(
         // face normal direction
         int deepestPointIndex = 0;
         float deepestPointDot = dot(faceNormal, vertexBox->corner(0));
-        for (int i = 1; i < 8; i++) {
+        for (int i = 1; i < 8; ++i) {
             float dotProduct = dot(faceNormal, vertexBox->corner(i));
             if (dotProduct < deepestPointDot) {
                 deepestPointDot = dotProduct;
@@ -487,7 +487,7 @@ float CollisionDetection::penetrationDepthForFixedBoxFixedBox(
 
         // find edge line by finding the edge axis, and the
         // other two axes that are closest to the other box
-        for (int i = 0; i < 3; i++ ) {
+        for (int i = 0; i < 3; ++i ) {
             if (i == edge1) {
                 lineDir1 = box1.axis(i);
             } else {

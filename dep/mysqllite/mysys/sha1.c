@@ -180,7 +180,7 @@ int mysql_sha1_result(SHA1_CONTEXT *context,
     context->Computed = 1;
   }
 
-  for (i = 0; i < SHA1_HASH_SIZE; i++)
+  for (i = 0; i < SHA1_HASH_SIZE; ++i)
     Message_Digest[i] = (int8)((context->Intermediate_Hash[i>>2] >> 8
              * ( 3 - ( i & 0x03 ) )));
   return SHA_SUCCESS;
@@ -376,7 +376,7 @@ static void SHA1PadMessage(SHA1_CONTEXT *context)
 
   if (i > 55)
   {
-    context->Message_Block[i++] = 0x80;
+    context->Message_Block[++i] = 0x80;
     bzero((char*) &context->Message_Block[i],
       sizeof(context->Message_Block[0])*(64-i));
     context->Message_Block_Index=64;
@@ -390,7 +390,7 @@ static void SHA1PadMessage(SHA1_CONTEXT *context)
   }
   else
   {
-    context->Message_Block[i++] = 0x80;
+    context->Message_Block[++i] = 0x80;
     bzero((char*) &context->Message_Block[i],
       sizeof(context->Message_Block[0])*(56-i));
     context->Message_Block_Index=56;

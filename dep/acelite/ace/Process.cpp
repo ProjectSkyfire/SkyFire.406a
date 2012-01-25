@@ -506,7 +506,7 @@ ACE_Process::spawn (ACE_Process_Options &options)
           {
             // Add the new environment variables to the environment
             // context of the context before doing an <execvp>.
-            for (size_t i = 0; procenv[i] != 0; i++)
+            for (size_t i = 0; procenv[i] != 0; ++i)
               if (ACE_OS::putenv (procenv[i]) != 0)
                 return ACE_INVALID_PID;
 
@@ -943,7 +943,7 @@ ACE_Process_Options::setenv (ACE_TCHAR *envp[])
       if (this->setenv_i (envp[i],
                           ACE_OS::strlen (envp[i])) == -1)
         return -1;
-      i++;
+      ++i;
     }
 
 #if defined (ACE_WIN32)

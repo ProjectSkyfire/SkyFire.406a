@@ -221,7 +221,7 @@ class Quest
         uint32 GetBonusTalents() const { return BonusTalents; }
         int32  GetRewArenaPoints() const
         {
-            for (uint8 i = 0; i < QUEST_CURRENCY_COUNT; i++)
+            for (uint8 i = 0; i < QUEST_CURRENCY_COUNT; ++i)
             {
                 if (RewCurrencyId[i] == 390) // Conquest points
                     return RewCurrencyCount[i];

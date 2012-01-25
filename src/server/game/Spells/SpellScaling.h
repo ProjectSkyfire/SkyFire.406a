@@ -58,7 +58,7 @@ public:
         _canScale = false;
         _castTime = 0;
 
-        for (uint8 i = 0; i < 3; i++)
+        for (uint8 i = 0; i < 3; ++i)
         {
             avg[i] = 0.0f;
             min[i] = 0.0f;

@@ -47,7 +47,7 @@ void WorldSession::HandleLearnPreviewTalents(WorldPacket& recvPacket)
     if (spec != ((uint32)-1))
     {
         uint32 specID = 0;
-        for (uint32 i = 0; i < sTalentTabStore.GetNumRows(); i++)
+        for (uint32 i = 0; i < sTalentTabStore.GetNumRows(); ++i)
         {
             TalentTabEntry const * entry = sTalentTabStore.LookupEntry(i);
             if (entry)
@@ -84,7 +84,7 @@ void WorldSession::HandleLearnPreviewTalents(WorldPacket& recvPacket)
     uint32 pointInBranchSpec = 0;
     for (PlayerTalentMap::iterator itr = _player->_talents[_player->_activeSpec]->begin(); itr != _player->_talents[_player->_activeSpec]->end(); itr++)
     {
-        for (uint32 i = 0; i < sTalentStore.GetNumRows(); i++)
+        for (uint32 i = 0; i < sTalentStore.GetNumRows(); ++i)
         {
             const TalentEntry * thisTalent = sTalentStore.LookupEntry(i);
             if (thisTalent)

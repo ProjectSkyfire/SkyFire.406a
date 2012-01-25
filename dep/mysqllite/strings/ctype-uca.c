@@ -7897,7 +7897,7 @@ static my_bool create_tailoring(CHARSET_INFO *cs, void *(*alloc)(size_t))
     Calculate maximum lenghts for the pages
     which will be overwritten.
   */
-  for (i=0; i < rc; i++)
+  for (i=0; i < rc; ++i)
   {
     if (!rule[i].curr[1]) /* If not a contraction */
     {
@@ -7911,7 +7911,7 @@ static my_bool create_tailoring(CHARSET_INFO *cs, void *(*alloc)(size_t))
       ncontractions++;
   }
 
-  for (i=0; i < rc;  i++)
+  for (i=0; i < rc;  ++i)
   {
     uint pageb= (rule[i].base >> 8) & 0xFF;
     uint pagec= (rule[i].curr[0] >> 8) & 0xFF;
@@ -7951,7 +7951,7 @@ static my_bool create_tailoring(CHARSET_INFO *cs, void *(*alloc)(size_t))
   }
 
   /* Copy non-overwritten pages from the default UCA weights */
-  for (i= 0; i < 256 ; i++)
+  for (i= 0; i < 256 ; ++i)
   {
     if (!newweights[i])
       newweights[i]= defweights[i];
@@ -7974,7 +7974,7 @@ static my_bool create_tailoring(CHARSET_INFO *cs, void *(*alloc)(size_t))
         return 1;
     bzero((void*)cs->contractions, size);
     contraction_flags= ((char*) cs->contractions) + 0x40*0x40;
-    for (i=0; i < rc; i++)
+    for (i=0; i < rc; ++i)
     {
       if (rule[i].curr[1])
       {

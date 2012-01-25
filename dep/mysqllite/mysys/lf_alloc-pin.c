@@ -214,7 +214,7 @@ void _lf_pinbox_put_pins(LF_PINS *pins)
 #ifdef MY_LF_EXTRA_DEBUG
   {
     int i;
-    for (i= 0; i < LF_PINBOX_PINS; i++)
+    for (i= 0; i < LF_PINBOX_PINS; ++i)
       DBUG_ASSERT(pins->pin[i] == 0);
   }
 #endif
@@ -287,7 +287,7 @@ static int harvest_pins(LF_PINS *el, struct st_harvester *hv)
   LF_PINS *el_end= el+min(hv->npins, LF_DYNARRAY_LEVEL_LENGTH);
   for (; el < el_end; el++)
   {
-    for (i= 0; i < LF_PINBOX_PINS; i++)
+    for (i= 0; i < LF_PINBOX_PINS; ++i)
     {
       void *p= el->pin[i];
       if (p)
@@ -313,7 +313,7 @@ static int match_pins(LF_PINS *el, void *addr)
   int i;
   LF_PINS *el_end= el+LF_DYNARRAY_LEVEL_LENGTH;
   for (; el < el_end; el++)
-    for (i= 0; i < LF_PINBOX_PINS; i++)
+    for (i= 0; i < LF_PINBOX_PINS; ++i)
       if (el->pin[i] == addr)
         return 1;
   return 0;
@@ -528,7 +528,7 @@ uint lf_alloc_pool_count(LF_ALLOCATOR *allocator)
 {
   uint i;
   uchar *node;
-  for (node= allocator->top, i= 0; node; node= anext_node(node), i++)
+  for (node= allocator->top, i= 0; node; node= anext_node(node), ++i)
     /* no op */;
   return i;
 }

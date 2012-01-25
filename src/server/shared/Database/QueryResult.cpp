@@ -160,7 +160,7 @@ bool ResultSet::NextRow()
         return false;
     }
 
-    for (uint32 i = 0; i < m_fieldCount; i++)
+    for (uint32 i = 0; i < m_fieldCount; ++i)
         m_currentRow[i].SetStructuredValue(row[i], m_fields[i].type);
 
     return true;

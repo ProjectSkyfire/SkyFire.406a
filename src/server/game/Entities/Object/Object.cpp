@@ -398,7 +398,7 @@ void Object::_BuildMovementUpdate(ByteBuffer * data, uint16 flags) const
    {
        uint8 bytes = 0;
        *data << bytes;
-       for (uint8 i = 0; i < bytes; i++)
+       for (uint8 i = 0; i < bytes; ++i)
            *data << uint32(0);
    }
 }

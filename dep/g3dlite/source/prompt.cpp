@@ -342,7 +342,7 @@ static int guiPrompt(
         2, 2, width - 4, height - buttonHeight - 7, IDC_MESSAGE);
 
     int i;
-    for (i = 0; i < numChoices; i++) {
+    for (i = 0; i < numChoices; ++i) {
         int x = buttonSpacing + i * (buttonWidth + buttonSpacing);
         int y = height - buttonHeight - buttonSpacing;
 
@@ -457,7 +457,7 @@ static int textPrompt(
         while ((c < 0) || (c >= numChoices)) {
             printf("\n");
 
-            for (int i = 0; i < numChoices; i++) {
+            for (int i = 0; i < numChoices; ++i) {
                 if (numChoices <= 3) {
                     printf("  (%d) %s ", i, choice[i]);
                 } else {

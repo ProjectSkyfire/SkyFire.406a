@@ -813,7 +813,7 @@ my_real_read(NET *net, size_t *complen)
 #endif /* NO_ALARM */
 
     pos = net->buff + net->where_b;		/* net->packet -4 */
-    for (i=0 ; i < 2 ; i++)
+    for (i=0 ; i < 2 ; ++i)
     {
       while (remain > 0)
       {

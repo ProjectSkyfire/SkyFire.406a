@@ -214,7 +214,7 @@ int main(int argc __attribute__((unused)),char **argv)
     printf("my_gethwaddr failed with errno %d\n", errno);
     exit(1);
   }
-  for (i=0; i < sizeof(mac); i++)
+  for (i=0; i < sizeof(mac); ++i)
   {
     if (i) printf(":");
     printf("%02x", mac[i]);

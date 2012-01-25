@@ -55,7 +55,7 @@ void BIH::subdivide(int left, int right, std::vector<uint32> &tempTree, buildDat
         Vector3 d( gridBox.hi - gridBox.lo );
         if (d.x < 0 || d.y < 0 || d.z < 0)
             throw std::logic_error("negative node extents");
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 3; ++i)
         {
             if (nodeBox.hi[i] < gridBox.lo[i] || nodeBox.lo[i] > gridBox.hi[i])
             {
@@ -81,7 +81,7 @@ void BIH::subdivide(int left, int right, std::vector<uint32> &tempTree, buildDat
             if (center <= split)
             {
                 // stay left
-                i++;
+                ++i;
                 if (clipL < maxb)
                     clipL = maxb;
             }

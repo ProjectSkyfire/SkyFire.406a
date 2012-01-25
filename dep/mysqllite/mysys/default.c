@@ -270,7 +270,7 @@ int my_search_option_files(const char *conf_file, int *argc, char ***argv,
                                    (2*group->count+1)*sizeof(char*))))
       DBUG_RETURN(2);
 
-    for (i= 0; i < group->count; i++)
+    for (i= 0; i < group->count; ++i)
     {
       size_t len;
       extra_groups[i]= group->type_names[i]; /** copy group */
@@ -536,7 +536,7 @@ int my_load_defaults(const char *conf_file, const char **groups,
       set_args_separator(&res[1]);
       j++;
     }
-    for (i=2 ; i < (uint) *argc ; i++, j++)
+    for (i=2 ; i < (uint) *argc ; ++i, j++)
       res[j]=argv[0][i];
     res[j]=0;					/* End pointer */
     /*
@@ -620,7 +620,7 @@ int my_load_defaults(const char *conf_file, const char **groups,
     int i;
     printf("%s would have been started with the following arguments:\n",
        **argv);
-    for (i=1 ; i < *argc ; i++)
+    for (i=1 ; i < *argc ; ++i)
       if (!my_getopt_is_args_separator((*argv)[i])) /* skip arguments separator */
         printf("%s ", (*argv)[i]);
     puts("");
@@ -835,7 +835,7 @@ static int search_default_file_with_ext(Process_option_func opt_handler,
         if (!(search_dir= my_dir(ptr, MYF(MY_WME))))
           goto err;
 
-        for (i= 0; i < (uint) search_dir->number_off_files; i++)
+        for (i= 0; i < (uint) search_dir->number_off_files; ++i)
         {
           search_file= search_dir->dir_entry + i;
           ext= fn_ext(search_file->name);

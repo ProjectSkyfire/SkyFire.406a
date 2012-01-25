@@ -83,7 +83,7 @@ int32 ReputationMgr::GetBaseReputation(FactionEntry const* factionEntry) const
 
     uint32 raceMask = _player->getRaceMask();
     uint32 classMask = _player->getClassMask();
-    for (int i=0; i < 4; i++)
+    for (int i=0; i < 4; ++i)
     {
         if ((factionEntry->BaseRepRaceMask[i] & raceMask  ||
             (factionEntry->BaseRepRaceMask[i] == 0  &&
@@ -137,7 +137,7 @@ uint32 ReputationMgr::GetDefaultStateFlags(FactionEntry const* factionEntry) con
 
     uint32 raceMask = _player->getRaceMask();
     uint32 classMask = _player->getClassMask();
-    for (int i=0; i < 4; i++)
+    for (int i=0; i < 4; ++i)
     {
         if ((factionEntry->BaseRepRaceMask[i] & raceMask  ||
             (factionEntry->BaseRepRaceMask[i] == 0  &&
@@ -255,7 +255,7 @@ void ReputationMgr::Initialize()
     m_reveredFactionCount = 0;
     m_exaltedFactionCount = 0;
 
-    for (unsigned int i = 1; i < sFactionStore.GetNumRows(); i++)
+    for (unsigned int i = 1; i < sFactionStore.GetNumRows(); ++i)
     {
         FactionEntry const* factionEntry = sFactionStore.LookupEntry(i);
 

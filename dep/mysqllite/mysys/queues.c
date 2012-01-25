@@ -614,7 +614,7 @@ static void benchmark_test()
   {
     printf("Start benchmark queue_fix, tot_no_parts= %u \n", tot_no_parts);
     start_measurement();
-    for (i= 0; i < 128; i++)
+    for (i= 0; i < 128; ++i)
     {
       perform_insert(queue);
       queue_remove_all(queue);
@@ -624,7 +624,7 @@ static void benchmark_test()
     fix_used= FALSE;
     printf("Start benchmark queue_insert\n");
     start_measurement();
-    for (i= 0; i < 128; i++)
+    for (i= 0; i < 128; ++i)
     {
       perform_insert(queue);
       queue_remove_all(queue);
@@ -639,7 +639,7 @@ static void benchmark_test()
   printf("Start benchmarking _downheap \n");
   start_measurement();
   perform_insert(queue);
-  for (i= 0; i < 65536; i++)
+  for (i= 0; i < 65536; ++i)
   {
     uint num, part;
     num= *(uint*)queue_top(queue);
@@ -649,7 +649,7 @@ static void benchmark_test()
     queue_top(queue)= (uchar*)&num_array[part];
     queue_replaced(queue);
   }
-  for (i= 0; i < 16; i++)
+  for (i= 0; i < 16; ++i)
     queue_remove(queue, (uint) 0);
   queue_remove_all(queue);
   stop_measurement();

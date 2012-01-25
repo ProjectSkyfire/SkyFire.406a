@@ -504,7 +504,7 @@ public:
                         case EVENT_CHAIN:
                         {
                             uint32 count = urand(1, 3);
-                            for (uint8 i = 1; i <= count; i++)
+                            for (uint8 i = 1; i <= count; ++i)
                             {
                                 Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 200, true);
                                 if (target && !target->isCharmed() && (chained.find(target->GetGUID()) == chained.end()))

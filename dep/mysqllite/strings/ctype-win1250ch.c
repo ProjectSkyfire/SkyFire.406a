@@ -416,7 +416,7 @@ static struct wordvalue doubles[] = {
             : _sort_order_win1250ch2[*p]);			\
         if (value == 0xff) {					\
             int i;						\
-            for (i = 0; i < (int) sizeof(doubles); i++) {	\
+            for (i = 0; i < (int) sizeof(doubles); ++i) {	\
                 const uchar *patt = doubles[i].word;	\
                 const uchar *q = (const uchar *) p;	\
                 while (*patt				\

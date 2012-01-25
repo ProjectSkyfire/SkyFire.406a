@@ -1340,7 +1340,7 @@ ACE_POSIX_AIOCB_Proactor::allocate_aio_slot (ACE_POSIX_Asynch_Result *result)
     }
   else  //try to find free slot as usual, but starting from 1
     {
-      for (i= 1; i < this->aiocb_list_max_size_; i++)
+      for (i= 1; i < this->aiocb_list_max_size_; ++i)
         if (result_list_[i] == 0)
           break;
     }
@@ -1427,7 +1427,7 @@ ACE_POSIX_AIOCB_Proactor::start_deferred_aio ()
 
   size_t i = 0;
 
-  for (i= 0; i < this->aiocb_list_max_size_; i++)
+  for (i= 0; i < this->aiocb_list_max_size_; ++i)
     if (result_list_[i] !=0       // check for
        && aiocb_list_[i]  ==0)     // deferred AIO
       break;
@@ -1801,7 +1801,7 @@ ACE_POSIX_SIG_Proactor::allocate_aio_slot (ACE_POSIX_Asynch_Result *result)
   size_t i = 0;
 
   //try to find free slot as usual, starting from 0
-  for (i = 0; i < this->aiocb_list_max_size_; i++)
+  for (i = 0; i < this->aiocb_list_max_size_; ++i)
     if (result_list_[i] == 0)
       break;
 

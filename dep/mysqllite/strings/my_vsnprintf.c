@@ -377,7 +377,7 @@ start:
     uint i;
     print_arr[idx].end= fmt;
     /* Obtain parameters from the list */
-    for (i= 0 ; i < arg_count; i++)
+    for (i= 0 ; i < arg_count; ++i)
     {
       switch (args_arr[i].arg_type) {
       case 's':
@@ -410,7 +410,7 @@ start:
       }
     }
     /* Print result string */
-    for (i= 0; i <= idx; i++)
+    for (i= 0; i <= idx; ++i)
     {
       size_t width= 0, length= 0;
       switch (print_arr[i].arg_type) {

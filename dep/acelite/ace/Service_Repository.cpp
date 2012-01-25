@@ -278,7 +278,7 @@ ACE_Service_Repository::find_i (const ACE_TCHAR name[],
   size_t i = 0;
   array_type::const_iterator element = this->service_array_.end ();
 
-  for (i = 0; i < this->service_array_.size(); i++)
+  for (i = 0; i < this->service_array_.size(); ++i)
     {
       array_type::const_iterator iter = this->service_array_.find (i);
       if (iter != this->service_array_.end ()
@@ -326,7 +326,7 @@ ACE_Service_Repository::relocate_i (size_t begin,
 {
   ACE_SHLIB_HANDLE new_handle = adll.get_handle (0);
 
-  for (size_t i = begin; i < end; i++)
+  for (size_t i = begin; i < end; ++i)
     {
       ACE_Service_Type *type =
         const_cast<ACE_Service_Type *> (this->service_array_[i]);

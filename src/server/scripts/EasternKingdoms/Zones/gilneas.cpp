@@ -1005,7 +1005,7 @@ public:
 
         void MultiDistanceMeter(Point *p, uint8 pointsCount, float *dist)
         {
-            for (uint8 i = 0; i <= (pointsCount-1); i++)
+            for (uint8 i = 0; i <= (pointsCount-1); ++i)
             {
                 dist[i] = me->GetDistance2d(p[i].x, p[i].y);
             }
@@ -1016,7 +1016,7 @@ public:
             WayPointID nearestPointID;
             float dist[PATHS_COUNT][10], lowestDists[PATHS_COUNT];
             uint8 nearestPointsID[PATHS_COUNT], lowestDist;
-            for (uint8 i = 0; i <= PATHS_COUNT-1; i++)
+            for (uint8 i = 0; i <= PATHS_COUNT-1; ++i)
             {
                 MultiDistanceMeter(paths.paths[i], paths.pointsCount[i], dist[i]);
                 for (uint8 j = 0; j <= paths.pointsCount[i]-1; j++)
@@ -1033,7 +1033,7 @@ public:
                     }
                 }
             }
-            for (uint8 i = 0; i < PATHS_COUNT; i++)
+            for (uint8 i = 0; i < PATHS_COUNT; ++i)
             {
                 if (i == 0)
                     {
@@ -1180,7 +1180,7 @@ public:
                     switch (phase)
                     {
                         case 1:
-                            for (int i = 0; i < 8; i++)
+                            for (int i = 0; i < 8; ++i)
                                 me->SummonCreature(35456, me->GetPositionX()+10, me->GetPositionY()+10, me->GetPositionZ(), 0, TEMPSUMMON_CORPSE_DESPAWN, 10000);
                             me->SummonCreature(35167, -1672.92f, 1449.13f, 52.28f, 0, TEMPSUMMON_CORPSE_DESPAWN, 10000);
                         break;
@@ -1190,7 +1190,7 @@ public:
                         break;
 
                         case 3:
-                            for (int i = 0; i < 10; i++)
+                            for (int i = 0; i < 10; ++i)
                                 me->SummonCreature(35456, me->GetPositionX()+10, me->GetPositionY()+10, me->GetPositionZ(), 0, TEMPSUMMON_CORPSE_DESPAWN, 10000);
                             me->SummonCreature(35188, -1672.92f, 1449.13f, 52.28f, 0, TEMPSUMMON_CORPSE_DESPAWN, 10000);
                         break;
@@ -1200,13 +1200,13 @@ public:
                         break;
 
                         case 5:
-                            for (int i = 0; i < 7; i++)
+                            for (int i = 0; i < 7; ++i)
                                 me->SummonCreature(35456, me->GetPositionX()+10, me->GetPositionY()+10, me->GetPositionZ(), 0, TEMPSUMMON_CORPSE_DESPAWN, 10000);
                             me->SummonCreature(35167, -1672.92f, 1449.13f, 52.28f, 0, TEMPSUMMON_CORPSE_DESPAWN, 10000);
                         break;
 
                         case 6:
-                            for (int i = 0; i < 7; i++)
+                            for (int i = 0; i < 7; ++i)
                                 me->SummonCreature(35456, me->GetPositionX()+10, me->GetPositionY()+10, me->GetPositionZ(), 0, TEMPSUMMON_CORPSE_DESPAWN, 10000);
                             me->SummonCreature(35188, -1672.92f, 1449.13f, 52.28f, 0, TEMPSUMMON_CORPSE_DESPAWN, 10000);
                         break;
@@ -1278,7 +1278,7 @@ public:
 
     bool OnQuestAccept(Player* player, Creature* creature, Quest const* quest)
     {
-        for (int i = 0; i < 30; i++)
+        for (int i = 0; i < 30; ++i)
             player->KilledMonsterCredit(35582, 0);
 
         player->TeleportTo(654, -1533.76f, 1582.44f, 26.54f, 4.05f);

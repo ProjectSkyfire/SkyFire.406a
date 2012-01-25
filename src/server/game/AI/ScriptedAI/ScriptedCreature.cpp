@@ -60,10 +60,10 @@ void SummonList::DespawnEntry(uint32 entry)
     {
         Creature* summon = Unit::GetCreature(*me, *i);
         if (!summon)
-            erase(i++);
+            erase(++i);
         else if (summon->GetEntry() == entry)
         {
-            erase(i++);
+            erase(++i);
             summon->DespawnOrUnsummon();
         }
         else
@@ -93,7 +93,7 @@ void SummonList::RemoveNotExisting()
         if (Unit::GetCreature(*me, *i))
             ++i;
         else
-            erase(i++);
+            erase(++i);
     }
 }
 
@@ -103,7 +103,7 @@ bool SummonList::HasEntry(uint32 entry)
     {
         Creature* summon = Unit::GetCreature(*me, *i);
         if (!summon)
-            erase(i++);
+            erase(++i);
         else if (summon->GetEntry() == entry)
             return true;
         else
@@ -216,7 +216,7 @@ SpellInfo const* ScriptedAI::SelectSpell(Unit* target, uint32 school, uint32 mec
     SpellInfo const* tempSpell = NULL;
 
     //Check if each spell is viable(set it to null if not)
-    for (uint32 i = 0; i < CREATURE_MAX_SPELLS; i++)
+    for (uint32 i = 0; i < CREATURE_MAX_SPELLS; ++i)
     {
         tempSpell = sSpellMgr->GetSpellInfo(me->_spells[i]);
 

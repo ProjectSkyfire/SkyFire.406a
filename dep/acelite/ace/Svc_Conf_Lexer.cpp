@@ -648,7 +648,7 @@ ACE_Svc_Conf_Lexer::locate_bom (char* source,
     { 3, "\xef\xbb\xbf",     ACE_Encoding_Converter_Factory::ACE_UTF_8    },
   };
 
-  for (size_t i = 0; i < sizeof (boms) / sizeof (bom); i++)
+  for (size_t i = 0; i < sizeof (boms) / sizeof (bom); ++i)
     {
       if (source_size >= boms[i].length_)
         {

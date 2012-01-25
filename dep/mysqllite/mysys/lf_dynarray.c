@@ -55,7 +55,7 @@ static void recursive_free(void **alloc, int level)
   if (level)
   {
     int i;
-    for (i= 0; i < LF_DYNARRAY_LEVEL_LENGTH; i++)
+    for (i= 0; i < LF_DYNARRAY_LEVEL_LENGTH; ++i)
       recursive_free(alloc[i], level-1);
     my_free(alloc);
   }
@@ -66,7 +66,7 @@ static void recursive_free(void **alloc, int level)
 void lf_dynarray_destroy(LF_DYNARRAY *array)
 {
   int i;
-  for (i= 0; i < LF_DYNARRAY_LEVELS; i++)
+  for (i= 0; i < LF_DYNARRAY_LEVELS; ++i)
     recursive_free(array->level[i], i);
   my_atomic_rwlock_destroy(&array->lock);
 }
@@ -177,7 +177,7 @@ static int recursive_iterate(LF_DYNARRAY *array, void *ptr, int level,
     return 0;
   if (!level)
     return func(ptr, arg);
-  for (i= 0; i < LF_DYNARRAY_LEVEL_LENGTH; i++)
+  for (i= 0; i < LF_DYNARRAY_LEVEL_LENGTH; ++i)
     if ((res= recursive_iterate(array, ((void **)ptr)[i], level-1, func, arg)))
       return res;
   return 0;
@@ -191,7 +191,7 @@ static int recursive_iterate(LF_DYNARRAY *array, void *ptr, int level,
     lf_dynarray consists of a set of arrays, LF_DYNARRAY_LEVEL_LENGTH elements
     each. _lf_dynarray_iterate() calls user-supplied function on every array
     from the set. It is the fastest way to scan the array, faster than
-      for (i=0; i < N; i++) { func(_lf_dynarray_value(dynarray, i)); }
+      for (i=0; i < N; ++i) { func(_lf_dynarray_value(dynarray, i)); }
 
   NOTE
     if func() returns non-zero, the scan is aborted
@@ -199,7 +199,7 @@ static int recursive_iterate(LF_DYNARRAY *array, void *ptr, int level,
 int _lf_dynarray_iterate(LF_DYNARRAY *array, lf_dynarray_func func, void *arg)
 {
   int i, res;
-  for (i= 0; i < LF_DYNARRAY_LEVELS; i++)
+  for (i= 0; i < LF_DYNARRAY_LEVELS; ++i)
     if ((res= recursive_iterate(array, array->level[i], i, func, arg)))
       return res;
   return 0;

@@ -48,11 +48,11 @@ struct MySQLConnectionInfo
 
         uint8 i = 0;
 
-        host.assign(tokens[i++]);
-        port_or_socket.assign(tokens[i++]);
-        user.assign(tokens[i++]);
-        password.assign(tokens[i++]);
-        database.assign(tokens[i++]);
+        host.assign(tokens[++i]);
+        port_or_socket.assign(tokens[++i]);
+        user.assign(tokens[++i]);
+        password.assign(tokens[++i]);
+        database.assign(tokens[++i]);
     }
 
     std::string user;

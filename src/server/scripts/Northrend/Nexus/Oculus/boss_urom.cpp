@@ -108,7 +108,7 @@ public:
 
             if (instance->GetData(DATA_UROM_PLATAFORM) == 0)
             {
-                for (uint8 i = 0; i < 3; i++)
+                for (uint8 i = 0; i < 3; ++i)
                     group[i] = 0;
             }
 
@@ -167,7 +167,7 @@ public:
 
             while (group[0] == group[1] || group[0] == group[2] || group[1] == group[2])
             {
-                for (uint8 i = 0; i < 3; i++)
+                for (uint8 i = 0; i < 3; ++i)
                     group[i] = urand(0, 2);
             }
         }
@@ -202,7 +202,7 @@ public:
             if (!instance || instance->GetData(DATA_UROM_PLATAFORM) > 2)
                 return;
 
-            for (uint8 i = 0; i < 4 ; i++)
+            for (uint8 i = 0; i < 4 ; ++i)
             {
                 SetPosition(i);
                 me->SummonCreature(Group[group[instance->GetData(DATA_UROM_PLATAFORM)]].entry[i], x, y, me->GetPositionZ(), me->GetOrientation());

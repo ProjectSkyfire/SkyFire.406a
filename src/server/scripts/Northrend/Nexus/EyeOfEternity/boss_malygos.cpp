@@ -462,7 +462,7 @@ public:
             me->GetMotionMaster()->MoveIdle();
             me->GetMotionMaster()->MovePoint(MOVE_DEEP_BREATH_ROTATION, MalygosPhaseTwoWaypoints[0]);
 
-            for (uint8 i = 0; i < 2; i++)
+            for (uint8 i = 0; i < 2; ++i)
             {
                 // Starting position. One starts from the first waypoint and another from the last.
                 uint8 pos = !i ? MAX_HOVER_DISK_WAYPOINTS-1 : 0;
@@ -931,7 +931,7 @@ public:
             switch (action)
             {
                 case ACTION_HOVER_DISK_START_WP_1:
-                    for (uint8 i = 0; i < MAX_HOVER_DISK_WAYPOINTS; i++)
+                    for (uint8 i = 0; i < MAX_HOVER_DISK_WAYPOINTS; ++i)
                         AddWaypoint(i, HoverDiskWaypoints[i].GetPositionX(), HoverDiskWaypoints[i].GetPositionY(), HoverDiskWaypoints[i].GetPositionZ());
                     break;
                 case ACTION_HOVER_DISK_START_WP_2:

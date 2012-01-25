@@ -319,7 +319,7 @@ ACE_SOCK_Dgram::send (const iovec iov[],
   int i;
 
   // Determine the total length of all the buffers in <iov>.
-  for (i = 0; i < n; i++)
+  for (i = 0; i < n; ++i)
 #if ! (defined(__BORLANDC__) || defined(linux) || defined(ACE_HAS_RTEMS))
     // The iov_len is unsigned on Linux, RTEMS and with Borland. If we go
     // ahead and try the if, it will emit a warning.
@@ -341,7 +341,7 @@ ACE_SOCK_Dgram::send (const iovec iov[],
 
   char *ptr = buf;
 
-  for (i = 0; i < n; i++)
+  for (i = 0; i < n; ++i)
     {
       ACE_OS::memcpy (ptr, iov[i].iov_base, iov[i].iov_len);
       ptr += iov[i].iov_len;
@@ -368,7 +368,7 @@ ACE_SOCK_Dgram::recv (iovec iov[],
   ssize_t length = 0;
   int i;
 
-  for (i = 0; i < n; i++)
+  for (i = 0; i < n; ++i)
 #if ! (defined(__BORLANDC__) || defined(linux) || defined(ACE_HAS_RTEMS))
     // The iov_len is unsigned on Linux, RTEMS and with Borland. If we go
     // ahead and try the if, it will emit a warning.
@@ -397,7 +397,7 @@ ACE_SOCK_Dgram::recv (iovec iov[],
 
       for (i = 0;
            i < n && copyn > 0;
-           i++)
+           ++i)
         {
           ACE_OS::memcpy (iov[i].iov_base, ptr,
                           // iov_len is int on some platforms, size_t on others

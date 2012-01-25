@@ -147,7 +147,7 @@ static int fill_uchar(uchar *a,uint size,const char *str, size_t len)
   uint i= 0;
   const char *s, *b, *e=str+len;
 
-  for (s=str ; s < e ; i++)
+  for (s=str ; s < e ; ++i)
   {
     for ( ; (s < e) && strchr(" \t\r\n",s[0]); s++) ;
     b=s;
@@ -164,7 +164,7 @@ static int fill_uint16(uint16 *a,uint size,const char *str, size_t len)
   uint i= 0;
 
   const char *s, *b, *e=str+len;
-  for (s=str ; s < e ; i++)
+  for (s=str ; s < e ; ++i)
   {
     for ( ; (s < e) && strchr(" \t\r\n",s[0]); s++) ;
     b=s;
@@ -409,7 +409,7 @@ my_charset_is_ascii_compatible(CHARSET_INFO *cs)
   uint i;
   if (!cs->tab_to_uni)
     return 1;
-  for (i= 0; i < 128; i++)
+  for (i= 0; i < 128; ++i)
   {
     if (cs->tab_to_uni[i] != i)
       return 0;

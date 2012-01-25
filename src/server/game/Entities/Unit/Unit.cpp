@@ -784,7 +784,7 @@ uint32 Unit::DealDamage(Unit* victim, uint32 damage, CleanDamage const* cleanDam
 
 void Unit::CastStop(uint32 except_spellid)
 {
-    for (uint32 i = CURRENT_FIRST_NON_MELEE_SPELL; i < CURRENT_MAX_SPELL; i++)
+    for (uint32 i = CURRENT_FIRST_NON_MELEE_SPELL; i < CURRENT_MAX_SPELL; ++i)
         if (m_currentSpells[i] && m_currentSpells[i]->m_spellInfo->Id != except_spellid)
             InterruptSpell(CurrentSpellTypes(i), false);
 }
@@ -3015,7 +3015,7 @@ void Unit::InterruptNonMeleeSpells(bool withDelayed, uint32 spell_id, bool withI
 
 Spell* Unit::FindCurrentSpellBySpellId(uint32 spell_id) const
 {
-    for (uint32 i = 0; i < CURRENT_MAX_SPELL; i++)
+    for (uint32 i = 0; i < CURRENT_MAX_SPELL; ++i)
         if (m_currentSpells[i] && m_currentSpells[i]->m_spellInfo->Id == spell_id)
             return m_currentSpells[i];
     return NULL;
@@ -6126,7 +6126,7 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                         return false;
 
                     int EffIndex = 0;
-                    for (uint8 i = 0; i < MAX_SPELL_EFFECTS; i++)
+                    for (uint8 i = 0; i < MAX_SPELL_EFFECTS; ++i)
                     {
                         if (GoPoH->Effects[i].Effect == SPELL_EFFECT_APPLY_AURA)
                         {
@@ -7786,7 +7786,7 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
             {
                 if (procSpell->SpellFamilyName == SPELLFAMILY_POTION)
                 {
-                    for (uint8 i = 0; i < MAX_SPELL_EFFECTS; i++)
+                    for (uint8 i = 0; i < MAX_SPELL_EFFECTS; ++i)
                     {
                         if (procSpell->Effects[i].Effect == SPELL_EFFECT_HEAL)
                         {
@@ -8113,7 +8113,7 @@ bool Unit::HandleAuraProc(Unit* victim, uint32 damage, Aura* triggeredByAura, Sp
                 if (triggeredByAura->GetCasterGUID() == victim->GetGUID())
                     return false;
                 // Lookup base amount mana restore
-                for (uint8 i = 0; i<MAX_SPELL_EFFECTS; i++)
+                for (uint8 i = 0; i<MAX_SPELL_EFFECTS; ++i)
                 {
                     if (procSpell->Effects[i].Effect == SPELL_EFFECT_ENERGIZE)
                     {
@@ -14825,7 +14825,7 @@ uint32 Unit::GetCastingTimeForBonus(SpellInfo const* spellProto, DamageEffectTyp
     bool DirectDamage = false;
     bool AreaEffect   = false;
 
-    for (uint32 i = 0; i < MAX_SPELL_EFFECTS; i++)
+    for (uint32 i = 0; i < MAX_SPELL_EFFECTS; ++i)
     {
         switch (spellProto->Effects[i].Effect)
         {
@@ -17642,7 +17642,7 @@ void Unit::AddSpellMod(SpellModifier* mod, bool apply)
         for (int eff = 0; eff < 96; ++eff)
         {
             if (eff != 0 && eff%32 == 0)
-                _mask[i++] = 0;
+                _mask[++i] = 0;
 
             _mask[i] = uint32(1) << (eff-(32*i));
             if (mod->mask & _mask)
@@ -17843,7 +17843,7 @@ uint32 Unit::GetHealingDoneInPastSecs(uint32 secs)
     if (secs > 120)
         secs = 120;
 
-    for (uint32 i = 0; i < secs; i++)
+    for (uint32 i = 0; i < secs; ++i)
         heal += m_heal_done[i];
 
     if (heal < 0)
@@ -17859,7 +17859,7 @@ uint32 Unit::GetDamageDoneInPastSecs(uint32 secs)
     if (secs > 120)
         secs = 120;
 
-    for (uint32 i = 0; i < secs; i++)
+    for (uint32 i = 0; i < secs; ++i)
         damage += m_damage_done[i];
 
     if (damage < 0)
@@ -17875,7 +17875,7 @@ uint32 Unit::GetDamageTakenInPastSecs(uint32 secs)
     if (secs > 120)
         secs = 120;
 
-    for (uint32 i = 0; i < secs; i++)
+    for (uint32 i = 0; i < secs; ++i)
         tdamage += m_damage_taken[i];
 
     if (tdamage < 0)
@@ -17889,7 +17889,7 @@ void Unit::ResetDamageDoneInPastSecs(uint32 secs)
     if (secs > 120)
         secs = 120;
 
-    for (uint32 i = 0; i < secs; i++)
+    for (uint32 i = 0; i < secs; ++i)
         m_damage_done[i] = 0;
 };
 
@@ -17898,6 +17898,6 @@ void Unit::ResetHealingDoneInPastSecs(uint32 secs)
     if (secs > 120)
         secs = 120;
 
-    for (uint32 i = 0; i < secs; i++)
+    for (uint32 i = 0; i < secs; ++i)
         m_heal_done[i] = 0;
 };

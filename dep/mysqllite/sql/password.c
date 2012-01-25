@@ -272,7 +272,7 @@ void get_salt_from_password_323(ulong *res, const char *password)
     {
       ulong val=0;
       uint i;
-      for (i=0 ; i < 8 ; i++)
+      for (i=0 ; i < 8 ; ++i)
         val=(val << 4)+char_val(*password++);
       *res++=val;
     }

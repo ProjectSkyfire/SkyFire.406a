@@ -62,7 +62,7 @@ bool BattlefieldTB::SetupBattlefield()
         m_Timer = 10 * 60 * 1000;
     }
 
-    for (uint8 i=0; i<BATTLEFIELD_TB_GY_MAX; i++)
+    for (uint8 i=0; i<BATTLEFIELD_TB_GY_MAX; ++i)
     {
         BfGraveYardTB* gy = new BfGraveYardTB(this);
         if (TBGraveYard[i].startcontrol == TEAM_NEUTRAL)
@@ -77,7 +77,7 @@ bool BattlefieldTB::SetupBattlefield()
     }
 
     // Pop des gameobject et creature du TBWorkShop
-    for (uint8 i = 0; i<TB_MAX_WORKSHOP; i++)
+    for (uint8 i = 0; i<TB_MAX_WORKSHOP; ++i)
     {
         BfTBWorkShopData* ws = new BfTBWorkShopData(this); // Create new object
         // Init:setup variable
@@ -117,7 +117,7 @@ bool BattlefieldTB::SetupBattlefield()
     }
 
     // Spawning npc in keep
-    for (uint8 i = 0; i<TB_MAX_KEEP_NPC; i++)
+    for (uint8 i = 0; i<TB_MAX_KEEP_NPC; ++i)
     {
         // Horde npc
         if (Creature* creature = SpawnCreature(TBKeepNPC[i].entryh, TBKeepNPC[i].x, TBKeepNPC[i].y, TBKeepNPC[i].z, TBKeepNPC[i].o, TEAM_HORDE))
@@ -134,7 +134,7 @@ bool BattlefieldTB::SetupBattlefield()
                 HideNpc(creature);
 
     // Spawning battle npcs
-    for (uint8 i = 0; i<TB_MAX_KEEP_NPC; i++)
+    for (uint8 i = 0; i<TB_MAX_KEEP_NPC; ++i)
     {
         // Horde npc
         if (Creature* creature = SpawnCreature(TBWarNPC[i].entryh, TBWarNPC[i].x, TBWarNPC[i].y, TBWarNPC[i].z, TBWarNPC[i].o, TEAM_HORDE))
@@ -156,7 +156,7 @@ bool BattlefieldTB::SetupBattlefield()
                 HideNpc(creature);
 
     //Spawning Buiding
-    for (uint8 i = 0; i<TB_MAX_OBJ; i++)
+    for (uint8 i = 0; i<TB_MAX_OBJ; ++i)
     {
         GameObject* go = SpawnGameObject(TBGameObjectBuillding[i].entry, TBGameObjectBuillding[i].x, TBGameObjectBuillding[i].y, TBGameObjectBuillding[i].z, TBGameObjectBuillding[i].o);
         if (go)
@@ -319,7 +319,7 @@ void BattlefieldTB::OnBattleEnd(bool endbytimer)
                 (*itr)->Rebuild();
 
     // Update all graveyard, control is to defender when no wartime
-    for (uint8 i = 0; i<BATTLEFIELD_TB_GY_HORDE; i++)
+    for (uint8 i = 0; i<BATTLEFIELD_TB_GY_HORDE; ++i)
     {
         if (GetGraveYardById(i))
         {

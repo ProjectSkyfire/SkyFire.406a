@@ -187,7 +187,7 @@ bool Battlefield::Update(uint32 diff)
 
     if (m_LastResurectTimer <= diff)
     {
-        for (uint8 i = 0; i < m_GraveYardList.size(); i++)
+        for (uint8 i = 0; i < m_GraveYardList.size(); ++i)
             if (GetGraveYardById(i))
                 m_GraveYardList[i]->Resurrect();
         m_LastResurectTimer = RESURRECTION_INTERVAL;
@@ -622,7 +622,7 @@ WorldSafeLocsEntry const *Battlefield::GetClosestGraveYard(Player *player)
 {
     BfGraveYard* closestGY = NULL;
     float maxdist = -1;
-    for (uint8 i = 0; i < m_GraveYardList.size(); i++)
+    for (uint8 i = 0; i < m_GraveYardList.size(); ++i)
     {
         if (m_GraveYardList[i])
         {
@@ -646,7 +646,7 @@ WorldSafeLocsEntry const *Battlefield::GetClosestGraveYard(Player *player)
 
 void Battlefield::AddPlayerToResurrectQueue(uint64 npc_guid, uint64 player_guid)
 {
-    for (uint8 i = 0; i < m_GraveYardList.size(); i++)
+    for (uint8 i = 0; i < m_GraveYardList.size(); ++i)
     {
         if (!m_GraveYardList[i])
             continue;
@@ -661,7 +661,7 @@ void Battlefield::AddPlayerToResurrectQueue(uint64 npc_guid, uint64 player_guid)
 
 void Battlefield::RemovePlayerFromResurrectQueue(uint64 player_guid)
 {
-    for (uint8 i = 0; i < m_GraveYardList.size(); i++)
+    for (uint8 i = 0; i < m_GraveYardList.size(); ++i)
     {
         if (!m_GraveYardList[i])
             continue;

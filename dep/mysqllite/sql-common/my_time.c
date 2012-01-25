@@ -255,7 +255,7 @@ str_to_datetime(const char *str, uint length, MYSQL_TIME *l_time,
   for (i = start_loop;
        i < MAX_DATE_PARTS-1 && str != end &&
          my_isdigit(&my_charset_latin1,*str);
-       i++)
+       ++i)
   {
     const char *start= str;
     ulong tmp_value= (uint) (uchar) (*str++ - '0');
@@ -290,7 +290,7 @@ str_to_datetime(const char *str, uint length, MYSQL_TIME *l_time,
 
     if ((last_field_pos= str) == end)
     {
-      i++;                                      /* Register last found part */
+      ++i;                                      /* Register last found part */
       break;
     }
     /* Allow a 'T' after day to allow CCYYMMDDT type of fields */
@@ -327,7 +327,7 @@ str_to_datetime(const char *str, uint length, MYSQL_TIME *l_time,
     /* Check if next position is AM/PM */
     if (i == format_position[6])                /* Seconds, time for AM/PM */
     {
-      i++;                                      /* Skip AM/PM part */
+      ++i;                                      /* Skip AM/PM part */
       if (format_position[7] != 255)            /* If using AM/PM */
       {
         if (str+2 <= end && (str[1] == 'M' || str[1] == 'm'))
@@ -357,7 +357,7 @@ str_to_datetime(const char *str, uint length, MYSQL_TIME *l_time,
   while (i < MAX_DATE_PARTS)
   {
     date_len[i]= 0;
-    date[i++]= 0;
+    date[++i]= 0;
   }
 
   if (!is_internal_format)

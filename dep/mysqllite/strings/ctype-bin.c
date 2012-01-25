@@ -438,7 +438,7 @@ skip:
     j= search+1;
 
     while (j != search_end)
-      if ((*i++) != (*j++))
+      if ((*++i) != (*j++))
             goto skip;
 
         if (nmatch > 0)

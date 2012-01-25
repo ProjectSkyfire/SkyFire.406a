@@ -554,7 +554,7 @@ public:
             if (itr->second._status != QUEST_STATUS_INCOMPLETE)
                 return;
 
-            for (uint8 i=0; i<3; i++)
+            for (uint8 i=0; i<3; ++i)
             {
                 switch (i)
                 {

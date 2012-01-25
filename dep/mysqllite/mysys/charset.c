@@ -66,7 +66,7 @@ static my_bool init_state_maps(CHARSET_INFO *cs)
   ident_map= cs->ident_map;
 
   /* Fill state_map with states to get a faster parser */
-  for (i=0; i < 256 ; i++)
+  for (i=0; i < 256 ; ++i)
   {
     if (my_isalpha(cs,i))
       state_map[i]=(uchar) MY_LEX_IDENT;
@@ -101,7 +101,7 @@ static my_bool init_state_maps(CHARSET_INFO *cs)
   /*
     Create a second map to make it faster to find identifiers
   */
-  for (i=0; i < 256 ; i++)
+  for (i=0; i < 256 ; ++i)
   {
     ident_map[i]= (uchar) (state_map[i] == MY_LEX_IDENT ||
                state_map[i] == MY_LEX_NUMBER_IDENT);

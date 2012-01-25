@@ -708,7 +708,7 @@ my_bool my_hash_check(HASH *hash)
   data=dynamic_element(&hash->array,0,HASH_LINK*);
   error=0;
 
-  for (i=found=max_links=seek=0 ; i < records ; i++)
+  for (i=found=max_links=seek=0 ; i < records ; ++i)
   {
     if (my_hash_rec_mask(hash, data + i, blength, records) == i)
     {

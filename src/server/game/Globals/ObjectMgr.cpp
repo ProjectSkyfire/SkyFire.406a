@@ -600,7 +600,7 @@ void ObjectMgr::LoadCreatureTemplateAddons()
                 sLog->outErrorDb("Creature (Entry: %u) has wrong spell %u defined in `auras` field in `creature_template_addon`.", entry, uint32(atol(*itr)));
                 continue;
             }
-            creatureAddon.auras[i++] = uint32(atol(*itr));
+            creatureAddon.auras[++i] = uint32(atol(*itr));
         }
 
         if (creatureAddon.mount)
@@ -968,7 +968,7 @@ void ObjectMgr::LoadCreatureAddons()
                 sLog->outErrorDb("Creature (GUID: %u) has wrong spell %u defined in `auras` field in `creature_addon`.", guid, uint32(atol(*itr)));
                 continue;
             }
-            creatureAddon.auras[i++] = uint32(atol(*itr));
+            creatureAddon.auras[++i] = uint32(atol(*itr));
         }
 
       if (creatureAddon.mount)
@@ -1590,7 +1590,7 @@ void ObjectMgr::LoadCreatures()
 void ObjectMgr::AddCreatureToGrid(uint32 guid, CreatureData const* data)
 {
     uint8 mask = data->spawnMask;
-    for (uint8 i = 0; mask != 0; i++, mask >>= 1)
+    for (uint8 i = 0; mask != 0; ++i, mask >>= 1)
     {
         if (mask & 1)
         {
@@ -1605,7 +1605,7 @@ void ObjectMgr::AddCreatureToGrid(uint32 guid, CreatureData const* data)
 void ObjectMgr::RemoveCreatureFromGrid(uint32 guid, CreatureData const* data)
 {
     uint8 mask = data->spawnMask;
-    for (uint8 i = 0; mask != 0; i++, mask >>= 1)
+    for (uint8 i = 0; mask != 0; ++i, mask >>= 1)
     {
         if (mask & 1)
         {
@@ -1893,7 +1893,7 @@ void ObjectMgr::LoadGameobjects()
 void ObjectMgr::AddGameobjectToGrid(uint32 guid, GameObjectData const* data)
 {
     uint8 mask = data->spawnMask;
-    for (uint8 i = 0; mask != 0; i++, mask >>= 1)
+    for (uint8 i = 0; mask != 0; ++i, mask >>= 1)
     {
         if (mask & 1)
         {
@@ -1908,7 +1908,7 @@ void ObjectMgr::AddGameobjectToGrid(uint32 guid, GameObjectData const* data)
 void ObjectMgr::RemoveGameobjectFromGrid(uint32 guid, GameObjectData const* data)
 {
     uint8 mask = data->spawnMask;
-    for (uint8 i = 0; mask != 0; i++, mask >>= 1)
+    for (uint8 i = 0; mask != 0; ++i, mask >>= 1)
     {
         if (mask & 1)
         {
@@ -2886,7 +2886,7 @@ void ObjectMgr::LoadPetLevelInfo()
         pLevelInfo->mana   = fields[3].GetUInt16();
         pLevelInfo->armor  = fields[9].GetUInt16();
 
-        for (int i = 0; i < MAX_STATS; i++)
+        for (int i = 0; i < MAX_STATS; ++i)
         {
             pLevelInfo->stats[i] = fields[i+4].GetUInt16();
         }
@@ -3441,7 +3441,7 @@ void ObjectMgr::LoadPlayerInfo()
 
             PlayerLevelInfo* pLevelInfo = &pInfo->levelInfo[current_level-1];
 
-            for (int i = 0; i < MAX_STATS; i++)
+            for (int i = 0; i < MAX_STATS; ++i)
             {
                 pLevelInfo->stats[i] = fields[i+3].GetUInt8();
             }
@@ -5237,7 +5237,7 @@ void ObjectMgr::LoadGossipText()
 
         GossipText& gText = mGossipText[Text_ID];
 
-        for (int i = 0; i < MAX_GOSSIP_TEXT_OPTIONS; i++)
+        for (int i = 0; i < MAX_GOSSIP_TEXT_OPTIONS; ++i)
         {
             gText.Options[i].Text_0           = fields[cic++].GetString();
             gText.Options[i].Text_1           = fields[cic++].GetString();

@@ -239,7 +239,7 @@ int handle_options(int *argc, char ***argv,
       {
         if (optend)
           must_be_var= 1; /* option is followed by an argument */
-        for (i= 0; special_opt_prefix[i]; i++)
+        for (i= 0; special_opt_prefix[i]; ++i)
         {
           if (!getopt_compare_strings(special_opt_prefix[i], opt_str,
                       special_opt_prefix_lengths[i]) &&
