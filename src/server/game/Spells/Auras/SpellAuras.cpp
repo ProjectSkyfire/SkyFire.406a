@@ -694,7 +694,7 @@ void Aura::Update(uint32 diff, Unit* caster)
                 m_timeCla -= diff;
             else if (caster)
             {
-                if(m_spellInfo->ManaPerSecond > 0)
+                if (m_spellInfo->ManaPerSecond > 0)
                 {
                     if (int32 manaPerSecond = m_spellInfo->ManaPerSecond * caster->getLevel())
                     {

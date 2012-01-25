@@ -2825,7 +2825,7 @@ void World::ResetGuildAdvancementDailyXP()
         uint64 diff = (uint64)(baseXP * 15 / 100);
         uint64 m_xp_cap = 0;
 
-        if(diff < baseXP)
+        if (diff < baseXP)
             m_xp_cap = diff + m_xp;
         else
             m_xp_cap = baseXP;

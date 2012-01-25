@@ -609,11 +609,11 @@ int32 AuraEffect::CalculateAmount(Unit* caster)
             else if (m_spellInfo->Id == 29166)
             {
                 int32 bonusMana = amount;
-                if(GetBase()->GetCaster() == GetBase()->GetUnitOwner())
+                if (GetBase()->GetCaster() == GetBase()->GetUnitOwner())
                 {
-                    if(GetBase()->GetCaster()->HasAura(33597))  // Dreamstate rank1
+                    if (GetBase()->GetCaster()->HasAura(33597))  // Dreamstate rank1
                         bonusMana += 15;
-                    if(GetBase()->GetCaster()->HasAura(33599))  // Dreamstate rank2
+                    if (GetBase()->GetCaster()->HasAura(33599))  // Dreamstate rank2
                         bonusMana += 30;
                 }
                 ApplyPctF(bonusMana, float(GetBase()->GetUnitOwner()->GetMaxPower(POWER_MANA)) / GetTotalTicks());
@@ -709,7 +709,7 @@ int32 AuraEffect::CalculateAmount(Unit* caster)
         case SPELL_AURA_MOUNTED:
             {
                 Player *player = caster->ToPlayer();
-                if(player)
+                if (player)
                 {
                     // find the spell we need
                     const MountTypeEntry *type = sMountTypeStore.LookupEntry(GetMiscValueB());
@@ -725,11 +725,11 @@ int32 AuraEffect::CalculateAmount(Unit* caster)
                         const MountCapabilityEntry *cap = sMountCapabilityStore.LookupEntry(type->capabilities[i]);
                         if(!cap)
                             continue;
-                        if(cap->map != -1 && cap->map != map)
+                        if (cap->map != -1 && cap->map != map)
                             continue;
                         if (cap->reqSkillLevel && (cap->reqSkillLevel > plrskill || cap->reqSkillLevel <= maxSkill))
                             continue;
-                        if(cap->reqSpell && !player->HasSpell(cap->reqSpell))
+                        if (cap->reqSpell && !player->HasSpell(cap->reqSpell))
                             continue;
                         maxSkill = cap->reqSkillLevel;
                         spellId = cap->spell;
@@ -2826,7 +2826,7 @@ void AuraEffect::HandleAuraMounted(AuraApplication const* aurApp, uint8 mode, bo
             break;
     }
 
-    if(player && spellId < 2)
+    if (player && spellId < 2)
         return;
 
     if (apply)
@@ -2864,14 +2864,14 @@ void AuraEffect::HandleAuraMounted(AuraApplication const* aurApp, uint8 mode, bo
 
         target->Mount(displayID, ci->VehicleId, GetMiscValue());
 
-        if(player)
+        if (player)
             player->CastSpell(player, spellId, true);
     }
     else
     {
         target->Dismount();
 
-        if(player)
+        if (player)
             player->RemoveAurasDueToSpell(spellId);
 
         //some mounts like Headless Horseman's Mount or broom stick are skill based spell
@@ -4962,61 +4962,61 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
                     switch(target->getRace())
                     {
                     case RACE_BLOODELF:
-                        if(target->getGender()==GENDER_MALE)
+                        if (target->getGender()==GENDER_MALE)
                             target->PlayDistanceSound(9672);
                         else
                             target->PlayDistanceSound(9644);
                         break;
                     case RACE_DRAENEI:
-                        if(target->getGender()==GENDER_MALE)
+                        if (target->getGender()==GENDER_MALE)
                             target->PlayDistanceSound(9722);
                         else
                             target->PlayDistanceSound(9697);
                         break;
                     case RACE_DWARF:
-                        if(target->getGender()==GENDER_MALE)
+                        if (target->getGender()==GENDER_MALE)
                             target->PlayDistanceSound(7636);
                         else
                             target->PlayDistanceSound(7637);
                         break;
                     case RACE_HUMAN:
-                        if(target->getGender()==GENDER_MALE)
+                        if (target->getGender()==GENDER_MALE)
                             target->PlayDistanceSound(7634);
                         else
                             target->PlayDistanceSound(7635);
                         break;
                     case RACE_ORC:
-                        if(target->getGender()==GENDER_MALE)
+                        if (target->getGender()==GENDER_MALE)
                             target->PlayDistanceSound(7638);
                         else
                             target->PlayDistanceSound(7639);
                         break;
                     case RACE_GNOME:
-                        if(target->getGender()==GENDER_MALE)
+                        if (target->getGender()==GENDER_MALE)
                             target->PlayDistanceSound(7640);
                         else
                             target->PlayDistanceSound(7641);
                         break;
                     case RACE_NIGHTELF:
-                        if(target->getGender()==GENDER_MALE)
+                        if (target->getGender()==GENDER_MALE)
                             target->PlayDistanceSound(7642);
                         else
                             target->PlayDistanceSound(7643);
                         break;
                     case RACE_UNDEAD_PLAYER:
-                        if(target->getGender()==GENDER_MALE)
+                        if (target->getGender()==GENDER_MALE)
                             target->PlayDistanceSound(7644);
                         else
                             target->PlayDistanceSound(7645);
                         break;
                     case RACE_TAUREN:
-                        if(target->getGender()==GENDER_MALE)
+                        if (target->getGender()==GENDER_MALE)
                             target->PlayDistanceSound(7646);
                         else
                             target->PlayDistanceSound(7647);
                         break;
                     case RACE_TROLL:
-                        if(target->getGender()==GENDER_MALE)
+                        if (target->getGender()==GENDER_MALE)
                             target->PlayDistanceSound(7648);
                         else
                             target->PlayDistanceSound(7649);
@@ -5917,7 +5917,7 @@ void AuraEffect::HandleAuraSetVehicle(AuraApplication const* aurApp, uint8 mode,
     if(!spell)
         return;
 
-    if(apply)
+    if (apply)
         aurApp->GetTarget()->learnSpell(spell,false);
     else
         aurApp->GetTarget()->removeSpell(spell,false,false);

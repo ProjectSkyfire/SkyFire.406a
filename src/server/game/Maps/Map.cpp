@@ -768,10 +768,10 @@ void Map::MoveAllCreaturesInMoveList()
     for (std::vector<Creature*>::iterator itr = _creaturesToMove.begin(); itr != _creaturesToMove.end(); ++itr)
     {
         Creature* c = *itr;
-        if(c->FindMap() != this) //pet is teleported to another map
+        if (c->FindMap() != this) //pet is teleported to another map
             continue;
 
-        if(c->_moveState != CREATURE_CELL_MOVE_ACTIVE)
+        if (c->_moveState != CREATURE_CELL_MOVE_ACTIVE)
         {
             c->_moveState = CREATURE_CELL_MOVE_NONE;
             continue;

@@ -267,7 +267,7 @@ void Group::ConvertToRaid()
 
 void Group::ConvertToGroup()
 {
-    if(m_memberSlots.size() > 5)
+    if (m_memberSlots.size() > 5)
         return;
 
     m_groupType = GroupType(GROUPTYPE_NORMAL);
@@ -2414,14 +2414,14 @@ void Group::SendGuildGroupStateUpdate(bool guild)
 {
     for (GroupReference *itr = GetFirstMember(); itr != NULL; itr = itr->next()) // Loop trought all members
     {
-        if(Player* player = itr->getSource())
+        if (Player* player = itr->getSource())
         {
             WorldPacket data(SMSG_GUILD_PARTY_STATE_UPDATE, 1+4+4+4);
             data << uint8(guild ? 1 << 7 : 0);
             data << uint32(0); // numGuildRequired, not used
             data << uint32(0); // numGuildPresent, not used
             data << float(1.0f / 100.0f); // xpMultiplier
-            if(player->GetSession())
+            if (player->GetSession())
                 player->GetSession()->SendPacket(&data);
         }
     }

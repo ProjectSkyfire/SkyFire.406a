@@ -477,7 +477,7 @@ void Vehicle::TeleportVehicle(float x, float y, float z, float ang)
     RemoveAllPassengers(); // this can unlink Guns from Siege Engines
     _me->NearTeleportTo(x, y, z, ang);
     for (GuidSet::const_iterator itr = vehiclePlayers.begin(); itr != vehiclePlayers.end(); ++itr)
-        if(Unit* player = sObjectAccessor->FindUnit(*itr))
+        if (Unit* player = sObjectAccessor->FindUnit(*itr))
                 player->NearTeleportTo(x, y, z, ang);
 }
 

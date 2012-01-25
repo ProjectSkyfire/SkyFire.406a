@@ -522,7 +522,7 @@ class spell_dk_festering_strike : public SpellScriptLoader
 
             void HandleScript(SpellEffIndex /*eff*/)
             {
-                if(Unit* target = GetHitUnit())
+                if (Unit* target = GetHitUnit())
                 {
                     uint32 addDuration = urand(2, 6);
                     if (target->HasAura(45524)) // Chains of Ice
@@ -559,7 +559,7 @@ class spell_dk_chains_of_ice : public SpellScriptLoader
 
             void HandleEffect(SpellEffIndex /*eff*/)
             {
-                if(Unit* target = GetHitUnit())
+                if (Unit* target = GetHitUnit())
                 {
                     if (GetCaster()->HasAura(50041)) // Chilblains Rank 2
                         GetCaster()->CastSpell(target, 96294, true);

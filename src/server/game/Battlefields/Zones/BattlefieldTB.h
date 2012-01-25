@@ -501,7 +501,7 @@ struct BfTBGameObjectBuilding
         m_State = BATTLEFIELD_TB_OBJECTSTATE_ALLIANCE_DAMAGE-(m_Team*3);
         m_TB->SendUpdateWorldState(m_WorldState, m_State);
         // Send warning message
-        if(m_NameId)
+        if (m_NameId)
             m_TB->SendWarningToAllInZone(m_NameId);
     }
 
@@ -512,7 +512,7 @@ struct BfTBGameObjectBuilding
         m_State = BATTLEFIELD_TB_OBJECTSTATE_ALLIANCE_DESTROY-(m_Team*3);
         m_TB->SendUpdateWorldState(m_WorldState, m_State);
         // Warning
-        if(m_NameId)
+        if (m_NameId)
             m_TB->SendWarningToAllInZone(m_NameId);
         switch (m_Type)
         {
@@ -547,12 +547,12 @@ struct BfTBGameObjectBuilding
         {
             case BATTLEFIELD_TB_OBJECTSTATE_ALLIANCE_INTACT:
             case BATTLEFIELD_TB_OBJECTSTATE_HORDE_INTACT:
-                if(m_Build)
+                if (m_Build)
                     m_Build->SetDestructibleState(GO_DESTRUCTIBLE_REBUILDING, NULL, true);
                 break;
             case BATTLEFIELD_TB_OBJECTSTATE_ALLIANCE_DESTROY:
             case BATTLEFIELD_TB_OBJECTSTATE_HORDE_DESTROY:
-                if(m_Build)
+                if (m_Build)
                 {
                     m_Build->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_DAMAGED);
                     m_Build->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_DESTROYED);
@@ -561,7 +561,7 @@ struct BfTBGameObjectBuilding
                 break;
             case BATTLEFIELD_TB_OBJECTSTATE_ALLIANCE_DAMAGE:
             case BATTLEFIELD_TB_OBJECTSTATE_HORDE_DAMAGE:
-                if(m_Build)
+                if (m_Build)
                 {
                     m_Build->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_DAMAGED);
                     m_Build->SetUInt32Value(GAMEOBJECT_DISPLAYID, m_Build->GetGOInfo()->building.damagedDisplayId);

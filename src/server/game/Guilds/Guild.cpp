@@ -520,14 +520,14 @@ void Guild::Member::SetStats(Player* player)
     uint8 count_prof = 0;
     for (PlayerSpellMap::const_iterator spellIter = player->GetSpellMap().begin(); spellIter != player->GetSpellMap().end(); ++spellIter)
     {
-        if(count_prof >= 2)
+        if (count_prof >= 2)
             break;
     
         SpellInfo const *spellInfo = sSpellMgr->GetSpellInfo(spellIter->first);
             if (!spellInfo)
                 continue;
 
-        if(spellInfo->IsPrimaryProfession())
+        if (spellInfo->IsPrimaryProfession())
         {
             uint32 skill = 0;
 
@@ -1258,14 +1258,14 @@ void Guild::UpdateMemberData(Player* player, uint8 dataid, uint32 value)
                 uint8 count_prof = 0;
                 for (PlayerSpellMap::const_iterator spellIter = player->GetSpellMap().begin(); spellIter != player->GetSpellMap().end(); ++spellIter)
                 {
-                    if(count_prof >= 2)
+                    if (count_prof >= 2)
                         break;
 
                     SpellInfo const *spellInfo = sSpellMgr->GetSpellInfo(spellIter->first);
                         if (!spellInfo)
                             continue;
 
-                    if(spellInfo->IsPrimaryProfession())
+                    if (spellInfo->IsPrimaryProfession())
                     {
                         uint32 skill = 0;
 
@@ -1316,7 +1316,7 @@ void Guild::OnPlayerStatusChange(Player* player, uint32 flag, bool state)
 {
     if (Member* member = GetMember(player->GetGUID()))
     {
-        if(state)
+        if (state)
             member->AddFlag(flag);
         else member->RemFlag(flag);
     }
@@ -1404,7 +1404,7 @@ void Guild::HandleRoster(WorldSession* session /*= NULL*/)
 
     for (Members::const_iterator itr = m_members.begin(); itr != m_members.end(); ++itr)
     {
-        if(itr->second->IsOnline())
+        if (itr->second->IsOnline())
             data << float(0); // unk
         else
             data << float(float(::time(NULL) - itr->second->GetLogoutTime()) / DAY);
@@ -1758,7 +1758,7 @@ void Guild::HandleAcceptMember(WorldSession* session)
         player->SetFlag(PLAYER_FLAGS, PLAYER_FLAGS_GLEVEL_ENABLED);
         /// Learn perks to him
         for (int i = 0; i < GetLevel()-1; ++i)
-            if(const GuildPerksEntry* perk = sGuildPerksStore.LookupEntry(i))
+            if (const GuildPerksEntry* perk = sGuildPerksStore.LookupEntry(i))
                 player->learnSpell(perk->SpellId, true);
 
         _LogEvent(GUILD_EVENT_LOG_JOIN_GUILD, player->GetGUIDLow());
@@ -2200,7 +2200,7 @@ bool Guild::LoadFromDB(Field* fields)
     if (m_level == 0)
         m_level = 1;
 
-    if(m_xp_cap == 0)
+    if (m_xp_cap == 0)
         GenerateXPCap();
 
     m_nextLevelXP = sObjectMgr->GetXPForGuildLevel(m_level);
@@ -2229,7 +2229,7 @@ void Guild::GenerateXPCap()
     uint64 baseXP = sObjectMgr->GetXPForGuildLevel(m_level);
     uint64 diff = (uint64)(baseXP * 15 / 100);
 
-    if(diff < baseXP)
+    if (diff < baseXP)
         m_xp_cap = diff + m_xp;
     else
         m_xp_cap = baseXP;
@@ -2471,7 +2471,7 @@ bool Guild::AddMember(uint64 guid, uint8 rankId)
 
         // Learn our perks to him
         for (int i = 0; i < m_level; ++i)
-            if(const GuildPerksEntry* perk = sGuildPerksStore.LookupEntry(i))
+            if (const GuildPerksEntry* perk = sGuildPerksStore.LookupEntry(i))
                 player->learnSpell(perk->SpellId, true);
     }
     else
@@ -3169,7 +3169,7 @@ void Guild::GainXP(uint64 xp)
     uint64 nextLvlXP = GetNextLevelXP();
     uint8 level = GetLevel();
 
-    if(new_xp > m_xp_cap)
+    if (new_xp > m_xp_cap)
         return;
 
     if (new_xp >= nextLvlXP && level < sWorld->getIntConfig(CONFIG_GUILD_ADVANCEMENT_MAX_LEVEL))

@@ -321,9 +321,9 @@ public:
 
         SpellCastResult CheckCast()
         {
-            if(Unit* caster = GetCaster())
+            if (Unit* caster = GetCaster())
             {
-                if(caster->CountPctFromMaxHealth(GetSpellInfo()->Effects[EFFECT_2].CalcValue()) >= caster->GetHealth()) // You cant kill yourself with this
+                if (caster->CountPctFromMaxHealth(GetSpellInfo()->Effects[EFFECT_2].CalcValue()) >= caster->GetHealth()) // You cant kill yourself with this
                     return SPELL_FAILED_FIZZLE;
 
                 return SPELL_CAST_OK;
@@ -333,7 +333,7 @@ public:
 
         void HandleDummy(SpellEffIndex /*EffIndex*/)
         {
-            if(Unit* caster = GetCaster())
+            if (Unit* caster = GetCaster())
             {
                 int32 damage = int32(caster->CountPctFromMaxHealth(GetSpellInfo()->Effects[EFFECT_2].CalcValue()));
                 int32 mana = 0;
@@ -437,8 +437,8 @@ public:
             int32 bp = 2; // Normal, restore 2% of health
 
             // Check for Death's Embrace
-            if(AuraEffect const* aurEff = GetCaster()->GetAuraEffect(SPELL_AURA_DUMMY, SPELLFAMILY_WARLOCK, 3223, 0))
-                if(GetCaster()->HealthBelowPct(25))
+            if (AuraEffect const* aurEff = GetCaster()->GetAuraEffect(SPELL_AURA_DUMMY, SPELLFAMILY_WARLOCK, 3223, 0))
+                if (GetCaster()->HealthBelowPct(25))
                     bp += int32(aurEff->GetAmount());
 
             GetCaster()->CastCustomSpell(GetCaster(), 89653, &bp, NULL, NULL, true);

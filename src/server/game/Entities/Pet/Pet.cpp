@@ -360,7 +360,7 @@ void Pet::SavePetToDB(PetSlot mode)
     if (!owner)
         return;
 
-    if(mode == PET_SLOT_ACTUAL_PET_SLOT)
+    if (mode == PET_SLOT_ACTUAL_PET_SLOT)
         mode = owner->_currentPetSlot;
 
     // not save pet as current if another pet temporary unsummoned

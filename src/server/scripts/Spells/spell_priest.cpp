@@ -288,7 +288,7 @@ class spell_pri_shadow_word_death : public SpellScriptLoader
 
             void DamageCaster(SpellEffIndex /*effIndex*/)
             {
-                if(Unit* caster = GetCaster())
+                if (Unit* caster = GetCaster())
                 {
                     int32 back_damage = caster->SpellDamageBonus(GetHitUnit(), GetSpellInfo(), uint32(GetHitDamage()), SPELL_DIRECT_DAMAGE);
                     if (AuraEffect* aurEff = caster->GetDummyAuraEffect(SPELLFAMILY_PRIEST, 2874, 1))
@@ -297,14 +297,14 @@ class spell_pri_shadow_word_death : public SpellScriptLoader
                     if (back_damage < int32(GetHitUnit()->GetHealth()))
                     {
                         caster->CastCustomSpell(caster, 32409, &back_damage, NULL, NULL, true);
-                        if(GetHitUnit()->HealthBelowPct(25))
+                        if (GetHitUnit()->HealthBelowPct(25))
                         {
                             SetHitDamage(int32(GetHitDamage() * 3)); // Deals 3 times more damage to targets below 25% health
 
                             if (caster->HasAura(55682) && !GetHitUnit()->HasAura(95652)) // Glyph of Shadow Word: Death
                             {
                                 caster->AddAura(95652, GetHitUnit()); // Glyph of Shadow Word: Death - Marker
-                                if(caster->GetTypeId() == TYPEID_PLAYER)
+                                if (caster->GetTypeId() == TYPEID_PLAYER)
                                     caster->ToPlayer()->RemoveSpellCooldown(32379, true); // Shadow Word: Death
                             }
                         }
@@ -337,7 +337,7 @@ class spell_pri_mind_blast : public SpellScriptLoader
 
             void HandleDamage(SpellEffIndex /*effIndex*/)
             {
-                if(Unit* caster = GetCaster())
+                if (Unit* caster = GetCaster())
                 {
                     if (AuraEffect * aurEff = caster->GetDummyAuraEffect(SPELLFAMILY_PRIEST, 95, 1)) // If we have Improved Mind Blast
                         if (caster->GetShapeshiftForm() == FORM_SHADOW)
@@ -375,11 +375,11 @@ class spell_pri_power_word_fortitude : public SpellScriptLoader
 
             void HandleDummy(SpellEffIndex /*effIndex*/)
             {
-                if(Unit* caster = GetCaster())
+                if (Unit* caster = GetCaster())
                 {
                     std::list<Unit*> PartyMembers;
                     caster->GetPartyMembers(PartyMembers);
-                    if(PartyMembers.size() > 1)
+                    if (PartyMembers.size() > 1)
                         caster->CastSpell(GetHitUnit(), 79105, true); // Power Word : Fortitude (Raid)
                     else
                         caster->CastSpell(GetHitUnit(), 79104, true); // Power Word : Fortitude (Caster)
@@ -412,11 +412,11 @@ class spell_pri_power_word_shield : public SpellScriptLoader
             void CalculateAmount(AuraEffect const* aurEff, int32 & amount, bool & /*canBeRecalculated*/)
             {
                 // Improved Power Word: Shield rank 1
-                if(AuraEffect const* improved = GetCaster()->GetAuraEffect(PRIEST_SPELL_IMPROVED_POWER_WORD_SHIELD_R1, EFFECT_0))
+                if (AuraEffect const* improved = GetCaster()->GetAuraEffect(PRIEST_SPELL_IMPROVED_POWER_WORD_SHIELD_R1, EFFECT_0))
                     amount += improved->GetAmount();
 
                 // Improved Power Word: Shield rank 2
-                if(AuraEffect const* improved = GetCaster()->GetAuraEffect(PRIEST_SPELL_IMPROVED_POWER_WORD_SHIELD_R2, EFFECT_0))
+                if (AuraEffect const* improved = GetCaster()->GetAuraEffect(PRIEST_SPELL_IMPROVED_POWER_WORD_SHIELD_R2, EFFECT_0))
                     amount += improved->GetAmount();
 
                 amount *= GetCaster()->GetTotalAuraMultiplier(SPELL_AURA_MOD_HEALING_DONE_PERCENT);

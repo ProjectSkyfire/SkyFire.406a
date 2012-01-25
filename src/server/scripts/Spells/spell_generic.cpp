@@ -1430,7 +1430,7 @@ class spell_gen_spirit_healer_res : public SpellScriptLoader
                 Unit* caster = GetOriginalCaster();
                 Unit* target = GetHitUnit();
 
-                if(caster->GetTypeId() != TYPEID_PLAYER)
+                if (caster->GetTypeId() != TYPEID_PLAYER)
                     return;
 
                 WorldPacket data(SMSG_SPIRIT_HEALER_CONFIRM, 8);

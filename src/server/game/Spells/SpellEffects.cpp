@@ -554,7 +554,7 @@ void Spell::EffectSchoolDMG(SpellEffIndex effIndex)
 
                         if (m_caster->HasAura(33191)) // Harnessed Shadows rank1
                             chance += 4;
-                        else if(m_caster->HasAura(78228))  // Harnessed Shadows rank2
+                        else if (m_caster->HasAura(78228))  // Harnessed Shadows rank2
                             chance += 8;
 
                         if (roll_chance_i(chance))
@@ -1433,7 +1433,7 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                 if (m_caster->HasUnitState(UNIT_STAT_CONTROLLED))
                     return;
 
-                if(unitTarget && !unitTarget->isInCombat())
+                if (unitTarget && !unitTarget->isInCombat())
                     return;
 
                 m_caster->CastSpell(unitTarget, damage, true);
@@ -1624,9 +1624,9 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                     AddPctN(bp, m_caster->CalculateSpellDamage(m_caster, aurEff->GetSpellInfo(), 2));
 
                 // Glyph of Dark Succor
-                if(AuraEffect const* aurEff = m_caster->GetAuraEffect(96279, 0))
-                    if(bp < int32(m_caster->CountPctFromMaxHealth(aurEff->GetAmount())))
-                        if(m_caster->HasAura(48265) || m_caster->HasAura(48266)) // Only in frost/unholy presence
+                if (AuraEffect const* aurEff = m_caster->GetAuraEffect(96279, 0))
+                    if (bp < int32(m_caster->CountPctFromMaxHealth(aurEff->GetAmount())))
+                        if (m_caster->HasAura(48265) || m_caster->HasAura(48266)) // Only in frost/unholy presence
                             bp = m_caster->CountPctFromMaxHealth(aurEff->GetAmount());
 
                 m_caster->CastCustomSpell(m_caster, 45470, &bp, NULL, NULL, false);
@@ -1669,7 +1669,7 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                 if (m_caster->GetTypeId() != TYPEID_PLAYER)
                     return;
 
-                if(effIndex != 0)
+                if (effIndex != 0)
                     return;
                 // Do we have talent Master of Ghouls?
                 if (m_caster->HasAura(52143))
@@ -5580,15 +5580,15 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
                 {
                     if (!unitTarget || !unitTarget->isAlive())
                         return;
-                    if(unitTarget->GetEntry() == 416)            // Summoned Imp
+                    if (unitTarget->GetEntry() == 416)            // Summoned Imp
                         m_caster->CastSpell(m_caster,79459,true);
-                    if(unitTarget->GetEntry() == 1860)           // Summoned Voidwalker
+                    if (unitTarget->GetEntry() == 1860)           // Summoned Voidwalker
                         m_caster->CastSpell(m_caster,79464,true);
-                    if(unitTarget->GetEntry() == 417)            // Summoned Felhunter
+                    if (unitTarget->GetEntry() == 417)            // Summoned Felhunter
                         m_caster->CastSpell(m_caster,79460,true);
-                    if(unitTarget->GetEntry() == 1863)           // Summoned Succubus
+                    if (unitTarget->GetEntry() == 1863)           // Summoned Succubus
                         m_caster->CastSpell(m_caster,79463,true);
-                    if(unitTarget->GetEntry() == 17252)          // Summoned Felguard
+                    if (unitTarget->GetEntry() == 17252)          // Summoned Felguard
                         m_caster->CastSpell(m_caster,79462,true);
                 }
             }
@@ -5734,7 +5734,7 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
             {
                 case 77767: // Cobra Shot
                 {
-                    if(Aura* SS = unitTarget->GetAura(1978, m_caster->GetGUID())) // Find Serpent Sting
+                    if (Aura* SS = unitTarget->GetAura(1978, m_caster->GetGUID())) // Find Serpent Sting
                         SS->SetDuration(SS->GetDuration() + (m_spellInfo->Effects[EFFECT_1].BasePoints * 1000)); // Increase duration of the Serpent Sting aura
                     break;
                 }
@@ -5746,8 +5746,8 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
             {
                 case 80863: // Blood In The Water
                 {
-                    if(unitTarget->HealthBelowPct(25))
-                        if(Aura* rip = unitTarget->GetAura(1079, m_caster->GetGUID()))
+                    if (unitTarget->HealthBelowPct(25))
+                        if (Aura* rip = unitTarget->GetAura(1079, m_caster->GetGUID()))
                             rip->RefreshDuration();
                 }
             }

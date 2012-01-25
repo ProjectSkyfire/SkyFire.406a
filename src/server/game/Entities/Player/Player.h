@@ -2401,15 +2401,15 @@ class Player : public Unit, public GridObject<Player>
             // Call Pet Spells.
             // 883, 83242, 83243, 83244, 83245
             //  1     2      3      4      5
-            if(HasSpell(83245))
+            if (HasSpell(83245))
                 last_known = 5;
-            else if(HasSpell(83244))
+            else if (HasSpell(83244))
                 last_known = 4;
-            else if(HasSpell(83243))
+            else if (HasSpell(83243))
                 last_known = 3;
-            else if(HasSpell(83242))
+            else if (HasSpell(83242))
                 last_known = 2;
-            else if(HasSpell(883))
+            else if (HasSpell(883))
                 last_known = 1;
 
             for (uint32 i = uint32(PET_SLOT_HUNTER_FIRST); i < last_known; i++)

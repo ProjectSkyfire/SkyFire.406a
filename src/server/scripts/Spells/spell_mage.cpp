@@ -520,7 +520,7 @@ class spell_mage_ice_barrier : public SpellScriptLoader
 
             void CalculateAmount(AuraEffect const* aurEff, int32 & amount, bool & canBeRecalculated)
             {
-                if(AuraEffect const* glyph = GetCaster()->GetAuraEffect(SPELL_MAGE_GLYPH_OF_ICE_BARRIER, 0))
+                if (AuraEffect const* glyph = GetCaster()->GetAuraEffect(SPELL_MAGE_GLYPH_OF_ICE_BARRIER, 0))
                     amount += glyph->GetAmount(); // 30% increase absorb from glyph
 
                 canBeRecalculated = false;

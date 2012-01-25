@@ -1429,7 +1429,7 @@ void AchievementMgrBase::CompletedCriteriaFor(AchievementEntry const* achievemen
 
     if (IsCompletedAchievement(achievement, player))
     {
-        if(_guild)
+        if (_guild)
             CompletedAchievement(achievement, player);
         else
             CompletedAchievement(achievement);

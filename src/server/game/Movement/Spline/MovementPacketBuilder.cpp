@@ -157,7 +157,7 @@ namespace Movement
             {
                 data << move_spline.facing.target;
             }
-            else if(splineFlags.final_point)
+            else if (splineFlags.final_point)
             {
                 data << move_spline.facing.f.x << move_spline.facing.f.y << move_spline.facing.f.z;
             }

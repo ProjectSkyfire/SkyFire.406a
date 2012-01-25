@@ -373,7 +373,7 @@ public:
 
         void CalculateDamage(SpellEffIndex /*effIndex*/)
         {
-            if(Unit* caster = GetCaster())
+            if (Unit* caster = GetCaster())
             {
                 int32 damage = GetHitDamage();
                 switch(caster->GetPower(POWER_HOLY_POWER))

@@ -8069,12 +8069,12 @@ void Player::ApplyReforgedStats(Item* item, bool apply)
     {
         if (proto->ItemStat[i].ItemStatValue == 0)
             continue;
-        if(proto->ItemStat[i].ItemStatType != stats->SourceStat)
+        if (proto->ItemStat[i].ItemStatType != stats->SourceStat)
             continue;
 
         int32 val = int32((proto->ItemStat[i].ItemStatValue * stats->Scaling1)*stats->Scaling2);
 
-        if(val == 0)
+        if (val == 0)
             return;
 
         switch (stats->DestinationStat)
@@ -8180,7 +8180,7 @@ void Player::ApplyReforgedStats(Item* item, bool apply)
                 ApplyRatingMod(CR_EXPERTISE, int32(val), apply);
                 break;
             case ITEM_MOD_ATTACK_POWER:
-                if(float(val) > 0.f)
+                if (float(val) > 0.f)
                 {
                     HandleStatModifier(UNIT_MOD_ATTACK_POWER_POS, TOTAL_VALUE, float(val), apply);
                     HandleStatModifier(UNIT_MOD_ATTACK_POWER_RANGED_POS, TOTAL_VALUE, float(val), apply);
@@ -8192,7 +8192,7 @@ void Player::ApplyReforgedStats(Item* item, bool apply)
                 }
                 break;
             case ITEM_MOD_RANGED_ATTACK_POWER:
-                if(float(val) > 0.f)
+                if (float(val) > 0.f)
                     HandleStatModifier(UNIT_MOD_ATTACK_POWER_RANGED_POS, TOTAL_VALUE, float(val), apply);
                 else
                     HandleStatModifier(UNIT_MOD_ATTACK_POWER_RANGED_NEG, TOTAL_VALUE, -float(val), apply);
@@ -8326,7 +8326,7 @@ void Player::ApplyReforgedStats(Item* item, bool apply)
                 ApplyRatingMod(CR_EXPERTISE, int32(val), apply);
                 break;
             case ITEM_MOD_ATTACK_POWER:
-                if(float(val) > 0.f)
+                if (float(val) > 0.f)
                 {
                     HandleStatModifier(UNIT_MOD_ATTACK_POWER_POS, TOTAL_VALUE, float(val), apply);
                     HandleStatModifier(UNIT_MOD_ATTACK_POWER_RANGED_POS, TOTAL_VALUE, float(val), apply);
@@ -8338,7 +8338,7 @@ void Player::ApplyReforgedStats(Item* item, bool apply)
                 }
                 break;
             case ITEM_MOD_RANGED_ATTACK_POWER:
-                if(float(val) > 0.f)
+                if (float(val) > 0.f)
                     HandleStatModifier(UNIT_MOD_ATTACK_POWER_RANGED_POS, TOTAL_VALUE, float(val), apply);
                 else
                     HandleStatModifier(UNIT_MOD_ATTACK_POWER_RANGED_NEG, TOTAL_VALUE, -float(val), apply);
@@ -10446,7 +10446,7 @@ uint8 Player::FindEquipSlot(ItemTemplate const* proto, uint32 slot, bool swap) c
             break;
         case INVTYPE_RELIC:
         {
-            if(playerClass == CLASS_PALADIN || playerClass == CLASS_DRUID||
+            if (playerClass == CLASS_PALADIN || playerClass == CLASS_DRUID||
                playerClass == CLASS_SHAMAN || playerClass == CLASS_DEATH_KNIGHT)
                 slots[0] = EQUIPMENT_SLOT_RANGED;
                     break;
@@ -12559,7 +12559,7 @@ Item* Player::StoreItem(ItemPosCountVec const& dest, Item* pItem, bool update)
     }
     UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_OWN_ITEM, entry);
 
-    if(Guild* guild = sGuildMgr->GetGuildById(GetGuildId()))
+    if (Guild* guild = sGuildMgr->GetGuildById(GetGuildId()))
         guild->GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_OWN_ITEM, this, entry, 1);
 
     return lastItem;
@@ -15608,7 +15608,7 @@ void Player::RewardQuest(Quest const *quest, uint32 reward, Object* questGiver, 
         {
             UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_COMPLETE_DAILY_QUEST, quest_id);
             UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_COMPLETE_DAILY_QUEST_DAILY, quest_id);
-            if(Guild* guild = sGuildMgr->GetGuildById(GetGuildId()))
+            if (Guild* guild = sGuildMgr->GetGuildById(GetGuildId()))
                 guild->GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_COMPLETE_DAILY_QUEST, this, quest_id);
         }
     }
@@ -16428,7 +16428,7 @@ void Player::KilledMonsterCredit(uint32 entry, uint64 guid)
 
     GetAchievementMgr().StartTimedAchievement(ACHIEVEMENT_TIMED_TYPE_CREATURE, real_entry);   // MUST BE CALLED FIRST
     UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_KILL_CREATURE, real_entry, addkillcount, guid ? GetMap()->GetCreature(guid) : NULL);
-    if(Creature* killed = GetMap()->GetCreature(guid))
+    if (Creature* killed = GetMap()->GetCreature(guid))
     {
         UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_KILL_CREATURE_TYPE, killed->GetCreatureInfo()->type, addkillcount, killed);
         UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_KILL_CREATURE_TYPE_GUILD, killed->GetCreatureInfo()->type, addkillcount, killed);
@@ -20266,7 +20266,7 @@ void Player::RemovePet(Pet* pet, PetSlot mode, bool returnreagent)
     // only if current pet in slot
     pet->SavePetToDB(mode);
 
-    if(pet->getPetType() != HUNTER_PET)
+    if (pet->getPetType() != HUNTER_PET)
         SetMinion(pet, false, PET_SLOT_UNK_SLOT);
     else
         SetMinion(pet, false, PET_SLOT_ACTUAL_PET_SLOT);
@@ -22313,7 +22313,7 @@ void Player::SendPetGUIDs()
     // The current handlind of the pet system wont allow to send them all,
     // because the pet guids are generated at runtime when the pet is summoned
     // ToDo/FixMe: Rewrite the pet system and fix this packet
-    if(Pet* pet = GetPet())
+    if (Pet* pet = GetPet())
     {
         WorldPacket data(SMSG_PET_GUIDS, 4 + (8 * 1));
         data << uint32(1);
@@ -22380,7 +22380,7 @@ void Player::SendInitialPacketsAfterAddToMap()
     else if (GetRaidDifficulty() != GetStoredRaidDifficulty())
         SendRaidDifficulty(GetGroup() != NULL);
 
-    if(Guild* guild = sGuildMgr->GetGuildById(GetGuildId()))
+    if (Guild* guild = sGuildMgr->GetGuildById(GetGuildId()))
         guild->GetAchievementMgr().SendAllAchievementData(); // must be after add to map
 
     SendPetGUIDs();
@@ -23754,7 +23754,7 @@ void Player::InitGlyphsForLevel()
 
     if (level >= 25)
         value |= 1 | 2 | 64;
-    if(level >= 50)
+    if (level >= 50)
         value |= 4 | 8 | 128;
     if (level >= 75)
         value |= 16 | 32 | 256;
@@ -24384,7 +24384,7 @@ void Player::UpdateAchievementCriteria(AchievementCriteriaTypes type, uint32 mis
 {
     GetAchievementMgr().UpdateAchievementCriteria(type, this, miscValue1, miscValue2, unit);
 
-    if(Guild* guild = sGuildMgr->GetGuildById(GetGuildId()))
+    if (Guild* guild = sGuildMgr->GetGuildById(GetGuildId()))
         guild->GetAchievementMgr().UpdateAchievementCriteria(type, this, miscValue1, miscValue2, unit);
 }
 
@@ -24413,7 +24413,7 @@ void Player::LearnTalent(uint32 talentId, uint32 talentRank, bool one)
     if (!talentTabInfo)
         return;
 
-    if(one && talentTabInfo->TalentTabID != GetTalentBranchSpec(_activeSpec))
+    if (one && talentTabInfo->TalentTabID != GetTalentBranchSpec(_activeSpec))
     {
         uint32 pointInBranchSpec = 0;
         for (PlayerTalentMap::iterator itr = _talents[_activeSpec]->begin(); itr != _talents[_activeSpec]->end(); itr++)
@@ -24421,18 +24421,18 @@ void Player::LearnTalent(uint32 talentId, uint32 talentRank, bool one)
             for (uint32 i = 0; i < sTalentStore.GetNumRows(); i++)
             {
                 const TalentEntry * thisTalent = sTalentStore.LookupEntry(i);
-                if(thisTalent)
+                if (thisTalent)
                 {
                     int thisrank = -1;
                     for (int j = 0; j < 5; j++)
-                        if(thisTalent->RankID[j] == itr->first)
+                        if (thisTalent->RankID[j] == itr->first)
                         {
                             thisrank = j;
                             break;
                         }
-                    if(thisrank != -1)
+                    if (thisrank != -1)
                     {
-                        if(thisTalent->TalentTab == GetTalentBranchSpec(_activeSpec))
+                        if (thisTalent->TalentTab == GetTalentBranchSpec(_activeSpec))
                         {
                             int8 curtalent_maxrank = -1;
                             for (int8 rank = MAX_TALENT_RANK-1; rank >= 0; --rank)
@@ -24443,14 +24443,14 @@ void Player::LearnTalent(uint32 talentId, uint32 talentRank, bool one)
                                     break;
                                 }
                             }
-                            if(curtalent_maxrank != -1 && thisrank == curtalent_maxrank)
+                            if (curtalent_maxrank != -1 && thisrank == curtalent_maxrank)
                                 pointInBranchSpec += curtalent_maxrank + 1;
                         }
                     }
                 }
             }
         }
-        if(pointInBranchSpec < 31)
+        if (pointInBranchSpec < 31)
             return;
     }
 
@@ -25821,7 +25821,7 @@ void Player::UpdateMasteryAuras(uint32 branch)
     {
         // Remove all mastery spells
         for (int i = 0; i < MAX_TALENT_MASTERY_SPELLS; i ++)
-            if(tab->masterySpell[i] && HasSpell(tab->masterySpell[i]))
+            if (tab->masterySpell[i] && HasSpell(tab->masterySpell[i]))
             {
                 RemoveAura(tab->masterySpell[i]);
                 removeSpell(tab->masterySpell[i]);
@@ -25831,7 +25831,7 @@ void Player::UpdateMasteryAuras(uint32 branch)
 
     for (int i = 0; i < MAX_TALENT_MASTERY_SPELLS; i ++)
     {
-        if(tab->masterySpell[i] && !HasSpell(tab->masterySpell[i]))
+        if (tab->masterySpell[i] && !HasSpell(tab->masterySpell[i]))
         {
             sLog->outDebug(LOG_FILTER_SPELLS_AURAS, "Learn mastery %u to player %s", tab->masterySpell[i], GetName());
             learnSpell(tab->masterySpell[i], true);
@@ -25842,10 +25842,10 @@ void Player::UpdateMasteryAuras(uint32 branch)
     // Now remove all the mastery spells for all branch except this one
     for (uint32 i = 0; i < sTalentTabStore.GetNumRows(); ++i)
     {
-        if(branch != i)
+        if (branch != i)
             if (TalentTabEntry const* tabi = sTalentTabStore.LookupEntry(i))
                 for (uint32 j = 0; j < MAX_TALENT_MASTERY_SPELLS; j++)
-                    if(tabi->masterySpell[j] && HasSpell(tabi->masterySpell[j]))
+                    if (tabi->masterySpell[j] && HasSpell(tabi->masterySpell[j]))
                     {
                         RemoveAura(tab->masterySpell[i]);
                         removeSpell(tabi->masterySpell[j]);
@@ -25862,8 +25862,8 @@ void Player::RecalculateMasteryAuraEffects(uint32 branch)
 
     for (int i = 0; i < MAX_TALENT_MASTERY_SPELLS; i ++)
     {
-        if(tab->masterySpell[i])
-            if(Aura* aura = GetAura(tab->masterySpell[i]))
+        if (tab->masterySpell[i])
+            if (Aura* aura = GetAura(tab->masterySpell[i]))
                 aura->RecalculateAmountOfEffects();
     }
 }

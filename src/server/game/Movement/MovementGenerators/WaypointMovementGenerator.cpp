@@ -212,7 +212,7 @@ void FlightPathMovementGenerator::Finalize(Player & player)
     if (player._taxi.empty())
     {
         player.getHostileRefManager().setOnlineOfflineState(true);
-        if(player.pvpInfo.inHostileArea)
+        if (player.pvpInfo.inHostileArea)
             player.CastSpell(&player, 2479, true);
 
         // update z position to ground and orientation for landing point

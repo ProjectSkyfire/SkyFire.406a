@@ -488,7 +488,7 @@ public:
                     setStage(8);
                     break;
                 case 8: //PHASE 3 BOTH REALMS
-                    if(Creature* pTwilight = me->GetMap()->GetCreature(instance->GetData64(NPC_HALION_TWILIGHT)))
+                    if (Creature* pTwilight = me->GetMap()->GetCreature(instance->GetData64(NPC_HALION_TWILIGHT)))
                         if (pTwilight->isAlive())
                             me->SetHealth(pTwilight->GetHealth());
                     if (FlameTimer <= Diff)
@@ -1401,7 +1401,7 @@ public:
 
         void UpdateAI(const uint32 diff)
         {
-            if(instance && instance->GetData(TYPE_HALION) != IN_PROGRESS)
+            if (instance && instance->GetData(TYPE_HALION) != IN_PROGRESS)
                 me->ForcedDespawn();
 
             if (ConsumptTimer <= diff)
@@ -1413,9 +1413,9 @@ public:
             Map::PlayerList const &players = instance->instance->GetPlayers();
             for (Map::PlayerList::const_iterator i = players.begin(); i != players.end(); ++i)
             {
-                if(Player* player = i->getSource())
+                if (Player* player = i->getSource())
                 {
-                    if(player->isAlive() && player->HasAura(SPELL_MARK_OF_CONSUMPTION))
+                    if (player->isAlive() && player->HasAura(SPELL_MARK_OF_CONSUMPTION))
                     {
                         Aura *aura = player->GetAura(SPELL_MARK_OF_CONSUMPTION);
                         uint32 stacs;
@@ -1482,7 +1482,7 @@ public:
 
         void UpdateAI(const uint32 diff)
         {
-            if(instance && instance->GetData(TYPE_HALION) != IN_PROGRESS)
+            if (instance && instance->GetData(TYPE_HALION) != IN_PROGRESS)
                 me->ForcedDespawn();
 
             if (ConbustTimer <= diff)
@@ -1493,9 +1493,9 @@ public:
             Map::PlayerList const &players = instance->instance->GetPlayers();
             for (Map::PlayerList::const_iterator i = players.begin(); i != players.end(); ++i)
             {
-                if(Player* player = i->getSource())
+                if (Player* player = i->getSource())
                 {
-                    if(player->isAlive() && player->HasAura(SPELL_MARK_OF_COMBUSTION))
+                    if (player->isAlive() && player->HasAura(SPELL_MARK_OF_COMBUSTION))
                     {
                         Aura *aura = player->GetAura(SPELL_MARK_OF_COMBUSTION);
                         uint32 stacs;

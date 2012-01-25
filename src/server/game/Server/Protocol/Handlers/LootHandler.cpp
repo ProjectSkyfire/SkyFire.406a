@@ -209,7 +209,7 @@ void WorldSession::HandleLootMoneyOpcode(WorldPacket & /*recv_data*/)
                 if (Guild* guild = sGuildMgr->GetGuildById((*i)->GetGuildId()))
                 {
                     float mod = float((*i)->GetTotalAuraModifier(SPELL_AURA_DEPOSIT_BONUS_MONEY_IN_GUILD_BANK_ON_LOOT));
-                    if(mod >= 1)
+                    if (mod >= 1)
                     {
                         mod /= 100;
                         guild->HandleMemberDepositMoney((*i)->GetSession(), uint32(goldPerPlayer * mod));
@@ -236,7 +236,7 @@ void WorldSession::HandleLootMoneyOpcode(WorldPacket & /*recv_data*/)
             {
                 float mod = float(player->GetTotalAuraModifier(SPELL_AURA_DEPOSIT_BONUS_MONEY_IN_GUILD_BANK_ON_LOOT));
                 mod /= 100;
-                if(mod >= 1)
+                if (mod >= 1)
                 {
                     uint32 deposit = uint32(loot->gold * mod);
                     guild->HandleMemberDepositMoney(player->GetSession(), deposit);

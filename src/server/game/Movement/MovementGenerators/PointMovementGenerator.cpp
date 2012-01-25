@@ -46,7 +46,7 @@ bool PointMovementGenerator<T>::Update(T &unit, const uint32 &diff)
     if (!&unit)
         return false;
 
-    if(unit.HasUnitState(UNIT_STAT_ROOT | UNIT_STAT_STUNNED))
+    if (unit.HasUnitState(UNIT_STAT_ROOT | UNIT_STAT_STUNNED))
     {
         unit.ClearUnitState(UNIT_STAT_ROAMING_MOVE);
         return true;

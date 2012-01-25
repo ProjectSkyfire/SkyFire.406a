@@ -251,7 +251,7 @@ class boss_flame_warden : public CreatureScript
 
                 if (LavaTimer <= diff)
                 {
-                    if(Unit *target = (SelectTarget(SELECT_TARGET_RANDOM, 0, 0, true)))
+                    if (Unit *target = (SelectTarget(SELECT_TARGET_RANDOM, 0, 0, true)))
                         DoCast(target, SPELL_LAVA_ERUPTION);
                     LavaTimer = 5000+rand()%5000;
                 }
@@ -321,7 +321,7 @@ class boss_air_warden : public CreatureScript
 
                 if (WindTimer <= diff)
                 {
-                    if(Unit *target = (SelectTarget(SELECT_TARGET_RANDOM, 0, 0, true)))
+                    if (Unit *target = (SelectTarget(SELECT_TARGET_RANDOM, 0, 0, true)))
                         DoCast(target, SPELL_WIND_SHEAR);
                     WindTimer = 7500+rand()%7500;
                 } else WindTimer -= diff;
@@ -384,7 +384,7 @@ class boss_earth_warden : public CreatureScript
 
                 if (RockTimer <= diff)
                 {
-                    if(Unit* target = (SelectTarget(SELECT_TARGET_RANDOM, 0, 0, true)))
+                    if (Unit* target = (SelectTarget(SELECT_TARGET_RANDOM, 0, 0, true)))
                         DoCast(target, SPELL_WIND_SHEAR);
                     RockTimer = 20000+rand()%7500;
                 }
@@ -454,7 +454,7 @@ class boss_water_warden : public CreatureScript
 
                 if (BubbleTimer <= diff)
                 {
-                    if(Unit *target = (SelectTarget(SELECT_TARGET_RANDOM, 0, 0, true)))
+                    if (Unit *target = (SelectTarget(SELECT_TARGET_RANDOM, 0, 0, true)))
                         DoCast(target, SPELL_BUBBLE_BOUND);
                     BubbleTimer = 15000+rand()%7500;
                 }
