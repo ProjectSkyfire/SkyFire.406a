@@ -86,12 +86,12 @@ static Dialogue RAJDialogue[]=
 // Entries and spawn locations for creatures in Oz event
 float Spawns[6][2]=
 {
-    {17535, -10896},                                        // Dorothee
-    {17546, -10891},                                        // Roar
-    {17547, -10884},                                        // Tinhead
-    {17543, -10902},                                        // Strawman
-    {17603, -10892},                                        // Grandmother
-    {17534, -10900},                                        // Julianne
+    {17535, -10896},                                       // Dorothee
+    {17546, -10891},                                       // Roar
+    {17547, -10884},                                       // Tinhead
+    {17543, -10902},                                       // Strawman
+    {17603, -10892},                                       // Grandmother
+    {17534, -10900},                                       // Julianne
 };
 
 #define CREATURE_SPOTLIGHT  19525

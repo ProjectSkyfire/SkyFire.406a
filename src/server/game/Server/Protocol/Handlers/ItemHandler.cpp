@@ -297,7 +297,7 @@ void WorldSession::HandleRequestHotFix(WorldPacket & recv_data)
         uint32 item;
         recv_data >> item;
         recv_data.read_skip(8);
-        WorldPacket data2(SMSG_DB_REPLY,700);
+        WorldPacket data2(SMSG_DB_REPLY, 700);
         ByteBuffer data;
 
         data2 << uint32(type); // Needed?
@@ -1459,16 +1459,16 @@ void WorldSession::HandleReforgeItem(WorldPacket& recv_data)
     recv_data >> slotId >> reforgeId;
     recv_data >> GUID >> bag;
 
-    Item* item = GetPlayer()->GetItemByPos(bag,slotId);
+    Item* item = GetPlayer()->GetItemByPos(bag, slotId);
 
     if(!item)       // cheating?
         return;
 
-    item->SetState(ITEM_CHANGED,GetPlayer()); // Set the 'changed' state to allow items to be saved to DB if they are equipped
+    item->SetState(ITEM_CHANGED, GetPlayer()); // Set the 'changed' state to allow items to be saved to DB if they are equipped
     if (reforgeId == 0) // Reset item
     {
         if (item->IsEquipped()) // Item must be equipped to avoid additional stat loose
-            GetPlayer()->ApplyReforgedStats(item,false);
+            GetPlayer()->ApplyReforgedStats(item, false);
         item->SetEnchantment(REFORGE_ENCHANTMENT_SLOT, 0, 0, 0);
         SQLTransaction trans = CharacterDatabase.BeginTransaction();
         item->SaveToDB(trans);
@@ -1485,10 +1485,10 @@ void WorldSession::HandleReforgeItem(WorldPacket& recv_data)
         return; // Cheating?
 
     GetPlayer()->ModifyMoney(-int32(money));
-    item->SetEnchantment(REFORGE_ENCHANTMENT_SLOT,reforgeId, 0, 0);
+    item->SetEnchantment(REFORGE_ENCHANTMENT_SLOT, reforgeId, 0, 0);
     SQLTransaction trans = CharacterDatabase.BeginTransaction();
     item->SaveToDB(trans);
     CharacterDatabase.CommitTransaction(trans);
     if (item->IsEquipped()) // Item must be equipped to get the new stats
-        GetPlayer()->ApplyReforgedStats(item,true);
+        GetPlayer()->ApplyReforgedStats(item, true);
 }

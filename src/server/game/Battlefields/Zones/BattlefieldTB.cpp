@@ -283,7 +283,7 @@ void BattlefieldTB::OnBattleEnd(bool endbytimer)
         {
             if (Unit* unit = ObjectAccessor::FindUnit((*itr)))
                 if (Creature* creature = unit->ToCreature())
-                    ShowNpc(creature,true);
+                    ShowNpc(creature, true);
         }
         // Hide creatures that should be visible only when battle is on.
         for (GuidSet::const_iterator itr = WarCreature[GetAttackerTeam()].begin(); itr != WarCreature[GetAttackerTeam()].end(); ++itr)
@@ -309,7 +309,7 @@ void BattlefieldTB::OnBattleEnd(bool endbytimer)
         {
             if (Unit* unit = ObjectAccessor::FindUnit((*itr)))
                 if (Creature* creature = unit->ToCreature())
-                    ShowNpc(creature,true);
+                    ShowNpc(creature, true);
         }*/
     }
 

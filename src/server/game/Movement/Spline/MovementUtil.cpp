@@ -202,7 +202,7 @@ namespace Movement
     std::string MoveSplineFlag::ToString() const
     {
         std::string str;
-        print_flags(raw(),g_SplineFlag_names,str);
+        print_flags(raw(),g_SplineFlag_names, str);
         return str;
     }
 }

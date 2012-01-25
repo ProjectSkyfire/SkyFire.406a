@@ -119,14 +119,14 @@ enum Points
 
 static const Position outroPos[8] =
 {
-    {828.9342f, 118.6247f, 509.5190f, 0.0000000f},  // Krick's Outro Position
-    {841.0100f, 196.2450f, 573.9640f, 0.2046099f},  // Scourgelord Tyrannus Outro Position (Tele to...)
-    {777.2274f, 119.5521f, 510.0363f, 6.0562930f},  // Sylvanas / Jaine Outro Spawn Position (NPC_SYLVANAS_PART1)
-    {823.3984f, 114.4907f, 509.4899f, 0.0000000f},  // Sylvanas / Jaine Outro Move Position (1)
-    {835.5887f, 139.4345f, 530.9526f, 0.0000000f},  // Tyrannus fly down Position (not sniffed)
-    {828.9342f, 118.6247f, 514.5190f, 0.0000000f},  // Krick's Choke Position
-    {828.9342f, 118.6247f, 509.4958f, 0.0000000f},  // Kirck's Death Position
-    {914.4820f, 143.1602f, 633.3624f, 0.0000000f},  // Tyrannus fly up (not sniffed)
+    {828.9342f, 118.6247f, 509.5190f, 0.0000000f}, // Krick's Outro Position
+    {841.0100f, 196.2450f, 573.9640f, 0.2046099f}, // Scourgelord Tyrannus Outro Position (Tele to...)
+    {777.2274f, 119.5521f, 510.0363f, 6.0562930f}, // Sylvanas / Jaine Outro Spawn Position (NPC_SYLVANAS_PART1)
+    {823.3984f, 114.4907f, 509.4899f, 0.0000000f}, // Sylvanas / Jaine Outro Move Position (1)
+    {835.5887f, 139.4345f, 530.9526f, 0.0000000f}, // Tyrannus fly down Position (not sniffed)
+    {828.9342f, 118.6247f, 514.5190f, 0.0000000f}, // Krick's Choke Position
+    {828.9342f, 118.6247f, 509.4958f, 0.0000000f}, // Kirck's Death Position
+    {914.4820f, 143.1602f, 633.3624f, 0.0000000f}, // Tyrannus fly up (not sniffed)
 };
 
 class boss_ick : public CreatureScript

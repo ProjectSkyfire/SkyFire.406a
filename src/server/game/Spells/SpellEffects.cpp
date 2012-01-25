@@ -577,12 +577,12 @@ void Spell::EffectSchoolDMG(SpellEffIndex effIndex)
                 /*if (m_caster->HasAura(81659))                     // Evangelism rank 1
                 {
                     if (m_spellInfo->Id == 15407)                   //  Mind Flay
-                        m_caster->CastSpell(m_caster,87117,true);   // Dark Evangelism
+                        m_caster->CastSpell(m_caster, 87117, true);   // Dark Evangelism
                 }
                 else if (m_caster->HasAura(81662))                  // Evangelism rank 2
                 {
                     if (m_spellInfo->Id == 15407)                   //  Mind Flay
-                        m_caster->CastSpell(m_caster,87118,true);   // Dark Evangelism
+                        m_caster->CastSpell(m_caster, 87118, true);   // Dark Evangelism
                 }
                 break;*/
             }
@@ -1469,11 +1469,11 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                 case 86150:
                 {
                     if (m_caster->ToPlayer()->HasSpell(20473)) // Holy Shock
-                        m_caster->CastSpell(m_caster,86669,true);
+                        m_caster->CastSpell(m_caster, 86669, true);
                     if (m_caster->ToPlayer()->HasSpell(85256)) // Templar's Verdict
-                        m_caster->CastSpell(m_caster,86698,true);
+                        m_caster->CastSpell(m_caster, 86698, true);
                     if (m_caster->ToPlayer()->HasSpell(31935)) // Avenger's shield
-                        m_caster->CastSpell(m_caster,86659,true);
+                        m_caster->CastSpell(m_caster, 86659, true);
                     return;
                 }
                 case 19740: // Blessing of Might
@@ -5581,15 +5581,15 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
                     if (!unitTarget || !unitTarget->isAlive())
                         return;
                     if (unitTarget->GetEntry() == 416)            // Summoned Imp
-                        m_caster->CastSpell(m_caster,79459,true);
+                        m_caster->CastSpell(m_caster, 79459, true);
                     if (unitTarget->GetEntry() == 1860)           // Summoned Voidwalker
-                        m_caster->CastSpell(m_caster,79464,true);
+                        m_caster->CastSpell(m_caster, 79464, true);
                     if (unitTarget->GetEntry() == 417)            // Summoned Felhunter
-                        m_caster->CastSpell(m_caster,79460,true);
+                        m_caster->CastSpell(m_caster, 79460, true);
                     if (unitTarget->GetEntry() == 1863)           // Summoned Succubus
-                        m_caster->CastSpell(m_caster,79463,true);
+                        m_caster->CastSpell(m_caster, 79463, true);
                     if (unitTarget->GetEntry() == 17252)          // Summoned Felguard
-                        m_caster->CastSpell(m_caster,79462,true);
+                        m_caster->CastSpell(m_caster, 79462, true);
                 }
             }
             break;
@@ -5646,7 +5646,7 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
                     {
                         case 31876:
                         {
-                            m_caster->CastSpell((Unit*)NULL,57669,true);
+                            m_caster->CastSpell((Unit*)NULL, 57669, true);
                             break;
                         }
                     }

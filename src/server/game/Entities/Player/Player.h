@@ -1035,7 +1035,7 @@ class TradeData
 {
     public:                                                 // constructors
         TradeData(Player* player, Player* trader) :
-            _player(player),  _trader(trader), _accepted(false), m_acceptProccess(false),
+            _player(player), _trader(trader), _accepted(false), m_acceptProccess(false),
             _money(0), m_spell(0) {}
 
         Player* GetTrader() const { return _trader; }
@@ -2642,7 +2642,7 @@ class Player : public Unit, public GridObject<Player>
         //We allow only one timed quest active at the same time. Below can then be simple value instead of set.
         typedef std::set<uint32> QuestSet;
         typedef std::set<uint32> SeasonalQuestSet;
-        typedef UNORDERED_MAP<uint32,SeasonalQuestSet> SeasonalEventQuestMap;
+        typedef UNORDERED_MAP<uint32, SeasonalQuestSet> SeasonalEventQuestMap;
         QuestSet _timedquests;
         QuestSet _weeklyquests;
         SeasonalEventQuestMap _seasonalquests;
@@ -2772,7 +2772,7 @@ class Player : public Unit, public GridObject<Player>
         uint8 _activeSpec;
         uint8 _specsCount;
         uint32 _branchSpec[MAX_TALENT_SPECS];              // tabId of the main talent bran
-        uint32 m_talentSpec[MAX_TALENT_SPECS];              // S[1,MAX_TALENT_TABS] { (numTalentsInTab << (tabPageIndex*8) }
+        uint32 m_talentSpec[MAX_TALENT_SPECS];              // S[1, MAX_TALENT_TABS] { (numTalentsInTab << (tabPageIndex*8) }
         uint32 m_freeTalentPoints;
 
         uint32 m_emote;

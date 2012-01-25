@@ -99,7 +99,7 @@ namespace Movement
             Vector3 middle = (real_path[0] + real_path[last_idx]) / 2.f;
             Vector3 offset;
             // first and last points already appended
-            for(uint32 i = 1; i < last_idx; ++i)
+            for (uint32 i = 1; i < last_idx; ++i)
             {
                 offset = middle - real_path[i];
                 data.appendPackXYZ(offset.x, offset.y, offset.z);
@@ -141,7 +141,7 @@ namespace Movement
 
     void PacketBuilder::WriteCreate(const MoveSpline& move_spline, ByteBuffer& data)
     {
-        //WriteClientStatus(mov,data);
+        //WriteClientStatus(mov, data);
         //data.append<float>(&mov.m_float_values[SpeedWalk], SpeedMaxCount);
         //if (mov.SplineEnabled())
         {

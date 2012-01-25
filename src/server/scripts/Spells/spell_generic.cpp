@@ -1530,7 +1530,7 @@ class spell_gen_damage_reduction_aura : public SpellScriptLoader
         void OnApply(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
         {
             Unit* target = GetTarget();
-            
+
             target->CastSpell(target, SPELL_DAMAGE_REDUCTION_AURA, true);
         }
 
@@ -1540,7 +1540,7 @@ class spell_gen_damage_reduction_aura : public SpellScriptLoader
             if (!target->HasAura(SPELL_DAMAGE_REDUCTION_AURA))
                 return;
 
-            if (target->HasAura(SPELL_BLESSING_OF_SANCTUARY) || 
+            if (target->HasAura(SPELL_BLESSING_OF_SANCTUARY) ||
                 target->HasAura(SPELL_GREATER_BLESSING_OF_SANCTUARY) ||
                 target->HasAura(SPELL_RENEWED_HOPE) ||
                 target->HasAura(SPELL_VIGILANCE))
@@ -1554,7 +1554,6 @@ class spell_gen_damage_reduction_aura : public SpellScriptLoader
             OnEffectApply += AuraEffectApplyFn(spell_gen_damage_reduction_AuraScript::OnApply, EFFECT_0, SPELL_AURA_DUMMY, AURA_EFFECT_HANDLE_REAL_OR_REAPPLY_MASK);
             OnEffectRemove += AuraEffectRemoveFn(spell_gen_damage_reduction_AuraScript::OnRemove, EFFECT_0, SPELL_AURA_DUMMY, AURA_EFFECT_HANDLE_REAL_OR_REAPPLY_MASK);
         }
-
     };
 
     AuraScript* GetAuraScript() const
@@ -1597,5 +1596,5 @@ void AddSC_generic_spell_scripts()
     new spell_gen_luck_of_the_draw();
     new spell_gen_spirit_healer_res();
     new spell_gen_reindeer_transformation();
-    new spell_gen_damage_reduction_aura();    
+    new spell_gen_damage_reduction_aura();
 }

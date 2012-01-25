@@ -75,7 +75,7 @@ namespace VMAP
             InstanceTreeMap iInstanceMapTrees;
             // Mutex for iLoadedModelFiles
             ACE_Thread_Mutex LoadedModelFilesLock;
-           
+
             bool _loadMap(uint32 mapId, const std::string& basePath, uint32 tileX, uint32 tileY);
             /* void _unloadMap(uint32 pMapId, uint32 x, uint32 y); */
 

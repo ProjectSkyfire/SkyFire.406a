@@ -447,7 +447,7 @@ public:
             CombatCheck = false;
         }
 
-        float x,y,z,o,newx,newy,angle;
+        float x, y, z, o, newx, newy, angle;
         bool CombatCheck;
         uint32 DespawnTimer;
         uint32 DespawnCheckTimer;

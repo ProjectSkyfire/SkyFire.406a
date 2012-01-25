@@ -63,19 +63,19 @@ struct CouncilYells
 
 static CouncilYells CouncilAggro[]=
 {
-    {-1564069, 5000},                                       // Gathios
-    {-1564070, 5500},                                       // Veras
-    {-1564071, 5000},                                       // Malande
-    {-1564072, 0},                                          // Zerevor
+    {-1564069, 5000},                                      // Gathios
+    {-1564070, 5500},                                      // Veras
+    {-1564071, 5000},                                      // Malande
+    {-1564072, 0},                                         // Zerevor
 };
 
 // Need to get proper timers for this later
 static CouncilYells CouncilEnrage[]=
 {
-    {-1564073, 2000},                                       // Gathios
-    {-1564074, 6000},                                       // Veras
-    {-1564075, 5000},                                       // Malande
-    {-1564076, 0},                                          // Zerevor
+    {-1564073, 2000},                                      // Gathios
+    {-1564074, 6000},                                      // Veras
+    {-1564075, 5000},                                      // Malande
+    {-1564076, 0},                                         // Zerevor
 };
 
 // High Nethermancer Zerevor's spells

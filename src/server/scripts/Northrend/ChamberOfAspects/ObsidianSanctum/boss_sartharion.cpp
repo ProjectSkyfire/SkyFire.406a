@@ -145,7 +145,7 @@ struct Locations
 //each dragons special points. First where fly to before connect to connon, second where land point is.
 Waypoint _aTene[]=
 {
-    {3212.854f, 575.597f, 109.856f},                           //init
+    {3212.854f, 575.597f, 109.856f},                          //init
     {3246.425f, 565.367f, 61.249f}                             //end
 };
 

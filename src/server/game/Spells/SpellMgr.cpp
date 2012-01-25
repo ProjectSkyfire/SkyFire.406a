@@ -1856,7 +1856,7 @@ void SpellMgr::LoadSpellProcEvents()
     } while (result->NextRow());
 
     if (customProc)
-        sLog->outString(">> Loaded %u extra and %u custom spell proc event conditions in %u ms",  count, customProc, GetMSTimeDiffToNow(oldMSTime));
+        sLog->outString(">> Loaded %u extra and %u custom spell proc event conditions in %u ms", count, customProc, GetMSTimeDiffToNow(oldMSTime));
     else
         sLog->outString(">> Loaded %u extra spell proc event conditions in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
     sLog->outString();

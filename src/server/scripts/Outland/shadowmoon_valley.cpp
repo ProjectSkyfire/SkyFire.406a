@@ -1127,9 +1127,9 @@ struct WaveData
 
 static WaveData WavesInfo[]=
 {
-    {9, 0, 22075, 10000, 7000, -1000371},   //Illidari Soldier
-    {2, 9, 22074, 10000, 7000, -1000372},   //Illidari Mind Breaker
-    {4, 11, 19797, 10000, 7000, -1000373},  //Illidari Highlord
+    {9, 0, 22075, 10000, 7000, -1000371},  //Illidari Soldier
+    {2, 9, 22074, 10000, 7000, -1000372},  //Illidari Mind Breaker
+    {4, 11, 19797, 10000, 7000, -1000373}, //Illidari Highlord
     {1, 15, 22076, 10000, 7000, -1000374}   //Torloth The Magnificent
 };
 
@@ -1140,14 +1140,14 @@ struct SpawnSpells
 
 static SpawnSpells SpawnCast[]=
 {
-    {10000, 15000, 35871},  // Illidari Soldier Cast - Spellbreaker
-    {10000, 10000, 38985},  // Illidari Mind Breake Cast - Focused Bursts
-    {35000, 35000, 22884},  // Illidari Mind Breake Cast - Psychic Scream
-    {20000, 20000, 17194},  // Illidari Mind Breake Cast - Mind Blast
-    {8000, 15000, 38010},   // Illidari Highlord Cast - Curse of Flames
-    {12000, 20000, 16102},  // Illidari Highlord Cast - Flamestrike
-    {10000, 15000, 15284},  // Torloth the Magnificent Cast - Cleave
-    {18000, 20000, 39082},  // Torloth the Magnificent Cast - Shadowfury
+    {10000, 15000, 35871}, // Illidari Soldier Cast - Spellbreaker
+    {10000, 10000, 38985}, // Illidari Mind Breake Cast - Focused Bursts
+    {35000, 35000, 22884}, // Illidari Mind Breake Cast - Psychic Scream
+    {20000, 20000, 17194}, // Illidari Mind Breake Cast - Mind Blast
+    {8000, 15000, 38010},  // Illidari Highlord Cast - Curse of Flames
+    {12000, 20000, 16102}, // Illidari Highlord Cast - Flamestrike
+    {10000, 15000, 15284}, // Torloth the Magnificent Cast - Cleave
+    {18000, 20000, 39082}, // Torloth the Magnificent Cast - Shadowfury
     {25000, 28000, 33961}   // Torloth the Magnificent Cast - Spell Reflection
 };
 

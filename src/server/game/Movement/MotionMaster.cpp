@@ -208,7 +208,7 @@ void MotionMaster::MoveTargetedHome()
         if (target)
         {
             sLog->outStaticDebug("Following %s (GUID: %u)", target->GetTypeId() == TYPEID_PLAYER ? "player" : "creature", target->GetTypeId() == TYPEID_PLAYER ? target->GetGUIDLow() : ((Creature*)target)->GetDBTableGUIDLow() );
-            Mutate(new FollowMovementGenerator<Creature>(*target,PET_FOLLOW_DIST,PET_FOLLOW_ANGLE), MOTION_SLOT_ACTIVE);
+            Mutate(new FollowMovementGenerator<Creature>(*target, PET_FOLLOW_DIST, PET_FOLLOW_ANGLE), MOTION_SLOT_ACTIVE);
         }
     }
     else
@@ -245,7 +245,7 @@ void MotionMaster::MoveChase(Unit* target, float dist, float angle)
             i_owner->GetGUIDLow(),
             target->GetTypeId() == TYPEID_PLAYER ? "player" : "creature",
             target->GetTypeId() == TYPEID_PLAYER ? target->GetGUIDLow() : target->ToCreature()->GetDBTableGUIDLow());
-        Mutate(new ChaseMovementGenerator<Player>(*target,dist,angle), MOTION_SLOT_ACTIVE);
+        Mutate(new ChaseMovementGenerator<Player>(*target, dist, angle), MOTION_SLOT_ACTIVE);
     }
     else
     {
@@ -253,7 +253,7 @@ void MotionMaster::MoveChase(Unit* target, float dist, float angle)
             i_owner->GetEntry(), i_owner->GetGUIDLow(),
             target->GetTypeId() == TYPEID_PLAYER ? "player" : "creature",
             target->GetTypeId() == TYPEID_PLAYER ? target->GetGUIDLow() : target->ToCreature()->GetDBTableGUIDLow());
-        Mutate(new ChaseMovementGenerator<Creature>(*target,dist,angle), MOTION_SLOT_ACTIVE);
+        Mutate(new ChaseMovementGenerator<Creature>(*target, dist, angle), MOTION_SLOT_ACTIVE);
     }
 }
 
@@ -269,7 +269,7 @@ void MotionMaster::MoveFollow(Unit* target, float dist, float angle, MovementSlo
         sLog->outStaticDebug("Player (GUID: %u) follow to %s (GUID: %u)", i_owner->GetGUIDLow(),
             target->GetTypeId() == TYPEID_PLAYER ? "player" : "creature",
             target->GetTypeId() == TYPEID_PLAYER ? target->GetGUIDLow() : target->ToCreature()->GetDBTableGUIDLow());
-        Mutate(new FollowMovementGenerator<Player>(*target,dist,angle), slot);
+        Mutate(new FollowMovementGenerator<Player>(*target, dist, angle), slot);
     }
     else
     {
@@ -277,7 +277,7 @@ void MotionMaster::MoveFollow(Unit* target, float dist, float angle, MovementSlo
             i_owner->GetEntry(), i_owner->GetGUIDLow(),
             target->GetTypeId() == TYPEID_PLAYER ? "player" : "creature",
             target->GetTypeId() == TYPEID_PLAYER ? target->GetGUIDLow() : target->ToCreature()->GetDBTableGUIDLow());
-        Mutate(new FollowMovementGenerator<Creature>(*target,dist,angle), slot);
+        Mutate(new FollowMovementGenerator<Creature>(*target, dist, angle), slot);
     }
 }
 
@@ -304,7 +304,7 @@ void MotionMaster::MoveLand(uint32 id, Position const& pos, float speed)
     sLog->outStaticDebug("Creature (Entry: %u) landing point (ID: %u X: %f Y: %f Z: %f)", i_owner->GetEntry(), id, x, y, z);
 
     Movement::MoveSplineInit init(*i_owner);
-    init.MoveTo(x,y,z);
+    init.MoveTo(x, y, z);
     init.SetVelocity(speed);
     init.SetAnimation(Movement::ToGround);
     init.Launch();
@@ -319,7 +319,7 @@ void MotionMaster::MoveTakeoff(uint32 id, Position const& pos, float speed)
     sLog->outStaticDebug("Creature (Entry: %u) landing point (ID: %u X: %f Y: %f Z: %f)", i_owner->GetEntry(), id, x, y, z);
 
     Movement::MoveSplineInit init(*i_owner);
-    init.MoveTo(x,y,z);
+    init.MoveTo(x, y, z);
     init.SetVelocity(speed);
     init.SetAnimation(Movement::ToFly);
     init.Launch();
@@ -359,11 +359,11 @@ void MotionMaster::MoveJump(float x, float y, float z, float speedXY, float spee
     sLog->outStaticDebug("Unit (GUID: %u) jump to point (X: %f Y: %f Z: %f)", i_owner->GetGUIDLow(), x, y, z);
 
     float moveTimeHalf = speedZ / Movement::gravity;
-    float max_height = -Movement::computeFallElevation(moveTimeHalf,false,-speedZ);
+    float max_height = -Movement::computeFallElevation(moveTimeHalf, false,-speedZ);
 
     Movement::MoveSplineInit init(*i_owner);
-    init.MoveTo(x,y,z);
-    init.SetParabolic(max_height,0);
+    init.MoveTo(x, y, z);
+    init.SetParabolic(max_height, 0);
     init.SetVelocity(speedXY);
     init.Launch();
     if (i_owner->GetTypeId() == TYPEID_PLAYER)

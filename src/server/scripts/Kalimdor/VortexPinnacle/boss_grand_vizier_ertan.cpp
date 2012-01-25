@@ -59,7 +59,7 @@ public:
             instance->SetData(DATA_GRAND_VIZIER_ERTAN, DONE);
 
             Creature * Slipstream = me->SummonCreature(NPC_SLIPSTREAM, -775.51f, -70.93f, 640.31f, 1.0f, TEMPSUMMON_CORPSE_DESPAWN, 0);
-            Slipstream->SetUInt32Value(UNIT_NPC_FLAGS,UNIT_NPC_FLAG_GOSSIP);
+            Slipstream->SetUInt32Value(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
 
             Map::PlayerList const &PlList = me->GetMap()->GetPlayers();
 
@@ -81,7 +81,7 @@ public:
                 if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                     me->CastSpell(target, DUNGEON_MODE(SPELL_LIGHTNING_BOLT_NORMAL, SPELL_LIGHTNING_BOLT_HEROIC), true);
 
-                LightningBoltTimer = urand(5*IN_MILLISECONDS,7*IN_MILLISECONDS);
+                LightningBoltTimer = urand(5*IN_MILLISECONDS, 7*IN_MILLISECONDS);
             } else LightningBoltTimer -= diff;
 
             DoMeleeAttackIfReady();

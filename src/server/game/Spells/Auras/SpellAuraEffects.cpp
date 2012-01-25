@@ -4798,19 +4798,19 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
                     // Guardian of Ancient Kings - Retribution
                 case 86698:
                 {
-                    caster->CastSpell(caster,86701,true);
+                    caster->CastSpell(caster, 86701, true);
                     break;
                 }
                     // Guardian of Ancient Kings - Holy
                 case 86669:
                 {
-                    caster->CastSpell(caster,86674,true);
+                    caster->CastSpell(caster, 86674, true);
                     break;
                 }
                 case 52437:  // Sudden Death Cataclysm Proc
                 {
                     if (caster && caster->ToPlayer()->HasSpellCooldown(86346))
-                        caster->ToPlayer()->RemoveSpellCooldown(86346,true);
+                        caster->ToPlayer()->RemoveSpellCooldown(86346, true);
                     break;
                 }
                 case 34026:   // kill command
@@ -5229,7 +5229,7 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
                         {
                             if (aurApp->GetBase()->GetOwner()->ToUnit()->HasAura(86700))
                             {
-                                caster->CastSpell((Unit*)NULL,86704,true);
+                                caster->CastSpell((Unit*)NULL, 86704, true);
                                 caster->RemoveAura(86701);
                                 caster->RemoveAura(86700);
                             }
@@ -5918,9 +5918,9 @@ void AuraEffect::HandleAuraSetVehicle(AuraApplication const* aurApp, uint8 mode,
         return;
 
     if (apply)
-        aurApp->GetTarget()->learnSpell(spell,false);
+        aurApp->GetTarget()->learnSpell(spell, false);
     else
-        aurApp->GetTarget()->removeSpell(spell,false,false);
+        aurApp->GetTarget()->removeSpell(spell, false, false);
 }*/
 
 void AuraEffect::HandlePreventResurrection(AuraApplication const* aurApp, uint8 mode, bool apply) const

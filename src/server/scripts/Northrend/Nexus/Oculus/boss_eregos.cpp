@@ -18,7 +18,7 @@
 #include "ScriptPCH.h"
 #include "oculus.h"
 
-//Types of drake mounts: Ruby(Tank),  Amber(DPS),  Emerald(Healer)
+//Types of drake mounts: Ruby(Tank), Amber(DPS), Emerald(Healer)
 //Two Repeating phases
 
 enum Events

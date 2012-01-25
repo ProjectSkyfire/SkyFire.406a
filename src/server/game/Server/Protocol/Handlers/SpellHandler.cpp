@@ -333,7 +333,7 @@ void WorldSession::HandleGameobjectReportUse(WorldPacket& recvPacket)
 
 void WorldSession::HandleCastSpellOpcode(WorldPacket& recvPacket)
 {
-    uint32 spellId,glyphIndex;
+    uint32 spellId, glyphIndex;
     uint8  castCount, castFlags;
     recvPacket >> castCount >> spellId >> glyphIndex >> castFlags;
 

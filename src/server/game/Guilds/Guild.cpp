@@ -617,7 +617,7 @@ void Guild::Member::SaveToDB(SQLTransaction& trans) const
     stmt->setUInt32(7, professions[0].rank);
     stmt->setUInt32(8, professions[1].level);
     stmt->setUInt32(9, professions[1].skillID);
-    stmt->setUInt32(10,professions[1].rank);
+    stmt->setUInt32(10, professions[1].rank);
     CharacterDatabase.ExecuteOrAppend(trans, stmt);
 }
 
@@ -2272,11 +2272,11 @@ bool Guild::LoadEventLogFromDB(Field* fields)
     {
         m_eventLog->LoadEvent(new EventLogEntry(
             m_id,                                       // guild id
-            fields[1].GetUInt32(),                      // guid
-            time_t(fields[6].GetUInt32()),              // timestamp
-            GuildEventLogTypes(fields[2].GetUInt8()),   // event type
-            fields[3].GetUInt32(),                      // player guid 1
-            fields[4].GetUInt32(),                      // player guid 2
+            fields[1].GetUInt32(),                     // guid
+            time_t(fields[6].GetUInt32()),             // timestamp
+            GuildEventLogTypes(fields[2].GetUInt8()),  // event type
+            fields[3].GetUInt32(),                     // player guid 1
+            fields[4].GetUInt32(),                     // player guid 2
             fields[5].GetUInt8()));                     // rank
         return true;
     }
@@ -2311,12 +2311,12 @@ bool Guild::LoadBankEventLogFromDB(Field* fields)
             pLog->LoadEvent(new BankEventLogEntry(
                 m_id,                                   // guild id
                 guid,                                   // guid
-                time_t(fields[8].GetUInt32()),          // timestamp
+                time_t(fields[8].GetUInt32()),         // timestamp
                 dbTabId,                                // tab id
                 eventType,                              // event type
-                fields[4].GetUInt32(),                  // player guid
-                fields[5].GetUInt32(),                  // item or money
-                fields[6].GetUInt16(),                  // itam stack count
+                fields[4].GetUInt32(),                 // player guid
+                fields[5].GetUInt32(),                 // item or money
+                fields[6].GetUInt16(),                 // itam stack count
                 fields[7].GetUInt8()));                 // dest tab id
         }
     }

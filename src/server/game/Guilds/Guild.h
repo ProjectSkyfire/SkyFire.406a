@@ -319,7 +319,7 @@ private:
         void SetZoneID(uint32 id) { m_zoneId = id; }
         void SetAchievementPoints(uint32 val) { m_achievementPoints = val; }
         void SetLevel(uint8 var) { m_level = var; }
-		
+
         void SetProfession(uint32 num, uint32 level, uint32 skill, uint32 rank)
         {
             professions[num].level = level;
