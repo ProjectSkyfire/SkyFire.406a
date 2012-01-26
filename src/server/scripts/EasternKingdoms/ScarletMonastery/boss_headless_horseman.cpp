@@ -29,59 +29,66 @@ EndScriptData */
 #include "scarlet_monastery.h"
 
 //this texts are already used by 3975 and 3976
-#define SAY_ENTRANCE                -1189001
-#define SAY_REJOINED                -1189002
-#define SAY_LOST_HEAD               -1189003
-#define SAY_CONFLAGRATION           -1189004
-#define SAY_SPROUTING_PUMPKINS      -1189005
-#define SAY_PLAYER_DEATH            -1189006
-#define SAY_DEATH                   -1189007
+enum Says
+{
+    SAY_ENTRANCE                = -1189001,
+    SAY_REJOINED                = -1189002,
+    SAY_LOST_HEAD               = -1189003,
+    SAY_CONFLAGRATION           = -1189004,
+    SAY_SPROUTING_PUMPKINS      = -1189005,
+    SAY_PLAYER_DEATH            = -1189006,
+    SAY_DEATH                   = -1189007
+};
 
 uint32 RandomLaugh[] = {11965, 11975, 11976};
 
-    // Entryes
-#define HH_MOUNTED                  23682
-#define HH_UNHORSED                 23800
-#define HEAD                        23775
-#define PULSING_PUMPKIN             23694
-#define PUMPKIN_FIEND               23545
-#define HELPER                      23686
-#define WISP_INVIS                  24034
+enum Entry
+{
+    HH_MOUNTED                  = 23682,
+    HH_DISMOUNTED               = 23800,  // unhorsed?? wtf type of engrish was that?
+    HEAD                        = 23775,
+    PULSING_PUMPKIN             = 23694,
+    PUMPKIN_FIEND               = 23545,
+    HELPER                      = 23686,
+    WISP_INVIS                  = 24034
+};
 
-    //Spells
-#define SPELL_CLEAVE                42587
-#define SPELL_CONFLAGRATION         42380       //Phase 2, can't find real spell(Dim Fire?)
-//#define SPELL_CONFL_SPEED         22587       //8% increase speed, value 22587 from SPELL_CONFLAGRATION mains that spell?
-#define SPELL_SUMMON_PUMPKIN        42394
+enum Spells
+{
+    SPELL_CLEAVE                = 42587,
+    SPELL_CONFLAGRATION         = 42380,       //Phase 2, can't find real spell(Dim Fire?)
+ // SPELL_CONFL_SPEED           = 22587,       //8% increase speed, value 22587 from SPELL_CONFLAGRATION mains that spell?
+    SPELL_SUMMON_PUMPKIN        = 42394,
 
-#define SPELL_WHIRLWIND             43116
-#define SPELL_IMMUNE                42556
-#define SPELL_BODY_REGEN            42403
-#define SPELL_CONFUSE               43105
+    SPELL_WHIRLWIND             = 43116,
+    SPELL_IMMUNE                = 42556,
+    SPELL_BODY_REGEN            = 42403,
+    SPELL_CONFUSE               = 43105,
 
-#define SPELL_FLYING_HEAD           42399       //visual flying head
-#define SPELL_HEAD                  42413       //visual buff, "head"
-#define SPELL_HEAD_IS_DEAD          42428       //at killing head, Phase 3
+    SPELL_FLYING_HEAD           = 42399,       //visual flying head
+    SPELL_HEAD                  = 42413,       //visual buff, "head"
+    SPELL_HEAD_IS_DEAD          = 42428,       //at killing head, Phase 3
 
-#define SPELL_PUMPKIN_AURA          42280
-#define SPELL_PUMPKIN_AURA_GREEN    42294
-#define SPELL_SQUASH_SOUL           42514
-#define SPELL_SPROUTING             42281
-#define SPELL_SPROUT_BODY           42285
+    SPELL_PUMPKIN_AURA          = 42280,
+    SPELL_PUMPKIN_AURA_GREEN    = 42294,
+    SPELL_SQUASH_SOUL           = 42514,
+    SPELL_SPROUTING             = 42281,
+    SPELL_SPROUT_BODY           = 42285,
 
     //Effects
-#define SPELL_RHYME_BIG             42909
-//#define SPELL_RHYME_SMALL         42910
-#define SPELL_HEAD_SPEAKS           43129
-#define SPELL_HEAD_LANDS            42400
-#define SPELL_BODY_FLAME            42074
-#define SPELL_HEAD_FLAME            42971
-//#define SPELL_ENRAGE_VISUAL       42438       // he uses this spell?
-#define SPELL_WISP_BLUE             42821
-#define SPELL_WISP_FLIGHT_PORT      42818
-//#define SPELL_WISP_INVIS          42823
-#define SPELL_SMOKE                 42355
-#define SPELL_DEATH                 42566       //not correct spell
+    SPELL_RHYME_BIG             = 42909,
+ // SPELL_RHYME_SMALL           = 42910,
+    SPELL_HEAD_SPEAKS           = 43129,
+    SPELL_HEAD_LANDS            = 42400,
+    SPELL_BODY_FLAME            = 42074,
+    SPELL_HEAD_FLAME            = 42971,
+ // SPELL_ENRAGE_VISUAL         = 42438,       // he uses this spell?
+    SPELL_WISP_BLUE             = 42821,
+    SPELL_WISP_FLIGHT_PORT      = 42818,
+ // SPELL_WISP_INVIS            = 42823,
+    SPELL_SMOKE                 = 42355,
+    SPELL_DEATH                 = 42566       //not correct spell
+};
 
 struct Locations
 {
@@ -127,7 +134,7 @@ static const char* Text[]=
     "Now, know demise!"
 };
 
-#define EMOTE_LAUGHS    "Headless Horseman laughs"
+#define EMOTE_LAUGHS    "Headless Horseman laughs"  // needs assigned to db.
 
 class mob_wisp_invis : public CreatureScript
 {

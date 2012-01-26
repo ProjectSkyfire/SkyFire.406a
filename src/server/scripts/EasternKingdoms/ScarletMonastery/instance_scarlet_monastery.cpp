@@ -27,10 +27,13 @@ EndScriptData */
 #include "ScriptPCH.h"
 #include "scarlet_monastery.h"
 
-#define ENTRY_PUMPKIN_SHRINE    186267
-#define ENTRY_HORSEMAN          23682
-#define ENTRY_HEAD              23775
-#define ENTRY_PUMPKIN           23694
+enum Entry
+{
+    ENTRY_PUMPKIN_SHRINE    = 186267,
+    ENTRY_HORSEMAN          = 23682,
+    ENTRY_HEAD              = 23775,
+    ENTRY_PUMPKIN           = 23694
+};
 
 #define MAX_ENCOUNTER 2
 

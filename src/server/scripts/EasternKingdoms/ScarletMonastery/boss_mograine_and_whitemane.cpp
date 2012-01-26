@@ -27,7 +27,7 @@ EndScriptData */
 #include "ScriptPCH.h"
 #include "scarlet_monastery.h"
 
-enum eEnums
+enum Says
 {
     //Mograine says
     SAY_MO_AGGRO                 = -1189005,
@@ -38,7 +38,10 @@ enum eEnums
     SAY_WH_INTRO                 = -1189008,
     SAY_WH_KILL                  = -1189009,
     SAY_WH_RESSURECT             = -1189010,
+};
 
+enum Spells
+{
     //Mograine Spells
     SPELL_CRUSADERSTRIKE         = 14518,
     SPELL_HAMMEROFJUSTICE        = 5589,

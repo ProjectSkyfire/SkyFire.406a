@@ -25,10 +25,12 @@ SDCategory: Scarlet Monastery
 EndScriptData */
 
 #include "ScriptPCH.h"
-
-#define SPELL_CALLOFTHEGRAVE            17831
-#define SPELL_TERRIFY                   7399
-#define SPELL_SOULSIPHON                7290
+enum Spells
+{
+    SPELL_CALLOFTHEGRAVE            = 17831,
+    SPELL_TERRIFY                   = 7399,
+    SPELL_SOULSIPHON                = 7290
+};
 
 class boss_azshir_the_sleepless : public CreatureScript
 {

@@ -26,10 +26,13 @@ EndScriptData */
 
 #include "ScriptPCH.h"
 
-#define SPELL_LICHSLAP                  28873
-#define SPELL_FROSTBOLTVOLLEY           8398
-#define SPELL_MINDFLAY                  17313
-#define SPELL_FROSTNOVA                 15531
+enum Spells
+{
+    SPELL_LICHSLAP                  = 28873,
+    SPELL_FROSTBOLTVOLLEY           = 8398,
+    SPELL_MINDFLAY                  = 17313,
+    SPELL_FROSTNOVA                 = 15531
+};
 
 class boss_scorn : public CreatureScript
 {
