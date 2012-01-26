@@ -4198,8 +4198,19 @@ void Player::removeSpell(uint32 spell_id, bool disabled, bool learn_low_rank)
 
     if (spell_id == 46917 && _canTitanGrip)
         SetCanTitanGrip(false);
-    if (spell_id == 674 && _canDualWield)
-        SetCanDualWield(false);
+    if (_canDualWield)
+    {
+        SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(spell_id);
+        if (spellInfo->IsPassive())
+        {
+            for (int i = 0; i < MAX_SPELL_EFFECTS; ++i)
+                if (spellInfo->Effects[i].Effect == SPELL_EFFECT_DUAL_WIELD)
+                {
+                    SetCanDualWield(false);
+                    break;
+                }
+        }
+    }
 
     if (sWorld->getBoolConfig(CONFIG_OFFHAND_CHECK_AT_SPELL_UNLEARN))
         AutoUnequipOffhandIfNeed();
