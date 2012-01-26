@@ -90,9 +90,9 @@ public:
 
         InstanceScript* instance;
 
-        uint32 uiRavageTimer;
-        uint32 uiFrostNovaTimer;
-        uint32 uiFrostBoltVolleyTimer;
+        uint32 ravageTimer;
+        uint32 frostNovaTimer;
+        uint32 frostBoltVolleyTimer;
 
         bool bFlee;
 
@@ -100,9 +100,9 @@ public:
         {
             bFlee = false;
 
-            uiRavageTimer           = urand(5000, 8000);
-            uiFrostNovaTimer        = urand(9000, 12000);
-            uiFrostBoltVolleyTimer  = urand(2000, 4000);
+            ravageTimer           = urand(5000, 8000);
+            frostNovaTimer        = urand(9000, 12000);
+            frostBoltVolleyTimer  = urand(2000, 4000);
         }
 
         void AttackPlayer()
@@ -129,7 +129,7 @@ public:
             }
         }
 
-        void UpdateAI(const uint32 uiDiff)
+        void UpdateAI(const uint32 diff)
         {
             if (!UpdateVictim())
                 return;
@@ -138,11 +138,11 @@ public:
             {
                 case NPC_AKU_MAI_SNAPJAW:
                 {
-                    if (uiRavageTimer <= uiDiff)
+                    if (ravageTimer <= diff)
                     {
                         DoCast(me->getVictim(), SPELL_RAVAGE);
-                        uiRavageTimer = urand(9000, 14000);
-                    } else uiRavageTimer -= uiDiff;
+                        ravageTimer = urand(9000, 14000);
+                    } else ravageTimer -= diff;
                     break;
                 }
                 case NPC_MURKSHALLOW_SOFTSHELL:
@@ -157,20 +157,23 @@ public:
                 }
                 case NPC_AKU_MAI_SERVANT:
                 {
-                    if (uiFrostBoltVolleyTimer <= uiDiff)
+                    if (frostBoltVolleyTimer <= diff)
                     {
                         if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                         {
                             if (target)
                                 DoCast(target, SPELL_FROST_BOLT_VOLLEY);
                         }
-                        uiFrostBoltVolleyTimer = urand(5000, 8000);
-                    } else uiFrostBoltVolleyTimer -= uiDiff;
-                    if (uiFrostNovaTimer <= uiDiff)
+                        frostBoltVolleyTimer = urand(5000, 8000);
+                    } 
+                    else frostBoltVolleyTimer -= diff;
+                    
+                    if (frostNovaTimer <= diff)
                     {
                         DoCastAOE(SPELL_FROST_NOVA, false);
-                        uiFrostNovaTimer = urand(25000, 30000);
-                    } else uiFrostNovaTimer -= uiDiff;
+                        frostNovaTimer = urand(25000, 30000);
+                    } 
+                    else frostNovaTimer -= diff;
                     break;
                 }
             }
@@ -203,7 +206,7 @@ public:
         player->PlayerTalkClass->ClearMenus();
         switch (action)
         {
-            case GOSSIP_ACTION_INFO_DEF+1:
+            case GOSSIP_ACTION_INFO_DEF + 1:
                 player->TeleportTo(1, 9952.239f, 2284.277f, 1341.394f, 1.595f);
                 player->CLOSE_GOSSIP_MENU();
                 break;
@@ -213,7 +216,7 @@ public:
 
     bool OnGossipHello(Player* player, Creature* creature)
     {
-        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_MORRIDUNE, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_MORRIDUNE, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
         player->SEND_GOSSIP_MENU(player->GetGossipTextId(creature), creature->GetGUID());
         return true;
