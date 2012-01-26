@@ -34,14 +34,13 @@ enum SpellEffIndex
 #define EFFECT_FIRST_FOUND 254
 #define EFFECT_ALL 255
 
-// loot modes for creatures and gameobjects, bitmask!
 enum LootModes
 {
-    LOOT_MODE_DEFAULT                  = 0x01,
-    LOOT_MODE_HARD_MODE_1              = 0x02,
-    LOOT_MODE_HARD_MODE_2              = 0x04,
-    LOOT_MODE_HARD_MODE_3              = 0x08,
-    LOOT_MODE_HARD_MODE_4              = 0x10
+    LOOT_MODE_DEFAULT                  = 1,
+    LOOT_MODE_HARD_MODE_1              = 2,
+    LOOT_MODE_HARD_MODE_2              = 4,
+    LOOT_MODE_HARD_MODE_3              = 8,
+    LOOT_MODE_HARD_MODE_4              = 16
 };
 
 enum Gender
@@ -171,20 +170,20 @@ enum Stats
 
 enum Powers
 {
-    POWER_MANA                          = 0,
-    POWER_RAGE                          = 1,
-    POWER_FOCUS                         = 2,
-    POWER_ENERGY                        = 3,
-    POWER_HAPPINESS                     = 4,
-    POWER_RUNE                          = 5,
-    POWER_RUNIC_POWER                   = 6,
-    POWER_SOULSHARDS                    = 7,
-    POWER_ECLIPSE                       = 8,
-    POWER_HOLY_POWER                    = 9,
-  // POWER_UNK                           = 10,
-    MAX_POWERS                          = 10,
-    POWER_ALL                           = 127,    // default for class?
-    POWER_HEALTH                        = 0xFFFFFFFE    // (-2 as signed value)
+    POWER_MANA                            = 0,
+    POWER_RAGE                            = 1,
+    POWER_FOCUS                           = 2,
+    POWER_ENERGY                          = 3,
+    POWER_HAPPINESS                       = 4,
+    POWER_RUNE                            = 5,
+    POWER_RUNIC_POWER                     = 6,
+    POWER_SOULSHARDS                      = 7,
+    POWER_ECLIPSE                         = 8,
+    POWER_HOLY_POWER                      = 9,
+ // POWER_ALTERNATIVE                     = 10,  // Used in some quests
+    MAX_POWERS                            = 10,
+    POWER_ALL                             = 127, // default for class?
+    POWER_HEALTH                          = 0xFFFFFFFE // (-2 as signed value)
 };
 
 enum SpellSchools

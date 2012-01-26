@@ -7462,7 +7462,7 @@ void Player::ModifyCurrency(uint32 id, int32 count, bool force)
         {
             // if (count > 0)
               // GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_CURRENCY, id, count);    // todo
-        
+
             WorldPacket packet(SMSG_UPDATE_CURRENCY, 12);
             packet << uint32(id);
             packet << uint32(weekCap ? (newWeekCount / PLAYER_CURRENCY_PRECISION) : 0);
@@ -9523,7 +9523,7 @@ void Player::SendLoot(uint64 guid, LootType loot_type)
     {
         if (Item *item = GetItemByGuid(guid))
         {
-			objEntry = item->GetTemplate()->ItemId;
+            objEntry = item->GetTemplate()->ItemId;
             objType = 2;
         }
     }
@@ -9539,7 +9539,7 @@ void Player::SendLoot(uint64 guid, LootType loot_type)
     {
         if (GameObject *gobject = GetMap()->GetGameObject(guid))
         {
-			objEntry = gobject->GetGOInfo()->entry;
+            objEntry = gobject->GetGOInfo()->entry;
             objType = 3;
         }
     }
@@ -19855,27 +19855,26 @@ void Player::_SaveStats(SQLTransaction& trans)
     trans->PAppend("DELETE FROM character_stats WHERE guid = '%u'", GetGUIDLow());
     std::ostringstream ss;
     ss << "INSERT INTO character_stats (guid, maxhealth, maxpower1, maxpower2, maxpower3, maxpower4, maxpower5, maxpower6, maxpower7, maxpower8, maxpower9, maxpower10, "
-        "strength, agility, stamina, intellect, spirit, armor, resHoly, resFire, resNature, resFrost, resShadow, resArcane, "
-        "blockPct, dodgePct, parryPct, critPct, rangedCritPct, spellCritPct, attackPower, rangedAttackPower, spellPower, resilience) VALUES ("
-        << GetGUIDLow() << ','
-        << GetMaxHealth() << ',';
+    "strength, agility, stamina, intellect, spirit, armor, resHoly, resFire, resNature, resFrost, resShadow, resArcane, "
+    "blockPct, dodgePct, parryPct, critPct, rangedCritPct, spellCritPct, attackPower, rangedAttackPower, spellPower) VALUES ("
+    << GetGUIDLow() << ', '
+    << GetMaxHealth() << ', ';
     for (uint8 i = 0; i < MAX_POWERS; ++i)
-        ss << GetMaxPower(Powers(i)) << ',';
+        ss << GetMaxPower(Powers(i)) << ', ';
     for (uint8 i = 0; i < MAX_STATS; ++i)
-        ss << GetStat(Stats(i)) << ',';
+        ss << GetStat(Stats(i)) << ', ';
     // armor + school resistances
     for (int i = 0; i < MAX_SPELL_SCHOOL; ++i)
-        ss << GetResistance(SpellSchools(i)) << ',';
-    ss << GetFloatValue(PLAYER_BLOCK_PERCENTAGE) << ','
-       << GetFloatValue(PLAYER_DODGE_PERCENTAGE) << ','
-       << GetFloatValue(PLAYER_PARRY_PERCENTAGE) << ','
-       << GetFloatValue(PLAYER_CRIT_PERCENTAGE) << ','
-       << GetFloatValue(PLAYER_RANGED_CRIT_PERCENTAGE) << ','
-       << GetFloatValue(PLAYER_SPELL_CRIT_PERCENTAGE1) << ','
-       << GetUInt32Value(UNIT_FIELD_ATTACK_POWER) << ','
-       << GetUInt32Value(UNIT_FIELD_RANGED_ATTACK_POWER) << ','
-       << GetBaseSpellPowerBonus() << ','
-       << GetUInt32Value(PLAYER_FIELD_COMBAT_RATING_1 + CR_CRIT_TAKEN_SPELL) << ')';
+        ss << GetResistance(SpellSchools(i)) << ', ';
+    ss << GetFloatValue(PLAYER_BLOCK_PERCENTAGE) << ', '
+            << GetFloatValue(PLAYER_DODGE_PERCENTAGE) << ', '
+            << GetFloatValue(PLAYER_PARRY_PERCENTAGE) << ', '
+            << GetFloatValue(PLAYER_CRIT_PERCENTAGE) << ', '
+            << GetFloatValue(PLAYER_RANGED_CRIT_PERCENTAGE) << ', '
+            << GetFloatValue(PLAYER_SPELL_CRIT_PERCENTAGE1) << ', '
+            << GetUInt32Value(UNIT_FIELD_ATTACK_POWER) << ', '
+            << GetUInt32Value(UNIT_FIELD_RANGED_ATTACK_POWER) << ', '
+            << GetBaseSpellPowerBonus() << ')';
     trans->Append(ss.str().c_str());
 }
 
