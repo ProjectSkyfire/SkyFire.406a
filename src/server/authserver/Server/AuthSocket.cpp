@@ -677,11 +677,11 @@ bool AuthSocket::_HandleLogonProof()
                     else
                     {
                         stmt = LoginDatabase.GetPreparedStatement(LOGIN_SET_IPAUTOBANNED);
-                        stmt->setString(0, socket().get_remote_address());
+                        stmt->setString(0, socket().getRemoteAddress());
                         stmt->setUInt32(1, WrongPassBanTime);
                         LoginDatabase.Execute(stmt);
 
-                        sLog->outBasic("[AuthChallenge] IP %s got banned for '%u' seconds because account %s failed to authenticate '%u' times", socket().get_remote_address().c_str(), WrongPassBanTime, _login.c_str(), failed_logins);
+                        sLog->outBasic("[AuthChallenge] IP %s got banned for '%u' seconds because account %s failed to authenticate '%u' times", socket().getRemoteAddress().c_str(), WrongPassBanTime, _login.c_str(), failed_logins);
                     }
                 }
             }
