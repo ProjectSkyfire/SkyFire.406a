@@ -364,7 +364,6 @@ class Battleground
         uint8 GetArenaType() const          { return _ArenaType; }
         uint8 GetWinner() const             { return _Winner; }
         uint32 GetScriptId() const          { return ScriptId; }
-        uint32 GetBattlemasterEntry() const;
         uint32 GetBonusHonorFromKill(uint32 kills) const;
         bool IsRandom() const { return _IsRandom; }
 
