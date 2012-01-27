@@ -32,7 +32,7 @@ RealmSocket::Session::Session(void) {}
 
 RealmSocket::Session::~Session(void) { }
 
-RealmSocket::RealmSocket(void) : input_buffer_(4096), session_(NULL), remote_address_()
+RealmSocket::RealmSocket(void) : input_buffer_(4096), session_(NULL), _remoteAddress()
 {
     reference_counting_policy().value(ACE_Event_Handler::Reference_Counting_Policy::ENABLED);
 
@@ -64,7 +64,8 @@ int RealmSocket::open(void * arg)
         return -1;
     }
 
-    remote_address_ = addr.get_host_addr();
+    _remoteAddress = addr.get_host_addr();
+    _remotePort = addr.get_port_number();
 
     // Register with ACE Reactor
     if (Base::open(arg) == -1)
@@ -90,9 +91,14 @@ int RealmSocket::close(int)
     return 0;
 }
 
-const std::string& RealmSocket::get_remote_address(void) const
+const std::string& RealmSocket::getRemoteAddress(void) const
 {
-    return remote_address_;
+    return _remoteAddress;
+}
+
+const uint16 RealmSocket::getRemotePort(void) const
+{
+    return _remotePort;
 }
 
 size_t RealmSocket::recv_len(void) const

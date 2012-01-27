@@ -53,7 +53,9 @@ public:
 
     bool send(const char *buf, size_t len);
 
-    const std::string& get_remote_address(void) const;
+    const std::string& getRemoteAddress(void) const;
+
+    const uint16 getRemotePort(void) const;
 
     virtual int open(void *);
 
@@ -71,7 +73,8 @@ private:
 
     ACE_Message_Block input_buffer_;
     Session* session_;
-    std::string remote_address_;
+    std::string _remoteAddress;
+    uint16 _remotePort;
 };
 
 #endif /* __REALMSOCKET_H__ */
