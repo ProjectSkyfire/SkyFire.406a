@@ -17161,7 +17161,7 @@ void Unit::_ExitVehicle(Position const* exitPosition)
 
     WorldPacket data2;
     BuildHeartBeatMsg(&data2);
-    SendMessageToSet(&data2, true);
+    SendMessageToSet(&data2, false);
 
     if (vehicle->GetBase()->HasUnitTypeMask(UNIT_MASK_MINION))
         if (((Minion*)vehicle->GetBase())->GetOwner() == this)
