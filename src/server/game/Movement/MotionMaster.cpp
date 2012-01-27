@@ -238,7 +238,9 @@ void MotionMaster::MoveChase(Unit* target, float dist, float angle)
     if (!target || target == i_owner || i_owner->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISABLE_MOVE))
         return;
 
-    //i_owner->ClearUnitState(UNIT_STAT_FOLLOW);
+    if (Impl[MOTION_SLOT_ACTIVE] && Impl[MOTION_SLOT_ACTIVE]->GetMovementGeneratorType() == HOME_MOTION_TYPE)
+        return;
+
     if (i_owner->GetTypeId() == TYPEID_PLAYER)
     {
         sLog->outStaticDebug("Player (GUID: %u) chase to %s (GUID: %u)",
