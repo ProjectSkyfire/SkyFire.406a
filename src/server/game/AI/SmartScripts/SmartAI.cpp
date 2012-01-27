@@ -47,7 +47,7 @@ SmartAI::SmartAI(Creature* c) : CreatureAI(c)
 
     // spawn in run mode
     me->RemoveUnitMovementFlag(MOVEMENTFLAG_WALKING);
-    mRun = true;
+    mRun = false;
 
     me->GetPosition(&mLastOOCPos);
 
