@@ -61,7 +61,7 @@
 #include "AddonMgr.h"
 #include "AccountMgr.h"
 #include "AuctionHouseMgr.h"
-#include "CalendarMgr.h"
+#include "Calendar.h"
 #include "UnitEvents.h"
 #include "HostileRefManager.h"
 #include "ThreatManager.h"
