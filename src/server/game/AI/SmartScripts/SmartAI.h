@@ -194,7 +194,7 @@ class SmartAI : public CreatureAI
             mDespawnState = t ? 1 : 0;
         }
         void StartDespawn() { mDespawnState = 2; }
-        
+
         void RemoveAuras();
 
     private:

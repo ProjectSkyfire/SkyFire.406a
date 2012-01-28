@@ -300,7 +300,6 @@ void SmartAI::UpdatePath(const uint32 diff)
             mWPPauseTimer = 0;
         } else {
             mWPPauseTimer -= diff;
-
         }
     }
     if (HasEscortState(SMART_ESCORT_RETURNING))
@@ -330,7 +329,6 @@ void SmartAI::UpdatePath(const uint32 diff)
                 me->GetMotionMaster()->MovePoint(wp->id, wp->x, wp->y, wp->z);
             }
         }
-
     }
 }
 
@@ -450,7 +448,7 @@ void SmartAI::EnterEvadeMode()
         return;
 
     RemoveAuras();
-    
+
     me->DeleteThreatList();
     me->CombatStop(true);
     me->LoadCreaturesAddon();
@@ -480,15 +478,15 @@ void SmartAI::MoveInLineOfSight(Unit* who)
 {
     if (!who)
         return;
-    
+
     GetScript()->OnMoveInLineOfSight(who);
-    
+
     if (me->HasReactState(REACT_PASSIVE) || AssistPlayerInCombat(who))
         return;
 
     if (!CanAIAttack(who))
         return;
-    
+
     if (!me->canStartAttack(who, false))
         return;
 
@@ -825,7 +823,7 @@ void SmartAI::SetScript9(SmartScriptHolder& e, uint32 entry, Unit* invoker)
         GetScript()->mLastInvoker = invoker->GetGUID();
     GetScript()->SetScript9(e, entry);
 }
-    
+
 void SmartAI::sOnGameEvent(bool start, uint16 eventId)
 {
     GetScript()->ProcessEventsFor(start ? SMART_EVENT_GAME_EVENT_START : SMART_EVENT_GAME_EVENT_END, NULL, eventId);

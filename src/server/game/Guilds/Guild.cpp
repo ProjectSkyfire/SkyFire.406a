@@ -516,13 +516,13 @@ void Guild::Member::SetStats(Player* player)
     m_zoneId    = player->GetZoneId();
     m_accountId = player->GetSession()->GetAccountId();
     m_achievementPoints = player->GetAchievementMgr().GetAchievementPoints();
-	
+
     uint8 count_prof = 0;
     for (PlayerSpellMap::const_iterator spellIter = player->GetSpellMap().begin(); spellIter != player->GetSpellMap().end(); ++spellIter)
     {
         if (count_prof >= 2)
             break;
-    
+
         SpellInfo const *spellInfo = sSpellMgr->GetSpellInfo(spellIter->first);
             if (!spellInfo)
                 continue;
@@ -536,7 +536,7 @@ void Guild::Member::SetStats(Player* player)
                 if (spellInfo->Effects[i].Effect == SPELL_EFFECT_SKILL)
                 {
                     uint32 skill = spellInfo->Effects[i].MiscValue;
-                    break; 
+                    break;
                 }
             }
 
@@ -559,7 +559,7 @@ void Guild::Member::SetStats(const std::string& name, uint8 level, uint8 _class,
     m_class     = _class;
     m_zoneId    = zoneId;
     m_accountId = accountId;
-	
+
     for (int i = 0; i < 2; i++)
         SetProfession(i, 0, 0, 0);
 }
@@ -642,7 +642,7 @@ bool Guild::Member::LoadFromDB(Field* fields)
              fields[26].GetUInt16(),
              fields[27].GetUInt32());
     m_logoutTime    = fields[28].GetUInt32();
-	
+
     SetProfession(0, fields[29].GetUInt32(), fields[30].GetUInt32(), fields[31].GetUInt32());
     SetProfession(1, fields[32].GetUInt32(), fields[33].GetUInt32(), fields[34].GetUInt32());
 
@@ -1274,10 +1274,10 @@ void Guild::UpdateMemberData(Player* player, uint8 dataid, uint32 value)
                             if (spellInfo->Effects[i].Effect == SPELL_EFFECT_SKILL)
                             {
                                 skill = spellInfo->Effects[i].MiscValue;
-                                break; 
+                                break;
                             }
                         }
-                        
+
                         uint32 value = (uint32)player->GetSkillValue(skill);
                         uint32 rank = sSpellMgr->GetSpellRank(spellIter->first);
 
@@ -1285,7 +1285,7 @@ void Guild::UpdateMemberData(Player* player, uint8 dataid, uint32 value)
                         count_prof++;
                     }
                 }
-				
+
                 if (count_prof < 2)
                     for (uint8 i = 0; i < (2 - count_prof); i++)
                         member->SetProfession((uint32)(count_prof + i), 0, 0, 0);
