@@ -24775,6 +24775,7 @@ void Player::BuildPlayerTalentsInfoData(WorldPacket *data)
         {
             uint8 talentIdCount = 0;
             *data << uint32(GetTalentBranchSpec(specIdx));
+            *data << uint32(GetPrimaryTalentTree(specIdx));
             size_t pos = data->wpos();
             *data << uint8(talentIdCount);                  // [PH], talentIdCount
 
