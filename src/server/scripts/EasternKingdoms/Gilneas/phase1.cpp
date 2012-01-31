@@ -86,7 +86,6 @@ public:
     };
 };
 
-
 /*######
 ## npc_gilneas_city_guard_phase1
 ######*/

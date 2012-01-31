@@ -50,7 +50,6 @@ void rcFree(void* ptr)
 		sRecastFreeFunc(ptr);
 }
 
-
 void rcIntArray::resize(int n)
 {
 	if (n > m_cap)

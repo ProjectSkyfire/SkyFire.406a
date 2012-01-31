@@ -32,7 +32,6 @@ float rcSqrt(float x)
 	return sqrtf(x);
 }
 
-
 void rcContext::log(const rcLogCategory category, const char* format, ...)
 {
 	if (!m_logEnabled)
@@ -143,7 +142,6 @@ void rcFreePolyMeshDetail(rcPolyMeshDetail* dmesh)
 	rcFree(dmesh);
 }
 
-
 void rcCalcBounds(const float* verts, int nv, float* bmin, float* bmax)
 {
 	// Calculate bounding box.
@@ -169,7 +167,7 @@ bool rcCreateHeightfield(rcContext* /*ctx*/, rcHeightfield& hf, int width, int h
 {
 	// TODO: VC complains about unref formal variable, figure out a way to handle this better.
 //	rcAssert(ctx);
-	
+
 	hf.width = width;
 	hf.height = height;
 	rcVcopy(hf.bmin, bmin);
@@ -199,11 +197,11 @@ void rcMarkWalkableTriangles(rcContext* /*ctx*/, const float walkableSlopeAngle,
 {
 	// TODO: VC complains about unref formal variable, figure out a way to handle this better.
 //	rcAssert(ctx);
-	
+
 	const float walkableThr = cosf(walkableSlopeAngle/180.0f*RC_PI);
 
 	float norm[3];
-	
+
 	for (int i = 0; i < nt; ++i)
 	{
 		const int* tri = &tris[i*3];
@@ -221,11 +219,11 @@ void rcClearUnwalkableTriangles(rcContext* /*ctx*/, const float walkableSlopeAng
 {
 	// TODO: VC complains about unref formal variable, figure out a way to handle this better.
 //	rcAssert(ctx);
-	
+
 	const float walkableThr = cosf(walkableSlopeAngle/180.0f*RC_PI);
-	
+
 	float norm[3];
-	
+
 	for (int i = 0; i < nt; ++i)
 	{
 		const int* tri = &tris[i*3];
@@ -240,7 +238,7 @@ int rcGetHeightFieldSpanCount(rcContext* /*ctx*/, rcHeightfield& hf)
 {
 	// TODO: VC complains about unref formal variable, figure out a way to handle this better.
 //	rcAssert(ctx);
-	
+
 	const int w = hf.width;
 	const int h = hf.height;
 	int spanCount = 0;
@@ -262,9 +260,9 @@ bool rcBuildCompactHeightfield(rcContext* ctx, const int walkableHeight, const i
 							   rcHeightfield& hf, rcCompactHeightfield& chf)
 {
 	rcAssert(ctx);
-	
+
 	ctx->startTimer(RC_TIMER_BUILD_COMPACTHEIGHTFIELD);
-	
+
 	const int w = hf.width;
 	const int h = hf.height;
 	const int spanCount = rcGetHeightFieldSpanCount(ctx, hf);
@@ -302,9 +300,9 @@ bool rcBuildCompactHeightfield(rcContext* ctx, const int walkableHeight, const i
 		return false;
 	}
 	memset(chf.areas, RC_NULL_AREA, sizeof(unsigned char)*spanCount);
-	
+
 	const int MAX_HEIGHT = 0xffff;
-	
+
 	// Fill in cells and spans.
 	int idx = 0;
 	for (int y = 0; y < h; ++y)
@@ -345,7 +343,7 @@ bool rcBuildCompactHeightfield(rcContext* ctx, const int walkableHeight, const i
 			for (int i = (int)c.index, ni = (int)(c.index+c.count); i < ni; ++i)
 			{
 				rcCompactSpan& s = chf.spans[i];
-				
+
 				for (int dir = 0; dir < 4; ++dir)
 				{
 					rcSetCon(s, dir, RC_NOT_CONNECTED);
@@ -354,7 +352,7 @@ bool rcBuildCompactHeightfield(rcContext* ctx, const int walkableHeight, const i
 					// First check that the neighbour cell is in bounds.
 					if (nx < 0 || ny < 0 || nx >= w || ny >= h)
 						continue;
-						
+
 					// Iterate over all neighbour spans and check if any of the is
 					// accessible from current cell.
 					const rcCompactCell& nc = chf.cells[nx+ny*w];
@@ -379,20 +377,19 @@ bool rcBuildCompactHeightfield(rcContext* ctx, const int walkableHeight, const i
 							break;
 						}
 					}
-					
 				}
 			}
 		}
 	}
-	
+
 	if (tooHighNeighbour > MAX_LAYERS)
 	{
 		ctx->log(RC_LOG_ERROR, "rcBuildCompactHeightfield: Heightfield has too many layers %d (max: %d)",
 				 tooHighNeighbour, MAX_LAYERS);
 	}
-		
+
 	ctx->stopTimer(RC_TIMER_BUILD_COMPACTHEIGHTFIELD);
-	
+
 	return true;
 }
 
@@ -402,7 +399,7 @@ static int getHeightfieldMemoryUsage(const rcHeightfield& hf)
 	int size = 0;
 	size += sizeof(hf);
 	size += hf.width * hf.height * sizeof(rcSpan*);
-	
+
 	rcSpanPool* pool = hf.pools;
 	while (pool)
 	{

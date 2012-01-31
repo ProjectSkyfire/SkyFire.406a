@@ -247,7 +247,6 @@ public:
     };
 };
 
-
 /*######
 ## npc_gilneas_city_guard_phase2
 ######*/
@@ -721,10 +720,10 @@ public:
             {
                 if(go->GetGoState() == GO_STATE_ACTIVE)
                     go->SetGoState(GO_STATE_READY);
-            
+
                 DoorTimer = DOOR_TIMER;
             }
-        else 
+        else
             DoorTimer -= diff;
     }
 };

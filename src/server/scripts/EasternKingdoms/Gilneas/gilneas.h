@@ -20,12 +20,10 @@
 
 enum Data
 {
-    
 };
 
 enum Data64
 {
-    
 };
 
 enum CreatureIds
@@ -40,7 +38,6 @@ enum CreatureIds
 
 enum GameObjectIds
 {
-
 };
 
 enum QuestIds
