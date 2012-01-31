@@ -1,0 +1,114 @@
+DROP TABLE IF EXISTS `itemdisenchantloot_dbc`;
+CREATE TABLE `itemdisenchantloot_dbc` (
+  `Id` INT(11) NOT NULL DEFAULT '0',
+  `ItemClass` INT(11) NOT NULL DEFAULT '0',
+  `Unk` INT(11) NOT NULL DEFAULT '0',
+  `ItemQuality` INT(11) NOT NULL DEFAULT '0',
+  `MinItemLevel` INT(11) NOT NULL DEFAULT '0',
+  `MaxItemLevel` INT(11) NOT NULL DEFAULT '0',
+  `RequiredDisenchantSkill` INT(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`Id`)
+) ENGINE=MYISAM DEFAULT CHARSET=utf8 COMMENT='Export of ItemDisenchantLoot.dbc';
+
+LOCK TABLES `itemdisenchantloot_dbc` WRITE;
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (3, 2, -1, 2, 1, 15, 1);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (4, 4, -1, 2, 1, 15, 1);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (5, 4, -1, 2, 16, 20, 1);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (6, 2, -1, 2, 16, 20, 1);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (7, 2, -1, 2, 21, 25, 25);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (8, 4, -1, 2, 21, 25, 25);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (9, 4, -1, 3, 1, 25, 25);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (10, 2, -1, 3, 1, 25, 25);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (11, 4, -1, 3, 26, 30, 50);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (12, 2, -1, 3, 26, 30, 50);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (13, 4, -1, 2, 26, 30, 50);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (14, 2, -1, 2, 26, 30, 50);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (15, 4, -1, 3, 31, 35, 75);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (16, 2, -1, 3, 31, 35, 75);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (17, 4, -1, 2, 31, 35, 75);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (18, 2, -1, 2, 31, 35, 75);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (19, 4, -1, 3, 36, 40, 100);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (20, 2, -1, 3, 36, 40, 100);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (21, 4, -1, 2, 36, 40, 100);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (22, 2, -1, 2, 36, 40, 100);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (23, 4, -1, 3, 41, 45, 125);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (24, 2, -1, 3, 41, 45, 125);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (25, 4, -1, 2, 41, 45, 125);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (26, 2, -1, 2, 41, 45, 125);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (27, 4, -1, 3, 46, 50, 150);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (28, 2, -1, 3, 46, 50, 150);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (29, 4, -1, 2, 46, 50, 150);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (30, 2, -1, 2, 46, 50, 150);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (31, 2, -1, 2, 51, 55, 175);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (32, 4, -1, 2, 51, 55, 175);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (34, 4, -1, 3, 51, 55, 175);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (35, 2, -1, 3, 51, 55, 175);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (38, 4, -1, 4, 41, 45, 125);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (39, 2, -1, 4, 41, 45, 125);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (40, 4, -1, 4, 46, 50, 150);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (41, 2, -1, 4, 46, 50, 150);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (42, 2, -1, 4, 51, 55, 175);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (43, 4, -1, 4, 51, 55, 175);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (44, 4, -1, 3, 56, 60, 200);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (45, 2, -1, 3, 56, 60, 200);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (46, 4, -1, 2, 56, 60, 200);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (47, 2, -1, 2, 56, 60, 200);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (48, 4, -1, 4, 56, 60, 200);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (49, 2, -1, 4, 56, 60, 200);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (50, 4, -1, 3, 61, 65, 225);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (51, 2, -1, 3, 61, 65, 225);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (52, 4, -1, 2, 61, 65, 225);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (53, 2, -1, 2, 61, 65, 225);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (54, 4, -1, 4, 61, 65, 225);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (55, 2, -1, 4, 61, 65, 225);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (56, 4, -1, 2, 66, 79, 225);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (57, 2, -1, 2, 66, 79, 225);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (58, 4, -1, 3, 66, 79, 225);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (59, 2, -1, 3, 66, 79, 225);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (60, 2, -1, 4, 66, 99, 225);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (61, 4, -1, 4, 66, 99, 225);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (62, 2, -1, 2, 100, 120, 275);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (63, 4, -1, 2, 100, 120, 275);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (64, 2, -1, 3, 100, 115, 275);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (65, 4, -1, 3, 100, 115, 275);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (66, 2, -1, 4, 90, 199, 300);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (67, 4, -1, 4, 90, 199, 300);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (68, 4, -1, 3, 80, 99, 225);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (69, 2, -1, 3, 80, 99, 225);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (70, 4, -1, 2, 80, 99, 225);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (71, 2, -1, 2, 80, 99, 225);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (72, 4, -1, 4, 1, 25, 25);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (73, 2, -1, 4, 1, 25, 25);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (74, 4, -1, 4, 26, 30, 50);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (75, 2, -1, 4, 26, 30, 50);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (76, 4, -1, 4, 31, 35, 75);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (77, 2, -1, 4, 31, 35, 75);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (78, 4, -1, 4, 36, 40, 100);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (79, 2, -1, 4, 36, 40, 100);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (80, 2, -1, 4, 200, 299, 375);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (81, 4, -1, 4, 200, 299, 375);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (82, 4, -1, 2, 121, 153, 325);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (83, 2, -1, 2, 121, 153, 325);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (84, 4, -1, 3, 116, 166, 325);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (85, 2, -1, 3, 116, 166, 325);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (86, 4, -1, 3, 167, 200, 325);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (87, 2, -1, 3, 167, 200, 325);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (88, 4, -1, 2, 154, 200, 350);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (89, 2, -1, 2, 154, 200, 350);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (94, 4, -1, 2, 201, 272, 425);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (95, 4, -1, 2, 273, 289, 425);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (96, 4, -1, 2, 290, 305, 425);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (97, 4, -1, 2, 306, 312, 425);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (98, 4, -1, 2, 313, 400, 425);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (99, 2, -1, 2, 201, 272, 425);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (100, 2, -1, 2, 273, 289, 425);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (101, 2, -1, 2, 290, 305, 425);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (102, 2, -1, 2, 306, 312, 425);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (103, 2, -1, 2, 313, 400, 425);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (104, 4, -1, 3, 201, 316, 450);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (105, 2, -1, 3, 201, 316, 450);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (106, 4, -1, 3, 317, 500, 450);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (107, 2, -1, 3, 317, 500, 450);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (108, 2, -1, 4, 300, 500, 475);
+INSERT INTO `ItemDisenchantLoot_dbc` VALUES (109, 4, -1, 4, 300, 500, 475);
+UNLOCK TABLES;
