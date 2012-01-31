@@ -697,26 +697,26 @@ void WorldSession::HandleBuyItemInSlotOpcode(WorldPacket & recv_data)
 
 void WorldSession::HandleBuyItemOpcode(WorldPacket & recv_data)
 {
-	sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_BUY_ITEM");
-	uint64 vendorguid;
-	uint8 unk;
-	uint32 item, slot, count;
-	uint64 unk1;
-	uint8 unk2;
+    sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_BUY_ITEM");
+    uint64 vendorguid;
+    uint8 unk;
+    uint32 item, slot, count;
+    uint64 unk1;
+    uint8 unk2;
 
-	recv_data >> vendorguid;
-	recv_data >> unk;                                       // 4.0.6
-	recv_data >> item >> slot >> count;
-	recv_data >> unk1;                                      // 4.0.6
-	recv_data >> unk2;
+    recv_data >> vendorguid;
+    recv_data >> unk;                                       // 4.0.6
+    recv_data >> item >> slot >> count;
+    recv_data >> unk1;                                      // 4.0.6
+    recv_data >> unk2;
 
-	// client expects count starting at 1, and we send vendorslot+1 to client already
-	if (slot > 0)
-		--slot;
-	else
-		return; // cheating
+    // client expects count starting at 1, and we send vendorslot+1 to client already
+    if (slot > 0)
+        --slot;
+    else
+        return; // cheating
 
-	GetPlayer()->BuyItemFromVendorSlot(vendorguid, slot, item, count, NULL_BAG, NULL_SLOT);
+    GetPlayer()->BuyItemFromVendorSlot(vendorguid, slot, item, count, NULL_BAG, NULL_SLOT);
 }
 
 void WorldSession::HandleListInventoryOpcode(WorldPacket & recv_data)

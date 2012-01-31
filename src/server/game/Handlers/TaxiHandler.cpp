@@ -85,7 +85,7 @@ void WorldSession::HandleTaxiQueryAvailableNodes(WorldPacket & recv_data)
 
     // unknown taxi node case
     if (SendLearnNewTaxiNode(unit))
-		SendTaxiMenu(unit);
+        SendTaxiMenu(unit);
 
     // known taxi node case
     SendTaxiMenu(unit);

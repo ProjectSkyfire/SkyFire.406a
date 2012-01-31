@@ -107,9 +107,9 @@ void WorldSession::HandleAutostoreLootItemOpcode(WorldPacket & recv_data)
         std::list<CurrencyLoot> temp = sObjectMgr->GetCurrencyLoot(objEntry, objType);
         for (std::list<CurrencyLoot>::iterator i = temp.begin(); i != temp.end(); ++i)
         {
-			if (currencys == lootSlot)
-				player->SetCurrency(i->CurrencyId, i->CurrencyAmount * 100);
-			++currencys;
+            if (currencys == lootSlot)
+                player->SetCurrency(i->CurrencyId, i->CurrencyAmount * 100);
+            ++currencys;
         }
     }
     else if (loot)

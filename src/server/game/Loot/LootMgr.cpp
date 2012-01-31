@@ -954,7 +954,7 @@ ByteBuffer& operator<<(ByteBuffer& b, LootView const& lv)
     }
 
     uint8 currencys = 0;
-	 std::list<CurrencyLoot> temp = sObjectMgr->GetCurrencyLoot(lv.objEntry, lv.objType);
+     std::list<CurrencyLoot> temp = sObjectMgr->GetCurrencyLoot(lv.objEntry, lv.objType);
     for (std::list<CurrencyLoot>::iterator i = temp.begin(); i != temp.end(); ++i)
     {
         b << uint8(currencys);

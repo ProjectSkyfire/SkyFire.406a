@@ -485,7 +485,7 @@ void WorldSession::HandleSetActiveMoverOpcode(WorldPacket &recv_data)
    if (guid != _player->GetCharmGUID() && guid != _player->GetGUID())
    {
        sLog->outError("Player %s is trying to change mover to an invalid value!", _player->GetName());
-		GetPlayer()->SetMover(GetPlayer());
+        GetPlayer()->SetMover(GetPlayer());
        return;
    }
 

@@ -16,12 +16,13 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <string>
 #include "Spell.h"
 #include "SpellAuras.h"
 #include "SpellAuraEffects.h"
 #include "SpellScript.h"
 #include "SpellMgr.h"
+
+#include <string>
 
 bool _SpellScript::_Validate(SpellInfo const* entry)
 {

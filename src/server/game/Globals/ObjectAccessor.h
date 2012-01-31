@@ -246,7 +246,7 @@ class ObjectAccessor
         void AddCorpsesToGrid(GridCoord const& gridpair, GridType& grid, Map* map);
         Corpse* ConvertCorpseForPlayer(uint64 player_guid, bool insignia = false);
 
-		//Thread unsafe
+        //Thread unsafe
         void Update(uint32 diff);
         void RemoveOldCorpses();
 

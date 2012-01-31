@@ -43,4 +43,3 @@ class RandomMovementGenerator
         float wander_distance;
 };
 #endif
-
