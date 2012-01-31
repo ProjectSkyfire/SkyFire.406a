@@ -109,5 +109,6 @@ enum SoundIds
 #define CD_ENRAGE                                     30000
 #define SUMMON1_TTL                                   300000
 #define PATHS_COUNT                                   2
+#define DOOR_TIMER                                    30*IN_MILLISECONDS
 
 #endif
