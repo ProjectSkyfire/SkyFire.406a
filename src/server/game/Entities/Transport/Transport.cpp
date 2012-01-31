@@ -595,7 +595,7 @@ void Transport::UpdateForMap(Map const* targetMap)
     }
     else
     {
-        UpdateData transData(targetMap->GetId());
+        UpdateData transData(GetMapId());
         BuildOutOfRangeUpdateBlock(&transData);
         WorldPacket out_packet;
         transData.BuildPacket(&out_packet);
