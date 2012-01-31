@@ -41,30 +41,38 @@ public:
 	{
 		return new npc_rock_borerAI(creature);
 	}
-	struct npc_rock_borerAI : public ScriptedAI
+
+    struct npc_rock_borerAI : public ScriptedAI
 	{
 		npc_rock_borerAI(Creature* creature) : ScriptedAI(creature)
 		{
 			instance = creature->GetInstanceScript();
 		}
-		InstanceScript* instance;
-		uint32 m_SpellBoreTimer;
-		void Reset() 
+
+        InstanceScript* instance;
+
+        uint32 _SpellBoreTimer;
+
+        void Reset()
 		{
-			m_SpellBoreTimer = 6000;
+			_SpellBoreTimer = 6000;
 		}
-		void EnterCombar(Unit* ) { }
-		void MoveInLineOfSight(Unit* who) { }
-		void UpdateAI(const uint32 Diff) 
+
+        void EnterCombar(Unit* ) { }
+
+        void MoveInLineOfSight(Unit* who) { }
+
+        void UpdateAI(const uint32 Diff)
 		{
-			if(m_SpellBoreTimer <= Diff)
+			if (_SpellBoreTimer <= Diff)
 			{
 				DoCast(me->getVictim(),SPELL_ROCK_BORE);
-				m_SpellBoreTimer = 6000;
+				_SpellBoreTimer = 6000;
 			}
 			else
-				m_SpellBoreTimer -= Diff;
-			DoMeleeAttackIfReady();
+				_SpellBoreTimer -= Diff;
+
+            DoMeleeAttackIfReady();
 		}
 	};
 };
@@ -88,50 +96,53 @@ public:
 
         InstanceScript* instance;
 		SummonList Summons;
-		uint32 m_SummonBorerTimer;
+
+        uint32 _SummonBorerTimer;
 		uint32 b_BorrowTimer;
-		uint32 m_CrystalTimer;
-		uint32 m_DampeningTimer;
+		uint32 _CrystalTimer;
+		uint32 _DampeningTimer;
 		bool b_BORROW;               //bool var type for invisible mode
 
-        void Reset() 
+        void Reset()
 		{
 			instance->SetData(DATA_CORBORUS_EVENT,NOT_STARTED);
-			m_SummonBorerTimer = 33000;
-			b_BORROW           = 0;
-			m_CrystalTimer     = 13600;
-			m_DampeningTimer   = 25000;
+			_SummonBorerTimer    = 33000;
+			b_BORROW             = 0;
+			_CrystalTimer        = 13600;
+			_DampeningTimer      = 25000;
 			Summons.DespawnAll();
 		}
 
 		void JustDied(Unit* )
 		{
-			if(instance)
+			if (instance)
 				instance->SetData(DATA_CORBORUS_EVENT,DONE);
 			Summons.DespawnAll();
 		}
 
-        void EnterCombat(Unit* /*who*/) 
+        void EnterCombat(Unit* /*who*/)
 		{
 			instance->SetData(DATA_CORBORUS_EVENT,IN_PROGRESS);
 			DoZoneInCombat();
 		}
 
-		void SummonRockBorer() 
+		void SummonRockBorer()
 		{
-			if(!IsHeroic())
-			    if(Unit* target = SelectTarget(SELECT_TARGET_RANDOM,0)) 
-			       for(uint8 i=0;i<2;++i)                                   //summon 2 Rock Borer Normal Mode
-				 me->SummonCreature(NPC_ROCK_BORER,target->GetPositionX(),target->GetPositionY(),target->GetPositionZ(),0.0f, TEMPSUMMON_CORPSE_DESPAWN);
-			if(IsHeroic())
-			    if(Unit* target = SelectTarget(SELECT_TARGET_RANDOM,0))	
-			       for(uint8 i=0;i<4;++i)                                  //summon 4 Rock Borer Heroic Mode
-				 me->SummonCreature(NPC_ROCK_BORER,target->GetPositionX(),target->GetPositionY(),target->GetPositionZ(),0.0f, TEMPSUMMON_CORPSE_DESPAWN);
+			if (!IsHeroic())
+			    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM,0))
+			        for (uint8 i=0;i<2;++i)                                   //summon 2 Rock Borer Normal Mode
+				me->SummonCreature(NPC_ROCK_BORER,target->GetPositionX(),target->GetPositionY(),target->GetPositionZ(),0.0f, TEMPSUMMON_CORPSE_DESPAWN);
+
+            if (IsHeroic())
+			    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM,0))
+			        for (uint8 i=0;i<4;++i)                                  //summon 4 Rock Borer Heroic Mode
+				me->SummonCreature(NPC_ROCK_BORER,target->GetPositionX(),target->GetPositionY(),target->GetPositionZ(),0.0f, TEMPSUMMON_CORPSE_DESPAWN);
 		}
 
 		void JustSummoned(Creature* summoned)
         {
             summoned->SetInCombatWithZone();
+
             if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                 summoned->AI()->AttackStart(target);
 
@@ -149,49 +160,51 @@ public:
             if (!UpdateVictim())
 				return;
 
-
-			if(m_SummonBorerTimer <= Diff)
+			if (_SummonBorerTimer <= Diff)
 			{
-				instance->DoSendNotifyToInstance("INSTANCE MESSAGE: Rock Borer are spawned"); //Notify to players when Rock Borer are spawn
+				instance->DoSendNotifyToInstance("INSTANCE MESSAGE: Rock Borer are spawned"); // Notify to players when Rock Borer are spawn
 				b_BORROW = 1;
 				DoCast(me,SPELL_BURROW);
 				SummonRockBorer();
-				m_SummonBorerTimer = 30000;
+				_SummonBorerTimer = 30000;
 				b_BorrowTimer = 9000;
 			}
 			else
 			{
-				m_SummonBorerTimer -= Diff;
+				_SummonBorerTimer -= Diff;
 				b_BorrowTimer -= Diff;
 			}
-			if(b_BorrowTimer <= Diff)
+            if (b_BorrowTimer <= Diff)
 				b_BORROW = 0;
 
-			if(m_CrystalTimer <= Diff)
+			if (_CrystalTimer <= Diff)
 			{
-				if(Unit* target = SelectTarget(SELECT_TARGET_RANDOM,0,100,true))
-					if(!IsHeroic())
+				if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+					if (!IsHeroic())
 					{
-					DoCast(target,SPELL_CRYSTAL_BARRAGE);
+                        DoCast(target,SPELL_CRYSTAL_BARRAGE);
 					}
 					else
-						DoCast(target,SPELL_CRYSTAL_BARRAGE_H);
-					m_CrystalTimer = 11000;
+                        DoCast(target,SPELL_CRYSTAL_BARRAGE_H);
+
+                    _CrystalTimer = 11000;
 			}
 			else
-				m_CrystalTimer -= Diff;
-			if(m_DampeningTimer <= Diff)
+				_CrystalTimer -= Diff;
+
+            if (_DampeningTimer <= Diff)
 			{
-				if(!IsHeroic())
+				if (!IsHeroic())
 					DoCast(SPELL_DAMPENING_WAVE);
 				else
 					DoCast(SPELL_DAMPENING_WAVE_H);
-				m_DampeningTimer = 20000;
+
+                _DampeningTimer = 20000;
 			}
 			else
-				m_DampeningTimer -= Diff;
+				_DampeningTimer -= Diff;
 
-			if(b_BORROW == 0)                    //if not invisible
+			if (b_BORROW == 0)                    //if not invisible
 				DoMeleeAttackIfReady();
         }
     };
