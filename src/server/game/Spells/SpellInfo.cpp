@@ -576,6 +576,9 @@ int32 SpellEffectInfo::CalcValue(Unit const* caster, int32 const* bp, Unit const
     int32 basePoints = bp ? *bp : BasePoints;
     int32 randomPoints = int32(DieSides);
 
+    if (!_spellInfo)
+        return 0;
+
     float maxPoints = 0.00f;
     float comboPointScaling = 0.00f;
     if (caster)
@@ -591,7 +594,7 @@ int32 SpellEffectInfo::CalcValue(Unit const* caster, int32 const* bp, Unit const
         else
         {
             int32 level = int32(caster->getLevel());
-            if (level > int32(!_spellInfo && _spellInfo->MaxLevel) && _spellInfo->MaxLevel > 0)
+            if (level > int32(_spellInfo->MaxLevel) && _spellInfo->MaxLevel > 0)
                 level = int32(_spellInfo->MaxLevel);
             else if (level < int32(_spellInfo->BaseLevel))
                 level = int32(_spellInfo->BaseLevel);
