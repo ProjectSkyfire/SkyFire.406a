@@ -591,7 +591,7 @@ int32 SpellEffectInfo::CalcValue(Unit const* caster, int32 const* bp, Unit const
         else
         {
             int32 level = int32(caster->getLevel());
-            if (level > int32(_spellInfo->MaxLevel) && _spellInfo->MaxLevel > 0)
+            if (level > int32(!_spellInfo && _spellInfo->MaxLevel) && _spellInfo->MaxLevel > 0)
                 level = int32(_spellInfo->MaxLevel);
             else if (level < int32(_spellInfo->BaseLevel))
                 level = int32(_spellInfo->BaseLevel);
@@ -1007,7 +1007,7 @@ void SpellInfo::LoadSpellAddons()
     ChannelInterruptFlags = SpellInterrupts ? SpellInterrupts->ChannelInterruptFlags : 0;
     InterruptFlags = SpellInterrupts ? SpellInterrupts->InterruptFlags : 0;
 
-    SpellLevelsEntry const* SpellLevels  = GetSpellLevels();
+    SpellLevelsEntry const* SpellLevels = GetSpellLevels();
     BaseLevel = SpellLevels ? SpellLevels->baseLevel : 0;
     MaxLevel = SpellLevels ? SpellLevels->maxLevel : 0;
     SpellLevel = SpellLevels ? SpellLevels->spellLevel : 0;
