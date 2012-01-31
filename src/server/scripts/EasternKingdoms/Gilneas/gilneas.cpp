@@ -717,13 +717,13 @@ public:
             }
             else tQuestCredit -= ((float)diff/8);
         }
-		if (DoorTimer <= diff)
-		    {
-			    if(go->GetGoState() == GO_STATE_ACTIVE)
-				    go->SetGoState(GO_STATE_READY);
-			
-			    DoorTimer = DOOR_TIMER;
-		    }
+        if (DoorTimer <= diff)
+            {
+                if(go->GetGoState() == GO_STATE_ACTIVE)
+                    go->SetGoState(GO_STATE_READY);
+            
+                DoorTimer = DOOR_TIMER;
+            }
         else 
             DoorTimer -= diff;
     }
