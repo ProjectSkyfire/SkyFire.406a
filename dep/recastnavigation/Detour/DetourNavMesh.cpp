@@ -31,7 +31,7 @@
 #include <io.h>
 #define F_OK   0
 #else
-#include <unistd>
+#include <unistd.h>
 #endif
 
 inline bool overlapSlabs(const float* amin, const float* amax,
