@@ -655,15 +655,17 @@ public:
     uint8 spawnKind;
     Player* aPlayer;
     GameObject* go;
+    uint32 DoorTimer;
 
     bool OnGossipHello(Player* player, GameObject* go)
     {
-        if (player->GetQuestStatus(QUEST_EVAC_MERC_SQUA) == QUEST_STATUS_INCOMPLETE)
+        if (player->GetQuestStatus(QUEST_EVAC_MERC_SQUA) == QUEST_STATUS_INCOMPLETE && go->GetGoState() == GO_STATE_READY)
         {
             aPlayer          = player;
             opened           = 1;
             tQuestCredit     = 2500;
-            go->Use(player);
+            go->SetGoState(GO_STATE_ACTIVE);
+            DoorTimer = DOOR_TIMER;
             spawnKind = urand(1, 3); //1, 2=citizen, 3=citizen&worgen (66%, 33%)
             angle = go->GetOrientation();
             x = go->GetPositionX()-cos(angle)*2;
@@ -715,6 +717,15 @@ public:
             }
             else tQuestCredit -= ((float)diff/8);
         }
+		if (DoorTimer <= diff)
+		    {
+			    if(go->GetGoState() == GO_STATE_ACTIVE)
+				    go->SetGoState(GO_STATE_READY);
+			
+			    DoorTimer = DOOR_TIMER;
+		    }
+        else 
+            DoorTimer -= diff;
     }
 };
 
