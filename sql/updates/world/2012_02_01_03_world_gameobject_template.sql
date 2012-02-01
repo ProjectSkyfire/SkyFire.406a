@@ -1,0 +1,1 @@
+UPDATE `gameobject_template` SET `type`=0, `data0`=724, `data1`=86, `WDBVerified`=13623 WHERE `entry`=181165;
