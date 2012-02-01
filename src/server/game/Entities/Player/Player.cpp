@@ -3226,6 +3226,8 @@ void Player::InitStatsForLevel(bool reapplyMods)
         SetUInt32Value(index, 0);
 
     SetUInt32Value(PLAYER_FIELD_MOD_HEALING_DONE_POS, 0);
+    SetFloatValue(PLAYER_FIELD_MOD_HEALING_PCT, 1.0f);
+    SetFloatValue(PLAYER_FIELD_MOD_HEALING_DONE_PCT, 1.0f);
     for (uint8 i = 0; i < 7; ++i)
     {
         SetUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_NEG+i, 0);
