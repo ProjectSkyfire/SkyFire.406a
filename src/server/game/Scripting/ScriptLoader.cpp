@@ -48,6 +48,7 @@ void AddSC_example_spell_scripts();
 void AddSC_SmartSCripts();
 
 //Commands
+void AddSC_vip_commandscript();
 void AddSC_account_commandscript();
 void AddSC_achievement_commandscript();
 void AddSC_bf_commandscript();
@@ -729,6 +730,7 @@ void AddSpellScripts()
 
 void AddCommandScripts()
 {
+    AddSC_vip_commandscript();
     AddSC_account_commandscript();
     AddSC_achievement_commandscript();
     AddSC_bf_commandscript();
