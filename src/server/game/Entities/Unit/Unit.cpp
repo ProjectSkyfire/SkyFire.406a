@@ -645,6 +645,7 @@ uint32 Unit::DealDamage(Unit* victim, uint32 damage, CleanDamage const* cleanDam
 
     // duel ends when player has 1 or less hp
     bool duel_hasEnded = false;
+    bool duel_wasMounted = false;
     if (victim->GetTypeId() == TYPEID_PLAYER && victim->ToPlayer()->duel && damage >= (health-1))
     {
         // prevent kill only if killed in duel and killed by opponent or opponent controlled creature
@@ -652,6 +653,20 @@ uint32 Unit::DealDamage(Unit* victim, uint32 damage, CleanDamage const* cleanDam
             damage = health - 1;
 
         duel_hasEnded = true;
+    }
+    else if (victim->IsVehicle() && damage >= (health-1) && victim->GetCharmer() && victim->GetCharmer()->GetTypeId() ==  TYPEID_PLAYER)
+    {
+        Player* victimRider = victim->GetCharmer()->ToPlayer();
+
+        if (victimRider && victimRider->duel && victimRider->duel->isMounted)
+        {
+            // prevent kill only if killed in duel and killed by opponent or opponent controlled creature
+            if (victimRider->duel->opponent == this || victimRider->duel->opponent->GetGUID() == GetCharmerGUID())
+                damage = health - 1;
+
+            duel_wasMounted = true;
+            duel_hasEnded = true;
+        }
     }
 
     if (GetTypeId() == TYPEID_PLAYER && this != victim)
@@ -762,11 +777,24 @@ uint32 Unit::DealDamage(Unit* victim, uint32 damage, CleanDamage const* cleanDam
         // last damage from duel opponent
         if (duel_hasEnded)
         {
+            Player* he;
+
+            if (duel_wasMounted)
+            {
+                ASSERT(victim->GetCharmer()->GetTypeId() == TYPEID_PLAYER);
+                he = victim->GetCharmer()->ToPlayer();
+            }
+            else
+            {
             ASSERT(victim->GetTypeId() == TYPEID_PLAYER);
-            Player* he = victim->ToPlayer();
+                he = victim->ToPlayer();
+            }
 
             ASSERT(he->duel);
 
+            if (duel_wasMounted) // In this case victim==mount
+                victim->SetHealth(1);
+            else
             he->SetHealth(1);
 
             he->duel->opponent->CombatStopWithPets(true);
@@ -17129,6 +17157,10 @@ void Unit::_ExitVehicle(Position const* exitPosition)
         return;
 
     m_vehicle->RemovePassenger(this);
+
+    // If player is on mouted duel and exits the mount should immediatly lose the duel
+    if (GetTypeId() == TYPEID_PLAYER && ToPlayer()->duel && ToPlayer()->duel->isMounted)
+        ToPlayer()->DuelComplete(DUEL_FLED);
 
     // This should be done before dismiss, because there may be some aura removal
     Vehicle *vehicle = m_vehicle;
