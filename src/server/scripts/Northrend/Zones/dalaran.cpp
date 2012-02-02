@@ -35,6 +35,7 @@ enum Spells
 {
     SPELL_TRESPASSER_A      = 54028,
     SPELL_TRESPASSER_H      = 54029,
+    SPELL_DETECTION         = 18950,
 
     SPELL_SUNREAVER_DISGUISE_FEMALE        = 70973,
     SPELL_SUNREAVER_DISGUISE_MALE          = 70974,
@@ -62,7 +63,10 @@ public:
             creature->ApplySpellImmune(0, IMMUNITY_DAMAGE, SPELL_SCHOOL_MASK_MAGIC, true);
         }
 
-        void Reset(){}
+        void Reset()
+        {
+            me->CastSpell(me, SPELL_DETECTION, true);
+        }
 
         void EnterCombat(Unit* /*who*/) {}
 
@@ -73,7 +77,7 @@ public:
             if (!who || !who->IsInWorld() || who->GetZoneId() != 4395)
                 return;
 
-            if (!me->IsWithinDist(who, 65.0f, false))
+            if (!me->IsWithinDist(who, 100.0f, false))
                 return;
 
             Player* player = who->GetCharmerOrOwnerPlayerOrPlayerItself();
