@@ -2617,6 +2617,30 @@ Arena.ArenaStartPersonalRating = 0
 Arena.ArenaStartMatchmakerRating = 1500
 
 #
+#     Arena.2v2.Team
+#        Disable Arena 2v2
+#        Default: 1 - Enable
+#                 0 - Disable
+
+Arena.2v2.Team = 1
+
+#
+#     Arena.3v3.Team
+#        Disable Arena 3v3
+#        Default: 1 - Enable
+#                 0 - Disable
+
+Arena.3v3.Team = 1
+
+#
+#     Arena.5v5.Team
+#        Disable Arena 5v5
+#        Default: 1 - Enable
+#                 0 - Disable
+
+Arena.5v5.Team = 1
+
+#
 ###################################################################################################
 
 ###################################################################################################

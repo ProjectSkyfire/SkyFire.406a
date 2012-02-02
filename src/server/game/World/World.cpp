@@ -1053,6 +1053,9 @@ void World::LoadConfigSettings(bool reload)
     m_int_configs[CONFIG_ARENA_START_MATCHMAKER_RATING]              = ConfigMgr::GetIntDefault ("Arena.ArenaStartMatchmakerRating", 1500);
     m_bool_configs[CONFIG_ARENA_SEASON_IN_PROGRESS]                  = ConfigMgr::GetBoolDefault("Arena.ArenaSeason.InProgress", true);
     m_bool_configs[CONFIG_ARENA_LOG_EXTENDED_INFO]                   = ConfigMgr::GetBoolDefault("ArenaLog.ExtendedInfo", false);
+    m_bool_configs[CONFIG_ARENA_2v2_TEAM_ENABLE]                     = ConfigMgr::GetBoolDefault("Arena.2v2.Team", 1);
+    m_bool_configs[CONFIG_ARENA_3v3_TEAM_ENABLE]                     = ConfigMgr::GetBoolDefault("Arena.3v3.Team", 1);
+    m_bool_configs[CONFIG_ARENA_5v5_TEAM_ENABLE]                     = ConfigMgr::GetBoolDefault("Arena.5v5.Team", 1);
 
     m_bool_configs[CONFIG_OFFHAND_CHECK_AT_SPELL_UNLEARN]            = ConfigMgr::GetBoolDefault("OffhandCheckAtSpellUnlearn", true);
 

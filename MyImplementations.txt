@@ -3,10 +3,10 @@
 ############################################################################
 Changes:
 Here are listed all changes done by me and taken from other sources.
-Small fixes, custom fixes and spells will be add like [fix nº]
+Small fixes, custom fixes and spells will be add like [patch nº]
 I'm sorry if I can not say thanks just in case because sometimes I can not remember where I had take some fixes.
 
-
+[patch 001] Core/Arenas: Implement enable - disable 2v2, 3v3, 5v5 in worldserver.conf
 
 # Extras
 - V.I.P system is working. Need PHP Script.
