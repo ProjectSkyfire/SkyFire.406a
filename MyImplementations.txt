@@ -1,0 +1,12 @@
+############################################################################
+######################### EXTRA IMPLEMENTATIONS  ###########################
+############################################################################
+Changes:
+Here are listed all changes done by me and taken from other sources.
+Small fixes, custom fixes and spells will be add like [fix nº]
+I'm sorry if I can not say thanks just in case because sometimes I can not remember where I had take some fixes.
+
+
+
+# Extras
+- V.I.P system is working. Need PHP Script.
