@@ -35,11 +35,11 @@ enum Spells
 {
     SPELL_TRESPASSER_A      = 54028,
     SPELL_TRESPASSER_H      = 54029,
-    SPELL_DETECTION         = 18950,
-    SPELL_DISGUISE_A_F      = 70973,
-    SPELL_DISGUISE_A_M      = 70974,
-    SPELL_DISGUISE_H_F      = 70971,
-    SPELL_DISGUISE_H_M      = 70972
+
+    SPELL_SUNREAVER_DISGUISE_FEMALE        = 70973,
+    SPELL_SUNREAVER_DISGUISE_MALE          = 70974,
+    SPELL_SILVER_COVENANT_DISGUISE_FEMALE  = 70971,
+    SPELL_SILVER_COVENANT_DISGUISE_MALE    = 70972,
 };
 
 enum NPCs // All outdoor guards are within 35.0f of these NPCs
@@ -62,10 +62,7 @@ public:
             creature->ApplySpellImmune(0, IMMUNITY_DAMAGE, SPELL_SCHOOL_MASK_MAGIC, true);
         }
 
-        void Reset()
-        {
-            me->CastSpell(me, SPELL_DETECTION, true);
-        }
+        void Reset(){}
 
         void EnterCombat(Unit* /*who*/) {}
 
@@ -81,13 +78,16 @@ public:
 
             Player* player = who->GetCharmerOrOwnerPlayerOrPlayerItself();
 
-            if (!player || player->isGameMaster() || player->IsBeingTeleported())
+            if (!player || player->isGameMaster() || player->IsBeingTeleported() ||
+                // If player has Disguise aura for quest A Meeting With The Magister or An Audience With The Arcanist, do not teleport it away but let it pass
+                player->HasAura(SPELL_SUNREAVER_DISGUISE_FEMALE) || player->HasAura(SPELL_SUNREAVER_DISGUISE_MALE) ||
+                player->HasAura(SPELL_SILVER_COVENANT_DISGUISE_FEMALE) || player->HasAura(SPELL_SILVER_COVENANT_DISGUISE_MALE))
                 return;
 
             switch (me->GetEntry())
             {
-            case 29254: // Horde unit found in Alliance area
-                if (player->GetTeam() == HORDE && !(player->HasAura(SPELL_DISGUISE_H_M) || player->HasAura(SPELL_DISGUISE_H_F)))
+                case 29254:
+                    if (player->GetTeam() == HORDE)              // Horde unit found in Alliance area
                 {
                     if (GetClosestCreatureWithEntry(me, NPC_APPLEBOUGH_A, 32.0f))
                     {
@@ -98,8 +98,8 @@ public:
                         DoCast(who, SPELL_TRESPASSER_A); // Teleport the Horde unit out
                 }
                 break;
-            case 29255: // Alliance unit found in Horde area
-                if (player->GetTeam() == ALLIANCE && !(player->HasAura(SPELL_DISGUISE_A_M) || player->HasAura(SPELL_DISGUISE_A_F)))
+                case 29255:
+                    if (player->GetTeam() == ALLIANCE)           // Alliance unit found in Horde area
                 {
                     if (GetClosestCreatureWithEntry(me, NPC_SWEETBERRY_H, 32.0f))
                     {
