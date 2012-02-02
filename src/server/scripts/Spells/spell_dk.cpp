@@ -544,7 +544,6 @@ void AddSC_deathknight_spell_scripts()
     new spell_dk_death_gate();
     new spell_dk_death_pact();
     new spell_dk_scourge_strike();
-    new spell_dk_spell_deflection();
     new spell_dk_blood_boil();
     new spell_dk_improved_blood_presence();
     new spell_dk_improved_unholy_presence();
