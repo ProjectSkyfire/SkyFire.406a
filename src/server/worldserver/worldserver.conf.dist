@@ -2090,6 +2090,13 @@ Rate.XP.Quest.Premium   = 1
 Rate.XP.Explore.Premium = 1
 
 #
+#    Rate.XP.After.80
+#        XP rates after level 80
+#        Default: 1
+
+Rate.XP.After.80 = 1
+
+#
 #    Rate.RepairCost
 #        Description: Repair cost rate.
 #        Default:     1
