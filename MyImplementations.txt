@@ -13,6 +13,7 @@ I'm sorry if I can not say thanks just in case because sometimes I can not remem
 [patch 005] Custom: Automatic annouce when player is banned
 [patch 006] Custom: Implement `.baninfo player` command.
 [patch 007] Custom: Implement `.banlist playeraccount` command.
+[patch 008] Custom: Added modadd command to allow moderators to give player specific items or spells by classes.
 
 # Extras
 - V.I.P system is working. Need PHP Script.
