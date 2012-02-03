@@ -35,6 +35,7 @@ enum Spells
 {
     SPELL_TRESPASSER_A      = 54028,
     SPELL_TRESPASSER_H      = 54029,
+    SPELL_DETECTION         = 70465,
 
     SPELL_SUNREAVER_DISGUISE_FEMALE        = 70973,
     SPELL_SUNREAVER_DISGUISE_MALE          = 70974,
@@ -62,7 +63,10 @@ public:
             creature->ApplySpellImmune(0, IMMUNITY_DAMAGE, SPELL_SCHOOL_MASK_MAGIC, true);
         }
 
-        void Reset(){}
+        void Reset()
+        {
+            me->CastSpell(me, SPELL_DETECTION, true);
+        }
 
         void EnterCombat(Unit* /*who*/) {}
 
@@ -87,7 +91,7 @@ public:
             switch (me->GetEntry())
             {
                 case 29254:
-                    if (player->GetTeam() == HORDE)              // Horde unit found in Alliance area
+                if (player->GetTeam() == HORDE)              // Horde unit found in Alliance area
                 {
                     if (GetClosestCreatureWithEntry(me, NPC_APPLEBOUGH_A, 32.0f))
                     {
@@ -99,7 +103,7 @@ public:
                 }
                 break;
                 case 29255:
-                    if (player->GetTeam() == ALLIANCE)           // Alliance unit found in Horde area
+                if (player->GetTeam() == ALLIANCE)           // Alliance unit found in Horde area
                 {
                     if (GetClosestCreatureWithEntry(me, NPC_SWEETBERRY_H, 32.0f))
                     {
