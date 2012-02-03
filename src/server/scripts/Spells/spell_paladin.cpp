@@ -301,34 +301,6 @@ public:
     }
 };
 
-class spell_pal_judgement_of_command : public SpellScriptLoader
-{
-public:
-    spell_pal_judgement_of_command() : SpellScriptLoader("spell_pal_judgement_of_command") { }
-
-    class spell_pal_judgement_of_command_SpellScript : public SpellScript
-    {
-        PrepareSpellScript(spell_pal_judgement_of_command_SpellScript)
-        void HandleDummy(SpellEffIndex /*effIndex*/)
-        {
-            if (Unit* unitTarget = GetHitUnit())
-                if (SpellInfo const* spell_proto = sSpellMgr->GetSpellInfo(GetEffectValue()))
-                    GetCaster()->CastSpell(unitTarget, spell_proto, true, NULL);
-        }
-
-        void Register()
-        {
-            // add dummy effect spell handler to Judgement of Command
-            OnEffectHitTarget += SpellEffectFn(spell_pal_judgement_of_command_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
-        }
-    };
-
-    SpellScript* GetSpellScript() const
-    {
-        return new spell_pal_judgement_of_command_SpellScript();
-    }
-};
-
 class spell_pal_judgements_of_the_bold : public SpellScriptLoader
 {
     public:
@@ -583,7 +555,6 @@ void AddSC_paladin_spell_scripts()
     new spell_pal_blessing_of_sanctuary();
     new spell_pal_guarded_by_the_light();
     new spell_pal_holy_shock();
-    new spell_pal_judgement_of_command();
     new spell_pal_shield_of_righteous();
     new spell_pal_judgements_of_the_bold();
     new spell_pal_word_of_glory();
