@@ -735,6 +735,7 @@ enum SkyFireStrings
 
     LANG_CHANNEL_CITY                   = 819,
     LANG_FAIL_ENTER_SPECTRAL_REALM      = 820,
+    LANG_ADDITEM_WARNING                = 821,
     // Room for in-game strings           821-999 not used
 
     // Level 4 (CLI only commands)

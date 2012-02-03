@@ -303,12 +303,15 @@ bool ChatHandler::HandleAddItemCommand(const char *args)
         for (ItemPosCountVec::const_iterator itr = dest.begin(); itr != dest.end(); ++itr)
             if (Item* item1 = player->GetItemByPos(itr->pos))
                 item1->SetBinding(false);
+	Player *chr = getSelectedPlayer();
 
     if (count > 0 && item)
     {
         player->SendNewItem(item, count, false, true);
         if (player != plTarget)
             plTarget->SendNewItem(item, count, true, false);
+		PSendSysMessage(LANG_ADDITEM_WARNING, GetNameLink(chr).c_str(), itemId);
+        return true;
     }
 
     if (noSpaceForCount > 0)
