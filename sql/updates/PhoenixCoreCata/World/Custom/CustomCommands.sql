@@ -14,3 +14,6 @@ DELETE FROM `skyfire_string` WHERE `entry`='11003';
 INSERT INTO `skyfire_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES 
 ('11003','|cffff0000[GM]:|r %s was banned by %s for eternity. Reason: %s.',NULL,NULL,NULL,NULL,NULL,'|cffff0000[GM]:|r %s ha sido baneado por %s eternamente. La Razón es: %s.','|cffff0000[GM]:|r %s ha sido baneado por %s eternamente. La Razón es: %s.',NULL);
 
+-- Implement `.baninfo player` command
+DELETE FROM `command` WHERE `name` = 'baninfo player';
+INSERT INTO `command` VALUES ('baninfo player', 3, 'Syntax: .baninfo player $playerName\r\nWatch full information about a specific ban.');
