@@ -35,7 +35,7 @@ enum Spells
 {
     SPELL_TRESPASSER_A      = 54028,
     SPELL_TRESPASSER_H      = 54029,
-    SPELL_DETECTION         = 18950,
+    SPELL_DETECTION         = 70465,
 
     SPELL_SUNREAVER_DISGUISE_FEMALE        = 70973,
     SPELL_SUNREAVER_DISGUISE_MALE          = 70974,
@@ -91,24 +91,24 @@ public:
             switch (me->GetEntry())
             {
                 case 29254:
-                    if (player->GetTeam() == HORDE)              // Horde unit found in Alliance area
+                if (player->GetTeam() == HORDE)              // Horde unit found in Alliance area
                 {
                     if (GetClosestCreatureWithEntry(me, NPC_APPLEBOUGH_A, 32.0f))
                     {
                         if (me->isInBackInMap(who, 12.0f)) // In my line of sight, "outdoors", and behind me
-                            DoCast(who, SPELL_TRESPASSER_A); // Teleport the Horde unit out
+                            DoCast(who, SPELL_TRESPASSER_H || SPELL_DETECTION); // Teleport the Horde unit out
                     }
                     else   // In my line of sight, and "indoors"
                         DoCast(who, SPELL_TRESPASSER_A); // Teleport the Horde unit out
                 }
                 break;
                 case 29255:
-                    if (player->GetTeam() == ALLIANCE)           // Alliance unit found in Horde area
+                if (player->GetTeam() == ALLIANCE)           // Alliance unit found in Horde area
                 {
                     if (GetClosestCreatureWithEntry(me, NPC_SWEETBERRY_H, 32.0f))
                     {
                         if (me->isInBackInMap(who, 12.0f)) // In my line of sight, "outdoors", and behind me
-                            DoCast(who, SPELL_TRESPASSER_H); // Teleport the Alliance unit out
+                            DoCast(who, SPELL_TRESPASSER_A || SPELL_DETECTION); // Teleport the Alliance unit out
                     }
                     else // In my line of sight, and "indoors"
                         DoCast(who, SPELL_TRESPASSER_H); // Teleport the Alliance unit out
