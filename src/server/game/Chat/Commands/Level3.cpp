@@ -3171,7 +3171,7 @@ bool ChatHandler::HandleBanInfoAccountByCharCommand(const char *args)
     uint32 accountid = target ? target->GetSession()->GetAccountId() : sObjectMgr->GetPlayerAccountIdByGUID(target_guid);
 
     std::string accountname;
-    if (!sAccountMgr->GetName(accountid,accountname))
+    if (!AccountMgr::GetName(accountid,accountname))
     {
         PSendSysMessage(LANG_BANINFO_NOCHARACTER);
         return true;
@@ -3365,7 +3365,7 @@ bool ChatHandler::HandleBanListPlayerAccountCommand(const char *args)
         return false;
 
     std::string filter = cFilter;
-    LoginDatabase.escape_string(filter);
+    LoginDatabase.EscapeString(filter);
     QueryResult result = CharacterDatabase.PQuery("SELECT account FROM characters WHERE name "_LIKE_" "_CONCAT3_("'%%'","'%s'","'%%'"),filter.c_str());
     if (!result)
     {
