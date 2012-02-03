@@ -366,6 +366,10 @@ void PlayerMenu::SendQuestGiverQuestDetails(Quest const* quest, uint64 npcGUID, 
             data << uint32(0);
     }
 
+    float rates = sWorld->getRate(RATE_XP_QUEST);
+    if (_session->GetPlayer() && _session->GetPlayer()->getLevel() >= 80)
+        rates = sWorld->getRate(RATE_XP_AFTER_80);
+        
     data << uint32(quest->GetRewOrReqMoney()); // rewarded money
     data << uint32(quest->XPValue(_session->GetPlayer()) * sWorld->getRate(RATE_XP_QUEST)); // granted exp
     data << uint32(quest->GetCharTitleId());

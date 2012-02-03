@@ -6951,6 +6951,8 @@ void Player::CheckAreaExploreAndOutdoor()
                     XP = uint32(sObjectMgr->GetBaseXP(p->area_level)*sWorld->getRate(RATE_XP_EXPLORE));
                 }
 
+                if(GetSession()->IsPremium())
+                    XP *= sWorld->getRate(RATE_XP_EXPLORE_PREMIUM);
                 GiveXP(XP, NULL);
                 SendExplorationExperience(area, XP);
             }
@@ -15544,12 +15546,19 @@ void Player::RewardQuest(Quest const *quest, uint32 reward, Object* questGiver, 
     bool rewarded = (_RewardedQuests.find(quest_id) != _RewardedQuests.end());
 
     // Not give XP in case already completed once repeatable quest
-    uint32 XP = rewarded ? 0 : uint32(quest->XPValue(this)*sWorld->getRate(RATE_XP_QUEST));
+    float rates = sWorld->getRate(RATE_XP_QUEST);
+    if (getLevel() >= 80)
+        rates = sWorld->getRate(RATE_XP_AFTER_80);
+
+	uint32 XP = rewarded ? 0 : uint32(quest->XPValue(this)* rates);
 
     // handle SPELL_AURA_MOD_XP_QUEST_PCT auras
     Unit::AuraEffectList const& ModXPPctAuras = GetAuraEffectsByType(SPELL_AURA_MOD_XP_QUEST_PCT);
     for (Unit::AuraEffectList::const_iterator i = ModXPPctAuras.begin(); i != ModXPPctAuras.end(); ++i)
         AddPctN(XP, (*i)->GetAmount());
+
+    if (GetSession()->IsPremium())
+        XP *= sWorld->getRate(RATE_XP_QUEST_PREMIUM);
 
     int32 moneyRew = 0;
     if (getLevel() < sWorld->getIntConfig(CONFIG_MAX_PLAYER_LEVEL))
