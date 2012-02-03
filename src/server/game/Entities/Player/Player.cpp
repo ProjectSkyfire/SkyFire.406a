@@ -3141,6 +3141,19 @@ void Player::GiveLevel(uint8 level)
             }
 
     sScriptMgr->OnPlayerLevelChanged(this, oldLevel);
+
+    if (level == 85 || level == 60)
+    {
+        uint32 accId = 0;
+        if (accId = GetSession()->GetRecruiterId())
+        {
+            if (accId != 0)
+            {
+                CharacterDatabase.PQuery("DELETE FROM `recruit_leveled` WHERE guid=%u;", GetGUIDLow());
+                CharacterDatabase.PQuery("INSERT INTO `recruit_leveled` (guid, accId, recruiterId, level) VALUES (%u,%u,%u,%u);", GetGUIDLow(), GetSession()->GetAccountId(), accId, level);
+            }
+        }
+    }
 }
 
 void Player::InitTalentForLevel()
