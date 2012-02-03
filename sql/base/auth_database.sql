@@ -106,6 +106,32 @@ LOCK TABLES `account_banned` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `account_premium`
+--
+
+DROP TABLE IF EXISTS `account_premium`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE IF NOT EXISTS `account_premium` (
+  `id` int(11) NOT NULL default '0' COMMENT 'Account id',
+  `setdate` bigint(40) NOT NULL default '0',
+  `unsetdate` bigint(40) NOT NULL default '0',
+  `premium_type` tinyint(4) unsigned NOT NULL default '1',
+  `active` tinyint(4) NOT NULL default '1',
+  PRIMARY KEY  (`id`,`setdate`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Premium Accounts';  
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `account_premium`
+--
+
+LOCK TABLES `account_banned` WRITE;
+/*!40000 ALTER TABLE `account_premium` DISABLE KEYS */;
+/*!40000 ALTER TABLE `account_premium` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `ip_banned`
 --
 
