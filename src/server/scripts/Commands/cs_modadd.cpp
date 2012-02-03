@@ -74,7 +74,7 @@ public:
         QueryResult result = WorldDatabase.PQuery("SELECT class FROM moderator_add WHERE id = %u AND type = 0", itemId);
         if (!result)
         {
-            handler->PSendSysMessage("Item not found.");
+            handler->PSendSysMessage(LANG_COMMAND_ITEM_NOT_FOUND); // Item not found.
             return true;
         }
 
@@ -82,7 +82,7 @@ public:
 
         if (allowed_class > 0 && pclass != allowed_class)
         {
-            handler->PSendSysMessage("Player class not allowed to have this item.");
+            handler->PSendSysMessage(LANG_CLASS_NOT_ITEM_ALLOWED); // Player class not allowed to have this item
             return true;
         }
 
@@ -148,7 +148,7 @@ public:
         QueryResult result = WorldDatabase.PQuery("SELECT class FROM moderator_add WHERE id = %u AND type = 1", spell);
         if (!result)
         {
-            handler->PSendSysMessage("Spell not found.");
+            handler->PSendSysMessage(LANG_COMMAND_SPELL_NOT_FOUND); // Spell not found.
             return true;
         }
 
@@ -156,7 +156,7 @@ public:
 
         if (allowed_class > 0 && pclass != allowed_class)
         {
-            handler->PSendSysMessage("Player class not allowed to learn this spell.");
+            handler->PSendSysMessage(LANG_CLASS_NOT_SPELL_ALLOWED); // Player class not allowed to learn this spell.
             return true;
         }
 

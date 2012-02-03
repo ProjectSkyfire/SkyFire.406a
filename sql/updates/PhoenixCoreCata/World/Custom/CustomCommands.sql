@@ -21,6 +21,19 @@ INSERT INTO `command` VALUES
 ('banlist playeraccount', 3, 'Syntax: .banlist playeraccount [$Name]\r\nSearches the banlist for accounts according to a character name pattern.');
 
 -- Moderator Add Command
+DELETE FROM `skyfire_string` WHERE `entry`='11005';
+INSERT INTO `skyfire_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES 
+('11005','Item NOT found.',NULL,NULL,NULL,NULL,NULL,'Objeto NO autorizado.','Objeto NO autorizado.',NULL);
+DELETE FROM `skyfire_string` WHERE `entry`='11006';
+INSERT INTO `skyfire_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES 
+('11006','Player class not allowed to have this item',NULL,NULL,NULL,NULL,NULL,'La clase del jugador no le permite obtener ese item.','La clase del jugador no le permite obtener ese item.',NULL);
+DELETE FROM `skyfire_string` WHERE `entry`='11007';
+INSERT INTO `skyfire_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES 
+('11007','Spell NOT found.',NULL,NULL,NULL,NULL,NULL,'Spell NO autorizado.','Spell NO autorizado.',NULL);
+DELETE FROM `skyfire_string` WHERE `entry`='11008';
+INSERT INTO `skyfire_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES 
+('11008','Player class not allowed to learn this spell',NULL,NULL,NULL,NULL,NULL,'La clase del jugador no le permite aprender ese spell.','La clase del jugador no le permite aprender ese spell.',NULL);
+
 DROP TABLE IF EXISTS `moderator_add`;
 CREATE TABLE `moderator_add` (
   `type` tinyint(1) unsigned NOT NULL DEFAULT '0', -- 0 = item, 1 = spell
