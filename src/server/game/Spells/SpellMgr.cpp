@@ -3344,6 +3344,10 @@ void SpellMgr::LoadSpellCustomAttr()
             case 64678: // Sentinel Blast (Auriaya)
                 spellInfo->DurationEntry = sSpellDurationStore.LookupEntry(28); // 5 seconds, wrong DBC data?
                 break;
+            case 26573 : //Consecration
+                spellInfo->Effects[1].TriggerSpell = 82366;
+                spellInfo->Effects[2].TriggerSpell = 36946;  
+                break;           
             case 64321: // Potent Pheromones (Freya)
                 // spell should dispel area aura, but doesn't have the attribute
                 // may be db data bug, or blizz may keep reapplying area auras every update with checking immunity
