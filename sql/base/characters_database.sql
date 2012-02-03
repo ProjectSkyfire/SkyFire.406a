@@ -2565,6 +2565,34 @@ INSERT INTO `pool_quest_save` VALUES (523,25105),(524,25160),(530,26192),(531,26
 UNLOCK TABLES;
 
 --
+-- Table structure for table `recruit_leveled`
+--
+
+DROP TABLE IF EXISTS `recruit_leveled`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `recruit_leveled` (
+	`guid` INT(10) NOT NULL DEFAULT '0',
+	`accId` INT(10) NULL DEFAULT NULL,
+	`recruiterId` INT(10) NULL DEFAULT NULL,
+	`level` INT(10) NULL DEFAULT NULL,
+	PRIMARY KEY (`guid`)
+)
+COMMENT='In this table are stored recruited friends that have reached 60 or 85 level'
+COLLATE='latin1_swedish_ci'
+ENGINE=InnoDB;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `recruit_leveled`
+--
+
+LOCK TABLES `recruit_leveled` WRITE;
+/*!40000 ALTER TABLE `recruit_leveled` DISABLE KEYS */;
+/*!40000 ALTER TABLE `recruit_leveled` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `reserved_name`
 --
 
