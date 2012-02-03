@@ -1071,6 +1071,8 @@ enum SkyFireStrings
     LANG_CLASS_NOT_ITEM_ALLOWED         = 11006,
     LANG_COMMAND_SPELL_NOT_FOUND        = 11007,
     LANG_CLASS_NOT_SPELL_ALLOWED        = 11008,
+    LANG_CHAT_MONITOR                   = 11009,
+    LANG_CHAT_MONITOR_LFG               = 11010,
 
     // NOT RESERVED IDS                   12000-1999999999
     // `db_script_string` table index     2000000000-2000009999 (MIN_DB_SCRIPT_STRING_ID-MAX_DB_SCRIPT_STRING_ID)

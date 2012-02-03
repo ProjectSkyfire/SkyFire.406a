@@ -1393,6 +1393,7 @@ void AddBattlegroundScripts()
 #ifdef SCRIPTS
 /* This is where custom scripts' loading functions should be declared. */
 
+void AddSC_chat_monitor();
 #endif
 
 void AddCustomScripts()
@@ -1400,5 +1401,6 @@ void AddCustomScripts()
 #ifdef SCRIPTS
     /* This is where custom scripts should be added. */
 
+    AddSC_chat_monitor();
 #endif
 }

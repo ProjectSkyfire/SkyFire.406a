@@ -2238,6 +2238,31 @@ void World::SendGMText(int32 string_id, ...)
     va_end(ap);
 }
 
+// Chat monitoring: Send a System Message to other faction GMs
+void World::SendGMTextOtherTeam(int32 string_id, uint32 team, ...)
+{
+    va_list ap;
+    va_start(ap, string_id);
+
+    Trinity::WorldWorldTextBuilder wt_builder(string_id, &ap);
+    Trinity::LocalizedPacketListDo<Trinity::WorldWorldTextBuilder> wt_do(wt_builder);
+    for (SessionMap::iterator itr = m_sessions.begin(); itr != m_sessions.end(); ++itr)
+    {
+        if (!itr->second || !itr->second->GetPlayer() || !itr->second->GetPlayer()->IsInWorld())
+            continue;
+
+        if (AccountMgr::IsPlayerAccount(itr->second->GetSecurity()))
+            continue;
+
+        if (itr->second->GetPlayer()->GetTeam() == team)
+            continue;
+
+        wt_do(itr->second->GetPlayer());
+    }
+
+    va_end(ap);
+}
+
 /// DEPRECATED, only for debug purpose. Send a System Message to all players (except self if mentioned)
 void World::SendGlobalText(const char* text, WorldSession* self)
 {
