@@ -782,6 +782,7 @@ void Battleground::EndBattleground(uint32 winner)
         }
     }
 
+    uint8 aliveWinners = GetAlivePlayersCountByTeam(winner);
     for (BattlegroundPlayerMap::iterator itr = _Players.begin(); itr != _Players.end(); ++itr)
     {
         uint32 team = itr->second.Team;
@@ -807,6 +808,10 @@ void Battleground::EndBattleground(uint32 winner)
         if (player->HasAuraType(SPELL_AURA_SPIRIT_OF_REDEMPTION))
             player->RemoveAurasByType(SPELL_AURA_MOD_SHAPESHIFT);
 
+        // Last standing - Rated 5v5 arena & be solely alive player
+        if (team == winner && isArena() && isRated() && GetArenaType() == ARENA_TYPE_5v5 && aliveWinners == 1 && player->isAlive())
+            player->CastSpell(player, SPELL_THE_LAST_STANDING, true);
+
         if (!player->isAlive())
         {
             player->ResurrectPlayer(1.0f);
@@ -830,7 +835,7 @@ void Battleground::EndBattleground(uint32 winner)
                 // update achievement BEFORE personal rating update
                 ArenaTeamMember* member = winner_arena_team->GetMember(player->GetGUID());
                 if (member)
-                    player->UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_WIN_RATED_ARENA, member->PersonalRating);
+                    player->UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_WIN_RATED_ARENA, 1);
 
                 winner_arena_team->MemberWon(player, loser_matchmaker_rating, winner_matchmaker_change);
             }

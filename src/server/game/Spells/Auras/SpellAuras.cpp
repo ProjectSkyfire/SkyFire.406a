@@ -1942,7 +1942,7 @@ bool Aura::CanStackWith(Aura const* existingAura) const
                 case SPELL_AURA_OBS_MOD_HEALTH:
                 case SPELL_AURA_PERIODIC_TRIGGER_SPELL_WITH_VALUE:
                     // periodic auras which target areas are not allowed to stack this way (replenishment for example)
-                    if (m_spellInfo->Effects[i].IsArea() || existingSpellInfo->Effects[i].IsArea())
+                    if (m_spellInfo->Effects[i].IsTargetingArea() || existingSpellInfo->Effects[i].IsTargetingArea())
                         break;
                     return true;
                 default:
@@ -2445,7 +2445,7 @@ void UnitAura::FillTargetMap(std::map<Unit* , uint8> & targets, Unit* caster)
         {
             float radius = GetSpellInfo()->Effects[effIndex].CalcRadius(caster);
 
-            if (!GetUnitOwner()->HasUnitState(UNIT_STAT_ISOLATED))
+            if (!GetUnitOwner()->HasUnitState(UNIT_STATE_ISOLATED))
             {
                 switch (GetSpellInfo()->Effects[effIndex].Effect)
                 {

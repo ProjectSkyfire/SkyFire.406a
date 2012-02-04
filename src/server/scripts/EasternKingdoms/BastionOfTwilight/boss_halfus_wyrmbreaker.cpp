@@ -314,8 +314,8 @@ class spell_halfus_stone_touch : public SpellScriptLoader
             {
                 if (Unit * target = GetTarget())
                 {
-                    target->AddUnitState(UNIT_STAT_STUNNED);
-                    target->ClearUnitState(UNIT_STAT_CASTING);
+                    target->AddUnitState(UNIT_STATE_STUNNED);
+                    target->ClearUnitState(UNIT_STATE_CASTING);
                 }
             }
 
@@ -323,8 +323,8 @@ class spell_halfus_stone_touch : public SpellScriptLoader
             {
                if (Unit* target = GetTarget())
                {
-                   target->ClearUnitState(UNIT_STAT_STUNNED);
-                   target->AddUnitState(UNIT_STAT_CASTING);
+                   target->ClearUnitState(UNIT_STATE_STUNNED);
+                   target->AddUnitState(UNIT_STATE_CASTING);
                }
             }
 

@@ -151,7 +151,7 @@ public:
                     summoned->CastSpell(summoned, SPELL_DARKFIEND_VISUAL, false);
                     break;
                 case CREATURE_DARKNESS:
-                    summoned->AddUnitState(UNIT_STAT_STUNNED);
+                    summoned->AddUnitState(UNIT_STATE_STUNNED);
                     float x, y, z, o;
                     summoned->GetHomePosition(x, y, z, o);
                     me->SummonCreature(CREATURE_DARK_FIENDS, x, y, z, o, TEMPSUMMON_CORPSE_DESPAWN, 0);
@@ -397,7 +397,7 @@ public:
             InAction = false;
             SummonSentinel = false;
 
-            me->AddUnitState(UNIT_STAT_STUNNED);
+            me->AddUnitState(UNIT_STATE_STUNNED);
 
             Summons.DespawnAll();
         }
@@ -469,7 +469,7 @@ public:
             WaitTimer = 2000;
             InAction = false;
 
-            me->AddUnitState(UNIT_STAT_STUNNED);
+            me->AddUnitState(UNIT_STATE_STUNNED);
         }
 
         void SpellHit(Unit* /*caster*/, const SpellInfo* Spell)
@@ -488,7 +488,7 @@ public:
             {
                 if (!InAction)
                 {
-                    me->ClearUnitState(UNIT_STAT_STUNNED);
+                    me->ClearUnitState(UNIT_STATE_STUNNED);
                     DoCastAOE(SPELL_DARKFIEND_SKIN, false);
                     AttackStart(SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true));
                     InAction = true;
@@ -593,7 +593,7 @@ public:
             SpellTimer = 5000;
             Phase = 0;
 
-            me->AddUnitState(UNIT_STAT_STUNNED);
+            me->AddUnitState(UNIT_STATE_STUNNED);
             DoCastAOE(SPELL_BLACKHOLE_SPAWN, true);
         }
 
@@ -605,7 +605,7 @@ public:
                 switch (NeedForAHack)
                 {
                     case 0:
-                        me->ClearUnitState(UNIT_STAT_STUNNED);
+                        me->ClearUnitState(UNIT_STATE_STUNNED);
                         DoCastAOE(SPELL_BLACKHOLE_GROW, false);
                         if (Victim)
                             AttackStart(Victim);

@@ -217,7 +217,7 @@ void WorldSession::HandlePetActionHelper(Unit* pet, uint64 guid1, uint32 spellid
                             return;
                     }
 
-                    pet->ClearUnitState(UNIT_STAT_FOLLOW);
+                    pet->ClearUnitState(UNIT_STATE_FOLLOW);
                     // This is true if pet has no target or has target but targets differs.
                     if (pet->getVictim() != TargetUnit || (pet->getVictim() == TargetUnit && !pet->GetCharmInfo()->IsCommandAttack()))
                     {
@@ -792,7 +792,7 @@ void WorldSession::HandlePetCastSpellOpcode(WorldPacket& recvPacket)
     targets.Read(recvPacket, caster);
     HandleClientCastFlags(recvPacket, castFlags, targets);
 
-    caster->ClearUnitState(UNIT_STAT_FOLLOW);
+    caster->ClearUnitState(UNIT_STATE_FOLLOW);
 
     Spell* spell = new Spell(caster, spellInfo, TRIGGERED_NONE);
     spell->_cast_count = castCount;                    // probably pending spell cast

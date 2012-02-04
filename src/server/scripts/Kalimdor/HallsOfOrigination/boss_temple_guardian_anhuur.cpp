@@ -224,7 +224,7 @@ class boss_temple_guardian_anhuur : public CreatureScript
                     FlameCount = 2;
                 }
 
-                if (!me->HasUnitState(UNIT_STAT_CASTING) && Phase == PHASE_SHIELD)
+                if (!me->HasUnitState(UNIT_STATE_CASTING) && Phase == PHASE_SHIELD)
                 {
                     Phase = PHASE_NORMAL;
                     RemoveSummons();

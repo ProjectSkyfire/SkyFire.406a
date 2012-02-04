@@ -1322,7 +1322,7 @@ public:
             if (uiType != POINT_MOTION_TYPE)
                 return;
 
-            me->AddUnitState(UNIT_STAT_STUNNED);
+            me->AddUnitState(UNIT_STATE_STUNNED);
             me->CastSpell(me, SPELL_STUN, true);
             if (me->isSummon())
                 if (Unit* summoner = me->ToTempSummon()->GetSummoner())
@@ -1439,7 +1439,7 @@ public:
             DoScriptText(SAY_LERYSSA_1, pLeryssa);
             pArlos->Kill(pArlos, false);
             pLeryssa->RemoveAura(SPELL_STUN);
-            pLeryssa->ClearUnitState(UNIT_STAT_STUNNED);
+            pLeryssa->ClearUnitState(UNIT_STATE_STUNNED);
             pLeryssa->RemoveUnitMovementFlag(MOVEMENTFLAG_WALKING);
             pLeryssa->GetMotionMaster()->MovePoint(0, 3722.114502f, 3564.201660f, 477.441437f);
 
@@ -1489,7 +1489,7 @@ public:
                 if (Creature* pTalbot = me->FindNearestCreature(NPC_PRINCE_VALANAR, 50.0f, true))
                     CAST_AI(npc_counselor_talbot::npc_counselor_talbotAI, pTalbot->GetAI())->bCheck = true;
 
-                me->AddUnitState(UNIT_STAT_STUNNED);
+                me->AddUnitState(UNIT_STATE_STUNNED);
                 me->CastSpell(me, SPELL_STUN, true);
 
                 if (me->isSummon())

@@ -40,7 +40,6 @@ SmartScript::SmartScript()
     go = NULL;
     me = NULL;
     mEventPhase = 0;
-    mInvinceabilityHpLevel = 0;
     mPathId = 0;
     mTargetStorage = new ObjectListMap();
     mStoredEvents.clear();
@@ -85,7 +84,20 @@ void SmartScript::ProcessEventsFor(SMART_EVENT e, Unit* unit, uint32 var0, uint3
             continue;
 
         if (eventType == e/* && (!(*i).event.event_phase_mask || IsInPhase((*i).event.event_phase_mask)) && !((*i).event.event_flags & SMART_EVENT_FLAG_NOT_REPEATABLE && (*i).runOnce)*/)
-            ProcessEvent(*i, unit, var0, var1, bvar, spell, gob);
+        {
+            bool meets = true;
+            if (unit)
+            {
+                if (Player* player = unit->ToPlayer())
+                {
+                    ConditionList conds = sConditionMgr->GetConditionsForSmartEvent((*i).entryOrGuid, (*i).event_id, (*i).source_type);
+                    meets = sConditionMgr->IsPlayerMeetToConditions(player, conds);
+                }
+            }
+            
+            if (meets)
+                ProcessEvent(*i, unit, var0, var1, bvar, spell, gob);
+        }
     }
 }
 
@@ -980,10 +992,15 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
             if (!me)
                 break;
 
+            SmartAI* ai = CAST_AI(SmartAI, me->AI());
+
+            if (!ai)
+                break;
+
             if (e.action.invincHP.percent)
-                mInvinceabilityHpLevel = me->CountPctFromMaxHealth(e.action.invincHP.percent);
+                ai->SetInvinceabilityHpLevel(me->CountPctFromMaxHealth(e.action.invincHP.percent));
             else
-                mInvinceabilityHpLevel = e.action.invincHP.minHP;
+                ai->SetInvinceabilityHpLevel(e.action.invincHP.minHP);
             break;
         }
         case SMART_ACTION_SET_DATA:
@@ -2702,7 +2719,7 @@ void SmartScript::UpdateTimer(SmartScriptHolder& e, uint32 const diff)
         {
             if (!(e.action.cast.flags & SMARTCAST_INTERRUPT_PREVIOUS))
             {
-                if (me && me->HasUnitState(UNIT_STAT_CASTING))
+                if (me && me->HasUnitState(UNIT_STATE_CASTING))
                 {
                     e.timer = 1;
                     return;
