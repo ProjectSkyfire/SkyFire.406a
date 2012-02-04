@@ -160,7 +160,7 @@ class boss_ammunae : public CreatureScript
                 if (!UpdateVictim())
                     return;
 
-                if (me->HasUnitState(UNIT_STAT_CASTING))
+                if (me->HasUnitState(UNIT_STATE_CASTING))
                     return;
 
                 while(uint32 eventId = events.ExecuteEvent())
@@ -243,7 +243,7 @@ public:
                 if (!UpdateVictim())
                     return;
 
-                if (me->HasUnitState(UNIT_STAT_CASTING))
+                if (me->HasUnitState(UNIT_STATE_CASTING))
                     return;
 
             if (SlashTimer <= diff)

@@ -211,7 +211,7 @@ class boss_drakkari_colossus : public CreatureScript
 
                 events.Update(diff);
 
-                if (me->HasUnitState(UNIT_STAT_CASTING))
+                if (me->HasUnitState(UNIT_STATE_CASTING))
                     return;
 
                 while (uint32 eventId = events.ExecuteEvent())
@@ -288,7 +288,7 @@ class boss_drakkari_elemental : public CreatureScript
 
                 events.Update(diff);
 
-                if (me->HasUnitState(UNIT_STAT_CASTING))
+                if (me->HasUnitState(UNIT_STATE_CASTING))
                     return;
 
                 while (uint32 eventId = events.ExecuteEvent())
@@ -334,7 +334,7 @@ class boss_drakkari_elemental : public CreatureScript
                             damage = 0;
 
                             // to prevent spell spaming
-                            if (me->HasUnitState(UNIT_STAT_CHARGING))
+                            if (me->HasUnitState(UNIT_STATE_CHARGING))
                                 return;
 
                             // not sure about this, the idea of this code is to prevent bug the elemental

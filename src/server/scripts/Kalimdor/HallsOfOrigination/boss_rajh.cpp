@@ -127,7 +127,7 @@ class boss_rajh : public CreatureScript
                 if (!UpdateVictim())
                     return;
 
-                if (me->HasUnitState(UNIT_STAT_CASTING))
+                if (me->HasUnitState(UNIT_STATE_CASTING))
                     return;
 
                 while(uint32 eventId = events.ExecuteEvent())
