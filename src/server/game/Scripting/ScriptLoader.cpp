@@ -48,6 +48,7 @@ void AddSC_example_spell_scripts();
 void AddSC_SmartSCripts();
 
 //Commands
+void AddSC_vip_commandscript();
 void AddSC_account_commandscript();
 void AddSC_achievement_commandscript();
 void AddSC_bf_commandscript();
@@ -729,6 +730,7 @@ void AddSpellScripts()
 
 void AddCommandScripts()
 {
+    AddSC_vip_commandscript();
     AddSC_account_commandscript();
     AddSC_achievement_commandscript();
     AddSC_bf_commandscript();
@@ -1391,6 +1393,9 @@ void AddBattlegroundScripts()
 #ifdef SCRIPTS
 /* This is where custom scripts' loading functions should be declared. */
 
+void AddSC_DuelReset();
+void AddSC_chat_monitor();
+void AddSC_level_rewards();
 #endif
 
 void AddCustomScripts()
@@ -1398,5 +1403,8 @@ void AddCustomScripts()
 #ifdef SCRIPTS
     /* This is where custom scripts should be added. */
 
+    AddSC_DuelReset();
+    AddSC_chat_monitor();
+    AddSC_level_rewards();
 #endif
 }
