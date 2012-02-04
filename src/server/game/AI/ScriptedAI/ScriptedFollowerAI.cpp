@@ -53,8 +53,8 @@ void FollowerAI::AttackStart(Unit* who)
         me->SetInCombatWith(who);
         who->SetInCombatWith(me);
 
-        if (me->HasUnitState(UNIT_STATEE_FOLLOW))
-            me->ClearUnitState(UNIT_STATEE_FOLLOW);
+        if (me->HasUnitState(UNIT_STATE_FOLLOW))
+            me->ClearUnitState(UNIT_STATE_FOLLOW);
 
         if (IsCombatMovementAllowed())
             me->GetMotionMaster()->MoveChase(who);
@@ -355,9 +355,9 @@ Player* FollowerAI::GetLeaderForFollower()
 
 void FollowerAI::SetFollowComplete(bool bWithEndEvent)
 {
-    if (me->HasUnitState(UNIT_STATEE_FOLLOW))
+    if (me->HasUnitState(UNIT_STATE_FOLLOW))
     {
-        me->ClearUnitState(UNIT_STATEE_FOLLOW);
+        me->ClearUnitState(UNIT_STATE_FOLLOW);
 
         me->StopMoving();
         me->GetMotionMaster()->Clear();
@@ -384,9 +384,9 @@ void FollowerAI::SetFollowPaused(bool paused)
     {
         AddFollowState(STATE_FOLLOW_PAUSED);
 
-        if (me->HasUnitState(UNIT_STATEE_FOLLOW))
+        if (me->HasUnitState(UNIT_STATE_FOLLOW))
         {
-            me->ClearUnitState(UNIT_STATEE_FOLLOW);
+            me->ClearUnitState(UNIT_STATE_FOLLOW);
 
             me->StopMoving();
             me->GetMotionMaster()->Clear();
