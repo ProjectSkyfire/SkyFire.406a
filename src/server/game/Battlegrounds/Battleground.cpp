@@ -835,7 +835,7 @@ void Battleground::EndBattleground(uint32 winner)
                 // update achievement BEFORE personal rating update
                 ArenaTeamMember* member = winner_arena_team->GetMember(player->GetGUID());
                 if (member)
-                    player->UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_WIN_RATED_ARENA, member->PersonalRating);
+                    player->UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_WIN_RATED_ARENA, 1);
 
                 winner_arena_team->MemberWon(player, loser_matchmaker_rating, winner_matchmaker_change);
             }
