@@ -1395,6 +1395,7 @@ void AddBattlegroundScripts()
 
 void AddSC_DuelReset();
 void AddSC_chat_monitor();
+void AddSC_level_rewards();
 #endif
 
 void AddCustomScripts()
@@ -1404,5 +1405,6 @@ void AddCustomScripts()
 
     AddSC_DuelReset();
     AddSC_chat_monitor();
+    AddSC_level_rewards();
 #endif
 }
