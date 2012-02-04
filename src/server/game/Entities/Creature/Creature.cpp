@@ -1548,7 +1548,7 @@ void Creature::Respawn(bool force)
         if (_DBTableGuid)
             sObjectMgr->RemoveCreatureRespawnTime(_DBTableGuid, GetInstanceId());
 
-        sLog->outStaticDebug("Respawning...");
+        sLog->outStaticDebug("Respawning creature %s (GuidLow: %u, Full GUID: " UI64FMTD " Entry: %u)", GetName(), GetGUIDLow(), GetGUID(), GetEntry());
         _respawnTime = 0;
         lootForPickPocketed = false;
         lootForBody         = false;
