@@ -11,6 +11,7 @@
 set(scripts_STAT_SRCS
   ${scripts_STAT_SRCS}
   Custom/chat_monitor.cpp
+  Custom/duel_reset.cpp
 )
 
 message("  -> Prepared: Custom")

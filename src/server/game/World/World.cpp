@@ -597,6 +597,7 @@ void World::LoadConfigSettings(bool reload)
     m_int_configs[CONFIG_INTERVAL_SAVE] = ConfigMgr::GetIntDefault("PlayerSaveInterval", 15 * MINUTE * IN_MILLISECONDS);
     m_int_configs[CONFIG_INTERVAL_DISCONNECT_TOLERANCE] = ConfigMgr::GetIntDefault("DisconnectToleranceInterval", 0);
     m_bool_configs[CONFIG_STATS_SAVE_ONLY_ON_LOGOUT] = ConfigMgr::GetBoolDefault("PlayerSave.Stats.SaveOnlyOnLogout", true);
+    m_bool_configs[CONFIG_DUEL_RESET_COOLDOWN] = ConfigMgr::GetBoolDefault("DuelResetCooldown", false);
     m_bool_configs[CONFIG_PREVENT_PLAYERS_ACCESS_TO_GMISLAND] = ConfigMgr::GetBoolDefault("PreventPlayersAccessToGMIsland", false);
 
     m_int_configs[CONFIG_MIN_LEVEL_STAT_SAVE] = ConfigMgr::GetIntDefault("PlayerSave.Stats.MinLevel", 0);
@@ -1234,6 +1235,10 @@ void World::LoadConfigSettings(bool reload)
     // misc
     m_bool_configs[CONFIG_PDUMP_NO_PATHS] = ConfigMgr::GetBoolDefault("PlayerDump.DisallowPaths", true);
     m_bool_configs[CONFIG_PDUMP_NO_OVERWRITE] = ConfigMgr::GetBoolDefault("PlayerDump.DisallowOverwrite", true);
+    //AreaDuelReset
+    m_int_configs[CONFIG_DUEL_RESET_ONE] = ConfigMgr::GetIntDefault("Duel.Reset.Area.One", 14); // stormwind
+    m_int_configs[CONFIG_DUEL_RESET_TWO] = ConfigMgr::GetIntDefault("Duel.Reset.Area.Two", 12); // orgrimmar
+
 
     sScriptMgr->OnConfigLoad(reload);
 }

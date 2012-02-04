@@ -2969,4 +2969,22 @@ PlayerDump.DisallowPaths = 1
 PlayerDump.DisallowOverwrite = 1
 
 #
+#   DuelResetCooldown
+#	Reseting cooldown and restore health to start duel
+#	Default: 0 - Disable
+#		     1 - Enable
+
+DuelResetCooldown = 1
+
+#
+#    Duel.Reset.Area
+#	     Description:  Reseting cooldown and restore health to start duel
+#        Duel.Reset.Area.One = 14 - stormwind
+#        Duel.Reset.Area.Two = 12 - orgrimmar
+
+Duel.Reset.Area.One = 14
+Duel.Reset.Area.Two = 12
+
+
+#
 ###################################################################################################
