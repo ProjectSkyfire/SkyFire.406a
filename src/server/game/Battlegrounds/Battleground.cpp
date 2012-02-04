@@ -782,6 +782,7 @@ void Battleground::EndBattleground(uint32 winner)
         }
     }
 
+    uint8 aliveWinners = GetAlivePlayersCountByTeam(winner);
     for (BattlegroundPlayerMap::iterator itr = _Players.begin(); itr != _Players.end(); ++itr)
     {
         uint32 team = itr->second.Team;
@@ -804,7 +805,7 @@ void Battleground::EndBattleground(uint32 winner)
             continue;
 
         // Last standing - Rated 5v5 arena & be solely alive player
-        if (team == winner && isArena() && isRated() && GetArenaType() == ARENA_TYPE_5v5 && GetAlivePlayersCountByTeam(winner) == 1 && player->isAlive())
+        if (team == winner && isArena() && isRated() && GetArenaType() == ARENA_TYPE_5v5 && aliveWinners == 1 && player->isAlive())
             player->CastSpell(player, SPELL_THE_LAST_STANDING, true);
 
         // should remove spirit of redemption
