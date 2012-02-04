@@ -1238,6 +1238,8 @@ void World::LoadConfigSettings(bool reload)
     //AreaDuelReset
     m_int_configs[CONFIG_DUEL_RESET_ONE] = ConfigMgr::GetIntDefault("Duel.Reset.Area.One", 14); // stormwind
     m_int_configs[CONFIG_DUEL_RESET_TWO] = ConfigMgr::GetIntDefault("Duel.Reset.Area.Two", 12); // orgrimmar
+    // Player Item logs
+    m_bool_configs[CONFIG_ENABLE_ITEMLOG] = ConfigMgr::GetBoolDefault("Itemlog.Enable", false);
 
 
     sScriptMgr->OnConfigLoad(reload);

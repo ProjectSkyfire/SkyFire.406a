@@ -271,6 +271,12 @@ void WorldSession::HandleDestroyItemOpcode(WorldPacket & recv_data)
         return;
     }
 
+    if (sWorld->getBoolConfig(CONFIG_ENABLE_ITEMLOG))
+    {
+        if (pItem->GetTemplate()->Quality >= 4 && (pItem->GetTemplate()->ItemLevel >= 346 || (pItem->GetTemplate()->Class == ITEM_CLASS_MISC && pItem->GetTemplate()->ItemLevel >= 85)))
+        CharacterDatabase.PExecute("INSERT INTO character_itemlog_delete (`date`, `guid`, `name`, `item`, `comment`) VALUES (NOW(), '%u', '%s', '%u', '%s');", _player->GetGUIDLow(), _player->GetName(), pItem->GetTemplate()->ItemId, "drop");
+    }
+
     if (count)
     {
         uint32 i_count = count;

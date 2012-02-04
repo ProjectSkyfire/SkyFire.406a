@@ -2985,6 +2985,14 @@ DuelResetCooldown = 1
 Duel.Reset.Area.One = 14
 Duel.Reset.Area.Two = 12
 
+#
+#
+#     Itemlog.Enable
+#        Description: Keep a log of all item win by players with more than 232 lvl Quality
+#        Default:     0 - (Disable)
+#                     1 - (Enable)
+
+Itemlog.Enable = 1
 
 #
 ###################################################################################################

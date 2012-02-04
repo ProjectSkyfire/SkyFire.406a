@@ -12559,6 +12559,12 @@ Item* Player::StoreNewItem(ItemPosCountVec const& dest, uint32 item, bool update
             stmt->setString(1, ss.str());
             CharacterDatabase.Execute(stmt);
         }
+
+        if (sWorld->getBoolConfig(CONFIG_ENABLE_ITEMLOG))
+        {
+            if (pItem->GetTemplate()->Quality >= 4 && (pItem->GetTemplate()->ItemLevel >= 346 || (pItem->GetTemplate()->Class == ITEM_CLASS_MISC && pItem->GetTemplate()->ItemLevel >= 85)))
+            CharacterDatabase.PExecute("INSERT INTO character_itemlog (`date`, `guid`, `name`, `item`) VALUES (NOW(), '%u', '%s', '%u');", GetGUIDLow(), m_name.c_str(), pItem->GetTemplate()->ItemId);
+        }
     }
     return pItem;
 }
