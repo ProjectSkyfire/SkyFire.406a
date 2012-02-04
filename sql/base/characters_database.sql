@@ -823,6 +823,59 @@ LOCK TABLES `character_inventory` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `character_itemlog`
+--
+
+DROP TABLE IF EXISTS `character_itemlog`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `character_itemlog` (
+  `id` int(9) NOT NULL auto_increment,
+  `date` timestamp NOT NULL,
+  `guid` int(9) NOT NULL default '0',
+  `name` varchar(12) NOT NULL,
+  `item` int(6) NOT NULL default '0',
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `character_itemlog`
+--
+
+LOCK TABLES `character_inventory` WRITE;
+/*!40000 ALTER TABLE `character_itemlog` DISABLE KEYS */;
+/*!40000 ALTER TABLE `character_itemlog` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `character_itemlog_delete`
+--
+
+DROP TABLE IF EXISTS `character_itemlog_delete`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `character_itemlog_delete` (
+  `id` int(9) NOT NULL AUTO_INCREMENT,
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `guid` int(9) NOT NULL DEFAULT '0',
+  `name` varchar(12) NOT NULL,
+  `item` int(6) NOT NULL DEFAULT '0',
+  `comment` varchar(12) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `character_itemlog_delete`
+--
+
+LOCK TABLES `character_inventory` WRITE;
+/*!40000 ALTER TABLE `character_itemlog_delete` DISABLE KEYS */;
+/*!40000 ALTER TABLE `character_itemlog_delete` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `character_pet`
 --
 
@@ -2562,6 +2615,34 @@ LOCK TABLES `pool_quest_save` WRITE;
 /*!40000 ALTER TABLE `pool_quest_save` DISABLE KEYS */;
 INSERT INTO `pool_quest_save` VALUES (523,25105),(524,25160),(530,26192),(531,26220),(532,26414),(533,26556),(534,11369),(34771,14144),(34880,14080),(34882,14102),(34912,14145),(34914,14112);
 /*!40000 ALTER TABLE `pool_quest_save` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `recruit_leveled`
+--
+
+DROP TABLE IF EXISTS `recruit_leveled`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `recruit_leveled` (
+	`guid` INT(10) NOT NULL DEFAULT '0',
+	`accId` INT(10) NULL DEFAULT NULL,
+	`recruiterId` INT(10) NULL DEFAULT NULL,
+	`level` INT(10) NULL DEFAULT NULL,
+	PRIMARY KEY (`guid`)
+)
+COMMENT='In this table are stored recruited friends that have reached 60 or 85 level'
+COLLATE='latin1_swedish_ci'
+ENGINE=InnoDB;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `recruit_leveled`
+--
+
+LOCK TABLES `recruit_leveled` WRITE;
+/*!40000 ALTER TABLE `recruit_leveled` DISABLE KEYS */;
+/*!40000 ALTER TABLE `recruit_leveled` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --

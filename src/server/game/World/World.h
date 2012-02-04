@@ -135,6 +135,9 @@ enum WorldBoolConfigs
     CONFIG_ARENA_QUEUE_ANNOUNCER_PLAYERONLY,
     CONFIG_ARENA_SEASON_IN_PROGRESS,
     CONFIG_ARENA_LOG_EXTENDED_INFO,
+    CONFIG_ARENA_2v2_TEAM_ENABLE,
+    CONFIG_ARENA_3v3_TEAM_ENABLE,
+    CONFIG_ARENA_5v5_TEAM_ENABLE,	
     CONFIG_OFFHAND_CHECK_AT_SPELL_UNLEARN,
     CONFIG_VMAP_INDOOR_CHECK,
     CONFIG_PET_LOS,
@@ -165,6 +168,8 @@ enum WorldBoolConfigs
     CONFIG_PDUMP_NO_OVERWRITE,
     CONFIG_WINTERGRASP_ENABLE,
     CONFIG_TOL_BARAD_ENABLE,
+    CONFIG_DUEL_RESET_COOLDOWN,
+    CONFIG_ENABLE_ITEMLOG,
     BOOL_CONFIG_VALUE_COUNT
 };
 
@@ -326,6 +331,8 @@ enum WorldIntConfigs
     CONFIG_TOL_BARAD_BATTLETIME,
     CONFIG_TOL_BARAD_NOBATTLETIME,
     CONFIG_IGNORING_MAPS_VERSION,
+    CONFIG_DUEL_RESET_ONE,
+    CONFIG_DUEL_RESET_TWO,
     INT_CONFIG_VALUE_COUNT
 };
 
@@ -352,8 +359,12 @@ enum Rates
     RATE_DROP_ITEM_REFERENCED_AMOUNT,
     RATE_DROP_MONEY,
     RATE_XP_KILL,
+    RATE_XP_KILL_PREMIUM,
     RATE_XP_QUEST,
+    RATE_XP_QUEST_PREMIUM,
     RATE_XP_EXPLORE,
+    RATE_XP_EXPLORE_PREMIUM,
+    RATE_XP_AFTER_80,
     RATE_REPAIRCOST,
     RATE_REPUTATION_GAIN,
     RATE_REPUTATION_LOWLEVEL_KILL,
@@ -649,6 +660,7 @@ class World
         void SendWorldText(int32 string_id, ...);
         void SendGlobalText(const char* text, WorldSession* self);
         void SendGMText(int32 string_id, ...);
+        void SendGMTextOtherTeam(int32 string_id, uint32 team, ...); // Chat monitoring: Send a System Message to other faction GMs
         void SendGlobalMessage(WorldPacket* packet, WorldSession* self = 0, uint32 team = 0);
         void SendGlobalGMMessage(WorldPacket* packet, WorldSession* self = 0, uint32 team = 0);
         void SendZoneMessage(uint32 zone, WorldPacket* packet, WorldSession* self = 0, uint32 team = 0);
