@@ -110,9 +110,7 @@ public:
         void Reset()
         {
             if (me->GetGUIDLow() == 3486400)
-            {
                 tSay = DELAY_SAY_GILNEAS_CITY_GUARD_GATE; //Reset timer
-            }
         }
 
         void UpdateAI(const uint32 diff)
