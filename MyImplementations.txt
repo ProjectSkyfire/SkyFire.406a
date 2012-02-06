@@ -18,6 +18,7 @@ I'm sorry if I can not say thanks just in case because sometimes I can not remem
 [patch 010] Custom: reset cooldown hp/mana after duel end.
 [patch 011] Logs: Keep a log of all items won or deleted by players with more than 346 level Quality
 [patch 012] Custom: Added level rewarder script.
+[patch 013] Player can join LFG anywhere.
 
 # Extras
 - V.I.P system is working. Need PHP Script.
