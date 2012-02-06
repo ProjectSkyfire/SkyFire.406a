@@ -33,7 +33,7 @@ public:
 
     CreatureAI* GetAI(Creature* creature) const
     {
-        return new npc_panicked_citizenAI (creature);
+        return new npc_panicked_citizenAI(creature);
     }
 
     struct npc_panicked_citizenAI : public ScriptedAI
@@ -79,9 +79,7 @@ public:
                 if (!guid_panicked_nextsay)
                 {
                     if (urand(0, 1))
-                    {
                         guid_panicked_nextsay = me->GetGUIDLow();
-                    }
                 }
 
                 //If this is the selected npc to say
@@ -128,7 +126,7 @@ public:
 
     CreatureAI* GetAI(Creature* creature) const
     {
-        return new npc_panicked_citizen_2AI (creature);
+        return new npc_panicked_citizen_2AI(creature);
     }
 
     struct npc_panicked_citizen_2AI : public ScriptedAI
@@ -232,7 +230,7 @@ public:
 
     CreatureAI* GetAI(Creature* creature) const
     {
-        return new npc_lieutenant_waldenAI (creature);
+        return new npc_lieutenant_waldenAI(creature);
     }
 
     struct npc_lieutenant_waldenAI : public ScriptedAI
@@ -323,12 +321,15 @@ public:
                 playSound = false;
             }
 
-            if (playSound == true) tSound -= diff;
+            if (playSound == true)
+                tSound -= diff;
 
             if (dmgCount < 2)
                 DoMeleeAttackIfReady();
-            else if (me->getVictim()->GetTypeId() == TYPEID_PLAYER) dmgCount = 0;
-            else if (me->getVictim()->isPet()) dmgCount = 0;
+            else
+                if (me->getVictim()->GetTypeId() == TYPEID_PLAYER) dmgCount = 0;
+            else
+                if (me->getVictim()->isPet()) dmgCount = 0;
             else
             {
                 if (tAnimate <= diff)
@@ -458,8 +459,10 @@ public:
                 //Attack
                 if (dmgCount < 2)
                     DoMeleeAttackIfReady();
-                else if (me->getVictim()->GetTypeId() == TYPEID_PLAYER) dmgCount = 0;
-                else if (me->getVictim()->isPet()) dmgCount = 0;
+                else
+                    if (me->getVictim()->GetTypeId() == TYPEID_PLAYER) dmgCount = 0;
+                else
+                    if (me->getVictim()->isPet()) dmgCount = 0;
                 else
                 {
                     if (tAnimate <= diff)
@@ -555,7 +558,8 @@ public:
             else tEnrage -= diff;
 
             //play attack sound
-            if (playSound == true) tSound -= diff;
+            if (playSound == true)
+                tSound -= diff;
 
             if (tSound <= diff)
             {
@@ -566,8 +570,10 @@ public:
 
             if (dmgCount < 2)
                 DoMeleeAttackIfReady();
-            else if (me->getVictim()->GetTypeId() == TYPEID_PLAYER) dmgCount = 0;
-            else if (me->getVictim()->isPet()) dmgCount = 0;
+            else
+                if (me->getVictim()->GetTypeId() == TYPEID_PLAYER) dmgCount = 0;
+            else
+                if (me->getVictim()->isPet()) dmgCount = 0;
             else
             {
                 if (tAnimate <= diff)
@@ -619,7 +625,8 @@ public:
                 me->GetMotionMaster()->MoveCharge(x, y, z, 8);
                 onceRun = false;
             }
-            else tRun -= diff;
+            else
+                tRun -= diff;
 
             if (!UpdateVictim())
                 return;
@@ -633,7 +640,8 @@ public:
                     tEnrage = CD_ENRAGE;
                 }
             }
-            else tEnrage -= diff;
+            else
+                tEnrage -= diff;
 
             DoMeleeAttackIfReady();
         }
@@ -718,7 +726,7 @@ public:
         }
         if (DoorTimer <= diff)
             {
-                if(go->GetGoState() == GO_STATE_ACTIVE)
+                if (go->GetGoState() == GO_STATE_ACTIVE)
                     go->SetGoState(GO_STATE_READY);
 
                 DoorTimer = DOOR_TIMER;
@@ -804,9 +812,7 @@ public:
         void MultiDistanceMeter(Point *p, uint8 pointsCount, float *dist)
         {
             for (uint8 i = 0; i <= (pointsCount-1); i++)
-            {
                 dist[i] = me->GetDistance2d(p[i].x, p[i].y);
-            }
         }
 
         WayPointID GetNearestPoint(Paths paths)
@@ -834,17 +840,17 @@ public:
             for (uint8 i = 0; i < PATHS_COUNT; i++)
             {
                 if (i == 0)
-                    {
-                        lowestDist = lowestDists[i];
-                        nearestPointID.pointID = nearestPointsID[i];
-                        nearestPointID.pathID = i;
-                    }
-                    else if (lowestDist > lowestDists[i])
-                    {
-                        lowestDist = lowestDists[i];
-                        nearestPointID.pointID = nearestPointsID[i];
-                        nearestPointID.pathID = i;
-                    }
+                {
+                    lowestDist = lowestDists[i];
+                    nearestPointID.pointID = nearestPointsID[i];
+                    nearestPointID.pathID = i;
+                }
+                else if (lowestDist > lowestDists[i])
+                {
+                    lowestDist = lowestDists[i];
+                    nearestPointID.pointID = nearestPointsID[i];
+                    nearestPointID.pathID = i;
+                }
             }
             return nearestPointID;
         }
@@ -868,7 +874,8 @@ public:
                 me->GetMotionMaster()->MoveCharge(x, y, z, 8);
                 onceRun = false;
             }
-            else tRun -= diff;
+            else
+                tRun -= diff;
 
             if (tSay <= diff && onceSay)
             {
@@ -1022,7 +1029,8 @@ public:
                         in_progress = false;
                     }
                 }
-                else phaseTime -= diff;
+                else
+                    phaseTime -= diff;
             }
 
             DoMeleeAttackIfReady();
