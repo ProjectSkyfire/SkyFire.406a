@@ -2996,7 +2996,8 @@ Itemlog.Enable = 1
 
 #
 #     Level Rewarder System
-#        Description: Give gold reward each 10 levels and when player come to lvl 85
+#        Description: Give gold reward each 10 levels.
+#                     When player come to lvl 85 recive gold and item reward.
 #      Gold.Lvl.Reward.XX:
 #			Default: 0
 #      Gift.Lvl.Reward:
