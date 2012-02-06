@@ -1,7 +1,10 @@
 #include "ScriptPCH.h"
 #include "Config.h"
 
-uint32 GIFT_LEVEL_REWARD = ConfigMgr::GetIntDefault("Gift.Lvl.Reward", NULL);
+enum LevelRewards
+{
+    GIFT_LEVEL_REWARD  = 62540 // Lil' Deathwing http://www.wowhead.com/item=62540
+};
 
 class level_rewards : public PlayerScript
 {
@@ -18,31 +21,31 @@ public:
         switch (oldLevel)
         {
             case 9:
-                money = ConfigMgr::GetIntDefault("Gold.Lvl.Reward.10",0);
+                money = (ConfigMgr::GetIntDefault("Gold.Lvl.Reward.10",0));
                 break;
             case 19:
-                money = ConfigMgr::GetIntDefault("Gold.Lvl.Reward.20",0);
+                money = (ConfigMgr::GetIntDefault("Gold.Lvl.Reward.20",0));
                 break;
             case 29:
-                money = ConfigMgr::GetIntDefault("Gold.Lvl.Reward.30",0);
+                money = (ConfigMgr::GetIntDefault("Gold.Lvl.Reward.30",0));
                 break;
             case 39:
-                money = ConfigMgr::GetIntDefault("Gold.Lvl.Reward.40",0);
+                money = (ConfigMgr::GetIntDefault("Gold.Lvl.Reward.40",0));
                 break;
             case 49:
-                money = ConfigMgr::GetIntDefault("Gold.Lvl.Reward.50",0);
+                money = (ConfigMgr::GetIntDefault("Gold.Lvl.Reward.50",0));
                 break;
             case 59:
-                money = ConfigMgr::GetIntDefault("Gold.Lvl.Reward.60",0);
+                money = (ConfigMgr::GetIntDefault("Gold.Lvl.Reward.60",0));
                 break;
             case 69:
-                money = ConfigMgr::GetIntDefault("Gold.Lvl.Reward.70",0);
+                money = (ConfigMgr::GetIntDefault("Gold.Lvl.Reward.70",0));
                 break;
             case 79:
-                money = ConfigMgr::GetIntDefault("Gold.Lvl.Reward.80",0);
+                money = (ConfigMgr::GetIntDefault("Gold.Lvl.Reward.80",0));
                 break;
             case 84:
-                money = ConfigMgr::GetIntDefault("Gold.Lvl.Reward.85",0);
+                money = (ConfigMgr::GetIntDefault("Gold.Lvl.Reward.85",0));
                 break;
             default:
                 return;
