@@ -2996,9 +2996,11 @@ Itemlog.Enable = 1
 
 #
 #     Level Rewarder System
-#        Description: Give gold reward each 10 levels and when player in lvl 85
+#        Description: Give gold reward each 10 levels and when player come to lvl 85
 #      Gold.Lvl.Reward.XX:
-#			Default: 0                                        
+#			Default: 0
+#      Gift.Lvl.Reward:
+#			Default: 62540 - Lil' Deathwing http://www.wowhead.com/item=62540                                       
 
 Gold.Lvl.Reward.10 = 0
 Gold.Lvl.Reward.20 = 0
@@ -3009,6 +3011,8 @@ Gold.Lvl.Reward.60 = 0
 Gold.Lvl.Reward.70 = 0
 Gold.Lvl.Reward.80 = 0
 Gold.Lvl.Reward.85 = 0
+
+Gift.Lvl.Reward = 62540
 
 #
 ###################################################################################################

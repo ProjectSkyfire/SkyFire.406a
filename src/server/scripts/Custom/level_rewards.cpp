@@ -1,10 +1,7 @@
 #include "ScriptPCH.h"
 #include "Config.h"
 
-enum LevelRewards
-{
-    GIFT_LEVEL_REWARD  = 62540 // Lil' Deathwing http://www.wowhead.com/item=62540
-};
+uint32 GIFT_LEVEL_REWARD = ConfigMgr::GetIntDefault("Gift.Lvl.Reward", NULL);
 
 class level_rewards : public PlayerScript
 {
