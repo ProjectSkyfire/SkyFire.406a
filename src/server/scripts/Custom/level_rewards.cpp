@@ -1,4 +1,5 @@
 #include "ScriptPCH.h"
+#include "Config.h"
 
 enum LevelRewards
 {
@@ -20,31 +21,31 @@ public:
         switch (oldLevel)
         {
             case 9:
-                money = 150000; // 15 gold
+                money = ConfigMgr::GetIntDefault("Gold.Lvl.Reward.10",0);
                 break;
             case 19:
-                money = 150000;
+                money = ConfigMgr::GetIntDefault("Gold.Lvl.Reward.20",0);
                 break;
             case 29:
-                money = 300000;
+                money = ConfigMgr::GetIntDefault("Gold.Lvl.Reward.30",0);
                 break;
             case 39:
-                money = 300000;
+                money = ConfigMgr::GetIntDefault("Gold.Lvl.Reward.40",0);
                 break;
             case 49:
-                money = 300000;
+                money = ConfigMgr::GetIntDefault("Gold.Lvl.Reward.50",0);
                 break;
             case 59:
-                money = 1000000;
+                money = ConfigMgr::GetIntDefault("Gold.Lvl.Reward.60",0);
                 break;
             case 69:
-                money = 2000000;
+                money = ConfigMgr::GetIntDefault("Gold.Lvl.Reward.70",0);
                 break;
             case 79:
-                money = 5000000;
+                money = ConfigMgr::GetIntDefault("Gold.Lvl.Reward.80",0);
                 break;
             case 84:
-                money = 10000000;
+                money = ConfigMgr::GetIntDefault("Gold.Lvl.Reward.85",0);
                 break;
             default:
                 return;
