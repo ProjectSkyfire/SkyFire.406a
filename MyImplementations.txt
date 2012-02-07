@@ -1,0 +1,24 @@
+############################################################################
+######################### EXTRA IMPLEMENTATIONS  ###########################
+############################################################################
+Changes:
+Here are listed all changes done by me and taken from other sources.
+Small fixes, custom fixes and spells will be add like [patch nº]
+I'm sorry if I can not say thanks just in case because sometimes I can not remember where I had take some fixes.
+
+[patch 001] Core/Arenas: Implement enable - disable 2v2, 3v3, 5v5 in worldserver.conf
+[patch 002] Custom\Exp: Set exp for players above level 80
+[patch 003] Custom: Implement Add item WARNING message when GM use command ".add item".
+[patch 004] Custom: Save recruited players that reach 60 or 85 level
+[patch 005] Custom: Automatic annouce when player is banned
+[patch 006] Custom: Implement `.baninfo player` command.
+[patch 007] Custom: Implement `.banlist playeraccount` command.
+[patch 008] Custom: Added modadd command to allow moderators to give player specific items or spells by classes.
+[patch 009] Custom: Chat monitoring - Notify GMs when some words are said in chat.
+[patch 010] Custom: reset cooldown hp/mana after duel end.
+[patch 011] Logs: Keep a log of all items won or deleted by players with more than 346 level Quality
+[patch 012] Custom: Added level rewarder script.
+[patch 013] Player can join LFG anywhere.
+
+# Extras
+- V.I.P system is working. Need PHP Script.
