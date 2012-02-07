@@ -18,10 +18,6 @@
 #include "ScriptPCH.h"
 #include "the_stonecore.h"
 
-enum Yells
-{
-};
-
 enum Spells
 {
     SPELL_CRYSTAL_BARRAGE            = 86881,     // Crystal Barrage normal
@@ -29,52 +25,6 @@ enum Spells
     SPELL_DAMPENING_WAVE             = 82415,     // Dampening Wave normal
     SPELL_DAMPENING_WAVE_H           = 92650,     // Dampening Wave heroic
     SPELL_BURROW                     = 26381,     // Burrow
-    SPELL_ROCK_BORE                  = 80028,     // Rock Bore
-};
-
-class npc_rock_borer : public CreatureScript
-{
-public:
-    npc_rock_borer() : CreatureScript("npc_rock_borer") { }
-
-    CreatureAI* GetAI(Creature* creature) const
-    {
-        return new npc_rock_borerAI(creature);
-    }
-
-    struct npc_rock_borerAI : public ScriptedAI
-    {
-        npc_rock_borerAI(Creature* creature) : ScriptedAI(creature)
-        {
-            instance = creature->GetInstanceScript();
-        }
-
-        InstanceScript* instance;
-
-        uint32 _SpellBoreTimer;
-
-        void Reset()
-        {
-            _SpellBoreTimer = 6000;
-        }
-
-        void EnterCombar(Unit* ) { }
-
-        void MoveInLineOfSight(Unit* who) { }
-
-        void UpdateAI(const uint32 Diff)
-        {
-            if (_SpellBoreTimer <= Diff)
-            {
-                DoCast(me->getVictim(),SPELL_ROCK_BORE);
-                _SpellBoreTimer = 6000;
-            }
-            else
-                _SpellBoreTimer -= Diff;
-
-            DoMeleeAttackIfReady();
-        }
-    };
 };
 
 class boss_corborus : public CreatureScript
@@ -183,9 +133,7 @@ public:
             {
                 if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                     if (!IsHeroic())
-                    {
                         DoCast(target,SPELL_CRYSTAL_BARRAGE);
-                    }
                     else
                         DoCast(target,SPELL_CRYSTAL_BARRAGE_H);
 
@@ -215,5 +163,4 @@ public:
 void AddSC_boss_corborus()
 {
     new boss_corborus();
-    new npc_rock_borer();
 }
