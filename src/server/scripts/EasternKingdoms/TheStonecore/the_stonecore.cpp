@@ -147,7 +147,7 @@ public:
 
             events.Update(diff);
 
-            if (me->HasUnitState(UNIT_STATE_CASTING))
+            if (me->HasUnitState(UNIT_STAT_CASTING))
                 return;
 
             while (uint32 eventId = events.ExecuteEvent())
@@ -200,7 +200,7 @@ public:
 
             events.Update(diff);
 
-            if (me->HasUnitState(UNIT_STATE_CASTING))
+            if (me->HasUnitState(UNIT_STAT_CASTING))
                 return;
 
             while (uint32 eventId = events.ExecuteEvent())
@@ -233,44 +233,41 @@ public:
 
     struct mob_rock_borerAI : public ScriptedAI
     {
-        mob_rock_borerAI(Creature* creature) : ScriptedAI(creature) {}
+        mob_rock_borerAI(Creature* creature) : ScriptedAI(creature)
+        {
+            instance = creature->GetInstanceScript(); 
+        }
 
-        EventMap events;
+        InstanceScript* instance;
+
+        uint32 _SpellBoreTimer;
 
         void Reset()
         {
-            events.Reset();
+            _SpellBoreTimer = 6000;
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void EnterCombar(Unit* ) { }
+
+        void MoveInLineOfSight(Unit* who) { }
+
+        void UpdateAI(const uint32 Diff)
         {
-            events.ScheduleEvent(EVENT_ROCK_BORE, 1000);
-        }
-
-        void UpdateAI(const uint32 diff)
-        {
-            if (!UpdateVictim())
-                return;
-
-            events.Update(diff);
-
-            if (me->HasUnitState(UNIT_STATE_CASTING))
-                return;
-
-            while (uint32 eventId = events.ExecuteEvent())
+			if(instance->GetData(DATA_CORBORUS_EVENT) == DONE || instance->GetData(DATA_CORBORUS_EVENT) == NOT_STARTED)
+				me->DespawnOrUnsummon();
+            if (_SpellBoreTimer <= Diff)
             {
-                switch (eventId)
-                {
-                    case EVENT_ROCK_BORE:
-                        if (Unit *target = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                            DoCast(target, SPELL_ROCK_BORE);
-                        events.RescheduleEvent(EVENT_ROCK_BORE, 1000);
-                        return;
-                }
+				if(!IsHeroic())
+					DoCast(me->getVictim(),SPELL_ROCK_BORE);
+				if(IsHeroic())
+					DoCast(me->getVictim(),H_SPELL_ROCK_BORE);
+                _SpellBoreTimer = 6000;
             }
+            else
+                _SpellBoreTimer -= Diff;
 
             DoMeleeAttackIfReady();
-        }
+        } 
     };
 };
 
@@ -312,7 +309,7 @@ public:
 
             events.Update(diff);
 
-            if (me->HasUnitState(UNIT_STATE_CASTING))
+            if (me->HasUnitState(UNIT_STAT_CASTING))
                 return;
 
             while (uint32 eventId = events.ExecuteEvent())
