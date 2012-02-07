@@ -553,7 +553,6 @@ class spell_marrowgar_bone_spike_graveyard : public SpellScriptLoader
 
                         didHit = true;
                         target->CastCustomSpell(boneSpikeSummonId[i], SPELLVALUE_BASE_POINT0, 0, target, true);
-
                     }
                 }
             }

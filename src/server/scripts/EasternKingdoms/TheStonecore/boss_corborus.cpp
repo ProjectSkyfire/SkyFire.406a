@@ -133,9 +133,7 @@ public:
             {
                 if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                     if (!IsHeroic())
-                    {
                         DoCast(target,SPELL_CRYSTAL_BARRAGE);
-                    }
                     else
                         DoCast(target,SPELL_CRYSTAL_BARRAGE_H);
 

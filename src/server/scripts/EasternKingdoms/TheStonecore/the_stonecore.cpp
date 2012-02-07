@@ -267,7 +267,7 @@ public:
                 _SpellBoreTimer -= Diff;
 
             DoMeleeAttackIfReady();
-        }
+        } 
     };
 };
 

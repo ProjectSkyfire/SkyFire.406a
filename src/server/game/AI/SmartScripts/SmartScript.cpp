@@ -94,7 +94,7 @@ void SmartScript::ProcessEventsFor(SMART_EVENT e, Unit* unit, uint32 var0, uint3
                     meets = sConditionMgr->IsPlayerMeetToConditions(player, conds);
                 }
             }
-            
+
             if (meets)
                 ProcessEvent(*i, unit, var0, var1, bvar, spell, gob);
         }
