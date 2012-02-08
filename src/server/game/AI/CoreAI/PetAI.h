@@ -51,7 +51,6 @@ class PetAI : public CreatureAI
 
         TimeTracker i_tracker;
         bool inCombat;
-        bool targetHasCC;
         std::set<uint64> m_AllySet;
         uint32 m_updateAlliesTimer;
 
@@ -59,6 +58,5 @@ class PetAI : public CreatureAI
         void HandleReturnMovement();
         void DoAttack(Unit* target, bool chase);
         bool CanAttack(Unit* target);
-        bool _CheckTargetCC(Unit* target);
 };
 #endif
