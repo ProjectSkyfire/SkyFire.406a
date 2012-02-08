@@ -18,3 +18,5 @@ DELETE FROM `achievement_criteria_data` WHERE `criteria_id` IN (1291,5787,4071);
 INSERT INTO `achievement_criteria_data` (`criteria_id`, `type`, `value1`, `value2`, `ScriptName`) VALUES
 (5787, 6, 4395, 0, ''), -- Lonely? - Dalaran
 (4071, 6, 4395, 0, ''); -- Lonely? - Dalaran
+
+UPDATE `achievement_criteria_data` SET `value1`=423 WHERE `value1`=355 AND `type`=16
