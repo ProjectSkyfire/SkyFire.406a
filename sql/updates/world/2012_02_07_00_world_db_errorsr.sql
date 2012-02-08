@@ -1,2 +1,0 @@
-UPDATE `conditions` SET `SourceTypeOrReferenceId`=17 WHERE `SourceTypeOrReferenceId`=13 AND `SourceEntry`=47305 AND `ConditionTypeOrReference`=20;
-DELETE FROM conditions WHERE SourceTypeOrReferenceId=13 AND SourceEntry=47305;
