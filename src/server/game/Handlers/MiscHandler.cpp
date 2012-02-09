@@ -546,6 +546,7 @@ void WorldSession::HandleAddFriendOpcode(WorldPacket & recv_data)
     stmt->setString(0, friendName);
 
     _addFriendCallback.SetParam(friendNote);
+    _addFriendCallback.SetFutureResult(CharacterDatabase.AsyncQuery(stmt));
 }
 
 void WorldSession::HandleAddFriendOpcodeCallBack(PreparedQueryResult result, std::string friendNote)
