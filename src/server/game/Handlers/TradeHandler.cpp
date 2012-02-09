@@ -108,7 +108,7 @@ void WorldSession::SendUpdateTrade(bool trader_data /*= true*/)
     data << uint64(view_trade->GetMoney()); // trade money
     data << uint32(0);
     // old structure. meaning of new structure fields has to be researched
-    /*data << uint8(trader_data);
+    /*data << uint8(trader_data);                             // 1 means traders data, 0 means own
     data << uint32(0);                                      // added in 2.4.0, this value must be equal to value from TRADE_STATUS_OPEN_WINDOW status packet (different value for different players to block multiple trades?)
     data << uint32(TRADE_SLOT_COUNT);                       // trade slots count/number?, = next field in most cases
     data << uint32(TRADE_SLOT_COUNT);                       // trade slots count/number?, = prev field in most cases
@@ -117,51 +117,32 @@ void WorldSession::SendUpdateTrade(bool trader_data /*= true*/)
 
     for (uint8 i = 0; i < TRADE_SLOT_COUNT; ++i)
     {
+        uint32 id = 0;
         if (Item* item = view_trade->GetItem(TradeSlots(i)))
         {
-            uint32 id = item->GetTemplate()->ItemId;
-            data << uint32(0);
-            data << uint64(item->GetUInt64Value(ITEM_FIELD_CREATOR)); // Creator GUID
-            data << uint32(item->GetEnchantmentId(PERM_ENCHANTMENT_SLOT)); // Permanent Enchantment
-            data << uint32(id);
-            data << uint32(item->GetEnchantmentId(EnchantmentSlot(SOCK_ENCHANTMENT_SLOT+1))); // First gem socket enchant
-            data << uint32(item->GetUInt32Value(ITEM_FIELD_DURABILITY)); // Current Durability
-            data << uint32(0);
-            data << uint8(0); // If 1, then the item wont display any sockets, even if it has them
-            data << uint64(0);
-            data << uint32(0);
-            data << uint8(i);   // trade slot number
-            data << uint32(item->GetUInt32Value(ITEM_FIELD_MAXDURABILITY)); // Max durability
-            data << uint32(item->GetCount()); // Stack count
-            data << uint32(0);
-            data << uint32(item->GetEnchantmentId(TEMP_ENCHANTMENT_SLOT)); // Temporal enchantment
-            data << uint32(item->GetEnchantmentId(EnchantmentSlot(SOCK_ENCHANTMENT_SLOT+2))); // Second socket gem
-            data << uint32(item->GetEnchantmentId(EnchantmentSlot(SOCK_ENCHANTMENT_SLOT+3))); // Third socket gem
-            data << uint32(0);
+            id = item->GetTemplate()->ItemId;
         }
-        else
-        {
-            data << uint32(0);
-            data << uint64(0);
-            data << uint32(0);
-            data << uint32(0);
-            data << uint32(0);
-            data << uint32(0);
-            data << uint32(0);
-            data << uint8(0);
-            data << uint64(0);
-            data << uint32(0);
-            data << uint8(i);
-            data << uint32(0);
-            data << uint32(0);
-            data << uint32(0);
-            data << uint32(0);
-            data << uint32(0);
-            data << uint32(0);
-            data << uint32(0);
-        }
+        data << uint32(0);
+        data << uint64(0);
+        data << uint32(0);
+        data << uint32(id);
+        data << uint32(0);
+        data << uint32(0);
+        data << uint32(0);
+        data << uint8(0);
+        data << uint64(0);
+        data << uint32(0);
+        data << uint8(i);   // trade slot number
+        data << uint32(0);
+        data << uint32(0);
+        data << uint32(0);
+        data << uint32(0);
+        data << uint32(0);
+        data << uint32(0);
+        data << uint32(0);
+
         // old structure
-        /*data << uint8(i);
+        /*data << uint8(i);                                  // trade slot number, if not specified, then end of packet
 
         if (Item* item = view_trade->GetItem(TradeSlots(i)))
         {
@@ -281,7 +262,7 @@ void WorldSession::moveItems(Item* myItems[], Item* hisItems[])
 
 //==============================================================
 
-static void setAcceptTradeMode(TradeData* myTrade, TradeData* hisTrade, Item* *myItems, Item* *hisItems)
+static void setAcceptTradeMode(TradeData* myTrade, TradeData* hisTrade, Item **myItems, Item **hisItems)
 {
     myTrade->SetInAcceptProcess(true);
     hisTrade->SetInAcceptProcess(true);
@@ -312,7 +293,7 @@ static void clearAcceptTradeMode(TradeData* myTrade, TradeData* hisTrade)
     hisTrade->SetInAcceptProcess(false);
 }
 
-static void clearAcceptTradeMode(Item* *myItems, Item* *hisItems)
+static void clearAcceptTradeMode(Item **myItems, Item **hisItems)
 {
     // clear 'in-trade' flag
     for (uint8 i = 0; i < TRADE_SLOT_TRADED_COUNT; ++i)
@@ -336,8 +317,8 @@ void WorldSession::HandleAcceptTradeOpcode(WorldPacket& /*recvPacket*/)
     if (!his_trade)
         return;
 
-    Item* myItems[TRADE_SLOT_TRADED_COUNT]  = { NULL, NULL, NULL, NULL, NULL, NULL };
-    Item* hisItems[TRADE_SLOT_TRADED_COUNT] = { NULL, NULL, NULL, NULL, NULL, NULL };
+    Item *myItems[TRADE_SLOT_TRADED_COUNT]  = { NULL, NULL, NULL, NULL, NULL, NULL };
+    Item *hisItems[TRADE_SLOT_TRADED_COUNT] = { NULL, NULL, NULL, NULL, NULL, NULL };
     bool myCanCompleteTrade = true, hisCanCompleteTrade = true;
 
     // set before checks for properly undo at problems (it already set in to client)
@@ -614,13 +595,9 @@ void WorldSession::HandleCancelTradeOpcode(WorldPacket& /*recvPacket*/)
 void WorldSession::HandleInitiateTradeOpcode(WorldPacket& recvPacket)
 {
     if (GetPlayer()->_trade)
-    {
-        recvPacket.rfinish();
         return;
-    }
 
     uint64 ID;
-    recvPacket >> ID;
 
     if (!GetPlayer()->isAlive())
     {
@@ -651,6 +628,8 @@ void WorldSession::HandleInitiateTradeOpcode(WorldPacket& recvPacket)
         SendNotification(GetSkyFireString(LANG_TRADE_REQ), sWorld->getIntConfig(CONFIG_TRADE_LEVEL_REQ));
         return;
     }
+
+    recvPacket >> ID;
 
     Player* pOther = ObjectAccessor::FindPlayer(ID);
 
@@ -721,7 +700,6 @@ void WorldSession::HandleInitiateTradeOpcode(WorldPacket& recvPacket)
     WorldPacket data(SMSG_TRADE_STATUS, 1+8+4+4+4+1+4+4+4);
     data << uint8(0);
     data << uint64(_player->GetGUID());
-
     data << uint32(0);
     data << uint32(TRADE_STATUS_BEGIN_TRADE);
     data << uint32(0);
@@ -734,6 +712,7 @@ void WorldSession::HandleInitiateTradeOpcode(WorldPacket& recvPacket)
 
 void WorldSession::HandleSetTradeGoldOpcode(WorldPacket& recvPacket)
 {
+    // it should actually be uint64 as of 4.0.6
     uint32 gold;
     recvPacket >> gold;
 
@@ -752,9 +731,9 @@ void WorldSession::HandleSetTradeItemOpcode(WorldPacket& recvPacket)
     uint8 bag;
     uint8 slot;
 
-    recvPacket >> tradeSlot;
-    recvPacket >> bag;
     recvPacket >> slot;
+    recvPacket >> bag;
+    recvPacket >> tradeSlot;
 
     TradeData* my_trade = _player->GetTradeData();
     if (!my_trade)
