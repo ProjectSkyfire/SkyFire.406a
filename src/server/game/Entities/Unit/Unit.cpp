@@ -6000,6 +6000,12 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                 triggered_spell_id = 54181;
                 break;
             }
+            // Impending Doom
+            if (dummySpell->SpellIconID == 195)
+            {
+                if (ToPlayer()->HasSpellCooldown(47241)) // Metamorphosis
+                    ToPlayer()->UpdateSpellCooldown(47241, -dummySpell->Effects[EFFECT_1].CalcValue()); // Remove X sec
+            }
             switch (dummySpell->Id)
             {
                 case 18119: // Improved Soul Fire rank 1
