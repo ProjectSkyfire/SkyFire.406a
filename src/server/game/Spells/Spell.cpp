@@ -1428,7 +1428,8 @@ SpellMissInfo Spell::DoSpellHitOnUnit(Unit* unit, uint32 effectMask, bool scaleA
         if (effectMask & (1 << effectNumber) && unit->IsImmunedToSpellEffect(m_spellInfo, effectNumber))
             effectMask &= ~(1 << effectNumber);
     if (!effectMask || (m_spellInfo->Speed && (unit->IsImmunedToDamage(m_spellInfo) || unit->IsImmunedToSpell(m_spellInfo))))
-
+        return SPELL_MISS_IMMUNE;
+        
     PrepareScriptHitHandlers();
     CallScriptBeforeHitHandlers();
 
