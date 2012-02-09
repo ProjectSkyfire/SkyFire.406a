@@ -25130,6 +25130,28 @@ void Player::SendClearCooldown(uint32 spell_id, Unit* target)
     SendDirectMessage(&data);
 }
 
+void Player::UpdateSpellCooldown(uint32 spell_id, int32 amount)
+{
+    uint32 curCooldown = GetSpellCooldownDelay(spell_id);
+    if (amount < 0)
+    {
+        if (curCooldown <= (curCooldown + amount))
+            curCooldown = 0;
+        else
+            curCooldown -= amount;
+    }
+    else // if (amount > 0) 
+        curCooldown += amount;
+    
+    AddSpellCooldown(spell_id, 0, uint32(time(NULL) + curCooldown));
+    
+    WorldPacket data(SMSG_MODIFY_COOLDOWN, 4+8+4);
+    data << uint32(spell_id);               // Spell ID
+    data << uint64(GetGUID());              // Player GUID
+    data << int32(amount * 1000);           // Cooldown mod in milliseconds
+    GetSession()->SendPacket(&data);   
+}
+
 void Player::ResetMap()
 {
     // this may be called during Map::Update
