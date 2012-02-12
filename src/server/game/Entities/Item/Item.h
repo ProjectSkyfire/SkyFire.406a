@@ -163,7 +163,7 @@ enum EnchantmentSlot
     SOCK_ENCHANTMENT_SLOT_3         = 4,
     BONUS_ENCHANTMENT_SLOT          = 5,
     PRISMATIC_ENCHANTMENT_SLOT      = 6,                    // added at apply special permanent enchantment
-    ENCHANTMENT_SLOT_UNK            = 7,
+    ENCHANTMENT_SLOT_MAIL           = 7,					// enchantement mail item
     REFORGE_ENCHANTMENT_SLOT        = 8,
     MAX_INSPECTED_ENCHANTMENT_SLOT  = 9,
 

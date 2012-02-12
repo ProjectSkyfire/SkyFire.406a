@@ -139,7 +139,7 @@ void AddSC_boss_nefarian();
 void AddSC_boss_victor_nefarius();
 void AddSC_boss_omnotron_defense_system();   //Blackwing Descent
 void AddSC_boss_bd_nefarian();
-void AddSC_boss_maloriak();
+// void AddSC_boss_maloriak();
 void AddSC_boss_atramedes();
 void AddSC_boss_magmaw();
 void AddSC_boss_chimaeron();
@@ -827,7 +827,7 @@ void AddEasternKingdomsScripts()
     AddSC_boss_victor_nefarius();
     AddSC_boss_omnotron_defense_system(); //Blackwing Descent
     AddSC_boss_bd_nefarian();
-    AddSC_boss_maloriak();
+   // AddSC_boss_maloriak();
     AddSC_boss_atramedes();
     AddSC_boss_magmaw();
     AddSC_boss_chimaeron();
