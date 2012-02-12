@@ -131,7 +131,7 @@ bool ArenaTeam::AddMember(uint64 playerGuid)
     // Set player's personal rating
     uint32 personalRating = 0;
 
-    if (sWorld->getIntConfig(CONFIG_ARENA_START_PERSONAL_RATING) > 0)
+    if (sWorld->getIntConfig(CONFIG_ARENA_START_PERSONAL_RATING) >= 0)
         personalRating = sWorld->getIntConfig(CONFIG_ARENA_START_PERSONAL_RATING);
     else if (GetRating() >= 1000)
         personalRating = 1000;
