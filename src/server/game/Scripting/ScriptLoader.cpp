@@ -982,7 +982,7 @@ void AddEasternKingdomsScripts()
     AddSC_ghostlands();
     AddSC_gilneas();
     AddSC_gilneas_phase1();
-	AddSC_gilneas_phase2();
+    AddSC_gilneas_phase2();
     AddSC_hinterlands();
     AddSC_ironforge();
     AddSC_isle_of_queldanas();
