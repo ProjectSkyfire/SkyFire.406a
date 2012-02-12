@@ -615,7 +615,7 @@ void WorldSession::HandleGetMailList(WorldPacket & recv_data)
             data << uint32((item ? item->GetGUIDLow() : 0));
             // entry
             data << uint32((item ? item->GetEntry() : 0));
-            for (uint8 j = 0; j < MAX_INSPECTED_ENCHANTMENT_SLOT; ++j)
+            for (uint8 j = 0; j < ENCHANTMENT_SLOT_MAIL; ++j)
             {
                 data << uint32((item ? item->GetEnchantmentId((EnchantmentSlot)j) : 0));
                 data << uint32((item ? item->GetEnchantmentDuration((EnchantmentSlot)j) : 0));

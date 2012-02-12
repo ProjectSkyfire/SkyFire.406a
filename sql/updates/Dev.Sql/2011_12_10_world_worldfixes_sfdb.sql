@@ -845,7 +845,7 @@ INSERT INTO `smart_scripts` (`entryorguid`, `source_type`, `id`, `link`, `event_
 (42692, 0, 1, 0, 0, 0, 100, 30, 800, 1400, 10000, 11000, 11, 80180, 1, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 'Stonecore Bruiser'),
 (42692, 0, 2, 0, 0, 0, 100, 30, 3000, 4000, 8000, 8100, 11, 80195, 1, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 'Stonecore Bruiser');
 
-- SmartAI Throne of the tides Mobs + PickpocketLoot + hp fix + mana fix
+-- SmartAI Throne of the tides Mobs + PickpocketLoot + hp fix + mana fix
 UPDATE `creature_template` SET `pickpocketloot` = 40577, `AIName` = 'SmartAI' WHERE `entry` = 40577;
 
 DELETE FROM `pickpocketing_loot_template` WHERE (`entry`=40577);
