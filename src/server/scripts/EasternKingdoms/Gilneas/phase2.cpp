@@ -19,7 +19,7 @@
 #include "Unit.h"
 #include "gilneas.h"
 
-//Phase 1
+//Phase 2
 /*######
 ## npc_gilneas_city_guard_phase2
 ######*/
