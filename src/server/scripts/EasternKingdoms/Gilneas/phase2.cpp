@@ -257,7 +257,7 @@ public:
     };
 };
 
-void AddSC_gilneas()
+void gilneas_phase2()
 {
     new npc_gilneas_city_guard_phase2();
     new npc_prince_liam_greymane_phase2();
