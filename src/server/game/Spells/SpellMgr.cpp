@@ -2822,10 +2822,9 @@ void SpellMgr::LoadSpellInfoStore()
             if (node->map_id < 2 || i == 82 || i == 83 || i == 93 || i == 94)
                 sOldContinentsNodesMask[field] |= submask;
 
-            // fix DK node at Ebon Hold
-            if (i == 315) {
+            // fix DK node at Ebon Hold and Shadow Vault flight master
+            if (i == 315 || i == 333)
                 ((TaxiNodesEntry*)node)->MountCreatureID[1] = 32981;
-            }
         }
     }
 
