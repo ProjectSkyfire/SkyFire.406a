@@ -311,7 +311,7 @@ void CharacterDatabaseConnection::DoPrepareStatements()
     PREPARE_STATEMENT(CHAR_DEL_CREATURE_RESPAWN_BY_GUID, "DELETE FROM creature_respawn WHERE guid = ?", CONNECTION_ASYNC)
     PREPARE_STATEMENT(CHAR_DEL_CREATURE_RESPAWN_BY_INSTANCE, "DELETE FROM creature_respawn WHERE instanceId = ?", CONNECTION_ASYNC)
     PREPARE_STATEMENT(CHAR_GET_MAX_CREATURE_RESPAWNS, "SELECT MAX(respawnTime), instanceId FROM creature_respawn WHERE instanceId > 0 GROUP BY instanceId", CONNECTION_SYNCH)
-    PREPARE_STATEMENT(CHAR_DEL_NONEXISTENT_INSTANCE_CREATURE_RESPAWNS, "DELETE FROM creature_respawn WHERE instanceId > 0 AND instanceId NOT IN (SELECT instanceId FROM instance)", CONNECTION_SYNCH)
+    PREPARE_STATEMENT(CHAR_DEL_NONEXISTENT_INSTANCE_CREATURE_RESPAWNS, "DELETE FROM creature_respawn WHERE instanceId > 0 AND instanceId NOT IN (SELECT Id FROM instance)", CONNECTION_SYNCH)
 
     // Gameobject respawn
     PREPARE_STATEMENT(CHAR_LOAD_GO_RESPAWNS, "SELECT guid, respawnTime, instanceId FROM gameobject_respawn", CONNECTION_SYNCH)
@@ -319,7 +319,7 @@ void CharacterDatabaseConnection::DoPrepareStatements()
     PREPARE_STATEMENT(CHAR_DEL_GO_RESPAWN, "DELETE FROM gameobject_respawn WHERE guid = ? AND instanceId = ?", CONNECTION_ASYNC)
     PREPARE_STATEMENT(CHAR_DEL_GO_RESPAWN_BY_INSTANCE, "DELETE FROM gameobject_respawn WHERE instanceId = ?", CONNECTION_ASYNC)
     PREPARE_STATEMENT(CHAR_DEL_EXPIRED_GO_RESPAWNS, "DELETE FROM gameobject_respawn WHERE respawnTime <= UNIX_TIMESTAMP(NOW())", CONNECTION_SYNCH)
-    PREPARE_STATEMENT(CHAR_DEL_NONEXISTENT_INSTANCE_GO_RESPAWNS, "DELETE FROM gameobject_respawn WHERE instanceId > 0 AND instanceId NOT IN (SELECT instanceId FROM instance)", CONNECTION_SYNCH)
+    PREPARE_STATEMENT(CHAR_DEL_NONEXISTENT_INSTANCE_GO_RESPAWNS, "DELETE FROM gameobject_respawn WHERE instanceId > 0 AND instanceId NOT IN (SELECT Id FROM instance)", CONNECTION_SYNCH)
 
     // GM Tickets
     PREPARE_STATEMENT(CHAR_LOAD_GM_TICKETS, "SELECT ticketId, guid, name, message, createTime, mapId, posX, posY, posZ, lastModifiedTime, closedBy, assignedTo, comment, completed, escalated, viewed FROM gm_tickets", CONNECTION_SYNCH)
