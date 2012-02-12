@@ -1,4 +1,5 @@
-CREATE TABLE IF NOT EXISTS `fishing_loot_template` (
+DROP TABLE IF EXISTS `fishing_loot_template`;
+CREATE TABLE `fishing_loot_template` (
   `entry` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `item` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `ChanceOrQuestChance` float NOT NULL DEFAULT '100',
