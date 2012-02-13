@@ -675,9 +675,7 @@ public:
     const std::string& GetName() const { return m_name; }
     const std::string& GetMOTD() const { return m_motd; }
     const std::string& GetInfo() const { return m_info; }
-
     void SwitchRank(uint32 oldRank, uint32 newRank);
-
     uint32 GetMembersCount() { return m_members.size(); }
 
     // Handle client commands

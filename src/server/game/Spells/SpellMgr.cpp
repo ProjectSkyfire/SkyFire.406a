@@ -106,9 +106,6 @@ DiminishingGroup GetDiminishingReturnsGroupForSpell(SpellInfo const* spellproto,
             // Hamstring - limit duration to 10s in PvP
             if (spellproto->SpellFamilyFlags[0] & 0x2)
                 return DIMINISHING_LIMITONLY;
-            // Improved Hamstring
-            else if (spellproto->AttributesEx3 & 0x80000 && spellproto->SpellIconID == 23)
-                return DIMINISHING_ROOT;
             // Charge Stun (own diminishing)
             else if (spellproto->SpellFamilyFlags[0] & 0x01000000)
                 return DIMINISHING_CHARGE;
@@ -2822,10 +2819,9 @@ void SpellMgr::LoadSpellInfoStore()
             if (node->map_id < 2 || i == 82 || i == 83 || i == 93 || i == 94)
                 sOldContinentsNodesMask[field] |= submask;
 
-            // fix DK node at Ebon Hold
-            if (i == 315) {
+            // fix DK node at Ebon Hold and Shadow Vault flight master
+            if (i == 315 || i == 333)
                 ((TaxiNodesEntry*)node)->MountCreatureID[1] = 32981;
-            }
         }
     }
 
@@ -3612,6 +3608,7 @@ void SpellMgr::LoadSpellCustomAttr()
             case 64588: // Thrust (Argent Tournament)
             case 66479: // Thrust (Argent Tournament)
             case 68505: // Thrust (Argent Tournament)
+            case 62709: // Counterattack! (Argent Tournament)
             case 62626: // Break-Shield (Argent Tournament, Player)
             case 64590: // Break-Shield (Argent Tournament, Player)
             case 64342: // Break-Shield (Argent Tournament, NPC)

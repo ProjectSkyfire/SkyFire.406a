@@ -11,5 +11,5 @@
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 add_subdirectory(extractor)
-add_subdirectory(vmap3_assembler)
-add_subdirectory(vmap3_extractor)
+add_subdirectory(vmap4_assembler)
+add_subdirectory(vmap4_extractor)

@@ -571,6 +571,7 @@ void SmartAI::JustRespawned()
     mFollowArrivedTimer = 1000;
     mFollowArrivedEntry = 0;
     mFollowCreditType = 0;
+    mInvinceabilityHpLevel = 0;   
 }
 
 int SmartAI::Permissible(const Creature* creature)

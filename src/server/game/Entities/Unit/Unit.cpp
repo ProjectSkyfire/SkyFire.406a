@@ -533,22 +533,27 @@ bool Unit::HasAuraTypeWithFamilyFlags(AuraType auraType, uint32 familyName, uint
     return false;
 }
 
-bool Unit::HasBreakableByDamageAuraType(AuraType type) const
+bool Unit::HasBreakableByDamageAuraType(AuraType type, uint32 excludeAura) const
 {
     AuraEffectList const& auras = GetAuraEffectsByType(type);
     for (AuraEffectList::const_iterator itr = auras.begin(); itr != auras.end(); ++itr)
-        if ((*itr)->GetSpellInfo()->Attributes & SPELL_ATTR0_BREAKABLE_BY_DAMAGE || (*itr)->GetSpellInfo()->AuraInterruptFlags & AURA_INTERRUPT_FLAG_TAKE_DAMAGE)
+        if ((!excludeAura || excludeAura != (*itr)->GetSpellInfo()->Id) && // Avoid self interrupt of channeled Crowd Control spells like Seduction
+           ((*itr)->GetSpellInfo()->Attributes & SPELL_ATTR0_BREAKABLE_BY_DAMAGE || (*itr)->GetSpellInfo()->AuraInterruptFlags & AURA_INTERRUPT_FLAG_TAKE_DAMAGE))
             return true;
     return false;
 }
 
-bool Unit::HasBreakableByDamageCrowdControlAura() const
+bool Unit::HasBreakableByDamageCrowdControlAura(Unit* excludeCasterChannel) const
 {
-    return (   HasBreakableByDamageAuraType(SPELL_AURA_MOD_CONFUSE)
-            || HasBreakableByDamageAuraType(SPELL_AURA_MOD_FEAR)
-            || HasBreakableByDamageAuraType(SPELL_AURA_MOD_STUN)
-            || HasBreakableByDamageAuraType(SPELL_AURA_MOD_ROOT)
-            || HasBreakableByDamageAuraType(SPELL_AURA_TRANSFORM));
+    uint32 excludeAura = 0;
+   if (Spell* currentChanneledSpell = excludeCasterChannel ? excludeCasterChannel->GetCurrentSpell(CURRENT_CHANNELED_SPELL) : NULL)
+       excludeAura = currentChanneledSpell->GetSpellInfo()->Id; //Avoid self interrupt of channeled Crowd Control spells like Seduction
+
+   return (   HasBreakableByDamageAuraType(SPELL_AURA_MOD_CONFUSE, excludeAura)
+           || HasBreakableByDamageAuraType(SPELL_AURA_MOD_FEAR, excludeAura)
+           || HasBreakableByDamageAuraType(SPELL_AURA_MOD_STUN, excludeAura)
+           || HasBreakableByDamageAuraType(SPELL_AURA_MOD_ROOT, excludeAura)
+           || HasBreakableByDamageAuraType(SPELL_AURA_TRANSFORM, excludeAura));
 }
 
 void Unit::DealDamageMods(Unit* victim, uint32 &damage, uint32* absorb)
@@ -6000,6 +6005,12 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                 triggered_spell_id = 54181;
                 break;
             }
+            // Impending Doom
+            if (dummySpell->SpellIconID == 195)
+            {
+                if (ToPlayer()->HasSpellCooldown(47241)) // Metamorphosis
+                    ToPlayer()->UpdateSpellCooldown(47241, -dummySpell->Effects[EFFECT_1].CalcValue()); // Remove X sec
+            }
             switch (dummySpell->Id)
             {
                 case 18119: // Improved Soul Fire rank 1
@@ -7380,18 +7391,7 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                     {
                         if (ToPlayer()->HasSpellCooldown(16166))
                         {
-                            uint32 newCooldownDelay = ToPlayer()->GetSpellCooldownDelay(16166);
-                            if (newCooldownDelay < 3)
-                                newCooldownDelay = 0;
-                            else
-                                newCooldownDelay -= 2;
-                            ToPlayer()->AddSpellCooldown(16166, 0, uint32(time(NULL) + newCooldownDelay));
-
-                            WorldPacket data(SMSG_MODIFY_COOLDOWN, 4+8+4);
-                            data << uint32(16166);                  // Spell ID
-                            data << uint64(GetGUID());              // Player GUID
-                            data << int32(-2000);                   // Cooldown mod in milliseconds
-                            ToPlayer()->GetSession()->SendPacket(&data);
+                            ToPlayer()->UpdateSpellCooldown(16166, -1); // Remove 1 sec
                             return true;
                         }
                     }
@@ -14651,7 +14651,7 @@ void Unit::SendMovementFlagUpdate()
 {
     WorldPacket data;
     BuildHeartBeatMsg(&data);
-    SendMessageToSet(&data, true);
+    SendMessageToSet(&data, false);
 }
 
 bool Unit::IsSitState() const
@@ -17221,9 +17221,7 @@ void Unit::_ExitVehicle(Position const* exitPosition)
     if (Player* player = ToPlayer())
         player->ResummonPetTemporaryUnSummonedIfAny();
 
-    WorldPacket data2;
-    BuildHeartBeatMsg(&data2);
-    SendMessageToSet(&data2, false);
+    SendMovementFlagUpdate();
 
     if (vehicle->GetBase()->HasUnitTypeMask(UNIT_MASK_MINION))
         if (((Minion*)vehicle->GetBase())->GetOwner() == this)

@@ -1737,7 +1737,7 @@ public:
             if (!UpdateVictim())
                 return;
 
-            if (me->getVictim()->HasBreakableByDamageCrowdControlAura())
+            if (me->getVictim()->HasBreakableByDamageCrowdControlAura(me))
             {
                 me->InterruptNonMeleeSpells(false);
                 return;

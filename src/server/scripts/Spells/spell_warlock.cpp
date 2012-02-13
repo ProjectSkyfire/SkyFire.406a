@@ -311,7 +311,7 @@ public:
                 int32 damage = int32(caster->CountPctFromMaxHealth(GetSpellInfo()->Effects[EFFECT_2].CalcValue()));
                 int32 mana = 0;
 
-                uint32 multiplier = 1.2f;
+                float multiplier = 1.2f;
 
                 // Should not appear in combat log
                 caster->ModifyHealth(-damage);

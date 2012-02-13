@@ -100,6 +100,12 @@ void CombatAI::UpdateAI(const uint32 diff)
 
     events.Update(diff);
 
+    if (me->getVictim()->HasBreakableByDamageCrowdControlAura(me))
+    {
+        me->InterruptNonMeleeSpells(false);
+        return;
+    }
+
     if (me->HasUnitState(UNIT_STATE_CASTING))
         return;
 
@@ -159,7 +165,7 @@ void CasterAI::UpdateAI(const uint32 diff)
 
     events.Update(diff);
  
-    if (me->getVictim()->HasBreakableByDamageCrowdControlAura())
+    if (me->getVictim()->HasBreakableByDamageCrowdControlAura(me))
     {
         me->InterruptNonMeleeSpells(false);
         return;
