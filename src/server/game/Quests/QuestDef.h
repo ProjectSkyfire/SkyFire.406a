@@ -271,6 +271,7 @@ class Quest
         uint32 GetQuestStartScript() const { return QuestStartScript; }
         uint32 GetQuestCompleteScript() const { return QuestCompleteScript; }
         bool   IsRepeatable() const { return QuestFlags & QUEST_TRINITY_FLAGS_REPEATABLE; }
+        bool   IsAutoAccept() const;
         bool   IsAutoComplete() const;
         uint32 GetFlags() const { return QuestFlags; }
         bool   IsDaily() const { return QuestFlags & QUEST_FLAGS_DAILY; }
