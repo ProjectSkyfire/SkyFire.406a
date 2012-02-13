@@ -145,7 +145,7 @@ public:
 /*######
 ## npc_panicked_citizen
 ######*/
-/*
+
 uint32 guid_panicked_nextsay = 0; //GUID of the Panicked Citizen that will say random text, this is to prevent more than 1 npc speaking
 uint32 tSay_panicked = 30000; //Time left to say
 
@@ -233,7 +233,6 @@ public:
         }
     };
 };
- */
 
 /*######
 ## npc_panicked_citizen_2
@@ -831,7 +830,7 @@ public:
 /*######
 ## go_merchant_square_door
 ######*/
-/*
+
 enum eMerchant_square_door
 {
     QUEST_EVAC_MERC_SQUA      = 14098
@@ -911,11 +910,11 @@ public:
         }
     }
 };
-*/
+
 /*######
 ## npc_frightened_citizen
 ######*/
-/*
+
 enum eFrightened_citizen
 {
     SAY_CITIZEN_1                = -1638003,
@@ -1103,135 +1102,135 @@ public:
         }
     };
 };
-*/
+
 // Quest: (14154) By the Skin of His Teeth
-// class npc_lord_darius_crowley : public CreatureScript
-// {
-// public:
-    // npc_lord_darius_crowley() : CreatureScript("npc_lord_darius_crowley") { }
+class npc_lord_darius_crowley : public CreatureScript
+{
+public:
+    npc_lord_darius_crowley() : CreatureScript("npc_lord_darius_crowley") { }
 
-    // bool OnQuestAccept(Player* player, Creature* creature, Quest const* quest)
-    // {
-        // if (quest->GetQuestId() == 14154)
-        // {
-            // CAST_AI(npc_lord_darius_crowley::npc_lord_darius_crowleyAI, creature->AI())->in_progress = true;
-            // CAST_AI(npc_lord_darius_crowley::npc_lord_darius_crowleyAI, creature->AI())->phase = 1;
-            // CAST_AI(npc_lord_darius_crowley::npc_lord_darius_crowleyAI, creature->AI())->_player = player;
-            // creature->CastSpell(player, 66914, true);
-        // }
-        // return true;
-    // }
+    bool OnQuestAccept(Player* player, Creature* creature, Quest const* quest)
+    {
+        if (quest->GetQuestId() == 14154)
+        {
+            CAST_AI(npc_lord_darius_crowley::npc_lord_darius_crowleyAI, creature->AI())->in_progress = true;
+            CAST_AI(npc_lord_darius_crowley::npc_lord_darius_crowleyAI, creature->AI())->phase = 1;
+            CAST_AI(npc_lord_darius_crowley::npc_lord_darius_crowleyAI, creature->AI())->_player = player;
+            creature->CastSpell(player, 66914, true);
+        }
+        return true;
+    }
 
-    // CreatureAI* GetAI(Creature* creature) const
-    // {
-        // return new npc_lord_darius_crowleyAI (creature);
-    // }
+    CreatureAI* GetAI(Creature* creature) const
+    {
+        return new npc_lord_darius_crowleyAI (creature);
+    }
 
-    // struct npc_lord_darius_crowleyAI : public ScriptedAI
-    // {
-        // npc_lord_darius_crowleyAI(Creature* creature) : ScriptedAI(creature), Summons(me) {}
+    struct npc_lord_darius_crowleyAI : public ScriptedAI
+    {
+        npc_lord_darius_crowleyAI(Creature* creature) : ScriptedAI(creature), Summons(me) {}
 
-        // uint8 phase;
-        // uint32 phaseTime;
-        // bool in_progress;
-        // SummonList Summons;
-        // Player* _player;
+        uint8 phase;
+        uint32 phaseTime;
+        bool in_progress;
+        SummonList Summons;
+        Player* _player;
 
-        // void Reset()
-        // {
-            // phase     = 1;
-            // phaseTime = 15000;
-            // Summons.DespawnAll();
-            // in_progress = false;
-            // _player = NULL;
-            // me->CastSpell(me, 67503, true);
-        // }
+        void Reset()
+        {
+            phase     = 1;
+            phaseTime = 15000;
+            Summons.DespawnAll();
+            in_progress = false;
+            _player = NULL;
+            me->CastSpell(me, 67503, true);
+        }
 
-        // void EnterCombat(Unit* who)
-        // {
-            // me->CastSpell(who, 61044, true);
-        // }
+        void EnterCombat(Unit* who)
+        {
+            me->CastSpell(who, 61044, true);
+        }
 
-        // void JustSummoned(Creature *summoned)
-        // {
-            // summoned->AI()->AttackStart(_player);
-            // Summons.Summon(summoned);
-        // }
+        void JustSummoned(Creature *summoned)
+        {
+            summoned->AI()->AttackStart(_player);
+            Summons.Summon(summoned);
+        }
 
-        // void SummonedCreatureDespawn(Creature* summoned)
-        // {
-            // Summons.Despawn(summoned);
-        // }
+        void SummonedCreatureDespawn(Creature* summoned)
+        {
+            Summons.Despawn(summoned);
+        }
 
-        // void JustDied(Unit* /*killer*/)
-        // {
-            // if (_player)
-            // {
-                // _player->RemoveAurasDueToSpell(59073);
-                // _player->FailQuest(66914);
-            // }
-        // }
+        void JustDied(Unit* /*killer*/)
+        {
+            if (_player)
+            {
+                _player->RemoveAurasDueToSpell(59073);
+                _player->FailQuest(66914);
+            }
+        }
 
-        // void UpdateAI(const uint32 diff)
-        // {
-            // if (in_progress)
-            // {
-                // if (phaseTime <= diff)
-                // {
-                    // switch (phase)
-                    // {
-                        // case 1:
-                            // for (int i = 0; i < 8; i++)
-                                // me->SummonCreature(35456, me->GetPositionX()+10, me->GetPositionY()+10, me->GetPositionZ(), 0, TEMPSUMMON_CORPSE_DESPAWN, 10000);
-                            // me->SummonCreature(35167, -1672.92f, 1449.13f, 52.28f, 0, TEMPSUMMON_CORPSE_DESPAWN, 10000);
-                        // break;
+        void UpdateAI(const uint32 diff)
+        {
+            if (in_progress)
+            {
+                if (phaseTime <= diff)
+                {
+                    switch (phase)
+                    {
+                        case 1:
+                            for (int i = 0; i < 8; i++)
+                                me->SummonCreature(35456, me->GetPositionX()+10, me->GetPositionY()+10, me->GetPositionZ(), 0, TEMPSUMMON_CORPSE_DESPAWN, 10000);
+                            me->SummonCreature(35167, -1672.92f, 1449.13f, 52.28f, 0, TEMPSUMMON_CORPSE_DESPAWN, 10000);
+                        break;
 
-                        // case 2:
-                            // me->SummonCreature(35170, -1672.92f, 1449.13f, 52.28f, 0, TEMPSUMMON_CORPSE_DESPAWN, 10000);
-                        // break;
+                        case 2:
+                            me->SummonCreature(35170, -1672.92f, 1449.13f, 52.28f, 0, TEMPSUMMON_CORPSE_DESPAWN, 10000);
+                        break;
 
-                        // case 3:
-                            // for (int i = 0; i < 10; i++)
-                                // me->SummonCreature(35456, me->GetPositionX()+10, me->GetPositionY()+10, me->GetPositionZ(), 0, TEMPSUMMON_CORPSE_DESPAWN, 10000);
-                            // me->SummonCreature(35188, -1672.92f, 1449.13f, 52.28f, 0, TEMPSUMMON_CORPSE_DESPAWN, 10000);
-                        // break;
+                        case 3:
+                            for (int i = 0; i < 10; i++)
+                                me->SummonCreature(35456, me->GetPositionX()+10, me->GetPositionY()+10, me->GetPositionZ(), 0, TEMPSUMMON_CORPSE_DESPAWN, 10000);
+                            me->SummonCreature(35188, -1672.92f, 1449.13f, 52.28f, 0, TEMPSUMMON_CORPSE_DESPAWN, 10000);
+                        break;
 
-                        // case 4:
-                            // me->SummonCreature(35188, -1672.92f, 1449.13f, 52.28f, 0, TEMPSUMMON_CORPSE_DESPAWN, 10000);
-                        // break;
+                        case 4:
+                            me->SummonCreature(35188, -1672.92f, 1449.13f, 52.28f, 0, TEMPSUMMON_CORPSE_DESPAWN, 10000);
+                        break;
 
-                        // case 5:
-                            // for (int i = 0; i < 7; i++)
-                                // me->SummonCreature(35456, me->GetPositionX()+10, me->GetPositionY()+10, me->GetPositionZ(), 0, TEMPSUMMON_CORPSE_DESPAWN, 10000);
-                            // me->SummonCreature(35167, -1672.92f, 1449.13f, 52.28f, 0, TEMPSUMMON_CORPSE_DESPAWN, 10000);
-                        // break;
+                        case 5:
+                            for (int i = 0; i < 7; i++)
+                                me->SummonCreature(35456, me->GetPositionX()+10, me->GetPositionY()+10, me->GetPositionZ(), 0, TEMPSUMMON_CORPSE_DESPAWN, 10000);
+                            me->SummonCreature(35167, -1672.92f, 1449.13f, 52.28f, 0, TEMPSUMMON_CORPSE_DESPAWN, 10000);
+                        break;
 
-                        // case 6:
-                            // for (int i = 0; i < 7; i++)
-                                // me->SummonCreature(35456, me->GetPositionX()+10, me->GetPositionY()+10, me->GetPositionZ(), 0, TEMPSUMMON_CORPSE_DESPAWN, 10000);
-                            // me->SummonCreature(35188, -1672.92f, 1449.13f, 52.28f, 0, TEMPSUMMON_CORPSE_DESPAWN, 10000);
-                        // break;
+                        case 6:
+                            for (int i = 0; i < 7; i++)
+                                me->SummonCreature(35456, me->GetPositionX()+10, me->GetPositionY()+10, me->GetPositionZ(), 0, TEMPSUMMON_CORPSE_DESPAWN, 10000);
+                            me->SummonCreature(35188, -1672.92f, 1449.13f, 52.28f, 0, TEMPSUMMON_CORPSE_DESPAWN, 10000);
+                        break;
 
-                        // case 7:
-                            // me->SummonCreature(35170, -1672.92f, 1449.13f, 52.28f, 0, TEMPSUMMON_CORPSE_DESPAWN, 10000);
-                        // break;
-                    // }
+                        case 7:
+                            me->SummonCreature(35170, -1672.92f, 1449.13f, 52.28f, 0, TEMPSUMMON_CORPSE_DESPAWN, 10000);
+                        break;
+                    }
 
-                    // phase++;
-                    // phaseTime = 15000;
-                    // if (phase > 7)
-                    // {
-                        // phase = 1;
-                        // in_progress = false;
-                    // }
-                // }
-                // else phaseTime -= diff;
-            // }
+                    phase++;
+                    phaseTime = 15000;
+                    if (phase > 7)
+                    {
+                        phase = 1;
+                        in_progress = false;
+                    }
+                }
+                else phaseTime -= diff;
+            }
 
-            // DoMeleeAttackIfReady();
-        // }
-    // };
-// };
+            DoMeleeAttackIfReady();
+        }
+    };
+};
 
 class npc_josiah_avery : public CreatureScript
 {
@@ -1335,7 +1334,7 @@ public:
     }
 };
 
-/*class spell_keg_placed : public SpellScriptLoader
+class spell_keg_placed : public SpellScriptLoader
 {
     public:
         spell_keg_placed() : SpellScriptLoader("spell_keg_placed") {}
@@ -1344,10 +1343,10 @@ public:
         {
             PrepareAuraScript(spell_keg_placed_AuraScript);
 
-            uint32 tick, tickcount;*/
+            uint32 tick, tickcount;
 
-// void HandleEffectApply(AuraEffect const * /*aurEff*/, AuraEffectHandleModes /*mode*/)
-/*            {
+            void HandleEffectApply(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
+            {
                 tick = urand(1, 4);
                 tickcount = 0;
             }
@@ -1381,7 +1380,7 @@ public:
         {
             return new spell_keg_placed_AuraScript();
         }
-};*/
+};
 
 void AddSC_gilneas()
 {
@@ -1391,16 +1390,16 @@ void AddSC_gilneas()
     new npc_prince_liam_greymane_phase2();
     new npc_rampaging_worgen();
     new npc_rampaging_worgen2();
-	//new go_merchant_square_door();
-	//new npc_frightened_citizen();
-	//new npc_panicked_citizen();
+    new go_merchant_square_door();
+    new npc_frightened_citizen();
+    new npc_panicked_citizen();
     new npc_panicked_citizen_2();
     new npc_lieutenant_walden();
-	//new npc_lord_darius_crowley();
+    new npc_lord_darius_crowley();
     new npc_josiah_avery();
     new npc_king_genn_greymane();
     new npc_lord_darius_crowley_c2();
     new npc_lord_darius_crowley_c3();
     new npc_king_genn_greymane_c2();
-	//new spell_keg_placed();
+    new spell_keg_placed();
 }
