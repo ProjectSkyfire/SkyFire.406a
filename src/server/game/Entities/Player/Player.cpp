@@ -4490,7 +4490,7 @@ bool Player::resetTalents(bool no_cost)
                 continue;
         const SpellInfo* _spellEntry = sSpellMgr->GetSpellInfo(talentInfo->RankID[rank]);
             if (!_spellEntry)
-                continue;                
+                continue;
             removeSpell(talentInfo->RankID[rank], true);
         // search for spells that the talent teaches and unlearn them
             for (uint8 i = 0; i < MAX_SPELL_EFFECTS; ++i)
@@ -21215,7 +21215,7 @@ inline bool Player::_StoreOrEquipNewItem(uint32 vendorslot, uint32 item, uint8 c
 
     ModifyMoney(-price);
 
-    ModifyMoney(-price);
+    // ModifyMoney(-price); why was this doubled?
 
     if (crItem->ExtendedCost)                            // case for new honor system
     {
@@ -25183,16 +25183,16 @@ void Player::UpdateSpellCooldown(uint32 spell_id, int32 amount)
         else
             curCooldown -= amount;
     }
-    else // if (amount > 0) 
+    else // if (amount > 0)
         curCooldown += amount;
-    
+
     AddSpellCooldown(spell_id, 0, uint32(time(NULL) + curCooldown));
-    
+
     WorldPacket data(SMSG_MODIFY_COOLDOWN, 4+8+4);
     data << uint32(spell_id);               // Spell ID
     data << uint64(GetGUID());              // Player GUID
     data << int32(amount * 1000);           // Cooldown mod in milliseconds
-    GetSession()->SendPacket(&data);   
+    GetSession()->SendPacket(&data);
 }
 
 void Player::ResetMap()
