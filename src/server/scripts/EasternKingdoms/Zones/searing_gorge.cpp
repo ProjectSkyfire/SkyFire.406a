@@ -1,33 +1,38 @@
 /*
  * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2006-2012 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
+ * Copyright (C) 2005-2012 MaNGOS <http://www.getmangos.com/>
+ * Copyright (C) 2008-2012 Trinity <http://www.trinitycore.org/>
  *
- * This program is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
- * option) any later version.
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
- * more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along
- * with this program. If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
 /* ScriptData
-SDName: Searing_Gorge
-SD%Complete: 80
-SDComment: Quest support: 3377, 3441 (More accurate info on Kalaran needed). Lothos Riftwaker teleport to Molten Core.
-SDCategory: Searing Gorge
+SkyFireScript_Name: Searing_Gorge
+%Complete: 95
+Comment:
+Category: Searing Gorge
 EndScriptData */
 
 /* ContentData
 npc_kalaran_windblade
 npc_lothos_riftwaker
 npc_zamael_lunthistle
+npc_glassweb_spid
+npc_lunk_spider_ride
+npc_dark_iron_steamsmith
+npc_lunk_dwarf_ride
 EndContentData */
 
 #include "ScriptPCH.h"
@@ -165,13 +170,335 @@ public:
     }
 };
 
-/*######
-##
-######*/
+enum eGlasswebSpider
+{
+    QUEST_A_PROPER_ANTIVENOM           = 27958,
+    QUEST_LUNKS_ADVENTURE_SPIDER_RIDER = 27959
+};
+
+class npc_glassweb_spider : public CreatureScript
+{
+public:
+    npc_glassweb_spider() : CreatureScript("npc_glassweb_spider") { }
+
+    CreatureAI* GetAI(Creature* pCreature) const
+    {
+        return new npc_glassweb_spiderAI (pCreature);
+    }
+
+    struct npc_glassweb_spiderAI : public ScriptedAI
+    {
+ 
+        npc_glassweb_spiderAI(Creature *c) : ScriptedAI(c) {}
+
+        void Reset()
+        {
+            me->SetReactState(REACT_AGGRESSIVE);
+        }
+
+        void JustDied(Unit* killer)
+        {
+            if(killer->ToPlayer()->GetQuestStatus(QUEST_LUNKS_ADVENTURE_SPIDER_RIDER) == QUEST_STATUS_INCOMPLETE)
+                return;
+
+            if(killer->ToPlayer()->GetQuestStatus(QUEST_A_PROPER_ANTIVENOM) == QUEST_STATUS_INCOMPLETE)
+                killer->CastSpell(killer->GetPositionX(),killer->GetPositionY(),killer->GetPositionZ(),88152,true);
+        }
+
+        void PassengerBoarded(Unit* who, int8 /*seatId*/, bool apply)
+        {
+            me->GetMotionMaster()->MoveRandom(20);
+            me->CombatStop();
+            me->DeleteThreatList();
+            me->RemoveAllAuras();
+        }
+        
+        void OnCharmed(bool /*apply*/)
+        {
+
+        }
+
+        void UpdateAI(const uint32 diff)
+        {
+          DoMeleeAttackIfReady();
+        }
+
+    };
+};
+
+enum eLunkSpiderRide
+{
+    NPC_GLASSWEB_SPIDER          = 5856,
+    SPELL_TUMMY_VENOM            = 88154,
+    SPELL_RIDE_VEHICLE_HARDCODED = 46598
+};
+
+class npc_lunk_spider_ride : public CreatureScript
+{
+public:
+    npc_lunk_spider_ride() : CreatureScript("npc_lunk_spider_ride") { }
+
+    bool OnGossipHello(Player* pPlayer, Creature* pCreature)
+    {
+        if (pCreature->isQuestGiver())
+            pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+        if (pPlayer->GetQuestStatus(QUEST_A_PROPER_ANTIVENOM) == QUEST_STATUS_INCOMPLETE)
+        {
+            pPlayer->AddItem(62809,(urand(1,4)));
+            pCreature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
+            pCreature->RemoveAurasDueToSpell(SPELL_TUMMY_VENOM);
+        }
+
+        return true;
+    }
+
+    CreatureAI* GetAI(Creature* pCreature) const
+    {
+        return new npc_lunk_spider_rideAI (pCreature);
+    }
+
+    struct npc_lunk_spider_rideAI : public ScriptedAI
+    {
+ 
+        npc_lunk_spider_rideAI(Creature *c) : ScriptedAI(c)  { }
+
+        uint32 Step;
+        uint32 Timer;
+
+        void Reset()
+        {
+            Step =0;
+            Timer = 2000;
+            if (Unit *summoner = me->ToTempSummon()->GetSummoner())
+              if (summoner->GetTypeId() == TYPEID_PLAYER)
+                  me->GetMotionMaster()->MoveFollow(summoner,0.0f,0.0f);
+            me->SetReactState(REACT_PASSIVE);
+            me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
+        }
+
+       bool OnQuestReward(Player* player, Creature* creature, Quest const* quest, uint32 opt)
+       {
+         if (quest->GetQuestId() == QUEST_LUNKS_ADVENTURE_SPIDER_RIDER)
+          {
+            me->DisappearAndDie();
+          }	
+          return true;
+       }
+
+        void UpdateAI(const uint32 diff)
+        {
+            if (Creature* Spider = me->FindNearestCreature(NPC_GLASSWEB_SPIDER, 10))
+            {
+                if(Spider->HealthBelowPct(50)) 
+                {
+                    if(Timer < diff)	
+                    {
+                      switch(Step)
+                      {
+                         case 0:
+                             me->CastSpell(Spider,SPELL_RIDE_VEHICLE_HARDCODED,true);
+                             Timer = 2000;
+                             ++Step;
+                             break;
+                         case 1:
+                             sCreatureTextMgr->SendChat(me,0,0);
+                             Timer = 2000;
+                             ++Step;
+                             break;
+                         case 2:
+                             Timer = 3000;
+                             ++Step;
+                             break;
+                         case 3:
+                             me->ExitVehicle(0);
+                             Spider->DisappearAndDie();
+                             me->CastSpell(me,SPELL_TUMMY_VENOM,true);
+                             sCreatureTextMgr->SendChat(me,1,0);
+                             if (Unit *summoner = me->ToTempSummon()->GetSummoner())
+                                 if (summoner->GetTypeId() == TYPEID_PLAYER)
+                                      me->GetMotionMaster()->MoveFollow(summoner,0.0f,0.0f);
+                             Timer = 2000;
+                             Step = 0;
+                             break;
+                      }
+                    } else Timer -= diff;
+                }
+            }
+
+                if(me->HasAura(SPELL_TUMMY_VENOM))
+                    me->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
+                
+
+                if (Unit *summoner = me->ToTempSummon()->GetSummoner())
+                 if (summoner->GetTypeId() == TYPEID_PLAYER)
+                  if(summoner->ToPlayer()->GetQuestStatus(QUEST_LUNKS_ADVENTURE_SPIDER_RIDER) == QUEST_STATUS_INCOMPLETE)
+                      me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER | UNIT_NPC_FLAG_GOSSIP);
+                      else me->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER | UNIT_NPC_FLAG_GOSSIP);
+        }
+
+    };
+};
+
+enum eDarkIronSteamsmith
+{
+    QUEST_RECON_ESSENTIALS                     = 27977,
+    QUEST_LUNKS_ADVENTURE_CRANKY_LITTLE_DWARFS = 27983
+};
+
+class npc_dark_iron_steamsmith : public CreatureScript
+{
+public:
+    npc_dark_iron_steamsmith() : CreatureScript("npc_dark_iron_steamsmith") { }
+
+    CreatureAI* GetAI(Creature* pCreature) const
+    {
+        return new npc_dark_iron_steamsmithAI (pCreature);
+    }
+
+    struct npc_dark_iron_steamsmithAI : public ScriptedAI
+    {
+ 
+        npc_dark_iron_steamsmithAI(Creature *c) : ScriptedAI(c) {}
+
+        void Reset()
+        {
+            me->SetReactState(REACT_AGGRESSIVE);
+        }
+
+        void JustDied(Unit* killer)
+        {
+            if (killer->GetTypeId() == TYPEID_PLAYER)
+            {
+
+            if(killer->ToPlayer()->GetQuestStatus(QUEST_LUNKS_ADVENTURE_CRANKY_LITTLE_DWARFS) == QUEST_STATUS_INCOMPLETE)
+                return;
+
+            if(killer->ToPlayer()->GetQuestStatus(QUEST_RECON_ESSENTIALS) == QUEST_STATUS_INCOMPLETE)
+                killer->CastSpell(killer->GetPositionX(),killer->GetPositionY(),killer->GetPositionZ(),88291,true);
+            }
+        }
+
+        void PassengerBoarded(Unit* who, int8 /*seatId*/, bool apply)
+        {           
+            me->CombatStop();
+            me->DeleteThreatList();
+            me->RemoveAllAuras();
+            sCreatureTextMgr->SendChat(me,0,0);
+        }
+
+        void OnCharmed(bool /*apply*/)
+        {
+        }
+
+        void UpdateAI(const uint32 diff)
+        {
+          DoMeleeAttackIfReady();
+        }
+
+    };
+};
+
+enum eLunkDwavrfRide
+{
+    NPC_DARK_IRON_STEAMSMITH      = 5840,
+    SPELL_HOLDING_LOOT            = 88320,
+};
+
+class npc_lunk_dwarf_ride : public CreatureScript
+{
+public:
+    npc_lunk_dwarf_ride() : CreatureScript("npc_lunk_dwarf_ride") { }
+
+    CreatureAI* GetAI(Creature* pCreature) const
+    {
+        return new npc_lunk_dwarf_rideAI (pCreature);
+    }
+
+    struct npc_lunk_dwarf_rideAI : public ScriptedAI
+    {
+ 
+        npc_lunk_dwarf_rideAI(Creature *c) : ScriptedAI(c)  { }
+
+        uint32 Step;
+        uint32 Timer;
+
+        void Reset()
+        {
+            Step =0;
+            Timer = 2000;
+            if (Unit *summoner = me->ToTempSummon()->GetSummoner())
+              if (summoner->GetTypeId() == TYPEID_PLAYER)
+                  me->GetMotionMaster()->MoveFollow(summoner,0.0f,0.0f);
+            me->SetReactState(REACT_PASSIVE);
+            me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
+        }
+
+       bool OnQuestReward(Player* player, Creature* creature, Quest const* quest, uint32 opt)
+       {
+         if (quest->GetQuestId() == QUEST_LUNKS_ADVENTURE_CRANKY_LITTLE_DWARFS)
+          {
+            me->DisappearAndDie();
+          }	
+          return true;
+       }
+
+        void UpdateAI(const uint32 diff)
+        {
+            if (Creature* Dwarf = me->FindNearestCreature(NPC_DARK_IRON_STEAMSMITH, 10))
+            {
+                if(Dwarf->HealthBelowPct(40)) 
+                {
+                    if(Timer < diff)	
+                    {
+                      switch(Step)
+                      {
+                         case 0:
+                             me->CastSpell(Dwarf,SPELL_RIDE_VEHICLE_HARDCODED,true);
+                             Timer = 1000;
+                             ++Step;
+                             break;
+                         case 1:
+                             Timer = 1000;
+                             ++Step;
+                             break;
+                         case 2:
+                             Timer = 3000;
+                             ++Step;
+                             break;
+                         case 3:
+                             me->ExitVehicle(0);
+                             me->Kill(Dwarf);
+                             me->CastSpell(me,SPELL_HOLDING_LOOT,true);
+                             sCreatureTextMgr->SendChat(me,0,0);
+                             if (Unit *summoner = me->ToTempSummon()->GetSummoner())
+                                 if (summoner->GetTypeId() == TYPEID_PLAYER)
+                                      me->GetMotionMaster()->MoveFollow(summoner,0.0f,0.0f);
+                             Timer = 2000;
+                             Step = 0;
+                             break;
+                      }
+                    } else Timer -= diff;
+                }
+            }               
+
+                if (Unit *summoner = me->ToTempSummon()->GetSummoner())
+                 if (summoner->GetTypeId() == TYPEID_PLAYER)
+                  if(summoner->ToPlayer()->GetQuestStatus(QUEST_LUNKS_ADVENTURE_CRANKY_LITTLE_DWARFS) == QUEST_STATUS_INCOMPLETE)
+                      me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER | UNIT_NPC_FLAG_GOSSIP);
+                      else me->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER | UNIT_NPC_FLAG_GOSSIP);
+        }
+
+    };
+};
 
 void AddSC_searing_gorge()
 {
     new npc_kalaran_windblade();
     new npc_lothos_riftwaker();
     new npc_zamael_lunthistle();
+    new npc_glassweb_spider;
+    new npc_lunk_spider_ride();
+    new npc_dark_iron_steamsmith();
+    new npc_lunk_dwarf_ride();
 }
