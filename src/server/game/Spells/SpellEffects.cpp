@@ -593,7 +593,7 @@ void Spell::EffectSchoolDMG(SpellEffIndex effIndex)
                 {
                     // converts each extra point of energy into ($f1+$AP/410) additional damage
                     float ap = m_caster->GetTotalAttackPowerValue(BASE_ATTACK);
-                    float multiple = ap / 410 + m_spellInfo->Effects[effIndex].DamageMultiplier;
+                    float multiple = ap / 410 + m_spellInfo->Effects[effIndex].DamageMultiplier; // effIndex = 3??
                     int32 energy = -(m_caster->ModifyPower(POWER_ENERGY, -30));
                     damage += int32(energy * multiple);
                     damage += int32(CalculatePctN(m_caster->ToPlayer()->GetComboPoints() * ap, 7));
@@ -612,42 +612,44 @@ void Spell::EffectSchoolDMG(SpellEffIndex effIndex)
                         int mana = 0;
                         if (m_caster->HasAura(81061) && roll_chance_i(12) || m_caster->HasAura(81062) && roll_chance_i(24)) // Euphoria
                         {
-                            if (!m_caster->HasAura(48518) && !m_caster->HasAura(48517))
+                            if (!m_caster->HasAura(48518) && !m_caster->HasAura(48517))  // Eclipse (lunar | solar)
                                 eclipse = -26;
                             else
                                 eclipse = -13;
 
-                            m_caster->CastCustomSpell(m_caster, 89265, &eclipse, 0, 0, true);
+                            m_caster->CastCustomSpell(m_caster, 89265, &eclipse, 0, 0, true); // Eclipse Energy (http://www.wowhead.com/spell=89265)
                         }
-                        else
-                            m_caster->CastCustomSpell(m_caster, 89265, &eclipse, 0, 0, true); // Normal Eclipse gain
+                        else // Normal Eclipse gain
+                            m_caster->CastCustomSpell(m_caster, 89265, &eclipse, 0, 0, true); // Eclipse Energy (http://www.wowhead.com/spell=89265)
 
                         if (m_caster->GetPower(POWER_ECLIPSE) == 0)
                         {
                             if (m_caster->HasAura(81061)) // Euphoria Rank 1
                             {
                                 mana = 8;
-                                m_caster->CastCustomSpell(m_caster, 81070, &mana, 0, 0, true);
+                                m_caster->CastCustomSpell(m_caster, 81070, &mana, 0, 0, true); // Euphoria (http://www.wowhead.com/spell=81070)
                             }
+
                             if (m_caster->HasAura(81062)) // Euphoria Rank 2
                             {
                                 mana = 16;
-                                m_caster->CastCustomSpell(m_caster, 81070, &mana, 0, 0, true);
+                                m_caster->CastCustomSpell(m_caster, 81070, &mana, 0, 0, true); // Euphoria (http://www.wowhead.com/spell=81070)
                             }
 
                             m_caster->CastSpell(m_caster, 48518, true, 0); // Cast Eclipse
                         }
-                        /// ECLIPSE REMOVE
+                        // ECLIPSE REMOVE
                         if (m_caster->GetPower(POWER_ECLIPSE) > 99)
                         {
                             m_caster->RemoveAurasDueToSpell(93432); // Nature's Grace CD remove.
-                            m_caster->RemoveAurasDueToSpell(48518);
+                            m_caster->RemoveAurasDueToSpell(48518); // Eclipse (Lunar)
                         }
+
                         if (m_caster->GetPower(POWER_ECLIPSE) < 101)
                         {
                             m_caster->RemoveAurasDueToSpell(93432); // Nature's Grace CD remove.
-                            m_caster->RemoveAurasDueToSpell(48517);
-                            m_caster->RemoveAurasDueToSpell(94338);
+                            m_caster->RemoveAurasDueToSpell(48517); // Eclipse (Solar)
+                            m_caster->RemoveAurasDueToSpell(94338); // Eclipse (Solar) (Aura 332?)
                         }
                     }
                 }
@@ -660,51 +662,55 @@ void Spell::EffectSchoolDMG(SpellEffIndex effIndex)
                         int mana = 0;
                         if (m_caster->HasAura(81061) && roll_chance_i(12) || m_caster->HasAura(81062) && roll_chance_i(24)) // Euphoria
                         {
-                            if (!m_caster->HasAura(48518) && !m_caster->HasAura(48517))
+                            if (!m_caster->HasAura(48518) && !m_caster->HasAura(48517)) // Eclipse (lunar | solar)
                                 eclipse = 40;
                             else
                                 eclipse = 20;
 
-                            m_caster->CastCustomSpell(m_caster, 89265, &eclipse, 0, 0, true);
+                            m_caster->CastCustomSpell(m_caster, 89265, &eclipse, 0, 0, true); // Eclipse Energy (http://www.wowhead.com/spell=89265)
                         }
-                        else
-                            m_caster->CastCustomSpell(m_caster, 89265, &eclipse, 0, 0, true); // Normal Eclipse gain
+                        else  // Normal Eclipse gain
+                            m_caster->CastCustomSpell(m_caster, 89265, &eclipse, 0, 0, true); // Eclipse Energy (http://www.wowhead.com/spell=89265)
 
                         if (m_caster->GetPower(POWER_ECLIPSE) == 200)
                         {
                             if (m_caster->HasAura(81061)) // Euphoria Rank 1
                             {
                                 mana = 8;
-                                m_caster->CastCustomSpell(m_caster, 81070, &mana, 0, 0, true);
+                                m_caster->CastCustomSpell(m_caster, 81070, &mana, 0, 0, true); // Euphoria (http://www.wowhead.com/spell=81070)
                             }
+
                             if (m_caster->HasAura(81062)) // Euphoria Rank 2
                             {
                                 mana = 16;
-                                m_caster->CastCustomSpell(m_caster, 81070, &mana, 0, 0, true);
+                                m_caster->CastCustomSpell(m_caster, 81070, &mana, 0, 0, true); // Euphoria (http://www.wowhead.com/spell=81070)
                             }
-                            if (m_caster->HasAura(93401))
-                                m_caster->CastSpell(m_caster, 94338, true, 0);
 
-                            m_caster->CastSpell(m_caster, 48517, true, 0); // Cast Eclipse
+                            if (m_caster->HasAura(93401)) // Sunfire Rank 1
+                                m_caster->CastSpell(m_caster, 94338, true, 0); // Eclipse (Solar)
+
+                            m_caster->CastSpell(m_caster, 48517, true, 0); // Cast Eclipse (http://www.wowhead.com/spell=48517)
                         }
+
                         // ECLIPSE REMOVE
                         if (m_caster->GetPower(POWER_ECLIPSE) > 99)
                         {
                             m_caster->RemoveAurasDueToSpell(93432); // Nature's Grace CD remove.
-                            m_caster->RemoveAurasDueToSpell(48518);
+                            m_caster->RemoveAurasDueToSpell(48518); // Eclipse (Lunar)
                         }
+
                         if (m_caster->GetPower(POWER_ECLIPSE) < 101)
                         {
                             m_caster->RemoveAurasDueToSpell(93432); // Nature's Grace CD remove.
-                            m_caster->RemoveAurasDueToSpell(48517);
-                            m_caster->RemoveAurasDueToSpell(94338);
+                            m_caster->RemoveAurasDueToSpell(48517); // Eclipse (Solar)
+                            m_caster->RemoveAurasDueToSpell(94338); // Eclipse (Solar) (Aura 332?)
                         }
                     }
                 }
                 // Starsurge
-                else if (m_spellInfo->Id == 78674)
+                else if (m_spellInfo->Id == 78674) // Starsurge (http://www.wowhead.com/spell=78674)
                 {
-                    if (m_caster->HasAura(16913))
+                    if (m_caster->HasAura(16913)) // Moonfury
                     {
                         int eclipse = 0;
                         if (m_caster->GetPower(POWER_ECLIPSE) < 100)
@@ -712,27 +718,30 @@ void Spell::EffectSchoolDMG(SpellEffIndex effIndex)
                         else
                             eclipse = 15;
 
-                        m_caster->CastCustomSpell(m_caster, 86605, &eclipse, 0, 0, true);
+                        m_caster->CastCustomSpell(m_caster, 86605, &eclipse, 0, 0, true); // Starsurge
 
                         if (m_caster->GetPower(POWER_ECLIPSE) == 200)
                         {
-                            if (m_caster->HasAura(93401))
+                            if (m_caster->HasAura(93401))  // Sunfire Rank 1
                                 m_caster->CastSpell(m_caster, 94338, true, 0);
 
-                            m_caster->CastSpell(m_caster, 48517, true, 0);
+                            m_caster->CastSpell(m_caster, 48517, true, 0); // Eclipse (Solar)
                         }
+
                         if (m_caster->GetPower(POWER_ECLIPSE) == 0)
-                            m_caster->CastSpell(m_caster, 48518, true, 0);
+                            m_caster->CastSpell(m_caster, 48518, true, 0); // Eclipse (Lunar)
+
                         if (m_caster->GetPower(POWER_ECLIPSE) > 99)
                         {
                             m_caster->RemoveAurasDueToSpell(93432); // Nature's Grace CD remove.
-                            m_caster->RemoveAurasDueToSpell(48518);
+                            m_caster->RemoveAurasDueToSpell(48518); // Eclipse (Lunar)
                         }
+
                         if (m_caster->GetPower(POWER_ECLIPSE) < 101)
                         {
                             m_caster->RemoveAurasDueToSpell(93432); // Nature's Grace CD remove.
-                            m_caster->RemoveAurasDueToSpell(48517);
-                            m_caster->RemoveAurasDueToSpell(94338);
+                            m_caster->RemoveAurasDueToSpell(48517); // Eclipse (Solar)
+                            m_caster->RemoveAurasDueToSpell(94338); // Eclipse (Solar) (Aura 332?)
                         }
                     }
                 }
