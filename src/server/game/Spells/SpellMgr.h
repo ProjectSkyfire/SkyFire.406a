@@ -43,7 +43,7 @@ enum SpellCategories
     SPELLCATEGORY_DRINK            = 59,
 };
 
-//SpellFamilyFlags
+// SpellFamilyFlags
 enum SpellFamilyFlag
 {
     // SPELLFAMILYFLAG  = SpellFamilyFlags[0]

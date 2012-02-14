@@ -531,18 +531,18 @@ uint32 SpellMgr::GetSpellIdForDifficulty(uint32 spellId, Unit const* caster) con
     if (mode >= MAX_DIFFICULTY)
     {
         sLog->outError("SpellMgr::GetSpellIdForDifficulty: Incorrect Difficulty for spell %u.", spellId);
-        return spellId; //return source spell
+        return spellId; // return source spell
     }
 
     uint32 difficultyId = GetSpellDifficultyId(spellId);
     if (!difficultyId)
-        return spellId; //return source spell, it has only REGULAR_DIFFICULTY
+        return spellId; // return source spell, it has only REGULAR_DIFFICULTY
 
     SpellDifficultyEntry const *difficultyEntry = sSpellDifficultyStore.LookupEntry(difficultyId);
     if (!difficultyEntry)
     {
         sLog->outDebug(LOG_FILTER_SPELLS_AURAS, "SpellMgr::GetSpellIdForDifficulty: SpellDifficultyEntry not found for spell %u. This should never happen.", spellId);
-        return spellId; //return source spell
+        return spellId; // return source spell
     }
 
     if (difficultyEntry->SpellID[mode] <= 0 && mode > DUNGEON_DIFFICULTY_HEROIC)
@@ -2293,7 +2293,7 @@ void SpellMgr::LoadSpellLinked()
             continue;
         }
 
-        if (type) //we will find a better way when more types are needed
+        if (type) // we will find a better way when more types are needed
         {
             if (trigger > 0)
                 trigger += SPELL_LINKED_MAX_SPELLS * type;
@@ -2335,7 +2335,7 @@ void SpellMgr::LoadPetLevelupSpellMap()
                 if (!skillLine)
                     continue;
 
-                //if (skillLine->skillId != creatureFamily->skillLine[0] &&
+                // if (skillLine->skillId != creatureFamily->skillLine[0] &&
                 //    (!creatureFamily->skillLine[1] || skillLine->skillId != creatureFamily->skillLine[1]))
                 //    continue;
 
@@ -3021,7 +3021,7 @@ void SpellMgr::LoadSpellCustomAttr()
             case 42821: // Headless Horseman - Wisp Flight Missile
                 spellInfo->RangeEntry = sSpellRangeStore.LookupEntry(6); // 100 yards
                 break;
-            case 36350: //They Must Burn Bomb Aura (self)
+            case 36350: // They Must Burn Bomb Aura (self)
                 spellInfo->Effects[0].TriggerSpell = 36325; // They Must Burn Bomb Drop (DND)
                 break;
             case 49838: // Stop Time
@@ -3125,7 +3125,7 @@ void SpellMgr::LoadSpellCustomAttr()
             case 50312: // Unholy Frenzy
                 spellInfo->MaxAffectedTargets = 15;
                 break;
-            case 38794: case 33711: //Murmur's Touch
+            case 38794: case 33711: // Murmur's Touch
                 spellInfo->MaxAffectedTargets = 1;
                 spellInfo->Effects[0].TriggerSpell = 33760;
                 break;

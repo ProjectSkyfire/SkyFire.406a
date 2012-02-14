@@ -998,7 +998,7 @@ uint32 MasteryScript::GetMasteryBaseAmount()
     {
         if (SpellInfo const* spellInfo = GetAura()->GetSpellInfo())
             return spellInfo->Effects[dummyEffectIndex].BasePoints ? spellInfo->Effects[dummyEffectIndex].BasePoints : defaultBaseAmount;
-        //if (AuraEffect* effect = GetAura()->GetEffect(dummyEffectIndex))
+        // if (AuraEffect* effect = GetAura()->GetEffect(dummyEffectIndex))
         //    return effect->GetBaseAmount()/*GetAmount()*/;
     }
     return defaultBaseAmount;

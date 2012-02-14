@@ -76,8 +76,8 @@ enum SpellCastFlags
 enum SpellRangeFlag
 {
     SPELL_RANGE_DEFAULT             = 0,
-    SPELL_RANGE_MELEE               = 1,     //melee
-    SPELL_RANGE_RANGED              = 2,     //hunter range and ranged weapon
+    SPELL_RANGE_MELEE               = 1,     // melee
+    SPELL_RANGE_RANGED              = 2,     // hunter range and ranged weapon
 };
 
 enum SpellNotifyPushType
@@ -89,7 +89,7 @@ enum SpellNotifyPushType
     PUSH_IN_THIN_LINE,
     PUSH_SRC_CENTER,
     PUSH_DST_CENTER,
-    PUSH_CASTER_CENTER, //this is never used in grid search
+    PUSH_CASTER_CENTER, // this is never used in grid search
     PUSH_CHAIN,
 };
 
@@ -516,7 +516,7 @@ class Spell
 
         Spell** m_selfContainer;                            // pointer to our spell container (if applicable)
 
-        //Spell data
+        // Spell data
         SpellSchoolMask m_spellSchoolMask;                  // Spell school (can be overwrite for some spells (wand shoot for example)
         WeaponAttackType m_attackType;                      // For weapon based attack
         int32 m_powerCost;                                  // Calculated spell cost initialized only in Spell::prepare

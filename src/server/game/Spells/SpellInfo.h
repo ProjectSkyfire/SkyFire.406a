@@ -334,14 +334,14 @@ public:
     uint32 ActiveIconID;                                    // 19       m_activeIconID
     char* SpellName;                                        // 20       m_name
     uint32 SpellShapeshiftId;                               // 21       SpellShapeshift.dbc
-    //DBCString Description;                                // 22       m_description_lang not used
-    //DBCString ToolTip;                                    // 23       m_auraDescription_lang not used
+    // DBCString Description;                                // 22       m_description_lang not used
+    // DBCString ToolTip;                                    // 23       m_auraDescription_lang not used
     uint32 SchoolMask;                                      // 24       m_schoolMask
     uint32 RuneCostID;                                      // 25       m_runeCostID
-    //uint32    spellMissileID;                             // 26       m_spellMissileID not used
-    //uint32  spellDescriptionVariableID;                   // 27       3.2.0
+    // uint32    spellMissileID;                             // 26       m_spellMissileID not used
+    // uint32  spellDescriptionVariableID;                   // 27       3.2.0
     uint32 SpellDifficultyId;                               // 28       m_spellDifficultyID - id from SpellDifficulty.dbc
-    //float unk_f1;                                         // 29
+    // float unk_f1;                                         // 29
     uint32 SpellScalingId;                                  // 30       SpellScaling.dbc
     uint32 SpellAuraOptionsId;                              // 31       SpellAuraOptions.dbc
     uint32 SpellAuraRestrictionsId;                         // 32       SpellAuraRestrictions.dbc
@@ -349,7 +349,7 @@ public:
     uint32 SpellCategoriesId;                               // 34       SpellCategories.dbc
     uint32 SpellClassOptionsId;                             // 35       SpellClassOptions.dbc
     uint32 SpellCooldownsId;                                // 36       SpellCooldowns.dbc
-    //uint32 unkIndex7;                                     // 37       all zeros...
+    // uint32 unkIndex7;                                     // 37       all zeros...
     uint32 SpellEquippedItemsId;                            // 38       SpellEquippedItems.dbc
     uint32 SpellInterruptsId;                               // 39       SpellInterrupts.dbc
     uint32 SpellLevelsId;                                   // 40       SpellLevels.dbc
@@ -357,15 +357,15 @@ public:
     uint32 SpellReagentsId;                                 // 42       SpellReagents.dbc
     uint32 SpellTargetRestrictionsId;                       // 44       SpellTargetRestrictions.dbc
     uint32 SpellTotemsId;                                   // 45       SpellTotems.dbc
-    //uint32 unk2;                                          // 46
+    // uint32 unk2;                                          // 46
 
-    //SpellAuraOptionsEntry
+    // SpellAuraOptionsEntry
     uint32 StackAmount;
     uint32 ProcFlags;
     uint32 ProcChance;
     uint32 ProcCharges;
 
-    //SpellAuraRestrictionsEntry
+    // SpellAuraRestrictionsEntry
     uint32 CasterAuraState;
     uint32 TargetAuraState;
     uint32 CasterAuraStateNot;
@@ -375,12 +375,12 @@ public:
     uint32 ExcludeCasterAuraSpell;
     uint32 ExcludeTargetAuraSpell;
 
-    //SpellCastingRequirementsEntry
+    // SpellCastingRequirementsEntry
     uint32 FacingCasterFlags;
     int32  AreaGroupId;
     uint32 RequiresSpellFocus;
 
-    //SpellCategoriesEntry
+    // SpellCategoriesEntry
     uint32 Category;
     uint32 DmgClass;
     uint32 Dispel;
@@ -388,41 +388,41 @@ public:
     uint32 PreventionType;
     uint32 StartRecoveryCategory;
 
-    //SpellClassOptionsEntry
+    // SpellClassOptionsEntry
     uint32 SpellFamilyName;
     flag96 SpellFamilyFlags;
 
-    //SpellCooldownsEntry
+    // SpellCooldownsEntry
     uint32 RecoveryTime;
     uint32 CategoryRecoveryTime;
     uint32 StartRecoveryTime;
 
-    //SpellEffectEntry
+    // SpellEffectEntry
     SpellEffectInfo Effects[MAX_SPELL_EFFECTS];
 
-    //SpellEquippedItemsEntry
+    // SpellEquippedItemsEntry
     int32  EquippedItemClass;
     int32  EquippedItemSubClassMask;
     int32  EquippedItemInventoryTypeMask;
 
-    //SpellInterruptsEntry
+    // SpellInterruptsEntry
     uint32 InterruptFlags;
     uint32 AuraInterruptFlags;
     uint32 ChannelInterruptFlags;
 
-    //SpellLevelsEntry
+    // SpellLevelsEntry
     uint32 MaxLevel;
     uint32 BaseLevel;
     uint32 SpellLevel;
 
-    //SpellPowerEntry
+    // SpellPowerEntry
     uint32 ManaCost;
     uint32 ManaCostPerlevel;
     uint32 ManaPerSecond;
     uint32 ManaCostPercentage;
     uint32 ManaPerSecondPerLevel;  // 4.0 REMOVED
 
-    //SpellReagentsEntry
+    // SpellReagentsEntry
     int32  Reagent[MAX_SPELL_REAGENTS];
     uint32 ReagentCount[MAX_SPELL_REAGENTS];
 
@@ -437,11 +437,11 @@ public:
     float  CoefBase;
     uint32 CoefLevelBase;
 
-    //SpellShapeshiftEntry
+    // SpellShapeshiftEntry
     uint32 Stances;
     uint32 StancesNot;
 
-    //SpellTargetRestrictionsEntry
+    // SpellTargetRestrictionsEntry
     uint32 Targets;
     uint32 TargetCreatureType;
     uint32 MaxTargetLevel;

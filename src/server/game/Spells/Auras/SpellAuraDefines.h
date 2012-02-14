@@ -52,7 +52,7 @@ enum AuraEffectHandleModes
     AURA_EFFECT_HANDLE_REAL_OR_REAPPLY_MASK = (AURA_EFFECT_HANDLE_REAPPLY | AURA_EFFECT_HANDLE_REAL),
 };
 
-//m_schoolAbsorb
+// m_schoolAbsorb
 enum DAMAGE_ABSORB_TYPE
 {
     ALL_DAMAGE_ABSORB       					= -2,
@@ -81,7 +81,7 @@ enum AuraType
     SPELL_AURA_MOD_STEALTH_DETECT 				= 17,
     SPELL_AURA_MOD_INVISIBILITY 				= 18,
     SPELL_AURA_MOD_INVISIBILITY_DETECT 			= 19,
-    SPELL_AURA_OBS_MOD_HEALTH 					= 20,    //20, 21 unofficial
+    SPELL_AURA_OBS_MOD_HEALTH 					= 20,    // 20, 21 unofficial
     SPELL_AURA_OBS_MOD_POWER 					= 21,
     SPELL_AURA_MOD_RESISTANCE 					= 22,
     SPELL_AURA_PERIODIC_TRIGGER_SPELL 			= 23,
@@ -394,9 +394,7 @@ enum AuraType
     SPELL_AURA_CAST_WHILE_WALKING 					= 330,    // NYI
     SPELL_AURA_331                                  = 331,
     SPELL_AURA_332_REPLACE_SPELL                    = 332,
-    SPELL_AURA_333_REPLACE_SPELL                    = 333,   
-    //SPELL_AURA_OVERRIDE_ACTIONBAR_SPELLS_1          = 332,    // NYI
-    //SPELL_AURA_OVERRIDE_ACTIONBAR_SPELLS_2          = 333,    // NYI
+    SPELL_AURA_333_REPLACE_SPELL                    = 333,
     SPELL_AURA_334                                  = 334,
     SPELL_AURA_335 									= 335,
     SPELL_AURA_MOD_FLYING_RESTRICTIONS 				= 336,    // NYI
