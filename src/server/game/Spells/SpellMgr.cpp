@@ -3148,7 +3148,7 @@ void SpellMgr::LoadSpellCustomAttr()
                 break;
             case 84726: // Frostfire orb rank 1
             case 84727: // Frostfire orb rank 2
-                spellInfo->Effects[1].ApplyAuraName = SPELL_AURA_333_REPLACE_SPELL;
+                spellInfo->Effects[1].ApplyAuraName = SPELL_AURA_OVERRIDE_ACTIONBAR_SPELLS_2;
                 spellInfo->Effects[1].BasePoints = 92283;
                 break;
             case 44544: // Fingers of Frost
@@ -3293,12 +3293,12 @@ void SpellMgr::LoadSpellCustomAttr()
                 break;
             case 81585: // Chakra: Serenity replace
                 spellInfo->Effects[0].Effect = SPELL_EFFECT_APPLY_AURA;
-                spellInfo->Effects[0].ApplyAuraName = SPELL_AURA_332_REPLACE_SPELL;
+                spellInfo->Effects[0].ApplyAuraName = SPELL_AURA_OVERRIDE_ACTIONBAR_SPELLS_1;
                 spellInfo->Effects[0].BasePoints = 88684;
                 break;
             case 81207: // Chakra: Sanctuary replace
                 spellInfo->Effects[0].Effect = SPELL_EFFECT_APPLY_AURA;
-                spellInfo->Effects[0].ApplyAuraName = SPELL_AURA_332_REPLACE_SPELL;
+                spellInfo->Effects[0].ApplyAuraName = SPELL_AURA_OVERRIDE_ACTIONBAR_SPELLS_1;
                 spellInfo->Effects[0].BasePoints = 88685;
                 break;
             case 68659: // Launch

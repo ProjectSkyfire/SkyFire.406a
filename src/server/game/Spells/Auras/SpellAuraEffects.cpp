@@ -387,8 +387,8 @@ pAuraEffectHandler AuraEffectHandler[TOTAL_AURAS]=
     &AuraEffect::HandleNULL,                                      // 329 NYI
     &AuraEffect::HandleNULL,                                      // 330 NYI
     &AuraEffect::HandleNULL,                                      // 331 NYI
-    &AuraEffect::HandleAuraReplaceSpell,                          // 332 SPELL_AURA_332_REPLACE_SPELL
-    &AuraEffect::HandleAuraReplaceSpell,                          // 333 SPELL_AURA_333_REPLACE_SPELL
+    &AuraEffect::HandleActionbarSpellOverride,                    // 332 SPELL_AURA_OVERRIDE_ACTIONBAR_SPELLS_1
+    &AuraEffect::HandleActionbarSpellOverride,                    // 333 SPELL_AURA_OVERRIDE_ACTIONBAR_SPELLS_2
     &AuraEffect::HandleNULL,                                      // 334 NYI
     &AuraEffect::HandleNULL,                                      // 335 NYI
     &AuraEffect::HandleNULL,                                      // 336 NYI
@@ -5904,7 +5904,7 @@ void AuraEffect::HandleAuraSetVehicle(AuraApplication const* aurApp, uint8 mode,
     }
 }
 
-void AuraEffect::HandleAuraReplaceSpell(AuraApplication const * aurApp, uint8 mode, bool apply) const
+void AuraEffect::HandleActionbarSpellOverride(AuraApplication const * aurApp, uint8 mode, bool apply) const
 {
     if (!(mode & AURA_EFFECT_HANDLE_REAL))
         return;
