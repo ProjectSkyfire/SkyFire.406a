@@ -21,7 +21,7 @@
 /* ScriptData
 SkyFireScript_Name: Searing_Gorge
 %Complete: 95
-Comment:
+Comment: Author Kiper
 Category: Searing Gorge
 EndScriptData */
 

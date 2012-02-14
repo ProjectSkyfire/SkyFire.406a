@@ -21,7 +21,7 @@
 /* ScriptData
 SkyFireScript_Name: Westfall
 %Complete: 90
-Comment:
+Comment: Author Raknar
 Category: Westfall
 EndScriptData */
 
