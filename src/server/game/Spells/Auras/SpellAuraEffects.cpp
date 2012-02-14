@@ -387,8 +387,8 @@ pAuraEffectHandler AuraEffectHandler[TOTAL_AURAS]=
     &AuraEffect::HandleNULL,                                      //329 NYI
     &AuraEffect::HandleNULL,                                      //330 NYI
     &AuraEffect::HandleNULL,                                      //331 NYI
-    &AuraEffect::HandleNULL,                                      //332 NYI SPELL_AURA_OVERRIDE_ACTIONBAR_SPELLS_1
-    &AuraEffect::HandleNULL,                                      //333 SPELL_AURA_OVERRIDE_ACTIONBAR_SPELLS_2
+    &AuraEffect::HandleAuraReplaceSpell,                          //332 SPELL_AURA_332_REPLACE_SPELL
+    &AuraEffect::HandleAuraReplaceSpell,                          //333 SPELL_AURA_333_REPLACE_SPELL
     &AuraEffect::HandleNULL,                                      //334 NYI
     &AuraEffect::HandleNULL,                                      //335 NYI
     &AuraEffect::HandleNULL,                                      //336 NYI
@@ -713,7 +713,7 @@ int32 AuraEffect::CalculateAmount(Unit* caster)
                 {
                     // find the spell we need
                     const MountTypeEntry *type = sMountTypeStore.LookupEntry(GetMiscValueB());
-                    if(!type)
+                    if (!type)
                         return 0;
 
                     uint32 spellId = 0;
@@ -723,7 +723,7 @@ int32 AuraEffect::CalculateAmount(Unit* caster)
                     for (int i = 0; i < MAX_MOUNT_TYPE_COLUMN; i++)
                     {
                         const MountCapabilityEntry *cap = sMountCapabilityStore.LookupEntry(type->capabilities[i]);
-                        if(!cap)
+                        if (!cap)
                             continue;
                         if (cap->map != -1 && cap->map != map)
                             continue;
@@ -3723,7 +3723,7 @@ void AuraEffect::HandleAuraModMastery(AuraApplication const* aurApp, uint8 mode,
 {
     Unit* target = aurApp->GetTarget();
 
-    if(!target || target->GetTypeId() != TYPEID_PLAYER)
+    if (!target || target->GetTypeId() != TYPEID_PLAYER)
         return;
 
     int32 rating = target->ToPlayer()->CalculateMasteryRating(GetAmount());
@@ -5835,7 +5835,7 @@ void AuraEffect::HandleAuraModFakeInebriation(AuraApplication const* aurApp, uin
             target->_invisibilityDetect.DelFlag(INVISIBILITY_DRUNK);
     }
 
-    // call functions which may have additional effects after chainging state of unit
+    // call functions which may have additional effects after changing state of unit
     target->UpdateObjectVisibility();
 }
 
@@ -5903,25 +5903,89 @@ void AuraEffect::HandleAuraSetVehicle(AuraApplication const* aurApp, uint8 mode,
         target->ToPlayer()->GetSession()->SendPacket(&data);
     }
 }
-// wtf is this?
-/*void AuraEffect::HandleActionbarSpellOverride(AuraApplication const* aurApp, uint8 mode, bool apply) const
+
+void AuraEffect::HandleAuraReplaceSpell(AuraApplication const * aurApp, uint8 mode, bool apply) const
 {
     if (!(mode & AURA_EFFECT_HANDLE_REAL))
         return;
 
-    if (aurApp->GetTarget()->GetTypeId() != TYPEID_PLAYER)
+    Player* target = aurApp->GetTarget()->ToPlayer();
+
+    if (!target || !target->IsInWorld())
         return;
 
-    uint32 spell = GetAmount();
+    uint32 overrideId = GetAmount();
 
-    if(!spell)
+    if (!overrideId)
         return;
+    SpellEntry const* spell = sSpellStore.LookupEntry(overrideId);
+    if (!spell)
+        return;
+    uint32 affspell = 77606; //Default: Dark Simulacrum since it can copy all kind of spells - DO NOT USE: Cause learning spells, BIG BUG
+
+    // if (target->getClass() != CLASS_DEATH_KNIGHT)
+        // affspell = 54530;               // Hackfixed, opening
+
+    if (overrideId == 93402)            // Sunfire
+    {
+        if (target->HasAura(48517))     // Sunfire talent
+            affspell = 8921;            // Moonfire
+        else
+            return;
+    }
+
+    if (overrideId == 91711)
+    {
+        if (target->HasAura(91713)) //The nether ward talent
+            affspell = 6229;
+        else
+            return;
+    }
+
+    if (overrideId == 92315) // Pyroblast
+        affspell = 11366;
+
+    if (overrideId == 82928) // Fire!
+        affspell = 19434;
+
+    if (overrideId == 89420) // Drain Life
+        affspell = 689;
+
+    if (overrideId == 81170) // Ravage
+        affspell = 6785;
+
+    if (overrideId == 93402) // Eclipse (Solar)
+        affspell = 8921;
+
+    if (overrideId == 92283) // Frostfire Orb Override
+        affspell = 82731;
+
+    if (overrideId == 88625) // Chakra: Serenity
+        affspell = 2050;
+
+    if (overrideId == 86213) // Soul Swap: Exhale
+        affspell = 86121;
+
+    if (overrideId == 88684 || overrideId == 88685) // Chakra
+        affspell = 88625;
 
     if (apply)
-        aurApp->GetTarget()->learnSpell(spell, false);
+    {
+        target->AddTemporarySpell(overrideId);
+        WorldPacket data(SMSG_SUPERCEDED_SPELL, 4 + 4);
+        data << uint32(affspell); // here should be affected spell - not really necessary, after casting the real spell again, it auto-fixes
+        data << uint32(overrideId);
+        target->GetSession()->SendPacket(&data);
+    }
     else
-        aurApp->GetTarget()->removeSpell(spell, false, false);
-}*/
+    {
+        target->RemoveTemporarySpell(overrideId);
+        WorldPacket data(SMSG_SUPERCEDED_SPELL, 4 + 4);
+        data << uint32(overrideId);
+        data << uint32(affspell); // here should be affected spell - not really necessary, after casting the real spell again, it auto-fixes
+        target->GetSession()->SendPacket(&data);
+    }
+}
 
 void AuraEffect::HandlePreventResurrection(AuraApplication const* aurApp, uint8 mode, bool apply) const
 {
@@ -6133,7 +6197,7 @@ void AuraEffect::HandlePeriodicDummyAuraTick(Unit* target, Unit* caster) const
                 case 49016: // Hysteria
                     if (target->GetTypeId() != TYPEID_PLAYER)
                     return;
-                    if(((Player*)target)->getClass() != CLASS_DEATH_KNIGHT)
+                    if (((Player*)target)->getClass() != CLASS_DEATH_KNIGHT)
                     return;
                     uint32 damage = uint32(target->CountPctFromMaxHealth(1));
                     target->DealDamage(target, damage, NULL, NODAMAGE, SPELL_SCHOOL_MASK_NORMAL, NULL, false);

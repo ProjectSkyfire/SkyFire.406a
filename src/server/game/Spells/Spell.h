@@ -350,6 +350,7 @@ class Spell
         void EffectUnlearnSpecialization(SpellEffIndex effIndex);
         void EffectHealPct(SpellEffIndex effIndex);
         void EffectEnergizePct(SpellEffIndex effIndex);
+        // void EffectTriggerSpellWithValue(SpellEffIndex effIndex); NYI
         void EffectTriggerRitualOfSummoning(SpellEffIndex effIndex);
         void EffectSummonRaFFriend(SpellEffIndex effIndex);
         void EffectKillCreditPersonal(SpellEffIndex effIndex);

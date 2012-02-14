@@ -561,76 +561,180 @@ void Spell::EffectSchoolDMG(SpellEffIndex effIndex)
                             m_caster->CastSpell(m_caster, 77487, true);
                     }
                 }
-
-                if (m_caster->HasAura(81659)) // Evangelism Rank 1
+                // Evangelism: Rank 1
+                if (Aura* evan1 = m_caster->GetAura(81659))
                 {
-                    if (m_spellInfo->Id == 585 || m_spellInfo->Id == 14914 || m_spellInfo->Id == 15407)  // Smite | Holy Fire | mind flay
-                        m_caster->CastSpell(m_caster, 81660, true);
+                    m_caster->CastSpell(m_caster, 81660, true);
+                    // Trigger to activate archangel
+                    m_caster->CastSpell(m_caster, 87154, true);
+                    m_caster->RemoveAurasDueToSpell(87118);
+                    m_caster->RemoveAurasDueToSpell(87117);
                 }
-
-                if (m_caster->HasAura(81662)) // Evangelism Rank 2
+                // Evangelism: Rank 2
+                if (Aura* evan2 = m_caster->GetAura(81662))
                 {
-                    if (m_spellInfo->Id == 585 || m_spellInfo->Id == 14914 || m_spellInfo->Id == 15407)  // Smite | Holy Fire | mind flay
-                        m_caster->CastSpell(m_caster, 81661, true);
+                    m_caster->CastSpell(m_caster, 81661, true);
+                    // Trigger to activate archangel
+                    m_caster->CastSpell(m_caster, 87154, true);
+                    m_caster->RemoveAurasDueToSpell(87118);
+                    m_caster->RemoveAurasDueToSpell(87117);
                 }
-                //Dark Evangelism  not implemented yet
-                /*if (m_caster->HasAura(81659))                     // Evangelism rank 1
+                if (m_caster->HasAura(14751)) // Chakra
                 {
-                    if (m_spellInfo->Id == 15407)                   //  Mind Flay
-                        m_caster->CastSpell(m_caster, 87117, true);   // Dark Evangelism
+                    m_caster->CastSpell(m_caster, 81209, true);
+                    m_caster->RemoveAurasDueToSpell(14751);
                 }
-                else if (m_caster->HasAura(81662))                  // Evangelism rank 2
-                {
-                    if (m_spellInfo->Id == 15407)                   //  Mind Flay
-                        m_caster->CastSpell(m_caster, 87118, true);   // Dark Evangelism
-                }
-                break;*/
+                break;
             }
             case SPELLFAMILY_DRUID:
             {
-                // Starfire
-                if (m_spellInfo->SpellFamilyFlags[0] & 0x00000004)
+                // Ferocious Bite
+                if (m_caster->GetTypeId() == TYPEID_PLAYER && (m_spellInfo->SpellFamilyFlags[0] & 0x000800000) && m_spellInfo->SpellVisual[0] == 6587)
                 {
-                    if (m_caster->GetTypeId() == TYPEID_PLAYER)
-                    {
-                        if (m_caster->ToPlayer()->GetTalentBranchSpec(m_caster->ToPlayer()->GetActiveSpec()) == BS_DRUID_BALANCE)
-                        {
-                            if (m_caster->HasAura(48517))
-                            {
-                                m_caster->RemoveAurasDueToSpell(48517);
-                                m_caster->SetEclipsePower(0);
-                            }
-                            if (m_caster->GetEclipsePower() >= -20)
-                                if (m_caster->HasAura(48518))
-                                        m_caster->RemoveAurasDueToSpell(48518);
+                    // converts each extra point of energy into ($f1+$AP/410) additional damage
+                    float ap = m_caster->GetTotalAttackPowerValue(BASE_ATTACK);
+                    float multiple = ap / 410 + m_spellInfo->Effects[effIndex].DamageMultiplier;
+                    int32 energy = -(m_caster->ModifyPower(POWER_ENERGY, -30));
+                    damage += int32(energy * multiple);
+                    damage += int32(CalculatePctN(m_caster->ToPlayer()->GetComboPoints() * ap, 7));
+                }
+                // Wrath
+                else if (m_spellInfo->Id == 5176)
+                {
+                    // Improved Insect Swarm
+                    if (AuraEffect const * aurEff = m_caster->GetDummyAuraEffect(SPELLFAMILY_DRUID, 1771, 0))
+                        if (unitTarget->GetAuraEffect(SPELL_AURA_PERIODIC_DAMAGE, SPELLFAMILY_DRUID, 0x00200000, 0, 0))
+                            AddPctN(damage, aurEff->GetAmount());
 
-                            m_caster->SetEclipsePower(int32(m_caster->GetEclipsePower() + 20));
+                    if (m_caster->HasAura(16913))
+                    {
+                        int eclipse = -13;
+                        int mana = 0;
+                        if (m_caster->HasAura(81061) && roll_chance_i(12) || m_caster->HasAura(81062) && roll_chance_i(24)) // Euphoria
+                        {
+                            if (!m_caster->HasAura(48518) && !m_caster->HasAura(48517))
+                                eclipse = -26;
+                            else
+                                eclipse = -13;
+
+                            m_caster->CastCustomSpell(m_caster, 89265, &eclipse, 0, 0, true);
+                        }
+                        else
+                            m_caster->CastCustomSpell(m_caster, 89265, &eclipse, 0, 0, true); // Normal Eclipse gain
+
+                        if (m_caster->GetPower(POWER_ECLIPSE) == 0)
+                        {
+                            if (m_caster->HasAura(81061)) // Euphoria Rank 1
+                            {
+                                mana = 8;
+                                m_caster->CastCustomSpell(m_caster, 81070, &mana, 0, 0, true);
+                            }
+                            if (m_caster->HasAura(81062)) // Euphoria Rank 2
+                            {
+                                mana = 16;
+                                m_caster->CastCustomSpell(m_caster, 81070, &mana, 0, 0, true);
+                            }
+
+                            m_caster->CastSpell(m_caster, 48518, true, 0); // Cast Eclipse
+                        }
+                        /// ECLIPSE REMOVE
+                        if (m_caster->GetPower(POWER_ECLIPSE) > 99)
+                        {
+                            m_caster->RemoveAurasDueToSpell(93432); // Nature's Grace CD remove.
+                            m_caster->RemoveAurasDueToSpell(48518);
+                        }
+                        if (m_caster->GetPower(POWER_ECLIPSE) < 101)
+                        {
+                            m_caster->RemoveAurasDueToSpell(93432); // Nature's Grace CD remove.
+                            m_caster->RemoveAurasDueToSpell(48517);
+                            m_caster->RemoveAurasDueToSpell(94338);
                         }
                     }
                 }
-                // Wrath
-                else if (m_spellInfo->SpellFamilyFlags[0] & 0x00000001)
+                // Starfire
+                else if (m_spellInfo->Id == 2912)
                 {
-                    if (m_caster->GetTypeId() == TYPEID_PLAYER)
+                    if (m_caster->HasAura(16913))
                     {
-                        if (m_caster->ToPlayer()->GetTalentBranchSpec(m_caster->ToPlayer()->GetActiveSpec()) == BS_DRUID_BALANCE)
+                        int eclipse = 20;
+                        int mana = 0;
+                        if (m_caster->HasAura(81061) && roll_chance_i(12) || m_caster->HasAura(81062) && roll_chance_i(24)) // Euphoria
                         {
-                            if (m_caster->HasAura(48518))
-                            {
-                                m_caster->RemoveAurasDueToSpell(48518);
-                                m_caster->SetEclipsePower(0);
-                            }
-                            if (m_caster->GetEclipsePower() <= 13)
-                                if (m_caster->HasAura(48517))
-                                        m_caster->RemoveAurasDueToSpell(48517);
+                            if (!m_caster->HasAura(48518) && !m_caster->HasAura(48517))
+                                eclipse = 40;
+                            else
+                                eclipse = 20;
 
-                            m_caster->SetEclipsePower(int32(m_caster->GetEclipsePower() - 13));
+                            m_caster->CastCustomSpell(m_caster, 89265, &eclipse, 0, 0, true);
+                        }
+                        else
+                            m_caster->CastCustomSpell(m_caster, 89265, &eclipse, 0, 0, true); // Normal Eclipse gain
+
+                        if (m_caster->GetPower(POWER_ECLIPSE) == 200)
+                        {
+                            if (m_caster->HasAura(81061)) // Euphoria Rank 1
+                            {
+                                mana = 8;
+                                m_caster->CastCustomSpell(m_caster, 81070, &mana, 0, 0, true);
+                            }
+                            if (m_caster->HasAura(81062)) // Euphoria Rank 2
+                            {
+                                mana = 16;
+                                m_caster->CastCustomSpell(m_caster, 81070, &mana, 0, 0, true);
+                            }
+                            if (m_caster->HasAura(93401))
+                                m_caster->CastSpell(m_caster, 94338, true, 0);
+
+                            m_caster->CastSpell(m_caster, 48517, true, 0); // Cast Eclipse
+                        }
+                        // ECLIPSE REMOVE
+                        if (m_caster->GetPower(POWER_ECLIPSE) > 99)
+                        {
+                            m_caster->RemoveAurasDueToSpell(93432); // Nature's Grace CD remove.
+                            m_caster->RemoveAurasDueToSpell(48518);
+                        }
+                        if (m_caster->GetPower(POWER_ECLIPSE) < 101)
+                        {
+                            m_caster->RemoveAurasDueToSpell(93432); // Nature's Grace CD remove.
+                            m_caster->RemoveAurasDueToSpell(48517);
+                            m_caster->RemoveAurasDueToSpell(94338);
                         }
                     }
-                    // Improved Insect Swarm
-                    if (AuraEffect const* aurEff = m_caster->GetDummyAuraEffect(SPELLFAMILY_DRUID, 1771, 0))
-                        if (unitTarget->GetAuraEffect(SPELL_AURA_PERIODIC_DAMAGE, SPELLFAMILY_DRUID, 0x00200000, 0, 0))
-                            damage = int32(damage*(100.0f+aurEff->GetAmount())/100.0f);
+                }
+                // Starsurge
+                else if (m_spellInfo->Id == 78674)
+                {
+                    if (m_caster->HasAura(16913))
+                    {
+                        int eclipse = 0;
+                        if (m_caster->GetPower(POWER_ECLIPSE) < 100)
+                            eclipse = -15;
+                        else
+                            eclipse = 15;
+
+                        m_caster->CastCustomSpell(m_caster, 86605, &eclipse, 0, 0, true);
+
+                        if (m_caster->GetPower(POWER_ECLIPSE) == 200)
+                        {
+                            if (m_caster->HasAura(93401))
+                                m_caster->CastSpell(m_caster, 94338, true, 0);
+
+                            m_caster->CastSpell(m_caster, 48517, true, 0);
+                        }
+                        if (m_caster->GetPower(POWER_ECLIPSE) == 0)
+                            m_caster->CastSpell(m_caster, 48518, true, 0);
+                        if (m_caster->GetPower(POWER_ECLIPSE) > 99)
+                        {
+                            m_caster->RemoveAurasDueToSpell(93432); // Nature's Grace CD remove.
+                            m_caster->RemoveAurasDueToSpell(48518);
+                        }
+                        if (m_caster->GetPower(POWER_ECLIPSE) < 101)
+                        {
+                            m_caster->RemoveAurasDueToSpell(93432); // Nature's Grace CD remove.
+                            m_caster->RemoveAurasDueToSpell(48517);
+                            m_caster->RemoveAurasDueToSpell(94338);
+                        }
+                    }
                 }
                 break;
             }
@@ -1283,6 +1387,13 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                 }
                 switch (m_spellInfo->Id)
                 {
+                    case 92315: // Pyroblast!
+                        m_caster->RemoveAurasDueToSpell(48108); // Remove hot streak
+                        break;
+                    case 30455: // Ice lance
+                        if (Aura* fof = m_caster->GetAura(44544))
+                            AddPctN(damage, 25*fof->GetCharges());
+                        break;
                     case 1459: // Arcane Brilliance
                     {
                         if (m_caster->GetTypeId() == TYPEID_PLAYER)
@@ -1421,7 +1532,7 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
             // Starfall
             if (m_spellInfo->SpellFamilyFlags[2] & SPELLFAMILYFLAG2_DRUID_STARFALL)
             {
-                // Shapeshifting into an animal form or mounting cancels the effect.
+                //Shapeshifting into an animal form or mounting cancels the effect.
                 if (m_caster->GetCreatureType() == CREATURE_TYPE_BEAST || m_caster->IsMounted())
                 {
                     if (m_triggeredByAuraSpell)
@@ -1429,25 +1540,61 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                     return;
                 }
 
-                // Any effect which causes you to lose control of your character will supress the starfall effect.
-                if (m_caster->HasUnitState(UNIT_STATE_CONTROLLED))
-                    return;
-
-                if (unitTarget && !unitTarget->isInCombat())
+                //Any effect which causes you to lose control of your character will supress the starfall effect.
+                if (m_caster->HasUnitState(UNIT_STATE_STUNNED | UNIT_STATE_FLEEING | UNIT_STATE_ROOT | UNIT_STATE_CONFUSED))
                     return;
 
                 m_caster->CastSpell(unitTarget, damage, true);
+                return;
+            }
+            //Wild mushroom: detonate
+            /*if(m_spellInfo->Id == 88751)
+            {
+                CellCoord pair(Trinity::ComputeCellCoord(m_caster->GetPositionX(), m_caster->GetPositionY()));
+                Cell cell(pair);
+                cell.SetNoCreate();
 
-                switch (m_spellInfo->Id)
+                std::list<Creature*> templist;
+                Trinity::AllFriendlyCreaturesInGrid check(me, 47649);
+                Trinity::CreatureListSearcher<Trinity::AllCreaturesOfEntryInRange> searcher(m_caster, templist, check);
+
+                TypeContainerVisitor<Trinity::CreatureListSearcher<Trinity::AllCreaturesOfEntryInRange>, GridTypeMapContainer> cSearcher(searcher);
+                cell.Visit(pair, cSearcher, *(me->GetMap()), *me, me->GetGridActivationRange());
+
+                if (!templist.empty())
+                    for (std::list<Creature*>::const_iterator itr = templist.begin(); itr != templist.end(); ++itr)
+                    {
+                        //You cannot detonate other people's mushrooms
+                        if((*itr)->GetOwner() != m_caster)
+                            continue;
+                        // Find all the enemies
+                        std::list<Unit*> targets;
+                        Trinity::AnyUnfriendlyUnitInObjectRangeCheck u_check((*itr), (*itr), 6.0f);
+                        Trinity::UnitListSearcher<Trinity::AnyUnfriendlyUnitInObjectRangeCheck> searcher((*itr), targets, u_check);
+                        (*itr)->VisitNearbyObject(6.0f, searcher);
+                        for (std::list<Unit*>::const_iterator iter = targets.begin(); iter != targets.end(); ++iter)
+                        {
+                            //Damage spell
+                            (*itr)->CastSpell((*iter),78777,true);
+                            //Suicide spell
+                            (*itr)->CastSpell((*itr),92853,true);
+                            (*itr)->DisappearAndDie();
+                        }
+                    }
+                    templist.clear();
+            }*/
+            if(m_spellInfo->Id == 1126)
+            {
+                if (m_caster->GetTypeId() == TYPEID_PLAYER)
                 {
-                    case 50286: m_caster->CastSpell(unitTarget, 50288, true); return;
-                    //case 53196: m_caster->CastSpell(unitTarget, 53191, true); return;  //depreciated?
-                    //case 53197: m_caster->CastSpell(unitTarget, 53194, true); return;  //depreciated?
-                    //case 53198: m_caster->CastSpell(unitTarget, 53195, true); return;  //depreciated?
-                    default:
-                        sLog->outError("Spell::EffectDummy: Unhandled Starfall spell rank %u", m_spellInfo->Id);
-                        return;
+                    std::list<Unit*> PartyMembers;
+                    m_caster->GetPartyMembers(PartyMembers);
+                    if(PartyMembers.size() > 1)
+                        m_caster->CastSpell(unitTarget, 79061, true); // Mark of the Wild (Raid)
+                    else
+                        m_caster->CastSpell(unitTarget, 79060, true); // Mark of the Wild (Caster)
                 }
+                break;
             }
             break;
         }
@@ -2003,6 +2150,35 @@ void Spell::EffectForceCast(SpellEffIndex effIndex)
 
     unitTarget->CastSpell(targets, spellInfo, &values, TRIGGERED_FULL_MASK);
 }
+
+// not implemented yet.
+/*void Spell::EffectTriggerSpellWithValue(SpellEffIndex effIndex)
+{
+    uint32 triggered_spell_id = m_spellInfo->Effects[effIndex].TriggerSpell;
+
+    // normal case
+    SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(triggered_spell_id);
+
+    if (!spellInfo)
+    {
+        sLog->outError("EffectTriggerSpellWithValue of spell %u: triggering unknown spell id %i", m_spellInfo->Id, triggered_spell_id);
+        return;
+    }
+
+    int32 bp = damage;
+    Unit * caster = GetTriggeredSpellCaster(spellInfo, m_caster, unitTarget);
+
+    caster->CastCustomSpell(unitTarget, triggered_spell_id, &bp, &bp, &bp, true);
+
+    if(m_spellInfo->Id == 33076) // Prayer of Mending
+    {
+        if(m_caster->HasAura(14751)) // Chakra
+        {
+            m_caster->CastSpell(m_caster, 81206, true); // Chakra: Sanctuary
+            m_caster->RemoveAurasDueToSpell(14751);
+        }
+    }
+}*/
 
 void Spell::EffectTriggerRitualOfSummoning(SpellEffIndex effIndex)
 {
@@ -4325,6 +4501,15 @@ void Spell::EffectWeaponDmg(SpellEffIndex effIndex)
             {
                 if (AuraEffect const* rendAndTear = m_caster->GetDummyAuraEffect(SPELLFAMILY_DRUID, 2859, 0))
                     AddPctN(totalDamagePercentMod, rendAndTear->GetAmount());
+            }
+            if(m_spellInfo->Id == 80313) // Pulverize
+            {
+                if(Aura* lacer = unitTarget->GetAura(33745)) // Lacerate
+                {
+                    int32 bp = ((m_spellInfo->Effects[2].BasePoints * m_spellInfo->Effects[0].BasePoints / 100) * lacer->GetStackAmount()) / 100;
+                    m_caster->CastCustomSpell(unitTarget, 31756, &bp, NULL, NULL, true);
+                    unitTarget->RemoveAurasDueToSpell(33745);
+                }
             }
             break;
         }

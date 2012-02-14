@@ -3146,6 +3146,11 @@ void SpellMgr::LoadSpellCustomAttr()
             case 44401: // Missile Barrage
                 spellInfo->ProcCharges = 1;
                 break;
+            case 84726: // Frostfire orb rank 1
+            case 84727: // Frostfire orb rank 2
+                spellInfo->Effects[1].ApplyAuraName = SPELL_AURA_333_REPLACE_SPELL;
+                spellInfo->Effects[1].BasePoints = 92283;
+                break;
             case 44544: // Fingers of Frost
                 spellInfo->Effects[0].SpellClassMask = flag96(685904631, 1151048, 0);
                 break;
@@ -3272,6 +3277,35 @@ void SpellMgr::LoadSpellCustomAttr()
             case 53245: // Marked for Death (Rank 4)
             case 53246: // Marked for Death (Rank 5)
                 spellInfo->Effects[0].SpellClassMask = flag96(423937, 276955137, 2049);
+                break;
+            // Chakra spells needs moved to spellscripts this is a temp hack.
+            case 14751: // Chakra
+                spellInfo->Effects[0].ApplyAuraName = 0;
+                spellInfo->Effects[1].ApplyAuraName = 0;
+                spellInfo->Effects[2].ApplyAuraName = 0;
+                break;
+            case 81208: // Chakra: Serenity
+                spellInfo->Effects[1].ApplyAuraName = SPELL_AURA_DUMMY;
+                spellInfo->Effects[2].ApplyAuraName = SPELL_AURA_DUMMY;
+                break;
+            case 81206: // Chakra: Sanctuary
+                spellInfo->Effects[2].ApplyAuraName = SPELL_AURA_DUMMY;
+                break;
+            case 81585: // Chakra: Serenity replace
+                spellInfo->Effects[0].Effect = SPELL_EFFECT_APPLY_AURA;
+                spellInfo->Effects[0].ApplyAuraName = SPELL_AURA_332_REPLACE_SPELL;
+                spellInfo->Effects[0].BasePoints = 88684;
+                break;
+            case 81207: // Chakra: Sanctuary replace
+                spellInfo->Effects[0].Effect = SPELL_EFFECT_APPLY_AURA;
+                spellInfo->Effects[0].ApplyAuraName = SPELL_AURA_332_REPLACE_SPELL;
+                spellInfo->Effects[0].BasePoints = 88685;
+                break;
+            case 68659: // Launch
+                spellInfo->Effects[1].TriggerSpell = 4336;
+                break;
+            case 94338: // Sunfire (Eclipse)
+                spellInfo->Effects[0].BasePoints = 93402;
                 break;
             case 70728: // Exploit Weakness (needs target selection script)
             case 70840: // Devious Minds (needs target selection script)

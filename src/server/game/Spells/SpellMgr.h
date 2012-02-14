@@ -105,6 +105,8 @@ enum SpellLinkedType
     SPELL_LINK_REMOVE   = 0,
 };
 
+// Unit * GetTriggeredSpellCaster(SpellInfo const * spellInfo, Unit * caster, Unit * target); NYI
+
 // Spell proc event related declarations (accessed using SpellMgr functions)
 enum ProcFlags
 {
