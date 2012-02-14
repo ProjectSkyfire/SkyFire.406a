@@ -3305,6 +3305,8 @@ void SpellMgr::LoadSpellCustomAttr()
                 spellInfo->Effects[1].TriggerSpell = 4336;
                 break;
             case 94338: // Sunfire (Eclipse)
+                spellInfo->Effects[0].Effect = SPELL_EFFECT_APPLY_AURA;
+                spellInfo->Effects[0].ApplyAuraName = SPELL_AURA_OVERRIDE_ACTIONBAR_SPELLS_1;
                 spellInfo->Effects[0].BasePoints = 93402;
                 break;
             case 70728: // Exploit Weakness (needs target selection script)
