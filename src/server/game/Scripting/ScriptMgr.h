@@ -461,6 +461,9 @@ class GameObjectScript : public ScriptObject, public UpdatableScript<GameObject>
         // Called when a player accepts a quest from the gameobject.
         virtual bool OnQuestAccept(Player* /*player*/, GameObject* /*go*/, Quest const* /*quest*/) { return false; }
 
+        // Called when a player completes a quest with the gameobject.
+        virtual bool OnQuestComplete(Player* /*player*/, GameObject* /*go*/, Quest const* /*quest*/) { return false; }
+
         // Called when a player selects a quest reward.
         virtual bool OnQuestReward(Player* /*player*/, GameObject* /*go*/, Quest const* /*quest*/, uint32 /*opt*/) { return false; }
 
@@ -915,6 +918,7 @@ class ScriptMgr
         bool OnGossipSelect(Player* player, GameObject* go, uint32 sender, uint32 action);
         bool OnGossipSelectCode(Player* player, GameObject* go, uint32 sender, uint32 action, const char* code);
         bool OnQuestAccept(Player* player, GameObject* go, Quest const* quest);
+        bool OnQuestComplete(Player* player, GameObject* go, Quest const* quest);
         bool OnQuestReward(Player* player, GameObject* go, Quest const* quest, uint32 opt);
         uint32 GetDialogStatus(Player* player, GameObject* go);
         void OnGameObjectDestroyed(GameObject* go, Player* player);

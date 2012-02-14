@@ -907,6 +907,17 @@ bool ScriptMgr::OnQuestAccept(Player* player, GameObject* go, Quest const* quest
     return tmpscript->OnQuestAccept(player, go, quest);
 }
 
+bool ScriptMgr::OnQuestComplete(Player* player, GameObject* go, Quest const* quest)
+{
+    ASSERT(player);
+    ASSERT(go);
+    ASSERT(quest);
+
+    GET_SCRIPT_RET(GameObjectScript, creature->GetScriptId(), tmpscript, false);
+    player->PlayerTalkClass->ClearMenus();
+    return tmpscript->OnQuestComplete(player, go, quest);
+}
+
 bool ScriptMgr::OnQuestReward(Player* player, GameObject* go, Quest const* quest, uint32 opt)
 {
     ASSERT(player);
