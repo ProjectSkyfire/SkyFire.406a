@@ -913,7 +913,7 @@ bool ScriptMgr::OnQuestComplete(Player* player, GameObject* go, Quest const* que
     ASSERT(go);
     ASSERT(quest);
 
-    GET_SCRIPT_RET(GameObjectScript, creature->GetScriptId(), tmpscript, false);
+    GET_SCRIPT_RET(GameObjectScript, go->GetScriptId(), tmpscript, false);
     player->PlayerTalkClass->ClearMenus();
     return tmpscript->OnQuestComplete(player, go, quest);
 }
