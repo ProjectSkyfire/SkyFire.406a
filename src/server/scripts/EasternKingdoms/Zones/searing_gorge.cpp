@@ -181,15 +181,15 @@ class npc_glassweb_spider : public CreatureScript
 public:
     npc_glassweb_spider() : CreatureScript("npc_glassweb_spider") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new npc_glassweb_spiderAI (pCreature);
+        return new npc_glassweb_spiderAI (creature);
     }
 
     struct npc_glassweb_spiderAI : public ScriptedAI
     {
  
-        npc_glassweb_spiderAI(Creature *c) : ScriptedAI(c) {}
+        npc_glassweb_spiderAI(Creature *creature) : ScriptedAI(creature) {}
 
         void Reset()
         {
@@ -198,10 +198,10 @@ public:
 
         void JustDied(Unit* killer)
         {
-            if(killer->ToPlayer()->GetQuestStatus(QUEST_LUNKS_ADVENTURE_SPIDER_RIDER) == QUEST_STATUS_INCOMPLETE)
+            if (killer->ToPlayer()->GetQuestStatus(QUEST_LUNKS_ADVENTURE_SPIDER_RIDER) == QUEST_STATUS_INCOMPLETE)
                 return;
 
-            if(killer->ToPlayer()->GetQuestStatus(QUEST_A_PROPER_ANTIVENOM) == QUEST_STATUS_INCOMPLETE)
+            if (killer->ToPlayer()->GetQuestStatus(QUEST_A_PROPER_ANTIVENOM) == QUEST_STATUS_INCOMPLETE)
                 killer->CastSpell(killer->GetPositionX(),killer->GetPositionY(),killer->GetPositionZ(),88152,true);
         }
 
@@ -238,30 +238,30 @@ class npc_lunk_spider_ride : public CreatureScript
 public:
     npc_lunk_spider_ride() : CreatureScript("npc_lunk_spider_ride") { }
 
-    bool OnGossipHello(Player* pPlayer, Creature* pCreature)
+    bool OnGossipHello(Player* player, Creature* creature)
     {
-        if (pCreature->isQuestGiver())
-            pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+        if (creature->isQuestGiver())
+            player->PrepareQuestMenu(creature->GetGUID());
 
-        if (pPlayer->GetQuestStatus(QUEST_A_PROPER_ANTIVENOM) == QUEST_STATUS_INCOMPLETE)
+        if (player->GetQuestStatus(QUEST_A_PROPER_ANTIVENOM) == QUEST_STATUS_INCOMPLETE)
         {
-            pPlayer->AddItem(62809,(urand(1,4)));
-            pCreature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
-            pCreature->RemoveAurasDueToSpell(SPELL_TUMMY_VENOM);
+            player->AddItem(62809,(urand(1,4)));
+            creature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
+            creature->RemoveAurasDueToSpell(SPELL_TUMMY_VENOM);
         }
 
         return true;
     }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new npc_lunk_spider_rideAI (pCreature);
+        return new npc_lunk_spider_rideAI (creature);
     }
 
     struct npc_lunk_spider_rideAI : public ScriptedAI
     {
  
-        npc_lunk_spider_rideAI(Creature *c) : ScriptedAI(c)  { }
+        npc_lunk_spider_rideAI(Creature *creature) : ScriptedAI(creature)  { }
 
         uint32 Step;
         uint32 Timer;
@@ -290,11 +290,11 @@ public:
         {
             if (Creature* Spider = me->FindNearestCreature(NPC_GLASSWEB_SPIDER, 10))
             {
-                if(Spider->HealthBelowPct(50)) 
+                if (Spider->HealthBelowPct(50)) 
                 {
-                    if(Timer < diff)	
+                    if (Timer < diff)	
                     {
-                      switch(Step)
+                      switch (Step)
                       {
                          case 0:
                              me->CastSpell(Spider,SPELL_RIDE_VEHICLE_HARDCODED,true);
@@ -326,13 +326,13 @@ public:
                 }
             }
 
-                if(me->HasAura(SPELL_TUMMY_VENOM))
+                if (me->HasAura(SPELL_TUMMY_VENOM))
                     me->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
                 
 
                 if (Unit *summoner = me->ToTempSummon()->GetSummoner())
                  if (summoner->GetTypeId() == TYPEID_PLAYER)
-                  if(summoner->ToPlayer()->GetQuestStatus(QUEST_LUNKS_ADVENTURE_SPIDER_RIDER) == QUEST_STATUS_INCOMPLETE)
+                  if (summoner->ToPlayer()->GetQuestStatus(QUEST_LUNKS_ADVENTURE_SPIDER_RIDER) == QUEST_STATUS_INCOMPLETE)
                       me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER | UNIT_NPC_FLAG_GOSSIP);
                       else me->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER | UNIT_NPC_FLAG_GOSSIP);
         }
@@ -351,15 +351,15 @@ class npc_dark_iron_steamsmith : public CreatureScript
 public:
     npc_dark_iron_steamsmith() : CreatureScript("npc_dark_iron_steamsmith") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new npc_dark_iron_steamsmithAI (pCreature);
+        return new npc_dark_iron_steamsmithAI (creature);
     }
 
     struct npc_dark_iron_steamsmithAI : public ScriptedAI
     {
  
-        npc_dark_iron_steamsmithAI(Creature *c) : ScriptedAI(c) {}
+        npc_dark_iron_steamsmithAI(Creature *creature) : ScriptedAI(creature) {}
 
         void Reset()
         {
@@ -371,10 +371,10 @@ public:
             if (killer->GetTypeId() == TYPEID_PLAYER)
             {
 
-            if(killer->ToPlayer()->GetQuestStatus(QUEST_LUNKS_ADVENTURE_CRANKY_LITTLE_DWARFS) == QUEST_STATUS_INCOMPLETE)
+            if (killer->ToPlayer()->GetQuestStatus(QUEST_LUNKS_ADVENTURE_CRANKY_LITTLE_DWARFS) == QUEST_STATUS_INCOMPLETE)
                 return;
 
-            if(killer->ToPlayer()->GetQuestStatus(QUEST_RECON_ESSENTIALS) == QUEST_STATUS_INCOMPLETE)
+            if (killer->ToPlayer()->GetQuestStatus(QUEST_RECON_ESSENTIALS) == QUEST_STATUS_INCOMPLETE)
                 killer->CastSpell(killer->GetPositionX(),killer->GetPositionY(),killer->GetPositionZ(),88291,true);
             }
         }
@@ -410,15 +410,15 @@ class npc_lunk_dwarf_ride : public CreatureScript
 public:
     npc_lunk_dwarf_ride() : CreatureScript("npc_lunk_dwarf_ride") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new npc_lunk_dwarf_rideAI (pCreature);
+        return new npc_lunk_dwarf_rideAI (creature);
     }
 
     struct npc_lunk_dwarf_rideAI : public ScriptedAI
     {
  
-        npc_lunk_dwarf_rideAI(Creature *c) : ScriptedAI(c)  { }
+        npc_lunk_dwarf_rideAI(Creature *creature) : ScriptedAI(creature)  { }
 
         uint32 Step;
         uint32 Timer;
@@ -447,11 +447,11 @@ public:
         {
             if (Creature* Dwarf = me->FindNearestCreature(NPC_DARK_IRON_STEAMSMITH, 10))
             {
-                if(Dwarf->HealthBelowPct(40)) 
+                if (Dwarf->HealthBelowPct(40)) 
                 {
-                    if(Timer < diff)	
+                    if (Timer < diff)	
                     {
-                      switch(Step)
+                      switch (Step)
                       {
                          case 0:
                              me->CastSpell(Dwarf,SPELL_RIDE_VEHICLE_HARDCODED,true);
@@ -484,7 +484,7 @@ public:
 
                 if (Unit *summoner = me->ToTempSummon()->GetSummoner())
                  if (summoner->GetTypeId() == TYPEID_PLAYER)
-                  if(summoner->ToPlayer()->GetQuestStatus(QUEST_LUNKS_ADVENTURE_CRANKY_LITTLE_DWARFS) == QUEST_STATUS_INCOMPLETE)
+                  if (summoner->ToPlayer()->GetQuestStatus(QUEST_LUNKS_ADVENTURE_CRANKY_LITTLE_DWARFS) == QUEST_STATUS_INCOMPLETE)
                       me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER | UNIT_NPC_FLAG_GOSSIP);
                       else me->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER | UNIT_NPC_FLAG_GOSSIP);
         }
