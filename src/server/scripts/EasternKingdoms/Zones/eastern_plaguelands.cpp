@@ -18,10 +18,10 @@
  */
 
 /* ScriptData
-SDName: Eastern_Plaguelands
-SD%Complete: 100
-SDComment: Quest support: 5211, 5742. Special vendor Augustus the Touched
-SDCategory: Eastern Plaguelands
+SFName: Eastern_Plaguelands
+SF%Complete: 100
+SFComment: Quest support: 5211, 5742. Special vendor Augustus the Touched
+SFCategory: Eastern Plaguelands
 EndScriptData */
 
 /* ContentData
@@ -33,9 +33,9 @@ EndContentData */
 
 #include "ScriptPCH.h"
 
-//id8530 - cannibal ghoul
-//id8531 - gibbering ghoul
-//id8532 - diseased flayer
+// id8530 - cannibal ghoul
+// id8531 - gibbering ghoul
+// id8532 - diseased flayer
 
 class mobs_ghoul_flayer : public CreatureScript
 {
@@ -72,10 +72,10 @@ class npc_augustus_the_touched : public CreatureScript
 public:
     npc_augustus_the_touched() : CreatureScript("npc_augustus_the_touched") { }
 
-    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*Sender*/, uint32 Action)
+    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*sender*/, uint32 action)
     {
         player->PlayerTalkClass->ClearMenus();
-        if (Action == GOSSIP_ACTION_TRADE)
+        if (action == GOSSIP_ACTION_TRADE)
             player->GetSession()->SendListInventory(creature->GetGUID());
         return true;
     }
@@ -97,12 +97,15 @@ public:
 ## npc_darrowshire_spirit
 ######*/
 
-#define SPELL_SPIRIT_SPAWNIN    17321
+enum Spells
+{
+    SPELL_SPIRIT_SPAWNIN    = 17321
+};
 
 class npc_darrowshire_spirit : public CreatureScript
 {
 public:
-    npc_darrowshire_spirit() : CreatureScript("npc_darrowshire_spirit") { }
+    npc_darrowshire_spirit() : CreatureScript("npc_darrowshire_spirit") {}
 
     bool OnGossipHello(Player* player, Creature* creature)
     {
@@ -143,26 +146,26 @@ public:
 class npc_tirion_fordring : public CreatureScript
 {
 public:
-    npc_tirion_fordring() : CreatureScript("npc_tirion_fordring") { }
+    npc_tirion_fordring() : CreatureScript("npc_tirion_fordring") {}
 
-    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*Sender*/, uint32 Action)
+    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*sender*/, uint32 action)
     {
         player->PlayerTalkClass->ClearMenus();
-        switch (Action)
+        switch (action)
         {
-            case GOSSIP_ACTION_INFO_DEF+1:
+            case GOSSIP_ACTION_INFO_DEF + 1:
                 player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_SELECT1, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
                 player->SEND_GOSSIP_MENU(4493, creature->GetGUID());
                 break;
-            case GOSSIP_ACTION_INFO_DEF+2:
+            case GOSSIP_ACTION_INFO_DEF + 2:
                 player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_SELECT2, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
                 player->SEND_GOSSIP_MENU(4494, creature->GetGUID());
                 break;
-            case GOSSIP_ACTION_INFO_DEF+3:
+            case GOSSIP_ACTION_INFO_DEF + 3:
                 player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_SELECT3, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
                 player->SEND_GOSSIP_MENU(4495, creature->GetGUID());
                 break;
-            case GOSSIP_ACTION_INFO_DEF+4:
+            case GOSSIP_ACTION_INFO_DEF + 4:
                 player->CLOSE_GOSSIP_MENU();
                 player->AreaExploredOrEventHappens(5742);
                 break;
@@ -176,7 +179,7 @@ public:
             player->PrepareQuestMenu(creature->GetGUID());
 
         if (player->GetQuestStatus(5742) == QUEST_STATUS_INCOMPLETE && player->getStandState() == UNIT_STAND_STATE_SIT)
-            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_HELLO, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
+            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_HELLO, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
         player->SEND_GOSSIP_MENU(player->GetGossipTextId(creature), creature->GetGUID());
 

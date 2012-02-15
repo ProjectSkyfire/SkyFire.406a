@@ -18,10 +18,10 @@
  */
 
 /* ScriptData
-SDName: Isle_of_Queldanas
-SD%Complete: 100
-SDComment: Quest support: 11524, 11525, 11532, 11533, 11542, 11543, 11541
-SDCategory: Isle Of Quel'Danas
+SFName: Isle_of_Queldanas
+SF%Complete: 100
+SFComment: Quest support: 11524, 11525, 11532, 11533, 11542, 11543, 11541
+SFCategory: Isle Of Quel'Danas
 EndScriptData */
 
 /* ContentData
@@ -35,15 +35,33 @@ EndContentData */
 ## npc_converted_sentry
 ######*/
 
-#define SAY_CONVERTED_1         -1000188
-#define SAY_CONVERTED_2         -1000189
+enum NPCs
+{
+    DARKSPINE_MYRMIDON     = 25060
+};
 
-#define SPELL_CONVERT_CREDIT    45009
+enum Says
+{
+    SAY_CONVERTED_1        = -1000188,
+    SAY_CONVERTED_2        = -1000189
+};
+
+enum Spells
+{
+    SPELL_CONVERT_CREDIT   = 45009,
+    ENRAGE                 = 45111,
+    ORB_OF_MURLOC_CONTROL  = 45109
+};
+
+enum Quests
+{
+   DISRUPT_THE_GREENGILL_COAST  = 11541
+};
 
 class npc_converted_sentry : public CreatureScript
 {
 public:
-    npc_converted_sentry() : CreatureScript("npc_converted_sentry") { }
+    npc_converted_sentry() : CreatureScript("npc_converted_sentry") {}
 
     CreatureAI* GetAI(Creature* creature) const
     {
@@ -82,7 +100,8 @@ public:
                     if (me->isPet())
                         me->ToPet()->SetDuration(7500);
                     Credit = true;
-                } else Timer -= diff;
+                }
+                else Timer -= diff;
             }
         }
     };
@@ -92,15 +111,10 @@ public:
 ## npc_greengill_slave
 ######*/
 
-#define ENRAGE  45111
-#define ORB     45109
-#define QUESTG  11541
-#define DM      25060
-
 class npc_greengill_slave : public CreatureScript
 {
 public:
-    npc_greengill_slave() : CreatureScript("npc_greengill_slave") { }
+    npc_greengill_slave() : CreatureScript("npc_greengill_slave") {}
 
     CreatureAI* GetAI(Creature* creature) const
     {
@@ -117,7 +131,7 @@ public:
 
         void Reset()
         {
-        PlayerGUID = 0;
+            PlayerGUID = 0;
         }
 
         void SpellHit(Unit* caster, const SpellInfo* spell)
@@ -125,17 +139,17 @@ public:
             if (!caster)
                 return;
 
-            if (caster->GetTypeId() == TYPEID_PLAYER && spell->Id == ORB && !me->HasAura(ENRAGE))
+            if (caster->GetTypeId() == TYPEID_PLAYER && spell->Id == ORB_OF_MURLOC_CONTROL && !me->HasAura(ENRAGE))
             {
                 PlayerGUID = caster->GetGUID();
                 if (PlayerGUID)
                 {
                     Unit* player = Unit::GetUnit((*me), PlayerGUID);
-                    if (player && CAST_PLR(player)->GetQuestStatus(QUESTG) == QUEST_STATUS_INCOMPLETE)
+                    if (player && CAST_PLR(player)->GetQuestStatus(DISRUPT_THE_GREENGILL_COAST) == QUEST_STATUS_INCOMPLETE)
                         DoCast(player, 45110, true);
                 }
                 DoCast(me, ENRAGE);
-                Unit* Myrmidon = me->FindNearestCreature(DM, 70);
+                Unit* Myrmidon = me->FindNearestCreature(DARKSPINE_MYRMIDON, 70);
                 if (Myrmidon)
                 {
                     me->AddThreat(Myrmidon, 100000.0f);

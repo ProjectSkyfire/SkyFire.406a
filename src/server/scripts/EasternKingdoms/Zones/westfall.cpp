@@ -141,22 +141,22 @@ class npc_thug: public CreatureScript
                                 Thug1->MonsterSay("Did you... did you meet her?", 0, 0);
                                 SummonTimer = 3500;
                                 Phase++;
+                                break;
                             }
-                            break;
                             case 1:
                             {
                                 Thug2->MonsterSay("Yep. She's for real?", 0, 0);
                                 SummonTimer = 4000;
                                 Phase++;
+                                break;
                             }
-                            break;
                             case 2:
                             {
                                 Thug2->MonsterSay("She wanted me to tell you that she appreciates the job that we did for her on the Furlbrows. Gave me a pile o'gold to split with you all.", 0, 0);
                                 SummonTimer = 7000;
                                 Phase++;
+                                break;
                             }
-                            break;
                             case 3:
                             {
                                 Thug3->MonsterSay(" See her face. It is really...", 0, 0);
@@ -172,29 +172,29 @@ class npc_thug: public CreatureScript
                                 Thug4->SetFacingToObject(player);
                                 SummonTimer = 1000;
                                 Phase++;
+                                break;
                             }
-                            break;
                             case 5:
                             {
-                            Thug1->MonsterSay("Whoa, what do we have here? Looks like we have ourselves an eavesdropper, boys.", 0, 0);
-                            SummonTimer = 4500;
-                            Phase++;
+                                Thug1->MonsterSay("Whoa, what do we have here? Looks like we have ourselves an eavesdropper, boys.", 0, 0);
+                                SummonTimer = 4500;
+                                Phase++;
+                                break;
                             }
-                            break;
                             case 6:
                             {
-                            Thug1->MonsterSay("Only one thing to do with a louisy, good-for-nothin eavesdropper.", 0, 0);
-                            SummonTimer = 4500;
-                            Phase++;
+                                Thug1->MonsterSay("Only one thing to do with a louisy, good-for-nothin eavesdropper.", 0, 0);
+                                SummonTimer = 4500;
+                                Phase++;
+                                break;
                             }
-                            break;
                             case 7:
                             {
-                            Thug1->MonsterSay("DIE!!!", 0, 0);
-                            SummonTimer = 2000;
-                            Phase++;
+                                Thug1->MonsterSay("DIE!!!", 0, 0);
+                                SummonTimer = 2000;
+                                Phase++;
+                                break;
                             }
-                            break;
                             case 8:
                             {
                                 Thug1->SetReactState(REACT_AGGRESSIVE);
@@ -211,8 +211,8 @@ class npc_thug: public CreatureScript
                                 Thug4->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PVP_ATTACKABLE);
                                 SummonTimer = 1000;
                                 Phase++;
+                                break;
                             }
-                            break;
                             case 9:
                             {
                                 Thug1->CombatStart(player, true);
@@ -221,16 +221,16 @@ class npc_thug: public CreatureScript
                                 Thug4->CombatStart(player, true);
                                 SummonTimer = 5000;
                                 Phase++;
+                                break;
                             }
-                            break;
                             case 10:
                             {
                                 if (Player* player = me->GetPlayer(*me, PlayerGUID))
                                     player->KilledMonsterCredit(42417, PlayerGUID);
                                     SummonTimer = 2500;
                                     Phase++;
+                                    break;
                             }
-                            break;
                             case 11:
                             {
                                 player->CastSpell(player, 79346, true);
@@ -244,8 +244,8 @@ class npc_thug: public CreatureScript
                                 }
                                 SummonTimer = 15000;
                                 Phase++;
+                                break;
                             }
-                            break;
                             case 12:
                                 Reset();
                                 break;
@@ -364,23 +364,23 @@ class npc_horatio : public CreatureScript
                                 Investigator01->MonsterSay("It's a bloodbath, lieutenant. They've been murdered.", 0, 0);
                                 TextTimer = 6000;
                                 Phase++;
+                                break;
                             }
-                            break;
                             case 1:
                             {
                                 Investigator01->MonsterSay("Given the body temperature. I'd say they've been dead no more than 6 hours.",0, 0);
                                 Investigator01->SetStandState(UNIT_STAND_STATE_KNEEL);
                                 TextTimer = 6000;
                                 Phase++;
+                                break;
                             }
-                            break;
                             case 2:
                             {
                                 Investigator02->MonsterSay("Damn shame what they did to Old Blanchy...",0, 0);
                                 TextTimer = 6000;
                                 Phase++;
+                                break;
                             }
-                            break;
                             case 3:
                             {
                                 me->MonsterSay("No kidding, rookie.",0, 0);
@@ -390,22 +390,22 @@ class npc_horatio : public CreatureScript
                                 me->SetStandState(UNIT_STAND_STATE_KNEEL);
                                 TextTimer = 6000;
                                 Phase++;
+                                break;
                             }
-                            break;
                             case 4:
                             {
                                 me->MonsterSay("Looks like they really put the cart.",0, 0);
                                 TextTimer = 5000;
                                 Phase++;
+                                break;
                             }
-                            break;
                             case 5:
                             {
                                 me->MonsterSay("...before the horse.",0, 0);
                                 TextTimer = 4000;
                                 Phase++;
+                                break;
                             }
-                            break;
                             case 6:
                             {
                                 me->SetStandState(UNIT_STAND_STATE_STAND);
@@ -415,15 +415,15 @@ class npc_horatio : public CreatureScript
                                 me->RemoveUnitMovementFlag(MOVEMENTFLAG_WALKING);
                                 TextTimer = 8000;
                                 Phase++;
+                                break;
                             }
-                            break;
                             case 7:
                             {
                                 me->SetFacingToObject(player);
                                 TextTimer = 60000;
                                 Phase++;
+                                break;
                             }
-                            break;
                             case 8:
                                 Reset();
                                 break;

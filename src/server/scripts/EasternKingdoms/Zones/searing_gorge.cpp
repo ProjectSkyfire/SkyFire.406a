@@ -50,10 +50,10 @@ class npc_kalaran_windblade : public CreatureScript
 public:
     npc_kalaran_windblade() : CreatureScript("npc_kalaran_windblade") { }
 
-    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*Sender*/, uint32 Action)
+    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*sender*/, uint32 action)
     {
         player->PlayerTalkClass->ClearMenus();
-        switch (Action)
+        switch (action)
         {
             case GOSSIP_ACTION_INFO_DEF:
                 player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_SELECT_KW1, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
@@ -96,10 +96,10 @@ class npc_lothos_riftwaker : public CreatureScript
 public:
     npc_lothos_riftwaker() : CreatureScript("npc_lothos_riftwaker") { }
 
-    bool OnGossipSelect(Player* player, Creature* /*creature*/, uint32 /*Sender*/, uint32 Action)
+    bool OnGossipSelect(Player* player, Creature* /*creature*/, uint32 /*sender*/, uint32 action)
     {
         player->PlayerTalkClass->ClearMenus();
-        if (Action == GOSSIP_ACTION_INFO_DEF + 1)
+        if (action == GOSSIP_ACTION_INFO_DEF + 1)
         {
             player->CLOSE_GOSSIP_MENU();
             player->TeleportTo(409, 1096, -467, -104.6f, 3.64f);
@@ -135,10 +135,10 @@ class npc_zamael_lunthistle : public CreatureScript
 public:
     npc_zamael_lunthistle() : CreatureScript("npc_zamael_lunthistle") { }
 
-    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*Sender*/, uint32 Action)
+    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*sender*/, uint32 action)
     {
         player->PlayerTalkClass->ClearMenus();
-        switch (Action)
+        switch (action)
         {
             case GOSSIP_ACTION_INFO_DEF:
                 player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_SELECT_ZL1, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
@@ -172,8 +172,8 @@ public:
 
 enum eGlasswebSpider
 {
-    QUEST_A_PROPER_ANTIVENOM           = 27958,
-    QUEST_LUNKS_ADVENTURE_SPIDER_RIDER = 27959
+    QUEST_A_PROPER_ANTIVENOM             = 27958,
+    QUEST_LUNKS_ADVENTURE_SPIDER_RIDER   = 27959
 };
 
 class npc_glassweb_spider : public CreatureScript
@@ -201,7 +201,7 @@ public:
                 return;
 
             if (killer->ToPlayer()->GetQuestStatus(QUEST_A_PROPER_ANTIVENOM) == QUEST_STATUS_INCOMPLETE)
-                killer->CastSpell(killer->GetPositionX(),killer->GetPositionY(),killer->GetPositionZ(),88152, true);
+                killer->CastSpell(killer->GetPositionX(), killer->GetPositionY(),killer->GetPositionZ(), 88152, true);
         }
 
         void PassengerBoarded(Unit* who, int8 /*seatId*/, bool apply)
@@ -225,15 +225,15 @@ public:
 
 enum eLunkSpiderRide
 {
-    NPC_GLASSWEB_SPIDER          = 5856,
-    SPELL_TUMMY_VENOM            = 88154,
-    SPELL_RIDE_VEHICLE_HARDCODED = 46598
+    NPC_GLASSWEB_SPIDER             = 5856,
+    SPELL_TUMMY_VENOM               = 88154,
+    SPELL_RIDE_VEHICLE_HARDCODED    = 46598
 };
 
 class npc_lunk_spider_ride : public CreatureScript
 {
 public:
-    npc_lunk_spider_ride() : CreatureScript("npc_lunk_spider_ride") { }
+    npc_lunk_spider_ride() : CreatureScript("npc_lunk_spider_ride") {}
 
     bool OnGossipHello(Player* player, Creature* creature)
     {
@@ -257,30 +257,30 @@ public:
 
     struct npc_lunk_spider_rideAI : public ScriptedAI
     {
-        npc_lunk_spider_rideAI(Creature *creature) : ScriptedAI(creature)  { }
+        npc_lunk_spider_rideAI(Creature *creature) : ScriptedAI(creature)  {}
 
         uint32 Step;
         uint32 Timer;
 
         void Reset()
         {
-            Step =0;
-            Timer = 2000;
+            Step   = 0;
+            Timer  = 2000;
             if (Unit *summoner = me->ToTempSummon()->GetSummoner())
-              if (summoner->GetTypeId() == TYPEID_PLAYER)
-                  me->GetMotionMaster()->MoveFollow(summoner, 0.0f, 0.0f);
+                if (summoner->GetTypeId() == TYPEID_PLAYER)
+                    me->GetMotionMaster()->MoveFollow(summoner, 0.0f, 0.0f);
             me->SetReactState(REACT_PASSIVE);
             me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
         }
 
-       bool OnQuestReward(Player* player, Creature* creature, Quest const* quest, uint32 opt)
-       {
-         if (quest->GetQuestId() == QUEST_LUNKS_ADVENTURE_SPIDER_RIDER)
-          {
-            me->DisappearAndDie();
-          }
-          return true;
-       }
+        bool OnQuestReward(Player* player, Creature* creature, Quest const* quest, uint32 opt)
+        {
+            if (quest->GetQuestId() == QUEST_LUNKS_ADVENTURE_SPIDER_RIDER)
+            {
+                me->DisappearAndDie();
+            }
+            return true;
+        }
 
         void UpdateAI(const uint32 diff)
         {
@@ -290,46 +290,48 @@ public:
                 {
                     if (Timer < diff)
                     {
-                      switch (Step)
-                      {
-                         case 0:
-                             me->CastSpell(Spider, SPELL_RIDE_VEHICLE_HARDCODED, true);
-                             Timer = 2000;
-                             ++Step;
-                             break;
-                         case 1:
-                             sCreatureTextMgr->SendChat(me, 0, 0);
-                             Timer = 2000;
-                             ++Step;
-                             break;
-                         case 2:
-                             Timer = 3000;
-                             ++Step;
-                             break;
-                         case 3:
-                             me->ExitVehicle(0);
-                             Spider->DisappearAndDie();
-                             me->CastSpell(me, SPELL_TUMMY_VENOM, true);
-                             sCreatureTextMgr->SendChat(me, 1, 0);
-                             if (Unit *summoner = me->ToTempSummon()->GetSummoner())
-                                 if (summoner->GetTypeId() == TYPEID_PLAYER)
-                                      me->GetMotionMaster()->MoveFollow(summoner, 0.0f, 0.0f);
-                             Timer = 2000;
-                             Step = 0;
-                             break;
-                      }
-                    } else Timer -= diff;
+                        switch (Step)
+                        {
+                            case 0:
+                                me->CastSpell(Spider, SPELL_RIDE_VEHICLE_HARDCODED, true);
+                                Timer = 2000;
+                                ++Step;
+                                break;
+                            case 1:
+                                sCreatureTextMgr->SendChat(me, 0, 0);
+                                Timer = 2000;
+                                ++Step;
+                                break;
+                            case 2:
+                                Timer = 3000;
+                                ++Step;
+                                break;
+                            case 3:
+                                me->ExitVehicle(0);
+                                Spider->DisappearAndDie();
+                                me->CastSpell(me, SPELL_TUMMY_VENOM, true);
+                                sCreatureTextMgr->SendChat(me, 1, 0);
+                                if (Unit *summoner = me->ToTempSummon()->GetSummoner())
+                                    if (summoner->GetTypeId() == TYPEID_PLAYER)
+                                        me->GetMotionMaster()->MoveFollow(summoner, 0.0f, 0.0f);
+                                Timer = 2000;
+                                Step = 0;
+                                break;
+                        }
+                    }
+                    else Timer -= diff;
                 }
             }
 
-                if (me->HasAura(SPELL_TUMMY_VENOM))
-                    me->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
+            if (me->HasAura(SPELL_TUMMY_VENOM))
+                me->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
 
-                if (Unit *summoner = me->ToTempSummon()->GetSummoner())
-                 if (summoner->GetTypeId() == TYPEID_PLAYER)
-                  if (summoner->ToPlayer()->GetQuestStatus(QUEST_LUNKS_ADVENTURE_SPIDER_RIDER) == QUEST_STATUS_INCOMPLETE)
-                      me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER | UNIT_NPC_FLAG_GOSSIP);
-                      else me->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER | UNIT_NPC_FLAG_GOSSIP);
+            if (Unit *summoner = me->ToTempSummon()->GetSummoner())
+                if (summoner->GetTypeId() == TYPEID_PLAYER)
+                    if (summoner->ToPlayer()->GetQuestStatus(QUEST_LUNKS_ADVENTURE_SPIDER_RIDER) == QUEST_STATUS_INCOMPLETE)
+                        me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER | UNIT_NPC_FLAG_GOSSIP);
+                    else
+                        me->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER | UNIT_NPC_FLAG_GOSSIP);
         }
     };
 };
@@ -363,11 +365,11 @@ public:
         {
             if (killer->GetTypeId() == TYPEID_PLAYER)
             {
-            if (killer->ToPlayer()->GetQuestStatus(QUEST_LUNKS_ADVENTURE_CRANKY_LITTLE_DWARFS) == QUEST_STATUS_INCOMPLETE)
-                return;
+                if (killer->ToPlayer()->GetQuestStatus(QUEST_LUNKS_ADVENTURE_CRANKY_LITTLE_DWARFS) == QUEST_STATUS_INCOMPLETE)
+                    return;
 
-            if (killer->ToPlayer()->GetQuestStatus(QUEST_RECON_ESSENTIALS) == QUEST_STATUS_INCOMPLETE)
-                killer->CastSpell(killer->GetPositionX(),killer->GetPositionY(),killer->GetPositionZ(),88291, true);
+                if (killer->ToPlayer()->GetQuestStatus(QUEST_RECON_ESSENTIALS) == QUEST_STATUS_INCOMPLETE)
+                    killer->CastSpell(killer->GetPositionX(), killer->GetPositionY(), killer->GetPositionZ(), 88291, true);
             }
         }
 
@@ -385,7 +387,7 @@ public:
 
         void UpdateAI(const uint32 diff)
         {
-          DoMeleeAttackIfReady();
+            DoMeleeAttackIfReady();
         }
     };
 };
@@ -399,7 +401,7 @@ enum eLunkDwavrfRide
 class npc_lunk_dwarf_ride : public CreatureScript
 {
 public:
-    npc_lunk_dwarf_ride() : CreatureScript("npc_lunk_dwarf_ride") { }
+    npc_lunk_dwarf_ride() : CreatureScript("npc_lunk_dwarf_ride") {}
 
     CreatureAI* GetAI(Creature* creature) const
     {
@@ -408,30 +410,30 @@ public:
 
     struct npc_lunk_dwarf_rideAI : public ScriptedAI
     {
-        npc_lunk_dwarf_rideAI(Creature *creature) : ScriptedAI(creature)  { }
+        npc_lunk_dwarf_rideAI(Creature *creature) : ScriptedAI(creature)  {}
 
         uint32 Step;
         uint32 Timer;
 
         void Reset()
         {
-            Step =0;
-            Timer = 2000;
-            if (Unit *summoner = me->ToTempSummon()->GetSummoner())
-              if (summoner->GetTypeId() == TYPEID_PLAYER)
-                  me->GetMotionMaster()->MoveFollow(summoner, 0.0f, 0.0f);
+            Step    = 0;
+            Timer   = 2000;
+            if (Unit* summoner = me->ToTempSummon()->GetSummoner())
+                if (summoner->GetTypeId() == TYPEID_PLAYER)
+                    me->GetMotionMaster()->MoveFollow(summoner, 0.0f, 0.0f);
             me->SetReactState(REACT_PASSIVE);
             me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
         }
 
-       bool OnQuestReward(Player* player, Creature* creature, Quest const* quest, uint32 opt)
-       {
-         if (quest->GetQuestId() == QUEST_LUNKS_ADVENTURE_CRANKY_LITTLE_DWARFS)
-          {
-            me->DisappearAndDie();
-          }
-          return true;
-       }
+        bool OnQuestReward(Player* player, Creature* creature, Quest const* quest, uint32 opt)
+        {
+            if (quest->GetQuestId() == QUEST_LUNKS_ADVENTURE_CRANKY_LITTLE_DWARFS)
+            {
+                me->DisappearAndDie();
+            }
+            return true;
+        }
 
         void UpdateAI(const uint32 diff)
         {
@@ -441,42 +443,44 @@ public:
                 {
                     if (Timer < diff)
                     {
-                      switch (Step)
-                      {
-                         case 0:
-                             me->CastSpell(Dwarf, SPELL_RIDE_VEHICLE_HARDCODED, true);
-                             Timer = 1000;
-                             ++Step;
-                             break;
-                         case 1:
-                             Timer = 1000;
-                             ++Step;
-                             break;
-                         case 2:
-                             Timer = 3000;
-                             ++Step;
-                             break;
-                         case 3:
-                             me->ExitVehicle(0);
-                             me->Kill(Dwarf);
-                             me->CastSpell(me, SPELL_HOLDING_LOOT, true);
-                             sCreatureTextMgr->SendChat(me, 0, 0);
-                             if (Unit *summoner = me->ToTempSummon()->GetSummoner())
-                                 if (summoner->GetTypeId() == TYPEID_PLAYER)
-                                      me->GetMotionMaster()->MoveFollow(summoner, 0.0f, 0.0f);
-                             Timer = 2000;
-                             Step = 0;
-                             break;
-                      }
-                    } else Timer -= diff;
+                        switch (Step)
+                        {
+                            case 0:
+                                me->CastSpell(Dwarf, SPELL_RIDE_VEHICLE_HARDCODED, true);
+                                Timer = 1000;
+                                ++Step;
+                                break;
+                            case 1:
+                                Timer = 1000;
+                                ++Step;
+                                break;
+                            case 2:
+                                Timer = 3000;
+                                ++Step;
+                                break;
+                            case 3:
+                                me->ExitVehicle(0);
+                                me->Kill(Dwarf);
+                                me->CastSpell(me, SPELL_HOLDING_LOOT, true);
+                                sCreatureTextMgr->SendChat(me, 0, 0);
+                                if (Unit* summoner = me->ToTempSummon()->GetSummoner())
+                                    if (summoner->GetTypeId() == TYPEID_PLAYER)
+                                         me->GetMotionMaster()->MoveFollow(summoner, 0.0f, 0.0f);
+                                Timer = 2000;
+                                Step = 0;
+                                break;
+                        }
+                    }
+                    else Timer -= diff;
                 }
             }
 
                 if (Unit *summoner = me->ToTempSummon()->GetSummoner())
-                 if (summoner->GetTypeId() == TYPEID_PLAYER)
-                  if (summoner->ToPlayer()->GetQuestStatus(QUEST_LUNKS_ADVENTURE_CRANKY_LITTLE_DWARFS) == QUEST_STATUS_INCOMPLETE)
-                      me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER | UNIT_NPC_FLAG_GOSSIP);
-                      else me->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER | UNIT_NPC_FLAG_GOSSIP);
+                    if (summoner->GetTypeId() == TYPEID_PLAYER)
+                        if (summoner->ToPlayer()->GetQuestStatus(QUEST_LUNKS_ADVENTURE_CRANKY_LITTLE_DWARFS) == QUEST_STATUS_INCOMPLETE)
+                        me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER | UNIT_NPC_FLAG_GOSSIP);
+                    else
+                        me->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER | UNIT_NPC_FLAG_GOSSIP);
         }
     };
 };

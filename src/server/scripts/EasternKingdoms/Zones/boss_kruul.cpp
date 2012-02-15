@@ -18,26 +18,29 @@
  */
 
 /* ScriptData
-SDName: Boss_Kruul
-SD%Complete: 100
-SDComment: Highlord Kruul are presumably no longer in-game on regular bases, however future events could bring him back.
-SDCategory: Bosses
+SFName: Boss_Kruul
+SF%Complete: 100
+SFComment: Highlord Kruul are presumably no longer in-game on regular bases, however future events could bring him back.
+SFCategory: Bosses
 EndScriptData */
 
 #include "ScriptPCH.h"
 
-#define SPELL_SHADOWVOLLEY          21341
-#define SPELL_CLEAVE                20677
-#define SPELL_THUNDERCLAP           23931
-#define SPELL_TWISTEDREFLECTION     21063
-#define SPELL_VOIDBOLT              21066
-#define SPELL_RAGE                  21340
-#define SPELL_CAPTURESOUL           21054
+enum Spells
+{
+    SPELL_SHADOWVOLLEY           = 21341,
+    SPELL_CLEAVE                 = 20677,
+    SPELL_THUNDERCLAP            = 23931,
+    SPELL_TWISTEDREFLECTION      = 21063,
+    SPELL_VOIDBOLT               = 21066,
+    SPELL_RAGE                   = 21340,
+    SPELL_CAPTURESOUL            = 21054
+};
 
 class boss_kruul : public CreatureScript
 {
 public:
-    boss_kruul() : CreatureScript("boss_kruul") { }
+    boss_kruul() : CreatureScript("boss_kruul") {}
 
     CreatureAI* GetAI(Creature* creature) const
     {
@@ -94,7 +97,8 @@ public:
                     DoCast(me->getVictim(), SPELL_SHADOWVOLLEY);
 
                 ShadowVolley_Timer = 5000;
-            } else ShadowVolley_Timer -= diff;
+            }
+            else ShadowVolley_Timer -= diff;
 
             //Cleave_Timer
             if (Cleave_Timer <= diff)
@@ -103,7 +107,8 @@ public:
                     DoCast(me->getVictim(), SPELL_CLEAVE);
 
                 Cleave_Timer = 10000;
-            } else Cleave_Timer -= diff;
+            }
+            else Cleave_Timer -= diff;
 
             //ThunderClap_Timer
             if (ThunderClap_Timer <= diff)
@@ -112,14 +117,16 @@ public:
                     DoCast(me->getVictim(), SPELL_THUNDERCLAP);
 
                 ThunderClap_Timer = 12000;
-            } else ThunderClap_Timer -= diff;
+            }
+            else ThunderClap_Timer -= diff;
 
             //TwistedReflection_Timer
             if (TwistedReflection_Timer <= diff)
             {
                 DoCast(me->getVictim(), SPELL_TWISTEDREFLECTION);
                 TwistedReflection_Timer = 30000;
-            } else TwistedReflection_Timer -= diff;
+            }
+            else TwistedReflection_Timer -= diff;
 
             //VoidBolt_Timer
             if (VoidBolt_Timer <= diff)
@@ -128,14 +135,16 @@ public:
                     DoCast(me->getVictim(), SPELL_VOIDBOLT);
 
                 VoidBolt_Timer = 18000;
-            } else VoidBolt_Timer -= diff;
+            }
+            else VoidBolt_Timer -= diff;
 
             //Rage_Timer
             if (Rage_Timer <= diff)
             {
                 DoCast(me, SPELL_RAGE);
                 Rage_Timer = 70000;
-            } else Rage_Timer -= diff;
+            }
+            else Rage_Timer -= diff;
 
             //Hound_Timer
             if (Hound_Timer <= diff)
@@ -145,7 +154,8 @@ public:
                 SummonHounds(me->getVictim());
 
                 Hound_Timer = 45000;
-            } else Hound_Timer -= diff;
+            }
+            else Hound_Timer -= diff;
 
             DoMeleeAttackIfReady();
         }

@@ -18,10 +18,10 @@
  */
 
 /* ScriptData
-SDName: Stormwind_City
-SD%Complete: 100
-SDComment: Quest support: 1640, 1447, 4185, 11223, 434.
-SDCategory: Stormwind City
+SFName: Stormwind_City
+SF%Complete: 100
+SFComment: Quest support: 1640, 1447, 4185, 11223, 434.
+SFCategory: Stormwind City
 EndScriptData */
 
 /* ContentData
@@ -49,10 +49,10 @@ class npc_archmage_malin : public CreatureScript
 public:
     npc_archmage_malin() : CreatureScript("npc_archmage_malin") { }
 
-    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*Sender*/, uint32 Action)
+    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*sender*/, uint32 action)
     {
         player->PlayerTalkClass->ClearMenus();
-        if (Action == GOSSIP_ACTION_INFO_DEF)
+        if (action == GOSSIP_ACTION_INFO_DEF)
         {
             player->CLOSE_GOSSIP_MENU();
             creature->CastSpell(player, 42711, true);
@@ -231,10 +231,10 @@ class npc_lady_katrana_prestor : public CreatureScript
 public:
     npc_lady_katrana_prestor() : CreatureScript("npc_lady_katrana_prestor") { }
 
-    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*Sender*/, uint32 Action)
+    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*sender*/, uint32 action)
     {
         player->PlayerTalkClass->ClearMenus();
-        switch (Action)
+        switch (action)
         {
             case GOSSIP_ACTION_INFO_DEF:
                 player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_KAT_2, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
@@ -421,8 +421,8 @@ public:
                             Phase = 7;
                             break;
                         case 7:
-                            if (Creature* pTyrion = me->FindNearestCreature(NPC_TYRION, 20.0f, true))
-                                DoScriptText(SAY_TYRION_2, pTyrion);
+                            if (Creature* tyrion = me->FindNearestCreature(NPC_TYRION, 20.0f, true))
+                                DoScriptText(SAY_TYRION_2, tyrion);
                             if (Creature* marzon = Unit::GetCreature(*me, MarzonGUID))
                                 marzon->setFaction(14);
                             me->setFaction(14);
@@ -430,7 +430,8 @@ public:
                             Phase = 0;
                             break;
                     }
-                } else Timer -= Diff;
+                }
+                else Timer -= Diff;
             }
             npc_escortAI::UpdateAI(Diff);
 
@@ -608,8 +609,8 @@ public:
                             Phase = 2;
                             break;
                         case 2:
-                            if (Creature* pTyrion = me->FindNearestCreature(NPC_TYRION, 10.0f))
-                                DoScriptText(SAY_TYRION_1, pTyrion);
+                            if (Creature* tyrion = me->FindNearestCreature(NPC_TYRION, 10.0f))
+                                DoScriptText(SAY_TYRION_1, tyrion);
                             Timer = 3000;
                             Phase = 3;
                             break;
@@ -640,8 +641,8 @@ public:
                             Phase = 0;
                             break;
                         case 8:
-                            if (Creature* pLescovar = me->FindNearestCreature(NPC_LORD_GREGOR_LESCOVAR, 10.0f))
-                                DoScriptText(SAY_LESCOVAR_1, pLescovar);
+                            if (Creature* lescovar = me->FindNearestCreature(NPC_LORD_GREGOR_LESCOVAR, 10.0f))
+                                DoScriptText(SAY_LESCOVAR_1, lescovar);
                             Timer = 3000;
                             Phase = 9;
                             break;
@@ -651,12 +652,12 @@ public:
                             Phase = 10;
                             break;
                         case 10:
-                            if (Creature* pLescovar = me->FindNearestCreature(NPC_LORD_GREGOR_LESCOVAR, 10.0f))
+                            if (Creature* lescovar = me->FindNearestCreature(NPC_LORD_GREGOR_LESCOVAR, 10.0f))
                             {
                                 if (Player* player = GetPlayerForEscort())
                                 {
-                                    CAST_AI(npc_lord_gregor_lescovar::npc_lord_gregor_lescovarAI, pLescovar->AI())->Start(false, false, player->GetGUID());
-                                    CAST_AI(npc_lord_gregor_lescovar::npc_lord_gregor_lescovarAI, pLescovar->AI())->SetMaxPlayerDistance(200.0f);
+                                    CAST_AI(npc_lord_gregor_lescovar::npc_lord_gregor_lescovarAI, lescovar->AI())->Start(false, false, player->GetGUID());
+                                    CAST_AI(npc_lord_gregor_lescovar::npc_lord_gregor_lescovarAI, lescovar->AI())->SetMaxPlayerDistance(200.0f);
                                 }
                             }
                             me->DisappearAndDie();
@@ -664,7 +665,8 @@ public:
                             Phase = 0;
                             break;
                     }
-                } else Timer -= Diff;
+                }
+                else Timer -= Diff;
             }
             npc_escortAI::UpdateAI(Diff);
 

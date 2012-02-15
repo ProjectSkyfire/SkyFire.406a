@@ -18,10 +18,10 @@
  */
 
 /* ScriptData
-SDName: Tirisfal_Glades
-SD%Complete: 100
-SDComment: Quest support: 590, 1819
-SDCategory: Tirisfal Glades
+SFName: Tirisfal_Glades
+SF%Complete: 100
+SFComment: Quest support: 590, 1819
+SFCategory: Tirisfal Glades
 EndScriptData */
 
 /* ContentData
@@ -39,7 +39,7 @@ EndContentData */
 enum eCalvin
 {
     SAY_COMPLETE        = -1000431,
-    SPELL_DRINK         = 2639,                           // possibly not correct spell (but iconId is correct)
+    SPELL_DRINK         = 2639,  // possibly not correct spell (but iconId is correct)
     QUEST_590           = 590,
     FACTION_HOSTILE     = 168
 };
@@ -47,7 +47,7 @@ enum eCalvin
 class npc_calvin_montague : public CreatureScript
 {
 public:
-    npc_calvin_montague() : CreatureScript("npc_calvin_montague") { }
+    npc_calvin_montague() : CreatureScript("npc_calvin_montague") {}
 
     bool OnQuestAccept(Player* player, Creature* creature, Quest const* quest)
     {
@@ -67,7 +67,7 @@ public:
 
     struct npc_calvin_montagueAI : public ScriptedAI
     {
-        npc_calvin_montagueAI(Creature* creature) : ScriptedAI(creature) { }
+        npc_calvin_montagueAI(Creature* creature) : ScriptedAI(creature) {}
 
         uint32 Phase;
         uint32 PhaseTimer;
