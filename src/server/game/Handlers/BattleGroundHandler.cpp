@@ -420,7 +420,7 @@ void WorldSession::HandleBattleFieldPortOpcode(WorldPacket &recv_data)
     WorldPacket data;
     switch (action)
     {
-        case 1:                                         // port to battleground
+        case 128:                                         // port to battleground
             if (!_player->IsInvitedForBattlegroundQueueType(bgQueueTypeId))
                 return;                                 // cheating?
 
