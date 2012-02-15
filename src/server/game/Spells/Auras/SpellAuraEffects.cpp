@@ -5921,10 +5921,7 @@ void AuraEffect::HandleActionbarSpellOverride(AuraApplication const * aurApp, ui
     SpellEntry const* spell = sSpellStore.LookupEntry(overrideId);
     if (!spell)
         return;
-    uint32 affspell = 77606; // Default: Dark Simulacrum since it can copy all kind of spells - DO NOT USE: Cause learning spells, BIG BUG
-
-    // if (target->getClass() != CLASS_DEATH_KNIGHT)
-        // affspell = 54530;               // Hackfixed, opening
+    uint32 affspell = 0;
 
     if (overrideId == 93402)            // Sunfire
     {
