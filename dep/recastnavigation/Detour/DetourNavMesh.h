@@ -21,26 +21,14 @@
 
 #include "DetourAlloc.h"
 
-#ifdef WIN32
-    typedef unsigned __int64   uint64;
-#else
-#include <stdint.h>
-#ifndef uint64_t
-#ifdef __linux__
-#include <linux/types.h>
-#endif
-#endif
-    typedef uint64_t           uint64;
-#endif
-
 // Note: If you want to use 64-bit refs, change the types of both dtPolyRef & dtTileRef.
 // It is also recommended to change dtHashRef() to proper 64-bit hash too.
 
 // Reference to navigation polygon.
-typedef uint64 dtPolyRef;
+typedef unsigned int dtPolyRef;
 
 // Reference to navigation mesh tile.
-typedef uint64 dtTileRef;
+typedef unsigned int dtTileRef;
 
 // Maximum number of vertices per navigation polygon.
 static const int DT_VERTS_PER_POLYGON = 6;
@@ -57,11 +45,7 @@ static const unsigned int DT_OFFMESH_CON_BIDIR = 1;
 
 static const int DT_MAX_AREAS = 64;
 
-static const int STATIC_SALT_BITS = 12;
-static const int STATIC_TILE_BITS = 21;
-static const int STATIC_POLY_BITS = 31;
-// we cannot have over 31 bits for either tile nor poly
-// without changing polyCount to use 64bits too.
+static const int SALT_MIN_BITS = 4;
 
 // Flags for addTile
 enum dtTileFlags

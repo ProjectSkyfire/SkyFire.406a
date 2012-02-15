@@ -20,10 +20,12 @@
 #ifndef TRINITY_MAP_H
 #define TRINITY_MAP_H
 
-#include "Define.h"
-#include <ace/RW_Thread_Mutex.h>
-#include <ace/Thread_Mutex.h>
+// Pathfinding
+#include "DetourAlloc.h"
+#include "DetourNavMesh.h"
+#include "DetourNavMeshQuery.h"
 
+#include "Define.h"
 #include "DBCStructure.h"
 #include "GridDefines.h"
 #include "Cell.h"
@@ -31,7 +33,10 @@
 #include "SharedDefines.h"
 #include "GridRefManager.h"
 #include "MapRefManager.h"
+#include "DetourNavMesh.h"
 
+#include <ace/RW_Thread_Mutex.h>
+#include <ace/Thread_Mutex.h>
 #include <bitset>
 #include <list>
 
@@ -75,6 +80,8 @@ struct map_fileheader
     uint32 heightMapSize;
     uint32 liquidMapOffset;
     uint32 liquidMapSize;
+    uint32 holesOffset;
+    uint32 holesSize;
 };
 
 #define MAP_AREA_NO_AREA      0x0001
@@ -433,6 +440,8 @@ class Map : public GridRefManager<NGridType>
         void LoadMap(int gx, int gy, bool reload = false);
         GridMap* GetGrid(float x, float y);
 
+        // Load MMap Data
+        void LoadMMap(int gx, int gy);
         void SetTimer(uint32 t) { i_gridExpiry = t < MIN_GRID_DELAY ? MIN_GRID_DELAY : t; }
 
         void SendInitSelf(Player* player);
@@ -553,6 +562,18 @@ class Map : public GridRefManager<NGridType>
             else
                 m_activeNonPlayers.erase(obj);
         }
+    public:
+        dtNavMesh const* GetNavMesh() const;
+        static void preventPathfindingOnMaps(std::string ignoreMapIds);
+        bool IsPathfindingEnabled() const;
+
+    private:
+        void LoadNavMesh(int gx, int gy);
+        void UnloadNavMesh(int gx, int gy);
+        dtNavMesh* m_navMesh;
+        UNORDERED_MAP<uint32, dtTileRef> m_mmapLoadedTiles;    // maps [map grid coords] to [dtTile]
+
+    static std::set<uint32> s_mmapDisabledIds;      // stores list of mapids which do not use pathfinding
 };
 
 enum InstanceResetMethod

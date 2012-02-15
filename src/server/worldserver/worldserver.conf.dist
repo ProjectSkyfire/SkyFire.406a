@@ -311,6 +311,20 @@ vmap.enableIndoorCheck = 1
 
 DetectPosCollision = 1
 
+#    mmap.enablePathFinding
+#        Description: Enable/Disable pathfinding using mmaps
+#        Default:     1 - (Enabled)
+#                     0 - (Disabled)
+
+mmap.enablePathFinding = 1
+
+#
+#    mmap.ignoreMapIds
+#        Disable mmap pathfinding on the listed maps.
+#        List of map ids with delimiter ','
+
+mmap.ignoreMapIds = ""
+
 #
 #    TargetPosRecalculateRange
 #        Description: Max distance from movement target point (+moving unit size) and targeted

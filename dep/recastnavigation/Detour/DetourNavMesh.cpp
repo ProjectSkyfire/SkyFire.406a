@@ -26,13 +26,6 @@
 #include "DetourAlloc.h"
 #include "DetourAssert.h"
 #include <new>
-#include <errno.h>
-#ifdef _WIN32
-#include <io.h>
-#define F_OK   0
-#else
-#include <unistd.h>
-#endif
 
 inline bool overlapSlabs(const float* amin, const float* amax,
 						 const float* bmin, const float* bmax,
@@ -209,11 +202,11 @@ dtStatus dtNavMesh::init(const dtNavMeshParams* params)
 	}
 
 	// Init ID generator values.
-	m_tileBits = STATIC_TILE_BITS;    //dtIlog2(dtNextPow2((unsigned int)params->maxTiles));
-	m_polyBits = STATIC_POLY_BITS;    //dtIlog2(dtNextPow2((unsigned int)params->maxPolys));
-	m_saltBits = STATIC_SALT_BITS;    //sizeof(dtPolyRef)*8 - m_tileBits - m_polyBits;
-	//if (m_saltBits < SALT_MIN_BITS)
-		//return DT_FAILURE;
+	m_tileBits = dtIlog2(dtNextPow2((unsigned int)params->maxTiles));
+	m_polyBits = dtIlog2(dtNextPow2((unsigned int)params->maxPolys));
+	m_saltBits = 32 - m_tileBits - m_polyBits;
+	if (m_saltBits < SALT_MIN_BITS)
+		return DT_FAILURE;
 
 	return DT_SUCCESS;
 }
@@ -824,31 +817,16 @@ dtStatus dtNavMesh::addTile(unsigned char* data, int dataSize, int flags,
 
 const dtMeshTile* dtNavMesh::getTileAt(int x, int y) const
 {
-        // Find tile based on hash.
-        if (x<-10000 || y<-10000 ||  y>10000 || x>10000)
-            return 0;
-        int h = computeTileHash(x,y,m_tileLutMask);
-        access ((char*)(m_posLookup+h),F_OK);
-        if (errno==14)
-            return 0;
-        dtMeshTile* tile = m_posLookup[h];
-        while (tile)
-        {
-                if (sizeof(*tile)!=sizeof(dtMeshTile))
-                        return 0;
-                if (sizeof(*tile->header)!=sizeof(dtMeshHeader))
-                        return 0;
-                access ((char*)tile,F_OK);
-                if (errno==14)
-                        return 0;
-                access ((char*)tile->header,F_OK);
-                if (errno==14)
-                        return 0;
-                if (tile->header && tile->header->x == x && tile->header->y == y)
-                        return tile;
-                tile = tile->next;
-        }
-        return 0;
+	// Find tile based on hash.
+	int h = computeTileHash(x,y,m_tileLutMask);
+	dtMeshTile* tile = m_posLookup[h];
+	while (tile)
+	{
+		if (tile->header && tile->header->x == x && tile->header->y == y)
+			return tile;
+		tile = tile->next;
+	}
+	return 0;
 }
 
 dtMeshTile* dtNavMesh::getNeighbourTileAt(int x, int y, int side) const

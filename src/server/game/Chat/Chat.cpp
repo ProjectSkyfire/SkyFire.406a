@@ -330,6 +330,13 @@ ChatCommand* ChatHandler::getCommandTable()
         { NULL,             0,                  false, NULL,                                                "", NULL }
     };
 
+    static ChatCommand mapinfoCommandTable[] =
+    {
+        { "map",       SEC_ADMINISTRATOR,  true,    OldHandler<&ChatHandler::HandleMapInfoCommand>,       "", NULL },
+        { "set",       SEC_ADMINISTRATOR,  true,    OldHandler<&ChatHandler::HandleMapSetInfoCommand>,       "", NULL },
+        { NULL,        0,                  false,   NULL,                                            "", NULL }
+    };
+
     static ChatCommand commandTable[] =
     {
         { "character",     SEC_GAMEMASTER,     true,  NULL,                                           "", characterCommandTable},

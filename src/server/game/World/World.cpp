@@ -56,6 +56,7 @@
 #include "TemporarySummon.h"
 #include "WaypointMovementGenerator.h"
 #include "VMapFactory.h"
+#include "MMapFactory.h"
 #include "GameEventMgr.h"
 #include "PoolMgr.h"
 #include "GridNotifiersImpl.h"
@@ -76,6 +77,7 @@
 #include "CreatureTextMgr.h"
 #include "SmartAI.h"
 #include "Channel.h"
+#include "Memory.h"
 #include "DB2Stores.h"
 
 volatile bool World::m_stopEvent = false;
@@ -134,7 +136,7 @@ World::~World()
         delete command;
 
     VMAP::VMapFactory::clear();
-
+    MMAP::MMapFactory::clear();
     //TODO free addSessQueue
 }
 
@@ -1147,14 +1149,17 @@ void World::LoadConfigSettings(bool reload)
     bool enableHeight = ConfigMgr::GetBoolDefault("vmap.enableHeight", true);
     bool enablePetLOS = ConfigMgr::GetBoolDefault("vmap.petLOS", true);
     std::string ignoreSpellIds = ConfigMgr::GetStringDefault("vmap.ignoreSpellIds", "");
-
+    std::string ignoreMapIds = ConfigMgr::GetStringDefault("mmap.ignoreMapIds", "");
+    m_bool_configs[CONFIG_ENABLE_MMAPS] = ConfigMgr::GetBoolDefault("mmap.enablePathFinding", true);
     if (!enableHeight)
         sLog->outError("VMap height checking disabled! Creatures movements and other various things WILL be broken! Expect no support.");
 
     VMAP::VMapFactory::createOrGetVMapManager()->setEnableLineOfSightCalc(enableLOS);
     VMAP::VMapFactory::createOrGetVMapManager()->setEnableHeightCalc(enableHeight);
     VMAP::VMapFactory::preventSpellsFromBeingTestedForLoS(ignoreSpellIds.c_str());
-    sLog->outString("WORLD: VMap support included. LineOfSight:%i, getHeight:%i, indoorCheck:%i PetLOS:%i", enableLOS, enableHeight, enableIndoor, enablePetLOS);
+    MMAP::MMapFactory::preventPathfindingOnMaps(ignoreMapIds.c_str());
+    sLog->outString("WORLD: Collision support included. LineOfSight:%i, getHeight:%i, indoorCheck:%i, PetLOS:%i", enableLOS, enableHeight, enableIndoor, enablePetLOS);
+    sLog->outString("WORLD: Collision data directory is: %svmaps", m_dataPath.c_str()); sLog->outString("WORLD: VMap support included. LineOfSight:%i, getHeight:%i, indoorCheck:%i PetLOS:%i", enableLOS, enableHeight, enableIndoor, enablePetLOS);
     sLog->outString("WORLD: VMap data directory is: %svmaps", m_dataPath.c_str());
 
     m_int_configs[CONFIG_MAX_WHO] = ConfigMgr::GetIntDefault("MaxWhoListReturns", 49);
@@ -1243,6 +1248,10 @@ void World::SetInitialWorldSettings()
 
     ///- Initialize config settings
     LoadConfigSettings();
+
+    ///- Initialize detour memory management
+
+    dtAllocSetCustom(dtCustomAlloc, dtCustomFree);
 
     ///- Initialize Allowed Security Level
     LoadDBAllowedSecurityLevel();

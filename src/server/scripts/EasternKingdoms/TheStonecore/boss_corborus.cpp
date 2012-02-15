@@ -98,7 +98,9 @@ public:
 
             switch (summoned->GetEntry())
             {
-                Summons.Summon(summoned);
+                case 1: 
+                    Summons.Summon(summoned);
+                break;
             }
         }
 
