@@ -357,26 +357,36 @@ class boss_lady_deathwhisper : public CreatureScript
             void DamageTaken(Unit* /*damageDealer*/, uint32& damage)
             {
                 // phase transition
-                if (events.GetPhaseMask() & PHASE_ONE_MASK && damage > uint32(me->GetPower(POWER_MANA)))
+                if (events.GetPhaseMask() & PHASE_ONE_MASK)
                 {
-                    Talk(SAY_PHASE_2);
-                    Talk(EMOTE_PHASE_2);
-                    DoStartMovement(me->getVictim());
-                    damage -= me->GetPower(POWER_MANA);
-                    me->SetPower(POWER_MANA, 0);
-                    me->RemoveAurasDueToSpell(SPELL_MANA_BARRIER);
-                    events.SetPhase(PHASE_TWO);
-                    events.ScheduleEvent(EVENT_P2_FROSTBOLT, urand(10000, 12000), 0, PHASE_TWO);
-                    events.ScheduleEvent(EVENT_P2_FROSTBOLT_VOLLEY, urand(19000, 21000), 0, PHASE_TWO);
-                    events.ScheduleEvent(EVENT_P2_TOUCH_OF_INSIGNIFICANCE, urand(6000, 9000), 0, PHASE_TWO);
-                    events.ScheduleEvent(EVENT_P2_SUMMON_SHADE, urand(12000, 15000), 0, PHASE_TWO);
-                    // on heroic mode Lady Deathwhisper is immune to taunt effects in phase 2 and continues summoning adds
-                    if (IsHeroic())
-                    {
-                        me->ApplySpellImmune(0, IMMUNITY_STATE, SPELL_AURA_MOD_TAUNT, true);
-                        me->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_ATTACK_ME, true);
-                        events.ScheduleEvent(EVENT_P2_SUMMON_WAVE, 45000, 0, PHASE_TWO);
-                    }
+					//shield broken, switch to phase 2
+					if (me->GetPower(POWER_MANA) <= 0)
+					{
+						Talk(SAY_PHASE_2);
+						Talk(EMOTE_PHASE_2);
+						DoStartMovement(me->getVictim());
+						damage -= me->GetPower(POWER_MANA);
+						me->SetPower(POWER_MANA, 0);
+						me->RemoveAurasDueToSpell(SPELL_MANA_BARRIER);
+						events.SetPhase(PHASE_TWO);
+						events.ScheduleEvent(EVENT_P2_FROSTBOLT, urand(10000, 12000), 0, PHASE_TWO);
+						events.ScheduleEvent(EVENT_P2_FROSTBOLT_VOLLEY, urand(19000, 21000), 0, PHASE_TWO);
+						events.ScheduleEvent(EVENT_P2_TOUCH_OF_INSIGNIFICANCE, urand(6000, 9000), 0, PHASE_TWO);
+						events.ScheduleEvent(EVENT_P2_SUMMON_SHADE, urand(12000, 15000), 0, PHASE_TWO);
+						// on heroic mode Lady Deathwhisper is immune to taunt effects in phase 2 and continues summoning adds
+						if (IsHeroic())
+						{
+							me->ApplySpellImmune(0, IMMUNITY_STATE, SPELL_AURA_MOD_TAUNT, true);
+							me->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_ATTACK_ME, true);
+							events.ScheduleEvent(EVENT_P2_SUMMON_WAVE, 45000, 0, PHASE_TWO);
+						}
+					}
+					else
+					{
+						// decrease mana to break the shield
+						uint32 mana = me->GetPower(POWER_MANA) - damage;
+						me->SetPower(POWER_MANA, mana >= 0 ? mana : 0);
+					}
                 }
             }
 
