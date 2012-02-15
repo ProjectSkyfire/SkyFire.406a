@@ -177,13 +177,13 @@ struct Location
 Location _afAmbushSpawn[] =
 {
     {191.296204f, -2839.329346f, 107.388f},
-    {70.972466f,  -2848.674805f, 109.459f}
+    {70.972466f, -2848.674805f, 109.459f}
 };
 
 Location _afAmbushMoveTo[] =
 {
     {166.630386f, -2824.780273f, 108.153f},
-    {70.886589f,  -2874.335449f, 116.675f}
+    {70.886589f, -2874.335449f, 116.675f}
 };
 
 class npc_rinji : public CreatureScript

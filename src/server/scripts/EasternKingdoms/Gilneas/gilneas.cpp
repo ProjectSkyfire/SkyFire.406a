@@ -245,7 +245,6 @@ public:
     };
 };
 
-
 /*######
 ## npc_rampaging_worgen
 ######*/

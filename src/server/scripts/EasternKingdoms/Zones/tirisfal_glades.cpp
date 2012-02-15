@@ -39,7 +39,7 @@ EndContentData */
 enum eCalvin
 {
     SAY_COMPLETE        = -1000431,
-    SPELL_DRINK         = 2639,                             // possibly not correct spell (but iconId is correct)
+    SPELL_DRINK         = 2639,                           // possibly not correct spell (but iconId is correct)
     QUEST_590           = 590,
     FACTION_HOSTILE     = 168
 };

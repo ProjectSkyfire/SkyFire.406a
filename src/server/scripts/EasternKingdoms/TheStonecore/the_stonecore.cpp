@@ -235,7 +235,7 @@ public:
     {
         mob_rock_borerAI(Creature* creature) : ScriptedAI(creature)
         {
-            instance = creature->GetInstanceScript(); 
+            instance = creature->GetInstanceScript();
         }
 
         InstanceScript* instance;
@@ -267,7 +267,7 @@ public:
                 _SpellBoreTimer -= Diff;
 
             DoMeleeAttackIfReady();
-        } 
+        }
     };
 };
 

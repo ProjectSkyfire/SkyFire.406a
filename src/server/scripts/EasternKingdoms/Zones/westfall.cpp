@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2005-2012 MaNGOS <http://www.getmangos.com/>
  * Copyright (C) 2008-2012 Trinity <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2012 MaNGOS <http://www.getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -368,7 +368,7 @@ class npc_horatio : public CreatureScript
                             break;
                             case 1:
                             {
-                                Investigator01->MonsterSay("Given the body temperature. I'd say they've been dead no more than 6 hours.",0,0);
+                                Investigator01->MonsterSay("Given the body temperature. I'd say they've been dead no more than 6 hours.",0, 0);
                                 Investigator01->SetStandState(UNIT_STAND_STATE_KNEEL);
                                 TextTimer = 6000;
                                 Phase++;
@@ -376,14 +376,14 @@ class npc_horatio : public CreatureScript
                             break;
                             case 2:
                             {
-                                Investigator02->MonsterSay("Damn shame what they did to Old Blanchy...",0,0);
+                                Investigator02->MonsterSay("Damn shame what they did to Old Blanchy...",0, 0);
                                 TextTimer = 6000;
                                 Phase++;
                             }
                             break;
                             case 3:
                             {
-                                me->MonsterSay("No kidding, rookie.",0,0);
+                                me->MonsterSay("No kidding, rookie.",0, 0);
                                 me->AddUnitMovementFlag(MOVEMENTFLAG_WALKING);
                                 me->GetMotionMaster()->MovePoint(0, -9852.267f, 911.928f, 30.028f);
                                 me->GetMotionMaster()->MovePoint(1, -9851.928f, 909.8602f, 29.931f);
@@ -394,14 +394,14 @@ class npc_horatio : public CreatureScript
                             break;
                             case 4:
                             {
-                                me->MonsterSay("Looks like they really put the cart.",0,0);
+                                me->MonsterSay("Looks like they really put the cart.",0, 0);
                                 TextTimer = 5000;
                                 Phase++;
                             }
                             break;
                             case 5:
                             {
-                                me->MonsterSay("...before the horse.",0,0);
+                                me->MonsterSay("...before the horse.",0, 0);
                                 TextTimer = 4000;
                                 Phase++;
                             }
@@ -483,14 +483,14 @@ class npc_westplains_drifter : public CreatureScript
                 case 0:
                 {
                     creature->MonsterSay("Listen, pal. I don't want any trouble, ok? I didn't see who murdered 'em, but I sure heard it! Lots of yelling. Human voices... you dig? Now get out of here before I change my mind about beating you up and takin' your shoes.", 0, 0);
-                    player->KilledMonsterCredit(CREDIT_SAY1,0);
+                    player->KilledMonsterCredit(CREDIT_SAY1, 0);
                     creature->SetStandState(UNIT_STAND_STATE_STAND);
                     creature->ForcedDespawn(5000);
                     break;
                 }
                 case 1:
                 {
-                    creature->MonsterSay("I didn't see who killed 'm, bub/sis, but I got a whiff. Smelled rich, kinda like you. Damn shame too. Furlbrows were a fixture around here. Nice people, always willin' to share a meal or a patch of dirt.",0,0);
+                    creature->MonsterSay("I didn't see who killed 'm, bub/sis, but I got a whiff. Smelled rich, kinda like you. Damn shame too. Furlbrows were a fixture around here. Nice people, always willin' to share a meal or a patch of dirt.",0, 0);
                     player->KilledMonsterCredit(CREDIT_SAY2, 0);
                     creature->SetStandState(UNIT_STAND_STATE_STAND);
                     creature->ForcedDespawn(5000);
@@ -756,9 +756,9 @@ class npc_crate_mine : public CreatureScript
                             case 13:
                             {
                                 me->ForcedDespawn(5000);
-                                glubtok1->CastSpell(glubtok1,64446, true);
+                                glubtok1->CastSpell(glubtok1, 64446, true);
                                 glubtok1->ForcedDespawn(1000);
-                                shadowy1->CastSpell(shadowy1,64446, true);
+                                shadowy1->CastSpell(shadowy1, 64446, true);
                                 shadowy1->ForcedDespawn(1000);
 
                                 std::list<Player*> players;
@@ -828,7 +828,7 @@ class npc_homeless_citizen : public CreatureScript
 
         void Eat()
         {
-            me->CastSpell(me,SPELL_FULL_BELLY, true);
+            me->CastSpell(me, SPELL_FULL_BELLY, true);
             me->SetStandState(UNIT_STAND_STATE_SIT);
             DoScriptText(RAND(-1642384,-1642385,-1642386), me);
         }
@@ -1172,17 +1172,17 @@ class npc_shadowy_trigger : public CreatureScript
                             }
                             case 9:
                             {
-                                if (Creature* listener = me->FindNearestCreature(NPC_LISTENER,35.0f,true))
+                                if (Creature* listener = me->FindNearestCreature(NPC_LISTENER, 35.0f, true))
                                 {
                                     if(!bText)
                                     {
                                         me->MonsterTextEmote("<homeless people applaud and cheer>", NULL, true);
-                                        listener->TextEmote(TEXT_EMOTE_APPLAUD,PlayerGUID, false);
+                                        listener->TextEmote(TEXT_EMOTE_APPLAUD, PlayerGUID, false);
                                         bText = true;
                                     }
                                     listener->HandleEmoteCommand(EMOTE_ONESHOT_APPLAUD);
                                     player->KilledMonsterCredit(42680, PlayerGUID);
-                                    Shadowy2->CastSpell(me,64446, true);
+                                    Shadowy2->CastSpell(me, 64446, true);
                                     Shadowy2->ForcedDespawn(1000);
                                 }
                             }
@@ -1566,11 +1566,11 @@ class npc_rise_br : public CreatureScript
 
         void RemoveStun()
         {
-            if (Creature* Horatio = me->FindNearestCreature(NPC_HORATIO2,50.0f,true))
-            if (Creature* Danuvin = me->FindNearestCreature(NPC_DANUVIN,50.0f,true))
-            if (Creature* Guard = me->FindNearestCreature(NPC_GUARD,50.0f,true))
-            if (Creature* Investigator = me->FindNearestCreature(NPC_INVESTIGATOR,50.0f,true))
-            if (Creature* Investigator2 = me->FindNearestCreature(NPC_INVESTIGATOR3,50.0f,true))
+            if (Creature* Horatio = me->FindNearestCreature(NPC_HORATIO2, 50.0f, true))
+            if (Creature* Danuvin = me->FindNearestCreature(NPC_DANUVIN, 50.0f, true))
+            if (Creature* Guard = me->FindNearestCreature(NPC_GUARD, 50.0f, true))
+            if (Creature* Investigator = me->FindNearestCreature(NPC_INVESTIGATOR, 50.0f, true))
+            if (Creature* Investigator2 = me->FindNearestCreature(NPC_INVESTIGATOR3, 50.0f, true))
             {
                 Horatio->RemoveAurasDueToSpell(79724);
                 Danuvin->RemoveAurasDueToSpell(79724);
@@ -1582,17 +1582,17 @@ class npc_rise_br : public CreatureScript
 
         void DoStun()
         {
-            if (Creature* Horatio = me->FindNearestCreature(NPC_HORATIO2,50.0f,true))
-            if (Creature* Danuvin = me->FindNearestCreature(NPC_DANUVIN,50.0f,true))
-            if (Creature* Guard = me->FindNearestCreature(NPC_GUARD,50.0f,true))
-            if (Creature* Investigator = me->FindNearestCreature(NPC_INVESTIGATOR,50.0f,true))
-            if (Creature* Investigator2 = me->FindNearestCreature(NPC_INVESTIGATOR3,50.0f,true))
+            if (Creature* Horatio = me->FindNearestCreature(NPC_HORATIO2, 50.0f, true))
+            if (Creature* Danuvin = me->FindNearestCreature(NPC_DANUVIN, 50.0f, true))
+            if (Creature* Guard = me->FindNearestCreature(NPC_GUARD, 50.0f, true))
+            if (Creature* Investigator = me->FindNearestCreature(NPC_INVESTIGATOR, 50.0f, true))
+            if (Creature* Investigator2 = me->FindNearestCreature(NPC_INVESTIGATOR3, 50.0f, true))
             {
-                Horatio->CastSpell(Horatio,79724,true);
-                Danuvin->CastSpell(Danuvin,79724,true);
-                Guard->CastSpell(Guard,79724,true);
-                Investigator->CastSpell(Investigator,79724,true);
-                Investigator2->CastSpell(Investigator2,79724,true);
+                Horatio->CastSpell(Horatio, 79724, true);
+                Danuvin->CastSpell(Danuvin, 79724, true);
+                Guard->CastSpell(Guard, 79724, true);
+                Investigator->CastSpell(Investigator, 79724, true);
+                Investigator2->CastSpell(Investigator2, 79724, true);
             }
         }
 
@@ -1663,7 +1663,7 @@ class npc_rise_br : public CreatureScript
                             }
                             case 2:
                             {
-                                Hope->MonsterSay("You bastards will burn for what you did.",0,0);
+                                Hope->MonsterSay("You bastards will burn for what you did.",0, 0);
                                 EventTimer = 4000;
                                 Phase++;
                                 break;
@@ -1735,7 +1735,7 @@ class npc_rise_br : public CreatureScript
                             }
                             case 12:
                             {
-                                Ripsnarl->CastSpell(Ripsnarl,SPELL_TRANSFORM_HUMAN, true);
+                                Ripsnarl->CastSpell(Ripsnarl, SPELL_TRANSFORM_HUMAN, true);
                                 Hope->MonsterSay("Admiral, your hat.", 0, 0);
                                 EventTimer = 4000;
                                 Phase++;
@@ -1744,7 +1744,7 @@ class npc_rise_br : public CreatureScript
                             case 13:
                             {
                                 Ripsnarl->MonsterSay("Thank you, my dear.", 0, 0);
-                                Ripsnarl->CastSpell(Ripsnarl,SPELL_ADMIRAL_HAT, true);
+                                Ripsnarl->CastSpell(Ripsnarl, SPELL_ADMIRAL_HAT, true);
                                 EventTimer = 4000;
                                 Phase++;
                                 break;
@@ -1919,7 +1919,7 @@ class npc_defias_blackguard : public CreatureScript
                 {
                     if (ThrowTimer < diff)
                     {
-                        DoCast(pTarget,79778,true);
+                        DoCast(pTarget, 79778, true);
                         ThrowTimer = 4000;
                         // me->AddUnitMovementFlag(MOVEMENTFLAG_WALKING);
                         // me->GetMotionMaster()->MovePoint(0, me->GetPositionX()-5, me->GetPositionY()+5, me->GetPositionZ());
@@ -2061,8 +2061,8 @@ class npc_horatio_investigate : public CreatureScript
                 if (Creature* Home = me->SummonCreature(NPC_HOME, -9862.88f, 1278.52f, 40.80f, 0.43f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 66000))
                 {
                     HomeGUID = Home->GetGUID();
-                    Home->CastSpell(Home,79346,true);
-                    Home->CastSpell(Home,52384,true);
+                    Home->CastSpell(Home, 79346, true);
+                    Home->CastSpell(Home, 52384, true);
                     bSummonn2 = true;
                 }
 

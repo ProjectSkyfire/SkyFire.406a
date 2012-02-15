@@ -48,7 +48,7 @@ enum Sylvanas
 
     SPELL_HIGHBORNE_AURA        = 37090,
     SPELL_SYLVANAS_CAST         = 36568,
-    SPELL_RIBBON_OF_SOULS       = 34432,                   //the real one to use might be 37099
+    SPELL_RIBBON_OF_SOULS       = 34432,                 //the real one to use might be 37099
 };
 
 float HighborneLoc[4][3]=
