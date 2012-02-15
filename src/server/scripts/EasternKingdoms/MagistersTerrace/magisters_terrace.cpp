@@ -55,34 +55,33 @@ const float afKaelLandPoint[] = {225.045f, -276.236f, -5.434f};
 class npc_kalecgos : public CreatureScript
 {
 public:
-    npc_kalecgos() : CreatureScript("npc_kalecgos") { }
+    npc_kalecgos() : CreatureScript("npc_kalecgos") {}
 
-    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*Sender*/, uint32 Action)
+    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*sender*/, uint32 action)
     {
         player->PlayerTalkClass->ClearMenus();
-        switch (Action)
+        switch (action)
         {
             case GOSSIP_ACTION_INFO_DEF:
                 player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_KAEL_2, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
                 player->SEND_GOSSIP_MENU(12500, creature->GetGUID());
                 break;
-            case GOSSIP_ACTION_INFO_DEF+1:
+            case GOSSIP_ACTION_INFO_DEF + 1:
                 player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_KAEL_3, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
                 player->SEND_GOSSIP_MENU(12502, creature->GetGUID());
                 break;
-            case GOSSIP_ACTION_INFO_DEF+2:
+            case GOSSIP_ACTION_INFO_DEF + 2:
                 player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_KAEL_4, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
                 player->SEND_GOSSIP_MENU(12606, creature->GetGUID());
                 break;
-            case GOSSIP_ACTION_INFO_DEF+3:
+            case GOSSIP_ACTION_INFO_DEF + 3:
                 player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_KAEL_5, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
                 player->SEND_GOSSIP_MENU(12607, creature->GetGUID());
                 break;
-            case GOSSIP_ACTION_INFO_DEF+4:
+            case GOSSIP_ACTION_INFO_DEF + 4:
                 player->SEND_GOSSIP_MENU(12608, creature->GetGUID());
                 break;
         }
-
         return true;
     }
 
@@ -117,13 +116,13 @@ public:
                 me->GetMotionMaster()->MovePoint(POINT_ID_LAND, afKaelLandPoint[0], afKaelLandPoint[1], afKaelLandPoint[2]);
         }
 
-        void MovementInform(uint32 Type, uint32 PointId)
+        void MovementInform(uint32 type, uint32 pointId)
         {
-            if (Type != POINT_MOTION_TYPE)
+            if (type != POINT_MOTION_TYPE)
                 return;
 
-            if (PointId == POINT_ID_LAND)
-                TransformTimer = MINUTE*IN_MILLISECONDS;
+            if (pointId == POINT_ID_LAND)
+                TransformTimer = MINUTE * IN_MILLISECONDS;
         }
 
         // some targeting issues with the spell, so use this workaround as temporary solution
@@ -165,7 +164,8 @@ public:
                     me->UpdateEntry(NPC_KAEL);
 
                     TransformTimer = 0;
-                } else TransformTimer -= Diff;
+                } 
+                else TransformTimer -= Diff;
             }
         }
     };

@@ -27,35 +27,38 @@ EndScriptData */
 #include "ScriptPCH.h"
 #include "magisters_terrace.h"
 
-#define SAY_AGGRO                       -1585000
-#define SAY_ENERGY                      -1585001
-#define SAY_EMPOWERED                   -1585002
-#define SAY_KILL_1                      -1585003
-#define SAY_KILL_2                      -1585004
-#define SAY_DEATH                       -1585005
-#define EMOTE_CRYSTAL                   -1585006
+enum eFireheart
+{
+    SAY_AGGRO                      = -1585000,
+    SAY_ENERGY                     = -1585001,
+    SAY_EMPOWERED                  = -1585002,
+    SAY_KILL_1                     = -1585003,
+    SAY_KILL_2                     = -1585004,
+    SAY_DEATH                      = -1585005,
+    EMOTE_CRYSTAL                  = -1585006,
 
-//Crystal effect spells
-#define SPELL_FEL_CRYSTAL_COSMETIC      44374
-#define SPELL_FEL_CRYSTAL_DUMMY         44329
-#define SPELL_FEL_CRYSTAL_VISUAL        44355
-#define SPELL_MANA_RAGE                 44320               // This spell triggers 44321, which changes scale and regens mana Requires an entry in spell_script_target
+    //Crystal effect spells
+    SPELL_FEL_CRYSTAL_COSMETIC     = 44374,
+    SPELL_FEL_CRYSTAL_DUMMY        = 44329,
+    SPELL_FEL_CRYSTAL_VISUAL       = 44355,
+    SPELL_MANA_RAGE                = 44320,  // This spell triggers 44321, which changes scale and regens mana Requires an entry in spell_script_target
 
-//Selin's spells
-#define SPELL_DRAIN_LIFE                44294
-#define SPELL_FEL_EXPLOSION             44314
+    //Selin's spells
+    SPELL_DRAIN_LIFE               = 44294,
+    SPELL_FEL_EXPLOSION            = 44314,
 
-#define SPELL_DRAIN_MANA                46153               // Heroic only
+    SPELL_DRAIN_MANA               = 46153,  // Heroic only
 
-#define CRYSTALS_NUMBER                 5
-#define DATA_CRYSTALS                   6
+    CRYSTALS_NUMBER                = 5,
+    DATA_CRYSTALS                  = 6,
 
-#define CREATURE_FEL_CRYSTAL            24722
+    CREATURE_FEL_CRYSTAL           = 24722
+};
 
 class boss_selin_fireheart : public CreatureScript
 {
 public:
-    boss_selin_fireheart() : CreatureScript("boss_selin_fireheart") { }
+    boss_selin_fireheart() : CreatureScript("boss_selin_fireheart") {}
 
     CreatureAI* GetAI(Creature* creature) const
     {
@@ -95,12 +98,12 @@ public:
         bool IsDraining;
         bool DrainingCrystal;
 
-        uint64 CrystalGUID;                                     // This will help us create a pointer to the crystal we are draining. We store GUIDs, never units in case unit is deleted/offline (offline if player of course).
+        uint64 CrystalGUID;  // This will help us create a pointer to the crystal we are draining. We store GUIDs, never units in case unit is deleted/offline (offline if player of course).
 
         void Reset()
         {
             if (instance)
-            {
+            {   
                 //for (uint8 i = 0; i < CRYSTALS_NUMBER; ++i)
                 for (std::list<uint64>::const_iterator itr = Crystals.begin(); itr != Crystals.end(); ++itr)
                 {
@@ -118,10 +121,11 @@ public:
 
                 instance->HandleGameObject(instance->GetData64(DATA_SELIN_ENCOUNTER_DOOR), true);
                 // Open the big encounter door. Close it in Aggro and open it only in JustDied(and here)
-                                                                // Small door opened after event are expected to be closed by default
+                // Small door opened after event are expected to be closed by default
                 // Set Inst data for encounter
                 instance->SetData(DATA_SELIN_EVENT, NOT_STARTED);
-            } else sLog->outError(ERROR_INST_DATA);
+            } 
+            else sLog->outError(ERROR_INST_DATA);
 
             DrainLifeTimer = urand(3000, 7000);
             DrainManaTimer = DrainLifeTimer + 5000;
@@ -158,7 +162,7 @@ public:
                     if (!CrystalChosen || me->GetDistanceOrder(crystal, CrystalChosen, false))
                     {
                         CrystalGUID = crystal->GetGUID();
-                        CrystalChosen = crystal;               // Store a copy of crystal so we don't need to recreate a pointer to closest crystal for the movement and yell.
+                        CrystalChosen = crystal; // Store a copy of crystal so we don't need to recreate a pointer to closest crystal for the movement and yell.
                     }
                 }
             }
@@ -169,7 +173,7 @@ public:
 
                 CrystalChosen->CastSpell(CrystalChosen, SPELL_FEL_CRYSTAL_COSMETIC, true);
 
-                float x, y, z;                                  // coords that we move to, close to the crystal.
+                float x, y, z;  // coords that we move to, close to the crystal.
                 CrystalChosen->GetClosePoint(x, y, z, me->GetObjectSize(), CONTACT_DISTANCE);
 
                 me->RemoveUnitMovementFlag(MOVEMENTFLAG_WALKING);
@@ -236,9 +240,9 @@ public:
             if (!instance)
                 return;
 
-            instance->SetData(DATA_SELIN_EVENT, DONE);         // Encounter complete!
-            instance->HandleGameObject(instance->GetData64(DATA_SELIN_ENCOUNTER_DOOR), true);                  // Open the encounter door
-            instance->HandleGameObject(instance->GetData64(DATA_SELIN_DOOR), true);                 // Open the door leading further in
+            instance->SetData(DATA_SELIN_EVENT, DONE);                                         // Encounter complete!
+            instance->HandleGameObject(instance->GetData64(DATA_SELIN_ENCOUNTER_DOOR), true);  // Open the encounter door
+            instance->HandleGameObject(instance->GetData64(DATA_SELIN_DOOR), true);            // Open the door leading further in
             ShatterRemainingCrystals();
         }
 
@@ -256,7 +260,8 @@ public:
                     {
                         DoCast(SelectTarget(SELECT_TARGET_RANDOM, 0), SPELL_DRAIN_LIFE);
                         DrainLifeTimer = 10000;
-                    } else DrainLifeTimer -= diff;
+                    } 
+                    else DrainLifeTimer -= diff;
 
                     // Heroic only
                     if (IsHeroic())
@@ -265,7 +270,8 @@ public:
                         {
                             DoCast(SelectTarget(SELECT_TARGET_RANDOM, 1), SPELL_DRAIN_MANA);
                             DrainManaTimer = 10000;
-                        } else DrainManaTimer -= diff;
+                        } 
+                        else DrainManaTimer -= diff;
                     }
                 }
 
@@ -276,7 +282,8 @@ public:
                         DoCast(me, SPELL_FEL_EXPLOSION);
                         FelExplosionTimer = 2000;
                     }
-                } else FelExplosionTimer -= diff;
+                } 
+                else FelExplosionTimer -= diff;
 
                 // If below 10% mana, start recharging
                 maxPowerMana = me->GetMaxPower(POWER_MANA);
@@ -289,9 +296,11 @@ public:
                             DrainCrystalTimer = urand(10000, 15000);
                         else
                             DrainCrystalTimer = urand(20000, 25000);
-                    } else DrainCrystalTimer -= diff;
+                    } 
+                    else DrainCrystalTimer -= diff;
                 }
-            }else
+            }
+            else
             {
                 if (IsDraining)
                 {
@@ -311,7 +320,8 @@ public:
 
                         me->GetMotionMaster()->Clear();
                         me->GetMotionMaster()->MoveChase(me->getVictim());
-                    } else EmpowerTimer -= diff;
+                    } 
+                    else EmpowerTimer -= diff;
                 }
             }
 
@@ -323,7 +333,7 @@ public:
 class mob_fel_crystal : public CreatureScript
 {
 public:
-    mob_fel_crystal() : CreatureScript("mob_fel_crystal") { }
+    mob_fel_crystal() : CreatureScript("mob_fel_crystal") {}
 
     CreatureAI* GetAI(Creature* creature) const
     {
@@ -360,7 +370,8 @@ public:
                         }
                     }
                 }
-            } else sLog->outError(ERROR_INST_DATA);
+            } 
+            else sLog->outError(ERROR_INST_DATA);
         }
     };
 };

@@ -35,23 +35,20 @@ enum eEnums
     SAY_KILL                        = -1585010,
     EMOTE_DISCHARGE_ENERGY          = -1585011,
 
-    //is this text for real?
-    //#define SAY_DEATH             "What...happen...ed."
-
     //Pure energy spell info
     SPELL_ENERGY_BOLT               = 46156,
     SPELL_ENERGY_FEEDBACK           = 44335,
 
     //Vexallus spell info
     SPELL_CHAIN_LIGHTNING           = 44318,
-    SPELL_H_CHAIN_LIGHTNING         = 46380,                //heroic spell
+    SPELL_H_CHAIN_LIGHTNING         = 46380,                // heroic spell
     SPELL_OVERLOAD                  = 44353,
     SPELL_ARCANE_SHOCK              = 44319,
-    SPELL_H_ARCANE_SHOCK            = 46381,                //heroic spell
+    SPELL_H_ARCANE_SHOCK            = 46381,                // heroic spell
 
-    SPELL_SUMMON_PURE_ENERGY        = 44322,                //mod scale -10
-    H_SPELL_SUMMON_PURE_ENERGY1     = 46154,                //mod scale -5
-    H_SPELL_SUMMON_PURE_ENERGY2     = 46159,                //mod scale -5
+    SPELL_SUMMON_PURE_ENERGY        = 44322,                // mod scale -10
+    H_SPELL_SUMMON_PURE_ENERGY1     = 46154,                // mod scale -5
+    H_SPELL_SUMMON_PURE_ENERGY2     = 46159,                // mod scale -5
 
     //Creatures
     NPC_PURE_ENERGY                 = 24745,
@@ -63,7 +60,7 @@ enum eEnums
 class boss_vexallus : public CreatureScript
 {
 public:
-    boss_vexallus() : CreatureScript("boss_vexallus") { }
+    boss_vexallus() : CreatureScript("boss_vexallus") {}
 
     CreatureAI* GetAI(Creature* creature) const
     {
@@ -168,7 +165,8 @@ public:
                         DoCast(target, SPELL_CHAIN_LIGHTNING);
 
                     ChainLightningTimer = 8000;
-                } else ChainLightningTimer -= diff;
+                } 
+                else ChainLightningTimer -= diff;
 
                 if (ArcaneShockTimer <= diff)
                 {
@@ -177,7 +175,8 @@ public:
                         DoCast(target, SPELL_ARCANE_SHOCK);
 
                     ArcaneShockTimer = 8000;
-                } else ArcaneShockTimer -= diff;
+                } 
+                else ArcaneShockTimer -= diff;
             }
             else
             {
@@ -186,9 +185,10 @@ public:
                     DoCast(me->getVictim(), SPELL_OVERLOAD);
 
                     OverloadTimer = 2000;
-                } else OverloadTimer -= diff;
+                } 
+                else OverloadTimer -= diff;
             }
-
+            
             DoMeleeAttackIfReady();
         }
     };
@@ -197,7 +197,7 @@ public:
 class mob_pure_energy : public CreatureScript
 {
 public:
-    mob_pure_energy() : CreatureScript("mob_pure_energy") { }
+    mob_pure_energy() : CreatureScript("mob_pure_energy") {}
 
     CreatureAI* GetAI(Creature* creature) const
     {
