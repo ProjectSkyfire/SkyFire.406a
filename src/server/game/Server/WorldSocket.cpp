@@ -878,7 +878,6 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     uint32 world_expansion = sWorld->getIntConfig(CONFIG_EXPANSION);
     if (expansion > world_expansion)
         expansion = world_expansion;
-    //expansion = ((sWorld->getIntConfig(CONFIG_EXPANSION) > fields[6].GetUInt8()) ? fields[6].GetUInt8() : sWorld->getIntConfig(CONFIG_EXPANSION));
 
     N.SetHexStr ("894B645E89E1535BBDAD5B8B290650530801B18EBFBF5E8FAB3C82872A3E9BB7");
     g.SetDword (7);
@@ -911,10 +910,6 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     }
 
     id = fields[0].GetUInt32();
-    /*
-    if (security > SEC_ADMINISTRATOR)                        // prevent invalid security settings in DB
-        security = SEC_ADMINISTRATOR;
-        */
 
     K.SetHexStr (fields[1].GetCString());
 
@@ -988,17 +983,6 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     sha.UpdateBigNumbers(&K, NULL);
     sha.Finalize();
 
-    /*if (memcmp (sha.GetDigest(), digest, 20))
-    {
-        packet.Initialize (SMSG_AUTH_RESPONSE, 1);
-        packet << uint8 (AUTH_FAILED);
-
-        SendPacket (packet);
-
-        sLog->outError ("WorldSocket::HandleAuthSession: Sent Auth Response (authentification failed).");
-        return -1;
-    }*/
-
     std::string address = GetRemoteAddress();
 
     sLog->outStaticDebug ("WorldSocket::HandleAuthSession: Client '%s' authenticated successfully from %s.",
@@ -1013,9 +997,6 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
         isRecruiter = true;
 
     // Update the last_ip in the database
-    // No SQL injection, username escaped.
-    LoginDatabase.EscapeString (address);
-
     PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_UPDATE_LAST_IP);
 
     stmt->setString(0, address);

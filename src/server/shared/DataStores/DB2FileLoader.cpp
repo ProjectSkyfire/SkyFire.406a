@@ -235,17 +235,6 @@ uint32 DB2FileLoader::GetFormatStringsFields(const char * format)
 
 char* DB2FileLoader::AutoProduceData(const char* format, uint32& records, char**& indexTable)
 {
-    /*
-    format STRING, NA, FLOAT, NA, INT <=>
-    struct{
-    char* field0,
-    float field1,
-    int field2
-    }entry;
-
-    this func will generate  entry[rows] data;
-    */
-
     typedef char * ptr;
     if (strlen(format) != fieldCount)
         return NULL;
