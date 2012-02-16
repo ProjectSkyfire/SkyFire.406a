@@ -588,18 +588,8 @@ void Spell::EffectSchoolDMG(SpellEffIndex effIndex)
             }
             case SPELLFAMILY_DRUID:
             {
-                // Ferocious Bite
-                if (m_caster->GetTypeId() == TYPEID_PLAYER && (m_spellInfo->SpellFamilyFlags[0] & 0x000800000) && m_spellInfo->SpellVisual[0] == 6587)
-                {
-                    // converts each extra point of energy into ($f1+$AP/410) additional damage
-                    float ap = m_caster->GetTotalAttackPowerValue(BASE_ATTACK);
-                    float multiple = ap / 410 + m_spellInfo->Effects[effIndex].DamageMultiplier; // effIndex = 3??
-                    int32 energy = -(m_caster->ModifyPower(POWER_ENERGY, -30));
-                    damage += int32(energy * multiple);
-                    damage += int32(CalculatePctN(m_caster->ToPlayer()->GetComboPoints() * ap, 7));
-                }
                 // Wrath
-                else if (m_spellInfo->Id == 5176)
+                if (m_spellInfo->Id == 5176)
                 {
                     // Improved Insect Swarm
                     if (AuraEffect const * aurEff = m_caster->GetDummyAuraEffect(SPELLFAMILY_DRUID, 1771, 0))
@@ -610,7 +600,7 @@ void Spell::EffectSchoolDMG(SpellEffIndex effIndex)
                     {
                         int32 eclipse = 13;
                         int mana = 0;
-                        
+
                         if (m_caster->HasAura(81061) && roll_chance_i(12) || m_caster->HasAura(81062) && roll_chance_i(24)) // Euphoria
                         {
                             if (!m_caster->HasAura(48518) && !m_caster->HasAura(48517))  // Eclipse (lunar | solar)
@@ -670,7 +660,7 @@ void Spell::EffectSchoolDMG(SpellEffIndex effIndex)
                                 eclipse = 40;
                             else
                                 eclipse = 20;
-                            
+
                             m_caster->SetEclipsePower(int32(m_caster->GetEclipsePower() + eclipse));
                             //m_caster->CastCustomSpell(m_caster, 89265, &eclipse, 0, 0, true); // Eclipse Energy (http://www.wowhead.com/spell=89265)
                         }
@@ -702,7 +692,7 @@ void Spell::EffectSchoolDMG(SpellEffIndex effIndex)
 
                         // ECLIPSE REMOVE
                         if (m_caster->GetEclipsePower() > 0)
-                        {                            
+                        {
                             m_caster->RemoveAurasDueToSpell(48518); // Eclipse (Lunar)
                         }
 
@@ -743,12 +733,12 @@ void Spell::EffectSchoolDMG(SpellEffIndex effIndex)
                         }
 
                         if (m_caster->GetEclipsePower() > 0)
-                        {        
+                        {
                             m_caster->RemoveAurasDueToSpell(48518); // Eclipse (Lunar)
                         }
 
                         if (m_caster->GetEclipsePower() < 0)
-                        {         
+                        {
                             m_caster->RemoveAurasDueToSpell(48517); // Eclipse (Solar)
                             m_caster->RemoveAurasDueToSpell(94338); // Eclipse (Solar) (Aura 332?)
                         }
