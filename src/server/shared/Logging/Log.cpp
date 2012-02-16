@@ -606,7 +606,7 @@ void Log::outErrorDb(const char * err, ...)
 
     if (dberLogfile)
     {
-        //outTimestamp(dberLogfile);
+        outTimestamp(dberLogfile);
         va_start(ap, err);
         vfprintf(dberLogfile, err, ap);
         va_end(ap);

@@ -251,9 +251,16 @@ void WorldSession::HandleCharEnumOpcode(WorldPacket & /*recv_data*/)
     /// get all the data necessary for loading all characters (along with their pets) on the account
 
     if (sWorld->getBoolConfig(CONFIG_DECLINED_NAMES_USED))
+    {
         stmt = CharacterDatabase.GetPreparedStatement(CHAR_GET_ENUM_DECLINED_NAME);
+        stmt->setUInt32(0, PET_SLOT_DEFAULT);
+        stmt->setUInt32(1, GetAccountId());
+    }
     else
+    {
         stmt = CharacterDatabase.GetPreparedStatement(CHAR_GET_ENUM);
+        stmt->setUInt32(0, GetAccountId());
+    }
 
     stmt->setUInt32(0, GetAccountId());
 
