@@ -19,4 +19,4 @@ INSERT INTO `achievement_criteria_data` (`criteria_id`, `type`, `value1`, `value
 (5787, 6, 4395, 0, ''), -- Lonely? - Dalaran
 (4071, 6, 4395, 0, ''); -- Lonely? - Dalaran
 
-UPDATE `achievement_criteria_data` SET `value1`=423 WHERE `value1`=355 AND `type`=16
+UPDATE `achievement_criteria_data` SET `value1`=423 WHERE `value1`=355 AND `type`=16;
