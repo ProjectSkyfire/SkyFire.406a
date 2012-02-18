@@ -19,6 +19,363 @@
 #include "Unit.h"
 #include "gilneas.h"
 
+//Phase 1
+/*######
+## npc_prince_liam_greymane_phase1
+######*/
+
+class npc_prince_liam_greymane_phase1 : public CreatureScript
+{
+public:
+    npc_prince_liam_greymane_phase1() : CreatureScript("npc_prince_liam_greymane_phase1") { }
+
+    CreatureAI* GetAI(Creature* creature) const
+    {
+        return new npc_prince_liam_greymane_phase1AI (creature);
+    }
+
+    struct npc_prince_liam_greymane_phase1AI : public ScriptedAI
+    {
+        npc_prince_liam_greymane_phase1AI(Creature* creature) : ScriptedAI(creature) {}
+
+        uint32 tSay; //Time left for say
+        uint32 cSay; //Current Say
+
+        //Evade or Respawn
+        void Reset()
+        {
+            tSay = DELAY_SAY_PRINCE_LIAM_GREYMANE; //Reset timer
+            cSay = 1; //Start from 1
+        }
+
+        //Timed events
+        void UpdateAI(const uint32 diff)
+        {
+            //Out of combat
+            if (!me->getVictim())
+            {
+                //Timed say
+                if (tSay <= diff)
+                {
+                    switch (cSay)
+                    {
+                        default:
+                        case 1:
+                            DoScriptText(SAY_PRINCE_LIAM_GREYMANE_1, me);
+                            cSay++;
+                            break;
+                        case 2:
+                            DoScriptText(SAY_PRINCE_LIAM_GREYMANE_2, me);
+                            cSay++;
+                            break;
+                        case 3:
+                            DoScriptText(SAY_PRINCE_LIAM_GREYMANE_3, me);
+                            cSay = 1; //Reset to 1
+                            break;
+                    }
+
+                    tSay = DELAY_SAY_PRINCE_LIAM_GREYMANE; //Reset the timer
+                }
+                else
+                {
+                    tSay -= diff;
+                }
+                return;
+            }
+        }
+    };
+};
+
+/*######
+## npc_gilneas_city_guard_phase1
+######*/
+
+class npc_gilneas_city_guard_phase1 : public CreatureScript
+{
+public:
+    npc_gilneas_city_guard_phase1() : CreatureScript("npc_gilneas_city_guard_phase1") {}
+
+    CreatureAI* GetAI(Creature* creature) const
+    {
+        return new npc_gilneas_city_guard_phase1AI (creature);
+    }
+
+    struct npc_gilneas_city_guard_phase1AI : public ScriptedAI
+    {
+        npc_gilneas_city_guard_phase1AI(Creature* creature) : ScriptedAI(creature) {}
+
+        uint32 tSay; //Time left for say
+
+        //Evade or Respawn
+        void Reset()
+        {
+            if (me->GetGUIDLow() == 3486400)
+                tSay = DELAY_SAY_GILNEAS_CITY_GUARD_GATE; //Reset timer
+        }
+
+        void UpdateAI(const uint32 diff)
+        {
+            //Out of combat and
+            if (me->GetGUIDLow() == 3486400)
+            {
+                //Timed say
+                if (tSay <= diff)
+                {
+                    //Random say
+                    DoScriptText(RAND(
+                        SAY_GILNEAS_CITY_GUARD_GATE_1,
+                        SAY_GILNEAS_CITY_GUARD_GATE_2,
+                        SAY_GILNEAS_CITY_GUARD_GATE_3),
+                    me);
+
+                    tSay = DELAY_SAY_GILNEAS_CITY_GUARD_GATE; //Reset timer
+                }
+                else
+                {
+                    tSay -= diff;
+                }
+            }
+        }
+    };
+};
+
+//Phase 2
+/*######
+## npc_gilneas_city_guard_phase2
+######*/
+
+class npc_gilneas_city_guard_phase2 : public CreatureScript
+{
+public:
+    npc_gilneas_city_guard_phase2() : CreatureScript("npc_gilneas_city_guard_phase2") {}
+
+    CreatureAI* GetAI(Creature* creature) const
+    {
+        return new npc_gilneas_city_guard_phase2AI (creature);
+    }
+
+    struct npc_gilneas_city_guard_phase2AI : public ScriptedAI
+    {
+        npc_gilneas_city_guard_phase2AI(Creature* creature) : ScriptedAI(creature) {}
+
+        uint32 tAnimate, tSound, dmgCount, tSeek;
+        bool playSound;
+
+        void Reset()
+        {
+            tAnimate   = DELAY_ANIMATE;
+            dmgCount   = 0;
+            tSound     = DELAY_SOUND;
+            playSound  = false;
+            tSeek      = urand(1000, 2000);
+        }
+
+        void DamageTaken(Unit* who, uint32 &Damage)
+        {
+            if (who->GetTypeId() == TYPEID_PLAYER)
+            {
+                me->getThreatManager().resetAllAggro();
+                who->AddThreat(me, 1.0f);
+                me->AddThreat(who, 1.0f);
+                me->AI()->AttackStart(who);
+                dmgCount = 0;
+            }
+            else if (who->isPet())
+            {
+                me->getThreatManager().resetAllAggro();
+                me->AddThreat(who, 1.0f);
+                me->AI()->AttackStart(who);
+                dmgCount = 0;
+            }
+        }
+
+        void DamageDealt(Unit* target, uint32& damage, DamageEffectType damageType)
+        {
+            if (target->GetEntry() == NPC_RAMPAGING_WORGEN_1)
+                dmgCount ++;
+        }
+
+        void UpdateAI(const uint32 diff)
+        {
+            if (tSeek <= diff)
+            {
+                if ((me->isAlive()) && (!me->isInCombat() && (me->GetDistance2d(me->GetHomePosition().GetPositionX(), me->GetHomePosition().GetPositionY()) <= 1.0f)))
+                    if (Creature* enemy = me->FindNearestCreature(NPC_RAMPAGING_WORGEN_1, 16.0f, true))
+                        me->AI()->AttackStart(enemy);
+                tSeek = urand(1000, 2000); //optimize cpu load, seeking only sometime between 1 and 2 seconds
+            }
+            else tSeek -= diff;
+
+            if (!UpdateVictim())
+                return;
+
+            if (tSound <= diff)
+            {
+                me->PlayDistanceSound(SOUND_SWORD_FLESH);
+                tSound = DELAY_SOUND;
+                playSound = false;
+            }
+
+            if (playSound == true)
+                tSound -= diff;
+
+            if (dmgCount < 2)
+                DoMeleeAttackIfReady();
+            else
+                if (me->getVictim()->GetTypeId() == TYPEID_PLAYER) dmgCount = 0;
+            else
+                if (me->getVictim()->isPet()) dmgCount = 0;
+            else
+            {
+                if (tAnimate <= diff)
+                {
+                    me->HandleEmoteCommand(EMOTE_ONESHOT_ATTACK1H);
+                    playSound = true;
+                    tAnimate = DELAY_ANIMATE;
+                }
+                else
+                    tAnimate -= diff;
+            }
+        }
+    };
+};
+
+/*######
+## npc_prince_liam_greymane_phase2
+######*/
+
+class npc_prince_liam_greymane_phase2 : public CreatureScript
+{
+public:
+    npc_prince_liam_greymane_phase2() : CreatureScript("npc_prince_liam_greymane_phase2") {}
+
+    CreatureAI* GetAI(Creature* creature) const
+    {
+        return new npc_prince_liam_greymane_phase2AI (creature);
+    }
+
+    struct npc_prince_liam_greymane_phase2AI : public ScriptedAI
+    {
+        npc_prince_liam_greymane_phase2AI(Creature* creature) : ScriptedAI(creature) {}
+
+        uint32 tAnimate, tSound, dmgCount, tYell, tSeek;
+        bool playSound, doYell;
+
+        void Reset()
+        {
+            tAnimate  = DELAY_ANIMATE;
+            dmgCount  = 0;
+            tSound    = DELAY_SOUND;
+            playSound = false;
+            tSeek     = urand(1000, 2000);
+            doYell    = true;
+            tYell     = DELAY_YELL_PRINCE_LIAM_GREYMANE;
+        }
+
+        void sGossipHello(Player* player)
+        {
+            if ((player->GetQuestStatus(14094) == QUEST_STATUS_REWARDED) && (player->GetPhaseMask() == 2))
+                player->SetAuraStack(SPELL_PHASE_4, player, 1); //phaseshift
+        }
+
+        void DamageTaken(Unit * who, uint32 &Damage)
+        {
+            if (who->GetTypeId() == TYPEID_PLAYER)
+            {
+                me->getThreatManager().resetAllAggro();
+                who->AddThreat(me, 1.0f);
+                me->AddThreat(who, 1.0f);
+                me->AI()->AttackStart(who);
+                dmgCount = 0;
+            }
+            else if (who->isPet())
+            {
+                me->getThreatManager().resetAllAggro();
+                me->AddThreat(who, 1.0f);
+                me->AI()->AttackStart(who);
+                dmgCount = 0;
+            }
+        }
+
+        void DamageDealt(Unit* target, uint32& damage, DamageEffectType damageType)
+        {
+            if (target->GetEntry() == NPC_RAMPAGING_WORGEN_1)
+                dmgCount ++;
+        }
+
+        void UpdateAI(const uint32 diff)
+        {
+            //If creature has no target
+            if (!UpdateVictim())
+            {
+                if (tSeek <= diff)
+                {
+                    //Find worgen nearby
+                    if (me->isAlive() && !me->isInCombat() && (me->GetDistance2d(me->GetHomePosition().GetPositionX(), me->GetHomePosition().GetPositionY()) <= 1.0f))
+                        if (Creature* enemy = me->FindNearestCreature(NPC_RAMPAGING_WORGEN_1, 16.0f, true))
+                            me->AI()->AttackStart(enemy);
+                    tSeek = urand(1000, 2000);//optimize cpu load
+                }
+                else tSeek -= diff;
+
+                //Yell only once after Reset()
+                if (doYell)
+                {
+                    //Yell Timer
+                    if (tYell <= diff)
+                    {
+                        //Random yell
+                        DoScriptText(RAND(
+                            YELL_PRINCE_LIAM_GREYMANE_1,
+                            YELL_PRINCE_LIAM_GREYMANE_2,
+                            YELL_PRINCE_LIAM_GREYMANE_3,
+                            YELL_PRINCE_LIAM_GREYMANE_4,
+                            YELL_PRINCE_LIAM_GREYMANE_5),
+                        me);
+
+                        doYell = false;
+                    }
+                    else
+                        tYell -= diff;
+                }
+            }
+            else
+            {
+                //Play sword attack sound
+                if (tSound <= diff)
+                {
+                    me->PlayDistanceSound(SOUND_SWORD_FLESH);
+                    tSound = DELAY_SOUND;
+                    playSound = false;
+                }
+
+                if (playSound == true) tSound -= diff;
+
+                //Attack
+                if (dmgCount < 2)
+                    DoMeleeAttackIfReady();
+                else
+                    if (me->getVictim()->GetTypeId() == TYPEID_PLAYER) dmgCount = 0;
+                else
+                    if (me->getVictim()->isPet()) dmgCount = 0;
+                else
+                {
+                    if (tAnimate <= diff)
+                    {
+                        me->HandleEmoteCommand(EMOTE_ONESHOT_ATTACK1H);
+                        playSound = true;
+                        tAnimate = DELAY_ANIMATE;
+                    }
+                    else
+                        tAnimate -= diff;
+                }
+
+                //Stop yell timer on combat
+                doYell = false;
+            }
+        }
+    };
+};
 
 /*######
 ## npc_lieutenant_walden
@@ -754,6 +1111,10 @@ class spell_keg_placed : public SpellScriptLoader
 
 void AddSC_gilneas()
 {
+    new npc_gilneas_city_guard_phase1();
+    new npc_prince_liam_greymane_phase1();
+    new npc_gilneas_city_guard_phase2();
+    new npc_prince_liam_greymane_phase2();
     new npc_rampaging_worgen();
     new npc_rampaging_worgen2();
     new go_merchant_square_door();
