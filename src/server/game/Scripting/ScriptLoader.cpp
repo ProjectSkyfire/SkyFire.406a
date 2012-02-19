@@ -84,6 +84,8 @@ void AddSC_npc_taxi();
 void AddSC_achievement_scripts();
 
 //eastern kingdoms
+void AddSC_elwynn_forest();
+
 void AddSC_alterac_valley();                 //Alterac Valley
 void AddSC_boss_balinda();
 void AddSC_boss_drekthar();
@@ -292,8 +294,6 @@ void AddSC_eastern_plaguelands();
 void AddSC_eversong_woods();
 void AddSC_ghostlands();
 void AddSC_gilneas();
-void AddSC_gilneas_phase1();
-void AddSC_gilneas_phase2();
 void AddSC_hinterlands();
 void AddSC_ironforge();
 void AddSC_isle_of_queldanas();
@@ -773,6 +773,7 @@ void AddWorldScripts()
 void AddEasternKingdomsScripts()
 {
 #ifdef SCRIPTS
+    AddSC_elwynn_forest();
     AddSC_alterac_valley();                 //Alterac Valley
     AddSC_boss_balinda();
     AddSC_boss_drekthar();
@@ -981,8 +982,6 @@ void AddEasternKingdomsScripts()
     AddSC_eversong_woods();
     AddSC_ghostlands();
     AddSC_gilneas();
-    AddSC_gilneas_phase1();
-    AddSC_gilneas_phase2();
     AddSC_hinterlands();
     AddSC_ironforge();
     AddSC_isle_of_queldanas();
