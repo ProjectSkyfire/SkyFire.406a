@@ -3705,6 +3705,22 @@ void Spell::finish(bool ok)
     // Stop Attack for some spells
     if (m_spellInfo->Attributes & SPELL_ATTR0_STOP_ATTACK_TARGET)
         m_caster->AttackStop();
+        
+    switch (m_spellInfo->Id)
+    {
+		case 73975://necrotic strike
+		{
+			if (!unitTarget)//fix crash
+				return;
+			if (Aura* NS = unitTarget->GetAura(73975))
+			{
+				int32 nsbp = m_caster->GetTotalAttackPowerValue(BASE_ATTACK) * 0.75f;//
+				int32 getheal = unitTarget->GetAbsorbHeal();//Get current absorb value if any
+				int32 heal = nsbp + getheal;//define &| combine values
+				unitTarget->SetAbsorbHeal(heal);//set absorb value
+			}
+		}
+    }
 }
 
 void Spell::SendCastResult(SpellCastResult result)
