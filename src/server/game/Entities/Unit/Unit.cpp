@@ -1909,14 +1909,14 @@ void Unit::CalcHealAbsorb(Unit* victim, const SpellInfo *healSpell, uint32 &heal
     
       if (Aura * aur = GetAura(73975))//
       {
-	//necrotic strike
-	int32 getabsorb = GetAbsorbHeal();//Get initial absorb value
-	int32 subtract = getabsorb - absorb;//Define subtraction
-	SetAbsorbHeal(subtract);//set absorb heal to the new value
-	if (subtract <= 0)//remove if empty - 0 absorb left
-	pVictim->RemoveAura(73975);
-	SetAbsorbHeal(0);//reset absorb amount after consumed
-      }    
+        //necrotic strike
+        int32 getabsorb = GetAbsorbHeal();//Get initial absorb value
+        int32 subtract = getabsorb - absorb;//Define subtraction
+        SetAbsorbHeal(subtract);//set absorb heal to the new value
+        if (subtract <= 0)//remove if empty - 0 absorb left
+        pVictim->RemoveAura(73975);
+        SetAbsorbHeal(0);//reset absorb amount after consumed
+      }
 }
 
 void Unit::AttackerStateUpdate (Unit* victim, WeaponAttackType attType, bool extra)
