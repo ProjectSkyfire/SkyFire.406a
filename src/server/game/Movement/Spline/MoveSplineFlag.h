@@ -71,7 +71,7 @@ namespace Movement
             // CatmullRom interpolation mode used
             Mask_CatmullRom = Flying | Catmullrom,
             // Unused, not supported flags
-            Mask_Unused = No_Spline|Enter_Cycle|Frozen|Transport|Exit_Vehicle|Unknown26|Unknown27|Unknown32,
+            Mask_Unused = No_Spline|Enter_Cycle|Frozen|Transport|Exit_Vehicle|Unknown26|Unknown27,
         };
 
         inline uint32& raw() { return (uint32&)*this;}
