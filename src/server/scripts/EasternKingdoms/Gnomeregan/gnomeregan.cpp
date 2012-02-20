@@ -526,7 +526,7 @@ public:
                             NextStep(0, false);
                             break;
                     }
-                } 
+                }
                 else Timer -= Diff;
             }
 

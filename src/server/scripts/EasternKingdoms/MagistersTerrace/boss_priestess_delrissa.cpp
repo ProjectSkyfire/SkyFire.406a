@@ -253,7 +253,7 @@ public:
                     return;
                 }
                 ResetTimer = 5000;
-            } 
+            }
             else ResetTimer -= diff;
 
             if (HealTimer <= diff)
@@ -271,7 +271,7 @@ public:
 
                 DoCast(target, SPELL_FLASH_HEAL);
                 HealTimer = 15000;
-            } 
+            }
             else HealTimer -= diff;
 
             if (RenewTimer <= diff)
@@ -285,7 +285,7 @@ public:
 
                 DoCast(target, SPELL_RENEW_NORMAL);
                 RenewTimer = 5000;
-            } 
+            }
             else RenewTimer -= diff;
 
             if (ShieldTimer <= diff)
@@ -299,7 +299,7 @@ public:
 
                 DoCast(target, SPELL_SHIELD);
                 ShieldTimer = 7500;
-            } 
+            }
             else ShieldTimer -= diff;
 
             if (DispelTimer <= diff)
@@ -322,7 +322,7 @@ public:
                     DoCast(target, SPELL_DISPEL_MAGIC);
 
                 DispelTimer = 12000;
-            } 
+            }
             else DispelTimer -= diff;
 
             if (SWPainTimer <= diff)
@@ -331,7 +331,7 @@ public:
                     DoCast(target, SPELL_SW_PAIN_NORMAL);
 
                 SWPainTimer = 10000;
-            } 
+            }
             else SWPainTimer -= diff;
 
             DoMeleeAttackIfReady();
@@ -474,7 +474,7 @@ struct boss_priestess_lackey_commonAI : public ScriptedAI
         {
             DoResetThreat();
             ResetThreatTimer = urand(5000, 20000);
-        } 
+        }
         else ResetThreatTimer -= diff;
     }
 };
@@ -545,7 +545,7 @@ public:
                 InVanish        = true;
                 Vanish_Timer    = 30000;
                 Wait_Timer      = 10000;
-            } 
+            }
             else Vanish_Timer -= diff;
 
             if (InVanish)
@@ -556,7 +556,7 @@ public:
                     DoCast(me->getVictim(), SPELL_KIDNEY_SHOT, true);
                     me->SetVisible(true);       // ...? Hacklike
                     InVanish = false;
-                } 
+                }
                 else Wait_Timer -= diff;
             }
 
@@ -564,21 +564,21 @@ public:
             {
                 DoCast(me->getVictim(), SPELL_GOUGE);
                 Gouge_Timer = 5500;
-            } 
+            }
             else Gouge_Timer -= diff;
 
             if (Kick_Timer <= diff)
             {
                 DoCast(me->getVictim(), SPELL_KICK);
                 Kick_Timer = 7000;
-            } 
+            }
             else Kick_Timer -= diff;
 
             if (Eviscerate_Timer <= diff)
             {
                 DoCast(me->getVictim(), SPELL_EVISCERATE);
                 Eviscerate_Timer = 4000;
-            } 
+            }
             else Eviscerate_Timer -= diff;
 
             if (!InVanish)
@@ -646,14 +646,14 @@ public:
             {
                 DoCast(me->getVictim(), SPELL_IMMOLATE);
                 Immolate_Timer = 6000;
-            } 
+            }
             else Immolate_Timer -= diff;
 
             if (Shadow_Bolt_Timer <= diff)
             {
                 DoCast(me->getVictim(), SPELL_SHADOW_BOLT);
                 Shadow_Bolt_Timer = 5000;
-            } 
+            }
             else Shadow_Bolt_Timer -= diff;
 
             if (Seed_of_Corruption_Timer <= diff)
@@ -662,7 +662,7 @@ public:
                     DoCast(unit, SPELL_SEED_OF_CORRUPTION);
 
                 Seed_of_Corruption_Timer = 10000;
-            } 
+            }
             else Seed_of_Corruption_Timer -= diff;
 
             if (Curse_of_Agony_Timer <= diff)
@@ -671,7 +671,7 @@ public:
                     DoCast(unit, SPELL_CURSE_OF_AGONY);
 
                 Curse_of_Agony_Timer = 13000;
-            } 
+            }
             else Curse_of_Agony_Timer -= diff;
 
             if (Fear_Timer <= diff)
@@ -680,7 +680,7 @@ public:
                     DoCast(unit, SPELL_FEAR);
 
                 Fear_Timer = 10000;
-            } 
+            }
             else Fear_Timer -= diff;
 
             DoMeleeAttackIfReady();
@@ -731,14 +731,14 @@ public:
             {
                 DoCast(me->getVictim(), SPELL_KNOCKDOWN);
                 Knockdown_Timer = 6000;
-            } 
+            }
             else Knockdown_Timer -= diff;
 
             if (Snap_Kick_Timer <= diff)
             {
                 DoCast(me->getVictim(), SPELL_SNAP_KICK);
                 Snap_Kick_Timer  = 4500;
-            } 
+            }
             else Snap_Kick_Timer -= diff;
 
             DoMeleeAttackIfReady();
@@ -813,7 +813,7 @@ public:
                     DoCast(target, SPELL_POLYMORPH);
                     Polymorph_Timer = 20000;
                 }
-            } 
+            }
             else Polymorph_Timer -= diff;
 
             if (HealthBelowPct(35) && !HasIceBlocked)
@@ -828,28 +828,28 @@ public:
                     DoCast(unit, SPELL_BLIZZARD);
 
                 Blizzard_Timer = 8000;
-            } 
+            }
             else Blizzard_Timer -= diff;
 
             if (Ice_Lance_Timer <= diff)
             {
                 DoCast(me->getVictim(), SPELL_ICE_LANCE);
                 Ice_Lance_Timer = 12000;
-            } 
+            }
             else Ice_Lance_Timer -= diff;
 
             if (Cone_of_Cold_Timer <= diff)
             {
                 DoCast(me->getVictim(), SPELL_CONE_OF_COLD);
                 Cone_of_Cold_Timer = 10000;
-            } 
+            }
             else Cone_of_Cold_Timer -= diff;
 
             if (Frostbolt_Timer <= diff)
             {
                 DoCast(me->getVictim(), SPELL_FROSTBOLT);
                 Frostbolt_Timer = 8000;
-            } 
+            }
             else Frostbolt_Timer -= diff;
 
             if (Blink_Timer <= diff)
@@ -874,7 +874,7 @@ public:
                     DoCast(me, SPELL_BLINK);
 
                 Blink_Timer = 8000;
-            } 
+            }
             else Blink_Timer -= diff;
 
             DoMeleeAttackIfReady();
@@ -964,42 +964,42 @@ public:
                 }
 
                 Intercept_Stun_Timer = 10000;
-            } 
+            }
             else Intercept_Stun_Timer -= diff;
 
             if (Disarm_Timer <= diff)
             {
                 DoCast(me->getVictim(), SPELL_DISARM);
                 Disarm_Timer = 6000;
-            } 
+            }
             else Disarm_Timer -= diff;
 
             if (Hamstring_Timer <= diff)
             {
                 DoCast(me->getVictim(), SPELL_HAMSTRING);
                 Hamstring_Timer = 4500;
-            } 
+            }
             else Hamstring_Timer -= diff;
 
             if (Mortal_Strike_Timer <= diff)
             {
                 DoCast(me->getVictim(), SPELL_MORTAL_STRIKE);
                 Mortal_Strike_Timer = 4500;
-            } 
+            }
             else Mortal_Strike_Timer -= diff;
 
             if (Piercing_Howl_Timer <= diff)
             {
                 DoCast(me->getVictim(), SPELL_PIERCING_HOWL);
                 Piercing_Howl_Timer = 10000;
-            } 
+            }
             else Piercing_Howl_Timer -= diff;
 
             if (Frightening_Shout_Timer <= diff)
             {
                 DoCast(me->getVictim(), SPELL_FRIGHTENING_SHOUT);
                 Frightening_Shout_Timer = 18000;
-            } 
+            }
             else Frightening_Shout_Timer -= diff;
 
             DoMeleeAttackIfReady();
@@ -1077,7 +1077,7 @@ public:
                 {
                     DoCast(me->getVictim(), SPELL_WING_CLIP);
                     Wing_Clip_Timer = 4000;
-                } 
+                }
                 else Wing_Clip_Timer -= diff;
 
                 if (Freezing_Trap_Timer <= diff)
@@ -1094,7 +1094,7 @@ public:
                         DoCast(me->getVictim(), SPELL_FREEZING_TRAP);
                         Freezing_Trap_Timer = 15000;
                     }
-                } 
+                }
                 else Freezing_Trap_Timer -= diff;
 
                 DoMeleeAttackIfReady();
@@ -1105,28 +1105,28 @@ public:
                 {
                     DoCast(me->getVictim(), SPELL_CONCUSSIVE_SHOT);
                     Concussive_Shot_Timer = 8000;
-                } 
+                }
                 else Concussive_Shot_Timer -= diff;
 
                 if (Multi_Shot_Timer <= diff)
                 {
                     DoCast(me->getVictim(), SPELL_MULTI_SHOT);
                     Multi_Shot_Timer = 10000;
-                } 
+                }
                 else Multi_Shot_Timer -= diff;
 
                 if (Aimed_Shot_Timer <= diff)
                 {
                     DoCast(me->getVictim(), SPELL_AIMED_SHOT);
                     Aimed_Shot_Timer = 6000;
-                } 
+                }
                 else Aimed_Shot_Timer -= diff;
 
                 if (Shoot_Timer <= diff)
                 {
                     DoCast(me->getVictim(), SPELL_SHOOT);
                     Shoot_Timer = 2500;
-                } 
+                }
                 else Shoot_Timer -= diff;
             }
         }
@@ -1190,14 +1190,14 @@ public:
                 DoCast(me, RAND(SPELL_WINDFURY_TOTEM, SPELL_FIRE_NOVA_TOTEM, SPELL_EARTHBIND_TOTEM));
                 ++Tote_Amount;
                 Totem_Timer = Tote_Amount*2000;
-            } 
+            }
             else Totem_Timer -= diff;
 
             if (War_Stomp_Timer <= diff)
             {
                 DoCast(me, SPELL_WAR_STOMP);
                 War_Stomp_Timer = 10000;
-            } 
+            }
             else War_Stomp_Timer -= diff;
 
             if (Purge_Timer <= diff)
@@ -1206,14 +1206,14 @@ public:
                     DoCast(unit, SPELL_PURGE);
 
                 Purge_Timer = 15000;
-            } 
+            }
             else Purge_Timer -= diff;
 
             if (Frost_Shock_Timer <= diff)
             {
                 DoCast(me->getVictim(), SPELL_FROST_SHOCK);
                 Frost_Shock_Timer = 7000;
-            } 
+            }
             else Frost_Shock_Timer -= diff;
 
             if (Healing_Wave_Timer <= diff)
@@ -1229,7 +1229,7 @@ public:
                 Healing_Wave_Timer = 5000;
                 //    }
                 // }
-            } 
+            }
             else Healing_Wave_Timer -= diff;
 
             DoMeleeAttackIfReady();
@@ -1318,14 +1318,14 @@ public:
                     }
                 }
                 Recombobulate_Timer = 2000;
-            } 
+            }
             else Recombobulate_Timer -= diff;
 
             if (High_Explosive_Sheep_Timer <= diff)
             {
                 DoCast(me, SPELL_HIGH_EXPLOSIVE_SHEEP);
                 High_Explosive_Sheep_Timer = 65000;
-            } 
+            }
             else High_Explosive_Sheep_Timer -= diff;
 
             DoMeleeAttackIfReady();

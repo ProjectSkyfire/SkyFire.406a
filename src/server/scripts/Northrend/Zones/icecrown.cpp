@@ -486,7 +486,6 @@ class npc_tournament_training_dummy : public CreatureScript
         {
             return new npc_tournament_training_dummyAI(creature);
         }
-
 };
 
 void AddSC_icecrown()

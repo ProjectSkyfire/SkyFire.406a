@@ -164,7 +164,7 @@ public:
                     me->UpdateEntry(NPC_KAEL);
 
                     TransformTimer = 0;
-                } 
+                }
                 else TransformTimer -= Diff;
             }
         }

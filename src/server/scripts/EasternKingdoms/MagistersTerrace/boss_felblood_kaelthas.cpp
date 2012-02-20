@@ -295,7 +295,7 @@ public:
                             DoCast(me, SPELL_SHOCK_BARRIER, true);
                             DoCast(me->getVictim(), SPELL_PYROBLAST);
                             PyroblastTimer = 60000;
-                        } 
+                        }
                         else PyroblastTimer -= diff;
                     }
 
@@ -303,7 +303,7 @@ public:
                     {
                         DoCast(me->getVictim(), SPELL_FIREBALL_NORMAL);
                         FireballTimer = urand(2000, 6000);
-                    } 
+                    }
                     else FireballTimer -= diff;
 
                     if (PhoenixTimer <= diff)
@@ -325,7 +325,7 @@ public:
                         DoScriptText(SAY_PHOENIX, me);
 
                         PhoenixTimer = 60000;
-                    } 
+                    }
                     else PhoenixTimer -= diff;
 
                     if (FlameStrikeTimer <= diff)
@@ -338,7 +338,7 @@ public:
                             DoScriptText(SAY_FLAMESTRIKE, me);
                         }
                         FlameStrikeTimer = urand(15000, 25000);
-                    } 
+                    }
                     else FlameStrikeTimer -= diff;
 
                     // Below 50%
@@ -424,7 +424,7 @@ public:
                                 GravityLapsePhase = 0;
                                 break;
                         }
-                    } 
+                    }
                     else GravityLapseTimer -= diff;
                 }
                 break;
@@ -467,7 +467,7 @@ public:
             {
                 DoCast(me, SPELL_FLAMESTRIKE1_NORMAL, true);
                 me->Kill(me);
-            } 
+            }
             else FlameStrikeTimer -= diff;
         }
     };
@@ -566,7 +566,7 @@ public:
                         me->SummonCreature(CREATURE_PHOENIX_EGG, 0.0f, 0.0f, 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 45000);
                         me->DisappearAndDie();
                         Rebirth = false;
-                    } 
+                    }
                     else Death_Timer -= diff;
                 }
             }
@@ -617,7 +617,7 @@ public:
             {
                 me->SummonCreature(CREATURE_PHOENIX, 0.0f, 0.0f, 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 60000);
                 me->Kill(me);
-            } 
+            }
             else HatchTimer -= diff;
         }
     };
@@ -674,7 +674,7 @@ public:
                 }
 
                 ChangeTargetTimer = urand(5000, 15000);
-            } 
+            }
             else ChangeTargetTimer -= diff;
         }
     };

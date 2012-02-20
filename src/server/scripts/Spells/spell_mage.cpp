@@ -635,8 +635,8 @@ void AddSC_mage_spell_scripts()
     new spell_mage_incanters_absorbtion_manashield();
     new spell_mage_polymorph_cast_visual;
     new spell_mage_summon_water_elemental;
-    new spell_mage_ice_barrier;    
+    new spell_mage_ice_barrier;
     new npc_flame_orb;
     new npc_ring_of_frost;
-    new npc_frostfire_orb;    
+    new npc_frostfire_orb;
 }

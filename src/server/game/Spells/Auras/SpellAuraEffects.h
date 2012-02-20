@@ -283,7 +283,7 @@ class AuraEffect
         void HandlePreventResurrection(AuraApplication const* aurApp, uint8 mode, bool apply) const;
         void HandleActionbarSpellOverride(AuraApplication const * aurApp, uint8 mode, bool apply) const;
         void HandleAuraOverrideSpells(AuraApplication const * aurApp, uint8 mode, bool apply) const;
-        
+
         // aura effect periodic tick handlers
         void HandlePeriodicDummyAuraTick(Unit* target, Unit* caster) const;
         void HandlePeriodicTriggerSpellAuraTick(Unit* target, Unit* caster) const;

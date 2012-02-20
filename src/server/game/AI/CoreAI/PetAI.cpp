@@ -98,7 +98,7 @@ void PetAI::UpdateAI(const uint32 diff)
             me->InterruptNonMeleeSpells(false);
             return;
         }
-    
+
         if (_needToStop())
         {
             sLog->outStaticDebug("Pet AI stopped attacking [guid=%u]", me->GetGUIDLow());
