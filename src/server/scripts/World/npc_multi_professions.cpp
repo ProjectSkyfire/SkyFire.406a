@@ -17,38 +17,72 @@
 
 /* ScriptData
 Name: Npc_Multi_Professions Trainer
-%Complete: 0
+%Complete: 4
 Comment: Provides support for multi-profession trainer new to cataclysm
 Category: NPCs
 EndScriptData */
 
 #include "ScriptPCH.h"
 
-/*
-INSERT INTO `script_texts` VALUES ('0', '-2000000', 'I can teach you the basics of any gathering profession, but that's all. To learn more than an apprentice's skills, youu'll need to visit a specialist dedicated to only one profession. You can learn up to two professions: Two gathering, two production, or one of each. Secondary skills like Archaelogy, cooking, First Aid, and Fishing don't count twards your two professions; you can learn as many of those as you like.', null, null, null, null, null, null, null, null, '0', '1', '0', '0', 'INTRO0');
-INSERT INTO `script_texts` VALUES ('0', '-2000001', 'Reserved', null, null, null, null, null, null, null, null, '16261', '1', '0', '0', 'INTRO1');
-INSERT INTO `script_texts` VALUES ('0', '-2000002', 'Reserved', null, null, null, null, null, null, null, null, '16261', '1', '0', '0', 'INTRO2');
-INSERT INTO `script_texts` VALUES ('0', '-2000003', 'Reserved', null, null, null, null, null, null, null, null, '16261', '1', '0', '0', 'INTRO3');
-INSERT INTO `script_texts` VALUES ('0', '-2000004', 'Reserved', null, null, null, null, null, null, null, null, '16261', '1', '0', '0', 'INTRO4');
-INSERT INTO `script_texts` VALUES ('0', '-2000005', 'Reserved', null, null, null, null, null, null, null, null, '16261', '1', '0', '0', 'INTRO5');
-INSERT INTO `script_texts` VALUES ('0', '-2000006', 'Reserved', null, null, null, null, null, null, null, null, '16261', '1', '0', '0', 'INTRO6');
-INSERT INTO `script_texts` VALUES ('0', '-2000007', 'Reserved', null, null, null, null, null, null, null, null, '16261', '1', '0', '0', 'INTRO7');
-INSERT INTO `script_texts` VALUES ('0', '-2000008', 'Reserved', null, null, null, null, null, null, null, null, '16261', '1', '0', '0', 'INTRO8');
-INSERT INTO `script_texts` VALUES ('0', '-2000009', 'Reserved', null, null, null, null, null, null, null, null, '16261', '1', '0', '0', 'INTRO9');
-INSERT INTO `script_texts` VALUES ('0', '-2000010', 'Reserved', null, null, null, null, null, null, null, null, '16261', '1', '0', '0', 'INTRO10');
-*/
+#define SAY_GATHER1 "Tell me about the gathering professions"
+#define SAY_PRODUC1 "Tell me about the production professions"
+#define SAY_TEST1 "Learn Herbalism"
+#define SAY_TEST2 "Learn Inscription"
 
-enum eEnums          // Text placeholder
+enum ProfessionSpells
 {
-    SAY_INTRO0       = -2000000,
-    SAY_INTRO1       = -2000001,
-    SAY_INTRO2       = -2000002,
-    SAY_INTRO3       = -2000003,
-    SAY_INTRO4       = -2000004,
-    SAY_INTRO5       = -2000005,
-    SAY_INTRO6       = -2000006,
-    SAY_INTRO7       = -2000007,
-    SAY_INTRO8       = -2000008,
-    SAY_INTRO9       = -2000009,
-    SAY_INTRO10      = -2000010
+    S_LEARN_HERB1 = 182,
+    S_LEARN_INSC1 = 773
 };
+
+class multi_profession_npc : public CreatureScript
+{
+public:
+
+    multi_profession_npc()
+        : CreatureScript("multi_profession_npc")
+    {
+    }
+
+    void SendActionMenu(Player* player, Creature* creature, uint32 action)
+    {
+        switch (action)
+        {        
+            case GOSSIP_ACTION_INFO_DEF:
+                player->CastSpell(player, S_LEARN_HERB1, true);
+                player->CLOSE_GOSSIP_MENU();
+            break;
+
+            case GOSSIP_ACTION_INFO_DEF + 1:
+                player->CastSpell(player, S_LEARN_INSC1, true);
+                player->CLOSE_GOSSIP_MENU();
+            break;
+            
+            case GOSSIP_ACTION_INFO_DEF + 2:
+                player->SEND_GOSSIP_MENU(17126, creature->GetGUID());
+            break;
+            
+            case GOSSIP_ACTION_INFO_DEF + 3:
+                player->SEND_GOSSIP_MENU(17127, creature->GetGUID());
+            break;
+
+        }
+    }
+
+    bool OnGossipHello(Player* player, Creature* creature)
+    {
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, SAY_TEST1, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF);
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, SAY_TEST2, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, SAY_GATHER1, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, SAY_PRODUC1, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+
+        player->PlayerTalkClass->SendGossipMenu(17125, creature->GetGUID());
+
+        return true;
+    }
+};
+
+void AddSC_multi_profession_npc()
+{
+    new multi_profession_npc();
+}
