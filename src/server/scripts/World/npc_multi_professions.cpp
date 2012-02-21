@@ -1,6 +1,5 @@
 /*
- * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2006-2012 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -41,15 +40,15 @@ INSERT INTO `script_texts` VALUES ('0', '-2000010', 'Reserved', null, null, null
 
 enum eEnums          // Text placeholder
 {
-	SAY_INTRO0       = -2000000,
-	SAY_INTRO1       = -2000001,
-	SAY_INTRO2       = -2000002,
-	SAY_INTRO3       = -2000003,
-	SAY_INTRO4       = -2000004,
-	SAY_INTRO5       = -2000005,
-	SAY_INTRO6       = -2000006,
-	SAY_INTRO7       = -2000007,
-	SAY_INTRO8       = -2000008,
-	SAY_INTRO9       = -2000009,
-	SAY_INTRO10      = -2000010
+    SAY_INTRO0       = -2000000,
+    SAY_INTRO1       = -2000001,
+    SAY_INTRO2       = -2000002,
+    SAY_INTRO3       = -2000003,
+    SAY_INTRO4       = -2000004,
+    SAY_INTRO5       = -2000005,
+    SAY_INTRO6       = -2000006,
+    SAY_INTRO7       = -2000007,
+    SAY_INTRO8       = -2000008,
+    SAY_INTRO9       = -2000009,
+    SAY_INTRO10      = -2000010
 };
