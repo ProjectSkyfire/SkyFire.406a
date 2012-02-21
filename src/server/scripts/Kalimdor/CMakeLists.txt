@@ -146,7 +146,7 @@ set(scripts_STAT_SRCS
   Kalimdor/Zones/tanaris.cpp
   Kalimdor/Zones/dustwallow_marsh.cpp
   Kalimdor/Zones/winterspring.cpp
-  Kalimdor/Zones/thousand_needles.cpp
+  #Kalimdor/Zones/thousand_needles.cpp
   Kalimdor/Zones/ashenvale.cpp
   Kalimdor/Zones/teldrassil.cpp
 )
