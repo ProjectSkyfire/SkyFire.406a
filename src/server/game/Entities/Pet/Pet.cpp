@@ -544,6 +544,11 @@ void Pet::Update(uint32 diff)
                             _regenTimer += PET_FOCUS_REGEN_INTERVAL - diff;
                             if (!_regenTimer)
                                 ++_regenTimer;
+
+                            // MrSmite
+                            //  Fix for focus regen getting stuck
+                            if (_regenTimer > PET_FOCUS_REGEN_INTERVAL)
+                                _regenTimer = PET_FOCUS_REGEN_INTERVAL;
                             break;
                         // in creature::update
                         //case POWER_ENERGY:
