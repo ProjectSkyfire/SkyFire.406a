@@ -461,8 +461,13 @@ void World::LoadConfigSettings(bool reload)
     rate_values[RATE_DROP_ITEM_REFERENCED_AMOUNT] = ConfigMgr::GetFloatDefault("Rate.Drop.Item.ReferencedAmount", 1.0f);
     rate_values[RATE_DROP_MONEY]  = ConfigMgr::GetFloatDefault("Rate.Drop.Money", 1.0f);
     rate_values[RATE_XP_KILL]     = ConfigMgr::GetFloatDefault("Rate.XP.Kill", 1.0f);
+    rate_values[RATE_XP_KILL_PREMIUM]    = ConfigMgr::GetFloatDefault("Rate.XP.Kill.Premium", 1.0f);
     rate_values[RATE_XP_QUEST]    = ConfigMgr::GetFloatDefault("Rate.XP.Quest", 1.0f);
+    rate_values[RATE_XP_QUEST_PREMIUM]   = ConfigMgr::GetFloatDefault("Rate.XP.Quest.Premium", 1.0f);
     rate_values[RATE_XP_EXPLORE]  = ConfigMgr::GetFloatDefault("Rate.XP.Explore", 1.0f);
+    rate_values[RATE_XP_EXPLORE_PREMIUM] = ConfigMgr::GetFloatDefault("Rate.XP.Explore.Premium", 1.0f);
+    rate_values[RATE_XP_AFTER_80] = ConfigMgr::GetFloatDefault("Rate.XP.After.80", 1.0f);
+	
     rate_values[RATE_REPAIRCOST]  = ConfigMgr::GetFloatDefault("Rate.RepairCost", 1.0f);
     if (rate_values[RATE_REPAIRCOST] < 0.0f)
     {
@@ -592,6 +597,7 @@ void World::LoadConfigSettings(bool reload)
     m_int_configs[CONFIG_INTERVAL_SAVE] = ConfigMgr::GetIntDefault("PlayerSaveInterval", 15 * MINUTE * IN_MILLISECONDS);
     m_int_configs[CONFIG_INTERVAL_DISCONNECT_TOLERANCE] = ConfigMgr::GetIntDefault("DisconnectToleranceInterval", 0);
     m_bool_configs[CONFIG_STATS_SAVE_ONLY_ON_LOGOUT] = ConfigMgr::GetBoolDefault("PlayerSave.Stats.SaveOnlyOnLogout", true);
+    m_bool_configs[CONFIG_DUEL_RESET_COOLDOWN] = ConfigMgr::GetBoolDefault("DuelResetCooldown", false);
     m_bool_configs[CONFIG_PREVENT_PLAYERS_ACCESS_TO_GMISLAND] = ConfigMgr::GetBoolDefault("PreventPlayersAccessToGMIsland", false);
 
     m_int_configs[CONFIG_MIN_LEVEL_STAT_SAVE] = ConfigMgr::GetIntDefault("PlayerSave.Stats.MinLevel", 0);
@@ -1051,6 +1057,9 @@ void World::LoadConfigSettings(bool reload)
     m_int_configs[CONFIG_ARENA_START_MATCHMAKER_RATING]              = ConfigMgr::GetIntDefault ("Arena.ArenaStartMatchmakerRating", 1500);
     m_bool_configs[CONFIG_ARENA_SEASON_IN_PROGRESS]                  = ConfigMgr::GetBoolDefault("Arena.ArenaSeason.InProgress", true);
     m_bool_configs[CONFIG_ARENA_LOG_EXTENDED_INFO]                   = ConfigMgr::GetBoolDefault("ArenaLog.ExtendedInfo", false);
+    m_bool_configs[CONFIG_ARENA_2v2_TEAM_ENABLE]                     = ConfigMgr::GetBoolDefault("Arena.2v2.Team", 1);
+    m_bool_configs[CONFIG_ARENA_3v3_TEAM_ENABLE]                     = ConfigMgr::GetBoolDefault("Arena.3v3.Team", 1);
+    m_bool_configs[CONFIG_ARENA_5v5_TEAM_ENABLE]                     = ConfigMgr::GetBoolDefault("Arena.5v5.Team", 1);
 
     m_bool_configs[CONFIG_OFFHAND_CHECK_AT_SPELL_UNLEARN]            = ConfigMgr::GetBoolDefault("OffhandCheckAtSpellUnlearn", true);
 
@@ -1228,6 +1237,12 @@ void World::LoadConfigSettings(bool reload)
     // misc
     m_bool_configs[CONFIG_PDUMP_NO_PATHS] = ConfigMgr::GetBoolDefault("PlayerDump.DisallowPaths", true);
     m_bool_configs[CONFIG_PDUMP_NO_OVERWRITE] = ConfigMgr::GetBoolDefault("PlayerDump.DisallowOverwrite", true);
+    //AreaDuelReset
+    m_int_configs[CONFIG_DUEL_RESET_ONE] = ConfigMgr::GetIntDefault("Duel.Reset.Area.One", 14); // stormwind
+    m_int_configs[CONFIG_DUEL_RESET_TWO] = ConfigMgr::GetIntDefault("Duel.Reset.Area.Two", 12); // orgrimmar
+    // Player Item logs
+    m_bool_configs[CONFIG_ENABLE_ITEMLOG] = ConfigMgr::GetBoolDefault("Itemlog.Enable", false);
+
 
     sScriptMgr->OnConfigLoad(reload);
 }
@@ -2224,6 +2239,31 @@ void World::SendGMText(int32 string_id, ...)
             continue;
 
         if (AccountMgr::IsPlayerAccount(itr->second->GetSecurity()))
+            continue;
+
+        wt_do(itr->second->GetPlayer());
+    }
+
+    va_end(ap);
+}
+
+// Chat monitoring: Send a System Message to other faction GMs
+void World::SendGMTextOtherTeam(int32 string_id, uint32 team, ...)
+{
+    va_list ap;
+    va_start(ap, string_id);
+
+    Trinity::WorldWorldTextBuilder wt_builder(string_id, &ap);
+    Trinity::LocalizedPacketListDo<Trinity::WorldWorldTextBuilder> wt_do(wt_builder);
+    for (SessionMap::iterator itr = m_sessions.begin(); itr != m_sessions.end(); ++itr)
+    {
+        if (!itr->second || !itr->second->GetPlayer() || !itr->second->GetPlayer()->IsInWorld())
+            continue;
+
+        if (AccountMgr::IsPlayerAccount(itr->second->GetSecurity()))
+            continue;
+
+        if (itr->second->GetPlayer()->GetTeam() == team)
             continue;
 
         wt_do(itr->second->GetPlayer());
