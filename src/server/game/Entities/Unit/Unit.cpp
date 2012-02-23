@@ -16416,28 +16416,8 @@ void Unit::ApplyResilience(Unit const* victim, int32* damage, CombatRating type)
         return;
 
     if (source && damage)
-    switch (type)
     {
-    case CR_CRIT_TAKEN_MELEE:
-        if (source && damage)
-        {
-            *damage -= target->GetMeleeDamageReduction(*damage);
-        }
-        break;
-    case CR_CRIT_TAKEN_RANGED:
-        if (source && damage)
-        {
-            *damage -= target->GetRangedDamageReduction(*damage);
-        }
-        break;
-    case CR_CRIT_TAKEN_SPELL:
-        if (source && damage)
-        {
-            *damage -= target->GetSpellDamageReduction(*damage);
-        }
-        break;
-    default:
-        break;
+        *damage -= target->ToPlayer()->GetPlayerDamageReduction(*damage);
     }
 }
 
