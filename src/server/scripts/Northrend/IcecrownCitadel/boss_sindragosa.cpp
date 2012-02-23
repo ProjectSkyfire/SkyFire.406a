@@ -268,7 +268,7 @@ class boss_sindragosa : public CreatureScript
 
             void MovementInform(uint32 type, uint32 point)
             {
-                if (type != EFFECT_MOTION_TYPE && type != EFFECT_MOTION_TYPE)
+                if (type != EFFECT_MOTION_TYPE && type != POINT_FROSTWYRM_FLY_IN)
                     return;
 
                 switch (point)
