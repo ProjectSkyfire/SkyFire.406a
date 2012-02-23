@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 Trinity <http://www.trinitycore.org/>
  * Copyright (C) 2005-2012 MaNGOS <http://www.getmangos.com/>
  *
