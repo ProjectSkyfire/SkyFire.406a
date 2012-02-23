@@ -141,27 +141,27 @@ void PetAI::UpdateAI(const uint32 diff)
             if (!spellInfo)
                 continue;
 
+            // Check global cooldown
             if (me->GetCharmInfo() && me->GetCharmInfo()->GetGlobalCooldownMgr().HasGlobalCooldown(spellInfo))
                 continue;
 
+            // Check spell cooldown
+            if (me->HasSpellCooldown(spellInfo->Id))
+                continue;
+
+            // Check if pet is in combat and if spell can be cast
+            if (me->isInCombat() && !spellInfo->CanBeUsedInCombat())
+                continue;
+
+            // Prevent spells like Furious Howl from constantly casting out of
+            //  combat when the cooldown is up
+            if (!me->isInCombat() && !spellInfo->NeedsToBeTriggeredByCaster())
+                continue;
+
+            // We have a spell we can cast, let's pick a target
             if (spellInfo->IsPositive())
             {
-                // non combat spells allowed
-                // only pet spells have IsNonCombatSpell and not fit this reqs:
-                // Consume Shadows, Lesser Invisibility, so ignore checks for its
-                if (spellInfo->CanBeUsedInCombat())
-                {
-                    // allow only spell without spell cost or with spell cost but not duration limit
-                    int32 duration = spellInfo->GetDuration();
-                    if ((spellInfo->ManaCost || spellInfo->ManaCostPercentage || spellInfo->ManaPerSecond) && duration > 0)
-                        continue;
-
-                    // allow only spell without cooldown > duration
-                    int32 cooldown = spellInfo->GetRecoveryTime();
-                    if (cooldown >= 0 && duration >= 0 && cooldown > duration)
-                        continue;
-                }
-
+                // These would be buff spells like Furious Howl, Consume Shadows, etc.
                 Spell* spell = new Spell(me, spellInfo, TRIGGERED_NONE, 0);
 
                 bool spellUsed = false;
@@ -169,7 +169,6 @@ void PetAI::UpdateAI(const uint32 diff)
                 {
                     Unit* target = ObjectAccessor::GetUnit(*me, *tar);
 
-                    //only buff targets that are in combat, unless the spell can only be cast while out of combat
                     if (!target)
                         continue;
 
@@ -183,8 +182,9 @@ void PetAI::UpdateAI(const uint32 diff)
                 if (!spellUsed)
                     delete spell;
             }
-            else if (me->getVictim() && CanAttack(me->getVictim()) && spellInfo->CanBeUsedInCombat())
+            else if (me->getVictim() && CanAttack(me->getVictim()))
             {
+                // These would be offensive spells like Claw, Bite, Torment, Fireball, etc.
                 Spell* spell = new Spell(me, spellInfo, TRIGGERED_NONE, 0);
                 if (spell->CanAutoCast(me->getVictim()))
                     targetSpellStore.push_back(std::make_pair<Unit*, Spell*>(me->getVictim(), spell));
