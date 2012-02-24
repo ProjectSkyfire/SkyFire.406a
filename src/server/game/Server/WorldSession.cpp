@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -226,7 +226,6 @@ bool WorldSession::Update(uint32 diff, PacketFilter& updater)
     //! Delete packet after processing by default
     bool deletePacket = true;
     //! To prevent infinite loop
-    bool delayedPackets = false;
     WorldPacket* firstDelayedPacket = NULL;
     //! If _recvQueue.peek() == firstDelayedPacket it means that in this Update call, we've processed all
     //! *properly timed* packets, and we're now at the part of the queue where we find
@@ -1010,14 +1009,7 @@ void WorldSession::SendAddonsInfo()
 
     uint32 count = 0;
     data << uint32(count);
-    /*for (uint32 i = 0; i < count; ++i)
-    {
-        uint32
-        string (16 bytes)
-        string (16 bytes)
-        uint32
-        uint32
-    }*/
+    data << uint32(0); // count for an unknown for loop
 
     SendPacket(&data);
 }

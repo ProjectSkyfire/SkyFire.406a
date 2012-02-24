@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -235,17 +235,6 @@ uint32 DB2FileLoader::GetFormatStringsFields(const char * format)
 
 char* DB2FileLoader::AutoProduceData(const char* format, uint32& records, char**& indexTable)
 {
-    /*
-    format STRING, NA, FLOAT, NA, INT <=>
-    struct{
-    char* field0,
-    float field1,
-    int field2
-    }entry;
-
-    this func will generate  entry[rows] data;
-    */
-
     typedef char * ptr;
     if (strlen(format) != fieldCount)
         return NULL;

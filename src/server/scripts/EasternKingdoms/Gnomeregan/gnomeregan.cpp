@@ -1,10 +1,10 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -89,17 +89,17 @@ const Position SpawnPosition[] =
 class npc_blastmaster_emi_shortfuse : public CreatureScript
 {
 public:
-    npc_blastmaster_emi_shortfuse() : CreatureScript("npc_blastmaster_emi_shortfuse") { }
+    npc_blastmaster_emi_shortfuse() : CreatureScript("npc_blastmaster_emi_shortfuse") {}
 
     CreatureAI* GetAI(Creature* creature) const
     {
         return new npc_blastmaster_emi_shortfuseAI(creature);
     }
 
-    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*Sender*/, uint32 Action)
+    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*sender*/, uint32 action)
     {
         player->PlayerTalkClass->ClearMenus();
-        if (Action == GOSSIP_ACTION_INFO_DEF+1)
+        if (action == GOSSIP_ACTION_INFO_DEF + 1)
         {
             if (npc_escortAI* escortAI = CAST_AI(npc_blastmaster_emi_shortfuse::npc_blastmaster_emi_shortfuseAI, creature->AI()))
                 escortAI->Start(true, false, player->GetGUID());
@@ -405,8 +405,8 @@ public:
                     }
                     break;
                 case 9:
-                    if (Creature* pGrubbis = me->SummonCreature(NPC_GRUBBIS, SpawnPosition[15], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 1800000))
-                        DoScriptText(SAY_GRUBBIS, pGrubbis);
+                    if (Creature* grubbis = me->SummonCreature(NPC_GRUBBIS, SpawnPosition[15], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 1800000))
+                        DoScriptText(SAY_GRUBBIS, grubbis);
                     me->SummonCreature(NPC_CHOMPER, SpawnPosition[16], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 1800000);
                     break;
             }
@@ -526,7 +526,8 @@ public:
                             NextStep(0, false);
                             break;
                     }
-                } else Timer -= Diff;
+                }
+                else Timer -= Diff;
             }
 
             if (!UpdateVictim())

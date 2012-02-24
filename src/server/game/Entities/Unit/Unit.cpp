@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -1871,6 +1871,20 @@ void Unit::CalcHealAbsorb(Unit* victim, const SpellInfo *healSpell, uint32 &heal
             existExpired = true;
     }
 
+    // Necrotic Strike
+    if (victim->HasAura(73975))
+    {
+        if (Aura* aur = GetAura(73975))
+        {
+            int32 heal = int32(victim->GetAbsorbHeal());
+            RemainingHeal -= heal;
+        }
+    }
+
+    // No negative heal
+    if (RemainingHeal < 0)
+        RemainingHeal = 0;
+
     // Remove all expired absorb auras
     if (existExpired)
     {
@@ -1878,6 +1892,8 @@ void Unit::CalcHealAbsorb(Unit* victim, const SpellInfo *healSpell, uint32 &heal
         {
             AuraEffect* auraEff = *i;
             ++i;
+            if (auraEff->GetId() != 73975)     // if aura id doesnt = necro strike
+            // undefined auras
             if (auraEff->GetAmount() <= 0)
             {
                 uint32 removedAuras = victim->m_removedAurasCount;
@@ -1890,6 +1906,16 @@ void Unit::CalcHealAbsorb(Unit* victim, const SpellInfo *healSpell, uint32 &heal
 
     absorb = RemainingHeal > 0 ? (healAmount - RemainingHeal) : healAmount;
     healAmount = RemainingHeal;
+
+    if (Aura* aur = GetAura(73975))              // necrotic strike
+    {
+        int32 getabsorb = GetAbsorbHeal();       // Get initial absorb value
+        int32 subtract = getabsorb - absorb;     // Define subtraction
+        SetAbsorbHeal(subtract);                 // set absorb heal to the new value
+        if (subtract <= 0)                       // remove if empty - 0 absorb left
+        victim->RemoveAura(73975);
+        SetAbsorbHeal(0);                        // reset absorb amount after consumed
+    }
 }
 
 void Unit::AttackerStateUpdate (Unit* victim, WeaponAttackType attType, bool extra)
@@ -3589,7 +3615,7 @@ void Unit::RemoveAurasDueToSpellByDispel(uint32 spellId, uint32 dispellerSpellId
 
             // Call OnDispel hook on AuraScript
             aura->CallScriptDispel(&dispelInfo);
-        
+
             if (aura->GetSpellInfo()->AttributesEx7 & SPELL_ATTR7_DISPEL_CHARGES)
                 aura->ModCharges(-dispelInfo.GetRemovedCharges(), AURA_REMOVE_BY_ENEMY_SPELL);
             else
@@ -14821,10 +14847,10 @@ Unit* Unit::SelectNearbyTarget(Unit* exclude, float dist) const
     // remove current target
     if (getVictim())
         targets.remove(getVictim());
-        
+
     if (exclude)
         targets.remove(exclude);
- 
+
     // remove not LoS targets
     for (std::list<Unit*>::iterator tIter = targets.begin(); tIter != targets.end();)
     {
@@ -15319,14 +15345,6 @@ void Unit::Kill(Unit* victim, bool durabilityLoss)
     if (!victim->GetHealth())
         return;
 
-    // Inform pets (if any) when player kills target)
-    if (Player* player = ToPlayer())
-    {
-        Pet* pet = player->GetPet();
-        if (pet && pet->isAlive() && pet->isControlled())
-            pet->AI()->KilledUnit(victim);
-    }
-
     // find player: owner of controlled `this` or `this` itself maybe
     Player* player = GetCharmerOrOwnerPlayerOrPlayerItself();
     Creature* creature = victim->ToCreature();
@@ -15453,6 +15471,16 @@ void Unit::Kill(Unit* victim, bool durabilityLoss)
     {
         sLog->outStaticDebug("SET JUST_DIED");
         victim->setDeathState(JUST_DIED);
+    }
+
+    // Inform pets (if any) when player kills target)
+    // MUST come after victim->setDeathState(JUST_DIED); or pet next target
+    // selection will get stuck on same target and break pet react state
+    if (Player* player = ToPlayer())
+    {
+        Pet* pet = player->GetPet();
+        if (pet && pet->isAlive() && pet->isControlled())
+            pet->AI()->KilledUnit(victim);
     }
 
     // 10% durability loss on death
@@ -16390,28 +16418,8 @@ void Unit::ApplyResilience(Unit const* victim, int32* damage, CombatRating type)
         return;
 
     if (source && damage)
-    switch (type)
     {
-    case CR_CRIT_TAKEN_MELEE:
-        if (source && damage)
-        {
-            *damage -= target->GetMeleeDamageReduction(*damage);
-        }
-        break;
-    case CR_CRIT_TAKEN_RANGED:
-        if (source && damage)
-        {
-            *damage -= target->GetRangedDamageReduction(*damage);
-        }
-        break;
-    case CR_CRIT_TAKEN_SPELL:
-        if (source && damage)
-        {
-            *damage -= target->GetSpellDamageReduction(*damage);
-        }
-        break;
-    default:
-        break;
+        *damage -= target->ToPlayer()->GetPlayerDamageReduction(*damage);
     }
 }
 
@@ -17605,7 +17613,11 @@ bool CharmInfo::IsCommandAttack()
 
 void CharmInfo::SaveStayPosition()
 {
-    m_unit->GetPosition(m_stayX, m_stayY, m_stayZ);
+    //! At this point a new spline destination is enabled because of Unit::StopMoving()
+    G3D::Vector3 const stayPos = m_unit->movespline->FinalDestination();
+    m_stayX = stayPos.x;
+    m_stayY = stayPos.y;
+    m_stayZ = stayPos.z;
 }
 
 void CharmInfo::GetStayPosition(float &x, float &y, float &z)

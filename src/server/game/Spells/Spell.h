@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -76,8 +76,8 @@ enum SpellCastFlags
 enum SpellRangeFlag
 {
     SPELL_RANGE_DEFAULT             = 0,
-    SPELL_RANGE_MELEE               = 1,     //melee
-    SPELL_RANGE_RANGED              = 2,     //hunter range and ranged weapon
+    SPELL_RANGE_MELEE               = 1,     // melee
+    SPELL_RANGE_RANGED              = 2,     // hunter range and ranged weapon
 };
 
 enum SpellNotifyPushType
@@ -89,7 +89,7 @@ enum SpellNotifyPushType
     PUSH_IN_THIN_LINE,
     PUSH_SRC_CENTER,
     PUSH_DST_CENTER,
-    PUSH_CASTER_CENTER, //this is never used in grid search
+    PUSH_CASTER_CENTER, // this is never used in grid search
     PUSH_CHAIN,
 };
 
@@ -350,6 +350,7 @@ class Spell
         void EffectUnlearnSpecialization(SpellEffIndex effIndex);
         void EffectHealPct(SpellEffIndex effIndex);
         void EffectEnergizePct(SpellEffIndex effIndex);
+        // void EffectTriggerSpellWithValue(SpellEffIndex effIndex); NYI
         void EffectTriggerRitualOfSummoning(SpellEffIndex effIndex);
         void EffectSummonRaFFriend(SpellEffIndex effIndex);
         void EffectKillCreditPersonal(SpellEffIndex effIndex);
@@ -515,7 +516,7 @@ class Spell
 
         Spell** m_selfContainer;                            // pointer to our spell container (if applicable)
 
-        //Spell data
+        // Spell data
         SpellSchoolMask m_spellSchoolMask;                  // Spell school (can be overwrite for some spells (wand shoot for example)
         WeaponAttackType m_attackType;                      // For weapon based attack
         int32 m_powerCost;                                  // Calculated spell cost initialized only in Spell::prepare

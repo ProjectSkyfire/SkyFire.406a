@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -83,8 +83,11 @@ void AddSC_npc_innkeeper();
 void AddSC_npcs_special();
 void AddSC_npc_taxi();
 void AddSC_achievement_scripts();
+void AddSC_multi_profession_npc();
 
 //eastern kingdoms
+void AddSC_elwynn_forest();
+
 void AddSC_alterac_valley();                 //Alterac Valley
 void AddSC_boss_balinda();
 void AddSC_boss_drekthar();
@@ -293,8 +296,6 @@ void AddSC_eastern_plaguelands();
 void AddSC_eversong_woods();
 void AddSC_ghostlands();
 void AddSC_gilneas();
-void AddSC_gilneas_phase1();
-void AddSC_gilneas_phase2();
 void AddSC_hinterlands();
 void AddSC_ironforge();
 void AddSC_isle_of_queldanas();
@@ -306,7 +307,7 @@ void AddSC_silverpine_forest();
 void AddSC_stormwind_city();
 void AddSC_stranglethorn_vale();
 void AddSC_swamp_of_sorrows();
-void AddSC_tirisfal_glades();
+//void AddSC_tirisfal_glades();
 void AddSC_undercity();
 void AddSC_western_plaguelands();
 void AddSC_westfall();
@@ -412,7 +413,7 @@ void AddSC_stonetalon_mountains();
 void AddSC_tanaris();
 void AddSC_teldrassil();
 void AddSC_the_barrens();
-void AddSC_thousand_needles();
+//void AddSC_thousand_needles();
 void AddSC_thunder_bluff();
 void AddSC_ungoro_crater();
 void AddSC_winterspring();
@@ -727,7 +728,7 @@ void AddSpellScripts()
     AddSC_mastery_spells();
     AddSC_quest_spell_scripts();
     AddSC_item_spell_scripts();
-    AddSC_holiday_spell_scripts();    
+    AddSC_holiday_spell_scripts();
 }
 
 void AddCommandScripts()
@@ -769,12 +770,14 @@ void AddWorldScripts()
     AddSC_npc_taxi();
     AddSC_achievement_scripts();
     AddSC_chat_log();
+    AddSC_multi_profession_npc();
 #endif
 }
 
 void AddEasternKingdomsScripts()
 {
 #ifdef SCRIPTS
+    AddSC_elwynn_forest();
     AddSC_alterac_valley();                 //Alterac Valley
     AddSC_boss_balinda();
     AddSC_boss_drekthar();
@@ -983,8 +986,6 @@ void AddEasternKingdomsScripts()
     AddSC_eversong_woods();
     AddSC_ghostlands();
     AddSC_gilneas();
-    AddSC_gilneas_phase1();
-    AddSC_gilneas_phase2();
     AddSC_hinterlands();
     AddSC_ironforge();
     AddSC_isle_of_queldanas();
@@ -996,7 +997,7 @@ void AddEasternKingdomsScripts()
     AddSC_stormwind_city();
     AddSC_stranglethorn_vale();
     AddSC_swamp_of_sorrows();
-    AddSC_tirisfal_glades();
+    //AddSC_tirisfal_glades();
     AddSC_undercity();
     AddSC_western_plaguelands();
     AddSC_westfall();
@@ -1106,7 +1107,7 @@ void AddKalimdorScripts()
     AddSC_tanaris();
     AddSC_teldrassil();
     AddSC_the_barrens();
-    AddSC_thousand_needles();
+    //AddSC_thousand_needles();
     AddSC_thunder_bluff();
     AddSC_ungoro_crater();
     AddSC_winterspring();

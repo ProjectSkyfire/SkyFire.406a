@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2006-2012 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -41,7 +41,7 @@ enum eTapokeSlim
     QUEST_MISSING_DIPLO_PT11    = 1249,
     FACTION_ENEMY               = 168,
     SPELL_STEALTH               = 1785,
-    SPELL_CALL_FRIENDS          = 16457,                    //summons 1x friend
+    SPELL_CALL_FRIENDS          = 16457,                  //summons 1x friend
     NPC_SLIMS_FRIEND            = 4971,
     NPC_TAPOKE_SLIM_JAHN        = 4962
 };

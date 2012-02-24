@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -4680,7 +4680,7 @@ void ObjectMgr::LoadScripts(ScriptsType type)
 
             case SCRIPT_COMMAND_CAST_SPELL:
             {
-                if (!sSpellMgr->GetSpellInfo(tmp.CastSpell.SpellID))
+                if (!sSpellStore.LookupEntry(tmp.CastSpell.SpellID))
                 {
                     sLog->outErrorDb("Table `%s` using non-existent spell (id: %u) in SCRIPT_COMMAND_CAST_SPELL for script id %u",
                         tableName.c_str(), tmp.CastSpell.SpellID, tmp.id);
@@ -6984,7 +6984,7 @@ void ObjectMgr::LoadReputationSpilloverTemplate()
     m_RepSpilloverTemplateMap.clear();                      // for reload case
 
     uint32 count = 0;
-    QueryResult result = WorldDatabase.Query("SELECT faction, faction1, rate_1, rank_1, faction2, rate_2, rank_2, faction3, rate_3, rank_3, faction4, rate_4, rank_4 FROM reputation_spillover_template");
+    QueryResult result = WorldDatabase.Query("SELECT faction, faction1, rate_1, rank_1, faction2, rate_2, rank_2, faction3, rate_3, rank_3, faction4, rate_4, rank_4,faction5,rate_5,rank_5 FROM reputation_spillover_template");
 
     if (!result)
     {
@@ -7013,6 +7013,9 @@ void ObjectMgr::LoadReputationSpilloverTemplate()
         repTemplate.faction[3]          = fields[10].GetUInt32();
         repTemplate.faction_rate[3]     = fields[11].GetFloat();
         repTemplate.faction_rank[3]     = fields[12].GetUInt32();
+        repTemplate.faction[4]          = fields[13].GetUInt32();
+        repTemplate.faction_rate[4]     = fields[14].GetFloat();
+        repTemplate.faction_rank[4]     = fields[15].GetUInt32();
 
         FactionEntry const *factionEntry = sFactionStore.LookupEntry(factionId);
 
@@ -7076,6 +7079,12 @@ void ObjectMgr::LoadReputationSpilloverTemplate()
         if (repTemplate.faction[3] && !factionEntry3)
         {
             sLog->outErrorDb("Faction (faction.dbc) %u does not exist but is used in `reputation_spillover_template`", repTemplate.faction[3]);
+            continue;
+        }
+        FactionEntry const *factionEntry4 = sFactionStore.LookupEntry(repTemplate.faction[4]);
+        if (repTemplate.faction[4] && !factionEntry4)
+        {
+            sLog->outErrorDb("Faction (faction.dbc) %u does not exist but is used in `reputation_spillover_template`", repTemplate.faction[4]);
             continue;
         }
 

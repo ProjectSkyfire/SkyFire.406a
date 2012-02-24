@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -531,18 +531,18 @@ uint32 SpellMgr::GetSpellIdForDifficulty(uint32 spellId, Unit const* caster) con
     if (mode >= MAX_DIFFICULTY)
     {
         sLog->outError("SpellMgr::GetSpellIdForDifficulty: Incorrect Difficulty for spell %u.", spellId);
-        return spellId; //return source spell
+        return spellId; // return source spell
     }
 
     uint32 difficultyId = GetSpellDifficultyId(spellId);
     if (!difficultyId)
-        return spellId; //return source spell, it has only REGULAR_DIFFICULTY
+        return spellId; // return source spell, it has only REGULAR_DIFFICULTY
 
     SpellDifficultyEntry const *difficultyEntry = sSpellDifficultyStore.LookupEntry(difficultyId);
     if (!difficultyEntry)
     {
         sLog->outDebug(LOG_FILTER_SPELLS_AURAS, "SpellMgr::GetSpellIdForDifficulty: SpellDifficultyEntry not found for spell %u. This should never happen.", spellId);
-        return spellId; //return source spell
+        return spellId; // return source spell
     }
 
     if (difficultyEntry->SpellID[mode] <= 0 && mode > DUNGEON_DIFFICULTY_HEROIC)
@@ -2293,7 +2293,7 @@ void SpellMgr::LoadSpellLinked()
             continue;
         }
 
-        if (type) //we will find a better way when more types are needed
+        if (type) // we will find a better way when more types are needed
         {
             if (trigger > 0)
                 trigger += SPELL_LINKED_MAX_SPELLS * type;
@@ -2335,7 +2335,7 @@ void SpellMgr::LoadPetLevelupSpellMap()
                 if (!skillLine)
                     continue;
 
-                //if (skillLine->skillId != creatureFamily->skillLine[0] &&
+                // if (skillLine->skillId != creatureFamily->skillLine[0] &&
                 //    (!creatureFamily->skillLine[1] || skillLine->skillId != creatureFamily->skillLine[1]))
                 //    continue;
 
@@ -3021,7 +3021,7 @@ void SpellMgr::LoadSpellCustomAttr()
             case 42821: // Headless Horseman - Wisp Flight Missile
                 spellInfo->RangeEntry = sSpellRangeStore.LookupEntry(6); // 100 yards
                 break;
-            case 36350: //They Must Burn Bomb Aura (self)
+            case 36350: // They Must Burn Bomb Aura (self)
                 spellInfo->Effects[0].TriggerSpell = 36325; // They Must Burn Bomb Drop (DND)
                 break;
             case 49838: // Stop Time
@@ -3125,7 +3125,7 @@ void SpellMgr::LoadSpellCustomAttr()
             case 50312: // Unholy Frenzy
                 spellInfo->MaxAffectedTargets = 15;
                 break;
-            case 38794: case 33711: //Murmur's Touch
+            case 38794: case 33711: // Murmur's Touch
                 spellInfo->MaxAffectedTargets = 1;
                 spellInfo->Effects[0].TriggerSpell = 33760;
                 break;
@@ -3145,6 +3145,11 @@ void SpellMgr::LoadSpellCustomAttr()
             case 34477: // Misdirection
             case 44401: // Missile Barrage
                 spellInfo->ProcCharges = 1;
+                break;
+            case 84726: // Frostfire orb rank 1
+            case 84727: // Frostfire orb rank 2
+                spellInfo->Effects[1].ApplyAuraName = SPELL_AURA_OVERRIDE_ACTIONBAR_SPELLS_2;
+                spellInfo->Effects[1].BasePoints = 92283;
                 break;
             case 44544: // Fingers of Frost
                 spellInfo->Effects[0].SpellClassMask = flag96(685904631, 1151048, 0);
@@ -3272,6 +3277,37 @@ void SpellMgr::LoadSpellCustomAttr()
             case 53245: // Marked for Death (Rank 4)
             case 53246: // Marked for Death (Rank 5)
                 spellInfo->Effects[0].SpellClassMask = flag96(423937, 276955137, 2049);
+                break;
+            // Chakra spells needs moved to spellscripts this is a temp hack.
+            case 14751: // Chakra
+                spellInfo->Effects[0].ApplyAuraName = 0;
+                spellInfo->Effects[1].ApplyAuraName = 0;
+                spellInfo->Effects[2].ApplyAuraName = 0;
+                break;
+            case 81208: // Chakra: Serenity
+                spellInfo->Effects[1].ApplyAuraName = SPELL_AURA_DUMMY;
+                spellInfo->Effects[2].ApplyAuraName = SPELL_AURA_DUMMY;
+                break;
+            case 81206: // Chakra: Sanctuary
+                spellInfo->Effects[2].ApplyAuraName = SPELL_AURA_DUMMY;
+                break;
+            case 81585: // Chakra: Serenity replace
+                spellInfo->Effects[0].Effect = SPELL_EFFECT_APPLY_AURA;
+                spellInfo->Effects[0].ApplyAuraName = SPELL_AURA_OVERRIDE_ACTIONBAR_SPELLS_1;
+                spellInfo->Effects[0].BasePoints = 88684;
+                break;
+            case 81207: // Chakra: Sanctuary replace
+                spellInfo->Effects[0].Effect = SPELL_EFFECT_APPLY_AURA;
+                spellInfo->Effects[0].ApplyAuraName = SPELL_AURA_OVERRIDE_ACTIONBAR_SPELLS_1;
+                spellInfo->Effects[0].BasePoints = 88685;
+                break;
+            case 68659: // Launch
+                spellInfo->Effects[1].TriggerSpell = 4336;
+                break;
+            case 94338: // Sunfire (Eclipse)
+                spellInfo->Effects[0].Effect = SPELL_EFFECT_APPLY_AURA;
+                spellInfo->Effects[0].ApplyAuraName = SPELL_AURA_OVERRIDE_ACTIONBAR_SPELLS_1;
+                spellInfo->Effects[0].BasePoints = 93402;
                 break;
             case 70728: // Exploit Weakness (needs target selection script)
             case 70840: // Devious Minds (needs target selection script)

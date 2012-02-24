@@ -3,7 +3,7 @@
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -538,6 +538,94 @@ class spell_mage_ice_barrier : public SpellScriptLoader
         }
 };
 
+// npc_frostfire_orb
+enum eFrostfireOrb
+{
+    SPELL_FROSTFIRE_ORB_DAMAGE_RANK_1   = 95969,
+    SPELL_FROSTFIRE_ORB_DAMAGE_RANK_2   = 84721,
+    FROSTFIRE_ORB_DISTANCE              = 120
+};
+
+class npc_frostfire_orb : public CreatureScript
+{
+public:
+    npc_frostfire_orb() : CreatureScript("npc_frostfire_orb") {}
+
+    struct npc_frostfire_orbAI : public ScriptedAI
+    {
+        npc_frostfire_orbAI(Creature* creature) : ScriptedAI(creature)
+        {
+            x = me->GetPositionX();
+            y = me->GetPositionY();
+            z = me->GetOwner()->GetPositionZ()+2;
+            o = me->GetOrientation();
+            me->NearTeleportTo(x, y, z, o, true);
+            angle = me->GetOwner()->GetAngle(me);
+            newx = me->GetPositionX() + FROSTFIRE_ORB_DISTANCE/2 * cos(angle);
+            newy = me->GetPositionY() + FROSTFIRE_ORB_DISTANCE/2 * sin(angle);
+            CombatCheck = false;
+        }
+
+        float x,y,z,o,newx,newy,angle;
+        bool CombatCheck;
+        uint32 despawnTimer;
+        uint32 despawnCheckTimer;
+        uint32 damageTimer;
+
+        void EnterCombat(Unit* /*target*/)
+        {
+            me->GetMotionMaster()->MoveCharge(newx, newy, z, 1.14286f); // Normal speed
+            despawnTimer = 15 * IN_MILLISECONDS;
+            CombatCheck = true;
+        }
+
+        void Reset()
+        {
+            me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
+            me->AddUnitMovementFlag(MOVEMENTFLAG_FLYING);
+            me->SetReactState(REACT_PASSIVE);
+            if (CombatCheck == true)
+                despawnTimer = 15 * IN_MILLISECONDS;
+            else
+                despawnTimer = 4 * IN_MILLISECONDS;
+            damageTimer = 1 * IN_MILLISECONDS;
+            me->GetMotionMaster()->MovePoint(0, newx, newy, z);
+        }
+
+        void UpdateAI(const uint32 diff)
+        {
+            if (!me->isInCombat() && CombatCheck == false)
+            {
+                me->SetSpeed(MOVE_RUN, 2, true);
+                me->SetSpeed(MOVE_FLIGHT, 2, true);
+            }
+
+            if (despawnTimer <= diff)
+                me->DisappearAndDie();
+            else
+                despawnTimer -= diff;
+
+            if (damageTimer <= diff)
+            {
+                if (Unit* target = me->SelectNearestTarget(20))
+                    if (me->GetOwner()->HasAura(84726))
+                        DoCast(target, SPELL_FROSTFIRE_ORB_DAMAGE_RANK_1);
+                    else
+                        DoCast(target, SPELL_FROSTFIRE_ORB_DAMAGE_RANK_2);
+
+                damageTimer = 1 * IN_MILLISECONDS;
+            }
+            else
+                damageTimer -= diff;
+        }
+    };
+
+    CreatureAI* GetAI(Creature* creature) const
+    {
+        return new npc_frostfire_orbAI(creature);
+    }
+};
+
 void AddSC_mage_spell_scripts()
 {
     new spell_mage_blast_wave;
@@ -547,7 +635,8 @@ void AddSC_mage_spell_scripts()
     new spell_mage_incanters_absorbtion_manashield();
     new spell_mage_polymorph_cast_visual;
     new spell_mage_summon_water_elemental;
+    new spell_mage_ice_barrier;
     new npc_flame_orb;
     new npc_ring_of_frost;
-    new spell_mage_ice_barrier;
+    new npc_frostfire_orb;
 }

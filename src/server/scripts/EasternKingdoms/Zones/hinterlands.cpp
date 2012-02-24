@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2006-2012 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -177,13 +177,13 @@ struct Location
 Location _afAmbushSpawn[] =
 {
     {191.296204f, -2839.329346f, 107.388f},
-    {70.972466f,  -2848.674805f, 109.459f}
+    {70.972466f, -2848.674805f, 109.459f}
 };
 
 Location _afAmbushMoveTo[] =
 {
     {166.630386f, -2824.780273f, 108.153f},
-    {70.886589f,  -2874.335449f, 116.675f}
+    {70.886589f, -2874.335449f, 116.675f}
 };
 
 class npc_rinji : public CreatureScript

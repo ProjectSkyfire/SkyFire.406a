@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -79,18 +79,18 @@ typedef ACE_UINT32 uint32;
 typedef ACE_UINT16 uint16;
 typedef ACE_UINT8 uint8;
 
-enum /*DBCFormer*/
+enum DBCFormer
 {
-    FT_NA='x',                                             //not used or unknown, 4 byte size
-    FT_NA_BYTE='X',                                        //not used or unknown, byte
-    FT_STRING='s',                                         //char*
-    FT_FLOAT='f',                                          //float
-    FT_INT='i',                                            //uint32
-    FT_BYTE='b',                                           //uint8
-    FT_SORT='d',                                           //sorted by this field, field is not included
-    FT_IND='n',                                            //the same, but parsed to data
-    FT_LOGIC='l',                                           //Logical (boolean)
-    FT_SQL_PRESENT='p',                                     //Used in sql format to mark column present in sql dbc
+    FT_NA='x',                                              //not used or unknown, 4 byte size
+    FT_NA_BYTE='X',                                         //not used or unknown, byte
+    FT_STRING='s',                                          //char*
+    FT_FLOAT='f',                                           //float
+    FT_INT='i',                                             //uint32
+    FT_BYTE='b',                                            //uint8
+    FT_SORT='d',                                            //sorted by this field, field is not included
+    FT_IND='n',                                             //the same, but parsed to data
+    FT_LOGIC='l',                                            //Logical (boolean)
+    FT_SQL_PRESENT='p',                                      //Used in sql format to mark column present in sql dbc
     FT_SQL_ABSENT='a'                                       //Used in sql format to mark column absent in sql dbc
 };
 

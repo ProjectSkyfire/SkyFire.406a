@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -43,7 +43,7 @@ enum SpellCategories
     SPELLCATEGORY_DRINK            = 59,
 };
 
-//SpellFamilyFlags
+// SpellFamilyFlags
 enum SpellFamilyFlag
 {
     // SPELLFAMILYFLAG  = SpellFamilyFlags[0]
@@ -104,6 +104,8 @@ enum SpellLinkedType
     SPELL_LINK_AURA     = 2 * 200000,   // +: aura; -: immune
     SPELL_LINK_REMOVE   = 0,
 };
+
+// Unit * GetTriggeredSpellCaster(SpellInfo const * spellInfo, Unit * caster, Unit * target); NYI
 
 // Spell proc event related declarations (accessed using SpellMgr functions)
 enum ProcFlags

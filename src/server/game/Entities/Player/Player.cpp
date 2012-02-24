@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -4598,6 +4598,8 @@ void Player::InitVisibleBits()
     updateVisualBits.SetBit(OBJECT_FIELD_GUID);
     updateVisualBits.SetBit(OBJECT_FIELD_TYPE);
     updateVisualBits.SetBit(OBJECT_FIELD_ENTRY);
+    updateVisualBits.SetBit(OBJECT_FIELD_DATA + 0);
+    updateVisualBits.SetBit(OBJECT_FIELD_DATA + 1);
     updateVisualBits.SetBit(OBJECT_FIELD_SCALE_X);
     updateVisualBits.SetBit(UNIT_FIELD_CHARM + 0);
     updateVisualBits.SetBit(UNIT_FIELD_CHARM + 1);
@@ -6082,7 +6084,7 @@ void Player::UpdateRating(CombatRating cr)
             }
             break;
         case CR_MASTERY:                                    // Implemented in Player::UpdateMastery
-            UpdateMastery();
+            UpdateMasteryPercentage();
             break;
         case CR_ARMOR_PENETRATION:
             if (affectStats)
@@ -19941,24 +19943,24 @@ void Player::_SaveStats(SQLTransaction& trans)
     ss << "INSERT INTO character_stats (guid, maxhealth, maxpower1, maxpower2, maxpower3, maxpower4, maxpower5, maxpower6, maxpower7, maxpower8, maxpower9, maxpower10, "
     "strength, agility, stamina, intellect, spirit, armor, resHoly, resFire, resNature, resFrost, resShadow, resArcane, "
     "blockPct, dodgePct, parryPct, critPct, rangedCritPct, spellCritPct, attackPower, rangedAttackPower, spellPower, resilience) VALUES ("
-    << GetGUIDLow() << ', '
-    << GetMaxHealth() << ', ';
+    << GetGUIDLow() << ','
+    << GetMaxHealth() << ',';
     for (uint8 i = 0; i < MAX_POWERS; ++i)
-        ss << GetMaxPower(Powers(i)) << ', ';
+        ss << GetMaxPower(Powers(i)) << ',';
     for (uint8 i = 0; i < MAX_STATS; ++i)
-        ss << GetStat(Stats(i)) << ', ';
+        ss << GetStat(Stats(i)) << ',';
     // armor + school resistances
     for (int i = 0; i < MAX_SPELL_SCHOOL; ++i)
-        ss << GetResistance(SpellSchools(i)) << ', ';
-    ss << GetFloatValue(PLAYER_BLOCK_PERCENTAGE) << ', '
-            << GetFloatValue(PLAYER_DODGE_PERCENTAGE) << ', '
-            << GetFloatValue(PLAYER_PARRY_PERCENTAGE) << ', '
-            << GetFloatValue(PLAYER_CRIT_PERCENTAGE) << ', '
-            << GetFloatValue(PLAYER_RANGED_CRIT_PERCENTAGE) << ', '
-            << GetFloatValue(PLAYER_SPELL_CRIT_PERCENTAGE1) << ', '
-            << GetUInt32Value(UNIT_FIELD_ATTACK_POWER) << ', '
-            << GetUInt32Value(UNIT_FIELD_RANGED_ATTACK_POWER) << ', '
-            << GetBaseSpellPowerBonus() << ')';
+        ss << GetResistance(SpellSchools(i)) << ',';
+    ss << GetFloatValue(PLAYER_BLOCK_PERCENTAGE) << ','
+        << GetFloatValue(PLAYER_DODGE_PERCENTAGE) << ','
+        << GetFloatValue(PLAYER_PARRY_PERCENTAGE) << ','
+        << GetFloatValue(PLAYER_CRIT_PERCENTAGE) << ','
+        << GetFloatValue(PLAYER_RANGED_CRIT_PERCENTAGE) << ','
+        << GetFloatValue(PLAYER_SPELL_CRIT_PERCENTAGE1) << ','
+        << GetUInt32Value(UNIT_FIELD_ATTACK_POWER) << ','
+        << GetUInt32Value(UNIT_FIELD_RANGED_ATTACK_POWER) << ','
+        << GetBaseSpellPowerBonus() << ')';
     trans->Append(ss.str().c_str());
 }
 
@@ -21246,8 +21248,6 @@ inline bool Player::_StoreOrEquipNewItem(uint32 vendorslot, uint32 item, uint8 c
     }
 
     ModifyMoney(-price);
-
-    // ModifyMoney(-price); why was this doubled?
 
     if (crItem->ExtendedCost)                            // case for new honor system
     {

@@ -1,10 +1,10 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2005-2011 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -71,7 +71,7 @@ namespace Movement
             // CatmullRom interpolation mode used
             Mask_CatmullRom = Flying | Catmullrom,
             // Unused, not supported flags
-            Mask_Unused = No_Spline|Enter_Cycle|Frozen|Transport|Exit_Vehicle|Unknown26|Unknown27|Unknown32,
+            Mask_Unused = No_Spline|Enter_Cycle|Frozen|Transport|Exit_Vehicle|Unknown26|Unknown27,
         };
 
         inline uint32& raw() { return (uint32&)*this;}
