@@ -182,7 +182,14 @@ namespace Trinity
                         gain *= 2;
                 }
 
-                gain = uint32(gain * sWorld->getRate(RATE_XP_KILL));
+                float premium_rate = player->GetSession()->IsPremium() ? sWorld->getRate(RATE_XP_KILL_PREMIUM) : 1.0f;
+
+             uint32 expamount = uint32(gain*sWorld->getRate(RATE_XP_KILL)*premium_rate);
+
+             if (player->getLevel() >= 80)
+             expamount = uint32(gain*sWorld->getRate(RATE_XP_AFTER_80)*premium_rate);
+
+                 return expamount;
             }
 
             sScriptMgr->OnGainCalculation(gain, player, u);

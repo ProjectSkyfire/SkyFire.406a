@@ -735,6 +735,7 @@ enum SkyFireStrings
 
     LANG_CHANNEL_CITY                   = 819,
     LANG_FAIL_ENTER_SPECTRAL_REALM      = 820,
+    LANG_ADDITEM_WARNING                = 821,
     // Room for in-game strings           821-999 not used
 
     // Level 4 (CLI only commands)
@@ -1064,6 +1065,14 @@ enum SkyFireStrings
     // Use for custom patches             11000-11999
     LANG_AUTO_BROADCAST                 = 11000,
     LANG_INVALID_REALMID                = 11001,
+    LANG_BAN_WORLD_ANNOUNCE             = 11002,
+    LANG_PERMBAN_WORLD_ANNOUNCE         = 11003,
+    LANG_COMMAND_ITEM_NOT_FOUND         = 11005,
+    LANG_CLASS_NOT_ITEM_ALLOWED         = 11006,
+    LANG_COMMAND_SPELL_NOT_FOUND        = 11007,
+    LANG_CLASS_NOT_SPELL_ALLOWED        = 11008,
+    LANG_CHAT_MONITOR                   = 11009,
+    LANG_CHAT_MONITOR_LFG               = 11010,
 
     // NOT RESERVED IDS                   12000-1999999999
     // `db_script_string` table index     2000000000-2000009999 (MIN_DB_SCRIPT_STRING_ID-MAX_DB_SCRIPT_STRING_ID)
