@@ -1928,8 +1928,8 @@ void Pet::SynchronizeLevelWithOwner()
         case HUNTER_PET:
             if (getLevel() > owner->getLevel())
                 GivePetLevel(owner->getLevel());
-            else if (getLevel() + 5 < owner->getLevel())
-                GivePetLevel(owner->getLevel() - 5);
+            else if (getLevel() + 3 < owner->getLevel())
+                GivePetLevel(owner->getLevel() - 3);
             break;
         default:
             break;
