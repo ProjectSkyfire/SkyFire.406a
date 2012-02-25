@@ -407,7 +407,12 @@ void Unit::UpdateSplineMovement(uint32 t_diff)
         if (GetTypeId() == TYPEID_PLAYER)
             ((Player*)this)->UpdatePosition(loc.x, loc.y, loc.z, loc.orientation);
         else
+        {
             GetMap()->CreatureRelocation((Creature*)this, loc.x, loc.y, loc.z, loc.orientation);
+            
+            if (IsVehicle())
+                GetVehicleKit()->RelocatePassengers(loc.x, loc.y, loc.z, loc.orientation);
+        }
     }
 }
 
