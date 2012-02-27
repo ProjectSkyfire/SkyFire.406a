@@ -80,7 +80,7 @@ public:
             { "creature_ai_scripts",         SEC_ADMINISTRATOR, true,  &HandleReloadEventAIScriptsCommand,             "", NULL },
             { "creature_ai_summons",         SEC_ADMINISTRATOR, true,  &HandleReloadEventAISummonsCommand,             "", NULL },
             { "creature_ai_texts",           SEC_ADMINISTRATOR, true,  &HandleReloadEventAITextsCommand,               "", NULL },
-	    { "creature_equip_template",     SEC_ADMINISTRATOR, true,  &HandleReloadCreatureEquipTemplateCommand,      "", NULL },
+	        { "creature_equip_template",     SEC_ADMINISTRATOR, true,  &HandleReloadCreatureEquipTemplateCommand,      "", NULL },
             { "creature_involvedrelation",   SEC_ADMINISTRATOR, true,  &HandleReloadCreatureQuestInvRelationsCommand,  "", NULL },
             { "creature_linked_respawn",     SEC_GAMEMASTER,    true,  &HandleReloadLinkedRespawnCommand,              "", NULL },
             { "creature_loot_template",      SEC_ADMINISTRATOR, true,  &HandleReloadLootTemplatesCreatureCommand,      "", NULL },
