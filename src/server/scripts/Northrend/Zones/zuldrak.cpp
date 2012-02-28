@@ -93,7 +93,7 @@ public:
                     if (Creature* rageclaw = Unit::GetCreature(*me, RageclawGUID))
                     {
                         UnlockRageclaw(caster);
-                        caster->ToPlayer()->KilledMonster(rageclaw->GetCreatureInfo(), RageclawGUID);
+                        caster->ToPlayer()->KilledMonster(rageclaw->GetCreatureTemplate(), RageclawGUID);
                         me->DisappearAndDie();
                     }
                     else
@@ -157,7 +157,7 @@ public:
 
                 me->RemoveAurasDueToSpell(SPELL_KNEEL);
 
-                me->setFaction(me->GetCreatureInfo()->faction_H);
+                me->setFaction(me->GetCreatureTemplate()->faction_H);
 
                 DoCast(me, SPELL_UNSHACKLED, true);
                 me->MonsterSay(SAY_RAGECLAW, LANG_UNIVERSAL, 0);

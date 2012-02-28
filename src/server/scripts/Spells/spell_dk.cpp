@@ -302,7 +302,7 @@ class spell_dk_death_pact : public SpellScriptLoader
                 {
                     if ((*itr)->GetTypeId() == TYPEID_UNIT
                         && (*itr)->GetOwnerGUID() == GetCaster()->GetGUID()
-                        && (*itr)->ToCreature()->GetCreatureInfo()->type == CREATURE_TYPE_UNDEAD)
+                        && (*itr)->ToCreature()->GetCreatureTemplate()->type == CREATURE_TYPE_UNDEAD)
                     {
                         unit_to_add = (*itr);
                         break;
@@ -588,7 +588,7 @@ class spell_dk_chains_of_ice : public SpellScriptLoader
 
 void AddSC_deathknight_spell_scripts()
 {
-    new spell_dk_necrotic_strike();    
+    new spell_dk_necrotic_strike();
     new spell_dk_anti_magic_shell_raid();
     new spell_dk_anti_magic_shell_self();
     new spell_dk_anti_magic_zone();

@@ -109,7 +109,7 @@ public:
             if (!me->GetEquipmentId())
                 if (const CreatureTemplate* info = sObjectMgr->GetCreatureTemplate(28406))
                     if (info->equipmentId)
-                        const_cast<CreatureTemplate*>(me->GetCreatureInfo())->equipmentId = info->equipmentId;
+                        const_cast<CreatureTemplate*>(me->GetCreatureTemplate())->equipmentId = info->equipmentId;
         }
 
         uint64 playerGUID;
@@ -870,7 +870,7 @@ public:
         {
             me->setFaction(35);
             me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PC);
-            me->SetDisplayId(me->GetCreatureInfo()->Modelid1); // Modelid2 is a horse.
+            me->SetDisplayId(me->GetCreatureTemplate()->Modelid1); // Modelid2 is a horse.
         }
 
         uint64 minerGUID;

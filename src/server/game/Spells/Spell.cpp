@@ -5072,7 +5072,7 @@ SpellCastResult Spell::CheckCast(bool strict)
                 if (creature->GetCreatureType() != CREATURE_TYPE_CRITTER && !creature->loot.isLooted())
                     return SPELL_FAILED_TARGET_NOT_LOOTED;
 
-                uint32 skill = creature->GetCreatureInfo()->GetRequiredLootSkill();
+                uint32 skill = creature->GetCreatureTemplate()->GetRequiredLootSkill();
 
                 int32 skillValue = m_caster->ToPlayer()->GetSkillValue(skill);
                 int32 TargetLevel = m_targets.GetUnitTarget()->getLevel();
@@ -5346,7 +5346,7 @@ SpellCastResult Spell::CheckCast(bool strict)
                             return SPELL_FAILED_NO_ACTIONS;
                         }
 
-                        if (!target->GetCreatureInfo()->isTameable (m_caster->ToPlayer()->CanTameExoticPets()))
+                        if (!target->GetCreatureTemplate()->isTameable (m_caster->ToPlayer()->CanTameExoticPets()))
                         {
                             m_caster->ToPlayer()->SendPetTameResult(PET_TAME_ERROR_CANT_CONTROL_EXOTIC);
                             return SPELL_FAILED_NO_ACTIONS;

@@ -459,17 +459,17 @@ class Creature : public Unit, public GridObject<Creature>, public MapCreature
 
         void Update(uint32 time);                         // overwrited Unit::Update
         void GetRespawnPosition(float &x, float &y, float &z, float* ori = NULL, float* dist =NULL) const;
-        uint32 GetEquipmentId() const { return GetCreatureInfo()->equipmentId; }
+        uint32 GetEquipmentId() const { return GetCreatureTemplate()->equipmentId; }
 
         void SetCorpseDelay(uint32 delay) { _corpseDelay = delay; }
         uint32 GetCorpseDelay() const { return _corpseDelay; }
-        bool isRacialLeader() const { return GetCreatureInfo()->RacialLeader; }
-        bool isCivilian() const { return GetCreatureInfo()->flags_extra & CREATURE_FLAG_EXTRA_CIVILIAN; }
-        bool isTrigger() const { return GetCreatureInfo()->flags_extra & CREATURE_FLAG_EXTRA_TRIGGER; }
-        bool isGuard() const { return GetCreatureInfo()->flags_extra & CREATURE_FLAG_EXTRA_GUARD; }
-        bool canWalk() const { return GetCreatureInfo()->InhabitType & INHABIT_GROUND; }
-        bool canSwim() const { return GetCreatureInfo()->InhabitType & INHABIT_WATER; }
-        //bool canFly()  const { return GetCreatureInfo()->InhabitType & INHABIT_AIR; }
+        bool isRacialLeader() const { return GetCreatureTemplate()->RacialLeader; }
+        bool isCivilian() const { return GetCreatureTemplate()->flags_extra & CREATURE_FLAG_EXTRA_CIVILIAN; }
+        bool isTrigger() const { return GetCreatureTemplate()->flags_extra & CREATURE_FLAG_EXTRA_TRIGGER; }
+        bool isGuard() const { return GetCreatureTemplate()->flags_extra & CREATURE_FLAG_EXTRA_GUARD; }
+        bool canWalk() const { return GetCreatureTemplate()->InhabitType & INHABIT_GROUND; }
+        bool canSwim() const { return GetCreatureTemplate()->InhabitType & INHABIT_WATER; }
+        //bool canFly()  const { return GetCreatureTemplate()->InhabitType & INHABIT_AIR; }
 
         void SetReactState(ReactStates st) { _reactState = st; }
         ReactStates GetReactState() { return _reactState; }
@@ -498,7 +498,7 @@ class Creature : public Unit, public GridObject<Creature>, public MapCreature
             if (isPet())
                 return false;
 
-            uint32 rank = GetCreatureInfo()->rank;
+            uint32 rank = GetCreatureTemplate()->rank;
             return rank != CREATURE_ELITE_NORMAL && rank != CREATURE_ELITE_RARE;
         }
 
@@ -507,7 +507,7 @@ class Creature : public Unit, public GridObject<Creature>, public MapCreature
             if (isPet())
                 return false;
 
-            return GetCreatureInfo()->rank == CREATURE_ELITE_WORLDBOSS;
+            return GetCreatureTemplate()->rank == CREATURE_ELITE_WORLDBOSS;
         }
 
         bool IsDungeonBoss() const;
@@ -560,7 +560,7 @@ class Creature : public Unit, public GridObject<Creature>, public MapCreature
 
         TrainerSpellData const* GetTrainerSpells() const;
 
-        CreatureTemplate const* GetCreatureInfo() const { return _creatureInfo; }
+        CreatureTemplate const* GetCreatureTemplate() const { return _creatureInfo; }
         CreatureData const* GetCreatureData() const { return _creatureData; }
         CreatureAddon const* GetCreatureAddon() const;
 

@@ -1694,7 +1694,7 @@ public:
         {
             SpellTimer = 0;
 
-            CreatureTemplate const* Info = me->GetCreatureInfo();
+            CreatureTemplate const* Info = me->GetCreatureTemplate();
 
             IsViper = Info->Entry == C_VIPER ? true : false;
 
