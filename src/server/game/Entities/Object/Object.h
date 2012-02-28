@@ -52,7 +52,7 @@ enum TypeMask
     TYPEMASK_OBJECT         = 0x00000001,
     TYPEMASK_ITEM           = 0x00000002,
     TYPEMASK_CONTAINER      = 0x00000006,                       // TYPEMASK_ITEM | 0x0004
-    TYPEMASK_UNIT           = 0x00000008,                       //creature or player
+    TYPEMASK_UNIT           = 0x00000008,                       //creature
     TYPEMASK_PLAYER         = 0x00000010,
     TYPEMASK_GAMEOBJECT     = 0x00000020,
     TYPEMASK_DYNAMICOBJECT  = 0x00000040,
