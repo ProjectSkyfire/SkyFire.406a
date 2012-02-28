@@ -173,7 +173,7 @@ void MapManager::LoadTransportNPCs()
     sLog->outString();
 }
 
-Transport::Transport(uint32 period, uint32 script) : GameObject(), m_pathTime(0), m_timer(getMSTime()),
+Transport::Transport(uint32 period, uint32 script) : GameObject(), m_pathTime(0), _timer(getMSTime()),
 currenttguid(0), m_period(period), ScriptId(script)
 {
     m_updateFlag = (UPDATEFLAG_TRANSPORT | UPDATEFLAG_HAS_POSITION | UPDATEFLAG_ROTATION);
