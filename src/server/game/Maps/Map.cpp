@@ -664,9 +664,10 @@ void Map::RemovePlayerFromMap(Player* player, bool remove)
         ASSERT(remove); //maybe deleted in logoutplayer when player is not in a map
 
     if (remove)
+    {
         DeleteFromWorld(player);
-
-    sScriptMgr->OnPlayerLeaveMap(this, player);
+        sScriptMgr->OnPlayerLeaveMap(this, player);
+    }
 }
 
 template<class T>
