@@ -577,7 +577,7 @@ class ConditionScript : public ScriptObject
         bool IsDatabaseBound() const { return true; }
 
         // Called when a single condition is checked for a player.
-        virtual bool OnConditionCheck(Condition* /*condition*/, Player* /*player*/, Unit* /*invoker*/) { return true; }
+        virtual bool OnConditionCheck(Condition* /*condition*/, WorldObject* /*object*/, WorldObject* /*invoker*/) { return true; }
 };
 
 class VehicleScript : public ScriptObject
@@ -952,7 +952,7 @@ class ScriptMgr
 
     public: /* ConditionScript */
 
-        bool OnConditionCheck(Condition* condition, Player* player, Unit* invoker);
+        bool OnConditionCheck(Condition* condition, WorldObject* object, WorldObject* invoker);
 
     public: /* VehicleScript */
 
