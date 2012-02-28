@@ -931,7 +931,8 @@ void ObjectMgr::LoadCreatureAddons()
 
         uint32 guid = fields[0].GetUInt32();
 
-        if (mCreatureDataMap.find(guid) == mCreatureDataMap.end())
+        CreatureData const* creData = GetCreatureData(guid);
+        if (!creData)
         {
             sLog->outErrorDb("Creature (GUID: %u) does not exist but has a record in `creature_addon`", guid);
             continue;
@@ -940,6 +941,12 @@ void ObjectMgr::LoadCreatureAddons()
         CreatureAddon& creatureAddon = CreatureAddonStore[guid];
 
         creatureAddon.path_id = fields[1].GetUInt32();
+        if (creData->movementType == WAYPOINT_MOTION_TYPE && !creatureAddon.path_id)
+        {
+            const_cast<CreatureData*>(creData)->movementType = IDLE_MOTION_TYPE;
+            sLog->outErrorDb("Creature (GUID %u) has movement type set to WAYPOINT_MOTION_TYPE but no path assigned", guid);
+        }
+
         creatureAddon.mount   = fields[2].GetUInt32();
         creatureAddon.bytes1  = fields[3].GetUInt32();
         creatureAddon.bytes2  = fields[4].GetUInt32();
