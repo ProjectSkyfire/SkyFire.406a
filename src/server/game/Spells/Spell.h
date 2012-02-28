@@ -420,6 +420,7 @@ class Spell
         void WriteSpellGoTargets(WorldPacket* data);
 
         void InitExplicitTargets(SpellCastTargets const& targets);
+        void SelectExplicitTargets();
         void SelectSpellTargets();
         void SelectEffectTypeImplicitTargets(uint8 effIndex);
         uint32 SelectEffectTargets(uint32 i, SpellImplicitTargetInfo const& cur);
