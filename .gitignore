@@ -13,3 +13,5 @@ build*/
 *.BACKUP.*
 *.BASE.*
 *.LOCAL.*
+*.cmd
+*.cfg
