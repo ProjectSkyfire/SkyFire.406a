@@ -16147,7 +16147,7 @@ bool Player::SatisfyQuestSeasonal(Quest const* qInfo, bool /*msg*/)
         return true;
 
     uint16 eventId = sGameEventMgr->GetEventIdForQuest(qInfo);
-    if (m_seasonalquests.find(eventId) == m_seasonalquests.end() || m_seasonalquests[eventId].empty())
+    if (_seasonalquests.find(eventId) == _seasonalquests.end() || _seasonalquests[eventId].empty())
         return true;
 
     // if not found in cooldown list
