@@ -65,7 +65,7 @@ class TimedFleeingMovementGenerator
             i_totalFleeTime(time) {}
 
         MovementGeneratorType GetMovementGeneratorType() { return TIMED_FLEEING_MOTION_TYPE; }
-        bool Update(Unit &, const uint32);
+        bool Update(Unit &, const uint32&);
         void Finalize(Unit &);
 
     private:
