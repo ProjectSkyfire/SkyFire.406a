@@ -873,8 +873,6 @@ Player::Player(WorldSession* session): Unit(true), _achievementMgr(this), _reput
     for (uint8 i = 0; i < MAX_POWERS; ++i)
         _powerFraction[i] = 0;
 
-    _ConditionErrorMsgId = 0;
-
     isDebugAreaTriggers = false;
 
     SetPendingBind(0, 0);
@@ -4488,7 +4486,7 @@ bool Player::resetTalents(bool no_cost)
             // skip non-existant talent ranks
             if (talentInfo->RankID[rank] == 0)
                 continue;
-        const SpellInfo* _spellEntry = sSpellMgr->GetSpellInfo(talentInfo->RankID[rank]);
+            SpellInfo const* _spellEntry = sSpellMgr->GetSpellInfo(talentInfo->RankID[rank]);
             if (!_spellEntry)
                 continue;
             removeSpell(talentInfo->RankID[rank], true);
