@@ -275,14 +275,10 @@ bool Transport::GenerateWaypoints(uint32 pathid, std::set<uint32> &mapids)
                 mapids.insert(k.node->mapid);
             }
             else
-            {
                 mapChange = 1;
-            }
         }
         else
-        {
             --mapChange;
-        }
     }
 
     int lastStop = -1;
@@ -291,17 +287,13 @@ bool Transport::GenerateWaypoints(uint32 pathid, std::set<uint32> &mapids)
     // first cell is arrived at by teleportation :S
     keyFrames[0].distFromPrev = 0;
     if (keyFrames[0].node->actionFlag == 2)
-    {
         lastStop = 0;
-    }
 
     // find the rest of the distances between key points
     for (size_t i = 1; i < keyFrames.size(); ++i)
     {
         if ((keyFrames[i].node->actionFlag == 1) || (keyFrames[i].node->mapid != keyFrames[i-1].node->mapid))
-        {
             keyFrames[i].distFromPrev = 0;
-        }
         else
         {
             keyFrames[i].distFromPrev =
@@ -354,10 +346,6 @@ bool Transport::GenerateWaypoints(uint32 pathid, std::set<uint32> &mapids)
         keyFrames[i].tTo *= 1000;
     }
 
-    //    for (int i = 0; i < keyFrames.size(); ++i) {
-    //        sLog->outString("%f, %f, %f, %f, %f, %f, %f", keyFrames[i].x, keyFrames[i].y, keyFrames[i].distUntilStop, keyFrames[i].distSinceStop, keyFrames[i].distFromPrev, keyFrames[i].tFrom, keyFrames[i].tTo);
-    //    }
-
     // Now we're completely set up; we can move along the length of each waypoint at 100 ms intervals
     // speed = max(30, t) (remember x = 0.5s^2, and when accelerating, a = 1 unit/s^2
     int t = 0;
@@ -398,7 +386,6 @@ bool Transport::GenerateWaypoints(uint32 pathid, std::set<uint32> &mapids)
                         cM = keyFrames[i].node->mapid;
                     }
 
-                    //                    sLog->outString("T: %d, D: %f, x: %f, y: %f, z: %f", t, d, newX, newY, newZ);
                     if (teleport)
                         m_WayPoints[t] = WayPoint(keyFrames[i].node->mapid, newX, newY, newZ, teleport, 0);
                 }
@@ -406,13 +393,9 @@ bool Transport::GenerateWaypoints(uint32 pathid, std::set<uint32> &mapids)
                 if (tFrom < tTo)                            // caught in tFrom dock's "gravitational pull"
                 {
                     if (tFrom <= 30000)
-                    {
                         d = 0.5f * (tFrom / 1000) * (tFrom / 1000);
-                    }
                     else
-                    {
                         d = 0.5f * 30 * 30 + 30 * ((tFrom - 30000) / 1000);
-                    }
                     d = d - keyFrames[i].distSinceStop;
                 }
                 else
@@ -446,14 +429,11 @@ bool Transport::GenerateWaypoints(uint32 pathid, std::set<uint32> &mapids)
 
         m_WayPoints[t] = WayPoint(keyFrames[i + 1].node->mapid, keyFrames[i + 1].node->x, keyFrames[i + 1].node->y, keyFrames[i + 1].node->z, teleport,
             0, keyFrames[i + 1].node->arrivalEventID, keyFrames[i + 1].node->departureEventID);
-        //        sLog->outString("T: %d, x: %f, y: %f, z: %f, t:%d", t, pos.x, pos.y, pos.z, teleport);
 
         t += keyFrames[i + 1].node->delay * 1000;
     }
 
     uint32 timer = t;
-
-    //    sLog->outDetail("    Generated %lu waypoints, total time %u.", (unsigned long)m_WayPoints.size(), timer);
 
     m_curr = m_WayPoints.begin();
     m_next = GetNextWayPoint();
@@ -533,7 +513,8 @@ void Transport::Update(uint32 p_diff)
     {
         if (!AIM_Initialize())
             sLog->outError("Could not initialize GameObjectAI for Transport");
-    } else
+    }
+    else
         AI()->UpdateAI(p_diff);
 
     if (m_WayPoints.size() <= 1)
@@ -551,9 +532,7 @@ void Transport::Update(uint32 p_diff)
 
         // first check help in case client-server transport coordinates de-synchronization
         if (m_curr->second.mapid != GetMapId() || m_curr->second.teleport)
-        {
             TeleportTransport(m_curr->second.mapid, m_curr->second.x, m_curr->second.y, m_curr->second.z);
-        }
         else
         {
             Relocate(m_curr->second.x, m_curr->second.y, m_curr->second.z, GetAngle(m_next->second.x, m_next->second.y) + float(M_PI));
