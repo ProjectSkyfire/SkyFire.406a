@@ -630,6 +630,7 @@ void WorldSession::HandleCharCreateCallback(PreparedQueryResult result, Characte
                 sLog->outDebug(LOG_FILTER_NETWORKIO, "Character creation %s (account %u) has unhandled tail data.", createInfo->Name.c_str(), GetAccountId());
 
             Player newChar(this);
+            newChar.GetMotionMaster()->Initialize();
             if (!newChar.Create(sObjectMgr->GenerateLowGuid(HIGHGUID_PLAYER), createInfo))
             {
                 // Player not create (race/class/etc problem?)
