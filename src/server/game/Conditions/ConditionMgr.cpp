@@ -319,7 +319,7 @@ bool Condition::Meets(ConditionSourceInfo& sourceInfo)
         }
         case CONDITION_PHASEMASK:
         {
-            condMeets = (bool)(object->GetPhaseMask() & mConditionValue1);
+            condMeets = object->GetPhaseMask() & mConditionValue1;
             break;
         }
         default:
@@ -1697,9 +1697,9 @@ bool ConditionMgr::isConditionTypeValid(Condition* cond)
         case CONDITION_PHASEMASK:
         {
             if (cond->mConditionValue2)
-                sLog->outErrorDb("World state condition has useless data in value2 (%u)!", cond->mConditionValue2);
+                sLog->outErrorDb("Phasemask condition has useless data in value2 (%u)!", cond->mConditionValue2);
             if (cond->mConditionValue3)
-                sLog->outErrorDb("World state condition has useless data in value3 (%u)!", cond->mConditionValue3);
+                sLog->outErrorDb("Phasemask condition has useless data in value3 (%u)!", cond->mConditionValue3);
             break;
         }
         default:
