@@ -142,7 +142,7 @@ bool ForcedDespawnDelayEvent::Execute(uint64 /*e_time*/, uint32 /*p_time*/)
 
 Creature::Creature(bool isWorldObject): Unit(isWorldObject), MapCreature(),
 lootForPickPocketed(false), lootForBody(false), _groupLootTimer(0), lootingGroupLowGUID(0),
-_PlayerDamageReq(0), _lootMoney(0), _lootRecipient(0), _lootRecipientGroup(0), _corpseRemoveTime(0), _respawnTime(0),
+_PlayerDamageReq(0), _lootRecipient(0), _lootRecipientGroup(0), _corpseRemoveTime(0), _respawnTime(0),
 _respawnDelay(300), _corpseDelay(60), _respawnradius(0.0f), _reactState(REACT_AGGRESSIVE),
 _defaultMovementType(IDLE_MOTION_TYPE), _DBTableGuid(0), _equipmentId(0), _AlreadyCallAssistance(false),
 _AlreadySearchedAssistance(false), _regenHealth(true), _AI_locked(false), _meleeDamageSchoolMask(SPELL_SCHOOL_MASK_NORMAL),
