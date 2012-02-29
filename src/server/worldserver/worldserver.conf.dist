@@ -1006,6 +1006,7 @@ CharacterCreating.Disabled.ClassMask = 0
 #        Default:     50
 
 CharactersPerAccount = 50
+
 #
 #    CharactersPerRealm
 #        Description: Limit number of characters per account on this realm.
@@ -1114,9 +1115,9 @@ StartArenaPoints = 0
 #    RecruitAFriend.MaxLevel
 #        Description: Highest level up to which a character can benefit from the Recruit-A-Friend
 #                     experience multiplier.
-#        Default:     60
+#        Default:     80
 
-RecruitAFriend.MaxLevel = 60
+RecruitAFriend.MaxLevel = 80
 
 #
 #    RecruitAFriend.MaxDifference
@@ -1436,10 +1437,10 @@ AllowTickets = 1
 #
 #     DungeonFinder.Enable
 #        Description: Dungeon and raid finder system.
-#        Default:     0 - (Disabled)
-#                     1 - (Enabled, Experimental as of still being in development)
+#                     0 - (Disabled)
+#        Default:     1 - (Enabled, Experimental as of still being in development)
 
-DungeonFinder.Enable = 0
+DungeonFinder.Enable = 1
 
 #
 #   DB2.EnforceItemAttributes
