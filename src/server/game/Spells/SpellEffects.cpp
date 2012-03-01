@@ -1555,24 +1555,26 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                 m_caster->CastSpell(unitTarget, damage, true);
                 return;
             }
-            // Wild mushroom: detonate
-            /*if(m_spellInfo->Id == 88751)
+            //Wild mushroom: detonate
+            if(m_spellInfo->Id == 88751)
             {
+                std::list<Creature*> templist;
+
                 CellCoord pair(Trinity::ComputeCellCoord(m_caster->GetPositionX(), m_caster->GetPositionY()));
                 Cell cell(pair);
                 cell.SetNoCreate();
 
-                std::list<Creature*> templist;
-                Trinity::AllFriendlyCreaturesInGrid check(me, 47649);
-                Trinity::CreatureListSearcher<Trinity::AllCreaturesOfEntryInRange> searcher(m_caster, templist, check);
+                Trinity::AllFriendlyCreaturesInGrid check(m_caster);
+                Trinity::CreatureListSearcher<Trinity::AllFriendlyCreaturesInGrid> searcher(m_caster, templist, check);
 
-                TypeContainerVisitor<Trinity::CreatureListSearcher<Trinity::AllCreaturesOfEntryInRange>, GridTypeMapContainer> cSearcher(searcher);
-                cell.Visit(pair, cSearcher, *(me->GetMap()), *me, me->GetGridActivationRange());
+                TypeContainerVisitor<Trinity::CreatureListSearcher<Trinity::AllFriendlyCreaturesInGrid>, GridTypeMapContainer> cSearcher(searcher);
+
+                cell.Visit(pair, cSearcher, *(m_caster->GetMap()), *m_caster, m_caster->GetGridActivationRange());
 
                 if (!templist.empty())
                     for (std::list<Creature*>::const_iterator itr = templist.begin(); itr != templist.end(); ++itr)
                     {
-                        // You cannot detonate other people's mushrooms
+                        //You cannot detonate other people's mushrooms
                         if((*itr)->GetOwner() != m_caster)
                             continue;
                         // Find all the enemies
@@ -1582,15 +1584,15 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                         (*itr)->VisitNearbyObject(6.0f, searcher);
                         for (std::list<Unit*>::const_iterator iter = targets.begin(); iter != targets.end(); ++iter)
                         {
-                            // Damage spell
-                            (*itr)->CastSpell((*iter),78777,true);
-                            // Suicide spell
-                            (*itr)->CastSpell((*itr),92853,true);
+                            //Damage spell
+                            (*itr)->CastSpell((*iter), 78777, true);
+                            //Suicide spell
+                            (*itr)->CastSpell((*itr), 92853, true);
                             (*itr)->DisappearAndDie();
                         }
                     }
                     templist.clear();
-            }*/
+            }
             if(m_spellInfo->Id == 1126)
             {
                 if (m_caster->GetTypeId() == TYPEID_PLAYER)
@@ -3431,7 +3433,7 @@ void Spell::EffectSummonType(SpellEffIndex effIndex)
     uint32 numSummons;
 
     // some spells need to summon many units, for those spells number of summons is stored in effect value
-    // however so far noone found a generic check to find all of those (there's no related data in summonproperties.dbc 
+    // however so far noone found a generic check to find all of those (there's no related data in summonproperties.dbc
     // and in spell attributes, possibly we need to add a table for those)
     // so here's a list of MiscValueB values, which is currently most generic check
     switch (properties->Id)
