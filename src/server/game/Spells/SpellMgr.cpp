@@ -1328,6 +1328,7 @@ void SpellMgr::LoadSpellRanks()
             mSpellChains[addedSpell].last = GetSpellInfo(rankChain.back().first);
             mSpellChains[addedSpell].rank = itr->second;
             mSpellChains[addedSpell].prev = GetSpellInfo(prevRank);
+            mSpellInfoMap[addedSpell]->ChainEntry = &mSpellChains[addedSpell];
             prevRank = addedSpell;
             ++itr;
             if (itr == rankChain.end())
