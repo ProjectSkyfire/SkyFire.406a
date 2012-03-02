@@ -1585,7 +1585,7 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                         for (std::list<Unit*>::const_iterator iter = targets.begin(); iter != targets.end(); ++iter)
                         {
                             //Damage spell
-                            (*itr)->CastSpell((*iter), 78777, true);
+                            (*itr)->CastSpell((*iter), 88747, true);
                             //Suicide spell
                             (*itr)->CastSpell((*itr), 92853, true);
                             (*itr)->DisappearAndDie();
