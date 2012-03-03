@@ -1330,9 +1330,9 @@ void CreatureEventAI::ReceiveEmote(Player* player, uint32 textEmote)
                 return;
 
             Condition cond;
-            cond.ConditionType = ConditionTypes((*itr).Event.receive_emote.condition);
-            cond.ConditionValue1 = (*itr).Event.receive_emote.conditionValue1;
-            cond.ConditionValue2 = (*itr).Event.receive_emote.conditionValue2;
+            cond.mConditionType = ConditionType((*itr).Event.receive_emote.condition);
+            cond.mConditionValue1 = (*itr).Event.receive_emote.conditionValue1;
+            cond.mConditionValue2 = (*itr).Event.receive_emote.conditionValue2;
 
             ConditionSourceInfo srcInfo = ConditionSourceInfo(player);
             if (cond.Meets(srcInfo))

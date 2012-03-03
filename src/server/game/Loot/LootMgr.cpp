@@ -1374,7 +1374,7 @@ bool LootTemplate::addConditionItem(Condition* cond)
     {
         for (LootStoreItemList::iterator i = Entries.begin(); i != Entries.end(); ++i)
         {
-            if (i->itemid == cond->SourceEntry)
+            if (i->itemid == cond->mSourceEntry)
             {
                 i->conditions.push_back(cond);
                 return true;
@@ -1390,7 +1390,7 @@ bool LootTemplate::addConditionItem(Condition* cond)
             {
                 for (LootStoreItemList::iterator i = itemList->begin(); i != itemList->end(); ++i)
                 {
-                    if ((*i).itemid == cond->SourceEntry)
+                    if ((*i).itemid == cond->mSourceEntry)
                     {
                         (*i).conditions.push_back(cond);
                         return true;
@@ -1402,7 +1402,7 @@ bool LootTemplate::addConditionItem(Condition* cond)
             {
                 for (LootStoreItemList::iterator i = itemList->begin(); i != itemList->end(); ++i)
                 {
-                    if ((*i).itemid == cond->SourceEntry)
+                    if ((*i).itemid == cond->mSourceEntry)
                     {
                         (*i).conditions.push_back(cond);
                         return true;
