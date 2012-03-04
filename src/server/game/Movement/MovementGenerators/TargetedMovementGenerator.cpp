@@ -25,6 +25,7 @@
 #include "World.h"
 #include "MoveSplineInit.h"
 #include "MoveSpline.h"
+#include "Player.h"
 
 #include <cmath>
 
