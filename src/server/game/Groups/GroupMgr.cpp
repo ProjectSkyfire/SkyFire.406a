@@ -18,6 +18,7 @@
  */
 
 #include "Common.h"
+#include "DBCStores.h"
 #include "GroupMgr.h"
 #include "InstanceSaveMgr.h"
 

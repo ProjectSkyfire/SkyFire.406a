@@ -26,7 +26,6 @@
 #include "LootMgr.h"
 #include "QueryResult.h"
 #include "SharedDefines.h"
-#include "Player.h"
 #include "../Battlefields/Battlefield.h" // TODO: Fix this!
 
 class Creature;

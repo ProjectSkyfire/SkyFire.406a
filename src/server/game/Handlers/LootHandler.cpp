@@ -24,6 +24,7 @@
 #include "GameObject.h"
 #include "Player.h"
 #include "ObjectAccessor.h"
+#include "ObjectMgr.h"
 #include "WorldSession.h"
 #include "LootMgr.h"
 #include "Object.h"
