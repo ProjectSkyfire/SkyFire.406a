@@ -20,6 +20,7 @@
 
 #include "Battlefield.h"
 #include "Group.h"
+#include "ObjectMgr.h"
 #include "WorldPacket.h"
 #include "World.h"
 
