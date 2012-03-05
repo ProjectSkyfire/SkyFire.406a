@@ -5818,7 +5818,7 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
 
                 uint32 spellId = 0;
 
-                // Seal of Truth and Seal of Righteoussness have a dummy aura on effect 2
+                // Seal of Truth and Seal of Righteousness have a dummy aura on effect 2
                 Unit::AuraApplicationMap & sealAuras = m_caster->GetAppliedAuras();
                 for (Unit::AuraApplicationMap::iterator iter = sealAuras.begin(); iter != sealAuras.end();)
                 {
@@ -6021,10 +6021,11 @@ void Spell::EffectAddComboPoints(SpellEffIndex /*effIndex*/)
     if (damage <= 0)
     {
         // Rogue: Redirect
-        if (GetSpellInfo()->Id == 73981 && plr->GetComboPoints() > 0 && plr->GetComboTarget())
+        Player* player = unitTarget->ToPlayer();
+        if (GetSpellInfo()->Id == 73981 && player->GetComboPoints() > 0 && player->GetComboTarget())
         {
-            if (!(plr->GetComboTarget() == unitTarget->GetGUID())) // Can't Use on target that already has Combo Points
-                plr->AddComboPoints(unitTarget, plr->GetComboPoints(), this);
+            if (!(player->GetComboTarget() == unitTarget->GetGUID())) // Can't Use on target that already has Combo Points
+                player->AddComboPoints(unitTarget, player->GetComboPoints(), this);
         }
     }
 
