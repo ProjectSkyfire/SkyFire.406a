@@ -406,7 +406,7 @@ ChatCommand* ChatHandler::getCommandTable()
         { "flusharenapoints", SEC_ADMINISTRATOR, false, OldHandler<&ChatHandler::HandleFlushArenaPointsCommand>,   "", NULL },
         { "repairitems",   SEC_GAMEMASTER,     true,  OldHandler<&ChatHandler::HandleRepairitemsCommand>,        "", NULL },
         { "waterwalk",     SEC_GAMEMASTER,     false, OldHandler<&ChatHandler::HandleWaterwalkCommand>,          "", NULL },
-        { "note",		   SEC_GAMEMASTER,		true, OldHandler<&ChatHandler::HandleGmNote>,                    "", NULL },
+        { "note",          SEC_GAMEMASTER,      true, OldHandler<&ChatHandler::HandleGmNote>,                    "", NULL },
 
         { "freeze",        SEC_MODERATOR,  false, OldHandler<&ChatHandler::HandleFreezeCommand>,             "", NULL },
         { "unfreeze",      SEC_MODERATOR,  false, OldHandler<&ChatHandler::HandleUnFreezeCommand>,           "", NULL },
