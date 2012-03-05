@@ -775,6 +775,7 @@ bool ChatHandler::HandleGmNote(const char* args)
     if(!*args)
 
         return false;
+    SendSysMessage(LANG_IS_NOTE);
 
     return true;
 
