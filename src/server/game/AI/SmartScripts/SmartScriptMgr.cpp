@@ -802,8 +802,6 @@ bool SmartAIMgr::IsEventValid(SmartScriptHolder& e)
         case SMART_ACTION_JUMP_TO_POS:
         case SMART_ACTION_SEND_GOSSIP_MENU:
         case SMART_ACTION_SET_RANDOM_HEALTH:
-        case SMART_ACTION_LEAVE_VEHICLE:
-        case SMART_ACTION_REMOVE_PASSENGERS:
         case SMART_ACTION_GO_SET_LOOT_STATE:
         case SMART_ACTION_SEND_TARGET_TO_TARGET:
             break;
