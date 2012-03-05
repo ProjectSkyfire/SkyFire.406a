@@ -3057,6 +3057,17 @@ void SpellMgr::LoadSpellCustomAttr()
                 spellInfo->Effects[1].TriggerSpell = 82366;
                 spellInfo->Effects[2].TriggerSpell = 36946;
                 break;
+            case 36946: // Consecration Trigger Change Duration from 20 to 10 sec
+                spellInfo->DurationEntry = sSpellDurationStore.LookupEntry(1);
+                break;
+            case 13795: // Immolation Trap
+            case 13809: // Ice Trap
+            case 1499:  // Freezing Trap
+            case 13813: // Explosive Trap
+            case 34600: // Snake Trap
+            // Dont Remove Stealth From Camouflage
+                spellInfo->AttributesEx |= SPELL_ATTR1_NOT_BREAK_STEALTH;
+                break;
             case 63320: // Glyph of Life Tap
             // Entries were not updated after spell effect change, we have to do that manually :/
                 spellInfo->AttributesEx3 |= SPELL_ATTR3_CAN_PROC_WITH_TRIGGERED;

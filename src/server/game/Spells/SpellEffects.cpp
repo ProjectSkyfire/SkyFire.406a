@@ -6005,7 +6005,14 @@ void Spell::EffectAddComboPoints(SpellEffIndex /*effIndex*/)
         return;
 
     if (damage <= 0)
-        return;
+    {
+        // Rogue: Redirect
+        if (GetSpellInfo()->Id == 73981 && plr->GetComboPoints() > 0 && plr->GetComboTarget())
+        {
+            if (!(plr->GetComboTarget() == unitTarget->GetGUID())) // Can't Use on target that already has Combo Points
+                plr->AddComboPoints(unitTarget, plr->GetComboPoints(), this);
+        }
+    }
 
     m_caster->_movedPlayer->AddComboPoints(unitTarget, damage, this);
 }
