@@ -174,6 +174,7 @@ enum SkyFireStrings
     LANG_YOU_CHANGE_RUNIC_POWER         = 173,
     LANG_YOURS_RUNIC_POWER_CHANGED      = 174,
     LANG_LIQUID_STATUS                  = 175,
+    LANG_IS_NOTE                        = 176,
     // Room for more level 1              176-199 not used
 
     // level 2 chat
