@@ -1798,6 +1798,21 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
             // TODO: Resume path when reached jump location
             break;
         }
+        case SMART_ACTION_SET_RANDOM_HEALTH:
+        {
+            ObjectList* targets = GetTargets(e, unit);
+            if (!targets)
+                return;
+
+            for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+            {
+                if (Creature *cUnit = (*itr)->ToCreature())
+                {
+                    cUnit->SetHealth(cUnit->GetMaxHealth() * urand(e.action.health.MinPct, e.action.health.MaxPct) / 100);
+                }
+            }
+            break;
+        }
         case SMART_ACTION_GO_SET_LOOT_STATE:
         {
             ObjectList* targets = GetTargets(e, unit);
