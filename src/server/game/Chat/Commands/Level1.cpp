@@ -767,3 +767,15 @@ bool ChatHandler::HandleGroupSummonCommand(const char* args)
 
     return true;
 }
+
+bool ChatHandler::HandleGmNote(const char* args)
+
+{
+
+    if(!*args)
+
+        return false;
+
+    return true;
+
+}

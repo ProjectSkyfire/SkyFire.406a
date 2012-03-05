@@ -122,6 +122,7 @@ class ChatHandler
         GameObject* GetObjectGlobalyWithGuidOrNearWithDbGuid(uint32 lowguid, uint32 entry);
         bool HasSentErrorMessage() const { return sentErrorMessage;}
         void SetSentErrorMessage(bool val){ sentErrorMessage = val;};
+        bool HandleGmNote(const char* args);
         static bool LoadCommandTable() { return load_command_table;}
         static void SetLoadCommandTable(bool val){ load_command_table = val;};
 
