@@ -426,6 +426,7 @@ class HookList
         }
 };
 
+class flag96;
 class flag96
 {
 private:
@@ -460,6 +461,14 @@ public:
             part[1]&p2 ||
             part[2]&p3);
     };
+    
+    inline bool HasFlag(flag96 flags) const
+    {
+        return ( 
+            part[0]&flags[0] ||
+            part[1]&flags[1] ||
+            part[2]&flags[2]);
+    }
 
     inline void Set(uint32 p1=0, uint32 p2=0, uint32 p3=0)
     {

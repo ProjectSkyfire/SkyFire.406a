@@ -3098,11 +3098,25 @@ void Unit::InterruptNonMeleeSpells(bool withDelayed, uint32 spell_id, bool withI
 bool Unit::CanCastWhileWalking(uint32 spell_id)
 {
     SpellInfo const* spell = sSpellMgr->GetSpellInfo(spell_id);
+    
+    if (!spell)
+        return false;
+
+    bool ret = false;
+    SkillLineAbilityMapBounds skills = sSpellMgr->GetSkillLineAbilityMapBounds(spell_id);
+    for (SkillLineAbilityMap::const_iterator itr = skills.first; itr != skills.second; ++itr)
+    {
+        if (itr->second->skillId > 0)
+            ret = true;
+    }
+
+    if (!ret)
+        return false;
+    
     AuraEffectList const& auraList = GetAuraEffectsByType(SPELL_AURA_CAST_WHILE_WALKING);
     for (Unit::AuraEffectList::const_iterator itr = auraList.begin(); itr != auraList.end(); ++itr)
     {
-        // check that spell mask matches 
-        if (!((*itr)->GetSpellInfo()->Effects[(*itr)->GetEffIndex()].SpellClassMask & spell->SpellFamilyFlags))
+        if ((*itr)->GetSpellInfo()->Effects[(*itr)->GetEffIndex()].SpellClassMask.HasFlag(spell->GetSpellClassOptions()->SpellFamilyFlags))
             return true;
     }
     return false;
