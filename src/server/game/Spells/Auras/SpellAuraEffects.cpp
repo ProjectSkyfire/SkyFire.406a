@@ -385,7 +385,7 @@ pAuraEffectHandler AuraEffectHandler[TOTAL_AURAS]=
     &AuraEffect::HandleNULL,                                      // 327 NYI
     &AuraEffect::HandleNULL,                                      // 328 NYI
     &AuraEffect::HandleNULL,                                      // 329 NYI
-    &AuraEffect::HandleNULL,                                      // 330 NYI
+    &AuraEffect::HandleNULL,                                      // 330 SPELL_AURA_CAST_WHILE_WALKING
     &AuraEffect::HandleNULL,                                      // 331 NYI
     &AuraEffect::HandleActionbarSpellOverride,                    // 332 SPELL_AURA_OVERRIDE_ACTIONBAR_SPELLS_1
     &AuraEffect::HandleActionbarSpellOverride,                    // 333 SPELL_AURA_OVERRIDE_ACTIONBAR_SPELLS_2
