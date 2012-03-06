@@ -174,7 +174,7 @@ void PetAI::UpdateAI(const uint32 diff)
 
                     if (spell->CanAutoCast(target))
                     {
-                        targetSpellStore.push_back(std::make_pair<Unit*, Spell*>(target, spell));
+                        targetSpellStore.push_back(std::make_pair(target, spell));
                         spellUsed = true;
                         break;
                     }
@@ -187,7 +187,7 @@ void PetAI::UpdateAI(const uint32 diff)
                 // These would be offensive spells like Claw, Bite, Torment, Fireball, etc.
                 Spell* spell = new Spell(me, spellInfo, TRIGGERED_NONE, 0);
                 if (spell->CanAutoCast(me->getVictim()))
-                    targetSpellStore.push_back(std::make_pair<Unit*, Spell*>(me->getVictim(), spell));
+                    targetSpellStore.push_back(std::make_pair(me->getVictim(), spell));
                 else
                     delete spell;
             }
