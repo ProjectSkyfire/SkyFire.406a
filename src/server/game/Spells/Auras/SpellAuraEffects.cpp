@@ -44,8 +44,8 @@ class Aura;
 // EFFECT HANDLER NOTES
 //
 // in aura handler there should be check for modes:
-// AURA_EFFECT_HANDLE_REAL set
-// AURA_EFFECT_HANDLE_SEND_FOR_CLIENT_MASK set
+// AURA_EFFECT_HANDLE_REAL set -  aura mod is just applied/removed on the target
+// AURA_EFFECT_HANDLE_SEND_FOR_CLIENT_MASK set - aura is just applied/removed, or aura packet request is made
 // AURA_EFFECT_HANDLE_CHANGE_AMOUNT_MASK set - aura is recalculated or is just applied/removed - need to redo all things related to m_amount
 // AURA_EFFECT_HANDLE_CHANGE_AMOUNT_SEND_FOR_CLIENT_MASK - logical or of above conditions
 // AURA_EFFECT_HANDLE_STAT - set when stats are reapplied
@@ -217,8 +217,8 @@ pAuraEffectHandler AuraEffectHandler[TOTAL_AURAS]=
     &AuraEffect::HandleNoImmediateEffect,                         // 159 SPELL_AURA_NO_PVP_CREDIT      only for Honorless Target spell
     &AuraEffect::HandleNoImmediateEffect,                         // 160 SPELL_AURA_MOD_AOE_AVOIDANCE                 implemented in Unit::MagicSpellHitResult
     &AuraEffect::HandleNoImmediateEffect,                         // 161 SPELL_AURA_MOD_HEALTH_REGEN_IN_COMBAT
-    &AuraEffect::HandleNoImmediateEffect,                         // 162 SPELL_AURA_POWER_BURN implemented in AuraEffect::PeriodicTick
-    &AuraEffect::HandleNoImmediateEffect,                         // 163 SPELL_AURA_MOD_CRIT_DAMAGE_BONUS
+    &AuraEffect::HandleNoImmediateEffect,                         // 162 SPELL_AURA_POWER_BURN_MANA implemented in AuraEffect::PeriodicTick
+    &AuraEffect::HandleNoImmediateEffect,                         // 163 SPELL_AURA_MOD_CRIT_DAMAGE_BONUS_MELEE
     &AuraEffect::HandleUnused,                                    // 164 unused (3.2.0), only one test spell
     &AuraEffect::HandleNoImmediateEffect,                         // 165 SPELL_AURA_MELEE_ATTACK_POWER_ATTACKER_BONUS implemented in Unit::MeleeDamageBonus
     &AuraEffect::HandleAuraModAttackPowerPercent,                 // 166 SPELL_AURA_MOD_ATTACK_POWER_PCT
@@ -316,7 +316,7 @@ pAuraEffectHandler AuraEffectHandler[TOTAL_AURAS]=
     &AuraEffect::HandleNULL,                                      // 258 SPELL_AURA_MOD_SPELL_VISUAL
     &AuraEffect::HandleNoImmediateEffect,                         // 259 SPELL_AURA_MOD_HOT_PCT implemented in Unit::SpellHealingBonus
     &AuraEffect::HandleNoImmediateEffect,                         // 260 SPELL_AURA_SCREEN_EFFECT (miscvalue = id in ScreenEffect.dbc) not required any code
-    &AuraEffect::HandlePhase,                                     // 261 SPELL_AURA_PHASE
+    &AuraEffect::HandlePhase,                                     // 261 SPELL_AURA_PHASE undetectable invisibility?     implemented in Unit::isVisibleForOrDetect
     &AuraEffect::HandleNoImmediateEffect,                         // 262 SPELL_AURA_ABILITY_IGNORE_AURASTATE implemented in spell::cancast
     &AuraEffect::HandleAuraAllowOnlyAbility,                      // 263 SPELL_AURA_ALLOW_ONLY_ABILITY player can use only abilities set in SpellClassMask
     &AuraEffect::HandleUnused,                                    // 264 unused (3.2.0)
@@ -331,7 +331,7 @@ pAuraEffectHandler AuraEffectHandler[TOTAL_AURAS]=
     &AuraEffect::HandleUnused,                                    // 273 clientside
     &AuraEffect::HandleNoImmediateEffect,                         // 274 SPELL_AURA_CONSUME_NO_AMMO implemented in spell::CalculateDamageDoneForAllTargets
     &AuraEffect::HandleNoImmediateEffect,                         // 275 SPELL_AURA_MOD_IGNORE_SHAPESHIFT Use SpellClassMask for spell select
-    &AuraEffect::HandleNULL,                                      // 276 mod damage % mechanic?
+    &AuraEffect::HandleNoImmediateEffect,                         // 276 SPELL_AURA_MOD_DAMAGE_DONE_PERCENT_MECHANIC implemented in Unit::MeleeDamageBonus
     &AuraEffect::HandleNoImmediateEffect,                         // 277 SPELL_AURA_MOD_ABILITY_AFFECTED_TARGETS implemented in spell::settargetmap
     &AuraEffect::HandleAuraModDisarm,                             // 278 SPELL_AURA_MOD_DISARM_RANGED disarm ranged weapon
     &AuraEffect::HandleNoImmediateEffect,                         // 279 SPELL_AURA_INITIALIZE_IMAGES
@@ -363,7 +363,7 @@ pAuraEffectHandler AuraEffectHandler[TOTAL_AURAS]=
     &AuraEffect::HandleAuraModIncreaseSpeed,                      // 305 SPELL_AURA_MOD_MINIMUM_SPEED
     &AuraEffect::HandleNULL,                                      // 306 0 spells in 3.3.5
     &AuraEffect::HandleNULL,                                      // 307 0 spells in 3.3.5
-    &AuraEffect::HandleNULL,                                      // 308 new aura for hunter traps
+    &AuraEffect::HandleNULL,                                      // 308 This increases chance to receive/make a critical hit
     &AuraEffect::HandleNULL,                                      // 309 0 spells in 3.3.5
     &AuraEffect::HandleNoImmediateEffect,                         // 310 SPELL_AURA_MOD_CREATURE_AOE_DAMAGE_AVOIDANCE implemented in Spell::CalculateDamageDone
     &AuraEffect::HandleNULL,                                      // 311 0 spells in 3.3.5
@@ -373,41 +373,41 @@ pAuraEffectHandler AuraEffectHandler[TOTAL_AURAS]=
     &AuraEffect::HandleNoImmediateEffect,                         // 315 SPELL_AURA_UNDERWATER_WALKING todo
     &AuraEffect::HandleNoImmediateEffect,                         // 316 SPELL_AURA_PERIODIC_HASTE implemented in AuraEffect::CalculatePeriodic
     &AuraEffect::HandleNULL,                                      // 317 SPELL_AURA_MOD_SPELL_POWER_PCT
-    &AuraEffect::HandleAuraModMastery,                            // 318 SPELL_AURA_MASTERY
+    &AuraEffect::HandleAuraModMastery,                            // 318 SPELL_AURA_MASTERY allows and adds for player x% mastery.
     &AuraEffect::HandleModMeleeSpeedPct,                          // 319
-    &AuraEffect::HandleNULL,                                      // 320 NYI
-    &AuraEffect::HandleNULL,                                      // 321 NYI
+    &AuraEffect::HandleModMeleeRangedSpeedPct,                    // 320
+    &AuraEffect::HandleNULL,                                      // 321
     &AuraEffect::HandleNoImmediateEffect,                         // 322
-    &AuraEffect::HandleNULL,                                      // 323 NYI
-    &AuraEffect::HandleNULL,                                      // 324 NYI
-    &AuraEffect::HandleNULL,                                      // 325 NYI
-    &AuraEffect::HandleNULL,                                      // 326 NYI
-    &AuraEffect::HandleNULL,                                      // 327 NYI
-    &AuraEffect::HandleNULL,                                      // 328 NYI
-    &AuraEffect::HandleNULL,                                      // 329 NYI
-    &AuraEffect::HandleNULL,                                      // 330 NYI
-    &AuraEffect::HandleNULL,                                      // 331 NYI
+    &AuraEffect::HandleNULL,                                      // 323 0 spells in 4.0.6a
+    &AuraEffect::HandleModSpellCritChanceShool,                   // 324
+    &AuraEffect::HandleNULL,                                      // 325 0 spells in 4.0.6a
+    &AuraEffect::HandlePhase,                                     // 326
+    &AuraEffect::HandleNULL,                                      // 327 0 spells in 4.0.6a
+    &AuraEffect::HandleNULL,                                      // 328 Eclipse driver
+    &AuraEffect::HandleModPowerRegenPCT,                          // 329
+    &AuraEffect::HandleNoImmediateEffect,                         // 330 SPELL_AURA_ALLOW_CAST_WHILE_MOVING implemented in Spell::prepare, Spell::update, Spell::CheckCast
+    &AuraEffect::HandleNULL,                                      // 331 Weather related.
     &AuraEffect::HandleActionbarSpellOverride,                    // 332 SPELL_AURA_OVERRIDE_ACTIONBAR_SPELLS_1
     &AuraEffect::HandleActionbarSpellOverride,                    // 333 SPELL_AURA_OVERRIDE_ACTIONBAR_SPELLS_2
-    &AuraEffect::HandleNULL,                                      // 334 NYI
-    &AuraEffect::HandleNULL,                                      // 335 NYI
-    &AuraEffect::HandleNULL,                                      // 336 NYI
-    &AuraEffect::HandleNULL,                                      // 337 NYI
-    &AuraEffect::HandleNULL,                                      // 338 NYI
-    &AuraEffect::HandleNULL,                                      // 339 NYI
-    &AuraEffect::HandleNULL,                                      // 340 NYI
-    &AuraEffect::HandleNULL,                                      // 341 NYI
-    &AuraEffect::HandleNULL,                                      // 342 NYI
-    &AuraEffect::HandleNULL,                                      // 343 NYI
-    &AuraEffect::HandleNoImmediateEffect,                         // 344 SPELL_AURA_MOD_AUTOATTACK_DAMAGE, Implemented in Unit::AttackerStateUpdate
-    &AuraEffect::HandleNULL,                                      // 345 NYI
-    &AuraEffect::HandleNULL,                                      // 346 NYI
-    &AuraEffect::HandleNULL,                                      // 347 NYI
-    &AuraEffect::HandleNULL,                                      // 348 NYI
-    &AuraEffect::HandleNULL,                                      // 349 NYI
-    &AuraEffect::HandleNULL,                                      // 350 NYI
-    &AuraEffect::HandleNULL,                                      // 351 NYI
-    &AuraEffect::HandleNULL,                                      // 352 NYI
+    &AuraEffect::HandleNULL,                                      // 334 - deal damage in x range. X - Aura Effect value.
+    &AuraEffect::HandleNULL,                                      // 335 - something with invisibility.
+    &AuraEffect::HandleNULL,                                      // 336 - disallow flight.
+    &AuraEffect::HandleNULL,                                      // 337 - Reduces the price of items from all vendors by xx%.
+    &AuraEffect::HandleNULL,                                      // 338 - Items take xx% less durability loss when you die.
+    &AuraEffect::HandleNULL,                                      // 339 - Increases the chance to gain a skill increase on tradeskills by xx%.
+    &AuraEffect::HandleNULL,                                      // 340 - Increases health gained when resurrected by a guild member by xx%.
+    &AuraEffect::HandleNULL,                                      // 341 - modify cooldown of all spells with Category value from '()'
+    &AuraEffect::HandleModMeleeSpeedPct,                          // 342
+    &AuraEffect::HandleNULL,                                      // 343
+    &AuraEffect::HandleModDamagePercentDone,                      // 344
+    &AuraEffect::HandleNULL,                                      // 345 - Collosus smash.
+    &AuraEffect::HandleNULL,                                      // 346 - Shows special UI (like corrupted blood).
+    &AuraEffect::HandleNULL,                                      // 347 - something with haste.
+    &AuraEffect::HandleNULL,                                      // 348 - increases money loot by x% and gives it to guild bank.  X - Aura Effect value.
+    &AuraEffect::HandleNULL,                                      // 349 - currency points gain increased.
+    &AuraEffect::HandleNULL,                                      // 350 - 1 spell. Increase count of items from Mining, Skinning, Herbalism, and Disenchanting.
+    &AuraEffect::HandleAuraModSkill,                              // 351 - Modify Archeology skill.
+    &AuraEffect::HandleNULL,                                      // 352 - Only 1 Worgen Form.
     &AuraEffect::HandleModCamouflage,                             // 353 SPELL_AURA_CAMOUFLAGE
 };
 
@@ -771,7 +771,7 @@ void AuraEffect::CalculatePeriodic(Unit* caster, bool create, bool load)
         case SPELL_AURA_PERIODIC_HEALTH_FUNNEL:
         case SPELL_AURA_PERIODIC_MANA_LEECH:
         case SPELL_AURA_PERIODIC_DAMAGE_PERCENT:
-        case SPELL_AURA_POWER_BURN:
+        case SPELL_AURA_POWER_BURN_MANA:
             m_isPeriodic = true;
             break;
         case SPELL_AURA_PERIODIC_TRIGGER_SPELL:
@@ -1318,7 +1318,7 @@ void AuraEffect::PeriodicTick(AuraApplication * aurApp, Unit* caster) const
         case SPELL_AURA_PERIODIC_ENERGIZE:
             HandlePeriodicEnergizeAuraTick(target, caster);
             break;
-        case SPELL_AURA_POWER_BURN:
+        case SPELL_AURA_POWER_BURN_MANA:
             HandlePeriodicPowerBurnAuraTick(target, caster);
             break;
         case SPELL_AURA_DUMMY:
@@ -2065,8 +2065,8 @@ void AuraEffect::HandleAuraModShapeshift(AuraApplication const* aurApp, uint8 mo
             if (target->getClass() == CLASS_DRUID)
             {
                 target->setPowerType(POWER_MANA);
-                // Remove movement impairing effects also when shifting out
-                target->RemoveMovementImpairingAuras();
+                // Remove movement impairing effects(without root 4.0.6) also when shifting out
+                target->RemoveAurasWithMechanic((1 << MECHANIC_SNARE));
             }
         }
 
@@ -2098,6 +2098,22 @@ void AuraEffect::HandleAuraModShapeshift(AuraApplication const* aurApp, uint8 mo
                     if (AuraEffect const* aurEff = target->IsScriptOverriden(m_spellInfo, 831))
                         Rage_val += aurEff->GetAmount() * 10;
                 }
+                // Stance mastery + Tactical mastery (both passive, and last have aura only in defense stance, but need apply at any stance switch)
+                if (target->GetTypeId() == TYPEID_PLAYER)
+                {
+                    PlayerSpellMap const& sp_list = target->ToPlayer()->GetSpellMap();
+                    for (PlayerSpellMap::const_iterator itr = sp_list.begin(); itr != sp_list.end(); ++itr)
+                    {
+                        if (itr->second->state == PLAYERSPELL_REMOVED || itr->second->disabled) continue;
+                        SpellEntry const *spellInfo = sSpellStore.LookupEntry(itr->first);
+
+                        if (m_spellInfo->SpellFamilyName == SPELLFAMILY_WARRIOR && spellInfo->SpellIconID == 139)
+                            Rage_val += target->CalculateSpellDamage(target, m_spellInfo, 0) * 10;
+                    }
+                }
+                if (target->GetPower(POWER_RAGE) > Rage_val)
+                    target->SetPower(POWER_RAGE, Rage_val);
+                break;
             }
             default:
                 break;
@@ -2929,9 +2945,9 @@ void AuraEffect::HandleAuraWaterWalk(AuraApplication const* aurApp, uint8 mode, 
 
     WorldPacket data;
     if (apply)
-        data.Initialize(SMSG_MOVE_WATER_WALK, 8+4);
+        data.Initialize(SMSG_MOVE_WATER_WALK, 2 + 8 + 4);    // Turn Waterwalk on.
     else
-        data.Initialize(SMSG_MOVE_LAND_WALK, 8+4);
+        data.Initialize(SMSG_MOVE_LAND_WALK, 2 + 8 + 4);     // Turn Waterwalk off.
     data.append(target->GetPackGUID());
     data << uint32(0);
     target->SendMessageToSet(&data, true);
@@ -3029,7 +3045,7 @@ void AuraEffect::HandleModThreat(AuraApplication const* aurApp, uint8 mode, bool
         return;
 
     Unit* target = aurApp->GetTarget();
-    for (int8 i = 0; i < MAX_SPELL_SCHOOL; ++i)
+    for (int32 i = 0; i < MAX_SPELL_SCHOOL; ++i)
         if (GetMiscValue() & (1 << i))
             ApplyPercentModFloatVar(target->m_threatModifier[i], float(GetAmount()), apply);
 }
@@ -3082,7 +3098,17 @@ void AuraEffect::HandleModConfuse(AuraApplication const* aurApp, uint8 mode, boo
         return;
 
     Unit* target = aurApp->GetTarget();
+    Unit* caster = GetCaster();
 
+    if (caster->HasAura(56375)) // Glyph of Polymorph
+    {
+        if (GetSpellInfo()->Mechanic == MECHANIC_POLYMORPH)
+        {
+            target->RemoveAurasByType(SPELL_AURA_PERIODIC_DAMAGE, 0, target->GetAura(32409));
+            target->RemoveAurasByType(SPELL_AURA_PERIODIC_DAMAGE_PERCENT);
+            target->RemoveAurasByType(SPELL_AURA_PERIODIC_LEECH);
+        }
+    }
     target->SetControlled(apply, UNIT_STATE_CONFUSED);
 }
 
