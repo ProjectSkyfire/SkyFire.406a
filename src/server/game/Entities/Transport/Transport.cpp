@@ -318,7 +318,7 @@ bool Transport::GenerateWaypoints(uint32 pathid, uint32 moveSpeed, uint32 accelR
                 if (node_Idx > 0)
                 {
                     bool teleport_on_this_node = (point_Idx == spline.last() - 1 ? teleport : false);   //if is the last node of segment -> teleport
-                    teleport_on_this_node |= (node_Idx == path.size() -1 ? !never_teleport : false);    //if is the last node of path, teleport if teleported at least one time 
+                    teleport_on_this_node |= (node_Idx == path.size() -1 ? !never_teleport : false);    //if is the last node of path, teleport if teleported at least one time
                     m_WayPoints[t] = WayPoint(path[node_Idx].mapid, path[node_Idx].x, path[node_Idx].y, path[node_Idx].z, teleport_on_this_node, path[node_Idx].index, path[node_Idx].arrivalEventID, path[node_Idx].departureEventID);
                     sLog->outDebug(LOG_FILTER_TRANSPORTS, "[%d] %d T: %d, x: %f, y: %f, z: %f, t:%d", pathid, path[node_Idx].index, t, path[node_Idx].x, path[node_Idx].y, path[node_Idx].z, teleport_on_this_node);
                     //if (path[node_Idx].actionFlag == 2)    //add delay - always or only on actionFlag == 2?

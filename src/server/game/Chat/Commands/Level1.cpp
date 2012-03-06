@@ -771,12 +771,10 @@ bool ChatHandler::HandleGroupSummonCommand(const char* args)
 bool ChatHandler::HandleGmNote(const char* args)
 
 {
-
     if(!*args)
 
         return false;
     SendSysMessage(LANG_IS_NOTE);
 
     return true;
-
 }

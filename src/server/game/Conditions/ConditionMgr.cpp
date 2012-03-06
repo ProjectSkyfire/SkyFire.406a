@@ -239,7 +239,7 @@ bool Condition::Meets(ConditionSourceInfo& sourceInfo)
         case CONDITION_OBJECT_ENTRY:
         {
             if (object->GetTypeId() == mConditionValue1)
-                condMeets = (!mConditionValue2) || (object->GetEntry() == mConditionValue2);         
+                condMeets = (!mConditionValue2) || (object->GetEntry() == mConditionValue2);
             break;
         }
         case CONDITION_TYPE_MASK:
@@ -1576,7 +1576,7 @@ bool ConditionMgr::isConditionTypeValid(Condition* cond)
                     return false;
             }
             if (cond->mConditionValue3)
-                sLog->outErrorDb("ObjectEntry condition has useless data in value3 (%u)!", cond->mConditionValue3);        
+                sLog->outErrorDb("ObjectEntry condition has useless data in value3 (%u)!", cond->mConditionValue3);
             break;
         }
         case CONDITION_TYPE_MASK:
