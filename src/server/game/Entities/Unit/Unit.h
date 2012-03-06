@@ -2273,9 +2273,8 @@ class Unit : public WorldObject
         void ResetDamageDoneInPastSecs(uint32 secs);
         void ResetHealingDoneInPastSecs(uint32 secs);
 
-        float m_AbsorbHeal;
-        float GetAbsorbHeal() const { return m_AbsorbHeal; };
-        void SetAbsorbHeal(float heal) { m_AbsorbHeal = heal; };
+        float GetHealAbsorb() const { return _healAbsorb; };
+        void SetHealAbsorb(float absorb) { _healAbsorb = absorb; };
 
         // Movement info
         Movement::MoveSpline * movespline;
@@ -2401,6 +2400,8 @@ class Unit : public WorldObject
 
         Spell const* _focusSpell;
         bool _targetLocked; // locks the target during spell cast for proper facing
+
+        float _healAbsorb;
 };
 
 namespace Trinity
