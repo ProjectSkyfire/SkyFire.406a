@@ -36,6 +36,7 @@ enum DeathKnightSpells
     DK_SPELL_IMPROVED_BLOOD_PRESENCE_TRIGGERED  = 63611,
     DK_SPELL_UNHOLY_PRESENCE                    = 48265,
     DK_SPELL_IMPROVED_UNHOLY_PRESENCE_TRIGGERED = 63622,
+    DK_SPELL_NECROTIC_STRIKE                    = 73975,
 };
 
 class spell_dk_necrotic_strike : public SpellScriptLoader
@@ -47,37 +48,32 @@ public:
     {
         PrepareSpellScript(spell_dk_necrotic_strike_SpellScript);
 
-        enum Spells
-        {
-            DK_SPELL_NECROTIC_STRIKE = 73975,
-        };
-
         bool Validate(SpellEntry const * /*spellEntry*/)
         {
             return sSpellStore.LookupEntry(DK_SPELL_NECROTIC_STRIKE);
         }
 
-        void HandleAfterHit()
+        void HandleBeforeHit()
         {
-            Unit* caster = GetCaster();
-
             if (Unit* target = GetHitUnit())
             {
-                if (!target)//
-                    return;
-                    int32 nsbp = caster->GetTotalAttackPowerValue(BASE_ATTACK) * 0.75f;//initial scale
-                    int32 getheal = target->GetAbsorbHeal();//Get current absorb value if any
-                    int32 heal = nsbp + getheal;//define &| combine values
+                if (!target->HasAura(73975))
+                    target->SetHealAbsorb(0.0f);
+            }
+        }
 
-                if (Aura* NS = target->GetAura(73975))
-                {
-                    target->SetAbsorbHeal(heal);//set absorb value
-                }
+        void HandleAfterHit()
+        {
+            if (Unit* target = GetHitUnit())
+            {
+                float absorb = GetCaster()->GetTotalAttackPowerValue(BASE_ATTACK) * 0.75f + target->GetHealAbsorb();
+                target->SetHealAbsorb(absorb);
             }
         }
 
         void Register()
         {
+            BeforeHit += SpellHitFn(spell_dk_necrotic_strike_SpellScript::HandleBeforeHit);
             AfterHit += SpellHitFn(spell_dk_necrotic_strike_SpellScript::HandleAfterHit);
         }
     };
@@ -220,11 +216,11 @@ class spell_dk_anti_magic_zone : public SpellScriptLoader
             {
                 SpellInfo const* talentSpell = sSpellMgr->GetSpellInfo(DK_SPELL_ANTI_MAGIC_SHELL_TALENT);
                 amount = talentSpell->Effects[EFFECT_0].CalcValue(GetCaster());
-                Unit* caster = GetCaster();
-                if (!caster)
-                    return;
-                if (Player* player = caster->ToPlayer())
-                     amount += int32(2 * player->GetTotalAttackPowerValue(BASE_ATTACK));
+                if (Unit* caster = GetCaster())
+                {
+                    if (Player* player = caster->ToPlayer())
+                        amount += int32(2 * player->GetTotalAttackPowerValue(BASE_ATTACK));
+                }
             }
 
             void Absorb(AuraEffect* /*aurEff*/, DamageInfo & dmgInfo, uint32 & absorbAmount)
