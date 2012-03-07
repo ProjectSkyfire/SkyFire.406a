@@ -477,7 +477,7 @@ enum SMART_ACTION
     SMART_ACTION_GO_SET_LOOT_STATE                  = 100,     // state
     SMART_ACTION_SEND_TARGET_TO_TARGET              = 101,
     SMART_ACTION_SET_MANA                           = 102,     // Mana_Ammount
-	
+    
     SMART_ACTION_END                                = 103,
 };
 
@@ -905,7 +905,7 @@ struct SmartAction
             uint32 MinPct;
             uint32 MaxPct;
         } health;
-		struct
+        struct
         {
             uint32 Mana;
         } mana;

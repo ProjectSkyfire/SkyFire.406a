@@ -1813,7 +1813,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
             }
             break;
         }
-		case SMART_ACTION_SET_MANA:
+        case SMART_ACTION_SET_MANA:
         {
             ObjectList* targets = GetTargets(e, unit);
             if (!targets)
@@ -1822,8 +1822,8 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
             for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
             {
                 if (Creature *cUnit = (*itr)->ToCreature())
-				{
-					cUnit->SetPower(POWER_MANA,e.action.mana.Mana);
+                {
+                    cUnit->SetPower(POWER_MANA,e.action.mana.Mana);
                 }
             }
             break;
