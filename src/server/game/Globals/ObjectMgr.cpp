@@ -6885,21 +6885,21 @@ void ObjectMgr::LoadRewardOnKill()
         uint32 creature_id = fields[0].GetUInt32();
 
         RewardOnKillEntry rewOnKill;
-        rewOnKill.repfaction1          = fields[1].GetUInt32();
-        rewOnKill.repfaction2          = fields[2].GetUInt32();
-        rewOnKill.is_teamaward1        = fields[3].GetBool();
-        rewOnKill.reputation_max_cap1  = fields[4].GetUInt32();
-        rewOnKill.repvalue1            = fields[5].GetInt32();
-        rewOnKill.is_teamaward2        = fields[6].GetBool();
-        rewOnKill.reputation_max_cap2  = fields[7].GetUInt32();
-        rewOnKill.repvalue2            = fields[8].GetInt32();
-        rewOnKill.team_dependent       = fields[9].GetUInt8();
-        rewOnKill.currencyid1          = fields[10].GetUInt32();
-        rewOnKill.currencyid2          = fields[11].GetUInt32();
-        rewOnKill.currencyid3          = fields[12].GetUInt32();
-        rewOnKill.currencycount1       = fields[13].GetInt32();
-        rewOnKill.currencycount2       = fields[14].GetInt32();
-        rewOnKill.currencycount3       = fields[15].GetInt32();
+        rewOnKill.RepFaction1          = fields[1].GetUInt32();
+        rewOnKill.RepFaction2          = fields[2].GetUInt32();
+        rewOnKill.IsTeamAward1        = fields[3].GetBool();
+        rewOnKill.ReputationMaxCap1  = fields[4].GetUInt32();
+        rewOnKill.RepValue1            = fields[5].GetInt32();
+        rewOnKill.IsTeamAward2        = fields[6].GetBool();
+        rewOnKill.ReputationMaxCap2  = fields[7].GetUInt32();
+        rewOnKill.RepValue2            = fields[8].GetInt32();
+        rewOnKill.TeamDependent       = fields[9].GetUInt8();
+        rewOnKill.CurrencyId1          = fields[10].GetUInt32();
+        rewOnKill.CurrencyId2          = fields[11].GetUInt32();
+        rewOnKill.CurrencyId3          = fields[12].GetUInt32();
+        rewOnKill.CurrencyCount1       = fields[13].GetInt32();
+        rewOnKill.CurrencyCount2       = fields[14].GetInt32();
+        rewOnKill.CurrencyCount3       = fields[15].GetInt32();
 
         if (!GetCreatureTemplate(creature_id))
         {
@@ -6907,49 +6907,49 @@ void ObjectMgr::LoadRewardOnKill()
             continue;
         }
 
-        if (rewOnKill.repfaction1)
+        if (rewOnKill.RepFaction1)
         {
-            FactionEntry const *factionEntry1 = sFactionStore.LookupEntry(rewOnKill.repfaction1);
+            FactionEntry const *factionEntry1 = sFactionStore.LookupEntry(rewOnKill.RepFaction1);
             if (!factionEntry1)
             {
-                sLog->outErrorDb("Faction (faction.dbc) %u does not exist but is used in `creature_onkill_reward`", rewOnKill.repfaction1);
+                sLog->outErrorDb("Faction (faction.dbc) %u does not exist but is used in `creature_onkill_reward`", rewOnKill.RepFaction1);
                 continue;
             }
         }
 
-        if (rewOnKill.repfaction2)
+        if (rewOnKill.RepFaction2)
         {
-            FactionEntry const *factionEntry2 = sFactionStore.LookupEntry(rewOnKill.repfaction2);
+            FactionEntry const *factionEntry2 = sFactionStore.LookupEntry(rewOnKill.RepFaction2);
             if (!factionEntry2)
             {
-                sLog->outErrorDb("Faction (faction.dbc) %u does not exist but is used in `creature_onkill_reward`", rewOnKill.repfaction2);
+                sLog->outErrorDb("Faction (faction.dbc) %u does not exist but is used in `creature_onkill_reward`", rewOnKill.RepFaction2);
                 continue;
             }
         }
 
-        if (rewOnKill.currencyid1)
+        if (rewOnKill.CurrencyId1)
         {
-            if (!sCurrencyTypesStore.LookupEntry(rewOnKill.currencyid1))
+            if (!sCurrencyTypesStore.LookupEntry(rewOnKill.CurrencyId1))
             {
-                sLog->outErrorDb("CurrencyType (CurrencyTypes.dbc) %u does not exist but is used in `creature_onkill_reward`", rewOnKill.currencyid1);
+                sLog->outErrorDb("CurrencyType (CurrencyTypes.dbc) %u does not exist but is used in `creature_onkill_reward`", rewOnKill.CurrencyId1);
                 continue;
             }
         }
 
-        if (rewOnKill.currencyid2)
+        if (rewOnKill.CurrencyId2)
         {
-            if (!sCurrencyTypesStore.LookupEntry(rewOnKill.currencyid2))
+            if (!sCurrencyTypesStore.LookupEntry(rewOnKill.CurrencyId2))
             {
-                sLog->outErrorDb("CurrencyType (CurrencyTypes.dbc) %u does not exist but is used in `creature_onkill_reward`", rewOnKill.currencyid2);
+                sLog->outErrorDb("CurrencyType (CurrencyTypes.dbc) %u does not exist but is used in `creature_onkill_reward`", rewOnKill.CurrencyId2);
                 continue;
             }
         }
 
-        if (rewOnKill.currencyid3)
+        if (rewOnKill.CurrencyId3)
         {
-            if (!sCurrencyTypesStore.LookupEntry(rewOnKill.currencyid3))
+            if (!sCurrencyTypesStore.LookupEntry(rewOnKill.CurrencyId3))
             {
-                sLog->outErrorDb("CurrencyType (CurrencyTypes.dbc) %u does not exist but is used in `creature_onkill_reward`", rewOnKill.currencyid3);
+                sLog->outErrorDb("CurrencyType (CurrencyTypes.dbc) %u does not exist but is used in `creature_onkill_reward`", rewOnKill.CurrencyId3);
                 continue;
             }
         }

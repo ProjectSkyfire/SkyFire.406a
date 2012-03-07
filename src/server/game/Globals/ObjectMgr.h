@@ -446,21 +446,21 @@ struct RepRewardRate
 
 struct RewardOnKillEntry
 {
-    uint32 repfaction1;
-    uint32 repfaction2;
-    bool is_teamaward1;
-    uint32 reputation_max_cap1;
-    int32 repvalue1;
-    bool is_teamaward2;
-    uint32 reputation_max_cap2;
-    int32 repvalue2;
-    bool team_dependent;
-    uint32 currencyid1;
-    uint32 currencyid2;
-    uint32 currencyid3;
-    int32 currencycount1;
-    int32 currencycount2;
-    int32 currencycount3;
+    uint32 RepFaction1;
+    uint32 RepFaction2;
+    uint32 ReputationMaxCap1;
+    int32 RepValue1;
+    uint32 ReputationMaxCap2;
+    int32 RepValue2;
+    bool IsTeamAward1;
+    bool IsTeamAward2;
+    bool TeamDependent;
+    uint32 CurrencyId1;
+    uint32 CurrencyId2;
+    uint32 CurrencyId3;
+    int32 CurrencyCount1;
+    int32 CurrencyCount2;
+    int32 CurrencyCount3;
 };
 
 struct RepSpilloverTemplate
