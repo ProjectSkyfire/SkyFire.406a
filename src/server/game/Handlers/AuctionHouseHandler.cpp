@@ -229,12 +229,12 @@ void WorldSession::HandleAuctionSellItem(WorldPacket & recv_data)
     AH->item_guidlow                = GUID_LOPART(item);
     AH->item_template               = it->GetEntry();
     AH->owner                       = player->GetGUIDLow();
-    AH->startbid                    = (bid >> 32);
+    AH->startbid                    = bid;
     AH->bidder                      = 0;
     AH->bid                         = 0;
-    AH->buyout                      = (buyout >> 32);
+    AH->buyout                      = buyout;
     AH->expire_time                 = time(NULL) + auction_time;
-    AH->deposit                     = (deposit >> 32);
+    AH->deposit                     = deposit;
     AH->auctionHouseEntry           = auctionHouseEntry;
 
     sLog->outDetail("selling item %u to auctioneer %u with initial bid %u with buyout %u and with time %u (in sec) in auctionhouse %u", GUID_LOPART(item), AH->auctioneer, bid, buyout, auction_time, AH->GetHouseId());
@@ -342,7 +342,7 @@ void WorldSession::HandleAuctionPlaceBid(WorldPacket & recv_data)
             player->ModifyMoney(-int32(price));
 
         auction->bidder  = player->GetGUIDLow();
-        auction->bid     = (price >> 32);
+        auction->bid     = price;
         GetPlayer()->UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_HIGHEST_AUCTION_BID, price);
 
         trans->PAppend("UPDATE auctionhouse SET buyguid = '%u', lastbid = '%u' WHERE id = '%u'", auction->bidder, auction->bid, auction->Id);
