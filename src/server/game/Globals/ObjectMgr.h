@@ -410,8 +410,6 @@ typedef UNORDERED_MAP<uint32, PointOfInterestLocale> PointOfInterestLocaleMap;
 
 typedef std::multimap<uint32, uint32> QuestRelations;
 typedef std::pair<QuestRelations::const_iterator, QuestRelations::const_iterator> QuestRelationBounds;
-typedef std::multimap<uint32, ItemRequiredTarget> ItemRequiredTargetMap;
-typedef std::pair<ItemRequiredTargetMap::const_iterator, ItemRequiredTargetMap::const_iterator>  ItemRequiredTargetMapBounds;
 
 struct PetLevelInfo
 {
@@ -1287,8 +1285,6 @@ class ObjectMgr
         SpellClickInfoMap   mSpellClickInfoMap;
 
         SpellScriptsMap     mSpellScripts;
-
-        ItemRequiredTargetMap m_ItemRequiredTarget;
 
         VehicleAccessoryMap m_VehicleTemplateAccessoryMap;
         VehicleAccessoryMap m_VehicleAccessoryMap;
