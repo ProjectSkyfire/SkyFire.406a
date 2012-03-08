@@ -738,7 +738,7 @@ bool ConditionMgr::addToGossipMenus(Condition* cond)
 
     if (pMenuBounds.first != pMenuBounds.second)
     {
-        for (GossipMenusMap::iterator itr = pMenuBounds.first; itr != pMenuBounds.second; ++itr)
+        for (GossipMenusContainer::iterator itr = pMenuBounds.first; itr != pMenuBounds.second; ++itr)
         {
             if ((*itr).second.entry == cond->SourceGroup && (*itr).second.text_id == cond->SourceEntry)
             {
@@ -757,7 +757,7 @@ bool ConditionMgr::addToGossipMenuItems(Condition* cond)
     GossipMenuItemsMapBoundsNonConst pMenuItemBounds = sObjectMgr->GetGossipMenuItemsMapBoundsNonConst(cond->SourceGroup);
     if (pMenuItemBounds.first != pMenuItemBounds.second)
     {
-        for (GossipMenuItemsMap::iterator itr = pMenuItemBounds.first; itr != pMenuItemBounds.second; ++itr)
+        for (GossipMenuItemsContainer::iterator itr = pMenuItemBounds.first; itr != pMenuItemBounds.second; ++itr)
         {
             if ((*itr).second.MenuId == cond->SourceGroup && (*itr).second.OptionIndex == cond->SourceEntry)
             {

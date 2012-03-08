@@ -17076,7 +17076,7 @@ bool Unit::HandleSpellClick(Unit* clicker, int8 seatId)
 {
     uint32 spellClickEntry = GetVehicleKit() ? GetVehicleKit()->GetCreatureEntry() : GetEntry();
     SpellClickInfoMapBounds clickPair = sObjectMgr->GetSpellClickInfoMapBounds(spellClickEntry);
-    for (SpellClickInfoMap::const_iterator itr = clickPair.first; itr != clickPair.second; ++itr)
+    for (SpellClickInfoContainer::const_iterator itr = clickPair.first; itr != clickPair.second; ++itr)
     {
         //! First check simple relations from clicker to clickee
         if (!itr->second.IsFitToRequirements(clicker, this))

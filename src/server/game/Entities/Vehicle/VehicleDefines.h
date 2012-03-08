@@ -73,7 +73,7 @@ struct VehicleAccessory
 };
 
 typedef std::vector<VehicleAccessory> VehicleAccessoryList;
-typedef std::map<uint32, VehicleAccessoryList> VehicleAccessoryMap;
+typedef std::map<uint32, VehicleAccessoryList> VehicleAccessoryContainer;
 typedef std::map<int8, VehicleSeat> SeatMap;
 typedef std::set<uint64> GuidSet;
 

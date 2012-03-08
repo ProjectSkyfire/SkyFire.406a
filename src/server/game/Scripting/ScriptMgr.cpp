@@ -396,7 +396,7 @@ void ScriptMgr::CreateSpellScripts(uint32 spellId, std::list<SpellScript*>& scri
 {
     SpellScriptsBounds bounds = sObjectMgr->GetSpellScriptsBounds(spellId);
 
-    for (SpellScriptsMap::iterator itr = bounds.first; itr != bounds.second; ++itr)
+    for (SpellScriptsContainer::iterator itr = bounds.first; itr != bounds.second; ++itr)
     {
         SpellScriptLoader* tmpscript = ScriptRegistry<SpellScriptLoader>::GetScriptById(itr->second);
         if (!tmpscript)
@@ -417,7 +417,7 @@ void ScriptMgr::CreateAuraScripts(uint32 spellId, std::list<AuraScript*>& script
 {
     SpellScriptsBounds bounds = sObjectMgr->GetSpellScriptsBounds(spellId);
 
-    for (SpellScriptsMap::iterator itr = bounds.first; itr != bounds.second; ++itr)
+    for (SpellScriptsContainer::iterator itr = bounds.first; itr != bounds.second; ++itr)
     {
         SpellScriptLoader* tmpscript = ScriptRegistry<SpellScriptLoader>::GetScriptById(itr->second);
         if (!tmpscript)
@@ -434,12 +434,12 @@ void ScriptMgr::CreateAuraScripts(uint32 spellId, std::list<AuraScript*>& script
     }
 }
 
-void ScriptMgr::CreateSpellScriptLoaders(uint32 spellId, std::vector<std::pair<SpellScriptLoader*, SpellScriptsMap::iterator> >& scriptVector)
+void ScriptMgr::CreateSpellScriptLoaders(uint32 spellId, std::vector<std::pair<SpellScriptLoader*, SpellScriptsContainer::iterator> >& scriptVector)
 {
     SpellScriptsBounds bounds = sObjectMgr->GetSpellScriptsBounds(spellId);
     scriptVector.reserve(std::distance(bounds.first, bounds.second));
 
-    for (SpellScriptsMap::iterator itr = bounds.first; itr != bounds.second; ++itr)
+    for (SpellScriptsContainer::iterator itr = bounds.first; itr != bounds.second; ++itr)
     {
         SpellScriptLoader* tmpscript = ScriptRegistry<SpellScriptLoader>::GetScriptById(itr->second);
         if (!tmpscript)
