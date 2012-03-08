@@ -9161,7 +9161,7 @@ void Player::_ApplyAllItemMods()
             if (_items[i]->IsBroken() || !CanUseAttackType(GetAttackBySlot(i)))
                 continue;
 
-            _ApplyItemBonuses(proto, i, true);
+            _ApplyItemMods(_items[i], i, true);
         }
     }
 
