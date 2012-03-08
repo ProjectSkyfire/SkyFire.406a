@@ -2951,14 +2951,14 @@ void AuraEffect::HandleAuraAllowFlight(AuraApplication const* aurApp, uint8 mode
 
 void AuraEffect::HandleModCanCastWhileWalking(AuraApplication const* aurApp, uint8 mode, bool /*apply*/) const
 {
-    if (!(mode & AURA_EFFECT_HANDLE_SEND_FOR_CLIENT_MASK))
+    /*if (!(mode & AURA_EFFECT_HANDLE_SEND_FOR_CLIENT_MASK))
         return;
 
     Unit* target = aurApp->GetTarget();
 
     // Casts WaterWalk on player target
     if (target->GetTypeId() == TYPEID_PLAYER)
-        target->ToPlayer()->CanCastWhileWalking(58265);
+        target->ToPlayer()->CanCastWhileWalking(58265);*/
 }
 
 void AuraEffect::HandleAuraWaterWalk(AuraApplication const* aurApp, uint8 mode, bool apply) const
