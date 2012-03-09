@@ -22,80 +22,80 @@
 
 enum
 {
-    SPELL_TWILIGHT_PRECISION		= 78243, // Increases Halion's chance to hit by 5% and decreases all players' chance to dodge by 20%
-    SPELL_BERSERK					= 26662, // Increases the caster's attack and movement speeds by 150% and all damage it deals by 500% for 5 min. Also grants immunity to Taunt effects.
-    SPELL_START_PHASE2				= 74808, // Phases the caster into the Twilight realm, leaving behind a large rift.
-    SPELL_TWILIGHT_ENTER			= 74807, // Phases the caster into the Twilight realm - phase 32
-    SPELL_TWILIGHT_ENTER2			= 74812, //
-    SPELL_SUMMON_TWILIGHT_PORTAL	= 74809, //
+    SPELL_TWILIGHT_PRECISION        = 78243, // Increases Halion's chance to hit by 5% and decreases all players' chance to dodge by 20%
+    SPELL_BERSERK                    = 26662, // Increases the caster's attack and movement speeds by 150% and all damage it deals by 500% for 5 min. Also grants immunity to Taunt effects.
+    SPELL_START_PHASE2                = 74808, // Phases the caster into the Twilight realm, leaving behind a large rift.
+    SPELL_TWILIGHT_ENTER            = 74807, // Phases the caster into the Twilight realm - phase 32
+    SPELL_TWILIGHT_ENTER2            = 74812, //
+    SPELL_SUMMON_TWILIGHT_PORTAL    = 74809, //
 
-    SPELL_FIRE_PILLAR				= 76006, // Visual intro
-    SPELL_FIERY_EXPLOSION			= 76010, // Visual intro
+    SPELL_FIRE_PILLAR                = 76006, // Visual intro
+    SPELL_FIERY_EXPLOSION            = 76010, // Visual intro
 
     //NEED SCRIPT
-    SPELL_TAIL_LASH 				= 74531, // A sweeping tail strike hits all enemies behind the caster, inflicting 3063 to 3937 damage and stunning them for 2 sec.
-    SPELL_TWILIGHT_DIVISION 		= 75063, // Phases the caster, allowing him to exist and act simultaneously in both the material and Twilight realms.
-    SPELL_TWILIGHT_CUTTER 			= 77844, // Inflicts 13, 875 to 16, 125 Shadow damage every second to players touched by the shadow beam
-    SPELL_TWILIGHT_CUTTER_CHANNEL 	= 74768, // Channeling shadow cutter visual + trigger 74769
+    SPELL_TAIL_LASH                 = 74531, // A sweeping tail strike hits all enemies behind the caster, inflicting 3063 to 3937 damage and stunning them for 2 sec.
+    SPELL_TWILIGHT_DIVISION         = 75063, // Phases the caster, allowing him to exist and act simultaneously in both the material and Twilight realms.
+    SPELL_TWILIGHT_CUTTER             = 77844, // Inflicts 13, 875 to 16, 125 Shadow damage every second to players touched by the shadow beam
+    SPELL_TWILIGHT_CUTTER_CHANNEL     = 74768, // Channeling shadow cutter visual + trigger 74769
 
     //CORPOREALITY
-    SPELL_CORPOREALITY_EVEN			= 74826, // Deals & receives normal damage
-    SPELL_CORPOREALITY_20I			= 74827, // Damage dealt increased by 10% & Damage taken increased by 15%
-    SPELL_CORPOREALITY_40I			= 74828, // Damage dealt increased by 30% & Damage taken increased by 50%
-    SPELL_CORPOREALITY_60I			= 74829, // Damage dealt increased by 60% & Damage taken increased by 100%
-    SPELL_CORPOREALITY_80I			= 74830, // Damage dealt increased by 100% & Damage taken increased by 200%
-    SPELL_CORPOREALITY_100I			= 74831, // Damage dealt increased by 200% & Damage taken increased by 400%
-    SPELL_CORPOREALITY_20D			= 74832, // Damage dealt reduced by 10% & Damage taken reduced by 15%
-    SPELL_CORPOREALITY_40D			= 74833, // Damage dealt reduced by 30% & Damage taken reduced by 50%
-    SPELL_CORPOREALITY_60D			= 74834, // Damage dealt reduced by 60% & Damage taken reduced by 100%
-    SPELL_CORPOREALITY_80D			= 74835, // Damage dealt reduced by 100% & Damage taken reduced by 200%
-    SPELL_CORPOREALITY_100D			= 74836, // Damage dealt reduced by 200% & Damage taken reduced by 400%
+    SPELL_CORPOREALITY_EVEN            = 74826, // Deals & receives normal damage
+    SPELL_CORPOREALITY_20I            = 74827, // Damage dealt increased by 10% & Damage taken increased by 15%
+    SPELL_CORPOREALITY_40I            = 74828, // Damage dealt increased by 30% & Damage taken increased by 50%
+    SPELL_CORPOREALITY_60I            = 74829, // Damage dealt increased by 60% & Damage taken increased by 100%
+    SPELL_CORPOREALITY_80I            = 74830, // Damage dealt increased by 100% & Damage taken increased by 200%
+    SPELL_CORPOREALITY_100I            = 74831, // Damage dealt increased by 200% & Damage taken increased by 400%
+    SPELL_CORPOREALITY_20D            = 74832, // Damage dealt reduced by 10% & Damage taken reduced by 15%
+    SPELL_CORPOREALITY_40D            = 74833, // Damage dealt reduced by 30% & Damage taken reduced by 50%
+    SPELL_CORPOREALITY_60D            = 74834, // Damage dealt reduced by 60% & Damage taken reduced by 100%
+    SPELL_CORPOREALITY_80D            = 74835, // Damage dealt reduced by 100% & Damage taken reduced by 200%
+    SPELL_CORPOREALITY_100D            = 74836, // Damage dealt reduced by 200% & Damage taken reduced by 400%
     //METEOR STRIKE
-    SPELL_METEOR					= 74637, // Script Start (summon NPC_METEOR_STRIKE)
-    SPELL_METEOR_IMPACT				= 74641, // IMPACT ZONE FOR METEOR
-    SPELL_METEOR_STRIKE				= 74648, // Inflicts 18, 750 to 21, 250 Fire damage to enemies within 12 yards of the targeted area. Takes about 5 seconds to land.
-    SPELL_METEOR_FLAME				= 74718, // FLAME FROM METEOR
+    SPELL_METEOR                    = 74637, // Script Start (summon NPC_METEOR_STRIKE)
+    SPELL_METEOR_IMPACT                = 74641, // IMPACT ZONE FOR METEOR
+    SPELL_METEOR_STRIKE                = 74648, // Inflicts 18, 750 to 21, 250 Fire damage to enemies within 12 yards of the targeted area. Takes about 5 seconds to land.
+    SPELL_METEOR_FLAME                = 74718, // FLAME FROM METEOR
     //N10
-    SPELL_FLAME_BREATH				= 74525, // Inflicts 17, 500 to 22, 500 Fire damage to players in front of Halion
-    SPELL_DARK_BREATH				= 74806, // Inflicts 17, 500 to 22, 500 Shadow damage to players in front of Halion
-    SPELL_DUSK_SHROUD				= 75484, // Inflicts 3, 000 Shadow damage every 2 seconds to everyone in the Twilight Realm
+    SPELL_FLAME_BREATH                = 74525, // Inflicts 17, 500 to 22, 500 Fire damage to players in front of Halion
+    SPELL_DARK_BREATH                = 74806, // Inflicts 17, 500 to 22, 500 Shadow damage to players in front of Halion
+    SPELL_DUSK_SHROUD                = 75484, // Inflicts 3, 000 Shadow damage every 2 seconds to everyone in the Twilight Realm
     //Combustion
-    NPC_COMBUSTION					= 40001, 
-    SPELL_MARK_OF_COMBUSTION		= 74567, // Dummy effect only
-    SPELL_FIERY_COMBUSTION			= 74562, // Inflicts 4, 000 Fire damage every 2 seconds for 30 seconds to a random raider. Every time Fiery Combustion does damage, it applies a stackable Mark of Combustion.
-    SPELL_COMBUSTION_EXPLODE		= 74607, 
-    SPELL_COMBUSTION_AURA			= 74629, 
+    NPC_COMBUSTION                    = 40001, 
+    SPELL_MARK_OF_COMBUSTION        = 74567, // Dummy effect only
+    SPELL_FIERY_COMBUSTION            = 74562, // Inflicts 4, 000 Fire damage every 2 seconds for 30 seconds to a random raider. Every time Fiery Combustion does damage, it applies a stackable Mark of Combustion.
+    SPELL_COMBUSTION_EXPLODE        = 74607, 
+    SPELL_COMBUSTION_AURA            = 74629, 
     //Consumption
-    NPC_CONSUMPTION					= 40135, 
-    SPELL_MARK_OF_CONSUMPTION		= 74795, // Dummy effect only
-    SPELL_SOUL_CONSUMPTION			= 74792, // Inflicts 4, 000 Shadow damage every 2 seconds for 30 seconds to a random raider. Every time Soul Consumption does damage, it applies a stackable Mark of Consumption.
-    SPELL_CONSUMPTION_EXPLODE		= 74799, 
-    SPELL_CONSUMPTION_AURA			= 74803, 
-    SPELL_GROW_UP					= 36300, 
+    NPC_CONSUMPTION                    = 40135, 
+    SPELL_MARK_OF_CONSUMPTION        = 74795, // Dummy effect only
+    SPELL_SOUL_CONSUMPTION            = 74792, // Inflicts 4, 000 Shadow damage every 2 seconds for 30 seconds to a random raider. Every time Soul Consumption does damage, it applies a stackable Mark of Consumption.
+    SPELL_CONSUMPTION_EXPLODE        = 74799, 
+    SPELL_CONSUMPTION_AURA            = 74803, 
+    SPELL_GROW_UP                    = 36300, 
     //Summons
-    NPC_METEOR_STRIKE				= 40029, //casts "impact zone" then meteor
-    NPC_METEOR_STRIKE_1				= 40041, 
-    NPC_METEOR_STRIKE_2				= 40042, 
-    NPC_ORB_CUTTER					= 40081, 
+    NPC_METEOR_STRIKE                = 40029, //casts "impact zone" then meteor
+    NPC_METEOR_STRIKE_1                = 40041, 
+    NPC_METEOR_STRIKE_2                = 40042, 
+    NPC_ORB_CUTTER                    = 40081, 
 
-    FR_RADIUS						= 45, 
+    FR_RADIUS                        = 45, 
 
     //SAYS
-    SAY_HALION_SPAWN				= -1666100, //17499 Meddlesome insects, you're too late! The Ruby Sanctum is lost.
-    SAY_HALION_AGGRO				= -1666101, //17500 Your world teeters on the brink of annihilation. You will all bear witness to the coming of a new age of destruction!
-    SAY_HALION_SLAY_1				= -1666102, //17501 Another hero falls.
-    SAY_HALION_SLAY_2				= -1666103, //17502 Ha Ha Ha!
-    SAY_HALION_DEATH				= -1666104, //17503 Relish this victory mortals, for it will be your last. This world will burn with the Master's return!
-    SAY_HALION_BERSERK				= -1666105, //17504 Not good enough!
-    SAY_HALION_SPECIAL_1			= -1666106, //17505 The heavens burn!
-    SAY_HALION_SPECIAL_2			= -1666107, //17506 Beware the shadow!
-    SAY_HALION_PHASE_2				= -1666108, //17507 You will find only suffering within the realm of Twilight. Enter if you dare.
-    SAY_HALION_PHASE_3				= -1666109, //17508 I am the light AND the darkness! Cower mortals before the Herald of Deathwing!
-    EMOTE_WARNING					= -1666110, //orbs charge warning
-    EMOTE_REAL_PUSH					= -1666111, // Out of real world message
-    EMOTE_REAL_PULL					= -1666112, // To real world message
-    EMOTE_TWIL_PUSH					= -1666113, // Out of twilight world message
-    EMOTE_TWIL_PULL					= -1666114, // To twilight world message
+    SAY_HALION_SPAWN                = -1666100, //17499 Meddlesome insects, you're too late! The Ruby Sanctum is lost.
+    SAY_HALION_AGGRO                = -1666101, //17500 Your world teeters on the brink of annihilation. You will all bear witness to the coming of a new age of destruction!
+    SAY_HALION_SLAY_1                = -1666102, //17501 Another hero falls.
+    SAY_HALION_SLAY_2                = -1666103, //17502 Ha Ha Ha!
+    SAY_HALION_DEATH                = -1666104, //17503 Relish this victory mortals, for it will be your last. This world will burn with the Master's return!
+    SAY_HALION_BERSERK                = -1666105, //17504 Not good enough!
+    SAY_HALION_SPECIAL_1            = -1666106, //17505 The heavens burn!
+    SAY_HALION_SPECIAL_2            = -1666107, //17506 Beware the shadow!
+    SAY_HALION_PHASE_2                = -1666108, //17507 You will find only suffering within the realm of Twilight. Enter if you dare.
+    SAY_HALION_PHASE_3                = -1666109, //17508 I am the light AND the darkness! Cower mortals before the Herald of Deathwing!
+    EMOTE_WARNING                    = -1666110, //orbs charge warning
+    EMOTE_REAL_PUSH                    = -1666111, // Out of real world message
+    EMOTE_REAL_PULL                    = -1666112, // To real world message
+    EMOTE_TWIL_PUSH                    = -1666113, // Out of twilight world message
+    EMOTE_TWIL_PULL                    = -1666114, // To twilight world message
 };
 
 struct Locations
@@ -752,7 +752,7 @@ public:
                         SoulCunsumTimer = urand(25*IN_MILLISECONDS, 40*IN_MILLISECONDS);
                     } else SoulCunsumTimer -= Diff;
 
-                    if (HealthBelowPct(51))	{setStage(2);}
+                    if (HealthBelowPct(51))    {setStage(2);}
                     break;
                 case 2: //To two realms
                     instance->SetData(TYPE_HALION_EVENT, IN_PROGRESS);

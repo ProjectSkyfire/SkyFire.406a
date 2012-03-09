@@ -50,7 +50,7 @@ enum ScriptTexts
 enum Spells
 {
     //Anraphet
-	SPELL_ALPHA_BEAMS          = 76184,
+    SPELL_ALPHA_BEAMS          = 76184,
     SPELL_CRUMBLING_RUIN       = 75609,
     SPELL_DESTRUCTION_PROTOCOL = 77437,
     SPELL_NEMESIS_STRIKE       = 75604,

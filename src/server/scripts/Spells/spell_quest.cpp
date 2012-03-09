@@ -945,7 +945,7 @@ class spell_q12805_lifeblood_dummy : public SpellScriptLoader
  */
 enum eBattleStandard
 {
-    NPC_KING_OF_THE_MOUNTAINT_KC					= 31766,
+    NPC_KING_OF_THE_MOUNTAINT_KC                    = 31766,
 };
 class spell_q13280_13283_plant_battle_standard: public SpellScriptLoader
 {
