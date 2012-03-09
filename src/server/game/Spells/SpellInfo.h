@@ -38,6 +38,7 @@ struct SpellRangeEntry;
 struct SpellRadiusEntry;
 struct SpellEntry;
 struct SpellCastTimesEntry;
+struct Condition;
 
 enum SpellCastTargetFlags
 {
@@ -107,15 +108,16 @@ enum SpellTargetObjectTypes
     TARGET_OBJECT_TYPE_CORPSE_ALLY,
 };
 
-enum SpellTargetSelectionCheckTypes
+enum SpellTargetCheckTypes
 {
-    TARGET_SELECT_CHECK_DEFAULT,
-    TARGET_SELECT_CHECK_ENTRY,
-    TARGET_SELECT_CHECK_ENEMY,
-    TARGET_SELECT_CHECK_ALLY,
-    TARGET_SELECT_CHECK_PARTY,
-    TARGET_SELECT_CHECK_RAID,
-    TARGET_SELECT_CHECK_PASSENGER,
+    TARGET_CHECK_DEFAULT,
+    TARGET_CHECK_ENTRY,
+    TARGET_CHECK_ENEMY,
+    TARGET_CHECK_ALLY,
+    TARGET_CHECK_PARTY,
+    TARGET_CHECK_RAID,
+    TARGET_CHECK_RAID_CLASS,
+    TARGET_CHECK_PASSENGER,
 };
 
 enum SpellTargetDirectionTypes
@@ -222,7 +224,7 @@ public:
     SpellTargetSelectionCategories GetSelectionCategory() const;
     SpellTargetReferenceTypes GetReferenceType() const;
     SpellTargetObjectTypes GetObjectType() const;
-    SpellTargetSelectionCheckTypes GetSelectionCheckType() const;
+    SpellTargetCheckTypes GetCheckType() const;
     SpellTargetDirectionTypes GetDirectionType() const;
     float CalcDirectionAngle() const;
 
@@ -242,7 +244,7 @@ private:
         SpellTargetObjectTypes ObjectType;    // type of object returned by target type
         SpellTargetReferenceTypes ReferenceType; // defines which object is used as a reference when selecting target
         SpellTargetSelectionCategories SelectionCategory;
-        SpellTargetSelectionCheckTypes SelectionCheckType; // defines selection criteria
+        SpellTargetCheckTypes SelectionCheckType; // defines selection criteria
         SpellTargetDirectionTypes DirectionType; // direction for cone and dest targets
     };
     static StaticData _data[TOTAL_SPELL_TARGETS];
@@ -454,9 +456,11 @@ public:
     // Custom
     uint32 AttributesCu;
     uint32 ExplicitTargetMask;
+    std::list<Condition*>* ImplicitTargetConditions;
     SpellChainNode const* ChainEntry;
 
     SpellInfo(SpellEntry const* spellEntry);
+    ~SpellInfo();
     void LoadSpellAddons();
     void LoadSpellEffect(SpellEffectEntry const *spellEffect);
 
@@ -527,7 +531,7 @@ public:
 
     SpellCastResult CheckShapeshift(uint32 form) const;
     SpellCastResult CheckLocation(uint32 map_id, uint32 zone_id, uint32 area_id, Player const* player = NULL, uint8 effMask = MAX_EFFECT_MASK) const;
-    SpellCastResult CheckTarget(Unit const* caster, Unit const* target, bool implicit = true) const;
+    SpellCastResult CheckTarget(Unit const* caster, WorldObject const* target, bool implicit = true) const;
     SpellCastResult CheckExplicitTarget(Unit const* caster, WorldObject const* target, Item const* itemTarget = NULL) const;
     bool CheckTargetCreatureType(Unit const* target) const;
 
@@ -545,7 +549,7 @@ public:
     SpellSpecificType GetSpellSpecific() const;
 
     float GetMinRange(bool positive = false) const;
-    float GetMaxRange(bool positive = false) const;
+    float GetMaxRange(bool positive = false, Unit* caster = NULL, Spell* spell = NULL) const;
 
     int32 GetDuration() const;
     int32 GetMaxDuration() const;
@@ -571,6 +575,9 @@ public:
     bool _IsPositiveEffect(uint8 effIndex, bool deep) const;
     bool _IsPositiveSpell() const;
     static bool _IsPositiveTarget(uint32 targetA, uint32 targetB);
+
+    // unloading helpers
+    void _UnloadImplicitTargetConditionLists();
 };
 
 #endif // _SPELLINFO_H
