@@ -94,7 +94,7 @@ public:
             if (!instance)
                 return;
 
-			NonFight    = false;
+            NonFight    = false;
             StartEscort = false;
             walkSpeed   = 1.0f;
             Wall        = 0;
