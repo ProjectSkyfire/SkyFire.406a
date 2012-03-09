@@ -272,6 +272,7 @@ public:
     SpellRadiusEntry const* RadiusEntry;
     float     RealPointsPerLevel;
     flag96    SpellClassMask;
+    std::list<Condition*>* ImplicitTargetConditions;
     uint32    TriggerSpell;
     SpellImplicitTargetInfo TargetA;
     SpellImplicitTargetInfo TargetB;
@@ -456,7 +457,6 @@ public:
     // Custom
     uint32 AttributesCu;
     uint32 ExplicitTargetMask;
-    std::list<Condition*>* ImplicitTargetConditions;
     SpellChainNode const* ChainEntry;
 
     SpellInfo(SpellEntry const* spellEntry);

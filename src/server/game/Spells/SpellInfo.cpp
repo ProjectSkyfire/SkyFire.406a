@@ -512,6 +512,7 @@ SpellEffectInfo::SpellEffectInfo(SpellEffectEntry const *spellEffect, SpellInfo 
         RadiusEntry = spellEffect->EffectRadiusMaxIndex ? sSpellRadiusStore.LookupEntry(spellEffect->EffectRadiusMaxIndex) : NULL;
     RealPointsPerLevel = spellEffect->EffectRealPointsPerLevel;
     SpellClassMask = spellEffect->EffectSpellClassMask;
+    ImplicitTargetConditions = NULL;
     TriggerSpell = spellEffect->EffectTriggerSpell;
     TargetA = SpellImplicitTargetInfo(spellEffect->EffectImplicitTargetA);
     TargetB = SpellImplicitTargetInfo(spellEffect->EffectImplicitTargetB);
@@ -959,7 +960,6 @@ SpellInfo::SpellInfo(SpellEntry const* spellEntry)
     AttributesCu = 0;
     ExplicitTargetMask = 0;
     ChainEntry = NULL;
-    ImplicitTargetConditions = NULL;
 
     LoadSpellAddons();
 }
