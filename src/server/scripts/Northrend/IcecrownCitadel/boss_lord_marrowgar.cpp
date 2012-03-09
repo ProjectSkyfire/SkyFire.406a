@@ -203,7 +203,7 @@ class boss_lord_marrowgar : public CreatureScript
                             if (Aura* pStorm = me->GetAura(SPELL_BONE_STORM))
                                 pStorm->SetDuration(int32(_boneStormDuration));
                             me->SetSpeed(MOVE_RUN, _baseSpeed*3.0f, true);
-							DoPlaySoundToSet(me,S_BONE_STORM);
+                            DoPlaySoundToSet(me,S_BONE_STORM);
                             Talk(SAY_BONE_STORM);
                             events.ScheduleEvent(EVENT_BONE_STORM_END, _boneStormDuration+1);
                             // no break here

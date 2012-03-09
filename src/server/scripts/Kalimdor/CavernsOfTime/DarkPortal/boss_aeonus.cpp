@@ -122,7 +122,7 @@ public:
                 DoCast(me->getVictim(), SPELL_SAND_BREATH);
                 SandBreath_Timer = 15000+rand()%10000;
             }
-			else SandBreath_Timer -= diff;
+            else SandBreath_Timer -= diff;
 
             //Time Stop
             if (TimeStop_Timer <= diff)
@@ -130,7 +130,7 @@ public:
                 DoCast(me->getVictim(), SPELL_TIME_STOP);
                 TimeStop_Timer = 20000+rand()%15000;
             }
-			else TimeStop_Timer -= diff;
+            else TimeStop_Timer -= diff;
 
             //Frenzy
             if (Frenzy_Timer <= diff)
@@ -139,7 +139,7 @@ public:
                 DoCast(me, SPELL_ENRAGE);
                 Frenzy_Timer = 20000+rand()%15000;
             }
-			else Frenzy_Timer -= diff;
+            else Frenzy_Timer -= diff;
 
             DoMeleeAttackIfReady();
         }
