@@ -5332,9 +5332,9 @@ void ObjectMgr::ReturnOrDeleteOldMails(bool serverUp)
         m->sender = fields[2].GetUInt32();
         m->receiver = fields[3].GetUInt32();
         bool has_items = fields[4].GetBool();
-        m->expire_time = time_t(fields[5].GetUInt32());
+        m->expire_time = time_t(fields[5].GetUInt64());
         m->deliver_time = 0;
-        m->COD = fields[6].GetUInt32();
+        m->COD = fields[6].GetUInt64();
         m->checked = fields[7].GetUInt32();
         m->mailTemplateId = fields[8].GetInt16();
 

@@ -621,13 +621,6 @@ void WorldSession::HandleGetMailList(WorldPacket & recv_data)
                 data << uint32((item ? item->GetEnchantmentDuration((EnchantmentSlot)j) : 0));
                 data << uint32((item ? item->GetEnchantmentCharges((EnchantmentSlot)j) : 0));
             }
-            // Hack Alert!
-            for (uint8 mail_hack = 0; mail_hack < 2; ++mail_hack)
-            {
-                data << uint32(0);
-                data << uint32(0);
-                data << uint32(0);
-            }
 
             // can be negative
             data << int32((item ? item->GetItemRandomPropertyId() : 0));
