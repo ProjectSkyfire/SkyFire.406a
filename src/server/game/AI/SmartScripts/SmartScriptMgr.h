@@ -1382,10 +1382,10 @@ class SmartAIMgr
             if (t > 0 && v1 >= 0 && v2 >= 0 && v3 >= 0)
             {
                 Condition cond;
-                cond.mConditionType = ConditionTypes(t);
-                cond.mConditionValue1 = uint32(v1);
-                cond.mConditionValue2 = uint32(v2);
-                cond.mConditionValue3 = uint32(v3);
+                cond.ConditionType = ConditionTypes(t);
+                cond.ConditionValue1 = uint32(v1);
+                cond.ConditionValue2 = uint32(v2);
+                cond.ConditionValue3 = uint32(v3);
                 if (!sConditionMgr->isConditionTypeValid(&cond))
                     error = true;
             }

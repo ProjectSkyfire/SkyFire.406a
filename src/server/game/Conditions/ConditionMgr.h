@@ -50,12 +50,12 @@ enum ConditionTypes
     CONDITION_RACE                  = 16,                   // race             0              0                  true if player's race is equal to race
     CONDITION_ACHIEVEMENT           = 17,                   // achievement_id   0              0                  true if achievement is complete
     CONDITION_SPELL_SCRIPT_TARGET   = 18,                   // SpellScriptTargetType, TargetEntry,            0
-    CONDITION_UNUSED_19             = 19,                   //
-    CONDITION_UNUSED_20             = 20,                   //
-    CONDITION_UNUSED_21             = 21,                   //
+    CONDITION_CREATURE_TARGET       = 19,                   // creature entry   0              0                  true if current target is creature with value1 entry
+    CONDITION_TARGET_HEALTH_BELOW_PCT = 20,                 // 0-100            0              0                  true if target's health is below value1 percent, false if over or no target
+    CONDITION_TARGET_RANGE          = 21,                   // minDistance      maxDist        0                  true if target is closer then minDist and further then maxDist or if max is 0 then max dist is infinit
     CONDITION_MAPID                 = 22,                   // map_id           0              0                  true if in map_id
     CONDITION_AREAID                = 23,                   // area_id          0              0                  true if in area_id
-    CONDITION_UNUSED_24             = 24,                   //
+    CONDITION_ITEM_TARGET           = 24,                   // ItemRequiredTargetType, TargetEntry,    0
     CONDITION_SPELL                 = 25,                   // spell_id         0              0                  true if player has learned spell
     CONDITION_PHASEMASK             = 26,                   // phasemask        0              0                  true if object is in phasemask
     CONDITION_LEVEL                 = 27,                   // level            ComparisonType 0                  true if unit's level is equal to param1 (param2 can modify the statement)
@@ -93,7 +93,7 @@ enum ConditionSourceType
     CONDITION_SOURCE_TYPE_GOSSIP_MENU_OPTION             = 15,
     CONDITION_SOURCE_TYPE_CREATURE_TEMPLATE_VEHICLE      = 16,
     CONDITION_SOURCE_TYPE_SPELL                          = 17,
-    CONDITION_SOURCE_TYPE_UNUSED_18                      = 18,
+    CONDITION_SOURCE_TYPE_ITEM_REQUIRED_TARGET           = 18,
     CONDITION_SOURCE_TYPE_QUEST_ACCEPT                   = 19,
     CONDITION_SOURCE_TYPE_QUEST_SHOW_MARK                = 20,
     CONDITION_SOURCE_TYPE_VEHICLE_SPELL                  = 21,
@@ -128,14 +128,14 @@ enum
 
 struct ConditionSourceInfo
 {
-    WorldObject* mConditionTargets[MAX_CONDITION_TARGETS]; // an array of targets available for conditions
-    Condition* mLastFailedCondition;
+    WorldObject* ConditionTargets[MAX_CONDITION_TARGETS]; // an array of targets available for conditions
+    Condition* LastFailedCondition;
     ConditionSourceInfo(WorldObject* target0, WorldObject* target1 = NULL, WorldObject* target2 = NULL)
     {
-        mConditionTargets[0] = target0;
-        mConditionTargets[1] = target1;
-        mConditionTargets[2] = target2;
-        mLastFailedCondition = NULL;
+        ConditionTargets[0] = target0;
+        ConditionTargets[1] = target1;
+        ConditionTargets[2] = target2;
+        LastFailedCondition = NULL;
     }
 };
 
@@ -147,13 +147,13 @@ struct Condition
     uint32                  SourceId;          // So far, only used in CONDITION_SOURCE_TYPE_SMART_EVENT
     uint32                  ElseGroup;
     ConditionTypes          ConditionType;     //ConditionTypeOrReference
+    uint8                   ConditionTarget;
     uint32                  ConditionValue1;
     uint32                  ConditionValue2;
     uint32                  ConditionValue3;
     uint32                  ErrorTextId;
     uint32                  ReferenceId;
     uint32                  ScriptId;
-    uint8                   ConditionTarget;
     bool                    NegativeCondition;
 
     Condition()
@@ -168,7 +168,7 @@ struct Condition
         ConditionValue2    = 0;
         ConditionValue3    = 0;
         ReferenceId        = 0;
-        ErrorTextId        = 0;
+        ErrorTextId          = 0;
         ScriptId           = 0;
         NegativeCondition  = false;
     }
