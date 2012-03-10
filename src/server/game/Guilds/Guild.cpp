@@ -3234,7 +3234,7 @@ void Guild::LevelUp()
             if (spellId)
                player->learnSpell(spellId, true);
 
-            GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_REACH_GUILD_LEVEL, player);
+            GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_REACH_GUILD_LEVEL);
         }
     }
 }
