@@ -655,6 +655,7 @@ void GameObject::SaveToDB(uint32 mapid, uint8 spawnMask, uint32 phaseMask)
     // data->guid = guid must not be updated at save
     data.id               = GetEntry();
     data.mapid            = mapid;
+    data.spawnMask        = spawnMask;
     data.phaseMask        = phaseMask;
     data.posX             = GetPositionX();
     data.posY             = GetPositionY();
@@ -667,28 +668,28 @@ void GameObject::SaveToDB(uint32 mapid, uint8 spawnMask, uint32 phaseMask)
     data.spawntimesecs    = m_spawnedByDefault ? m_respawnDelayTime : -(int32)m_respawnDelayTime;
     data.animprogress     = GetGoAnimProgress();
     data.go_state         = GetGoState();
-    data.spawnMask        = spawnMask;
+
     data.artKit           = GetGoArtKit();
 
     // update in DB
     std::ostringstream ss;
     ss << "INSERT INTO gameobject VALUES ("
         << _DBTableGuid << ','
-        << GetEntry() << ','
-        << mapid << ','
-        << uint32(spawnMask) << ','                         // cast to prevent save as symbol
-        << uint16(GetPhaseMask()) << ','                    // prevent out of range error
-        << GetPositionX() << ','
-        << GetPositionY() << ','
-        << GetPositionZ() << ','
-        << GetOrientation() << ','
-        << GetFloatValue(GAMEOBJECT_PARENTROTATION) << ','
-        << GetFloatValue(GAMEOBJECT_PARENTROTATION + 1) << ','
-        << GetFloatValue(GAMEOBJECT_PARENTROTATION + 2) << ','
-        << GetFloatValue(GAMEOBJECT_PARENTROTATION + 3) << ','
-        << m_respawnDelayTime << ','
-        << uint32(GetGoAnimProgress()) << ','
-        << uint32(GetGoState()) << ')';
+        << data.id << ','
+        << data.mapid << ','
+        << uint32(data.spawnMask) << ','                         // cast to prevent save as symbol
+        << uint16(data.phaseMask) << ','                    // prevent out of range error
+        << data.posX << ','
+        << data.posY << ','
+        << data.posZ << ','
+        << data.orientation << ','
+        << data.rotation0 << ','
+        << data.rotation1 + 1) << ','
+        << data.rotation2 + 2) << ','
+        << data.rotation3 + 3) << ','
+        << data.spawntimesecs << ','
+        << uint32(data.animprogress) << ','
+        << uint32(data.go_state) << ')';
 
     SQLTransaction trans = WorldDatabase.BeginTransaction();
     trans->PAppend("DELETE FROM gameobject WHERE guid = '%u'", _DBTableGuid);
