@@ -684,9 +684,9 @@ void GameObject::SaveToDB(uint32 mapid, uint8 spawnMask, uint32 phaseMask)
         << data.posZ << ','
         << data.orientation << ','
         << data.rotation0 << ','
-        << data.rotation1 + 1) << ','
-        << data.rotation2 + 2) << ','
-        << data.rotation3 + 3) << ','
+        << data.rotation1 << ','
+        << data.rotation2 << ','
+        << data.rotation3 << ','
         << data.spawntimesecs << ','
         << uint32(data.animprogress) << ','
         << uint32(data.go_state) << ')';

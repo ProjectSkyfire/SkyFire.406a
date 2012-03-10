@@ -4783,7 +4783,7 @@ SpellCastResult Spell::CheckCast(bool strict)
     // check spell cast conditions from database
     {
         ConditionSourceInfo condInfo = ConditionSourceInfo(m_caster);
-        condInfo.mConditionTargets[1] = m_targets.GetObjectTarget();
+        condInfo.ConditionTargets[1] = m_targets.GetObjectTarget();
         ConditionList conditions = sConditionMgr->GetConditionsForNotGroupedEntry(CONDITION_SOURCE_TYPE_SPELL, m_spellInfo->Id);
         if (!conditions.empty() && !sConditionMgr->IsObjectMeetToConditions(condInfo, conditions))
         {
@@ -4791,9 +4791,9 @@ SpellCastResult Spell::CheckCast(bool strict)
             // TODO: using WorldSession::SendNotification is not blizzlike
             if (Player* playerCaster = m_caster->ToPlayer())
             {
-                if (playerCaster->GetSession() && condInfo.mLastFailedCondition
-                    && condInfo.mLastFailedCondition->ErrorTextId)
-                    playerCaster->GetSession()->SendNotification(condInfo.mLastFailedCondition->ErrorTextId);
+                if (playerCaster->GetSession() && condInfo.LastFailedCondition
+                    && condInfo.LastFailedCondition->ErrorTextId)
+                    playerCaster->GetSession()->SendNotification(condInfo.LastFailedCondition->ErrorTextId);
             }
             return SPELL_FAILED_DONT_REPORT;
         }
