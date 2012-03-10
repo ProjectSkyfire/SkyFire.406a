@@ -7259,7 +7259,7 @@ void ObjectMgr::LoadNPCSpellClickSpells()
         // quest might be 0 to enable spellclick independent of any quest
         if (quest_start)
         {
-            if (mQuestTemplates.find(quest_start) == mQuestTemplates.end())
+            if (_questTemplates.find(quest_start) == _questTemplates.end())
             {
                 sLog->outErrorDb("Table npc_spellclick_spells references unknown start quest %u. Skipping entry.", quest_start);
                 continue;
@@ -7272,7 +7272,7 @@ void ObjectMgr::LoadNPCSpellClickSpells()
         // quest might be 0 to enable spellclick active infinity after start quest
         if (quest_end)
         {
-            if (mQuestTemplates.find(quest_end) == mQuestTemplates.end())
+            if (_questTemplates.find(quest_end) == _questTemplates.end())
             {
                 sLog->outErrorDb("Table npc_spellclick_spells references unknown end quest %u. Skipping entry.", quest_end);
                 continue;
