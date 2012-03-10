@@ -231,7 +231,7 @@ public:
     Targets GetTarget() const;
     uint32 GetExplicitTargetMask(bool& srcSet, bool& dstSet) const;
 
-    // temporarily avalible to public
+    // temporarily available to public
     static SpellSelectTargetTypes Type[TOTAL_SPELL_TARGETS];
 private:
     static bool InitStaticData();
@@ -269,12 +269,13 @@ public:
     int32     MiscValue;
     int32     MiscValueB;
     float     PointsPerComboPoint;
+    SpellImplicitTargetInfo TargetA;
+    SpellImplicitTargetInfo TargetB;
     SpellRadiusEntry const* RadiusEntry;
     float     RealPointsPerLevel;
     flag96    SpellClassMask;
     uint32    TriggerSpell;
-    SpellImplicitTargetInfo TargetA;
-    SpellImplicitTargetInfo TargetB;
+    std::list<Condition*>* ImplicitTargetConditions;
 
     SpellEffectInfo();
     SpellEffectInfo(SpellEffectEntry const *spellEffect, SpellInfo const* spellInfo);

@@ -44,10 +44,10 @@ class AchievementMgr : public AchievementMgrBase
         void CheckAllAchievementCriteria();
         void SendAllAchievementData();
         void SendRespondInspectAchievements(Player* player);
+        Player* GetPlayer() const { return _player; }
         void UpdateTimedAchievements(uint32 timeDiff);
         void StartTimedAchievement(AchievementCriteriaTimedTypes type, uint32 entry, uint32 timeLost = 0);
         void RemoveTimedAchievement(AchievementCriteriaTimedTypes type, uint32 entry);   // used for quest and scripted timed achievements
-        Player* GetPlayer() const { return _player; }
 
     private:
         void SendAchievementEarned(AchievementEntry const* achievement) const;
