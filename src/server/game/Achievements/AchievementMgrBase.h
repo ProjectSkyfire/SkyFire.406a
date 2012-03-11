@@ -226,7 +226,7 @@ class AchievementMgrBase
         virtual void SetCriteriaProgress(AchievementCriteriaEntry const* entry, uint32 changeValue, Player* player, ProgressType ptype = PROGRESS_SET);
         void SendCriteriaUpdate(AchievementCriteriaEntry const* entry, CriteriaProgress const* progress, uint32 timeElapsed, bool timedCompleted, Player* completer);
         void SendDirectMessageToAll(WorldPacket* data);
-        void UpdateAchievementCriteria(AchievementCriteriaTypes type, uint32 miscValue1 = 0, uint32 miscValue2 = 0, Unit* unit = NULL);
+        virtual void UpdateAchievementCriteria(AchievementCriteriaTypes type, Player* player, uint32 miscValue1 = 0, uint32 miscValue2 = 0, Unit* unit = NULL);
         virtual bool IsCompletedAchievement(AchievementEntry const* entry, Player* player);
         uint32 GetAchievementPoints() const { return m_achievementPoints; }
         void ResetAchievementCriteria(AchievementCriteriaTypes type, Player* player, uint32 miscvalue1 = 0, uint32 miscvalue2 = 0, bool evenIfCriteriaComplete = false);

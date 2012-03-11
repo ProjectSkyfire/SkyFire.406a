@@ -313,7 +313,7 @@ void AchievementMgr::CheckAllAchievementCriteria()
 {
     // suppress sending packets
     for (uint32 i = 0; i<ACHIEVEMENT_CRITERIA_TYPE_TOTAL; ++i)
-        UpdateAchievementCriteria(AchievementCriteriaTypes(i));
+        UpdateAchievementCriteria(AchievementCriteriaTypes(i), _player);
 }
 
 void AchievementMgr::UpdateTimedAchievements(uint32 timeDiff)
@@ -403,8 +403,8 @@ void AchievementMgr::CompletedAchievement(AchievementEntry const* achievement)
     if (!(achievement->flags & ACHIEVEMENT_FLAG_REALM_FIRST_KILL))
         sAchievementMgr->SetRealmCompleted(achievement);
 
-    UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_COMPLETE_ACHIEVEMENT);
-    UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_EARN_ACHIEVEMENT_POINTS, achievement->points);
+    UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_COMPLETE_ACHIEVEMENT, _player);
+    UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_EARN_ACHIEVEMENT_POINTS, _player, achievement->points);
 
     m_achievementPoints += achievement->points;
     // reward items and titles if any
