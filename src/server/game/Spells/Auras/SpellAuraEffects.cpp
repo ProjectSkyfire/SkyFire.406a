@@ -55,226 +55,226 @@ class Aura;
 
 pAuraEffectHandler AuraEffectHandler[TOTAL_AURAS]=
 {
-    &AuraEffect::HandleNULL,                                      //  0 SPELL_AURA_NONE
-    &AuraEffect::HandleBindSight,                                 //  1 SPELL_AURA_BIND_SIGHT
-    &AuraEffect::HandleModPossess,                                //  2 SPELL_AURA_MOD_POSSESS
-    &AuraEffect::HandleNoImmediateEffect,                         //  3 SPELL_AURA_PERIODIC_DAMAGE implemented in AuraEffect::PeriodicTick
-    &AuraEffect::HandleAuraDummy,                                 //  4 SPELL_AURA_DUMMY
-    &AuraEffect::HandleModConfuse,                                //  5 SPELL_AURA_MOD_CONFUSE
-    &AuraEffect::HandleModCharm,                                  //  6 SPELL_AURA_MOD_CHARM
-    &AuraEffect::HandleModFear,                                   //  7 SPELL_AURA_MOD_FEAR
-    &AuraEffect::HandleNoImmediateEffect,                         //  8 SPELL_AURA_PERIODIC_HEAL implemented in AuraEffect::PeriodicTick
-    &AuraEffect::HandleModAttackSpeed,                            //  9 SPELL_AURA_MOD_ATTACKSPEED
-    &AuraEffect::HandleModThreat,                                 // 10 SPELL_AURA_MOD_THREAT
-    &AuraEffect::HandleModTaunt,                                  // 11 SPELL_AURA_MOD_TAUNT
-    &AuraEffect::HandleAuraModStun,                               // 12 SPELL_AURA_MOD_STUN
-    &AuraEffect::HandleModDamageDone,                             // 13 SPELL_AURA_MOD_DAMAGE_DONE
-    &AuraEffect::HandleNoImmediateEffect,                         // 14 SPELL_AURA_MOD_DAMAGE_TAKEN implemented in Unit::MeleeDamageBonus and Unit::SpellDamageBonus
-    &AuraEffect::HandleNoImmediateEffect,                         // 15 SPELL_AURA_DAMAGE_SHIELD    implemented in Unit::DoAttackDamage
-    &AuraEffect::HandleModStealth,                                // 16 SPELL_AURA_MOD_STEALTH
-    &AuraEffect::HandleModStealthDetect,                          // 17 SPELL_AURA_MOD_DETECT
-    &AuraEffect::HandleModInvisibility,                           // 18 SPELL_AURA_MOD_INVISIBILITY
-    &AuraEffect::HandleModInvisibilityDetect,                     // 19 SPELL_AURA_MOD_INVISIBILITY_DETECTION
-    &AuraEffect::HandleNoImmediateEffect,                         // 20 SPELL_AURA_OBS_MOD_HEALTH implemented in AuraEffect::PeriodicTick
-    &AuraEffect::HandleNoImmediateEffect,                         // 21 SPELL_AURA_OBS_MOD_POWER implemented in AuraEffect::PeriodicTick
-    &AuraEffect::HandleAuraModResistance,                         // 22 SPELL_AURA_MOD_RESISTANCE
-    &AuraEffect::HandleNoImmediateEffect,                         // 23 SPELL_AURA_PERIODIC_TRIGGER_SPELL implemented in AuraEffect::PeriodicTick
-    &AuraEffect::HandleNoImmediateEffect,                         // 24 SPELL_AURA_PERIODIC_ENERGIZE implemented in AuraEffect::PeriodicTick
-    &AuraEffect::HandleAuraModPacify,                             // 25 SPELL_AURA_MOD_PACIFY
-    &AuraEffect::HandleAuraModRoot,                               // 26 SPELL_AURA_MOD_ROOT
-    &AuraEffect::HandleAuraModSilence,                            // 27 SPELL_AURA_MOD_SILENCE
-    &AuraEffect::HandleNoImmediateEffect,                         // 28 SPELL_AURA_REFLECT_SPELLS        implement in Unit::SpellHitResult
-    &AuraEffect::HandleAuraModStat,                               // 29 SPELL_AURA_MOD_STAT
-    &AuraEffect::HandleAuraModSkill,                              // 30 SPELL_AURA_MOD_SKILL
-    &AuraEffect::HandleAuraModIncreaseSpeed,                      // 31 SPELL_AURA_MOD_INCREASE_SPEED
-    &AuraEffect::HandleAuraModIncreaseMountedSpeed,               // 32 SPELL_AURA_MOD_INCREASE_MOUNTED_SPEED
-    &AuraEffect::HandleAuraModDecreaseSpeed,                      // 33 SPELL_AURA_MOD_DECREASE_SPEED
-    &AuraEffect::HandleAuraModIncreaseHealth,                     // 34 SPELL_AURA_MOD_INCREASE_HEALTH
-    &AuraEffect::HandleAuraModIncreaseEnergy,                     // 35 SPELL_AURA_MOD_INCREASE_ENERGY
-    &AuraEffect::HandleAuraModShapeshift,                         // 36 SPELL_AURA_MOD_SHAPESHIFT
-    &AuraEffect::HandleAuraModEffectImmunity,                     // 37 SPELL_AURA_EFFECT_IMMUNITY
-    &AuraEffect::HandleAuraModStateImmunity,                      // 38 SPELL_AURA_STATE_IMMUNITY
-    &AuraEffect::HandleAuraModSchoolImmunity,                     // 39 SPELL_AURA_SCHOOL_IMMUNITY
-    &AuraEffect::HandleAuraModDmgImmunity,                        // 40 SPELL_AURA_DAMAGE_IMMUNITY
-    &AuraEffect::HandleAuraModDispelImmunity,                     // 41 SPELL_AURA_DISPEL_IMMUNITY
-    &AuraEffect::HandleNoImmediateEffect,                         // 42 SPELL_AURA_PROC_TRIGGER_SPELL  implemented in Unit::ProcDamageAndSpellFor and Unit::HandleProcTriggerSpell
-    &AuraEffect::HandleNoImmediateEffect,                         // 43 SPELL_AURA_PROC_TRIGGER_DAMAGE implemented in Unit::ProcDamageAndSpellFor
-    &AuraEffect::HandleAuraTrackCreatures,                        // 44 SPELL_AURA_TRACK_CREATURES
-    &AuraEffect::HandleAuraTrackResources,                        // 45 SPELL_AURA_TRACK_RESOURCES
-    &AuraEffect::HandleNULL,                                      // 46 SPELL_AURA_46 (used in test spells 54054 and 54058, and spell 48050) (3.0.8a)
-    &AuraEffect::HandleAuraModParryPercent,                       // 47 SPELL_AURA_MOD_PARRY_PERCENT
-    &AuraEffect::HandleNULL,                                      // 48 SPELL_AURA_48 spell Napalm (area damage spell with additional delayed damage effect)
-    &AuraEffect::HandleAuraModDodgePercent,                       // 49 SPELL_AURA_MOD_DODGE_PERCENT
-    &AuraEffect::HandleNoImmediateEffect,                         // 50 SPELL_AURA_MOD_CRITICAL_HEALING_AMOUNT implemented in Unit::SpellCriticalHealingBonus
-    &AuraEffect::HandleAuraModBlockPercent,                       // 51 SPELL_AURA_MOD_BLOCK_PERCENT
-    &AuraEffect::HandleAuraModWeaponCritPercent,                  // 52 SPELL_AURA_MOD_WEAPON_CRIT_PERCENT
-    &AuraEffect::HandleNoImmediateEffect,                         // 53 SPELL_AURA_PERIODIC_LEECH implemented in AuraEffect::PeriodicTick
-    &AuraEffect::HandleModHitChance,                              // 54 SPELL_AURA_MOD_HIT_CHANCE
-    &AuraEffect::HandleModSpellHitChance,                         // 55 SPELL_AURA_MOD_SPELL_HIT_CHANCE
-    &AuraEffect::HandleAuraTransform,                             // 56 SPELL_AURA_TRANSFORM
-    &AuraEffect::HandleModSpellCritChance,                        // 57 SPELL_AURA_MOD_SPELL_CRIT_CHANCE
-    &AuraEffect::HandleAuraModIncreaseSwimSpeed,                  // 58 SPELL_AURA_MOD_INCREASE_SWIM_SPEED
-    &AuraEffect::HandleNoImmediateEffect,                         // 59 SPELL_AURA_MOD_DAMAGE_DONE_CREATURE implemented in Unit::MeleeDamageBonus and Unit::SpellDamageBonus
-    &AuraEffect::HandleAuraModPacifyAndSilence,                   // 60 SPELL_AURA_MOD_PACIFY_SILENCE
-    &AuraEffect::HandleAuraModScale,                              // 61 SPELL_AURA_MOD_SCALE
-    &AuraEffect::HandleNoImmediateEffect,                         // 62 SPELL_AURA_PERIODIC_HEALTH_FUNNEL implemented in AuraEffect::PeriodicTick
-    &AuraEffect::HandleNULL,                                      // 63 unused (3.2.0) old SPELL_AURA_PERIODIC_MANA_FUNNEL
-    &AuraEffect::HandleNoImmediateEffect,                         // 64 SPELL_AURA_PERIODIC_MANA_LEECH implemented in AuraEffect::PeriodicTick
-    &AuraEffect::HandleModCastingSpeed,                           // 65 SPELL_AURA_MOD_CASTING_SPEED_NOT_STACK
-    &AuraEffect::HandleFeignDeath,                                // 66 SPELL_AURA_FEIGN_DEATH
-    &AuraEffect::HandleAuraModDisarm,                             // 67 SPELL_AURA_MOD_DISARM
-    &AuraEffect::HandleAuraModStalked,                            // 68 SPELL_AURA_MOD_STALKED
-    &AuraEffect::HandleNoImmediateEffect,                         // 69 SPELL_AURA_SCHOOL_ABSORB implemented in Unit::CalcAbsorbResist
-    &AuraEffect::HandleUnused,                                    // 70 SPELL_AURA_EXTRA_ATTACKS clientside
-    &AuraEffect::HandleModSpellCritChanceShool,                   // 71 SPELL_AURA_MOD_SPELL_CRIT_CHANCE_SCHOOL
-    &AuraEffect::HandleModPowerCostPCT,                           // 72 SPELL_AURA_MOD_POWER_COST_SCHOOL_PCT
-    &AuraEffect::HandleModPowerCost,                              // 73 SPELL_AURA_MOD_POWER_COST_SCHOOL
-    &AuraEffect::HandleNoImmediateEffect,                         // 74 SPELL_AURA_REFLECT_SPELLS_SCHOOL  implemented in Unit::SpellHitResult
-    &AuraEffect::HandleNoImmediateEffect,                         // 75 SPELL_AURA_MOD_LANGUAGE
-    &AuraEffect::HandleNoImmediateEffect,                         // 76 SPELL_AURA_FAR_SIGHT
-    &AuraEffect::HandleModMechanicImmunity,                       // 77 SPELL_AURA_MECHANIC_IMMUNITY
-    &AuraEffect::HandleAuraMounted,                               // 78 SPELL_AURA_MOUNTED
-    &AuraEffect::HandleModDamagePercentDone,                      // 79 SPELL_AURA_MOD_DAMAGE_PERCENT_DONE
-    &AuraEffect::HandleModPercentStat,                            // 80 SPELL_AURA_MOD_PERCENT_STAT
-    &AuraEffect::HandleNoImmediateEffect,                         // 81 SPELL_AURA_SPLIT_DAMAGE_PCT implemented in Unit::CalcAbsorbResist
-    &AuraEffect::HandleWaterBreathing,                            // 82 SPELL_AURA_WATER_BREATHING
-    &AuraEffect::HandleModBaseResistance,                         // 83 SPELL_AURA_MOD_BASE_RESISTANCE
-    &AuraEffect::HandleNoImmediateEffect,                         // 84 SPELL_AURA_MOD_REGEN implemented in Player::RegenerateHealth
-    &AuraEffect::HandleModPowerRegen,                             // 85 SPELL_AURA_MOD_POWER_REGEN implemented in Player::Regenerate
-    &AuraEffect::HandleChannelDeathItem,                          // 86 SPELL_AURA_CHANNEL_DEATH_ITEM
-    &AuraEffect::HandleNoImmediateEffect,                         // 87 SPELL_AURA_MOD_DAMAGE_PERCENT_TAKEN implemented in Unit::MeleeDamageBonus and Unit::SpellDamageBonus
-    &AuraEffect::HandleNoImmediateEffect,                         // 88 SPELL_AURA_MOD_HEALTH_REGEN_PERCENT implemented in Player::RegenerateHealth
-    &AuraEffect::HandleNoImmediateEffect,                         // 89 SPELL_AURA_PERIODIC_DAMAGE_PERCENT
-    &AuraEffect::HandleNULL,                                      // 90 unused (3.0.8a) old SPELL_AURA_MOD_RESIST_CHANCE
-    &AuraEffect::HandleNoImmediateEffect,                         // 91 SPELL_AURA_MOD_DETECT_RANGE implemented in Creature::GetAttackDistance
-    &AuraEffect::HandlePreventFleeing,                            // 92 SPELL_AURA_PREVENTS_FLEEING
-    &AuraEffect::HandleModUnattackable,                           // 93 SPELL_AURA_MOD_UNATTACKABLE
-    &AuraEffect::HandleNoImmediateEffect,                         // 94 SPELL_AURA_INTERRUPT_REGEN implemented in Player::Regenerate
-    &AuraEffect::HandleAuraGhost,                                 // 95 SPELL_AURA_GHOST
-    &AuraEffect::HandleNoImmediateEffect,                         // 96 SPELL_AURA_SPELL_MAGNET implemented in Unit::SelectMagnetTarget
-    &AuraEffect::HandleNoImmediateEffect,                         // 97 SPELL_AURA_MANA_SHIELD implemented in Unit::CalcAbsorbResist
-    &AuraEffect::HandleAuraModSkill,                              // 98 SPELL_AURA_MOD_SKILL_TALENT
-    &AuraEffect::HandleAuraModAttackPower,                        // 99 SPELL_AURA_MOD_ATTACK_POWER
-    &AuraEffect::HandleUnused,                                    // 100 SPELL_AURA_AURAS_VISIBLE obsolete? all player can see all auras now, but still have spells including GM-spell
-    &AuraEffect::HandleModResistancePercent,                      // 101 SPELL_AURA_MOD_RESISTANCE_PCT
-    &AuraEffect::HandleNoImmediateEffect,                         // 102 SPELL_AURA_MOD_MELEE_ATTACK_POWER_VERSUS implemented in Unit::MeleeDamageBonus
-    &AuraEffect::HandleAuraModTotalThreat,                        // 103 SPELL_AURA_MOD_TOTAL_THREAT
-    &AuraEffect::HandleAuraWaterWalk,                             // 104 SPELL_AURA_WATER_WALK
-    &AuraEffect::HandleAuraFeatherFall,                           // 105 SPELL_AURA_FEATHER_FALL
-    &AuraEffect::HandleAuraHover,                                 // 106 SPELL_AURA_HOVER
-    &AuraEffect::HandleNoImmediateEffect,                         // 107 SPELL_AURA_ADD_FLAT_MODIFIER implemented in AuraEffect::CalculateSpellMod()
-    &AuraEffect::HandleNoImmediateEffect,                         // 108 SPELL_AURA_ADD_PCT_MODIFIER implemented in AuraEffect::CalculateSpellMod()
-    &AuraEffect::HandleNoImmediateEffect,                         // 109 SPELL_AURA_ADD_TARGET_TRIGGER
-    &AuraEffect::HandleModPowerRegenPCT,                          // 110 SPELL_AURA_MOD_POWER_REGEN_PERCENT implemented in Player::Regenerate, Creature::Regenerate
-    &AuraEffect::HandleNoImmediateEffect,                         // 111 SPELL_AURA_ADD_CASTER_HIT_TRIGGER implemented in Unit::SelectMagnetTarget
-    &AuraEffect::HandleNoImmediateEffect,                         // 112 SPELL_AURA_OVERRIDE_CLASS_SCRIPTS
-    &AuraEffect::HandleNoImmediateEffect,                         // 113 SPELL_AURA_MOD_RANGED_DAMAGE_TAKEN implemented in Unit::MeleeDamageBonus
-    &AuraEffect::HandleNoImmediateEffect,                         // 114 SPELL_AURA_MOD_RANGED_DAMAGE_TAKEN_PCT implemented in Unit::MeleeDamageBonus
-    &AuraEffect::HandleNoImmediateEffect,                         // 115 SPELL_AURA_MOD_HEALING                 implemented in Unit::SpellBaseHealingBonusForVictim
-    &AuraEffect::HandleNoImmediateEffect,                         // 116 SPELL_AURA_MOD_REGEN_DURING_COMBAT
-    &AuraEffect::HandleNoImmediateEffect,                         // 117 SPELL_AURA_MOD_MECHANIC_RESISTANCE     implemented in Unit::MagicSpellHitResult
-    &AuraEffect::HandleNoImmediateEffect,                         // 118 SPELL_AURA_MOD_HEALING_PCT             implemented in Unit::SpellHealingBonus
-    &AuraEffect::HandleNULL,                                      // 119 unused (3.2.0) old SPELL_AURA_SHARE_PET_TRACKING
-    &AuraEffect::HandleAuraUntrackable,                           // 120 SPELL_AURA_UNTRACKABLE
-    &AuraEffect::HandleAuraEmpathy,                               // 121 SPELL_AURA_EMPATHY
-    &AuraEffect::HandleModOffhandDamagePercent,                   // 122 SPELL_AURA_MOD_OFFHAND_DAMAGE_PCT
-    &AuraEffect::HandleModTargetResistance,                       // 123 SPELL_AURA_MOD_TARGET_RESISTANCE
-    &AuraEffect::HandleAuraModRangedAttackPower,                  // 124 SPELL_AURA_MOD_RANGED_ATTACK_POWER
-    &AuraEffect::HandleNoImmediateEffect,                         // 125 SPELL_AURA_MOD_MELEE_DAMAGE_TAKEN implemented in Unit::MeleeDamageBonus
-    &AuraEffect::HandleNoImmediateEffect,                         // 126 SPELL_AURA_MOD_MELEE_DAMAGE_TAKEN_PCT implemented in Unit::MeleeDamageBonus
-    &AuraEffect::HandleNoImmediateEffect,                         // 127 SPELL_AURA_RANGED_ATTACK_POWER_ATTACKER_BONUS implemented in Unit::MeleeDamageBonus
-    &AuraEffect::HandleModPossessPet,                             // 128 SPELL_AURA_MOD_POSSESS_PET
-    &AuraEffect::HandleAuraModIncreaseSpeed,                      // 129 SPELL_AURA_MOD_SPEED_ALWAYS
-    &AuraEffect::HandleAuraModIncreaseMountedSpeed,               // 130 SPELL_AURA_MOD_MOUNTED_SPEED_ALWAYS
-    &AuraEffect::HandleNoImmediateEffect,                         // 131 SPELL_AURA_MOD_RANGED_ATTACK_POWER_VERSUS implemented in Unit::MeleeDamageBonus
-    &AuraEffect::HandleAuraModIncreaseEnergyPercent,              // 132 SPELL_AURA_MOD_INCREASE_ENERGY_PERCENT
-    &AuraEffect::HandleAuraModIncreaseHealthPercent,              // 133 SPELL_AURA_MOD_INCREASE_HEALTH_PERCENT
-    &AuraEffect::HandleAuraModRegenInterrupt,                     // 134 SPELL_AURA_MOD_MANA_REGEN_INTERRUPT
-    &AuraEffect::HandleModHealingDone,                            // 135 SPELL_AURA_MOD_HEALING_DONE
-    &AuraEffect::HandleNoImmediateEffect,                         // 136 SPELL_AURA_MOD_HEALING_DONE_PERCENT   implemented in Unit::SpellHealingBonus
-    &AuraEffect::HandleModTotalPercentStat,                       // 137 SPELL_AURA_MOD_TOTAL_STAT_PERCENTAGE
-    &AuraEffect::HandleModMeleeSpeedPct,                          // 138 SPELL_AURA_MOD_MELEE_HASTE
-    &AuraEffect::HandleForceReaction,                             // 139 SPELL_AURA_FORCE_REACTION
-    &AuraEffect::HandleAuraModRangedHaste,                        // 140 SPELL_AURA_MOD_RANGED_HASTE
-    &AuraEffect::HandleNULL,                                      // 141 SPELL_AURA_MOD_RANGED_AMMO_HASTE
-    &AuraEffect::HandleAuraModBaseResistancePCT,                  // 142 SPELL_AURA_MOD_BASE_RESISTANCE_PCT
-    &AuraEffect::HandleAuraModResistanceExclusive,                // 143 SPELL_AURA_MOD_RESISTANCE_EXCLUSIVE
-    &AuraEffect::HandleNoImmediateEffect,                         // 144 SPELL_AURA_SAFE_FALL                         implemented in WorldSession::HandleMovementOpcodes
-    &AuraEffect::HandleAuraModPetTalentsPoints,                   // 145 SPELL_AURA_MOD_PET_TALENT_POINTS
-    &AuraEffect::HandleNoImmediateEffect,                         // 146 SPELL_AURA_ALLOW_TAME_PET_TYPE
-    &AuraEffect::HandleModStateImmunityMask,                      // 147 SPELL_AURA_MECHANIC_IMMUNITY_MASK
-    &AuraEffect::HandleAuraRetainComboPoints,                     // 148 SPELL_AURA_RETAIN_COMBO_POINTS
-    &AuraEffect::HandleNoImmediateEffect,                         // 149 SPELL_AURA_REDUCE_PUSHBACK
-    &AuraEffect::HandleShieldBlockValue,                          // 150 SPELL_AURA_MOD_SHIELD_BLOCKVALUE_PCT
-    &AuraEffect::HandleAuraTrackStealthed,                        // 151 SPELL_AURA_TRACK_STEALTHED
-    &AuraEffect::HandleNoImmediateEffect,                         // 152 SPELL_AURA_MOD_DETECTED_RANGE implemented in Creature::GetAttackDistance
-    &AuraEffect::HandleNoImmediateEffect,                         // 153 SPELL_AURA_SPLIT_DAMAGE_FLAT
-    &AuraEffect::HandleModStealthLevel,                           // 154 SPELL_AURA_MOD_STEALTH_LEVEL
-    &AuraEffect::HandleNoImmediateEffect,                         // 155 SPELL_AURA_MOD_WATER_BREATHING
-    &AuraEffect::HandleNoImmediateEffect,                         // 156 SPELL_AURA_MOD_REPUTATION_GAIN
-    &AuraEffect::HandleNULL,                                      // 157 SPELL_AURA_PET_DAMAGE_MULTI
-    &AuraEffect::HandleShieldBlockValue,                          // 158 SPELL_AURA_MOD_SHIELD_BLOCKVALUE
-    &AuraEffect::HandleNoImmediateEffect,                         // 159 SPELL_AURA_NO_PVP_CREDIT      only for Honorless Target spell
-    &AuraEffect::HandleNoImmediateEffect,                         // 160 SPELL_AURA_MOD_AOE_AVOIDANCE                 implemented in Unit::MagicSpellHitResult
-    &AuraEffect::HandleNoImmediateEffect,                         // 161 SPELL_AURA_MOD_HEALTH_REGEN_IN_COMBAT
-    &AuraEffect::HandleNoImmediateEffect,                         // 162 SPELL_AURA_POWER_BURN_MANA implemented in AuraEffect::PeriodicTick
-    &AuraEffect::HandleNoImmediateEffect,                         // 163 SPELL_AURA_MOD_CRIT_DAMAGE_BONUS_MELEE
-    &AuraEffect::HandleUnused,                                    // 164 unused (3.2.0), only one test spell
-    &AuraEffect::HandleNoImmediateEffect,                         // 165 SPELL_AURA_MELEE_ATTACK_POWER_ATTACKER_BONUS implemented in Unit::MeleeDamageBonus
-    &AuraEffect::HandleAuraModAttackPowerPercent,                 // 166 SPELL_AURA_MOD_ATTACK_POWER_PCT
-    &AuraEffect::HandleAuraModRangedAttackPowerPercent,           // 167 SPELL_AURA_MOD_RANGED_ATTACK_POWER_PCT
-    &AuraEffect::HandleNoImmediateEffect,                         // 168 SPELL_AURA_MOD_DAMAGE_DONE_VERSUS            implemented in Unit::SpellDamageBonus, Unit::MeleeDamageBonus
-    &AuraEffect::HandleNoImmediateEffect,                         // 169 SPELL_AURA_MOD_CRIT_PERCENT_VERSUS           implemented in Unit::DealDamageBySchool, Unit::DoAttackDamage, Unit::SpellCriticalBonus
-    &AuraEffect::HandleNULL,                                      // 170 SPELL_AURA_DETECT_AMORE       various spells that change visual of units for aura target (clientside?)
-    &AuraEffect::HandleAuraModIncreaseSpeed,                      // 171 SPELL_AURA_MOD_SPEED_NOT_STACK
-    &AuraEffect::HandleAuraModIncreaseMountedSpeed,               // 172 SPELL_AURA_MOD_MOUNTED_SPEED_NOT_STACK
-    &AuraEffect::HandleNULL,                                      // 173 unused (3.2.0) no spells, old SPELL_AURA_ALLOW_CHAMPION_SPELLS  only for Proclaim Champion spell
-    &AuraEffect::HandleModSpellDamagePercentFromStat,             // 174 SPELL_AURA_MOD_SPELL_DAMAGE_OF_STAT_PERCENT  implemented in Unit::SpellBaseDamageBonus
-    &AuraEffect::HandleModSpellHealingPercentFromStat,            // 175 SPELL_AURA_MOD_SPELL_HEALING_OF_STAT_PERCENT implemented in Unit::SpellBaseHealingBonus
-    &AuraEffect::HandleSpiritOfRedemption,                        // 176 SPELL_AURA_SPIRIT_OF_REDEMPTION   only for Spirit of Redemption spell, die at aura end
-    &AuraEffect::HandleCharmConvert,                              // 177 SPELL_AURA_AOE_CHARM
-    &AuraEffect::HandleNoImmediateEffect,                         // 178 SPELL_AURA_MOD_DEBUFF_RESISTANCE          implemented in Unit::MagicSpellHitResult
-    &AuraEffect::HandleNoImmediateEffect,                         // 179 SPELL_AURA_MOD_ATTACKER_SPELL_CRIT_CHANCE implemented in Unit::SpellCriticalBonus
-    &AuraEffect::HandleNoImmediateEffect,                         // 180 SPELL_AURA_MOD_FLAT_SPELL_DAMAGE_VERSUS   implemented in Unit::SpellDamageBonus
-    &AuraEffect::HandleNULL,                                      // 181 unused (3.2.0) old SPELL_AURA_MOD_FLAT_SPELL_CRIT_DAMAGE_VERSUS
-    &AuraEffect::HandleAuraModResistenceOfStatPercent,            // 182 SPELL_AURA_MOD_RESISTANCE_OF_STAT_PERCENT
-    &AuraEffect::HandleNULL,                                      // 183 SPELL_AURA_MOD_CRITICAL_THREAT only used in 28746 - miscvalue - spell school
-    &AuraEffect::HandleNoImmediateEffect,                         // 184 SPELL_AURA_MOD_ATTACKER_MELEE_HIT_CHANCE  implemented in Unit::RollMeleeOutcomeAgainst
-    &AuraEffect::HandleNoImmediateEffect,                         // 185 SPELL_AURA_MOD_ATTACKER_RANGED_HIT_CHANCE implemented in Unit::RollMeleeOutcomeAgainst
-    &AuraEffect::HandleNoImmediateEffect,                         // 186 SPELL_AURA_MOD_ATTACKER_SPELL_HIT_CHANCE  implemented in Unit::MagicSpellHitResult
-    &AuraEffect::HandleNoImmediateEffect,                         // 187 SPELL_AURA_MOD_ATTACKER_MELEE_CRIT_CHANCE  implemented in Unit::GetUnitCriticalChance
-    &AuraEffect::HandleNoImmediateEffect,                         // 188 SPELL_AURA_MOD_ATTACKER_RANGED_CRIT_CHANCE implemented in Unit::GetUnitCriticalChance
-    &AuraEffect::HandleModRating,                                 // 189 SPELL_AURA_MOD_RATING
-    &AuraEffect::HandleNoImmediateEffect,                         // 190 SPELL_AURA_MOD_FACTION_REPUTATION_GAIN     implemented in Player::CalculateReputationGain
-    &AuraEffect::HandleAuraModUseNormalSpeed,                     // 191 SPELL_AURA_USE_NORMAL_MOVEMENT_SPEED
-    &AuraEffect::HandleModMeleeRangedSpeedPct,                    // 192 SPELL_AURA_MOD_MELEE_RANGED_HASTE
-    &AuraEffect::HandleModCombatSpeedPct,                         // 193 SPELL_AURA_MELEE_SLOW (in fact combat (any type attack) speed pct)
-    &AuraEffect::HandleNoImmediateEffect,                         // 194 SPELL_AURA_MOD_TARGET_ABSORB_SCHOOL implemented in Unit::CalcAbsorbResist
-    &AuraEffect::HandleNoImmediateEffect,                         // 195 SPELL_AURA_MOD_TARGET_ABILITY_ABSORB_SCHOOL implemented in Unit::CalcAbsorbResist
-    &AuraEffect::HandleNULL,                                      // 196 SPELL_AURA_MOD_COOLDOWN - flat mod of spell cooldowns
-    &AuraEffect::HandleNoImmediateEffect,                         // 197 SPELL_AURA_MOD_ATTACKER_SPELL_AND_WEAPON_CRIT_CHANCE implemented in Unit::SpellCriticalBonus Unit::GetUnitCriticalChance
-    &AuraEffect::HandleNULL,                                      // 198 unused (3.2.0) old SPELL_AURA_MOD_ALL_WEAPON_SKILLS
-    &AuraEffect::HandleNoImmediateEffect,                         // 199 SPELL_AURA_MOD_INCREASES_SPELL_PCT_TO_HIT  implemented in Unit::MagicSpellHitResult
-    &AuraEffect::HandleNoImmediateEffect,                         // 200 SPELL_AURA_MOD_XP_PCT implemented in Player::RewardPlayerAndGroupAtKill
-    &AuraEffect::HandleAuraAllowFlight,                           // 201 -  SPELL_AURA_FLY                             this aura enable flight mode...
-    &AuraEffect::HandleNoImmediateEffect,                         // 202 -  SPELL_AURA_CANNOT_BE_DODGED                implemented in Unit::RollPhysicalOutcomeAgainst
-    &AuraEffect::HandleNoImmediateEffect,                         // 203 -  SPELL_AURA_MOD_ATTACKER_MELEE_CRIT_DAMAGE  implemented in Unit::CalculateMeleeDamage and Unit::CalculateSpellDamage
-    &AuraEffect::HandleNoImmediateEffect,                         // 204 -  SPELL_AURA_MOD_ATTACKER_RANGED_CRIT_DAMAGE implemented in Unit::CalculateMeleeDamage and Unit::CalculateSpellDamage
-    &AuraEffect::HandleNULL,                                      // 205 -  SPELL_AURA_MOD_SCHOOL_CRIT_DMG_TAKEN
-    &AuraEffect::HandleAuraModIncreaseFlightSpeed,                // 206 -  SPELL_AURA_MOD_INCREASE_VEHICLE_FLIGHT_SPEED
-    &AuraEffect::HandleAuraModIncreaseFlightSpeed,                // 207 -  SPELL_AURA_MOD_INCREASE_MOUNTED_FLIGHT_SPEED
-    &AuraEffect::HandleAuraModIncreaseFlightSpeed,                // 208 -  SPELL_AURA_MOD_INCREASE_FLIGHT_SPEED
-    &AuraEffect::HandleAuraModIncreaseFlightSpeed,                // 209 -  SPELL_AURA_MOD_MOUNTED_FLIGHT_SPEED_ALWAYS
-    &AuraEffect::HandleAuraModIncreaseFlightSpeed,                // 210 -  SPELL_AURA_MOD_VEHICLE_SPEED_ALWAYS
-    &AuraEffect::HandleAuraModIncreaseFlightSpeed,                // 211 -  SPELL_AURA_MOD_FLIGHT_SPEED_NOT_STACK
-    &AuraEffect::HandleAuraModRangedAttackPowerOfStatPercent,     // 212 -  SPELL_AURA_MOD_RANGED_ATTACK_POWER_OF_STAT_PERCENT
-    &AuraEffect::HandleNoImmediateEffect,                         // 213 -  SPELL_AURA_MOD_RAGE_FROM_DAMAGE_DEALT implemented in Player::RewardRage
-    &AuraEffect::HandleNULL,                                      // 214 -  Tamed Pet Passive
-    &AuraEffect::HandleArenaPreparation,                          // 215 -  SPELL_AURA_ARENA_PREPARATION
-    &AuraEffect::HandleModCastingSpeed,                           // 216 -  SPELL_AURA_HASTE_SPELLS
-    &AuraEffect::HandleNULL,                                      // 217 -  69106 - killing spree helper - unknown use
-    &AuraEffect::HandleAuraModRangedHaste,                        // 218 -  SPELL_AURA_HASTE_RANGED
-    &AuraEffect::HandleModManaRegen,                              // 219 -  SPELL_AURA_MOD_MANA_REGEN_FROM_STAT
+    &AuraEffect::HandleNULL,                                      // 0 -   SPELL_AURA_NONE
+    &AuraEffect::HandleBindSight,                                 // 1 -   SPELL_AURA_BIND_SIGHT
+    &AuraEffect::HandleModPossess,                                // 2 -   SPELL_AURA_MOD_POSSESS
+    &AuraEffect::HandleNoImmediateEffect,                         // 3 -   SPELL_AURA_PERIODIC_DAMAGE implemented in AuraEffect::PeriodicTick
+    &AuraEffect::HandleAuraDummy,                                 // 4 -   SPELL_AURA_DUMMY
+    &AuraEffect::HandleModConfuse,                                // 5 -   SPELL_AURA_MOD_CONFUSE
+    &AuraEffect::HandleModCharm,                                  // 6 -   SPELL_AURA_MOD_CHARM
+    &AuraEffect::HandleModFear,                                   // 7 -   SPELL_AURA_MOD_FEAR
+    &AuraEffect::HandleNoImmediateEffect,                         // 8 -   SPELL_AURA_PERIODIC_HEAL implemented in AuraEffect::PeriodicTick
+    &AuraEffect::HandleModAttackSpeed,                            // 9 -   SPELL_AURA_MOD_ATTACKSPEED
+    &AuraEffect::HandleModThreat,                                 // 10 -  SPELL_AURA_MOD_THREAT
+    &AuraEffect::HandleModTaunt,                                  // 11 -  SPELL_AURA_MOD_TAUNT
+    &AuraEffect::HandleAuraModStun,                               // 12 -  SPELL_AURA_MOD_STUN
+    &AuraEffect::HandleModDamageDone,                             // 13 -  SPELL_AURA_MOD_DAMAGE_DONE
+    &AuraEffect::HandleNoImmediateEffect,                         // 14 -  SPELL_AURA_MOD_DAMAGE_TAKEN implemented in Unit::MeleeDamageBonus and Unit::SpellDamageBonus
+    &AuraEffect::HandleNoImmediateEffect,                         // 15 -  SPELL_AURA_DAMAGE_SHIELD    implemented in Unit::DoAttackDamage
+    &AuraEffect::HandleModStealth,                                // 16 -  SPELL_AURA_MOD_STEALTH
+    &AuraEffect::HandleModStealthDetect,                          // 17 -  SPELL_AURA_MOD_DETECT
+    &AuraEffect::HandleModInvisibility,                           // 18 -  SPELL_AURA_MOD_INVISIBILITY
+    &AuraEffect::HandleModInvisibilityDetect,                     // 19 -  SPELL_AURA_MOD_INVISIBILITY_DETECTION
+    &AuraEffect::HandleNoImmediateEffect,                         // 20 -  SPELL_AURA_OBS_MOD_HEALTH implemented in AuraEffect::PeriodicTick
+    &AuraEffect::HandleNoImmediateEffect,                         // 21 -  SPELL_AURA_OBS_MOD_POWER implemented in AuraEffect::PeriodicTick
+    &AuraEffect::HandleAuraModResistance,                         // 22 -  SPELL_AURA_MOD_RESISTANCE
+    &AuraEffect::HandleNoImmediateEffect,                         // 23 -  SPELL_AURA_PERIODIC_TRIGGER_SPELL implemented in AuraEffect::PeriodicTick
+    &AuraEffect::HandleNoImmediateEffect,                         // 24 -  SPELL_AURA_PERIODIC_ENERGIZE implemented in AuraEffect::PeriodicTick
+    &AuraEffect::HandleAuraModPacify,                             // 25 -  SPELL_AURA_MOD_PACIFY
+    &AuraEffect::HandleAuraModRoot,                               // 26 -  SPELL_AURA_MOD_ROOT
+    &AuraEffect::HandleAuraModSilence,                            // 27 -  SPELL_AURA_MOD_SILENCE
+    &AuraEffect::HandleNoImmediateEffect,                         // 28 -  SPELL_AURA_REFLECT_SPELLS        implement in Unit::SpellHitResult
+    &AuraEffect::HandleAuraModStat,                               // 29 -  SPELL_AURA_MOD_STAT
+    &AuraEffect::HandleAuraModSkill,                              // 30 -  SPELL_AURA_MOD_SKILL
+    &AuraEffect::HandleAuraModIncreaseSpeed,                      // 31 -  SPELL_AURA_MOD_INCREASE_SPEED
+    &AuraEffect::HandleAuraModIncreaseMountedSpeed,               // 32 -  SPELL_AURA_MOD_INCREASE_MOUNTED_SPEED
+    &AuraEffect::HandleAuraModDecreaseSpeed,                      // 33 -  SPELL_AURA_MOD_DECREASE_SPEED
+    &AuraEffect::HandleAuraModIncreaseHealth,                     // 34 -  SPELL_AURA_MOD_INCREASE_HEALTH
+    &AuraEffect::HandleAuraModIncreaseEnergy,                     // 35 -  SPELL_AURA_MOD_INCREASE_ENERGY
+    &AuraEffect::HandleAuraModShapeshift,                         // 36 -  SPELL_AURA_MOD_SHAPESHIFT
+    &AuraEffect::HandleAuraModEffectImmunity,                     // 37 -  SPELL_AURA_EFFECT_IMMUNITY
+    &AuraEffect::HandleAuraModStateImmunity,                      // 38 -  SPELL_AURA_STATE_IMMUNITY
+    &AuraEffect::HandleAuraModSchoolImmunity,                     // 39 -  SPELL_AURA_SCHOOL_IMMUNITY
+    &AuraEffect::HandleAuraModDmgImmunity,                        // 40 -  SPELL_AURA_DAMAGE_IMMUNITY
+    &AuraEffect::HandleAuraModDispelImmunity,                     // 41 -  SPELL_AURA_DISPEL_IMMUNITY
+    &AuraEffect::HandleNoImmediateEffect,                         // 42 -  SPELL_AURA_PROC_TRIGGER_SPELL  implemented in Unit::ProcDamageAndSpellFor and Unit::HandleProcTriggerSpell
+    &AuraEffect::HandleNoImmediateEffect,                         // 43 -  SPELL_AURA_PROC_TRIGGER_DAMAGE implemented in Unit::ProcDamageAndSpellFor
+    &AuraEffect::HandleAuraTrackCreatures,                        // 44 -  SPELL_AURA_TRACK_CREATURES
+    &AuraEffect::HandleAuraTrackResources,                        // 45 -  SPELL_AURA_TRACK_RESOURCES
+    &AuraEffect::HandleNULL,                                      // 46 -  SPELL_AURA_46 (used in test spells 54054 and 54058, and spell 48050) (3.0.8a)
+    &AuraEffect::HandleAuraModParryPercent,                       // 47 -  SPELL_AURA_MOD_PARRY_PERCENT
+    &AuraEffect::HandleNULL,                                      // 48 -  SPELL_AURA_48 spell Napalm (area damage spell with additional delayed damage effect)
+    &AuraEffect::HandleAuraModDodgePercent,                       // 49 -  SPELL_AURA_MOD_DODGE_PERCENT
+    &AuraEffect::HandleNoImmediateEffect,                         // 50 -  SPELL_AURA_MOD_CRITICAL_HEALING_AMOUNT implemented in Unit::SpellCriticalHealingBonus
+    &AuraEffect::HandleAuraModBlockPercent,                       // 51 -  SPELL_AURA_MOD_BLOCK_PERCENT
+    &AuraEffect::HandleAuraModWeaponCritPercent,                  // 52 -  SPELL_AURA_MOD_WEAPON_CRIT_PERCENT
+    &AuraEffect::HandleNoImmediateEffect,                         // 53 -  SPELL_AURA_PERIODIC_LEECH implemented in AuraEffect::PeriodicTick
+    &AuraEffect::HandleModHitChance,                              // 54 -  SPELL_AURA_MOD_HIT_CHANCE
+    &AuraEffect::HandleModSpellHitChance,                         // 55 -  SPELL_AURA_MOD_SPELL_HIT_CHANCE
+    &AuraEffect::HandleAuraTransform,                             // 56 -  SPELL_AURA_TRANSFORM
+    &AuraEffect::HandleModSpellCritChance,                        // 57 -  SPELL_AURA_MOD_SPELL_CRIT_CHANCE
+    &AuraEffect::HandleAuraModIncreaseSwimSpeed,                  // 58 -  SPELL_AURA_MOD_INCREASE_SWIM_SPEED
+    &AuraEffect::HandleNoImmediateEffect,                         // 59 -  SPELL_AURA_MOD_DAMAGE_DONE_CREATURE implemented in Unit::MeleeDamageBonus and Unit::SpellDamageBonus
+    &AuraEffect::HandleAuraModPacifyAndSilence,                   // 60 -  SPELL_AURA_MOD_PACIFY_SILENCE
+    &AuraEffect::HandleAuraModScale,                              // 61 -  SPELL_AURA_MOD_SCALE
+    &AuraEffect::HandleNoImmediateEffect,                         // 62 -  SPELL_AURA_PERIODIC_HEALTH_FUNNEL implemented in AuraEffect::PeriodicTick
+    &AuraEffect::HandleNULL,                                      // 63 -  unused (3.2.0) old SPELL_AURA_PERIODIC_MANA_FUNNEL
+    &AuraEffect::HandleNoImmediateEffect,                         // 64 -  SPELL_AURA_PERIODIC_MANA_LEECH implemented in AuraEffect::PeriodicTick
+    &AuraEffect::HandleModCastingSpeed,                           // 65 -  SPELL_AURA_MOD_CASTING_SPEED_NOT_STACK
+    &AuraEffect::HandleFeignDeath,                                // 66 -  SPELL_AURA_FEIGN_DEATH
+    &AuraEffect::HandleAuraModDisarm,                             // 67 -  SPELL_AURA_MOD_DISARM
+    &AuraEffect::HandleAuraModStalked,                            // 68 -  SPELL_AURA_MOD_STALKED
+    &AuraEffect::HandleNoImmediateEffect,                         // 69 -  SPELL_AURA_SCHOOL_ABSORB implemented in Unit::CalcAbsorbResist
+    &AuraEffect::HandleUnused,                                    // 70 -  SPELL_AURA_EXTRA_ATTACKS clientside
+    &AuraEffect::HandleModSpellCritChanceShool,                   // 71 -  SPELL_AURA_MOD_SPELL_CRIT_CHANCE_SCHOOL
+    &AuraEffect::HandleModPowerCostPCT,                           // 72 -  SPELL_AURA_MOD_POWER_COST_SCHOOL_PCT
+    &AuraEffect::HandleModPowerCost,                              // 73 -  SPELL_AURA_MOD_POWER_COST_SCHOOL
+    &AuraEffect::HandleNoImmediateEffect,                         // 74 -  SPELL_AURA_REFLECT_SPELLS_SCHOOL  implemented in Unit::SpellHitResult
+    &AuraEffect::HandleNoImmediateEffect,                         // 75 -  SPELL_AURA_MOD_LANGUAGE
+    &AuraEffect::HandleNoImmediateEffect,                         // 76 -  SPELL_AURA_FAR_SIGHT
+    &AuraEffect::HandleModMechanicImmunity,                       // 77 -  SPELL_AURA_MECHANIC_IMMUNITY
+    &AuraEffect::HandleAuraMounted,                               // 78 -  SPELL_AURA_MOUNTED
+    &AuraEffect::HandleModDamagePercentDone,                      // 79 -  SPELL_AURA_MOD_DAMAGE_PERCENT_DONE
+    &AuraEffect::HandleModPercentStat,                            // 80 -  SPELL_AURA_MOD_PERCENT_STAT
+    &AuraEffect::HandleNoImmediateEffect,                         // 81 -  SPELL_AURA_SPLIT_DAMAGE_PCT implemented in Unit::CalcAbsorbResist
+    &AuraEffect::HandleWaterBreathing,                            // 82 -  SPELL_AURA_WATER_BREATHING
+    &AuraEffect::HandleModBaseResistance,                         // 83 -  SPELL_AURA_MOD_BASE_RESISTANCE
+    &AuraEffect::HandleNoImmediateEffect,                         // 84 -  SPELL_AURA_MOD_REGEN implemented in Player::RegenerateHealth
+    &AuraEffect::HandleModPowerRegen,                             // 85 -  SPELL_AURA_MOD_POWER_REGEN implemented in Player::Regenerate
+    &AuraEffect::HandleChannelDeathItem,                          // 86 -  SPELL_AURA_CHANNEL_DEATH_ITEM
+    &AuraEffect::HandleNoImmediateEffect,                         // 87 -  SPELL_AURA_MOD_DAMAGE_PERCENT_TAKEN implemented in Unit::MeleeDamageBonus and Unit::SpellDamageBonus
+    &AuraEffect::HandleNoImmediateEffect,                         // 88 -  SPELL_AURA_MOD_HEALTH_REGEN_PERCENT implemented in Player::RegenerateHealth
+    &AuraEffect::HandleNoImmediateEffect,                         // 89 -  SPELL_AURA_PERIODIC_DAMAGE_PERCENT
+    &AuraEffect::HandleNULL,                                      // 90 -  unused (3.0.8a) old SPELL_AURA_MOD_RESIST_CHANCE
+    &AuraEffect::HandleNoImmediateEffect,                         // 91 -  SPELL_AURA_MOD_DETECT_RANGE implemented in Creature::GetAttackDistance
+    &AuraEffect::HandlePreventFleeing,                            // 92 -  SPELL_AURA_PREVENTS_FLEEING
+    &AuraEffect::HandleModUnattackable,                           // 93 -  SPELL_AURA_MOD_UNATTACKABLE
+    &AuraEffect::HandleNoImmediateEffect,                         // 94 -  SPELL_AURA_INTERRUPT_REGEN implemented in Player::Regenerate
+    &AuraEffect::HandleAuraGhost,                                 // 95 -  SPELL_AURA_GHOST
+    &AuraEffect::HandleNoImmediateEffect,                         // 96 -  SPELL_AURA_SPELL_MAGNET implemented in Unit::SelectMagnetTarget
+    &AuraEffect::HandleNoImmediateEffect,                         // 97 -  SPELL_AURA_MANA_SHIELD implemented in Unit::CalcAbsorbResist
+    &AuraEffect::HandleAuraModSkill,                              // 98 -  SPELL_AURA_MOD_SKILL_TALENT
+    &AuraEffect::HandleAuraModAttackPower,                        // 99 -  SPELL_AURA_MOD_ATTACK_POWER
+    &AuraEffect::HandleUnused,                                    // 100 - SPELL_AURA_AURAS_VISIBLE obsolete? all player can see all auras now, but still have spells including GM-spell
+    &AuraEffect::HandleModResistancePercent,                      // 101 - SPELL_AURA_MOD_RESISTANCE_PCT
+    &AuraEffect::HandleNoImmediateEffect,                         // 102 - SPELL_AURA_MOD_MELEE_ATTACK_POWER_VERSUS implemented in Unit::MeleeDamageBonus
+    &AuraEffect::HandleAuraModTotalThreat,                        // 103 - SPELL_AURA_MOD_TOTAL_THREAT
+    &AuraEffect::HandleAuraWaterWalk,                             // 104 - SPELL_AURA_WATER_WALK
+    &AuraEffect::HandleAuraFeatherFall,                           // 105 - SPELL_AURA_FEATHER_FALL
+    &AuraEffect::HandleAuraHover,                                 // 106 - SPELL_AURA_HOVER
+    &AuraEffect::HandleNoImmediateEffect,                         // 107 - SPELL_AURA_ADD_FLAT_MODIFIER implemented in AuraEffect::CalculateSpellMod()
+    &AuraEffect::HandleNoImmediateEffect,                         // 108 - SPELL_AURA_ADD_PCT_MODIFIER implemented in AuraEffect::CalculateSpellMod()
+    &AuraEffect::HandleNoImmediateEffect,                         // 109 - SPELL_AURA_ADD_TARGET_TRIGGER
+    &AuraEffect::HandleModPowerRegenPCT,                          // 110 - SPELL_AURA_MOD_POWER_REGEN_PERCENT implemented in Player::Regenerate, Creature::Regenerate
+    &AuraEffect::HandleNoImmediateEffect,                         // 111 - SPELL_AURA_ADD_CASTER_HIT_TRIGGER implemented in Unit::SelectMagnetTarget
+    &AuraEffect::HandleNoImmediateEffect,                         // 112 - SPELL_AURA_OVERRIDE_CLASS_SCRIPTS
+    &AuraEffect::HandleNoImmediateEffect,                         // 113 - SPELL_AURA_MOD_RANGED_DAMAGE_TAKEN implemented in Unit::MeleeDamageBonus
+    &AuraEffect::HandleNoImmediateEffect,                         // 114 - SPELL_AURA_MOD_RANGED_DAMAGE_TAKEN_PCT implemented in Unit::MeleeDamageBonus
+    &AuraEffect::HandleNoImmediateEffect,                         // 115 - SPELL_AURA_MOD_HEALING                 implemented in Unit::SpellBaseHealingBonusForVictim
+    &AuraEffect::HandleNoImmediateEffect,                         // 116 - SPELL_AURA_MOD_REGEN_DURING_COMBAT
+    &AuraEffect::HandleNoImmediateEffect,                         // 117 - SPELL_AURA_MOD_MECHANIC_RESISTANCE     implemented in Unit::MagicSpellHitResult
+    &AuraEffect::HandleNoImmediateEffect,                         // 118 - SPELL_AURA_MOD_HEALING_PCT             implemented in Unit::SpellHealingBonus
+    &AuraEffect::HandleNULL,                                      // 119 - unused (3.2.0) old SPELL_AURA_SHARE_PET_TRACKING
+    &AuraEffect::HandleAuraUntrackable,                           // 120 - SPELL_AURA_UNTRACKABLE
+    &AuraEffect::HandleAuraEmpathy,                               // 121 - SPELL_AURA_EMPATHY
+    &AuraEffect::HandleModOffhandDamagePercent,                   // 122 - SPELL_AURA_MOD_OFFHAND_DAMAGE_PCT
+    &AuraEffect::HandleModTargetResistance,                       // 123 - SPELL_AURA_MOD_TARGET_RESISTANCE
+    &AuraEffect::HandleAuraModRangedAttackPower,                  // 124 - SPELL_AURA_MOD_RANGED_ATTACK_POWER
+    &AuraEffect::HandleNoImmediateEffect,                         // 125 - SPELL_AURA_MOD_MELEE_DAMAGE_TAKEN implemented in Unit::MeleeDamageBonus
+    &AuraEffect::HandleNoImmediateEffect,                         // 126 - SPELL_AURA_MOD_MELEE_DAMAGE_TAKEN_PCT implemented in Unit::MeleeDamageBonus
+    &AuraEffect::HandleNoImmediateEffect,                         // 127 - SPELL_AURA_RANGED_ATTACK_POWER_ATTACKER_BONUS implemented in Unit::MeleeDamageBonus
+    &AuraEffect::HandleModPossessPet,                             // 128 - SPELL_AURA_MOD_POSSESS_PET
+    &AuraEffect::HandleAuraModIncreaseSpeed,                      // 129 - SPELL_AURA_MOD_SPEED_ALWAYS
+    &AuraEffect::HandleAuraModIncreaseMountedSpeed,               // 130 - SPELL_AURA_MOD_MOUNTED_SPEED_ALWAYS
+    &AuraEffect::HandleNoImmediateEffect,                         // 131 - SPELL_AURA_MOD_RANGED_ATTACK_POWER_VERSUS implemented in Unit::MeleeDamageBonus
+    &AuraEffect::HandleAuraModIncreaseEnergyPercent,              // 132 - SPELL_AURA_MOD_INCREASE_ENERGY_PERCENT
+    &AuraEffect::HandleAuraModIncreaseHealthPercent,              // 133 - SPELL_AURA_MOD_INCREASE_HEALTH_PERCENT
+    &AuraEffect::HandleAuraModRegenInterrupt,                     // 134 - SPELL_AURA_MOD_MANA_REGEN_INTERRUPT
+    &AuraEffect::HandleModHealingDone,                            // 135 - SPELL_AURA_MOD_HEALING_DONE
+    &AuraEffect::HandleNoImmediateEffect,                         // 136 - SPELL_AURA_MOD_HEALING_DONE_PERCENT   implemented in Unit::SpellHealingBonus
+    &AuraEffect::HandleModTotalPercentStat,                       // 137 - SPELL_AURA_MOD_TOTAL_STAT_PERCENTAGE
+    &AuraEffect::HandleModMeleeSpeedPct,                          // 138 - SPELL_AURA_MOD_MELEE_HASTE
+    &AuraEffect::HandleForceReaction,                             // 139 - SPELL_AURA_FORCE_REACTION
+    &AuraEffect::HandleAuraModRangedHaste,                        // 140 - SPELL_AURA_MOD_RANGED_HASTE
+    &AuraEffect::HandleNULL,                                      // 141 - SPELL_AURA_MOD_RANGED_AMMO_HASTE
+    &AuraEffect::HandleAuraModBaseResistancePCT,                  // 142 - SPELL_AURA_MOD_BASE_RESISTANCE_PCT
+    &AuraEffect::HandleAuraModResistanceExclusive,                // 143 - SPELL_AURA_MOD_RESISTANCE_EXCLUSIVE
+    &AuraEffect::HandleNoImmediateEffect,                         // 144 - SPELL_AURA_SAFE_FALL                         implemented in WorldSession::HandleMovementOpcodes
+    &AuraEffect::HandleAuraModPetTalentsPoints,                   // 145 - SPELL_AURA_MOD_PET_TALENT_POINTS
+    &AuraEffect::HandleNoImmediateEffect,                         // 146 - SPELL_AURA_ALLOW_TAME_PET_TYPE
+    &AuraEffect::HandleModStateImmunityMask,                      // 147 - SPELL_AURA_MECHANIC_IMMUNITY_MASK
+    &AuraEffect::HandleAuraRetainComboPoints,                     // 148 - SPELL_AURA_RETAIN_COMBO_POINTS
+    &AuraEffect::HandleNoImmediateEffect,                         // 149 - SPELL_AURA_REDUCE_PUSHBACK
+    &AuraEffect::HandleShieldBlockValue,                          // 150 - SPELL_AURA_MOD_SHIELD_BLOCKVALUE_PCT
+    &AuraEffect::HandleAuraTrackStealthed,                        // 151 - SPELL_AURA_TRACK_STEALTHED
+    &AuraEffect::HandleNoImmediateEffect,                         // 152 - SPELL_AURA_MOD_DETECTED_RANGE implemented in Creature::GetAttackDistance
+    &AuraEffect::HandleNoImmediateEffect,                         // 153 - SPELL_AURA_SPLIT_DAMAGE_FLAT
+    &AuraEffect::HandleModStealthLevel,                           // 154 - SPELL_AURA_MOD_STEALTH_LEVEL
+    &AuraEffect::HandleNoImmediateEffect,                         // 155 - SPELL_AURA_MOD_WATER_BREATHING
+    &AuraEffect::HandleNoImmediateEffect,                         // 156 - SPELL_AURA_MOD_REPUTATION_GAIN
+    &AuraEffect::HandleNULL,                                      // 157 - SPELL_AURA_PET_DAMAGE_MULTI
+    &AuraEffect::HandleShieldBlockValue,                          // 158 - SPELL_AURA_MOD_SHIELD_BLOCKVALUE
+    &AuraEffect::HandleNoImmediateEffect,                         // 159 - SPELL_AURA_NO_PVP_CREDIT      only for Honorless Target spell
+    &AuraEffect::HandleNoImmediateEffect,                         // 160 - SPELL_AURA_MOD_AOE_AVOIDANCE                 implemented in Unit::MagicSpellHitResult
+    &AuraEffect::HandleNoImmediateEffect,                         // 161 - SPELL_AURA_MOD_HEALTH_REGEN_IN_COMBAT
+    &AuraEffect::HandleNoImmediateEffect,                         // 162 - SPELL_AURA_POWER_BURN_MANA implemented in AuraEffect::PeriodicTick
+    &AuraEffect::HandleNoImmediateEffect,                         // 163 - SPELL_AURA_MOD_CRIT_DAMAGE_BONUS_MELEE
+    &AuraEffect::HandleUnused,                                    // 164 - unused (3.2.0), only one test spell
+    &AuraEffect::HandleNoImmediateEffect,                         // 165 - SPELL_AURA_MELEE_ATTACK_POWER_ATTACKER_BONUS implemented in Unit::MeleeDamageBonus
+    &AuraEffect::HandleAuraModAttackPowerPercent,                 // 166 - SPELL_AURA_MOD_ATTACK_POWER_PCT
+    &AuraEffect::HandleAuraModRangedAttackPowerPercent,           // 167 - SPELL_AURA_MOD_RANGED_ATTACK_POWER_PCT
+    &AuraEffect::HandleNoImmediateEffect,                         // 168 - SPELL_AURA_MOD_DAMAGE_DONE_VERSUS            implemented in Unit::SpellDamageBonus, Unit::MeleeDamageBonus
+    &AuraEffect::HandleNoImmediateEffect,                         // 169 - SPELL_AURA_MOD_CRIT_PERCENT_VERSUS           implemented in Unit::DealDamageBySchool, Unit::DoAttackDamage, Unit::SpellCriticalBonus
+    &AuraEffect::HandleNULL,                                      // 170 - SPELL_AURA_DETECT_AMORE       various spells that change visual of units for aura target (clientside?)
+    &AuraEffect::HandleAuraModIncreaseSpeed,                      // 171 - SPELL_AURA_MOD_SPEED_NOT_STACK
+    &AuraEffect::HandleAuraModIncreaseMountedSpeed,               // 172 - SPELL_AURA_MOD_MOUNTED_SPEED_NOT_STACK
+    &AuraEffect::HandleNULL,                                      // 173 - unused (3.2.0) no spells, old SPELL_AURA_ALLOW_CHAMPION_SPELLS  only for Proclaim Champion spell
+    &AuraEffect::HandleModSpellDamagePercentFromStat,             // 174 - SPELL_AURA_MOD_SPELL_DAMAGE_OF_STAT_PERCENT  implemented in Unit::SpellBaseDamageBonus
+    &AuraEffect::HandleModSpellHealingPercentFromStat,            // 175 - SPELL_AURA_MOD_SPELL_HEALING_OF_STAT_PERCENT implemented in Unit::SpellBaseHealingBonus
+    &AuraEffect::HandleSpiritOfRedemption,                        // 176 - SPELL_AURA_SPIRIT_OF_REDEMPTION   only for Spirit of Redemption spell, die at aura end
+    &AuraEffect::HandleCharmConvert,                              // 177 - SPELL_AURA_AOE_CHARM
+    &AuraEffect::HandleNoImmediateEffect,                         // 178 - SPELL_AURA_MOD_DEBUFF_RESISTANCE          implemented in Unit::MagicSpellHitResult
+    &AuraEffect::HandleNoImmediateEffect,                         // 179 - SPELL_AURA_MOD_ATTACKER_SPELL_CRIT_CHANCE implemented in Unit::SpellCriticalBonus
+    &AuraEffect::HandleNoImmediateEffect,                         // 180 - SPELL_AURA_MOD_FLAT_SPELL_DAMAGE_VERSUS   implemented in Unit::SpellDamageBonus
+    &AuraEffect::HandleNULL,                                      // 181 - unused (3.2.0) old SPELL_AURA_MOD_FLAT_SPELL_CRIT_DAMAGE_VERSUS
+    &AuraEffect::HandleAuraModResistenceOfStatPercent,            // 182 - SPELL_AURA_MOD_RESISTANCE_OF_STAT_PERCENT
+    &AuraEffect::HandleNULL,                                      // 183 - SPELL_AURA_MOD_CRITICAL_THREAT only used in 28746 - miscvalue - spell school
+    &AuraEffect::HandleNoImmediateEffect,                         // 184 - SPELL_AURA_MOD_ATTACKER_MELEE_HIT_CHANCE  implemented in Unit::RollMeleeOutcomeAgainst
+    &AuraEffect::HandleNoImmediateEffect,                         // 185 - SPELL_AURA_MOD_ATTACKER_RANGED_HIT_CHANCE implemented in Unit::RollMeleeOutcomeAgainst
+    &AuraEffect::HandleNoImmediateEffect,                         // 186 - SPELL_AURA_MOD_ATTACKER_SPELL_HIT_CHANCE  implemented in Unit::MagicSpellHitResult
+    &AuraEffect::HandleNoImmediateEffect,                         // 187 - SPELL_AURA_MOD_ATTACKER_MELEE_CRIT_CHANCE  implemented in Unit::GetUnitCriticalChance
+    &AuraEffect::HandleNoImmediateEffect,                         // 188 - SPELL_AURA_MOD_ATTACKER_RANGED_CRIT_CHANCE implemented in Unit::GetUnitCriticalChance
+    &AuraEffect::HandleModRating,                                 // 189 - SPELL_AURA_MOD_RATING
+    &AuraEffect::HandleNoImmediateEffect,                         // 190 - SPELL_AURA_MOD_FACTION_REPUTATION_GAIN     implemented in Player::CalculateReputationGain
+    &AuraEffect::HandleAuraModUseNormalSpeed,                     // 191 - SPELL_AURA_USE_NORMAL_MOVEMENT_SPEED
+    &AuraEffect::HandleModMeleeRangedSpeedPct,                    // 192 - SPELL_AURA_MOD_MELEE_RANGED_HASTE
+    &AuraEffect::HandleModCombatSpeedPct,                         // 193 - SPELL_AURA_MELEE_SLOW (in fact combat (any type attack) speed pct)
+    &AuraEffect::HandleNoImmediateEffect,                         // 194 - SPELL_AURA_MOD_TARGET_ABSORB_SCHOOL implemented in Unit::CalcAbsorbResist
+    &AuraEffect::HandleNoImmediateEffect,                         // 195 - SPELL_AURA_MOD_TARGET_ABILITY_ABSORB_SCHOOL implemented in Unit::CalcAbsorbResist
+    &AuraEffect::HandleNULL,                                      // 196 - SPELL_AURA_MOD_COOLDOWN - flat mod of spell cooldowns
+    &AuraEffect::HandleNoImmediateEffect,                         // 197 - SPELL_AURA_MOD_ATTACKER_SPELL_AND_WEAPON_CRIT_CHANCE implemented in Unit::SpellCriticalBonus Unit::GetUnitCriticalChance
+    &AuraEffect::HandleNULL,                                      // 198 - unused (3.2.0) old SPELL_AURA_MOD_ALL_WEAPON_SKILLS
+    &AuraEffect::HandleNoImmediateEffect,                         // 199 - SPELL_AURA_MOD_INCREASES_SPELL_PCT_TO_HIT  implemented in Unit::MagicSpellHitResult
+    &AuraEffect::HandleNoImmediateEffect,                         // 200 - SPELL_AURA_MOD_XP_PCT implemented in Player::RewardPlayerAndGroupAtKill
+    &AuraEffect::HandleAuraAllowFlight,                           // 201 - SPELL_AURA_FLY                             this aura enable flight mode...
+    &AuraEffect::HandleNoImmediateEffect,                         // 202 - SPELL_AURA_CANNOT_BE_DODGED                implemented in Unit::RollPhysicalOutcomeAgainst
+    &AuraEffect::HandleNoImmediateEffect,                         // 203 - SPELL_AURA_MOD_ATTACKER_MELEE_CRIT_DAMAGE  implemented in Unit::CalculateMeleeDamage and Unit::CalculateSpellDamage
+    &AuraEffect::HandleNoImmediateEffect,                         // 204 - SPELL_AURA_MOD_ATTACKER_RANGED_CRIT_DAMAGE implemented in Unit::CalculateMeleeDamage and Unit::CalculateSpellDamage
+    &AuraEffect::HandleNULL,                                      // 205 - SPELL_AURA_MOD_SCHOOL_CRIT_DMG_TAKEN
+    &AuraEffect::HandleAuraModIncreaseFlightSpeed,                // 206 - SPELL_AURA_MOD_INCREASE_VEHICLE_FLIGHT_SPEED
+    &AuraEffect::HandleAuraModIncreaseFlightSpeed,                // 207 - SPELL_AURA_MOD_INCREASE_MOUNTED_FLIGHT_SPEED
+    &AuraEffect::HandleAuraModIncreaseFlightSpeed,                // 208 - SPELL_AURA_MOD_INCREASE_FLIGHT_SPEED
+    &AuraEffect::HandleAuraModIncreaseFlightSpeed,                // 209 - SPELL_AURA_MOD_MOUNTED_FLIGHT_SPEED_ALWAYS
+    &AuraEffect::HandleAuraModIncreaseFlightSpeed,                // 210 - SPELL_AURA_MOD_VEHICLE_SPEED_ALWAYS
+    &AuraEffect::HandleAuraModIncreaseFlightSpeed,                // 211 - SPELL_AURA_MOD_FLIGHT_SPEED_NOT_STACK
+    &AuraEffect::HandleAuraModRangedAttackPowerOfStatPercent,     // 212 - SPELL_AURA_MOD_RANGED_ATTACK_POWER_OF_STAT_PERCENT
+    &AuraEffect::HandleNoImmediateEffect,                         // 213 - SPELL_AURA_MOD_RAGE_FROM_DAMAGE_DEALT implemented in Player::RewardRage
+    &AuraEffect::HandleNULL,                                      // 214 - Tamed Pet Passive
+    &AuraEffect::HandleArenaPreparation,                          // 215 - SPELL_AURA_ARENA_PREPARATION
+    &AuraEffect::HandleModCastingSpeed,                           // 216 - SPELL_AURA_HASTE_SPELLS
+    &AuraEffect::HandleNULL,                                      // 217 - 69106 - killing spree helper - unknown use
+    &AuraEffect::HandleAuraModRangedHaste,                        // 218 - SPELL_AURA_HASTE_RANGED
+    &AuraEffect::HandleModManaRegen,                              // 219 - SPELL_AURA_MOD_MANA_REGEN_FROM_STAT
     &AuraEffect::HandleModRatingFromStat,                         // 220 - SPELL_AURA_MOD_RATING_FROM_STAT
     &AuraEffect::HandleNULL,                                      // 221 - SPELL_AURA_MOD_DETAUNT
     &AuraEffect::HandleUnused,                                    // 222 - unused (3.2.0) only for spell 44586 that not used in real spell cast
@@ -363,7 +363,7 @@ pAuraEffectHandler AuraEffectHandler[TOTAL_AURAS]=
     &AuraEffect::HandleAuraModIncreaseSpeed,                      // 305 - SPELL_AURA_MOD_MINIMUM_SPEED
     &AuraEffect::HandleNULL,                                      // 306 - 0 spells in 3.3.5
     &AuraEffect::HandleNULL,                                      // 307 - 0 spells in 3.3.5
-    &AuraEffect::HandleNULL,                                      // 308 - This increases chance to receive/make a critical hit
+    &AuraEffect::HandleNULL,                                      // 308 - new aura for hunter traps
     &AuraEffect::HandleNULL,                                      // 309 - 0 spells in 3.3.5
     &AuraEffect::HandleNoImmediateEffect,                         // 310 - SPELL_AURA_MOD_CREATURE_AOE_DAMAGE_AVOIDANCE implemented in Spell::CalculateDamageDone
     &AuraEffect::HandleNULL,                                      // 311 - 0 spells in 3.3.5
