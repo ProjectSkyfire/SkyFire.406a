@@ -3091,7 +3091,7 @@ void Unit::InterruptNonMeleeSpells(bool withDelayed, uint32 spell_id, bool withI
 bool Unit::CanCastWhileWalking(uint32 spell_id)
 {
     SpellInfo const* spell = sSpellMgr->GetSpellInfo(spell_id);
-    
+
     if (!spell)
         return false;
 
@@ -3105,7 +3105,7 @@ bool Unit::CanCastWhileWalking(uint32 spell_id)
 
     if (!ret)
         return false;
-    
+
     AuraEffectList const& auraList = GetAuraEffectsByType(SPELL_AURA_CAST_WHILE_WALKING);
     for (Unit::AuraEffectList::const_iterator itr = auraList.begin(); itr != auraList.end(); ++itr)
     {
