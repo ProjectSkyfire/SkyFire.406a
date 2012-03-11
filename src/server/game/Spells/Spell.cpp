@@ -1442,6 +1442,13 @@ void Spell::SelectImplicitTargetDestTargets(SpellEffIndex effIndex, SpellImplici
 
 void Spell::SelectImplicitDestDestTargets(SpellEffIndex effIndex, SpellImplicitTargetInfo const& targetType)
 {
+    // set destination to caster if no dest provided
+    // can only happen if previous destination target could not be set for some reason
+    // (not found nearby target, or channel target for example
+    // maybe we should abort the spell in such case?
+    if (!m_targets.HasDst())
+        m_targets.SetDst(*m_caster);
+
     switch(targetType.GetTarget())
     {
         case TARGET_DEST_DYNOBJ_ENEMY:
@@ -1509,7 +1516,7 @@ void Spell::SelectImplicitCasterObjectTargets(SpellEffIndex effIndex, SpellImpli
 
 void Spell::SelectImplicitTargetObjectTargets(SpellEffIndex effIndex, SpellImplicitTargetInfo const& targetType)
 {
-    ASSERT(m_targets.GetObjectTarget() && "Spell::SelectImplicitTargetObjectTargets - no explicit object target available!");
+    ASSERT((m_targets.GetObjectTarget() || m_targets.GetItemTarget()) && "Spell::SelectImplicitTargetObjectTargets - no explicit object or item target available!");
     if (Unit* unit = m_targets.GetUnitTarget())
         AddUnitTarget(unit, 1 << effIndex);
     else if (GameObject* gobj = m_targets.GetGOTarget())
