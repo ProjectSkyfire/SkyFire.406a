@@ -276,7 +276,6 @@ public:
     flag96    SpellClassMask;
     std::list<Condition*>* ImplicitTargetConditions;
     uint32    TriggerSpell;
-    std::list<Condition*>* ImplicitTargetConditions;
 
     SpellEffectInfo();
     SpellEffectInfo(SpellEffectEntry const *spellEffect, SpellInfo const* spellInfo);
