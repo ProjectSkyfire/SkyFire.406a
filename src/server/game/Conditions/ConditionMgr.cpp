@@ -851,6 +851,26 @@ void ConditionMgr::LoadConditions(bool isReload)
                 case CONDITION_SOURCE_TYPE_GOSSIP_MENU_OPTION:
                     valid = addToGossipMenuItems(cond);
                     break;
+                case CONDITION_SOURCE_TYPE_SPELL_CLICK_EVENT:
+                {
+                    //if no list for npc create one
+                    if (SpellClickEventConditionStore.find(cond->SourceGroup) == SpellClickEventConditionStore.end())
+                    {
+                        ConditionTypeContainer cmap;
+                        SpellClickEventConditionStore[cond->SourceGroup] = cmap;
+                    }
+                    //if no list for spellclick spell create one
+                    if (SpellClickEventConditionStore[cond->SourceGroup].find(cond->SourceEntry) == SpellClickEventConditionStore[cond->SourceGroup].end())
+                    {
+                        ConditionList clist;
+                        SpellClickEventConditionStore[cond->SourceGroup][cond->SourceEntry] = clist;
+                    }
+                    SpellClickEventConditionStore[cond->SourceGroup][cond->SourceEntry].push_back(cond);
+                    valid = true;
+                    ++count;
+                    continue;   // do not add to m_AllocatedMemory to avoid double deleting
+                    break;
+                }
                 case CONDITION_SOURCE_TYPE_SPELL_IMPLICIT_TARGET:
                     valid = addToSpellImplicitTargetConditions(cond);
                     break;
@@ -1302,14 +1322,20 @@ bool ConditionMgr::isSourceTypeValid(Condition* cond)
                     case TARGET_SELECT_CATEGORY_CONE:
                     case TARGET_SELECT_CATEGORY_AREA:
                         continue;
+                    default:
+                        break;
                 }
+                
                 switch (spellInfo->Effects[i].TargetB.GetSelectionCategory())
                 {
                     case TARGET_SELECT_CATEGORY_NEARBY:
                     case TARGET_SELECT_CATEGORY_CONE:
                     case TARGET_SELECT_CATEGORY_AREA:
                         continue;
+                    default:
+                        break;
                 }
+
                 sLog->outErrorDb("SourceEntry %u SourceGroup %u in `condition` table - spell %u does not have implicit targets of types: _AREA_, _CONE_, _NEARBY_ for effect %u, SourceGroup needs correction, ignoring.", cond->SourceEntry, origGroup, cond->SourceEntry, uint32(i));
                 cond->SourceGroup &= ~(1<<i);
             }
