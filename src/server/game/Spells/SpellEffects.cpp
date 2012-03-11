@@ -1263,7 +1263,7 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                             {
                                 std::list<Unit*> unitList;
                                 // use 99 because it is 3d search
-                                SearchAreaTarget(unitList, 99, PUSH_DST_CENTER, SPELL_TARGETS_ENTRY, 33114);
+                                //SearchAreaTarget(unitList, 99, PUSH_DST_CENTER, SPELL_TARGETS_ENTRY, 33114);
                                 float minDist = 99 * 99;
                                 Unit* target = NULL;
                                 for (std::list<Unit*>::iterator itr = unitList.begin(); itr != unitList.end(); ++itr)
