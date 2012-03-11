@@ -277,7 +277,7 @@ void GuildAchievementMgr::CompletedAchievement(AchievementEntry const* achieveme
 
     m_achievementPoints += achievement->points;
 
-    UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_COMPLETE_ACHIEVEMENT, player);
+    UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_COMPLETE_ACHIEVEMENT, _player);
 }
 
 void GuildAchievementMgr::SendAllAchievementData()
