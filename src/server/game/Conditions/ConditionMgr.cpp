@@ -1108,16 +1108,16 @@ bool ConditionMgr::isSourceTypeValid(Condition* cond)
             bool bIsItemSpellValid = false;
             for (uint8 i = 0; i < MAX_ITEM_PROTO_SPELLS; ++i)
             {
-                if (SpellInfo const* pSpellInfo = sSpellMgr->GetSpellInfo(pItemProto->Spells[i].SpellId))
+                if (SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(pItemProto->Spells[i].SpellId))
                 {
                     if (pItemProto->Spells[i].SpellTrigger == ITEM_SPELLTRIGGER_ON_USE ||
                         pItemProto->Spells[i].SpellTrigger == ITEM_SPELLTRIGGER_ON_NO_DELAY_USE)
                     {
-                        ConditionList conditions = sConditionMgr->GetConditionsForNotGroupedEntry(CONDITION_SOURCE_TYPE_SPELL_SCRIPT_TARGET, pSpellInfo->Id);//script loading is done before item target loading
+                        ConditionList conditions = sConditionMgr->GetConditionsForNotGroupedEntry(CONDITION_SOURCE_TYPE_SPELL_SCRIPT_TARGET, spellInfo->Id);//script loading is done before item target loading
                         if (!conditions.empty())
                             break;
 
-                        if (pSpellInfo->NeedsExplicitUnitTarget())
+                        if (spellInfo->NeedsExplicitUnitTarget())
                         {
                             bIsItemSpellValid = true;
                             break;
