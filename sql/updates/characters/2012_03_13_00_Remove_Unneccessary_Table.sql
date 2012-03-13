@@ -1,5 +1,6 @@
 -- Un-needed table cleanup
 DROP TABLE IF EXISTS `waypoint_scripts`; -- This is a world db table... not needed in characters
+DROP TABLE IF EXISTS `creature_loot_template`; -- Another world db table I missed (thx Tonio)
 
 -- Now we set character version correctly
 --
@@ -15,6 +16,5 @@ CREATE TABLE `character_version` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=FIXED COMMENT='Version Notes';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
--- Now we set current version
 REPLACE INTO character_version VALUES
-('2012_03_11 - fad059fdde','2012_03_12_00');
+('2012_03_11 - fad059fdde','2012_03_13_00');
