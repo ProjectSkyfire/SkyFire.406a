@@ -1918,7 +1918,6 @@ void ObjectMgr::LoadGameobjectRespawnTimes()
     // Remove outdated data
     CharacterDatabase.DirectExecute(CharacterDatabase.GetPreparedStatement(CHAR_DEL_EXPIRED_GO_RESPAWNS));
 
-    _itemTemplateStore.rehash(result->GetRowCount());
     uint32 count = 0;
 
     PreparedQueryResult result = CharacterDatabase.Query(CharacterDatabase.GetPreparedStatement(CHAR_LOAD_GO_RESPAWNS));
