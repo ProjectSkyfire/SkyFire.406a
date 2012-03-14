@@ -2956,9 +2956,9 @@ void AuraEffect::HandleAuraAllowFlight(AuraApplication const* aurApp, uint8 mode
 
 void AuraEffect::HandleModCanCastWhileWalking(AuraApplication const* aurApp, uint8 mode, bool apply) const
 {
-    uint32 spellId = 0;
+    uint32 spellId = 0;  // still thinking about making a switch for spell_id's, this aura crosses multiple spells
     Unit* target = aurApp->GetTarget();
-    //Unit* caster = GetCaster();
+    // Unit* caster = GetCaster();
 
     if (!(mode & AURA_EFFECT_HANDLE_REAL))
         return;
