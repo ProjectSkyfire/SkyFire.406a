@@ -15514,7 +15514,7 @@ void Unit::Kill(Unit* victim, bool durabilityLoss)
     // Inform pets (if any) when player kills target)
     // MUST come after victim->setDeathState(JUST_DIED); or pet next target
     // selection will get stuck on same target and break pet react state
-    if (Player* player = ToPlayer())
+    if (player)
     {
         Pet* pet = player->GetPet();
         if (pet && pet->isAlive() && pet->isControlled())
@@ -17205,7 +17205,7 @@ void Unit::ExitVehicle(Position const* exitPosition)
         return;
 
     GetVehicleBase()->RemoveAurasByType(SPELL_AURA_CONTROL_VEHICLE, GetGUID());
-    //! The following call would not even be executed successfully as the 
+    //! The following call would not even be executed successfully as the
     //! SPELL_AURA_CONTROL_VEHICLE unapply handler already calls _ExitVehicle without
     //! specifying an exitposition. The subsequent call below would return on if (!m_vehicle).
     /*_ExitVehicle(exitPosition);*/
@@ -17708,12 +17708,30 @@ void Unit::SetFacingToObject(WorldObject* pObject)
     SetFacingTo(GetAngle(pObject));
 }
 
-void Unit::SetWalk(bool enable)
+bool Unit::SetWalk(bool enable)
 {
+    if (enable == IsWalking())
+        return false;
+
     if (enable)
         AddUnitMovementFlag(MOVEMENTFLAG_WALKING);
     else
         RemoveUnitMovementFlag(MOVEMENTFLAG_WALKING);
+
+    return true;
+}
+
+bool Unit::SetLevitate(bool enable)
+{
+    if (enable == IsLevitating())
+        return false;
+
+    if (enable)
+        AddUnitMovementFlag(MOVEMENTFLAG_WALKING);
+    else
+        RemoveUnitMovementFlag(MOVEMENTFLAG_WALKING);
+
+    return true;
 }
 
 bool Unit::IsAffectedBySpellmod(SpellInfo const *spellInfo, SpellModifier *mod, Spell* spell)
