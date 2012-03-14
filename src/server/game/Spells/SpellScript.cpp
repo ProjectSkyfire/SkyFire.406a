@@ -795,6 +795,8 @@ void AuraScript::PreventDefaultAction()
     {
         case AURA_SCRIPT_HOOK_EFFECT_APPLY:
         case AURA_SCRIPT_HOOK_EFFECT_REMOVE:
+        case AURA_SCRIPT_HOOK_EFFECT_AFTER_APPLY:
+        case AURA_SCRIPT_HOOK_EFFECT_AFTER_REMOVE:
         case AURA_SCRIPT_HOOK_EFFECT_PERIODIC:
         case AURA_SCRIPT_HOOK_EFFECT_PROC:
             m_defaultActionPrevented = true;
