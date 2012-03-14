@@ -273,7 +273,7 @@ public:
 
         void JustSummoned(Creature* summoned)
         {
-            summoned->RemoveUnitMovementFlag(MOVEMENTFLAG_WALKING);
+            summoned->SetWalk(false);
             summoned->GetMotionMaster()->MovePoint(0, _afAmbushMoveTo[_iSpawnId]._fX, _afAmbushMoveTo[_iSpawnId]._fY, _afAmbushMoveTo[_iSpawnId]._fZ);
         }
 

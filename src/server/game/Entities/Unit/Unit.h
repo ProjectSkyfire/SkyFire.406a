@@ -1658,6 +1658,7 @@ class Unit : public WorldObject
         void SendMovementFlagUpdate();
         bool IsLevitating() const { return _movementInfo.HasMovementFlag(MOVEMENTFLAG_LEVITATING);}
         bool IsWalking() const { return _movementInfo.HasMovementFlag(MOVEMENTFLAG_WALKING);}
+        virtual void SetWalk(bool enable);
 
         void SetInFront(Unit const* target);
         void SetFacingTo(float ori);

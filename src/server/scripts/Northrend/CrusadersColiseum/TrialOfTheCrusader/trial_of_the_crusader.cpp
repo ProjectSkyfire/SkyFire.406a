@@ -254,7 +254,7 @@ class boss_lich_king_toc : public CreatureScript
                     summoned->SetDisplayId(11686);
                 }
                 if (m_pInstance) m_pInstance->SetData(TYPE_LICH_KING, IN_PROGRESS);
-                me->AddUnitMovementFlag(MOVEMENTFLAG_WALKING);
+                me->SetWalk(true);
             }
 
             void MovementInform(uint32 uiType, uint32 uiId)
@@ -377,7 +377,7 @@ class npc_fizzlebang_toc : public CreatureScript
 
             void Reset()
             {
-                me->AddUnitMovementFlag(MOVEMENTFLAG_WALKING);
+                me->SetWalk(true);
                 m_uiPortalGUID = 0;
                 me->GetMotionMaster()->MovePoint(1, ToCCommonLoc[10].GetPositionX(), ToCCommonLoc[10].GetPositionY()-60, ToCCommonLoc[10].GetPositionZ());
             }
@@ -389,7 +389,7 @@ class npc_fizzlebang_toc : public CreatureScript
                 switch (uiId)
                 {
                     case 1:
-                        me->RemoveUnitMovementFlag(MOVEMENTFLAG_WALKING);
+                        me->SetWalk(false);
                         if (m_pInstance)
                         {
                             m_pInstance->DoUseDoorOrButton(m_pInstance->GetData64(GO_MAIN_GATE_DOOR));
