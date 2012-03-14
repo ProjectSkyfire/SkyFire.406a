@@ -61,7 +61,7 @@ public:
         return true;
     }
 
-    bool OnGossipSelect(Player* player, Creature* /*pCreature*/, uint32 /*uiSender*/, uint32 action)
+    bool OnGossipSelect(Player* player, Creature* /*creature*/, uint32 /*sender*/, uint32 action)
     {
         player->CLOSE_GOSSIP_MENU();
 
@@ -118,7 +118,7 @@ class npc_tol_barad_battlemage : public CreatureScript
         return true;
     }
 
-    bool OnGossipSelect(Player* player, Creature* /*pCreature*/, uint32 /*uiSender*/, uint32 /*uiAction*/)
+    bool OnGossipSelect(Player* player, Creature* /*creature*/, uint32 /*sender*/, uint32 /*action*/)
     {
         player->CLOSE_GOSSIP_MENU();
 

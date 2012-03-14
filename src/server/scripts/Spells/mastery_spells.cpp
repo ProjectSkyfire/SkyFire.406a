@@ -56,7 +56,7 @@ public:
     class spell_war_strikes_of_opportunity_AuraScript : public MasteryScript
     {
     public:
-        void OnProc(AuraEffect const* aurEff, Unit* pUnit, Unit* pVictim, uint32 damage, SpellInfo const* procSpell, uint32 procFlag, uint32 procExtra, WeaponAttackType attType, int32 cooldown)
+        void OnProc(AuraEffect const* aurEff, Unit* pUnit, Unit* victim, uint32 damage, SpellInfo const* procSpell, uint32 procFlag, uint32 procExtra, WeaponAttackType attType, int32 cooldown)
         {
             PreventDefaultAction();
             if (attType != BASE_ATTACK && attType != OFF_ATTACK)
@@ -65,7 +65,7 @@ public:
             //sLog->outBasic("Strikes of Opportunity : attType %u, damage %u, procSpell %u, chance %d", attType, damage, procSpellId, aurEff->GetAmount());
             if ((procSpellId != 76858) && roll_chance_i(aurEff->GetAmount()))
             {
-                pUnit->CastSpell(pVictim, 76858, true); // Opportunity Strike on melee attack
+                pUnit->CastSpell(victim, 76858, true); // Opportunity Strike on melee attack
                 if (cooldown && pUnit->GetTypeId() == TYPEID_PLAYER)
                     pUnit->ToPlayer()->AddSpellCooldown(76858, 0, time(NULL) + cooldown);
             }
