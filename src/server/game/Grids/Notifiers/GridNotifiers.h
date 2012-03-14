@@ -531,7 +531,7 @@ namespace Trinity
     class RaiseDeadObjectCheck
     {
         public:
-            RaiseDeadObjectCheck(Unit* source, float range) : _source(source), i_range(range) {}
+            RaiseDeadObjectCheck(Unit* source, float range) : _source(source), _range(range) {}
             bool operator()(Creature* u)
             {
                 if (_source->GetTypeId() != TYPEID_PLAYER || !((Player*)_source)->isHonorOrXPTarget(u) ||
@@ -540,7 +540,7 @@ namespace Trinity
                     (u->GetDisplayId() != u->GetNativeDisplayId()))
                     return false;
 
-                return _source->IsWithinDistInMap(u, i_range);
+                return _source->IsWithinDistInMap(u, _range);
             }
 
             bool operator()(Player* u)
@@ -550,7 +550,7 @@ namespace Trinity
                     (u->GetCreatureTypeMask() & (1 << (CREATURE_TYPE_HUMANOID-1))) == 0)
                     return false;
 
-                return _source->IsWithinDistInMap(u, i_range);
+                return _source->IsWithinDistInMap(u, _range);
             }
 
             bool operator()(Corpse* u)
@@ -558,12 +558,12 @@ namespace Trinity
                 if (_source->GetTypeId() != TYPEID_PLAYER || u->GetType() == CORPSE_BONES)
                     return false;
 
-                return _source->IsWithinDistInMap(u, i_range);
+                return _source->IsWithinDistInMap(u, _range);
             }
             template<class NOT_INTERESTED> bool operator()(NOT_INTERESTED*) { return false; }
         private:
             Unit* const _source;
-            float i_range;
+            float _range;
     };
 
     class ExplodeCorpseObjectCheck

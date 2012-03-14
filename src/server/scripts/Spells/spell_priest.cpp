@@ -3,7 +3,7 @@
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 3 of the License, or (at your
+ * Free Software Foundation; either version 2 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -21,7 +21,8 @@
  * Scriptnames of files in this file should be prefixed with "spell_pri_".
  */
 
-#include "ScriptPCH.h"
+#include "ScriptMgr.h"
+#include "SpellScript.h"
 #include "SpellAuraEffects.h"
 #include "GridNotifiers.h"
 
@@ -51,7 +52,9 @@ class spell_pri_guardian_spirit : public SpellScriptLoader
 
             bool Validate(SpellInfo const* /*spellEntry*/)
             {
-                return sSpellMgr->GetSpellInfo(PRIEST_SPELL_GUARDIAN_SPIRIT_HEAL) != NULL;
+                if (!sSpellMgr->GetSpellInfo(PRIEST_SPELL_GUARDIAN_SPIRIT_HEAL))
+                    return false;
+                return true;
             }
 
             bool Load()
@@ -103,11 +106,8 @@ class spell_pri_mana_burn : public SpellScriptLoader
 
             void HandleAfterHit()
             {
-                Unit* unitTarget = GetHitUnit();
-                if (!unitTarget)
-                    return;
-
-                unitTarget->RemoveAurasWithMechanic((1 << MECHANIC_FEAR) | (1 << MECHANIC_POLYMORPH));
+                if (Unit* unitTarget = GetHitUnit())
+                    unitTarget->RemoveAurasWithMechanic((1 << MECHANIC_FEAR) | (1 << MECHANIC_POLYMORPH));
             }
 
             void Register()
@@ -206,18 +206,19 @@ class spell_pri_penance : public SpellScriptLoader
 
             void HandleDummy(SpellEffIndex /*effIndex*/)
             {
-                Unit* unitTarget = GetHitUnit();
-                if (!unitTarget || !unitTarget->isAlive())
-                    return;
-
                 Unit* caster = GetCaster();
+                if (Unit* unitTarget = GetHitUnit())
+                {
+                    if(!unitTarget->isAlive())
+                        return;
 
-                uint8 rank = sSpellMgr->GetSpellRank(GetSpellInfo()->Id);
+                    uint8 rank = sSpellMgr->GetSpellRank(GetSpellInfo()->Id);
 
-                if (caster->IsFriendlyTo(unitTarget))
-                    caster->CastSpell(unitTarget, sSpellMgr->GetSpellWithRank(PRIEST_SPELL_PENANCE_R1_HEAL, rank), false, 0);
-                else
-                    caster->CastSpell(unitTarget, sSpellMgr->GetSpellWithRank(PRIEST_SPELL_PENANCE_R1_DAMAGE, rank), false, 0);
+                    if (caster->IsFriendlyTo(unitTarget))
+                        caster->CastSpell(unitTarget, sSpellMgr->GetSpellWithRank(PRIEST_SPELL_PENANCE_R1_HEAL, rank), false, 0);
+                    else
+                        caster->CastSpell(unitTarget, sSpellMgr->GetSpellWithRank(PRIEST_SPELL_PENANCE_R1_DAMAGE, rank), false, 0);
+                }
             }
 
             void Register()
@@ -245,7 +246,9 @@ class spell_pri_reflective_shield_trigger : public SpellScriptLoader
 
             bool Validate(SpellInfo const* /*spellEntry*/)
             {
-                return sSpellMgr->GetSpellInfo(PRIEST_SPELL_REFLECTIVE_SHIELD_TRIGGERED) && sSpellMgr->GetSpellInfo(PRIEST_SPELL_REFLECTIVE_SHIELD_R1);
+                if (!sSpellMgr->GetSpellInfo(PRIEST_SPELL_REFLECTIVE_SHIELD_TRIGGERED) || !sSpellMgr->GetSpellInfo(PRIEST_SPELL_REFLECTIVE_SHIELD_R1))
+                    return false;
+                return true;
             }
 
             void Trigger(AuraEffect* aurEff, DamageInfo & dmgInfo, uint32 & absorbAmount)
@@ -253,14 +256,13 @@ class spell_pri_reflective_shield_trigger : public SpellScriptLoader
                 Unit* target = GetTarget();
                 if (dmgInfo.GetAttacker() == target)
                     return;
-                Unit* caster = GetCaster();
-                if (!caster)
-                    return;
-                if (AuraEffect* talentAurEff = target->GetAuraEffectOfRankedSpell(PRIEST_SPELL_REFLECTIVE_SHIELD_R1, EFFECT_0))
-                {
-                    int32 bp = CalculatePctN(absorbAmount, talentAurEff->GetAmount());
-                    target->CastCustomSpell(dmgInfo.GetAttacker(), PRIEST_SPELL_REFLECTIVE_SHIELD_TRIGGERED, &bp, NULL, NULL, true, NULL, aurEff);
-                }
+
+                if (GetCaster())
+                    if (AuraEffect* talentAurEff = target->GetAuraEffectOfRankedSpell(PRIEST_SPELL_REFLECTIVE_SHIELD_R1, EFFECT_0))
+                    {
+                        int32 bp = CalculatePctN(absorbAmount, talentAurEff->GetAmount());
+                        target->CastCustomSpell(dmgInfo.GetAttacker(), PRIEST_SPELL_REFLECTIVE_SHIELD_TRIGGERED, &bp, NULL, NULL, true, NULL, aurEff);
+                    }
             }
 
             void Register()

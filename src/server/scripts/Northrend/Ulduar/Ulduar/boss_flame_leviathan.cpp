@@ -3,7 +3,7 @@
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 3 of the License, or (at your
+ * Free Software Foundation; either version 2 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -34,6 +34,7 @@
 #include "Vehicle.h"
 #include "VehicleDefines.h"
 #include "ulduar.h"
+#include "Spell.h"
 
 enum Spells
 {
@@ -755,7 +756,7 @@ class boss_flame_leviathan_safety_container : public CreatureScript
             {
                 float x, y, z;
                 me->GetPosition(x, y, z);
-                z = me->GetMap()->GetHeight(x, y, z);
+                z = me->GetMap()->GetHeight(me->GetPhaseMask(), x, y, z);
                 me->GetMotionMaster()->MovePoint(0, x, y, z);
                 me->SetPosition(x, y, z, 0);
             }
@@ -1149,7 +1150,7 @@ class npc_lorekeeper : public CreatureScript
             }
         };
 
-        bool OnGossipSelect(Player* player, Creature* creature, uint32 /*Sender*/, uint32 action)
+        bool OnGossipSelect(Player* player, Creature* creature, uint32 /*uiSender*/, uint32 action)
         {
             player->PlayerTalkClass->ClearMenus();
             InstanceScript* instance = creature->GetInstanceScript();
@@ -1222,10 +1223,10 @@ class npc_brann_bronzebeard : public CreatureScript
 public:
     npc_brann_bronzebeard() : CreatureScript("npc_brann_bronzebeard") { }
 
-    //bool OnGossipSelect(Player* player, Creature* creature, uint32 Sender, uint32 action)
+    //bool OnGossipSelect(Player* player, Creature* creature, uint32 uiSender, uint32 uiAction)
     //{
     //    player->PlayerTalkClass->ClearMenus();
-    //    switch (action)
+    //    switch(uiAction)
     //    {
     //        case GOSSIP_ACTION_INFO_DEF+1:
     //            if (player)
@@ -1266,7 +1267,7 @@ class go_ulduar_tower : public GameObjectScript
     public:
         go_ulduar_tower() : GameObjectScript("go_ulduar_tower") { }
 
-        void OnDestroyed(GameObject* go, Player* /*player*/, uint32 /*value*/)
+        void OnDestroyed(GameObject* go, Player* /*player*/,  uint32 /*value*/)
         {
             InstanceScript* instance = go->GetInstanceScript();
             if (!instance)
@@ -1647,74 +1648,135 @@ class FlameLeviathanPursuedTargetSelector
 
 class spell_pursue : public SpellScriptLoader
 {
-public:
-    spell_pursue() : SpellScriptLoader("spell_pursue") {}
+    public:
+        spell_pursue() : SpellScriptLoader("spell_pursue") {}
 
-    class spell_pursue_SpellScript : public SpellScript
-    {
-        PrepareSpellScript(spell_pursue_SpellScript);
-
-        bool Load()
+        class spell_pursue_SpellScript : public SpellScript
         {
-            _target = NULL;
-            return true;
-        }
+            PrepareSpellScript(spell_pursue_SpellScript);
 
-        void FilterTargets(std::list<Unit*>& targets)
-        {
-            targets.remove_if(FlameLeviathanPursuedTargetSelector(GetCaster()));
-            if (targets.empty())
+            bool Load()
             {
-                if (Creature* caster = GetCaster()->ToCreature())
-                    caster->AI()->EnterEvadeMode();
+                _target = NULL;
+                return true;
             }
-            else
+
+            void FilterTargets(std::list<Unit*>& targets)
             {
-                //! In the end, only one target should be selected
-                _target = SelectRandomContainerElement(targets);
-                FilterTargetsSubsequently(targets);
-            }
-        }
-
-        void FilterTargetsSubsequently(std::list<Unit*>& targets)
-        {
-            targets.clear();
-                if (_target)
-                    targets.push_back(_target);
-        }
-
-        void HandleScript(SpellEffIndex /*eff*/)
-        {
-            Creature* caster = GetCaster()->ToCreature();
-            if (!caster)
-                return;
-
-            caster->AI()->AttackStart(GetHitUnit());    // Chase target
-
-            for (SeatMap::const_iterator itr = caster->GetVehicleKit()->Seats.begin(); itr != caster->GetVehicleKit()->Seats.end(); ++itr)
-            {
-                if (IS_PLAYER_GUID(itr->second.Passenger))
+                targets.remove_if(FlameLeviathanPursuedTargetSelector(GetCaster()));
+                if (targets.empty())
                 {
-                    caster->MonsterTextEmote(EMOTE_PURSUE, itr->second.Passenger, true);
-                    return;
+                    if (Creature* caster = GetCaster()->ToCreature())
+                        caster->AI()->EnterEvadeMode();
+                }
+                else
+                {
+                    //! In the end, only one target should be selected
+                    _target = SelectRandomContainerElement(targets);
+                    FilterTargetsSubsequently(targets);
                 }
             }
-        }
 
-        void Register()
+            void FilterTargetsSubsequently(std::list<Unit*>& targets)
+            {
+                targets.clear();
+                if(_target)
+                    targets.push_back(_target);
+            }
+
+            void HandleScript(SpellEffIndex /*eff*/)
+            {
+                Creature* caster = GetCaster()->ToCreature();
+                if (!caster)
+                    return;
+
+                caster->AI()->AttackStart(GetHitUnit());    // Chase target
+
+                for (SeatMap::const_iterator itr = caster->GetVehicleKit()->Seats.begin(); itr != caster->GetVehicleKit()->Seats.end(); ++itr)
+                {
+                    if (IS_PLAYER_GUID(itr->second.Passenger))
+                    {
+                        caster->MonsterTextEmote(EMOTE_PURSUE, itr->second.Passenger, true);
+                        return;
+                    }
+                }
+            }
+
+            void Register()
+            {
+                OnUnitTargetSelect += SpellUnitTargetFn(spell_pursue_SpellScript::FilterTargets, EFFECT_0, TARGET_UNIT_SRC_AREA_ENEMY);
+                OnUnitTargetSelect += SpellUnitTargetFn(spell_pursue_SpellScript::FilterTargetsSubsequently, EFFECT_1, TARGET_UNIT_SRC_AREA_ENEMY);
+                OnEffectHitTarget += SpellEffectFn(spell_pursue_SpellScript::HandleScript, EFFECT_0, SPELL_EFFECT_APPLY_AURA);
+            }
+
+            Unit* _target;
+        };
+
+        SpellScript* GetSpellScript() const
         {
-            OnUnitTargetSelect += SpellUnitTargetFn(spell_pursue_SpellScript::FilterTargets, EFFECT_0, TARGET_UNIT_SRC_AREA_ENEMY);
-            OnUnitTargetSelect += SpellUnitTargetFn(spell_pursue_SpellScript::FilterTargetsSubsequently, EFFECT_1, TARGET_UNIT_SRC_AREA_ENEMY);
-            OnEffectHitTarget += SpellEffectFn(spell_pursue_SpellScript::HandleScript, EFFECT_0, SPELL_EFFECT_APPLY_AURA);
+            return new spell_pursue_SpellScript();
         }
+};
 
-        Unit* _target;
-    };
+class spell_vehicle_throw_passenger : public SpellScriptLoader
+{
+    public:
+        spell_vehicle_throw_passenger() : SpellScriptLoader("spell_vehicle_throw_passenger") {}
 
-    SpellScript* GetSpellScript() const
-    {
-        return new spell_pursue_SpellScript();
-    }
+        class spell_vehicle_throw_passenger_SpellScript : public SpellScript
+        {
+            PrepareSpellScript(spell_vehicle_throw_passenger_SpellScript);
+            void HandleScript(SpellEffIndex effIndex)
+            {
+                Spell* baseSpell = GetSpell();
+                SpellCastTargets targets = baseSpell->m_targets;
+                int32 damage = GetEffectValue();
+                if (targets.HasTraj())
+                    if (Vehicle* vehicle = GetCaster()->GetVehicleKit())
+                        if (Unit* passenger = vehicle->GetPassenger(damage - 1))
+                        {
+                            std::list<Unit*> unitList;
+                            // use 99 because it is 3d search
+                            SearchAreaTarget(unitList, 99, PUSH_DST_CENTER, SPELL_TARGETS_ENTRY, NPC_SEAT);
+                            float minDist = 99 * 99;
+                            Unit* target = NULL;
+                            for (std::list<Unit*>::iterator itr = unitList.begin(); itr != unitList.end(); ++itr)
+                            {
+                                if (Vehicle* seat = (*itr)->GetVehicleKit())
+                                    if (!seat->GetPassenger(0))
+                                        if (Unit* device = seat->GetPassenger(2))
+                                            if (!device->GetCurrentSpell(CURRENT_CHANNELED_SPELL))
+                                            {
+                                                float dist = (*itr)->GetExactDistSq(targets.GetDst());
+                                                if (dist < minDist)
+                                                {
+                                                    minDist = dist;
+                                                    target = (*itr);
+                                                }
+                                            }
+                            }
+                            if (target && target->IsWithinDist2d(targets.GetDst(), GetSpellInfo()->Effects[effIndex].CalcRadius() * 2)) // now we use *2 because the location of the seat is not correct
+                                passenger->EnterVehicle(target, 0);
+                            else
+                            {
+                                passenger->ExitVehicle();
+                                float x, y, z;
+                                targets.GetDst()->GetPosition(x, y, z);
+                                passenger->GetMotionMaster()->MoveJump(x, y, z, targets.GetSpeedXY(), targets.GetSpeedZ());
+                            }
+                        }
+            }
+
+            void Register()
+            {
+                OnEffectHitTarget += SpellEffectFn(spell_vehicle_throw_passenger_SpellScript::HandleScript, EFFECT_0, SPELL_EFFECT_DUMMY);
+            }
+        };
+
+        SpellScript* GetSpellScript() const
+        {
+            return new spell_vehicle_throw_passenger_SpellScript();
+        }
 };
 
 void AddSC_boss_flame_leviathan()
@@ -1751,4 +1813,5 @@ void AddSC_boss_flame_leviathan()
     new spell_auto_repair();
     new spell_systems_shutdown();
     new spell_pursue();
+    new spell_vehicle_throw_passenger();
 }
