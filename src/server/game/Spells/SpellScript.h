@@ -324,6 +324,8 @@ class SpellScript : public _SpellScript
         Item* GetHitItem();
         // returns: target of current effect if it was GameObject otherwise NULL
         GameObject* GetHitGObj();
+        // returns: destination of current effect
+        WorldLocation const* GetHitDest();
         // setter/getter for for damage done by spell to target of spell hit
         // returns damage calculated before hit, and real dmg done after hit
         int32 GetHitDamage();
