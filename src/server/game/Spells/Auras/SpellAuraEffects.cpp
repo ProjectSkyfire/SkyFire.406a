@@ -6504,18 +6504,6 @@ void AuraEffect::HandlePeriodicTriggerSpellAuraTick(Unit* target, Unit* caster) 
                             target->CastSpell(target, spell_id, true, NULL, this);
                         return;
                     }
-                    // Frost Trap
-                    case 1499:
-                        triggerSpellId = 60192;
-                        break;
-                    // Explosive Trap
-                    case 13813:
-                        triggerSpellId = 82939;
-                        break;
-                    // Ice Trap
-                    case 13809:
-                        triggerSpellId = 82941;
-                        break;
                     // Remote Toy
                     case 37027:
                         triggerSpellId = 37029;
