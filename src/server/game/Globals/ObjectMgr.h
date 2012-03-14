@@ -389,6 +389,7 @@ struct SkyFireStringLocale
     StringVector Content;
 };
 
+
 typedef std::map<uint64, uint64> LinkedRespawnContainer;
 typedef UNORDERED_MAP<uint32, CreatureData> CreatureDataContainer;
 typedef UNORDERED_MAP<uint32, GameObjectData> GameObjectDataContainer;
