@@ -58,7 +58,6 @@ set(scripts_STAT_SRCS
   Outland/TempestKeep/Mechanar/boss_gatewatcher_gyrokill.cpp
   Outland/TempestKeep/Mechanar/instance_mechanar.cpp
   Outland/TempestKeep/Mechanar/boss_gatewatcher_ironhand.cpp
-  Outland/TempestKeep/Mechanar/boss_mechano_lord_capacitus.cpp
   
   Outland/TempestKeep/Eye/the_eye.h
   Outland/TempestKeep/Eye/instance_the_eye.cpp
