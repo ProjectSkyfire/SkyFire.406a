@@ -40,6 +40,8 @@ enum HunterSpells
     HUNTER_SPELL_CHIMERA_SHOT_VIPER              = 53358,
     HUNTER_SPELL_CHIMERA_SHOT_SCORPID            = 53359,
     HUNTER_SPELL_ASPECT_OF_THE_BEAST_PET         = 61669,
+    HUNTER_SPELL_KILL_COMMAND                    = 34026,
+    HUNTER_SPELL_KILL_COMMAND_TRIGGER            = 83381,
 };
 
 // 53209 Chimera Shot
@@ -553,6 +555,63 @@ public:
     }
 };
 
+// 34026 Kill comamnd
+class spell_hun_kill_command : public SpellScriptLoader
+{
+public:
+    spell_hun_kill_command() : SpellScriptLoader("spell_hun_kill_command") { }
+
+    class spell_hun_kill_command_SpellScript : public SpellScript
+    {
+        PrepareSpellScript(spell_hun_kill_command_SpellScript)
+        bool Validate(SpellInfo const* /*spellEntry*/)
+        {
+            if (!sSpellMgr->GetSpellInfo(HUNTER_SPELL_KILL_COMMAND))
+                return false;
+            return true;
+        }
+
+        SpellCastResult CheckCastMeet()
+        {
+            Unit* pet = GetCaster()->GetGuardianPet();
+            Unit* petTarget = pet->getVictim();
+            if (!pet)
+                return SPELL_FAILED_NO_PET;
+
+            // Make sure pet has a target and target is within 5 yards
+            if (!petTarget || !pet->IsWithinDist(petTarget, 5.0f, true))
+            {
+                SetCustomCastResultMessage(SPELL_CUSTOM_ERROR_TARGET_TOO_FAR);
+                return SPELL_FAILED_CUSTOM_ERROR;
+            }
+
+            return SPELL_CAST_OK;
+        }
+
+        void HandleDummy(SpellEffIndex /*effIndex*/)
+        {
+            Unit* pet = GetCaster()->GetGuardianPet();
+
+            if (!pet)
+                return;
+
+            pet->CastSpell(pet->getVictim(), HUNTER_SPELL_KILL_COMMAND_TRIGGER, true);
+        }
+        
+        
+        void Register()
+        {
+            OnCheckCast += SpellCheckCastFn(spell_hun_kill_command_SpellScript::CheckCastMeet);
+            OnEffectHit += SpellEffectFn(spell_hun_kill_command_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
+        }
+    };
+
+    SpellScript* GetSpellScript() const
+    {
+        return new spell_hun_kill_command_SpellScript();
+    }
+};
+
 void AddSC_hunter_spell_scripts()
 {
     new spell_hun_chimera_shot();
@@ -565,4 +624,5 @@ void AddSC_hunter_spell_scripts()
     new spell_hun_pet_heart_of_the_phoenix();
     new spell_hun_pet_carrion_feeder();
     new spell_hun_serpent_sting();
+    new spell_hun_kill_command();
 }
