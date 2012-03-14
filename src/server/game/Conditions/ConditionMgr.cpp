@@ -115,7 +115,7 @@ bool Condition::Meets(ConditionSourceInfo& sourceInfo)
         case CONDITION_QUESTREWARDED:
         {
             if (Player* player = object->ToPlayer())
-                condMeets = (player->GetQuestRewardStatus(ConditionValue1) == !ConditionValue2);
+                condMeets = player->GetQuestRewardStatus(ConditionValue1);
             break;
         }
         case CONDITION_QUESTTAKEN:
@@ -123,7 +123,7 @@ bool Condition::Meets(ConditionSourceInfo& sourceInfo)
             if (Player* player = object->ToPlayer())
             {
                 QuestStatus status = player->GetQuestStatus(ConditionValue1);
-                condMeets = ((status == QUEST_STATUS_INCOMPLETE) == !ConditionValue2);
+                condMeets = (status == QUEST_STATUS_INCOMPLETE);
             }
             break;
         }
@@ -132,7 +132,7 @@ bool Condition::Meets(ConditionSourceInfo& sourceInfo)
             if (Player* player = object->ToPlayer())
             {
                 QuestStatus status = player->GetQuestStatus(ConditionValue1);
-                condMeets = ((status == QUEST_STATUS_COMPLETE && !player->GetQuestRewardStatus(ConditionValue1)) == !ConditionValue2);
+                condMeets = (status == QUEST_STATUS_COMPLETE && !player->GetQuestRewardStatus(ConditionValue1));
             }
             break;
         }
@@ -141,7 +141,7 @@ bool Condition::Meets(ConditionSourceInfo& sourceInfo)
             if (Player* player = object->ToPlayer())
             {
                 QuestStatus status = player->GetQuestStatus(ConditionValue1);
-                condMeets = ((status == QUEST_STATUS_NONE) == !ConditionValue2);
+                condMeets = (status == QUEST_STATUS_NONE);
             }
             break;
         }
