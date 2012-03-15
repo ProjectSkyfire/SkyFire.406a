@@ -372,7 +372,7 @@ void AchievementMgrBase::UpdateAchievementCriteria(AchievementCriteriaTypes type
     sLog->outDebug(LOG_FILTER_ACHIEVEMENTSYS, "AchievementMgr::UpdateAchievementCriteria(%u, %u, %u)", type, miscValue1, miscValue2);
 
     // disable for gamemasters with GM-mode enabled
-    if (_player->isGameMaster())
+    if (player->isGameMaster())
         return;
 
     AchievementCriteriaEntryList const& achievementCriteriaList = sAchievementMgr->GetAchievementCriteriaByType(type);
