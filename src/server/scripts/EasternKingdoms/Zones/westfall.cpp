@@ -384,7 +384,7 @@ class npc_horatio : public CreatureScript
                             case 3:
                             {
                                 me->MonsterSay("No kidding, rookie.",0, 0);
-                                me->AddUnitMovementFlag(MOVEMENTFLAG_WALKING);
+                                me->SetWalk(true);
                                 me->GetMotionMaster()->MovePoint(0, -9852.267f, 911.928f, 30.028f);
                                 me->GetMotionMaster()->MovePoint(1, -9851.928f, 909.8602f, 29.931f);
                                 me->SetStandState(UNIT_STAND_STATE_KNEEL);
@@ -412,7 +412,7 @@ class npc_horatio : public CreatureScript
                                 me->GetMotionMaster()->MovePoint(0, -9852.267f, 911.928f, 30.028f);
                                 me->GetMotionMaster()->MovePoint(1, -9849.818f, 914.904f, 30.27f);
                                 me->GetMotionMaster()->MovePoint(2, -9849.86f, 914.859f, 30.268f);
-                                me->RemoveUnitMovementFlag(MOVEMENTFLAG_WALKING);
+                                me->SetWalk(false);
                                 TextTimer = 8000;
                                 Phase++;
                                 break;
@@ -670,7 +670,7 @@ class npc_crate_mine : public CreatureScript
                             }
                             case 1:
                             {
-                                shadowy1->AddUnitMovementFlag(MOVEMENTFLAG_WALKING);
+                                shadowy1->SetWalk(true);
                                 shadowy1->GetMotionMaster()->MovePoint(0, -9840.526f, 1399.37f, 37.177f);
                                 EntryTime = 7000;
                                 Phase++;
@@ -1271,7 +1271,7 @@ class npc_shadowy_tower : public CreatureScript
                     {
                         Shadowy3GUID = Shadowy3->GetGUID();
                         Shadowy3->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-                        Shadowy3->AddUnitMovementFlag(MOVEMENTFLAG_WALKING);
+                        Shadowy3->SetWalk(true);
                         Shadowy3->GetMotionMaster()->MovePoint(0, -11131.710f, 546.810f, 70.380f);
                         bSumm1 = true;
                     }
@@ -1655,7 +1655,7 @@ class npc_rise_br : public CreatureScript
                             case 1:
                             {
                                 me->SetFacingToObject(Hope);
-                                Hope->AddUnitMovementFlag(MOVEMENTFLAG_WALKING);
+                                Hope->SetWalk(true);
                                 Hope->GetMotionMaster()->MovePoint(0, -10507.65f, 1042.81f, 60.51f);
                                 EventTimer = 8000;
                                 Phase++;
@@ -1751,7 +1751,7 @@ class npc_rise_br : public CreatureScript
                             }
                             case 14:
                             {
-                                Ripsnarl->AddUnitMovementFlag(MOVEMENTFLAG_WALKING);
+                                Ripsnarl->SetWalk(true);
                                 Ripsnarl->GetMotionMaster()->MovePoint(2, -10513.41f, 1041.11f, 60.518f);
                                 EventTimer = 2500;
                                 Phase++;
@@ -1813,13 +1813,13 @@ class npc_rise_br : public CreatureScript
 
                                 if (Creature* Helix2 = me->FindNearestCreature(42753, 30.0f, true))
                                 {
-                                    Helix2->AddUnitMovementFlag(MOVEMENTFLAG_WALKING);
+                                    Helix2->SetWalk(true);
                                     Helix2->GetMotionMaster()->MovePoint(7, -10520.01f, 1062.31f, 55.386f);
                                 }
 
                                 if (Creature* Glubtok4 = me->FindNearestCreature(42755, 30.0f, true))
                                 {
-                                    Glubtok4->AddUnitMovementFlag(MOVEMENTFLAG_WALKING);
+                                    Glubtok4->SetWalk(true);
                                     Glubtok4->GetMotionMaster()->MovePoint(8, -10511.79f, 1065.78f, 55.085f);
                                 }
 
@@ -1921,7 +1921,7 @@ class npc_defias_blackguard : public CreatureScript
                     {
                         DoCast(pTarget, 79778, true);
                         ThrowTimer = 4000;
-                        // me->AddUnitMovementFlag(MOVEMENTFLAG_WALKING);
+                        // me->SetWalk(true);
                         // me->GetMotionMaster()->MovePoint(0, me->GetPositionX()-5, me->GetPositionY()+5, me->GetPositionZ());
                     }
                     else ThrowTimer -= diff;

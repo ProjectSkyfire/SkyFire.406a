@@ -461,7 +461,7 @@ public:
     {
         npc_marzon_silent_bladeAI(Creature* creature) : ScriptedAI(creature)
         {
-            me->AddUnitMovementFlag(MOVEMENTFLAG_WALKING);
+            me->SetWalk(true);
         }
 
         void Reset()
