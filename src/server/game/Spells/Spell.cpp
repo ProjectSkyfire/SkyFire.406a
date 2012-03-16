@@ -1463,6 +1463,7 @@ void Spell::SelectImplicitTargetDestTargets(SpellEffIndex effIndex, SpellImplici
         dist = objSize + (dist - objSize) * (float)rand_norm();
 
     Position pos;
+    target->GetNearPosition(pos, dist, angle);
     m_targets.SetDst(*target);
     m_targets.ModDst(pos);
 }
