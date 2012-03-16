@@ -223,7 +223,7 @@ public:
                 me->setFaction(FACTION_DEFAULT);
 
             FlyTimer = 10000;
-            me->RemoveUnitMovementFlag(MOVEMENTFLAG_LEVITATING);
+            me->SetLevitate(false);
             me->SetVisible(true);
         }
 
@@ -270,7 +270,7 @@ public:
                     PlayerGUID = 0;
                 }
                 me->SetVisible(false);
-                me->RemoveUnitMovementFlag(MOVEMENTFLAG_LEVITATING);
+                me->SetLevitate(false);
                 me->DealDamage(me, me->GetHealth(), NULL, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, NULL, false);
                 me->RemoveCorpse();
             }
@@ -308,7 +308,7 @@ public:
                                     pos.m_positionZ += 25;
                                 }
 
-                                me->AddUnitMovementFlag(MOVEMENTFLAG_LEVITATING);
+                                me->SetLevitate(true);
                                 me->GetMotionMaster()->MovePoint(1, pos);
                             }
                         }
@@ -364,7 +364,7 @@ public:
                 float x, y, z;
                 caster->GetClosePoint(x, y, z, me->GetObjectSize());
 
-                me->RemoveUnitMovementFlag(MOVEMENTFLAG_WALKING);
+                me->SetWalk(false);
                 me->GetMotionMaster()->MovePoint(1, x, y, z);
             }
         }
@@ -808,7 +808,7 @@ public:
             case 19: DoScriptText(LORD_ILLIDAN_SAY_7, Illi); return 5000; break;
             case 20:
                 Illi->HandleEmoteCommand(EMOTE_ONESHOT_LIFTOFF);
-                Illi->AddUnitMovementFlag(MOVEMENTFLAG_LEVITATING);
+                Illi->SetLevitate(true);
                 return 500; break;
             case 21: DoScriptText(OVERLORD_SAY_5, me); return 500; break;
             case 22:

@@ -312,7 +312,7 @@ void AchievementMgr::SendAchievementEarned(AchievementEntry const* achievement) 
 void AchievementMgr::CheckAllAchievementCriteria()
 {
     // suppress sending packets
-    for (uint32 i=0; i<ACHIEVEMENT_CRITERIA_TYPE_TOTAL; ++i)
+    for (uint32 i = 0; i<ACHIEVEMENT_CRITERIA_TYPE_TOTAL; ++i)
         UpdateAchievementCriteria(AchievementCriteriaTypes(i), _player);
 }
 

@@ -4133,10 +4133,10 @@ void Player::removeSpell(uint32 spell_id, bool disabled, bool learn_low_rank)
             // most likely will never be used, haven't heard of cases where players unlearn a mount
             if (Has310Flyer(false) && _spell_idx->second->skillId == SKILL_MOUNTS)
             {
-                SpellInfo const *pSpellInfo = sSpellMgr->GetSpellInfo(spell_id);
+                SpellInfo const *spellInfo = sSpellMgr->GetSpellInfo(spell_id);
                 for (uint8 i = 0; i < MAX_SPELL_EFFECTS; ++i)
-                    if (pSpellInfo->Effects[i].ApplyAuraName == SPELL_AURA_MOD_INCREASE_MOUNTED_FLIGHT_SPEED &&
-                        pSpellInfo->Effects[i].CalcValue() == 310)
+                    if (spellInfo->Effects[i].ApplyAuraName == SPELL_AURA_MOD_INCREASE_MOUNTED_FLIGHT_SPEED &&
+                        spellInfo->Effects[i].CalcValue() == 310)
                         Has310Flyer(true, spell_id);    // with true as first argument its also used to set/remove the flag
             }
         }
@@ -4226,7 +4226,7 @@ bool Player::Has310Flyer(bool checkAllSpells, uint32 excludeSpellId)
     else
     {
         SetHas310Flyer(false);
-        SpellInfo const *pSpellInfo;
+        SpellInfo const *spellInfo;
         for (PlayerSpellMap::iterator itr = _spells.begin(); itr != _spells.end(); ++itr)
         {
             if (itr->first == excludeSpellId)
@@ -4238,10 +4238,10 @@ bool Player::Has310Flyer(bool checkAllSpells, uint32 excludeSpellId)
                 if (_spell_idx->second->skillId != SKILL_MOUNTS)
                     break;  // We can break because mount spells belong only to one skillline (at least 310 flyers do)
 
-                pSpellInfo = sSpellMgr->GetSpellInfo(itr->first);
+                spellInfo = sSpellMgr->GetSpellInfo(itr->first);
                 for (uint8 i = 0; i < MAX_SPELL_EFFECTS; ++i)
-                    if (pSpellInfo->Effects[i].ApplyAuraName == SPELL_AURA_MOD_INCREASE_MOUNTED_FLIGHT_SPEED &&
-                        pSpellInfo->Effects[i].CalcValue() == 310)
+                    if (spellInfo->Effects[i].ApplyAuraName == SPELL_AURA_MOD_INCREASE_MOUNTED_FLIGHT_SPEED &&
+                        spellInfo->Effects[i].CalcValue() == 310)
                     {
                         SetHas310Flyer(true);
                         return true;
@@ -14653,12 +14653,10 @@ void Player::PrepareGossipMenu(WorldObject* source, uint32 menuId /*= 0*/, bool 
         menuItemBounds = sObjectMgr->GetGossipMenuItemsMapBounds(0);
 
     uint32 npcflags = 0;
-    Creature* creature = NULL;
 
     if (source->GetTypeId() == TYPEID_UNIT)
     {
-        creature = source->ToCreature();
-        npcflags = creature->GetUInt32Value(UNIT_NPC_FLAGS);
+        npcflags = source->GetUInt32Value(UNIT_NPC_FLAGS);
         if (npcflags & UNIT_NPC_FLAG_QUESTGIVER && showQuests)
             PrepareQuestMenu(source->GetGUID());
     }
@@ -14673,7 +14671,7 @@ void Player::PrepareGossipMenu(WorldObject* source, uint32 menuId /*= 0*/, bool 
         if (!sConditionMgr->IsObjectMeetToConditions(this, source, itr->second.Conditions))
             continue;
 
-        if (source->GetTypeId() == TYPEID_UNIT)
+        if (Creature* creature = source->ToCreature())
         {
             if (!(itr->second.OptionNpcflag & npcflags))
                 continue;
@@ -14947,7 +14945,7 @@ void Player::OnGossipSelect(WorldObject* source, uint32 gossipListId, uint32 men
                 return;
             }
 
-            GetSession()->SendBattlegGroundList(guid, bgTypeId);
+            GetSession()->SendBattleGroundList(guid, bgTypeId);
             break;
         }
         case GOSSIP_OPTION_REFORGE:
@@ -15003,15 +15001,15 @@ uint32 Player::GetDefaultGossipMenuForSource(WorldObject* source)
 
 void Player::PrepareQuestMenu(uint64 guid)
 {
-    QuestRelationBounds pObjectQR;
-    QuestRelationBounds pObjectQIR;
+    QuestRelationBounds objectQR;
+    QuestRelationBounds objectQIR;
 
     // pets also can have quests
     Creature *creature = ObjectAccessor::GetCreatureOrPetOrVehicle(*this, guid);
     if (creature)
     {
-        pObjectQR  = sObjectMgr->GetCreatureQuestRelationBounds(creature->GetEntry());
-        pObjectQIR = sObjectMgr->GetCreatureQuestInvolvedRelationBounds(creature->GetEntry());
+        objectQR  = sObjectMgr->GetCreatureQuestRelationBounds(creature->GetEntry());
+        objectQIR = sObjectMgr->GetCreatureQuestInvolvedRelationBounds(creature->GetEntry());
     }
     else
     {
@@ -15022,8 +15020,8 @@ void Player::PrepareQuestMenu(uint64 guid)
         GameObject *pGameObject = _map->GetGameObject(guid);
         if (pGameObject)
         {
-            pObjectQR  = sObjectMgr->GetGOQuestRelationBounds(pGameObject->GetEntry());
-            pObjectQIR = sObjectMgr->GetGOQuestInvolvedRelationBounds(pGameObject->GetEntry());
+            objectQR  = sObjectMgr->GetGOQuestRelationBounds(pGameObject->GetEntry());
+            objectQIR = sObjectMgr->GetGOQuestInvolvedRelationBounds(pGameObject->GetEntry());
         }
         else
             return;
@@ -15032,7 +15030,7 @@ void Player::PrepareQuestMenu(uint64 guid)
     QuestMenu &qm = PlayerTalkClass->GetQuestMenu();
     qm.ClearMenu();
 
-    for (QuestRelations::const_iterator i = pObjectQIR.first; i != pObjectQIR.second; ++i)
+    for (QuestRelations::const_iterator i = objectQIR.first; i != objectQIR.second; ++i)
     {
         uint32 quest_id = i->second;
         QuestStatus status = GetQuestStatus(quest_id);
@@ -15044,7 +15042,7 @@ void Player::PrepareQuestMenu(uint64 guid)
         //    qm.AddMenuItem(quest_id, 2);
     }
 
-    for (QuestRelations::const_iterator i = pObjectQR.first; i != pObjectQR.second; ++i)
+    for (QuestRelations::const_iterator i = objectQR.first; i != objectQR.second; ++i)
     {
         uint32 quest_id = i->second;
         Quest const* quest = sObjectMgr->GetQuestTemplate(quest_id);
@@ -15164,11 +15162,11 @@ bool Player::IsActiveQuest(uint32 quest_id) const
 
 Quest const* Player::GetNextQuest(uint64 guid, Quest const *quest)
 {
-    QuestRelationBounds pObjectQR;
+    QuestRelationBounds objectQR;
 
     Creature *creature = ObjectAccessor::GetCreatureOrPetOrVehicle(*this, guid);
     if (creature)
-        pObjectQR  = sObjectMgr->GetCreatureQuestRelationBounds(creature->GetEntry());
+        objectQR  = sObjectMgr->GetCreatureQuestRelationBounds(creature->GetEntry());
     else
     {
         //we should obtain map pointer from GetMap() in 99% of cases. Special case
@@ -15177,13 +15175,13 @@ Quest const* Player::GetNextQuest(uint64 guid, Quest const *quest)
         ASSERT(_map);
         GameObject *pGameObject = _map->GetGameObject(guid);
         if (pGameObject)
-            pObjectQR  = sObjectMgr->GetGOQuestRelationBounds(pGameObject->GetEntry());
+            objectQR  = sObjectMgr->GetGOQuestRelationBounds(pGameObject->GetEntry());
         else
             return NULL;
     }
 
     uint32 nextQuestID = quest->GetNextQuestInChain();
-    for (QuestRelations::const_iterator itr = pObjectQR.first; itr != pObjectQR.second; ++itr)
+    for (QuestRelations::const_iterator itr = objectQR.first; itr != objectQR.second; ++itr)
     {
         if (itr->second == nextQuestID)
             return sObjectMgr->GetQuestTemplate(nextQuestID);
@@ -16616,9 +16614,9 @@ void Player::CastedCreatureOrGO(uint32 entry, uint64 guid, uint32 spell_id)
                             if (reqTarget != entry) // if entry doesn't match, check for killcredits referenced in template
                             {
                                 CreatureTemplate const* cinfo = sObjectMgr->GetCreatureTemplate(entry);
-                                for (uint8 j = 0; j < MAX_KILL_CREDIT; ++j)
-                                    if (cinfo->KillCredit[j] == reqTarget)
-                                        entry = cinfo->KillCredit[j];
+                                for (uint8 k = 0; k < MAX_KILL_CREDIT; ++k)
+                                    if (cinfo->KillCredit[k] == reqTarget)
+                                        entry = cinfo->KillCredit[k];
                             }
                          }
                     }
@@ -18278,7 +18276,7 @@ void Player::_LoadMailedItems(Mail *mail)
         {
             sLog->outError("Player %u has unknown item_template (ProtoType) in mailed items(GUID: %u template: %u) in mail (%u), deleted.", GetGUIDLow(), itemGuid, itemTemplate, mail->messageID);
 
-            PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_INVALID_MAIL_ITEM);
+            stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_INVALID_MAIL_ITEM);
             stmt->setUInt32(0, itemGuid);
             CharacterDatabase.Execute(stmt);
 
@@ -18294,10 +18292,8 @@ void Player::_LoadMailedItems(Mail *mail)
         {
             sLog->outError("Player::_LoadMailedItems - Item in mail (%u) doesn't exist !!!! - item guid: %u, deleted from mail", mail->messageID, itemGuid);
 
-            PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_MAIL_ITEM);
-
+            stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_MAIL_ITEM);
             stmt->setUInt32(0, itemGuid);
-
             CharacterDatabase.Execute(stmt);
 
             item->FSetState(ITEM_REMOVED);
@@ -19773,7 +19769,7 @@ void Player::_SaveWeeklyQuestStatus(SQLTransaction& trans)
     {
         uint32 quest_id  = *iter;
 
-        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_CHARACTER_WEEKLYQUESTSTATUS);
+        stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_CHARACTER_WEEKLYQUESTSTATUS);
         stmt->setUInt32(0, GetGUIDLow());
         stmt->setUInt32(1, quest_id);
         trans->Append(stmt);
@@ -19799,7 +19795,7 @@ void Player::_SaveSeasonalQuestStatus(SQLTransaction& trans)
         {
             uint32 quest_id = (*itr);
 
-            PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_CHARACTER_SEASONALQUESTSTATUS);
+            stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_CHARACTER_SEASONALQUESTSTATUS);
             stmt->setUInt32(0, GetGUIDLow());
             stmt->setUInt32(1, quest_id);
             stmt->setUInt32(2, event_id);
@@ -22920,11 +22916,21 @@ void Player::UpdateForQuestWorldObjects()
 
             SpellClickInfoMapBounds clickPair = sObjectMgr->GetSpellClickInfoMapBounds(obj->GetEntry());
             for (SpellClickInfoContainer::const_iterator _itr = clickPair.first; _itr != clickPair.second; ++_itr)
-                if (_itr->second.questStart || _itr->second.questEnd)
+            {
+                //! This code doesn't look right, but it was logically converted to condition system to do the exact
+                //! same thing it did before. It definitely needs to be overlooked for intended functionality.
+                ConditionList conds = sConditionMgr->GetConditionsForSpellClickEvent(obj->GetEntry(), _itr->second.spellId);
+                bool buildUpdateBlock = false;
+                for (ConditionList::const_iterator jtr = conds.begin(); jtr != conds.end() && !buildUpdateBlock; ++jtr)
+                    if ((*jtr)->ConditionType == CONDITION_QUESTREWARDED || (*jtr)->ConditionType == CONDITION_QUESTTAKEN)
+                        buildUpdateBlock = true;
+
+                if (buildUpdateBlock)
                 {
                     obj->BuildCreateUpdateBlockForPlayer(&udata, this);
                     break;
                 }
+            }
         }
     }
     udata.BuildPacket(&packet);
@@ -24772,10 +24778,16 @@ bool Player::canSeeSpellClickOn(Creature const *c) const
         return true;
 
     for (SpellClickInfoContainer::const_iterator itr = clickPair.first; itr != clickPair.second; ++itr)
-        if (itr->second.IsFitToRequirements(this, c))
+    {
+        if (!itr->second.IsFitToRequirements(this, c))
             return true;
 
-    return false;
+        ConditionList conds = sConditionMgr->GetConditionsForSpellClickEvent(c->GetEntry(), itr->second.spellId);
+        ConditionSourceInfo info = ConditionSourceInfo(const_cast<Player*>(this), const_cast<Creature*>(c));
+        if (!sConditionMgr->IsObjectMeetToConditions(info, conds))
+            return false;
+    }
+    return true;
 }
 
 void Player::BuildPlayerTalentsInfoData(WorldPacket *data)

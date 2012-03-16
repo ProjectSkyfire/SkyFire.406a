@@ -1267,9 +1267,12 @@ DROP TABLE IF EXISTS `character_version`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `character_version` (
   `core_version` varchar(120) NOT NULL DEFAULT 'SkyFireEMU Rebase 4.0.6a' COMMENT 'Core revision dumped at startup.',
-  `required_2011_12_02_02_characters_version_test` bit(1) DEFAULT NULL
+  `character_db_version` varchar(120) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=FIXED COMMENT='Version Notes';
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+REPLACE INTO character_version VALUES
+('2012_03_11 - fad059fdde','2012_03_13_00');
 
 --
 -- Dumping data for table `character_version`
@@ -1452,34 +1455,6 @@ CREATE TABLE `corpse` (
 LOCK TABLES `corpse` WRITE;
 /*!40000 ALTER TABLE `corpse` DISABLE KEYS */;
 /*!40000 ALTER TABLE `corpse` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `creature_loot_template`
---
-
-DROP TABLE IF EXISTS `creature_loot_template`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `creature_loot_template` (
-  `entry` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `item` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `ChanceOrQuestChance` float NOT NULL DEFAULT '100',
-  `lootmode` smallint(5) unsigned NOT NULL DEFAULT '1',
-  `groupid` tinyint(3) unsigned NOT NULL DEFAULT '0',
-  `mincountOrRef` mediumint(9) NOT NULL DEFAULT '1',
-  `maxcount` tinyint(3) unsigned NOT NULL DEFAULT '1',
-  PRIMARY KEY (`entry`,`item`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Loot System';
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `creature_loot_template`
---
-
-LOCK TABLES `creature_loot_template` WRITE;
-/*!40000 ALTER TABLE `creature_loot_template` DISABLE KEYS */;
-/*!40000 ALTER TABLE `creature_loot_template` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -2584,37 +2559,6 @@ LOCK TABLES `reserved_name` WRITE;
 /*!40000 ALTER TABLE `reserved_name` ENABLE KEYS */;
 UNLOCK TABLES;
 
---
--- Table structure for table `waypoint_scripts`
---
-
-DROP TABLE IF EXISTS `waypoint_scripts`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `waypoint_scripts` (
-  `id` int(11) unsigned NOT NULL DEFAULT '0',
-  `delay` int(11) unsigned NOT NULL DEFAULT '0',
-  `command` int(11) unsigned NOT NULL DEFAULT '0',
-  `datalong` int(11) unsigned NOT NULL DEFAULT '0',
-  `datalong2` int(11) unsigned NOT NULL DEFAULT '0',
-  `dataint` int(11) unsigned NOT NULL DEFAULT '0',
-  `x` float NOT NULL DEFAULT '0',
-  `y` float NOT NULL DEFAULT '0',
-  `z` float NOT NULL DEFAULT '0',
-  `o` float NOT NULL DEFAULT '0',
-  `guid` int(11) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`guid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `waypoint_scripts`
---
-
-LOCK TABLES `waypoint_scripts` WRITE;
-/*!40000 ALTER TABLE `waypoint_scripts` DISABLE KEYS */;
-/*!40000 ALTER TABLE `waypoint_scripts` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `worldstates`

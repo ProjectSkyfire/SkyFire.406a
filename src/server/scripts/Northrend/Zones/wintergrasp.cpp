@@ -310,13 +310,13 @@ class npc_wg_quest_giver : public CreatureScript
             if (creature->isQuestGiver())
             {
                 Object* pObject = (Object *) creature;
-                QuestRelations* pObjectQR = sObjectMgr->GetCreatureQuestRelationMap();
-                QuestRelations* pObjectQIR = sObjectMgr->GetCreatureQuestInvolvedRelation();
+                QuestRelations* objectQR = sObjectMgr->GetCreatureQuestRelationMap();
+                QuestRelations* objectQIR = sObjectMgr->GetCreatureQuestInvolvedRelation();
 
                 QuestMenu & qm = player->PlayerTalkClass->GetQuestMenu();
                 qm.ClearMenu();
 
-                for (QuestRelations::const_iterator i = pObjectQIR->lower_bound(pObject->GetEntry()); i != pObjectQIR->upper_bound(pObject->GetEntry()); ++i)
+                for (QuestRelations::const_iterator i = objectQIR->lower_bound(pObject->GetEntry()); i != objectQIR->upper_bound(pObject->GetEntry()); ++i)
                 {
                     uint32 quest_id = i->second;
                     QuestStatus status = player->GetQuestStatus(quest_id);
@@ -326,7 +326,7 @@ class npc_wg_quest_giver : public CreatureScript
                         qm.AddMenuItem(quest_id, 4);
                 }
 
-                for (QuestRelations::const_iterator i = pObjectQR->lower_bound(pObject->GetEntry()); i != pObjectQR->upper_bound(pObject->GetEntry()); ++i)
+                for (QuestRelations::const_iterator i = objectQR->lower_bound(pObject->GetEntry()); i != objectQR->upper_bound(pObject->GetEntry()); ++i)
                 {
                     uint32 quest_id = i->second;
                     Quest const* quest = sObjectMgr->GetQuestTemplate(quest_id);

@@ -326,7 +326,7 @@ SpellInfo const* SpellScript::GetSpellInfo()
 WorldLocation const* SpellScript::GetTargetDest()
 {
     if (m_spell->m_targets.HasDst())
-        return m_spell->m_targets.GetDst();
+        return m_spell->m_targets.GetDstPos();
     return NULL;
 }
 
@@ -404,6 +404,16 @@ GameObject* SpellScript::GetHitGObj()
         return NULL;
     }
     return m_spell->gameObjTarget;
+}
+
+WorldLocation const* SpellScript::GetHitDest()
+{
+    if (!IsInEffectHook())
+    {
+        sLog->outError("TSCR: Script: `%s` Spell: `%u`: function SpellScript::GetHitGObj was called, but function has no effect in current hook!", m_scriptName->c_str(), m_scriptSpellId);
+        return NULL;
+    }
+    return m_spell->destTarget;
 }
 
 int32 SpellScript::GetHitDamage()
@@ -743,9 +753,9 @@ AuraScript::EffectProcHandler::EffectProcHandler(AuraEffectProcFnType _pEffectPr
     pEffectProcScript = _pEffectProcScript;
 }
 
-void AuraScript::EffectProcHandler::Call(AuraScript * auraScript, AuraEffect const * _aurEff, Unit* pUnit, Unit *pVictim, uint32 damage, SpellInfo const* procSpell, uint32 procFlag, uint32 procExtra, WeaponAttackType attType, int32 cooldown)
+void AuraScript::EffectProcHandler::Call(AuraScript * auraScript, AuraEffect const * _aurEff, Unit* pUnit, Unit *victim, uint32 damage, SpellInfo const* procSpell, uint32 procFlag, uint32 procExtra, WeaponAttackType attType, int32 cooldown)
 {
-    (auraScript->*pEffectProcScript)(_aurEff, pUnit, pVictim, damage, procSpell, procFlag, procExtra, attType, cooldown);
+    (auraScript->*pEffectProcScript)(_aurEff, pUnit, victim, damage, procSpell, procFlag, procExtra, attType, cooldown);
 }
 
 bool AuraScript::_Load(Aura* aura)

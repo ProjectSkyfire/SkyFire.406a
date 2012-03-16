@@ -1459,7 +1459,7 @@ public:
                             break;
                         case 2:
                             // walk forward
-                            me->AddUnitMovementFlag(MOVEMENTFLAG_WALKING);
+                            me->SetWalk(true);
                             me->GetMotionMaster()->MovePoint(0, me->GetPositionX() + (cos(m_heading) * 10), me->GetPositionY() + (sin(m_heading) * 10), me->GetPositionZ());
                             m_Timer = 5000;
                             m_Phase = 3;

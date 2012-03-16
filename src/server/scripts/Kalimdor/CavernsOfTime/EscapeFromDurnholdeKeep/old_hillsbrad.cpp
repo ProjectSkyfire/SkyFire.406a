@@ -400,7 +400,7 @@ public:
                     SetRun();
                     break;
                 case 91:
-                    me->AddUnitMovementFlag(MOVEMENTFLAG_WALKING);
+                    me->SetWalk(true);
                     SetRun(false);
                     break;
                 case 93:

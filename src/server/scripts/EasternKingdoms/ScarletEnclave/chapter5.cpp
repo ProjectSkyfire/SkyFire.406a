@@ -503,7 +503,7 @@ public:
             switch (wpId)
             {
                 case 0:
-                    me->RemoveUnitMovementFlag(MOVEMENTFLAG_WALKING);
+                    me->SetWalk(false);
                     SetHoldState(true);
                     break;
                 case 1:
@@ -538,7 +538,7 @@ public:
                     bIsBattle = true;
                     break;
                 case 2:
-                    me->AddUnitMovementFlag(MOVEMENTFLAG_WALKING);
+                    me->SetWalk(true);
                     DoCast(me, SPELL_THE_LIGHT_OF_DAWN);
                     break;
                 case 3:
@@ -552,30 +552,30 @@ public:
                     {
                         if (temp->HasAura(SPELL_THE_LIGHT_OF_DAWN, 0))
                             temp->RemoveAurasDueToSpell(SPELL_THE_LIGHT_OF_DAWN);
-                        temp->AddUnitMovementFlag(MOVEMENTFLAG_WALKING);
+                        temp->SetWalk(true);
                         temp->GetMotionMaster()->MovePoint(0, LightofDawnLoc[19].x, LightofDawnLoc[19].y, LightofDawnLoc[19].z);
                     }
                     if (Creature* temp = Unit::GetCreature(*me, ThassarianGUID))
                     {
                         if (temp->HasAura(SPELL_THE_LIGHT_OF_DAWN, 0))
                             temp->RemoveAurasDueToSpell(SPELL_THE_LIGHT_OF_DAWN);
-                        temp->AddUnitMovementFlag(MOVEMENTFLAG_WALKING);
+                        temp->SetWalk(true);
                         temp->GetMotionMaster()->MovePoint(0, LightofDawnLoc[21].x, LightofDawnLoc[21].y, LightofDawnLoc[21].z);
                     }
                     if (Creature* temp = Unit::GetCreature(*me, KorfaxGUID))
                     {
-                        temp->AddUnitMovementFlag(MOVEMENTFLAG_WALKING);
+                        temp->SetWalk(true);
                         temp->SetUInt32Value(UNIT_NPC_EMOTESTATE, EMOTE_STATE_READY2H);
                         temp->GetMotionMaster()->MovePoint(0, LightofDawnLoc[10].x, LightofDawnLoc[10].y, LightofDawnLoc[10].z);
                     }
                     if (Creature* temp = Unit::GetCreature(*me, MaxwellGUID))
                     {
-                        temp->AddUnitMovementFlag(MOVEMENTFLAG_WALKING);
+                        temp->SetWalk(true);
                         temp->GetMotionMaster()->MovePoint(0, LightofDawnLoc[13].x, LightofDawnLoc[13].y, LightofDawnLoc[13].z);
                     }
                     if (Creature* temp = Unit::GetCreature(*me, EligorGUID))
                     {
-                        temp->AddUnitMovementFlag(MOVEMENTFLAG_WALKING);
+                        temp->SetWalk(true);
                         temp->GetMotionMaster()->MovePoint(0, LightofDawnLoc[16].x, LightofDawnLoc[16].y, LightofDawnLoc[16].z);
                     }
                     JumpToNextStep(10000);
@@ -665,7 +665,7 @@ public:
                             if (Summon_counter < ENCOUNTER_GHOUL_NUMBER)
                             {
                                 Unit* temp = me->SummonCreature(NPC_ACHERUS_GHOUL, (me->GetPositionX()-20)+rand()%40, (me->GetPositionY()-20)+rand()%40, me->GetPositionZ(), 0, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 300000);
-                                temp->RemoveUnitMovementFlag(MOVEMENTFLAG_WALKING);
+                                temp->SetWalk(false);
                                 temp->setFaction(2084);
                                 GhoulGUID[Summon_counter] = temp->GetGUID();
                                 ++Summon_counter;
@@ -683,7 +683,7 @@ public:
                             if (Summon_counter < ENCOUNTER_ABOMINATION_NUMBER)
                             {
                                 Unit* temp = me->SummonCreature(NPC_RAMPAGING_ABOMINATION, (me->GetPositionX()-20)+rand()%40, (me->GetPositionY()-20)+rand()%40, me->GetPositionZ(), 0, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 300000);
-                                temp->RemoveUnitMovementFlag(MOVEMENTFLAG_WALKING);
+                                temp->SetWalk(false);
                                 temp->setFaction(2084);
                                 AbominationGUID[Summon_counter] = temp->GetGUID();
                                 ++Summon_counter;
@@ -701,7 +701,7 @@ public:
                             if (Summon_counter < ENCOUNTER_WARRIOR_NUMBER)
                             {
                                 Unit* temp = me->SummonCreature(NPC_WARRIOR_OF_THE_FROZEN_WASTES, (me->GetPositionX()-20)+rand()%40, (me->GetPositionY()-20)+rand()%40, me->GetPositionZ(), 0, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 300000);
-                                temp->RemoveUnitMovementFlag(MOVEMENTFLAG_WALKING);
+                                temp->SetWalk(false);
                                 temp->setFaction(2084);
                                 WarriorGUID[Summon_counter] = temp->GetGUID();
                                 ++Summon_counter;
@@ -719,7 +719,7 @@ public:
                             if (Summon_counter < ENCOUNTER_BEHEMOTH_NUMBER)
                             {
                                 Unit* temp = me->SummonCreature(NPC_FLESH_BEHEMOTH, (me->GetPositionX()-20)+rand()%40, (me->GetPositionY()-20)+rand()%40, me->GetPositionZ(), 0, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 300000);
-                                temp->RemoveUnitMovementFlag(MOVEMENTFLAG_WALKING);
+                                temp->SetWalk(false);
                                 temp->setFaction(2084);
                                 BehemothGUID[Summon_counter] = temp->GetGUID();
                                 ++Summon_counter;
@@ -740,17 +740,17 @@ public:
                             SetHoldState(false);
                             if (Creature* temp = Unit::GetCreature(*me, KoltiraGUID))
                             {
-                                temp->RemoveUnitMovementFlag(MOVEMENTFLAG_WALKING);
+                                temp->SetWalk(false);
                                 temp->GetMotionMaster()->MovePoint(0, LightofDawnLoc[0].x+rand()%30, LightofDawnLoc[0].y+rand()%30, LightofDawnLoc[0].z);
                             }
                             if (Creature* temp = Unit::GetCreature(*me, OrbazGUID))
                             {
-                                temp->RemoveUnitMovementFlag(MOVEMENTFLAG_WALKING);
+                                temp->SetWalk(false);
                                 temp->GetMotionMaster()->MovePoint(0, LightofDawnLoc[0].x+rand()%30, LightofDawnLoc[0].y+rand()%30, LightofDawnLoc[0].z);
                             }
                             if (Creature* temp = Unit::GetCreature(*me, ThassarianGUID))
                             {
-                                temp->RemoveUnitMovementFlag(MOVEMENTFLAG_WALKING);
+                                temp->SetWalk(false);
                                 temp->GetMotionMaster()->MovePoint(0, LightofDawnLoc[0].x+rand()%30, LightofDawnLoc[0].y+rand()%30, LightofDawnLoc[0].z);
                             }
                             for (uint8 i = 0; i < ENCOUNTER_ABOMINATION_NUMBER; ++i)
@@ -825,7 +825,7 @@ public:
                             if (Unit* temp = me->SummonCreature(NPC_DARION_MOGRAINE, LightofDawnLoc[24].x, LightofDawnLoc[24].y, LightofDawnLoc[24].z, LightofDawnLoc[24].o, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 300000))
                             {
                                 DoScriptText(SAY_LIGHT_OF_DAWN35, temp);
-                                temp->RemoveUnitMovementFlag(MOVEMENTFLAG_WALKING);
+                                temp->SetWalk(false);
                                 DarionGUID = temp->GetGUID();
                             }
                             JumpToNextStep(4000);
@@ -941,7 +941,7 @@ public:
                                 DoCast(me, SPELL_MOGRAINE_CHARGE); // jumping charge
     //   doesn't make it looks well, so workarounds, Darion charges, looks better
                             me->SetSpeed(MOVE_RUN, 3.0f);
-                            me->RemoveUnitMovementFlag(MOVEMENTFLAG_WALKING);
+                            me->SetWalk(false);
                             SetHoldState(false);
                             JumpToNextStep(0);
                             break;
@@ -1014,7 +1014,7 @@ public:
                                     Unit* temp;
                                     temp = me->SummonCreature(NPC_DEFENDER_OF_THE_LIGHT, LightofDawnLoc[0].x+rand()%10, LightofDawnLoc[0].y+rand()%10, LightofDawnLoc[0].z, 0, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 10000);
                                     temp->SetUInt32Value(UNIT_NPC_EMOTESTATE, EMOTE_STATE_ATTACK_UNARMED);
-                                    temp->RemoveUnitMovementFlag(MOVEMENTFLAG_WALKING);
+                                    temp->SetWalk(false);
                                     temp->SetSpeed(MOVE_RUN, 2.0f);
                                     temp->setFaction(me->getFaction());
                                     temp->GetMotionMaster()->MovePoint(0, fLichPositionX, fLichPositionY, fLichPositionZ);
@@ -1022,7 +1022,7 @@ public:
 
                                     temp = me->SummonCreature(NPC_RIMBLAT_EARTHSHATTER, LightofDawnLoc[0].x+rand()%10, LightofDawnLoc[0].y+rand()%10, LightofDawnLoc[0].z, 0, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 10000);
                                     temp->SetUInt32Value(UNIT_NPC_EMOTESTATE, EMOTE_STATE_ATTACK_UNARMED);
-                                    temp->RemoveUnitMovementFlag(MOVEMENTFLAG_WALKING);
+                                    temp->SetWalk(false);
                                     temp->SetSpeed(MOVE_RUN, 2.0f);
                                     temp->setFaction(me->getFaction());
                                     temp->GetMotionMaster()->MovePoint(0, fLichPositionX, fLichPositionY, fLichPositionZ);
@@ -1031,7 +1031,7 @@ public:
                                 if (Creature* temp = Unit::GetCreature(*me, MaxwellGUID))
                                 {
                                     temp->SetUInt32Value(UNIT_NPC_EMOTESTATE, EMOTE_STATE_ATTACK_UNARMED);
-                                    temp->RemoveUnitMovementFlag(MOVEMENTFLAG_WALKING);
+                                    temp->SetWalk(false);
                                     temp->SetSpeed(MOVE_RUN, 2.0f);
                                     temp->GetMotionMaster()->MovePoint(0, fLichPositionX, fLichPositionY, fLichPositionZ);
                                     DoScriptText(SAY_LIGHT_OF_DAWN50, temp);
@@ -1039,7 +1039,7 @@ public:
                                 if (Creature* temp = Unit::GetCreature(*me, KorfaxGUID))
                                 {
                                     temp->SetUInt32Value(UNIT_NPC_EMOTESTATE, EMOTE_STATE_ATTACK_UNARMED);
-                                    temp->RemoveUnitMovementFlag(MOVEMENTFLAG_WALKING);
+                                    temp->SetWalk(false);
                                     temp->SetSpeed(MOVE_RUN, 2.0f);
                                     temp->HandleEmoteCommand(EMOTE_STATE_ATTACK_UNARMED);
                                     temp->GetMotionMaster()->MovePoint(0, fLichPositionX, fLichPositionY, fLichPositionZ);
@@ -1047,7 +1047,7 @@ public:
                                 if (Creature* temp = Unit::GetCreature(*me, EligorGUID))
                                 {
                                     temp->SetUInt32Value(UNIT_NPC_EMOTESTATE, EMOTE_STATE_ATTACK_UNARMED);
-                                    temp->RemoveUnitMovementFlag(MOVEMENTFLAG_WALKING);
+                                    temp->SetWalk(false);
                                     temp->SetSpeed(MOVE_RUN, 2.0f);
                                     temp->GetMotionMaster()->MovePoint(0, fLichPositionX, fLichPositionY, fLichPositionZ);
                                 }
@@ -1112,7 +1112,7 @@ public:
 
                         case 46: // Darion stand up, "not today"
                             me->SetSpeed(MOVE_RUN, 1.0f);
-                            me->AddUnitMovementFlag(MOVEMENTFLAG_WALKING);
+                            me->SetWalk(true);
                             me->SetStandState(UNIT_STAND_STATE_STAND);
                             DoScriptText(SAY_LIGHT_OF_DAWN53, me);
                             SetHoldState(false); // Darion throws sword
@@ -1172,7 +1172,7 @@ public:
                                 temp->CastSpell(temp, SPELL_TIRION_CHARGE, false); // jumping charge
                                 temp->SetUInt32Value(UNIT_NPC_EMOTESTATE, EMOTE_STATE_READY2H);
                                 temp->SetSpeed(MOVE_RUN, 3.0f); // workarounds, make Tirion still running
-                                temp->RemoveUnitMovementFlag(MOVEMENTFLAG_WALKING);
+                                temp->SetWalk(false);
                                 temp->GetMotionMaster()->MovePoint(0, LightofDawnLoc[2].x, LightofDawnLoc[2].y, LightofDawnLoc[2].z);
                                 if (Creature* lktemp = Unit::GetCreature(*me, LichKingGUID))
                                     lktemp->Relocate(LightofDawnLoc[28].x, LightofDawnLoc[28].y, LightofDawnLoc[28].z); // workarounds, he should kick back by Tirion, but here we relocate him
@@ -1190,7 +1190,7 @@ public:
                             if (Creature* temp = Unit::GetCreature(*me, LichKingGUID))
                             {
                                 temp->SetSpeed(MOVE_RUN, 1.0f);
-                                me->AddUnitMovementFlag(MOVEMENTFLAG_WALKING);
+                                me->SetWalk(true);
                                 temp->GetMotionMaster()->MovePoint(0, LightofDawnLoc[29].x, LightofDawnLoc[29].y, LightofDawnLoc[29].z); // 26
                             }
                             JumpToNextStep(4000);
@@ -1250,7 +1250,7 @@ public:
                         case 62:
                             if (Creature* temp = Unit::GetCreature(*me, TirionGUID))
                             {
-                                temp->AddUnitMovementFlag(MOVEMENTFLAG_WALKING);
+                                temp->SetWalk(true);
                                 temp->GetMotionMaster()->MovePoint(0, LightofDawnLoc[7].x, LightofDawnLoc[7].y, LightofDawnLoc[7].z);
                             }
                             JumpToNextStep(5500);
@@ -1438,7 +1438,7 @@ public:
                     me->DeleteThreatList();
                     me->CombatStop(true);
                     me->InterruptNonMeleeSpells(false);
-                    me->RemoveUnitMovementFlag(MOVEMENTFLAG_WALKING);
+                    me->SetWalk(false);
 
                     for (uint8 i = 0; i < ENCOUNTER_DEFENDER_NUMBER; ++i)
                         DespawnNPC(DefenderGUID[i]);
@@ -1460,7 +1460,7 @@ public:
                         temp->CombatStop(true);
                         temp->AttackStop();
                         temp->setFaction(me->getFaction());
-                        temp->RemoveUnitMovementFlag(MOVEMENTFLAG_WALKING);
+                        temp->SetWalk(false);
                         temp->GetMotionMaster()->MovePoint(0, LightofDawnLoc[9].x, LightofDawnLoc[9].y, LightofDawnLoc[9].z);
                     }
 
@@ -1471,7 +1471,7 @@ public:
                         temp->CombatStop(true);
                         temp->AttackStop();
                         temp->setFaction(me->getFaction());
-                        temp->RemoveUnitMovementFlag(MOVEMENTFLAG_WALKING);
+                        temp->SetWalk(false);
                         temp->GetMotionMaster()->MovePoint(0, LightofDawnLoc[12].x, LightofDawnLoc[12].y, LightofDawnLoc[12].z);
                     }
 
@@ -1482,7 +1482,7 @@ public:
                         temp->CombatStop(true);
                         temp->AttackStop();
                         temp->setFaction(me->getFaction());
-                        temp->RemoveUnitMovementFlag(MOVEMENTFLAG_WALKING);
+                        temp->SetWalk(false);
                         temp->GetMotionMaster()->MovePoint(0, LightofDawnLoc[15].x, LightofDawnLoc[15].y, LightofDawnLoc[15].z);
                     }
                     DespawnNPC(RayneGUID);
@@ -1494,7 +1494,7 @@ public:
                         temp->CombatStop(true);
                         temp->AttackStop();
                         temp->setFaction(me->getFaction());
-                        temp->RemoveUnitMovementFlag(MOVEMENTFLAG_WALKING);
+                        temp->SetWalk(false);
                         temp->GetMotionMaster()->MovePoint(0, LightofDawnLoc[18].x, LightofDawnLoc[18].y, LightofDawnLoc[18].z);
                         temp->CastSpell(temp, SPELL_THE_LIGHT_OF_DAWN, false);
                     }
@@ -1509,7 +1509,7 @@ public:
                         temp->CombatStop(true);
                         temp->AttackStop();
                         temp->setFaction(me->getFaction());
-                        temp->RemoveUnitMovementFlag(MOVEMENTFLAG_WALKING);
+                        temp->SetWalk(false);
                         temp->GetMotionMaster()->MovePoint(0, LightofDawnLoc[20].x, LightofDawnLoc[20].y, LightofDawnLoc[20].z);
                         temp->CastSpell(temp, SPELL_THE_LIGHT_OF_DAWN, false);
                     }
