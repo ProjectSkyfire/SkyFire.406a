@@ -28,8 +28,6 @@ void WorldSession::HandleJoinChannel(WorldPacket& recvPacket)
     uint8 unknown1, unknown2;
     std::string password, channelname;
 
-    recvPacket.read_skip<uint8>();
-    recvPacket.read_skip<uint8>();
     recvPacket >> channel_id;
     recvPacket >> unknown1 >> unknown2;
     recvPacket >> password;
@@ -87,8 +85,10 @@ void WorldSession::HandleChannelList(WorldPacket& recvPacket)
     recvPacket >> channelname;
 
     if (ChannelMgr* cMgr = channelMgr(_player->GetTeam()))
+    {
         if (Channel *chn = cMgr->GetChannel(channelname, _player))
             chn->List(_player);
+    }
 }
 
 void WorldSession::HandleChannelPassword(WorldPacket& recvPacket)
