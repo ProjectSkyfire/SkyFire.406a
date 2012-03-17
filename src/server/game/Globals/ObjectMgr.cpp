@@ -4872,12 +4872,30 @@ void ObjectMgr::LoadSpellScriptNames()
             }
             while (spellInfo)
             {
-                _spellScriptsStore.insert(SpellScriptsContainer::value_type(spellInfo->Id, GetScriptId(scriptName)));
+                bool found = false;
+                SpellScriptsBounds bounds = GetSpellScriptsBounds(spellInfo->Id);
+                for (SpellScriptsContainer::iterator itr = bounds.first; itr != bounds.second; ++itr)
+                    if (itr->second == GetScriptId(scriptName))
+                        found = true;
+                if (!found)
+                    _spellScriptsStore.insert(SpellScriptsContainer::value_type(spellInfo->Id, GetScriptId(scriptName)));
+                else
+                    sLog->outErrorDb("Scriptname:`%s` spell (spell_id:%d) already added.", scriptName, spellInfo->Id);
                 spellInfo = sSpellMgr->GetSpellInfo(spellInfo->Id)->GetNextRankSpell();
             }
         }
         else
-            _spellScriptsStore.insert(SpellScriptsContainer::value_type(spellInfo->Id, GetScriptId(scriptName)));
+        {
+            bool found = false;
+            SpellScriptsBounds bounds = GetSpellScriptsBounds(spellInfo->Id);
+            for (SpellScriptsContainer::iterator itr = bounds.first; itr != bounds.second; ++itr)
+                if (itr->second == GetScriptId(scriptName))
+                    found = true;
+            if (!found)
+                _spellScriptsStore.insert(SpellScriptsContainer::value_type(spellInfo->Id, GetScriptId(scriptName)));
+            else
+                sLog->outErrorDb("Scriptname:`%s` spell (spell_id:%d) already added.", scriptName, fields[0].GetInt32());
+        }
         ++count;
     }
     while (result->NextRow());
