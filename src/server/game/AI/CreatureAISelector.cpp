@@ -104,7 +104,7 @@ namespace FactorySelector
     {
         MovementGeneratorRegistry& mv_registry(*MovementGeneratorRepository::instance());
         ASSERT(creature->GetCreatureTemplate() != NULL);
-        MovementGeneratorCreator const* mv_factory = mv_registry.GetRegistryItem(creature->GetOwnerGUID() ? FOLLOW_MOTION_TYPE : creature->GetDefaultMovementType());
+        MovementGeneratorCreator const* mv_factory = mv_registry.GetRegistryItem(creature->GetDefaultMovementType());
 
         /* if (mv_factory == NULL)
         {
