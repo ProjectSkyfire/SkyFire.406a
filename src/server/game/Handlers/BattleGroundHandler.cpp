@@ -572,23 +572,15 @@ void WorldSession::HandleBattlemasterJoinArena(WorldPacket & recv_data)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: CMSG_BATTLEMASTER_JOIN_ARENA");
 
-    uint64 guid;                                            // arena Battlemaster guid
     uint8 arenaslot;                                        // 2v2, 3v3 or 5v5
-    uint8 asGroup;                                          // asGroup
-    uint8 isRated;                                          // isRated
     Group * group = NULL;
 
-    recv_data >> guid >> arenaslot >> asGroup >> isRated;
+    bool isRated = true, asGroup = true;
+
+    recv_data >> arenaslot;
 
     // ignore if we already in BG or BG queue
     if (_player->InBattleground())
-        return;
-
-    Creature* unit = GetPlayer()->GetMap()->GetCreature(guid);
-    if (!unit)
-        return;
-
-    if (!unit->isBattleMaster())                             // it's not battle master
         return;
 
     uint8 arenatype = 0;
