@@ -3020,6 +3020,12 @@ void Spell::EffectEnergize(SpellEffIndex effIndex)
         case 71132:                                         // Glyph of Shadow Word: Pain
             damage = int32(CalculatePctN(unitTarget->GetCreateMana(), 1));  // set 1 as value, missing in dbc
             break;
+        case 82726:                                         // Fervor
+            {
+                if (Unit* pet = m_caster->GetGuardianPet())
+                    pet->CastSpell(pet, 82726, true); // Also give +50 focus to pet
+                break;
+            }
         default:
             break;
     }
