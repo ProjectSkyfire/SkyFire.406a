@@ -2244,13 +2244,13 @@ TempSummon* WorldObject::SummonCreature(uint32 entry, const Position &pos, TempS
 Pet* Player::SummonPet(uint32 entry, float x, float y, float z, float ang, PetType petType, uint32 duration, PetSlot slotID)
 {
     Pet* pet = new Pet(this, petType);
-
-    if (petType == SUMMON_PET && pet->LoadPetFromDB(this, entry, 0, slotID != PET_SLOT_UNK_SLOT, slotID))
+    //summoned pets always non-curent!
+    if (petType == SUMMON_PET && pet->LoadPetFromDB(this, entry, 0, false, slotID))
     {
         if (duration > 0)
             pet->SetDuration(duration);
 
-        return NULL;
+        return pet;
     }
 
     // petentry == 0 for hunter "call pet" (current pet summoned if any)
