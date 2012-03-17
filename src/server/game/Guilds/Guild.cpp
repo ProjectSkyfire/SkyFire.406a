@@ -3273,8 +3273,8 @@ void Guild::AddGuildNews(uint32 type, uint64 source_guild, int value1, int value
     stmt->setUInt8 (2, guildNews.m_timestamp);
     stmt->setUInt32(3, value1);
     stmt->setUInt32(4, value2);
-    stmt->setUInt8 (5, source_guild);
-    stmt->setUInt64(6, flags);
+    stmt->setUInt64 (5, source_guild);
+    stmt->setUInt8(6, flags);
     CharacterDatabase.ExecuteOrAppend(trans, stmt);
 
     WorldPacket data(SMSG_GUILD_NEWS_UPDATE, 8*5);
