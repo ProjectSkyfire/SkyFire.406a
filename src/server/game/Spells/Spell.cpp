@@ -4674,7 +4674,7 @@ SpellCastResult Spell::CheckCast(bool strict)
     // check spell cast conditions from database
     {
         ConditionSourceInfo condInfo = ConditionSourceInfo(m_caster);
-        condInfo.ConditionTargets[1] = m_targets.GetObjectTarget();
+        condInfo.mConditionTargets[1] = m_targets.GetObjectTarget();
         ConditionList conditions = sConditionMgr->GetConditionsForNotGroupedEntry(CONDITION_SOURCE_TYPE_SPELL, m_spellInfo->Id);
         if (!conditions.empty() && !sConditionMgr->IsObjectMeetToConditions(condInfo, conditions))
         {
@@ -4683,14 +4683,14 @@ SpellCastResult Spell::CheckCast(bool strict)
             if (Player* playerCaster = m_caster->ToPlayer())
             {
                 // mLastFailedCondition can be NULL if there was an error processing the condition in Condition::Meets (i.e. wrong data for ConditionTarget or others)
-                if (playerCaster->GetSession() && condInfo.LastFailedCondition
-                    && condInfo.LastFailedCondition->ErrorTextId)
+                if (playerCaster->GetSession() && condInfo.mLastFailedCondition
+                    && condInfo.mLastFailedCondition->ErrorTextId)
                 {
-                    playerCaster->GetSession()->SendNotification(condInfo.LastFailedCondition->ErrorTextId);
+                    playerCaster->GetSession()->SendNotification(condInfo.mLastFailedCondition->ErrorTextId);
                     return SPELL_FAILED_DONT_REPORT;
                 }
             }
-            if (!condInfo.LastFailedCondition || !condInfo.LastFailedCondition->ConditionTarget)
+            if (!condInfo.mLastFailedCondition || !condInfo.mLastFailedCondition->ConditionTarget)
                 return SPELL_FAILED_CASTER_AURASTATE;
             return SPELL_FAILED_BAD_TARGETS;
         }
@@ -7130,7 +7130,7 @@ bool WorldObjectSpellTargetCheck::operator()(WorldObject* target)
     }
     if (!_condSrcInfo)
         return true;
-    _condSrcInfo->ConditionTargets[0] = target;
+    _condSrcInfo->mConditionTargets[0] = target;
     return sConditionMgr->IsObjectMeetToConditions(*_condSrcInfo, *_condList);
 }
 
