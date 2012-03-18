@@ -369,7 +369,6 @@ public:
                     else
                         tAnimate -= diff;
                 }
-
                 //Stop yell timer on combat
                 doYell = false;
             }
@@ -504,7 +503,7 @@ public:
                     playSound = true;
                 }
                 else
-                tAnimate -= diff;
+                    tAnimate -= diff;
             }
         }
     };
@@ -533,8 +532,8 @@ public:
             tEnrage = 0;
             tRun = 500;
             onceRun = true;
-            x = me->m_positionX+cos(me->_orientation)*8;
-            y = me->m_positionY+sin(me->_orientation)*8;
+            x = me->m_positionX + cos(me->_orientation)*8;
+            y = me->m_positionY + sin(me->_orientation)*8;
             z = me->m_positionZ;
             willCastEnrage = urand(0, 1);
         }
@@ -581,7 +580,7 @@ public:
     float x, y, z, wx, wy, angle, tQuestCredit;
     bool opened;
     uint8 spawnKind;
-    Player* aPlayer;
+    Player* player;
     GameObject* go;
     uint32 DoorTimer;
 
@@ -589,9 +588,8 @@ public:
     {
         if (player->GetQuestStatus(QUEST_EVAC_MERC_SQUA) == QUEST_STATUS_INCOMPLETE && go->GetGoState() == GO_STATE_READY)
         {
-            aPlayer          = player;
-            opened           = 1;
-            tQuestCredit     = 2500;
+            opened = 1;
+            tQuestCredit = 2500;
             go->SetGoState(GO_STATE_ACTIVE);
             DoorTimer = DOOR_TIMER;
             spawnKind = urand(1, 3); //1, 2=citizen, 3=citizen&worgen (66%, 33%)
@@ -630,7 +628,7 @@ public:
             if (tQuestCredit <= ((float)diff/8))
             {
                 opened = 0;
-                aPlayer->KilledMonsterCredit(35830, 0);
+                player->KilledMonsterCredit(35830, 0);
                 if (spawnKind == 3)
                 {
                     if (Creature* spawnedCreature = go->SummonCreature(NPC_RAMPAGING_WORGEN_2, wx, wy, z, angle, TEMPSUMMON_TIMED_DESPAWN, SUMMON1_TTL))
@@ -638,20 +636,20 @@ public:
                         spawnedCreature->SetPhaseMask(6, 1);
                         spawnedCreature->Respawn(1);
                         spawnedCreature->getThreatManager().resetAllAggro();
-                        aPlayer->AddThreat(spawnedCreature, 1.0f);
-                        spawnedCreature->AddThreat(aPlayer, 1.0f);
+                        player->AddThreat(spawnedCreature, 1.0f);
+                        spawnedCreature->AddThreat(player, 1.0f);
                     }
                 }
             }
             else tQuestCredit -= ((float)diff/8);
         }
         if (DoorTimer <= diff)
-            {
-                if (go->GetGoState() == GO_STATE_ACTIVE)
-                    go->SetGoState(GO_STATE_READY);
+        {
+            if (go->GetGoState() == GO_STATE_ACTIVE)
+                go->SetGoState(GO_STATE_READY);
 
-                DoorTimer = DOOR_TIMER;
-            }
+            DoorTimer = DOOR_TIMER;
+        }
         else
             DoorTimer -= diff;
     }
@@ -783,8 +781,8 @@ public:
             tRun2          = 2500;
             tSay           = 1000;
             onceRun = onceRun2 = onceSay = onceGet = true;
-            x = me->m_positionX+cos(me->_orientation)*5;
-            y = me->m_positionY+sin(me->_orientation)*5;
+            x = me->m_positionX + cos(me->_orientation)*5;
+            y = me->m_positionY + sin(me->_orientation)*5;
             z = me->m_positionZ;
         }
 
@@ -864,7 +862,7 @@ public:
             willCastEnrage = urand(0, 1);
         }
 
-        void DamageDealt(Unit* target, uint32& damage, DamageEffectType damageType)
+        void DamageDealt(Unit* target, uint32 &damage, DamageEffectType damageType)
         {
             if (target->GetEntry() == NPC_GILNEAN_ROYAL_GUARD || target->GetEntry() == NPC_SERGEANT_CLEESE || target->GetEntry() == NPC_MYRIAM_SPELLWALKER)
                 dmgCount++;
@@ -1086,7 +1084,7 @@ public:
             }
         }
 
-        void DamageDealt(Unit* target, uint32& damage, DamageEffectType damageType)
+        void DamageDealt(Unit* target, uint32 &damage, DamageEffectType damageType)
         {
             if (target->GetEntry() == NPC_BLOODFANG_WORGEN)
                 dmgCount ++;
@@ -1156,14 +1154,14 @@ public:
         npc_mariam_spellwalkerAI(Creature* creature) : ScriptedAI(creature) {}
 
         uint32 dmgCount, tSeek;
-        
+
         void Reset()
         {
-            dmgCount   = 0;
-            tSeek      = urand(1000, 2000);
+            dmgCount = 0;
+            tSeek = urand(1000, 2000);
         }
 
-        void DamageDealt(Unit* target, uint32& damage, DamageEffectType damageType)
+        void DamageDealt(Unit* target, uint32 &damage, DamageEffectType damageType)
         {
             if (target->GetEntry() == NPC_BLOODFANG_WORGEN)
                 dmgCount ++;
@@ -1399,7 +1397,7 @@ public:
             loc.m_positionX   = -1818.4f;
             loc.m_positionY   = 2294.25f;
             loc.m_positionZ   = 42.2135f;
-            loc._orientation = 3.14f;
+            loc._orientation  = 3.14f;
 
             player->SetHomebind(loc, 4786);
         }
@@ -1478,12 +1476,12 @@ void AddSC_gilneas()
     new npc_rampaging_worgen();
     new npc_rampaging_worgen2();
     new go_merchant_square_door();
-	new npc_sergeant_cleese();
-	new npc_bloodfang_worgen();
+    new npc_sergeant_cleese();
+    new npc_bloodfang_worgen();
     new npc_lieutenant_walden();
     new npc_lord_darius_crowley();
-	new npc_gilnean_royal_guard();
-	new npc_mariam_spellwalker();
+    new npc_gilnean_royal_guard();
+    new npc_mariam_spellwalker();
     new npc_josiah_avery();
     new npc_king_genn_greymane();
     new npc_lord_darius_crowley_c2();

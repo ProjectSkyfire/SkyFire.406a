@@ -34,9 +34,9 @@ enum CreatureIds
     NPC_RAMPAGING_WORGEN_2                            = 35660,
     NPC_BLOODFANG_WORGEN                              = 35118,
     NPC_SERGEANT_CLEESE                               = 35839,
-	NPC_MYRIAM_SPELLWALKER                            = 35872,
-	NPC_GILNEAN_ROYAL_GUARD                           = 35232,
-	NPC_FRIGHTENED_CITIZEN_1                          = 34981,
+    NPC_MYRIAM_SPELLWALKER                            = 35872,
+    NPC_GILNEAN_ROYAL_GUARD                           = 35232,
+    NPC_FRIGHTENED_CITIZEN_1                          = 34981,
     NPC_FRIGHTENED_CITIZEN_2                          = 35836
 };
 
@@ -55,7 +55,7 @@ enum SpellIds
     SPELL_PHASE_2                                      = 59073,
     SPELL_PHASE_4                                      = 59074,
     SPELL_ENRAGE                                       = 8599,
-	SPELL_FROSTBOLT_VISUAL_ONLY                        = 74277 //Dummy spell, visual only
+    SPELL_FROSTBOLT_VISUAL_ONLY                        = 74277 //Dummy spell, visual only
 };
 
 enum NpcTextIds
