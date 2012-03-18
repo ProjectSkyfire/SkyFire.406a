@@ -380,7 +380,7 @@ enum AuraType
     SPELL_AURA_PERIODIC_HASTE                      = 316,
     SPELL_AURA_MOD_SPELL_POWER_PCT                 = 317,
     SPELL_AURA_MASTERY                             = 318,
-    SPELL_AURA_319                                 = 319,    // (melee?) attack speed
+    SPELL_AURA_MOD_MELEE_ATTACK_SPEED              = 319,    // (melee?) attack speed
     SPELL_AURA_MOD_RANGED_ATTACK_SPEED             = 320,    // NYI
     SPELL_AURA_321                                 = 321,
     SPELL_AURA_INTERFERE_TARGETTING                = 322,    // NYI
