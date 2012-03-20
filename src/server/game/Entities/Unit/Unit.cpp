@@ -9954,18 +9954,16 @@ void Unit::SetMinion(Minion *minion, bool apply, PetSlot slot)
 
         if (GetTypeId() == TYPEID_PLAYER)
         {
-            // If its not a Hunter Pet, only set pet slot. use setPetSlotUsed only for hanter pets.
-            // Always save thoose spots where hunter is correct
-            if (!minion->isHunterPet())
+            if(!minion->isHunterPet()) //If its not a Hunter Pet, well lets not try to use it for hunters then.
+            {
                 ToPlayer()->_currentPetSlot = slot;
-            else if (slot >= PET_SLOT_HUNTER_FIRST && slot <= PET_SLOT_HUNTER_LAST)
+                ToPlayer()->_petSlotUsed = 3452816845; // the same as 100 so that the pet is only that and nothing more
+                // ToPlayer()->setPetSlotUsed(slot, true);
+            }
+            if (slot >= PET_SLOT_HUNTER_FIRST && slot <= PET_SLOT_HUNTER_LAST) // Always save thoose spots where hunter is correct
             {
                 ToPlayer()->_currentPetSlot = slot;
                 ToPlayer()->setPetSlotUsed(slot, true);
-            }else
-            {
-                sLog->outCrash("Unit::SetMinion. Try to add hunter pet to not alawed slot(%u). Minion %u for %u", slot, minion->GetEntry(), GetEntry());
-                ASSERT(false);
             }
         }
 
