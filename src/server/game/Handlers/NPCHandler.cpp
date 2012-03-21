@@ -488,7 +488,6 @@ void WorldSession::HandleListStabledPetsOpcode(WorldPacket & recv_data)
 
 void WorldSession::SendStablePet(uint64 guid)
 {
-
     _sendStabledPetCallback.SetParam(guid);
     _sendStabledPetCallback.SetFutureResult(
         CharacterDatabase.AsyncPQuery("SELECT owner, slot, id, entry, level, name FROM character_pet WHERE owner = '%u' AND slot >= '%u' AND slot <= '%u' ORDER BY slot",
@@ -822,7 +821,6 @@ void WorldSession::HandleStableSwapPetCallback(QueryResult result, uint8 petnumb
             _player->setPetSlotUsed((PetSlot)slot, false);
             _player->setPetSlotUsed((PetSlot)petnumber, true);
             SendStableResult(STABLE_SUCCESS_UNSTABLE);
-
         }
         else
             SendStableResult(STABLE_ERR_STABLE);

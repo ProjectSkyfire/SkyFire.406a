@@ -1118,5 +1118,5 @@ void WorldSession::ProcessQueryCallbacks()
         _stableSwapCallback.GetResult(result_old);
         HandleStableSwapPetCallback(result_old, param);
         _stableSwapCallback.FreeResult();
-    } 
+    }
 }
