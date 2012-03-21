@@ -589,7 +589,7 @@ public:
         if (player->GetQuestStatus(QUEST_EVAC_MERC_SQUA) == QUEST_STATUS_INCOMPLETE && go->GetGoState() == GO_STATE_READY)
         {
             aPlayer = player;
-			opened = 1;
+            opened = 1;
             tQuestCredit = 2500;
             go->SetGoState(GO_STATE_ACTIVE);
             DoorTimer = DOOR_TIMER;
