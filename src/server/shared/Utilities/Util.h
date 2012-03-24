@@ -461,10 +461,10 @@ public:
             part[1]&p2 ||
             part[2]&p3);
     };
-    
+
     inline bool HasFlag(flag96 flags) const
     {
-        return ( 
+        return (
             part[0]&flags[0] ||
             part[1]&flags[1] ||
             part[2]&flags[2]);

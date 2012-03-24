@@ -580,7 +580,7 @@ public:
     float x, y, z, wx, wy, angle, tQuestCredit;
     bool opened;
     uint8 spawnKind;
-    Player* player;
+    Player* aPlayer;
     GameObject* go;
     uint32 DoorTimer;
 
@@ -588,6 +588,7 @@ public:
     {
         if (player->GetQuestStatus(QUEST_EVAC_MERC_SQUA) == QUEST_STATUS_INCOMPLETE && go->GetGoState() == GO_STATE_READY)
         {
+            aPlayer = player;
             opened = 1;
             tQuestCredit = 2500;
             go->SetGoState(GO_STATE_ACTIVE);
@@ -628,7 +629,7 @@ public:
             if (tQuestCredit <= ((float)diff/8))
             {
                 opened = 0;
-                player->KilledMonsterCredit(35830, 0);
+                aPlayer->KilledMonsterCredit(35830, 0);
                 if (spawnKind == 3)
                 {
                     if (Creature* spawnedCreature = go->SummonCreature(NPC_RAMPAGING_WORGEN_2, wx, wy, z, angle, TEMPSUMMON_TIMED_DESPAWN, SUMMON1_TTL))
@@ -636,8 +637,8 @@ public:
                         spawnedCreature->SetPhaseMask(6, 1);
                         spawnedCreature->Respawn(1);
                         spawnedCreature->getThreatManager().resetAllAggro();
-                        player->AddThreat(spawnedCreature, 1.0f);
-                        spawnedCreature->AddThreat(player, 1.0f);
+                        aPlayer->AddThreat(spawnedCreature, 1.0f);
+                        spawnedCreature->AddThreat(aPlayer, 1.0f);
                     }
                 }
             }
@@ -1478,6 +1479,7 @@ void AddSC_gilneas()
     new go_merchant_square_door();
     new npc_sergeant_cleese();
     new npc_bloodfang_worgen();
+    new npc_frightened_citizen();
     new npc_lieutenant_walden();
     new npc_lord_darius_crowley();
     new npc_gilnean_royal_guard();

@@ -25944,37 +25944,3 @@ void Player::SetTalentBranchSpec(uint32 branchSpec, uint8 spec)
     }
     sScriptMgr->OnTalentBranchSpecChanged(this, spec, branchSpec);
 }
-
-void Player::setPetSlotUsed(PetSlot slot, bool used)
-{
-    if (used)
-        _petSlotUsed |=  (1 << uint32(slot));
-    else
-        _petSlotUsed &= ~(1 << uint32(slot));
-}
-
-PetSlot Player::getSlotForNewPet()
-{
-    // Some changes here.
-    uint32 last_known = 0;
-    // Call Pet Spells.
-    // 883, 83242, 83243, 83244, 83245
-    //  1     2      3      4      5
-    if (HasSpell(83245))
-        last_known = 5;
-    else if (HasSpell(83244))
-        last_known = 4;
-    else if (HasSpell(83243))
-        last_known = 3;
-    else if (HasSpell(83242))
-        last_known = 2;
-    else if (HasSpell(883))
-        last_known = 1;
-
-    for (uint32 i = uint32(PET_SLOT_HUNTER_FIRST); i < last_known; i++)
-        if((_petSlotUsed & (1 << i)) == 0)
-            return PetSlot(i);
-
-    // If there is no slots available, then we should point that out
-    return PET_SLOT_FULL_LIST; //(PetSlot)last_known;
-}

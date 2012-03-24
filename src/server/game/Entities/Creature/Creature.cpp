@@ -1043,7 +1043,6 @@ void Creature::SaveToDB(uint32 mapid, uint8 spawnMask, uint32 phaseMask)
     // data->guid = guid must not be updated at save
     data.id = GetEntry();
     data.mapid = mapid;
-    data.spawnMask = spawnMask;
     data.phaseMask = phaseMask;
     data.displayid = displayId;
     data.equipmentId = GetEquipmentId();
@@ -1060,6 +1059,7 @@ void Creature::SaveToDB(uint32 mapid, uint8 spawnMask, uint32 phaseMask)
     // prevent add data integrity problems
     data.movementType = !_respawnradius && GetDefaultMovementType() == RANDOM_MOTION_TYPE
         ? IDLE_MOTION_TYPE : GetDefaultMovementType();
+    data.spawnMask = spawnMask;
     data.npcflag = npcflag;
     data.unit_flags = unit_flags;
     data.dynamicflags = dynamicflags;
@@ -1072,25 +1072,25 @@ void Creature::SaveToDB(uint32 mapid, uint8 spawnMask, uint32 phaseMask)
     std::ostringstream ss;
     ss << "INSERT INTO creature VALUES ("
         << _DBTableGuid << ','
-        << data.id << ','
-        << data.mapid << ','
-        << uint32(data.spawnMask) << ','             // cast to prevent save as symbol
-        << uint16(data.phaseMask) << ','             // prevent out of range error
-        << data.displayid << ','
-        << data.equipmentId << ','
-        << data.posX << ','
-        << data.posY << ','
-        << data.posZ << ','
-        << data.orientation << ','
-        << data.spawntimesecs << ','                 //respawn time
-        << (float) data.spawndist << ','             //spawn distance (float)
-        << data.currentwaypoint << ','               //currentwaypoint
-        << data.curhealth << ','                     //curhealth
-        << data.curmana << ','                       //curmana
-        << data.movementType << ','                  //default movement generator type
-        << data.npcflag << ','
-        << data.unit_flags << ','
-        << data.dynamicflags << ')';
+        << GetEntry() << ','
+        << mapid << ','
+        << uint32(spawnMask) << ','                         // cast to prevent save as symbol
+        << uint16(GetPhaseMask()) << ','                    // prevent out of range error
+        << displayId << ','
+        << GetEquipmentId() << ','
+        << GetPositionX() << ','
+        << GetPositionY() << ','
+        << GetPositionZ() << ','
+        << GetOrientation() << ','
+        << _respawnDelay << ','                             //respawn time
+        << (float) _respawnradius << ','                    //spawn distance (float)
+        << (uint32) (0) << ','                              //currentwaypoint
+        << GetHealth() << ','                               //curhealth
+        << GetPower(POWER_MANA) << ','                      //curmana
+        << GetDefaultMovementType() << ','                  //default movement generator type
+        << npcflag << ','
+        << unit_flags << ','
+        << dynamicflags << ')';
 
     trans->Append(ss.str().c_str());
 
