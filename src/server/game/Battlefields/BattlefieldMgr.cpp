@@ -18,7 +18,8 @@
  */
 
 #include "BattlefieldMgr.h"
-#include "Zones/BattlefieldWG.h"
+#include "BattlefieldWG.h"
+#include "BattlefieldTB.h"
 #include "ObjectMgr.h"
 #include "Player.h"
 
@@ -52,22 +53,21 @@ void BattlefieldMgr::InitBattlefield()
         sLog->outString("Battlefield : Wintergrasp successfully initiated.");
     }
 
-    /* For Cataclysm: Tol Barad
-       pBf = new BattlefieldTB;
-       // respawn, init variables
-       if(!pBf->SetupBattlefield())
-       {
-       sLog->outDebug(LOG_FILTER_BATTLEFIELD, "Battlefield : Tol Barad init failed.");
-       delete pBf;
-       }
-       else
-       {
-       m_BattlefieldSet.push_back(pBf);
-       sLog->outDebug(LOG_FILTER_BATTLEFIELD, "Battlefield : Tol Barad successfully initiated.");
-       } */
-}
+    //pBf = new BattlefieldTB;
+    //// respawn, init variables
+    //if (!pBf->SetupBattlefield())
+    //{
+    //    sLog->outDebug(LOG_FILTER_BATTLEFIELD, "Battlefield : Tol Barad init failed.");
+    //    delete pBf;
+    //}
+    //else
+    //{
+    //    m_BattlefieldSet.push_back(pBf);
+    //    sLog->outDebug(LOG_FILTER_BATTLEFIELD, "Battlefield : Tol Barad successfully initiated.");
+    //}
 
-void BattlefieldMgr::AddZone(uint32 zoneid, Battlefield *handle)
+
+void BattlefieldMgr::AddZone(uint32 zoneid, Battlefield* handle)
 {
     m_BattlefieldMap[zoneid] = handle;
 }
