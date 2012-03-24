@@ -68,7 +68,7 @@ void SystemMgr::LoadScriptTexts()
 
         if (temp.SoundId)
         {
-            if (!GetSoundEntriesStore()->LookupEntry(temp.SoundId))
+            if (!sSoundEntriesStore.LookupEntry(temp.SoundId))
                 sLog->outErrorDb("TSCR: Entry %i in table `script_texts` has soundId %u but sound does not exist.", Id, temp.SoundId);
         }
 
@@ -129,7 +129,7 @@ void SystemMgr::LoadScriptTextsCustom()
 
         if (temp.SoundId)
         {
-            if (!GetSoundEntriesStore()->LookupEntry(temp.SoundId))
+            if (!sSoundEntriesStore.LookupEntry(temp.SoundId))
                 sLog->outErrorDb("TSCR: Entry %i in table `custom_texts` has soundId %u but sound does not exist.", iId, temp.SoundId);
         }
 

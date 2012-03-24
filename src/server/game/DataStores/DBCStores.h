@@ -212,12 +212,4 @@ extern DBCStorage <WorldSafeLocsEntry>           sWorldSafeLocsStore;
 
 void LoadDBCStores(const std::string& dataPath, uint32& availableDbcLocales);
 
-// script support functions
- DBCStorage <SoundEntriesEntry>          const* GetSoundEntriesStore();
- DBCStorage <SpellRangeEntry>            const* GetSpellRangeStore();
- DBCStorage <FactionEntry>               const* GetFactionStore();
- DBCStorage <CreatureDisplayInfoEntry>   const* GetCreatureDisplayStore();
- DBCStorage <EmotesEntry>                const* GetEmotesStore();
- DBCStorage <EmotesTextEntry>            const* GetEmotesTextStore();
- DBCStorage <AchievementEntry>           const* GetAchievementStore();
 #endif

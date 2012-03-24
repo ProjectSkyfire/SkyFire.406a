@@ -156,7 +156,7 @@ public:
 
             if (IsHeroic() && GolemsShattered < 5)
             {
-                AchievementEntry const* AchievShatterResistant = GetAchievementStore()->LookupEntry(ACHIEVEMENT_SHATTER_RESISTANT);
+                AchievementEntry const* AchievShatterResistant = sAchievementStore.LookupEntry(ACHIEVEMENT_SHATTER_RESISTANT);
                 if (AchievShatterResistant)
                 {
                     Map* map = me->GetMap();
