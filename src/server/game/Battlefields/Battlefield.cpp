@@ -223,8 +223,6 @@ void Battlefield::InvitePlayerInQueueToWar()
             {
                 if (m_PlayersInWar[player->GetTeamId()].size() + m_InvitedPlayers[player->GetTeamId()].size() < m_MaxPlayer)
                     InvitePlayerToWar(player);
-                else
-                    //Full
             }
         }
         m_PlayersInQueue[team].clear();

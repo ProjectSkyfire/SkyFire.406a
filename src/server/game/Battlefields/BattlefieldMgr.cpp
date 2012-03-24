@@ -65,7 +65,7 @@ void BattlefieldMgr::InitBattlefield()
     //    m_BattlefieldSet.push_back(pBf);
     //    sLog->outDebug(LOG_FILTER_BATTLEFIELD, "Battlefield : Tol Barad successfully initiated.");
     //}
-
+}
 
 void BattlefieldMgr::AddZone(uint32 zoneid, Battlefield* handle)
 {
