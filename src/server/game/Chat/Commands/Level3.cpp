@@ -2144,16 +2144,12 @@ bool ChatHandler::HandleExploreCheatCommand(const char *args)
             ChatHandler(chr).PSendSysMessage(LANG_YOURS_EXPLORE_SET_NOTHING, GetNameLink().c_str());
     }
 
-    for (uint8 i=0; i<PLAYER_EXPLORED_ZONES_SIZE; ++i)
+    for (uint8 i = 0; i < PLAYER_EXPLORED_ZONES_SIZE; ++i)
     {
         if (flag != 0)
-        {
             _session->GetPlayer()->SetFlag(PLAYER_EXPLORED_ZONES_1+i, 0xFFFFFFFF);
-        }
         else
-        {
             _session->GetPlayer()->SetFlag(PLAYER_EXPLORED_ZONES_1+i, 0);
-        }
     }
 
     return true;
@@ -4492,10 +4488,6 @@ bool ChatHandler::HandleChannelSetOwnership(const char *args)
 
     return true;
 }
-
-/*------------------------------------------
- *-------------TRINITY----------------------
- *-------------------------------------*/
 
 bool ChatHandler::HandlePlayAllCommand(const char *args)
 {

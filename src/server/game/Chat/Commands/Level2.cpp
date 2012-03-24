@@ -176,7 +176,6 @@ bool ChatHandler::HandleItemMoveCommand(const char* args)
 {
     if (!*args)
         return false;
-    uint8 srcslot, dstslot;
 
     char* pParam1 = strtok((char*)args, " ");
     if (!pParam1)
@@ -186,8 +185,8 @@ bool ChatHandler::HandleItemMoveCommand(const char* args)
     if (!pParam2)
         return false;
 
-    srcslot = (uint8)atoi(pParam1);
-    dstslot = (uint8)atoi(pParam2);
+    uint8 srcslot = (uint8)atoi(pParam1);
+    uint8 dstslot = (uint8)atoi(pParam2);
 
     if (srcslot == dstslot)
         return true;
@@ -714,19 +713,20 @@ bool ChatHandler::HandleLookupPlayerIpCommand(const char* args)
     char* limit_str;
 
     Player *chr = getSelectedPlayer();
-    if (chr == NULL)
+    if (!*args)
     {
-        if (!*args)
+        // NULL only if used from console
+        if (!chr || chr == GetSession()->GetPlayer())
             return false;
 
-        ip = strtok ((char*)args, " ");
-        limit_str = strtok (NULL, " ");
-        limit = limit_str ? atoi (limit_str) : -1;
+        ip = chr->GetSession()->GetRemoteAddress();
+        limit = -1;
     }
     else
     {
-        ip = chr->GetSession()->GetRemoteAddress();
-        limit = -1;
+        ip = strtok ((char*)args, " ");
+        limit_str = strtok (NULL, " ");
+        limit = limit_str ? atoi (limit_str) : -1;
     }
 
     LoginDatabase.EscapeString(ip);
@@ -752,7 +752,7 @@ bool ChatHandler::HandleLookupPlayerAccountCommand(const char* args)
 
     QueryResult result = LoginDatabase.PQuery ("SELECT id, username FROM account WHERE username = '%s'", account.c_str ());
 
-    return LookupPlayerSearchCommand (result, limit);
+    return LookupPlayerSearchCommand(result, limit);
 }
 
 bool ChatHandler::HandleLookupPlayerEmailCommand(const char* args)

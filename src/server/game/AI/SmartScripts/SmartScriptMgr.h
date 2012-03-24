@@ -877,6 +877,12 @@ struct SmartAction
 
         struct
         {
+            uint8 pointId;
+        } MoveToPos;
+
+
+        struct
+        {
             uint32 gossipMenuId;
             uint32 gossipNpcTextId;
         } sendGossipMenu;
