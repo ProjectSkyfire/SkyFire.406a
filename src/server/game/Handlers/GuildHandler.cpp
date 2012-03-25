@@ -52,13 +52,9 @@ void WorldSession::HandleGuildQueryOpcode(WorldPacket& recvPacket)
     // Use received guild id to access guild method (not player's guild id)
     uint32 lowGuildId = GUID_LOPART(guildId);
     if (Guild* guild = sGuildMgr->GetGuildById(lowGuildId))
-    {
         guild->HandleQuery(this);
-    }
     else
-    {
         Guild::SendCommandResult(this, GUILD_CREATE_S, ERR_GUILD_PLAYER_NOT_IN_GUILD);
-    }
 }
 
 void WorldSession::HandleGuildCreateOpcode(WorldPacket& recvPacket)
