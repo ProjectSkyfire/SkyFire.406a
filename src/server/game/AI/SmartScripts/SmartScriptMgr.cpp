@@ -29,10 +29,19 @@
 #include "ScriptedCreature.h"
 #include "GameEventMgr.h"
 #include "SmartScriptMgr.h"
+#include "CreatureTextMgr.h"
 
 void SmartWaypointMgr::LoadFromDB()
 {
     uint32 oldMSTime = getMSTime();
+
+    for (UNORDERED_MAP<uint32, WPPath*>::iterator itr = waypoint_map.begin(); itr != waypoint_map.end(); ++itr)
+    {
+        for (WPPath::iterator pathItr = itr->second->begin(); pathItr != itr->second->end(); ++pathItr)
+            delete pathItr->second;
+
+        delete itr->second;
+    }
 
     waypoint_map.clear();
 
@@ -79,6 +88,19 @@ void SmartWaypointMgr::LoadFromDB()
 
     sLog->outString(">> Loaded %u SmartAI waypoint paths (total %u waypoints) in %u ms", count, total, GetMSTimeDiffToNow(oldMSTime));
     sLog->outString();
+}
+
+SmartWaypointMgr::~SmartWaypointMgr()
+{
+    for (UNORDERED_MAP<uint32, WPPath*>::iterator itr = waypoint_map.begin(); itr != waypoint_map.end(); ++itr)
+    {
+        for (WPPath::iterator pathItr = itr->second->begin(); pathItr != itr->second->end(); ++pathItr)
+            delete pathItr->second;
+
+        delete itr->second;
+    }
+
+    waypoint_map.clear();
 }
 
 void SmartAIMgr::LoadSmartAIFromDB()

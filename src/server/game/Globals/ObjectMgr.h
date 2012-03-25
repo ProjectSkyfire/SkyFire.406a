@@ -1075,8 +1075,8 @@ class ObjectMgr
             if (itr == _skyfireStringLocaleStore.end()) return NULL;
             return &itr->second;
         }
-        const char *GetSkyFireString(int32 entry, LocaleConstant locale_idx) const;
-        const char *GetSkyFireStringForDBCLocale(int32 entry) const { return GetSkyFireString(entry, DBCLocaleIndex); }
+        const char* GetSkyFireString(int32 entry, LocaleConstant locale_idx) const;
+        const char* GetSkyFireStringForDBCLocale(int32 entry) const { return GetSkyFireString(entry, DBCLocaleIndex); }
         LocaleConstant GetDBCLocaleIndex() const { return DBCLocaleIndex; }
         void SetDBCLocaleIndex(LocaleConstant locale) { DBCLocaleIndex = locale; }
 

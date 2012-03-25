@@ -24,7 +24,6 @@
 #include "CreatureAI.h"
 #include "Unit.h"
 #include "ConditionMgr.h"
-#include "CreatureTextMgr.h"
 #include "Spell.h"
 #include "DB2Stores.h"
 //#include "SmartScript.h"
@@ -443,7 +442,7 @@ enum SMART_ACTION
 
     SMART_ACTION_CREATE_TIMED_EVENT                 = 67,     // id, InitialMin, InitialMax, RepeatMin(only if it repeats), RepeatMax(only if it repeats), chance
     SMART_ACTION_PLAYMOVIE                          = 68,     // entry
-    SMART_ACTION_MOVE_TO_POS                        = 69,     // xyz
+    SMART_ACTION_MOVE_TO_POS                        = 69,     // PointId, xyz
     SMART_ACTION_RESPAWN_TARGET                     = 70,     //
     SMART_ACTION_EQUIP                              = 71,     // entry, slotmask slot1, slot2, slot3   , only slots with mask set will be sent to client, bits are 1, 2, 4, leaving mask 0 is defaulted to mask 7 (send all), slots1-3 are only used if no entry is set
     SMART_ACTION_CLOSE_GOSSIP                       = 72,     // none
@@ -1241,9 +1240,9 @@ typedef UNORDERED_MAP<uint32, ObjectList*> ObjectListMap;
 class SmartWaypointMgr
 {
     friend class ACE_Singleton<SmartWaypointMgr, ACE_Null_Mutex>;
-    SmartWaypointMgr(){};
+    SmartWaypointMgr() {}
     public:
-        ~SmartWaypointMgr(){};
+        ~SmartWaypointMgr();
 
         void LoadFromDB();
 
@@ -1388,10 +1387,10 @@ class SmartAIMgr
             if (t > 0 && v1 >= 0 && v2 >= 0 && v3 >= 0)
             {
                 Condition cond;
-                cond.ConditionType = ConditionTypes(t);
-                cond.ConditionValue1 = uint32(v1);
-                cond.ConditionValue2 = uint32(v2);
-                cond.ConditionValue3 = uint32(v3);
+                cond.mConditionType = ConditionType(t);
+                cond.mConditionValue1 = uint32(v1);
+                cond.mConditionValue2 = uint32(v2);
+                cond.mConditionValue3 = uint32(v3);
                 if (!sConditionMgr->isConditionTypeValid(&cond))
                     error = true;
             }

@@ -379,8 +379,11 @@ void Transport::TeleportTransport(uint32 newMapid, float x, float y, float z)
         UpdateForMap(newMap);
     }
 
+    // This is a "workaround"
+#ifdef TRINITY_DEBUG
     for (CreatureSet::iterator itr = m_NPCPassengerSet.begin(); itr != m_NPCPassengerSet.end(); ++itr)
         (*itr)->FarTeleportTo(newMap, x, y, z, (*itr)->GetOrientation());
+#endif
 }
 
 bool Transport::AddPassenger(Player* passenger)

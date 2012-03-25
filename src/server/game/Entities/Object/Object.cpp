@@ -2641,7 +2641,7 @@ void WorldObject::MovePositionToFirstCollision(Position &pos, float dist, float 
 {
     angle += _orientation;
     float destx, desty, destz, ground, floor;
-
+    pos.m_positionZ += 2.0f;
     destx = pos.m_positionX + dist * cos(angle);
     desty = pos.m_positionY + dist * sin(angle);
     ground = GetMap()->GetHeight(destx, desty, MAX_HEIGHT, true);

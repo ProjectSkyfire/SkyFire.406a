@@ -302,6 +302,7 @@ void TicketMgr::RemoveTicket(uint32 ticketId)
     {
         ticket->DeleteFromDB();
         _ticketList.erase(ticketId);
+        delete ticket;
     }
 }
 

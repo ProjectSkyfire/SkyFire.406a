@@ -577,8 +577,10 @@ void ObjectMgr::LoadCreatureTemplateAddons()
         }
 
         if (!sEmotesStore.LookupEntry(creatureAddon.emote))
+        {
             sLog->outErrorDb("Creature (Entry: %u) has invalid emote (%u) defined in `creature_template_addon`.", entry, creatureAddon.emote);
-
+            creatureAddon.emote = 0;
+        }
         ++count;
     }
     while (result->NextRow());
@@ -952,8 +954,10 @@ void ObjectMgr::LoadCreatureAddons()
         }
 
         if (!sEmotesStore.LookupEntry(creatureAddon.emote))
+        {
             sLog->outErrorDb("Creature (GUID: %u) has invalid emote (%u) defined in `creature_addon`.", guid, creatureAddon.emote);
-
+            creatureAddon.emote = 0;
+        }
         ++count;
     }
     while (result->NextRow());
@@ -3062,7 +3066,7 @@ void ObjectMgr::LoadPlayerInfo()
 
                 uint32 item_id = fields[2].GetUInt32();
 
-                if (!sObjectMgr->GetItemTemplate(item_id))
+                if (!GetItemTemplate(item_id))
                 {
                     sLog->outErrorDb("Item id %u (race %u class %u) in `playercreateinfo_item` table but not listed in `item_template`, ignoring.", item_id, current_race, current_class);
                     continue;
@@ -5638,7 +5642,7 @@ uint32 ObjectMgr::GetTaxiMountDisplayId(uint32 id, uint32 team, bool allowed_alt
     }
 
     // minfo is not actually used but the mount_id was updated
-    sObjectMgr->GetCreatureModelRandomGender(&mount_id);
+    GetCreatureModelRandomGender(&mount_id);
 
     return mount_id;
 }
@@ -5934,8 +5938,6 @@ void ObjectMgr::RemoveGraveYardLink(uint32 id, uint32 zoneId, uint32 team, bool 
 
         WorldDatabase.Execute(stmt);
     }
-
-    return;
 }
 
 void ObjectMgr::LoadAreaTriggerTeleports()
@@ -7972,17 +7974,20 @@ SkillRangeType GetSkillRangeType(SkillLineEntry const *pSkill, bool racial)
 
 void ObjectMgr::LoadGameTele()
 {
+    uint32 oldMSTime = getMSTime();
+
     _gameTeleStore.clear();                                  // for reload case
 
-    uint32 count = 0;
     QueryResult result = WorldDatabase.Query("SELECT id, position_x, position_y, position_z, orientation, map, name FROM game_tele");
 
     if (!result)
     {
+        sLog->outErrorDb(">> Loaded 0 GameTeleports. DB table `game_tele` is empty!");
         sLog->outString();
-        sLog->outErrorDb(">> Loaded `game_tele`, table is empty!");
         return;
     }
+
+    uint32 count = 0;
 
     do
     {
@@ -8019,8 +8024,8 @@ void ObjectMgr::LoadGameTele()
     }
     while (result->NextRow());
 
+    sLog->outString(">> Loaded %u GameTeleports in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
     sLog->outString();
-    sLog->outString(">> Loaded %u GameTeleports", count);
 }
 
 GameTele const* ObjectMgr::GetGameTele(const std::string& name) const
@@ -8280,7 +8285,7 @@ void ObjectMgr::LoadTrainerSpell()
 
         AddSpellToTrainer(entry, spell, spellCost, reqSkill, reqSkillValue, reqLevel);
 
-        count++;
+        ++count;
     }
     while (result->NextRow());
 

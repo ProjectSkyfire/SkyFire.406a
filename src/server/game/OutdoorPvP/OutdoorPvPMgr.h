@@ -44,11 +44,14 @@ class OutdoorPvPMgr
 
     private:
         OutdoorPvPMgr();
-        ~OutdoorPvPMgr();
+        ~OutdoorPvPMgr() {};
 
     public:
         // create outdoor pvp events
         void InitOutdoorPvP();
+
+        // cleanup
+        void Die();
 
         // called when a player enters an outdoor pvp area
         void HandlePlayerEnterZone(Player* player, uint32 areaflag);

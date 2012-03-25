@@ -24,7 +24,6 @@
 #include "CreatureAI.h"
 #include "Unit.h"
 #include "ConditionMgr.h"
-#include "CreatureTextMgr.h"
 #include "Spell.h"
 #include "GridNotifiers.h"
 
@@ -100,8 +99,13 @@ class SmartScript
                 return;
 
             if (mTargetStorage->find(id) != mTargetStorage->end())
-                delete (*mTargetStorage)[id];
+            {
+                // check if already stored
+                if ((*mTargetStorage)[id] == targets)
+                    return;
 
+                delete (*mTargetStorage)[id];
+            }
             (*mTargetStorage)[id] = targets;
         }
 

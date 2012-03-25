@@ -441,8 +441,6 @@ void Vehicle::RelocatePassengers(float x, float y, float z, float ang)
         if (Unit* passenger = ObjectAccessor::GetUnit(*GetBase(), itr->second.Passenger))
         {
             ASSERT(passenger->IsInWorld());
-            ASSERT(passenger->IsOnVehicle(GetBase()));
-            ASSERT(GetSeatForPassenger(passenger));
 
             float px = x + passenger->_movementInfo.t_pos.m_positionX;
             float py = y + passenger->_movementInfo.t_pos.m_positionY;
