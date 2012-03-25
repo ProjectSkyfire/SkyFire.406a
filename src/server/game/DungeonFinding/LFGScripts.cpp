@@ -29,9 +29,45 @@
 #include "LFGScripts.h"
 #include "LFGMgr.h"
 
-LFGScripts::LFGScripts(): GroupScript("LFGScripts"), PlayerScript("LFGScripts") {}
+LFGPlayerScript::LFGPlayerScript() : PlayerScript("LFGPlayerScript")
+{
+}
 
-void LFGScripts::OnAddMember(Group* group, uint64 guid)
+void LFGPlayerScript::OnLevelChanged(Player* player, uint8 /*oldLevel*/)
+{
+    sLFGMgr->InitializeLockedDungeons(player);
+}
+
+void LFGPlayerScript::OnLogout(Player* player)
+{
+    sLFGMgr->Leave(player);
+    LfgUpdateData updateData = LfgUpdateData(LFG_UPDATETYPE_REMOVED_FROM_QUEUE);
+    player->GetSession()->SendLfgUpdateParty(updateData);
+    player->GetSession()->SendLfgUpdatePlayer(updateData);
+    player->GetSession()->SendLfgUpdateSearch(false);
+    uint64 guid = player->GetGUID();
+    // TODO - Do not remove, add timer before deleting
+    sLFGMgr->RemovePlayerData(guid);
+}
+
+void LFGPlayerScript::OnLogin(Player* player)
+{
+    sLFGMgr->InitializeLockedDungeons(player);
+    // TODO - Restore LfgPlayerData and send proper status to player if it was in a group
+}
+
+void LFGPlayerScript::OnBindToInstance(Player* player, Difficulty difficulty, uint32 mapId, bool /*permanent*/)
+{
+    MapEntry const* mapEntry = sMapStore.LookupEntry(mapId);
+    if (mapEntry->IsDungeon() && difficulty > DUNGEON_DIFFICULTY_NORMAL)
+        sLFGMgr->InitializeLockedDungeons(player);
+}
+
+LFGGroupScript::LFGGroupScript() : GroupScript("LFGGroupScript")
+{
+}
+
+void LFGGroupScript::OnAddMember(Group* group, uint64 guid)
 {
     uint64 gguid = group->GetGUID();
     if (!gguid)
@@ -57,7 +93,7 @@ void LFGScripts::OnAddMember(Group* group, uint64 guid)
             sLFGMgr->Leave(player);
 }
 
-void LFGScripts::OnRemoveMember(Group* group, uint64 guid, RemoveMethod& method, uint64 kicker, const char* reason)
+void LFGGroupScript::OnRemoveMember(Group* group, uint64 guid, RemoveMethod method, uint64 kicker, char const* reason)
 {
     uint64 gguid = group->GetGUID();
     if (!gguid || method == GROUP_REMOVEMETHOD_DEFAULT)
@@ -104,7 +140,7 @@ void LFGScripts::OnRemoveMember(Group* group, uint64 guid, RemoveMethod& method,
         sLFGMgr->OfferContinue(group);
 }
 
-void LFGScripts::OnDisband(Group* group)
+void LFGGroupScript::OnDisband(Group* group)
 {
     uint64 gguid = group->GetGUID();
     sLog->outDebug(LOG_FILTER_LFG, "LFGScripts::OnDisband [" UI64FMTD "]", gguid);
@@ -112,7 +148,7 @@ void LFGScripts::OnDisband(Group* group)
     sLFGMgr->RemoveGroupData(gguid);
 }
 
-void LFGScripts::OnChangeLeader(Group* group, uint64 newLeaderGuid, uint64 oldLeaderGuid)
+void LFGGroupScript::OnChangeLeader(Group* group, uint64 newLeaderGuid, uint64 oldLeaderGuid)
 {
     uint64 gguid = group->GetGUID();
     if (!gguid)
@@ -133,7 +169,7 @@ void LFGScripts::OnChangeLeader(Group* group, uint64 newLeaderGuid, uint64 oldLe
     }
 }
 
-void LFGScripts::OnInviteMember(Group* group, uint64 guid)
+void LFGGroupScript::OnInviteMember(Group* group, uint64 guid)
 {
     uint64 gguid = group->GetGUID();
     if (!gguid)
@@ -141,34 +177,4 @@ void LFGScripts::OnInviteMember(Group* group, uint64 guid)
 
     sLog->outDebug(LOG_FILTER_LFG, "LFGScripts::OnInviteMember [" UI64FMTD "]: invite [" UI64FMTD "] leader [" UI64FMTD "]", gguid, guid, group->GetLeaderGUID());
     sLFGMgr->Leave(NULL, group);
-}
-
-void LFGScripts::OnLevelChanged(Player* player, uint8 /*newLevel*/)
-{
-    sLFGMgr->InitializeLockedDungeons(player);
-}
-
-void LFGScripts::OnLogout(Player* player)
-{
-    sLFGMgr->Leave(player);
-    LfgUpdateData updateData = LfgUpdateData(LFG_UPDATETYPE_REMOVED_FROM_QUEUE);
-    player->GetSession()->SendLfgUpdateParty(updateData);
-    player->GetSession()->SendLfgUpdatePlayer(updateData);
-    player->GetSession()->SendLfgUpdateSearch(false);
-    uint64 guid = player->GetGUID();
-    // TODO - Do not remove, add timer before deleting
-    sLFGMgr->RemovePlayerData(guid);
-}
-
-void LFGScripts::OnLogin(Player* player)
-{
-    sLFGMgr->InitializeLockedDungeons(player);
-    // TODO - Restore LfgPlayerData and send proper status to player if it was in a group
-}
-
-void LFGScripts::OnBindToInstance(Player* player, Difficulty difficulty, uint32 mapId, bool permanent)
-{
-    MapEntry const* mapEntry = sMapStore.LookupEntry(mapId);
-    if (mapEntry->IsDungeon() && difficulty > DUNGEON_DIFFICULTY_NORMAL)
-        sLFGMgr->InitializeLockedDungeons(player);
 }
