@@ -1027,7 +1027,7 @@ class TradeData
 
         Item* GetItem(TradeSlots slot) const;
         bool HasItem(uint64 itemGuid) const;
-        TradeSlots const GetTradeSlotForItem(uint64 itemGuid);
+        TradeSlots GetTradeSlotForItem(uint64 itemGuid);
         void SetItem(TradeSlots slot, Item* item);
 
         uint32 GetSpell() const { return m_spell; }
@@ -1383,6 +1383,7 @@ class Player : public Unit, public GridObject<Player>
 
         void UpdateEnchantTime(uint32 time);
         void UpdateSoulboundTradeItems();
+        void AddTradeableItem(Item* item);
         void RemoveTradeableItem(Item* item);
         void UpdateItemDuration(uint32 time, bool realtimeonly = false);
         void AddEnchantmentDurations(Item *item);
@@ -1522,7 +1523,7 @@ class Player : public Unit, public GridObject<Player>
         void SendQuestReward(Quest const *quest, uint32 XP, Object* questGiver);
         void SendQuestFailed(uint32 questId, InventoryResult reason = EQUIP_ERR_OK);
         void SendQuestTimerFailed(uint32 quest_id);
-        void SendCanTakeQuestResponse(uint32 msg);
+        void SendCanTakeQuestResponse(uint32 msg) const;
         void SendQuestConfirmAccept(Quest const* quest, Player* pReceiver);
         void SendPushToPartyResponse(Player *player, uint32 msg);
         void SendQuestUpdateAddItem(Quest const* quest, uint32 item_idx, uint16 count);

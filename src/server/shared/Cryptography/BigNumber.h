@@ -21,6 +21,7 @@
 #define _AUTH_BIGNUMBER_H
 
 #include "Define.h"
+#include <ace/Mutex.h>
 
 struct bignum_st;
 
@@ -90,5 +91,9 @@ class BigNumber
     private:
         struct bignum_st *_bn;
         uint8 *_array;
+
+        // This mutex only controls thread-safe access to AsByteArray() and should be replaced with a thread-safe implementation of BigNumber
+        ACE_Mutex _lock;
+
 };
 #endif
