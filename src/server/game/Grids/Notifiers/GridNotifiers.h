@@ -952,8 +952,8 @@ namespace Trinity
                 if (!u->IsWithinLOSInMap(i_enemy))
                     return;
 
-                if (u->AI())
-                    u->AI()->AttackStart(i_enemy);
+                //if (u->AI())
+                    //u->AI()->AttackStart(i_enemy);
             }
         private:
             Unit* const i_funit;
