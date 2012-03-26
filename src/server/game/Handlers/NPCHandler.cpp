@@ -753,11 +753,20 @@ void WorldSession::HandleStableSwapPet(WorldPacket & recv_data)
 
     Pet* pet = _player->GetPet();
 
-    if (!pet || pet->getPetType() != HUNTER_PET)
+   /* if (!pet || pet->getPetType() != HUNTER_PET)
     {
         SendStableResult(STABLE_ERR_STABLE);
         return;
     }
+    */
+
+    //If we move the pet already summoned...
+    if (pet && pet->GetCharmInfo() && pet->GetCharmInfo()->GetPetNumber() == pet_number)
+        _player->RemovePet(pet, PET_SLOT_ACTUAL_PET_SLOT);
+
+    //If we move to the pet already summoned...
+    if (pet && GetPlayer()->_currentPetSlot == new_slot)
+        _player->RemovePet(pet, PET_SLOT_ACTUAL_PET_SLOT);
 
     //If we move the pet already summoned...
     if (pet && pet->GetCharmInfo() && pet->GetCharmInfo()->GetPetNumber() == pet_number)
@@ -803,6 +812,9 @@ void WorldSession::HandleStableSwapPetCallback(QueryResult result, uint8 petnumb
     }
 
     // move alive pet to slot or delete dead pet
+    CharacterDatabase.PExecute("UPDATE character_pet SET slot = '%u' WHERE slot = '%u' AND owner='%u'", petnumber, slot, GetPlayer()->GetGUIDLow());
+    CharacterDatabase.PExecute("UPDATE character_pet SET slot = '%u' WHERE slot = '%u' AND owner='%u' AND id<>'%u'", slot, petnumber, GetPlayer()->GetGUIDLow(), pet_number);
+
     CharacterDatabase.PExecute("UPDATE character_pet SET slot = '%u' WHERE slot = '%u' AND owner='%u'", petnumber, slot, GetPlayer()->GetGUIDLow());
     CharacterDatabase.PExecute("UPDATE character_pet SET slot = '%u' WHERE slot = '%u' AND owner='%u' AND id<>'%u'", slot, petnumber, GetPlayer()->GetGUIDLow(), pet_number);
 

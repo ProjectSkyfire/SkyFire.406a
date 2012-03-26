@@ -1697,7 +1697,6 @@ enum TrapSpells
 
 #define VENOMOUS_SNAKE_TIMER   1500
 #define VIPER_TIMER            3000
-
 class npc_snake_trap : public CreatureScript
 {
 public:

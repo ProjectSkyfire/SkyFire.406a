@@ -418,9 +418,9 @@ void WorldSession::HandleBattleFieldPortOpcode(WorldPacket &recv_data)
     }
     uint32 queueSlot = _player->GetBattlegroundQueueIndex(bgQueueTypeId);
     WorldPacket data;
-    switch (action)
+    switch (action >> 7)
     {
-        case 128:                                         // port to battleground
+        case 1:                                         // port to battleground
             if (!_player->IsInvitedForBattlegroundQueueType(bgQueueTypeId))
                 return;                                 // cheating?
 

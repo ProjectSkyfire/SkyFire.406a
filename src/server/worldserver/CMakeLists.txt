@@ -49,8 +49,10 @@ include_directories(
   ${CMAKE_SOURCE_DIR}/dep/sockets/include
   ${CMAKE_SOURCE_DIR}/dep/SFMT
   ${CMAKE_SOURCE_DIR}/dep/mersennetwister
-  ${CMAKE_SOURCE_DIR}/src/server/collision
-  ${CMAKE_SOURCE_DIR}/src/server/collision/Management
+  ${CMAKE_SOURCE_DIR}/dep/recastlite/Recast
+  ${CMAKE_SOURCE_DIR}/dep/recastlite/Detour
+  ${CMAKE_SOURCE_DIR}/src/Server/Collision
+  ${CMAKE_SOURCE_DIR}/src/Server/Collision/Management
   ${CMAKE_SOURCE_DIR}/src/server/shared
   ${CMAKE_SOURCE_DIR}/src/server/shared/Configuration
   ${CMAKE_SOURCE_DIR}/src/server/shared/Cryptography
@@ -115,6 +117,7 @@ include_directories(
   ${CMAKE_SOURCE_DIR}/src/server/game/Movement
   ${CMAKE_SOURCE_DIR}/src/server/game/Movement/MovementGenerators
   ${CMAKE_SOURCE_DIR}/src/server/game/Movement/Waypoints
+  ${CMAKE_SOURCE_DIR}/src/server/game/Movement/Spline
   ${CMAKE_SOURCE_DIR}/src/server/game/OutdoorPvP
   ${CMAKE_SOURCE_DIR}/src/server/game/Pools
   ${CMAKE_SOURCE_DIR}/src/server/game/PrecompiledHeaders
@@ -158,12 +161,14 @@ endif()
 set_target_properties(worldserver PROPERTIES LINK_FLAGS "${worldserver_LINK_FLAGS}")
 
 target_link_libraries(worldserver
+  Detour
   game
   shared
   scripts
   collision
   g3dlib
   gsoap
+  ${DETOURE_LIBRARY}
   ${JEMALLOC_LIBRARY}
   ${READLINE_LIBRARY}
   ${TERMCAP_LIBRARY}

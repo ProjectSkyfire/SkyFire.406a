@@ -710,26 +710,26 @@ void Map::ScriptsProcess()
                 // source/target cast spell at target/source (script->datalong2: 0: s->t 1: s->s 2: t->t 3: t->s
                 switch (step.script->CastSpell.Flags)
                 {
-                case SF_CASTSPELL_SOURCE_TO_TARGET: // source -> target
-                    uSource = dynamic_cast<Unit*>(source);
-                    uTarget = dynamic_cast<Unit*>(target);
-                    break;
-                case SF_CASTSPELL_SOURCE_TO_SOURCE: // source -> source
-                    uSource = dynamic_cast<Unit*>(source);
-                    uTarget = uSource;
-                    break;
-                case SF_CASTSPELL_TARGET_TO_TARGET: // target -> target
-                    uSource = dynamic_cast<Unit*>(target);
-                    uTarget = uSource;
-                    break;
-                case SF_CASTSPELL_TARGET_TO_SOURCE: // target -> source
-                    uSource = dynamic_cast<Unit*>(target);
-                    uTarget = dynamic_cast<Unit*>(source);
-                    break;
-                case SF_CASTSPELL_SEARCH_CREATURE: // source -> creature with entry
-                    uSource = dynamic_cast<Unit*>(source);
-                    uTarget = GetClosestCreatureWithEntry(uSource, abs(step.script->CastSpell.CreatureEntry), step.script->CastSpell.SearchRadius);
-                    break;
+                    case SF_CASTSPELL_SOURCE_TO_TARGET: // source -> target
+                        uSource = dynamic_cast<Unit*>(source);
+                        uTarget = dynamic_cast<Unit*>(target);
+                        break;
+                    case SF_CASTSPELL_SOURCE_TO_SOURCE: // source -> source
+                        uSource = dynamic_cast<Unit*>(source);
+                        uTarget = uSource;
+                        break;
+                    case SF_CASTSPELL_TARGET_TO_TARGET: // target -> target
+                        uSource = dynamic_cast<Unit*>(target);
+                        uTarget = uSource;
+                        break;
+                    case SF_CASTSPELL_TARGET_TO_SOURCE: // target -> source
+                        uSource = dynamic_cast<Unit*>(target);
+                        uTarget = dynamic_cast<Unit*>(source);
+                        break;
+                    case SF_CASTSPELL_SEARCH_CREATURE: // source -> creature with entry
+                        uSource = dynamic_cast<Unit*>(source);
+                        uTarget = GetClosestCreatureWithEntry(uSource, abs(step.script->CastSpell.CreatureEntry), step.script->CastSpell.SearchRadius);
+                        break;
                 }
 
                 if (!uSource || !uSource->isType(TYPEMASK_UNIT))

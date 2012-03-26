@@ -19,7 +19,9 @@
 #ifndef TRINITYSERVER_MOVESPLINEINIT_H
 #define TRINITYSERVER_MOVESPLINEINIT_H
 
+#include "MoveSplineInit.h"
 #include "MoveSplineInitArgs.h"
+#include "PathFinderMovementGenerator.h"
 
 class Unit;
 
@@ -42,8 +44,9 @@ namespace Movement
         explicit MoveSplineInit(Unit& m);
 
         /*  Final pass of initialization that launches spline movement.
-         */
-        void Launch();
+        * @return duration - estimated travel time
+        */
+        int32 MoveSplineInit::Launch();
 
         /* Adds movement by parabolic trajectory
          * @param amplitude  - the maximum height of parabola, value could be negative and positive
@@ -72,8 +75,11 @@ namespace Movement
 
         /* Initializes simple A to B mition, A is current unit's position, B is destination
          */
-        void MoveTo(const Vector3& destination);
-        void MoveTo(float x, float y, float z);
+        // void MoveTo(const Vector3& destination);
+        //void MoveTo(float x, float y, float z);
+
+        void MoveTo(const Vector3& destination, bool generatePath = false, bool forceDestination = false);
+        void MoveTo(float x, float y, float z, bool generatePath = false, bool forceDestination = false);
 
         /* Sets Id of fisrt point of the path. When N-th path point will be done ILisener will notify that pointId + N done
          * Needed for waypoint movement where path splitten into parts
@@ -133,18 +139,31 @@ namespace Movement
         args.path.assign(controls.begin(),controls.end());
     }
 
-    inline void MoveSplineInit::MoveTo(float x, float y, float z)
+    inline void MoveSplineInit::MoveTo(float x, float y, float z, bool generatePath, bool forceDestination)
     {
         Vector3 v(x, y, z);
         MoveTo(v);
+        MoveTo(v, generatePath, forceDestination);
     }
 
-    inline void MoveSplineInit::MoveTo(const Vector3& dest)
+    inline void MoveSplineInit::MoveTo(const Vector3& dest, bool generatePath, bool forceDestination)
     {
-        args.path_Idx_offset = 0;
-        args.path.resize(2);
-        args.path[1] = dest;
-    }
+       //  args.path_Idx_offset = 0;
+       //  args.path.resize(2);
+       //  args.path[1] = dest;
+        if (generatePath)
+        {
+            PathFinderMovementGenerator path(&unit);
+            path.calculate(dest.x, dest.y, dest.z, forceDestination);
+            MovebyPath(path.getPath());
+        }
+        else
+        {
+            args.path_Idx_offset = 0;
+            args.path.resize(2);
+            args.path[1] = dest;
+        }
+     }
 
     inline void MoveSplineInit::SetParabolic(float amplitude, float time_shift)
     {

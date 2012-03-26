@@ -35,14 +35,15 @@
 #include "AccountMgr.h"
 #include "WaypointManager.h"
 #include "Util.h"
-#include <cctype>
-#include <iostream>
-#include <fstream>
-#include <map>
 #include "OutdoorPvPMgr.h"
 #include "Transport.h"
 #include "TargetedMovementGenerator.h"                      // for HandleNpcUnFollowCommand
 #include "CreatureGroups.h"
+
+#include <cctype>
+#include <iostream>
+#include <fstream>
+#include <map>
 
 //mute player for some times
 bool ChatHandler::HandleMuteCommand(const char* args)

@@ -47,6 +47,8 @@
 #include "Totem.h"
 #include "OutdoorPvPMgr.h"
 #include "MovementPacketBuilder.h"
+#include "ObjectPosSelector.h"
+#include "World.h"
 
 #define TERRAIN_LOS_STEP_DISTANCE   3.0f        // sample distance for terrain LoS this may need adjusting.
 
@@ -2417,7 +2419,6 @@ void WorldObject::GetCreatureListWithEntryInGrid(std::list<Creature*>& creatureL
     cell.Visit(pair, visitor, *(this->GetMap()), *this, maxSearchRange);
 }
 
-/*
 namespace Trinity
 {
     class NearUsedPosDo
@@ -2488,7 +2489,6 @@ namespace Trinity
             ObjectPosSelector& i_selector;
     };
 }                                                           // namespace Trinity
-*/
 
 //===================================================================================================
 
@@ -2501,15 +2501,15 @@ void WorldObject::GetNearPoint2D(float &x, float &y, float distance2d, float abs
     Trinity::NormalizeMapCoord(y);
 }
 
-void WorldObject::GetNearPoint(WorldObject const* /*searcher*/, float &x, float &y, float &z, float searcher_size, float distance2d, float absAngle) const
+void WorldObject::GetNearPoint(WorldObject const* searcher, float &x, float &y, float &z, float searcher_size, float distance2d, float absAngle) const
 {
     GetNearPoint2D(x, y, distance2d+searcher_size, absAngle);
-    z = GetPositionZ();
+    const float init_z =  z = GetPositionZ();
     UpdateAllowedPositionZ(x, y, z);
 
-    /*
+   /*
     // if detection disabled, return first point
-    if (!sWorld->getIntConfig(CONFIG_DETECT_POS_COLLISION))
+    if (!sWorld->getBoolConfig(CONFIG_DETECT_POS_COLLISION))
     {
         UpdateGroundPositionZ(x, y, z);                       // update to LOS height if available
         return;

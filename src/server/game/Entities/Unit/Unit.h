@@ -528,6 +528,7 @@ enum UnitState
     UNIT_STATE_FLEEING_MOVE    = 0x02000000,
     UNIT_STATE_CHASE_MOVE      = 0x04000000,
     UNIT_STATE_FOLLOW_MOVE     = 0x08000000,
+    UNIT_STATE_IGNORE_PATHFINDING    = 0x10000000,               // do not use pathfinding in any MovementGenerator
     UNIT_STATE_UNATTACKABLE    = (UNIT_STATE_IN_FLIGHT | UNIT_STATE_ONVEHICLE),
     //UNIT_STATE_MOVING          = (UNIT_STATE_ROAMING | UNIT_STATE_CHASE),
     // for real move using movegen check and stop (except unstoppable flight)

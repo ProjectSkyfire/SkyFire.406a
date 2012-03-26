@@ -272,16 +272,19 @@ namespace VMAP
     void VMapManager2::releaseModelInstance(const std::string &filename)
     {
         //! Critical section, thread safe access to iLoadedModelFiles
+
         TRINITY_GUARD(ACE_Thread_Mutex, LoadedModelFilesLock);
         ModelFileMap::iterator model = iLoadedModelFiles.find(filename);
         if (model == iLoadedModelFiles.end())
         {
             sLog->outError("VMapManager2: trying to unload non-loaded file '%s'", filename.c_str());
+            printf("[ERROR] ---> filename: [%s] \n\n", filename.c_str());
             return;
         }
         if (model->second.decRefCount() == 0)
         {
             sLog->outDebug(LOG_FILTER_MAPS, "VMapManager2: unloading file '%s'", filename.c_str());
+
             delete model->second.getModel();
             iLoadedModelFiles.erase(model);
         }
