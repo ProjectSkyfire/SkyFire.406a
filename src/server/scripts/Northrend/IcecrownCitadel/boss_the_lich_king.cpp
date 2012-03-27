@@ -17,6 +17,7 @@
 
 #include "ObjectMgr.h"
 #include "ScriptMgr.h"
+#include "CreatureTextMgr.h"
 #include "ScriptedCreature.h"
 #include "SpellScript.h"
 #include "SpellAuraEffects.h"
