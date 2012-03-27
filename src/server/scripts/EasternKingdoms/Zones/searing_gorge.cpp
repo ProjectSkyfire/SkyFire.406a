@@ -36,6 +36,7 @@ npc_lunk_dwarf_ride
 EndContentData */
 
 #include "ScriptPCH.h"
+#include "CreatureTextMgr.h"
 
 /*######
 ## npc_kalaran_windblade
