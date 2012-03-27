@@ -213,7 +213,7 @@ Battleground::~Battleground()
     for (uint32 i = 0; i < size; ++i)
         DelCreature(i);
 
-    size = uint32(_BgObjects.size());
+    size = uint32(BgObjects.size());
     for (uint32 i = 0; i < size; ++i)
         DelObject(i);
 
@@ -1426,7 +1426,7 @@ void Battleground::RemovePlayerFromResurrectQueue(uint64 player_guid)
 bool Battleground::AddObject(uint32 type, uint32 entry, float x, float y, float z, float o, float rotation0, float rotation1, float rotation2, float rotation3, uint32 /*respawnTime*/)
 {
     // If the assert is called, means that _BgObjects must be resized!
-    ASSERT(type < _BgObjects.size());
+    ASSERT(type < BgObjects.size());
 
     Map* map = FindBgMap();
     if (!map)
@@ -1473,7 +1473,7 @@ bool Battleground::AddObject(uint32 type, uint32 entry, float x, float y, float 
         delete go;
         return false;
     }
-    _BgObjects[type] = go->GetGUID();
+    BgObjects[type] = go->GetGUID();
     return true;
 }
 
@@ -1481,7 +1481,7 @@ bool Battleground::AddObject(uint32 type, uint32 entry, float x, float y, float 
 // It would be nice to correctly implement GO_ACTIVATED state and open/close doors in gameobject code
 void Battleground::DoorClose(uint32 type)
 {
-    if (GameObject* obj = GetBgMap()->GetGameObject(_BgObjects[type]))
+    if (GameObject* obj = GetBgMap()->GetGameObject(BgObjects[type]))
     {
         // If doors are open, close it
         if (obj->getLootState() == GO_ACTIVATED && obj->GetGoState() != GO_STATE_READY)
@@ -1493,12 +1493,12 @@ void Battleground::DoorClose(uint32 type)
     }
     else
         sLog->outError("Battleground::DoorClose: door gameobject (type: %u, GUID: %u) not found for BG (map: %u, instance id: %u)!",
-            type, GUID_LOPART(_BgObjects[type]), _MapId, _InstanceID);
+            type, GUID_LOPART(BgObjects[type]), _MapId, _InstanceID);
 }
 
 void Battleground::DoorOpen(uint32 type)
 {
-    if (GameObject* obj = GetBgMap()->GetGameObject(_BgObjects[type]))
+    if (GameObject* obj = GetBgMap()->GetGameObject(BgObjects[type]))
     {
         // Change state to be sure they will be opened
         obj->SetLootState(GO_READY);
@@ -1506,15 +1506,15 @@ void Battleground::DoorOpen(uint32 type)
     }
     else
         sLog->outError("Battleground::DoorOpen: door gameobject (type: %u, GUID: %u) not found for BG (map: %u, instance id: %u)!",
-            type, GUID_LOPART(_BgObjects[type]), _MapId, _InstanceID);
+            type, GUID_LOPART(BgObjects[type]), _MapId, _InstanceID);
 }
 
 GameObject* Battleground::GetBGObject(uint32 type)
 {
-    GameObject* obj = GetBgMap()->GetGameObject(_BgObjects[type]);
+    GameObject* obj = GetBgMap()->GetGameObject(BgObjects[type]);
     if (!obj)
         sLog->outError("Battleground::GetBGObject: gameobject (type: %u, GUID: %u) not found for BG (map: %u, instance id: %u)!",
-            type, GUID_LOPART(_BgObjects[type]), _MapId, _InstanceID);
+            type, GUID_LOPART(BgObjects[type]), _MapId, _InstanceID);
     return obj;
 }
 
@@ -1530,7 +1530,7 @@ Creature* Battleground::GetBGCreature(uint32 type)
 void Battleground::SpawnBGObject(uint32 type, uint32 respawntime)
 {
     if (Map* map = FindBgMap())
-        if (GameObject* obj = map->GetGameObject(_BgObjects[type]))
+        if (GameObject* obj = map->GetGameObject(BgObjects[type]))
         {
             if (respawntime)
                 obj->SetLootState(GO_JUST_DEACTIVATED);
@@ -1609,19 +1609,19 @@ bool Battleground::DelCreature(uint32 type)
 
 bool Battleground::DelObject(uint32 type)
 {
-    if (!_BgObjects[type])
+    if (!BgObjects[type])
         return true;
 
-    if (GameObject* obj = GetBgMap()->GetGameObject(_BgObjects[type]))
+    if (GameObject* obj = GetBgMap()->GetGameObject(BgObjects[type]))
     {
         obj->SetRespawnTime(0);                                 // not save respawn time
         obj->Delete();
-        _BgObjects[type] = 0;
+        BgObjects[type] = 0;
         return true;
     }
     sLog->outError("Battleground::DelObject: gameobject (type: %u, GUID: %u) not found for BG (map: %u, instance id: %u)!",
-        type, GUID_LOPART(_BgObjects[type]), _MapId, _InstanceID);
-    _BgObjects[type] = 0;
+        type, GUID_LOPART(BgObjects[type]), _MapId, _InstanceID);
+    BgObjects[type] = 0;
     return false;
 }
 
@@ -1739,8 +1739,8 @@ void Battleground::HandleTriggerBuff(uint64 go_guid)
         return;
 
     // Change buff type, when buff is used:
-    int32 index = _BgObjects.size() - 1;
-    while (index >= 0 && _BgObjects[index] != go_guid)
+    int32 index = BgObjects.size() - 1;
+    while (index >= 0 && BgObjects[index] != go_guid)
         index--;
     if (index < 0)
     {
@@ -1861,8 +1861,8 @@ void Battleground::SetHoliday(bool is_holiday)
 
 int32 Battleground::GetObjectType(uint64 guid)
 {
-    for (uint32 i = 0; i < _BgObjects.size(); ++i)
-        if (_BgObjects[i] == guid)
+    for (uint32 i = 0; i < BgObjects.size(); ++i)
+        if (BgObjects[i] == guid)
             return i;
     sLog->outError("Battleground::GetObjectType: player used gameobject (GUID: %u) which is not in internal data for BG (map: %u, instance id: %u), cheating?",
         GUID_LOPART(guid), _MapId, _InstanceID);

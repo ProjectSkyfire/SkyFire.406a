@@ -13785,28 +13785,7 @@ void Unit::CleanupBeforeRemoveFromMap(bool finalCleanup)
 
 void Unit::CleanupsBeforeDelete(bool finalCleanup)
 {
-    // This needs to be before RemoveFromWorld to make GetCaster() return a valid pointer on aura removal
-    InterruptNonMeleeSpells(true);
-
-    if (IsInWorld())
-        RemoveFromWorld();
-
-    ASSERT(GetGUID());
-
-    // A unit may be in removelist and not in world, but it is still in grid
-    // and may have some references during delete
-    RemoveAllAuras();
-    RemoveAllGameObjects();
-
-    if (finalCleanup)
-        m_cleanupDone = true;
-
-    _Events.KillAllEvents(false);                      // non-delatable (currently casted spells) will not deleted now but it will deleted at call in Map::RemoveAllObjectsInRemoveList
-    CombatStop();
-    ClearComboPointHolders();
-    DeleteThreatList();
-    getHostileRefManager().setOnlineOfflineState(false);
-    GetMotionMaster()->Clear(false);                    // remove different non-standard movement generators.
+    CleanupBeforeRemoveFromMap(finalCleanup);
 
     if (Creature* thisCreature = ToCreature())
         if (GetTransport())
@@ -15951,8 +15930,6 @@ bool Unit::SetCharmedBy(Unit* charmer, CharmType type, AuraApplication const* au
     if (GetTypeId() == TYPEID_UNIT)
     {
         ToCreature()->AI()->OnCharmed(true);
-        GetMotionMaster()->Clear(false);
-        StopMoving();
         GetMotionMaster()->MoveIdle();
     }
     else
@@ -17211,7 +17188,7 @@ void Unit::ExitVehicle(Position const* exitPosition)
     //! to specify exit coordinates and either store those per passenger, or we need to
     //! init spline movement based on those coordinates in unapply handlers, and
     //! relocate exiting passengers based on Unit::moveSpline data. Either way,
-    //! Coming Soon™
+    //! Coming Soonï¿½
 }
 
 void Unit::_ExitVehicle(Position const* exitPosition)
