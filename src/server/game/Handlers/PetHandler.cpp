@@ -279,6 +279,19 @@ void WorldSession::HandlePetActionHelper(Unit* pet, uint64 guid1, uint32 spellid
                         }
                     }
                     break;
+                case COMMAND_MOVE:
+                    pet->AttackStop();
+                    pet->InterruptNonMeleeSpells(false);
+                    pet->GetMotionMaster()->Clear(false);
+                    pet->GetMotionMaster()->MoveIdle();
+                    charmInfo->SetCommandState(COMMAND_MOVE);
+
+                    charmInfo->SetIsCommandAttack(true);
+                    charmInfo->SetIsAtStay(true);
+                    charmInfo->SetIsFollowing(false);
+                    charmInfo->SetIsReturning(false);
+                    charmInfo->SaveStayPosition();
+                    break;
                 default:
                     sLog->outError("WORLD: unknown PET flag Action %i and spellid %i.", uint32(flag), spellid);
             }
