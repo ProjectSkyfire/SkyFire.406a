@@ -194,22 +194,22 @@ Battleground::Battleground()
 
     _HonorMode = BG_NORMAL;
 
-    _StartDelayTimes[BG_STARTING_EVENT_FIRST]  = BG_START_DELAY_2M;
-    _StartDelayTimes[BG_STARTING_EVENT_SECOND] = BG_START_DELAY_1M;
-    _StartDelayTimes[BG_STARTING_EVENT_THIRD]  = BG_START_DELAY_30S;
-    _StartDelayTimes[BG_STARTING_EVENT_FOURTH] = BG_START_DELAY_NONE;
+    StartDelayTimes[BG_STARTING_EVENT_FIRST]  = BG_START_DELAY_2M;
+    StartDelayTimes[BG_STARTING_EVENT_SECOND] = BG_START_DELAY_1M;
+    StartDelayTimes[BG_STARTING_EVENT_THIRD]  = BG_START_DELAY_30S;
+    StartDelayTimes[BG_STARTING_EVENT_FOURTH] = BG_START_DELAY_NONE;
     //we must set to some default existing values
-    _StartMessageIds[BG_STARTING_EVENT_FIRST]  = LANG_BG_WS_START_TWO_MINUTES;
-    _StartMessageIds[BG_STARTING_EVENT_SECOND] = LANG_BG_WS_START_ONE_MINUTE;
-    _StartMessageIds[BG_STARTING_EVENT_THIRD]  = LANG_BG_WS_START_HALF_MINUTE;
-    _StartMessageIds[BG_STARTING_EVENT_FOURTH] = LANG_BG_WS_HAS_BEGUN;
+    StartMessageIds[BG_STARTING_EVENT_FIRST]  = LANG_BG_WS_START_TWO_MINUTES;
+    StartMessageIds[BG_STARTING_EVENT_SECOND] = LANG_BG_WS_START_ONE_MINUTE;
+    StartMessageIds[BG_STARTING_EVENT_THIRD]  = LANG_BG_WS_START_HALF_MINUTE;
+    StartMessageIds[BG_STARTING_EVENT_FOURTH] = LANG_BG_WS_HAS_BEGUN;
 }
 
 Battleground::~Battleground()
 {
     // remove objects and creatures
     // (this is done automatically in mapmanager update, when the instance is reset after the reset time)
-    uint32 size = uint32(_BgCreatures.size());
+    uint32 size = uint32(BgCreatures.size());
     for (uint32 i = 0; i < size; ++i)
         DelCreature(i);
 
@@ -229,7 +229,7 @@ Battleground::~Battleground()
     // remove from bg free slot queue
     RemoveFromBGFreeSlotQueue();
 
-    for (BattlegroundScoreMap::const_iterator itr = _PlayerScores.begin(); itr != _PlayerScores.end(); ++itr)
+    for (BattlegroundScoreMap::const_iterator itr = PlayerScores.begin(); itr != PlayerScores.end(); ++itr)
         delete itr->second;
 }
 
@@ -463,21 +463,21 @@ inline void Battleground::_ProcessJoin(uint32 diff)
         }
 
         StartingEventCloseDoors();
-        SetStartDelayTime(_StartDelayTimes[BG_STARTING_EVENT_FIRST]);
+        SetStartDelayTime(StartDelayTimes[BG_STARTING_EVENT_FIRST]);
         // First start warning - 2 or 1 minute
-        SendMessageToAll(_StartMessageIds[BG_STARTING_EVENT_FIRST], CHAT_MSG_BG_SYSTEM_NEUTRAL);
+        SendMessageToAll(StartMessageIds[BG_STARTING_EVENT_FIRST], CHAT_MSG_BG_SYSTEM_NEUTRAL);
     }
     // After 1 minute or 30 seconds, warning is signalled
-    else if (GetStartDelayTime() <= _StartDelayTimes[BG_STARTING_EVENT_SECOND] && !(_Events & BG_STARTING_EVENT_2))
+    else if (GetStartDelayTime() <= StartDelayTimes[BG_STARTING_EVENT_SECOND] && !(_Events & BG_STARTING_EVENT_2))
     {
         _Events |= BG_STARTING_EVENT_2;
-        SendMessageToAll(_StartMessageIds[BG_STARTING_EVENT_SECOND], CHAT_MSG_BG_SYSTEM_NEUTRAL);
+        SendMessageToAll(StartMessageIds[BG_STARTING_EVENT_SECOND], CHAT_MSG_BG_SYSTEM_NEUTRAL);
     }
     // After 30 or 15 seconds, warning is signalled
-    else if (GetStartDelayTime() <= _StartDelayTimes[BG_STARTING_EVENT_THIRD] && !(_Events & BG_STARTING_EVENT_3))
+    else if (GetStartDelayTime() <= StartDelayTimes[BG_STARTING_EVENT_THIRD] && !(_Events & BG_STARTING_EVENT_3))
     {
         _Events |= BG_STARTING_EVENT_3;
-        SendMessageToAll(_StartMessageIds[BG_STARTING_EVENT_THIRD], CHAT_MSG_BG_SYSTEM_NEUTRAL);
+        SendMessageToAll(StartMessageIds[BG_STARTING_EVENT_THIRD], CHAT_MSG_BG_SYSTEM_NEUTRAL);
     }
     // Delay expired (atfer 2 or 1 minute)
     else if (GetStartDelayTime() <= 0 && !(_Events & BG_STARTING_EVENT_4))
@@ -486,9 +486,9 @@ inline void Battleground::_ProcessJoin(uint32 diff)
 
         StartingEventOpenDoors();
 
-        SendWarningToAll(_StartMessageIds[BG_STARTING_EVENT_FOURTH]);
+        SendWarningToAll(StartMessageIds[BG_STARTING_EVENT_FOURTH]);
         SetStatus(STATUS_IN_PROGRESS);
-        SetStartDelayTime(_StartDelayTimes[BG_STARTING_EVENT_FOURTH]);
+        SetStartDelayTime(StartDelayTimes[BG_STARTING_EVENT_FOURTH]);
 
         // Remove preparation
         if (isArena())
@@ -928,11 +928,11 @@ void Battleground::RemovePlayerAtLeave(uint64 guid, bool Transport, bool SendPac
         participant = true;
     }
 
-    BattlegroundScoreMap::iterator itr2 = _PlayerScores.find(guid);
-    if (itr2 != _PlayerScores.end())
+    BattlegroundScoreMap::iterator itr2 = PlayerScores.find(guid);
+    if (itr2 != PlayerScores.end())
     {
         delete itr2->second;                                // delete player's score
-        _PlayerScores.erase(itr2);
+        PlayerScores.erase(itr2);
     }
 
     RemovePlayerFromResurrectQueue(guid);
@@ -1066,9 +1066,9 @@ void Battleground::Reset()
 
     _Players.clear();
 
-    for (BattlegroundScoreMap::const_iterator itr = _PlayerScores.begin(); itr != _PlayerScores.end(); ++itr)
+    for (BattlegroundScoreMap::const_iterator itr = PlayerScores.begin(); itr != PlayerScores.end(); ++itr)
         delete itr->second;
-    _PlayerScores.clear();
+    PlayerScores.clear();
 
     ResetBGSubclass();
 }
@@ -1355,8 +1355,8 @@ bool Battleground::HasFreeSlots() const
 void Battleground::UpdatePlayerScore(Player* Source, uint32 type, uint32 value, bool doAddHonor)
 {
     //this procedure is called from virtual function implemented in bg subclass
-    BattlegroundScoreMap::const_iterator itr = _PlayerScores.find(Source->GetGUID());
-    if (itr == _PlayerScores.end())                         // player not found...
+    BattlegroundScoreMap::const_iterator itr = PlayerScores.find(Source->GetGUID());
+    if (itr == PlayerScores.end())                         // player not found...
         return;
 
     switch (type)
@@ -1520,10 +1520,10 @@ GameObject* Battleground::GetBGObject(uint32 type)
 
 Creature* Battleground::GetBGCreature(uint32 type)
 {
-    Creature* creature = GetBgMap()->GetCreature(_BgCreatures[type]);
+    Creature* creature = GetBgMap()->GetCreature(BgCreatures[type]);
     if (!creature)
         sLog->outError("Battleground::GetBGCreature: creature (type: %u, GUID: %u) not found for BG (map: %u, instance id: %u)!",
-            type, GUID_LOPART(_BgCreatures[type]), _MapId, _InstanceID);
+            type, GUID_LOPART(BgCreatures[type]), _MapId, _InstanceID);
     return creature;
 }
 
@@ -1545,8 +1545,8 @@ void Battleground::SpawnBGObject(uint32 type, uint32 respawntime)
 
 Creature* Battleground::AddCreature(uint32 entry, uint32 type, uint32 teamval, float x, float y, float z, float o, uint32 respawntime)
 {
-    // If the assert is called, means that _BgCreatures must be resized!
-    ASSERT(type < _BgCreatures.size());
+    // If the assert is called, means that BgCreatures must be resized!
+    ASSERT(type < BgCreatures.size());
 
     Map* map = FindBgMap();
     if (!map)
@@ -1581,7 +1581,7 @@ Creature* Battleground::AddCreature(uint32 entry, uint32 type, uint32 teamval, f
         return NULL;
     }
 
-    _BgCreatures[type] = creature->GetGUID();
+    BgCreatures[type] = creature->GetGUID();
 
     if (respawntime)
         creature->SetRespawnDelay(respawntime);
@@ -1591,19 +1591,19 @@ Creature* Battleground::AddCreature(uint32 entry, uint32 type, uint32 teamval, f
 
 bool Battleground::DelCreature(uint32 type)
 {
-    if (!_BgCreatures[type])
+    if (!BgCreatures[type])
         return true;
 
-    if (Creature *creature = GetBgMap()->GetCreature(_BgCreatures[type]))
+    if (Creature *creature = GetBgMap()->GetCreature(BgCreatures[type]))
     {
         creature->AddObjectToRemoveList();
-        _BgCreatures[type] = 0;
+        BgCreatures[type] = 0;
         return true;
     }
 
     sLog->outError("Battleground::DelCreature: creature (type: %u, GUID: %u) not found for BG (map: %u, instance id: %u)!",
-        type, GUID_LOPART(_BgCreatures[type]), _MapId, _InstanceID);
-    _BgCreatures[type] = 0;
+        type, GUID_LOPART(BgCreatures[type]), _MapId, _InstanceID);
+    BgCreatures[type] = 0;
     return false;
 }
 

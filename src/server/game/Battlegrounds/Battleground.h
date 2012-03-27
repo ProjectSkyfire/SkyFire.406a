@@ -415,9 +415,9 @@ class Battleground
         uint32 GetPlayersSize() const { return _Players.size(); }
 
         typedef std::map<uint64, BattlegroundScore*> BattlegroundScoreMap;
-        BattlegroundScoreMap::const_iterator GetPlayerScoresBegin() const { return _PlayerScores.begin(); }
-        BattlegroundScoreMap::const_iterator GetPlayerScoresEnd() const { return _PlayerScores.end(); }
-        uint32 GetPlayerScoresSize() const { return _PlayerScores.size(); }
+        BattlegroundScoreMap::const_iterator GetPlayerScoresBegin() const { return PlayerScores.begin(); }
+        BattlegroundScoreMap::const_iterator GetPlayerScoresEnd() const { return PlayerScores.end(); }
+        uint32 GetPlayerScoresSize() const { return PlayerScores.size(); }
 
         uint32 GetReviveQueueSize() const { return _ReviveQueue.size(); }
 
@@ -544,8 +544,8 @@ class Battleground
         // TODO: make this protected:
         typedef std::vector<uint64> BGObjects;
         typedef std::vector<uint64> BGCreatures;
-        BGObjects _BgObjects;
-        BGCreatures _BgCreatures;
+        BGObjects BgObjects;
+        BGCreatures BgCreatures;
         void SpawnBGObject(uint32 type, uint32 respawntime);
         bool AddObject(uint32 type, uint32 entry, float x, float y, float z, float o, float rotation0, float rotation1, float rotation2, float rotation3, uint32 respawnTime = 0);
         Creature* AddCreature(uint32 entry, uint32 type, uint32 teamval, float x, float y, float z, float o, uint32 respawntime = 0);
@@ -597,7 +597,7 @@ class Battleground
         void _ProcessJoin(uint32 diff);
 
         // Scorekeeping
-        BattlegroundScoreMap _PlayerScores;                // Player scores
+        BattlegroundScoreMap PlayerScores;                // Player scores
         // must be implemented in BG subclass
         virtual void RemovePlayer(Player* /*player*/, uint64 /*guid*/, uint32 /*team*/) {}
 
@@ -608,9 +608,9 @@ class Battleground
 
         // these are important variables used for starting messages
         uint8 _Events;
-        BattlegroundStartTimeIntervals  _StartDelayTimes[BG_STARTING_EVENT_COUNT];
+        BattlegroundStartTimeIntervals  StartDelayTimes[BG_STARTING_EVENT_COUNT];
         // this must be filled in constructors!
-        uint32 _StartMessageIds[BG_STARTING_EVENT_COUNT];
+        uint32 StartMessageIds[BG_STARTING_EVENT_COUNT];
 
         bool   _BuffChange;
         bool   _IsRandom;
