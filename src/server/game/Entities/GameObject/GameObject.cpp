@@ -671,29 +671,34 @@ void GameObject::SaveToDB(uint32 mapid, uint8 spawnMask, uint32 phaseMask)
 
     data.artKit           = GetGoArtKit();
 
-    // update in DB
-    std::ostringstream ss;
-    ss << "INSERT INTO gameobject VALUES ("
-        << _DBTableGuid << ','
-        << data.id << ','
-        << data.mapid << ','
-        << uint32(data.spawnMask) << ','                         // cast to prevent save as symbol
-        << uint16(data.phaseMask) << ','                    // prevent out of range error
-        << data.posX << ','
-        << data.posY << ','
-        << data.posZ << ','
-        << data.orientation << ','
-        << data.rotation0 << ','
-        << data.rotation1 << ','
-        << data.rotation2 << ','
-        << data.rotation3 << ','
-        << data.spawntimesecs << ','
-        << uint32(data.animprogress) << ','
-        << uint32(data.go_state) << ')';
-
+    // Update in DB
     SQLTransaction trans = WorldDatabase.BeginTransaction();
-    trans->PAppend("DELETE FROM gameobject WHERE guid = '%u'", _DBTableGuid);
-    trans->Append(ss.str().c_str());
+
+    uint8 index = 0;
+
+    PreparedStatement* stmt = WorldDatabase.GetPreparedStatement(WORLD_DEL_GAMEOBJECT);
+    stmt->setUInt32(0, _DBTableGuid);
+    trans->Append(stmt);
+
+    stmt = WorldDatabase.GetPreparedStatement(WORLD_INS_GAMEOBJECT);
+    stmt->setUInt32(index++, uint32(_DBTableGuid));
+    stmt->setUInt32(index++, uint32(data.id));
+    stmt->setUInt16(index++, uint16(data.mapid));
+    stmt->setUInt8(index++, uint8(data.spawnMask));
+    stmt->setUInt16(index++, uint16(data.phaseMask));
+    stmt->setFloat(index++, float(data.posX));
+    stmt->setFloat(index++, float(data.posY));
+    stmt->setFloat(index++, float(data.posZ));
+    stmt->setFloat(index++, float(data.orientation));
+    stmt->setFloat(index++, float(data.rotation0));
+    stmt->setFloat(index++, float(data.rotation1));
+    stmt->setFloat(index++, float(data.rotation2));
+    stmt->setFloat(index++, float(data.rotation3));
+    stmt->setInt32(index++, int32(data.spawntimesecs));
+    stmt->setUInt8(index++, uint8(data.go_state));
+    stmt->setUInt8(index++, uint8(data.go_state));
+    trans->Append(stmt);
+
     WorldDatabase.CommitTransaction(trans);
 }
 
