@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -73,9 +74,9 @@ public:
 
     struct boss_jedoga_shadowseekerAI : public ScriptedAI
     {
-        boss_jedoga_shadowseekerAI(Creature* c) : ScriptedAI(c)
+        boss_jedoga_shadowseekerAI(Creature* creature) : ScriptedAI(creature)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
             bFirstTime = true;
             bPreDone = false;
         }
@@ -355,9 +356,9 @@ public:
 
     struct mob_jedoga_initiandAI : public ScriptedAI
     {
-        mob_jedoga_initiandAI(Creature* c) : ScriptedAI(c)
+        mob_jedoga_initiandAI(Creature* creature) : ScriptedAI(creature)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
         }
 
         InstanceScript* instance;
@@ -531,9 +532,9 @@ public:
 
     struct npc_jedogas_aufseher_triggerAI : public Scripted_NoMovementAI
     {
-        npc_jedogas_aufseher_triggerAI(Creature* c) : Scripted_NoMovementAI(c)
+        npc_jedogas_aufseher_triggerAI(Creature* creature) : Scripted_NoMovementAI(creature)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
             bRemoved = false;
             bRemoved2 = false;
             bCasted = false;
