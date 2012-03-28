@@ -200,7 +200,7 @@ void Creature::RemoveFromWorld()
         if (_zoneScript)
             _zoneScript->OnCreatureRemove(this);
         if (_formation)
-            FormationMgr::RemoveCreatureFromGroup(_formation, this);
+            sFormationMgr->RemoveCreatureFromGroup(_formation, this);
         Unit::RemoveFromWorld();
         sObjectAccessor->RemoveObject(this);
     }
@@ -225,9 +225,9 @@ void Creature::SearchFormation()
     if (!lowguid)
         return;
 
-    CreatureGroupInfoType::iterator frmdata = CreatureGroupMap.find(lowguid);
-    if (frmdata != CreatureGroupMap.end())
-        FormationMgr::AddCreatureToGroup(frmdata->second->leaderGUID, this);
+    CreatureGroupInfoType::iterator frmdata = sFormationMgr->CreatureGroupMap.find(lowguid);
+    if (frmdata != sFormationMgr->CreatureGroupMap.end())
+        sFormationMgr->AddCreatureToGroup(frmdata->second->leaderGUID, this);
 }
 
 void Creature::RemoveCorpse(bool setSpawnTime)
@@ -1067,32 +1067,34 @@ void Creature::SaveToDB(uint32 mapid, uint8 spawnMask, uint32 phaseMask)
     // update in DB
     SQLTransaction trans = WorldDatabase.BeginTransaction();
 
-    trans->PAppend("DELETE FROM creature WHERE guid = '%u'", _DBTableGuid);
+    PreparedStatement* stmt = WorldDatabase.GetPreparedStatement(WORLD_DEL_CREATURE);
+    stmt->setUInt32(0, _DBTableGuid);
+    trans->Append(stmt);
 
-    std::ostringstream ss;
-    ss << "INSERT INTO creature VALUES ("
-        << _DBTableGuid << ','
-        << GetEntry() << ','
-        << mapid << ','
-        << uint32(spawnMask) << ','                         // cast to prevent save as symbol
-        << uint16(GetPhaseMask()) << ','                    // prevent out of range error
-        << displayId << ','
-        << GetEquipmentId() << ','
-        << GetPositionX() << ','
-        << GetPositionY() << ','
-        << GetPositionZ() << ','
-        << GetOrientation() << ','
-        << _respawnDelay << ','                             //respawn time
-        << (float) _respawnradius << ','                    //spawn distance (float)
-        << (uint32) (0) << ','                              //currentwaypoint
-        << GetHealth() << ','                               //curhealth
-        << GetPower(POWER_MANA) << ','                      //curmana
-        << GetDefaultMovementType() << ','                  //default movement generator type
-        << npcflag << ','
-        << unit_flags << ','
-        << dynamicflags << ')';
+    uint8 index = 0;
 
-    trans->Append(ss.str().c_str());
+    stmt = WorldDatabase.GetPreparedStatement(WORLD_INS_CREATURE);
+    stmt->setUInt32(index++, _DBTableGuid);
+    stmt->setUInt32(index++, GetEntry());
+    stmt->setUInt16(index++, uint16(mapid));
+    stmt->setUInt8(index++, spawnMask);
+    stmt->setUInt16(index++, uint16(GetPhaseMask()));
+    stmt->setUInt32(index++, displayId);
+    stmt->setInt32(index++, int32(GetEquipmentId()));
+    stmt->setFloat(index++, GetPositionX());
+    stmt->setFloat(index++, GetPositionY());
+    stmt->setFloat(index++, GetPositionZ());
+    stmt->setFloat(index++, GetOrientation());
+    stmt->setUInt32(index++, _respawnDelay);
+    stmt->setFloat(index++, _respawnradius);
+    stmt->setUInt32(index++, 0);
+    stmt->setUInt32(index++, GetHealth());
+    stmt->setUInt32(index++, GetPower(POWER_MANA));
+    stmt->setUInt8(index++, uint8(GetDefaultMovementType()));
+    stmt->setUInt32(index++, npcflag);
+    stmt->setUInt32(index++, unit_flags);
+    stmt->setUInt32(index, dynamicflags);
+    trans->Append(stmt);
 
     WorldDatabase.CommitTransaction(trans);
 }
@@ -1365,10 +1367,23 @@ void Creature::DeleteFromDB()
     sObjectMgr->DeleteCreatureData(_DBTableGuid);
 
     SQLTransaction trans = WorldDatabase.BeginTransaction();
-    trans->PAppend("DELETE FROM creature WHERE guid = '%u'", _DBTableGuid);
-    trans->PAppend("DELETE FROM creature_addon WHERE guid = '%u'", _DBTableGuid);
-    trans->PAppend("DELETE FROM game_event_creature WHERE guid = '%u'", _DBTableGuid);
-    trans->PAppend("DELETE FROM game_event_model_equip WHERE guid = '%u'", _DBTableGuid);
+
+    PreparedStatement* stmt = WorldDatabase.GetPreparedStatement(WORLD_DEL_CREATURE);
+    stmt->setUInt32(0, _DBTableGuid);
+    trans->Append(stmt);
+
+    stmt = WorldDatabase.GetPreparedStatement(WORLD_DEL_CREATURE_ADDON);
+    stmt->setUInt32(0, _DBTableGuid);
+    trans->Append(stmt);
+
+    stmt = WorldDatabase.GetPreparedStatement(WORLD_DEL_GAME_EVENT_CREATURE);
+    stmt->setUInt32(0, _DBTableGuid);
+    trans->Append(stmt);
+
+    stmt = WorldDatabase.GetPreparedStatement(WORLD_DEL_GAME_EVENT_MODEL_EQUIP);
+    stmt->setUInt32(0, _DBTableGuid);
+    trans->Append(stmt);
+
     WorldDatabase.CommitTransaction(trans);
 }
 

@@ -155,16 +155,24 @@ void ArenaTeamMgr::DistributeArenaPoints()
 
     SQLTransaction trans = CharacterDatabase.BeginTransaction();
 
-    // Cycle that gives points to all players
-    //TODO: Fix it after implementing ModifyConquestPoints
-    //for (std::map<uint32, uint32>::iterator playerItr = PlayerPoints.begin(); playerItr != PlayerPoints.end(); ++playerItr)
-    //{
-    //    // Add points to player if online
-    //    if (Player* player = HashMapHolder<Player>::Find(playerItr->first))
-    //        player->ModifyConquestPoints(playerItr->second, &trans);
-    //    else    // Update database
-    //        trans->PAppend("UPDATE characters SET conquestPoints = conquestPoints + %u WHERE guid=%u", playerItr->second, playerItr->first);
-    //}
+    PreparedStatement* stmt;
+
+    /*Cycle that gives points to all players
+    TODO: Fix it after implementing ModifyConquestPoints
+    for (std::map<uint32, uint32>::iterator playerItr = PlayerPoints.begin(); playerItr != PlayerPoints.end(); ++playerItr)
+    {
+        // Add points to player if online
+        if (Player* player = HashMapHolder<Player>::Find(playerItr->first))
+            player->ModifyConquestPoints(playerItr->second, &trans);
+        else    // Update database
+        {
+            stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_CHAR_ARENA_POINTS);
+            stmt->setUInt32(0, playerItr->second);
+            stmt->setUInt32(1, playerItr->first);
+            trans->Append(stmt);
+        }
+            //trans->PAppend("UPDATE characters SET conquestPoints = conquestPoints + %u WHERE guid=%u", playerItr->second, playerItr->first);
+    }*/
 
     CharacterDatabase.CommitTransaction(trans);
 
