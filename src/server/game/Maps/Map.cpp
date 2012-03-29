@@ -2411,11 +2411,7 @@ void InstanceMap::CreateInstanceData(bool load)
     if (load)
     {
         // TODO: make a global storage for this
-        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_INSTANCE);
-        stmt->setUInt16(0, uint16(GetId()));
-        stmt->setUInt32(1, i_InstanceId);
-        PreparedQueryResult result = CharacterDatabase.Query(stmt);
-
+        QueryResult result = CharacterDatabase.PQuery("SELECT data, completedEncounters FROM instance WHERE map = '%u' AND id = '%u'", GetId(), i_InstanceId);
         if (result)
         {
             Field* fields = result->Fetch();

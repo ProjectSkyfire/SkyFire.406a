@@ -174,15 +174,12 @@ int RASocket::process_command(const std::string& command)
 
 int RASocket::check_access_level(const std::string& user)
 {
-    std::string safeUser = user;
+    std::string safe_user = user;
 
-    AccountMgr::normalizeString(safeUser);
+    AccountMgr::normalizeString(safe_user);
+    LoginDatabase.EscapeString(safe_user);
 
-
-
-    PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_ACCOUNT_ACCESS);
-    stmt->setString(0, safeUser);
-    PreparedQueryResult result = LoginDatabase.Query(stmt);
+    QueryResult result = LoginDatabase.PQuery("SELECT a.id, aa.gmlevel, aa.RealmID FROM account a LEFT JOIN account_access aa ON (a.id = aa.id) WHERE a.username = '%s'", safe_user.c_str());
 
     if (!result)
     {
@@ -210,20 +207,19 @@ int RASocket::check_password(const std::string& user, const std::string& pass)
 {
     std::string safe_user = user;
     AccountMgr::normalizeString(safe_user);
+    LoginDatabase.EscapeString(safe_user);
 
     std::string safe_pass = pass;
     AccountMgr::normalizeString(safe_pass);
+    LoginDatabase.EscapeString(safe_pass);
 
     std::string hash = AccountMgr::CalculateShaPassHash(safe_user, safe_pass);
 
-    PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_CHECK_PASSWORD_BY_NAME);
+    QueryResult check = LoginDatabase.PQuery(
+            "SELECT 1 FROM account WHERE username = '%s' AND sha_pass_hash = '%s'",
+            safe_user.c_str(), hash.c_str());
 
-    stmt->setString(0, safe_user);
-    stmt->setString(1, hash);
-
-    PreparedQueryResult result = LoginDatabase.Query(stmt);
-
-    if (!result)
+    if (!check)
     {
         sLog->outRemote("Wrong password for user: %s", user.c_str());
         return -1;

@@ -446,10 +446,7 @@ ChatCommand* ChatHandler::getCommandTable()
                 added += appendCommandTable(commandTableCache + added, *it);
         }
 
-        PreparedStatement* stmt = WorldDatabase.GetPreparedStatement(WORLD_SEL_COMMANDS);
-
-        PreparedQueryResult result = WorldDatabase.Query(stmt);
-
+        QueryResult result = WorldDatabase.Query("SELECT name, security, help FROM command");
         if (result)
         {
             do

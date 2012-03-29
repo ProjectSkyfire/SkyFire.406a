@@ -99,12 +99,7 @@ void WaypointMgr::ReloadPath(uint32 id)
         _waypointStore.erase(itr);
     }
 
-    PreparedStatement* stmt = WorldDatabase.GetPreparedStatement(WORLD_SEL_WAYPOINT_DATA_BY_ID);
-
-    stmt->setUInt32(0, id);
-
-    PreparedQueryResult result = WorldDatabase.Query(stmt);
-
+    QueryResult result = WorldDatabase.PQuery("SELECT point, position_x, position_y, position_z, move_flag, delay, action, action_chance FROM waypoint_data WHERE id = %u ORDER BY point", id);
     if (!result)
         return;
 

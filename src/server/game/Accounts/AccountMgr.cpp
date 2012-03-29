@@ -37,14 +37,14 @@ AccountOpResult CreateAccount(std::string username, std::string password)
     if (GetId(username))
         return AOR_NAME_ALREADY_EXIST;                       // username does already exist
 
-    PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_INS_ACCOUNT);
+    PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_ADD_ACCOUNT);
 
     stmt->setString(0, username);
     stmt->setString(1, CalculateShaPassHash(username, password));
 
     LoginDatabase.Execute(stmt);
 
-    stmt = LoginDatabase.GetPreparedStatement(LOGIN_INS_REALM_CHARACTERS_INIT);
+    stmt = LoginDatabase.GetPreparedStatement(LOGIN_ADD_REALM_CHARS);
 
     LoginDatabase.Execute(stmt);
 
@@ -53,21 +53,12 @@ AccountOpResult CreateAccount(std::string username, std::string password)
 
 AccountOpResult DeleteAccount(uint32 accountId)
 {
-    // Check if accounts exists
-    PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_ACCOUNT_BY_ID);
-    stmt->setUInt32(0, accountId);
-    PreparedQueryResult result = LoginDatabase.Query(stmt);
-
+    QueryResult result = LoginDatabase.PQuery("SELECT 1 FROM account WHERE id='%d'", accountId);
     if (!result)
-        return AOR_NAME_DOES_NOT_EXIST;
+        return AOR_NAME_DOES_NOT_EXIST;                          // account doesn't exist
 
-    // Obtain accounts characters
-    stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_CHARS_BY_ACCOUNT_ID);
-
-    stmt->setUInt32(0, accountId);
-
-    result = CharacterDatabase.Query(stmt);
-
+    // existed characters list
+    result = CharacterDatabase.PQuery("SELECT guid FROM characters WHERE account='%d'", accountId);
     if (result)
     {
         do
@@ -75,7 +66,7 @@ AccountOpResult DeleteAccount(uint32 accountId)
             uint32 guidLow = (*result)[0].GetUInt32();
             uint64 guid = MAKE_NEW_GUID(guidLow, 0, HIGHGUID_PLAYER);
 
-            // Kick if player is online
+            // kick if player is online
             if (Player* p = ObjectAccessor::FindPlayer(guid))
             {
                 WorldSession* s = p->GetSession();
@@ -88,7 +79,7 @@ AccountOpResult DeleteAccount(uint32 accountId)
     }
 
     // table realm specific but common for all characters of account for realm
-    stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_TUTORIALS);
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_TUTORIALS);
     stmt->setUInt32(0, accountId);
     CharacterDatabase.Execute(stmt);
     stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_ACCOUNT_DATA);
@@ -97,17 +88,9 @@ AccountOpResult DeleteAccount(uint32 accountId)
 
     SQLTransaction trans = LoginDatabase.BeginTransaction();
 
-    stmt = LoginDatabase.GetPreparedStatement(LOGIN_DEL_ACCOUNT);
-    stmt->setUInt32(0, accountId);
-    trans->Append(stmt);
-
-    stmt = LoginDatabase.GetPreparedStatement(LOGIN_DEL_ACCOUNT_ACCESS);
-    stmt->setUInt32(0, accountId);
-    trans->Append(stmt);
-
-    stmt = LoginDatabase.GetPreparedStatement(LOGIN_DEL_REALM_CHARACTERS);
-    stmt->setUInt32(0, accountId);
-    trans->Append(stmt);
+    trans->PAppend("DELETE FROM account WHERE id='%d'", accountId);
+    trans->PAppend("DELETE FROM account_access WHERE id ='%d'", accountId);
+    trans->PAppend("DELETE FROM realmcharacters WHERE acctid='%d'", accountId);
 
     LoginDatabase.CommitTransaction(trans);
 
@@ -116,13 +99,9 @@ AccountOpResult DeleteAccount(uint32 accountId)
 
 AccountOpResult ChangeUsername(uint32 accountId, std::string newUsername, std::string newPassword)
 {
-    // Check if accounts exists
-    PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_ACCOUNT_BY_ID);
-    stmt->setUInt32(0, accountId);
-    PreparedQueryResult result = LoginDatabase.Query(stmt);
-
+    QueryResult result = LoginDatabase.PQuery("SELECT 1 FROM account WHERE id='%d'", accountId);
     if (!result)
-        return AOR_NAME_DOES_NOT_EXIST;
+        return AOR_NAME_DOES_NOT_EXIST;                          // account doesn't exist
 
     if (utf8length(newUsername) > MAX_ACCOUNT_STR)
         return AOR_NAME_TOO_LONG;
@@ -133,7 +112,7 @@ AccountOpResult ChangeUsername(uint32 accountId, std::string newUsername, std::s
     normalizeString(newUsername);
     normalizeString(newPassword);
 
-    stmt = LoginDatabase.GetPreparedStatement(LOGIN_UPD_USERNAME);
+    PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_UPDATE_USERNAME);
 
     stmt->setString(0, newUsername);
     stmt->setString(1, CalculateShaPassHash(newUsername, newPassword));
@@ -157,7 +136,7 @@ AccountOpResult ChangePassword(uint32 accountId, std::string newPassword)
     normalizeString(username);
     normalizeString(newPassword);
 
-    PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_UPD_PASSWORD);
+    PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_UPDATE_PASSWORD);
 
     stmt->setString(0, CalculateShaPassHash(username, newPassword));
     stmt->setUInt32(1, accountId);
@@ -169,38 +148,28 @@ AccountOpResult ChangePassword(uint32 accountId, std::string newPassword)
 
 uint32 GetId(std::string username)
 {
-    PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_GET_ACCOUNT_ID_BY_USERNAME);
-    stmt->setString(0, username);
-    PreparedQueryResult result = LoginDatabase.Query(stmt);
-
+    LoginDatabase.EscapeString(username);
+    QueryResult result = LoginDatabase.PQuery("SELECT id FROM account WHERE username = '%s'", username.c_str());
     return (result) ? (*result)[0].GetUInt32() : 0;
 }
 
 uint32 GetSecurity(uint32 accountId)
 {
-    PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_GET_ACCOUNT_ACCESS_GMLEVEL);
-    stmt->setUInt32(0, accountId);
-    PreparedQueryResult result = LoginDatabase.Query(stmt);
-
-    return (result) ? (*result)[0].GetUInt32() : SEC_PLAYER;
+    QueryResult result = LoginDatabase.PQuery("SELECT gmlevel FROM account_access WHERE id = '%u'", accountId);
+    return (result) ? (*result)[0].GetUInt32() : 0;
 }
 
-uint32 GetSecurity(uint32 accountId, int32 realmId)
+uint32 GetSecurity(uint64 accountId, int32 realmId)
 {
-    PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_GET_GMLEVEL_BY_REALMID);
-    stmt->setUInt32(0, accountId);
-    stmt->setInt32(1, realmId);
-    PreparedQueryResult result = LoginDatabase.Query(stmt);
-
-    return (result) ? (*result)[0].GetUInt32() : SEC_PLAYER;
+    QueryResult result = (realmId == -1)
+        ? LoginDatabase.PQuery("SELECT gmlevel FROM account_access WHERE id = '%u' AND RealmID = '%d'", accountId, realmId)
+        : LoginDatabase.PQuery("SELECT gmlevel FROM account_access WHERE id = '%u' AND (RealmID = '%d' OR RealmID = '-1')", accountId, realmId);
+    return (result) ? (*result)[0].GetUInt32() : 0;
 }
 
 bool GetName(uint32 accountId, std::string& name)
 {
-    PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_GET_USERNAME_BY_ID);
-    stmt->setUInt32(0, accountId);
-    PreparedQueryResult result = LoginDatabase.Query(stmt);
-
+    QueryResult result = LoginDatabase.PQuery("SELECT username FROM account WHERE id = '%u'", accountId);
     if (result)
     {
         name = (*result)[0].GetString();
@@ -220,21 +189,14 @@ bool CheckPassword(uint32 accountId, std::string password)
     normalizeString(username);
     normalizeString(password);
 
-    PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_CHECK_PASSWORD);
-    stmt->setUInt32(0, accountId);
-    stmt->setString(1, CalculateShaPassHash(username, password));
-    PreparedQueryResult result = LoginDatabase.Query(stmt);
-
+    QueryResult result = LoginDatabase.PQuery("SELECT 1 FROM account WHERE id='%d' AND sha_pass_hash='%s'", accountId, CalculateShaPassHash(username, password).c_str());
     return (result) ? true : false;
 }
 
 uint32 GetCharactersCount(uint32 accountId)
 {
     // check character count
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_SUM_CHARS);
-    stmt->setUInt32(0, accountId);
-    PreparedQueryResult result = CharacterDatabase.Query(stmt);
-
+    QueryResult result = CharacterDatabase.PQuery("SELECT COUNT(guid) FROM characters WHERE account = '%d'", accountId);
     return (result) ? (*result)[0].GetUInt32() : 0;
 }
 
