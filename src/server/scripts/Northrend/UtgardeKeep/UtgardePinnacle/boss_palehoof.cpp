@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -94,9 +95,9 @@ public:
 
     struct boss_palehoofAI : public ScriptedAI
     {
-        boss_palehoofAI(Creature* c) : ScriptedAI(c)
+        boss_palehoofAI(Creature* creature) : ScriptedAI(creature)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
         }
 
         uint32 uiArcingSmashTimer;
@@ -296,9 +297,9 @@ public:
 
     struct mob_ravenous_furbolgAI : public ScriptedAI
     {
-        mob_ravenous_furbolgAI(Creature* c) : ScriptedAI(c)
+        mob_ravenous_furbolgAI(Creature* creature) : ScriptedAI(creature)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
         }
 
         uint32 uiChainLightingTimer;
@@ -408,9 +409,9 @@ public:
 
     struct mob_frenzied_worgenAI : public ScriptedAI
     {
-        mob_frenzied_worgenAI(Creature* c) : ScriptedAI(c)
+        mob_frenzied_worgenAI(Creature* creature) : ScriptedAI(creature)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
         }
 
         uint32 uiMortalWoundTimer;
@@ -523,9 +524,9 @@ public:
 
     struct mob_ferocious_rhinoAI : public ScriptedAI
     {
-        mob_ferocious_rhinoAI(Creature* c) : ScriptedAI(c)
+        mob_ferocious_rhinoAI(Creature* creature) : ScriptedAI(creature)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
         }
 
         uint32 uiStompTimer;
@@ -642,9 +643,9 @@ public:
 
     struct mob_massive_jormungarAI : public ScriptedAI
     {
-        mob_massive_jormungarAI(Creature* c) : ScriptedAI(c)
+        mob_massive_jormungarAI(Creature* creature) : ScriptedAI(creature)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
         }
 
         uint32 uiAcidSpitTimer;
@@ -747,9 +748,9 @@ public:
 
     struct mob_palehoof_orbAI : public ScriptedAI
     {
-        mob_palehoof_orbAI(Creature* c) : ScriptedAI(c)
+        mob_palehoof_orbAI(Creature* creature) : ScriptedAI(creature)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
         }
 
         InstanceScript* instance;
