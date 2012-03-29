@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -125,7 +126,7 @@ class mob_frost_warder : public CreatureScript
 
         struct mob_frost_warderAI : public ScriptedAI
         {
-            mob_frost_warderAI(Creature* c) : ScriptedAI(c) {}
+            mob_frost_warderAI(Creature* creature) : ScriptedAI(creature) {}
 
             void Reset()
             {
