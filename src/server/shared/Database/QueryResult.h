@@ -58,7 +58,7 @@ class ResultSet
         MYSQL_FIELD* _fields;
 };
 
-typedef ACE_Refcounted_Auto_Ptr<ResultSet, ACE_Thread_Mutex> QueryResult;
+typedef ACE_Refcounted_Auto_Ptr<ResultSet, ACE_Null_Mutex> QueryResult;
 
 class PreparedResultSet
 {
@@ -102,6 +102,6 @@ class PreparedResultSet
         bool _NextRow();
 };
 
-typedef ACE_Refcounted_Auto_Ptr<PreparedResultSet, ACE_Thread_Mutex> PreparedQueryResult;
+typedef ACE_Refcounted_Auto_Ptr<PreparedResultSet, ACE_Null_Mutex> PreparedQueryResult;
 
 #endif

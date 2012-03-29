@@ -31,8 +31,7 @@ void SystemMgr::LoadScriptTexts()
 
     sLog->outString("TSCR: Loading Script Texts additional data...");
     uint32 oldMSTime = getMSTime();
-    
-    //                                                 0      1      2      3
+
     QueryResult result = WorldDatabase.Query("SELECT entry, sound, type, language, emote FROM script_texts");
 
     if (!result)
@@ -110,11 +109,11 @@ void SystemMgr::LoadScriptTextsCustom()
         Field* fields = result->Fetch();
         StringTextData temp;
 
-        int32 iId           = fields[0].GetInt32();
+        int32 iId              = fields[0].GetInt32();
         temp.SoundId        = fields[1].GetUInt32();
-        temp.Type           = fields[2].GetUInt8();
-        temp.Language       = fields[3].GetUInt8();
-        temp.Emote          = fields[4].GetUInt16();
+        temp.Type           = fields[2].GetUInt32();
+        temp.Language       = fields[3].GetUInt32();
+        temp.Emote          = fields[4].GetUInt32();
 
         if (iId >= 0)
         {
@@ -164,7 +163,6 @@ void SystemMgr::LoadScriptWaypoints()
 
     sLog->outString("TSCR: Loading Script Waypoints for " UI64FMTD " creature(s)...", uiCreatureCount);
 
-    //                                     0       1         2           3           4           5
     result = WorldDatabase.Query("SELECT entry, pointid, location_x, location_y, location_z, waittime FROM script_waypoint ORDER BY pointid");
 
     if (!result)
