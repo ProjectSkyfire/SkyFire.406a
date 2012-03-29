@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -61,9 +62,9 @@ public:
 
     struct boss_trollgoreAI : public ScriptedAI
     {
-        boss_trollgoreAI(Creature* c) : ScriptedAI(c), lSummons(me)
+        boss_trollgoreAI(Creature* creature) : ScriptedAI(creature), lSummons(me)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
         }
 
         uint32 uiConsumeTimer;
