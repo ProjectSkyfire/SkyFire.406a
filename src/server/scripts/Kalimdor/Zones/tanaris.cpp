@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2006-2012 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
@@ -58,7 +59,7 @@ public:
 
     struct mob_aquementasAI : public ScriptedAI
     {
-        mob_aquementasAI(Creature* c) : ScriptedAI(c) {}
+        mob_aquementasAI(Creature* creature) : ScriptedAI(creature) {}
 
         uint32 SendItem_Timer;
         uint32 SwitchFaction_Timer;
@@ -169,7 +170,7 @@ public:
 
     struct npc_custodian_of_timeAI : public npc_escortAI
     {
-        npc_custodian_of_timeAI(Creature* c) : npc_escortAI(c) {}
+        npc_custodian_of_timeAI(Creature* creature) : npc_escortAI(creature) {}
 
         void WaypointReached(uint32 i)
         {
@@ -421,7 +422,7 @@ public:
 
     struct npc_OOX17AI : public npc_escortAI
     {
-        npc_OOX17AI(Creature* c) : npc_escortAI(c) {}
+        npc_OOX17AI(Creature* creature) : npc_escortAI(creature) {}
 
         void WaypointReached(uint32 i)
         {

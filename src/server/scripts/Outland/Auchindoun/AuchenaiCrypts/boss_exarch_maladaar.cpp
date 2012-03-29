@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2006-2012 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
@@ -53,7 +54,7 @@ public:
 
     struct mob_stolen_soulAI : public ScriptedAI
     {
-        mob_stolen_soulAI(Creature* c) : ScriptedAI(c) {}
+        mob_stolen_soulAI(Creature* creature) : ScriptedAI(creature) {}
 
         uint8 myClass;
         uint32 Class_Timer;
@@ -161,7 +162,7 @@ public:
 
     struct boss_exarch_maladaarAI : public ScriptedAI
     {
-        boss_exarch_maladaarAI(Creature* c) : ScriptedAI(c)
+        boss_exarch_maladaarAI(Creature* creature) : ScriptedAI(creature)
         {
             HasTaunted = false;
         }
@@ -316,7 +317,7 @@ public:
 
     struct mob_avatar_of_martyredAI : public ScriptedAI
     {
-        mob_avatar_of_martyredAI(Creature* c) : ScriptedAI(c) {}
+        mob_avatar_of_martyredAI(Creature* creature) : ScriptedAI(creature) {}
 
         uint32 Mortal_Strike_timer;
 

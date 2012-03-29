@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -575,10 +576,10 @@ void OPvPCapturePointEP_PWT::SummonFlightMaster(uint32 team)
         /*
         // sky - we need update gso code
 
-        Creature* c = HashMapHolder<Creature>::Find(m_Creatures[EP_PWT_FLIGHTMASTER]);
+        Creature* creature = HashMapHolder<Creature>::Find(m_Creatures[EP_PWT_FLIGHTMASTER]);
         //Spawn flight master as friendly to capturing team
-        c->SetUInt32Value(GAMEOBJECT_FACTION, (team == ALLIANCE ? 55 : 68));
-        if (c)
+        creature->SetUInt32Value(GAMEOBJECT_FACTION, (team == ALLIANCE ? 55 : 68));
+        if (creature)
         {
             GossipOption gso;
             gso.Action = GOSSIP_OPTION_OUTDOORPVP;
@@ -589,7 +590,7 @@ void OPvPCapturePointEP_PWT::SummonFlightMaster(uint32 team)
             gso.NpcFlag = 0;
             gso.BoxMoney = 0;
             gso.Coded = false;
-            c->addGossipOption(gso);
+            creature->addGossipOption(gso);
 
             gso.Action = GOSSIP_OPTION_OUTDOORPVP;
             gso.GossipId = 0;
@@ -599,7 +600,7 @@ void OPvPCapturePointEP_PWT::SummonFlightMaster(uint32 team)
             gso.NpcFlag = 0;
             gso.BoxMoney = 0;
             gso.Coded = false;
-            c->addGossipOption(gso);
+            creature->addGossipOption(gso);
 
             gso.Action = GOSSIP_OPTION_OUTDOORPVP;
             gso.GossipId = 0;
@@ -609,7 +610,7 @@ void OPvPCapturePointEP_PWT::SummonFlightMaster(uint32 team)
             gso.NpcFlag = 0;
             gso.BoxMoney = 0;
             gso.Coded = false;
-            c->addGossipOption(gso);
+            creature->addGossipOption(gso);
         }
         */
     }

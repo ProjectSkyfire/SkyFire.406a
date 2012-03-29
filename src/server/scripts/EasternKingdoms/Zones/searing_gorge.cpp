@@ -189,7 +189,7 @@ public:
 
     struct npc_glassweb_spiderAI : public ScriptedAI
     {
-        npc_glassweb_spiderAI(Creature *creature) : ScriptedAI(creature) {}
+        npc_glassweb_spiderAI(Creature* creature) : ScriptedAI(creature) {}
 
         void Reset()
         {
@@ -258,7 +258,7 @@ public:
 
     struct npc_lunk_spider_rideAI : public ScriptedAI
     {
-        npc_lunk_spider_rideAI(Creature *creature) : ScriptedAI(creature)  {}
+        npc_lunk_spider_rideAI(Creature* creature) : ScriptedAI(creature)  {}
 
         uint32 Step;
         uint32 Timer;
@@ -355,7 +355,7 @@ public:
 
     struct npc_dark_iron_steamsmithAI : public ScriptedAI
     {
-        npc_dark_iron_steamsmithAI(Creature *creature) : ScriptedAI(creature) {}
+        npc_dark_iron_steamsmithAI(Creature* creature) : ScriptedAI(creature) {}
 
         void Reset()
         {
@@ -411,7 +411,7 @@ public:
 
     struct npc_lunk_dwarf_rideAI : public ScriptedAI
     {
-        npc_lunk_dwarf_rideAI(Creature *creature) : ScriptedAI(creature)  {}
+        npc_lunk_dwarf_rideAI(Creature* creature) : ScriptedAI(creature)  {}
 
         uint32 Step;
         uint32 Timer;
@@ -476,7 +476,7 @@ public:
                 }
             }
 
-                if (Unit *summoner = me->ToTempSummon()->GetSummoner())
+                if (Unit* summoner = me->ToTempSummon()->GetSummoner())
                     if (summoner->GetTypeId() == TYPEID_PLAYER)
                         if (summoner->ToPlayer()->GetQuestStatus(QUEST_LUNKS_ADVENTURE_CRANKY_LITTLE_DWARFS) == QUEST_STATUS_INCOMPLETE)
                         me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER | UNIT_NPC_FLAG_GOSSIP);

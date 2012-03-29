@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2006-2012 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
@@ -74,7 +75,7 @@ public:
 
     struct npc_ameAI : public npc_escortAI
     {
-        npc_ameAI(Creature* c) : npc_escortAI(c) {}
+        npc_ameAI(Creature* creature) : npc_escortAI(creature) {}
 
         uint32 DEMORALIZINGSHOUT_Timer;
 

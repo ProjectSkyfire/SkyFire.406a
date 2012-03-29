@@ -99,7 +99,7 @@ class npc_frostlord_ahune : public CreatureScript
 
         struct npc_frostlord_ahuneAI : public Scripted_NoMovementAI
         {
-            npc_frostlord_ahuneAI(Creature* c) : Scripted_NoMovementAI(c), _summons(me) { }
+            npc_frostlord_ahuneAI(Creature* creature) : Scripted_NoMovementAI(creature), _summons(me) { }
 
             void Reset()
             {
