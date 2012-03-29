@@ -2853,7 +2853,7 @@ void World::LoadDBAllowedSecurityLevel()
     PreparedQueryResult result = LoginDatabase.Query(stmt);
 
     if (result)
-        SetPlayerSecurityLimit(AccountTypes(result->Fetch()->GetUInt8()));
+        SetPlayerSecurityLimit(AccountTypes(result->Fetch()->GetUInt16()));
 }
 
 void World::SetPlayerSecurityLimit(AccountTypes _sec)

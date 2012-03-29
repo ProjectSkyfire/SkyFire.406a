@@ -920,7 +920,7 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     else
     {
         fields = result->Fetch();
-        security = fields[0].GetUInt8();
+        security = fields[0].GetInt32();
     }
 
     // Re-check account ban (same check as in realmd)
