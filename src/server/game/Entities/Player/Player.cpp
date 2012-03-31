@@ -6923,7 +6923,8 @@ void Player::CheckAreaExploreAndOutdoor()
             sLog->outError("Player %u discovered unknown area (x: %f y: %f z: %f map: %u", GetGUIDLow(), GetPositionX(), GetPositionY(), GetPositionZ(), GetMapId());
             return;
         }
-        else if (areaEntry->area_level > 0)
+
+        if (areaEntry->area_level > 0)
         {
             uint32 area = areaEntry->ID;
             if (getLevel() >= sWorld->getIntConfig(CONFIG_MAX_PLAYER_LEVEL))
@@ -21985,13 +21986,6 @@ template<class T>
 inline void UpdateVisibilityOf_helper(std::set<uint64>& s64, T* target, std::set<Unit*>& /*v*/)
 {
     s64.insert(target->GetGUID());
-}
-
-template<>
-inline void UpdateVisibilityOf_helper(std::set<uint64>& s64, GameObject* target, std::set<Unit*>& /*v*/)
-{
-    if (!target->IsTransport())
-        s64.insert(target->GetGUID());
 }
 
 template<>
