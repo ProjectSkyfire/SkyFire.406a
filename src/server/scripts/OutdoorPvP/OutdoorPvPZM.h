@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -219,7 +220,7 @@ class OPvPCapturePointZM_GraveYard : public OPvPCapturePoint
 
         bool HandleDropFlag(Player* player, uint32 spellId);
 
-        bool CanTalkTo(Player* player, Creature* c, GossipMenuItems const& gso);
+        bool CanTalkTo(Player* player, Creature* creature, GossipMenuItems const& gso);
 
         uint32 GetGraveYardState() const;
 

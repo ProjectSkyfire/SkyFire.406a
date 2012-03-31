@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2006-2012 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
@@ -58,9 +59,9 @@ public:
 
     struct boss_thespiaAI : public ScriptedAI
     {
-        boss_thespiaAI(Creature* c) : ScriptedAI(c)
+        boss_thespiaAI(Creature* creature) : ScriptedAI(creature)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
         }
 
         InstanceScript* instance;
@@ -157,7 +158,7 @@ public:
 
     struct mob_coilfang_waterelementalAI : public ScriptedAI
     {
-        mob_coilfang_waterelementalAI(Creature* c) : ScriptedAI(c) {}
+        mob_coilfang_waterelementalAI(Creature* creature) : ScriptedAI(creature) {}
 
         uint32 WaterBoltVolley_Timer;
 

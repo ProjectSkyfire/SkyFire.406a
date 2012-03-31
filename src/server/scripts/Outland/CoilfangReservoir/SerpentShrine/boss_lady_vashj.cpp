@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2006-2012 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
@@ -145,12 +146,12 @@ public:
 
     struct boss_lady_vashjAI : public ScriptedAI
     {
-        boss_lady_vashjAI (Creature* c) : ScriptedAI(c)
+        boss_lady_vashjAI (Creature* creature) : ScriptedAI(creature)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
             Intro = false;
             JustCreated = true;
-            c->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE); //set it only once on Creature create (no need do intro if wiped)
+            creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE); //set it only once on Creature create (no need do intro if wiped)
         }
 
         InstanceScript* instance;
@@ -585,9 +586,9 @@ public:
 
     struct mob_enchanted_elementalAI : public ScriptedAI
     {
-        mob_enchanted_elementalAI(Creature* c) : ScriptedAI(c)
+        mob_enchanted_elementalAI(Creature* creature) : ScriptedAI(creature)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
         }
 
         InstanceScript* instance;
@@ -686,9 +687,9 @@ public:
 
     struct mob_tainted_elementalAI : public ScriptedAI
     {
-        mob_tainted_elementalAI(Creature* c) : ScriptedAI(c)
+        mob_tainted_elementalAI(Creature* creature) : ScriptedAI(creature)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
         }
 
         InstanceScript* instance;
@@ -760,9 +761,9 @@ public:
 
     struct mob_toxic_sporebatAI : public ScriptedAI
     {
-        mob_toxic_sporebatAI(Creature* c) : ScriptedAI(c)
+        mob_toxic_sporebatAI(Creature* creature) : ScriptedAI(creature)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
             EnterEvadeMode();
         }
 
@@ -913,9 +914,9 @@ public:
 
     struct mob_shield_generator_channelAI : public ScriptedAI
     {
-        mob_shield_generator_channelAI(Creature* c) : ScriptedAI(c)
+        mob_shield_generator_channelAI(Creature* creature) : ScriptedAI(creature)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
         }
 
         InstanceScript* instance;

@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2006-2012 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
@@ -48,7 +49,7 @@ public:
 
     struct boss_murmurAI : public ScriptedAI
     {
-        boss_murmurAI(Creature* c) : ScriptedAI(c)
+        boss_murmurAI(Creature* creature) : ScriptedAI(creature)
         {
             SetCombatMovement(false);
         }

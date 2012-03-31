@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2006-2012 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
@@ -75,7 +76,7 @@ public:
 
     struct mob_mature_netherwing_drakeAI : public ScriptedAI
     {
-        mob_mature_netherwing_drakeAI(Creature* c) : ScriptedAI(c) { }
+        mob_mature_netherwing_drakeAI(Creature* creature) : ScriptedAI(creature) { }
 
         uint64 uiPlayerGUID;
 
@@ -206,7 +207,7 @@ public:
 
     struct mob_enslaved_netherwing_drakeAI : public ScriptedAI
     {
-        mob_enslaved_netherwing_drakeAI(Creature* c) : ScriptedAI(c)
+        mob_enslaved_netherwing_drakeAI(Creature* creature) : ScriptedAI(creature)
         {
             PlayerGUID = 0;
             Tapped = false;
@@ -338,7 +339,7 @@ public:
 
     struct mob_dragonmaw_peonAI : public ScriptedAI
     {
-        mob_dragonmaw_peonAI(Creature* c) : ScriptedAI(c) {}
+        mob_dragonmaw_peonAI(Creature* creature) : ScriptedAI(creature) {}
 
         uint64 PlayerGUID;
         bool Tapped;
@@ -714,7 +715,7 @@ public:
 
     struct npc_overlord_morghorAI : public ScriptedAI
     {
-        npc_overlord_morghorAI(Creature* c) : ScriptedAI(c) {}
+        npc_overlord_morghorAI(Creature* creature) : ScriptedAI(creature) {}
 
         uint64 PlayerGUID;
         uint64 IllidanGUID;
@@ -1160,14 +1161,14 @@ class mob_torloth_the_magnificent : public CreatureScript
 public:
     mob_torloth_the_magnificent() : CreatureScript("mob_torloth_the_magnificent") { }
 
-    CreatureAI* GetAI(Creature* c) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new mob_torloth_the_magnificentAI(c);
+        return new mob_torloth_the_magnificentAI(creature);
     }
 
     struct mob_torloth_the_magnificentAI : public ScriptedAI
     {
-        mob_torloth_the_magnificentAI(Creature* c) : ScriptedAI(c) {}
+        mob_torloth_the_magnificentAI(Creature* creature) : ScriptedAI(creature) {}
 
         uint32 AnimationTimer, SpellTimer1, SpellTimer2, SpellTimer3;
 
@@ -1322,14 +1323,14 @@ class npc_lord_illidan_stormrage : public CreatureScript
 public:
     npc_lord_illidan_stormrage() : CreatureScript("npc_lord_illidan_stormrage") { }
 
-    CreatureAI* GetAI(Creature* c) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new npc_lord_illidan_stormrageAI(c);
+        return new npc_lord_illidan_stormrageAI(creature);
     }
 
     struct npc_lord_illidan_stormrageAI : public ScriptedAI
     {
-        npc_lord_illidan_stormrageAI(Creature* c) : ScriptedAI(c) {}
+        npc_lord_illidan_stormrageAI(Creature* creature) : ScriptedAI(creature) {}
 
         uint64 PlayerGUID;
 
@@ -1467,14 +1468,14 @@ class mob_illidari_spawn : public CreatureScript
 public:
     mob_illidari_spawn() : CreatureScript("mob_illidari_spawn") { }
 
-    CreatureAI* GetAI(Creature* c) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new mob_illidari_spawnAI(c);
+        return new mob_illidari_spawnAI(creature);
     }
 
     struct mob_illidari_spawnAI : public ScriptedAI
     {
-        mob_illidari_spawnAI(Creature* c) : ScriptedAI(c) {}
+        mob_illidari_spawnAI(Creature* creature) : ScriptedAI(creature) {}
 
         uint64 LordIllidanGUID;
         uint32 SpellTimer1, SpellTimer2, SpellTimer3;
@@ -1725,7 +1726,7 @@ public:
 
     struct npc_enraged_spiritAI : public ScriptedAI
     {
-        npc_enraged_spiritAI(Creature* c) : ScriptedAI(c) {}
+        npc_enraged_spiritAI(Creature* creature) : ScriptedAI(creature) {}
 
         void Reset()   { }
 

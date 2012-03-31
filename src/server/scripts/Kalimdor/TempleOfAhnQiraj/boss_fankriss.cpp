@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2006-2012 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
@@ -49,7 +50,7 @@ public:
 
     struct boss_fankrissAI : public ScriptedAI
     {
-        boss_fankrissAI(Creature* c) : ScriptedAI(c) {}
+        boss_fankrissAI(Creature* creature) : ScriptedAI(creature) {}
 
         uint32 MortalWound_Timer;
         uint32 SpawnHatchlings_Timer;
