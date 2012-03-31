@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -45,7 +46,7 @@ public:
 
     struct boss_grobbulusAI : public BossAI
     {
-        boss_grobbulusAI(Creature* c) : BossAI(c, BOSS_GROBBULUS)
+        boss_grobbulusAI(Creature* creature) : BossAI(creature, BOSS_GROBBULUS)
         {
             me->ApplySpellImmune(0, IMMUNITY_ID, SPELL_POISON_CLOUD_ADD, true);
         }

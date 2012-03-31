@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -75,7 +76,7 @@ public:
 
     struct boss_nothAI : public BossAI
     {
-        boss_nothAI(Creature* c) : BossAI(c, BOSS_NOTH) {}
+        boss_nothAI(Creature* creature) : BossAI(creature, BOSS_NOTH) {}
 
         uint32 waveCount, balconyCount;
 
