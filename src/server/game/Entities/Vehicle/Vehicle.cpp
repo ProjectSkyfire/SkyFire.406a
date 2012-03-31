@@ -432,6 +432,7 @@ void Vehicle::RemovePassenger(Unit* unit)
         sScriptMgr->OnRemovePassenger(this, unit);
 }
 
+//! Must be called after m_base::Relocate
 void Vehicle::RelocatePassengers(float x, float y, float z, float ang)
 {
     ASSERT(_me->GetMap());

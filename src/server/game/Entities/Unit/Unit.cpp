@@ -451,7 +451,7 @@ void Unit::SendMonsterMoveTransport(Unit* vehicleOwner)
     data.append(GetPackGUID());
     data.append(vehicleOwner->GetPackGUID());
     data << int8(GetTransSeat());
-    data << uint8(0);
+    data << uint8(GetTypeId() == TYPEID_PLAYER ? 1 : 0); // boolean
     data << GetPositionX() - vehicleOwner->GetPositionX();
     data << GetPositionY() - vehicleOwner->GetPositionY();
     data << GetPositionZ() - vehicleOwner->GetPositionZ();
@@ -4696,7 +4696,8 @@ void Unit::AddGameObject(GameObject* gameObj)
 
 void Unit::RemoveGameObject(GameObject* gameObj, bool del)
 {
-    if (!gameObj || !gameObj->GetOwnerGUID() == GetGUID()) return;
+    if (!gameObj || gameObj->GetOwnerGUID() != GetGUID())
+        return;
 
     gameObj->SetOwnerGUID(0);
 
@@ -8216,10 +8217,10 @@ bool Unit::HandleAuraProc(Unit* victim, uint32 damage, Aura* triggeredByAura, Sp
             {
                 *handled = true;
                 // Check if we are the target and prevent mana gain
-                if (triggeredByAura->GetCasterGUID() == victim->GetGUID())
+                if (victim && triggeredByAura->GetCasterGUID() == victim->GetGUID())
                     return false;
                 // Lookup base amount mana restore
-                for (uint8 i = 0; i<MAX_SPELL_EFFECTS; i++)
+                for (uint8 i = 0; i < MAX_SPELL_EFFECTS; i++)
                 {
                     if (procSpell->Effects[i].Effect == SPELL_EFFECT_ENERGIZE)
                     {
@@ -12707,7 +12708,6 @@ void Unit::setDeathState(DeathState s)
 {
     // death state needs to be updated before RemoveAllAurasOnDeath() calls HandleChannelDeathItem(..) so that
     // it can be used to check creation of death items (such as soul shards).
-    DeathState oldDeathState = _deathState;
     _deathState = s;
 
     if (s != ALIVE && s != JUST_ALIVED)
@@ -12720,7 +12720,6 @@ void Unit::setDeathState(DeathState s)
         if (IsNonMeleeSpellCasted(false))
             InterruptNonMeleeSpells(false);
 
-        ExitVehicle();  // Remove applied auras with SPELL_AURA_CONTROL_VEHICLE
         UnsummonAllTotems();
         RemoveAllControlled();
         RemoveAllAurasOnDeath();
@@ -12743,7 +12742,7 @@ void Unit::setDeathState(DeathState s)
         SetPower(getPowerType(), 0);
     }
     else if (s == JUST_ALIVED)
-        RemoveFlag (UNIT_FIELD_FLAGS, UNIT_FLAG_SKINNABLE); // clear skinnable for creature and player (at battleground)
+        RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SKINNABLE); // clear skinnable for creature and player (at battleground)
 }
 
 /*########################################
@@ -17214,8 +17213,6 @@ void Unit::_ExitVehicle(Position const* exitPosition)
     else
         pos = *exitPosition;
 
-    AddUnitState(UNIT_STATE_MOVE);
-
     if (GetTypeId() == TYPEID_PLAYER)
         ToPlayer()->SetFallInformation(0, GetPositionZ());
     else if (HasUnitMovementFlag(MOVEMENTFLAG_ROOT))
@@ -17356,12 +17353,16 @@ bool Unit::UpdatePosition(float x, float y, float z, float orientation, bool tel
             GetMap()->CreatureRelocation(ToCreature(), x, y, z, orientation);
     }
     else if (turn)
-        SetOrientation(orientation);
-
-    if ((relocated || turn) && IsVehicle())
-        GetVehicleKit()->RelocatePassengers(x, y, z, orientation);
+        UpdateOrientation(orientation);
 
     return (relocated || turn);
+}
+
+void Unit::UpdateOrientation(float orientation)
+{
+    SetOrientation(orientation);
+    if (IsVehicle())
+        GetVehicleKit()->RelocatePassengers(GetPositionX(), GetPositionY(), GetPositionZ(), GetOrientation());
 }
 
 void Unit::SendThreatListUpdate()

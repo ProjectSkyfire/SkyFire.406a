@@ -1,10 +1,10 @@
 /*
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 3 of the License, or (at your
+ * Free Software Foundation; either version 2 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -19,7 +19,7 @@
 #ifndef QUERYRESULT_H
 #define QUERYRESULT_H
 
-#include <ace/Refcounted_Auto_Ptr.h>
+#include "AutoPtr.h"
 #include <ace/Thread_Mutex.h>
 
 #include "Field.h"
@@ -33,7 +33,7 @@
 class ResultSet
 {
     public:
-        ResultSet(MYSQL_RES* result, MYSQL_FIELD *fields, uint64 rowCount, uint32 fieldCount);
+        ResultSet(MYSQL_RES* result, MYSQL_FIELD* fields, uint64 rowCount, uint32 fieldCount);
         ~ResultSet();
 
         bool NextRow();
@@ -58,7 +58,7 @@ class ResultSet
         MYSQL_FIELD* _fields;
 };
 
-typedef ACE_Refcounted_Auto_Ptr<ResultSet, ACE_Null_Mutex> QueryResult;
+typedef Trinity::AutoPtr<ResultSet, ACE_Thread_Mutex> QueryResult;
 
 class PreparedResultSet
 {
@@ -100,8 +100,10 @@ class PreparedResultSet
         void FreeBindBuffer();
         void CleanUp();
         bool _NextRow();
+
 };
 
-typedef ACE_Refcounted_Auto_Ptr<PreparedResultSet, ACE_Null_Mutex> PreparedQueryResult;
+typedef Trinity::AutoPtr<PreparedResultSet, ACE_Thread_Mutex> PreparedQueryResult;
 
 #endif
+

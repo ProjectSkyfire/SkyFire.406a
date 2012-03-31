@@ -874,6 +874,10 @@ Player::Player(WorldSession* session): Unit(true), _achievementMgr(this), _reput
 
     isDebugAreaTriggers = false;
 
+    _WeeklyQuestChanged = false;
+
+    m_SeasonalQuestChanged = false;
+
     SetPendingBind(0, 0);
 }
 
@@ -14863,14 +14867,14 @@ void Player::OnGossipSelect(WorldObject* source, uint32 gossipListId, uint32 men
     {
         case GOSSIP_OPTION_GOSSIP:
         {
+            if (menuItemData->GossipActionPoi)
+                PlayerTalkClass->SendPointOfInterest(menuItemData->GossipActionPoi);
+
             if (menuItemData->GossipActionMenuId)
             {
                 PrepareGossipMenu(source, menuItemData->GossipActionMenuId);
                 SendPreparedGossip(source);
             }
-
-            if (menuItemData->GossipActionPoi)
-                PlayerTalkClass->SendPointOfInterest(menuItemData->GossipActionPoi);
 
             break;
         }
