@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2006-2012 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
@@ -86,7 +87,7 @@ public:
             }
         }
 
-        aqsentinelAI(Creature* c) : ScriptedAI(c)
+        aqsentinelAI(Creature* creature) : ScriptedAI(creature)
         {
             ClearBuddyList();
             abselected = 0;                                     // just initialization of variable
@@ -116,11 +117,11 @@ public:
             }
         }
 
-        void GiveBuddyMyList(Creature* c)
+        void GiveBuddyMyList(Creature* creature)
         {
-            aqsentinelAI* cai = CAST_AI(aqsentinelAI, (c)->AI());
+            aqsentinelAI* cai = CAST_AI(aqsentinelAI, (creature)->AI());
             for (int i=0; i<3; ++i)
-                if (NearbyGUID[i] && NearbyGUID[i] != c->GetGUID())
+                if (NearbyGUID[i] && NearbyGUID[i] != creature->GetGUID())
                     cai->AddBuddyToList(NearbyGUID[i]);
             cai->AddBuddyToList(me->GetGUID());
         }
@@ -136,14 +137,14 @@ public:
         {
             for (int i=0; i<3; ++i)
             {
-                Creature* c = Unit::GetCreature(*me, NearbyGUID[i]);
-                if (c)
+                Creature* creature = Unit::GetCreature(*me, NearbyGUID[i]);
+                if (creature)
                 {
-                    if (!c->isInCombat())
+                    if (!creature->isInCombat())
                     {
-                        c->SetNoCallAssistance(true);
-                        if (c->AI())
-                            c->AI()->AttackStart(who);
+                        creature->SetNoCallAssistance(true);
+                        if (creature->AI())
+                            creature->AI()->AttackStart(who);
                     }
                 }
             }

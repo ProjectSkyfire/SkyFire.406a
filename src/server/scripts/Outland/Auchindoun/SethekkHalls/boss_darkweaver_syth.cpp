@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2006-2012 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
@@ -65,7 +66,7 @@ public:
 
     struct boss_darkweaver_sythAI : public ScriptedAI
     {
-        boss_darkweaver_sythAI(Creature* c) : ScriptedAI(c)
+        boss_darkweaver_sythAI(Creature* creature) : ScriptedAI(creature)
         {
         }
 
@@ -205,7 +206,7 @@ public:
 
     struct mob_syth_fireAI : public ScriptedAI
     {
-        mob_syth_fireAI(Creature* c) : ScriptedAI(c)
+        mob_syth_fireAI(Creature* creature) : ScriptedAI(creature)
         {
         }
 
@@ -264,7 +265,7 @@ public:
 
     struct mob_syth_arcaneAI : public ScriptedAI
     {
-        mob_syth_arcaneAI(Creature* c) : ScriptedAI(c)
+        mob_syth_arcaneAI(Creature* creature) : ScriptedAI(creature)
         {
         }
 
@@ -318,7 +319,7 @@ public:
 
     struct mob_syth_frostAI : public ScriptedAI
     {
-        mob_syth_frostAI(Creature* c) : ScriptedAI(c)
+        mob_syth_frostAI(Creature* creature) : ScriptedAI(creature)
         {
         }
 
@@ -372,7 +373,7 @@ public:
 
     struct mob_syth_shadowAI : public ScriptedAI
     {
-        mob_syth_shadowAI(Creature* c) : ScriptedAI(c)
+        mob_syth_shadowAI(Creature* creature) : ScriptedAI(creature)
         {
         }
 

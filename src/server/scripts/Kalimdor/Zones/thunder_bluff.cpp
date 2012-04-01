@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2006-2012 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
@@ -73,7 +74,7 @@ public:
 
     struct npc_cairne_bloodhoofAI : public ScriptedAI
     {
-        npc_cairne_bloodhoofAI(Creature* c) : ScriptedAI(c) {}
+        npc_cairne_bloodhoofAI(Creature* creature) : ScriptedAI(creature) {}
 
         uint32 BerserkerCharge_Timer;
         uint32 Cleave_Timer;
