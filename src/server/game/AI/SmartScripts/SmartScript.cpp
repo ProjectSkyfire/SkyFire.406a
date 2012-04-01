@@ -35,6 +35,10 @@
 #include "Vehicle.h"
 #include "ScriptedGossip.h"
 #include "CreatureTextMgr.h"
+#include "Common.h"
+#include "DatabaseEnv.h"
+#include "World.h"
+#include "Player.h"
 
 class TrinityStringTextBuilder
 {
@@ -1941,9 +1945,26 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
             delete targets;
             break;
         }
+        case SMART_ACTION_CHARACTER_SAVE:
+        {
+            ObjectList* targets = GetTargets(e, unit);
+            if (!targets)
+                break;
+
+            for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+            {
+                if (!IsPlayer(*itr))
+                    continue;
+                (*itr)->ToPlayer()->SaveToDB();
+            }
+            delete targets;
+            break;
+                
+        }
         default:
             sLog->outErrorDb("SmartScript::ProcessAction: Unhandled Action type %u", e.GetActionType());
             break;
+
     }
 
     if (e.link && e.link != e.event_id)
