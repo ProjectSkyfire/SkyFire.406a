@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2010 /dev/rsa for ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -21,26 +21,26 @@
 
 enum Texts
 {
-    SAY_XERESTRASZA_EVENT       = 0,
-    SAY_XERESTRASZA_EVENT_1     = 1,
-    SAY_XERESTRASZA_EVENT_2     = 2,
-    SAY_XERESTRASZA_EVENT_3     = 3,
-    SAY_XERESTRASZA_EVENT_4     = 4,
-    SAY_XERESTRASZA_EVENT_5     = 5,
-    SAY_XERESTRASZA_EVENT_6     = 6,
-    SAY_XERESTRASZA_EVENT_7     = 7,
-    SAY_XERESTRASZA_INTRO       = 8,
+    SAY_XERESTRASZA_EVENT       = 0, 
+    SAY_XERESTRASZA_EVENT_1     = 1, 
+    SAY_XERESTRASZA_EVENT_2     = 2, 
+    SAY_XERESTRASZA_EVENT_3     = 3, 
+    SAY_XERESTRASZA_EVENT_4     = 4, 
+    SAY_XERESTRASZA_EVENT_5     = 5, 
+    SAY_XERESTRASZA_EVENT_6     = 6, 
+    SAY_XERESTRASZA_EVENT_7     = 7, 
+    SAY_XERESTRASZA_INTRO       = 8, 
 };
 
 enum Events
 {
-    EVENT_XERESTRASZA_EVENT_1   = 1,
-    EVENT_XERESTRASZA_EVENT_2   = 2,
-    EVENT_XERESTRASZA_EVENT_3   = 3,
-    EVENT_XERESTRASZA_EVENT_4   = 4,
-    EVENT_XERESTRASZA_EVENT_5   = 5,
-    EVENT_XERESTRASZA_EVENT_6   = 6,
-    EVENT_XERESTRASZA_EVENT_7   = 7,
+    EVENT_XERESTRASZA_EVENT_1   = 1, 
+    EVENT_XERESTRASZA_EVENT_2   = 2, 
+    EVENT_XERESTRASZA_EVENT_3   = 3, 
+    EVENT_XERESTRASZA_EVENT_4   = 4, 
+    EVENT_XERESTRASZA_EVENT_5   = 5, 
+    EVENT_XERESTRASZA_EVENT_6   = 6, 
+    EVENT_XERESTRASZA_EVENT_7   = 7, 
 };
 
 Position const xerestraszaMovePos = {3151.236f, 379.8733f, 86.31996f, 0.0f};

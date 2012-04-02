@@ -59,7 +59,6 @@ enum Halion
     SPELL_DARK_BREATH                   = 74806, // Inflicts 17, 500 to 22, 500 Shadow damage to players in front of Halion
     SPELL_DUSK_SHROUD                   = 75484, // Inflicts 3, 000 Shadow damage every 2 seconds to everyone in the Twilight Realm
     //Combustion
-    NPC_COMBUSTION                      = 40001,
     SPELL_MARK_OF_COMBUSTION            = 74567, // Dummy effect only
     SPELL_FIERY_COMBUSTION              = 74562, // Inflicts 4, 000 Fire damage every 2 seconds for 30 seconds to a random raider. Every time Fiery Combustion does damage, it applies a stackable Mark of Combustion.
     SPELL_COMBUSTION_EXPLODE            = 74607,
@@ -150,8 +149,8 @@ public:
 
             if (me->isAlive())
             {
-                instance->SetData(TYPE_HALION, NOT_STARTED);
-                instance->SetData(TYPE_HALION_EVENT, FAIL);
+                instance->SetData(NPC_HALION, NOT_STARTED);
+                instance->SetData(DATA_HALION_EVENT, FAIL);
                 me->SetDisplayId(11686);
             }
 
@@ -173,7 +172,7 @@ public:
                 goPortal->Delete();
             if (GameObject* goPortal = me->FindNearestGameObject(GO_HALION_PORTAL_2, 50.0f))
                 goPortal->Delete();
-            if (GameObject* goPortal = me->FindNearestGameObject(GO_HALION_PORTAL_3, 50.0f))
+            if (GameObject* goPortal = me->FindNearestGameObject(GO_HALION_PORTAL_EXIT, 50.0f))
                 goPortal->Delete();
             me->RemoveAurasDueToSpell(SPELL_TWILIGHT_ENTER);
         }
@@ -196,7 +195,7 @@ public:
             if (!who || who->GetTypeId() != TYPEID_PLAYER)
                 return;
 
-            if (instance->GetData(TYPE_ZARITHRIAN) == DONE)
+            if (instance->GetData(DATA_GENERAL_ZARITHRIAN) == DONE)
             {
                 if (!intro && who->IsWithinDistInMap(me, 60.0f))
                     {
@@ -207,8 +206,8 @@ public:
                 if (intro && !me->isInCombat() && who->IsWithinDistInMap(me, 20.0f))
                 {
                     me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-                    me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_OOC_NOT_ATTACKABLE);
-                    me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
+                    me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PC);
+                    me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PACIFIED);
                     me->SetInCombatWith(who);
                     SetCombatMovement(false);
                     me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISABLE_MOVE);
@@ -222,7 +221,7 @@ public:
         {
             if (!instance)
                 return;
-            if (instance->GetData(TYPE_HALION_EVENT) != FAIL || getStage() == 0)
+            if (instance->GetData(DATA_HALION_EVENT) != FAIL || getStage() == 0)
                 return;
 
             ScriptedAI::JustReachedHome();
@@ -232,7 +231,7 @@ public:
         {
             if (!instance) return;
 
-            if (instance->GetData(TYPE_HALION_EVENT) != FAIL) return;
+            if (instance->GetData(DATA_HALION_EVENT) != FAIL) return;
 
             ScriptedAI::EnterEvadeMode();
         }
@@ -251,7 +250,7 @@ public:
                     clone->SetHealth(1);
                 }
             }
-            instance->SetData(TYPE_HALION, DONE);
+            instance->SetData(DATA_HALION, DONE);
             me->SetFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
             instance->SetData(TYPE_COUNTER, COUNTER_OFF);
             // Updating achievements for all players in the map - not only in real world
@@ -290,7 +289,7 @@ public:
             me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
             DoCast(SPELL_TWILIGHT_PRECISION);
             me->SetInCombatWithZone();
-            instance->SetData(TYPE_HALION, IN_PROGRESS);
+            instance->SetData(DATA_HALION, IN_PROGRESS);
             DoScriptText(-1666101, me);
         }
 
@@ -352,9 +351,9 @@ public:
                     if (IntroAppTimer <= diff)
                     {
                         me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-                        me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_OOC_NOT_ATTACKABLE);
+                        me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PC);
                         me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-                        me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
+                        me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PACIFIED);
                         me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISABLE_MOVE);
                         DoCast(SPELL_FIERY_EXPLOSION);
                         me->SetDisplayId(31952);
@@ -405,12 +404,12 @@ public:
                 case 1: // Switch to phase 2
                     {
                         DoScriptText(-1666108, me);
-                        instance->SetData(TYPE_HALION_EVENT, NOT_STARTED);
+                        instance->SetData(DATA_HALION_EVENT, NOT_STARTED);
                         StartMovement(0);
                         {
-                            Creature* control = me->GetMap()->GetCreature(instance->GetData64(NPC_HALION_CONTROL));
+                            Creature* control = me->GetMap()->GetCreature(instance->GetData64(NPC_HALION_CONTROLLER));
                             if (!control)
-                                control = me->SummonCreature(NPC_HALION_CONTROL, SpawnLoc[0].x, SpawnLoc[0].y, SpawnLoc[0].z, 0, TEMPSUMMON_MANUAL_DESPAWN, 1000);
+                                control = me->SummonCreature(NPC_HALION_CONTROLLER, SpawnLoc[0].x, SpawnLoc[0].y, SpawnLoc[0].z, 0, TEMPSUMMON_MANUAL_DESPAWN, 1000);
                             else if (!control->isAlive())
                                 control->Respawn();
                             control->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
@@ -438,7 +437,7 @@ public:
                 case 4:
                     if (!me->IsNonMeleeSpellCasted(false))
                     {
-                        if (Creature* control = me->GetMap()->GetCreature(instance->GetData64(NPC_HALION_CONTROL)))
+                        if (Creature* control = me->GetMap()->GetCreature(instance->GetData64(NPC_HALION_CONTROLLER)))
                         {
                             me->SetInCombatWith(control);
                             control->SetInCombatWith(me);
@@ -455,17 +454,17 @@ public:
                     break;
 
                 case 5: // HALION awaiting end battle in TWILIGHT REALM
-                    if (instance->GetData(TYPE_HALION_EVENT) == IN_PROGRESS)
+                    if (instance->GetData(DATA_HALION_EVENT) == IN_PROGRESS)
                         {
                             me->RemoveAurasDueToSpell(SPELL_START_PHASE2);
-                            if (Creature* control = me->GetMap()->GetCreature(instance->GetData64(NPC_HALION_CONTROL)))
+                            if (Creature* control = me->GetMap()->GetCreature(instance->GetData64(NPC_HALION_CONTROLLER)))
                             {
                                 me->SetInCombatWith(control);
                                 control->SetInCombatWith(me);
                             }
                             me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-                            me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_OOC_NOT_ATTACKABLE);
-                            me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
+                            me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PC);
+                            me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PACIFIED);
                             me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                             me->SetHealth(me->GetMaxHealth()/2);
                             me->SetInCombatWithZone();
@@ -474,7 +473,7 @@ public:
                     return;
                 case 6: // Switch to phase 3
                     DoScriptText(-1666109, me);
-                    instance->SetData(TYPE_HALION_EVENT, SPECIAL);
+                    instance->SetData(DATA_HALION_EVENT, SPECIAL);
                     setStage(7);
                     break;
                 case 7:
@@ -576,7 +575,7 @@ public:
             TailLashTimer = urand(10*IN_MILLISECONDS, 20*IN_MILLISECONDS);
 
             me->SetInCombatWithZone();
-            if (Creature* control = me->GetMap()->GetCreature(instance->GetData64(NPC_HALION_CONTROL)))
+            if (Creature* control = me->GetMap()->GetCreature(instance->GetData64(NPC_HALION_CONTROLLER)))
             {
                 me->SetInCombatWith(control);
                 control->SetInCombatWith(me);
@@ -588,7 +587,7 @@ public:
             else if (!focus->isAlive())
                 focus->Respawn();
 
-            if (Creature* real = me->GetMap()->GetCreature(instance->GetData64(NPC_HALION_REAL)))
+            if (Creature* real = me->GetMap()->GetCreature(instance->GetData64(NPC_HALION)))
                 if (real->isAlive())
                     me->SetHealth(real->GetHealth());
             if (!me->HasAura(SPELL_TWILIGHT_ENTER))
@@ -608,7 +607,7 @@ public:
         void JustReachedHome()
         {
             if (!instance) return;
-            if (instance->GetData(TYPE_HALION_EVENT) != FAIL || getStage() == 0)
+            if (instance->GetData(DATA_HALION_EVENT) != FAIL || getStage() == 0)
                 return;
             ScriptedAI::JustReachedHome();
         }
@@ -617,7 +616,7 @@ public:
         {
             if (!instance) return;
 
-            if (instance->GetData(TYPE_HALION_EVENT) != FAIL || getStage() == 0)
+            if (instance->GetData(DATA_HALION_EVENT) != FAIL || getStage() == 0)
                 return;
 
             ScriptedAI::EnterEvadeMode();
@@ -632,8 +631,8 @@ public:
             if ( !intro && who->IsWithinDistInMap(me, 20.0f))
             {
                 me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-                me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_OOC_NOT_ATTACKABLE);
-                me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
+                me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PC);
+                me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PACIFIED);
                 intro = true;
                 AttackStart(who);
                 setStage(1);
@@ -646,10 +645,10 @@ public:
             if (!instance)
                 return;
             instance->DoRemoveAurasDueToSpellOnPlayers(SPELL_TWILIGHT_ENTER);
-            if (Creature* real = me->GetMap()->GetCreature(instance->GetData64(NPC_HALION_REAL)))
+            if (Creature* real = me->GetMap()->GetCreature(instance->GetData64(NPC_HALION)))
             if (!real->isAlive())
             {
-                instance->SetData(TYPE_HALION, DONE);
+                instance->SetData(DATA_HALION, DONE);
                 real->SetFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
                 instance->SetData(TYPE_COUNTER, COUNTER_OFF);
             }
@@ -680,7 +679,7 @@ public:
             if (!instance)
                 return;
             Tdmg += Damage;
-            Creature* halionReal = me->GetMap()->GetCreature(instance->GetData64(NPC_HALION_REAL));
+            Creature* halionReal = me->GetMap()->GetCreature(instance->GetData64(NPC_HALION));
             if (!halionReal)
                 return;
             if (halionReal->GetHealth() <=1 || !halionReal->isAlive())
@@ -702,11 +701,11 @@ public:
                 return;
             }
 
-            if (instance->GetData(TYPE_HALION) != DONE)
+            if (instance->GetData(DATA_HALION) != DONE)
             {
-                if (!instance || instance->GetData(TYPE_HALION) != IN_PROGRESS || instance->GetData(TYPE_HALION_EVENT) == FAIL)
+                if (!instance || instance->GetData(DATA_HALION) != IN_PROGRESS || instance->GetData(DATA_HALION_EVENT) == FAIL)
                 {
-                    if (Creature* real = me->GetMap()->GetCreature(instance->GetData64(NPC_HALION_REAL)))
+                    if (Creature* real = me->GetMap()->GetCreature(instance->GetData64(NPC_HALION)))
                         if (!real->isAlive())
                             real->Respawn();
                     me->ForcedDespawn();
@@ -753,9 +752,9 @@ public:
                     }
                     break;
                 case 2: //To two realms
-                    instance->SetData(TYPE_HALION_EVENT, IN_PROGRESS);
+                    instance->SetData(DATA_HALION_EVENT, IN_PROGRESS);
                     DoScriptText(-1666109, me);
-                    if (GameObject* goPortal = me->SummonGameObject(GO_HALION_PORTAL_3, SpawnLoc[0].x, SpawnLoc[0].y, SpawnLoc[0].z, 4.47206f, 0, 0, 0.786772f, -0.617243f, 99999999))
+                    if (GameObject* goPortal = me->SummonGameObject(GO_HALION_PORTAL_EXIT, SpawnLoc[0].x, SpawnLoc[0].y, SpawnLoc[0].z, 4.47206f, 0, 0, 0.786772f, -0.617243f, 99999999))
                     {
                         goPortal->SetPhaseMask(32, true);
                         goPortal->SetRespawnTime(9999999);
@@ -873,7 +872,7 @@ public:
             _lastBuffNum = 5;
             _lastCorreal = 50;
             instance->SetData(TYPE_COUNTER, COUNTER_OFF);
-            instance->SetData(TYPE_HALION_EVENT, NOT_STARTED);
+            instance->SetData(DATA_HALION_EVENT, NOT_STARTED);
         }
 
         void AttackStart(Unit *who)
@@ -908,7 +907,7 @@ public:
                 return;
             }
 
-            if (instance->GetData(TYPE_HALION) != IN_PROGRESS)
+            if (instance->GetData(DATA_HALION) != IN_PROGRESS)
             {
                 me->ForcedDespawn();
                 return;
@@ -921,8 +920,8 @@ public:
                     sLog->outDebug(LOG_FILTER_MAPS, "ruby_sanctum: cannot detect players in range! ");
                     if (!_detectplayers)
                     {
-                        instance->SetData(TYPE_HALION_EVENT, FAIL);
-                        instance->SetData(TYPE_HALION, FAIL);
+                        instance->SetData(DATA_HALION_EVENT, FAIL);
+                        instance->SetData(DATA_HALION, FAIL);
                         me->ForcedDespawn();
                     }
                 else
@@ -935,8 +934,8 @@ public:
                 _detectplayers = true;
             }
 
-                if (instance->GetData(TYPE_HALION_EVENT) != SPECIAL) return;
-                halionReal = me->GetMap()->GetCreature(instance->GetData64(NPC_HALION_REAL));
+                if (instance->GetData(DATA_HALION_EVENT) != SPECIAL) return;
+                halionReal = me->GetMap()->GetCreature(instance->GetData64(NPC_HALION));
                 halionTwilight = me->GetMap()->GetCreature(instance->GetData64(NPC_HALION_TWILIGHT));
                 halionTwilight->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
                 float p_MaxHP = halionReal->GetMaxHealth();
@@ -1088,7 +1087,7 @@ public:
         {
             if (!instance)
                   me->ForcedDespawn();
-            if (instance->GetData(TYPE_HALION) != IN_PROGRESS)
+            if (instance->GetData(DATA_HALION) != IN_PROGRESS)
                   me->ForcedDespawn();
 
             if (instance->GetData(DATA_ORB_S) == DONE && instance->GetData(DATA_ORB_N) == DONE)
@@ -1199,7 +1198,7 @@ public:
             tc_timer = 30000;
             me->SetPhaseMask(32, true);
             me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_ATTACKABLE_1);
-            me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_OOC_NOT_ATTACKABLE);
+            me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PC);
             me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
             if (me->GetEntry() == NPC_SHADOW_PULSAR_N)
             {
@@ -1259,7 +1258,7 @@ public:
         {
             if (!instance)
                   me->ForcedDespawn();
-            if (instance->GetData(TYPE_HALION) != IN_PROGRESS)
+            if (instance->GetData(DATA_HALION) != IN_PROGRESS)
                   me->ForcedDespawn();
 
             if (!MovementStarted && instance->GetData(_flag) == SPECIAL)
@@ -1327,7 +1326,7 @@ public:
 
         void UpdateAI(const uint32 diff)
         {
-            if (!instance || instance->GetData(TYPE_HALION) != IN_PROGRESS)
+            if (!instance || instance->GetData(DATA_HALION) != IN_PROGRESS)
                   me->ForcedDespawn();
 
             if (!MovementStarted)
@@ -1393,7 +1392,7 @@ public:
 
         void UpdateAI(const uint32 diff)
         {
-            if (instance && instance->GetData(TYPE_HALION) != IN_PROGRESS)
+            if (instance && instance->GetData(DATA_HALION) != IN_PROGRESS)
                 me->ForcedDespawn();
 
             if (ConsumptTimer <= diff)
@@ -1473,7 +1472,7 @@ public:
 
         void UpdateAI(const uint32 diff)
         {
-            if (instance && instance->GetData(TYPE_HALION) != IN_PROGRESS)
+            if (instance && instance->GetData(DATA_HALION) != IN_PROGRESS)
                 me->ForcedDespawn();
 
             if (ConbustTimer <= diff)

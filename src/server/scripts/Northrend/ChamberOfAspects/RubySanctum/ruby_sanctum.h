@@ -48,6 +48,10 @@ enum DataTypes
     DATA_BURNING_TREE_3                     = 12,
     DATA_BURNING_TREE_4                     = 13,
     DATA_FLAME_RING                         = 14,
+    DATA_HALION_EVENT                       = 15,
+    DATA_ORB_DIRECTION				        = 16,
+    DATA_ORB_S						        = 17,
+    DATA_ORB_N						        = 18,
 };
 
 enum SharedActions
@@ -89,6 +93,15 @@ enum CreaturesIds
     NPC_METEOR_STRIKE_SOUTH                 = 40044,
     NPC_METEOR_STRIKE_FLAME                 = 40055,
     NPC_COMBUSTION                          = 40001,
+
+    // Orb rotation
+    NPC_SHADOW_PULSAR_N                     = 40083, //spinning orb N spawn
+    NPC_SHADOW_PULSAR_S                     = 40100, //spinning orb S spawn
+    NPC_SHADOW_PULSAR_E                     = 40468, //spinning orb E spawn
+    NPC_SHADOW_PULSAR_W                     = 40469, //spinning orb W spawn
+
+    TYPE_COUNTER		                    = 6, // for WorldUpdateState
+    COUNTER_OFF			                    = 255,
 
     // Xerestrasza
     NPC_XERESTRASZA                         = 40429,

@@ -39,13 +39,24 @@ class instance_ruby_sanctum : public InstanceMapScript
                 BaltharusTheWarbornGUID = 0;
                 GeneralZarithrianGUID   = 0;
                 SavianaRagefireGUID     = 0;
-                HalionGUID              = 0;
+                Halion_pGUID            = 0;
+                Halion_tGUID            = 0;
                 HalionControllerGUID    = 0;
                 CrystalChannelTargetGUID = 0;
                 XerestraszaGUID         = 0;
                 BaltharusSharedHealth   = 0;
                 FlameWallsGUID          = 0;
                 FlameRingGUID           = 0;
+                OrbNGUID                = 0;
+                OrbSGUID                = 0;
+                OrbFocusGUID            = 0;
+                OrbCarrierGUID          = 0;
+                HalionPortal1GUID       = 0;
+                HalionPortal2GUID       = 0;
+                HalionPortal3GUID       = 0;
+                HalionFireWallSGUID     = 0;
+                HalionFireWallMGUID     = 0;
+                HalionFireWallLGUID     = 0;
                 memset(ZarithianSpawnStalkerGUID, 0, 2*sizeof(uint64));
                 memset(BurningTreeGUID, 0, 4*sizeof(uint64));
             }
@@ -64,7 +75,10 @@ class instance_ruby_sanctum : public InstanceMapScript
                         SavianaRagefireGUID = creature->GetGUID();
                         break;
                     case NPC_HALION:
-                        HalionGUID = creature->GetGUID();
+                        Halion_pGUID = creature->GetGUID();
+                        break;
+                    case NPC_HALION_TWILIGHT:
+                        Halion_tGUID = creature->GetGUID();
                         break;
                     case NPC_HALION_CONTROLLER:
                         HalionControllerGUID = creature->GetGUID();
@@ -79,6 +93,18 @@ class instance_ruby_sanctum : public InstanceMapScript
                             ZarithianSpawnStalkerGUID[0] = creature->GetGUID();
                         else
                             ZarithianSpawnStalkerGUID[1] = creature->GetGUID();
+                        break;
+                    case NPC_SHADOW_PULSAR_N:
+                        OrbNGUID = creature->GetGUID();
+                        break;
+                    case NPC_SHADOW_PULSAR_S:
+                        OrbSGUID = creature->GetGUID();
+                        break;
+                    case NPC_ORB_ROTATION_FOCUS:
+                        OrbFocusGUID = creature->GetGUID();
+                        break;
+                    case NPC_ORB_CARRIER:
+                        OrbCarrierGUID = creature->GetGUID();
                         break;
                     default:
                         break;
@@ -99,6 +125,15 @@ class instance_ruby_sanctum : public InstanceMapScript
                         break;
                     case GO_FLAME_RING:
                         FlameRingGUID = go->GetGUID();
+                        break;
+                    case GO_HALION_PORTAL_1:
+                        HalionPortal1GUID = go->GetGUID();
+                        break;
+                    case GO_HALION_PORTAL_2:
+                        HalionPortal2GUID = go->GetGUID();
+                        break;
+                    case GO_HALION_PORTAL_EXIT:
+                        HalionPortal3GUID = go->GetGUID();
                         break;
                     case GO_BURNING_TREE_1:
                         BurningTreeGUID[0] = go->GetGUID();
@@ -155,8 +190,10 @@ class instance_ruby_sanctum : public InstanceMapScript
                         return ZarithianSpawnStalkerGUID[0];
                     case DATA_ZARITHIAN_SPAWN_STALKER_2:
                         return ZarithianSpawnStalkerGUID[1];
-                    case DATA_HALION:
-                        return HalionGUID;
+                    case NPC_HALION:
+                        return Halion_pGUID;
+                    case NPC_HALION_TWILIGHT:
+                        return Halion_tGUID;
                     case DATA_HALION_CONTROLLER:
                         return HalionControllerGUID;
                     case DATA_BURNING_TREE_1:
@@ -169,6 +206,20 @@ class instance_ruby_sanctum : public InstanceMapScript
                         return BurningTreeGUID[3];
                     case DATA_FLAME_RING:
                         return FlameRingGUID;
+                    case GO_HALION_PORTAL_1:
+                        return HalionPortal1GUID;
+                    case GO_HALION_PORTAL_2:
+                        return HalionPortal2GUID;
+                    case GO_HALION_PORTAL_EXIT:
+                        return HalionPortal3GUID;
+                    case NPC_SHADOW_PULSAR_N:
+                        return OrbNGUID;
+                    case NPC_SHADOW_PULSAR_S:
+                        return OrbSGUID;
+                    case NPC_ORB_ROTATION_FOCUS:
+                        return OrbFocusGUID;
+                    case NPC_ORB_CARRIER:
+                        return OrbCarrierGUID;
                     default:
                         break;
                 }
@@ -206,17 +257,17 @@ class instance_ruby_sanctum : public InstanceMapScript
                     case DATA_GENERAL_ZARITHRIAN:
                         if (GetBossState(DATA_SAVIANA_RAGEFIRE) == DONE && GetBossState(DATA_BALTHARUS_THE_WARBORN) == DONE)
                             HandleGameObject(FlameWallsGUID, state != IN_PROGRESS);
-                        /*
+
                         if (state == DONE)
                             if (Creature* halionController = instance->SummonCreature(NPC_HALION_CONTROLLER, HalionControllerSpawnPos))
                                 halionController->AI()->DoAction(ACTION_INTRO_HALION);
-                        */
+
                         break;
                     case DATA_HALION:
-                        /*
+
                         if (state != IN_PROGRESS)
                             HandleGameObject(FlameRingGUID, true);
-                        */
+
                         break;
                     default:
                         break;
@@ -296,7 +347,8 @@ class instance_ruby_sanctum : public InstanceMapScript
             uint64 BaltharusTheWarbornGUID;
             uint64 GeneralZarithrianGUID;
             uint64 SavianaRagefireGUID;
-            uint64 HalionGUID;
+            uint64 Halion_pGUID;
+            uint64 Halion_tGUID;
             uint64 HalionControllerGUID;
             uint64 CrystalChannelTargetGUID;
             uint64 XerestraszaGUID;
@@ -304,6 +356,16 @@ class instance_ruby_sanctum : public InstanceMapScript
             uint64 ZarithianSpawnStalkerGUID[2];
             uint64 BurningTreeGUID[4];
             uint64 FlameRingGUID;
+            uint64 OrbNGUID;
+            uint64 OrbSGUID;
+            uint64 OrbFocusGUID;
+            uint64 OrbCarrierGUID;
+            uint64 HalionPortal1GUID;
+            uint64 HalionPortal2GUID;
+            uint64 HalionPortal3GUID;
+            uint64 HalionFireWallSGUID;
+            uint64 HalionFireWallMGUID;
+            uint64 HalionFireWallLGUID;
             uint32 BaltharusSharedHealth;
         };
 
