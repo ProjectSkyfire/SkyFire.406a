@@ -22,7 +22,7 @@
 DoorData const doorData[] =
 {
     {GO_FIRE_FIELD,     DATA_BALTHARUS_THE_WARBORN, DOOR_TYPE_PASSAGE,  BOUNDARY_E   },
-    {GO_FLAME_RING,     DATA_HALION,                DOOR_TYPE_ROOM,     BOUNDARY_S   },
+    {GO_FLAME_RING,     DATA_HALION,                DOOR_TYPE_PASSAGE,  BOUNDARY_S   },
     {0,                 0,                          DOOR_TYPE_ROOM,     BOUNDARY_NONE},
 };
 
