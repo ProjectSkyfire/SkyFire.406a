@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2006-2012 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
@@ -327,7 +328,7 @@ public:
 
     struct npc_creditmarker_visit_with_ancestorsAI : public ScriptedAI
     {
-        npc_creditmarker_visit_with_ancestorsAI(Creature* c) : ScriptedAI(c) {}
+        npc_creditmarker_visit_with_ancestorsAI(Creature* creature) : ScriptedAI(creature) {}
 
         void Reset() {}
 

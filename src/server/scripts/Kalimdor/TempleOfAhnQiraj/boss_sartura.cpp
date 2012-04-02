@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2006-2012 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
@@ -49,7 +50,7 @@ public:
 
     struct boss_sarturaAI : public ScriptedAI
     {
-        boss_sarturaAI(Creature* c) : ScriptedAI(c) {}
+        boss_sarturaAI(Creature* creature) : ScriptedAI(creature) {}
 
         uint32 WhirlWind_Timer;
         uint32 WhirlWindRandom_Timer;
@@ -190,7 +191,7 @@ public:
 
     struct mob_sartura_royal_guardAI : public ScriptedAI
     {
-        mob_sartura_royal_guardAI(Creature* c) : ScriptedAI(c) {}
+        mob_sartura_royal_guardAI(Creature* creature) : ScriptedAI(creature) {}
 
         uint32 WhirlWind_Timer;
         uint32 WhirlWindRandom_Timer;

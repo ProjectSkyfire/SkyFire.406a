@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -52,9 +53,9 @@ public:
 
     struct boss_kazrogalAI : public hyjal_trashAI
     {
-        boss_kazrogalAI(Creature* c) : hyjal_trashAI(c)
+        boss_kazrogalAI(Creature* creature) : hyjal_trashAI(creature)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
             go = false;
             pos = 0;
         }

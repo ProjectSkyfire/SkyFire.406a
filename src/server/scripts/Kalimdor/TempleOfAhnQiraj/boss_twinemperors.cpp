@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2006-2012 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
@@ -61,9 +62,9 @@ EndScriptData */
 
 struct boss_twinemperorsAI : public ScriptedAI
 {
-    boss_twinemperorsAI(Creature* c): ScriptedAI(c)
+    boss_twinemperorsAI(Creature* creature): ScriptedAI(creature)
     {
-        instance = c->GetInstanceScript();
+        instance = creature->GetInstanceScript();
     }
 
     InstanceScript* instance;
@@ -318,19 +319,19 @@ struct boss_twinemperorsAI : public ScriptedAI
 
         for (std::list<Creature*>::const_iterator iter = lUnitList.begin(); iter != lUnitList.end(); ++iter)
         {
-            Creature* c = *iter;
-            if (c)
+            Creature* creature = *iter;
+            if (creature)
             {
-                if (c->isDead())
+                if (creature->isDead())
                 {
-                    c->Respawn();
-                    c->setFaction(7);
-                    c->RemoveAllAuras();
+                    creature->Respawn();
+                    creature->setFaction(7);
+                    creature->RemoveAllAuras();
                 }
-                if (c->IsWithinDistInMap(me, ABUSE_BUG_RANGE))
+                if (creature->IsWithinDistInMap(me, ABUSE_BUG_RANGE))
                 {
                     if (!nearb || (rand()%4) == 0)
-                        nearb = c;
+                        nearb = creature;
                 }
             }
         }
@@ -341,12 +342,12 @@ struct boss_twinemperorsAI : public ScriptedAI
     {
         if (BugsTimer < diff || Abuse_Bug_Timer <= diff)
         {
-            Creature* c = RespawnNearbyBugsAndGetOne();
+            Creature* creature = RespawnNearbyBugsAndGetOne();
             if (Abuse_Bug_Timer <= diff)
             {
-                if (c)
+                if (creature)
                 {
-                    CastSpellOnBug(c);
+                    CastSpellOnBug(creature);
                     Abuse_Bug_Timer = urand(10000, 17000);
                 }
                 else
@@ -393,7 +394,7 @@ public:
     struct boss_veknilashAI : public boss_twinemperorsAI
     {
         bool IAmVeklor() {return false;}
-        boss_veknilashAI(Creature* c) : boss_twinemperorsAI(c) {}
+        boss_veknilashAI(Creature* creature) : boss_twinemperorsAI(creature) {}
 
         uint32 UpperCut_Timer;
         uint32 UnbalancingStrike_Timer;
@@ -478,7 +479,7 @@ public:
     struct boss_veklorAI : public boss_twinemperorsAI
     {
         bool IAmVeklor() {return true;}
-        boss_veklorAI(Creature* c) : boss_twinemperorsAI(c) {}
+        boss_veklorAI(Creature* creature) : boss_twinemperorsAI(creature) {}
 
         uint32 ShadowBolt_Timer;
         uint32 Blizzard_Timer;

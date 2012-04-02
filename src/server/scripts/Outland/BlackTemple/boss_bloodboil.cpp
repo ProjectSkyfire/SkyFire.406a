@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2006-2012 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
@@ -67,9 +68,9 @@ public:
 
     struct boss_gurtogg_bloodboilAI : public ScriptedAI
     {
-        boss_gurtogg_bloodboilAI(Creature* c) : ScriptedAI(c)
+        boss_gurtogg_bloodboilAI(Creature* creature) : ScriptedAI(creature)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
         }
 
         InstanceScript* instance;

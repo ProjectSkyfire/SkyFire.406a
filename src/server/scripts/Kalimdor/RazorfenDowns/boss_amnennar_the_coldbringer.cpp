@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2006-2012 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
@@ -48,7 +49,7 @@ public:
 
     struct boss_amnennar_the_coldbringerAI : public ScriptedAI
     {
-        boss_amnennar_the_coldbringerAI(Creature* c) : ScriptedAI(c) {}
+        boss_amnennar_the_coldbringerAI(Creature* creature) : ScriptedAI(creature) {}
 
         uint32 AmnenarsWrath_Timer;
         uint32 FrostBolt_Timer;

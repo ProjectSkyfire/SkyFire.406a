@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -55,9 +56,9 @@ public:
 
     struct boss_azgalorAI : public hyjal_trashAI
     {
-        boss_azgalorAI(Creature* c) : hyjal_trashAI(c)
+        boss_azgalorAI(Creature* creature) : hyjal_trashAI(creature)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
             go = false;
             pos = 0;
         }
@@ -214,9 +215,9 @@ public:
 
     struct mob_lesser_doomguardAI : public hyjal_trashAI
     {
-        mob_lesser_doomguardAI(Creature* c) : hyjal_trashAI(c)
+        mob_lesser_doomguardAI(Creature* creature) : hyjal_trashAI(creature)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
             if (instance)
                 AzgalorGUID = instance->GetData64(DATA_AZGALOR);
         }

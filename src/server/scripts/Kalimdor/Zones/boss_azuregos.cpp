@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2006-2012 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
@@ -47,7 +48,7 @@ public:
 
     struct boss_azuregosAI : public ScriptedAI
     {
-        boss_azuregosAI(Creature* c) : ScriptedAI(c) {}
+        boss_azuregosAI(Creature* creature) : ScriptedAI(creature) {}
 
         uint32 MarkOfFrost_Timer;
         uint32 ManaStorm_Timer;
