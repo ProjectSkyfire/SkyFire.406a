@@ -22,6 +22,7 @@
 DoorData const doorData[] =
 {
     {GO_FIRE_FIELD,     DATA_BALTHARUS_THE_WARBORN, DOOR_TYPE_PASSAGE,  BOUNDARY_E   },
+    {GO_FLAME_RING,     DATA_HALION,                DOOR_TYPE_ROOM,     BOUNDARY_S   },
     {0,                 0,                          DOOR_TYPE_ROOM,     BOUNDARY_NONE},
 };
 
@@ -264,10 +265,15 @@ class instance_ruby_sanctum : public InstanceMapScript
 
                         break;
                     case DATA_HALION:
+                        if (GetBossState(DATA_SAVIANA_RAGEFIRE) == DONE && GetBossState(DATA_BALTHARUS_THE_WARBORN) == DONE && GetBossState(DATA_GENERAL_ZARITHRIAN) == DONE)
+                            HandleGameObject(FlameRingGUID, state != IN_PROGRESS);
 
                         if (state != IN_PROGRESS)
+                        {
                             HandleGameObject(FlameRingGUID, true);
-
+                            if (Creature* halion = instance->GetCreature(Halion_pGUID))
+                                halion->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PC | UNIT_FLAG_NOT_SELECTABLE);
+                        }
                         break;
                     default:
                         break;
