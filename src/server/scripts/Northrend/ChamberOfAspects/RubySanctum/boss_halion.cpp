@@ -75,7 +75,6 @@ enum Halion
     SPELL_SOUL_CONSUMPTION              = 74792, // Inflicts 4, 000 Shadow damage every 2 seconds for 30 seconds to a random raider. Every time Soul Consumption does damage, it applies a stackable Mark of Consumption.
     SPELL_CONSUMPTION_EXPLODE           = 74799,
     SPELL_CONSUMPTION_AURA              = 74803,
-    SPELL_GROW_UP                       = 36300,
     //Summons
     NPC_METEOR_STRIKE                   = 40029, //casts "impact zone" then meteor
     NPC_METEOR_STRIKE_1                 = 40041,
