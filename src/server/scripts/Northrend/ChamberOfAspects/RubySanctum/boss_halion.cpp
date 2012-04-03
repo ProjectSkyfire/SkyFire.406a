@@ -835,7 +835,7 @@ public:
     };
 };
 
-///- mob_halion_control
+///- mob_halion_controller
 
 struct HalionBuffLine
 {
@@ -858,19 +858,19 @@ static HalionBuffLine Buff[]=
     {SPELL_CORPOREALITY_100I, SPELL_CORPOREALITY_100D, 100 },
 };
 
-class mob_halion_control : public CreatureScript
+class mob_halion_controller : public CreatureScript
 {
 public:
-    mob_halion_control() : CreatureScript("mob_halion_control") { }
+    mob_halion_controller() : CreatureScript("mob_halion_controller") { }
 
     CreatureAI* GetAI(Creature* creature) const
     {
-        return new mob_halion_controlAI(creature);
+        return new mob_halion_controllerAI(creature);
     }
 
-    struct mob_halion_controlAI : public ScriptedAI
+    struct mob_halion_controllerAI : public ScriptedAI
     {
-        mob_halion_controlAI(Creature* creature) : ScriptedAI(creature)
+        mob_halion_controllerAI(Creature* creature) : ScriptedAI(creature)
         {
             instance = (InstanceScript*)creature->GetInstanceScript();
             Reset();
@@ -904,7 +904,7 @@ public:
 
         void AttackStart(Unit *who)
         {
-            //ignore all attackstart commands
+            //ignore all attack start commands
             return;
         }
 
@@ -1247,7 +1247,7 @@ public:
 
         void AttackStart(Unit* who)
         {
-            //ignore all attackstart commands
+            //ignore all attack start commands
             return;
         }
 
@@ -1699,11 +1699,11 @@ class go_halion_portal_twilight : public GameObjectScript
         }
 };
 
-class go_halion_portal_real : public GameObjectScript
+class go_halion_portal : public GameObjectScript
 {
 public:
 
-    go_halion_portal_real() : GameObjectScript("go_halion_portal_real") { }
+    go_halion_portal() : GameObjectScript("go_halion_portal") { }
 
     bool OnGossipHello(Player* player, GameObject* go)
     {
@@ -1829,13 +1829,13 @@ void AddSC_boss_halion()
     new mob_halion_meteor();
     new mob_halion_flame();
     new mob_halion_orb();
-    new mob_halion_control();
+    new mob_halion_controller();
     new mob_orb_rotation_focus();
     new mob_orb_carrier();
     new mob_soul_consumption();
     new mob_fiery_combustion();
     new go_halion_portal_twilight();
-    new go_halion_portal_real();
+    new go_halion_portal();
     new spell_halion_fiery_combustion();
     new spell_halion_soul_consumption();
 }
