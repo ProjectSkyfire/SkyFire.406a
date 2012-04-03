@@ -190,114 +190,114 @@ class boss_general_zarithrian : public CreatureScript
 
 class npc_onyx_flamecaller : public CreatureScript
 {
-    public:
-        npc_onyx_flamecaller() : CreatureScript("npc_onyx_flamecaller") { }
+public:
+    npc_onyx_flamecaller() : CreatureScript("npc_onyx_flamecaller") { }
 
-        struct npc_onyx_flamecallerAI : public npc_escortAI
+    struct npc_onyx_flamecallerAI : public npc_escortAI
+    {
+        npc_onyx_flamecallerAI(Creature* creature) : npc_escortAI(creature)
         {
-            npc_onyx_flamecallerAI(Creature* creature) : npc_escortAI(creature)
-            {
-                _instance = creature->GetInstanceScript();
-                npc_escortAI::SetDespawnAtEnd(false);
-            }
-
-            void Reset()
-            {
-                _lavaGoutCount = 0;
-                me->setActive(true);
-                AddWaypoints();
-                Start(true, true);
-            }
-
-            void EnterCombat(Unit* /*who*/)
-            {
-                _events.Reset();
-                _events.ScheduleEvent(EVENT_BLAST_NOVA, urand(20000, 30000));
-                _events.ScheduleEvent(EVENT_LAVA_GOUT, 5000);
-            }
-
-            void EnterEvadeMode()
-            {
-                // Prevent EvadeMode
-            }
-
-            void IsSummonedBy(Unit* /*summoner*/)
-            {
-                // Let Zarithrian count as summoner. _instance cant be null since we got GetRubySanctumAI
-                if (Creature* zarithrian = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_GENERAL_ZARITHRIAN)))
-                    zarithrian->AI()->JustSummoned(me);
-            }
-
-            void WaypointReached(uint32 pointId)
-            {
-                if (pointId == MAX_PATH_FLAMECALLER_WAYPOINTS || pointId == MAX_PATH_FLAMECALLER_WAYPOINTS*2)
-                {
-                    DoZoneInCombat();
-                    SetEscortPaused(true);
-                }
-            }
-
-            void AddWaypoints()
-            {
-                if (me->GetPositionY() < 500.0f)
-                {
-                    for (uint8 i = 0; i < MAX_PATH_FLAMECALLER_WAYPOINTS; i++)
-                        AddWaypoint(i, FlamecallerWaypoints[i].GetPositionX(), FlamecallerWaypoints[i].GetPositionY(), FlamecallerWaypoints[i].GetPositionZ());
-                }
-                else
-                {
-                    for (uint8 i = 0, j = MAX_PATH_FLAMECALLER_WAYPOINTS; j < MAX_PATH_FLAMECALLER_WAYPOINTS*2; j++, i++)
-                        AddWaypoint(i, FlamecallerWaypoints[j].GetPositionX(), FlamecallerWaypoints[j].GetPositionY(), FlamecallerWaypoints[j].GetPositionZ());
-                }
-            }
-
-            void UpdateEscortAI(uint32 const diff)
-            {
-                if (!UpdateVictim())
-                    return;
-
-                _events.Update(diff);
-
-                if (me->HasUnitState(UNIT_STATE_CASTING))
-                    return;
-
-                while (uint32 eventId = _events.ExecuteEvent())
-                {
-                    switch (eventId)
-                    {
-                        case EVENT_BLAST_NOVA:
-                            DoCastAOE(SPELL_BLAST_NOVA);
-                            _events.ScheduleEvent(EVENT_BLAST_NOVA, urand(20000, 30000));
-                            break;
-                        case EVENT_LAVA_GOUT:
-                            if (_lavaGoutCount >= 3)
-                            {
-                                _lavaGoutCount = 0;
-                                _events.ScheduleEvent(EVENT_LAVA_GOUT, 8000);
-                                break;
-                            }
-                            DoCastVictim(SPELL_LAVA_GOUT);
-                            _lavaGoutCount++;
-                            _events.ScheduleEvent(EVENT_LAVA_GOUT, 1500);
-                            break;
-                        default:
-                            break;
-                    }
-                }
-
-                DoMeleeAttackIfReady();
-            }
-        private:
-            EventMap _events;
-            bool _movementComplete;
-            InstanceScript* _instance;
-            uint8 _lavaGoutCount;
-        };
-
-        CreatureAI* GetAI(Creature* creature) const
-        {
-            return GetRubySanctumAI<npc_onyx_flamecallerAI>(creature);
+            _instance = creature->GetInstanceScript();
+            npc_escortAI::SetDespawnAtEnd(false);
         }
+
+        void Reset()
+        {
+            _lavaGoutCount = 0;
+            me->setActive(true);
+            AddWaypoints();
+            Start(true, true);
+        }
+
+        void EnterCombat(Unit* /*who*/)
+        {
+            _events.Reset();
+            _events.ScheduleEvent(EVENT_BLAST_NOVA, urand(20000, 30000));
+            _events.ScheduleEvent(EVENT_LAVA_GOUT, 5000);
+        }
+
+        void EnterEvadeMode()
+        {
+            // Prevent EvadeMode
+        }
+
+        void IsSummonedBy(Unit* /*summoner*/)
+        {
+            // Let Zarithrian count as summoner. _instance cant be null since we got GetRubySanctumAI
+            if (Creature* zarithrian = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_GENERAL_ZARITHRIAN)))
+                zarithrian->AI()->JustSummoned(me);
+        }
+
+        void WaypointReached(uint32 pointId)
+        {
+            if (pointId == MAX_PATH_FLAMECALLER_WAYPOINTS || pointId == MAX_PATH_FLAMECALLER_WAYPOINTS*2)
+            {
+                DoZoneInCombat();
+                SetEscortPaused(true);
+            }
+        }
+
+        void AddWaypoints()
+        {
+            if (me->GetPositionY() < 500.0f)
+            {
+                for (uint8 i = 0; i < MAX_PATH_FLAMECALLER_WAYPOINTS; i++)
+                    AddWaypoint(i, FlamecallerWaypoints[i].GetPositionX(), FlamecallerWaypoints[i].GetPositionY(), FlamecallerWaypoints[i].GetPositionZ());
+            }
+            else
+            {
+                for (uint8 i = 0, j = MAX_PATH_FLAMECALLER_WAYPOINTS; j < MAX_PATH_FLAMECALLER_WAYPOINTS*2; j++, i++)
+                    AddWaypoint(i, FlamecallerWaypoints[j].GetPositionX(), FlamecallerWaypoints[j].GetPositionY(), FlamecallerWaypoints[j].GetPositionZ());
+            }
+        }
+
+        void UpdateEscortAI(uint32 const diff)
+        {
+            if (!UpdateVictim())
+                return;
+
+            _events.Update(diff);
+
+            if (me->HasUnitState(UNIT_STATE_CASTING))
+                return;
+
+            while (uint32 eventId = _events.ExecuteEvent())
+            {
+                switch (eventId)
+                {
+                case EVENT_BLAST_NOVA:
+                    DoCastAOE(SPELL_BLAST_NOVA);
+                    _events.ScheduleEvent(EVENT_BLAST_NOVA, urand(20000, 30000));
+                    break;
+                case EVENT_LAVA_GOUT:
+                    if (_lavaGoutCount >= 3)
+                    {
+                        _lavaGoutCount = 0;
+                        _events.ScheduleEvent(EVENT_LAVA_GOUT, 8000);
+                        break;
+                    }
+                    DoCastVictim(SPELL_LAVA_GOUT);
+                    _lavaGoutCount++;
+                    _events.ScheduleEvent(EVENT_LAVA_GOUT, 1500);
+                    break;
+                default:
+                    break;
+                }
+            }
+
+            DoMeleeAttackIfReady();
+        }
+    private:
+        EventMap _events;
+        bool _movementComplete;
+        InstanceScript* _instance;
+        uint8 _lavaGoutCount;
+    };
+
+    CreatureAI* GetAI(Creature* creature) const
+    {
+        return GetRubySanctumAI<npc_onyx_flamecallerAI>(creature);
+    }
 };
 
 void AddSC_boss_general_zarithrian()

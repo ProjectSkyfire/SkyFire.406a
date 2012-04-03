@@ -63,199 +63,199 @@ Position const SavianaRagefireLandPos = {3151.07f, 636.443f, 79.54f, 4.69f};
 
 class boss_saviana_ragefire : public CreatureScript
 {
-    public:
-        boss_saviana_ragefire() : CreatureScript("boss_saviana_ragefire") { }
+public:
+    boss_saviana_ragefire() : CreatureScript("boss_saviana_ragefire") { }
 
-        struct boss_saviana_ragefireAI : public BossAI
+    struct boss_saviana_ragefireAI : public BossAI
+    {
+        boss_saviana_ragefireAI(Creature* creature) : BossAI(creature, DATA_SAVIANA_RAGEFIRE)
         {
-            boss_saviana_ragefireAI(Creature* creature) : BossAI(creature, DATA_SAVIANA_RAGEFIRE)
-            {
-            }
+        }
 
-            void Reset()
+        void Reset()
+        {
+            _Reset();
+            me->SetReactState(REACT_AGGRESSIVE);
+        }
+
+        void EnterCombat(Unit* /*who*/)
+        {
+            _EnterCombat();
+            Talk(SAY_AGGRO);
+            events.Reset();
+            events.ScheduleEvent(EVENT_ENRAGE, 20000, EVENT_GROUP_LAND_PHASE);
+            events.ScheduleEvent(EVENT_FLAME_BREATH, 14000, EVENT_GROUP_LAND_PHASE);
+            events.ScheduleEvent(EVENT_FLIGHT, 60000);
+        }
+
+        void JustDied(Unit* /*killer*/)
+        {
+            _JustDied();
+            me->PlayDirectSound(SOUND_ID_DEATH);
+        }
+
+        void MovementInform(uint32 type, uint32 point)
+        {
+            if (type != POINT_MOTION_TYPE)
+                return;
+
+            switch (point)
             {
-                _Reset();
+            case POINT_FLIGHT:
+                events.ScheduleEvent(EVENT_CONFLAGRATION, 1000);
+                Talk(SAY_CONFLAGRATION);
+                break;
+            case POINT_LAND:
+                me->SetFlying(false);
+                me->SetLevitate(false);
                 me->SetReactState(REACT_AGGRESSIVE);
+                if (me->GetMotionMaster()->GetCurrentMovementGeneratorType() == POINT_MOTION_TYPE)
+                    me->GetMotionMaster()->MovementExpired();
+                DoStartMovement(me->getVictim());
+                break;
+            default:
+                break;
             }
+        }
 
-            void EnterCombat(Unit* /*who*/)
+        void JustReachedHome()
+        {
+            _JustReachedHome();
+            me->SetFlying(false);
+            me->SetLevitate(false);
+        }
+
+        void KilledUnit(Unit* victim)
+        {
+            if (victim->GetTypeId() == TYPEID_PLAYER)
+                Talk(SAY_KILL);
+        }
+
+        void UpdateAI(uint32 const diff)
+        {
+            if (!UpdateVictim())
+                return;
+
+            events.Update(diff);
+
+            if (me->HasUnitState(UNIT_STATE_CASTING))
+                return;
+
+            while (uint32 eventId = events.ExecuteEvent())
             {
-                _EnterCombat();
-                Talk(SAY_AGGRO);
-                events.Reset();
-                events.ScheduleEvent(EVENT_ENRAGE, 20000, EVENT_GROUP_LAND_PHASE);
-                events.ScheduleEvent(EVENT_FLAME_BREATH, 14000, EVENT_GROUP_LAND_PHASE);
-                events.ScheduleEvent(EVENT_FLIGHT, 60000);
-            }
-
-            void JustDied(Unit* /*killer*/)
-            {
-                _JustDied();
-                me->PlayDirectSound(SOUND_ID_DEATH);
-            }
-
-            void MovementInform(uint32 type, uint32 point)
-            {
-                if (type != POINT_MOTION_TYPE)
-                    return;
-
-                switch (point)
+                switch (eventId)
                 {
-                    case POINT_FLIGHT:
-                        events.ScheduleEvent(EVENT_CONFLAGRATION, 1000);
-                        Talk(SAY_CONFLAGRATION);
+                    case EVENT_FLIGHT:
+                    {
+                        me->SetFlying(true);
+                        me->SetLevitate(true);
+                        me->SetReactState(REACT_PASSIVE);
+                        me->GetMotionMaster()->MovePoint(POINT_FLIGHT, SavianaRagefireFlyPos);
+                        events.ScheduleEvent(EVENT_FLIGHT, 50000);
+                        events.DelayEvents(12500, EVENT_GROUP_LAND_PHASE);
                         break;
-                    case POINT_LAND:
-                        me->SetFlying(false);
-                        me->SetLevitate(false);
-                        me->SetReactState(REACT_AGGRESSIVE);
-                        if (me->GetMotionMaster()->GetCurrentMovementGeneratorType() == POINT_MOTION_TYPE)
-                            me->GetMotionMaster()->MovementExpired();
-                        DoStartMovement(me->getVictim());
+                    }
+                    case EVENT_CONFLAGRATION:
+                        DoCast(me, SPELL_CONFLAGRATION, true);
+                        break;
+                    case EVENT_ENRAGE:
+                        DoCast(me, SPELL_ENRAGE);
+                        Talk(EMOTE_ENRAGED);
+                        events.ScheduleEvent(EVENT_ENRAGE, urand(15000, 20000), EVENT_GROUP_LAND_PHASE);
+                        break;
+                    case EVENT_FLAME_BREATH:
+                        DoCastVictim(SPELL_FLAME_BREATH);
+                        events.ScheduleEvent(EVENT_FLAME_BREATH, urand(20000, 30000), EVENT_GROUP_LAND_PHASE);
                         break;
                     default:
                         break;
                 }
             }
 
-            void JustReachedHome()
-            {
-                _JustReachedHome();
-                me->SetFlying(false);
-                me->SetLevitate(false);
-            }
-
-            void KilledUnit(Unit* victim)
-            {
-                if (victim->GetTypeId() == TYPEID_PLAYER)
-                    Talk(SAY_KILL);
-            }
-
-            void UpdateAI(uint32 const diff)
-            {
-                if (!UpdateVictim())
-                    return;
-
-                events.Update(diff);
-
-                if (me->HasUnitState(UNIT_STATE_CASTING))
-                    return;
-
-                while (uint32 eventId = events.ExecuteEvent())
-                {
-                    switch (eventId)
-                    {
-                        case EVENT_FLIGHT:
-                        {
-                            me->SetFlying(true);
-                            me->SetLevitate(true);
-                            me->SetReactState(REACT_PASSIVE);
-                            me->GetMotionMaster()->MovePoint(POINT_FLIGHT, SavianaRagefireFlyPos);
-                            events.ScheduleEvent(EVENT_FLIGHT, 50000);
-                            events.DelayEvents(12500, EVENT_GROUP_LAND_PHASE);
-                            break;
-                        }
-                        case EVENT_CONFLAGRATION:
-                            DoCast(me, SPELL_CONFLAGRATION, true);
-                            break;
-                        case EVENT_ENRAGE:
-                            DoCast(me, SPELL_ENRAGE);
-                            Talk(EMOTE_ENRAGED);
-                            events.ScheduleEvent(EVENT_ENRAGE, urand(15000, 20000), EVENT_GROUP_LAND_PHASE);
-                            break;
-                        case EVENT_FLAME_BREATH:
-                            DoCastVictim(SPELL_FLAME_BREATH);
-                            events.ScheduleEvent(EVENT_FLAME_BREATH, urand(20000, 30000), EVENT_GROUP_LAND_PHASE);
-                            break;
-                        default:
-                            break;
-                    }
-                }
-
-                DoMeleeAttackIfReady();
-            }
-        };
-
-        CreatureAI* GetAI(Creature* creature) const
-        {
-            return GetRubySanctumAI<boss_saviana_ragefireAI>(creature);
+            DoMeleeAttackIfReady();
         }
+    };
+
+    CreatureAI* GetAI(Creature* creature) const
+    {
+        return GetRubySanctumAI<boss_saviana_ragefireAI>(creature);
+    }
 };
 
 class ConflagrationTargetSelector
 {
-    public:
-        ConflagrationTargetSelector() { }
+public:
+    ConflagrationTargetSelector() { }
 
-        bool operator()(Unit* unit)
-        {
-            return unit->GetTypeId() != TYPEID_PLAYER;
-        }
+    bool operator()(Unit* unit)
+    {
+        return unit->GetTypeId() != TYPEID_PLAYER;
+    }
 };
 
 class spell_saviana_conflagration_init : public SpellScriptLoader
 {
-    public:
-        spell_saviana_conflagration_init() : SpellScriptLoader("spell_saviana_conflagration_init") { }
+public:
+    spell_saviana_conflagration_init() : SpellScriptLoader("spell_saviana_conflagration_init") { }
 
-        class spell_saviana_conflagration_init_SpellScript : public SpellScript
+    class spell_saviana_conflagration_init_SpellScript : public SpellScript
+    {
+        PrepareSpellScript(spell_saviana_conflagration_init_SpellScript);
+
+        void FilterTargets(std::list<Unit*>& unitList)
         {
-            PrepareSpellScript(spell_saviana_conflagration_init_SpellScript);
-
-            void FilterTargets(std::list<Unit*>& unitList)
-            {
-                unitList.remove_if (ConflagrationTargetSelector());
-                uint8 maxSize = uint8(GetCaster()->GetMap()->GetSpawnMode() & 1 ? 6 : 3);
-                if (unitList.size() > maxSize)
-                    Trinity::RandomResizeList(unitList, maxSize);
-            }
-
-            void HandleDummy(SpellEffIndex effIndex)
-            {
-                PreventHitDefaultEffect(effIndex);
-                GetCaster()->CastSpell(GetHitUnit(), SPELL_FLAME_BEACON, true);
-                GetCaster()->CastSpell(GetHitUnit(), SPELL_CONFLAGRATION_2, false);
-            }
-
-            void Register()
-            {
-                OnUnitTargetSelect += SpellUnitTargetFn(spell_saviana_conflagration_init_SpellScript::FilterTargets, EFFECT_0, TARGET_UNIT_SRC_AREA_ENEMY);
-                OnEffectHitTarget += SpellEffectFn(spell_saviana_conflagration_init_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
-            }
-        };
-
-        SpellScript* GetSpellScript() const
-        {
-            return new spell_saviana_conflagration_init_SpellScript();
+            unitList.remove_if (ConflagrationTargetSelector());
+            uint8 maxSize = uint8(GetCaster()->GetMap()->GetSpawnMode() & 1 ? 6 : 3);
+            if (unitList.size() > maxSize)
+                Trinity::RandomResizeList(unitList, maxSize);
         }
+
+        void HandleDummy(SpellEffIndex effIndex)
+        {
+            PreventHitDefaultEffect(effIndex);
+            GetCaster()->CastSpell(GetHitUnit(), SPELL_FLAME_BEACON, true);
+            GetCaster()->CastSpell(GetHitUnit(), SPELL_CONFLAGRATION_2, false);
+        }
+
+        void Register()
+        {
+            OnUnitTargetSelect += SpellUnitTargetFn(spell_saviana_conflagration_init_SpellScript::FilterTargets, EFFECT_0, TARGET_UNIT_SRC_AREA_ENEMY);
+            OnEffectHitTarget += SpellEffectFn(spell_saviana_conflagration_init_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
+        }
+    };
+
+    SpellScript* GetSpellScript() const
+    {
+        return new spell_saviana_conflagration_init_SpellScript();
+    }
 };
 
 class spell_saviana_conflagration_throwback : public SpellScriptLoader
 {
-    public:
-        spell_saviana_conflagration_throwback() : SpellScriptLoader("spell_saviana_conflagration_throwback") { }
+public:
+    spell_saviana_conflagration_throwback() : SpellScriptLoader("spell_saviana_conflagration_throwback") { }
 
-        class spell_saviana_conflagration_throwback_SpellScript : public SpellScript
+    class spell_saviana_conflagration_throwback_SpellScript : public SpellScript
+    {
+        PrepareSpellScript(spell_saviana_conflagration_throwback_SpellScript);
+
+        void HandleScript(SpellEffIndex effIndex)
         {
-            PrepareSpellScript(spell_saviana_conflagration_throwback_SpellScript);
-
-            void HandleScript(SpellEffIndex effIndex)
-            {
-                PreventHitDefaultEffect(effIndex);
-                GetHitUnit()->CastSpell(GetCaster(), uint32(GetEffectValue()), true);
-                GetHitUnit()->GetMotionMaster()->MovePoint(POINT_LAND, SavianaRagefireLandPos);
-            }
-
-            void Register()
-            {
-                OnEffectHitTarget += SpellEffectFn(spell_saviana_conflagration_throwback_SpellScript::HandleScript, EFFECT_0, SPELL_EFFECT_SCRIPT_EFFECT);
-            }
-        };
-
-        SpellScript* GetSpellScript() const
-        {
-            return new spell_saviana_conflagration_throwback_SpellScript();
+            PreventHitDefaultEffect(effIndex);
+            GetHitUnit()->CastSpell(GetCaster(), uint32(GetEffectValue()), true);
+            GetHitUnit()->GetMotionMaster()->MovePoint(POINT_LAND, SavianaRagefireLandPos);
         }
+
+        void Register()
+        {
+            OnEffectHitTarget += SpellEffectFn(spell_saviana_conflagration_throwback_SpellScript::HandleScript, EFFECT_0, SPELL_EFFECT_SCRIPT_EFFECT);
+        }
+    };
+
+    SpellScript* GetSpellScript() const
+    {
+        return new spell_saviana_conflagration_throwback_SpellScript();
+    }
 };
 
 void AddSC_boss_saviana_ragefire()
