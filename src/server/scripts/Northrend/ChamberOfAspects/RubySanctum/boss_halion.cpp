@@ -55,9 +55,15 @@ enum Halion
     SPELL_METEOR_STRIKE                 = 74648, // Inflicts 18, 750 to 21, 250 Fire damage to enemies within 12 yards of the targeted area. Takes about 5 seconds to land.
     SPELL_METEOR_FLAME                  = 74718, // FLAME FROM METEOR
     //N10
-    SPELL_FLAME_BREATH                  = 74525, // Inflicts 17, 500 to 22, 500 Fire damage to players in front of Halion
-    SPELL_DARK_BREATH                   = 74806, // Inflicts 17, 500 to 22, 500 Shadow damage to players in front of Halion
+    SPELL_FLAME_BREATH_10_NORMAL        = 74525, // Inflicts 17, 500 to 22, 500 Fire damage to players in front of Halion
+    //SPELL_FLAME_BREATH_25_NORMAL        = 74526,
+    //SPELL_FLAME_BREATH_10_HEROIC        = 74527,
+    //SPELL_FLAME_BREATH_25_HEROIC        = 74528,
     SPELL_DUSK_SHROUD                   = 75484, // Inflicts 3, 000 Shadow damage every 2 seconds to everyone in the Twilight Realm
+    SPELL_DARK_BREATH_10_NORMAL         = 74806, // Inflicts 17, 500 to 22, 500 Shadow damage to players in front of Halion
+    //SPELL_DARK_BREATH_25_NORMAL         = 75954,
+    //SPELL_DARK_BREATH_10_HEROIC         = 75955,
+    //SPELL_DARK_BREATH_25_HEROIC         = 75956,
     //Combustion
     SPELL_MARK_OF_COMBUSTION            = 74567, // Dummy effect only
     SPELL_FIERY_COMBUSTION              = 74562, // Inflicts 4, 000 Fire damage every 2 seconds for 30 seconds to a random raider. Every time Fiery Combustion does damage, it applies a stackable Mark of Combustion.
@@ -106,22 +112,26 @@ static Locations SpawnLoc[]=
     {3154.99f, 535.637f, 72.8887f}, // 0 - Halion spawn point (center)
 };
 
-///- boss_halion_real (Physical version)
-uint32 Rdmg, Tdmg;
+///- boss_halion (Physical version)
 
-class boss_halion_real : public CreatureScript
+Creature* halion;
+Creature* twilight;
+uint32 HalionDamage, TwilightDamage;
+uint32 HalionAura, TwilightAura;
+
+class boss_halion : public CreatureScript
 {
 public:
-    boss_halion_real() : CreatureScript("boss_halion_real") { }
+    boss_halion() : CreatureScript("boss_halion") { }
 
     CreatureAI* GetAI(Creature* creature) const
     {
-        return new boss_halion_realAI(creature);
+        return new boss_halionAI(creature);
     }
 
-    struct boss_halion_realAI : public ScriptedAI
+    struct boss_halionAI : public ScriptedAI
     {
-        boss_halion_realAI(Creature* creature) : ScriptedAI(creature)
+        boss_halionAI(Creature* creature) : ScriptedAI(creature)
         {
             instance = (InstanceScript*)creature->GetInstanceScript();
             Reset();
@@ -143,13 +153,15 @@ public:
 
         void Reset()
         {
-            if(!instance)
+            if (instance->GetData(DATA_HALION_TWILIGHT) == IN_PROGRESS || instance->GetBossState(DATA_HALION) == IN_PROGRESS)
+            {
                 return;
+            }
             me->SetRespawnDelay(7*DAY);
 
             if (me->isAlive())
             {
-                instance->SetData(NPC_HALION, NOT_STARTED);
+                instance->SetData(DATA_HALION, NOT_STARTED);
                 instance->SetData(DATA_HALION_EVENT, FAIL);
                 me->SetDisplayId(11686);
             }
@@ -164,7 +176,8 @@ public:
             FieryTimer      = urand(30*IN_MILLISECONDS, 40*IN_MILLISECONDS);
             MeteorTimer     = urand(30*IN_MILLISECONDS, 35*IN_MILLISECONDS);
             TailLashTimer   = urand(15*IN_MILLISECONDS, 25*IN_MILLISECONDS);
-            Rdmg            = 0;
+            HalionDamage    = 0;
+            HalionAura      = 0;
             SetCombatMovement(true);
             me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
 
@@ -221,6 +234,7 @@ public:
         {
             if (!instance)
                 return;
+
             if (instance->GetData(DATA_HALION_EVENT) != FAIL || getStage() == 0)
                 return;
 
@@ -240,9 +254,11 @@ public:
         {
             if (!instance)
                 return;
+
             if (GameObject* goPortal = me->FindNearestGameObject(GO_HALION_PORTAL_1, 50.0f))
                 goPortal->Delete();
             DoScriptText(-1666104, me);
+
             if (Creature* clone = me->GetMap()->GetCreature(instance->GetData64(NPC_HALION_TWILIGHT)))
             {
                 if (clone->isAlive())
@@ -250,13 +266,16 @@ public:
                     clone->SetHealth(1);
                 }
             }
+
             instance->SetData(DATA_HALION, DONE);
             me->SetFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
             instance->SetData(TYPE_COUNTER, COUNTER_OFF);
-            // Updating achievements for all players in the map - not only in real world
+
+            // Updating achievements for all players in the map - not only in halion world
             Map* map = me->GetMap();
             Map::PlayerList const &pList = map->GetPlayers();
                 if (pList.isEmpty()) return;
+
             for (Map::PlayerList::const_iterator i = pList.begin(); i != pList.end(); ++i)
             {
                 if (Player* player = i->getSource())
@@ -286,6 +305,7 @@ public:
         {
             if (!instance)
                 return;
+
             me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
             DoCast(SPELL_TWILIGHT_PRECISION);
             me->SetInCombatWithZone();
@@ -318,12 +338,15 @@ public:
         {
             if (!instance)
                 return;
-            Rdmg += Damage;
+
+            HalionDamage += Damage;
             Creature * halionTwilight = me->GetMap()->GetCreature(instance->GetData64(NPC_HALION_TWILIGHT));
             if (!halionTwilight)
                 return;
-            if (halionTwilight->GetHealth() <=1 || !halionTwilight->isAlive())
+
+            if (halionTwilight->GetHealth() <= 1 || !halionTwilight->isAlive())
                 return;
+
             if (Damage < me->GetHealth())
             {
                 halionTwilight->SetHealth(me->GetHealth()-Damage);
@@ -346,7 +369,8 @@ public:
                         DoCast(SPELL_FIRE_PILLAR);
                         IntroAppTimer = 10*IN_MILLISECONDS;
                         IntroTimer = 30*IN_MILLISECONDS;
-                    } else IntroTimer -= diff;
+                    }
+                    else IntroTimer -= diff;
 
                     if (IntroAppTimer <= diff)
                     {
@@ -361,12 +385,13 @@ public:
                         me->GetMotionMaster()->MoveChase(me->getVictim());
                         setStage(0);
                         IntroAppTimer = 30*IN_MILLISECONDS;
-                    } else IntroAppTimer -= diff;
+                    }
+                    else IntroAppTimer -= diff;
                     break;
                 case 0: //PHASE 1 PHYSICAL REALM
                     if (FlameTimer <= diff)
                     {
-                        DoCast(SPELL_FLAME_BREATH);
+                        DoCast(SPELL_FLAME_BREATH_10_NORMAL);
                         FlameTimer = urand(12*IN_MILLISECONDS, 20*IN_MILLISECONDS);
                     } else FlameTimer -= diff;
 
@@ -423,8 +448,10 @@ public:
                     if (MovementStarted) return;
                     DoCast(me, SPELL_SUMMON_TWILIGHT_PORTAL);
                     setStage(3);
+
                     if (GameObject* goPortal = instance->instance->GetGameObject(instance->GetData64(GO_HALION_PORTAL_1)))
                           goPortal->SetPhaseMask(31, true);
+
                     if (GameObject* goRing = instance->instance->GetGameObject(instance->GetData64(GO_FLAME_RING)))
                           goRing->SetPhaseMask(65535, true);
                     break;
@@ -489,7 +516,7 @@ public:
                             me->SetHealth(twilight->GetHealth());
                     if (FlameTimer <= diff)
                     {
-                         DoCast(SPELL_FLAME_BREATH);
+                         DoCast(SPELL_FLAME_BREATH_10_NORMAL);
                          FlameTimer = urand(12*IN_MILLISECONDS, 20*IN_MILLISECONDS);
                     } else FlameTimer -= diff;
 
@@ -569,7 +596,7 @@ public:
             intro = false;
             Enrage = 600*IN_MILLISECONDS;
             DuskTimer = 2*IN_MILLISECONDS;
-            Tdmg = 0;
+            TwilightDamage = 0;
             DarkBreathTimer = urand(12*IN_MILLISECONDS, 20*IN_MILLISECONDS);
             SoulCunsumTimer = urand(30*IN_MILLISECONDS, 40*IN_MILLISECONDS);
             TailLashTimer = urand(10*IN_MILLISECONDS, 20*IN_MILLISECONDS);
@@ -587,9 +614,9 @@ public:
             else if (!focus->isAlive())
                 focus->Respawn();
 
-            if (Creature* real = me->GetMap()->GetCreature(instance->GetData64(NPC_HALION)))
-                if (real->isAlive())
-                    me->SetHealth(real->GetHealth());
+            if (Creature* halion = me->GetMap()->GetCreature(instance->GetData64(NPC_HALION)))
+                if (halion->isAlive())
+                    me->SetHealth(halion->GetHealth());
             if (!me->HasAura(SPELL_TWILIGHT_ENTER))
                 DoCast(me, SPELL_TWILIGHT_ENTER);
         }
@@ -645,11 +672,11 @@ public:
             if (!instance)
                 return;
             instance->DoRemoveAurasDueToSpellOnPlayers(SPELL_TWILIGHT_ENTER);
-            if (Creature* real = me->GetMap()->GetCreature(instance->GetData64(NPC_HALION)))
-            if (!real->isAlive())
+            if (Creature* halion = me->GetMap()->GetCreature(instance->GetData64(NPC_HALION)))
+            if (!halion->isAlive())
             {
                 instance->SetData(DATA_HALION, DONE);
-                real->SetFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
+                halion->SetFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
                 instance->SetData(TYPE_COUNTER, COUNTER_OFF);
             }
             me->ForcedDespawn();
@@ -678,15 +705,15 @@ public:
         {
             if (!instance)
                 return;
-            Tdmg += Damage;
-            Creature* halionReal = me->GetMap()->GetCreature(instance->GetData64(NPC_HALION));
-            if (!halionReal)
+            TwilightDamage += Damage;
+            Creature* halion = me->GetMap()->GetCreature(instance->GetData64(NPC_HALION));
+            if (!halion)
                 return;
-            if (halionReal->GetHealth() <=1 || !halionReal->isAlive())
+            if (halion->GetHealth() <=1 || !halion->isAlive())
                 return;
             if (Damage < me->GetHealth())
             {
-                halionReal->SetHealth(me->GetHealth()-Damage);
+                halion->SetHealth(me->GetHealth()-Damage);
             }
         }
 
@@ -705,9 +732,9 @@ public:
             {
                 if (!instance || instance->GetData(DATA_HALION) != IN_PROGRESS || instance->GetData(DATA_HALION_EVENT) == FAIL)
                 {
-                    if (Creature* real = me->GetMap()->GetCreature(instance->GetData64(NPC_HALION)))
-                        if (!real->isAlive())
-                            real->Respawn();
+                    if (Creature* halion = me->GetMap()->GetCreature(instance->GetData64(NPC_HALION)))
+                        if (!halion->isAlive())
+                            halion->Respawn();
                     me->ForcedDespawn();
                 }
             }
@@ -727,7 +754,7 @@ public:
 
                     if (DarkBreathTimer <= diff)
                     {
-                        DoCast(SPELL_DARK_BREATH);
+                        DoCast(SPELL_DARK_BREATH_10_NORMAL);
                         DarkBreathTimer = urand(12*IN_MILLISECONDS, 20*IN_MILLISECONDS);
                     } else DarkBreathTimer -= diff;
 
@@ -773,7 +800,7 @@ public:
 
                     if (DarkBreathTimer <= diff)
                     {
-                        DoCast(SPELL_DARK_BREATH);
+                        DoCast(SPELL_DARK_BREATH_10_NORMAL);
                         DarkBreathTimer = urand(12*IN_MILLISECONDS, 20*IN_MILLISECONDS);
                     } else DarkBreathTimer -= diff;
 
@@ -812,8 +839,8 @@ public:
 
 struct HalionBuffLine
 {
-    uint32 real, twilight;     // Buff pair
-    uint8 disp_corp;           // Displayed Corporeality
+    uint32 halion, twilight;     // Buff pair
+    uint8 disp_corp;             // Displayed Corporeality
 };
 
 static HalionBuffLine Buff[]=
@@ -850,7 +877,7 @@ public:
         }
 
         InstanceScript* instance;
-        Creature* halionReal;
+        Creature* halion;
         Creature* halionTwilight;
         uint32 _lastBuffReal, _lastBuffTwilight, _lastBuffNum;
         uint32 CorporealityTimer;
@@ -935,14 +962,14 @@ public:
             }
 
                 if (instance->GetData(DATA_HALION_EVENT) != SPECIAL) return;
-                halionReal = me->GetMap()->GetCreature(instance->GetData64(NPC_HALION));
+                halion = me->GetMap()->GetCreature(instance->GetData64(NPC_HALION));
                 halionTwilight = me->GetMap()->GetCreature(instance->GetData64(NPC_HALION_TWILIGHT));
                 halionTwilight->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-                float p_MaxHP = halionReal->GetMaxHealth();
-                float p_RealHP = (halionReal && halionReal->isAlive()) ? Rdmg/p_MaxHP*100 : 0.0f;
-                float p_TwilightHP = (halionTwilight && halionTwilight->isAlive()) ? Tdmg/p_MaxHP*100 : 0.0f;
-                Rdmg = 0;
-                Tdmg = 0;
+                float p_MaxHP = halion->GetMaxHealth();
+                float p_RealHP = (halion && halion->isAlive()) ? HalionDamage/p_MaxHP*100 : 0.0f;
+                float p_TwilightHP = (halionTwilight && halionTwilight->isAlive()) ? TwilightDamage/p_MaxHP*100 : 0.0f;
+                HalionDamage = 0;
+                TwilightDamage = 0;
                 float m_diff = (p_TwilightHP - p_RealHP);
                 int32 buffnum;
 
@@ -965,31 +992,31 @@ public:
                 if (buffnum < 0) buffnum = 0;
                 if (buffnum > 10) buffnum = 10;
 
-                if (!_lastBuffReal || _lastBuffReal != Buff[buffnum].real)
+                if (!_lastBuffReal || _lastBuffReal != Buff[buffnum].halion)
                 {
-                    if (halionReal && halionReal->isAlive())
+                    if (halion && halion->isAlive())
                     {
                         if (_lastBuffReal)
                         {
-                            halionReal->RemoveAurasDueToSpell(_lastBuffReal);
+                            halion->RemoveAurasDueToSpell(_lastBuffReal);
                         }
-                        halionReal->CastSpell(halionReal, Buff[buffnum].real, true);
-                        _lastBuffReal = Buff[buffnum].real;
+                        halion->CastSpell(halion, Buff[buffnum].halion, true);
+                        _lastBuffReal = Buff[buffnum].halion;
                     }
                 }
 
                 if (_lastCorreal - Buff[buffnum].disp_corp < 0)
                 {
-                    DoScriptText(EMOTE_REAL_PULL, halionReal);
+                    DoScriptText(EMOTE_REAL_PULL, halion);
                     DoScriptText(EMOTE_TWIL_PUSH, halionTwilight);
                 }
                 else if (_lastCorreal - Buff[buffnum].disp_corp > 0)
                 {
-                    DoScriptText(EMOTE_REAL_PUSH, halionReal);
+                    DoScriptText(EMOTE_REAL_PUSH, halion);
                     DoScriptText(EMOTE_TWIL_PULL, halionTwilight);
                 }
 
-                _lastBuffReal = Buff[buffnum].real;
+                _lastBuffReal = Buff[buffnum].halion;
                 _lastCorreal = (uint8)Buff[buffnum].disp_corp;
                 _lastBuffNum = buffnum;
 
@@ -1797,7 +1824,7 @@ public:
 
 void AddSC_boss_halion()
 {
-    new boss_halion_real();
+    new boss_halion();
     new boss_halion_twilight();
     new mob_halion_meteor();
     new mob_halion_flame();
