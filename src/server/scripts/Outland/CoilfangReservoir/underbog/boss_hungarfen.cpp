@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2006-2012 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
@@ -40,7 +41,7 @@ public:
 
     struct boss_hungarfenAI : public ScriptedAI
     {
-        boss_hungarfenAI(Creature* c) : ScriptedAI(c)
+        boss_hungarfenAI(Creature* creature) : ScriptedAI(creature)
         {
         }
 
@@ -111,7 +112,7 @@ public:
 
     struct mob_underbog_mushroomAI : public ScriptedAI
     {
-        mob_underbog_mushroomAI(Creature* c) : ScriptedAI(c) {}
+        mob_underbog_mushroomAI(Creature* creature) : ScriptedAI(creature) {}
 
         bool Stop;
         uint32 Grow_Timer;

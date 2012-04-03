@@ -17187,7 +17187,7 @@ void Unit::ExitVehicle(Position const* exitPosition)
     //! to specify exit coordinates and either store those per passenger, or we need to
     //! init spline movement based on those coordinates in unapply handlers, and
     //! relocate exiting passengers based on Unit::moveSpline data. Either way,
-    //! Coming Soonï¿½
+    //! Coming Soon™
 }
 
 void Unit::_ExitVehicle(Position const* exitPosition)
@@ -17353,16 +17353,12 @@ bool Unit::UpdatePosition(float x, float y, float z, float orientation, bool tel
             GetMap()->CreatureRelocation(ToCreature(), x, y, z, orientation);
     }
     else if (turn)
-        UpdateOrientation(orientation);
+        SetOrientation(orientation);
+
+    if ((relocated || turn) && IsVehicle())
+        GetVehicleKit()->RelocatePassengers(x, y, z, orientation);
 
     return (relocated || turn);
-}
-
-void Unit::UpdateOrientation(float orientation)
-{
-    SetOrientation(orientation);
-    if (IsVehicle())
-        GetVehicleKit()->RelocatePassengers(GetPositionX(), GetPositionY(), GetPositionZ(), GetOrientation());
 }
 
 void Unit::SendThreatListUpdate()
