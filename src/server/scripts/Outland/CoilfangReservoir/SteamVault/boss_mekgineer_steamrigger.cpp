@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2006-2012 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
@@ -60,9 +61,9 @@ public:
 
     struct boss_mekgineer_steamriggerAI : public ScriptedAI
     {
-        boss_mekgineer_steamriggerAI(Creature* c) : ScriptedAI(c)
+        boss_mekgineer_steamriggerAI(Creature* creature) : ScriptedAI(creature)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
         }
 
         InstanceScript* instance;
@@ -203,9 +204,9 @@ public:
 
     struct mob_steamrigger_mechanicAI : public ScriptedAI
     {
-        mob_steamrigger_mechanicAI(Creature* c) : ScriptedAI(c)
+        mob_steamrigger_mechanicAI(Creature* creature) : ScriptedAI(creature)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
         }
 
         InstanceScript* instance;

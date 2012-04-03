@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2006-2012 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
@@ -30,6 +31,7 @@ EndContentData */
 
 #include "ScriptPCH.h"
 #include "ScriptedEscortAI.h"
+#include "CreatureTextMgr.h"
 
 /*######
 ## npc_braug_dimspirit
@@ -110,7 +112,7 @@ public:
 
     struct npc_kaya_flathoofAI : public npc_escortAI
     {
-        npc_kaya_flathoofAI(Creature* c) : npc_escortAI(c) {}
+        npc_kaya_flathoofAI(Creature* creature) : npc_escortAI(creature) {}
 
         void WaypointReached(uint32 i)
         {

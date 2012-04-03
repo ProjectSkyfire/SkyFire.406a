@@ -271,14 +271,10 @@ public:
             doYell    = true;
             tYell     = DELAY_YELL_PRINCE_LIAM_GREYMANE;
         }
-
-        void sGossipHello(Player* player)
-        {
-            if ((player->GetQuestStatus(14094) == QUEST_STATUS_REWARDED) && (player->GetPhaseMask() == 2))
-                player->SetAuraStack(SPELL_PHASE_4, player, 1); //phaseshift
-        }
-
-        void DamageTaken(Unit * who, uint32 &Damage)
+        
+        //There is NO phase shift here!!!!
+		
+		void DamageTaken(Unit * who, uint32 &Damage)
         {
             if (who->GetTypeId() == TYPEID_PLAYER)
             {
@@ -372,32 +368,6 @@ public:
                 //Stop yell timer on combat
                 doYell = false;
             }
-        }
-    };
-};
-
-/*######
-## npc_lieutenant_walden
-######*/
-
-class npc_lieutenant_walden : public CreatureScript
-{
-public:
-    npc_lieutenant_walden() : CreatureScript("npc_lieutenant_walden") {}
-
-    CreatureAI* GetAI(Creature* creature) const
-    {
-        return new npc_lieutenant_waldenAI(creature);
-    }
-
-    struct npc_lieutenant_waldenAI : public ScriptedAI
-    {
-        npc_lieutenant_waldenAI(Creature* creature) : ScriptedAI(creature) {}
-
-        void sQuestReward(Player* player, const Quest* quest, uint32 data)
-        {
-            if (quest->GetQuestId() == QUEST_LOCKDOWN && player->GetPhaseMask() == 1)
-                player->SetAuraStack(SPELL_PHASE_2, player, 1); //phaseshift
         }
     };
 };
@@ -588,9 +558,9 @@ public:
     {
         if (player->GetQuestStatus(QUEST_EVAC_MERC_SQUA) == QUEST_STATUS_INCOMPLETE && go->GetGoState() == GO_STATE_READY)
         {
-            aPlayer = player;
-            opened = 1;
-            tQuestCredit = 2500;
+            aPlayer          = player;
+            opened           = 1;
+            tQuestCredit     = 2500;
             go->SetGoState(GO_STATE_ACTIVE);
             DoorTimer = DOOR_TIMER;
             spawnKind = urand(1, 3); //1, 2=citizen, 3=citizen&worgen (66%, 33%)
@@ -645,12 +615,12 @@ public:
             else tQuestCredit -= ((float)diff/8);
         }
         if (DoorTimer <= diff)
-        {
-            if (go->GetGoState() == GO_STATE_ACTIVE)
-                go->SetGoState(GO_STATE_READY);
+            {
+                if (go->GetGoState() == GO_STATE_ACTIVE)
+                    go->SetGoState(GO_STATE_READY);
 
-            DoorTimer = DOOR_TIMER;
-        }
+                DoorTimer = DOOR_TIMER;
+            }
         else
             DoorTimer -= diff;
     }
@@ -1188,175 +1158,6 @@ public:
     };
 };
 
-// Quest: (14154) By the Skin of His Teeth
-class npc_lord_darius_crowley : public CreatureScript
-{
-public:
-    npc_lord_darius_crowley() : CreatureScript("npc_lord_darius_crowley") { }
-
-    bool OnQuestAccept(Player* player, Creature* creature, Quest const* quest)
-    {
-        if (quest->GetQuestId() == 14154)
-        {
-            CAST_AI(npc_lord_darius_crowley::npc_lord_darius_crowleyAI, creature->AI())->in_progress = true;
-            CAST_AI(npc_lord_darius_crowley::npc_lord_darius_crowleyAI, creature->AI())->phase = 1;
-            CAST_AI(npc_lord_darius_crowley::npc_lord_darius_crowleyAI, creature->AI())->_player = player;
-            creature->CastSpell(player, 66914, true);
-        }
-        return true;
-    }
-
-    CreatureAI* GetAI(Creature* creature) const
-    {
-        return new npc_lord_darius_crowleyAI (creature);
-    }
-
-    struct npc_lord_darius_crowleyAI : public ScriptedAI
-    {
-        npc_lord_darius_crowleyAI(Creature* creature) : ScriptedAI(creature), Summons(me) {}
-
-        uint8 phase;
-        uint32 phaseTime;
-        bool in_progress;
-        SummonList Summons;
-        Player* _player;
-
-        void Reset()
-        {
-            phase     = 1;
-            phaseTime = 15000;
-            Summons.DespawnAll();
-            in_progress = false;
-            _player = NULL;
-            me->CastSpell(me, 67503, true);
-        }
-
-        void EnterCombat(Unit* who)
-        {
-            me->CastSpell(who, 61044, true);
-        }
-
-        void JustSummoned(Creature *summoned)
-        {
-            summoned->AI()->AttackStart(_player);
-            Summons.Summon(summoned);
-        }
-
-        void SummonedCreatureDespawn(Creature* summoned)
-        {
-            Summons.Despawn(summoned);
-        }
-
-        void JustDied(Unit* /*killer*/)
-        {
-            if (_player)
-            {
-                _player->RemoveAurasDueToSpell(59073);
-                _player->FailQuest(66914);
-            }
-        }
-
-        void UpdateAI(const uint32 diff)
-        {
-            if (in_progress)
-            {
-                if (phaseTime <= diff)
-                {
-                    switch (phase)
-                    {
-                        case 1:
-                            for (int i = 0; i < 8; i++)
-                                me->SummonCreature(35456, me->GetPositionX()+10, me->GetPositionY()+10, me->GetPositionZ(), 0, TEMPSUMMON_CORPSE_DESPAWN, 10000);
-                            me->SummonCreature(35167, -1672.92f, 1449.13f, 52.28f, 0, TEMPSUMMON_CORPSE_DESPAWN, 10000);
-                        break;
-
-                        case 2:
-                            me->SummonCreature(35170, -1672.92f, 1449.13f, 52.28f, 0, TEMPSUMMON_CORPSE_DESPAWN, 10000);
-                        break;
-
-                        case 3:
-                            for (int i = 0; i < 10; i++)
-                                me->SummonCreature(35456, me->GetPositionX()+10, me->GetPositionY()+10, me->GetPositionZ(), 0, TEMPSUMMON_CORPSE_DESPAWN, 10000);
-                            me->SummonCreature(35188, -1672.92f, 1449.13f, 52.28f, 0, TEMPSUMMON_CORPSE_DESPAWN, 10000);
-                        break;
-
-                        case 4:
-                            me->SummonCreature(35188, -1672.92f, 1449.13f, 52.28f, 0, TEMPSUMMON_CORPSE_DESPAWN, 10000);
-                        break;
-
-                        case 5:
-                            for (int i = 0; i < 7; i++)
-                                me->SummonCreature(35456, me->GetPositionX()+10, me->GetPositionY()+10, me->GetPositionZ(), 0, TEMPSUMMON_CORPSE_DESPAWN, 10000);
-                            me->SummonCreature(35167, -1672.92f, 1449.13f, 52.28f, 0, TEMPSUMMON_CORPSE_DESPAWN, 10000);
-                        break;
-
-                        case 6:
-                            for (int i = 0; i < 7; i++)
-                                me->SummonCreature(35456, me->GetPositionX()+10, me->GetPositionY()+10, me->GetPositionZ(), 0, TEMPSUMMON_CORPSE_DESPAWN, 10000);
-                            me->SummonCreature(35188, -1672.92f, 1449.13f, 52.28f, 0, TEMPSUMMON_CORPSE_DESPAWN, 10000);
-                        break;
-
-                        case 7:
-                            me->SummonCreature(35170, -1672.92f, 1449.13f, 52.28f, 0, TEMPSUMMON_CORPSE_DESPAWN, 10000);
-                        break;
-                    }
-
-                    phase++;
-                    phaseTime = 15000;
-                    if (phase > 7)
-                    {
-                        phase = 1;
-                        in_progress = false;
-                    }
-                }
-                else
-                    phaseTime -= diff;
-            }
-
-            DoMeleeAttackIfReady();
-        }
-    };
-};
-
-class npc_josiah_avery : public CreatureScript
-{
-public:
-    npc_josiah_avery() : CreatureScript("npc_josiah_avery") {}
-
-    bool OnQuestComplete(Player* player, Creature* creature, const Quest* _Quest)
-    {
-        if (_Quest->GetQuestId() == 14159)
-        {
-            if (Creature* lorna = creature->FindNearestCreature(35378, 30))
-                lorna->CastSpell(player, 67357, true);
-
-            player->RemoveAurasDueToSpell(59073);
-            player->CastSpell(player, 72870, true);
-
-            DoScriptText(-1777004, player);
-        }
-        return true;
-    }
-};
-
-// Quest:(14293) Save Krennan Aranas
-class npc_king_genn_greymane : public CreatureScript
-{
-public:
-    npc_king_genn_greymane() : CreatureScript("npc_king_genn_greymane") {}
-
-    bool OnQuestAccept(Player* player, Creature* creature, Quest const* quest)
-    {
-        if (quest->GetQuestId() == 14293)
-        {
-            //player->CastSpell(player, 68232, true);
-            //player->CastSpell(player, 43671, true);
-            player->KilledMonsterCredit(35753, 0);
-        }
-        return true;
-    }
-};
-
 class npc_lord_darius_crowley_c2 : public CreatureScript
 {
 public:
@@ -1480,12 +1281,8 @@ void AddSC_gilneas()
     new npc_sergeant_cleese();
     new npc_bloodfang_worgen();
     new npc_frightened_citizen();
-    new npc_lieutenant_walden();
-    new npc_lord_darius_crowley();
     new npc_gilnean_royal_guard();
     new npc_mariam_spellwalker();
-    new npc_josiah_avery();
-    new npc_king_genn_greymane();
     new npc_lord_darius_crowley_c2();
     new npc_lord_darius_crowley_c3();
     new npc_king_genn_greymane_c2();

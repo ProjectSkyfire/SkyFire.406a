@@ -139,7 +139,9 @@ void WorldSession::SendUpdateTrade(bool trader_data /*= true*/)
             data << uint32(item->GetEnchantmentId(EnchantmentSlot(SOCK_ENCHANTMENT_SLOT+2))); // Second socket gem
             data << uint32(item->GetEnchantmentId(EnchantmentSlot(SOCK_ENCHANTMENT_SLOT+3))); // Third socket gem
             data << uint32(0);
-        } else
+        }
+        else
+        {
             data << uint32(0);
             data << uint64(0);
             data << uint32(0);
@@ -158,6 +160,7 @@ void WorldSession::SendUpdateTrade(bool trader_data /*= true*/)
             data << uint32(0);
             data << uint32(0);
             data << uint32(0);
+        }
 
         // old structure
         /*data << uint8(i);                                  // trade slot number, if not specified, then end of packet

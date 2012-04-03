@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2006-2012 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
@@ -118,9 +119,9 @@ public:
 
     struct boss_high_king_maulgarAI : public ScriptedAI
     {
-        boss_high_king_maulgarAI(Creature* c) : ScriptedAI(c)
+        boss_high_king_maulgarAI(Creature* creature) : ScriptedAI(creature)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
             for (uint8 i = 0; i < 4; ++i)
                 Council[i] = 0;
         }
@@ -316,9 +317,9 @@ public:
 
     struct boss_olm_the_summonerAI : public ScriptedAI
     {
-        boss_olm_the_summonerAI(Creature* c) : ScriptedAI(c)
+        boss_olm_the_summonerAI(Creature* creature) : ScriptedAI(creature)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
         }
 
         uint32 DarkDecay_Timer;
@@ -443,9 +444,9 @@ public:
 
     struct boss_kiggler_the_crazedAI : public ScriptedAI
     {
-        boss_kiggler_the_crazedAI(Creature* c) : ScriptedAI(c)
+        boss_kiggler_the_crazedAI(Creature* creature) : ScriptedAI(creature)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
         }
 
         uint32 GreaterPolymorph_Timer;
@@ -564,9 +565,9 @@ public:
 
     struct boss_blindeye_the_seerAI : public ScriptedAI
     {
-        boss_blindeye_the_seerAI(Creature* c) : ScriptedAI(c)
+        boss_blindeye_the_seerAI(Creature* creature) : ScriptedAI(creature)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
         }
 
         uint32 GreaterPowerWordShield_Timer;
@@ -673,9 +674,9 @@ public:
 
     struct boss_krosh_firehandAI : public ScriptedAI
     {
-        boss_krosh_firehandAI(Creature* c) : ScriptedAI(c)
+        boss_krosh_firehandAI(Creature* creature) : ScriptedAI(creature)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
         }
 
         uint32 GreaterFireball_Timer;

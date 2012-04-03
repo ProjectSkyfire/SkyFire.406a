@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2006-2012 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
@@ -88,9 +89,9 @@ public:
 
     struct boss_hydross_the_unstableAI : public ScriptedAI
     {
-        boss_hydross_the_unstableAI(Creature* c) : ScriptedAI(c), Summons(me)
+        boss_hydross_the_unstableAI(Creature* creature) : ScriptedAI(creature), Summons(me)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
         }
 
         InstanceScript* instance;
