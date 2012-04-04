@@ -21,7 +21,7 @@
 #define TRINITY_SHAREDDEFINES_H
 
 #include "Define.h"
-#include "Detournavmesh.h"
+#include "DetourNavMesh.h"
 #include <cassert>
 
 enum SpellEffIndex
