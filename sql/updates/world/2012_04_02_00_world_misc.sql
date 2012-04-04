@@ -2,11 +2,11 @@
 UPDATE `instance_template` SET `Script`='instance_ruby_sanctum' WHERE `map`=724;
 
 -- Halion
-UPDATE `creature_template` SET `ScriptName`='boss_halion_real', `AIName` ='' WHERE `entry`=39863;
+UPDATE `creature_template` SET `ScriptName`='boss_halion', `AIName` ='' WHERE `entry`=39863;
 UPDATE `creature_template` SET `ScriptName`='boss_halion_twilight', `AIName` ='' WHERE `entry`=40142;
 UPDATE `creature_template` SET `ScriptName`='mob_halion_meteor', `AIName` ='' WHERE `entry` = 40029;
 UPDATE `creature_template` SET `ScriptName`='mob_halion_flame', `AIName` ='' WHERE `entry` IN (40041);
-UPDATE `creature_template` SET `ScriptName`='mob_halion_control', `AIName` ='' WHERE `entry` IN (40146);
+UPDATE `creature_template` SET `ScriptName`='mob_halion_controller', `AIName` ='' WHERE `entry` IN (40146);
 UPDATE `creature_template` SET `ScriptName`='mob_halion_orb', `AIName` ='' WHERE `entry` IN (40083,40100);
 UPDATE `creature_template` SET `ScriptName`='mob_orb_rotation_focus', `AIName` ='' WHERE `entry` = 40091;
 UPDATE `creature_template` SET `ScriptName`='mob_orb_carrier', `AIName` ='' WHERE `entry` = 40081;
@@ -32,7 +32,7 @@ INSERT INTO spell_linked_spell VALUES (-74562, 74610, 0, 'Fiery Combustion remov
 INSERT INTO spell_linked_spell VALUES (-74792, 74800, 0, 'Soul Consumption removed -> Consumption');
 
 UPDATE `gameobject_template` SET `data10` = 74807, `faction` = '0', `ScriptName` = 'go_halion_portal_twilight' WHERE `gameobject_template`.`entry` IN (202794,202795);
-UPDATE `gameobject_template` SET `faction` = '0', `ScriptName` = 'go_halion_portal_real' WHERE `gameobject_template`.`entry` IN (202796);
+UPDATE `gameobject_template` SET `faction` = '0', `ScriptName` = 'go_halion_portal' WHERE `gameobject_template`.`entry` IN (202796);
 
 -- fix Halion spawn
 DELETE FROM `creature` WHERE `id` = 39863;
