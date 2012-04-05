@@ -19,7 +19,6 @@
 #ifndef TRINITYSERVER_MOVESPLINEINIT_H
 #define TRINITYSERVER_MOVESPLINEINIT_H
 
-#include "MoveSplineInit.h"
 #include "MoveSplineInitArgs.h"
 #include "PathFinderMovementGenerator.h"
 

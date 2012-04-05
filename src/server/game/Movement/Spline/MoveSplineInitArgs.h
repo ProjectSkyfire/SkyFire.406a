@@ -20,7 +20,7 @@
 #define TRINITYSERVER_MOVESPLINEINIT_ARGS_H
 
 #include "MoveSplineFlag.h"
-#include <G3D/vector3.h>
+#include <G3D/Vector3.h>
 
 using G3D::Vector3;
 
