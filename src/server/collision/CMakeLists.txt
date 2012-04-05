@@ -44,41 +44,41 @@ include_directories(
   ${CMAKE_SOURCE_DIR}/dep/g3dlite/include
   ${CMAKE_SOURCE_DIR}/dep/recastlite/Detour
   ${CMAKE_SOURCE_DIR}/dep/recastlite/Recast
-  ${CMAKE_SOURCE_DIR}/src/Server/Shared
-  ${CMAKE_SOURCE_DIR}/src/server/Shared/Configuration
-  ${CMAKE_SOURCE_DIR}/src/Server/Shared/Debugging
-  ${CMAKE_SOURCE_DIR}/src/Server/Shared/Database
-  ${CMAKE_SOURCE_DIR}/src/Server/Shared/Debugging
-  ${CMAKE_SOURCE_DIR}/src/Server/Shared/Dynamic
-  ${CMAKE_SOURCE_DIR}/src/Server/Shared/Dynamic/LinkedReference
-  ${CMAKE_SOURCE_DIR}/src/Server/Shared/Logging
-  ${CMAKE_SOURCE_DIR}/src/Server/Shared/Threading
-  ${CMAKE_SOURCE_DIR}/src/Server/Shared/Packets
-  ${CMAKE_SOURCE_DIR}/src/Server/Shared/Utilities
-  ${CMAKE_SOURCE_DIR}/src/Server/Game
-  ${CMAKE_SOURCE_DIR}/src/Server/Game/Entities
-  ${CMAKE_SOURCE_DIR}/src/Server/Game/Addons
-  ${CMAKE_SOURCE_DIR}/src/Server/Game/World
-  ${CMAKE_SOURCE_DIR}/src/Server/Game/Entities/Creature
-  ${CMAKE_SOURCE_DIR}/src/Server/Game/Entities/Unit
-  ${CMAKE_SOURCE_DIR}/src/Server/Game/Entities/Object
-  ${CMAKE_SOURCE_DIR}/src/Server/Game/Entities/Object/Updates
-  ${CMAKE_SOURCE_DIR}/src/Server/Game/Entities/Vehicle
-  ${CMAKE_SOURCE_DIR}/src/Server/Game/Entities/Item
-  ${CMAKE_SOURCE_DIR}/src/Server/Game/Grids
-  ${CMAKE_SOURCE_DIR}/src/Server/Game/Grids/Cells
-  ${CMAKE_SOURCE_DIR}/src/Server/Game/Miscellaneous
-  ${CMAKE_SOURCE_DIR}/src/Server/Game/Maps
-  ${CMAKE_SOURCE_DIR}/src/Server/Game/DataStores
-  ${CMAKE_SOURCE_DIR}/src/Server/Game/Movement
-  ${CMAKE_SOURCE_DIR}/src/Server/Game/Movement/Waypoints
-  ${CMAKE_SOURCE_DIR}/src/Server/Game/Server
-  ${CMAKE_SOURCE_DIR}/src/Server/Game/Server/Protocol
-  ${CMAKE_SOURCE_DIR}/src/Server/Game/Spells
-  ${CMAKE_SOURCE_DIR}/src/Server/Game/Spells/Auras
-  ${CMAKE_SOURCE_DIR}/src/Server/Game/Combat
-  ${CMAKE_SOURCE_DIR}/src/Server/Game/Loot
-  ${CMAKE_SOURCE_DIR}/src/Server/Game/Conditions
+  ${CMAKE_SOURCE_DIR}/src/server/shared
+  ${CMAKE_SOURCE_DIR}/src/server/shared/Configuration
+  ${CMAKE_SOURCE_DIR}/src/server/shared/Debugging
+  ${CMAKE_SOURCE_DIR}/src/server/shared/Database
+  ${CMAKE_SOURCE_DIR}/src/server/shared/Debugging
+  ${CMAKE_SOURCE_DIR}/src/server/shared/Dynamic
+  ${CMAKE_SOURCE_DIR}/src/server/shared/Dynamic/LinkedReference
+  ${CMAKE_SOURCE_DIR}/src/server/shared/Logging
+  ${CMAKE_SOURCE_DIR}/src/server/shared/Threading
+  ${CMAKE_SOURCE_DIR}/src/server/shared/Packets
+  ${CMAKE_SOURCE_DIR}/src/server/shared/Utilities
+  ${CMAKE_SOURCE_DIR}/src/server/game
+  ${CMAKE_SOURCE_DIR}/src/server/game/Entities
+  ${CMAKE_SOURCE_DIR}/src/server/game/Addons
+  ${CMAKE_SOURCE_DIR}/src/server/game/World
+  ${CMAKE_SOURCE_DIR}/src/server/game/Entities/Creature
+  ${CMAKE_SOURCE_DIR}/src/server/game/Entities/Unit
+  ${CMAKE_SOURCE_DIR}/src/server/game/Entities/Object
+  ${CMAKE_SOURCE_DIR}/src/server/game/Entities/Object/Updates
+  ${CMAKE_SOURCE_DIR}/src/server/game/Entities/Vehicle
+  ${CMAKE_SOURCE_DIR}/src/server/game/Entities/Item
+  ${CMAKE_SOURCE_DIR}/src/server/game/Grids
+  ${CMAKE_SOURCE_DIR}/src/server/game/Grids/Cells
+  ${CMAKE_SOURCE_DIR}/src/server/game/Miscellaneous
+  ${CMAKE_SOURCE_DIR}/src/server/game/Maps
+  ${CMAKE_SOURCE_DIR}/src/server/game/DataStores
+  ${CMAKE_SOURCE_DIR}/src/server/game/Movement
+  ${CMAKE_SOURCE_DIR}/src/server/game/Movement/Waypoints
+  ${CMAKE_SOURCE_DIR}/src/server/game/Server
+  ${CMAKE_SOURCE_DIR}/src/server/game/Server/Protocol
+  ${CMAKE_SOURCE_DIR}/src/server/game/Spells
+  ${CMAKE_SOURCE_DIR}/src/server/game/Spells/Auras
+  ${CMAKE_SOURCE_DIR}/src/server/game/Combat
+  ${CMAKE_SOURCE_DIR}/src/server/game/Loot
+  ${CMAKE_SOURCE_DIR}/src/server/game/Conditions
   ${CMAKE_CURRENT_SOURCE_DIR}
   ${CMAKE_CURRENT_SOURCE_DIR}/Management
   ${CMAKE_CURRENT_SOURCE_DIR}/Maps
