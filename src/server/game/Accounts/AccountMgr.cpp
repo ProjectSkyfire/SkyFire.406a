@@ -185,7 +185,7 @@ uint32 GetSecurity(uint32 accountId)
     return (result) ? (*result)[0].GetUInt8() : uint32(SEC_PLAYER);
 }
 
-uint32 GetSecurity(uint64 accountId, int32 realmId)
+uint32 GetSecurity(uint32 accountId, int32 realmId)
 {
     PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_GET_GMLEVEL_BY_REALMID);
     stmt->setUInt32(0, accountId);
