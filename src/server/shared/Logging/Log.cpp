@@ -374,10 +374,10 @@ void Log::outDB(LogTypes type, const char * str)
     std::string logStr(str);
     if (logStr.empty())
         return;
+    PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_ADD_LOG);
 
-    PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_INS_LOG);
     stmt->setInt32(0, realm);
-    stmt->setUInt8(1, uint8(type));
+    stmt->setInt32(1, type);
     stmt->setString(2, logStr);
 
     LoginDatabase.Execute(stmt);

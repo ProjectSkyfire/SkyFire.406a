@@ -280,7 +280,7 @@ int Master::Run()
     LoginDatabase.DirectPExecute("UPDATE realmlist SET color = color | %u WHERE id = '%d'", REALM_FLAG_OFFLINE, realmID);
 
     ///- Clean database before leaving
-    ClearOnlineAccounts();
+    clearOnlineAccounts();
 
     _StopDB();
 
@@ -440,7 +440,7 @@ bool Master::_StartDB()
     sLog->SetRealmID(realmID);
 
     ///- Clean the database before starting
-    ClearOnlineAccounts();
+    clearOnlineAccounts();
 
     ///- Insert version info into DB
     WorldDatabase.PExecute("UPDATE version SET core_version = '%s', core_revision = '%s'", _FULLVERSION, _HASH);        // One-time query
@@ -461,14 +461,16 @@ void Master::_StopDB()
 }
 
 /// Clear 'online' status for all accounts with characters in this realm
-void Master::ClearOnlineAccounts()
+void Master::clearOnlineAccounts()
 {
-    // Reset online status for all accounts with characters on the current realm
-    LoginDatabase.DirectPExecute("UPDATE account SET online = 0 WHERE online > 0 AND id IN (SELECT acctid FROM realmcharacters WHERE realmid = %d)", realmID);
+    // Cleanup online status for characters hosted at current realm
+    /// \todo Only accounts with characters logged on *this* realm should have online status reset. Move the online column from 'account' to 'realmcharacters'?
+    LoginDatabase.DirectPExecute(
+        "UPDATE account SET online = 0 WHERE online > 0 "
+        "AND id IN (SELECT acctid FROM realmcharacters WHERE realmid = '%d')", realmID);
 
-    // Reset online status for all characters
     CharacterDatabase.DirectExecute("UPDATE characters SET online = 0 WHERE online <> 0");
 
     // Battleground instance ids reset at server restart
-    CharacterDatabase.DirectExecute("UPDATE character_battleground_data SET instanceId = 0");
+    CharacterDatabase.DirectExecute(CharacterDatabase.GetPreparedStatement(CHAR_RESET_PLAYERS_BGDATA));
 }

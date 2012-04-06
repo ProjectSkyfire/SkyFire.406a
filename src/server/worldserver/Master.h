@@ -37,7 +37,7 @@ class Master
         bool _StartDB();
         void _StopDB();
 
-        void ClearOnlineAccounts();
+        void clearOnlineAccounts();
 };
 
 #define sMaster ACE_Singleton<Master, ACE_Null_Mutex>::instance()
