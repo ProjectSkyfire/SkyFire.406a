@@ -311,16 +311,16 @@ char* DBCFileLoader::AutoProduceStrings(const char* format, char* dataTable)
                     offset += sizeof(char*);
                     break;
                 }
-                    case FT_LOGIC:
-                        ASSERT(false && "Attempted to load DBC files that does not have field types that match what is in the core. Check DBCfmt.h or your DBC files.");
-                        break;
-                    case FT_NA:
-                    case FT_NA_BYTE:
-                    case FT_SORT:
-                    break;
-                default:
-                    ASSERT(false && "Unknown field format character in DBCfmt.h");
-                    break;
+                case FT_LOGIC:
+                    ASSERT(false && "Attempted to load DBC files that does not have field types that match what is in the core. Check DBCfmt.h or your DBC files.");
+                break;
+                case FT_NA:
+                case FT_NA_BYTE:
+                case FT_SORT:
+                break;
+            default:
+                ASSERT(false && "Unknown field format character in DBCfmt.h");
+                break;
             }
         }
     }
