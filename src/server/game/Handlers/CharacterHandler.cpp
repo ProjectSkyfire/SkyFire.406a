@@ -436,7 +436,7 @@ void WorldSession::HandleCharCreateCallback(PreparedQueryResult result, Characte
 
             ASSERT(_charCreateCallback.GetParam() == createInfo);
 
-            PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_GET_SUM_REALMCHARS);
+            PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_SUM_REALM_CHARACTERS);
             stmt->setUInt32(0, GetAccountId());
 
             _charCreateCallback.FreeResult();
@@ -661,7 +661,7 @@ void WorldSession::HandleCharCreateCallback(PreparedQueryResult result, Characte
             stmt->setUInt32(1, realmID);
             trans->Append(stmt);
 
-            stmt = LoginDatabase.GetPreparedStatement(LOGIN_ADD_REALMCHARACTERS);
+            stmt = LoginDatabase.GetPreparedStatement(LOGIN_INS_REALM_CHARACTERS);
             stmt->setUInt32(0, createInfo->CharCount);
             stmt->setUInt32(1, GetAccountId());
             stmt->setUInt32(2, realmID);
@@ -1053,7 +1053,7 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder* holder)
 
     CharacterDatabase.Execute(stmt);
 
-    stmt = LoginDatabase.GetPreparedStatement(LOGIN_UPDATE_ACCOUNT_ONLINE);
+    stmt = LoginDatabase.GetPreparedStatement(LOGIN_UPD_ACCOUNT_ONLINE);
 
     stmt->setUInt32(0, GetAccountId());
 

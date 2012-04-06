@@ -77,7 +77,7 @@ bool ChatHandler::HandleMuteCommand(const char* args)
     if (HasLowerSecurity (target, target_guid, true))
         return false;
 
-    PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_UPDATE_MUTE_TIME);
+    PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_UPD_MUTE_TIME);
 
     if (target)
     {
@@ -140,7 +140,7 @@ bool ChatHandler::HandleUnmuteCommand(const char* args)
         target->GetSession()->m_muteTime = 0;
     }
 
-    PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_UPDATE_MUTE_TIME);
+    PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_UPD_MUTE_TIME);
 
     stmt->setInt64(0, 0);
     stmt->setUInt32(1, accountId);
@@ -322,17 +322,17 @@ bool ChatHandler::HandlePInfoCommand(const char* args)
         areaId = fields[7].GetUInt16();
     }
 
-    std::string username = GetSkyFireString(LANG_ERROR);
-    std::string email = GetSkyFireString(LANG_ERROR);
-    std::string last_ip = GetSkyFireString(LANG_ERROR);
-    uint32 security = 0;
+    std::string username   = GetSkyFireString(LANG_ERROR);
+    std::string email      = GetSkyFireString(LANG_ERROR);
+    std::string last_ip    = GetSkyFireString(LANG_ERROR);
+    uint32 security        = 0;
     std::string last_login = GetSkyFireString(LANG_ERROR);
 
-    QueryResult result = LoginDatabase.PQuery("SELECT a.username, aa.gmlevel, a.email, a.last_ip, a.last_login, a.mutetime "
-                                                "FROM account a "
-                                                "LEFT JOIN account_access aa "
-                                                "ON (a.id = aa.id AND (aa.RealmID = -1 OR aa.RealmID = %u)) "
-                                                "WHERE a.id = '%u'", realmID, accId);
+    PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_PINFO);
+    stmt->setInt32(0, int32(realmID));
+    stmt->setUInt32(1, accId);
+    PreparedQueryResult result = LoginDatabase.Query(stmt);
+
     if (result)
     {
         Field* fields = result->Fetch();
@@ -362,8 +362,11 @@ bool ChatHandler::HandlePInfoCommand(const char* args)
 
     std::string bannedby = "unknown";
     std::string banreason = "";
-    if (QueryResult result2 = LoginDatabase.PQuery("SELECT unbandate, bandate = unbandate, bannedby, banreason FROM account_banned "
-                                                  "WHERE id = '%u' AND active ORDER BY bandate ASC LIMIT 1", accId))
+
+    stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_PINFO_BANS);
+    stmt->setUInt32(0, accId);
+    PreparedQueryResult result2 = LoginDatabase.Query(stmt);
+    if (!result2)
     {
         Field* fields = result2->Fetch();
         banTime = fields[1].GetBool() ? 0 : fields[0].GetUInt64();
@@ -729,9 +732,9 @@ bool ChatHandler::HandleLookupPlayerIpCommand(const char* args)
         limit = limit_str ? atoi (limit_str) : -1;
     }
 
-    LoginDatabase.EscapeString(ip);
-
-    QueryResult result = LoginDatabase.PQuery("SELECT id, username FROM account WHERE last_ip = '%s'", ip.c_str());
+    PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_ACCOUNT_BY_IP);
+    stmt->setString(0, ip);
+    PreparedQueryResult result = LoginDatabase.Query(stmt);
 
     return LookupPlayerSearchCommand(result, limit);
 }
@@ -748,9 +751,9 @@ bool ChatHandler::HandleLookupPlayerAccountCommand(const char* args)
     if (!AccountMgr::normalizeString (account))
         return false;
 
-    LoginDatabase.EscapeString (account);
-
-    QueryResult result = LoginDatabase.PQuery ("SELECT id, username FROM account WHERE username = '%s'", account.c_str ());
+    PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_ACCOUNT_LIST_BY_NAME);
+    stmt->setString(0, account);
+    PreparedQueryResult result = LoginDatabase.Query(stmt);
 
     return LookupPlayerSearchCommand(result, limit);
 }
@@ -764,14 +767,14 @@ bool ChatHandler::HandleLookupPlayerEmailCommand(const char* args)
     char* limit_str = strtok (NULL, " ");
     int32 limit = limit_str ? atoi (limit_str) : -1;
 
-    LoginDatabase.EscapeString (email);
-
-    QueryResult result = LoginDatabase.PQuery ("SELECT id, username FROM account WHERE email = '%s'", email.c_str ());
+    PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_ACCOUNT_LIST_BY_EMAIL);
+    stmt->setString(0, email);
+    PreparedQueryResult result = LoginDatabase.Query(stmt);
 
     return LookupPlayerSearchCommand (result, limit);
 }
 
-bool ChatHandler::LookupPlayerSearchCommand(QueryResult result, int32 limit)
+bool ChatHandler::LookupPlayerSearchCommand(PreparedQueryResult result, int32 limit)
 {
     if (!result)
     {
