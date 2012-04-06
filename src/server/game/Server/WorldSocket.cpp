@@ -840,11 +840,25 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
                 clientSeed);
 
     // Get the account information from the realmd database
-    PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_ACCOUNT_INFO_BY_NAME);
+    std::string safe_account = account; // Duplicate, else will screw the SHA hash verification below
+    LoginDatabase.EscapeString (safe_account);
+    // No SQL injection, username escaped.
 
-    stmt->setString(0, account);
-
-    PreparedQueryResult result = LoginDatabase.Query(stmt);
+    QueryResult result =
+          LoginDatabase.PQuery ("SELECT "
+                                "id, "                      //0
+                                "sessionkey, "              //1
+                                "last_ip, "                 //2
+                                "locked, "                  //3
+                                "v, "                       //4
+                                "s, "                       //5
+                                "expansion, "               //6
+                                "mutetime, "                //7
+                                "locale, "                  //8
+                                "recruiter "                //9
+                                "FROM account "
+                                "WHERE username = '%s'",
+                                safe_account.c_str());
 
     // Stop if the account is not found
     if (!result)
@@ -899,19 +913,7 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
 
     K.SetHexStr (fields[1].GetCString());
 
-    int64 mutetime = fields[7].GetInt64();
-    //! Negative mutetime indicates amount of seconds to be muted effective on next login - which is now.
-    if (mutetime < 0)
-    {
-        mutetime = time(NULL) + llabs(mutetime);
-
-        PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_UPD_MUTE_TIME);
-
-        stmt->setInt64(0, mutetime);
-        stmt->setUInt32(1, id);
-
-        LoginDatabase.Execute(stmt);
-    }
+    time_t mutetime = time_t (fields[7].GetUInt64());
 
     locale = LocaleConstant (fields[8].GetUInt8());
     if (locale >= TOTAL_LOCALES)
@@ -920,13 +922,15 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     uint32 recruiter = fields[9].GetUInt32();
 
     // Checks gmlevel per Realm
-    stmt = LoginDatabase.GetPreparedStatement(LOGIN_GET_GMLEVEL_BY_REALMID);
-
-    stmt->setUInt32(0, id);
-    stmt->setInt32(1, int32(realmID));
-
-    result = LoginDatabase.Query(stmt);
-
+    result =
+        LoginDatabase.PQuery ("SELECT "
+                              "RealmID, "            //0
+                              "gmlevel "             //1
+                              "FROM account_access "
+                              "WHERE id = '%d'"
+                              " AND (RealmID = '%d'"
+                              " OR RealmID = '-1')",
+                              id, realmID);
     if (!result)
         security = 0;
     else
@@ -936,12 +940,11 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     }
 
     // Re-check account ban (same check as in realmd)
-    stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_BANS);
-
-    stmt->setUInt32(0, id);
-    stmt->setString(1, GetRemoteAddress());
-
-    PreparedQueryResult banresult = LoginDatabase.Query(stmt);
+    QueryResult banresult =
+          LoginDatabase.PQuery ("SELECT 1 FROM account_banned WHERE id = %u AND active = 1 "
+                                "UNION "
+                                "SELECT 1 FROM ip_banned WHERE ip = '%s'",
+                                id, GetRemoteAddress().c_str());
 
     if (banresult) // if account banned
     {
@@ -987,18 +990,14 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
                 address.c_str());
 
     // Check if this user is by any chance a recruiter
-    stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_ACCOUNT_RECRUITER);
-
-    stmt->setUInt32(0, id);
-
-    result = LoginDatabase.Query(stmt);
+    result = LoginDatabase.PQuery ("SELECT 1 FROM account WHERE recruiter = %u", id);
 
     bool isRecruiter = false;
     if (result)
         isRecruiter = true;
 
     // Update the last_ip in the database
-    stmt = LoginDatabase.GetPreparedStatement(LOGIN_UPD_LAST_IP);
+    PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_UPDATE_LAST_IP);
 
     stmt->setString(0, address);
     stmt->setString(1, account);
