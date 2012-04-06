@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -24,6 +24,7 @@
 #include "GameObject.h"
 #include "Player.h"
 #include "ObjectAccessor.h"
+#include "ObjectMgr.h"
 #include "WorldSession.h"
 #include "LootMgr.h"
 #include "Object.h"
@@ -96,7 +97,7 @@ void WorldSession::HandleAutostoreLootItemOpcode(WorldPacket & recv_data)
             return;
         }
 
-        objEntry = creature->GetCreatureInfo()->Entry;
+        objEntry = creature->GetCreatureTemplate()->Entry;
         objType = 1;
         loot = &creature->loot;
     }

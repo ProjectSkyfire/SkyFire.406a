@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2011 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -121,7 +121,7 @@ public:
                 DoCast(me->getVictim(), SPELL_ARCANE_BLAST);
                 ArcaneBlast_Timer = 15000+rand()%10000;
             }
-			else ArcaneBlast_Timer -= diff;
+            else ArcaneBlast_Timer -= diff;
 
             //Arcane Discharge
             if (ArcaneDischarge_Timer <= diff)
@@ -130,7 +130,7 @@ public:
                 DoCast(target, SPELL_ARCANE_DISCHARGE);
                 ArcaneDischarge_Timer = 20000+rand()%10000;
             }
-			else ArcaneDischarge_Timer -= diff;
+            else ArcaneDischarge_Timer -= diff;
 
             //Time Lapse
             if (TimeLapse_Timer <= diff)
@@ -139,7 +139,7 @@ public:
                 DoCast(me, SPELL_TIME_LAPSE);
                 TimeLapse_Timer = 15000+rand()%10000;
             }
-			else TimeLapse_Timer -= diff;
+            else TimeLapse_Timer -= diff;
 
             if (IsHeroic())
             {
@@ -148,7 +148,7 @@ public:
                     DoCast(me, SPELL_ATTRACTION);
                     Attraction_Timer = 25000+rand()%10000;
                 }
-				else Attraction_Timer -= diff;
+                else Attraction_Timer -= diff;
             }
 
             DoMeleeAttackIfReady();

@@ -3,7 +3,7 @@
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -30,7 +30,7 @@ void TCSoapRunnable::run()
     soap.accept_timeout = 3;
     soap.recv_timeout = 5;
     soap.send_timeout = 5;
-    if (soap_bind(&soap, m_host.c_str(), m_port, 100) < 0)
+    if (!soap_valid_socket(soap_bind(&soap, m_host.c_str(), m_port, 100)))
     {
         sLog->outError("TCSoap: couldn't bind to %s:%d", m_host.c_str(), m_port);
         exit(-1);

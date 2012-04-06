@@ -1,10 +1,10 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -24,7 +24,6 @@
 #include "CreatureAI.h"
 #include "Unit.h"
 #include "ConditionMgr.h"
-#include "CreatureTextMgr.h"
 #include "Spell.h"
 #include "DB2Stores.h"
 //#include "SmartScript.h"
@@ -443,7 +442,7 @@ enum SMART_ACTION
 
     SMART_ACTION_CREATE_TIMED_EVENT                 = 67,     // id, InitialMin, InitialMax, RepeatMin(only if it repeats), RepeatMax(only if it repeats), chance
     SMART_ACTION_PLAYMOVIE                          = 68,     // entry
-    SMART_ACTION_MOVE_TO_POS                        = 69,     // xyz
+    SMART_ACTION_MOVE_TO_POS                        = 69,     // PointId, xyz
     SMART_ACTION_RESPAWN_TARGET                     = 70,     //
     SMART_ACTION_EQUIP                              = 71,     // entry, slotmask slot1, slot2, slot3   , only slots with mask set will be sent to client, bits are 1, 2, 4, leaving mask 0 is defaulted to mask 7 (send all), slots1-3 are only used if no entry is set
     SMART_ACTION_CLOSE_GOSSIP                       = 72,     // none
@@ -473,10 +472,13 @@ enum SMART_ACTION
     SMART_ACTION_REMOVE_DYNAMIC_FLAG                = 96,     // Flags
     SMART_ACTION_JUMP_TO_POS                        = 97,     // speedXY, speedZ, targetX, targetY, targetZ
     SMART_ACTION_SEND_GOSSIP_MENU                   = 98,     // menuId, optionId
-    SMART_ACTION_GO_SET_LOOT_STATE                  = 99,     // state
-    SMART_ACTION_SEND_TARGET_TO_TARGET              = 100,
+    SMART_ACTION_SET_RANDOM_HEALTH                  = 99,     // MinPctHealth, MaxPctHealth
+    SMART_ACTION_GO_SET_LOOT_STATE                  = 100,     // state
+    SMART_ACTION_SEND_TARGET_TO_TARGET              = 101,
+    SMART_ACTION_SET_MANA                           = 102,     // Mana_Ammount
+    SMART_ACTION_CHARACTER_SAVE                     = 103,     // Force save character to DB. This prevents character relogging in wrong phase.
 
-    SMART_ACTION_END                                = 101,
+    SMART_ACTION_END                                = 104,
 };
 
 struct SmartAction
@@ -875,6 +877,12 @@ struct SmartAction
 
         struct
         {
+            uint8 pointId;
+        } MoveToPos;
+
+
+        struct
+        {
             uint32 gossipMenuId;
             uint32 gossipNpcTextId;
         } sendGossipMenu;
@@ -898,6 +906,15 @@ struct SmartAction
             uint32 param5;
             uint32 param6;
         } raw;
+        struct
+        {
+            uint32 MinPct;
+            uint32 MaxPct;
+        } health;
+        struct
+        {
+            uint32 Mana;
+        } mana;
     };
 };
 
@@ -1179,7 +1196,7 @@ enum SmartCastFlags
     //CAST_FORCE_CAST             = 0x04,                     //Forces cast even if creature is out of mana or out of range
     //CAST_NO_MELEE_IF_OOM        = 0x08,                     //Prevents creature from entering melee if out of mana or out of range
     //CAST_FORCE_TARGET_SELF      = 0x10,                     //Forces the target to cast this spell on itself
-    //CAST_AURA_NOT_PRESENT       = 0x20,                     //Only casts the spell if the target does not have an aura from the spell
+    SMARTCAST_AURA_NOT_PRESENT       = 0x20,                     //Only casts the spell if the target does not have an aura from the spell
 };
 
 // one line in DB is one event
@@ -1224,9 +1241,9 @@ typedef UNORDERED_MAP<uint32, ObjectList*> ObjectListMap;
 class SmartWaypointMgr
 {
     friend class ACE_Singleton<SmartWaypointMgr, ACE_Null_Mutex>;
-    SmartWaypointMgr(){};
+    SmartWaypointMgr() {}
     public:
-        ~SmartWaypointMgr(){};
+        ~SmartWaypointMgr();
 
         void LoadFromDB();
 

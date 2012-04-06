@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -28,8 +28,6 @@ void WorldSession::HandleJoinChannel(WorldPacket& recvPacket)
     uint8 unknown1, unknown2;
     std::string password, channelname;
 
-    recvPacket.read_skip<uint8>();
-    recvPacket.read_skip<uint8>();
     recvPacket >> channel_id;
     recvPacket >> unknown1 >> unknown2;
     recvPacket >> password;
@@ -87,8 +85,10 @@ void WorldSession::HandleChannelList(WorldPacket& recvPacket)
     recvPacket >> channelname;
 
     if (ChannelMgr* cMgr = channelMgr(_player->GetTeam()))
+    {
         if (Channel *chn = cMgr->GetChannel(channelname, _player))
             chn->List(_player);
+    }
 }
 
 void WorldSession::HandleChannelPassword(WorldPacket& recvPacket)

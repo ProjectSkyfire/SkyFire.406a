@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -75,7 +75,7 @@ public:
 
     struct boss_lich_king_horAI : public npc_escortAI
     {
-        boss_lich_king_horAI(Creature *creature) : npc_escortAI(creature)
+        boss_lich_king_horAI(Creature* creature) : npc_escortAI(creature)
         {
             instance = (InstanceScript*)creature->GetInstanceScript();
             Reset();
@@ -94,7 +94,7 @@ public:
             if (!instance)
                 return;
 
-			NonFight    = false;
+            NonFight    = false;
             StartEscort = false;
             walkSpeed   = 1.0f;
             Wall        = 0;
@@ -387,7 +387,7 @@ public:
 
     struct npc_raging_gnoulAI : public ScriptedAI
     {
-        npc_raging_gnoulAI(Creature *creature) : ScriptedAI(creature)
+        npc_raging_gnoulAI(Creature* creature) : ScriptedAI(creature)
         {
             instance = (InstanceScript*)creature->GetInstanceScript();
             me->setActive(true);
@@ -485,7 +485,7 @@ public:
 
     struct npc_risen_witch_doctorAI : public ScriptedAI
     {
-        npc_risen_witch_doctorAI(Creature *creature) : ScriptedAI(creature)
+        npc_risen_witch_doctorAI(Creature* creature) : ScriptedAI(creature)
         {
             instance = (InstanceScript*)creature->GetInstanceScript();
             me->setActive(true);
@@ -595,7 +595,7 @@ public:
 
     struct npc_abonAI : public ScriptedAI
     {
-        npc_abonAI(Creature *creature) : ScriptedAI(creature)
+        npc_abonAI(Creature* creature) : ScriptedAI(creature)
         {
             instance = (InstanceScript*)creature->GetInstanceScript();
             me->setActive(true);

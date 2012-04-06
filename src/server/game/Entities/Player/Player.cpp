@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -150,7 +150,6 @@ static uint32 copseReclaimDelay[MAX_DEATH_COUNT] = { 30, 60, 120 };
 
 PlayerTaxi::PlayerTaxi()
 {
-    // Taxi nodes
     memset(_taximask, 0, sizeof(_taximask));
 }
 
@@ -312,7 +311,7 @@ bool TradeData::HasItem(uint64 itemGuid) const
     return false;
 }
 
-TradeSlots const TradeData::GetTradeSlotForItem(uint64 itemGuid)
+TradeSlots TradeData::GetTradeSlotForItem(uint64 itemGuid)
 {
     for (uint8 i = 0; i < TRADE_SLOT_COUNT; ++i)
         if (_items[i] == itemGuid)
@@ -441,9 +440,9 @@ void TradeData::SetAccepted(bool state, bool crosssend /*= false*/)
 // 5. Credit instance encounter.
 KillRewarder::KillRewarder(Player* killer, Unit* victim, bool isBattleGround) :
     // 1. Initialize internal variables to default values.
-    _killer(killer), _victim(victim), _isBattleGround(isBattleGround),
-    _isPvP(false), _group(killer->GetGroup()), _groupRate(1.0f),
-    _maxLevel(0), _maxNotGrayMember(NULL), _count(0), _sumLevel(0), _isFullXP(false), _xp(0)
+    _killer(killer), _victim(victim), _group(killer->GetGroup()),
+    _groupRate(1.0f), _maxNotGrayMember(NULL), _count(0), _sumLevel(0), _xp(0),
+    _isFullXP(false), _maxLevel(0), _isBattleGround(isBattleGround), _isPvP(false)
 {
     // mark the credit as pvp if victim is player
     if (victim->GetTypeId() == TYPEID_PLAYER)
@@ -547,7 +546,7 @@ inline void KillRewarder::_RewardKillCredit(Player* player)
     // 4.4. Give kill credit (player must not be in group, or he must be alive or without corpse).
     if (!_group || player->isAlive() || !player->GetCorpse())
         if (_victim->GetTypeId() == TYPEID_UNIT)
-            player->KilledMonster(_victim->ToCreature()->GetCreatureInfo(), _victim->GetGUID());
+            player->KilledMonster(_victim->ToCreature()->GetCreatureTemplate(), _victim->GetGUID());
 }
 
 void KillRewarder::_RewardPlayer(Player* player, bool isDungeon)
@@ -872,8 +871,6 @@ Player::Player(WorldSession* session): Unit(true), _achievementMgr(this), _reput
 
     for (uint8 i = 0; i < MAX_POWERS; ++i)
         _powerFraction[i] = 0;
-
-    _ConditionErrorMsgId = 0;
 
     isDebugAreaTriggers = false;
 
@@ -1573,7 +1570,7 @@ void Player::Update(uint32 p_time)
         while (iter != _timedquests.end())
         {
             QuestStatusData& q_status = _QuestStatus[*iter];
-            if (q_status._timer <= p_time)
+            if (q_status.Timer <= p_time)
             {
                 uint32 quest_id  = *iter;
                 ++iter;                                     // current iter will be removed in FailQuest
@@ -1581,7 +1578,7 @@ void Player::Update(uint32 p_time)
             }
             else
             {
-                q_status._timer -= p_time;
+                q_status.Timer -= p_time;
                 _QuestStatusSave[*iter] = true;
                 ++iter;
             }
@@ -2738,11 +2735,11 @@ Creature* Player::GetNPCIfCanInteractWith(uint64 guid, uint32 npcflagmask)
         return NULL;
 
     // Deathstate checks
-    if (!isAlive() && !(creature->GetCreatureInfo()->type_flags & CREATURE_TYPEFLAGS_GHOST))
+    if (!isAlive() && !(creature->GetCreatureTemplate()->type_flags & CREATURE_TYPEFLAGS_GHOST))
         return NULL;
 
     // alive or spirit healer
-    if (!creature->isAlive() && !(creature->GetCreatureInfo()->type_flags & CREATURE_TYPEFLAGS_DEAD_INTERACT))
+    if (!creature->isAlive() && !(creature->GetCreatureTemplate()->type_flags & CREATURE_TYPEFLAGS_DEAD_INTERACT))
         return NULL;
 
     // appropriate npc type
@@ -4135,10 +4132,10 @@ void Player::removeSpell(uint32 spell_id, bool disabled, bool learn_low_rank)
             // most likely will never be used, haven't heard of cases where players unlearn a mount
             if (Has310Flyer(false) && _spell_idx->second->skillId == SKILL_MOUNTS)
             {
-                SpellInfo const *pSpellInfo = sSpellMgr->GetSpellInfo(spell_id);
+                SpellInfo const *spellInfo = sSpellMgr->GetSpellInfo(spell_id);
                 for (uint8 i = 0; i < MAX_SPELL_EFFECTS; ++i)
-                    if (pSpellInfo->Effects[i].ApplyAuraName == SPELL_AURA_MOD_INCREASE_MOUNTED_FLIGHT_SPEED &&
-                        pSpellInfo->Effects[i].CalcValue() == 310)
+                    if (spellInfo->Effects[i].ApplyAuraName == SPELL_AURA_MOD_INCREASE_MOUNTED_FLIGHT_SPEED &&
+                        spellInfo->Effects[i].CalcValue() == 310)
                         Has310Flyer(true, spell_id);    // with true as first argument its also used to set/remove the flag
             }
         }
@@ -4228,7 +4225,7 @@ bool Player::Has310Flyer(bool checkAllSpells, uint32 excludeSpellId)
     else
     {
         SetHas310Flyer(false);
-        SpellInfo const *pSpellInfo;
+        SpellInfo const *spellInfo;
         for (PlayerSpellMap::iterator itr = _spells.begin(); itr != _spells.end(); ++itr)
         {
             if (itr->first == excludeSpellId)
@@ -4240,10 +4237,10 @@ bool Player::Has310Flyer(bool checkAllSpells, uint32 excludeSpellId)
                 if (_spell_idx->second->skillId != SKILL_MOUNTS)
                     break;  // We can break because mount spells belong only to one skillline (at least 310 flyers do)
 
-                pSpellInfo = sSpellMgr->GetSpellInfo(itr->first);
+                spellInfo = sSpellMgr->GetSpellInfo(itr->first);
                 for (uint8 i = 0; i < MAX_SPELL_EFFECTS; ++i)
-                    if (pSpellInfo->Effects[i].ApplyAuraName == SPELL_AURA_MOD_INCREASE_MOUNTED_FLIGHT_SPEED &&
-                        pSpellInfo->Effects[i].CalcValue() == 310)
+                    if (spellInfo->Effects[i].ApplyAuraName == SPELL_AURA_MOD_INCREASE_MOUNTED_FLIGHT_SPEED &&
+                        spellInfo->Effects[i].CalcValue() == 310)
                     {
                         SetHas310Flyer(true);
                         return true;
@@ -4488,7 +4485,7 @@ bool Player::resetTalents(bool no_cost)
             // skip non-existant talent ranks
             if (talentInfo->RankID[rank] == 0)
                 continue;
-        const SpellInfo* _spellEntry = sSpellMgr->GetSpellInfo(talentInfo->RankID[rank]);
+            SpellInfo const* _spellEntry = sSpellMgr->GetSpellInfo(talentInfo->RankID[rank]);
             if (!_spellEntry)
                 continue;
             removeSpell(talentInfo->RankID[rank], true);
@@ -4538,7 +4535,7 @@ bool Player::resetTalents(bool no_cost)
     /* when prev line will dropped use next line
     if (Pet* pet = GetPet())
     {
-        if (pet->getPetType() == HUNTER_PET && !pet->GetCreatureInfo()->isTameable(CanTameExoticPets()))
+        if (pet->getPetType() == HUNTER_PET && !pet->GetCreatureTemplate()->isTameable(CanTameExoticPets()))
             RemovePet(NULL, PET_SAVE_NOT_IN_SLOT, true);
     }
     */
@@ -5386,7 +5383,7 @@ void Player::DurabilityLoss(Item* item, double percent)
     if (!pMaxDurability)
         return;
 
-    percent /= GetTotalAuraMultiplier(SPELL_AURA_MOD_DURABILITY_LOSS);
+    percent /= GetTotalAuraMultiplier(SPELL_AURA_REDUCE_DURABILITY_LOSS);
 
     uint32 pDurabilityLoss = uint32(pMaxDurability*percent);
 
@@ -6294,7 +6291,7 @@ void Player::UpdateWeaponSkill(WeaponAttackType attType)
     if (GetShapeshiftForm() == FORM_TREE)
         return;                                             // use weapon but not skill up
 
-    if (victim && victim->GetTypeId() == TYPEID_UNIT && (victim->ToCreature()->GetCreatureInfo()->flags_extra & CREATURE_FLAG_EXTRA_NO_SKILLGAIN))
+    if (victim && victim->GetTypeId() == TYPEID_UNIT && (victim->ToCreature()->GetCreatureTemplate()->flags_extra & CREATURE_FLAG_EXTRA_NO_SKILLGAIN))
         return;
 
     uint32 weapon_skill_gain = sWorld->getIntConfig(CONFIG_SKILL_GAIN_WEAPON);
@@ -6916,21 +6913,22 @@ void Player::CheckAreaExploreAndOutdoor()
 
         UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_EXPLORE_AREA);
 
-        AreaTableEntry const *p = GetAreaEntryByAreaFlagAndMap(areaFlag, GetMapId());
-        if (!p)
+        AreaTableEntry const* areaEntry = GetAreaEntryByAreaFlagAndMap(areaFlag, GetMapId());
+        if (!areaEntry)
         {
-            sLog->outError("PLAYER: Player %u discovered unknown area (x: %f y: %f map: %u", GetGUIDLow(), GetPositionX(), GetPositionY(), GetMapId());
+            sLog->outError("Player %u discovered unknown area (x: %f y: %f z: %f map: %u", GetGUIDLow(), GetPositionX(), GetPositionY(), GetPositionZ(), GetMapId());
+            return;
         }
-        else if (p->area_level > 0)
+        else if (areaEntry->area_level > 0)
         {
-            uint32 area = p->ID;
+            uint32 area = areaEntry->ID;
             if (getLevel() >= sWorld->getIntConfig(CONFIG_MAX_PLAYER_LEVEL))
             {
                 SendExplorationExperience(area, 0);
             }
             else
             {
-                int32 diff = int32(getLevel()) - p->area_level;
+                int32 diff = int32(getLevel()) - areaEntry->area_level;
                 uint32 XP = 0;
                 if (diff < -5)
                 {
@@ -6944,17 +6942,17 @@ void Player::CheckAreaExploreAndOutdoor()
                     else if (exploration_percent < 0)
                         exploration_percent = 0;
 
-                    XP = uint32(sObjectMgr->GetBaseXP(p->area_level)*exploration_percent/100*sWorld->getRate(RATE_XP_EXPLORE));
+                    XP = uint32(sObjectMgr->GetBaseXP(areaEntry->area_level)*exploration_percent/100*sWorld->getRate(RATE_XP_EXPLORE));
                 }
                 else
                 {
-                    XP = uint32(sObjectMgr->GetBaseXP(p->area_level)*sWorld->getRate(RATE_XP_EXPLORE));
+                    XP = uint32(sObjectMgr->GetBaseXP(areaEntry->area_level)*sWorld->getRate(RATE_XP_EXPLORE));
                 }
 
                 GiveXP(XP, NULL);
                 SendExplorationExperience(area, XP);
             }
-            sLog->outDetail("PLAYER: Player %u discovered a new area: %u", GetGUIDLow(), area);
+            sLog->outDetail("Player %u discovered a new area: %u", GetGUIDLow(), area);
         }
     }
 }
@@ -7029,7 +7027,7 @@ void Player::RewardOnKill(Unit *victim, float rate)
     if (victim->ToCreature()->IsReputationGainDisabled())
         return;
 
-    RewardOnKillEntry const* Rew = sObjectMgr->GetRewardOnKillEntry(victim->ToCreature()->GetCreatureInfo()->Entry);
+    RewardOnKillEntry const* Rew = sObjectMgr->GetRewardOnKillEntry(victim->ToCreature()->GetCreatureTemplate()->Entry);
 
     if (!Rew)
         return;
@@ -7079,54 +7077,54 @@ void Player::RewardOnKill(Unit *victim, float rate)
     float favored_rep_mult = 0;
 
     if ((HasAura(32096) || HasAura(32098)) && (zone == 3483 || zone == 3562 || zone == 3836 || zone == 3713 || zone == 3714)) favored_rep_mult = 0.25; // Thrallmar's Favor and Honor Hold's Favor
-    else if (HasAura(30754) && (Rew->repfaction1 == 609 || Rew->repfaction2 == 609) && !ChampioningFaction)                   favored_rep_mult = 0.25; // Cenarion Favor
+    else if (HasAura(30754) && (Rew->RepFaction1 == 609 || Rew->RepFaction2 == 609) && !ChampioningFaction)                   favored_rep_mult = 0.25; // Cenarion Favor
 
     if (favored_rep_mult > 0) favored_rep_mult *= 2; // Multiplied by 2 because the reputation is divided by 2 for some reason (See "donerep1 / 2" and "donerep2 / 2") -- if you know why this is done, please update/explain :)
     // Favored reputation increase END
 
     bool recruitAFriend = GetsRecruitAFriendBonus(false);
 
-    if (Rew->repfaction1 && (!Rew->team_dependent || team == ALLIANCE))
+    if (Rew->RepFaction1 && (!Rew->TeamDependent || team == ALLIANCE))
     {
-        int32 donerep1 = CalculateReputationGain(victim->getLevel(), Rew->repvalue1, ChampioningFaction ? ChampioningFaction : Rew->repfaction1, false);
+        int32 donerep1 = CalculateReputationGain(victim->getLevel(), Rew->RepValue1, ChampioningFaction ? ChampioningFaction : Rew->RepFaction1, false);
         donerep1 = int32(donerep1*(rate + favored_rep_mult));
 
         if (recruitAFriend)
             donerep1 = int32(donerep1 * (1 + sWorld->getRate(RATE_REPUTATION_RECRUIT_A_FRIEND_BONUS)));
 
-        FactionEntry const *factionEntry1 = sFactionStore.LookupEntry(ChampioningFaction ? ChampioningFaction : Rew->repfaction1);
+        FactionEntry const *factionEntry1 = sFactionStore.LookupEntry(ChampioningFaction ? ChampioningFaction : Rew->RepFaction1);
         uint32 current_reputation_rank1 = GetReputationMgr().GetRank(factionEntry1);
-        if (factionEntry1 && current_reputation_rank1 <= Rew->reputation_max_cap1)
+        if (factionEntry1 && current_reputation_rank1 <= Rew->ReputationMaxCap1)
             GetReputationMgr().ModifyReputation(factionEntry1, donerep1);
     }
 
-    if (Rew->repfaction2 && (!Rew->team_dependent || team == HORDE))
+    if (Rew->RepFaction2 && (!Rew->TeamDependent || team == HORDE))
     {
-        int32 donerep2 = CalculateReputationGain(victim->getLevel(), Rew->repvalue2, ChampioningFaction ? ChampioningFaction : Rew->repfaction2, false);
+        int32 donerep2 = CalculateReputationGain(victim->getLevel(), Rew->RepValue2, ChampioningFaction ? ChampioningFaction : Rew->RepFaction2, false);
         donerep2 = int32(donerep2*(rate + favored_rep_mult));
 
         if (recruitAFriend)
             donerep2 = int32(donerep2 * (1 + sWorld->getRate(RATE_REPUTATION_RECRUIT_A_FRIEND_BONUS)));
 
-        FactionEntry const *factionEntry2 = sFactionStore.LookupEntry(ChampioningFaction ? ChampioningFaction : Rew->repfaction2);
+        FactionEntry const *factionEntry2 = sFactionStore.LookupEntry(ChampioningFaction ? ChampioningFaction : Rew->RepFaction2);
         uint32 current_reputation_rank2 = GetReputationMgr().GetRank(factionEntry2);
-        if (factionEntry2 && current_reputation_rank2 <= Rew->reputation_max_cap2)
+        if (factionEntry2 && current_reputation_rank2 <= Rew->ReputationMaxCap2)
             GetReputationMgr().ModifyReputation(factionEntry2, donerep2);
     }
 
-    if (Rew->currencyid1 && Rew->currencycount1)
+    if (Rew->CurrencyId1 && Rew->CurrencyCount1)
     {
-        ModifyCurrency(Rew->currencyid1, Rew->currencycount1);
+        ModifyCurrency(Rew->CurrencyId1, Rew->CurrencyCount1);
     }
 
-    if (Rew->currencyid2 && Rew->currencycount2)
+    if (Rew->CurrencyId2 && Rew->CurrencyCount2)
     {
-        ModifyCurrency(Rew->currencyid2, Rew->currencycount2);
+        ModifyCurrency(Rew->CurrencyId2, Rew->CurrencyCount2);
     }
 
-    if (Rew->currencyid3 && Rew->currencycount3)
+    if (Rew->CurrencyId3 && Rew->CurrencyCount3)
     {
-        ModifyCurrency(Rew->currencyid3, Rew->currencycount3);
+        ModifyCurrency(Rew->CurrencyId3, Rew->CurrencyCount3);
     }
 }
 
@@ -9163,7 +9161,7 @@ void Player::_ApplyAllItemMods()
             if (_items[i]->IsBroken() || !CanUseAttackType(GetAttackBySlot(i)))
                 continue;
 
-            _ApplyItemBonuses(proto, i, true);
+            _ApplyItemMods(_items[i], i, true);
         }
     }
 
@@ -9427,7 +9425,7 @@ void Player::SendLoot(uint64 guid, LootType loot_type)
                 creature->lootForPickPocketed = true;
                 loot->clear();
 
-                if (uint32 lootid = creature->GetCreatureInfo()->pickpocketLootId)
+                if (uint32 lootid = creature->GetCreatureTemplate()->pickpocketLootId)
                     loot->FillLoot(lootid, LootTemplates_Pickpocketing, this, true);
 
                 // Generate extra money for pick pocket loot
@@ -9474,7 +9472,7 @@ void Player::SendLoot(uint64 guid, LootType loot_type)
             if (loot_type == LOOT_SKINNING)
             {
                 loot->clear();
-                loot->FillLoot(creature->GetCreatureInfo()->SkinLootId, LootTemplates_Skinning, this, true);
+                loot->FillLoot(creature->GetCreatureTemplate()->SkinLootId, LootTemplates_Skinning, this, true);
                 permission = OWNER_PERMISSION;
             }
             // set group rights only for loot_type != LOOT_SKINNING
@@ -9544,7 +9542,7 @@ void Player::SendLoot(uint64 guid, LootType loot_type)
     {
         if (Creature* creature = GetMap()->GetCreature(guid))
         {
-            objEntry = creature->GetCreatureInfo()->Entry;
+            objEntry = creature->GetCreatureTemplate()->Entry;
             objType = 1;
         }
     }
@@ -12373,6 +12371,45 @@ InventoryResult Player::CanUseItem(Item *pItem, bool not_loading) const
     return EQUIP_ERR_ITEM_NOT_FOUND;
 }
 
+InventoryResult Player::CanUseItem(ItemTemplate const* proto) const
+{
+    // Used by group, function NeedBeforeGreed, to know if a prototype can be used by a player
+
+    if (proto)
+    {
+        if ((proto->Flags2 & ITEM_FLAGS_EXTRA_HORDE_ONLY) && GetTeam() != HORDE)
+            return EQUIP_ERR_YOU_CAN_NEVER_USE_THAT_ITEM;
+
+        if ((proto->Flags2 & ITEM_FLAGS_EXTRA_ALLIANCE_ONLY) && GetTeam() != ALLIANCE)
+            return EQUIP_ERR_YOU_CAN_NEVER_USE_THAT_ITEM;
+
+        if ((proto->AllowableClass & getClassMask()) == 0 || (proto->AllowableRace & getRaceMask()) == 0)
+            return EQUIP_ERR_YOU_CAN_NEVER_USE_THAT_ITEM;
+
+        if (proto->RequiredSkill != 0)
+        {
+            if (GetSkillValue(proto->RequiredSkill) == 0)
+                return EQUIP_ERR_NO_REQUIRED_PROFICIENCY;
+            else if (GetSkillValue(proto->RequiredSkill) < proto->RequiredSkillRank)
+                return EQUIP_ERR_CANT_EQUIP_SKILL;
+        }
+
+        if (proto->RequiredSpell != 0 && !HasSpell(proto->RequiredSpell))
+            return EQUIP_ERR_NO_REQUIRED_PROFICIENCY;
+
+        if (getLevel() < proto->RequiredLevel)
+            return EQUIP_ERR_CANT_EQUIP_LEVEL_I;
+
+        // If World Event is not active, prevent using event dependant items
+        if (proto->HolidayId && !IsHolidayActive((HolidayIds)proto->HolidayId))
+            return EQUIP_ERR_CANT_DO_RIGHT_NOW;
+
+        return EQUIP_ERR_OK;
+    }
+
+    return EQUIP_ERR_ITEM_NOT_FOUND;
+}
+
 InventoryResult Player::CanRollForItemInLFG(ItemTemplate const* proto, WorldObject const* lootedObject) const
 {
     LfgDungeonSet const& dungeons = sLFGMgr->GetSelectedDungeons(GetGUID());
@@ -12460,45 +12497,6 @@ InventoryResult Player::CanRollForItemInLFG(ItemTemplate const* proto, WorldObje
     return EQUIP_ERR_OK;
 }
 
-InventoryResult Player::CanUseItem(ItemTemplate const* proto) const
-{
-    // Used by group, function NeedBeforeGreed, to know if a prototype can be used by a player
-
-    if (proto)
-    {
-        if ((proto->Flags2 & ITEM_FLAGS_EXTRA_HORDE_ONLY) && GetTeam() != HORDE)
-            return EQUIP_ERR_YOU_CAN_NEVER_USE_THAT_ITEM;
-
-        if ((proto->Flags2 & ITEM_FLAGS_EXTRA_ALLIANCE_ONLY) && GetTeam() != ALLIANCE)
-            return EQUIP_ERR_YOU_CAN_NEVER_USE_THAT_ITEM;
-
-        if ((proto->AllowableClass & getClassMask()) == 0 || (proto->AllowableRace & getRaceMask()) == 0)
-            return EQUIP_ERR_YOU_CAN_NEVER_USE_THAT_ITEM;
-
-        if (proto->RequiredSkill != 0)
-        {
-            if (GetSkillValue(proto->RequiredSkill) == 0)
-                return EQUIP_ERR_NO_REQUIRED_PROFICIENCY;
-            else if (GetSkillValue(proto->RequiredSkill) < proto->RequiredSkillRank)
-                return EQUIP_ERR_CANT_EQUIP_SKILL;
-        }
-
-        if (proto->RequiredSpell != 0 && !HasSpell(proto->RequiredSpell))
-            return EQUIP_ERR_NO_REQUIRED_PROFICIENCY;
-
-        if (getLevel() < proto->RequiredLevel)
-            return EQUIP_ERR_CANT_EQUIP_LEVEL_I;
-
-        // If World Event is not active, prevent using event dependent items
-        if (proto->HolidayId && !IsHolidayActive((HolidayIds)proto->HolidayId))
-            return EQUIP_ERR_CANT_DO_RIGHT_NOW;
-
-        return EQUIP_ERR_OK;
-    }
-
-    return EQUIP_ERR_ITEM_NOT_FOUND;
-}
-
 Item* Player::StoreNewItem(ItemPosCountVec const& dest, uint32 item, bool update, int32 randomPropertyId)
 {
     AllowedLooterSet allowedLooters;
@@ -12530,7 +12528,7 @@ Item* Player::StoreNewItem(ItemPosCountVec const& dest, uint32 item, bool update
         {
             pItem->SetSoulboundTradeable(allowedLooters);
             pItem->SetUInt32Value(ITEM_FIELD_CREATE_PLAYED_TIME, GetTotalPlayedTime());
-            _itemSoulboundTradeable.push_back(pItem);
+            AddTradeableItem(pItem);
 
             // save data
             std::ostringstream ss;
@@ -12979,7 +12977,7 @@ void Player::MoveItemToInventory(ItemPosCountVec const& dest, Item* pItem, bool 
     }
 
     if (pLastItem->HasFlag(ITEM_FIELD_FLAGS, ITEM_FLAG_BOP_TRADEABLE))
-        _itemSoulboundTradeable.push_back(pLastItem);
+        AddTradeableItem(pLastItem);
 }
 
 void Player::DestroyItem(uint8 bag, uint8 slot, bool update)
@@ -14018,7 +14016,12 @@ void Player::UpdateSoulboundTradeItems()
     }
 }
 
-//TODO: should never allow an item to be added to _itemSoulboundTradeable twice
+void Player::AddTradeableItem(Item* item)
+{
+    _itemSoulboundTradeable.push_back(item);
+}
+
+//TODO: should never allow an item to be added to m_itemSoulboundTradeable twice
 void Player::RemoveTradeableItem(Item* item)
 {
     _itemSoulboundTradeable.remove(item);
@@ -14655,12 +14658,10 @@ void Player::PrepareGossipMenu(WorldObject* source, uint32 menuId /*= 0*/, bool 
         menuItemBounds = sObjectMgr->GetGossipMenuItemsMapBounds(0);
 
     uint32 npcflags = 0;
-    Creature* creature = NULL;
 
     if (source->GetTypeId() == TYPEID_UNIT)
     {
-        creature = source->ToCreature();
-        npcflags = creature->GetUInt32Value(UNIT_NPC_FLAGS);
+        npcflags = source->GetUInt32Value(UNIT_NPC_FLAGS);
         if (npcflags & UNIT_NPC_FLAG_QUESTGIVER && showQuests)
             PrepareQuestMenu(source->GetGUID());
     }
@@ -14669,13 +14670,13 @@ void Player::PrepareGossipMenu(WorldObject* source, uint32 menuId /*= 0*/, bool 
         if (source->ToGameObject()->GetGoType() == GAMEOBJECT_TYPE_QUESTGIVER)
             PrepareQuestMenu(source->GetGUID());
 
-    for (GossipMenuItemsMap::const_iterator itr = menuItemBounds.first; itr != menuItemBounds.second; ++itr)
+    for (GossipMenuItemsContainer::const_iterator itr = menuItemBounds.first; itr != menuItemBounds.second; ++itr)
     {
         bool canTalk = true;
-        if (!sConditionMgr->IsPlayerMeetToConditions(this, itr->second.Conditions))
+        if (!sConditionMgr->IsObjectMeetToConditions(this, source, itr->second.Conditions))
             continue;
 
-        if (source->GetTypeId() == TYPEID_UNIT)
+        if (Creature* creature = source->ToCreature())
         {
             if (!(itr->second.OptionNpcflag & npcflags))
                 continue;
@@ -14712,7 +14713,7 @@ void Player::PrepareGossipMenu(WorldObject* source, uint32 menuId /*= 0*/, bool 
                         canTalk = false;
                     break;
                 case GOSSIP_OPTION_UNLEARNPETTALENTS:
-                    if (!GetPet() || GetPet()->getPetType() != HUNTER_PET || GetPet()->_spells.size() <= 1 || creature->GetCreatureInfo()->trainer_type != TRAINER_TYPE_PETS || creature->GetCreatureInfo()->trainer_class != CLASS_HUNTER)
+                    if (!GetPet() || GetPet()->getPetType() != HUNTER_PET || GetPet()->_spells.size() <= 1 || creature->GetCreatureTemplate()->trainer_type != TRAINER_TYPE_PETS || creature->GetCreatureTemplate()->trainer_class != CLASS_HUNTER)
                         canTalk = false;
                     break;
                 case GOSSIP_OPTION_TAXIVENDOR:
@@ -14817,7 +14818,7 @@ void Player::SendPreparedGossip(WorldObject* source)
     uint32 textId = GetGossipTextId(source);
 
     if (uint32 menuId = PlayerTalkClass->GetGossipMenu().GetMenuId())
-        textId = GetGossipTextId(menuId);
+        textId = GetGossipTextId(menuId, source);
 
     PlayerTalkClass->SendGossipMenu(textId, source->GetGUID());
 }
@@ -14949,7 +14950,7 @@ void Player::OnGossipSelect(WorldObject* source, uint32 gossipListId, uint32 men
                 return;
             }
 
-            GetSession()->SendBattlegGroundList(guid, bgTypeId);
+            GetSession()->SendBattleGroundList(guid, bgTypeId);
             break;
         }
         case GOSSIP_OPTION_REFORGE:
@@ -14965,10 +14966,10 @@ uint32 Player::GetGossipTextId(WorldObject* source)
     if (!source)
         return DEFAULT_GOSSIP_MESSAGE;
 
-    return GetGossipTextId(GetDefaultGossipMenuForSource(source));
+    return GetGossipTextId(GetDefaultGossipMenuForSource(source), source);
 }
 
-uint32 Player::GetGossipTextId(uint32 menuId)
+uint32 Player::GetGossipTextId(uint32 menuId, WorldObject* source)
 {
     uint32 textId = DEFAULT_GOSSIP_MESSAGE;
 
@@ -14977,8 +14978,8 @@ uint32 Player::GetGossipTextId(uint32 menuId)
 
     GossipMenusMapBounds menuBounds = sObjectMgr->GetGossipMenusMapBounds(menuId);
 
-    for (GossipMenusMap::const_iterator itr = menuBounds.first; itr != menuBounds.second; ++itr)
-        if (sConditionMgr->IsPlayerMeetToConditions(this, itr->second.conditions))
+    for (GossipMenusContainer::const_iterator itr = menuBounds.first; itr != menuBounds.second; ++itr)
+        if (sConditionMgr->IsObjectMeetToConditions(this, source, itr->second.conditions))
             textId = itr->second.text_id;
 
     return textId;
@@ -14989,7 +14990,7 @@ uint32 Player::GetDefaultGossipMenuForSource(WorldObject* source)
     switch (source->GetTypeId())
     {
         case TYPEID_UNIT:
-            return source->ToCreature()->GetCreatureInfo()->GossipMenuId;
+            return source->ToCreature()->GetCreatureTemplate()->GossipMenuId;
         case TYPEID_GAMEOBJECT:
             return source->ToGameObject()->GetGOInfo()->GetGossipMenuId();
         default:
@@ -15005,15 +15006,15 @@ uint32 Player::GetDefaultGossipMenuForSource(WorldObject* source)
 
 void Player::PrepareQuestMenu(uint64 guid)
 {
-    QuestRelationBounds pObjectQR;
-    QuestRelationBounds pObjectQIR;
+    QuestRelationBounds objectQR;
+    QuestRelationBounds objectQIR;
 
     // pets also can have quests
     Creature *creature = ObjectAccessor::GetCreatureOrPetOrVehicle(*this, guid);
     if (creature)
     {
-        pObjectQR  = sObjectMgr->GetCreatureQuestRelationBounds(creature->GetEntry());
-        pObjectQIR = sObjectMgr->GetCreatureQuestInvolvedRelationBounds(creature->GetEntry());
+        objectQR  = sObjectMgr->GetCreatureQuestRelationBounds(creature->GetEntry());
+        objectQIR = sObjectMgr->GetCreatureQuestInvolvedRelationBounds(creature->GetEntry());
     }
     else
     {
@@ -15024,8 +15025,8 @@ void Player::PrepareQuestMenu(uint64 guid)
         GameObject *pGameObject = _map->GetGameObject(guid);
         if (pGameObject)
         {
-            pObjectQR  = sObjectMgr->GetGOQuestRelationBounds(pGameObject->GetEntry());
-            pObjectQIR = sObjectMgr->GetGOQuestInvolvedRelationBounds(pGameObject->GetEntry());
+            objectQR  = sObjectMgr->GetGOQuestRelationBounds(pGameObject->GetEntry());
+            objectQIR = sObjectMgr->GetGOQuestInvolvedRelationBounds(pGameObject->GetEntry());
         }
         else
             return;
@@ -15034,7 +15035,7 @@ void Player::PrepareQuestMenu(uint64 guid)
     QuestMenu &qm = PlayerTalkClass->GetQuestMenu();
     qm.ClearMenu();
 
-    for (QuestRelations::const_iterator i = pObjectQIR.first; i != pObjectQIR.second; ++i)
+    for (QuestRelations::const_iterator i = objectQIR.first; i != objectQIR.second; ++i)
     {
         uint32 quest_id = i->second;
         QuestStatus status = GetQuestStatus(quest_id);
@@ -15046,7 +15047,7 @@ void Player::PrepareQuestMenu(uint64 guid)
         //    qm.AddMenuItem(quest_id, 2);
     }
 
-    for (QuestRelations::const_iterator i = pObjectQR.first; i != pObjectQR.second; ++i)
+    for (QuestRelations::const_iterator i = objectQR.first; i != objectQR.second; ++i)
     {
         uint32 quest_id = i->second;
         Quest const* quest = sObjectMgr->GetQuestTemplate(quest_id);
@@ -15166,11 +15167,11 @@ bool Player::IsActiveQuest(uint32 quest_id) const
 
 Quest const* Player::GetNextQuest(uint64 guid, Quest const *quest)
 {
-    QuestRelationBounds pObjectQR;
+    QuestRelationBounds objectQR;
 
     Creature *creature = ObjectAccessor::GetCreatureOrPetOrVehicle(*this, guid);
     if (creature)
-        pObjectQR  = sObjectMgr->GetCreatureQuestRelationBounds(creature->GetEntry());
+        objectQR  = sObjectMgr->GetCreatureQuestRelationBounds(creature->GetEntry());
     else
     {
         //we should obtain map pointer from GetMap() in 99% of cases. Special case
@@ -15179,13 +15180,13 @@ Quest const* Player::GetNextQuest(uint64 guid, Quest const *quest)
         ASSERT(_map);
         GameObject *pGameObject = _map->GetGameObject(guid);
         if (pGameObject)
-            pObjectQR  = sObjectMgr->GetGOQuestRelationBounds(pGameObject->GetEntry());
+            objectQR  = sObjectMgr->GetGOQuestRelationBounds(pGameObject->GetEntry());
         else
             return NULL;
     }
 
     uint32 nextQuestID = quest->GetNextQuestInChain();
-    for (QuestRelations::const_iterator itr = pObjectQR.first; itr != pObjectQR.second; ++itr)
+    for (QuestRelations::const_iterator itr = objectQR.first; itr != objectQR.second; ++itr)
     {
         if (itr->second == nextQuestID)
             return sObjectMgr->GetQuestTemplate(nextQuestID);
@@ -15265,13 +15266,13 @@ bool Player::CanCompleteQuest(uint32 quest_id)
 
         QuestStatusData &q_status = itr->second;
 
-        if (q_status._status == QUEST_STATUS_INCOMPLETE)
+        if (q_status.Status == QUEST_STATUS_INCOMPLETE)
         {
             if (qInfo->HasFlag(QUEST_TRINITY_FLAGS_DELIVER))
             {
                 for (uint8 i = 0; i < QUEST_ITEM_OBJECTIVES_COUNT; i++)
                 {
-                    if (qInfo->ReqItemCount[i]!= 0 && q_status._itemcount[i] < qInfo->ReqItemCount[i])
+                    if (qInfo->ReqItemCount[i]!= 0 && q_status.ItemCount[i] < qInfo->ReqItemCount[i])
                         return false;
                 }
             }
@@ -15283,19 +15284,19 @@ bool Player::CanCompleteQuest(uint32 quest_id)
                     if (qInfo->ReqCreatureOrGOId[i] == 0)
                         continue;
 
-                    if (qInfo->ReqCreatureOrGOCount[i] != 0 && q_status._creatureOrGOcount[i] < qInfo->ReqCreatureOrGOCount[i])
+                    if (qInfo->ReqCreatureOrGOCount[i] != 0 && q_status.CreatureOrGOCount[i] < qInfo->ReqCreatureOrGOCount[i])
                         return false;
                 }
             }
 
             if (qInfo->HasFlag(QUEST_TRINITY_FLAGS_PLAYER_KILL))
-                if (qInfo->GetPlayersSlain() != 0 && q_status._playercount < qInfo->GetPlayersSlain())
+                if (qInfo->GetPlayersSlain() != 0 && q_status.PlayerCount < qInfo->GetPlayersSlain())
                     return false;
 
-            if (qInfo->HasFlag(QUEST_TRINITY_FLAGS_EXPLORATION_OR_EVENT) && !q_status._explored)
+            if (qInfo->HasFlag(QUEST_TRINITY_FLAGS_EXPLORATION_OR_EVENT) && !q_status.Explored)
                 return false;
 
-            if (qInfo->HasFlag(QUEST_TRINITY_FLAGS_TIMED) && q_status._timer == 0)
+            if (qInfo->HasFlag(QUEST_TRINITY_FLAGS_TIMED) && q_status.Timer == 0)
                 return false;
 
             if (qInfo->GetRewOrReqMoney() < 0)
@@ -15421,23 +15422,23 @@ void Player::AddQuest(Quest const *quest, Object *questGiver)
     QuestStatusData& questStatusData = _QuestStatus[quest_id];
 
     // check for repeatable quests status reset
-    questStatusData._status = QUEST_STATUS_INCOMPLETE;
-    questStatusData._explored = false;
+    questStatusData.Status = QUEST_STATUS_INCOMPLETE;
+    questStatusData.Explored = false;
 
     if (quest->HasFlag(QUEST_TRINITY_FLAGS_DELIVER))
     {
         for (uint8 i = 0; i < QUEST_ITEM_OBJECTIVES_COUNT; ++i)
-            questStatusData._itemcount[i] = 0;
+            questStatusData.ItemCount[i] = 0;
     }
 
     if (quest->HasFlag(QUEST_TRINITY_FLAGS_KILL_OR_CAST | QUEST_TRINITY_FLAGS_SPEAKTO))
     {
         for (uint8 i = 0; i < QUEST_OBJECTIVES_COUNT; ++i)
-            questStatusData._creatureOrGOcount[i] = 0;
+            questStatusData.CreatureOrGOCount[i] = 0;
     }
 
     if (quest->HasFlag(QUEST_TRINITY_FLAGS_PLAYER_KILL))
-        questStatusData._playercount = 0;
+        questStatusData.PlayerCount = 0;
 
     GiveQuestSourceItem(quest);
     AdjustQuestReqItemCount(quest, questStatusData);
@@ -15457,14 +15458,14 @@ void Player::AddQuest(Quest const *quest, Object *questGiver)
 
         // shared timed quest
         if (questGiver && questGiver->GetTypeId() == TYPEID_PLAYER)
-            limittime = questGiver->ToPlayer()->getQuestStatusMap()[quest_id]._timer / IN_MILLISECONDS;
+            limittime = questGiver->ToPlayer()->getQuestStatusMap()[quest_id].Timer / IN_MILLISECONDS;
 
         AddTimedQuest(quest_id);
-        questStatusData._timer = limittime * IN_MILLISECONDS;
+        questStatusData.Timer = limittime * IN_MILLISECONDS;
         qtime = static_cast<uint32>(time(NULL)) + limittime;
     }
     else
-        questStatusData._timer = 0;
+        questStatusData.Timer = 0;
 
     SetQuestSlot(log_slot, quest_id, qtime);
 
@@ -15745,7 +15746,7 @@ void Player::FailQuest(uint32 questId)
             QuestStatusData& q_status = _QuestStatus[questId];
 
             RemoveTimedQuest(questId);
-            q_status._timer = 0;
+            q_status.Timer = 0;
 
             SendQuestTimerFailed(questId);
         }
@@ -15991,7 +15992,7 @@ bool Player::SatisfyQuestStatus(Quest const* qInfo, bool msg)
 bool Player::SatisfyQuestConditions(Quest const* qInfo, bool msg)
 {
     ConditionList conditions = sConditionMgr->GetConditionsForNotGroupedEntry(CONDITION_SOURCE_TYPE_QUEST_ACCEPT, qInfo->GetQuestId());
-    if (!sConditionMgr->IsPlayerMeetToConditions(this, conditions))
+    if (!sConditionMgr->IsObjectMeetToConditions(this, conditions))
     {
         if (msg)
             SendCanTakeQuestResponse(INVALIDREASON_DONT_HAVE_REQ);
@@ -16083,7 +16084,7 @@ bool Player::SatisfyQuestPrevChain(Quest const* qInfo, bool msg)
         QuestStatusMap::const_iterator itr = _QuestStatus.find(*iter);
 
         // If any of the previous quests in chain active, return false
-        if (itr != _QuestStatus.end() && itr->second._status != QUEST_STATUS_NONE)
+        if (itr != _QuestStatus.end() && itr->second.Status != QUEST_STATUS_NONE)
         {
             if (msg)
                 SendCanTakeQuestResponse(INVALIDREASON_DONT_HAVE_REQ);
@@ -16149,8 +16150,8 @@ bool Player::SatisfyQuestSeasonal(Quest const* qInfo, bool /*msg*/)
         return true;
 
     uint16 eventId = sGameEventMgr->GetEventIdForQuest(qInfo);
-    if (_seasonalquests.find(eventId) == _seasonalquests.end())
-        return false;
+    if (_seasonalquests.find(eventId) == _seasonalquests.end() || _seasonalquests[eventId].empty())
+        return true;
 
     // if not found in cooldown list
     return _seasonalquests[eventId].find(qInfo->GetQuestId()) == _seasonalquests[eventId].end();
@@ -16243,7 +16244,7 @@ QuestStatus Player::GetQuestStatus(uint32 quest_id) const
     {
         QuestStatusMap::const_iterator itr = _QuestStatus.find(quest_id);
         if (itr != _QuestStatus.end())
-            return itr->second._status;
+            return itr->second.Status;
 
         if (Quest const* qInfo = sObjectMgr->GetQuestTemplate(quest_id))
             if (!qInfo->IsRepeatable() && _RewardedQuests.find(quest_id) != _RewardedQuests.end())
@@ -16259,7 +16260,7 @@ bool Player::CanShareQuest(uint32 quest_id) const
     {
         QuestStatusMap::const_iterator itr = _QuestStatus.find(quest_id);
         if (itr != _QuestStatus.end())
-            return itr->second._status == QUEST_STATUS_INCOMPLETE;
+            return itr->second.Status == QUEST_STATUS_INCOMPLETE;
     }
     return false;
 }
@@ -16268,7 +16269,7 @@ void Player::SetQuestStatus(uint32 quest_id, QuestStatus status)
 {
     if (sObjectMgr->GetQuestTemplate(quest_id))
     {
-        _QuestStatus[quest_id]._status = status;
+        _QuestStatus[quest_id].Status = status;
         _QuestStatusSave[quest_id] = true;
     }
 
@@ -16305,7 +16306,7 @@ uint16 Player::GetReqKillOrCastCurrentCount(uint32 quest_id, int32 entry)
 
     for (uint8 j = 0; j < QUEST_OBJECTIVES_COUNT; ++j)
         if (qInfo->ReqCreatureOrGOId[j] == entry)
-            return _QuestStatus[quest_id]._creatureOrGOcount[j];
+            return _QuestStatus[quest_id].CreatureOrGOCount[j];
 
     return 0;
 }
@@ -16321,7 +16322,7 @@ void Player::AdjustQuestReqItemCount(Quest const* quest, QuestStatusData& questS
             {
                 uint32 curitemcount = GetItemCount(quest->ReqItemId[i], true);
 
-                questStatusData._itemcount[i] = std::min(curitemcount, reqitemcount);
+                questStatusData.ItemCount[i] = std::min(curitemcount, reqitemcount);
                 _QuestStatusSave[quest->GetQuestId()] = true;
             }
         }
@@ -16346,9 +16347,9 @@ void Player::AreaExploredOrEventHappens(uint32 questId)
         {
             QuestStatusData& q_status = _QuestStatus[questId];
 
-            if (!q_status._explored)
+            if (!q_status.Explored)
             {
-                q_status._explored = true;
+                q_status.Explored = true;
                 _QuestStatusSave[questId] = true;
             }
         }
@@ -16360,7 +16361,7 @@ void Player::AreaExploredOrEventHappens(uint32 questId)
 //not used in Trinityd, function for external script library
 void Player::GroupEventHappens(uint32 questId, WorldObject const* pEventObject)
 {
-    if (Group *group = GetGroup())
+    if (Group* group = GetGroup())
     {
         for (GroupReference* itr = group->GetFirstMember(); itr != NULL; itr = itr->next())
         {
@@ -16385,7 +16386,7 @@ void Player::ItemAddedQuestCheck(uint32 entry, uint32 count)
 
         QuestStatusData& q_status = _QuestStatus[questid];
 
-        if (q_status._status != QUEST_STATUS_INCOMPLETE)
+        if (q_status.Status != QUEST_STATUS_INCOMPLETE)
             continue;
 
         Quest const* qInfo = sObjectMgr->GetQuestTemplate(questid);
@@ -16398,11 +16399,11 @@ void Player::ItemAddedQuestCheck(uint32 entry, uint32 count)
             if (reqitem == entry)
             {
                 uint32 reqitemcount = qInfo->ReqItemCount[j];
-                uint16 curitemcount = q_status._itemcount[j];
+                uint16 curitemcount = q_status.ItemCount[j];
                 if (curitemcount < reqitemcount)
                 {
                     uint16 additemcount = curitemcount + count <= reqitemcount ? count : reqitemcount - curitemcount;
-                    q_status._itemcount[j] += additemcount;
+                    q_status.ItemCount[j] += additemcount;
 
                     _QuestStatusSave[questid] = true;
 
@@ -16439,14 +16440,14 @@ void Player::ItemRemovedQuestCheck(uint32 entry, uint32 count)
 
                 uint32 reqitemcount = qInfo->ReqItemCount[j];
                 uint16 curitemcount;
-                if (q_status._status != QUEST_STATUS_COMPLETE)
-                    curitemcount = q_status._itemcount[j];
+                if (q_status.Status != QUEST_STATUS_COMPLETE)
+                    curitemcount = q_status.ItemCount[j];
                 else
                     curitemcount = GetItemCount(entry, true);
                 if (curitemcount < reqitemcount + count)
                 {
                     uint16 remitemcount = curitemcount <= reqitemcount ? count : count + reqitemcount - curitemcount;
-                    q_status._itemcount[j] = (curitemcount <= remitemcount) ? 0 : curitemcount - remitemcount;
+                    q_status.ItemCount[j] = (curitemcount <= remitemcount) ? 0 : curitemcount - remitemcount;
 
                     _QuestStatusSave[questid] = true;
 
@@ -16484,8 +16485,8 @@ void Player::KilledMonsterCredit(uint32 entry, uint64 guid)
     UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_KILL_CREATURE, real_entry, addkillcount, guid ? GetMap()->GetCreature(guid) : NULL);
     if (Creature* killed = GetMap()->GetCreature(guid))
     {
-        UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_KILL_CREATURE_TYPE, killed->GetCreatureInfo()->type, addkillcount, killed);
-        UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_KILL_CREATURE_TYPE_GUILD, killed->GetCreatureInfo()->type, addkillcount, killed);
+        UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_KILL_CREATURE_TYPE, killed->GetCreatureTemplate()->type, addkillcount, killed);
+        UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_KILL_CREATURE_TYPE_GUILD, killed->GetCreatureTemplate()->type, addkillcount, killed);
     }
 
     for (uint8 i = 0; i < MAX_QUEST_LOG_SIZE; ++i)
@@ -16499,7 +16500,7 @@ void Player::KilledMonsterCredit(uint32 entry, uint64 guid)
             continue;
         // just if !ingroup || !noraidgroup || raidgroup
         QuestStatusData& q_status = _QuestStatus[questid];
-        if (q_status._status == QUEST_STATUS_INCOMPLETE && (!GetGroup() || !GetGroup()->isRaidGroup() || qInfo->IsAllowedInRaid()))
+        if (q_status.Status == QUEST_STATUS_INCOMPLETE && (!GetGroup() || !GetGroup()->isRaidGroup() || qInfo->IsAllowedInRaid()))
         {
             if (qInfo->HasFlag(QUEST_TRINITY_FLAGS_KILL_OR_CAST))
             {
@@ -16518,10 +16519,10 @@ void Player::KilledMonsterCredit(uint32 entry, uint64 guid)
                     if (reqkill == real_entry)
                     {
                         uint32 reqkillcount = qInfo->ReqCreatureOrGOCount[j];
-                        uint16 curkillcount = q_status._creatureOrGOcount[j];
+                        uint16 curkillcount = q_status.CreatureOrGOCount[j];
                         if (curkillcount < reqkillcount)
                         {
-                            q_status._creatureOrGOcount[j] = curkillcount + addkillcount;
+                            q_status.CreatureOrGOCount[j] = curkillcount + addkillcount;
 
                             _QuestStatusSave[questid] = true;
 
@@ -16554,16 +16555,16 @@ void Player::KilledPlayerCredit()
             continue;
         // just if !ingroup || !noraidgroup || raidgroup
         QuestStatusData& q_status = _QuestStatus[questid];
-        if (q_status._status == QUEST_STATUS_INCOMPLETE && (!GetGroup() || !GetGroup()->isRaidGroup() || qInfo->IsAllowedInRaid()))
+        if (q_status.Status == QUEST_STATUS_INCOMPLETE && (!GetGroup() || !GetGroup()->isRaidGroup() || qInfo->IsAllowedInRaid()))
         {
             if (qInfo->HasFlag(QUEST_TRINITY_FLAGS_PLAYER_KILL))
             {
                 uint32 reqkill = qInfo->GetPlayersSlain();
-                uint16 curkill = q_status._playercount;
+                uint16 curkill = q_status.PlayerCount;
 
                 if (curkill < reqkill)
                 {
-                    q_status._playercount = curkill + addkillcount;
+                    q_status.PlayerCount = curkill + addkillcount;
 
                     _QuestStatusSave[questid] = true;
 
@@ -16596,7 +16597,7 @@ void Player::CastedCreatureOrGO(uint32 entry, uint64 guid, uint32 spell_id)
 
         QuestStatusData& q_status = _QuestStatus[questid];
 
-        if (q_status._status == QUEST_STATUS_INCOMPLETE)
+        if (q_status.Status == QUEST_STATUS_INCOMPLETE)
         {
             if (qInfo->HasFlag(QUEST_TRINITY_FLAGS_KILL_OR_CAST))
             {
@@ -16618,9 +16619,9 @@ void Player::CastedCreatureOrGO(uint32 entry, uint64 guid, uint32 spell_id)
                             if (reqTarget != entry) // if entry doesn't match, check for killcredits referenced in template
                             {
                                 CreatureTemplate const* cinfo = sObjectMgr->GetCreatureTemplate(entry);
-                                for (uint8 j = 0; j < MAX_KILL_CREDIT; ++j)
-                                    if (cinfo->KillCredit[j] == reqTarget)
-                                        entry = cinfo->KillCredit[j];
+                                for (uint8 k = 0; k < MAX_KILL_CREDIT; ++k)
+                                    if (cinfo->KillCredit[k] == reqTarget)
+                                        entry = cinfo->KillCredit[k];
                             }
                          }
                     }
@@ -16637,10 +16638,10 @@ void Player::CastedCreatureOrGO(uint32 entry, uint64 guid, uint32 spell_id)
                         continue;
 
                     uint32 reqCastCount = qInfo->ReqCreatureOrGOCount[j];
-                    uint16 curCastCount = q_status._creatureOrGOcount[j];
+                    uint16 curCastCount = q_status.CreatureOrGOCount[j];
                     if (curCastCount < reqCastCount)
                     {
-                        q_status._creatureOrGOcount[j] = curCastCount + addCastCount;
+                        q_status.CreatureOrGOCount[j] = curCastCount + addCastCount;
 
                         _QuestStatusSave[questid] = true;
 
@@ -16673,7 +16674,7 @@ void Player::TalkedToCreature(uint32 entry, uint64 guid)
 
         QuestStatusData& q_status = _QuestStatus[questid];
 
-        if (q_status._status == QUEST_STATUS_INCOMPLETE)
+        if (q_status.Status == QUEST_STATUS_INCOMPLETE)
         {
             if (qInfo->HasFlag(QUEST_TRINITY_FLAGS_KILL_OR_CAST | QUEST_TRINITY_FLAGS_SPEAKTO))
             {
@@ -16694,10 +16695,10 @@ void Player::TalkedToCreature(uint32 entry, uint64 guid)
                     if (reqTarget == entry)
                     {
                         uint32 reqTalkCount = qInfo->ReqCreatureOrGOCount[j];
-                        uint16 curTalkCount = q_status._creatureOrGOcount[j];
+                        uint16 curTalkCount = q_status.CreatureOrGOCount[j];
                         if (curTalkCount < reqTalkCount)
                         {
-                            q_status._creatureOrGOcount[j] = curTalkCount + addTalkCount;
+                            q_status.CreatureOrGOCount[j] = curTalkCount + addTalkCount;
 
                             _QuestStatusSave[questid] = true;
 
@@ -16728,7 +16729,7 @@ void Player::MoneyChanged(uint32 count)
         {
             QuestStatusData& q_status = _QuestStatus[questid];
 
-            if (q_status._status == QUEST_STATUS_INCOMPLETE)
+            if (q_status.Status == QUEST_STATUS_INCOMPLETE)
             {
                 if (int32(count) >= -qInfo->GetRewOrReqMoney())
                 {
@@ -16736,7 +16737,7 @@ void Player::MoneyChanged(uint32 count)
                         CompleteQuest(questid);
                 }
             }
-            else if (q_status._status == QUEST_STATUS_COMPLETE)
+            else if (q_status.Status == QUEST_STATUS_COMPLETE)
             {
                 if (int32(count) < -qInfo->GetRewOrReqMoney())
                     IncompleteQuest(questid);
@@ -16756,13 +16757,13 @@ void Player::ReputationChanged(FactionEntry const* factionEntry)
                 if (qInfo->GetRepObjectiveFaction() == factionEntry->ID)
                 {
                     QuestStatusData& q_status = _QuestStatus[questid];
-                    if (q_status._status == QUEST_STATUS_INCOMPLETE)
+                    if (q_status.Status == QUEST_STATUS_INCOMPLETE)
                     {
                         if (GetReputationMgr().GetReputation(factionEntry) >= qInfo->GetRepObjectiveValue())
                             if (CanCompleteQuest(questid))
                                 CompleteQuest(questid);
                     }
-                    else if (q_status._status == QUEST_STATUS_COMPLETE)
+                    else if (q_status.Status == QUEST_STATUS_COMPLETE)
                     {
                         if (GetReputationMgr().GetReputation(factionEntry) < qInfo->GetRepObjectiveValue())
                             IncompleteQuest(questid);
@@ -16784,13 +16785,13 @@ void Player::ReputationChanged2(FactionEntry const* factionEntry)
                 if (qInfo->GetRepObjectiveFaction2() == factionEntry->ID)
                 {
                     QuestStatusData& q_status = _QuestStatus[questid];
-                    if (q_status._status == QUEST_STATUS_INCOMPLETE)
+                    if (q_status.Status == QUEST_STATUS_INCOMPLETE)
                     {
                         if (GetReputationMgr().GetReputation(factionEntry) >= qInfo->GetRepObjectiveValue2())
                             if (CanCompleteQuest(questid))
                                 CompleteQuest(questid);
                     }
-                    else if (q_status._status == QUEST_STATUS_COMPLETE)
+                    else if (q_status.Status == QUEST_STATUS_COMPLETE)
                     {
                         if (GetReputationMgr().GetReputation(factionEntry) < qInfo->GetRepObjectiveValue2())
                             IncompleteQuest(questid);
@@ -16815,7 +16816,7 @@ bool Player::HasQuestForItem(uint32 itemid) const
 
         QuestStatusData const& q_status = qs_itr->second;
 
-        if (q_status._status == QUEST_STATUS_INCOMPLETE)
+        if (q_status.Status == QUEST_STATUS_INCOMPLETE)
         {
             Quest const* qinfo = sObjectMgr->GetQuestTemplate(questid);
             if (!qinfo)
@@ -16830,7 +16831,7 @@ bool Player::HasQuestForItem(uint32 itemid) const
             // This part for ReqItem drop
             for (uint8 j = 0; j < QUEST_ITEM_OBJECTIVES_COUNT; ++j)
             {
-                if (itemid == qinfo->ReqItemId[j] && q_status._itemcount[j] < qinfo->ReqItemCount[j])
+                if (itemid == qinfo->ReqItemId[j] && q_status.ItemCount[j] < qinfo->ReqItemCount[j])
                     return true;
             }
             // This part - for ReqSource
@@ -16925,7 +16926,7 @@ void Player::SendQuestTimerFailed(uint32 quest_id)
     }
 }
 
-void Player::SendCanTakeQuestResponse(uint32 msg)
+void Player::SendCanTakeQuestResponse(uint32 msg) const
 {
     WorldPacket data(SMSG_QUESTGIVER_QUEST_INVALID, 4);
     data << uint32(msg);
@@ -17289,7 +17290,7 @@ bool Player::LoadFromDB(uint32 guid, SQLQueryHolder *holder)
     SetByteValue(PLAYER_FIELD_BYTES, 2, fields[63].GetUInt8());
 
     _currentPetSlot = (PetSlot)fields[64].GetUInt8();
-    _petSlotUsed = fields[65].GetUInt64();
+    _petSlotUsed = fields[65].GetUInt32();
 
     InitDisplayIds();
 
@@ -18206,7 +18207,7 @@ Item* Player::_LoadItem(SQLTransaction& trans, uint32 zoneId, uint32 timeDiff, F
                     for (Tokens::iterator itr = GUIDlist.begin(); itr != GUIDlist.end(); ++itr)
                         looters.insert(atol(*itr));
                     item->SetSoulboundTradeable(looters);
-                    _itemSoulboundTradeable.push_back(item);
+                    AddTradeableItem(item);
                 }
                 else
                 {
@@ -18280,7 +18281,7 @@ void Player::_LoadMailedItems(Mail *mail)
         {
             sLog->outError("Player %u has unknown item_template (ProtoType) in mailed items(GUID: %u template: %u) in mail (%u), deleted.", GetGUIDLow(), itemGuid, itemTemplate, mail->messageID);
 
-            PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_INVALID_MAIL_ITEM);
+            stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_INVALID_MAIL_ITEM);
             stmt->setUInt32(0, itemGuid);
             CharacterDatabase.Execute(stmt);
 
@@ -18296,10 +18297,8 @@ void Player::_LoadMailedItems(Mail *mail)
         {
             sLog->outError("Player::_LoadMailedItems - Item in mail (%u) doesn't exist !!!! - item guid: %u, deleted from mail", mail->messageID, itemGuid);
 
-            PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_MAIL_ITEM);
-
+            stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_MAIL_ITEM);
             stmt->setUInt32(0, itemGuid);
-
             CharacterDatabase.Execute(stmt);
 
             item->FSetState(ITEM_REMOVED);
@@ -18345,10 +18344,10 @@ void Player::_LoadMail()
             m->subject = fields[4].GetString();
             m->body = fields[5].GetString();
             bool has_items = fields[6].GetBool();
-            m->expire_time = time_t(fields[7].GetUInt32());
-            m->deliver_time = time_t(fields[8].GetUInt32());
-            m->money = fields[9].GetUInt32();
-            m->COD = fields[10].GetUInt32();
+            m->expire_time = time_t(fields[7].GetUInt64());
+            m->deliver_time = time_t(fields[8].GetUInt64());
+            m->money = fields[9].GetUInt64();
+            m->COD = fields[10].GetUInt64();
             m->checked = fields[11].GetUInt32();
             m->stationery = fields[12].GetUInt8();
             m->mailTemplateId = fields[13].GetInt16();
@@ -18408,14 +18407,14 @@ void Player::_LoadQuestStatus(PreparedQueryResult result)
 
                 uint8 qstatus = fields[1].GetUInt8();
                 if (qstatus < MAX_QUEST_STATUS)
-                    questStatusData._status = QuestStatus(qstatus);
+                    questStatusData.Status = QuestStatus(qstatus);
                 else
                 {
-                    questStatusData._status = QUEST_STATUS_INCOMPLETE;
+                    questStatusData.Status = QUEST_STATUS_INCOMPLETE;
                     sLog->outError("Player %s have invalid quest %d status (%u), replaced by QUEST_STATUS_INCOMPLETE(3).", GetName(), quest_id, qstatus);
                 }
 
-                questStatusData._explored = (fields[2].GetUInt8() > 0);
+                questStatusData.Explored = (fields[2].GetUInt8() > 0);
 
                 time_t quest_time = time_t(fields[3].GetUInt32());
 
@@ -18424,44 +18423,44 @@ void Player::_LoadQuestStatus(PreparedQueryResult result)
                     AddTimedQuest(quest_id);
 
                     if (quest_time <= sWorld->GetGameTime())
-                        questStatusData._timer = 1;
+                        questStatusData.Timer = 1;
                     else
-                        questStatusData._timer = uint32((quest_time - sWorld->GetGameTime()) * IN_MILLISECONDS);
+                        questStatusData.Timer = uint32((quest_time - sWorld->GetGameTime()) * IN_MILLISECONDS);
                 }
                 else
                     quest_time = 0;
 
-                questStatusData._creatureOrGOcount[0] = fields[4].GetUInt16();
-                questStatusData._creatureOrGOcount[1] = fields[5].GetUInt16();
-                questStatusData._creatureOrGOcount[2] = fields[6].GetUInt16();
-                questStatusData._creatureOrGOcount[3] = fields[7].GetUInt16();
-                questStatusData._itemcount[0] = fields[8].GetUInt16();
-                questStatusData._itemcount[1] = fields[9].GetUInt16();
-                questStatusData._itemcount[2] = fields[10].GetUInt16();
-                questStatusData._itemcount[3] = fields[11].GetUInt16();
-                questStatusData._playercount = fields[12].GetUInt16();
+                questStatusData.CreatureOrGOCount[0] = fields[4].GetUInt16();
+                questStatusData.CreatureOrGOCount[1] = fields[5].GetUInt16();
+                questStatusData.CreatureOrGOCount[2] = fields[6].GetUInt16();
+                questStatusData.CreatureOrGOCount[3] = fields[7].GetUInt16();
+                questStatusData.ItemCount[0] = fields[8].GetUInt16();
+                questStatusData.ItemCount[1] = fields[9].GetUInt16();
+                questStatusData.ItemCount[2] = fields[10].GetUInt16();
+                questStatusData.ItemCount[3] = fields[11].GetUInt16();
+                questStatusData.PlayerCount = fields[12].GetUInt16();
 
                 // add to quest log
-                if (slot < MAX_QUEST_LOG_SIZE && questStatusData._status != QUEST_STATUS_NONE)
+                if (slot < MAX_QUEST_LOG_SIZE && questStatusData.Status != QUEST_STATUS_NONE)
                 {
                     SetQuestSlot(slot, quest_id, uint32(quest_time)); // cast can't be helped
 
-                    if (questStatusData._status == QUEST_STATUS_COMPLETE)
+                    if (questStatusData.Status == QUEST_STATUS_COMPLETE)
                         SetQuestSlotState(slot, QUEST_STATE_COMPLETE);
-                    else if (questStatusData._status == QUEST_STATUS_FAILED)
+                    else if (questStatusData.Status == QUEST_STATUS_FAILED)
                         SetQuestSlotState(slot, QUEST_STATE_FAIL);
 
                     for (uint8 idx = 0; idx < QUEST_OBJECTIVES_COUNT; ++idx)
-                        if (questStatusData._creatureOrGOcount[idx])
-                            SetQuestSlotCounter(slot, idx, questStatusData._creatureOrGOcount[idx]);
+                        if (questStatusData.CreatureOrGOCount[idx])
+                            SetQuestSlotCounter(slot, idx, questStatusData.CreatureOrGOCount[idx]);
 
-                    if (questStatusData._playercount)
-                        SetQuestSlotCounter(slot, QUEST_PVP_KILL_SLOT, questStatusData._playercount);
+                    if (questStatusData.PlayerCount)
+                        SetQuestSlotCounter(slot, QUEST_PVP_KILL_SLOT, questStatusData.PlayerCount);
 
                     ++slot;
                 }
 
-                sLog->outDebug(LOG_FILTER_PLAYER_LOADING, "Quest status is {%u} for quest {%u} for player (GUID: %u)", questStatusData._status, quest_id, GetGUIDLow());
+                sLog->outDebug(LOG_FILTER_PLAYER_LOADING, "Quest status is {%u} for quest {%u} for player (GUID: %u)", questStatusData.Status, quest_id, GetGUIDLow());
             }
         }
         while (result->NextRow());
@@ -19167,7 +19166,7 @@ void Player::SaveToDB(bool create /*=false*/)
     outDebugValues();
 
     PreparedStatement* stmt = NULL;
-    uint16 index = 0;
+    uint8 index = 0;
 
     if (create)
     {
@@ -19263,7 +19262,7 @@ void Player::SaveToDB(bool create /*=false*/)
         stmt->setString(index++, ss.str());
         stmt->setUInt8(index++, GetByteValue(PLAYER_FIELD_BYTES, 2));
         stmt->setUInt8(index++, _currentPetSlot);
-        stmt->setUInt64(index++, _petSlotUsed);
+        stmt->setUInt32(index++, _petSlotUsed);
         stmt->setUInt32(index++, _grantableLevels);
     }
     else
@@ -19371,7 +19370,7 @@ void Player::SaveToDB(bool create /*=false*/)
         stmt->setString(index++, ss.str());
         stmt->setUInt8(index++, GetByteValue(PLAYER_FIELD_BYTES, 2));
         stmt->setUInt8(index++, _currentPetSlot);
-        stmt->setUInt64(index++, _petSlotUsed);
+        stmt->setUInt32(index++, _petSlotUsed);
         stmt->setUInt32(index++, _grantableLevels);
 
         stmt->setUInt8(index++, IsInWorld() ? 1 : 0);
@@ -19431,7 +19430,7 @@ void Player::SaveInventoryAndGoldToDB(SQLTransaction& trans)
 
 void Player::SaveGoldToDB(SQLTransaction& trans)
 {
-    trans->PAppend("UPDATE characters SET money = '%u' WHERE guid = '%u'", GetMoney(), GetGUIDLow());
+    trans->PAppend("UPDATE characters SET money = '" UI64FMTD "' WHERE guid = '%u'", GetMoney(), GetGUIDLow());
 }
 
 void Player::_SaveActions(SQLTransaction& trans)
@@ -19640,7 +19639,7 @@ void Player::_SaveMail(SQLTransaction& trans)
         Mail *m = (*itr);
         if (m->state == MAIL_STATE_CHANGED)
         {
-            trans->PAppend("UPDATE mail SET has_items = '%u', expire_time = '" UI64FMTD "', deliver_time = '" UI64FMTD "', money = '%u', cod = '%u', checked = '%u' WHERE id = '%u'",
+            trans->PAppend("UPDATE mail SET has_items = '%u', expire_time = '" UI64FMTD "', deliver_time = '" UI64FMTD "', money = '" UI64FMTD "', cod = '" UI64FMTD "', checked = '%u' WHERE id = '%u'",
                 m->HasItems() ? 1 : 0, (uint64)m->expire_time, (uint64)m->deliver_time, m->money, m->COD, m->checked, m->messageID);
             if (!m->removedItems.empty())
             {
@@ -19700,10 +19699,10 @@ void Player::_SaveQuestStatus(SQLTransaction& trans)
         if (saveItr->second)
         {
             statusItr = _QuestStatus.find(saveItr->first);
-            if (statusItr != _QuestStatus.end() && (keepAbandoned || statusItr->second._status != QUEST_STATUS_NONE))
+            if (statusItr != _QuestStatus.end() && (keepAbandoned || statusItr->second.Status != QUEST_STATUS_NONE))
                 trans->PAppend("REPLACE INTO character_queststatus (guid, quest, status, explored, timer, mobcount1, mobcount2, mobcount3, mobcount4, itemcount1, itemcount2, itemcount3, itemcount4, playercount) "
                     "VALUES ('%u', '%u', '%u', '%u', '" UI64FMTD "', '%u', '%u', '%u', '%u', '%u', '%u', '%u', '%u', '%u')",
-                    GetGUIDLow(), statusItr->first, statusItr->second._status, statusItr->second._explored, uint64(statusItr->second._timer / IN_MILLISECONDS+ sWorld->GetGameTime()), statusItr->second._creatureOrGOcount[0], statusItr->second._creatureOrGOcount[1], statusItr->second._creatureOrGOcount[2], statusItr->second._creatureOrGOcount[3], statusItr->second._itemcount[0], statusItr->second._itemcount[1], statusItr->second._itemcount[2], statusItr->second._itemcount[3], statusItr->second._playercount);
+                    GetGUIDLow(), statusItr->first, statusItr->second.Status, statusItr->second.Explored, uint64(statusItr->second.Timer / IN_MILLISECONDS+ sWorld->GetGameTime()), statusItr->second.CreatureOrGOCount[0], statusItr->second.CreatureOrGOCount[1], statusItr->second.CreatureOrGOCount[2], statusItr->second.CreatureOrGOCount[3], statusItr->second.ItemCount[0], statusItr->second.ItemCount[1], statusItr->second.ItemCount[2], statusItr->second.ItemCount[3], statusItr->second.PlayerCount);
         }
         else
             trans->PAppend("DELETE FROM character_queststatus WHERE guid = %u AND quest = %u", GetGUIDLow(), saveItr->first);
@@ -19741,7 +19740,7 @@ void Player::_SaveDailyQuestStatus(SQLTransaction& trans)
     for (uint32 quest_daily_idx = 0; quest_daily_idx < PLAYER_MAX_DAILY_QUESTS; ++quest_daily_idx)
         if (GetUInt32Value(PLAYER_FIELD_DAILY_QUESTS_1+quest_daily_idx))
         {
-            PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_CHARACTER_DAILYQUESTSTATUS);
+            stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_CHARACTER_DAILYQUESTSTATUS);
             stmt->setUInt32(0, GetGUIDLow());
             stmt->setUInt32(1, GetUInt32Value(PLAYER_FIELD_DAILY_QUESTS_1+quest_daily_idx));
             stmt->setUInt64(2, uint64(_lastDailyQuestTime));
@@ -19775,7 +19774,7 @@ void Player::_SaveWeeklyQuestStatus(SQLTransaction& trans)
     {
         uint32 quest_id  = *iter;
 
-        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_CHARACTER_WEEKLYQUESTSTATUS);
+        stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_CHARACTER_WEEKLYQUESTSTATUS);
         stmt->setUInt32(0, GetGUIDLow());
         stmt->setUInt32(1, quest_id);
         trans->Append(stmt);
@@ -19801,7 +19800,7 @@ void Player::_SaveSeasonalQuestStatus(SQLTransaction& trans)
         {
             uint32 quest_id = (*itr);
 
-            PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_CHARACTER_SEASONALQUESTSTATUS);
+            stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_CHARACTER_SEASONALQUESTSTATUS);
             stmt->setUInt32(0, GetGUIDLow());
             stmt->setUInt32(1, quest_id);
             stmt->setUInt32(2, event_id);
@@ -19928,7 +19927,8 @@ void Player::_SaveStats(SQLTransaction& trans)
         << GetFloatValue(PLAYER_SPELL_CRIT_PERCENTAGE1) << ','
         << GetUInt32Value(UNIT_FIELD_ATTACK_POWER) << ','
         << GetUInt32Value(UNIT_FIELD_RANGED_ATTACK_POWER) << ','
-        << GetBaseSpellPowerBonus() << ')';
+        << GetBaseSpellPowerBonus() << ','
+        << GetUInt32Value(PLAYER_FIELD_COMBAT_RATING_1 + CR_CRIT_TAKEN_SPELL) << ')';
     trans->Append(ss.str().c_str());
 }
 
@@ -20472,7 +20472,7 @@ void Player::PetSpellInitialize()
 
     WorldPacket data(SMSG_PET_SPELLS, 8+2+4+4+4*MAX_UNIT_ACTION_BAR_INDEX+1+1);
     data << uint64(pet->GetGUID());
-    data << uint16(pet->GetCreatureInfo()->family);         // creature family (required for pet talents)
+    data << uint16(pet->GetCreatureTemplate()->family);         // creature family (required for pet talents)
     data << uint32(0);
     data << uint8(pet->GetReactState()) << uint8(charmInfo->GetCommandState()) << uint16(0);
 
@@ -20566,7 +20566,7 @@ void Player::VehicleSpellInitialize()
 
     WorldPacket data(SMSG_PET_SPELLS, 8 + 2 + 4 + 4 + 4 * 10 + 1 + 1 + cooldownCount * (4 + 2 + 4 + 4));
     data << uint64(veh->GetGUID());
-    data << uint16(veh->GetCreatureInfo()->family);
+    data << uint16(veh->GetCreatureTemplate()->family);
     data << uint32(0);
     // The following three segments are read as one uint32
     data << uint8(veh->GetReactState());
@@ -20584,7 +20584,7 @@ void Player::VehicleSpellInitialize()
         }
 
         ConditionList conditions = sConditionMgr->GetConditionsForVehicleSpell(veh->GetEntry(), spellId);
-        if (!sConditionMgr->IsPlayerMeetToConditions(this, conditions))
+        if (!sConditionMgr->IsObjectMeetToConditions(this, veh, conditions))
         {
             sLog->outDebug(LOG_FILTER_CONDITIONSYS, "VehicleSpellInitialize: conditions not met for Vehicle entry %u spell %u", veh->ToCreature()->GetEntry(), spellId);
             data << uint16(0) << uint8(0) << uint8(i+8);
@@ -20652,7 +20652,7 @@ void Player::CharmSpellInitialize()
     uint8 addlist = 0;
     if (charm->GetTypeId() != TYPEID_PLAYER)
     {
-        //CreatureInfo const* cinfo = charm->ToCreature()->GetCreatureInfo();
+        //CreatureInfo const* cinfo = charm->ToCreature()->GetCreatureTemplate();
         //if (cinfo && cinfo->type == CREATURE_TYPE_DEMON && getClass() == CLASS_WARLOCK)
         {
             for (uint32 i = 0; i < MAX_SPELL_CHARM; ++i)
@@ -20818,9 +20818,7 @@ bool Player::ActivateTaxiPathTo(std::vector<uint32> const& nodes, Creature* npc 
     // not let cheating with start flight in time of logout process || while in combat || has type state: stunned || has type state: root
     if (GetSession()->isLogingOut() || isInCombat() || HasUnitState(UNIT_STATE_STUNNED) || HasUnitState(UNIT_STATE_ROOT))
     {
-        WorldPacket data(SMSG_ACTIVATETAXIREPLY, 4);
-        data << uint32(ERR_TAXIPLAYERBUSY);
-        GetSession()->SendPacket(&data);
+        GetSession()->SendActivateTaxiReply(ERR_TAXIPLAYERBUSY);
         return false;
     }
 
@@ -20833,26 +20831,20 @@ bool Player::ActivateTaxiPathTo(std::vector<uint32> const& nodes, Creature* npc 
         // not let cheating with start flight mounted
         if (IsMounted())
         {
-            WorldPacket data(SMSG_ACTIVATETAXIREPLY, 4);
-            data << uint32(ERR_TAXIPLAYERALREADYMOUNTED);
-            GetSession()->SendPacket(&data);
+            GetSession()->SendActivateTaxiReply(ERR_TAXIPLAYERALREADYMOUNTED);
             return false;
         }
 
         if (IsInDisallowedMountForm())
         {
-            WorldPacket data(SMSG_ACTIVATETAXIREPLY, 4);
-            data << uint32(ERR_TAXIPLAYERSHAPESHIFTED);
-            GetSession()->SendPacket(&data);
+            GetSession()->SendActivateTaxiReply(ERR_TAXIPLAYERSHAPESHIFTED);
             return false;
         }
 
         // not let cheating with start flight in time of logout process || if casting not finished || while in combat || if not use Spell's with EffectSendTaxi
         if (IsNonMeleeSpellCasted(false))
         {
-            WorldPacket data(SMSG_ACTIVATETAXIREPLY, 4);
-            data << uint32(ERR_TAXIPLAYERBUSY);
-            GetSession()->SendPacket(&data);
+            GetSession()->SendActivateTaxiReply(ERR_TAXIPLAYERBUSY);
             return false;
         }
     }
@@ -20881,9 +20873,7 @@ bool Player::ActivateTaxiPathTo(std::vector<uint32> const& nodes, Creature* npc 
     TaxiNodesEntry const* node = sTaxiNodesStore.LookupEntry(sourcenode);
     if (!node)
     {
-        WorldPacket data(SMSG_ACTIVATETAXIREPLY, 4);
-        data << uint32(ERR_TAXINOSUCHPATH);
-        GetSession()->SendPacket(&data);
+        GetSession()->SendActivateTaxiReply(ERR_TAXINOSUCHPATH);
         return false;
     }
 
@@ -20896,18 +20886,14 @@ bool Player::ActivateTaxiPathTo(std::vector<uint32> const& nodes, Creature* npc 
             (node->z - GetPositionZ())*(node->z - GetPositionZ()) >
             (2*INTERACTION_DISTANCE)*(2*INTERACTION_DISTANCE)*(2*INTERACTION_DISTANCE))
         {
-            WorldPacket data(SMSG_ACTIVATETAXIREPLY, 4);
-            data << uint32(ERR_TAXITOOFARAWAY);
-            GetSession()->SendPacket(&data);
+            GetSession()->SendActivateTaxiReply(ERR_TAXITOOFARAWAY);
             return false;
         }
     }
     // node must have pos if taxi master case (npc != NULL)
     else if (npc)
     {
-        WorldPacket data(SMSG_ACTIVATETAXIREPLY, 4);
-        data << uint32(ERR_TAXIUNSPECIFIEDSERVERERROR);
-        GetSession()->SendPacket(&data);
+        GetSession()->SendActivateTaxiReply(ERR_TAXIUNSPECIFIEDSERVERERROR);
         return false;
     }
 
@@ -20970,9 +20956,7 @@ bool Player::ActivateTaxiPathTo(std::vector<uint32> const& nodes, Creature* npc 
     // in spell case allow 0 model
     if ((mount_display_id == 0 && spellid == 0) || sourcepath == 0)
     {
-        WorldPacket data(SMSG_ACTIVATETAXIREPLY, 4);
-        data << uint32(ERR_TAXIUNSPECIFIEDSERVERERROR);
-        GetSession()->SendPacket(&data);
+        GetSession()->SendActivateTaxiReply(ERR_TAXIUNSPECIFIEDSERVERERROR);
         _taxi.ClearTaxiDestinations();
         return false;
     }
@@ -20984,9 +20968,7 @@ bool Player::ActivateTaxiPathTo(std::vector<uint32> const& nodes, Creature* npc 
 
     if (money < totalcost)
     {
-        WorldPacket data(SMSG_ACTIVATETAXIREPLY, 4);
-        data << uint32(ERR_TAXINOTENOUGHMONEY);
-        GetSession()->SendPacket(&data);
+        GetSession()->SendActivateTaxiReply(ERR_TAXINOTENOUGHMONEY);
         _taxi.ClearTaxiDestinations();
         return false;
     }
@@ -21008,10 +20990,7 @@ bool Player::ActivateTaxiPathTo(std::vector<uint32> const& nodes, Creature* npc 
     }
     else
     {
-        WorldPacket data(SMSG_ACTIVATETAXIREPLY, 4);
-        data << uint32(ERR_TAXIOK);
-        GetSession()->SendPacket(&data);
-        sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Sent SMSG_ACTIVATETAXIREPLY");
+        GetSession()->SendActivateTaxiReply(ERR_TAXIOK);
         GetSession()->SendDoFlight(mount_display_id, sourcepath);
     }
     return true;
@@ -21367,16 +21346,25 @@ bool Player::BuyItemFromVendorSlot(uint64 vendorguid, uint32 vendorslot, uint32 
         }
     }
 
-    uint64 price  = crItem->IsGoldRequired(proto) ? proto->BuyPrice * count : 0;
-
-    // reputation discount
-    if (price)
+    uint64 price = 0;
+    if (crItem->IsGoldRequired(proto) && proto->BuyPrice > 0) //Assume price cannot be negative (do not know why it is int32)
+    {
+        uint32 maxCount = MAX_MONEY_AMOUNT / proto->BuyPrice;
+        if((uint32)count > maxCount)
+        {
+            sLog->outError("Player %s tried to buy %u item id %u, causing overflow", GetName(), (uint32)count, proto->ItemId);
+            count = (uint8)maxCount;
+        }
+        price = proto->BuyPrice * count; //it should not exceed MAX_MONEY_AMOUNT
+        
+        // reputation discount
         price = uint32(floor(price * GetReputationPriceDiscount(creature)));
 
-    if (!HasEnoughMoney(price))
-    {
-        SendBuyError(BUY_ERR_NOT_ENOUGHT_MONEY, creature, item, 0);
-        return false;
+        if (!HasEnoughMoney(price))
+        {
+            SendBuyError(BUY_ERR_NOT_ENOUGHT_MONEY, creature, item, 0);
+            return false;
+        }
     }
 
     if ((bag == NULL_BAG && slot == NULL_SLOT) || IsInventoryPos(bag, slot))
@@ -22894,7 +22882,7 @@ bool Player::HasQuestForGO(int32 GOId) const
 
         QuestStatusData const& qs = qs_itr->second;
 
-        if (qs._status == QUEST_STATUS_INCOMPLETE)
+        if (qs.Status == QUEST_STATUS_INCOMPLETE)
         {
             Quest const* qinfo = sObjectMgr->GetQuestTemplate(questid);
             if (!qinfo)
@@ -22908,7 +22896,7 @@ bool Player::HasQuestForGO(int32 GOId) const
                 if (qinfo->ReqCreatureOrGOId[j] >= 0)       //skip non GO case
                     continue;
 
-                if ((-1)*GOId == qinfo->ReqCreatureOrGOId[j] && qs._creatureOrGOcount[j] < qinfo->ReqCreatureOrGOCount[j])
+                if ((-1)*GOId == qinfo->ReqCreatureOrGOId[j] && qs.CreatureOrGOCount[j] < qinfo->ReqCreatureOrGOCount[j])
                     return true;
             }
         }
@@ -22941,12 +22929,22 @@ void Player::UpdateForQuestWorldObjects()
                 continue;
 
             SpellClickInfoMapBounds clickPair = sObjectMgr->GetSpellClickInfoMapBounds(obj->GetEntry());
-            for (SpellClickInfoMap::const_iterator _itr = clickPair.first; _itr != clickPair.second; ++_itr)
-                if (_itr->second.questStart || _itr->second.questEnd)
+            for (SpellClickInfoContainer::const_iterator _itr = clickPair.first; _itr != clickPair.second; ++_itr)
+            {
+                //! This code doesn't look right, but it was logically converted to condition system to do the exact
+                //! same thing it did before. It definitely needs to be overlooked for intended functionality.
+                ConditionList conds = sConditionMgr->GetConditionsForSpellClickEvent(obj->GetEntry(), _itr->second.spellId);
+                bool buildUpdateBlock = false;
+                for (ConditionList::const_iterator jtr = conds.begin(); jtr != conds.end() && !buildUpdateBlock; ++jtr)
+                    if ((*jtr)->ConditionType == CONDITION_QUESTREWARDED || (*jtr)->ConditionType == CONDITION_QUESTTAKEN)
+                        buildUpdateBlock = true;
+
+                if (buildUpdateBlock)
                 {
                     obj->BuildCreateUpdateBlockForPlayer(&udata, this);
                     break;
                 }
+            }
         }
     }
     udata.BuildPacket(&packet);
@@ -23196,7 +23194,7 @@ bool Player::isHonorOrXPTarget(Unit* victim)
     {
         if (victim->ToCreature()->isTotem() ||
             victim->ToCreature()->isPet() ||
-            victim->ToCreature()->GetCreatureInfo()->flags_extra & CREATURE_FLAG_EXTRA_NO_XP_AT_KILL)
+            victim->ToCreature()->GetCreatureTemplate()->flags_extra & CREATURE_FLAG_EXTRA_NO_XP_AT_KILL)
                 return false;
     }
     return true;
@@ -23319,12 +23317,11 @@ uint32 Player::GetBaseWeaponSkillValue (WeaponAttackType attType) const
 void Player::ResurectUsingRequestData()
 {
     /// Teleport before resurrecting by player, otherwise the player might get attacked from creatures near his corpse
-    if (IS_PLAYER_GUID(m_resurrectGUID))
-        TeleportTo(m_resurrectMap, m_resurrectX, m_resurrectY, m_resurrectZ, GetOrientation());
+    TeleportTo(m_resurrectMap, m_resurrectX, m_resurrectY, m_resurrectZ, GetOrientation());
 
     //we cannot resurrect player when we triggered far teleport
     //player will be resurrected upon teleportation
-    if (IsBeingTeleportedFar())
+    if (IsBeingTeleported())
     {
         ScheduleDelayedOperation(DELAYED_RESURRECT_PLAYER);
         return;
@@ -23604,7 +23601,7 @@ void Player::UpdateUnderwaterState(Map* m, float x, float y, float z)
     ZLiquidStatus res = m->getLiquidStatus(x, y, z, MAP_ALL_LIQUIDS, &liquid_status);
     if (!res)
     {
-        _MirrorTimerFlags &= ~(UNDERWATER_INWATER|UNDERWATER_INLAVA|UNDERWATER_INSLIME|UNDERWARER_INDARKWATER);
+        _MirrorTimerFlags &= ~(UNDERWATER_INWATER | UNDERWATER_INLAVA | UNDERWATER_INSLIME | UNDERWARER_INDARKWATER);
         // Small hack for enable breath in WMO
         /* if (IsInWater())
             _MirrorTimerFlags|=UNDERWATER_INWATER; */
@@ -23612,7 +23609,7 @@ void Player::UpdateUnderwaterState(Map* m, float x, float y, float z)
     }
 
     // All liquids type - check under water position
-    if (liquid_status.type&(MAP_LIQUID_TYPE_WATER|MAP_LIQUID_TYPE_OCEAN|MAP_LIQUID_TYPE_MAGMA|MAP_LIQUID_TYPE_SLIME))
+    if (liquid_status.type&(MAP_LIQUID_TYPE_WATER | MAP_LIQUID_TYPE_OCEAN | MAP_LIQUID_TYPE_MAGMA | MAP_LIQUID_TYPE_SLIME))
     {
         if (res & LIQUID_MAP_UNDER_WATER)
             _MirrorTimerFlags |= UNDERWATER_INWATER;
@@ -23629,7 +23626,7 @@ void Player::UpdateUnderwaterState(Map* m, float x, float y, float z)
     // in lava check, anywhere in lava level
     if (liquid_status.type&MAP_LIQUID_TYPE_MAGMA)
     {
-        if (res & (LIQUID_MAP_UNDER_WATER|LIQUID_MAP_IN_WATER|LIQUID_MAP_WATER_WALK))
+        if (res & (LIQUID_MAP_UNDER_WATER | LIQUID_MAP_IN_WATER | LIQUID_MAP_WATER_WALK))
             _MirrorTimerFlags |= UNDERWATER_INLAVA;
         else
             _MirrorTimerFlags &= ~UNDERWATER_INLAVA;
@@ -23637,7 +23634,7 @@ void Player::UpdateUnderwaterState(Map* m, float x, float y, float z)
     // in slime check, anywhere in slime level
     if (liquid_status.type&MAP_LIQUID_TYPE_SLIME)
     {
-        if (res & (LIQUID_MAP_UNDER_WATER|LIQUID_MAP_IN_WATER|LIQUID_MAP_WATER_WALK))
+        if (res & (LIQUID_MAP_UNDER_WATER|LIQUID_MAP_IN_WATER | LIQUID_MAP_WATER_WALK))
             _MirrorTimerFlags |= UNDERWATER_INSLIME;
         else
             _MirrorTimerFlags &= ~UNDERWATER_INSLIME;
@@ -23863,7 +23860,6 @@ void Player::SetTitle(CharTitlesEntry const* title, bool lost)
     GetSession()->SendPacket(&data);
 }
 
-/*-----------------------TRINITY--------------------------*/
 bool Player::isTotalImmunity()
 {
     AuraEffectList const& immune = GetAuraEffectsByType(SPELL_AURA_SCHOOL_IMMUNITY);
@@ -23950,6 +23946,9 @@ void Player::RemoveRunesByAuraEffect(AuraEffect const* aura)
 void Player::RestoreBaseRune(uint8 index)
 {
     AuraEffect const* aura = _runes->runes[index].ConvertAura;
+    // If rune was converted by a non-pasive aura that still active we should keep it converted
+    if (aura && !(aura->GetSpellInfo()->Attributes & SPELL_ATTR0_PASSIVE))
+        return;
     ConvertRune(index, GetBaseRune(index));
     SetRuneConvertAura(index, NULL);
     // Don't drop passive talents providing rune convertion
@@ -24637,7 +24636,7 @@ void Player::LearnPetTalent(uint64 petGuid, uint32 talentId, uint32 talentRank)
     if (!talentTabInfo)
         return;
 
-    CreatureTemplate const *ci = pet->GetCreatureInfo();
+    CreatureTemplate const *ci = pet->GetCreatureTemplate();
 
     if (!ci)
         return;
@@ -24793,11 +24792,17 @@ bool Player::canSeeSpellClickOn(Creature const *c) const
     if (clickPair.first == clickPair.second)
         return true;
 
-    for (SpellClickInfoMap::const_iterator itr = clickPair.first; itr != clickPair.second; ++itr)
-        if (itr->second.IsFitToRequirements(this, c))
+    for (SpellClickInfoContainer::const_iterator itr = clickPair.first; itr != clickPair.second; ++itr)
+    {
+        if (!itr->second.IsFitToRequirements(this, c))
             return true;
 
-    return false;
+        ConditionList conds = sConditionMgr->GetConditionsForSpellClickEvent(c->GetEntry(), itr->second.spellId);
+        ConditionSourceInfo info = ConditionSourceInfo(const_cast<Player*>(this), const_cast<Creature*>(c));
+        if (!sConditionMgr->IsObjectMeetToConditions(info, conds))
+            return false;
+    }
+    return true;
 }
 
 void Player::BuildPlayerTalentsInfoData(WorldPacket *data)
@@ -24886,7 +24891,7 @@ void Player::BuildPetTalentsInfoData(WorldPacket *data)
 
     data->put<uint32>(pointsPos, unspentTalentPoints);      // put real points
 
-    CreatureTemplate const *ci = pet->GetCreatureInfo();
+    CreatureTemplate const *ci = pet->GetCreatureTemplate();
     if (!ci)
         return;
 
@@ -25207,7 +25212,7 @@ void Player::ResetMap()
     GetMapRef().unlink();
 }
 
-void Player::SetMap(Map * map)
+void Player::SetMap(Map* map)
 {
     Unit::SetMap(map);
     m_mapRef.link(map, this);

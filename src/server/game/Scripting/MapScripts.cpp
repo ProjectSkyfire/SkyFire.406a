@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -40,9 +40,9 @@ void Map::ScriptsStart(ScriptMapMap const& scripts, uint32 id, Object* source, O
         return;
 
     // prepare static data
-    uint64 sourceGUID = source ? source->GetGUID() : (uint64)0; //some script commands doesn't have source
-    uint64 targetGUID = target ? target->GetGUID() : (uint64)0;
-    uint64 ownerGUID  = (source->GetTypeId() == TYPEID_ITEM) ? ((Item*)source)->GetOwnerGUID() : (uint64)0;
+    uint64 sourceGUID = source ? source->GetGUID() : uint64(0); //some script commands doesn't have source
+    uint64 targetGUID = target ? target->GetGUID() : uint64(0);
+    uint64 ownerGUID  = (source && source->GetTypeId() == TYPEID_ITEM) ? ((Item*)source)->GetOwnerGUID() : uint64(0);
 
     ///- Schedule script execution for all scripts in the script map
     ScriptMap const* s2 = &(s->second);
@@ -75,9 +75,9 @@ void Map::ScriptCommandStart(ScriptInfo const& script, uint32 delay, Object* sou
     // NOTE: script record _must_ exist until command executed
 
     // prepare static data
-    uint64 sourceGUID = source ? source->GetGUID() : (uint64)0;
-    uint64 targetGUID = target ? target->GetGUID() : (uint64)0;
-    uint64 ownerGUID  = (source->GetTypeId() == TYPEID_ITEM) ? ((Item*)source)->GetOwnerGUID() : (uint64)0;
+    uint64 sourceGUID = source ? source->GetGUID() : uint64(0);
+    uint64 targetGUID = target ? target->GetGUID() : uint64(0);
+    uint64 ownerGUID  = (source && source->GetTypeId() == TYPEID_ITEM) ? ((Item*)source)->GetOwnerGUID() : uint64(0);
 
     ScriptAction sa;
     sa.sourceGUID = sourceGUID;
@@ -710,26 +710,26 @@ void Map::ScriptsProcess()
                 // source/target cast spell at target/source (script->datalong2: 0: s->t 1: s->s 2: t->t 3: t->s
                 switch (step.script->CastSpell.Flags)
                 {
-                    case SF_CASTSPELL_SOURCE_TO_TARGET: // source -> target
-                        uSource = source ? source->ToUnit() : NULL;
-                        uTarget = target ? target->ToUnit() : NULL;
-                        break;
-                    case SF_CASTSPELL_SOURCE_TO_SOURCE: // source -> source
-                        uSource = source ? source->ToUnit() : NULL;
-                        uTarget = uSource;
-                        break;
-                    case SF_CASTSPELL_TARGET_TO_TARGET: // target -> target
-                        uSource = target ? target->ToUnit() : NULL;
-                        uTarget = uSource;
-                        break;
-                    case SF_CASTSPELL_TARGET_TO_SOURCE: // target -> source
-                        uSource = target ? target->ToUnit() : NULL;
-                        uTarget = source ? source->ToUnit() : NULL;
-                        break;
-                    case SF_CASTSPELL_SEARCH_CREATURE: // source -> creature with entry
-                        uSource = source ? source->ToUnit() : NULL;
-                        uTarget = uSource ? GetClosestCreatureWithEntry(uSource, abs(step.script->CastSpell.CreatureEntry), step.script->CastSpell.SearchRadius) : NULL;
-                        break;
+                case SF_CASTSPELL_SOURCE_TO_TARGET: // source -> target
+                    uSource = dynamic_cast<Unit*>(source);
+                    uTarget = dynamic_cast<Unit*>(target);
+                    break;
+                case SF_CASTSPELL_SOURCE_TO_SOURCE: // source -> source
+                    uSource = dynamic_cast<Unit*>(source);
+                    uTarget = uSource;
+                    break;
+                case SF_CASTSPELL_TARGET_TO_TARGET: // target -> target
+                    uSource = dynamic_cast<Unit*>(target);
+                    uTarget = uSource;
+                    break;
+                case SF_CASTSPELL_TARGET_TO_SOURCE: // target -> source
+                    uSource = dynamic_cast<Unit*>(target);
+                    uTarget = dynamic_cast<Unit*>(source);
+                    break;
+                case SF_CASTSPELL_SEARCH_CREATURE: // source -> creature with entry
+                    uSource = dynamic_cast<Unit*>(source);
+                    uTarget = GetClosestCreatureWithEntry(uSource, abs(step.script->CastSpell.CreatureEntry), step.script->CastSpell.SearchRadius);
+                    break;
                 }
 
                 if (!uSource || !uSource->isType(TYPEMASK_UNIT))

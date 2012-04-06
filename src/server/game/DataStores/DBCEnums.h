@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -73,7 +73,7 @@ enum AchievementFlags
     ACHIEVEMENT_FLAG_UNK4                   = 0x00001000,        // as guild group?
     ACHIEVEMENT_FLAG_UNK5                   = 0x00002000,        // as guild group?
     ACHIEVEMENT_FLAG_GUILD_ACHIEVEMENT      = 0x00004000,        //
-    ACHIEVEMENT_FLAG_SHOW_GUILD_MEMBERS	    = 0x00008000,        //
+    ACHIEVEMENT_FLAG_SHOW_GUILD_MEMBERS        = 0x00008000,        //
     ACHIEVEMENT_FLAG_SHOW_CRITERIA_MEMBERS  = 0x00010000,        //
 };
 
@@ -249,13 +249,13 @@ enum AchievementCriteriaTypes
 
 enum AchievementCriteriaMoreReqType
 {
-    ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_DRUNKEN_STATE		  = 1,
+    ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_DRUNKEN_STATE          = 1,
     ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_ITEM_LEVEL             = 3,
     ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_CREATURE_ID            = 4,
-    ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_TARGET_TYPE			  = 5,
+    ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_TARGET_TYPE              = 5,
     ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_AURA                   = 8,
     ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_AURA_ON_TARGET         = 10,
-    ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_MOUNTED				  = 11,
+    ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_MOUNTED                  = 11,
     ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_ITEM_QUALITY_EQUIPPED  = 14,
     ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_ITEM_QUALITY_LOOTED    = 15,
     ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_AREA_ID                = 17,
@@ -270,12 +270,12 @@ enum AchievementCriteriaMoreReqType
     ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_CREATURE_TYPE          = 30,
     ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_MAP_ID                 = 32,
     ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_TIMED_QUEST            = 35,
-    ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_PERSONAL_RATING		  = 37,
+    ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_PERSONAL_RATING          = 37,
     ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_PLAYER_TITLE           = 38,
     ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_PLAYER_LEVEL           = 39,
     ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_PLAYER_LEVEL2          = 40,
     ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_ZONE_ID                = 41,
-    ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_T_HEALTH_UNDER_PCT	  = 46, // target
+    ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_T_HEALTH_UNDER_PCT      = 46, // target
     ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_REQUIRES_GUILD_GROUP   = 61,
     ACHIEVEMENT_CRITERIA_MORE_REQ_TYPE_GUILD_REP              = 62,
 };
@@ -500,9 +500,10 @@ enum CurrencyTypes
     CURRENCY_TYPE_VALOR_POINTS                   = 396,
 };
 
+#define DB2TYPE_ITEM_SPARSE                        2442913102            // hash of item-sparse.db2
+
 enum DB2Types
 {
-    DB2TYPE_ITEM_SPARSE                          = 2442913102,           // hash of item-sparse.db2
     DB2TYPE_ITEM                                 = 1344507586,           // hash of item.db2
     ITEM_TEMPLATE_UPDATE_REGISTER                = 1091717232,           // what is this for?
 };

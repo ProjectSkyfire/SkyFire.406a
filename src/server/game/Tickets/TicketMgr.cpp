@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -199,6 +199,12 @@ void GmTicket::TeleportTo(Player* player) const
 // Ticket manager
 TicketMgr::TicketMgr() : _status(true), _lastTicketId(0), _lastSurveyId(0), _openTicketCount(0), _lastChange(time(NULL)) { }
 
+TicketMgr::~TicketMgr()
+{
+    for (GmTicketList::const_iterator itr = _ticketList.begin(); itr != _ticketList.end(); ++itr)
+        delete itr->second;
+}
+
 void TicketMgr::Initialize() { SetStatus(sWorld->getBoolConfig(CONFIG_ALLOW_TICKETS)); }
 
 void TicketMgr::ResetTickets()
@@ -218,10 +224,8 @@ void TicketMgr::LoadTickets()
 {
     uint32 oldMSTime = getMSTime();
 
-    if (!_ticketList.empty())
-        for (GmTicketList::const_iterator itr = _ticketList.begin(); itr != _ticketList.end(); ++itr)
-            if (itr->second)
-                delete itr->second;
+    for (GmTicketList::const_iterator itr = _ticketList.begin(); itr != _ticketList.end(); ++itr)
+        delete itr->second;
     _ticketList.clear();
 
     _lastTicketId = 0;
@@ -302,6 +306,7 @@ void TicketMgr::RemoveTicket(uint32 ticketId)
     {
         ticket->DeleteFromDB();
         _ticketList.erase(ticketId);
+        delete ticket;
     }
 }
 

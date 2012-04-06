@@ -1,9 +1,10 @@
 /*
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -81,7 +82,7 @@ public:
 
     struct boss_sapphironAI : public BossAI
     {
-        boss_sapphironAI(Creature* c) : BossAI(c, BOSS_SAPPHIRON)
+        boss_sapphironAI(Creature* creature) : BossAI(creature, BOSS_SAPPHIRON)
             , phase(PHASE_NULL)
         {
             map = me->GetMap();
@@ -153,7 +154,7 @@ public:
             CheckPlayersFrostResist();
             if (CanTheHundredClub)
             {
-                AchievementEntry const* AchievTheHundredClub = GetAchievementStore()->LookupEntry(ACHIEVEMENT_THE_HUNDRED_CLUB);
+                AchievementEntry const* AchievTheHundredClub = sAchievementStore.LookupEntry(ACHIEVEMENT_THE_HUNDRED_CLUB);
                 if (AchievTheHundredClub)
                 {
                     if (map && map->IsDungeon())
@@ -296,7 +297,7 @@ public:
                     {
                         case EVENT_LIFTOFF:
                             me->HandleEmoteCommand(EMOTE_ONESHOT_LIFTOFF);
-                            me->AddUnitMovementFlag(MOVEMENTFLAG_LEVITATING);
+                            me->SetLevitate(true);
                             me->SendMovementFlagUpdate();
                             events.ScheduleEvent(EVENT_ICEBOLT, 1500);
                             iceboltCount = RAID_MODE(2, 3);
@@ -340,7 +341,7 @@ public:
                             return;
                         case EVENT_LAND:
                             me->HandleEmoteCommand(EMOTE_ONESHOT_LAND);
-                            me->RemoveUnitMovementFlag(MOVEMENTFLAG_LEVITATING);
+                            me->SetLevitate(false);
                             me->SendMovementFlagUpdate();
                             events.ScheduleEvent(EVENT_GROUND, 1500);
                             return;

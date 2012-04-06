@@ -1,10 +1,11 @@
 /*
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2006-2012 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -33,6 +34,7 @@ EndContentData */
 #include "ScriptPCH.h"
 #include "World.h"
 #include "WorldPacket.h"
+#include "CreatureTextMgr.h"
 
 /*######
 ## mobs_spitelashes
@@ -50,7 +52,7 @@ public:
 
     struct mobs_spitelashesAI : public ScriptedAI
     {
-        mobs_spitelashesAI(Creature* c) : ScriptedAI(c) {}
+        mobs_spitelashesAI(Creature* creature) : ScriptedAI(creature) {}
 
         uint32 morphtimer;
         bool spellhit;
@@ -295,7 +297,7 @@ public:
 
     struct mob_rizzle_sprysprocketAI : public ScriptedAI
     {
-        mob_rizzle_sprysprocketAI(Creature* c) : ScriptedAI(c) {}
+        mob_rizzle_sprysprocketAI(Creature* creature) : ScriptedAI(creature) {}
 
         uint32 spellEscape_Timer;
         uint32 Teleport_Timer;
@@ -468,7 +470,7 @@ public:
 
     struct mob_depth_chargeAI : public ScriptedAI
     {
-        mob_depth_chargeAI(Creature* c) : ScriptedAI(c) {}
+        mob_depth_chargeAI(Creature* creature) : ScriptedAI(creature) {}
 
         bool we_must_die;
         uint32 must_die_timer;

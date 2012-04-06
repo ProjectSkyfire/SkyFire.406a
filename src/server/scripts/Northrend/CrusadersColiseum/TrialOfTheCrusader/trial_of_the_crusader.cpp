@@ -1,10 +1,11 @@
 /*
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2006-2012 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -254,7 +255,7 @@ class boss_lich_king_toc : public CreatureScript
                     summoned->SetDisplayId(11686);
                 }
                 if (m_pInstance) m_pInstance->SetData(TYPE_LICH_KING, IN_PROGRESS);
-                me->AddUnitMovementFlag(MOVEMENTFLAG_WALKING);
+                me->SetWalk(true);
             }
 
             void MovementInform(uint32 uiType, uint32 uiId)
@@ -377,7 +378,7 @@ class npc_fizzlebang_toc : public CreatureScript
 
             void Reset()
             {
-                me->AddUnitMovementFlag(MOVEMENTFLAG_WALKING);
+                me->SetWalk(true);
                 m_uiPortalGUID = 0;
                 me->GetMotionMaster()->MovePoint(1, ToCCommonLoc[10].GetPositionX(), ToCCommonLoc[10].GetPositionY()-60, ToCCommonLoc[10].GetPositionZ());
             }
@@ -389,7 +390,7 @@ class npc_fizzlebang_toc : public CreatureScript
                 switch (uiId)
                 {
                     case 1:
-                        me->RemoveUnitMovementFlag(MOVEMENTFLAG_WALKING);
+                        me->SetWalk(false);
                         if (m_pInstance)
                         {
                             m_pInstance->DoUseDoorOrButton(m_pInstance->GetData64(GO_MAIN_GATE_DOOR));

@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -1919,9 +1919,6 @@ void Guild::HandleRemoveRank(WorldSession* session, uint8 rankId)
 
 void Guild::HandleMemberDepositMoney(WorldSession* session, uint32 amount)
 {
-    if (!_GetPurchasedTabsSize())
-        return;                                                     // No guild bank tabs - no money in bank
-
     Player* player = session->GetPlayer();
 
     // Call script after validation and before money transfer.
@@ -1957,9 +1954,6 @@ void Guild::HandleMemberDepositMoney(WorldSession* session, uint32 amount)
 
 bool Guild::HandleMemberWithdrawMoney(WorldSession* session, uint32 amount, bool repair)
 {
-    if (!_GetPurchasedTabsSize())
-        return false;                                       // No guild bank tabs - no money
-
     if (m_bankMoney < amount)                               // Not enough money in bank
         return false;
 
@@ -3273,8 +3267,8 @@ void Guild::AddGuildNews(uint32 type, uint64 source_guild, int value1, int value
     stmt->setUInt8 (2, guildNews.m_timestamp);
     stmt->setUInt32(3, value1);
     stmt->setUInt32(4, value2);
-    stmt->setUInt8 (5, source_guild);
-    stmt->setUInt64(6, flags);
+    stmt->setUInt64 (5, source_guild);
+    stmt->setUInt8(6, flags);
     CharacterDatabase.ExecuteOrAppend(trans, stmt);
 
     WorldPacket data(SMSG_GUILD_NEWS_UPDATE, 8*5);

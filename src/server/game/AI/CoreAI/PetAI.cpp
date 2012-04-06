@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -98,7 +98,7 @@ void PetAI::UpdateAI(const uint32 diff)
             me->InterruptNonMeleeSpells(false);
             return;
         }
-    
+
         if (_needToStop())
         {
             sLog->outStaticDebug("Pet AI stopped attacking [guid=%u]", me->GetGUIDLow());
@@ -141,27 +141,27 @@ void PetAI::UpdateAI(const uint32 diff)
             if (!spellInfo)
                 continue;
 
+            // Check global cooldown
             if (me->GetCharmInfo() && me->GetCharmInfo()->GetGlobalCooldownMgr().HasGlobalCooldown(spellInfo))
                 continue;
 
+            // Check spell cooldown
+            if (me->HasSpellCooldown(spellInfo->Id))
+                continue;
+
+            // Check if pet is in combat and if spell can be cast
+            if (me->isInCombat() && !spellInfo->CanBeUsedInCombat())
+                continue;
+
+            // Prevent spells like Furious Howl from constantly casting out of
+            //  combat when the cooldown is up
+            if (!me->isInCombat() && !spellInfo->NeedsToBeTriggeredByCaster())
+                continue;
+
+            // We have a spell we can cast, let's pick a target
             if (spellInfo->IsPositive())
             {
-                // non combat spells allowed
-                // only pet spells have IsNonCombatSpell and not fit this reqs:
-                // Consume Shadows, Lesser Invisibility, so ignore checks for its
-                if (spellInfo->CanBeUsedInCombat())
-                {
-                    // allow only spell without spell cost or with spell cost but not duration limit
-                    int32 duration = spellInfo->GetDuration();
-                    if ((spellInfo->ManaCost || spellInfo->ManaCostPercentage || spellInfo->ManaPerSecond) && duration > 0)
-                        continue;
-
-                    // allow only spell without cooldown > duration
-                    int32 cooldown = spellInfo->GetRecoveryTime();
-                    if (cooldown >= 0 && duration >= 0 && cooldown > duration)
-                        continue;
-                }
-
+                // These would be buff spells like Furious Howl, Consume Shadows, etc.
                 Spell* spell = new Spell(me, spellInfo, TRIGGERED_NONE, 0);
 
                 bool spellUsed = false;
@@ -169,13 +169,12 @@ void PetAI::UpdateAI(const uint32 diff)
                 {
                     Unit* target = ObjectAccessor::GetUnit(*me, *tar);
 
-                    //only buff targets that are in combat, unless the spell can only be cast while out of combat
                     if (!target)
                         continue;
 
                     if (spell->CanAutoCast(target))
                     {
-                        targetSpellStore.push_back(std::make_pair<Unit*, Spell*>(target, spell));
+                        targetSpellStore.push_back(std::make_pair(target, spell));
                         spellUsed = true;
                         break;
                     }
@@ -183,11 +182,12 @@ void PetAI::UpdateAI(const uint32 diff)
                 if (!spellUsed)
                     delete spell;
             }
-            else if (me->getVictim() && CanAttack(me->getVictim()) && spellInfo->CanBeUsedInCombat())
+            else if (me->getVictim() && CanAttack(me->getVictim()))
             {
+                // These would be offensive spells like Claw, Bite, Torment, Fireball, etc.
                 Spell* spell = new Spell(me, spellInfo, TRIGGERED_NONE, 0);
                 if (spell->CanAutoCast(me->getVictim()))
-                    targetSpellStore.push_back(std::make_pair<Unit*, Spell*>(me->getVictim(), spell));
+                    targetSpellStore.push_back(std::make_pair(me->getVictim(), spell));
                 else
                     delete spell;
             }
@@ -279,6 +279,7 @@ void PetAI::KilledUnit(Unit* victim)
     // next target selection
     me->AttackStop();
     me->GetCharmInfo()->SetIsCommandAttack(false);
+    me->SendMeleeAttackStop();  // Stops the pet's 'Attack' button from flashing
 
     Unit* nextTarget = SelectNextTarget();
 

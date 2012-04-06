@@ -1,9 +1,10 @@
 /*
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -108,9 +109,9 @@ public:
 
     struct boss_ymironAI : public ScriptedAI
     {
-        boss_ymironAI(Creature* c) : ScriptedAI(c)
+        boss_ymironAI(Creature* creature) : ScriptedAI(creature)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
             for (int i = 0; i < 4; ++i)
                 m_uiActiveOrder[i] = i;
             for (int i = 0; i < 3; ++i)
@@ -218,7 +219,7 @@ public:
                         m_uiActivedCreatureGUID = temp->GetGUID();
                         temp->CastSpell(me, SPELL_CHANNEL_SPIRIT_TO_YMIRON, true);
                         temp->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_SELECTABLE);
-                        temp->AddUnitMovementFlag(MOVEMENTFLAG_LEVITATING);
+                        temp->SetLevitate(true);
                         switch (m_uiActiveOrder[m_uiActivedNumber])
                         {
                             case 0: m_bIsActiveWithBJORN  = true; break;

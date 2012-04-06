@@ -1,10 +1,11 @@
 /*
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2006-2012 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -113,7 +114,7 @@ public:
 
     struct npc_enslaved_soulAI : public ScriptedAI
     {
-        npc_enslaved_soulAI(Creature* c) : ScriptedAI(c) {}
+        npc_enslaved_soulAI(Creature* creature) : ScriptedAI(creature) {}
 
         uint64 ReliquaryGUID;
 
@@ -141,9 +142,9 @@ public:
 
     struct boss_reliquary_of_soulsAI : public ScriptedAI
     {
-        boss_reliquary_of_soulsAI(Creature* c) : ScriptedAI(c)
+        boss_reliquary_of_soulsAI(Creature* creature) : ScriptedAI(creature)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
             EssenceGUID = 0;
         }
 
@@ -377,7 +378,7 @@ public:
 
     struct boss_essence_of_sufferingAI : public ScriptedAI
     {
-        boss_essence_of_sufferingAI(Creature* c) : ScriptedAI(c) {}
+        boss_essence_of_sufferingAI(Creature* creature) : ScriptedAI(creature) {}
 
         uint64 StatAuraGUID;
 
@@ -501,7 +502,7 @@ public:
 
     struct boss_essence_of_desireAI : public ScriptedAI
     {
-        boss_essence_of_desireAI(Creature* c) : ScriptedAI(c) {}
+        boss_essence_of_desireAI(Creature* creature) : ScriptedAI(creature) {}
 
         uint32 RuneShieldTimer;
         uint32 DeadenTimer;
@@ -603,7 +604,7 @@ public:
 
     struct boss_essence_of_angerAI : public ScriptedAI
     {
-        boss_essence_of_angerAI(Creature* c) : ScriptedAI(c) {}
+        boss_essence_of_angerAI(Creature* creature) : ScriptedAI(creature) {}
 
         uint64 AggroTargetGUID;
 

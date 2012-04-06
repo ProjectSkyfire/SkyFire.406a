@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -646,28 +646,28 @@ void AuctionHouseObject::BuildListAuctionItems(WorldPacket& data, Player* player
 }
 
 //this function inserts to WorldPacket auction's data
-bool AuctionEntry::BuildAuctionInfo(WorldPacket & data) const
+bool AuctionEntry::BuildAuctionInfo(WorldPacket& data) const
 {
-    Item* pItem = sAuctionMgr->GetAItem(item_guidlow);
-    if (!pItem)
+    Item* item = sAuctionMgr->GetAItem(item_guidlow);
+    if (!item)
     {
-        sLog->outError("auction to item, that doesn't exist !!!!");
+        sLog->outError("AuctionEntry::BuildAuctionInfo: Auction %u has a non-existent item: %u", Id, item_guidlow);
         return false;
     }
     data << uint32(Id);
-    data << uint32(pItem->GetEntry());
+    data << uint32(item->GetEntry());
 
     for (uint8 i = 0; i < MAX_INSPECTED_ENCHANTMENT_SLOT; ++i)
     {
-        data << uint32(pItem->GetEnchantmentId(EnchantmentSlot(i)));
-        data << uint32(pItem->GetEnchantmentDuration(EnchantmentSlot(i)));
-        data << uint32(pItem->GetEnchantmentCharges(EnchantmentSlot(i)));
+        data << uint32(item->GetEnchantmentId(EnchantmentSlot(i)));
+        data << uint32(item->GetEnchantmentDuration(EnchantmentSlot(i)));
+        data << uint32(item->GetEnchantmentCharges(EnchantmentSlot(i)));
     }
 
-    data << int32(pItem->GetItemRandomPropertyId());        //random item property id
-    data << uint32(pItem->GetItemSuffixFactor());           //SuffixFactor
-    data << uint32(pItem->GetCount());                      //item->count
-    data << uint32(pItem->GetSpellCharges());               //item->charge FFFFFFF
+    data << int32(item->GetItemRandomPropertyId());        //random item property id
+    data << uint32(item->GetItemSuffixFactor());           //SuffixFactor
+    data << uint32(item->GetCount());                      //item->count
+    data << uint32(item->GetSpellCharges());               //item->charge FFFFFFF
     data << uint32(0);                                      //Unknown
     data << uint64(owner);                                  //Auction->owner
     data << uint64(startbid);                               //Auction->startbid (not sure if useful)

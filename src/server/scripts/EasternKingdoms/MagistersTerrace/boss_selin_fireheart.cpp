@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2006-2012 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -103,7 +103,7 @@ public:
         void Reset()
         {
             if (instance)
-            {   
+            {
                 //for (uint8 i = 0; i < CRYSTALS_NUMBER; ++i)
                 for (std::list<uint64>::const_iterator itr = Crystals.begin(); itr != Crystals.end(); ++itr)
                 {
@@ -124,7 +124,7 @@ public:
                 // Small door opened after event are expected to be closed by default
                 // Set Inst data for encounter
                 instance->SetData(DATA_SELIN_EVENT, NOT_STARTED);
-            } 
+            }
             else sLog->outError(ERROR_INST_DATA);
 
             DrainLifeTimer = urand(3000, 7000);
@@ -176,7 +176,7 @@ public:
                 float x, y, z;  // coords that we move to, close to the crystal.
                 CrystalChosen->GetClosePoint(x, y, z, me->GetObjectSize(), CONTACT_DISTANCE);
 
-                me->RemoveUnitMovementFlag(MOVEMENTFLAG_WALKING);
+                me->SetWalk(false);
                 me->GetMotionMaster()->MovePoint(1, x, y, z);
                 DrainingCrystal = true;
             }
@@ -260,7 +260,7 @@ public:
                     {
                         DoCast(SelectTarget(SELECT_TARGET_RANDOM, 0), SPELL_DRAIN_LIFE);
                         DrainLifeTimer = 10000;
-                    } 
+                    }
                     else DrainLifeTimer -= diff;
 
                     // Heroic only
@@ -270,7 +270,7 @@ public:
                         {
                             DoCast(SelectTarget(SELECT_TARGET_RANDOM, 1), SPELL_DRAIN_MANA);
                             DrainManaTimer = 10000;
-                        } 
+                        }
                         else DrainManaTimer -= diff;
                     }
                 }
@@ -282,7 +282,7 @@ public:
                         DoCast(me, SPELL_FEL_EXPLOSION);
                         FelExplosionTimer = 2000;
                     }
-                } 
+                }
                 else FelExplosionTimer -= diff;
 
                 // If below 10% mana, start recharging
@@ -296,7 +296,7 @@ public:
                             DrainCrystalTimer = urand(10000, 15000);
                         else
                             DrainCrystalTimer = urand(20000, 25000);
-                    } 
+                    }
                     else DrainCrystalTimer -= diff;
                 }
             }
@@ -320,7 +320,7 @@ public:
 
                         me->GetMotionMaster()->Clear();
                         me->GetMotionMaster()->MoveChase(me->getVictim());
-                    } 
+                    }
                     else EmpowerTimer -= diff;
                 }
             }
@@ -370,7 +370,7 @@ public:
                         }
                     }
                 }
-            } 
+            }
             else sLog->outError(ERROR_INST_DATA);
         }
     };

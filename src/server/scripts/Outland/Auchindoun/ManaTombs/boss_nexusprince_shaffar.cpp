@@ -1,10 +1,11 @@
 /*
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2006-2012 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -67,7 +68,7 @@ public:
 
     struct boss_nexusprince_shaffarAI : public ScriptedAI
     {
-        boss_nexusprince_shaffarAI(Creature* c) : ScriptedAI(c), summons(me) { HasTaunted = false; }
+        boss_nexusprince_shaffarAI(Creature* creature) : ScriptedAI(creature), summons(me) { HasTaunted = false; }
 
         uint32 Blink_Timer;
         uint32 Beacon_Timer;
@@ -232,7 +233,7 @@ public:
 
     struct mob_ethereal_beaconAI : public ScriptedAI
     {
-        mob_ethereal_beaconAI(Creature* c) : ScriptedAI(c)
+        mob_ethereal_beaconAI(Creature* creature) : ScriptedAI(creature)
         {
         }
 
@@ -323,7 +324,7 @@ public:
 
     struct mob_ethereal_apprenticeAI : public ScriptedAI
     {
-        mob_ethereal_apprenticeAI(Creature* c) : ScriptedAI(c) {}
+        mob_ethereal_apprenticeAI(Creature* creature) : ScriptedAI(creature) {}
 
         uint32 Cast_Timer;
 

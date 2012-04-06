@@ -1,9 +1,9 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -25,12 +25,12 @@
 
 enum Spells
 {
-	SPELL_DUST_FLAIL		 = 81642,
-	SPELL_SCENT_OF_BLOOD	 = 81690,
-	H_SPELL_SCENT_OF_BLOOD	 = 89998,
-	SPELL_VENOMOUS_RAGE		 = 81706,
-	SPELL_VISCOUS_POISON	 = 81630,
-	H_SPELL_VISCOUS_POISON	 = 90004,
+    SPELL_DUST_FLAIL         = 81642,
+    SPELL_SCENT_OF_BLOOD     = 81690,
+    H_SPELL_SCENT_OF_BLOOD     = 89998,
+    SPELL_VENOMOUS_RAGE         = 81706,
+    SPELL_VISCOUS_POISON     = 81630,
+    H_SPELL_VISCOUS_POISON     = 90004,
 };
 
 enum Events
@@ -65,19 +65,19 @@ class boss_lockmaw : public CreatureScript
            return new boss_lockmawAI(creature);
         }
         struct boss_lockmawAI : public ScriptedAI
-		{
-			boss_lockmawAI(Creature* creature) : ScriptedAI(creature), Summons(me)
-			{
-				instance = creature->GetInstanceScript();
-			}
+        {
+            boss_lockmawAI(Creature* creature) : ScriptedAI(creature), Summons(me)
+            {
+                instance = creature->GetInstanceScript();
+            }
 
-			InstanceScript* instance;
+            InstanceScript* instance;
             EventMap events;
             SummonList Summons;
             bool check_in;
 
             void Reset ()
-			{
+            {
                 events.Reset();
                 Summons.DespawnAll();
 
@@ -85,7 +85,7 @@ class boss_lockmaw : public CreatureScript
                     instance->SetData(DATA_LOCKMAW_EVENT, NOT_STARTED);
 
                 check_in = false;
-			}
+            }
 
             void JustDied(Unit* /*Kill*/)
             {
@@ -96,18 +96,18 @@ class boss_lockmaw : public CreatureScript
 
             void EnterCombat(Unit* /*Ent*/)
             {
-				if (instance)
+                if (instance)
                     instance->SetData(DATA_LOCKMAW_EVENT, IN_PROGRESS);
 
                 DoZoneInCombat();
-			}
+            }
 
-			void UpdateAI(const uint32 uiDiff)
+            void UpdateAI(const uint32 uiDiff)
             {
                 if (!UpdateVictim())  /* No target to kill */
                     return;
 
-				events.Update(uiDiff);
+                events.Update(uiDiff);
 
                 if (me->HasUnitState(UNIT_STATE_CASTING))
                     return;

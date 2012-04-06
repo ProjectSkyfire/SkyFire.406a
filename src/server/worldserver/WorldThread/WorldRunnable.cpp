@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -30,6 +30,7 @@
 #include "MapManager.h"
 #include "Timer.h"
 #include "WorldRunnable.h"
+#include "OutdoorPvPMgr.h"
 
 #define WORLD_SLEEP_CONST 50
 
@@ -93,4 +94,5 @@ void WorldRunnable::run()
     sMapMgr->UnloadAll();                     // unload all grids (including locked in memory)
     sObjectAccessor->UnloadAll();             // unload 'i_player2corpse' storage and remove from world
     sScriptMgr->Unload();
+    sOutdoorPvPMgr->Die();
 }

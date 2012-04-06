@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -38,8 +38,8 @@
 #include "Vehicle.h"
 
 AuraApplication::AuraApplication(Unit* target, Unit* caster, Aura* aura, uint8 effMask):
-m_target(target), m_base(aura), m_slot(MAX_AURAS), m_flags(AFLAG_NONE),
-m_effectsToApply(effMask), m_removeMode(AURA_REMOVE_NONE), m_needClientUpdate(false)
+_target(target), _base(aura), _slot(MAX_AURAS), _flags(AFLAG_NONE),
+_effectsToApply(effMask), _removeMode(AURA_REMOVE_NONE), _needClientUpdate(false)
 {
     ASSERT(GetTarget() && GetBase());
 
@@ -71,7 +71,7 @@ m_effectsToApply(effMask), m_removeMode(AURA_REMOVE_NONE), m_needClientUpdate(fa
         // Register Visible Aura
         if (slot < MAX_AURAS)
         {
-            m_slot = slot;
+            _slot = slot;
             GetTarget()->SetVisibleAura(slot, this);
             SetNeedClientUpdate();
             sLog->outDebug(LOG_FILTER_SPELLS_AURAS, "Aura: %u Effect: %d put to unit visible auras slot: %u", GetBase()->GetId(), GetEffectMask(), slot);
@@ -90,7 +90,7 @@ void AuraApplication::_Remove()
     if (slot >= MAX_AURAS)
         return;
 
-    if (AuraApplication * foundAura = m_target->GetAuraApplication(GetBase()->GetId(), GetBase()->GetCasterGUID(), GetBase()->GetCastItemGUID()))
+    if (AuraApplication * foundAura = _target->GetAuraApplication(GetBase()->GetId(), GetBase()->GetCasterGUID(), GetBase()->GetCastItemGUID()))
     {
         // Reuse visible aura slot by aura which is still applied - prevent storing dead pointers
         if (slot == foundAura->GetSlot())
@@ -116,7 +116,7 @@ void AuraApplication::_Remove()
 void AuraApplication::_InitFlags(Unit* caster, uint8 effMask)
 {
     // mark as selfcasted if needed
-    m_flags |= (GetBase()->GetCasterGUID() == GetTarget()->GetGUID()) ? AFLAG_CASTER : AFLAG_NONE;
+    _flags |= (GetBase()->GetCasterGUID() == GetTarget()->GetGUID()) ? AFLAG_CASTER : AFLAG_NONE;
 
     // aura is casted by self or an enemy
     // one negative effect and we know aura is negative
@@ -131,7 +131,7 @@ void AuraApplication::_InitFlags(Unit* caster, uint8 effMask)
                 break;
             }
         }
-        m_flags |= negativeFound ? AFLAG_NEGATIVE : AFLAG_POSITIVE;
+        _flags |= negativeFound ? AFLAG_NEGATIVE : AFLAG_POSITIVE;
     }
     // aura is casted by friend
     // one positive effect and we know aura is positive
@@ -146,7 +146,7 @@ void AuraApplication::_InitFlags(Unit* caster, uint8 effMask)
                 break;
             }
         }
-        m_flags |= positiveFound ? AFLAG_POSITIVE : AFLAG_NEGATIVE;
+        _flags |= positiveFound ? AFLAG_POSITIVE : AFLAG_NEGATIVE;
     }
 }
 
@@ -155,19 +155,19 @@ void AuraApplication::_HandleEffect(uint8 effIndex, bool apply)
     AuraEffect* aurEff = GetBase()->GetEffect(effIndex);
     ASSERT(aurEff);
     ASSERT(HasEffect(effIndex) == (!apply));
-    ASSERT((1<<effIndex) & m_effectsToApply);
+    ASSERT((1<<effIndex) & _effectsToApply);
     sLog->outDebug(LOG_FILTER_SPELLS_AURAS, "AuraApplication::_HandleEffect: %u, apply: %u: amount: %u", aurEff->GetAuraType(), apply, aurEff->GetAmount());
 
     if (apply)
     {
-        ASSERT(!(m_flags & (1<<effIndex)));
-        m_flags |= 1<<effIndex;
+        ASSERT(!(_flags & (1<<effIndex)));
+        _flags |= 1<<effIndex;
         aurEff->HandleEffect(this, AURA_EFFECT_HANDLE_REAL, true);
     }
     else
     {
-        ASSERT(m_flags & (1<<effIndex));
-        m_flags &= ~(1<<effIndex);
+        ASSERT(_flags & (1<<effIndex));
+        _flags &= ~(1<<effIndex);
         aurEff->HandleEffect(this, AURA_EFFECT_HANDLE_REAL, false);
 
         // Remove all triggered by aura spells vs unlimited duration
@@ -178,19 +178,19 @@ void AuraApplication::_HandleEffect(uint8 effIndex, bool apply)
 
 void AuraApplication::BuildUpdatePacket(ByteBuffer& data, bool remove) const
 {
-    data << uint8(m_slot);
+    data << uint8(_slot);
 
     if (remove)
     {
-        ASSERT(!m_target->GetVisibleAura(m_slot));
+        ASSERT(!_target->GetVisibleAura(_slot));
         data << uint32(0);
         return;
     }
-    ASSERT(m_target->GetVisibleAura(m_slot));
+    ASSERT(_target->GetVisibleAura(_slot));
 
     Aura const* aura = GetBase();
     data << uint32(aura->GetId());
-    uint32 flags = m_flags;
+    uint32 flags = _flags;
     if (aura->GetMaxDuration() > 0 && !(aura->GetSpellInfo()->AttributesEx5 & SPELL_ATTR5_HIDE_DURATION))
         flags |= AFLAG_DURATION;
     if (!aura->IsPassive())
@@ -222,13 +222,13 @@ void AuraApplication::BuildUpdatePacket(ByteBuffer& data, bool remove) const
 
 void AuraApplication::ClientUpdate(bool remove)
 {
-    m_needClientUpdate = false;
+    _needClientUpdate = false;
 
     WorldPacket data(SMSG_AURA_UPDATE);
     data.append(GetTarget()->GetPackGUID());
     BuildUpdatePacket(data, remove);
 
-    m_target->SendMessageToSet(&data, true);
+    _target->SendMessageToSet(&data, true);
 }
 
 uint8 Aura::BuildEffectMaskForOwner(SpellInfo const* spellProto, uint8 avalibleEffectMask, WorldObject* owner)
@@ -1927,6 +1927,10 @@ bool Aura::CanStackWith(Aura const* existingAura) const
 
     if (!sameCaster)
     {
+        // Channeled auras can stack if not forbidden by db or aura type
+        if (existingAura->GetSpellInfo()->IsChanneled())
+            return true;
+
         if (m_spellInfo->AttributesEx3 & SPELL_ATTR3_STACK_FOR_DIFF_CASTERS)
             return true;
 
@@ -1943,7 +1947,7 @@ bool Aura::CanStackWith(Aura const* existingAura) const
                 case SPELL_AURA_PERIODIC_ENERGIZE:
                 case SPELL_AURA_PERIODIC_MANA_LEECH:
                 case SPELL_AURA_PERIODIC_LEECH:
-                case SPELL_AURA_POWER_BURN:
+                case SPELL_AURA_POWER_BURN_MANA:
                 case SPELL_AURA_OBS_MOD_POWER:
                 case SPELL_AURA_OBS_MOD_HEALTH:
                 case SPELL_AURA_PERIODIC_TRIGGER_SPELL_WITH_VALUE:
@@ -2406,7 +2410,7 @@ void Aura::CallScriptEffectAfterManaShieldHandlers(AuraEffect* aurEff, AuraAppli
     }
 }
 
-bool Aura::CallScriptEffectProc(AuraEffect const * aurEff, Unit* pUnit, Unit *pVictim, uint32 damage, SpellInfo const* procSpell, uint32 procFlag, uint32 procExtra, WeaponAttackType attType, int32 cooldown)
+bool Aura::CallScriptEffectProc(AuraEffect const * aurEff, Unit* pUnit, Unit *victim, uint32 damage, SpellInfo const* procSpell, uint32 procFlag, uint32 procExtra, WeaponAttackType attType, int32 cooldown)
 {
     bool preventDefault = false;
     for (std::list<AuraScript *>::iterator scritr = m_loadedScripts.begin(); scritr != m_loadedScripts.end() ; ++scritr)
@@ -2416,7 +2420,7 @@ bool Aura::CallScriptEffectProc(AuraEffect const * aurEff, Unit* pUnit, Unit *pV
         for(; effItr != effEndItr ; ++effItr)
         {
             if ((*effItr).IsEffectAffected(m_spellInfo, aurEff->GetEffIndex()))
-                (*effItr).Call(*scritr, aurEff, pUnit, pVictim, damage, procSpell, procFlag, procExtra, attType, cooldown);
+                (*effItr).Call(*scritr, aurEff, pUnit, victim, damage, procSpell, procFlag, procExtra, attType, cooldown);
         }
         if (!preventDefault)
             preventDefault = (*scritr)->_IsDefaultActionPrevented();

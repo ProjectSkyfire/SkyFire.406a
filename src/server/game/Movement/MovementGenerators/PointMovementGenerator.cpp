@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -24,6 +24,7 @@
 #include "World.h"
 #include "MoveSplineInit.h"
 #include "MoveSpline.h"
+#include "Player.h"
 
 //----- Point Movement Generator
 template<class T>
@@ -107,7 +108,7 @@ void AssistanceMovementGenerator::Finalize(Unit &unit)
         unit.GetMotionMaster()->MoveSeekAssistanceDistract(sWorld->getIntConfig(CONFIG_CREATURE_FAMILY_ASSISTANCE_DELAY));
 }
 
-bool EffectMovementGenerator::Update(Unit &unit, const uint32)
+bool EffectMovementGenerator::Update(Unit &unit, const uint32&)
 {
     return !unit.movespline->Finalized();
 }
@@ -117,7 +118,7 @@ void EffectMovementGenerator::Finalize(Unit &unit)
     if (unit.GetTypeId() != TYPEID_UNIT)
         return;
 
-    if (((Creature&)unit).AI() && unit.movespline->Finalized())
+    if (((Creature&)unit).AI())
         ((Creature&)unit).AI()->MovementInform(EFFECT_MOTION_TYPE, m_Id);
     // Need restore previous movement since we have no proper states system
     //if (unit.isAlive() && !unit.HasUnitState(UNIT_STATE_CONFUSED|UNIT_STATE_FLEEING))

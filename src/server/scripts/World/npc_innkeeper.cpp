@@ -1,9 +1,10 @@
 /*
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -16,18 +17,21 @@
  */
 
 /* ScriptData
-SDName: Npc_Innkeeper
-SDAuthor: WarHead
-SD%Complete: 99%
-SDComment: Complete
-SDCategory: NPCs
+SFName: Npc_Innkeeper
+SFAuthor: WarHead
+SF%Complete: 99%
+SFComment: Complete
+SFCategory: NPCs
 EndScriptData */
 
 #include "ScriptPCH.h"
 
-#define HALLOWEEN_EVENTID       12
-#define SPELL_TRICK_OR_TREATED  24755
-#define SPELL_TREAT             24715
+enum HalloweenSpells
+{
+    HALLOWEEN_EVENTID        = 12,
+    SPELL_TRICK_OR_TREATED   = 24755,
+    SPELL_TREAT              = 24715
+};
 
 #define LOCALE_TRICK_OR_TREAT_0 "Trick or Treat!"
 #define LOCALE_TRICK_OR_TREAT_2 "Des bonbons ou des blagues!"

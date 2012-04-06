@@ -1,10 +1,11 @@
 /*
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2006-2012 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -61,7 +62,7 @@ public:
 
     struct mobs_bladespire_ogreAI : public ScriptedAI
     {
-        mobs_bladespire_ogreAI(Creature* c) : ScriptedAI(c) {}
+        mobs_bladespire_ogreAI(Creature* creature) : ScriptedAI(creature) {}
 
         void Reset() { }
 
@@ -112,7 +113,7 @@ public:
 
     struct mobs_nether_drakeAI : public ScriptedAI
     {
-        mobs_nether_drakeAI(Creature* c) : ScriptedAI(c) {}
+        mobs_nether_drakeAI(Creature* creature) : ScriptedAI(creature) {}
 
         bool IsNihil;
         uint32 NihilSpeech_Timer;
@@ -276,7 +277,7 @@ public:
 
     struct npc_daranelleAI : public ScriptedAI
     {
-        npc_daranelleAI(Creature* c) : ScriptedAI(c) {}
+        npc_daranelleAI(Creature* creature) : ScriptedAI(creature) {}
 
         void Reset() { }
 
@@ -516,7 +517,7 @@ public:
                 me->GetMotionMaster()->MoveTargetedHome();
                 Creature* Credit = me->FindNearestCreature(NPC_QUEST_CREDIT, 50, true);
                 if (player && Credit)
-                    player->KilledMonster(Credit->GetCreatureInfo(), Credit->GetGUID());
+                    player->KilledMonster(Credit->GetCreatureTemplate(), Credit->GetGUID());
             }
         }
 

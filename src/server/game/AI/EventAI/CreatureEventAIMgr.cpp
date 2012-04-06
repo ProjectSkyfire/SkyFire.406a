@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -360,9 +360,9 @@ void CreatureEventAIMgr::LoadCreatureEventAI_Scripts()
                 if (temp.receive_emote.condition)
                 {
                     Condition cond;
-                    cond.mConditionType = ConditionType(temp.receive_emote.condition);
-                    cond.mConditionValue1 = temp.receive_emote.conditionValue1;
-                    cond.mConditionValue2 = temp.receive_emote.conditionValue2;
+                    cond.ConditionType = ConditionTypes(temp.receive_emote.condition);
+                    cond.ConditionValue1 = temp.receive_emote.conditionValue1;
+                    cond.ConditionValue2 = temp.receive_emote.conditionValue2;
                     if (!sConditionMgr->isConditionTypeValid(&cond))
                     {
                         sLog->outErrorDb("CreatureEventAI: Creature %u using event %u: param2 (Condition: %u) are not valid.", temp.creature_id, i, temp.receive_emote.condition);

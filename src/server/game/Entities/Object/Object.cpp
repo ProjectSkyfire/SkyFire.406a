@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -514,7 +514,7 @@ void Object::_BuildValuesUpdate(uint8 updatetype, ByteBuffer * data, UpdateMask*
                 {
                     if (GetTypeId() == TYPEID_UNIT)
                     {
-                        CreatureTemplate const* cinfo = ToCreature()->GetCreatureInfo();
+                        CreatureTemplate const* cinfo = ToCreature()->GetCreatureTemplate();
 
                         // this also applies for transform auras
                         if (SpellInfo const* transform = sSpellMgr->GetSpellInfo(ToUnit()->getTransForm()))
@@ -1058,9 +1058,9 @@ bool Object::PrintIndexError(uint32 index, bool set) const
     return false;
 }
 
-bool Position::HasInLine(Unit const* target, float distance, float width) const
+bool Position::HasInLine(WorldObject const* target, float width) const
 {
-    if (!HasInArc(M_PI, target) || !target->IsWithinDist3d(m_positionX, m_positionY, m_positionZ, distance))
+    if (!HasInArc(M_PI, target))
         return false;
     width += target->GetObjectSize();
     float angle = GetRelativeAngle(target);
@@ -1497,14 +1497,14 @@ bool WorldObject::IsInBetween(const WorldObject* obj1, const WorldObject* obj2, 
     return (size * size) >= GetExactDist2dSq(obj1->GetPositionX() + cos(angle) * dist, obj1->GetPositionY() + sin(angle) * dist);
 }
 
-bool WorldObject::isInFront(WorldObject const* target, float distance,  float arc) const
+bool WorldObject::isInFront(WorldObject const* target,  float arc) const
 {
-    return IsWithinDist(target, distance) && HasInArc(arc, target);
+    return HasInArc(arc, target);
 }
 
-bool WorldObject::isInBack(WorldObject const* target, float distance, float arc) const
+bool WorldObject::isInBack(WorldObject const* target, float arc) const
 {
-    return IsWithinDist(target, distance) && !HasInArc(2 * M_PI - arc, target);
+    return !HasInArc(2 * M_PI - arc, target);
 }
 
 void WorldObject::GetRandomPoint(const Position &pos, float distance, float &rand_x, float &rand_y, float &rand_z) const
@@ -2643,7 +2643,7 @@ void WorldObject::MovePositionToFirstCollision(Position &pos, float dist, float 
 {
     angle += _orientation;
     float destx, desty, destz, ground, floor;
-
+    pos.m_positionZ += 2.0f;
     destx = pos.m_positionX + dist * cos(angle);
     desty = pos.m_positionY + dist * sin(angle);
     ground = GetMap()->GetHeight(destx, desty, MAX_HEIGHT, true);

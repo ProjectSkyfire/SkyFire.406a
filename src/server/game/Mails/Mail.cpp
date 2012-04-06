@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -213,8 +213,8 @@ void MailDraft::SendMailTo(SQLTransaction& trans, MailReceiver const& receiver, 
     stmt->setBool  (++index, !_items.empty());
     stmt->setUInt64(++index, uint64(expire_time));
     stmt->setUInt64(++index, uint64(deliver_time));
-    stmt->setUInt32(++index, _money);
-    stmt->setUInt32(++index, m_COD);
+    stmt->setUInt64(++index, _money);
+    stmt->setUInt64(++index, m_COD);
     stmt->setUInt8 (++index, uint8(checked));
     trans->Append(stmt);
 

@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -37,25 +37,25 @@ enum AccountOpResult
 
 namespace AccountMgr
 {
-        AccountOpResult CreateAccount(std::string username, std::string password);
-        AccountOpResult DeleteAccount(uint32 accountId);
-        AccountOpResult ChangeUsername(uint32 accountId, std::string newUsername, std::string newPassword);
-        AccountOpResult ChangePassword(uint32 accountId, std::string newPassword);
-        bool CheckPassword(uint32 accountId, std::string password);
+    AccountOpResult CreateAccount(std::string username, std::string password);
+    AccountOpResult DeleteAccount(uint32 accountId);
+    AccountOpResult ChangeUsername(uint32 accountId, std::string newUsername, std::string newPassword);
+    AccountOpResult ChangePassword(uint32 accountId, std::string newPassword);
+    bool CheckPassword(uint32 accountId, std::string password);
 
-        uint32 GetId(std::string username);
-        uint32 GetSecurity(uint32 accountId);
-        uint32 GetSecurity(uint64 accountId, int32 realmId);
-        bool GetName(uint32 accountId, std::string& name);
-        uint32 GetCharactersCount(uint32 accountId);
-        std::string CalculateShaPassHash(std::string& name, std::string& password);
+    uint32 GetId(std::string username);
+    uint32 GetSecurity(uint32 accountId);
+    uint32 GetSecurity(uint64 accountId, int32 realmId);
+    bool GetName(uint32 accountId, std::string& name);
+    uint32 GetCharactersCount(uint32 accountId);
+    std::string CalculateShaPassHash(std::string& name, std::string& password);
 
-        bool normalizeString(std::string& utf8String);
-        bool IsPlayerAccount(uint32 gmlevel);
-        bool IsModeratorAccount(uint32 gmlevel);
-        bool IsGMAccount(uint32 gmlevel);
-        bool IsAdminAccount(uint32 gmlevel);
-        bool IsConsoleAccount(uint32 gmlevel);
+    bool normalizeString(std::string& utf8String);
+    bool IsPlayerAccount(uint32 gmlevel);
+    bool IsModeratorAccount(uint32 gmlevel);
+    bool IsGMAccount(uint32 gmlevel);
+    bool IsAdminAccount(uint32 gmlevel);
+    bool IsConsoleAccount(uint32 gmlevel);
 };
 
 #endif

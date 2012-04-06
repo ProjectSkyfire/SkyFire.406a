@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -52,6 +52,9 @@ inline void Trinity::ObjectUpdater::Visit(CreatureMapType &m)
 template<class Check>
 void Trinity::WorldObjectSearcher<Check>::Visit(GameObjectMapType &m)
 {
+    if (!(i_mapTypeMask & GRID_MAP_TYPE_MASK_GAMEOBJECT))
+        return;
+
     // already found
     if (i_object)
         return;
@@ -72,6 +75,9 @@ void Trinity::WorldObjectSearcher<Check>::Visit(GameObjectMapType &m)
 template<class Check>
 void Trinity::WorldObjectSearcher<Check>::Visit(PlayerMapType &m)
 {
+    if (!(i_mapTypeMask & GRID_MAP_TYPE_MASK_PLAYER))
+        return;
+
     // already found
     if (i_object)
         return;
@@ -92,6 +98,9 @@ void Trinity::WorldObjectSearcher<Check>::Visit(PlayerMapType &m)
 template<class Check>
 void Trinity::WorldObjectSearcher<Check>::Visit(CreatureMapType &m)
 {
+    if (!(i_mapTypeMask & GRID_MAP_TYPE_MASK_CREATURE))
+        return;
+
     // already found
     if (i_object)
         return;
@@ -112,6 +121,9 @@ void Trinity::WorldObjectSearcher<Check>::Visit(CreatureMapType &m)
 template<class Check>
 void Trinity::WorldObjectSearcher<Check>::Visit(CorpseMapType &m)
 {
+    if (!(i_mapTypeMask & GRID_MAP_TYPE_MASK_CORPSE))
+        return;
+
     // already found
     if (i_object)
         return;
@@ -132,6 +144,9 @@ void Trinity::WorldObjectSearcher<Check>::Visit(CorpseMapType &m)
 template<class Check>
 void Trinity::WorldObjectSearcher<Check>::Visit(DynamicObjectMapType &m)
 {
+    if (!(i_mapTypeMask & GRID_MAP_TYPE_MASK_DYNAMICOBJECT))
+        return;
+
     // already found
     if (i_object)
         return;
@@ -150,8 +165,91 @@ void Trinity::WorldObjectSearcher<Check>::Visit(DynamicObjectMapType &m)
 }
 
 template<class Check>
+void Trinity::WorldObjectLastSearcher<Check>::Visit(GameObjectMapType &m)
+{
+    if (!(i_mapTypeMask & GRID_MAP_TYPE_MASK_GAMEOBJECT))
+        return;
+
+    for (GameObjectMapType::iterator itr=m.begin(); itr != m.end(); ++itr)
+    {
+        if (!itr->getSource()->InSamePhase(i_phaseMask))
+            continue;
+
+        if (i_check(itr->getSource()))
+            i_object = itr->getSource();
+    }
+}
+
+template<class Check>
+void Trinity::WorldObjectLastSearcher<Check>::Visit(PlayerMapType &m)
+{
+    if (!(i_mapTypeMask & GRID_MAP_TYPE_MASK_PLAYER))
+        return;
+
+    for (PlayerMapType::iterator itr=m.begin(); itr != m.end(); ++itr)
+    {
+        if (!itr->getSource()->InSamePhase(i_phaseMask))
+            continue;
+
+        if (i_check(itr->getSource()))
+            i_object = itr->getSource();
+    }
+}
+
+template<class Check>
+void Trinity::WorldObjectLastSearcher<Check>::Visit(CreatureMapType &m)
+{
+    if (!(i_mapTypeMask & GRID_MAP_TYPE_MASK_CREATURE))
+        return;
+
+    for (CreatureMapType::iterator itr=m.begin(); itr != m.end(); ++itr)
+    {
+        if (!itr->getSource()->InSamePhase(i_phaseMask))
+            continue;
+
+        if (i_check(itr->getSource()))
+            i_object = itr->getSource();
+    }
+}
+
+template<class Check>
+void Trinity::WorldObjectLastSearcher<Check>::Visit(CorpseMapType &m)
+{
+    if (!(i_mapTypeMask & GRID_MAP_TYPE_MASK_CORPSE))
+        return;
+
+    for (CorpseMapType::iterator itr=m.begin(); itr != m.end(); ++itr)
+    {
+        if (!itr->getSource()->InSamePhase(i_phaseMask))
+            continue;
+
+        if (i_check(itr->getSource()))
+            i_object = itr->getSource();
+    }
+}
+
+template<class Check>
+void Trinity::WorldObjectLastSearcher<Check>::Visit(DynamicObjectMapType &m)
+{
+    if (!(i_mapTypeMask & GRID_MAP_TYPE_MASK_DYNAMICOBJECT))
+        return;
+
+    for (DynamicObjectMapType::iterator itr=m.begin(); itr != m.end(); ++itr)
+    {
+        if (!itr->getSource()->InSamePhase(i_phaseMask))
+            continue;
+
+        if (i_check(itr->getSource()))
+            i_object = itr->getSource();
+    }
+}
+
+template<class Check>
 void Trinity::WorldObjectListSearcher<Check>::Visit(PlayerMapType &m)
 {
+    if (!(i_mapTypeMask & GRID_MAP_TYPE_MASK_PLAYER))
+        return;
+
     for (PlayerMapType::iterator itr=m.begin(); itr != m.end(); ++itr)
         if (itr->getSource()->InSamePhase(i_phaseMask))
             if (i_check(itr->getSource()))
@@ -161,6 +259,9 @@ void Trinity::WorldObjectListSearcher<Check>::Visit(PlayerMapType &m)
 template<class Check>
 void Trinity::WorldObjectListSearcher<Check>::Visit(CreatureMapType &m)
 {
+    if (!(i_mapTypeMask & GRID_MAP_TYPE_MASK_CREATURE))
+        return;
+
     for (CreatureMapType::iterator itr=m.begin(); itr != m.end(); ++itr)
         if (itr->getSource()->InSamePhase(i_phaseMask))
             if (i_check(itr->getSource()))
@@ -170,6 +271,9 @@ void Trinity::WorldObjectListSearcher<Check>::Visit(CreatureMapType &m)
 template<class Check>
 void Trinity::WorldObjectListSearcher<Check>::Visit(CorpseMapType &m)
 {
+    if (!(i_mapTypeMask & GRID_MAP_TYPE_MASK_CORPSE))
+        return;
+
     for (CorpseMapType::iterator itr=m.begin(); itr != m.end(); ++itr)
         if (itr->getSource()->InSamePhase(i_phaseMask))
             if (i_check(itr->getSource()))
@@ -179,6 +283,9 @@ void Trinity::WorldObjectListSearcher<Check>::Visit(CorpseMapType &m)
 template<class Check>
 void Trinity::WorldObjectListSearcher<Check>::Visit(GameObjectMapType &m)
 {
+    if (!(i_mapTypeMask & GRID_MAP_TYPE_MASK_GAMEOBJECT))
+        return;
+
     for (GameObjectMapType::iterator itr=m.begin(); itr != m.end(); ++itr)
         if (itr->getSource()->InSamePhase(i_phaseMask))
             if (i_check(itr->getSource()))
@@ -188,6 +295,9 @@ void Trinity::WorldObjectListSearcher<Check>::Visit(GameObjectMapType &m)
 template<class Check>
 void Trinity::WorldObjectListSearcher<Check>::Visit(DynamicObjectMapType &m)
 {
+    if (!(i_mapTypeMask & GRID_MAP_TYPE_MASK_DYNAMICOBJECT))
+        return;
+
     for (DynamicObjectMapType::iterator itr=m.begin(); itr != m.end(); ++itr)
         if (itr->getSource()->InSamePhase(i_phaseMask))
             if (i_check(itr->getSource()))

@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -276,7 +276,7 @@ class Quest
         uint32 GetFlags() const { return QuestFlags; }
         bool   IsDaily() const { return QuestFlags & QUEST_FLAGS_DAILY; }
         bool   IsWeekly() const { return QuestFlags & QUEST_FLAGS_WEEKLY; }
-        bool   IsSeasonal() const { return (ZoneOrSort == -QUEST_SORT_SEASONAL || ZoneOrSort == -QUEST_SORT_SPECIAL || ZoneOrSort == -QUEST_SORT_LUNAR_FESTIVAL || ZoneOrSort == -QUEST_SORT_MIDSUMMER || ZoneOrSort == -QUEST_SORT_BREWFEST || ZoneOrSort == -QUEST_SORT_LOVE_IS_IN_THE_AIR || ZoneOrSort == -QUEST_SORT_NOBLEGARDEN); }
+        bool   IsSeasonal() const { return (ZoneOrSort == -QUEST_SORT_SEASONAL || ZoneOrSort == -QUEST_SORT_SPECIAL || ZoneOrSort == -QUEST_SORT_LUNAR_FESTIVAL || ZoneOrSort == -QUEST_SORT_MIDSUMMER || ZoneOrSort == -QUEST_SORT_BREWFEST || ZoneOrSort == -QUEST_SORT_LOVE_IS_IN_THE_AIR || ZoneOrSort == -QUEST_SORT_NOBLEGARDEN) && !IsRepeatable(); }
         bool   IsDailyOrWeekly() const { return QuestFlags & (QUEST_FLAGS_DAILY | QUEST_FLAGS_WEEKLY); }
         bool   IsRaidQuest() const { return Type == QUEST_TYPE_RAID || Type == QUEST_TYPE_RAID_10 || Type == QUEST_TYPE_RAID_25 || Type == QUEST_TYPE_PVP; }
         bool   IsAllowedInRaid() const;
@@ -401,17 +401,17 @@ class Quest
 
 struct QuestStatusData
 {
-    QuestStatusData(): _status(QUEST_STATUS_NONE), _explored(false), _timer(0), _playercount(0)
+    QuestStatusData(): Status(QUEST_STATUS_NONE), Explored(false), Timer(0), PlayerCount(0)
     {
-        memset(_itemcount, 0, QUEST_ITEM_OBJECTIVES_COUNT * sizeof(uint16));
-        memset(_creatureOrGOcount, 0, QUEST_OBJECTIVES_COUNT * sizeof(uint16));
+        memset(ItemCount, 0, QUEST_ITEM_OBJECTIVES_COUNT * sizeof(uint16));
+        memset(CreatureOrGOCount, 0, QUEST_OBJECTIVES_COUNT * sizeof(uint16));
     }
 
-    QuestStatus _status;
-    bool _explored;
-    uint32 _timer;
-    uint16 _itemcount[QUEST_ITEM_OBJECTIVES_COUNT];
-    uint16 _creatureOrGOcount[QUEST_OBJECTIVES_COUNT];
-    uint16 _playercount;
+    QuestStatus Status;
+    uint32 Timer;
+    uint16 ItemCount[QUEST_ITEM_OBJECTIVES_COUNT];
+    uint16 CreatureOrGOCount[QUEST_OBJECTIVES_COUNT];
+    uint16 PlayerCount;
+    bool Explored;
 };
 #endif

@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -655,6 +655,7 @@ void GameObject::SaveToDB(uint32 mapid, uint8 spawnMask, uint32 phaseMask)
     // data->guid = guid must not be updated at save
     data.id               = GetEntry();
     data.mapid            = mapid;
+    data.spawnMask        = spawnMask;
     data.phaseMask        = phaseMask;
     data.posX             = GetPositionX();
     data.posY             = GetPositionY();
@@ -667,28 +668,28 @@ void GameObject::SaveToDB(uint32 mapid, uint8 spawnMask, uint32 phaseMask)
     data.spawntimesecs    = m_spawnedByDefault ? m_respawnDelayTime : -(int32)m_respawnDelayTime;
     data.animprogress     = GetGoAnimProgress();
     data.go_state         = GetGoState();
-    data.spawnMask        = spawnMask;
+
     data.artKit           = GetGoArtKit();
 
     // update in DB
     std::ostringstream ss;
     ss << "INSERT INTO gameobject VALUES ("
         << _DBTableGuid << ','
-        << GetEntry() << ','
-        << mapid << ','
-        << uint32(spawnMask) << ','                         // cast to prevent save as symbol
-        << uint16(GetPhaseMask()) << ','                    // prevent out of range error
-        << GetPositionX() << ','
-        << GetPositionY() << ','
-        << GetPositionZ() << ','
-        << GetOrientation() << ','
-        << GetFloatValue(GAMEOBJECT_PARENTROTATION) << ','
-        << GetFloatValue(GAMEOBJECT_PARENTROTATION + 1) << ','
-        << GetFloatValue(GAMEOBJECT_PARENTROTATION + 2) << ','
-        << GetFloatValue(GAMEOBJECT_PARENTROTATION + 3) << ','
-        << m_respawnDelayTime << ','
-        << uint32(GetGoAnimProgress()) << ','
-        << uint32(GetGoState()) << ')';
+        << data.id << ','
+        << data.mapid << ','
+        << uint32(data.spawnMask) << ','                         // cast to prevent save as symbol
+        << uint16(data.phaseMask) << ','                    // prevent out of range error
+        << data.posX << ','
+        << data.posY << ','
+        << data.posZ << ','
+        << data.orientation << ','
+        << data.rotation0 << ','
+        << data.rotation1 << ','
+        << data.rotation2 << ','
+        << data.rotation3 << ','
+        << data.spawntimesecs << ','
+        << uint32(data.animprogress) << ','
+        << uint32(data.go_state) << ')';
 
     SQLTransaction trans = WorldDatabase.BeginTransaction();
     trans->PAppend("DELETE FROM gameobject WHERE guid = '%u'", _DBTableGuid);

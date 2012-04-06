@@ -1,9 +1,10 @@
 /*
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -68,7 +69,7 @@ public:
 
     struct boss_maexxnaAI : public BossAI
     {
-        boss_maexxnaAI(Creature* c) : BossAI(c, BOSS_MAEXXNA) {}
+        boss_maexxnaAI(Creature* creature) : BossAI(creature, BOSS_MAEXXNA) {}
 
         bool enraged;
 
@@ -158,7 +159,7 @@ public:
 
     struct mob_webwrapAI : public NullCreatureAI
     {
-        mob_webwrapAI(Creature* c) : NullCreatureAI(c), victimGUID(0) {}
+        mob_webwrapAI(Creature* creature) : NullCreatureAI(creature), victimGUID(0) {}
 
         uint64 victimGUID;
 

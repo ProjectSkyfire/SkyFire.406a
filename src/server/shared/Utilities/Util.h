@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -426,6 +426,7 @@ class HookList
         }
 };
 
+class flag96;
 class flag96
 {
 private:
@@ -460,6 +461,14 @@ public:
             part[1]&p2 ||
             part[2]&p3);
     };
+
+    inline bool HasFlag(flag96 flags) const
+    {
+        return (
+            part[0]&flags[0] ||
+            part[1]&flags[1] ||
+            part[2]&flags[2]);
+    }
 
     inline void Set(uint32 p1=0, uint32 p2=0, uint32 p3=0)
     {

@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -142,7 +142,7 @@ bool ForcedDespawnDelayEvent::Execute(uint64 /*e_time*/, uint32 /*p_time*/)
 
 Creature::Creature(bool isWorldObject): Unit(isWorldObject), MapCreature(),
 lootForPickPocketed(false), lootForBody(false), _groupLootTimer(0), lootingGroupLowGUID(0),
-_PlayerDamageReq(0), _lootMoney(0), _lootRecipient(0), _lootRecipientGroup(0), _corpseRemoveTime(0), _respawnTime(0),
+_PlayerDamageReq(0), _lootRecipient(0), _lootRecipientGroup(0), _corpseRemoveTime(0), _respawnTime(0),
 _respawnDelay(300), _corpseDelay(60), _respawnradius(0.0f), _reactState(REACT_AGGRESSIVE),
 _defaultMovementType(IDLE_MOTION_TYPE), _DBTableGuid(0), _equipmentId(0), _AlreadyCallAssistance(false),
 _AlreadySearchedAssistance(false), _regenHealth(true), _AI_locked(false), _meleeDamageSchoolMask(SPELL_SCHOOL_MASK_NORMAL),
@@ -200,7 +200,7 @@ void Creature::RemoveFromWorld()
         if (_zoneScript)
             _zoneScript->OnCreatureRemove(this);
         if (_formation)
-            FormationMgr::RemoveCreatureFromGroup(_formation, this);
+            sFormationMgr->RemoveCreatureFromGroup(_formation, this);
         Unit::RemoveFromWorld();
         sObjectAccessor->RemoveObject(this);
     }
@@ -225,9 +225,9 @@ void Creature::SearchFormation()
     if (!lowguid)
         return;
 
-    CreatureGroupInfoType::iterator frmdata = CreatureGroupMap.find(lowguid);
-    if (frmdata != CreatureGroupMap.end())
-        FormationMgr::AddCreatureToGroup(frmdata->second->leaderGUID, this);
+    CreatureGroupInfoType::iterator frmdata = sFormationMgr->CreatureGroupMap.find(lowguid);
+    if (frmdata != sFormationMgr->CreatureGroupMap.end())
+        sFormationMgr->AddCreatureToGroup(frmdata->second->leaderGUID, this);
 }
 
 void Creature::RemoveCorpse(bool setSpawnTime)
@@ -304,7 +304,7 @@ bool Creature::InitEntry(uint32 Entry, uint32 /*team*/, const CreatureData* data
         return false;
     }
 
-    uint32 displayID = sObjectMgr->ChooseDisplayId(0, GetCreatureInfo(), data);
+    uint32 displayID = sObjectMgr->ChooseDisplayId(0, GetCreatureTemplate(), data);
     CreatureModelInfo const* minfo = sObjectMgr->GetCreatureModelRandomGender(&displayID);
     if (!minfo)                                             // Cancel load if no model defined
     {
@@ -343,7 +343,7 @@ bool Creature::InitEntry(uint32 Entry, uint32 /*team*/, const CreatureData* data
         _defaultMovementType = IDLE_MOTION_TYPE;
 
     for (uint8 i=0; i < CREATURE_MAX_SPELLS; ++i)
-        _spells[i] = GetCreatureInfo()->spells[i];
+        _spells[i] = GetCreatureTemplate()->spells[i];
 
     return true;
 }
@@ -353,14 +353,14 @@ bool Creature::UpdateEntry(uint32 Entry, uint32 team, const CreatureData* data)
     if (!InitEntry(Entry, team, data))
         return false;
 
-    CreatureTemplate const* cInfo = GetCreatureInfo();
+    CreatureTemplate const* cInfo = GetCreatureTemplate();
 
     _regenHealth = cInfo->RegenHealth;
 
     // creatures always have melee weapon ready if any
     SetSheath(SHEATH_STATE_MELEE);
 
-    SelectLevel(GetCreatureInfo());
+    SelectLevel(GetCreatureTemplate());
     if (team == HORDE)
         setFaction(cInfo->faction_H);
     else
@@ -755,7 +755,7 @@ bool Creature::Create(uint32 guidlow, Map* map, uint32 phaseMask, uint32 Entry, 
     if (!CreateFromProto(guidlow, Entry, vehId, team, data))
         return false;
 
-    switch (GetCreatureInfo()->rank)
+    switch (GetCreatureTemplate()->rank)
     {
         case CREATURE_ELITE_RARE:
             _corpseDelay = sWorld->getIntConfig(CONFIG_CORPSE_DECAY_RARE);
@@ -784,7 +784,7 @@ bool Creature::Create(uint32 guidlow, Map* map, uint32 phaseMask, uint32 Entry, 
         SetByteValue(UNIT_FIELD_BYTES_0, 2, minfo->gender);
     }
 
-    if (GetCreatureInfo()->InhabitType & INHABIT_AIR)
+    if (GetCreatureTemplate()->InhabitType & INHABIT_AIR)
     {
         if (GetDefaultMovementType() == IDLE_MOTION_TYPE)
             AddUnitMovementFlag(MOVEMENTFLAG_CAN_FLY);
@@ -792,10 +792,10 @@ bool Creature::Create(uint32 guidlow, Map* map, uint32 phaseMask, uint32 Entry, 
             SetFlying(true);
     }
 
-    if (GetCreatureInfo()->InhabitType & INHABIT_WATER)
+    if (GetCreatureTemplate()->InhabitType & INHABIT_WATER)
         AddUnitMovementFlag(MOVEMENTFLAG_SWIMMING);
 
-    LastUsedScriptID = GetCreatureInfo()->ScriptID;
+    LastUsedScriptID = GetCreatureTemplate()->ScriptID;
 
     // TODO: Replace with spell, handle from DB
     if (isSpiritHealer() || isSpiritGuide())
@@ -817,22 +817,22 @@ bool Creature::isCanTrainingOf(Player* player, bool msg) const
 
     TrainerSpellData const* trainer_spells = GetTrainerSpells();
 
-    if ((!trainer_spells || trainer_spells->spellList.empty()) && GetCreatureInfo()->trainer_type != TRAINER_TYPE_PETS)
+    if ((!trainer_spells || trainer_spells->spellList.empty()) && GetCreatureTemplate()->trainer_type != TRAINER_TYPE_PETS)
     {
         sLog->outErrorDb("Creature %u (Entry: %u) have UNIT_NPC_FLAG_TRAINER but have empty trainer spell list.",
             GetGUIDLow(), GetEntry());
         return false;
     }
 
-    switch (GetCreatureInfo()->trainer_type)
+    switch (GetCreatureTemplate()->trainer_type)
     {
         case TRAINER_TYPE_CLASS:
-            if (player->getClass() != GetCreatureInfo()->trainer_class)
+            if (player->getClass() != GetCreatureTemplate()->trainer_class)
             {
                 if (msg)
                 {
                     player->PlayerTalkClass->ClearMenus();
-                    switch (GetCreatureInfo()->trainer_class)
+                    switch (GetCreatureTemplate()->trainer_class)
                     {
                         case CLASS_DRUID:  player->PlayerTalkClass->SendGossipMenu(4913, GetGUID()); break;
                         case CLASS_HUNTER: player->PlayerTalkClass->SendGossipMenu(10090, GetGUID()); break;
@@ -857,12 +857,12 @@ bool Creature::isCanTrainingOf(Player* player, bool msg) const
             }
             break;
         case TRAINER_TYPE_MOUNTS:
-            if (GetCreatureInfo()->trainer_race && player->getRace() != GetCreatureInfo()->trainer_race)
+            if (GetCreatureTemplate()->trainer_race && player->getRace() != GetCreatureTemplate()->trainer_race)
             {
                 if (msg)
                 {
                     player->PlayerTalkClass->ClearMenus();
-                    switch (GetCreatureInfo()->trainer_class)
+                    switch (GetCreatureTemplate()->trainer_class)
                     {
                         case RACE_DWARF:        player->PlayerTalkClass->SendGossipMenu(5865, GetGUID()); break;
                         case RACE_GNOME:        player->PlayerTalkClass->SendGossipMenu(4881, GetGUID()); break;
@@ -880,7 +880,7 @@ bool Creature::isCanTrainingOf(Player* player, bool msg) const
             }
             break;
         case TRAINER_TYPE_TRADESKILLS:
-            if (GetCreatureInfo()->trainer_spell && !player->HasSpell(GetCreatureInfo()->trainer_spell))
+            if (GetCreatureTemplate()->trainer_spell && !player->HasSpell(GetCreatureTemplate()->trainer_spell))
             {
                 if (msg)
                 {
@@ -931,8 +931,8 @@ bool Creature::isCanInteractWithBattleMaster(Player* player, bool msg) const
 bool Creature::isCanTrainingAndResetTalentsOf(Player* player) const
 {
     return player->getLevel() >= 10
-        && GetCreatureInfo()->trainer_type == TRAINER_TYPE_CLASS
-        && player->getClass() == GetCreatureInfo()->trainer_class;
+        && GetCreatureTemplate()->trainer_type == TRAINER_TYPE_CLASS
+        && player->getClass() == GetCreatureTemplate()->trainer_class;
 }
 
 void Creature::AI_SendMoveToPacket(float x, float y, float z, uint32 time, uint32 /*MovementFlags*/, uint8 /*type*/)
@@ -1023,7 +1023,7 @@ void Creature::SaveToDB(uint32 mapid, uint8 spawnMask, uint32 phaseMask)
     uint32 dynamicflags = GetUInt32Value(UNIT_DYNAMIC_FLAGS);
 
     // check if it's a custom model and if not, use 0 for displayId
-    CreatureTemplate const* cinfo = GetCreatureInfo();
+    CreatureTemplate const* cinfo = GetCreatureTemplate();
     if (cinfo)
     {
         if (displayId == cinfo->Modelid1 || displayId == cinfo->Modelid2 ||
@@ -1082,8 +1082,8 @@ void Creature::SaveToDB(uint32 mapid, uint8 spawnMask, uint32 phaseMask)
         << GetPositionY() << ','
         << GetPositionZ() << ','
         << GetOrientation() << ','
-        << _respawnDelay << ','                            //respawn time
-        << (float) _respawnradius << ','                   //spawn distance (float)
+        << _respawnDelay << ','                             //respawn time
+        << (float) _respawnradius << ','                    //spawn distance (float)
         << (uint32) (0) << ','                              //currentwaypoint
         << GetHealth() << ','                               //curhealth
         << GetPower(POWER_MANA) << ','                      //curmana
@@ -1285,7 +1285,7 @@ bool Creature::LoadCreatureFromDB(uint32 guid, Map* map, bool addToMap)
         curhealth = data->curhealth;
         if (curhealth)
         {
-            curhealth = uint32(curhealth*_GetHealthMod(GetCreatureInfo()->rank));
+            curhealth = uint32(curhealth*_GetHealthMod(GetCreatureTemplate()->rank));
             if (curhealth < 1)
                 curhealth = 1;
         }
@@ -1485,8 +1485,8 @@ void Creature::setDeathState(DeathState s)
 
         setActive(false);
 
-        if (!isPet() && GetCreatureInfo()->SkinLootId)
-            if (LootTemplates_Skinning.HaveLootFor(GetCreatureInfo()->SkinLootId))
+        if (!isPet() && GetCreatureTemplate()->SkinLootId)
+            if (LootTemplates_Skinning.HaveLootFor(GetCreatureTemplate()->SkinLootId))
                 if (hasLootRecipient())
                     SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SKINNABLE);
 
@@ -1512,11 +1512,11 @@ void Creature::setDeathState(DeathState s)
         SetFullHealth();
         SetLootRecipient(NULL);
         ResetPlayerDamageReq();
-        CreatureTemplate const* cinfo = GetCreatureInfo();
+        CreatureTemplate const* cinfo = GetCreatureTemplate();
         SetWalk(true);
-        if (GetCreatureInfo()->InhabitType & INHABIT_AIR)
+        if (GetCreatureTemplate()->InhabitType & INHABIT_AIR)
             AddUnitMovementFlag(MOVEMENTFLAG_CAN_FLY | MOVEMENTFLAG_FLYING);
-        if (GetCreatureInfo()->InhabitType & INHABIT_WATER)
+        if (GetCreatureTemplate()->InhabitType & INHABIT_WATER)
             AddUnitMovementFlag(MOVEMENTFLAG_SWIMMING);
         SetUInt32Value(UNIT_NPC_FLAGS, cinfo->npcflag);
         ClearUnitState(uint32(UNIT_STATE_ALL_STATE));
@@ -1556,7 +1556,7 @@ void Creature::Respawn(bool force)
         if (_originalEntry != GetEntry())
             UpdateEntry(_originalEntry);
 
-        CreatureTemplate const* cinfo = GetCreatureInfo();
+        CreatureTemplate const* cinfo = GetCreatureTemplate();
         SelectLevel(cinfo);
 
         setDeathState(JUST_ALIVED);
@@ -1617,11 +1617,11 @@ bool Creature::IsImmunedToSpell(SpellInfo const* spellInfo)
         return false;
 
     // Spells that don't have effectMechanics.
-    if (!spellInfo->HasAnyEffectMechanic() && GetCreatureInfo()->MechanicImmuneMask & (1 << (spellInfo->Mechanic - 1)))
+    if (!spellInfo->HasAnyEffectMechanic() && GetCreatureTemplate()->MechanicImmuneMask & (1 << (spellInfo->Mechanic - 1)))
         return true;
 
-    // This check must be done instead of 'if (GetCreatureInfo()->MechanicImmuneMask & (1 << (spellInfo->Mechanic - 1)))' for not break
-    // the check of mechanic immunity on DB (tested) because GetCreatureInfo()->MechanicImmuneMask and m_spellImmune[IMMUNITY_MECHANIC] don't have same data.
+    // This check must be done instead of 'if (GetCreatureTemplate()->MechanicImmuneMask & (1 << (spellInfo->Mechanic - 1)))' for not break
+    // the check of mechanic immunity on DB (tested) because GetCreatureTemplate()->MechanicImmuneMask and m_spellImmune[IMMUNITY_MECHANIC] don't have same data.
     bool immunedToAllEffects = true;
     for (uint8 i = 0; i < MAX_SPELL_EFFECTS; ++i)
         if (!IsImmunedToSpellEffect(spellInfo, i))
@@ -1637,10 +1637,10 @@ bool Creature::IsImmunedToSpell(SpellInfo const* spellInfo)
 
 bool Creature::IsImmunedToSpellEffect(SpellInfo const* spellInfo, uint32 index) const
 {
-    if (GetCreatureInfo()->MechanicImmuneMask & (1 << (spellInfo->Effects[index].Mechanic - 1)))
+    if (GetCreatureTemplate()->MechanicImmuneMask & (1 << (spellInfo->Effects[index].Mechanic - 1)))
         return true;
 
-    if (GetCreatureInfo()->type == CREATURE_TYPE_MECHANICAL && spellInfo->Effects[index].Effect == SPELL_EFFECT_HEAL)
+    if (GetCreatureTemplate()->type == CREATURE_TYPE_MECHANICAL && spellInfo->Effects[index].Effect == SPELL_EFFECT_HEAL)
         return true;
 
     return Unit::IsImmunedToSpellEffect(spellInfo, index);
@@ -1999,7 +1999,7 @@ CreatureAddon const* Creature::GetCreatureAddon() const
     }
 
     // dependent from difficulty mode entry
-    return sObjectMgr->GetCreatureTemplateAddon(GetCreatureInfo()->Entry);
+    return sObjectMgr->GetCreatureTemplateAddon(GetCreatureTemplate()->Entry);
 }
 
 //creature_addon table
@@ -2220,7 +2220,7 @@ void Creature::AllLootRemovedFromCorpse()
             return;
 
         float decayRate;
-        CreatureTemplate const* cinfo = GetCreatureInfo();
+        CreatureTemplate const* cinfo = GetCreatureTemplate();
 
         decayRate = sWorld->getRate(RATE_CORPSE_DECAY_LOOTED);
         uint32 diff = uint32((_corpseRemoveTime - now) * decayRate);
@@ -2391,24 +2391,24 @@ bool Creature::IsDungeonBoss() const
     return cinfo && (cinfo->flags_extra & CREATURE_FLAG_EXTRA_DUNGEON_BOSS);
 }
 
-void Creature::SetWalk(bool enable)
+bool Creature::SetWalk(bool enable)
 {
-    if (enable)
-        AddUnitMovementFlag(MOVEMENTFLAG_WALKING);
-    else
-        RemoveUnitMovementFlag(MOVEMENTFLAG_WALKING);
+    if (!Unit::SetWalk(enable))
+        return false;
+
     WorldPacket data(enable ? SMSG_SPLINE_MOVE_SET_WALK_MODE : SMSG_SPLINE_MOVE_SET_RUN_MODE, 9);
     data.append(GetPackGUID());
     SendMessageToSet(&data, true);
+    return true;
 }
 
-void Creature::SetLevitate(bool enable)
+bool Creature::SetLevitate(bool enable)
 {
-    if (enable)
-        AddUnitMovementFlag(MOVEMENTFLAG_LEVITATING);
-    else
-        RemoveUnitMovementFlag(MOVEMENTFLAG_LEVITATING);
+    if (!Unit::SetLevitate(enable))
+        return false;
+
     WorldPacket data(enable ? SMSG_SPLINE_MOVE_GRAVITY_DISABLE : SMSG_SPLINE_MOVE_GRAVITY_ENABLE, 9);
     data.append(GetPackGUID());
     SendMessageToSet(&data, true);
+    return true;
 }

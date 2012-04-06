@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -43,7 +43,6 @@
 
 bool ChatHandler::HandleNameAnnounceCommand(const char* args)
 {
-    WorldPacket data;
     if (!*args)
         return false;
 
@@ -57,7 +56,6 @@ bool ChatHandler::HandleNameAnnounceCommand(const char* args)
 
 bool ChatHandler::HandleGMNameAnnounceCommand(const char* args)
 {
-    WorldPacket data;
     if (!*args)
         return false;
 
@@ -424,12 +422,8 @@ bool ChatHandler::HandleTaxiCheatCommand(const char* args)
 
     Player* chr = getSelectedPlayer();
     if (!chr)
-    {
-        chr=_session->GetPlayer();
-    }
-
-    // check online security
-    else if (HasLowerSecurity(chr, 0))
+        chr = _session->GetPlayer();
+    else if (HasLowerSecurity(chr, 0)) // check online security
         return false;
 
     if (argstr == "on")
@@ -559,8 +553,8 @@ bool ChatHandler::HandleLookupTeleCommand(const char * args)
     uint32 maxResults = sWorld->getIntConfig(CONFIG_MAX_RESULTS_LOOKUP_COMMANDS);
     bool limitReached = false;
 
-    GameTeleMap const & teleMap = sObjectMgr->GetGameTeleMap();
-    for (GameTeleMap::const_iterator itr = teleMap.begin(); itr != teleMap.end(); ++itr)
+    GameTeleContainer const & teleMap = sObjectMgr->GetGameTeleMap();
+    for (GameTeleContainer::const_iterator itr = teleMap.begin(); itr != teleMap.end(); ++itr)
     {
         GameTele const* tele = &itr->second;
 
@@ -764,6 +758,17 @@ bool ChatHandler::HandleGroupSummonCommand(const char* args)
         _session->GetPlayer()->GetClosePoint(x, y, z, player->GetObjectSize());
         player->TeleportTo(_session->GetPlayer()->GetMapId(), x, y, z, player->GetOrientation());
     }
+
+    return true;
+}
+
+bool ChatHandler::HandleGmNote(const char* args)
+
+{
+    if(!*args)
+
+        return false;
+    SendSysMessage(LANG_IS_NOTE);
 
     return true;
 }

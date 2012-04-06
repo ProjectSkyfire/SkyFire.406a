@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -1328,6 +1328,7 @@ void SpellMgr::LoadSpellRanks()
             mSpellChains[addedSpell].last = GetSpellInfo(rankChain.back().first);
             mSpellChains[addedSpell].rank = itr->second;
             mSpellChains[addedSpell].prev = GetSpellInfo(prevRank);
+            mSpellInfoMap[addedSpell]->ChainEntry = &mSpellChains[addedSpell];
             prevRank = addedSpell;
             ++itr;
             if (itr == rankChain.end())
@@ -2834,9 +2835,18 @@ void SpellMgr::UnloadSpellInfoStore()
     for (uint32 i = 0; i < mSpellInfoMap.size(); ++i)
     {
         if (mSpellInfoMap[i])
-          delete mSpellInfoMap[i];
+            delete mSpellInfoMap[i];
     }
     mSpellInfoMap.clear();
+}
+
+void SpellMgr::UnloadSpellInfoImplicitTargetConditionLists()
+{
+    for (uint32 i = 0; i < mSpellInfoMap.size(); ++i)
+    {
+        if (mSpellInfoMap[i])
+            mSpellInfoMap[i]->_UnloadImplicitTargetConditionLists();
+    }
 }
 
 void SpellMgr::LoadSpellCustomAttr()
@@ -2879,7 +2889,7 @@ void SpellMgr::LoadSpellCustomAttr()
                 case SPELL_AURA_PERIODIC_ENERGIZE:
                 case SPELL_AURA_OBS_MOD_HEALTH:
                 case SPELL_AURA_OBS_MOD_POWER:
-                case SPELL_AURA_POWER_BURN:
+                case SPELL_AURA_POWER_BURN_MANA:
                     spellInfo->AttributesCu |= SPELL_ATTR0_CU_NO_INITIAL_THREAT;
                     break;
             }

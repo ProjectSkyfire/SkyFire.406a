@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -1024,7 +1024,7 @@ enum Opcodes
     CMSG_GUILD_BANK_WITHDRAW_MONEY                   = 0x073A8, // 4.0.6a 13623
     CMSG_GUILD_BANK_NOTE                             = 0x07680, // 4.0.6a 13623
     MSG_GUILD_BANK_LOG_QUERY                         = 0x0F584, // 4.0.6a 13623
-    CMSG_SET_CHANNEL_WATCH                           = 0x07FE0, // 4.0.6a 13623
+    CMSG_SET_CHANNEL_WATCH                           = 0x102B9, // Unknown opcode ID
     SMSG_USERLIST_ADD                                = 0x0F8CC, // 4.0.6a 13623
     SMSG_USERLIST_REMOVE                             = 0x0EF80, // 4.0.6a 13623
     SMSG_USERLIST_UPDATE                             = 0x02C8C, // 4.0.6a 13623

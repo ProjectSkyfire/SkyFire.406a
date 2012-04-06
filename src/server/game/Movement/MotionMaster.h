@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -84,24 +84,25 @@ class MotionMaster //: private std::stack<MovementGenerator *>
     private:
         //typedef std::stack<MovementGenerator *> Impl;
         typedef MovementGenerator* _Ty;
-        _Ty Impl[MAX_MOTION_SLOT];
-        bool needInit[MAX_MOTION_SLOT];
-        typedef std::vector<_Ty> ExpireList;
-        int i_top;
 
-        void pop() { Impl[i_top] = NULL; --i_top; }
-        void push(_Ty _Val) { ++i_top; Impl[i_top] = _Val; }
+        void pop()
+        {
+            Impl[_top] = NULL;
+            while (!top())
+                --_top;
+        }
+        void push(_Ty _Val) { ++_top; Impl[_top] = _Val; }
 
-        bool needInitTop() const { return needInit[i_top]; }
+        bool needInitTop() const { return _needInit[_top]; }
         void InitTop();
     public:
 
-        explicit MotionMaster(Unit* unit) : i_top(-1), i_owner(unit), m_expList(NULL), m_cleanFlag(MMCF_NONE)
+        explicit MotionMaster(Unit* unit) : _top(-1), _owner(unit), _expList(NULL), _cleanFlag(MMCF_NONE)
         {
             for (uint8 i = 0; i < MAX_MOTION_SLOT; ++i)
             {
                 Impl[i] = NULL;
-                needInit[i] = true;
+                _needInit[i] = true;
             }
         }
         ~MotionMaster();
@@ -109,9 +110,9 @@ class MotionMaster //: private std::stack<MovementGenerator *>
         void Initialize();
         void InitDefault();
 
-        bool empty() const { return (i_top < 0); }
-        int size() const { return i_top + 1; }
-        _Ty top() const { return Impl[i_top]; }
+        bool empty() const { return (_top < 0); }
+        int size() const { return _top + 1; }
+        _Ty top() const { return Impl[_top]; }
         _Ty GetMotionSlot(int slot) const { return Impl[slot]; }
 
         void DirectDelete(_Ty curr);
@@ -120,12 +121,12 @@ class MotionMaster //: private std::stack<MovementGenerator *>
         void UpdateMotion(uint32 diff);
         void Clear(bool reset = true)
         {
-            if (m_cleanFlag & MMCF_UPDATE)
+            if (_cleanFlag & MMCF_UPDATE)
             {
                 if (reset)
-                    m_cleanFlag |= MMCF_RESET;
+                    _cleanFlag |= MMCF_RESET;
                 else
-                    m_cleanFlag &= ~MMCF_RESET;
+                    _cleanFlag &= ~MMCF_RESET;
                 DelayedClean();
             }
             else
@@ -133,12 +134,12 @@ class MotionMaster //: private std::stack<MovementGenerator *>
         }
         void MovementExpired(bool reset = true)
         {
-            if (m_cleanFlag & MMCF_UPDATE)
+            if (_cleanFlag & MMCF_UPDATE)
             {
                 if (reset)
-                    m_cleanFlag |= MMCF_RESET;
+                    _cleanFlag |= MMCF_RESET;
                 else
-                    m_cleanFlag &= ~MMCF_RESET;
+                    _cleanFlag &= ~MMCF_RESET;
                 DelayedExpire();
             }
             else
@@ -188,8 +189,12 @@ class MotionMaster //: private std::stack<MovementGenerator *>
         void DirectExpire(bool reset);
         void DelayedExpire();
 
-        Unit       *i_owner;
-        ExpireList* m_expList;
-        uint8       m_cleanFlag;
+        typedef std::vector<_Ty> ExpireList;
+        ExpireList* _expList;
+        _Ty Impl[MAX_MOTION_SLOT];
+        int _top;
+        Unit* _owner;
+        bool _needInit[MAX_MOTION_SLOT];
+        uint8 _cleanFlag;
 };
 #endif

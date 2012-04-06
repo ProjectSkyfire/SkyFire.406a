@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -47,13 +47,13 @@ class AuraApplication
     friend void Unit::RemoveAura(AuraApplication * aurApp, AuraRemoveMode mode);
     friend AuraApplication * Unit::_CreateAuraApplication(Aura* aura, uint8 effMask);
     private:
-        Unit* const m_target;
-        Aura* const m_base;
-        uint8 m_slot;                                   // Aura slot on unit
-        uint8 m_flags;                                  // Aura info flag
-        uint8 m_effectsToApply;                         // Used only at spell hit to determine which effect should be applied
-        AuraRemoveMode m_removeMode:8;                  // Store info for know remove aura reason
-        bool m_needClientUpdate:1;
+        Unit* const _target;
+        Aura* const _base;
+        AuraRemoveMode _removeMode:8;                  // Store info for know remove aura reason
+        uint8 _slot;                                   // Aura slot on unit
+        uint8 _flags;                                  // Aura info flag
+        uint8 _effectsToApply;                         // Used only at spell hit to determine which effect should be applied
+        bool _needClientUpdate:1;
 
         explicit AuraApplication(Unit* target, Unit* caster, Aura* base, uint8 effMask);
         void _Remove();
@@ -62,22 +62,22 @@ class AuraApplication
         void _HandleEffect(uint8 effIndex, bool apply);
     public:
 
-        Unit* GetTarget() const { return m_target; }
-        Aura* GetBase() const { return m_base; }
+        Unit* GetTarget() const { return _target; }
+        Aura* GetBase() const { return _base; }
 
-        uint8 GetSlot() const { return m_slot; }
-        uint8 GetFlags() const { return m_flags; }
-        uint8 GetEffectMask() const { return m_flags & (AFLAG_EFF_INDEX_0 | AFLAG_EFF_INDEX_1 | AFLAG_EFF_INDEX_2); }
-        bool HasEffect(uint8 effect) const { ASSERT(effect < MAX_SPELL_EFFECTS);  return m_flags & (1<<effect); }
-        bool IsPositive() const { return m_flags & AFLAG_POSITIVE; }
-        bool IsSelfcasted() const { return m_flags & AFLAG_CASTER; }
-        uint8 GetEffectsToApply() const { return m_effectsToApply; }
+        uint8 GetSlot() const { return _slot; }
+        uint8 GetFlags() const { return _flags; }
+        uint8 GetEffectMask() const { return _flags & (AFLAG_EFF_INDEX_0 | AFLAG_EFF_INDEX_1 | AFLAG_EFF_INDEX_2); }
+        bool HasEffect(uint8 effect) const { ASSERT(effect < MAX_SPELL_EFFECTS);  return _flags & (1<<effect); }
+        bool IsPositive() const { return _flags & AFLAG_POSITIVE; }
+        bool IsSelfcasted() const { return _flags & AFLAG_CASTER; }
+        uint8 GetEffectsToApply() const { return _effectsToApply; }
 
-        void SetRemoveMode(AuraRemoveMode mode) { m_removeMode = mode; }
-        AuraRemoveMode GetRemoveMode() const {return m_removeMode;}
+        void SetRemoveMode(AuraRemoveMode mode) { _removeMode = mode; }
+        AuraRemoveMode GetRemoveMode() const {return _removeMode;}
 
-        void SetNeedClientUpdate() { m_needClientUpdate = true;}
-        bool IsNeedClientUpdate() const { return m_needClientUpdate;}
+        void SetNeedClientUpdate() { _needClientUpdate = true;}
+        bool IsNeedClientUpdate() const { return _needClientUpdate;}
         void BuildUpdatePacket(ByteBuffer& data, bool remove) const;
         void ClientUpdate(bool remove = false);
 };
@@ -217,7 +217,7 @@ class Aura
         void CallScriptEffectAfterAbsorbHandlers(AuraEffect* aurEff, AuraApplication const* aurApp, DamageInfo & dmgInfo, uint32 & absorbAmount);
         void CallScriptEffectManaShieldHandlers(AuraEffect* aurEff, AuraApplication const* aurApp, DamageInfo & dmgInfo, uint32 & absorbAmount, bool & defaultPrevented);
         void CallScriptEffectAfterManaShieldHandlers(AuraEffect* aurEff, AuraApplication const* aurApp, DamageInfo & dmgInfo, uint32 & absorbAmount);
-        bool CallScriptEffectProc(AuraEffect const * aurEff, Unit* pUnit, Unit *pVictim, uint32 damage, SpellInfo const* procSpell, uint32 procFlag, uint32 procExtra, WeaponAttackType attType, int32 cooldown);
+        bool CallScriptEffectProc(AuraEffect const * aurEff, Unit* pUnit, Unit *victim, uint32 damage, SpellInfo const* procSpell, uint32 procFlag, uint32 procExtra, WeaponAttackType attType, int32 cooldown);
         std::list<AuraScript*> m_loadedScripts;
     private:
         void _DeleteRemovedApplications();

@@ -1,9 +1,10 @@
 /*
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -89,7 +90,7 @@ public:
 
     struct boss_four_horsemenAI : public BossAI
     {
-        boss_four_horsemenAI(Creature* c) : BossAI(c, BOSS_HORSEMEN)
+        boss_four_horsemenAI(Creature* creature) : BossAI(creature, BOSS_HORSEMEN)
         {
             id = Horsemen(0);
             for (uint8 i = 0; i < 4; ++i)
@@ -194,7 +195,7 @@ public:
         {
             movementStarted = true;
             me->SetReactState(REACT_PASSIVE);
-            me->RemoveUnitMovementFlag(MOVEMENTFLAG_WALKING);
+            me->SetWalk(false);
             me->SetSpeed(MOVE_RUN, me->GetSpeedRate(MOVE_RUN), true);
 
             switch (id)

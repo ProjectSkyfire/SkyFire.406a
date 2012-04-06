@@ -1,10 +1,10 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -93,7 +93,7 @@ public:
                     if (Creature* rageclaw = Unit::GetCreature(*me, RageclawGUID))
                     {
                         UnlockRageclaw(caster);
-                        caster->ToPlayer()->KilledMonster(rageclaw->GetCreatureInfo(), RageclawGUID);
+                        caster->ToPlayer()->KilledMonster(rageclaw->GetCreatureTemplate(), RageclawGUID);
                         me->DisappearAndDie();
                     }
                     else
@@ -157,7 +157,7 @@ public:
 
                 me->RemoveAurasDueToSpell(SPELL_KNEEL);
 
-                me->setFaction(me->GetCreatureInfo()->faction_H);
+                me->setFaction(me->GetCreatureTemplate()->faction_H);
 
                 DoCast(me, SPELL_UNSHACKLED, true);
                 me->MonsterSay(SAY_RAGECLAW, LANG_UNIVERSAL, 0);
@@ -1459,7 +1459,7 @@ public:
                             break;
                         case 2:
                             // walk forward
-                            me->AddUnitMovementFlag(MOVEMENTFLAG_WALKING);
+                            me->SetWalk(true);
                             me->GetMotionMaster()->MovePoint(0, me->GetPositionX() + (cos(m_heading) * 10), me->GetPositionY() + (sin(m_heading) * 10), me->GetPositionZ());
                             m_Timer = 5000;
                             m_Phase = 3;

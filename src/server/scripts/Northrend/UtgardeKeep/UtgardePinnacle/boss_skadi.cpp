@@ -1,9 +1,10 @@
 /*
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -168,9 +169,9 @@ public:
 
     struct boss_skadiAI : public ScriptedAI
     {
-        boss_skadiAI(Creature* c) : ScriptedAI(c), Summons(me)
+        boss_skadiAI(Creature* creature) : ScriptedAI(creature), Summons(me)
         {
-            m_pInstance = c->GetInstanceScript();
+            m_pInstance = creature->GetInstanceScript();
         }
 
         InstanceScript* m_pInstance;
@@ -240,7 +241,7 @@ public:
                 m_pInstance->SetData(DATA_SKADI_THE_RUTHLESS_EVENT, IN_PROGRESS);
                 m_pInstance->DoStartTimedAchievement(ACHIEVEMENT_TIMED_TYPE_EVENT, ACHIEV_TIMED_START_EVENT);
                 me->GetMotionMaster()->MoveJump(Location[0].GetPositionX(), Location[0].GetPositionY(), Location[0].GetPositionZ(), 5.0f, 10.0f);
-                me->RemoveUnitMovementFlag(MOVEMENTFLAG_WALKING);
+                me->SetWalk(false);
                 m_uiMountTimer = 1000;
                 Summons.DespawnEntry(CREATURE_GRAUF);
             }

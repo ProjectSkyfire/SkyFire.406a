@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -201,7 +201,7 @@ void FlightPathMovementGenerator::Initialize(Player &player)
     InitEndGridInfo();
 }
 
-void FlightPathMovementGenerator::Finalize(Player & player)
+void FlightPathMovementGenerator::Finalize(Player& player)
 {
     // remove flag to prevent send object build movement packets for flight state and crash (movement generator already not at top of stack)
     player.ClearUnitState(UNIT_STATE_IN_FLIGHT);
@@ -212,8 +212,6 @@ void FlightPathMovementGenerator::Finalize(Player & player)
     if (player._taxi.empty())
     {
         player.getHostileRefManager().setOnlineOfflineState(true);
-        if (player.pvpInfo.inHostileArea)
-            player.CastSpell(&player, 2479, true);
 
         // update z position to ground and orientation for landing point
         // this prevent cheating with landing  point at lags
@@ -243,7 +241,7 @@ void FlightPathMovementGenerator::Reset(Player & player)
     init.Launch();
 }
 
-bool FlightPathMovementGenerator::Update(Player &player, const uint32 diff)
+bool FlightPathMovementGenerator::Update(Player &player, const uint32& diff)
 {
     uint32 pointId = (uint32)player.movespline->currentPathIdx();
     if (pointId > i_currentNode)

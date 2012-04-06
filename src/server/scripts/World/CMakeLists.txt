@@ -1,3 +1,4 @@
+# Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
 # Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
 #
 # This file is free software; as a special exception the author gives
@@ -20,6 +21,7 @@ set(scripts_STAT_SRCS
   World/mob_generic_creature.cpp
   World/npc_innkeeper.cpp
   World/npc_professions.cpp
+  World/npc_multi_professions.cpp
   World/npc_taxi.cpp
   World/npcs_special.cpp
 )

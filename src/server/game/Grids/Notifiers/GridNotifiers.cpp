@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -344,24 +344,17 @@ bool AnyDeadUnitObjectInRangeCheck::operator()(Creature* u)
 
 bool AnyDeadUnitSpellTargetInRangeCheck::operator()(Player* u)
 {
-    return AnyDeadUnitObjectInRangeCheck::operator()(u)
-        && (i_spellInfo->CheckTarget(i_searchObj, u, true) == SPELL_CAST_OK)
-        && i_searchObj->IsTargetMatchingCheck(u, i_check);
+    return AnyDeadUnitObjectInRangeCheck::operator()(u) && i_check(u);
 }
 
 bool AnyDeadUnitSpellTargetInRangeCheck::operator()(Corpse* u)
 {
-    Player* owner = ObjectAccessor::FindPlayer(u->GetOwnerGUID());
-    return owner && AnyDeadUnitObjectInRangeCheck::operator()(u)
-        && (i_spellInfo->CheckTarget(i_searchObj, owner, true) == SPELL_CAST_OK)
-        && i_searchObj->IsTargetMatchingCheck(owner, i_check);
+    return AnyDeadUnitObjectInRangeCheck::operator()(u) && i_check(u);
 }
 
 bool AnyDeadUnitSpellTargetInRangeCheck::operator()(Creature* u)
 {
-    return AnyDeadUnitObjectInRangeCheck::operator()(u)
-        && (i_spellInfo->CheckTarget(i_searchObj, u, true) == SPELL_CAST_OK)
-        && i_searchObj->IsTargetMatchingCheck(u, i_check);
+    return AnyDeadUnitObjectInRangeCheck::operator()(u) && i_check(u);
 }
 
 template void ObjectUpdater::Visit<GameObject>(GameObjectMapType &);

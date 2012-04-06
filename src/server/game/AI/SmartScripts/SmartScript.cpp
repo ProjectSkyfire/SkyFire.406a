@@ -1,10 +1,10 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -34,6 +34,51 @@
 #include "Group.h"
 #include "Vehicle.h"
 #include "ScriptedGossip.h"
+#include "CreatureTextMgr.h"
+#include "Common.h"
+#include "DatabaseEnv.h"
+#include "World.h"
+#include "Player.h"
+
+class TrinityStringTextBuilder
+{
+    public:
+        TrinityStringTextBuilder(WorldObject* obj, ChatMsg msgtype, int32 id, uint32 language, uint64 targetGUID)
+            : _source(obj), _msgType(msgtype), _textId(id), _language(language), _targetGUID(targetGUID)
+        {
+        }
+
+        size_t operator()(WorldPacket* data, LocaleConstant locale) const
+        {
+            std::string text = sObjectMgr->GetSkyFireString(_textId, locale);
+            char const* localizedName = _source->GetNameForLocaleIdx(locale);
+
+            *data << uint8(_msgType);
+            *data << uint32(_language);
+            *data << uint64(_source->GetGUID());
+            *data << uint32(1);                                      // 2.1.0
+            *data << uint32(strlen(localizedName)+1);
+            *data << localizedName;
+            size_t whisperGUIDpos = data->wpos();
+            *data << uint64(_targetGUID);                           // Unit Target
+            if (_targetGUID && !IS_PLAYER_GUID(_targetGUID))
+            {
+                *data << uint32(1);                                  // target name length
+                *data << uint8(0);                                   // target name
+            }
+            *data << uint32(text.length() + 1);
+            *data << text;
+            *data << uint8(0);                                       // ChatTag
+
+            return whisperGUIDpos;
+        }
+
+        WorldObject* _source;
+        ChatMsg _msgType;
+        int32 _textId;
+        uint32 _language;
+        uint64 _targetGUID;
+};
 
 SmartScript::SmartScript()
 {
@@ -86,14 +131,9 @@ void SmartScript::ProcessEventsFor(SMART_EVENT e, Unit* unit, uint32 var0, uint3
         if (eventType == e/* && (!(*i).event.event_phase_mask || IsInPhase((*i).event.event_phase_mask)) && !((*i).event.event_flags & SMART_EVENT_FLAG_NOT_REPEATABLE && (*i).runOnce)*/)
         {
             bool meets = true;
-            if (unit)
-            {
-                if (Player* player = unit->ToPlayer())
-                {
-                    ConditionList conds = sConditionMgr->GetConditionsForSmartEvent((*i).entryOrGuid, (*i).event_id, (*i).source_type);
-                    meets = sConditionMgr->IsPlayerMeetToConditions(player, conds);
-                }
-            }
+            ConditionList conds = sConditionMgr->GetConditionsForSmartEvent((*i).entryOrGuid, (*i).event_id, (*i).source_type);
+            ConditionSourceInfo info = ConditionSourceInfo(unit, GetBaseObject());
+            meets = sConditionMgr->IsObjectMeetToConditions(info, conds);
 
             if (meets)
                 ProcessEvent(*i, unit, var0, var1, bvar, spell, gob);
@@ -485,7 +525,10 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                     if (e.action.cast.flags & SMARTCAST_INTERRUPT_PREVIOUS)
                         me->InterruptNonMeleeSpells(false);
 
-                    me->CastSpell((*itr)->ToUnit(), e.action.cast.spell, (e.action.cast.flags & SMARTCAST_TRIGGERED) ? true : false);
+                    if (!(e.action.cast.flags & SMARTCAST_AURA_NOT_PRESENT) || !(*itr)->ToUnit()->HasAura(e.action.cast.spell))
+                        me->CastSpell((*itr)->ToUnit(), e.action.cast.spell, (e.action.cast.flags & SMARTCAST_TRIGGERED) ? true : false);
+                    else
+                        sLog->outDebug(LOG_FILTER_DATABASE_AI, "Spell %u not casted because it has flag SMARTCAST_AURA_NOT_PRESENT and the target (Guid: " UI64FMTD " Entry: %u Type: %u) already has the aura", e.action.cast.spell, (*itr)->GetGUID(), (*itr)->GetEntry(), uint32((*itr)->GetTypeId()));
                     sLog->outDebug(LOG_FILTER_DATABASE_AI, "SmartScript::ProcessAction:: SMART_ACTION_CAST:: Creature %u casts spell %u on target %u with castflags %u",
                         me->GetGUIDLow(), e.action.cast.spell, (*itr)->GetGUIDLow(), e.action.cast.flags);
                 }
@@ -511,7 +554,11 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                     if (e.action.cast.flags & SMARTCAST_INTERRUPT_PREVIOUS)
                         tempLastInvoker->InterruptNonMeleeSpells(false);
 
-                    tempLastInvoker->CastSpell((*itr)->ToUnit(), e.action.cast.spell, (e.action.cast.flags & SMARTCAST_TRIGGERED) ? true : false);
+                    if (!(e.action.cast.flags & SMARTCAST_AURA_NOT_PRESENT) || !(*itr)->ToUnit()->HasAura(e.action.cast.spell))
+                        tempLastInvoker->CastSpell((*itr)->ToUnit(), e.action.cast.spell, (e.action.cast.flags & SMARTCAST_TRIGGERED) ? true : false);
+                    else
+                        sLog->outDebug(LOG_FILTER_DATABASE_AI, "Spell %u not casted because it has flag SMARTCAST_AURA_NOT_PRESENT and the target (Guid: " UI64FMTD " Entry: %u Type: %u) already has the aura", e.action.cast.spell, (*itr)->GetGUID(), (*itr)->GetEntry(), uint32((*itr)->GetTypeId()));
+
                     sLog->outDebug(LOG_FILTER_DATABASE_AI, "SmartScript::ProcessAction:: SMART_ACTION_INVOKER_CAST: Invoker %u casts spell %u on target %u with castflags %u",
                         tempLastInvoker->GetGUIDLow(), e.action.cast.spell, (*itr)->GetGUIDLow(), e.action.cast.flags);
                 }
@@ -694,7 +741,10 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
 
             me->DoFleeToGetAssistance();
             if (e.action.flee.withEmote)
-                sCreatureTextMgr->SendChatString(me, sObjectMgr->GetSkyFireStringForDBCLocale(LANG_FLEE), CHAT_MSG_MONSTER_EMOTE);
+            {
+                TrinityStringTextBuilder builder(me, CHAT_MSG_MONSTER_EMOTE, LANG_FLEE, LANG_UNIVERSAL, 0);
+                sCreatureTextMgr->SendChatPacket(me, builder, CHAT_MSG_MONSTER_EMOTE);
+            }
             sLog->outDebug(LOG_FILTER_DATABASE_AI, "SmartScript::ProcessAction:: SMART_ACTION_FLEE_FOR_ASSIST: Creature %u DoFleeToGetAssistance", me->GetGUIDLow());
             break;
         }
@@ -1319,19 +1369,20 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 e.GetTargetType() == SMART_TARGET_CREATURE_DISTANCE || e.GetTargetType() == SMART_TARGET_GAMEOBJECT_RANGE ||
                 e.GetTargetType() == SMART_TARGET_GAMEOBJECT_GUID || e.GetTargetType() == SMART_TARGET_GAMEOBJECT_DISTANCE ||
                 e.GetTargetType() == SMART_TARGET_CLOSEST_CREATURE || e.GetTargetType() == SMART_TARGET_CLOSEST_GAMEOBJECT ||
-                e.GetTargetType() == SMART_TARGET_OWNER_OR_SUMMONER)
+                e.GetTargetType() == SMART_TARGET_OWNER_OR_SUMMONER || e.GetTargetType() == SMART_TARGET_ACTION_INVOKER)
             {
                 ObjectList* targets = GetTargets(e, unit);
                 if (!targets)
                     break;
 
                 target = targets->front();
+                delete targets;
             }
 
-            if(!target)
-                me->GetMotionMaster()->MovePoint(0, e.target.x, e.target.y, e.target.z);
+            if (!target)
+                me->GetMotionMaster()->MovePoint(e.action.MoveToPos.pointId, e.target.x, e.target.y, e.target.z);
             else
-                me->GetMotionMaster()->MovePoint(0, target->GetPositionX(), target->GetPositionY(), target->GetPositionZ());
+                me->GetMotionMaster()->MovePoint(e.action.MoveToPos.pointId, target->GetPositionX(), target->GetPositionY(), target->GetPositionZ());
             break;
         }
         case SMART_ACTION_RESPAWN_TARGET:
@@ -1569,8 +1620,15 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                         (*itr)->ToUnit()->InterruptNonMeleeSpells(false);
 
                     for (ObjectList::const_iterator it = targets->begin(); it != targets->end(); ++it)
+                    {
                         if (IsUnit(*it))
-                            (*itr)->ToUnit()->CastSpell((*it)->ToUnit(), e.action.cast.spell, (e.action.cast.flags & SMARTCAST_TRIGGERED) ? true : false);
+                        {
+                            if (!(e.action.cast.flags & SMARTCAST_AURA_NOT_PRESENT) || !(*it)->ToUnit()->HasAura(e.action.cast.spell))
+                                (*itr)->ToUnit()->CastSpell((*it)->ToUnit(), e.action.cast.spell, (e.action.cast.flags & SMARTCAST_TRIGGERED) ? true : false);
+                            else
+                                sLog->outDebug(LOG_FILTER_DATABASE_AI, "Spell %u not casted because it has flag SMARTCAST_AURA_NOT_PRESENT and the target (Guid: " UI64FMTD " Entry: %u Type: %u) already has the aura", e.action.cast.spell, (*it)->GetGUID(), (*it)->GetEntry(), uint32((*it)->GetTypeId()));
+                        }
+                    }
                 }
             }
 
@@ -1789,6 +1847,37 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
             // TODO: Resume path when reached jump location
             break;
         }
+        case SMART_ACTION_SET_RANDOM_HEALTH:
+        {
+            ObjectList* targets = GetTargets(e, unit);
+            if (!targets)
+                return;
+
+            for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+            {
+                if (Creature *cUnit = (*itr)->ToCreature())
+                {
+                    cUnit->SetHealth(cUnit->GetMaxHealth() * urand(e.action.health.MinPct, e.action.health.MaxPct) / 100);
+                }
+            }
+            break;
+        }
+        case SMART_ACTION_SET_MANA:
+        {
+            ObjectList* targets = GetTargets(e, unit);
+            if (!targets)
+                return;
+
+            for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+            {
+                if (Creature *cUnit = (*itr)->ToCreature())
+                {
+                    cUnit->SetPower(POWER_MANA,e.action.mana.Mana);
+                }
+            }
+            break;
+        }
+
         case SMART_ACTION_GO_SET_LOOT_STATE:
         {
             ObjectList* targets = GetTargets(e, unit);
@@ -1856,9 +1945,26 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
             delete targets;
             break;
         }
+        case SMART_ACTION_CHARACTER_SAVE:
+        {
+            ObjectList* targets = GetTargets(e, unit);
+            if (!targets)
+                break;
+
+            for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+            {
+                if (!IsPlayer(*itr))
+                    continue;
+                (*itr)->ToPlayer()->SaveToDB();
+            }
+            delete targets;
+            break;
+                
+        }
         default:
             sLog->outErrorDb("SmartScript::ProcessAction: Unhandled Action type %u", e.GetActionType());
             break;
+
     }
 
     if (e.link && e.link != e.event_id)
@@ -2782,6 +2888,19 @@ void SmartScript::InstallEvents()
 
         mInstallEvents.clear();
     }
+}
+
+bool SmartScript::ConditionValid(Unit* u, int32 c, int32 v1, int32 v2, int32 v3)
+{
+    if (c == 0) return true;
+    if (!u || !u->ToPlayer()) return false;
+    Condition cond;
+    cond.ConditionType = ConditionTypes(uint32(c));
+    cond.ConditionValue1 = uint32(v1);
+    cond.ConditionValue1 = uint32(v2);
+    cond.ConditionValue1 = uint32(v3);
+    ConditionSourceInfo srcInfo = ConditionSourceInfo(u->ToPlayer());
+    return cond.Meets(srcInfo);
 }
 
 void SmartScript::OnUpdate(uint32 const diff)

@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -52,7 +52,7 @@ enum TypeMask
     TYPEMASK_OBJECT         = 0x00000001,
     TYPEMASK_ITEM           = 0x00000002,
     TYPEMASK_CONTAINER      = 0x00000006,                       // TYPEMASK_ITEM | 0x0004
-    TYPEMASK_UNIT           = 0x00000008,                       //creature or player
+    TYPEMASK_UNIT           = 0x00000008,                       // creature
     TYPEMASK_PLAYER         = 0x00000010,
     TYPEMASK_GAMEOBJECT     = 0x00000020,
     TYPEMASK_DYNAMICOBJECT  = 0x00000040,
@@ -453,7 +453,7 @@ struct Position
     bool IsInDist(const Position* pos, float dist) const
         { return GetExactDistSq(pos) < dist * dist; }
     bool HasInArc(float arcangle, const Position* pos) const;
-    bool HasInLine(Unit const* target, float distance, float width) const;
+    bool HasInLine(WorldObject const* target, float width) const;
     std::string ToString() const;
 };
 ByteBuffer& operator>>(ByteBuffer& buf, Position::PositionXYZOStreamer const& streamer);
@@ -709,8 +709,8 @@ class WorldObject : public Object, public WorldLocation
         bool IsInRange(WorldObject const* obj, float minRange, float maxRange, bool is3D = true) const;
         bool IsInRange2d(float x, float y, float minRange, float maxRange) const;
         bool IsInRange3d(float x, float y, float z, float minRange, float maxRange) const;
-        bool isInFront(WorldObject const* target, float distance, float arc = M_PI) const;
-        bool isInBack(WorldObject const* target, float distance, float arc = M_PI) const;
+        bool isInFront(WorldObject const* target, float arc = M_PI) const;
+        bool isInBack(WorldObject const* target, float arc = M_PI) const;
 
         bool IsInBetween(const WorldObject* obj1, const WorldObject* obj2, float size = 0) const;
 
@@ -778,7 +778,8 @@ class WorldObject : public Object, public WorldLocation
                 GetClosePoint(x, y, z, GetObjectSize());
                 ang = GetOrientation();
             }
-            Position pos = {x, y, z, ang};
+            Position pos;
+            pos.Relocate(x, y, z, ang);
             return SummonCreature(id, pos, spwtype, despwtime, 0);
         }
         GameObject* SummonGameObject(uint32 entry, float x, float y, float z, float ang, float rotation0, float rotation1, float rotation2, float rotation3, uint32 respawnTime);

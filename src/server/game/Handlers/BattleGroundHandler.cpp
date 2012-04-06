@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -61,10 +61,10 @@ void WorldSession::HandleBattlemasterHelloOpcode(WorldPacket & recv_data)
         return;
     }
 
-    SendBattlegGroundList(guid, bgTypeId);
+    SendBattleGroundList(guid, bgTypeId);
 }
 
-void WorldSession::SendBattlegGroundList(uint64 guid, BattlegroundTypeId bgTypeId)
+void WorldSession::SendBattleGroundList(uint64 guid, BattlegroundTypeId bgTypeId)
 {
     WorldPacket data;
     sBattlegroundMgr->BuildBattlegroundListPacket(&data, guid, _player, bgTypeId, 0);
@@ -572,23 +572,15 @@ void WorldSession::HandleBattlemasterJoinArena(WorldPacket & recv_data)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: CMSG_BATTLEMASTER_JOIN_ARENA");
 
-    uint64 guid;                                            // arena Battlemaster guid
     uint8 arenaslot;                                        // 2v2, 3v3 or 5v5
-    uint8 asGroup;                                          // asGroup
-    uint8 isRated;                                          // isRated
     Group * group = NULL;
 
-    recv_data >> guid >> arenaslot >> asGroup >> isRated;
+    bool isRated = true, asGroup = true;
+
+    recv_data >> arenaslot;
 
     // ignore if we already in BG or BG queue
     if (_player->InBattleground())
-        return;
-
-    Creature* unit = GetPlayer()->GetMap()->GetCreature(guid);
-    if (!unit)
-        return;
-
-    if (!unit->isBattleMaster())                             // it's not battle master
         return;
 
     uint8 arenatype = 0;

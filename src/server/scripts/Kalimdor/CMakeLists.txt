@@ -1,3 +1,4 @@
+# Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
 # Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
 #
 # This file is free software; as a special exception the author gives
@@ -146,7 +147,7 @@ set(scripts_STAT_SRCS
   Kalimdor/Zones/tanaris.cpp
   Kalimdor/Zones/dustwallow_marsh.cpp
   Kalimdor/Zones/winterspring.cpp
-  Kalimdor/Zones/thousand_needles.cpp
+  #Kalimdor/Zones/thousand_needles.cpp
   Kalimdor/Zones/ashenvale.cpp
   Kalimdor/Zones/teldrassil.cpp
 )

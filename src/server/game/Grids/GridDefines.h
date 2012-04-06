@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -65,6 +65,16 @@ typedef GridRefManager<Creature>        CreatureMapType;
 typedef GridRefManager<DynamicObject>   DynamicObjectMapType;
 typedef GridRefManager<GameObject>      GameObjectMapType;
 typedef GridRefManager<Player>          PlayerMapType;
+
+enum GridMapTypeMask
+{
+    GRID_MAP_TYPE_MASK_CORPSE = 0x01,
+    GRID_MAP_TYPE_MASK_CREATURE = 0x02,
+    GRID_MAP_TYPE_MASK_DYNAMICOBJECT = 0x04,
+    GRID_MAP_TYPE_MASK_GAMEOBJECT = 0x08,
+    GRID_MAP_TYPE_MASK_PLAYER = 0x10,
+    GRID_MAP_TYPE_MASK_ALL = 0x1F
+};
 
 typedef Grid<Player, AllWorldObjectTypes, AllGridObjectTypes> GridType;
 typedef NGrid<MAX_NUMBER_OF_CELLS, Player, AllWorldObjectTypes, AllGridObjectTypes> NGridType;

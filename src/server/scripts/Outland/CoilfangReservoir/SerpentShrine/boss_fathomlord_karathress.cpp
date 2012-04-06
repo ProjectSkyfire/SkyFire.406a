@@ -1,10 +1,11 @@
 /*
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2006-2012 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -107,9 +108,9 @@ public:
 
     struct boss_fathomlord_karathressAI : public ScriptedAI
     {
-        boss_fathomlord_karathressAI(Creature* c) : ScriptedAI(c)
+        boss_fathomlord_karathressAI(Creature* creature) : ScriptedAI(creature)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
             Advisors[0] = 0;
             Advisors[1] = 0;
             Advisors[2] = 0;
@@ -315,9 +316,9 @@ public:
 
     struct boss_fathomguard_sharkkisAI : public ScriptedAI
     {
-        boss_fathomguard_sharkkisAI(Creature* c) : ScriptedAI(c)
+        boss_fathomguard_sharkkisAI(Creature* creature) : ScriptedAI(creature)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
         }
 
         InstanceScript* instance;
@@ -468,9 +469,9 @@ public:
 
     struct boss_fathomguard_tidalvessAI : public ScriptedAI
     {
-        boss_fathomguard_tidalvessAI(Creature* c) : ScriptedAI(c)
+        boss_fathomguard_tidalvessAI(Creature* creature) : ScriptedAI(creature)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
         }
 
         InstanceScript* instance;
@@ -594,9 +595,9 @@ public:
 
     struct boss_fathomguard_caribdisAI : public ScriptedAI
     {
-        boss_fathomguard_caribdisAI(Creature* c) : ScriptedAI(c)
+        boss_fathomguard_caribdisAI(Creature* creature) : ScriptedAI(creature)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
         }
 
         InstanceScript* instance;

@@ -1,10 +1,11 @@
 /*
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2006-2012 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -482,14 +483,14 @@ class npc_anachronos_the_ancient : public CreatureScript
 public:
     npc_anachronos_the_ancient() : CreatureScript("npc_anachronos_the_ancient") { }
 
-    CreatureAI* GetAI(Creature* c) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new npc_anachronos_the_ancientAI(c);
+        return new npc_anachronos_the_ancientAI(creature);
     }
 
     struct npc_anachronos_the_ancientAI : public ScriptedAI
     {
-        npc_anachronos_the_ancientAI(Creature* c) : ScriptedAI(c) {}
+        npc_anachronos_the_ancientAI(Creature* creature) : ScriptedAI(creature) {}
 
         uint32 AnimationTimer;
         uint8 AnimationCount;
@@ -573,7 +574,7 @@ public:
                         break;
                     case 10:
                         Merithra->HandleEmoteCommand(EMOTE_ONESHOT_LIFTOFF);
-                        Merithra->AddUnitMovementFlag(MOVEMENTFLAG_LEVITATING);
+                        Merithra->SetLevitate(true);
                         Merithra->GetMotionMaster()->MoveCharge(-8065, 1530, 6.61f, 3);
                         break;
                     case 11:
@@ -600,7 +601,7 @@ public:
                         break;
                     case 18:
                         Arygos->HandleEmoteCommand(EMOTE_ONESHOT_LIFTOFF);
-                        Arygos->AddUnitMovementFlag(MOVEMENTFLAG_LEVITATING);
+                        Arygos->SetLevitate(true);
                         Arygos->GetMotionMaster()->MoveCharge(-8065, 1530, 6.61f, 42);
                         break;
                     case 19:
@@ -627,7 +628,7 @@ public:
                         break;
                     case 26:
                         Caelestrasz->HandleEmoteCommand(254);
-                        Caelestrasz->AddUnitMovementFlag(MOVEMENTFLAG_LEVITATING);
+                        Caelestrasz->SetLevitate(true);
                         Caelestrasz->GetMotionMaster()->MoveCharge(-8065, 1530, 7.61f, 4);
                         break;
                     case 27:
@@ -766,7 +767,7 @@ public:
                         break;
                     case 63:
                         me->HandleEmoteCommand(254);
-                        me->AddUnitMovementFlag(MOVEMENTFLAG_LEVITATING);
+                        me->SetLevitate(true);
                         break;
                     case 64:
                         me->GetMotionMaster()->MoveCharge(-8000, 1400, 150, 9);
@@ -809,14 +810,14 @@ class mob_qiraj_war_spawn : public CreatureScript
 public:
     mob_qiraj_war_spawn() : CreatureScript("mob_qiraj_war_spawn") { }
 
-    CreatureAI* GetAI(Creature* c) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new mob_qiraj_war_spawnAI(c);
+        return new mob_qiraj_war_spawnAI(creature);
     }
 
     struct mob_qiraj_war_spawnAI : public ScriptedAI
     {
-        mob_qiraj_war_spawnAI(Creature* c) : ScriptedAI(c) {}
+        mob_qiraj_war_spawnAI(Creature* creature) : ScriptedAI(creature) {}
 
         uint64 MobGUID;
         uint64 PlayerGUID;
@@ -923,14 +924,14 @@ class npc_anachronos_quest_trigger : public CreatureScript
 public:
     npc_anachronos_quest_trigger() : CreatureScript("npc_anachronos_quest_trigger") { }
 
-    CreatureAI* GetAI(Creature* c) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new npc_anachronos_quest_triggerAI(c);
+        return new npc_anachronos_quest_triggerAI(creature);
     }
 
     struct npc_anachronos_quest_triggerAI : public ScriptedAI
     {
-        npc_anachronos_quest_triggerAI(Creature* c) : ScriptedAI(c) {}
+        npc_anachronos_quest_triggerAI(Creature* creature) : ScriptedAI(creature) {}
 
         uint64 PlayerGUID;
 
@@ -1415,7 +1416,7 @@ class go_wind_stone : public GameObjectScript
                     break;
             }
 
-            player->SEND_GOSSIP_MENU(player->GetGossipTextId(gossipId), go->GetGUID());
+            player->SEND_GOSSIP_MENU(player->GetGossipTextId(gossipId, go), go->GetGUID());
             return true;
         }
 

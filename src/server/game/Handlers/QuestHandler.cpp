@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -104,7 +104,7 @@ void WorldSession::HandleQuestgiverHelloOpcode(WorldPacket & recv_data)
     if (sScriptMgr->OnGossipHello(_player, creature))
         return;
 
-    _player->PrepareGossipMenu(creature, creature->GetCreatureInfo()->GossipMenuId, true);
+    _player->PrepareGossipMenu(creature, creature->GetCreatureTemplate()->GossipMenuId, true);
     _player->SendPreparedGossip(creature);
 
     creature->AI()->sGossipHello(_player);
@@ -660,7 +660,7 @@ uint32 WorldSession::getDialogStatus(Player* player, Object* questgiver, uint32 
             continue;
 
         ConditionList conditions = sConditionMgr->GetConditionsForNotGroupedEntry(CONDITION_SOURCE_TYPE_QUEST_SHOW_MARK, quest->GetQuestId());
-        if (!sConditionMgr->IsPlayerMeetToConditions(player, conditions))
+        if (!sConditionMgr->IsObjectMeetToConditions(player, conditions))
             continue;
 
         QuestStatus status = player->GetQuestStatus(quest_id);
@@ -688,7 +688,7 @@ uint32 WorldSession::getDialogStatus(Player* player, Object* questgiver, uint32 
             continue;
 
         ConditionList conditions = sConditionMgr->GetConditionsForNotGroupedEntry(CONDITION_SOURCE_TYPE_QUEST_SHOW_MARK, quest->GetQuestId());
-        if (!sConditionMgr->IsPlayerMeetToConditions(player, conditions))
+        if (!sConditionMgr->IsObjectMeetToConditions(player, conditions))
             continue;
 
         QuestStatus status = player->GetQuestStatus(quest_id);

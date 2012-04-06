@@ -1267,9 +1267,12 @@ DROP TABLE IF EXISTS `character_version`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `character_version` (
   `core_version` varchar(120) NOT NULL DEFAULT 'SkyFireEMU Rebase 4.0.6a' COMMENT 'Core revision dumped at startup.',
-  `required_2011_12_02_02_characters_version_test` bit(1) DEFAULT NULL
+  `character_db_version` varchar(120) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=FIXED COMMENT='Version Notes';
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+REPLACE INTO character_version VALUES
+('2012_03_11 - fad059fdde','2012_03_13_00');
 
 --
 -- Dumping data for table `character_version`
@@ -1452,34 +1455,6 @@ CREATE TABLE `corpse` (
 LOCK TABLES `corpse` WRITE;
 /*!40000 ALTER TABLE `corpse` DISABLE KEYS */;
 /*!40000 ALTER TABLE `corpse` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `creature_loot_template`
---
-
-DROP TABLE IF EXISTS `creature_loot_template`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `creature_loot_template` (
-  `entry` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `item` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `ChanceOrQuestChance` float NOT NULL DEFAULT '100',
-  `lootmode` smallint(5) unsigned NOT NULL DEFAULT '1',
-  `groupid` tinyint(3) unsigned NOT NULL DEFAULT '0',
-  `mincountOrRef` mediumint(9) NOT NULL DEFAULT '1',
-  `maxcount` tinyint(3) unsigned NOT NULL DEFAULT '1',
-  PRIMARY KEY (`entry`,`item`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Loot System';
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `creature_loot_template`
---
-
-LOCK TABLES `creature_loot_template` WRITE;
-/*!40000 ALTER TABLE `creature_loot_template` DISABLE KEYS */;
-/*!40000 ALTER TABLE `creature_loot_template` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -2173,7 +2148,6 @@ CREATE TABLE `instance_reset` (
 
 LOCK TABLES `instance_reset` WRITE;
 /*!40000 ALTER TABLE `instance_reset` DISABLE KEYS */;
-INSERT INTO `instance_reset` VALUES (33,1,1326859200),(36,1,1326859200),(249,0,1327377600),(249,1,1327377600),(269,1,1326859200),(409,0,1327377600),(469,0,1327377600),(509,0,1327032000),(531,0,1327377600),(532,0,1327377600),(533,0,1327377600),(533,1,1327377600),(534,0,1327377600),(540,1,1326859200),(542,1,1326859200),(543,1,1326859200),(544,0,1327377600),(545,1,1326859200),(546,1,1326859200),(547,1,1326859200),(548,0,1327377600),(550,0,1327377600),(552,1,1326859200),(553,1,1326859200),(554,1,1326859200),(555,1,1326859200),(556,1,1326859200),(557,1,1326859200),(558,1,1326859200),(560,1,1326859200),(564,0,1327377600),(565,0,1327377600),(568,0,1327032000),(574,1,1326859200),(575,1,1326859200),(576,1,1326859200),(578,1,1326859200),(580,0,1327377600),(585,1,1326859200),(595,1,1326859200),(598,1,1326859200),(599,1,1326859200),(600,1,1326859200),(601,1,1326859200),(602,1,1326859200),(603,0,1327377600),(603,1,1327377600),(604,1,1326859200),(608,1,1326859200),(615,0,1327377600),(615,1,1327377600),(616,0,1327377600),(616,1,1327377600),(619,1,1326859200),(624,0,1327377600),(624,1,1327377600),(631,0,1327377600),(631,1,1327377600),(631,2,1327377600),(631,3,1327377600),(632,1,1326859200),(643,1,1326859200),(644,1,1326859200),(645,1,1326859200),(649,0,1327377600),(649,1,1327377600),(649,2,1327377600),(649,3,1327377600),(650,1,1326859200),(657,1,1326859200),(658,1,1326859200),(668,1,1326859200),(669,0,1327377600),(669,1,1327377600),(669,2,1327377600),(669,3,1327377600),(670,1,1326859200),(671,0,1327377600),(671,1,1327377600),(671,2,1327377600),(671,3,1327377600),(724,0,1327377600),(724,1,1327377600),(724,2,1327377600),(724,3,1327377600),(725,1,1326859200),(754,0,1327377600),(754,1,1327377600),(754,2,1327377600),(754,3,1327377600),(755,1,1326859200),(757,0,1327377600),(757,1,1327377600);
 /*!40000 ALTER TABLE `instance_reset` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2560,7 +2534,6 @@ CREATE TABLE `pool_quest_save` (
 
 LOCK TABLES `pool_quest_save` WRITE;
 /*!40000 ALTER TABLE `pool_quest_save` DISABLE KEYS */;
-INSERT INTO `pool_quest_save` VALUES (523,25105),(524,25160),(530,26192),(531,26220),(532,26414),(533,26556),(534,11369),(34771,14144),(34880,14080),(34882,14102),(34912,14145),(34914,14112);
 /*!40000 ALTER TABLE `pool_quest_save` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2586,37 +2559,6 @@ LOCK TABLES `reserved_name` WRITE;
 /*!40000 ALTER TABLE `reserved_name` ENABLE KEYS */;
 UNLOCK TABLES;
 
---
--- Table structure for table `waypoint_scripts`
---
-
-DROP TABLE IF EXISTS `waypoint_scripts`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `waypoint_scripts` (
-  `id` int(11) unsigned NOT NULL DEFAULT '0',
-  `delay` int(11) unsigned NOT NULL DEFAULT '0',
-  `command` int(11) unsigned NOT NULL DEFAULT '0',
-  `datalong` int(11) unsigned NOT NULL DEFAULT '0',
-  `datalong2` int(11) unsigned NOT NULL DEFAULT '0',
-  `dataint` int(11) unsigned NOT NULL DEFAULT '0',
-  `x` float NOT NULL DEFAULT '0',
-  `y` float NOT NULL DEFAULT '0',
-  `z` float NOT NULL DEFAULT '0',
-  `o` float NOT NULL DEFAULT '0',
-  `guid` int(11) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`guid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `waypoint_scripts`
---
-
-LOCK TABLES `waypoint_scripts` WRITE;
-/*!40000 ALTER TABLE `waypoint_scripts` DISABLE KEYS */;
-/*!40000 ALTER TABLE `waypoint_scripts` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `worldstates`
@@ -2651,4 +2593,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-01-25 14:16:30
+-- Dump completed on 2012-02-24 14:16:41

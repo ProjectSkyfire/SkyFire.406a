@@ -1,9 +1,10 @@
 /*
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -106,7 +107,7 @@ public:
 
     struct boss_thaddiusAI : public BossAI
     {
-        boss_thaddiusAI(Creature* c) : BossAI(c, BOSS_THADDIUS)
+        boss_thaddiusAI(Creature* creature) : BossAI(creature, BOSS_THADDIUS)
         {
             // init is a bit tricky because thaddius shall track the life of both adds, but not if there was a wipe
             // and, in particular, if there was a crash after both adds were killed (should not respawn)
@@ -265,9 +266,9 @@ public:
 
     struct mob_stalaggAI : public ScriptedAI
     {
-        mob_stalaggAI(Creature* c) : ScriptedAI(c)
+        mob_stalaggAI(Creature* creature) : ScriptedAI(creature)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
         }
 
         InstanceScript* instance;
@@ -350,9 +351,9 @@ public:
 
     struct mob_feugenAI : public ScriptedAI
     {
-        mob_feugenAI(Creature* c) : ScriptedAI(c)
+        mob_feugenAI(Creature* creature) : ScriptedAI(creature)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
         }
 
         InstanceScript* instance;

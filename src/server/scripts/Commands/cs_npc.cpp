@@ -1,10 +1,10 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -463,7 +463,7 @@ public:
         // Faction is set in creature_template - not inside creature
 
         // update in memory..
-        if (CreatureTemplate const* cinfo = creature->GetCreatureInfo())
+        if (CreatureTemplate const* cinfo = creature->GetCreatureTemplate())
         {
             const_cast<CreatureTemplate*>(cinfo)->faction_A = factionId;
             const_cast<CreatureTemplate*>(cinfo)->faction_H = factionId;
@@ -548,7 +548,7 @@ public:
         uint32 displayid = target->GetDisplayId();
         uint32 nativeid = target->GetNativeDisplayId();
         uint32 Entry = target->GetEntry();
-        CreatureTemplate const* cInfo = target->GetCreatureInfo();
+        CreatureTemplate const* cInfo = target->GetCreatureTemplate();
 
         int64 curRespawnDelay = target->GetRespawnTimeEx()-time(NULL);
         if (curRespawnDelay < 0)
@@ -1149,7 +1149,7 @@ public:
             return false;
         }
 
-        CreatureTemplate const* cInfo = creatureTarget->GetCreatureInfo();
+        CreatureTemplate const* cInfo = creatureTarget->GetCreatureTemplate();
 
         if (!cInfo->isTameable (player->CanTameExoticPets()))
         {
@@ -1230,7 +1230,7 @@ public:
         group_member->leaderGUID     = leaderGUID;
         group_member->groupAI        = 0;
 
-        CreatureGroupMap[lowguid] = group_member;
+        sFormationMgr->CreatureGroupMap[lowguid] = group_member;
         creature->SearchFormation();
 
         PreparedStatement* stmt = WorldDatabase.GetPreparedStatement(WORLD_INS_CREATURE_FORMATION);

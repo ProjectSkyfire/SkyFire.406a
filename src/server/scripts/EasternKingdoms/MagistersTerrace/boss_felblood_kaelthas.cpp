@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2006-2012 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -295,7 +295,7 @@ public:
                             DoCast(me, SPELL_SHOCK_BARRIER, true);
                             DoCast(me->getVictim(), SPELL_PYROBLAST);
                             PyroblastTimer = 60000;
-                        } 
+                        }
                         else PyroblastTimer -= diff;
                     }
 
@@ -303,7 +303,7 @@ public:
                     {
                         DoCast(me->getVictim(), SPELL_FIREBALL_NORMAL);
                         FireballTimer = urand(2000, 6000);
-                    } 
+                    }
                     else FireballTimer -= diff;
 
                     if (PhoenixTimer <= diff)
@@ -325,7 +325,7 @@ public:
                         DoScriptText(SAY_PHOENIX, me);
 
                         PhoenixTimer = 60000;
-                    } 
+                    }
                     else PhoenixTimer -= diff;
 
                     if (FlameStrikeTimer <= diff)
@@ -338,7 +338,7 @@ public:
                             DoScriptText(SAY_FLAMESTRIKE, me);
                         }
                         FlameStrikeTimer = urand(15000, 25000);
-                    } 
+                    }
                     else FlameStrikeTimer -= diff;
 
                     // Below 50%
@@ -424,7 +424,7 @@ public:
                                 GravityLapsePhase = 0;
                                 break;
                         }
-                    } 
+                    }
                     else GravityLapseTimer -= diff;
                 }
                 break;
@@ -467,7 +467,7 @@ public:
             {
                 DoCast(me, SPELL_FLAMESTRIKE1_NORMAL, true);
                 me->Kill(me);
-            } 
+            }
             else FlameStrikeTimer -= diff;
         }
     };
@@ -499,7 +499,7 @@ public:
         void Reset()
         {
             me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE + UNIT_FLAG_NON_ATTACKABLE);
-            me->AddUnitMovementFlag(MOVEMENTFLAG_LEVITATING);
+            me->SetLevitate(true);
             DoCast(me, SPELL_PHOENIX_BURN, true);
             BurnTimer = 2000;
             Death_Timer = 3000;
@@ -566,7 +566,7 @@ public:
                         me->SummonCreature(CREATURE_PHOENIX_EGG, 0.0f, 0.0f, 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 45000);
                         me->DisappearAndDie();
                         Rebirth = false;
-                    } 
+                    }
                     else Death_Timer -= diff;
                 }
             }
@@ -617,7 +617,7 @@ public:
             {
                 me->SummonCreature(CREATURE_PHOENIX, 0.0f, 0.0f, 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 60000);
                 me->Kill(me);
-            } 
+            }
             else HatchTimer -= diff;
         }
     };
@@ -646,7 +646,7 @@ public:
             ChangeTargetTimer = urand(6000, 12000);
 
             me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-            me->AddUnitMovementFlag(MOVEMENTFLAG_LEVITATING);
+            me->SetLevitate(true);
             me->setFaction(14);
             DoCast(me, SPELL_ARCANE_SPHERE_PASSIVE, true);
         }
@@ -674,7 +674,7 @@ public:
                 }
 
                 ChangeTargetTimer = urand(5000, 15000);
-            } 
+            }
             else ChangeTargetTimer -= diff;
         }
     };

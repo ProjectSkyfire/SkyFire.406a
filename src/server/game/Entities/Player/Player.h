@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -501,23 +501,6 @@ enum PlayerFieldByte2Flags
     PLAYER_FIELD_BYTE2_NONE                 = 0x00,
     PLAYER_FIELD_BYTE2_STEALTH              = 0x20,
     PLAYER_FIELD_BYTE2_INVISIBILITY_GLOW    = 0x40
-};
-
-enum ActivateTaxiReplies
-{
-    ERR_TAXIOK                      = 0,
-    ERR_TAXIUNSPECIFIEDSERVERERROR  = 1,
-    ERR_TAXINOSUCHPATH              = 2,
-    ERR_TAXINOTENOUGHMONEY          = 3,
-    ERR_TAXITOOFARAWAY              = 4,
-    ERR_TAXINOVENDORNEARBY          = 5,
-    ERR_TAXINOTVISITED              = 6,
-    ERR_TAXIPLAYERBUSY              = 7,
-    ERR_TAXIPLAYERALREADYMOUNTED    = 8,
-    ERR_TAXIPLAYERSHAPESHIFTED      = 9,
-    ERR_TAXIPLAYERMOVING            = 10,
-    ERR_TAXISAMENODE                = 11,
-    ERR_TAXINOTSTANDING             = 12
 };
 
 enum MirrorTimerType
@@ -1044,7 +1027,7 @@ class TradeData
 
         Item* GetItem(TradeSlots slot) const;
         bool HasItem(uint64 itemGuid) const;
-        TradeSlots const GetTradeSlotForItem(uint64 itemGuid);
+        TradeSlots GetTradeSlotForItem(uint64 itemGuid);
         void SetItem(TradeSlots slot, Item* item);
 
         uint32 GetSpell() const { return m_spell; }
@@ -1102,19 +1085,16 @@ private:
 
     Player* _killer;
     Unit* _victim;
-    bool _isBattleGround;
-
-    bool _isPvP;
-
     Group* _group;
     float _groupRate;
-    uint8 _maxLevel;
     Player* _maxNotGrayMember;
     uint32 _count;
     uint32 _sumLevel;
-    bool _isFullXP;
-
     uint32 _xp;
+    bool _isFullXP;
+    uint8 _maxLevel;
+    bool _isBattleGround;
+    bool _isPvP;
 };
 
 class Player : public Unit, public GridObject<Player>
@@ -1403,6 +1383,7 @@ class Player : public Unit, public GridObject<Player>
 
         void UpdateEnchantTime(uint32 time);
         void UpdateSoulboundTradeItems();
+        void AddTradeableItem(Item* item);
         void RemoveTradeableItem(Item* item);
         void UpdateItemDuration(uint32 time, bool realtimeonly = false);
         void AddEnchantmentDurations(Item *item);
@@ -1430,7 +1411,7 @@ class Player : public Unit, public GridObject<Player>
         void SendPreparedGossip(WorldObject* source);
         void OnGossipSelect(WorldObject* source, uint32 gossipListId, uint32 menuId);
 
-        uint32 GetGossipTextId(uint32 menuId);
+        uint32 GetGossipTextId(uint32 menuId, WorldObject* source);
         uint32 GetGossipTextId(WorldObject* source);
         static uint32 GetDefaultGossipMenuForSource(WorldObject* source);
 
@@ -1542,7 +1523,7 @@ class Player : public Unit, public GridObject<Player>
         void SendQuestReward(Quest const *quest, uint32 XP, Object* questGiver);
         void SendQuestFailed(uint32 questId, InventoryResult reason = EQUIP_ERR_OK);
         void SendQuestTimerFailed(uint32 quest_id);
-        void SendCanTakeQuestResponse(uint32 msg);
+        void SendCanTakeQuestResponse(uint32 msg) const;
         void SendQuestConfirmAccept(Quest const* quest, Player* pReceiver);
         void SendPushToPartyResponse(Player *player, uint32 msg);
         void SendQuestUpdateAddItem(Quest const* quest, uint32 item_idx, uint16 count);
@@ -2373,8 +2354,6 @@ class Player : public Unit, public GridObject<Player>
         void   SaveRecallPosition();
 
         void SetHomebind(WorldLocation const& loc, uint32 area_id);
-
-        uint32 _ConditionErrorMsgId;
 
         // Homebind coordinates
         uint32 _homebindMapId;

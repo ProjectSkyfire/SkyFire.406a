@@ -1,10 +1,10 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2005-2011 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -104,22 +104,6 @@ namespace Movement
         inline int32 operator()(Spline<int32>& s, int32 i)
         {
             return Movement::computeFallTime(start_elevation - s.getPoint(i+1).z, false) * 1000.f;
-        }
-    };
-
-    enum{
-        minimal_duration = 1,
-    };
-
-    struct CommonInitializer
-    {
-        CommonInitializer(float _velocity) : velocityInv(1000.f/_velocity), time(minimal_duration) {}
-        float velocityInv;
-        int32 time;
-        inline int32 operator()(Spline<int32>& s, int32 i)
-        {
-            time += (s.SegLength(i) * velocityInv);
-            return time;
         }
     };
 

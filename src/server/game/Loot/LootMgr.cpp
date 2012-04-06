@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -103,9 +103,7 @@ uint32 LootStore::LoadLootTable()
     QueryResult result = WorldDatabase.PQuery("SELECT entry, item, ChanceOrQuestChance, lootmode, groupid, mincountOrRef, maxcount FROM %s", GetName());
 
     if (!result)
-    {
         return 0;
-}
 
     uint32 count = 0;
 
@@ -340,7 +338,7 @@ LootItem::LootItem(LootStoreItem const& li)
 bool LootItem::AllowedForPlayer(Player const* player) const
 {
     // DB conditions check
-    if (!sConditionMgr->IsPlayerMeetToConditions(const_cast<Player*>(player), conditions))
+    if (!sConditionMgr->IsObjectMeetToConditions(const_cast<Player*>(player), conditions))
         return false;
 
     ItemTemplate const* proto = sObjectMgr->GetItemTemplate(itemid);
@@ -1376,7 +1374,7 @@ bool LootTemplate::addConditionItem(Condition* cond)
     {
         for (LootStoreItemList::iterator i = Entries.begin(); i != Entries.end(); ++i)
         {
-            if (i->itemid == cond->mSourceEntry)
+            if (i->itemid == cond->SourceEntry)
             {
                 i->conditions.push_back(cond);
                 return true;
@@ -1392,7 +1390,7 @@ bool LootTemplate::addConditionItem(Condition* cond)
             {
                 for (LootStoreItemList::iterator i = itemList->begin(); i != itemList->end(); ++i)
                 {
-                    if ((*i).itemid == cond->mSourceEntry)
+                    if ((*i).itemid == uint32(cond->SourceEntry))
                     {
                         (*i).conditions.push_back(cond);
                         return true;
@@ -1404,7 +1402,7 @@ bool LootTemplate::addConditionItem(Condition* cond)
             {
                 for (LootStoreItemList::iterator i = itemList->begin(); i != itemList->end(); ++i)
                 {
-                    if ((*i).itemid == cond->mSourceEntry)
+                    if ((*i).itemid == uint32(cond->SourceEntry))
                     {
                         (*i).conditions.push_back(cond);
                         return true;

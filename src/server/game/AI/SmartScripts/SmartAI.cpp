@@ -1,10 +1,10 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -46,7 +46,7 @@ SmartAI::SmartAI(Creature* c) : CreatureAI(c)
     mCanRepeatPath = false;
 
     // spawn in run mode
-    me->RemoveUnitMovementFlag(MOVEMENTFLAG_WALKING);
+    me->SetWalk(false);
     mRun = false;
 
     me->GetPosition(&mLastOOCPos);
@@ -523,7 +523,7 @@ bool SmartAI::AssistPlayerInCombat(Unit* who)
         return false;
 
     //experimental (unknown) flag not present
-    if (!(me->GetCreatureInfo()->type_flags & CREATURE_TYPEFLAGS_AID_PLAYERS))
+    if (!(me->GetCreatureTemplate()->type_flags & CREATURE_TYPEFLAGS_AID_PLAYERS))
         return false;
 
     //not a player
@@ -560,7 +560,7 @@ void SmartAI::JustRespawned()
     mDespawnState = 0;
     mEscortState = SMART_ESCORT_NONE;
     me->SetVisible(true);
-    if (me->getFaction() != me->GetCreatureInfo()->faction_A)
+    if (me->getFaction() != me->GetCreatureTemplate()->faction_A)
         me->RestoreFaction();
     GetScript()->ProcessEventsFor(SMART_EVENT_RESPAWN);
     Reset();
@@ -571,7 +571,7 @@ void SmartAI::JustRespawned()
     mFollowArrivedTimer = 1000;
     mFollowArrivedEntry = 0;
     mFollowCreditType = 0;
-    mInvinceabilityHpLevel = 0;   
+    mInvinceabilityHpLevel = 0;
 }
 
 int SmartAI::Permissible(const Creature* creature)
@@ -720,9 +720,9 @@ uint64 SmartAI::GetGUID(int32 /*id*/)
 void SmartAI::SetRun(bool run)
 {
     if (run)
-        me->RemoveUnitMovementFlag(MOVEMENTFLAG_WALKING);
+        me->SetWalk(false);
     else
-        me->AddUnitMovementFlag(MOVEMENTFLAG_WALKING);
+        me->SetWalk(true);
 
     mRun = run;
 }
@@ -731,12 +731,12 @@ void SmartAI::SetFly(bool fly)
 {
     if (fly)
     {
-        me->AddUnitMovementFlag(MOVEMENTFLAG_LEVITATING);
+        me->SetLevitate(true);
         me->SetByteFlag(UNIT_FIELD_BYTES_1, 3, 0x01);
     }
     else
     {
-        me->RemoveUnitMovementFlag(MOVEMENTFLAG_LEVITATING);
+        me->SetLevitate(false);
         me->RemoveByteFlag(UNIT_FIELD_BYTES_1, 3, 0x01);
     }
     me->SetFlying(fly);

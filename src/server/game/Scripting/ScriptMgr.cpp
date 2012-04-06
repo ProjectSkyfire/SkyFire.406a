@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -182,7 +182,7 @@ void DoScriptText(int32 iTextEntry, WorldObject* pSource, Unit* target)
 
     if (data->SoundId)
     {
-        if (GetSoundEntriesStore()->LookupEntry(data->SoundId))
+        if (sSoundEntriesStore.LookupEntry(data->SoundId))
             pSource->SendPlaySound(data->SoundId, false);
         else
             sLog->outError("TSCR: DoScriptText entry %i tried to process invalid sound id %u.", iTextEntry, data->SoundId);
@@ -261,7 +261,7 @@ void ScriptMgr::Initialize()
 void ScriptMgr::Unload()
 {
     #define SCR_CLEAR(T) \
-        FOR_SCRIPTS(T, itr, end) \
+        for (SCR_REG_ITR(T) itr = SCR_REG_LST(T).begin(); itr != SCR_REG_LST(T).end(); ++itr) \
             delete itr->second; \
         SCR_REG_LST(T).clear();
 
@@ -396,7 +396,7 @@ void ScriptMgr::CreateSpellScripts(uint32 spellId, std::list<SpellScript*>& scri
 {
     SpellScriptsBounds bounds = sObjectMgr->GetSpellScriptsBounds(spellId);
 
-    for (SpellScriptsMap::iterator itr = bounds.first; itr != bounds.second; ++itr)
+    for (SpellScriptsContainer::iterator itr = bounds.first; itr != bounds.second; ++itr)
     {
         SpellScriptLoader* tmpscript = ScriptRegistry<SpellScriptLoader>::GetScriptById(itr->second);
         if (!tmpscript)
@@ -417,7 +417,7 @@ void ScriptMgr::CreateAuraScripts(uint32 spellId, std::list<AuraScript*>& script
 {
     SpellScriptsBounds bounds = sObjectMgr->GetSpellScriptsBounds(spellId);
 
-    for (SpellScriptsMap::iterator itr = bounds.first; itr != bounds.second; ++itr)
+    for (SpellScriptsContainer::iterator itr = bounds.first; itr != bounds.second; ++itr)
     {
         SpellScriptLoader* tmpscript = ScriptRegistry<SpellScriptLoader>::GetScriptById(itr->second);
         if (!tmpscript)
@@ -434,12 +434,12 @@ void ScriptMgr::CreateAuraScripts(uint32 spellId, std::list<AuraScript*>& script
     }
 }
 
-void ScriptMgr::CreateSpellScriptLoaders(uint32 spellId, std::vector<std::pair<SpellScriptLoader*, SpellScriptsMap::iterator> >& scriptVector)
+void ScriptMgr::CreateSpellScriptLoaders(uint32 spellId, std::vector<std::pair<SpellScriptLoader*, SpellScriptsContainer::iterator> >& scriptVector)
 {
     SpellScriptsBounds bounds = sObjectMgr->GetSpellScriptsBounds(spellId);
     scriptVector.reserve(std::distance(bounds.first, bounds.second));
 
-    for (SpellScriptsMap::iterator itr = bounds.first; itr != bounds.second; ++itr)
+    for (SpellScriptsContainer::iterator itr = bounds.first; itr != bounds.second; ++itr)
     {
         SpellScriptLoader* tmpscript = ScriptRegistry<SpellScriptLoader>::GetScriptById(itr->second);
         if (!tmpscript)
@@ -1044,14 +1044,12 @@ void ScriptMgr::OnAuctionExpire(AuctionHouseObject* ah, AuctionEntry* entry)
     FOREACH_SCRIPT(AuctionHouseScript)->OnAuctionExpire(ah, entry);
 }
 
-bool ScriptMgr::OnConditionCheck(Condition* condition, Player* player, Unit* invoker)
+bool ScriptMgr::OnConditionCheck(Condition* condition, ConditionSourceInfo& sourceInfo)
 {
     ASSERT(condition);
-    ASSERT(player);
-    // invoker can be NULL.
 
-    GET_SCRIPT_RET(ConditionScript, condition->mScriptId, tmpscript, true);
-    return tmpscript->OnConditionCheck(condition, player, invoker);
+    GET_SCRIPT_RET(ConditionScript, condition->ScriptId, tmpscript, true);
+    return tmpscript->OnConditionCheck(condition, sourceInfo);
 }
 
 void ScriptMgr::OnInstall(Vehicle* veh)

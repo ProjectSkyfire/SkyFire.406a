@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2011 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -290,7 +290,7 @@ public:
                     if (status != QUEST_STATUS_COMPLETE && status != QUEST_STATUS_REWARDED)
                         return false;
 
-				    player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_ARTHAS_0, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF);
+                    player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_ARTHAS_0, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF);
                     player->SEND_GOSSIP_MENU(907, creature->GetGUID());
                     break;
                 }
@@ -595,11 +595,11 @@ public:
                         }
                         //After waypoint 0
                         case 1:
-                            me->RemoveUnitMovementFlag(MOVEMENTFLAG_WALKING);
+                            me->SetWalk(false);
                             if (Unit* uther = me->SummonCreature(NPC_UTHER, 1794.357f, 1272.183f, 140.558f, 1.37f, TEMPSUMMON_DEAD_DESPAWN, 180000))
                             {
                                 UtherGUID = uther->GetGUID();
-                                uther->RemoveUnitMovementFlag(MOVEMENTFLAG_WALKING);
+                                uther->SetWalk(false);
                                 uther->GetMotionMaster()->MovePoint(0, 1897.018f, 1287.487f, 143.481f);
                                 uther->SetTarget(me->GetGUID());
                                 me->SetTarget(UtherGUID);
@@ -684,7 +684,7 @@ public:
                         case 17:
                             if (Creature* uther = Unit::GetCreature(*me, UtherGUID))
                             {
-                                uther->AddUnitMovementFlag(MOVEMENTFLAG_WALKING);
+                                uther->SetWalk(true);
                                 uther->GetMotionMaster()->MovePoint(0, 1794.357f, 1272.183f, 140.558f);
                             }
                             JumpToNextStep(1000);
@@ -693,7 +693,7 @@ public:
                             if (Creature* jaina = Unit::GetCreature(*me, JainaGUID))
                             {
                                 me->SetTarget(JainaGUID);
-                                jaina->AddUnitMovementFlag(MOVEMENTFLAG_WALKING);
+                                jaina->SetWalk(true);
                                 jaina->GetMotionMaster()->MovePoint(0, 1794.357f, 1272.183f, 140.558f);
                             }
                             JumpToNextStep(1000);
@@ -759,7 +759,7 @@ public:
                             if (Creature* cityman = Unit::GetCreature(*me, CitymenGUID[0]))
                             {
                                 cityman->SetTarget(me->GetGUID());
-                                cityman->AddUnitMovementFlag(MOVEMENTFLAG_WALKING);
+                                cityman->SetWalk(true);
                                 cityman->GetMotionMaster()->MovePoint(0, 2088.625f, 1279.191f, 140.743f);
                             }
                             JumpToNextStep(2000);
@@ -933,7 +933,7 @@ public:
                                 if (Unit* boss = me->SummonCreature(BossID, 2232.19f, 1331.933f, 126.662f, 3.15f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 900000))
                                 {
                                     BossGUID = boss->GetGUID();
-                                    boss->AddUnitMovementFlag(MOVEMENTFLAG_WALKING);
+                                    boss->SetWalk(true);
                                     boss->GetMotionMaster()->MovePoint(0, 2194.110f, 1332.00f, 130.00f);
                                 }
                             }

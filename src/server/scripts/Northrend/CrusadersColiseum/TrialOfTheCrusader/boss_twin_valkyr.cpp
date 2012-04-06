@@ -1,10 +1,11 @@
 /*
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2006-2012 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -176,7 +177,7 @@ struct boss_twin_baseAI : public ScriptedAI
         me->SetReactState(REACT_PASSIVE);
         me->ModifyAuraState(m_uiAuraState, true);
         /* Uncomment this once that they are flying above the ground
-        me->AddUnitMovementFlag(MOVEMENTFLAG_LEVITATING);
+        me->SetLevitate(true);
         me->SetFlying(true); */
         m_bIsBerserk = false;
 
@@ -560,11 +561,13 @@ struct mob_unleashed_ballAI : public ScriptedAI
     {
         float x0 = ToCCommonLoc[1].GetPositionX(), y0 = ToCCommonLoc[1].GetPositionY(), r = 47.0f;
         float y = y0;
-        float x = float(urand(uint32(x0 - r), uint32(x0 + r)));
+        float x = frand(x0 - r, x0 + r);
+        float sq = pow(r, 2) - pow(x - x0, 2);
+        float rt = sqrtf(fabs(sq));
         if (urand(0, 1))
-            y = y0 + sqrt(pow(r, 2) - pow((x-x0), 2));
+            y = y0 + rt;
         else
-            y = y0 - sqrt(pow(r, 2) - pow((x-x0), 2));
+            y = y0 - rt;
         me->GetMotionMaster()->MovePoint(0, x, y, me->GetPositionZ());
     }
 
@@ -572,7 +575,7 @@ struct mob_unleashed_ballAI : public ScriptedAI
     {
         me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_PC | UNIT_FLAG_NOT_SELECTABLE);
         me->SetReactState(REACT_PASSIVE);
-        me->AddUnitMovementFlag(MOVEMENTFLAG_LEVITATING);
+        me->SetLevitate(true);
         me->SetFlying(true);
         SetCombatMovement(false);
         MoveToNextPoint();

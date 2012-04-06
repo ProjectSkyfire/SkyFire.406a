@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -125,9 +125,9 @@ ReputationRank ReputationMgr::GetBaseRank(FactionEntry const* factionEntry) cons
 void ReputationMgr::ApplyForceReaction(uint32 faction_id, ReputationRank rank, bool apply)
 {
     if (apply)
-        m_forcedReactions[faction_id] = rank;
+        _forcedReactions[faction_id] = rank;
     else
-        m_forcedReactions.erase(faction_id);
+        _forcedReactions.erase(faction_id);
 }
 
 uint32 ReputationMgr::GetDefaultStateFlags(FactionEntry const* factionEntry) const
@@ -153,9 +153,9 @@ uint32 ReputationMgr::GetDefaultStateFlags(FactionEntry const* factionEntry) con
 void ReputationMgr::SendForceReactions()
 {
     WorldPacket data;
-    data.Initialize(SMSG_SET_FORCED_REACTIONS, 4+m_forcedReactions.size()*(4+4));
-    data << uint32(m_forcedReactions.size());
-    for (ForcedReactions::const_iterator itr = m_forcedReactions.begin(); itr != m_forcedReactions.end(); ++itr)
+    data.Initialize(SMSG_SET_FORCED_REACTIONS, 4+_forcedReactions.size()*(4+4));
+    data << uint32(_forcedReactions.size());
+    for (ForcedReactions::const_iterator itr = _forcedReactions.begin(); itr != _forcedReactions.end(); ++itr)
     {
         data << uint32(itr->first);                         // faction_id (Faction.dbc)
         data << uint32(itr->second);                        // reputation rank
@@ -177,7 +177,7 @@ void ReputationMgr::SendState(FactionState const* faction)
     data << (uint32) faction->ReputationListID;
     data << (uint32) faction->Standing;
 
-    for (FactionStateList::iterator itr = m_factions.begin(); itr != m_factions.end(); ++itr)
+    for (FactionStateList::iterator itr = _factions.begin(); itr != _factions.end(); ++itr)
     {
         if (itr->second.needSend)
         {
@@ -202,7 +202,7 @@ void ReputationMgr::SendInitialReputations()
 
     RepListID a = 0;
 
-    for (FactionStateList::iterator itr = m_factions.begin(); itr != m_factions.end(); ++itr)
+    for (FactionStateList::iterator itr = _factions.begin(); itr != _factions.end(); ++itr)
     {
         // fill in absent fields
         for (; a != itr->first; a++)
@@ -232,7 +232,7 @@ void ReputationMgr::SendInitialReputations()
 
 void ReputationMgr::SendStates()
 {
-    for (FactionStateList::iterator itr = m_factions.begin(); itr != m_factions.end(); ++itr)
+    for (FactionStateList::iterator itr = _factions.begin(); itr != _factions.end(); ++itr)
         SendState(&(itr->second));
 }
 
@@ -249,11 +249,11 @@ void ReputationMgr::SendVisible(FactionState const* faction) const
 
 void ReputationMgr::Initialize()
 {
-    m_factions.clear();
-    m_visibleFactionCount = 0;
-    m_honoredFactionCount = 0;
-    m_reveredFactionCount = 0;
-    m_exaltedFactionCount = 0;
+    _factions.clear();
+    _visibleFactionCount = 0;
+    _honoredFactionCount = 0;
+    _reveredFactionCount = 0;
+    _exaltedFactionCount = 0;
 
     for (unsigned int i = 1; i < sFactionStore.GetNumRows(); i++)
     {
@@ -270,11 +270,11 @@ void ReputationMgr::Initialize()
             newFaction.needSave = true;
 
             if (newFaction.Flags & FACTION_FLAG_VISIBLE)
-                ++m_visibleFactionCount;
+                ++_visibleFactionCount;
 
             UpdateRankCounters(REP_HOSTILE, GetBaseRank(factionEntry));
 
-            m_factions[newFaction.ReputationListID] = newFaction;
+            _factions[newFaction.ReputationListID] = newFaction;
         }
     }
 }
@@ -310,9 +310,9 @@ bool ReputationMgr::SetReputation(FactionEntry const* factionEntry, int32 standi
             spillOverRepOut *= factionEntry->spilloverRateOut;
             if (FactionEntry const* parent = sFactionStore.LookupEntry(factionEntry->team))
             {
-                FactionStateList::iterator parentState = m_factions.find(parent->reputationListID);
+                FactionStateList::iterator parentState = _factions.find(parent->reputationListID);
                 // some team factions have own reputation standing, in this case do not spill to other sub-factions
-                if (parentState != m_factions.end() && (parentState->second.Flags & FACTION_FLAG_SPECIAL))
+                if (parentState != _factions.end() && (parentState->second.Flags & FACTION_FLAG_SPECIAL))
                 {
                     SetOneFactionReputation(parent, int32(spillOverRepOut), incremental);
                 }
@@ -339,8 +339,8 @@ bool ReputationMgr::SetReputation(FactionEntry const* factionEntry, int32 standi
         }
     }
     // spillover done, update faction itself
-    FactionStateList::iterator faction = m_factions.find(factionEntry->reputationListID);
-    if (faction != m_factions.end())
+    FactionStateList::iterator faction = _factions.find(factionEntry->reputationListID);
+    if (faction != _factions.end())
     {
         res = SetOneFactionReputation(factionEntry, standing, incremental);
         // only this faction gets reported to client, even if it has no own visible standing
@@ -351,8 +351,8 @@ bool ReputationMgr::SetReputation(FactionEntry const* factionEntry, int32 standi
 
 bool ReputationMgr::SetOneFactionReputation(FactionEntry const* factionEntry, int32 standing, bool incremental)
 {
-    FactionStateList::iterator itr = m_factions.find(factionEntry->reputationListID);
-    if (itr != m_factions.end())
+    FactionStateList::iterator itr = _factions.find(factionEntry->reputationListID);
+    if (itr != _factions.end())
     {
         int32 BaseRep = GetBaseReputation(factionEntry);
 
@@ -410,8 +410,8 @@ void ReputationMgr::SetVisible(FactionEntry const* factionEntry)
     if (factionEntry->reputationListID < 0)
         return;
 
-    FactionStateList::iterator itr = m_factions.find(factionEntry->reputationListID);
-    if (itr == m_factions.end())
+    FactionStateList::iterator itr = _factions.find(factionEntry->reputationListID);
+    if (itr == _factions.end())
         return;
 
     SetVisible(&itr->second);
@@ -432,15 +432,15 @@ void ReputationMgr::SetVisible(FactionState* faction)
     faction->needSend = true;
     faction->needSave = true;
 
-    ++m_visibleFactionCount;
+    ++_visibleFactionCount;
 
     SendVisible(faction);
 }
 
 void ReputationMgr::SetAtWar(RepListID repListID, bool on)
 {
-    FactionStateList::iterator itr = m_factions.find(repListID);
-    if (itr == m_factions.end())
+    FactionStateList::iterator itr = _factions.find(repListID);
+    if (itr == _factions.end())
         return;
 
     // always invisible or hidden faction can't change war state
@@ -471,8 +471,8 @@ void ReputationMgr::SetAtWar(FactionState* faction, bool atWar) const
 
 void ReputationMgr::SetInactive(RepListID repListID, bool on)
 {
-    FactionStateList::iterator itr = m_factions.find(repListID);
-    if (itr == m_factions.end())
+    FactionStateList::iterator itr = _factions.find(repListID);
+    if (itr == _factions.end())
         return;
 
     SetInactive(&itr->second, on);
@@ -513,7 +513,7 @@ void ReputationMgr::LoadFromDB(PreparedQueryResult result)
             FactionEntry const* factionEntry = sFactionStore.LookupEntry(fields[0].GetUInt16());
             if (factionEntry && (factionEntry->reputationListID >= 0))
             {
-                FactionState* faction = &m_factions[factionEntry->reputationListID];
+                FactionState* faction = &_factions[factionEntry->reputationListID];
 
                 // update standing to current
                 faction->Standing = int32(fields[1].GetUInt32());
@@ -559,7 +559,7 @@ void ReputationMgr::LoadFromDB(PreparedQueryResult result)
 
 void ReputationMgr::SaveToDB(SQLTransaction& trans)
 {
-    for (FactionStateList::iterator itr = m_factions.begin(); itr != m_factions.end(); ++itr)
+    for (FactionStateList::iterator itr = _factions.begin(); itr != _factions.end(); ++itr)
     {
         if (itr->second.needSave)
         {
@@ -573,16 +573,16 @@ void ReputationMgr::SaveToDB(SQLTransaction& trans)
 void ReputationMgr::UpdateRankCounters(ReputationRank old_rank, ReputationRank new_rank)
 {
     if (old_rank >= REP_EXALTED)
-        --m_exaltedFactionCount;
+        --_exaltedFactionCount;
     if (old_rank >= REP_REVERED)
-        --m_reveredFactionCount;
+        --_reveredFactionCount;
     if (old_rank >= REP_HONORED)
-        --m_honoredFactionCount;
+        --_honoredFactionCount;
 
     if (new_rank >= REP_EXALTED)
-        ++m_exaltedFactionCount;
+        ++_exaltedFactionCount;
     if (new_rank >= REP_REVERED)
-        ++m_reveredFactionCount;
+        ++_reveredFactionCount;
     if (new_rank >= REP_HONORED)
-        ++m_honoredFactionCount;
+        ++_honoredFactionCount;
 }

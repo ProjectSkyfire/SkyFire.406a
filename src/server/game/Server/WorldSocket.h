@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -30,8 +30,6 @@
 #include <ace/Synch_Traits.h>
 #include <ace/Svc_Handler.h>
 #include <ace/SOCK_Stream.h>
-#include <ace/SOCK_Acceptor.h>
-#include <ace/Acceptor.h>
 #include <ace/Thread_Mutex.h>
 #include <ace/Guard_T.h>
 #include <ace/Unbounded_Queue.h>
@@ -87,16 +85,13 @@ typedef ACE_Svc_Handler<ACE_SOCK_STREAM, ACE_NULL_SYNCH> WorldHandler;
  * notification.
  *
  */
-class WorldSocket : protected WorldHandler
+class WorldSocket : public WorldHandler
 {
     public:
-        /// Declare some friends
-        friend class ACE_Acceptor< WorldSocket, ACE_SOCK_ACCEPTOR >;
-        friend class WorldSocketMgr;
-        friend class ReactorRunnable;
+        WorldSocket (void);
+        virtual ~WorldSocket (void);
 
-        /// Declare the acceptor for this class
-        typedef ACE_Acceptor< WorldSocket, ACE_SOCK_ACCEPTOR > Acceptor;
+        friend class WorldSocketMgr;
 
         /// Mutex type used for various synchronizations.
         typedef ACE_Thread_Mutex LockType;
@@ -122,10 +117,7 @@ class WorldSocket : protected WorldHandler
         /// Remove reference to this object.
         long RemoveReference (void);
 
-    protected:
         /// things called by ACE framework.
-        WorldSocket (void);
-        virtual ~WorldSocket (void);
 
         /// Called on open , the void* is the acceptor.
         virtual int open (void *);

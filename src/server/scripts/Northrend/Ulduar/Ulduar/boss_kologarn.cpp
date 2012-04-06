@@ -1,9 +1,10 @@
 /*
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -485,6 +486,8 @@ class spell_ulduar_squeezed_lifeless : public SpellScriptLoader
                 if (!GetHitPlayer() || !GetHitPlayer()->GetVehicle())
                     return;
 
+                //! Proper exit position does not work currently,
+                //! See documentation in void Unit::ExitVehicle(Position const* exitPosition)
                 Position pos;
                 pos.m_positionX = 1756.25f + irand(-3, 3);
                 pos.m_positionY = -8.3f + irand(-3, 3);

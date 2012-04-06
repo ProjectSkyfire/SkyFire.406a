@@ -537,3 +537,52 @@ UPDATE `creature` SET `map`='638',`phaseMask`='2' WHERE (`id`='35830');
 UPDATE `gameobject` SET `phaseMask`='2' WHERE (`id`='195327');
 UPDATE `creature_template` SET `flags_extra`='128' WHERE (`entry`='35830'); /*makes them invisible to players*/
 REPLACE INTO `quest_template` (`entry`, `Method`, `ZoneOrSort`, `SkillOrClassMask`, `MinLevel`, `MaxLevel`, `QuestLevel`, `Type`, `RequiredRaces`, `RequiredSkillValue`, `RepObjectiveFaction`, `RepObjectiveValue`, `RepObjectiveFaction2`, `RepObjectiveValue2`, `RequiredMinRepFaction`, `RequiredMinRepValue`, `RequiredMaxRepFaction`, `RequiredMaxRepValue`, `SuggestedPlayers`, `LimitTime`, `QuestFlags`, `SpecialFlags`, `CharTitleId`, `PlayersSlain`, `BonusTalents`, `RewardArenaPoints`, `PrevQuestId`, `NextQuestId`, `ExclusiveGroup`, `NextQuestInChain`, `RewXPId`, `SrcItemId`, `SrcItemCount`, `SrcSpell`, `Title`, `Details`, `Objectives`, `OfferRewardText`, `RequestItemsText`, `EndText`, `CompletedText`, `ObjectiveText1`, `ObjectiveText2`, `ObjectiveText3`, `ObjectiveText4`, `ReqItemId1`, `ReqItemId2`, `ReqItemId3`, `ReqItemId4`, `ReqItemId5`, `ReqItemId6`, `ReqItemCount1`, `ReqItemCount2`, `ReqItemCount3`, `ReqItemCount4`, `ReqItemCount5`, `ReqItemCount6`, `ReqSourceId1`, `ReqSourceId2`, `ReqSourceId3`, `ReqSourceId4`, `ReqSourceCount1`, `ReqSourceCount2`, `ReqSourceCount3`, `ReqSourceCount4`, `ReqCreatureOrGOId1`, `ReqCreatureOrGOId2`, `ReqCreatureOrGOId3`, `ReqCreatureOrGOId4`, `ReqCreatureOrGOCount1`, `ReqCreatureOrGOCount2`, `ReqCreatureOrGOCount3`, `ReqCreatureOrGOCount4`, `ReqSpellCast1`, `ReqSpellCast2`, `ReqSpellCast3`, `ReqSpellCast4`, `RewChoiceItemId1`, `RewChoiceItemId2`, `RewChoiceItemId3`, `RewChoiceItemId4`, `RewChoiceItemId5`, `RewChoiceItemId6`, `RewChoiceItemCount1`, `RewChoiceItemCount2`, `RewChoiceItemCount3`, `RewChoiceItemCount4`, `RewChoiceItemCount5`, `RewChoiceItemCount6`, `RewItemId1`, `RewItemId2`, `RewItemId3`, `RewItemId4`, `RewItemCount1`, `RewItemCount2`, `RewItemCount3`, `RewItemCount4`, `RewRepFaction1`, `RewRepFaction2`, `RewRepFaction3`, `RewRepFaction4`, `RewRepFaction5`, `RewRepValueId1`, `RewRepValueId2`, `RewRepValueId3`, `RewRepValueId4`, `RewRepValueId5`, `RewRepValue1`, `RewRepValue2`, `RewRepValue3`, `RewRepValue4`, `RewRepValue5`, `RewHonorAddition`, `RewHonorMultiplier`, `unk0`, `RewOrReqMoney`, `RewMoneyMaxLevel`, `RewSpell`, `RewSpellCast`, `RewMailTemplateId`, `RewMailDelaySecs`, `PointMapId`, `PointX`, `PointY`, `PointOpt`, `DetailsEmote1`, `DetailsEmote2`, `DetailsEmote3`, `DetailsEmote4`, `DetailsEmoteDelay1`, `DetailsEmoteDelay2`, `DetailsEmoteDelay3`, `DetailsEmoteDelay4`, `IncompleteEmote`, `CompleteEmote`, `OfferRewardEmote1`, `OfferRewardEmote2`, `OfferRewardEmote3`, `OfferRewardEmote4`, `OfferRewardEmoteDelay1`, `OfferRewardEmoteDelay2`, `OfferRewardEmoteDelay3`, `OfferRewardEmoteDelay4`, `RewSkillLineId`, `RewSkillPoints`, `RewRepMask`, `QuestGiverPortrait`, `QuestTurnInPortrait`, `RewCurrencyId1`, `RewCurrencyCount1`, `RewCurrencyId2`, `RewCurrencyCount2`, `RewCurrencyId3`, `RewCurrencyCount3`, `RewCurrencyId4`, `RewCurrencyCount4`, `ReqCurrencyId1`, `ReqCurrencyCount1`, `ReqCurrencyId2`, `ReqCurrencyCount2`, `ReqCurrencyId3`, `ReqCurrencyCount3`, `ReqCurrencyId4`, `ReqCurrencyCount4`, `QuestGiverPortraitText`, `QuestGiverPortraitUnk`, `QuestTurnInPortraitText`, `QuestTurnInPortraitUnk`, `SoundAccept`, `SoundTurnIn`, `RequiredSpell`, `StartScript`, `CompleteScript`, `WDBVerified`) VALUES('14098','2','4755','0','1','0','2','0','0','0','0','0','0','0','0','0','0','0','0','0','8912896','0','0','0','0','0','14094','14099','0','0','6','0','0','0','Evacuate the Merchant Square','The civilians aren\'t safe here anymore.  Not even inside their homes.$B$BWe\'re doing our best to stop the worgen from getting indoors, but their numbers are too great.$B$BHelp us by evacuating the civilian homes.  My father\'s army in the prison district will be able to better protect them.','Evacuate 3 Civilian Homes.','Good job, $N.  Thanks to you, many Gilneans will live to see another day.',NULL,'Return to Prince Liam Greymane at the Merchant Square in Gilneas City.','','Market Homes Evacuated','','','','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','-195327','0','0','0','3','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','1134','0','0','0','0','6','0','0','0','0','0','0','0','0','0','0','0','0','65','120','0','59074','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','','','','','890','878','0','0','0','1');
+ 
+ -- from Matovkins gilneas scripts, converted from russian/bulgarian to english by bootz
+     
+    DELETE FROM `script_texts` WHERE `entry` IN (-1977000, -1977001, -1977002, -1977003, -1977004, -1977005, -1977006, -1977007, -1977008, -1977009, -1977010, -1977011, -1977012, -1977013, -1977014, -1977015, -1977016, -1977017, -1977018, -1977019, -1977020);
+     
+    INSERT IGNORE INTO `script_texts`(`npc_entry`,`entry`,`content_default`,`content_loc8`,`sound`,`type`,`language`,`emote`,`comment`) VALUES
+    (34850,-1977000,'We defended Gilneas from the Scourge and during the uprising in the Northern Gateway. We will protect it from any new hazards that would threaten him.','',19616,0,0,0,'gilneas'),
+    (34850,-1977001,'Guards, get ready! We do not know how many will be attacking, but Rocky Point is already occupied by the enemy and we are cut off from the coastal cities. The enemy superior to us the number!','',19614,0,0,0,'gilneas'),
+    (34850,-1977002,'It is necessary to protect the perimeter and at all times to keep the two guards at the gate. No one was let in and not let out!','',19615,0,0,0,'gilneas'),
+    (34851,-1977003,'What ... what kind of creatures are on the roof?','',0,0,0,0,'gilneas'),
+    (34981,-1977004,'You can not spend a minute!','',0,0,0,0,'gilneas'),
+    (34981,-1977005,'It is not safe. We must go!','',0,0,0,0,'gilneas'),
+    (34981,-1977006,'Run! They\'re everywhere!','',0,0,0,0,'gilneas'),
+    (34981,-1977007,'What is happening? Get out of here!','',0,0,0,0,'gilneas'),
+    (34981,-1977008,'Please do not let them catch me!','',0,0,0,0,'gilneas'),
+    (34981,-1977009,'Worgen! Worgen are everywhere!','',0,0,0,0,'gilneas'),
+    (34981,-1977010,'Let\'s go!','',0,0,0,0,'gilneas'),
+    (34981,-1977011,'Thank you!','',0,0,0,0,'gilneas'),
+    (35836,-1977012,'I do not want to die!','',0,0,0,0,'gilneas'),
+    (35836,-1977013,'He goes right for me!','',0,0,0,0,'gilneas'),
+    (35836,-1977014,'For me, being chased!','',0,0,0,0,'gilneas'),
+    (35836,-1977015,'Help!','',0,0,0,0,'gilneas'),
+    (34913,-1977016,'Throw them out!','',0,1,0,0,'gilneas'),
+    (34913,-1977017,'Stick to a single step!','',0,1,0,0,'gilneas'),
+    (34913,-1977018,'Defeat these creatures!','',0,1,0,0,'gilneas'),
+    (34913,-1977019,'Take heart, people! We must protect your city!','',0,1,0,0,'gilneas'),
+    (34913,-1977020,'Protect the citizens!','',0,1,0,0,'gilneas');
+     
+    UPDATE `creature_template` SET `ScriptName` = 'npc_rampaging_worgen' WHERE `entry` = 34884;
+    UPDATE `creature_template` SET `ScriptName` = 'npc_prince_liam_greymane_intro' WHERE `entry` = 34850;
+    UPDATE `creature_template` SET `ScriptName` = 'npc_prince_liam_greymane_phase_1' WHERE `entry` = 34913;
+    UPDATE `creature_template` SET `faction_A` = 2173, `faction_H` = 2173 WHERE `entry` = 34913;
+    UPDATE `creature_template` SET `unit_flags` = `unit_flags` + 4 WHERE `entry` = 34913;
+    UPDATE `creature_template` SET `ScriptName` = 'npc_worgen_attacker' WHERE `entry` = 35188;
+    UPDATE `creature_template` SET `ScriptName` = 'npc_worgen_attacker' WHERE `entry` = 35167;
+    UPDATE `creature_template` SET `ScriptName` = 'vehicle_genn_horse' WHERE `entry` = 35905;
+    UPDATE `creature_template` SET `unit_class` = 2 WHERE `entry` = 35905;
+    UPDATE `creature_template` SET `scale` = 1 WHERE entry = 35905;
+    UPDATE `creature_template` SET `speed_run` = 1.285714, `speed_walk` = 1 WHERE entry = 35905;
+    UPDATE `creature_template` SET `faction_A` = 2203, `faction_H` = 2203 WHERE `entry` = 35905;
+    UPDATE `creature_template` SET `baseattacktime` = 2000 WHERE `entry` = 35905;
+    UPDATE `creature_template` SET `unit_flags` = `unit_flags` | 8 WHERE `entry` = 35905;
+    UPDATE `creature_template` SET `vehicleid` = 494 WHERE `entry` = 35905;
+    UPDATE `creature_template` SET `spell1` = 68219 WHERE `entry` = 35905;
+    UPDATE `creature_template` SET `AIName` = 'SmartAI' WHERE `entry` = 34850;
+     
+    DELETE FROM `smart_scripts` WHERE (`entryorguid`=34850 AND `source_type`=0);
+    INSERT INTO `smart_scripts` (`entryorguid`, `source_type`, `id`, `link`, `event_type`, `event_phase_mask`, `event_chance`, `event_flags`, `event_param1`, `event_param2`, `event_param3`, `event_param4`, `action_type`, `action_param1`, `action_param2`, `action_param3`, `action_param4`, `action_param5`, `action_param6`, `target_type`, `target_param1`, `target_param2`, `target_param3`, `target_x`, `target_y`, `target_z`, `target_o`, `comment`) VALUES
+    (34850, 0, 0, 0, 1, 0, 100, 0, 5000, 5000, 50000, 60000, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 'Say Text OOC');

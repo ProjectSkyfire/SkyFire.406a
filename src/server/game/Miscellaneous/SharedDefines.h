@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -3287,4 +3287,21 @@ enum NavTerrain
     NAV_UNUSED4 = 0x80
     // we only have 8 bits
 };
+enum ActivateTaxiReply
+{
+    ERR_TAXIOK                      = 0,
+    ERR_TAXIUNSPECIFIEDSERVERERROR  = 1,
+    ERR_TAXINOSUCHPATH              = 2,
+    ERR_TAXINOTENOUGHMONEY          = 3,
+    ERR_TAXITOOFARAWAY              = 4,
+    ERR_TAXINOVENDORNEARBY          = 5,
+    ERR_TAXINOTVISITED              = 6,
+    ERR_TAXIPLAYERBUSY              = 7,
+    ERR_TAXIPLAYERALREADYMOUNTED    = 8,
+    ERR_TAXIPLAYERSHAPESHIFTED      = 9,
+    ERR_TAXIPLAYERMOVING            = 10,
+    ERR_TAXISAMENODE                = 11,
+    ERR_TAXINOTSTANDING             = 12
+};
+
 #endif

@@ -1,10 +1,11 @@
 /*
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2006-2012 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -203,7 +204,7 @@ void initBlyCrewMember(InstanceScript* instance, uint32 entry, float x, float y,
    if (Creature* crew = instance->instance->GetCreature(instance->GetData64(entry)))
    {
         crew->SetReactState(REACT_AGGRESSIVE);
-        crew->AddUnitMovementFlag(MOVEMENTFLAG_WALKING);
+        crew->SetWalk(true);
         crew->SetHomePosition(x, y, z, 0);
         crew->GetMotionMaster()->MovePoint(1, x, y, z);
         crew->setFaction(FACTION_FREED);

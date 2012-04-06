@@ -1,10 +1,10 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -29,10 +29,19 @@
 #include "ScriptedCreature.h"
 #include "GameEventMgr.h"
 #include "SmartScriptMgr.h"
+#include "CreatureTextMgr.h"
 
 void SmartWaypointMgr::LoadFromDB()
 {
     uint32 oldMSTime = getMSTime();
+
+    for (UNORDERED_MAP<uint32, WPPath*>::iterator itr = waypoint_map.begin(); itr != waypoint_map.end(); ++itr)
+    {
+        for (WPPath::iterator pathItr = itr->second->begin(); pathItr != itr->second->end(); ++pathItr)
+            delete pathItr->second;
+
+        delete itr->second;
+    }
 
     waypoint_map.clear();
 
@@ -48,7 +57,6 @@ void SmartWaypointMgr::LoadFromDB()
 
     uint32 count = 0;
     uint32 total = 0;
-    WPPath* path = NULL;
     uint32 last_entry = 0;
     uint32 last_id = 1;
 
@@ -62,25 +70,17 @@ void SmartWaypointMgr::LoadFromDB()
         y = fields[3].GetFloat();
         z = fields[4].GetFloat();
 
-        WayPoint* wp = new WayPoint(id, x, y, z);
-
         if (last_entry != entry)
         {
-            path = new WPPath;
+            waypoint_map[entry] = new WPPath();
             last_id = 1;
+            count++;
         }
         if (last_id != id)
-        {
             sLog->outErrorDb("SmartWaypointMgr::LoadFromDB: Path entry %u, unexpected point id %u, expected %u.", entry, id, last_id);
-        }
         last_id++;
-        (*path)[id] = wp;
+        (*waypoint_map[entry])[id] = new WayPoint(id, x, y, z);
 
-        if (last_entry != entry)
-        {
-            count++;
-            waypoint_map[entry] = path;
-        }
         last_entry = entry;
         total++;
     }
@@ -88,6 +88,19 @@ void SmartWaypointMgr::LoadFromDB()
 
     sLog->outString(">> Loaded %u SmartAI waypoint paths (total %u waypoints) in %u ms", count, total, GetMSTimeDiffToNow(oldMSTime));
     sLog->outString();
+}
+
+SmartWaypointMgr::~SmartWaypointMgr()
+{
+    for (UNORDERED_MAP<uint32, WPPath*>::iterator itr = waypoint_map.begin(); itr != waypoint_map.end(); ++itr)
+    {
+        for (WPPath::iterator pathItr = itr->second->begin(); pathItr != itr->second->end(); ++pathItr)
+            delete pathItr->second;
+
+        delete itr->second;
+    }
+
+    waypoint_map.clear();
 }
 
 void SmartAIMgr::LoadSmartAIFromDB()
@@ -801,8 +814,11 @@ bool SmartAIMgr::IsEventValid(SmartScriptHolder& e)
         case SMART_ACTION_REMOVE_DYNAMIC_FLAG:
         case SMART_ACTION_JUMP_TO_POS:
         case SMART_ACTION_SEND_GOSSIP_MENU:
+        case SMART_ACTION_SET_RANDOM_HEALTH:
+        case SMART_ACTION_SET_MANA:
         case SMART_ACTION_GO_SET_LOOT_STATE:
         case SMART_ACTION_SEND_TARGET_TO_TARGET:
+        case SMART_ACTION_CHARACTER_SAVE:
             break;
         default:
             sLog->outErrorDb("SmartAIMgr: Not handled action_type(%u), event_type(%u), Entry %d SourceType %u Event %u, skipped.", e.GetActionType(), e.GetEventType(), e.entryOrGuid, e.GetScriptType(), e.event_id);

@@ -1,10 +1,10 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -24,7 +24,6 @@
 #include "CreatureAI.h"
 #include "Unit.h"
 #include "ConditionMgr.h"
-#include "CreatureTextMgr.h"
 #include "Spell.h"
 #include "GridNotifiers.h"
 
@@ -85,17 +84,7 @@ class SmartScript
             return obj && obj->GetTypeId() == TYPEID_GAMEOBJECT;
         }
 
-        bool ConditionValid(Unit* u, int32 c, int32 v1, int32 v2, int32 v3)
-        {
-            if (c == 0) return true;
-            if (!u || !u->ToPlayer()) return false;
-            Condition cond;
-            cond.mConditionType = ConditionType(uint32(c));
-            cond.mConditionValue1 = uint32(v1);
-            cond.mConditionValue1 = uint32(v2);
-            cond.mConditionValue1 = uint32(v3);
-            return cond.Meets(u->ToPlayer());
-        }
+        bool ConditionValid(Unit* u, int32 c, int32 v1, int32 v2, int32 v3);
 
         void OnUpdate(const uint32 diff);
         void OnMoveInLineOfSight(Unit* who);
@@ -110,8 +99,13 @@ class SmartScript
                 return;
 
             if (mTargetStorage->find(id) != mTargetStorage->end())
-                delete (*mTargetStorage)[id];
+            {
+                // check if already stored
+                if ((*mTargetStorage)[id] == targets)
+                    return;
 
+                delete (*mTargetStorage)[id];
+            }
             (*mTargetStorage)[id] = targets;
         }
 

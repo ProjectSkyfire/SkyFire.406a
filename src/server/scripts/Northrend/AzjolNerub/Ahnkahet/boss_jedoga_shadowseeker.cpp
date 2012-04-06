@@ -1,9 +1,10 @@
 /*
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -73,9 +74,9 @@ public:
 
     struct boss_jedoga_shadowseekerAI : public ScriptedAI
     {
-        boss_jedoga_shadowseekerAI(Creature* c) : ScriptedAI(c)
+        boss_jedoga_shadowseekerAI(Creature* creature) : ScriptedAI(creature)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
             bFirstTime = true;
             bPreDone = false;
         }
@@ -355,9 +356,9 @@ public:
 
     struct mob_jedoga_initiandAI : public ScriptedAI
     {
-        mob_jedoga_initiandAI(Creature* c) : ScriptedAI(c)
+        mob_jedoga_initiandAI(Creature* creature) : ScriptedAI(creature)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
         }
 
         InstanceScript* instance;
@@ -402,7 +403,8 @@ public:
                     if (!CAST_AI(boss_jedoga_shadowseeker::boss_jedoga_shadowseekerAI, boss->AI())->bOpFerok)
                         CAST_AI(boss_jedoga_shadowseeker::boss_jedoga_shadowseekerAI, boss->AI())->bOpFerokFail = true;
 
-                    boss->AI()->DoAction(ACTION_INITIAND_KILLED);
+                    if (Killer->GetTypeId() == TYPEID_PLAYER)
+                        boss->AI()->DoAction(ACTION_INITIAND_KILLED);
                 }
 
                 instance->SetData64(DATA_ADD_JEDOGA_OPFER, 0);
@@ -530,9 +532,9 @@ public:
 
     struct npc_jedogas_aufseher_triggerAI : public Scripted_NoMovementAI
     {
-        npc_jedogas_aufseher_triggerAI(Creature* c) : Scripted_NoMovementAI(c)
+        npc_jedogas_aufseher_triggerAI(Creature* creature) : Scripted_NoMovementAI(creature)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
             bRemoved = false;
             bRemoved2 = false;
             bCasted = false;

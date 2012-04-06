@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -57,8 +57,7 @@ void AddItemsSetItem(Player* player, Item* item)
 
     if (!eff)
     {
-        eff = new ItemSetEffect;
-        memset(eff, 0, sizeof(ItemSetEffect));
+        eff = new ItemSetEffect();
         eff->setid = setid;
 
         size_t x = 0;
@@ -780,14 +779,14 @@ bool Item::CanBeTraded(bool mail, bool trade) const
 
 bool Item::HasEnchantRequiredSkill(const Player* player) const
 {
-  // Check all enchants for required skill
-  for (uint32 enchant_slot = PERM_ENCHANTMENT_SLOT; enchant_slot < MAX_ENCHANTMENT_SLOT; ++enchant_slot)
-    if (uint32 enchant_id = GetEnchantmentId(EnchantmentSlot(enchant_slot)))
-      if (SpellItemEnchantmentEntry const* enchantEntry = sSpellItemEnchantmentStore.LookupEntry(enchant_id))
-    if (enchantEntry->requiredSkill && player->GetSkillValue(enchantEntry->requiredSkill) < enchantEntry->requiredSkillValue)
-      return false;
-
-  return true;
+    // Check all enchants for required skill
+    for (uint32 enchant_slot = PERM_ENCHANTMENT_SLOT; enchant_slot < MAX_ENCHANTMENT_SLOT; ++enchant_slot)
+        if (uint32 enchant_id = GetEnchantmentId(EnchantmentSlot(enchant_slot)))
+            if (SpellItemEnchantmentEntry const* enchantEntry = sSpellItemEnchantmentStore.LookupEntry(enchant_id))
+                if (enchantEntry->requiredSkill && player->GetSkillValue(enchantEntry->requiredSkill) < enchantEntry->requiredSkillValue)
+                    return false;
+    
+    return true;
 }
 
 uint32 Item::GetEnchantRequiredLevel() const
@@ -865,24 +864,6 @@ bool Item::IsFitToSpellRequirements(SpellInfo const* spellInfo) const
     }
 
     return true;
-}
-
-bool Item::IsTargetValidForItemUse(Unit* pUnitTarget)
-{
-    ConditionList conditions = sConditionMgr->GetConditionsForNotGroupedEntry(CONDITION_SOURCE_TYPE_ITEM_REQUIRED_TARGET, GetTemplate()->ItemId);
-    if (conditions.empty())
-        return true;
-
-    if (!pUnitTarget)
-        return false;
-
-    for (ConditionList::const_iterator itr = conditions.begin(); itr != conditions.end(); ++itr)
-    {
-        ItemRequiredTarget irt(ItemRequiredTargetType((*itr)->mConditionValue1), (*itr)->mConditionValue2);
-        if (irt.IsFitToRequirements(pUnitTarget))
-            return true;
-    }
-    return false;
 }
 
 void Item::SetEnchantment(EnchantmentSlot slot, uint32 id, uint32 duration, uint32 charges)
@@ -1016,12 +997,13 @@ bool Item::IsLimitedToAnotherMapOrZone(uint32 cur_mapId, uint32 cur_zoneId) cons
 // time.
 void Item::SendTimeUpdate(Player* owner)
 {
-    if (!GetUInt32Value(ITEM_FIELD_DURATION))
+    uint32 duration = GetUInt32Value(ITEM_FIELD_DURATION);
+    if (!duration)
         return;
 
     WorldPacket data(SMSG_ITEM_TIME_UPDATE, (8+4));
-    data << (uint64)GetGUID();
-    data << (uint32)GetUInt32Value(ITEM_FIELD_DURATION);
+    data << uint64(GetGUID());
+    data << uint32(duration);
     owner->GetSession()->SendPacket(&data);
 }
 
@@ -1087,25 +1069,6 @@ bool Item::IsBindedNotWith(Player const* player) const
         return false;
 
     return true;
-}
-
-bool ItemRequiredTarget::IsFitToRequirements(Unit* pUnitTarget) const
-{
-    if (pUnitTarget->GetTypeId() != TYPEID_UNIT)
-        return false;
-
-    if (pUnitTarget->GetEntry() != m_uiTargetEntry)
-        return false;
-
-    switch (m_uiType)
-    {
-        case ITEM_TARGET_TYPE_CREATURE:
-            return pUnitTarget->isAlive();
-        case ITEM_TARGET_TYPE_DEAD:
-            return !pUnitTarget->isAlive();
-        default:
-            return false;
-    }
 }
 
 void Item::BuildUpdate(UpdateDataMapType& data_map)

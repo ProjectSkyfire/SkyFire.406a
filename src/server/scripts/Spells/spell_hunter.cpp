@@ -1,9 +1,10 @@
 /*
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -40,6 +41,13 @@ enum HunterSpells
     HUNTER_SPELL_CHIMERA_SHOT_VIPER              = 53358,
     HUNTER_SPELL_CHIMERA_SHOT_SCORPID            = 53359,
     HUNTER_SPELL_ASPECT_OF_THE_BEAST_PET         = 61669,
+    HUNTER_SPELL_KILL_COMMAND                    = 34026,
+    HUNTER_SPELL_KILL_COMMAND_TRIGGER            = 83381,
+    HUNTER_SPELL_FOCUS_FIRE                      = 82692,
+    HUNTER_PET_SPELL_FRENZY                      = 19615,
+    HUNTER_PET_SPELL_FOCUS_FIRE_REGEN            = 83468,
+    HUNTER_VISUAL_FOCUS_FIRE                     = 88843,
+    HUNTER_PET_AURA_FRENZY_TRIGGER               = 20784, // Tamed Pet Passive 07 (DND) 
 };
 
 // 53209 Chimera Shot
@@ -479,7 +487,7 @@ public:
             float max_range = GetSpellInfo()->GetMaxRange(false);
             WorldObject* result = NULL;
             // search for nearby enemy corpse in range
-            Trinity::AnyDeadUnitSpellTargetInRangeCheck check(caster, max_range, GetSpellInfo(), TARGET_SELECT_CHECK_ENEMY);
+            Trinity::AnyDeadUnitSpellTargetInRangeCheck check(caster, max_range, GetSpellInfo(), TARGET_CHECK_ENEMY);
             Trinity::WorldObjectSearcher<Trinity::AnyDeadUnitSpellTargetInRangeCheck> searcher(caster, result, check);
             caster->GetMap()->VisitFirstFound(caster->m_positionX, caster->m_positionY, max_range, searcher);
             if (!result)
@@ -553,6 +561,232 @@ public:
     }
 };
 
+// 34026 Kill comamnd
+class spell_hun_kill_command : public SpellScriptLoader
+{
+public:
+    spell_hun_kill_command() : SpellScriptLoader("spell_hun_kill_command") { }
+
+    class spell_hun_kill_command_SpellScript : public SpellScript
+    {
+        PrepareSpellScript(spell_hun_kill_command_SpellScript)
+        bool Validate(SpellInfo const* /*spellEntry*/)
+        {
+            if (!sSpellMgr->GetSpellInfo(HUNTER_SPELL_KILL_COMMAND))
+                return false;
+            return true;
+        }
+
+        SpellCastResult CheckCastMeet()
+        {
+            Unit* pet = GetCaster()->GetGuardianPet();
+            Unit* petTarget = pet->getVictim();
+            if (!pet)
+                return SPELL_FAILED_NO_PET;
+
+            // Make sure pet has a target and target is within 5 yards
+            if (!petTarget || !pet->IsWithinDist(petTarget, 5.0f, true))
+            {
+                SetCustomCastResultMessage(SPELL_CUSTOM_ERROR_TARGET_TOO_FAR);
+                return SPELL_FAILED_CUSTOM_ERROR;
+            }
+
+            return SPELL_CAST_OK;
+        }
+
+        void HandleDummy(SpellEffIndex /*effIndex*/)
+        {
+            Unit* pet = GetCaster()->GetGuardianPet();
+
+            if (!pet)
+                return;
+
+            pet->CastSpell(pet->getVictim(), HUNTER_SPELL_KILL_COMMAND_TRIGGER, true);
+        }
+
+        void Register()
+        {
+            OnCheckCast += SpellCheckCastFn(spell_hun_kill_command_SpellScript::CheckCastMeet);
+            OnEffectHit += SpellEffectFn(spell_hun_kill_command_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
+        }
+    };
+
+    SpellScript* GetSpellScript() const
+    {
+        return new spell_hun_kill_command_SpellScript();
+    }
+};
+
+// 82692 Focus Fire
+class spell_hun_focus_fire : public SpellScriptLoader
+{
+public:
+    spell_hun_focus_fire() : SpellScriptLoader("spell_hun_focus_fire") { }
+
+    // SpellScript
+    class spell_hun_focus_fire_SpellScript : public SpellScript
+    {
+        PrepareSpellScript(spell_hun_focus_fire_SpellScript)
+
+        bool Validate(SpellInfo const* /*spellEntry*/)
+        {
+            if (!sSpellMgr->GetSpellInfo(HUNTER_SPELL_FOCUS_FIRE))
+                return false;
+            return true;
+        }
+
+        SpellCastResult CheckFrenzyStack()
+        {
+            Unit * pet = GetCaster()->GetGuardianPet();
+            if (!pet)
+                return SPELL_FAILED_NO_PET;
+
+            if (pet->HasAura(HUNTER_PET_SPELL_FRENZY))
+                return SPELL_CAST_OK;
+            else
+                return SPELL_FAILED_CANT_DO_THAT_RIGHT_NOW;
+        }
+
+        void RemoveFrenzyStacks()
+        {
+            if (Unit* pet = GetCaster()->GetGuardianPet())
+                pet->RemoveAura(HUNTER_PET_SPELL_FRENZY);
+        }
+        
+        void Register()
+        {
+            OnCheckCast += SpellCheckCastFn(spell_hun_focus_fire_SpellScript::CheckFrenzyStack);
+            AfterHit += SpellHitFn(spell_hun_focus_fire_SpellScript::RemoveFrenzyStacks);
+        }
+    };
+
+    SpellScript* GetSpellScript() const
+    {
+        return new spell_hun_focus_fire_SpellScript();
+    }
+
+    // AuraScript
+    class spell_hun_focus_fire_AuraScript : public AuraScript
+    {
+        PrepareAuraScript(spell_hun_focus_fire_AuraScript);
+
+        uint32 GetFrenzyStackCount()
+        {
+            if (Unit* pet = GetUnitOwner()->GetGuardianPet())
+            {
+                if (pet->HasAura(HUNTER_PET_SPELL_FRENZY))
+                    return pet->GetAuraCount(HUNTER_PET_SPELL_FRENZY);
+                else
+                    return 0;
+            }
+            return 0;
+        }
+
+        void CalculateAmount(AuraEffect const* /*aurEff*/, int32 & amount, bool & /*canBeRecalculated*/)
+        {
+            if (Unit* caster = GetUnitOwner())
+                amount = GetSpellInfo()->Effects[0].BasePoints * GetFrenzyStackCount();
+        }
+
+        void OnApply(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
+        {
+            if (Unit* caster = GetUnitOwner())
+            {
+                if (Unit* pet = caster->GetGuardianPet())
+                {
+                    int32 basepoint0 = GetAura()->GetEffect(1)->GetAmount() * GetFrenzyStackCount();
+                    caster->CastCustomSpell(pet, HUNTER_PET_SPELL_FOCUS_FIRE_REGEN, &basepoint0, NULL, NULL, true);
+                }
+            }
+        }
+
+        void Register()
+        {
+            DoEffectCalcAmount += AuraEffectCalcAmountFn(spell_hun_focus_fire_AuraScript::CalculateAmount, EFFECT_0, SPELL_AURA_MOD_RANGED_HASTE);
+            OnEffectApply += AuraEffectApplyFn(spell_hun_focus_fire_AuraScript::OnApply, EFFECT_1, SPELL_AURA_DUMMY, AURA_EFFECT_HANDLE_REAL);
+        }
+    };
+
+    AuraScript* GetAuraScript() const
+    {
+        return new spell_hun_focus_fire_AuraScript();
+    }
+};
+
+// 19615 Frenzy Effect
+class spell_hun_frenzy_effect : public SpellScriptLoader
+{
+public:
+    spell_hun_frenzy_effect() : SpellScriptLoader("spell_hun_frenzy_effect") { }
+
+    class spell_hun_frenzy_effect_AuraScript : public AuraScript
+    {
+        PrepareAuraScript(spell_hun_frenzy_effect_AuraScript)
+
+        int32 GetHasteValue()
+        {
+            if (Unit* pet = GetUnitOwner())
+            {
+                if (pet->HasAura(HUNTER_PET_AURA_FRENZY_TRIGGER))
+                {
+                    if (Aura* frenzyAura = pet->GetAura(HUNTER_PET_AURA_FRENZY_TRIGGER))
+                        return frenzyAura->GetEffect(0)->GetAmount();
+                }
+                else
+                    return 0;
+            }
+            return 0;
+        }
+
+        void CalculateAmount(AuraEffect const* /*aurEff*/, int32 & amount, bool & /*canBeRecalculated*/)
+        {
+            if (Unit* pet = GetUnitOwner())
+            {
+                Unit* petOwner = pet->GetOwner();
+
+
+                if (!petOwner)
+                    return;
+             
+                amount = GetHasteValue();
+            }
+        }
+
+        void OnApply(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
+        {
+            // Apply UI Visual when at 5 stack
+            if (Unit* petOwner = GetUnitOwner()->GetOwner())
+            {
+                if (GetStackAmount() >= GetSpellInfo()->StackAmount)
+                    petOwner->AddAura(HUNTER_VISUAL_FOCUS_FIRE, petOwner);
+            }
+        }
+
+        void OnRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
+        {
+            if (Unit* pet = GetUnitOwner())
+            {
+                if (Unit * petOwner = pet->GetOwner())
+                    petOwner->RemoveAura(HUNTER_VISUAL_FOCUS_FIRE);
+            }
+        }
+                
+
+        void Register()
+        {
+             AfterEffectApply += AuraEffectApplyFn(spell_hun_frenzy_effect_AuraScript::OnApply, EFFECT_0, SPELL_AURA_MOD_MELEE_ATTACK_SPEED, AURA_EFFECT_HANDLE_CHANGE_AMOUNT_MASK);
+             AfterEffectRemove += AuraEffectApplyFn(spell_hun_frenzy_effect_AuraScript::OnRemove, EFFECT_0, SPELL_AURA_MOD_MELEE_ATTACK_SPEED, AURA_EFFECT_HANDLE_REAL);
+             DoEffectCalcAmount += AuraEffectCalcAmountFn(spell_hun_frenzy_effect_AuraScript::CalculateAmount, EFFECT_0, SPELL_AURA_MOD_MELEE_ATTACK_SPEED);
+        }
+    };
+
+    AuraScript* GetAuraScript() const
+    {
+        return new spell_hun_frenzy_effect_AuraScript();
+    }
+};
+
+
 void AddSC_hunter_spell_scripts()
 {
     new spell_hun_chimera_shot();
@@ -565,4 +799,7 @@ void AddSC_hunter_spell_scripts()
     new spell_hun_pet_heart_of_the_phoenix();
     new spell_hun_pet_carrion_feeder();
     new spell_hun_serpent_sting();
+    new spell_hun_kill_command();
+    new spell_hun_focus_fire();
+    new spell_hun_frenzy_effect();
 }

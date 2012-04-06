@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -100,12 +100,6 @@ void CombatAI::UpdateAI(const uint32 diff)
 
     events.Update(diff);
 
-    if (me->getVictim()->HasBreakableByDamageCrowdControlAura(me))
-    {
-        me->InterruptNonMeleeSpells(false);
-        return;
-    }
-
     if (me->HasUnitState(UNIT_STATE_CASTING))
         return;
 
@@ -164,7 +158,7 @@ void CasterAI::UpdateAI(const uint32 diff)
         return;
 
     events.Update(diff);
- 
+
     if (me->getVictim()->HasBreakableByDamageCrowdControlAura(me))
     {
         me->InterruptNonMeleeSpells(false);
@@ -333,7 +327,7 @@ void VehicleAI::CheckConditions(const uint32 diff)
                 {
                     if (Player* player = passenger->ToPlayer())
                     {
-                        if (!sConditionMgr->IsPlayerMeetToConditions(player, conditions))
+                        if (!sConditionMgr->IsObjectMeetToConditions(player, me, conditions))
                         {
                             player->ExitVehicle();
                             return;//check other pessanger in next tick

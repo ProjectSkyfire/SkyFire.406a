@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -1248,7 +1248,7 @@ void CreatureEventAI::DoScriptText(int32 textEntry, WorldObject* source, Unit* t
 
     if ((*i).second.SoundId)
     {
-        if (GetSoundEntriesStore()->LookupEntry((*i).second.SoundId))
+        if (sSoundEntriesStore.LookupEntry((*i).second.SoundId))
             source->PlayDirectSound((*i).second.SoundId);
         else
             sLog->outErrorDb("CreatureEventAI: DoScriptText entry %i tried to process invalid sound id %u.", textEntry, (*i).second.SoundId);
@@ -1330,11 +1330,12 @@ void CreatureEventAI::ReceiveEmote(Player* player, uint32 textEmote)
                 return;
 
             Condition cond;
-            cond.mConditionType = ConditionType((*itr).Event.receive_emote.condition);
-            cond.mConditionValue1 = (*itr).Event.receive_emote.conditionValue1;
-            cond.mConditionValue2 = (*itr).Event.receive_emote.conditionValue2;
+            cond.ConditionType = ConditionTypes((*itr).Event.receive_emote.condition);
+            cond.ConditionValue1 = (*itr).Event.receive_emote.conditionValue1;
+            cond.ConditionValue2 = (*itr).Event.receive_emote.conditionValue2;
 
-            if (cond.Meets(player))
+            ConditionSourceInfo srcInfo = ConditionSourceInfo(player);
+            if (cond.Meets(srcInfo))
             {
                 sLog->outDebug(LOG_FILTER_DATABASE_AI, "CreatureEventAI: ReceiveEmote CreatureEventAI: Condition ok, processing");
                 ProcessEvent(*itr, player);

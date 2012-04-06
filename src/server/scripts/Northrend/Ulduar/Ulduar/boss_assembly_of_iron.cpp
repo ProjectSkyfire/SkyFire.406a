@@ -1,9 +1,10 @@
 /*
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -575,7 +576,7 @@ class boss_stormcaller_brundir : public CreatureScript
                 _Reset();
                 phase = 0;
                 me->RemoveAllAuras();
-                me->RemoveUnitMovementFlag(MOVEMENTFLAG_LEVITATING);
+                me->SetLevitate(false);
                 me->ApplySpellImmune(0, IMMUNITY_MECHANIC, MECHANIC_INTERRUPT, false);  // Should be interruptable unless overridden by spell (Overload)
                 me->ApplySpellImmune(0, IMMUNITY_MECHANIC, MECHANIC_STUN, false);   // Reset immumity, Brundir should be stunnable by default
                 RespawnEncounter(instance, me);
@@ -680,7 +681,7 @@ class boss_stormcaller_brundir : public CreatureScript
                             DoCast(RAID_MODE(SPELL_LIGHTNING_TENDRILS_10M, SPELL_LIGHTNING_TENDRILS_25M));
                             DoCast(SPELL_LIGHTNING_TENDRILS_VISUAL);
                             me->AttackStop();
-                            //me->AddUnitMovementFlag(MOVEMENTFLAG_LEVITATING);
+                            //me->SetLevitate(true);
                             me->GetMotionMaster()->Initialize();
                             me->GetMotionMaster()->MovePoint(0, me->GetPositionX(), me->GetPositionY(), FINAL_FLIGHT_Z);
                             events.DelayEvents(35000);
@@ -707,7 +708,7 @@ class boss_stormcaller_brundir : public CreatureScript
                             events.ScheduleEvent(EVENT_GROUND, 2500);
                             break;
                         case EVENT_GROUND:
-                            //me->RemoveUnitMovementFlag(MOVEMENTFLAG_LEVITATING);
+                            //me->SetLevitate(false);
                             me->RemoveAurasDueToSpell(RAID_MODE(SPELL_LIGHTNING_TENDRILS_10M, SPELL_LIGHTNING_TENDRILS_25M));
                             me->RemoveAurasDueToSpell(SPELL_LIGHTNING_TENDRILS_VISUAL);
                             DoStartMovement(me->getVictim());

@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -141,10 +141,10 @@ ChatCommand* ChatHandler::getCommandTable()
 
     static ChatCommand groupCommandTable[] =
     {
-        { "leader",        SEC_ADMINISTRATOR,     false,  OldHandler<&ChatHandler::HandleGroupLeaderCommand>,        "", NULL },
-        { "disband",       SEC_ADMINISTRATOR,     false,  OldHandler<&ChatHandler::HandleGroupDisbandCommand>,       "", NULL },
-        { "remove",        SEC_ADMINISTRATOR,     false,  OldHandler<&ChatHandler::HandleGroupRemoveCommand>,        "", NULL },
-        { NULL,             0,                     false, NULL,                                           "", NULL }
+        { "leader",         SEC_ADMINISTRATOR, false,  OldHandler<&ChatHandler::HandleGroupLeaderCommand>,         "", NULL },
+        { "disband",        SEC_ADMINISTRATOR, false,  OldHandler<&ChatHandler::HandleGroupDisbandCommand>,        "", NULL },
+        { "remove",         SEC_ADMINISTRATOR, false,  OldHandler<&ChatHandler::HandleGroupRemoveCommand>,         "", NULL },
+        { NULL,             0,                 false,  NULL,                                           "", NULL }
     };
 
     static ChatCommand guildCommandTable[] =
@@ -282,7 +282,7 @@ ChatCommand* ChatHandler::getCommandTable()
         { "corpses",       SEC_GAMEMASTER,     true,  OldHandler<&ChatHandler::HandleServerCorpsesCommand>,    "", NULL },
         { "exit",          SEC_CONSOLE,        true,  OldHandler<&ChatHandler::HandleServerExitCommand>,       "", NULL },
         { "idlerestart",   SEC_ADMINISTRATOR,  true,  NULL,                                                     "", serverIdleRestartCommandTable },
-        { "idleshutdown",  SEC_ADMINISTRATOR,  true,  NULL,                                                     "", serverShutdownCommandTable },
+        { "idleshutdown",   SEC_ADMINISTRATOR,  true,  NULL,                                                     "", serverIdleShutdownCommandTable },
         { "info",          SEC_PLAYER,         true,  OldHandler<&ChatHandler::HandleServerInfoCommand>,       "", NULL },
         { "motd",          SEC_PLAYER,         true,  OldHandler<&ChatHandler::HandleServerMotdCommand>,       "", NULL },
         { "plimit",        SEC_ADMINISTRATOR,  true,  OldHandler<&ChatHandler::HandleServerPLimitCommand>,     "", NULL },
@@ -344,6 +344,7 @@ ChatCommand* ChatHandler::getCommandTable()
         { "lookup",        SEC_ADMINISTRATOR,  true,  NULL,                                           "", lookupCommandTable   },
         { "pdump",         SEC_ADMINISTRATOR,  true,  NULL,                                           "", pdumpCommandTable    },
         { "guild",         SEC_ADMINISTRATOR,  true,  NULL,                                           "", guildCommandTable    },
+        { "group",          SEC_ADMINISTRATOR,  false, NULL,                                           "", groupCommandTable    },
         { "cast",          SEC_ADMINISTRATOR,  false, NULL,                                           "", castCommandTable     },
         { "reset",         SEC_ADMINISTRATOR,  true,  NULL,                                           "", resetCommandTable    },
         { "instance",      SEC_ADMINISTRATOR,  true,  NULL,                                           "", instanceCommandTable },
@@ -412,6 +413,7 @@ ChatCommand* ChatHandler::getCommandTable()
         { "flusharenapoints", SEC_ADMINISTRATOR, false, OldHandler<&ChatHandler::HandleFlushArenaPointsCommand>,   "", NULL },
         { "repairitems",   SEC_GAMEMASTER,     true,  OldHandler<&ChatHandler::HandleRepairitemsCommand>,        "", NULL },
         { "waterwalk",     SEC_GAMEMASTER,     false, OldHandler<&ChatHandler::HandleWaterwalkCommand>,          "", NULL },
+        { "note",          SEC_GAMEMASTER,      true, OldHandler<&ChatHandler::HandleGmNote>,                    "", NULL },
 
         { "freeze",        SEC_MODERATOR,  false, OldHandler<&ChatHandler::HandleFreezeCommand>,             "", NULL },
         { "unfreeze",      SEC_MODERATOR,  false, OldHandler<&ChatHandler::HandleUnFreezeCommand>,           "", NULL },

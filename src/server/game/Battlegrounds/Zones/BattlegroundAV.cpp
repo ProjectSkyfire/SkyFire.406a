@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -1028,17 +1028,18 @@ void BattlegroundAV::EventPlayerAssaultsPoint(Player* player, uint32 object)
             std::vector<uint64> ghost_list = _ReviveQueue[_BgCreatures[node]];
             if (!ghost_list.empty())
             {
-                Player* player;
-                WorldSafeLocsEntry const* ClosestGrave = NULL;
+                Player* waitingPlayer;  // player waiting at graveyard for resurrection
+                WorldSafeLocsEntry const* closestGrave = NULL;
                 for (std::vector<uint64>::iterator itr = ghost_list.begin(); itr != ghost_list.end(); ++itr)
                 {
-                    player = ObjectAccessor::FindPlayer(*ghost_list.begin());
-                    if (!player)
+                    waitingPlayer = ObjectAccessor::FindPlayer(*ghost_list.begin());
+                    if (!waitingPlayer)
                         continue;
-                    if (!ClosestGrave)
-                        ClosestGrave = GetClosestGraveYard(player);
+
+                    if (!closestGrave)
+                        closestGrave = GetClosestGraveYard(waitingPlayer);
                     else
-                        player->TeleportTo(GetMapId(), ClosestGrave->x, ClosestGrave->y, ClosestGrave->z, player->GetOrientation());
+                        waitingPlayer->TeleportTo(GetMapId(), closestGrave->x, closestGrave->y, closestGrave->z, player->GetOrientation());
                 }
                 _ReviveQueue[_BgCreatures[node]].clear();
             }

@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -407,6 +407,7 @@ void WorldSession::HandleCharCreateOpcode(WorldPacket & recv_data)
     }
 
     delete _charCreateCallback.GetParam();  // Delete existing if any, to make the callback chain reset to stage 0
+    _charCreateCallback.Reset();
     _charCreateCallback.SetParam(new CharacterCreateInfo(name, race_, class_, gender, skin, face, hairStyle, hairColor, facialHair, outfitId, recv_data));
     PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_GET_CHECK_NAME);
     stmt->setString(0, name);
@@ -630,6 +631,7 @@ void WorldSession::HandleCharCreateCallback(PreparedQueryResult result, Characte
                 sLog->outDebug(LOG_FILTER_NETWORKIO, "Character creation %s (account %u) has unhandled tail data.", createInfo->Name.c_str(), GetAccountId());
 
             Player newChar(this);
+            newChar.GetMotionMaster()->Initialize();
             if (!newChar.Create(sObjectMgr->GenerateLowGuid(HIGHGUID_PLAYER), createInfo))
             {
                 // Player not create (race/class/etc problem?)
@@ -926,7 +928,7 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder* holder)
             uint32 MaxPlayersNum = sWorld->GetMaxPlayerCount();
             std::string uptime = secsToTimeString(sWorld->GetUptime());
 
-            chH.PSendSysMessage(_CLIENT_BUILD_REVISION, _FULLVERSION);
+            chH.PSendSysMessage(_CLIENT_BUILD_REVISION_2, _FULLVERSION);
             chH.PSendSysMessage(LANG_CONNECTED_PLAYERS, PlayersNum, MaxPlayersNum);
             chH.PSendSysMessage(LANG_UPTIME, uptime.c_str());
 
@@ -1929,8 +1931,8 @@ void WorldSession::HandleCharFactionOrRaceChange(WorldPacket& recv_data)
         if (!sWorld->getBoolConfig(CONFIG_ALLOW_TWO_SIDE_INTERACTION_GUILD))
         {
             // Reset guild
-            if (QueryResult result = CharacterDatabase.PQuery("SELECT guildid FROM `guild_member` WHERE guid ='%u'", lowGuid))
-                if (Guild* guild = sGuildMgr->GetGuildById((result->Fetch()[0]).GetUInt32()))
+            if (QueryResult result2 = CharacterDatabase.PQuery("SELECT guildid FROM `guild_member` WHERE guid ='%u'", lowGuid))
+                if (Guild* guild = sGuildMgr->GetGuildById((result2->Fetch()[0]).GetUInt32()))
                     guild->DeleteMember(MAKE_NEW_GUID(lowGuid, 0, HIGHGUID_PLAYER));
         }
 
@@ -1972,7 +1974,7 @@ void WorldSession::HandleCharFactionOrRaceChange(WorldPacket& recv_data)
         trans->Append(stmt);
 
         // Achievement conversion
-        for (std::map<uint32, uint32>::const_iterator it = sObjectMgr->factionchange_achievements.begin(); it != sObjectMgr->factionchange_achievements.end(); ++it)
+        for (std::map<uint32, uint32>::const_iterator it = sObjectMgr->FactionChange_Achievements.begin(); it != sObjectMgr->FactionChange_Achievements.end(); ++it)
         {
             uint32 achiev_alliance = it->first;
             uint32 achiev_horde = it->second;
@@ -1983,7 +1985,7 @@ void WorldSession::HandleCharFactionOrRaceChange(WorldPacket& recv_data)
         }
 
         // Item conversion
-        for (std::map<uint32, uint32>::const_iterator it = sObjectMgr->factionchange_items.begin(); it != sObjectMgr->factionchange_items.end(); ++it)
+        for (std::map<uint32, uint32>::const_iterator it = sObjectMgr->FactionChange_Items.begin(); it != sObjectMgr->FactionChange_Items.end(); ++it)
         {
             uint32 item_alliance = it->first;
             uint32 item_horde = it->second;
@@ -1992,7 +1994,7 @@ void WorldSession::HandleCharFactionOrRaceChange(WorldPacket& recv_data)
         }
 
         // Spell conversion
-        for (std::map<uint32, uint32>::const_iterator it = sObjectMgr->factionchange_spells.begin(); it != sObjectMgr->factionchange_spells.end(); ++it)
+        for (std::map<uint32, uint32>::const_iterator it = sObjectMgr->FactionChange_Spells.begin(); it != sObjectMgr->FactionChange_Spells.end(); ++it)
         {
             uint32 spell_alliance = it->first;
             uint32 spell_horde = it->second;
@@ -2003,7 +2005,7 @@ void WorldSession::HandleCharFactionOrRaceChange(WorldPacket& recv_data)
         }
 
         // Reputation conversion
-        for (std::map<uint32, uint32>::const_iterator it = sObjectMgr->factionchange_reputations.begin(); it != sObjectMgr->factionchange_reputations.end(); ++it)
+        for (std::map<uint32, uint32>::const_iterator it = sObjectMgr->FactionChange_Reputation.begin(); it != sObjectMgr->FactionChange_Reputation.end(); ++it)
         {
             uint32 reputation_alliance = it->first;
             uint32 reputation_horde = it->second;

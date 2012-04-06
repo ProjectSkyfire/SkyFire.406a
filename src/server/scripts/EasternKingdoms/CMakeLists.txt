@@ -17,6 +17,8 @@ set(scripts_STAT_SRCS
   EasternKingdoms/AlteracValley/boss_vanndar.cpp
   EasternKingdoms/AlteracValley/alterac_valley.cpp
   
+  EasternKingdoms/ElwynnForest/elwynnforest.cpp
+  
   EasternKingdoms/Scholomance/boss_the_ravenian.cpp
   EasternKingdoms/Scholomance/boss_instructor_malicia.cpp
   EasternKingdoms/Scholomance/boss_death_knight_darkreaver.cpp
@@ -61,10 +63,7 @@ set(scripts_STAT_SRCS
   
   EasternKingdoms/Gilneas/gilneas.cpp
   EasternKingdoms/Gilneas/gilneas.h
-  EasternKingdoms/Gilneas/phase1.cpp
-  EasternKingdoms/Gilneas/phase2.cpp
-  EasternKingdoms/Gilneas/phase3.cpp
-  
+    
   EasternKingdoms/BlackrockDepths/boss_high_interrogator_gerstahn.cpp
   EasternKingdoms/BlackrockDepths/boss_gorosh_the_dervish.cpp
   EasternKingdoms/BlackrockDepths/blackrock_depths.cpp

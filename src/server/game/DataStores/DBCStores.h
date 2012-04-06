@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -46,10 +46,10 @@ const std::string* GetRandomCharacterName(uint8 race, uint8 gender);
 
 enum ContentLevels
 {
-	CONTENT_1_60 = 0,
-	CONTENT_61_70,
-	CONTENT_71_80,
-	CONTENT_81_85
+    CONTENT_1_60 = 0,
+    CONTENT_61_70,
+    CONTENT_71_80,
+    CONTENT_81_85
 };
 ContentLevels GetContentLevelsForMapAndZone(uint32 mapid, uint32 zoneId);
 
@@ -212,12 +212,4 @@ extern DBCStorage <WorldSafeLocsEntry>           sWorldSafeLocsStore;
 
 void LoadDBCStores(const std::string& dataPath, uint32& availableDbcLocales);
 
-// script support functions
- DBCStorage <SoundEntriesEntry>          const* GetSoundEntriesStore();
- DBCStorage <SpellRangeEntry>            const* GetSpellRangeStore();
- DBCStorage <FactionEntry>               const* GetFactionStore();
- DBCStorage <CreatureDisplayInfoEntry>   const* GetCreatureDisplayStore();
- DBCStorage <EmotesEntry>                const* GetEmotesStore();
- DBCStorage <EmotesTextEntry>            const* GetEmotesTextStore();
- DBCStorage <AchievementEntry>           const* GetAchievementStore();
 #endif

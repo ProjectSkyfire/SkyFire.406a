@@ -1,10 +1,11 @@
 /*
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2006-2012 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -86,9 +87,9 @@ public:
 
     struct mob_ancient_wispAI : public ScriptedAI
     {
-        mob_ancient_wispAI(Creature* c) : ScriptedAI(c)
+        mob_ancient_wispAI(Creature* creature) : ScriptedAI(creature)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
             ArchimondeGUID = 0;
         }
 
@@ -141,7 +142,7 @@ public:
 
     struct mob_doomfireAI : public ScriptedAI
     {
-        mob_doomfireAI(Creature* c) : ScriptedAI(c) {}
+        mob_doomfireAI(Creature* creature) : ScriptedAI(creature) {}
 
         void Reset() { }
 
@@ -165,7 +166,7 @@ public:
 
     struct mob_doomfire_targettingAI : public ScriptedAI
     {
-        mob_doomfire_targettingAI(Creature* c) : ScriptedAI(c) {}
+        mob_doomfire_targettingAI(Creature* creature) : ScriptedAI(creature) {}
 
         uint64 TargetGUID;
         uint32 ChangeTargetTimer;
@@ -230,9 +231,9 @@ public:
 
     struct boss_archimondeAI : public hyjal_trashAI
     {
-        boss_archimondeAI(Creature* c) : hyjal_trashAI(c)
+        boss_archimondeAI(Creature* creature) : hyjal_trashAI(creature)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
         }
 
         InstanceScript* instance;

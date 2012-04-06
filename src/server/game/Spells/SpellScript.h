@@ -1,10 +1,10 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -324,6 +324,8 @@ class SpellScript : public _SpellScript
         Item* GetHitItem();
         // returns: target of current effect if it was GameObject otherwise NULL
         GameObject* GetHitGObj();
+        // returns: destination of current effect
+        WorldLocation const* GetHitDest();
         // setter/getter for for damage done by spell to target of spell hit
         // returns damage calculated before hit, and real dmg done after hit
         int32 GetHitDamage();
@@ -500,7 +502,7 @@ class AuraScript : public _SpellScript
         {
             public:
                 EffectProcHandler(AuraEffectProcFnType _pEffectProcScript, uint8 _effIndex, uint16 _effName);
-                void Call(AuraScript * auraScript, AuraEffect const * _aurEff, Unit* pUnit, Unit *pVictim, uint32 damage, SpellInfo const* procSpell, uint32 procFlag, uint32 procExtra, WeaponAttackType attType, int32 cooldown);
+                void Call(AuraScript * auraScript, AuraEffect const * _aurEff, Unit* pUnit, Unit *victim, uint32 damage, SpellInfo const* procSpell, uint32 procFlag, uint32 procExtra, WeaponAttackType attType, int32 cooldown);
             private:
                 AuraEffectProcFnType pEffectProcScript;
         };
@@ -646,7 +648,7 @@ class AuraScript : public _SpellScript
 
         // executed when aura effect proc event occurs
         // example: OnEffectProc += AuraEffectProcFn(class::function, EffectIndexSpecifier, EffectAuraNameSpecifier);
-        // where function is: void function (AuraEffect const * aurEff, Unit* pUnit, Unit *pVictim, uint32 damage, SpellInfo const* procSpell, uint32 procFlag, uint32 procExtra, WeaponAttackType attType, int32 cooldown);
+        // where function is: void function (AuraEffect const * aurEff, Unit* pUnit, Unit *victim, uint32 damage, SpellInfo const* procSpell, uint32 procFlag, uint32 procExtra, WeaponAttackType attType, int32 cooldown);
         HookList<EffectProcHandler> OnEffectProc;
         #define AuraEffectProcFn(F, I, N) EffectProcHandlerFunction(&F, I, N)
 
@@ -775,7 +777,7 @@ public:
     }
 
     virtual uint32 GetMasteryBaseAmount();
-    virtual void OnProc(AuraEffect const * aurEff, Unit* pUnit, Unit *pVictim, uint32 damage, SpellInfo const* procSpell, uint32 procFlag, uint32 procExtra, WeaponAttackType attType, int32 cooldown) { }
+    virtual void OnProc(AuraEffect const * aurEff, Unit* pUnit, Unit *victim, uint32 damage, SpellInfo const* procSpell, uint32 procFlag, uint32 procExtra, WeaponAttackType attType, int32 cooldown) { }
     virtual void CalcAmount(AuraEffect const* /*aurEffect*/, int32& /*amount*/, bool& /*canBeRecalculated*/);
     virtual void CalcSpellMod(AuraEffect const * /*aurEff*/, SpellModifier *& /*spellMod*/, SpellInfo const * /*spellInfo*/, Unit * /*target*/) { }
     virtual void Register();

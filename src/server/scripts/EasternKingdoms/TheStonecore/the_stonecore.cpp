@@ -1,9 +1,9 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -253,14 +253,14 @@ public:
 
         void UpdateAI(const uint32 Diff)
         {
-			if(instance->GetData(DATA_CORBORUS_EVENT) == DONE || instance->GetData(DATA_CORBORUS_EVENT) == NOT_STARTED)
-				me->DespawnOrUnsummon();
+            if(instance->GetData(DATA_CORBORUS_EVENT) == DONE || instance->GetData(DATA_CORBORUS_EVENT) == NOT_STARTED)
+                me->DespawnOrUnsummon();
             if (_SpellBoreTimer <= Diff)
             {
-				if(!IsHeroic())
-					DoCast(me->getVictim(),SPELL_ROCK_BORE);
-				if(IsHeroic())
-					DoCast(me->getVictim(),H_SPELL_ROCK_BORE);
+                if(!IsHeroic())
+                    DoCast(me->getVictim(),SPELL_ROCK_BORE);
+                if(IsHeroic())
+                    DoCast(me->getVictim(),H_SPELL_ROCK_BORE);
                 _SpellBoreTimer = 6000;
             }
             else

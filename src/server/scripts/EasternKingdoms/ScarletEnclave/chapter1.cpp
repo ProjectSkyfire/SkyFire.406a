@@ -1,10 +1,10 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -109,7 +109,7 @@ public:
             if (!me->GetEquipmentId())
                 if (const CreatureTemplate* info = sObjectMgr->GetCreatureTemplate(28406))
                     if (info->equipmentId)
-                        const_cast<CreatureTemplate*>(me->GetCreatureInfo())->equipmentId = info->equipmentId;
+                        const_cast<CreatureTemplate*>(me->GetCreatureTemplate())->equipmentId = info->equipmentId;
         }
 
         uint64 playerGUID;
@@ -584,7 +584,7 @@ public:
                 return;
 
             TargetGUID = who->GetGUID();
-            me->AddUnitMovementFlag(MOVEMENTFLAG_WALKING);
+            me->SetWalk(true);
             me->SetSpeed(MOVE_RUN, 0.4f);
             me->GetMotionMaster()->MoveChase(who);
             me->SetTarget(TargetGUID);
@@ -870,7 +870,7 @@ public:
         {
             me->setFaction(35);
             me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PC);
-            me->SetDisplayId(me->GetCreatureInfo()->Modelid1); // Modelid2 is a horse.
+            me->SetDisplayId(me->GetCreatureTemplate()->Modelid1); // Modelid2 is a horse.
         }
 
         uint64 minerGUID;
@@ -884,7 +884,7 @@ public:
         {
             if (Creature* miner = Unit::GetCreature(*me, minerGUID))
             {
-                me->RemoveUnitMovementFlag(MOVEMENTFLAG_WALKING);
+                me->SetWalk(false);
 
                 //Not 100% correct, but movement is smooth. Sometimes miner walks faster
                 //than normal, this speed is fast enough to keep up at those times.

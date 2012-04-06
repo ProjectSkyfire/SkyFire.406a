@@ -1,10 +1,11 @@
 /*
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2006-2012 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -293,7 +294,7 @@ public:
 
     struct master_kelerun_bloodmournAI : public ScriptedAI
     {
-        master_kelerun_bloodmournAI(Creature* c) : ScriptedAI(c) {}
+        master_kelerun_bloodmournAI(Creature* creature) : ScriptedAI(creature) {}
 
         uint8  questPhase;
         uint8  paladinPhase;
@@ -389,7 +390,7 @@ public:
             }
         }
 
-        void SummonedCreatureDespawn(Creature* /*c*/) {}
+        void SummonedCreatureDespawn(Creature* /*creature*/) {}
     };
 };
 
@@ -457,7 +458,7 @@ public:
 
     struct npc_apprentice_mirvedaAI : public ScriptedAI
     {
-        npc_apprentice_mirvedaAI(Creature* c) : ScriptedAI(c), Summons(me) {}
+        npc_apprentice_mirvedaAI(Creature* creature) : ScriptedAI(creature), Summons(me) {}
 
         uint32 KillCount;
         uint64 PlayerGUID;
@@ -547,7 +548,7 @@ public:
 
     struct npc_infused_crystalAI : public Scripted_NoMovementAI
     {
-        npc_infused_crystalAI(Creature* c) : Scripted_NoMovementAI(c) {}
+        npc_infused_crystalAI(Creature* creature) : Scripted_NoMovementAI(creature) {}
 
         uint32 EndTimer;
         uint32 WaveTimer;

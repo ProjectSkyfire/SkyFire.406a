@@ -1,10 +1,11 @@
 /*
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2006-2012 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -78,9 +79,9 @@ public:
 
     struct boss_brutallusAI : public ScriptedAI
     {
-        boss_brutallusAI(Creature* c) : ScriptedAI(c)
+        boss_brutallusAI(Creature* creature) : ScriptedAI(creature)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
             Intro = true;
         }
 
@@ -216,7 +217,7 @@ public:
                     break;
                 case 3:
                     DoCast(me, SPELL_INTRO_FROST_BLAST);
-                    Madrigosa->AddUnitMovementFlag(MOVEMENTFLAG_LEVITATING);
+                    Madrigosa->SetLevitate(true);
                     me->AttackStop();
                     Madrigosa->AttackStop();
                     IntroFrostBoltTimer = 3000;

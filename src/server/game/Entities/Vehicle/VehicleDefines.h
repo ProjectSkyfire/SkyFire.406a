@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -64,16 +64,16 @@ struct VehicleSeat
 struct VehicleAccessory
 {
     VehicleAccessory(uint32 entry, int8 seatId, bool isMinion, uint8 summonType, uint32 summonTime) :
-        AccessoryEntry(entry), SeatId(seatId), IsMinion(isMinion), SummonedType(summonType), SummonTime(summonTime) {}
+        AccessoryEntry(entry), IsMinion(isMinion), SummonTime(summonTime), SeatId(seatId), SummonedType(summonType) {}
     uint32 AccessoryEntry;
-    int8 SeatId;
     uint32 IsMinion;
-    uint8 SummonedType;
     uint32 SummonTime;
+    int8 SeatId;
+    uint8 SummonedType;
 };
 
 typedef std::vector<VehicleAccessory> VehicleAccessoryList;
-typedef std::map<uint32, VehicleAccessoryList> VehicleAccessoryMap;
+typedef std::map<uint32, VehicleAccessoryList> VehicleAccessoryContainer;
 typedef std::map<int8, VehicleSeat> SeatMap;
 typedef std::set<uint64> GuidSet;
 

@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -274,13 +274,13 @@ class LFGMgr
         void UpdateRoleCheck(uint64& gguid, uint64 guid = 0, uint8 roles = ROLE_NONE);
 
         // Proposals
-        void UpdateProposal(uint32 proposalId, const uint64& guid, bool accept);
+        void UpdateProposal(uint32 proposalId, uint64 guid, bool accept);
 
         // Teleportation
         void TeleportPlayer(Player* player, bool out, bool fromOpcode = false);
 
         // Vote kick
-        void InitBoot(Group* group, const uint64& kguid, const uint64& vguid, std::string reason);
+        void InitBoot(Group* group, uint64 kguid, uint64 vguid, std::string reason);
         void UpdateBoot(Player* player, bool accept);
         void OfferContinue(Group* group);
 
@@ -289,33 +289,33 @@ class LFGMgr
         void _LoadFromDB(Field* fields, uint64 guid);
         void _SaveToDB(uint64 guid, uint32 db_guid);
 
-        void SetComment(const uint64& guid, const std::string& comment);
-        const LfgLockMap& GetLockedDungeons(const uint64& guid);
-        LfgState GetState(const uint64& guid);
-        const LfgDungeonSet& GetSelectedDungeons(const uint64& guid);
-        uint32 GetDungeon(const uint64& guid, bool asId = true);
-        void SetState(const uint64& guid, LfgState state);
-        void ClearState(const uint64& guid);
-        void RemovePlayerData(const uint64& guid);
-        void RemoveGroupData(const uint64& guid);
-        uint8 GetKicksLeft(const uint64& gguid);
-        uint8 GetVotesNeeded(const uint64& gguid);
+        void SetComment(uint64 guid, const std::string& comment);
+        const LfgLockMap& GetLockedDungeons(uint64 guid);
+        LfgState GetState(uint64 guid);
+        const LfgDungeonSet& GetSelectedDungeons(uint64 guid);
+        uint32 GetDungeon(uint64 guid, bool asId = true);
+        void SetState(uint64 guid, LfgState state);
+        void ClearState(uint64 guid);
+        void RemovePlayerData(uint64 guid);
+        void RemoveGroupData(uint64 guid);
+        uint8 GetKicksLeft(uint64 gguid);
+        uint8 GetVotesNeeded(uint64 gguid);
         bool IsTeleported(uint64 pguid);
-        void SetRoles(const uint64& guid, uint8 roles);
-        void SetSelectedDungeons(const uint64& guid, const LfgDungeonSet& dungeons);
+        void SetRoles(uint64 guid, uint8 roles);
+        void SetSelectedDungeons(uint64 guid, const LfgDungeonSet& dungeons);
 
     private:
 
-        uint8 GetRoles(const uint64& guid);
-        const std::string& GetComment(const uint64& gguid);
-        void RestoreState(const uint64& guid);
-        void SetDungeon(const uint64& guid, uint32 dungeon);
-        void SetLockedDungeons(const uint64& guid, const LfgLockMap& lock);
-        void DecreaseKicksLeft(const uint64& guid);
+        uint8 GetRoles(uint64 guid);
+        const std::string& GetComment(uint64 gguid);
+        void RestoreState(uint64 guid);
+        void SetDungeon(uint64 guid, uint32 dungeon);
+        void SetLockedDungeons(uint64 guid, const LfgLockMap& lock);
+        void DecreaseKicksLeft(uint64 guid);
 
         // Queue
-        void AddToQueue(const uint64& guid, uint8 queueId);
-        bool RemoveFromQueue(const uint64& guid);
+        void AddToQueue(uint64 guid, uint8 queueId);
+        bool RemoveFromQueue(uint64 guid);
 
         // Proposals
         void RemoveProposal(LfgProposalMap::iterator itProposal, LfgUpdateType type);

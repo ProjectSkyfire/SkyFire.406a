@@ -1,10 +1,11 @@
 /*
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2006-2012 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -379,7 +380,7 @@ public:
 
     struct flame_of_azzinothAI : public ScriptedAI
     {
-        flame_of_azzinothAI(Creature* c) : ScriptedAI(c) {}
+        flame_of_azzinothAI(Creature* creature) : ScriptedAI(creature) {}
 
         uint32 FlameBlastTimer;
         uint32 CheckTimer;
@@ -470,9 +471,9 @@ public:
 
     struct boss_illidan_stormrageAI : public ScriptedAI
     {
-        boss_illidan_stormrageAI(Creature* c) : ScriptedAI(c), Summons(me)
+        boss_illidan_stormrageAI(Creature* creature) : ScriptedAI(creature), Summons(me)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
             DoCast(me, SPELL_DUAL_WIELD, true);
         }
 
@@ -501,7 +502,7 @@ public:
 
         void SummonedCreatureDespawn(Creature* summon)
         {
-            if (summon->GetCreatureInfo()->Entry == FLAME_OF_AZZINOTH)
+            if (summon->GetCreatureTemplate()->Entry == FLAME_OF_AZZINOTH)
             {
                 for (uint8 i = 0; i < 2; ++i)
                     if (summon->GetGUID() == FlameGUID[i])
@@ -749,7 +750,7 @@ public:
             if (!Trigger) return;
 
             Trigger->SetSpeed(MOVE_WALK, 3);
-            Trigger->AddUnitMovementFlag(MOVEMENTFLAG_WALKING);
+            Trigger->SetWalk(true);
             Trigger->GetMotionMaster()->MovePoint(0, final.x, final.y, final.z);
 
             // Trigger->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
@@ -866,7 +867,7 @@ public:
                 Timer[EVENT_FLIGHT_SEQUENCE] = 2000;
                 break;
             case 9: // land
-                me->RemoveUnitMovementFlag(MOVEMENTFLAG_LEVITATING);
+                me->SetLevitate(false);
                 me->StopMoving();
                 me->HandleEmoteCommand(EMOTE_ONESHOT_LAND);
                 for (uint8 i = 0; i < 2; ++i)
@@ -1155,7 +1156,7 @@ public:
 
     struct boss_maievAI : public ScriptedAI
     {
-        boss_maievAI(Creature* c) : ScriptedAI(c) {};
+        boss_maievAI(Creature* creature) : ScriptedAI(creature) {};
 
         uint64 IllidanGUID;
 
@@ -1369,9 +1370,9 @@ public:
 
     struct npc_akama_illidanAI : public ScriptedAI
     {
-        npc_akama_illidanAI(Creature* c) : ScriptedAI(c)
+        npc_akama_illidanAI(Creature* creature) : ScriptedAI(creature)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
             JustCreated = true;
         }
         bool JustCreated;
@@ -1413,8 +1414,8 @@ public:
                     instance->HandleGameObject(DoorGUID[i], false);
                     // JustCreated = false;
                 }
-				else
-				{ // open all doors, raid wiped
+                else
+                { // open all doors, raid wiped
                     instance->HandleGameObject(GateGUID, true);
                     WalkCount = 1; // skip first wp
 
@@ -1495,7 +1496,7 @@ public:
             instance->SetData(DATA_ILLIDANSTORMRAGEEVENT, IN_PROGRESS);
             for (uint8 i = 0; i < 2; ++i)
 
-			instance->HandleGameObject(DoorGUID[i], false);
+            instance->HandleGameObject(DoorGUID[i], false);
             if (GETCRE(Illidan, IllidanGUID))
             {
                 Illidan->RemoveAurasDueToSpell(SPELL_KNEEL);
@@ -1513,11 +1514,11 @@ public:
             me->setActive(true);
             me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
 
-			if (!JustCreated)
+            if (!JustCreated)
                 return;
             float x, y, z;
 
-			if (GETGO(Gate, GateGUID))
+            if (GETGO(Gate, GateGUID))
                 Gate->GetPosition(x, y, z);
             else
                 return; // if door not spawned, don't crash server
@@ -1539,7 +1540,7 @@ public:
 
         void BeginWalk()
         {
-            me->RemoveUnitMovementFlag(MOVEMENTFLAG_WALKING);
+            me->SetWalk(false);
             me->SetSpeed(MOVE_RUN, 1.0f);
             me->GetMotionMaster()->MovePoint(0, AkamaWP[WalkCount].x, AkamaWP[WalkCount].y, AkamaWP[WalkCount].z);
         }
@@ -1870,7 +1871,7 @@ void boss_illidan_stormrage::boss_illidan_stormrageAI::Reset()
     me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
     me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
     SetEquipmentSlots(false, EQUIP_UNEQUIP, EQUIP_UNEQUIP, EQUIP_NO_CHANGE);
-    me->RemoveUnitMovementFlag(MOVEMENTFLAG_LEVITATING);
+    me->SetLevitate(false);
     me->setActive(false);
     Summons.DespawnAll();
 }
@@ -1933,7 +1934,7 @@ void boss_illidan_stormrage::boss_illidan_stormrageAI::HandleTalkSequence()
         // Equip our warglaives!
         SetEquipmentSlots(false, EQUIP_ID_MAIN_HAND, EQUIP_ID_OFF_HAND, EQUIP_NO_CHANGE);
         me->SetByteValue(UNIT_FIELD_BYTES_2, 0, SHEATH_STATE_MELEE);
-        me->RemoveUnitMovementFlag(MOVEMENTFLAG_WALKING);
+        me->SetWalk(false);
         break;
     case 9:
         if (GETCRE(Akama, AkamaGUID))
@@ -2019,7 +2020,7 @@ public:
 
     struct cage_trap_triggerAI : public ScriptedAI
     {
-        cage_trap_triggerAI(Creature* c) : ScriptedAI(c) {}
+        cage_trap_triggerAI(Creature* creature) : ScriptedAI(creature) {}
 
         uint64 IllidanGUID;
         uint32 DespawnTimer;
@@ -2115,7 +2116,7 @@ public:
 
     struct shadow_demonAI : public ScriptedAI
     {
-        shadow_demonAI(Creature* c) : ScriptedAI(c) {}
+        shadow_demonAI(Creature* creature) : ScriptedAI(creature) {}
 
         uint64 TargetGUID;
 
@@ -2165,7 +2166,7 @@ public:
 
     struct blade_of_azzinothAI : public NullCreatureAI
     {
-        blade_of_azzinothAI(Creature* c) : NullCreatureAI(c) {}
+        blade_of_azzinothAI(Creature* creature) : NullCreatureAI(creature) {}
 
         void SpellHit(Unit* /*caster*/, const SpellInfo* spell)
         {
@@ -2188,9 +2189,9 @@ public:
     // Shadowfiends interact with Illidan, setting more targets in Illidan's hashmap
     struct mob_parasitic_shadowfiendAI : public ScriptedAI
     {
-        mob_parasitic_shadowfiendAI(Creature* c) : ScriptedAI(c)
+        mob_parasitic_shadowfiendAI(Creature* creature) : ScriptedAI(creature)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
         }
 
         InstanceScript* instance;

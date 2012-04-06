@@ -1,10 +1,11 @@
 /*
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2006-2012 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -115,9 +116,9 @@ public:
 
     struct boss_kalecgosAI : public ScriptedAI
     {
-        boss_kalecgosAI(Creature* c) : ScriptedAI(c)
+        boss_kalecgosAI(Creature* creature) : ScriptedAI(creature)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
             SathGUID = 0;
             DoorGUID = 0;
             bJustReset = false;
@@ -159,7 +160,7 @@ public:
             if (!bJustReset) //first reset at create
             {
                 me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE + UNIT_FLAG_NOT_SELECTABLE);
-                me->RemoveUnitMovementFlag(MOVEMENTFLAG_LEVITATING);
+                me->SetLevitate(false);
                 me->SetVisible(true);
                 me->SetStandState(UNIT_STAND_STATE_SLEEP);
             }
@@ -231,7 +232,7 @@ public:
                     if (ResetTimer <= diff)
                     {
                         me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE|UNIT_FLAG_NOT_SELECTABLE);
-                        me->RemoveUnitMovementFlag(MOVEMENTFLAG_LEVITATING);
+                        me->SetLevitate(false);
                         me->SetVisible(true);
                         me->SetStandState(UNIT_STAND_STATE_SLEEP);
                         ResetTimer = 10000;
@@ -400,7 +401,7 @@ public:
                 TalkTimer = 10000;
                 break;
             case 3:
-                me->AddUnitMovementFlag(MOVEMENTFLAG_LEVITATING);
+                me->SetLevitate(true);
                 me->GetMotionMaster()->MovePoint(0, FLY_X, FLY_Y, FLY_Z);
                 TalkTimer = 600000;
                 break;
@@ -418,7 +419,7 @@ public:
                 TalkTimer = 3000;
                 break;
             case 2:
-                me->AddUnitMovementFlag(MOVEMENTFLAG_LEVITATING);
+                me->SetLevitate(true);
                 me->GetMotionMaster()->MovePoint(0, FLY_X, FLY_Y, FLY_Z);
                 TalkTimer = 15000;
                 break;
@@ -455,9 +456,9 @@ public:
 
         bool isEnraged; // if demon is enraged
 
-        boss_kalecAI(Creature* c) : ScriptedAI(c)
+        boss_kalecAI(Creature* creature) : ScriptedAI(creature)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
         }
 
         void Reset()
@@ -572,9 +573,9 @@ public:
 
     struct boss_sathrovarrAI : public ScriptedAI
     {
-        boss_sathrovarrAI(Creature* c) : ScriptedAI(c)
+        boss_sathrovarrAI(Creature* creature) : ScriptedAI(creature)
         {
-            instance = c->GetInstanceScript();
+            instance = creature->GetInstanceScript();
             KalecGUID = 0;
             KalecgosGUID = 0;
         }

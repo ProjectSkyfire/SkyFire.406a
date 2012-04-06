@@ -1,10 +1,11 @@
 /*
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2006-2012 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -75,7 +76,7 @@ public:
 
     struct mob_mature_netherwing_drakeAI : public ScriptedAI
     {
-        mob_mature_netherwing_drakeAI(Creature* c) : ScriptedAI(c) { }
+        mob_mature_netherwing_drakeAI(Creature* creature) : ScriptedAI(creature) { }
 
         uint64 uiPlayerGUID;
 
@@ -206,7 +207,7 @@ public:
 
     struct mob_enslaved_netherwing_drakeAI : public ScriptedAI
     {
-        mob_enslaved_netherwing_drakeAI(Creature* c) : ScriptedAI(c)
+        mob_enslaved_netherwing_drakeAI(Creature* creature) : ScriptedAI(creature)
         {
             PlayerGUID = 0;
             Tapped = false;
@@ -223,7 +224,7 @@ public:
                 me->setFaction(FACTION_DEFAULT);
 
             FlyTimer = 10000;
-            me->RemoveUnitMovementFlag(MOVEMENTFLAG_LEVITATING);
+            me->SetLevitate(false);
             me->SetVisible(true);
         }
 
@@ -270,7 +271,7 @@ public:
                     PlayerGUID = 0;
                 }
                 me->SetVisible(false);
-                me->RemoveUnitMovementFlag(MOVEMENTFLAG_LEVITATING);
+                me->SetLevitate(false);
                 me->DealDamage(me, me->GetHealth(), NULL, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, NULL, false);
                 me->RemoveCorpse();
             }
@@ -308,7 +309,7 @@ public:
                                     pos.m_positionZ += 25;
                                 }
 
-                                me->AddUnitMovementFlag(MOVEMENTFLAG_LEVITATING);
+                                me->SetLevitate(true);
                                 me->GetMotionMaster()->MovePoint(1, pos);
                             }
                         }
@@ -338,7 +339,7 @@ public:
 
     struct mob_dragonmaw_peonAI : public ScriptedAI
     {
-        mob_dragonmaw_peonAI(Creature* c) : ScriptedAI(c) {}
+        mob_dragonmaw_peonAI(Creature* creature) : ScriptedAI(creature) {}
 
         uint64 PlayerGUID;
         bool Tapped;
@@ -364,7 +365,7 @@ public:
                 float x, y, z;
                 caster->GetClosePoint(x, y, z, me->GetObjectSize());
 
-                me->RemoveUnitMovementFlag(MOVEMENTFLAG_WALKING);
+                me->SetWalk(false);
                 me->GetMotionMaster()->MovePoint(1, x, y, z);
             }
         }
@@ -714,7 +715,7 @@ public:
 
     struct npc_overlord_morghorAI : public ScriptedAI
     {
-        npc_overlord_morghorAI(Creature* c) : ScriptedAI(c) {}
+        npc_overlord_morghorAI(Creature* creature) : ScriptedAI(creature) {}
 
         uint64 PlayerGUID;
         uint64 IllidanGUID;
@@ -808,7 +809,7 @@ public:
             case 19: DoScriptText(LORD_ILLIDAN_SAY_7, Illi); return 5000; break;
             case 20:
                 Illi->HandleEmoteCommand(EMOTE_ONESHOT_LIFTOFF);
-                Illi->AddUnitMovementFlag(MOVEMENTFLAG_LEVITATING);
+                Illi->SetLevitate(true);
                 return 500; break;
             case 21: DoScriptText(OVERLORD_SAY_5, me); return 500; break;
             case 22:
@@ -1160,14 +1161,14 @@ class mob_torloth_the_magnificent : public CreatureScript
 public:
     mob_torloth_the_magnificent() : CreatureScript("mob_torloth_the_magnificent") { }
 
-    CreatureAI* GetAI(Creature* c) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new mob_torloth_the_magnificentAI(c);
+        return new mob_torloth_the_magnificentAI(creature);
     }
 
     struct mob_torloth_the_magnificentAI : public ScriptedAI
     {
-        mob_torloth_the_magnificentAI(Creature* c) : ScriptedAI(c) {}
+        mob_torloth_the_magnificentAI(Creature* creature) : ScriptedAI(creature) {}
 
         uint32 AnimationTimer, SpellTimer1, SpellTimer2, SpellTimer3;
 
@@ -1322,14 +1323,14 @@ class npc_lord_illidan_stormrage : public CreatureScript
 public:
     npc_lord_illidan_stormrage() : CreatureScript("npc_lord_illidan_stormrage") { }
 
-    CreatureAI* GetAI(Creature* c) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new npc_lord_illidan_stormrageAI(c);
+        return new npc_lord_illidan_stormrageAI(creature);
     }
 
     struct npc_lord_illidan_stormrageAI : public ScriptedAI
     {
-        npc_lord_illidan_stormrageAI(Creature* c) : ScriptedAI(c) {}
+        npc_lord_illidan_stormrageAI(Creature* creature) : ScriptedAI(creature) {}
 
         uint64 PlayerGUID;
 
@@ -1467,14 +1468,14 @@ class mob_illidari_spawn : public CreatureScript
 public:
     mob_illidari_spawn() : CreatureScript("mob_illidari_spawn") { }
 
-    CreatureAI* GetAI(Creature* c) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new mob_illidari_spawnAI(c);
+        return new mob_illidari_spawnAI(creature);
     }
 
     struct mob_illidari_spawnAI : public ScriptedAI
     {
-        mob_illidari_spawnAI(Creature* c) : ScriptedAI(c) {}
+        mob_illidari_spawnAI(Creature* creature) : ScriptedAI(creature) {}
 
         uint64 LordIllidanGUID;
         uint32 SpellTimer1, SpellTimer2, SpellTimer3;
@@ -1725,7 +1726,7 @@ public:
 
     struct npc_enraged_spiritAI : public ScriptedAI
     {
-        npc_enraged_spiritAI(Creature* c) : ScriptedAI(c) {}
+        npc_enraged_spiritAI(Creature* creature) : ScriptedAI(creature) {}
 
         void Reset()   { }
 

@@ -1,9 +1,10 @@
 /*
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -36,6 +37,52 @@ enum DeathKnightSpells
     DK_SPELL_IMPROVED_BLOOD_PRESENCE_TRIGGERED  = 63611,
     DK_SPELL_UNHOLY_PRESENCE                    = 48265,
     DK_SPELL_IMPROVED_UNHOLY_PRESENCE_TRIGGERED = 63622,
+    DK_SPELL_NECROTIC_STRIKE                    = 73975,
+};
+
+class spell_dk_necrotic_strike : public SpellScriptLoader
+{
+public:
+    spell_dk_necrotic_strike() : SpellScriptLoader("spell_dk_necrotic_strike") { }
+
+    class spell_dk_necrotic_strike_SpellScript : public SpellScript
+    {
+        PrepareSpellScript(spell_dk_necrotic_strike_SpellScript);
+
+        bool Validate(SpellEntry const * /*spellEntry*/)
+        {
+            return sSpellStore.LookupEntry(DK_SPELL_NECROTIC_STRIKE);
+        }
+
+        void HandleBeforeHit()
+        {
+            if (Unit* target = GetHitUnit())
+            {
+                if (!target->HasAura(73975))
+                    target->SetHealAbsorb(0.0f);
+            }
+        }
+
+        void HandleAfterHit()
+        {
+            if (Unit* target = GetHitUnit())
+            {
+                float absorb = GetCaster()->GetTotalAttackPowerValue(BASE_ATTACK) * 0.75f + target->GetHealAbsorb();
+                target->SetHealAbsorb(absorb);
+            }
+        }
+
+        void Register()
+        {
+            BeforeHit += SpellHitFn(spell_dk_necrotic_strike_SpellScript::HandleBeforeHit);
+            AfterHit += SpellHitFn(spell_dk_necrotic_strike_SpellScript::HandleAfterHit);
+        }
+    };
+
+    SpellScript *GetSpellScript() const
+    {
+        return new spell_dk_necrotic_strike_SpellScript();
+    }
 };
 
 // 50462 - Anti-Magic Shell (on raid member)
@@ -170,11 +217,11 @@ class spell_dk_anti_magic_zone : public SpellScriptLoader
             {
                 SpellInfo const* talentSpell = sSpellMgr->GetSpellInfo(DK_SPELL_ANTI_MAGIC_SHELL_TALENT);
                 amount = talentSpell->Effects[EFFECT_0].CalcValue(GetCaster());
-                Unit* caster = GetCaster();
-                if (!caster)
-                    return;
-                if (Player* player = caster->ToPlayer())
-                     amount += int32(2 * player->GetTotalAttackPowerValue(BASE_ATTACK));
+                if (Unit* caster = GetCaster())
+                {
+                    if (Player* player = caster->ToPlayer())
+                        amount += int32(2 * player->GetTotalAttackPowerValue(BASE_ATTACK));
+                }
             }
 
             void Absorb(AuraEffect* /*aurEff*/, DamageInfo & dmgInfo, uint32 & absorbAmount)
@@ -252,7 +299,7 @@ class spell_dk_death_pact : public SpellScriptLoader
                 {
                     if ((*itr)->GetTypeId() == TYPEID_UNIT
                         && (*itr)->GetOwnerGUID() == GetCaster()->GetGUID()
-                        && (*itr)->ToCreature()->GetCreatureInfo()->type == CREATURE_TYPE_UNDEAD)
+                        && (*itr)->ToCreature()->GetCreatureTemplate()->type == CREATURE_TYPE_UNDEAD)
                     {
                         unit_to_add = (*itr);
                         break;
@@ -538,6 +585,7 @@ class spell_dk_chains_of_ice : public SpellScriptLoader
 
 void AddSC_deathknight_spell_scripts()
 {
+    new spell_dk_necrotic_strike();
     new spell_dk_anti_magic_shell_raid();
     new spell_dk_anti_magic_shell_self();
     new spell_dk_anti_magic_zone();
