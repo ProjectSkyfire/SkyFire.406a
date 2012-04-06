@@ -428,10 +428,8 @@ void Transport::Update(uint32 p_diff)
         DoEventIfAny(*m_curr, false);
 
         // first check help in case client-server transport coordinates de-synchronization
-        if (m_curr->second.mapid != GetMapId())
+        if (m_curr->second.mapid != GetMapId() || m_curr->second.teleport)
             TeleportTransport(m_curr->second.mapid, m_curr->second.x, m_curr->second.y, m_curr->second.z);
-        else if (m_curr->second.teleport)
-            TeleportTransport(m_next->second.mapid, m_next->second.x, m_next->second.y, m_next->second.z);
         else
         {
             Relocate(m_curr->second.x, m_curr->second.y, m_curr->second.z, GetAngle(m_next->second.x, m_next->second.y) + float(M_PI));
