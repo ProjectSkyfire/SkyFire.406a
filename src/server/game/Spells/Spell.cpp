@@ -2733,20 +2733,6 @@ void Spell::DoTriggersOnSpellHit(Unit* unit, uint8 effMask)
     // TODO: move this code to scripts
     if (m_preCastSpell)
     {
-        // Paladin immunity shields
-        if (m_preCastSpell == 61988)
-        {
-            // Cast Forbearance
-            m_caster->CastSpell(unit, 25771, true);
-            // Cast Avenging Wrath Marker
-            unit->CastSpell(unit, 61987, true);
-        }
-
-        // Avenging Wrath
-        if (m_preCastSpell == 61987)
-            // Cast the serverside immunity shield marker
-            m_caster->CastSpell(unit, 61988, true);
-
         if (sSpellMgr->GetSpellInfo(m_preCastSpell))
             // Blizz seems to just apply aura without bothering to cast
             m_caster->AddAura(m_preCastSpell, unit);
@@ -4730,9 +4716,9 @@ SpellCastResult Spell::CheckCast(bool strict)
         {
             if (m_caster->GetTypeId() == TYPEID_PLAYER) // Target - is player caster
             {
-                // Lay on Hands - cannot be self-cast on paladin with Forbearance or after using Avenging Wrath
-                if (m_spellInfo->SpellFamilyName == SPELLFAMILY_PALADIN && m_spellInfo->SpellFamilyFlags[0] & 0x0008000)
-                    if (target->HasAura(61988)) // Immunity shield marker
+                // Cannot be self-cast on paladin with Forbearance
+                if (m_spellInfo->Id == 1022 || m_spellInfo->Id == 642 || m_spellInfo->Id == 633)
+                    if (target->HasAura(25771)) // Immunity shield marker
                         return SPELL_FAILED_TARGET_AURASTATE;
             }
         }
