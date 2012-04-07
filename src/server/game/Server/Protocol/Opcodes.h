@@ -1024,7 +1024,7 @@ enum Opcodes
     CMSG_GUILD_BANK_WITHDRAW_MONEY                   = 0x073A8, // 4.0.6a 13623
     CMSG_GUILD_BANK_NOTE                             = 0x07680, // 4.0.6a 13623
     MSG_GUILD_BANK_LOG_QUERY                         = 0x0F584, // 4.0.6a 13623
-    CMSG_SET_CHANNEL_WATCH                           = 0x102B9, // Unknown opcode ID
+    CMSG_SET_CHANNEL_WATCH                           = 0x07FE0, // 4.0.3a 13329 - 403
     SMSG_USERLIST_ADD                                = 0x0F8CC, // 4.0.6a 13623
     SMSG_USERLIST_REMOVE                             = 0x0EF80, // 4.0.6a 13623
     SMSG_USERLIST_UPDATE                             = 0x02C8C, // 4.0.6a 13623
