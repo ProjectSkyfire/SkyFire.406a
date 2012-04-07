@@ -22,7 +22,7 @@
 
 #include "Common.h"
 
-#include <Vector>
+#include <vector>
 #include <deque>
 
 struct PathNode
