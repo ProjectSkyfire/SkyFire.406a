@@ -72,7 +72,7 @@ void ConfusedMovementGenerator<T>::Initialize(T &unit)
     }*/
     // set initial position
     unit.GetPosition(i_x, i_y, i_z);
-    
+
     unit.StopMoving();
     unit.SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_CONFUSED);
     unit.AddUnitState(UNIT_STATE_CONFUSED|UNIT_STATE_CONFUSED_MOVE);
@@ -118,7 +118,6 @@ bool ConfusedMovementGenerator<T>::Update(T &unit, const uint32 &diff)
             i_nextMove = urand(1, MAX_CONF_WAYPOINTS);
             i_nextMoveTime.Reset(urand(0, 1500-1));     // TODO: check the minimum reset time, should be probably higher
         }*/
-
     }
     else
     {
@@ -146,7 +145,7 @@ bool ConfusedMovementGenerator<T>::Update(T &unit, const uint32 &diff)
             {
                 i_nextMoveTime.Reset(urand(800, 1000));
                return true;
-            }           
+            }
             Movement::MoveSplineInit init(unit);
             // init.MoveTo(x, y, z);
             init.MovebyPath(path.getPath());

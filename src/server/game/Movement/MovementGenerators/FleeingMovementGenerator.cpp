@@ -304,7 +304,6 @@ FleeingMovementGenerator<T>::_setMoveData(T &owner)
     float curr_x, curr_y, curr_z;
     owner.GetPosition(curr_x, curr_y, curr_z);
 
- 
     // current distance
     // i_last_distance_from_caster = cur_dist;
     x = curr_x + dist*cos(angle);

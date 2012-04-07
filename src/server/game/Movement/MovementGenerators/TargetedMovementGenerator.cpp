@@ -156,7 +156,7 @@ bool TargetedMovementGeneratorMedium<T, D>::Update(T &owner, const uint32 & time
       /*  float allowed_dist = i_target->GetObjectSize() + owner.GetObjectSize() + MELEE_RANGE - 0.5f;
         float dist = (owner.movespline->FinalDestination() - G3D::Vector3(i_target->GetPositionX(),i_target->GetPositionY(),i_target->GetPositionZ())).squaredLength();
         if (dist >= allowed_dist * allowed_dist)*/
-        
+
         float allowed_dist = owner.GetObjectSize() + MELEE_RANGE - 0.5f;
         G3D::Vector3 dest = owner.movespline->FinalDestination();
 

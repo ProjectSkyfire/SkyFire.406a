@@ -1959,12 +1959,10 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
             }
             delete targets;
             break;
-                
         }
         default:
             sLog->outErrorDb("SmartScript::ProcessAction: Unhandled Action type %u", e.GetActionType());
             break;
-
     }
 
     if (e.link && e.link != e.event_id)

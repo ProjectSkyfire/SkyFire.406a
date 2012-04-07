@@ -880,7 +880,6 @@ struct SmartAction
             uint8 pointId;
         } MoveToPos;
 
-
         struct
         {
             uint32 gossipMenuId;

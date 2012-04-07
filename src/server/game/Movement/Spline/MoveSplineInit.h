@@ -81,7 +81,6 @@ namespace Movement
         void MoveTo(const Vector3& destination, bool generatePath = false, bool forceDestination = false);
         void MoveTo(float x, float y, float z, bool generatePath = false, bool forceDestination = false);
 
-
         /* Sets Id of fisrt point of the path. When N-th path point will be done ILisener will notify that pointId + N done
          * Needed for waypoint movement where path splitten into parts
          */
@@ -164,9 +163,7 @@ namespace Movement
             args.path.resize(2);
             args.path[1] = dest;
         }
-
      }
-    
 
     inline void MoveSplineInit::SetParabolic(float amplitude, float time_shift)
     {

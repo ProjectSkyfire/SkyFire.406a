@@ -68,14 +68,10 @@
 bool ChatHandler::HandleMapSetInfoCommand(const char* args)
 {
    return true;
-
 }
 bool ChatHandler::HandleMapInfoCommand(const char* args)
 {
-
 return true;
-
-
 }
 bool ChatHandler::HandleMaxSkillCommand(const char* /*args*/)
 {
@@ -268,14 +264,14 @@ bool ChatHandler::HandleAddItemCommand(const char *args)
 
     if (count == 0)
         count = 1;
-    
+
     Player* player = _session->GetPlayer();
     Player* plTarget = getSelectedPlayer();
     if (!plTarget)
         plTarget = player;
 
     sLog->outDetail(GetSkyFireString(LANG_ADDITEM), itemId, count);
-    
+
     ItemTemplate const* proto = sObjectMgr->GetItemTemplate(itemId);
     if (!proto)
     {

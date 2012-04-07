@@ -100,7 +100,6 @@ class PreparedResultSet
         void FreeBindBuffer();
         void CleanUp();
         bool _NextRow();
-
 };
 
 typedef Trinity::AutoPtr<PreparedResultSet, ACE_Thread_Mutex> PreparedQueryResult;
