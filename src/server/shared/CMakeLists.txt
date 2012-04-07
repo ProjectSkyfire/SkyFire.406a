@@ -55,7 +55,6 @@ include_directories(
   ${CMAKE_SOURCE_DIR}/dep/zlib  
   ${CMAKE_SOURCE_DIR}/dep/SFMT
   ${CMAKE_SOURCE_DIR}/dep/mersennetwister
-  ${CMAKE_SOURCE_DIR}/dep/sockets/include
   ${CMAKE_SOURCE_DIR}/dep/utf8cpp
   ${CMAKE_SOURCE_DIR}/dep/recastlite/Detour
   ${CMAKE_SOURCE_DIR}/dep/recastlite/Recast
