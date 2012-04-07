@@ -4712,16 +4712,6 @@ SpellCastResult Spell::CheckCast(bool strict)
             if (!(m_spellInfo->AttributesEx2 & SPELL_ATTR2_CAN_TARGET_NOT_IN_LOS) && VMAP::VMapFactory::checkSpellForLoS(m_spellInfo->Id) && !m_caster->IsWithinLOSInMap(target))
                 return SPELL_FAILED_LINE_OF_SIGHT;
         }
-        else
-        {
-            if (m_caster->GetTypeId() == TYPEID_PLAYER) // Target - is player caster
-            {
-                // Cannot be self-cast on paladin with Forbearance
-                if (m_spellInfo->Id == 1022 || m_spellInfo->Id == 642 || m_spellInfo->Id == 633)
-                    if (target->HasAura(25771)) // Immunity shield marker
-                        return SPELL_FAILED_TARGET_AURASTATE;
-            }
-        }
     }
 
     //Check for line of sight for spells with dest
@@ -4865,6 +4855,19 @@ SpellCastResult Spell::CheckCast(bool strict)
                     Unit* target = m_targets.GetUnitTarget();
                     if (!target || !target->IsFriendlyTo(m_caster) || target->getAttackers().empty())
                         return SPELL_FAILED_BAD_TARGETS;
+                }
+                break;
+            }
+            case SPELL_EFFECT_HEAL_MAX_HEALTH:
+            {
+                Unit* target = m_targets.GetUnitTarget();
+                if(target)
+
+                {
+                    // Cannot be cast on paladin with Forbearance
+                    if (m_spellInfo->Id == 642 || m_spellInfo->Id == 1022)
+                        if (target->HasAura(25771))
+                            return SPELL_FAILED_TARGET_AURASTATE;
                 }
                 break;
             }
@@ -5270,6 +5273,19 @@ SpellCastResult Spell::CheckCast(bool strict)
                     }
                     default:
                         break;
+                }
+                break;
+            }
+            case SPELL_AURA_SCHOOL_IMMUNITY:
+            {
+                Unit* target = m_targets.GetUnitTarget();
+                if(target)
+
+                {
+                    // Cannot be cast on paladin with Forbearance
+                    if (m_spellInfo->Id == 633)
+                        if (target->HasAura(25771))
+                            return SPELL_FAILED_TARGET_AURASTATE;
                 }
                 break;
             }
