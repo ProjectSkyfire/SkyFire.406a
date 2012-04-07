@@ -407,7 +407,10 @@ DumpReturn PlayerDumpReader::LoadDump(const std::string& file, uint32 account, s
     bool incHighest = true;
     if (guid != 0 && guid < sObjectMgr->_hiCharGuid)
     {
-        result = CharacterDatabase.PQuery("SELECT 1 FROM characters WHERE guid = '%d'", guid);
+        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_CHECK_GUID);
+        stmt->setUInt32(0, guid);
+        PreparedQueryResult result = CharacterDatabase.Query(stmt);
+
         if (result)
             guid = sObjectMgr->_hiCharGuid;                     // use first free if exists
         else incHighest = false;

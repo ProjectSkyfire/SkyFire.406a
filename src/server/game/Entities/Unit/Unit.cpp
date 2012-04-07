@@ -104,6 +104,7 @@ m_damageType(_damageType), m_attackType(BASE_ATTACK)
     m_resist = 0;
     m_block = 0;
 }
+
 DamageInfo::DamageInfo(CalcDamageInfo& dmgInfo)
 : m_attacker(dmgInfo.attacker), m_victim(dmgInfo.target), m_damage(dmgInfo.damage), m_spellInfo(NULL), m_schoolMask(SpellSchoolMask(dmgInfo.damageSchoolMask)),
 m_damageType(DIRECT_DAMAGE), m_attackType(dmgInfo.attackType)
@@ -450,7 +451,7 @@ void Unit::SendMonsterMoveTransport(Unit* vehicleOwner)
     data.append(GetPackGUID());
     data.append(vehicleOwner->GetPackGUID());
     data << int8(GetTransSeat());
-    data << uint8(0);
+    data << uint8(GetTypeId() == TYPEID_PLAYER ? 1 : 0); // boolean
     data << GetPositionX() - vehicleOwner->GetPositionX();
     data << GetPositionY() - vehicleOwner->GetPositionY();
     data << GetPositionZ() - vehicleOwner->GetPositionZ();
@@ -4695,7 +4696,8 @@ void Unit::AddGameObject(GameObject* gameObj)
 
 void Unit::RemoveGameObject(GameObject* gameObj, bool del)
 {
-    if (!gameObj || !gameObj->GetOwnerGUID() == GetGUID()) return;
+    if (!gameObj || gameObj->GetOwnerGUID() != GetGUID())
+        return;
 
     gameObj->SetOwnerGUID(0);
 
@@ -8215,10 +8217,10 @@ bool Unit::HandleAuraProc(Unit* victim, uint32 damage, Aura* triggeredByAura, Sp
             {
                 *handled = true;
                 // Check if we are the target and prevent mana gain
-                if (triggeredByAura->GetCasterGUID() == victim->GetGUID())
+                if (victim && triggeredByAura->GetCasterGUID() == victim->GetGUID())
                     return false;
                 // Lookup base amount mana restore
-                for (uint8 i = 0; i<MAX_SPELL_EFFECTS; i++)
+                for (uint8 i = 0; i < MAX_SPELL_EFFECTS; i++)
                 {
                     if (procSpell->Effects[i].Effect == SPELL_EFFECT_ENERGIZE)
                     {
@@ -12706,7 +12708,6 @@ void Unit::setDeathState(DeathState s)
 {
     // death state needs to be updated before RemoveAllAurasOnDeath() calls HandleChannelDeathItem(..) so that
     // it can be used to check creation of death items (such as soul shards).
-    DeathState oldDeathState = _deathState;
     _deathState = s;
 
     if (s != ALIVE && s != JUST_ALIVED)
@@ -12719,7 +12720,6 @@ void Unit::setDeathState(DeathState s)
         if (IsNonMeleeSpellCasted(false))
             InterruptNonMeleeSpells(false);
 
-        ExitVehicle();  // Remove applied auras with SPELL_AURA_CONTROL_VEHICLE
         UnsummonAllTotems();
         RemoveAllControlled();
         RemoveAllAurasOnDeath();
@@ -12742,7 +12742,7 @@ void Unit::setDeathState(DeathState s)
         SetPower(getPowerType(), 0);
     }
     else if (s == JUST_ALIVED)
-        RemoveFlag (UNIT_FIELD_FLAGS, UNIT_FLAG_SKINNABLE); // clear skinnable for creature and player (at battleground)
+        RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SKINNABLE); // clear skinnable for creature and player (at battleground)
 }
 
 /*########################################
@@ -13784,28 +13784,7 @@ void Unit::CleanupBeforeRemoveFromMap(bool finalCleanup)
 
 void Unit::CleanupsBeforeDelete(bool finalCleanup)
 {
-    // This needs to be before RemoveFromWorld to make GetCaster() return a valid pointer on aura removal
-    InterruptNonMeleeSpells(true);
-
-    if (IsInWorld())
-        RemoveFromWorld();
-
-    ASSERT(GetGUID());
-
-    // A unit may be in removelist and not in world, but it is still in grid
-    // and may have some references during delete
-    RemoveAllAuras();
-    RemoveAllGameObjects();
-
-    if (finalCleanup)
-        m_cleanupDone = true;
-
-    _Events.KillAllEvents(false);                      // non-delatable (currently casted spells) will not deleted now but it will deleted at call in Map::RemoveAllObjectsInRemoveList
-    CombatStop();
-    ClearComboPointHolders();
-    DeleteThreatList();
-    getHostileRefManager().setOnlineOfflineState(false);
-    GetMotionMaster()->Clear(false);                    // remove different non-standard movement generators.
+    CleanupBeforeRemoveFromMap(finalCleanup);
 
     if (Creature* thisCreature = ToCreature())
         if (GetTransport())
@@ -15950,8 +15929,6 @@ bool Unit::SetCharmedBy(Unit* charmer, CharmType type, AuraApplication const* au
     if (GetTypeId() == TYPEID_UNIT)
     {
         ToCreature()->AI()->OnCharmed(true);
-        GetMotionMaster()->Clear(false);
-        StopMoving();
         GetMotionMaster()->MoveIdle();
     }
     else
@@ -17235,8 +17212,6 @@ void Unit::_ExitVehicle(Position const* exitPosition)
         vehicle->GetBase()->GetPosition(&pos);
     else
         pos = *exitPosition;
-
-    AddUnitState(UNIT_STATE_MOVE);
 
     if (GetTypeId() == TYPEID_PLAYER)
         ToPlayer()->SetFallInformation(0, GetPositionZ());

@@ -96,7 +96,7 @@ uint32 CreatureTemplate::GetRandomValidModelId() const
     if (Modelid3) modelIDs[c++] = Modelid3;
     if (Modelid4) modelIDs[c++] = Modelid4;
 
-    return ((c>0) ? modelIDs[urand(0, c-1)] : 0);
+    return ((c > 0) ? modelIDs[urand(0, c-1)] : 0);
 }
 
 uint32 CreatureTemplate::GetFirstValidModelId() const
@@ -743,17 +743,19 @@ bool Creature::Create(uint32 guidlow, Map* map, uint32 phaseMask, uint32 Entry, 
         return false;
     }
 
+    //! Relocate before CreateFromProto, to initialize coords and allow
+    //! returning correct zone id for selecting OutdoorPvP/Battlefield script
     Relocate(x, y, z, ang);
+
+    //oX = x;     oY = y;    dX = x;    dY = y;    _moveTime = 0;    _startMove = 0;
+    if (!CreateFromProto(guidlow, Entry, vehId, team, data))
+        return false;
 
     if (!IsPositionValid())
     {
         sLog->outError("Creature::Create(): given coordinates for creature (guidlow %d, entry %d) are not valid (X: %f, Y: %f, Z: %f, O: %f)", guidlow, Entry, x, y, z, ang);
         return false;
     }
-
-    //oX = x;     oY = y;    dX = x;    dY = y;    _moveTime = 0;    _startMove = 0;
-    if (!CreateFromProto(guidlow, Entry, vehId, team, data))
-        return false;
 
     switch (GetCreatureTemplate()->rank)
     {
@@ -1669,7 +1671,7 @@ SpellInfo const* Creature::reachWithSpellAttack(Unit* victim)
                 (spellInfo->Effects[j].Effect == SPELL_EFFECT_INSTAKILL)            ||
                 (spellInfo->Effects[j].Effect == SPELL_EFFECT_ENVIRONMENTAL_DAMAGE) ||
                 (spellInfo->Effects[j].Effect == SPELL_EFFECT_HEALTH_LEECH)
-)
+                )
             {
                 bcontinue = false;
                 break;
@@ -1719,7 +1721,8 @@ SpellInfo const* Creature::reachWithSpellCure(Unit* victim)
                 break;
             }
         }
-        if (bcontinue) continue;
+        if (bcontinue)
+            continue;
 
         if (spellInfo->ManaCost > uint32(GetPower(POWER_MANA)))
             continue;
@@ -2398,7 +2401,7 @@ bool Creature::SetWalk(bool enable)
 
     WorldPacket data(enable ? SMSG_SPLINE_MOVE_SET_WALK_MODE : SMSG_SPLINE_MOVE_SET_RUN_MODE, 9);
     data.append(GetPackGUID());
-    SendMessageToSet(&data, true);
+    SendMessageToSet(&data, false);
     return true;
 }
 
@@ -2409,6 +2412,6 @@ bool Creature::SetLevitate(bool enable)
 
     WorldPacket data(enable ? SMSG_SPLINE_MOVE_GRAVITY_DISABLE : SMSG_SPLINE_MOVE_GRAVITY_ENABLE, 9);
     data.append(GetPackGUID());
-    SendMessageToSet(&data, true);
+    SendMessageToSet(&data, false);
     return true;
 }

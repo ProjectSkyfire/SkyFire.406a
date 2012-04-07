@@ -1392,11 +1392,6 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
             case SPELLFAMILY_GENERIC:
                 switch (GetId())
                 {
-                    case 61987: // Avenging Wrath
-                        // Remove the immunity shield marker on Avenging Wrath removal if Forbearance is not present
-                        if (target->HasAura(61988) && !target->HasAura(25771))
-                            target->RemoveAura(61988);
-                        break;
                     case 72368: // Shared Suffering
                     case 72369:
                         if (caster)
@@ -1637,11 +1632,6 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                 if (GetSpellInfo()->SpellFamilyFlags[0] & 0x00000008)
                     if (caster && caster->HasAura(56845))
                         target->CastSpell(target, 61394, true);
-                break;
-            case SPELLFAMILY_PALADIN:
-                // Remove the immunity shield marker on Forbearance removal if AW marker is not present
-                if (GetId() == 25771 && target->HasAura(61988) && !target->HasAura(61987))
-                    target->RemoveAura(61988);
                 break;
         }
     }

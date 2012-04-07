@@ -37,7 +37,7 @@ typedef DatabaseWorkerPool<CharacterDatabaseConnection> CharacterDatabaseWorkerP
 enum CharacterDatabaseStatements
 {
     /*  Naming standard for defines:
-        {DB}_{SET/DEL/ADD/REP}_{Summary of data changed}
+        {DB}_{SEL/INS/UPD/DEL/REP}_{Summary of data changed}
         When updating more than one field, consider looking at the calling function
         name for a suiting suffix.
     */
@@ -61,23 +61,37 @@ enum CharacterDatabaseStatements
     // Misc
     CHAR_GET_CHARACTER_COUNT,
     CHAR_DEL_QUEST_POOL_SAVE,
-    CHAR_ADD_QUEST_POOL_SAVE,
-    CHAR_GET_GUID_BY_NAME,
-    CHAR_GET_GUID_BY_NAME_FILTER,
-    CHAR_GET_CHECK_NAME,
-    CHAR_GET_SUM_CHARS,
-    CHAR_GET_CHAR_CREATE_INFO,
+    CHAR_INS_QUEST_POOL_SAVE,
+    CHAR_SEL_GUID_BY_NAME,
+    CHAR_SEL_GUID_BY_NAME_FILTER,
+    CHAR_SEL_CHECK_NAME,
+    CHAR_SEL_CHECK_GUID,
+    CHAR_SEL_SUM_CHARS,
+    CHAR_SEL_CHAR_CREATE_INFO,
     CHAR_GET_FREE_NAME,
     CHAR_GET_GUID_RACE_ACC_BY_NAME,
     CHAR_ADD_BUG_REPORT,
 
     // Bans
-    CHAR_ADD_BAN,
-    CHAR_SET_NOT_BANNED,
+    CHAR_INS_CHARACTER_BAN,
+    CHAR_UPD_CHARACTER_BAN,
     CHAR_DEL_EXPIRED_BANS,
-    CHAR_GET_BANINFO,
-    CHAR_GET_BANINFO_LIST,
-    CHAR_GET_BANNED_NAME,
+    CHAR_SEL_BANINFO,
+    CHAR_SEL_BANINFO_LIST,
+    CHAR_SEL_BANNED_NAME,
+    CHAR_SEL_ENUM,
+    CHAR_SEL_ENUM_DECLINED_NAME,
+    CHAR_SEL_PET_SLOTS,
+    CHAR_SEL_PET_SLOTS_DETAIL,
+    CHAR_SEL_PET_ENTRY,
+    CHAR_SEL_PET_SLOT_BY_ID,
+    CHAR_SEL_FREE_NAME,
+    CHAR_SEL_GUID_RACE_ACC_BY_NAME,
+    CHAR_SEL_CHAR_RACE,
+    CHAR_SEL_CHAR_LEVEL,
+    CHAR_SEL_CHAR_ZONE,
+    CHAR_SEL_CHAR_POSITION_XYZ,
+    CHAR_SEL_CHAR_POSITION,
 
     // Character loading
     CHAR_LOAD_PLAYER,
