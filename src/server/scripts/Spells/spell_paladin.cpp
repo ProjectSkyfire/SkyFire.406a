@@ -349,19 +349,21 @@ public:
             if (Unit* caster = GetCaster())
             {
                 int32 damage = GetHitDamage();
-                switch (caster->GetPower(POWER_HOLY_POWER))
+                int32 power = caster->GetPower(POWER_HOLY_POWER);
+                switch (power)
                 {
                     case 0:
-                        damage = int32(damage * 1.16f);
+                        damage = int32(damage * - 1.0f);
                         break;
                     case 1:
-                        damage = int32((damage * 1.16f) * 3);
+                        damage = int32((damage * 3.0f) - 3);
                         break;
                     case 2:
-                        damage = int32((damage * 1.16f) * 6);
+                        damage = int32((damage * 6.0f) - 6);
                         break;
                 }
                 SetHitDamage(damage);
+                caster->SetPower(POWER_HOLY_POWER, int32(-power));
             }
         }
 
