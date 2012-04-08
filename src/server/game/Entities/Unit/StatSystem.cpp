@@ -296,6 +296,12 @@ void Player::UpdateMaxPower(Powers power)
     SetMaxPower(power, uint32(value));
 }
 
+void Player::ApplyFeralAPBonus(int32 amount, bool apply)
+{
+   _ModifyUInt32(apply, _baseFeralAP, amount);
+   UpdateAttackPowerAndDamage();
+}
+
 void Player::UpdateAttackPowerAndDamage(bool ranged)
 {
     float val2 = 0.0f;
@@ -368,18 +374,49 @@ void Player::UpdateAttackPowerAndDamage(bool ranged)
                 // Check if Predatory Strikes is skilled
                 float mLevelMult = 0.0f;
                 float weapon_bonus = 0.0f;
+                float mFeralMult = 0.0f;
+                short applied = 0;
 
                 switch (GetShapeshiftForm())
                 {
                     case FORM_CAT:
-                        val2 = (GetStat(STAT_STRENGTH) * 2) + GetStat(STAT_AGILITY) + 40.0f - 20.0f;
-                        break;
                     case FORM_BEAR:
                     case FORM_DIREBEAR:
-                        val2 = (GetStat(STAT_STRENGTH) * 2) - 20.0f + (GetShapeshiftForm() == FORM_BEAR ? 30.0f : 120.0f);
+                    case FORM_MOONKIN:
+                    {
+                        Unit::AuraEffectList const& mDummy = GetAuraEffectsByType(SPELL_AURA_DUMMY);
+                        for (Unit::AuraEffectList::const_iterator itr = mDummy.begin(); itr != mDummy.end(); ++itr)
+                        {
+                            // Predatory Strikes (effect 0)
+                            if ((*itr)->GetEffIndex() == 0 && (*itr)->GetSpellInfo()->SpellIconID == 1563)
+                            {
+                                mLevelMult = (*itr)->GetAmount() / 100.0f;
+                                if (applied) break;
+                                applied = 1;
+                            }
+                            // Predatory Strikes (effect 1)
+                            if ((*itr)->GetEffIndex() == 1 && (*itr)->GetSpellInfo()->SpellIconID == 1563)
+                            {
+                                mFeralMult = (*itr)->GetAmount() / 100.0f;
+                                if (applied) break;
+                                applied = 1;
+                            }
+                       }
                         break;
+                    }
                     default:
-                        val2 = (GetStat(STAT_STRENGTH) * 2.0f) - 20.0f;
+                        break;
+                }
+
+                switch (GetShapeshiftForm())
+                {
+                    case FORM_CAT:
+                        val2 = getLevel() * (mLevelMult + 2.0f) + GetStat(STAT_STRENGTH) * 2.0f - 20.0f + GetStat(STAT_AGILITY) * 2.0f - 20.0f + _baseFeralAP; break;
+                    case FORM_BEAR:
+                    case FORM_DIREBEAR:
+                        val2 = getLevel() * (mLevelMult + 2.0f) + GetStat(STAT_STRENGTH) * 2.0f - 20.0f + GetStat(STAT_AGILITY) * 2.0f - 20.0f + _baseFeralAP; break;
+                    case FORM_MOONKIN:
+                        val2 = getLevel() * (mLevelMult + 1.5f) + GetStat(STAT_STRENGTH) * 2.0f - 20.0f + _baseFeralAP;
                         break;
                 }
                 break;
@@ -445,8 +482,8 @@ void Player::UpdateAttackPowerAndDamage(bool ranged)
     float attPowerMultiplier = (GetModifierValue(unitMod_pos, TOTAL_PCT) + (1 - GetModifierValue(unitMod_neg, TOTAL_PCT)))- 1.0f;
 
     SetInt32Value(index, (uint32)base_attPower);            //UNIT_FIELD_(RANGED)_ATTACK_POWER field
-    SetInt32Value(index_mod_pos, (uint32)attPowerMod_pos);          //UNIT_FIELD_(RANGED)_ATTACK_POWER_MOD_POS field
-    SetInt32Value(index_mod_neg, (uint32)attPowerMod_neg);          //UNIT_FIELD_(RANGED)_ATTACK_POWER_MOD_NEG field
+    SetInt32Value(index_mod_pos, (uint32)attPowerMod_pos);  //UNIT_FIELD_(RANGED)_ATTACK_POWER_MOD_POS field
+    SetInt32Value(index_mod_neg, (uint32)attPowerMod_neg);  //UNIT_FIELD_(RANGED)_ATTACK_POWER_MOD_NEG field
     SetFloatValue(index_mult, attPowerMultiplier);          //UNIT_FIELD_(RANGED)_ATTACK_POWER_MULTIPLIER field
 
     Pet* pet = GetPet();                                //update pet's AP
