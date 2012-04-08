@@ -517,7 +517,7 @@ void Player::CalculateMinMaxDamage(WeaponAttackType attType, bool normalized, bo
     UnitMods attPower_pos;
     UnitMods attPower_neg;
 
-    switch(attType)
+    switch (attType)
     {
         case BASE_ATTACK:
         default:
@@ -1056,8 +1056,8 @@ void Creature::UpdateAttackPowerAndDamage(bool ranged)
     float attPowerMultiplier = (GetModifierValue(unitMod_pos, TOTAL_PCT) + (1 - GetModifierValue(unitMod_neg, TOTAL_PCT)))- 1.0f;
 
     SetInt32Value(index, (uint32)base_attPower);            //UNIT_FIELD_(RANGED)_ATTACK_POWER field
-    SetInt32Value(index_mod_pos, (uint32)attPowerMod_pos);          //UNIT_FIELD_(RANGED)_ATTACK_POWER_MOD_POS field
-    SetInt32Value(index_mod_neg, (uint32)attPowerMod_neg);          //UNIT_FIELD_(RANGED)_ATTACK_POWER_MOD_NEG field
+    SetInt32Value(index_mod_pos, (uint32)attPowerMod_pos);  //UNIT_FIELD_(RANGED)_ATTACK_POWER_MOD_POS field
+    SetInt32Value(index_mod_neg, (uint32)attPowerMod_neg);  //UNIT_FIELD_(RANGED)_ATTACK_POWER_MOD_NEG field
     SetFloatValue(index_mult, attPowerMultiplier);          //UNIT_FIELD_(RANGED)_ATTACK_POWER_MULTIPLIER field
 
     //automatically update weapon damage after attack power modification
