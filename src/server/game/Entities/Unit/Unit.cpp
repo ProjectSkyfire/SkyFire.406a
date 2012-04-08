@@ -744,6 +744,22 @@ uint32 Unit::DealDamage(Unit* victim, uint32 damage, CleanDamage const* cleanDam
         if (victim->GetTypeId() == TYPEID_PLAYER)
             victim->ToPlayer()->UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_TOTAL_DAMAGE_RECEIVED, damage);
 
+        // Blood Craze
+        if (victim->GetTypeId() == TYPEID_PLAYER)
+        {
+            if (victim->HasAura(16487)) // Rank 1
+                if (roll_chance_f(10.0f))
+                    victim->CastSpell(victim, 16488, true);
+
+            if (victim->HasAura(16489)) // Rank 2
+                if (roll_chance_f(10.0f))
+                    victim->CastSpell(victim, 16490, true);
+
+            if (victim->HasAura(16492)) // Rank 3
+                if (roll_chance_f(10.0f))
+                    victim->CastSpell(victim, 16491, true);
+        }
+
         victim->ModifyHealth(- (int32)damage);
 
         if (damagetype == DIRECT_DAMAGE || damagetype == SPELL_DIRECT_DAMAGE)
@@ -2305,8 +2321,8 @@ SpellMissInfo Unit::MeleeSpellHitResult(Unit* victim, SpellInfo const* spell)
 
     WeaponAttackType attType = BASE_ATTACK;
 
-    // Check damage class instead of attack type to correctly handle judgements
-    // - they are meele, but can't be dodged/parried/deflected because of ranged dmg class
+    // Check damage class instead of attack type to correctly handle judgments
+    // - they are melee, but can't be dodged/parried/deflected because of ranged dmg class
     if (spell->DmgClass == SPELL_DAMAGE_CLASS_RANGED)
         attType = RANGED_ATTACK;
 
