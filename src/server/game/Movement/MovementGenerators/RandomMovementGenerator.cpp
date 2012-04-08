@@ -36,17 +36,16 @@
 template<>
 void RandomMovementGenerator<Creature>::SetRandomLocation(Creature &creature)
 {
-    float respX, respY, respZ, respO, destX, destY, destZ, travelDist;
+    float respX, respY, respZ, respO, destX, destY, destZ, travelDistZ;
     creature.GetHomePosition(respX, respY, respZ, respO);
-/*    currZ = creature.GetPositionZ();
     Map const* map = creature.GetBaseMap();
 
     // For 2D/3D system selection
     bool isAirOk = creature.canFly();
-    */
+
     const float angle = float(rand_norm()) * static_cast<float>(M_PI*2.0f);
     const float range = float(rand_norm()) * _wanderDistance;
-/*    const float distanceX = range * cos(angle);
+    const float distanceX = range * cos(angle);
     const float distanceY = range * sin(angle);
 
     destX = respX + distanceX;
@@ -96,27 +95,16 @@ void RandomMovementGenerator<Creature>::SetRandomLocation(Creature &creature)
     }
 
     if (isAirOk)
-        _nextMoveTime.Reset(0);
+        i_nextMoveTime.Reset(0);
     else
-        _nextMoveTime.Reset(urand(500, 10000));
-*/
-
-    destX = respX + range * cos(angle);
-    destY = respY + range * sin(angle);
-    destZ = creature.GetPositionZ();
-    creature.UpdateAllowedPositionZ(destX, destY, destZ);
+        i_nextMoveTime.Reset(urand(500, 10000));
 
     creature.AddUnitState(UNIT_STATE_ROAMING_MOVE);
 
     Movement::MoveSplineInit init(creature);
-    init.MoveTo(destX, destY, destZ, true);
+    init.MoveTo(destX, destY, destZ);
     init.SetWalk(true);
     init.Launch();
-
-    if (creature.canFly())
-        _nextMoveTime.Reset(0);
-    else
-        _nextMoveTime.Reset(urand(500, 10000));
 
     //Call for creature group update
     if (creature.GetFormation() && creature.GetFormation()->getLeader() == &creature)
@@ -163,15 +151,15 @@ RandomMovementGenerator<Creature>::Update(Creature &creature, uint32 const diff)
 {
     if (creature.HasUnitState(UNIT_STATE_ROOT | UNIT_STATE_STUNNED | UNIT_STATE_DISTRACTED))
     {
-        _nextMoveTime.Reset(0);  // Expire the timer
+        i_nextMoveTime.Reset(0);  // Expire the timer
         creature.ClearUnitState(UNIT_STATE_ROAMING_MOVE);
         return true;
     }
 
     if (creature.movespline->Finalized())
     {
-        _nextMoveTime.Update(diff);
-        if (_nextMoveTime.Passed())
+        i_nextMoveTime.Update(diff);
+        if (i_nextMoveTime.Passed())
             SetRandomLocation(creature);
     }
     return true;

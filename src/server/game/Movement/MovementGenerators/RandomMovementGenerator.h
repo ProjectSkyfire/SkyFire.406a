@@ -27,7 +27,7 @@ class RandomMovementGenerator
 : public MovementGeneratorMedium< T, RandomMovementGenerator<T> >
 {
     public:
-        RandomMovementGenerator(float spawnDist = 0.0f) : _nextMoveTime(0), _wanderDistance(spawnDist) {}
+        RandomMovementGenerator(float spawnDist = 0.0f) : i_nextMoveTime(0), _wanderDistance(spawnDist) {}
 
         void SetRandomLocation(T &);
         void Initialize(T &);
@@ -38,7 +38,7 @@ class RandomMovementGenerator
         bool GetResetPosition(T&, float& x, float& y, float& z);
         MovementGeneratorType GetMovementGeneratorType() { return RANDOM_MOTION_TYPE; }
     private:
-        TimeTrackerSmall _nextMoveTime;
+        TimeTrackerSmall i_nextMoveTime;
 
         uint32 _nextMove;
         float _wanderDistance;
