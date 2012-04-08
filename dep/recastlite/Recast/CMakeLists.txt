@@ -9,21 +9,21 @@
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 set(Recast_STAT_SRCS
-    Recast.cpp 
+    Recast.cpp
     RecastAlloc.cpp 
-    RecastArea.cpp 
-    RecastContour.cpp 
-    RecastFilter.cpp 
-    RecastMesh.cpp 
-    RecastMeshDetail.cpp 
-    RecastRasterization.cpp 
-    RecastRegion.cpp 
+    RecastArea.cpp
+    RecastContour.cpp
+    RecastFilter.cpp
+    RecastMesh.cpp
+    RecastMeshDetail.cpp
+    RecastRasterization.cpp
+    RecastRegion.cpp
 )
 
 if(WIN32)
   include_directories(
     ${CMAKE_SOURCE_DIR}/dep/zlib
-	${CMAKE_SOURCE_DIR}/dep/recastnavigation/Detour
+	${CMAKE_SOURCE_DIR}/dep/recastlite/Detour
   )
 endif()
 
