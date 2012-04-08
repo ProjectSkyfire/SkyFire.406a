@@ -229,7 +229,7 @@ enum ShapeshiftForm
     FORM_BEAR               = 0x05,
     FORM_AMBIENT            = 0x06,
     FORM_GHOUL              = 0x07,
-    FORM_DIREBEAR           = 0x08,
+    //FORM_DIREBEAR           = 0x08, // removed in 4.0.1
     FORM_STEVES_GHOUL       = 0x09,
     FORM_THARONJA_SKELETON  = 0x0A,
     FORM_TEST_OF_STRENGTH   = 0x0B,
@@ -1928,6 +1928,12 @@ class Unit : public WorldObject
         void SetShapeshiftForm(ShapeshiftForm form)
         {
             SetByteValue(UNIT_FIELD_BYTES_2, 3, form);
+        }
+
+        inline bool IsInFeralForm() const
+        {
+            ShapeshiftForm form = GetShapeshiftForm();
+            return form == FORM_CAT || form == FORM_BEAR;
         }
 
         inline bool IsInDisallowedMountForm() const

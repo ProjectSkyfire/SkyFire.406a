@@ -8494,8 +8494,7 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
                         {
                             case FORM_NONE:     trigger_spell_id = 37344; break;
                             case FORM_CAT:      trigger_spell_id = 37341; break;
-                            case FORM_BEAR:
-                            case FORM_DIREBEAR: trigger_spell_id = 37340; break;
+                            case FORM_BEAR:     trigger_spell_id = 37340; break;
                             case FORM_TREE:     trigger_spell_id = 37342; break;
                             case FORM_MOONKIN:  trigger_spell_id = 37343; break;
                             default:
@@ -8509,8 +8508,7 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
                         switch (GetShapeshiftForm())
                         {
                             case FORM_CAT:      trigger_spell_id = 67355; break;
-                            case FORM_BEAR:
-                            case FORM_DIREBEAR: trigger_spell_id = 67354; break;
+                            case FORM_BEAR:     trigger_spell_id = 67354; break;
                             default:
                                 return false;
                         }
@@ -16695,7 +16693,6 @@ uint32 Unit::GetModelForForm(ShapeshiftForm form)
                 return 892;
             else
                 return 8571;
-        case FORM_DIREBEAR:
         case FORM_BEAR:
             // Based on Hair color
             if (getRace() == RACE_NIGHTELF)
