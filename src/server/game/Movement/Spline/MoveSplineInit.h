@@ -46,7 +46,7 @@ namespace Movement
         /*  Final pass of initialization that launches spline movement.
         * @return duration - estimated travel time
         */
-        int32 MoveSplineInit::Launch();
+        int32 Launch();
 
         /* Adds movement by parabolic trajectory
          * @param amplitude  - the maximum height of parabola, value could be negative and positive
