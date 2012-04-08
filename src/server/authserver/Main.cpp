@@ -17,13 +17,6 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <ace/Dev_Poll_Reactor.h>
-#include <ace/TP_Reactor.h>
-#include <ace/ACE.h>
-#include <ace/Sig_Handler.h>
-#include <openssl/opensslv.h>
-#include <openssl/crypto.h>
-
 #include "Common.h"
 #include "Database/DatabaseEnv.h"
 #include "Configuration/Config.h"
@@ -34,8 +27,15 @@
 #include "RealmList.h"
 #include "RealmAcceptor.h"
 
-#ifndef _TRINITY_REALM_CONFIG
-# define _TRINITY_REALM_CONFIG  "authserver.conf"
+#include <ace/Dev_Poll_Reactor.h>
+#include <ace/TP_Reactor.h>
+#include <ace/ACE.h>
+#include <ace/Sig_Handler.h>
+#include <openssl/opensslv.h>
+#include <openssl/crypto.h>
+
+#ifndef _AUTHSERVER_CONFIG
+# define _AUTHSERVER_CONFIG  "authserver.conf"
 #endif
 
 bool StartDB();
@@ -74,7 +74,7 @@ extern int main(int argc, char **argv)
 {
     sLog->SetLogDB(false);
     // Command line parsing to get the configuration file name
-    char const* cfg_file = _TRINITY_REALM_CONFIG;
+    char const* cfg_file = _AUTHSERVER_CONFIG;
     int c = 1;
     while (c < argc)
     {
@@ -103,6 +103,14 @@ extern int main(int argc, char **argv)
     sLog->outString("%s (authserver)", _FULLVERSION);
     sLog->outString("<Ctrl-C> to stop.\n");
     sLog->outString("Using configuration file %s.", cfg_file);
+
+    sLog->outString("   ______  __  __  __  __  ______ __  ______  ______ ");
+    sLog->outString("  /\\  ___\\/\\ \\/ / /\\ \\_\\ \\/\\  ___/\\ \\/\\  == \\/\\  ___\\ ");
+    sLog->outString("  \\ \\___  \\ \\  _'-\\ \\____ \\ \\  __\\ \\ \\ \\  __<\\ \\  __\\ ");
+    sLog->outString("   \\/\\_____\\ \\_\\ \\_\\/\\_____\\ \\_\\  \\ \\_\\ \\_\\ \\_\\ \\_____\\ ");
+    sLog->outString("    \\/_____/\\/_/\\/_/\\/_____/\\/_/   \\/_/\\/_/ /_/\\/_____/ ");
+    sLog->outString("  Project SkyFireEmu 2012(c) Open-sourced Game Emulation ");
+    sLog->outString("           <http://www.projectskyfire.org/> \n");
 
     sLog->outDetail("%s (Library: %s)", OPENSSL_VERSION_TEXT, SSLeay_version(SSLEAY_VERSION));
 
