@@ -17,8 +17,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_UNITAI_H
-#define TRINITY_UNITAI_H
+#ifndef SKYFIRE_UNITAI_H
+#define SKYFIRE_UNITAI_H
 
 #include "Define.h"
 #include <list>

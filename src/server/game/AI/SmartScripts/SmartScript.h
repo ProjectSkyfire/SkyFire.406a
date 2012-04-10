@@ -16,8 +16,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_SMARTSCRIPT_H
-#define TRINITY_SMARTSCRIPT_H
+#ifndef SKYFIRE_SMARTSCRIPT_H
+#define SKYFIRE_SMARTSCRIPT_H
 
 #include "Common.h"
 #include "Creature.h"

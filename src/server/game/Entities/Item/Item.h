@@ -17,8 +17,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITYCORE_ITEM_H
-#define TRINITYCORE_ITEM_H
+#ifndef SKYFIRE_ITEM_H
+#define SKYFIRE_ITEM_H
 
 #include "Common.h"
 #include "Object.h"

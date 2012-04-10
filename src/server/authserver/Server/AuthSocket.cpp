@@ -307,7 +307,7 @@ bool AuthSocket::_HandleLogonChallenge()
 
     socket().recv((char *)&buf[0], 4);
 
-#if TRINITY_ENDIAN == TRINITY_BIGENDIAN
+#if SKYFIRE_ENDIAN == SKYFIRE_BIGENDIAN
     EndianConvert(*((uint16*)(buf[0])));
 #endif
 
@@ -329,7 +329,7 @@ bool AuthSocket::_HandleLogonChallenge()
 
     // BigEndian code, nop in little endian case
     // size already converted
-#if TRINITY_ENDIAN == TRINITY_BIGENDIAN
+#if SKYFIRE_ENDIAN == SKYFIRE_BIGENDIAN
     EndianConvert(*((uint32*)(&ch->gamename[0])));
     EndianConvert(ch->build);
     EndianConvert(*((uint32*)(&ch->platform[0])));
@@ -705,7 +705,7 @@ bool AuthSocket::_HandleReconnectChallenge()
 
     socket().recv((char *)&buf[0], 4);
 
-#if TRINITY_ENDIAN == TRINITY_BIGENDIAN
+#if SKYFIRE_ENDIAN == SKYFIRE_BIGENDIAN
     EndianConvert(*((uint16*)(buf[0])));
 #endif
 

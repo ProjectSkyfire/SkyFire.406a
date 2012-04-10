@@ -66,7 +66,7 @@ CreatureEventAI::CreatureEventAI(Creature* c) : CreatureAI(c)
         for (i = (*CreatureEvents).second.begin(); i != (*CreatureEvents).second.end(); ++i)
         {
             //Debug check
-            #ifndef TRINITY_DEBUG
+            #ifndef SKYFIRE_DEBUG
             if ((*i).event_flags & EFLAG_DEBUG_ONLY)
                 continue;
             #endif
@@ -760,7 +760,7 @@ void CreatureEventAI::ProcessAction(CreatureEventAI_Action const& action, uint32
         }
         break;
 
-        // TRINITY ONLY
+        // SKYFIRE ONLY
         case ACTION_T_MOVE_RANDOM_POINT: //dosen't work in combat
         {
             float x, y, z;

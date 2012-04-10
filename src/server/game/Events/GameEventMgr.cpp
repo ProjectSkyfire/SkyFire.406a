@@ -1660,14 +1660,14 @@ void GameEventMgr::RunSmartAIScripts(uint16 event_id, bool activate)
     //! Iterate over every supported source type (creature and gameobject)
     //! Not entirely sure how this will affect units in non-loaded grids.
     {
-        TRINITY_READ_GUARD(HashMapHolder<Creature>::LockType, *HashMapHolder<Creature>::GetLock());
+        SKYFIRE_READ_GUARD(HashMapHolder<Creature>::LockType, *HashMapHolder<Creature>::GetLock());
         HashMapHolder<Creature>::MapType const& m = ObjectAccessor::GetCreatures();
         for (HashMapHolder<Creature>::MapType::const_iterator iter = m.begin(); iter != m.end(); ++iter)
             if (iter->second->IsInWorld())
                 iter->second->AI()->sOnGameEvent(activate, event_id);
     }
     {
-        TRINITY_READ_GUARD(HashMapHolder<GameObject>::LockType, *HashMapHolder<GameObject>::GetLock());
+        SKYFIRE_READ_GUARD(HashMapHolder<GameObject>::LockType, *HashMapHolder<GameObject>::GetLock());
         HashMapHolder<GameObject>::MapType const& m = ObjectAccessor::GetGameObjects();
         for (HashMapHolder<GameObject>::MapType::const_iterator iter = m.begin(); iter != m.end(); ++iter)
             if (iter->second->IsInWorld())

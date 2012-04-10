@@ -30,9 +30,9 @@
 #include <openssl/crypto.h>
 #include <ace/Version.h>
 
-#ifndef _TRINITY_CORE_CONFIG
-# define _TRINITY_CORE_CONFIG  "worldserver.conf"
-#endif //_TRINITY_CORE_CONFIG
+#ifndef _SKYFIRE_CORE_CONFIG
+# define _SKYFIRE_CORE_CONFIG  "worldserver.conf"
+#endif //_SKYFIRE_CORE_CONFIG
 
 #ifdef _WIN32
 #include "ServiceWin32.h"
@@ -72,7 +72,7 @@ void usage(const char *prog)
 extern int main(int argc, char **argv)
 {
     ///- Command line parsing to get the configuration file name
-    char const* cfg_file = _TRINITY_CORE_CONFIG;
+    char const* cfg_file = _SKYFIRE_CORE_CONFIG;
     int c = 1;
     while ( c < argc )
     {

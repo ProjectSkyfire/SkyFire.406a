@@ -16,8 +16,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITYSERVER_MOVESPLINEINIT_ARGS_H
-#define TRINITYSERVER_MOVESPLINEINIT_ARGS_H
+#ifndef SKYFIRE_MOVESPLINEINIT_ARGS_H
+#define SKYFIRE_MOVESPLINEINIT_ARGS_H
 
 #include "MoveSplineFlag.h"
 #include <G3D/Vector3.h>
@@ -64,4 +64,4 @@ namespace Movement
     };
 }
 
-#endif // TRINITYSERVER_MOVESPLINEINIT_ARGS_H
+#endif // SKYFIRE_MOVESPLINEINIT_ARGS_H

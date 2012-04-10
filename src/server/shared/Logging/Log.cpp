@@ -220,8 +220,8 @@ FILE* Log::openGmlogPerAccount(uint32 account)
     if (m_gmlog_filename_format.empty())
         return NULL;
 
-    char namebuf[TRINITY_PATH_MAX];
-    snprintf(namebuf, TRINITY_PATH_MAX, m_gmlog_filename_format.c_str(), account);
+    char namebuf[SKYFIRE_PATH_MAX];
+    snprintf(namebuf, SKYFIRE_PATH_MAX, m_gmlog_filename_format.c_str(), account);
     return fopen(namebuf, "a");
 }
 

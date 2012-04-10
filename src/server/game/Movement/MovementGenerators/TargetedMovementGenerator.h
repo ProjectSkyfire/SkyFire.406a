@@ -17,8 +17,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_TARGETEDMOVEMENTGENERATOR_H
-#define TRINITY_TARGETEDMOVEMENTGENERATOR_H
+#ifndef SKYFIRE_TARGETEDMOVEMENTGENERATOR_H
+#define SKYFIRE_TARGETEDMOVEMENTGENERATOR_H
 
 #include "MovementGenerator.h"
 #include "FollowerReference.h"

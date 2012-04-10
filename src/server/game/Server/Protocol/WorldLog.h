@@ -20,8 +20,8 @@
 /// @{
 /// \file
 
-#ifndef TRINITY_WORLDLOG_H
-#define TRINITY_WORLDLOG_H
+#ifndef SKYFIRE_WORLDLOG_H
+#define SKYFIRE_WORLDLOG_H
 
 #include "Common.h"
 #include <ace/Singleton.h>

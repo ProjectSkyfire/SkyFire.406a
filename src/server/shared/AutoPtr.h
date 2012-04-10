@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _TRINITY_AUTO_PTR_H
-#define _TRINITY_AUTO_PTR_H
+#ifndef _SKYFIRE_AUTO_PTR_H
+#define _SKYFIRE_AUTO_PTR_H
 
 #include <ace/Bound_Ptr.h>
 

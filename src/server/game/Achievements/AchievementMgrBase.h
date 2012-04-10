@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __TRINITY_ACHIEVEMENTMGRBASE_H
-#define __TRINITY_ACHIEVEMENTMGRBASE_H
+#ifndef __SKYFIRE_ACHIEVEMENTMGRBASE_H
+#define __SKYFIRE_ACHIEVEMENTMGRBASE_H
 
 #include <map>
 #include <string>

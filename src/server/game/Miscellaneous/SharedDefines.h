@@ -17,8 +17,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_SHAREDDEFINES_H
-#define TRINITY_SHAREDDEFINES_H
+#ifndef SKYFIRE_SHAREDDEFINES_H
+#define SKYFIRE_SHAREDDEFINES_H
 
 #include "Define.h"
 #include <cassert>

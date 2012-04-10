@@ -382,7 +382,7 @@ typedef UNORDERED_MAP<uint64/*(instance, guid) pair*/, time_t> RespawnTimes;
 #define MAX_CREATURE_AI_TEXT_STRING_ID (-1000000)
 
 // Trinity Trainer Reference start range
-#define TRINITY_TRAINER_START_REF      200000
+#define SKYFIRE_TRAINER_START_REF      200000
 
 struct SkyFireStringLocale
 {
@@ -1099,14 +1099,14 @@ class ObjectMgr
 
         time_t GetCreatureRespawnTime(uint32 loguid, uint32 instance)
         {
-            TRINITY_GUARD(ACE_Thread_Mutex, _creatureRespawnTimesMutex);
+            SKYFIRE_GUARD(ACE_Thread_Mutex, _creatureRespawnTimesMutex);
             return _creatureRespawnTimes[MAKE_PAIR64(loguid, instance)];
         }
         void SaveCreatureRespawnTime(uint32 loguid, uint32 instance, time_t t);
         void RemoveCreatureRespawnTime(uint32 loguid, uint32 instance);
         time_t GetGORespawnTime(uint32 loguid, uint32 instance)
         {
-            TRINITY_GUARD(ACE_Thread_Mutex, _goRespawnTimesMutex);
+            SKYFIRE_GUARD(ACE_Thread_Mutex, _goRespawnTimesMutex);
             return _goRespawnTimes[MAKE_PAIR64(loguid, instance)];
         }
         void SaveGORespawnTime(uint32 loguid, uint32 instance, time_t t);

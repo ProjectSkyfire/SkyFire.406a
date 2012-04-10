@@ -313,7 +313,7 @@ void Map::EnsureGridCreated(const GridCoord &p)
 {
     if (!getNGrid(p.x_coord, p.y_coord))
     {
-        TRINITY_GUARD(ACE_Thread_Mutex, Lock);
+        SKYFIRE_GUARD(ACE_Thread_Mutex, Lock);
         if (!getNGrid(p.x_coord, p.y_coord))
         {
             sLog->outDebug(LOG_FILTER_MAPS, "Creating grid[%u, %u] for map %u instance %u", p.x_coord, p.y_coord, GetId(), i_InstanceId);
@@ -732,7 +732,7 @@ void Map::CreatureRelocation(Creature* creature, float x, float y, float z, floa
     // delay creature move for grid/cell to grid/cell moves
     if (old_cell.DiffCell(new_cell) || old_cell.DiffGrid(new_cell))
     {
-        #ifdef TRINITY_DEBUG
+        #ifdef SKYFIRE_DEBUG
             sLog->outDebug(LOG_FILTER_MAPS, "Creature (GUID: %u Entry: %u) added to moving list from grid[%u, %u]cell[%u, %u] to grid[%u, %u]cell[%u, %u].", creature->GetGUIDLow(), creature->GetEntry(), old_cell.GridX(), old_cell.GridY(), old_cell.CellX(), old_cell.CellY(), new_cell.GridX(), new_cell.GridY(), new_cell.CellX(), new_cell.CellY());
         #endif
         AddCreatureToMoveList(creature, x, y, z, ang);
@@ -803,7 +803,7 @@ void Map::MoveAllCreaturesInMoveList()
             if (!CreatureRespawnRelocation(c, false))
             {
                 // ... or unload (if respawn grid also not loaded)
-                #ifdef TRINITY_DEBUG
+                #ifdef SKYFIRE_DEBUG
                     sLog->outDebug(LOG_FILTER_MAPS, "Creature (GUID: %u Entry: %u) cannot be move to unloaded respawn grid.", c->GetGUIDLow(), c->GetEntry());
                 #endif
                 //AddObjectToRemoveList(Pet*) should only be called in Pet::Remove
@@ -831,7 +831,7 @@ bool Map::CreatureCellRelocation(Creature* c, Cell new_cell)
         // if in same cell then none do
         if (old_cell.DiffCell(new_cell))
         {
-            #ifdef TRINITY_DEBUG
+            #ifdef SKYFIRE_DEBUG
                 sLog->outDebug(LOG_FILTER_MAPS, "Creature (GUID: %u Entry: %u) moved in grid[%u, %u] from cell[%u, %u] to cell[%u, %u].", c->GetGUIDLow(), c->GetEntry(), old_cell.GridX(), old_cell.GridY(), old_cell.CellX(), old_cell.CellY(), new_cell.CellX(), new_cell.CellY());
             #endif
 
@@ -840,7 +840,7 @@ bool Map::CreatureCellRelocation(Creature* c, Cell new_cell)
         }
         else
         {
-            #ifdef TRINITY_DEBUG
+            #ifdef SKYFIRE_DEBUG
                 sLog->outDebug(LOG_FILTER_MAPS, "Creature (GUID: %u Entry: %u) moved in same grid[%u, %u]cell[%u, %u].", c->GetGUIDLow(), c->GetEntry(), old_cell.GridX(), old_cell.GridY(), old_cell.CellX(), old_cell.CellY());
             #endif
         }
@@ -853,7 +853,7 @@ bool Map::CreatureCellRelocation(Creature* c, Cell new_cell)
     {
         EnsureGridLoadedForActiveObject(new_cell, c);
 
-        #ifdef TRINITY_DEBUG
+        #ifdef SKYFIRE_DEBUG
             sLog->outDebug(LOG_FILTER_MAPS, "Active creature (GUID: %u Entry: %u) moved from grid[%u, %u]cell[%u, %u] to grid[%u, %u]cell[%u, %u].", c->GetGUIDLow(), c->GetEntry(), old_cell.GridX(), old_cell.GridY(), old_cell.CellX(), old_cell.CellY(), new_cell.GridX(), new_cell.GridY(), new_cell.CellX(), new_cell.CellY());
         #endif
 
@@ -866,7 +866,7 @@ bool Map::CreatureCellRelocation(Creature* c, Cell new_cell)
     // in diff. loaded grid normal creature
     if (IsGridLoaded(GridCoord(new_cell.GridX(), new_cell.GridY())))
     {
-        #ifdef TRINITY_DEBUG
+        #ifdef SKYFIRE_DEBUG
             sLog->outDebug(LOG_FILTER_MAPS, "Creature (GUID: %u Entry: %u) moved from grid[%u, %u]cell[%u, %u] to grid[%u, %u]cell[%u, %u].", c->GetGUIDLow(), c->GetEntry(), old_cell.GridX(), old_cell.GridY(), old_cell.CellX(), old_cell.CellY(), new_cell.GridX(), new_cell.GridY(), new_cell.CellX(), new_cell.CellY());
         #endif
 
@@ -878,7 +878,7 @@ bool Map::CreatureCellRelocation(Creature* c, Cell new_cell)
     }
 
     // fail to move: normal creature attempt move to unloaded grid
-    #ifdef TRINITY_DEBUG
+    #ifdef SKYFIRE_DEBUG
         sLog->outDebug(LOG_FILTER_MAPS, "Creature (GUID: %u Entry: %u) attempted to move from grid[%u, %u]cell[%u, %u] to unloaded grid[%u, %u]cell[%u, %u].", c->GetGUIDLow(), c->GetEntry(), old_cell.GridX(), old_cell.GridY(), old_cell.CellX(), old_cell.CellY(), new_cell.GridX(), new_cell.GridY(), new_cell.CellX(), new_cell.CellY());
     #endif
     return false;
@@ -897,7 +897,7 @@ bool Map::CreatureRespawnRelocation(Creature* c, bool diffGridOnly)
     c->CombatStop();
     c->GetMotionMaster()->Clear();
 
-    #ifdef TRINITY_DEBUG
+    #ifdef SKYFIRE_DEBUG
         sLog->outDebug(LOG_FILTER_MAPS, "Creature (GUID: %u Entry: %u) moved from grid[%u, %u]cell[%u, %u] to respawn grid[%u, %u]cell[%u, %u].", c->GetGUIDLow(), c->GetEntry(), c->GetCurrentCell().GridX(), c->GetCurrentCell().GridY(), c->GetCurrentCell().CellX(), c->GetCurrentCell().CellY(), resp_cell.GridX(), resp_cell.GridY(), resp_cell.CellX(), resp_cell.CellY());
     #endif
 
@@ -2259,7 +2259,7 @@ bool InstanceMap::AddPlayerToMap(Player* player)
     // Is it needed?
 
     {
-        TRINITY_GUARD(ACE_Thread_Mutex, Lock);
+        SKYFIRE_GUARD(ACE_Thread_Mutex, Lock);
         // Check moved to void WorldSession::HandleMoveWorldportAckOpcode()
         //if (!CanEnter(player))
             //return false;
@@ -2608,7 +2608,7 @@ bool BattlegroundMap::CanEnter(Player* player)
 bool BattlegroundMap::AddPlayerToMap(Player* player)
 {
     {
-        TRINITY_GUARD(ACE_Thread_Mutex, Lock);
+        SKYFIRE_GUARD(ACE_Thread_Mutex, Lock);
         //Check moved to void WorldSession::HandleMoveWorldportAckOpcode()
         //if (!CanEnter(player))
             //return false;

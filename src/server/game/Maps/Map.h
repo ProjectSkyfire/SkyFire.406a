@@ -17,8 +17,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_MAP_H
-#define TRINITY_MAP_H
+#ifndef SKYFIRE_MAP_H
+#define SKYFIRE_MAP_H
 
 #include "Define.h"
 #include <ace/RW_Thread_Mutex.h>

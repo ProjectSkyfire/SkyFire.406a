@@ -82,7 +82,7 @@ void MapManager::checkAndCorrectGridStatesArray()
             ok = false;
             si_GridStates[i] = i_GridStates[i];
         }
-        #ifdef TRINITY_DEBUG
+        #ifdef SKYFIRE_DEBUG
         // inner class checking only when compiled with debug
         if (!si_GridStates[i]->checkMagic())
         {
@@ -101,7 +101,7 @@ Map* MapManager::CreateBaseMap(uint32 id)
 
     if (m == NULL)
     {
-        TRINITY_GUARD(ACE_Thread_Mutex, Lock);
+        SKYFIRE_GUARD(ACE_Thread_Mutex, Lock);
 
         const MapEntry* entry = sMapStore.LookupEntry(id);
         if (entry && entry->Instanceable())
@@ -342,7 +342,7 @@ void MapManager::UnloadAll()
 
 uint32 MapManager::GetNumInstances()
 {
-    TRINITY_GUARD(ACE_Thread_Mutex, Lock);
+    SKYFIRE_GUARD(ACE_Thread_Mutex, Lock);
 
     uint32 ret = 0;
     for (MapMapType::iterator itr = i_maps.begin(); itr != i_maps.end(); ++itr)
@@ -359,7 +359,7 @@ uint32 MapManager::GetNumInstances()
 
 uint32 MapManager::GetNumPlayersInInstances()
 {
-    TRINITY_GUARD(ACE_Thread_Mutex, Lock);
+    SKYFIRE_GUARD(ACE_Thread_Mutex, Lock);
 
     uint32 ret = 0;
     for (MapMapType::iterator itr = i_maps.begin(); itr != i_maps.end(); ++itr)

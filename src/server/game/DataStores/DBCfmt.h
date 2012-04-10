@@ -17,8 +17,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_DBCSFRM_H
-#define TRINITY_DBCSFRM_H
+#ifndef SKYFIRE_DBCSFRM_H
+#define SKYFIRE_DBCSFRM_H
 
 const char Achievementfmt[]="niixsxiixixxii";
 const std::string CustomAchievementfmt="pppaaaapapaapp";

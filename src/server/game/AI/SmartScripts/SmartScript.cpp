@@ -2966,7 +2966,7 @@ void SmartScript::FillScript(SmartAIEventList e, WorldObject* obj, AreaTriggerEn
     }
     for (SmartAIEventList::iterator i = e.begin(); i != e.end(); ++i)
     {
-        #ifndef TRINITY_DEBUG
+        #ifndef SKYFIRE_DEBUG
             if ((*i).event.event_flags & SMART_EVENT_FLAG_DEBUG_ONLY)
                 continue;
         #endif
