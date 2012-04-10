@@ -60,7 +60,3 @@ INSERT INTO `spell_target_position` (`id`,`target_map`,`target_position_x`,`targ
 (59767,571,4314.648,2408.522,392.642,6.268125), -- Teleport: Eastspark Factory Graveyard "area 4612"
 (59769,571,5140.790,2179.120,390.950,1.972220); -- Teleport: Alliance Landing Zone
 
--- update worldstates
-DELETE FROM `worldstates` WHERE `entry` IN (33280,55629);
-INSERT  INTO `worldstates`(`entry`,`value`,`comment`) VALUES (33280,1,NULL);
-INSERT  INTO `worldstates`(`entry`,`value`,`comment`) VALUES (55629,1,NULL);
