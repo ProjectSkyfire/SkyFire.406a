@@ -113,7 +113,7 @@ void WorldSession::HandleBfQueueInviteResponse(WorldPacket &recv_data)
 
     uint64 BattleId = data &~ 0x20000;
 
-    Battlefield* Bf= sBattlefieldMgr.GetBattlefieldByBattleId((uint32)BattleId);
+    Battlefield* Bf= sBattlefieldMgr->GetBattlefieldByBattleId((uint32)BattleId);
     if(!Bf)
         return;
 
@@ -131,7 +131,7 @@ void WorldSession::HandleBfEntryInviteResponse(WorldPacket & recv_data)
 
     uint64 BattleId = data &~ 0x20000;
 
-    Battlefield* Bf= sBattlefieldMgr.GetBattlefieldByBattleId((uint32)BattleId);
+    Battlefield* Bf= sBattlefieldMgr->GetBattlefieldByBattleId((uint32)BattleId);
     if(!Bf)
         return;
 
@@ -154,7 +154,7 @@ void WorldSession::HandleBfExitRequest(WorldPacket &recv_data)
     recv_data >> BattleId;
     uint32 bId = BattleId & 0xFFFF;
     sLog->outError("HandleBfExitRequest: BattleID:%u ",bId);
-    Battlefield* Bf= sBattlefieldMgr.GetBattlefieldByBattleId(bId);
+    Battlefield* Bf= sBattlefieldMgr->GetBattlefieldByBattleId(bId);
     if(!Bf)
         return;
 
@@ -170,7 +170,7 @@ void WorldSession::HandleBfJoinQueue(WorldPacket &recv_data)
 
     uint64 BattleId = data &~ 0x20000;
 
-    Battlefield* Bf= sBattlefieldMgr.GetBattlefieldByBattleId(BattleId);
+    Battlefield* Bf= sBattlefieldMgr->GetBattlefieldByBattleId(BattleId);
     if(!Bf)
         return;
 

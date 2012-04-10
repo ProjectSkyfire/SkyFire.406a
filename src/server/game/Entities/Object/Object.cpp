@@ -2221,7 +2221,7 @@ void WorldObject::SetZoneScript()
             _zoneScript = (ZoneScript*)((InstanceMap*)map)->GetInstanceScript();
         else if (!map->IsBattlegroundOrArena())
         {
-            if (Battlefield* bf = sBattlefieldMgr.GetBattlefieldToZoneId(GetZoneId()))
+            if (Battlefield* bf = sBattlefieldMgr->GetBattlefieldToZoneId(GetZoneId()))
                 _zoneScript = bf;
             else
                 _zoneScript = sOutdoorPvPMgr->GetZoneScript(GetZoneId());

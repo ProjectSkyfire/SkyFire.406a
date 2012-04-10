@@ -44,7 +44,7 @@ public:
         if (creature->isQuestGiver())
             player->PrepareQuestMenu(creature->GetGUID());
 
-        BattlefieldTB* BfTB = (BattlefieldTB*)sBattlefieldMgr.GetBattlefieldByBattleId(BATTLEFIELD_BATTLEID_TB);
+        BattlefieldTB* BfTB = (BattlefieldTB*)sBattlefieldMgr->GetBattlefieldByBattleId(BATTLEFIELD_BATTLEID_TB);
         if (BfTB)
         {
             GraveYardVect gy = BfTB->GetGraveYardVect();
@@ -65,7 +65,7 @@ public:
     {
         player->CLOSE_GOSSIP_MENU();
 
-        BattlefieldTB* BfTB = (BattlefieldTB*)sBattlefieldMgr.GetBattlefieldByBattleId(BATTLEFIELD_BATTLEID_TB);
+        BattlefieldTB* BfTB = (BattlefieldTB*)sBattlefieldMgr->GetBattlefieldByBattleId(BATTLEFIELD_BATTLEID_TB);
         if (BfTB)
         {
             GraveYardVect gy = BfTB->GetGraveYardVect();
@@ -92,7 +92,7 @@ class npc_tol_barad_battlemage : public CreatureScript
         if (creature->isQuestGiver())
             player->PrepareQuestMenu(creature->GetGUID());
 
-        BattlefieldTB* BfTB = (BattlefieldTB*)sBattlefieldMgr.GetBattlefieldByBattleId(BATTLEFIELD_BATTLEID_TB);
+        BattlefieldTB* BfTB = (BattlefieldTB*)sBattlefieldMgr->GetBattlefieldByBattleId(BATTLEFIELD_BATTLEID_TB);
         if (BfTB)
         {
             if (BfTB->IsWarTime())
@@ -122,7 +122,7 @@ class npc_tol_barad_battlemage : public CreatureScript
     {
         player->CLOSE_GOSSIP_MENU();
 
-        BattlefieldTB* BfTB = (BattlefieldTB*)sBattlefieldMgr.GetBattlefieldByBattleId(BATTLEFIELD_BATTLEID_TB);
+        BattlefieldTB* BfTB = (BattlefieldTB*)sBattlefieldMgr->GetBattlefieldByBattleId(BATTLEFIELD_BATTLEID_TB);
         if (BfTB)
         {
             if (BfTB->IsWarTime()){

@@ -307,7 +307,7 @@ public:
         if (!sWorld->getBoolConfig(CONFIG_WINTERGRASP_ENABLE))
             return false;
 
-        if (BattlefieldWG *battleWG = (BattlefieldWG*) sBattlefieldMgr.GetBattlefieldToZoneId(4197))
+        if (BattlefieldWG *battleWG = (BattlefieldWG*) sBattlefieldMgr->GetBattlefieldToZoneId(4197))
         {
             if (battleWG->IsWarTime())
             {
@@ -349,7 +349,7 @@ public:
             if (!sWorld->getBoolConfig(CONFIG_WINTERGRASP_ENABLE))
                 return;
 
-            if (Battlefield *battleWG = (Battlefield*)sBattlefieldMgr.GetBattlefieldToZoneId(4197))
+            if (Battlefield *battleWG = (Battlefield*)sBattlefieldMgr->GetBattlefieldToZoneId(4197))
             {
                 // Get playerlist if there is.
                 if (battleWG->IsWarTime() && Check == true)
@@ -463,7 +463,7 @@ public:
         if (!sWorld->getBoolConfig(CONFIG_WINTERGRASP_ENABLE))
             return false;
 
-        if (Battlefield *battleWG = (Battlefield*)sBattlefieldMgr.GetBattlefieldToZoneId(4197))
+        if (Battlefield *battleWG = (Battlefield*)sBattlefieldMgr->GetBattlefieldToZoneId(4197))
         {
             if (battleWG->IsWarTime())
             {
@@ -505,7 +505,7 @@ public:
             if (!sWorld->getBoolConfig(CONFIG_WINTERGRASP_ENABLE))
                 return;
 
-            if (Battlefield *battleWG = (Battlefield*)sBattlefieldMgr.GetBattlefieldToZoneId(4197))
+            if (Battlefield *battleWG = (Battlefield*)sBattlefieldMgr->GetBattlefieldToZoneId(4197))
             {
                 // Get playerlist if there is.
                 if (battleWG->IsWarTime() && Check == true)
