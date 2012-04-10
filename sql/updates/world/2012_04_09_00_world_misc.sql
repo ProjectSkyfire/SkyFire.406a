@@ -103,9 +103,9 @@ INSERT INTO `gameobject` (`guid`,`id`,`map`,`spawnMask`,`phaseMask`,`position_x`
 
 -- Wintergrasp Battle-Mage
 DELETE FROM `creature` WHERE `id`=32170;
-INSERT INTO `creature` (`guid`,`id`,`map`,`spawnMask`,`phaseMask`,`modelid`,`equipment_id`,`position_x`,`position_y`,`position_z`,`orientation`,`spawntimesecs`,`spawndist`,`currentwaypoint`,`curhealth`,`curmana`,`DeathState`,`MovementType`,`npcflag`,`unit_flags`,`dynamicflags`) VALUES
-(500002, 32170, 571, 1, 65535, 27801, 0, 5925.34, 573.71, 661.087, 4.06662, 300, 0, 0, 504000, 440700, 0, 0, 0, 0, 0),
-(500012, 32170, 571, 1, 64, 0, 918, 5932.96, 549.906, 641.595, 2.09189, 300, 0, 0, 504000, 440700, 0, 0, 0, 0, 0);
+INSERT INTO `creature` (`guid`,`id`,`map`,`spawnMask`,`phaseMask`,`modelid`,`equipment_id`,`position_x`,`position_y`,`position_z`,`orientation`,`spawntimesecs`,`spawndist`,`currentwaypoint`,`curhealth`,`curmana`,`MovementType`,`npcflag`,`unit_flags`,`dynamicflags`) VALUES
+(500013, 32170, 571, 1, 65535, 27801, 0, 5925.34, 573.71, 661.087, 4.06662, 300, 0, 0, 504000, 440700, 0, 0, 0, 0),
+(500014, 32170, 571, 1, 64, 0, 918, 5932.96, 549.906, 641.595, 2.09189, 300, 0, 0, 504000, 440700, 0, 0, 0, 0);
 UPDATE `creature_template` SET `ScriptName`='npc_alliance_wg_battle_mage' WHERE `entry`=32169;
 UPDATE `creature_template` SET `ScriptName`='npc_horde_wg_battle_mage' WHERE `entry`=32170;
 
@@ -114,7 +114,7 @@ UPDATE `creature_template` SET `ScriptName`='npc_horde_wg_battle_mage' WHERE `en
 -- ---------- --
 
 -- Replace Wintergrasp spawns with properly phased spawns
-SET @GUID := 290000;
+SET @GUID := 501993;
 DELETE FROM `creature` WHERE `id` IN (31841,31842,30400,30499,30489,30869,31036,31051,31052,31054,31108,31109,31153,39172,30870,31053,31091,31101,31102,31106,31107,31151,32294,39173,32296,30488);
 INSERT INTO `creature` (`guid`,`id`,`map`,`spawnMask`,`phaseMask`,`modelid`,`equipment_id`,`position_x`,`position_y`,`position_z`,`orientation`,`spawntimesecs`,`spawndist`,`currentwaypoint`,`curhealth`,`curmana`,`MovementType`) VALUES
 -- Taunka Spirit Guide (Horde)
@@ -270,7 +270,7 @@ INSERT INTO `waypoint_data` (`id`,`point`,`position_x`,`position_y`,`position_z`
 (@PATH,6,5296.644,2731.107,409.3163,0,0,0,100,0);
 
 -- Guards "Alliance" (Valiance Expedition Champion)
-SET @GUID := 291000;
+SET @GUID := 502054;
 DELETE FROM `creature` WHERE `id`=30740;
 INSERT INTO `creature` (`guid`,`id`,`map`,`spawnMask`,`phaseMask`,`modelid`,`equipment_id`,`position_x`,`position_y`,`position_z`,`orientation`,`spawntimesecs`,`spawndist`,`currentwaypoint`,`curhealth`,`curmana`,`MovementType`) VALUES
 -- Fortress
@@ -472,8 +472,7 @@ INSERT INTO `gameobject` (`guid`,`id`,`map`,`spawnMask`,`phaseMask`,`position_x`
 (@OGUID+16,192400,571,1,32,5041.650879,3294.318604,381.919952,-1.605702,0,0,0,1,180,0,1),
 (@OGUID+17,192401,571,1,32,4855.444336,3297.600830,376.495758,-3.115388,0,0,0,1,180,0,1),
 (@OGUID+18,192281,571,1,32,4857.971191,3335.415771,369.291901,-2.888511,0,0,0,1,180,0,1),
-(@OGUID+19,192282,571,1,32,5006.322754,3280.362061,371.242249,2.242746,0,0,0,1,180,0,1);
-
+(@OGUID+19,192282,571,1,32,5006.322754,3280.362061,371.242249,2.242746,0,0,0,1,180,0,1),
 -- Eastspark Workshop "Horde"
 (@OGUID+20,192452,571,1,16,4416.7993,2414.0383,377.4869,0.0087,0,0,0,0,120,0,1),
 -- Eastspark Workshop "Alliance"
@@ -492,20 +491,20 @@ INSERT INTO `gameobject` (`guid`,`id`,`map`,`spawnMask`,`phaseMask`,`position_x`
 -- *** in progress zone horde banner in phase 128 + 32
 
 -- Winters Edge tower alliance
-(192429,571,1,64,4464.123535 2855.453125 406.110596,0.829032,0,0,0,0,120,0,1);
-(192430,571,1,64,4434.555664,2883.448730,406.025299,0.759217,0,0,0,0,120,0,1);
-(192431,571,1,64,4349.900391,2885.561768,406.104889,1.605702,0,0,0,0,120,0,1);
-(192414,571,1,64,4387.621582 2719.565918 389.935120,-1.544616,0,0,0,0,120,0,1);
+(@OGUID+29,192429,571,1,64,4464.123535,2855.453125,406.110596,0.829032,0,0,0,0,120,0,1),
+(@OGUID+30,192430,571,1,64,4434.555664,2883.448730,406.025299,0.759217,0,0,0,0,120,0,1),
+(@OGUID+31,192431,571,1,64,4349.900391,2885.561768,406.104889,1.605702,0,0,0,0,120,0,1),
+(@OGUID+32,192414,571,1,64,4387.621582,2719.565918,389.935120,-1.544616,0,0,0,0,120,0,1),
 -- Winters Edge tower horde
-(192442,571,1,128,4350.039,2885.61377,406.3287,1.58824873,0,0,0,0,120,0,1);
-(192443,571,1,128,4434.32568,2883.244,406.3456,0.767943859,0,0,0,0,120,0,1);
-(192444,571,1,128,4464.17432,2855.3186,406.390961,0.802850962,0,0,0,0,120,0,1);
-(192450,571,1,128,4387.59033,2719.90015,390.200531,-1.51843357,0,0,0,0,120,0,1);
+(@OGUID+33,192442,571,1,128,4350.039,2885.61377,406.3287,1.58824873,0,0,0,0,120,0,1),
+(@OGUID+34,192443,571,1,128,4434.32568,2883.244,406.3456,0.767943859,0,0,0,0,120,0,1),
+(@OGUID+35,192444,571,1,128,4464.17432,2855.3186,406.390961,0.802850962,0,0,0,0,120,0,1),
+(@OGUID+36,192450,571,1,128,4387.59033,2719.90015,390.200531,-1.51843357,0,0,0,0,120,0,1),
 
-(192449,571,1,129,4517.75342,2717.231,387.811981,-1.53588688,0,0,0,0,120,0,1);
-(192424,571,1,417,4563.70166,2171.03125,367.607056,-1.82386875,0,0,0,0,120,0,1),
-(192626,571,1,65,4938.364,2454.59863,320.391785,-2.513274,0,0,0,0,120,0,1);
-(192627,571,1,65,4939.48535,3339.65259,376.874939,0.890116632,0,0,0,0,120,0,1);
+(@OGUID+37,192449,571,1,129,4517.75342,2717.231,387.811981,-1.53588688,0,0,0,0,120,0,1),
+(@OGUID+38,192424,571,1,417,4563.70166,2171.03125,367.607056,-1.82386875,0,0,0,0,120,0,1),
+(@OGUID+39,192626,571,1,65,4938.364,2454.59863,320.391785,-2.513274,0,0,0,0,120,0,1),
+(@OGUID+40,192627,571,1,65,4939.48535,3339.65259,376.874939,0.890116632,0,0,0,0,120,0,1);
 
 -- Misc objects in fortress phased properly
 SET @OGUID := 282000;
