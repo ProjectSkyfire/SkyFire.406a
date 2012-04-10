@@ -308,7 +308,7 @@ class AuraEffect
         void HandleRaidProcFromChargeWithValueAuraProc(AuraApplication* aurApp, ProcEventInfo& eventInfo);
 };
 
-namespace Trinity
+namespace Skyfire
 {
     // Binary predicate for sorting the priority of absorption aura effects
     class AbsorbAuraOrderPred

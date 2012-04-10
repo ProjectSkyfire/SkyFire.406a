@@ -238,7 +238,7 @@ public:
         {
             DoScriptText(SAY_GAMESBEGIN_2, me);
 
-            //Trinity::Singleton<MapManager>::Instance().GetMap(me->GetMapId(), me)->GetPlayers().begin();
+            //Skyfire::Singleton<MapManager>::Instance().GetMap(me->GetMapId(), me)->GetPlayers().begin();
             /*
             list <Player*>::const_iterator i = sMapMgr->GetMap(me->GetMapId(), me)->GetPlayers().begin();
 

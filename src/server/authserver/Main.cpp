@@ -46,7 +46,7 @@ bool stopEvent = false;                                     // Setting it to tru
 LoginDatabaseWorkerPool LoginDatabase;                      // Accessor to the auth server database
 
 // Handle authserver's termination signals
-class AuthServerSignalHandler : public Trinity::SignalHandler
+class AuthServerSignalHandler : public Skyfire::SignalHandler
 {
 public:
     virtual void HandleSignal(int SigNum)

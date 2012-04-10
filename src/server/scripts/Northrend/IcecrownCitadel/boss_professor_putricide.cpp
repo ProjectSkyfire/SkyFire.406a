@@ -399,7 +399,7 @@ class boss_professor_putricide : public CreatureScript
                             GetCreatureListWithEntryInGrid(list, rotface, NPC_PUDDLE_STALKER, 36.0f);
                             if (list.size() > 4)
                             {
-                                list.sort(Trinity::ObjectDistanceOrderPred(rotface));
+                                list.sort(Skyfire::ObjectDistanceOrderPred(rotface));
                                 do
                                 {
                                     list.pop_back();
@@ -1109,7 +1109,7 @@ class spell_putricide_eat_ooze : public SpellScriptLoader
                 if (targets.empty())
                     return;
 
-                targets.sort(Trinity::ObjectDistanceOrderPred(GetCaster()));
+                targets.sort(Skyfire::ObjectDistanceOrderPred(GetCaster()));
                 Unit* target = targets.front();
                 targets.clear();
                 targets.push_back(target);

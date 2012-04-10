@@ -422,8 +422,8 @@ class boss_freya : public CreatureScript
                         {
                             // On every player
                             std::list<Player*> PlayerList;
-                            Trinity::AnyPlayerInObjectRangeCheck checker(me, 50.0f);
-                            Trinity::PlayerListSearcher<Trinity::AnyPlayerInObjectRangeCheck> searcher(me, PlayerList, checker);
+                            Skyfire::AnyPlayerInObjectRangeCheck checker(me, 50.0f);
+                            Skyfire::PlayerListSearcher<Skyfire::AnyPlayerInObjectRangeCheck> searcher(me, PlayerList, checker);
                             me->VisitNearbyWorldObject(50.0f, searcher);
                             for (std::list<Player*>::const_iterator itr = PlayerList.begin(); itr != PlayerList.end(); ++itr)
                                 (*itr)->CastSpell(*itr, SPELL_SUMMON_NATURE_BOMB, true);

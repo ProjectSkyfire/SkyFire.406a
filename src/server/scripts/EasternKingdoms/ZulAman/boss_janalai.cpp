@@ -233,14 +233,14 @@ class boss_janalai : public CreatureScript
                 me->GetPosition(x, y, z);
 
                 {
-                    CellCoord pair(Trinity::ComputeCellCoord(x, y));
+                    CellCoord pair(Skyfire::ComputeCellCoord(x, y));
                     Cell cell(pair);
                     cell.SetNoCreate();
 
-                    Trinity::AllCreaturesOfEntryInRange check(me, MOB_EGG, 100);
-                    Trinity::CreatureListSearcher<Trinity::AllCreaturesOfEntryInRange> searcher(me, templist, check);
+                    Skyfire::AllCreaturesOfEntryInRange check(me, MOB_EGG, 100);
+                    Skyfire::CreatureListSearcher<Skyfire::AllCreaturesOfEntryInRange> searcher(me, templist, check);
 
-                    TypeContainerVisitor<Trinity::CreatureListSearcher<Trinity::AllCreaturesOfEntryInRange>, GridTypeMapContainer> cSearcher(searcher);
+                    TypeContainerVisitor<Skyfire::CreatureListSearcher<Skyfire::AllCreaturesOfEntryInRange>, GridTypeMapContainer> cSearcher(searcher);
 
                     cell.Visit(pair, cSearcher, *me->GetMap(), *me, me->GetGridActivationRange());
                 }
@@ -266,14 +266,14 @@ class boss_janalai : public CreatureScript
                 me->GetPosition(x, y, z);
 
                 {
-                    CellCoord pair(Trinity::ComputeCellCoord(x, y));
+                    CellCoord pair(Skyfire::ComputeCellCoord(x, y));
                     Cell cell(pair);
                     cell.SetNoCreate();
 
-                    Trinity::AllCreaturesOfEntryInRange check(me, MOB_FIRE_BOMB, 100);
-                    Trinity::CreatureListSearcher<Trinity::AllCreaturesOfEntryInRange> searcher(me, templist, check);
+                    Skyfire::AllCreaturesOfEntryInRange check(me, MOB_FIRE_BOMB, 100);
+                    Skyfire::CreatureListSearcher<Skyfire::AllCreaturesOfEntryInRange> searcher(me, templist, check);
 
-                    TypeContainerVisitor<Trinity::CreatureListSearcher<Trinity::AllCreaturesOfEntryInRange>, GridTypeMapContainer> cSearcher(searcher);
+                    TypeContainerVisitor<Skyfire::CreatureListSearcher<Skyfire::AllCreaturesOfEntryInRange>, GridTypeMapContainer> cSearcher(searcher);
 
                     cell.Visit(pair, cSearcher, *me->GetMap(), *me, me->GetGridActivationRange());
                 }
@@ -517,14 +517,14 @@ class mob_janalai_hatcher : public CreatureScript
                 me->GetPosition(x, y, z);
 
                 {
-                    CellCoord pair(Trinity::ComputeCellCoord(x, y));
+                    CellCoord pair(Skyfire::ComputeCellCoord(x, y));
                     Cell cell(pair);
                     cell.SetNoCreate();
 
-                    Trinity::AllCreaturesOfEntryInRange check(me, 23817, 50);
-                    Trinity::CreatureListSearcher<Trinity::AllCreaturesOfEntryInRange> searcher(me, templist, check);
+                    Skyfire::AllCreaturesOfEntryInRange check(me, 23817, 50);
+                    Skyfire::CreatureListSearcher<Skyfire::AllCreaturesOfEntryInRange> searcher(me, templist, check);
 
-                    TypeContainerVisitor<Trinity::CreatureListSearcher<Trinity::AllCreaturesOfEntryInRange>, GridTypeMapContainer> cSearcher(searcher);
+                    TypeContainerVisitor<Skyfire::CreatureListSearcher<Skyfire::AllCreaturesOfEntryInRange>, GridTypeMapContainer> cSearcher(searcher);
 
                     cell.Visit(pair, cSearcher, *(me->GetMap()), *me, me->GetGridActivationRange());
                 }

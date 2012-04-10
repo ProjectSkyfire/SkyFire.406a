@@ -3493,14 +3493,14 @@ bool ChatHandler::HandleRespawnCommand(const char* /*args*/)
         return true;
     }
 
-    CellCoord p(Trinity::ComputeCellCoord(player->GetPositionX(), player->GetPositionY()));
+    CellCoord p(Skyfire::ComputeCellCoord(player->GetPositionX(), player->GetPositionY()));
     Cell cell(p);
     cell.SetNoCreate();
 
-    Trinity::RespawnDo u_do;
-    Trinity::WorldObjectWorker<Trinity::RespawnDo> worker(player, u_do);
+    Skyfire::RespawnDo u_do;
+    Skyfire::WorldObjectWorker<Skyfire::RespawnDo> worker(player, u_do);
 
-    TypeContainerVisitor<Trinity::WorldObjectWorker<Trinity::RespawnDo>, GridTypeMapContainer > obj_worker(worker);
+    TypeContainerVisitor<Skyfire::WorldObjectWorker<Skyfire::RespawnDo>, GridTypeMapContainer > obj_worker(worker);
     cell.Visit(p, obj_worker, *player->GetMap(), *player, player->GetGridActivationRange());
 
     return true;

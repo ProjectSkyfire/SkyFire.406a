@@ -31,7 +31,7 @@ namespace WeatherMgr
 {
 namespace
 {
-    typedef UNORDERED_MAP<uint32, Trinity::AutoPtr<Weather, ACE_Null_Mutex> > WeatherMap;
+    typedef UNORDERED_MAP<uint32, Skyfire::AutoPtr<Weather, ACE_Null_Mutex> > WeatherMap;
     typedef UNORDERED_MAP<uint32, WeatherData> WeatherZoneMap;
 
     WeatherMap m_weathers;

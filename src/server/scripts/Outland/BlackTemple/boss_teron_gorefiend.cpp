@@ -177,7 +177,7 @@ public:
                 if (unit && unit->isAlive())
                     targets.push_back(unit);
             }
-            targets.sort(Trinity::ObjectDistanceOrderPred(me));
+            targets.sort(Skyfire::ObjectDistanceOrderPred(me));
             Unit* target = targets.front();
             if (target && me->IsWithinDistInMap(target, me->GetAttackDistance(target)))
             {

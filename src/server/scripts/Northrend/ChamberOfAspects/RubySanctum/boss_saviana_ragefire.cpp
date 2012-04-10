@@ -207,7 +207,7 @@ public:
             unitList.remove_if (ConflagrationTargetSelector());
             uint8 maxSize = uint8(GetCaster()->GetMap()->GetSpawnMode() & 1 ? 6 : 3);
             if (unitList.size() > maxSize)
-                Trinity::RandomResizeList(unitList, maxSize);
+                Skyfire::RandomResizeList(unitList, maxSize);
         }
 
         void HandleDummy(SpellEffIndex effIndex)

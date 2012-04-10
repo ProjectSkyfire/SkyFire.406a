@@ -196,7 +196,7 @@ class Player;
 class WorldPacket;
 class Guild;
 
-namespace Trinity
+namespace Skyfire
 {
     class AchievementChatBuilder
     {
@@ -211,7 +211,7 @@ namespace Trinity
             int32 i_textId;
             uint32 i_achievementId;
     };
-}                                                           // namespace Trinity
+}                                                           // namespace Skyfire
 
 // Pure virtual class
 class AchievementMgrBase

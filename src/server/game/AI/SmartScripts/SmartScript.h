@@ -150,13 +150,13 @@ class SmartScript
         {
             GameObject* gameObject = NULL;
 
-            CellCoord p(Trinity::ComputeCellCoord(searchObject->GetPositionX(), searchObject->GetPositionY()));
+            CellCoord p(Skyfire::ComputeCellCoord(searchObject->GetPositionX(), searchObject->GetPositionY()));
             Cell cell(p);
 
-            Trinity::GameObjectWithDbGUIDCheck goCheck(*searchObject, guid);
-            Trinity::GameObjectSearcher<Trinity::GameObjectWithDbGUIDCheck> checker(searchObject, gameObject, goCheck);
+            Skyfire::GameObjectWithDbGUIDCheck goCheck(*searchObject, guid);
+            Skyfire::GameObjectSearcher<Skyfire::GameObjectWithDbGUIDCheck> checker(searchObject, gameObject, goCheck);
 
-            TypeContainerVisitor<Trinity::GameObjectSearcher<Trinity::GameObjectWithDbGUIDCheck>, GridTypeMapContainer > objectChecker(checker);
+            TypeContainerVisitor<Skyfire::GameObjectSearcher<Skyfire::GameObjectWithDbGUIDCheck>, GridTypeMapContainer > objectChecker(checker);
             cell.Visit(p, objectChecker, *searchObject->GetMap(), *searchObject, searchObject->GetGridActivationRange());
 
             return gameObject;
@@ -165,13 +165,13 @@ class SmartScript
         Creature* FindCreatureNear(WorldObject* searchObject, uint32 guid) const
         {
             Creature* creature = NULL;
-            CellCoord p(Trinity::ComputeCellCoord(searchObject->GetPositionX(), searchObject->GetPositionY()));
+            CellCoord p(Skyfire::ComputeCellCoord(searchObject->GetPositionX(), searchObject->GetPositionY()));
             Cell cell(p);
 
-            Trinity::CreatureWithDbGUIDCheck target_check(searchObject, guid);
-            Trinity::CreatureSearcher<Trinity::CreatureWithDbGUIDCheck> checker(searchObject, creature, target_check);
+            Skyfire::CreatureWithDbGUIDCheck target_check(searchObject, guid);
+            Skyfire::CreatureSearcher<Skyfire::CreatureWithDbGUIDCheck> checker(searchObject, creature, target_check);
 
-            TypeContainerVisitor<Trinity::CreatureSearcher <Trinity::CreatureWithDbGUIDCheck>, GridTypeMapContainer > unit_checker(checker);
+            TypeContainerVisitor<Skyfire::CreatureSearcher <Skyfire::CreatureWithDbGUIDCheck>, GridTypeMapContainer > unit_checker(checker);
             cell.Visit(p, unit_checker, *searchObject->GetMap(), *searchObject, searchObject->GetGridActivationRange());
 
             return creature;

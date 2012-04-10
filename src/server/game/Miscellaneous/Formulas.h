@@ -24,7 +24,7 @@
 #include "SharedDefines.h"
 #include "ScriptMgr.h"
 
-namespace Trinity
+namespace Skyfire
 {
     namespace Honor
     {

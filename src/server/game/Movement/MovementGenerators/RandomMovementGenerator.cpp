@@ -52,8 +52,8 @@ void RandomMovementGenerator<Creature>::SetRandomLocation(Creature &creature)
     destY = respY + distanceY;
 
     // prevent invalid coordinates generation
-    Trinity::NormalizeMapCoord(destX);
-    Trinity::NormalizeMapCoord(destY);
+    Skyfire::NormalizeMapCoord(destX);
+    Skyfire::NormalizeMapCoord(destY);
 
     travelDistZ = distanceX*distanceX + distanceY*distanceY;
 

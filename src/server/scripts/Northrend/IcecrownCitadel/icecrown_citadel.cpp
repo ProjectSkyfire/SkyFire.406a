@@ -1058,7 +1058,7 @@ class npc_crok_scourgebane : public CreatureScript
                         // get all nearby vrykul
                         std::list<Creature*> temp;
                         FrostwingVrykulSearcher check(me, 80.0f);
-                        Trinity::CreatureListSearcher<FrostwingVrykulSearcher> searcher(me, temp, check);
+                        Skyfire::CreatureListSearcher<FrostwingVrykulSearcher> searcher(me, temp, check);
                         me->VisitNearbyGridObject(80.0f, searcher);
 
                         _aliveTrash.clear();
@@ -1084,8 +1084,8 @@ class npc_crok_scourgebane : public CreatureScript
                 {
                     _wipeCheckTimer = 1000;
                     Player* player = NULL;
-                    Trinity::AnyPlayerInObjectRangeCheck check(me, 60.0f);
-                    Trinity::PlayerSearcher<Trinity::AnyPlayerInObjectRangeCheck> searcher(me, player, check);
+                    Skyfire::AnyPlayerInObjectRangeCheck check(me, 60.0f);
+                    Skyfire::PlayerSearcher<Skyfire::AnyPlayerInObjectRangeCheck> searcher(me, player, check);
                     me->VisitNearbyWorldObject(60.0f, searcher);
                     // wipe
                     if (!player)
@@ -1094,7 +1094,7 @@ class npc_crok_scourgebane : public CreatureScript
                         if (damage >= me->GetHealth())
                         {
                             FrostwingGauntletRespawner respawner;
-                            Trinity::CreatureWorker<FrostwingGauntletRespawner> worker(me, respawner);
+                            Skyfire::CreatureWorker<FrostwingGauntletRespawner> worker(me, respawner);
                             me->VisitNearbyGridObject(333.0f, worker);
                             Talk(SAY_CROK_DEATH);
                         }
@@ -1394,8 +1394,8 @@ class npc_captain_arnath : public CreatureScript
             Creature* FindFriendlyCreature() const
             {
                 Creature* target = NULL;
-                Trinity::MostHPMissingInRange u_check(me, 60.0f, 0);
-                Trinity::CreatureLastSearcher<Trinity::MostHPMissingInRange> searcher(me, target, u_check);
+                Skyfire::MostHPMissingInRange u_check(me, 60.0f, 0);
+                Skyfire::CreatureLastSearcher<Skyfire::MostHPMissingInRange> searcher(me, target, u_check);
                 me->VisitNearbyGridObject(60.0f, searcher);
                 return target;
             }
@@ -1745,7 +1745,7 @@ class spell_icc_sprit_alarm : public SpellScriptLoader
 
                 std::list<Creature*> wards;
                 GetCaster()->GetCreatureListWithEntryInGrid(wards, NPC_DEATHBOUND_WARD, 150.0f);
-                wards.sort(Trinity::ObjectDistanceOrderPred(GetCaster()));
+                wards.sort(Skyfire::ObjectDistanceOrderPred(GetCaster()));
                 for (std::list<Creature*>::iterator itr = wards.begin(); itr != wards.end(); ++itr)
                 {
                     if ((*itr)->isAlive() && (*itr)->HasAura(SPELL_STONEFORM))
@@ -1910,7 +1910,7 @@ class spell_svalna_revive_champion : public SpellScriptLoader
             void RemoveAliveTarget(std::list<Unit*>& unitList)
             {
                 unitList.remove_if (AliveCheck());
-                Trinity::RandomResizeList(unitList, 2);
+                Skyfire::RandomResizeList(unitList, 2);
             }
 
             void Land(SpellEffIndex /*effIndex*/)
@@ -1993,7 +1993,7 @@ class at_icc_saurfang_portal : public AreaTriggerScript
                 instance->SetData(DATA_COLDFLAME_JETS, IN_PROGRESS);
                 std::list<Creature*> traps;
                 GetCreatureListWithEntryInGrid(traps, player, NPC_FROST_FREEZE_TRAP, 120.0f);
-                traps.sort(Trinity::ObjectDistanceOrderPred(player));
+                traps.sort(Skyfire::ObjectDistanceOrderPred(player));
                 bool instant = false;
                 for (std::list<Creature*>::iterator itr = traps.begin(); itr != traps.end(); ++itr)
                 {

@@ -36,7 +36,7 @@
 class Player;
 //class Map;
 
-namespace Trinity
+namespace Skyfire
 {
     struct VisibleNotifier
     {

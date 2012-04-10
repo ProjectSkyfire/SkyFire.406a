@@ -1218,7 +1218,7 @@ class instance_icecrown_citadel : public InstanceMapScript
                             GetCreatureListWithEntryInGrid(triggers, terenas, NPC_WORLD_TRIGGER_INFINITE_AOI, 100.0f);
                             if (!triggers.empty())
                             {
-                                triggers.sort(Trinity::ObjectDistanceOrderPred(terenas, false));
+                                triggers.sort(Skyfire::ObjectDistanceOrderPred(terenas, false));
                                 Unit* visual = triggers.front();
                                 visual->CastSpell(visual, SPELL_FROSTMOURNE_TELEPORT_VISUAL, true);
                             }
