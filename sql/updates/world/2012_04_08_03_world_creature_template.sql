@@ -1,2 +1,0 @@
-UPDATE creature_template SET scriptname="npc_alliance_wg_battle_mage" WHERE entry=32169; -- http://www.wowhead.com/npc=32169
-UPDATE creature_template SET scriptname="npc_horde_wg_battle_mage" WHERE entry=32170; -- http://www.wowhead.com/npc=32170
