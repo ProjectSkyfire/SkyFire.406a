@@ -48,7 +48,6 @@ include_directories(
   ${CMAKE_SOURCE_DIR}/dep/gsoap
   ${CMAKE_SOURCE_DIR}/dep/sockets/include
   ${CMAKE_SOURCE_DIR}/dep/SFMT
-  ${CMAKE_SOURCE_DIR}/dep/mersennetwister
   ${CMAKE_SOURCE_DIR}/dep/recastlite/Detour
   ${CMAKE_SOURCE_DIR}/dep/recastlite/Recast 
   ${CMAKE_SOURCE_DIR}/src/server/collision
@@ -161,14 +160,13 @@ endif()
 set_target_properties(worldserver PROPERTIES LINK_FLAGS "${worldserver_LINK_FLAGS}")
 
 target_link_libraries(worldserver
-  Detour
   game
   shared
   scripts
   collision
   g3dlib
+  detour  
   gsoap
-  ${DETOUR_LIBRARY}
   ${JEMALLOC_LIBRARY}
   ${READLINE_LIBRARY}
   ${TERMCAP_LIBRARY}
@@ -176,6 +174,7 @@ target_link_libraries(worldserver
   ${MYSQL_LIBRARY}
   ${OPENSSL_LIBRARIES}
   ${OPENSSL_EXTRA_LIBRARIES}
+  ${DETOUR_LIBRARY}
   ${ZLIB_LIBRARIES}
   ${OSX_LIBS}
 )
