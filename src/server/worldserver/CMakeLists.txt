@@ -165,7 +165,7 @@ target_link_libraries(worldserver
   scripts
   collision
   g3dlib
-  detour  
+  Detour  
   gsoap
   ${JEMALLOC_LIBRARY}
   ${READLINE_LIBRARY}
