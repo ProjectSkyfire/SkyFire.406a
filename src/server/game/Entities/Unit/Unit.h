@@ -2517,4 +2517,5 @@ template <class T> T Unit::ApplySpellMod(uint32 spellId, SpellModOp op, T &basev
 
     return T(diff);
 }
+
 #endif
