@@ -2530,7 +2530,7 @@ void Player::Regenerate(Powers power)
             if (getLevel() < 15)
                 ManaIncreaseRate = sWorld->getRate(RATE_POWER_MANA) * (2.066f - (getLevel() * 0.066f));
 
-            if (recentCast) // Trinity Updates Mana in intervals of 2s, which is correct
+            if (recentCast) // Skyfire Updates Mana in intervals of 2s, which is correct
                 addvalue += GetFloatValue(UNIT_FIELD_POWER_REGEN_INTERRUPTED_FLAT_MODIFIER) *  ManaIncreaseRate * 0.001f * _regenTimer * haste;
             else
                 addvalue += GetFloatValue(UNIT_FIELD_POWER_REGEN_FLAT_MODIFIER) * ManaIncreaseRate * 0.001f * _regenTimer * haste;
@@ -6661,8 +6661,8 @@ void Player::SendActionButtons(uint32 state) const
     data << uint8(state);
     /*
         state can be 0, 1, 2
-        0 - Looks to be sent when initial action buttons get sent, however on Trinity we use 1 since 0 had some difficulties
-        1 - Used in any SMSG_ACTION_BUTTONS packet with button data on Trinity. Only used after spec swaps on retail.
+        0 - Looks to be sent when initial action buttons get sent, however on Skyfire we use 1 since 0 had some difficulties
+        1 - Used in any SMSG_ACTION_BUTTONS packet with button data on Skyfire. Only used after spec swaps on retail.
         2 - Clears the action bars client sided. This is sent during spec swap before unlearning and before sending the new buttons
     */
     if (state != 2)
@@ -16302,7 +16302,7 @@ void Player::RemoveRewardedQuest(uint32 quest_id)
     }
 }
 
-// not used in Trinity, but used in scripting code
+// not used in Skyfire, but used in scripting code
 uint16 Player::GetReqKillOrCastCurrentCount(uint32 quest_id, int32 entry)
 {
     Quest const* qInfo = sObjectMgr->GetQuestTemplate(quest_id);

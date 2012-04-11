@@ -63,7 +63,7 @@ typedef std::deque<Mail*> PlayerMails;
 #define PLAYER_MAX_DAILY_QUESTS     25
 #define PLAYER_EXPLORED_ZONES_SIZE  144
 
-// 2^n values, Player::m_isunderwater is a bitmask. These are Trinity internal values, they are never send to any client
+// 2^n values, Player::m_isunderwater is a bitmask. These are Skyfire internal values, they are never send to any client
 enum PlayerUnderwaterState
 {
     UNDERWATER_NONE                     = 0x00,

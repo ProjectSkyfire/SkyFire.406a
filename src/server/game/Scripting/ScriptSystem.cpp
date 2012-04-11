@@ -27,7 +27,7 @@ ScriptPointVector const SystemMgr::_empty;
 void SystemMgr::LoadScriptTexts()
 {
     sLog->outString("TSCR: Loading Script Texts...");
-    LoadTrinityStrings("script_texts", TEXT_SOURCE_RANGE, 1+(TEXT_SOURCE_RANGE*2));
+    LoadSkyfireStrings("script_texts", TEXT_SOURCE_RANGE, 1+(TEXT_SOURCE_RANGE*2));
 
     sLog->outString("TSCR: Loading Script Texts additional data...");
     uint32 oldMSTime = getMSTime();
@@ -89,7 +89,7 @@ void SystemMgr::LoadScriptTexts()
 void SystemMgr::LoadScriptTextsCustom()
 {
     sLog->outString("TSCR: Loading Custom Texts...");
-    LoadTrinityStrings("custom_texts", TEXT_SOURCE_RANGE*2, 1+(TEXT_SOURCE_RANGE*3));
+    LoadSkyfireStrings("custom_texts", TEXT_SOURCE_RANGE*2, 1+(TEXT_SOURCE_RANGE*3));
 
     sLog->outString("TSCR: Loading Custom Texts additional data...");
 
@@ -109,7 +109,7 @@ void SystemMgr::LoadScriptTextsCustom()
         Field* fields = result->Fetch();
         StringTextData temp;
 
-        int32 iId              = fields[0].GetInt32();
+        int32 iId           = fields[0].GetInt32();
         temp.SoundId        = fields[1].GetUInt32();
         temp.Type           = fields[2].GetUInt32();
         temp.Language       = fields[3].GetUInt32();

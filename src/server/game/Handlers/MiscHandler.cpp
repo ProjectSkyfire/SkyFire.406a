@@ -233,7 +233,7 @@ void WorldSession::HandleWhoOpcode(WorldPacket & recv_data)
     wstrToLower(wplayer_name);
     wstrToLower(wguild_name);
 
-    // client send in case not set max level value 100 but Trinity supports 255 max level,
+    // client send in case not set max level value 100 but Skyfire supports 255 max level,
     // update it to show GMs with characters after 100 level
     if (level_max >= MAX_LEVEL)
         level_max = STRONG_MAX_LEVEL;
@@ -1094,7 +1094,7 @@ void WorldSession::HandleMoveTimeSkippedOpcode(WorldPacket & recv_data)
         sLog->outDebug(LOG_FILTER_PACKETIO, "WORLD: CMSG_MOVE_TIME_SKIPPED");
 
         /// TODO
-        must be need use in Trinity
+        must be need use in Skyfire
         We substract server Lags to move time (AntiLags)
         for exmaple
         GetPlayer()->ModifyLastMoveTime(-int32(time_skipped));

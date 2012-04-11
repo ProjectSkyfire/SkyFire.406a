@@ -828,7 +828,7 @@ class ScriptMgr
         void LoadDatabase();
         void FillSpellSummary();
 
-        const char* ScriptsVersion() const { return "Integrated Trinity Scripts"; }
+        const char* ScriptsVersion() const { return "Integrated Skyfire Scripts"; }
 
         void IncrementScriptCount() { ++_scriptCount; }
         uint32 GetScriptCount() const { return _scriptCount; }
