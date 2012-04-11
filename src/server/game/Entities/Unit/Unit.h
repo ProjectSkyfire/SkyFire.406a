@@ -1052,6 +1052,7 @@ struct GlobalCooldown
 };
 
 typedef UNORDERED_MAP<uint32 /*category*/, GlobalCooldown> GlobalCooldownList;
+typedef UNORDERED_MAP<uint32, uint32> SpellsCastedInRow;
 
 class GlobalCooldownMgr                                     // Shared by Player and CharmInfo
 {
@@ -1307,8 +1308,18 @@ class Unit : public WorldObject
         bool IsWithinMeleeRange(const Unit* obj, float dist = MELEE_RANGE) const;
         void GetRandomContactPoint(const Unit* target, float &x, float &y, float &z, float distance2dMin, float distance2dMax) const;
         uint32 _extraAttacks;
+        int32 m_lastSpellCasted;
+        SpellsCastedInRow m_spellsinrow;
         bool _canDualWield;
 
+        uint32 GetTimesCastedInRow(uint32 spellid)
+        {
+            SpellsCastedInRow::iterator itr = m_spellsinrow.find(spellid);
+            if(itr != m_spellsinrow.end())
+                return itr->second;
+            return NULL;
+        }
+        inline int32 getLastSpellCasted() const { return m_lastSpellCasted ? m_lastSpellCasted : 0; }
         void _addAttacker(Unit* pAttacker)                  // must be called only from Unit::Attack(Unit*)
         {
             m_attackers.insert(pAttacker);
