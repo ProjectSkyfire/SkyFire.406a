@@ -168,7 +168,7 @@ target_link_libraries(worldserver
   collision
   g3dlib
   gsoap
-  ${DETOURE_LIBRARY}
+  ${DETOUR_LIBRARY}
   ${JEMALLOC_LIBRARY}
   ${READLINE_LIBRARY}
   ${TERMCAP_LIBRARY}
