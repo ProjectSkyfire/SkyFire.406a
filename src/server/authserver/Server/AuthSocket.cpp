@@ -30,7 +30,6 @@
 #include <algorithm>
 #include <openssl/crypto.h>
 #include <openssl/md5.h>
-
 #define ChunkSize 2048
 
 enum eAuthCmd
@@ -53,11 +52,11 @@ enum eStatus
     STATUS_AUTHED
 };
 
-// GCC have alternative #pragma pack(N) syntax and old gcc version not support pack(push, N), also any gcc version not support it at some paltform
+// GCC have alternative #pragma pack(N) syntax and old gcc version not support pack(push,N), also any gcc version not support it at some paltform
 #if defined(__GNUC__)
 #pragma pack(1)
 #else
-#pragma pack(push, 1)
+#pragma pack(push,1)
 #endif
 
 typedef struct AUTH_LOGON_CHALLENGE_C
@@ -172,7 +171,7 @@ public:
     Patches::const_iterator begin() const { return _patches.begin(); }
     Patches::const_iterator end() const { return _patches.end(); }
     void LoadPatchMD5(char*);
-    bool GetHash(char * pat, uint8 mymd5[16]);
+    bool GetHash(char * pat,uint8 mymd5[16]);
 
 private:
     void LoadPatchesInfo();
@@ -318,7 +317,7 @@ bool AuthSocket::_HandleLogonChallenge()
     if ((remaining < sizeof(sAuthLogonChallenge_C) - buf.size()) || (socket().recv_len() < remaining))
         return false;
 
-    //No big fear of memory outage (size is int16, i.e. < 65536)
+    // No big fear of memory outage (size is int16, i.e. < 65536)
     buf.resize(remaining + buf.size() + 1);
     buf[buf.size() - 1] = 0;
     sAuthLogonChallenge_C *ch = (sAuthLogonChallenge_C*)&buf[0];
@@ -345,6 +344,7 @@ bool AuthSocket::_HandleLogonChallenge()
     _login = (const char*)ch->I;
     _build = ch->build;
     _expversion = (AuthHelper::IsPostWotLKAcceptedClientBuild(_build) ? POST_WOTLK_EXP_FLAG : NO_VALID_EXP_FLAG) | (AuthHelper::IsPostBCAcceptedClientBuild(_build) ? POST_BC_EXP_FLAG : NO_VALID_EXP_FLAG) | (AuthHelper::IsPreBCAcceptedClientBuild(_build) ? PRE_BC_EXP_FLAG : NO_VALID_EXP_FLAG);
+
     _os = (const char*)ch->os;
 
     if (_os.size() > 4)
@@ -366,7 +366,7 @@ bool AuthSocket::_HandleLogonChallenge()
     if (result)
     {
         pkt << (uint8)WOW_FAIL_BANNED;
-        sLog->outBasic("'%s:%d' [AuthChallenge] Banned ip tries to login!", socket().getRemoteAddress().c_str(), socket().getRemotePort());
+        sLog->outBasic("'%s:%d' [AuthChallenge] Banned account %s  tries to login!", socket().getRemoteAddress().c_str(), socket().getRemotePort());
     }
     else
     {
@@ -413,7 +413,7 @@ bool AuthSocket::_HandleLogonChallenge()
                     if ((*banresult)[0].GetUInt64() == (*banresult)[1].GetUInt64())
                     {
                         pkt << (uint8)WOW_FAIL_BANNED;
-                        sLog->outBasic("'%s:%d' [AuthChallenge] Banned account %s tried to login!", socket().getRemoteAddress().c_str(), socket().getRemotePort(), _login.c_str ());
+                        sLog->outBasic("'%s:%d' [AuthChallenge] Banned ip tries to login!", socket().getRemoteAddress().c_str(), socket().getRemotePort());
                     }
                     else
                     {
@@ -611,7 +611,6 @@ bool AuthSocket::_HandleLogonProof()
         stmt->setString(0, K_hex);
         stmt->setString(1, socket().getRemoteAddress().c_str());
         stmt->setUInt32(2, GetLocaleByName(_localizationName));
-        stmt->setString(3, _login);
         stmt->setString(3, _os);
         stmt->setString(4, _login);
         LoginDatabase.Execute(stmt);
@@ -749,7 +748,7 @@ bool AuthSocket::_HandleReconnectChallenge()
         return false;
     }
 
-    // Reinitialize build, expansion and the account securitylevel
+    // Reinitialize build, expansion and the account security level
     _build = ch->build;
     _expversion = (AuthHelper::IsPostBCAcceptedClientBuild(_build) ? POST_BC_EXP_FLAG : NO_VALID_EXP_FLAG) | (AuthHelper::IsPreBCAcceptedClientBuild(_build) ? PRE_BC_EXP_FLAG : NO_VALID_EXP_FLAG);
     _os = (const char*)ch->os;
@@ -853,15 +852,15 @@ bool AuthSocket::_HandleRealmList()
         // don't work with realms which not compatible with the client
         if ((_expversion & POST_BC_EXP_FLAG) || (_expversion & POST_WOTLK_EXP_FLAG))
         {
-           if (i->second.gamebuild != _build)
+            if (i->second.gamebuild != _build)
             {
-               sLog->outStaticDebug("Realm not added because of not correct build : %u != %u", i->second.gamebuild, _build);
-               continue;
+                sLog->outStaticDebug("Realm not added because of not correct build : %u != %u", i->second.gamebuild, _build);
+                continue;
             }
         }
-        else if (_expversion & PRE_BC_EXP_FLAG) // 1.12.1 and 1.12.2 clients are compatible with eachother
+        else if (_expversion & PRE_BC_EXP_FLAG) // 1.12.1 and 1.12.2 clients are compatible with each other
             if (!AuthHelper::IsPreBCAcceptedClientBuild(i->second.gamebuild))
-               continue;
+                continue;
 
         uint8 AmountOfCharacters;
 
@@ -877,29 +876,29 @@ bool AuthSocket::_HandleRealmList()
 
         uint8 lock = (i->second.allowedSecurityLevel > _accountSecurityLevel) ? 1 : 0;
 
-        pkt << i->second.icon;                                       // realm type
+        pkt << i->second.icon;                              // realm type
         if (_expversion & (POST_BC_EXP_FLAG | POST_WOTLK_EXP_FLAG))  // 2.x, 3.x, and 4.x clients
-            pkt << lock;                                             // if 1, then realm locked
-        pkt << i->second.color;                                      // if 2, then realm is offline
+            pkt << lock;                                    // if 1, then realm locked
+        pkt << i->second.color;                             // if 2, then realm is offline
         pkt << i->first;
         pkt << i->second.address;
         pkt << i->second.populationLevel;
         pkt << AmountOfCharacters;
-        pkt << i->second.timezone;                                   // realm category
+        pkt << i->second.timezone;                          // realm category
         if (_expversion & (POST_BC_EXP_FLAG | POST_WOTLK_EXP_FLAG))  // 2.x, 3.x, and 4.x clients
-            pkt << (uint8)0x2C;                                      // unk, may be realm number/id?
+            pkt << (uint8)0x2C;                             // unk, may be realm number/id?
         else
-            pkt << (uint8)0x0;                                       // 1.12.1 and 1.12.2 clients
+            pkt << (uint8)0x0;                              // 1.12.1 and 1.12.2 clients
 
         ++RealmListSize;
     }
 
-    if ((_expversion & POST_BC_EXP_FLAG) || (_expversion & POST_WOTLK_EXP_FLAG))  // 2.x, 3.x, and 4.x clients
+    if ((_expversion & POST_BC_EXP_FLAG) || (_expversion & POST_WOTLK_EXP_FLAG))     // 2.x, 3.x, 4.x
     {
         pkt << (uint8)0x10;
         pkt << (uint8)0x00;
     }
-    else                                                                          // 1.12.1 and 1.12.2 clients
+    else                                                    // 1.12.1 and 1.12.2 clients
     {
         pkt << (uint8)0x00;
         pkt << (uint8)0x02;
@@ -938,7 +937,7 @@ bool AuthSocket::_HandleXferResume()
     // Launch a PatcherRunnable thread starting at given patch file offset
     uint64 start;
     socket().recv_skip(1);
-    socket().recv((char*)&start, sizeof(start));
+    socket().recv((char*)&start,sizeof(start));
     fseek(pPatch, long(start), 0);
 
     ACE_Based::Thread u(new PatcherRunnable(this));
