@@ -63,6 +63,7 @@ CREATE TABLE `account` (
   `expansion` tinyint(3) unsigned NOT NULL default '3',
   `mutetime` bigint(40) NOT NULL default '0',
   `locale` tinyint(3) unsigned NOT NULL default '0',
+  `os` varchar(4) NOT NULL DEFAULT '',  
   `recruiter` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   UNIQUE KEY `idx_username` (`username`)
