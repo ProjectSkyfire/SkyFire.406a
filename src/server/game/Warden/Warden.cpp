@@ -1,10 +1,11 @@
 /*
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -40,42 +41,6 @@ Warden::~Warden()
     delete _module;
     _module = NULL;
     _initialized = false;
-}
-
-void Warden::Init(WorldSession* /*session*/, BigNumber* /*k*/)
-{
-    ASSERT(false);
-}
-
-ClientWardenModule* Warden::GetModuleForClient()
-{
-    ASSERT(false);
-    return NULL;
-}
-
-void Warden::InitializeModule()
-{
-    ASSERT(false);
-}
-
-void Warden::RequestHash()
-{
-    ASSERT(false);
-}
-
-void Warden::HandleHashResult(ByteBuffer& /*buff*/)
-{
-    ASSERT(false);
-}
-
-void Warden::RequestData()
-{
-    ASSERT(false);
-}
-
-void Warden::HandleData(ByteBuffer &buff)
-{
-    ASSERT(false);
 }
 
 void Warden::SendModuleToClient()
