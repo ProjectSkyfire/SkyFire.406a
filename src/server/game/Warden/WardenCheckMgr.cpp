@@ -25,7 +25,6 @@
 #include "WardenCheckMgr.h"
 #include "Warden.h"
 
-
 WardenCheckMgr::WardenCheckMgr()
 {
     InternalDataID = 1;
@@ -33,7 +32,7 @@ WardenCheckMgr::WardenCheckMgr()
 
 WardenCheckMgr::~WardenCheckMgr()
 {
-    for (int i = 0; i < CheckStore.size(); ++i)
+    for (uint16 i = 0; i < CheckStore.size(); ++i)
         delete CheckStore[i];
 
     for (CheckResultContainer::iterator itr = CheckResultStore.begin(); itr != CheckResultStore.end(); ++itr)
@@ -51,7 +50,7 @@ void WardenCheckMgr::LoadWardenChecks()
     }
 
     // For reload case
-    for (int i = 0; i < CheckStore.size(); ++i)
+    for (uint16 i = 0; i < CheckStore.size(); ++i)
         delete CheckStore[i];
 
     CheckStore.clear();
@@ -59,7 +58,6 @@ void WardenCheckMgr::LoadWardenChecks()
     for (CheckResultContainer::iterator itr = CheckResultStore.begin(); itr != CheckResultStore.end(); ++itr)
         delete itr->second;
     CheckResultStore.clear();
-
 
     QueryResult result = WorldDatabase.Query("SELECT MAX(id) FROM warden_checks");
 

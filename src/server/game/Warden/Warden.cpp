@@ -42,12 +42,12 @@ Warden::~Warden()
     _initialized = false;
 }
 
-void Warden::Init(WorldSession* session, BigNumber* k)
+void Warden::Init(WorldSession* /*session*/, BigNumber* /*k*/)
 {
     ASSERT(false);
 }
 
-ClientWardenModule* Warden::GetModuleForClient(WorldSession* session)
+ClientWardenModule* Warden::GetModuleForClient()
 {
     ASSERT(false);
     return NULL;
@@ -63,7 +63,7 @@ void Warden::RequestHash()
     ASSERT(false);
 }
 
-void Warden::HandleHashResult(ByteBuffer &buff)
+void Warden::HandleHashResult(ByteBuffer& /*buff*/)
 {
     ASSERT(false);
 }
