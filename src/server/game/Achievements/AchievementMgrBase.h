@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __TRINITY_ACHIEVEMENTMGRBASE_H
-#define __TRINITY_ACHIEVEMENTMGRBASE_H
+#ifndef __SKYFIRE_ACHIEVEMENTMGRBASE_H
+#define __SKYFIRE_ACHIEVEMENTMGRBASE_H
 
 #include <map>
 #include <string>
@@ -196,7 +196,7 @@ class Player;
 class WorldPacket;
 class Guild;
 
-namespace Trinity
+namespace SkyFire
 {
     class AchievementChatBuilder
     {
@@ -211,7 +211,7 @@ namespace Trinity
             int32 i_textId;
             uint32 i_achievementId;
     };
-}                                                           // namespace Trinity
+}                                                           // namespace SkyFire
 
 // Pure virtual class
 class AchievementMgrBase

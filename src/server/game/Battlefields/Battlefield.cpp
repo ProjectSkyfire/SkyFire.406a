@@ -1030,8 +1030,8 @@ bool BfCapturePoint::Update(uint32 diff)
                     HandlePlayerLeave(player);
 
     std::list<Player*>players;
-    Trinity::AnyPlayerInObjectRangeCheck checker(m_capturePoint, radius);
-    Trinity::PlayerListSearcher < Trinity::AnyPlayerInObjectRangeCheck > searcher(m_capturePoint, players, checker);
+    SkyFire::AnyPlayerInObjectRangeCheck checker(m_capturePoint, radius);
+    SkyFire::PlayerListSearcher < SkyFire::AnyPlayerInObjectRangeCheck > searcher(m_capturePoint, players, checker);
     m_capturePoint->VisitNearbyWorldObject(radius, searcher);
 
     for (std::list<Player*>::iterator itr = players.begin(); itr != players.end(); ++itr)

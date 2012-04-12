@@ -17,8 +17,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __TRINITY_VEHICLEDEFINES_H
-#define __TRINITY_VEHICLEDEFINES_H
+#ifndef __SKYFIRE_VEHICLEDEFINES_H
+#define __SKYFIRE_VEHICLEDEFINES_H
 
 #include "Define.h"
 #include <vector>

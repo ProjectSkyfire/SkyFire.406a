@@ -17,15 +17,15 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_SYSTEMCONFIG_H
-#define TRINITY_SYSTEMCONFIG_H
+#ifndef SKYFIRE_SYSTEMCONFIG_H
+#define SKYFIRE_SYSTEMCONFIG_H
 
 #include "Define.h"
 #include "revision.h"
 
 #define _PACKAGENAME "SkyFireEMU"
 
-#if TRINITY_ENDIAN == TRINITY_BIGENDIAN
+#if SKYFIRE_ENDIAN == SKYFIRE_BIGENDIAN
 # define _ENDIAN_STRING "big-endian"
 #else
 # define _ENDIAN_STRING "little-endian"

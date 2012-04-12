@@ -169,7 +169,7 @@ Quest::Quest(Field* questRecord)
     QuestCompleteScript        = questRecord[173].GetUInt32();
 
     QuestFlags |= SpecialFlags << 20;
-    if (QuestFlags & QUEST_TRINITY_FLAGS_AUTO_ACCEPT)
+    if (QuestFlags & QUEST_SKYFIRE_FLAGS_AUTO_ACCEPT)
         QuestFlags |= QUEST_FLAGS_AUTO_ACCEPT;
 
     m_reqitemscount = 0;

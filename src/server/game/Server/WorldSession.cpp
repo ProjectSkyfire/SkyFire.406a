@@ -43,6 +43,8 @@
 #include "zlib.h"
 #include "ScriptMgr.h"
 #include "Transport.h"
+#include "WardenWin.h"
+#include "WardenMac.h"
 
 bool MapSessionFilter::Process(WorldPacket* packet)
 {
@@ -97,6 +99,8 @@ m_sessionDbLocaleIndex(locale),
 m_latency(0), m_TutorialsChanged(false), recruiterId(recruiter),
 isRecruiter(isARecruiter), timeLastWhoCommand(0)
 {
+    _warden = NULL;
+
     if (sock)
     {
         m_Address = sock->GetRemoteAddress();
@@ -123,6 +127,9 @@ WorldSession::~WorldSession()
         m_Socket = NULL;
     }
 
+    if (_warden)
+        delete _warden;
+
     ///- empty incoming packet queue
     WorldPacket* packet = NULL;
     while (_recvQueue.next(packet))
@@ -143,13 +150,19 @@ char const* WorldSession::GetPlayerName() const
     return GetPlayer() ? GetPlayer()->GetName() : "<none>";
 }
 
+/// Get player guid if available. Use for logging purposes only
+uint32 WorldSession::GetGuidLow() const
+{
+    return GetPlayer() ? GetPlayer()->GetGUIDLow() : 0;
+}
+
 /// Send a packet to the client
 void WorldSession::SendPacket(WorldPacket const* packet)
 {
     if (!m_Socket)
         return;
 
-#ifdef TRINITY_DEBUG
+#ifdef SKYFIRE_DEBUG
     // Code for network use statistic
     static uint64 sendPacketCount = 0;
     static uint64 sendPacketBytes = 0;
@@ -181,7 +194,7 @@ void WorldSession::SendPacket(WorldPacket const* packet)
         sendLastPacketCount = 1;
         sendLastPacketBytes = packet->wpos();               // wpos is real written size
     }
-#endif                                                      // !TRINITY_DEBUG
+#endif                                                      // !SKYFIRE_DEBUG
 
     if (m_Socket->SendPacket (*packet) == -1)
         m_Socket->CloseSocket ();
@@ -345,6 +358,9 @@ bool WorldSession::Update(uint32 diff, PacketFilter& updater)
             delete packet;
     }
 
+    if (m_Socket && !m_Socket->IsClosed() && _warden)
+        _warden->Update();
+
     ProcessQueryCallbacks();
 
     //check if we are safe to proceed with logout
@@ -355,6 +371,9 @@ bool WorldSession::Update(uint32 diff, PacketFilter& updater)
         ///- If necessary, log the player out
         if (ShouldLogOut(currTime) && !m_playerLoading)
             LogoutPlayer(true);
+
+        if (m_Socket && GetPlayer() && _warden)
+            _warden->Update();
 
         ///- Cleanup socket pointer if need
         if (m_Socket && m_Socket->IsClosed())
@@ -1117,4 +1136,19 @@ void WorldSession::ProcessQueryCallbacks()
         HandleStableSwapPetCallback(result, param);
         _stableSwapCallback.FreeResult();
     }
+}
+
+void WorldSession::InitWarden(BigNumber* k, std::string os)
+{
+   if (os == "Win")
+   {
+       _warden = new WardenWin();
+       _warden->Init(this, k);
+   }
+   else if (os == "OSX")
+   {
+       // Disabled as it is causing the client to crash
+       // _warden = new WardenMac();
+       // _warden->Init(this, k);
+   }
 }

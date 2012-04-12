@@ -16,8 +16,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITYSERVER_PACKET_BUILDER_H
-#define TRINITYSERVER_PACKET_BUILDER_H
+#ifndef SKYFIRE_PACKET_BUILDER_H
+#define SKYFIRE_PACKET_BUILDER_H
 
 class ByteBuffer;
 class WorldPacket;
@@ -34,4 +34,4 @@ namespace Movement
         static void WriteCreate(const MoveSpline& mov, ByteBuffer& data);
     };
 }
-#endif // TRINITYSERVER_PACKET_BUILDER_H
+#endif // SKYFIRE_PACKET_BUILDER_H

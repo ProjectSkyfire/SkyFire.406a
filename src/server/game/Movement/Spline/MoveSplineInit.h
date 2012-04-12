@@ -16,8 +16,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITYSERVER_MOVESPLINEINIT_H
-#define TRINITYSERVER_MOVESPLINEINIT_H
+#ifndef SKYFIRE_MOVESPLINEINIT_H
+#define SKYFIRE_MOVESPLINEINIT_H
 
 #include "MoveSplineInit.h"
 #include "MoveSplineInitArgs.h"
@@ -186,4 +186,4 @@ namespace Movement
         args.flags.EnableFacingPoint();
     }
 }
-#endif // TRINITYSERVER_MOVESPLINEINIT_H
+#endif // SKYFIRE_MOVESPLINEINIT_H

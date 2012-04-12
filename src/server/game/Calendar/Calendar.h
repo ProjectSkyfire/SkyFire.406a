@@ -17,8 +17,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_CALENDAR_H
-#define TRINITY_CALENDAR_H
+#ifndef SKYFIRE_CALENDAR_H
+#define SKYFIRE_CALENDAR_H
 
 class Calendar
 {

@@ -159,7 +159,7 @@ public:
             if (creature->GetOwner() && creature->GetOwner()->GetTypeId() == TYPEID_PLAYER)
                 Start(false, false, creature->GetOwner()->GetGUID());
             else
-                sLog->outError("TRINITY: npc_ancestral_wolf can not obtain owner or owner is not a player.");
+                sLog->outError("SKYFIRE: npc_ancestral_wolf can not obtain owner or owner is not a player.");
 
             creature->SetSpeed(MOVE_WALK, 1.5f);
             Reset();

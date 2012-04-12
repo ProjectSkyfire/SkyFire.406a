@@ -16,8 +16,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITYCORE_ERRORS_H
-#define TRINITYCORE_ERRORS_H
+#ifndef SKYFIRE_ERRORS_H
+#define SKYFIRE_ERRORS_H
 
 #include "Common.h"
 #include "Log.h"

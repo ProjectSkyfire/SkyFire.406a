@@ -17,8 +17,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITYCORE_GROUP_H
-#define TRINITYCORE_GROUP_H
+#ifndef SKYFIRE_GROUP_H
+#define SKYFIRE_GROUP_H
 
 #include "Battleground.h"
 #include "DBCEnums.h"

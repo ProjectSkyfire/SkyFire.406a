@@ -17,8 +17,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITYCORE_ARENATEAM_H
-#define TRINITYCORE_ARENATEAM_H
+#ifndef SKYFIRE_ARENATEAM_H
+#define SKYFIRE_ARENATEAM_H
 
 #include "QueryResult.h"
 #include <ace/Singleton.h>

@@ -258,7 +258,7 @@ class ThreatManager
 
 //=================================================
 
-namespace Trinity
+namespace SkyFire
 {
     // Binary predicate for sorting HostileReferences based on threat value
     class ThreatOrderPred
