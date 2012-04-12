@@ -360,8 +360,8 @@ public:
                         DoCastVictim(SPELL_BELLOWING_ROAR);
                         // Eruption
                         GameObject* floor = NULL;
-                        Skyfire::GameObjectInRangeCheck check(me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), 15);
-                        Skyfire::GameObjectLastSearcher<Skyfire::GameObjectInRangeCheck> searcher(me, floor, check);
+                        SkyFire::GameObjectInRangeCheck check(me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), 15);
+                        SkyFire::GameObjectLastSearcher<SkyFire::GameObjectInRangeCheck> searcher(me, floor, check);
                         me->VisitNearbyGridObject(30, searcher);
                         if (instance && floor)
                             instance->SetData64(DATA_FLOOR_ERUPTION_GUID, floor->GetGUID());

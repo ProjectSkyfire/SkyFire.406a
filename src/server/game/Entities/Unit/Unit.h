@@ -2426,7 +2426,7 @@ class Unit : public WorldObject
         float _healAbsorb;
 };
 
-namespace Skyfire
+namespace SkyFire
 {
     // Binary predicate for sorting Units based on percent value of a power
     class PowerPctOrderPred

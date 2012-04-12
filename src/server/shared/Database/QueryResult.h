@@ -58,7 +58,7 @@ class ResultSet
         MYSQL_FIELD* _fields;
 };
 
-typedef Skyfire::AutoPtr<ResultSet, ACE_Thread_Mutex> QueryResult;
+typedef SkyFire::AutoPtr<ResultSet, ACE_Thread_Mutex> QueryResult;
 
 class PreparedResultSet
 {
@@ -102,7 +102,7 @@ class PreparedResultSet
         bool _NextRow();
 };
 
-typedef Skyfire::AutoPtr<PreparedResultSet, ACE_Thread_Mutex> PreparedQueryResult;
+typedef SkyFire::AutoPtr<PreparedResultSet, ACE_Thread_Mutex> PreparedQueryResult;
 
 #endif
 

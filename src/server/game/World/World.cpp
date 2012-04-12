@@ -2150,7 +2150,7 @@ void World::SendGlobalGMMessage(WorldPacket* packet, WorldSession* self, uint32 
     }
 }
 
-namespace Skyfire
+namespace SkyFire
 {
     class WorldWorldTextBuilder
     {
@@ -2205,7 +2205,7 @@ namespace Skyfire
             int32 i_textId;
             va_list* i_args;
     };
-}                                                           // namespace Skyfire
+}                                                           // namespace SkyFire
 
 /// Send a System Message to all players (except self if mentioned)
 void World::SendWorldText(int32 string_id, ...)
@@ -2213,8 +2213,8 @@ void World::SendWorldText(int32 string_id, ...)
     va_list ap;
     va_start(ap, string_id);
 
-    Skyfire::WorldWorldTextBuilder wt_builder(string_id, &ap);
-    Skyfire::LocalizedPacketListDo<Skyfire::WorldWorldTextBuilder> wt_do(wt_builder);
+    SkyFire::WorldWorldTextBuilder wt_builder(string_id, &ap);
+    SkyFire::LocalizedPacketListDo<SkyFire::WorldWorldTextBuilder> wt_do(wt_builder);
     for (SessionMap::const_iterator itr = m_sessions.begin(); itr != m_sessions.end(); ++itr)
     {
         if (!itr->second || !itr->second->GetPlayer() || !itr->second->GetPlayer()->IsInWorld())
@@ -2232,8 +2232,8 @@ void World::SendGMText(int32 string_id, ...)
     va_list ap;
     va_start(ap, string_id);
 
-    Skyfire::WorldWorldTextBuilder wt_builder(string_id, &ap);
-    Skyfire::LocalizedPacketListDo<Skyfire::WorldWorldTextBuilder> wt_do(wt_builder);
+    SkyFire::WorldWorldTextBuilder wt_builder(string_id, &ap);
+    SkyFire::LocalizedPacketListDo<SkyFire::WorldWorldTextBuilder> wt_do(wt_builder);
     for (SessionMap::iterator itr = m_sessions.begin(); itr != m_sessions.end(); ++itr)
     {
         if (!itr->second || !itr->second->GetPlayer() || !itr->second->GetPlayer()->IsInWorld())

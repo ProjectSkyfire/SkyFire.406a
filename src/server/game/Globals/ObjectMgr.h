@@ -381,7 +381,7 @@ typedef UNORDERED_MAP<uint64/*(instance, guid) pair*/, time_t> RespawnTimes;
 #define MIN_CREATURE_AI_TEXT_STRING_ID (-1)                 // 'creature_ai_texts'
 #define MAX_CREATURE_AI_TEXT_STRING_ID (-1000000)
 
-// Skyfire Trainer Reference start range
+// SkyFire Trainer Reference start range
 #define SKYFIRE_TRAINER_START_REF      200000
 
 struct SkyFireStringLocale

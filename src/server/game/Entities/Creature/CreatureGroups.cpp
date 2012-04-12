@@ -232,8 +232,8 @@ void CreatureGroup::LeaderMoveTo(float x, float y, float z)
         float dy = y + sin(angle + pathangle) * dist;
         float dz = z;
 
-        Skyfire::NormalizeMapCoord(dx);
-        Skyfire::NormalizeMapCoord(dy);
+        SkyFire::NormalizeMapCoord(dx);
+        SkyFire::NormalizeMapCoord(dy);
 
         member->UpdateGroundPositionZ(dx, dy, dz);
 

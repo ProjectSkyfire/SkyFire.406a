@@ -670,13 +670,13 @@ void Creature::DoFleeToGetAssistance()
     {
         Creature* creature = NULL;
 
-        CellCoord p(Skyfire::ComputeCellCoord(GetPositionX(), GetPositionY()));
+        CellCoord p(SkyFire::ComputeCellCoord(GetPositionX(), GetPositionY()));
         Cell cell(p);
         cell.SetNoCreate();
-        Skyfire::NearestAssistCreatureInCreatureRangeCheck u_check(this, getVictim(), radius);
-        Skyfire::CreatureLastSearcher<Skyfire::NearestAssistCreatureInCreatureRangeCheck> searcher(this, creature, u_check);
+        SkyFire::NearestAssistCreatureInCreatureRangeCheck u_check(this, getVictim(), radius);
+        SkyFire::CreatureLastSearcher<SkyFire::NearestAssistCreatureInCreatureRangeCheck> searcher(this, creature, u_check);
 
-        TypeContainerVisitor<Skyfire::CreatureLastSearcher<Skyfire::NearestAssistCreatureInCreatureRangeCheck>, GridTypeMapContainer > grid_creature_searcher(searcher);
+        TypeContainerVisitor<SkyFire::CreatureLastSearcher<SkyFire::NearestAssistCreatureInCreatureRangeCheck>, GridTypeMapContainer > grid_creature_searcher(searcher);
 
         cell.Visit(p, grid_creature_searcher, *GetMap(), *this, radius);
 
@@ -1746,7 +1746,7 @@ SpellInfo const* Creature::reachWithSpellCure(Unit* victim)
 // select nearest hostile unit within the given distance (regardless of threat list).
 Unit* Creature::SelectNearestTarget(float dist) const
 {
-    CellCoord p(Skyfire::ComputeCellCoord(GetPositionX(), GetPositionY()));
+    CellCoord p(SkyFire::ComputeCellCoord(GetPositionX(), GetPositionY()));
     Cell cell(p);
     cell.SetNoCreate();
 
@@ -1756,11 +1756,11 @@ Unit* Creature::SelectNearestTarget(float dist) const
         if (dist == 0.0f)
             dist = MAX_VISIBILITY_DISTANCE;
 
-        Skyfire::NearestHostileUnitCheck u_check(this, dist);
-        Skyfire::UnitLastSearcher<Skyfire::NearestHostileUnitCheck> searcher(this, target, u_check);
+        SkyFire::NearestHostileUnitCheck u_check(this, dist);
+        SkyFire::UnitLastSearcher<SkyFire::NearestHostileUnitCheck> searcher(this, target, u_check);
 
-        TypeContainerVisitor<Skyfire::UnitLastSearcher<Skyfire::NearestHostileUnitCheck>, WorldTypeMapContainer > world_unit_searcher(searcher);
-        TypeContainerVisitor<Skyfire::UnitLastSearcher<Skyfire::NearestHostileUnitCheck>, GridTypeMapContainer >  grid_unit_searcher(searcher);
+        TypeContainerVisitor<SkyFire::UnitLastSearcher<SkyFire::NearestHostileUnitCheck>, WorldTypeMapContainer > world_unit_searcher(searcher);
+        TypeContainerVisitor<SkyFire::UnitLastSearcher<SkyFire::NearestHostileUnitCheck>, GridTypeMapContainer >  grid_unit_searcher(searcher);
 
         cell.Visit(p, world_unit_searcher, *GetMap(), *this, dist);
         cell.Visit(p, grid_unit_searcher, *GetMap(), *this, dist);
@@ -1772,7 +1772,7 @@ Unit* Creature::SelectNearestTarget(float dist) const
 // select nearest hostile unit within the given attack distance (i.e. distance is ignored if > than ATTACK_DISTANCE), regardless of threat list.
 Unit* Creature::SelectNearestTargetInAttackDistance(float dist) const
 {
-    CellCoord p(Skyfire::ComputeCellCoord(GetPositionX(), GetPositionY()));
+    CellCoord p(SkyFire::ComputeCellCoord(GetPositionX(), GetPositionY()));
     Cell cell(p);
     cell.SetNoCreate();
 
@@ -1785,11 +1785,11 @@ Unit* Creature::SelectNearestTargetInAttackDistance(float dist) const
     }
 
     {
-        Skyfire::NearestHostileUnitInAttackDistanceCheck u_check(this, dist);
-        Skyfire::UnitLastSearcher<Skyfire::NearestHostileUnitInAttackDistanceCheck> searcher(this, target, u_check);
+        SkyFire::NearestHostileUnitInAttackDistanceCheck u_check(this, dist);
+        SkyFire::UnitLastSearcher<SkyFire::NearestHostileUnitInAttackDistanceCheck> searcher(this, target, u_check);
 
-        TypeContainerVisitor<Skyfire::UnitLastSearcher<Skyfire::NearestHostileUnitInAttackDistanceCheck>, WorldTypeMapContainer > world_unit_searcher(searcher);
-        TypeContainerVisitor<Skyfire::UnitLastSearcher<Skyfire::NearestHostileUnitInAttackDistanceCheck>, GridTypeMapContainer >  grid_unit_searcher(searcher);
+        TypeContainerVisitor<SkyFire::UnitLastSearcher<SkyFire::NearestHostileUnitInAttackDistanceCheck>, WorldTypeMapContainer > world_unit_searcher(searcher);
+        TypeContainerVisitor<SkyFire::UnitLastSearcher<SkyFire::NearestHostileUnitInAttackDistanceCheck>, GridTypeMapContainer >  grid_unit_searcher(searcher);
 
         cell.Visit(p, world_unit_searcher, *GetMap(), *this, ATTACK_DISTANCE > dist ? ATTACK_DISTANCE : dist);
         cell.Visit(p, grid_unit_searcher, *GetMap(), *this, ATTACK_DISTANCE > dist ? ATTACK_DISTANCE : dist);
@@ -1802,8 +1802,8 @@ Player* Creature::SelectNearestPlayer(float distance) const
 {
     Player* target = NULL;
 
-    Skyfire::NearestPlayerInObjectRangeCheck checker(this, distance);
-    Skyfire::PlayerLastSearcher<Skyfire::NearestPlayerInObjectRangeCheck> searcher(this, target, checker);
+    SkyFire::NearestPlayerInObjectRangeCheck checker(this, distance);
+    SkyFire::PlayerLastSearcher<SkyFire::NearestPlayerInObjectRangeCheck> searcher(this, target, checker);
     VisitNearbyObject(distance, searcher);
 
     return target;
@@ -1834,14 +1834,14 @@ void Creature::CallAssistance()
             std::list<Creature*> assistList;
 
             {
-                CellCoord p(Skyfire::ComputeCellCoord(GetPositionX(), GetPositionY()));
+                CellCoord p(SkyFire::ComputeCellCoord(GetPositionX(), GetPositionY()));
                 Cell cell(p);
                 cell.SetNoCreate();
 
-                Skyfire::AnyAssistCreatureInRangeCheck u_check(this, getVictim(), radius);
-                Skyfire::CreatureListSearcher<Skyfire::AnyAssistCreatureInRangeCheck> searcher(this, assistList, u_check);
+                SkyFire::AnyAssistCreatureInRangeCheck u_check(this, getVictim(), radius);
+                SkyFire::CreatureListSearcher<SkyFire::AnyAssistCreatureInRangeCheck> searcher(this, assistList, u_check);
 
-                TypeContainerVisitor<Skyfire::CreatureListSearcher<Skyfire::AnyAssistCreatureInRangeCheck>, GridTypeMapContainer >  grid_creature_searcher(searcher);
+                TypeContainerVisitor<SkyFire::CreatureListSearcher<SkyFire::AnyAssistCreatureInRangeCheck>, GridTypeMapContainer >  grid_creature_searcher(searcher);
 
                 cell.Visit(p, grid_creature_searcher, *GetMap(), *this, radius);
             }
@@ -1866,14 +1866,14 @@ void Creature::CallForHelp(float radius)
     if (radius <= 0.0f || !getVictim() || isPet() || isCharmed())
         return;
 
-    CellCoord p(Skyfire::ComputeCellCoord(GetPositionX(), GetPositionY()));
+    CellCoord p(SkyFire::ComputeCellCoord(GetPositionX(), GetPositionY()));
     Cell cell(p);
     cell.SetNoCreate();
 
-    Skyfire::CallOfHelpCreatureInRangeDo u_do(this, getVictim(), radius);
-    Skyfire::CreatureWorker<Skyfire::CallOfHelpCreatureInRangeDo> worker(this, u_do);
+    SkyFire::CallOfHelpCreatureInRangeDo u_do(this, getVictim(), radius);
+    SkyFire::CreatureWorker<SkyFire::CallOfHelpCreatureInRangeDo> worker(this, u_do);
 
-    TypeContainerVisitor<Skyfire::CreatureWorker<Skyfire::CallOfHelpCreatureInRangeDo>, GridTypeMapContainer >  grid_creature_searcher(worker);
+    TypeContainerVisitor<SkyFire::CreatureWorker<SkyFire::CallOfHelpCreatureInRangeDo>, GridTypeMapContainer >  grid_creature_searcher(worker);
 
     cell.Visit(p, grid_creature_searcher, *GetMap(), *this, radius);
 }
@@ -2377,7 +2377,7 @@ void Creature::FarTeleportTo(Map* map, float X, float Y, float Z, float O)
 void Creature::SetPosition(float x, float y, float z, float o)
 {
     // prevent crash when a bad coord is sent by the client
-    if (!Skyfire::IsValidMapCoord(x, y, z, o))
+    if (!SkyFire::IsValidMapCoord(x, y, z, o))
     {
         sLog->outDebug(LOG_FILTER_UNITS, "Creature::SetPosition(%f, %f, %f) .. bad coordinates!", x, y, z);
         return;

@@ -111,7 +111,7 @@ public:
         uint32 postGossipStep;
         uint32 Text_Timer;
         uint32 ShieldBash_Timer;
-        uint32 Revenge_Timer;                                   //this is wrong, spell should never be used unless me->getVictim() dodge, parry or block attack. Skyfire support required.
+        uint32 Revenge_Timer;                                   //this is wrong, spell should never be used unless me->getVictim() dodge, parry or block attack. SkyFire support required.
         uint64 PlayerGUID;
 
         void Reset()

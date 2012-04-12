@@ -20,7 +20,7 @@
 
 #include <ace/Bound_Ptr.h>
 
-namespace Skyfire
+namespace SkyFire
 {
     template <class Pointer, class Lock>
     class AutoPtr : public ACE_Strong_Bound_Ptr<Pointer, Lock>

@@ -538,8 +538,8 @@ public:
         void CastLavaStrikeOnTarget(Unit* target)
         {
             std::list<Creature*> fireCyclonesList;
-            Skyfire::AllCreaturesOfEntryInRange checker(me, NPC_FIRE_CYCLONE, 200.0f);
-            Skyfire::CreatureListSearcher<Skyfire::AllCreaturesOfEntryInRange> searcher(me, fireCyclonesList, checker);
+            SkyFire::AllCreaturesOfEntryInRange checker(me, NPC_FIRE_CYCLONE, 200.0f);
+            SkyFire::CreatureListSearcher<SkyFire::AllCreaturesOfEntryInRange> searcher(me, fireCyclonesList, checker);
             me->VisitNearbyObject(200.0f, searcher);
 
             if (fireCyclonesList.empty())

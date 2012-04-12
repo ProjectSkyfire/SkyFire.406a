@@ -364,7 +364,7 @@ public:
             if (targets.empty())
                 return false;
 
-            targets.sort(Skyfire::ObjectDistanceOrderPred(me));
+            targets.sort(SkyFire::ObjectDistanceOrderPred(me));
             Unit* target = targets.front();
             if (target)
             {

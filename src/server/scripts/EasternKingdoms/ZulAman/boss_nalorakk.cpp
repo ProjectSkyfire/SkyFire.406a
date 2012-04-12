@@ -162,14 +162,14 @@ class boss_nalorakk : public CreatureScript
                 me->GetPosition(x, y, z);
 
                 {
-                    CellCoord pair(Skyfire::ComputeCellCoord(x, y));
+                    CellCoord pair(SkyFire::ComputeCellCoord(x, y));
                     Cell cell(pair);
                     cell.SetNoCreate();
 
-                    Skyfire::AllFriendlyCreaturesInGrid check(me);
-                    Skyfire::CreatureListSearcher<Skyfire::AllFriendlyCreaturesInGrid> searcher(me, templist, check);
+                    SkyFire::AllFriendlyCreaturesInGrid check(me);
+                    SkyFire::CreatureListSearcher<SkyFire::AllFriendlyCreaturesInGrid> searcher(me, templist, check);
 
-                    TypeContainerVisitor<Skyfire::CreatureListSearcher<Skyfire::AllFriendlyCreaturesInGrid>, GridTypeMapContainer> cSearcher(searcher);
+                    TypeContainerVisitor<SkyFire::CreatureListSearcher<SkyFire::AllFriendlyCreaturesInGrid>, GridTypeMapContainer> cSearcher(searcher);
 
                     cell.Visit(pair, cSearcher, *(me->GetMap()), *me, me->GetGridActivationRange());
                 }

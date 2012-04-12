@@ -1052,7 +1052,7 @@ public:
     {
         if (player->GetQuestStatus(12701) == QUEST_STATUS_INCOMPLETE)
         {
-            // Hack Why Skyfire Dont Support Custom Summon Location
+            // Hack Why SkyFire Dont Support Custom Summon Location
             if (Creature* miner = player->SummonCreature(28841, 2383.869629f, -5900.312500f, 107.996086f, player->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 1))
             {
                 player->CastSpell(player, SPELL_CART_SUMM, true);

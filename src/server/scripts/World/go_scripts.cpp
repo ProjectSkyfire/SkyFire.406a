@@ -250,7 +250,7 @@ class go_tablet_of_the_seven : public GameObjectScript
 public:
     go_tablet_of_the_seven() : GameObjectScript("go_tablet_of_the_seven") { }
 
-    //TODO: use gossip option ("Transcript the Tablet") instead, if Skyfire adds support.
+    //TODO: use gossip option ("Transcript the Tablet") instead, if SkyFire adds support.
     bool OnGossipHello(Player* player, GameObject* go)
     {
         if (go->GetGoType() != GAMEOBJECT_TYPE_QUESTGIVER)

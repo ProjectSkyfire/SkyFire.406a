@@ -1172,20 +1172,20 @@ inline Unit* CreatureEventAI::GetTargetByType(uint32 target, Unit* actionInvoker
 
 Unit* CreatureEventAI::DoSelectLowestHpFriendly(float range, uint32 minHPDiff)
 {
-    CellCoord p(Skyfire::ComputeCellCoord(me->GetPositionX(), me->GetPositionY()));
+    CellCoord p(SkyFire::ComputeCellCoord(me->GetPositionX(), me->GetPositionY()));
     Cell cell(p);
     cell.SetNoCreate();
 
     Unit* unit = NULL;
 
-    Skyfire::MostHPMissingInRange u_check(me, range, minHPDiff);
-    Skyfire::UnitLastSearcher<Skyfire::MostHPMissingInRange> searcher(me, unit, u_check);
+    SkyFire::MostHPMissingInRange u_check(me, range, minHPDiff);
+    SkyFire::UnitLastSearcher<SkyFire::MostHPMissingInRange> searcher(me, unit, u_check);
 
     /*
     typedef TYPELIST_4(GameObject, Creature*except pets*, DynamicObject, Corpse*Bones*) AllGridObjectTypes;
     This means that if we only search grid then we cannot possibly return pets or players so this is safe
     */
-    TypeContainerVisitor<Skyfire::UnitLastSearcher<Skyfire::MostHPMissingInRange>, GridTypeMapContainer >  grid_unit_searcher(searcher);
+    TypeContainerVisitor<SkyFire::UnitLastSearcher<SkyFire::MostHPMissingInRange>, GridTypeMapContainer >  grid_unit_searcher(searcher);
 
     cell.Visit(p, grid_unit_searcher, *me->GetMap(), *me, range);
     return unit;
@@ -1193,28 +1193,28 @@ Unit* CreatureEventAI::DoSelectLowestHpFriendly(float range, uint32 minHPDiff)
 
 void CreatureEventAI::DoFindFriendlyCC(std::list<Creature*>& _list, float range)
 {
-    CellCoord p(Skyfire::ComputeCellCoord(me->GetPositionX(), me->GetPositionY()));
+    CellCoord p(SkyFire::ComputeCellCoord(me->GetPositionX(), me->GetPositionY()));
     Cell cell(p);
     cell.SetNoCreate();
 
-    Skyfire::FriendlyCCedInRange u_check(me, range);
-    Skyfire::CreatureListSearcher<Skyfire::FriendlyCCedInRange> searcher(me, _list, u_check);
+    SkyFire::FriendlyCCedInRange u_check(me, range);
+    SkyFire::CreatureListSearcher<SkyFire::FriendlyCCedInRange> searcher(me, _list, u_check);
 
-    TypeContainerVisitor<Skyfire::CreatureListSearcher<Skyfire::FriendlyCCedInRange>, GridTypeMapContainer >  grid_creature_searcher(searcher);
+    TypeContainerVisitor<SkyFire::CreatureListSearcher<SkyFire::FriendlyCCedInRange>, GridTypeMapContainer >  grid_creature_searcher(searcher);
 
     cell.Visit(p, grid_creature_searcher, *me->GetMap(), *me, range);
 }
 
 void CreatureEventAI::DoFindFriendlyMissingBuff(std::list<Creature*>& _list, float range, uint32 spellid)
 {
-    CellCoord p(Skyfire::ComputeCellCoord(me->GetPositionX(), me->GetPositionY()));
+    CellCoord p(SkyFire::ComputeCellCoord(me->GetPositionX(), me->GetPositionY()));
     Cell cell(p);
     cell.SetNoCreate();
 
-    Skyfire::FriendlyMissingBuffInRange u_check(me, range, spellid);
-    Skyfire::CreatureListSearcher<Skyfire::FriendlyMissingBuffInRange> searcher(me, _list, u_check);
+    SkyFire::FriendlyMissingBuffInRange u_check(me, range, spellid);
+    SkyFire::CreatureListSearcher<SkyFire::FriendlyMissingBuffInRange> searcher(me, _list, u_check);
 
-    TypeContainerVisitor<Skyfire::CreatureListSearcher<Skyfire::FriendlyMissingBuffInRange>, GridTypeMapContainer >  grid_creature_searcher(searcher);
+    TypeContainerVisitor<SkyFire::CreatureListSearcher<SkyFire::FriendlyMissingBuffInRange>, GridTypeMapContainer >  grid_creature_searcher(searcher);
 
     cell.Visit(p, grid_creature_searcher, *me->GetMap(), *me, range);
 }

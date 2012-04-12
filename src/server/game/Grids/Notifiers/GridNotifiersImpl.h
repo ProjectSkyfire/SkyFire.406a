@@ -29,7 +29,7 @@
 #include "SpellAuras.h"
 
 template<class T>
-inline void Skyfire::VisibleNotifier::Visit(GridRefManager<T> &m)
+inline void SkyFire::VisibleNotifier::Visit(GridRefManager<T> &m)
 {
     for (typename GridRefManager<T>::iterator iter = m.begin(); iter != m.end(); ++iter)
     {
@@ -38,7 +38,7 @@ inline void Skyfire::VisibleNotifier::Visit(GridRefManager<T> &m)
     }
 }
 
-inline void Skyfire::ObjectUpdater::Visit(CreatureMapType &m)
+inline void SkyFire::ObjectUpdater::Visit(CreatureMapType &m)
 {
     for (CreatureMapType::iterator iter = m.begin(); iter != m.end(); ++iter)
         if (iter->getSource()->IsInWorld())
@@ -50,7 +50,7 @@ inline void Skyfire::ObjectUpdater::Visit(CreatureMapType &m)
 // WorldObject searchers & workers
 
 template<class Check>
-void Skyfire::WorldObjectSearcher<Check>::Visit(GameObjectMapType &m)
+void SkyFire::WorldObjectSearcher<Check>::Visit(GameObjectMapType &m)
 {
     if (!(i_mapTypeMask & GRID_MAP_TYPE_MASK_GAMEOBJECT))
         return;
@@ -73,7 +73,7 @@ void Skyfire::WorldObjectSearcher<Check>::Visit(GameObjectMapType &m)
 }
 
 template<class Check>
-void Skyfire::WorldObjectSearcher<Check>::Visit(PlayerMapType &m)
+void SkyFire::WorldObjectSearcher<Check>::Visit(PlayerMapType &m)
 {
     if (!(i_mapTypeMask & GRID_MAP_TYPE_MASK_PLAYER))
         return;
@@ -96,7 +96,7 @@ void Skyfire::WorldObjectSearcher<Check>::Visit(PlayerMapType &m)
 }
 
 template<class Check>
-void Skyfire::WorldObjectSearcher<Check>::Visit(CreatureMapType &m)
+void SkyFire::WorldObjectSearcher<Check>::Visit(CreatureMapType &m)
 {
     if (!(i_mapTypeMask & GRID_MAP_TYPE_MASK_CREATURE))
         return;
@@ -119,7 +119,7 @@ void Skyfire::WorldObjectSearcher<Check>::Visit(CreatureMapType &m)
 }
 
 template<class Check>
-void Skyfire::WorldObjectSearcher<Check>::Visit(CorpseMapType &m)
+void SkyFire::WorldObjectSearcher<Check>::Visit(CorpseMapType &m)
 {
     if (!(i_mapTypeMask & GRID_MAP_TYPE_MASK_CORPSE))
         return;
@@ -142,7 +142,7 @@ void Skyfire::WorldObjectSearcher<Check>::Visit(CorpseMapType &m)
 }
 
 template<class Check>
-void Skyfire::WorldObjectSearcher<Check>::Visit(DynamicObjectMapType &m)
+void SkyFire::WorldObjectSearcher<Check>::Visit(DynamicObjectMapType &m)
 {
     if (!(i_mapTypeMask & GRID_MAP_TYPE_MASK_DYNAMICOBJECT))
         return;
@@ -165,7 +165,7 @@ void Skyfire::WorldObjectSearcher<Check>::Visit(DynamicObjectMapType &m)
 }
 
 template<class Check>
-void Skyfire::WorldObjectLastSearcher<Check>::Visit(GameObjectMapType &m)
+void SkyFire::WorldObjectLastSearcher<Check>::Visit(GameObjectMapType &m)
 {
     if (!(i_mapTypeMask & GRID_MAP_TYPE_MASK_GAMEOBJECT))
         return;
@@ -181,7 +181,7 @@ void Skyfire::WorldObjectLastSearcher<Check>::Visit(GameObjectMapType &m)
 }
 
 template<class Check>
-void Skyfire::WorldObjectLastSearcher<Check>::Visit(PlayerMapType &m)
+void SkyFire::WorldObjectLastSearcher<Check>::Visit(PlayerMapType &m)
 {
     if (!(i_mapTypeMask & GRID_MAP_TYPE_MASK_PLAYER))
         return;
@@ -197,7 +197,7 @@ void Skyfire::WorldObjectLastSearcher<Check>::Visit(PlayerMapType &m)
 }
 
 template<class Check>
-void Skyfire::WorldObjectLastSearcher<Check>::Visit(CreatureMapType &m)
+void SkyFire::WorldObjectLastSearcher<Check>::Visit(CreatureMapType &m)
 {
     if (!(i_mapTypeMask & GRID_MAP_TYPE_MASK_CREATURE))
         return;
@@ -213,7 +213,7 @@ void Skyfire::WorldObjectLastSearcher<Check>::Visit(CreatureMapType &m)
 }
 
 template<class Check>
-void Skyfire::WorldObjectLastSearcher<Check>::Visit(CorpseMapType &m)
+void SkyFire::WorldObjectLastSearcher<Check>::Visit(CorpseMapType &m)
 {
     if (!(i_mapTypeMask & GRID_MAP_TYPE_MASK_CORPSE))
         return;
@@ -229,7 +229,7 @@ void Skyfire::WorldObjectLastSearcher<Check>::Visit(CorpseMapType &m)
 }
 
 template<class Check>
-void Skyfire::WorldObjectLastSearcher<Check>::Visit(DynamicObjectMapType &m)
+void SkyFire::WorldObjectLastSearcher<Check>::Visit(DynamicObjectMapType &m)
 {
     if (!(i_mapTypeMask & GRID_MAP_TYPE_MASK_DYNAMICOBJECT))
         return;
@@ -245,7 +245,7 @@ void Skyfire::WorldObjectLastSearcher<Check>::Visit(DynamicObjectMapType &m)
 }
 
 template<class Check>
-void Skyfire::WorldObjectListSearcher<Check>::Visit(PlayerMapType &m)
+void SkyFire::WorldObjectListSearcher<Check>::Visit(PlayerMapType &m)
 {
     if (!(i_mapTypeMask & GRID_MAP_TYPE_MASK_PLAYER))
         return;
@@ -257,7 +257,7 @@ void Skyfire::WorldObjectListSearcher<Check>::Visit(PlayerMapType &m)
 }
 
 template<class Check>
-void Skyfire::WorldObjectListSearcher<Check>::Visit(CreatureMapType &m)
+void SkyFire::WorldObjectListSearcher<Check>::Visit(CreatureMapType &m)
 {
     if (!(i_mapTypeMask & GRID_MAP_TYPE_MASK_CREATURE))
         return;
@@ -269,7 +269,7 @@ void Skyfire::WorldObjectListSearcher<Check>::Visit(CreatureMapType &m)
 }
 
 template<class Check>
-void Skyfire::WorldObjectListSearcher<Check>::Visit(CorpseMapType &m)
+void SkyFire::WorldObjectListSearcher<Check>::Visit(CorpseMapType &m)
 {
     if (!(i_mapTypeMask & GRID_MAP_TYPE_MASK_CORPSE))
         return;
@@ -281,7 +281,7 @@ void Skyfire::WorldObjectListSearcher<Check>::Visit(CorpseMapType &m)
 }
 
 template<class Check>
-void Skyfire::WorldObjectListSearcher<Check>::Visit(GameObjectMapType &m)
+void SkyFire::WorldObjectListSearcher<Check>::Visit(GameObjectMapType &m)
 {
     if (!(i_mapTypeMask & GRID_MAP_TYPE_MASK_GAMEOBJECT))
         return;
@@ -293,7 +293,7 @@ void Skyfire::WorldObjectListSearcher<Check>::Visit(GameObjectMapType &m)
 }
 
 template<class Check>
-void Skyfire::WorldObjectListSearcher<Check>::Visit(DynamicObjectMapType &m)
+void SkyFire::WorldObjectListSearcher<Check>::Visit(DynamicObjectMapType &m)
 {
     if (!(i_mapTypeMask & GRID_MAP_TYPE_MASK_DYNAMICOBJECT))
         return;
@@ -307,7 +307,7 @@ void Skyfire::WorldObjectListSearcher<Check>::Visit(DynamicObjectMapType &m)
 // Gameobject searchers
 
 template<class Check>
-void Skyfire::GameObjectSearcher<Check>::Visit(GameObjectMapType &m)
+void SkyFire::GameObjectSearcher<Check>::Visit(GameObjectMapType &m)
 {
     // already found
     if (i_object)
@@ -327,7 +327,7 @@ void Skyfire::GameObjectSearcher<Check>::Visit(GameObjectMapType &m)
 }
 
 template<class Check>
-void Skyfire::GameObjectLastSearcher<Check>::Visit(GameObjectMapType &m)
+void SkyFire::GameObjectLastSearcher<Check>::Visit(GameObjectMapType &m)
 {
     for (GameObjectMapType::iterator itr=m.begin(); itr != m.end(); ++itr)
     {
@@ -340,7 +340,7 @@ void Skyfire::GameObjectLastSearcher<Check>::Visit(GameObjectMapType &m)
 }
 
 template<class Check>
-void Skyfire::GameObjectListSearcher<Check>::Visit(GameObjectMapType &m)
+void SkyFire::GameObjectListSearcher<Check>::Visit(GameObjectMapType &m)
 {
     for (GameObjectMapType::iterator itr=m.begin(); itr != m.end(); ++itr)
         if (itr->getSource()->InSamePhase(i_phaseMask))
@@ -351,7 +351,7 @@ void Skyfire::GameObjectListSearcher<Check>::Visit(GameObjectMapType &m)
 // Unit searchers
 
 template<class Check>
-void Skyfire::UnitSearcher<Check>::Visit(CreatureMapType &m)
+void SkyFire::UnitSearcher<Check>::Visit(CreatureMapType &m)
 {
     // already found
     if (i_object)
@@ -371,7 +371,7 @@ void Skyfire::UnitSearcher<Check>::Visit(CreatureMapType &m)
 }
 
 template<class Check>
-void Skyfire::UnitSearcher<Check>::Visit(PlayerMapType &m)
+void SkyFire::UnitSearcher<Check>::Visit(PlayerMapType &m)
 {
     // already found
     if (i_object)
@@ -391,7 +391,7 @@ void Skyfire::UnitSearcher<Check>::Visit(PlayerMapType &m)
 }
 
 template<class Check>
-void Skyfire::UnitLastSearcher<Check>::Visit(CreatureMapType &m)
+void SkyFire::UnitLastSearcher<Check>::Visit(CreatureMapType &m)
 {
     for (CreatureMapType::iterator itr=m.begin(); itr != m.end(); ++itr)
     {
@@ -404,7 +404,7 @@ void Skyfire::UnitLastSearcher<Check>::Visit(CreatureMapType &m)
 }
 
 template<class Check>
-void Skyfire::UnitLastSearcher<Check>::Visit(PlayerMapType &m)
+void SkyFire::UnitLastSearcher<Check>::Visit(PlayerMapType &m)
 {
     for (PlayerMapType::iterator itr=m.begin(); itr != m.end(); ++itr)
     {
@@ -417,7 +417,7 @@ void Skyfire::UnitLastSearcher<Check>::Visit(PlayerMapType &m)
 }
 
 template<class Check>
-void Skyfire::UnitListSearcher<Check>::Visit(PlayerMapType &m)
+void SkyFire::UnitListSearcher<Check>::Visit(PlayerMapType &m)
 {
     for (PlayerMapType::iterator itr=m.begin(); itr != m.end(); ++itr)
         if (itr->getSource()->InSamePhase(i_phaseMask))
@@ -426,7 +426,7 @@ void Skyfire::UnitListSearcher<Check>::Visit(PlayerMapType &m)
 }
 
 template<class Check>
-void Skyfire::UnitListSearcher<Check>::Visit(CreatureMapType &m)
+void SkyFire::UnitListSearcher<Check>::Visit(CreatureMapType &m)
 {
     for (CreatureMapType::iterator itr=m.begin(); itr != m.end(); ++itr)
         if (itr->getSource()->InSamePhase(i_phaseMask))
@@ -437,7 +437,7 @@ void Skyfire::UnitListSearcher<Check>::Visit(CreatureMapType &m)
 // Creature searchers
 
 template<class Check>
-void Skyfire::CreatureSearcher<Check>::Visit(CreatureMapType &m)
+void SkyFire::CreatureSearcher<Check>::Visit(CreatureMapType &m)
 {
     // already found
     if (i_object)
@@ -457,7 +457,7 @@ void Skyfire::CreatureSearcher<Check>::Visit(CreatureMapType &m)
 }
 
 template<class Check>
-void Skyfire::CreatureLastSearcher<Check>::Visit(CreatureMapType &m)
+void SkyFire::CreatureLastSearcher<Check>::Visit(CreatureMapType &m)
 {
     for (CreatureMapType::iterator itr=m.begin(); itr != m.end(); ++itr)
     {
@@ -470,7 +470,7 @@ void Skyfire::CreatureLastSearcher<Check>::Visit(CreatureMapType &m)
 }
 
 template<class Check>
-void Skyfire::CreatureListSearcher<Check>::Visit(CreatureMapType &m)
+void SkyFire::CreatureListSearcher<Check>::Visit(CreatureMapType &m)
 {
     for (CreatureMapType::iterator itr=m.begin(); itr != m.end(); ++itr)
         if (itr->getSource()->InSamePhase(i_phaseMask))
@@ -479,7 +479,7 @@ void Skyfire::CreatureListSearcher<Check>::Visit(CreatureMapType &m)
 }
 
 template<class Check>
-void Skyfire::PlayerListSearcher<Check>::Visit(PlayerMapType &m)
+void SkyFire::PlayerListSearcher<Check>::Visit(PlayerMapType &m)
 {
     for (PlayerMapType::iterator itr=m.begin(); itr != m.end(); ++itr)
         if (itr->getSource()->InSamePhase(i_phaseMask))
@@ -488,7 +488,7 @@ void Skyfire::PlayerListSearcher<Check>::Visit(PlayerMapType &m)
 }
 
 template<class Check>
-void Skyfire::PlayerSearcher<Check>::Visit(PlayerMapType &m)
+void SkyFire::PlayerSearcher<Check>::Visit(PlayerMapType &m)
 {
     // already found
     if (i_object)
@@ -508,7 +508,7 @@ void Skyfire::PlayerSearcher<Check>::Visit(PlayerMapType &m)
 }
 
 template<class Check>
-void Skyfire::PlayerLastSearcher<Check>::Visit(PlayerMapType& m)
+void SkyFire::PlayerLastSearcher<Check>::Visit(PlayerMapType& m)
 {
     for (PlayerMapType::iterator itr = m.begin(); itr != m.end(); ++itr)
     {
@@ -521,7 +521,7 @@ void Skyfire::PlayerLastSearcher<Check>::Visit(PlayerMapType& m)
 }
 
 template<class Builder>
-void Skyfire::LocalizedPacketDo<Builder>::operator()(Player* p)
+void SkyFire::LocalizedPacketDo<Builder>::operator()(Player* p)
 {
     LocaleConstant loc_idx = p->GetSession()->GetSessionDbLocaleIndex();
     uint32 cache_idx = loc_idx+1;
@@ -546,7 +546,7 @@ void Skyfire::LocalizedPacketDo<Builder>::operator()(Player* p)
 }
 
 template<class Builder>
-void Skyfire::LocalizedPacketListDo<Builder>::operator()(Player* p)
+void SkyFire::LocalizedPacketListDo<Builder>::operator()(Player* p)
 {
     LocaleConstant loc_idx = p->GetSession()->GetSessionDbLocaleIndex();
     uint32 cache_idx = loc_idx+1;

@@ -873,8 +873,8 @@ public:
         else
         {
             Creature* passenger = NULL;
-            Skyfire::AllCreaturesOfEntryInRange check(handler->GetSession()->GetPlayer(), entry, 20.0f);
-            Skyfire::CreatureSearcher<Skyfire::AllCreaturesOfEntryInRange> searcher(handler->GetSession()->GetPlayer(), passenger, check);
+            SkyFire::AllCreaturesOfEntryInRange check(handler->GetSession()->GetPlayer(), entry, 20.0f);
+            SkyFire::CreatureSearcher<SkyFire::AllCreaturesOfEntryInRange> searcher(handler->GetSession()->GetPlayer(), passenger, check);
             handler->GetSession()->GetPlayer()->VisitNearbyObject(30.0f, searcher);
             if (!passenger || passenger == target)
                 return false;

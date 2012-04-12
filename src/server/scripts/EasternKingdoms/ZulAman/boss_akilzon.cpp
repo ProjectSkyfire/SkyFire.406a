@@ -189,18 +189,18 @@ class boss_akilzon : public CreatureScript
                     for (uint8 i = 2; i < StormCount; ++i)
                         bp0 *= 2;
 
-                    CellCoord p(Skyfire::ComputeCellCoord(me->GetPositionX(), me->GetPositionY()));
+                    CellCoord p(SkyFire::ComputeCellCoord(me->GetPositionX(), me->GetPositionY()));
                     Cell cell(p);
                     cell.SetNoCreate();
 
                     std::list<Unit*> tempUnitMap;
 
                     {
-                        Skyfire::AnyAoETargetUnitInObjectRangeCheck u_check(me, me, SIZE_OF_GRIDS);
-                        Skyfire::UnitListSearcher<Skyfire::AnyAoETargetUnitInObjectRangeCheck> searcher(me, tempUnitMap, u_check);
+                        SkyFire::AnyAoETargetUnitInObjectRangeCheck u_check(me, me, SIZE_OF_GRIDS);
+                        SkyFire::UnitListSearcher<SkyFire::AnyAoETargetUnitInObjectRangeCheck> searcher(me, tempUnitMap, u_check);
 
-                        TypeContainerVisitor<Skyfire::UnitListSearcher<Skyfire::AnyAoETargetUnitInObjectRangeCheck>, WorldTypeMapContainer > world_unit_searcher(searcher);
-                        TypeContainerVisitor<Skyfire::UnitListSearcher<Skyfire::AnyAoETargetUnitInObjectRangeCheck>, GridTypeMapContainer >  grid_unit_searcher(searcher);
+                        TypeContainerVisitor<SkyFire::UnitListSearcher<SkyFire::AnyAoETargetUnitInObjectRangeCheck>, WorldTypeMapContainer > world_unit_searcher(searcher);
+                        TypeContainerVisitor<SkyFire::UnitListSearcher<SkyFire::AnyAoETargetUnitInObjectRangeCheck>, GridTypeMapContainer >  grid_unit_searcher(searcher);
 
                         cell.Visit(p, world_unit_searcher, *me->GetMap(), *me, SIZE_OF_GRIDS);
                         cell.Visit(p, grid_unit_searcher, *me->GetMap(), *me, SIZE_OF_GRIDS);

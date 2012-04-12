@@ -40,7 +40,7 @@
 #include "Map.h"
 #include "InstanceScript.h"
 
-namespace Skyfire
+namespace SkyFire
 {
     void AchievementChatBuilder::operator()(WorldPacket& data, LocaleConstant loc_idx)
     {
