@@ -35,16 +35,16 @@
 
 enum eAuthCmd
 {
-    AUTH_LOGON_CHALLENGE = 0x00,
-    AUTH_LOGON_PROOF = 0x01,
-    AUTH_RECONNECT_CHALLENGE = 0x02,
-    AUTH_RECONNECT_PROOF = 0x03,
-    REALM_LIST = 0x10,
-    XFER_INITIATE = 0x30,
-    XFER_DATA = 0x31,
-    XFER_ACCEPT = 0x32,
-    XFER_RESUME = 0x33,
-    XFER_CANCEL = 0x34
+    AUTH_LOGON_CHALLENGE                = 0x00,
+    AUTH_LOGON_PROOF                    = 0x01,
+    AUTH_RECONNECT_CHALLENGE            = 0x02,
+    AUTH_RECONNECT_PROOF                = 0x03,
+    REALM_LIST                          = 0x10,
+    XFER_INITIATE                       = 0x30,
+    XFER_DATA                           = 0x31,
+    XFER_ACCEPT                         = 0x32,
+    XFER_RESUME                         = 0x33,
+    XFER_CANCEL                         = 0x34
 };
 
 enum eStatus
@@ -118,11 +118,11 @@ typedef struct AUTH_RECONNECT_PROOF_C
 
 typedef struct XFER_INIT
 {
-    uint8 cmd; // XFER_INITIATE
-    uint8 fileNameLen; // strlen(fileName);
-    uint8 fileName[5]; // fileName[fileNameLen]
-    uint64 file_size; // file size (bytes)
-    uint8 md5[MD5_DIGEST_LENGTH]; // MD5
+    uint8 cmd;                      // XFER_INITIATE
+    uint8 fileNameLen;              // strlen(fileName);
+    uint8 fileName[5];              // fileName[fileNameLen]
+    uint64 file_size;               // file size (bytes)
+    uint8 md5[MD5_DIGEST_LENGTH];   // MD5
 } XFER_INIT;
 
 typedef struct XFER_DATA
@@ -181,14 +181,14 @@ private:
 
 const AuthHandler table[] =
 {
-    { AUTH_LOGON_CHALLENGE, STATUS_CONNECTED, &AuthSocket::_HandleLogonChallenge },
-    { AUTH_LOGON_PROOF, STATUS_CONNECTED, &AuthSocket::_HandleLogonProof },
-    { AUTH_RECONNECT_CHALLENGE, STATUS_CONNECTED, &AuthSocket::_HandleReconnectChallenge},
-    { AUTH_RECONNECT_PROOF, STATUS_CONNECTED, &AuthSocket::_HandleReconnectProof },
-    { REALM_LIST, STATUS_AUTHED, &AuthSocket::_HandleRealmList },
-    { XFER_ACCEPT, STATUS_CONNECTED, &AuthSocket::_HandleXferAccept },
-    { XFER_RESUME, STATUS_CONNECTED, &AuthSocket::_HandleXferResume },
-    { XFER_CANCEL, STATUS_CONNECTED, &AuthSocket::_HandleXferCancel }
+    { AUTH_LOGON_CHALLENGE,     STATUS_CONNECTED, &AuthSocket::_HandleLogonChallenge },
+    { AUTH_LOGON_PROOF,         STATUS_CONNECTED, &AuthSocket::_HandleLogonProof },
+    { AUTH_RECONNECT_CHALLENGE, STATUS_CONNECTED, &AuthSocket::_HandleReconnectChallenge },
+    { AUTH_RECONNECT_PROOF,     STATUS_CONNECTED, &AuthSocket::_HandleReconnectProof },
+    { REALM_LIST,               STATUS_AUTHED,    &AuthSocket::_HandleRealmList },
+    { XFER_ACCEPT,              STATUS_CONNECTED, &AuthSocket::_HandleXferAccept },
+    { XFER_RESUME,              STATUS_CONNECTED, &AuthSocket::_HandleXferResume },
+    { XFER_CANCEL,              STATUS_CONNECTED, &AuthSocket::_HandleXferCancel }
 };
 
 #define AUTH_TOTAL_COMMANDS 8
