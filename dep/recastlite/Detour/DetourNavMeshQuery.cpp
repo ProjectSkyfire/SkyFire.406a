@@ -67,7 +67,7 @@ inline float dtQueryFilter::getCost(const float* pa, const float* pb,
 }
 #endif
 
-static const float H_SCALE = 2.0f; // Search heuristic scale.
+static const float H_SCALE = 0.999f; // Search heuristic scale.
 
 dtNavMeshQuery* dtAllocNavMeshQuery()
 {
@@ -167,10 +167,6 @@ dtStatus dtNavMeshQuery::closestPointOnPoly(dtPolyRef ref, const float* pos, flo
 	if (m_nav->getTileAndPolyByRef(ref, &tile, &poly) != DT_SUCCESS)
 		return DT_FAILURE;
 	if (!tile) return DT_FAILURE;
-
-    if (poly->getType() == DT_POLYTYPE_OFFMESH_CONNECTION)
-        return DT_FAILURE;
-
 	if (closestPointOnPolyInTile(tile, poly, pos, closest) != DT_SUCCESS)
 		return DT_FAILURE;
 	return DT_SUCCESS;

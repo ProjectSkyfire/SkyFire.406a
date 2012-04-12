@@ -1,14 +1,3 @@
--- Unused yet: 
--- Wintergrasp is under attack!
--- Wintergrasp Fortress is under attack!
--- Winter's Edge Tower is under attack!
--- Eastern Bridge is under attack!
--- Western Bridge is under attack!
--- Westspark Bridge is under attack!
--- Flamewatch Tower is under attack!
-
--- 'You have reached Rank 1: Corporal' Sent to player by raid leader
--- 'You have reached Rank 2: First Lieutenant' Sent to player by raid leader
 
 -- Wintergrasp coreside texts
 DELETE FROM `skyfire_string` WHERE `entry` BETWEEN 12050 AND 12072;
@@ -47,7 +36,7 @@ INSERT INTO `script_texts` (`npc_entry`,`entry`,`content_default`,`content_loc1`
 (0, -1850504, 'Guide me to the Eastspark Graveyard.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 0, ''),
 (0, -1850505, 'Guide me back to the Horde landing camp.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 0, ''),
 (0, -1850506, 'Guide me back to the Alliance landing camp.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 0, ''),
-(0, -1850507, 'Se mettre dans la file pour le Joug-d''hiver.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 0, ''); -- (Needs proper english text, maybe "Get in the queue for Wintergrasp."?)
+(0, -1850507, 'Get into the queue for Wintergrasp.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 0, '');
 
 -- New support-commands for battlefield class
 DELETE FROM `command` WHERE name IN ('bf start', 'bf stop', 'bf enable', 'bf switch', 'bf timer');

@@ -95,9 +95,9 @@ void RandomMovementGenerator<Creature>::SetRandomLocation(Creature &creature)
     }
 
     if (isAirOk)
-        _nextMoveTime.Reset(0);
+        i_nextMoveTime.Reset(0);
     else
-        _nextMoveTime.Reset(urand(500, 10000));
+        i_nextMoveTime.Reset(urand(500, 10000));
 
     creature.AddUnitState(UNIT_STATE_ROAMING_MOVE);
 
@@ -151,15 +151,15 @@ RandomMovementGenerator<Creature>::Update(Creature &creature, uint32 const diff)
 {
     if (creature.HasUnitState(UNIT_STATE_ROOT | UNIT_STATE_STUNNED | UNIT_STATE_DISTRACTED))
     {
-        _nextMoveTime.Reset(0);  // Expire the timer
+        i_nextMoveTime.Reset(0);  // Expire the timer
         creature.ClearUnitState(UNIT_STATE_ROAMING_MOVE);
         return true;
     }
 
     if (creature.movespline->Finalized())
     {
-        _nextMoveTime.Update(diff);
-        if (_nextMoveTime.Passed())
+        i_nextMoveTime.Update(diff);
+        if (i_nextMoveTime.Passed())
             SetRandomLocation(creature);
     }
     return true;

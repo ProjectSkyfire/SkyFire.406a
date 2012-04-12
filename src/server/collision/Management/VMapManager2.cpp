@@ -277,11 +277,13 @@ namespace VMAP
         if (model == iLoadedModelFiles.end())
         {
             sLog->outError("VMapManager2: trying to unload non-loaded file '%s'", filename.c_str());
+            printf("[ERROR] ---> filenamn : [%s] \n\n", filename.c_str());
             return;
         }
         if (model->second.decRefCount() == 0)
         {
             sLog->outDebug(LOG_FILTER_MAPS, "VMapManager2: unloading file '%s'", filename.c_str());
+
             delete model->second.getModel();
             iLoadedModelFiles.erase(model);
         }

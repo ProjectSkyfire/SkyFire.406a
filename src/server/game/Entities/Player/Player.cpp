@@ -2425,7 +2425,7 @@ void Player::RemoveFromWorld()
         StopCastingBindSight();
         UnsummonPetTemporaryIfAny();
         sOutdoorPvPMgr->HandlePlayerLeaveZone(this, _zoneUpdateId);
-        sBattlefieldMgr.HandlePlayerLeaveZone(this, _zoneUpdateId);
+        sBattlefieldMgr->HandlePlayerLeaveZone(this, _zoneUpdateId);
     }
 
     ///- Do not add/remove the player from the object storage
@@ -5573,8 +5573,8 @@ void Player::RepopAtGraveyard()
         ClosestGrave = bg->GetClosestGraveYard(this);
     else
     {
-        if (sBattlefieldMgr.GetBattlefieldToZoneId(GetZoneId()))
-            ClosestGrave = sBattlefieldMgr.GetBattlefieldToZoneId(GetZoneId())->GetClosestGraveYard(this);
+        if (sBattlefieldMgr->GetBattlefieldToZoneId(GetZoneId()))
+            ClosestGrave = sBattlefieldMgr->GetBattlefieldToZoneId(GetZoneId())->GetClosestGraveYard(this);
         else
             ClosestGrave = sObjectMgr->GetClosestGraveYard(GetPositionX(), GetPositionY(), GetPositionZ(), GetMapId(), GetTeam());
     }
@@ -7665,8 +7665,8 @@ void Player::UpdateZone(uint32 newZone, uint32 newArea)
 
         sOutdoorPvPMgr->HandlePlayerLeaveZone(this, _zoneUpdateId);
         sOutdoorPvPMgr->HandlePlayerEnterZone(this, newZone);
-        sBattlefieldMgr.HandlePlayerLeaveZone(this, _zoneUpdateId);
-        sBattlefieldMgr.HandlePlayerEnterZone(this, newZone);
+        sBattlefieldMgr->HandlePlayerLeaveZone(this, _zoneUpdateId);
+        sBattlefieldMgr->HandlePlayerEnterZone(this, newZone);
         SendInitWorldStates(newZone, newArea);              // only if really enters to new zone, not just area change, works strange...
 
         // zone changed, check mount
@@ -21137,7 +21137,6 @@ void Player::InitDataForForm(bool reapplyMods)
             break;
         }
         case FORM_BEAR:
-        case FORM_DIREBEAR:
         {
             if (getPowerType() != POWER_RAGE)
                 setPowerType(POWER_RAGE);
@@ -21361,7 +21360,7 @@ bool Player::BuyItemFromVendorSlot(uint64 vendorguid, uint32 vendorslot, uint32 
             count = (uint8)maxCount;
         }
         price = proto->BuyPrice * count; //it should not exceed MAX_MONEY_AMOUNT
-        
+
         // reputation discount
         price = uint32(floor(price * GetReputationPriceDiscount(creature)));
 

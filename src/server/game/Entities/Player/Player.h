@@ -1908,6 +1908,7 @@ class Player : public Unit, public GridObject<Player>
         void UpdateSpellPower();
         void UpdateMaxHealth();
         void UpdateMaxPower(Powers power);
+        void ApplyFeralAPBonus(int32 amount, bool apply);
         void UpdateAttackPowerAndDamage(bool ranged = false);
         void UpdateShieldBlockValue();
         void UpdateDamagePhysical(WeaponAttackType attType);
@@ -2768,6 +2769,7 @@ class Player : public Unit, public GridObject<Player>
 
         uint32 _baseManaRegen;
         uint32 _baseHealthRegen;
+        uint32 _baseFeralAP;
 
         uint32 _baseSpellPower;
         uint32 _spellPowerFromIntellect;

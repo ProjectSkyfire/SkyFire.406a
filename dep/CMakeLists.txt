@@ -34,7 +34,7 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 endif()
 
 add_subdirectory(g3dlite)
-add_subdirectory(recastnavigation)
+add_subdirectory(recastlite)
 
 if(SERVERS)
   add_subdirectory(gsoap)

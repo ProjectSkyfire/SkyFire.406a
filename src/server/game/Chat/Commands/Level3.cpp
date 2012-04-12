@@ -65,6 +65,14 @@
 #include "Group.h"
 #include "ChannelMgr.h"
 
+bool ChatHandler::HandleMapSetInfoCommand(const char* args)
+{
+   return true;
+}
+bool ChatHandler::HandleMapInfoCommand(const char* args)
+{
+return true;
+}
 bool ChatHandler::HandleMaxSkillCommand(const char* /*args*/)
 {
     Player* SelectedPlayer = getSelectedPlayer();
