@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #ifndef _WARDEN_BASE_H
 #define _WARDEN_BASE_H
 
@@ -108,7 +108,7 @@ class Warden
 
     public:
         Warden();
-        ~Warden();
+        virtual ~Warden();
 
         virtual void Init(WorldSession* session, BigNumber* k) = 0;
         virtual ClientWardenModule* GetModuleForClient() = 0;
