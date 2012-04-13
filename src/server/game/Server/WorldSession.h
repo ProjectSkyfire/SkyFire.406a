@@ -43,6 +43,7 @@ class Object;
 class Player;
 class Unit;
 class GameObject;
+class InstanceSave;
 class Quest;
 class WorldPacket;
 class WorldSocket;
@@ -959,8 +960,9 @@ class WorldSession
         void SendCalendarEventUpdateAlert(CalendarEvent const& calendarEvent, uint8 sendEventType);
         void SendCalendarEventStatus(CalendarEvent const& calendarEvent, CalendarInvite const& invite);
         void SendCalendarEventModeratorStatusAlert(CalendarInvite const& invite);
-        void SendCalendarClearPendingAction();
-        void SendCalendarCommandResult(uint32 value);
+        void SendCalendarClearActionPending();
+        void SendCalendarCommandResult(CalendarError err, char const* param = NULL);
+
         void SendCalendarRaidLockout(InstanceSave* save, bool add);
         void SendCalendarRaidLockoutUpdated(InstanceSave const* save);
 

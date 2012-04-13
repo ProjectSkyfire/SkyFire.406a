@@ -1,9 +1,10 @@
 /*
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -288,7 +289,7 @@ void CalendarMgr::AddAction(CalendarAction const& action)
                     uint64 inviteId = GetFreeInviteId();
                     CalendarInvite newInvite(inviteId);
                     newInvite.SetEventId(eventId);
-                    newInvite.SetSenderGUID(action.GetGUID());
+                    newInvite.SetSenderGUID(action.GetPlayer()->GetGUID());
                     newInvite.SetInvitee(invite->GetInvitee());
                     newInvite.SetStatus(invite->GetStatus());
                     newInvite.SetStatusTime(invite->GetStatusTime());
@@ -364,8 +365,8 @@ void CalendarMgr::AddAction(CalendarAction const& action)
             newInvite.SetStatus(status);
             newInvite.SetStatusTime(uint32(time(NULL)));
             newInvite.SetEventId(eventId);
+            newInvite.SetInvitee(action.GetPlayer()->GetGUID());
             newInvite.SetSenderGUID(action.GetPlayer()->GetGUID());
-            newInvite.SetInvitee(invite->GetInvitee());
 
             if (AddInvite(newInvite))
                 SendCalendarEventInvite(newInvite, false);
@@ -432,7 +433,7 @@ void CalendarMgr::AddAction(CalendarAction const& action)
             if (uint64 invitee = RemoveInvite(inviteId))
             {
                 SendCalendarEventInviteRemoveAlert(invitee, *calendarEvent, CALENDAR_STATUS_9);
-                SendCalendarEventInviteRemove(action.GetPlayer(), action.Invite, calendarEvent->GetFlags());
+                SendCalendarEventInviteRemove(action.GetPlayer()->GetGUID(), action.Invite, calendarEvent->GetFlags());
             }
             break;
         }

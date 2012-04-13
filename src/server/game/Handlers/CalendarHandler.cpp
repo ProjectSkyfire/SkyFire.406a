@@ -1,10 +1,11 @@
 /*
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
+ * Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -19,7 +20,7 @@
 /*
 ---- Opcodes Not Used yet -----
 
-SMSG_CALENDAR_CLEAR_PENDING_ACTION SendCalendarClearPendingAction()
+SMSG_CALENDAR_CLEAR_PENDING_ACTION SendCalendarClearActionPending()
 SMSG_CALENDAR_RAID_LOCKOUT_UPDATED SendCalendarRaildLockoutUpdated(InstanceSave const* save) <--- Structure unknown, using LOCKOUT_ADDED
 SMSG_CALENDAR_COMMAND_RESULT       SendCalendarCommandResult(uint32 value) <--- Structure meanings not known using in a Hack way
 
@@ -813,12 +814,12 @@ void WorldSession::SendCalendarEventInviteRemove(CalendarInvite const& invite, u
     SendPacket(&data);
 }
 
-void WorldSession::SendCalendarClearPendingAction()
+void WorldSession::SendCalendarClearActionPending()
 {
     uint64 guid = _player->GetGUID();
-    sLog->outDebug(LOG_FILTER_NETWORKIO, "SMSG_CALENDAR_CLEAR_PENDING_ACTION [" UI64FMTD "]", guid);
+    sLog->outDebug(LOG_FILTER_NETWORKIO, "SMSG_CALENDAR_ACTION_PENDING [" UI64FMTD "]", guid);
 
-    WorldPacket data(SMSG_CALENDAR_CLEAR_PENDING_ACTION, 0);
+    WorldPacket data(SMSG_CALENDAR_ACTION_PENDING, 0);
     SendPacket(&data);
 }
 
