@@ -1081,7 +1081,7 @@ void InitOpcodeTable()
     OPCODE( CMSG_CALENDAR_EVENT_MODERATOR_STATUS,         STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleCalendarEventModeratorStatus);
     OPCODE( SMSG_CALENDAR_SEND_CALENDAR,                  STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( SMSG_CALENDAR_SEND_EVENT,                     STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
-    OPCODE( SMSG_CALENDAR_FILTER_GUILD,                   STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
+    OPCODE( SMSG_CALENDAR_GUILD_FILTER,                   STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( SMSG_CALENDAR_ARENA_TEAM,                     STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( SMSG_CALENDAR_EVENT_INVITE,                   STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( SMSG_CALENDAR_EVENT_INVITE_REMOVED,           STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
@@ -1121,8 +1121,12 @@ void InitOpcodeTable()
     OPCODE( CMSG_FORCE_PITCH_RATE_CHANGE_ACK,             STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
     OPCODE( SMSG_SPLINE_SET_PITCH_RATE,                   STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( SMSG_MOVE_ABANDON_TRANSPORT,                  STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
+    OPCODE( CMSG_CALENDAR_EVENT_INVITE_NOTES,             STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
+    OPCODE( SMSG_CALENDAR_EVENT_INVITE_NOTES,             STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
+    OPCODE( SMSG_CALENDAR_EVENT_INVITE_NOTES_ALERT,       STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( SMSG_CALENDAR_UPDATE_INVITE_LIST,             STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
     OPCODE( SMSG_CALENDAR_UPDATE_INVITE_LIST2,            STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
+    OPCODE( SMSG_CALENDAR_UPDATE_INVITE_LIST3,            STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( CMSG_UPDATE_MISSILE_TRAJECTORY,               STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
     OPCODE( SMSG_UPDATE_ACCOUNT_DATA_COMPLETE,            STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( SMSG_TRIGGER_MOVIE,                           STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
@@ -1138,9 +1142,9 @@ void InitOpcodeTable()
     OPCODE( CMSG_COMPLETE_ACHIEVEMENT_CHEAT,              STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
     OPCODE( SMSG_QUESTUPDATE_ADD_PVP_KILL,                STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( CMSG_SET_CRITERIA_CHEAT,                      STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
-    OPCODE( SMSG_CALENDAR_UPDATE_INVITE_LIST3,            STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
+    OPCODE( SMSG_CALENDAR_RAID_LOCKOUT_UPDATED,           STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( CMSG_UNITANIMTIER_CHEAT,                      STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
-    OPCODE( CMSG_CHAR_CUSTOMIZE,                          STATUS_AUTHED,   PROCESS_THREADUNSAFE, &WorldSession::HandleCharCustomize              );
+    OPCODE( CMSG_CHAR_CUSTOMIZE,                          STATUS_AUTHED,   PROCESS_THREADUNSAFE,  &WorldSession::HandleCharCustomize             );
     OPCODE( SMSG_CHAR_CUSTOMIZE,                          STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( SMSG_PET_RENAMEABLE,                          STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( CMSG_REQUEST_VEHICLE_EXIT,                    STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleRequestVehicleExit        );
@@ -1204,8 +1208,8 @@ void InitOpcodeTable()
     OPCODE( CMSG_CORPSE_MAP_POSITION_QUERY,               STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleCorpseMapPositionQuery    );
     OPCODE( SMSG_CORPSE_MAP_POSITION_QUERY_RESPONSE,      STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( CMSG_LFG_SET_ROLES_2,                         STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
-    OPCODE( CMSG_CALENDAR_CONTEXT_EVENT_SIGNUP,           STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
-    OPCODE( SMSG_CALENDAR_ACTION_PENDING,                 STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
+    OPCODE( CMSG_CALENDAR_EVENT_SIGNUP,                   STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleCalendarEventSignup       );
+    OPCODE( SMSG_CALENDAR_CLEAR_ACTION_PENDING,           STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( SMSG_EQUIPMENT_SET_LIST,                      STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( CMSG_EQUIPMENT_SET_SAVE,                      STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleEquipmentSetSave          );
     OPCODE( CMSG_UPDATE_PROJECTILE_POSITION,              STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleUpdateProjectilePosition  );

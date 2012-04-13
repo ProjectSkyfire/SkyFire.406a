@@ -659,7 +659,7 @@ class ObjectMgr
             return NULL;
         }
 
-        InstanceTemplate const* GetInstanceTemplate(uint32 mapID);
+        InstanceTemplate const* GetInstanceTemplate(uint32 mapId);
 
         PetLevelInfo const* GetPetLevelInfo(uint32 creature_id, uint8 level) const;
 

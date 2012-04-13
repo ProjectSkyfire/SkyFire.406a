@@ -78,6 +78,7 @@
 #include "DBCEnums.h"
 #include "DB2Stores.h"
 #include "Object.h"
+#include "CalendarMgr.h"
 
 #include <cmath>
 
@@ -4136,7 +4137,7 @@ void Player::removeSpell(uint32 spell_id, bool disabled, bool learn_low_rank)
             // most likely will never be used, haven't heard of cases where players unlearn a mount
             if (Has310Flyer(false) && _spell_idx->second->skillId == SKILL_MOUNTS)
             {
-                SpellInfo const *spellInfo = sSpellMgr->GetSpellInfo(spell_id);
+                if (spellInfo)
                 for (uint8 i = 0; i < MAX_SPELL_EFFECTS; ++i)
                     if (spellInfo->Effects[i].ApplyAuraName == SPELL_AURA_MOD_INCREASE_MOUNTED_FLIGHT_SPEED &&
                         spellInfo->Effects[i].CalcValue() == 310)
@@ -18799,6 +18800,9 @@ void Player::UnbindInstance(BoundInstancesMap::iterator &itr, Difficulty difficu
         }
 
         itr->second.save->RemovePlayer(this);               // save can become invalid
+        if (itr->second.perm)
+           GetSession()->SendCalendarRaidLockout(itr->second.save, false);
+
         _boundInstances[difficulty].erase(itr++);
     }
 }
@@ -18867,6 +18871,8 @@ void Player::BindToInstance()
     data << uint32(0);
     GetSession()->SendPacket(&data);
     BindToInstance(mapSave, true);
+
+    GetSession()->SendCalendarRaidLockout(mapSave, true);
 }
 
 void Player::SendRaidInfo()
