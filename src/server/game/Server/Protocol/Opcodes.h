@@ -1097,7 +1097,7 @@ enum Opcodes
     CMSG_CALENDAR_EVENT_MODERATOR_STATUS             = 0x0BDE4, // 4.0.6a 13623
     SMSG_CALENDAR_SEND_CALENDAR                      = 0x0B0A4, // 4.0.6a 13623
     SMSG_CALENDAR_SEND_EVENT                         = 0x0FAA4, // 4.0.6a 13623
-    SMSG_CALENDAR_FILTER_GUILD                       = 0x02FC4, // 4.0.6a 13623
+    SMSG_CALENDAR_GUILD_FILTER                       = 0x02FC4, // 4.0.6a 13623
     SMSG_CALENDAR_ARENA_TEAM                         = 0x021E0, // 4.0.6a 13623
     SMSG_CALENDAR_EVENT_INVITE                       = 0x0A5A0, // 4.0.6a 13623
     SMSG_CALENDAR_EVENT_INVITE_REMOVED               = 0x0A9E0, // 4.0.6a 13623
@@ -1137,8 +1137,11 @@ enum Opcodes
     CMSG_FORCE_PITCH_RATE_CHANGE_ACK                 = 0x0E6C0, // 4.0.6a 13623
     SMSG_SPLINE_SET_PITCH_RATE                       = 0x070C4, // 4.0.6a 13623
     SMSG_MOVE_ABANDON_TRANSPORT                      = 0x101D0, // Unknown opcode ID
-    SMSG_CALENDAR_UPDATE_INVITE_LIST                 = 0x071A0, // 4.0.6a 13623
-    SMSG_CALENDAR_UPDATE_INVITE_LIST2                = 0x0EDC4, // 4.0.6a 13623
+    CMSG_CALENDAR_EVENT_INVITE_NOTES                 = 0x0045F, // Unknown opcode ID
+    SMSG_CALENDAR_EVENT_INVITE_NOTES                 = 0x00460, // Unknown opcode ID
+    SMSG_CALENDAR_EVENT_INVITE_NOTES_ALERT           = 0x00461, // Unknown opcode ID
+    //SMSG_CALENDAR_UPDATE_INVITE_LIST                 = 0x071A0, // 4.0.6a 13623
+    //SMSG_CALENDAR_UPDATE_INVITE_LIST2                = 0x0EDC4, // 4.0.6a 13623
     CMSG_UPDATE_MISSILE_TRAJECTORY                   = 0x00E54, // 4.0.3a 13329 - 403
     SMSG_UPDATE_ACCOUNT_DATA_COMPLETE                = 0x0B1CC, // 4.0.6a 13623
     SMSG_TRIGGER_MOVIE                               = 0x020C8, // 4.0.6a 13623
