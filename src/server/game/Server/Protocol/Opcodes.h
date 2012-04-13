@@ -1140,9 +1140,9 @@ enum Opcodes
     CMSG_CALENDAR_EVENT_INVITE_NOTES                 = 0x0045F, // Unknown opcode ID
     SMSG_CALENDAR_EVENT_INVITE_NOTES                 = 0x00460, // Unknown opcode ID
     SMSG_CALENDAR_EVENT_INVITE_NOTES_ALERT           = 0x00461, // Unknown opcode ID
-    //SMSG_CALENDAR_UPDATE_INVITE_LIST                 = 0x071A0, // 4.0.6a 13623
-    //SMSG_CALENDAR_UPDATE_INVITE_LIST2                = 0x0EDC4, // 4.0.6a 13623
-    //SMSG_CALENDAR_UPDATE_INVITE_LIST3                = 0x0A2A0, // 4.0.6a 13623
+    SMSG_CALENDAR_UPDATE_INVITE_LIST                 = 0x071A0, // 4.0.6a 13623
+    SMSG_CALENDAR_UPDATE_INVITE_LIST2                = 0x0EDC4, // 4.0.6a 13623
+    SMSG_CALENDAR_UPDATE_INVITE_LIST3                = 0x0A2A0, // 4.0.6a 13623
     CMSG_UPDATE_MISSILE_TRAJECTORY                   = 0x00E54, // 4.0.3a 13329 - 403
     SMSG_UPDATE_ACCOUNT_DATA_COMPLETE                = 0x0B1CC, // 4.0.6a 13623
     SMSG_TRIGGER_MOVIE                               = 0x020C8, // 4.0.6a 13623
@@ -1160,7 +1160,7 @@ enum Opcodes
     SMSG_COMPRESSED_ACHIEVEMENT_DATA                 = 0x0C1B0, // 4.0.6a 13623
     SMSG_QUESTUPDATE_ADD_PVP_KILL                    = 0x078E0, // 4.0.6a 13623
     CMSG_SET_CRITERIA_CHEAT                          = 0x101DD, // Unknown opcode ID
-    SMSG_CALENDAR_RAID_LOCKOUT_UPDATED                = 0x0A2A0, // 4.0.6a 13623
+    SMSG_CALENDAR_RAID_LOCKOUT_UPDATED               = 0x00471, // Unknown opcode ID
     CMSG_UNITANIMTIER_CHEAT                          = 0x101DE, // Unknown opcode ID
     CMSG_CHAR_CUSTOMIZE                              = 0x06484, // 4.0.6a 13623
     SMSG_CHAR_CUSTOMIZE                              = 0x02DA4, // 4.0.6a 13623

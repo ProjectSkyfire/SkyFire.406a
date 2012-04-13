@@ -1124,9 +1124,9 @@ void InitOpcodeTable()
     OPCODE( CMSG_CALENDAR_EVENT_INVITE_NOTES,             STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
     OPCODE( SMSG_CALENDAR_EVENT_INVITE_NOTES,             STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( SMSG_CALENDAR_EVENT_INVITE_NOTES_ALERT,       STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
-    //OPCODE( SMSG_CALENDAR_UPDATE_INVITE_LIST,             STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
-    //OPCODE( SMSG_CALENDAR_UPDATE_INVITE_LIST2,            STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
-    //OPCODE( SMSG_CALENDAR_UPDATE_INVITE_LIST3,            STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
+    OPCODE( SMSG_CALENDAR_UPDATE_INVITE_LIST,             STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
+    OPCODE( SMSG_CALENDAR_UPDATE_INVITE_LIST2,            STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
+    OPCODE( SMSG_CALENDAR_UPDATE_INVITE_LIST3,            STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( CMSG_UPDATE_MISSILE_TRAJECTORY,               STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
     OPCODE( SMSG_UPDATE_ACCOUNT_DATA_COMPLETE,            STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( SMSG_TRIGGER_MOVIE,                           STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
