@@ -42,14 +42,14 @@ void WorldSession::HandleCalendarGetCalendar(WorldPacket& /*recv_data*/)
 
     data << uint32(cur_time);                            // current time
     data << uint32(secsToTimeBitFields(cur_time));       // unknown packed time
-    
+
     InstanceSave *save = NULL;
     uint32 counter = 0;
     size_t p_counter = data.wpos();
     data << uint32(counter);                               // instance reset count
 
     for (uint8 i = 0; i < MAX_DIFFICULTY; ++i)
-        for (Player::BoundInstancesMap::const_iterator itr = _player->m_boundInstances[i].begin(); itr != _player->m_boundInstances[i].end(); ++itr)
+        for (Player::BoundInstancesMap::const_iterator itr = _player->_boundInstances[i].begin(); itr != _player->_boundInstances[i].end(); ++itr)
             if (itr->second.perm)
             {
                 save = itr->second.save;
@@ -91,7 +91,6 @@ void WorldSession::HandleCalendarGetCalendar(WorldPacket& /*recv_data*/)
     }
 
     data.put<uint32>(p_counter, counter);
-
 
     // TODO: Fix this -- read from DBC?
     std::string holidayName = "";
@@ -148,7 +147,7 @@ void WorldSession::HandleCalendarArenaTeam(WorldPacket& recv_data)
 void WorldSession::HandleCalendarAddEvent(WorldPacket& recv_data)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: CMSG_CALENDAR_ADD_EVENT");
-    
+
     std::string title;
     std::string description;
     uint8 type;
@@ -254,7 +253,6 @@ void WorldSession::HandleCalendarCopyEvent(WorldPacket& recv_data)
     //recv_data >> uint64
     //recv_data >> uint64
     //recv_data >> uint32
-
 }
 
 void WorldSession::HandleCalendarEventInvite(WorldPacket& recv_data)
@@ -286,7 +284,6 @@ void WorldSession::HandleCalendarEventRsvp(WorldPacket& recv_data)
     //recv_data >> uint64
     //recv_data >> uint64
     //recv_data >> uint32
-
 }
 
 void WorldSession::HandleCalendarEventRemoveInvite(WorldPacket& recv_data)
@@ -365,7 +362,7 @@ void WorldSession::SendCalendarEvent(uint64 eventId, bool added)
     {
         data << uint32(0);                                  // invite count
         for (uint8 i = 0; i < 0; ++i)
-        {         
+        {
             data << uint64(0);                              // invite played guid
             data << uint8(0);                               // unk
             data << uint8(0);                               // status
