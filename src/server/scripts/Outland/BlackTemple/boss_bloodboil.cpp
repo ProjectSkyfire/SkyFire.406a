@@ -159,7 +159,7 @@ public:
             }
 
             //Sort the list of players
-            targets.sort(Skyfire::ObjectDistanceOrderPred(me, false));
+            targets.sort(SkyFire::ObjectDistanceOrderPred(me, false));
             //Resize so we only get top 5
             targets.resize(5);
 

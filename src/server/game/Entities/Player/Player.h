@@ -63,7 +63,7 @@ typedef std::deque<Mail*> PlayerMails;
 #define PLAYER_MAX_DAILY_QUESTS     25
 #define PLAYER_EXPLORED_ZONES_SIZE  144
 
-// 2^n values, Player::m_isunderwater is a bitmask. These are Skyfire internal values, they are never send to any client
+// 2^n values, Player::m_isunderwater is a bitmask. These are SkyFire internal values, they are never send to any client
 enum PlayerUnderwaterState
 {
     UNDERWATER_NONE                     = 0x00,
@@ -1908,6 +1908,7 @@ class Player : public Unit, public GridObject<Player>
         void UpdateSpellPower();
         void UpdateMaxHealth();
         void UpdateMaxPower(Powers power);
+        void ApplyFeralAPBonus(int32 amount, bool apply);
         void UpdateAttackPowerAndDamage(bool ranged = false);
         void UpdateShieldBlockValue();
         void UpdateDamagePhysical(WeaponAttackType attType);
@@ -2768,6 +2769,7 @@ class Player : public Unit, public GridObject<Player>
 
         uint32 _baseManaRegen;
         uint32 _baseHealthRegen;
+        uint32 _baseFeralAP;
 
         uint32 _baseSpellPower;
         uint32 _spellPowerFromIntellect;

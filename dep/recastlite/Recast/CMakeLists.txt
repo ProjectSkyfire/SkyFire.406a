@@ -9,21 +9,25 @@
 # WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-set(Detour_STAT_SRCS
-    DetourAlloc.cpp 
-    DetourCommon.cpp 
-    DetourNavMesh.cpp 
-    DetourNavMeshBuilder.cpp 
-    DetourNavMeshQuery.cpp 
-    DetourNode.cpp 
+set(Recast_STAT_SRCS
+    Recast.cpp
+    RecastAlloc.cpp 
+    RecastArea.cpp
+    RecastContour.cpp
+    RecastFilter.cpp
+    RecastMesh.cpp
+    RecastMeshDetail.cpp
+    RecastRasterization.cpp
+    RecastRegion.cpp
 )
 
 if(WIN32)
   include_directories(
     ${CMAKE_SOURCE_DIR}/dep/zlib
+	${CMAKE_SOURCE_DIR}/dep/recastlite/Detour
   )
 endif()
 
-add_library(Detour STATIC ${Detour_STAT_SRCS})
+add_library(Recast STATIC ${Recast_STAT_SRCS})
 
-target_link_libraries(Detour ${ZLIB_LIBRARIES})
+target_link_libraries(Recast ${ZLIB_LIBRARIES})

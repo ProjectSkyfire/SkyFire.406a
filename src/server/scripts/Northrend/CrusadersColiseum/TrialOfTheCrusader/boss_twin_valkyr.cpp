@@ -118,7 +118,7 @@ class OrbsDespawner : public BasicEvent
 
         bool Execute(uint64 /*currTime*/, uint32 /*diff*/)
         {
-            Skyfire::CreatureWorker<OrbsDespawner> worker(_creature, *this);
+            SkyFire::CreatureWorker<OrbsDespawner> worker(_creature, *this);
             _creature->VisitNearbyGridObject(5000.0f, worker);
             return true;
         }
@@ -756,7 +756,7 @@ class spell_powering_up : public SpellScriptLoader
 
             uint32 spellId;
 
-            bool Validate(SpellEntry const* /*spellEntry*/)
+            bool Load(SpellInfo const* /*spellEntry*/)
             {
                 spellId = sSpellMgr->GetSpellIdForDifficulty(SPELL_SURGE_OF_SPEED, GetCaster());
                 if (!sSpellMgr->GetSpellInfo(spellId))

@@ -745,7 +745,7 @@ void InitOpcodeTable()
     OPCODE( SMSG_AREA_SPIRIT_HEALER_TIME,                 STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( CMSG_GM_UNTEACH,                              STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
     OPCODE( SMSG_WARDEN_DATA,                             STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
-    OPCODE( CMSG_WARDEN_DATA,                             STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleWardenDataOpcode          );
+    OPCODE( CMSG_WARDEN_DATA,                             STATUS_AUTHED,   PROCESS_THREADSAFE,    &WorldSession::HandleWardenDataOpcode          );
     OPCODE( SMSG_GROUP_JOINED_BATTLEGROUND,               STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( CMSG_BATTLEGROUND_PLAYER_POSITIONS,           STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleBattlegroundPlayerPositionsOpcode);
     OPCODE( SMSG_BATTLEGROUND_PLAYER_POSITIONS,           STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
@@ -1229,15 +1229,15 @@ void InitOpcodeTable()
     OPCODE( CMSG_CHAR_FACTION_CHANGE,                     STATUS_AUTHED,   PROCESS_THREADUNSAFE, &WorldSession::HandleCharFactionOrRaceChange    );
     OPCODE( SMSG_CHAR_FACTION_CHANGE,                     STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( SMSG_BATTLEFIELD_MGR_ENTRY_INVITE,            STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
-    OPCODE( CMSG_BATTLEFIELD_MGR_ENTRY_INVITE_RESPONSE,   STATUS_LOGGEDIN, PROCESS_INPLACE,       &WorldSession::HandleBfEntryInviteResponse     );
+    OPCODE( CMSG_BATTLEFIELD_MGR_ENTRY_INVITE_RESPONSE,   STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleBfEntryInviteResponse     );
     OPCODE( SMSG_BATTLEFIELD_MGR_ENTERED,                 STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( SMSG_BATTLEFIELD_MGR_QUEUE_INVITE,            STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
-    OPCODE( CMSG_BATTLEFIELD_MGR_QUEUE_INVITE_RESPONSE,   STATUS_LOGGEDIN, PROCESS_INPLACE,       &WorldSession::HandleBfQueueInviteResponse     );
-    OPCODE( CMSG_BATTLEFIELD_MGR_QUEUE_REQUEST,           STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
+    OPCODE( CMSG_BATTLEFIELD_MGR_QUEUE_INVITE_RESPONSE,   STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleBfQueueInviteResponse     );
+    OPCODE( CMSG_BATTLEFIELD_MGR_QUEUE_REQUEST,           STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleBfJoinQueue               );
     OPCODE( SMSG_BATTLEFIELD_MGR_QUEUE_REQUEST_RESPONSE,  STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( SMSG_BATTLEFIELD_MGR_EJECT_PENDING,           STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( SMSG_BATTLEFIELD_MGR_EJECTED,                 STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
-    OPCODE( CMSG_BATTLEFIELD_MGR_EXIT_REQUEST,            STATUS_LOGGEDIN, PROCESS_INPLACE,       &WorldSession::HandleBfExitRequest             );
+    OPCODE( CMSG_BATTLEFIELD_MGR_EXIT_REQUEST,            STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleBfExitRequest             );
     OPCODE( SMSG_BATTLEFIELD_MGR_STATE_CHANGE,            STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( MSG_SET_RAID_DIFFICULTY,                      STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleSetRaidDifficultyOpcode   );
     OPCODE( SMSG_TOGGLE_XP_GAIN,                          STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );

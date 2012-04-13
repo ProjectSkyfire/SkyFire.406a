@@ -785,7 +785,7 @@ bool Item::HasEnchantRequiredSkill(const Player* player) const
             if (SpellItemEnchantmentEntry const* enchantEntry = sSpellItemEnchantmentStore.LookupEntry(enchant_id))
                 if (enchantEntry->requiredSkill && player->GetSkillValue(enchantEntry->requiredSkill) < enchantEntry->requiredSkillValue)
                     return false;
-    
+
     return true;
 }
 

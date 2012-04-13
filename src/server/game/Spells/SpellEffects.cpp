@@ -1560,14 +1560,14 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
             {
                 std::list<Creature*> templist;
 
-                CellCoord pair(Skyfire::ComputeCellCoord(m_caster->GetPositionX(), m_caster->GetPositionY()));
+                CellCoord pair(SkyFire::ComputeCellCoord(m_caster->GetPositionX(), m_caster->GetPositionY()));
                 Cell cell(pair);
                 cell.SetNoCreate();
 
-                Skyfire::AllFriendlyCreaturesInGrid check(m_caster);
-                Skyfire::CreatureListSearcher<Skyfire::AllFriendlyCreaturesInGrid> searcher(m_caster, templist, check);
+                SkyFire::AllFriendlyCreaturesInGrid check(m_caster);
+                SkyFire::CreatureListSearcher<SkyFire::AllFriendlyCreaturesInGrid> searcher(m_caster, templist, check);
 
-                TypeContainerVisitor<Skyfire::CreatureListSearcher<Skyfire::AllFriendlyCreaturesInGrid>, GridTypeMapContainer> cSearcher(searcher);
+                TypeContainerVisitor<SkyFire::CreatureListSearcher<SkyFire::AllFriendlyCreaturesInGrid>, GridTypeMapContainer> cSearcher(searcher);
 
                 cell.Visit(pair, cSearcher, *(m_caster->GetMap()), *m_caster, m_caster->GetGridActivationRange());
 
@@ -1579,8 +1579,8 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                             continue;
                         // Find all the enemies
                         std::list<Unit*> targets;
-                        Skyfire::AnyUnfriendlyUnitInObjectRangeCheck u_check((*itr), (*itr), 6.0f);
-                        Skyfire::UnitListSearcher<Skyfire::AnyUnfriendlyUnitInObjectRangeCheck> searcher((*itr), targets, u_check);
+                        SkyFire::AnyUnfriendlyUnitInObjectRangeCheck u_check((*itr), (*itr), 6.0f);
+                        SkyFire::UnitListSearcher<SkyFire::AnyUnfriendlyUnitInObjectRangeCheck> searcher((*itr), targets, u_check);
                         (*itr)->VisitNearbyObject(6.0f, searcher);
                         for (std::list<Unit*>::const_iterator iter = targets.begin(); iter != targets.end(); ++iter)
                         {
@@ -3891,7 +3891,7 @@ void Spell::EffectAddHonor(SpellEffIndex /*effIndex*/)
     // do not allow to add too many honor for player (50 * 21) = 1040 at level 70, or (50 * 31) = 1550 at level 80
     if (damage <= 50)
     {
-        uint32 honor_reward = Skyfire::Honor::hk_honor_at_level(unitTarget->getLevel(), float(damage));
+        uint32 honor_reward = SkyFire::Honor::hk_honor_at_level(unitTarget->getLevel(), float(damage));
         unitTarget->ToPlayer()->RewardHonor(NULL, 1, honor_reward);
         sLog->outDebug(LOG_FILTER_SPELLS_AURAS, "SpellEffect::AddHonor (spell_id %u) rewards %u honor points (scale) to player: %u", m_spellInfo->Id, honor_reward, unitTarget->ToPlayer()->GetGUIDLow());
     }
@@ -6008,27 +6008,53 @@ void Spell::EffectSanctuary(SpellEffIndex /*effIndex*/)
 
 void Spell::EffectAddComboPoints(SpellEffIndex /*effIndex*/)
 {
-    if (effectHandleMode != SPELL_EFFECT_HANDLE_HIT_TARGET)
-        return;
-
     if (!unitTarget)
         return;
 
     if (!m_caster->_movedPlayer)
         return;
 
-    if (damage <= 0)
+    Player* player = m_caster->_movedPlayer;
+
+    //sLog->outString("Adding %u combo points to player", damage);
+    if (damage > 0)
+        player->AddComboPoints(unitTarget, damage, this);
+    else
     {
         // Rogue: Redirect
-        Player* player = unitTarget->ToPlayer();
         if (GetSpellInfo()->Id == 73981 && player->GetComboPoints() > 0 && player->GetComboTarget())
-        {
-            if (!(player->GetComboTarget() == unitTarget->GetGUID())) // Can't Use on target that already has Combo Points
-                player->AddComboPoints(unitTarget, player->GetComboPoints(), this);
-        }
+            player->AddComboPoints(unitTarget, player->GetComboPoints(), this);
     }
 
-    m_caster->_movedPlayer->AddComboPoints(unitTarget, damage, this);
+    if (m_spellInfo->Id == 1752 || m_spellInfo->Id == 84617) // Sinister Strike and Revealing Strike
+    {
+        uint32 times = m_caster->GetTimesCastedInRow(1752);
+        times += m_caster->GetTimesCastedInRow(84617);
+
+        if (m_caster->HasAura(84654)) // It shouldn't count while under effect of last aura.
+            return;
+
+        if (m_caster->HasAura(84652) && !m_caster->HasAura(84654)) // Bandit's Guile Rank 1
+            if (roll_chance_i(33))
+                times += 1;
+            else if (m_caster->HasAura(84653) && !m_caster->HasAura(84654)) // Bandit's Guile Rank 2
+                if (roll_chance_i(66))
+                    times += 1;
+                else if (m_caster->HasAura(84654) && !m_caster->HasAura(84654)) // Bandit's Guile Rank 3
+                    times += 1;
+
+        if (times == 4)
+            m_caster->CastSpell(m_caster, 84745, true);
+
+        else if (times == 8)
+            m_caster->CastSpell(m_caster, 84746, true);
+
+        else if (times == 12)
+        {
+            times = 0;
+            m_caster->CastSpell(m_caster, 84747, true);
+        }
+    }
 }
 
 void Spell::EffectDuel(SpellEffIndex effIndex)
@@ -6923,18 +6949,31 @@ void Spell::EffectSummonDeadPet(SpellEffIndex /*effIndex*/)
 
     if (m_caster->GetTypeId() != TYPEID_PLAYER)
         return;
-    Player* _player = m_caster->ToPlayer();
-    Pet* pet = _player->GetPet();
+
+    Player* player = m_caster->ToPlayer();
+    Pet* pet = player->GetPet();
+
     if (!pet)
         return;
-    if (pet->isAlive())
+
+    if (pet && pet->isAlive())
         return;
+
     if (damage < 0)
         return;
 
     float x, y, z;
-    _player->GetPosition(x, y, z);
-    _player->GetMap()->CreatureRelocation(pet, x, y, z, _player->GetOrientation());
+    player->GetPosition(x, y, z);
+
+    if (!pet)
+    {
+        player->SummonPet(0, x, y, z, player->GetOrientation(), SUMMON_PET, 0);
+        pet = player->GetPet();
+    }
+    if (!pet)
+        return;
+
+    player->GetMap()->CreatureRelocation(pet, x, y, z, player->GetOrientation());
 
     pet->SetUInt32Value(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_NONE);
     pet->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SKINNABLE);

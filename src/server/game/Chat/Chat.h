@@ -342,6 +342,8 @@ class ChatHandler
 
         bool HandleTempGameObjectCommand(const char* args);
 
+        bool HandleMapInfoCommand(const char* args);
+        bool HandleMapSetInfoCommand(const char* args);
         //! Development Commands
 
         /*bool HandleQuestAdd(const char * args);

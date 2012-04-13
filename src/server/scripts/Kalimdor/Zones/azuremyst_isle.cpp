@@ -520,8 +520,8 @@ public:
         {
             float radius = 50.0f;
             std::list<Player*> players;
-            Skyfire::AnyPlayerInObjectRangeCheck checker(me, radius);
-            Skyfire::PlayerListSearcher<Skyfire::AnyPlayerInObjectRangeCheck> searcher(me, players, checker);
+            SkyFire::AnyPlayerInObjectRangeCheck checker(me, radius);
+            SkyFire::PlayerListSearcher<SkyFire::AnyPlayerInObjectRangeCheck> searcher(me, players, checker);
             me->VisitNearbyWorldObject(radius, searcher);
 
             for (std::list<Player*>::const_iterator itr = players.begin(); itr != players.end(); ++itr)

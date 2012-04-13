@@ -16,7 +16,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/// \addtogroup Trinityd Skyfire Daemon
+/// \addtogroup Trinityd SkyFire Daemon
 /// @{
 /// \file
 
@@ -68,7 +68,7 @@ void usage(const char *prog)
         , prog);
 }
 
-/// Launch the Skyfire server
+/// Launch the SkyFire server
 extern int main(int argc, char **argv)
 {
     ///- Command line parsing to get the configuration file name

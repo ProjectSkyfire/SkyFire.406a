@@ -168,6 +168,33 @@ enum PutricideData
 #define EXPERIMENT_STATE_OOZE   false
 #define EXPERIMENT_STATE_GAS    true
 
+class AbominationDespawner
+{
+    public:
+        explicit AbominationDespawner(Unit* owner) : _owner(owner) { }
+
+        bool operator()(uint64 guid)
+        {
+            if (Unit* summon = ObjectAccessor::GetUnit(*_owner, guid))
+            {
+                if (summon->GetEntry() == NPC_MUTATED_ABOMINATION_10 || summon->GetEntry() == NPC_MUTATED_ABOMINATION_25)
+                {
+                    if (Vehicle* veh = summon->GetVehicleKit())
+                        veh->RemoveAllPassengers(); // also despawns the vehicle
+
+                    return true;
+                }
+
+                return false;
+            }
+
+            return true;
+        }
+
+    private:
+        Unit* _owner;
+};
+
 class boss_professor_putricide : public CreatureScript
 {
     public:
@@ -399,7 +426,7 @@ class boss_professor_putricide : public CreatureScript
                             GetCreatureListWithEntryInGrid(list, rotface, NPC_PUDDLE_STALKER, 36.0f);
                             if (list.size() > 4)
                             {
-                                list.sort(Skyfire::ObjectDistanceOrderPred(rotface));
+                                list.sort(SkyFire::ObjectDistanceOrderPred(rotface));
                                 do
                                 {
                                     list.pop_back();
@@ -478,8 +505,7 @@ class boss_professor_putricide : public CreatureScript
                                 SetPhase(PHASE_COMBAT_3);
                                 events.ScheduleEvent(EVENT_MUTATED_PLAGUE, 25000);
                                 events.CancelEvent(EVENT_UNSTABLE_EXPERIMENT);
-                                summons.DespawnEntry(NPC_MUTATED_ABOMINATION_10);
-                                summons.DespawnEntry(NPC_MUTATED_ABOMINATION_25);
+                                summons.remove_if(AbominationDespawner(me));
                                 break;
                             default:
                                 break;
@@ -1109,7 +1135,7 @@ class spell_putricide_eat_ooze : public SpellScriptLoader
                 if (targets.empty())
                     return;
 
-                targets.sort(Skyfire::ObjectDistanceOrderPred(GetCaster()));
+                targets.sort(SkyFire::ObjectDistanceOrderPred(GetCaster()));
                 Unit* target = targets.front();
                 targets.clear();
                 targets.push_back(target);

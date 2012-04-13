@@ -478,8 +478,8 @@ class boss_hodir : public CreatureScript
             void FlashFreeze()
             {
                 std::list<Unit*> TargetList;
-                Skyfire::AnyUnfriendlyUnitInObjectRangeCheck checker(me, me, 100.0f);
-                Skyfire::UnitListSearcher<Skyfire::AnyUnfriendlyUnitInObjectRangeCheck> searcher(me, TargetList, checker);
+                SkyFire::AnyUnfriendlyUnitInObjectRangeCheck checker(me, me, 100.0f);
+                SkyFire::UnitListSearcher<SkyFire::AnyUnfriendlyUnitInObjectRangeCheck> searcher(me, TargetList, checker);
                 me->VisitNearbyObject(100.0f, searcher);
                 for (std::list<Unit*>::iterator itr = TargetList.begin(); itr != TargetList.end(); ++itr)
                 {
@@ -635,8 +635,8 @@ class npc_hodir_priest : public CreatureScript
                         case EVENT_DISPEL_MAGIC:
                         {
                             std::list<Unit*> TargetList;
-                            Skyfire::AnyFriendlyUnitInObjectRangeCheck checker(me, me, 30.0f);
-                            Skyfire::UnitListSearcher<Skyfire::AnyFriendlyUnitInObjectRangeCheck> searcher(me, TargetList, checker);
+                            SkyFire::AnyFriendlyUnitInObjectRangeCheck checker(me, me, 30.0f);
+                            SkyFire::UnitListSearcher<SkyFire::AnyFriendlyUnitInObjectRangeCheck> searcher(me, TargetList, checker);
                             me->VisitNearbyObject(30.0f, searcher);
                             for (std::list<Unit*>::iterator itr = TargetList.begin(); itr != TargetList.end(); ++itr)
                                 if ((*itr)->HasAura(SPELL_FREEZE))

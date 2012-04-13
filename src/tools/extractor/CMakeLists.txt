@@ -1,6 +1,5 @@
-# Copyright (C) 2005-2011 MaNGOS <http://www.getmangos.com/>
-# Copyright (C) 2008-2011 Trinity <http://www.trinitycore.org/>
 # Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
+# Copyright (C) 2005-2011 MaNGOS <http://www.getmangos.com/>
 #
 # This file is free software; as a special exception the author gives
 # unlimited permission to copy and/or distribute it, with or without

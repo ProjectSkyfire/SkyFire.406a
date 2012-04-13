@@ -1,21 +1,21 @@
 /*
- * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
- *
- * This program is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 3 of the License, or (at your
- * option) any later version.
- *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
- * more details.
- *
- * You should have received a copy of the GNU General Public License along
- * with this program. If not, see <http://www.gnu.org/licenses/>.
- */
+* Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
+* Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+* Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
+*
+* This program is free software; you can redistribute it and/or modify it
+* under the terms of the GNU General Public License as published by the
+* Free Software Foundation; either version 3 of the License, or (at your
+* option) any later version.
+*
+* This program is distributed in the hope that it will be useful, but WITHOUT
+* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+* FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+* more details.
+*
+* You should have received a copy of the GNU General Public License along
+* with this program. If not, see <http://www.gnu.org/licenses/>.
+*/
 
 #include "Common.h"
 #include "Database/DatabaseEnv.h"
@@ -27,6 +27,7 @@
 #include "AuthCodes.h"
 #include "SHA1.h"
 
+#include <algorithm>
 #include <openssl/crypto.h>
 #include <openssl/md5.h>
 
@@ -34,21 +35,21 @@
 
 enum eAuthCmd
 {
-    AUTH_LOGON_CHALLENGE                         = 0x00,
-    AUTH_LOGON_PROOF                             = 0x01,
-    AUTH_RECONNECT_CHALLENGE                     = 0x02,
-    AUTH_RECONNECT_PROOF                         = 0x03,
-    REALM_LIST                                   = 0x10,
-    XFER_INITIATE                                = 0x30,
-    XFER_DATA                                    = 0x31,
-    XFER_ACCEPT                                  = 0x32,
-    XFER_RESUME                                  = 0x33,
-    XFER_CANCEL                                  = 0x34
+    AUTH_LOGON_CHALLENGE                = 0x00,
+    AUTH_LOGON_PROOF                    = 0x01,
+    AUTH_RECONNECT_CHALLENGE            = 0x02,
+    AUTH_RECONNECT_PROOF                = 0x03,
+    REALM_LIST                          = 0x10,
+    XFER_INITIATE                       = 0x30,
+    XFER_DATA                           = 0x31,
+    XFER_ACCEPT                         = 0x32,
+    XFER_RESUME                         = 0x33,
+    XFER_CANCEL                         = 0x34
 };
 
 enum eStatus
 {
-    STATUS_CONNECTED                             = 0,
+    STATUS_CONNECTED = 0,
     STATUS_AUTHED
 };
 
@@ -61,67 +62,67 @@ enum eStatus
 
 typedef struct AUTH_LOGON_CHALLENGE_C
 {
-    uint8   cmd;
-    uint8   error;
-    uint16  size;
-    uint8   gamename[4];
-    uint8   version1;
-    uint8   version2;
-    uint8   version3;
-    uint16  build;
-    uint8   platform[4];
-    uint8   os[4];
-    uint8   country[4];
-    uint32  timezone_bias;
-    uint32  ip;
-    uint8   I_len;
-    uint8   I[1];
+    uint8 cmd;
+    uint8 error;
+    uint16 size;
+    uint8 gamename[4];
+    uint8 version1;
+    uint8 version2;
+    uint8 version3;
+    uint16 build;
+    uint8 platform[4];
+    uint8 os[4];
+    uint8 country[4];
+    uint32 timezone_bias;
+    uint32 ip;
+    uint8 I_len;
+    uint8 I[1];
 } sAuthLogonChallenge_C;
 
 typedef struct AUTH_LOGON_PROOF_C
 {
-    uint8   cmd;
-    uint8   A[32];
-    uint8   M1[20];
-    uint8   crc_hash[20];
-    uint8   number_of_keys;
-    uint8   securityFlags;                                  // 0x00-0x04
+    uint8 cmd;
+    uint8 A[32];
+    uint8 M1[20];
+    uint8 crc_hash[20];
+    uint8 number_of_keys;
+    uint8 securityFlags; // 0x00-0x04
 } sAuthLogonProof_C;
 
 typedef struct AUTH_LOGON_PROOF_S
 {
-    uint8   cmd;
-    uint8   error;
-    uint8   M2[20];
-    uint32  unk1;
-    uint32  unk2;
-    uint16  unk3;
+    uint8 cmd;
+    uint8 error;
+    uint8 M2[20];
+    uint32 unk1;
+    uint32 unk2;
+    uint16 unk3;
 } sAuthLogonProof_S;
 
 typedef struct AUTH_LOGON_PROOF_S_OLD
 {
-    uint8   cmd;
-    uint8   error;
-    uint8   M2[20];
-    uint32  unk2;
+    uint8 cmd;
+    uint8 error;
+    uint8 M2[20];
+    uint32 unk2;
 } sAuthLogonProof_S_Old;
 
 typedef struct AUTH_RECONNECT_PROOF_C
 {
-    uint8   cmd;
-    uint8   R1[16];
-    uint8   R2[20];
-    uint8   R3[20];
-    uint8   number_of_keys;
+    uint8 cmd;
+    uint8 R1[16];
+    uint8 R2[20];
+    uint8 R3[20];
+    uint8 number_of_keys;
 } sAuthReconnectProof_C;
 
 typedef struct XFER_INIT
 {
-    uint8 cmd;                                              // XFER_INITIATE
-    uint8 fileNameLen;                                      // strlen(fileName);
-    uint8 fileName[5];                                      // fileName[fileNameLen]
-    uint64 file_size;                                       // file size (bytes)
-    uint8 md5[MD5_DIGEST_LENGTH];                           // MD5
+    uint8 cmd;                      // XFER_INITIATE
+    uint8 fileNameLen;              // strlen(fileName);
+    uint8 fileName[5];              // fileName[fileNameLen]
+    uint64 file_size;               // file size (bytes)
+    uint8 md5[MD5_DIGEST_LENGTH];   // MD5
 } XFER_INIT;
 
 typedef struct XFER_DATA
@@ -180,14 +181,14 @@ private:
 
 const AuthHandler table[] =
 {
-    { AUTH_LOGON_CHALLENGE,     STATUS_CONNECTED, &AuthSocket::_HandleLogonChallenge    },
-    { AUTH_LOGON_PROOF,         STATUS_CONNECTED, &AuthSocket::_HandleLogonProof        },
-    { AUTH_RECONNECT_CHALLENGE, STATUS_CONNECTED, &AuthSocket::_HandleReconnectChallenge},
-    { AUTH_RECONNECT_PROOF,     STATUS_CONNECTED, &AuthSocket::_HandleReconnectProof    },
-    { REALM_LIST,               STATUS_AUTHED,    &AuthSocket::_HandleRealmList         },
-    { XFER_ACCEPT,              STATUS_CONNECTED, &AuthSocket::_HandleXferAccept        },
-    { XFER_RESUME,              STATUS_CONNECTED, &AuthSocket::_HandleXferResume        },
-    { XFER_CANCEL,              STATUS_CONNECTED, &AuthSocket::_HandleXferCancel        }
+    { AUTH_LOGON_CHALLENGE,     STATUS_CONNECTED, &AuthSocket::_HandleLogonChallenge },
+    { AUTH_LOGON_PROOF,         STATUS_CONNECTED, &AuthSocket::_HandleLogonProof },
+    { AUTH_RECONNECT_CHALLENGE, STATUS_CONNECTED, &AuthSocket::_HandleReconnectChallenge },
+    { AUTH_RECONNECT_PROOF,     STATUS_CONNECTED, &AuthSocket::_HandleReconnectProof },
+    { REALM_LIST,               STATUS_AUTHED,    &AuthSocket::_HandleRealmList },
+    { XFER_ACCEPT,              STATUS_CONNECTED, &AuthSocket::_HandleXferAccept },
+    { XFER_RESUME,              STATUS_CONNECTED, &AuthSocket::_HandleXferResume },
+    { XFER_CANCEL,              STATUS_CONNECTED, &AuthSocket::_HandleXferCancel }
 };
 
 #define AUTH_TOTAL_COMMANDS 8
@@ -344,6 +345,13 @@ bool AuthSocket::_HandleLogonChallenge()
     _login = (const char*)ch->I;
     _build = ch->build;
     _expversion = (AuthHelper::IsPostWotLKAcceptedClientBuild(_build) ? POST_WOTLK_EXP_FLAG : NO_VALID_EXP_FLAG) | (AuthHelper::IsPostBCAcceptedClientBuild(_build) ? POST_BC_EXP_FLAG : NO_VALID_EXP_FLAG) | (AuthHelper::IsPreBCAcceptedClientBuild(_build) ? PRE_BC_EXP_FLAG : NO_VALID_EXP_FLAG);
+    _os = (const char*)ch->os;
+
+    if (_os.size() > 4)
+        return false;
+
+    // Restore string order as its byte order is reversed
+    std::reverse(_os.begin(), _os.end());
 
     pkt << (uint8)AUTH_LOGON_CHALLENGE;
     pkt << (uint8)0x00;
@@ -374,7 +382,7 @@ bool AuthSocket::_HandleLogonChallenge()
 
             // If the IP is 'locked', check that the player comes indeed from the correct IP address
             bool locked = false;
-            if (fields[2].GetUInt8() == 1)                  // if ip is locked
+            if (fields[2].GetUInt8() == 1) // if ip is locked
             {
                 sLog->outStaticDebug("[AuthChallenge] Account '%s' is locked to IP - '%s'", _login.c_str(), fields[3].GetCString());
                 sLog->outStaticDebug("[AuthChallenge] Player address is '%s'", ip_address.c_str());
@@ -446,23 +454,23 @@ bool AuthSocket::_HandleLogonChallenge()
                     pkt << uint8(WOW_SUCCESS);
 
                     // B may be calculated < 32B so we force minimal length to 32B
-                    pkt.append(B.AsByteArray(32), 32);      // 32 bytes
+                    pkt.append(B.AsByteArray(32), 32); // 32 bytes
                     pkt << uint8(1);
                     pkt.append(g.AsByteArray(), 1);
                     pkt << uint8(32);
                     pkt.append(N.AsByteArray(32), 32);
-                    pkt.append(s.AsByteArray(), s.GetNumBytes());   // 32 bytes
+                    pkt.append(s.AsByteArray(), s.GetNumBytes()); // 32 bytes
                     pkt.append(unk3.AsByteArray(16), 16);
                     uint8 securityFlags = 0;
-                    pkt << uint8(securityFlags);            // security flags (0x0...0x04)
+                    pkt << uint8(securityFlags); // security flags (0x0...0x04)
 
-                    if (securityFlags & 0x01)               // PIN input
+                    if (securityFlags & 0x01) // PIN input
                     {
                         pkt << uint32(0);
-                        pkt << uint64(0) << uint64(0);      // 16 bytes hash?
+                        pkt << uint64(0) << uint64(0); // 16 bytes hash?
                     }
 
-                    if (securityFlags & 0x02)               // Matrix input
+                    if (securityFlags & 0x02) // Matrix input
                     {
                         pkt << uint8(0);
                         pkt << uint8(0);
@@ -471,7 +479,7 @@ bool AuthSocket::_HandleLogonChallenge()
                         pkt << uint64(0);
                     }
 
-                    if (securityFlags & 0x04)               // Security token input
+                    if (securityFlags & 0x04) // Security token input
                         pkt << uint8(1);
 
                     uint8 secLevel = fields[4].GetUInt8();
@@ -487,7 +495,7 @@ bool AuthSocket::_HandleLogonChallenge()
                 }
             }
         }
-        else                                                //no account
+        else //no account
             pkt << (uint8)WOW_FAIL_UNKNOWN_ACCOUNT;
     }
 
@@ -603,7 +611,8 @@ bool AuthSocket::_HandleLogonProof()
         stmt->setString(0, K_hex);
         stmt->setString(1, socket().getRemoteAddress().c_str());
         stmt->setUInt32(2, GetLocaleByName(_localizationName));
-        stmt->setString(3, _login);
+        stmt->setString(3, _os);
+        stmt->setString(4, _login);
         LoginDatabase.Execute(stmt);
 
         OPENSSL_free((void*)K_hex);
@@ -613,7 +622,7 @@ bool AuthSocket::_HandleLogonProof()
         sha.UpdateBigNumbers(&A, &M, &K, NULL);
         sha.Finalize();
 
-        if ((_expversion & POST_BC_EXP_FLAG) || (_expversion & POST_WOTLK_EXP_FLAG))     // 2.x, 3.x, 4.x
+        if ((_expversion & POST_BC_EXP_FLAG) || (_expversion & POST_WOTLK_EXP_FLAG)) // 2.x, 3.x, 4.x
         {
             sAuthLogonProof_S proof;
             memcpy(proof.M2, sha.GetDigest(), 20);
@@ -742,6 +751,13 @@ bool AuthSocket::_HandleReconnectChallenge()
     // Reinitialize build, expansion and the account securitylevel
     _build = ch->build;
     _expversion = (AuthHelper::IsPostBCAcceptedClientBuild(_build) ? POST_BC_EXP_FLAG : NO_VALID_EXP_FLAG) | (AuthHelper::IsPreBCAcceptedClientBuild(_build) ? PRE_BC_EXP_FLAG : NO_VALID_EXP_FLAG);
+    _os = (const char*)ch->os;
+
+    if (_os.size() > 4)
+        return false;
+
+    // Restore string order as its byte order is reversed
+    std::reverse(_os.begin(), _os.end());
 
     Field* fields = result->Fetch();
     uint8 secLevel = fields[2].GetUInt8();
@@ -754,8 +770,8 @@ bool AuthSocket::_HandleReconnectChallenge()
     pkt << (uint8)AUTH_RECONNECT_CHALLENGE;
     pkt << (uint8)0x00;
     _reconnectProof.SetRand(16 * 8);
-    pkt.append(_reconnectProof.AsByteArray(16), 16);        // 16 bytes random
-    pkt << (uint64)0x00 << (uint64)0x00;                    // 16 bytes zeros
+    pkt.append(_reconnectProof.AsByteArray(16), 16); // 16 bytes random
+    pkt << (uint64)0x00 << (uint64)0x00; // 16 bytes zeros
     socket().send((char const*)pkt.contents(), pkt.size());
     return true;
 }
@@ -787,7 +803,7 @@ bool AuthSocket::_HandleReconnectProof()
         ByteBuffer pkt;
         pkt << (uint8)AUTH_RECONNECT_PROOF;
         pkt << (uint8)0x00;
-        pkt << (uint16)0x00;                               // 2 bytes zeros
+        pkt << (uint16)0x00; // 2 bytes zeros
         socket().send((char const*)pkt.contents(), pkt.size());
         _authed = true;
         return true;
@@ -860,29 +876,29 @@ bool AuthSocket::_HandleRealmList()
 
         uint8 lock = (i->second.allowedSecurityLevel > _accountSecurityLevel) ? 1 : 0;
 
-        pkt << i->second.icon;                                       // realm type
-        if (_expversion & (POST_BC_EXP_FLAG | POST_WOTLK_EXP_FLAG))  // 2.x, 3.x, and 4.x clients
-            pkt << lock;                                             // if 1, then realm locked
-        pkt << i->second.color;                                      // if 2, then realm is offline
+        pkt << i->second.icon; // realm type
+        if (_expversion & (POST_BC_EXP_FLAG | POST_WOTLK_EXP_FLAG)) // 2.x, 3.x, and 4.x clients
+            pkt << lock; // if 1, then realm locked
+        pkt << i->second.color; // if 2, then realm is offline
         pkt << i->first;
         pkt << i->second.address;
         pkt << i->second.populationLevel;
         pkt << AmountOfCharacters;
-        pkt << i->second.timezone;                                   // realm category
-        if (_expversion & (POST_BC_EXP_FLAG | POST_WOTLK_EXP_FLAG))  // 2.x, 3.x, and 4.x clients
-            pkt << (uint8)0x2C;                                      // unk, may be realm number/id?
+        pkt << i->second.timezone; // realm category
+        if (_expversion & (POST_BC_EXP_FLAG | POST_WOTLK_EXP_FLAG)) // 2.x, 3.x, and 4.x clients
+            pkt << (uint8)0x2C; // unk, may be realm number/id?
         else
-            pkt << (uint8)0x0;                                       // 1.12.1 and 1.12.2 clients
+            pkt << (uint8)0x0; // 1.12.1 and 1.12.2 clients
 
         ++RealmListSize;
     }
 
-    if ((_expversion & POST_BC_EXP_FLAG) || (_expversion & POST_WOTLK_EXP_FLAG))  // 2.x, 3.x, and 4.x clients
+    if ((_expversion & POST_BC_EXP_FLAG) || (_expversion & POST_WOTLK_EXP_FLAG)) // 2.x, 3.x, and 4.x clients
     {
         pkt << (uint8)0x10;
         pkt << (uint8)0x00;
     }
-    else                                                                          // 1.12.1 and 1.12.2 clients
+    else // 1.12.1 and 1.12.2 clients
     {
         pkt << (uint8)0x00;
         pkt << (uint8)0x02;
@@ -891,7 +907,7 @@ bool AuthSocket::_HandleRealmList()
     // make a ByteBuffer which stores the RealmList's size
     ByteBuffer RealmListSizeBuffer;
     RealmListSizeBuffer << (uint32)0;
-    if ((_expversion & POST_BC_EXP_FLAG) || (_expversion & POST_WOTLK_EXP_FLAG))  // 2.x, 3.x, and 4.x clients
+    if ((_expversion & POST_BC_EXP_FLAG) || (_expversion & POST_WOTLK_EXP_FLAG)) // 2.x, 3.x, and 4.x clients
         RealmListSizeBuffer << (uint16)RealmListSize;
     else
         RealmListSizeBuffer << (uint32)RealmListSize;
@@ -899,8 +915,8 @@ bool AuthSocket::_HandleRealmList()
     ByteBuffer hdr;
     hdr << (uint8) REALM_LIST;
     hdr << (uint16)(pkt.size() + RealmListSizeBuffer.size());
-    hdr.append(RealmListSizeBuffer);                        // append RealmList's size buffer
-    hdr.append(pkt);                                        // append realms in the realmlist
+    hdr.append(RealmListSizeBuffer); // append RealmList's size buffer
+    hdr.append(pkt); // append realms in the realmlist
 
     socket().send((char const*)hdr.contents(), hdr.size());
 
@@ -934,7 +950,7 @@ bool AuthSocket::_HandleXferCancel()
     sLog->outStaticDebug("Entering _HandleXferCancel");
 
     // Close and delete the socket
-    socket().recv_skip(1);                                         //clear input buffer
+    socket().recv_skip(1); //clear input buffer
     socket().shutdown();
 
     return true;
@@ -953,7 +969,7 @@ bool AuthSocket::_HandleXferAccept()
     }
 
     // Launch a PatcherRunnable thread, starting at the beginning of the patch file
-    socket().recv_skip(1);                                         // clear input buffer
+    socket().recv_skip(1); // clear input buffer
     fseek(pPatch, 0, 0);
 
     ACE_Based::Thread u(new PatcherRunnable(this));
@@ -1014,7 +1030,7 @@ void Patcher::LoadPatchesInfo()
     WIN32_FIND_DATA fil;
     HANDLE hFil = FindFirstFile("./patches/*.mpq", &fil);
     if (hFil == INVALID_HANDLE_VALUE)
-        return;                                             // no patches were found
+        return; // no patches were found
 
     do
         LoadPatchMD5(fil.cFileName);

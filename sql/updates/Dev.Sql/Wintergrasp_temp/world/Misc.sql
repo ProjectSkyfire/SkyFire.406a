@@ -4,19 +4,19 @@ INSERT INTO `spell_linked_spell` (`spell_trigger`,`spell_effect`,`type`,`comment
 (54640,54643,0, 'WG teleporter');
 
 -- Spell area
-DELETE FROM `spell_area` WHERE `spell` IN (58730,57940);
+DELETE FROM `spell_area` WHERE `spell` IN (91604,57940);
 INSERT INTO `spell_area` (`spell`,`area`,`quest_start`,`quest_start_active`,`quest_end`,`aura_spell`,`racemask`,`gender`,`autocast`) VALUES
-(58730,4581,0,0,0,0,0,2,1), -- Restricted Flight Area (Wintergrasp Eject)
-(58730,4539,0,0,0,0,0,2,1),
-(58730,4197,0,0,0,0,0,2,1),
-(58730,4585,0,0,0,0,0,2,1),
-(58730,4612,0,0,0,0,0,2,1),
-(58730,4582,0,0,0,0,0,2,1),
-(58730,4583,0,0,0,0,0,2,1),
-(58730,4589,0,0,0,0,0,2,1),
-(58730,4575,0,0,0,0,0,2,1),
-(58730,4538,0,0,0,0,0,2,1),
-(58730,4577,0,0,0,0,0,2,1),
+(91604,4581,0,0,0,0,0,2,1), -- Restricted Flight Area (Wintergrasp Eject)
+(91604,4539,0,0,0,0,0,2,1),
+(91604,4197,0,0,0,0,0,2,1),
+(91604,4585,0,0,0,0,0,2,1),
+(91604,4612,0,0,0,0,0,2,1),
+(91604,4582,0,0,0,0,0,2,1),
+(91604,4583,0,0,0,0,0,2,1),
+(91604,4589,0,0,0,0,0,2,1),
+(91604,4575,0,0,0,0,0,2,1),
+(91604,4538,0,0,0,0,0,2,1),
+(91604,4577,0,0,0,0,0,2,1),
 (57940,65,0,0,0,0,0,2,1), -- Essence of Wintergrasp
 (57940,66,0,0,0,0,0,2,1),
 (57940,67,0,0,0,0,0,2,1),
@@ -59,3 +59,4 @@ INSERT INTO `spell_target_position` (`id`,`target_map`,`target_position_x`,`targ
 (59766,571,4331.716,3235.695,390.251,0.008500), -- Teleport: Westspark Factory Graveyard "area 4611"
 (59767,571,4314.648,2408.522,392.642,6.268125), -- Teleport: Eastspark Factory Graveyard "area 4612"
 (59769,571,5140.790,2179.120,390.950,1.972220); -- Teleport: Alliance Landing Zone
+

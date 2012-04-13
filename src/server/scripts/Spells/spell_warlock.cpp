@@ -173,9 +173,7 @@ class spell_warl_create_healthstone : public SpellScriptLoader
 
             bool Validate(SpellInfo const* /*spellEntry*/)
             {
-                if (!sSpellMgr->GetSpellInfo(WARLOCK_IMPROVED_HEALTHSTONE_R1))
-                    return false;
-                if (!sSpellMgr->GetSpellInfo(WARLOCK_IMPROVED_HEALTHSTONE_R2))
+                if (!sSpellMgr->GetSpellInfo(WARLOCK_IMPROVED_HEALTHSTONE_R1) || !sSpellMgr->GetSpellInfo(WARLOCK_IMPROVED_HEALTHSTONE_R2))
                     return false;
                 return true;
             }
@@ -216,16 +214,15 @@ class spell_warl_create_healthstone : public SpellScriptLoader
 };
 
 uint32 const spell_warl_create_healthstone::spell_warl_create_healthstone_SpellScript::iTypes[8][3] = {
-    { 5512, 19004, 19005},             // Minor Healthstone
-    { 5511, 19006, 19007},             // Lesser Healthstone
-    { 5509, 19008, 19009},             // Healthstone
-    { 5510, 19010, 19011},             // Greater Healthstone
-    { 9421, 19012, 19013},             // Major Healthstone
-    {22103, 22104, 22105},             // Master Healthstone
-    {36889, 36890, 36891},             // Demonic Healthstone
+    { 5512, 19004, 19005},              // Minor Healthstone
+    { 5511, 19006, 19007},              // Lesser Healthstone
+    { 5509, 19008, 19009},              // Healthstone
+    { 5510, 19010, 19011},              // Greater Healthstone
+    { 9421, 19012, 19013},              // Major Healthstone
+    {22103, 22104, 22105},              // Master Healthstone
+    {36889, 36890, 36891},              // Demonic Healthstone
     {36892, 36893, 36894}               // Fel Healthstone
 };
-
 // 47422 Everlasting Affliction
 class spell_warl_everlasting_affliction : public SpellScriptLoader
 {

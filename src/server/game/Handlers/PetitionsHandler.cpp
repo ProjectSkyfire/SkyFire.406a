@@ -300,7 +300,7 @@ void WorldSession::HandlePetitionQueryOpcode(WorldPacket & recv_data)
 
     uint32 guildguid;
     uint64 petitionguid;
-    recv_data >> guildguid;                                 // in Skyfire always same as GUID_LOPART(petitionguid)
+    recv_data >> guildguid;                                 // in SkyFire always same as GUID_LOPART(petitionguid)
     recv_data >> petitionguid;                              // petition guid
     sLog->outDebug(LOG_FILTER_NETWORKIO, "CMSG_PETITION_QUERY Petition GUID %u Guild GUID %u", GUID_LOPART(petitionguid), guildguid);
 
@@ -335,7 +335,7 @@ void WorldSession::SendPetitionQueryOpcode(uint64 petitionguid)
     }
 
     WorldPacket data(SMSG_PETITION_QUERY_RESPONSE, (4+8+name.size()+1+1+4*12+2+10));
-    data << uint32(GUID_LOPART(petitionguid));              // guild/team guid (in Skyfire always same as GUID_LOPART(petition guid)
+    data << uint32(GUID_LOPART(petitionguid));              // guild/team guid (in SkyFire always same as GUID_LOPART(petition guid)
     data << uint64(ownerguid);                              // charter owner guid
     data << name;                                           // name (guild/arena team)
     data << uint8(0);                                       // some string

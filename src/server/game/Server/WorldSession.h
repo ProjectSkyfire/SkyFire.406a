@@ -49,6 +49,7 @@ class WorldSocket;
 class LoginQueryHolder;
 class CharacterHandler;
 class SpellCastTargets;
+class Warden;
 struct AreaTableEntry;
 struct LfgJoinResultData;
 struct LfgLockStatus;
@@ -248,10 +249,13 @@ class WorldSession
         uint32 GetAccountId() const { return _accountId; }
         Player* GetPlayer() const { return _player; }
         char const* GetPlayerName() const;
+        uint32 GetGuidLow() const;
         void SetSecurity(AccountTypes security) { _security = security; }
         std::string const& GetRemoteAddress() { return m_Address; }
         void SetPlayer(Player* player);
         uint8 Expansion() const { return m_expansion; }
+
+        void InitWarden(BigNumber* k, std::string os);
 
         /// Session in auth.queue currently
         void SetInQueue(bool state) { m_inQueue = state; }
@@ -797,15 +801,15 @@ class WorldSession
         void HandleInstanceLockResponse(WorldPacket& recvPacket);
 
         // Battlefield
-        void SendBfInvitePlayerToWar(uint32 BattleId, uint32 ZoneId, uint32 time);
+        void SendBfInvitePlayerToWar(uint32 BattleId, uint32 ZoneId, uint64 time);
         void SendBfInvitePlayerToQueue(uint32 BattleId);
-        void SendBfQueueInviteResponce(uint32 BattleId, uint32 ZoneId);
+        void SendBfQueueInviteResponse(uint32 BattleId, uint32 ZoneId);
         void SendBfEntered(uint32 BattleId);
         void SendBfLeaveMessage(uint32 BattleId);
-        void HandleBfQueueInviteResponse(WorldPacket &recv_data);
-        void HandleBfJoinQueue(WorldPacket &recv_data);
-        void HandleBfEntryInviteResponse(WorldPacket &recv_data);
-        void HandleBfExitRequest(WorldPacket &recv_data);
+        void HandleBfQueueInviteResponse(WorldPacket& recv_data);
+        void HandleBfJoinQueue(WorldPacket& recv_data);
+        void HandleBfEntryInviteResponse(WorldPacket& recv_data);
+        void HandleBfExitRequest(WorldPacket& recv_data);
 
         // Looking for Dungeon/Raid
         void HandleLfgSetCommentOpcode(WorldPacket& recv_data);
@@ -966,6 +970,9 @@ class WorldSession
         uint8 m_expansion;
 
         typedef std::list<AddonInfo> AddonsList;
+
+        // Warden
+        Warden* _warden;                                    // Remains NULL if Warden system is not enabled by config
 
         time_t _logoutTime;
         bool m_inQueue;                                     // session wait in auth.queue

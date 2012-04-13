@@ -381,7 +381,7 @@ typedef UNORDERED_MAP<uint64/*(instance, guid) pair*/, time_t> RespawnTimes;
 #define MIN_CREATURE_AI_TEXT_STRING_ID (-1)                 // 'creature_ai_texts'
 #define MAX_CREATURE_AI_TEXT_STRING_ID (-1000000)
 
-// Skyfire Trainer Reference start range
+// SkyFire Trainer Reference start range
 #define SKYFIRE_TRAINER_START_REF      200000
 
 struct SkyFireStringLocale
@@ -1069,7 +1069,7 @@ class ObjectMgr
         GameObjectData& NewGOData(uint32 guid) { return _gameObjectDataStore[guid]; }
         void DeleteGOData(uint32 guid);
 
-        SkyFireStringLocale const* GetTrinityStringLocale(int32 entry) const
+        SkyFireStringLocale const* GetSkyFireStringLocale(int32 entry) const
         {
             SkyFireStringLocaleContainer::const_iterator itr = _skyfireStringLocaleStore.find(entry);
             if (itr == _skyfireStringLocaleStore.end()) return NULL;
@@ -1371,6 +1371,6 @@ class ObjectMgr
 #define sObjectMgr ACE_Singleton<ObjectMgr, ACE_Null_Mutex>::instance()
 
 // scripting access functions
-bool LoadSkyfireStrings(char const* table, int32 start_value = MAX_CREATURE_AI_TEXT_STRING_ID, int32 end_value = std::numeric_limits<int32>::min());
+bool LoadSkyFireStrings(char const* table, int32 start_value = MAX_CREATURE_AI_TEXT_STRING_ID, int32 end_value = std::numeric_limits<int32>::min());
 
 #endif

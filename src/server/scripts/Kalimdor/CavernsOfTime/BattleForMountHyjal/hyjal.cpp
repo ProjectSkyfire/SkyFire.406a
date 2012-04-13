@@ -225,7 +225,6 @@ public:
                          player->SendNewItem(item, 1, true, false, true);
                 }
                 player->SEND_GOSSIP_MENU(907, creature->GetGUID());
-                CAST_AI(hyjalAI, creature->AI());
         }
         return true;
     }

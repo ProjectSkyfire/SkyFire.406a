@@ -65,6 +65,14 @@
 #include "Group.h"
 #include "ChannelMgr.h"
 
+bool ChatHandler::HandleMapSetInfoCommand(const char* args)
+{
+   return true;
+}
+bool ChatHandler::HandleMapInfoCommand(const char* args)
+{
+return true;
+}
 bool ChatHandler::HandleMaxSkillCommand(const char* /*args*/)
 {
     Player* SelectedPlayer = getSelectedPlayer();
@@ -3493,14 +3501,14 @@ bool ChatHandler::HandleRespawnCommand(const char* /*args*/)
         return true;
     }
 
-    CellCoord p(Skyfire::ComputeCellCoord(player->GetPositionX(), player->GetPositionY()));
+    CellCoord p(SkyFire::ComputeCellCoord(player->GetPositionX(), player->GetPositionY()));
     Cell cell(p);
     cell.SetNoCreate();
 
-    Skyfire::RespawnDo u_do;
-    Skyfire::WorldObjectWorker<Skyfire::RespawnDo> worker(player, u_do);
+    SkyFire::RespawnDo u_do;
+    SkyFire::WorldObjectWorker<SkyFire::RespawnDo> worker(player, u_do);
 
-    TypeContainerVisitor<Skyfire::WorldObjectWorker<Skyfire::RespawnDo>, GridTypeMapContainer > obj_worker(worker);
+    TypeContainerVisitor<SkyFire::WorldObjectWorker<SkyFire::RespawnDo>, GridTypeMapContainer > obj_worker(worker);
     cell.Visit(p, obj_worker, *player->GetMap(), *player, player->GetGridActivationRange());
 
     return true;

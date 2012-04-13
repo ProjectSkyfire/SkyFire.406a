@@ -426,8 +426,8 @@ void GameObject::Update(uint32 diff)
                     // search unfriendly creature
                     if (owner && goInfo->entry != 193963)               // hunter trap
                     {
-                        Skyfire::AnyUnfriendlyNoTotemUnitInObjectRangeCheck checker(this, owner, radius);
-                        Skyfire::UnitSearcher<Skyfire::AnyUnfriendlyNoTotemUnitInObjectRangeCheck> searcher(this, ok, checker);
+                        SkyFire::AnyUnfriendlyNoTotemUnitInObjectRangeCheck checker(this, owner, radius);
+                        SkyFire::UnitSearcher<SkyFire::AnyUnfriendlyNoTotemUnitInObjectRangeCheck> searcher(this, ok, checker);
                         VisitNearbyGridObject(radius, searcher);
                         if (!ok) VisitNearbyWorldObject(radius, searcher);
                     }
@@ -436,8 +436,8 @@ void GameObject::Update(uint32 diff)
                         // environmental damage spells already have around enemies targeting but this not help in case not existed GO casting support
                         // affect only players
                         Player* player = NULL;
-                        Skyfire::AnyPlayerInObjectRangeCheck checker(this, radius);
-                        Skyfire::PlayerSearcher<Skyfire::AnyPlayerInObjectRangeCheck> searcher(this, player, checker);
+                        SkyFire::AnyPlayerInObjectRangeCheck checker(this, radius);
+                        SkyFire::PlayerSearcher<SkyFire::AnyPlayerInObjectRangeCheck> searcher(this, player, checker);
                         VisitNearbyWorldObject(radius, searcher);
                         ok = player;
                     }
@@ -959,13 +959,13 @@ void GameObject::TriggeringLinkedGameObject(uint32 trapEntry, Unit* target)
     GameObject* trapGO = NULL;
     {
         // using original GO distance
-        CellCoord p(Skyfire::ComputeCellCoord(GetPositionX(), GetPositionY()));
+        CellCoord p(SkyFire::ComputeCellCoord(GetPositionX(), GetPositionY()));
         Cell cell(p);
 
-        Skyfire::NearestGameObjectEntryInObjectRangeCheck go_check(*target, trapEntry, range);
-        Skyfire::GameObjectLastSearcher<Skyfire::NearestGameObjectEntryInObjectRangeCheck> checker(this, trapGO, go_check);
+        SkyFire::NearestGameObjectEntryInObjectRangeCheck go_check(*target, trapEntry, range);
+        SkyFire::GameObjectLastSearcher<SkyFire::NearestGameObjectEntryInObjectRangeCheck> checker(this, trapGO, go_check);
 
-        TypeContainerVisitor<Skyfire::GameObjectLastSearcher<Skyfire::NearestGameObjectEntryInObjectRangeCheck>, GridTypeMapContainer > object_checker(checker);
+        TypeContainerVisitor<SkyFire::GameObjectLastSearcher<SkyFire::NearestGameObjectEntryInObjectRangeCheck>, GridTypeMapContainer > object_checker(checker);
         cell.Visit(p, object_checker, *GetMap(), *target, range);
     }
 
@@ -978,13 +978,13 @@ GameObject* GameObject::LookupFishingHoleAround(float range)
 {
     GameObject* ok = NULL;
 
-    CellCoord p(Skyfire::ComputeCellCoord(GetPositionX(), GetPositionY()));
+    CellCoord p(SkyFire::ComputeCellCoord(GetPositionX(), GetPositionY()));
     Cell cell(p);
 
-    Skyfire::NearestGameObjectFishingHole u_check(*this, range);
-    Skyfire::GameObjectSearcher<Skyfire::NearestGameObjectFishingHole> checker(this, ok, u_check);
+    SkyFire::NearestGameObjectFishingHole u_check(*this, range);
+    SkyFire::GameObjectSearcher<SkyFire::NearestGameObjectFishingHole> checker(this, ok, u_check);
 
-    TypeContainerVisitor<Skyfire::GameObjectSearcher<Skyfire::NearestGameObjectFishingHole>, GridTypeMapContainer > grid_object_checker(checker);
+    TypeContainerVisitor<SkyFire::GameObjectSearcher<SkyFire::NearestGameObjectFishingHole>, GridTypeMapContainer > grid_object_checker(checker);
     cell.Visit(p, grid_object_checker, *GetMap(), *this, range);
 
     return ok;

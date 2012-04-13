@@ -21,6 +21,7 @@
 #include "GridStates.h"
 #include "ScriptMgr.h"
 #include "VMapFactory.h"
+#include "MMapFactory.h"
 #include "MapInstanced.h"
 #include "CellImpl.h"
 #include "GridNotifiers.h"
@@ -69,6 +70,9 @@ Map::~Map()
 
     if (!m_scriptSchedule.empty())
         sScriptMgr->DecreaseScheduledScriptCount(m_scriptSchedule.size());
+
+    MMAP::MMapFactory::createOrGetMMapManager()->unloadMap(GetId());
+    MMAP::MMapFactory::createOrGetMMapManager()->unloadMapInstance(GetId(), i_InstanceId);
 }
 
 bool Map::ExistMap(uint32 mapid, int gx, int gy)
@@ -115,6 +119,24 @@ bool Map::ExistVMap(uint32 mapid, int gx, int gy)
     }
 
     return true;
+}
+
+void Map::LoadMMap(int gx, int gy)
+{
+    // DONT CHANGE "gy" and "gx" - Its necessary !
+    int mmapLoadResult = MMAP::MMapFactory::createOrGetMMapManager()->loadMap(GetId(), gy, gx);
+    switch (mmapLoadResult)
+    {
+        case MMAP::MMAP_LOAD_RESULT_OK:
+            sLog->outDetail("MMAP loaded name:%s, id:%d, x:%d, y:%d (mmap rep.: x:%d, y:%d)", GetMapName(), GetId(), gx, gy, gx, gy);
+          break;
+        case MMAP::MMAP_LOAD_RESULT_ERROR:
+            sLog->outDetail("Could not load MMAP name:%s, id:%d, x:%d, y:%d (mmap rep.: x:%d, y:%d)", GetMapName(), GetId(), gx, gy, gx, gy);
+            break;
+        case MMAP::MMAP_LOAD_RESULT_IGNORED:
+            sLog->outStaticDebug("Ignored MMAP name:%s, id:%d, x:%d, y:%d (mmap rep.: x:%d, y:%d)", GetMapName(), GetId(), gx, gy, gx, gy);
+            break;
+    }
 }
 
 void Map::LoadVMap(int gx, int gy)
@@ -184,6 +206,7 @@ void Map::LoadMap(int gx, int gy, bool reload)
 void Map::LoadMapAndVMap(int gx, int gy)
 {
     LoadMap(gx, gy);
+    LoadMMap(gx, gy);
     if (i_InstanceId == 0)
         LoadVMap(gx, gy);                                   // Only load the data for the base map
 }
@@ -261,7 +284,7 @@ void Map::AddToGrid(Creature* obj, Cell const& cell)
 void Map::SwitchGridContainers(Creature* obj, bool on)
 {
     ASSERT(!obj->IsPermanentWorldObject());
-    CellCoord p = Skyfire::ComputeCellCoord(obj->GetPositionX(), obj->GetPositionY());
+    CellCoord p = SkyFire::ComputeCellCoord(obj->GetPositionX(), obj->GetPositionY());
     if (!p.IsCoordValid())
     {
         sLog->outError("Map::SwitchGridContainers: Object " UI64FMTD " has invalid coordinates X:%f Y:%f grid cell [%u:%u]", obj->GetGUID(), obj->GetPositionX(), obj->GetPositionY(), p.x_coord, p.y_coord);
@@ -383,7 +406,7 @@ void Map::LoadGrid(float x, float y)
 
 bool Map::AddPlayerToMap(Player* player)
 {
-    CellCoord cellCoord = Skyfire::ComputeCellCoord(player->GetPositionX(), player->GetPositionY());
+    CellCoord cellCoord = SkyFire::ComputeCellCoord(player->GetPositionX(), player->GetPositionY());
     if (!cellCoord.IsCoordValid())
     {
         sLog->outError("Map::Add: Player (GUID: %u) has invalid coordinates X:%f Y:%f grid cell [%u:%u]", player->GetGUIDLow(), player->GetPositionX(), player->GetPositionY(), cellCoord.x_coord, cellCoord.y_coord);
@@ -431,7 +454,7 @@ bool Map::AddToMap(T *obj)
         return true;
     }
 
-    CellCoord cellCoord = Skyfire::ComputeCellCoord(obj->GetPositionX(), obj->GetPositionY());
+    CellCoord cellCoord = SkyFire::ComputeCellCoord(obj->GetPositionX(), obj->GetPositionY());
     //It will create many problems (including crashes) if an object is not added to grid after creation
     //The correct way to fix it is to make AddToMap return false and delete the object if it is not added to grid
     //But now AddToMap is used in too many places, I will just see how many ASSERT failures it will cause
@@ -470,7 +493,7 @@ bool Map::IsGridLoaded(const GridCoord &p) const
     return (getNGrid(p.x_coord, p.y_coord) && isGridObjectDataLoaded(p.x_coord, p.y_coord));
 }
 
-void Map::VisitNearbyCellsOf(WorldObject* obj, TypeContainerVisitor<Skyfire::ObjectUpdater, GridTypeMapContainer> &gridVisitor, TypeContainerVisitor<Skyfire::ObjectUpdater, WorldTypeMapContainer> &worldVisitor)
+void Map::VisitNearbyCellsOf(WorldObject* obj, TypeContainerVisitor<SkyFire::ObjectUpdater, GridTypeMapContainer> &gridVisitor, TypeContainerVisitor<SkyFire::ObjectUpdater, WorldTypeMapContainer> &worldVisitor)
 {
     // Check for valid position
     if (!obj->IsPositionValid())
@@ -516,11 +539,11 @@ void Map::Update(const uint32 t_diff)
     /// update active cells around players and active objects
     resetMarkedCells();
 
-    Skyfire::ObjectUpdater updater(t_diff);
+    SkyFire::ObjectUpdater updater(t_diff);
     // for creature
-    TypeContainerVisitor<Skyfire::ObjectUpdater, GridTypeMapContainer  > grid_object_update(updater);
+    TypeContainerVisitor<SkyFire::ObjectUpdater, GridTypeMapContainer  > grid_object_update(updater);
     // for pets
-    TypeContainerVisitor<Skyfire::ObjectUpdater, WorldTypeMapContainer > world_object_update(updater);
+    TypeContainerVisitor<SkyFire::ObjectUpdater, WorldTypeMapContainer > world_object_update(updater);
 
     // the player iterator is stored in the map object
     // to make sure calls to Map::Remove don't invalidate it
@@ -607,9 +630,9 @@ void Map::ProcessRelocationNotifies(const uint32 diff)
                 Cell cell(pair);
                 cell.SetNoCreate();
 
-                Skyfire::DelayedUnitRelocation cell_relocation(cell, pair, *this, MAX_VISIBILITY_DISTANCE);
-                TypeContainerVisitor<Skyfire::DelayedUnitRelocation, GridTypeMapContainer  > grid_object_relocation(cell_relocation);
-                TypeContainerVisitor<Skyfire::DelayedUnitRelocation, WorldTypeMapContainer > world_object_relocation(cell_relocation);
+                SkyFire::DelayedUnitRelocation cell_relocation(cell, pair, *this, MAX_VISIBILITY_DISTANCE);
+                TypeContainerVisitor<SkyFire::DelayedUnitRelocation, GridTypeMapContainer  > grid_object_relocation(cell_relocation);
+                TypeContainerVisitor<SkyFire::DelayedUnitRelocation, WorldTypeMapContainer > world_object_relocation(cell_relocation);
                 Visit(cell, grid_object_relocation);
                 Visit(cell, world_object_relocation);
             }
@@ -981,6 +1004,7 @@ bool Map::UnloadGrid(NGridType& ngrid, bool unloadAll)
             }
             // x and y are swapped
             VMAP::VMapFactory::createOrGetVMapManager()->unloadMap(GetId(), gx, gy);
+            MMAP::MMapFactory::createOrGetMMapManager()->unloadMap(GetId(), gx, gy);
         }
         else
             ((MapInstanced*)m_parentMap)->RemoveGridMapReference(GridCoord(gx, gy));
@@ -1849,18 +1873,18 @@ char const* Map::GetMapName() const
 void Map::UpdateObjectVisibility(WorldObject* obj, Cell cell, CellCoord cellpair)
 {
     cell.SetNoCreate();
-    Skyfire::VisibleChangesNotifier notifier(*obj);
-    TypeContainerVisitor<Skyfire::VisibleChangesNotifier, WorldTypeMapContainer > player_notifier(notifier);
+    SkyFire::VisibleChangesNotifier notifier(*obj);
+    TypeContainerVisitor<SkyFire::VisibleChangesNotifier, WorldTypeMapContainer > player_notifier(notifier);
     cell.Visit(cellpair, player_notifier, *this, *obj, obj->GetVisibilityRange());
 }
 
 void Map::UpdateObjectsVisibilityFor(Player* player, Cell cell, CellCoord cellpair)
 {
-    Skyfire::VisibleNotifier notifier(*player);
+    SkyFire::VisibleNotifier notifier(*player);
 
     cell.SetNoCreate();
-    TypeContainerVisitor<Skyfire::VisibleNotifier, WorldTypeMapContainer > world_notifier(notifier);
-    TypeContainerVisitor<Skyfire::VisibleNotifier, GridTypeMapContainer  > grid_notifier(notifier);
+    TypeContainerVisitor<SkyFire::VisibleNotifier, WorldTypeMapContainer > world_notifier(notifier);
+    TypeContainerVisitor<SkyFire::VisibleNotifier, GridTypeMapContainer  > grid_notifier(notifier);
     cell.Visit(cellpair, world_notifier, *this, *player, player->GetSightRange());
     cell.Visit(cellpair, grid_notifier,  *this, *player, player->GetSightRange());
 
@@ -2088,7 +2112,7 @@ bool Map::ActiveObjectsNearGrid(NGridType const& ngrid) const
     {
         Player* player = iter->getSource();
 
-        CellCoord p = Skyfire::ComputeCellCoord(player->GetPositionX(), player->GetPositionY());
+        CellCoord p = SkyFire::ComputeCellCoord(player->GetPositionX(), player->GetPositionY());
         if ((cell_min.x_coord <= p.x_coord && p.x_coord <= cell_max.x_coord) &&
             (cell_min.y_coord <= p.y_coord && p.y_coord <= cell_max.y_coord))
             return true;
@@ -2098,7 +2122,7 @@ bool Map::ActiveObjectsNearGrid(NGridType const& ngrid) const
     {
         WorldObject* obj = *iter;
 
-        CellCoord p = Skyfire::ComputeCellCoord(obj->GetPositionX(), obj->GetPositionY());
+        CellCoord p = SkyFire::ComputeCellCoord(obj->GetPositionX(), obj->GetPositionY());
         if ((cell_min.x_coord <= p.x_coord && p.x_coord <= cell_max.x_coord) &&
             (cell_min.y_coord <= p.y_coord && p.y_coord <= cell_max.y_coord))
             return true;
@@ -2116,12 +2140,12 @@ void Map::AddToActive(Creature* c)
     {
         float x, y, z;
         c->GetRespawnPosition(x, y, z);
-        GridCoord p = Skyfire::ComputeGridCoord(x, y);
+        GridCoord p = SkyFire::ComputeGridCoord(x, y);
         if (getNGrid(p.x_coord, p.y_coord))
             getNGrid(p.x_coord, p.y_coord)->incUnloadActiveLock();
         else
         {
-            GridCoord p2 = Skyfire::ComputeGridCoord(c->GetPositionX(), c->GetPositionY());
+            GridCoord p2 = SkyFire::ComputeGridCoord(c->GetPositionX(), c->GetPositionY());
             sLog->outError("Active creature (GUID: %u Entry: %u) added to grid[%u, %u] but spawn grid[%u, %u] was not loaded.",
                 c->GetGUIDLow(), c->GetEntry(), p.x_coord, p.y_coord, p2.x_coord, p2.y_coord);
         }
@@ -2137,12 +2161,12 @@ void Map::RemoveFromActive(Creature* c)
     {
         float x, y, z;
         c->GetRespawnPosition(x, y, z);
-        GridCoord p = Skyfire::ComputeGridCoord(x, y);
+        GridCoord p = SkyFire::ComputeGridCoord(x, y);
         if (getNGrid(p.x_coord, p.y_coord))
             getNGrid(p.x_coord, p.y_coord)->decUnloadActiveLock();
         else
         {
-            GridCoord p2 = Skyfire::ComputeGridCoord(c->GetPositionX(), c->GetPositionY());
+            GridCoord p2 = SkyFire::ComputeGridCoord(c->GetPositionX(), c->GetPositionY());
             sLog->outError("Active creature (GUID: %u Entry: %u) removed from grid[%u, %u] but spawn grid[%u, %u] was not loaded.",
                 c->GetGUIDLow(), c->GetEntry(), p.x_coord, p.y_coord, p2.x_coord, p2.y_coord);
         }

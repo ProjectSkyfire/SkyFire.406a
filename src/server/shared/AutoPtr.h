@@ -20,14 +20,14 @@
 
 #include <ace/Bound_Ptr.h>
 
-namespace Skyfire
+namespace SkyFire
 {
     template <class Pointer, class Lock>
     class AutoPtr : public ACE_Strong_Bound_Ptr<Pointer, Lock>
     {
         public:
             AutoPtr() : ACE_Strong_Bound_Ptr<Pointer, Lock>() {}
- 
+
             AutoPtr(Pointer* x)
             {
                 ACE_Strong_Bound_Ptr<Pointer, Lock>::reset(x);

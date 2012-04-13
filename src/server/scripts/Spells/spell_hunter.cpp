@@ -47,7 +47,7 @@ enum HunterSpells
     HUNTER_PET_SPELL_FRENZY                      = 19615,
     HUNTER_PET_SPELL_FOCUS_FIRE_REGEN            = 83468,
     HUNTER_VISUAL_FOCUS_FIRE                     = 88843,
-    HUNTER_PET_AURA_FRENZY_TRIGGER               = 20784, // Tamed Pet Passive 07 (DND) 
+    HUNTER_PET_AURA_FRENZY_TRIGGER               = 20784, // Tamed Pet Passive 07 (DND)
 };
 
 // 53209 Chimera Shot
@@ -487,8 +487,8 @@ public:
             float max_range = GetSpellInfo()->GetMaxRange(false);
             WorldObject* result = NULL;
             // search for nearby enemy corpse in range
-            Skyfire::AnyDeadUnitSpellTargetInRangeCheck check(caster, max_range, GetSpellInfo(), TARGET_CHECK_ENEMY);
-            Skyfire::WorldObjectSearcher<Skyfire::AnyDeadUnitSpellTargetInRangeCheck> searcher(caster, result, check);
+            SkyFire::AnyDeadUnitSpellTargetInRangeCheck check(caster, max_range, GetSpellInfo(), TARGET_CHECK_ENEMY);
+            SkyFire::WorldObjectSearcher<SkyFire::AnyDeadUnitSpellTargetInRangeCheck> searcher(caster, result, check);
             caster->GetMap()->VisitFirstFound(caster->m_positionX, caster->m_positionY, max_range, searcher);
             if (!result)
                 return SPELL_FAILED_NO_EDIBLE_CORPSES;
@@ -652,7 +652,7 @@ public:
             if (Unit* pet = GetCaster()->GetGuardianPet())
                 pet->RemoveAura(HUNTER_PET_SPELL_FRENZY);
         }
-        
+
         void Register()
         {
             OnCheckCast += SpellCheckCastFn(spell_hun_focus_fire_SpellScript::CheckFrenzyStack);
@@ -744,10 +744,9 @@ public:
             {
                 Unit* petOwner = pet->GetOwner();
 
-
                 if (!petOwner)
                     return;
-             
+
                 amount = GetHasteValue();
             }
         }
@@ -770,7 +769,6 @@ public:
                     petOwner->RemoveAura(HUNTER_VISUAL_FOCUS_FIRE);
             }
         }
-                
 
         void Register()
         {
@@ -785,7 +783,6 @@ public:
         return new spell_hun_frenzy_effect_AuraScript();
     }
 };
-
 
 void AddSC_hunter_spell_scripts()
 {

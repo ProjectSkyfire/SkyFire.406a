@@ -1024,7 +1024,7 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder* holder)
     //Send WG timer to player at login
     if (sWorld->getBoolConfig(CONFIG_WINTERGRASP_ENABLE))
     {
-        if (Battlefield *bfWG = sBattlefieldMgr.GetBattlefieldByBattleId(1))
+        if (Battlefield *bfWG = sBattlefieldMgr->GetBattlefieldByBattleId(1))
         {
             if (bfWG->IsWarTime())
                 pCurrChar->SendUpdateWorldState(ClockWorldState[1], uint32(time(NULL)));
@@ -1036,7 +1036,7 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder* holder)
     //Send TB timer to player at login
     if (sWorld->getBoolConfig(CONFIG_TOL_BARAD_ENABLE))
     {
-        if (Battlefield * bfTB = sBattlefieldMgr.GetBattlefieldToZoneId(5095))
+        if (Battlefield * bfTB = sBattlefieldMgr->GetBattlefieldToZoneId(5095))
         {
             if (bfTB->IsWarTime())
                 pCurrChar->SendUpdateWorldState(TBClockWorldState[1], uint32(time(NULL)));

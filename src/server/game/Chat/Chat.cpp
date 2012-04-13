@@ -330,6 +330,13 @@ ChatCommand* ChatHandler::getCommandTable()
         { NULL,             0,                  false, NULL,                                                "", NULL }
     };
 
+    static ChatCommand mapinfoCommandTable[] =
+    {
+        { "map",       SEC_ADMINISTRATOR,  true,    OldHandler<&ChatHandler::HandleMapInfoCommand>,       "", NULL },
+        { "set",       SEC_ADMINISTRATOR,  true,    OldHandler<&ChatHandler::HandleMapSetInfoCommand>,       "", NULL },
+        { NULL,        0,                  false,   NULL,                                            "", NULL }
+    };
+
     static ChatCommand commandTable[] =
     {
         { "character",     SEC_GAMEMASTER,     true,  NULL,                                           "", characterCommandTable},
@@ -1224,8 +1231,8 @@ GameObject* ChatHandler::GetNearbyGameObject()
 
     Player* pl = _session->GetPlayer();
     GameObject* obj = NULL;
-    Skyfire::NearestGameObjectCheck check(*pl);
-    Skyfire::GameObjectLastSearcher<Skyfire::NearestGameObjectCheck> searcher(pl, obj, check);
+    SkyFire::NearestGameObjectCheck check(*pl);
+    SkyFire::GameObjectLastSearcher<SkyFire::NearestGameObjectCheck> searcher(pl, obj, check);
     pl->VisitNearbyGridObject(SIZE_OF_GRIDS, searcher);
     return obj;
 }
@@ -1242,13 +1249,13 @@ GameObject* ChatHandler::GetObjectGlobalyWithGuidOrNearWithDbGuid(uint32 lowguid
     if (!obj && sObjectMgr->GetGOData(lowguid))                   // guid is DB guid of object
     {
         // search near player then
-        CellCoord p(Skyfire::ComputeCellCoord(player->GetPositionX(), player->GetPositionY()));
+        CellCoord p(SkyFire::ComputeCellCoord(player->GetPositionX(), player->GetPositionY()));
         Cell cell(p);
 
-        Skyfire::GameObjectWithDbGUIDCheck go_check(*player, lowguid);
-        Skyfire::GameObjectSearcher<Skyfire::GameObjectWithDbGUIDCheck> checker(player, obj, go_check);
+        SkyFire::GameObjectWithDbGUIDCheck go_check(*player, lowguid);
+        SkyFire::GameObjectSearcher<SkyFire::GameObjectWithDbGUIDCheck> checker(player, obj, go_check);
 
-        TypeContainerVisitor<Skyfire::GameObjectSearcher<Skyfire::GameObjectWithDbGUIDCheck>, GridTypeMapContainer > object_checker(checker);
+        TypeContainerVisitor<SkyFire::GameObjectSearcher<SkyFire::GameObjectWithDbGUIDCheck>, GridTypeMapContainer > object_checker(checker);
         cell.Visit(p, object_checker, *player->GetMap(), *player, player->GetGridActivationRange());
     }
 

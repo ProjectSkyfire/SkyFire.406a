@@ -22,6 +22,8 @@
 #include "MoveSplineFlag.h"
 #include <G3D/Vector3.h>
 
+using G3D::Vector3;
+
 namespace Movement
 {
     typedef std::vector<Vector3> PointsArray;

@@ -1,3 +1,4 @@
+
 # Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
 # Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
 #
@@ -9,16 +10,13 @@
 # WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-set(Recast_STAT_SRCS
-    Recast.cpp 
-    RecastAlloc.cpp 
-    RecastArea.cpp 
-    RecastContour.cpp 
-    RecastFilter.cpp 
-    RecastMesh.cpp 
-    RecastMeshDetail.cpp 
-    RecastRasterization.cpp 
-    RecastRegion.cpp 
+set(Detour_STAT_SRCS
+    DetourAlloc.cpp
+    DetourCommon.cpp
+    DetourNavMesh.cpp
+    DetourNavMeshBuilder.cpp
+    DetourNavMeshQuery.cpp
+    DetourNode.cpp
 )
 
 if(WIN32)
@@ -27,6 +25,6 @@ if(WIN32)
   )
 endif()
 
-add_library(Recast STATIC ${Recast_STAT_SRCS})
+add_library(Detour STATIC ${Detour_STAT_SRCS})
 
-target_link_libraries(Recast ${ZLIB_LIBRARIES})
+target_link_libraries(Detour ${ZLIB_LIBRARIES})

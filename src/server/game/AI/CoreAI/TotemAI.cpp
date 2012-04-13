@@ -80,8 +80,8 @@ TotemAI::UpdateAI(const uint32 /*diff*/)
         me->IsFriendlyTo(victim) || !me->canSeeOrDetect(victim))
     {
         victim = NULL;
-        Skyfire::NearestAttackableUnitInObjectRangeCheck u_check(me, me, max_range);
-        Skyfire::UnitLastSearcher<Skyfire::NearestAttackableUnitInObjectRangeCheck> checker(me, victim, u_check);
+        SkyFire::NearestAttackableUnitInObjectRangeCheck u_check(me, me, max_range);
+        SkyFire::UnitLastSearcher<SkyFire::NearestAttackableUnitInObjectRangeCheck> checker(me, victim, u_check);
         me->VisitNearbyObject(max_range, checker);
     }
 
