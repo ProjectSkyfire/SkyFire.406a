@@ -18,7 +18,7 @@
  */
 
 /*
------ Opcodes Not Used yet -----
+----- Opcodes needed checked and supported yet -----
 
 SMSG_CALENDAR_CLEAR_PENDING_ACTION SendCalendarClearPendingAction()
 SMSG_CALENDAR_RAID_LOCKOUT_UPDATED SendCalendarRaidLockoutUpdated(InstanceSave const* save) <--- Structure unknown, using LOCKOUT_ADDED

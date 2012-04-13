@@ -1142,6 +1142,7 @@ enum Opcodes
     SMSG_CALENDAR_EVENT_INVITE_NOTES_ALERT           = 0x00461, // Unknown opcode ID
     //SMSG_CALENDAR_UPDATE_INVITE_LIST                 = 0x071A0, // 4.0.6a 13623
     //SMSG_CALENDAR_UPDATE_INVITE_LIST2                = 0x0EDC4, // 4.0.6a 13623
+    //SMSG_CALENDAR_UPDATE_INVITE_LIST3                = 0x0A2A0, // 4.0.6a 13623
     CMSG_UPDATE_MISSILE_TRAJECTORY                   = 0x00E54, // 4.0.3a 13329 - 403
     SMSG_UPDATE_ACCOUNT_DATA_COMPLETE                = 0x0B1CC, // 4.0.6a 13623
     SMSG_TRIGGER_MOVIE                               = 0x020C8, // 4.0.6a 13623
