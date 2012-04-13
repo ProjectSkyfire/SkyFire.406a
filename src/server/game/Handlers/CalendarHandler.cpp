@@ -18,13 +18,12 @@
  */
 
 /*
----- Opcodes Not Used yet -----
+----- Opcodes Not Used yet -----
 
-SMSG_CALENDAR_CLEAR_PENDING_ACTION SendCalendarClearActionPending()
+SMSG_CALENDAR_CLEAR_PENDING_ACTION SendCalendarClearPendingAction()
 SMSG_CALENDAR_RAID_LOCKOUT_UPDATED SendCalendarRaildLockoutUpdated(InstanceSave const* save) <--- Structure unknown, using LOCKOUT_ADDED
-SMSG_CALENDAR_COMMAND_RESULT       SendCalendarCommandResult(uint32 value) <--- Structure meanings not known using in a Hack way
 
----- Opcodes without Sniffs -----
+----- Opcodes without Sniffs -----
 SMSG_CALENDAR_FILTER_GUILD              [ for (... uint32(count) { packguid(???), uint8(???) } ]
 SMSG_CALENDAR_ARENA_TEAM                [ for (... uint32(count) { packguid(???), uint8(???) } ]
 CMSG_CALENDAR_EVENT_INVITE_NOTES        [ packguid(Invitee), uint64(inviteId), string(Text), Boolean(Unk) ]
@@ -57,9 +56,9 @@ void WorldSession::HandleCalendarGetCalendar(WorldPacket& /*recv_data*/)
     sLog->outDebug(LOG_FILTER_NETWORKIO, "SMSG_CALENDAR_SEND_CALENDAR [" UI64FMTD "]", guid);
     WorldPacket data(SMSG_CALENDAR_SEND_CALENDAR, 1000);   // Impossible to get the correct size without doing a double iteration of some elements
 
-    CalendarinviteIdList const& invites = sCalendarMgr->GetPlayerInvites(guid);
+    CalendarInviteIdList const& invites = sCalendarMgr->GetPlayerInvites(guid);
     data << uint32(invites.size());
-    for (CalendarinviteIdList::const_iterator it = invites.begin(); it != invites.end(); ++it)
+    for (CalendarInviteIdList::const_iterator it = invites.begin(); it != invites.end(); ++it)
     {
         CalendarInvite* invite = sCalendarMgr->GetInvite(*it);
         CalendarEvent* calendarEvent = invite ? sCalendarMgr->GetEvent(invite->GetEventId()) : NULL;
@@ -105,14 +104,14 @@ void WorldSession::HandleCalendarGetCalendar(WorldPacket& /*recv_data*/)
     }
 
     data << uint32(cur_time);                              // server time
-    data << uint32(secsToTimeBitFields(cur_time));
+    data << uint32(secsToTimeBitFields(cur_time));         // server time
 
     uint32 counter = 0;
     size_t p_counter = data.wpos();
-    data << uint32(counter);                               // instance reset count
+    data << uint32(counter);                               // instance save count
 
     for (uint8 i = 0; i < MAX_DIFFICULTY; ++i)
-        for (Player::BoundInstancesMap::const_iterator itr = _player->_boundInstances[i].begin(); itr != _player->_boundInstances[i].end(); ++itr)
+        for (Player::BoundInstancesMap::const_iterator itr = _player->m_boundInstances[i].begin(); itr != _player->m_boundInstances[i].end(); ++itr)
             if (itr->second.perm)
             {
                 InstanceSave const* save = itr->second.save;
@@ -175,6 +174,7 @@ void WorldSession::HandleCalendarGetCalendar(WorldPacket& /*recv_data*/)
         std::string holidayName;                            // 64 chars
     }
     */
+
     SendPacket(&data);
 }
 
@@ -255,20 +255,14 @@ void WorldSession::HandleCalendarAddEvent(WorldPacket& recv_data)
         type, repeatable, maxInvites, dungeonId, eventPackedTime,
         unkPackedTime, flags, invitee, status, rank);
 
-    if (!invitee)
-    {
-        SendCalendarCommandResult(CALENDAR_ERROR_PLAYER_NOT_FOUND);
-        return;
-    }
-
     CalendarAction action;
 
     action.SetAction(CALENDAR_ACTION_ADD_EVENT);
     action.SetPlayer(_player);
     action.Event.SetEventId(sCalendarMgr->GetFreeEventId());
     action.Event.SetCreatorGUID(guid);
-    action.Event.SetType(type);
-    action.Event.SetFlags(flags);
+    action.Event.SetType((CalendarEventType) type);
+    action.Event.SetFlags((CalendarFlags) flags);
     action.Event.SetTime(eventPackedTime);
     action.Event.SetTimeZoneTime(unkPackedTime);
     action.Event.SetRepeatable(repeatable);
@@ -281,8 +275,8 @@ void WorldSession::HandleCalendarAddEvent(WorldPacket& recv_data)
     action.Invite.SetEventId(action.Event.GetEventId());
     action.Invite.SetInviteId(inviteId);
     action.Invite.SetInvitee(invitee);
-    action.Invite.SetStatus(status);
-    action.Invite.SetRank(rank);
+    action.Invite.SetStatus((CalendarInviteStatus) status);
+    action.Invite.SetRank((CalendarModerationRank) rank);
     action.Invite.SetSenderGUID(guid);
 
     sCalendarMgr->AddAction(action);
@@ -319,8 +313,8 @@ void WorldSession::HandleCalendarUpdateEvent(WorldPacket& recv_data)
     action.SetPlayer(_player);
     action.SetInviteId(inviteId);
     action.Event.SetEventId(eventId);
-    action.Event.SetType(type);
-    action.Event.SetFlags(flags);
+    action.Event.SetType((CalendarEventType) type);
+    action.Event.SetFlags((CalendarFlags) flags);
     action.Event.SetTime(eventPackedTime);
     action.Event.SetTimeZoneTime(timeZoneTime);
     action.Event.SetRepeatable(repeatable);
@@ -348,7 +342,7 @@ void WorldSession::HandleCalendarRemoveEvent(WorldPacket& recv_data)
     action.SetPlayer(_player);
     action.SetInviteId(inviteId);
     action.Event.SetEventId(eventId);
-    action.Event.SetFlags(flags);
+    action.Event.SetFlags((CalendarFlags) flags);
 
     sCalendarMgr->AddAction(action);
 }
@@ -386,7 +380,6 @@ void WorldSession::HandleCalendarEventInvite(WorldPacket& recv_data)
     uint32 team = 0;
 
     recv_data >> eventId >> inviteId >> name >> status >> rank;
-
     if (Player* player = sObjectAccessor->FindPlayerByName(name.c_str()))
     {
         invitee = player->GetGUID();
@@ -408,6 +401,12 @@ void WorldSession::HandleCalendarEventInvite(WorldPacket& recv_data)
         UI64FMTD "] InviteId [" UI64FMTD "] Name %s ([" UI64FMTD "]), status %u, "
         "Rank %u", guid, eventId, inviteId, name.c_str(), invitee, status, rank);
 
+    if (!invitee)
+    {
+        SendCalendarCommandResult(CALENDAR_ERROR_PLAYER_NOT_FOUND);
+        return;
+    }
+
     if (_player->GetTeam() != team)
     {
         SendCalendarCommandResult(CALENDAR_ERROR_NOT_ALLIED);
@@ -424,8 +423,8 @@ void WorldSession::HandleCalendarEventInvite(WorldPacket& recv_data)
     action.Invite.SetInviteId(sCalendarMgr->GetFreeInviteId());
     action.Invite.SetSenderGUID(_player->GetGUID());
     action.Invite.SetInvitee(invitee);
-    action.Invite.SetRank(rank);
-    action.Invite.SetStatus(status);
+    action.Invite.SetRank((CalendarModerationRank) rank);
+    action.Invite.SetStatus((CalendarInviteStatus) status);
 
     sCalendarMgr->AddAction(action);
 }
@@ -445,7 +444,7 @@ void WorldSession::HandleCalendarEventSignup(WorldPacket& recv_data)
     action.SetPlayer(_player);
     action.SetExtraData(GetPlayer()->GetGuildId());
     action.Event.SetEventId(eventId);
-    action.Invite.SetStatus(status);
+    action.Invite.SetStatus((CalendarInviteStatus) status);
     sCalendarMgr->AddAction(action);
 }
 
@@ -467,7 +466,7 @@ void WorldSession::HandleCalendarEventRsvp(WorldPacket& recv_data)
     action.SetInviteId(inviteId);
     action.Invite.SetInviteId(inviteId);
     action.Invite.SetEventId(eventId);
-    action.Invite.SetStatus(status);
+    action.Invite.SetStatus((CalendarInviteStatus) status);
 
     sCalendarMgr->AddAction(action);
 }
@@ -521,7 +520,7 @@ void WorldSession::HandleCalendarEventStatus(WorldPacket& recv_data)
     action.Invite.SetInviteId(inviteId);
     action.Invite.SetEventId(eventId);
     action.Invite.SetInvitee(invitee);
-    action.Invite.SetStatus(status);
+    action.Invite.SetStatus((CalendarInviteStatus) status);
 
     sCalendarMgr->AddAction(action);
 }
@@ -548,7 +547,7 @@ void WorldSession::HandleCalendarEventModeratorStatus(WorldPacket& recv_data)
     action.Invite.SetInviteId(inviteId);
     action.Invite.SetEventId(eventId);
     action.Invite.SetInvitee(invitee);
-    action.Invite.SetStatus(status);
+    action.Invite.SetStatus((CalendarInviteStatus) status);
 
     sCalendarMgr->AddAction(action);
 }
@@ -573,13 +572,13 @@ void WorldSession::HandleCalendarGetNumPending(WorldPacket& /*recv_data*/)
         "] Pending: %u", guid, pending);
 
     WorldPacket data(SMSG_CALENDAR_SEND_NUM_PENDING, 4);
-    data << uint32(pending);                                // number of pending invites
+    data << uint32(pending);
     SendPacket(&data);
 }
 
 // ----------------------------------- SEND ------------------------------------
 
-void WorldSession::SendCalendarEvent(CalendarEvent const& calendarEvent, uint8 sendEventType)
+void WorldSession::SendCalendarEvent(CalendarEvent const& calendarEvent, CalendarSendEventType sendEventType)
 {
     uint64 guid = _player->GetGUID();
     uint64 eventId = calendarEvent.GetEventId();
@@ -602,9 +601,9 @@ void WorldSession::SendCalendarEvent(CalendarEvent const& calendarEvent, uint8 s
     data << uint32(calendarEvent.GetTimeZoneTime());
     data << uint32(calendarEvent.GetGuildId());
 
-    CalendarinviteIdList const& invites = calendarEvent.GetInviteIdList();
+    CalendarInviteIdList const& invites = calendarEvent.GetInviteIdList();
     data << uint32(invites.size());
-    for (CalendarinviteIdList::const_iterator it = invites.begin(); it != invites.end(); ++it)
+    for (CalendarInviteIdList::const_iterator it = invites.begin(); it != invites.end(); ++it)
     {
         if (CalendarInvite* invite = sCalendarMgr->GetInvite(*it))
         {
@@ -688,13 +687,14 @@ void WorldSession::SendCalendarEventInviteAlert(CalendarEvent const& calendarEve
     SendPacket(&data);
 }
 
-void WorldSession::SendCalendarEventUpdateAlert(CalendarEvent const& calendarEvent, uint8 sendEventType)
+void WorldSession::SendCalendarEventUpdateAlert(CalendarEvent const& calendarEvent, CalendarSendEventType sendEventType)
 {
     uint64 guid = _player->GetGUID();
     uint64 eventId = calendarEvent.GetEventId();
 
     sLog->outDebug(LOG_FILTER_NETWORKIO, "SMSG_CALENDAR_EVENT_UPDATED_ALERT ["
         UI64FMTD "] EventId [" UI64FMTD "]", guid, eventId);
+
 
     WorldPacket data(SMSG_CALENDAR_EVENT_UPDATED_ALERT, 1 + 8 + 4 + 4 + 4 + 1 + 4 +
         calendarEvent.GetTitle().size() + calendarEvent.GetDescription().size() + 1 + 4 + 4);
@@ -741,6 +741,7 @@ void WorldSession::SendCalendarEventStatus(CalendarEvent const& calendarEvent, C
     uint8 rank = invite.GetRank();
     uint32 statusTime = secsToTimeBitFields(invite.GetStatusTime());
 
+
     sLog->outDebug(LOG_FILTER_NETWORKIO, "SMSG_CALENDAR_EVENT_STATUS [" UI64FMTD "] EventId ["
         UI64FMTD "] InviteId [" UI64FMTD "] Invitee [" UI64FMTD "] Time %u "
         "Flags %u, Status %u, Rank %u, StatusTime %u",
@@ -765,9 +766,11 @@ void WorldSession::SendCalendarEventModeratorStatusAlert(CalendarInvite const& i
     uint64 invitee = invite.GetInvitee();
     uint8 status = invite.GetStatus();
 
+
     sLog->outDebug(LOG_FILTER_NETWORKIO, "SMSG_CALENDAR_EVENT_MODERATOR_STATUS_ALERT [" UI64FMTD
         "] Invitee [" UI64FMTD "] EventId [" UI64FMTD "] Status %u ", guid,
         invitee, eventId, status);
+
 
     WorldPacket data(SMSG_CALENDAR_EVENT_MODERATOR_STATUS_ALERT, 8 + 8 + 1 + 1);
     data.appendPackGUID(invitee);
@@ -777,7 +780,7 @@ void WorldSession::SendCalendarEventModeratorStatusAlert(CalendarInvite const& i
     SendPacket(&data);
 }
 
-void WorldSession::SendCalendarEventInviteRemoveAlert(CalendarEvent const& calendarEvent, uint8 status)
+void WorldSession::SendCalendarEventInviteRemoveAlert(CalendarEvent const& calendarEvent, CalendarInviteStatus status)
 {
     uint64 guid = _player->GetGUID();
     uint64 eventId = calendarEvent.GetEventId();
@@ -796,7 +799,7 @@ void WorldSession::SendCalendarEventInviteRemoveAlert(CalendarEvent const& calen
     SendPacket(&data);
 }
 
-void WorldSession::SendCalendarEventInviteRemove(CalendarInvite const& invite, uint32 flags)
+void WorldSession::SendCalendarEventInviteRemove(CalendarInvite const& invite, CalendarFlags flags)
 {
     uint64 guid = _player->GetGUID();
     uint64 eventId = invite.GetEventId();
@@ -814,12 +817,12 @@ void WorldSession::SendCalendarEventInviteRemove(CalendarInvite const& invite, u
     SendPacket(&data);
 }
 
-void WorldSession::SendCalendarClearActionPending()
+void WorldSession::SendCalendarClearPendingAction()
 {
     uint64 guid = _player->GetGUID();
-    sLog->outDebug(LOG_FILTER_NETWORKIO, "SMSG_CALENDAR_ACTION_PENDING [" UI64FMTD "]", guid);
+    sLog->outDebug(LOG_FILTER_NETWORKIO, "SMSG_CALENDAR_CLEAR_PENDING_ACTION [" UI64FMTD "]", guid);
 
-    WorldPacket data(SMSG_CALENDAR_ACTION_PENDING, 0);
+    WorldPacket data(SMSG_CALENDAR_CLEAR_PENDING_ACTION, 0);
     SendPacket(&data);
 }
 
@@ -850,20 +853,20 @@ void WorldSession::SendCalendarCommandResult(CalendarError err, char const* para
 
     WorldPacket data(SMSG_CALENDAR_COMMAND_RESULT, 0);
     data << uint32(0);
-   data << uint8(0);
-   switch (err)
-   {
-       case CALENDAR_ERROR_OTHER_INVITES_EXCEEDED:
-       case CALENDAR_ERROR_ALREADY_INVITED_TO_EVENT_S:
-       case CALENDAR_ERROR_IGNORING_YOU_S:
-           data << param;
-           break;
-       default:
-           data << uint8(0);
-           break;
-   }
+    data << uint8(0);
+    switch (err)
+    {
+        case CALENDAR_ERROR_OTHER_INVITES_EXCEEDED:
+        case CALENDAR_ERROR_ALREADY_INVITED_TO_EVENT_S:
+        case CALENDAR_ERROR_IGNORING_YOU_S:
+            data << param;
+            break;
+        default:
+            data << uint8(0);
+            break;
+    }
 
-   data << uint32(err);
+    data << uint32(err);
 
     SendPacket(&data);
 }
