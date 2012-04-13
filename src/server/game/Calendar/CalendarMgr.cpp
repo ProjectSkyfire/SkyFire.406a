@@ -311,7 +311,7 @@ void CalendarMgr::AddAction(CalendarAction const& action)
         case CALENDAR_ACTION_REMOVE_EVENT:
         {
             uint64 eventId = action.Event.GetEventId();
-            uint32 flags = action.Event.GetFlags();
+            //uint32 flags = action.Event.GetFlags();
             // FIXME - Use of Flags here!
 
             CalendarEvent* calendarEvent = CheckPermisions(eventId, action.GetPlayer(), action.GetInviteId(), CALENDAR_RANK_OWNER);
@@ -438,7 +438,6 @@ void CalendarMgr::AddAction(CalendarAction const& action)
         default:
             break;
     }
-
 }
 
 bool CalendarMgr::AddEvent(CalendarEvent const& newEvent)
