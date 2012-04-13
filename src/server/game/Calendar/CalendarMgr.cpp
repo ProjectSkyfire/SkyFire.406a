@@ -377,7 +377,7 @@ void CalendarMgr::AddAction(CalendarAction const& action)
             uint64 eventId = action.Invite.GetEventId();
             uint64 inviteId = action.Invite.GetInviteId();
 
-            CalendarEvent* calendarEvent;
+            CalendarEvent* calendarEvent = NULL;
             if (action.GetInviteId() != action.Invite.GetInviteId())
                 calendarEvent = CheckPermisions(eventId, action.GetPlayer(), action.GetInviteId(), CALENDAR_RANK_MODERATOR);
             else
@@ -397,7 +397,7 @@ void CalendarMgr::AddAction(CalendarAction const& action)
             uint64 eventId = action.Invite.GetEventId();
             uint64 inviteId = action.Invite.GetInviteId();
 
-            CalendarEvent* calendarEvent;
+            CalendarEvent* calendarEvent = NULL;
             if (action.GetInviteId() != action.Invite.GetInviteId())
                 calendarEvent = CheckPermisions(eventId, action.GetPlayer(), action.GetInviteId(), CALENDAR_RANK_OWNER);
             else
@@ -422,6 +422,9 @@ void CalendarMgr::AddAction(CalendarAction const& action)
 
             // already checked in CheckPermisions
             CalendarInvite* invite = GetInvite(inviteId);
+            if (!invite)
+                return;
+
             if (calendarEvent->GetCreatorGUID() == invite->GetInvitee())
             {
                 action.GetPlayer()->GetSession()->SendCalendarCommandResult(CALENDAR_ERROR_DELETE_CREATOR_FAILED);
@@ -467,9 +470,9 @@ bool CalendarMgr::RemoveEvent(uint64 eventId)
     bool val = true;
 
     CalendarInviteIdList const& invites = itr->second.GetInviteIdList();
-    for (CalendarInviteIdList::const_iterator itr = invites.begin(); itr != invites.end(); ++itr)
+    for (CalendarInviteIdList::const_iterator itrInvites = invites.begin(); itrInvites != invites.end(); ++itrInvites)
     {
-        CalendarInvite* invite = GetInvite(*itr);
+        CalendarInvite* invite = GetInvite(*itrInvites);
         if (!invite || !RemovePlayerEvent(invite->GetInvitee(), eventId))
             val = false;
     }
