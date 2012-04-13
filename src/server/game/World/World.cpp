@@ -81,6 +81,7 @@
 #include "DB2Stores.h"
 #include "WardenCheckMgr.h"
 #include "Warden.h"
+#include "CalendarMgr.h"
 
 //TODO REMOVE
 #include "CreatureAISelector.h"
@@ -1719,6 +1720,9 @@ void World::SetInitialWorldSettings()
 
     sLog->outString("Loading SmartAI scripts...");
     sSmartScriptMgr->LoadSmartAIFromDB();
+
+    sLog->outString("Loading Calendar data...");
+    sCalendarMgr->LoadFromDB();
 
     ///- Initialize game time and timers
     sLog->outString("Initialize game time and timers");

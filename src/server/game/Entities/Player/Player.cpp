@@ -78,6 +78,7 @@
 #include "DBCEnums.h"
 #include "DB2Stores.h"
 #include "Object.h"
+#include "CalendarMgr.h"
 
 #include <cmath>
 

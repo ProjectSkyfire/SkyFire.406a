@@ -1222,7 +1222,7 @@ enum Opcodes
     CMSG_CORPSE_MAP_POSITION_QUERY                   = 0x023CC, // 4.0.6a 13623
     SMSG_CORPSE_MAP_POSITION_QUERY_RESPONSE          = 0x1020A, // Unknown opcode ID
     CMSG_LFG_SET_ROLES_2                             = 0x1020B, // Unknown opcode ID
-    CMSG_CALENDAR_CONTEXT_EVENT_SIGNUP               = 0x0AEAC, // 4.0.6a 13623
+    CMSG_CALENDAR_EVENT_SIGNUP               = 0x0AEAC, // 4.0.6a 13623
     SMSG_CALENDAR_ACTION_PENDING                     = 0x07E8C, // 4.0.6a 13623
     SMSG_EQUIPMENT_SET_LIST                          = 0x0F1A8, // 4.0.6a 13623
     CMSG_EQUIPMENT_SET_SAVE                          = 0x0BFC0, // 4.0.6a 13623
