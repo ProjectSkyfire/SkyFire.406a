@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -47,7 +48,7 @@ class CalendarMgr
         void SendCalendarEvent(CalendarEvent const& calendarEvent, CalendarSendEventType type);
         void SendCalendarEventInvite(CalendarInvite const& invite, bool pending);
         void SendCalendarEventInviteAlert(CalendarEvent const& calendarEvent, CalendarInvite const& invite);
-        void SendCalendarEventInviteRemove(uint64 guid, CalendarInvite const& invite, CalendarFlags flags);
+        void SendCalendarEventInviteRemove(uint64 guid, CalendarInvite const& invite, uint32 flags);
         void SendCalendarEventInviteRemoveAlert(uint64 guid, CalendarEvent const& calendarEvent, CalendarInviteStatus status);
         void SendCalendarEventUpdateAlert(uint64 guid, CalendarEvent const& calendarEvent, CalendarSendEventType type);
         void SendCalendarEventStatus(uint64 guid, CalendarEvent const& calendarEvent, CalendarInvite const& invite);

@@ -1205,7 +1205,7 @@ void InitOpcodeTable()
     OPCODE( SMSG_CORPSE_MAP_POSITION_QUERY_RESPONSE,      STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( CMSG_LFG_SET_ROLES_2,                         STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
     OPCODE( CMSG_CALENDAR_EVENT_SIGNUP,                   STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleCalendarEventSignup       );
-    OPCODE( SMSG_CALENDAR_ACTION_PENDING,                 STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
+    OPCODE( SMSG_CALENDAR_CLEAR_ACTION_PENDING,           STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( SMSG_EQUIPMENT_SET_LIST,                      STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( CMSG_EQUIPMENT_SET_SAVE,                      STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleEquipmentSetSave          );
     OPCODE( CMSG_UPDATE_PROJECTILE_POSITION,              STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleUpdateProjectilePosition  );

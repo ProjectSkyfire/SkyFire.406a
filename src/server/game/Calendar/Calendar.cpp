@@ -17,6 +17,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "Player.h"
 #include "Calendar.h"
 
 std::string CalendarInvite::GetDebugString() const
@@ -75,12 +76,11 @@ void CalendarEvent::Init()
     _dungeonId = -1;
     _maxInvites = 0;
     _eventTime = 0;
-    _flags = (CalendarFlags) 0;
+    _flags = 0;
     _repeatable = false;
     _timezoneTime = 0;
     _title = "";
     _description = "";
-
 }
 
 std::string CalendarAction::GetDebugString() const
