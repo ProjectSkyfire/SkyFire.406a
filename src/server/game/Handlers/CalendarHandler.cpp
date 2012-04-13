@@ -75,6 +75,7 @@ void WorldSession::HandleCalendarGetCalendar(WorldPacket& /*recv_data*/)
     {
         uint32 mapId = PAIR32_LOPART(itr->first);
 
+        Difficulty difficulty = Difficulty(PAIR32_HIPART(itr->first));
         if (sentMaps.find(mapId) != sentMaps.end())
             continue;
 
@@ -82,10 +83,14 @@ void WorldSession::HandleCalendarGetCalendar(WorldPacket& /*recv_data*/)
         if (!mapEntry || !mapEntry->IsRaid())
             continue;
 
+        MapDifficulty const* diff = GetMapDifficultyData(mapId, difficulty);
+        if (!diff)
+            continue;
+
         sentMaps.insert(mapId);
 
         data << uint32(mapId);
-        data << uint32(itr->second - cur_time);
+        data << uint32(diff->resetTime);
         data << uint32(mapEntry->unk_time);
         ++counter;
     }
