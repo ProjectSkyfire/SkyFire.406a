@@ -3158,7 +3158,7 @@ void SpellMgr::LoadSpellCustomAttr()
                 break;
             case 84726: // Frostfire orb rank 1
             case 84727: // Frostfire orb rank 2
-                spellInfo->Effects[1].ApplyAuraName = SPELL_AURA_OVERRIDE_ACTIONBAR_SPELLS_2;
+                spellInfo->Effects[1].ApplyAuraName = SPELL_AURA_SWAP_SPELLS;
                 spellInfo->Effects[1].BasePoints = 92283;
                 break;
             case 44544: // Fingers of Frost
@@ -3303,26 +3303,44 @@ void SpellMgr::LoadSpellCustomAttr()
                 break;
             case 81585: // Chakra: Serenity replace
                 spellInfo->Effects[0].Effect = SPELL_EFFECT_APPLY_AURA;
-                spellInfo->Effects[0].ApplyAuraName = SPELL_AURA_OVERRIDE_ACTIONBAR_SPELLS_1;
+                spellInfo->Effects[0].ApplyAuraName = SPELL_AURA_SWAP_SPELLS;
                 spellInfo->Effects[0].BasePoints = 88684;
                 break;
             case 81207: // Chakra: Sanctuary replace
                 spellInfo->Effects[0].Effect = SPELL_EFFECT_APPLY_AURA;
-                spellInfo->Effects[0].ApplyAuraName = SPELL_AURA_OVERRIDE_ACTIONBAR_SPELLS_1;
+                spellInfo->Effects[0].ApplyAuraName = SPELL_AURA_SWAP_SPELLS;
                 spellInfo->Effects[0].BasePoints = 88685;
                 break;
             case 68659: // Launch
                 spellInfo->Effects[1].TriggerSpell = 4336;
                 break;
+            case 50421: // Scent of Blood
+                spellInfo->Effects[0].TriggerSpell = 50422;
+                break;
+            case 85084: // Howling Gale
+                spellInfo->Effects[0].TriggerSpell = 85085;
+                break;
+            case 85085: // Howling Gale
+                spellInfo->Effects[0].RadiusEntry = sSpellRadiusStore.LookupEntry(18); // 15 yard
+                break;
+            case 84101: // Deepholm Intro Taxi
+                spellInfo->Effects[0].Effect = SPELL_EFFECT_DUMMY;
+                break;
+            case 50029: // Veteran of the Third War
+                spellInfo->Effects[0].MiscValue = 2;
+                break;
             case 94338: // Sunfire (Eclipse)
                 spellInfo->Effects[0].Effect = SPELL_EFFECT_APPLY_AURA;
-                spellInfo->Effects[0].ApplyAuraName = SPELL_AURA_OVERRIDE_ACTIONBAR_SPELLS_1;
+                spellInfo->Effects[0].ApplyAuraName = SPELL_AURA_SWAP_SPELLS;
                 spellInfo->Effects[0].BasePoints = 93402;
                 break;
             case 70728: // Exploit Weakness (needs target selection script)
             case 70840: // Devious Minds (needs target selection script)
                 spellInfo->Effects[0].TargetA = TARGET_UNIT_CASTER;
                 spellInfo->Effects[0].TargetB = TARGET_UNIT_PET;
+                break;
+            case 82992: // Crowley's ride vehicle
+                spellInfo->Effects[0].BasePoints = 60683;
                 break;
             case 70893: // Culling The Herd (needs target selection script)
                 spellInfo->Effects[0].TargetA = TARGET_UNIT_CASTER;
@@ -3523,11 +3541,7 @@ void SpellMgr::LoadSpellCustomAttr()
                 spellInfo->Effects[1].TargetA = TARGET_UNIT_TARGET_ENEMY;
                 spellInfo->Effects[0].BasePoints = 20*1000;
             break;
-            case 1776: // Gouge
-            case 1777:
-            case 8629:
-            case 11285:
-            case 11286:
+            case 1776:  // Gouge
             case 12540:
             case 13579:
             case 24698:
@@ -3535,52 +3549,14 @@ void SpellMgr::LoadSpellCustomAttr()
             case 29425:
             case 34940:
             case 36862:
-            case 38764:
             case 38863:
             case 52743: // Head Smack
                 spellInfo->AttributesCu |= SPELL_ATTR0_CU_REQ_TARGET_FACING_CASTER;
                 break;
-            case 53: // Backstab
-            case 2589:
-            case 2590:
-            case 2591:
-            case 8721:
-            case 11279:
-            case 11280:
-            case 11281:
-            case 25300:
-            case 26863:
-            case 48656:
-            case 48657:
-            case 703: // Garrote
-            case 8631:
-            case 8632:
-            case 8633:
-            case 11289:
-            case 11290:
-            case 26839:
-            case 26884:
-            case 48675:
-            case 48676:
-            case 5221: // Shred
-            case 6800:
-            case 8992:
-            case 9829:
-            case 9830:
-            case 27001:
-            case 27002:
-            case 48571:
-            case 48572:
-            case 8676: // Ambush
-            case 8724:
-            case 8725:
-            case 11267:
-            case 11268:
-            case 11269:
-            case 27441:
-            case 48689:
-            case 48690:
-            case 48691:
+            case 53:    // Backstab
+            case 703:   // Garrote
+            case 5221:  // Shred
+            case 8676:  // Ambush
             case 6785:  // Ravage
             case 81170:
             case 21987: // Lash of Pain

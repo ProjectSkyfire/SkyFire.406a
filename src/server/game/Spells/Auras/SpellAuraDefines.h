@@ -393,8 +393,8 @@ enum AuraType
     SPELL_AURA_MOD_RUNE_REGEN_SPEED                = 329,    // NYI - This aura is for increasing power regeneration percent
     SPELL_AURA_CAST_WHILE_WALKING                  = 330,    // NYI
     SPELL_AURA_331                                 = 331,
-    SPELL_AURA_OVERRIDE_ACTIONBAR_SPELLS_1         = 332,
-    SPELL_AURA_OVERRIDE_ACTIONBAR_SPELLS_2         = 333,
+    SPELL_AURA_SWAP_SPELLS                         = 332,
+    SPELL_AURA_MOD_TRAP_LAUNCHER                   = 333,
     SPELL_AURA_334                                 = 334,    // This aura blinds the target, makes all npcs and players invisible but they still can see you
     SPELL_AURA_335                                 = 335,    // Something related to invisibility
     SPELL_AURA_MOD_FLYING_RESTRICTIONS             = 336,    // NYI  - related to zone
