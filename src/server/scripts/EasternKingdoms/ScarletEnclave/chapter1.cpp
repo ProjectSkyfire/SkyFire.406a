@@ -340,8 +340,11 @@ enum EyeOfAcherus
     SPELL_EYE_CONTROL           = 51852,
 };
 
-#define SAY_EYE_LAUNCHED          "Eye of Acherus is launched towards its destination."
-#define SAY_EYE_UNDER_CONTROL     "You are now in control of the eye."
+enum Texts
+{
+    SAY_EYE_LAUNCHED            = 0,
+    SAY_EYE_UNDER_CONTROL       = 1,
+};
 
 static Position Center[]=
 {
@@ -370,12 +373,12 @@ public:
 
         void Reset()
         {
-            if(Unit* controller = me->GetCharmer())
+            if (Unit* controller = me->GetCharmer())
             me->SetLevel(controller->getLevel());
 
             me->CastSpell(me, 51890, true);
             me->SetDisplayId(26320);
-            me->MonsterSay(SAY_EYE_LAUNCHED, LANG_UNIVERSAL, 0);
+            Talk(SAY_EYE_LAUNCHED);
             me->SetHomePosition(2363.970589f, -5659.861328f, 504.316833f, 0);
             me->GetMotionMaster()->MoveCharge(1752.858276f, -5878.270996f, 145.136444f, 0); //position center
             me->SetReactState(REACT_AGGRESSIVE);
@@ -404,12 +407,10 @@ public:
                     me->CastSpell(me, 51892, true);
                     me->CastSpell(me, 51890, true);
 
-                    // workaround for faster flight speed
                     me->CastSpell(me, 51923, true);
                     me->SetSpeed(MOVE_FLIGHT, 3.4f, true);
-
                     me->GetMotionMaster()->MovePoint(0, 1711.0f, -5820.0f, 147.0f);
-                    return;    // was "me = true;" causing errors
+                    return;
                 }
                 else
                 startTimer -= diff;
@@ -423,13 +424,13 @@ public:
             if (type != POINT_MOTION_TYPE || pointId != 0)
                return;
 
-            // I think those morphs are not blizzlike...
+            // I think the green morph is not blizzlike...
             me->SetDisplayId(25499);
 
             // for some reason it does not work when this spell is casted before the waypoint movement
             me->CastSpell(me, 51892, true);
             me->CastSpell(me, 51890, true);
-            me->MonsterSay(SAY_EYE_UNDER_CONTROL, LANG_UNIVERSAL, 0);
+            Talk(SAY_EYE_UNDER_CONTROL);
             ((Player*)(me->GetCharmer()))->SetClientControl(me, 1);
         }
     };
