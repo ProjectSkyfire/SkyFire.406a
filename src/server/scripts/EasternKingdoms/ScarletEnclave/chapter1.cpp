@@ -342,8 +342,8 @@ enum EyeOfAcherus
 
 enum Texts
 {
-    SAY_EYE_LAUNCHED            = 0,
-    SAY_EYE_UNDER_CONTROL       = 1,
+    SAY_EYE_LAUNCHED            = 1,
+    SAY_EYE_UNDER_CONTROL       = 2,
 };
 
 static Position Center[]=
