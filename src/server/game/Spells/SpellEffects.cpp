@@ -1789,21 +1789,6 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                 m_caster->CastCustomSpell(m_caster, 45470, &bp, NULL, NULL, false);
                 return;
             }
-            // Death Coil
-            if (m_spellInfo->SpellFamilyFlags[0] & SPELLFAMILYFLAG_DK_DEATH_COIL)
-            {
-                if (m_caster->IsFriendlyTo(unitTarget))
-                {
-                    bp = int32(985 + damage) * 3.5;
-                    m_caster->CastCustomSpell(unitTarget, 47633, &bp, NULL, NULL, true);
-                }
-                else
-                {
-                    bp = 985 + damage;
-                    m_caster->CastCustomSpell(unitTarget, 47632, &bp, NULL, NULL, true);
-                }
-                return;
-            }
             switch (m_spellInfo->Id)
             {
             case 49020: // Obliterate
@@ -1814,15 +1799,6 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                        damage = int32(damage + (damage * count * 12.5 / 100));
                     break;
                 }
-                //TODO: Fix this.
-            //case 49560: // Death Grip
-            //    Position pos;
-            //    GetSummonPosition(effIndex, pos);
-            //    if (Unit* unit = unitTarget->GetVehicleBase()) // what is this for?
-            //        unit->CastSpell(pos.GetPositionX(), pos.GetPositionY(), pos.GetPositionZ(), damage, true);
-            //    else if (!unitTarget->HasAuraType(SPELL_AURA_DEFLECT_SPELLS)) // Deterrence
-            //        unitTarget->CastSpell(pos.GetPositionX(), pos.GetPositionY(), pos.GetPositionZ(), damage, true);
-            //    return;
             case 46584: // Raise Dead
                 if (m_caster->GetTypeId() != TYPEID_PLAYER)
                     return;
