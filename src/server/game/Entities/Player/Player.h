@@ -1962,7 +1962,7 @@ class Player : public Unit, public GridObject<Player>
 
         void RemovedInsignia(Player* looterPlr);
 
-        WorldSession* GetSession() const { return _session; }
+        WorldSession* GetSession() const { return m_session; }
 
         void BuildCreateUpdateBlockForPlayer(UpdateData *data, Player *target) const;
         void DestroyForPlayer(Player *target, bool anim = false) const;
@@ -2789,7 +2789,7 @@ class Player : public Unit, public GridObject<Player>
         float m_resurrectX, m_resurrectY, m_resurrectZ;
         uint32 _resurrectHealth, _resurrectMana;
 
-        WorldSession *_session;
+        WorldSession *m_session;
 
         typedef std::list<Channel*> JoinedChannelsList;
         JoinedChannelsList _channels;

@@ -41,7 +41,7 @@ WardenMac::~WardenMac()
 
 void WardenMac::Init(WorldSession *pClient, BigNumber *K)
 {
-    _session = pClient;
+    m_session = pClient;
     // Generate Warden Key
     SHA1Randx WK(K->AsByteArray(), K->GetNumBytes());
     WK.generate(_inputKey, 16);
@@ -112,7 +112,7 @@ void WardenMac::RequestHash()
 
     WorldPacket pkt(SMSG_WARDEN_DATA, sizeof(WardenHashRequest));
     pkt.append((uint8*)&Request, sizeof(WardenHashRequest));
-    _session->SendPacket(&pkt);
+    m_session->SendPacket(&pkt);
 }
 
 void WardenMac::HandleHashResult(ByteBuffer &buff)
@@ -154,7 +154,7 @@ void WardenMac::HandleHashResult(ByteBuffer &buff)
     {
         sLog->outDebug(LOG_FILTER_WARDEN, "Request hash reply: failed");
         sLog->outWarden("WARDEN: Player %s (guid: %u, account: %u) failed hash reply. Action: %s",
-            _session->GetPlayerName(), _session->GetGuidLow(), _session->GetAccountId(), Penalty().c_str());
+            m_session->GetPlayerName(), m_session->GetGuidLow(), m_session->GetAccountId(), Penalty().c_str());
         return;
     }
 
@@ -197,7 +197,7 @@ void WardenMac::RequestData()
 
     WorldPacket pkt(SMSG_WARDEN_DATA, buff.size());
     pkt.append(buff);
-    _session->SendPacket(&pkt);
+    m_session->SendPacket(&pkt);
 
     _dataSent = true;
 }
@@ -256,5 +256,5 @@ void WardenMac::HandleData(ByteBuffer &buff)
         found = true;
     }
 
-    _session->KickPlayer();
+    m_session->KickPlayer();
 }

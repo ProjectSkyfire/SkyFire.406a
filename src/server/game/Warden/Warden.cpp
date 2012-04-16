@@ -65,7 +65,7 @@ void Warden::SendModuleToClient()
         EncryptData((uint8*)&packet, burstSize + 3);
         WorldPacket pkt1(SMSG_WARDEN_DATA, burstSize + 3);
         pkt1.append((uint8*)&packet, burstSize + 3);
-        _session->SendPacket(&pkt1);
+        m_session->SendPacket(&pkt1);
     }
 }
 
@@ -86,7 +86,7 @@ void Warden::RequestModule()
 
     WorldPacket pkt(SMSG_WARDEN_DATA, sizeof(WardenModuleUse));
     pkt.append((uint8*)&request, sizeof(WardenModuleUse));
-    _session->SendPacket(&pkt);
+    m_session->SendPacket(&pkt);
 }
 
 void Warden::Update()
@@ -107,9 +107,9 @@ void Warden::Update()
                 if (_clientResponseTimer > maxClientResponseDelay * IN_MILLISECONDS)
                 {
                     sLog->outWarden("WARDEN: Player %s (guid: %u, account: %u, latency: %u, IP: %s) exceeded Warden module response delay for more than %s - disconnecting client",
-                                   _session->GetPlayerName(), _session->GetGuidLow(), _session->GetAccountId(), _session->GetLatency(), _session->GetRemoteAddress().c_str(),
+                                   m_session->GetPlayerName(), m_session->GetGuidLow(), m_session->GetAccountId(), m_session->GetLatency(), m_session->GetRemoteAddress().c_str(),
                                    secsToTimeString(maxClientResponseDelay, true).c_str());
-                    _session->KickPlayer();
+                    m_session->KickPlayer();
                 }
                 else
                     _clientResponseTimer += diff;
@@ -179,7 +179,7 @@ std::string Warden::Penalty(WardenCheck* check /*= NULL*/)
         return "None";
         break;
     case WARDEN_ACTION_KICK:
-        _session->KickPlayer();
+        m_session->KickPlayer();
         return "Kick";
         break;
     case WARDEN_ACTION_BAN:
@@ -187,7 +187,7 @@ std::string Warden::Penalty(WardenCheck* check /*= NULL*/)
             std::stringstream duration;
             duration << sWorld->getIntConfig(CONFIG_WARDEN_CLIENT_BAN_DURATION) << "s";
             std::string accountName;
-            AccountMgr::GetName(_session->GetAccountId(), accountName);
+            AccountMgr::GetName(m_session->GetAccountId(), accountName);
             sWorld->BanAccount(BAN_ACCOUNT, accountName, duration.str(), "Warden Anticheat violation","Server");
 
             return "Ban";

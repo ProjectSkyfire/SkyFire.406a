@@ -158,7 +158,7 @@ bool ChatHandler::HandleUnmuteCommand(const char* args)
 
 bool ChatHandler::HandleGUIDCommand(const char* /*args*/)
 {
-    uint64 guid = _session->GetPlayer()->GetSelection();
+    uint64 guid = m_session->GetPlayer()->GetSelection();
 
     if (guid == 0)
     {
@@ -191,16 +191,16 @@ bool ChatHandler::HandleItemMoveCommand(const char* args)
     if (srcslot == dstslot)
         return true;
 
-    if (!_session->GetPlayer()->IsValidPos(INVENTORY_SLOT_BAG_0, srcslot, true))
+    if (!m_session->GetPlayer()->IsValidPos(INVENTORY_SLOT_BAG_0, srcslot, true))
         return false;
 
-    if (!_session->GetPlayer()->IsValidPos(INVENTORY_SLOT_BAG_0, dstslot, false))
+    if (!m_session->GetPlayer()->IsValidPos(INVENTORY_SLOT_BAG_0, dstslot, false))
         return false;
 
     uint16 src = ((INVENTORY_SLOT_BAG_0 << 8) | srcslot);
     uint16 dst = ((INVENTORY_SLOT_BAG_0 << 8) | dstslot);
 
-    _session->GetPlayer()->SwapItem(src, dst);
+    m_session->GetPlayer()->SwapItem(src, dst);
 
     return true;
 }
@@ -210,7 +210,7 @@ bool ChatHandler::HandleDeMorphCommand(const char* /*args*/)
 {
     Unit* target = getSelectedUnit();
     if (!target)
-        target = _session->GetPlayer();
+        target = m_session->GetPlayer();
 
     // check online security
     else if (target->GetTypeId() == TYPEID_PLAYER && HasLowerSecurity((Player*)target, 0))
@@ -229,7 +229,7 @@ bool ChatHandler::HandleKickPlayerCommand(const char *args)
     if (!extractPlayerTarget((char*)args, &target, NULL, &playerName))
         return false;
 
-    if (_session && target == _session->GetPlayer())
+    if (m_session && target == m_session->GetPlayer())
     {
         SendSysMessage(LANG_COMMAND_KICKSELF);
         SetSentErrorMessage(true);
@@ -344,7 +344,7 @@ bool ChatHandler::HandlePInfoCommand(const char* args)
         if (email.empty())
             email = "-";
 
-        if (!_session || _session->GetSecurity() >= AccountTypes(security))
+        if (!m_session || m_session->GetSecurity() >= AccountTypes(security))
         {
             last_ip = fields[3].GetString();
             last_login = fields[4].GetString();
@@ -611,7 +611,7 @@ bool ChatHandler::HandleCharacterReputationCommand(const char* args)
         ReputationRank rank = target->GetReputationMgr().GetRank(factionEntry);
         std::string rankName = GetSkyFireString(ReputationRankStrIndex[rank]);
         std::ostringstream ss;
-        if (_session)
+        if (m_session)
             ss << faction.ID << " - |cffffffff|Hfaction:" << faction.ID << "|h[" << factionName << ' ' << localeNames[loc] << "]|h|r";
         else
             ss << faction.ID << " - " << factionName << ' ' << localeNames[loc];
@@ -675,7 +675,7 @@ bool ChatHandler::HandleLookupEventCommand(const char* args)
 
             char const* active = activeEvents.find(id) != activeEvents.end() ? GetSkyFireString(LANG_ACTIVE) : "";
 
-            if (_session)
+            if (m_session)
                 PSendSysMessage(LANG_EVENT_ENTRY_LIST_CHAT, id, id, eventData.description.c_str(), active);
             else
                 PSendSysMessage(LANG_EVENT_ENTRY_LIST_CONSOLE, id, eventData.description.c_str(), active);
@@ -887,7 +887,7 @@ bool ChatHandler::HandleWaterwalkCommand(const char* args)
 
 bool ChatHandler::HandleCreatePetCommand(const char* /*args*/)
 {
-    Player* player = _session->GetPlayer();
+    Player* player = m_session->GetPlayer();
     Creature *creatureTarget = getSelectedCreature();
 
     if (!creatureTarget || creatureTarget->isPet() || creatureTarget->GetTypeId() == TYPEID_PLAYER)
@@ -963,7 +963,7 @@ bool ChatHandler::HandlePetLearnCommand(const char* args)
     if (!*args)
         return false;
 
-    Player *player = _session->GetPlayer();
+    Player *player = m_session->GetPlayer();
     Pet* pet = player->GetPet();
 
     if (!pet)
@@ -1006,7 +1006,7 @@ bool ChatHandler::HandlePetUnlearnCommand(const char *args)
     if (!*args)
         return false;
 
-    Player *player = _session->GetPlayer();
+    Player *player = m_session->GetPlayer();
     Pet* pet = player->GetPet();
 
     if (!pet)
@@ -1095,7 +1095,7 @@ bool ChatHandler::HandleLookupTitleCommand(const char* args)
                 snprintf(titleNameStr, 80, name.c_str(), targetName);
 
                 // send title in "id (idx:idx) - [namedlink locale]" format
-                if (_session)
+                if (m_session)
                     PSendSysMessage(LANG_TITLE_LIST_CHAT, id, titleInfo->bit_index, id, titleNameStr, localeNames[loc], knownStr, activeStr);
                 else
                     PSendSysMessage(LANG_TITLE_LIST_CONSOLE, id, titleInfo->bit_index, titleNameStr, localeNames[loc], knownStr, activeStr);
@@ -1140,7 +1140,7 @@ bool ChatHandler::HandleCharacterTitlesCommand(const char* args)
             snprintf(titleNameStr, 80, name.c_str(), targetName);
 
             // send title in "id (idx:idx) - [namedlink locale]" format
-            if (_session)
+            if (m_session)
                 PSendSysMessage(LANG_TITLE_LIST_CHAT, id, titleInfo->bit_index, id, titleNameStr, localeNames[loc], knownStr, activeStr);
             else
                 PSendSysMessage(LANG_TITLE_LIST_CONSOLE, id, titleInfo->bit_index, name.c_str(), localeNames[loc], knownStr, activeStr);

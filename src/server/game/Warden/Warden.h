@@ -131,7 +131,7 @@ class Warden
         std::string Penalty(WardenCheck* check = NULL);
 
     private:
-        WorldSession* _session;
+        WorldSession* m_session;
         uint8 _inputKey[16];
         uint8 _outputKey[16];
         uint8 _seed[16];

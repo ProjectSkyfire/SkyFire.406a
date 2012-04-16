@@ -17,6 +17,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+
 #include "Player.h"
 #include "SpellAuras.h"
 #include "SpellMgr.h"
@@ -274,6 +275,12 @@ bool Condition::Meets(ConditionSourceInfo& sourceInfo)
             condMeets = object->GetPhaseMask() & ConditionValue1;
             break;
         }
+        case CONDITION_TITLE:
+        {
+            if (Player* player = object->ToPlayer())
+                condMeets = player->HasTitle(ConditionValue1);
+            break;
+        }
         default:
             condMeets = false;
             break;
@@ -422,6 +429,9 @@ uint32 Condition::GetSearcherTypeMaskForCondition()
         case CONDITION_PHASEMASK:
             mask |= GRID_MAP_TYPE_MASK_ALL;
             break;
+        case CONDITION_TITLE:
+            mask |= GRID_MAP_TYPE_MASK_PLAYER;
+            break;
         default:
             ASSERT(false && "Condition::GetSearcherTypeMaskForCondition - missing condition handling!");
             break;
@@ -536,6 +546,7 @@ bool ConditionMgr::IsObjectMeetToConditionList(ConditionSourceInfo& sourceInfo, 
                     sLog->outDebug(LOG_FILTER_CONDITIONSYS, "IsPlayerMeetToConditionList: Reference template -%u not found",
                         (*i)->ReferenceId);//checked at loading, should never happen
                 }
+
             }
             else //handle normal condition
             {
@@ -617,6 +628,7 @@ ConditionList ConditionMgr::GetConditionsForNotGroupedEntry(ConditionSourceType 
     }
     return spellCond;
 }
+
 
 ConditionList ConditionMgr::GetConditionsForSpellClickEvent(uint32 creatureId, uint32 spellId)
 {
@@ -711,13 +723,14 @@ void ConditionMgr::LoadConditions(bool isReload)
 
     do
     {
+
         Field* fields = result->Fetch();
 
         Condition* cond = new Condition();
         int32 iSourceTypeOrReferenceId   = fields[0].GetInt32();
         cond->SourceGroup               = fields[1].GetUInt32();
-        cond->SourceEntry               = fields[2].GetInt32();
-        cond->SourceId                  = fields[3].GetUInt32();
+        cond->SourceEntry               = fields[2].GetUInt32();
+        cond->SourceId                  = fields[3].GetInt32();
         cond->ElseGroup                 = fields[4].GetUInt32();
         int32 iConditionTypeOrReference  = fields[5].GetInt32();
         cond->ConditionTarget           = fields[6].GetUInt8();
@@ -1823,9 +1836,16 @@ bool ConditionMgr::isConditionTypeValid(Condition* cond)
                 sLog->outErrorDb("Phasemask condition has useless data in value3 (%u)!", cond->ConditionValue3);
             break;
         }
-        case CONDITION_UNUSED_18:
-            sLog->outErrorDb("Found ConditionTypeOrReference = CONDITION_UNUSED_18 in `conditions` table - ignoring");
-            return false;
+        case CONDITION_TITLE:
+        {
+            CharTitlesEntry const* titleEntry = sCharTitlesStore.LookupEntry(cond->ConditionValue1);
+            if (!titleEntry)
+            {
+                sLog->outErrorDb("Title condition has non existing title in value1 (%u), skipped", cond->ConditionValue1);
+                return false;
+            }
+            break;
+        }
         case CONDITION_UNUSED_19:
             sLog->outErrorDb("Found ConditionTypeOrReference = CONDITION_UNUSED_19 in `conditions` table - ignoring");
             return false;

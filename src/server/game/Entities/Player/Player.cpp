@@ -668,7 +668,7 @@ Player::Player(WorldSession* session): Unit(true), _achievementMgr(this), _reput
 
     _valuesCount = PLAYER_END;
 
-    _session = session;
+    m_session = session;
 
     _divider = 0;
 
@@ -6831,7 +6831,7 @@ void Player::SendMessageToSet(WorldPacket* data, Player const* skipped_rcvr)
 
 void Player::SendDirectMessage(WorldPacket* data)
 {
-    _session->SendPacket(data);
+    m_session->SendPacket(data);
 }
 
 void Player::SendCinematicStart(uint32 CinematicSequenceId)
@@ -9233,7 +9233,7 @@ void Player::SendLootRelease(uint64 guid)
 void Player::SendLoot(uint64 guid, LootType loot_type)
 {
     if (uint64 lguid = GetLootGUID())
-        _session->DoLootRelease(lguid);
+        m_session->DoLootRelease(lguid);
 
     Loot *loot = 0;
     PermissionTypes permission = ALL_PERMISSION;
@@ -13795,7 +13795,7 @@ void Player::SwapItem(uint16 src, uint16 dst)
                 {
                     if (bagItem->_lootGenerated)
                     {
-                        _session->DoLootRelease(GetLootGUID());
+                        m_session->DoLootRelease(GetLootGUID());
                         released = true;                    // so we don't need to look at dstBag
                         break;
                     }
@@ -13812,7 +13812,7 @@ void Player::SwapItem(uint16 src, uint16 dst)
                 {
                     if (bagItem->_lootGenerated)
                     {
-                        _session->DoLootRelease(GetLootGUID());
+                        m_session->DoLootRelease(GetLootGUID());
                         released = true;                    // not realy needed here
                         break;
                     }
@@ -19422,7 +19422,7 @@ void Player::SaveToDB(bool create /*=false*/)
 
     // check if stats should only be saved on logout
     // save stats can be out of transaction
-    if (_session->isLogingOut() || !sWorld->getBoolConfig(CONFIG_STATS_SAVE_ONLY_ON_LOGOUT))
+    if (m_session->isLogingOut() || !sWorld->getBoolConfig(CONFIG_STATS_SAVE_ONLY_ON_LOGOUT))
         _SaveStats(trans);
 
     CharacterDatabase.CommitTransaction(trans);

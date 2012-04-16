@@ -55,7 +55,7 @@ bool ChatHandler::HandleCommandsCommand(const char* /*args*/)
 
 bool ChatHandler::HandleStartCommand(const char* /*args*/)
 {
-    Player* chr = _session->GetPlayer();
+    Player* chr = m_session->GetPlayer();
 
     if (chr->isInFlight())
     {
@@ -109,31 +109,31 @@ bool ChatHandler::HandleServerInfoCommand(const char* /*args*/)
 bool ChatHandler::HandleDismountCommand(const char* /*args*/)
 {
     //If player is not mounted, so go out :)
-    if (!_session->GetPlayer()->IsMounted())
+    if (!m_session->GetPlayer()->IsMounted())
     {
         SendSysMessage(LANG_CHAR_NON_MOUNTED);
         SetSentErrorMessage(true);
         return false;
     }
 
-    if (_session->GetPlayer()->isInFlight())
+    if (m_session->GetPlayer()->isInFlight())
     {
         SendSysMessage(LANG_YOU_IN_FLIGHT);
         SetSentErrorMessage(true);
         return false;
     }
 
-    _session->GetPlayer()->Dismount();
-    _session->GetPlayer()->RemoveAurasByType(SPELL_AURA_MOUNTED);
+    m_session->GetPlayer()->Dismount();
+    m_session->GetPlayer()->RemoveAurasByType(SPELL_AURA_MOUNTED);
     return true;
 }
 
 bool ChatHandler::HandleSaveCommand(const char* /*args*/)
 {
-    Player* player = _session->GetPlayer();
+    Player* player = m_session->GetPlayer();
 
     // save GM account without delay and output message
-    if (!AccountMgr::IsPlayerAccount(_session->GetSecurity()))
+    if (!AccountMgr::IsPlayerAccount(m_session->GetSecurity()))
     {
         if (Player* target = getSelectedPlayer())
             target->SaveToDB();
