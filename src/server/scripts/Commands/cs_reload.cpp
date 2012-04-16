@@ -725,7 +725,7 @@ public:
     {
         sLog->outString("Re-Loading skyfire_string Table!");
         sObjectMgr->LoadSkyFireStrings();
-        handler->SendGlobalGMSysMessage("DB table `skykire_string` reloaded.");
+        handler->SendGlobalGMSysMessage("DB table `skyfire_string` reloaded.");
         return true;
     }
 
