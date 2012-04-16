@@ -659,34 +659,6 @@ LOCK TABLES `character_equipmentsets` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `character_feed_log`
---
-
-DROP TABLE IF EXISTS `character_feed_log`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `character_feed_log` (
-  `guid` int(11) NOT NULL,
-  `type` smallint(1) NOT NULL,
-  `data` int(11) NOT NULL,
-  `date` int(11) DEFAULT NULL,
-  `counter` int(11) NOT NULL,
-  `difficulty` smallint(6) DEFAULT '-1',
-  `item_guid` int(11) NOT NULL,
-  `item_quality` smallint(6) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `character_feed_log`
---
-
-LOCK TABLES `character_feed_log` WRITE;
-/*!40000 ALTER TABLE `character_feed_log` DISABLE KEYS */;
-/*!40000 ALTER TABLE `character_feed_log` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `character_gifts`
 --
 
@@ -1376,43 +1348,6 @@ CREATE TABLE `characters` (
 LOCK TABLES `characters` WRITE;
 /*!40000 ALTER TABLE `characters` DISABLE KEYS */;
 /*!40000 ALTER TABLE `characters` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `cheaters`
---
-
-DROP TABLE IF EXISTS `cheaters`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `cheaters` (
-  `entry` bigint(20) NOT NULL AUTO_INCREMENT,
-  `player` varchar(30) NOT NULL,
-  `acctid` int(11) NOT NULL,
-  `reason` varchar(255) NOT NULL DEFAULT 'unknown',
-  `speed` float NOT NULL DEFAULT '0',
-  `Val1` float NOT NULL DEFAULT '0',
-  `Val2` int(10) unsigned NOT NULL DEFAULT '0',
-  `count` int(11) NOT NULL DEFAULT '0',
-  `Map` smallint(5) NOT NULL DEFAULT '-1',
-  `Pos` varchar(255) NOT NULL DEFAULT '0',
-  `Level` mediumint(9) NOT NULL DEFAULT '0',
-  `first_date` datetime NOT NULL,
-  `last_date` datetime NOT NULL,
-  `Op` varchar(255) NOT NULL DEFAULT 'unknown',
-  PRIMARY KEY (`entry`),
-  KEY `idx_Count` (`count`) USING BTREE,
-  KEY `idx_Player` (`player`) USING BTREE
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `cheaters`
---
-
-LOCK TABLES `cheaters` WRITE;
-/*!40000 ALTER TABLE `cheaters` DISABLE KEYS */;
-/*!40000 ALTER TABLE `cheaters` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
