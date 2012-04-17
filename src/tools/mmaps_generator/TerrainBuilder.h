@@ -25,7 +25,7 @@
 #include "G3D/Vector3.h"
 #include "G3D/Matrix3.h"
 
-using namespace Trinity;
+using namespace SkyFire;
 
 namespace Pathfinding
 {
@@ -95,7 +95,7 @@ namespace Pathfinding
             /// Sets loop variables for selecting only certain parts of a map's terrain
             void getLoopVars(Spot portion, int &loopStart, int &loopEnd, int &loopInc);
 
-            /// Controls map tesselation
+            /// Controls map tessellation
             bool m_hiResHeightMaps;
             /// Controls whether liquids are loaded
             bool m_skipLiquid;
