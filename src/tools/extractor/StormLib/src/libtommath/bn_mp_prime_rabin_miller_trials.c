@@ -15,17 +15,18 @@
  * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
  */
 
+
 static const struct {
    int k, t;
 } sizes[] = {
-{   128,   28 },
-{   256,   16 },
-{   384,   10 },
-{   512,    7 },
-{   640,    6 },
-{   768,    5 },
-{   896,    4 },
-{  1024,    4 }
+{   128,    28 },
+{   256,    16 },
+{   384,    10 },
+{   512,     7 },
+{   640,     6 },
+{   768,     5 },
+{   896,     4 },
+{  1024,     4 }
 };
 
 /* returns # of RM trials required for a given bit size */
@@ -43,8 +44,9 @@ int mp_prime_rabin_miller_trials(int size)
    return sizes[x-1].t + 1;
 }
 
+
 #endif
 
-/* $Source: /cvs/libtom/libtommath/bn_mp_prime_rabin_miller_trials.c, v $ */
+/* $Source: /cvs/libtom/libtommath/bn_mp_prime_rabin_miller_trials.c,v $ */
 /* $Revision: 1.4 $ */
 /* $Date: 2006/12/28 01:25:13 $ */

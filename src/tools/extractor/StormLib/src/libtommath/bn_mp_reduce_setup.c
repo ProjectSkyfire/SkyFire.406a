@@ -21,7 +21,7 @@
 int mp_reduce_setup (mp_int * a, mp_int * b)
 {
   int     res;
-
+  
   if ((res = mp_2expt (a, b->used * 2 * DIGIT_BIT)) != MP_OKAY) {
     return res;
   }
@@ -29,6 +29,6 @@ int mp_reduce_setup (mp_int * a, mp_int * b)
 }
 #endif
 
-/* $Source: /cvs/libtom/libtommath/bn_mp_reduce_setup.c, v $ */
+/* $Source: /cvs/libtom/libtommath/bn_mp_reduce_setup.c,v $ */
 /* $Revision: 1.4 $ */
 /* $Date: 2006/12/28 01:25:13 $ */

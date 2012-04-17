@@ -50,6 +50,6 @@ mp_rand (mp_int * a, int digits)
 }
 #endif
 
-/* $Source: /cvs/libtom/libtommath/bn_mp_rand.c, v $ */
+/* $Source: /cvs/libtom/libtommath/bn_mp_rand.c,v $ */
 /* $Revision: 1.4 $ */
 /* $Date: 2006/12/28 01:25:13 $ */

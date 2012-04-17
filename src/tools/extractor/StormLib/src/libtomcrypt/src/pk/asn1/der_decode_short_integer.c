@@ -15,6 +15,7 @@
   ASN.1 DER, decode an integer, Tom St Denis
 */
 
+
 #ifdef LTC_DER
 
 /**
@@ -57,10 +58,11 @@ int der_decode_short_integer(const unsigned char *in, unsigned long inlen, unsig
    *num = y;
 
    return CRYPT_OK;
+
 }
 
 #endif
 
-/* $Source: /cvs/libtom/libtomcrypt/src/pk/asn1/der/short_integer/der_decode_short_integer.c, v $ */
+/* $Source: /cvs/libtom/libtomcrypt/src/pk/asn1/der/short_integer/der_decode_short_integer.c,v $ */
 /* $Revision: 1.7 $ */
 /* $Date: 2006/12/28 01:27:24 $ */

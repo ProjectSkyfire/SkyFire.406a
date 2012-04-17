@@ -19,7 +19,7 @@
 /**
   @file ltc_ecc_mul2add.c
   ECC Crypto, Shamir's Trick, Tom St Denis
-*/
+*/  
 
 #ifdef LTC_MECC
 
@@ -31,9 +31,9 @@
   @param B        Second point to multiply
   @param kB       What to multiple B by
   @param C        [out] Destination point (can overlap with A or B
-  @param modulus  Modulus for curve
+  @param modulus  Modulus for curve 
   @return CRYPT_OK on success
-*/
+*/ 
 int ltc_ecc_mul2add(ecc_point *A, void *kA,
                     ecc_point *B, void *kB,
                     ecc_point *C,
@@ -44,7 +44,7 @@ int ltc_ecc_mul2add(ecc_point *A, void *kA,
   unsigned char *tA, *tB;
   int            err, first;
   void          *mp, *mu;
-
+ 
   /* argchks */
   LTC_ARGCHK(A       != NULL);
   LTC_ARGCHK(B       != NULL);
@@ -113,20 +113,20 @@ int ltc_ecc_mul2add(ecc_point *A, void *kA,
   if ((err = mp_mulmod(B->y, mu, modulus, precomp[1<<2]->y)) != CRYPT_OK)                                      { goto ERR_MU; }
   if ((err = mp_mulmod(B->z, mu, modulus, precomp[1<<2]->z)) != CRYPT_OK)                                      { goto ERR_MU; }
 
-  /* precomp [i, 0](A + B) table */
+  /* precomp [i,0](A + B) table */
   if ((err = ltc_mp.ecc_ptdbl(precomp[1], precomp[2], modulus, mp)) != CRYPT_OK)                               { goto ERR_MU; }
   if ((err = ltc_mp.ecc_ptadd(precomp[1], precomp[2], precomp[3], modulus, mp)) != CRYPT_OK)                   { goto ERR_MU; }
 
-  /* precomp [0, i](A + B) table */
+  /* precomp [0,i](A + B) table */
   if ((err = ltc_mp.ecc_ptdbl(precomp[1<<2], precomp[2<<2], modulus, mp)) != CRYPT_OK)                         { goto ERR_MU; }
   if ((err = ltc_mp.ecc_ptadd(precomp[1<<2], precomp[2<<2], precomp[3<<2], modulus, mp)) != CRYPT_OK)          { goto ERR_MU; }
 
-  /* precomp [i, j](A + B) table (i != 0, j != 0) */
+  /* precomp [i,j](A + B) table (i != 0, j != 0) */
   for (x = 1; x < 4; x++) {
      for (y = 1; y < 4; y++) {
         if ((err = ltc_mp.ecc_ptadd(precomp[x], precomp[(y<<2)], precomp[x+(y<<2)], modulus, mp)) != CRYPT_OK) { goto ERR_MU; }
      }
-  }
+  }   
 
   nibble  = 3;
   first   = 1;
@@ -146,8 +146,8 @@ int ltc_ecc_mul2add(ecc_point *A, void *kA,
      /* extract two bits from both, shift/update */
      nA = (bitbufA >> 6) & 0x03;
      nB = (bitbufB >> 6) & 0x03;
-     bitbufA = (bitbufA << 2) & 0xFF;
-     bitbufB = (bitbufB << 2) & 0xFF;
+     bitbufA = (bitbufA << 2) & 0xFF;   
+     bitbufB = (bitbufB << 2) & 0xFF;   
 
      /* if both zero, if first, continue */
      if ((nA == 0) && (nB == 0) && (first == 1)) {
@@ -202,6 +202,6 @@ ERR_T:
 #endif
 #endif
 
-/* $Source: /cvs/libtom/libtomcrypt/src/pk/ecc/ltc_ecc_mul2add.c, v $ */
+/* $Source: /cvs/libtom/libtomcrypt/src/pk/ecc/ltc_ecc_mul2add.c,v $ */
 /* $Revision: 1.8 $ */
 /* $Date: 2007/05/12 14:32:35 $ */

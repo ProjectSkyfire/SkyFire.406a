@@ -24,11 +24,11 @@
   @param siglen           The length of the signature data (octets)
   @param hash             The hash of the message that was signed
   @param hashlen          The length of the hash of the message that was signed (octets)
-  @param stat             [out] The result of the signature comparison, 1 == valid, 0 == invalid
+  @param stat             [out] The result of the signature comparison, 1==valid, 0==invalid
   @param key              The public RSA key corresponding
   @return Error code
 */
-int rsa_verify_simple(const unsigned char *sig, unsigned long siglen,
+int rsa_verify_simple(const unsigned char *sig,  unsigned long siglen,
                       const unsigned char *hash, unsigned long hashlen,
                             int           *stat,
                             rsa_key       *key)
@@ -74,9 +74,9 @@ int rsa_verify_simple(const unsigned char *sig, unsigned long siglen,
   }
 
   /* compare the decrypted signature with the given hash */
-  if (x == hashlen && XMEMCMP(tmpbuf, hash, hashlen) == 0)
+  if(x == hashlen && XMEMCMP(tmpbuf, hash, hashlen) == 0)
       *stat = 1;
-
+       
 #ifdef LTC_CLEAN_STACK
   zeromem(tmpbuf, siglen);
 #endif

@@ -26,15 +26,15 @@
   @param padding          Type of padding (LTC_LTC_PKCS_1_PSS or LTC_LTC_PKCS_1_V1_5)
   @param hash_idx         The index of the desired hash
   @param saltlen          The length of the salt used during signature
-  @param stat             [out] The result of the signature comparison, 1 == valid, 0 == invalid
+  @param stat             [out] The result of the signature comparison, 1==valid, 0==invalid
   @param key              The public RSA key corresponding to the key that performed the signature
   @return CRYPT_OK on success (even if the signature is invalid)
 */
-int rsa_verify_hash_ex(const unsigned char *sig,     unsigned long siglen,
-                       const unsigned char *hash,    unsigned long hashlen,
+int rsa_verify_hash_ex(const unsigned char *sig,      unsigned long siglen,
+                       const unsigned char *hash,     unsigned long hashlen,
                              int            padding,
                              int            hash_idx, unsigned long saltlen,
-                             int           *stat,    rsa_key      *key)
+                             int           *stat,     rsa_key      *key)
 {
   unsigned long modulus_bitlen, modulus_bytelen, x;
   int           err;
@@ -115,24 +115,24 @@ int rsa_verify_hash_ex(const unsigned char *sig,     unsigned long siglen,
     }
 
     if ((err = pkcs_1_v1_5_decode(tmpbuf, x, LTC_LTC_PKCS_1_EMSA, modulus_bitlen, out, &outlen, &decoded)) != CRYPT_OK) {
-      XFREE(out);
+      XFREE(out);       
       goto bail_2;
     }
 
     /* now we must decode out[0...outlen-1] using ASN.1, test the OID and then test the hash */
-    /* construct the SEQUENCE
+    /* construct the SEQUENCE 
       SEQUENCE {
          SEQUENCE {hashoid OID
                    blah    NULL
          }
-         hash    OCTET STRING
+         hash    OCTET STRING 
       }
    */
     LTC_SET_ASN1(digestinfo, 0, LTC_ASN1_OBJECT_IDENTIFIER, loid, sizeof(loid)/sizeof(loid[0]));
-    LTC_SET_ASN1(digestinfo, 1, LTC_ASN1_NULL,             NULL,                         0);
-    LTC_SET_ASN1(siginfo,   0, LTC_ASN1_SEQUENCE,         digestinfo,                   2);
-    LTC_SET_ASN1(siginfo,   1, LTC_ASN1_OCTET_STRING,     tmpbuf,                       siglen);
-
+    LTC_SET_ASN1(digestinfo, 1, LTC_ASN1_NULL,              NULL,                          0);
+    LTC_SET_ASN1(siginfo,    0, LTC_ASN1_SEQUENCE,          digestinfo,                    2);
+    LTC_SET_ASN1(siginfo,    1, LTC_ASN1_OCTET_STRING,      tmpbuf,                        siglen);
+   
     if ((err = der_decode_sequence(out, outlen, siginfo, 2)) != CRYPT_OK) {
        XFREE(out);
        goto bail_2;
@@ -162,6 +162,6 @@ bail_2:
 
 #endif /* LTC_MRSA */
 
-/* $Source: /cvs/libtom/libtomcrypt/src/pk/rsa/rsa_verify_hash.c, v $ */
+/* $Source: /cvs/libtom/libtomcrypt/src/pk/rsa/rsa_verify_hash.c,v $ */
 /* $Revision: 1.13 $ */
 /* $Date: 2007/05/12 14:32:35 $ */

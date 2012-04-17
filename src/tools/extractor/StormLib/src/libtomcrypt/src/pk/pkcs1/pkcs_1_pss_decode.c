@@ -10,9 +10,9 @@
  */
 #include "../../headers/tomcrypt.h"
 
-/**
+/** 
   @file pkcs_1_pss_decode.c
-  LTC_PKCS #1 PSS Signature Padding, Tom St Denis
+  LTC_PKCS #1 PSS Signature Padding, Tom St Denis 
 */
 
 #ifdef LTC_PKCS_1
@@ -26,12 +26,12 @@
    @param  saltlen         The length of the salt used (octets)
    @param  hash_idx        The index of the hash desired
    @param  modulus_bitlen  The bit length of the RSA modulus
-   @param  res             [out] The result of the comparison, 1 == valid, 0 == invalid
+   @param  res             [out] The result of the comparison, 1==valid, 0==invalid
    @return CRYPT_OK if successful (even if the comparison failed)
 */
 int pkcs_1_pss_decode(const unsigned char *msghash, unsigned long msghashlen,
-                      const unsigned char *sig,    unsigned long siglen,
-                            unsigned long saltlen, int           hash_idx,
+                      const unsigned char *sig,     unsigned long siglen,
+                            unsigned long saltlen,  int           hash_idx,
                             unsigned long modulus_bitlen, int    *res)
 {
    unsigned char *DB, *mask, *salt, *hash;
@@ -54,7 +54,7 @@ int pkcs_1_pss_decode(const unsigned char *msghash, unsigned long msghashlen,
    modulus_len = (modulus_bitlen>>3) + (modulus_bitlen & 7 ? 1 : 0);
 
    /* check sizes */
-   if ((saltlen > modulus_len) ||
+   if ((saltlen > modulus_len) || 
        (modulus_len < hLen + saltlen + 2) || (siglen != modulus_len)) {
       return CRYPT_PK_INVALID_SIZE;
    }
@@ -110,7 +110,7 @@ int pkcs_1_pss_decode(const unsigned char *msghash, unsigned long msghashlen,
    for (y = 0; y < (modulus_len - hLen - 1); y++) {
       DB[y] ^= mask[y];
    }
-
+   
    /* now clear the first byte [make sure smaller than modulus] */
    DB[0] &= 0xFF >> ((modulus_len<<3) - (modulus_bitlen-1));
 
@@ -156,10 +156,10 @@ int pkcs_1_pss_decode(const unsigned char *msghash, unsigned long msghashlen,
    err = CRYPT_OK;
 LBL_ERR:
 #ifdef LTC_CLEAN_STACK
-   zeromem(DB,  modulus_len);
-   zeromem(mask, modulus_len);
-   zeromem(salt, modulus_len);
-   zeromem(hash, modulus_len);
+   zeromem(DB,   modulus_len);   
+   zeromem(mask, modulus_len);   
+   zeromem(salt, modulus_len);   
+   zeromem(hash, modulus_len);   
 #endif
 
    XFREE(hash);
@@ -172,6 +172,6 @@ LBL_ERR:
 
 #endif /* LTC_PKCS_1 */
 
-/* $Source: /cvs/libtom/libtomcrypt/src/pk/pkcs1/pkcs_1_pss_decode.c, v $ */
+/* $Source: /cvs/libtom/libtomcrypt/src/pk/pkcs1/pkcs_1_pss_decode.c,v $ */
 /* $Revision: 1.11 $ */
 /* $Date: 2007/05/12 14:32:35 $ */

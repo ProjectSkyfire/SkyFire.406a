@@ -15,6 +15,7 @@
   ASN.1 DER, encode a BIT STRING, Tom St Denis
 */
 
+
 #ifdef LTC_DER
 
 /**
@@ -25,7 +26,7 @@
   @param outlen  [in/out] The number of bits stored
   @return CRYPT_OK if successful
 */
-int der_decode_bit_string(const unsigned char *in, unsigned long inlen,
+int der_decode_bit_string(const unsigned char *in,  unsigned long inlen,
                                 unsigned char *out, unsigned long *outlen)
 {
    unsigned long dlen, blen, x, y;
@@ -66,7 +67,7 @@ int der_decode_bit_string(const unsigned char *in, unsigned long inlen,
       /* short format */
       dlen = in[x++] & 0x7F;
    }
-
+  
    /* is the data len too long or too short? */
    if ((dlen == 0) || (dlen + x > inlen)) {
        return CRYPT_INVALID_PACKET;
@@ -96,6 +97,6 @@ int der_decode_bit_string(const unsigned char *in, unsigned long inlen,
 
 #endif
 
-/* $Source: /cvs/libtom/libtomcrypt/src/pk/asn1/der/bit/der_decode_bit_string.c, v $ */
+/* $Source: /cvs/libtom/libtomcrypt/src/pk/asn1/der/bit/der_decode_bit_string.c,v $ */
 /* $Revision: 1.5 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
