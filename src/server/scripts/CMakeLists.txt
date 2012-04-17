@@ -58,7 +58,7 @@ file(GLOB_RECURSE sources_ScriptedAI
   ../game/AI/ScriptedAI/ScriptedEscortAI.cpp 
   ../game/AI/ScriptedAI/ScriptedCreature.cpp
   ../game/AI/ScriptedAI/ScriptedFollowerAI.cpp 
-  ../game/AI/ScriptedAI/ScriptedSimpleAI.cpp)
+  )
 
 source_group(ScriptedAI FILES ${sources_ScriptedAI})
   
