@@ -22,6 +22,7 @@ int mp_div_2d (mp_int * a, int b, mp_int * c, mp_int * d)
   int     x, res;
   mp_int  t;
 
+
   /* if the shift count is <= 0 then we do no work */
   if (b <= 0) {
     res = mp_copy (a, c);
@@ -91,6 +92,6 @@ int mp_div_2d (mp_int * a, int b, mp_int * c, mp_int * d)
 }
 #endif
 
-/* $Source: /cvs/libtom/libtommath/bn_mp_div_2d.c, v $ */
+/* $Source: /cvs/libtom/libtommath/bn_mp_div_2d.c,v $ */
 /* $Revision: 1.4 $ */
 /* $Date: 2006/12/28 01:25:13 $ */

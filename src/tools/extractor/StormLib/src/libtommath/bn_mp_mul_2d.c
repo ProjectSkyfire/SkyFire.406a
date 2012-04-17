@@ -69,7 +69,7 @@ int mp_mul_2d (mp_int * a, int b, mp_int * c)
       /* set the carry to the carry bits of the current word */
       r = rr;
     }
-
+    
     /* set final carry */
     if (r != 0) {
        c->dp[(c->used)++] = r;
@@ -80,6 +80,6 @@ int mp_mul_2d (mp_int * a, int b, mp_int * c)
 }
 #endif
 
-/* $Source: /cvs/libtom/libtommath/bn_mp_mul_2d.c, v $ */
+/* $Source: /cvs/libtom/libtommath/bn_mp_mul_2d.c,v $ */
 /* $Revision: 1.4 $ */
 /* $Date: 2006/12/28 01:25:13 $ */

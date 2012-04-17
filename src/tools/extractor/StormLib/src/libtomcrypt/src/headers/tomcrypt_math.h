@@ -362,13 +362,13 @@ typedef struct {
    */
    int (*ecc_ptdbl)(ecc_point *P, ecc_point *R, void *modulus, void *mp);
 
-   /** ECC mapping from projective to affine, currently uses (x, y, z) => (x/z^2, y/z^3, 1)
+   /** ECC mapping from projective to affine, currently uses (x,y,z) => (x/z^2, y/z^3, 1)
        @param P     The point to map
        @param modulus The modulus
        @param mp    The "b" value from montgomery_setup()
        @return CRYPT_OK on success
        @remark  The mapping can be different but keep in mind a ecc_point only has three 
-                integers (x, y, z) so if you use a different mapping you have to make it fit.
+                integers (x,y,z) so if you use a different mapping you have to make it fit.
    */
    int (*ecc_map)(ecc_point *P, void *modulus, void *mp);
 
@@ -381,9 +381,9 @@ typedef struct {
        @param modulus  Modulus for curve 
        @return CRYPT_OK on success
    */ 
-   int (*ecc_mul2add)(ecc_point *A, void *kA, 
-                      ecc_point *B, void *kB, 
-                      ecc_point *C, 
+   int (*ecc_mul2add)(ecc_point *A, void *kA,
+                      ecc_point *B, void *kB,
+                      ecc_point *C,
                            void *modulus);
 
 /* ---- (optional) rsa optimized math (for internal CRT) ---- */
@@ -392,7 +392,7 @@ typedef struct {
        @param prng     An active PRNG state
        @param wprng    The index of the PRNG desired
        @param size     The size of the modulus (key size) desired (octets)
-       @param e        The "e" value (public key).  e == 65537 is a good choice
+       @param e        The "e" value (public key).  e==65537 is a good choice
        @param key      [out] Destination of a newly created private key pair
        @return CRYPT_OK if successful, upon error all allocated ram is freed
     */
@@ -408,8 +408,8 @@ typedef struct {
       @param key      The RSA key to use 
       @return CRYPT_OK on success
    */
-   int (*rsa_me)(const unsigned char *in,  unsigned long inlen, 
-                       unsigned char *out, unsigned long *outlen, int which, 
+   int (*rsa_me)(const unsigned char *in,   unsigned long inlen,
+                       unsigned char *out,  unsigned long *outlen, int which,
                        rsa_key *key);
 } ltc_math_descriptor;
 
@@ -484,17 +484,17 @@ extern const ltc_math_descriptor gmp_desc;
 #define mp_montgomery_reduce(a, b, c)   ltc_mp.montgomery_reduce(a, b, c)
 #define mp_montgomery_free(a)        ltc_mp.montgomery_deinit(a)
 
-#define mp_exptmod(a, b, c, d)          ltc_mp.exptmod(a, b, c, d)
+#define mp_exptmod(a,b,c,d)          ltc_mp.exptmod(a,b,c,d)
 #define mp_prime_is_prime(a, b, c)   ltc_mp.isprime(a, c)
 
 #define mp_iszero(a)                 (mp_cmp_d(a, 0) == LTC_MP_EQ ? LTC_MP_YES : LTC_MP_NO)
 #define mp_isodd(a)                  (mp_get_digit_count(a) > 0 ? (mp_get_digit(a, 0) & 1 ? LTC_MP_YES : LTC_MP_NO) : LTC_MP_NO)
-#define mp_exch(a, b)                do { void *ABC__tmp = a; a = b; b = ABC__tmp; } while (0);
+#define mp_exch(a, b)                do { void *ABC__tmp = a; a = b; b = ABC__tmp; } while(0);
 
 #define mp_tohex(a, b)               mp_toradix(a, b, 16)
 
 #endif
 
-/* $Source: /cvs/libtom/libtomcrypt/src/headers/tomcrypt_math.h, v $ */
+/* $Source: /cvs/libtom/libtomcrypt/src/headers/tomcrypt_math.h,v $ */
 /* $Revision: 1.44 $ */
 /* $Date: 2007/05/12 14:32:35 $ */

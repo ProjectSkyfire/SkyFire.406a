@@ -110,7 +110,7 @@ local void make_crc_table()
     unsigned long poly;                 /* polynomial exclusive-or pattern */
     /* terms of polynomial defining this crc (except x^32): */
     static volatile int first = 1;      /* flag to limit concurrent making */
-    static const unsigned char p[] = {0, 1, 2, 4, 5, 7, 8, 10, 11, 12, 16, 22, 23, 26};
+    static const unsigned char p[] = {0,1,2,4,5,7,8,10,11,12,16,22,23,26};
 
     /* See if another task is already doing this (not thread-safe, but better
        than nothing -- significantly reduces duration of vulnerability in
@@ -168,7 +168,7 @@ local void make_crc_table()
 #  ifdef BYFOUR
         fprintf(out, "#ifdef BYFOUR\n");
         for (k = 1; k < 8; k++) {
-            fprintf(out, "  }, \n  {\n");
+            fprintf(out, "  },\n  {\n");
             write_table(out, crc_table[k]);
         }
         fprintf(out, "#endif\n");
@@ -188,7 +188,7 @@ local void write_table(out, table)
 
     for (n = 0; n < 256; n++)
         fprintf(out, "%s0x%08lxUL%s", n % 5 ? "" : "    ", table[n],
-                n == 255 ? "\n" : (n % 5 == 4 ? ", \n" : ", "));
+                n == 255 ? "\n" : (n % 5 == 4 ? ",\n" : ", "));
 }
 #endif /* MAKECRCH */
 

@@ -76,17 +76,17 @@ int mp_gcd (mp_int * a, mp_int * b, mp_int * c)
         /* swap u and v to make sure v is >= u */
         mp_exch(&u, &v);
      }
-
+     
      /* subtract smallest from largest */
      if ((res = s_mp_sub(&v, &u, &v)) != MP_OKAY) {
         goto LBL_V;
      }
-
+     
      /* Divide out all factors of two */
      if ((res = mp_div_2d(&v, mp_cnt_lsb(&v), &v, NULL)) != MP_OKAY) {
         goto LBL_V;
-     }
-  }
+     } 
+  } 
 
   /* multiply by 2**k which we divided out at the beginning */
   if ((res = mp_mul_2d (&u, k, c)) != MP_OKAY) {
@@ -100,6 +100,6 @@ LBL_U:mp_clear (&v);
 }
 #endif
 
-/* $Source: /cvs/libtom/libtommath/bn_mp_gcd.c, v $ */
+/* $Source: /cvs/libtom/libtommath/bn_mp_gcd.c,v $ */
 /* $Revision: 1.5 $ */
 /* $Date: 2006/12/28 01:25:13 $ */

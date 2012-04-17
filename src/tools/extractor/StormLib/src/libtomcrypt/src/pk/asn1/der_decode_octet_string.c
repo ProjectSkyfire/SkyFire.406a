@@ -15,6 +15,7 @@
   ASN.1 DER, encode a OCTET STRING, Tom St Denis
 */
 
+
 #ifdef LTC_DER
 
 /**
@@ -47,7 +48,7 @@ int der_decode_octet_string(const unsigned char *in, unsigned long inlen,
 
    /* decode the length */
    if (in[x] & 0x80) {
-      /* valid # of bytes in length are 1, 2, 3 */
+      /* valid # of bytes in length are 1,2,3 */
       y = in[x] & 0x7F;
       if ((y == 0) || (y > 3) || ((x + y) > inlen)) {
          return CRYPT_INVALID_PACKET;
@@ -82,9 +83,9 @@ int der_decode_octet_string(const unsigned char *in, unsigned long inlen,
 
    return CRYPT_OK;
 }
-
+ 
 #endif
 
-/* $Source: /cvs/libtom/libtomcrypt/src/pk/asn1/der/octet/der_decode_octet_string.c, v $ */
+/* $Source: /cvs/libtom/libtomcrypt/src/pk/asn1/der/octet/der_decode_octet_string.c,v $ */
 /* $Revision: 1.4 $ */
 /* $Date: 2006/12/28 01:27:24 $ */

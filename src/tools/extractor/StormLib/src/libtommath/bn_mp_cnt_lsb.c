@@ -15,7 +15,7 @@
  * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
  */
 
-static const int lnz[16] = {
+static const int lnz[16] = { 
    4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0
 };
 
@@ -48,6 +48,6 @@ int mp_cnt_lsb(mp_int *a)
 
 #endif
 
-/* $Source: /cvs/libtom/libtommath/bn_mp_cnt_lsb.c, v $ */
+/* $Source: /cvs/libtom/libtommath/bn_mp_cnt_lsb.c,v $ */
 /* $Revision: 1.4 $ */
 /* $Date: 2006/12/28 01:25:13 $ */

@@ -19,13 +19,13 @@
 /**
   @file ltc_ecc_points.c
   ECC Crypto, Tom St Denis
-*/
+*/  
 
 #ifdef LTC_MECC
 
 /**
    Allocate a new ECC point
-   @return A newly allocated point or NULL on error
+   @return A newly allocated point or NULL on error 
 */
 ecc_point *ltc_ecc_new_point(void)
 {
@@ -54,6 +54,7 @@ void ltc_ecc_del_point(ecc_point *p)
 }
 
 #endif
-/* $Source: /cvs/libtom/libtomcrypt/src/pk/ecc/ltc_ecc_points.c, v $ */
+/* $Source: /cvs/libtom/libtomcrypt/src/pk/ecc/ltc_ecc_points.c,v $ */
 /* $Revision: 1.7 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
+

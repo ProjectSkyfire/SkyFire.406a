@@ -15,7 +15,7 @@
  * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
  */
 
-/* b = |a|
+/* b = |a| 
  *
  * Simple function copies the input and fixes the sign to positive
  */
@@ -38,6 +38,6 @@ mp_abs (mp_int * a, mp_int * b)
 }
 #endif
 
-/* $Source: /cvs/libtom/libtommath/bn_mp_abs.c, v $ */
+/* $Source: /cvs/libtom/libtommath/bn_mp_abs.c,v $ */
 /* $Revision: 1.4 $ */
 /* $Date: 2006/12/28 01:25:13 $ */

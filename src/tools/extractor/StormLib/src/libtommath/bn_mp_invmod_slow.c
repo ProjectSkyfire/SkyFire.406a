@@ -27,7 +27,7 @@ int mp_invmod_slow (mp_int * a, mp_int * b, mp_int * c)
   }
 
   /* init temps */
-  if ((res = mp_init_multi(&x, &y, &u, &v,
+  if ((res = mp_init_multi(&x, &y, &u, &v, 
                            &A, &B, &C, &D, NULL)) != MP_OKAY) {
      return res;
   }
@@ -40,13 +40,13 @@ int mp_invmod_slow (mp_int * a, mp_int * b, mp_int * c)
     goto LBL_ERR;
   }
 
-  /* 2. [modified] if x, y are both even then return an error! */
+  /* 2. [modified] if x,y are both even then return an error! */
   if (mp_iseven (&x) == 1 && mp_iseven (&y) == 1) {
     res = MP_VAL;
     goto LBL_ERR;
   }
 
-  /* 3. u=x, v=y, A=1, B=0, C=0, D=1 */
+  /* 3. u=x, v=y, A=1, B=0, C=0,D=1 */
   if ((res = mp_copy (&x, &u)) != MP_OKAY) {
     goto LBL_ERR;
   }
@@ -154,14 +154,14 @@ top:
          goto LBL_ERR;
       }
   }
-
+  
   /* too big */
   while (mp_cmp_mag(&C, b) != MP_LT) {
       if ((res = mp_sub(&C, b, &C)) != MP_OKAY) {
          goto LBL_ERR;
       }
   }
-
+  
   /* C is now the inverse */
   mp_exch (&C, c);
   res = MP_OKAY;
@@ -170,6 +170,6 @@ LBL_ERR:mp_clear_multi (&x, &y, &u, &v, &A, &B, &C, &D, NULL);
 }
 #endif
 
-/* $Source: /cvs/libtom/libtommath/bn_mp_invmod_slow.c, v $ */
+/* $Source: /cvs/libtom/libtommath/bn_mp_invmod_slow.c,v $ */
 /* $Revision: 1.4 $ */
 /* $Date: 2006/12/28 01:25:13 $ */

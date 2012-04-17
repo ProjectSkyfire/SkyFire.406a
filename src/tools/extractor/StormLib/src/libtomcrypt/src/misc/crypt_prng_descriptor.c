@@ -13,13 +13,14 @@
 /**
   @file crypt_prng_descriptor.c
   Stores the PRNG descriptors, Tom St Denis
-*/
+*/  
 struct ltc_prng_descriptor prng_descriptor[TAB_SIZE] = {
 { NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL }
 };
 
 LTC_MUTEX_GLOBAL(ltc_prng_mutex)
 
-/* $Source: /cvs/libtom/libtomcrypt/src/misc/crypt/crypt_prng_descriptor.c, v $ */
+
+/* $Source: /cvs/libtom/libtomcrypt/src/misc/crypt/crypt_prng_descriptor.c,v $ */
 /* $Revision: 1.8 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
