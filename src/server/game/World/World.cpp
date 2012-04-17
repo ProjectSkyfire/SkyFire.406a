@@ -1329,9 +1329,6 @@ void World::SetInitialWorldSettings()
     LoadDB2Stores(m_dataPath);
     DetectDBCLang();
 
-    /*sLog->outString("Loading spell dbc data corrections...");
-    sSpellMgr->LoadDbcDataCorrections();*/  ///-is now merged to custom attri needs redirected
-
     sLog->outString("Loading SpellInfo store...");
     sSpellMgr->LoadSpellInfoStore();
 
@@ -1825,9 +1822,6 @@ void World::SetInitialWorldSettings()
     sLog->outString("Calculate random battleground reset time..." );
     InitRandomBGResetTime();
 
-    //sLog->outString("Calculate guild Advancement XP daily reset time..." );
-    //InitGuildAdvancementDailyResetTime();
-
     LoadCharacterNameData();
 
     // possibly enable db logging; avoid massive startup spam by doing it here.
@@ -1988,9 +1982,6 @@ void World::Update(uint32 diff)
 
     if (m_gameTime > m_NextWeeklyQuestReset)
         ResetWeeklyQuests();
-
-    // if (m_gameTime > m_NextDailyXPReset)
-        // ResetGuildAdvancementDailyXP();
 
     if (m_gameTime > m_NextRandomBGReset)
         ResetRandomBG();
@@ -2818,69 +2809,6 @@ void World::ResetDailyQuests()
     // change available dailies
     sPoolMgr->ChangeDailyQuests();
 }
-
-/*void World::InitGuildAdvancementDailyResetTime()
-{
-    time_t Hourlyxptime = uint64(sWorld->getWorldState(WS_GUILD_AD_HOURLY_RESET_TIME));
-    if (!Hourlyxptime)
-        m_NextHourlyXPReset = time_t(time(NULL));         // game time not yet init
-
-    // generate time by config
-    time_t curTime = time(NULL);
-    tm localTm = *localtime(&curTime);
-    localTm.tm_hour = getIntConfig(CONFIG_GUILD_DAILY_XP_RESET_HOUR);
-    localTm.tm_min = 0;
-    localTm.tm_sec = 0;
-
-    // current day reset time
-    time_t nextHourlyResetTime = mktime(&localTm);
-
-    // next reset time before current moment
-    if (curTime >= nextHourlyResetTime)
-        nextHourlyResetTime += HOUR;
-
-    // normalize reset time
-    m_NextHourlyXPReset = Hourlyxptime < curTime ? nextHourlyResetTime - HOUR : nextHourlyResetTime;
-
-    if (!Hourlyxptime)
-        sWorld->setWorldState(WS_GUILD_AD_HOURLY_RESET_TIME, uint64(m_NextHourlyXPReset));
-}
-
-void World::ResetGuildAdvancementDailyXP()
-{
-    // sLog->outDetail("Guild Advancement Daily XP status was reset for all characters.");
-    QueryResult result = CharacterDatabase.Query("SELECT level, xp, guildid FROM guild"); // todo: fix the spam, use "SQLDriverQueryLogging=1" in configs to see it in console.
-
-    if (!result)
-        return;
-
-    uint32 count = 0;
-
-    do
-    {
-        Field *fields = result->Fetch();
-        uint8 level = fields[0].GetUInt32();
-        uint64 m_xp = fields[1].GetUInt64();
-        uint64 guildid = fields[2].GetUInt64();
-
-        uint64 baseXP = sObjectMgr->GetXPForGuildLevel(level);
-        uint64 diff = (uint64)(baseXP * 15 / 100);
-        uint64 m_xp_cap = 0;
-
-        if (diff < baseXP)
-            m_xp_cap = diff + m_xp;
-        else
-            m_xp_cap = baseXP;
-
-        CharacterDatabase.PExecute("UPDATE guild SET m_xp_cap = %u, m_today_xp = '0' WHERE guildid = %u", m_xp_cap, guildid);
-
-        ++count;
-    }
-    while (result->NextRow());
-
-    m_NextHourlyXPReset = time_t(m_NextHourlyXPReset + HOUR);
-    sWorld->setWorldState(WS_GUILD_AD_HOURLY_RESET_TIME, uint64(m_NextHourlyXPReset));
-}*/
 
 void World::LoadDBAllowedSecurityLevel()
 {

@@ -645,7 +645,6 @@ class World
         time_t GetNextDailyQuestsResetTime() const { return m_NextDailyQuestReset; }
         time_t GetNextWeeklyQuestsResetTime() const { return m_NextWeeklyQuestReset; }
         time_t GetNextRandomBGResetTime() const { return m_NextRandomBGReset; }
-        time_t GetGuildAdvancementDailyXPResetTime() const { return m_NextHourlyXPReset; }
 
         /// Get the maximum skill level a player can reach
         uint16 GetConfigMaxSkillValue() const
@@ -788,10 +787,10 @@ class World
         void InitDailyQuestResetTime();
         void InitWeeklyQuestResetTime();
         void InitRandomBGResetTime();
-        //void InitGuildAdvancementDailyResetTime();
+
         void ResetDailyQuests();
         void ResetWeeklyQuests();
-        //void ResetGuildAdvancementDailyXP();
+
         void ResetRandomBG();
     private:
         static ACE_Atomic_Op<ACE_Thread_Mutex, bool> m_stopEvent;
