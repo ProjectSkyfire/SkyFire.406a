@@ -639,7 +639,7 @@ void AchievementGlobalMgr::LoadAchievementCriteriaData()
             continue;
         }
 
-        uint32 dataType = fields[1].GetUInt32();
+        uint32 dataType = fields[1].GetUInt8();
         const char* scriptName = fields[4].GetCString();
         uint32 scriptId = 0;
         if (strcmp(scriptName, "")) // not empty
