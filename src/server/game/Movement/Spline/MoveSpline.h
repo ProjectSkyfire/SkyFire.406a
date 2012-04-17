@@ -16,31 +16,14 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef SKYFIRE_MOVEPLINE_H
-#define SKYFIRE_MOVEPLINE_H
+#ifndef SKYFIRESERVER_MOVEPLINE_H
+#define SKYFIRESERVER_MOVEPLINE_H
 
 #include "Spline.h"
 #include "MoveSplineInitArgs.h"
 
 namespace Movement
 {
-    enum
-    {
-        minimal_duration = 1,
-    };
-
-    struct CommonInitializer
-    {
-        CommonInitializer(float _velocity) : velocityInv(1000.f/_velocity), time(minimal_duration) {}
-        float velocityInv;
-        int32 time;
-        inline int32 operator()(Spline<int32>& s, int32 i)
-        {
-            time += (s.SegLength(i) * velocityInv);
-            return time;
-        }
-    };
-
     struct Location : public Vector3
     {
         Location() : orientation(0) {}
@@ -139,4 +122,4 @@ namespace Movement
         std::string ToString() const;
     };
 }
-#endif // SKYFIRE_MOVEPLINE_H
+#endif // SKYFIRESERVER_MOVEPLINE_H
