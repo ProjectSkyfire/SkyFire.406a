@@ -1602,9 +1602,11 @@ void World::SetInitialWorldSettings()
     ///- Load dynamic data tables from the database
     sLog->outString("Loading Item Auctions...");
     sAuctionMgr->LoadAuctionItems();
+
     sLog->outString("Loading Auctions...");
     sAuctionMgr->LoadAuctions();
 
+    sLog->outString("Loading Guilds...");
     sGuildMgr->LoadGuilds();
 
     sLog->outString("Loading Guild Rewards...");
@@ -1762,7 +1764,7 @@ void World::SetInitialWorldSettings()
     mail_timer_expires = ((DAY * IN_MILLISECONDS) / (m_timers[WUPDATE_AUCTIONS].GetInterval()));
     sLog->outDetail("Mail timer set to: " UI64FMTD ", mail return is called every " UI64FMTD " minutes", uint64(mail_timer), uint64(mail_timer_expires));
 
-    ///- Initilize static helper structures
+    ///- Initialize static helper structures
     AIRegistry::Initialize();
     Player::InitVisibleBits();
 

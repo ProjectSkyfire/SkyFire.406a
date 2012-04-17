@@ -433,6 +433,8 @@ uint32 GetXPForGuildLevel(uint8 level);
 
 void GuildMgr::LoadGuildRewards()
 {
+    uint32 oldMSTime = getMSTime();
+
     QueryResult result = WorldDatabase.Query("SELECT item_entry, price, achievement, standing FROM guild_rewards");
 
     if (!result)
@@ -455,8 +457,8 @@ void GuildMgr::LoadGuildRewards()
         mGuildRewards.push_back(reward);
 
         ++count;
-    }while (result->NextRow());
+    } while (result->NextRow());
 
+    sLog->outString(">> Loaded %u guild reward definitions in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
     sLog->outString();
-    sLog->outString(">> Loaded %u guild reward definitions.");
 }
