@@ -66,7 +66,7 @@ void WardenCheckMgr::LoadWardenChecks()
 
     //                                   0   1     2     3       4        5       6    7
     result = WorldDatabase.Query("SELECT id, type, data, result, address, length, str, comment FROM warden_checks ORDER BY id ASC");
-    
+
     uint32 count = 0;
     do
     {

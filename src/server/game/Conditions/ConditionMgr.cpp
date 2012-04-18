@@ -17,7 +17,6 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #include "Player.h"
 #include "SpellAuras.h"
 #include "SpellMgr.h"
@@ -546,7 +545,6 @@ bool ConditionMgr::IsObjectMeetToConditionList(ConditionSourceInfo& sourceInfo, 
                     sLog->outDebug(LOG_FILTER_CONDITIONSYS, "IsPlayerMeetToConditionList: Reference template -%u not found",
                         (*i)->ReferenceId);//checked at loading, should never happen
                 }
-
             }
             else //handle normal condition
             {
@@ -628,7 +626,6 @@ ConditionList ConditionMgr::GetConditionsForNotGroupedEntry(ConditionSourceType 
     }
     return spellCond;
 }
-
 
 ConditionList ConditionMgr::GetConditionsForSpellClickEvent(uint32 creatureId, uint32 spellId)
 {
@@ -723,7 +720,6 @@ void ConditionMgr::LoadConditions(bool isReload)
 
     do
     {
-
         Field* fields = result->Fetch();
 
         Condition* cond = new Condition();

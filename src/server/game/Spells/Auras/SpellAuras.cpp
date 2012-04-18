@@ -2351,7 +2351,7 @@ void Aura::CallScriptEffectAbsorbHandlers(AuraEffect* aurEff, AuraApplication co
             if ((*effItr).IsEffectAffected(m_spellInfo, aurEff->GetEffIndex()))
                 (*effItr).Call(*scritr, aurEff, dmgInfo, absorbAmount);
         }
-        defaultPrevented = (*scritr)->_IsDefaultActionPrevented();       
+        defaultPrevented = (*scritr)->_IsDefaultActionPrevented();
         (*scritr)->_FinishScriptCall();
     }
 }

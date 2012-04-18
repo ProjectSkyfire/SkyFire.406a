@@ -38,8 +38,8 @@ struct WardenCheck
     uint8 Length;                                           // PROC_CHECK, MEM_CHECK, PAGE_CHECK
     std::string Str;                                        // LUA, MPQ, DRIVER
     std::string Comment;
-    uint16 CheckId;    
-    enum WardenActions Action;    
+    uint16 CheckId;
+    enum WardenActions Action;
 };
 
 struct WardenCheckResult
