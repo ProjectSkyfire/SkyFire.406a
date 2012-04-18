@@ -15,7 +15,7 @@
  * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
  */
 
-/* read signed bin, big endian, first byte is 0 == positive or 1 == negative */
+/* read signed bin, big endian, first byte is 0==positive or 1==negative */
 int mp_read_signed_bin (mp_int * a, const unsigned char *b, int c)
 {
   int     res;
@@ -36,6 +36,6 @@ int mp_read_signed_bin (mp_int * a, const unsigned char *b, int c)
 }
 #endif
 
-/* $Source: /cvs/libtom/libtommath/bn_mp_read_signed_bin.c, v $ */
+/* $Source: /cvs/libtom/libtommath/bn_mp_read_signed_bin.c,v $ */
 /* $Revision: 1.5 $ */
 /* $Date: 2006/12/28 01:25:13 $ */

@@ -9,8 +9,6 @@
 /*****************************************************************************/
 
 #define __STORMLIB_SELF__
-#define __INCLUDE_COMPRESSION__
-#define __INCLUDE_CRYPTOGRAPHY__
 #include "StormLib.h"
 #include "StormCommon.h"
 
@@ -33,6 +31,7 @@ typedef struct _MPQ_ATTRIBUTES_HEADER
 int SAttrLoadAttributes(TMPQArchive * ha)
 {
     MPQ_ATTRIBUTES_HEADER AttrHeader;
+    TMPQFile * hf;
     HANDLE hFile = NULL;
     DWORD dwBlockTableSize = ha->pHeader->dwBlockTableSize;
     DWORD dwArraySize;
@@ -40,70 +39,80 @@ int SAttrLoadAttributes(TMPQArchive * ha)
     DWORD i;
     int nError = ERROR_SUCCESS;
 
-    // Hash table must exist, and file table must be initialized
-    assert(ha->pHashTable != NULL);
+    // File table must be initialized
     assert(ha->pFileTable != NULL);
 
     // Attempt to open the "(attributes)" file.
     // If it's not there, then the archive doesn't support attributes
-    if (SFileOpenFileEx((HANDLE)ha, ATTRIBUTES_NAME, SFILE_OPEN_ANY_LOCALE, &hFile))
+    if(SFileOpenFileEx((HANDLE)ha, ATTRIBUTES_NAME, SFILE_OPEN_ANY_LOCALE, &hFile))
     {
+        // Remember the flags for (attributes)
+        hf = (TMPQFile *)hFile;
+        ha->dwFileFlags2 = hf->pFileEntry->dwFlags;
+
         // Load the content of the attributes file
         SFileReadFile(hFile, &AttrHeader, sizeof(MPQ_ATTRIBUTES_HEADER), &dwBytesRead, NULL);
-        AttrHeader.dwVersion = BSWAP_INT32_UNSIGNED(AttrHeader.dwVersion);
-        AttrHeader.dwFlags   = BSWAP_INT32_UNSIGNED(AttrHeader.dwFlags);
-        ha->dwAttrFlags      = AttrHeader.dwFlags;
-        if (dwBytesRead != sizeof(MPQ_ATTRIBUTES_HEADER))
+        if(dwBytesRead != sizeof(MPQ_ATTRIBUTES_HEADER))
             nError = ERROR_FILE_CORRUPT;
 
-        // Verify format of the attributes
-        if (nError == ERROR_SUCCESS)
+        // Verify the header of the (attributes) file
+        if(nError == ERROR_SUCCESS)
         {
-            if (AttrHeader.dwVersion > MPQ_ATTRIBUTES_V1)
+            AttrHeader.dwVersion = BSWAP_INT32_UNSIGNED(AttrHeader.dwVersion);
+            AttrHeader.dwFlags   = BSWAP_INT32_UNSIGNED(AttrHeader.dwFlags);
+            ha->dwAttrFlags      = AttrHeader.dwFlags;
+            if(dwBytesRead != sizeof(MPQ_ATTRIBUTES_HEADER))
+                nError = ERROR_FILE_CORRUPT;
+        }
+
+        // Verify format of the attributes
+        if(nError == ERROR_SUCCESS)
+        {
+            if(AttrHeader.dwVersion > MPQ_ATTRIBUTES_V1)
                 nError = ERROR_BAD_FORMAT;
         }
 
         // Load the CRC32 (if any)
-        if (nError == ERROR_SUCCESS && (AttrHeader.dwFlags & MPQ_ATTRIBUTE_CRC32))
+        if(nError == ERROR_SUCCESS && (AttrHeader.dwFlags & MPQ_ATTRIBUTE_CRC32))
         {
-            LPDWORD pArrayCRC32 = ALLOCMEM(DWORD, dwBlockTableSize);
+            LPDWORD pArrayCRC32 = STORM_ALLOC(DWORD, dwBlockTableSize);
 
-            if (pArrayCRC32 != NULL)
+            if(pArrayCRC32 != NULL)
             {
                 dwArraySize = dwBlockTableSize * sizeof(DWORD);
                 SFileReadFile(hFile, pArrayCRC32, dwArraySize, &dwBytesRead, NULL);
-                if (dwBytesRead == dwArraySize)
+                if(dwBytesRead == dwArraySize)
                 {
-                    for (i = 0; i < dwBlockTableSize; i++)
+                     for(i = 0; i < dwBlockTableSize; i++)
                         ha->pFileTable[i].dwCrc32 = BSWAP_INT32_UNSIGNED(pArrayCRC32[i]);
                 }
                 else
                     nError = ERROR_FILE_CORRUPT;
 
-                FREEMEM(pArrayCRC32);
+                STORM_FREE(pArrayCRC32);
             }
             else
                 nError = ERROR_NOT_ENOUGH_MEMORY;
         }
 
         // Read the array of file times
-        if (nError == ERROR_SUCCESS && (AttrHeader.dwFlags & MPQ_ATTRIBUTE_FILETIME))
+        if(nError == ERROR_SUCCESS && (AttrHeader.dwFlags & MPQ_ATTRIBUTE_FILETIME))
         {
-            ULONGLONG * pArrayFileTime = ALLOCMEM(ULONGLONG, dwBlockTableSize);
+            ULONGLONG * pArrayFileTime = STORM_ALLOC(ULONGLONG, dwBlockTableSize);
 
-            if (pArrayFileTime != NULL)
+            if(pArrayFileTime != NULL)
             {
                 dwArraySize = dwBlockTableSize * sizeof(ULONGLONG);
                 SFileReadFile(hFile, pArrayFileTime, dwArraySize, &dwBytesRead, NULL);
-                if (dwBytesRead == dwArraySize)
+                if(dwBytesRead == dwArraySize)
                 {
-                    for (i = 0; i < dwBlockTableSize; i++)
+                    for(i = 0; i < dwBlockTableSize; i++)
                         ha->pFileTable[i].FileTime = BSWAP_INT64_UNSIGNED(pArrayFileTime[i]);
                 }
                 else
                     nError = ERROR_FILE_CORRUPT;
 
-                FREEMEM(pArrayFileTime);
+                STORM_FREE(pArrayFileTime);
             }
             else
                 nError = ERROR_NOT_ENOUGH_MEMORY;
@@ -111,19 +120,19 @@ int SAttrLoadAttributes(TMPQArchive * ha)
 
         // Read the MD5 (if any)
         // Note: MD5 array can be incomplete, if it's the last array in the (attributes)
-        if (nError == ERROR_SUCCESS && (AttrHeader.dwFlags & MPQ_ATTRIBUTE_MD5))
+        if(nError == ERROR_SUCCESS && (AttrHeader.dwFlags & MPQ_ATTRIBUTE_MD5))
         {
-            unsigned char * pArrayMD5 = ALLOCMEM(unsigned char, (dwBlockTableSize * MD5_DIGEST_SIZE));
+            unsigned char * pArrayMD5 = STORM_ALLOC(unsigned char, (dwBlockTableSize * MD5_DIGEST_SIZE));
             unsigned char * md5;
 
-            if (pArrayMD5 != NULL)
+            if(pArrayMD5 != NULL)
             {
                 dwArraySize = dwBlockTableSize * MD5_DIGEST_SIZE;
                 SFileReadFile(hFile, pArrayMD5, dwArraySize, &dwBytesRead, NULL);
-                if (dwBytesRead == dwArraySize)
+                if(dwBytesRead == dwArraySize)
                 {
                     md5 = pArrayMD5;
-                    for (i = 0; i < dwBlockTableSize; i++)
+                    for(i = 0; i < dwBlockTableSize; i++)
                     {
                         memcpy(ha->pFileTable[i].md5, md5, MD5_DIGEST_SIZE);
                         md5 += MD5_DIGEST_SIZE;
@@ -132,20 +141,20 @@ int SAttrLoadAttributes(TMPQArchive * ha)
                 else
                     nError = ERROR_FILE_CORRUPT;
 
-                FREEMEM(pArrayMD5);
+                STORM_FREE(pArrayMD5);
             }
             else
                 nError = ERROR_NOT_ENOUGH_MEMORY;
         }
 
-        //
-        // Note: Version 7.00 of StormLib saved the (attributes) incorrectly.
+        // 
+        // Note: Version 7.00 of StormLib saved the (attributes) incorrectly. 
         // Sometimes, number of entries in the (attributes) was 1 item less
-        // than block table size.
+        // than block table size. 
         // If we encounter such table, we will zero all three arrays
         //
 
-        if (nError != ERROR_SUCCESS)
+        if(nError != ERROR_SUCCESS)
             ha->dwAttrFlags = 0;
 
         // Cleanup & exit
@@ -168,10 +177,10 @@ int SAttrFileSaveToMpq(TMPQArchive * ha)
     // If the (attributes) is not in the file table yet,
     // we have to increase the final block table size
     pFileEntry = GetFileEntryExact(ha, ATTRIBUTES_NAME, LANG_NEUTRAL);
-    if (pFileEntry != NULL)
+    if(pFileEntry != NULL)
     {
         // If "(attributes)" file exists, and it's set to 0, then remove it
-        if (ha->dwAttrFlags == 0)
+        if(ha->dwAttrFlags == 0)
         {
             FreeFileEntry(ha, pFileEntry);
             return ERROR_SUCCESS;
@@ -180,39 +189,40 @@ int SAttrFileSaveToMpq(TMPQArchive * ha)
     else
     {
         // If we don't want to create file atributes, do nothing
-        if (ha->dwAttrFlags == 0)
+        if(ha->dwAttrFlags == 0)
             return ERROR_SUCCESS;
 
         // Check where the file entry is going to be allocated.
         // If at the end of the file table, we have to increment
         // the expected size of the (attributes) file.
         pFileEntry = FindFreeFileEntry(ha);
-        if (pFileEntry == ha->pFileTable + ha->dwFileTableSize)
+        if(pFileEntry == ha->pFileTable + ha->dwFileTableSize)
             dwFinalBlockTableSize++;
     }
 
     // Calculate the size of the attributes file
-    if (nError == ERROR_SUCCESS)
+    if(nError == ERROR_SUCCESS)
     {
         dwFileSize = sizeof(MPQ_ATTRIBUTES_HEADER);         // Header
-        if (ha->dwAttrFlags & MPQ_ATTRIBUTE_CRC32)
+        if(ha->dwAttrFlags & MPQ_ATTRIBUTE_CRC32)
             dwFileSize += dwFinalBlockTableSize * sizeof(DWORD);
-        if (ha->dwAttrFlags & MPQ_ATTRIBUTE_FILETIME)
+        if(ha->dwAttrFlags & MPQ_ATTRIBUTE_FILETIME)
             dwFileSize += dwFinalBlockTableSize * sizeof(ULONGLONG);
-        if (ha->dwAttrFlags & MPQ_ATTRIBUTE_MD5)
+        if(ha->dwAttrFlags & MPQ_ATTRIBUTE_MD5)
             dwFileSize += dwFinalBlockTableSize * MD5_DIGEST_SIZE;
     }
 
     // Create the attributes file in the MPQ
+    assert(ha->dwFileFlags2 != 0);
     nError = SFileAddFile_Init(ha, ATTRIBUTES_NAME,
-                                   NULL,
+                                   0,
                                    dwFileSize,
                                    LANG_NEUTRAL,
-                                   MPQ_FILE_COMPRESS | MPQ_FILE_REPLACEEXISTING,
+                                   ha->dwFileFlags2,
                                   &hf);
 
     // Write all parts of the (attributes) file
-    if (nError == ERROR_SUCCESS)
+    if(nError == ERROR_SUCCESS)
     {
         assert(ha->dwFileTableSize == dwFinalBlockTableSize);
 
@@ -223,60 +233,64 @@ int SAttrFileSaveToMpq(TMPQArchive * ha)
     }
 
     // Write the array of CRC32
-    if (nError == ERROR_SUCCESS && (ha->dwAttrFlags & MPQ_ATTRIBUTE_CRC32))
+    if(nError == ERROR_SUCCESS && (ha->dwAttrFlags & MPQ_ATTRIBUTE_CRC32))
     {
-        LPDWORD pArrayCRC32 = ALLOCMEM(DWORD, dwFinalBlockTableSize);
+        LPDWORD pArrayCRC32 = STORM_ALLOC(DWORD, dwFinalBlockTableSize);
 
-        if (pArrayCRC32 != NULL)
+        if(pArrayCRC32 != NULL)
         {
             // Copy from file table
-            for (i = 0; i < ha->dwFileTableSize; i++)
+            for(i = 0; i < ha->dwFileTableSize; i++)
                 pArrayCRC32[i] = BSWAP_INT32_UNSIGNED(ha->pFileTable[i].dwCrc32);
 
             dwToWrite = ha->dwFileTableSize * sizeof(DWORD);
             nError = SFileAddFile_Write(hf, pArrayCRC32, dwToWrite, MPQ_COMPRESSION_ZLIB);
-            FREEMEM(pArrayCRC32);
+            STORM_FREE(pArrayCRC32);
         }
     }
 
     // Write the array of file time
-    if (nError == ERROR_SUCCESS && (ha->dwAttrFlags & MPQ_ATTRIBUTE_FILETIME))
+    if(nError == ERROR_SUCCESS && (ha->dwAttrFlags & MPQ_ATTRIBUTE_FILETIME))
     {
-        ULONGLONG * pArrayFileTime = ALLOCMEM(ULONGLONG, ha->dwFileTableSize);
+        ULONGLONG * pArrayFileTime = STORM_ALLOC(ULONGLONG, ha->dwFileTableSize);
 
-        if (pArrayFileTime != NULL)
+        if(pArrayFileTime != NULL)
         {
             // Copy from file table
-            for (i = 0; i < ha->dwFileTableSize; i++)
+            for(i = 0; i < ha->dwFileTableSize; i++)
                 pArrayFileTime[i] = BSWAP_INT64_UNSIGNED(ha->pFileTable[i].FileTime);
 
             dwToWrite = ha->dwFileTableSize * sizeof(ULONGLONG);
             nError = SFileAddFile_Write(hf, pArrayFileTime, dwToWrite, MPQ_COMPRESSION_ZLIB);
-            FREEMEM(pArrayFileTime);
+            STORM_FREE(pArrayFileTime);
         }
     }
 
     // Write the array of MD5s
-    if (nError == ERROR_SUCCESS && (ha->dwAttrFlags & MPQ_ATTRIBUTE_MD5))
+    if(nError == ERROR_SUCCESS && (ha->dwAttrFlags & MPQ_ATTRIBUTE_MD5))
     {
-        char * pArrayMD5 = ALLOCMEM(char, ha->dwFileTableSize * MD5_DIGEST_SIZE);
+        char * pArrayMD5 = STORM_ALLOC(char, ha->dwFileTableSize * MD5_DIGEST_SIZE);
 
-        if (pArrayMD5 != NULL)
+        if(pArrayMD5 != NULL)
         {
             // Copy from file table
-            for (i = 0; i < ha->dwFileTableSize; i++)
+            for(i = 0; i < ha->dwFileTableSize; i++)
                 memcpy(&pArrayMD5[i * MD5_DIGEST_SIZE], ha->pFileTable[i].md5, MD5_DIGEST_SIZE);
 
             dwToWrite = ha->dwFileTableSize * MD5_DIGEST_SIZE;
             nError = SFileAddFile_Write(hf, pArrayMD5, dwToWrite, MPQ_COMPRESSION_ZLIB);
-            FREEMEM(pArrayMD5);
+            STORM_FREE(pArrayMD5);
         }
     }
 
     // Finalize the file in the archive
-    if (hf != NULL)
+    if(hf != NULL)
+    {
         SFileAddFile_Finish(hf);
+    }
 
+    if(nError == ERROR_SUCCESS)
+        ha->dwFlags &= ~MPQ_FLAG_INV_ATTRIBUTES;
     return nError;
 }
 
@@ -288,7 +302,7 @@ DWORD WINAPI SFileGetAttributes(HANDLE hMpq)
     TMPQArchive * ha = (TMPQArchive *)hMpq;
 
     // Verify the parameters
-    if (!IsValidMpqHandle(ha))
+    if(!IsValidMpqHandle(ha))
     {
         SetLastError(ERROR_INVALID_PARAMETER);
         return SFILE_INVALID_ATTRIBUTES;
@@ -302,22 +316,22 @@ bool WINAPI SFileSetAttributes(HANDLE hMpq, DWORD dwFlags)
     TMPQArchive * ha = (TMPQArchive *)hMpq;
 
     // Verify the parameters
-    if (!IsValidMpqHandle(ha))
+    if(!IsValidMpqHandle(ha))
     {
         SetLastError(ERROR_INVALID_PARAMETER);
         return false;
     }
 
     // Not allowed when the archive is read-only
-    if (ha->dwFlags & MPQ_FLAG_READ_ONLY)
+    if(ha->dwFlags & MPQ_FLAG_READ_ONLY)
     {
         SetLastError(ERROR_ACCESS_DENIED);
         return false;
     }
 
     // Set the attributes
+    InvalidateInternalFiles(ha);
     ha->dwAttrFlags = (dwFlags & MPQ_ATTRIBUTE_ALL);
-    ha->dwFlags |= MPQ_FLAG_CHANGED;
     return true;
 }
 
@@ -333,21 +347,21 @@ bool WINAPI SFileUpdateFileAttributes(HANDLE hMpq, const char * szFileName)
     DWORD dwCrc32;
 
     // Verify the parameters
-    if (!IsValidMpqHandle(ha))
+    if(!IsValidMpqHandle(ha))
     {
         SetLastError(ERROR_INVALID_PARAMETER);
         return false;
     }
 
     // Not allowed when the archive is read-only
-    if (ha->dwFlags & MPQ_FLAG_READ_ONLY)
+    if(ha->dwFlags & MPQ_FLAG_READ_ONLY)
     {
         SetLastError(ERROR_ACCESS_DENIED);
         return false;
     }
 
     // Attempt to open the file
-    if (!SFileOpenFileEx(hMpq, szFileName, SFILE_OPEN_FROM_MPQ, &hFile))
+    if(!SFileOpenFileEx(hMpq, szFileName, SFILE_OPEN_FROM_MPQ, &hFile))
         return false;
 
     // Get the file size
@@ -359,11 +373,11 @@ bool WINAPI SFileUpdateFileAttributes(HANDLE hMpq, const char * szFileName)
     dwCrc32 = crc32(0, Z_NULL, 0);
 
     // Go through entire file and calculate both CRC32 and MD5
-    while (dwTotalBytes != 0)
+    while(dwTotalBytes != 0)
     {
         // Read data from file
         SFileReadFile(hFile, Buffer, sizeof(Buffer), &dwBytesRead, NULL);
-        if (dwBytesRead == 0)
+        if(dwBytesRead == 0)
             break;
 
         // Update CRC32 and MD5
@@ -379,7 +393,7 @@ bool WINAPI SFileUpdateFileAttributes(HANDLE hMpq, const char * szFileName)
     md5_done(&md5_state, hf->pFileEntry->md5);
 
     // Remember that we need to save the MPQ tables
-    ha->dwFlags |= MPQ_FLAG_CHANGED;
+    InvalidateInternalFiles(ha);
     SFileCloseFile(hFile);
     return true;
 }

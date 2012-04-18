@@ -39,7 +39,7 @@ int mp_exptmod_fast (mp_int * G, mp_int * X, mp_int * P, mp_int * Y, int redmode
    * one of many reduction algorithms without modding the guts of
    * the code with if statements everywhere.
    */
-  int     (*redux)(mp_int*, mp_int*, mp_digit);
+  int     (*redux)(mp_int*,mp_int*,mp_digit);
 
   /* find window size */
   x = mp_count_bits (X);
@@ -84,7 +84,7 @@ int mp_exptmod_fast (mp_int * G, mp_int * X, mp_int * P, mp_int * Y, int redmode
 
   /* determine and setup reduction code */
   if (redmode == 0) {
-#ifdef BN_MP_MONTGOMERY_SETUP_C
+#ifdef BN_MP_MONTGOMERY_SETUP_C     
      /* now setup montgomery  */
      if ((err = mp_montgomery_setup (P, &mp)) != MP_OKAY) {
         goto LBL_M;
@@ -99,7 +99,7 @@ int mp_exptmod_fast (mp_int * G, mp_int * X, mp_int * P, mp_int * Y, int redmode
      if (((P->used * 2 + 1) < MP_WARRAY) &&
           P->used < (1 << ((CHAR_BIT * sizeof (mp_word)) - (2 * DIGIT_BIT)))) {
         redux = fast_mp_montgomery_reduce;
-     } else
+     } else 
 #endif
      {
 #ifdef BN_MP_MONTGOMERY_REDUCE_C
@@ -150,7 +150,7 @@ int mp_exptmod_fast (mp_int * G, mp_int * X, mp_int * P, mp_int * Y, int redmode
      if ((err = mp_montgomery_calc_normalization (&res, P)) != MP_OKAY) {
        goto LBL_RES;
      }
-#else
+#else 
      err = MP_VAL;
      goto LBL_RES;
 #endif
@@ -315,6 +315,7 @@ LBL_M:
 }
 #endif
 
-/* $Source: /cvs/libtom/libtommath/bn_mp_exptmod_fast.c, v $ */
+
+/* $Source: /cvs/libtom/libtommath/bn_mp_exptmod_fast.c,v $ */
 /* $Revision: 1.4 $ */
 /* $Date: 2006/12/28 01:25:13 $ */

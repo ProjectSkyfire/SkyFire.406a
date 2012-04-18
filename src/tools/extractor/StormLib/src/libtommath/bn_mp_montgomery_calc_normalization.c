@@ -37,6 +37,7 @@ int mp_montgomery_calc_normalization (mp_int * a, mp_int * b)
      bits = 1;
   }
 
+
   /* now compute C = A * B mod b */
   for (x = bits - 1; x < (int)DIGIT_BIT; x++) {
     if ((res = mp_mul_2 (a, a)) != MP_OKAY) {
@@ -53,6 +54,6 @@ int mp_montgomery_calc_normalization (mp_int * a, mp_int * b)
 }
 #endif
 
-/* $Source: /cvs/libtom/libtommath/bn_mp_montgomery_calc_normalization.c, v $ */
+/* $Source: /cvs/libtom/libtommath/bn_mp_montgomery_calc_normalization.c,v $ */
 /* $Revision: 1.4 $ */
 /* $Date: 2006/12/28 01:25:13 $ */

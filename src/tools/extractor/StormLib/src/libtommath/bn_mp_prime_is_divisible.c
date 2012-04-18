@@ -15,7 +15,7 @@
  * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
  */
 
-/* determines if an integers is divisible by one
+/* determines if an integers is divisible by one 
  * of the first PRIME_SIZE primes or not
  *
  * sets result to 0 if not, 1 if yes
@@ -45,6 +45,6 @@ int mp_prime_is_divisible (mp_int * a, int *result)
 }
 #endif
 
-/* $Source: /cvs/libtom/libtommath/bn_mp_prime_is_divisible.c, v $ */
+/* $Source: /cvs/libtom/libtommath/bn_mp_prime_is_divisible.c,v $ */
 /* $Revision: 1.4 $ */
 /* $Date: 2006/12/28 01:25:13 $ */

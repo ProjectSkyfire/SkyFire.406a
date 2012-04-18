@@ -1,3 +1,4 @@
+
 /*-------------------------------------------------------------*/
 /*--- Decompression machinery                               ---*/
 /*---                                          decompress.c ---*/
@@ -10,14 +11,16 @@
    bzip2/libbzip2 version 1.0.5 of 10 December 2007
    Copyright (C) 1996-2007 Julian Seward <jseward@bzip.org>
 
-   Please read the WARNING, DISCLAIMER and PATENTS sections in the
+   Please read the WARNING, DISCLAIMER and PATENTS sections in the 
    README file.
 
    This program is released under the terms of the license contained
    in the file LICENSE.
    ------------------------------------------------------------------ */
 
+
 #include "bzlib_private.h"
+
 
 /*---------------------------------------------------*/
 static
@@ -32,11 +35,12 @@ void makeMaps_d ( DState* s )
       }
 }
 
+
 /*---------------------------------------------------*/
 #define RETURN(rrr)                               \
    { retVal = rrr; goto save_state_and_return; };
 
-#define GET_BITS(lll, vvv, nnn)                     \
+#define GET_BITS(lll,vvv,nnn)                     \
    case lll: s->state = lll;                      \
    while (True) {                                 \
       if (s->bsLive >= nnn) {                     \
@@ -60,14 +64,14 @@ void makeMaps_d ( DState* s )
          s->strm->total_in_hi32++;                \
    }
 
-#define GET_UCHAR(lll, uuu)                        \
-   GET_BITS(lll, uuu, 8)
+#define GET_UCHAR(lll,uuu)                        \
+   GET_BITS(lll,uuu,8)
 
-#define GET_BIT(lll, uuu)                          \
-   GET_BITS(lll, uuu, 1)
+#define GET_BIT(lll,uuu)                          \
+   GET_BITS(lll,uuu,1)
 
 /*---------------------------------------------------*/
-#define GET_MTF_VAL(label1, label2, lval)           \
+#define GET_MTF_VAL(label1,label2,lval)           \
 {                                                 \
    if (groupPos == 0) {                           \
       groupNo++;                                  \
@@ -97,6 +101,7 @@ void makeMaps_d ( DState* s )
    lval = gPerm[zvec - gBase[zn]];                \
 }
 
+
 /*---------------------------------------------------*/
 Int32 BZ2_decompress ( DState* s )
 {
@@ -122,7 +127,7 @@ Int32 BZ2_decompress ( DState* s )
    Int32  N;
    Int32  curr;
    Int32  zt;
-   Int32  zn;
+   Int32  zn; 
    Int32  zvec;
    Int32  zj;
    Int32  gSel;
@@ -176,7 +181,7 @@ Int32 BZ2_decompress ( DState* s )
    N           = s->save_N;
    curr        = s->save_curr;
    zt          = s->save_zt;
-   zn          = s->save_zn;
+   zn          = s->save_zn; 
    zvec        = s->save_zvec;
    zj          = s->save_zj;
    gSel        = s->save_gSel;
@@ -188,6 +193,7 @@ Int32 BZ2_decompress ( DState* s )
    retVal = BZ_OK;
 
    switch (s->state) {
+
       GET_UCHAR(BZ_X_MAGIC_1, uc);
       if (uc != BZ_HDR_B) RETURN(BZ_DATA_ERROR_MAGIC);
 
@@ -198,14 +204,14 @@ Int32 BZ2_decompress ( DState* s )
       if (uc != BZ_HDR_h) RETURN(BZ_DATA_ERROR_MAGIC);
 
       GET_BITS(BZ_X_MAGIC_4, s->blockSize100k, 8)
-      if (s->blockSize100k < (BZ_HDR_0 + 1) ||
+      if (s->blockSize100k < (BZ_HDR_0 + 1) || 
           s->blockSize100k > (BZ_HDR_0 + 9)) RETURN(BZ_DATA_ERROR_MAGIC);
       s->blockSize100k -= BZ_HDR_0;
 
       if (s->smallDecompress) {
          s->ll16 = BZALLOC( s->blockSize100k * 100000 * sizeof(UInt16) );
-         s->ll4  = BZALLOC(
-                      ((1 + s->blockSize100k * 100000) >> 1) * sizeof(UChar)
+         s->ll4  = BZALLOC( 
+                      ((1 + s->blockSize100k * 100000) >> 1) * sizeof(UChar) 
                    );
          if (s->ll16 == NULL || s->ll4 == NULL) RETURN(BZ_MEM_ERROR);
       } else {
@@ -231,7 +237,7 @@ Int32 BZ2_decompress ( DState* s )
       s->currBlockNo++;
       if (s->verbosity >= 2)
          VPrintf1 ( "\n    [%d: huff+mtf ", s->currBlockNo );
-
+ 
       s->storedBlockCRC = 0;
       GET_UCHAR(BZ_X_BCRC_1, uc);
       s->storedBlockCRC = (s->storedBlockCRC << 8) | ((UInt32)uc);
@@ -254,14 +260,14 @@ Int32 BZ2_decompress ( DState* s )
 
       if (s->origPtr < 0)
          RETURN(BZ_DATA_ERROR);
-      if (s->origPtr > 10 + 100000*s->blockSize100k)
+      if (s->origPtr > 10 + 100000*s->blockSize100k) 
          RETURN(BZ_DATA_ERROR);
 
       /*--- Receive the mapping table ---*/
       for (i = 0; i < 16; i++) {
          GET_BIT(BZ_X_MAPPING_1, uc);
-         if (uc == 1)
-            s->inUse16[i] = True; else
+         if (uc == 1) 
+            s->inUse16[i] = True; else 
             s->inUse16[i] = False;
       }
 
@@ -297,7 +303,7 @@ Int32 BZ2_decompress ( DState* s )
       {
          UChar pos[BZ_N_GROUPS], tmp, v;
          for (v = 0; v < nGroups; v++) pos[v] = v;
-
+   
          for (i = 0; i < nSelectors; i++) {
             v = s->selectorMtf[i];
             tmp = pos[v];
@@ -330,10 +336,10 @@ Int32 BZ2_decompress ( DState* s )
             if (s->len[t][i] > maxLen) maxLen = s->len[t][i];
             if (s->len[t][i] < minLen) minLen = s->len[t][i];
          }
-         BZ2_hbCreateDecodeTables (
-            &(s->limit[t][0]),
-            &(s->base[t][0]),
-            &(s->perm[t][0]),
+         BZ2_hbCreateDecodeTables ( 
+            &(s->limit[t][0]), 
+            &(s->base[t][0]), 
+            &(s->perm[t][0]), 
             &(s->len[t][0]),
             minLen, maxLen, alphaSize
          );
@@ -367,9 +373,11 @@ Int32 BZ2_decompress ( DState* s )
       GET_MTF_VAL(BZ_X_MTF_1, BZ_X_MTF_2, nextSym);
 
       while (True) {
+
          if (nextSym == EOB) break;
 
          if (nextSym == BZ_RUNA || nextSym == BZ_RUNB) {
+
             es = -1;
             N = 1;
             do {
@@ -400,7 +408,9 @@ Int32 BZ2_decompress ( DState* s )
                };
 
             continue;
+
          } else {
+
             if (nblock >= nblockMAX) RETURN(BZ_DATA_ERROR);
 
             /*-- uc = MTF ( nextSym-1 ) --*/
@@ -421,23 +431,23 @@ Int32 BZ2_decompress ( DState* s )
                      s->mtfa[(z)-3] = s->mtfa[(z)-4];
                      nn -= 4;
                   }
-                  while (nn > 0) {
-                     s->mtfa[(pp+nn)] = s->mtfa[(pp+nn)-1]; nn--;
+                  while (nn > 0) { 
+                     s->mtfa[(pp+nn)] = s->mtfa[(pp+nn)-1]; nn--; 
                   };
                   s->mtfa[pp] = uc;
-               } else {
+               } else { 
                   /* general case */
                   lno = nn / MTFL_SIZE;
                   off = nn % MTFL_SIZE;
                   pp = s->mtfbase[lno] + off;
                   uc = s->mtfa[pp];
-                  while (pp > s->mtfbase[lno]) {
-                     s->mtfa[pp] = s->mtfa[pp-1]; pp--;
+                  while (pp > s->mtfbase[lno]) { 
+                     s->mtfa[pp] = s->mtfa[pp-1]; pp--; 
                   };
                   s->mtfbase[lno]++;
                   while (lno > 0) {
                      s->mtfbase[lno]--;
-                     s->mtfa[s->mtfbase[lno]]
+                     s->mtfa[s->mtfbase[lno]] 
                         = s->mtfa[s->mtfbase[lno-1] + MTFL_SIZE - 1];
                      lno--;
                   }
@@ -492,6 +502,7 @@ Int32 BZ2_decompress ( DState* s )
       if (s->verbosity >= 2) VPrintf0 ( "rt+rld" );
 
       if (s->smallDecompress) {
+
          /*-- Make a copy of cftab, used in generation of T --*/
          for (i = 0; i <= 256; i++) s->cftabCopy[i] = s->cftab[i];
 
@@ -518,11 +529,13 @@ Int32 BZ2_decompress ( DState* s )
          if (s->blockRandomised) {
             BZ_RAND_INIT_MASK;
             BZ_GET_SMALL(s->k0); s->nblock_used++;
-            BZ_RAND_UPD_MASK; s->k0 ^= BZ_RAND_MASK;
+            BZ_RAND_UPD_MASK; s->k0 ^= BZ_RAND_MASK; 
          } else {
             BZ_GET_SMALL(s->k0); s->nblock_used++;
          }
+
       } else {
+
          /*-- compute the T^(-1) vector --*/
          for (i = 0; i < nblock; i++) {
             uc = (UChar)(s->tt[i] & 0xff);
@@ -535,13 +548,16 @@ Int32 BZ2_decompress ( DState* s )
          if (s->blockRandomised) {
             BZ_RAND_INIT_MASK;
             BZ_GET_FAST(s->k0); s->nblock_used++;
-            BZ_RAND_UPD_MASK; s->k0 ^= BZ_RAND_MASK;
+            BZ_RAND_UPD_MASK; s->k0 ^= BZ_RAND_MASK; 
          } else {
             BZ_GET_FAST(s->k0); s->nblock_used++;
          }
+
       }
 
       RETURN(BZ_OK);
+
+
 
     endhdr_2:
 
@@ -601,8 +617,9 @@ Int32 BZ2_decompress ( DState* s )
    s->save_gBase       = gBase;
    s->save_gPerm       = gPerm;
 
-   return retVal;
+   return retVal;   
 }
+
 
 /*-------------------------------------------------------------*/
 /*--- end                                      decompress.c ---*/
