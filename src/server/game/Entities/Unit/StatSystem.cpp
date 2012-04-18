@@ -72,6 +72,7 @@ bool Player::UpdateStats(Stats stat)
     switch (stat)
     {
         case STAT_STRENGTH:
+            UpdateShieldBlockValue();
             break;
         case STAT_AGILITY:
             UpdateAllCritPercentages();
@@ -250,7 +251,7 @@ float Player::GetHealthBonusFromStamina()
     float baseStam = stamina < 20 ? stamina : 20;
     float moreStam = stamina - baseStam;
 
-    return baseStam + (moreStam*10.0f);
+    return baseStam + (moreStam*14.0f);
 }
 
 float Player::GetManaBonusFromIntellect()
@@ -328,8 +329,6 @@ void Player::UpdateAttackPowerAndDamage(bool ranged)
                 val2 = level * 2.0f + GetStat(STAT_AGILITY) * 2.0f - 20.0f;
                 break;
             case CLASS_ROGUE:
-                val2 = level + GetStat(STAT_AGILITY) - 10.0f;
-                break;
             case CLASS_WARRIOR:
                 val2 = level + GetStat(STAT_AGILITY) - 10.0f;
                 break;
@@ -338,12 +337,16 @@ void Player::UpdateAttackPowerAndDamage(bool ranged)
                 {
                     case FORM_CAT:
                     case FORM_BEAR:
-                        val2 = 0.0f; break;
+                        val2 = 0.0f;
+                        break;
                     default:
-                        val2 = GetStat(STAT_AGILITY) - 10.0f; break;
+                        val2 = GetStat(STAT_AGILITY) - 10.0f;
+                        break;
                 }
                 break;
-            default: val2 = GetStat(STAT_AGILITY) - 10.0f; break;
+            default:
+                val2 = GetStat(STAT_AGILITY) - 10.0f;
+                break;
         }
     }
     else
@@ -351,11 +354,7 @@ void Player::UpdateAttackPowerAndDamage(bool ranged)
         switch (getClass())
         {
             case CLASS_WARRIOR:
-                val2 = (level * 3.0f) + (GetStat(STAT_STRENGTH) * 2.0f) - 20.0f;
-                break;
             case CLASS_PALADIN:
-                val2 = (level * 3.0f) + (GetStat(STAT_STRENGTH) * 2.0f) - 20.0f;
-                break;
             case CLASS_DEATH_KNIGHT:
                 val2 = (level * 3.0f) + (GetStat(STAT_STRENGTH) * 2.0f) - 20.0f;
                 break;
@@ -408,15 +407,18 @@ void Player::UpdateAttackPowerAndDamage(bool ranged)
 
                 switch (GetShapeshiftForm())
                 {
-                    case FORM_CAT:
-                        val2 = (GetStat(STAT_STRENGTH) * 2) + GetStat(STAT_AGILITY) + 40.0f - 20.0f;
-                        break;
-                    case FORM_BEAR:
-                        val2 = getLevel() * (mLevelMult + 2.0f) + (GetStat(STAT_STRENGTH) * 2) - 20.0f + GetStat(STAT_AGILITY) * 2.0f - 20.0f  + (GetShapeshiftForm() == FORM_BEAR ? 30.0f : 120.0f) + _baseFeralAP;
-                        break;
-                    case FORM_MOONKIN:
-                        val2 = getLevel() * (mLevelMult + 1.5f) + (GetStat(STAT_STRENGTH) * 2) - 20.0f + _baseFeralAP;
-                        break;
+                case FORM_CAT:
+                    val2 = getLevel() * (mLevelMult + 2.0f) + GetStat(STAT_STRENGTH) * 2.0f + GetStat(STAT_AGILITY) - 20.0f + weapon_bonus + _baseFeralAP;
+                    break;
+                case FORM_BEAR:
+                    val2 = getLevel() * (mLevelMult + 3.0f) + GetStat(STAT_STRENGTH) * 2.0f - 20.0f + weapon_bonus + _baseFeralAP;
+                    break;
+                case FORM_MOONKIN:
+                    val2 = getLevel() * (mLevelMult + 1.5f) + GetStat(STAT_STRENGTH) * 2.0f - 20.0f + _baseFeralAP;
+                    break;
+                default:
+                    val2 = GetStat(STAT_STRENGTH) * 2.0f - 20.0f;
+                    break;
                 }
                 break;
             }
@@ -568,11 +570,6 @@ void Player::CalculateMinMaxDamage(WeaponAttackType attType, bool normalized, bo
         weapon_mindamage = BASE_MINDAMAGE;
         weapon_maxdamage = BASE_MAXDAMAGE;
     }
-    /*else if (attType == RANGED_ATTACK)                       //add ammo DPS to ranged damage
-    {
-        weapon_mindamage += GetAmmoDPS() * att_speed;
-        weapon_maxdamage += GetAmmoDPS() * att_speed;
-    }*/
 
     min_damage = ((base_value + weapon_mindamage) * base_pct + total_value) * total_pct;
     max_damage = ((base_value + weapon_maxdamage) * base_pct + total_value) * total_pct;
@@ -619,10 +616,20 @@ void Player::UpdateBlockPercentage()
     {
         // Base value
         value = 5.0f;
+        // Modify value from defense skill
+        value += (int32(GetDefenseSkillValue()) - int32(GetMaxSkillValueForLevel())) * 0.04f;
         // Increase from SPELL_AURA_MOD_BLOCK_PERCENT aura
         value += GetTotalAuraModifier(SPELL_AURA_MOD_BLOCK_PERCENT);
-        // Increase from rating
+        // Increase from block rating
         value += GetRatingBonusValue(CR_BLOCK);
+
+        // Increase from mastery rating
+        if(HasAura(76671)) //paladin Protection
+            value += GetMasteryPoints() * 0.0225f;
+
+        if(HasAura(76857)) //warrior Protection
+            value += GetMasteryPoints() * 0.015f;
+
         value = value < 0.0f ? 0.0f : value;
     }
     SetStatFloatValue(PLAYER_BLOCK_PERCENTAGE, value);
@@ -965,15 +972,6 @@ void Player::_RemoveAllStatBonuses()
 
     UpdateAllStats();
 }
-
-/*void Player::UpdateMastery()
-{
-    if (HasAuraType(SPELL_AURA_MASTERY))
-    {
-        SetInt32Value(PLAYER_FIELD_COMBAT_RATING_1 + CR_MASTERY, _baseRatingValue[CR_MASTERY]);
-        SetFloatValue(PLAYER_MASTERY, GetMasteryPoints());
-    }
-}*/
 
 /*#######################################
 ########                         ########
