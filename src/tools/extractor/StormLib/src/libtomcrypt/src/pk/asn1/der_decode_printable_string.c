@@ -15,7 +15,6 @@
   ASN.1 DER, encode a printable STRING, Tom St Denis
 */
 
-
 #ifdef LTC_DER
 
 /**
@@ -88,7 +87,7 @@ int der_decode_printable_string(const unsigned char *in, unsigned long inlen,
 
    return CRYPT_OK;
 }
- 
+
 #endif
 
 /* $Source: /cvs/libtom/libtomcrypt/src/pk/asn1/der/printable_string/der_decode_printable_string.c,v $ */

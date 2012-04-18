@@ -169,7 +169,6 @@ struct static_tree_desc_s {int dummy;}; /* for buggy compilers */
  */
 #define UPDATE_HASH(s,h,c) (h = (((h)<<s->hash_shift) ^ (c)) & s->hash_mask)
 
-
 /* ===========================================================================
  * Insert string str in the dictionary and set match_head to the previous head
  * of the hash chain (the most recent string with same hash key). Return
@@ -902,7 +901,6 @@ int ZEXPORT deflateCopy (dest, source)
     deflate_state *ss;
     ushf *overlay;
 
-
     if (source == Z_NULL || dest == Z_NULL || source->state == Z_NULL) {
         return Z_STREAM_ERROR;
     }
@@ -1278,7 +1276,6 @@ local void fill_window(s)
         if (sizeof(int) <= 2) {
             if (more == 0 && s->strstart == 0 && s->lookahead == 0) {
                 more = wsize;
-
             } else if (more == (unsigned)(-1)) {
                 /* Very unlikely, but possible on 16 bit machine if
                  * strstart == 0 && lookahead == 1 (input done a byte at time)
@@ -1291,7 +1288,6 @@ local void fill_window(s)
          * move the upper half to the lower one to make room in the upper half.
          */
         if (s->strstart >= wsize+MAX_DIST(s)) {
-
             zmemcpy(s->window, s->window+wsize, (unsigned)wsize);
             s->match_start -= wsize;
             s->strstart    -= wsize; /* we now have strstart >= MAX_DIST */
@@ -1353,7 +1349,6 @@ local void fill_window(s)
         /* If the whole input has less than MIN_MATCH bytes, ins_h is garbage,
          * but this is not important since only literal bytes will be emitted.
          */
-
     } while (s->lookahead < MIN_LOOKAHEAD && s->strm->avail_in != 0);
 }
 
@@ -1405,7 +1400,6 @@ local block_state deflate_stored(s, flush)
     for (;;) {
         /* Fill the window as much as possible: */
         if (s->lookahead <= 1) {
-
             Assert(s->strstart < s->w_size+MAX_DIST(s) ||
                    s->block_start >= (long)s->w_size, "slide too late");
 
@@ -1604,7 +1598,6 @@ local block_state deflate_slow(s, flush)
                     s->strstart - s->match_start > TOO_FAR)
 #endif
                 )) {
-
                 /* If prev_match is also MIN_MATCH, match_start is garbage
                  * but we will ignore the current match anyway.
                  */
@@ -1640,7 +1633,6 @@ local block_state deflate_slow(s, flush)
             s->strstart++;
 
             if (bflush) FLUSH_BLOCK(s, 0);
-
         } else if (s->match_available) {
             /* If there was no match at the previous position, output a
              * single literal. If there was a match but the current match

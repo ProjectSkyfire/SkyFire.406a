@@ -92,7 +92,6 @@ mp_toom_sqr(mp_int *a, mp_int *b)
        goto ERR;
     }
 
-
     /* w2 = (a2 + a1 + a0)**2 */
     if ((res = mp_add(&a2, &a1, &tmp1)) != MP_OKAY) {
        goto ERR;

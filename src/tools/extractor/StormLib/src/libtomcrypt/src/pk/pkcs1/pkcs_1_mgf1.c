@@ -10,9 +10,9 @@
  */
 #include "../../headers/tomcrypt.h"
 
-/** 
+/**
   @file pkcs_1_mgf1.c
-  The Mask Generation Function (MGF1) for LTC_PKCS #1, Tom St Denis 
+  The Mask Generation Function (MGF1) for LTC_PKCS #1, Tom St Denis
 */
 
 #ifdef LTC_PKCS_1
@@ -35,12 +35,12 @@ int pkcs_1_mgf1(int                  hash_idx,
    int           err;
    hash_state    *md;
    unsigned char *buf;
- 
+
    LTC_ARGCHK(seed != NULL);
    LTC_ARGCHK(mask != NULL);
 
    /* ensure valid hash */
-   if ((err = hash_is_valid(hash_idx)) != CRYPT_OK) { 
+   if ((err = hash_is_valid(hash_idx)) != CRYPT_OK) {
       return err;
    }
 

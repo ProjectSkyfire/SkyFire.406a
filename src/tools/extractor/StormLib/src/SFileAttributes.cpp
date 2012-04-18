@@ -147,10 +147,10 @@ int SAttrLoadAttributes(TMPQArchive * ha)
                 nError = ERROR_NOT_ENOUGH_MEMORY;
         }
 
-        // 
-        // Note: Version 7.00 of StormLib saved the (attributes) incorrectly. 
+        //
+        // Note: Version 7.00 of StormLib saved the (attributes) incorrectly.
         // Sometimes, number of entries in the (attributes) was 1 item less
-        // than block table size. 
+        // than block table size.
         // If we encounter such table, we will zero all three arrays
         //
 

@@ -22,7 +22,6 @@ int mp_div_2d (mp_int * a, int b, mp_int * c, mp_int * d)
   int     x, res;
   mp_int  t;
 
-
   /* if the shift count is <= 0 then we do no work */
   if (b <= 0) {
     res = mp_copy (a, c);

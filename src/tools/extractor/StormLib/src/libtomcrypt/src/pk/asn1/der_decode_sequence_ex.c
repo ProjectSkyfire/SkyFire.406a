@@ -11,7 +11,6 @@
 #include "../../headers/tomcrypt.h"
 #include <stdarg.h>
 
-
 /**
   @file der_decode_sequence_ex.c
   ASN.1 DER, decode a SEQUENCE, Tom St Denis
@@ -37,7 +36,7 @@ int der_decode_sequence_ex(const unsigned char *in, unsigned long  inlen,
 
    LTC_ARGCHK(in   != NULL);
    LTC_ARGCHK(list != NULL);
-   
+
    /* get blk size */
    if (inlen < 2) {
       return CRYPT_INVALID_PACKET;
@@ -78,7 +77,7 @@ int der_decode_sequence_ex(const unsigned char *in, unsigned long  inlen,
    /* mark all as unused */
    for (i = 0; i < outlen; i++) {
        list[i].used = 0;
-   }     
+   }
 
   /* ok read data */
    inlen = blksize;
@@ -89,7 +88,7 @@ int der_decode_sequence_ex(const unsigned char *in, unsigned long  inlen,
        data = list[i].data;
        if (!ordered && list[i].used == 1) { continue; }
 
-       if (type == LTC_ASN1_EOL) { 
+       if (type == LTC_ASN1_EOL) {
           break;
        }
 
@@ -103,7 +102,7 @@ int der_decode_sequence_ex(const unsigned char *in, unsigned long  inlen,
                    goto LBL_ERR;
                 }
                 break;
-          
+
            case LTC_ASN1_INTEGER:
                z = inlen;
                if ((err = der_decode_integer(in + x, z, data)) != CRYPT_OK) {
@@ -124,7 +123,7 @@ int der_decode_sequence_ex(const unsigned char *in, unsigned long  inlen,
                if ((err = der_length_short_integer(((unsigned long*)data)[0], &z)) != CRYPT_OK) {
                   goto LBL_ERR;
                }
-               
+
                break;
 
            case LTC_ASN1_BIT_STRING:
@@ -159,7 +158,7 @@ int der_decode_sequence_ex(const unsigned char *in, unsigned long  inlen,
                }
                z = 2;
                break;
-                  
+
            case LTC_ASN1_OBJECT_IDENTIFIER:
                z = inlen;
                if ((err = der_decode_object_identifier(in + x, z, data, &size)) != CRYPT_OK) {
@@ -183,7 +182,6 @@ int der_decode_sequence_ex(const unsigned char *in, unsigned long  inlen,
                   goto LBL_ERR;
                }
                break;
-
 
            case LTC_ASN1_PRINTABLE_STRING:
                z = inlen;
@@ -227,7 +225,7 @@ int der_decode_sequence_ex(const unsigned char *in, unsigned long  inlen,
                   goto LBL_ERR;
                }
                break;
-           
+
            case LTC_ASN1_SETOF:
            case LTC_ASN1_SEQUENCE:
                /* detect if we have the right type */
@@ -246,7 +244,6 @@ int der_decode_sequence_ex(const unsigned char *in, unsigned long  inlen,
                }
                break;
 
-
            case LTC_ASN1_CHOICE:
                z = inlen;
                if ((err = der_decode_choice(in + x, &z, data, size)) != CRYPT_OK) {
@@ -262,24 +259,24 @@ int der_decode_sequence_ex(const unsigned char *in, unsigned long  inlen,
        x           += z;
        inlen       -= z;
        list[i].used = 1;
-       if (!ordered) { 
+       if (!ordered) {
           /* restart the decoder */
           i = -1;
-       }          
+       }
    }
-     
+
    for (i = 0; i < outlen; i++) {
       if (list[i].used == 0) {
           err = CRYPT_INVALID_PACKET;
           goto LBL_ERR;
       }
-   }                
-   err = CRYPT_OK;   
+   }
+   err = CRYPT_OK;
 
 LBL_ERR:
    return err;
-}  
- 
+}
+
 #endif
 
 /* $Source: /cvs/libtom/libtomcrypt/src/pk/asn1/der/sequence/der_decode_sequence_ex.c,v $ */

@@ -15,7 +15,6 @@
   ASN.1 DER, encode a BIT STRING, Tom St Denis
 */
 
-
 #ifdef LTC_DER
 
 /**
@@ -67,7 +66,7 @@ int der_decode_bit_string(const unsigned char *in,  unsigned long inlen,
       /* short format */
       dlen = in[x++] & 0x7F;
    }
-  
+
    /* is the data len too long or too short? */
    if ((dlen == 0) || (dlen + x > inlen)) {
        return CRYPT_INVALID_PACKET;

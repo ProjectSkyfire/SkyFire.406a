@@ -15,7 +15,6 @@
   ASN.1 DER, decode an integer, Tom St Denis
 */
 
-
 #ifdef LTC_DER
 
 /**
@@ -58,7 +57,6 @@ int der_decode_short_integer(const unsigned char *in, unsigned long inlen, unsig
    *num = y;
 
    return CRYPT_OK;
-
 }
 
 #endif

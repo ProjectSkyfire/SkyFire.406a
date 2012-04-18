@@ -21,7 +21,6 @@ int mp_lcm (mp_int * a, mp_int * b, mp_int * c)
   int     res;
   mp_int  t1, t2;
 
-
   if ((res = mp_init_multi (&t1, &t2, NULL)) != MP_OKAY) {
     return res;
   }

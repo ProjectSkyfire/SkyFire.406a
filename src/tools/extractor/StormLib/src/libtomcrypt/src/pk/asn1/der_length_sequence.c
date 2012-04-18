@@ -18,14 +18,14 @@
 #ifdef LTC_DER
 
 /**
-   Get the length of a DER sequence 
+   Get the length of a DER sequence
    @param list   The sequences of items in the SEQUENCE
    @param inlen  The number of items
-   @param outlen [out] The length required in octets to store it 
+   @param outlen [out] The length required in octets to store it
    @return CRYPT_OK on success
 */
 int der_length_sequence(ltc_asn1_list *list, unsigned long inlen,
-                        unsigned long *outlen) 
+                        unsigned long *outlen)
 {
    int           err, type;
    unsigned long size, x, y, z, i;
@@ -41,7 +41,7 @@ int der_length_sequence(ltc_asn1_list *list, unsigned long inlen,
        size = list[i].size;
        data = list[i].data;
 
-       if (type == LTC_ASN1_EOL) { 
+       if (type == LTC_ASN1_EOL) {
           break;
        }
 
@@ -52,7 +52,7 @@ int der_length_sequence(ltc_asn1_list *list, unsigned long inlen,
               }
               y += x;
               break;
-          
+
            case LTC_ASN1_INTEGER:
                if ((err = der_length_integer(data, &x)) != CRYPT_OK) {
                   goto LBL_ERR;
@@ -129,7 +129,6 @@ int der_length_sequence(ltc_asn1_list *list, unsigned long inlen,
                y += x;
                break;
 
-          
            default:
                err = CRYPT_INVALID_ARG;
                goto LBL_ERR;

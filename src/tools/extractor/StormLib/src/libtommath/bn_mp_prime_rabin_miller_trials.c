@@ -15,7 +15,6 @@
  * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
  */
 
-
 static const struct {
    int k, t;
 } sizes[] = {
@@ -43,7 +42,6 @@ int mp_prime_rabin_miller_trials(int size)
    }
    return sizes[x-1].t + 1;
 }
-
 
 #endif
 

@@ -59,12 +59,12 @@
 
 #endif
 
-// Defines for Mac Carbon 
+// Defines for Mac Carbon
 #if !defined(PLATFORM_DEFINED) && defined(__APPLE__)  // Mac Carbon API
 
   // Macintosh using Carbon
   #include <Carbon/Carbon.h> // Mac OS X
-  
+
   #define    PKEXPORT
   #define    __SYS_ZLIB
   #define    __SYS_BZLIB
@@ -131,7 +131,7 @@
     #define MAX_PATH 1024
   #endif
 
-  #define WINAPI 
+  #define WINAPI
 
   #define FILE_BEGIN    SEEK_SET
   #define FILE_CURRENT  SEEK_CUR

@@ -13,11 +13,11 @@
 /**
   @file rsa_make_key.c
   RSA key generation, Tom St Denis
-*/  
+*/
 
 #ifdef LTC_MRSA
 
-/** 
+/**
    Create an RSA key
    @param prng     An active PRNG state
    @param wprng    The index of the PRNG desired

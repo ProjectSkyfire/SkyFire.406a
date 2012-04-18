@@ -1,4 +1,3 @@
-
 /*-------------------------------------------------------------*/
 /*--- Table for doing CRCs                                  ---*/
 /*---                                            crctable.c ---*/
@@ -11,13 +10,12 @@
    bzip2/libbzip2 version 1.0.5 of 10 December 2007
    Copyright (C) 1996-2007 Julian Seward <jseward@bzip.org>
 
-   Please read the WARNING, DISCLAIMER and PATENTS sections in the 
+   Please read the WARNING, DISCLAIMER and PATENTS sections in the
    README file.
 
    This program is released under the terms of the license contained
    in the file LICENSE.
    ------------------------------------------------------------------ */
-
 
 #include "bzlib_private.h"
 
@@ -29,7 +27,6 @@
 --*/
 
 UInt32 BZ2_crc32Table[256] = {
-
    /*-- Ugly, innit? --*/
 
    0x00000000L, 0x04c11db7L, 0x09823b6eL, 0x0d4326d9L,
@@ -97,7 +94,6 @@ UInt32 BZ2_crc32Table[256] = {
    0xafb010b1L, 0xab710d06L, 0xa6322bdfL, 0xa2f33668L,
    0xbcb4666dL, 0xb8757bdaL, 0xb5365d03L, 0xb1f740b4L
 };
-
 
 /*-------------------------------------------------------------*/
 /*--- end                                        crctable.c ---*/

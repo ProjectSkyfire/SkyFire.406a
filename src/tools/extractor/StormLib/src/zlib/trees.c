@@ -229,7 +229,6 @@ local void send_bits(s, value, length)
 }
 #endif /* DEBUG */
 
-
 /* the arguments must not have side effects */
 
 /* ===========================================================================
@@ -425,7 +424,6 @@ local void init_block(s)
 
 #define SMALLEST 1
 /* Index within the heap array of least frequent node in the Huffman tree */
-
 
 /* ===========================================================================
  * Remove the smallest element from the heap and recreate the heap with
@@ -686,7 +684,6 @@ local void build_tree(s, desc)
         /* and insert the new node in the heap */
         s->heap[SMALLEST] = node++;
         pqdownheap(s, tree, SMALLEST);
-
     } while (s->heap_len >= 2);
 
     s->heap[--(s->heap_max)] = s->heap[SMALLEST];
@@ -771,17 +768,14 @@ local void send_tree (s, tree, max_code)
             continue;
         } else if (count < min_count) {
             do { send_code(s, curlen, s->bl_tree); } while (--count != 0);
-
         } else if (curlen != 0) {
             if (curlen != prevlen) {
                 send_code(s, curlen, s->bl_tree); count--;
             }
             Assert(count >= 3 && count <= 6, " 3_6?");
             send_code(s, REP_3_6, s->bl_tree); send_bits(s, count-3, 2);
-
         } else if (count <= 10) {
             send_code(s, REPZ_3_10, s->bl_tree); send_bits(s, count-3, 3);
-
         } else {
             send_code(s, REPZ_11_138, s->bl_tree); send_bits(s, count-11, 7);
         }
@@ -929,7 +923,6 @@ void _tr_flush_block(s, buf, stored_len, eof)
 
     /* Build the Huffman trees unless a stored block is forced */
     if (s->level > 0) {
-
         /* Check if the file is binary or text */
         if (stored_len > 0 && s->strm->data_type == Z_UNKNOWN)
             set_data_type(s);
@@ -960,7 +953,6 @@ void _tr_flush_block(s, buf, stored_len, eof)
                 s->last_lit));
 
         if (static_lenb <= opt_lenb) opt_lenb = static_lenb;
-
     } else {
         Assert(buf != (char*)0, "lost buf");
         opt_lenb = static_lenb = stored_len + 5; /* force a stored block */
@@ -1110,7 +1102,6 @@ local void compress_block(s, ltree, dtree)
         /* Check that the overlay between pending_buf and d_buf+l_buf is ok: */
         Assert((uInt)(s->pending) < s->lit_bufsize + 2*lx,
                "pendingBuf overflow");
-
     } while (lx < s->last_lit);
 
     send_code(s, END_BLOCK, ltree);

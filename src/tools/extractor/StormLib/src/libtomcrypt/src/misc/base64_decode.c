@@ -15,7 +15,6 @@
   Compliant base64 code donated by Wayne Scott (wscott@bitmover.com)
 */
 
-
 #ifdef LTC_BASE64
 
 static const unsigned char map[256] = {
@@ -50,7 +49,7 @@ static const unsigned char map[256] = {
    @param outlen   [in/out] The max size and resulting size of the decoded data
    @return CRYPT_OK if successful
 */
-int base64_decode(const unsigned char *in,  unsigned long inlen, 
+int base64_decode(const unsigned char *in,  unsigned long inlen,
                         unsigned char *out, unsigned long *outlen)
 {
    unsigned long t, x, y, z;
@@ -66,8 +65,8 @@ int base64_decode(const unsigned char *in,  unsigned long inlen,
        c = map[in[x]&0xFF];
        if (c == 255) continue;
        /* the final = symbols are read and used to trim the remaining bytes */
-       if (c == 254) { 
-          c = 0; 
+       if (c == 254) {
+          c = 0;
           /* prevent g < 0 which would potentially allow an overflow later */
           if (--g < 0) {
              return CRYPT_INVALID_PACKET;
@@ -80,8 +79,8 @@ int base64_decode(const unsigned char *in,  unsigned long inlen,
        t = (t<<6)|c;
 
        if (++y == 4) {
-          if (z + g > *outlen) { 
-             return CRYPT_BUFFER_OVERFLOW; 
+          if (z + g > *outlen) {
+             return CRYPT_BUFFER_OVERFLOW;
           }
           out[z++] = (unsigned char)((t>>16)&255);
           if (g > 1) out[z++] = (unsigned char)((t>>8)&255);
@@ -97,7 +96,6 @@ int base64_decode(const unsigned char *in,  unsigned long inlen,
 }
 
 #endif
-
 
 /* $Source: /cvs/libtom/libtomcrypt/src/misc/base64/base64_decode.c,v $ */
 /* $Revision: 1.6 $ */

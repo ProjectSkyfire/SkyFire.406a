@@ -46,7 +46,6 @@ typedef struct _PART_FILE_HEADER
     DWORD FileSizeLo;                       // Low 32 bits of the file size
     DWORD FileSizeHi;                       // High 32 bits of the file size
     DWORD BlockSize;                        // Size of one file block, in bytes
-
 } PART_FILE_HEADER, *PPART_FILE_HEADER;
 
 // Structure describing the block-to-file map entry
@@ -57,7 +56,6 @@ typedef struct _PART_FILE_MAP_ENTRY
     DWORD BlockOffsHi;                      // High 32 bits of the block position in the file
     DWORD Unknown0C;
     DWORD Unknown10;
-
 } PART_FILE_MAP_ENTRY, *PPART_FILE_MAP_ENTRY;
 
 struct TPartFileStream : public TFileStream
@@ -148,13 +146,13 @@ static OSErr FSOpenDFCompat(FSRef *ref, char permission, short *refNum)
     HFSUniStr255 forkName;
     OSErr theErr;
     Boolean isFolder, wasChanged;
-    
+
     theErr = FSResolveAliasFile(ref, true, &isFolder, &wasChanged);
     if (theErr != noErr)
     {
         return theErr;
     }
-    
+
     FSGetDataForkName(&forkName);
 #ifdef PLATFORM_64BIT
     theErr = FSOpenFork(ref, forkName.length, forkName.unicode, permission, (FSIORefNum *)refNum);
@@ -203,12 +201,12 @@ static HANDLE CreateNewFile(
         FSRef   theFileRef;
         OSErr   theErr;
         short   fileRef;
-        
+
         theErr = FSPathMakeRef((const UInt8 *)szFileName, &theFileRef, NULL);
-        
+
         if (theErr == noErr)
             FSDeleteObject(&theFileRef);
-        
+
         // Create the FSRef for the parent directory.
         UInt8 folderName[MAX_PATH];
         memset(&theFileRef, 0, sizeof(FSRef));
@@ -219,20 +217,20 @@ static HANDLE CreateNewFile(
         theErr = FSPathMakeRef(folderName, &theParentRef, NULL);
         CFRelease(fileURL);
         CFRelease(folderURL);
-        
+
         if (theErr != noErr)
         {
             nLastError = theErr;
             return INVALID_HANDLE_VALUE;
         }
-        
+
         // Create the file
         UniChar unicodeFileName[256];
         fileURL = CFURLCreateWithFileSystemPath(NULL, filePathCFString, kCFURLPOSIXPathStyle, false);
         CFStringRef fileNameCFString = CFURLCopyLastPathComponent(fileURL);
-        CFStringGetCharacters(fileNameCFString, CFRangeMake(0, CFStringGetLength(fileNameCFString)), 
+        CFStringGetCharacters(fileNameCFString, CFRangeMake(0, CFStringGetLength(fileNameCFString)),
                               unicodeFileName);
-        theErr = FSCreateFileUnicode(&theParentRef, CFStringGetLength(fileNameCFString), unicodeFileName, 
+        theErr = FSCreateFileUnicode(&theParentRef, CFStringGetLength(fileNameCFString), unicodeFileName,
                                      kFSCatInfoNone, NULL, &theFileRef, NULL);
         CFRelease(fileNameCFString);
         CFRelease(filePathCFString);
@@ -376,10 +374,10 @@ static bool RenameFile(const TCHAR * szExistingFile, const TCHAR * szNewFile)
     OSErr theErr;
     FSRef fromFileRef;
     FSRef toFileRef;
-    
+
     if (FSPathMakeRef((const UInt8 *)szNewFile, &toFileRef, NULL) == noErr)
         FSDeleteObject(&toFileRef);
-    
+
     // Get the path to the old file
     theErr = FSPathMakeRef((const UInt8 *)szExistingFile, &fromFileRef, NULL);
     if (theErr != noErr)
@@ -387,19 +385,19 @@ static bool RenameFile(const TCHAR * szExistingFile, const TCHAR * szNewFile)
         nLastError = theErr;
         return false;
     }
-    
+
     // Get a CFString for the new file name
     CFStringRef newFileNameCFString = CFStringCreateWithCString(NULL, szNewFile, kCFStringEncodingUTF8);
     CFURLRef fileURL = CFURLCreateWithFileSystemPath(NULL, newFileNameCFString, kCFURLPOSIXPathStyle, false);
     CFRelease(newFileNameCFString);
     newFileNameCFString = CFURLCopyLastPathComponent(fileURL);
     CFRelease(fileURL);
-    
+
     // Convert CFString to Unicode and rename the file
     UniChar unicodeFileName[256];
-    CFStringGetCharacters(newFileNameCFString, CFRangeMake(0, CFStringGetLength(newFileNameCFString)), 
+    CFStringGetCharacters(newFileNameCFString, CFRangeMake(0, CFStringGetLength(newFileNameCFString)),
                           unicodeFileName);
-    theErr = FSRenameUnicode(&fromFileRef, CFStringGetLength(newFileNameCFString), unicodeFileName, 
+    theErr = FSRenameUnicode(&fromFileRef, CFStringGetLength(newFileNameCFString), unicodeFileName,
                              kTextEncodingUnknown, NULL);
     if (theErr != noErr)
     {
@@ -407,9 +405,9 @@ static bool RenameFile(const TCHAR * szExistingFile, const TCHAR * szNewFile)
         nLastError = theErr;
         return false;
     }
-    
+
     CFRelease(newFileNameCFString);
-    
+
     return true;
 #endif
 
@@ -523,7 +521,7 @@ static bool File_Read(
             dwBytesRead = (DWORD)(size_t)bytes_read;
         }
     }
-#endif                    
+#endif
 
     // Increment the current file position by number of bytes read
     // If the number of bytes read doesn't match to required amount, return false
@@ -629,7 +627,7 @@ static bool File_GetSize(
 #ifdef PLATFORM_WINDOWS
     DWORD FileSizeHi = 0;
     DWORD FileSizeLo;
-    
+
     FileSizeLo = GetFileSize(pStream->hFile, &FileSizeHi);
     if(FileSizeLo == INVALID_FILE_SIZE && GetLastError() != ERROR_SUCCESS)
         return false;
@@ -695,7 +693,7 @@ static bool File_SetSize(TFileStream * pStream, ULONGLONG NewFileSize)
         return bResult;
     }
 #endif
-    
+
 #ifdef PLATFORM_MAC
     {
         OSErr theErr;
@@ -706,7 +704,7 @@ static bool File_SetSize(TFileStream * pStream, ULONGLONG NewFileSize)
             nLastError = theErr;
             return false;
         }
-        
+
         return true;
     }
 #endif
@@ -959,7 +957,7 @@ static void DecryptFileChunk(
         KeyShuffled[0x04] = KeyMirror[0x0D];
         KeyShuffled[0x01] = KeyMirror[0x0E];
         KeyShuffled[0x00] = KeyMirror[0x0F];
-        
+
         // Shuffle the key - part 2
         for(DWORD i = 0; i < RoundCount; i += 2)
         {
@@ -1035,7 +1033,6 @@ static void DecryptFileChunk(
     }
 }
 
-
 static bool DetectFileKey(TEncryptedStream * pStream)
 {
     ULONGLONG ByteOffset = 0;
@@ -1053,7 +1050,7 @@ static bool DetectFileKey(TEncryptedStream * pStream)
         memcpy(pStream->Key, MpqKeyArray[i], MPQE_CHUNK_SIZE);
         BSWAP_ARRAY32_UNSIGNED(pStream->Key, MPQE_CHUNK_SIZE);
 
-        // Try to decrypt with the given key 
+        // Try to decrypt with the given key
         memcpy(FileHeader, EncryptedHeader, MPQE_CHUNK_SIZE);
         DecryptFileChunk((LPDWORD)FileHeader, pStream->Key, ByteOffset, MPQE_CHUNK_SIZE);
 
@@ -1120,7 +1117,7 @@ static bool EncryptedFile_Read(
             assert(false);
         }
 
-        // Free decryption buffer        
+        // Free decryption buffer
         STORM_FREE(pbMpqData);
     }
 
@@ -1183,7 +1180,7 @@ TFileStream * FileStream_CreateFile(
     HANDLE hFile;
 
     // Create the file
-    hFile = CreateNewFile(szFileName); 
+    hFile = CreateNewFile(szFileName);
     if(hFile != INVALID_HANDLE_VALUE)
     {
         // Allocate the FileStream structure and fill it
@@ -1239,7 +1236,7 @@ TFileStream * FileStream_OpenRawFile(
     HANDLE hFile;
 
     // Create the file
-    hFile = OpenExistingFile(szFileName, bWriteAccess); 
+    hFile = OpenExistingFile(szFileName, bWriteAccess);
     if(hFile == INVALID_HANDLE_VALUE)
         return NULL;
 
@@ -1448,7 +1445,6 @@ bool FileStream_Write(TFileStream * pStream, ULONGLONG * pByteOffset, const void
     return pStream->StreamWrite(pStream, pByteOffset, pvBuffer, dwBytesToWrite);
 }
 
-
 /**
  * Returns the last write time of a file
  *
@@ -1471,14 +1467,14 @@ bool FileStream_GetLastWriteTime(TFileStream * pStream, ULONGLONG * pFileTime)
 	OSErr theErr;
 	FSRef theFileRef;
 	FSCatalogInfo theCatInfo;
-	
+
     theErr = FSGetForkCBInfo((short)(long)pStream->hFile, 0, NULL, NULL, NULL, &theFileRef, NULL);
     if(theErr != noErr)
     {
         nLastError = theErr;
         return false;
     }
-	
+
     theErr = FSGetCatalogInfo(&theFileRef, kFSCatInfoContentMod, &theCatInfo, NULL, NULL, NULL);
     if(theErr != noErr)
     {
@@ -1523,7 +1519,7 @@ bool FileStream_GetSize(TFileStream * pStream, ULONGLONG & FileSize)
  * \a NewFileSize File size to set
  */
 bool FileStream_SetSize(TFileStream * pStream, ULONGLONG NewFileSize)
-{                                 
+{
     if(pStream->StreamFlags & STREAM_FLAG_READ_ONLY)
         return false;
     assert(pStream->StreamSetSize != NULL);

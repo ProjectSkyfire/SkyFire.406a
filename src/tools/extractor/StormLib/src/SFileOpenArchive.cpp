@@ -82,7 +82,6 @@ static int VerifyMpqTablePositions(TMPQArchive * ha, ULONGLONG FileSize)
     return ERROR_SUCCESS;
 }
 
-
 /*****************************************************************************/
 /* Public functions                                                          */
 /*****************************************************************************/
@@ -132,7 +131,7 @@ bool WINAPI SFileOpenArchive(
     TFileStream * pStream = NULL;       // Open file stream
     TMPQArchive * ha = NULL;            // Archive handle
     ULONGLONG FileSize = 0;             // Size of the file
-    int nError = ERROR_SUCCESS;   
+    int nError = ERROR_SUCCESS;
 
     // Verify the parameters
     if(szMpqName == NULL || *szMpqName == 0 || phMpq == NULL)
@@ -158,7 +157,7 @@ bool WINAPI SFileOpenArchive(
                 nError = GetLastError();
         }
     }
-    
+
     // Allocate the MPQhandle
     if(nError == ERROR_SUCCESS)
     {

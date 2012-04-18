@@ -15,11 +15,10 @@
   ASN.1 DER, get length of encoding, Tom St Denis
 */
 
-
 #ifdef LTC_DER
 /**
-  Gets length of DER encoding of num 
-  @param num    The int to get the size of 
+  Gets length of DER encoding of num
+  @param num    The int to get the size of
   @param outlen [out] The length of the DER encoding for the given integer
   @return CRYPT_OK if successful
 */
@@ -71,7 +70,7 @@ int der_length_integer(void *num, unsigned long *outlen)
    ++len;
 
    /* return length */
-   *outlen = len; 
+   *outlen = len;
    return CRYPT_OK;
 }
 

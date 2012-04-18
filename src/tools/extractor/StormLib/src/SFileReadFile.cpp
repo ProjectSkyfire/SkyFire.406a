@@ -77,7 +77,7 @@ static bool GetFilePatchChain(TMPQFile * hf, void * pvFileInfo, DWORD cbFileInfo
         // Calculate the length needed
         cchCharsNeeded += _tcslen(hf->pStream->szFileName) + 1;
         cbLengthNeeded = (DWORD)(cchCharsNeeded * sizeof(TCHAR));
-        
+
         // If we have enough space, copy the file name
         if(cbFileInfo >= cbLengthNeeded)
         {
@@ -301,10 +301,10 @@ static int ReadMpqSectors(TMPQFile * hf, LPBYTE pbBuffer, DWORD dwByteOffset, DW
     // Free all used buffers
     if(pbRawSector != NULL)
         STORM_FREE(pbRawSector);
-    
+
     // Give the caller thenumber of bytes read
     *pdwBytesRead = dwBytesRead;
-    return nError; 
+    return nError;
 }
 
 static int ReadMpqFileSingleUnit(TMPQFile * hf, void * pvBuffer, DWORD dwFilePos, DWORD dwToRead, LPDWORD pdwBytesRead)
@@ -343,7 +343,7 @@ static int ReadMpqFileSingleUnit(TMPQFile * hf, void * pvBuffer, DWORD dwFilePos
             bIsReallyCompressed = true;
             pbRawData = pbCompressed;
         }
-        
+
         // Load the raw (compressed, encrypted) data
         if(!FileStream_Read(ha->pStream, &RawFilePos, pbRawData, pFileEntry->dwCmpSize))
         {
@@ -366,7 +366,7 @@ static int ReadMpqFileSingleUnit(TMPQFile * hf, void * pvBuffer, DWORD dwFilePos
         // --------------------------------------  ------- --------  ---------------
         // esES\DBFilesClient\LightSkyBox.dbc      0xBE    0xBC      Is compressed
         // deDE\DBFilesClient\MountCapability.dbc  0x93    0x77      Is uncompressed
-        // 
+        //
         // Now tell me how to deal with this mess.
         //
 
@@ -479,7 +479,7 @@ static int ReadMpqFile(TMPQFile * hf, void * pvBuffer, DWORD dwFilePos, DWORD dw
     {
         DWORD dwBytesInSector = ha->dwSectorSize;
         DWORD dwBufferOffs = dwFilePos & dwSectorSizeMask;
-        DWORD dwToCopy;                                     
+        DWORD dwToCopy;
 
         // Is the file sector already loaded ?
         if(hf->dwSectorOffs != dwFileSectorPos)
@@ -553,7 +553,7 @@ static int ReadMpqFile(TMPQFile * hf, void * pvBuffer, DWORD dwFilePos, DWORD dw
 
         // Copy the data from the cached last sector to the caller's buffer
         memcpy(pbBuffer, hf->pbFileSector, dwToCopy);
-        
+
         // Update pointers
         dwTotalBytesRead += dwToCopy;
     }
@@ -684,7 +684,7 @@ bool WINAPI SFileReadFile(HANDLE hFile, void * pvBuffer, DWORD dwToRead, LPDWORD
             nError = ReadMpqFilePatchFile(hf, pvBuffer, hf->dwFilePos, dwToRead, &dwBytesRead);
         }
 
-        // If the file is single unit file, redirect it to read file 
+        // If the file is single unit file, redirect it to read file
         else if(hf->pFileEntry->dwFlags & MPQ_FILE_SINGLE_UNIT)
         {
             nError = ReadMpqFileSingleUnit(hf, pvBuffer, hf->dwFilePos, dwToRead, &dwBytesRead);
@@ -692,7 +692,7 @@ bool WINAPI SFileReadFile(HANDLE hFile, void * pvBuffer, DWORD dwToRead, LPDWORD
 
         // Otherwise read it as sector based MPQ file
         else
-        {                                                                   
+        {
             nError = ReadMpqFile(hf, pvBuffer, hf->dwFilePos, dwToRead, &dwBytesRead);
         }
 
@@ -862,7 +862,7 @@ DWORD WINAPI SFileSetFilePointer(HANDLE hFile, LONG lFilePos, LONG * plFilePosHi
 //-----------------------------------------------------------------------------
 // Tries to retrieve the file name
 
-static TFileHeader2Ext data2ext[] = 
+static TFileHeader2Ext data2ext[] =
 {
     {0x00005A4D, 0x0000FFFF, 0x00000000, 0x00000000, "exe"},    // EXE files
     {0x00000006, 0xFFFFFFFF, 0x00000001, 0xFFFFFFFF, "dc6"},    // EXE files
@@ -885,14 +885,14 @@ static TFileHeader2Ext data2ext[] =
     {0x47585053, 0xFFFFFFFF, 0x00000000, 0x00000000, "bls"},    // WoW pixel shaders
     {0xE0FFD8FF, 0xFFFFFFFF, 0x00000000, 0x00000000, "jpg"},    // JPEG image
     {0x00000000, 0x00000000, 0x00000000, 0x00000000, "xxx"},    // Default extension
-    {0, 0, 0, 0, NULL}                                          // Terminator 
+    {0, 0, 0, 0, NULL}                                          // Terminator
 };
 
 bool WINAPI SFileGetFileName(HANDLE hFile, char * szFileName)
 {
     TFileEntry * pFileEntry;
     TMPQFile * hf = (TMPQFile *)hFile;  // MPQ File handle
-    char szPseudoName[20];    
+    char szPseudoName[20];
     DWORD FirstBytes[2];                // The first 4 bytes of the file
     DWORD dwFilePos;                    // Saved file position
     int nError = ERROR_SUCCESS;
@@ -906,13 +906,13 @@ bool WINAPI SFileGetFileName(HANDLE hFile, char * szFileName)
     if(!IsValidFileHandle(hf))
         nError = ERROR_INVALID_HANDLE;
     pFileEntry = hf->pFileEntry;
-    
+
     // Only do something if the file name is not filled
     if(nError == ERROR_SUCCESS && pFileEntry != NULL && pFileEntry->szFileName == NULL)
     {
         // Read the first 2 DWORDs bytes from the file
         FirstBytes[0] = FirstBytes[1] = 0;
-        dwFilePos = SFileSetFilePointer(hf, 0, NULL, FILE_CURRENT);   
+        dwFilePos = SFileSetFilePointer(hf, 0, NULL, FILE_CURRENT);
         SFileReadFile(hFile, FirstBytes, sizeof(FirstBytes), NULL);
         BSWAP_ARRAY32_UNSIGNED(FirstBytes, sizeof(FirstBytes));
         SFileSetFilePointer(hf, dwFilePos, NULL, FILE_BEGIN);
@@ -930,7 +930,7 @@ bool WINAPI SFileGetFileName(HANDLE hFile, char * szFileName)
 
         // Put the file name to the file table
         AllocateFileName(pFileEntry, szPseudoName);
-    } 
+    }
 
     // Now put the file name to the file structure
     if(nError == ERROR_SUCCESS && szFileName != NULL)
@@ -986,7 +986,7 @@ bool WINAPI SFileGetFileInfo(
     {
         case SFILE_INFO_ARCHIVE_NAME:
             VERIFY_MPQ_HANDLE(ha);
-            
+
             // pvFileInfo receives the name of the archive, terminated by 0
             cbLengthNeeded = (DWORD)(_tcslen(ha->pStream->szFileName) + 1) * sizeof(TCHAR);
             pvSrcFileInfo = ha->pStream->szFileName;

@@ -29,11 +29,11 @@
  *
  *  @return CRYPT_OK if successful (even if invalid)
  */
-int pkcs_1_v1_5_decode(const unsigned char *msg, 
+int pkcs_1_v1_5_decode(const unsigned char *msg,
                              unsigned long  msglen,
                                        int  block_type,
                              unsigned long  modulus_bitlen,
-                             unsigned char *out, 
+                             unsigned char *out,
                              unsigned long *outlen,
                                        int *is_valid)
 {
