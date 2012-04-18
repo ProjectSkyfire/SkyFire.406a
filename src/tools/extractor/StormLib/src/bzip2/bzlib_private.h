@@ -56,51 +56,51 @@ typedef unsigned short  UInt16;
 #ifndef BZ_NO_STDIO
 
 extern void BZ2_bz__AssertH__fail ( int errcode );
-#define AssertH(cond, errcode) \
+#define AssertH(cond,errcode) \
    { if (!(cond)) BZ2_bz__AssertH__fail ( errcode ); }
 
 #if BZ_DEBUG
-#define AssertD(cond, msg) \
+#define AssertD(cond,msg) \
    { if (!(cond)) {       \
-      fprintf ( stderr,  \
+      fprintf ( stderr,   \
         "\n\nlibbzip2(debug build): internal error\n\t%s\n", msg );\
       exit(1); \
    }}
 #else
-#define AssertD(cond, msg) /* */
+#define AssertD(cond,msg) /* */
 #endif
 
 #define VPrintf0(zf) \
-   fprintf(stderr, zf)
-#define VPrintf1(zf, za1) \
-   fprintf(stderr, zf, za1)
-#define VPrintf2(zf, za1, za2) \
-   fprintf(stderr, zf, za1, za2)
-#define VPrintf3(zf, za1, za2, za3) \
-   fprintf(stderr, zf, za1, za2, za3)
-#define VPrintf4(zf, za1, za2, za3, za4) \
-   fprintf(stderr, zf, za1, za2, za3, za4)
-#define VPrintf5(zf, za1, za2, za3, za4, za5) \
-   fprintf(stderr, zf, za1, za2, za3, za4, za5)
+   fprintf(stderr,zf)
+#define VPrintf1(zf,za1) \
+   fprintf(stderr,zf,za1)
+#define VPrintf2(zf,za1,za2) \
+   fprintf(stderr,zf,za1,za2)
+#define VPrintf3(zf,za1,za2,za3) \
+   fprintf(stderr,zf,za1,za2,za3)
+#define VPrintf4(zf,za1,za2,za3,za4) \
+   fprintf(stderr,zf,za1,za2,za3,za4)
+#define VPrintf5(zf,za1,za2,za3,za4,za5) \
+   fprintf(stderr,zf,za1,za2,za3,za4,za5)
 
 #else
 
 extern void bz_internal_error ( int errcode );
-#define AssertH(cond, errcode) \
+#define AssertH(cond,errcode) \
    { if (!(cond)) bz_internal_error ( errcode ); }
-#define AssertD(cond, msg)                do { } while (0)
+#define AssertD(cond,msg)                do { } while (0)
 #define VPrintf0(zf)                     do { } while (0)
-#define VPrintf1(zf, za1)                 do { } while (0)
-#define VPrintf2(zf, za1, za2)             do { } while (0)
-#define VPrintf3(zf, za1, za2, za3)         do { } while (0)
-#define VPrintf4(zf, za1, za2, za3, za4)     do { } while (0)
-#define VPrintf5(zf, za1, za2, za3, za4, za5) do { } while (0)
+#define VPrintf1(zf,za1)                 do { } while (0)
+#define VPrintf2(zf,za1,za2)             do { } while (0)
+#define VPrintf3(zf,za1,za2,za3)         do { } while (0)
+#define VPrintf4(zf,za1,za2,za3,za4)     do { } while (0)
+#define VPrintf5(zf,za1,za2,za3,za4,za5) do { } while (0)
 
 #endif
 
 
-#define BZALLOC(nnn) (strm->bzalloc)(strm->opaque, (nnn), 1)
-#define BZFREE(ppp)  (strm->bzfree)(strm->opaque, (ppp))
+#define BZALLOC(nnn) (strm->bzalloc)(strm->opaque,(nnn),1)
+#define BZFREE(ppp)  (strm->bzfree)(strm->opaque,(ppp))
 
 
 /*-- Header bytes. --*/
@@ -164,7 +164,7 @@ extern UInt32 BZ2_crc32Table[256];
    crcVar = ~(crcVar);                         \
 }
 
-#define BZ_UPDATE_CRC(crcVar, cha)              \
+#define BZ_UPDATE_CRC(crcVar,cha)              \
 {                                              \
    crcVar = (crcVar << 8) ^                    \
             BZ2_crc32Table[(crcVar >> 24) ^    \
@@ -270,13 +270,13 @@ typedef
 /*-- externs for compression. --*/
 
 extern void 
-BZ2_blockSort ( EState*);
+BZ2_blockSort ( EState* );
 
 extern void 
 BZ2_compressBlock ( EState*, Bool );
 
 extern void 
-BZ2_bsInitWrite ( EState*);
+BZ2_bsInitWrite ( EState* );
 
 extern void 
 BZ2_hbAssignCodes ( Int32*, UChar*, Int32, Int32, Int32 );
@@ -455,7 +455,7 @@ typedef
     cccc = (UChar)(c_tPos & 0xff);            \
     c_tPos >>= 8;
 
-#define SET_LL4(i, n)                                          \
+#define SET_LL4(i,n)                                          \
    { if (((i) & 0x1) == 0)                                    \
         s->ll4[(i) >> 1] = (s->ll4[(i) >> 1] & 0xf0) | (n); else    \
         s->ll4[(i) >> 1] = (s->ll4[(i) >> 1] & 0x0f) | ((n) << 4);  \
@@ -464,7 +464,7 @@ typedef
 #define GET_LL4(i)                             \
    ((((UInt32)(s->ll4[(i) >> 1])) >> (((i) << 2) & 0x4)) & 0xF)
 
-#define SET_LL(i, n)                          \
+#define SET_LL(i,n)                          \
    { s->ll16[i] = (UInt16)(n & 0x0000ffff);  \
      SET_LL4(i, n >> 16);                    \
    }
@@ -482,14 +482,14 @@ typedef
 /*-- externs for decompression. --*/
 
 extern Int32 
-BZ2_indexIntoF ( Int32, Int32*);
+BZ2_indexIntoF ( Int32, Int32* );
 
 extern Int32 
-BZ2_decompress ( DState*);
+BZ2_decompress ( DState* );
 
 extern void 
-BZ2_hbCreateDecodeTables ( Int32*, Int32*, Int32*, UChar*, 
-                           Int32, Int32, Int32 );
+BZ2_hbCreateDecodeTables ( Int32*, Int32*, Int32*, UChar*,
+                           Int32,  Int32, Int32 );
 
 
 #endif

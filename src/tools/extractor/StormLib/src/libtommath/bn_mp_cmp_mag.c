@@ -25,7 +25,7 @@ int mp_cmp_mag (mp_int * a, mp_int * b)
   if (a->used > b->used) {
     return MP_GT;
   }
-
+  
   if (a->used < b->used) {
     return MP_LT;
   }
@@ -50,6 +50,6 @@ int mp_cmp_mag (mp_int * a, mp_int * b)
 }
 #endif
 
-/* $Source: /cvs/libtom/libtommath/bn_mp_cmp_mag.c, v $ */
+/* $Source: /cvs/libtom/libtommath/bn_mp_cmp_mag.c,v $ */
 /* $Revision: 1.4 $ */
 /* $Date: 2006/12/28 01:25:13 $ */

@@ -13,16 +13,16 @@
 /**
   @file rsa_make_key.c
   RSA key generation, Tom St Denis
-*/
+*/  
 
 #ifdef LTC_MRSA
 
-/**
+/** 
    Create an RSA key
    @param prng     An active PRNG state
    @param wprng    The index of the PRNG desired
    @param size     The size of the modulus (key size) desired (octets)
-   @param e        The "e" value (public key).  e == 65537 is a good choice
+   @param e        The "e" value (public key).  e==65537 is a good choice
    @param key      [out] Destination of a newly created private key pair
    @return CRYPT_OK if successful, upon error all allocated ram is freed
 */
@@ -56,21 +56,21 @@ int rsa_make_key(prng_state *prng, int wprng, int size, long e, rsa_key *key)
    /* make prime "p" */
    do {
        if ((err = rand_prime( p, size/2, prng, wprng)) != CRYPT_OK)  { goto errkey; }
-       if ((err = mp_sub_d( p, 1, tmp1)) != CRYPT_OK)               { goto errkey; }  /* tmp1 = p-1 */
-       if ((err = mp_gcd( tmp1, tmp3, tmp2)) != CRYPT_OK)          { goto errkey; }  /* tmp2 = gcd(p-1, e) */
+       if ((err = mp_sub_d( p, 1,  tmp1)) != CRYPT_OK)               { goto errkey; }  /* tmp1 = p-1 */
+       if ((err = mp_gcd( tmp1,  tmp3,  tmp2)) != CRYPT_OK)          { goto errkey; }  /* tmp2 = gcd(p-1, e) */
    } while (mp_cmp_d( tmp2, 1) != 0);                                                  /* while e divides p-1 */
 
    /* make prime "q" */
    do {
        if ((err = rand_prime( q, size/2, prng, wprng)) != CRYPT_OK)  { goto errkey; }
-       if ((err = mp_sub_d( q, 1, tmp1)) != CRYPT_OK)               { goto errkey; } /* tmp1 = q-1 */
-       if ((err = mp_gcd( tmp1, tmp3, tmp2)) != CRYPT_OK)          { goto errkey; } /* tmp2 = gcd(q-1, e) */
+       if ((err = mp_sub_d( q, 1,  tmp1)) != CRYPT_OK)               { goto errkey; } /* tmp1 = q-1 */
+       if ((err = mp_gcd( tmp1,  tmp3,  tmp2)) != CRYPT_OK)          { goto errkey; } /* tmp2 = gcd(q-1, e) */
    } while (mp_cmp_d( tmp2, 1) != 0);                                                 /* while e divides q-1 */
 
    /* tmp1 = lcm(p-1, q-1) */
-   if ((err = mp_sub_d( p, 1, tmp2)) != CRYPT_OK)                   { goto errkey; } /* tmp2 = p-1 */
+   if ((err = mp_sub_d( p, 1,  tmp2)) != CRYPT_OK)                   { goto errkey; } /* tmp2 = p-1 */
                                                                                       /* tmp1 = q-1 (previous do/while loop) */
-   if ((err = mp_lcm( tmp1, tmp2, tmp1)) != CRYPT_OK)              { goto errkey; } /* tmp1 = lcm(p-1, q-1) */
+   if ((err = mp_lcm( tmp1,  tmp2,  tmp1)) != CRYPT_OK)              { goto errkey; } /* tmp1 = lcm(p-1, q-1) */
 
    /* make key */
    if ((err = mp_init_multi(&key->e, &key->d, &key->N, &key->dQ, &key->dP, &key->qP, &key->p, &key->q, NULL)) != CRYPT_OK) {
@@ -78,19 +78,19 @@ int rsa_make_key(prng_state *prng, int wprng, int size, long e, rsa_key *key)
    }
 
    if ((err = mp_set_int( key->e, e)) != CRYPT_OK)                     { goto errkey; } /* key->e =  e */
-   if ((err = mp_invmod( key->e, tmp1, key->d)) != CRYPT_OK)         { goto errkey; } /* key->d = 1/e mod lcm(p-1, q-1) */
-   if ((err = mp_mul( p, q, key->N)) != CRYPT_OK)                    { goto errkey; } /* key->N = pq */
+   if ((err = mp_invmod( key->e,  tmp1,  key->d)) != CRYPT_OK)         { goto errkey; } /* key->d = 1/e mod lcm(p-1,q-1) */
+   if ((err = mp_mul( p,  q,  key->N)) != CRYPT_OK)                    { goto errkey; } /* key->N = pq */
 
    /* optimize for CRT now */
    /* find d mod q-1 and d mod p-1 */
-   if ((err = mp_sub_d( p, 1, tmp1)) != CRYPT_OK)                     { goto errkey; } /* tmp1 = q-1 */
-   if ((err = mp_sub_d( q, 1, tmp2)) != CRYPT_OK)                     { goto errkey; } /* tmp2 = p-1 */
-   if ((err = mp_mod( key->d, tmp1, key->dP)) != CRYPT_OK)           { goto errkey; } /* dP = d mod p-1 */
-   if ((err = mp_mod( key->d, tmp2, key->dQ)) != CRYPT_OK)           { goto errkey; } /* dQ = d mod q-1 */
-   if ((err = mp_invmod( q, p, key->qP)) != CRYPT_OK)                { goto errkey; } /* qP = 1/q mod p */
+   if ((err = mp_sub_d( p, 1,  tmp1)) != CRYPT_OK)                     { goto errkey; } /* tmp1 = q-1 */
+   if ((err = mp_sub_d( q, 1,  tmp2)) != CRYPT_OK)                     { goto errkey; } /* tmp2 = p-1 */
+   if ((err = mp_mod( key->d,  tmp1,  key->dP)) != CRYPT_OK)           { goto errkey; } /* dP = d mod p-1 */
+   if ((err = mp_mod( key->d,  tmp2,  key->dQ)) != CRYPT_OK)           { goto errkey; } /* dQ = d mod q-1 */
+   if ((err = mp_invmod( q,  p,  key->qP)) != CRYPT_OK)                { goto errkey; } /* qP = 1/q mod p */
 
-   if ((err = mp_copy( p, key->p)) != CRYPT_OK)                       { goto errkey; }
-   if ((err = mp_copy( q, key->q)) != CRYPT_OK)                       { goto errkey; }
+   if ((err = mp_copy( p,  key->p)) != CRYPT_OK)                       { goto errkey; }
+   if ((err = mp_copy( q,  key->q)) != CRYPT_OK)                       { goto errkey; }
 
    /* set key type (in this case it's CRT optimized) */
    key->type = PK_PRIVATE;
@@ -107,6 +107,6 @@ cleanup:
 
 #endif
 
-/* $Source: /cvs/libtom/libtomcrypt/src/pk/rsa/rsa_make_key.c, v $ */
+/* $Source: /cvs/libtom/libtomcrypt/src/pk/rsa/rsa_make_key.c,v $ */
 /* $Revision: 1.16 $ */
 /* $Date: 2007/05/12 14:32:35 $ */

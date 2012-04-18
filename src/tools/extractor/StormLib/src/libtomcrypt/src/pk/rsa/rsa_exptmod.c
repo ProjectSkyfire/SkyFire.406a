@@ -13,22 +13,22 @@
 /**
   @file rsa_exptmod.c
   RSA LTC_PKCS exptmod, Tom St Denis
-*/
+*/  
 
 #ifdef LTC_MRSA
 
-/**
-   Compute an RSA modular exponentiation
+/** 
+   Compute an RSA modular exponentiation 
    @param in         The input data to send into RSA
    @param inlen      The length of the input (octets)
-   @param out        [out] The destination
+   @param out        [out] The destination 
    @param outlen     [in/out] The max size and resulting size of the output
    @param which      Which exponent to use, e.g. PK_PRIVATE or PK_PUBLIC
-   @param key        The RSA key to use
+   @param key        The RSA key to use 
    @return CRYPT_OK if successful
-*/
-int rsa_exptmod(const unsigned char *in,  unsigned long inlen,
-                      unsigned char *out, unsigned long *outlen, int which,
+*/   
+int rsa_exptmod(const unsigned char *in,   unsigned long inlen,
+                      unsigned char *out,  unsigned long *outlen, int which,
                       rsa_key *key)
 {
    void         *tmp, *tmpa, *tmpb;
@@ -39,7 +39,7 @@ int rsa_exptmod(const unsigned char *in,  unsigned long inlen,
    LTC_ARGCHK(out    != NULL);
    LTC_ARGCHK(outlen != NULL);
    LTC_ARGCHK(key    != NULL);
-
+  
    /* is the key of the right type for the operation? */
    if (which == PK_PRIVATE && (key->type != PK_PRIVATE)) {
       return CRYPT_PK_NOT_PRIVATE;
@@ -108,6 +108,6 @@ error:
 
 #endif
 
-/* $Source: /cvs/libtom/libtomcrypt/src/pk/rsa/rsa_exptmod.c, v $ */
+/* $Source: /cvs/libtom/libtomcrypt/src/pk/rsa/rsa_exptmod.c,v $ */
 /* $Revision: 1.18 $ */
 /* $Date: 2007/05/12 14:32:35 $ */

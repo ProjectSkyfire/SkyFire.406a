@@ -21,7 +21,7 @@ int mp_set_int (mp_int * a, unsigned long b)
   int     x, res;
 
   mp_zero (a);
-
+  
   /* set four bits at a time */
   for (x = 0; x < 8; x++) {
     /* shift the number up four bits */
@@ -43,6 +43,6 @@ int mp_set_int (mp_int * a, unsigned long b)
 }
 #endif
 
-/* $Source: /cvs/libtom/libtommath/bn_mp_set_int.c, v $ */
+/* $Source: /cvs/libtom/libtommath/bn_mp_set_int.c,v $ */
 /* $Revision: 1.4 $ */
 /* $Date: 2006/12/28 01:25:13 $ */

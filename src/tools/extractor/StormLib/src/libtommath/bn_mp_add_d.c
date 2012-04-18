@@ -107,6 +107,6 @@ mp_add_d (mp_int * a, mp_digit b, mp_int * c)
 
 #endif
 
-/* $Source: /cvs/libtom/libtommath/bn_mp_add_d.c, v $ */
+/* $Source: /cvs/libtom/libtommath/bn_mp_add_d.c,v $ */
 /* $Revision: 1.5 $ */
 /* $Date: 2006/12/28 01:25:13 $ */

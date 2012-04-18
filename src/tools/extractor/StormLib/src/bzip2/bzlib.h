@@ -59,8 +59,8 @@ typedef
 
       void *state;
 
-      void *(*bzalloc)(void *, int, int);
-      void (*bzfree)(void *, void *);
+      void *(*bzalloc)(void *,int,int);
+      void (*bzfree)(void *,void *);
       void *opaque;
    } 
    bz_stream;
@@ -137,11 +137,11 @@ BZ_EXTERN int BZ_API(BZ2_bzDecompressEnd) (
 typedef void BZFILE;
 
 BZ_EXTERN BZFILE* BZ_API(BZ2_bzReadOpen) ( 
-      int*  bzerror,  
+      int*  bzerror,   
       FILE* f, 
       int   verbosity, 
-      int   small, 
-      void* unused,   
+      int   small,
+      void* unused,    
       int   nUnused 
    );
 
@@ -153,7 +153,7 @@ BZ_EXTERN void BZ_API(BZ2_bzReadClose) (
 BZ_EXTERN void BZ_API(BZ2_bzReadGetUnused) ( 
       int*    bzerror, 
       BZFILE* b, 
-      void**  unused, 
+      void**  unused,  
       int*    nUnused 
    );
 
@@ -165,7 +165,7 @@ BZ_EXTERN int BZ_API(BZ2_bzRead) (
    );
 
 BZ_EXTERN BZFILE* BZ_API(BZ2_bzWriteOpen) ( 
-      int*  bzerror,     
+      int*  bzerror,      
       FILE* f, 
       int   blockSize100k, 
       int   verbosity, 
@@ -203,9 +203,9 @@ BZ_EXTERN void BZ_API(BZ2_bzWriteClose64) (
 
 BZ_EXTERN int BZ_API(BZ2_bzBuffToBuffCompress) ( 
       char*         dest, 
-      unsigned int* destLen, 
+      unsigned int* destLen,
       char*         source, 
-      unsigned int  sourceLen, 
+      unsigned int  sourceLen,
       int           blockSize100k, 
       int           verbosity, 
       int           workFactor 
@@ -213,9 +213,9 @@ BZ_EXTERN int BZ_API(BZ2_bzBuffToBuffCompress) (
 
 BZ_EXTERN int BZ_API(BZ2_bzBuffToBuffDecompress) ( 
       char*         dest, 
-      unsigned int* destLen, 
+      unsigned int* destLen,
       char*         source, 
-      unsigned int  sourceLen, 
+      unsigned int  sourceLen,
       int           small, 
       int           verbosity 
    );
@@ -236,12 +236,12 @@ BZ_EXTERN const char * BZ_API(BZ2_bzlibVersion) (
 
 #ifndef BZ_NO_STDIO
 BZ_EXTERN BZFILE * BZ_API(BZ2_bzopen) (
-      const char *path, 
+      const char *path,
       const char *mode
    );
 
 BZ_EXTERN BZFILE * BZ_API(BZ2_bzdopen) (
-      int        fd, 
+      int        fd,
       const char *mode
    );
          

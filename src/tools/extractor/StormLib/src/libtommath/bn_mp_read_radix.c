@@ -29,8 +29,8 @@ int mp_read_radix (mp_int * a, const char *str, int radix)
     return MP_VAL;
   }
 
-  /* if the leading digit is a
-   * minus set the sign to negative.
+  /* if the leading digit is a 
+   * minus set the sign to negative. 
    */
   if (*str == '-') {
     ++str;
@@ -41,7 +41,7 @@ int mp_read_radix (mp_int * a, const char *str, int radix)
 
   /* set the integer to the default of zero */
   mp_zero (a);
-
+  
   /* process each digit of the string */
   while (*str) {
     /* if the radix < 36 the conversion is case insensitive
@@ -55,9 +55,9 @@ int mp_read_radix (mp_int * a, const char *str, int radix)
       }
     }
 
-    /* if the char was found in the map
+    /* if the char was found in the map 
      * and is less than the given radix add it
-     * to the number, otherwise exit the loop.
+     * to the number, otherwise exit the loop. 
      */
     if (y < radix) {
       if ((res = mp_mul_d (a, (mp_digit) radix, a)) != MP_OKAY) {
@@ -71,7 +71,7 @@ int mp_read_radix (mp_int * a, const char *str, int radix)
     }
     ++str;
   }
-
+  
   /* set the sign only if a != 0 */
   if (mp_iszero(a) != 1) {
      a->sign = neg;
@@ -80,6 +80,6 @@ int mp_read_radix (mp_int * a, const char *str, int radix)
 }
 #endif
 
-/* $Source: /cvs/libtom/libtommath/bn_mp_read_radix.c, v $ */
+/* $Source: /cvs/libtom/libtommath/bn_mp_read_radix.c,v $ */
 /* $Revision: 1.5 $ */
 /* $Date: 2006/12/28 01:25:13 $ */

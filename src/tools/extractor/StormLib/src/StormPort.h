@@ -9,7 +9,7 @@
 /* Computer: whiplash.flachland-chemnitz.de                                  */
 /* System: Linux 2.4.0 on i686                                               */
 /*                                                                           */
-/* Author: Sam Wilkins                                                       */
+/* Author: Sam Wilkins <swilkins1337@gmail.com>                              */
 /* System: Mac OS X and port to big endian processor                         */
 /*                                                                           */
 /*---------------------------------------------------------------------------*/
@@ -26,6 +26,12 @@
 #ifndef __STORMPORT_H__
 #define __STORMPORT_H__
 
+#ifndef __cplusplus
+  #define bool char
+  #define true 1
+  #define false 0
+#endif
+
 // Defines for Windows
 #if !defined(PLATFORM_DEFINED) && (defined(WIN32) || defined(WIN64))
 
@@ -35,6 +41,7 @@
   #define _CRT_NON_CONFORMING_SWPRINTFS
   #endif
 
+  #include <tchar.h>
   #include <assert.h>
   #include <ctype.h>
   #include <stdio.h>
@@ -52,19 +59,15 @@
 
 #endif
 
-// Defines for Mac Carbon
+// Defines for Mac Carbon 
 #if !defined(PLATFORM_DEFINED) && defined(__APPLE__)  // Mac Carbon API
 
   // Macintosh using Carbon
   #include <Carbon/Carbon.h> // Mac OS X
-
+  
   #define    PKEXPORT
   #define    __SYS_ZLIB
   #define    __SYS_BZLIB
-
-  #ifndef __BIG_ENDIAN__
-    #define PLATFORM_LITTLE_ENDIAN          // Apple is now making Macs with Intel CPUs
-  #endif
 
   #define PLATFORM_MAC
   #define PLATFORM_DEFINED                  // The platform is known now
@@ -128,17 +131,23 @@
     #define MAX_PATH 1024
   #endif
 
-  #define WINAPI
+  #define WINAPI 
 
   #define FILE_BEGIN    SEEK_SET
   #define FILE_CURRENT  SEEK_CUR
   #define FILE_END      SEEK_END
 
-  #define _stricmp strcasecmp
-  #define _strnicmp strncasecmp
+  #define _T(x)     x
+  #define _tcslen   strlen
+  #define _tcscpy   strcpy
+  #define _tcscat   strcat
+  #define _tcsrchr  strrchr
+  #define _tprintf  printf
+  #define _stprintf sprintf
+  #define _tremove  remove
 
-  void  SetLastError(int err);
-  int   GetLastError();
+  #define _stricmp  strcasecmp
+  #define _strnicmp strncasecmp
 
 #endif // !WIN32
 
@@ -186,32 +195,34 @@
     #define    BSWAP_INT32_SIGNED(a)            (a)
     #define    BSWAP_INT64_SIGNED(a)            (a)
     #define    BSWAP_INT64_UNSIGNED(a)          (a)
-    #define    BSWAP_ARRAY16_UNSIGNED(a, b)      {}
-    #define    BSWAP_ARRAY32_UNSIGNED(a, b)      {}
-    #define    BSWAP_ARRAY64_UNSIGNED(a, b)      {}
+    #define    BSWAP_ARRAY16_UNSIGNED(a,b)      {}
+    #define    BSWAP_ARRAY32_UNSIGNED(a,b)      {}
+    #define    BSWAP_ARRAY64_UNSIGNED(a,b)      {}
     #define    BSWAP_PART_HEADER(a)             {}
     #define    BSWAP_TMPQUSERDATA(a)            {}
     #define    BSWAP_TMPQHEADER(a)              {}
 #else
-    extern int16_t  SwapInt16(uint16_t);
-    extern uint16_t SwapUInt16(uint16_t);
-    extern int32_t  SwapInt32(uint32_t);
-    extern uint32_t SwapUInt32(uint32_t);
-    extern int32_t  SwapInt64(uint64_t);
-    extern uint32_t SwapUInt64(uint64_t);
-    extern void ConvertUnsignedLongBuffer(void * ptr, size_t length);
-    extern void ConvertUnsignedShortBuffer(void * ptr, size_t length);
-    extern void ConvertTMPQUserData(void *userData);
-    extern void ConvertTMPQHeader(void *header);
+    int16_t  SwapInt16(uint16_t);
+    uint16_t SwapUInt16(uint16_t);
+    int32_t  SwapInt32(uint32_t);
+    uint32_t SwapUInt32(uint32_t);
+    int64_t  SwapInt64(uint64_t);
+    uint64_t SwapUInt64(uint64_t);
+    void ConvertUInt16Buffer(void * ptr, size_t length);
+    void ConvertUInt32Buffer(void * ptr, size_t length);
+    void ConvertUInt64Buffer(void * ptr, size_t length);
+    void ConvertPartHeader(void * partHeader);
+    void ConvertTMPQUserData(void *userData);
+    void ConvertTMPQHeader(void *header);
     #define    BSWAP_INT16_SIGNED(a)            SwapInt16((a))
     #define    BSWAP_INT16_UNSIGNED(a)          SwapUInt16((a))
     #define    BSWAP_INT32_SIGNED(a)            SwapInt32((a))
     #define    BSWAP_INT32_UNSIGNED(a)          SwapUInt32((a))
     #define    BSWAP_INT64_SIGNED(a)            SwapInt64((a))
     #define    BSWAP_INT64_UNSIGNED(a)          SwapUInt64((a))
-    #define    BSWAP_ARRAY16_UNSIGNED(a, b)      ConvertUInt16Buffer((a), (b))
-    #define    BSWAP_ARRAY32_UNSIGNED(a, b)      ConvertUInt32Buffer((a), (b))
-    #define    BSWAP_ARRAY64_UNSIGNED(a, b)      ConvertUInt64Buffer((a), (b))
+    #define    BSWAP_ARRAY16_UNSIGNED(a,b)      ConvertUInt16Buffer((a),(b))
+    #define    BSWAP_ARRAY32_UNSIGNED(a,b)      ConvertUInt32Buffer((a),(b))
+    #define    BSWAP_ARRAY64_UNSIGNED(a,b)      ConvertUInt64Buffer((a),(b))
     #define    BSWAP_PART_HEADER(a)             ConvertPartHeader(a)
     #define    BSWAP_TMPQUSERDATA(a)            ConvertTMPQUserData((a))
     #define    BSWAP_TMPQHEADER(a)              ConvertTMPQHeader((a))

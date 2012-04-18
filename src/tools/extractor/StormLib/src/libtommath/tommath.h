@@ -24,11 +24,11 @@
 #include "tommath_class.h"
 
 #ifndef MIN
-   #define MIN(x, y) ((x)<(y)?(x):(y))
+   #define MIN(x,y) ((x)<(y)?(x):(y))
 #endif
 
 #ifndef MAX
-   #define MAX(x, y) ((x)>(y)?(x):(y))
+   #define MAX(x,y) ((x)>(y)?(x):(y))
 #endif
 
 #ifdef __cplusplus
@@ -155,9 +155,9 @@ extern "C" {
 typedef int           mp_err;
 
 /* you'll have to tune these... */
-extern int KARATSUBA_MUL_CUTOFF, 
-           KARATSUBA_SQR_CUTOFF, 
-           TOOM_MUL_CUTOFF, 
+extern int KARATSUBA_MUL_CUTOFF,
+           KARATSUBA_SQR_CUTOFF,
+           TOOM_MUL_CUTOFF,
            TOOM_SQR_CUTOFF;
 
 /* define this to use lower memory usage routines (exptmods mostly) */
@@ -186,7 +186,7 @@ typedef int ltm_prime_callback(unsigned char *dst, int len, void *dat);
 
 
 #define USED(m)    ((m)->used)
-#define DIGIT(m, k) ((m)->dp[(k)])
+#define DIGIT(m,k) ((m)->dp[(k)])
 #define SIGN(m)    ((m)->sign)
 
 /* error code to char* string */
@@ -489,7 +489,7 @@ int mp_prime_is_prime(mp_int *a, int t, int *result);
  */
 int mp_prime_next_prime(mp_int *a, int t, int bbs_style);
 
-/* makes a truly random prime of a given size (bytes), 
+/* makes a truly random prime of a given size (bytes),
  * call with bbs = 1 if you want it to be congruent to 3 mod 4 
  *
  * You have to supply a callback which fills in a buffer with random bytes.  "dat" is a parameter you can
@@ -498,9 +498,9 @@ int mp_prime_next_prime(mp_int *a, int t, int bbs_style);
  *
  * The prime generated will be larger than 2^(8*size).
  */
-#define mp_prime_random(a, t, size, bbs, cb, dat) mp_prime_random_ex(a, t, ((size) * 8) + 1, (bbs == 1)?LTM_PRIME_BBS:0, cb, dat)
+#define mp_prime_random(a, t, size, bbs, cb, dat) mp_prime_random_ex(a, t, ((size) * 8) + 1, (bbs==1)?LTM_PRIME_BBS:0, cb, dat)
 
-/* makes a truly random prime of a given size (bits), 
+/* makes a truly random prime of a given size (bits),
  *
  * Flags are as follows:
  * 
@@ -526,7 +526,7 @@ int mp_to_unsigned_bin_n (mp_int * a, unsigned char *b, unsigned long *outlen);
 
 int mp_signed_bin_size(mp_int *a);
 int mp_read_signed_bin(mp_int *a, const unsigned char *b, int c);
-int mp_to_signed_bin(mp_int *a, unsigned char *b);
+int mp_to_signed_bin(mp_int *a,  unsigned char *b);
 int mp_to_signed_bin_n (mp_int * a, unsigned char *b, unsigned long *outlen);
 
 int mp_read_radix(mp_int *a, const char *str, int radix);
@@ -579,6 +579,6 @@ extern const char *mp_s_rmap;
 #endif
 
 
-/* $Source: /cvs/libtom/libtommath/tommath.h, v $ */
+/* $Source: /cvs/libtom/libtommath/tommath.h,v $ */
 /* $Revision: 1.8 $ */
 /* $Date: 2006/03/31 14:18:44 $ */
