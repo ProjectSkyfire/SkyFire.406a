@@ -35,9 +35,9 @@ EndContentData */
 ## npc_shenthul
 ######*/
 
-enum eShenthul
+enum Shenthul
 {
-    QUEST_SHATTERED_SALUTE  = 2460
+    QUEST_SHATTERED_SALUTE  = 2460  // Obsolete quest for cata
 };
 
 class npc_shenthul : public CreatureScript
@@ -130,10 +130,12 @@ public:
 ## npc_thrall_warchief
 ######*/
 
-#define QUEST_6566              6566
-
-#define SPELL_CHAIN_LIGHTNING   16033
-#define SPELL_SHOCK             16034
+enum Thrall
+{
+    QUEST_6566              = 6566,  // obsolete quest for cata
+    SPELL_CHAIN_LIGHTNING   = 16033,
+    SPELL_SHOCK             = 16034
+};
 
 #define GOSSIP_HTW "Please share your wisdom with me, Warchief."
 #define GOSSIP_STW1 "What discoveries?"
@@ -240,8 +242,91 @@ public:
     };
 };
 
+/*######
+## npc_hellscream_demolisher
+######*/
+
+#define FIRST_ENGINEER_SAY_1 "Ready for inspection, sir!"
+#define FIRST_ENGINEER_SAY_2 "See that? Ironclad!"
+#define SECOND_ENGINEER_SAY_1 "This baby is all mine! I call her, \"The Throttler.\""
+#define SECOND_ENGINEER_SAY_2 "That's right. Takes a lickin' but keeps on kickin' butt!"
+#define THIRD_ENGINEER_SAY_1 "Ready for inspection! ...Be gentle."
+#define THIRD_ENGINEER_SAY_2 "Uh oh. Um. Oops."
+#define THIRD_ENGINEER_SAY_3 "Look, look, it's okay! It's just a tiny little glitch. See?"
+#define SIEGEWORKERS_SAY_1 "We'll get right on this, sir!"
+#define SIEGEWORKERS_SAY_2 "Yes sir! Right away, sir!"
+#define SIEGEWORKERS_SAY_3 "We're on it!"
+#define DEMOLISHER_FALL "The demolisher falls apart when inspected."
+#define WORKERS_REPAIR "Punish the goblin, kicking him away! Workers goes to repair it right away."
+// these defines need cleaned out to enums and set to db.
+
+class npc_hellscream_demolisher : public CreatureScript
+{
+public:
+    npc_hellscream_demolisher() : CreatureScript("npc_hellscream_demolisher") {}
+
+    bool OnGossipHello(Player* player, Creature* creature)
+    {
+        if (player->GetQuestStatus(26294) == QUEST_STATUS_INCOMPLETE) //Weapons of mass dysfunction
+        {
+            if (CAST_AI(npc_hellscream_demolisher::npc_hellscream_demolisherAI, creature->AI())->demolisher_N == 1)
+            {
+                if (Creature* eng_chief1 = creature->FindNearestCreature(42671, 6.0f, true)) // Find the chief engineer
+                {
+                    eng_chief1->MonsterSay(FIRST_ENGINEER_SAY_1, LANG_UNIVERSAL, NULL);
+                    eng_chief1->MonsterSay(FIRST_ENGINEER_SAY_2, LANG_UNIVERSAL, NULL);
+                    CAST_AI(npc_hellscream_demolisher::npc_hellscream_demolisherAI, creature->AI())->demolisher_N = 2;
+                }
+            }
+            else if (CAST_AI(npc_hellscream_demolisher::npc_hellscream_demolisherAI, creature->AI())->demolisher_N == 2)
+            {
+                if (Creature* eng_chief2 = creature->FindNearestCreature(42671, 6.0f, true)) // Find the chief engineer
+                {
+                    eng_chief2->MonsterSay(SECOND_ENGINEER_SAY_1, LANG_UNIVERSAL, NULL);
+                    eng_chief2->MonsterSay(SECOND_ENGINEER_SAY_2, LANG_UNIVERSAL, NULL);
+                    CAST_AI(npc_hellscream_demolisher::npc_hellscream_demolisherAI, creature->AI())->demolisher_N = 3;
+                }
+            }
+            else if (CAST_AI(npc_hellscream_demolisher::npc_hellscream_demolisherAI, creature->AI())->demolisher_N == 3)
+            {
+                if (Creature* eng_chief3 = creature->FindNearestCreature(42671, 6.0f, true)) // Find the chief engineer
+                {
+                    eng_chief3->MonsterSay(THIRD_ENGINEER_SAY_1, LANG_UNIVERSAL, NULL);
+                    creature->MonsterTextEmote(DEMOLISHER_FALL, 0);
+                    eng_chief3->MonsterSay(THIRD_ENGINEER_SAY_2, LANG_UNIVERSAL, NULL);
+                    eng_chief3->MonsterSay(THIRD_ENGINEER_SAY_3, LANG_UNIVERSAL, NULL);
+                    creature->MonsterTextEmote(WORKERS_REPAIR, 0);
+                    player->CompleteQuest(26294);
+                    CAST_AI(npc_hellscream_demolisher::npc_hellscream_demolisherAI, creature->AI())->demolisher_N = 1;
+                }
+            }
+        }
+
+        player->PlayerTalkClass->ClearMenus();
+        return true;
+    }
+
+    CreatureAI* GetAI(Creature* creature) const
+    {
+        return new npc_hellscream_demolisherAI(creature);
+    }
+
+    struct npc_hellscream_demolisherAI : public ScriptedAI
+    {
+        npc_hellscream_demolisherAI(Creature* creature) : ScriptedAI(creature) {}
+
+        uint32 demolisher_N;
+
+        void Reset()
+        {
+            demolisher_N = 1;
+        }
+    };
+};
+
 void AddSC_orgrimmar()
 {
     new npc_shenthul();
     new npc_thrall_warchief();
+    new npc_hellscream_demolisher();
 }
