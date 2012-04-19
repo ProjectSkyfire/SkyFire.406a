@@ -18,10 +18,10 @@
  */
 
 /* ScriptData
-SDName: Orgrimmar
-SD%Complete: 100
-SDComment: Quest support: 2460, 6566
-SDCategory: Orgrimmar
+Name: Orgrimmar
+%Complete: 100
+Comment: Quest support for 2460, 6566 are both obsolete quests for cataclysm and need properly removed.
+Category: Orgrimmar
 EndScriptData */
 
 /* ContentData
@@ -258,7 +258,7 @@ public:
 #define SIEGEWORKERS_SAY_3 "We're on it!"
 #define DEMOLISHER_FALL "The demolisher falls apart when inspected."
 #define WORKERS_REPAIR "Punish the goblin, kicking him away! Workers goes to repair it right away."
-// these defines need cleaned out to enums and set to db.
+// these defines need cleaned out to be set to enums & creature_text.
 
 class npc_hellscream_demolisher : public CreatureScript
 {
@@ -267,7 +267,7 @@ public:
 
     bool OnGossipHello(Player* player, Creature* creature)
     {
-        if (player->GetQuestStatus(26294) == QUEST_STATUS_INCOMPLETE) //Weapons of mass dysfunction
+        if (player->GetQuestStatus(26294) == QUEST_STATUS_INCOMPLETE) // Weapons of mass dysfunction
         {
             if (CAST_AI(npc_hellscream_demolisher::npc_hellscream_demolisherAI, creature->AI())->demolisher_N == 1)
             {
@@ -324,9 +324,168 @@ public:
     };
 };
 
+/*######
+## npc_herezegor
+######*/
+
+#define HEREZEGOR_OPTION_1 "The Dragonmaw can be great again. Help our conquest of the Twilight Highlands - Can you give me a map?"
+#define HEREZEGOR_OPTION_2 "Yes, a map of the coastal approaches."
+#define SAY_OK "I will help, but know that you are stepping into a viper's nest. Let me draw you a map - wha - behind you!"
+#define SUMMON_SAY "Cover the door! - we've got him!"
+#define INK_SAY "Oh no not the bar, take it outside mon!"
+#define SAY_BATTLE_1 "Only the weak hide in shadows, Twilight fifht!"
+#define SAY_BATTLE_2 "Feel the bite of the Dragonmaw!"
+#define SAY_BATTLE_3 "Another worm driven to the ground"
+#define SPAWN_COORDS    1915.459961f, -4734.319824f, 39.019798f, 1.012290f
+// todo clean up these defines to enums.
+
+class npc_herezegor : public CreatureScript
+{
+public:
+    npc_herezegor() : CreatureScript("npc_herezegor") { }
+
+    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*sender*/, uint32 action)
+    {
+        player->PlayerTalkClass->ClearMenus();
+        switch (action)
+        {
+        case GOSSIP_ACTION_INFO_DEF+1:
+            {
+                creature->MonsterSay(SAY_OK, LANG_UNIVERSAL, NULL);
+                CAST_AI(npc_herezegor::npc_herezegorAI, creature->AI())->Start = true;
+                CAST_AI(npc_herezegor::npc_herezegorAI, creature->AI())->plrGUID = player->GetGUID();
+                break;
+            }
+        }
+        return true;
+    }
+
+    bool OnGossipHello(Player* player, Creature* creature)
+    {
+        if (player->GetQuestStatus(26311) == QUEST_STATUS_INCOMPLETE)
+        {
+            if (CAST_AI(npc_herezegor::npc_herezegorAI, creature->AI())->Completed)
+                player->PlayerTalkClass->SendGossipMenu(50432, creature->GetGUID());
+            else
+            {
+                player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, HEREZEGOR_OPTION_1, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+                player->PlayerTalkClass->SendGossipMenu(50431, creature->GetGUID());
+            }
+        }
+        return true;
+    }
+
+    CreatureAI* GetAI(Creature* creature) const
+    {
+        return new npc_herezegorAI(creature);
+    }
+
+    struct npc_herezegorAI : public ScriptedAI
+    {
+        npc_herezegorAI(Creature* creature) : ScriptedAI(creature) {}
+
+        bool Start;
+        uint32 TalkTimer;
+        bool summonsay;
+        bool Completed;
+
+        uint32 deadSummons;
+        uint64 plrGUID;
+        uint32 phase;
+        uint32 say_phase;
+
+        std::list<uint64> SummonList;
+
+        void Reset()
+        {
+            Start           = false;
+            Completed       = false;
+            TalkTimer       = 10000;
+            plrGUID         = 0;
+            phase           = 1;
+            say_phase       = 1;
+            summonsay       = false;
+            deadSummons     = 0;
+        }
+
+        void JustSummoned(Creature* summoned)
+        {
+            if (Player* player = Unit::GetPlayer(*me, plrGUID))
+            {
+                if (!summonsay)
+                {
+                    summoned->MonsterSay(SUMMON_SAY, LANG_UNIVERSAL, NULL);
+
+                    if (Creature* gravy = me->FindNearestCreature(42709, 80.0f, true)) // Find Gravy
+                        gravy->MonsterSay(INK_SAY, LANG_UNIVERSAL, NULL);
+
+                    summonsay = true;
+                }
+                summoned->AddThreat(me, 32.0f);
+                summoned->AI()->AttackStart(me);
+            }
+            SummonList.push_back(summoned->GetGUID());
+        }
+
+        void SummonedCreatureDespawn(Creature* summon)
+        {
+            if ((deadSummons++) >= 3)
+                if (Player* player = Unit::GetPlayer(*me, plrGUID))
+                    player->AddItem(58141, 1); // Add the quest item to the player (map)
+        }
+
+        void UpdateAI(uint32 const diff)
+        {
+            if (!Start)
+                return;
+
+            Player* player = Unit::GetPlayer(*me, plrGUID);
+
+            if (!player)
+                return;
+
+            if (phase == 1)
+            {
+                for (uint32 i = 0; i < 3; ++i)
+                    me->SummonCreature(42707, SPAWN_COORDS, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 1000); // Summon 3 Twilight Nightblade
+                phase = 2;
+            }
+
+            if (TalkTimer <= diff && phase == 2)
+            {
+                switch (say_phase)
+                {
+                    case 1:
+                    {
+                        me->MonsterSay(SAY_BATTLE_1, LANG_UNIVERSAL, 0);
+                        say_phase = 2;
+                        TalkTimer = 3000;
+                        break;
+                    }
+                    case 2:
+                    {
+                        me->MonsterSay(SAY_BATTLE_2, LANG_UNIVERSAL, 0);
+                        say_phase = 0;
+                        TalkTimer = 3000;
+                        break;
+                    }
+                    case 3:
+                    {
+                        me->MonsterSay(SAY_BATTLE_3, LANG_UNIVERSAL, 0);
+                        say_phase = 0;
+                        break;
+                    }
+                }
+            }
+            else TalkTimer -= diff;
+        }
+    };
+};
+
 void AddSC_orgrimmar()
 {
     new npc_shenthul();
     new npc_thrall_warchief();
     new npc_hellscream_demolisher();
+    new npc_herezegor();
 }
