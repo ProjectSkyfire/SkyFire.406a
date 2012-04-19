@@ -200,7 +200,7 @@ void PathInfo::BuildPolyPath(PathNode startPos, PathNode endPos)
     {
         PATH_DEBUG("++ BuildPolyPath :: (startPoly == 0 || endPoly == 0)\n");
         BuildShortcut();
-        m_type = (m_sourceUnit->GetTypeId() == TYPEID_UNIT && ((Creature*)m_sourceUnit)->canFly())
+        m_type = (m_sourceUnit->GetTypeId() == TYPEID_UNIT && ((Creature*)m_sourceUnit)->IsLevitating())
             ? PathType(PATHFIND_NORMAL | PATHFIND_NOT_USING_PATH) : PATHFIND_NOPATH;
 
         return;
@@ -226,7 +226,7 @@ void PathInfo::BuildPolyPath(PathNode startPos, PathNode endPos)
             else
             {
                 PATH_DEBUG("++ BuildPolyPath :: flying case\n");
-                if (owner->canFly())
+                if (owner->IsLevitating())
                     buildShotrcut = true;
             }
         }
