@@ -333,7 +333,7 @@ public:
 #define SAY_OK "I will help, but know that you are stepping into a viper's nest. Let me draw you a map - wha - behind you!"
 #define SUMMON_SAY "Cover the door! - we've got him!"
 #define INK_SAY "Oh no not the bar, take it outside mon!"
-#define SAY_BATTLE_1 "Only the weak hide in shadows, Twilight fifht!"
+#define SAY_BATTLE_1 "Only the weak hide in shadows, Twilight filth!"
 #define SAY_BATTLE_2 "Feel the bite of the Dragonmaw!"
 #define SAY_BATTLE_3 "Another worm driven to the ground"
 #define SPAWN_COORDS    1915.459961f, -4734.319824f, 39.019798f, 1.012290f
