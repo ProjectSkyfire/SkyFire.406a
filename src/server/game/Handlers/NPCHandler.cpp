@@ -596,7 +596,7 @@ void WorldSession::HandleStablePet(WorldPacket & recv_data)
     stmt->setUInt32(0, _player->GetGUIDLow());
     stmt->setUInt8(1, PET_SLOT_HUNTER_FIRST);
     stmt->setUInt8(2, PET_SLOT_STABLE_LAST);
-    
+
     _stablePetCallback = CharacterDatabase.AsyncQuery(stmt);
 }
 
@@ -771,7 +771,6 @@ void WorldSession::HandleStableSwapPet(WorldPacket & recv_data)
     if (GetPlayer()->HasUnitState(UNIT_STATE_DIED))
         GetPlayer()->RemoveAurasByType(SPELL_AURA_FEIGN_DEATH);
 
-    
     Pet* pet = _player->GetPet();
     /*
     if (!pet || pet->getPetType() != HUNTER_PET)
@@ -783,10 +782,6 @@ void WorldSession::HandleStableSwapPet(WorldPacket & recv_data)
 
     //If we move the pet already summoned...
     if (pet && pet->GetCharmInfo() && pet->GetCharmInfo()->GetPetNumber() == pet_number)
-        _player->RemovePet(pet, PET_SLOT_ACTUAL_PET_SLOT);
-
-    //If we move to the pet already summoned...
-    if (pet && GetPlayer()->_currentPetSlot == new_slot)
         _player->RemovePet(pet, PET_SLOT_ACTUAL_PET_SLOT);
 
     PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_PET_SLOT_BY_ID);
@@ -802,7 +797,7 @@ void WorldSession::HandleStableSwapPetCallback(PreparedQueryResult result, uint8
 {
     if (!GetPlayer())
         return;
-    
+
     if (!result)
     {
         SendStableResult(STABLE_ERR_STABLE);
@@ -842,7 +837,7 @@ void WorldSession::HandleStableSwapPetCallback(PreparedQueryResult result, uint8
 
     // move alive pet to slot or delete dead pet
     // _player->RemovePet(pet, pet->isAlive() ? PetSlot(slot) : PET_SLOT_DELETED);
-    
+
     CharacterDatabase.PExecute("UPDATE character_pet SET slot = '%u' WHERE slot = '%u' AND owner='%u'", petnumber, slot, GetPlayer()->GetGUIDLow());
     CharacterDatabase.PExecute("UPDATE character_pet SET slot = '%u' WHERE slot = '%u' AND owner='%u' AND id<>'%u'", slot, petnumber, GetPlayer()->GetGUIDLow(), pet_number);
 
@@ -853,7 +848,6 @@ void WorldSession::HandleStableSwapPetCallback(PreparedQueryResult result, uint8
         _player->setPetSlotUsed((PetSlot)slot, false);
         _player->setPetSlotUsed((PetSlot)petnumber, true);
         SendStableResult(STABLE_SUCCESS_UNSTABLE);
-
     }
     else
         SendStableResult(STABLE_ERR_STABLE);
