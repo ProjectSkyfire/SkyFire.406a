@@ -2246,6 +2246,7 @@ TempSummon* WorldObject::SummonCreature(uint32 entry, const Position &pos, TempS
 Pet* Player::SummonPet(uint32 entry, float x, float y, float z, float ang, PetType petType, uint32 duration, PetSlot slotID)
 {
     Pet* pet = new Pet(this, petType);
+
     //summoned pets always non-curent!
     if (petType == SUMMON_PET && pet->LoadPetFromDB(this, entry, 0, false, slotID))
     {
@@ -2288,7 +2289,8 @@ Pet* Player::SummonPet(uint32 entry, float x, float y, float z, float ang, PetTy
     pet->InitStatsForLevel(getLevel());
 
     // Only slot 100, as it's not hunter pet.
-    SetMinion(pet, true, PET_SLOT_OTHER_PET);
+    if(!pet->isHunterPet())
+        SetMinion(pet, true, PET_SLOT_OTHER_PET);
 
     switch (petType)
     {

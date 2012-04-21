@@ -20333,7 +20333,8 @@ void Player::RemovePet(Pet* pet, PetSlot mode, bool returnreagent)
     // only if current pet in slot
     pet->SavePetToDB(mode);
 
-    if (pet->getPetType() != HUNTER_PET)
+    // if (pet->getPetType() != HUNTER_PET || !pet->isHunterPet())
+    if (!pet->isHunterPet())
         SetMinion(pet, false, PET_SLOT_UNK_SLOT);
     else
         SetMinion(pet, false, PET_SLOT_ACTUAL_PET_SLOT);
@@ -24783,7 +24784,7 @@ void Player::ResummonPetTemporaryUnSummonedIfAny()
         return;
 
     Pet* NewPet = new Pet(this);
-    if (!NewPet->LoadPetFromDB(this, 0, _temporaryUnsummonedPetNumber, true))
+    if (!NewPet->LoadPetFromDB(this, 0, _temporaryUnsummonedPetNumber, true, _currentPetSlot))
         delete NewPet;
 
     _temporaryUnsummonedPetNumber = 0;
