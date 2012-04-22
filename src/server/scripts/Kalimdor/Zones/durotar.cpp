@@ -19,87 +19,6 @@
 #include "ScriptPCH.h"
 #include "Vehicle.h"
 
-/*######
-##Quest 5441: Lazy Peons
-##npc_lazy_peon
-######*/
-
-enum LazyPeonYells
-{
-    SAY_SPELL_HIT                                 = -1000600   //Ow! OK, I''ll get back to work, $N!'
-};
-
-enum LazyPeon
-{
-    QUEST_LAZY_PEONS                              = 5441,
-    GO_LUMBERPILE                                 = 175784,
-    SPELL_BUFF_SLEEP                              = 17743,
-    SPELL_AWAKEN_PEON                             = 19938
-};
-
-class npc_lazy_peon : public CreatureScript
-{
-public:
-    npc_lazy_peon() : CreatureScript("npc_lazy_peon") { }
-
-    CreatureAI* GetAI(Creature* creature) const
-    {
-        return new npc_lazy_peonAI(creature);
-    }
-
-    struct npc_lazy_peonAI : public ScriptedAI
-    {
-        npc_lazy_peonAI(Creature* creature) : ScriptedAI(creature) {}
-
-        uint64 uiPlayerGUID;
-
-        uint32 m_uiRebuffTimer;
-        bool work;
-
-        void Reset ()
-        {
-            uiPlayerGUID = 0;
-            m_uiRebuffTimer = 0;
-            work = false;
-        }
-
-        void MovementInform(uint32 /*type*/, uint32 id)
-        {
-            if (id == 1)
-                work = true;
-        }
-
-        void SpellHit(Unit* caster, const SpellInfo* spell)
-        {
-            if (spell->Id == SPELL_AWAKEN_PEON && caster->GetTypeId() == TYPEID_PLAYER
-                && CAST_PLR(caster)->GetQuestStatus(QUEST_LAZY_PEONS) == QUEST_STATUS_INCOMPLETE)
-            {
-                caster->ToPlayer()->KilledMonsterCredit(me->GetEntry(), me->GetGUID());
-                DoScriptText(SAY_SPELL_HIT, me, caster);
-                me->RemoveAllAuras();
-                if (GameObject* Lumberpile = me->FindNearestGameObject(GO_LUMBERPILE, 20))
-                    me->GetMotionMaster()->MovePoint(1, Lumberpile->GetPositionX()-1, Lumberpile->GetPositionY(), Lumberpile->GetPositionZ());
-            }
-        }
-
-        void UpdateAI(const uint32 uiDiff)
-        {
-            if (work == true)
-                me->HandleEmoteCommand(466);
-            if (m_uiRebuffTimer <= uiDiff)
-            {
-                DoCast(me, SPELL_BUFF_SLEEP);
-                m_uiRebuffTimer = 300000;                 //Rebuff agian in 5 minutes
-            }
-            else
-                m_uiRebuffTimer -= uiDiff;
-            if (!UpdateVictim())
-                return;
-            DoMeleeAttackIfReady();
-        }
-    };
-};
-
 enum Texts
 {
     // Tiger Matriarch Credit
@@ -566,7 +485,6 @@ class spell_voodoo : public SpellScriptLoader
 
 void AddSC_durotar()
 {
-    new npc_lazy_peon();
     new npc_tiger_matriarch_credit();
     new npc_tiger_matriarch();
     new npc_troll_volunteer();
