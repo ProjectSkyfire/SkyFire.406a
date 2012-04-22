@@ -436,7 +436,7 @@ inline void Battleground::_ProcessJoin(uint32 diff)
     // *********************************************************
     ModifyStartDelayTime(diff);
 
-    if (_ResetStatTimer <= 5000)
+    if (_ResetStatTimer > 5000)
     {
         _ResetStatTimer = 0;
         for (BattlegroundPlayerMap::const_iterator itr = GetPlayers().begin(); itr != GetPlayers().end(); ++itr)
