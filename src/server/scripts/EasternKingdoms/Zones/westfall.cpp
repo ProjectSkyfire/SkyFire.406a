@@ -269,8 +269,6 @@ enum eHoratio
     QUEST_HERO_WESTFALL1     = 28562,
     QUEST_HERO_WESTFALL2     = 26378,
 
-    SPELL_INVISIBILITY       = 79488,
-
     NPC_HORATIO              = 42308,
     NPC_INVESTIGATOR1          = 42309,
     NPC_INVESTIGATOR2          = 42745
