@@ -222,8 +222,8 @@ public:
 
 enum Execute
 {
-    SPELL_EXECUTE               = 20647,
-    SPELL_GLYPH_OF_EXECUTION    = 58367,
+    SPELL_EXECUTE               = 5308,
+    SPELL_GLYPH_OF_BLOODTHRIST  = 58367,
     ICON_ID_SUDDEN_DEATH        = 1989,
 };
 
@@ -238,7 +238,7 @@ public:
 
         bool Validate(SpellInfo const* /*SpellEntry*/)
         {
-            if (!sSpellMgr->GetSpellInfo(SPELL_EXECUTE) || !sSpellMgr->GetSpellInfo(SPELL_GLYPH_OF_EXECUTION))
+            if (!sSpellMgr->GetSpellInfo(SPELL_EXECUTE) || !sSpellMgr->GetSpellInfo(SPELL_GLYPH_OF_BLOODTHRIST))
                 return false;
             return true;
         }
@@ -260,7 +260,7 @@ public:
 
                 caster->SetPower(POWER_RAGE, uint32(newRage));
                 // Glyph of Execution bonus
-                if (AuraEffect* aurEff = caster->GetAuraEffect(SPELL_GLYPH_OF_EXECUTION, EFFECT_0))
+                if (AuraEffect* aurEff = caster->GetAuraEffect(SPELL_GLYPH_OF_BLOODTHRIST, EFFECT_0))
                     rageUsed += aurEff->GetAmount() * 10;
 
                 int32 bp = GetEffectValue() + int32(rageUsed * spellInfo->Effects[effIndex].DamageMultiplier + caster->GetTotalAttackPowerValue(BASE_ATTACK) * 0.2f);
