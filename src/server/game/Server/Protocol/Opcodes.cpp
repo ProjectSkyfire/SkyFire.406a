@@ -1279,6 +1279,7 @@ void InitOpcodeTable()
     OPCODE( CMSG_AUTO_DECLINE_GUILD_INVITES,              STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
     OPCODE( CMSG_SET_PRIMARY_TALENT_TREE,                 STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
     OPCODE( CMSG_GROUP_SET_ROLES,                         STATUS_LOGGEDIN, PROCESS_INPLACE,       &WorldSession::HandleGroupSetRoles             );
+    OPCODE( CMSG_BATTLEGROUND_PORT_AND_LEAVE,             STATUS_LOGGEDIN, PROCESS_INPLACE,       &WorldSession::HandleBattlegroundPortOpcode    );
     OPCODE( CMSG_GUILD_UPDATE_PARTY_STATE,                STATUS_LOGGEDIN, PROCESS_INPLACE,       &WorldSession::HandleGuildPartyStateUpdate     );
     OPCODE( CMSG_GUILD_QUERY_NEWS,                        STATUS_LOGGEDIN, PROCESS_INPLACE,       &WorldSession::HandleGuildQueryNews            );
     OPCODE( SMSG_UNKNOWN_1310,                            STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
