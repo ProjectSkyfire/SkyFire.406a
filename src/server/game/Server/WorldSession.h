@@ -280,7 +280,7 @@ class WorldSession
 
         void LogoutPlayer(bool Save);
         void KickPlayer();
-        void HandleMoveToGraveyard(WorldPacket &recv_data);
+        void HandleMoveToGraveyard(WorldPacket& recv_data);
 
         void QueuePacket(WorldPacket* new_packet);
         bool Update(uint32 diff, PacketFilter& updater);
@@ -779,7 +779,7 @@ class WorldSession
         void HandleBattlemasterHelloOpcode(WorldPacket& recv_data);
         void HandleBattlemasterJoinOpcode(WorldPacket& recv_data);
         void HandleBattlegroundPlayerPositionsOpcode(WorldPacket& recv_data);
-        void HandleBattlegroundPortOpcode(WorldPacket &recv_data);
+        void HandleBattlegroundPortOpcode(WorldPacket& recv_data);
         void HandlePVPLogDataOpcode(WorldPacket& recv_data);
         void HandleBattleFieldPortOpcode(WorldPacket& recv_data);
         void HandleBattlefieldListOpcode(WorldPacket& recv_data);
