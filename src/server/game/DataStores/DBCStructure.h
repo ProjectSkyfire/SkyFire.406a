@@ -1764,7 +1764,7 @@ struct SpellScalingEntry
     int32     castTimeMin;                                  // 1        minimum cast time
     int32     castTimeMax;                                  // 2        maximum cast time
     uint32    castScalingMaxLevel;                          // 3        first level with maximum cast time
-    uint32    playerClass;                                  // 4        (index * 100) + charLevel => gtSpellScaling.dbc
+    int32    playerClass;                                  // 4        (index * 100) + charLevel => gtSpellScaling.dbc
     float     Multiplier[3];                                // 5-7
     float     RandomMultiplier[3];                          // 8-10
     float     OtherMultiplier[3];                           // 11-13
