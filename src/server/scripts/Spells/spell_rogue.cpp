@@ -175,8 +175,8 @@ class spell_rog_preparation : public SpellScriptLoader
 
                     if (spellInfo->SpellFamilyName == SPELLFAMILY_ROGUE)
                     {
-                        if (spellInfo->SpellFamilyFlags[1] & SPELLFAMILYFLAG1_ROGUE_COLDB_SHADOWSTEP ||      // Cold Blood, Shadowstep
-                            spellInfo->SpellFamilyFlags[0] & SPELLFAMILYFLAG_ROGUE_VAN_EVAS_SPRINT)           // Vanish, Evasion, Sprint
+                        if (spellInfo->SpellFamilyFlags[1] & SPELLFAMILYFLAG1_ROGUE_SHADOWSTEP ||           // Shadowstep
+                            spellInfo->SpellFamilyFlags[0] & SPELLFAMILYFLAG_ROGUE_VAN_SPRINT)              // Vanish, Sprint
                             caster->ToPlayer()->RemoveSpellCooldown((itr++)->first, true);
                         else if (caster->HasAura(ROGUE_SPELL_GLYPH_OF_PREPARATION))
                         {
