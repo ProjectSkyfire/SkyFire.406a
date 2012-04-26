@@ -2460,7 +2460,6 @@ void Player::RegenerateAll()
     _regenTimerCount += _regenTimer;
 
     Regenerate(POWER_ENERGY);
-    Regenerate(POWER_FOCUS);
     Regenerate(POWER_MANA);
 
     // Runes act as cooldowns, and they don't need to send any data
@@ -2555,7 +2554,7 @@ void Player::Regenerate(Powers power)
             addvalue += 0.01f * _regenTimer * sWorld->getRate(RATE_POWER_ENERGY) * haste;
             break;
         case POWER_FOCUS:
-            addvalue += 4.0f * _modAttackSpeedPct[RANGED_ATTACK] * sWorld->getRate(RATE_POWER_FOCUS) * haste;
+            addvalue += 12.0f * _modAttackSpeedPct[RANGED_ATTACK] * sWorld->getRate(RATE_POWER_FOCUS) * haste;
             break;
         case POWER_RUNIC_POWER:
         {
