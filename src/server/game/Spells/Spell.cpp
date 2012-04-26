@@ -4861,11 +4861,10 @@ SpellCastResult Spell::CheckCast(bool strict)
             case SPELL_EFFECT_HEAL_MAX_HEALTH:
             {
                 Unit* target = m_targets.GetUnitTarget();
-                if(target)
-
+                if (target)
                 {
                     // Cannot be cast on paladin with Forbearance
-                    if (m_spellInfo->Id == 642 || m_spellInfo->Id == 1022)
+                    if (m_spellInfo->Id == 633) // Lay on Hands
                         if (target->HasAura(25771))
                             return SPELL_FAILED_TARGET_AURASTATE;
                 }
@@ -5279,11 +5278,10 @@ SpellCastResult Spell::CheckCast(bool strict)
             case SPELL_AURA_SCHOOL_IMMUNITY:
             {
                 Unit* target = m_targets.GetUnitTarget();
-                if(target)
-
+                if (target)
                 {
                     // Cannot be cast on paladin with Forbearance
-                    if (m_spellInfo->Id == 633)
+                    if (m_spellInfo->Id == 642 || m_spellInfo->Id == 1022) // Divine Shield - Hand of Protection
                         if (target->HasAura(25771))
                             return SPELL_FAILED_TARGET_AURASTATE;
                 }
