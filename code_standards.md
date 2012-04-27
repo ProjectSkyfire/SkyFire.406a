@@ -10,3 +10,7 @@ Coding and Pull Requests
 * Pull requests should be tested (does it compile? AND does it work?) before submission.
 * Any major additions should have documentation ready and provided if applicable (this is usually the case).
 * Try to follow test driven development where applicable.
+
+Useful Links
+
+squashing commits -- http://gitready.com/advanced/2009/02/10/squashing-commits-with-rebase.html
