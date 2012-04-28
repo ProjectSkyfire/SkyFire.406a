@@ -5230,10 +5230,10 @@ SpellCastResult Spell::CheckCast(bool strict)
                             return SPELL_FAILED_BAD_TARGETS;
                         break;
                     }
-                    /*case 61336:  //this spellid= Survival Instincts this needs checked.
+                    case 61336:  //this spellid= Survival Instincts this needs checked.
                         if (m_caster->GetTypeId() != TYPEID_PLAYER || !m_caster->ToPlayer()->IsInFeralForm())
                             return SPELL_FAILED_ONLY_SHAPESHIFT;
-                        break;*/
+                        break;
                     case 1515:
                     {
                         if (m_caster->GetTypeId() != TYPEID_PLAYER)

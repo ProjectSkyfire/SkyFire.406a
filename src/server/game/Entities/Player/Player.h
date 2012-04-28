@@ -1364,7 +1364,7 @@ class Player : public Unit, public GridObject<Player>
         bool IsUseEquipedWeapon(bool mainhand) const
         {
             // disarm applied only to mainhand weapon
-            return !mainhand || !HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISARMED);
+            return !IsInFeralForm() && (!mainhand || !HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISARMED));
         }
         bool IsTwoHandUsed() const
         {

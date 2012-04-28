@@ -82,6 +82,7 @@
 #include "WardenCheckMgr.h"
 #include "Warden.h"
 #include "CalendarMgr.h"
+#include "ItemInfo.h"
 
 //TODO REMOVE
 #include "CreatureAISelector.h"
@@ -1415,8 +1416,8 @@ void World::SetInitialWorldSettings()
     sLog->outString("Loading Items...");                         // must be after LoadRandomEnchantmentsTable and LoadPageTexts
     sObjectMgr->LoadItemTemplates();
 
-    sLog->outString("Loading Item Extra Data...");              // must be after LoadItemPrototypes
-    sObjectMgr->LoadItemTemplateAddon();
+    //sLog->outString("Loading Item Extra Data...");              // must be after LoadItemPrototypes
+    //sObjectMgr->LoadItemTemplateAddon();
 
     sLog->outString("Loading Item Scripts...");                 // must be after LoadItemPrototypes
     sObjectMgr->LoadItemScriptNames();

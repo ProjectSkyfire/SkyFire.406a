@@ -159,7 +159,7 @@ public:
             { "waypoint_data",                SEC_ADMINISTRATOR, true,  &HandleReloadWpCommand,                         "", NULL },
             { "vehicle_accessory",            SEC_ADMINISTRATOR, true,  &HandleReloadVehicleAccessoryCommand,           "", NULL },
             { "vehicle_template_accessory",   SEC_ADMINISTRATOR, true,  &HandleReloadVehicleTemplateAccessoryCommand,   "", NULL },
-            { "item_template_addon",         SEC_ADMINISTRATOR, true,  &HandleReloadItemTemplateAddonCommand,          "", NULL },
+            //{ "item_template_addon",         SEC_ADMINISTRATOR, true,  &HandleReloadItemTemplateAddonCommand,          "", NULL },
             { NULL,                           0,                 false, NULL,                                           "", NULL }
         };
         static ChatCommand commandTable[] =
@@ -761,13 +761,13 @@ public:
         return true;
     }
 
-    static bool HandleReloadItemTemplateAddonCommand(ChatHandler* handler, const char* /*args*/)
-    {
+    //static bool HandleReloadItemTemplateAddonCommand(ChatHandler* handler, const char* /*args*/)
+    /*{
         sLog->outString("Re-Loading `item_template_addon` Table!");
         sObjectMgr->LoadItemTemplateAddon();
         handler->SendGlobalGMSysMessage("DB table `item_template_addon` reloaded.");
         return true;
-    }
+    }*/
 
     static bool HandleReloadPointsOfInterestCommand(ChatHandler* handler, const char* /*args*/)
     {

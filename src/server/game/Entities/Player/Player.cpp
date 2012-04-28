@@ -8417,15 +8417,17 @@ void Player::_ApplyItemBonuses(ItemTemplate const *proto, uint8 slot, bool apply
             if (ssd->StatMod[i] < 0)
                 continue;
             statType = ssd->StatMod[i];
-            val = (ssv->GetStatMultiplier(proto->InventoryType) * ssd->Modifier[i]) / 10000;
+            val = (ssv->getssdMultiplier(proto->ScalingStatValue) * ssd->Modifier[i]) / 10000;
         }
         else
         {
+            if (proto->ItemStat[i].ItemStatValue == 0)
+                continue;
             statType = proto->ItemStat[i].ItemStatType;
             val = proto->ItemStat[i].ItemStatValue;
         }
 
-        if (val <= 0)
+        if (val == 0)
             continue;
 
         switch (statType)
@@ -8606,14 +8608,15 @@ void Player::_ApplyItemBonuses(ItemTemplate const *proto, uint8 slot, bool apply
     }
 
     // Apply Spell Power from ScalingStatValue if set
-    if (ssv && proto->Flags2 & ITEM_FLAGS_EXTRA_CASTER_WEAPON)
-        if (int32 spellbonus = int32(ssv->Spellpower))
+    if (ssv)
+        if (int32 spellbonus = ssv->getSpellBonus(proto->ScalingStatValue))
             ApplySpellPowerBonus(spellbonus, apply);
 
     // If set ScalingStatValue armor get it or use item armor
-    uint32 armor = proto->Armor;
-    if (ssv && proto->Class == ITEM_CLASS_ARMOR)
-        armor = ssv->GetArmor(proto->InventoryType, proto->SubClass - 1);
+    uint32 armor = proto->GetArmor();
+    if (ssv)
+        if (uint32 ssvarmor = ssv->getArmorMod(proto->ScalingStatValue))
+            armor = ssvarmor;
 
     if (armor)
     {
@@ -8671,20 +8674,19 @@ void Player::_ApplyWeaponDamage(uint8 slot, ItemTemplate const *proto, ScalingSt
         attType = OFF_ATTACK;
     }
 
-    float minDamage = proto->DamageMin;
-    float maxDamage = proto->DamageMax;
+    float minDamage = proto->GetMinDamage();
+    float maxDamage = proto->GetMaxDamage();
 
     // If set dpsMod in ScalingStatValue use it for min (70% from average), max (130% from average) damage
     int32 extraDPS = 0;
     if (ssv)
     {
-        float damageMultiplier = 0.0f;
-        extraDPS = ssv->GetDPSAndDamageMultiplier(proto->SubClass, proto->Flags2 & ITEM_FLAGS_EXTRA_CASTER_WEAPON, &damageMultiplier);
+        extraDPS = ssv->getDPSMod(proto->ScalingStatValue);
         if (extraDPS)
         {
             float average = extraDPS * proto->Delay / 1000.0f;
-            minDamage = (1.0f - damageMultiplier) * average;
-            maxDamage = (1.0f + damageMultiplier) * average;
+            minDamage = 0.7f * average;
+            maxDamage = 1.3f * average;
         }
     }
 
@@ -8709,6 +8711,13 @@ void Player::_ApplyWeaponDamage(uint8 slot, ItemTemplate const *proto, ScalingSt
         else if (slot == EQUIPMENT_SLOT_OFFHAND)
             SetAttackTime(OFF_ATTACK, apply ? proto->Delay: BASE_ATTACK_TIME);
     }
+
+    if (CanModifyStats() && (damage || proto->Delay))
+        UpdateDamagePhysical(attType);
+
+    // No need to modify any physical damage for ferals as it is calculated from stats only
+    if (IsInFeralForm())
+        return;
 
     if (CanModifyStats() && (damage || proto->Delay))
         UpdateDamagePhysical(attType);
@@ -8949,7 +8958,7 @@ void Player::CastItemCombatSpell(Unit* target, WeaponAttackType attType, uint32 
 
             float chance = (float)spellInfo->ProcChance;
 
-            if (proto->SpellPPMRate)
+            if (spellData.SpellPPMRate)
             {
                 if (spellData.SpellId == 52781) // Persuasive Strike
                 {
@@ -8964,7 +8973,7 @@ void Player::CastItemCombatSpell(Unit* target, WeaponAttackType attType, uint32 
                     }
                 }
                 uint32 WeaponSpeed = GetAttackTime(attType);
-                chance = GetPPMProcChance(WeaponSpeed, proto->SpellPPMRate, spellInfo);
+                chance = GetPPMProcChance(WeaponSpeed, spellData.SpellPPMRate, spellInfo);
             }
             else if (chance > 100.0f)
             {
@@ -10996,7 +11005,8 @@ bool Player::HasItemOrGemWithLimitCategoryEquipped(uint32 limitCategory, uint32 
 InventoryResult Player::CanTakeMoreSimilarItems(uint32 entry, uint32 count, Item* pItem, uint32* no_space_count) const
 {
     ItemTemplate const *proto = sObjectMgr->GetItemTemplate(entry);
-    if (!proto)
+    ItemSparseEntry const* sparse = sItemSparseStore.LookupEntry(entry);
+    if (!proto || !sparse)
     {
         if (no_space_count)
             *no_space_count = count;
@@ -16849,9 +16859,10 @@ bool Player::HasQuestForItem(uint32 itemid) const
                 if (qinfo->ReqSourceId[j] == itemid)
                 {
                     ItemTemplate const *proto = sObjectMgr->GetItemTemplate(itemid);
+                    ItemSparseEntry const* sparse = sItemSparseStore.LookupEntry(itemid);
 
                     // 'unique' item
-                    if (proto->MaxCount && int32(GetItemCount(itemid, true)) < proto->MaxCount)
+                    if (sparse->MaxCount && int32(GetItemCount(itemid, true)) < sparse->MaxCount)
                         return true;
 
                     // allows custom amount drop when not 0

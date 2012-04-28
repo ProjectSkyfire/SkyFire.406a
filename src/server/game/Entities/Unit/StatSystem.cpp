@@ -372,37 +372,35 @@ void Player::UpdateAttackPowerAndDamage(bool ranged)
                 // Check if Predatory Strikes is skilled
                 float mLevelMult = 0.0f;
                 float weapon_bonus = 0.0f;
-                float mFeralMult = 0.0f;
-                short applied = 0;
-
-                switch (GetShapeshiftForm())
+                if (IsInFeralForm())
                 {
-                    case FORM_CAT:
-                    case FORM_BEAR:
-                    case FORM_MOONKIN:
+                    Unit::AuraEffectList const& mDummy = GetAuraEffectsByType(SPELL_AURA_DUMMY);
+                    for (Unit::AuraEffectList::const_iterator itr = mDummy.begin(); itr != mDummy.end(); ++itr)
                     {
-                        Unit::AuraEffectList const& mDummy = GetAuraEffectsByType(SPELL_AURA_DUMMY);
-                        for (Unit::AuraEffectList::const_iterator itr = mDummy.begin(); itr != mDummy.end(); ++itr)
+                        AuraEffect* aurEff = *itr;
+                        if (aurEff->GetSpellInfo()->SpellIconID == 1563)
                         {
-                            // Predatory Strikes (effect 0)
-                            if ((*itr)->GetEffIndex() == 0 && (*itr)->GetSpellInfo()->SpellIconID == 1563)
+                            switch (aurEff->GetEffIndex())
                             {
-                                mLevelMult = (*itr)->GetAmount() / 100.0f;
-                                if (applied) break;
-                                applied = 1;
+                                case 0: // Predatory Strikes (effect 0)
+                                    mLevelMult = CalculatePctN(1.0f, aurEff->GetAmount());
+                                    break;
+                                case 1: // Predatory Strikes (effect 1)
+                                    if (Item* mainHand = _items[EQUIPMENT_SLOT_MAINHAND])
+                                    {
+                                        // also gains % attack power from equipped weapon
+                                        ItemTemplate const *proto = mainHand->GetTemplate();
+                                        if (!proto)
+                                            continue;
+
+                                        weapon_bonus = CalculatePctN(float(proto->getFeralBonus()), aurEff->GetAmount());
+                                    }
+                                    break;
+                                default:
+                                    break;
                             }
-                            // Predatory Strikes (effect 1)
-                            if ((*itr)->GetEffIndex() == 1 && (*itr)->GetSpellInfo()->SpellIconID == 1563)
-                            {
-                                mFeralMult = (*itr)->GetAmount() / 100.0f;
-                                if (applied) break;
-                                applied = 1;
-                            }
-                       }
-                        break;
+                        }
                     }
-                    default:
-                        break;
                 }
 
                 switch (GetShapeshiftForm())

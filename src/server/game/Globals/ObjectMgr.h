@@ -649,7 +649,7 @@ class ObjectMgr
         CreatureAddon const* GetCreatureAddon(uint32 lowguid);
         CreatureAddon const* GetCreatureTemplateAddon(uint32 entry);
         ItemTemplate const* GetItemTemplate(uint32 entry);
-        ItemTemplateContainer const* GetItemTemplateStore() { return &_itemTemplateStore; }
+        ItemTemplateContainer const* GetItemTemplateStore() { return &ItemTemplateStore; }
 
         ItemSetNameEntry const* GetItemSetNameEntry(uint32 itemId)
         {
@@ -885,7 +885,7 @@ class ObjectMgr
         void LoadGameobjects();
         void LoadGameobjectRespawnTimes();
         void LoadItemTemplates();
-        void LoadItemTemplateAddon();
+        //void LoadItemTemplateAddon();
         void LoadItemScriptNames();
         void LoadItemLocales();
         void LoadItemSetNames();
@@ -1339,7 +1339,7 @@ class ObjectMgr
         GameObjectLocaleContainer _gameObjectLocaleStore;
         GameObjectTemplateContainer _gameObjectTemplateStore;
 
-       ItemTemplateContainer _itemTemplateStore;
+        ItemTemplateContainer ItemTemplateStore;
         ItemLocaleContainer _itemLocaleStore;
         ItemSetNameLocaleContainer _itemSetNameLocaleStore;
         QuestLocaleContainer _questLocaleStore;
