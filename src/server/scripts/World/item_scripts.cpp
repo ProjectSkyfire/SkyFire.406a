@@ -318,6 +318,32 @@ public:
     }
 };
 
+/*#####
+# item_kromgar_flame_thrower
+#####*/
+
+class item_kromgar_flame_thrower : public ItemScript
+{
+public:
+    item_kromgar_flame_thrower() : ItemScript("item_kromgar_flame_thrower") {}
+
+    bool OnUse(Player* player, Item* item, SpellCastTargets const & /*targets*/)
+    {
+        if (player->GetQuestStatus(26010) == QUEST_STATUS_INCOMPLETE)
+        {
+            if (GameObject* go = player->FindNearestGameObject(203431, 15.0f))
+            {
+                player->CastSpell(player, 78141, true, NULL); 
+                go->SetGoState(GO_STATE_ACTIVE_ALTERNATIVE);
+                player->KilledMonsterCredit(41936, 0);
+                return true;
+
+            }
+        }
+        return false;
+    }
+};
+
 void AddSC_item_scripts()
 {
     new item_only_for_flight();
@@ -327,4 +353,5 @@ void AddSC_item_scripts()
     new item_pile_fake_furs();
     new item_petrov_cluster_bombs();
     new item_dehta_trap_smasher();
- }
+    new item_kromgar_flame_thrower();
+}
