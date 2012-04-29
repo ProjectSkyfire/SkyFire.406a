@@ -1,2 +1,0 @@
-ALTER TABLE `lag_reports` ADD `latency` INT(10) UNSIGNED NOT NULL DEFAULT '0';
-ALTER TABLE `lag_reports` ADD `createTime` INT(10) UNSIGNED NOT NULL DEFAULT '0';
