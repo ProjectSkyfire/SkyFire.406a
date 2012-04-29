@@ -332,7 +332,7 @@ bool WorldSession::Update(uint32 diff, PacketFilter& updater)
                         LogUnprocessedTail(packet);
                     break;
                 case STATUS_NEVER:
-                    sLog->outError("SESSION (account: %u, guidlow: %u, char: %s): received not allowed opcode %s (0x%.4X)",
+                    sLog->outDebug(LOG_FILTER_NETWORKIO, "SESSION (account: %u, guidlow: %u, char: %s): received not allowed opcode %s (0x%.4X)",
                         GetAccountId(), m_GUIDLow, _player ? _player->GetName() : "<none>",
                         LookupOpcodeName(packet->GetOpcode()), packet->GetOpcode());
                     break;
