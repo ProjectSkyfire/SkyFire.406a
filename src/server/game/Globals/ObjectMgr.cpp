@@ -3590,9 +3590,9 @@ void ObjectMgr::LoadPlayerInfo()
 
         if (!result)
         {
-            sLog->outString();
-            sLog->outString(">> Loaded %u xp for guild level definitions", count);
+            sLog->outString(">> Loaded %u XP for Guild levels", count);
             sLog->outErrorDb("Error loading `guild_xp_for_level` table or empty table.");
+            sLog->outString();
         }
         else
         {
@@ -3631,8 +3631,8 @@ void ObjectMgr::LoadPlayerInfo()
                 }
             }
 
+            sLog->outString(">> Loaded %u XP for Guild levels", count);
             sLog->outString();
-            sLog->outString(">> Loaded %u xp for guild level definitions", count);
         }
     }
 

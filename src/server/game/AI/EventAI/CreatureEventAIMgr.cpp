@@ -44,7 +44,7 @@ void CreatureEventAIMgr::LoadCreatureEventAI_Texts()
 
     if (!result)
     {
-        sLog->outString(">> Loaded 0 additional CreatureEventAI Texts data. DB table `creature_ai_texts` is empty.");
+        sLog->outString(">> Loaded 0 additional CreatureAI Texts data. DB table `creature_ai_texts` is empty.");
         sLog->outString();
         return;
     }
@@ -99,7 +99,7 @@ void CreatureEventAIMgr::LoadCreatureEventAI_Texts()
     }
     while (result->NextRow());
 
-    sLog->outString(">> Loaded %u additional CreatureEventAI Texts data in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+    sLog->outString(">> Loaded %u additional CreatureAI Texts data in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
     sLog->outString();
 }
 

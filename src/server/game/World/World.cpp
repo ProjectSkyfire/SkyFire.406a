@@ -1604,9 +1604,6 @@ void World::SetInitialWorldSettings()
     sLog->outString("Loading Auctions...");
     sAuctionMgr->LoadAuctions();
 
-    sLog->outString("Loading Guilds...");
-    sGuildMgr->LoadGuilds();
-
     sLog->outString("Loading Guild Rewards...");
     sGuildMgr->LoadGuildRewards();
 
@@ -1694,13 +1691,13 @@ void World::SetInitialWorldSettings()
     sLog->outString("Loading Scripts text locales...");      // must be after Load*Scripts calls
     sObjectMgr->LoadDbScriptStrings();
 
-    sLog->outString("Loading CreatureEventAI Texts...");
+    sLog->outString("Loading CreatureAI Texts...");
     sEventAIMgr->LoadCreatureEventAI_Texts();
 
-    sLog->outString("Loading CreatureEventAI Summons...");
+    sLog->outString("Loading CreatureAI Summons...");
     sEventAIMgr->LoadCreatureEventAI_Summons();
 
-    sLog->outString("Loading CreatureEventAI Scripts...");
+    sLog->outString("Loading CreaturAI Scripts...");
     sEventAIMgr->LoadCreatureEventAI_Scripts();
 
     sLog->outString("Loading spell script names...");
@@ -1797,6 +1794,7 @@ void World::SetInitialWorldSettings()
     ///- Initialize Battlefield
     sLog->outString("Starting Battlefield System");
     sBattlefieldMgr->InitBattlefield();
+    sLog->outString();
 
     sLog->outString("Loading Transports...");
     sMapMgr->LoadTransports();
