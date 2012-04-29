@@ -322,6 +322,14 @@ public:
 # item_kromgar_flame_thrower
 #####*/
 
+enum KromgarFlameThrower
+{
+    Flamethrower        = 78141,     // spell
+    Ashes_to_Ashes      = 26010,     // quest
+    Northwatch_Tent     = 203431,    // go
+    KC                  = 41936
+};
+
 class item_kromgar_flame_thrower : public ItemScript
 {
 public:
@@ -333,11 +341,10 @@ public:
         {
             if (GameObject* go = player->FindNearestGameObject(203431, 15.0f))
             {
-                player->CastSpell(player, 78141, true, NULL); 
+                player->CastSpell(player, 78141, true, NULL);
                 go->SetGoState(GO_STATE_ACTIVE_ALTERNATIVE);
                 player->KilledMonsterCredit(41936, 0);
                 return true;
-
             }
         }
         return false;
