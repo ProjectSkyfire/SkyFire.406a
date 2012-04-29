@@ -885,7 +885,6 @@ class ObjectMgr
         void LoadGameobjects();
         void LoadGameobjectRespawnTimes();
         void LoadItemTemplates();
-        //void LoadItemTemplateAddon();
         void LoadItemScriptNames();
         void LoadItemLocales();
         void LoadItemSetNames();

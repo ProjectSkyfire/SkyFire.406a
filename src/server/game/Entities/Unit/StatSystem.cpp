@@ -297,12 +297,6 @@ void Player::UpdateMaxPower(Powers power)
     SetMaxPower(power, uint32(value));
 }
 
-void Player::ApplyFeralAPBonus(int32 amount, bool apply)
-{
-   _ModifyUInt32(apply, _baseFeralAP, amount);
-   UpdateAttackPowerAndDamage();
-}
-
 void Player::UpdateAttackPowerAndDamage(bool ranged)
 {
     float val2 = 0.0f;
@@ -370,9 +364,10 @@ void Player::UpdateAttackPowerAndDamage(bool ranged)
             case CLASS_DRUID:
             {
                 // Check if Predatory Strikes is skilled
-                float mLevelMult = 0.0f;
+                float _LevelMult = 0.0f;
                 float weapon_bonus = 0.0f;
-                if (IsInFeralForm())
+
+                if (IsInShapeshiftForm())
                 {
                     Unit::AuraEffectList const& mDummy = GetAuraEffectsByType(SPELL_AURA_DUMMY);
                     for (Unit::AuraEffectList::const_iterator itr = mDummy.begin(); itr != mDummy.end(); ++itr)
@@ -383,7 +378,7 @@ void Player::UpdateAttackPowerAndDamage(bool ranged)
                             switch (aurEff->GetEffIndex())
                             {
                                 case 0: // Predatory Strikes (effect 0)
-                                    mLevelMult = CalculatePctN(1.0f, aurEff->GetAmount());
+                                    _LevelMult = CalculatePctN(1.0f, aurEff->GetAmount());
                                     break;
                                 case 1: // Predatory Strikes (effect 1)
                                     if (Item* mainHand = _items[EQUIPMENT_SLOT_MAINHAND])
@@ -392,8 +387,6 @@ void Player::UpdateAttackPowerAndDamage(bool ranged)
                                         ItemTemplate const *proto = mainHand->GetTemplate();
                                         if (!proto)
                                             continue;
-
-                                        weapon_bonus = CalculatePctN(float(proto->getFeralBonus()), aurEff->GetAmount());
                                     }
                                     break;
                                 default:
@@ -406,13 +399,13 @@ void Player::UpdateAttackPowerAndDamage(bool ranged)
                 switch (GetShapeshiftForm())
                 {
                 case FORM_CAT:
-                    val2 = getLevel() * (mLevelMult + 2.0f) + GetStat(STAT_STRENGTH) * 2.0f + GetStat(STAT_AGILITY) - 20.0f + weapon_bonus + _baseFeralAP;
+                    val2 = getLevel() * (_LevelMult + 2.0f) + GetStat(STAT_STRENGTH) * 2.0f + GetStat(STAT_AGILITY) - 20.0f + weapon_bonus;
                     break;
                 case FORM_BEAR:
-                    val2 = getLevel() * (mLevelMult + 3.0f) + GetStat(STAT_STRENGTH) * 2.0f - 20.0f + weapon_bonus + _baseFeralAP;
+                    val2 = getLevel() * (_LevelMult + 3.0f) + GetStat(STAT_STRENGTH) * 2.0f - 20.0f + weapon_bonus;
                     break;
                 case FORM_MOONKIN:
-                    val2 = getLevel() * (mLevelMult + 1.5f) + GetStat(STAT_STRENGTH) * 2.0f - 20.0f + _baseFeralAP;
+                    val2 = getLevel() * (_LevelMult + 1.5f) + GetStat(STAT_STRENGTH) * 2.0f - 20.0f + weapon_bonus;
                     break;
                 default:
                     val2 = GetStat(STAT_STRENGTH) * 2.0f - 20.0f;
@@ -547,7 +540,7 @@ void Player::CalculateMinMaxDamage(WeaponAttackType attType, bool normalized, bo
     float weapon_mindamage = GetWeaponDamageRange(attType, MINDAMAGE);
     float weapon_maxdamage = GetWeaponDamageRange(attType, MAXDAMAGE);
 
-    if (IsInFeralForm())                                    //check if player is druid and in cat or bear forms
+    if (IsInShapeshiftForm())                                    //check if player is druid and in cat or bear forms
     {
         uint8 lvl = getLevel();
         if (lvl > 60)

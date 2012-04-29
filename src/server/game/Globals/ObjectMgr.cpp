@@ -2785,54 +2785,6 @@ void ObjectMgr::LoadItemTemplates()
     sLog->outString();
 }
 
-/*void ObjectMgr::LoadItemTemplateAddon()
-{
-    uint32 oldMSTime = getMSTime();
-    uint32 count = 0;
-
-    QueryResult result = WorldDatabase.Query("SELECT Id, BuyCount, FoodType, MinMoneyLoot, MaxMoneyLoot, SpellPPMChance FROM item_template_addon");
-    if (result)
-    {
-        do
-        {
-            Field* fields = result->Fetch();
-            uint32 itemId = fields[0].GetUInt32();
-            if (!GetItemTemplate(itemId))
-            {
-                sLog->outErrorDb("Item %u specified in `item_template_addon` does not exist, skipped.", itemId);
-                continue;
-            }
-
-            uint8 buyCount = fields[1].GetUInt8();
-            if (!buyCount)
-            {
-                sLog->outErrorDb("Item %u has BuyCount set to 0, corrected to 1.", itemId);
-                buyCount = 1;
-            }
-
-            uint8 foodType = fields[2].GetUInt8();
-            uint32 minMoneyLoot = fields[3].GetUInt32();
-            uint32 maxMoneyLoot = fields[4].GetUInt32();
-            if (minMoneyLoot > maxMoneyLoot)
-            {
-                sLog->outErrorDb("Minimum money loot specified in `item_template_addon` for item %u was greater than maximum amount, swapping.", itemId);
-                std::swap(minMoneyLoot, maxMoneyLoot);
-            }
-
-            ItemTemplate& itemTemplate = _itemTemplateStore[itemId];
-            itemTemplate.BuyCount = buyCount;
-            itemTemplate.FoodType = foodType;
-            itemTemplate.MinMoneyLoot = minMoneyLoot;
-            itemTemplate.MaxMoneyLoot = maxMoneyLoot;
-            itemTemplate.SpellPPMRate = fields[5].GetFloat();
-            ++count;
-        } while (result->NextRow());
-    }
-
-    sLog->outString(">> Loaded %u item addon templates in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
-    sLog->outString();
-}*/
-
 void ObjectMgr::LoadItemScriptNames()
 {
     uint32 oldMSTime = getMSTime();

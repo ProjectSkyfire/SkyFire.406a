@@ -5231,7 +5231,7 @@ SpellCastResult Spell::CheckCast(bool strict)
                         break;
                     }
                     case 61336:  //this spellid= Survival Instincts this needs checked.
-                        if (m_caster->GetTypeId() != TYPEID_PLAYER || !m_caster->ToPlayer()->IsInFeralForm())
+                        if (m_caster->GetTypeId() != TYPEID_PLAYER || !m_caster->ToPlayer()->IsInShapeshiftForm())
                             return SPELL_FAILED_ONLY_SHAPESHIFT;
                         break;
                     case 1515:

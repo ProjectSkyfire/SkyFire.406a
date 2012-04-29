@@ -1941,7 +1941,7 @@ class Unit : public WorldObject
             SetByteValue(UNIT_FIELD_BYTES_2, 3, form);
         }
 
-        inline bool IsInFeralForm() const
+        inline bool IsInShapeshiftForm() const
         {
             ShapeshiftForm form = GetShapeshiftForm();
             return form == FORM_CAT || form == FORM_BEAR;

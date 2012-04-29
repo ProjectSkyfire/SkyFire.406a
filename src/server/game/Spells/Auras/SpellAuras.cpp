@@ -2065,7 +2065,7 @@ bool Aura::IsProcTriggeredOnEvent(AuraApplication* aurApp, ProcEventInfo& eventI
     {
         if (GetSpellInfo()->EquippedItemClass == ITEM_CLASS_WEAPON)
         {
-            if (target->ToPlayer()->IsInFeralForm())
+            if (target->ToPlayer()->IsInShapeshiftForm())
                 return false;
 
             if (eventInfo.GetDamageInfo())

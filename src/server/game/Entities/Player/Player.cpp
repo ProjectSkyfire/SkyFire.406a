@@ -8716,7 +8716,7 @@ void Player::_ApplyWeaponDamage(uint8 slot, ItemTemplate const *proto, ScalingSt
         UpdateDamagePhysical(attType);
 
     // No need to modify any physical damage for ferals as it is calculated from stats only
-    if (IsInFeralForm())
+    if (IsInShapeshiftForm())
         return;
 
     if (CanModifyStats() && (damage || proto->Delay))

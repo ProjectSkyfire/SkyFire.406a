@@ -2575,7 +2575,7 @@ void AuraEffect::HandleAuraModDisarm(AuraApplication const* aurApp, uint8 mode, 
         target->RemoveFlag(field, flag);
 
     // Handle damage modification, shapeshifted druids are not affected
-    if (target->GetTypeId() == TYPEID_PLAYER && !target->IsInFeralForm())
+    if (target->GetTypeId() == TYPEID_PLAYER && !target->IsInShapeshiftForm())
     {
         if (Item* pItem = target->ToPlayer()->GetItemByPos(INVENTORY_SLOT_BAG_0, slot))
         {
@@ -5628,7 +5628,7 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
 
                     if (apply)
                     {
-                        if (!target->IsInFeralForm())
+                        if (!target->IsInShapeshiftForm())
                             break;
 
                         int32 bp0 = int32(target->CountPctFromMaxHealth(GetAmount()));
