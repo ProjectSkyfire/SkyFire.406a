@@ -324,10 +324,10 @@ public:
 
 enum KromgarFlameThrower
 {
-    Flamethrower        = 78141,     // spell
-    Ashes_to_Ashes      = 26010,     // quest
-    Northwatch_Tent     = 203431,    // go
-    KC                  = 41936
+    SPELL_FLAMETHROWER          = 78141,
+    QUEST_ASHES_TO_ASHES        = 26010,
+    GO_NORTHWATCH_TENT          = 203431,
+    KC                          = 41936
 };
 
 class item_kromgar_flame_thrower : public ItemScript
@@ -337,13 +337,13 @@ public:
 
     bool OnUse(Player* player, Item* item, SpellCastTargets const & /*targets*/)
     {
-        if (player->GetQuestStatus(26010) == QUEST_STATUS_INCOMPLETE)
+        if (player->GetQuestStatus(QUEST_ASHES_TO_ASHES) == QUEST_STATUS_INCOMPLETE)
         {
-            if (GameObject* go = player->FindNearestGameObject(203431, 15.0f))
+            if (GameObject* go = player->FindNearestGameObject(GO_NORTHWATCH_TENT, 15.0f))
             {
-                player->CastSpell(player, 78141, true, NULL);
+                player->CastSpell(player, SPELL_FLAMETHROWER, true, NULL);
                 go->SetGoState(GO_STATE_ACTIVE_ALTERNATIVE);
-                player->KilledMonsterCredit(41936, 0);
+                player->KilledMonsterCredit(KC, 0);
                 return true;
             }
         }
