@@ -347,8 +347,8 @@ void ScriptedAI::DoTeleportAll(float x, float y, float z, float o)
 Unit* ScriptedAI::DoSelectLowestHpFriendly(float range, uint32 minHPDiff)
 {
     Unit* unit = NULL;
-    Skyfire::MostHPMissingInRange u_check(me, range, minHPDiff);
-    Skyfire::UnitLastSearcher<Skyfire::MostHPMissingInRange> searcher(me, unit, u_check);
+    SkyFire::MostHPMissingInRange u_check(me, range, minHPDiff);
+    SkyFire::UnitLastSearcher<SkyFire::MostHPMissingInRange> searcher(me, unit, u_check);
     me->VisitNearbyObject(range, searcher);
 
     return unit;
@@ -357,8 +357,8 @@ Unit* ScriptedAI::DoSelectLowestHpFriendly(float range, uint32 minHPDiff)
 std::list<Creature*> ScriptedAI::DoFindFriendlyCC(float range)
 {
     std::list<Creature*> list;
-    Skyfire::FriendlyCCedInRange u_check(me, range);
-    Skyfire::CreatureListSearcher<Skyfire::FriendlyCCedInRange> searcher(me, list, u_check);
+    SkyFire::FriendlyCCedInRange u_check(me, range);
+    SkyFire::CreatureListSearcher<SkyFire::FriendlyCCedInRange> searcher(me, list, u_check);
     me->VisitNearbyObject(range, searcher);
     return list;
 }
@@ -366,8 +366,8 @@ std::list<Creature*> ScriptedAI::DoFindFriendlyCC(float range)
 std::list<Creature*> ScriptedAI::DoFindFriendlyMissingBuff(float range, uint32 uiSpellid)
 {
     std::list<Creature*> list;
-    Skyfire::FriendlyMissingBuffInRange u_check(me, range, uiSpellid);
-    Skyfire::CreatureListSearcher<Skyfire::FriendlyMissingBuffInRange> searcher(me, list, u_check);
+    SkyFire::FriendlyMissingBuffInRange u_check(me, range, uiSpellid);
+    SkyFire::CreatureListSearcher<SkyFire::FriendlyMissingBuffInRange> searcher(me, list, u_check);
     me->VisitNearbyObject(range, searcher);
     return list;
 }
@@ -376,13 +376,13 @@ Player* ScriptedAI::GetPlayerAtMinimumRange(float minimumRange)
 {
     Player* player = NULL;
 
-    CellCoord pair(Skyfire::ComputeCellCoord(me->GetPositionX(), me->GetPositionY()));
+    CellCoord pair(SkyFire::ComputeCellCoord(me->GetPositionX(), me->GetPositionY()));
     Cell cell(pair);
     cell.SetNoCreate();
 
-    Skyfire::PlayerAtMinimumRangeAway check(me, minimumRange);
-    Skyfire::PlayerSearcher<Skyfire::PlayerAtMinimumRangeAway> searcher(me, player, check);
-    TypeContainerVisitor<Skyfire::PlayerSearcher<Skyfire::PlayerAtMinimumRangeAway>, GridTypeMapContainer> visitor(searcher);
+    SkyFire::PlayerAtMinimumRangeAway check(me, minimumRange);
+    SkyFire::PlayerSearcher<SkyFire::PlayerAtMinimumRangeAway> searcher(me, player, check);
+    TypeContainerVisitor<SkyFire::PlayerSearcher<SkyFire::PlayerAtMinimumRangeAway>, GridTypeMapContainer> visitor(searcher);
 
     cell.Visit(pair, visitor, *me->GetMap(), *me, minimumRange);
 

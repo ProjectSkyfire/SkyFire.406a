@@ -805,15 +805,34 @@ void Spell::EffectSchoolDMG(SpellEffIndex effIndex)
                 break;
             }
             case SPELLFAMILY_HUNTER:
-                {
-                    // Rapid Recuperation
-                    if (m_caster->HasAura(3045))
-                        if (m_caster->HasAura(53228))                // Rank 1
-                            m_caster->CastSpell(m_caster, 53230, true);
-                        else
-                            if (m_caster->HasAura(53232))                // Rank 2
-                                m_caster->CastSpell(m_caster, 54227, true);
+            {
+                switch (m_spellInfo->Id)
+                {    // PETS BASIC ATTACK
+                    case 17253: // Bite
+                    case 16827: // Claw
+                    case 49966: // Smack
+                    case 53508: // Wolverine Bite
+                    {
+                        damage += int32((m_caster->GetOwner()->GetTotalAttackPowerValue(RANGED_ATTACK) * 0.4f) / 2);
+                        break;
+                    }
                 }
+                // Gore
+                if (m_spellInfo->SpellIconID == 1578)
+                    if (m_caster->HasAura(57627))           // Charge 6 sec post-effect
+                        damage *= 2;
+                break;
+                // Rapid Recuperation
+                if (m_caster->HasAura(3045))
+                {
+                    if (m_caster->HasAura(53228))           // Rank 1
+                        m_caster->CastSpell(m_caster, 53230, true);
+                    else
+                    if (m_caster->HasAura(53232))           // Rank 2
+                        m_caster->CastSpell(m_caster, 54227, true);
+                }
+                break;
+            }
             case SPELLFAMILY_PALADIN:
             {
                 // Hammer of the Righteous
@@ -1478,54 +1497,6 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                 break;
             }
         case SPELLFAMILY_WARRIOR:
-            // Charge
-            if (m_spellInfo->SpellFamilyFlags & SPELLFAMILYFLAG_WARRIOR_CHARGE && m_spellInfo->SpellVisual[0] == 867)
-            {
-                int32 chargeBasePoints0 = damage;
-                m_caster->CastCustomSpell(m_caster, 34846, &chargeBasePoints0, NULL, NULL, true);
-
-                // Juggernaut crit bonus & Cooldown
-                if (m_caster->HasAura(64976))
-                {
-                    m_caster->CastSpell(m_caster, 65156, true);
-                    m_caster->CastSpell(m_caster, 96216, false);
-                }
-                return;
-            }
-            // Slam
-            if (m_spellInfo->SpellFamilyFlags[0] & SPELLFAMILYFLAG_WARRIOR_SLAM && m_spellInfo->SpellIconID == 559)
-            {
-                int32 bp0 = damage;
-                m_caster->CastCustomSpell(unitTarget, 50783, &bp0, NULL, NULL, true, 0);
-                return;
-            }
-            // Execute
-            if (m_spellInfo->SpellFamilyFlags[EFFECT_0] & SPELLFAMILYFLAG_WARRIOR_EXECUTE)
-            {
-                if (!unitTarget)
-                    return;
-
-                spell_id = 20647;
-
-                int32 rageUsed = std::min<int32>(300 - m_powerCost, m_caster->GetPower(POWER_RAGE));
-                int32 newRage = std::max<int32>(0, m_caster->GetPower(POWER_RAGE) - rageUsed);
-
-                // Sudden Death rage save
-                if (AuraEffect* aurEff = m_caster->GetAuraEffect(SPELL_AURA_PROC_TRIGGER_SPELL, SPELLFAMILY_GENERIC, 1989, EFFECT_0))
-                {
-                    int32 ragesave = aurEff->GetSpellInfo()->Effects[EFFECT_1].CalcValue() * 10;
-                    newRage = std::max(newRage, ragesave);
-                }
-
-                m_caster->SetPower(POWER_RAGE, uint32(newRage));
-
-                // Glyph of Execution bonus
-                if (AuraEffect* aurEff = m_caster->GetAuraEffect(58367, EFFECT_0))
-                    rageUsed += aurEff->GetAmount() * 10;
-
-                bp = damage + int32(rageUsed * m_spellInfo->Effects[effIndex].DamageMultiplier + m_caster->GetTotalAttackPowerValue(BASE_ATTACK) * 0.2f);
-                break;
-            }
             // Concussion Blow
             if (m_spellInfo->SpellFamilyFlags[0] & SPELLFAMILYFLAG_WARRIOR_CONCUSSION_BLOW)
             {
@@ -1569,14 +1540,14 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
             {
                 std::list<Creature*> templist;
 
-                CellCoord pair(Skyfire::ComputeCellCoord(m_caster->GetPositionX(), m_caster->GetPositionY()));
+                CellCoord pair(SkyFire::ComputeCellCoord(m_caster->GetPositionX(), m_caster->GetPositionY()));
                 Cell cell(pair);
                 cell.SetNoCreate();
 
-                Skyfire::AllFriendlyCreaturesInGrid check(m_caster);
-                Skyfire::CreatureListSearcher<Skyfire::AllFriendlyCreaturesInGrid> searcher(m_caster, templist, check);
+                SkyFire::AllFriendlyCreaturesInGrid check(m_caster);
+                SkyFire::CreatureListSearcher<SkyFire::AllFriendlyCreaturesInGrid> searcher(m_caster, templist, check);
 
-                TypeContainerVisitor<Skyfire::CreatureListSearcher<Skyfire::AllFriendlyCreaturesInGrid>, GridTypeMapContainer> cSearcher(searcher);
+                TypeContainerVisitor<SkyFire::CreatureListSearcher<SkyFire::AllFriendlyCreaturesInGrid>, GridTypeMapContainer> cSearcher(searcher);
 
                 cell.Visit(pair, cSearcher, *(m_caster->GetMap()), *m_caster, m_caster->GetGridActivationRange());
 
@@ -1588,8 +1559,8 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                             continue;
                         // Find all the enemies
                         std::list<Unit*> targets;
-                        Skyfire::AnyUnfriendlyUnitInObjectRangeCheck u_check((*itr), (*itr), 6.0f);
-                        Skyfire::UnitListSearcher<Skyfire::AnyUnfriendlyUnitInObjectRangeCheck> searcher((*itr), targets, u_check);
+                        SkyFire::AnyUnfriendlyUnitInObjectRangeCheck u_check((*itr), (*itr), 6.0f);
+                        SkyFire::UnitListSearcher<SkyFire::AnyUnfriendlyUnitInObjectRangeCheck> searcher((*itr), targets, u_check);
                         (*itr)->VisitNearbyObject(6.0f, searcher);
                         for (std::list<Unit*>::const_iterator iter = targets.begin(); iter != targets.end(); ++iter)
                         {
@@ -1798,21 +1769,6 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                 m_caster->CastCustomSpell(m_caster, 45470, &bp, NULL, NULL, false);
                 return;
             }
-            // Death Coil
-            if (m_spellInfo->SpellFamilyFlags[0] & SPELLFAMILYFLAG_DK_DEATH_COIL)
-            {
-                if (m_caster->IsFriendlyTo(unitTarget))
-                {
-                    bp = int32(985 + damage) * 3.5;
-                    m_caster->CastCustomSpell(unitTarget, 47633, &bp, NULL, NULL, true);
-                }
-                else
-                {
-                    bp = 985 + damage;
-                    m_caster->CastCustomSpell(unitTarget, 47632, &bp, NULL, NULL, true);
-                }
-                return;
-            }
             switch (m_spellInfo->Id)
             {
             case 49020: // Obliterate
@@ -1823,15 +1779,6 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                        damage = int32(damage + (damage * count * 12.5 / 100));
                     break;
                 }
-                //TODO: Fix this.
-            //case 49560: // Death Grip
-            //    Position pos;
-            //    GetSummonPosition(effIndex, pos);
-            //    if (Unit* unit = unitTarget->GetVehicleBase()) // what is this for?
-            //        unit->CastSpell(pos.GetPositionX(), pos.GetPositionY(), pos.GetPositionZ(), damage, true);
-            //    else if (!unitTarget->HasAuraType(SPELL_AURA_DEFLECT_SPELLS)) // Deterrence
-            //        unitTarget->CastSpell(pos.GetPositionX(), pos.GetPositionY(), pos.GetPositionZ(), damage, true);
-            //    return;
             case 46584: // Raise Dead
                 if (m_caster->GetTypeId() != TYPEID_PLAYER)
                     return;
@@ -2171,7 +2118,7 @@ void Spell::EffectForceCast(SpellEffIndex effIndex)
     unitTarget->CastSpell(targets, spellInfo, &values, TRIGGERED_FULL_MASK);
 }
 
-// not implemented yet.
+// NYI.
 /*void Spell::EffectTriggerSpellWithValue(SpellEffIndex effIndex)
 {
     uint32 triggered_spell_id = m_spellInfo->Effects[effIndex].TriggerSpell;
@@ -3900,7 +3847,7 @@ void Spell::EffectAddHonor(SpellEffIndex /*effIndex*/)
     // do not allow to add too many honor for player (50 * 21) = 1040 at level 70, or (50 * 31) = 1550 at level 80
     if (damage <= 50)
     {
-        uint32 honor_reward = Skyfire::Honor::hk_honor_at_level(unitTarget->getLevel(), float(damage));
+        uint32 honor_reward = SkyFire::Honor::hk_honor_at_level(unitTarget->getLevel(), float(damage));
         unitTarget->ToPlayer()->RewardHonor(NULL, 1, honor_reward);
         sLog->outDebug(LOG_FILTER_SPELLS_AURAS, "SpellEffect::AddHonor (spell_id %u) rewards %u honor points (scale) to player: %u", m_spellInfo->Id, honor_reward, unitTarget->ToPlayer()->GetGUIDLow());
     }
@@ -6017,27 +5964,53 @@ void Spell::EffectSanctuary(SpellEffIndex /*effIndex*/)
 
 void Spell::EffectAddComboPoints(SpellEffIndex /*effIndex*/)
 {
-    if (effectHandleMode != SPELL_EFFECT_HANDLE_HIT_TARGET)
-        return;
-
     if (!unitTarget)
         return;
 
     if (!m_caster->_movedPlayer)
         return;
 
-    if (damage <= 0)
+    Player* player = m_caster->_movedPlayer;
+
+    //sLog->outString("Adding %u combo points to player", damage);
+    if (damage > 0)
+        player->AddComboPoints(unitTarget, damage, this);
+    else
     {
         // Rogue: Redirect
-        Player* player = unitTarget->ToPlayer();
         if (GetSpellInfo()->Id == 73981 && player->GetComboPoints() > 0 && player->GetComboTarget())
-        {
-            if (!(player->GetComboTarget() == unitTarget->GetGUID())) // Can't Use on target that already has Combo Points
-                player->AddComboPoints(unitTarget, player->GetComboPoints(), this);
-        }
+            player->AddComboPoints(unitTarget, player->GetComboPoints(), this);
     }
 
-    m_caster->_movedPlayer->AddComboPoints(unitTarget, damage, this);
+    if (m_spellInfo->Id == 1752 || m_spellInfo->Id == 84617) // Sinister Strike and Revealing Strike
+    {
+        uint32 times = m_caster->GetTimesCastedInRow(1752);
+        times += m_caster->GetTimesCastedInRow(84617);
+
+        if (m_caster->HasAura(84654)) // It shouldn't count while under effect of last aura.
+            return;
+
+        if (m_caster->HasAura(84652) && !m_caster->HasAura(84654)) // Bandit's Guile Rank 1
+            if (roll_chance_i(33))
+                times += 1;
+            else if (m_caster->HasAura(84653) && !m_caster->HasAura(84654)) // Bandit's Guile Rank 2
+                if (roll_chance_i(66))
+                    times += 1;
+                else if (m_caster->HasAura(84654) && !m_caster->HasAura(84654)) // Bandit's Guile Rank 3
+                    times += 1;
+
+        if (times == 4)
+            m_caster->CastSpell(m_caster, 84745, true);
+
+        else if (times == 8)
+            m_caster->CastSpell(m_caster, 84746, true);
+
+        else if (times == 12)
+        {
+            times = 0;
+            m_caster->CastSpell(m_caster, 84747, true);
+        }
+    }
 }
 
 void Spell::EffectDuel(SpellEffIndex effIndex)
@@ -6936,8 +6909,10 @@ void Spell::EffectSummonDeadPet(SpellEffIndex /*effIndex*/)
     Pet* pet = _player->GetPet();
     if (!pet)
         return;
+
     if (pet->isAlive())
         return;
+
     if (damage < 0)
         return;
 

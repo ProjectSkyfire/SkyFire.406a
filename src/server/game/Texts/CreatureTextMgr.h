@@ -244,7 +244,7 @@ void CreatureTextMgr::SendChatPacket(WorldObject* source, Builder const& builder
     }
 
     float dist = GetRangeForChatType(msgType);
-    Skyfire::PlayerDistWorker<CreatureTextLocalizer<Builder> > worker(source, dist, localizer);
+    SkyFire::PlayerDistWorker<CreatureTextLocalizer<Builder> > worker(source, dist, localizer);
     source->VisitNearbyWorldObject(dist, worker);
 }
 

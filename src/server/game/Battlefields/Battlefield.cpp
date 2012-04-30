@@ -508,7 +508,7 @@ void Battlefield::SendUpdateWorldState(uint32 field, uint32 value)
 
 void Battlefield::RegisterZone(uint32 zoneId)
 {
-    sBattlefieldMgr.AddZone(zoneId, this);
+    sBattlefieldMgr->AddZone(zoneId, this);
 }
 
 void Battlefield::HideNpc(Creature *p_Creature)
@@ -1027,8 +1027,8 @@ bool BfCapturePoint::Update(uint32 diff)
                     HandlePlayerLeave(player);
 
     std::list<Player*>players;
-    Skyfire::AnyPlayerInObjectRangeCheck checker(m_capturePoint, radius);
-    Skyfire::PlayerListSearcher < Skyfire::AnyPlayerInObjectRangeCheck > searcher(m_capturePoint, players, checker);
+    SkyFire::AnyPlayerInObjectRangeCheck checker(m_capturePoint, radius);
+    SkyFire::PlayerListSearcher < SkyFire::AnyPlayerInObjectRangeCheck > searcher(m_capturePoint, players, checker);
     m_capturePoint->VisitNearbyWorldObject(radius, searcher);
 
     for (std::list<Player*>::iterator itr = players.begin(); itr != players.end(); ++itr)

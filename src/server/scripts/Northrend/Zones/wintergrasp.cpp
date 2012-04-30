@@ -66,7 +66,7 @@ class npc_wg_demolisher_engineer : public CreatureScript
         if (creature->isQuestGiver())
             player->PrepareQuestMenu(creature->GetGUID());
 
-        BattlefieldWG* BfWG = (BattlefieldWG *) sBattlefieldMgr.GetBattlefieldByBattleId(1);
+        BattlefieldWG* BfWG = (BattlefieldWG *) sBattlefieldMgr->GetBattlefieldByBattleId(1);
 
         if (!BfWG)
             return true;
@@ -94,7 +94,7 @@ class npc_wg_demolisher_engineer : public CreatureScript
     {
         player->CLOSE_GOSSIP_MENU();
 
-        BattlefieldWG* BfWG = (BattlefieldWG *) sBattlefieldMgr.GetBattlefieldByBattleId(1);
+        BattlefieldWG* BfWG = (BattlefieldWG *) sBattlefieldMgr->GetBattlefieldByBattleId(1);
 
         if (!BfWG)
             return true;
@@ -135,7 +135,7 @@ class npc_wg_spirit_guide : public CreatureScript
         if (creature->isQuestGiver())
             player->PrepareQuestMenu(creature->GetGUID());
 
-        BattlefieldWG* BfWG = (BattlefieldWG *) sBattlefieldMgr.GetBattlefieldByBattleId(BATTLEFIELD_BATTLEID_WG);
+        BattlefieldWG* BfWG = (BattlefieldWG *) sBattlefieldMgr->GetBattlefieldByBattleId(BATTLEFIELD_BATTLEID_WG);
         if (BfWG)
         {
             GraveYardVect gy = BfWG->GetGraveYardVect();
@@ -157,7 +157,7 @@ class npc_wg_spirit_guide : public CreatureScript
     {
         player->CLOSE_GOSSIP_MENU();
 
-        BattlefieldWG* BfWG = (BattlefieldWG *) sBattlefieldMgr.GetBattlefieldByBattleId(BATTLEFIELD_BATTLEID_WG);
+        BattlefieldWG* BfWG = (BattlefieldWG *) sBattlefieldMgr->GetBattlefieldByBattleId(BATTLEFIELD_BATTLEID_WG);
         if (BfWG)
         {
             GraveYardVect gy = BfWG->GetGraveYardVect();
@@ -186,7 +186,7 @@ class npc_wg_queue : public CreatureScript
         if (creature->isQuestGiver())
             player->PrepareQuestMenu(creature->GetGUID());
 
-        BattlefieldWG* BfWG = (BattlefieldWG *) sBattlefieldMgr.GetBattlefieldByBattleId(BATTLEFIELD_BATTLEID_WG);
+        BattlefieldWG* BfWG = (BattlefieldWG *) sBattlefieldMgr->GetBattlefieldByBattleId(BATTLEFIELD_BATTLEID_WG);
         if (BfWG)
         {
             if (BfWG->IsWarTime())
@@ -216,7 +216,7 @@ class npc_wg_queue : public CreatureScript
     {
         player->CLOSE_GOSSIP_MENU();
 
-        BattlefieldWG* BfWG = (BattlefieldWG *) sBattlefieldMgr.GetBattlefieldByBattleId(BATTLEFIELD_BATTLEID_WG);
+        BattlefieldWG* BfWG = (BattlefieldWG *) sBattlefieldMgr->GetBattlefieldByBattleId(BATTLEFIELD_BATTLEID_WG);
         if (BfWG)
         {
             if (BfWG->IsWarTime())
@@ -304,7 +304,7 @@ class npc_wg_quest_giver : public CreatureScript
         if (creature->isQuestGiver())
             player->PrepareQuestMenu(creature->GetGUID());
 
-        BattlefieldWG* BfWG = (BattlefieldWG *) sBattlefieldMgr.GetBattlefieldByBattleId(BATTLEFIELD_BATTLEID_WG);
+        BattlefieldWG* BfWG = (BattlefieldWG *) sBattlefieldMgr->GetBattlefieldByBattleId(BATTLEFIELD_BATTLEID_WG);
         if (BfWG)
         {
             if (creature->isQuestGiver())

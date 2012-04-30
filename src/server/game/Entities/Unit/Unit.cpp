@@ -744,6 +744,22 @@ uint32 Unit::DealDamage(Unit* victim, uint32 damage, CleanDamage const* cleanDam
         if (victim->GetTypeId() == TYPEID_PLAYER)
             victim->ToPlayer()->UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_TOTAL_DAMAGE_RECEIVED, damage);
 
+        // Blood Craze
+        if (victim->GetTypeId() == TYPEID_PLAYER)
+        {
+            if (victim->HasAura(16487)) // Rank 1
+                if (roll_chance_f(10.0f))
+                    victim->CastSpell(victim, 16488, true);
+
+            if (victim->HasAura(16489)) // Rank 2
+                if (roll_chance_f(10.0f))
+                    victim->CastSpell(victim, 16490, true);
+
+            if (victim->HasAura(16492)) // Rank 3
+                if (roll_chance_f(10.0f))
+                    victim->CastSpell(victim, 16491, true);
+        }
+
         victim->ModifyHealth(- (int32)damage);
 
         if (damagetype == DIRECT_DAMAGE || damagetype == SPELL_DIRECT_DAMAGE)
@@ -806,20 +822,9 @@ uint32 Unit::DealDamage(Unit* victim, uint32 damage, CleanDamage const* cleanDam
         // last damage from duel opponent
         if (duel_hasEnded)
         {
-            Player* he;
+            Player* he = duel_wasMounted ? victim->GetCharmer()->ToPlayer() : victim->ToPlayer();
 
-            if (duel_wasMounted)
-            {
-                ASSERT(victim->GetCharmer()->GetTypeId() == TYPEID_PLAYER);
-                he = victim->GetCharmer()->ToPlayer();
-            }
-            else
-            {
-            ASSERT(victim->GetTypeId() == TYPEID_PLAYER);
-                he = victim->ToPlayer();
-            }
-
-            ASSERT(he->duel);
+            ASSERT(he && he->duel);
 
             if (duel_wasMounted) // In this case victim==mount
                 victim->SetHealth(1);
@@ -1564,6 +1569,7 @@ void Unit::CalcAbsorbResist(Unit* victim, SpellSchoolMask schoolMask, DamageEffe
     DamageInfo dmgInfo = DamageInfo(this, victim, damage, spellInfo, schoolMask, damagetype);
 
     // Magic damage, check for resists
+    // Ignore spells that cant be resisted
     if ((schoolMask & SPELL_SCHOOL_MASK_NORMAL) == 0)
     {
         float victimResistance = float(victim->GetResistance(schoolMask));
@@ -1650,7 +1656,7 @@ void Unit::CalcAbsorbResist(Unit* victim, SpellSchoolMask schoolMask, DamageEffe
     // We're going to call functions which can modify content of the list during iteration over it's elements
     // Let's copy the list so we can prevent iterator invalidation
     AuraEffectList vSchoolAbsorbCopy(victim->GetAuraEffectsByType(SPELL_AURA_SCHOOL_ABSORB));
-    vSchoolAbsorbCopy.sort(Skyfire::AbsorbAuraOrderPred());
+    vSchoolAbsorbCopy.sort(SkyFire::AbsorbAuraOrderPred());
 
     // absorb without mana cost
     for (AuraEffectList::iterator itr = vSchoolAbsorbCopy.begin(); (itr != vSchoolAbsorbCopy.end()) && (dmgInfo.GetDamage() > 0); ++itr)
@@ -2305,8 +2311,8 @@ SpellMissInfo Unit::MeleeSpellHitResult(Unit* victim, SpellInfo const* spell)
 
     WeaponAttackType attType = BASE_ATTACK;
 
-    // Check damage class instead of attack type to correctly handle judgements
-    // - they are meele, but can't be dodged/parried/deflected because of ranged dmg class
+    // Check damage class instead of attack type to correctly handle judgments
+    // - they are melee, but can't be dodged/parried/deflected because of ranged dmg class
     if (spell->DmgClass == SPELL_DAMAGE_CLASS_RANGED)
         attType = RANGED_ATTACK;
 
@@ -2803,6 +2809,9 @@ uint32 Unit::GetWeaponSkillValue (WeaponAttackType attType, Unit const* target) 
         // feral or unarmed skill only for base attack
         if (attType != BASE_ATTACK && !item)
             return 0;
+
+        if (IsInShapeshiftForm())
+            return GetMaxSkillValueForLevel();              // always maximized SKILL_FERAL_COMBAT in fact
 
         // weapon skill or (unarmed for base attack and fist weapons)
         uint32 skill;
@@ -8445,6 +8454,12 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
                     RemoveAuraFromStack(auraSpellInfo->Id);
                     return false;
                 }
+                if (auraSpellInfo->Id == 50720)
+                {
+                    target = triggeredByAura->GetCaster();
+                    if (!target)
+                        return false;
+                }
                 break;
             case SPELLFAMILY_WARLOCK:
             {
@@ -8494,8 +8509,7 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
                         {
                             case FORM_NONE:     trigger_spell_id = 37344; break;
                             case FORM_CAT:      trigger_spell_id = 37341; break;
-                            case FORM_BEAR:
-                            case FORM_DIREBEAR: trigger_spell_id = 37340; break;
+                            case FORM_BEAR:     trigger_spell_id = 37340; break;
                             case FORM_TREE:     trigger_spell_id = 37342; break;
                             case FORM_MOONKIN:  trigger_spell_id = 37343; break;
                             default:
@@ -8509,8 +8523,7 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
                         switch (GetShapeshiftForm())
                         {
                             case FORM_CAT:      trigger_spell_id = 67355; break;
-                            case FORM_BEAR:
-                            case FORM_DIREBEAR: trigger_spell_id = 67354; break;
+                            case FORM_BEAR:     trigger_spell_id = 67354; break;
                             default:
                                 return false;
                         }
@@ -8726,7 +8739,7 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
             break;
         }
         // Persistent Shield (Scarab Brooch trinket)
-        // This spell originally trigger 13567 - Dummy Trigger (vs dummy efect)
+        // This spell originally trigger 13567 - Dummy Trigger (vs dummy effect)
         case 26467:
         {
             basepoints0 = int32(CalculatePctN(damage, 15));
@@ -8898,7 +8911,7 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
     }
 
     // Blade Barrier
-    if (auraSpellInfo->SpellFamilyName == SPELLFAMILY_DEATHKNIGHT && auraSpellInfo->SpellIconID == 85)
+    if (auraSpellInfo->SpellFamilyName == SPELLFAMILY_DEATHKNIGHT && auraSpellInfo->SpellIconID == 85 && procSpell)
     {
         Player* player = ToPlayer();
         if (!player || player->getClass() != CLASS_DEATH_KNIGHT)
@@ -14853,8 +14866,8 @@ void Unit::UpdateReactives(uint32 p_time)
 Unit* Unit::SelectNearbyTarget(Unit* exclude, float dist) const
 {
     std::list<Unit*> targets;
-    Skyfire::AnyUnfriendlyUnitInObjectRangeCheck u_check(this, this, dist);
-    Skyfire::UnitListSearcher<Skyfire::AnyUnfriendlyUnitInObjectRangeCheck> searcher(this, targets, u_check);
+    SkyFire::AnyUnfriendlyUnitInObjectRangeCheck u_check(this, this, dist);
+    SkyFire::UnitListSearcher<SkyFire::AnyUnfriendlyUnitInObjectRangeCheck> searcher(this, targets, u_check);
     VisitNearbyObject(dist, searcher);
 
     // remove current target
@@ -15223,6 +15236,9 @@ bool Unit::IsTriggeredAtSpellProcEvent(Unit* victim, Aura* aura, SpellInfo const
             else
                 item = player->GetUseableItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_RANGED);
 
+            if (player->IsInShapeshiftForm())
+                return false;
+
             if (!item || item->IsBroken() || item->GetTemplate()->Class != ITEM_CLASS_WEAPON || !((1<<item->GetTemplate()->SubClass) & spellProto->EquippedItemSubClassMask))
                 return false;
         }
@@ -15583,7 +15599,7 @@ void Unit::Kill(Unit* victim, bool durabilityLoss)
         if (OutdoorPvP* pvp = player->GetOutdoorPvP())
             pvp->HandleKill(player, victim);
 
-        if (Battlefield* bf = sBattlefieldMgr.GetBattlefieldToZoneId(player->GetZoneId()))
+        if (Battlefield* bf = sBattlefieldMgr->GetBattlefieldToZoneId(player->GetZoneId()))
             bf->HandleKill(player, victim);
     }
 
@@ -16485,7 +16501,7 @@ void Unit::UpdateObjectVisibility(bool forced)
     {
         WorldObject::UpdateObjectVisibility(true);
         // call MoveInLineOfSight for nearby creatures
-        Skyfire::AIRelocationNotifier notifier(*this);
+        SkyFire::AIRelocationNotifier notifier(*this);
         VisitNearbyObject(GetVisibilityRange(), notifier);
     }
 }
@@ -16695,7 +16711,6 @@ uint32 Unit::GetModelForForm(ShapeshiftForm form)
                 return 892;
             else
                 return 8571;
-        case FORM_DIREBEAR:
         case FORM_BEAR:
             // Based on Hair color
             if (getRace() == RACE_NIGHTELF)
@@ -17330,7 +17345,7 @@ void Unit::NearTeleportTo(float x, float y, float z, float orientation, bool cas
 bool Unit::UpdatePosition(float x, float y, float z, float orientation, bool teleport)
 {
     // prevent crash when a bad coord is sent by the client
-    if (!Skyfire::IsValidMapCoord(x, y, z, orientation))
+    if (!SkyFire::IsValidMapCoord(x, y, z, orientation))
     {
         sLog->outDebug(LOG_FILTER_UNITS, "Unit::UpdatePosition(%f, %f, %f) .. bad coordinates!", x, y, z);
         return false;

@@ -130,7 +130,7 @@ bool ChatHandler::HandleSummonCommand(const char* args)
     if (!extractPlayerTarget((char*)args, &target, &target_guid, &target_name))
         return false;
 
-    Player* _player = _session->GetPlayer();
+    Player* _player = m_session->GetPlayer();
     if (target == _player || target_guid == _player->GetGUID())
     {
         PSendSysMessage(LANG_CANT_TELEPORT_SELF);
@@ -152,7 +152,7 @@ bool ChatHandler::HandleSummonCommand(const char* args)
             return false;
         }
 
-        Map* map = _session->GetPlayer()->GetMap();
+        Map* map = m_session->GetPlayer()->GetMap();
 
         if (map->IsBattlegroundOrArena())
         {
@@ -164,12 +164,12 @@ bool ChatHandler::HandleSummonCommand(const char* args)
                 return false;
             }
             // if both players are in different bgs
-            else if (target->GetBattlegroundId() && _session->GetPlayer()->GetBattlegroundId() != target->GetBattlegroundId())
+            else if (target->GetBattlegroundId() && m_session->GetPlayer()->GetBattlegroundId() != target->GetBattlegroundId())
                 target->LeaveBattleground(false); // Note: should be changed so target gets no Deserter debuff
 
             // all's well, set bg id
             // when porting out from the bg, it will be reset to 0
-            target->SetBattlegroundId(_session->GetPlayer()->GetBattlegroundId(), _session->GetPlayer()->GetBattlegroundTypeId());
+            target->SetBattlegroundId(m_session->GetPlayer()->GetBattlegroundId(), m_session->GetPlayer()->GetBattlegroundTypeId());
             // remember current position as entry point for return at bg end teleportation
             if (!target->GetMap()->IsBattlegroundOrArena())
                 target->SetBattlegroundEntryPoint();
@@ -182,9 +182,9 @@ bool ChatHandler::HandleSummonCommand(const char* args)
                 target->UnbindInstance(map->GetInstanceId(), target->GetDungeonDifficulty(), true);
 
             // we are in instance, and can summon only player in our group with us as lead
-            if (!_session->GetPlayer()->GetGroup() || !target->GetGroup() ||
-                (target->GetGroup()->GetLeaderGUID() != _session->GetPlayer()->GetGUID()) ||
-                (_session->GetPlayer()->GetGroup()->GetLeaderGUID() != _session->GetPlayer()->GetGUID()))
+            if (!m_session->GetPlayer()->GetGroup() || !target->GetGroup() ||
+                (target->GetGroup()->GetLeaderGUID() != m_session->GetPlayer()->GetGUID()) ||
+                (m_session->GetPlayer()->GetGroup()->GetLeaderGUID() != m_session->GetPlayer()->GetGUID()))
                 // the last check is a bit excessive, but let it be, just in case
             {
                 PSendSysMessage(LANG_CANNOT_SUMMON_TO_INST, nameLink.c_str());
@@ -209,9 +209,9 @@ bool ChatHandler::HandleSummonCommand(const char* args)
 
         // before GM
         float x, y, z;
-        _session->GetPlayer()->GetClosePoint(x, y, z, target->GetObjectSize());
-        target->TeleportTo(_session->GetPlayer()->GetMapId(), x, y, z, target->GetOrientation());
-        target->SetPhaseMask(_session->GetPlayer()->GetPhaseMask(), true);
+        m_session->GetPlayer()->GetClosePoint(x, y, z, target->GetObjectSize());
+        target->TeleportTo(m_session->GetPlayer()->GetMapId(), x, y, z, target->GetOrientation());
+        target->SetPhaseMask(m_session->GetPlayer()->GetPhaseMask(), true);
     }
     else
     {
@@ -224,12 +224,12 @@ bool ChatHandler::HandleSummonCommand(const char* args)
         PSendSysMessage(LANG_SUMMONING, nameLink.c_str(), GetSkyFireString(LANG_OFFLINE));
 
         // in point where GM stay
-        Player::SavePositionInDB(_session->GetPlayer()->GetMapId(),
-            _session->GetPlayer()->GetPositionX(),
-            _session->GetPlayer()->GetPositionY(),
-            _session->GetPlayer()->GetPositionZ(),
-            _session->GetPlayer()->GetOrientation(),
-            _session->GetPlayer()->GetZoneId(),
+        Player::SavePositionInDB(m_session->GetPlayer()->GetMapId(),
+            m_session->GetPlayer()->GetPositionX(),
+            m_session->GetPlayer()->GetPositionY(),
+            m_session->GetPlayer()->GetPositionZ(),
+            m_session->GetPlayer()->GetOrientation(),
+            m_session->GetPlayer()->GetZoneId(),
             target_guid);
     }
 
@@ -245,7 +245,7 @@ bool ChatHandler::HandleAppearCommand(const char* args)
     if (!extractPlayerTarget((char*)args, &target, &target_guid, &target_name))
         return false;
 
-    Player* _player = _session->GetPlayer();
+    Player* _player = m_session->GetPlayer();
     if (target == _player || target_guid == _player->GetGUID())
     {
         SendSysMessage(LANG_CANT_TELEPORT_SELF);
@@ -422,7 +422,7 @@ bool ChatHandler::HandleTaxiCheatCommand(const char* args)
 
     Player* chr = getSelectedPlayer();
     if (!chr)
-        chr = _session->GetPlayer();
+        chr = m_session->GetPlayer();
     else if (HasLowerSecurity(chr, 0)) // check online security
         return false;
 
@@ -506,7 +506,7 @@ bool ChatHandler::HandleLookupAreaCommand(const char* args)
 
                 // send area in "id - [name]" format
                 std::ostringstream ss;
-                if (_session)
+                if (m_session)
                     ss << areaEntry->ID << " - |cffffffff|Harea:" << areaEntry->ID << "|h[" << name << ' ' << localeNames[loc]<< "]|h|r";
                 else
                     ss << areaEntry->ID << " - " << name << ' ' << localeNames[loc];
@@ -567,7 +567,7 @@ bool ChatHandler::HandleLookupTeleCommand(const char * args)
             break;
         }
 
-        if (_session)
+        if (m_session)
             reply << "  |cffffffff|Htele:" << itr->first << "|h[" << tele->name << "]|h|r\n";
         else
             reply << "  " << itr->first << ' ' << tele->name << "\n";
@@ -589,7 +589,7 @@ bool ChatHandler::HandleWhispersCommand(const char* args)
 {
     if (!*args)
     {
-        PSendSysMessage(LANG_COMMAND_WHISPERACCEPTING, _session->GetPlayer()->isAcceptWhispers() ?  GetSkyFireString(LANG_ON) : GetSkyFireString(LANG_OFF));
+        PSendSysMessage(LANG_COMMAND_WHISPERACCEPTING, m_session->GetPlayer()->isAcceptWhispers() ?  GetSkyFireString(LANG_ON) : GetSkyFireString(LANG_OFF));
         return true;
     }
 
@@ -597,7 +597,7 @@ bool ChatHandler::HandleWhispersCommand(const char* args)
     // whisper on
     if (argstr == "on")
     {
-        _session->GetPlayer()->SetAcceptWhispers(true);
+        m_session->GetPlayer()->SetAcceptWhispers(true);
         SendSysMessage(LANG_COMMAND_WHISPERON);
         return true;
     }
@@ -606,8 +606,8 @@ bool ChatHandler::HandleWhispersCommand(const char* args)
     if (argstr == "off")
     {
         // Remove all players from the Gamemaster's whisper whitelist
-        _session->GetPlayer()->ClearWhisperWhiteList();
-        _session->GetPlayer()->SetAcceptWhispers(false);
+        m_session->GetPlayer()->ClearWhisperWhiteList();
+        m_session->GetPlayer()->SetAcceptWhispers(false);
         SendSysMessage(LANG_COMMAND_WHISPEROFF);
         return true;
     }
@@ -656,7 +656,7 @@ bool ChatHandler::HandleSendMailCommand(const char* args)
     std::string text    = msgText;
 
     // from console show not existed sender
-    MailSender sender(MAIL_NORMAL, _session ? _session->GetPlayer()->GetGUIDLow() : 0, MAIL_STATIONERY_GM);
+    MailSender sender(MAIL_NORMAL, m_session ? m_session->GetPlayer()->GetGUIDLow() : 0, MAIL_STATIONERY_GM);
 
     //- TODO: Fix poor design
     SQLTransaction trans = CharacterDatabase.BeginTransaction();
@@ -692,13 +692,13 @@ bool ChatHandler::HandleGroupSummonCommand(const char* args)
         return false;
     }
 
-    Map* gmMap = _session->GetPlayer()->GetMap();
+    Map* gmMap = m_session->GetPlayer()->GetMap();
     bool to_instance =  gmMap->Instanceable();
 
     // we are in instance, and can summon only player in our group with us as lead
     if (to_instance && (
-        !_session->GetPlayer()->GetGroup() || (group->GetLeaderGUID() != _session->GetPlayer()->GetGUID()) ||
-        (_session->GetPlayer()->GetGroup()->GetLeaderGUID() != _session->GetPlayer()->GetGUID())))
+        !m_session->GetPlayer()->GetGroup() || (group->GetLeaderGUID() != m_session->GetPlayer()->GetGUID()) ||
+        (m_session->GetPlayer()->GetGroup()->GetLeaderGUID() != m_session->GetPlayer()->GetGUID())))
         // the last check is a bit excessive, but let it be, just in case
     {
         SendSysMessage(LANG_CANNOT_SUMMON_TO_INST);
@@ -710,7 +710,7 @@ bool ChatHandler::HandleGroupSummonCommand(const char* args)
     {
         Player* player = itr->getSource();
 
-        if (!player || player == _session->GetPlayer() || !player->GetSession())
+        if (!player || player == m_session->GetPlayer() || !player->GetSession())
             continue;
 
         // check online security
@@ -755,8 +755,8 @@ bool ChatHandler::HandleGroupSummonCommand(const char* args)
 
         // before GM
         float x, y, z;
-        _session->GetPlayer()->GetClosePoint(x, y, z, player->GetObjectSize());
-        player->TeleportTo(_session->GetPlayer()->GetMapId(), x, y, z, player->GetOrientation());
+        m_session->GetPlayer()->GetClosePoint(x, y, z, player->GetObjectSize());
+        player->TeleportTo(m_session->GetPlayer()->GetMapId(), x, y, z, player->GetOrientation());
     }
 
     return true;

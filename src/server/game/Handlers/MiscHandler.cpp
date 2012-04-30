@@ -233,7 +233,7 @@ void WorldSession::HandleWhoOpcode(WorldPacket & recv_data)
     wstrToLower(wplayer_name);
     wstrToLower(wguild_name);
 
-    // client send in case not set max level value 100 but Skyfire supports 255 max level,
+    // client send in case not set max level value 100 but SkyFire supports 255 max level,
     // update it to show GMs with characters after 100 level
     if (level_max >= MAX_LEVEL)
         level_max = STRONG_MAX_LEVEL;
@@ -1094,7 +1094,7 @@ void WorldSession::HandleMoveTimeSkippedOpcode(WorldPacket & recv_data)
         sLog->outDebug(LOG_FILTER_PACKETIO, "WORLD: CMSG_MOVE_TIME_SKIPPED");
 
         /// TODO
-        must be need use in Skyfire
+        must be need use in SkyFire
         We substract server Lags to move time (AntiLags)
         for exmaple
         GetPlayer()->ModifyLastMoveTime(-int32(time_skipped));
@@ -1747,7 +1747,7 @@ void WorldSession::HandleAreaSpiritHealerQueryOpcode(WorldPacket & recv_data)
     if (bg)
         sBattlegroundMgr->SendAreaSpiritHealerQueryOpcode(_player, bg, guid);
 
-    if (Battlefield* bf = sBattlefieldMgr.GetBattlefieldToZoneId(_player->GetZoneId()))
+    if (Battlefield* bf = sBattlefieldMgr->GetBattlefieldToZoneId(_player->GetZoneId()))
         bf->SendAreaSpiritHealerQueryOpcode(_player, guid);
 }
 
@@ -1769,7 +1769,7 @@ void WorldSession::HandleAreaSpiritHealerQueueOpcode(WorldPacket & recv_data)
     if (bg)
         bg->AddPlayerToResurrectQueue(guid, _player->GetGUID());
 
-    if (Battlefield* bf = sBattlefieldMgr.GetBattlefieldToZoneId(_player->GetZoneId()))
+    if (Battlefield* bf = sBattlefieldMgr->GetBattlefieldToZoneId(_player->GetZoneId()))
         bf->AddPlayerToResurrectQueue(guid, _player->GetGUID());
 }
 
@@ -1778,7 +1778,7 @@ void WorldSession::HandleHearthAndResurrect(WorldPacket& /*recv_data*/)
     if (_player->isInFlight())
         return;
 
-    if (Battlefield* bf = sBattlefieldMgr.GetBattlefieldToZoneId(_player->GetZoneId()))
+    if (Battlefield* bf = sBattlefieldMgr->GetBattlefieldToZoneId(_player->GetZoneId()))
     {
         // bf->PlayerAskToLeave(_player); FIXME
         return;

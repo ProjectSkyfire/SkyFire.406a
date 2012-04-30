@@ -110,7 +110,7 @@ void GossipMenu::ClearMenu()
     _menuItemData.clear();
 }
 
-PlayerMenu::PlayerMenu(WorldSession* session) : _session(session)
+PlayerMenu::PlayerMenu(WorldSession* session) : m_session(session)
 {
 }
 
@@ -159,7 +159,7 @@ void PlayerMenu::SendGossipMenu(uint32 titleTextId, uint64 objectGUID) const
         data << uint8(0);                               // 3.3.3 changes icon: blue question or yellow exclamation
         std::string title = quest->GetTitle();
 
-        int32 locale = _session->GetSessionDbLocaleIndex();
+        int32 locale = m_session->GetSessionDbLocaleIndex();
         if (locale >= 0)
             if (QuestLocale const* localeData = sObjectMgr->GetQuestLocale(questID))
                 ObjectMgr::GetLocaleString(localeData->Title, locale, title);
@@ -167,13 +167,13 @@ void PlayerMenu::SendGossipMenu(uint32 titleTextId, uint64 objectGUID) const
         data << title;                                  // max 0x200
     }
 
-    _session->SendPacket(&data);
+    m_session->SendPacket(&data);
 }
 
 void PlayerMenu::SendCloseGossip() const
 {
     WorldPacket data(SMSG_GOSSIP_COMPLETE, 0);
-    _session->SendPacket(&data);
+    m_session->SendPacket(&data);
 }
 
 void PlayerMenu::SendPointOfInterest(uint32 poiId) const
@@ -186,7 +186,7 @@ void PlayerMenu::SendPointOfInterest(uint32 poiId) const
     }
 
     std::string iconText = poi->icon_name;
-    int32 locale = _session->GetSessionDbLocaleIndex();
+    int32 locale = m_session->GetSessionDbLocaleIndex();
     if (locale >= 0)
         if (PointOfInterestLocale const* localeData = sObjectMgr->GetPointOfInterestLocale(poiId))
             ObjectMgr::GetLocaleString(localeData->IconName, locale, iconText);
@@ -199,7 +199,7 @@ void PlayerMenu::SendPointOfInterest(uint32 poiId) const
     data << uint32(poi->data);
     data << iconText;
 
-    _session->SendPacket(&data);
+    m_session->SendPacket(&data);
 }
 
 /*********************************************************/
@@ -266,7 +266,7 @@ void PlayerMenu::SendQuestGiverQuestList(QEmote eEmote, const std::string& Title
         {
             std::string title = quest->GetTitle();
 
-            int locale = _session->GetSessionDbLocaleIndex();
+            int locale = m_session->GetSessionDbLocaleIndex();
             if (locale >= 0)
                 if (QuestLocale const* localeData = sObjectMgr->GetQuestLocale(questID))
                     ObjectMgr::GetLocaleString(localeData->Title, locale, title);
@@ -281,7 +281,7 @@ void PlayerMenu::SendQuestGiverQuestList(QEmote eEmote, const std::string& Title
     }
 
     data.put<uint8>(count_pos, count);
-    _session->SendPacket(&data);
+    m_session->SendPacket(&data);
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Sent SMSG_QUESTGIVER_QUEST_LIST NPC Guid=%u", GUID_LOPART(npcGUID));
 }
 
@@ -291,7 +291,7 @@ void PlayerMenu::SendQuestGiverStatus(uint32 questStatus, uint64 npcGUID) const
     data << uint64(npcGUID);
     data << questStatus;
 
-    _session->SendPacket(&data);
+    m_session->SendPacket(&data);
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Sent SMSG_QUESTGIVER_STATUS NPC Guid=%u, status=%u", GUID_LOPART(npcGUID), questStatus);
 }
 
@@ -304,7 +304,7 @@ void PlayerMenu::SendQuestGiverQuestDetails(Quest const* quest, uint64 npcGUID, 
     std::string questTargetTextWindow = quest->GetQuestGiverPortraitText();
     std::string questTargetName  = quest->GetQuestGiverPortraitUnk();
 
-    int locale = _session->GetSessionDbLocaleIndex();
+    int locale = m_session->GetSessionDbLocaleIndex();
     if (locale >= 0)
     {
         if (QuestLocale const* localeData = sObjectMgr->GetQuestLocale(quest->GetQuestId()))
@@ -367,7 +367,7 @@ void PlayerMenu::SendQuestGiverQuestDetails(Quest const* quest, uint64 npcGUID, 
     }
 
     data << uint32(quest->GetRewOrReqMoney()); // rewarded money
-    data << uint32(quest->XPValue(_session->GetPlayer()) * sWorld->getRate(RATE_XP_QUEST)); // granted exp
+    data << uint32(quest->XPValue(m_session->GetPlayer()) * sWorld->getRate(RATE_XP_QUEST)); // granted exp
     data << uint32(quest->GetCharTitleId());
     data << uint32(0); // unknown 4.0.6a
     data << uint32(0); // unknown 4.0.6a
@@ -403,7 +403,7 @@ void PlayerMenu::SendQuestGiverQuestDetails(Quest const* quest, uint64 npcGUID, 
         data << uint32(quest->DetailsEmoteDelay[i]);       // (in ms)
     }
 
-    _session->SendPacket(&data);
+    m_session->SendPacket(&data);
 
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Sent SMSG_QUESTGIVER_QUEST_DETAILS NPCGuid=%u, questid=%u", GUID_LOPART(npcGUID), quest->GetQuestId());
 }
@@ -424,7 +424,7 @@ void PlayerMenu::SendQuestQueryResponse(Quest const* quest) const
     for (uint32 i = 0; i < QUEST_OBJECTIVES_COUNT; ++i)
         questObjectiveText[i] = quest->ObjectiveText[i];
 
-    int32 locale = _session->GetSessionDbLocaleIndex();
+    int32 locale = m_session->GetSessionDbLocaleIndex();
     if (locale >= 0)
     {
         if (QuestLocale const* localeData = sObjectMgr->GetQuestLocale(quest->GetQuestId()))
@@ -565,7 +565,7 @@ void PlayerMenu::SendQuestQueryResponse(Quest const* quest) const
     data << uint32(quest->GetSoundAccept());
     data << uint32(quest->GetSoundTurnIn());
 
-    _session->SendPacket(&data);
+    m_session->SendPacket(&data);
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Sent SMSG_QUEST_QUERY_RESPONSE questid=%u", quest->GetQuestId());
 }
 
@@ -578,7 +578,7 @@ void PlayerMenu::SendQuestGiverOfferReward(Quest const* quest, uint64 npcGUID, b
     std::string questCompleteTextWindow     = quest->GetQuestTurnInPortraitText();
     std::string questCompleteName           = quest->GetQuestTurnInPortraitUnk();
 
-    int locale = _session->GetSessionDbLocaleIndex();
+    int locale = m_session->GetSessionDbLocaleIndex();
     if (locale >= 0)
     {
         if (QuestLocale const* localeData = sObjectMgr->GetQuestLocale(quest->GetQuestId()))
@@ -653,7 +653,7 @@ void PlayerMenu::SendQuestGiverOfferReward(Quest const* quest, uint64 npcGUID, b
     }
 
     data << uint32(quest->GetRewOrReqMoney());
-    data << uint32(quest->XPValue(_session->GetPlayer()) * sWorld->getRate(RATE_XP_QUEST));
+    data << uint32(quest->XPValue(m_session->GetPlayer()) * sWorld->getRate(RATE_XP_QUEST));
 
     data << uint32(quest->GetCharTitleId());
     data << uint32(0); // Unknown 4.0.6
@@ -683,7 +683,7 @@ void PlayerMenu::SendQuestGiverOfferReward(Quest const* quest, uint64 npcGUID, b
     data << uint32(0);
     data << uint32(0);
 
-    _session->SendPacket(&data);
+    m_session->SendPacket(&data);
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Sent SMSG_QUESTGIVER_OFFER_REWARD NPCGuid=%u, questid=%u", GUID_LOPART(npcGUID), quest->GetQuestId());
 }
 
@@ -695,7 +695,7 @@ void PlayerMenu::SendQuestGiverRequestItems(Quest const* quest, uint64 npcGUID, 
     std::string questTitle = quest->GetTitle();
     std::string requestItemsText = quest->GetRequestItemsText();
 
-    int32 locale = _session->GetSessionDbLocaleIndex();
+    int32 locale = m_session->GetSessionDbLocaleIndex();
     if (locale >= 0)
     {
         if (QuestLocale const* localeData = sObjectMgr->GetQuestLocale(quest->GetQuestId()))
@@ -770,6 +770,6 @@ void PlayerMenu::SendQuestGiverRequestItems(Quest const* quest, uint64 npcGUID, 
     data << uint32(0x10);
     data << uint32(0x40); // added in 4.0.1
 
-    _session->SendPacket(&data);
+    m_session->SendPacket(&data);
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Sent SMSG_QUESTGIVER_REQUEST_ITEMS NPCGuid=%u, questid=%u", GUID_LOPART(npcGUID), quest->GetQuestId());
 }

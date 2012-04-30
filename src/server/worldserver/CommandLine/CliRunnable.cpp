@@ -207,7 +207,7 @@ std::string ChatHandler::GenerateDeletedCharacterGUIDsWhereStr(DeletedInfoList::
  */
 void ChatHandler::HandleCharacterDeletedListHelper(DeletedInfoList const& foundList)
 {
-    if (!_session)
+    if (!m_session)
     {
         SendSysMessage(LANG_CHARACTER_DELETED_LIST_BAR);
         SendSysMessage(LANG_CHARACTER_DELETED_LIST_HEADER);
@@ -218,7 +218,7 @@ void ChatHandler::HandleCharacterDeletedListHelper(DeletedInfoList const& foundL
     {
         std::string dateStr = TimeToTimestampStr(itr->deleteDate);
 
-        if (!_session)
+        if (!m_session)
             PSendSysMessage(LANG_CHARACTER_DELETED_LIST_LINE_CONSOLE,
                 itr->lowguid, itr->name.c_str(), itr->accountName.empty() ? "<Does not exist>" : itr->accountName.c_str(),
                 itr->accountId, dateStr.c_str());
@@ -228,7 +228,7 @@ void ChatHandler::HandleCharacterDeletedListHelper(DeletedInfoList const& foundL
                 itr->accountId, dateStr.c_str());
     }
 
-    if (!_session)
+    if (!m_session)
         SendSysMessage(LANG_CHARACTER_DELETED_LIST_BAR);
 }
 

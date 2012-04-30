@@ -1,6 +1,5 @@
 /*
- * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2010-2012 Project SkyFire <http://www.projectskyfire.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,24 +15,31 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __SIGNAL_HANDLER_H__
-#define __SIGNAL_HANDLER_H__
+#ifndef SKYFIRE_ITEMINFOMGR_H
+#define SKYFIRE_ITEMINFOMGR_H
 
-#include <ace/Event_Handler.h>
+#include "ItemInfo.h"
 
-namespace SkyFire
+class ItemInfoMgr
 {
-/// Handle termination signals
-class SignalHandler : public ACE_Event_Handler
-{
-    public:
-        int handle_signal(int SigNum, siginfo_t* = NULL, ucontext_t* = NULL)
-        {
-            HandleSignal(SigNum);
-            return 0;
-        }
-        virtual void HandleSignal(int /*SigNum*/) {};
+    friend class ACE_Singleton<ItemInfoMgr, ACE_Null_Mutex>;
+private:
+    ItemInfoMgr();
+    ~ItemInfoMgr();
+
+public:
+    typedef std::vector<ItemInfo*> ItemInfoMap;
+
+    ItemInfo const* GetItemInfo(uint32 ItemId) const;
+    uint32 GetItemInfoStoreSize() const;
+
+    void LoadItemInfo();
+    void UnloadItemInfoStore();
+
+private:
+    ItemInfoMap mItemInfoMap;
 };
-}
 
-#endif /* __SIGNAL_HANDLER_H__ */
+#define sItemInfoMgr ACE_Singleton<ItemInfoMgr, ACE_Null_Mutex>::instance()
+
+#endif

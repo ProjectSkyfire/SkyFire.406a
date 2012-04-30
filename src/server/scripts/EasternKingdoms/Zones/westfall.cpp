@@ -762,8 +762,8 @@ class npc_crate_mine : public CreatureScript
 
                                 std::list<Player*> players;
 
-                                Skyfire::AnyPlayerInObjectRangeCheck checker(me, 25.0f);
-                                Skyfire::PlayerListSearcher<Skyfire::AnyPlayerInObjectRangeCheck> searcher(me, players, checker);
+                                SkyFire::AnyPlayerInObjectRangeCheck checker(me, 25.0f);
+                                SkyFire::PlayerListSearcher<SkyFire::AnyPlayerInObjectRangeCheck> searcher(me, players, checker);
                                 me->VisitNearbyWorldObject(20.0f, searcher);
 
                                 for (std::list<Player*>::const_iterator itr = players.begin(); itr != players.end(); ++itr)
@@ -1824,8 +1824,8 @@ class npc_rise_br : public CreatureScript
 
                                 std::list<Player*> players;
 
-                                Skyfire::AnyPlayerInObjectRangeCheck checker(me, 50.0f);
-                                Skyfire::PlayerListSearcher<Skyfire::AnyPlayerInObjectRangeCheck> searcher(me, players, checker);
+                                SkyFire::AnyPlayerInObjectRangeCheck checker(me, 50.0f);
+                                SkyFire::PlayerListSearcher<SkyFire::AnyPlayerInObjectRangeCheck> searcher(me, players, checker);
                                 me->VisitNearbyWorldObject(50.0f, searcher);
 
                                 for (std::list<Player*>::const_iterator itr = players.begin(); itr != players.end(); ++itr)

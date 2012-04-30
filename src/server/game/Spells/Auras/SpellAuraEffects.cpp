@@ -1539,7 +1539,6 @@ void AuraEffect::HandleShapeshiftBoosts(Unit* target, bool apply) const
                         target->CastCustomSpell(target, 48420, &bp, NULL, NULL, true);
                     }
                 break;
-                case FORM_DIREBEAR:
                 case FORM_BEAR:
                     // Master Shapeshifter - Bear
                     if (AuraEffect const* aurEff = target->GetAuraEffect(48411,1))
@@ -1933,7 +1932,6 @@ void AuraEffect::HandleAuraModShapeshift(AuraApplication const* aurApp, uint8 mo
             break;
 
         case FORM_BEAR:                                     // 0x05
-        case FORM_DIREBEAR:                                 // 0x08
 
         case FORM_BATTLESTANCE:                             // 0x11
         case FORM_DEFENSIVESTANCE:                          // 0x12
@@ -1981,7 +1979,6 @@ void AuraEffect::HandleAuraModShapeshift(AuraApplication const* aurApp, uint8 mo
             case FORM_TRAVEL:
             case FORM_AQUA:
             case FORM_BEAR:
-            case FORM_DIREBEAR:
             case FORM_FLIGHT_EPIC:
             case FORM_FLIGHT:
             case FORM_MOONKIN:
@@ -2019,7 +2016,6 @@ void AuraEffect::HandleAuraModShapeshift(AuraApplication const* aurApp, uint8 mo
             {
                 case FORM_CAT:
                 case FORM_BEAR:
-                case FORM_DIREBEAR:
                 {
                     // get furor proc chance
                     int32 FurorChance = 0;
@@ -2036,7 +2032,6 @@ void AuraEffect::HandleAuraModShapeshift(AuraApplication const* aurApp, uint8 mo
                         }
                         break;
                         case FORM_BEAR:
-                        case FORM_DIREBEAR:
                         if (irand(0, 99) < FurorChance)
                             target->CastSpell(target, 17057, true);
                         default:
@@ -2080,7 +2075,6 @@ void AuraEffect::HandleAuraModShapeshift(AuraApplication const* aurApp, uint8 mo
         {
             // Nordrassil Harness - bonus
             case FORM_BEAR:
-            case FORM_DIREBEAR:
             case FORM_CAT:
                 if (AuraEffect* dummy = target->GetAuraEffect(37315, 0))
                     target->CastSpell(target, 37316, true, NULL, dummy);
@@ -2459,8 +2453,8 @@ void AuraEffect::HandleFeignDeath(AuraApplication const* aurApp, uint8 mode, boo
         */
 
         UnitList targets;
-        Skyfire::AnyUnfriendlyUnitInObjectRangeCheck u_check(target, target, target->GetMap()->GetVisibilityRange());
-        Skyfire::UnitListSearcher<Skyfire::AnyUnfriendlyUnitInObjectRangeCheck> searcher(target, targets, u_check);
+        SkyFire::AnyUnfriendlyUnitInObjectRangeCheck u_check(target, target, target->GetMap()->GetVisibilityRange());
+        SkyFire::UnitListSearcher<SkyFire::AnyUnfriendlyUnitInObjectRangeCheck> searcher(target, targets, u_check);
         target->VisitNearbyObject(target->GetMap()->GetVisibilityRange(), searcher);
         for (UnitList::iterator iter = targets.begin(); iter != targets.end(); ++iter)
         {
@@ -2581,7 +2575,7 @@ void AuraEffect::HandleAuraModDisarm(AuraApplication const* aurApp, uint8 mode, 
         target->RemoveFlag(field, flag);
 
     // Handle damage modification, shapeshifted druids are not affected
-    if (target->GetTypeId() == TYPEID_PLAYER)
+    if (target->GetTypeId() == TYPEID_PLAYER && !target->IsInShapeshiftForm())
     {
         if (Item* pItem = target->ToPlayer()->GetItemByPos(INVENTORY_SLOT_BAG_0, slot))
         {
@@ -5211,7 +5205,7 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
                                 if (Battleground* bg = target->ToPlayer()->GetBattleground())
                                     bg->RemovePlayerFromResurrectQueue(target->GetGUID());
 
-                                if (Battlefield* bf = sBattlefieldMgr.GetBattlefieldToZoneId(target->GetZoneId()))
+                                if (Battlefield* bf = sBattlefieldMgr->GetBattlefieldToZoneId(target->GetZoneId()))
                                     bf->RemovePlayerFromResurrectQueue(target->GetGUID());
                             }
                             break;
@@ -5634,6 +5628,9 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
 
                     if (apply)
                     {
+                        if (!target->IsInShapeshiftForm())
+                            break;
+
                         int32 bp0 = int32(target->CountPctFromMaxHealth(GetAmount()));
                         target->CastCustomSpell(target, 50322, &bp0, NULL, NULL, true);
                     }
@@ -6315,14 +6312,14 @@ void AuraEffect::HandlePeriodicDummyAuraTick(Unit* target, Unit* caster) const
                         // eff_radius == 0
                         float radius = GetSpellInfo()->GetMaxRange(false);
 
-                        CellCoord p(Skyfire::ComputeCellCoord(target->GetPositionX(), target->GetPositionY()));
+                        CellCoord p(SkyFire::ComputeCellCoord(target->GetPositionX(), target->GetPositionY()));
                         Cell cell(p);
 
-                        Skyfire::AnyUnfriendlyAttackableVisibleUnitInObjectRangeCheck u_check(target, radius);
-                        Skyfire::UnitListSearcher<Skyfire::AnyUnfriendlyAttackableVisibleUnitInObjectRangeCheck> checker(target, targets, u_check);
+                        SkyFire::AnyUnfriendlyAttackableVisibleUnitInObjectRangeCheck u_check(target, radius);
+                        SkyFire::UnitListSearcher<SkyFire::AnyUnfriendlyAttackableVisibleUnitInObjectRangeCheck> checker(target, targets, u_check);
 
-                        TypeContainerVisitor<Skyfire::UnitListSearcher<Skyfire::AnyUnfriendlyAttackableVisibleUnitInObjectRangeCheck>, GridTypeMapContainer > grid_object_checker(checker);
-                        TypeContainerVisitor<Skyfire::UnitListSearcher<Skyfire::AnyUnfriendlyAttackableVisibleUnitInObjectRangeCheck>, WorldTypeMapContainer > world_object_checker(checker);
+                        TypeContainerVisitor<SkyFire::UnitListSearcher<SkyFire::AnyUnfriendlyAttackableVisibleUnitInObjectRangeCheck>, GridTypeMapContainer > grid_object_checker(checker);
+                        TypeContainerVisitor<SkyFire::UnitListSearcher<SkyFire::AnyUnfriendlyAttackableVisibleUnitInObjectRangeCheck>, WorldTypeMapContainer > world_object_checker(checker);
 
                         cell.Visit(p, grid_object_checker,  *GetBase()->GetOwner()->GetMap(), *target, radius);
                         cell.Visit(p, world_object_checker, *GetBase()->GetOwner()->GetMap(), *target, radius);

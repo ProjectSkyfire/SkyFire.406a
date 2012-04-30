@@ -55,8 +55,8 @@ void ConfusedMovementGenerator<T>::Initialize(T &unit)
         i_waypoints[idx][1] = y + wanderY;
 
         // prevent invalid coordinates generation
-        Skyfire::NormalizeMapCoord(i_waypoints[idx][0]);
-        Skyfire::NormalizeMapCoord(i_waypoints[idx][1]);
+        SkyFire::NormalizeMapCoord(i_waypoints[idx][0]);
+        SkyFire::NormalizeMapCoord(i_waypoints[idx][1]);
 
         bool is_water = map->IsInWater(i_waypoints[idx][0],i_waypoints[idx][1],z);
         // if generated wrong path just ignore

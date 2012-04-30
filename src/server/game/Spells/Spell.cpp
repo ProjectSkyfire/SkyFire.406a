@@ -1009,7 +1009,7 @@ void Spell::SelectImplicitNearbyTargets(SpellEffIndex effIndex, SpellImplicitTar
     {
         case TARGET_OBJECT_TYPE_UNIT:
             if (Unit* unitTarget = target->ToUnit())
-                AddUnitTarget(unitTarget, effMask, false);
+                AddUnitTarget(unitTarget, effMask, true, false);
             break;
         case TARGET_OBJECT_TYPE_GOBJ:
             if (GameObject* gobjTarget = target->ToGameObject())
@@ -1042,9 +1042,9 @@ void Spell::SelectImplicitConeTargets(SpellEffIndex effIndex, SpellImplicitTarge
 
     if (uint32 containerTypeMask = GetSearcherTypeMask(objectType, condList))
     {
-        Skyfire::WorldObjectSpellConeTargetCheck check(coneAngle, radius, m_caster, m_spellInfo, selectionType, condList);
-        Skyfire::WorldObjectListSearcher<Skyfire::WorldObjectSpellConeTargetCheck> searcher(m_caster, targets, check, containerTypeMask);
-        SearchTargets<Skyfire::WorldObjectListSearcher<Skyfire::WorldObjectSpellConeTargetCheck> > (searcher, containerTypeMask, m_caster, m_caster, radius);
+        SkyFire::WorldObjectSpellConeTargetCheck check(coneAngle, radius, m_caster, m_spellInfo, selectionType, condList);
+        SkyFire::WorldObjectListSearcher<SkyFire::WorldObjectSpellConeTargetCheck> searcher(m_caster, targets, check, containerTypeMask);
+        SearchTargets<SkyFire::WorldObjectListSearcher<SkyFire::WorldObjectSpellConeTargetCheck> > (searcher, containerTypeMask, m_caster, m_caster, radius);
 
         if (!targets.empty())
         {
@@ -1056,7 +1056,7 @@ void Spell::SelectImplicitConeTargets(SpellEffIndex effIndex, SpellImplicitTarge
                     if ((*j)->IsAffectingSpell(m_spellInfo))
                         maxTargets += (*j)->GetAmount();
 
-                Skyfire::RandomResizeList(targets, maxTargets);
+                SkyFire::RandomResizeList(targets, maxTargets);
             }
 
             // for compability with older code - add only unit and go targets
@@ -1321,7 +1321,7 @@ void Spell::SelectImplicitAreaTargets(SpellEffIndex effIndex, SpellImplicitTarge
             {
                 if (unitTargets.size() > maxSize)
                 {
-                    unitTargets.sort(Skyfire::HealthPctOrderPred());
+                    unitTargets.sort(SkyFire::HealthPctOrderPred());
                     unitTargets.resize(maxSize);
                 }
             }
@@ -1335,7 +1335,7 @@ void Spell::SelectImplicitAreaTargets(SpellEffIndex effIndex, SpellImplicitTarge
 
                 if (unitTargets.size() > maxSize)
                 {
-                    unitTargets.sort(Skyfire::PowerPctOrderPred((Powers)power));
+                    unitTargets.sort(SkyFire::PowerPctOrderPred((Powers)power));
                     unitTargets.resize(maxSize);
                 }
             }
@@ -1351,7 +1351,7 @@ void Spell::SelectImplicitAreaTargets(SpellEffIndex effIndex, SpellImplicitTarge
 
             if (m_spellInfo->Id == 5246) //Intimidating Shout
                 unitTargets.remove(m_targets.GetUnitTarget());
-            Skyfire::RandomResizeList(unitTargets, maxTargets);
+            SkyFire::RandomResizeList(unitTargets, maxTargets);
         }
 
         CallScriptAfterUnitTargetSelectHandlers(unitTargets, effIndex);
@@ -1369,7 +1369,7 @@ void Spell::SelectImplicitAreaTargets(SpellEffIndex effIndex, SpellImplicitTarge
                 if ((*j)->IsAffectingSpell(m_spellInfo))
                     maxTargets += (*j)->GetAmount();
 
-            Skyfire::RandomResizeList(gObjTargets, maxTargets);
+            SkyFire::RandomResizeList(gObjTargets, maxTargets);
         }
         for (std::list<GameObject*>::iterator itr = gObjTargets.begin(); itr != gObjTargets.end(); ++itr)
             AddGOTarget(*itr, effMask);
@@ -1545,7 +1545,7 @@ void Spell::SelectImplicitTargetObjectTargets(SpellEffIndex effIndex, SpellImpli
 {
     ASSERT((m_targets.GetObjectTarget() || m_targets.GetItemTarget()) && "Spell::SelectImplicitTargetObjectTargets - no explicit object or item target available!");
     if (Unit* unit = m_targets.GetUnitTarget())
-        AddUnitTarget(unit, 1 << effIndex);
+        AddUnitTarget(unit, 1 << effIndex, true, false);
     else if (GameObject* gobj = m_targets.GetGOTarget())
         AddGOTarget(gobj, 1 << effIndex);
     else
@@ -1612,13 +1612,13 @@ void Spell::SelectImplicitTrajTargets()
     float srcToDestDelta = m_targets.GetDstPos()->m_positionZ - m_targets.GetSrcPos()->m_positionZ;
 
     std::list<WorldObject*> targets;
-    Skyfire::WorldObjectSpellTrajTargetCheck check(dist2d, m_targets.GetSrcPos(), m_caster, m_spellInfo);
-    Skyfire::WorldObjectListSearcher<Skyfire::WorldObjectSpellTrajTargetCheck> searcher(m_caster, targets, check, GRID_MAP_TYPE_MASK_ALL);
-    SearchTargets<Skyfire::WorldObjectListSearcher<Skyfire::WorldObjectSpellTrajTargetCheck> > (searcher, GRID_MAP_TYPE_MASK_ALL, m_caster, m_targets.GetSrcPos(), dist2d);
+    SkyFire::WorldObjectSpellTrajTargetCheck check(dist2d, m_targets.GetSrcPos(), m_caster, m_spellInfo);
+    SkyFire::WorldObjectListSearcher<SkyFire::WorldObjectSpellTrajTargetCheck> searcher(m_caster, targets, check, GRID_MAP_TYPE_MASK_ALL);
+    SearchTargets<SkyFire::WorldObjectListSearcher<SkyFire::WorldObjectSpellTrajTargetCheck> > (searcher, GRID_MAP_TYPE_MASK_ALL, m_caster, m_targets.GetSrcPos(), dist2d);
     if (targets.empty())
         return;
 
-    targets.sort(Skyfire::ObjectDistanceOrderPred(m_caster));
+    targets.sort(SkyFire::ObjectDistanceOrderPred(m_caster));
 
     float b = tangent(m_targets.GetElevation());
     float a = (srcToDestDelta - dist2d * b) / (dist2d * dist2d);
@@ -1854,7 +1854,7 @@ void Spell::SearchTargets(SEARCHER& searcher, uint32 containerMask, Unit* refere
         x = pos->GetPositionX();
         y = pos->GetPositionY();
 
-        CellCoord p(Skyfire::ComputeCellCoord(x, y));
+        CellCoord p(SkyFire::ComputeCellCoord(x, y));
         Cell cell(p);
         cell.SetNoCreate();
 
@@ -1879,9 +1879,9 @@ WorldObject* Spell::SearchNearbyTarget(float range, SpellTargetObjectTypes objec
     uint32 containerTypeMask = GetSearcherTypeMask(objectType, condList);
     if (!containerTypeMask)
         return NULL;
-    Skyfire::WorldObjectSpellNearbyTargetCheck check(range, m_caster, m_spellInfo, selectionType, condList);
-    Skyfire::WorldObjectLastSearcher<Skyfire::WorldObjectSpellNearbyTargetCheck> searcher(m_caster, target, check, containerTypeMask);
-    SearchTargets<Skyfire::WorldObjectLastSearcher<Skyfire::WorldObjectSpellNearbyTargetCheck> > (searcher, containerTypeMask, m_caster, m_caster, range);
+    SkyFire::WorldObjectSpellNearbyTargetCheck check(range, m_caster, m_spellInfo, selectionType, condList);
+    SkyFire::WorldObjectLastSearcher<SkyFire::WorldObjectSpellNearbyTargetCheck> searcher(m_caster, target, check, containerTypeMask);
+    SearchTargets<SkyFire::WorldObjectLastSearcher<SkyFire::WorldObjectSpellNearbyTargetCheck> > (searcher, containerTypeMask, m_caster, m_caster, range);
     return target;
 }
 
@@ -1890,9 +1890,9 @@ void Spell::SearchAreaTargets(std::list<WorldObject*>& targets, float range, Pos
     uint32 containerTypeMask = GetSearcherTypeMask(objectType, condList);
     if (!containerTypeMask)
         return;
-    Skyfire::WorldObjectSpellAreaTargetCheck check(range, position, m_caster, referer, m_spellInfo, selectionType, condList);
-    Skyfire::WorldObjectListSearcher<Skyfire::WorldObjectSpellAreaTargetCheck> searcher(m_caster, targets, check, containerTypeMask);
-    SearchTargets<Skyfire::WorldObjectListSearcher<Skyfire::WorldObjectSpellAreaTargetCheck> > (searcher, containerTypeMask, m_caster, m_caster, range);
+    SkyFire::WorldObjectSpellAreaTargetCheck check(range, position, m_caster, referer, m_spellInfo, selectionType, condList);
+    SkyFire::WorldObjectListSearcher<SkyFire::WorldObjectSpellAreaTargetCheck> searcher(m_caster, targets, check, containerTypeMask);
+    SearchTargets<SkyFire::WorldObjectListSearcher<SkyFire::WorldObjectSpellAreaTargetCheck> > (searcher, containerTypeMask, m_caster, m_caster, range);
 }
 
 void Spell::SearchChainTargets(std::list<WorldObject*>& targets, uint32 chainTargets, WorldObject* target, SpellTargetObjectTypes objectType, SpellTargetCheckTypes selectType, ConditionList* condList, bool isChainHeal)
@@ -2078,7 +2078,7 @@ void Spell::CleanupTargetList()
     m_delayMoment = 0;
 }
 
-void Spell::AddUnitTarget(Unit* target, uint32 effectMask, bool checkIfValid /*= true*/)
+void Spell::AddUnitTarget(Unit* target, uint32 effectMask, bool checkIfValid /*= true*/, bool implicit /*= true*/)
 {
     for (uint32 effIndex = 0; effIndex < MAX_SPELL_EFFECTS; ++effIndex)
         if (!m_spellInfo->Effects[effIndex].IsEffect() || !CheckEffectTarget(target, effIndex))
@@ -2089,7 +2089,7 @@ void Spell::AddUnitTarget(Unit* target, uint32 effectMask, bool checkIfValid /*=
         return;
 
     if (checkIfValid)
-        if (m_spellInfo->CheckTarget(m_caster, target, true) != SPELL_CAST_OK)
+        if (m_spellInfo->CheckTarget(m_caster, target, implicit) != SPELL_CAST_OK)
             return;
 
     // Check for effect immune skip if immuned
@@ -5065,10 +5065,8 @@ SpellCastResult Spell::CheckCast(bool strict)
             case SPELL_EFFECT_SUMMON_DEAD_PET:
             {
                 Creature* pet = m_caster->GetGuardianPet();
-                if (!pet)
-                    return SPELL_FAILED_NO_PET;
 
-                if (pet->isAlive())
+                if (pet && pet->isAlive())
                     return SPELL_FAILED_ALREADY_HAVE_SUMMON;
 
                 break;
@@ -5232,10 +5230,10 @@ SpellCastResult Spell::CheckCast(bool strict)
                             return SPELL_FAILED_BAD_TARGETS;
                         break;
                     }
-                    /*case 61336:  //this spellid= Survival Instincts this needs checked.
-                        if (m_caster->GetTypeId() != TYPEID_PLAYER || !m_caster->ToPlayer()->IsInFeralForm())
+                    case 61336:  //this spellid= Survival Instincts this needs checked.
+                        if (m_caster->GetTypeId() != TYPEID_PLAYER || !m_caster->ToPlayer()->IsInShapeshiftForm())
                             return SPELL_FAILED_ONLY_SHAPESHIFT;
-                        break;*/
+                        break;
                     case 1515:
                     {
                         if (m_caster->GetTypeId() != TYPEID_PLAYER)
@@ -5824,14 +5822,14 @@ SpellCastResult Spell::CheckItems()
     // check spell focus object
     if (m_spellInfo->RequiresSpellFocus)
     {
-        CellCoord p(Skyfire::ComputeCellCoord(m_caster->GetPositionX(), m_caster->GetPositionY()));
+        CellCoord p(SkyFire::ComputeCellCoord(m_caster->GetPositionX(), m_caster->GetPositionY()));
         Cell cell(p);
 
         GameObject* ok = NULL;
-        Skyfire::GameObjectFocusCheck go_check(m_caster, m_spellInfo->RequiresSpellFocus);
-        Skyfire::GameObjectSearcher<Skyfire::GameObjectFocusCheck> checker(m_caster, ok, go_check);
+        SkyFire::GameObjectFocusCheck go_check(m_caster, m_spellInfo->RequiresSpellFocus);
+        SkyFire::GameObjectSearcher<SkyFire::GameObjectFocusCheck> checker(m_caster, ok, go_check);
 
-        TypeContainerVisitor<Skyfire::GameObjectSearcher<Skyfire::GameObjectFocusCheck>, GridTypeMapContainer > object_checker(checker);
+        TypeContainerVisitor<SkyFire::GameObjectSearcher<SkyFire::GameObjectFocusCheck>, GridTypeMapContainer > object_checker(checker);
         Map& map = *m_caster->GetMap();
         cell.Visit(p, object_checker, map, *m_caster, m_caster->GetVisibilityRange());
 
@@ -7056,7 +7054,7 @@ void Spell::CancelGlobalCooldown()
         m_caster->ToPlayer()->GetGlobalCooldownMgr().CancelGlobalCooldown(m_spellInfo);
 }
 
-namespace Skyfire
+namespace SkyFire
 {
 WorldObjectSpellTargetCheck::WorldObjectSpellTargetCheck(Unit* caster, Unit* referer, SpellInfo const* spellInfo,
             SpellTargetCheckTypes selectionType, ConditionList* condList) : _caster(caster), _referer(referer), _spellInfo(spellInfo),
@@ -7201,4 +7199,4 @@ bool WorldObjectSpellTrajTargetCheck::operator()(WorldObject* target)
         return false;
     return WorldObjectSpellAreaTargetCheck::operator ()(target);
 }
-} //namespace Skyfire
+} //namespace SkyFire

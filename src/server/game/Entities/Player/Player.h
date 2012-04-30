@@ -63,7 +63,7 @@ typedef std::deque<Mail*> PlayerMails;
 #define PLAYER_MAX_DAILY_QUESTS     25
 #define PLAYER_EXPLORED_ZONES_SIZE  144
 
-// 2^n values, Player::m_isunderwater is a bitmask. These are Skyfire internal values, they are never send to any client
+// 2^n values, Player::m_isunderwater is a bitmask. These are SkyFire internal values, they are never send to any client
 enum PlayerUnderwaterState
 {
     UNDERWATER_NONE                     = 0x00,
@@ -1364,7 +1364,7 @@ class Player : public Unit, public GridObject<Player>
         bool IsUseEquipedWeapon(bool mainhand) const
         {
             // disarm applied only to mainhand weapon
-            return !mainhand || !HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISARMED);
+            return !IsInShapeshiftForm() && (!mainhand || !HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISARMED));
         }
         bool IsTwoHandUsed() const
         {
@@ -1908,6 +1908,7 @@ class Player : public Unit, public GridObject<Player>
         void UpdateSpellPower();
         void UpdateMaxHealth();
         void UpdateMaxPower(Powers power);
+        void ApplyFeralAPBonus(int32 amount, bool apply);
         void UpdateAttackPowerAndDamage(bool ranged = false);
         void UpdateShieldBlockValue();
         void UpdateDamagePhysical(WeaponAttackType attType);
@@ -1961,7 +1962,7 @@ class Player : public Unit, public GridObject<Player>
 
         void RemovedInsignia(Player* looterPlr);
 
-        WorldSession* GetSession() const { return _session; }
+        WorldSession* GetSession() const { return m_session; }
 
         void BuildCreateUpdateBlockForPlayer(UpdateData *data, Player *target) const;
         void DestroyForPlayer(Player *target, bool anim = false) const;
@@ -2768,6 +2769,7 @@ class Player : public Unit, public GridObject<Player>
 
         uint32 _baseManaRegen;
         uint32 _baseHealthRegen;
+        uint32 _baseFeralAP;
 
         uint32 _baseSpellPower;
         uint32 _spellPowerFromIntellect;
@@ -2787,7 +2789,7 @@ class Player : public Unit, public GridObject<Player>
         float m_resurrectX, m_resurrectY, m_resurrectZ;
         uint32 _resurrectHealth, _resurrectMana;
 
-        WorldSession *_session;
+        WorldSession *m_session;
 
         typedef std::list<Channel*> JoinedChannelsList;
         JoinedChannelsList _channels;

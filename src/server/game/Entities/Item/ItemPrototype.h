@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 3 of the License, or (at your
+ * Free Software Foundation; either version 2 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
@@ -377,11 +377,10 @@ enum ItemSubclassArmor
     ITEM_SUBCLASS_ARMOR_IDOL                    = 8,
     ITEM_SUBCLASS_ARMOR_TOTEM                   = 9,
     ITEM_SUBCLASS_ARMOR_SIGIL                   = 10,
-    ITEM_SUBCLASS_ARMOR_RELIC                   = 11,
-    ITEM_SUBCLASS_ARMOR_BUCKLER                 = 12
+    ITEM_SUBCLASS_ARMOR_RELIC                   = 11
 };
 
-#define MAX_ITEM_SUBCLASS_ARMOR                   13
+#define MAX_ITEM_SUBCLASS_ARMOR                   12
 
 enum ItemSubclassReagent
 {
@@ -552,19 +551,24 @@ inline uint8 ItemSubClassToDurabilityMultiplierId(uint32 ItemClass, uint32 ItemS
 #pragma pack(push, 1)
 #endif
 
+struct _Damage
+{
+    float   DamageMin;
+    float   DamageMax;
+    uint32  DamageType;                                     // id from Resistances.dbc
+};
+
 struct _ItemStat
 {
     uint32  ItemStatType;
     int32   ItemStatValue;
-    int32   ItemStatUnk1;
-    int32   ItemStatUnk2;
 };
-
 struct _Spell
 {
     int32 SpellId;                                         // id from Spell.dbc
     uint32 SpellTrigger;
     int32  SpellCharges;
+    float  SpellPPMRate;
     int32  SpellCooldown;
     uint32 SpellCategory;                                   // id from SpellCategory.dbc
     int32  SpellCategoryCooldown;
@@ -582,11 +586,12 @@ struct ItemTemplate
     uint32 Class;                                           // id from ItemClass.dbc
     uint32 SubClass;                                        // id from ItemSubClass.dbc
     int32  Unk0;
-    std::string Name1;
+    std::string  Name1;
     uint32 DisplayInfoID;                                   // id from ItemDisplayInfo.dbc
     uint32 Quality;
     uint32 Flags;
     uint32 Flags2;
+    uint32 BuyCount;
     int32  BuyPrice;
     uint32 SellPrice;
     uint32 InventoryType;
@@ -603,15 +608,17 @@ struct ItemTemplate
     uint32 RequiredReputationRank;
     int32  MaxCount;                                        // <= 0: no limit
     int32  Stackable;                                       // 0: not allowed, -1: put in player coin info tab and don't limit stacking (so 1 slot)
+    //uint32 StatsCount;
     uint32 ContainerSlots;
     _ItemStat ItemStat[MAX_ITEM_PROTO_STATS];
     uint32 ScalingStatDistribution;                         // id from ScalingStatDistribution.dbc
+    uint32 ScalingStatValue;                                // mask for selecting column in ScalingStatValues.dbc
     uint32 DamageType;                                      // id from Resistances.dbc
     uint32 Delay;
     float  RangedModRange;
     _Spell Spells[MAX_ITEM_PROTO_SPELLS];
     uint32 Bonding;
-    std::string Description;
+    std::string  Description;
     uint32 PageText;
     uint32 LanguageID;
     uint32 PageMaterial;
@@ -621,6 +628,7 @@ struct ItemTemplate
     uint32 Sheath;
     int32  RandomProperty;                                  // id from ItemRandomProperties.dbc
     int32  RandomSuffix;                                    // id from ItemRandomSuffix.dbc
+    uint32 Block;
     uint32 ItemSet;                                         // id from ItemSet.dbc
     uint32 MaxDurability;
     uint32 Area;                                            // id from AreaTable.dbc
@@ -630,32 +638,25 @@ struct ItemTemplate
     _Socket Socket[MAX_ITEM_PROTO_SOCKETS];
     uint32 socketBonus;                                     // id from SpellItemEnchantment.dbc
     uint32 GemProperties;                                   // id from GemProperties.dbc
+    uint32 RequiredDisenchantSkill;
     float  ArmorDamageModifier;
     int32  Duration;                                        // negative = realtime, positive = ingame time
     uint32 ItemLimitCategory;                               // id from ItemLimitCategory.dbc
     uint32 HolidayId;                                       // id from Holidays.dbc
-    float  StatScalingFactor;
-    int32  Field130;
-    int32  Field131;
-
-    // extra fields, not part of db2 files
-    uint32 BuyCount;
-    float  DamageMin;
-    float  DamageMax;
-    float  DPS;
-    uint32 Armor;
-    float  SpellPPMRate;
     uint32 ScriptId;
     uint32 DisenchantID;
-    uint32 RequiredDisenchantSkill;
     uint32 FoodType;
     uint32 MinMoneyLoot;
     uint32 MaxMoneyLoot;
 
+    // extra fields
+    float  DPS;
+    uint32 Armor;
+
     // helpers
     bool CanChangeEquipStateInCombat() const
     {
-        switch (InventoryType)
+        switch(InventoryType)
         {
             case INVTYPE_RELIC:
             case INVTYPE_SHIELD:
@@ -663,7 +664,7 @@ struct ItemTemplate
                 return true;
         }
 
-        switch (Class)
+        switch(Class)
         {
             case ITEM_CLASS_WEAPON:
             case ITEM_CLASS_PROJECTILE:
@@ -701,6 +702,12 @@ struct ItemTemplate
         return itemLevel;
     }
 
+    // Remove this.
+    uint32 GetArmor() const;
+    ItemDamageEntry const* FindItemDamageEntry() const;
+    float GetMinDamage() const { return floor(DPS * float(Delay) / 1000.0f * 0.8f + 0.5f); }
+    float GetMaxDamage() const { return floor(DPS * float(Delay) / 1000.0f * 1.2f + 0.5f); }
+
     bool IsPotion() const { return Class == ITEM_CLASS_CONSUMABLE && SubClass == ITEM_SUBCLASS_POTION; }
     bool IsArmorVellum() const { return Class == ITEM_CLASS_TRADE_GOODS && SubClass == ITEM_SUBCLASS_ARMOR_ENCHANTMENT; }
     bool IsConjuredConsumable() const { return Class == ITEM_CLASS_CONSUMABLE && (Flags & ITEM_PROTO_FLAG_CONJURED); }
@@ -724,6 +731,7 @@ struct ItemSetNameEntry
 struct ItemSetNameLocale
 {
     StringVector Name;
+    StringVector Description;
 };
 
 // GCC have alternative #pragma pack() syntax and old gcc version not support pack(pop), also any gcc version not support it at some platform

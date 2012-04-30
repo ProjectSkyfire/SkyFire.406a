@@ -77,6 +77,7 @@
 #include "SmartAI.h"
 #include "Channel.h"
 #include "DB2Stores.h"
+#include "ItemInfo.h"
 
 //TODO REMOVE
 #include "CreatureAISelector.h"
@@ -138,7 +139,6 @@ World::~World()
         delete command;
 
     VMAP::VMapFactory::clear();
-
     //TODO free addSessQueue
 }
 
@@ -1308,9 +1308,6 @@ void World::SetInitialWorldSettings()
     LoadDB2Stores(m_dataPath);
     DetectDBCLang();
 
-    /*sLog->outString("Loading spell dbc data corrections...");
-    sSpellMgr->LoadDbcDataCorrections();*/  ///-is now merged to custom attri needs redirected
-
     sLog->outString("Loading SpellInfo store...");
     sSpellMgr->LoadSpellInfoStore();
 
@@ -1396,9 +1393,6 @@ void World::SetInitialWorldSettings()
 
     sLog->outString("Loading Items...");                         // must be after LoadRandomEnchantmentsTable and LoadPageTexts
     sObjectMgr->LoadItemTemplates();
-
-    sLog->outString("Loading Item Extra Data...");              // must be after LoadItemPrototypes
-    sObjectMgr->LoadItemTemplateAddon();
 
     sLog->outString("Loading Item Scripts...");                 // must be after LoadItemPrototypes
     sObjectMgr->LoadItemScriptNames();
@@ -1581,10 +1575,9 @@ void World::SetInitialWorldSettings()
     ///- Load dynamic data tables from the database
     sLog->outString("Loading Item Auctions...");
     sAuctionMgr->LoadAuctionItems();
+
     sLog->outString("Loading Auctions...");
     sAuctionMgr->LoadAuctions();
-
-    sGuildMgr->LoadGuilds();
 
     sLog->outString("Loading Guild Rewards...");
     sGuildMgr->LoadGuildRewards();
@@ -1738,7 +1731,7 @@ void World::SetInitialWorldSettings()
     mail_timer_expires = ((DAY * IN_MILLISECONDS) / (m_timers[WUPDATE_AUCTIONS].GetInterval()));
     sLog->outDetail("Mail timer set to: " UI64FMTD ", mail return is called every " UI64FMTD " minutes", uint64(mail_timer), uint64(mail_timer_expires));
 
-    ///- Initilize static helper structures
+    ///- Initialize static helper structures
     AIRegistry::Initialize();
     Player::InitVisibleBits();
 
@@ -1772,7 +1765,8 @@ void World::SetInitialWorldSettings()
 
     ///- Initialize Battlefield
     sLog->outString("Starting Battlefield System");
-    sBattlefieldMgr.InitBattlefield();
+    sBattlefieldMgr->InitBattlefield();
+    sLog->outString();
 
     sLog->outString("Loading Transports...");
     sMapMgr->LoadTransports();
@@ -1791,9 +1785,6 @@ void World::SetInitialWorldSettings()
 
     sLog->outString("Calculate random battleground reset time..." );
     InitRandomBGResetTime();
-
-    //sLog->outString("Calculate guild Advancement XP daily reset time..." );
-    //InitGuildAdvancementDailyResetTime();
 
     LoadCharacterNameData();
 
@@ -1956,9 +1947,6 @@ void World::Update(uint32 diff)
     if (m_gameTime > m_NextWeeklyQuestReset)
         ResetWeeklyQuests();
 
-    // if (m_gameTime > m_NextDailyXPReset)
-        // ResetGuildAdvancementDailyXP();
-
     if (m_gameTime > m_NextRandomBGReset)
         ResetRandomBG();
 
@@ -2046,7 +2034,7 @@ void World::Update(uint32 diff)
     sOutdoorPvPMgr->Update(diff);
     RecordTimeDiff("UpdateOutdoorPvPMgr");
 
-    sBattlefieldMgr.Update(diff);
+    sBattlefieldMgr->Update(diff);
     RecordTimeDiff("BattlefieldMgr");
 
     ///- Delete all characters which have been deleted X days before
@@ -2141,7 +2129,7 @@ void World::SendGlobalGMMessage(WorldPacket* packet, WorldSession* self, uint32 
     }
 }
 
-namespace Skyfire
+namespace SkyFire
 {
     class WorldWorldTextBuilder
     {
@@ -2196,7 +2184,7 @@ namespace Skyfire
             int32 i_textId;
             va_list* i_args;
     };
-}                                                           // namespace Skyfire
+}                                                           // namespace SkyFire
 
 /// Send a System Message to all players (except self if mentioned)
 void World::SendWorldText(int32 string_id, ...)
@@ -2204,8 +2192,8 @@ void World::SendWorldText(int32 string_id, ...)
     va_list ap;
     va_start(ap, string_id);
 
-    Skyfire::WorldWorldTextBuilder wt_builder(string_id, &ap);
-    Skyfire::LocalizedPacketListDo<Skyfire::WorldWorldTextBuilder> wt_do(wt_builder);
+    SkyFire::WorldWorldTextBuilder wt_builder(string_id, &ap);
+    SkyFire::LocalizedPacketListDo<SkyFire::WorldWorldTextBuilder> wt_do(wt_builder);
     for (SessionMap::const_iterator itr = m_sessions.begin(); itr != m_sessions.end(); ++itr)
     {
         if (!itr->second || !itr->second->GetPlayer() || !itr->second->GetPlayer()->IsInWorld())
@@ -2223,8 +2211,8 @@ void World::SendGMText(int32 string_id, ...)
     va_list ap;
     va_start(ap, string_id);
 
-    Skyfire::WorldWorldTextBuilder wt_builder(string_id, &ap);
-    Skyfire::LocalizedPacketListDo<Skyfire::WorldWorldTextBuilder> wt_do(wt_builder);
+    SkyFire::WorldWorldTextBuilder wt_builder(string_id, &ap);
+    SkyFire::LocalizedPacketListDo<SkyFire::WorldWorldTextBuilder> wt_do(wt_builder);
     for (SessionMap::iterator itr = m_sessions.begin(); itr != m_sessions.end(); ++itr)
     {
         if (!itr->second || !itr->second->GetPlayer() || !itr->second->GetPlayer()->IsInWorld())
@@ -2785,69 +2773,6 @@ void World::ResetDailyQuests()
     // change available dailies
     sPoolMgr->ChangeDailyQuests();
 }
-
-/*void World::InitGuildAdvancementDailyResetTime()
-{
-    time_t Hourlyxptime = uint64(sWorld->getWorldState(WS_GUILD_AD_HOURLY_RESET_TIME));
-    if (!Hourlyxptime)
-        m_NextHourlyXPReset = time_t(time(NULL));         // game time not yet init
-
-    // generate time by config
-    time_t curTime = time(NULL);
-    tm localTm = *localtime(&curTime);
-    localTm.tm_hour = getIntConfig(CONFIG_GUILD_DAILY_XP_RESET_HOUR);
-    localTm.tm_min = 0;
-    localTm.tm_sec = 0;
-
-    // current day reset time
-    time_t nextHourlyResetTime = mktime(&localTm);
-
-    // next reset time before current moment
-    if (curTime >= nextHourlyResetTime)
-        nextHourlyResetTime += HOUR;
-
-    // normalize reset time
-    m_NextHourlyXPReset = Hourlyxptime < curTime ? nextHourlyResetTime - HOUR : nextHourlyResetTime;
-
-    if (!Hourlyxptime)
-        sWorld->setWorldState(WS_GUILD_AD_HOURLY_RESET_TIME, uint64(m_NextHourlyXPReset));
-}
-
-void World::ResetGuildAdvancementDailyXP()
-{
-    // sLog->outDetail("Guild Advancement Daily XP status was reset for all characters.");
-    QueryResult result = CharacterDatabase.Query("SELECT level, xp, guildid FROM guild"); // todo: fix the spam, use "SQLDriverQueryLogging=1" in configs to see it in console.
-
-    if (!result)
-        return;
-
-    uint32 count = 0;
-
-    do
-    {
-        Field *fields = result->Fetch();
-        uint8 level = fields[0].GetUInt32();
-        uint64 m_xp = fields[1].GetUInt64();
-        uint64 guildid = fields[2].GetUInt64();
-
-        uint64 baseXP = sObjectMgr->GetXPForGuildLevel(level);
-        uint64 diff = (uint64)(baseXP * 15 / 100);
-        uint64 m_xp_cap = 0;
-
-        if (diff < baseXP)
-            m_xp_cap = diff + m_xp;
-        else
-            m_xp_cap = baseXP;
-
-        CharacterDatabase.PExecute("UPDATE guild SET m_xp_cap = %u, m_today_xp = '0' WHERE guildid = %u", m_xp_cap, guildid);
-
-        ++count;
-    }
-    while (result->NextRow());
-
-    m_NextHourlyXPReset = time_t(m_NextHourlyXPReset + HOUR);
-    sWorld->setWorldState(WS_GUILD_AD_HOURLY_RESET_TIME, uint64(m_NextHourlyXPReset));
-}*/
 
 void World::LoadDBAllowedSecurityLevel()
 {

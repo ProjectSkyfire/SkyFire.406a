@@ -29,7 +29,7 @@
 #include "CellImpl.h"
 #include "SpellInfo.h"
 
-using namespace Skyfire;
+using namespace SkyFire;
 
 void VisibleNotifier::SendToSelf()
 {
@@ -212,7 +212,7 @@ void DelayedUnitRelocation::Visit(PlayerMapType &m)
         if (player != viewPoint && !viewPoint->IsPositionValid())
             continue;
 
-        CellCoord pair2(Skyfire::ComputeCellCoord(viewPoint->GetPositionX(), viewPoint->GetPositionY()));
+        CellCoord pair2(SkyFire::ComputeCellCoord(viewPoint->GetPositionX(), viewPoint->GetPositionY()));
         Cell cell2(pair2);
         //cell.SetNoCreate(); need load cells around viewPoint or player, that's why its commented
 

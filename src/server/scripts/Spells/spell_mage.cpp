@@ -363,14 +363,14 @@ public:
             float x, y, z;
             me->GetPosition(x, y, z);
             {
-                CellCoord pair(Skyfire::ComputeCellCoord(x, y));
+                CellCoord pair(SkyFire::ComputeCellCoord(x, y));
                 Cell cell(pair);
                 cell.SetNoCreate();
 
-                Skyfire::AllFriendlyCreaturesInGrid check(me);
-                Skyfire::CreatureListSearcher<Skyfire::AllFriendlyCreaturesInGrid> searcher(me, templist, check);
+                SkyFire::AllFriendlyCreaturesInGrid check(me);
+                SkyFire::CreatureListSearcher<SkyFire::AllFriendlyCreaturesInGrid> searcher(me, templist, check);
 
-                TypeContainerVisitor<Skyfire::CreatureListSearcher<Skyfire::AllFriendlyCreaturesInGrid>, GridTypeMapContainer> cSearcher(searcher);
+                TypeContainerVisitor<SkyFire::CreatureListSearcher<SkyFire::AllFriendlyCreaturesInGrid>, GridTypeMapContainer> cSearcher(searcher);
 
                 cell.Visit(pair, cSearcher, *(me->GetMap()), *me, me->GetGridActivationRange());
 
@@ -407,8 +407,8 @@ public:
 
             // Find all the enemies
             std::list<Unit*> targets;
-            Skyfire::AnyUnfriendlyUnitInObjectRangeCheck u_check(me, me, 5.0f);
-            Skyfire::UnitListSearcher<Skyfire::AnyUnfriendlyUnitInObjectRangeCheck> searcher(me, targets, u_check);
+            SkyFire::AnyUnfriendlyUnitInObjectRangeCheck u_check(me, me, 5.0f);
+            SkyFire::UnitListSearcher<SkyFire::AnyUnfriendlyUnitInObjectRangeCheck> searcher(me, targets, u_check);
             me->VisitNearbyObject(5.0f, searcher);
             for (std::list<Unit*>::const_iterator iter = targets.begin(); iter != targets.end(); ++iter)
                 CheckIfMoveInRing(*iter);

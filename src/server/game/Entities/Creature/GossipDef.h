@@ -282,6 +282,6 @@ class PlayerMenu
     private:
         GossipMenu _gossipMenu;
         QuestMenu  _questMenu;
-        WorldSession* _session;
+        WorldSession* m_session;
 };
 #endif

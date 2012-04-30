@@ -473,7 +473,7 @@ inline void KillRewarder::_InitGroupData()
                         _maxLevel = lvl;
                     // 2.4. _maxNotGrayMember - maximum level of alive group member within reward distance,
                     //      for whom victim is not gray;
-                    uint32 grayLevel = Skyfire::XP::GetGrayLevel(lvl);
+                    uint32 grayLevel = SkyFire::XP::GetGrayLevel(lvl);
                     if (_victim->getLevel() > grayLevel && (!_maxNotGrayMember || _maxNotGrayMember->getLevel() < lvl))
                         _maxNotGrayMember = member;
                 }
@@ -493,7 +493,7 @@ inline void KillRewarder::_InitXP(Player* player)
     // * otherwise, not in PvP;
     // * not if killer is on vehicle.
     if (_isBattleGround || (!_isPvP && !_killer->GetVehicle()))
-        _xp = Skyfire::XP::Gain(player, _victim);
+        _xp = SkyFire::XP::Gain(player, _victim);
 }
 
 inline void KillRewarder::_RewardHonor(Player* player)
@@ -606,7 +606,7 @@ void KillRewarder::_RewardGroup()
             {
                 // 3.1.2. Alter group rate if group is in raid (not for battlegrounds).
                 const bool isRaid = !_isPvP && sMapStore.LookupEntry(_killer->GetMapId())->IsRaid() && _group->isRaidGroup();
-                _groupRate = Skyfire::XP::xp_in_group_rate(_count, isRaid);
+                _groupRate = SkyFire::XP::xp_in_group_rate(_count, isRaid);
             }
 
             // 3.1.3. Reward each group member (even dead or corpse) within reward distance.
@@ -667,7 +667,7 @@ Player::Player(WorldSession* session): Unit(true), _achievementMgr(this), _reput
 
     _valuesCount = PLAYER_END;
 
-    _session = session;
+    m_session = session;
 
     _divider = 0;
 
@@ -948,7 +948,8 @@ bool Player::Create(uint32 guidlow, CharacterCreateInfo* createInfo)
     PlayerInfo const* info = sObjectMgr->GetPlayerInfo(createInfo->Race, createInfo->Class);
     if (!info)
     {
-        sLog->outError("Player (Name %s) has incorrect race/class pair. Can't be loaded.", m_name.c_str());
+        sLog->outError("Player::Create: Possible hacking-attempt: Account '%s' tried creating a character named '%s' with an invalid race/class pair (%u/%u) - refusing to do so.",
+            GetSession()->GetAccountId(), m_name.c_str(), createInfo->Race, createInfo->Class);
         return false;
     }
 
@@ -960,7 +961,8 @@ bool Player::Create(uint32 guidlow, CharacterCreateInfo* createInfo)
     ChrClassesEntry const* cEntry = sChrClassesStore.LookupEntry(createInfo->Class);
     if (!cEntry)
     {
-        sLog->outError("Class %u not found in DBC (Wrong DBC files?)", createInfo->Class);
+        sLog->outError("Player::Create: Possible hacking-attempt: Account '%s' tried creating a character named '%s' with an invalid character class (%u) - refusing to do so (wrong DBC-files?)",
+            GetSession()->GetAccountId(), m_name.c_str(), createInfo->Class);
         return false;
     }
 
@@ -975,7 +977,8 @@ bool Player::Create(uint32 guidlow, CharacterCreateInfo* createInfo)
 
     if (!IsValidGender(createInfo->Gender))
     {
-        sLog->outError("Player has invalid gender (%hu), can't be loaded.", createInfo->Gender);
+        sLog->outError("Player::Create: Possible hacking-attempt: Account '%s' tried creating a character named '%s' with an invalid gender (%hu) - refusing to do so",
+            GetSession()->GetAccountId(), m_name.c_str(), createInfo->Gender);
         return false;
     }
 
@@ -2248,7 +2251,7 @@ bool Player::TeleportTo(uint32 mapid, float x, float y, float z, float orientati
                     LeaveBattleground(false);                   // don't teleport to entry point
             }
 
-            // remove arena spell coldowns/buffs now to also remove pet's cooldowns before it's temporarily unsummoned
+            // remove arena spell cooldowns/buffs now to also remove pet's cooldowns before it's temporarily unsummoned
             if (mEntry->IsBattleArena())
             {
                 RemoveArenaSpellCooldowns(true);
@@ -2425,7 +2428,7 @@ void Player::RemoveFromWorld()
         StopCastingBindSight();
         UnsummonPetTemporaryIfAny();
         sOutdoorPvPMgr->HandlePlayerLeaveZone(this, _zoneUpdateId);
-        sBattlefieldMgr.HandlePlayerLeaveZone(this, _zoneUpdateId);
+        sBattlefieldMgr->HandlePlayerLeaveZone(this, _zoneUpdateId);
     }
 
     ///- Do not add/remove the player from the object storage
@@ -2529,13 +2532,13 @@ void Player::Regenerate(Powers power)
             if (getLevel() < 15)
                 ManaIncreaseRate = sWorld->getRate(RATE_POWER_MANA) * (2.066f - (getLevel() * 0.066f));
 
-            if (recentCast) // Skyfire Updates Mana in intervals of 2s, which is correct
+            if (recentCast) // SkyFire Updates Mana in intervals of 2s, which is correct
                 addvalue += GetFloatValue(UNIT_FIELD_POWER_REGEN_INTERRUPTED_FLAT_MODIFIER) *  ManaIncreaseRate * 0.001f * _regenTimer * haste;
             else
                 addvalue += GetFloatValue(UNIT_FIELD_POWER_REGEN_FLAT_MODIFIER) * ManaIncreaseRate * 0.001f * _regenTimer * haste;
             break;
         }
-        case POWER_RAGE:                                    // Regenerate rage
+        case POWER_RAGE:                                                  // Regenerate rage
         {
             if (!isInCombat() && !HasAuraType(SPELL_AURA_INTERRUPT_REGEN))
             {
@@ -2544,13 +2547,13 @@ void Player::Regenerate(Powers power)
             }
             break;
         }
-        case POWER_HOLY_POWER:                              // Regenerate holy power
+        case POWER_HOLY_POWER:                                           // Regenerate holy power
         {
             if (!isInCombat())
-                addvalue += -0.2f;               // remove 1 each 10 sec
+                addvalue += -0.2f;                                       // remove 1 each 10 sec
             break;
         }
-        case POWER_ENERGY:                                  // Regenerate energy (rogue)
+        case POWER_ENERGY:                                               // Regenerate energy (rogue)
             addvalue += 0.01f * _regenTimer * sWorld->getRate(RATE_POWER_ENERGY) * haste;
             break;
         case POWER_FOCUS:
@@ -2561,7 +2564,7 @@ void Player::Regenerate(Powers power)
             if (!isInCombat() && !HasAuraType(SPELL_AURA_INTERRUPT_REGEN))
             {
                 float RunicPowerDecreaseRate = sWorld->getRate(RATE_POWER_RUNICPOWER_LOSS);
-                addvalue += -30 * RunicPowerDecreaseRate;         // 3 RunicPower by tick
+                addvalue += -30 * RunicPowerDecreaseRate;                // 3 RunicPower by tick
             }
             break;
         }
@@ -2654,7 +2657,7 @@ void Player::RegenerateHealth()
     // normal regen case (maybe partly in combat case)
     else if (!isInCombat() || HasAuraType(SPELL_AURA_MOD_REGEN_DURING_COMBAT))
     {
-        addvalue = 0.015f*((float)GetMaxHealth())*HealthIncreaseRate; //2 secs: 0.75*2 :-) source: wowpedia.
+        addvalue = 0.015f*((float)GetMaxHealth())*HealthIncreaseRate;  // 2 secs: 0.75*2 :-) source: wowpedia.
         if (!isInCombat())
         {
             AuraEffectList const& mModHealthRegenPct = GetAuraEffectsByType(SPELL_AURA_MOD_HEALTH_REGEN_PERCENT);
@@ -4135,7 +4138,7 @@ void Player::removeSpell(uint32 spell_id, bool disabled, bool learn_low_rank)
             // most likely will never be used, haven't heard of cases where players unlearn a mount
             if (Has310Flyer(false) && _spell_idx->second->skillId == SKILL_MOUNTS)
             {
-                SpellInfo const *spellInfo = sSpellMgr->GetSpellInfo(spell_id);
+                if (spellInfo)
                 for (uint8 i = 0; i < MAX_SPELL_EFFECTS; ++i)
                     if (spellInfo->Effects[i].ApplyAuraName == SPELL_AURA_MOD_INCREASE_MOUNTED_FLIGHT_SPEED &&
                         spellInfo->Effects[i].CalcValue() == 310)
@@ -5572,8 +5575,8 @@ void Player::RepopAtGraveyard()
         ClosestGrave = bg->GetClosestGraveYard(this);
     else
     {
-        if (sBattlefieldMgr.GetBattlefieldToZoneId(GetZoneId()))
-            ClosestGrave = sBattlefieldMgr.GetBattlefieldToZoneId(GetZoneId())->GetClosestGraveYard(this);
+        if (sBattlefieldMgr->GetBattlefieldToZoneId(GetZoneId()))
+            ClosestGrave = sBattlefieldMgr->GetBattlefieldToZoneId(GetZoneId())->GetClosestGraveYard(this);
         else
             ClosestGrave = sObjectMgr->GetClosestGraveYard(GetPositionX(), GetPositionY(), GetPositionZ(), GetMapId(), GetTeam());
     }
@@ -6311,7 +6314,7 @@ void Player::UpdateWeaponSkill(WeaponAttackType attType)
 void Player::UpdateCombatSkills(Unit* victim, WeaponAttackType attType, bool defence)
 {
     uint8 plevel = getLevel();                              // if defense than victim == attacker
-    uint8 greylevel = Skyfire::XP::GetGrayLevel(plevel);
+    uint8 greylevel = SkyFire::XP::GetGrayLevel(plevel);
     uint8 moblevel = victim->getLevelForTarget(this);
     if (moblevel < greylevel)
         return;
@@ -6660,8 +6663,8 @@ void Player::SendActionButtons(uint32 state) const
     data << uint8(state);
     /*
         state can be 0, 1, 2
-        0 - Looks to be sent when initial action buttons get sent, however on Skyfire we use 1 since 0 had some difficulties
-        1 - Used in any SMSG_ACTION_BUTTONS packet with button data on Skyfire. Only used after spec swaps on retail.
+        0 - Looks to be sent when initial action buttons get sent, however on SkyFire we use 1 since 0 had some difficulties
+        1 - Used in any SMSG_ACTION_BUTTONS packet with button data on SkyFire. Only used after spec swaps on retail.
         2 - Clears the action bars client sided. This is sent during spec swap before unlearning and before sending the new buttons
     */
     if (state != 2)
@@ -6803,7 +6806,7 @@ void Player::SendMessageToSetInRange(WorldPacket *data, float dist, bool self)
     if (self)
         GetSession()->SendPacket(data);
 
-    Skyfire::MessageDistDeliverer notifier(this, data, dist);
+    SkyFire::MessageDistDeliverer notifier(this, data, dist);
     VisitNearbyWorldObject(dist, notifier);
 }
 
@@ -6812,7 +6815,7 @@ void Player::SendMessageToSetInRange(WorldPacket* data, float dist, bool self, b
     if (self)
         GetSession()->SendPacket(data);
 
-    Skyfire::MessageDistDeliverer notifier(this, data, dist, own_team_only);
+    SkyFire::MessageDistDeliverer notifier(this, data, dist, own_team_only);
     VisitNearbyWorldObject(dist, notifier);
 }
 
@@ -6823,13 +6826,13 @@ void Player::SendMessageToSet(WorldPacket* data, Player const* skipped_rcvr)
 
     // we use World::GetMaxVisibleDistance() because i cannot see why not use a distance
     // update: replaced by GetMap()->GetVisibilityDistance()
-    Skyfire::MessageDistDeliverer notifier(this, data, GetVisibilityRange(), false, skipped_rcvr);
+    SkyFire::MessageDistDeliverer notifier(this, data, GetVisibilityRange(), false, skipped_rcvr);
     VisitNearbyWorldObject(GetVisibilityRange(), notifier);
 }
 
 void Player::SendDirectMessage(WorldPacket* data)
 {
-    _session->SendPacket(data);
+    m_session->SendPacket(data);
 }
 
 void Player::SendCinematicStart(uint32 CinematicSequenceId)
@@ -7006,7 +7009,7 @@ int32 Player::CalculateReputationGain(uint32 creatureOrQuestLevel, int32 rep, in
 
     float rate = for_quest ? sWorld->getRate(RATE_REPUTATION_LOWLEVEL_QUEST) : sWorld->getRate(RATE_REPUTATION_LOWLEVEL_KILL);
 
-    if (rate != 1.0f && creatureOrQuestLevel <= Skyfire::XP::GetGrayLevel(getLevel()))
+    if (rate != 1.0f && creatureOrQuestLevel <= SkyFire::XP::GetGrayLevel(getLevel()))
         percent *= rate;
 
     float repMod = noQuestBonus ? 0.0f : (float)GetTotalAuraModifier(SPELL_AURA_MOD_REPUTATION_GAIN);
@@ -7257,7 +7260,7 @@ bool Player::RewardHonor(Unit *uVictim, uint32 groupsize, int32 honor, bool pvpt
                 return false;
 
             uint8 k_level = getLevel();
-            uint8 k_grey = Skyfire::XP::GetGrayLevel(k_level);
+            uint8 k_grey = SkyFire::XP::GetGrayLevel(k_level);
             uint8 v_level = victim->getLevel();
 
             if (v_level <= k_grey)
@@ -7284,7 +7287,7 @@ bool Player::RewardHonor(Unit *uVictim, uint32 groupsize, int32 honor, bool pvpt
             else
                 victim_guid = 0;                        // Don't show HK: <rank> message, only log.
 
-            honor_f = ceil(Skyfire::Honor::hk_honor_at_level_f(k_level) * (v_level - k_grey) / (k_level - k_grey));
+            honor_f = ceil(SkyFire::Honor::hk_honor_at_level_f(k_level) * (v_level - k_grey) / (k_level - k_grey));
 
             // count the number of playerkills in one day
             ApplyModUInt32Value(PLAYER_FIELD_KILLS, 1, true);
@@ -7664,8 +7667,8 @@ void Player::UpdateZone(uint32 newZone, uint32 newArea)
 
         sOutdoorPvPMgr->HandlePlayerLeaveZone(this, _zoneUpdateId);
         sOutdoorPvPMgr->HandlePlayerEnterZone(this, newZone);
-        sBattlefieldMgr.HandlePlayerLeaveZone(this, _zoneUpdateId);
-        sBattlefieldMgr.HandlePlayerEnterZone(this, newZone);
+        sBattlefieldMgr->HandlePlayerLeaveZone(this, _zoneUpdateId);
+        sBattlefieldMgr->HandlePlayerEnterZone(this, newZone);
         SendInitWorldStates(newZone, newArea);              // only if really enters to new zone, not just area change, works strange...
 
         // zone changed, check mount
@@ -8413,15 +8416,17 @@ void Player::_ApplyItemBonuses(ItemTemplate const *proto, uint8 slot, bool apply
             if (ssd->StatMod[i] < 0)
                 continue;
             statType = ssd->StatMod[i];
-            val = (ssv->GetStatMultiplier(proto->InventoryType) * ssd->Modifier[i]) / 10000;
+            val = (ssv->getssdMultiplier(proto->ScalingStatValue) * ssd->Modifier[i]) / 10000;
         }
         else
         {
+            if (proto->ItemStat[i].ItemStatValue == 0)
+                continue;
             statType = proto->ItemStat[i].ItemStatType;
             val = proto->ItemStat[i].ItemStatValue;
         }
 
-        if (val <= 0)
+        if (val == 0)
             continue;
 
         switch (statType)
@@ -8602,14 +8607,15 @@ void Player::_ApplyItemBonuses(ItemTemplate const *proto, uint8 slot, bool apply
     }
 
     // Apply Spell Power from ScalingStatValue if set
-    if (ssv && proto->Flags2 & ITEM_FLAGS_EXTRA_CASTER_WEAPON)
-        if (int32 spellbonus = int32(ssv->Spellpower))
+    if (ssv)
+        if (int32 spellbonus = ssv->getSpellBonus(proto->ScalingStatValue))
             ApplySpellPowerBonus(spellbonus, apply);
 
     // If set ScalingStatValue armor get it or use item armor
-    uint32 armor = proto->Armor;
-    if (ssv && proto->Class == ITEM_CLASS_ARMOR)
-        armor = ssv->GetArmor(proto->InventoryType, proto->SubClass - 1);
+    uint32 armor = proto->GetArmor();
+    if (ssv)
+        if (uint32 ssvarmor = ssv->getArmorMod(proto->ScalingStatValue))
+            armor = ssvarmor;
 
     if (armor)
     {
@@ -8667,20 +8673,19 @@ void Player::_ApplyWeaponDamage(uint8 slot, ItemTemplate const *proto, ScalingSt
         attType = OFF_ATTACK;
     }
 
-    float minDamage = proto->DamageMin;
-    float maxDamage = proto->DamageMax;
+    float minDamage = proto->GetMinDamage();
+    float maxDamage = proto->GetMaxDamage();
 
     // If set dpsMod in ScalingStatValue use it for min (70% from average), max (130% from average) damage
     int32 extraDPS = 0;
     if (ssv)
     {
-        float damageMultiplier = 0.0f;
-        extraDPS = ssv->GetDPSAndDamageMultiplier(proto->SubClass, proto->Flags2 & ITEM_FLAGS_EXTRA_CASTER_WEAPON, &damageMultiplier);
+        extraDPS = ssv->getDPSMod(proto->ScalingStatValue);
         if (extraDPS)
         {
             float average = extraDPS * proto->Delay / 1000.0f;
-            minDamage = (1.0f - damageMultiplier) * average;
-            maxDamage = (1.0f + damageMultiplier) * average;
+            minDamage = 0.7f * average;
+            maxDamage = 1.3f * average;
         }
     }
 
@@ -8705,6 +8710,13 @@ void Player::_ApplyWeaponDamage(uint8 slot, ItemTemplate const *proto, ScalingSt
         else if (slot == EQUIPMENT_SLOT_OFFHAND)
             SetAttackTime(OFF_ATTACK, apply ? proto->Delay: BASE_ATTACK_TIME);
     }
+
+    if (CanModifyStats() && (damage || proto->Delay))
+        UpdateDamagePhysical(attType);
+
+    // No need to modify any physical damage for ferals as it is calculated from stats only
+    if (IsInShapeshiftForm())
+        return;
 
     if (CanModifyStats() && (damage || proto->Delay))
         UpdateDamagePhysical(attType);
@@ -8945,7 +8957,7 @@ void Player::CastItemCombatSpell(Unit* target, WeaponAttackType attType, uint32 
 
             float chance = (float)spellInfo->ProcChance;
 
-            if (proto->SpellPPMRate)
+            if (spellData.SpellPPMRate)
             {
                 if (spellData.SpellId == 52781) // Persuasive Strike
                 {
@@ -8960,7 +8972,7 @@ void Player::CastItemCombatSpell(Unit* target, WeaponAttackType attType, uint32 
                     }
                 }
                 uint32 WeaponSpeed = GetAttackTime(attType);
-                chance = GetPPMProcChance(WeaponSpeed, proto->SpellPPMRate, spellInfo);
+                chance = GetPPMProcChance(WeaponSpeed, spellData.SpellPPMRate, spellInfo);
             }
             else if (chance > 100.0f)
             {
@@ -9231,7 +9243,7 @@ void Player::SendLootRelease(uint64 guid)
 void Player::SendLoot(uint64 guid, LootType loot_type)
 {
     if (uint64 lguid = GetLootGUID())
-        _session->DoLootRelease(lguid);
+        m_session->DoLootRelease(lguid);
 
     Loot *loot = 0;
     PermissionTypes permission = ALL_PERMISSION;
@@ -10992,7 +11004,8 @@ bool Player::HasItemOrGemWithLimitCategoryEquipped(uint32 limitCategory, uint32 
 InventoryResult Player::CanTakeMoreSimilarItems(uint32 entry, uint32 count, Item* pItem, uint32* no_space_count) const
 {
     ItemTemplate const *proto = sObjectMgr->GetItemTemplate(entry);
-    if (!proto)
+    ItemSparseEntry const* sparse = sItemSparseStore.LookupEntry(entry);
+    if (!proto || !sparse)
     {
         if (no_space_count)
             *no_space_count = count;
@@ -13793,7 +13806,7 @@ void Player::SwapItem(uint16 src, uint16 dst)
                 {
                     if (bagItem->_lootGenerated)
                     {
-                        _session->DoLootRelease(GetLootGUID());
+                        m_session->DoLootRelease(GetLootGUID());
                         released = true;                    // so we don't need to look at dstBag
                         break;
                     }
@@ -13810,7 +13823,7 @@ void Player::SwapItem(uint16 src, uint16 dst)
                 {
                     if (bagItem->_lootGenerated)
                     {
-                        _session->DoLootRelease(GetLootGUID());
+                        m_session->DoLootRelease(GetLootGUID());
                         released = true;                    // not realy needed here
                         break;
                     }
@@ -16301,7 +16314,7 @@ void Player::RemoveRewardedQuest(uint32 quest_id)
     }
 }
 
-// not used in Skyfire, but used in scripting code
+// not used in SkyFire, but used in scripting code
 uint16 Player::GetReqKillOrCastCurrentCount(uint32 quest_id, int32 entry)
 {
     Quest const* qInfo = sObjectMgr->GetQuestTemplate(quest_id);
@@ -16845,9 +16858,10 @@ bool Player::HasQuestForItem(uint32 itemid) const
                 if (qinfo->ReqSourceId[j] == itemid)
                 {
                     ItemTemplate const *proto = sObjectMgr->GetItemTemplate(itemid);
+                    ItemSparseEntry const* sparse = sItemSparseStore.LookupEntry(itemid);
 
                     // 'unique' item
-                    if (proto->MaxCount && int32(GetItemCount(itemid, true)) < proto->MaxCount)
+                    if (sparse->MaxCount && int32(GetItemCount(itemid, true)) < sparse->MaxCount)
                         return true;
 
                     // allows custom amount drop when not 0
@@ -17428,7 +17442,7 @@ bool Player::LoadFromDB(uint32 guid, SQLQueryHolder *holder)
         _movementInfo.t_guid = MAKE_NEW_GUID(transGUID, 0, HIGHGUID_MO_TRANSPORT);
         _movementInfo.t_pos.Relocate(fields[26].GetFloat(), fields[27].GetFloat(), fields[28].GetFloat(), fields[29].GetFloat());
 
-        if (!Skyfire::IsValidMapCoord(
+        if (!SkyFire::IsValidMapCoord(
             GetPositionX()+_movementInfo.t_pos.m_positionX, GetPositionY()+_movementInfo.t_pos.m_positionY,
             GetPositionZ()+_movementInfo.t_pos.m_positionZ, GetOrientation()+_movementInfo.t_pos._orientation) ||
             // transport size limited
@@ -18798,6 +18812,7 @@ void Player::UnbindInstance(BoundInstancesMap::iterator &itr, Difficulty difficu
         }
 
         itr->second.save->RemovePlayer(this);               // save can become invalid
+
         _boundInstances[difficulty].erase(itr++);
     }
 }
@@ -19415,7 +19430,7 @@ void Player::SaveToDB(bool create /*=false*/)
 
     // check if stats should only be saved on logout
     // save stats can be out of transaction
-    if (_session->isLogingOut() || !sWorld->getBoolConfig(CONFIG_STATS_SAVE_ONLY_ON_LOGOUT))
+    if (m_session->isLogingOut() || !sWorld->getBoolConfig(CONFIG_STATS_SAVE_ONLY_ON_LOGOUT))
         _SaveStats(trans);
 
     CharacterDatabase.CommitTransaction(trans);
@@ -21136,7 +21151,6 @@ void Player::InitDataForForm(bool reapplyMods)
             break;
         }
         case FORM_BEAR:
-        case FORM_DIREBEAR:
         {
             if (getPowerType() != POWER_RAGE)
                 setPowerType(POWER_RAGE);
@@ -21360,7 +21374,7 @@ bool Player::BuyItemFromVendorSlot(uint64 vendorguid, uint32 vendorslot, uint32 
             count = (uint8)maxCount;
         }
         price = proto->BuyPrice * count; //it should not exceed MAX_MONEY_AMOUNT
-        
+
         // reputation discount
         price = uint32(floor(price * GetReputationPriceDiscount(creature)));
 
@@ -22142,7 +22156,7 @@ void Player::UpdateObjectVisibility(bool forced)
 void Player::UpdateVisibilityForPlayer()
 {
     // updates visibility of all objects around point of view for current player
-    Skyfire::VisibleNotifier notifier(*this);
+    SkyFire::VisibleNotifier notifier(*this);
     _seer->VisitNearbyObject(GetSightRange(), notifier);
     notifier.SendToSelf();   // send gathered data
 }
@@ -23181,7 +23195,7 @@ uint32 Player::GetResurrectionSpellId()
 bool Player::isHonorOrXPTarget(Unit* victim)
 {
     uint8 v_level = victim->getLevel();
-    uint8 k_grey  = Skyfire::XP::GetGrayLevel(getLevel());
+    uint8 k_grey  = SkyFire::XP::GetGrayLevel(getLevel());
 
     // Victim level less gray level
     if (v_level <= k_grey)
@@ -25957,3 +25971,4 @@ void Player::SetTalentBranchSpec(uint32 branchSpec, uint8 spec)
     }
     sScriptMgr->OnTalentBranchSpecChanged(this, spec, branchSpec);
 }
+

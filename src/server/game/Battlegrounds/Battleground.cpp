@@ -36,7 +36,7 @@
 #include "SpellAuraEffects.h"
 #include "Util.h"
 
-namespace Skyfire
+namespace SkyFire
 {
     class BattlegroundChatBuilder
     {
@@ -118,7 +118,7 @@ namespace Skyfire
             int32 _arg1;
             int32 _arg2;
     };
-}                                                           // namespace Skyfire
+}                                                           // namespace SkyFire
 
 template<class Do>
 void Battleground::BroadcastWorker(Do& _do)
@@ -906,7 +906,7 @@ uint32 Battleground::GetBonusHonorFromKill(uint32 kills) const
 {
     //variable kills means how many honorable kills you scored (so we need kills * honor_for_one_kill)
     uint32 maxLevel = std::min(GetMaxLevel(), 80U);
-    return Skyfire::Honor::hk_honor_at_level(maxLevel, float(kills));
+    return SkyFire::Honor::hk_honor_at_level(maxLevel, float(kills));
 }
 
 void Battleground::BlockMovement(Player* player)
@@ -1656,8 +1656,8 @@ void Battleground::SendMessageToAll(int32 entry, ChatMsg type, Player const* sou
     if (!entry)
         return;
 
-    Skyfire::BattlegroundChatBuilder bg_builder(type, entry, source);
-    Skyfire::LocalizedPacketDo<Skyfire::BattlegroundChatBuilder> bg_do(bg_builder);
+    SkyFire::BattlegroundChatBuilder bg_builder(type, entry, source);
+    SkyFire::LocalizedPacketDo<SkyFire::BattlegroundChatBuilder> bg_do(bg_builder);
     BroadcastWorker(bg_do);
 }
 
@@ -1669,8 +1669,8 @@ void Battleground::PSendMessageToAll(int32 entry, ChatMsg type, Player const* so
     va_list ap;
     va_start(ap, source);
 
-    Skyfire::BattlegroundChatBuilder bg_builder(type, entry, source, &ap);
-    Skyfire::LocalizedPacketDo<Skyfire::BattlegroundChatBuilder> bg_do(bg_builder);
+    SkyFire::BattlegroundChatBuilder bg_builder(type, entry, source, &ap);
+    SkyFire::LocalizedPacketDo<SkyFire::BattlegroundChatBuilder> bg_do(bg_builder);
     BroadcastWorker(bg_do);
 
     va_end(ap);
@@ -1710,8 +1710,8 @@ void Battleground::SendWarningToAll(int32 entry, ...)
 
 void Battleground::SendMessage2ToAll(int32 entry, ChatMsg type, Player const* source, int32 arg1, int32 arg2)
 {
-    Skyfire::Battleground2ChatBuilder bg_builder(type, entry, source, arg1, arg2);
-    Skyfire::LocalizedPacketDo<Skyfire::Battleground2ChatBuilder> bg_do(bg_builder);
+    SkyFire::Battleground2ChatBuilder bg_builder(type, entry, source, arg1, arg2);
+    SkyFire::LocalizedPacketDo<SkyFire::Battleground2ChatBuilder> bg_do(bg_builder);
     BroadcastWorker(bg_do);
 }
 

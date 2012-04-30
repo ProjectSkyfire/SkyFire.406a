@@ -1521,8 +1521,8 @@ void WorldObject::GetRandomPoint(const Position &pos, float distance, float &ran
     rand_y = pos.m_positionY + new_dist * sin(angle);
     rand_z = pos.m_positionZ;
 
-    Skyfire::NormalizeMapCoord(rand_x);
-    Skyfire::NormalizeMapCoord(rand_y);
+    SkyFire::NormalizeMapCoord(rand_x);
+    SkyFire::NormalizeMapCoord(rand_y);
     UpdateGroundPositionZ(rand_x, rand_y, rand_z);            // update to LOS height if available
 }
 
@@ -1599,7 +1599,7 @@ void WorldObject::UpdateAllowedPositionZ(float x, float y, float &z) const
 
 bool Position::IsPositionValid() const
 {
-    return Skyfire::IsValidMapCoord(m_positionX, m_positionY, m_positionZ, _orientation);
+    return SkyFire::IsValidMapCoord(m_positionX, m_positionY, m_positionZ, _orientation);
 }
 
 float WorldObject::GetGridActivationRange() const
@@ -1849,7 +1849,7 @@ void Object::ForceValuesUpdateAtIndex(uint32 i)
     }
 }
 
-namespace Skyfire
+namespace SkyFire
 {
     class MonsterChatBuilder
     {
@@ -1890,68 +1890,68 @@ namespace Skyfire
             uint32 i_language;
             uint64 i_targetGUID;
     };
-}                                                           // namespace Skyfire
+}                                                           // namespace SkyFire
 
 void WorldObject::MonsterSay(const char* text, uint32 language, uint64 TargetGuid)
 {
-    CellCoord p = Skyfire::ComputeCellCoord(GetPositionX(), GetPositionY());
+    CellCoord p = SkyFire::ComputeCellCoord(GetPositionX(), GetPositionY());
 
     Cell cell(p);
     cell.SetNoCreate();
 
-    Skyfire::MonsterCustomChatBuilder say_build(*this, CHAT_MSG_MONSTER_SAY, text, language, TargetGuid);
-    Skyfire::LocalizedPacketDo<Skyfire::MonsterCustomChatBuilder> say_do(say_build);
-    Skyfire::PlayerDistWorker<Skyfire::LocalizedPacketDo<Skyfire::MonsterCustomChatBuilder> > say_worker(this, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_SAY), say_do);
-    TypeContainerVisitor<Skyfire::PlayerDistWorker<Skyfire::LocalizedPacketDo<Skyfire::MonsterCustomChatBuilder> >, WorldTypeMapContainer > message(say_worker);
+    SkyFire::MonsterCustomChatBuilder say_build(*this, CHAT_MSG_MONSTER_SAY, text, language, TargetGuid);
+    SkyFire::LocalizedPacketDo<SkyFire::MonsterCustomChatBuilder> say_do(say_build);
+    SkyFire::PlayerDistWorker<SkyFire::LocalizedPacketDo<SkyFire::MonsterCustomChatBuilder> > say_worker(this, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_SAY), say_do);
+    TypeContainerVisitor<SkyFire::PlayerDistWorker<SkyFire::LocalizedPacketDo<SkyFire::MonsterCustomChatBuilder> >, WorldTypeMapContainer > message(say_worker);
     cell.Visit(p, message, *GetMap(), *this, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_SAY));
 }
 
 void WorldObject::MonsterSay(int32 textId, uint32 language, uint64 TargetGuid)
 {
-    CellCoord p = Skyfire::ComputeCellCoord(GetPositionX(), GetPositionY());
+    CellCoord p = SkyFire::ComputeCellCoord(GetPositionX(), GetPositionY());
 
     Cell cell(p);
     cell.SetNoCreate();
 
-    Skyfire::MonsterChatBuilder say_build(*this, CHAT_MSG_MONSTER_SAY, textId, language, TargetGuid);
-    Skyfire::LocalizedPacketDo<Skyfire::MonsterChatBuilder> say_do(say_build);
-    Skyfire::PlayerDistWorker<Skyfire::LocalizedPacketDo<Skyfire::MonsterChatBuilder> > say_worker(this, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_SAY), say_do);
-    TypeContainerVisitor<Skyfire::PlayerDistWorker<Skyfire::LocalizedPacketDo<Skyfire::MonsterChatBuilder> >, WorldTypeMapContainer > message(say_worker);
+    SkyFire::MonsterChatBuilder say_build(*this, CHAT_MSG_MONSTER_SAY, textId, language, TargetGuid);
+    SkyFire::LocalizedPacketDo<SkyFire::MonsterChatBuilder> say_do(say_build);
+    SkyFire::PlayerDistWorker<SkyFire::LocalizedPacketDo<SkyFire::MonsterChatBuilder> > say_worker(this, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_SAY), say_do);
+    TypeContainerVisitor<SkyFire::PlayerDistWorker<SkyFire::LocalizedPacketDo<SkyFire::MonsterChatBuilder> >, WorldTypeMapContainer > message(say_worker);
     cell.Visit(p, message, *GetMap(), *this, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_SAY));
 }
 
 void WorldObject::MonsterYell(const char* text, uint32 language, uint64 TargetGuid)
 {
-    CellCoord p = Skyfire::ComputeCellCoord(GetPositionX(), GetPositionY());
+    CellCoord p = SkyFire::ComputeCellCoord(GetPositionX(), GetPositionY());
 
     Cell cell(p);
     cell.SetNoCreate();
 
-    Skyfire::MonsterCustomChatBuilder say_build(*this, CHAT_MSG_MONSTER_YELL, text, language, TargetGuid);
-    Skyfire::LocalizedPacketDo<Skyfire::MonsterCustomChatBuilder> say_do(say_build);
-    Skyfire::PlayerDistWorker<Skyfire::LocalizedPacketDo<Skyfire::MonsterCustomChatBuilder> > say_worker(this, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_YELL), say_do);
-    TypeContainerVisitor<Skyfire::PlayerDistWorker<Skyfire::LocalizedPacketDo<Skyfire::MonsterCustomChatBuilder> >, WorldTypeMapContainer > message(say_worker);
+    SkyFire::MonsterCustomChatBuilder say_build(*this, CHAT_MSG_MONSTER_YELL, text, language, TargetGuid);
+    SkyFire::LocalizedPacketDo<SkyFire::MonsterCustomChatBuilder> say_do(say_build);
+    SkyFire::PlayerDistWorker<SkyFire::LocalizedPacketDo<SkyFire::MonsterCustomChatBuilder> > say_worker(this, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_YELL), say_do);
+    TypeContainerVisitor<SkyFire::PlayerDistWorker<SkyFire::LocalizedPacketDo<SkyFire::MonsterCustomChatBuilder> >, WorldTypeMapContainer > message(say_worker);
     cell.Visit(p, message, *GetMap(), *this, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_YELL));
 }
 
 void WorldObject::MonsterYell(int32 textId, uint32 language, uint64 TargetGuid)
 {
-    CellCoord p = Skyfire::ComputeCellCoord(GetPositionX(), GetPositionY());
+    CellCoord p = SkyFire::ComputeCellCoord(GetPositionX(), GetPositionY());
 
     Cell cell(p);
     cell.SetNoCreate();
 
-    Skyfire::MonsterChatBuilder say_build(*this, CHAT_MSG_MONSTER_YELL, textId, language, TargetGuid);
-    Skyfire::LocalizedPacketDo<Skyfire::MonsterChatBuilder> say_do(say_build);
-    Skyfire::PlayerDistWorker<Skyfire::LocalizedPacketDo<Skyfire::MonsterChatBuilder> > say_worker(this, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_YELL), say_do);
-    TypeContainerVisitor<Skyfire::PlayerDistWorker<Skyfire::LocalizedPacketDo<Skyfire::MonsterChatBuilder> >, WorldTypeMapContainer > message(say_worker);
+    SkyFire::MonsterChatBuilder say_build(*this, CHAT_MSG_MONSTER_YELL, textId, language, TargetGuid);
+    SkyFire::LocalizedPacketDo<SkyFire::MonsterChatBuilder> say_do(say_build);
+    SkyFire::PlayerDistWorker<SkyFire::LocalizedPacketDo<SkyFire::MonsterChatBuilder> > say_worker(this, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_YELL), say_do);
+    TypeContainerVisitor<SkyFire::PlayerDistWorker<SkyFire::LocalizedPacketDo<SkyFire::MonsterChatBuilder> >, WorldTypeMapContainer > message(say_worker);
     cell.Visit(p, message, *GetMap(), *this, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_YELL));
 }
 
 void WorldObject::MonsterYellToZone(int32 textId, uint32 language, uint64 TargetGuid)
 {
-    Skyfire::MonsterChatBuilder say_build(*this, CHAT_MSG_MONSTER_YELL, textId, language, TargetGuid);
-    Skyfire::LocalizedPacketDo<Skyfire::MonsterChatBuilder> say_do(say_build);
+    SkyFire::MonsterChatBuilder say_build(*this, CHAT_MSG_MONSTER_YELL, textId, language, TargetGuid);
+    SkyFire::LocalizedPacketDo<SkyFire::MonsterChatBuilder> say_do(say_build);
 
     uint32 zoneid = GetZoneId();
 
@@ -1970,15 +1970,15 @@ void WorldObject::MonsterTextEmote(const char* text, uint64 TargetGuid, bool IsB
 
 void WorldObject::MonsterTextEmote(int32 textId, uint64 TargetGuid, bool IsBossEmote)
 {
-    CellCoord p = Skyfire::ComputeCellCoord(GetPositionX(), GetPositionY());
+    CellCoord p = SkyFire::ComputeCellCoord(GetPositionX(), GetPositionY());
 
     Cell cell(p);
     cell.SetNoCreate();
 
-    Skyfire::MonsterChatBuilder say_build(*this, IsBossEmote ? CHAT_MSG_RAID_BOSS_EMOTE : CHAT_MSG_MONSTER_EMOTE, textId, LANG_UNIVERSAL, TargetGuid);
-    Skyfire::LocalizedPacketDo<Skyfire::MonsterChatBuilder> say_do(say_build);
-    Skyfire::PlayerDistWorker<Skyfire::LocalizedPacketDo<Skyfire::MonsterChatBuilder> > say_worker(this, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_TEXTEMOTE), say_do);
-    TypeContainerVisitor<Skyfire::PlayerDistWorker<Skyfire::LocalizedPacketDo<Skyfire::MonsterChatBuilder> >, WorldTypeMapContainer > message(say_worker);
+    SkyFire::MonsterChatBuilder say_build(*this, IsBossEmote ? CHAT_MSG_RAID_BOSS_EMOTE : CHAT_MSG_MONSTER_EMOTE, textId, LANG_UNIVERSAL, TargetGuid);
+    SkyFire::LocalizedPacketDo<SkyFire::MonsterChatBuilder> say_do(say_build);
+    SkyFire::PlayerDistWorker<SkyFire::LocalizedPacketDo<SkyFire::MonsterChatBuilder> > say_worker(this, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_TEXTEMOTE), say_do);
+    TypeContainerVisitor<SkyFire::PlayerDistWorker<SkyFire::LocalizedPacketDo<SkyFire::MonsterChatBuilder> >, WorldTypeMapContainer > message(say_worker);
     cell.Visit(p, message, *GetMap(), *this, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_TEXTEMOTE));
 }
 
@@ -2045,13 +2045,13 @@ void WorldObject::SendMessageToSet(WorldPacket* data, bool self)
 
 void WorldObject::SendMessageToSetInRange(WorldPacket* data, float dist, bool /*self*/)
 {
-    Skyfire::MessageDistDeliverer notifier(this, data, dist);
+    SkyFire::MessageDistDeliverer notifier(this, data, dist);
     VisitNearbyWorldObject(dist, notifier);
 }
 
 void WorldObject::SendMessageToSet(WorldPacket* data, Player const* skipped_rcvr)
 {
-    Skyfire::MessageDistDeliverer notifier(this, data, GetVisibilityRange(), false, skipped_rcvr);
+    SkyFire::MessageDistDeliverer notifier(this, data, GetVisibilityRange(), false, skipped_rcvr);
     VisitNearbyWorldObject(GetVisibilityRange(), notifier);
 }
 
@@ -2219,7 +2219,7 @@ void WorldObject::SetZoneScript()
             _zoneScript = (ZoneScript*)((InstanceMap*)map)->GetInstanceScript();
         else if (!map->IsBattlegroundOrArena())
         {
-            if (Battlefield* bf = sBattlefieldMgr.GetBattlefieldToZoneId(GetZoneId()))
+            if (Battlefield* bf = sBattlefieldMgr->GetBattlefieldToZoneId(GetZoneId()))
                 _zoneScript = bf;
             else
                 _zoneScript = sOutdoorPvPMgr->GetZoneScript(GetZoneId());
@@ -2376,8 +2376,8 @@ Creature* WorldObject::SummonTrigger(float x, float y, float z, float ang, uint3
 Creature* WorldObject::FindNearestCreature(uint32 entry, float range, bool alive) const
 {
     Creature* creature = NULL;
-    Skyfire::NearestCreatureEntryWithLiveStateInObjectRangeCheck checker(*this, entry, alive, range);
-    Skyfire::CreatureLastSearcher<Skyfire::NearestCreatureEntryWithLiveStateInObjectRangeCheck> searcher(this, creature, checker);
+    SkyFire::NearestCreatureEntryWithLiveStateInObjectRangeCheck checker(*this, entry, alive, range);
+    SkyFire::CreatureLastSearcher<SkyFire::NearestCreatureEntryWithLiveStateInObjectRangeCheck> searcher(this, creature, checker);
     VisitNearbyObject(range, searcher);
     return creature;
 }
@@ -2385,40 +2385,40 @@ Creature* WorldObject::FindNearestCreature(uint32 entry, float range, bool alive
 GameObject* WorldObject::FindNearestGameObject(uint32 entry, float range) const
 {
     GameObject* go = NULL;
-    Skyfire::NearestGameObjectEntryInObjectRangeCheck checker(*this, entry, range);
-    Skyfire::GameObjectLastSearcher<Skyfire::NearestGameObjectEntryInObjectRangeCheck> searcher(this, go, checker);
+    SkyFire::NearestGameObjectEntryInObjectRangeCheck checker(*this, entry, range);
+    SkyFire::GameObjectLastSearcher<SkyFire::NearestGameObjectEntryInObjectRangeCheck> searcher(this, go, checker);
     VisitNearbyGridObject(range, searcher);
     return go;
 }
 
 void WorldObject::GetGameObjectListWithEntryInGrid(std::list<GameObject*>& gameobjectList, uint32 entry, float maxSearchRange) const
 {
-    CellCoord pair(Skyfire::ComputeCellCoord(this->GetPositionX(), this->GetPositionY()));
+    CellCoord pair(SkyFire::ComputeCellCoord(this->GetPositionX(), this->GetPositionY()));
     Cell cell(pair);
     cell.SetNoCreate();
 
-    Skyfire::AllGameObjectsWithEntryInRange check(this, entry, maxSearchRange);
-    Skyfire::GameObjectListSearcher<Skyfire::AllGameObjectsWithEntryInRange> searcher(this, gameobjectList, check);
-    TypeContainerVisitor<Skyfire::GameObjectListSearcher<Skyfire::AllGameObjectsWithEntryInRange>, GridTypeMapContainer> visitor(searcher);
+    SkyFire::AllGameObjectsWithEntryInRange check(this, entry, maxSearchRange);
+    SkyFire::GameObjectListSearcher<SkyFire::AllGameObjectsWithEntryInRange> searcher(this, gameobjectList, check);
+    TypeContainerVisitor<SkyFire::GameObjectListSearcher<SkyFire::AllGameObjectsWithEntryInRange>, GridTypeMapContainer> visitor(searcher);
 
     cell.Visit(pair, visitor, *(this->GetMap()), *this, maxSearchRange);
 }
 
 void WorldObject::GetCreatureListWithEntryInGrid(std::list<Creature*>& creatureList, uint32 entry, float maxSearchRange) const
 {
-    CellCoord pair(Skyfire::ComputeCellCoord(this->GetPositionX(), this->GetPositionY()));
+    CellCoord pair(SkyFire::ComputeCellCoord(this->GetPositionX(), this->GetPositionY()));
     Cell cell(pair);
     cell.SetNoCreate();
 
-    Skyfire::AllCreaturesOfEntryInRange check(this, entry, maxSearchRange);
-    Skyfire::CreatureListSearcher<Skyfire::AllCreaturesOfEntryInRange> searcher(this, creatureList, check);
-    TypeContainerVisitor<Skyfire::CreatureListSearcher<Skyfire::AllCreaturesOfEntryInRange>, GridTypeMapContainer> visitor(searcher);
+    SkyFire::AllCreaturesOfEntryInRange check(this, entry, maxSearchRange);
+    SkyFire::CreatureListSearcher<SkyFire::AllCreaturesOfEntryInRange> searcher(this, creatureList, check);
+    TypeContainerVisitor<SkyFire::CreatureListSearcher<SkyFire::AllCreaturesOfEntryInRange>, GridTypeMapContainer> visitor(searcher);
 
     cell.Visit(pair, visitor, *(this->GetMap()), *this, maxSearchRange);
 }
 
 /*
-namespace Skyfire
+namespace SkyFire
 {
     class NearUsedPosDo
     {
@@ -2487,7 +2487,7 @@ namespace Skyfire
             float              i_angle;
             ObjectPosSelector& i_selector;
     };
-}                                                           // namespace Skyfire
+}                                                           // namespace SkyFire
 */
 
 //===================================================================================================
@@ -2497,8 +2497,8 @@ void WorldObject::GetNearPoint2D(float &x, float &y, float distance2d, float abs
     x = GetPositionX() + (GetObjectSize() + distance2d) * cos(absAngle);
     y = GetPositionY() + (GetObjectSize() + distance2d) * sin(absAngle);
 
-    Skyfire::NormalizeMapCoord(x);
-    Skyfire::NormalizeMapCoord(y);
+    SkyFire::NormalizeMapCoord(x);
+    SkyFire::NormalizeMapCoord(y);
 }
 
 void WorldObject::GetNearPoint(WorldObject const* /*searcher*/, float &x, float &y, float &z, float searcher_size, float distance2d, float absAngle) const
@@ -2525,15 +2525,15 @@ void WorldObject::GetNearPoint(WorldObject const* /*searcher*/, float &x, float 
 
     // adding used positions around object
     {
-        CellCoord p(Skyfire::ComputeCellCoord(GetPositionX(), GetPositionY()));
+        CellCoord p(SkyFire::ComputeCellCoord(GetPositionX(), GetPositionY()));
         Cell cell(p);
         cell.SetNoCreate();
 
-        Skyfire::NearUsedPosDo u_do(*this, searcher, absAngle, selector);
-        Skyfire::WorldObjectWorker<Skyfire::NearUsedPosDo> worker(this, u_do);
+        SkyFire::NearUsedPosDo u_do(*this, searcher, absAngle, selector);
+        SkyFire::WorldObjectWorker<SkyFire::NearUsedPosDo> worker(this, u_do);
 
-        TypeContainerVisitor<Skyfire::WorldObjectWorker<Skyfire::NearUsedPosDo>, GridTypeMapContainer  > grid_obj_worker(worker);
-        TypeContainerVisitor<Skyfire::WorldObjectWorker<Skyfire::NearUsedPosDo>, WorldTypeMapContainer > world_obj_worker(worker);
+        TypeContainerVisitor<SkyFire::WorldObjectWorker<SkyFire::NearUsedPosDo>, GridTypeMapContainer  > grid_obj_worker(worker);
+        TypeContainerVisitor<SkyFire::WorldObjectWorker<SkyFire::NearUsedPosDo>, WorldTypeMapContainer > world_obj_worker(worker);
 
         CellLock<GridReadGuard> cell_lock(cell, p);
         cell_lock->Visit(cell_lock, grid_obj_worker,  *GetMap(), *this, distance2d);
@@ -2634,14 +2634,14 @@ void WorldObject::MovePosition(Position &pos, float dist, float angle)
     desty = pos.m_positionY + dist * sin(angle);
 
     // Prevent invalid coordinates here, position is unchanged
-    if (!Skyfire::IsValidMapCoord(destx, desty))
+    if (!SkyFire::IsValidMapCoord(destx, desty))
     {
         sLog->outCrash("WorldObject::MovePosition invalid coordinates X: %f and Y: %f were passed!", destx, desty);
         return;
     }
 
-    ground = GetMap()->GetHeight(GetPhaseMask(), destx, desty, MAX_HEIGHT, true);
-    floor = GetMap()->GetHeight(GetPhaseMask(), destx, desty, pos.m_positionZ, true);
+    ground = GetMap()->GetHeight(destx, desty, MAX_HEIGHT, true);
+    floor = GetMap()->GetHeight(destx, desty, pos.m_positionZ, true);
     destz = fabs(ground - pos.m_positionZ) <= fabs(floor - pos.m_positionZ) ? ground : floor;
 
     float step = dist/10.0f;
@@ -2653,8 +2653,8 @@ void WorldObject::MovePosition(Position &pos, float dist, float angle)
         {
             destx -= step * cos(angle);
             desty -= step * sin(angle);
-            ground = GetMap()->GetHeight(GetPhaseMask(), destx, desty, MAX_HEIGHT, true);
-            floor = GetMap()->GetHeight(GetPhaseMask(), destx, desty, pos.m_positionZ, true);
+            ground = GetMap()->GetHeight(destx, desty, MAX_HEIGHT, true);
+            floor = GetMap()->GetHeight(destx, desty, pos.m_positionZ, true);
             destz = fabs(ground - pos.m_positionZ) <= fabs(floor - pos.m_positionZ) ? ground : floor;
         }
         // we have correct destz now
@@ -2665,8 +2665,8 @@ void WorldObject::MovePosition(Position &pos, float dist, float angle)
         }
     }
 
-    Skyfire::NormalizeMapCoord(pos.m_positionX);
-    Skyfire::NormalizeMapCoord(pos.m_positionY);
+    SkyFire::NormalizeMapCoord(pos.m_positionX);
+    SkyFire::NormalizeMapCoord(pos.m_positionY);
     UpdateGroundPositionZ(pos.m_positionX, pos.m_positionY, pos.m_positionZ);
     pos._orientation = _orientation;
 }
@@ -2714,8 +2714,8 @@ void WorldObject::MovePositionToFirstCollision(Position &pos, float dist, float 
         }
     }
 
-    Skyfire::NormalizeMapCoord(pos.m_positionX);
-    Skyfire::NormalizeMapCoord(pos.m_positionY);
+    SkyFire::NormalizeMapCoord(pos.m_positionX);
+    SkyFire::NormalizeMapCoord(pos.m_positionY);
     UpdateGroundPositionZ(pos.m_positionX, pos.m_positionY, pos.m_positionZ);
     pos._orientation = _orientation;
 }
@@ -2755,8 +2755,8 @@ void WorldObject::DestroyForNearbyPlayers()
         return;
 
     std::list<Player*> targets;
-    Skyfire::AnyPlayerInObjectRangeCheck check(this, GetVisibilityRange(), false);
-    Skyfire::PlayerListSearcher<Skyfire::AnyPlayerInObjectRangeCheck> searcher(this, targets, check);
+    SkyFire::AnyPlayerInObjectRangeCheck check(this, GetVisibilityRange(), false);
+    SkyFire::PlayerListSearcher<SkyFire::AnyPlayerInObjectRangeCheck> searcher(this, targets, check);
     VisitNearbyWorldObject(GetVisibilityRange(), searcher);
     for (std::list<Player*>::const_iterator iter = targets.begin(); iter != targets.end(); ++iter)
     {
@@ -2779,7 +2779,7 @@ void WorldObject::DestroyForNearbyPlayers()
 void WorldObject::UpdateObjectVisibility(bool /*forced*/)
 {
     //updates object's visibility for nearby players
-    Skyfire::VisibleChangesNotifier notifier(*this);
+    SkyFire::VisibleChangesNotifier notifier(*this);
     VisitNearbyWorldObject(GetVisibilityRange(), notifier);
 }
 
@@ -2855,7 +2855,7 @@ struct WorldObjectChangeAccumulator
 
 void WorldObject::BuildUpdate(UpdateDataMapType& data_map)
 {
-    CellCoord p = Skyfire::ComputeCellCoord(GetPositionX(), GetPositionY());
+    CellCoord p = SkyFire::ComputeCellCoord(GetPositionX(), GetPositionY());
     Cell cell(p);
     cell.SetNoCreate();
     WorldObjectChangeAccumulator notifier(*this, data_map);
