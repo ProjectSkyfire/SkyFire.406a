@@ -1135,7 +1135,7 @@ void WorldSession::ProcessQueryCallbacks()
         _stableSwapCallback.GetResult(result);
         HandleStableSwapPetCallback(result, param);
         _stableSwapCallback.FreeResult();
-    } 
+    }
 }
 
 void WorldSession::InitWarden(BigNumber* k, std::string os)
