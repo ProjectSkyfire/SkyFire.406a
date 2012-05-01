@@ -11006,7 +11006,7 @@ InventoryResult Player::CanTakeMoreSimilarItems(uint32 entry, uint32 count, Item
 {
     ItemTemplate const *proto = sObjectMgr->GetItemTemplate(entry);
     ItemSparseEntry const* sparse = sItemSparseStore.LookupEntry(entry);
-    if (!proto || !sparse)
+    if (!proto || !sparse && sWorld->getBoolConfig(CONFIG_DB2_ENFORCE_ITEM_ATTRIBUTES))
     {
         if (no_space_count)
             *no_space_count = count;
@@ -16862,7 +16862,9 @@ bool Player::HasQuestForItem(uint32 itemid) const
                     ItemSparseEntry const* sparse = sItemSparseStore.LookupEntry(itemid);
 
                     // 'unique' item
-                    if (sparse->MaxCount && int32(GetItemCount(itemid, true)) < sparse->MaxCount)
+                    if (sWorld->getBoolConfig(CONFIG_DB2_ENFORCE_ITEM_ATTRIBUTES) && sparse->MaxCount && int32(GetItemCount(itemid, true)) < sparse->MaxCount)
+                        return true;
+                    else if (proto->MaxCount && int32(GetItemCount(itemid, true)) < proto->MaxCount)
                         return true;
 
                     // allows custom amount drop when not 0
