@@ -1012,7 +1012,7 @@ SpellTotemsEntry const* SpellInfo::GetSpellTotems() const
 
 SpellInfo::~SpellInfo()
 {
-    _UnloadImplicitTargetConditionLists();
+    //_UnloadImplicitTargetConditionLists();
 }
 
 bool SpellInfo::HasEffect(SpellEffects effect) const
@@ -2669,7 +2669,7 @@ bool SpellInfo::_IsPositiveTarget(uint32 targetA, uint32 targetB)
         return _IsPositiveTarget(targetB, 0);
     return true;
 }
-
+/*
 void SpellInfo::_UnloadImplicitTargetConditionLists()
 {
     // find the same instances of ConditionList and delete them.
@@ -2686,3 +2686,4 @@ void SpellInfo::_UnloadImplicitTargetConditionLists()
         delete cur;
     }
 }
+*/

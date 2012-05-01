@@ -660,7 +660,7 @@ class SpellMgr
         void LoadSpellAreas();
         void LoadSpellInfoStore();
         void UnloadSpellInfoStore();
-        void UnloadSpellInfoImplicitTargetConditionLists();
+        //void UnloadSpellInfoImplicitTargetConditionLists();
         void LoadSpellCustomAttr();
 
     private:
