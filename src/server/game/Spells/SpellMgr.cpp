@@ -2839,7 +2839,7 @@ void SpellMgr::UnloadSpellInfoStore()
     }
     mSpellInfoMap.clear();
 }
-
+/*
 void SpellMgr::UnloadSpellInfoImplicitTargetConditionLists()
 {
     for (uint32 i = 0; i < mSpellInfoMap.size(); ++i)
@@ -2848,7 +2848,7 @@ void SpellMgr::UnloadSpellInfoImplicitTargetConditionLists()
             mSpellInfoMap[i]->_UnloadImplicitTargetConditionLists();
     }
 }
-
+*/
 void SpellMgr::LoadSpellCustomAttr()
 {
     uint32 oldMSTime = getMSTime();
