@@ -14,7 +14,7 @@ INSERT INTO spell_override VALUES
 (88685,88625,0,"Chakra: Holy Word: Sanctuary"),
 -- idky these are on spell-override there not aura 332
 (86213,86121,0,"Soul Swap: Exhale"),
-(91711,6229,9173,"Nether Ward Talent"),
+(91711,6229,0,"Nether Ward Talent"),
 (92315,11366,0,"Pyroblast!"),
 (82928,19434,0,"Aimed Shot!"), 
 (89420,689,0,"Drain Life"),
