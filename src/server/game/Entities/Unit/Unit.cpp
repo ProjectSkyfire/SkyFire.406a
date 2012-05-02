@@ -8099,6 +8099,7 @@ bool Unit::HandleAuraProc(Unit* victim, uint32 damage, Aura* triggeredByAura, Sp
     switch (dummySpell->SpellFamilyName)
     {
         case SPELLFAMILY_GENERIC:
+        {
             switch (dummySpell->Id)
             {
                 // Nevermelting Ice Crystal
@@ -8150,9 +8151,8 @@ bool Unit::HandleAuraProc(Unit* victim, uint32 damage, Aura* triggeredByAura, Sp
                     break;
                 }
             }
-
             break;
-
+        }
         case SPELLFAMILY_PRIEST:
         {
             if (!procSpell)
@@ -8165,23 +8165,32 @@ bool Unit::HandleAuraProc(Unit* victim, uint32 damage, Aura* triggeredByAura, Sp
                 case 2061:
                 case 32546:
                 {
-                    CastSpell(this, 81208, true);
-                    *handled = true;
-                    return true;
+                    if (HasAura(14751))
+                    {
+                        CastSpell(this, 81208, true);
+                        *handled = true;
+                        break;
+                    }
                 }
                 case 33076:
                 case 596:
                 {
-                    CastSpell(this, 81206, true);
-                    *handled = true;
-                    return true;
+                    if (HasAura(14751))
+                    {
+                        CastSpell(this, 81206, true);
+                        *handled = true;
+                        break;
+                    }
                 }
                 case 585:
                 case 73510:
                 {
-                    CastSpell(this, 81209, true);
-                    *handled = true;
-                    break;
+                    if (HasAura(14751))
+                    {
+                        CastSpell(this, 81209, true);
+                        *handled = true;
+                        break;
+                    }
                 }
                 break;
             }

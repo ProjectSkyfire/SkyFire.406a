@@ -8,10 +8,10 @@ CREATE TABLE IF NOT EXISTS `spell_override` (
 
 INSERT INTO spell_override VALUES
 (93402,8921,48517,"Eclipse (Solar)"),
-(91183,82731,0,"Frostfire orb"),
-(88625,2050,0,"Chakra: Holy Word: Chastise"),
-(88684,88625,0,"Chakra: Holy Word: Serenity"),
-(88685,88625,0,"Chakra: Holy Word: Sanctuary"),
+(84714,82731,84717,"Frostfire orb"),
+(88625,2050,0,"Chakra: Holy Word: Chastise"),   -- (aura 14751)
+(88684,88625,0,"Chakra: Holy Word: Serenity"),  -- (aura 14751)
+(88685,88625,0,"Chakra: Holy Word: Sanctuary"), -- (aura 14751)
 (86213,86121,0,"Soul Swap: Exhale"),
 (91711,6229,0,"Nether Ward Talent"),
 (92315,11366,0,"Pyroblast!"),

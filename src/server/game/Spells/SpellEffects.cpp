@@ -544,22 +544,21 @@ void Spell::EffectSchoolDMG(SpellEffIndex effIndex)
                     case 588:    // inner fire
                         m_caster->RemoveAurasDueToSpell(73413);
                          break;
-                }
+                    case 589:    // Shadow Word: Pain | mind flay
+                    case 15407:
+                        if (m_caster->HasSpell(95740))   // Shadow Orbs
+                        {
+                            int chance = 10;
 
-                if (m_spellInfo->Id == 589 || m_spellInfo->Id == 15407)  // Shadow Word: Pain | mind flay
-                {
-                    if (m_caster->HasSpell(95740))   // Shadow Orbs
-                    {
-                        int chance = 10;
+                            if (m_caster->HasAura(33191)) // Harnessed Shadows rank1
+                                chance += 4;
+                            else if (m_caster->HasAura(78228))  // Harnessed Shadows rank2
+                                chance += 8;
 
-                        if (m_caster->HasAura(33191)) // Harnessed Shadows rank1
-                            chance += 4;
-                        else if (m_caster->HasAura(78228))  // Harnessed Shadows rank2
-                            chance += 8;
-
-                        if (roll_chance_i(chance))
-                            m_caster->CastSpell(m_caster, 77487, true);
-                    }
+                            if (roll_chance_i(chance))
+                                m_caster->CastSpell(m_caster, 77487, true);
+                        }
+                        break;
                 }
                 // Evangelism: Rank 1
                 if (Aura* evan1 = m_caster->GetAura(81659))
@@ -578,11 +577,6 @@ void Spell::EffectSchoolDMG(SpellEffIndex effIndex)
                     m_caster->CastSpell(m_caster, 87154, true);
                     m_caster->RemoveAurasDueToSpell(87118);
                     m_caster->RemoveAurasDueToSpell(87117);
-                }
-                if (m_caster->HasAura(14751)) // Chakra
-                {
-                    m_caster->CastSpell(m_caster, 81209, true);
-                    m_caster->RemoveAurasDueToSpell(14751);
                 }
                 break;
             }
