@@ -2696,6 +2696,61 @@ void SpellMgr::LoadSpellAreas()
     sLog->outString();
 }
 
+void SpellMgr::LoadActionBarSpellOverride()
+{
+    uint32 oldMSTime = getMSTime();
+    mActionBarSpellOverrideMap.clear();
+
+    QueryResult result = WorldDatabase.Query("SELECT overrideSpell, affSpell, aura FROM spell_override ORDER BY overrideSpell ASC");
+
+    if (!result)
+    {
+        sLog->outString(">> Loaded 0 actionbar spell overrides. DB table `spell_override` is empty.");
+        sLog->outString();
+        return;
+    }
+
+    do
+    {
+        Field *fields = result->Fetch();
+
+        uint32 overrideSpell = fields[0].GetUInt32();
+        uint32 affSpell = fields[1].GetUInt32();
+        uint32 aura = fields[2].GetUInt32();
+
+        if(!sSpellStore.LookupEntry(overrideSpell))
+        {
+            sLog->outErrorDb("Spell (overrideSpell) %u listed in `spell_override` does not exist", overrideSpell);
+            continue;
+        }
+
+        if(!sSpellStore.LookupEntry(affSpell))
+        {
+            sLog->outErrorDb("Spell (affSpell) %u listed in `spell_override` does not exist", affSpell);
+            continue;
+        }
+
+        if(aura > 0)
+        {
+            if(!sSpellStore.LookupEntry(aura))
+            {
+                sLog->outErrorDb("Spell (aura) %u listed in `spell_override` does not exist", aura);
+                continue;
+            }
+        }
+
+        ActionBarSpellOverride actbarSpellov;
+        actbarSpellov.affSpell = affSpell;
+        actbarSpellov.aura = aura;
+
+        mActionBarSpellOverrideMap[overrideSpell]= actbarSpellov;
+    }
+    while (result->NextRow());
+
+    sLog->outString(">> Loaded %u actionbar spell overrides in %u ms", mActionBarSpellOverrideMap.size(), GetMSTimeDiffToNow(oldMSTime));
+    sLog->outString();
+}
+
 void SpellMgr::LoadSpellInfoStore()
 {
     uint32 oldMSTime = getMSTime();
@@ -2828,6 +2883,16 @@ void SpellMgr::LoadSpellInfoStore()
 
     sLog->outString(">> Loaded spell custom attributes in %u ms", GetMSTimeDiffToNow(oldMSTime));
     sLog->outString();
+}
+
+ActionBarSpellOverride const* SpellMgr::GetActionBarSpellOverride(uint32 overrideSpell) const
+{
+    ActionBarSpellOverrideMap::const_iterator itr = mActionBarSpellOverrideMap.find(overrideSpell);
+
+    if(itr == mActionBarSpellOverrideMap.end())
+        return NULL;
+    else
+        return &itr->second;
 }
 
 void SpellMgr::UnloadSpellInfoStore()
