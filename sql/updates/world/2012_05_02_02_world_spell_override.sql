@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS `spell_override`;
 CREATE TABLE IF NOT EXISTS `spell_override` (
 	`overrideSpell` INT(10) UNSIGNED NOT NULL DEFAULT '0',
 	`affSpell` INT(10) NOT NULL DEFAULT '0', 
