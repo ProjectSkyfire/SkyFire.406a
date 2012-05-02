@@ -337,14 +337,6 @@ enum SpellGroup
     SPELL_GROUP_CORE_RANGE_MAX         = 5,
 };
 
-struct ActionBarSpellOverride
-{
-    uint32 affSpell;
-    uint32 aura;
-};
-
-typedef UNORDERED_MAP<uint32, ActionBarSpellOverride> ActionBarSpellOverrideMap;
-
 #define SPELL_GROUP_DB_RANGE_MIN 1000
 
 //                  spell_id, group_id
@@ -556,9 +548,9 @@ class SpellMgr
         SpellMgr();
         ~SpellMgr();
 
-    // Assessors (const or static functions)
+    // Accessors (const or static functions)
     public:
-        // Spell correctness for client using
+        // Spell correctess for client using
         static bool IsSpellValid(SpellInfo const* spellInfo, Player* player = NULL, bool msg = true);
 
         // Spell difficulty
@@ -612,9 +604,6 @@ class SpellMgr
         // Spell proc table
         SpellProcEntry const* GetSpellProcEntry(uint32 spellId) const;
         bool CanSpellTriggerProcOnEvent(SpellProcEntry const& procEntry, ProcEventInfo& eventInfo);
-
-        // Actionbar override spell
-        ActionBarSpellOverride const* GetActionBarSpellOverride(uint32 overrideSpell) const;
 
         // Spell bonus data table
         SpellBonusEntry const* GetSpellBonusData(uint32 spellId) const;
@@ -673,7 +662,6 @@ class SpellMgr
         void UnloadSpellInfoStore();
         //void UnloadSpellInfoImplicitTargetConditionLists();
         void LoadSpellCustomAttr();
-        void LoadActionBarSpellOverride();
 
     private:
         SpellDifficultySearcherMap mSpellDifficultySearcherMap;
@@ -704,7 +692,6 @@ class SpellMgr
         PetLevelupSpellMap         mPetLevelupSpellMap;
         PetDefaultSpellsMap        mPetDefaultSpellsMap;           // only spells not listed in related mPetLevelupSpellMap entry
         SpellInfoMap               mSpellInfoMap;
-        ActionBarSpellOverrideMap  mActionBarSpellOverrideMap;
 };
 
 #define sSpellMgr ACE_Singleton<SpellMgr, ACE_Null_Mutex>::instance()
