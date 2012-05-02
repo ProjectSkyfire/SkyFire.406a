@@ -196,7 +196,6 @@ BOOL WheatyExceptionReport::_GetWindowsVersion(TCHAR* szVersion, DWORD cntMax)
             // Test for the specific product family.
             if (osvi.dwMajorVersion == 6)
                 {
-
             #if WINVER < 0x0500
                 if (osvi.wReserved[1] == VER_NT_WORKSTATION)
             #else

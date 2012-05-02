@@ -48,6 +48,6 @@ int der_length_bit_string(unsigned long nbits, unsigned long *outlen)
 
 #endif
 
-/* $Source: /cvs/libtom/libtomcrypt/src/pk/asn1/der/bit/der_length_bit_string.c, v $ */
+/* $Source: /cvs/libtom/libtomcrypt/src/pk/asn1/der/bit/der_length_bit_string.c,v $ */
 /* $Revision: 1.3 $ */
 /* $Date: 2006/12/28 01:27:24 $ */

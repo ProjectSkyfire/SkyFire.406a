@@ -25,7 +25,7 @@
   @param outlen  [in/out] The number of bits stored
   @return CRYPT_OK if successful
 */
-int der_decode_bit_string(const unsigned char *in, unsigned long inlen,
+int der_decode_bit_string(const unsigned char *in,  unsigned long inlen,
                                 unsigned char *out, unsigned long *outlen)
 {
    unsigned long dlen, blen, x, y;
@@ -96,6 +96,6 @@ int der_decode_bit_string(const unsigned char *in, unsigned long inlen,
 
 #endif
 
-/* $Source: /cvs/libtom/libtomcrypt/src/pk/asn1/der/bit/der_decode_bit_string.c, v $ */
+/* $Source: /cvs/libtom/libtomcrypt/src/pk/asn1/der/bit/der_decode_bit_string.c,v $ */
 /* $Revision: 1.5 $ */
 /* $Date: 2006/12/28 01:27:24 $ */

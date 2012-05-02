@@ -39,7 +39,7 @@ int mp_exptmod_fast (mp_int * G, mp_int * X, mp_int * P, mp_int * Y, int redmode
    * one of many reduction algorithms without modding the guts of
    * the code with if statements everywhere.
    */
-  int     (*redux)(mp_int*, mp_int*, mp_digit);
+  int     (*redux)(mp_int*,mp_int*,mp_digit);
 
   /* find window size */
   x = mp_count_bits (X);
@@ -315,6 +315,6 @@ LBL_M:
 }
 #endif
 
-/* $Source: /cvs/libtom/libtommath/bn_mp_exptmod_fast.c, v $ */
+/* $Source: /cvs/libtom/libtommath/bn_mp_exptmod_fast.c,v $ */
 /* $Revision: 1.4 $ */
 /* $Date: 2006/12/28 01:25:13 $ */

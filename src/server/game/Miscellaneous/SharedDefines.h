@@ -21,6 +21,7 @@
 #define SKYFIRE_SHAREDDEFINES_H
 
 #include "Define.h"
+#include "DetourNavMesh.h"
 #include <cassert>
 
 enum SpellEffIndex
@@ -360,9 +361,9 @@ enum SpellAttr2
     SPELL_ATTR2_TAME_BEAST                       = 0x00010000, // 16
     SPELL_ATTR2_NOT_RESET_AUTO_ACTIONS           = 0x00020000, // 17 don't reset timers for melee autoattacks (swings) or ranged autoattacks (autoshoots)
     SPELL_ATTR2_UNK18                            = 0x00040000, // 18 Only Revive pet - possible req dead pet
-    SPELL_ATTR2_NOT_NEED_SHAPESHIFT              = 0x00080000, // 19 does not necessarly need shapeshift
+    SPELL_ATTR2_NOT_NEED_SHAPESHIFT              = 0x00080000, // 19 does not necessarily need shapeshift
     SPELL_ATTR2_UNK20                            = 0x00100000, // 20
-    SPELL_ATTR2_DAMAGE_REDUCED_SHIELD            = 0x00200000, // 21 for ice blocks, pala immunity buffs, priest absorb shields, but used also for other spells -> not sure!
+    SPELL_ATTR2_DAMAGE_REDUCED_SHIELD            = 0x00200000, // 21 for ice blocks, paladin immunity buffs, priest absorb shields, but used also for other spells -> not sure!
     SPELL_ATTR2_UNK22                            = 0x00400000, // 22
     SPELL_ATTR2_UNK23                            = 0x00800000, // 23 Only mage Arcane Concentration have this flag
     SPELL_ATTR2_UNK24                            = 0x01000000, // 24
@@ -393,7 +394,7 @@ enum SpellAttr3
     SPELL_ATTR3_UNK13                            = 0x00002000, // 13
     SPELL_ATTR3_UNK14                            = 0x00004000, // 14 "Honorless Target" only this spells have this flag
     SPELL_ATTR3_UNK15                            = 0x00008000, // 15 Auto Shoot, Shoot, Throw,  - this is autoshot flag
-    SPELL_ATTR3_CANT_TRIGGER_PROC                = 0x00010000, // 16 confirmed with many patchnotes
+    SPELL_ATTR3_CANT_TRIGGER_PROC                = 0x00010000, // 16 confirmed with many patch notes
     SPELL_ATTR3_NO_INITIAL_AGGRO                 = 0x00020000, // 17 Soothe Animal, 39758, Mind Soothe
     SPELL_ATTR3_IGNORE_HIT_RESULT                = 0x00040000, // 18 Spell should always hit its target
     SPELL_ATTR3_DISABLE_PROC                     = 0x00080000, // 19 during aura proc no spells can trigger (20178, 20375)
@@ -413,13 +414,13 @@ enum SpellAttr3
 
 enum SpellAttr4
 {
-    SPELL_ATTR4_UNK0                             = 0x00000001, //  0
+    SPELL_ATTR4_IGNORE_RESISTANCES               = 0x00000001, //  0 spells with this attribute will completely ignore the target resistances (these spells cant be resisted)
     SPELL_ATTR4_PROC_ONLY_ON_DUMMY               = 0x00000002, //  1 proc only on SPELL_EFFECT_DUMMY?
     SPELL_ATTR4_UNK2                             = 0x00000004, //  2
     SPELL_ATTR4_UNK3                             = 0x00000008, //  3
     SPELL_ATTR4_UNK4                             = 0x00000010, //  4 This will no longer cause guards to attack on use??
     SPELL_ATTR4_UNK5                             = 0x00000020, //  5
-    SPELL_ATTR4_NOT_STEALABLE                    = 0x00000040, //  6 although such auras might be dispellable, they cannot be stolen
+    SPELL_ATTR4_NOT_STEALABLE                    = 0x00000040, //  6 although such auras might be dispelled, they cannot be stolen
     SPELL_ATTR4_TRIGGERED                        = 0x00000080, //  7 spells forced to be triggered
     SPELL_ATTR4_UNK8                             = 0x00000100, //  8 ignores taken percent damage mods?
     SPELL_ATTR4_UNK9                             = 0x00000200, //  9
@@ -3255,6 +3256,37 @@ enum RemoveMethod
     GROUP_REMOVEMETHOD_LEAVE   = 2,
 };
 
+#define MMAP_MAGIC 0x4d4d4150 // 'MMAP'
+
+//0x444e4156   'MMAP' Maby the new one
+
+#define MMAP_VERSION 3
+
+struct MmapTileHeader
+{
+    uint32 mmapMagic;
+    uint32 dtVersion;
+    uint32 mmapVersion;
+    uint32 size;
+    bool usesLiquids : 1;
+
+    MmapTileHeader() : mmapMagic(MMAP_MAGIC), dtVersion(DT_NAVMESH_VERSION),
+        mmapVersion(MMAP_VERSION), size(0), usesLiquids(true) {}
+};
+
+enum NavTerrain
+{
+    NAV_EMPTY   = 0x00,
+    NAV_GROUND  = 0x01,
+    NAV_MAGMA   = 0x02,
+    NAV_SLIME   = 0x04,
+    NAV_WATER   = 0x08,
+    NAV_UNUSED1 = 0x10,
+    NAV_UNUSED2 = 0x20,
+    NAV_UNUSED3 = 0x40,
+    NAV_UNUSED4 = 0x80
+    // we only have 8 bits
+};
 enum ActivateTaxiReply
 {
     ERR_TAXIOK                      = 0,
@@ -3271,5 +3303,106 @@ enum ActivateTaxiReply
     ERR_TAXISAMENODE                = 11,
     ERR_TAXINOTSTANDING             = 12
 };
+
+// Calendar - start
+
+enum CalendarFlags
+{
+   CALENDAR_FLAG_ALL_ALLOWED     = 0x001,
+   CALENDAR_FLAG_INVITES_LOCKED  = 0x010,
+   CALENDAR_FLAG_WITHOUT_INVITES = 0x040,
+   CALENDAR_FLAG_GUILD_ONLY      = 0x400,
+};
+
+enum CalendarActionData
+{
+   CALENDAR_ACTION_NONE,
+   CALENDAR_ACTION_ADD_EVENT,
+   CALENDAR_ACTION_MODIFY_EVENT,
+   CALENDAR_ACTION_REMOVE_EVENT,
+   CALENDAR_ACTION_COPY_EVENT,
+   CALENDAR_ACTION_ADD_EVENT_INVITE,
+   CALENDAR_ACTION_MODIFY_EVENT_INVITE,
+   CALENDAR_ACTION_MODIFY_MODERATOR_EVENT_INVITE,
+   CALENDAR_ACTION_REMOVE_EVENT_INVITE,
+   CALENDAR_ACTION_SIGNUP_TO_EVENT,
+};
+
+enum CalendarModerationRank
+{
+   CALENDAR_RANK_PLAYER,
+   CALENDAR_RANK_MODERATOR,
+   CALENDAR_RANK_OWNER,
+};
+
+enum CalendarSendEventType
+{
+   CALENDAR_SENDTYPE_GET,
+   CALENDAR_SENDTYPE_ADD,
+   CALENDAR_SENDTYPE_COPY,
+};
+
+enum CalendarEventType
+{
+   CALENDAR_TYPE_RAID,
+   CALENDAR_TYPE_DUNGEON,
+   CALENDAR_TYPE_PVP,
+   CALENDAR_TYPE_MEETING,
+   CALENDAR_TYPE_OTHER,
+};
+
+enum CalendarInviteStatus
+{
+   CALENDAR_STATUS_INVITED,
+   CALENDAR_STATUS_ACCEPTED,
+   CALENDAR_STATUS_DECLINED,
+   CALENDAR_STATUS_TENTATIVE,
+   CALENDAR_STATUS_OUT,
+   CALENDAR_STATUS_STANDBY,
+   CALENDAR_STATUS_CONFIRMED,
+   CALENDAR_STATUS_NO_OWNER,
+   CALENDAR_STATUS_8,
+   CALENDAR_STATUS_9,
+};
+
+enum CalendarError
+{
+   CALENDAR_OK                                 = 0,
+   CALENDAR_ERROR_GUILD_EVENTS_EXCEEDED        = 1,
+   CALENDAR_ERROR_EVENTS_EXCEEDED              = 2,
+   CALENDAR_ERROR_SELF_INVITES_EXCEEDED        = 3,
+   CALENDAR_ERROR_OTHER_INVITES_EXCEEDED       = 4,
+   CALENDAR_ERROR_PERMISSIONS                  = 5,
+   CALENDAR_ERROR_EVENT_INVALID                = 6,
+   CALENDAR_ERROR_NOT_INVITED                  = 7,
+   CALENDAR_ERROR_INTERNAL                     = 8,
+   CALENDAR_ERROR_GUILD_PLAYER_NOT_IN_GUILD    = 9,
+   CALENDAR_ERROR_ALREADY_INVITED_TO_EVENT_S   = 10,
+   CALENDAR_ERROR_PLAYER_NOT_FOUND             = 11,
+   CALENDAR_ERROR_NOT_ALLIED                   = 12,
+   CALENDAR_ERROR_IGNORING_YOU_S               = 13,
+   CALENDAR_ERROR_INVITES_EXCEEDED             = 14,
+   CALENDAR_ERROR_INVALID_DATE                 = 16,
+   CALENDAR_ERROR_INVALID_TIME                 = 17,
+
+   CALENDAR_ERROR_NEEDS_TITLE                  = 19,
+   CALENDAR_ERROR_EVENT_PASSED                 = 20,
+   CALENDAR_ERROR_EVENT_LOCKED                 = 21,
+   CALENDAR_ERROR_DELETE_CREATOR_FAILED        = 22,
+   CALENDAR_ERROR_SYSTEM_DISABLED              = 24,
+   CALENDAR_ERROR_RESTRICTED_ACCOUNT           = 25,
+   CALENDAR_ERROR_ARENA_EVENTS_EXCEEDED        = 26,
+   CALENDAR_ERROR_RESTRICTED_LEVEL             = 27,
+   CALENDAR_ERROR_USER_SQUELCHED               = 28,
+   CALENDAR_ERROR_NO_INVITE                    = 29,
+
+   CALENDAR_ERROR_EVENT_WRONG_SERVER           = 36,
+   CALENDAR_ERROR_INVITE_WRONG_SERVER          = 37,
+   CALENDAR_ERROR_NO_GUILD_INVITES             = 38,
+   CALENDAR_ERROR_INVALID_SIGNUP               = 39,
+   CALENDAR_ERROR_NO_MODERATOR                 = 40
+};
+
+// Calendar - end
 
 #endif

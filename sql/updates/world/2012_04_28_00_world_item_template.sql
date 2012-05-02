@@ -1,0 +1,14 @@
+ALTER TABLE `item_template` ADD `BuyCount` tinyint(3) unsigned NOT NULL DEFAULT '1' AFTER FlagsExtra;
+ALTER TABLE `item_template` ADD `ScalingStatValue` smallint(6) NOT NULL DEFAULT '0' AFTER ScalingStatDistribution;
+ALTER TABLE `item_template` ADD `spellppmRate_1` float NOT NULL DEFAULT '0' AFTER spellcharges_1;
+ALTER TABLE `item_template` ADD `spellppmRate_2` float NOT NULL DEFAULT '0' AFTER spellcharges_2;
+ALTER TABLE `item_template` ADD `spellppmRate_3` float NOT NULL DEFAULT '0' AFTER spellcharges_3;
+ALTER TABLE `item_template` ADD `spellppmRate_4` float NOT NULL DEFAULT '0' AFTER spellcharges_4;
+ALTER TABLE `item_template` ADD `spellppmRate_5` float NOT NULL DEFAULT '0' AFTER spellcharges_5;
+ALTER TABLE `item_template` ADD `block` mediumint(8) unsigned NOT NULL DEFAULT '0' AFTER RandomSuffix;
+ALTER TABLE `item_template` ADD `RequiredDisenchantSkill` smallint(6) NOT NULL DEFAULT '-1' AFTER GemProperties;
+ALTER TABLE `item_template` ADD `ScriptName` varchar(64) NOT NULL DEFAULT '' AFTER HolidayId;
+ALTER TABLE `item_template` ADD `DisenchantID` mediumint(8) unsigned NOT NULL DEFAULT '0' AFTER ScriptName;
+ALTER TABLE `item_template` ADD `FoodType` tinyint(3) unsigned NOT NULL DEFAULT '0' AFTER DisenchantID;
+ALTER TABLE `item_template` ADD `minMoneyLoot` int(10) unsigned NOT NULL DEFAULT '0' AFTER FoodType;
+ALTER TABLE `item_template` ADD `maxMoneyLoot` int(10) unsigned NOT NULL DEFAULT '0' AFTER minMoneyLoot;

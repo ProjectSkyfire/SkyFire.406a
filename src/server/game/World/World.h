@@ -168,6 +168,8 @@ enum WorldBoolConfigs
     CONFIG_QUEST_IGNORE_AUTO_COMPLETE,
     CONFIG_WINTERGRASP_ENABLE,
     CONFIG_TOL_BARAD_ENABLE,
+    CONFIG_ENABLE_MMAPS,
+    CONFIG_WARDEN_ENABLED,
     BOOL_CONFIG_VALUE_COUNT
 };
 
@@ -329,6 +331,12 @@ enum WorldIntConfigs
     CONFIG_TOL_BARAD_BATTLETIME,
     CONFIG_TOL_BARAD_NOBATTLETIME,
     CONFIG_IGNORING_MAPS_VERSION,
+    CONFIG_WARDEN_CLIENT_RESPONSE_DELAY,
+    CONFIG_WARDEN_CLIENT_CHECK_HOLDOFF,
+    CONFIG_WARDEN_CLIENT_FAIL_ACTION,
+    CONFIG_WARDEN_CLIENT_BAN_DURATION,
+    CONFIG_WARDEN_NUM_MEM_CHECKS,
+    CONFIG_WARDEN_NUM_OTHER_CHECKS,
     INT_CONFIG_VALUE_COUNT
 };
 
@@ -637,7 +645,6 @@ class World
         time_t GetNextDailyQuestsResetTime() const { return m_NextDailyQuestReset; }
         time_t GetNextWeeklyQuestsResetTime() const { return m_NextWeeklyQuestReset; }
         time_t GetNextRandomBGResetTime() const { return m_NextRandomBGReset; }
-        time_t GetGuildAdvancementDailyXPResetTime() const { return m_NextHourlyXPReset; }
 
         /// Get the maximum skill level a player can reach
         uint16 GetConfigMaxSkillValue() const
@@ -780,10 +787,10 @@ class World
         void InitDailyQuestResetTime();
         void InitWeeklyQuestResetTime();
         void InitRandomBGResetTime();
-        //void InitGuildAdvancementDailyResetTime();
+
         void ResetDailyQuests();
         void ResetWeeklyQuests();
-        //void ResetGuildAdvancementDailyXP();
+
         void ResetRandomBG();
     private:
         static ACE_Atomic_Op<ACE_Thread_Mutex, bool> m_stopEvent;

@@ -19,9 +19,9 @@
 static const struct {
     int mpi_code, ltc_code;
 } mpi_to_ltc_codes[] = {
-   { MP_OKAY , CRYPT_OK},
-   { MP_MEM  , CRYPT_MEM},
-   { MP_VAL  , CRYPT_INVALID_ARG},
+   { MP_OKAY ,  CRYPT_OK},
+   { MP_MEM  ,  CRYPT_MEM},
+   { MP_VAL  ,  CRYPT_INVALID_ARG},
 };
 
 /**
@@ -313,7 +313,7 @@ static int mulmod(void *a, void *b, void *c, void *d)
    LTC_ARGCHK(b != NULL);
    LTC_ARGCHK(c != NULL);
    LTC_ARGCHK(d != NULL);
-   return mpi_to_ltc_error(mp_mulmod(a, b, c, d));
+   return mpi_to_ltc_error(mp_mulmod(a,b,c,d));
 }
 
 static int sqrmod(void *a, void *b, void *c)
@@ -321,7 +321,7 @@ static int sqrmod(void *a, void *b, void *c)
    LTC_ARGCHK(a != NULL);
    LTC_ARGCHK(b != NULL);
    LTC_ARGCHK(c != NULL);
-   return mpi_to_ltc_error(mp_sqrmod(a, b, c));
+   return mpi_to_ltc_error(mp_sqrmod(a,b,c));
 }
 
 /* invmod */
@@ -378,7 +378,7 @@ static int exptmod(void *a, void *b, void *c, void *d)
    LTC_ARGCHK(b != NULL);
    LTC_ARGCHK(c != NULL);
    LTC_ARGCHK(d != NULL);
-   return mpi_to_ltc_error(mp_exptmod(a, b, c, d));
+   return mpi_to_ltc_error(mp_exptmod(a,b,c,d));
 }
 
 static int isprime(void *a, int *b)
@@ -475,6 +475,6 @@ const ltc_math_descriptor ltm_desc = {
 
 #endif
 
-/* $Source: /cvs/libtom/libtomcrypt/src/math/ltm_desc.c, v $ */
+/* $Source: /cvs/libtom/libtomcrypt/src/math/ltm_desc.c,v $ */
 /* $Revision: 1.31 $ */
 /* $Date: 2007/05/12 14:32:35 $ */

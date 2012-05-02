@@ -113,8 +113,11 @@ void SmartScript::OnReset()
     ResetBaseObject();
     for (SmartAIEventList::iterator i = mEvents.begin(); i != mEvents.end(); ++i)
     {
-        InitTimer((*i));
-        (*i).runOnce = false;
+        if (!((*i).event.event_flags & SMART_EVENT_FLAG_DONT_RESET))
+        {
+            InitTimer((*i));
+            (*i).runOnce = false;
+        }
     }
     ProcessEventsFor(SMART_EVENT_RESET);
     mLastInvoker = 0;
@@ -1048,9 +1051,9 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 break;
 
             if (e.action.invincHP.percent)
-                ai->SetInvinceabilityHpLevel(me->CountPctFromMaxHealth(e.action.invincHP.percent));
+                ai->SetInvincibilityHpLevel(me->CountPctFromMaxHealth(e.action.invincHP.percent));
             else
-                ai->SetInvinceabilityHpLevel(e.action.invincHP.minHP);
+                ai->SetInvincibilityHpLevel(e.action.invincHP.minHP);
             break;
         }
         case SMART_ACTION_SET_DATA:

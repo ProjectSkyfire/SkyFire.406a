@@ -583,6 +583,93 @@ class spell_dk_chains_of_ice : public SpellScriptLoader
         }
 };
 
+class spell_dk_death_grip : public SpellScriptLoader
+{
+public:
+    spell_dk_death_grip() : SpellScriptLoader("spell_dk_death_grip") { }
+
+    class spell_dk_death_grip_SpellScript : public SpellScript
+    {
+        PrepareSpellScript(spell_dk_death_grip_SpellScript);
+
+        void HandleDummy(SpellEffIndex /*effIndex*/)
+        {
+            int32 damage = GetEffectValue();
+            Position const* pos = GetTargetDest();
+            if (Unit* target = GetHitUnit())
+            {
+                if (!target->HasAuraType(SPELL_AURA_DEFLECT_SPELLS)) // Deterrence
+                    target->CastSpell(pos->GetPositionX(), pos->GetPositionY(), pos->GetPositionZ(), damage, true);
+            }
+        }
+
+        void Register()
+        {
+            OnEffectHitTarget += SpellEffectFn(spell_dk_death_grip_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
+        }
+    };
+
+    SpellScript* GetSpellScript() const
+    {
+        return new spell_dk_death_grip_SpellScript();
+    }
+};
+
+enum DeathCoil
+{
+    SPELL_DEATH_COIL_DAMAGE     = 47632,
+    SPELL_DEATH_COIL_HEAL       = 47633,
+    SPELL_SIGIL_VENGEFUL_HEART  = 64962,
+};
+
+class spell_dk_death_coil : public SpellScriptLoader
+{
+public:
+    spell_dk_death_coil() : SpellScriptLoader("spell_dk_death_coil") { }
+
+    class spell_dk_death_coil_SpellScript : public SpellScript
+    {
+        PrepareSpellScript(spell_dk_death_coil_SpellScript);
+
+        bool Validate(SpellInfo const* /*SpellEntry*/)
+        {
+            if (!sSpellMgr->GetSpellInfo(SPELL_DEATH_COIL_DAMAGE) || !sSpellMgr->GetSpellInfo(SPELL_DEATH_COIL_HEAL))
+                return false;
+            return true;
+        }
+
+        void HandleDummy(SpellEffIndex /* effIndex */)
+        {
+            int32 damage = GetEffectValue();
+            Unit* caster = GetCaster();
+            if (Unit* target = GetHitUnit())
+            {
+                if (caster->IsFriendlyTo(target))
+                {
+                    int32 bp = int32(damage * 1.5f);
+                    caster->CastCustomSpell(target, SPELL_DEATH_COIL_HEAL, &bp, NULL, NULL, true);
+                }
+                else
+                {
+                    if (AuraEffect const* auraEffect = caster->GetAuraEffect(SPELL_SIGIL_VENGEFUL_HEART, EFFECT_1))
+                        damage += auraEffect->GetBaseAmount();
+                    caster->CastCustomSpell(target, SPELL_DEATH_COIL_DAMAGE, &damage, NULL, NULL, true);
+                }
+            }
+        }
+
+        void Register()
+        {
+            OnEffectHitTarget += SpellEffectFn(spell_dk_death_coil_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
+        }
+    };
+
+    SpellScript* GetSpellScript() const
+    {
+        return new spell_dk_death_coil_SpellScript();
+    }
+};
+
 void AddSC_deathknight_spell_scripts()
 {
     new spell_dk_necrotic_strike();
@@ -597,4 +684,6 @@ void AddSC_deathknight_spell_scripts()
     new spell_dk_improved_unholy_presence();
     new spell_dk_festering_strike();
     new spell_dk_chains_of_ice();
+    new spell_dk_death_grip();
+    new spell_dk_death_coil();
 }

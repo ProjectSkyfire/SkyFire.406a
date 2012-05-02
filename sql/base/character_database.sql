@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 5.5.18, for Win64 (x86)
 --
--- Host: localhost    Database: characters
+-- Host: localhost    Database: character
 -- ------------------------------------------------------
 -- Server version	5.5.18
 
@@ -1243,15 +1243,13 @@ CREATE TABLE `character_version` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=FIXED COMMENT='Version Notes';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
-REPLACE INTO character_version VALUES
-('2012_03_11 - fad059fdde','2012_03_13_00');
-
 --
 -- Dumping data for table `character_version`
 --
 
 LOCK TABLES `character_version` WRITE;
 /*!40000 ALTER TABLE `character_version` DISABLE KEYS */;
+INSERT INTO `character_version` VALUES ('2012_03_11 - fad059fdde','2012_03_13_00');
 /*!40000 ALTER TABLE `character_version` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2006,6 +2004,29 @@ LOCK TABLES `guild_rank` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `guild_xp_for_level`
+--
+
+DROP TABLE IF EXISTS `guild_xp_for_level`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `guild_xp_for_level` (
+  `lvl` int(11) NOT NULL,
+  `xp_for_next_level` bigint(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `guild_xp_for_level`
+--
+
+LOCK TABLES `guild_xp_for_level` WRITE;
+/*!40000 ALTER TABLE `guild_xp_for_level` DISABLE KEYS */;
+INSERT INTO `guild_xp_for_level` VALUES (1,16580000),(2,18240000),(3,19900000),(4,21550000),(5,23220000),(6,24880000),(7,26530000),(8,28190000),(9,29850000),(10,31510000),(11,33170000),(12,34820000),(13,36490000),(14,38140000),(15,39800000),(16,41450000),(17,43120000),(18,44780000),(19,46430000),(20,48090000),(21,49750000),(22,51410000),(23,53060000),(24,54730000);
+/*!40000 ALTER TABLE `guild_xp_for_level` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `instance`
 --
 
@@ -2212,6 +2233,8 @@ CREATE TABLE `lag_reports` (
   `posX` float NOT NULL DEFAULT '0',
   `posY` float NOT NULL DEFAULT '0',
   `posZ` float NOT NULL DEFAULT '0',
+  `latency` int(10) unsigned NOT NULL DEFAULT '0',
+  `createTime` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`reportId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Player System';
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -2494,6 +2517,28 @@ LOCK TABLES `reserved_name` WRITE;
 /*!40000 ALTER TABLE `reserved_name` ENABLE KEYS */;
 UNLOCK TABLES;
 
+--
+-- Table structure for table `warden_action`
+--
+
+DROP TABLE IF EXISTS `warden_action`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `warden_action` (
+  `wardenId` smallint(5) unsigned NOT NULL,
+  `action` tinyint(3) unsigned DEFAULT NULL,
+  PRIMARY KEY (`wardenId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `warden_action`
+--
+
+LOCK TABLES `warden_action` WRITE;
+/*!40000 ALTER TABLE `warden_action` DISABLE KEYS */;
+/*!40000 ALTER TABLE `warden_action` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `worldstates`
@@ -2516,6 +2561,7 @@ CREATE TABLE `worldstates` (
 
 LOCK TABLES `worldstates` WRITE;
 /*!40000 ALTER TABLE `worldstates` DISABLE KEYS */;
+INSERT INTO `worldstates` VALUES (31001,0,'WG war status'),(31002,0,'WG clock'),(31003,0,'WG Fortress Defender'),(31004,0,'WG TEMP Battle Control Faction'),(33280,0,NULL),(55629,0,NULL);
 /*!40000 ALTER TABLE `worldstates` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -2528,4 +2574,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-02-24 14:16:41
+-- Dump completed on 2012-04-29 18:32:59

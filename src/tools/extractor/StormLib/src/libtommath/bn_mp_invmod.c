@@ -38,6 +38,6 @@ int mp_invmod (mp_int * a, mp_int * b, mp_int * c)
 }
 #endif
 
-/* $Source: /cvs/libtom/libtommath/bn_mp_invmod.c, v $ */
+/* $Source: /cvs/libtom/libtommath/bn_mp_invmod.c,v $ */
 /* $Revision: 1.4 $ */
 /* $Date: 2006/12/28 01:25:13 $ */

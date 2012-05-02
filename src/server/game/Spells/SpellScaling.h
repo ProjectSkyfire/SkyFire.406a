@@ -46,7 +46,7 @@ public:
         float _coef = -1.0f;
         if (classId)
         {
-            GtSpellScalingEntry const* spellscaling = sGtSpellScalingStore.LookupEntry(((classId - 1) * 100) + level);
+            GtSpellScalingEntry const* spellscaling = sGtSpellScalingStore.LookupEntry(((classId - 1) * 100) + (level - 1));
             _coef = spellscaling ? spellscaling->coef : _coef;
         }
 

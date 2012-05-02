@@ -161,7 +161,7 @@ int mp_div (mp_int * a, mp_int * b, mp_int * c, mp_int * d)
      norm = 0;
   }
 
-  /* note hac does 0 based, so if used == 5 then its 0, 1, 2, 3, 4, e.g. use 4 */
+  /* note hac does 0 based, so if used==5 then its 0,1,2,3,4, e.g. use 4 */
   n = x.used - 1;
   t = y.used - 1;
 
@@ -286,6 +286,6 @@ LBL_Q:mp_clear (&q);
 
 #endif
 
-/* $Source: /cvs/libtom/libtommath/bn_mp_div.c, v $ */
+/* $Source: /cvs/libtom/libtommath/bn_mp_div.c,v $ */
 /* $Revision: 1.4 $ */
 /* $Date: 2006/12/28 01:25:13 $ */

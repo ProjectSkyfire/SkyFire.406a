@@ -132,6 +132,6 @@ LBL_ERR:
 
 #endif
 
-/* $Source: /cvs/libtom/libtomcrypt/src/pk/asn1/der/sequence/der_decode_sequence_multi.c, v $ */
+/* $Source: /cvs/libtom/libtomcrypt/src/pk/asn1/der/sequence/der_decode_sequence_multi.c,v $ */
 /* $Revision: 1.13 $ */
 /* $Date: 2006/12/28 01:27:24 $ */

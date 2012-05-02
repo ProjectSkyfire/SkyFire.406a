@@ -133,13 +133,16 @@ bool Battlefield::Update(uint32 diff)
     {
         //Here end of battle by timer
         if (IsWarTime())
+        {
             EndBattle(true);
+        }
         //Start of battle
         else
+        {
             StartBattle();
+        }
     }
-    else
-        m_Timer -= diff;
+    else m_Timer -= diff;
 
     //Some times before battle start invite player to queue
     if (!m_StartGrouping && m_Timer <= m_StartGroupingTimer)
@@ -305,17 +308,17 @@ void Battlefield::KickPlayerFromBf(uint64 guid)
 
 void Battlefield::StartBattle()
 {
-    if (m_BattlefieldActive)
+    if (m_WarTime)
         return;
 
-    for (int team = 0; team < BG_TEAMS_COUNT; team++)
+    for (int team = 0; team < 2; team++)
     {
         m_PlayersInWar[team].clear();
         m_Groups[team].clear();
     }
-
     m_Timer = m_BattleTime;
-    m_BattlefieldActive = true;
+
+    m_WarTime = true;
 
     InvitePlayerInZoneToWar();
     InvitePlayerInQueueToWar();
@@ -327,7 +330,7 @@ void Battlefield::StartBattle()
 
 void Battlefield::EndBattle(bool endbytimer)
 {
-    m_BattlefieldActive = false;
+    m_WarTime = false;
 
     m_StartGrouping = false;
 
@@ -335,13 +338,13 @@ void Battlefield::EndBattle(bool endbytimer)
         SetDefenderTeam(GetAttackerTeam());
 
     if (GetDefenderTeam() == TEAM_ALLIANCE)
-        PlaySoundToAll(BF_ALLIANCE_WINS);                   // alliance wins sound
+        PlaySoundToAll(BF_ALLIANCE_WINS);                // alliance wins sound
     else
-        PlaySoundToAll(BF_HORDE_WINS);                      // horde wins sound
+        PlaySoundToAll(BF_HORDE_WINS);                   // horde wins sound
 
     OnBattleEnd(endbytimer);
 
-    // reset bf timer
+    //reset battlefield timer
     m_Timer = m_NoWarBattleTime;
     SendInitWorldStatesToAll();
 }
@@ -371,7 +374,7 @@ void Battlefield::PlayerAcceptInviteToQueue(Player *player)
     // Add player in queueVenez
     m_PlayersInQueue[player->GetTeamId()].insert(player->GetGUID());
     // Send notification
-    player->GetSession()->SendBfQueueInviteResponce(m_BattleId, m_ZoneId);
+    player->GetSession()->SendBfQueueInviteResponse(m_BattleId, m_ZoneId);
 }
 // Called in WorldSession::HandleBfExitRequest
 void Battlefield::AskToLeaveQueue(Player *player)
@@ -550,7 +553,7 @@ Group *Battlefield::GetFreeBfRaid(TeamId TeamId)
 
     return NULL;
 }
-
+// This needs to go... there IS NO forced grouping in WorldPvp!!!
 Group *Battlefield::GetGroupPlayer(uint64 guid, TeamId TeamId)
 {
     for (GuidSet::const_iterator itr = m_Groups[TeamId].begin(); itr != m_Groups[TeamId].end(); ++itr)
@@ -560,7 +563,7 @@ Group *Battlefield::GetGroupPlayer(uint64 guid, TeamId TeamId)
 
     return NULL;
 }
-
+// This needs to go... there IS NO forced grouping in WorldPvp!!!
 bool Battlefield::AddOrSetPlayerToCorrectBfGroup(Player *player)
 {
     if (!player->IsInWorld())

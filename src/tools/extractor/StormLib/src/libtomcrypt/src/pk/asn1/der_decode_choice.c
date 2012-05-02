@@ -25,7 +25,7 @@
    @param outlen   The number of items in the list
    @return CRYPT_OK on success
 */
-int der_decode_choice(const unsigned char *in,  unsigned long *inlen,
+int der_decode_choice(const unsigned char *in,   unsigned long *inlen,
                             ltc_asn1_list *list, unsigned long  outlen)
 {
    unsigned long size, x, z;
@@ -176,6 +176,6 @@ int der_decode_choice(const unsigned char *in,  unsigned long *inlen,
 
 #endif
 
-/* $Source: /cvs/libtom/libtomcrypt/src/pk/asn1/der/choice/der_decode_choice.c, v $ */
+/* $Source: /cvs/libtom/libtomcrypt/src/pk/asn1/der/choice/der_decode_choice.c,v $ */
 /* $Revision: 1.9 $ */
 /* $Date: 2006/12/28 01:27:24 $ */

@@ -113,15 +113,15 @@ int ltc_ecc_mul2add(ecc_point *A, void *kA,
   if ((err = mp_mulmod(B->y, mu, modulus, precomp[1<<2]->y)) != CRYPT_OK)                                      { goto ERR_MU; }
   if ((err = mp_mulmod(B->z, mu, modulus, precomp[1<<2]->z)) != CRYPT_OK)                                      { goto ERR_MU; }
 
-  /* precomp [i, 0](A + B) table */
+  /* precomp [i,0](A + B) table */
   if ((err = ltc_mp.ecc_ptdbl(precomp[1], precomp[2], modulus, mp)) != CRYPT_OK)                               { goto ERR_MU; }
   if ((err = ltc_mp.ecc_ptadd(precomp[1], precomp[2], precomp[3], modulus, mp)) != CRYPT_OK)                   { goto ERR_MU; }
 
-  /* precomp [0, i](A + B) table */
+  /* precomp [0,i](A + B) table */
   if ((err = ltc_mp.ecc_ptdbl(precomp[1<<2], precomp[2<<2], modulus, mp)) != CRYPT_OK)                         { goto ERR_MU; }
   if ((err = ltc_mp.ecc_ptadd(precomp[1<<2], precomp[2<<2], precomp[3<<2], modulus, mp)) != CRYPT_OK)          { goto ERR_MU; }
 
-  /* precomp [i, j](A + B) table (i != 0, j != 0) */
+  /* precomp [i,j](A + B) table (i != 0, j != 0) */
   for (x = 1; x < 4; x++) {
      for (y = 1; y < 4; y++) {
         if ((err = ltc_mp.ecc_ptadd(precomp[x], precomp[(y<<2)], precomp[x+(y<<2)], modulus, mp)) != CRYPT_OK) { goto ERR_MU; }
@@ -202,6 +202,6 @@ ERR_T:
 #endif
 #endif
 
-/* $Source: /cvs/libtom/libtomcrypt/src/pk/ecc/ltc_ecc_mul2add.c, v $ */
+/* $Source: /cvs/libtom/libtomcrypt/src/pk/ecc/ltc_ecc_mul2add.c,v $ */
 /* $Revision: 1.8 $ */
 /* $Date: 2007/05/12 14:32:35 $ */

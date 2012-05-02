@@ -27,10 +27,6 @@
      bzBuffToBuffDecompress.  Fixed.
 */
 
-#if defined(WIN32) || defined(WIN64)
-#pragma warning( disable : 4005)
-#endif
-
 #define _CRT_SECURE_NO_WARNINGS
 #include "bzlib_private.h"
 
@@ -65,7 +61,7 @@ void BZ2_bz__AssertH__fail ( int errcode )
       "memory reads/writes, and so acts (unintendedly) as a stress\n"
       "test of your memory system.\n"
       "\n"
-      "I suggest the following: try compressing the file again, \n"
+      "I suggest the following: try compressing the file again,\n"
       "possibly monitoring progress in detail with the -vv flag.\n"
       "\n"
       "* If the error cannot be reproduced, and/or happens at different\n"
@@ -250,7 +246,7 @@ void flush_RL ( EState* s )
 }
 
 /*---------------------------------------------------*/
-#define ADD_CHAR_TO_BLOCK(zs, zchh0)               \
+#define ADD_CHAR_TO_BLOCK(zs,zchh0)               \
 {                                                 \
    UInt32 zchh = (UInt32)(zchh0);                 \
    /*-- fast track the common case --*/           \
@@ -1324,14 +1320,14 @@ const char * BZ_API(BZ2_bzlibVersion)(void)
 #if defined(_WIN32) || defined(OS2) || defined(MSDOS)
 #   include <fcntl.h>
 #   include <io.h>
-#   define SET_BINARY_MODE(file) _setmode(_fileno(file), O_BINARY)
+#   define SET_BINARY_MODE(file) _setmode(_fileno(file),O_BINARY)
 #else
 #   define SET_BINARY_MODE(file)
 #endif
 static
 BZFILE * bzopen_or_bzdopen
-               ( const char *path,  /* no use when bzdopen */
-                 int fd,            /* no use when bzdopen */
+               ( const char *path,   /* no use when bzdopen */
+                 int fd,             /* no use when bzdopen */
                  const char *mode,
                  int open_mode)      /* bzopen: 0, bzdopen:1 */
 {
@@ -1364,20 +1360,20 @@ BZFILE * bzopen_or_bzdopen
       mode++;
    }
    strcat(mode2, writing ? "w" : "r" );
-   strcat(mode2, "b");   /* binary mode */
+   strcat(mode2,"b");   /* binary mode */
 
-   if (open_mode == 0) {
-      if (path == NULL || strcmp(path, "")==0) {
+   if (open_mode==0) {
+      if (path==NULL || strcmp(path,"")==0) {
         fp = (writing ? stdout : stdin);
         SET_BINARY_MODE(fp);
       } else {
-        fp = fopen(path, mode2);
+        fp = fopen(path,mode2);
       }
    } else {
 #ifdef BZ_STRICT_ANSI
       fp = NULL;
 #else
-      fp = _fdopen(fd, mode2);
+      fp = _fdopen(fd,mode2);
 #endif
    }
    if (fp == NULL) return NULL;
@@ -1386,11 +1382,11 @@ BZFILE * bzopen_or_bzdopen
       /* Guard against total chaos and anarchy -- JRS */
       if (blockSize100k < 1) blockSize100k = 1;
       if (blockSize100k > 9) blockSize100k = 9;
-      bzfp = BZ2_bzWriteOpen(&bzerr, fp, blockSize100k,
-                             verbosity, workFactor);
+      bzfp = BZ2_bzWriteOpen(&bzerr,fp,blockSize100k,
+                             verbosity,workFactor);
    } else {
-      bzfp = BZ2_bzReadOpen(&bzerr, fp, verbosity, smallMode,
-                            unused, nUnused);
+      bzfp = BZ2_bzReadOpen(&bzerr,fp,verbosity,smallMode,
+                            unused,nUnused);
    }
    if (bzfp == NULL) {
       if (fp != stdin && fp != stdout) fclose(fp);
@@ -1402,14 +1398,14 @@ BZFILE * bzopen_or_bzdopen
 /*---------------------------------------------------*/
 /*--
    open file for read or write.
-      ex) bzopen("file", "w9")
+      ex) bzopen("file","w9")
       case path="" or NULL => use stdin or stdout.
 --*/
 BZFILE * BZ_API(BZ2_bzopen)
                ( const char *path,
                  const char *mode )
 {
-   return bzopen_or_bzdopen(path, -1, mode, /*bzopen*/0);
+   return bzopen_or_bzdopen(path,-1,mode,/*bzopen*/0);
 }
 
 /*---------------------------------------------------*/
@@ -1417,7 +1413,7 @@ BZFILE * BZ_API(BZ2_bzdopen)
                ( int fd,
                  const char *mode )
 {
-   return bzopen_or_bzdopen(NULL, fd, mode, /*bzdopen*/1);
+   return bzopen_or_bzdopen(NULL,fd,mode,/*bzdopen*/1);
 }
 
 /*---------------------------------------------------*/
@@ -1425,7 +1421,7 @@ int BZ_API(BZ2_bzread) (BZFILE* b, void* buf, int len )
 {
    int bzerr, nread;
    if (((bzFile*)b)->lastErr == BZ_STREAM_END) return 0;
-   nread = BZ2_bzRead(&bzerr, b, buf, len);
+   nread = BZ2_bzRead(&bzerr,b,buf,len);
    if (bzerr == BZ_OK || bzerr == BZ_STREAM_END) {
       return nread;
    } else {
@@ -1438,8 +1434,8 @@ int BZ_API(BZ2_bzwrite) (BZFILE* b, void* buf, int len )
 {
    int bzerr;
 
-   BZ2_bzWrite(&bzerr, b, buf, len);
-   if (bzerr == BZ_OK){
+   BZ2_bzWrite(&bzerr,b,buf,len);
+   if(bzerr == BZ_OK){
       return len;
    }else{
       return -1;
@@ -1459,17 +1455,17 @@ void BZ_API(BZ2_bzclose) (BZFILE* b)
    int bzerr;
    FILE *fp;
 
-   if (b == NULL) {return;}
+   if (b==NULL) {return;}
    fp = ((bzFile *)b)->handle;
-   if (((bzFile*)b)->writing){
-      BZ2_bzWriteClose(&bzerr, b, 0, NULL, NULL);
-      if (bzerr != BZ_OK){
-         BZ2_bzWriteClose(NULL, b, 1, NULL, NULL);
+   if(((bzFile*)b)->writing){
+      BZ2_bzWriteClose(&bzerr,b,0,NULL,NULL);
+      if(bzerr != BZ_OK){
+         BZ2_bzWriteClose(NULL,b,1,NULL,NULL);
       }
    }else{
-      BZ2_bzReadClose(&bzerr, b);
+      BZ2_bzReadClose(&bzerr,b);
    }
-   if (fp!=stdin && fp!=stdout){
+   if(fp!=stdin && fp!=stdout){
       fclose(fp);
    }
 }
@@ -1480,28 +1476,28 @@ void BZ_API(BZ2_bzclose) (BZFILE* b)
 --*/
 static const char *bzerrorstrings[] = {
        "OK"
-      , "SEQUENCE_ERROR"
-      , "PARAM_ERROR"
-      , "MEM_ERROR"
-      , "DATA_ERROR"
-      , "DATA_ERROR_MAGIC"
-      , "IO_ERROR"
-      , "UNEXPECTED_EOF"
-      , "OUTBUFF_FULL"
-      , "CONFIG_ERROR"
-      , "???"   /* for future */
-      , "???"   /* for future */
-      , "???"   /* for future */
-      , "???"   /* for future */
-      , "???"   /* for future */
-      , "???"   /* for future */
+      ,"SEQUENCE_ERROR"
+      ,"PARAM_ERROR"
+      ,"MEM_ERROR"
+      ,"DATA_ERROR"
+      ,"DATA_ERROR_MAGIC"
+      ,"IO_ERROR"
+      ,"UNEXPECTED_EOF"
+      ,"OUTBUFF_FULL"
+      ,"CONFIG_ERROR"
+      ,"???"   /* for future */
+      ,"???"   /* for future */
+      ,"???"   /* for future */
+      ,"???"   /* for future */
+      ,"???"   /* for future */
+      ,"???"   /* for future */
 };
 
 const char * BZ_API(BZ2_bzerror) (BZFILE *b, int *errnum)
 {
    int err = ((bzFile *)b)->lastErr;
 
-   if (err>0) err = 0;
+   if(err>0) err = 0;
    *errnum = err;
    return bzerrorstrings[err*-1];
 }

@@ -43,6 +43,6 @@ int mp_set_int (mp_int * a, unsigned long b)
 }
 #endif
 
-/* $Source: /cvs/libtom/libtommath/bn_mp_set_int.c, v $ */
+/* $Source: /cvs/libtom/libtommath/bn_mp_set_int.c,v $ */
 /* $Revision: 1.4 $ */
 /* $Date: 2006/12/28 01:25:13 $ */

@@ -38,14 +38,14 @@ typedef struct _PART_FILE_HEADER
     char  GameBuildNumber[8];               // Minimum build number of the game that can use this MPQ
     DWORD Unknown0C;
     DWORD Unknown10;
-    DWORD Unknown14;                        // Seems to contain 0x1C, which is the size of the rest of the header
+    DWORD Unknown14;                        // Often contains 0x1C (size of the rest of the header ?)
     DWORD Unknown18;
-    DWORD Unknown1C;
-    DWORD Unknown20;
-    DWORD ZeroValue;                        // Seems to always be zero
+    DWORD ZeroValue1C;                      // Seems to always be zero
+    DWORD ZeroValue20;                      // Seems to always be zero
+    DWORD ZeroValue24;                      // Seems to always be zero
     DWORD FileSizeLo;                       // Low 32 bits of the file size
     DWORD FileSizeHi;                       // High 32 bits of the file size
-    DWORD PartSize;                         // Size of one file part, in bytes
+    DWORD BlockSize;                        // Size of one file block, in bytes
 } PART_FILE_HEADER, *PPART_FILE_HEADER;
 
 // Structure describing the block-to-file map entry
@@ -62,8 +62,8 @@ struct TPartFileStream : public TFileStream
 {
     ULONGLONG VirtualSize;                  // Virtual size of the file
     ULONGLONG VirtualPos;                   // Virtual position in the file
-    DWORD     PartCount;                    // Number of file parts. Used by partial file stream
-    DWORD     PartSize;                     // Size of one part. Used by partial file stream
+    DWORD     BlockCount;                   // Number of file blocks. Used by partial file stream
+    DWORD     BlockSize;                    // Size of one block. Used by partial file stream
 
     PART_FILE_MAP_ENTRY PartMap[1];         // File map, variable length
 };
@@ -74,6 +74,23 @@ struct TEncryptedStream : public TFileStream
 {
     BYTE Key[MPQE_CHUNK_SIZE];              // File key
 };
+
+static bool IsPartHeader(PPART_FILE_HEADER pPartHdr)
+{
+    // Version number must be 2
+    if(pPartHdr->PartialVersion == 2)
+    {
+        // GameBuildNumber must be anm ASCII number
+        if(isdigit(pPartHdr->GameBuildNumber[0]) && isdigit(pPartHdr->GameBuildNumber[1]) && isdigit(pPartHdr->GameBuildNumber[2]))
+        {
+            // Block size must be power of 2
+            if((pPartHdr->BlockSize & (pPartHdr->BlockSize - 1)) == 0)
+                return true;
+        }
+    }
+
+    return false;
+}
 
 //-----------------------------------------------------------------------------
 // Non-Windows support for LastError
@@ -100,17 +117,17 @@ void ConvertPartHeader(void * partHeader)
 {
     PPART_FILE_HEADER theHeader = (PPART_FILE_HEADER)partHeader;
 
-    theHeader->PartialVersion = SwapULong(theHeader->PartialVersion);
-    theHeader->Unknown0C      = SwapULong(theHeader->Unknown0C);
-    theHeader->Unknown10      = SwapULong(theHeader->Unknown10);
-    theHeader->Unknown14      = SwapULong(theHeader->Unknown14);
-    theHeader->Unknown18      = SwapULong(theHeader->Unknown18);
-    theHeader->Unknown1C      = SwapULong(theHeader->Unknown1C);
-    theHeader->Unknown20      = SwapULong(theHeader->Unknown20);
-    theHeader->ZeroValue      = SwapULong(theHeader->ZeroValue);
-    theHeader->FileSizeLo     = SwapULong(theHeader->FileSizeLo);
-    theHeader->FileSizeHi     = SwapULong(theHeader->FileSizeHi);
-    theHeader->PartSize       = SwapULong(theHeader->PartSize);
+    theHeader->PartialVersion = SwapUInt32(theHeader->PartialVersion);
+    theHeader->Unknown0C      = SwapUInt32(theHeader->Unknown0C);
+    theHeader->Unknown10      = SwapUInt32(theHeader->Unknown10);
+    theHeader->Unknown14      = SwapUInt32(theHeader->Unknown14);
+    theHeader->Unknown18      = SwapUInt32(theHeader->Unknown18);
+    theHeader->Unknown1C      = SwapUInt32(theHeader->Unknown1C);
+    theHeader->Unknown20      = SwapUInt32(theHeader->Unknown20);
+    theHeader->ZeroValue      = SwapUInt32(theHeader->ZeroValue);
+    theHeader->FileSizeLo     = SwapUInt32(theHeader->FileSizeLo);
+    theHeader->FileSizeHi     = SwapUInt32(theHeader->FileSizeHi);
+    theHeader->BlockSize      = SwapUInt32(theHeader->BlockSize);
 }
 #endif
 
@@ -157,15 +174,20 @@ static void ConvertTimeTToFileTime(ULONGLONG * pFileTime, time_t crt_time)
 #endif
 
 static HANDLE CreateNewFile(
-    const char * szFileName)                // Name of the file to open
+    const TCHAR * szFileName)               // Name of the file to open
 {
     HANDLE hFile = INVALID_HANDLE_VALUE;    // Pre-set the file handle to INVALID_HANDLE_VALUE
 
 #ifdef PLATFORM_WINDOWS
     {
+        DWORD dwShareMode = FILE_SHARE_READ;
+
+        if(dwGlobalFlags & SFILE_FLAG_ALLOW_WRITE_SHARE)
+            dwShareMode |= FILE_SHARE_WRITE;
+
         hFile = CreateFile(szFileName,
                            GENERIC_READ | GENERIC_WRITE,
-                           FILE_SHARE_READ,
+                           dwShareMode,
                            NULL,
                            CREATE_ALWAYS,
                            0,
@@ -220,7 +242,7 @@ static HANDLE CreateNewFile(
         }
 
         theErr = FSOpenDFCompat(&theFileRef, fsRdWrPerm, &fileRef);
-        if (theErr != noErr)
+        if(theErr != noErr)
         {
             nLastError = theErr;
             return INVALID_HANDLE_VALUE;
@@ -235,7 +257,7 @@ static HANDLE CreateNewFile(
         intptr_t handle;
 
         handle = open(szFileName, O_RDWR | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
-        if (handle == -1)
+        if(handle == -1)
         {
             nLastError = errno;
             return INVALID_HANDLE_VALUE;
@@ -250,16 +272,21 @@ static HANDLE CreateNewFile(
 }
 
 static HANDLE OpenExistingFile(
-    const char * szFileName,               // Name of the file to open
+    const TCHAR * szFileName,               // Name of the file to open
     bool bWriteAccess)                      // false = read-only, true = read/write
 {
     HANDLE hFile = INVALID_HANDLE_VALUE;    // Pre-set the file handle to INVALID_HANDLE_VALUE
 
 #ifdef PLATFORM_WINDOWS
     {
+        DWORD dwShareMode = FILE_SHARE_READ;
+
+        if(dwGlobalFlags & SFILE_FLAG_ALLOW_WRITE_SHARE)
+            dwShareMode |= FILE_SHARE_WRITE;
+
         hFile = CreateFile(szFileName,
                            bWriteAccess ? (GENERIC_READ | GENERIC_WRITE) : GENERIC_READ,
-                           FILE_SHARE_READ,
+                           dwShareMode,
                            NULL,
                            OPEN_EXISTING,
                            0,
@@ -275,7 +302,7 @@ static HANDLE OpenExistingFile(
         char permission = bWriteAccess ? fsRdWrPerm : fsRdPerm;
 
         theErr = FSPathMakeRef((const UInt8 *)szFileName, &theFileRef, NULL);
-        if (theErr != noErr)
+        if(theErr != noErr)
         {
             nLastError = theErr;
             return INVALID_HANDLE_VALUE;
@@ -298,7 +325,7 @@ static HANDLE OpenExistingFile(
         intptr_t handle;
 
         handle = open(szFileName, oflag | O_LARGEFILE);
-        if (handle == -1)
+        if(handle == -1)
         {
             nLastError = errno;
             return INVALID_HANDLE_VALUE;
@@ -327,10 +354,12 @@ static void CloseTheFile(HANDLE hFile)
 #endif
 }
 
-// Renames a file to another name.
-// Note that the "szNewFile" file usually exists when this function is called,
-// so the function must deal with it properly
-static bool RenameFile(const char * szExistingFile, const char * szNewFile)
+/**
+ * Renames a file to another name.
+ * Note that the "szNewFile" file usually exists when this function is called,
+ * so the function must deal with it properly
+ */
+static bool RenameFile(const TCHAR * szExistingFile, const TCHAR * szNewFile)
 {
 #ifdef PLATFORM_WINDOWS
     // Delete the original stream file. Don't check the result value,
@@ -384,7 +413,7 @@ static bool RenameFile(const char * szExistingFile, const char * szNewFile)
 
 #ifdef PLATFORM_LINUX
     // "rename" on Linux also works if the target file exists
-    if (rename(szExistingFile, szNewFile) == -1)
+    if(rename(szExistingFile, szNewFile) == -1)
     {
         nLastError = errno;
         return false;
@@ -398,7 +427,7 @@ static bool RenameFile(const char * szExistingFile, const char * szNewFile)
 // Stream functions - normal file stream
 
 static bool File_GetPos(
-    TFileStream * pStream,                 // Pointer to an open stream
+    TFileStream * pStream,                  // Pointer to an open stream
     ULONGLONG & ByteOffset)                 // Pointer to file byte offset
 {
     ByteOffset = pStream->RawFilePos;
@@ -406,22 +435,22 @@ static bool File_GetPos(
 }
 
 static bool File_Read(
-    TFileStream * pStream,                 // Pointer to an open stream
-    ULONGLONG * pByteOffset,               // Pointer to file byte offset. If NULL, it reads from the current position
-    void * pvBuffer,                       // Pointer to data to be read
+    TFileStream * pStream,                  // Pointer to an open stream
+    ULONGLONG * pByteOffset,                // Pointer to file byte offset. If NULL, it reads from the current position
+    void * pvBuffer,                        // Pointer to data to be read
     DWORD dwBytesToRead)                    // Number of bytes to read from the file
 {
     DWORD dwBytesRead = 0;                  // Must be set by platform-specific code
 
     // If the byte offset is not entered, use the current position
-    if (pByteOffset == NULL)
+    if(pByteOffset == NULL)
         pByteOffset = &pStream->RawFilePos;
 
 #ifdef PLATFORM_WINDOWS
     {
         // If the byte offset is different from the current file position,
         // we have to update the file position
-        if (*pByteOffset != pStream->RawFilePos)
+        if(*pByteOffset != pStream->RawFilePos)
         {
             LONG ByteOffsetHi = (LONG)(*pByteOffset >> 32);
             LONG ByteOffsetLo = (LONG)(*pByteOffset);
@@ -431,9 +460,9 @@ static bool File_Read(
         }
 
         // Read the data
-        if (dwBytesToRead != 0)
+        if(dwBytesToRead != 0)
         {
-            if (!ReadFile(pStream->hFile, pvBuffer, dwBytesToRead, &dwBytesRead, NULL))
+            if(!ReadFile(pStream->hFile, pvBuffer, dwBytesToRead, &dwBytesRead, NULL))
                 return false;
         }
     }
@@ -447,14 +476,14 @@ static bool File_Read(
 
         // If the byte offset is different from the current file position,
         // we have to update the file position
-        if (*pByteOffset != pStream->RawFilePos)
+        if(*pByteOffset != pStream->RawFilePos)
         {
             FSSetForkPosition((short)(long)pStream->hFile, fsFromStart, (SInt64)(*pByteOffset));
             pStream->RawFilePos = *pByteOffset;
         }
 
         // Read the data
-        if (nBytesToRead != 0)
+        if(nBytesToRead != 0)
         {
             theErr = FSReadFork((short)(long)pStream->hFile, fsAtMark, 0, nBytesToRead, pvBuffer, &nBytesRead);
             if (theErr != noErr && theErr != eofErr)
@@ -473,17 +502,17 @@ static bool File_Read(
 
         // If the byte offset is different from the current file position,
         // we have to update the file position
-        if (*pByteOffset != pStream->RawFilePos)
+        if(*pByteOffset != pStream->RawFilePos)
         {
             lseek64((intptr_t)pStream->hFile, (off64_t)(*pByteOffset), SEEK_SET);
             pStream->RawFilePos = *pByteOffset;
         }
 
         // Perform the read operation
-        if (dwBytesToRead != 0)
+        if(dwBytesToRead != 0)
         {
             bytes_read = read((intptr_t)pStream->hFile, pvBuffer, (size_t)dwBytesToRead);
-            if (bytes_read == -1)
+            if(bytes_read == -1)
             {
                 nLastError = errno;
                 return false;
@@ -497,28 +526,31 @@ static bool File_Read(
     // Increment the current file position by number of bytes read
     // If the number of bytes read doesn't match to required amount, return false
     pStream->RawFilePos = *pByteOffset + dwBytesRead;
-    if (dwBytesRead != dwBytesToRead)
+    if(dwBytesRead != dwBytesToRead)
         SetLastError(ERROR_HANDLE_EOF);
     return (dwBytesRead == dwBytesToRead);
 }
 
-static bool File_Write(
-    TFileStream * pStream,                 // Pointer to an open stream
-    ULONGLONG * pByteOffset,               // Pointer to file byte offset. If NULL, it writes to current position
-    const void * pvBuffer,                 // Pointer to data to be written
-    DWORD dwBytesToWrite)                   // Number of bytes to write to the file
+/**
+ * \a pStream Pointer to an open stream
+ * \a pByteOffset Pointer to file byte offset. If NULL, writes to current position
+ * \a pvBuffer Pointer to data to be written
+ * \a dwBytesToWrite Number of bytes to write to the file
+ */
+
+static bool File_Write(TFileStream * pStream, ULONGLONG * pByteOffset, const void * pvBuffer, DWORD dwBytesToWrite)
 {
     DWORD dwBytesWritten = 0;               // Must be set by platform-specific code
 
     // If the byte offset is not entered, use the current position
-    if (pByteOffset == NULL)
+    if(pByteOffset == NULL)
         pByteOffset = &pStream->RawFilePos;
 
 #ifdef PLATFORM_WINDOWS
     {
         // If the byte offset is different from the current file position,
         // we have to update the file position
-        if (*pByteOffset != pStream->RawFilePos)
+        if(*pByteOffset != pStream->RawFilePos)
         {
             LONG ByteOffsetHi = (LONG)(*pByteOffset >> 32);
             LONG ByteOffsetLo = (LONG)(*pByteOffset);
@@ -528,7 +560,7 @@ static bool File_Write(
         }
 
         // Read the data
-        if (!WriteFile(pStream->hFile, pvBuffer, dwBytesToWrite, &dwBytesWritten, NULL))
+        if(!WriteFile(pStream->hFile, pvBuffer, dwBytesToWrite, &dwBytesWritten, NULL))
             return false;
     }
 #endif
@@ -541,7 +573,7 @@ static bool File_Write(
 
         // If the byte offset is different from the current file position,
         // we have to update the file position
-        if (*pByteOffset != pStream->RawFilePos)
+        if(*pByteOffset != pStream->RawFilePos)
         {
             FSSetForkPosition((short)(long)pStream->hFile, fsFromStart, (SInt64)(*pByteOffset));
             pStream->RawFilePos = *pByteOffset;
@@ -563,7 +595,7 @@ static bool File_Write(
 
         // If the byte offset is different from the current file position,
         // we have to update the file position
-        if (*pByteOffset != pStream->RawFilePos)
+        if(*pByteOffset != pStream->RawFilePos)
         {
             lseek64((intptr_t)pStream->hFile, (off64_t)(*pByteOffset), SEEK_SET);
             pStream->RawFilePos = *pByteOffset;
@@ -571,7 +603,7 @@ static bool File_Write(
 
         // Perform the read operation
         bytes_written = write((intptr_t)pStream->hFile, pvBuffer, (size_t)dwBytesToWrite);
-        if (bytes_written == -1)
+        if(bytes_written == -1)
         {
             nLastError = errno;
             return false;
@@ -583,13 +615,13 @@ static bool File_Write(
 
     // Increment the current file position by number of bytes read
     pStream->RawFilePos = *pByteOffset + dwBytesWritten;
-    if (dwBytesWritten != dwBytesToWrite)
+    if(dwBytesWritten != dwBytesToWrite)
         SetLastError(ERROR_DISK_FULL);
     return (dwBytesWritten == dwBytesToWrite);
 }
 
 static bool File_GetSize(
-    TFileStream * pStream,                 // Pointer to an open stream
+    TFileStream * pStream,                  // Pointer to an open stream
     ULONGLONG & FileSize)                   // Pointer where to store file size
 {
 #ifdef PLATFORM_WINDOWS
@@ -597,7 +629,7 @@ static bool File_GetSize(
     DWORD FileSizeLo;
 
     FileSizeLo = GetFileSize(pStream->hFile, &FileSizeHi);
-    if (FileSizeLo == INVALID_FILE_SIZE && GetLastError() != ERROR_SUCCESS)
+    if(FileSizeLo == INVALID_FILE_SIZE && GetLastError() != ERROR_SUCCESS)
         return false;
 
     FileSize = MAKE_OFFSET64(FileSizeHi, FileSizeLo);
@@ -609,7 +641,7 @@ static bool File_GetSize(
     OSErr theErr;
 
     theErr = FSGetForkSize((short)(long)pStream->hFile, &fileLength);
-    if (theErr != noErr)
+    if(theErr != noErr)
     {
         nLastError = theErr;
         return false;
@@ -622,7 +654,7 @@ static bool File_GetSize(
 #ifdef PLATFORM_LINUX
     struct stat64 fileinfo;
 
-    if (fstat64((intptr_t)pStream->hFile, &fileinfo) == -1)
+    if(fstat64((intptr_t)pStream->hFile, &fileinfo) == -1)
     {
         nLastError = errno;
         return false;
@@ -633,9 +665,11 @@ static bool File_GetSize(
 #endif
 }
 
-static bool File_SetSize(
-    TFileStream * pStream,                 // Pointer to an open stream
-    ULONGLONG NewFileSize)                  // new size of the file
+/**
+ * \a pStream Pointer to an open stream
+ * \a NewFileSize New size of the file
+ */
+static bool File_SetSize(TFileStream * pStream, ULONGLONG NewFileSize)
 {
 #ifdef PLATFORM_WINDOWS
     {
@@ -646,7 +680,7 @@ static bool File_SetSize(
 
         // Set the position at the new file size
         dwNewPos = SetFilePointer(pStream->hFile, FileSizeLo, &FileSizeHi, FILE_BEGIN);
-        if (dwNewPos == INVALID_SET_FILE_POINTER && GetLastError() != ERROR_SUCCESS)
+        if(dwNewPos == INVALID_SET_FILE_POINTER && GetLastError() != ERROR_SUCCESS)
             return false;
 
         // Set the current file pointer as the end of the file
@@ -665,7 +699,7 @@ static bool File_SetSize(
         OSErr theErr;
 
         theErr = FSSetForkSize((short)(long)pStream->hFile, fsFromStart, (SInt64)NewFileSize);
-        if (theErr != noErr)
+        if(theErr != noErr)
         {
             nLastError = theErr;
             return false;
@@ -677,7 +711,7 @@ static bool File_SetSize(
 
 #ifdef PLATFORM_LINUX
     {
-        if (ftruncate((intptr_t)pStream->hFile, (off_t)NewFileSize) == -1)
+        if(ftruncate((intptr_t)pStream->hFile, (off_t)NewFileSize) == -1)
         {
             nLastError = errno;
             return false;
@@ -691,19 +725,23 @@ static bool File_SetSize(
 //-----------------------------------------------------------------------------
 // Stream functions - partial normal file stream
 
-static bool PartFile_GetPos(
-    TPartFileStream * pStream,             // Pointer to an open stream
-    ULONGLONG & ByteOffset)                 // Pointer to file byte offset
+/**
+ * \a pStream Pointer to an open stream
+ * \a ByteOffset File byte offset
+ */
+static bool PartFile_GetPos(TPartFileStream * pStream, ULONGLONG & ByteOffset)
 {
     ByteOffset = pStream->VirtualPos;
     return true;
 }
 
-static bool PartFile_Read(
-    TPartFileStream * pStream,             // Pointer to an open stream
-    ULONGLONG * pByteOffset,               // Pointer to file byte offset. If NULL, it reads from the current position
-    void * pvBuffer,                       // Pointer to data to be read
-    DWORD dwBytesToRead)                    // Number of bytes to read from the file
+/**
+ * \a pStream Pointer to an open stream
+ * \a pByteOffset Pointer to file byte offset. If NULL, reads from the current position
+ * \a pvBuffer Pointer to data to be read
+ * \a dwBytesToRead Number of bytes to read from the file
+ */
+static bool PartFile_Read(TPartFileStream * pStream, ULONGLONG * pByteOffset, void * pvBuffer, DWORD dwBytesToRead)
 {
     ULONGLONG RawByteOffset;
     LPBYTE pbBuffer = (LPBYTE)pvBuffer;
@@ -711,16 +749,16 @@ static bool PartFile_Read(
     DWORD dwPartOffset;
     DWORD dwPartIndex;
     DWORD dwBytesRead = 0;
-    DWORD dwPartSize = pStream->PartSize;
+    DWORD dwBlockSize = pStream->BlockSize;
     bool bResult = false;
     int nFailReason = ERROR_HANDLE_EOF;             // Why it failed if not enough bytes was read
 
     // If the byte offset is not entered, use the current position
-    if (pByteOffset == NULL)
+    if(pByteOffset == NULL)
         pByteOffset = &pStream->VirtualPos;
 
     // Check if the file position is not at or beyond end of the file
-    if (*pByteOffset >= pStream->VirtualSize)
+    if(*pByteOffset >= pStream->VirtualSize)
     {
         SetLastError(ERROR_HANDLE_EOF);
         return false;
@@ -729,25 +767,25 @@ static bool PartFile_Read(
     // Get the part index where the read offset is
     // Note that the part index should now be within the range,
     // as read requests beyond-EOF are handled by the previous test
-    dwPartIndex = (DWORD)(*pByteOffset / pStream->PartSize);
-    assert(dwPartIndex < pStream->PartCount);
+    dwPartIndex = (DWORD)(*pByteOffset / pStream->BlockSize);
+    assert(dwPartIndex < pStream->BlockCount);
 
     // If the number of bytes remaining goes past
     // the end of the file, cut them
-    if ((*pByteOffset + dwBytesRemaining) > pStream->VirtualSize)
+    if((*pByteOffset + dwBytesRemaining) > pStream->VirtualSize)
         dwBytesRemaining = (DWORD)(pStream->VirtualSize - *pByteOffset);
 
     // Calculate the offset in the current part
-    dwPartOffset = (DWORD)(*pByteOffset) & (pStream->PartSize - 1);
+    dwPartOffset = (DWORD)(*pByteOffset) & (pStream->BlockSize - 1);
 
     // Read all data, one part at a time
-    while (dwBytesRemaining != 0)
+    while(dwBytesRemaining != 0)
     {
         PPART_FILE_MAP_ENTRY PartMap = pStream->PartMap + dwPartIndex;
         DWORD dwBytesInPart;
 
         // If the part is not present in the file, we fail the read
-        if ((PartMap->Flags & 3) == 0)
+        if((PartMap->Flags & 3) == 0)
         {
             nFailReason = ERROR_CAN_NOT_COMPLETE;
             bResult = false;
@@ -755,15 +793,15 @@ static bool PartFile_Read(
         }
 
         // If we are in the last part, we have to cut the number of bytes in the last part
-        if (dwPartIndex == pStream->PartCount - 1)
-            dwPartSize = (DWORD)pStream->VirtualSize & (pStream->PartSize - 1);
+        if(dwPartIndex == pStream->BlockCount - 1)
+            dwBlockSize = (DWORD)pStream->VirtualSize & (pStream->BlockSize - 1);
 
         // Get the number of bytes reamining in the current part
-        dwBytesInPart = dwPartSize - dwPartOffset;
+        dwBytesInPart = dwBlockSize - dwPartOffset;
 
         // Compute the raw file offset of the file part
         RawByteOffset = MAKE_OFFSET64(PartMap->BlockOffsHi, PartMap->BlockOffsLo);
-        if (RawByteOffset == 0)
+        if(RawByteOffset == 0)
         {
             nFailReason = ERROR_CAN_NOT_COMPLETE;
             bResult = false;
@@ -771,12 +809,12 @@ static bool PartFile_Read(
         }
 
         // If the number of bytes in part is too big, cut it
-        if (dwBytesInPart > dwBytesRemaining)
+        if(dwBytesInPart > dwBytesRemaining)
             dwBytesInPart = dwBytesRemaining;
 
         // Append the offset within the part
         RawByteOffset += dwPartOffset;
-        if (!File_Read(pStream, &RawByteOffset, pbBuffer, dwBytesInPart))
+        if(!File_Read(pStream, &RawByteOffset, pbBuffer, dwBytesInPart))
         {
             nFailReason = ERROR_CAN_NOT_COMPLETE;
             bResult = false;
@@ -795,15 +833,15 @@ static bool PartFile_Read(
 
     // Move the file position by the number of bytes read
     pStream->VirtualPos = *pByteOffset + dwBytesRead;
-    if (dwBytesRead != dwBytesToRead)
+    if(dwBytesRead != dwBytesToRead)
         SetLastError(nFailReason);
     return (dwBytesRead == dwBytesToRead);
 }
 
 static bool PartFile_Write(
-    TPartFileStream * pStream,             // Pointer to an open stream
-    ULONGLONG * pByteOffset,               // Pointer to file byte offset. If NULL, it reads from the current position
-    const void * pvBuffer,                 // Pointer to data to be read
+    TPartFileStream * pStream,              // Pointer to an open stream
+    ULONGLONG * pByteOffset,                // Pointer to file byte offset. If NULL, it reads from the current position
+    const void * pvBuffer,                  // Pointer to data to be read
     DWORD dwBytesToRead)                    // Number of bytes to read from the file
 {
     // Keep compiler happy
@@ -817,7 +855,7 @@ static bool PartFile_Write(
 }
 
 static bool PartFile_GetSize(
-    TPartFileStream * pStream,             // Pointer to an open stream
+    TPartFileStream * pStream,              // Pointer to an open stream
     ULONGLONG & FileSize)                   // Pointer where to store file size
 {
     FileSize = pStream->VirtualSize;
@@ -825,7 +863,7 @@ static bool PartFile_GetSize(
 }
 
 static bool PartFile_SetSize(
-    TPartFileStream * pStream,             // Pointer to an open stream
+    TPartFileStream * pStream,              // Pointer to an open stream
     ULONGLONG NewSize)                      // new size of the file
 {
     // Keep compiler happy
@@ -836,32 +874,42 @@ static bool PartFile_SetSize(
     return false;
 }
 
-//-----------------------------------------------------------------------------
+//
 // Stream functions - encrypted stream
 //
 // Note: In original Starcraft II Installer.exe:                       Suffix derived from battle.net auth. code
 // Address of decryption routine: 0053A3D0                             http://us.battle.net/static/mediakey/sc2-authenticationcode-enUS.txt
-// Pointer to decryptor object: ECX                                    Numbers mean offset of 4-char group of auth code
+// Pointer to decryptor object: ECX                                    Numbers mean offset of 4-char group of auth code (follows in comment)
 // Pointer to key: ECX+0x5C                                            -0C-    -1C--08-    -18--04-    -14--00-    -10-
-static const char * MpqeKey_Starcraft2_Install_enUS = "expand 32-byte kTFD80000ETR5VM5G0000K859RE5N0000WT6F3DH500005LXG";
-static const char * MpqeKey_Starcraft2_Install_enGB = "expand 32-byte kANGY000029ZH6NA20000HRGF8UDG0000NY82G8MN00006A3D";
-static const char * MpqeKey_Starcraft2_Install_deDE = "expand 32-byte kSSXH00004XFXK4KX00008EKJD3CA0000Y64ZY45M0000YD9V";
-static const char * MpqeKey_Starcraft2_Install_esES = "expand 32-byte kQU4Y0000XKTQ94PF0000N4R4UAXE0000AZ248WLK0000249P";
-static const char * MpqeKey_Starcraft2_Install_frFR = "expand 32-byte kFWPQ00006EAJ8HJE0000PFER9K9300008MA2ZG7J0000UA76";
-static const char * MpqeKey_Starcraft2_Install_itIT = "expand 32-byte kXV7E00008BL2TVAP0000GVMWUNNN0000SVBWNE7C00003G2B";
-static const char * MpqeKey_Starcraft2_Install_plPL = "expand 32-byte k83U6000048L6LULJ00004MQDB8ME0000UP6K2NSF0000YHA3";
-static const char * MpqeKey_Starcraft2_Install_ruRU = "expand 32-byte k9SH70000YEGT4BAT0000QDK978W60000V9NLVHB30000D68V";
+static const char * MpqeKey_Starcraft2_Install_enUS = "expand 32-byte kTFD80000ETR5VM5G0000K859RE5N0000WT6F3DH500005LXG";   // 3DH5RE5NVM5GTFD85LXGWT6FK859ETR5
+static const char * MpqeKey_Starcraft2_Install_enGB = "expand 32-byte kANGY000029ZH6NA20000HRGF8UDG0000NY82G8MN00006A3D";   // G8MN8UDG6NA2ANGY6A3DNY82HRGF29ZH
+static const char * MpqeKey_Starcraft2_Install_enSG = "expand 32-byte kWW5B0000F7HWFDU90000FWZSHLB20000BLRSW9RR00003ECE";   // W9RRHLB2FDU9WW5B3ECEBLRSFWZSF7HW
+static const char * MpqeKey_Starcraft2_Install_deDE = "expand 32-byte kSSXH00004XFXK4KX00008EKJD3CA0000Y64ZY45M0000YD9V";   // Y45MD3CAK4KXSSXHYD9VY64Z8EKJ4XFX
+static const char * MpqeKey_Starcraft2_Install_esES = "expand 32-byte kQU4Y0000XKTQ94PF0000N4R4UAXE0000AZ248WLK0000249P";   // 8WLKUAXE94PFQU4Y249PAZ24N4R4XKTQ
+static const char * MpqeKey_Starcraft2_Install_esMX = "expand 32-byte kSQBR00004G54HGGX0000MF9GXX3V0000FFDXA34D0000FE5U";   // A34DXX3VHGGXSQBRFE5UFFDXMF9G4G54
+static const char * MpqeKey_Starcraft2_Install_frFR = "expand 32-byte kFWPQ00006EAJ8HJE0000PFER9K9300008MA2ZG7J0000UA76";   // ZG7J9K938HJEFWPQUA768MA2PFER6EAJ
+static const char * MpqeKey_Starcraft2_Install_itIT = "expand 32-byte kXV7E00008BL2TVAP0000GVMWUNNN0000SVBWNE7C00003G2B";   // NE7CUNNNTVAPXV7E3G2BSVBWGVMW8BL2
+static const char * MpqeKey_Starcraft2_Install_plPL = "expand 32-byte k83U6000048L6LULJ00004MQDB8ME0000UP6K2NSF0000YHA3";   // 2NSFB8MELULJ83U6YHA3UP6K4MQD48L6
+static const char * MpqeKey_Starcraft2_Install_ruRU = "expand 32-byte k9SH70000YEGT4BAT0000QDK978W60000V9NLVHB30000D68V";   // VHB378W64BAT9SH7D68VV9NLQDK9YEGT
+static const char * MpqeKey_Starcraft2_Install_zhTW = "expand 32-byte k7KBN0000D9NEM6GC0000N3PLQJV400003BRDU3NF00009XQJ";   // U3NFQJV4M6GC7KBN9XQJ3BRDN3PLD9NE
+static const char * MpqeKey_Starcraft2_Install_ptBR = "expand 32-byte kU8BM0000SW4EZ4CU00005F9CZ9EW0000CTY6QA2T0000B5WX";   // QA2TZ9EWZ4CUU8BMB5WXCTY65F9CSW4E
+static const char * MpqeKey_Starcraft2_Install_koKR = "expand 32-byte kQWK70000838FBM9Q0000WQDB2FTM0000MWAZ3V9E0000U6MA";   // 3V9E2FTMBM9QQWK7U6MAMWAZWQDB838F
 
 static const char * MpqKeyArray[] =
 {
     MpqeKey_Starcraft2_Install_enUS,
     MpqeKey_Starcraft2_Install_enGB,
+    MpqeKey_Starcraft2_Install_enSG,
     MpqeKey_Starcraft2_Install_deDE,
     MpqeKey_Starcraft2_Install_esES,
+    MpqeKey_Starcraft2_Install_esMX,
     MpqeKey_Starcraft2_Install_frFR,
     MpqeKey_Starcraft2_Install_itIT,
     MpqeKey_Starcraft2_Install_plPL,
     MpqeKey_Starcraft2_Install_ruRU,
+    MpqeKey_Starcraft2_Install_zhTW,
+    MpqeKey_Starcraft2_Install_ptBR,
+    MpqeKey_Starcraft2_Install_koKR,
     NULL
 };
 
@@ -873,7 +921,7 @@ static DWORD Rol32(DWORD dwValue, DWORD dwRolCount)
 }
 
 static void DecryptFileChunk(
-    LPDWORD MpqData,
+    DWORD * MpqData,
     LPBYTE pbKey,
     ULONGLONG ByteOffset,
     DWORD dwLength)
@@ -890,7 +938,7 @@ static void DecryptFileChunk(
     KeyMirror[0x05] = (DWORD)(ChunkOffset >> 32);
     KeyMirror[0x08] = (DWORD)(ChunkOffset);
 
-    while (dwLength >= MPQE_CHUNK_SIZE)
+    while(dwLength >= MPQE_CHUNK_SIZE)
     {
         // Shuffle the key - part 1
         KeyShuffled[0x0E] = KeyMirror[0x00];
@@ -911,7 +959,7 @@ static void DecryptFileChunk(
         KeyShuffled[0x00] = KeyMirror[0x0F];
 
         // Shuffle the key - part 2
-        for (DWORD i = 0; i < RoundCount; i += 2)
+        for(DWORD i = 0; i < RoundCount; i += 2)
         {
             KeyShuffled[0x0A] = KeyShuffled[0x0A] ^ Rol32((KeyShuffled[0x0E] + KeyShuffled[0x02]), 0x07);
             KeyShuffled[0x03] = KeyShuffled[0x03] ^ Rol32((KeyShuffled[0x0A] + KeyShuffled[0x0E]), 0x09);
@@ -976,7 +1024,7 @@ static void DecryptFileChunk(
 
         // Update byte offset in the key
         KeyMirror[0x08]++;
-        if (KeyMirror[0x08] == 0)
+        if(KeyMirror[0x08] == 0)
             KeyMirror[0x05]++;
 
         // Move pointers and decrease number of bytes to decrypt
@@ -992,11 +1040,11 @@ static bool DetectFileKey(TEncryptedStream * pStream)
     BYTE FileHeader[MPQE_CHUNK_SIZE];
 
     // Load the chunk from the file
-    if (!FileStream_Read(pStream, &ByteOffset, EncryptedHeader, sizeof(EncryptedHeader)))
+    if(!FileStream_Read(pStream, &ByteOffset, EncryptedHeader, sizeof(EncryptedHeader)))
         return false;
 
     // We just try all known keys one by one
-    for (int i = 0; MpqKeyArray[i] != NULL; i++)
+    for(int i = 0; MpqKeyArray[i] != NULL; i++)
     {
         // Copy the key there
         memcpy(pStream->Key, MpqKeyArray[i], MPQE_CHUNK_SIZE);
@@ -1009,7 +1057,7 @@ static bool DetectFileKey(TEncryptedStream * pStream)
         // We check the decrypoted data
         // All known encrypted MPQs have header at the begin of the file,
         // so we check for MPQ signature there.
-        if (FileHeader[0] == 'M' && FileHeader[1] == 'P' && FileHeader[2] == 'Q')
+        if(FileHeader[0] == 'M' && FileHeader[1] == 'P' && FileHeader[2] == 'Q')
             return true;
     }
 
@@ -1018,9 +1066,9 @@ static bool DetectFileKey(TEncryptedStream * pStream)
 }
 
 static bool EncryptedFile_Read(
-    TEncryptedStream * pStream,            // Pointer to an open stream
-    ULONGLONG * pByteOffset,               // Pointer to file byte offset. If NULL, it reads from the current position
-    void * pvBuffer,                       // Pointer to data to be read
+    TEncryptedStream * pStream,             // Pointer to an open stream
+    ULONGLONG * pByteOffset,                // Pointer to file byte offset. If NULL, it reads from the current position
+    void * pvBuffer,                        // Pointer to data to be read
     DWORD dwBytesToRead)                    // Number of bytes to read from the file
 {
     ULONGLONG StartOffset;                  // Offset of the first byte to be read from the file
@@ -1033,7 +1081,7 @@ static bool EncryptedFile_Read(
     bool bResult = false;
 
     // Get the byte offset
-    if (pByteOffset != NULL)
+    if(pByteOffset != NULL)
         ByteOffset = *pByteOffset;
     else
         ByteOffset = pStream->RawFilePos;
@@ -1048,14 +1096,14 @@ static bool EncryptedFile_Read(
     dwBytesToAllocate = (dwBytesToDecrypt + (MPQE_CHUNK_SIZE - 1)) & ~(MPQE_CHUNK_SIZE - 1);
 
     // Allocate buffers for encrypted and decrypted data
-    pbMpqData = ALLOCMEM(BYTE, dwBytesToAllocate);
-    if (pbMpqData)
+    pbMpqData = STORM_ALLOC(BYTE, dwBytesToAllocate);
+    if(pbMpqData)
     {
         // Get the offset of the desired data in the cache
         dwOffsetInCache = (DWORD)(ByteOffset - StartOffset);
 
         // Read the file from the stream as-is
-        if (File_Read(pStream, &StartOffset, pbMpqData, dwBytesToDecrypt))
+        if(File_Read(pStream, &StartOffset, pbMpqData, dwBytesToDecrypt))
         {
             // Decrypt the data
             DecryptFileChunk((LPDWORD)pbMpqData, pStream->Key, StartOffset, dwBytesToAllocate);
@@ -1070,7 +1118,7 @@ static bool EncryptedFile_Read(
         }
 
         // Free decryption buffer
-        FREEMEM(pbMpqData);
+        STORM_FREE(pbMpqData);
     }
 
     // Free buffers and exit
@@ -1078,9 +1126,9 @@ static bool EncryptedFile_Read(
 }
 
 static bool EncryptedFile_Write(
-    TEncryptedStream * pStream,            // Pointer to an open stream
-    ULONGLONG * pByteOffset,               // Pointer to file byte offset. If NULL, it reads from the current position
-    const void * pvBuffer,                 // Pointer to data to be read
+    TEncryptedStream * pStream,             // Pointer to an open stream
+    ULONGLONG * pByteOffset,                // Pointer to file byte offset. If NULL, it reads from the current position
+    const void * pvBuffer,                  // Pointer to data to be read
     DWORD dwBytesToRead)                    // Number of bytes to read from the file
 {
     // Keep compiler happy
@@ -1094,7 +1142,7 @@ static bool EncryptedFile_Write(
 }
 
 static bool EncryptedFile_SetSize(
-    TEncryptedStream * pStream,            // Pointer to an open stream
+    TEncryptedStream * pStream,             // Pointer to an open stream
     ULONGLONG NewSize)                      // new size of the file
 {
     // Keep compiler happy
@@ -1108,40 +1156,42 @@ static bool EncryptedFile_SetSize(
 //-----------------------------------------------------------------------------
 // Public functions
 
-//
-// This function creates a new file for read or read-write access
-//
-// * If the current platform supports file sharing,
-//   the file must be created for read sharing (i.e. another application
-//   can open the file for read, but not for write)
-// * If the file does not exist, the function must create new one
-// * If the file exists, the function must rewrite it and set to zero size
-// * The parameters of the function must be validate by the caller
-// * The function must initialize all stream function pointers in TFileStream
-// * If the function fails from any reason, it must close all handles
-//   and free all memory that has been allocated in the process of stream creation,
-//   including the TFileStream structure itself
-//
+/**
+ * This function creates a new file for read or read-write access
+ *
+ * - If the current platform supports file sharing,
+ *   the file must be created for read sharing (i.e. another application
+ *   can open the file for read, but not for write)
+ * - If the file does not exist, the function must create new one
+ * - If the file exists, the function must rewrite it and set to zero size
+ * - The parameters of the function must be validate by the caller
+ * - The function must initialize all stream function pointers in TFileStream
+ * - If the function fails from any reason, it must close all handles
+ *   and free all memory that has been allocated in the process of stream creation,
+ *   including the TFileStream structure itself
+ *
+ * \a szFileName Name of the file to create
+ */
 
 TFileStream * FileStream_CreateFile(
-    const char * szFileName)                // Name of the file to create
+    const TCHAR * szFileName)           // Name of the file to create
 {
     TFileStream * pStream = NULL;
     HANDLE hFile;
 
     // Create the file
     hFile = CreateNewFile(szFileName);
-    if (hFile != INVALID_HANDLE_VALUE)
+    if(hFile != INVALID_HANDLE_VALUE)
     {
         // Allocate the FileStream structure and fill it
-        pStream = ALLOCMEM(TFileStream, 1);
-        if (pStream != NULL)
+        pStream = STORM_ALLOC(TFileStream, 1);
+        if(pStream != NULL)
         {
             // Reset entire structure to zero
             memset(pStream, 0, sizeof(TFileStream));
 
             // Save file name and set function pointers
-            strcpy(pStream->szFileName, szFileName);
+            _tcscpy(pStream->szFileName, szFileName);
             pStream->StreamGetPos  = File_GetPos;
             pStream->StreamRead    = File_Read;
             pStream->StreamWrite   = File_Write;
@@ -1159,25 +1209,27 @@ TFileStream * FileStream_CreateFile(
     return pStream;
 }
 
-//
-// This function opens an existing file for read or read-write access
-//
-// * If the current platform supports file sharing,
-//   the file must be open for read sharing (i.e. another application
-//   can open the file for read, but not for write)
-// * If the file does not exist, the function must return NULL
-// * If the file exists but cannot be open, then function must return NULL
-// * The parameters of the function must be validate by the caller
-// * The function must check if the file is a PART file,
-//   and create TPartFileStream object if so.
-// * The function must initialize all stream function pointers in TFileStream
-// * If the function fails from any reason, it must close all handles
-//   and free all memory that has been allocated in the process of stream creation,
-//   including the TFileStream structure itself
-//
+/**
+ * This function opens an existing file for read or read-write access
+ * - If the current platform supports file sharing,
+ *   the file must be open for read sharing (i.e. another application
+ *   can open the file for read, but not for write)
+ * - If the file does not exist, the function must return NULL
+ * - If the file exists but cannot be open, then function must return NULL
+ * - The parameters of the function must be validate by the caller
+ * - The function must check if the file is a PART file,
+ *   and create TPartFileStream object if so.
+ * - The function must initialize all stream function pointers in TFileStream
+ * - If the function fails from any reason, it must close all handles
+ *   and free all memory that has been allocated in the process of stream creation,
+ *   including the TFileStream structure itself
+ *
+ * \a szFileName Name of the file to open
+ * \a bWriteAccess false for read only, true for read+write
+ */
 
 TFileStream * FileStream_OpenRawFile(
-    const char * szFileName,               // Name of the file to create
+    const TCHAR * szFileName,               // Name of the file to create
     bool bWriteAccess)                      // false = read-only, true = read+write
 {
     TFileStream * pStream;
@@ -1185,24 +1237,24 @@ TFileStream * FileStream_OpenRawFile(
 
     // Create the file
     hFile = OpenExistingFile(szFileName, bWriteAccess);
-    if (hFile == INVALID_HANDLE_VALUE)
+    if(hFile == INVALID_HANDLE_VALUE)
         return NULL;
 
     // Initialize the file as normal file stream
-    pStream = ALLOCMEM(TFileStream, 1);
-    if (pStream != NULL)
+    pStream = STORM_ALLOC(TFileStream, 1);
+    if(pStream != NULL)
     {
         // Reset entire structure to zero
         memset(pStream, 0, sizeof(TFileStream));
 
         // Save file name and set function pointers
-        strcpy(pStream->szFileName, szFileName);
+        _tcscpy(pStream->szFileName, szFileName);
         pStream->StreamGetPos  = File_GetPos;
         pStream->StreamRead    = File_Read;
         pStream->StreamWrite   = File_Write;
         pStream->StreamGetSize = File_GetSize;
         pStream->StreamSetSize = File_SetSize;
-        if (bWriteAccess == false)
+        if(bWriteAccess == false)
             pStream->StreamFlags |= STREAM_FLAG_READ_ONLY;
         pStream->hFile = hFile;
         return pStream;
@@ -1212,59 +1264,63 @@ TFileStream * FileStream_OpenRawFile(
     return NULL;
 }
 
-TFileStream * FileStream_OpenFile(
-    const char * szFileName,               // Name of the file to create
-    bool bWriteAccess)                      // false = read-only, true = read+write
+/**
+ * Opens a file
+ *
+ * \a szFileName Name of the file to open
+ * \a bWriteAccess false for read only, true for read+write
+ */
+
+TFileStream * FileStream_OpenFile(const TCHAR * szFileName, bool bWriteAccess)
 {
     PART_FILE_HEADER PartHdr;
-    ULONGLONG VirtualSize;             // Size of the file stored in part file
+    ULONGLONG VirtualSize;                  // Size of the file stored in part file
     ULONGLONG ByteOffset = {0};
     TFileStream * pStream;
     size_t nStructLength;
-    DWORD PartCount;
+    DWORD BlockCount;
 
     // Open the file as normal stream
     pStream = FileStream_OpenRawFile(szFileName, bWriteAccess);
-    if (pStream == NULL)
+    if(pStream == NULL)
         return NULL;
 
     // Attempt to read PART file header
-    if (FileStream_Read(pStream, &ByteOffset, &PartHdr, sizeof(PART_FILE_HEADER)))
+    if(FileStream_Read(pStream, &ByteOffset, &PartHdr, sizeof(PART_FILE_HEADER)))
     {
         // We need to swap PART file header on big-endian platforms
         BSWAP_PART_HEADER(&PartHdr);
 
         // Verify the PART file header
-        if (PartHdr.PartialVersion == 2 && PartHdr.GameBuildNumber[0] != 0 &&
-           PartHdr.PartSize != 0 && (PartHdr.PartSize & (PartHdr.PartSize - 1)) == 0)
+        if(IsPartHeader(&PartHdr))
         {
             TPartFileStream * pPartStream;
 
             // Calculate the number of parts in the file
             VirtualSize = MAKE_OFFSET64(PartHdr.FileSizeHi, PartHdr.FileSizeLo);
-            PartCount = (DWORD)((VirtualSize + PartHdr.PartSize - 1) / PartHdr.PartSize);
+            BlockCount = (DWORD)((VirtualSize + PartHdr.BlockSize - 1) / PartHdr.BlockSize);
 
             // Calculate the size of the entire structure
             // Note that we decrement number of parts by one,
             // because there already is one entry in the TPartFileStream structure
-            nStructLength = sizeof(TPartFileStream) + (PartCount - 1) * sizeof(PART_FILE_MAP_ENTRY);
-            pPartStream = (TPartFileStream *)ALLOCMEM(char, nStructLength);
-            if (pPartStream != NULL)
+            nStructLength = sizeof(TPartFileStream) + (BlockCount - 1) * sizeof(PART_FILE_MAP_ENTRY);
+            pPartStream = (TPartFileStream *)STORM_ALLOC(char, nStructLength);
+            if(pPartStream != NULL)
             {
                 // Initialize the part file stream
                 memset(pPartStream, 0, nStructLength);
                 memcpy(pPartStream, pStream, sizeof(TFileStream));
 
                 // Load the block map
-                if (!FileStream_Read(pPartStream, NULL, pPartStream->PartMap, PartCount * sizeof(PART_FILE_MAP_ENTRY)))
+                if(!FileStream_Read(pPartStream, NULL, pPartStream->PartMap, BlockCount * sizeof(PART_FILE_MAP_ENTRY)))
                 {
                     FileStream_Close(pStream);
-                    FREEMEM(pPartStream);
+                    STORM_FREE(pPartStream);
                     return NULL;
                 }
 
                 // Swap the array of file map entries
-                BSWAP_ARRAY32_UNSIGNED(pPartStream->PartMap, PartCount * sizeof(PART_FILE_MAP_ENTRY));
+                BSWAP_ARRAY32_UNSIGNED(pPartStream->PartMap, BlockCount * sizeof(PART_FILE_MAP_ENTRY));
 
                 // Set new function pointers
                 pPartStream->StreamGetPos  = (STREAM_GETPOS)PartFile_GetPos;
@@ -1277,10 +1333,10 @@ TFileStream * FileStream_OpenFile(
                 // Fill the members of PART file stream
                 pPartStream->VirtualSize = ((ULONGLONG)PartHdr.FileSizeHi) + PartHdr.FileSizeLo;
                 pPartStream->VirtualPos = 0;
-                pPartStream->PartCount = PartCount;
-                pPartStream->PartSize = PartHdr.PartSize;
+                pPartStream->BlockCount = BlockCount;
+                pPartStream->BlockSize = PartHdr.BlockSize;
 
-                FREEMEM(pStream);
+                STORM_FREE(pStream);
             }
             return pPartStream;
         }
@@ -1292,18 +1348,18 @@ TFileStream * FileStream_OpenFile(
     return pStream;
 }
 
-TFileStream * FileStream_OpenEncrypted(const char * szFileName)
+TFileStream * FileStream_OpenEncrypted(const TCHAR * szFileName)
 {
     TEncryptedStream * pEncryptedStream;
     TFileStream * pStream;
 
     // Open the file as raw stream
     pStream = FileStream_OpenRawFile(szFileName, false);
-    if (pStream)
+    if(pStream)
     {
         // Allocate new stream for handling encryption
-        pEncryptedStream = ALLOCMEM(TEncryptedStream, 1);
-        if (pEncryptedStream != NULL)
+        pEncryptedStream = STORM_ALLOC(TEncryptedStream, 1);
+        if(pEncryptedStream != NULL)
         {
             // Copy the file stream to the encrypted stream
             memset(pEncryptedStream, 0, sizeof(TEncryptedStream));
@@ -1316,90 +1372,91 @@ TFileStream * FileStream_OpenEncrypted(const char * szFileName)
             pEncryptedStream->StreamFlags  |= (STREAM_FLAG_READ_ONLY | STREAM_FLAG_ENCRYPTED_FILE);
 
             // Get the file key
-            if (!DetectFileKey(pEncryptedStream))
-            {
-                SetLastError(ERROR_UNKNOWN_FILE_KEY);
-                FREEMEM(pEncryptedStream);
-                pEncryptedStream = NULL;
-            }
+            if(DetectFileKey(pEncryptedStream))
+                return pEncryptedStream;
 
-            FREEMEM(pStream);
+            // Close the encrypted stream
+            STORM_FREE(pEncryptedStream);
+            pEncryptedStream = NULL;
         }
 
-        return pEncryptedStream;
+        FileStream_Close(pStream);
+        pStream = NULL;
     }
 
+    SetLastError(ERROR_UNKNOWN_FILE_KEY);
     return NULL;
 }
 
-// This function returns the current file position
-bool FileStream_GetPos(
-    TFileStream * pStream,
-    ULONGLONG & ByteOffset)
+/**
+ * This function returns the current file position
+ * \a pStream
+ * \a ByteOffset
+ */
+bool FileStream_GetPos(TFileStream * pStream, ULONGLONG & ByteOffset)
 {
     assert(pStream->StreamGetPos != NULL);
     return pStream->StreamGetPos(pStream, ByteOffset);
 }
 
-//
-// This function reads data from the stream
-//
-// * Returns true if the read operation succeeded and all bytes have been read
-// * Returns false if either read failed or not all bytes have been read
-// * If the pByteOffset is NULL, the function must read the data from the current file position
-// * The function can be called with dwBytesToRead = 0. In that case, pvBuffer is ignored
-//   and the function just adjusts file pointer.
-//
-// Returned value:
-//
-// * If the function reads the required amount of bytes, it returns true.
-// * If the function reads less than required bytes, it returns false and GetLastError() returns ERROR_HANDLE_EOF
-// * If the function fails, it reads false and GetLastError() returns an error code different from ERROR_HANDLE_EOF
-//
-
-bool FileStream_Read(
-    TFileStream * pStream,                 // Pointer to an open stream
-    ULONGLONG * pByteOffset,               // Pointer to file byte offset. If NULL, it reads from the current position
-    void * pvBuffer,                       // Pointer to data to be read
-    DWORD dwBytesToRead)                    // Number of bytes to read from the file
+/**
+ * Reads data from the stream
+ *
+ * - Returns true if the read operation succeeded and all bytes have been read
+ * - Returns false if either read failed or not all bytes have been read
+ * - If the pByteOffset is NULL, the function must read the data from the current file position
+ * - The function can be called with dwBytesToRead = 0. In that case, pvBuffer is ignored
+ *   and the function just adjusts file pointer.
+ *
+ * \a pStream Pointer to an open stream
+ * \a pByteOffset Pointer to file byte offset. If NULL, it reads from the current position
+ * \a pvBuffer Pointer to data to be read
+ * \a dwBytesToRead Number of bytes to read from the file
+ *
+ * \returns
+ * - If the function reads the required amount of bytes, it returns true.
+ * - If the function reads less than required bytes, it returns false and GetLastError() returns ERROR_HANDLE_EOF
+ * - If the function fails, it reads false and GetLastError() returns an error code different from ERROR_HANDLE_EOF
+ */
+bool FileStream_Read(TFileStream * pStream, ULONGLONG * pByteOffset, void * pvBuffer, DWORD dwBytesToRead)
 {
     assert(pStream->StreamRead != NULL);
     return pStream->StreamRead(pStream, pByteOffset, pvBuffer, dwBytesToRead);
 }
 
-//
-// This function writes data to the stream
-//
-// * Returns true if the write operation succeeded and all bytes have been written
-// * Returns false if either write failed or not all bytes have been written
-// * If the pByteOffset is NULL, the function must write the data to the current file position
-//
-
-bool FileStream_Write(
-    TFileStream * pStream,                 // Pointer to an open stream
-    ULONGLONG * pByteOffset,          // Pointer to file byte offset. If NULL, it writes to the current position
-    const void * pvBuffer,                 // Pointer to data to be written
-    DWORD dwBytesToWrite)                   // Number of bytes to read from the file
+/**
+ * This function writes data to the stream
+ *
+ * - Returns true if the write operation succeeded and all bytes have been written
+ * - Returns false if either write failed or not all bytes have been written
+ * - If the pByteOffset is NULL, the function must write the data to the current file position
+ *
+ * \a pStream Pointer to an open stream
+ * \a pByteOffset Pointer to file byte offset. If NULL, it reads from the current position
+ * \a pvBuffer Pointer to data to be written
+ * \a dwBytesToWrite Number of bytes to write to the file
+ */
+bool FileStream_Write(TFileStream * pStream, ULONGLONG * pByteOffset, const void * pvBuffer, DWORD dwBytesToWrite)
 {
-    if (pStream->StreamFlags & STREAM_FLAG_READ_ONLY)
+    if(pStream->StreamFlags & STREAM_FLAG_READ_ONLY)
         return false;
     assert(pStream->StreamWrite != NULL);
 
     return pStream->StreamWrite(pStream, pByteOffset, pvBuffer, dwBytesToWrite);
 }
 
-//
-// Retrieves the last write time to the file
-//
-
-bool FileStream_GetLastWriteTime(
-    TFileStream * pStream,                 // Pointer to an open stream
-    ULONGLONG * pFileTime)                  // Pointer where to store file time
+/**
+ * Returns the last write time of a file
+ *
+ * \a pStream Pointer to an open stream
+ * \a pFileType Pointer where to store the file last write time
+ */
+bool FileStream_GetLastWriteTime(TFileStream * pStream, ULONGLONG * pFileTime)
 {
 #ifdef PLATFORM_WINDOWS
     FILETIME ft;
 
-    if (!GetFileTime(pStream->hFile, NULL, NULL, &ft))
+    if(!GetFileTime(pStream->hFile, NULL, NULL, &ft))
         return false;
 
     *pFileTime = MAKE_OFFSET64(ft.dwHighDateTime, ft.dwLowDateTime);
@@ -1412,14 +1469,14 @@ bool FileStream_GetLastWriteTime(
 	FSCatalogInfo theCatInfo;
 
     theErr = FSGetForkCBInfo((short)(long)pStream->hFile, 0, NULL, NULL, NULL, &theFileRef, NULL);
-    if (theErr != noErr)
+    if(theErr != noErr)
     {
         nLastError = theErr;
         return false;
     }
 
     theErr = FSGetCatalogInfo(&theFileRef, kFSCatInfoContentMod, &theCatInfo, NULL, NULL, NULL);
-    if (theErr != noErr)
+    if(theErr != noErr)
     {
         nLastError = theErr;
         return false;
@@ -1432,7 +1489,7 @@ bool FileStream_GetLastWriteTime(
 #ifdef PLATFORM_LINUX
     struct stat file_stats;
 
-    if (fstat((int)(size_t)pStream->hFile, &file_stats) == -1)
+    if(fstat((int)(size_t)pStream->hFile, &file_stats) == -1)
     {
         nLastError = errno;
         return false;
@@ -1443,45 +1500,45 @@ bool FileStream_GetLastWriteTime(
 #endif
 }
 
-//
-// Retrieves the size of the file
-//
-
-bool FileStream_GetSize(
-    TFileStream * pStream,                 // Pointer to an open stream
-    ULONGLONG & FileSize)                   // Pointer where to store file size
+/**
+ * Returns the size of a file
+ *
+ * \a pStream Pointer to an open stream
+ * \a FileSize Pointer where to store the file size
+ */
+bool FileStream_GetSize(TFileStream * pStream, ULONGLONG & FileSize)
 {
     assert(pStream->StreamGetSize != NULL);
     return pStream->StreamGetSize(pStream, FileSize);
 }
 
-//
-// Retrieves the size of the file
-//
-
-bool FileStream_SetSize(
-    TFileStream * pStream,                 // Pointer to an open stream
-    ULONGLONG NewFileSize)                  // Pointer where to store file size
+/**
+ * Sets the size of a file
+ *
+ * \a pStream Pointer to an open stream
+ * \a NewFileSize File size to set
+ */
+bool FileStream_SetSize(TFileStream * pStream, ULONGLONG NewFileSize)
 {
-    if (pStream->StreamFlags & STREAM_FLAG_READ_ONLY)
+    if(pStream->StreamFlags & STREAM_FLAG_READ_ONLY)
         return false;
     assert(pStream->StreamSetSize != NULL);
 
     return pStream->StreamSetSize(pStream, NewFileSize);
 }
 
-//
-// Switches a stream with another. Used for final phase of archive compacting.
-// Performs these steps:
-//
-// 1) Closes the handle to the existing MPQ
-// 2) Renames the temporary MPQ to the original MPQ, overwrites existing one
-// 3) Opens the MPQ stores the handle and stream position to the new stream structure
-//
-
-bool FileStream_MoveFile(
-    TFileStream * pStream,                 // Existing stream
-    TFileStream * pTempStream)              // Temporary ("working") stream (created during archive compacting)
+/**
+ * Switches a stream with another. Used for final phase of archive compacting.
+ * Performs these steps:
+ *
+ * 1) Closes the handle to the existing MPQ
+ * 2) Renames the temporary MPQ to the original MPQ, overwrites existing one
+ * 3) Opens the MPQ stores the handle and stream position to the new stream structure
+ *
+ * \a pStream Pointer to an open stream
+ * \a pTempStream Temporary ("working") stream (created during archive compacting)
+ */
+bool FileStream_MoveFile(TFileStream * pStream, TFileStream * pTempStream)
 {
     bool bWriteAccess;
 
@@ -1494,13 +1551,13 @@ bool FileStream_MoveFile(
     pStream->hFile = INVALID_HANDLE_VALUE;
 
     // Rename the temp file to the final file
-    if (!RenameFile(pTempStream->szFileName, pStream->szFileName))
+    if(!RenameFile(pTempStream->szFileName, pStream->szFileName))
         return false;
 
     // Now open the renamed file again, and store its handle to the old stream
     bWriteAccess = (pStream->StreamFlags & STREAM_FLAG_READ_ONLY) ? false : true;
     pStream->hFile = OpenExistingFile(pStream->szFileName, bWriteAccess);
-    if (pStream->hFile == INVALID_HANDLE_VALUE)
+    if(pStream->hFile == INVALID_HANDLE_VALUE)
         return false;
 
     // Delete the temporary file stream
@@ -1511,25 +1568,25 @@ bool FileStream_MoveFile(
     return true;
 }
 
-//
-// This function closes an archive file and frees any data buffers
-// that have been allocated for stream management. The function must also
-// support partially allocated structure, i.e. one or more buffers
-// can be NULL, if there was an allocation failure during the process
-//
-
-void FileStream_Close(
-    TFileStream * pStream)                  // Pointer to an open stream
+/**
+ * This function closes an archive file and frees any data buffers
+ * that have been allocated for stream management. The function must also
+ * support partially allocated structure, i.e. one or more buffers
+ * can be NULL, if there was an allocation failure during the process
+ *
+ * \a pStream Pointer to an open stream
+ */
+void FileStream_Close(TFileStream * pStream)
 {
     // Check if the stream structure is allocated at all
-    if (pStream != NULL)
+    if(pStream != NULL)
     {
         // Close the file handle
-        if (pStream->hFile != INVALID_HANDLE_VALUE)
+        if(pStream->hFile != INVALID_HANDLE_VALUE)
             CloseTheFile(pStream->hFile);
 
         // Free the stream itself
-        FREEMEM(pStream);
+        STORM_FREE(pStream);
     }
 }
 
@@ -1556,15 +1613,15 @@ int main(void)
     //
 
     pStream = FileStream_CreateFile("E:\\Stream.bin");
-    if (pStream == NULL)
+    if(pStream == NULL)
     {
         printf("Failed to create new file\n");
         return -1;
     }
 
-    for (int i = 0; i < 10; i++)
+    for(int i = 0; i < 10; i++)
     {
-        if (!FileStream_Write(pStream, NULL, szString1, dwLength))
+        if(!FileStream_Write(pStream, NULL, szString1, dwLength))
         {
             printf("Failed to write to the stream\n");
             return -1;
@@ -1577,29 +1634,29 @@ int main(void)
     //
 
     pStream = FileStream_OpenFile("E:\\Stream.bin", false);
-    if (pStream == NULL)
+    if(pStream == NULL)
     {
         printf("Failed to open existing file\n");
         return -1;
     }
 
     // This call must end with an error
-    if (FileStream_Write(pStream, NULL, "aaa", 3))
+    if(FileStream_Write(pStream, NULL, "aaa", 3))
     {
         printf("Write succeeded while it should fail\n");
         return -1;
     }
 
-    for (int i = 0; i < 10; i++)
+    for(int i = 0; i < 10; i++)
     {
-        if (!FileStream_Read(pStream, NULL, szString2, dwLength))
+        if(!FileStream_Read(pStream, NULL, szString2, dwLength))
         {
             printf("Failed to read from the stream\n");
             return -1;
         }
 
         szString2[dwLength] = 0;
-        if (strcmp(szString1, szString2))
+        if(strcmp(szString1, szString2))
         {
             printf("Data read from file are different from data written\n");
             return -1;
@@ -1612,40 +1669,40 @@ int main(void)
     //
 
     pStream = FileStream_OpenFile("E:\\Stream.bin", false);
-    if (pStream == NULL)
+    if(pStream == NULL)
     {
         printf("Failed to open existing file\n");
         return -1;
     }
 
     pTempStream = FileStream_CreateFile("E:\\TempStream.bin");
-    if (pTempStream == NULL)
+    if(pTempStream == NULL)
     {
         printf("Failed to create temp stream\n");
         return -1;
     }
 
     // Copy the original stream to the temp
-    if (!FileStream_GetSize(pStream, &FileSize))
+    if(!FileStream_GetSize(pStream, &FileSize))
     {
         printf("Failed to get the file size\n");
         return -1;
     }
 
-    while (FileSize.QuadPart != 0)
+    while(FileSize.QuadPart != 0)
     {
         DWORD dwBytesToRead = FileSize.LowPart;
 
-        if (dwBytesToRead > sizeof(Buffer))
+        if(dwBytesToRead > sizeof(Buffer))
             dwBytesToRead = sizeof(Buffer);
 
-        if (!FileStream_Read(pStream, NULL, Buffer, dwBytesToRead))
+        if(!FileStream_Read(pStream, NULL, Buffer, dwBytesToRead))
         {
             printf("CopyStream: Read source file failed\n");
             return -1;
         }
 
-        if (!FileStream_Write(pTempStream, NULL, Buffer, dwBytesToRead))
+        if(!FileStream_Write(pTempStream, NULL, Buffer, dwBytesToRead))
         {
             printf("CopyStream: Write target file failed\n");
             return -1;
@@ -1664,22 +1721,22 @@ int main(void)
     //
 
     pStream = FileStream_OpenFile("E:\\Stream.bin", false);
-    if (pStream == NULL)
+    if(pStream == NULL)
     {
         printf("Failed to open existing file\n");
         return -1;
     }
 
-    for (int i = 0; i < 10; i++)
+    for(int i = 0; i < 10; i++)
     {
-        if (!FileStream_Read(pStream, NULL, szString2, dwLength))
+        if(!FileStream_Read(pStream, NULL, szString2, dwLength))
         {
             printf("Failed to read from the stream\n");
             return -1;
         }
 
         szString2[dwLength] = 0;
-        if (strcmp(szString1, szString2))
+        if(strcmp(szString1, szString2))
         {
             printf("Data read from file are different from data written\n");
             return -1;
@@ -1693,13 +1750,13 @@ int main(void)
 
 //  InitializeMpqCryptography();
     pStream = FileStream_OpenFile("e:\\Multimedia\\MPQs\\PartialMPQs\\patch.MPQ.part", false);
-    if (pStream != NULL)
+    if(pStream != NULL)
     {
         // Read the MPQ header
         FileStream_Read(pStream, NULL, &MpqHeader, MPQ_HEADER_SIZE_V2);
 
         // Read the hash table
-        pHash = ALLOCMEM(TMPQHash, MpqHeader.dwHashTableSize);
+        pHash = STORM_ALLOC(TMPQHash, MpqHeader.dwHashTableSize);
         FilePos.HighPart = 0;
         FilePos.LowPart = MpqHeader.dwHashTablePos;
         FileStream_Read(pStream, &FilePos, pHash, MpqHeader.dwHashTableSize * sizeof(TMPQHash));
@@ -1751,7 +1808,7 @@ int main(void)
         //
 
         // Read the block table
-        pBlock = ALLOCMEM(TMPQBlock, MpqHeader.dwBlockTableSize);
+        pBlock = STORM_ALLOC(TMPQBlock, MpqHeader.dwBlockTableSize);
         FilePos.HighPart = 0;
         FilePos.LowPart = MpqHeader.dwBlockTablePos;
         FileStream_Read(pStream, &FilePos, pBlock, MpqHeader.dwBlockTableSize * sizeof(TMPQBlock));

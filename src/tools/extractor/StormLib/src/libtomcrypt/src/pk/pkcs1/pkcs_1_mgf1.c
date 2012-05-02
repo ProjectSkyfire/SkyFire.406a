@@ -92,7 +92,7 @@ int pkcs_1_mgf1(int                  hash_idx,
 LBL_ERR:
 #ifdef LTC_CLEAN_STACK
    zeromem(buf, hLen);
-   zeromem(md, sizeof(hash_state));
+   zeromem(md,  sizeof(hash_state));
 #endif
 
    XFREE(buf);
@@ -103,6 +103,6 @@ LBL_ERR:
 
 #endif /* LTC_PKCS_1 */
 
-/* $Source: /cvs/libtom/libtomcrypt/src/pk/pkcs1/pkcs_1_mgf1.c, v $ */
+/* $Source: /cvs/libtom/libtomcrypt/src/pk/pkcs1/pkcs_1_mgf1.c,v $ */
 /* $Revision: 1.8 $ */
 /* $Date: 2007/05/12 14:32:35 $ */

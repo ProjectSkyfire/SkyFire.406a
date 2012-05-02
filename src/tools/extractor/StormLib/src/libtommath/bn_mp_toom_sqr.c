@@ -220,6 +220,6 @@ ERR:
 
 #endif
 
-/* $Source: /cvs/libtom/libtommath/bn_mp_toom_sqr.c, v $ */
+/* $Source: /cvs/libtom/libtommath/bn_mp_toom_sqr.c,v $ */
 /* $Revision: 1.4 $ */
 /* $Date: 2006/12/28 01:25:13 $ */

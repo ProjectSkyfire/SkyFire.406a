@@ -163,6 +163,6 @@ LBL_ERR:
 
 #endif
 
-/* $Source: /cvs/libtom/libtomcrypt/src/pk/asn1/der/sequence/der_length_sequence.c, v $ */
+/* $Source: /cvs/libtom/libtomcrypt/src/pk/asn1/der/sequence/der_length_sequence.c,v $ */
 /* $Revision: 1.14 $ */
 /* $Date: 2006/12/28 01:27:24 $ */

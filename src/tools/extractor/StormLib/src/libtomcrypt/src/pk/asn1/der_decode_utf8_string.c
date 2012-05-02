@@ -25,7 +25,7 @@
   @param outlen  [in/out] The number of utf8s stored
   @return CRYPT_OK if successful
 */
-int der_decode_utf8_string(const unsigned char *in, unsigned long inlen,
+int der_decode_utf8_string(const unsigned char *in,  unsigned long inlen,
                                        wchar_t *out, unsigned long *outlen)
 {
    wchar_t       tmp;
@@ -48,7 +48,7 @@ int der_decode_utf8_string(const unsigned char *in, unsigned long inlen,
 
    /* decode the length */
    if (in[x] & 0x80) {
-      /* valid # of bytes in length are 1, 2, 3 */
+      /* valid # of bytes in length are 1,2,3 */
       y = in[x] & 0x7F;
       if ((y == 0) || (y > 3) || ((x + y) > inlen)) {
          return CRYPT_INVALID_PACKET;
@@ -105,6 +105,6 @@ int der_decode_utf8_string(const unsigned char *in, unsigned long inlen,
 
 #endif
 
-/* $Source: /cvs/libtom/libtomcrypt/src/pk/asn1/der/utf8/der_decode_utf8_string.c, v $ */
+/* $Source: /cvs/libtom/libtomcrypt/src/pk/asn1/der/utf8/der_decode_utf8_string.c,v $ */
 /* $Revision: 1.8 $ */
 /* $Date: 2006/12/28 01:27:24 $ */

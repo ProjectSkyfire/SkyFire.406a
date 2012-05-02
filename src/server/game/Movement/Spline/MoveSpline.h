@@ -16,14 +16,31 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef SKYFIRESERVER_MOVEPLINE_H
-#define SKYFIRESERVER_MOVEPLINE_H
+#ifndef SKYFIRE_MOVEPLINE_H
+#define SKYFIRE_MOVEPLINE_H
 
 #include "Spline.h"
 #include "MoveSplineInitArgs.h"
 
 namespace Movement
 {
+    enum
+    {
+        minimal_duration = 1,
+    };
+
+    struct CommonInitializer
+    {
+        CommonInitializer(float _velocity) : velocityInv(1000.f/_velocity), time(minimal_duration) {}
+        float velocityInv;
+        int32 time;
+        inline int32 operator()(Spline<int32>& s, int32 i)
+        {
+            time += (s.SegLength(i) * velocityInv);
+            return time;
+        }
+    };
+
     struct Location : public Vector3
     {
         Location() : orientation(0) {}
@@ -77,7 +94,7 @@ namespace Movement
         UpdateResult _updateState(int32& ms_time_diff);
         int32 next_timestamp() const { return spline.length(point_Idx+1);}
         int32 segment_time_elapsed() const { return next_timestamp()-time_passed;}
-        int32 Duration() const { return spline.length();}
+       // int32 Duration() const { return spline.length();}
         int32 timeElapsed() const { return Duration() - time_passed;}
         int32 timePassed() const { return time_passed;}
 
@@ -118,8 +135,8 @@ namespace Movement
         const Vector3 FinalDestination() const { return Initialized() ? spline.getPoint(spline.last()) : Vector3();}
         const Vector3 CurrentDestination() const { return Initialized() ? spline.getPoint(point_Idx+1) : Vector3();}
         int32 currentPathIdx() const;
-
+        int32 Duration() const { return spline.length();}
         std::string ToString() const;
     };
 }
-#endif // SKYFIRESERVER_MOVEPLINE_H
+#endif // SKYFIRE_MOVEPLINE_H

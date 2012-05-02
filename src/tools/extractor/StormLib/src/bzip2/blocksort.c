@@ -71,13 +71,13 @@ void fallbackSimpleSort ( UInt32* fmap,
    }                                  \
 }
 
-#define fmin(a, b) ((a) < (b)) ? (a) : (b)
+#define fmin(a,b) ((a) < (b)) ? (a) : (b)
 
-#define fpush(lz, hz) { stackLo[sp] = lz; \
+#define fpush(lz,hz) { stackLo[sp] = lz; \
                        stackHi[sp] = hz; \
                        sp++; }
 
-#define fpop(lz, hz) { sp--;              \
+#define fpop(lz,hz) { sp--;              \
                       lz = stackLo[sp];  \
                       hz = stackHi[sp]; }
 
@@ -578,21 +578,21 @@ UChar mmed3 ( UChar a, UChar b, UChar c )
    return b;
 }
 
-#define mmin(a, b) ((a) < (b)) ? (a) : (b)
+#define mmin(a,b) ((a) < (b)) ? (a) : (b)
 
-#define mpush(lz, hz, dz) { stackLo[sp] = lz; \
+#define mpush(lz,hz,dz) { stackLo[sp] = lz; \
                           stackHi[sp] = hz; \
                           stackD [sp] = dz; \
                           sp++; }
 
-#define mpop(lz, hz, dz) { sp--;             \
+#define mpop(lz,hz,dz) { sp--;             \
                          lz = stackLo[sp]; \
                          hz = stackHi[sp]; \
                          dz = stackD [sp]; }
 
 #define mnextsize(az) (nextHi[az]-nextLo[az])
 
-#define mnextswap(az, bz)                                        \
+#define mnextswap(az,bz)                                        \
    { Int32 tz;                                                  \
      tz = nextLo[az]; nextLo[az] = nextLo[bz]; nextLo[bz] = tz; \
      tz = nextHi[az]; nextHi[az] = nextHi[bz]; nextHi[bz] = tz; \
@@ -687,9 +687,9 @@ void mainQSort3 ( UInt32* ptr,
       nextLo[1] = m;   nextHi[1] = hi;  nextD[1] = d;
       nextLo[2] = n+1; nextHi[2] = m-1; nextD[2] = d+1;
 
-      if (mnextsize(0) < mnextsize(1)) mnextswap(0, 1);
-      if (mnextsize(1) < mnextsize(2)) mnextswap(1, 2);
-      if (mnextsize(0) < mnextsize(1)) mnextswap(0, 1);
+      if (mnextsize(0) < mnextsize(1)) mnextswap(0,1);
+      if (mnextsize(1) < mnextsize(2)) mnextswap(1,2);
+      if (mnextsize(0) < mnextsize(1)) mnextswap(0,1);
 
       AssertD (mnextsize(0) >= mnextsize(1), "mainQSort3(8)" );
       AssertD (mnextsize(1) >= mnextsize(2), "mainQSort3(9)" );
@@ -894,7 +894,7 @@ void mainSort ( UInt32* ptr,
          Step 2:
          Now scan this big bucket [ss] so as to synthesise the
          sorted order for small buckets [t, ss] for all t,
-         including, magically, the bucket [ss, ss] too.
+         including, magically, the bucket [ss,ss] too.
          This will avoid doing Real Work in subsequent Step 1's.
       --*/
       {
@@ -1051,7 +1051,7 @@ void BZ2_blockSort ( EState* s )
                     budgetInit - budget,
                     nblock,
                     (float)(budgetInit - budget) /
-                    (float)(nblock == 0 ? 1 : nblock) );
+                    (float)(nblock==0 ? 1 : nblock) );
       if (budget < 0) {
          if (verb >= 2)
             VPrintf0 ( "    too repetitive; using fallback"

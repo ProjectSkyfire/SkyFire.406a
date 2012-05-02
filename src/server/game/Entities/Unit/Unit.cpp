@@ -1570,7 +1570,7 @@ void Unit::CalcAbsorbResist(Unit* victim, SpellSchoolMask schoolMask, DamageEffe
 
     // Magic damage, check for resists
     // Ignore spells that cant be resisted
-    if ((schoolMask & SPELL_SCHOOL_MASK_NORMAL) == 0)
+    if ((schoolMask & SPELL_SCHOOL_MASK_NORMAL) == 0 && (spellInfo->AttributesEx4 & SPELL_ATTR4_IGNORE_RESISTANCES) == 0)
     {
         float victimResistance = float(victim->GetResistance(schoolMask));
         victimResistance += float(GetTotalAuraModifierByMiscMask(SPELL_AURA_MOD_TARGET_RESISTANCE, schoolMask));
@@ -9969,16 +9969,19 @@ void Unit::SetMinion(Minion *minion, bool apply, PetSlot slot)
 
         if (GetTypeId() == TYPEID_PLAYER)
         {
-            if(!minion->isHunterPet()) //If its not a Hunter Pet, well lets not try to use it for hunters then.
-            {
+            // If its not a Hunter Pet, only set pet slot. use setPetSlotUsed only for hunter pets.
+            // Always save thoose spots where hunter is correct
+            if (!minion->isHunterPet())
                 ToPlayer()->_currentPetSlot = slot;
-                ToPlayer()->_petSlotUsed = 3452816845; // the same as 100 so that the pet is only that and nothing more
-                // ToPlayer()->setPetSlotUsed(slot, true);
-            }
-            if (slot >= PET_SLOT_HUNTER_FIRST && slot <= PET_SLOT_HUNTER_LAST) // Always save thoose spots where hunter is correct
+            else if (slot >= PET_SLOT_HUNTER_FIRST && slot <= PET_SLOT_HUNTER_LAST)
             {
                 ToPlayer()->_currentPetSlot = slot;
                 ToPlayer()->setPetSlotUsed(slot, true);
+            }
+            else
+            {
+                sLog->outCrash("Unit::SetMinion. Try to add hunter pet to not alawed slot(%u). Minion %u for %u", slot, minion->GetEntry(), GetEntry());
+                ASSERT(false);
             }
         }
 

@@ -6903,22 +6903,28 @@ void Spell::EffectSummonDeadPet(SpellEffIndex /*effIndex*/)
     if (effectHandleMode != SPELL_EFFECT_HANDLE_HIT)
         return;
 
-    if (m_caster->GetTypeId() != TYPEID_PLAYER)
-        return;
-    Player* _player = m_caster->ToPlayer();
-    Pet* pet = _player->GetPet();
-    if (!pet)
+    Player* player = m_caster->ToPlayer();
+    if (!player)
         return;
 
-    if (pet->isAlive())
+    Pet* pet = player->GetPet();
+    if (pet && pet->isAlive())
         return;
 
     if (damage < 0)
         return;
 
     float x, y, z;
-    _player->GetPosition(x, y, z);
-    _player->GetMap()->CreatureRelocation(pet, x, y, z, _player->GetOrientation());
+    player->GetPosition(x, y, z);
+    if (!pet)
+    {
+        player->SummonPet(0, x, y, z, player->GetOrientation(), SUMMON_PET, 0);
+        pet = player->GetPet();
+    }
+    if (!pet)
+        return;
+
+    player->GetMap()->CreatureRelocation(pet, x, y, z, player->GetOrientation());
 
     pet->SetUInt32Value(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_NONE);
     pet->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SKINNABLE);

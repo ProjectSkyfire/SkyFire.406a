@@ -24,7 +24,7 @@
   @param outlen  [in/out] The number of OID words
   @return CRYPT_OK if successful
 */
-int der_decode_object_identifier(const unsigned char *in,   unsigned long  inlen,
+int der_decode_object_identifier(const unsigned char *in,    unsigned long  inlen,
                                        unsigned long *words, unsigned long *outlen)
 {
    unsigned long x, y, t, len;
@@ -94,6 +94,6 @@ int der_decode_object_identifier(const unsigned char *in,   unsigned long  inlen
 
 #endif
 
-/* $Source: /cvs/libtom/libtomcrypt/src/pk/asn1/der/object_identifier/der_decode_object_identifier.c, v $ */
+/* $Source: /cvs/libtom/libtomcrypt/src/pk/asn1/der/object_identifier/der_decode_object_identifier.c,v $ */
 /* $Revision: 1.6 $ */
 /* $Date: 2006/12/28 01:27:24 $ */

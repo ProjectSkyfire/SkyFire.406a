@@ -78,7 +78,7 @@ void bsPutUInt32 ( EState* s, UInt32 u )
    bsW ( s, 8, (u >> 24) & 0xffL );
    bsW ( s, 8, (u >> 16) & 0xffL );
    bsW ( s, 8, (u >>  8) & 0xffL );
-   bsW ( s, 8, u        & 0xffL );
+   bsW ( s, 8,  u        & 0xffL );
 }
 
 /*---------------------------------------------------*/
@@ -416,7 +416,7 @@ void sendMTFValues ( EState* s )
          gs = ge+1;
       }
       if (s->verbosity >= 3) {
-         VPrintf2 ( "      pass %d: size is %d, group uses are ",
+         VPrintf2 ( "      pass %d: size is %d, grp uses are ",
                    iter+1, totc/8 );
          for (t = 0; t < nGroups; t++)
             VPrintf1 ( "%d ", fave[t] );
@@ -466,7 +466,7 @@ void sendMTFValues ( EState* s )
          if (s->len[t][i] < minLen) minLen = s->len[t][i];
       }
       AssertH ( !(maxLen > 17 /*20*/ ), 3004 );
-      AssertH ( !(minLen < 1), 3005 );
+      AssertH ( !(minLen < 1),  3005 );
       BZ2_hbAssignCodes ( &(s->code[t][0]), &(s->len[t][0]),
                           minLen, maxLen, alphaSize );
    }
@@ -482,12 +482,12 @@ void sendMTFValues ( EState* s )
 
       nBytes = s->numZ;
       for (i = 0; i < 16; i++)
-         if (inUse16[i]) bsW(s, 1, 1); else bsW(s, 1, 0);
+         if (inUse16[i]) bsW(s,1,1); else bsW(s,1,0);
 
       for (i = 0; i < 16; i++)
          if (inUse16[i])
             for (j = 0; j < 16; j++) {
-               if (s->inUse[i * 16 + j]) bsW(s, 1, 1); else bsW(s, 1, 0);
+               if (s->inUse[i * 16 + j]) bsW(s,1,1); else bsW(s,1,0);
             }
 
       if (s->verbosity >= 3)
@@ -499,8 +499,8 @@ void sendMTFValues ( EState* s )
    bsW ( s, 3, nGroups );
    bsW ( s, 15, nSelectors );
    for (i = 0; i < nSelectors; i++) {
-      for (j = 0; j < s->selectorMtf[i]; j++) bsW(s, 1, 1);
-      bsW(s, 1, 0);
+      for (j = 0; j < s->selectorMtf[i]; j++) bsW(s,1,1);
+      bsW(s,1,0);
    }
    if (s->verbosity >= 3)
       VPrintf1( "selectors %d, ", s->numZ-nBytes );
@@ -512,8 +512,8 @@ void sendMTFValues ( EState* s )
       Int32 curr = s->len[t][0];
       bsW ( s, 5, curr );
       for (i = 0; i < alphaSize; i++) {
-         while (curr < s->len[t][i]) { bsW(s, 2, 2); curr++; /* 10 */ };
-         while (curr > s->len[t][i]) { bsW(s, 2, 3); curr--; /* 11 */ };
+         while (curr < s->len[t][i]) { bsW(s,2,2); curr++; /* 10 */ };
+         while (curr > s->len[t][i]) { bsW(s,2,3); curr--; /* 11 */ };
          bsW ( s, 1, 0 );
       }
    }
@@ -541,8 +541,8 @@ void sendMTFValues ( EState* s )
 
 #           define BZ_ITAH(nn)                      \
                mtfv_i = mtfv[gs+(nn)];              \
-               bsW ( s,                            \
-                     s_len_sel_selCtr[mtfv_i],     \
+               bsW ( s,                             \
+                     s_len_sel_selCtr[mtfv_i],      \
                      s_code_sel_selCtr[mtfv_i] )
 
             BZ_ITAH(0);  BZ_ITAH(1);  BZ_ITAH(2);  BZ_ITAH(3);  BZ_ITAH(4);
@@ -620,7 +620,7 @@ void BZ2_compressBlock ( EState* s, Bool is_last_block )
          so as to maintain backwards compatibility with
          older versions of bzip2.
       --*/
-      bsW(s, 1, 0);
+      bsW(s,1,0);
 
       bsW ( s, 24, s->origPtr );
       generateMTFValues ( s );

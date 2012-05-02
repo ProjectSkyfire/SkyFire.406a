@@ -438,7 +438,7 @@ SRes LzmaEnc_SetProps(CLzmaEncHandle pp, const CLzmaEncProps *props2)
   return SZ_OK;
 }
 
-static const int kLiteralNextStates[kNumStates] = {0, 0, 0, 0, 1, 2, 3, 4, 5, 6,  4, 5};
+static const int kLiteralNextStates[kNumStates] = {0, 0, 0, 0, 1, 2, 3, 4,  5,  6,   4, 5};
 static const int kMatchNextStates[kNumStates]   = {7, 7, 7, 7, 7, 7, 7, 10, 10, 10, 10, 10};
 static const int kRepNextStates[kNumStates]     = {8, 8, 8, 8, 8, 8, 8, 11, 11, 11, 11, 11};
 static const int kShortRepNextStates[kNumStates]= {9, 9, 9, 9, 9, 9, 9, 11, 11, 11, 11, 11};
@@ -1761,7 +1761,7 @@ static SRes LzmaEnc_CodeOneBlock(CLzmaEnc *p, Bool useLimits, UInt32 maxPackSize
       len = GetOptimum(p, nowPos32, &pos);
 
     #ifdef SHOW_STAT2
-    printf("\n pos = %4X,  len = %d   pos = %d", nowPos32, len, pos);
+    printf("\n pos = %4X,   len = %d   pos = %d", nowPos32, len, pos);
     #endif
 
     posState = nowPos32 & p->pbMask;

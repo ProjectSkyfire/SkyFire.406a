@@ -141,6 +141,7 @@ done:
    return err;
 }
 #endif
-/* $Source: /cvs/libtom/libtomcrypt/src/pk/ecc/ltc_ecc_projective_dbl_point.c, v $ */
+/* $Source: /cvs/libtom/libtomcrypt/src/pk/ecc/ltc_ecc_projective_dbl_point.c,v $ */
 /* $Revision: 1.11 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
+

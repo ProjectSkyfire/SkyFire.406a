@@ -36,14 +36,14 @@
  *
  *  REFERENCES
  *
- *      Deutsch, L.P., "DEFLATE Compressed Data Format Specification".
+ *      Deutsch, L.P.,"DEFLATE Compressed Data Format Specification".
  *      Available in http://www.ietf.org/rfc/rfc1951.txt
  *
  *      A description of the Rabin and Karp algorithm is given in the book
  *         "Algorithms" by R. Sedgewick, Addison-Wesley, p252.
  *
- *      Fiala, E.R., and Greene, D.H.
- *         Data Compression with Finite Windows, Comm.ACM, 32, 4 (1989) 490-595
+ *      Fiala,E.R., and Greene,D.H.
+ *         Data Compression with Finite Windows, Comm.ACM, 32,4 (1989) 490-595
  *
  */
 
@@ -64,8 +64,8 @@ const char deflate_copyright[] =
  *  Function prototypes.
  */
 typedef enum {
-    need_more,     /* block not completed, need more input or more output */
-    block_done,    /* block flush performed */
+    need_more,      /* block not completed, need more input or more output */
+    block_done,     /* block flush performed */
     finish_started, /* finish started, need only more output at next deflate */
     finish_done     /* finish done, accept no more input or output */
 } block_state;
@@ -131,20 +131,20 @@ typedef struct config_s {
 #ifdef FASTEST
 local const config configuration_table[2] = {
 /*      good lazy nice chain */
-/* 0 */ {0,   0, 0,   0, deflate_stored}, /* store only */
-/* 1 */ {4,   4, 8,   4, deflate_fast}}; /* max speed, no lazy matches */
+/* 0 */ {0,    0,  0,    0, deflate_stored},  /* store only */
+/* 1 */ {4,    4,  8,    4, deflate_fast}}; /* max speed, no lazy matches */
 #else
 local const config configuration_table[10] = {
 /*      good lazy nice chain */
-/* 0 */ {0,   0, 0,   0, deflate_stored}, /* store only */
-/* 1 */ {4,   4, 8,   4, deflate_fast}, /* max speed, no lazy matches */
-/* 2 */ {4,   5, 16,   8, deflate_fast},
-/* 3 */ {4,   6, 32,  32, deflate_fast},
+/* 0 */ {0,    0,  0,    0, deflate_stored},  /* store only */
+/* 1 */ {4,    4,  8,    4, deflate_fast}, /* max speed, no lazy matches */
+/* 2 */ {4,    5, 16,    8, deflate_fast},
+/* 3 */ {4,    6, 32,   32, deflate_fast},
 
-/* 4 */ {4,   4, 16,  16, deflate_slow}, /* lazy matches */
-/* 5 */ {8,  16, 32,  32, deflate_slow},
-/* 6 */ {8,  16, 128, 128, deflate_slow},
-/* 7 */ {8,  32, 128, 256, deflate_slow},
+/* 4 */ {4,    4, 16,   16, deflate_slow},  /* lazy matches */
+/* 5 */ {8,   16, 32,   32, deflate_slow},
+/* 6 */ {8,   16, 128, 128, deflate_slow},
+/* 7 */ {8,   32, 128, 256, deflate_slow},
 /* 8 */ {32, 128, 258, 1024, deflate_slow},
 /* 9 */ {32, 258, 258, 4096, deflate_slow}}; /* max compression */
 #endif
@@ -167,7 +167,7 @@ struct static_tree_desc_s {int dummy;}; /* for buggy compilers */
  *    input characters, so that a running hash key can be computed from the
  *    previous key instead of complete recalculation each time.
  */
-#define UPDATE_HASH(s, h, c) (h = (((h)<<s->hash_shift) ^ (c)) & s->hash_mask)
+#define UPDATE_HASH(s,h,c) (h = (((h)<<s->hash_shift) ^ (c)) & s->hash_mask)
 
 /* ===========================================================================
  * Insert string str in the dictionary and set match_head to the previous head
@@ -229,7 +229,7 @@ int ZEXPORT deflateInit2_(strm, level, method, windowBits, memLevel, strategy,
 
     ushf *overlay;
     /* We overlay pending_buf and d_buf+l_buf. This works since the average
-     * output size for (length, distance) codes is <= 24 bits.
+     * output size for (length,distance) codes is <= 24 bits.
      */
 
     if (version == Z_NULL || version[0] != my_version[0] ||
@@ -1243,7 +1243,7 @@ local void check_match(s, start, match, length)
         z_error("invalid match");
     }
     if (z_verbose > 1) {
-        fprintf(stderr, "\\[%d, %d]", start-match, length);
+        fprintf(stderr,"\\[%d,%d]", start-match, length);
         do { putc(s->window[start++], stderr); } while (--length != 0);
     }
 }
@@ -1364,7 +1364,7 @@ local void fill_window(s)
                 (eof)); \
    s->block_start = s->strstart; \
    flush_pending(s->strm); \
-   Tracev((stderr, "[FLUSH]")); \
+   Tracev((stderr,"[FLUSH]")); \
 }
 
 /* Same but force premature exit if necessary. */
@@ -1528,7 +1528,7 @@ local block_state deflate_fast(s, flush)
             }
         } else {
             /* No match, output a literal byte */
-            Tracevv((stderr, "%c", s->window[s->strstart]));
+            Tracevv((stderr,"%c", s->window[s->strstart]));
             _tr_tally_lit (s, s->window[s->strstart], bflush);
             s->lookahead--;
             s->strstart++;
@@ -1638,7 +1638,7 @@ local block_state deflate_slow(s, flush)
              * single literal. If there was a match but the current match
              * is longer, truncate the previous match to a single literal.
              */
-            Tracevv((stderr, "%c", s->window[s->strstart-1]));
+            Tracevv((stderr,"%c", s->window[s->strstart-1]));
             _tr_tally_lit(s, s->window[s->strstart-1], bflush);
             if (bflush) {
                 FLUSH_BLOCK_ONLY(s, 0);
@@ -1657,7 +1657,7 @@ local block_state deflate_slow(s, flush)
     }
     Assert (flush != Z_NO_FLUSH, "no flush?");
     if (s->match_available) {
-        Tracevv((stderr, "%c", s->window[s->strstart-1]));
+        Tracevv((stderr,"%c", s->window[s->strstart-1]));
         _tr_tally_lit(s, s->window[s->strstart-1], bflush);
         s->match_available = 0;
     }
@@ -1715,7 +1715,7 @@ local block_state deflate_rle(s, flush)
             s->strstart += run;
         } else {
             /* No match, output a literal byte */
-            Tracevv((stderr, "%c", s->window[s->strstart]));
+            Tracevv((stderr,"%c", s->window[s->strstart]));
             _tr_tally_lit (s, s->window[s->strstart], bflush);
             s->lookahead--;
             s->strstart++;

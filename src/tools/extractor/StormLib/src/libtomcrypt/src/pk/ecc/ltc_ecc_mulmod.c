@@ -33,7 +33,7 @@
    @param G    The base point
    @param R    [out] Destination for kG
    @param modulus  The modulus of the field the ECC curve is in
-   @param map      Boolean whether to map back to affine or not (1 == map, 0 == leave in projective)
+   @param map      Boolean whether to map back to affine or not (1==map, 0 == leave in projective)
    @return CRYPT_OK on success
 */
 int ltc_ecc_mulmod(void *k, ecc_point *G, ecc_point *R, void *modulus, int map)
@@ -76,7 +76,7 @@ int ltc_ecc_mulmod(void *k, ecc_point *G, ecc_point *R, void *modulus, int map)
       }
   }
 
-   /* make a copy of G incase R == G */
+   /* make a copy of G incase R==G */
    tG = ltc_ecc_new_point();
    if (tG == NULL)                                                                   { err = CRYPT_MEM; goto done; }
 
@@ -93,7 +93,7 @@ int ltc_ecc_mulmod(void *k, ecc_point *G, ecc_point *R, void *modulus, int map)
    mp_clear(mu);
    mu = NULL;
 
-   /* calc the M tab, which holds kG for k == 8..15 */
+   /* calc the M tab, which holds kG for k==8..15 */
    /* M[0] == 8G */
    if ((err = ltc_mp.ecc_ptdbl(tG, M[0], modulus, mp)) != CRYPT_OK)                 { goto done; }
    if ((err = ltc_mp.ecc_ptdbl(M[0], M[0], modulus, mp)) != CRYPT_OK)               { goto done; }
@@ -217,6 +217,6 @@ done:
 
 #endif
 
-/* $Source: /cvs/libtom/libtomcrypt/src/pk/ecc/ltc_ecc_mulmod.c, v $ */
+/* $Source: /cvs/libtom/libtomcrypt/src/pk/ecc/ltc_ecc_mulmod.c,v $ */
 /* $Revision: 1.26 $ */
 /* $Date: 2007/05/12 14:32:35 $ */

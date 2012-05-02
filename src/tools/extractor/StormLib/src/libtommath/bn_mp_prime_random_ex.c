@@ -119,6 +119,6 @@ error:
 
 #endif
 
-/* $Source: /cvs/libtom/libtommath/bn_mp_prime_random_ex.c, v $ */
+/* $Source: /cvs/libtom/libtommath/bn_mp_prime_random_ex.c,v $ */
 /* $Revision: 1.5 $ */
 /* $Date: 2006/12/28 01:25:13 $ */

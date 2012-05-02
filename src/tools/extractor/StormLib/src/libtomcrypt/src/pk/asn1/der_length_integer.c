@@ -76,6 +76,6 @@ int der_length_integer(void *num, unsigned long *outlen)
 
 #endif
 
-/* $Source: /cvs/libtom/libtomcrypt/src/pk/asn1/der/integer/der_length_integer.c, v $ */
+/* $Source: /cvs/libtom/libtomcrypt/src/pk/asn1/der/integer/der_length_integer.c,v $ */
 /* $Revision: 1.5 $ */
 /* $Date: 2006/12/28 01:27:24 $ */

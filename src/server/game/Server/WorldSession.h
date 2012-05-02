@@ -32,24 +32,27 @@
 #include "WorldPacket.h"
 #include "Cryptography/BigNumber.h"
 
-struct ItemTemplate;
-struct AuctionEntry;
-struct DeclinedName;
-struct MovementInfo;
-
+class CalendarEvent;
+class CalendarInvite;
 class Creature;
+class GameObject;
+class InstanceSave;
 class Item;
+class LoginQueryHolder;
 class Object;
 class Player;
-class Unit;
-class GameObject;
+class InstanceSave;
 class Quest;
-class WorldPacket;
-class WorldSocket;
-class LoginQueryHolder;
 class CharacterHandler;
 class SpellCastTargets;
+class Unit;
+class Warden;
+class WorldPacket;
+class WorldSocket;
 struct AreaTableEntry;
+struct AuctionEntry;
+struct DeclinedName;
+struct ItemTemplate;
 struct LfgJoinResultData;
 struct LfgLockStatus;
 struct LfgPlayerBoot;
@@ -57,6 +60,7 @@ struct LfgProposal;
 struct LfgReward;
 struct LfgRoleCheck;
 struct LfgUpdateData;
+struct MovementInfo;
 
 enum AccountDataType
 {
@@ -248,10 +252,13 @@ class WorldSession
         uint32 GetAccountId() const { return _accountId; }
         Player* GetPlayer() const { return _player; }
         char const* GetPlayerName() const;
+        uint32 GetGuidLow() const;
         void SetSecurity(AccountTypes security) { _security = security; }
         std::string const& GetRemoteAddress() { return m_Address; }
         void SetPlayer(Player* player);
         uint8 Expansion() const { return m_expansion; }
+
+        void InitWarden(BigNumber* k, std::string os);
 
         /// Session in auth.queue currently
         void SetInQueue(bool state) { m_inQueue = state; }
@@ -273,7 +280,7 @@ class WorldSession
 
         void LogoutPlayer(bool Save);
         void KickPlayer();
-        void HandleMoveToGraveyard(WorldPacket &recv_data);
+        void HandleMoveToGraveyard(WorldPacket& recv_data);
 
         void QueuePacket(WorldPacket* new_packet);
         bool Update(uint32 diff, PacketFilter& updater);
@@ -609,7 +616,7 @@ class WorldSession
         void HandleBuyStableSlot(WorldPacket& recvPacket);
         void HandleStableRevivePet(WorldPacket& recvPacket);
         void HandleStableSwapPet(WorldPacket& recvPacket);
-        void HandleStableSwapPetCallback(PreparedQueryResult result, uint32 petnumber);
+        void HandleStableSwapPetCallback(PreparedQueryResult result, uint8 petnumber);
 
         void HandleDuelAcceptedOpcode(WorldPacket& recvPacket);
         void HandleDuelCancelledOpcode(WorldPacket& recvPacket);
@@ -772,6 +779,7 @@ class WorldSession
         void HandleBattlemasterHelloOpcode(WorldPacket& recv_data);
         void HandleBattlemasterJoinOpcode(WorldPacket& recv_data);
         void HandleBattlegroundPlayerPositionsOpcode(WorldPacket& recv_data);
+        void HandleBattlegroundPortOpcode(WorldPacket& recv_data);
         void HandlePVPLogDataOpcode(WorldPacket& recv_data);
         void HandleBattleFieldPortOpcode(WorldPacket& recv_data);
         void HandleBattlefieldListOpcode(WorldPacket& recv_data);
@@ -794,18 +802,19 @@ class WorldSession
         void HandleResetInstancesOpcode(WorldPacket& recv_data);
         void HandleHearthAndResurrect(WorldPacket& recv_data);
         void HandleGuildPartyStateUpdate(WorldPacket& recv_data);
+        //void HandleUITimeRequest(WorldPacket& recv_data); // NYI
         void HandleInstanceLockResponse(WorldPacket& recvPacket);
 
         // Battlefield
-        void SendBfInvitePlayerToWar(uint32 BattleId, uint32 ZoneId, uint32 time);
+        void SendBfInvitePlayerToWar(uint32 BattleId, uint32 ZoneId, uint64 time);
         void SendBfInvitePlayerToQueue(uint32 BattleId);
-        void SendBfQueueInviteResponce(uint32 BattleId, uint32 ZoneId);
+        void SendBfQueueInviteResponse(uint32 BattleId, uint32 ZoneId);
         void SendBfEntered(uint32 BattleId);
         void SendBfLeaveMessage(uint32 BattleId);
-        void HandleBfQueueInviteResponse(WorldPacket &recv_data);
-        void HandleBfJoinQueue(WorldPacket &recv_data);
-        void HandleBfEntryInviteResponse(WorldPacket &recv_data);
-        void HandleBfExitRequest(WorldPacket &recv_data);
+        void HandleBfQueueInviteResponse(WorldPacket& recv_data);
+        void HandleBfJoinQueue(WorldPacket& recv_data);
+        void HandleBfEntryInviteResponse(WorldPacket& recv_data);
+        void HandleBfExitRequest(WorldPacket& recv_data);
 
         // Looking for Dungeon/Raid
         void HandleLfgSetCommentOpcode(WorldPacket& recv_data);
@@ -889,21 +898,36 @@ class WorldSession
         void HandleAcceptGrantLevel(WorldPacket& recv_data);
 
         // Calendar
-        void HandleCalendarGetCalendar(WorldPacket& recv_data);
-        void HandleCalendarGetEvent(WorldPacket& recv_data);
-        void HandleCalendarGuildFilter(WorldPacket& recv_data);
-        void HandleCalendarArenaTeam(WorldPacket& recv_data);
-        void HandleCalendarAddEvent(WorldPacket& recv_data);
-        void HandleCalendarUpdateEvent(WorldPacket& recv_data);
-        void HandleCalendarRemoveEvent(WorldPacket& recv_data);
-        void HandleCalendarCopyEvent(WorldPacket& recv_data);
-        void HandleCalendarEventInvite(WorldPacket& recv_data);
-        void HandleCalendarEventRsvp(WorldPacket& recv_data);
-        void HandleCalendarEventRemoveInvite(WorldPacket& recv_data);
-        void HandleCalendarEventStatus(WorldPacket& recv_data);
-        void HandleCalendarEventModeratorStatus(WorldPacket& recv_data);
-        void HandleCalendarComplain(WorldPacket& recv_data);
-        void HandleCalendarGetNumPending(WorldPacket& recv_data);
+        void HandleCalendarGetCalendar(WorldPacket& recvData);
+        void HandleCalendarGetEvent(WorldPacket& recvData);
+        void HandleCalendarGuildFilter(WorldPacket& recvData);
+        void HandleCalendarArenaTeam(WorldPacket& recvData);
+        void HandleCalendarAddEvent(WorldPacket& recvData);
+        void HandleCalendarUpdateEvent(WorldPacket& recvData);
+        void HandleCalendarRemoveEvent(WorldPacket& recvData);
+        void HandleCalendarCopyEvent(WorldPacket& recvData);
+        void HandleCalendarEventInvite(WorldPacket& recvData);
+        void HandleCalendarEventRsvp(WorldPacket& recvData);
+        void HandleCalendarEventRemoveInvite(WorldPacket& recvData);
+        void HandleCalendarEventStatus(WorldPacket& recvData);
+        void HandleCalendarEventModeratorStatus(WorldPacket& recvData);
+        void HandleCalendarComplain(WorldPacket& recvData);
+        void HandleCalendarGetNumPending(WorldPacket& recvData);
+        void HandleCalendarEventSignup(WorldPacket& recvData);
+
+        void SendCalendarEvent(CalendarEvent const& calendarEvent, CalendarSendEventType sendEventType);
+        void SendCalendarEventInvite(CalendarInvite const& invite, bool pending);
+        void SendCalendarEventInviteAlert(CalendarEvent const& calendarEvent, CalendarInvite const& calendarInvite);
+        void SendCalendarEventInviteRemove(CalendarInvite const& invite, uint32 flags);
+        void SendCalendarEventInviteRemoveAlert(CalendarEvent const& calendarEvent, CalendarInviteStatus status);
+        void SendCalendarEventRemovedAlert(CalendarEvent const& calendarEvent);
+        void SendCalendarEventUpdateAlert(CalendarEvent const& calendarEvent, CalendarSendEventType sendEventType);
+        void SendCalendarEventStatus(CalendarEvent const& calendarEvent, CalendarInvite const& invite);
+        void SendCalendarEventModeratorStatusAlert(CalendarInvite const& invite);
+        void SendCalendarCommandResult(CalendarError err, char const* param = NULL);
+        void SendCalendarRaidLockout(InstanceSave const* save, bool add);
+        void SendCalendarRaidLockoutUpdated(InstanceSave const* save);
+        void SendCalendarClearActionPending();
 
         void HandleSpellClick(WorldPacket& recv_data);
         void HandleMirrorImageDataRequest(WorldPacket& recv_data);
@@ -966,6 +990,9 @@ class WorldSession
         uint8 m_expansion;
 
         typedef std::list<AddonInfo> AddonsList;
+
+        // Warden
+        Warden* _warden;                                    // Remains NULL if Warden system is not enabled by config
 
         time_t _logoutTime;
         bool m_inQueue;                                     // session wait in auth.queue

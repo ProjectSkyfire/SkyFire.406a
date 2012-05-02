@@ -51,14 +51,14 @@ int rsa_import(const unsigned char *in, unsigned long inlen, rsa_key *key)
    }
 
    /* this includes the internal hash ID and optional params (NULL in this case) */
-   LTC_SET_ASN1(ssl_pubkey_hashoid, 0, LTC_ASN1_OBJECT_IDENTIFIER, tmpoid,               sizeof(tmpoid)/sizeof(tmpoid[0]));
-   LTC_SET_ASN1(ssl_pubkey_hashoid, 1, LTC_ASN1_NULL,             NULL,                 0);
+   LTC_SET_ASN1(ssl_pubkey_hashoid, 0, LTC_ASN1_OBJECT_IDENTIFIER, tmpoid,                sizeof(tmpoid)/sizeof(tmpoid[0]));
+   LTC_SET_ASN1(ssl_pubkey_hashoid, 1, LTC_ASN1_NULL,              NULL,                  0);
 
    /* the actual format of the SSL DER key is odd, it stores a RSAPublicKey in a **BIT** string ... so we have to extract it
       then proceed to convert bit to octet
     */
-   LTC_SET_ASN1(ssl_pubkey, 0,        LTC_ASN1_SEQUENCE,         &ssl_pubkey_hashoid,  2);
-   LTC_SET_ASN1(ssl_pubkey, 1,        LTC_ASN1_BIT_STRING,       tmpbuf,               MAX_RSA_SIZE*8);
+   LTC_SET_ASN1(ssl_pubkey, 0,         LTC_ASN1_SEQUENCE,          &ssl_pubkey_hashoid,   2);
+   LTC_SET_ASN1(ssl_pubkey, 1,         LTC_ASN1_BIT_STRING,        tmpbuf,                MAX_RSA_SIZE*8);
 
    if (der_decode_sequence(in, inlen,
                            ssl_pubkey, 2UL) == CRYPT_OK) {
@@ -76,7 +76,7 @@ int rsa_import(const unsigned char *in, unsigned long inlen, rsa_key *key)
       if ((err = der_decode_sequence_multi(tmpbuf, t,
                                            LTC_ASN1_INTEGER, 1UL, key->N,
                                            LTC_ASN1_INTEGER, 1UL, key->e,
-                                           LTC_ASN1_EOL,    0UL, NULL)) != CRYPT_OK) {
+                                           LTC_ASN1_EOL,     0UL, NULL)) != CRYPT_OK) {
          XFREE(tmpbuf);
          goto LBL_ERR;
       }
@@ -89,7 +89,7 @@ int rsa_import(const unsigned char *in, unsigned long inlen, rsa_key *key)
    /* not SSL public key, try to match against LTC_PKCS #1 standards */
    if ((err = der_decode_sequence_multi(in, inlen,
                                   LTC_ASN1_INTEGER, 1UL, key->N,
-                                  LTC_ASN1_EOL,    0UL, NULL)) != CRYPT_OK) {
+                                  LTC_ASN1_EOL,     0UL, NULL)) != CRYPT_OK) {
       goto LBL_ERR;
    }
 
@@ -108,7 +108,7 @@ int rsa_import(const unsigned char *in, unsigned long inlen, rsa_key *key)
                           LTC_ASN1_INTEGER, 1UL, key->dP,
                           LTC_ASN1_INTEGER, 1UL, key->dQ,
                           LTC_ASN1_INTEGER, 1UL, key->qP,
-                          LTC_ASN1_EOL,    0UL, NULL)) != CRYPT_OK) {
+                          LTC_ASN1_EOL,     0UL, NULL)) != CRYPT_OK) {
          mp_clear(zero);
          goto LBL_ERR;
       }
@@ -123,19 +123,19 @@ int rsa_import(const unsigned char *in, unsigned long inlen, rsa_key *key)
       if ((err = der_decode_sequence_multi(in, inlen,
                                      LTC_ASN1_INTEGER, 1UL, key->N,
                                      LTC_ASN1_INTEGER, 1UL, key->e,
-                                     LTC_ASN1_EOL,    0UL, NULL)) != CRYPT_OK) {
+                                     LTC_ASN1_EOL,     0UL, NULL)) != CRYPT_OK) {
          goto LBL_ERR;
       }
       key->type = PK_PUBLIC;
    }
    return CRYPT_OK;
 LBL_ERR:
-   mp_clear_multi(key->d, key->e, key->N, key->dQ, key->dP, key->qP, key->p, key->q, NULL);
+   mp_clear_multi(key->d,  key->e, key->N, key->dQ, key->dP, key->qP, key->p, key->q, NULL);
    return err;
 }
 
 #endif /* LTC_MRSA */
 
-/* $Source: /cvs/libtom/libtomcrypt/src/pk/rsa/rsa_import.c, v $ */
+/* $Source: /cvs/libtom/libtomcrypt/src/pk/rsa/rsa_import.c,v $ */
 /* $Revision: 1.23 $ */
 /* $Date: 2007/05/12 14:32:35 $ */

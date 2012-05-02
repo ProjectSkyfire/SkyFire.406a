@@ -43,6 +43,6 @@ int mp_init_size (mp_int * a, int size)
 }
 #endif
 
-/* $Source: /cvs/libtom/libtommath/bn_mp_init_size.c, v $ */
+/* $Source: /cvs/libtom/libtommath/bn_mp_init_size.c,v $ */
 /* $Revision: 1.4 $ */
 /* $Date: 2006/12/28 01:25:13 $ */

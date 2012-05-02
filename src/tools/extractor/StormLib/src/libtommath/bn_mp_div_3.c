@@ -74,6 +74,6 @@ mp_div_3 (mp_int * a, mp_int *c, mp_digit * d)
 
 #endif
 
-/* $Source: /cvs/libtom/libtommath/bn_mp_div_3.c, v $ */
+/* $Source: /cvs/libtom/libtommath/bn_mp_div_3.c,v $ */
 /* $Revision: 1.4 $ */
 /* $Date: 2006/12/28 01:25:13 $ */

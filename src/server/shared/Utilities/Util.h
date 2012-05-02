@@ -383,6 +383,7 @@ bool IsIPAddress(char const* ipaddress);
 uint32 CreatePIDFile(const std::string& filename);
 
 void hexEncodeByteArray(uint8* bytes, uint32 arrayLen, std::string& result);
+std::string ByteArrayToHexStr(uint8* bytes, uint32 length);
 #endif
 
 //handler for operations on large flags
@@ -394,7 +395,7 @@ void hexEncodeByteArray(uint8* bytes, uint32 arrayLen, std::string& result);
 #define PAIR64_LOPART(x)   (uint32)(uint64(x)         & UI64LIT(0x00000000FFFFFFFF))
 #endif
 
-// simple class for not-modifyable list
+// simple class for not-modifiable list
 template <typename T>
 class HookList
 {

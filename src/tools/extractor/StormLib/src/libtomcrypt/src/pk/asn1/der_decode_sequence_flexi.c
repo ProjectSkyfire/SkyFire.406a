@@ -380,6 +380,6 @@ error:
 
 #endif
 
-/* $Source: /cvs/libtom/libtomcrypt/src/pk/asn1/der/sequence/der_decode_sequence_flexi.c, v $ */
+/* $Source: /cvs/libtom/libtomcrypt/src/pk/asn1/der/sequence/der_decode_sequence_flexi.c,v $ */
 /* $Revision: 1.26 $ */
 /* $Date: 2006/12/28 01:27:24 $ */

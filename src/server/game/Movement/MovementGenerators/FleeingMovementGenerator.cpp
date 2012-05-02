@@ -21,6 +21,7 @@
 #include "CreatureAI.h"
 #include "MapManager.h"
 #include "FleeingMovementGenerator.h"
+#include "PathFinderMovementGenerator.h"
 #include "ObjectAccessor.h"
 #include "MoveSplineInit.h"
 #include "MoveSpline.h"
@@ -29,8 +30,7 @@
 #define MAX_QUIET_DISTANCE 43.0f
 
 template<class T>
-void
-FleeingMovementGenerator<T>::_setTargetLocation(T &owner)
+void FleeingMovementGenerator<T>::_setTargetLocation(T &owner)
 {
     if (!&owner)
         return;
@@ -38,8 +38,8 @@ FleeingMovementGenerator<T>::_setTargetLocation(T &owner)
     if (owner.HasUnitState(UNIT_STATE_ROOT | UNIT_STATE_STUNNED))
         return;
 
-    if (!_setMoveData(owner))
-        return;
+   //  if (!_setMoveData(owner))
+   //     return;
 
     float x, y, z;
     if (!_getPoint(owner, x, y, z))
@@ -47,10 +47,21 @@ FleeingMovementGenerator<T>::_setTargetLocation(T &owner)
 
     owner.AddUnitState(UNIT_STATE_FLEEING_MOVE);
 
+    PathFinderMovementGenerator path(&owner);
+    path.setPathLengthLimit(30.0f);
+    path.calculate(x, y, z);
+    if (path.getPathType() & PATHFIND_NOPATH)
+    {
+        i_nextCheckTime.Reset(urand(1000, 1500));
+        return;
+    }
+
     Movement::MoveSplineInit init(owner);
-    init.MoveTo(x, y, z);
+    // init.MoveTo(x, y, z);
+    init.MovebyPath(path.getPath());
     init.SetWalk(false);
-    init.Launch();
+    //init.Launch();
+    int32 traveltime = init.Launch();
 }
 
 template<class T>
@@ -60,7 +71,7 @@ FleeingMovementGenerator<T>::_getPoint(T &owner, float &x, float &y, float &z)
     if (!&owner)
         return false;
 
-    x = owner.GetPositionX();
+/*    x = owner.GetPositionX();
     y = owner.GetPositionY();
     z = owner.GetPositionZ();
 
@@ -220,63 +231,86 @@ FleeingMovementGenerator<T>::_setMoveData(T &owner)
 
     float cur_dist;
     float angle_to_caster;
+    */
+    float dist_from_caster, angle_to_caster;
 
     if (Unit* fright = ObjectAccessor::GetUnit(owner, i_frightGUID))
     {
-        cur_dist = fright->GetDistance(&owner);
+    /*    cur_dist = fright->GetDistance(&owner);
         if (cur_dist < cur_dist_xyz)
         {
             i_caster_x = fright->GetPositionX();
             i_caster_y = fright->GetPositionY();
-            i_caster_z = fright->GetPositionZ();
+            i_caster_z = fright->GetPositionZ(); */
+
+        dist_from_caster = fright->GetDistance(&owner);
+        if (dist_from_caster > 0.2f)
             angle_to_caster = fright->GetAngle(&owner);
-        }
         else
-        {
+          angle_to_caster = frand(0, 2*M_PI_F);
+       /* {
             cur_dist = cur_dist_xyz;
             angle_to_caster = owner.GetAngle(i_caster_x, i_caster_y) + static_cast<float>(M_PI);
-        }
+        } */
     }
     else
     {
-        cur_dist = cur_dist_xyz;
-        angle_to_caster = owner.GetAngle(i_caster_x, i_caster_y) + static_cast<float>(M_PI);
+      //  cur_dist = cur_dist_xyz;
+      //  angle_to_caster = owner.GetAngle(i_caster_x, i_caster_y) + static_cast<float>(M_PI);
+        dist_from_caster = 0.0f;
+        angle_to_caster = frand(0, 2 * M_PI_F);
     }
 
-    // if we too close may use 'path-finding' else just stop
+/*    // if we too close may use 'path-finding' else just stop
     i_only_forward = cur_dist >= MIN_QUIET_DISTANCE/3;
 
     //get angle and 'distance from caster' to run
     float angle;
 
-    if (i_cur_angle == 0.0f && i_last_distance_from_caster == 0.0f) //just started, first time
+    if (i_cur_angle == 0.0f && i_last_distance_from_caster == 0.0f) //just started, first time*/
+    float dist, angle;
+    if (dist_from_caster < MIN_QUIET_DISTANCE)
     {
-        angle = (float)rand_norm()*(1.0f - cur_dist/MIN_QUIET_DISTANCE) * static_cast<float>(M_PI/3) + (float)rand_norm()*static_cast<float>(M_PI*2/3);
-        i_to_distance_from_caster = MIN_QUIET_DISTANCE;
-        i_only_forward = true;
+     //   angle = (float)rand_norm()*(1.0f - cur_dist/MIN_QUIET_DISTANCE) * static_cast<float>(M_PI/3) + (float)rand_norm()*static_cast<float>(M_PI*2/3);
+     //   i_to_distance_from_caster = MIN_QUIET_DISTANCE;
+     //   i_only_forward = true;
+        dist = frand(0.4f, 1.3f)*(MIN_QUIET_DISTANCE - dist_from_caster);
+        angle = angle_to_caster + frand(-M_PI_F / 8, M_PI_F / 8);
     }
-    else if (cur_dist < MIN_QUIET_DISTANCE)
+   // else if (cur_dist < MIN_QUIET_DISTANCE)
+    else if (dist_from_caster > MAX_QUIET_DISTANCE)
     {
-        angle = static_cast<float>(M_PI/6) + (float)rand_norm()*static_cast<float>(M_PI*2/3);
-        i_to_distance_from_caster = cur_dist*2/3 + (float)rand_norm()*(MIN_QUIET_DISTANCE - cur_dist*2/3);
+        // angle = static_cast<float>(M_PI/6) + (float)rand_norm()*static_cast<float>(M_PI*2/3);
+        // i_to_distance_from_caster = cur_dist*2/3 + (float)rand_norm()*(MIN_QUIET_DISTANCE - cur_dist*2/3);
+        dist = frand(0.4f, 1.0f)*(MAX_QUIET_DISTANCE - MIN_QUIET_DISTANCE);
+        angle = -angle_to_caster + frand(-M_PI_F / 4, M_PI_F / 4);
     }
-    else if (cur_dist > MAX_QUIET_DISTANCE)
+    else  // we are inside quiet range // if (cur_dist > MAX_QUIET_DISTANCE)
     {
-        angle = (float)rand_norm()*static_cast<float>(M_PI/3) + static_cast<float>(M_PI*2/3);
+    /*    angle = (float)rand_norm()*static_cast<float>(M_PI/3) + static_cast<float>(M_PI*2/3);
         i_to_distance_from_caster = MIN_QUIET_DISTANCE + 2.5f + (float)rand_norm()*(MAX_QUIET_DISTANCE - MIN_QUIET_DISTANCE - 2.5f);
     }
     else
     {
         angle = (float)rand_norm()*static_cast<float>(M_PI);
         i_to_distance_from_caster = MIN_QUIET_DISTANCE + 2.5f + (float)rand_norm()*(MAX_QUIET_DISTANCE - MIN_QUIET_DISTANCE - 2.5f);
+    */
+        dist = frand(0.6f, 1.2f)*(MAX_QUIET_DISTANCE - MIN_QUIET_DISTANCE);
+        angle = frand(0, 2*M_PI_F);
     }
 
-    int8 sign = (float)rand_norm() > 0.5f ? 1 : -1;
-    i_cur_angle = sign*angle + angle_to_caster;
+  //  int8 sign = (float)rand_norm() > 0.5f ? 1 : -1;
+  //  i_cur_angle = sign*angle + angle_to_caster;
+    float curr_x, curr_y, curr_z;
+    owner.GetPosition(curr_x, curr_y, curr_z);
 
     // current distance
-    i_last_distance_from_caster = cur_dist;
+    // i_last_distance_from_caster = cur_dist;
+    x = curr_x + dist*cos(angle);
+    y = curr_y + dist*sin(angle);
+    z = curr_z;
 
+    owner.UpdateAllowedPositionZ(x, y, z);
     return true;
 }
 
@@ -289,8 +323,9 @@ FleeingMovementGenerator<T>::Initialize(T &owner)
 
     owner.SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_FLEEING);
     owner.AddUnitState(UNIT_STATE_FLEEING|UNIT_STATE_FLEEING_MOVE);
+    owner.StopMoving();
 
-    _Init(owner);
+    /*_Init(owner);
 
     if (Unit *fright = ObjectAccessor::GetUnit(owner, i_frightGUID))
     {
@@ -308,12 +343,12 @@ FleeingMovementGenerator<T>::Initialize(T &owner)
     i_only_forward = true;
     i_cur_angle = 0.0f;
     i_last_distance_from_caster = 0.0f;
-    i_to_distance_from_caster = 0.0f;
+    i_to_distance_from_caster = 0.0f; */
     _setTargetLocation(owner);
 }
 
-template<>
-void
+// template<>
+/*void
 FleeingMovementGenerator<Creature>::_Init(Creature &owner)
 {
     if (!&owner)
@@ -323,7 +358,8 @@ FleeingMovementGenerator<Creature>::_Init(Creature &owner)
     is_water_ok = owner.canSwim();
     is_land_ok  = owner.canWalk();
 }
-
+*/
+/*
 template<>
 void
 FleeingMovementGenerator<Player>::_Init(Player &)
@@ -331,12 +367,14 @@ FleeingMovementGenerator<Player>::_Init(Player &)
     is_water_ok = true;
     is_land_ok  = true;
 }
-
+*/
 template<>
 void FleeingMovementGenerator<Player>::Finalize(Player &owner)
 {
     owner.RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_FLEEING);
-    owner.ClearUnitState(UNIT_STATE_FLEEING|UNIT_STATE_FLEEING_MOVE);
+ //   owner.ClearUnitState(UNIT_STATE_FLEEING|UNIT_STATE_FLEEING_MOVE);
+    owner.ClearUnitState(UNIT_STATE_FLEEING | UNIT_STATE_FLEEING_MOVE);
+    owner.StopMoving();
 }
 
 template<>
@@ -375,8 +413,8 @@ FleeingMovementGenerator<T>::Update(T &owner, const uint32 &time_diff)
 
 template void FleeingMovementGenerator<Player>::Initialize(Player &);
 template void FleeingMovementGenerator<Creature>::Initialize(Creature &);
-template bool FleeingMovementGenerator<Player>::_setMoveData(Player &);
-template bool FleeingMovementGenerator<Creature>::_setMoveData(Creature &);
+// template bool FleeingMovementGenerator<Player>::_setMoveData(Player &);
+// template bool FleeingMovementGenerator<Creature>::_setMoveData(Creature &);
 template bool FleeingMovementGenerator<Player>::_getPoint(Player &, float &, float &, float &);
 template bool FleeingMovementGenerator<Creature>::_getPoint(Creature &, float &, float &, float &);
 template void FleeingMovementGenerator<Player>::_setTargetLocation(Player &);
