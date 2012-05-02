@@ -1336,9 +1336,6 @@ void World::SetInitialWorldSettings()
     sLog->outString("Loading spell custom attributes...");
     sSpellMgr->LoadSpellCustomAttr();
 
-    sLog->outString("Loading Actionbar Spell overrides...");
-    sSpellMgr->LoadActionBarSpellOverride();
-
     sLog->outString("Loading Script Names...");
     sObjectMgr->LoadScriptNames();
 
