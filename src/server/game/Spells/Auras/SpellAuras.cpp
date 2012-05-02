@@ -1187,12 +1187,13 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                 // Todo: This should be moved to similar function in spell::hit
                 else if (GetSpellInfo()->SpellFamilyFlags[0] & 0x01000000)
                 {
-                    // Polymorph Sound - Sheep && Penguin
+                    // Polymorph Sound - Sheep, Penguin and Monkey
                     if (GetSpellInfo()->SpellIconID == 82 && GetSpellInfo()->SpellVisual[0] == 12978)
                     {
-                        // Glyph of the Penguin
-                        if (caster->HasAura(52648))
+                        if (caster->HasAura(52648))                 // Glyph of the Penguin
                             caster->CastSpell(target, 61635, true);
+                        else if (caster->HasAura(57927))            // Glyph of the Monkey
+                                 caster->CastSpell(target, 89729, true);
                         else
                             caster->CastSpell(target, 61634, true);
                     }
