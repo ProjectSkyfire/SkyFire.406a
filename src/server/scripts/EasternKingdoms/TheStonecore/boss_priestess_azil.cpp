@@ -18,6 +18,25 @@
 #include "ScriptPCH.h"
 #include "the_stonecore.h"
 
+enum Spells
+{
+    SPELL_ERUPTION                                = 80800,
+    SPELL_SUMMON_LAVA_FISSURE                     = 80803,
+    SPELL_LAVA_FISSURE_PREPARATION                = 80798,
+    SPELL_STALACTITE_SUMMON_OBJ                   = 92309,
+    SPELL_STALACTITE_SUMMON_TRIG                  = 80656,
+    SPELL_STALACTITE_VISUAL                       = 80654,
+    SPELL_SANDBLAST                               = 92656,
+};
+
+enum Events
+{
+    EVENT_LAVA_FISSURE = 1,
+    EVENT_STALACTITE_P1,
+    EVENT_STALACTITE_P2,
+    EVENT_SANDBLAST,
+};
+
 class boss_priestess_azil : public CreatureScript
 {
 public:
@@ -37,9 +56,24 @@ public:
 
         InstanceScript* instance;
 
-        void Reset() {}
+        void Reset()
 
-        void EnterCombat(Unit* /*who*/) {}
+        {
+            summons.DespawnAll();
+            events.Reset();
+            isFlyPhase = false;
+            me->SetReactState(REACT_AGGRESSIVE);
+            me->SetFlying(false);
+            DoStartMovement(me->getVictim());
+            me->RemoveUnitMovementFlag(MOVEMENTFLAG_LEVITATING);
+        }
+
+        void EnterCombat(Unit* attacker)
+        {
+            events.ScheduleEvent(EVENT_LAVA_FISSURE, urand(7000, 10000), 0, 0);
+            events.ScheduleEvent(EVENT_SANDBLAST, urand(7000, 8000), 0, 0);
+            events.ScheduleEvent(EVENT_STALACTITE_P1, urand(20000, 30000), 0, 0);
+        }
 
         void UpdateAI(const uint32 Diff)
         {
