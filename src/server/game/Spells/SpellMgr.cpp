@@ -3154,6 +3154,7 @@ void SpellMgr::LoadSpellCustomAttr()
             case 64823: // Item - Druid T8 Balance 4P Bonus
             case 34477: // Misdirection
             case 44401: // Missile Barrage
+            case 46915: // Bloodsurge
                 spellInfo->ProcCharges = 1;
                 break;
             case 84726: // Frostfire orb rank 1
