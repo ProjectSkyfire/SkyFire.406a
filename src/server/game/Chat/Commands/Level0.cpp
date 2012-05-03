@@ -94,7 +94,9 @@ bool ChatHandler::HandleServerInfoCommand(const char* /*args*/)
     std::string uptime = secsToTimeString(sWorld->GetUptime());
     uint32 updateTime = sWorld->GetUpdateTime();
 
-    PSendSysMessage(_CLIENT_BUILD_REVISION_2, _FULLVERSION);
+    PSendSysMessage(_CLIENT_BUILD_REVISION_2);
+    PSendSysMessage("Revision Hash: "_HASH);
+    PSendSysMessage("Build Date: "_DATE);
     PSendSysMessage(LANG_CONNECTED_PLAYERS, playersNum, maxPlayersNum);
     PSendSysMessage(LANG_CONNECTED_USERS, activeClientsNum, maxActiveClientsNum, queuedClientsNum, maxQueuedClientsNum);
     PSendSysMessage(LANG_UPTIME, uptime.c_str());
