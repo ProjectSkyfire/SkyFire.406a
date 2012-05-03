@@ -3032,7 +3032,7 @@ void Spell::prepare(SpellCastTargets const* targets, AuraEffect const* triggered
         if (!m_casttime && !m_spellInfo->StartRecoveryTime && !m_castItemGUID && GetCurrentContainer() == CURRENT_GENERIC_SPELL)
             cast(true);
     }
-    
+
     Unit::AuraEffectList const& AurasList = m_caster->GetAuraEffectsByType(SPELL_AURA_SWAP_SPELLS);
     for (Unit::AuraEffectList::const_iterator itr = AurasList.begin(); itr != AurasList.end(); ++itr)
     {

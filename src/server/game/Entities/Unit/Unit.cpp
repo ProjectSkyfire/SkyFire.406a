@@ -8167,7 +8167,7 @@ bool Unit::HandleAuraProc(Unit* victim, uint32 damage, Aura* triggeredByAura, Sp
                 {
                     if (HasAura(14751))
                     {
-                        CastSpell(this, 81208, true);
+                        CastSpell(this, 81208, true);  // Chakra: Serenity
                         *handled = true;
                         break;
                     }
@@ -8177,7 +8177,7 @@ bool Unit::HandleAuraProc(Unit* victim, uint32 damage, Aura* triggeredByAura, Sp
                 {
                     if (HasAura(14751))
                     {
-                        CastSpell(this, 81206, true);
+                        CastSpell(this, 81206, true); // Chakra: Sanctuary
                         *handled = true;
                         break;
                     }
@@ -8187,7 +8187,7 @@ bool Unit::HandleAuraProc(Unit* victim, uint32 damage, Aura* triggeredByAura, Sp
                 {
                     if (HasAura(14751))
                     {
-                        CastSpell(this, 81209, true);
+                        CastSpell(this, 81209, true); // Chakra: Chastise
                         *handled = true;
                         break;
                     }
@@ -8219,7 +8219,7 @@ bool Unit::HandleAuraProc(Unit* victim, uint32 damage, Aura* triggeredByAura, Sp
                     *handled = true;
                 break;
             }
-            // Judgements of the Just
+            // Judgments of the Just
             else if (dummySpell->SpellIconID == 3015)
             {
                 *handled = true;
