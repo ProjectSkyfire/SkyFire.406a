@@ -363,53 +363,20 @@ void Player::UpdateAttackPowerAndDamage(bool ranged)
                 break;
             case CLASS_DRUID:
             {
-                // Check if Predatory Strikes is skilled
-                float _LevelMult = 0.0f;
-                float weapon_bonus = 0.0f;
-
-                if (IsInShapeshiftForm())
-                {
-                    Unit::AuraEffectList const& mDummy = GetAuraEffectsByType(SPELL_AURA_DUMMY);
-                    for (Unit::AuraEffectList::const_iterator itr = mDummy.begin(); itr != mDummy.end(); ++itr)
-                    {
-                        AuraEffect* aurEff = *itr;
-                        if (aurEff->GetSpellInfo()->SpellIconID == 1563)
-                        {
-                            switch (aurEff->GetEffIndex())
-                            {
-                                case 0: // Predatory Strikes (effect 0)
-                                    _LevelMult = CalculatePctN(1.0f, aurEff->GetAmount());
-                                    break;
-                                case 1: // Predatory Strikes (effect 1)
-                                    if (Item* mainHand = _items[EQUIPMENT_SLOT_MAINHAND])
-                                    {
-                                        // also gains % attack power from equipped weapon
-                                        ItemTemplate const *proto = mainHand->GetTemplate();
-                                        if (!proto)
-                                            continue;
-                                    }
-                                    break;
-                                default:
-                                    break;
-                            }
-                        }
-                    }
-                }
-
                 switch (GetShapeshiftForm())
                 {
-                case FORM_CAT:
-                    val2 = getLevel() * (_LevelMult + 2.0f) + GetStat(STAT_STRENGTH) * 2.0f + GetStat(STAT_AGILITY) - 20.0f + weapon_bonus;
-                    break;
-                case FORM_BEAR:
-                    val2 = getLevel() * (_LevelMult + 3.0f) + GetStat(STAT_STRENGTH) * 2.0f - 20.0f + weapon_bonus;
-                    break;
-                case FORM_MOONKIN:
-                    val2 = getLevel() * (_LevelMult + 1.5f) + GetStat(STAT_STRENGTH) * 2.0f - 20.0f + weapon_bonus;
-                    break;
-                default:
-                    val2 = GetStat(STAT_STRENGTH) * 2.0f - 20.0f;
-                    break;
+                    case FORM_CAT:
+                        val2 = (level * 2.0f) + GetStat(STAT_STRENGTH) * 2.0f + GetStat(STAT_AGILITY) - 20.0f;
+                        break;
+                    case FORM_BEAR:
+                        val2 = (level * 3.0f) + GetStat(STAT_STRENGTH) * 2.0f - 20.0f;
+                        break;
+                    case FORM_MOONKIN:
+                        val2 = (level * 1.5f) + GetStat(STAT_STRENGTH) * 2.0f - 20.0f;
+                        break;
+                    default:
+                        val2 = GetStat(STAT_STRENGTH) * 2.0f - 20.0f;
+                        break;
                 }
                 break;
             }
