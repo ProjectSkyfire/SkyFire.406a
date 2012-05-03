@@ -6117,7 +6117,7 @@ void AuraEffect::HandleAuraOverrideSpells(AuraApplication const* aurApp, uint8 m
 
 void AuraEffect::HandleAuraSwapSpells(AuraApplication const * aurApp, uint8 mode, bool apply) const
 {
-    if (!(mode & (AURA_EFFECT_HANDLE_CHANGE_AMOUNT_MASK | AURA_EFFECT_HANDLE_STAT)))
+    if (!(mode & AURA_EFFECT_HANDLE_REAL))
         return;
 
     Player* target = aurApp->GetTarget()->ToPlayer();
@@ -6142,7 +6142,10 @@ void AuraEffect::HandleAuraSwapSpells(AuraApplication const * aurApp, uint8 mode
             continue;
 
         if (overrideId != itr->first && (spellInfo->SpellFamilyFlags & GetSpellInfo()->Effects[GetEffIndex()].SpellClassMask))
+        {
             affspell = itr->first;
+            break;
+        }
     }
 
     if (!affspell)
