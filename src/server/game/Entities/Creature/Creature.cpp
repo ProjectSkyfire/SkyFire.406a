@@ -259,6 +259,7 @@ void Creature::RemoveCorpse(bool setSpawnTime)
  */
 bool Creature::InitEntry(uint32 Entry, uint32 /*team*/, const CreatureData* data)
 {
+    // sLog->outString("Creature::InitEntry:\t[Entry: %u]", Entry);
     CreatureTemplate const* normalInfo = sObjectMgr->GetCreatureTemplate(Entry);
     if (!normalInfo)
     {

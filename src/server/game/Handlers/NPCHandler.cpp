@@ -514,12 +514,16 @@ void WorldSession::SendStablePetCallback(PreparedQueryResult result, uint64 guid
     size_t wpos = data.wpos();
     data << uint8(0);                                       // place holder for slot show number
 
-    data << uint8(GetPlayer()->_petSlotUsed);
+    // data << uint8(GetPlayer()->_petSlotUsed);
+    data << uint8(0);
 
     uint8 num = 0;                                          // counter for place holder
 
     // not let move dead pet in slot
    /* if (pet && pet->isAlive() && pet->getPetType() == HUNTER_PET)
+    */
+    /*
+    if (pet && pet->getPetType() == HUNTER_PET)
     {
         data << uint32(_player->_currentPetSlot);
         data << uint32(pet->GetCharmInfo()->GetPetNumber());
@@ -527,23 +531,26 @@ void WorldSession::SendStablePetCallback(PreparedQueryResult result, uint64 guid
         data << uint32(pet->getLevel());
         data << pet->GetName();                             // petname
         data << uint8(1);                                   // 1 = current, 2/3 = in stable (any from 4, 5, ... create problems with proper show)
-        ++num;
-    }*/
-
+        // ++num;
+    }
+    */
     if (result)
     {
         do
         {
             Field *fields = result->Fetch();
 
-            data << uint32(fields[1].GetUInt32());          // slot
-            data << uint32(fields[2].GetUInt32());          // petnumber
-            data << uint32(fields[3].GetUInt32());          // creature entry
-            data << uint32(fields[4].GetUInt16());          // level
-            data << fields[5].GetString();                  // name
-            data << uint8(fields[1].GetUInt32() <= PET_SLOT_STABLE_FIRST ? 1 : 2);       // 1 = current, 2/3 = in stable (any from 4, 5, ... create problems with proper show)
-
-            ++num;
+            // if(fields[1].GetUInt32() != uint32(_player->_currentPetSlot))
+           // {
+                // data << uint8(num);
+                data << uint32(fields[1].GetUInt8());          // slot
+                data << uint32(fields[2].GetUInt32());          // petnumber
+                data << uint32(fields[3].GetUInt32());          // creature entry
+                data << uint32(fields[4].GetUInt16());          // level
+                data << fields[5].GetString();                  // name
+                data << uint8(fields[1].GetUInt8() < uint8(PET_SLOT_STABLE_FIRST) ? 1 : 2);       // 1 = current, 2/3 = in stable (any from 4, 5, ... create problems with proper show)
+                ++num;
+            //}
         }
         while (result->NextRow());
     }

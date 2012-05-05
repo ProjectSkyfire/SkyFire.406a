@@ -3354,6 +3354,8 @@ void Spell::EffectProficiency(SpellEffIndex /*effIndex*/)
 
 void Spell::EffectSummonType(SpellEffIndex effIndex)
 {
+    sLog->outString("\n\nThis is intressting too\n\n");
+    
     if (effectHandleMode != SPELL_EFFECT_HANDLE_HIT)
         return;
 
@@ -4179,7 +4181,7 @@ void Spell::EffectTameCreature(SpellEffIndex /*effIndex*/)
 
     if (m_caster->GetTypeId() == TYPEID_PLAYER)
     {
-        pet->SavePetToDB(PET_SLOT_ACTUAL_PET_SLOT);
+        pet->SavePetToDB(m_caster->ToPlayer()->getSlotForNewPet());
         m_caster->ToPlayer()->PetSpellInitialize();
     }
 }
@@ -4188,7 +4190,7 @@ void Spell::EffectSummonPet(SpellEffIndex effIndex)
 {
     if (effectHandleMode != SPELL_EFFECT_HANDLE_HIT)
         return;
-
+    
     Player* owner = NULL;
     if (m_originalCaster)
     {
@@ -4198,7 +4200,7 @@ void Spell::EffectSummonPet(SpellEffIndex effIndex)
     }
 
     uint32 petentry = m_spellInfo->Effects[effIndex].MiscValue;
-
+    // My work sLog->outString("\n\npetentry [%u]\n\n", petentry);
     if (!owner)
     {
         SummonPropertiesEntry const* properties = sSummonPropertiesStore.LookupEntry(67);
@@ -6911,7 +6913,7 @@ void Spell::EffectSummonDeadPet(SpellEffIndex /*effIndex*/)
     float x, y, z;
     player->GetPosition(x, y, z);
     if (!pet)
-    {
+    {                                    
         player->SummonPet(0, x, y, z, player->GetOrientation(), SUMMON_PET, 0);
         pet = player->GetPet();
     }

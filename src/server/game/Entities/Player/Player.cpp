@@ -18397,6 +18397,7 @@ void Player::LoadPet()
     // just not added to the map
     if (IsInWorld())
     {
+        
         Pet* pet = new Pet(this);
         if (!pet->LoadPetFromDB(this, 0, 0, true, PET_SLOT_ACTUAL_PET_SLOT))
             delete pet;

@@ -9927,7 +9927,10 @@ Unit* Unit::GetCharm() const
 void Unit::SetMinion(Minion *minion, bool apply, PetSlot slot)
 {
     sLog->outDebug(LOG_FILTER_UNITS, "SetMinion %u for %u, apply %u", minion->GetEntry(), GetEntry(), apply);
-
+    
+    if(slot == PET_SLOT_ACTUAL_PET_SLOT)
+        slot = ToPlayer()->_currentPetSlot;
+    
     if (apply)
     {
         if (!minion->AddUInt64Value(UNIT_FIELD_SUMMONEDBY, GetGUID()))
@@ -9988,11 +9991,10 @@ void Unit::SetMinion(Minion *minion, bool apply, PetSlot slot)
             }
             else
             {
-                sLog->outCrash("Unit::SetMinion. Try to add hunter pet to not alawed slot(%u). Minion %u for %u", slot, minion->GetEntry(), GetEntry());
+                sLog->outCrash("Unit::SetMinion. Try to add hunter pet to not alawed slot(%u). Minion %u for %u", slot, minion->GetEntry(), ToPlayer()->GetEntry());
                 ASSERT(false);
             }
         }
-
         if (minion->HasUnitTypeMask(UNIT_MASK_CONTROLABLE_GUARDIAN))
             AddUInt64Value(UNIT_FIELD_SUMMON, minion->GetGUID());
 

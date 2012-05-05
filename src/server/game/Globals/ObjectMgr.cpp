@@ -5965,7 +5965,8 @@ WorldSafeLocsEntry const *ObjectMgr::GetClosestGraveYard(float x, float y, float
 {
     // search for zone associated closest graveyard
     uint32 zoneId = sMapMgr->GetZoneId(MapId, x, y, z);
-
+    sLog->outString("Map ID -> [%u]", zoneId);
+    
     if (!zoneId)
     {
         if (z > -500)
