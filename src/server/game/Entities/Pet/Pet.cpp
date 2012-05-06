@@ -367,9 +367,11 @@ bool Pet::LoadPetFromDB(Player* owner, uint32 petentry, uint32 petnumber, bool c
 
 void Pet::SavePetToDB(PetSlot mode)
 {
-    if (!GetOwner()->GetPet()->GetEntry())
-        return;
-
+    if(!GetEntry())
+    {
+        if (!GetOwner()->GetPet()->GetEntry())
+            return;
+    }
     // save only fully controlled creature
     if (!isControlled())
         return;
