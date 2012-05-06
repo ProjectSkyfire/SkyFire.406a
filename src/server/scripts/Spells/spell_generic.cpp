@@ -282,7 +282,7 @@ class spell_gen_pet_summoned : public SpellScriptLoader
         class spell_gen_pet_summoned_SpellScript : public SpellScript
         {
             PrepareSpellScript(spell_gen_pet_summoned_SpellScript);
-            
+
             void HandleScript(SpellEffIndex /*effIndex*/)
             {
                 Unit* caster = GetCaster();

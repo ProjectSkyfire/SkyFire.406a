@@ -3355,7 +3355,7 @@ void Spell::EffectProficiency(SpellEffIndex /*effIndex*/)
 void Spell::EffectSummonType(SpellEffIndex effIndex)
 {
     sLog->outString("\n\nThis is intressting too\n\n");
-    
+
     if (effectHandleMode != SPELL_EFFECT_HANDLE_HIT)
         return;
 
@@ -4190,7 +4190,7 @@ void Spell::EffectSummonPet(SpellEffIndex effIndex)
 {
     if (effectHandleMode != SPELL_EFFECT_HANDLE_HIT)
         return;
-    
+
     Player* owner = NULL;
     if (m_originalCaster)
     {
@@ -6913,7 +6913,7 @@ void Spell::EffectSummonDeadPet(SpellEffIndex /*effIndex*/)
     float x, y, z;
     player->GetPosition(x, y, z);
     if (!pet)
-    {                                    
+    {
         player->SummonPet(0, x, y, z, player->GetOrientation(), SUMMON_PET, 0);
         pet = player->GetPet();
     }
