@@ -417,7 +417,13 @@ void Pet::SavePetToDB(PetSlot mode)
     if (mode >= PET_SLOT_HUNTER_FIRST)
     {
         uint32 ownerLowGUID = GUID_LOPART(GetOwnerGUID());
-        std::string name = owner->GetPet()->GetName();  //m_name;
+        std::string name;
+
+        if(!m_name.empty())
+            name = m_name;
+        else
+            name = owner->GetPet()->GetName();
+
         CharacterDatabase.EscapeString(name);
         trans = CharacterDatabase.BeginTransaction();
         // remove current data
