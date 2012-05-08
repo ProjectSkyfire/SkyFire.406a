@@ -9928,7 +9928,7 @@ void Unit::SetMinion(Minion *minion, bool apply, PetSlot slot)
 {
     sLog->outDebug(LOG_FILTER_UNITS, "SetMinion %u for %u, apply %u", minion->GetEntry(), GetEntry(), apply);
 
-    if(slot == PET_SLOT_ACTUAL_PET_SLOT)
+    if (slot == PET_SLOT_ACTUAL_PET_SLOT)
         slot = ToPlayer()->_currentPetSlot;
 
     if (apply)
