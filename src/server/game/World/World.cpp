@@ -1601,6 +1601,9 @@ void World::SetInitialWorldSettings()
     sLog->outString("Loading Auctions...");
     sAuctionMgr->LoadAuctions();
 
+    sLog->outString("Loading Guilds...");
+    sGuildMgr->LoadGuilds(); 
+    
     sLog->outString("Loading Guild Rewards...");
     sGuildMgr->LoadGuildRewards();
 
