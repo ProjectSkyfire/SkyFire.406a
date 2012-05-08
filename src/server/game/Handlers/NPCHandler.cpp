@@ -520,8 +520,6 @@ void WorldSession::SendStablePetCallback(PreparedQueryResult result, uint64 guid
     uint8 num = 0;                                          // counter for place holder
 
     // not let move dead pet in slot
-   /* if (pet && pet->isAlive() && pet->getPetType() == HUNTER_PET)
-    */
     /*
     if (pet && pet->getPetType() == HUNTER_PET)
     {
@@ -534,23 +532,21 @@ void WorldSession::SendStablePetCallback(PreparedQueryResult result, uint64 guid
         // ++num;
     }
     */
+
     if (result)
     {
         do
         {
             Field *fields = result->Fetch();
-
-            // if(fields[1].GetUInt32() != uint32(_player->_currentPetSlot))
-           // {
-                // data << uint8(num);
-                data << uint32(fields[1].GetUInt8());          // slot
-                data << uint32(fields[2].GetUInt32());          // petnumber
-                data << uint32(fields[3].GetUInt32());          // creature entry
-                data << uint32(fields[4].GetUInt16());          // level
-                data << fields[5].GetString();                  // name
-                data << uint8(fields[1].GetUInt8() < uint8(PET_SLOT_STABLE_FIRST) ? 1 : 2);       // 1 = current, 2/3 = in stable (any from 4, 5, ... create problems with proper show)
-                ++num;
-            //}
+            
+            data << uint32(fields[1].GetUInt8());          // slot
+            data << uint32(fields[2].GetUInt32());          // petnumber
+            data << uint32(fields[3].GetUInt32());          // creature entry
+            data << uint32(fields[4].GetUInt16());          // level
+            data << fields[5].GetString();                  // name
+            data << uint8(fields[1].GetUInt8() < uint8(PET_SLOT_STABLE_FIRST) ? 1 : 2);       // 1 = current, 2/3 = in stable (any from 4, 5, ... create problems with proper show)
+            
+            ++num;
         }
         while (result->NextRow());
     }
