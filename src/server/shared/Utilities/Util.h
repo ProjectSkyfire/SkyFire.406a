@@ -427,7 +427,6 @@ class HookList
         }
 };
 
-class flag96;
 class flag96
 {
 private:
