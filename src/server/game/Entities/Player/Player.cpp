@@ -6220,7 +6220,60 @@ bool Player::UpdateFishingSkill()
 
     uint32 SkillValue = GetPureSkillValue(SKILL_FISHING);
 
-    int32 chance = SkillValue < 75 ? 100 : 2500/(SkillValue-50);
+    int32 chance;
+
+    if (SkillValue <= 115)
+    {
+        chance = 100;
+    }
+    else if (SkillValue > 115 && SkillValue <= 150)
+    {
+        chance = 50;
+    }
+    else if (SkillValue > 150 && SkillValue <= 170)
+    {
+        chance = 33, 33;
+    }
+    else if (SkillValue > 170 && SkillValue <= 190)
+    {
+        chance = 25;
+    }
+    else if (SkillValue > 190 && SkillValue <= 215)
+    {
+        chance = 20;
+    }
+    else if (SkillValue > 215 && SkillValue <= 235)
+    {
+        chance = 16, 67;
+    }
+    else if (SkillValue > 235 && SkillValue <= 260)
+    {
+        chance = 14, 29;
+    }
+    else if (SkillValue > 260 && SkillValue <= 280)
+    {
+        chance = 12, 5;
+    }
+    else if (SkillValue > 280 && SkillValue <= 325)
+    {
+        chance = 11, 11;
+    }
+    else if (SkillValue > 325 && SkillValue <= 365)
+    {
+        chance = 10;
+    }
+    else if (SkillValue > 365 && SkillValue <= 450)
+    {
+        chance = 9, 1;
+    }
+    else if (SkillValue > 450 && SkillValue <= 500)
+    {
+        chance = 11, 11;
+    }
+    else if (SkillValue > 500)
+    {
+        chance = 10;
+    }
 
     uint32 gathering_skill_gain = sWorld->getIntConfig(CONFIG_SKILL_GAIN_GATHERING);
 
@@ -14964,7 +15017,7 @@ void Player::OnGossipSelect(WorldObject* source, uint32 gossipListId, uint32 men
 
             if (bgTypeId == BATTLEGROUND_TYPE_NONE)
             {
-                sLog->outError("a user (guid %u) requested battlegroundlist from a npc who is no battlemaster", GetGUIDLow());
+                sLog->outError("a user (guid %u) requested battlegroundlist from a npc who is not a battlemaster", GetGUIDLow());
                 return;
             }
 
