@@ -4259,9 +4259,12 @@ void Spell::EffectSummonPet(SpellEffIndex effIndex)
     pet->SetUInt32Value(UNIT_CREATED_BY_SPELL, m_spellInfo->Id);
 
     // generate new name for summon pet
-    std::string new_name=sObjectMgr->GeneratePetName(petentry);
-    if (!new_name.empty())
-        pet->SetName(new_name);
+    if (petentry)
+    {
+        std::string new_name=sObjectMgr->GeneratePetName(petentry);
+        if (!new_name.empty())
+            pet->SetName(new_name);
+    }
 
     ExecuteLogEffectSummonObject(effIndex, pet);
 }

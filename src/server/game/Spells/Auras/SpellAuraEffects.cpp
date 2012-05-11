@@ -3148,7 +3148,7 @@ void AuraEffect::HandleModConfuse(AuraApplication const* aurApp, uint8 mode, boo
     Unit* target = aurApp->GetTarget();
     Unit* caster = GetCaster();
 
-    if (caster->HasAura(56375)) // Glyph of Polymorph
+    if (caster && caster->HasAura(56375)) // Glyph of Polymorph
     {
         if (GetSpellInfo()->Mechanic == MECHANIC_POLYMORPH)
         {
