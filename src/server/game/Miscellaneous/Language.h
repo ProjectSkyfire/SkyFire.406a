@@ -848,7 +848,44 @@ enum SkyFireStrings
     LANG_BG_IC_ALLIANCE                 = 1300,
     LANG_BG_IC_HORDE                    = 1301,
 
-    // FREE IDS                           1228-9999
+    // Twin Peaks
+    LANG_BG_TP_START_TWO_MINUTES        = 1230,
+    LANG_BG_TP_START_ONE_MINUTE         = 1231,
+    LANG_BG_TP_START_HALF_MINUTE        = 1232,
+    LANG_BG_TP_HAS_BEGUN                = 1233,
+    LANG_BG_TP_CAPTURED_HF              = 1234,
+    LANG_BG_TP_CAPTURED_AF              = 1235,
+    LANG_BG_TP_DROPPED_HF               = 1236,
+    LANG_BG_TP_DROPPED_AF               = 1237,
+    LANG_BG_TP_RETURNED_AF              = 1238,
+    LANG_BG_TP_RETURNED_HF              = 1239,
+    LANG_BG_TP_PICKEDUP_HF              = 1240,
+    LANG_BG_TP_PICKEDUP_AF              = 1241,
+    LANG_BG_TP_F_PLACED                 = 1242,
+    LANG_BG_TP_ALLIANCE_FLAG_RESPAWNED  = 1243,
+    LANG_BG_TP_HORDE_FLAG_RESPAWNED     = 1244,
+
+    // FREE IDS                           1245-1249
+
+    // Battle For Gilneas
+    LANG_BG_BG_START_TWO_MINUTES        = 1250,
+    LANG_BG_BG_START_ONE_MINUTE         = 1251,
+    LANG_BG_BG_START_HALF_MINUTE        = 1252,
+    LANG_BG_BG_HAS_BEGUN                = 1253,
+
+    LANG_BG_BG_ALLY                     = 1254,
+    LANG_BG_BG_HORDE                    = 1255,
+    LANG_BG_BG_NODE_LIGHTHOUSE          = 1256,
+    LANG_BG_BG_NODE_WATERWORKS          = 1257,
+    LANG_BG_BG_NODE_MINE                = 1258,
+    LANG_BG_BG_NODE_TAKEN               = 1259,
+    LANG_BG_BG_NODE_DEFENDED            = 1260,
+    LANG_BG_BG_NODE_ASSAULTED           = 1261,
+    LANG_BG_BG_NODE_CLAIMED             = 1262,
+    LANG_BG_BG_A_NEAR_VICTORY           = 1263,
+    LANG_BG_BG_H_NEAR_VICTORY           = 1264,
+    // FREE IDS                           1265-1299
+
 
     // AV
     LANG_BG_AV_ALLY                     = 1300,
