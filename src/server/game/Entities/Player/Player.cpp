@@ -6220,64 +6220,38 @@ bool Player::UpdateFishingSkill()
 
     uint32 SkillValue = GetPureSkillValue(SKILL_FISHING);
 
-    int32 chance;
+    float chance = 0.0f;
 
     if (SkillValue <= 115)
-    {
-        chance = 100;
-    }
-    else if (SkillValue > 115 && SkillValue <= 150)
-    {
-        chance = 50;
-    }
-    else if (SkillValue > 150 && SkillValue <= 170)
-    {
-        chance = 33, 33;
-    }
-    else if (SkillValue > 170 && SkillValue <= 190)
-    {
-        chance = 25;
-    }
-    else if (SkillValue > 190 && SkillValue <= 215)
-    {
-        chance = 20;
-    }
-    else if (SkillValue > 215 && SkillValue <= 235)
-    {
-        chance = 16, 67;
-    }
-    else if (SkillValue > 235 && SkillValue <= 260)
-    {
-        chance = 14, 29;
-    }
-    else if (SkillValue > 260 && SkillValue <= 280)
-    {
-        chance = 12, 5;
-    }
-    else if (SkillValue > 280 && SkillValue <= 325)
-    {
-        chance = 11, 11;
-    }
-    else if (SkillValue > 325 && SkillValue <= 365)
-    {
-        chance = 10;
-    }
-    else if (SkillValue > 365 && SkillValue <= 450)
-    {
-        chance = 9, 1;
-    }
-    else if (SkillValue > 450 && SkillValue <= 500)
-    {
-        chance = 11, 11;
-    }
-    else if (SkillValue > 500)
-    {
-        chance = 10;
-    }
+        chance = 100.0f;
+    else if (SkillValue <= 150)
+        chance = 50.0f;
+    else if (SkillValue <= 170)
+        chance = 33.33f;
+    else if (SkillValue <= 190)
+        chance = 25.0f;
+    else if (SkillValue <= 215)
+        chance = 20.0f;
+    else if (SkillValue <= 235)
+        chance = 16.67f;
+    else if (SkillValue <= 260)
+        chance = 14.29f;
+    else if (SkillValue <= 280)
+        chance = 12.5f;
+    else if (SkillValue <= 325)
+        chance = 11.11f;
+    else if (SkillValue <= 365)
+        chance = 10.0f;
+    else if (SkillValue <= 450)
+        chance = 9.1f;
+    else if (SkillValue <= 500)
+        chance = 11.11f;
+    else
+        chance = 10.0f;
 
     uint32 gathering_skill_gain = sWorld->getIntConfig(CONFIG_SKILL_GAIN_GATHERING);
 
-    return UpdateSkillPro(SKILL_FISHING, chance*10, gathering_skill_gain);
+    return UpdateSkillPro(SKILL_FISHING, (int32)(chance * 10.0f), gathering_skill_gain);
 }
 
 // levels sync. with spell requirement for skill levels to learn

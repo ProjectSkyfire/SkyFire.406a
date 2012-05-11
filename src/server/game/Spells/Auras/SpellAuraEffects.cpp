@@ -5221,34 +5221,34 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
                     switch (GetId())
                     {
                         case 2584: // Waiting to Resurrect
-                            // Waiting to resurrect spell cancel, we must remove player from resurrect queue
-                            if (target->GetTypeId() == TYPEID_PLAYER)
-                            {
-                                if (Battleground* bg = target->ToPlayer()->GetBattleground())
-                                    bg->RemovePlayerFromResurrectQueue(target->GetGUID());
+                        // Waiting to resurrect spell cancel, we must remove player from resurrect queue
+                        if (target->GetTypeId() == TYPEID_PLAYER)
+                        {
+                            if (Battleground* bg = target->ToPlayer()->GetBattleground())
+                                bg->RemovePlayerFromResurrectQueue(target->GetGUID());
 
-                                if (Battlefield* bf = sBattlefieldMgr->GetBattlefieldToZoneId(target->GetZoneId()))
-                                    bf->RemovePlayerFromResurrectQueue(target->GetGUID());
-                            }
-                            break;
-                            case 12774: // (DND) Belnistrasz Idol Shutdown Visual
-                            {
-                                if (aurApp->GetRemoveMode() != AURA_REMOVE_BY_EXPIRE)
-                                return;
+                            if (Battlefield* bf = sBattlefieldMgr->GetBattlefieldToZoneId(target->GetZoneId()))
+                                bf->RemovePlayerFromResurrectQueue(target->GetGUID());
+                        }
+                        break;
+                        case 12774: // (DND) Belnistrasz Idol Shutdown Visual
+                        {
+                            if (aurApp->GetRemoveMode() != AURA_REMOVE_BY_EXPIRE)
+                            return;
 
-                                // Idom Rool Camera Shake <- wtf, don't drink while making spellnames?
-                                if (Unit* caster = GetCaster())
-                                    caster->CastSpell(caster, 12816, true);
+                            // Idom Rool Camera Shake <- wtf, don't drink while making spellnames?
+                            if (Unit* caster = GetCaster())
+                                caster->CastSpell(caster, 12816, true);
 
-                                return;
-                            }
-                            case 32286: // Focus Target Visual
-                            {
-                                if (aurApp->GetRemoveMode() != AURA_REMOVE_BY_EXPIRE)
-                                    target->CastSpell(target, 32301, true, NULL, this);
+                            return;
+                        }
+                        case 32286: // Focus Target Visual
+                        {
+                            if (aurApp->GetRemoveMode() != AURA_REMOVE_BY_EXPIRE)
+                                target->CastSpell(target, 32301, true, NULL, this);
 
-                                return;
-                            }
+                            return;
+                        }
                         case 36730: // Flame Strike
                         {
                             target->CastSpell(target, 36731, true, NULL, this);
@@ -5283,16 +5283,31 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
                         case 60244:  // Blood Parrot Despawn Aura
                             target->CastSpell((Unit*)NULL, GetAmount(), true, NULL, this);
                             break;
-                        case 91604: // Restricted Flight Area
-                        case 58600: // Restricted Flight Area
-                            if (aurApp->GetRemoveMode() == AURA_REMOVE_BY_EXPIRE)
-                            {
-                                target->CastSpell(target, 61286, true);
-                                target->CastSpell(target, 58601, true);
-                            }
+                        case 91604: // Restricted Flight Area (wintergrasp)
+                        case 58600: // Restricted Flight Area (dalaran -until 4.2)
+                        if (aurApp->GetRemoveMode() == AURA_REMOVE_BY_EXPIRE)
+                        {
+                            target->CastSpell(target, 83100, true); // WG
+                            target->CastSpell(target, 58601, true); // dal
+                        }
+                        break;
+                        case 65213:	// Throw Oil Aura (Quest=13890)
+                        {
+                            if (caster->GetTypeId() != TYPEID_PLAYER)
+                                return;
+
+                            if (caster->ToPlayer()->GetQuestStatus(13890) != QUEST_STATUS_INCOMPLETE)
+                                return;
+
+                            if (!caster->ToPlayer()->HasItemCount(46366, 1))     // Mystlash Hydra Oil
+                                return;
+
+                            caster->CastSpell(caster, 65203, true);              // spell: Throw Oil
+                            caster->ToPlayer()->KilledMonsterCredit(34329, NULL);
                             break;
+                        }
+                        break;
                     }
-                    break;
                 case SPELLFAMILY_MAGE:
                     // Living Bomb
                     if (m_spellInfo->SpellFamilyFlags[1] & 0x20000)
