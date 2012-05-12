@@ -1,0 +1,12 @@
+INSERT INTO `spell_linked_spell` (`spell_trigger`, `spell_effect`, `type`, `comment`) VALUES (66537, 66557, 0, 'Isle of Conquest A (IN>OUT)');
+INSERT INTO `spell_linked_spell` (`spell_trigger`, `spell_effect`, `type`, `comment`) VALUES (66538, 66558, 0, 'Isle of Conquest A (OUT>IN)');
+INSERT INTO `spell_linked_spell` (`spell_trigger`, `spell_effect`, `type`, `comment`) VALUES (66539, 66559, 0, 'Isle of Conquest A (IN>OUT)');
+INSERT INTO `spell_linked_spell` (`spell_trigger`, `spell_effect`, `type`, `comment`) VALUES (66540, 66560, 0, 'Isle of Conquest A (OUT>IN)');
+INSERT INTO `spell_linked_spell` (`spell_trigger`, `spell_effect`, `type`, `comment`) VALUES (66541, 66561, 0, 'Isle of Conquest A (IN>OUT)');
+INSERT INTO `spell_linked_spell` (`spell_trigger`, `spell_effect`, `type`, `comment`) VALUES (66542, 66562, 0, 'Isle of Conquest A (OUT>IN)');
+INSERT INTO `spell_linked_spell` (`spell_trigger`, `spell_effect`, `type`, `comment`) VALUES (66543, 66563, 0, 'Isle of Conquest H (IN>OUT)');
+INSERT INTO `spell_linked_spell` (`spell_trigger`, `spell_effect`, `type`, `comment`) VALUES (66544, 66564, 0, 'Isle of Conquest H (OUT>IN)');
+INSERT INTO `spell_linked_spell` (`spell_trigger`, `spell_effect`, `type`, `comment`) VALUES (66545, 66565, 0, 'Isle of Conquest H (IN>OUT)');
+INSERT INTO `spell_linked_spell` (`spell_trigger`, `spell_effect`, `type`, `comment`) VALUES (66546, 66566, 0, 'Isle of Conquest H (OUT>IN)');
+INSERT INTO `spell_linked_spell` (`spell_trigger`, `spell_effect`, `type`, `comment`) VALUES (66547, 66567, 0, 'Isle of Conquest H (IN>OUT)');
+INSERT INTO `spell_linked_spell` (`spell_trigger`, `spell_effect`, `type`, `comment`) VALUES (66548, 66568, 0, 'Isle of Conquest H (OUT>IN)');
