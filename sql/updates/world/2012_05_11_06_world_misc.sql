@@ -1,8 +1,10 @@
 -- Battle for gilneas & twinpeaks
 
--- bg_template
-INSERT  INTO `battleground_template` VALUES (108,10,10,1,85,1726,0,1727,0,1,'','Twin Peaks');
-INSERT  INTO `battleground_template` VALUES (120,5,5,1,85,1740,0,1739,3.23,1,'','The Battle for Gilneas');
+-- Fix min lvl and Min, Max players on the TP and BG
+DELETE FROM `battleground_template` WHERE `id` IN (120,108);
+INSERT INTO `battleground_template` VALUES
+(108,10,10,81,85,1726,0,1727,0,1,'','Twin Peaks'),
+(120,10,10,85,85,1740,0,1739,3.23,1,'','The Battle for Gilneas');
 
 -- bg_holiday's (not sure what new bitmasks are, so havent used "game_event_battleground_holiday")
 DELETE FROM `game_event` WHERE `EventEntry` IN (18,19,20,21,30,42,75,78);
