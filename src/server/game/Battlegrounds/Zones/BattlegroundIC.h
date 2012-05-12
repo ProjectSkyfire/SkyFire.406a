@@ -122,25 +122,19 @@ enum gameobjectsIC
     GO_STOVE_1                                  = 174863,
     GO_STOVE_2                                  = 160411,
 
-    GO_TELEPORTER_1                             = 195314, // 195314 H-OUT 66549
-    GO_TELEPORTER_2                             = 195313, // 195313 H-IN  66548
-    GO_TELEPORTER_3                             = 195315, // 195315 A-OUT 66549
-    GO_TELEPORTER_4                             = 195316, // 195316 A-IN  66548
+    GO_TELEPORTER_1                             = 195277, // A-IN  66537
+    GO_TELEPORTER_2                             = 195278, // A-OUT 66538
+    GO_TELEPORTER_3                             = 195279, // A-IN  66539
+    GO_TELEPORTER_4                             = 195280, // A-OUT 66540
+    GO_TELEPORTER_5                             = 195281, // A-IN  66541
+    GO_TELEPORTER_6                             = 195282, // A-OUT 66542
+    GO_TELEPORTER_7                             = 195283, // H-IN  66543
+    GO_TELEPORTER_8                             = 195284, // H-OUT 66544
+    GO_TELEPORTER_9                             = 195285, // H-IN  66545
+    GO_TELEPORTER_10                            = 195286, // H-OUT 66546
+    GO_TELEPORTER_11                            = 195287, // H-IN  66547
+    GO_TELEPORTER_12                            = 195288, // H-OUT 66548
 
-/*  For better teleporting around the walls but requires Database changes
-    GO_TELEPORTER_1                             = 195277, A-IN  66547
-    GO_TELEPORTER_2                             = 195278, A-OUT 66548
-    GO_TELEPORTER_3                             = 195279, A-IN  66549
-    GO_TELEPORTER_4                             = 195280, A-OUT 66550
-    GO_TELEPORTER_5                             = 195281, A-IN  66551
-    GO_TELEPORTER_6                             = 195282, A-OUT 66552
-    GO_TELEPORTER_7                             = 195283, H-IN  66553
-    GO_TELEPORTER_8                             = 195284, H-OUT 66554
-    GO_TELEPORTER_9                             = 195283, H-IN  66553
-    GO_TELEPORTER_10                            = 195284, H-OUT 66554
-    GO_TELEPORTER_11                            = 195283, H-IN  66553
-    GO_TELEPORTER_12                            = 195284, H-OUT 66554
-*/
     GO_TELEPORTER_EFFECTS_A                     = 195701,
 
     GO_TELEPORTER_EFFECTS_H                     = 195702,
@@ -546,17 +540,17 @@ struct ICGo
 const ICGo BG_IC_Teleporters[MAX_FORTRESS_TELEPORTERS_SPAWNS] =
 {
     {BG_IC_GO_TELEPORTER_1, GO_TELEPORTER_1, 1143.25f, -779.599f, 48.629f, 1.64061f},       // Teleporter
-    {BG_IC_GO_TELEPORTER_2, GO_TELEPORTER_1, 1236.53f, -669.415f, 48.2729f, 0.104719f},     // Teleporter
-    {BG_IC_GO_TELEPORTER_3, GO_TELEPORTER_2, 1233.27f, -844.526f, 48.8824f, -0.0174525f},   // Teleporter
-    {BG_IC_GO_TELEPORTER_4, GO_TELEPORTER_3, 311.92f, -913.972f, 48.8159f, 3.08918f},       // Teleporter
-    {BG_IC_GO_TELEPORTER_5, GO_TELEPORTER_2, 1235.53f, -683.872f, 49.304f, -3.08918f},      // Teleporter
-    {BG_IC_GO_TELEPORTER_6, GO_TELEPORTER_4, 397.089f, -859.382f, 48.8993f, 1.64061f},      // Teleporter
-    {BG_IC_GO_TELEPORTER_7, GO_TELEPORTER_3, 324.635f, -749.128f, 49.3602f, 0.0174525f},    // Teleporter
-    {BG_IC_GO_TELEPORTER_8, GO_TELEPORTER_3, 425.675f, -857.09f, 48.5104f, -1.6057f},       // Teleporter
-    {BG_IC_GO_TELEPORTER_9, GO_TELEPORTER_4, 323.54f, -888.361f, 48.9197f, 0.0349063f},     // Teleporter
-    {BG_IC_GO_TELEPORTER_10, GO_TELEPORTER_4, 326.285f, -777.366f, 49.0208f, 3.12412f},     // Teleporter
-    {BG_IC_GO_TELEPORTER_11, GO_TELEPORTER_1, 1235.09f, -857.898f, 48.9163f, 3.07177f},     // Teleporter
-    {BG_IC_GO_TELEPORTER_12, GO_TELEPORTER_2, 1158.76f, -746.182f, 48.6277f, -1.51844f},    // Teleporter
+    {BG_IC_GO_TELEPORTER_2, GO_TELEPORTER_2, 1236.53f, -669.415f, 48.2729f, 0.104719f},     // Teleporter
+    {BG_IC_GO_TELEPORTER_3, GO_TELEPORTER_3, 1233.27f, -844.526f, 48.8824f, -0.0174525f},   // Teleporter
+    {BG_IC_GO_TELEPORTER_4, GO_TELEPORTER_4, 311.92f, -913.972f, 48.8159f, 3.08918f},       // Teleporter
+    {BG_IC_GO_TELEPORTER_5, GO_TELEPORTER_5, 1235.53f, -683.872f, 49.304f, -3.08918f},      // Teleporter
+    {BG_IC_GO_TELEPORTER_6, GO_TELEPORTER_6, 397.089f, -859.382f, 48.8993f, 1.64061f},      // Teleporter
+    {BG_IC_GO_TELEPORTER_7, GO_TELEPORTER_7, 324.635f, -749.128f, 49.3602f, 0.0174525f},    // Teleporter
+    {BG_IC_GO_TELEPORTER_8, GO_TELEPORTER_8, 425.675f, -857.09f, 48.5104f, -1.6057f},       // Teleporter
+    {BG_IC_GO_TELEPORTER_9, GO_TELEPORTER_9, 323.54f, -888.361f, 48.9197f, 0.0349063f},     // Teleporter
+    {BG_IC_GO_TELEPORTER_10, GO_TELEPORTER_10, 326.285f, -777.366f, 49.0208f, 3.12412f},    // Teleporter
+    {BG_IC_GO_TELEPORTER_11, GO_TELEPORTER_11, 1235.09f, -857.898f, 48.9163f, 3.07177f},    // Teleporter
+    {BG_IC_GO_TELEPORTER_12, GO_TELEPORTER_12, 1158.76f, -746.182f, 48.6277f, -1.51844f},   // Teleporter
 
     {BG_IC_GO_TELEPORTER_EFFECTS_A_1, GO_TELEPORTER_EFFECTS_A, 425.686f, -857.092f, 48.51f, -1.62316f},   // Teleporter Effects (Alliance)
     {BG_IC_GO_TELEPORTER_EFFECTS_A_2, GO_TELEPORTER_EFFECTS_A, 324.634f, -749.148f, 49.359f, 0.0174525f}, // Teleporter Effects (Alliance)
