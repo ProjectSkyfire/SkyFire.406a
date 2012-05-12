@@ -235,6 +235,7 @@ class BattlegroundBG : public Battleground
         uint32              m_NodeTimers[BG_BG_DYNAMIC_NODES_COUNT];
         uint32              m_lastTick[BG_TEAMS_COUNT];
         uint32              m_HonorScoreTicks[BG_TEAMS_COUNT];
+        uint32              m_ReputationScoreTics[BG_TEAMS_COUNT];
         bool                m_IsInformedNearVictory;
         uint32              m_HonorTics;
         bool                m_TeamScores500Disadvantage[BG_TEAMS_COUNT];

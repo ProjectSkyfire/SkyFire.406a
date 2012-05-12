@@ -554,6 +554,8 @@ void BattlegroundBG::Reset()
     m_lastTick[BG_TEAM_HORDE]               = 0;
     m_HonorScoreTicks[BG_TEAM_ALLIANCE]      = 0;
     m_HonorScoreTicks[BG_TEAM_HORDE]         = 0;
+    m_ReputationScoreTics[BG_TEAM_ALLIANCE] = 0;
+    m_ReputationScoreTics[BG_TEAM_HORDE]    = 0;
     m_IsInformedNearVictory                 = false;
     //bool isBGWeekend = sBattlegroundMgr->IsBGWeekend(GetTypeID());
     m_TeamScores500Disadvantage[BG_TEAM_ALLIANCE] = false;
