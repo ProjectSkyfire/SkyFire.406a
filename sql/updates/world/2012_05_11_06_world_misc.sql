@@ -8,14 +8,14 @@ INSERT INTO `battleground_template` VALUES
 
 -- bg_holiday's (not sure what new bitmasks are, so havent used "game_event_battleground_holiday")
 DELETE FROM `game_event` WHERE `EventEntry` IN (18,19,20,21,30,42,75,78);
-INSERT  INTO `game_event` VALUES (18,'2010-10-21 12:01:00','2020-12-30 11:59:00',60480,5758,283,'Call to Arms: Alterac Valley!',1);
-INSERT  INTO `game_event` VALUES (19,'2010-09-16 12:01:00','2020-12-30 11:59:00',60480,5758,284,'Call to Arms: Warsong Gulch!',1);
-INSERT  INTO `game_event` VALUES (20,'2010-10-07 12:01:00','2020-12-30 11:59:00',60480,5758,285,'Call to Arms: Arathi Basin!',1);
-INSERT  INTO `game_event` VALUES (21,'2010-10-14 12:01:00','2020-12-30 11:59:00',60480,5758,353,'Call to Arms: Eye of the Storm!',1);
-INSERT  INTO `game_event` VALUES (30,'2010-09-23 12:01:00','2020-12-30 11:59:00',60480,5758,400,'Call to Arms: Strand of the Ancients!',1);
-INSERT  INTO `game_event` VALUES (42,'2010-09-30 12:01:00','2020-12-30 11:59:00',60480,5758,420,'Call to Arms: Isle of Conquest!',1);
-INSERT  INTO `game_event` VALUES (75,'2012-05-11 12:01:00','2020-12-30 11:59:00',60480,5758,436,'Call to Arms: Twin Peaks!',1);
-INSERT  INTO `game_event` VALUES (78,'2012-05-04 12:01:00','2020-12-30 11:59:00',60480,5758,288,'Call to Arms: The Battle for Gilneas',1);
+INSERT  INTO `game_event` VALUES (18,'2010-10-21 12:01:00','2020-12-30 11:59:00',60480,5758,283,'Call to Arms: Alterac Valley!',0);
+INSERT  INTO `game_event` VALUES (19,'2010-09-16 12:01:00','2020-12-30 11:59:00',60480,5758,284,'Call to Arms: Warsong Gulch!',0);
+INSERT  INTO `game_event` VALUES (20,'2010-10-07 12:01:00','2020-12-30 11:59:00',60480,5758,285,'Call to Arms: Arathi Basin!',0);
+INSERT  INTO `game_event` VALUES (21,'2010-10-14 12:01:00','2020-12-30 11:59:00',60480,5758,353,'Call to Arms: Eye of the Storm!',0);
+INSERT  INTO `game_event` VALUES (30,'2010-09-23 12:01:00','2020-12-30 11:59:00',60480,5758,400,'Call to Arms: Strand of the Ancients!',0);
+INSERT  INTO `game_event` VALUES (42,'2010-09-30 12:01:00','2020-12-30 11:59:00',60480,5758,420,'Call to Arms: Isle of Conquest!',0);
+INSERT  INTO `game_event` VALUES (75,'2012-05-11 12:01:00','2020-12-30 11:59:00',60480,5758,436,'Call to Arms: Twin Peaks!',0);
+INSERT  INTO `game_event` VALUES (78,'2012-05-04 12:01:00','2020-12-30 11:59:00',60480,5758,288,'Call to Arms: The Battle for Gilneas',0);
 
 
 -- Strings
