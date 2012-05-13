@@ -122,18 +122,18 @@ enum gameobjectsIC
     GO_STOVE_1                                  = 174863,
     GO_STOVE_2                                  = 160411,
 
-    GO_TELEPORTER_1                             = 195277, // A-IN  66537
-    GO_TELEPORTER_2                             = 195278, // A-OUT 66538
-    GO_TELEPORTER_3                             = 195279, // A-IN  66539
-    GO_TELEPORTER_4                             = 195280, // A-OUT 66540
-    GO_TELEPORTER_5                             = 195281, // A-IN  66541
-    GO_TELEPORTER_6                             = 195282, // A-OUT 66542
-    GO_TELEPORTER_7                             = 195283, // H-IN  66543
-    GO_TELEPORTER_8                             = 195284, // H-OUT 66544
-    GO_TELEPORTER_9                             = 195285, // H-IN  66545
-    GO_TELEPORTER_10                            = 195286, // H-OUT 66546
-    GO_TELEPORTER_11                            = 195287, // H-IN  66547
-    GO_TELEPORTER_12                            = 195288, // H-OUT 66548
+    GO_TELEPORTER_1                             = 195277, // A-IN  95063
+    GO_TELEPORTER_2                             = 195278, // A-OUT 94964
+    GO_TELEPORTER_3                             = 195279, // A-IN  94965
+    GO_TELEPORTER_4                             = 195280, // A-OUT 94966
+    GO_TELEPORTER_5                             = 195281, // A-IN  94967
+    GO_TELEPORTER_6                             = 195282, // A-OUT 94968
+    GO_TELEPORTER_7                             = 195283, // H-IN  94969
+    GO_TELEPORTER_8                             = 195284, // H-OUT 94970
+    GO_TELEPORTER_9                             = 195285, // H-IN  94971
+    GO_TELEPORTER_10                            = 195286, // H-OUT 94972
+    GO_TELEPORTER_11                            = 195287, // H-IN  94973
+    GO_TELEPORTER_12                            = 195288, // H-OUT 94974
 
     GO_TELEPORTER_EFFECTS_A                     = 195701,
 
