@@ -30,19 +30,25 @@ enum BG_BG_WorldStates
     BG_BG_OP_RESOURCES_WARNING          = 1955
 };
 
-const uint32 BG_BG_OP_NODESTATES[5] =    {1767, 1782, 1772, 1792, 1787};
-const uint32 BG_BG_OP_NODEICONS[3]  =    {1842, 1846, 1845};
+const uint32 BG_BG_OP_NODESTATES[3] =    {1767, 1772, 1782};
+const uint32 BG_BG_OP_NODEICONS[3]  =    {1842, 1845, 1846};
 
 enum BG_BG_NodeObjectId
 {
     /*
     BG_BG_OBJECTID_NODE_BANNER_0    = 205557,       // Lighthouse banner
     BG_BG_OBJECTID_NODE_BANNER_1    = 208782,       // Mine banner
-    BG_BG_OBJECTID_NODE_BANNER_2    = 208785,       // Watterworks banner
+    BG_BG_OBJECTID_NODE_BANNER_2    = 208785,       // Waterworks banner
     */
     BG_BG_OBJECTID_NODE_BANNER_0    = 180087,       // Stables banner
     BG_BG_OBJECTID_NODE_BANNER_1    = 180088,       // Blacksmith banner
     BG_BG_OBJECTID_NODE_BANNER_2    = 180089,       // Farm banner
+
+    /* This is what I did but requires changes in Database
+    BG_BG_OBJECTID_NODE_BANNER_0    = 208779,       // Lighthouse banner
+    BG_BG_OBJECTID_NODE_BANNER_1    = 208780,       // Mines banner
+    BG_BG_OBJECTID_NODE_BANNER_2    = 208781,       // Waterworks banner
+    */
 };
 
 enum BG_BG_ObjectType
@@ -57,7 +63,16 @@ enum BG_BG_ObjectType
     BG_BG_OBJECT_AURA_CONTESTED          = 7,
     BG_BG_OBJECT_GATE_A                  = 24,
     BG_BG_OBJECT_GATE_H                  = 25,
-    BG_BG_OBJECT_MAX                     = 26,
+    BG_BG_OBJECT_SPEEDBUFF_LIGHTHOUSE    = 26,
+    BG_BG_OBJECT_REGENBUFF_LIGHTHOUSE    = 27,
+    BG_BG_OBJECT_BERSERKBUFF_LIGHTHOUSE  = 28,
+    BG_BG_OBJECT_SPEEDBUFF_WATERWORKS    = 29,
+    BG_BG_OBJECT_REGENBUFF_WATERWORKS    = 30,
+    BG_BG_OBJECT_BERSERKBUFF_WATERWORKS  = 31,
+    BG_BG_OBJECT_SPEEDBUFF_MINE          = 32,
+    BG_BG_OBJECT_REGENBUFF_MINE          = 33,
+    BG_BG_OBJECT_BERSERKBUFF_MINE        = 34,
+    BG_BG_OBJECT_MAX                     = 35,
 };
 
 /* Object id templates from DB */
@@ -72,8 +87,8 @@ enum BG_BG_ObjectTypes
     BG_BG_OBJECTID_AURA_H               = 180101,
     BG_BG_OBJECTID_AURA_C               = 180102,
 
-    BG_BG_OBJECTID_GATE_A               = 205496,
-    BG_BG_OBJECTID_GATE_H               = 207178
+    BG_BG_OBJECTID_GATE_A               = 207177,
+    BG_BG_OBJECTID_GATE_H               = 207178,
 };
 
 enum BG_BG_Timers
@@ -83,7 +98,7 @@ enum BG_BG_Timers
 
 enum BG_BG_Score
 {
-    BG_BG_WARNING_NEAR_VICTORY_SCORE    = 1800,
+    BG_BG_WARNING_NEAR_VICTORY_SCORE    = 1800,  // 1800 or 1760?
     BG_BG_MAX_TEAM_SCORE                = 2000
 };
 
@@ -156,11 +171,10 @@ const float BG_BG_SpiritGuidePos[BG_BG_ALL_NODES_COUNT][4] = {
     {1401.38f, 977.125f, 7.44215f, 3.04f},                  // Horde
 };
 
-//Need to Fix it!
 const float BG_BG_BuffPositions[BG_BG_DYNAMIC_NODES_COUNT][4] = {
-    {1185.71f, 1185.24f, -56.36f, 2.56f},                   // Lighthouse
-    {990.75f, 1008.18f, -42.60f, 2.43f},                    // Waterworks
-    {817.66f, 843.34f, -56.54f, 3.01f},                     // Mine
+    {1063.57f, 1313.42f, 4.91f, 4.14f},                    // Lighthouse
+    {961.830f, 977.03f, 14.15f, 4.55f},                    // Waterworks
+    {1193.09f, 1017.46f, 7.98f, 0.24f},                    // Mine
 };
 
 struct BG_BG_BannerTimer
