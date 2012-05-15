@@ -17,8 +17,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _AUTH_SARC4_H
-#define _AUTH_SARC4_H
+#ifndef _AUTH_ARC4_H
+#define _AUTH_ARC4_H
 
 #include "Define.h"
 #include <openssl/evp.h>
