@@ -10288,6 +10288,11 @@ Unit* Unit::GetFirstControlled() const
     return unit;
 }
 
+bool Unit::IsControlling(Unit* const unit) const
+{
+    return (m_Controlled.find(unit) != m_Controlled.end());
+}
+
 void Unit::RemoveAllControlled()
 {
     // possessed pet and vehicle
@@ -10526,10 +10531,10 @@ uint32 Unit::SpellDamageBonus(Unit* victim, SpellInfo const* spellProto, uint32 
 
         switch ((*i)->GetMiscValue())
         {
-            case 4920: // Molten Fury Rank 2
-            case 4919: // Molten Fury Rank 1
+            case 4920:  // Molten Fury Rank 2
+            case 4919:  // Molten Fury Rank 1
             case 12368: // Molten Fury Rank 3
-            case 6917: // Death's Embrace
+            case 6917:  // Death's Embrace
             case 6926:
             case 6928:
             {
@@ -10547,12 +10552,12 @@ uint32 Unit::SpellDamageBonus(Unit* victim, SpellInfo const* spellProto, uint32 
                 int32 stepPercent = CalculateSpellDamage(this, (*i)->GetSpellInfo(), 0);
                 // count affliction effects and calc additional damage in percentage
                 int32 modPercent = 0;
-                AuraApplicationMap const& victimAuras = victim->GetAppliedAuras();
+                AuraApplicationMap const &victimAuras = victim->GetAppliedAuras();
                 for (AuraApplicationMap::const_iterator itr = victimAuras.begin(); itr != victimAuras.end(); ++itr)
                 {
-                    Aura const* aura = itr->second->GetBase();
-                    SpellInfo const* m_spell = aura->GetSpellInfo();
-                    if (m_spell->SpellFamilyName != SPELLFAMILY_WARLOCK || !(m_spell->SpellFamilyFlags[0] & 0x4008))
+                    Aura const * aura = itr->second->GetBase();
+                    SpellInfo const *m_spell = aura->GetSpellInfo();
+                    if (m_spell->SpellFamilyName != SPELLFAMILY_WARLOCK || !(m_spell->SpellFamilyFlags[1] & 0x0004071B || m_spell->SpellFamilyFlags[0] & 0x8044C402))
                         continue;
                     modPercent += stepPercent * aura->GetStackAmount();
                     if (modPercent >= maxPercent)
@@ -13770,7 +13775,7 @@ void Unit::RemoveFromWorld()
 
         if (Unit* owner = GetOwner())
         {
-            if (owner->m_Controlled.find(this) != owner->m_Controlled.end())
+            if (owner->IsControlling(this))
             {
                 sLog->outCrash("Unit %u is in controlled list of %u when removed from world", GetEntry(), owner->GetEntry());
                 ASSERT(false);

@@ -1745,6 +1745,7 @@ class Unit : public WorldObject
         ControlList m_Controlled;
         Unit* GetFirstControlled() const;
         void RemoveAllControlled();
+        bool IsControlling(Unit* const unit) const;
 
         bool isCharmed() const { return GetCharmerGUID() != 0; }
         bool isPossessed() const { return HasUnitState(UNIT_STATE_POSSESSED); }
