@@ -62,13 +62,14 @@ enum Yells
     SAY_WIN_ERUNAK                  = -1643018,
 };
 
+// predicate function to select not charmed target
 struct NotCharmedTargetSelector : public std::unary_function<Unit*, bool>
 {
     NotCharmedTargetSelector() {}
 
-    bool operator() (const Unit* target)
+    bool operator()(Unit const* target) const
     {
-        return (!target->isCharmed());
+        return !target->isCharmed();
     }
 };
 
