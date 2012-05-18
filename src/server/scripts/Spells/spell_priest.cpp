@@ -434,6 +434,7 @@ class spell_pri_power_word_shield : public SpellScriptLoader
             return new spell_pri_power_word_shield_AuraScript();
         }
 };
+
 enum PrayerOfMending
 {
     SPELL_T9_HEALING_2_PIECE = 67201,
