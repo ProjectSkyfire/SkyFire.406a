@@ -454,5 +454,4 @@ void AddSC_mage_spell_scripts()
     new spell_mage_polymorph_cast_visual;
     new spell_mage_summon_water_elemental;
     new spell_mage_ice_barrier;
-    new npc_power_word_barrier;
 }
