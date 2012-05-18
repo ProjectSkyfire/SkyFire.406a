@@ -42,81 +42,81 @@ enum MageSpells
 
 class spell_mage_blast_wave : public SpellScriptLoader
 {
-    public:
-        spell_mage_blast_wave() : SpellScriptLoader("spell_mage_blast_wave") { }
+public:
+    spell_mage_blast_wave() : SpellScriptLoader("spell_mage_blast_wave") { }
 
-        class spell_mage_blast_wave_SpellScript : public SpellScript
+    class spell_mage_blast_wave_SpellScript : public SpellScript
+    {
+        PrepareSpellScript(spell_mage_blast_wave_SpellScript);
+
+        bool Validate(SpellInfo const* /*spellEntry*/)
         {
-            PrepareSpellScript(spell_mage_blast_wave_SpellScript);
-
-            bool Validate(SpellInfo const* /*spellEntry*/)
-            {
-                if (!sSpellMgr->GetSpellInfo(SPELL_MAGE_GLYPH_OF_BLAST_WAVE))
-                    return false;
-                return true;
-            }
-
-            void HandleKnockBack(SpellEffIndex effIndex)
-            {
-                if (GetCaster()->HasAura(SPELL_MAGE_GLYPH_OF_BLAST_WAVE))
-                    PreventHitDefaultEffect(effIndex);
-            }
-
-            void Register()
-            {
-                OnEffectHitTarget += SpellEffectFn(spell_mage_blast_wave_SpellScript::HandleKnockBack, EFFECT_2, SPELL_EFFECT_KNOCK_BACK);
-            }
-        };
-
-        SpellScript* GetSpellScript() const
-        {
-            return new spell_mage_blast_wave_SpellScript();
+            if (!sSpellMgr->GetSpellInfo(SPELL_MAGE_GLYPH_OF_BLAST_WAVE))
+                return false;
+            return true;
         }
+
+        void HandleKnockBack(SpellEffIndex effIndex)
+        {
+            if (GetCaster()->HasAura(SPELL_MAGE_GLYPH_OF_BLAST_WAVE))
+                PreventHitDefaultEffect(effIndex);
+        }
+
+        void Register()
+        {
+            OnEffectHitTarget += SpellEffectFn(spell_mage_blast_wave_SpellScript::HandleKnockBack, EFFECT_2, SPELL_EFFECT_KNOCK_BACK);
+        }
+    };
+
+    SpellScript* GetSpellScript() const
+    {
+        return new spell_mage_blast_wave_SpellScript();
+    }
 };
 
 class spell_mage_cold_snap : public SpellScriptLoader
 {
-    public:
-        spell_mage_cold_snap() : SpellScriptLoader("spell_mage_cold_snap") { }
+public:
+    spell_mage_cold_snap() : SpellScriptLoader("spell_mage_cold_snap") { }
 
-        class spell_mage_cold_snap_SpellScript : public SpellScript
+    class spell_mage_cold_snap_SpellScript : public SpellScript
+    {
+        PrepareSpellScript(spell_mage_cold_snap_SpellScript)
+        void HandleDummy(SpellEffIndex /*effIndex*/)
         {
-            PrepareSpellScript(spell_mage_cold_snap_SpellScript)
-            void HandleDummy(SpellEffIndex /*effIndex*/)
+            Unit* caster = GetCaster();
+
+            if (caster->GetTypeId() != TYPEID_PLAYER)
+                return;
+
+            // immediately finishes the cooldown on Frost spells
+            const SpellCooldowns& cm = caster->ToPlayer()->GetSpellCooldownMap();
+            for (SpellCooldowns::const_iterator itr = cm.begin(); itr != cm.end();)
             {
-                Unit* caster = GetCaster();
+                SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(itr->first);
 
-                if (caster->GetTypeId() != TYPEID_PLAYER)
-                    return;
-
-                // immediately finishes the cooldown on Frost spells
-                const SpellCooldowns& cm = caster->ToPlayer()->GetSpellCooldownMap();
-                for (SpellCooldowns::const_iterator itr = cm.begin(); itr != cm.end();)
+                if (spellInfo->SpellFamilyName == SPELLFAMILY_MAGE &&
+                    (spellInfo->GetSchoolMask() & SPELL_SCHOOL_MASK_FROST) &&
+                    spellInfo->Id != SPELL_MAGE_COLD_SNAP && spellInfo->GetRecoveryTime() > 0)
                 {
-                    SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(itr->first);
-
-                    if (spellInfo->SpellFamilyName == SPELLFAMILY_MAGE &&
-                        (spellInfo->GetSchoolMask() & SPELL_SCHOOL_MASK_FROST) &&
-                        spellInfo->Id != SPELL_MAGE_COLD_SNAP && spellInfo->GetRecoveryTime() > 0)
-                    {
-                        caster->ToPlayer()->RemoveSpellCooldown((itr++)->first, true);
-                    }
-                    else
-                        ++itr;
+                    caster->ToPlayer()->RemoveSpellCooldown((itr++)->first, true);
                 }
+                else
+                    ++itr;
             }
-
-            void Register()
-            {
-                // add dummy effect spell handler to Cold Snap
-                OnEffectHit += SpellEffectFn(spell_mage_cold_snap_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
-            }
-        };
-
-        SpellScript* GetSpellScript() const
-        {
-            return new spell_mage_cold_snap_SpellScript();
         }
+
+        void Register()
+        {
+            // add dummy effect spell handler to Cold Snap
+            OnEffectHit += SpellEffectFn(spell_mage_cold_snap_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
+        }
+    };
+
+    SpellScript* GetSpellScript() const
+    {
+        return new spell_mage_cold_snap_SpellScript();
+    }
 };
 
 enum SilvermoonPolymorph
@@ -127,42 +127,42 @@ enum SilvermoonPolymorph
 // TODO: move out of here and rename - not a mage spell
 class spell_mage_polymorph_cast_visual : public SpellScriptLoader
 {
-    public:
-        spell_mage_polymorph_cast_visual() : SpellScriptLoader("spell_mage_polymorph_visual") { }
+public:
+    spell_mage_polymorph_cast_visual() : SpellScriptLoader("spell_mage_polymorph_visual") { }
 
-        class spell_mage_polymorph_cast_visual_SpellScript : public SpellScript
+    class spell_mage_polymorph_cast_visual_SpellScript : public SpellScript
+    {
+        PrepareSpellScript(spell_mage_polymorph_cast_visual_SpellScript);
+
+        static const uint32 PolymorhForms[6];
+
+        bool Validate(SpellInfo const* /*spellEntry*/)
         {
-            PrepareSpellScript(spell_mage_polymorph_cast_visual_SpellScript);
-
-            static const uint32 PolymorhForms[6];
-
-            bool Validate(SpellInfo const* /*spellEntry*/)
-            {
-                // check if spell ids exist in dbc
-                for (uint32 i = 0; i < 6; i++)
-                    if (!sSpellMgr->GetSpellInfo(PolymorhForms[i]))
-                        return false;
-                return true;
-            }
-
-            void HandleDummy(SpellEffIndex /*effIndex*/)
-            {
-                if (Unit* target = GetCaster()->FindNearestCreature(NPC_AUROSALIA, 30.0f))
-                    if (target->GetTypeId() == TYPEID_UNIT)
-                        target->CastSpell(target, PolymorhForms[urand(0, 5)], true);
-            }
-
-            void Register()
-            {
-                // add dummy effect spell handler to Polymorph visual
-                OnEffectHitTarget += SpellEffectFn(spell_mage_polymorph_cast_visual_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
-            }
-        };
-
-        SpellScript* GetSpellScript() const
-        {
-            return new spell_mage_polymorph_cast_visual_SpellScript();
+            // check if spell ids exist in dbc
+            for (uint32 i = 0; i < 6; i++)
+                if (!sSpellMgr->GetSpellInfo(PolymorhForms[i]))
+                    return false;
+            return true;
         }
+
+        void HandleDummy(SpellEffIndex /*effIndex*/)
+        {
+            if (Unit* target = GetCaster()->FindNearestCreature(NPC_AUROSALIA, 30.0f))
+                if (target->GetTypeId() == TYPEID_UNIT)
+                    target->CastSpell(target, PolymorhForms[urand(0, 5)], true);
+        }
+
+        void Register()
+        {
+            // add dummy effect spell handler to Polymorph visual
+            OnEffectHitTarget += SpellEffectFn(spell_mage_polymorph_cast_visual_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
+        }
+    };
+
+    SpellScript* GetSpellScript() const
+    {
+        return new spell_mage_polymorph_cast_visual_SpellScript();
+    }
 };
 
 const uint32 spell_mage_polymorph_cast_visual::spell_mage_polymorph_cast_visual_SpellScript::PolymorhForms[6] =
@@ -177,41 +177,41 @@ const uint32 spell_mage_polymorph_cast_visual::spell_mage_polymorph_cast_visual_
 
 class spell_mage_summon_water_elemental : public SpellScriptLoader
 {
-    public:
-        spell_mage_summon_water_elemental() : SpellScriptLoader("spell_mage_summon_water_elemental") { }
+public:
+    spell_mage_summon_water_elemental() : SpellScriptLoader("spell_mage_summon_water_elemental") { }
 
-        class spell_mage_summon_water_elemental_SpellScript : public SpellScript
+    class spell_mage_summon_water_elemental_SpellScript : public SpellScript
+    {
+        PrepareSpellScript(spell_mage_summon_water_elemental_SpellScript);
+
+        bool Validate(SpellInfo const* /*spellEntry*/)
         {
-            PrepareSpellScript(spell_mage_summon_water_elemental_SpellScript);
-
-            bool Validate(SpellInfo const* /*spellEntry*/)
-            {
-                if (!sSpellMgr->GetSpellInfo(SPELL_MAGE_GLYPH_OF_ETERNAL_WATER) || !sSpellMgr->GetSpellInfo(SPELL_MAGE_SUMMON_WATER_ELEMENTAL_TEMPORARY) || !sSpellMgr->GetSpellInfo(SPELL_MAGE_SUMMON_WATER_ELEMENTAL_PERMANENT))
-                    return false;
-                return true;
-            }
-
-            void HandleDummy(SpellEffIndex /*effIndex*/)
-            {
-                Unit* caster = GetCaster();
-                // Glyph of Eternal Water
-                if (caster->HasAura(SPELL_MAGE_GLYPH_OF_ETERNAL_WATER))
-                    caster->CastSpell(caster, SPELL_MAGE_SUMMON_WATER_ELEMENTAL_PERMANENT, true);
-                else
-                    caster->CastSpell(caster, SPELL_MAGE_SUMMON_WATER_ELEMENTAL_TEMPORARY, true);
-            }
-
-            void Register()
-            {
-                // add dummy effect spell handler to Summon Water Elemental
-                OnEffectHit += SpellEffectFn(spell_mage_summon_water_elemental_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
-            }
-        };
-
-        SpellScript* GetSpellScript() const
-        {
-            return new spell_mage_summon_water_elemental_SpellScript();
+            if (!sSpellMgr->GetSpellInfo(SPELL_MAGE_GLYPH_OF_ETERNAL_WATER) || !sSpellMgr->GetSpellInfo(SPELL_MAGE_SUMMON_WATER_ELEMENTAL_TEMPORARY) || !sSpellMgr->GetSpellInfo(SPELL_MAGE_SUMMON_WATER_ELEMENTAL_PERMANENT))
+                return false;
+            return true;
         }
+
+        void HandleDummy(SpellEffIndex /*effIndex*/)
+        {
+            Unit* caster = GetCaster();
+            // Glyph of Eternal Water
+            if (caster->HasAura(SPELL_MAGE_GLYPH_OF_ETERNAL_WATER))
+                caster->CastSpell(caster, SPELL_MAGE_SUMMON_WATER_ELEMENTAL_PERMANENT, true);
+            else
+                caster->CastSpell(caster, SPELL_MAGE_SUMMON_WATER_ELEMENTAL_TEMPORARY, true);
+        }
+
+        void Register()
+        {
+            // add dummy effect spell handler to Summon Water Elemental
+            OnEffectHit += SpellEffectFn(spell_mage_summon_water_elemental_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
+        }
+    };
+
+    SpellScript* GetSpellScript() const
+    {
+        return new spell_mage_summon_water_elemental_SpellScript();
+    }
 };
 
 // Frost Warding
@@ -335,21 +335,24 @@ public:
     }
 };
 
-class npc_ring_of_frost : public CreatureScript
+// Power Word Barrier
+class npc_power_word_barrier : public CreatureScript
 {
 public:
-    npc_ring_of_frost() : CreatureScript("npc_ring_of_frost") { }
+    npc_power_word_barrier() : CreatureScript("npc_power_word_barrier") { }
 
-    struct npc_ring_of_frostAI : public ScriptedAI
+    struct npc_power_word_barrierAI : public ScriptedAI
     {
-        npc_ring_of_frostAI(Creature *creature) : ScriptedAI(creature) {}
-        bool Isready;
-        uint32 timer;
+        npc_power_word_barrierAI(Creature *creature) : ScriptedAI(creature) {}
+
+        bool checker;
+        uint32 cron; // Duration
 
         void Reset()
         {
-            timer = 3000; // 3sec
-            Isready = false;
+            checker = false;
+            cron = 10000;
+            DoCast(me, 81781);
         }
 
         void InitializeAI()
@@ -362,154 +365,51 @@ public:
             me->SetReactState(REACT_PASSIVE);
             me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
             me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-
-            // Remove other ring spawned by the player
-            std::list<Creature*> templist;
-            float x, y, z;
-            me->GetPosition(x, y, z);
-            {
-                CellCoord pair(SkyFire::ComputeCellCoord(x, y));
-                Cell cell(pair);
-                cell.SetNoCreate();
-
-                SkyFire::AllFriendlyCreaturesInGrid check(me);
-                SkyFire::CreatureListSearcher<SkyFire::AllFriendlyCreaturesInGrid> searcher(me, templist, check);
-
-                TypeContainerVisitor<SkyFire::CreatureListSearcher<SkyFire::AllFriendlyCreaturesInGrid>, GridTypeMapContainer> cSearcher(searcher);
-
-                cell.Visit(pair, cSearcher, *(me->GetMap()), *me, me->GetGridActivationRange());
-
-                if (!templist.empty())
-                    for (std::list<Creature*>::const_iterator itr = templist.begin(); itr != templist.end(); ++itr)
-                        if((*itr)->GetEntry() == me->GetEntry() && ((*itr)->GetOwner() == me->GetOwner() && *itr != me))
-                            (*itr)->DisappearAndDie();
-                templist.clear();
-            }
         }
 
-        void EnterEvadeMode() { return; }
-
-        void CheckIfMoveInRing(Unit* who)
+        void BarrierChecker(Unit* who)
         {
-            if (who->isAlive() && me->IsInRange(who, 2.0f, 4.7f) && !who->HasAura(82691)/*<= target already frozen*/ && !Isready)
-                me->CastSpell(who, 82691, true);
+            if (who->isAlive() && !who->HasAura(81782))
+            {
+                me->CastSpell(who, 81782, true);
+            }
+
+            if (who->isAlive() && who->HasAura(81782))
+            {
+                if (AuraEffect const* aur = who->GetAuraEffect(81782, 0))
+                    aur->GetBase()->SetDuration(aur->GetSpellInfo()->GetMaxDuration(), true);
+            }
         }
 
         void UpdateAI(const uint32 diff)
         {
-            if (timer <= diff)
+            if (cron <= diff)
             {
-                if (!Isready)
+                if (!checker)
                 {
-                    Isready = true;
-                    timer = 9000; // 9sec
+                    checker = true;
+                    cron = 10000;   //10 seconds
                 }
                 else
                     me->DisappearAndDie();
             }
             else
-                timer -= diff;
+                cron -= diff;
 
-            // Find all the enemies
-            std::list<Unit*> targets;
-            SkyFire::AnyUnfriendlyUnitInObjectRangeCheck u_check(me, me, 5.0f);
-            SkyFire::UnitListSearcher<SkyFire::AnyUnfriendlyUnitInObjectRangeCheck> searcher(me, targets, u_check);
-            me->VisitNearbyObject(5.0f, searcher);
+           //Check friendly entities
+           std::list<Unit*> targets;
+            SkyFire::AnyFriendlyUnitInObjectRangeCheck u_check(me, me, 7.0f);
+            SkyFire::UnitListSearcher<SkyFire::AnyFriendlyUnitInObjectRangeCheck> searcher(me, targets, u_check);
+
+            me->VisitNearbyObject(7.0f, searcher);
             for (std::list<Unit*>::const_iterator iter = targets.begin(); iter != targets.end(); ++iter)
-                CheckIfMoveInRing(*iter);
+                BarrierChecker(*iter);
         }
     };
 
     CreatureAI* GetAI(Creature* creature) const
     {
-        return new npc_ring_of_frostAI(creature);
-    }
-};
-
-// npc_flame_orb
-enum eFlameOrb
-{
-    SPELL_FLAME_ORB_DAMAGE          = 86719,
-    FLAME_ORB_DISTANCE              = 120
-};
-
-class npc_flame_orb : public CreatureScript
-{
-public:
-    npc_flame_orb() : CreatureScript("npc_flame_orb") {}
-
-    struct npc_flame_orbAI : public ScriptedAI
-    {
-        npc_flame_orbAI(Creature *creature) : ScriptedAI(creature)
-        {
-            x = me->GetPositionX();
-            y = me->GetPositionY();
-            z = me->GetOwner()->GetPositionZ()+2;
-            o = me->GetOrientation();
-            me->NearTeleportTo(x, y, z, o, true);
-            angle = me->GetOwner()->GetAngle(me);
-            newx = me->GetPositionX() + FLAME_ORB_DISTANCE/2 * cos(angle);
-            newy = me->GetPositionY() + FLAME_ORB_DISTANCE/2 * sin(angle);
-            CombatCheck = false;
-        }
-
-        float x, y, z, o, newx, newy, angle;
-        bool CombatCheck;
-        uint32 DespawnTimer;
-        uint32 DespawnCheckTimer;
-        uint32 DamageTimer;
-
-        void EnterCombat(Unit* /*target*/)
-        {
-            me->GetMotionMaster()->MoveCharge(newx, newy, z, 1.14286f);  // Normal speed
-            DespawnTimer = 15 * IN_MILLISECONDS;
-            CombatCheck = true;
-        }
-
-        void Reset()
-        {
-            me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE|UNIT_FLAG_NON_ATTACKABLE);
-            me->AddUnitMovementFlag(MOVEMENTFLAG_FLYING);
-            me->SetReactState(REACT_PASSIVE);
-            if (CombatCheck == true)
-                DespawnTimer = 15 * IN_MILLISECONDS;
-            else
-                DespawnTimer = 4 * IN_MILLISECONDS;
-            DamageTimer = 1 * IN_MILLISECONDS;
-            me->GetMotionMaster()->MovePoint(0, newx, newy, z);
-        }
-
-        void UpdateAI(const uint32 diff)
-        {
-            if (!me->isInCombat() && CombatCheck == false)
-            {
-                me->SetSpeed(MOVE_RUN, 2, true);
-                me->SetSpeed(MOVE_FLIGHT, 2, true);
-            }
-
-            if (DespawnTimer <= diff)
-            {
-                me->SetVisible(false);
-                me->DisappearAndDie();
-            }
-            else
-                DespawnTimer -= diff;
-
-            if (DamageTimer <= diff)
-            {
-                if (Unit* target = me->SelectNearestTarget(20))
-                    DoCast(target, SPELL_FLAME_ORB_DAMAGE);
-
-                DamageTimer = 1 * IN_MILLISECONDS;
-            }
-            else
-                DamageTimer -= diff;
-        }
-    };
-
-    CreatureAI* GetAI(Creature* creature) const
-    {
-        return new npc_flame_orbAI(creature);
+        return new npc_power_word_barrierAI(creature);
     }
 };
 
@@ -517,118 +417,30 @@ public:
 // Spell Id: 11426
 class spell_mage_ice_barrier : public SpellScriptLoader
 {
-    public:
-        spell_mage_ice_barrier() : SpellScriptLoader("spell_mage_ice_barrier") { }
-
-        class spell_mage_ice_barrier_AuraScript : public AuraScript
-        {
-            PrepareAuraScript(spell_mage_ice_barrier_AuraScript);
-
-            void CalculateAmount(AuraEffect const* aurEff, int32 & amount, bool & canBeRecalculated)
-            {
-                if (AuraEffect const* glyph = GetCaster()->GetAuraEffect(SPELL_MAGE_GLYPH_OF_ICE_BARRIER, 0))
-                    amount += glyph->GetAmount(); // 30% increase absorb from glyph
-
-                canBeRecalculated = false;
-            }
-
-            void Register()
-            {
-                DoEffectCalcAmount += AuraEffectCalcAmountFn(spell_mage_ice_barrier_AuraScript::CalculateAmount, EFFECT_0, SPELL_AURA_SCHOOL_ABSORB);
-            }
-        };
-
-        AuraScript* GetAuraScript() const
-        {
-            return new spell_mage_ice_barrier_AuraScript();
-        }
-};
-
-// npc_frostfire_orb
-enum eFrostfireOrb
-{
-    SPELL_FROSTFIRE_ORB_DAMAGE_RANK_1   = 95969,
-    SPELL_FROSTFIRE_ORB_DAMAGE_RANK_2   = 84721,
-    FROSTFIRE_ORB_DISTANCE              = 120
-};
-
-class npc_frostfire_orb : public CreatureScript
-{
 public:
-    npc_frostfire_orb() : CreatureScript("npc_frostfire_orb") {}
+    spell_mage_ice_barrier() : SpellScriptLoader("spell_mage_ice_barrier") { }
 
-    struct npc_frostfire_orbAI : public ScriptedAI
+    class spell_mage_ice_barrier_AuraScript : public AuraScript
     {
-        npc_frostfire_orbAI(Creature* creature) : ScriptedAI(creature)
+        PrepareAuraScript(spell_mage_ice_barrier_AuraScript);
+
+        void CalculateAmount(AuraEffect const* aurEff, int32 & amount, bool & canBeRecalculated)
         {
-            x = me->GetPositionX();
-            y = me->GetPositionY();
-            z = me->GetOwner()->GetPositionZ()+2;
-            o = me->GetOrientation();
-            me->NearTeleportTo(x, y, z, o, true);
-            angle = me->GetOwner()->GetAngle(me);
-            newx = me->GetPositionX() + FROSTFIRE_ORB_DISTANCE/2 * cos(angle);
-            newy = me->GetPositionY() + FROSTFIRE_ORB_DISTANCE/2 * sin(angle);
-            CombatCheck = false;
+            if (AuraEffect const* glyph = GetCaster()->GetAuraEffect(SPELL_MAGE_GLYPH_OF_ICE_BARRIER, 0))
+                amount += glyph->GetAmount(); // 30% increase absorb from glyph
+
+            canBeRecalculated = false;
         }
 
-        float x,y,z,o,newx,newy,angle;
-        bool CombatCheck;
-        uint32 despawnTimer;
-        uint32 despawnCheckTimer;
-        uint32 damageTimer;
-
-        void EnterCombat(Unit* /*target*/)
+        void Register()
         {
-            me->GetMotionMaster()->MoveCharge(newx, newy, z, 1.14286f); // Normal speed
-            despawnTimer = 15 * IN_MILLISECONDS;
-            CombatCheck = true;
-        }
-
-        void Reset()
-        {
-            me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
-            me->AddUnitMovementFlag(MOVEMENTFLAG_FLYING);
-            me->SetReactState(REACT_PASSIVE);
-            if (CombatCheck == true)
-                despawnTimer = 15 * IN_MILLISECONDS;
-            else
-                despawnTimer = 4 * IN_MILLISECONDS;
-            damageTimer = 1 * IN_MILLISECONDS;
-            me->GetMotionMaster()->MovePoint(0, newx, newy, z);
-        }
-
-        void UpdateAI(const uint32 diff)
-        {
-            if (!me->isInCombat() && CombatCheck == false)
-            {
-                me->SetSpeed(MOVE_RUN, 2, true);
-                me->SetSpeed(MOVE_FLIGHT, 2, true);
-            }
-
-            if (despawnTimer <= diff)
-                me->DisappearAndDie();
-            else
-                despawnTimer -= diff;
-
-            if (damageTimer <= diff)
-            {
-                if (Unit* target = me->SelectNearestTarget(20))
-                    if (me->GetOwner()->HasAura(84726))
-                        DoCast(target, SPELL_FROSTFIRE_ORB_DAMAGE_RANK_1);
-                    else
-                        DoCast(target, SPELL_FROSTFIRE_ORB_DAMAGE_RANK_2);
-
-                damageTimer = 1 * IN_MILLISECONDS;
-            }
-            else
-                damageTimer -= diff;
+            DoEffectCalcAmount += AuraEffectCalcAmountFn(spell_mage_ice_barrier_AuraScript::CalculateAmount, EFFECT_0, SPELL_AURA_SCHOOL_ABSORB);
         }
     };
 
-    CreatureAI* GetAI(Creature* creature) const
+    AuraScript* GetAuraScript() const
     {
-        return new npc_frostfire_orbAI(creature);
+        return new spell_mage_ice_barrier_AuraScript();
     }
 };
 
@@ -642,7 +454,5 @@ void AddSC_mage_spell_scripts()
     new spell_mage_polymorph_cast_visual;
     new spell_mage_summon_water_elemental;
     new spell_mage_ice_barrier;
-    new npc_flame_orb;
-    new npc_ring_of_frost;
-    new npc_frostfire_orb;
+    new npc_power_word_barrier;
 }
