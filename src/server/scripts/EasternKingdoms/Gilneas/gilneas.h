@@ -37,7 +37,7 @@ enum CreatureIds
     NPC_MYRIAM_SPELLWALKER                            = 35872,
     NPC_GILNEAN_ROYAL_GUARD                           = 35232,
     NPC_FRIGHTENED_CITIZEN_1                          = 34981,
-    NPC_FRIGHTENED_CITIZEN_2                          = 35836
+    NPC_FRIGHTENED_CITIZEN_2                          = 35836,
 };
 
 enum GameObjectIds
@@ -47,13 +47,14 @@ enum GameObjectIds
 enum QuestIds
 {
     QUEST_LOCKDOWN                                     = 14078,
-    QUEST_EVAC_MERC_SQUA                               = 14098
+    QUEST_EVAC_MERC_SQUA                               = 14098,
+    QUEST_SAVE_KRENNAN_ARANAS                          = 14293
 };
 
 enum SpellIds
 {
     SPELL_ENRAGE                                       = 8599,
-    SPELL_FROSTBOLT_VISUAL_ONLY                        = 74277 //Dummy spell, visual only
+    SPELL_FROSTBOLT_VISUAL_ONLY                        = 74277, //Dummy spell, visual only
 };
 
 enum NpcTextIds
@@ -91,7 +92,11 @@ enum NpcTextIds
     SAY_CITIZEN_2b                                     = -1638012,
     SAY_CITIZEN_3b                                     = -1638013,
     SAY_CITIZEN_4b                                     = -1638014,
-    SAY_CITIZEN_5b                                     = -1638015
+    SAY_CITIZEN_5b                                     = -1638015,
+    
+    YELL_KRENNAN_C1                                    = -1999973,
+    SAY_KRENNAN_C2                                     = -1999972,
+    SAY_GREYMANE_HORSE                                 = -1999971
 };
 
 enum SoundIds
@@ -110,5 +115,9 @@ enum SoundIds
 #define SUMMON1_TTL                                   300000
 #define PATHS_COUNT                                   2
 #define DOOR_TIMER                                    30*IN_MILLISECONDS
+#define KRENNAN_END_X                                 -1772.4172f
+#define KRENNAN_END_Y                                 1430.6125f
+#define KRENNAN_END_Z                                 19.79f
+#define KRENNAN_END_O                                 2.79f
 
 #endif
