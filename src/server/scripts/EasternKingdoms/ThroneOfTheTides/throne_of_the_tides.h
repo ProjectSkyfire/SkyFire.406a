@@ -18,47 +18,57 @@
 #ifndef DEF_THRONE_OF_THE_TIDES
 #define DEF_THRONE_OF_THE_TIDES
 
+enum Npcs
+{
+    // Lady Naz'jar
+    BOSS_LADY_NAZJAR                  = 40586,
+    NPC_SUMMONED_WITCH                = 40634, // 2 of them
+    NPC_SUMMONED_GUARD                = 40633,
+    NPC_SUMMONED_WATERSPOUT           = 48571,
+
+    // Commander Ulthok
+    BOSS_COMMANDER_ULTHOK             = 40765,
+    NPC_DARK_FISSURE                  = 40784,
+
+    // Erunak Stonespeaker & Mindbender Ghur'sha
+    BOSS_ERUNAK_STONESPEAKER          = 40825,
+    BOSS_MINDBENDER_GHURSHA           = 40788,
+    NPC_EARTH_SHARD                   = 45469,
+    NPC_MIND_FOG                      = 40861,
+    // Ozumat
+    BOSS_OZUMAT                       = 42172,
+    BOSS_NEPTULON                     = 40792,
+    NPC_DEEP_MURLOC                   = 44658,
+    NPC_MINDLASHER                    = 44715,
+    NPC_BEHEMOTH                      = 44648,
+    NPC_SAPPER                        = 44752,
+    NPC_BEAST                         = 44841,
+    // GOs
+    GO_LADY_NAZJAR_DOOR               = 204338,
+    GO_COMMANDER_ULTHOK_DOOR          = 204339,
+    GO_ERUNAK_STONESPEAKER_DOOR       = 204340,
+    GO_OZUMAT_DOOR                    = 204341,
+    GO_OZUMAT_CHEST_NORMAL            = 205216,
+    GO_OZUMAT_CHEST_HEROIC            = 320000,
+};
+
+enum Data
+{
+    DATA_LADY_NAZJAR_EVENT         = 0,
+    DATA_COMMANDER_ULTHOK_EVENT    = 1,
+    DATA_ERUNAK_STONESPEAKER_EVENT = 2,
+    DATA_OZUMAT_EVENT              = 3
+};
+
+#define MAX_ENCOUNTER 4
+
 enum Data64
 {
     DATA_LADY_NAZJAR,
     DATA_COMMANDER_ULTHOK,
     DATA_ERUNAK_STONESPEAKER,
-    DATA_MINDBENDER_GHURSHA,
     DATA_OZUMAT,
-};
-
-enum Data
-{
-    DATA_LADY_NAZJAR_EVENT,
-    DATA_COMMANDER_ULTHOK_EVENT,
-    DATA_ERUNAK_STONESPEAKER_EVENT,
-    DATA_MINDBENDER_GHURSHA_EVENT,
-    DATA_OZUMAT_EVENT,
-};
-
-enum CreatureIds
-{
-    /* Dungeons Bosses */
-
-    BOSS_LADY_NAZJAR            = 40586,
-    BOSS_COMMANDER_ULTHOK       = 40765,
-    BOSS_ERUNAK_STONESPEAKER    = 40825,
-    BOSS_MINDBENDER_GHURSHA     = 40788,
-    BOSS_OZUMAT = 42172,
-
-    /* Various NPCs */
-
-    NPC_CAPTAIN_TAYLOR          = 50270,
-    NPC_LEGIONNAIRE_NAZGRIM     = 50272,
-    NPC_NEPTULON                = 40792,
-    NPC_THRONE_TELEPORTER_1     = 51395,
-    NPC_THRONE_TELEPORTER_2     = 51391,
-};
-
-enum GameObjectIds
-{
-    GO_NEPUTOLON_CACHE          = 205216,
-    GO_STRANGE_FOUNTAIN         = 207406,
+    DATA_NEPTULON,
 };
 
 #endif
