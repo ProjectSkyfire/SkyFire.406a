@@ -3031,6 +3031,10 @@ void SpellMgr::LoadSpellCustomAttr()
             case 42821: // Headless Horseman - Wisp Flight Missile
                 spellInfo->RangeEntry = sSpellRangeStore.LookupEntry(6); // 100 yards
                 break;
+            case 87193: // Paralysis
+            case 87194:
+                spellInfo->Effects[0].ApplyAuraName = SPELL_AURA_MOD_ROOT;
+                break;
             case 36350: // They Must Burn Bomb Aura (self)
                 spellInfo->Effects[0].TriggerSpell = 36325; // They Must Burn Bomb Drop (DND)
                 break;
