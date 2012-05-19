@@ -18,6 +18,9 @@
 #include "ScriptPCH.h"
 #include "Unit.h"
 #include "gilneas.h"
+#include "ScriptedEscortAI.h"
+#include "Vehicle.h"
+
 
 //Phase 1
 /*######
@@ -1158,6 +1161,9 @@ public:
     };
 };
 
+/*######
+## npc_lord_darius_crowley_c2
+######*/
 class npc_lord_darius_crowley_c2 : public CreatureScript
 {
 public:
@@ -1173,6 +1179,9 @@ public:
     }
 };
 
+/*######
+## npc_lord_darius_crowley_c3
+######*/
 class npc_lord_darius_crowley_c3 : public CreatureScript
 {
 public:
@@ -1207,6 +1216,9 @@ public:
     }
 };
 
+/*######
+## npc_king_genn_greymane_c2
+######*/
 class npc_king_genn_greymane_c2 : public CreatureScript
 {
 public:
@@ -1218,6 +1230,190 @@ public:
         player->RemoveAurasDueToSpell(76642);
         player->CastSpell(player, 68481, true);
         return true;
+    }
+};
+
+/*######
+## npc_greymane_horse
+######*/
+class npc_greymane_horse : public CreatureScript
+{
+public:
+    npc_greymane_horse() : CreatureScript("npc_greymane_horse") { }
+
+    struct npc_greymane_horseAI : public npc_escortAI
+    {
+        npc_greymane_horseAI(Creature* creature) : npc_escortAI(creature) {}
+
+        uint32 krennansay;
+        bool AfterJump;
+        
+        void AttackStart(Unit* /*who*/) {}
+        void EnterCombat(Unit* /*who*/) {}
+        void EnterEvadeMode() {}
+
+        void Reset()
+        {
+             krennansay = 500;//Check every 500ms initially
+             AfterJump = false;
+
+        }
+
+        void PassengerBoarded(Unit* who, int8 /*seatId*/, bool apply)
+        {
+            if (who->GetTypeId() == TYPEID_PLAYER)
+            {
+                if (apply)
+                {
+                    Start(false, true, who->GetGUID());
+                }
+            }
+            else if (who->GetTypeId() == TYPEID_UNIT)
+            {
+                SetEscortPaused(false);
+            }
+        }
+
+        void WaypointReached(uint32 i)
+        {
+            Player* player = GetPlayerForEscort();
+
+            switch(i)
+            {
+                case 5:
+                    me->GetMotionMaster()->MoveJump(-1679.089f,1348.42f,15.31f,25.0f, 15.0f);
+                    AfterJump = true;
+                    if (me->GetVehicleKit()->HasEmptySeat(1))
+                    {
+                        SetEscortPaused(true);
+                        player->SetClientControl(me, 0);
+                        break;
+                    }
+                    else
+                    break;
+                case 12:
+                    player->ExitVehicle();
+                    player->SetClientControl(me, 1);
+                    break;
+            }
+        }
+
+        void JustDied(Unit* /*killer*/)
+        {
+            if (Player* player = GetPlayerForEscort())
+               player->FailQuest(QUEST_SAVE_KRENNAN_ARANAS);
+        }
+
+        void OnCharmed(bool /*apply*/)
+        {
+        }
+
+        void UpdateAI(const uint32 diff)
+        {
+            npc_escortAI::UpdateAI(diff);
+            Player* player = GetPlayerForEscort();
+
+            if (AfterJump && (me->IsWithinDist3d(-1679.089f, 1348.42f, 15.31f, 1.0f)))
+            {
+                Talk(0,player->GetGUID());
+                AfterJump = false;
+            }
+
+            if (krennansay <=diff)
+            {
+                if (Creature *krennan = me->FindNearestCreature(3871227, 30, true))
+                {
+                    krennansay = urand(4000,7000);//Repeat every 4 to 7 seconds
+                }
+            }
+            else
+                krennansay -= diff;
+        }
+    };
+
+    CreatureAI* GetAI(Creature* creature) const
+    {
+        return new npc_greymane_horseAI (creature);
+    }
+};
+
+/*######
+## npc_krennan_aranas_c2
+######*/
+class npc_krennan_aranas_c2 : public CreatureScript
+{
+public:
+    npc_krennan_aranas_c2() : CreatureScript("npc_krennan_aranas_c2") { }
+
+    struct npc_krennan_aranas_c2AI : public ScriptedAI
+    {
+        npc_krennan_aranas_c2AI(Creature* creature) : ScriptedAI(creature) {}
+
+        bool Say;
+        bool Move;
+        bool Cast;
+        bool KrennanDead;
+        uint32 SayTimer;
+
+        void AttackStart(Unit* /*who*/) {}
+        void EnterCombat(Unit* /*who*/) {}
+        void EnterEvadeMode() {}
+
+        void Reset()
+        {
+            Say = false;
+            Move = true;
+            Cast = true;
+            KrennanDead = false;
+            SayTimer = 500;
+        }
+
+        void UpdateAI(const uint32 diff)
+        {
+            if (Creature *krennan = me->FindNearestCreature(3871227, 50))
+            {
+                if (!KrennanDead)
+                {
+                    krennan->ForcedDespawn(0);
+                    KrennanDead = true;
+                }
+            }
+
+            if (Creature *horse = me->FindNearestCreature(35905, 20.0f))//Jump onto horse in seat 2
+            {
+                if (Cast)
+                {
+                    DoCast(horse, 84275, true);
+                }
+                
+                if (me->HasAura(84275))
+                {
+                    Cast = false;
+                }
+            }
+
+            if (!me->HasAura(84275) && Move)
+            {
+                me->NearTeleportTo(KRENNAN_END_X, KRENNAN_END_Y, KRENNAN_END_Z, KRENNAN_END_O);
+                Say = true;
+                Move = false;
+                SayTimer = 500;
+            }
+
+            if (Say && SayTimer <= diff)
+            {
+                DoScriptText(SAY_KRENNAN_C2, me);
+                me->ForcedDespawn(6000);
+                Say = false;
+            }
+            else
+                SayTimer -= diff;
+        }
+    };
+
+    CreatureAI* GetAI(Creature* creature) const
+    {
+        return new npc_krennan_aranas_c2AI(creature);
     }
 };
 
@@ -1287,4 +1483,6 @@ void AddSC_gilneas()
     new npc_lord_darius_crowley_c3();
     new npc_king_genn_greymane_c2();
     new spell_keg_placed();
+    new npc_greymane_horse();
+    new npc_krennan_aranas_c2();
 }
