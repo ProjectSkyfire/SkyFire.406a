@@ -37,7 +37,7 @@ enum CreatureIds
     NPC_MYRIAM_SPELLWALKER                            = 35872,
     NPC_GILNEAN_ROYAL_GUARD                           = 35232,
     NPC_FRIGHTENED_CITIZEN_1                          = 34981,
-    NPC_FRIGHTENED_CITIZEN_2                          = 35836,
+    NPC_FRIGHTENED_CITIZEN_2                          = 35836
 };
 
 enum GameObjectIds
@@ -54,7 +54,7 @@ enum QuestIds
 enum SpellIds
 {
     SPELL_ENRAGE                                       = 8599,
-    SPELL_FROSTBOLT_VISUAL_ONLY                        = 74277, //Dummy spell, visual only
+    SPELL_FROSTBOLT_VISUAL_ONLY                        = 74277 //Dummy spell, visual only
 };
 
 enum NpcTextIds
