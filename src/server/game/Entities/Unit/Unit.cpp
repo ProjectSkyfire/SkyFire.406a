@@ -10581,6 +10581,40 @@ uint32 Unit::SpellDamageBonus(Unit* victim, SpellInfo const* spellProto, uint32 
                 DoneTotal += (*i)->GetAmount();
                 break;
             }
+            // Tundra Stalker
+            // Merciless Combat
+            case 7277:
+            {
+                // Merciless Combat
+                if ((*i)->GetSpellInfo()->SpellIconID == 2656)
+                {
+                    if (!victim->HealthAbovePct(35))
+                        AddPctN(DoneTotalMod, (*i)->GetAmount());
+                }
+                // Tundra Stalker
+                else
+                {
+                    if (victim->HasAura(55095)) // Frost Fever (target debuff)
+                        AddPctN(DoneTotalMod, (*i)->GetAmount());
+                    break;
+                }
+                break;
+            }           
+            case 7293: // Rage of Rivendare
+            {
+                if (victim->GetAuraEffect(SPELL_AURA_PERIODIC_DAMAGE, SPELLFAMILY_DEATHKNIGHT, 0, 0x02000000, 0))
+                {
+                    if (SpellChainNode const* chain = sSpellMgr->GetSpellChainNode((*i)->GetId()))
+                        AddPctF(DoneTotalMod, chain->rank * 2.0f);
+                }
+                break;
+            }
+            case 7377: // Twisted Faith
+            {
+                if (victim->GetAuraEffect(SPELL_AURA_PERIODIC_DAMAGE, SPELLFAMILY_PRIEST, 0x8000, 0, 0, GetGUID()))
+                    AddPctN(DoneTotalMod, (*i)->GetAmount());
+                break;
+            }
         }
     }
 
@@ -10609,9 +10643,8 @@ uint32 Unit::SpellDamageBonus(Unit* victim, SpellInfo const* spellProto, uint32 
         case SPELLFAMILY_PRIEST:
             // Smite
             if (spellProto->SpellFamilyFlags[0] & 0x80)
-            {
-                // Glyph of Smite
-                if (AuraEffect* aurEff = GetAuraEffect(55692, 0))
+            {              
+                if (AuraEffect* aurEff = GetAuraEffect(55692, 0)) // Glyph of Smite
                     if (victim->GetAuraEffect(SPELL_AURA_PERIODIC_DAMAGE, SPELLFAMILY_PRIEST, 0x100000, 0, 0, GetGUID()))
                         AddPctN(DoneTotalMod, aurEff->GetAmount());
             }
@@ -10928,21 +10961,27 @@ bool Unit::isSpellCrit(Unit* victim, SpellInfo const* spellProto, SpellSchoolMas
                     switch ((*i)->GetMiscValue())
                     {
                         // Shatter
-                        case  911: modChance+= 16;
-                        case  910: modChance+= 17;
-                        case  849: modChance+= 17;
+                        case  911: modChance += 16;
+                        case  910: modChance += 17;
+                        case  849: modChance += 17;
                             if (!victim->HasAuraState(AURA_STATE_FROZEN, spellProto, this))
                                 break;
-                            crit_chance+=modChance;
+                            crit_chance += modChance;
                             break;
                         case 7917: // Glyph of Shadowburn
                             if (victim->HasAuraState(AURA_STATE_HEALTHLESS_35_PERCENT, spellProto, this))
-                                crit_chance+=(*i)->GetAmount();
+                                crit_chance += (*i)->GetAmount();
                             break;
                         case 7997: // Renewed Hope
                         case 7998:
                             if (victim->HasAura(6788))
-                                crit_chance+=(*i)->GetAmount();
+                                crit_chance += (*i)->GetAmount();
+                            break;
+                        case   21: // Test of Faith
+                        case 6935:
+                        case 6918:
+                            if (victim->HealthBelowPct(50))
+                                crit_chance += (*i)->GetAmount();
                             break;
                         default:
                             break;
@@ -10997,26 +11036,63 @@ bool Unit::isSpellCrit(Unit* victim, SpellInfo const* spellProto, SpellSchoolMas
                                 return true;
                             break;
                         }
-                        // Word of Glory
-                        else if (spellProto->SpellFamilyFlags[2] & 0x4000)
+                        // Word of glory
+                        if (spellProto->Id == 85673)
                         {
-                            // Last Word
-                            if (AuraEffect const* aurEff = GetDummyAuraEffect(SPELLFAMILY_PALADIN, 2139, 0))
-                                if (victim->HasAuraState(AURA_STATE_HEALTHLESS_35_PERCENT))
-                                    crit_chance += aurEff->GetAmount();
+                            if (HasAura(20235)) // Last Word rank 2
+                                if (victim->HealthBelowPct(35))
+                                    crit_chance += 60;
+                            if (HasAura(20234)) // Last Word rank 1
+                                if (victim->HealthBelowPct(35))
+                                    crit_chance += 30;
                             break;
+                        }
+                    break;
+                    case SPELLFAMILY_HUNTER:
+                        {
+                            // Cobra shot, Steady shot, Aimed Shot - careful aim crit bonus
+                            if (spellProto->Id == 77767 || spellProto->Id == 56641 || spellProto->Id == 19434)
+                            {
+                                // Careful Aim rank 1 cobra shot
+                                if (HasAura(34482))
+                                    // If target has more than 80% health
+                                    if (!victim->HealthBelowPct(80))
+                                        crit_chance += 30;
+                                // Careful Aim rank 2 cobra shot
+                                if (HasAura(34483))
+                                    // If target has more than 80% health
+                                    if (!victim->HealthBelowPct(80))
+                                        crit_chance += 60;
+                                break;
+                            }
                         }
                     break;
                     case SPELLFAMILY_SHAMAN:
                         // Lava Burst
-                        if (spellProto->SpellFamilyFlags[1] & 0x00001000)
+                        if (spellProto->Id == 51505 || spellProto->Id == 77451) // Normal + proc from mastery
                         {
                             if (victim->GetAuraEffect(SPELL_AURA_PERIODIC_DAMAGE, SPELLFAMILY_SHAMAN, 0x10000000, 0, 0, GetGUID()))
                                 if (victim->GetTotalAuraModifier(SPELL_AURA_MOD_ATTACKER_SPELL_AND_WEAPON_CRIT_CHANCE) > -100)
                                     return true;
                             break;
                         }
-                    break;
+                        break;
+                    case SPELLFAMILY_PRIEST:
+                        {
+                            break;
+                        }
+                    case SPELLFAMILY_WARLOCK:
+                        // Improved searing pain
+                        if (spellProto->Id == 5676)
+                        {
+                            if (HasAura(17927)) // Rank 1
+                                if (victim->HealthBelowPct(25))
+                                    crit_chance += 20;
+                            if (HasAura(17929)) // Rank 2
+                                if (victim->HealthBelowPct(25))
+                                    crit_chance += 40;
+                        }
+                        break;
                 }
             }
             break;
@@ -11029,9 +11105,7 @@ bool Unit::isSpellCrit(Unit* victim, SpellInfo const* spellProto, SpellSchoolMas
                 {
                     case SPELLFAMILY_DRUID:
                         // Rend and Tear - bonus crit chance for Ferocious Bite on bleeding targets
-                        if (spellProto->SpellFamilyFlags[0] & 0x00800000
-                            && spellProto->SpellIconID == 1680
-                            && victim->HasAuraState(AURA_STATE_BLEEDING))
+                        if (spellProto->SpellFamilyFlags[0] & 0x00800000 && spellProto->SpellIconID == 1680 && victim->HasAuraState(AURA_STATE_BLEEDING))
                         {
                             if (AuraEffect const* rendAndTear = GetDummyAuraEffect(SPELLFAMILY_DRUID, 2859, 1))
                                 crit_chance += rendAndTear->GetAmount();
@@ -11076,42 +11150,117 @@ bool Unit::isSpellCrit(Unit* victim, SpellInfo const* spellProto, SpellSchoolMas
 uint32 Unit::SpellCriticalDamageBonus(SpellInfo const* spellProto, uint32 damage, Unit* victim)
 {
     // Calculate critical bonus
-    int32 crit_bonus = damage;
-    float crit_mod = 0.0f;
+    int32 crit_bonus;
     Player* modOwner = GetSpellModOwner();
 
     switch (spellProto->DmgClass)
     {
         case SPELL_DAMAGE_CLASS_MELEE:                      // for melee based spells is 100%
         case SPELL_DAMAGE_CLASS_RANGED:
-            // TODO: write here full calculation for melee/ranged spells
-            crit_bonus += damage;
+            crit_bonus = damage;                            // ToDo: Write full calculation for melee/ranged attacks
             break;
         default:
             if (modOwner && (modOwner->getClass() == CLASS_MAGE || modOwner->getClass() == CLASS_WARLOCK))
-                crit_bonus += damage; // 100% bonus for Mages and Warlocks in Cataclysm
+                crit_bonus = damage;                        // 100% bonus for Mages and Warlocks in Cataclysm
             else
-                crit_bonus += damage / 2;                        // for spells is 50%
+                crit_bonus = damage / 2;                    // for spells is 50%
             break;
     }
 
-    crit_mod += (GetTotalAuraMultiplierByMiscMask(SPELL_AURA_MOD_CRIT_DAMAGE_BONUS, spellProto->GetSchoolMask()) - 1.0f) * 100;
-
-    if (victim)
-        crit_mod += GetTotalAuraModifierByMiscMask(SPELL_AURA_MOD_CRIT_PERCENT_VERSUS, victim->GetCreatureTypeMask());
-
-    if (crit_bonus != 0)
-        AddPctF(crit_bonus, crit_mod);
-
-    crit_bonus -= damage;
-
     // adds additional damage to crit_bonus (from talents)
     if (modOwner)
-        modOwner->ApplySpellMod(spellProto->Id, SPELLMOD_CRIT_DAMAGE_BONUS, crit_bonus, NULL, victim);
+        modOwner->ApplySpellMod(spellProto->Id, SPELLMOD_CRIT_DAMAGE_BONUS, crit_bonus);
 
-    crit_bonus += damage;
+    if (victim)
+    {
+        uint32 creatureTypeMask = victim->GetCreatureTypeMask();
+        crit_bonus = int32(crit_bonus * GetTotalAuraMultiplierByMiscMask(SPELL_AURA_MOD_CRIT_PERCENT_VERSUS, creatureTypeMask));
+    }
 
-    return crit_bonus;
+    if (crit_bonus > 0)
+        damage += crit_bonus;
+
+    if (spellProto && spellProto->Id == 116 && HasAura(83156)) // Piercing Chill rank 1
+    {
+        Unit* trg = NULL;
+        uint32 it = 0;
+
+        while(!trg)
+        {
+            if (it >= 7) // Prevent infinite loop, iterate max 7 times
+                break;
+
+            ++it;
+
+            trg = SelectNearbyTarget();
+
+            if (trg && (trg->GetGUID() == victim->GetGUID() || IsFriendlyTo(trg)))
+                trg = NULL;
+
+            if (trg) // Double check it
+                break;
+        }
+        if (trg)
+            CastSpell(trg, 83154, true);
+    }
+
+    if (spellProto && spellProto->Id == 116 && HasAura(83157)) // Piercing Chill rank 2 this needs rework
+    {
+        Unit* trg = NULL;
+        Unit* trg2 = NULL;
+        uint32 it = 0;
+
+        while (!trg2)
+        {
+            if (it >= 14) // Prevent infinite loop, iterate max 7*2 times
+                break;
+
+            ++it;
+
+            trg = SelectNearbyTarget();
+
+            if (trg && (trg->GetGUID() == victim->GetGUID() || IsFriendlyTo(trg)))
+                trg = NULL;
+            else if (trg)
+            {
+                trg2 = trg->SelectNearbyTarget();
+                if (trg2 && (trg2->GetGUID() == trg->GetGUID() || trg2->GetGUID() == victim->GetGUID() || IsFriendlyTo(trg2)))
+                    trg2 = NULL;
+            }
+            if (!trg2)
+                break;
+        }
+        if (trg)
+            CastSpell(trg, 83154, true);
+
+        if (trg2)
+            CastSpell(trg2, 83154, true);
+    }
+
+    if (spellProto && (spellProto->Id == 17253 || spellProto->Id == 49966 || spellProto->Id == 16827))
+    {
+        if (Unit* owner = GetOwner())
+            if (owner->HasAura(53253) || owner->HasAura(53252)) // Invigoration rank 1 & 2
+                owner->CastSpell(owner, 53398, true);
+    }
+
+    if (spellProto && spellProto->Id == 8092) // Mind Blast
+    {
+        if (HasAura(87192)) // Paralysis rank 1
+            CastSpell(victim, 87193, true);
+
+        if (HasAura(87195)) // Paralysis rank 2
+            CastSpell(victim, 87194, true);
+    }
+
+    for (uint8 i = 0; i < MAX_SPELL_EFFECTS; ++i)
+    {
+        if (spellProto->Effects[i].ApplyAuraName == SPELL_AURA_PERIODIC_DAMAGE || spellProto->Effects[i].ApplyAuraName == SPELL_AURA_PERIODIC_LEECH)
+            crit_bonus = damage / 2;
+        else
+            crit_bonus = damage;
+    }
+    return damage;
 }
 
 uint32 Unit::SpellCriticalHealingBonus(SpellInfo const* spellProto, uint32 damage, Unit* victim)
@@ -11721,15 +11870,13 @@ void Unit::MeleeDamageBonus(Unit* victim, uint32 *pdamage, WeaponAttackType attT
                 }
                 // Tundra Stalker
                 else
-                {
-                    // Frost Fever (target debuff)
-                    if (victim->HasAura(55095))
+                {                  
+                    if (victim->HasAura(55095)) // Frost Fever (target debuff)
                         AddPctN(DoneTotalMod, (*i)->GetAmount());
                 }
                 break;
             }
-            // Rage of Rivendare
-            case 7293:
+            case 7293: // Rage of Rivendare
             {
                 if (victim->GetAuraEffect(SPELL_AURA_PERIODIC_DAMAGE, SPELLFAMILY_DEATHKNIGHT, 0, 0x02000000, 0))
                     AddPctF(DoneTotalMod, (*i)->GetSpellInfo()->GetRank() * 2.0f);
