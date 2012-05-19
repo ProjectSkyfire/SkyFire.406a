@@ -1246,6 +1246,7 @@ public:
         npc_greymane_horseAI(Creature* creature) : npc_escortAI(creature) {}
 
         uint32 krennansay;
+        bool AfterJump;
         
         void AttackStart(Unit* /*who*/) {}
         void EnterCombat(Unit* /*who*/) {}
@@ -1253,7 +1254,9 @@ public:
 
         void Reset()
         {
-             krennansay = 500;//Check every 500ms initially             
+             krennansay = 500;//Check every 500ms initially
+             AfterJump = false;
+
         }
 
         void PassengerBoarded(Unit* who, int8 /*seatId*/, bool apply)
@@ -1277,10 +1280,9 @@ public:
 
             switch(i)
             {
-                case 1:
-                    DoScriptText(SAY_GREYMANE_HORSE, me, player);
-                    break;
                 case 5:
+                    me->GetMotionMaster()->MoveJump(-1679.089f,1348.42f,15.31f,25.0f, 15.0f);
+                    AfterJump = true;
                     if (me->GetVehicleKit()->HasEmptySeat(1))
                     {
                         SetEscortPaused(true);
@@ -1309,12 +1311,18 @@ public:
         void UpdateAI(const uint32 diff)
         {
             npc_escortAI::UpdateAI(diff);
+            Player* player = GetPlayerForEscort();
+
+            if (AfterJump && (me->IsWithinDist3d(-1679.089f, 1348.42f, 15.31f, 1.0f)))
+            {
+                Talk(0,player->GetGUID());
+                AfterJump = false;
+            }
 
             if (krennansay <=diff)
             {
                 if (Creature *krennan = me->FindNearestCreature(3871227, 30, true))
                 {
-                    DoScriptText(YELL_KRENNAN_C1, krennan);
                     krennansay = urand(4000,7000);//Repeat every 4 to 7 seconds
                 }
             }
