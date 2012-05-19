@@ -75,4 +75,8 @@ DELETE FROM skyfire_string WHERE entry=11002;
 INSERT INTO skyfire_string VALUES
 (11002,'You must be near Krennan Aranas!','','','','','','','','');
 
+DELETE FROM creature_text WHERE entry =35905;
+INSERT INTO creature_text VALUES
+(35905,0,0,'Rescue Krennan Aranas by using your vehicle''s ability.$B|TInterface\Icons\inv_misc_groupneedmore.blp:64|t',42,0,100,0,0,0,'King Greymane''s Horse');
+
 
