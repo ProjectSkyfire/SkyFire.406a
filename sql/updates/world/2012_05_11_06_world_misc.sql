@@ -126,5 +126,5 @@ INSERT INTO `gameobject_template` (`entry`, `type`, `displayId`, `name`, `IconNa
 -- not sure wth this is...
 -- PVP HOLIDAY (H) TB
 -- DELETE FROM gameobject_template WHERE entry=207465;
---INSERT INTO gameobject_template (entry, TYPE, displayId, NAME, data1, data6, WDBVerified) VALUES
---(207465, 5, 8618, 'PVP HOLIDAY (H) TBfG', 0, 0, 13623);
+-- INSERT INTO gameobject_template (entry, TYPE, displayId, NAME, data1, data6, WDBVerified) VALUES
+-- (207465, 5, 8618, 'PVP HOLIDAY (H) TBfG', 0, 0, 13623);
