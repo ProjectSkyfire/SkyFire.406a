@@ -1711,7 +1711,7 @@ bool WorldObject::canSeeOrDetect(WorldObject const* obj, bool ignoreStealth, boo
             return false;
     }
 
-    if (obj->_serverSideVisibility.GetValue(SERVERSIDE_VISIBILITY_SUMMONER_ONLY) == _serverSideVisibilityDetect.GetValue(SERVERSIDE_VISIBILITY_SUMMONER_ONLY))
+    if if (obj->_serverSideVisibility.GetValue(SERVERSIDE_VISIBILITY_SUMMONER_ONLY))
 
     {
         if (const Player* thisPlayer = ToPlayer())
@@ -1719,13 +1719,9 @@ bool WorldObject::canSeeOrDetect(WorldObject const* obj, bool ignoreStealth, boo
             if (const Creature* objCreature = obj->ToCreature())
             {
                 if (thisPlayer != objCreature->GetOwner())
-                {
                     return false;
-                }
             }
-            return false;
         }
-        return false;
     }
 
     if (obj->IsInvisibleDueToDespawn())
