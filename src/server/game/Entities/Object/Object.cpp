@@ -1711,6 +1711,23 @@ bool WorldObject::canSeeOrDetect(WorldObject const* obj, bool ignoreStealth, boo
             return false;
     }
 
+    if (obj->_serverSideVisibility.GetValue(SERVERSIDE_VISIBILITY_SUMMONER_ONLY) == _serverSideVisibilityDetect.GetValue(SERVERSIDE_VISIBILITY_SUMMONER_ONLY))
+
+    {
+        if (const Player* thisPlayer = ToPlayer())
+        {
+            if (const Creature* objCreature = obj->ToCreature())
+            {
+                if (thisPlayer != objCreature->GetOwner())
+                {
+                    return false;
+                }
+            }
+            return false;
+        }
+        return false;
+    }
+
     if (obj->IsInvisibleDueToDespawn())
         return false;
 
@@ -1894,60 +1911,64 @@ namespace SkyFire
     };
 }                                                           // namespace SkyFire
 
-void WorldObject::MonsterSay(const char* text, uint32 language, uint64 TargetGuid)
-{
-    CellCoord p = SkyFire::ComputeCellCoord(GetPositionX(), GetPositionY());
-
-    Cell cell(p);
-    cell.SetNoCreate();
-
-    SkyFire::MonsterCustomChatBuilder say_build(*this, CHAT_MSG_MONSTER_SAY, text, language, TargetGuid);
-    SkyFire::LocalizedPacketDo<SkyFire::MonsterCustomChatBuilder> say_do(say_build);
-    SkyFire::PlayerDistWorker<SkyFire::LocalizedPacketDo<SkyFire::MonsterCustomChatBuilder> > say_worker(this, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_SAY), say_do);
-    TypeContainerVisitor<SkyFire::PlayerDistWorker<SkyFire::LocalizedPacketDo<SkyFire::MonsterCustomChatBuilder> >, WorldTypeMapContainer > message(say_worker);
-    cell.Visit(p, message, *GetMap(), *this, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_SAY));
-}
-
 void WorldObject::MonsterSay(int32 textId, uint32 language, uint64 TargetGuid)
 {
-    CellCoord p = SkyFire::ComputeCellCoord(GetPositionX(), GetPositionY());
+    if(_serverSideVisibility.GetValue(SERVERSIDE_VISIBILITY_SUMMONER_ONLY))
+    {
+        Player *player = sObjectAccessor->FindPlayer(TargetGuid);
+        if (!player || !player->GetSession())
+        return;
 
-    Cell cell(p);
-    cell.SetNoCreate();
+        LocaleConstant loc_idx = player->GetSession()->GetSessionDbLocaleIndex();
+        char const* text = sObjectMgr->GetSkyFireString(textId, loc_idx);
 
-    SkyFire::MonsterChatBuilder say_build(*this, CHAT_MSG_MONSTER_SAY, textId, language, TargetGuid);
-    SkyFire::LocalizedPacketDo<SkyFire::MonsterChatBuilder> say_do(say_build);
-    SkyFire::PlayerDistWorker<SkyFire::LocalizedPacketDo<SkyFire::MonsterChatBuilder> > say_worker(this, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_SAY), say_do);
-    TypeContainerVisitor<SkyFire::PlayerDistWorker<SkyFire::LocalizedPacketDo<SkyFire::MonsterChatBuilder> >, WorldTypeMapContainer > message(say_worker);
-    cell.Visit(p, message, *GetMap(), *this, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_SAY));
-}
+        WorldPacket data(SMSG_MESSAGECHAT, 200);
+        BuildMonsterChat(&data, CHAT_MSG_MONSTER_SAY, text, LANG_UNIVERSAL, GetNameForLocaleIdx(loc_idx), TargetGuid);
+        player->GetSession()->SendPacket(&data);
+    }
+    else
+    {
+        CellCoord p = SkyFire::ComputeCellCoord(GetPositionX(), GetPositionY());
 
-void WorldObject::MonsterYell(const char* text, uint32 language, uint64 TargetGuid)
-{
-    CellCoord p = SkyFire::ComputeCellCoord(GetPositionX(), GetPositionY());
+        Cell cell(p);
+        cell.SetNoCreate();
 
-    Cell cell(p);
-    cell.SetNoCreate();
-
-    SkyFire::MonsterCustomChatBuilder say_build(*this, CHAT_MSG_MONSTER_YELL, text, language, TargetGuid);
-    SkyFire::LocalizedPacketDo<SkyFire::MonsterCustomChatBuilder> say_do(say_build);
-    SkyFire::PlayerDistWorker<SkyFire::LocalizedPacketDo<SkyFire::MonsterCustomChatBuilder> > say_worker(this, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_YELL), say_do);
-    TypeContainerVisitor<SkyFire::PlayerDistWorker<SkyFire::LocalizedPacketDo<SkyFire::MonsterCustomChatBuilder> >, WorldTypeMapContainer > message(say_worker);
-    cell.Visit(p, message, *GetMap(), *this, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_YELL));
+        SkyFire::MonsterChatBuilder say_build(*this, CHAT_MSG_MONSTER_SAY, textId, language, TargetGuid);
+        SkyFire::LocalizedPacketDo<SkyFire::MonsterChatBuilder> say_do(say_build);
+        SkyFire::PlayerDistWorker<SkyFire::LocalizedPacketDo<SkyFire::MonsterChatBuilder> > say_worker(this, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_SAY), say_do);
+        TypeContainerVisitor<SkyFire::PlayerDistWorker<SkyFire::LocalizedPacketDo<SkyFire::MonsterChatBuilder> >, WorldTypeMapContainer > message(say_worker);
+        cell.Visit(p, message, *GetMap(), *this, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_SAY));
+    }
 }
 
 void WorldObject::MonsterYell(int32 textId, uint32 language, uint64 TargetGuid)
 {
-    CellCoord p = SkyFire::ComputeCellCoord(GetPositionX(), GetPositionY());
+    if(_serverSideVisibility.GetValue(SERVERSIDE_VISIBILITY_SUMMONER_ONLY))
+    {
+        Player *player = sObjectAccessor->FindPlayer(TargetGuid);
+        if (!player || !player->GetSession())
+            return;
 
-    Cell cell(p);
-    cell.SetNoCreate();
+        LocaleConstant loc_idx = player->GetSession()->GetSessionDbLocaleIndex();
+        char const* text = sObjectMgr->GetSkyFireString(textId, loc_idx);
 
-    SkyFire::MonsterChatBuilder say_build(*this, CHAT_MSG_MONSTER_YELL, textId, language, TargetGuid);
-    SkyFire::LocalizedPacketDo<SkyFire::MonsterChatBuilder> say_do(say_build);
-    SkyFire::PlayerDistWorker<SkyFire::LocalizedPacketDo<SkyFire::MonsterChatBuilder> > say_worker(this, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_YELL), say_do);
-    TypeContainerVisitor<SkyFire::PlayerDistWorker<SkyFire::LocalizedPacketDo<SkyFire::MonsterChatBuilder> >, WorldTypeMapContainer > message(say_worker);
-    cell.Visit(p, message, *GetMap(), *this, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_YELL));
+        WorldPacket data(SMSG_MESSAGECHAT, 200);
+        BuildMonsterChat(&data, CHAT_MSG_MONSTER_YELL, text, LANG_UNIVERSAL, GetNameForLocaleIdx(loc_idx), TargetGuid);
+        player->GetSession()->SendPacket(&data);
+    }
+    else
+    {
+        CellCoord p = SkyFire::ComputeCellCoord(GetPositionX(), GetPositionY());
+
+        Cell cell(p);
+        cell.SetNoCreate();
+
+        SkyFire::MonsterChatBuilder say_build(*this, CHAT_MSG_MONSTER_YELL, textId, language, TargetGuid);
+        SkyFire::LocalizedPacketDo<SkyFire::MonsterChatBuilder> say_do(say_build);
+        SkyFire::PlayerDistWorker<SkyFire::LocalizedPacketDo<SkyFire::MonsterChatBuilder> > say_worker(this, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_YELL), say_do);
+        TypeContainerVisitor<SkyFire::PlayerDistWorker<SkyFire::LocalizedPacketDo<SkyFire::MonsterChatBuilder> >, WorldTypeMapContainer > message(say_worker);
+        cell.Visit(p, message, *GetMap(), *this, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_YELL));
+    }
 }
 
 void WorldObject::MonsterYellToZone(int32 textId, uint32 language, uint64 TargetGuid)
@@ -1963,25 +1984,34 @@ void WorldObject::MonsterYellToZone(int32 textId, uint32 language, uint64 Target
             say_do(itr->getSource());
 }
 
-void WorldObject::MonsterTextEmote(const char* text, uint64 TargetGuid, bool IsBossEmote)
-{
-    WorldPacket data(SMSG_MESSAGECHAT, 200);
-    BuildMonsterChat(&data, IsBossEmote ? CHAT_MSG_RAID_BOSS_EMOTE : CHAT_MSG_MONSTER_EMOTE, text, LANG_UNIVERSAL, GetName(), TargetGuid);
-    SendMessageToSetInRange(&data, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_TEXTEMOTE), true);
-}
-
 void WorldObject::MonsterTextEmote(int32 textId, uint64 TargetGuid, bool IsBossEmote)
 {
-    CellCoord p = SkyFire::ComputeCellCoord(GetPositionX(), GetPositionY());
+    if (_serverSideVisibility.GetValue(SERVERSIDE_VISIBILITY_SUMMONER_ONLY))
+    {
+        Player *player = sObjectAccessor->FindPlayer(TargetGuid);
+        if (!player || !player->GetSession())
+            return;
 
-    Cell cell(p);
-    cell.SetNoCreate();
+        LocaleConstant loc_idx = player->GetSession()->GetSessionDbLocaleIndex();
+        char const* text = sObjectMgr->GetSkyFireString(textId, loc_idx);
 
-    SkyFire::MonsterChatBuilder say_build(*this, IsBossEmote ? CHAT_MSG_RAID_BOSS_EMOTE : CHAT_MSG_MONSTER_EMOTE, textId, LANG_UNIVERSAL, TargetGuid);
-    SkyFire::LocalizedPacketDo<SkyFire::MonsterChatBuilder> say_do(say_build);
-    SkyFire::PlayerDistWorker<SkyFire::LocalizedPacketDo<SkyFire::MonsterChatBuilder> > say_worker(this, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_TEXTEMOTE), say_do);
-    TypeContainerVisitor<SkyFire::PlayerDistWorker<SkyFire::LocalizedPacketDo<SkyFire::MonsterChatBuilder> >, WorldTypeMapContainer > message(say_worker);
-    cell.Visit(p, message, *GetMap(), *this, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_TEXTEMOTE));
+        WorldPacket data(SMSG_MESSAGECHAT, 200);
+        BuildMonsterChat(&data, CHAT_MSG_MONSTER_EMOTE, text, LANG_UNIVERSAL, GetNameForLocaleIdx(loc_idx), TargetGuid);
+        player->GetSession()->SendPacket(&data);
+    }
+    else
+    {
+        CellCoord p = SkyFire::ComputeCellCoord(GetPositionX(), GetPositionY());
+
+        Cell cell(p);
+        cell.SetNoCreate();
+
+        SkyFire::MonsterChatBuilder say_build(*this, IsBossEmote ? CHAT_MSG_RAID_BOSS_EMOTE : CHAT_MSG_MONSTER_EMOTE, textId, LANG_UNIVERSAL, TargetGuid);
+        SkyFire::LocalizedPacketDo<SkyFire::MonsterChatBuilder> say_do(say_build);
+        SkyFire::PlayerDistWorker<SkyFire::LocalizedPacketDo<SkyFire::MonsterChatBuilder> > say_worker(this, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_TEXTEMOTE), say_do);
+        TypeContainerVisitor<SkyFire::PlayerDistWorker<SkyFire::LocalizedPacketDo<SkyFire::MonsterChatBuilder> >, WorldTypeMapContainer > message(say_worker);
+        cell.Visit(p, message, *GetMap(), *this, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_TEXTEMOTE));
+    }
 }
 
 void WorldObject::MonsterWhisper(const char* text, uint64 receiver, bool IsBossWhisper)

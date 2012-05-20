@@ -807,6 +807,12 @@ bool Creature::Create(uint32 guidlow, Map* map, uint32 phaseMask, uint32 Entry, 
         _serverSideVisibilityDetect.SetValue(SERVERSIDE_VISIBILITY_GHOST, GHOST_VISIBILITY_GHOST);
     }
 
+    else if (isSummonerOnly())
+    {
+       _serverSideVisibility.SetValue(SERVERSIDE_VISIBILITY_SUMMONER_ONLY,1);
+       _serverSideVisibilityDetect.SetValue(SERVERSIDE_VISIBILITY_SUMMONER_ONLY,1);
+    }
+
     if (Entry == VISUAL_WAYPOINT)
         SetVisible(false);
 

@@ -2417,6 +2417,7 @@ void Player::AddToWorld()
     for (uint8 i = PLAYER_SLOT_START; i < PLAYER_SLOT_END; ++i)
         if (_items[i])
             _items[i]->AddToWorld();
+    _serverSideVisibilityDetect.SetValue(SERVERSIDE_VISIBILITY_SUMMONER_ONLY,1);
 }
 
 void Player::RemoveFromWorld()
