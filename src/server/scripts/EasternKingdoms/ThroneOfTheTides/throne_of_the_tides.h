@@ -45,6 +45,7 @@ enum Npcs
     NPC_BEAST                         = 44841,
     // GOs
     GO_LADY_NAZJAR_DOOR               = 204338,
+    GO_JELLYFISH_ELEVATOR             = 207209,
     GO_COMMANDER_ULTHOK_DOOR          = 204339,
     GO_ERUNAK_STONESPEAKER_DOOR       = 204340,
     GO_OZUMAT_DOOR                    = 204341,
