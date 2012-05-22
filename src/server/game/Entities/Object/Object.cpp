@@ -72,12 +72,12 @@ uint32 GuidHigh2TypeId(uint32 guid_hi)
 
 Object::Object() : m_PackGUID(sizeof(uint64)+1)
 {
-    _objectTypeId      = TYPEID_OBJECT;
-    _objectType        = TYPEMASK_OBJECT;
+    _objectTypeId       = TYPEID_OBJECT;
+    _objectType         = TYPEMASK_OBJECT;
 
-    _uint32Values      = NULL;
+    _uint32Values       = NULL;
     _changedFields      = NULL;
-    _valuesCount       = 0;
+    _valuesCount        = 0;
 
     m_inWorld           = false;
     m_objectUpdated     = false;
@@ -236,8 +236,6 @@ void Object::BuildCreateUpdateBlockForPlayer(UpdateData *data, Player *target) c
         }
     }
 
-    //sLog->outDebug("BuildCreateUpdate: update-type: %u, object-type: %u got flags: %X, flags2: %X", updatetype, _objectTypeId, flags, flags2);
-
     ByteBuffer buf(500);
     buf << (uint8)updatetype;
     buf.append(GetPackGUID());
@@ -301,37 +299,39 @@ void Object::_BuildMovementUpdate(ByteBuffer * data, uint16 flags) const
     // 0x20
     if (flags & UPDATEFLAG_LIVING)
     {
-        ((Unit*)this)->BuildMovementPacket(data);
+        Unit const* self = ToUnit();
+        self->BuildMovementPacket(data);
 
-        *data << ((Unit*)this)->GetSpeed(MOVE_WALK);
-        *data << ((Unit*)this)->GetSpeed(MOVE_RUN);
-        *data << ((Unit*)this)->GetSpeed(MOVE_RUN_BACK);
-        *data << ((Unit*)this)->GetSpeed(MOVE_SWIM);
-        *data << ((Unit*)this)->GetSpeed(MOVE_SWIM_BACK);
-        *data << ((Unit*)this)->GetSpeed(MOVE_FLIGHT);
-        *data << ((Unit*)this)->GetSpeed(MOVE_FLIGHT_BACK);
-        *data << ((Unit*)this)->GetSpeed(MOVE_TURN_RATE);
-        *data << ((Unit*)this)->GetSpeed(MOVE_PITCH_RATE);
+        *data << self->GetSpeed(MOVE_WALK);
+        *data << self->GetSpeed(MOVE_RUN);
+        *data << self->GetSpeed(MOVE_RUN_BACK);
+        *data << self->GetSpeed(MOVE_SWIM);
+        *data << self->GetSpeed(MOVE_SWIM_BACK);
+        *data << self->GetSpeed(MOVE_FLIGHT);
+        *data << self->GetSpeed(MOVE_FLIGHT_BACK);
+        *data << self->GetSpeed(MOVE_TURN_RATE);
+        *data << self->GetSpeed(MOVE_PITCH_RATE);
 
         // 0x08000000
-        if (((Unit*)this)->_movementInfo.GetMovementFlags() & MOVEMENTFLAG_SPLINE_ENABLED)
-            Movement::PacketBuilder::WriteCreate(*((Unit*)this)->movespline, *data);
+        if (self->_movementInfo.HasMovementFlag(MOVEMENTFLAG_SPLINE_ENABLED))
+            Movement::PacketBuilder::WriteCreate(*self->movespline, *data);
     }
     else
     {
+        WorldObject* worldObj = ((WorldObject*)this);
         if (flags & UPDATEFLAG_POSITION)
         {
-            *data << uint8(0);                              // unk PGUID!
-            *data << ((WorldObject*)this)->GetPositionX();
-            *data << ((WorldObject*)this)->GetPositionY();
-            *data << ((WorldObject*)this)->GetPositionZ();
-            *data << ((WorldObject*)this)->GetPositionX();
-            *data << ((WorldObject*)this)->GetPositionY();
-            *data << ((WorldObject*)this)->GetPositionZ();
-            *data << ((WorldObject*)this)->GetOrientation();
+            *data << uint8(0);    // unk PGUID!
+            *data << worldObj->GetPositionX();
+            *data << worldObj->GetPositionY();
+            *data << worldObj->GetPositionZ();
+            *data << worldObj->GetPositionX();
+            *data << worldObj->GetPositionY();
+            *data << worldObj->GetPositionZ();
+            *data << worldObj->GetOrientation();
 
             if (GetTypeId() == TYPEID_CORPSE)
-                *data << float(((WorldObject*)this)->GetOrientation());
+                *data << worldObj->GetOrientation();
             else
                 *data << float(0);
         }
@@ -346,14 +346,14 @@ void Object::_BuildMovementUpdate(ByteBuffer * data, uint16 flags) const
                     *data << (float)0;
                     *data << (float)0;
                     *data << (float)0;
-                    *data << ((WorldObject*)this)->GetOrientation();
+                    *data << worldObj->GetOrientation();
                 }
                 else
                 {
-                    *data << ((WorldObject*)this)->GetPositionX();
-                    *data << ((WorldObject*)this)->GetPositionY();
-                    *data << ((WorldObject*)this)->GetPositionZ();
-                    *data << ((WorldObject*)this)->GetOrientation();
+                    *data << worldObj->GetPositionX();
+                    *data << worldObj->GetPositionY();
+                    *data << worldObj->GetPositionZ();
+                    *data << worldObj->GetOrientation();
                 }
             }
         }
@@ -362,7 +362,7 @@ void Object::_BuildMovementUpdate(ByteBuffer * data, uint16 flags) const
     // 0x4
     if (flags & UPDATEFLAG_HAS_TARGET)                       // packed guid (current target guid)
     {
-        if (Unit* victim = ((Unit*)this)->getVictim())
+        if (Unit *victim = this->ToUnit()->getVictim())
             data->append(victim->GetPackGUID());
         else
             *data << uint8(0);
@@ -370,39 +370,26 @@ void Object::_BuildMovementUpdate(ByteBuffer * data, uint16 flags) const
 
     // 0x2
     if (flags & UPDATEFLAG_TRANSPORT)
-    {
-        *data << uint32(getMSTime());                       // ms time
-    }
+        *data << uint32(getMSTime());  // ms time
 
     // 0x80
-    if (flags & UPDATEFLAG_VEHICLE)                          // unused for now
+    if (flags & UPDATEFLAG_VEHICLE)  // unused for now
     {
         *data << uint32(((Unit*)this)->GetVehicleKit()->GetVehicleInfo()->m_ID);  // vehicle id
         *data << float(((Creature*)this)->GetOrientation());  // facing adjustment
     }
 
+    // 0x800 - AnimKits
+    if (flags & UPDATEFLAG_ANIMKITS)
+        *data << uint16(0) << uint16(0) << uint16(0);  // unk
+
     // 0x200
     if (flags & UPDATEFLAG_ROTATION)
-    {
         *data << int64(((GameObject*)this)->GetRotation());
-    }
 
-   // 0x0800
-   if (flags & UPDATEFLAG_UNK11)
-   {
-       *data << uint16(0);
-       *data << uint16(0);
-       *data << uint16(0);
-   }
-
-   // 0x1000
-   if (flags & UPDATEFLAG_UNK12)
-   {
-       uint8 bytes = 0;
-       *data << bytes;
-       for (uint8 i = 0; i < bytes; i++)
-           *data << uint32(0);
-   }
+    // 0x1000
+    if (flags & UPDATEFLAG_UNK3)
+        *data << uint8(0);  // unk counter to read uint32 values
 }
 
 void Object::_BuildValuesUpdate(uint8 updatetype, ByteBuffer * data, UpdateMask* updateMask, Player* target) const

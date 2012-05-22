@@ -1325,7 +1325,7 @@ class Player : public Unit, public GridObject<Player>
         uint32 GetCurrency(uint32 id) const;
         bool HasCurrency(uint32 id, uint32 count) const;
         void SetCurrency(uint32 id, uint32 count);
-        void ModifyCurrency(uint32 id, int32 count, bool force = false);
+        void ModifyCurrency(uint32 id, int32 count);
 
         void ApplyEquipCooldown(Item* pItem);
 
@@ -2146,7 +2146,7 @@ class Player : public Unit, public GridObject<Player>
         void ApplyEquipSpell(SpellInfo const* spellInfo, Item* item, bool apply, bool form_change = false);
         void UpdateEquipSpellsAtFormChange();
         void CastItemCombatSpell(Unit* target, WeaponAttackType attType, uint32 procVictim, uint32 procEx);
-        void CastItemUseSpell(Item *item, SpellCastTargets const& targets, uint8 cast_count);
+        void CastItemUseSpell(Item* item, SpellCastTargets const& targets, uint8 cast_count, uint32 glyphIndex);
         void CastItemCombatSpell(Unit* target, WeaponAttackType attType, uint32 procVictim, uint32 procEx, Item *item, ItemTemplate const* proto);
 
         void SendEquipmentSetList();
@@ -2690,9 +2690,9 @@ class Player : public Unit, public GridObject<Player>
 
         Item* _items[PLAYER_SLOTS_COUNT];
         uint32 _currentBuybackSlot;
+
         PlayerCurrenciesMap _currencies;
         uint32 _GetCurrencyWeekCap(const CurrencyTypesEntry* currency) const;
-        uint32 _GetCurrencyTotalCap(const CurrencyTypesEntry* currency) const;
 
         std::vector<Item*> m_itemUpdateQueue;
         bool _itemUpdateQueueBlocked;

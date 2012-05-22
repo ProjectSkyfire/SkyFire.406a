@@ -173,7 +173,7 @@ void WorldSession::HandleUseItemOpcode(WorldPacket& recvPacket)
     if (!sScriptMgr->OnItemUse(pUser, pItem, targets))
     {
         // no script or script not process request by self
-        pUser->CastItemUseSpell(pItem, targets, castCount);
+        pUser->CastItemUseSpell(pItem, targets, castCount, glyphIndex);
     }
 }
 

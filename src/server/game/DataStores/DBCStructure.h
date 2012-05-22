@@ -126,13 +126,13 @@ struct AchievementCriteriaEntry
             uint32  zoneID;                                 // 3
             uint32  questCount;                             // 4
         } complete_quests_in_zone;
-        //todo
+
         // ACHIEVEMENT_CRITERIA_TYPE_CURRENCY = 12
-        /*struct
+        struct
         {
-            uint32 currency;                                // 3
-            uint32 count;                                   // 4
-        } currencyGain;*/
+            uint32 currency;
+            uint32 count;
+        } currencyGain;
 
         // ACHIEVEMENT_CRITERIA_TYPE_COMPLETE_DAILY_QUEST   = 14
         struct
@@ -847,7 +847,7 @@ struct CurrencyTypesEntry
     //uint32 unk6;                                          // 6        archaeology-related (?)
     uint32 TotalCap;                                        // 7
     uint32 WeekCap;                                         // 8
-    //int32 unk9;                                           // 9
+    uint32 Flags;                                           // 9
     //char* description;                                    // 10
 };
 
@@ -1577,11 +1577,6 @@ struct ScalingStatValuesEntry
     uint32 getSpellBonus(uint32 mask) const
     {
         if (mask & 0x00008000) return spellBonus;
-        return 0;
-    }
-    uint32 getFeralBonus(uint32 mask) const
-    {
-        if (mask & 0x00010000) return 0;   // not used?
         return 0;
     }
 };

@@ -7404,15 +7404,31 @@ void Player::SendCurrencies() const
 
     for (PlayerCurrenciesMap::const_iterator itr = _currencies.begin(); itr != _currencies.end(); ++itr)
     {
-        const CurrencyTypesEntry* entry = sCurrencyTypesStore.LookupEntry(itr->first);
+        CurrencyTypesEntry const* entry = sCurrencyTypesStore.LookupEntry(itr->first);
         if (!entry)
             continue;
-        packet << uint32(itr->second.weekCount / PLAYER_CURRENCY_PRECISION);
-        packet << uint8(0);                     // unknown
+
+        uint32 precision = (entry->Flags & 0x8) ? 100 : 1;
+        packet << uint32(_GetCurrencyWeekCap(entry) / precision);
+        packet << uint8(0);
+        packet << uint32(itr->second.weekCount / precision);
+    }
+
+    for (PlayerCurrenciesMap::const_iterator itr = _currencies.begin(); itr != _currencies.end(); ++itr)
+    {
+        CurrencyTypesEntry const* entry = sCurrencyTypesStore.LookupEntry(itr->first);
+        if (!entry)
+            continue;
+
+        uint32 precision = (entry->Flags & 0x8) ? 100 : 1;
         packet << uint32(entry->ID);
-        packet << uint32(0/*TODO:sWorld->GetNextCurrencyResetTime() - WEEK*/);
-        packet << uint32(_GetCurrencyWeekCap(entry) / PLAYER_CURRENCY_PRECISION);
-        packet << uint32(itr->second.totalCount / PLAYER_CURRENCY_PRECISION);
+        if (uint32 weekCap = (_GetCurrencyWeekCap(entry) / precision))
+            packet << uint32(weekCap);
+        packet << uint32(itr->second.totalCount / precision);
+        packet << uint8(0);                     // unknown
+        //packet << uint32(0); // season total earned
+        if (uint32 weekCount = (itr->second.weekCount / precision))
+            packet << uint32(weekCount);
     }
 
     GetSession()->SendPacket(&packet);
@@ -7430,27 +7446,17 @@ bool Player::HasCurrency(uint32 id, uint32 count) const
     return itr != _currencies.end() && itr->second.totalCount >= count;
 }
 
-// NOTE:
-// when gaining currency (count > 0) with force flag set (recommended for gm command '.modify currency' use only):
-//     currency is gained forcedly without checking total cap nor week cap
-// when gaining currency (count > 0) with force flag unset:
-//     currency is limited to total cap and week cap, currency is unchanged if already exceeded cap (no force correction)
-// when removing/paying currency (count < 0):
-//     do simply subtraction to total count only, total cap and week cap are not checked in this case
-void Player::ModifyCurrency(uint32 id, int32 count, bool force)
+void Player::ModifyCurrency(uint32 id, int32 count)
 {
     if (!count)
         return;
 
-    const CurrencyTypesEntry* currency = sCurrencyTypesStore.LookupEntry(id);
-    if (!currency)
-    {
-        sLog->outError("ModifyCurrency: currency %u does not exist", id);
-        return;
-    }
+    CurrencyTypesEntry const* currency = sCurrencyTypesStore.LookupEntry(id);
+    ASSERT(currency);
 
-    int32 oldTotalCount = 0;
-    int32 oldWeekCount = 0;
+    int32 precision = currency->Flags & 0x8 ? 100 : 1;
+    uint32 oldTotalCount = 0;
+    uint32 oldWeekCount = 0;
     PlayerCurrenciesMap::iterator itr = _currencies.find(id);
     if (itr == _currencies.end())
     {
@@ -7467,37 +7473,36 @@ void Player::ModifyCurrency(uint32 id, int32 count, bool force)
         oldWeekCount = itr->second.weekCount;
     }
 
-    uint32 totalCap = _GetCurrencyTotalCap(currency);
-    if (totalCap)
-    {
-        int32 deltaMax = int32(totalCap) - oldTotalCount; // deltaMax could be minus if oldTotalCount already exceeded total cap
-        if (!force && count > 0 && count > deltaMax)      // correct count only when gaining currency exceeds total cap
-            count = deltaMax > 0 ? deltaMax : 0;
-    }
-
-    uint32 weekCap = _GetCurrencyWeekCap(currency);
-    if (weekCap)
-    {
-        int32 deltaMax = int32(weekCap) - oldWeekCount; // deltaMax could be minus if oldWeekCount already exceeded week cap
-        if (!force && count > 0 && count > deltaMax)    // correct count only when gaining currency exceeds week cap
-            count = deltaMax > 0 ? deltaMax : 0;
-    }
-
-    // count could be changed to 0 due to the total cap and week cap check, so check it again
-    if (!count)
-        return;
-
-    int32 newTotalCount = oldTotalCount + count;
+    int32 newTotalCount = int32(oldTotalCount) + count;
     if (newTotalCount < 0)
         newTotalCount = 0;
 
-    int32 newWeekCount = oldWeekCount + ((!force && count > 0) ? count : 0); // no updating week count when paying or force gaining
+    int32 newWeekCount = int32(oldWeekCount) + (count > 0 ? count : 0);
     if (newWeekCount < 0)
         newWeekCount = 0;
 
+    if (currency->TotalCap && int32(currency->TotalCap) < newTotalCount)
+    {
+        int32 delta = newTotalCount - int32(currency->TotalCap);
+        newTotalCount = int32(currency->TotalCap);
+        newWeekCount -= delta;
+    }
+
+    // TODO: fix conquest points
+    uint32 weekCap = _GetCurrencyWeekCap(currency);
+    if (weekCap && int32(weekCap) < newTotalCount)
+    {
+        int32 delta = newWeekCount - int32(weekCap);
+        newWeekCount = int32(weekCap);
+        newTotalCount -= delta;
+    }
+
+    // if we change total, we must change week
+    ASSERT(((newTotalCount-oldTotalCount) != 0) == ((newWeekCount-oldWeekCount) != 0));
+
     if (newTotalCount != oldTotalCount)
     {
-        if (itr->second.state != PLAYERCURRENCY_NEW)
+        if(itr->second.state != PLAYERCURRENCY_NEW)
             itr->second.state = PLAYERCURRENCY_CHANGED;
 
         itr->second.totalCount = newTotalCount;
@@ -7506,13 +7511,13 @@ void Player::ModifyCurrency(uint32 id, int32 count, bool force)
         // probably excessive checks
         if (IsInWorld() && !GetSession()->PlayerLoading())
         {
-            // if (count > 0)
-              // GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_CURRENCY, id, count);    // todo
+            if (count > 0)
+                UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_CURRENCY, id, count);
 
             WorldPacket packet(SMSG_UPDATE_CURRENCY, 12);
             packet << uint32(id);
-            packet << uint32(weekCap ? (newWeekCount / PLAYER_CURRENCY_PRECISION) : 0);
-            packet << uint32(newTotalCount / PLAYER_CURRENCY_PRECISION);
+            packet << uint32(weekCap ? (newWeekCount / precision) : 0);
+            packet << uint32(newTotalCount / precision);
             GetSession()->SendPacket(&packet);
         }
     }
@@ -7523,60 +7528,40 @@ void Player::SetCurrency(uint32 id, uint32 count)
     ModifyCurrency(id, int32(count) - GetCurrency(id));
 }
 
-//TODO: Implement it.
-//void Player::ModifyConquestPoints(int32 value, SQLTransaction* trans /*=NULL*/)
-//{
-//    int32 newValue = int32(GetConquestPoints()) + value;
-//    if (newValue < 0)
-//        newValue = 0;
-//    SetConquestPoints(uint32(newValue));
-//}
-
-// NYI, need rename
 uint32 Player::_GetCurrencyWeekCap(const CurrencyTypesEntry* currency) const
 {
     uint32 cap = currency->WeekCap;
-    //switch (currency->ID)
-    //{
-    //case CURRENCY_TYPE_CONQUEST_POINTS:
-    //    cap = uint32( m_conquestPointsWeekCap[CP_SOURCE_ARENA] * PLAYER_CURRENCY_PRECISION * sWorld->getRate(RATE_CONQUEST_POINTS_WEEK_LIMIT));
-    //    break;
-    //case CURRENCY_TYPE_JUSTICE_POINTS:
-    //    {
-    //        uint32 justicecap = sWorld->getIntConfig(CONFIG_MAX_JUSTICE_POINTS) * PLAYER_CURRENCY_PRECISION;
-    //        if (justicecap > 0)
-    //            cap = justicecap;
-    //        break;
-    //    }
-    //}
+    switch (currency->ID)
+    {
+        case CURRENCY_TYPE_CONQUEST_POINTS:
+        {
+            // TODO: implement
+            cap = 0;
+            break;
+        }
+        case CURRENCY_TYPE_HONOR_POINTS:
+        {
+            uint32 honorcap = sWorld->getIntConfig(CONFIG_MAX_HONOR_POINTS);
+            if (honorcap > 0)
+                cap = honorcap;
+            break;
+        }
+        case CURRENCY_TYPE_JUSTICE_POINTS:
+        {
+            uint32 justicecap = sWorld->getIntConfig(CONFIG_MAX_JUSTICE_POINTS);
+            if (justicecap > 0)
+                cap = justicecap;
+            break;
+        }
+    }
 
-    //if (cap != currency->WeekCap && IsInWorld() && !GetSession()->PlayerLoading())
-    //{
-    //    WorldPacket packet(SMSG_UPDATE_CURRENCY_WEEK_LIMIT, 8);
-    //    packet << uint32(cap / PLAYER_CURRENCY_PRECISION);
-    //    packet << uint32(currency->ID);
-    //    GetSession()->SendPacket(&packet);
-    //}
-
-    return cap;
-}
-
-// NYI, need rename
-uint32 Player::_GetCurrencyTotalCap(const CurrencyTypesEntry* currency) const
-{
-    uint32 cap = currency->TotalCap;
-    //switch (currency->ID)
-    //{
-    //case CURRENCY_TYPE_CONQUEST_POINTS:
-    //    cap = sWorld->getIntConfig(CONFIG_MAX_CONQUEST_POINTS) * PLAYER_CURRENCY_PRECISION;
-    //    break;
-    //case CURRENCY_TYPE_HONOR_POINTS:
-    //    cap = sWorld->getIntConfig(CONFIG_MAX_HONOR_POINTS) * PLAYER_CURRENCY_PRECISION;
-    //    break;
-    //case CURRENCY_TYPE_JUSTICE_POINTS:
-    //    cap = sWorld->getIntConfig(CONFIG_MAX_JUSTICE_POINTS) * PLAYER_CURRENCY_PRECISION;
-    //    break;
-    //}
+    if (cap != currency->WeekCap && IsInWorld() && !GetSession()->PlayerLoading())
+    {
+        WorldPacket packet(SMSG_UPDATE_CURRENCY_WEEK_LIMIT, 8);
+        packet << uint32(cap / ((currency->Flags & 0x8) ? 100 : 1));
+        packet << uint32(currency->ID);
+        GetSession()->SendPacket(&packet);
+    }
 
     return cap;
 }
@@ -7619,6 +7604,7 @@ uint32 Player::GetZoneIdFromDB(uint64 guid)
     QueryResult result = CharacterDatabase.PQuery("SELECT zone FROM characters WHERE guid='%u'", guidLow);
     if (!result)
         return 0;
+
     Field* fields = result->Fetch();
     uint32 zone = fields[0].GetUInt16();
 
@@ -7691,7 +7677,7 @@ void Player::UpdateZone(uint32 newZone, uint32 newArea)
     if (_zoneUpdateId != newZone)
     {
         if (Guild* guild = sGuildMgr->GetGuildById(GetGuildId()))
-            guild->UpdateMemberData(this, GUILD_MEMBER_DATA_ZONEID, newZone);
+           guild->UpdateMemberData(this, GUILD_MEMBER_DATA_ZONEID, newZone);
 
         sOutdoorPvPMgr->HandlePlayerLeaveZone(this, _zoneUpdateId);
         sOutdoorPvPMgr->HandlePlayerEnterZone(this, newZone);
@@ -7788,6 +7774,7 @@ void Player::UpdateZone(uint32 newZone, uint32 newArea)
             }
         }
     }
+
     // Prevent players from accessing GM Island
     if (sWorld->getBoolConfig(CONFIG_PREVENT_PLAYERS_ACCESS_TO_GMISLAND))
     {
@@ -7901,6 +7888,10 @@ void Player::UpdateZone(uint32 newZone, uint32 newArea)
     // recent client version not send leave/join channel packets for built-in local channels
     UpdateLocalChannels(newZone);
 
+    // group update
+    if (GetGroup())
+        SetGroupUpdateFlag(GROUP_UPDATE_FULL);
+
     UpdateZoneDependentAuras(newZone);
 }
 
@@ -7963,8 +7954,8 @@ void Player::DuelComplete(DuelCompleteType type)
     {
         data.Initialize(SMSG_DUEL_WINNER, (1+20));          // we guess size
         data << uint8(type == DUEL_WON ? 0 : 1);            // 0 = just won; 1 = fled
-        data << duel->opponent->GetName();
         data << GetName();
+        data << duel->opponent->GetName();
         SendMessageToSet(&data, true);
     }
 
@@ -8062,12 +8053,12 @@ void Player::DuelComplete(DuelCompleteType type)
 
 //---------------------------------------------------------//
 
-void Player::_ApplyItemMods(Item *item, uint8 slot, bool apply)
+void Player::_ApplyItemMods(Item* item, uint8 slot, bool apply)
 {
     if (slot >= INVENTORY_SLOT_BAG_END || !item)
         return;
 
-    ItemTemplate const *proto = item->GetTemplate();
+    ItemTemplate const* proto = item->GetTemplate();
 
     if (!proto)
         return;
@@ -8087,10 +8078,6 @@ void Player::_ApplyItemMods(Item *item, uint8 slot, bool apply)
         _ApplyWeaponDependentAuraMods(item, WeaponAttackType(attacktype), apply);
 
     _ApplyItemBonuses(proto, slot, apply);
-
-    //if (slot == EQUIPMENT_SLOT_RANGED)
-        //_ApplyAmmoBonuses();
-
     ApplyItemEquipSpell(item, apply);
     ApplyReforgedStats(item, apply);
     ApplyEnchantment(item, apply);
@@ -8100,14 +8087,14 @@ void Player::_ApplyItemMods(Item *item, uint8 slot, bool apply)
 
 void Player::ApplyReforgedStats(Item* item, bool apply)
 {
-    if(!item)
+    if (!item)
         return;
 
     uint32 reforgeId = item->GetUInt32Value(ITEM_FIELD_ENCHANTMENT_9_1);
 
     const ItemReforgeEntry* stats = sItemReforgeStore.LookupEntry(reforgeId);
 
-    if(!stats)
+    if (!stats)
         return;
 
     const ItemTemplate* proto = item->GetTemplate();
@@ -8416,12 +8403,12 @@ void Player::ApplyReforgedStats(Item* item, bool apply)
     }
 }
 
-void Player::_ApplyItemBonuses(ItemTemplate const *proto, uint8 slot, bool apply, bool only_level_scale /*= false*/)
+void Player::_ApplyItemBonuses(ItemTemplate const* proto, uint8 slot, bool apply, bool only_level_scale /*= false*/)
 {
     if (slot >= INVENTORY_SLOT_BAG_END || !proto)
         return;
 
-    ScalingStatDistributionEntry const *ssd = proto->ScalingStatDistribution ? sScalingStatDistributionStore.LookupEntry(proto->ScalingStatDistribution) : NULL;
+    ScalingStatDistributionEntry const* ssd = proto->ScalingStatDistribution ? sScalingStatDistributionStore.LookupEntry(proto->ScalingStatDistribution) : NULL;
     if (only_level_scale && !ssd)
         return;
 
@@ -8448,8 +8435,6 @@ void Player::_ApplyItemBonuses(ItemTemplate const *proto, uint8 slot, bool apply
         }
         else
         {
-            if (proto->ItemStat[i].ItemStatValue == 0)
-                continue;
             statType = proto->ItemStat[i].ItemStatType;
             val = proto->ItemStat[i].ItemStatValue;
         }
@@ -8576,7 +8561,7 @@ void Player::_ApplyItemBonuses(ItemTemplate const *proto, uint8 slot, bool apply
                 ApplyRatingMod(CR_EXPERTISE, int32(val), apply);
                 break;
             case ITEM_MOD_ATTACK_POWER:
-                if (float(val) > 0.f)
+                if (float(val) > 0.0f)
                 {
                     HandleStatModifier(UNIT_MOD_ATTACK_POWER_POS, TOTAL_VALUE, float(val), apply);
                     HandleStatModifier(UNIT_MOD_ATTACK_POWER_RANGED_POS, TOTAL_VALUE, float(val), apply);
@@ -8588,14 +8573,17 @@ void Player::_ApplyItemBonuses(ItemTemplate const *proto, uint8 slot, bool apply
                 }
                 break;
             case ITEM_MOD_RANGED_ATTACK_POWER:
-                if (float(val) > 0.f)
-                    HandleStatModifier(UNIT_MOD_ATTACK_POWER_RANGED_POS, TOTAL_VALUE, float(val), apply);
+                if (float(val) > 0.0f)
+                HandleStatModifier(UNIT_MOD_ATTACK_POWER_RANGED_POS, TOTAL_VALUE, float(val), apply);
                 else
-                    HandleStatModifier(UNIT_MOD_ATTACK_POWER_RANGED_NEG, TOTAL_VALUE, -float(val), apply);
+                HandleStatModifier(UNIT_MOD_ATTACK_POWER_RANGED_NEG, TOTAL_VALUE, -float(val), apply);
                 break;
             case ITEM_MOD_MANA_REGENERATION:
                 ApplyManaRegenBonus(int32(val), apply);
                 break;
+            //case ITEM_MOD_ARMOR_PENETRATION_RATING:
+                //ApplyRatingMod(CR_ARMOR_PENETRATION, int32(val), apply);
+                //break;
             case ITEM_MOD_SPELL_POWER:
                 ApplySpellPowerBonus(int32(val), apply);
                 break;
@@ -8609,7 +8597,7 @@ void Player::_ApplyItemBonuses(ItemTemplate const *proto, uint8 slot, bool apply
             case ITEM_MOD_MASTERY_RATING:
                 ApplyRatingMod(CR_MASTERY, int32(val), apply);
                 break;
-                // deprecated item mods
+            // deprecated item mods
             case ITEM_MOD_SPELL_HEALING_DONE:
             case ITEM_MOD_SPELL_DAMAGE_DONE:
                 break;
@@ -8635,8 +8623,8 @@ void Player::_ApplyItemBonuses(ItemTemplate const *proto, uint8 slot, bool apply
     }
 
     // Apply Spell Power from ScalingStatValue if set
-    if (ssv)
-        if (int32 spellbonus = ssv->getSpellBonus(proto->ScalingStatValue))
+    if (ssv && proto->Flags2 & ITEM_FLAGS_EXTRA_CASTER_WEAPON)
+        if (int32 spellbonus = int32(ssv->spellBonus))
             ApplySpellPowerBonus(spellbonus, apply);
 
     // If set ScalingStatValue armor get it or use item armor
@@ -8652,12 +8640,12 @@ void Player::_ApplyItemBonuses(ItemTemplate const *proto, uint8 slot, bool apply
         {
             switch (proto->SubClass)
             {
-            case ITEM_SUBCLASS_ARMOR_CLOTH:
-            case ITEM_SUBCLASS_ARMOR_LEATHER:
-            case ITEM_SUBCLASS_ARMOR_MAIL:
-            case ITEM_SUBCLASS_ARMOR_PLATE:
-            case ITEM_SUBCLASS_ARMOR_SHIELD:
-                modType = BASE_VALUE;
+                case ITEM_SUBCLASS_ARMOR_CLOTH:
+                case ITEM_SUBCLASS_ARMOR_LEATHER:
+                case ITEM_SUBCLASS_ARMOR_MAIL:
+                case ITEM_SUBCLASS_ARMOR_PLATE:
+                case ITEM_SUBCLASS_ARMOR_SHIELD:
+                    modType = BASE_VALUE;
                 break;
             }
         }
@@ -8671,8 +8659,7 @@ void Player::_ApplyItemBonuses(ItemTemplate const *proto, uint8 slot, bool apply
     WeaponAttackType attType = BASE_ATTACK;
 
     if (slot == EQUIPMENT_SLOT_RANGED && (
-        proto->InventoryType == INVTYPE_RANGED || proto->InventoryType == INVTYPE_THROWN ||
-        proto->InventoryType == INVTYPE_RANGEDRIGHT))
+        proto->InventoryType == INVTYPE_RANGED || proto->InventoryType == INVTYPE_THROWN || proto->InventoryType == INVTYPE_RANGEDRIGHT))
     {
         attType = RANGED_ATTACK;
     }
@@ -8685,14 +8672,12 @@ void Player::_ApplyItemBonuses(ItemTemplate const *proto, uint8 slot, bool apply
         _ApplyWeaponDamage(slot, proto, ssv, apply);
 }
 
-void Player::_ApplyWeaponDamage(uint8 slot, ItemTemplate const *proto, ScalingStatValuesEntry const *ssv, bool apply)
+void Player::_ApplyWeaponDamage(uint8 slot, ItemTemplate const* proto, ScalingStatValuesEntry const* ssv, bool apply)
 {
     WeaponAttackType attType = BASE_ATTACK;
     float damage = 0.0f;
 
-    if (slot == EQUIPMENT_SLOT_RANGED && (
-        proto->InventoryType == INVTYPE_RANGED || proto->InventoryType == INVTYPE_THROWN ||
-        proto->InventoryType == INVTYPE_RANGEDRIGHT))
+    if (slot == EQUIPMENT_SLOT_RANGED && (proto->InventoryType == INVTYPE_RANGED || proto->InventoryType == INVTYPE_THROWN || proto->InventoryType == INVTYPE_RANGEDRIGHT))
     {
         attType = RANGED_ATTACK;
     }
@@ -8708,12 +8693,13 @@ void Player::_ApplyWeaponDamage(uint8 slot, ItemTemplate const *proto, ScalingSt
     int32 extraDPS = 0;
     if (ssv)
     {
+        float damageMultiplier = 0.0f;
         extraDPS = ssv->getDPSMod(proto->ScalingStatValue);
         if (extraDPS)
         {
             float average = extraDPS * proto->Delay / 1000.0f;
-            minDamage = 0.7f * average;
-            maxDamage = 1.3f * average;
+            minDamage = (0.7f - damageMultiplier) * average;
+            maxDamage = (1.3f + damageMultiplier) * average;
         }
     }
 
@@ -8741,16 +8727,9 @@ void Player::_ApplyWeaponDamage(uint8 slot, ItemTemplate const *proto, ScalingSt
 
     if (CanModifyStats() && (damage || proto->Delay))
         UpdateDamagePhysical(attType);
-
-    // No need to modify any physical damage for ferals as it is calculated from stats only
-    if (IsInShapeshiftForm())
-        return;
-
-    if (CanModifyStats() && (damage || proto->Delay))
-        UpdateDamagePhysical(attType);
 }
 
-void Player::_ApplyWeaponDependentAuraMods(Item *item, WeaponAttackType attackType, bool apply)
+void Player::_ApplyWeaponDependentAuraMods(Item* item, WeaponAttackType attackType, bool apply)
 {
     AuraEffectList const& auraCritList = GetAuraEffectsByType(SPELL_AURA_MOD_WEAPON_CRIT_PERCENT);
     for (AuraEffectList::const_iterator itr = auraCritList.begin(); itr != auraCritList.end(); ++itr)
@@ -8765,7 +8744,7 @@ void Player::_ApplyWeaponDependentAuraMods(Item *item, WeaponAttackType attackTy
         _ApplyWeaponDependentAuraDamageMod(item, attackType, *itr, apply);
 }
 
-void Player::_ApplyWeaponDependentAuraCritMod(Item *item, WeaponAttackType attackType, AuraEffect const* aura, bool apply)
+void Player::_ApplyWeaponDependentAuraCritMod(Item* item, WeaponAttackType attackType, AuraEffect const* aura, bool apply)
 {
     // generic not weapon specific case processes in aura code
     if (aura->GetSpellInfo()->EquippedItemClass == -1)
@@ -8784,7 +8763,7 @@ void Player::_ApplyWeaponDependentAuraCritMod(Item *item, WeaponAttackType attac
         HandleBaseModValue(mod, FLAT_MOD, float (aura->GetAmount()), apply);
 }
 
-void Player::_ApplyWeaponDependentAuraDamageMod(Item *item, WeaponAttackType attackType, AuraEffect const* aura, bool apply)
+void Player::_ApplyWeaponDependentAuraDamageMod(Item* item, WeaponAttackType attackType, AuraEffect const* aura, bool apply)
 {
     //don't apply mod if item is broken
     if (item->IsBroken() || !CanUseAttackType(attackType))
@@ -8823,7 +8802,7 @@ void Player::_ApplyWeaponDependentAuraDamageMod(Item *item, WeaponAttackType att
     }
 }
 
-void Player::ApplyItemEquipSpell(Item *item, bool apply, bool form_change)
+void Player::ApplyItemEquipSpell(Item* item, bool apply, bool form_change)
 {
     if (!item)
         return;
@@ -8928,7 +8907,7 @@ void Player::CastItemCombatSpell(Unit* target, WeaponAttackType attType, uint32 
         // If usable, try to cast item spell
         if (Item* item = GetItemByPos(INVENTORY_SLOT_BAG_0, i))
             if (!item->IsBroken() && CanUseAttackType(attType))
-                if (ItemTemplate const *proto = item->GetTemplate())
+                if (ItemTemplate const* proto = item->GetTemplate())
                 {
                     // Additional check for weapons
                     if (proto->Class == ITEM_CLASS_WEAPON)
@@ -8954,7 +8933,7 @@ void Player::CastItemCombatSpell(Unit* target, WeaponAttackType attType, uint32 
     }
 }
 
-void Player::CastItemCombatSpell(Unit* target, WeaponAttackType attType, uint32 procVictim, uint32 procEx, Item *item, ItemTemplate const* proto)
+void Player::CastItemCombatSpell(Unit* target, WeaponAttackType attType, uint32 procVictim, uint32 procEx, Item* item, ItemTemplate const* proto)
 {
     // Can do effect if any damage done to target
     if (procVictim & PROC_FLAG_TAKEN_DAMAGE)
@@ -9016,7 +8995,7 @@ void Player::CastItemCombatSpell(Unit* target, WeaponAttackType attType, uint32 
     for (uint8 e_slot = 0; e_slot < MAX_ENCHANTMENT_SLOT; ++e_slot)
     {
         uint32 enchant_id = item->GetEnchantmentId(EnchantmentSlot(e_slot));
-        SpellItemEnchantmentEntry const *pEnchant = sSpellItemEnchantmentStore.LookupEntry(enchant_id);
+        SpellItemEnchantmentEntry const* pEnchant = sSpellItemEnchantmentStore.LookupEntry(enchant_id);
         if (!pEnchant) continue;
         for (uint8 s = 0; s < MAX_ITEM_ENCHANTMENT_EFFECTS; ++s)
         {
@@ -9075,7 +9054,7 @@ void Player::CastItemCombatSpell(Unit* target, WeaponAttackType attType, uint32 
     }
 }
 
-void Player::CastItemUseSpell(Item *item, SpellCastTargets const& targets, uint8 cast_count)
+void Player::CastItemUseSpell(Item* item, SpellCastTargets const& targets, uint8 cast_count, uint32 glyphIndex)
 {
     ItemTemplate const* proto = item->GetTemplate();
     // special learning case
@@ -9126,6 +9105,7 @@ void Player::CastItemUseSpell(Item *item, SpellCastTargets const& targets, uint8
         Spell* spell = new Spell(this, spellInfo, (count > 0) ? TRIGGERED_FULL_MASK : TRIGGERED_NONE);
         spell->_CastItem = item;
         spell->_cast_count = cast_count;                   // set count of casts
+        spell->m_glyphIndex = glyphIndex;                   // glyph index
         spell->prepare(&targets);
 
         ++count;
@@ -9135,7 +9115,7 @@ void Player::CastItemUseSpell(Item *item, SpellCastTargets const& targets, uint8
     for (uint8 e_slot = 0; e_slot < MAX_ENCHANTMENT_SLOT; ++e_slot)
     {
         uint32 enchant_id = item->GetEnchantmentId(EnchantmentSlot(e_slot));
-        SpellItemEnchantmentEntry const *pEnchant = sSpellItemEnchantmentStore.LookupEntry(enchant_id);
+        SpellItemEnchantmentEntry const* pEnchant = sSpellItemEnchantmentStore.LookupEntry(enchant_id);
         if (!pEnchant)
             continue;
         for (uint8 s = 0; s < MAX_ITEM_ENCHANTMENT_EFFECTS; ++s)
@@ -9153,6 +9133,7 @@ void Player::CastItemUseSpell(Item *item, SpellCastTargets const& targets, uint8
             Spell* spell = new Spell(this, spellInfo, (count > 0) ? TRIGGERED_FULL_MASK : TRIGGERED_NONE);
             spell->_CastItem = item;
             spell->_cast_count = cast_count;               // set count of casts
+            spell->m_glyphIndex = glyphIndex;               // glyph index
             spell->prepare(&targets);
 
             ++count;
@@ -9168,7 +9149,7 @@ void Player::_RemoveAllItemMods()
     {
         if (_items[i])
         {
-            ItemTemplate const *proto = _items[i]->GetTemplate();
+            ItemTemplate const* proto = _items[i]->GetTemplate();
             if (!proto)
                 continue;
 
@@ -9179,7 +9160,26 @@ void Player::_RemoveAllItemMods()
             if (_items[i]->IsBroken() || !CanUseAttackType(GetAttackBySlot(i)))
                 continue;
 
-            _ApplyItemMods(_items[i],i, false);
+            ApplyItemEquipSpell(_items[i], false);
+            ApplyEnchantment(_items[i], false);
+        }
+    }
+
+    for (uint8 i = 0; i < INVENTORY_SLOT_BAG_END; ++i)
+    {
+        if (_items[i])
+        {
+            if (_items[i]->IsBroken() || !CanUseAttackType(GetAttackBySlot(i)))
+                continue;
+            ItemTemplate const* proto = _items[i]->GetTemplate();
+            if (!proto)
+                continue;
+
+            uint32 attacktype = Player::GetAttackBySlot(i);
+            if (attacktype < MAX_ATTACK)
+                _ApplyWeaponDependentAuraMods(_items[i], WeaponAttackType(attacktype), false);
+
+            _ApplyItemBonuses(proto, i, false);
         }
     }
 
@@ -9194,7 +9194,26 @@ void Player::_ApplyAllItemMods()
     {
         if (_items[i])
         {
-            ItemTemplate const *proto = _items[i]->GetTemplate();
+            if (_items[i]->IsBroken() || !CanUseAttackType(GetAttackBySlot(i)))
+                continue;
+
+            ItemTemplate const* proto = _items[i]->GetTemplate();
+            if (!proto)
+                continue;
+
+            uint32 attacktype = Player::GetAttackBySlot(i);
+            if (attacktype < MAX_ATTACK)
+                _ApplyWeaponDependentAuraMods(_items[i], WeaponAttackType(attacktype), true);
+
+            _ApplyItemBonuses(proto, i, true);
+        }
+    }
+
+    for (uint8 i = 0; i < INVENTORY_SLOT_BAG_END; ++i)
+    {
+        if (_items[i])
+        {
+            ItemTemplate const* proto = _items[i]->GetTemplate();
             if (!proto)
                 continue;
 
@@ -9205,7 +9224,8 @@ void Player::_ApplyAllItemMods()
             if (_items[i]->IsBroken() || !CanUseAttackType(GetAttackBySlot(i)))
                 continue;
 
-            _ApplyItemMods(_items[i], i, true);
+            ApplyItemEquipSpell(_items[i], true);
+            ApplyEnchantment(_items[i], true);
         }
     }
 
@@ -9221,7 +9241,7 @@ void Player::_ApplyAllLevelScaleItemMods(bool apply)
             if (_items[i]->IsBroken() || !CanUseAttackType(GetAttackBySlot(i)))
                 continue;
 
-            ItemTemplate const *proto = _items[i]->GetTemplate();
+            ItemTemplate const* proto = _items[i]->GetTemplate();
             if (!proto)
                 continue;
 
@@ -25686,7 +25706,7 @@ bool Player::AddItem(uint32 itemId, uint32 count)
     return true;
 }
 
-void Player::RefundItem(Item *item)
+void Player::RefundItem(Item* item)
 {
     if (!item->HasFlag(ITEM_FIELD_FLAGS, ITEM_FLAG_REFUNDABLE))
     {
@@ -25697,10 +25717,9 @@ void Player::RefundItem(Item *item)
     if (item->IsRefundExpired())    // item refund has expired
     {
         item->SetNotRefundable(this);
-        WorldPacket data(SMSG_ITEM_REFUND_RESULT, 1+8+1);
-        data << uint8(0x00);                         // refund failed
+        WorldPacket data(SMSG_ITEM_REFUND_RESULT, 8+4);
         data << uint64(item->GetGUID());             // Guid
-        data << uint8(1);                            // item can't be refunded
+        data << uint32(10);                          // Error!
         GetSession()->SendPacket(&data);
         return;
     }
@@ -25720,7 +25739,7 @@ void Player::RefundItem(Item *item)
     }
 
     bool store_error = false;
-    for (uint8 i = 0; i < MAX_ITEM_EXT_COST_CURRENCIES; ++i)
+    for (uint8 i = 0; i < MAX_ITEM_EXT_COST_ITEMS; ++i)
     {
         uint32 count = iece->RequiredItemCount[i];
         uint32 itemid = iece->RequiredItem[i];
@@ -25734,61 +25753,27 @@ void Player::RefundItem(Item *item)
                 store_error = true;
                 break;
             }
-         }
-    }
-
-    if (store_error)
-    {
-        WorldPacket data(SMSG_ITEM_REFUND_RESULT, 1+8+1);
-        data << uint8(0x00);                         // refund failed
-        data << uint64(item->GetGUID());             // Guid
-        data << uint8(9);                            // bag is full
-        GetSession()->SendPacket(&data);
-        return;
-    }
-
-    store_error = false; // reuse variable
-    for (uint8 i = 0; i < MAX_ITEM_EXT_COST_CURRENCIES; ++i)
-    {
-        uint32 currencyid = iece->RequiredCurrency[i];
-        uint32 currencycount = iece->RequiredCurrencyCount[i];
-
-        if (currencyid && currencycount)
-        {
-            const CurrencyTypesEntry* currency = sCurrencyTypesStore.LookupEntry(currencyid);
-            if (!currency)
-                continue;
-
-            uint32 totalCap = _GetCurrencyTotalCap(currency);
-            if (totalCap && GetCurrency(currencyid) + currencycount > totalCap)
-            {
-                store_error = true;
-                break;
-            }
         }
     }
 
     if (store_error)
     {
-        WorldPacket data(SMSG_ITEM_REFUND_RESULT, 8+4);  //Checked for 406
+        WorldPacket data(SMSG_ITEM_REFUND_RESULT, 8+4);
         data << uint64(item->GetGUID());                 // Guid
         data << uint32(10);                              // Error!
         GetSession()->SendPacket(&data);
         return;
     }
 
-    WorldPacket data(SMSG_ITEM_REFUND_RESULT, 8+4+4+4+4+4*4+4*4); // Checked for 406
+    WorldPacket data(SMSG_ITEM_REFUND_RESULT, 8+4+4+4+4+4*4+4*4);
     data << uint64(item->GetGUID());                    // item guid
     data << uint32(0);                                  // 0, or error code
     data << uint32(item->GetPaidMoney());               // money cost
-    //data << uint32(iece->reqhonorpoints);               // honor point cost
-    //data << uint32(iece->reqarenapoints);               // arena point cost
-    for (uint8 i = 0; i < MAX_ITEM_EXT_COST_CURRENCIES; ++i)  // item cost data
+    for (uint8 i = 0; i < MAX_ITEM_EXT_COST_CURRENCIES; ++i) // item cost data
     {
-        data << uint32(iece->RequiredCurrency[i]);
-        data << uint32(iece->RequiredCurrencyCount[i]);
+        data << uint32(iece->RequiredItem[i]);
+        data << uint32(iece->RequiredItemCount[i]);
     }
-    data << uint32(0);                                  // 0, or error code
     GetSession()->SendPacket(&data);
 
     uint32 moneyRefund = item->GetPaidMoney();  // item-> will be invalidated in DestroyItem
@@ -25812,7 +25797,7 @@ void Player::RefundItem(Item *item)
             ItemPosCountVec dest;
             InventoryResult msg = CanStoreNewItem(NULL_BAG, NULL_SLOT, dest, itemid, count);
             ASSERT(msg == EQUIP_ERR_OK) /// Already checked before
-            Item* it = StoreNewItem(dest, itemid, true);
+                Item* it = StoreNewItem(dest, itemid, true);
             SendNewItem(it, count, true, false, true);
         }
     }
@@ -25821,7 +25806,7 @@ void Player::RefundItem(Item *item)
     if (moneyRefund)
         ModifyMoney(moneyRefund); // Saved in SaveInventoryAndGoldToDB
 
-    // TODO: Grant back currency
+    // Grant back Arena and Honor points ?
 
     SaveInventoryAndGoldToDB(trans);
 
