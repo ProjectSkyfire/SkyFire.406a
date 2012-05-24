@@ -120,10 +120,10 @@ class AchievementGlobalMgr
     private:
         AchievementCriteriaDataMap m_criteriaDataMap;
 
-        // store achievement criterias by type to speed up lookup
+        // store achievement criteria by type to speed up lookup
         AchievementCriteriaEntryList m_AchievementCriteriasByType[ACHIEVEMENT_CRITERIA_TYPE_TOTAL];
         AchievementCriteriaEntryList m_AchievementCriteriasByTimedType[ACHIEVEMENT_TIMED_TYPE_MAX];
-        // store achievement criterias by achievement to speed up lookup
+        // store achievement criteria by achievement to speed up lookup
         AchievementCriteriaListByAchievement m_AchievementCriteriaListByAchievement;
         // store achievements by referenced achievement id to speed up lookup
         AchievementListByReferencedId m_AchievementListByReferencedId;

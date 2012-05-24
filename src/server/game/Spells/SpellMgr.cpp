@@ -3662,10 +3662,6 @@ void SpellMgr::LoadSpellCustomAttr()
                 // 4.06 dbc issue which was fixed in 4.20 (or 4.10?)
                 spellInfo->Effects[1].BasePoints = 7;
                 break;
-            case 86150: // Guardian of Ancient Kings
-                spellInfo->Effects[0].TriggerSpell = 86698;
-                spellInfo->Effects[0].TargetA = TARGET_UNIT_CASTER;
-                break;
             default:
                 break;
         }

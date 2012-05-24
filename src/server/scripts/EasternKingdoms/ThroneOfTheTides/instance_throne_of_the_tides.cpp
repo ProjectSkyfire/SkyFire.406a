@@ -41,6 +41,7 @@ class instance_throne_of_the_tides : public InstanceMapScript
             }
 
             uint64 LadyNazjar;
+            uint64 JellyFishElevator;
             uint64 CommanderUlthok;
             uint64 ErunakStonespeaker;
             uint64 MindbenderGhursha;
@@ -62,6 +63,7 @@ class instance_throne_of_the_tides : public InstanceMapScript
                    encounter[i] = NOT_STARTED;
 
                 LadyNazjar              = 0;
+                JellyFishElevator      = 0;
                 CommanderUlthok         = 0;
                 ErunakStonespeaker      = 0;
                 MindbenderGhursha       = 0;
@@ -135,6 +137,13 @@ class instance_throne_of_the_tides : public InstanceMapScript
                         if (encounter[0] == IN_PROGRESS)
                             HandleGameObject(0, false, go);
                         break;
+                    case GO_JELLYFISH_ELEVATOR:
+                        JellyFishElevator = go->GetGUID();
+                        if (encounter[0] == DONE)
+                            HandleGameObject(0, true, go);
+                        if (encounter[0] == IN_PROGRESS)
+                            HandleGameObject(0, false, go);
+                        break;                    
                     case GO_COMMANDER_ULTHOK_DOOR:
                         CommanderUlthokDoor = go->GetGUID();
                         if (encounter[0] == DONE)

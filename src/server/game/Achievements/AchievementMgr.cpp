@@ -273,7 +273,7 @@ void AchievementMgr::SendAchievementEarned(AchievementEntry const* achievement) 
         guild->BroadcastWorker(say_do, GetPlayer());
     }
 
-    if (achievement->flags & (ACHIEVEMENT_FLAG_REALM_FIRST_KILL|ACHIEVEMENT_FLAG_REALM_FIRST_REACH))
+    if (achievement->flags & (ACHIEVEMENT_FLAG_REALM_FIRST_KILL | ACHIEVEMENT_FLAG_REALM_FIRST_REACH))
     {
         // broadcast realm first reached
         WorldPacket data(SMSG_SERVER_FIRST_ACHIEVEMENT, strlen(GetPlayer()->GetName())+1+8+4+4);
@@ -355,7 +355,7 @@ void AchievementMgr::StartTimedAchievement(AchievementCriteriaTimedTypes type, u
                 m_timedAchievements[(*i)->ID] = (*i)->timeLimit * IN_MILLISECONDS - timeLost;
 
                 // and at client too
-                SetCriteriaProgress(*i, 0, _player, PROGRESS_SET);
+                SetCriteriaProgress(*i, 0, PROGRESS_SET);
             }
         }
     }
@@ -687,7 +687,7 @@ void AchievementGlobalMgr::LoadAchievementCriteriaData()
                 if (!achievement)
                     continue;
 
-                // exist many achievements with this criteria, use at this moment hardcoded check to skil simple case
+                // exist many achievements with this criteria, use at this moment hardcoded check to skill simple case
                 if (achievement->ID == 1282)
                     break;
 

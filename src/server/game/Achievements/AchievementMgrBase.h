@@ -211,7 +211,7 @@ namespace SkyFire
             int32 i_textId;
             uint32 i_achievementId;
     };
-}                                                           // namespace SkyFire
+}  // namespace SkyFire
 
 // Pure virtual class
 class AchievementMgrBase
@@ -223,7 +223,7 @@ class AchievementMgrBase
         virtual bool CanUpdateCriteria(AchievementCriteriaEntry const* criteria, AchievementEntry const* achievement, Player* player, uint32 miscValue1 = 0, uint32 miscValue2 = 0, Unit* unit = NULL);
         virtual bool IsCompletedCriteria(AchievementCriteriaEntry const* achievementCriteria, AchievementEntry const* achievement, Player* player);
         virtual CriteriaProgress* GetCriteriaProgress(AchievementCriteriaEntry const* entry);
-        virtual void SetCriteriaProgress(AchievementCriteriaEntry const* entry, uint32 changeValue, Player* player, ProgressType ptype = PROGRESS_SET);
+        void SetCriteriaProgress(AchievementCriteriaEntry const* entry, uint32 changeValue, ProgressType ptype = PROGRESS_SET);
         void SendCriteriaUpdate(AchievementCriteriaEntry const* entry, CriteriaProgress const* progress, uint32 timeElapsed, bool timedCompleted, Player* completer);
         void SendDirectMessageToAll(WorldPacket* data);
         virtual void UpdateAchievementCriteria(AchievementCriteriaTypes type, Player* player, uint32 miscValue1 = 0, uint32 miscValue2 = 0, Unit* unit = NULL);
@@ -244,4 +244,5 @@ class AchievementMgrBase
         Player* _player;
         Guild* _guild;
 };
+
 #endif
