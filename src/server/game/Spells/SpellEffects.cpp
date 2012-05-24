@@ -344,10 +344,6 @@ void Spell::EffectSchoolDMG(SpellEffIndex effIndex)
 
                 switch (m_spellInfo->Id)                     // better way to check unknown
                 {
-                    case 86150: // Guardian of Ancient Kings
-                        if (unitTarget)
-                        m_caster->CastSpell(m_caster, 86698, false, NULL);
-                    return;
                     // Positive/Negative Charge
                     case 28062:
                     case 28085:
