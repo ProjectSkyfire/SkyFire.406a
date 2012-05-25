@@ -439,7 +439,7 @@ enum BannersTypes
 
 enum BG_IC_MaxSpawns
 {
-    MAX_NORMAL_GAMEOBJECTS_SPAWNS               = 72,
+    MAX_NORMAL_GAMEOBJECTS_SPAWNS               = 73,
     MAX_NORMAL_NPCS_SPAWNS                      = 35,
     MAX_WORKSHOP_SPAWNS                         = 10,
     MAX_DOCKS_SPAWNS                            = 12,
@@ -539,7 +539,6 @@ struct ICGo
     float z;
     float o;
 };
-
 
 const ICGo BG_IC_Teleporters[MAX_FORTRESS_TELEPORTERS_SPAWNS] =
 {
@@ -664,6 +663,7 @@ const ICGo BG_IC_ObjSpawnlocs[MAX_NORMAL_GAMEOBJECTS_SPAWNS] =
     {BG_IC_GO_HUGE_SEAFORIUM_BOMBS_H_2, GO_HUGE_SEAFORIUM_BOMB_H, 1268.50867f, -738.1215f, 48.9175f, -1.04719758f},
     {BG_IC_GO_HUGE_SEAFORIUM_BOMBS_H_3, GO_HUGE_SEAFORIUM_BOMB_H, 1273.066f, -786.572937f, 48.9419174f, -0.94247663f},
     {BG_IC_GO_HUGE_SEAFORIUM_BOMBS_H_4, GO_HUGE_SEAFORIUM_BOMB_H, 1273.849f, -796.2778f, 48.9364281f, -2.75761318f},
+
 };
 
 const Position workshopBombs[2] =
