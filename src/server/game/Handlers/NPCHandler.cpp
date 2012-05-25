@@ -538,14 +538,14 @@ void WorldSession::SendStablePetCallback(PreparedQueryResult result, uint64 guid
         do
         {
             Field *fields = result->Fetch();
-            
+
             data << uint32(fields[1].GetUInt8());          // slot
             data << uint32(fields[2].GetUInt32());          // petnumber
             data << uint32(fields[3].GetUInt32());          // creature entry
             data << uint32(fields[4].GetUInt16());          // level
             data << fields[5].GetString();                  // name
             data << uint8(fields[1].GetUInt8() < uint8(PET_SLOT_STABLE_FIRST) ? 1 : 2);       // 1 = current, 2/3 = in stable (any from 4, 5, ... create problems with proper show)
-            
+
             ++num;
         }
         while (result->NextRow());
@@ -588,7 +588,7 @@ void WorldSession::HandleStablePet(WorldPacket & recv_data)
     Pet* pet = _player->GetPet();
 
     // can't place in stable dead pet
-    if (!pet||!pet->isAlive()||pet->getPetType() != HUNTER_PET)
+    if (!pet || !pet->isAlive() || pet->getPetType() != HUNTER_PET)
     {
         SendStableResult(STABLE_ERR_STABLE);
         return;
@@ -785,7 +785,7 @@ void WorldSession::HandleStableSwapPet(WorldPacket & recv_data)
 
     //If we move the pet already summoned...
     if (pet && pet->GetCharmInfo() && pet->GetCharmInfo()->GetPetNumber() == pet_number)
-        _player->RemovePet(pet, PET_SLOT_ACTUAL_PET_SLOT);
+        _player->RemovePet(pet, PET_SAVE_AS_CURRENT);
 
     PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_PET_SLOT_BY_ID);
 

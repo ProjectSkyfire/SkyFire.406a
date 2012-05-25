@@ -143,7 +143,7 @@ class instance_throne_of_the_tides : public InstanceMapScript
                             HandleGameObject(0, true, go);
                         if (encounter[0] == IN_PROGRESS)
                             HandleGameObject(0, false, go);
-                        break;                    
+                        break;
                     case GO_COMMANDER_ULTHOK_DOOR:
                         CommanderUlthokDoor = go->GetGUID();
                         if (encounter[0] == DONE)

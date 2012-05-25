@@ -3551,7 +3551,7 @@ void Spell::EffectLearnSpell(SpellEffIndex effIndex)
 }
 
 typedef std::list< std::pair<uint32, uint64> > DispelList;
-typedef std::list< std::pair<Aura* , uint8> > DispelChargesList;
+typedef std::list< std::pair<Aura*, uint8> > DispelChargesList;
 void Spell::EffectDispel(SpellEffIndex effIndex)
 {
     if (effectHandleMode != SPELL_EFFECT_HANDLE_HIT_TARGET)
@@ -3593,8 +3593,8 @@ void Spell::EffectDispel(SpellEffIndex effIndex)
             }
 
             // The charges / stack amounts don't count towards the total number of auras that can be dispelled.
-            // Ie: A dispel on a target with 5 stacks of Winters Chill and a Polymorph has 1 / (1 + 1) -> 50% chance to dispell
-            // Polymorph instead of 1 / (5 + 1) -> 16%.
+            // Ie: A dispel on a target with 5 stacks of Winters Chill and a Polymorph has 1 / (1 + 1) ->50% chance to dispell
+            // Polymorph instead of 1 / (5 + 1) ->16%.
             bool dispel_charges = aura->GetSpellInfo()->AttributesEx7 & SPELL_ATTR7_DISPEL_CHARGES;
             uint8 charges = dispel_charges ? aura->GetCharges() : aura->GetStackAmount();
             if (charges > 0)
@@ -4169,7 +4169,7 @@ void Spell::EffectTameCreature(SpellEffIndex /*effIndex*/)
     pet->SetUInt32Value(UNIT_FIELD_LEVEL, level);
 
     // caster have pet now
-    m_caster->SetMinion(pet, true , m_caster->ToPlayer()->getSlotForNewPet());
+    m_caster->SetMinion(pet, true, m_caster->ToPlayer()->getSlotForNewPet());
 
     pet->InitTalentForLevel();
 
@@ -4287,7 +4287,7 @@ void Spell::EffectLearnPetSpell(SpellEffIndex effIndex)
         return;
 
     pet->learnSpell(learn_spellproto->Id);
-    pet->SavePetToDB(PET_SLOT_ACTUAL_PET_SLOT);
+    pet->SavePetToDB(PET_SAVE_AS_CURRENT);
     pet->GetOwner()->PetSpellInitialize();
 }
 
@@ -6368,7 +6368,7 @@ void Spell::EffectDismissPet(SpellEffIndex effIndex)
     Pet* pet = unitTarget->ToPet();
 
     ExecuteLogEffectUnsummonObject(effIndex, pet);
-    pet->GetOwner()->RemovePet(pet, PET_SLOT_ACTUAL_PET_SLOT);
+    pet->GetOwner()->RemovePet(pet, PET_SAVE_AS_CURRENT);
 }
 
 void Spell::EffectSummonObject(SpellEffIndex effIndex)
@@ -6927,7 +6927,7 @@ void Spell::EffectSummonDeadPet(SpellEffIndex /*effIndex*/)
 
     // pet->AIM_Initialize();
     // _player->PetSpellInitialize();
-    pet->SavePetToDB(PET_SLOT_ACTUAL_PET_SLOT);
+    pet->SavePetToDB(PET_SAVE_AS_CURRENT);
 }
 
 void Spell::EffectDestroyAllTotems(SpellEffIndex /*effIndex*/)
@@ -7294,8 +7294,8 @@ void Spell::EffectStealBeneficialBuff(SpellEffIndex effIndex)
                 continue;
 
             // The charges / stack amounts don't count towards the total number of auras that can be dispelled.
-            // Ie: A dispel on a target with 5 stacks of Winters Chill and a Polymorph has 1 / (1 + 1) -> 50% chance to dispell
-            // Polymorph instead of 1 / (5 + 1) -> 16%.
+            // Ie: A dispel on a target with 5 stacks of Winters Chill and a Polymorph has 1 / (1 + 1) ->50% chance to dispell
+            // Polymorph instead of 1 / (5 + 1) ->16%.
             bool dispel_charges = aura->GetSpellInfo()->AttributesEx7 & SPELL_ATTR7_DISPEL_CHARGES;
             uint8 charges = dispel_charges ? aura->GetCharges() : aura->GetStackAmount();
             if (charges > 0)
@@ -7487,7 +7487,7 @@ void Spell::EffectCreateTamedPet(SpellEffIndex effIndex)
     pet->GetMap()->AddToMap(pet->ToCreature());
 
     // unitTarget has pet now
-    unitTarget->SetMinion(pet, true, PET_SLOT_ACTUAL_PET_SLOT);
+    unitTarget->SetMinion(pet, true, PET_SAVE_AS_CURRENT);
 
     pet->InitTalentForLevel();
 

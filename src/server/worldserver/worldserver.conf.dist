@@ -1114,6 +1114,34 @@ MaxHonorPoints = 75000
 StartHonorPoints = 0
 
 #
+#    MaxConquestPoints
+#        Max conquest points that player can have, multiplied by 100.
+#        Default: 4000
+
+MaxConquestPoints = 4000
+
+#
+#    StartConquestPoints
+#        Amount of conquest that new players will start with
+#        Default: 0
+
+StartConquestPoints = 0
+
+#
+#    MaxJusticePoints
+#        Max justice points that player can have, multiplied by 100.
+#        Default: 4000
+
+MaxJusticePoints = 4000
+
+#
+#    StartJusticePoints
+#        Amount of justice points that new players will start with
+#        Default: 0
+
+StartJusticePoints = 0
+
+#
 #    MaxArenaPoints
 #        Description: Maximum arena points a character can have.
 #        Default:     10000

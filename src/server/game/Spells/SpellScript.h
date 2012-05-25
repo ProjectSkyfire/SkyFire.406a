@@ -22,6 +22,7 @@
 #include "Util.h"
 #include "SharedDefines.h"
 #include "SpellAuraDefines.h"
+#include "Spell.h"
 #include <stack>
 
 class Unit;
@@ -295,25 +296,35 @@ class SpellScript : public _SpellScript
         SpellInfo const* GetSpellInfo();
         SpellValue const* GetSpellValue();
 
-        // methods useable after spell targets are set
-        // accessors to the "focus" targets of the spell
-        // note: do not confuse these with spell hit targets
+        // methods useable after spell is prepared
+        // accessors to the explicit targets of the spell
+        // explicit target - target selected by caster (player, game client, or script - DoCast(explicitTarget, ...), required for spell to be cast
+        // examples:
+        // -shadowstep - explicit target is the unit you want to go behind of
+        // -chain heal - explicit target is the unit to be healed first
+        // -holy nova/arcane explosion - explicit target = NULL because target you are selecting doesn't affect how spell targets are selected
+        // you can determine if spell requires explicit targets by dbc columns:
+        // - Targets - mask of explicit target types
+        // - ImplicitTargetXX set to TARGET_XXX_TARGET_YYY, _TARGET_ here means that explicit target is used by the effect, so spell needs one too
+
         // returns: WorldLocation which was selected as a spell destination or NULL
-        WorldLocation const* GetTargetDest();
+        WorldLocation const* GetExplTargetDest();
 
-        void SetTargetDest(WorldLocation& loc);
+        void SetExplTargetDest(WorldLocation& loc);
 
-        // returns: Unit which was selected as a spell target or NULL
-        Unit* GetTargetUnit();
+        // returns: WorldObject which was selected as an explicit spell target or NULL if there's no target
+        WorldObject* GetExplTargetWorldObject();
 
-        // returns: GameObject which was selected as a spell target or NULL
-        GameObject* GetTargetGObj();
+        // returns: Unit which was selected as an explicit spell target or NULL if there's no target
+        Unit* GetExplTargetUnit();
 
-        // returns: Item which was selected as a spell target or NULL
-        Item* GetTargetItem();
+        // returns: GameObject which was selected as an explicit spell target or NULL if there's no target
+        GameObject* GetExplTargetGObj();
+
+        // returns: Item which was selected as an explicit spell target or NULL if there's no target
+        Item* GetExplTargetItem();
 
         // methods useable only during spell hit on target, or during spell launch on target:
-
         // returns: target of current effect if it was Unit otherwise NULL
         Unit* GetHitUnit();
         // returns: target of current effect if it was Creature otherwise NULL
@@ -325,7 +336,7 @@ class SpellScript : public _SpellScript
         // returns: target of current effect if it was GameObject otherwise NULL
         GameObject* GetHitGObj();
         // returns: destination of current effect
-        WorldLocation const* GetHitDest();
+        WorldLocation* GetHitDest();
         // setter/getter for for damage done by spell to target of spell hit
         // returns damage calculated before hit, and real dmg done after hit
         int32 GetHitDamage();
@@ -336,7 +347,7 @@ class SpellScript : public _SpellScript
         int32 GetHitHeal();
         void SetHitHeal(int32 heal);
         void PreventHitHeal() { SetHitHeal(0); }
-
+        Spell* GetSpell() { return m_spell; }
         // returns current spell hit target aura
         Aura* GetHitAura();
         // prevents applying aura on current spell hit target
@@ -412,7 +423,7 @@ class AuraScript : public _SpellScript
         typedef void(CLASSNAME::*AuraEffectUpdatePeriodicFnType)(AuraEffect*); \
         typedef void(CLASSNAME::*AuraEffectCalcAmountFnType)(AuraEffect const*, int32 &, bool &); \
         typedef void(CLASSNAME::*AuraEffectCalcPeriodicFnType)(AuraEffect const*, bool &, int32 &); \
-        typedef void(CLASSNAME::*AuraEffectCalcSpellModFnType)(AuraEffect const* , SpellModifier* &, SpellInfo const *, Unit *); \
+        typedef void(CLASSNAME::*AuraEffectCalcSpellModFnType)(AuraEffect const*, SpellModifier* &, SpellInfo const *, Unit *); \
         typedef void(CLASSNAME::*AuraEffectAbsorbFnType)(AuraEffect*, DamageInfo &, uint32 &); \
         typedef void(CLASSNAME::*AuraEffectProcFnType)(AuraEffect const *, Unit *, Unit *, uint32, SpellInfo const*, uint32, uint32, WeaponAttackType, int32); \
 
@@ -500,11 +511,11 @@ class AuraScript : public _SpellScript
         };
         class EffectProcHandler : public EffectBase
         {
-            public:
-                EffectProcHandler(AuraEffectProcFnType _pEffectProcScript, uint8 _effIndex, uint16 _effName);
-                void Call(AuraScript * auraScript, AuraEffect const * _aurEff, Unit* pUnit, Unit *victim, uint32 damage, SpellInfo const* procSpell, uint32 procFlag, uint32 procExtra, WeaponAttackType attType, int32 cooldown);
-            private:
-                AuraEffectProcFnType pEffectProcScript;
+        public:
+            EffectProcHandler(AuraEffectProcFnType _pEffectProcScript, uint8 _effIndex, uint16 _effName);
+            void Call(AuraScript * auraScript, AuraEffect const * _aurEff, Unit* pUnit, Unit *victim, uint32 damage, SpellInfo const* procSpell, uint32 procFlag, uint32 procExtra, WeaponAttackType attType, int32 cooldown);
+        private:
+            AuraEffectProcFnType pEffectProcScript;
         };
         class EffectManaShieldHandler : public EffectBase
         {

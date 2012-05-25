@@ -16,13 +16,12 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <string>
 #include "Spell.h"
 #include "SpellAuras.h"
 #include "SpellScript.h"
 #include "SpellMgr.h"
 #include "SpellAuraEffects.h"
-
-#include <string>
 
 bool _SpellScript::_Validate(SpellInfo const* entry)
 {
@@ -323,29 +322,34 @@ SpellInfo const* SpellScript::GetSpellInfo()
     return m_spell->GetSpellInfo();
 }
 
-WorldLocation const* SpellScript::GetTargetDest()
+WorldLocation const* SpellScript::GetExplTargetDest()
 {
     if (m_spell->m_targets.HasDst())
         return m_spell->m_targets.GetDstPos();
     return NULL;
 }
 
-void SpellScript::SetTargetDest(WorldLocation& loc)
+void SpellScript::SetExplTargetDest(WorldLocation& loc)
 {
     m_spell->m_targets.SetDst(loc);
 }
 
-Unit* SpellScript::GetTargetUnit()
+WorldObject* SpellScript::GetExplTargetWorldObject()
+{
+    return m_spell->m_targets.GetObjectTarget();
+}
+
+Unit* SpellScript::GetExplTargetUnit()
 {
     return m_spell->m_targets.GetUnitTarget();
 }
 
-GameObject* SpellScript::GetTargetGObj()
+GameObject* SpellScript::GetExplTargetGObj()
 {
     return m_spell->m_targets.GetGOTarget();
 }
 
-Item* SpellScript::GetTargetItem()
+Item* SpellScript::GetExplTargetItem()
 {
     return m_spell->m_targets.GetItemTarget();
 }
@@ -406,7 +410,7 @@ GameObject* SpellScript::GetHitGObj()
     return m_spell->gameObjTarget;
 }
 
-WorldLocation const* SpellScript::GetHitDest()
+WorldLocation* SpellScript::GetHitDest()
 {
     if (!IsInEffectHook())
     {
@@ -642,8 +646,7 @@ void AuraScript::AuraDispelHandler::Call(AuraScript* auraScript, DispelInfo* _di
     (auraScript->*pHandlerScript)(_dispelInfo);
 }
 
-AuraScript::EffectBase::EffectBase(uint8 _effIndex, uint16 _effName)
-    : _SpellScript::EffectAuraNameCheck(_effName), _SpellScript::EffectHook(_effIndex)
+AuraScript::EffectBase::EffectBase(uint8 _effIndex, uint16 _effName) : _SpellScript::EffectAuraNameCheck(_effName), _SpellScript::EffectHook(_effIndex)
 {
 }
 
@@ -657,8 +660,7 @@ std::string AuraScript::EffectBase::ToString()
     return "Index: " + EffIndexToString() + " AuraName: " +_SpellScript::EffectAuraNameCheck::ToString();
 }
 
-AuraScript::EffectPeriodicHandler::EffectPeriodicHandler(AuraEffectPeriodicFnType _pEffectHandlerScript, uint8 _effIndex, uint16 _effName)
-    : AuraScript::EffectBase(_effIndex, _effName)
+AuraScript::EffectPeriodicHandler::EffectPeriodicHandler(AuraEffectPeriodicFnType _pEffectHandlerScript, uint8 _effIndex, uint16 _effName) : AuraScript::EffectBase(_effIndex, _effName)
 {
     pEffectHandlerScript = _pEffectHandlerScript;
 }
@@ -668,8 +670,7 @@ void AuraScript::EffectPeriodicHandler::Call(AuraScript* auraScript, AuraEffect 
     (auraScript->*pEffectHandlerScript)(_aurEff);
 }
 
-AuraScript::EffectUpdatePeriodicHandler::EffectUpdatePeriodicHandler(AuraEffectUpdatePeriodicFnType _pEffectHandlerScript, uint8 _effIndex, uint16 _effName)
-    : AuraScript::EffectBase(_effIndex, _effName)
+AuraScript::EffectUpdatePeriodicHandler::EffectUpdatePeriodicHandler(AuraEffectUpdatePeriodicFnType _pEffectHandlerScript, uint8 _effIndex, uint16 _effName) : AuraScript::EffectBase(_effIndex, _effName)
 {
     pEffectHandlerScript = _pEffectHandlerScript;
 }
@@ -679,8 +680,7 @@ void AuraScript::EffectUpdatePeriodicHandler::Call(AuraScript* auraScript, AuraE
     (auraScript->*pEffectHandlerScript)(aurEff);
 }
 
-AuraScript::EffectCalcAmountHandler::EffectCalcAmountHandler(AuraEffectCalcAmountFnType _pEffectHandlerScript, uint8 _effIndex, uint16 _effName)
-    : AuraScript::EffectBase(_effIndex, _effName)
+AuraScript::EffectCalcAmountHandler::EffectCalcAmountHandler(AuraEffectCalcAmountFnType _pEffectHandlerScript, uint8 _effIndex, uint16 _effName) : AuraScript::EffectBase(_effIndex, _effName)
 {
     pEffectHandlerScript = _pEffectHandlerScript;
 }
@@ -690,8 +690,7 @@ void AuraScript::EffectCalcAmountHandler::Call(AuraScript* auraScript, AuraEffec
     (auraScript->*pEffectHandlerScript)(aurEff, amount, canBeRecalculated);
 }
 
-AuraScript::EffectCalcPeriodicHandler::EffectCalcPeriodicHandler(AuraEffectCalcPeriodicFnType _pEffectHandlerScript, uint8 _effIndex, uint16 _effName)
-    : AuraScript::EffectBase(_effIndex, _effName)
+AuraScript::EffectCalcPeriodicHandler::EffectCalcPeriodicHandler(AuraEffectCalcPeriodicFnType _pEffectHandlerScript, uint8 _effIndex, uint16 _effName) : AuraScript::EffectBase(_effIndex, _effName)
 {
     pEffectHandlerScript = _pEffectHandlerScript;
 }
@@ -701,8 +700,7 @@ void AuraScript::EffectCalcPeriodicHandler::Call(AuraScript* auraScript, AuraEff
     (auraScript->*pEffectHandlerScript)(aurEff, isPeriodic, periodicTimer);
 }
 
-AuraScript::EffectCalcSpellModHandler::EffectCalcSpellModHandler(AuraEffectCalcSpellModFnType _pEffectHandlerScript, uint8 _effIndex, uint16 _effName)
-    : AuraScript::EffectBase(_effIndex, _effName)
+AuraScript::EffectCalcSpellModHandler::EffectCalcSpellModHandler(AuraEffectCalcSpellModFnType _pEffectHandlerScript, uint8 _effIndex, uint16 _effName) : AuraScript::EffectBase(_effIndex, _effName)
 {
     pEffectHandlerScript = _pEffectHandlerScript;
 }
@@ -712,8 +710,7 @@ void AuraScript::EffectCalcSpellModHandler::Call(AuraScript* auraScript, AuraEff
     (auraScript->*pEffectHandlerScript)(aurEff, spellMod, spellInfo, target);
 }
 
-AuraScript::EffectApplyHandler::EffectApplyHandler(AuraEffectApplicationModeFnType _pEffectHandlerScript, uint8 _effIndex, uint16 _effName, AuraEffectHandleModes _mode)
-    : AuraScript::EffectBase(_effIndex, _effName)
+AuraScript::EffectApplyHandler::EffectApplyHandler(AuraEffectApplicationModeFnType _pEffectHandlerScript, uint8 _effIndex, uint16 _effName, AuraEffectHandleModes _mode) : AuraScript::EffectBase(_effIndex, _effName)
 {
     pEffectHandlerScript = _pEffectHandlerScript;
     mode = _mode;
@@ -725,8 +722,7 @@ void AuraScript::EffectApplyHandler::Call(AuraScript* auraScript, AuraEffect con
         (auraScript->*pEffectHandlerScript)(_aurEff, _mode);
 }
 
-AuraScript::EffectAbsorbHandler::EffectAbsorbHandler(AuraEffectAbsorbFnType _pEffectHandlerScript, uint8 _effIndex)
-    : AuraScript::EffectBase(_effIndex, SPELL_AURA_SCHOOL_ABSORB)
+AuraScript::EffectAbsorbHandler::EffectAbsorbHandler(AuraEffectAbsorbFnType _pEffectHandlerScript, uint8 _effIndex) : AuraScript::EffectBase(_effIndex, SPELL_AURA_SCHOOL_ABSORB)
 {
     pEffectHandlerScript = _pEffectHandlerScript;
 }
@@ -736,8 +732,7 @@ void AuraScript::EffectAbsorbHandler::Call(AuraScript* auraScript, AuraEffect* a
     (auraScript->*pEffectHandlerScript)(aurEff, dmgInfo, absorbAmount);
 }
 
-AuraScript::EffectManaShieldHandler::EffectManaShieldHandler(AuraEffectAbsorbFnType _pEffectHandlerScript, uint8 _effIndex)
-    : AuraScript::EffectBase(_effIndex, SPELL_AURA_MANA_SHIELD)
+AuraScript::EffectManaShieldHandler::EffectManaShieldHandler(AuraEffectAbsorbFnType _pEffectHandlerScript, uint8 _effIndex) : AuraScript::EffectBase(_effIndex, SPELL_AURA_MANA_SHIELD)
 {
     pEffectHandlerScript = _pEffectHandlerScript;
 }
@@ -747,8 +742,7 @@ void AuraScript::EffectManaShieldHandler::Call(AuraScript* auraScript, AuraEffec
     (auraScript->*pEffectHandlerScript)(aurEff, dmgInfo, absorbAmount);
 }
 
-AuraScript::EffectProcHandler::EffectProcHandler(AuraEffectProcFnType _pEffectProcScript, uint8 _effIndex, uint16 _effName)
-    : AuraScript::EffectBase(_effIndex, _effName)
+AuraScript::EffectProcHandler::EffectProcHandler(AuraEffectProcFnType _pEffectProcScript, uint8 _effIndex, uint16 _effName) : AuraScript::EffectBase(_effIndex, _effName)
 {
     pEffectProcScript = _pEffectProcScript;
 }
@@ -807,6 +801,7 @@ void AuraScript::PreventDefaultAction()
         case AURA_SCRIPT_HOOK_EFFECT_APPLY:
         case AURA_SCRIPT_HOOK_EFFECT_REMOVE:
         case AURA_SCRIPT_HOOK_EFFECT_PERIODIC:
+        case AURA_SCRIPT_HOOK_EFFECT_ABSORB:
         case AURA_SCRIPT_HOOK_EFFECT_PROC:
             m_defaultActionPrevented = true;
             break;

@@ -266,7 +266,7 @@ public:
 
         void HandleDummy(SpellEffIndex /*effIndex*/)
         {
-            if (Unit* target = GetTargetUnit())
+            if (Unit* target = GetExplTargetUnit())
                 if (target->GetTypeId() == TYPEID_UNIT && target->HasAura(SPELL_FORCE_SHIELD_ARCANE_PURPLE_X3))
                     // Make sure nobody else is channeling the same target
                     if (!target->HasAura(SPELL_SCOURGING_CRYSTAL_CONTROLLER))
@@ -303,7 +303,7 @@ public:
 
         void HandleDummy(SpellEffIndex /*effIndex*/)
         {
-            if (Unit* target = GetTargetUnit())
+            if (Unit* target = GetHitUnit())
                 if (target->GetTypeId() == TYPEID_UNIT)
                     target->RemoveAurasDueToSpell(SPELL_FORCE_SHIELD_ARCANE_PURPLE_X3);
         }
@@ -825,36 +825,38 @@ enum eQuest12659Data
 
 class spell_q12659_ahunaes_knife : public SpellScriptLoader
 {
-public:
-    spell_q12659_ahunaes_knife() : SpellScriptLoader("spell_q12659_ahunaes_knife") { }
+    public:
+        spell_q12659_ahunaes_knife() : SpellScriptLoader("spell_q12659_ahunaes_knife") { }
 
-    class spell_q12659_ahunaes_knife_SpellScript : public SpellScript
-    {
-        PrepareSpellScript(spell_q12659_ahunaes_knife_SpellScript);
-
-        void HandleDummy(SpellEffIndex /*effIndex*/)
+        class spell_q12659_ahunaes_knife_SpellScript : public SpellScript
         {
-            Player* caster = GetCaster()->ToPlayer();
-            if (!caster)
-                return;
+            PrepareSpellScript(spell_q12659_ahunaes_knife_SpellScript);
 
-            if (Creature* target = GetTargetUnit()->ToCreature())
+            bool Load()
             {
-                target->ForcedDespawn();
-                caster->KilledMonsterCredit(NPC_SCALPS_KC_BUNNY, 0);
+                return GetCaster()->GetTypeId() == TYPEID_PLAYER;
             }
-        }
 
-        void Register()
+            void HandleDummy(SpellEffIndex /*effIndex*/)
+            {
+                Player* caster = GetCaster()->ToPlayer();
+                if (Creature* target = GetHitCreature())
+                {
+                    target->DespawnOrUnsummon();
+                    caster->KilledMonsterCredit(NPC_SCALPS_KC_BUNNY, 0);
+                }
+            }
+
+            void Register()
+            {
+                OnEffectHitTarget += SpellEffectFn(spell_q12659_ahunaes_knife_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
+            }
+        };
+
+        SpellScript* GetSpellScript() const
         {
-            OnEffectHitTarget += SpellEffectFn(spell_q12659_ahunaes_knife_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
-        }
-    };
-
-    SpellScript* GetSpellScript() const
-    {
-        return new spell_q12659_ahunaes_knife_SpellScript();
-    };
+            return new spell_q12659_ahunaes_knife_SpellScript();
+        };
 };
 
 enum StoppingTheSpread

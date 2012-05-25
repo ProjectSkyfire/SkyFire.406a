@@ -293,7 +293,7 @@ void LoadDBCStores(const std::string& dataPath, uint32& availableDbcLocales)
 
     StoreProblemList bad_dbc_files;
 
-    for (uint8 i = 0 ; i < TOTAL_LOCALES; ++i)
+    for (uint8 i = 0; i < TOTAL_LOCALES; ++i)
         availableDbcLocales |= (1 << i);
 
     LoadDBC(availableDbcLocales, bad_dbc_files, sAreaStore, dbcPath, "AreaTable.dbc");
@@ -423,7 +423,7 @@ void LoadDBCStores(const std::string& dataPath, uint32& availableDbcLocales)
 
     // HACK for map 0, data removed in 4.0 - by LordJZ
     /// ToDo: Find a way to correctly fix this
-    sMapDifficultyMap[MAKE_PAIR32(0/*map*/, 0/*difficulty*/)] = MapDifficulty(0/*resetTime*/ , 0/*mapPlayers*/, false /*HasErrorMessage*/);
+    sMapDifficultyMap[MAKE_PAIR32(0/*map*/, 0/*difficulty*/)] = MapDifficulty(0/*resetTime*/, 0/*mapPlayers*/, false /*HasErrorMessage*/);
 
     sMapDifficultyStore.Clear();
 

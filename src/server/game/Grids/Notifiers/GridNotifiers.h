@@ -128,12 +128,7 @@ namespace SkyFire
         float i_distSq;
         uint32 team;
         Player const* skipped_receiver;
-        MessageDistDeliverer(WorldObject* src, WorldPacket* msg, float dist, bool own_team_only = false, Player const* skipped = NULL)
-            : i_source(src), i_message(msg), i_phaseMask(src->GetPhaseMask()), i_distSq(dist * dist)
-            , team((own_team_only && src->GetTypeId() == TYPEID_PLAYER) ? ((Player*)src)->GetTeam() : 0)
-            , skipped_receiver(skipped)
-        {
-        }
+        MessageDistDeliverer(WorldObject* src, WorldPacket* msg, float dist, bool own_team_only = false, Player const* skipped = NULL) : i_source(src), i_message(msg), i_phaseMask(src->GetPhaseMask()), i_distSq(dist * dist), team((own_team_only && src->GetTypeId() == TYPEID_PLAYER) ? ((Player*)src)->GetTeam() : 0), skipped_receiver(skipped) {}
         void Visit(PlayerMapType &m);
         void Visit(CreatureMapType &m);
         void Visit(DynamicObjectMapType &m);
@@ -175,8 +170,7 @@ namespace SkyFire
         WorldObject* &i_object;
         Check &i_check;
 
-        WorldObjectSearcher(WorldObject const* searcher, WorldObject* & result, Check& check, uint32 mapTypeMask = GRID_MAP_TYPE_MASK_ALL)
-            : i_mapTypeMask(mapTypeMask), i_phaseMask(searcher->GetPhaseMask()), i_object(result), i_check(check) {}
+        WorldObjectSearcher(WorldObject const* searcher, WorldObject* & result, Check& check, uint32 mapTypeMask = GRID_MAP_TYPE_MASK_ALL) : i_mapTypeMask(mapTypeMask), i_phaseMask(searcher->GetPhaseMask()), i_object(result), i_check(check) {}
 
         void Visit(GameObjectMapType &m);
         void Visit(PlayerMapType &m);
@@ -195,8 +189,7 @@ namespace SkyFire
         WorldObject* &i_object;
         Check &i_check;
 
-        WorldObjectLastSearcher(WorldObject const* searcher, WorldObject* & result, Check& check, uint32 mapTypeMask = GRID_MAP_TYPE_MASK_ALL)
-            :  i_mapTypeMask(mapTypeMask), i_phaseMask(searcher->GetPhaseMask()), i_object(result), i_check(check) {}
+        WorldObjectLastSearcher(WorldObject const* searcher, WorldObject* & result, Check& check, uint32 mapTypeMask = GRID_MAP_TYPE_MASK_ALL) : i_mapTypeMask(mapTypeMask), i_phaseMask(searcher->GetPhaseMask()), i_object(result), i_check(check) {}
 
         void Visit(GameObjectMapType &m);
         void Visit(PlayerMapType &m);
@@ -215,8 +208,7 @@ namespace SkyFire
         std::list<WorldObject*> &i_objects;
         Check& i_check;
 
-        WorldObjectListSearcher(WorldObject const* searcher, std::list<WorldObject*> &objects, Check & check, uint32 mapTypeMask = GRID_MAP_TYPE_MASK_ALL)
-            : i_mapTypeMask(mapTypeMask), i_phaseMask(searcher->GetPhaseMask()), i_objects(objects), i_check(check) {}
+        WorldObjectListSearcher(WorldObject const* searcher, std::list<WorldObject*> &objects, Check & check, uint32 mapTypeMask = GRID_MAP_TYPE_MASK_ALL) : i_mapTypeMask(mapTypeMask), i_phaseMask(searcher->GetPhaseMask()), i_objects(objects), i_check(check) {}
 
         void Visit(PlayerMapType &m);
         void Visit(CreatureMapType &m);
@@ -234,8 +226,7 @@ namespace SkyFire
         uint32 i_phaseMask;
         Do const& i_do;
 
-        WorldObjectWorker(WorldObject const* searcher, Do const& _do, uint32 mapTypeMask = GRID_MAP_TYPE_MASK_ALL)
-            : i_mapTypeMask(mapTypeMask), i_phaseMask(searcher->GetPhaseMask()), i_do(_do) {}
+        WorldObjectWorker(WorldObject const* searcher, Do const& _do, uint32 mapTypeMask = GRID_MAP_TYPE_MASK_ALL) : i_mapTypeMask(mapTypeMask), i_phaseMask(searcher->GetPhaseMask()), i_do(_do) {}
 
         void Visit(GameObjectMapType &m)
         {
@@ -293,8 +284,7 @@ namespace SkyFire
         GameObject* &i_object;
         Check &i_check;
 
-        GameObjectSearcher(WorldObject const* searcher, GameObject* & result, Check& check)
-            : i_phaseMask(searcher->GetPhaseMask()), i_object(result), i_check(check) {}
+        GameObjectSearcher(WorldObject const* searcher, GameObject* & result, Check& check) : i_phaseMask(searcher->GetPhaseMask()), i_object(result), i_check(check) {}
 
         void Visit(GameObjectMapType &m);
 
@@ -309,8 +299,7 @@ namespace SkyFire
         GameObject* &i_object;
         Check& i_check;
 
-        GameObjectLastSearcher(WorldObject const* searcher, GameObject* & result, Check& check)
-            : i_phaseMask(searcher->GetPhaseMask()), i_object(result), i_check(check) {}
+        GameObjectLastSearcher(WorldObject const* searcher, GameObject* & result, Check& check) : i_phaseMask(searcher->GetPhaseMask()), i_object(result), i_check(check) {}
 
         void Visit(GameObjectMapType &m);
 
@@ -324,8 +313,7 @@ namespace SkyFire
         std::list<GameObject*> &i_objects;
         Check& i_check;
 
-        GameObjectListSearcher(WorldObject const* searcher, std::list<GameObject*> &objects, Check & check)
-            : i_phaseMask(searcher->GetPhaseMask()), i_objects(objects), i_check(check) {}
+        GameObjectListSearcher(WorldObject const* searcher, std::list<GameObject*> &objects, Check & check) : i_phaseMask(searcher->GetPhaseMask()), i_objects(objects), i_check(check) {}
 
         void Visit(GameObjectMapType &m);
 
@@ -362,8 +350,7 @@ namespace SkyFire
         Unit* &i_object;
         Check & i_check;
 
-        UnitSearcher(WorldObject const* searcher, Unit* & result, Check & check)
-            : i_phaseMask(searcher->GetPhaseMask()), i_object(result), i_check(check) {}
+        UnitSearcher(WorldObject const* searcher, Unit* & result, Check & check) : i_phaseMask(searcher->GetPhaseMask()), i_object(result), i_check(check) {}
 
         void Visit(CreatureMapType &m);
         void Visit(PlayerMapType &m);
@@ -379,8 +366,7 @@ namespace SkyFire
         Unit* &i_object;
         Check & i_check;
 
-        UnitLastSearcher(WorldObject const* searcher, Unit* & result, Check & check)
-            : i_phaseMask(searcher->GetPhaseMask()), i_object(result), i_check(check) {}
+        UnitLastSearcher(WorldObject const* searcher, Unit* & result, Check & check) : i_phaseMask(searcher->GetPhaseMask()), i_object(result), i_check(check) {}
 
         void Visit(CreatureMapType &m);
         void Visit(PlayerMapType &m);
@@ -396,8 +382,7 @@ namespace SkyFire
         std::list<Unit*> &i_objects;
         Check& i_check;
 
-        UnitListSearcher(WorldObject const* searcher, std::list<Unit*> &objects, Check & check)
-            : i_phaseMask(searcher->GetPhaseMask()), i_objects(objects), i_check(check) {}
+        UnitListSearcher(WorldObject const* searcher, std::list<Unit*> &objects, Check & check) : i_phaseMask(searcher->GetPhaseMask()), i_objects(objects), i_check(check) {}
 
         void Visit(PlayerMapType &m);
         void Visit(CreatureMapType &m);
@@ -414,8 +399,7 @@ namespace SkyFire
         Creature* &i_object;
         Check & i_check;
 
-        CreatureSearcher(WorldObject const* searcher, Creature* & result, Check & check)
-            : i_phaseMask(searcher->GetPhaseMask()), i_object(result), i_check(check) {}
+        CreatureSearcher(WorldObject const* searcher, Creature* & result, Check & check) : i_phaseMask(searcher->GetPhaseMask()), i_object(result), i_check(check) {}
 
         void Visit(CreatureMapType &m);
 
@@ -430,8 +414,7 @@ namespace SkyFire
         Creature* &i_object;
         Check & i_check;
 
-        CreatureLastSearcher(WorldObject const* searcher, Creature* & result, Check & check)
-            : i_phaseMask(searcher->GetPhaseMask()), i_object(result), i_check(check) {}
+        CreatureLastSearcher(WorldObject const* searcher, Creature* & result, Check & check) : i_phaseMask(searcher->GetPhaseMask()), i_object(result), i_check(check) {}
 
         void Visit(CreatureMapType &m);
 
@@ -445,8 +428,7 @@ namespace SkyFire
         std::list<Creature*> &i_objects;
         Check& i_check;
 
-        CreatureListSearcher(WorldObject const* searcher, std::list<Creature*> &objects, Check & check)
-            : i_phaseMask(searcher->GetPhaseMask()), i_objects(objects), i_check(check) {}
+        CreatureListSearcher(WorldObject const* searcher, std::list<Creature*> &objects, Check & check) : i_phaseMask(searcher->GetPhaseMask()), i_objects(objects), i_check(check) {}
 
         void Visit(CreatureMapType &m);
 
@@ -459,8 +441,7 @@ namespace SkyFire
         uint32 i_phaseMask;
         Do& i_do;
 
-        CreatureWorker(WorldObject const* searcher, Do& _do)
-            : i_phaseMask(searcher->GetPhaseMask()), i_do(_do) {}
+        CreatureWorker(WorldObject const* searcher, Do& _do) : i_phaseMask(searcher->GetPhaseMask()), i_do(_do) {}
 
         void Visit(CreatureMapType &m)
         {
@@ -481,8 +462,7 @@ namespace SkyFire
         Player* &i_object;
         Check & i_check;
 
-        PlayerSearcher(WorldObject const* searcher, Player* & result, Check & check)
-            : i_phaseMask(searcher->GetPhaseMask()), i_object(result), i_check(check) {}
+        PlayerSearcher(WorldObject const* searcher, Player* & result, Check & check) : i_phaseMask(searcher->GetPhaseMask()), i_object(result), i_check(check) {}
 
         void Visit(PlayerMapType &m);
 
@@ -496,8 +476,7 @@ namespace SkyFire
         std::list<Player*> &i_objects;
         Check& i_check;
 
-        PlayerListSearcher(WorldObject const* searcher, std::list<Player*> &objects, Check & check)
-            : i_phaseMask(searcher->GetPhaseMask()), i_objects(objects), i_check(check) {}
+        PlayerListSearcher(WorldObject const* searcher, std::list<Player*> &objects, Check & check) : i_phaseMask(searcher->GetPhaseMask()), i_objects(objects), i_check(check) {}
 
         void Visit(PlayerMapType &m);
 
@@ -511,9 +490,7 @@ namespace SkyFire
         Player* &i_object;
         Check& i_check;
 
-        PlayerLastSearcher(WorldObject const* searcher, Player*& result, Check& check) : i_phaseMask(searcher->GetPhaseMask()), i_object(result), i_check(check)
-        {
-        }
+        PlayerLastSearcher(WorldObject const* searcher, Player*& result, Check& check) : i_phaseMask(searcher->GetPhaseMask()), i_object(result), i_check(check) {}
 
         void Visit(PlayerMapType& m);
 
@@ -526,8 +503,7 @@ namespace SkyFire
         uint32 i_phaseMask;
         Do& i_do;
 
-        PlayerWorker(WorldObject const* searcher, Do& _do)
-            : i_phaseMask(searcher->GetPhaseMask()), i_do(_do) {}
+        PlayerWorker(WorldObject const* searcher, Do& _do) : i_phaseMask(searcher->GetPhaseMask()), i_do(_do) {}
 
         void Visit(PlayerMapType &m)
         {
@@ -546,8 +522,7 @@ namespace SkyFire
         float i_dist;
         Do& i_do;
 
-        PlayerDistWorker(WorldObject const* searcher, float _dist, Do& _do)
-            : i_searcher(searcher), i_dist(_dist), i_do(_do) {}
+        PlayerDistWorker(WorldObject const* searcher, float _dist, Do& _do) : i_searcher(searcher), i_dist(_dist), i_do(_do) {}
 
         void Visit(PlayerMapType &m)
         {
@@ -578,9 +553,7 @@ namespace SkyFire
     class AnyDeadUnitSpellTargetInRangeCheck : public AnyDeadUnitObjectInRangeCheck
     {
         public:
-            AnyDeadUnitSpellTargetInRangeCheck(Unit* searchObj, float range, SpellInfo const* spellInfo, SpellTargetCheckTypes check)
-                : AnyDeadUnitObjectInRangeCheck(searchObj, range), i_spellInfo(spellInfo), i_check(searchObj, searchObj, spellInfo, check, NULL)
-            {}
+            AnyDeadUnitSpellTargetInRangeCheck(Unit* searchObj, float range, SpellInfo const* spellInfo, SpellTargetCheckTypes check) : AnyDeadUnitObjectInRangeCheck(searchObj, range), i_spellInfo(spellInfo), i_check(searchObj, searchObj, spellInfo, check, NULL) {}
             bool operator()(Player* u);
             bool operator()(Corpse* u);
             bool operator()(Creature* u);
@@ -734,8 +707,7 @@ namespace SkyFire
             FriendlyCCedInRange(Unit const* obj, float range) : i_obj(obj), i_range(range) {}
             bool operator()(Unit* u)
             {
-                if (u->isAlive() && u->isInCombat() && !i_obj->IsHostileTo(u) && i_obj->IsWithinDistInMap(u, i_range) &&
-                    (u->isFeared() || u->isCharmed() || u->isFrozen() || u->HasUnitState(UNIT_STATE_STUNNED) || u->HasUnitState(UNIT_STATE_CONFUSED)))
+                if (u->isAlive() && u->isInCombat() && !i_obj->IsHostileTo(u) && i_obj->IsWithinDistInMap(u, i_range) && (u->isFeared() || u->isCharmed() || u->isFrozen() || u->HasUnitState(UNIT_STATE_STUNNED) || u->HasUnitState(UNIT_STATE_CONFUSED)))
                 {
                     return true;
                 }
@@ -752,8 +724,7 @@ namespace SkyFire
             FriendlyMissingBuffInRange(Unit const* obj, float range, uint32 spellid) : i_obj(obj), i_range(range), i_spell(spellid) {}
             bool operator()(Unit* u)
             {
-                if (u->isAlive() && u->isInCombat() && !i_obj->IsHostileTo(u) && i_obj->IsWithinDistInMap(u, i_range) &&
-                    !(u->HasAura(i_spell)))
+                if (u->isAlive() && u->isInCombat() && !i_obj->IsHostileTo(u) && i_obj->IsWithinDistInMap(u, i_range) && !(u->HasAura(i_spell)))
                 {
                     return true;
                 }
@@ -811,8 +782,7 @@ namespace SkyFire
     class AnyUnfriendlyAttackableVisibleUnitInObjectRangeCheck
     {
         public:
-            AnyUnfriendlyAttackableVisibleUnitInObjectRangeCheck(Unit const* funit, float range)
-                : i_funit(funit), i_range(range) {}
+            AnyUnfriendlyAttackableVisibleUnitInObjectRangeCheck(Unit const* funit, float range) : i_funit(funit), i_range(range) {}
 
             bool operator()(const Unit* u)
             {
@@ -926,8 +896,7 @@ namespace SkyFire
     class AnyAoETargetUnitInObjectRangeCheck
     {
         public:
-            AnyAoETargetUnitInObjectRangeCheck(WorldObject const* obj, Unit const* funit, float range)
-                : i_obj(obj), i_funit(funit), _spellInfo(NULL), i_range(range)
+            AnyAoETargetUnitInObjectRangeCheck(WorldObject const* obj, Unit const* funit, float range) : i_obj(obj), i_funit(funit), _spellInfo(NULL), i_range(range)
             {
                 Unit const* check = i_funit;
                 Unit const* owner = i_funit->GetOwner();
@@ -960,9 +929,7 @@ namespace SkyFire
     class CallOfHelpCreatureInRangeDo
     {
         public:
-            CallOfHelpCreatureInRangeDo(Unit* funit, Unit* enemy, float range)
-                : i_funit(funit), i_enemy(enemy), i_range(range)
-            {}
+            CallOfHelpCreatureInRangeDo(Unit* funit, Unit* enemy, float range) : i_funit(funit), i_enemy(enemy), i_range(range) {}
             void operator()(Creature* u)
             {
                 if (u == i_funit)
@@ -1065,10 +1032,7 @@ namespace SkyFire
     class AnyAssistCreatureInRangeCheck
     {
         public:
-            AnyAssistCreatureInRangeCheck(Unit* funit, Unit* enemy, float range)
-                : i_funit(funit), i_enemy(enemy), i_range(range)
-            {
-            }
+            AnyAssistCreatureInRangeCheck(Unit* funit, Unit* enemy, float range) : i_funit(funit), i_enemy(enemy), i_range(range) {}
             bool operator()(Creature* u)
             {
                 if (u == i_funit)
@@ -1096,13 +1060,13 @@ namespace SkyFire
     class NearestAssistCreatureInCreatureRangeCheck
     {
         public:
-            NearestAssistCreatureInCreatureRangeCheck(Creature* obj, Unit* enemy, float range)
-                : i_obj(obj), i_enemy(enemy), i_range(range) {}
+            NearestAssistCreatureInCreatureRangeCheck(Creature* obj, Unit* enemy, float range) : i_obj(obj), i_enemy(enemy), i_range(range) {}
 
             bool operator()(Creature* u)
             {
                 if (u == i_obj)
                     return false;
+
                 if (!u->CanAssistTo(i_obj, i_enemy))
                     return false;
 
@@ -1129,8 +1093,7 @@ namespace SkyFire
     class NearestCreatureEntryWithLiveStateInObjectRangeCheck
     {
         public:
-            NearestCreatureEntryWithLiveStateInObjectRangeCheck(WorldObject const& obj, uint32 entry, bool alive, float range)
-                : i_obj(obj), i_entry(entry), i_alive(alive), i_range(range) {}
+            NearestCreatureEntryWithLiveStateInObjectRangeCheck(WorldObject const& obj, uint32 entry, bool alive, float range) : i_obj(obj), i_entry(entry), i_alive(alive), i_range(range) {}
 
             bool operator()(Creature* u)
             {
@@ -1176,9 +1139,7 @@ namespace SkyFire
     class NearestPlayerInObjectRangeCheck
     {
         public:
-            NearestPlayerInObjectRangeCheck(WorldObject const* obj, float range) : i_obj(obj), i_range(range)
-            {
-            }
+            NearestPlayerInObjectRangeCheck(WorldObject const* obj, float range) : i_obj(obj), i_range(range) {}
 
             bool operator()(Player* u)
             {
@@ -1268,8 +1229,7 @@ namespace SkyFire
     class GameObjectInRangeCheck
     {
     public:
-        GameObjectInRangeCheck(float _x, float _y, float _z, float _range, uint32 _entry = 0) :
-          x(_x), y(_y), z(_z), range(_range), entry(_entry) {}
+        GameObjectInRangeCheck(float _x, float _y, float _z, float _range, uint32 _entry = 0) : x(_x), y(_y), z(_z), range(_range), entry(_entry) {}
         bool operator() (GameObject* go)
         {
             if (!entry || (go->GetGOInfo() && go->GetGOInfo()->entry == entry))

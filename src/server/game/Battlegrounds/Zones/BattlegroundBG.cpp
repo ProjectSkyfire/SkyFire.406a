@@ -510,7 +510,7 @@ void BattlegroundBG::EventPlayerClickedOnFlag(Player *source, GameObject* /*targ
 
 bool BattlegroundBG::SetupBattleground()
 {
-    for (int i = 0 ; i < BG_BG_DYNAMIC_NODES_COUNT; ++i)
+    for (int i = 0; i < BG_BG_DYNAMIC_NODES_COUNT; ++i)
     {
         if (!AddObject(BG_BG_OBJECT_BANNER_NEUTRAL + 8*i, BG_BG_OBJECTID_NODE_BANNER_0 + i, BG_BG_NodePositions[i][0], BG_BG_NodePositions[i][1], BG_BG_NodePositions[i][2], BG_BG_NodePositions[i][3], 0, 0, sin(BG_BG_NodePositions[i][3]/2), cos(BG_BG_NodePositions[i][3]/2), RESPAWN_ONE_DAY)
             || !AddObject(BG_BG_OBJECT_BANNER_CONT_A + 8*i, BG_BG_OBJECTID_BANNER_CONT_A, BG_BG_NodePositions[i][0], BG_BG_NodePositions[i][1], BG_BG_NodePositions[i][2], BG_BG_NodePositions[i][3], 0, 0, sin(BG_BG_NodePositions[i][3]/2), cos(BG_BG_NodePositions[i][3]/2), RESPAWN_ONE_DAY)
