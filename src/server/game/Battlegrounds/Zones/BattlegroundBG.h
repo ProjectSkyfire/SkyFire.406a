@@ -35,20 +35,10 @@ const uint32 BG_BG_OP_NODEICONS[3]  =    {1842, 1845, 1846};
 
 enum BG_BG_NodeObjectId
 {
-    /*
-    BG_BG_OBJECTID_NODE_BANNER_0    = 205557,       // Lighthouse banner
-    BG_BG_OBJECTID_NODE_BANNER_1    = 208782,       // Mine banner
-    BG_BG_OBJECTID_NODE_BANNER_2    = 208785,       // Waterworks banner
-    */
-    BG_BG_OBJECTID_NODE_BANNER_0    = 180087,       // Stables banner
-    BG_BG_OBJECTID_NODE_BANNER_1    = 180088,       // Blacksmith banner
-    BG_BG_OBJECTID_NODE_BANNER_2    = 180089,       // Farm banner
-
-    /* This is what I did but requires changes in Database
+    // This is what I did but requires changes in Database
     BG_BG_OBJECTID_NODE_BANNER_0    = 208779,       // Lighthouse banner
     BG_BG_OBJECTID_NODE_BANNER_1    = 208780,       // Mines banner
     BG_BG_OBJECTID_NODE_BANNER_2    = 208781,       // Waterworks banner
-    */
 };
 
 enum BG_BG_ObjectType

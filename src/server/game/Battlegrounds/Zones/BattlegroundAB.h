@@ -86,25 +86,27 @@ enum BG_AB_ObjectType
     BG_AB_OBJECT_AURA_HORDE              = 6,
     BG_AB_OBJECT_AURA_CONTESTED          = 7,
     //gates
-    BG_AB_OBJECT_GATE_A                  = 40,
-    BG_AB_OBJECT_GATE_H                  = 41,
+    BG_AB_OBJECT_GATE_A_1                = 40,
+    BG_AB_OBJECT_GATE_A_2                = 41,
+    BG_AB_OBJECT_GATE_H_1                = 42,
+    BG_AB_OBJECT_GATE_H_2                = 43,
     //buffs
-    BG_AB_OBJECT_SPEEDBUFF_STABLES       = 42,
-    BG_AB_OBJECT_REGENBUFF_STABLES       = 43,
-    BG_AB_OBJECT_BERSERKBUFF_STABLES     = 44,
-    BG_AB_OBJECT_SPEEDBUFF_BLACKSMITH    = 45,
-    BG_AB_OBJECT_REGENBUFF_BLACKSMITH    = 46,
-    BG_AB_OBJECT_BERSERKBUFF_BLACKSMITH  = 47,
-    BG_AB_OBJECT_SPEEDBUFF_FARM          = 48,
-    BG_AB_OBJECT_REGENBUFF_FARM          = 49,
-    BG_AB_OBJECT_BERSERKBUFF_FARM        = 50,
-    BG_AB_OBJECT_SPEEDBUFF_LUMBER_MILL   = 51,
-    BG_AB_OBJECT_REGENBUFF_LUMBER_MILL   = 52,
-    BG_AB_OBJECT_BERSERKBUFF_LUMBER_MILL = 53,
-    BG_AB_OBJECT_SPEEDBUFF_GOLD_MINE     = 54,
-    BG_AB_OBJECT_REGENBUFF_GOLD_MINE     = 55,
-    BG_AB_OBJECT_BERSERKBUFF_GOLD_MINE   = 56,
-    BG_AB_OBJECT_MAX                     = 57,
+    BG_AB_OBJECT_SPEEDBUFF_STABLES       = 44,
+    BG_AB_OBJECT_REGENBUFF_STABLES       = 45,
+    BG_AB_OBJECT_BERSERKBUFF_STABLES     = 46,
+    BG_AB_OBJECT_SPEEDBUFF_BLACKSMITH    = 47,
+    BG_AB_OBJECT_REGENBUFF_BLACKSMITH    = 48,
+    BG_AB_OBJECT_BERSERKBUFF_BLACKSMITH  = 49,
+    BG_AB_OBJECT_SPEEDBUFF_FARM          = 50,
+    BG_AB_OBJECT_REGENBUFF_FARM          = 51,
+    BG_AB_OBJECT_BERSERKBUFF_FARM        = 52,
+    BG_AB_OBJECT_SPEEDBUFF_LUMBER_MILL   = 53,
+    BG_AB_OBJECT_REGENBUFF_LUMBER_MILL   = 54,
+    BG_AB_OBJECT_BERSERKBUFF_LUMBER_MILL = 55,
+    BG_AB_OBJECT_SPEEDBUFF_GOLD_MINE     = 56,
+    BG_AB_OBJECT_REGENBUFF_GOLD_MINE     = 57,
+    BG_AB_OBJECT_BERSERKBUFF_GOLD_MINE   = 58,
+    BG_AB_OBJECT_MAX                     = 59,
 };
 
 /* Object id templates from DB */
@@ -119,8 +121,10 @@ enum BG_AB_ObjectTypes
     BG_AB_OBJECTID_AURA_H               = 180101,
     BG_AB_OBJECTID_AURA_C               = 180102,
 
-    BG_AB_OBJECTID_GATE_A               = 180255,
-    BG_AB_OBJECTID_GATE_H               = 180256
+    BG_AB_OBJECTID_GATE_A_1             = 180255,
+    BG_AB_OBJECTID_GATE_A_2             = 180322,
+    BG_AB_OBJECTID_GATE_H_1             = 180256,
+    BG_AB_OBJECTID_GATE_H_2             = 180322,
 };
 
 enum BG_AB_Timers
@@ -191,13 +195,15 @@ const float BG_AB_NodePositions[BG_AB_DYNAMIC_NODES_COUNT][4] = {
     {977.0156f, 1046.616f, -44.80923f, -2.600541f},        // blacksmith
     {806.1821f, 874.2723f, -55.99371f, -2.303835f},        // farm
     {856.1419f, 1148.902f, 11.18469f, -2.303835f},         // lumber mill
-    {1146.923f, 848.1782f, -110.917f, -0.7330382f}          // gold mine
+    {1146.923f, 848.1782f, -110.917f, -0.7330382f}         // gold mine
 };
 
 // x, y, z, o, rot0, rot1, rot2, rot3
-const float BG_AB_DoorPositions[2][8] = {
-    {1284.597f, 1281.167f, -15.97792f, 0.7068594f, 0.012957f, -0.060288f, 0.344959f, 0.93659f},
-    {708.0903f, 708.4479f, -17.8342f, -2.391099f, 0.050291f, 0.015127f, 0.929217f, -0.365784f}
+const float BG_AB_DoorPositions[4][8] = {
+    {1284.597f, 1281.167f, -13.97792f, 0.7068594f, 0.012957f, -0.060288f, 0.344959f, 0.93659f},
+    {1284.597f, 1281.167f, -13.97792f, 0.7068594f, 0.012957f, -0.060288f, 0.344959f, 0.93659f},
+    {708.0903f, 708.4479f, -14.8342f, -2.391099f, 0.050291f, 0.015127f, 0.929217f, -0.365784f},
+    {708.0903f, 708.4479f, -14.8342f, -2.391099f, 0.050291f, 0.015127f, 0.929217f, -0.365784f}
 };
 
 // Tick intervals and given points: case 0, 1, 2, 3, 4, 5 captured nodes
@@ -213,7 +219,7 @@ const float BG_AB_BuffPositions[BG_AB_DYNAMIC_NODES_COUNT][4] = {
     {990.75f, 1008.18f, -42.60f, 2.43f},                   // blacksmith
     {817.66f, 843.34f, -56.54f, 3.01f},                    // farm
     {807.46f, 1189.16f, 11.92f, 5.44f},                    // lumber mill
-    {1146.62f, 816.94f, -98.49f, 6.14f}                     // gold mine
+    {1146.62f, 816.94f, -98.49f, 6.14f}                    // gold mine
 };
 
 // x, y, z, o
@@ -224,7 +230,7 @@ const float BG_AB_SpiritGuidePos[BG_AB_ALL_NODES_COUNT][4] = {
     {775.17f, 1206.40f, 15.79f, 1.90f},                    // lumber mill
     {1207.48f, 787.00f, -83.36f, 5.51f},                   // gold mine
     {1354.05f, 1275.48f, -11.30f, 4.77f},                  // alliance starting base
-    {714.61f, 646.15f, -10.87f, 4.34f}                      // horde starting base
+    {714.61f, 646.15f, -10.87f, 4.34f}                     // horde starting base
 };
 
 struct BG_AB_BannerTimer
