@@ -2183,7 +2183,6 @@ class Player : public Unit, public GridObject<Player>
         void SendNotifyLootItemRemoved(uint8 lootSlot);
         void SendNotifyLootMoneyRemoved();
 
-        ///protected:
         uint32 _regenTimerCount;
         uint32 _holyPowerRegenTimerCount; // Holy power updates ticks at every 10secs.
 
