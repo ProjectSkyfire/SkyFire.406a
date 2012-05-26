@@ -311,6 +311,13 @@ class spell_pal_judgements_of_the_bold : public SpellScriptLoader
         {
             PrepareAuraScript(spell_pal_judgements_of_the_bold_AuraScript);
 
+            bool Load()
+            {
+                if (GetCaster()->GetTypeId() != TYPEID_PLAYER)
+                    return false;
+                return true;
+            }
+
             void CalculateMana(AuraEffect const* /*aurEff*/, int32& amount, bool& canBeRecalculated)
             {
                 if (Unit* caster = GetCaster())
@@ -344,6 +351,13 @@ public:
     {
         PrepareSpellScript(spell_pal_shield_of_righteous_SpellScript)
 
+        bool Load()
+        {
+            if (GetCaster()->GetTypeId() != TYPEID_PLAYER)
+                return false;
+            return true;
+        }
+
         void CalculateDamage(SpellEffIndex /*effIndex*/)
         {
             if (Unit* caster = GetCaster())
@@ -363,7 +377,6 @@ public:
                         break;
                 }
                 SetHitDamage(damage);
-                caster->SetPower(POWER_HOLY_POWER, int32(-power));
             }
         }
 
@@ -422,17 +435,17 @@ public:
 
             switch (caster->GetPower(POWER_HOLY_POWER))
             {
-                case 1: // 1 Holy Power
+                case 0: // 1 Holy Power
                 {
                     totalheal = totalheal;
                     break;
                 }
-                case 2: // 2 Holy Power
+                case 1: // 2 Holy Power
                 {
                     totalheal *= 2;
                     break;
                 }
-                case 3: // 3 Holy Power
+                case 2: // 3 Holy Power
                 {
                     totalheal *= 3;
                     break;
@@ -551,6 +564,56 @@ class spell_pal_selfless_healer : public SpellScriptLoader
         }
 };
 
+class spell_pal_guardian_ancient_kings : public SpellScriptLoader
+{
+public:
+    spell_pal_guardian_ancient_kings() : SpellScriptLoader("spell_pal_guardian_ancient_kings") { }
+
+    class spell_pal_guardian_ancient_kings_SpellScript : public SpellScript
+    {
+        PrepareSpellScript(spell_pal_guardian_ancient_kings_SpellScript)
+
+        bool Load()
+        {
+            if (GetCaster()->GetTypeId() != TYPEID_PLAYER)
+                return false;
+            return true;
+        }
+
+        void HandleDummy(SpellEffIndex /*effIndex*/)
+        {
+            if (Unit* caster = GetCaster())
+            {
+                if (caster->ToPlayer()->HasSpell(20473)) // Holy Shock
+                {
+                    caster->CastSpell(caster, 86669, false);
+                    return;
+                }
+                if (caster->ToPlayer()->HasSpell(85256)) // Templar's Verdict
+                {
+                    caster->CastSpell(caster, 86698, false);
+                    return;
+                }
+                if (caster->ToPlayer()->HasSpell(31935)) // Avenger's shield
+                {
+                    caster->CastSpell(caster, 86659, false);
+                    return;
+                }
+            }
+        }
+
+        void Register()
+        {
+            OnEffectLaunch += SpellEffectFn(spell_pal_guardian_ancient_kings_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
+        }
+    };
+
+    SpellScript* GetSpellScript() const
+    {
+        return new spell_pal_guardian_ancient_kings_SpellScript();
+    }
+};
+
 void AddSC_paladin_spell_scripts()
 {
     new spell_pal_ardent_defender();
@@ -562,4 +625,5 @@ void AddSC_paladin_spell_scripts()
     new spell_pal_judgements_of_the_bold();
     new spell_pal_word_of_glory();
     new spell_pal_selfless_healer();
+    new spell_pal_guardian_ancient_kings();
 }
