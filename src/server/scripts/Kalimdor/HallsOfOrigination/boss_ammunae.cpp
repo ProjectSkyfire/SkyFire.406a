@@ -162,6 +162,8 @@ class boss_ammunae : public CreatureScript
 
                 if (me->HasUnitState(UNIT_STATE_CASTING))
                     return;
+                    
+                events.Update(diff);
 
                 while(uint32 eventId = events.ExecuteEvent())
                 {
