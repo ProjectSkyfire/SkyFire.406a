@@ -93,7 +93,7 @@ enum NpcTextIds
     SAY_CITIZEN_3b                                     = -1638013,
     SAY_CITIZEN_4b                                     = -1638014,
     SAY_CITIZEN_5b                                     = -1638015,
-    
+
     YELL_KRENNAN_C1                                    = -1999973,
     SAY_KRENNAN_C2                                     = -1999972,
     SAY_GREYMANE_HORSE                                 = -1999971

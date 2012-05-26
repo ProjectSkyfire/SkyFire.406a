@@ -886,7 +886,6 @@ enum SkyFireStrings
     LANG_BG_BG_H_NEAR_VICTORY           = 1264,
     // FREE IDS                           1265-1299
 
-
     // AV
     LANG_BG_AV_ALLY                     = 1300,
     LANG_BG_AV_HORDE                    = 1301,

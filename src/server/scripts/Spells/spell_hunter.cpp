@@ -247,7 +247,7 @@ class spell_hun_masters_call : public SpellScriptLoader
                     // there is a possibility that this effect should access effect 0 (dummy) target, but i dubt that
                     // it's more likely that on on retail it's possible to call target selector based on dbc values
                     // anyways, we're using GetTargetUnit() here and it's ok
-                    if (Unit* ally = GetTargetUnit())
+                    if (Unit* ally = GetExplTargetUnit())
                     {
                         target->CastSpell(ally, GetEffectValue(), castMask);
                         target->CastSpell(ally, GetSpellInfo()->Effects[EFFECT_0].CalcValue(), castMask);

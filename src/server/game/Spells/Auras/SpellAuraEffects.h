@@ -80,7 +80,7 @@ class AuraEffect
 
         bool IsPeriodic() const { return m_isPeriodic; }
         void SetPeriodic(bool isPeriodic) { m_isPeriodic = isPeriodic; }
-        bool IsAffectingSpell(SpellInfo const* spell) const;
+        bool IsAffectedOnSpell(SpellInfo const* spell) const;
 
         void SendTickImmune(Unit* target, Unit* caster) const;
         void PeriodicTick(AuraApplication * aurApp, Unit* caster) const;

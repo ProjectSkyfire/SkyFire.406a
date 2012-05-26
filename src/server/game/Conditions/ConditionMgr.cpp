@@ -1279,7 +1279,7 @@ bool ConditionMgr::isSourceTypeValid(Condition* cond)
 
             if ((cond->SourceGroup > MAX_EFFECT_MASK) || !cond->SourceGroup)
             {
-                sLog->outErrorDb("SourceEntry %u in `condition` table, has incorrect SourceGroup %u (spell effectMask) set , ignoring.", cond->SourceEntry, cond->SourceGroup);
+                sLog->outErrorDb("SourceEntry %u in `condition` table, has incorrect SourceGroup %u (spell effectMask) set, ignoring.", cond->SourceEntry, cond->SourceGroup);
                 return false;
             }
 

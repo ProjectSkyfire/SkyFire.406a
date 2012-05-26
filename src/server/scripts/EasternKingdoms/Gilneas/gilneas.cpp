@@ -21,7 +21,6 @@
 #include "ScriptedEscortAI.h"
 #include "Vehicle.h"
 
-
 //Phase 1
 /*######
 ## npc_prince_liam_greymane_phase1
@@ -1247,7 +1246,7 @@ public:
 
         uint32 krennansay;
         bool AfterJump;
-        
+
         void AttackStart(Unit* /*who*/) {}
         void EnterCombat(Unit* /*who*/) {}
         void EnterEvadeMode() {}
@@ -1256,7 +1255,6 @@ public:
         {
              krennansay = 500;//Check every 500ms initially
              AfterJump = false;
-
         }
 
         void PassengerBoarded(Unit* who, int8 /*seatId*/, bool apply)
@@ -1385,7 +1383,7 @@ public:
                 {
                     DoCast(horse, 84275, true);
                 }
-                
+
                 if (me->HasAura(84275))
                 {
                     Cast = false;

@@ -79,7 +79,7 @@ bool WorldSessionFilter::Process(WorldPacket* packet)
     if (opHandle.packetProcessing == PROCESS_THREADUNSAFE)
         return true;
 
-    //no player attached? -> our client! ^^
+    //no player attached? ->our client! ^^
     Player* player = m_pSession->GetPlayer();
     if (!player)
         return true;
@@ -487,7 +487,7 @@ void WorldSession::LogoutPlayer(bool Save)
             guild->HandleMemberLogout(this);
 
         ///- Remove pet
-        _player->RemovePet(NULL, PET_SLOT_ACTUAL_PET_SLOT, true);
+        _player->RemovePet(NULL, PET_SAVE_AS_CURRENT, true);
 
         ///- empty buyback items and save the player in the database
         // some save parts only correctly work in case player present in map/player_lists (pets, etc)
@@ -735,7 +735,7 @@ void WorldSession::SendAccountDataTimes(uint32 mask)
 
 void WorldSession::LoadTutorialsData()
 {
-    for (int aX = 0 ; aX < MAX_ACCOUNT_TUTORIAL_VALUES ; ++aX)
+    for (int aX = 0; aX < MAX_ACCOUNT_TUTORIAL_VALUES; ++aX)
         m_Tutorials[ aX ] = 0;
 
     QueryResult result = CharacterDatabase.PQuery("SELECT tut0, tut1, tut2, tut3, tut4, tut5, tut6, tut7 FROM account_tutorial WHERE accountid = '%u'", GetAccountId());

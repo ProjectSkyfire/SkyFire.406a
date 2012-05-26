@@ -242,7 +242,7 @@ void PetAI::UpdateAllies()
     //only pet and owner/not in group->ok
     if (m_AllySet.size() == 2 && !group)
         return;
-    //owner is in group; group members filled in already (no raid -> subgroupcount = whole count)
+    //owner is in group; group members filled in already (no raid ->subgroupcount = whole count)
     if (group && !group->isRaidGroup() && m_AllySet.size() == (group->GetMembersCount() + 2))
         return;
 

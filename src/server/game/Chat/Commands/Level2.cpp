@@ -952,7 +952,7 @@ bool ChatHandler::HandleCreatePetCommand(const char* /*args*/)
     pet->SetUInt32Value(UNIT_FIELD_LEVEL, creatureTarget->getLevel());
 
     player->SetMinion(pet, true, PET_SLOT_UNK_SLOT);
-    pet->SavePetToDB(PET_SLOT_ACTUAL_PET_SLOT);
+    pet->SavePetToDB(PET_SAVE_AS_CURRENT);
     player->PetSpellInitialize();
 
     return true;

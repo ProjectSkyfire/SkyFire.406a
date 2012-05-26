@@ -3194,13 +3194,13 @@ enum PetSlot
 {
     PET_SLOT_DEFAULT         =   0,
     //Some not-in-db slots
-    PET_SLOT_FULL_LIST       =  -4,        //Used when there is no slot free for tameing
+    PET_SLOT_FULL_LIST       =  -4,        //Used when there is no slot free for taming
     PET_SLOT_UNK_SLOT        =  -3,        // Used in some scripts.
 
-    PET_SLOT_ACTUAL_PET_SLOT =  -2,        // Save the pet in his actual slot.
+    PET_SAVE_AS_CURRENT      =  -2,        // Save the pet in his actual slot.
     PET_SLOT_DELETED         =  -1,        // Delete the pet
 
-    //Hunter pet slots, sended to client at stable.
+    //Hunter pet slots, sent to client at stable.
     PET_SLOT_HUNTER_FIRST    =   0,        // PetType == HUNTER_PET
     PET_SLOT_HUNTER_LAST     =   4,        // PetType == HUNTER_PET
     PET_SLOT_STABLE_FIRST    =   5,
@@ -3258,7 +3258,8 @@ enum RemoveMethod
 
 #define MMAP_MAGIC 0x4d4d4150 // 'MMAP'
 
-//0x444e4156   'MMAP' Maby the new one
+// Couldn't be confirmed, maybe new MMap_Magic number?
+//#define MMAP_MAGIC 0x444e4156 // 'MMAP'
 
 #define MMAP_VERSION 3
 
@@ -3305,7 +3306,6 @@ enum ActivateTaxiReply
 };
 
 // Calendar - start
-
 enum CalendarFlags
 {
    CALENDAR_FLAG_ALL_ALLOWED     = 0x001,
@@ -3402,7 +3402,6 @@ enum CalendarError
    CALENDAR_ERROR_INVALID_SIGNUP               = 39,
    CALENDAR_ERROR_NO_MODERATOR                 = 40
 };
-
 // Calendar - end
 
 #endif

@@ -766,7 +766,7 @@ class spell_powering_up : public SpellScriptLoader
 
             void HandleScriptEffect(SpellEffIndex /*effIndex*/)
             {
-                if (Unit* target = GetTargetUnit())
+                if (Unit* target = GetExplTargetUnit())
                     if (urand(0, 99) < 15)
                         target->CastSpell(target, spellId, true);
             }

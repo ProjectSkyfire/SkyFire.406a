@@ -910,6 +910,13 @@ enum CurrencyItems
     ITEM_ARENA_POINTS_ID    = 43307
 };
 
+enum ConquestPointsSources
+{
+    CP_SOURCE_ARENA     = 0,
+    CP_SOURCE_RATED_BG  = 1,
+    CP_SOURCE_MAX
+};
+
 enum ReferAFriendError
 {
     ERR_REFER_A_FRIEND_NONE                          = 0x00,
@@ -1467,6 +1474,9 @@ class Player : public Unit, public GridObject<Player>
         void ResetWeeklyQuestStatus();
         void ResetSeasonalQuestStatus(uint16 event_id);
 
+        void ResetCurrencyWeekCap();
+        void UpdateMaxWeekRating(ConquestPointsSources source, uint8 slot);
+
         uint16 FindQuestSlot(uint32 quest_id) const;
         uint32 GetQuestSlotQuestId(uint16 slot) const { return GetUInt32Value(PLAYER_QUEST_LOG_1_1 + slot * MAX_QUEST_OFFSET + QUEST_ID_OFFSET); }
         uint32 GetQuestSlotState(uint16 slot)   const { return GetUInt32Value(PLAYER_QUEST_LOG_1_1 + slot * MAX_QUEST_OFFSET + QUEST_STATE_OFFSET); }
@@ -1554,7 +1564,8 @@ class Player : public Unit, public GridObject<Player>
         static uint32 GetLevelFromDB(uint64 guid);
         static bool   LoadPositionFromDB(uint32& mapid, float& x, float& y, float& z, float& o, bool& in_flight, uint64 guid);
 
-        static bool IsValidGender(uint8 Gender) { return Gender <= GENDER_FEMALE ; }
+        static bool IsValidGender(uint8 Gender) { return Gender <= GENDER_FEMALE; }
+        void _LoadConquestPointsWeekCap(PreparedQueryResult result);
 
         /*********************************************************/
         /***                   SAVE SYSTEM                     ***/
@@ -1602,7 +1613,6 @@ class Player : public Unit, public GridObject<Player>
             MoneyChanged(value);
             UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_HIGHEST_GOLD_VALUE_OWNED);
         }
-
         RewardedQuestSet const& getRewardedQuests() const { return _RewardedQuests; }
         QuestStatusMap& getQuestStatusMap() { return _QuestStatus; };
 
@@ -1847,7 +1857,7 @@ class Player : public Unit, public GridObject<Player>
         bool IsInSameGroupWith(Player const* p) const;
         bool IsInSameRaidWith(Player const* p) const { return p == this || (GetGroup() != NULL && GetGroup() == p->GetGroup()); }
         void UninviteFromGroup();
-        static void RemoveFromGroup(Group* group, uint64 guid, RemoveMethod method = GROUP_REMOVEMETHOD_DEFAULT, uint64 kicker = 0 , const char* reason = NULL);
+        static void RemoveFromGroup(Group* group, uint64 guid, RemoveMethod method = GROUP_REMOVEMETHOD_DEFAULT, uint64 kicker = 0, const char* reason = NULL);
         void RemoveFromGroup(RemoveMethod method = GROUP_REMOVEMETHOD_DEFAULT) { RemoveFromGroup(GetGroup(), GetGUID(), method); }
         void SendUpdateToOutOfRangeGroupMembers();
 
@@ -1947,6 +1957,7 @@ class Player : public Unit, public GridObject<Player>
         float GetMasteryPoints() { return CalculateMasteryPoints(_baseRatingValue[CR_MASTERY]); }
         float CalculateMasteryPoints(int32 curr_rating)  { return float(curr_rating * 0.0055779569892473); }
         int32 CalculateMasteryRating(float curr_mastery) { return int32(curr_mastery / 0.0055779569892473); }
+        void RemoveOrAddMasterySpells();
 
         void UpdateAllSpellCritChances();
         void UpdateSpellCritChance(uint32 school);
@@ -1966,6 +1977,7 @@ class Player : public Unit, public GridObject<Player>
 
         void BuildCreateUpdateBlockForPlayer(UpdateData *data, Player *target) const;
         void DestroyForPlayer(Player *target, bool anim = false) const;
+        void SendPlayerMoneyNotify(Player* player, uint32 Money, uint32 Modifier);
         void SendLogXPGain(uint32 GivenXP, Unit* victim, uint32 BonusXP, bool recruitAFriend = false, float group_rate=1.0f);
 
         // notifiers
@@ -2170,6 +2182,10 @@ class Player : public Unit, public GridObject<Player>
         void SendLootRelease(uint64 guid);
         void SendNotifyLootItemRemoved(uint8 lootSlot);
         void SendNotifyLootMoneyRemoved();
+
+        ///protected:
+        uint32 _regenTimerCount;
+        uint32 _holyPowerRegenTimerCount; // Holy power updates ticks at every 10secs.
 
         /*********************************************************/
         /***               BATTLEGROUND SYSTEM                 ***/
@@ -2565,7 +2581,6 @@ class Player : public Unit, public GridObject<Player>
     protected:
         // Gamemaster whisper whitelist
         WhisperListContainer WhisperList;
-        uint32 _regenTimerCount;
         float _powerFraction[MAX_POWERS];
         uint32 _contestedPvPTimer;
 
@@ -2655,6 +2670,7 @@ class Player : public Unit, public GridObject<Player>
         void _SaveTalents(SQLTransaction& trans);
         void _SaveTalentBranchSpecs(SQLTransaction& trans);
         void _SaveCurrency();
+        void _SaveConquestPointsWeekCap();
         void _SaveStats(SQLTransaction& trans);
         void _SaveInstanceTimeRestrictions(SQLTransaction& trans);
 
@@ -2694,6 +2710,8 @@ class Player : public Unit, public GridObject<Player>
         PlayerCurrenciesMap _currencies;
         uint32 _GetCurrencyWeekCap(const CurrencyTypesEntry* currency) const;
 
+        uint16 _maxWeekRating[CP_SOURCE_MAX];
+        uint16 _conquestPointsWeekCap[CP_SOURCE_MAX]; // without *PLAYER_CURRENCY_PRECISION!
         std::vector<Item*> m_itemUpdateQueue;
         bool _itemUpdateQueueBlocked;
 

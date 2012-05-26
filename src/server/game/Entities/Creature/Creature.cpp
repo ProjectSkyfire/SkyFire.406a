@@ -453,12 +453,12 @@ void Creature::Update(uint32 diff)
 
     switch (_deathState)
     {
-        case JUST_ALIVED:
-            // Must not be called, see Creature::setDeathState JUST_ALIVED -> ALIVE promoting.
-            sLog->outError("Creature (GUID: %u Entry: %u) in wrong state: JUST_ALIVED (4)", GetGUIDLow(), GetEntry());
+        case JUST_RESPAWNED:
+            // Must not be called, see Creature::setDeathState JUST_RESPAWNED ->ALIVE promoting.
+            sLog->outError("Creature (GUID: %u Entry: %u) in wrong state: JUST_RESPAWNED (4)", GetGUIDLow(), GetEntry());
             break;
         case JUST_DIED:
-            // Must not be called, see Creature::setDeathState JUST_DIED -> CORPSE promoting.
+            // Must not be called, see Creature::setDeathState JUST_DIED ->CORPSE promoting.
             sLog->outError("Creature (GUID: %u Entry: %u) in wrong state: JUST_DEAD (1)", GetGUIDLow(), GetEntry());
             break;
         case DEAD:
@@ -685,7 +685,7 @@ void Creature::DoFleeToGetAssistance()
         UpdateSpeed(MOVE_RUN, false);
 
         if (!creature)
-            //SetFeared(true, getVictim()->GetGUID(), 0 , sWorld->getIntConfig(CONFIG_CREATURE_FAMILY_FLEE_DELAY));
+            //SetFeared(true, getVictim()->GetGUID(), 0, sWorld->getIntConfig(CONFIG_CREATURE_FAMILY_FLEE_DELAY));
             //TODO: use 31365
             SetControlled(true, UNIT_STATE_FLEEING);
         else
@@ -1508,7 +1508,7 @@ void Creature::setDeathState(DeathState s)
 
         Unit::setDeathState(CORPSE);
     }
-    else if (s == JUST_ALIVED)
+    else if (s == JUST_RESPAWNED)
     {
         //if (isPet())
         //    setActive(true);
@@ -1562,7 +1562,7 @@ void Creature::Respawn(bool force)
         CreatureTemplate const* cinfo = GetCreatureTemplate();
         SelectLevel(cinfo);
 
-        setDeathState(JUST_ALIVED);
+        setDeathState(JUST_RESPAWNED);
 
         uint32 displayID = GetNativeDisplayId();
         CreatureModelInfo const* minfo = sObjectMgr->GetCreatureModelRandomGender(&displayID);

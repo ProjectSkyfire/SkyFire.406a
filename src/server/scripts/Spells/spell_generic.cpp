@@ -378,10 +378,10 @@ public:
         {
             if (!sSpellMgr->GetSpellInfo(SPELL_LEECHING_SWARM_DMG))
                 return false;
-            
+
             if (!sSpellMgr->GetSpellInfo(SPELL_LEECHING_SWARM_HEAL))
                 return false;
-            
+
             return true;
         }
 
@@ -589,13 +589,13 @@ public:
         {
             if (!sSpellMgr->GetSpellInfo(SPELL_TRICK))
                 return false;
-            
+
             if (!sSpellMgr->GetSpellInfo(SPELL_TREAT))
                 return false;
-            
+
             if (!sSpellMgr->GetSpellInfo(SPELL_TRICKED_OR_TREATED))
                 return false;
-            
+
             return true;
         }
 
@@ -670,24 +670,24 @@ public:
         {
             if (!sSpellMgr->GetSpellInfo(SPELL_WILL_OF_THE_FORSAKEN_COOLDOWN_TRIGGER))
                 return false;
-            
+
             if (!sSpellMgr->GetSpellInfo(SPELL_WILL_OF_THE_FORSAKEN_COOLDOWN_TRIGGER_WOTF))
                 return false;
-            
+
             return true;
         }
 
         void HandleScript(SpellEffIndex /*effIndex*/)
         {
             Player* caster = GetCaster()->ToPlayer();
-            
+
             if (!caster)
                 return;
-            
+
             SpellInfo const* spellInfo = GetSpellInfo();
 
             caster->AddSpellCooldown(spellInfo->Id, 0, time(NULL) + sSpellMgr->GetSpellInfo(SPELL_WILL_OF_THE_FORSAKEN_COOLDOWN_TRIGGER)->GetRecoveryTime() / IN_MILLISECONDS);
-            
+
             WorldPacket data(SMSG_SPELL_COOLDOWN, 8+1+4);
             data << uint64(caster->GetGUID());
             data << uint8(0);
@@ -727,7 +727,7 @@ public:
         {
             if (!sSpellMgr->GetSpellInfo(SPELL_SPAWN_BLOOD_POOL))
                 return false;
-            
+
             return true;
         }
 
@@ -776,7 +776,7 @@ public:
         {
             if (!sSpellMgr->GetSpellInfo(SPELL_DIVINE_STORM))
                 return false;
-            
+
             return true;
         }
 
@@ -994,22 +994,22 @@ public:
         {
             if (!sSpellMgr->GetSpellInfo(SPELL_COPY_WEAPON))
                 return false;
-            
+
             if (!sSpellMgr->GetSpellInfo(SPELL_COPY_WEAPON_2))
                 return false;
-            
+
             if (!sSpellMgr->GetSpellInfo(SPELL_COPY_WEAPON_3))
                 return false;
-            
+
             if (!sSpellMgr->GetSpellInfo(SPELL_COPY_OFFHAND))
                 return false;
-            
+
             if (!sSpellMgr->GetSpellInfo(SPELL_COPY_OFFHAND_2))
                 return false;
-            
+
             if (!sSpellMgr->GetSpellInfo(SPELL_COPY_RANGED))
                 return false;
-            
+
             return true;
         }
 
@@ -1101,7 +1101,7 @@ public:
         {
             if (!sSpellMgr->GetSpellInfo(SPELL_PLANT_CHARGES_CREDIT_ACHIEVEMENT))
                 return false;
-            
+
             return true;
         }
 
@@ -1228,7 +1228,7 @@ public:
         {
             PreventHitDefaultEffect(effIndex);
             Player* target = GetHitPlayer();
-            
+
             if (!target)
                 return;
 
@@ -1316,7 +1316,7 @@ public:
 
         void Launch()
         {
-            WorldLocation const* const position = GetTargetDest();
+            WorldLocation const* const position = GetExplTargetDest();
 
             if (Player* player = GetHitPlayer())
             {
@@ -1541,7 +1541,6 @@ public:
                     return;
                 }
 
-
                 LFGDungeonEntry const* randomDungeon = sLFGDungeonStore.LookupEntry(*itr);
                 if (Group* group = owner->GetGroup())
                     if (Map const* map = owner->GetMap())
@@ -1681,14 +1680,14 @@ public:
                 case SPELL_SUNREAVER_DISGUISE_TRIGGER:
                     if (!sSpellMgr->GetSpellInfo(SPELL_SUNREAVER_DISGUISE_FEMALE))
                         return false;
-                    
+
                     if (!sSpellMgr->GetSpellInfo(SPELL_SUNREAVER_DISGUISE_MALE))
                         return false;
                     break;
                 case SPELL_SILVER_COVENANT_DISGUISE_TRIGGER:
                     if (!sSpellMgr->GetSpellInfo(SPELL_SILVER_COVENANT_DISGUISE_FEMALE))
                         return false;
-                    
+
                     if (!sSpellMgr->GetSpellInfo(SPELL_SILVER_COVENANT_DISGUISE_MALE))
                         return false;
                     break;
@@ -2016,10 +2015,10 @@ public:
         {
             if (!sSpellMgr->GetSpellInfo(SPELL_VISUAL_SHIELD_1))
                 return false;
-            
+
             if (!sSpellMgr->GetSpellInfo(SPELL_VISUAL_SHIELD_2))
                 return false;
-            
+
             if (!sSpellMgr->GetSpellInfo(SPELL_VISUAL_SHIELD_3))
                 return false;
             return true;
@@ -2103,10 +2102,10 @@ public:
         {
             if (!sSpellMgr->GetSpellInfo(SPELL_ON_TOURNAMENT_MOUNT))
                 return false;
-            
+
             if (!sSpellMgr->GetSpellInfo(SPELL_MOUNTED_DUEL))
                 return false;
-            
+
             return true;
         }
 
@@ -2157,7 +2156,7 @@ public:
         {
             if (!sSpellMgr->GetSpellInfo(SPELL_LANCE_EQUIPPED))
                 return false;
-            
+
             return true;
         }
 

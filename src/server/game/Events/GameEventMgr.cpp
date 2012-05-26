@@ -1159,7 +1159,7 @@ void GameEventMgr::ApplyNewEvent(uint16 event_id)
     // update bg holiday
     UpdateBattlegroundSettings();
     // check for seasonal quest reset.
-    sWorld->ResetEventSeasonalQuests(event_id);    
+    sWorld->ResetEventSeasonalQuests(event_id);
 }
 
 void GameEventMgr::UpdateEventNPCFlags(uint16 event_id)

@@ -522,8 +522,7 @@ enum AICondition
 
 struct AISpellInfoType
 {
-    AISpellInfoType() : target(AITARGET_SELF), condition(AICOND_COMBAT)
-        , cooldown(AI_DEFAULT_COOLDOWN), realCooldown(0), maxRange(0.0f) {}
+    AISpellInfoType() : target(AITARGET_SELF), condition(AICOND_COMBAT), cooldown(AI_DEFAULT_COOLDOWN), realCooldown(0), maxRange(0.0f) {}
     AITarget target;
     AICondition condition;
     uint32 cooldown;

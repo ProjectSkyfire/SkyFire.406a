@@ -655,7 +655,7 @@ void WorldSession::SendCalendarEventInvite(CalendarInvite const& invite, bool pe
 
     sLog->outDebug(LOG_FILTER_NETWORKIO, "SMSG_CALENDAR_EVENT_INVITE [" UI64FMTD "] EventId ["
         UI64FMTD "] InviteId [" UI64FMTD "] Invitee [" UI64FMTD "] "
-        " Level %u, Status %u, StatusTime %u" , guid, eventId, inviteId,
+        " Level %u, Status %u, StatusTime %u", guid, eventId, inviteId,
         invitee, level, status, statusTime);
 
     WorldPacket data(SMSG_CALENDAR_EVENT_INVITE, 8 + 8 + 8 + 1 + 1 + 1 + (statusTime ? 4 : 0) + 1);

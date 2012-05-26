@@ -223,8 +223,10 @@ enum WorldIntConfigs
     CONFIG_START_PLAYER_MONEY,
     CONFIG_MAX_HONOR_POINTS,
     CONFIG_START_HONOR_POINTS,
-    CONFIG_MAX_JUSTICE_POINTS,    // todo FinishMe
-    CONFIG_START_JUSTICE_POINTS,  // todo FinishMe
+    CONFIG_MAX_CONQUEST_POINTS,
+    CONFIG_START_CONQUEST_POINTS,
+    CONFIG_MAX_JUSTICE_POINTS,
+    CONFIG_START_JUSTICE_POINTS,
     CONFIG_MAX_ARENA_POINTS,
     CONFIG_START_ARENA_POINTS,
     CONFIG_MAX_RECRUIT_A_FRIEND_BONUS_PLAYER_LEVEL,
@@ -789,10 +791,10 @@ class World
         void InitDailyQuestResetTime();
         void InitWeeklyQuestResetTime();
         void InitRandomBGResetTime();
-
+        void InitCurrencyResetTime();
         void ResetDailyQuests();
         void ResetWeeklyQuests();
-
+        void ResetCurrencyWeekCap();
         void ResetRandomBG();
     private:
         static ACE_Atomic_Op<ACE_Thread_Mutex, bool> m_stopEvent;
@@ -853,6 +855,7 @@ class World
         // next daily quests and random bg reset time
         time_t m_NextDailyQuestReset;
         time_t m_NextWeeklyQuestReset;
+        time_t m_NextCurrencyReset;
         time_t m_NextRandomBGReset;
         time_t m_NextDailyXPReset;
         time_t m_NextHourlyXPReset;
