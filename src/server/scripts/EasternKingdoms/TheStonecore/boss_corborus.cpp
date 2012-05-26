@@ -20,7 +20,6 @@
 
 enum Spells
 {
-    SPELL_SUMMON_CRYSTAL_SHARD       = 92012,
     SPELL_CRYSTAL_BARRAGE            = 86881,     // Crystal Barrage normal
     SPELL_CRYSTAL_BARRAGE_H          = 92648,     // Crystal Barrage heroic
     SPELL_DAMPENING_WAVE             = 82415,     // Dampening Wave normal
@@ -31,7 +30,7 @@ enum Spells
 class boss_corborus : public CreatureScript
 {
 public:
-    boss_corborus() : CreatureScript("boss_corborus") { }
+    boss_corborus() : CreatureScript("boss_corborus") {}
 
     CreatureAI* GetAI(Creature* creature) const
     {
@@ -56,7 +55,7 @@ public:
 
         void Reset()
         {
-            instance->SetData(DATA_CORBORUS_EVENT,NOT_STARTED);
+            instance->SetData(DATA_CORBORUS_EVENT, NOT_STARTED);
             _SummonBorerTimer    = 33000;
             b_BORROW             = 0;
             _CrystalTimer        = 13600;
@@ -64,30 +63,31 @@ public:
             Summons.DespawnAll();
         }
 
-        void JustDied(Unit* )
+        void JustDied(Unit*)
         {
             if (instance)
                 instance->SetData(DATA_CORBORUS_EVENT,DONE);
+
             Summons.DespawnAll();
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void EnterCombat(Unit* /*killer*/)
         {
-            instance->SetData(DATA_CORBORUS_EVENT,IN_PROGRESS);
+            instance->SetData(DATA_CORBORUS_EVENT, IN_PROGRESS);
             DoZoneInCombat();
         }
 
         void SummonRockBorer()
         {
             if (!IsHeroic())
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM,0))
-                    for (uint8 i=0;i<2;++i)                                   //summon 2 Rock Borer Normal Mode
-                me->SummonCreature(NPC_ROCK_BORER,target->GetPositionX(),target->GetPositionY(),target->GetPositionZ(),0.0f, TEMPSUMMON_CORPSE_DESPAWN);
+                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                    for (uint8 i = 0; i < 2; ++i)                             //summon 2 Rock Borer Normal Mode
+                me->SummonCreature(NPC_ROCK_BORER, target->GetPositionX(), target->GetPositionY(), target->GetPositionZ(), 0.0f, TEMPSUMMON_CORPSE_DESPAWN);
 
             if (IsHeroic())
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM,0))
-                    for (uint8 i=0;i<4;++i)                                  //summon 4 Rock Borer Heroic Mode
-                me->SummonCreature(NPC_ROCK_BORER,target->GetPositionX(),target->GetPositionY(),target->GetPositionZ(),0.0f, TEMPSUMMON_CORPSE_DESPAWN);
+                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                    for (uint8 i = 0; i < 4; ++i)                                  //summon 4 Rock Borer Heroic Mode
+                me->SummonCreature(NPC_ROCK_BORER, target->GetPositionX(), target->GetPositionY(), target->GetPositionZ(), 0.0f, TEMPSUMMON_CORPSE_DESPAWN);
         }
 
         void JustSummoned(Creature* summoned)
@@ -96,12 +96,6 @@ public:
 
             if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                 summoned->AI()->AttackStart(target);
-
-            /*switch (summoned->GetEntry())
-            {
-            default:
-                break;
-            }*/
 
             Summons.Summon(summoned);
         }
@@ -116,22 +110,11 @@ public:
             if (!UpdateVictim())
                 return;
 
-         case EVENT_CRYSTAL_BARRAGE:
-                        if (phase == 0)
-                        {
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0, true, 0))
-                            {
-                                DoCast(target, SPELL_CRYSTAL_BARRAGE, true);
-
-                                if (me->GetMap()->IsHeroic())
-                                    DoCast(target, SPELL_SUMMON_CRYSTAL_SHARD);
-                            }
-
             if (_SummonBorerTimer <= Diff)
             {
                 instance->DoSendNotifyToInstance("INSTANCE MESSAGE: Rock Borer are spawned"); // Notify to players when Rock Borer are spawn
                 b_BORROW = 1;
-                DoCast(me,SPELL_BURROW);
+                DoCast(me, SPELL_BURROW);
                 SummonRockBorer();
                 _SummonBorerTimer = 30000;
                 b_BorrowTimer = 9000;
@@ -148,9 +131,9 @@ public:
             {
                 if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                     if (!IsHeroic())
-                        DoCast(target,SPELL_CRYSTAL_BARRAGE);
+                        DoCast(target, SPELL_CRYSTAL_BARRAGE);
                     else
-                        DoCast(target,SPELL_CRYSTAL_BARRAGE_H);
+                        DoCast(target, SPELL_CRYSTAL_BARRAGE_H);
 
                     _CrystalTimer = 11000;
             }
