@@ -20,6 +20,7 @@
 
 enum Spells
 {
+    SPELL_SUMMON_CRYSTAL_SHARD       = 92012,
     SPELL_CRYSTAL_BARRAGE            = 86881,     // Crystal Barrage normal
     SPELL_CRYSTAL_BARRAGE_H          = 92648,     // Crystal Barrage heroic
     SPELL_DAMPENING_WAVE             = 82415,     // Dampening Wave normal
@@ -114,6 +115,17 @@ public:
         {
             if (!UpdateVictim())
                 return;
+
+         case EVENT_CRYSTAL_BARRAGE:
+                        if (phase == 0)
+                        {
+                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0, true, 0))
+                            {
+                                DoCast(target, SPELL_CRYSTAL_BARRAGE, true);
+
+                                if (me->GetMap()->IsHeroic())
+                                    DoCast(target, SPELL_SUMMON_CRYSTAL_SHARD);
+                            }
 
             if (_SummonBorerTimer <= Diff)
             {
