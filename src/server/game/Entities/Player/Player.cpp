@@ -5607,7 +5607,62 @@ void Player::RepopAtGraveyard()
 
     // if no grave found, stay at the current location
     // and don't show spirit healer location
-    if (ClosestGrave)
+    if (GetMapId() == 638)//This is temporary exception for Gilneas starting map until we get map overlay issues resolved!
+    {
+        if (GetAreaId() == 4759)
+        {
+            TeleportTo(638, -1561.5416f, 1596.1632f, 28.101074f, 3.80f);
+            if (isDead())                                        // not send if alive, because it used in TeleportTo()
+            {
+                WorldPacket data(SMSG_DEATH_RELEASE_LOC, 4*4);  // show spirit healer position on minimap
+                data << 638;
+                data << -1561.5416;
+                data << 1596.1632;
+                data << 28.101074;
+                GetSession()->SendPacket(&data);
+            }
+        }
+        else if (GetAreaId() == 4758)
+        {
+            TeleportTo(638, -1765.4115f, 1658.1041f, 21.333597f, 2.40f);
+            if (isDead())                                        // not send if alive, because it used in TeleportTo()
+            {
+                WorldPacket data(SMSG_DEATH_RELEASE_LOC, 4*4);  // show spirit healer position on minimap
+                data << 638;
+                data << -1765.4115;
+                data << 1658.1041;
+                data << 21.333597;
+                GetSession()->SendPacket(&data);
+            }
+        }
+        else if (GetAreaId() == 4757)
+        {
+            TeleportTo(638, -1763.5608f, 1410.7587f, 20.88947f, 2.30f);
+            if (isDead())                                        // not send if alive, because it used in TeleportTo()
+            {
+                WorldPacket data(SMSG_DEATH_RELEASE_LOC, 4*4);  // show spirit healer position on minimap
+                data << 638;
+                data << -1763.5608;
+                data << 1410.7587;
+                data << 20.88947;
+                GetSession()->SendPacket(&data);
+            }
+        }
+        else if (GetAreaId() == 4756)
+        {
+            TeleportTo(638, -1389.8872f, 1370.1406f, 35.994f, 5.60f);
+            if (isDead())                                        // not send if alive, because it used in TeleportTo()
+            {
+                WorldPacket data(SMSG_DEATH_RELEASE_LOC, 4*4);  // show spirit healer position on minimap
+                data << 638;
+                data << -1389.8872;
+                data << 1370.1406;
+                data << 35.994;
+                GetSession()->SendPacket(&data);
+            }
+        }
+    }
+    else if (ClosestGrave)
     {
         TeleportTo(ClosestGrave->map_id, ClosestGrave->x, ClosestGrave->y, ClosestGrave->z, GetOrientation());
         if (isDead())                                        // not send if alive, because it used in TeleportTo()
