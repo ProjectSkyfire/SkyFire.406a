@@ -7380,7 +7380,7 @@ bool Player::RewardHonor(Unit *uVictim, uint32 groupsize, int32 honor, bool pvpt
     GetSession()->SendPacket(&data);
 
     // add honor points
-    ModifyCurrency(CURRENCY_TYPE_HONOR_POINTS, int32(honor)* 2.4);
+    ModifyCurrency(CURRENCY_TYPE_HONOR_POINTS, int32(honor));
 
     if (InBattleground() && honor > 0)
     {
@@ -20058,11 +20058,9 @@ void Player::_SaveCurrency()
     for (PlayerCurrenciesMap::iterator itr = _currencies.begin(); itr != _currencies.end();)
     {
         if (itr->second.state == PLAYERCURRENCY_CHANGED)
-            CharacterDatabase.PExecute("UPDATE character_currency SET `count` = '%u', thisweek = '%u' WHERE guid = '%u' AND currency = '%u'",
-            itr->second.totalCount, itr->second.weekCount, GetGUIDLow(), itr->first);
+            CharacterDatabase.PExecute("UPDATE character_currency SET `count` = '%u', thisweek = '%u' WHERE guid = '%u' AND currency = '%u'", itr->second.totalCount, itr->second.weekCount, GetGUIDLow(), itr->first);
         else if (itr->second.state == PLAYERCURRENCY_NEW)
-            CharacterDatabase.PExecute("INSERT INTO character_currency (guid, currency, `count`, thisweek) VALUES ('%u', '%u', '%u', '%u')",
-            GetGUIDLow(), itr->first, itr->second.totalCount, itr->second.weekCount);
+            CharacterDatabase.PExecute("INSERT INTO character_currency (guid, currency, `count`, thisweek) VALUES ('%u', '%u', '%u', '%u')", GetGUIDLow(), itr->first, itr->second.totalCount, itr->second.weekCount);
 
         if (itr->second.state == PLAYERCURRENCY_REMOVED)
             _currencies.erase(itr++);
@@ -20079,8 +20077,7 @@ void Player::_SaveConquestPointsWeekCap()
     CharacterDatabase.PExecute("DELETE FROM character_cp_weekcap WHERE guid = '%u'", GetGUIDLow());
     for (uint8 source = 0; source < CP_SOURCE_MAX; source++)
     {
-        CharacterDatabase.PExecute("INSERT INTO character_cp_weekcap (guid, source, maxWeekRating, weekCap) VALUES ('%u', '%u', '%u', '%u')",
-            GetGUIDLow(), source, _maxWeekRating[source], _conquestPointsWeekCap[source] );
+        CharacterDatabase.PExecute("INSERT INTO character_cp_weekcap (guid, source, maxWeekRating, weekCap) VALUES ('%u', '%u', '%u', '%u')", GetGUIDLow(), source, _maxWeekRating[source], _conquestPointsWeekCap[source]);
     }
 }
 
@@ -21075,7 +21072,7 @@ bool Player::ActivateTaxiPathTo(std::vector<uint32> const& nodes, Creature* npc 
             (node->z - GetPositionZ())*(node->z - GetPositionZ()) >
             (2*INTERACTION_DISTANCE)*(2*INTERACTION_DISTANCE)*(2*INTERACTION_DISTANCE))
         {
-            GetSession()->SendActivateTaxiReply(ERR_TAXIPLAYERBUSY);
+            GetSession()->SendActivateTaxiReply(ERR_TAXITOOFARAWAY);
             return false;
         }
     }
@@ -21535,23 +21532,24 @@ bool Player::BuyItemFromVendorSlot(uint64 vendorguid, uint32 vendorslot, uint32 
         {
             switch (iece->RequiredCurrency[i])
             {
-                case NULL: break;
-                case CURRENCY_TYPE_CONQUEST_POINTS: // There are currencies that include multiplier in dbc
-                case CURRENCY_TYPE_HONOR_POINTS:
-                case CURRENCY_TYPE_JUSTICE_POINTS:
-                case CURRENCY_TYPE_VALOR_POINTS:
-                    if (!HasCurrency(iece->RequiredCurrency[i], iece->RequiredCurrencyCount[i]))
-                    {
-                        SendEquipError(EQUIP_ERR_VENDOR_MISSING_TURNINS, NULL, NULL);
-                        return false;
-                    }
-                    break;
-                default: // other ones need multiplier
-                    if (!HasCurrency(iece->RequiredCurrency[i], iece->RequiredCurrencyCount[i] * PLAYER_CURRENCY_PRECISION))
-                    {
-                        SendEquipError(EQUIP_ERR_VENDOR_MISSING_TURNINS, NULL, NULL);
-                        return false;
-                    }
+            case NULL:
+                break;
+            case CURRENCY_TYPE_CONQUEST_POINTS:          // There are currencies that include multiplier in dbc
+            case CURRENCY_TYPE_HONOR_POINTS:
+            case CURRENCY_TYPE_JUSTICE_POINTS:
+            case CURRENCY_TYPE_VALOR_POINTS:
+                if (!HasCurrency(iece->RequiredCurrency[i], iece->RequiredCurrencyCount[i]))
+                {
+                    SendEquipError(EQUIP_ERR_VENDOR_MISSING_TURNINS, NULL, NULL);
+                    return false;
+                }
+                break;
+            default:          // other ones need multiplier
+                if (!HasCurrency(iece->RequiredCurrency[i], iece->RequiredCurrencyCount[i] * PLAYER_CURRENCY_PRECISION))
+                {
+                    SendEquipError(EQUIP_ERR_VENDOR_MISSING_TURNINS, NULL, NULL);
+                    return false;
+                }
             }
         }
 
@@ -23024,7 +23022,7 @@ void Player::ResetCurrencyWeekCap()
     else
         _conquestPointsWeekCap[CP_SOURCE_ARENA] = uint16(1.4326 * (1511.26 / (1 + 1639.28 / exp(0.00412 * _maxWeekRating[CP_SOURCE_ARENA]))) + 857.15);
 
-    _maxWeekRating[CP_SOURCE_ARENA] = 0; // player must win at least 1 arena for week to change m_conquestPointsWeekCap
+    _maxWeekRating[CP_SOURCE_ARENA] = 0;          // player must win at least 1 arena for week to change _conquestPointsWeekCap
 
     _SaveConquestPointsWeekCap();
     _SaveCurrency();
@@ -23098,9 +23096,9 @@ bool Player::GetBGAccessByLevel(BattlegroundTypeId bgTypeId) const
     return true;
 }
 
-float Player::GetReputationPriceDiscount(Creature const* pCreature) const
+float Player::GetReputationPriceDiscount(Creature const* creature) const
 {
-    FactionTemplateEntry const* vendor_faction = pCreature->getFactionTemplateEntry();
+    FactionTemplateEntry const* vendor_faction = creature->getFactionTemplateEntry();
     if (!vendor_faction || !vendor_faction->faction)
         return 1.0f;
 
