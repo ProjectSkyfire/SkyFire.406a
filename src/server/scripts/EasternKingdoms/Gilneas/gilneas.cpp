@@ -1160,23 +1160,6 @@ public:
     };
 };
 
-/*######
-## npc_lord_darius_crowley_c2
-######*/
-class npc_lord_darius_crowley_c2 : public CreatureScript
-{
-public:
-    npc_lord_darius_crowley_c2() : CreatureScript("npc_lord_darius_crowley_c2") {}
-
-    bool OnQuestAccept(Player* player, Creature* creature, Quest const* quest)
-    {
-        for (int i = 0; i < 30; i++)
-            player->KilledMonsterCredit(35582, 0);
-
-        player->TeleportTo(654, -1533.76f, 1582.44f, 26.54f, 4.05f);
-        return true;
-    }
-};
 
 /*######
 ## npc_lord_darius_crowley_c3
@@ -1463,6 +1446,248 @@ class spell_keg_placed : public SpellScriptLoader
         }
 };
 
+/*######
+## npc_crowley_horse
+######*/
+class npc_crowley_horse : public CreatureScript
+{
+public:
+    npc_crowley_horse() : CreatureScript("npc_crowley_horse") {}
+
+    struct npc_crowley_horseAI : public npc_escortAI
+    {
+        npc_crowley_horseAI(Creature* creature) : npc_escortAI(creature) {}
+
+        bool CrowleyOn;
+        bool CrowleySpawn;
+        bool Run;
+
+        void AttackStart(Unit* /*who*/) {}
+        void EnterCombat(Unit* /*who*/) {}
+        void EnterEvadeMode() {}
+
+        void Reset()
+        {
+            CrowleyOn = false;
+            CrowleySpawn = false;
+            Run = false;
+        }
+
+        void PassengerBoarded(Unit* who, int8 /*seatId*/, bool apply)
+        {
+            if (who->GetTypeId() == TYPEID_PLAYER)
+            {
+                if (apply)
+                {
+                    Start(false, true, who->GetGUID());
+                }
+            }
+        }
+
+        void WaypointReached(uint32 i)
+        {
+            Player* player = GetPlayerForEscort();
+            Creature *crowley = me->FindNearestCreature(NPC_DARIUS_CROWLEY, 5, true);
+
+            switch(i)
+            {
+                case 1:
+                    player->SetClientControl(me, 0);
+                    crowley->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                    me->GetMotionMaster()->MoveJump(-1714.02f, 1666.37f, 20.57f, 25.0f, 15.0f);
+                    break;
+                case 4:
+                    crowley->AI()->Talk(SAY_CROWLEY_HORSE_1);
+                    break;
+                case 10:
+                    me->GetMotionMaster()->MoveJump(-1571.32f, 1710.58f, 20.49f, 25.0f, 15.0f);
+                    break;
+                case 11:
+                    crowley->AI()->Talk(SAY_CROWLEY_HORSE_2);
+                    break;
+                case 16:
+                    crowley->AI()->Talk(SAY_CROWLEY_HORSE_2);
+                    break;
+                case 20:
+                    me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                    me->getThreatManager().resetAllAggro();
+                    player->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                    player->getThreatManager().resetAllAggro();
+                    break;
+                case 21:
+                    player->SetClientControl(me, 1);
+                    player->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                    player->ExitVehicle();
+                    break;
+            }
+        }
+
+        void JustDied(Unit* /*killer*/)
+        {
+            if (Player* player = GetPlayerForEscort())
+               player->FailQuest(QUEST_SACRIFICES);
+        }
+
+        void OnCharmed(bool /*apply*/)
+        {
+        }
+
+        void UpdateAI(const uint32 diff)
+        {
+            npc_escortAI::UpdateAI(diff);
+
+            if (!CrowleySpawn)
+            {
+                 DoCast(SPELL_SUMMON_CROWLEY);
+                 if (Creature *crowley = me->FindNearestCreature(NPC_DARIUS_CROWLEY, 5, true))
+                 {
+                     CrowleySpawn = true;
+                 }
+            }
+
+            if (CrowleySpawn && !CrowleyOn)
+            {
+                Creature *crowley = me->FindNearestCreature(NPC_DARIUS_CROWLEY, 5, true);
+                crowley->CastSpell(me, SPELL_RIDE_HORSE, true);//Mount Crowley in seat 1
+                CrowleyOn = true;
+            }
+
+            if (!Run)
+            {
+                me->SetSpeed(MOVE_RUN, CROWLEY_SPEED);
+                Run = true;
+            }
+        }
+    };
+
+    CreatureAI* GetAI(Creature* creature) const
+    {
+        return new npc_crowley_horseAI (creature);
+    }
+};
+
+/*######
+## npc_bloodfang_stalker_c1
+######*/
+class npc_bloodfang_stalker_c1 : public CreatureScript
+{
+public:
+    npc_bloodfang_stalker_c1() : CreatureScript("npc_bloodfang_stalker_c1") {}
+
+    CreatureAI* GetAI(Creature* creature) const
+    {
+        return new npc_bloodfang_stalker_c1AI (creature);
+    }
+
+    struct npc_bloodfang_stalker_c1AI : public ScriptedAI
+    {
+        npc_bloodfang_stalker_c1AI(Creature* creature) : ScriptedAI(creature) {}
+
+        Player* player;
+        uint32 tEnrage;
+        uint32 tAnimate;
+        uint32 BurningReset;
+        bool Miss, willCastEnrage, Burning;
+
+        void Reset()
+        {
+            tEnrage    = 0;
+            tAnimate   = DELAY_ANIMATE;
+            Miss  = false;
+            willCastEnrage = urand(0, 1);
+            BurningReset = 3000;
+            Burning = false;
+        }
+
+        void UpdateAI(const uint32 diff)
+        {
+            if(me->HasAura(SPELL_THROW_TORCH))
+            {
+                Burning = true;
+            }
+            else
+                Burning = false;
+
+            if (Burning && BurningReset <=diff)//Extra fail-safe in case for some reason the aura fails to automatically remove itself (happened a few times during testing - cause is still unknown at this time)
+            {
+                me->RemoveAllAuras();
+                BurningReset = 5000;
+                Burning = false;
+            }
+            else
+                BurningReset -= diff;
+
+            if (!UpdateVictim())
+            {
+                return;
+            }
+
+            if (tEnrage <= diff && willCastEnrage)
+            {
+                if (me->GetHealthPct() <= 30)
+                {
+                    me->MonsterTextEmote(-106, 0);
+                    DoCast(me, SPELL_ENRAGE);
+                    tEnrage = CD_ENRAGE;
+                }
+            }
+            else tEnrage -= diff;
+
+            if (me->getVictim()->GetTypeId() == TYPEID_PLAYER)
+            {
+                Miss = false;
+            }
+            else if (me->getVictim()->isPet())
+            {
+                Miss = false;
+            }
+            else if (me->getVictim()->GetEntry() == NPC_NORTHGATE_REBEL_1)
+            {
+                if (me->getVictim()->GetHealthPct() < 90)
+                {
+                    Miss = true;
+                }
+            }
+
+            if (Miss && tAnimate <= diff)
+            {
+                me->HandleEmoteCommand(EMOTE_ONESHOT_ATTACKUNARMED);
+                me->PlayDistanceSound(SOUND_WORGEN_ATTACK);
+                tAnimate = DELAY_ANIMATE;
+            }
+            else
+                tAnimate -= diff;
+
+            if (!Miss)
+            {
+                DoMeleeAttackIfReady();
+            }
+        }
+
+        void SpellHit(Unit* caster, const SpellInfo* spell)
+        {
+            Creature *horse = me->FindNearestCreature(NPC_CROWLEY_HORSE, 100, true);
+            if (spell->Id == SPELL_THROW_TORCH)
+            {
+                Burning = true;
+
+                if(me->getVictim()->GetTypeId() == TYPEID_PLAYER)//We should ONLY switch our victim if we currently have the player targeted
+                {
+                    me->getThreatManager().resetAllAggro();//We need to aggro on crowley's horse, not the player
+                    horse->AddThreat(me, 1.0f);
+                    me->AddThreat(horse, 1.0f);
+                    me->AI()->AttackStart(horse);
+                }
+
+                if (caster->GetTypeId() == TYPEID_PLAYER && caster->ToPlayer()->GetQuestStatus(QUEST_SACRIFICES) == QUEST_STATUS_INCOMPLETE)
+                {
+                    caster->ToPlayer()->KilledMonsterCredit(NPC_BLOODFANG_STALKER_CREDIT, 0);
+                }
+            }
+        }
+    };
+};
+
 void AddSC_gilneas()
 {
     new npc_gilneas_city_guard_phase1();
@@ -1477,10 +1702,11 @@ void AddSC_gilneas()
     new npc_frightened_citizen();
     new npc_gilnean_royal_guard();
     new npc_mariam_spellwalker();
-    new npc_lord_darius_crowley_c2();
     new npc_lord_darius_crowley_c3();
     new npc_king_genn_greymane_c2();
+    new npc_crowley_horse();
     new spell_keg_placed();
     new npc_greymane_horse();
     new npc_krennan_aranas_c2();
+    new npc_bloodfang_stalker_c1();
 }
