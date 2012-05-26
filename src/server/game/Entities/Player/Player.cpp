@@ -20053,7 +20053,7 @@ void Player::_SaveSpells(SQLTransaction& trans)
     }
 }
 
-void Player::_SaveCurrency ()
+void Player::_SaveCurrency()
 {
     for (PlayerCurrenciesMap::iterator itr = _currencies.begin(); itr != _currencies.end();)
     {
@@ -20072,7 +20072,7 @@ void Player::_SaveCurrency ()
     }
 }
 
-void Player::_SaveConquestPointsWeekCap ()
+void Player::_SaveConquestPointsWeekCap()
 {
     CharacterDatabase.PExecute("DELETE FROM character_cp_weekcap WHERE guid = '%u'", GetGUIDLow());
     for (uint8 source = 0; source < CP_SOURCE_MAX; source++)
@@ -23004,7 +23004,7 @@ void Player::SetSeasonalQuestStatus(uint32 quest_id)
     m_SeasonalQuestChanged = true;
 }
 
-void Player::ResetCurrencyWeekCap ()
+void Player::ResetCurrencyWeekCap()
 {
     for (PlayerCurrenciesMap::iterator itr = _currencies.begin(); itr != _currencies.end(); ++itr)
         itr->second.weekCount = 0;
