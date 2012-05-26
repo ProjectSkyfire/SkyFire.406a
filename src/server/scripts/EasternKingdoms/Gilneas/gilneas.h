@@ -37,7 +37,14 @@ enum CreatureIds
     NPC_MYRIAM_SPELLWALKER                            = 35872,
     NPC_GILNEAN_ROYAL_GUARD                           = 35232,
     NPC_FRIGHTENED_CITIZEN_1                          = 34981,
-    NPC_FRIGHTENED_CITIZEN_2                          = 35836
+    NPC_FRIGHTENED_CITIZEN_2                          = 35836,
+    NPC_DARIUS_CROWLEY                                = 35230,
+    NPC_NORTHGATE_REBEL_1                             = 36057,//phase 8 outside cathedral
+    NPC_NORTHGATE_REBEL_2                             = 41015,//phase 1024 inside cathedral
+    NPC_BLOODFANG_STALKER_C1                          = 35229,//Main spawns
+    NPC_BLOODFANG_STALKER_C2                          = 51277,
+    NPC_BLOODFANG_STALKER_CREDIT                      = 35582,
+    NPC_CROWLEY_HORSE                                 = 35231
 };
 
 enum GameObjectIds
@@ -48,13 +55,18 @@ enum QuestIds
 {
     QUEST_LOCKDOWN                                     = 14078,
     QUEST_EVAC_MERC_SQUA                               = 14098,
-    QUEST_SAVE_KRENNAN_ARANAS                          = 14293
+    QUEST_SAVE_KRENNAN_ARANAS                          = 14293,
+    QUEST_SACRIFICES                                   = 14212
 };
 
 enum SpellIds
 {
     SPELL_ENRAGE                                       = 8599,
-    SPELL_FROSTBOLT_VISUAL_ONLY                        = 74277 //Dummy spell, visual only
+    SPELL_FROSTBOLT_VISUAL_ONLY                        = 74277, //Dummy spell, visual only
+    SPELL_SUMMON_CROWLEY                               = 67004,
+    SPELL_RIDE_HORSE                                   = 43671,
+    SPELL_THROW_TORCH                                  = 67063,
+    SPELL_RIDE_VEHICLE_HARDCODED                       = 46598
 };
 
 enum NpcTextIds
@@ -96,13 +108,16 @@ enum NpcTextIds
 
     YELL_KRENNAN_C1                                    = -1999973,
     SAY_KRENNAN_C2                                     = -1999972,
-    SAY_GREYMANE_HORSE                                 = -1999971
+    SAY_GREYMANE_HORSE                                 = -1999971,
+    SAY_CROWLEY_HORSE_1                                = 0,    // Let''s round up as many of them as we can.  Every worgen chasing us is one less worgen chasing the survivors!
+    SAY_CROWLEY_HORSE_2                                = 1    // You'll never catch us, you blasted mongrels! || Come and get us, you motherless beasts! || Over here, you flea bags!
 };
 
 enum SoundIds
 {
     SOUND_SWORD_FLESH                                 = 143,
     SOUND_SWORD_PLATE                                 = 147,
+    SOUND_WORGEN_ATTACK                               = 558,
     DELAY_SOUND                                       = 500,
     DELAY_ANIMATE                                     = 2000
 };
@@ -119,5 +134,6 @@ enum SoundIds
 #define KRENNAN_END_Y                                 1430.6125f
 #define KRENNAN_END_Z                                 19.79f
 #define KRENNAN_END_O                                 2.79f
+#define CROWLEY_SPEED                                 1.85f//if set much lower than this, the horse automatically despawns before reaching the end of his waypoints
 
 #endif
