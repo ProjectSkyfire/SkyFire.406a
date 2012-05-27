@@ -819,6 +819,7 @@ bool SmartAIMgr::IsEventValid(SmartScriptHolder& e)
         case SMART_ACTION_GO_SET_LOOT_STATE:
         case SMART_ACTION_SEND_TARGET_TO_TARGET:
         case SMART_ACTION_CHARACTER_SAVE:
+        case SMART_ACTION_CHARACTER_BIND:
             break;
         default:
             sLog->outErrorDb("SmartAIMgr: Not handled action_type(%u), event_type(%u), Entry %d SourceType %u Event %u, skipped.", e.GetActionType(), e.GetEventType(), e.entryOrGuid, e.GetScriptType(), e.event_id);

@@ -1968,6 +1968,24 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
             delete targets;
             break;
         }
+        case SMART_ACTION_CHARACTER_BIND:
+        {
+            ObjectList* targets = GetTargets(e, unit);
+            if (!targets)
+                break;
+
+            uint32 area_id;
+            WorldLocation loc;
+
+            for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+            {
+                if (!IsPlayer(*itr))
+                    continue;
+                (*itr)->ToPlayer()->SetHomebind(loc, area_id);
+            }
+            delete targets;
+            break;
+        }
         default:
             sLog->outErrorDb("SmartScript::ProcessAction: Unhandled Action type %u", e.GetActionType());
             break;
