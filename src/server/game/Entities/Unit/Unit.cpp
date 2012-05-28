@@ -6928,17 +6928,19 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                         triggered_spell_id = 87173;
                         break;
                     }
+                    break;
                 }
                 // Divine purpose
                 case 85117:
                 case 86172:
                 {
-                    if (roll_chance_f(triggerAmount))
+                    if (roll_chance_i(triggerAmount))
                     {
                         target = this;
                         triggered_spell_id = 90174;
                         break;
                     }
+                    break;
                 }
                 // Judgement of Light
                 case 20185:
@@ -8109,6 +8111,23 @@ bool Unit::HandleAuraProc(Unit* victim, uint32 damage, Aura* triggeredByAura, Sp
         {
             switch (dummySpell->Id)
             {
+                // Pursuit of Justice
+                case 26022:
+                case 26023:
+                {
+                    *handled = true;
+
+                    // Need stun, root, or fear mechanic
+                    if (!(procSpell->GetAllEffectsMechanicMask() & ((1<<MECHANIC_ROOT)|(1<<MECHANIC_STUN)|(1<<MECHANIC_FEAR))))
+                        return false;
+
+                    if (!(HasAura(32733))) // Pursuit of Justice and Blessed Life cooldown marker
+                    {
+                        CastSpell(this,89024,true);
+                        CastSpell(this,32733,true);
+                    }
+                    break;
+                }
                 // Nevermelting Ice Crystal
                 case 71564:
                     RemoveAuraFromStack(71564);

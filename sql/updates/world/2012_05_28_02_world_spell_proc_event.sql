@@ -1,0 +1,5 @@
+-- (85117,86172,90174) Divine Purpose
+DELETE FROM `spell_proc_event` WHERE `entry` IN (85117,86172,90174);
+INSERT INTO `spell_proc_event` VALUES 
+(85117, 3, 10, 8388608, 2228354, 40960, 67600, 0, 0, 100, 0),
+(86172, 3, 10, 8388608, 2228354, 40960, 67600, 0, 0, 100, 0);
