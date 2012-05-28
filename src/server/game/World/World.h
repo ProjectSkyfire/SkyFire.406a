@@ -294,6 +294,7 @@ enum WorldIntConfigs
     CONFIG_ARENA_START_RATING,
     CONFIG_ARENA_START_PERSONAL_RATING,
     CONFIG_ARENA_START_MATCHMAKER_RATING,
+    CONFIG_ARENA_CONQUEST_POINTS_REWARD,
     CONFIG_MAX_WHO,
     CONFIG_HONOR_AFTER_DUEL,
     CONFIG_PVP_TOKEN_MAP_TYPE,
@@ -398,6 +399,7 @@ enum Rates
     RATE_AUCTION_DEPOSIT,
     RATE_AUCTION_CUT,
     RATE_HONOR,
+    RATE_CONQUEST_POINTS_WEEK_LIMIT,
     RATE_MINING_AMOUNT,
     RATE_MINING_NEXT,
     RATE_TALENT,
@@ -649,6 +651,7 @@ class World
         time_t GetNextDailyQuestsResetTime() const { return m_NextDailyQuestReset; }
         time_t GetNextWeeklyQuestsResetTime() const { return m_NextWeeklyQuestReset; }
         time_t GetNextRandomBGResetTime() const { return m_NextRandomBGReset; }
+        time_t GetNextCurrencyResetTime() const { return m_NextCurrencyReset; }
 
         /// Get the maximum skill level a player can reach
         uint16 GetConfigMaxSkillValue() const

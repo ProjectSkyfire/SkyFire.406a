@@ -40,7 +40,7 @@ void WorldSession::HandleBattlemasterHelloOpcode(WorldPacket & recv_data)
 {
     uint64 guid;
     recv_data >> guid;
-    sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Recvd CMSG_BATTLEMASTER_HELLO Message from (GUID: %u TypeId:%u)", GUID_LOPART(guid), GuidHigh2TypeId(GUID_HIPART(guid)));
+    sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_BATTLEMASTER_HELLO Message from (GUID: %u TypeId:%u)", GUID_LOPART(guid), GuidHigh2TypeId(GUID_HIPART(guid)));
 
     Creature* unit = GetPlayer()->GetMap()->GetCreature(guid);
     if (!unit)
@@ -107,7 +107,7 @@ void WorldSession::HandleBattlemasterJoinOpcode(WorldPacket & recv_data)
         return;
 
     // get bg template
-    Battleground *bg = sBattlegroundMgr->GetBattlegroundTemplate(bgTypeId);
+    Battleground* bg = sBattlegroundMgr->GetBattlegroundTemplate(bgTypeId);
     if (!bg)
         return;
 
@@ -237,9 +237,9 @@ void WorldSession::HandleBattlemasterJoinOpcode(WorldPacket & recv_data)
 
 void WorldSession::HandleBattlegroundPlayerPositionsOpcode(WorldPacket & /*recv_data*/)
 {
-    sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Recvd MSG_BATTLEGROUND_PLAYER_POSITIONS Message");
+    sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_BATTLEGROUND_PLAYER_POSITIONS Message");
 
-    Battleground *bg = _player->GetBattleground();
+    Battleground* bg = _player->GetBattleground();
     if (!bg)                                                 // can't be received if player not in battleground
         return;
 
@@ -297,7 +297,7 @@ void WorldSession::HandleBattlegroundPlayerPositionsOpcode(WorldPacket & /*recv_
 
 void WorldSession::HandlePVPLogDataOpcode(WorldPacket & /*recv_data*/)
 {
-    sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Recvd MSG_PVP_LOG_DATA Message");
+    sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received MSG_PVP_LOG_DATA Message");
 
     Battleground* bg = _player->GetBattleground();
     if (!bg)
@@ -316,7 +316,7 @@ void WorldSession::HandlePVPLogDataOpcode(WorldPacket & /*recv_data*/)
 
 void WorldSession::HandleBattlefieldListOpcode(WorldPacket &recv_data)
 {
-    sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Recvd CMSG_BATTLEFIELD_LIST Message");
+    sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_BATTLEFIELD_LIST Message");
 
     uint32 bgTypeId;
     recv_data >> bgTypeId;                                  // id from DBC
@@ -341,7 +341,7 @@ void WorldSession::HandleBattlefieldListOpcode(WorldPacket &recv_data)
 
 void WorldSession::HandleBattlegroundPortOpcode(WorldPacket &recv_data)
 {
-    sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Recvd CMSG_BATTLEGROUND_PORT Message");
+    sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_BATTLEGROUND_PORT Message");
 
     uint8 action;                                           // enter battle 128, leave queue 0
     // then goes uint64 that we sent to client in SMSG_BATTLEFIELD_STATUS3
@@ -379,7 +379,7 @@ void WorldSession::HandleBattlegroundPortOpcode(WorldPacket &recv_data)
         return;
     }
 
-    Battleground *bg = sBattlegroundMgr->GetBattleground(ginfo.IsInvitedToBGInstanceGUID, bgTypeId);
+    Battleground* bg = sBattlegroundMgr->GetBattleground(ginfo.IsInvitedToBGInstanceGUID, bgTypeId);
 
     // bg template might and must be used in case of leaving queue, when instance is not created yet
     if (!bg && action == 0)
@@ -418,7 +418,7 @@ void WorldSession::HandleBattlegroundPortOpcode(WorldPacket &recv_data)
     }
     uint32 queueSlot = _player->GetBattlegroundQueueIndex(bgQueueTypeId);
     WorldPacket data;
-    switch(action >> 7)
+    switch (action >> 7)
     {
         case 1:                                         // port to battleground
             if (!_player->IsInvitedForBattlegroundQueueType(bgQueueTypeId))
@@ -488,7 +488,7 @@ void WorldSession::HandleBattlegroundPortOpcode(WorldPacket &recv_data)
 
 void WorldSession::HandleBattleFieldPortOpcode(WorldPacket &recv_data)
 {
-    sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Recvd CMSG_BATTLEFIELD_PORT Message");
+    sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_BATTLEFIELD_PORT Message");
 
     uint8 type;                                             // arenatype if arena
     uint8 unk2;                                             // unk, can be 0x0 (may be if was invited?) and 0x1
@@ -636,7 +636,7 @@ void WorldSession::HandleBattleFieldPortOpcode(WorldPacket &recv_data)
 
 void WorldSession::HandleLeaveBattlefieldOpcode(WorldPacket& recv_data)
 {
-    sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Recvd CMSG_LEAVE_BATTLEFIELD Message");
+    sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_LEAVE_BATTLEFIELD Message");
 
     recv_data.read_skip<uint8>();                           // unk1
     recv_data.read_skip<uint8>();                           // unk2
@@ -659,7 +659,7 @@ void WorldSession::HandleBattlefieldStatusOpcode(WorldPacket & /*recv_data*/)
 
     WorldPacket data;
     // we must update all queues here
-    Battleground *bg = NULL;
+    Battleground* bg = NULL;
     for (uint8 i = 0; i < PLAYER_MAX_BATTLEGROUND_QUEUES; ++i)
     {
         BattlegroundQueueTypeId bgQueueTypeId = _player->GetBattlegroundQueueTypeId(i);

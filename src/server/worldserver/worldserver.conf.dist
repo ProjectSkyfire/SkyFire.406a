@@ -2746,6 +2746,13 @@ Arena.ArenaStartPersonalRating = 0
 Arena.ArenaStartMatchmakerRating = 1500
 
 #
+#    Arena.ConquestPointsReward
+#     Description: Amount of points set to be awarded.
+#     Default: 135
+
+Arena.ConquestPointsReward = 135
+
+#
 ###################################################################################################
 
 ###################################################################################################

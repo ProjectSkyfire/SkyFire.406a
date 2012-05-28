@@ -41,8 +41,7 @@ namespace SkyFire
     class BattlegroundChatBuilder
     {
         public:
-            BattlegroundChatBuilder(ChatMsg msgtype, int32 textId, Player const* source, va_list* args = NULL)
-                : _msgtype(msgtype), _textId(textId), _source(source), _args(args) { }
+            BattlegroundChatBuilder(ChatMsg msgtype, int32 textId, Player const* source, va_list* args = NULL) : _msgtype(msgtype), _textId(textId), _source(source), _args(args) { }
 
             void operator()(WorldPacket& data, LocaleConstant loc_idx)
             {
@@ -87,8 +86,7 @@ namespace SkyFire
     class Battleground2ChatBuilder
     {
         public:
-            Battleground2ChatBuilder(ChatMsg msgtype, int32 textId, Player const* source, int32 arg1, int32 arg2)
-                : _msgtype(msgtype), _textId(textId), _source(source), _arg1(arg1), _arg2(arg2) {}
+            Battleground2ChatBuilder(ChatMsg msgtype, int32 textId, Player const* source, int32 arg1, int32 arg2) : _msgtype(msgtype), _textId(textId), _source(source), _arg1(arg1), _arg2(arg2) {}
 
             void operator()(WorldPacket& data, LocaleConstant loc_idx)
             {
@@ -838,6 +836,9 @@ void Battleground::EndBattleground(uint32 winner)
                     player->UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_WIN_RATED_ARENA, 1);
 
                 winner_arena_team->MemberWon(player, loser_matchmaker_rating, winner_matchmaker_change);
+
+                player->ModifyCurrency(CURRENCY_TYPE_CONQUEST_POINTS, sWorld->getIntConfig(CONFIG_ARENA_CONQUEST_POINTS_REWARD) * PLAYER_CURRENCY_PRECISION);
+                player->UpdateMaxWeekRating(CP_SOURCE_ARENA, winner_arena_team->GetSlot());
             }
             else
             {
@@ -849,7 +850,7 @@ void Battleground::EndBattleground(uint32 winner)
         }
 
         uint32 winner_kills = player->GetRandomWinner() ? BG_REWARD_WINNER_HONOR_LAST : BG_REWARD_WINNER_HONOR_FIRST;
-        uint32 loser_kills = player->GetRandomWinner() ? BG_REWARD_LOSER_HONOR_LAST : BG_REWARD_LOSER_HONOR_FIRST;
+        uint32 loser_kills  = player->GetRandomWinner() ? BG_REWARD_LOSER_HONOR_LAST : BG_REWARD_LOSER_HONOR_FIRST;
         uint32 winner_arena = player->GetRandomWinner() ? BG_REWARD_WINNER_ARENA_LAST : BG_REWARD_WINNER_ARENA_FIRST;
 
         // Reward winner team
@@ -858,8 +859,12 @@ void Battleground::EndBattleground(uint32 winner)
             if (IsRandom() || BattlegroundMgr::IsBGWeekend(GetTypeID()))
             {
                 UpdatePlayerScore(player, SCORE_BONUS_HONOR, GetBonusHonorFromKill(winner_kills));
+
                 if (!player->GetRandomWinner())
+                {
+                    player->ModifyCurrency(CURRENCY_TYPE_CONQUEST_POINTS, 25 * PLAYER_CURRENCY_PRECISION);
                     player->SetRandomWinner(true);
+                }
             }
 
             player->UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_WIN_BG, 1);

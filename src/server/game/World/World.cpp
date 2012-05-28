@@ -507,6 +507,12 @@ void World::LoadConfigSettings(bool reload)
     rate_values[RATE_AUCTION_DEPOSIT] = ConfigMgr::GetFloatDefault("Rate.Auction.Deposit", 1.0f);
     rate_values[RATE_AUCTION_CUT] = ConfigMgr::GetFloatDefault("Rate.Auction.Cut", 1.0f);
     rate_values[RATE_HONOR] = ConfigMgr::GetFloatDefault("Rate.Honor", 1.0f);
+    rate_values[RATE_CONQUEST_POINTS_WEEK_LIMIT] = ConfigMgr::GetFloatDefault("Rate.ConquestPointsWeekLimit", 1.0f);
+    if (rate_values[RATE_CONQUEST_POINTS_WEEK_LIMIT] <= 0 || rate_values[RATE_CONQUEST_POINTS_WEEK_LIMIT] > 100)
+    {
+        sLog->outError("Rate.ConquestPointsWeekLimit (%f) must be between 0 and 100. Using 1 instead.", rate_values[RATE_CONQUEST_POINTS_WEEK_LIMIT]);
+        rate_values[RATE_CONQUEST_POINTS_WEEK_LIMIT] = 1.0f;
+    }
     rate_values[RATE_MINING_AMOUNT] = ConfigMgr::GetFloatDefault("Rate.Mining.Amount", 1.0f);
     rate_values[RATE_MINING_NEXT]   = ConfigMgr::GetFloatDefault("Rate.Mining.Next", 1.0f);
     rate_values[RATE_INSTANCE_RESET_TIME] = ConfigMgr::GetFloatDefault("Rate.InstanceResetTime", 1.0f);
@@ -1100,6 +1106,7 @@ void World::LoadConfigSettings(bool reload)
     m_int_configs[CONFIG_ARENA_SEASON_ID]                            = ConfigMgr::GetIntDefault ("Arena.ArenaSeason.ID", 1);
     m_int_configs[CONFIG_ARENA_START_RATING]                         = ConfigMgr::GetIntDefault ("Arena.ArenaStartRating", 0);
     m_int_configs[CONFIG_ARENA_START_PERSONAL_RATING]                = ConfigMgr::GetIntDefault ("Arena.ArenaStartPersonalRating", 1000);
+    m_int_configs[CONFIG_ARENA_CONQUEST_POINTS_REWARD]               = ConfigMgr::GetIntDefault ("Arena.ConquestPointsReward", 135);
     m_int_configs[CONFIG_ARENA_START_MATCHMAKER_RATING]              = ConfigMgr::GetIntDefault ("Arena.ArenaStartMatchmakerRating", 1500);
     m_bool_configs[CONFIG_ARENA_SEASON_IN_PROGRESS]                  = ConfigMgr::GetBoolDefault("Arena.ArenaSeason.InProgress", true);
     m_bool_configs[CONFIG_ARENA_LOG_EXTENDED_INFO]                   = ConfigMgr::GetBoolDefault("ArenaLog.ExtendedInfo", false);

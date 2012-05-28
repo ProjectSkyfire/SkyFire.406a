@@ -250,6 +250,7 @@ void CharacterDatabaseConnection::DoPrepareStatements()
 
     // Currency
     PREPARE_STATEMENT(CHAR_LOAD_PLAYER_CURRENCY, "SELECT currency, count, thisweek FROM character_currency WHERE guid = ?", CONNECTION_ASYNC);
+    PREPARE_STATEMENT(CHAR_LOAD_PLAYER_CP_WEEK_CAP, "SELECT source, maxWeekRating, weekCap FROM character_cp_weekcap WHERE guid = ?", CONNECTION_ASYNC);
 
     // Account data
     PREPARE_STATEMENT(CHAR_UPDATE_ALL_AT_LOGIN_FLAGS, "UPDATE characters SET at_login = at_login | ?", CONNECTION_ASYNC);

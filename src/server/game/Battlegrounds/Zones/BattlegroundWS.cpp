@@ -173,7 +173,6 @@ void BattlegroundWS::PostUpdateImpl(uint32 diff)
 
 void BattlegroundWS::StartingEventCloseDoors()
 {
-
     DoorClose(BG_WS_OBJECT_DOOR_A_1);
     DoorClose(BG_WS_OBJECT_DOOR_A_2);
     SpawnBGObject(BG_WS_OBJECT_DOOR_A_3, RESPAWN_IMMEDIATELY);
