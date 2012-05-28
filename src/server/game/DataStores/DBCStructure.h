@@ -1537,12 +1537,12 @@ struct ScalingStatValuesEntry
     {
         if (mask & 0x4001F)
         {
-            if(mask & 0x00000001) return ssdMultiplier[1];
-            if(mask & 0x00000002) return ssdMultiplier[2]; // 0 and 1 were duplicated
-            if(mask & 0x00000004) return ssdMultiplier[3];
-            if(mask & 0x00000008) return ssdMultiplier[0];
-            if(mask & 0x00000010) return ssdMultiplier[4];
-            if(mask & 0x00040000) return ssdMultiplier[2]; // 4.0.0
+            if (mask & 0x00000001) return ssdMultiplier[1];
+            if (mask & 0x00000002) return ssdMultiplier[2]; // 0 and 1 were duplicated
+            if (mask & 0x00000004) return ssdMultiplier[3];
+            if (mask & 0x00000008) return ssdMultiplier[0];
+            if (mask & 0x00000010) return ssdMultiplier[4];
+            if (mask & 0x00040000) return ssdMultiplier[2]; // 4.0.0
         }
         return 0;
     }

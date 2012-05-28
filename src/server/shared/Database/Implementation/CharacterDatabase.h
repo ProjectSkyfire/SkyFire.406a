@@ -262,7 +262,8 @@ enum CharacterDatabaseStatements
 
     // Currency
     CHAR_LOAD_PLAYER_CURRENCY,
-
+    CHAR_LOAD_PLAYER_CP_WEEK_CAP, // conquest points
+    
     // Tutorials
     CHAR_LOAD_TUTORIALS,
     CHAR_GET_HAS_TUTORIALS,
