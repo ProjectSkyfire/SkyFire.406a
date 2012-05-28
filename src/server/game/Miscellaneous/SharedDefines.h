@@ -602,11 +602,11 @@ enum SpellAttr8
 // Custom values
 enum SpellClickUserTypes
 {
-    SPELL_CLICK_USER_ANY = 0,
-    SPELL_CLICK_USER_FRIEND = 1,
-    SPELL_CLICK_USER_RAID = 2,
-    SPELL_CLICK_USER_PARTY = 3,
-    SPELL_CLICK_USER_MAX = 4
+    SPELL_CLICK_USER_ANY        = 0,
+    SPELL_CLICK_USER_FRIEND     = 1,
+    SPELL_CLICK_USER_RAID       = 2,
+    SPELL_CLICK_USER_PARTY      = 3,
+    SPELL_CLICK_USER_MAX        = 4,
 };
 
 enum SpellClickCastFlags

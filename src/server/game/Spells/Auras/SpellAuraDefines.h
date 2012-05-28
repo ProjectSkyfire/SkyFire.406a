@@ -55,8 +55,8 @@ enum AuraEffectHandleModes
 // m_schoolAbsorb
 enum DAMAGE_ABSORB_TYPE
 {
-    ALL_DAMAGE_ABSORB                           = -2,
-    ONLY_MAGIC_ABSORB                           = -1,
+    ALL_DAMAGE_ABSORB      = -2,
+    ONLY_MAGIC_ABSORB      = -1,
 };
 
 enum AuraType
