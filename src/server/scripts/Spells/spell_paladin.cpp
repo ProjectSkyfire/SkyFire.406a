@@ -405,8 +405,6 @@ public:
 
         bool Load()
         {
-            totalheal = GetSpellInfo()->Effects[EFFECT_0].CalcValue();
-
             if (GetCaster()->GetTypeId() != TYPEID_PLAYER)
                 return false;
             return true;
@@ -414,6 +412,7 @@ public:
 
         void ChangeHeal(SpellEffIndex /*effIndex*/)
         {
+            totalheal = GetHitHeal();
             Unit* caster = GetCaster();
             Unit* target = GetHitUnit();
 
@@ -427,9 +426,10 @@ public:
                 // Selfless Healer
                 if (AuraEffect const* auraEff = caster->GetAuraEffect(SPELL_AURA_DUMMY, SPELLFAMILY_PALADIN, 3924, EFFECT_0))
                     if (target != caster)
-                        totalheal += totalheal + (totalheal * auraEff->GetAmount()) / 100;
+                        totalheal += (totalheal * auraEff->GetAmount()) / 100;
 
                 SetHitHeal(totalheal);
+                const_cast<SpellValue*>(GetSpellValue())->EffectBasePoints[1] = totalheal;
                 return;
             }
 
@@ -454,9 +454,17 @@ public:
             // Selfless Healer
             if (AuraEffect const* auraEff = caster->GetDummyAuraEffect(SPELLFAMILY_PALADIN, 3924, EFFECT_0))
                 if (target != caster)
-                    totalheal += totalheal + (totalheal * auraEff->GetAmount()) / 100;
+                    totalheal += (totalheal * auraEff->GetAmount()) / 100;
 
             SetHitHeal(totalheal);
+            const_cast<SpellValue*>(GetSpellValue())->EffectBasePoints[1] = totalheal;
+        }
+
+        void PreventEffect(SpellEffIndex effIndex)
+        {
+            // Glyph of Long Word
+            if (!GetCaster()->HasAura(93466))
+                PreventHitDefaultEffect(effIndex);
         }
 
         void HandlePeriodic()
@@ -469,6 +477,7 @@ public:
         void Register()
         {
             OnEffectHitTarget += SpellEffectFn(spell_pal_word_of_glory_heal_SpellScript::ChangeHeal, EFFECT_0, SPELL_EFFECT_HEAL);
+            OnEffectHitTarget += SpellEffectFn(spell_pal_word_of_glory_heal_SpellScript::PreventEffect, EFFECT_1, SPELL_EFFECT_APPLY_AURA);
             AfterHit += SpellHitFn(spell_pal_word_of_glory_heal_SpellScript::HandlePeriodic);
         }
     };
@@ -486,10 +495,43 @@ public:
 
         void CalculateOvertime(AuraEffect const* aurEff, int32& amount, bool& canBeRecalculated)
         {
+            // Had to do ALLLLLL the scaling manually because (afaik) there is no way to hook the GetHitHeal from the spell's effIndex 0
+            Unit* caster = GetCaster();
+            int32 bonus = (caster->ToPlayer()->GetTotalAttackPowerValue(BASE_ATTACK) * 0.198) + (caster->ToPlayer()->GetBaseSpellPowerBonus() * 0.209);
+            int32 divinebonus = (caster->ToPlayer()->GetTotalAttackPowerValue(BASE_ATTACK) * 0.594) + (caster->ToPlayer()->GetBaseSpellPowerBonus() * 0.627);
+            int32 multiplier;
+
             if (AuraEffect const* longWord = GetCaster()->GetDummyAuraEffect(SPELLFAMILY_PALADIN, 4127, 1))
             {
                 canBeRecalculated = true;
-                amount = ((GetSpellInfo()->Effects[EFFECT_0].CalcValue() * longWord->GetAmount()) / 100)  / 3;
+
+                switch (caster->GetPower(POWER_HOLY_POWER))
+                {
+                    case 0:
+                    {
+                        bonus = bonus;
+                        multiplier = 1;
+                        break;
+                    }
+                    case 1:
+                    {
+                       bonus = (caster->ToPlayer()->GetTotalAttackPowerValue(BASE_ATTACK) * 0.396) + (caster->ToPlayer()->GetBaseSpellPowerBonus() * 0.418);
+                       multiplier = 2;
+                       break;
+                    }
+                    case 2:
+                    {
+                       bonus = (caster->ToPlayer()->GetTotalAttackPowerValue(BASE_ATTACK) * 0.594) + (caster->ToPlayer()->GetBaseSpellPowerBonus() * 0.627);
+                       multiplier = 3;
+                       break;
+                    }
+                }
+                if (caster->HasAura(SPELL_DIVINE_PURPOSE_PROC))
+                {
+                    amount = ((((GetSpellInfo()->Effects[0].CalcValue(caster) * 3)  + divinebonus) * longWord->GetAmount()) / 100)  / 3;
+                }
+                else
+                    amount = ((((GetSpellInfo()->Effects[0].CalcValue(caster) * multiplier)  + bonus) * longWord->GetAmount()) / 100)  / 3;
             }
         }
 
@@ -503,7 +545,6 @@ public:
     {
         return new spell_pal_word_of_glory_heal_AuraScript();
     }
-
     SpellScript* GetSpellScript() const
     {
         return new spell_pal_word_of_glory_heal_SpellScript();

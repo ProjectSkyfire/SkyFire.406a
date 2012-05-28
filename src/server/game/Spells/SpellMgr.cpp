@@ -2996,9 +2996,6 @@ void SpellMgr::LoadSpellCustomAttr()
             case 5484:  // Howl of Terror
                 spellInfo->AuraInterruptFlags = AURA_INTERRUPT_FLAG_TAKE_DAMAGE;
                 break;
-            case 89023: // Blessed life (spell, not talent)
-                spellInfo->Effects[1].Effect = 0;
-                break;
             case 1680: // Whirlwind  (Fury)
                 spellInfo->Effects[0].RadiusEntry = sSpellRadiusStore.LookupEntry (14);
                 spellInfo->Effects[1].RadiusEntry = sSpellRadiusStore.LookupEntry (14);
@@ -3011,6 +3008,14 @@ void SpellMgr::LoadSpellCustomAttr()
                 break;
             case 42835: // Spout
                 spellInfo->Effects[0].Effect = 0; // remove damage effect, only anim is needed
+                break;
+            // Need this otherwise we'll be having multiple chance rolls for judgement.
+            case 85117: // Divine Purpose (Rank 1)
+            case 86172: // Divine Purpose (Rank 2)
+                spellInfo->AttributesEx3 = 0; 
+                break;
+            case 90174: // Divine Purpose Proc
+                spellInfo->ProcCharges = 1;
                 break;
             case 30657: // Quake
                 spellInfo->Effects[0].TriggerSpell = 30571;
