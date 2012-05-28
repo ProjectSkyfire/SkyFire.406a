@@ -261,7 +261,7 @@ void ScriptMgr::Initialize()
 void ScriptMgr::Unload()
 {
     #define SCR_CLEAR(T) \
-        for (SCR_REG_ITR(T) itr = SCR_REG_LST(T).begin(); itr != SCR_REG_LST(T).end(); ++itr) \
+        FOR_SCRIPTS(T, itr, end) \
             delete itr->second; \
         SCR_REG_LST(T).clear();
 
