@@ -174,18 +174,19 @@ const uint32 GILNEAS_BG_GraveyardIds[GILNEAS_BG_ALL_NODES_COUNT] = { 1736, 1738,
 
 const float GILNEAS_BG_SpiritGuidePos[GILNEAS_BG_ALL_NODES_COUNT][4] =
 {
-    { 1034.82f, 1335.58f, 12.0095f, 5.15f },                   // Lighthouse
-    { 887.578f, 937.337f, 23.7737f, 0.45f },                   // Waterworks
-    { 1252.23f, 836.547f, 27.7895f, 1.60f },                   // Mine
-    { 908.274f, 1338.6f, 27.6449f, 5.95f  },                   // Alliance
-    { 1401.38f, 977.125f, 7.44215f, 3.04f },                   // Horde
+    { 1034.82f, 1335.58f, 12.0095f, 5.15f },     // Lighthouse
+    { 887.578f, 937.337f, 23.7737f, 0.45f },     // Waterworks
+    { 1252.23f, 836.547f, 27.7895f, 1.60f },     // Mine
+    { 908.274f, 1338.6f, 27.6449f, 5.95f  },     // Alliance
+    { 1401.38f, 977.125f, 7.44215f, 3.04f },     // Horde
 };
 
 const float GILNEAS_BG_BuffPositions[GILNEAS_BG_DYNAMIC_NODES_COUNT][4] =
 {
-    { 1063.57f, 1313.42f, 4.91f, 4.14f },                    // Lighthouse
-    { 961.830f, 977.03f, 14.15f, 4.55f },                    // Waterworks
-    { 1193.09f, 1017.46f, 7.98f, 0.24f },                    // Mine
+    { 1063.57f, 1313.42f, 4.91f, 4.14f },        // Lighthouse
+    { 961.830f, 977.03f, 14.15f, 4.55f },        // Waterworks
+    { 1193.09f, 1017.46f, 7.98f, 0.24f },        // Mine
+   // { 1107.57f, 912.18f, 27.54f, 5.53f },        // Unknown
 };
 
 struct GILNEAS_BG_BannerTimer
@@ -244,7 +245,7 @@ class BattlegroundBG : public Battleground
         void _DelBanner(uint8 node, uint8 type, uint8 teamIndex);
 
         /* Creature spawning/removing */
-        // TODO: need to get the peons spawning scripted
+        // TODO: need to get the peons spawns scripted
         void _NodeOccupied(uint8 node, Team team);
         void _NodeDeOccupied(uint8 node);
 
