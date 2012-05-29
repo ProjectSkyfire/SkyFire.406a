@@ -11333,7 +11333,7 @@ uint32 Unit::SpellHealingBonus(Unit* victim, SpellInfo const* spellProto, uint32
     // and Warlock's Healthstones
     if (spellProto->SpellFamilyName == SPELLFAMILY_WARLOCK && (spellProto->SpellFamilyFlags[0] & 0x10000))
     {
-        healamount = 0.45 * (GetMaxHealth() - 10 * (STAT_STAMINA - 180));
+        healamount = 0.45 * (GetCreateHealth());
         return healamount;
     }
 
