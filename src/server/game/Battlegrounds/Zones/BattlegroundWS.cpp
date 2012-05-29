@@ -642,7 +642,7 @@ void BattlegroundWS::HandleAreaTrigger(Player* Source, uint32 Trigger)
             break;
         case 3646:                                          // Alliance Flag spawn
             if (m_FlagState[BG_TEAM_HORDE] && !m_FlagState[BG_TEAM_ALLIANCE])
-                if (GetFlagPickerGUID(BG_TEAM_ALLIANCE) == Source->GetGUID())
+                if (GetFlagPickerGUID(BG_TEAM_HORDE) == Source->GetGUID())
                     EventPlayerCapturedFlag(Source);
             break;
         case 3647:                                          // Horde Flag spawn

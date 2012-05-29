@@ -1029,7 +1029,7 @@ CharactersPerAccount = 50
 #        Range:       1-12
 #        Default:     12 - (Client limitation)
 
-CharactersPerRealm = 12
+CharactersPerRealm = 10
 
 #
 #    HeroicCharactersPerRealm
@@ -1115,29 +1115,29 @@ StartHonorPoints = 0
 
 #
 #    MaxConquestPoints
-#        Max conquest points that player can have, multiplied by 100.
-#        Default: 4000
+#        Description: Maximum conquest points a character can have.
+#        Default:     4000
 
 MaxConquestPoints = 4000
 
 #
 #    StartConquestPoints
-#        Amount of conquest that new players will start with
-#        Default: 0
+#        Description: Amount of conquest points that characters has after creation.
+#        Default:     0
 
 StartConquestPoints = 0
 
 #
 #    MaxJusticePoints
-#        Max justice points that player can have, multiplied by 100.
-#        Default: 4000
+#        Description: Maximum justice points a character can have.
+#        Default:     4000
 
 MaxJusticePoints = 4000
 
 #
 #    StartJusticePoints
-#        Amount of justice points that new players will start with
-#        Default: 0
+#        Description: Amount of justice points that characters has after creation.
+#        Default:     0
 
 StartJusticePoints = 0
 
@@ -2746,12 +2746,14 @@ Arena.ArenaStartPersonalRating = 0
 Arena.ArenaStartMatchmakerRating = 1500
 
 #
-#    Arena.ConquestPointsReward
-#     Description: Amount of points set to be awarded.
-#     Default: 135
+#    Rate.ConquestPointsWeekLimit
+#        Description: Rate for Conquest Point Week Limit
+#                     Rate multiplier. (range 0-100)
+#        Default:     1
 
-Arena.ConquestPointsReward = 135
+Rate.ConquestPointsWeekLimit = 1
 
+#
 #
 ###################################################################################################
 
