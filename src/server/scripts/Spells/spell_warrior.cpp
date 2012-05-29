@@ -223,7 +223,6 @@ public:
 enum Execute
 {
     SPELL_EXECUTE               = 5308,
-    SPELL_GLYPH_OF_BLOODTHRIST  = 58367,
     ICON_ID_SUDDEN_DEATH        = 1989,
 };
 
@@ -238,39 +237,38 @@ public:
 
         bool Validate(SpellInfo const* /*SpellEntry*/)
         {
-            if (!sSpellMgr->GetSpellInfo(SPELL_EXECUTE) || !sSpellMgr->GetSpellInfo(SPELL_GLYPH_OF_BLOODTHRIST))
+            if (!sSpellMgr->GetSpellInfo(SPELL_EXECUTE))
                 return false;
             return true;
         }
-        void HandleDummy(SpellEffIndex effIndex)
+
+        void ChangeDamage(SpellEffIndex effIndex)
         {
             Unit* caster = GetCaster();
-            if (Unit* target = GetHitUnit())
+            Unit* target = GetHitUnit();
+
+            if (!target)
+                return;
+
+            int32 rageUsed = std::min<int32>(300 - GetSpellInfo()->CalcPowerCost(caster, SpellSchoolMask(GetSpellInfo()->SchoolMask)), caster->GetPower(POWER_RAGE));
+            int32 newRage = std::max<int32>(0, caster->GetPower(POWER_RAGE) - rageUsed);
+            // Sudden Death rage refund
+            if (AuraEffect* aurEff = caster->GetAuraEffect(SPELL_AURA_PROC_TRIGGER_SPELL, SPELLFAMILY_GENERIC, ICON_ID_SUDDEN_DEATH, EFFECT_0))
             {
-                SpellInfo const* spellInfo = GetSpellInfo();
-                int32 rageUsed = std::min<int32>(300 - spellInfo->CalcPowerCost(caster, SpellSchoolMask(spellInfo->SchoolMask)), caster->GetPower(POWER_RAGE));
-                int32 newRage = std::max<int32>(0, caster->GetPower(POWER_RAGE) - rageUsed);
-
-                // Sudden Death rage save
-                if (AuraEffect* aurEff = caster->GetAuraEffect(SPELL_AURA_PROC_TRIGGER_SPELL, SPELLFAMILY_GENERIC, ICON_ID_SUDDEN_DEATH, EFFECT_0))
-                {
-                    int32 ragesave = aurEff->GetSpellInfo()->Effects[EFFECT_1].CalcValue() * 10;
-                    newRage = std::max(newRage, ragesave);
-                }
-
-                caster->SetPower(POWER_RAGE, uint32(newRage));
-                // Glyph of Execution bonus
-                if (AuraEffect* aurEff = caster->GetAuraEffect(SPELL_GLYPH_OF_BLOODTHRIST, EFFECT_0))
-                    rageUsed += aurEff->GetAmount() * 10;
-
-                int32 bp = GetEffectValue() + int32(rageUsed * spellInfo->Effects[effIndex].DamageMultiplier + caster->GetTotalAttackPowerValue(BASE_ATTACK) * 0.2f);
-                caster->CastCustomSpell(target,SPELL_EXECUTE,&bp,0,0,true,0,0,GetOriginalCaster()->GetGUID());
+                int32 ragesave = aurEff->GetAmount() * 10;
+                newRage = std::max(newRage, ragesave);
             }
+            caster->SetPower(POWER_RAGE, uint32(newRage));
+            // DBC formula: ap * 0.874 * 100 / 100 - rageUsed
+            int32 rageBonus = ((caster->GetTotalAttackPowerValue(BASE_ATTACK) * 0.874f) * 1000) / (1000 - rageUsed);
+            int32 totalDamage = (GetHitDamage() + rageBonus);
+            SetHitDamage(totalDamage);
+
         }
 
         void Register()
         {
-            OnEffectHitTarget += SpellEffectFn(spell_warr_execute_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
+            OnEffectHitTarget += SpellEffectFn(spell_warr_execute_SpellScript::ChangeDamage, EFFECT_0, SPELL_EFFECT_SCHOOL_DAMAGE);
         }
     };
 
