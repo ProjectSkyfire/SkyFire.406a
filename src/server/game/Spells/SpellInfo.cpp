@@ -1569,11 +1569,8 @@ SpellCastResult SpellInfo::CheckLocation(uint32 map_id, uint32 zone_id, uint32 a
     switch (Id)
     {
         case 23333:                                         // Warsong Flag
-            return map_id == 726 && player && player->InBattleground() ? SPELL_CAST_OK : SPELL_FAILED_REQUIRES_AREA;
         case 23335:                                         // Silverwing Flag
-            return map_id == 726 && player && player->InBattleground() ? SPELL_CAST_OK : SPELL_FAILED_REQUIRES_AREA;
-            // why do i feel like theres a missing case here?
-            return map_id == 489 && player && player->InBattleground() ? SPELL_CAST_OK : SPELL_FAILED_REQUIRES_AREA;
+            return map_id == 489 || 726 && player && player->InBattleground() ? SPELL_CAST_OK : SPELL_FAILED_REQUIRES_AREA;
         case 34976:                                         // Netherstorm Flag
             return map_id == 566 && player && player->InBattleground() ? SPELL_CAST_OK : SPELL_FAILED_REQUIRES_AREA;
         case 2584:                                          // Waiting to Resurrect
@@ -2037,7 +2034,7 @@ SpellSpecificType SpellInfo::GetSpellSpecific() const
             if (SpellFamilyFlags[0] & 0x12040000)
                 return SPELL_SPECIFIC_MAGE_ARMOR;
 
-            // Arcane brillance and Arcane intelect (normal check fails because of flags difference)
+            // Arcane brilliance and Arcane intellect (normal check fails because of flags difference)
             if (SpellFamilyFlags[0] & 0x400)
                 return SPELL_SPECIFIC_MAGE_ARCANE_BRILLANCE;
 
