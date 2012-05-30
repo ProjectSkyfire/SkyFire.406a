@@ -477,7 +477,7 @@ enum SMART_ACTION
     SMART_ACTION_SEND_TARGET_TO_TARGET              = 101,
     SMART_ACTION_SET_MANA                           = 102,     // Mana_Ammount
     SMART_ACTION_CHARACTER_SAVE                     = 103,     // Force save character to DB. This prevents character relogging in wrong phase.
-    SMART_ACTION_CHARACTER_BIND                      = 104,     // Force save homebind in script.
+    SMART_ACTION_CHARACTER_BIND                     = 104,     // Force save homebind in script.
 
     SMART_ACTION_END                                = 105,
 };
