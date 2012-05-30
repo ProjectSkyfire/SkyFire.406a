@@ -312,10 +312,10 @@ enum AreaFlags
     AREA_FLAG_UNK7             = 0x00400000,                // Warsong Hold, Acherus: The Ebon Hold, New Agamand Inn, Vengeance Landing Inn
     AREA_FLAG_UNK8             = 0x00800000,                // Westguard Inn, Acherus: The Ebon Hold, Valgarde
     AREA_FLAG_WINTERGRASP      = 0x01000000,                // Wintergrasp and it's subzones
-    AREA_FLAG_INSIDE           = 0x02000000,                // used for determinating spell related inside/outside questions in Map::IsOutdoors
-    AREA_FLAG_OUTSIDE          = 0x04000000,                // used for determinating spell related inside/outside questions in Map::IsOutdoors
-    AREA_FLAG_WINTERGRASP_2    = 0x08000000,                // Wintergrasp and it's subzones
-    AREA_FLAG_NO_FLY_ZONE      = 0x20000000,                // Marks zones where you cannot fly
+    AREA_FLAG_INSIDE           = 0x02000000,                // used for determining spell related inside/outside questions in Map::IsOutdoors
+    AREA_FLAG_OUTSIDE          = 0x04000000,                // used for determining spell related inside/outside questions in Map::IsOutdoors
+    AREA_FLAG_CAN_HEARTH_AND_RES = 0x08000000,              // Wintergrasp and it's subzones
+    AREA_FLAG_NO_FLY_ZONE      = 0x20000000,                 // not allowed to fly, only used in Dalaran areas (zone 4395)
     AREA_FLAG_UNK9             = 0x40000000,
 };
 
@@ -381,6 +381,20 @@ enum MapTypes                                               // Lua_IsInInstance
     MAP_RAID            = 2,                                // raid
     MAP_BATTLEGROUND    = 3,                                // pvp
     MAP_ARENA           = 4                                 // arena
+};
+
+enum MapFlags                                               // Map flags (need more research)
+{
+    MAP_FLAG_NONE                = 0x00000000,              // none specific
+    MAP_FLAG_INSTANCEABLE        = 0x00000001,              // or possibly can be split for continent maps
+    MAP_FLAG_DEVELOPMENT         = 0x00000002,              // testing or development maps only
+    MAP_FLAG_UNK3                = 0x00000004,              //
+    MAP_FLAG_UNK4                = 0x00000008,              //
+    MAP_FLAG_UNK5                = 0x00000010,              //
+    MAP_FLAG_UNK6                = 0x00000020,              //
+    MAP_FLAG_UNK7                = 0x00000040,              //
+    MAP_FLAG_UNK8                = 0x00000080,              //
+    MAP_FLAG_VARIABLE_DIFFICULTY = 0x00000100              // maps, where has changeable difficulty
 };
 
 enum AbilytyLearnType
