@@ -653,8 +653,15 @@ public:
 
 enum PvPTrinketTriggeredSpells
 {
-    SPELL_WILL_OF_THE_FORSAKEN_COOLDOWN_TRIGGER         = 72752,
-    SPELL_WILL_OF_THE_FORSAKEN_COOLDOWN_TRIGGER_WOTF    = 72757,
+    // This is the spell that is casted by the PvP trinkets a.k.a medallions and every man for himself
+    // it will make WOTF enter on a 30s cooldown.
+    SPELL_WILL_OF_THE_FORSAKEN_COOLDOWN_TRIGGER     = 72752,
+    SPELL_WILL_OF_THE_FORSAKEN                      = 7744,
+
+    // This spell is the one casted together with WOTF,
+    // it will make all medallions enter on a 30s cooldown.
+    SPELL_TRINKET_PVP_COOLDOWN_TRIGGER_WOTF         = 72757,
+    SPELL_PVP_TRINKET                               = 42292,
 };
 
 class spell_pvp_trinket_wotf_shared_cd : public SpellScriptLoader
@@ -671,34 +678,37 @@ public:
             if (!sSpellMgr->GetSpellInfo(SPELL_WILL_OF_THE_FORSAKEN_COOLDOWN_TRIGGER))
                 return false;
 
-            if (!sSpellMgr->GetSpellInfo(SPELL_WILL_OF_THE_FORSAKEN_COOLDOWN_TRIGGER_WOTF))
+            if (!sSpellMgr->GetSpellInfo(SPELL_TRINKET_PVP_COOLDOWN_TRIGGER_WOTF))
                 return false;
 
             return true;
         }
 
-        void HandleScript(SpellEffIndex /*effIndex*/)
+        void HandleScript()
         {
             Player* caster = GetCaster()->ToPlayer();
 
             if (!caster)
                 return;
 
-            SpellInfo const* spellInfo = GetSpellInfo();
-
-            caster->AddSpellCooldown(spellInfo->Id, 0, time(NULL) + sSpellMgr->GetSpellInfo(SPELL_WILL_OF_THE_FORSAKEN_COOLDOWN_TRIGGER)->GetRecoveryTime() / IN_MILLISECONDS);
-
-            WorldPacket data(SMSG_SPELL_COOLDOWN, 8+1+4);
-            data << uint64(caster->GetGUID());
-            data << uint8(0);
-            data << uint32(spellInfo->Id);
-            data << uint32(0);
-            caster->GetSession()->SendPacket(&data);
+            switch (GetSpellInfo()->Id)
+            {
+                case SPELL_PVP_TRINKET:
+                {
+                    caster->CastSpell(caster,SPELL_WILL_OF_THE_FORSAKEN_COOLDOWN_TRIGGER, false);
+                    break;
+                }
+                case SPELL_WILL_OF_THE_FORSAKEN:
+                {
+                    caster->CastSpell(caster,SPELL_TRINKET_PVP_COOLDOWN_TRIGGER_WOTF, false);
+                    break;
+                }
+            }
         }
 
         void Register()
         {
-            OnEffectHit += SpellEffectFn(spell_pvp_trinket_wotf_shared_cd_SpellScript::HandleScript, EFFECT_0, SPELL_EFFECT_DUMMY);
+            AfterHit += SpellHitFn(spell_pvp_trinket_wotf_shared_cd_SpellScript::HandleScript);
         }
     };
 
