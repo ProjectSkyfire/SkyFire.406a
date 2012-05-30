@@ -33,8 +33,8 @@ enum WarlockSpells
     WARLOCK_DEMONIC_EMPOWERMENT_FELGUARD    = 54508,
     WARLOCK_DEMONIC_EMPOWERMENT_FELHUNTER   = 54509,
     WARLOCK_DEMONIC_EMPOWERMENT_IMP         = 54444,
-    WARLOCK_IMPROVED_HEALTHSTONE_R1         = 18692,
-    WARLOCK_IMPROVED_HEALTHSTONE_R2         = 18693,
+    WARLOCK_HEALTHSTONE_CREATE              = 34130,
+    WARLOCK_HEALTHSTONE_HEAL                = 6262,
 };
 
 class spell_warl_banish : public SpellScriptLoader
@@ -159,7 +159,7 @@ class spell_warl_demonic_empowerment : public SpellScriptLoader
         }
 };
 
-// 6201 Create Healthstone (and ranks)
+// 6201 Create Healthstone
 class spell_warl_create_healthstone : public SpellScriptLoader
 {
     public:
@@ -169,36 +169,18 @@ class spell_warl_create_healthstone : public SpellScriptLoader
         {
             PrepareSpellScript(spell_warl_create_healthstone_SpellScript);
 
-            static uint32 const iTypes[8][3];
-
             bool Validate(SpellInfo const* /*spellEntry*/)
             {
-                if (!sSpellMgr->GetSpellInfo(WARLOCK_IMPROVED_HEALTHSTONE_R1) || !sSpellMgr->GetSpellInfo(WARLOCK_IMPROVED_HEALTHSTONE_R2))
+                if (!sSpellMgr->GetSpellInfo(WARLOCK_HEALTHSTONE_CREATE) || !sSpellMgr->GetSpellInfo(WARLOCK_HEALTHSTONE_HEAL))
                     return false;
                 return true;
             }
 
-            void HandleScriptEffect(SpellEffIndex effIndex)
+            void HandleScriptEffect(SpellEffIndex /*effIndex*/)
             {
-                if (Unit* unitTarget = GetHitUnit())
-                {
-                    uint32 rank = 0;
-                    // Improved Healthstone
-                    if (AuraEffect const* aurEff = unitTarget->GetDummyAuraEffect(SPELLFAMILY_WARLOCK, 284, 0))
-                    {
-                        switch (aurEff->GetId())
-                        {
-                            case WARLOCK_IMPROVED_HEALTHSTONE_R1: rank = 1; break;
-                            case WARLOCK_IMPROVED_HEALTHSTONE_R2: rank = 2; break;
-                            default:
-                                sLog->outError("Unknown rank of Improved Healthstone id: %d", aurEff->GetId());
-                                break;
-                        }
-                    }
-                    uint8 spellRank = sSpellMgr->GetSpellRank(GetSpellInfo()->Id);
-                    if (spellRank > 0 && spellRank <= 8)
-                        CreateItem(effIndex, iTypes[spellRank - 1][rank]);
-                }
+                Unit* caster = GetCaster();
+                if (caster)
+                    caster->CastSpell(caster,WARLOCK_HEALTHSTONE_CREATE,false);
             }
 
             void Register()
@@ -213,16 +195,6 @@ class spell_warl_create_healthstone : public SpellScriptLoader
         }
 };
 
-uint32 const spell_warl_create_healthstone::spell_warl_create_healthstone_SpellScript::iTypes[8][3] = {
-    { 5512, 19004, 19005},              // Minor Healthstone
-    { 5511, 19006, 19007},              // Lesser Healthstone
-    { 5509, 19008, 19009},              // Healthstone
-    { 5510, 19010, 19011},              // Greater Healthstone
-    { 9421, 19012, 19013},              // Major Healthstone
-    {22103, 22104, 22105},              // Master Healthstone
-    {36889, 36890, 36891},              // Demonic Healthstone
-    {36892, 36893, 36894}               // Fel Healthstone
-};
 // 47422 Everlasting Affliction
 class spell_warl_everlasting_affliction : public SpellScriptLoader
 {
