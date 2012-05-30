@@ -173,12 +173,14 @@ void BattlegroundBG::StartingEventCloseDoors()
     // Remove banners, auras and buffs
     for (int object = GILNEAS_BG_OBJECT_BANNER_NEUTRAL; object < GILNEAS_BG_DYNAMIC_NODES_COUNT * 8; ++object)
         SpawnBGObject(object, RESPAWN_ONE_DAY);
+    for (int i = 0; i < GILNEAS_BG_DYNAMIC_NODES_COUNT * 3; ++i)
+        SpawnBGObject(GILNEAS_BG_OBJECT_SPEEDBUFF_LIGHTHOUSE + i, RESPAWN_ONE_DAY);
 
     // Starting doors
-    DoorClose(GILNEAS_BG_OBJECT_GATE_A);
-    DoorClose(GILNEAS_BG_OBJECT_GATE_H);
-    SpawnBGObject(GILNEAS_BG_OBJECT_GATE_A, RESPAWN_IMMEDIATELY);
-    SpawnBGObject(GILNEAS_BG_OBJECT_GATE_H, RESPAWN_IMMEDIATELY);
+    DoorClose(GILNEAS_BG_OBJECT_GATE_A_1);
+    SpawnBGObject(GILNEAS_BG_OBJECT_GATE_A_2, RESPAWN_IMMEDIATELY);
+    DoorClose(GILNEAS_BG_OBJECT_GATE_H_1);
+    SpawnBGObject(GILNEAS_BG_OBJECT_GATE_H_2, RESPAWN_IMMEDIATELY);
 
     // Starting base spirit guides
     _NodeOccupied(GILNEAS_BG_SPIRIT_ALIANCE, ALLIANCE);
@@ -189,9 +191,15 @@ void BattlegroundBG::StartingEventOpenDoors()
 {
     for (int banner = GILNEAS_BG_OBJECT_BANNER_NEUTRAL, i = 0; i < 5; banner += 8, ++i)
         SpawnBGObject(banner, RESPAWN_IMMEDIATELY);
-
-    DoorOpen(GILNEAS_BG_OBJECT_GATE_A);
-    DoorOpen(GILNEAS_BG_OBJECT_GATE_H);
+    for (int i = 0; i < GILNEAS_BG_DYNAMIC_NODES_COUNT; ++i)
+    {
+        uint8 buff = urand(0, 2);
+        SpawnBGObject(GILNEAS_BG_OBJECT_SPEEDBUFF_LIGHTHOUSE + buff + i * 3, RESPAWN_IMMEDIATELY);
+    }
+    DoorOpen(GILNEAS_BG_OBJECT_GATE_A_1);
+    GetBGObject(GILNEAS_BG_OBJECT_GATE_A_2)->RemoveFromWorld();
+    DoorOpen(GILNEAS_BG_OBJECT_GATE_H_1);
+    GetBGObject(GILNEAS_BG_OBJECT_GATE_H_2)->RemoveFromWorld();
 }
 
 void BattlegroundBG::AddPlayer(Player* player)
@@ -542,8 +550,10 @@ bool BattlegroundBG::SetupBattleground()
         }
     }
 
-    if (!AddObject(GILNEAS_BG_OBJECT_GATE_A, GILNEAS_BG_OBJECTID_GATE_A, GILNEAS_BG_DoorPositions[0][0], GILNEAS_BG_DoorPositions[0][1], GILNEAS_BG_DoorPositions[0][2], GILNEAS_BG_DoorPositions[0][3], GILNEAS_BG_DoorPositions[0][4], GILNEAS_BG_DoorPositions[0][5], GILNEAS_BG_DoorPositions[0][6], GILNEAS_BG_DoorPositions[0][7], RESPAWN_IMMEDIATELY)
-        || !AddObject(GILNEAS_BG_OBJECT_GATE_H, GILNEAS_BG_OBJECTID_GATE_H, GILNEAS_BG_DoorPositions[1][0], GILNEAS_BG_DoorPositions[1][1], GILNEAS_BG_DoorPositions[1][2], GILNEAS_BG_DoorPositions[1][3], GILNEAS_BG_DoorPositions[1][4], GILNEAS_BG_DoorPositions[1][5], GILNEAS_BG_DoorPositions[1][6], GILNEAS_BG_DoorPositions[1][7], RESPAWN_IMMEDIATELY))
+    if (!AddObject(GILNEAS_BG_OBJECT_GATE_A_1, GILNEAS_BG_OBJECTID_GATE_A_1, GILNEAS_BG_DoorPositions[0][0], GILNEAS_BG_DoorPositions[0][1], GILNEAS_BG_DoorPositions[0][2], GILNEAS_BG_DoorPositions[0][3], GILNEAS_BG_DoorPositions[0][4], GILNEAS_BG_DoorPositions[0][5], GILNEAS_BG_DoorPositions[0][6], GILNEAS_BG_DoorPositions[0][7], RESPAWN_IMMEDIATELY)
+        || !AddObject(GILNEAS_BG_OBJECT_GATE_A_2, GILNEAS_BG_OBJECTID_GATE_A_2, GILNEAS_BG_DoorPositions[1][0], GILNEAS_BG_DoorPositions[1][1], GILNEAS_BG_DoorPositions[1][2], GILNEAS_BG_DoorPositions[1][3], GILNEAS_BG_DoorPositions[1][4], GILNEAS_BG_DoorPositions[1][5], GILNEAS_BG_DoorPositions[1][6], GILNEAS_BG_DoorPositions[1][7], RESPAWN_IMMEDIATELY)
+        || !AddObject(GILNEAS_BG_OBJECT_GATE_H_1, GILNEAS_BG_OBJECTID_GATE_H_1, GILNEAS_BG_DoorPositions[2][0], GILNEAS_BG_DoorPositions[2][1], GILNEAS_BG_DoorPositions[2][2], GILNEAS_BG_DoorPositions[2][3], GILNEAS_BG_DoorPositions[2][4], GILNEAS_BG_DoorPositions[2][5], GILNEAS_BG_DoorPositions[2][6], GILNEAS_BG_DoorPositions[2][7], RESPAWN_IMMEDIATELY)
+        || !AddObject(GILNEAS_BG_OBJECT_GATE_H_2, GILNEAS_BG_OBJECTID_GATE_H_2, GILNEAS_BG_DoorPositions[3][0], GILNEAS_BG_DoorPositions[3][1], GILNEAS_BG_DoorPositions[3][2], GILNEAS_BG_DoorPositions[3][3], GILNEAS_BG_DoorPositions[3][4], GILNEAS_BG_DoorPositions[3][5], GILNEAS_BG_DoorPositions[3][6], GILNEAS_BG_DoorPositions[3][7], RESPAWN_IMMEDIATELY))
     {
         sLog->outErrorDb("BattleForGilneas: Can't Create Doors");
         return false;
