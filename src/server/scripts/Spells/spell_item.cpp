@@ -1027,53 +1027,46 @@ enum AshbringerSounds
     SOUND_ASHBRINGER_9  = 8925,                             // "Truth is unknown to him"
     SOUND_ASHBRINGER_10 = 8926,                             // "Scarlet Crusade  is pure no longer"
     SOUND_ASHBRINGER_11 = 8927,                             // "Balnazzar's crusade corrupted my son"
-    SOUND_ASHBRINGER_12 = 8928,                             // "Kill them all!"
-
-    SPELL_ASHBRINGER    = 28282,                            // Ashbringer - Inflicts the will of the Ashbringer upon the wielder
-    SPELL_ASHBRINGER_TR = 28441                             // AB Effect 000
+    SOUND_ASHBRINGER_12 = 8928                              // "Kill them all!"
 };
 
 class spell_item_ashbringer : public SpellScriptLoader
 {
-    public:
-        spell_item_ashbringer() : SpellScriptLoader("spell_item_ashbringer") {}
+public:
+    spell_item_ashbringer() : SpellScriptLoader("spell_item_ashbringer") {}
 
-        class spell_item_ashbringer_SpellScript : public SpellScript
+    class spell_item_ashbringer_SpellScript : public SpellScript
+    {
+        PrepareSpellScript(spell_item_ashbringer_SpellScript);
+
+        bool Load()
         {
-            PrepareSpellScript(spell_item_ashbringer_SpellScript)
-            bool Validate(SpellInfo const* /*spellEntry*/)
-            {
-                if (!sSpellMgr->GetSpellInfo(SPELL_ASHBRINGER))
-                    return false;
-                return true;
-            }
-
-            void OnDummyEffect(SpellEffIndex effIndex)
-            {
-                PreventHitDefaultEffect(effIndex);
-
-                Unit* caster = GetCaster();
-                if (Player* player = caster->ToPlayer())
-                {
-                    uint32 sound_id = RAND( SOUND_ASHBRINGER_1, SOUND_ASHBRINGER_2, SOUND_ASHBRINGER_3, SOUND_ASHBRINGER_4, SOUND_ASHBRINGER_5, SOUND_ASHBRINGER_6,
-                                    SOUND_ASHBRINGER_7, SOUND_ASHBRINGER_8, SOUND_ASHBRINGER_9, SOUND_ASHBRINGER_10, SOUND_ASHBRINGER_11, SOUND_ASHBRINGER_12 );
-
-                    // Ashbringers effect (spellID 28441) retriggers every 5 seconds, with a chance of making it say one of the above 12 sounds
-                    if (urand(0, 60) < 1)
-                        player->PlayDirectSound(sound_id, player);
-                }
-            }
-
-            void Register()
-            {
-                OnEffectHit += SpellEffectFn(spell_item_ashbringer_SpellScript::OnDummyEffect, EFFECT_0, SPELL_EFFECT_DUMMY);
-            }
-        };
-
-        SpellScript* GetSpellScript() const
-        {
-            return new spell_item_ashbringer_SpellScript();
+            return GetCaster()->GetTypeId() == TYPEID_PLAYER;
         }
+
+        void OnDummyEffect(SpellEffIndex effIndex)
+        {
+            PreventHitDefaultEffect(effIndex);
+
+            Player* player = GetCaster()->ToPlayer();
+            uint32 sound_id = RAND( SOUND_ASHBRINGER_1, SOUND_ASHBRINGER_2, SOUND_ASHBRINGER_3, SOUND_ASHBRINGER_4, SOUND_ASHBRINGER_5, SOUND_ASHBRINGER_6,
+                SOUND_ASHBRINGER_7, SOUND_ASHBRINGER_8, SOUND_ASHBRINGER_9, SOUND_ASHBRINGER_10, SOUND_ASHBRINGER_11, SOUND_ASHBRINGER_12 );
+
+            // Ashbringer's effect (spellID 28441) re-triggers every 5 seconds, with a chance of making it say one of the above 12 sounds
+            if (urand(0, 60) < 1)
+                player->PlayDirectSound(sound_id, player);
+        }
+
+        void Register()
+        {
+            OnEffectHit += SpellEffectFn(spell_item_ashbringer_SpellScript::OnDummyEffect, EFFECT_0, SPELL_EFFECT_DUMMY);
+        }
+    };
+
+    SpellScript* GetSpellScript() const
+    {
+        return new spell_item_ashbringer_SpellScript();
+    }
 };
 
 enum MagicEater
@@ -1182,6 +1175,34 @@ class spell_item_refocus : public SpellScriptLoader
         }
 };
 
+class spell_item_muisek_vessel : public SpellScriptLoader
+{
+public:
+    spell_item_muisek_vessel() : SpellScriptLoader("spell_item_muisek_vessel") { }
+
+    class spell_item_muisek_vessel_SpellScript : public SpellScript
+    {
+        PrepareSpellScript(spell_item_muisek_vessel_SpellScript);
+
+        void HandleDummy(SpellEffIndex /*effIndex*/)
+        {
+            if (Creature* target = GetHitCreature())
+                if (target->isDead())
+                    target->ForcedDespawn();
+        }
+
+        void Register()
+        {
+            OnEffectHitTarget += SpellEffectFn(spell_item_muisek_vessel_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
+        }
+    };
+
+    SpellScript* GetSpellScript() const
+    {
+        return new spell_item_muisek_vessel_SpellScript();
+    }
+};
+
 void AddSC_item_spell_scripts()
 {
     // 23074 Arcanite Dragonling
@@ -1215,4 +1236,5 @@ void AddSC_item_spell_scripts()
     new spell_item_ashbringer();
     new spell_magic_eater_food();
     new spell_item_refocus();
+    new spell_item_muisek_vessel();
 }
