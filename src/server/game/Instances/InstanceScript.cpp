@@ -396,33 +396,49 @@ bool InstanceScript::CheckAchievementCriteriaMeet(uint32 criteria_id, Player con
 
 void InstanceScript::SendEncounterUnit(uint32 type, Unit* unit /*= NULL*/, uint8 param1 /*= 0*/, uint8 param2 /*= 0*/)
 {
-    // size of this packet is at most 15 (usually less)
-    WorldPacket data(SMSG_UPDATE_INSTANCE_ENCOUNTER_UNIT, 15);
-    data << uint32(type);
-
     switch (type)
     {
         case ENCOUNTER_FRAME_ADD:
+        {
+            WorldPacket data1(SMSG_UPDATE_INSTANCE_ENCOUNTER_UNIT, 5);
+            data1 << uint8(0);
+            data1 << uint8(0);
+            data1 << uint8(0);
+            data1 << uint8(0);
+            data1 << uint8(3);
+            instance->SendToPlayers(&data1);
+            WorldPacket data2(SMSG_UPDATE_INSTANCE_ENCOUNTER_UNIT, 13);
+            data2 << uint8(2);
+            data2 << uint8(0);
+            data2 << uint8(0);
+            data2 << uint8(0);
+            data2.append(unit->GetPackGUID());
+            data2 << uint8(1);
+            instance->SendToPlayers(&data2);
+        }
+        break;
         case ENCOUNTER_FRAME_REMOVE:
-        case 2:
-            data.append(unit->GetPackGUID());
-            data << uint8(param1);
-            break;
-        case 3:
-        case 4:
-        case 6:
-            data << uint8(param1);
-            data << uint8(param2);
-            break;
-        case 5:
-            data << uint8(param1);
-            break;
-        case 7:
-        default:
-            break;
+        {
+            WorldPacket data1(SMSG_UPDATE_INSTANCE_ENCOUNTER_UNIT, 13);
+            data1 << uint8(3);
+            data1 << uint8(0);
+            data1 << uint8(0);
+            data1 << uint8(0);
+            data1.append(unit->GetPackGUID());
+            data1 << uint8(0);
+            instance->SendToPlayers(&data1);
+            WorldPacket data2(SMSG_UPDATE_INSTANCE_ENCOUNTER_UNIT, 4);
+            data2 << uint8(0);
+            data2 << uint8(0);
+            data2 << uint8(0);
+            data2 << uint8(0);
+            data2 << uint8(3);
+            instance->SendToPlayers(&data2);
+        }
+        break;
+    default:
+        break;
     }
-
-    instance->SendToPlayers(&data);
 }
 
 void InstanceScript::UpdateEncounterState(EncounterCreditType type, uint32 creditEntry, Unit* source)
