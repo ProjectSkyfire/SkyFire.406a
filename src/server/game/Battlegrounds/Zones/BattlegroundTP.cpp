@@ -144,23 +144,23 @@ void BattlegroundTP::Update(uint32 diff)
             m_FlagSpellForceTimer += diff;
             if (m_FlagDebuffState == 0 && m_FlagSpellForceTimer >= 600000)  // 10 minutes
             {
-                if (Player * player = ObjectAccessor::FindPlayer(m_FlagKeepers[0]))
+                if (Player * player = ObjectAccessor::FindPlayer(_flagKeepers[0]))
                     player->CastSpell(player, TP_SPELL_FOCUSED_ASSAULT, true);
 
-                if (Player * player = ObjectAccessor::FindPlayer(m_FlagKeepers[1]))
+                if (Player * player = ObjectAccessor::FindPlayer(_flagKeepers[1]))
                     player->CastSpell(player, TP_SPELL_FOCUSED_ASSAULT, true);
 
                 m_FlagDebuffState = 1;
             }
             else if (m_FlagDebuffState == 1 && m_FlagSpellForceTimer >= 900000) // 15 minutes
             {
-                if (Player * player = ObjectAccessor::FindPlayer(m_FlagKeepers[0]))
+                if (Player * player = ObjectAccessor::FindPlayer(_flagKeepers[0]))
                 {
                     player->RemoveAurasDueToSpell(TP_SPELL_FOCUSED_ASSAULT);
                     player->CastSpell(player, TP_SPELL_BRUTAL_ASSAULT, true);
                 }
 
-                if (Player * player = ObjectAccessor::FindPlayer(m_FlagKeepers[1]))
+                if (Player * player = ObjectAccessor::FindPlayer(_flagKeepers[1]))
                 {
                     player->RemoveAurasDueToSpell(TP_SPELL_FOCUSED_ASSAULT);
                     player->CastSpell(player, TP_SPELL_BRUTAL_ASSAULT, true);
@@ -611,7 +611,7 @@ void BattlegroundTP::EventPlayerClickedOnFlag(Player *Source, GameObject* target
 void BattlegroundTP::RemovePlayer(Player *player, uint64 guid)
 {
     // sometimes flag auras are not removed :(
-    if (IsAllianceFlagPickedup() && m_FlagKeepers[BG_TEAM_ALLIANCE] == guid)
+    if (IsAllianceFlagPickedup() && _flagKeepers[BG_TEAM_ALLIANCE] == guid)
     {
         if (!player)
         {
@@ -622,7 +622,7 @@ void BattlegroundTP::RemovePlayer(Player *player, uint64 guid)
         else
             this->EventPlayerDroppedFlag(player);
     }
-    if (IsHordeFlagPickedup() && m_FlagKeepers[BG_TEAM_HORDE] == guid)
+    if (IsHordeFlagPickedup() && _flagKeepers[BG_TEAM_HORDE] == guid)
     {
         if (!player)
         {
@@ -758,8 +758,8 @@ void BattlegroundTP::Reset()
     // call parent's class reset
     Battleground::Reset();
 
-    m_FlagKeepers[BG_TEAM_ALLIANCE]     = 0;
-    m_FlagKeepers[BG_TEAM_HORDE]        = 0;
+    _flagKeepers[BG_TEAM_ALLIANCE]     = 0;
+    _flagKeepers[BG_TEAM_HORDE]        = 0;
     m_DroppedFlagGUID[BG_TEAM_ALLIANCE] = 0;
     m_DroppedFlagGUID[BG_TEAM_HORDE]    = 0;
     m_FlagState[BG_TEAM_ALLIANCE]       = BG_TP_FLAG_STATE_ON_BASE;
