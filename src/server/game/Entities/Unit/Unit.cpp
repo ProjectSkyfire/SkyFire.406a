@@ -6614,19 +6614,19 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
             switch (dummySpell->Id)
             {
                 case 56800: // Glyph of Backstab
-                {
                     triggered_spell_id = 63975;
                     break;
-                }
                 case 32748: // Deadly Throw Interrupt
-                {
                     // Prevent cast Deadly Throw Interrupt on self from last effect (apply dummy) of Deadly Throw
                     if (this == victim)
                         return false;
 
                     triggered_spell_id = 32747;
                     break;
-                }
+                case 56807: // Glyph of hemorrhage
+                    basepoints0 = int32(0.40f * damage);
+                    triggered_spell_id = 89775;
+                    break;
             }
 
             switch (dummySpell->SpellIconID)
