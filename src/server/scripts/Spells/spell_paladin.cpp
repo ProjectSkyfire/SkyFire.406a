@@ -40,6 +40,12 @@ enum PaladinSpells
     SPELL_BLESSING_OF_LOWER_CITY_SHAMAN          = 37881,
 
     SPELL_DIVINE_PURPOSE_PROC                    = 90174,
+    SPELL_PALADIN_WORD_OF_GLORY                  = 85673,
+    SPELL_PALADIN_JUDG_BOLD_OVERTIME             = 89906,
+    SPELL_PALADIN_SELFLESS_HEALER_PROC           = 90811,
+    SPELL_PALADIN_RETRI_GUARDIAN                 = 86698,
+    SPELL_PALADIN_HOLY_GUARDIAN                  = 86669,
+    SPELL_PALADIN_PROT_GUARDIAN                  = 86659,
 };
 
 // 31850 - Ardent Defender
@@ -311,6 +317,14 @@ class spell_pal_judgements_of_the_bold : public SpellScriptLoader
         {
             PrepareAuraScript(spell_pal_judgements_of_the_bold_AuraScript);
 
+            bool Validate (SpellInfo *const /*spellEntry*/)
+            {
+                if (!sSpellMgr->GetSpellInfo(SPELL_PALADIN_JUDG_BOLD_OVERTIME))
+                    return false;
+
+                return true;
+            }
+
             bool Load()
             {
                 if (GetCaster()->GetTypeId() != TYPEID_PLAYER)
@@ -403,6 +417,14 @@ public:
 
         int32 totalheal;
 
+        bool Validate (SpellInfo *const /*spellEntry*/)
+        {
+            if (!sSpellMgr->GetSpellInfo(SPELL_PALADIN_WORD_OF_GLORY))
+                return false;
+
+            return true;
+        }
+
         bool Load()
         {
             if (GetCaster()->GetTypeId() != TYPEID_PLAYER)
@@ -486,6 +508,14 @@ public:
     {
         PrepareAuraScript(spell_pal_word_of_glory_heal_AuraScript)
 
+        bool Validate (SpellInfo *const /*spellEntry*/)
+        {
+            if (!sSpellMgr->GetSpellInfo(SPELL_PALADIN_WORD_OF_GLORY)->Effects[1].Effect)
+                return false;
+
+            return true;
+        }
+
         bool Load()
         {
             if (GetCaster()->GetTypeId() != TYPEID_PLAYER)
@@ -560,6 +590,21 @@ class spell_pal_selfless_healer : public SpellScriptLoader
         {
             PrepareAuraScript(spell_pal_selfless_healer_AuraScript);
 
+            bool Load()
+            {
+                if (GetCaster()->GetTypeId() != TYPEID_PLAYER)
+                    return false;
+                return true;
+            }
+
+            bool Validate (SpellInfo *const /*spellEntry*/)
+            {
+                if (!sSpellMgr->GetSpellInfo(SPELL_PALADIN_SELFLESS_HEALER_PROC))
+                    return false;
+
+                return true;
+            }
+
             void CalculateBonus(AuraEffect const* /*aurEff*/, int32& amount, bool& canBeRecalculated)
             {
                 if (Unit* caster = GetCaster())
@@ -621,23 +666,33 @@ public:
             return true;
         }
 
+        bool Validate (SpellInfo *const /*spellEntry*/)
+        {
+            if (!sSpellMgr->GetSpellInfo(SPELL_PALADIN_HOLY_GUARDIAN) ||
+                !sSpellMgr->GetSpellInfo(SPELL_PALADIN_RETRI_GUARDIAN) ||
+                !sSpellMgr->GetSpellInfo(SPELL_PALADIN_PROT_GUARDIAN))
+                return false;
+
+            return true;
+        }
+
         void HandleDummy(SpellEffIndex /*effIndex*/)
         {
             if (Unit* caster = GetCaster())
             {
                 if (caster->ToPlayer()->HasSpell(20473)) // Holy Shock
                 {
-                    caster->CastSpell(caster, 86669, false);
+                    caster->CastSpell(caster, SPELL_PALADIN_HOLY_GUARDIAN, false);
                     return;
                 }
                 if (caster->ToPlayer()->HasSpell(85256)) // Templar's Verdict
                 {
-                    caster->CastSpell(caster, 86698, false);
+                    caster->CastSpell(caster, SPELL_PALADIN_RETRI_GUARDIAN, false);
                     return;
                 }
                 if (caster->ToPlayer()->HasSpell(31935)) // Avenger's shield
                 {
-                    caster->CastSpell(caster, 86659, false);
+                    caster->CastSpell(caster, SPELL_PALADIN_PROT_GUARDIAN, false);
                     return;
                 }
             }

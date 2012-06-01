@@ -289,19 +289,19 @@ enum SpellAttr0
     SPELL_ATTR0_NOT_SHAPESHIFT                   = 0x00010000, // 16 Not while shapeshifted
     SPELL_ATTR0_ONLY_STEALTHED                   = 0x00020000, // 17 Must be in stealth
     SPELL_ATTR0_DONT_AFFECT_SHEATH_STATE         = 0x00040000, // 18 client won't hide unit weapons in sheath on cast/channel
-    SPELL_ATTR0_LEVEL_DAMAGE_CALCULATION         = 0x00080000, // 19 spelldamage depends on caster level
+    SPELL_ATTR0_LEVEL_DAMAGE_CALCULATION         = 0x00080000, // 19 spell damage depends on caster level
     SPELL_ATTR0_STOP_ATTACK_TARGET               = 0x00100000, // 20 Stop attack after use this spell (and not begin attack if use)
     SPELL_ATTR0_IMPOSSIBLE_DODGE_PARRY_BLOCK     = 0x00200000, // 21 Cannot be dodged/parried/blocked
     SPELL_ATTR0_CAST_TRACK_TARGET                = 0x00400000, // 22 Client automatically forces player to face target when casting
-    SPELL_ATTR0_CASTABLE_WHILE_DEAD              = 0x00800000, // 23 castable while dead?
-    SPELL_ATTR0_CASTABLE_WHILE_MOUNTED           = 0x01000000, // 24 castable while mounted
+    SPELL_ATTR0_CASTABLE_WHILE_DEAD              = 0x00800000, // 23 can cast while dead?
+    SPELL_ATTR0_CASTABLE_WHILE_MOUNTED           = 0x01000000, // 24 can cast while mounted
     SPELL_ATTR0_DISABLED_WHILE_ACTIVE            = 0x02000000, // 25 Activate and start cooldown after aura fade or remove summoned creature or go
     SPELL_ATTR0_NEGATIVE_1                       = 0x04000000, // 26 Many negative spells have this attr
-    SPELL_ATTR0_CASTABLE_WHILE_SITTING           = 0x08000000, // 27 castable while sitting
+    SPELL_ATTR0_CASTABLE_WHILE_SITTING           = 0x08000000, // 27 can cast while sitting
     SPELL_ATTR0_CANT_USED_IN_COMBAT              = 0x10000000, // 28 Cannot be used in combat
     SPELL_ATTR0_UNAFFECTED_BY_INVULNERABILITY    = 0x20000000, // 29 unaffected by invulnerability (hmm possible not...)
     SPELL_ATTR0_BREAKABLE_BY_DAMAGE              = 0x40000000, // 30
-    SPELL_ATTR0_CANT_CANCEL                      = 0x80000000  // 31 positive aura can't be canceled
+    SPELL_ATTR0_CANT_CANCEL                      = 0x80000000  // 31 positive aura can't be cancelled
 };
 
 enum SpellAttr1
@@ -309,12 +309,12 @@ enum SpellAttr1
     SPELL_ATTR1_DISMISS_PET                      = 0x00000001, //  0 for spells without this flag client doesn't allow to summon pet if caster has a pet
     SPELL_ATTR1_DRAIN_ALL_POWER                  = 0x00000002, //  1 use all power (Only paladin Lay of Hands and Bunyanize)
     SPELL_ATTR1_CHANNELED_1                      = 0x00000004, //  2 clientside checked? cancelable?
-    SPELL_ATTR1_CANT_BE_REDIRECTED               = 0x00000008, //  3
+    SPELL_ATTR1_CANT_BE_REDIRECTED               = 0x00000008, //  3 used for detecting if a spell can/can not be reflected
     SPELL_ATTR1_UNK4                             = 0x00000010, //  4 stealth and whirlwind
     SPELL_ATTR1_NOT_BREAK_STEALTH                = 0x00000020, //  5 Not break stealth
     SPELL_ATTR1_CHANNELED_2                      = 0x00000040, //  6
     SPELL_ATTR1_CANT_BE_REFLECTED                = 0x00000080, //  7
-    SPELL_ATTR1_CANT_TARGET_IN_COMBAT            = 0x00000100, //  8 can target only out of combat units
+    SPELL_ATTR1_CANT_TARGET_IN_COMBAT            = 0x00000100, //  8 Spell req target not to be in combat state
     SPELL_ATTR1_MELEE_COMBAT_START               = 0x00000200, //  9 player starts melee combat after this spell is cast
     SPELL_ATTR1_NO_THREAT                        = 0x00000400, // 10 no generates threat on cast 100% (old NO_INITIAL_AGGRO)
     SPELL_ATTR1_UNK11                            = 0x00000800, // 11 aura
@@ -322,13 +322,13 @@ enum SpellAttr1
     SPELL_ATTR1_FARSIGHT                         = 0x00002000, // 13 Client removes farsight on aura loss
     SPELL_ATTR1_CHANNEL_TRACK_TARGET             = 0x00004000, // 14 Client automatically forces player to face target when channeling
     SPELL_ATTR1_DISPEL_AURAS_ON_IMMUNITY         = 0x00008000, // 15 remove auras on immunity
-    SPELL_ATTR1_UNAFFECTED_BY_SCHOOL_IMMUNE      = 0x00010000, // 16 on immuniy
-    SPELL_ATTR1_UNAUTOCASTABLE_BY_PET            = 0x00020000, // 17
-    SPELL_ATTR1_UNK18                            = 0x00040000, // 18
+    SPELL_ATTR1_UNAFFECTED_BY_SCHOOL_IMMUNE      = 0x00010000, // 16 unaffected by school immunity
+    SPELL_ATTR1_UNAUTOCASTABLE_BY_PET            = 0x00020000, // 17 for auras SPELL_AURA_TRACK_CREATURES, SPELL_AURA_TRACK_RESOURCES and SPELL_AURA_TRACK_STEALTHED select non-stacking tracking spells
+    SPELL_ATTR1_UNK18                            = 0x00040000, // 18 auras with this attribute are broken by any damage (not CrowdControl auras)
     SPELL_ATTR1_CANT_TARGET_SELF                 = 0x00080000, // 19
     SPELL_ATTR1_REQ_COMBO_POINTS1                = 0x00100000, // 20 Req combo points on target
     SPELL_ATTR1_UNK21                            = 0x00200000, // 21
-    SPELL_ATTR1_REQ_COMBO_POINTS2                = 0x00400000, // 22 Req combo points on target
+    SPELL_ATTR1_REQ_COMBO_POINTS2                = 0x00400000, // 22 Use combo points (in 4.x not required combo point target selected)
     SPELL_ATTR1_UNK23                            = 0x00800000, // 23
     SPELL_ATTR1_UNK24                            = 0x01000000, // 24 only fishing spells
     SPELL_ATTR1_UNK25                            = 0x02000000, // 25
@@ -344,8 +344,8 @@ enum SpellAttr2
 {
     SPELL_ATTR2_CAN_TARGET_DEAD                  = 0x00000001, //  0 can target dead unit or corpse
     SPELL_ATTR2_UNK1                             = 0x00000002, //  1 ? many triggered spells have this flag
-    SPELL_ATTR2_CAN_TARGET_NOT_IN_LOS            = 0x00000004, //  2 26368 4.0.1 dbc change
-    SPELL_ATTR2_UNK3                             = 0x00000008, //  3
+    SPELL_ATTR2_CAN_TARGET_NOT_IN_LOS            = 0x00000004, //  2 do not need LOS (26368 4.0.1 dbc change)
+    SPELL_ATTR2_UNK3                             = 0x00000008, //  3 auto targeting? (e.g. fishing skill enhancement items)
     SPELL_ATTR2_DISPLAY_IN_STANCE_BAR            = 0x00000010, //  4 client displays icon in stance bar when learned, even if not shapeshift
     SPELL_ATTR2_AUTOREPEAT_FLAG                  = 0x00000020, //  5
     SPELL_ATTR2_CANT_TARGET_TAPPED               = 0x00000040, //  6 target must be tapped by caster
@@ -359,7 +359,7 @@ enum SpellAttr2
     SPELL_ATTR2_UNK14                            = 0x00004000, // 14
     SPELL_ATTR2_UNK15                            = 0x00008000, // 15 not set in 3.0.3
     SPELL_ATTR2_TAME_BEAST                       = 0x00010000, // 16
-    SPELL_ATTR2_NOT_RESET_AUTO_ACTIONS           = 0x00020000, // 17 don't reset timers for melee autoattacks (swings) or ranged autoattacks (autoshoots)
+    SPELL_ATTR2_NOT_RESET_AUTO_ACTIONS           = 0x00020000, // 17 don't reset timers for melee autoattacks (swings) or ranged autoattacks (autoshots)
     SPELL_ATTR2_UNK18                            = 0x00040000, // 18 Only Revive pet - possible req dead pet
     SPELL_ATTR2_NOT_NEED_SHAPESHIFT              = 0x00080000, // 19 does not necessarily need shapeshift
     SPELL_ATTR2_UNK20                            = 0x00100000, // 20
@@ -422,7 +422,7 @@ enum SpellAttr4
     SPELL_ATTR4_UNK5                             = 0x00000020, //  5
     SPELL_ATTR4_NOT_STEALABLE                    = 0x00000040, //  6 although such auras might be dispelled, they cannot be stolen
     SPELL_ATTR4_TRIGGERED                        = 0x00000080, //  7 spells forced to be triggered
-    SPELL_ATTR4_UNK8                             = 0x00000100, //  8 ignores taken percent damage mods?
+    SPELL_ATTR4_UNK8                             = 0x00000100, //  8 ignores taken percent damage mods (no effect on non DoTs)
     SPELL_ATTR4_UNK9                             = 0x00000200, //  9
     SPELL_ATTR4_SPELL_VS_EXTEND_COST             = 0x00000400, // 10 Rogue Shiv have this flag
     SPELL_ATTR4_UNK11                            = 0x00000800, // 11
@@ -430,8 +430,8 @@ enum SpellAttr4
     SPELL_ATTR4_UNK13                            = 0x00002000, // 13
     SPELL_ATTR4_DAMAGE_DOESNT_BREAK_AURAS        = 0x00004000, // 14 doesn't break auras by damage from these spells
     SPELL_ATTR4_UNK15                            = 0x00008000, // 15
-    SPELL_ATTR4_NOT_USABLE_IN_ARENA              = 0x00010000, // 16
-    SPELL_ATTR4_USABLE_IN_ARENA                  = 0x00020000, // 17
+    SPELL_ATTR4_NOT_USABLE_IN_ARENA              = 0x00010000, // 16 not usable in arena
+    SPELL_ATTR4_USABLE_IN_ARENA                  = 0x00020000, // 17 usable in arena
     SPELL_ATTR4_AREA_TARGET_CHAIN                = 0x00040000, // 18 (NYI)hits area targets one after another instead of all at once
     SPELL_ATTR4_UNK19                            = 0x00080000, // 19
     SPELL_ATTR4_NOT_CHECK_SELFCAST_POWER         = 0x00100000, // 20 supersedes message "More powerful spell applied" for self casts.
@@ -452,7 +452,7 @@ enum SpellAttr5
 {
     SPELL_ATTR5_UNK0                             = 0x00000001, //  0
     SPELL_ATTR5_NO_REAGENT_WHILE_PREP            = 0x00000002, //  1 not need reagents if UNIT_FLAG_PREPARATION
-    SPELL_ATTR5_UNK2                             = 0x00000004, //  2
+    SPELL_ATTR5_UNK2                             = 0x00000004, //  2 removed at enter arena (e.g. 31850 since 3.3.3)
     SPELL_ATTR5_USABLE_WHILE_STUNNED             = 0x00000008, //  3 usable while stunned
     SPELL_ATTR5_UNK4                             = 0x00000010, //  4
     SPELL_ATTR5_SINGLE_TARGET_SPELL              = 0x00000020, //  5 Only one target can be apply at a time
@@ -561,7 +561,7 @@ enum SpellAttr8
     SPELL_ATTR8_TAUNT                     =    0x00000001, // 0
     SPELL_ATTR8_WORGEN_TRANSFORMATION     =    0x00000002, // 1
     SPELL_ATTR8_UNK2                      =    0x00000004, // 2 3 spells : 72221, 90960, 90961
-    SPELL_ATTR8_UNK3                      =    0x00000008, // 3 summoning and unsummoning spells?
+    SPELL_ATTR8_UNK3                      =    0x00000008, // 3 summoning and removing spells?
     SPELL_ATTR8_UNK4                      =    0x00000010, // 4
     SPELL_ATTR8_UNK5                      =    0x00000020, // 5
     SPELL_ATTR8_UNK6                      =    0x00000040, // 6 2 spells: 56817 and 83569
@@ -814,7 +814,7 @@ enum SpellEffects
     SPELL_EFFECT_SUMMON_DEAD_PET           = 109,
     SPELL_EFFECT_DESTROY_ALL_TOTEMS        = 110,
     SPELL_EFFECT_DURABILITY_DAMAGE         = 111,
-    SPELL_EFFECT_112                       = 112,
+    SPELL_EFFECT_112                       = 112,  // old SPELL_EFFECT_SUMMON_DEMON
     SPELL_EFFECT_RESURRECT_NEW             = 113,
     SPELL_EFFECT_ATTACK_ME                 = 114,
     SPELL_EFFECT_DURABILITY_DAMAGE_PCT     = 115,
@@ -873,7 +873,7 @@ enum SpellEffects
     SPELL_EFFECT_ALLOW_CONTROL_PET         = 168,
     SPELL_EFFECT_REMOVE_ITEM               = 169,
     SPELL_EFFECT_170                       = 170,
-    SPELL_EFFECT_171                       = 171,  // Summons gamebject
+    SPELL_EFFECT_171                       = 171,  // Summons gameobject
     SPELL_EFFECT_172                       = 172,  // Aoe resurrection
     SPELL_EFFECT_BUY_GUILD_TAB             = 173,  // Guild tab unlocked (guild perk)
     SPELL_EFFECT_APPLY_AURA_2              = 174,
@@ -1206,7 +1206,7 @@ enum SpellCustomErrors
     SPELL_CUSTOM_ERROR_95                               = 95, // ""
     SPELL_CUSTOM_ERROR_MAX_NUMBER_OF_RECRUITS           = 96, // You already have the max number of recruits.
     SPELL_CUSTOM_ERROR_MAX_NUMBER_OF_VOLUNTEERS         = 97, // You already have the max number of volunteers.
-    SPELL_CUSTOM_ERROR_FROSTMOURNE_RENDERED_RESSURECT   = 98, // Frostmourne has rendered you unable to ressurect.
+    SPELL_CUSTOM_ERROR_FROSTMOURNE_RENDERED_RESSURECT   = 98, // Frostmourne has rendered you unable to resurrect.
     SPELL_CUSTOM_ERROR_CANT_MOUNT_WITH_SHAPESHIFT       = 99, // You can't mount while affected by that shapeshift.
 };
 
@@ -1277,7 +1277,7 @@ enum AuraStateType
     AURA_STATE_UNKNOWN19                    = 19,           //     |
     //AURA_STATE_UNKNOWN20                  = 20,           //  c  | only (45317 Suicide)
     //AURA_STATE_UNKNOWN21                  = 21,           //     | not used
-    AURA_STATE_UNKNOWN22                    = 22,           // C  t| varius spells (63884, 50240)
+    AURA_STATE_UNKNOWN22                    = 22,           // C  t| various spells (63884, 50240)
     AURA_STATE_HEALTH_ABOVE_75_PERCENT      = 23,           // C   |
 };
 
@@ -2372,7 +2372,7 @@ enum CreatureFamily
 
 enum CreatureTypeFlags
 {
-    CREATURE_TYPEFLAGS_TAMEABLE         = 0x00000001,         // Tameable by any hunter
+    CREATURE_TYPEFLAGS_TAMEABLE         = 0x00000001,         // Tamable by any hunter
     CREATURE_TYPEFLAGS_GHOST            = 0x00000002,         // Creature are also visible for not alive player. Allow gossip interaction if npcflag allow?
     CREATURE_TYPEFLAGS_UNK2             = 0x00000004,
     CREATURE_TYPEFLAGS_UNK3             = 0x00000008,

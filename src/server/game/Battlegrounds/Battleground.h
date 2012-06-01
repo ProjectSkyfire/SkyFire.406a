@@ -286,6 +286,7 @@ enum GroupJoinBattlegroundResult
     ERR_WARGAME_REQUEST_FAILURE             = -20,
     ERR_BATTLEFIELD_TEAM_PARTY_SIZE         = -22,
 };
+
 class BattlegroundScore
 {
     public:
@@ -363,7 +364,7 @@ class Battleground
         uint32 GetMaxPlayersPerTeam() const { return _MaxPlayersPerTeam; }
         uint32 GetMinPlayersPerTeam() const { return _MinPlayersPerTeam; }
 
-        int32 GetStartDelayTime() const     { return m_StartDelayTime; }
+        int32 GetStartDelayTime() const     { return _StartDelayTime; }
         uint8 GetArenaType() const          { return _ArenaType; }
         uint8 GetWinner() const             { return _Winner; }
         uint32 GetScriptId() const          { return ScriptId; }
@@ -391,8 +392,8 @@ class Battleground
         void SetWinner(uint8 winner)        { _Winner = winner; }
         void SetScriptId(uint32 scriptId)   { ScriptId = scriptId; }
 
-        void ModifyStartDelayTime(int diff) { m_StartDelayTime -= diff; }
-        void SetStartDelayTime(int Time)    { m_StartDelayTime = Time; }
+        void ModifyStartDelayTime(int diff) { _StartDelayTime -= diff; }
+        void SetStartDelayTime(int Time)    { _StartDelayTime = Time; }
 
         void SetMaxPlayersPerTeam(uint32 MaxPlayers) { _MaxPlayersPerTeam = MaxPlayers; }
         void SetMinPlayersPerTeam(uint32 MinPlayers) { _MinPlayersPerTeam = MinPlayers; }
@@ -450,6 +451,9 @@ class Battleground
             O = _TeamStartLocO[idx];
         }
 
+        void SetStartMaxDist(float startMaxDist) { _StartMaxDist = startMaxDist; }
+        float GetStartMaxDist() const { return _StartMaxDist; }
+
         // Packet Transfer
         // method that should fill worldpacket with actual world states (not yet implemented for all battlegrounds!)
         virtual void FillInitialWorldStates(WorldPacket& /*data*/) {}
@@ -502,13 +506,12 @@ class Battleground
         void SetArenaTeamRatingChangeForTeam(uint32 Team, int32 RatingChange) { _ArenaTeamRatingChanges[GetTeamIndexByTeamId(Team)] = RatingChange; }
         int32 GetArenaTeamRatingChangeForTeam(uint32 Team) const    { return _ArenaTeamRatingChanges[GetTeamIndexByTeamId(Team)]; }
         int32 GetArenaTeamRatingChangeByIndex(uint32 index) const   { return _ArenaTeamRatingChanges[index]; }
-        void SetArenaMatchmakerRating(uint32 Team, uint32 MMR){ m_ArenaTeamMMR[GetTeamIndexByTeamId(Team)] = MMR; }
-        uint32 GetArenaMatchmakerRating(uint32 Team) const          { return m_ArenaTeamMMR[GetTeamIndexByTeamId(Team)]; }
-        uint32 GetArenaMatchmakerRatingByIndex(uint32 index) const  { return m_ArenaTeamMMR[index]; }
+        void SetArenaMatchmakerRating(uint32 Team, uint32 MMR){ _ArenaTeamMMR[GetTeamIndexByTeamId(Team)] = MMR; }
+        uint32 GetArenaMatchmakerRating(uint32 Team) const          { return _ArenaTeamMMR[GetTeamIndexByTeamId(Team)]; }
+        uint32 GetArenaMatchmakerRatingByIndex(uint32 index) const  { return _ArenaTeamMMR[index]; }
         void CheckArenaAfterTimerConditions();
         void CheckArenaWinConditions();
         void UpdateArenaWorldState();
-        void ScheduleArenaEnd(uint32 timer);
 
         // Triggers handle
         // must be implemented in BG subclass
@@ -577,11 +580,7 @@ class Battleground
         void RewardXPAtKill(Player* killer, Player* victim);
         bool CanAwardArenaPoints() const { return _LevelMin >= BG_AWARD_ARENA_POINTS_MIN_LEVEL; }
 
-        // Arena team ids by team
-        uint32 _ArenaTeamIds[BG_TEAMS_COUNT];
-
-        int32 _ArenaTeamRatingChanges[BG_TEAMS_COUNT];
-        uint32 m_ArenaTeamMMR[BG_TEAMS_COUNT];
+        virtual uint64 GetFlagPickerGUID(int32 /*team*/ = -1) const { return 0; }
     protected:
         // this method is called, when BG cannot spawn its own spirit guide, or something is wrong, It correctly ends Battleground
         void EndNow();
@@ -627,6 +626,7 @@ class Battleground
         uint32 _ClientInstanceID;                          // the instance-id which is sent to the client and without any other internal use
         uint32 _StartTime;
         uint32 _ResetStatTimer;
+        uint32 _ValidStartPositionTimer;
         int32 _EndTime;                                    // it is set to 120000 when bg is ending and it decreases itself
         uint32 _LastResurrectTime;
         BattlegroundBracketId _BracketId;
@@ -635,11 +635,10 @@ class Battleground
         bool   _SetDeleteThis;                             // used for safe deletion of the bg after end / all players leave
         bool   _IsArena;
         uint8  _Winner;                                    // 0=alliance, 1=horde, 2=none
-        int32  m_StartDelayTime;
+        int32  _StartDelayTime;
         bool   _IsRated;                                   // is this battle rated?
         bool   _PrematureCountDown;
         uint32 _PrematureCountDownTimer;
-        uint32 _arenaEndTimer;                             // Time after death of the remaining mamber of a team before arena ends
         char const* _Name;
 
         /* Pre- and post-update hooks */
@@ -688,6 +687,12 @@ class Battleground
         // Players count by team
         uint32 _PlayersCount[BG_TEAMS_COUNT];
 
+        // Arena team ids by team
+        uint32 _ArenaTeamIds[BG_TEAMS_COUNT];
+
+        int32 _ArenaTeamRatingChanges[BG_TEAMS_COUNT];
+        uint32 _ArenaTeamMMR[BG_TEAMS_COUNT];
+
         // Limits
         uint32 _LevelMin;
         uint32 _LevelMax;
@@ -703,6 +708,7 @@ class Battleground
         float _TeamStartLocY[BG_TEAMS_COUNT];
         float _TeamStartLocZ[BG_TEAMS_COUNT];
         float _TeamStartLocO[BG_TEAMS_COUNT];
+        float _StartMaxDist;
         uint32 ScriptId;
 };
 #endif

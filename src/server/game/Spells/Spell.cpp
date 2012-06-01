@@ -917,7 +917,7 @@ void Spell::SelectImplicitChannelTargets(SpellEffIndex effIndex, SpellImplicitTa
     switch (targetType.GetTarget())
     {
         case TARGET_UNIT_CHANNEL_TARGET:
-            // unit target may be no longer avalible - teleported out of map for example
+            // unit target may be no longer available - teleported out of map for example
             if (Unit* target = Unit::GetUnit(*m_caster, channeledSpell->m_targets.GetUnitTargetGUID()))
                 AddUnitTarget(target, 1 << effIndex);
             else
@@ -4513,7 +4513,7 @@ void Spell::HandleHolyPower(Player* caster)
             {
                 if (ihit->targetGUID == targetGUID)
                 {
-                    if (ihit->missCondition != SPELL_MISS_NONE && ihit->missCondition != SPELL_MISS_MISS) 
+                    if (ihit->missCondition != SPELL_MISS_NONE && ihit->missCondition != SPELL_MISS_MISS)
                     {
                         hit = false;
                     }

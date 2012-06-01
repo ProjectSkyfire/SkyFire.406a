@@ -65,7 +65,7 @@ namespace SkyFire
         private:
             void do_helper(WorldPacket& data, char const* text)
             {
-                uint64 target_guid = _source  ? _source ->GetGUID() : 0;
+                uint64 target_guid = _source ? _source->GetGUID() : 0;
 
                 data << uint8 (_msgtype);
                 data << uint32(LANG_UNIVERSAL);
@@ -143,6 +143,7 @@ Battleground::Battleground()
     _Winner            = 2;
     _StartTime         = 0;
     _ResetStatTimer    = 0;
+    _ValidStartPositionTimer = 0;
     _Events            = 0;
     _IsRated           = false;
     _BuffChange        = false;
@@ -176,6 +177,8 @@ Battleground::Battleground()
     _ArenaTeamIds[BG_TEAM_ALLIANCE]   = 0;
     _ArenaTeamIds[BG_TEAM_HORDE]      = 0;
 
+    _StartMaxDist = 0.0f;
+
     _ArenaTeamRatingChanges[BG_TEAM_ALLIANCE]   = 0;
     _ArenaTeamRatingChanges[BG_TEAM_HORDE]      = 0;
 
@@ -184,6 +187,9 @@ Battleground::Battleground()
 
     _PlayersCount[BG_TEAM_ALLIANCE]    = 0;
     _PlayersCount[BG_TEAM_HORDE]       = 0;
+
+    _TeamScores[BG_TEAM_ALLIANCE]      = 0;
+    _TeamScores[BG_TEAM_HORDE]         = 0;
 
     _TeamScores[BG_TEAM_ALLIANCE]      = 0;
     _TeamScores[BG_TEAM_HORDE]         = 0;
@@ -270,20 +276,6 @@ void Battleground::Update(uint32 diff)
                     CheckArenaAfterTimerConditions();
                     return;
                 }
-
-                if ((GetAlivePlayersCountByTeam(ALLIANCE) && !GetAlivePlayersCountByTeam(HORDE)) || (GetAlivePlayersCountByTeam(HORDE) && !GetAlivePlayersCountByTeam(ALLIANCE)))
-                {
-                    // No player is alive, decrease the time
-                    _arenaEndTimer -= diff;
-                    // Determine winner team
-                    if (_arenaEndTimer < 100)
-                    {
-                        if (!GetAlivePlayersCountByTeam(ALLIANCE))
-                            EndBattleground(HORDE);
-                        else
-                            EndBattleground(ALLIANCE);
-                    }
-                }
             }
             else
             {
@@ -304,6 +296,7 @@ void Battleground::Update(uint32 diff)
     // Update start time and reset stats timer
     _StartTime += diff;
     _ResetStatTimer += diff;
+    _ValidStartPositionTimer += diff;
 
     PostUpdateImpl(diff);
 }
@@ -477,7 +470,7 @@ inline void Battleground::_ProcessJoin(uint32 diff)
         _Events |= BG_STARTING_EVENT_3;
         SendMessageToAll(StartMessageIds[BG_STARTING_EVENT_THIRD], CHAT_MSG_BG_SYSTEM_NEUTRAL);
     }
-    // Delay expired (atfer 2 or 1 minute)
+    // Delay expired (after 2 or 1 minute)
     else if (GetStartDelayTime() <= 0 && !(_Events & BG_STARTING_EVENT_4))
     {
         _Events |= BG_STARTING_EVENT_4;
@@ -509,7 +502,7 @@ inline void Battleground::_ProcessJoin(uint32 diff)
                     for (Unit::AuraApplicationMap::iterator iter = auraMap.begin(); iter != auraMap.end();)
                     {
                         AuraApplication * aurApp = iter->second;
-                        Aura * aura = aurApp->GetBase();
+                        Aura* aura = aurApp->GetBase();
                         if (!aura->IsPermanent()
                             && aura->GetDuration() <= 30*IN_MILLISECONDS
                             && aurApp->IsPositive()
@@ -536,6 +529,33 @@ inline void Battleground::_ProcessJoin(uint32 diff)
             // Announce BG starting
             if (sWorld->getBoolConfig(CONFIG_BATTLEGROUND_QUEUE_ANNOUNCER_ENABLE))
                 sWorld->SendWorldText(LANG_BG_STARTED_ANNOUNCE_WORLD, GetName(), GetMinLevel(), GetMaxLevel());
+        }
+    }
+
+    // Find if the player left our start zone; if so, teleport it back
+    if (_ValidStartPositionTimer > 1000)
+    {
+        _ValidStartPositionTimer = 0;
+        float maxDist = GetStartMaxDist();
+        if (maxDist > 0.0f)
+        {
+            for (BattlegroundPlayerMap::const_iterator itr = GetPlayers().begin(); itr != GetPlayers().end(); ++itr)
+            {
+                if (Player *player = ObjectAccessor::FindPlayer(itr->first))
+                {
+                    float x, y, z, o;
+                    uint32 team = player->GetBGTeam();
+                    GetTeamStartLoc(team, x, y, z, o);
+
+                    float dist = player->GetDistance(x, y, z);
+
+                    if (dist >= maxDist)
+                    {
+                        sLog->outError("BATTLEGROUND: Sending %s back to start location (map: %u) (possible exploit)", player->GetName(), GetMapId());
+                        player->TeleportTo(GetMapId(), x, y, z, o);
+                    }
+                }
+            }
         }
     }
 }
@@ -752,7 +772,7 @@ void Battleground::EndBattleground(uint32 winner)
                 winner_matchmaker_rating = GetArenaMatchmakerRating(winner);
                 winner_matchmaker_change = winner_arena_team->WonAgainst(winner_matchmaker_rating, loser_matchmaker_rating, winner_change);
                 loser_matchmaker_change = loser_arena_team->LostAgainst(loser_matchmaker_rating, winner_matchmaker_rating, loser_change);
-                sLog->outArena("--- Winner: old rating: %u, rating gain: %d, old MMR: %u, MMR gain: %d --- Loser: old rating: %u, rating loss: %d, old MMR: %u, MMR loss: %d ---", winner_team_rating, winner_change, winner_matchmaker_rating,
+                sLog->outArena("match Type: %u --- Winner: old rating: %u, rating gain: %d, old MMR: %u, MMR gain: %d --- Loser: old rating: %u, rating loss: %d, old MMR: %u, MMR loss: %d ---",  _ArenaType, winner_team_rating, winner_change, winner_matchmaker_rating,
                     winner_matchmaker_change, loser_team_rating, loser_change, loser_matchmaker_rating, loser_matchmaker_change);
                 SetArenaMatchmakerRating(winner, winner_matchmaker_rating + winner_matchmaker_change);
                 SetArenaMatchmakerRating(GetOtherTeam(winner), loser_matchmaker_rating + loser_matchmaker_change);
@@ -762,7 +782,7 @@ void Battleground::EndBattleground(uint32 winner)
                 if (sWorld->getBoolConfig(CONFIG_ARENA_LOG_EXTENDED_INFO))
                     for (Battleground::BattlegroundScoreMap::const_iterator itr = GetPlayerScoresBegin(); itr != GetPlayerScoresEnd(); ++itr)
                         if (Player* player = ObjectAccessor::FindPlayer(itr->first))
-                            sLog->outArena("Statistics for %s (GUID: " UI64FMTD ", Team: %d, IP: %s): %u damage, %u healing, %u killing blows", player->GetName(), itr->first, player->GetArenaTeamId(_ArenaType == 5 ? 2 : _ArenaType == 3), player->GetSession()->GetRemoteAddress().c_str(), itr->second->DamageDone, itr->second->HealingDone, itr->second->KillingBlows);
+                            sLog->outArena("Statistics match Type: %u for %s (GUID: " UI64FMTD ", Team: %d, IP: %s): %u damage, %u healing, %u killing blows", _ArenaType, player->GetName(), itr->first, player->GetArenaTeamId(_ArenaType == 5 ? 2 : _ArenaType == 3), player->GetSession()->GetRemoteAddress().c_str(), itr->second->DamageDone, itr->second->HealingDone, itr->second->KillingBlows);
             }
             // Deduct 16 points from each teams arena-rating if there are no winners after 45+2 minutes
             else
@@ -1493,7 +1513,7 @@ void Battleground::DoorClose(uint32 type)
         {
             // Change state to allow door to be closed
             obj->SetLootState(GO_READY);
-            obj->UseDoorOrButton(RESPAWN_ONE_DAY);
+            obj->SetGoState(GO_STATE_READY);
         }
     }
     else
@@ -1506,8 +1526,8 @@ void Battleground::DoorOpen(uint32 type)
     if (GameObject* obj = GetBgMap()->GetGameObject(BgObjects[type]))
     {
         // Change state to be sure they will be opened
-        obj->SetLootState(GO_READY);
-        obj->UseDoorOrButton(RESPAWN_ONE_DAY);
+        obj->SetLootState(GO_ACTIVATED);
+        obj->SetGoState(GO_STATE_ACTIVE);
     }
     else
         sLog->outError("Battleground::DoorOpen: door gameobject (type: %u, GUID: %u) not found for BG (map: %u, instance id: %u)!",
@@ -1599,7 +1619,7 @@ bool Battleground::DelCreature(uint32 type)
     if (!BgCreatures[type])
         return true;
 
-    if (Creature *creature = GetBgMap()->GetCreature(BgCreatures[type]))
+    if (Creature* creature = GetBgMap()->GetCreature(BgCreatures[type]))
     {
         creature->AddObjectToRemoveList();
         BgCreatures[type] = 0;
@@ -1886,24 +1906,9 @@ void Battleground::CheckArenaAfterTimerConditions()
 void Battleground::CheckArenaWinConditions()
 {
     if (!GetAlivePlayersCountByTeam(ALLIANCE) && GetPlayersCountByTeam(HORDE))
-    {
-        if (isArena())
-            ScheduleArenaEnd(1500);
-        else
-            EndBattleground(HORDE);
-    }
+        EndBattleground(HORDE);
     else if (GetPlayersCountByTeam(ALLIANCE) && !GetAlivePlayersCountByTeam(HORDE))
-    {
-        if (isArena())
-            ScheduleArenaEnd(1500);
-        else
-            EndBattleground(ALLIANCE);
-    }
-}
-
-void Battleground::ScheduleArenaEnd(uint32 time)
-{
-    _arenaEndTimer = time;
+        EndBattleground(ALLIANCE);
 }
 
 void Battleground::UpdateArenaWorldState()

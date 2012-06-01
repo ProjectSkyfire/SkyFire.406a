@@ -46,10 +46,9 @@ const uint32 GILNEAS_BG_OP_NODEICONS[3]  =    {1842, 1845, 1846};
 
 enum GILNEAS_BG_NodeObjectId
 {
-    // This is what I did but requires changes in Database
     GILNEAS_BG_OBJECTID_NODE_BANNER_0    = 208779,       // Lighthouse banner
-    GILNEAS_BG_OBJECTID_NODE_BANNER_1    = 208780,       // Mines banner
-    GILNEAS_BG_OBJECTID_NODE_BANNER_2    = 208781,       // Waterworks banner
+    GILNEAS_BG_OBJECTID_NODE_BANNER_1    = 208780,       // Waterworks banner
+    GILNEAS_BG_OBJECTID_NODE_BANNER_2    = 208781,       // Mines banner
 };
 
 enum GILNEAS_BG_ObjectType
@@ -62,22 +61,23 @@ enum GILNEAS_BG_ObjectType
     GILNEAS_BG_OBJECT_AURA_ALLY               = 5,
     GILNEAS_BG_OBJECT_AURA_HORDE              = 6,
     GILNEAS_BG_OBJECT_AURA_CONTESTED          = 7,
-    GILNEAS_BG_OBJECT_GATE_A                  = 24,
-    GILNEAS_BG_OBJECT_GATE_H                  = 25,
+    GILNEAS_BG_OBJECT_GATE_A_1                = 24,
+    GILNEAS_BG_OBJECT_GATE_A_2                = 25,
+    GILNEAS_BG_OBJECT_GATE_H_1                = 26,
+    GILNEAS_BG_OBJECT_GATE_H_2                = 27,
     //buffs
-    GILNEAS_BG_OBJECT_SPEEDBUFF_LIGHTHOUSE    = 26,
-    GILNEAS_BG_OBJECT_REGENBUFF_LIGHTHOUSE    = 27,
-    GILNEAS_BG_OBJECT_BERSERKBUFF_LIGHTHOUSE  = 28,
-    GILNEAS_BG_OBJECT_SPEEDBUFF_WATERWORKS    = 29,
-    GILNEAS_BG_OBJECT_REGENBUFF_WATERWORKS    = 30,
-    GILNEAS_BG_OBJECT_BERSERKBUFF_WATERWORKS  = 31,
-    GILNEAS_BG_OBJECT_SPEEDBUFF_MINE          = 32,
-    GILNEAS_BG_OBJECT_REGENBUFF_MINE          = 33,
-    GILNEAS_BG_OBJECT_BERSERKBUFF_MINE        = 34,
-    GILNEAS_BG_OBJECT_MAX                     = 35,
+    GILNEAS_BG_OBJECT_SPEEDBUFF_LIGHTHOUSE    = 28,
+    GILNEAS_BG_OBJECT_REGENBUFF_LIGHTHOUSE    = 29,
+    GILNEAS_BG_OBJECT_BERSERKBUFF_LIGHTHOUSE  = 30,
+    GILNEAS_BG_OBJECT_SPEEDBUFF_WATERWORKS    = 31,
+    GILNEAS_BG_OBJECT_REGENBUFF_WATERWORKS    = 32,
+    GILNEAS_BG_OBJECT_BERSERKBUFF_WATERWORKS  = 33,
+    GILNEAS_BG_OBJECT_SPEEDBUFF_MINE          = 34,
+    GILNEAS_BG_OBJECT_REGENBUFF_MINE          = 35,
+    GILNEAS_BG_OBJECT_BERSERKBUFF_MINE        = 36,
+    GILNEAS_BG_OBJECT_MAX                     = 37,
 };
 
-/* Object id templates from DB */
 enum GILNEAS_BG_ObjectTypes
 {
     GILNEAS_BG_OBJECTID_BANNER_A             = 180058,
@@ -89,8 +89,10 @@ enum GILNEAS_BG_ObjectTypes
     GILNEAS_BG_OBJECTID_AURA_H               = 180101,
     GILNEAS_BG_OBJECTID_AURA_C               = 180102,
 
-    GILNEAS_BG_OBJECTID_GATE_A               = 207177,
-    GILNEAS_BG_OBJECTID_GATE_H               = 207178
+    GILNEAS_BG_OBJECTID_GATE_A_1             = 207177,
+    GILNEAS_BG_OBJECTID_GATE_A_2             = 180322,
+    GILNEAS_BG_OBJECTID_GATE_H_1             = 207178,
+    GILNEAS_BG_OBJECTID_GATE_H_2             = 180322,
 };
 
 enum GILNEAS_BG_Timers
@@ -100,11 +102,11 @@ enum GILNEAS_BG_Timers
 
 enum GILNEAS_BG_Score
 {
-    GILNEAS_BG_WARNING_NEAR_VICTORY_SCORE    = 1800,  // 1800 or 1760?
+    GILNEAS_BG_WARNING_NEAR_VICTORY_SCORE    = 1800,
     GILNEAS_BG_MAX_TEAM_SCORE                = 2000
 };
 
-/* DoNot change below, or this thing will go boom! */
+/* Do not change below, or this thing will go boom! */
 enum GILNEAS_BG_BattlegroundNodes
 {
     GILNEAS_BG_NODE_LIGHTHOUSE       = 0,
@@ -154,16 +156,18 @@ enum GILNEAS_BG_Objectives
 
 const float GILNEAS_BG_NodePositions[GILNEAS_BG_DYNAMIC_NODES_COUNT][4] =
 {
-    { 1057.8f, 1278.150f, 3.25f, 5.0f  },      // Lighthouse
-    { 980.130f, 948.8f, 12.75f, 2.770f },      // Waterworks
-    { 1250.986f, 958.25f, 5.9f, 5.90f  },      // Mine
+    { 1057.790f, 1278.285f, 3.1500f, 1.945662f },        // Lighthouse
+    { 1251.010f, 958.2685f, 5.6000f, 5.892280f },        // Waterworks
+    { 980.0446f, 948.7411f, 12.650f, 5.904071f },        // Mine
 };
 
 // x, y, z, o, rot0, rot1, rot2, rot3
-const float GILNEAS_BG_DoorPositions[2][8] =
+const float GILNEAS_BG_DoorPositions[4][8] =
 {
-    { 918.876f, 1336.56f, 27.6195f, 2.77481f, 0.0f, 0.0f, 0.983231f, 0.182367f },
-    { 1396.15f, 977.014f, 7.43169f, 6.27043f, 0.0f, 0.0f, 0.006378f, -0.99998f }
+    { 918.160f, 1336.75f, 27.6299f, 2.87927f, 0.0f, 0.0f, 0.983231f, 0.182367f },
+    { 918.160f, 1336.75f, 26.6299f, 2.87927f, 0.0f, 0.0f, 0.983231f, 0.182367f },
+    { 1396.15f, 977.014f, 7.43169f, 6.27043f, 0.0f, 0.0f, 0.006378f, -0.99998f },
+    { 1396.15f, 977.014f, 0.33169f, 6.27043f, 0.0f, 0.0f, 0.006378f, -0.99998f },
 };
 
 const uint32 GILNEAS_BG_TickIntervals[4] = { 0, 12000, 6000, 1000 };
@@ -186,7 +190,6 @@ const float GILNEAS_BG_BuffPositions[GILNEAS_BG_DYNAMIC_NODES_COUNT][4] =
     { 1063.57f, 1313.42f, 4.91f, 4.14f },        // Lighthouse
     { 961.830f, 977.03f, 14.15f, 4.55f },        // Waterworks
     { 1193.09f, 1017.46f, 7.98f, 0.24f },        // Mine
-   // { 1107.57f, 912.18f, 27.54f, 5.53f },        // Unknown
 };
 
 struct GILNEAS_BG_BannerTimer

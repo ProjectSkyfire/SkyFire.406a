@@ -1289,8 +1289,8 @@ enum Opcodes
     SMSG_UPDATE_ITEM_ENCHANTMENTS                    = 0x020E8, // 4.0.6a 13623
     SMSG_REDIRECT_CLIENT                             = 0x0201B, // 4.0.6a 13623
     CMSG_REDIRECTION_FAILED                          = 0x10007, // Unknown opcode ID
-    SMSG_UNKNOWN_1295                                = 0x10008, // Unknown opcode Name, 4.0.6  13529
-    CMSG_UNKNOWN_1296                                = 0x10009, // Unknown opcode Name, 4.0.6  13529
+    SMSG_SUSPEND_COMMS                               = 0x10008, // Unknown opcode Name, 4.0.6  13529
+    CMSG_SUSPEND_COMMS_ACK                           = 0x10009, // Unknown opcode Name, 4.0.6  13529
     SMSG_FORCE_SEND_QUEUED_PACKETS                   = 0x02880, // 4.0.6a 13623
     CMSG_REDIRECTION_AUTH_PROOF                      = 0x00E4C, // 4.0.6a 13623
     SMSG_COMBAT_LOG_MULTIPLE                         = 0x033A8, // 4.0.6a 13623
