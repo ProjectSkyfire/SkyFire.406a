@@ -145,6 +145,7 @@ void Vehicle::ApplyAllImmunities()
     // Vehicles should be immune on Knockback ...
     _me->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
     _me->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK_DEST, true);
+    _me->ApplySpellImmune(0, IMMUNITY_MECHANIC, MECHANIC_GRIP, true);
 
     // Mechanical units & vehicles ( which are not Bosses, they have own immunities in DB ) should be also immune on healing ( exceptions in switch below )
     if (_me->ToCreature() && _me->ToCreature()->GetCreatureTemplate()->type == CREATURE_TYPE_MECHANICAL && !_me->ToCreature()->isWorldBoss())
@@ -180,6 +181,8 @@ void Vehicle::ApplyAllImmunities()
             _me->SetControlled(true, UNIT_STATE_ROOT);
             // why we need to apply this? we can simple add immunities to slow mechanic in DB
             _me->ApplySpellImmune(0, IMMUNITY_STATE, SPELL_AURA_MOD_DECREASE_SPEED, true);
+            _me->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_CHARGE, true);
+            _me->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_CHARGE_DEST, true);
             break;
         default:
             break;
