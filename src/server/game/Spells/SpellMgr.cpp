@@ -2976,6 +2976,10 @@ void SpellMgr::LoadSpellCustomAttr()
 
         switch (spellInfo->Id)
         {
+            case 79638:
+            case 79640:
+                spellInfo->DurationEntry = sSpellDurationStore.LookupEntry(367);
+                break;
             case 76547: // Mana Adept
             case 77226: // Deep Healing
             case 76613: // Frostburn
