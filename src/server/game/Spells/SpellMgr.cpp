@@ -2976,9 +2976,9 @@ void SpellMgr::LoadSpellCustomAttr()
 
         switch (spellInfo->Id)
         {
-            case 79638:
-            case 79640:
-                spellInfo->DurationEntry = sSpellDurationStore.LookupEntry(367);
+            case 79638: // Enhanced Strength
+            case 79640: // Enhanced Intellect
+                spellInfo->DurationEntry = sSpellDurationStore.LookupEntry(367); // 2 hours instead of 1
                 break;
             case 76547: // Mana Adept
             case 77226: // Deep Healing
