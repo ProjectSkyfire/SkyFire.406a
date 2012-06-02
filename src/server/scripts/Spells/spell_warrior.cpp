@@ -422,9 +422,9 @@ public:
             Unit* caster = GetCaster();
             int32 damage = 0;
 
-            // apply percent damage mods
-            damage = caster->SpellDamageBonus(target, GetSpellInfo(), damage, SPELL_DIRECT_DAMAGE);
+            damage = GetSpellValue()->EffectBasePoints[0];
 
+            // apply percent damage mods
             switch (GetSpellInfo()->Id)
             {
                 case 12162:

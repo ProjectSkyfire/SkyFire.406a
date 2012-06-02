@@ -8750,26 +8750,37 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
         case 12849:
         case 12867:
         {
+            Item* item = NULL;
+
             if (GetTypeId() != TYPEID_PLAYER)
                 return false;
 
+            float weaponDPS = 0.0;
+            float weaponSpeed = 0.0;
+            float attackPower = 0.0;
+
             // now compute approximate weapon damage by formula from wowwiki.com
-            Item* item = NULL;
             if (procFlags & PROC_FLAG_DONE_OFFHAND_ATTACK)
-                item = ToPlayer()->GetUseableItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND);
+            {
+                item = ToPlayer()->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND);
+                if (item)
+                {
+                    weaponSpeed = item->GetTemplate()->Delay / 1000.0f;
+                    weaponDPS = item->GetTemplate()->DPS;
+                }
+            }
             else
-                item = ToPlayer()->GetUseableItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_MAINHAND);
+            {
+                item = ToPlayer()->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_MAINHAND);
+                if (item)
+                {
+                    weaponSpeed = item->GetTemplate()->Delay / 1000.0f;
+                    weaponDPS = item->GetTemplate()->DPS;
+                }
+            }
 
-            // dunno if it's really needed but will prevent any possible crashes
-            if (!item)
-                return false;
-
-            ItemTemplate const* weapon = item->GetTemplate();
-
-            float weaponDPS = weapon->DPS;
-            float attackPower = GetTotalAttackPowerValue(BASE_ATTACK) / 14.0f;
-            float weaponSpeed = float(weapon->Delay) / 1000.0f;
-            basepoints0 = int32((weaponDPS + attackPower) * weaponSpeed);
+            attackPower = (GetTotalAttackPowerValue(BASE_ATTACK) / 14.0f);
+            basepoints0 = ((weaponDPS + attackPower) * weaponSpeed);
             break;
         }
         // Persistent Shield (Scarab Brooch trinket)
