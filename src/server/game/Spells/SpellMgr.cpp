@@ -2989,6 +2989,12 @@ void SpellMgr::LoadSpellCustomAttr()
             case 93072: // Bring our Boys back
                 spellInfo->Effects[0].TargetA = TARGET_UNIT_NEARBY_ENTRY;
                 break;
+            case 11113: // Blast Wave
+                // Had to do this, currently this spell is impossible to be implemented
+                // on the current proc system
+                spellInfo->Effects[2].Effect = NULL;
+                spellInfo->ExplicitTargetMask = TARGET_FLAG_DEST_LOCATION;
+                break;
             case 51514: // Hex
             case 118:   // Polymorph
             case 61305: // Polymorph (other animal)

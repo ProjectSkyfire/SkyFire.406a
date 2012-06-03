@@ -36,7 +36,8 @@ enum MageSpells
     SPELL_MAGE_GLYPH_OF_ETERNAL_WATER            = 70937,
     SPELL_MAGE_SUMMON_WATER_ELEMENTAL_PERMANENT  = 70908,
     SPELL_MAGE_SUMMON_WATER_ELEMENTAL_TEMPORARY  = 70907,
-    SPELL_MAGE_GLYPH_OF_BLAST_WAVE               = 62126,
+    SPELL_MAGE_FLAMESTRIKE                       = 2120,
+    SPELL_MAGE_BLASTWAVE                         = 11113,
     SPELL_MAGE_GLYPH_OF_ICE_BARRIER              = 63095,
 };
 
@@ -49,22 +50,48 @@ public:
     {
         PrepareSpellScript(spell_mage_blast_wave_SpellScript);
 
+        std::list<Unit*> targetList;
+        uint32 count;
+        float x;
+        float y;
+        float z;
+
         bool Validate(SpellInfo const* /*spellEntry*/)
         {
-            if (!sSpellMgr->GetSpellInfo(SPELL_MAGE_GLYPH_OF_BLAST_WAVE))
+            if (!sSpellMgr->GetSpellInfo(SPELL_MAGE_FLAMESTRIKE) ||
+                !sSpellMgr->GetSpellInfo(SPELL_MAGE_BLASTWAVE))
                 return false;
             return true;
         }
-
-        void HandleKnockBack(SpellEffIndex effIndex)
+        bool Load()
         {
-            if (GetCaster()->HasAura(SPELL_MAGE_GLYPH_OF_BLAST_WAVE))
-                PreventHitDefaultEffect(effIndex);
+            x = GetExplTargetDest()->GetPositionX();
+            y = GetExplTargetDest()->GetPositionY();
+            z = GetExplTargetDest()->GetPositionZ();
+            count = 0;
+            targetList.clear();
+            return true;
+        }
+
+        void FilterTargets(std::list<Unit*>& unitList)
+        {
+            count = unitList.size();
+        }
+
+        void HandleExtraEffect()
+        {
+            Unit* caster = GetCaster();
+            if (AuraEffect const* impFlamestrike = caster->GetDummyAuraEffect(SPELLFAMILY_MAGE, 37, EFFECT_0))
+            {
+                if (count >= 2 && roll_chance_i(impFlamestrike->GetAmount()))
+                    caster->CastSpell(x, y, z, SPELL_MAGE_FLAMESTRIKE, true);
+            }   
         }
 
         void Register()
         {
-            OnEffectHitTarget += SpellEffectFn(spell_mage_blast_wave_SpellScript::HandleKnockBack, EFFECT_2, SPELL_EFFECT_KNOCK_BACK);
+            AfterCast += SpellCastFn(spell_mage_blast_wave_SpellScript::HandleExtraEffect);
+            OnUnitTargetSelect += SpellUnitTargetFn(spell_mage_blast_wave_SpellScript::FilterTargets, EFFECT_0, TARGET_UNIT_DEST_AREA_ENEMY);
         }
     };
 

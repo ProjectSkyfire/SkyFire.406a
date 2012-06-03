@@ -2070,7 +2070,7 @@ void ObjectMgr::LoadItemLocales()
     sLog->outString();
 }
 
-void FillItemDamageFields(float* minDamage, float* maxDamage, float* dps, uint32 itemLevel, uint32 itemClass, uint32 itemSubClass, uint32 quality, uint32 delay, float statScalingFactor, uint32 inventoryType, uint32 flags2)
+void FillItemDamageFields(ItemTemplate tem,float* minDamage, float* maxDamage, float* dps, uint32 itemLevel, uint32 itemClass, uint32 itemSubClass, uint32 quality, uint32 delay, float statScalingFactor, uint32 inventoryType, uint32 flags2)
 {
     *minDamage = *maxDamage = *dps = 0.0f;
     if (itemClass != ITEM_CLASS_WEAPON || quality > ITEM_QUALITY_ARTIFACT)
@@ -2359,6 +2359,9 @@ void ObjectMgr::LoadItemTemplates()
         itemTemplate.MinMoneyLoot            = fields[120].GetUInt32();
         itemTemplate.MaxMoneyLoot            = fields[121].GetUInt32();
 
+        FillItemDamageFields(itemTemplate, &itemTemplate.minDamage, &itemTemplate.maxDamage, &itemTemplate.DPS, itemTemplate.ItemLevel,
+               itemTemplate.Class, itemTemplate.SubClass, itemTemplate.Quality, itemTemplate.Delay,
+               1, itemTemplate.InventoryType, itemTemplate.Flags2);
         // Checks
 
         ItemEntry const *db2item = sItemStore.LookupEntry(entry);
