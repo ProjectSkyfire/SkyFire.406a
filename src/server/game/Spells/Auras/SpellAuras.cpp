@@ -1619,7 +1619,6 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                     if (AuraEffect* aurEff = GetEffect(0))
                     {
                         remainingTicks = aurEff->GetTotalTicks() - aurEff->GetTickNumber();
-
                         if(caster->HasSpell(79133))
                         {
                             chance = 30.0f;
@@ -1627,12 +1626,10 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                         }
                         else
                             chance = 60.0f;
-                        
                         // for each remaining tick, calculate chances
                         for(remainingTicks; remainingTicks > 0; remainingTicks--)
                             if(roll_chance_f(chance))
                                 energy += 10;
-
                         // Give energy
                         caster->EnergizeBySpell(caster, talentId, energy, POWER_ENERGY);        // Hacky too, isn't it ?
                     }
@@ -1683,23 +1680,23 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
             if (GetSpellInfo()->SpellFamilyFlags[0] & 0x00400000)
             {
                 // Master of subtlety
-                if (AuraEffect const* aurEff = target->GetAuraEffectOfRankedSpell(31221, 0))
+                if (AuraEffect const* aurEff = target->GetAuraEffectOfRankedSpell(31223, 0))
                 {
                     if (!apply)
-                        target->CastSpell(target, 31666, true);
+                        caster->GetAura(31665)->SetDuration(6000, true);
                     else
                     {
                         int32 basepoints0 = aurEff->GetAmount();
-                        target->CastCustomSpell(target, 31665, &basepoints0, NULL, NULL, true);
+                        caster->CastCustomSpell(target, 31665, &basepoints0, NULL, NULL, true);
                     }
                 }
                 // Overkill
                 if (target->HasAura(58426))
                 {
                     if (!apply)
-                        target->CastSpell(target, 58428, true);
+                        caster->GetAura(58427)->SetDuration(20000, true);
                     else
-                        target->CastSpell(target, 58427, true);
+                        caster->CastSpell(target, 58427, true);
                 }
                 break;
             }
