@@ -6629,6 +6629,41 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                     basepoints0 = int32(0.40f * damage);
                     triggered_spell_id = 89775;
                     break;
+                // Venomeous wounds
+                case 79133:
+                case 79134:
+                    float chance;
+                    if(dummySpell->Id == 79133)
+                        chance = 30.0f;
+                    else
+                        chance = 60.0f;
+
+                    // Check if target is poisoned
+                    bool poisoned = false;
+                    // fast check
+                    if (target->HasAuraState(AURA_STATE_DEADLY_POISON, dummySpell, this))
+                        poisoned = true;
+                    // full aura scan
+                    else
+                    {
+                        Unit::AuraApplicationMap const& auras = target->GetAppliedAuras();
+                        for (Unit::AuraApplicationMap::const_iterator itr = auras.begin(); itr != auras.end(); ++itr)
+                        {
+                            if (itr->second->GetBase()->GetSpellInfo()->Dispel == DISPEL_POISON)
+                            {
+                                poisoned = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    // Only if: poisoned, proc chance, garrote or rupture
+                    if(!poisoned || !roll_chance_f(chance) || (procSpell->Id != 1943 && procSpell->Id != 703))
+                        return false;
+
+                    this->EnergizeBySpell(this, dummySpell->Id, 10, POWER_ENERGY); // Hacky, isn't it ?
+                    triggered_spell_id = 79136;
+                    break;
             }
 
             switch (dummySpell->SpellIconID)
