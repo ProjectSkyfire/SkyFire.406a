@@ -6632,11 +6632,7 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                 // Venomeous wounds
                 case 79133:
                 case 79134:
-                    float chance;
-                    if(dummySpell->Id == 79133)
-                        chance = 30.0f;
-                    else
-                        chance = 60.0f;
+                    float chance = (dummySpell->Id == 79133) ? 30.0f : 60.0f;
 
                     // Check if target is poisoned
                     bool poisoned = false;

@@ -1610,6 +1610,33 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                 // Cast stealth at vanish 3 seconds end
                 if (GetId() == 11327 && removeMode == AURA_REMOVE_BY_EXPIRE)
                     caster->AddAura(1784 /* == stealth */, caster);
+                // Rupture & venomeous wounds energy regain at target's death
+                else if(GetId() == 1943 && removeMode == AURA_REMOVE_BY_DEATH &&    // If rupture's target dies
+                    (caster->HasSpell(79133) || caster->HasSpell(79134)))            // Only if has talent
+                {
+                    float chance;
+                    uint32 energy = 0, talentId = 79134, remainingTicks;
+                    if (AuraEffect* aurEff = GetEffect(0))
+                    {
+                        remainingTicks = aurEff->GetTotalTicks() - aurEff->GetTickNumber();
+
+                        if(caster->HasSpell(79133))
+                        {
+                            chance = 30.0f;
+                            talentId = 79133;
+                        }
+                        else
+                            chance = 60.0f;
+                        
+                        // for each remaining tick, calculate chances
+                        for(remainingTicks; remainingTicks > 0; remainingTicks--)
+                            if(roll_chance_f(chance))
+                                energy += 10;
+
+                        // Give energy
+                        caster->EnergizeBySpell(caster, talentId, energy, POWER_ENERGY);        // Hacky too, isn't it ?
+                    }
+                }
                 break;
             case SPELLFAMILY_HUNTER:
                 // Wyvern Sting
