@@ -8748,8 +8748,8 @@ void Player::_ApplyWeaponDamage(uint8 slot, ItemTemplate const* proto, ScalingSt
         attType = OFF_ATTACK;
     }
 
-    float minDamage = proto->GetMinDamage();
-    float maxDamage = proto->GetMaxDamage();
+    float minDamage = proto->minDamage;
+    float maxDamage = proto->maxDamage;
 
     // If set dpsMod in ScalingStatValue use it for min (70% from average), max (130% from average) damage
     int32 extraDPS = 0;
@@ -15746,8 +15746,8 @@ void Player::RewardQuest(Quest const *quest, uint32 reward, Object* questGiver, 
     RewardedQuestSet::const_iterator rewItr = _RewardedQuests.find(quest_id);
     bool rewarded = (rewItr != _RewardedQuests.end());
 
-    // Not give XP in case already completed once repeatable quest
-    uint32 XP = rewarded ? 0 : uint32(quest->XPValue(this)*sWorld->getRate(RATE_XP_QUEST));
+    // Not give XP in case already completed once repeatable quest, but reward XP for daily, weekly and seasonal quests
+    uint32 XP = (rewarded && !quest->IsDaily() && !quest->IsWeekly() && !quest->IsSeasonal()) ? 0 : uint32(quest->XPValue(this)*sWorld->getRate(RATE_XP_QUEST));
 
     // handle SPELL_AURA_MOD_XP_QUEST_PCT auras
     Unit::AuraEffectList const& ModXPPctAuras = GetAuraEffectsByType(SPELL_AURA_MOD_XP_QUEST_PCT);

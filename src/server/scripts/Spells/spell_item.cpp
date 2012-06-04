@@ -118,6 +118,60 @@ public:
     }
 };
 
+// http://www.wowhead.com/item=58149 Flask of Enhancement
+// 79637 Flask of Enhancement
+enum eFlaskOfEnhancementSpells
+{
+    SPELL_FLASK_OF_ENHANCEMENT_INT = 79640,
+    SPELL_FLASK_OF_ENHANCEMENT_AGI = 79639,
+    SPELL_FLASK_OF_ENHANCEMENT_STR = 79638,
+};
+
+class spell_item_flask_of_enhancement : public SpellScriptLoader
+{
+public:
+    spell_item_flask_of_enhancement() : SpellScriptLoader("spell_item_flask_of_enhancement") { }
+
+    class spell_item_flask_of_enhancement_SpellScript : public SpellScript
+    {
+    public:
+        PrepareSpellScript(spell_item_flask_of_enhancement_SpellScript)
+        bool Validate(SpellInfo const* /*spellEntry*/)
+        {
+            if (!sSpellMgr->GetSpellInfo(SPELL_FLASK_OF_ENHANCEMENT_INT) || !sSpellMgr->GetSpellInfo(SPELL_FLASK_OF_ENHANCEMENT_AGI) || !sSpellMgr->GetSpellInfo(SPELL_FLASK_OF_ENHANCEMENT_STR))
+                return false;
+            return true;
+        }
+
+        void HandleDummy(SpellEffIndex /*effIndex*/)
+        {
+            Unit* pCaster = GetCaster();
+            if (pCaster->GetTypeId() != TYPEID_PLAYER)
+                return;
+
+            uint32 spellId;
+            if (pCaster->GetStat(STAT_INTELLECT) >= pCaster->GetStat(STAT_AGILITY) && pCaster->GetStat(STAT_INTELLECT) >= pCaster->GetStat(STAT_STRENGTH))
+                spellId = SPELL_FLASK_OF_ENHANCEMENT_INT;
+            else if(pCaster->GetStat(STAT_AGILITY) >= pCaster->GetStat(STAT_INTELLECT) && pCaster->GetStat(STAT_AGILITY) >= pCaster->GetStat(STAT_STRENGTH))
+                spellId = SPELL_FLASK_OF_ENHANCEMENT_AGI;
+            else
+                spellId = SPELL_FLASK_OF_ENHANCEMENT_STR;
+
+            pCaster->CastSpell(pCaster, spellId, true, NULL);
+        }
+
+        void Register()
+        {
+            OnEffectHit += SpellEffectFn(spell_item_flask_of_enhancement_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
+        }
+    };
+
+    SpellScript* GetSpellScript() const
+    {
+        return new spell_item_flask_of_enhancement_SpellScript();
+    }
+};
+
 // http://www.wowhead.com/item=47499 Flask of the North
 // 67019 Flask of the North
 enum eFlaskOfTheNorthSpells
@@ -199,8 +253,9 @@ public:
 // 13280 Gnomish Death Ray
 enum eGnomishDeathRay
 {
-    SPELL_GNOMISH_DEATH_RAY_SELF = 13493,
-    SPELL_GNOMISH_DEATH_RAY_TARGET = 13279,
+    SPELL_GNOMISH_DEATH_RAY_DUMMY_CASTER_SELF_DAMAGE = 13493,
+    SPELL_GNOMISH_DEATH_RAY_TARGET_DAMAGE = 13279,
+    SPELL_GNOMISH_DEATH_RAY_DUMMY_CASTER = 13280,
 };
 
 class spell_item_gnomish_death_ray : public SpellScriptLoader
@@ -211,26 +266,27 @@ public:
     class spell_item_gnomish_death_ray_SpellScript : public SpellScript
     {
     public:
+
         PrepareSpellScript(spell_item_gnomish_death_ray_SpellScript)
+
         bool Validate(SpellInfo const* /*spellEntry*/)
         {
-            if (!sSpellMgr->GetSpellInfo(SPELL_GNOMISH_DEATH_RAY_SELF))
+            if (!sSpellMgr->GetSpellInfo(SPELL_GNOMISH_DEATH_RAY_DUMMY_CASTER_SELF_DAMAGE))
                 return false;
-            if (!sSpellMgr->GetSpellInfo(SPELL_GNOMISH_DEATH_RAY_TARGET))
+            if (!sSpellMgr->GetSpellInfo(SPELL_GNOMISH_DEATH_RAY_TARGET_DAMAGE))
+                return false;
+            if (!sSpellMgr->GetSpellInfo(SPELL_GNOMISH_DEATH_RAY_DUMMY_CASTER))
                 return false;
             return true;
         }
 
         void HandleDummy(SpellEffIndex /*effIndex*/)
         {
-            if (Unit* target = GetHitUnit())
-            {
-                Unit* pCaster = GetCaster();
-                if (urand(0, 99) < 15)
-                    pCaster->CastSpell(pCaster, SPELL_GNOMISH_DEATH_RAY_SELF, true, NULL);    // failure
-                else
-                    pCaster->CastSpell(target, SPELL_GNOMISH_DEATH_RAY_TARGET, true, NULL);
-            }
+            Unit* caster = GetCaster();
+            Unit* target = caster->getVictim();
+            
+            if (target)
+                caster->CastSpell(target, SPELL_GNOMISH_DEATH_RAY_TARGET_DAMAGE, true);
         }
 
         void Register()
@@ -1215,6 +1271,7 @@ void AddSC_item_spell_scripts()
     new spell_item_trigger_spell("spell_item_mithril_mechanical_dragonling", SPELL_MITHRIL_MECHANICAL_DRAGONLING);
 
     new spell_item_deviate_fish();
+    new spell_item_flask_of_enhancement();
     new spell_item_flask_of_the_north();
     new spell_item_gnomish_death_ray();
     new spell_item_make_a_wish();

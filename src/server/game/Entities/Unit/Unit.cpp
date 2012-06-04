@@ -6994,20 +6994,6 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                     }
                     break;
                 }
-                case 25899:                                 // Greater Blessing of Sanctuary
-                case 20911:                                 // Blessing of Sanctuary
-                {
-                    target = this;
-                    switch (target->getPowerType())
-                    {
-                        case POWER_MANA:
-                            triggered_spell_id = 57319;
-                            break;
-                        default:
-                            return false;
-                    }
-                    break;
-                }
                 // Seal of Vengeance (damage calc on apply aura)
                 case 31801:
                 {
@@ -8056,23 +8042,6 @@ bool Unit::HandleModDamagePctTakenAuraProc(Unit* victim, uint32 /*damage*/, Aura
     Unit* target = victim;
     int32 basepoints0 = 0;
 
-    switch (dummySpell->SpellFamilyName)
-    {
-        case SPELLFAMILY_PALADIN:
-        {
-            // Blessing of Sanctuary
-            if (dummySpell->SpellFamilyFlags[0] & 0x10000000)
-            {
-                switch (getPowerType())
-                {
-                    case POWER_MANA:   triggered_spell_id = 57319; break;
-                    default:
-                        return false;
-                }
-            }
-            break;
-        }
-    }
     // processed charge only counting case
     if (!triggered_spell_id)
         return true;
@@ -8750,26 +8719,37 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
         case 12849:
         case 12867:
         {
+            Item* item = NULL;
+
             if (GetTypeId() != TYPEID_PLAYER)
                 return false;
 
+            float weaponDPS = 0.0;
+            float weaponSpeed = 0.0;
+            float attackPower = 0.0;
+
             // now compute approximate weapon damage by formula from wowwiki.com
-            Item* item = NULL;
             if (procFlags & PROC_FLAG_DONE_OFFHAND_ATTACK)
-                item = ToPlayer()->GetUseableItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND);
+            {
+                item = ToPlayer()->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND);
+                if (item)
+                {
+                    weaponSpeed = item->GetTemplate()->Delay / 1000.0f;
+                    weaponDPS = item->GetTemplate()->DPS;
+                }
+            }
             else
-                item = ToPlayer()->GetUseableItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_MAINHAND);
+            {
+                item = ToPlayer()->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_MAINHAND);
+                if (item)
+                {
+                    weaponSpeed = item->GetTemplate()->Delay / 1000.0f;
+                    weaponDPS = item->GetTemplate()->DPS;
+                }
+            }
 
-            // dunno if it's really needed but will prevent any possible crashes
-            if (!item)
-                return false;
-
-            ItemTemplate const* weapon = item->GetTemplate();
-
-            float weaponDPS = weapon->DPS;
-            float attackPower = GetTotalAttackPowerValue(BASE_ATTACK) / 14.0f;
-            float weaponSpeed = float(weapon->Delay) / 1000.0f;
-            basepoints0 = int32((weaponDPS + attackPower) * weaponSpeed);
+            attackPower = (GetTotalAttackPowerValue(BASE_ATTACK) / 14.0f);
+            basepoints0 = ((weaponDPS + attackPower) * weaponSpeed);
             break;
         }
         // Persistent Shield (Scarab Brooch trinket)

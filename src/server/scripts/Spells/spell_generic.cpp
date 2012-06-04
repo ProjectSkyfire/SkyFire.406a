@@ -1191,33 +1191,6 @@ public:
     }
 };
 
-class spell_gen_lifeblood : public SpellScriptLoader
-{
-public:
-    spell_gen_lifeblood() : SpellScriptLoader("spell_gen_lifeblood") { }
-
-    class spell_gen_lifeblood_AuraScript : public AuraScript
-    {
-        PrepareAuraScript(spell_gen_lifeblood_AuraScript);
-
-        void CalculateAmount(AuraEffect const* aurEff, int32& amount, bool& /*canBeRecalculated*/)
-        {
-            if (Unit* owner = GetUnitOwner())
-                amount += int32(CalculatePctF(owner->GetMaxHealth(), 1.5f / aurEff->GetTotalTicks()));
-        }
-
-        void Register()
-        {
-            DoEffectCalcAmount += AuraEffectCalcAmountFn(spell_gen_lifeblood_AuraScript::CalculateAmount, EFFECT_0, SPELL_AURA_PERIODIC_HEAL);
-        }
-    };
-
-    AuraScript* GetAuraScript() const
-    {
-        return new spell_gen_lifeblood_AuraScript();
-    }
-};
-
 enum MagicRoosterSpells
 {
     SPELL_MAGIC_ROOSTER_NORMAL          = 66122,
@@ -1454,66 +1427,6 @@ public:
     SpellScript* GetSpellScript() const
     {
         return new spell_gen_oracle_wolvar_reputation_SpellScript();
-    }
-};
-
-enum DamageReductionAura
-{
-   SPELL_BLESSING_OF_SANCTUARY         = 20911,
-   SPELL_GREATER_BLESSING_OF_SANCTUARY = 25899,
-   SPELL_RENEWED_HOPE                  = 63944,
-   SPELL_VIGILANCE                     = 50720,
-   SPELL_DAMAGE_REDUCTION_AURA         = 68066,
-};
-
-class spell_gen_damage_reduction_aura : public SpellScriptLoader
-{
-public:
-    spell_gen_damage_reduction_aura() : SpellScriptLoader("spell_gen_damage_reduction_aura") { }
-
-    class spell_gen_damage_reduction_AuraScript : public AuraScript
-    {
-        PrepareAuraScript(spell_gen_damage_reduction_AuraScript);
-
-        bool Validate(SpellInfo const* /*SpellEntry*/)
-        {
-            if (!sSpellMgr->GetSpellInfo(SPELL_DAMAGE_REDUCTION_AURA))
-                return false;
-            return true;
-        }
-
-        void OnApply(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
-        {
-            Unit* target = GetTarget();
-
-            target->CastSpell(target, SPELL_DAMAGE_REDUCTION_AURA, true);
-        }
-
-        void OnRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
-        {
-            Unit* target = GetTarget();
-            if (!target->HasAura(SPELL_DAMAGE_REDUCTION_AURA))
-                return;
-
-            if (target->HasAura(SPELL_BLESSING_OF_SANCTUARY) ||
-                target->HasAura(SPELL_GREATER_BLESSING_OF_SANCTUARY) ||
-                target->HasAura(SPELL_RENEWED_HOPE) ||
-                target->HasAura(SPELL_VIGILANCE))
-                return;
-
-            target->RemoveAurasDueToSpell(SPELL_DAMAGE_REDUCTION_AURA);
-        }
-
-        void Register()
-        {
-            OnEffectApply += AuraEffectApplyFn(spell_gen_damage_reduction_AuraScript::OnApply, EFFECT_0, SPELL_AURA_DUMMY, AURA_EFFECT_HANDLE_REAL_OR_REAPPLY_MASK);
-            OnEffectRemove += AuraEffectRemoveFn(spell_gen_damage_reduction_AuraScript::OnRemove, EFFECT_0, SPELL_AURA_DUMMY, AURA_EFFECT_HANDLE_REAL_OR_REAPPLY_MASK);
-        }
-    };
-
-    AuraScript* GetAuraScript() const
-    {
-        return new spell_gen_damage_reduction_AuraScript();
     }
 };
 
@@ -2507,13 +2420,11 @@ void AddSC_generic_spell_scripts()
     new spell_generic_clone_weapon();
     new spell_gen_seaforium_blast();
     new spell_gen_turkey_marker();
-    new spell_gen_lifeblood();
     new spell_gen_magic_rooster();
     new spell_gen_allow_cast_from_item_only();
     new spell_gen_launch();
     new spell_gen_vehicle_scaling();
     new spell_gen_oracle_wolvar_reputation();
-    new spell_gen_damage_reduction_aura();
     new spell_gen_luck_of_the_draw();
     new spell_gen_spirit_healer_res();
     new spell_gen_reindeer_transformation();
