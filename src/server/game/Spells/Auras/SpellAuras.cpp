@@ -1614,9 +1614,7 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                 else if(GetId() == 1943 && removeMode == AURA_REMOVE_BY_DEATH &&        // If rupture's target dies
                     (caster->HasSpell(79133) || caster->HasSpell(79134)))               // Only if has talent
                 {
-                    uint32 energy, talentId = 79134;
-                    if(caster->HasSpell(79133))
-                        talentId = 79133;
+                    uint32 talentId = caster->HasSpell(79133) ? 79133 : 79134;
 
                     // for each remaining 0.2 second, give 1 energy
                     caster->EnergizeBySpell(caster, talentId, (uint32)(GetDuration() / 100.0 / 2.0), POWER_ENERGY);    // Hacky too, isn't it ?
