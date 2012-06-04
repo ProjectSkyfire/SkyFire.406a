@@ -65,6 +65,9 @@ public:
         }
         bool Load()
         {
+            if (GetCaster()->GetTypeId() != TYPEID_PLAYER)
+                return false;
+
             x = GetExplTargetDest()->GetPositionX();
             y = GetExplTargetDest()->GetPositionY();
             z = GetExplTargetDest()->GetPositionZ();

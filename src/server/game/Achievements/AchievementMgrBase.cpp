@@ -1510,7 +1510,10 @@ void AchievementMgrBase::SetCriteriaProgress(AchievementCriteriaEntry const* ent
     if (entry->timeLimit && timedIter == m_timedAchievements.end())
         return;
 
-    sLog->outDebug(LOG_FILTER_ACHIEVEMENTSYS, "AchievementMgrBase::SetCriteriaProgress(%u, %u) for (GUID:%u)", entry->ID, changeValue, (GUID_LOPART(_player->GetGUIDLow())));
+    if (_player)
+        sLog->outDebug(LOG_FILTER_ACHIEVEMENTSYS, "AchievementMgrBase::SetCriteriaProgress(%u, %u) for (Player GUID:%u)", entry->ID, changeValue, _player->GetGUIDLow());
+    else
+        sLog->outDebug(LOG_FILTER_ACHIEVEMENTSYS, "AchievementMgrBase::SetCriteriaProgress(%u, %u) for (Guild ID:%u)", entry->ID, changeValue, _guild->GetId());
     
     CriteriaProgress* progress = GetCriteriaProgress(entry);
     if (!progress)

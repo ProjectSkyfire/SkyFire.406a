@@ -416,6 +416,21 @@ public:
     {
         PrepareSpellScript(spell_warr_deep_wounds_SpellScript);
 
+        bool Validate (SpellInfo *const /*spellEntry*/)
+        {
+            if (!sSpellMgr->GetSpellInfo(12721))
+                return false;
+
+            return true;
+        }
+
+        bool Load()
+        {
+            if (GetCaster()->GetTypeId() != TYPEID_PLAYER)
+                return false;
+            return true;
+        }
+
         void HandleDummy(SpellEffIndex /*effect*/)
         {
             Unit* target = GetHitUnit();
