@@ -429,6 +429,10 @@ public:
         {
             if (GetCaster()->GetTypeId() != TYPEID_PLAYER)
                 return false;
+
+            if (GetCaster()->ToPlayer()->getClass() != CLASS_PALADIN)
+                    return false;
+
             return true;
         }
 
@@ -520,6 +524,10 @@ public:
         {
             if (GetCaster()->GetTypeId() != TYPEID_PLAYER)
                 return false;
+            
+            if (GetCaster()->ToPlayer()->getClass() != CLASS_PALADIN)
+                return false;
+
             return true;
         }
 
@@ -594,6 +602,10 @@ class spell_pal_selfless_healer : public SpellScriptLoader
             {
                 if (GetCaster()->GetTypeId() != TYPEID_PLAYER)
                     return false;
+                
+                if (GetCaster()->ToPlayer()->getClass() != CLASS_PALADIN)
+                    return false;
+
                 return true;
             }
 

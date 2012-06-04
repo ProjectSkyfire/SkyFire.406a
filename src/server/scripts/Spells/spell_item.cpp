@@ -253,8 +253,9 @@ public:
 // 13280 Gnomish Death Ray
 enum eGnomishDeathRay
 {
-    SPELL_GNOMISH_DEATH_RAY_SELF = 13493,
-    SPELL_GNOMISH_DEATH_RAY_TARGET = 13279,
+    SPELL_GNOMISH_DEATH_RAY_DUMMY_CASTER_SELF_DAMAGE = 13493,
+    SPELL_GNOMISH_DEATH_RAY_TARGET_DAMAGE = 13279,
+    SPELL_GNOMISH_DEATH_RAY_DUMMY_CASTER = 13280,
 };
 
 class spell_item_gnomish_death_ray : public SpellScriptLoader
@@ -265,26 +266,27 @@ public:
     class spell_item_gnomish_death_ray_SpellScript : public SpellScript
     {
     public:
+
         PrepareSpellScript(spell_item_gnomish_death_ray_SpellScript)
+
         bool Validate(SpellInfo const* /*spellEntry*/)
         {
-            if (!sSpellMgr->GetSpellInfo(SPELL_GNOMISH_DEATH_RAY_SELF))
+            if (!sSpellMgr->GetSpellInfo(SPELL_GNOMISH_DEATH_RAY_DUMMY_CASTER_SELF_DAMAGE))
                 return false;
-            if (!sSpellMgr->GetSpellInfo(SPELL_GNOMISH_DEATH_RAY_TARGET))
+            if (!sSpellMgr->GetSpellInfo(SPELL_GNOMISH_DEATH_RAY_TARGET_DAMAGE))
+                return false;
+            if (!sSpellMgr->GetSpellInfo(SPELL_GNOMISH_DEATH_RAY_DUMMY_CASTER))
                 return false;
             return true;
         }
 
         void HandleDummy(SpellEffIndex /*effIndex*/)
         {
-            if (Unit* target = GetHitUnit())
-            {
-                Unit* pCaster = GetCaster();
-                if (urand(0, 99) < 15)
-                    pCaster->CastSpell(pCaster, SPELL_GNOMISH_DEATH_RAY_SELF, true, NULL);    // failure
-                else
-                    pCaster->CastSpell(target, SPELL_GNOMISH_DEATH_RAY_TARGET, true, NULL);
-            }
+            Unit* caster = GetCaster();
+            Unit* target = caster->getVictim();
+            
+            if (target)
+                caster->CastSpell(target, SPELL_GNOMISH_DEATH_RAY_TARGET_DAMAGE, true);
         }
 
         void Register()
