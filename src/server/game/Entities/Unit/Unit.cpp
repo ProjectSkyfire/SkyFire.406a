@@ -6994,20 +6994,6 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                     }
                     break;
                 }
-                case 25899:                                 // Greater Blessing of Sanctuary
-                case 20911:                                 // Blessing of Sanctuary
-                {
-                    target = this;
-                    switch (target->getPowerType())
-                    {
-                        case POWER_MANA:
-                            triggered_spell_id = 57319;
-                            break;
-                        default:
-                            return false;
-                    }
-                    break;
-                }
                 // Seal of Vengeance (damage calc on apply aura)
                 case 31801:
                 {
@@ -8056,23 +8042,6 @@ bool Unit::HandleModDamagePctTakenAuraProc(Unit* victim, uint32 /*damage*/, Aura
     Unit* target = victim;
     int32 basepoints0 = 0;
 
-    switch (dummySpell->SpellFamilyName)
-    {
-        case SPELLFAMILY_PALADIN:
-        {
-            // Blessing of Sanctuary
-            if (dummySpell->SpellFamilyFlags[0] & 0x10000000)
-            {
-                switch (getPowerType())
-                {
-                    case POWER_MANA:   triggered_spell_id = 57319; break;
-                    default:
-                        return false;
-                }
-            }
-            break;
-        }
-    }
     // processed charge only counting case
     if (!triggered_spell_id)
         return true;
