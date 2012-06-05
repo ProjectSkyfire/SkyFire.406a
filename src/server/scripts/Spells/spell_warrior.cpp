@@ -263,7 +263,6 @@ public:
             int32 rageBonus = ((caster->GetTotalAttackPowerValue(BASE_ATTACK) * 0.874f) * 1000) / (1000 - rageUsed);
             int32 totalDamage = (GetHitDamage() + rageBonus);
             SetHitDamage(totalDamage);
-
         }
 
         void Register()

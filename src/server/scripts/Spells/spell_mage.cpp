@@ -88,7 +88,7 @@ public:
             {
                 if (count >= 2 && roll_chance_i(impFlamestrike->GetAmount()))
                     caster->CastSpell(x, y, z, SPELL_MAGE_FLAMESTRIKE, true);
-            }   
+            }
         }
 
         void Register()

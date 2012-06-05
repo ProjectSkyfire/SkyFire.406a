@@ -5588,7 +5588,7 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
                 {
                     if (m_caster->GetTypeId() != TYPEID_PLAYER)
                         return;
-                    
+
                     // learn random explicit discovery recipe (if any)
                     if (uint32 discoveredSpell = GetExplicitDiscoverySpell(m_spellInfo->Id, m_caster->ToPlayer()))
                         m_caster->ToPlayer()->learnSpell(discoveredSpell, false);
