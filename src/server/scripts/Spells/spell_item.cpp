@@ -284,7 +284,7 @@ public:
         {
             Unit* caster = GetCaster();
             Unit* target = caster->getVictim();
-            
+
             if (target)
                 caster->CastSpell(target, SPELL_GNOMISH_DEATH_RAY_TARGET_DAMAGE, true);
         }
