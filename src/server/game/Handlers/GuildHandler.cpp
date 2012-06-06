@@ -186,9 +186,9 @@ void WorldSession::HandleGuildLeaderOpcode(WorldPacket& recvPacket)
     sLog->outDebug(LOG_FILTER_GUILD, "WORLD: Received CMSG_GUILD_LEADER");
 
     std::string name;
-    recvPacket >> name;
     recvPacket.read_skip<uint64>(); // guild GUID
     recvPacket.read_skip<uint64>(); // user's guid?
+    recvPacket >> name;
 
     if (normalizePlayerName(name))
         if (Guild* guild = _GetPlayerGuild(this, true))
