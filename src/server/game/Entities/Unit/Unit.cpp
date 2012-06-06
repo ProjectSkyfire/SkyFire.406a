@@ -6627,7 +6627,7 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                     basepoints0 = int32(0.40f * damage);
                     triggered_spell_id = 89775;
                     break;
-                // Venomeous wounds
+                // Venomous wounds
                 case 79133:
                 case 79134:
                     float chance = (dummySpell->Id == 79133) ? 30.0f : 60.0f;
@@ -6652,7 +6652,7 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                     }
 
                     // Only if: poisoned, proc chance, garrote or rupture
-                    if(!poisoned || !roll_chance_f(chance) || (procSpell->Id != 1943 && procSpell->Id != 703))
+                    if(!poisoned || !roll_chance_f(chance) || (procSpell->Id != 1943 && procSpell->Id != 703)) // TODO: fix proc with spell_proc_event and drop the 2 last checks
                         return false;
 
                     this->EnergizeBySpell(this, dummySpell->Id, 10, POWER_ENERGY); // Hacky, isn't it ?
