@@ -1624,7 +1624,7 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                     if(caster->HasAura(79125)) // Rank 2
                         caster->CastSpell(target, 79126, true);
                     else if(caster->HasAura(79123)) // Rank 1
-                        caster->CastSpell(target, 79126, true);
+                        caster->CastSpell(target, 79124, true);
                 }
                 break;
             case SPELLFAMILY_HUNTER:
