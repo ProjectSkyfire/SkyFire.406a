@@ -893,7 +893,6 @@ enum Opcodes
     SMSG_LFG_BOOT_PROPOSAL_UPDATE                    = 0x079AC, // 4.0.6a 13623
     CMSG_LFD_PLAYER_LOCK_INFO_REQUEST                = 0x0E5E8, // 4.0.6a 13623 0x00C76
     SMSG_LFG_PLAYER_INFO                             = 0x0E088, // 4.0.6a 13623
-    //SMSG_LFG_PLAYER_INFO                             = 0x0E088, // 4.0.6a 13623 :redefinition; previous def was 'enumerator'
     CMSG_LFG_TELEPORT                                = 0x0FA88, // 4.0.6a 13623
     CMSG_LFD_PARTY_LOCK_INFO_REQUEST                 = 0x00574, // 4.0.3a 13329 - 403
     SMSG_LFG_PARTY_INFO                              = 0x060A0, // 4.0.6a 13623
@@ -923,7 +922,6 @@ enum Opcodes
     CMSG_MAELSTROM_INVALIDATE_CACHE                  = 0x10155, // Unknown opcode ID
     SMSG_FLIGHT_SPLINE_SYNC                          = 0x0BFAC, // 4.0.6a 13623
     CMSG_SET_TAXI_BENCHMARK_MODE                     = 0x073C4, // 4.0.6a 13623
-    //SMSG_JOINED_BATTLEGROUND_QUEUE                   = 0x0090E, // 4.0.6a 13623 :redefinition; previous def was 'enumerator'
     SMSG_REALM_SPLIT                                 = 0x025EC, // 4.0.6a 13623
     CMSG_REALM_SPLIT                                 = 0x060AC, // 4.0.6a 13623
     CMSG_MOVE_CHNG_TRANSPORT                         = 0x10158, // Unknown opcode ID
@@ -1248,7 +1246,6 @@ enum Opcodes
     SMSG_SPLINE_MOVE_GRAVITY_ENABLE                  = 0x1022F, // 4.0.6a 13623
     CMSG_EQUIPMENT_SET_USE                           = 0x0E8A0, // 4.0.6a 13623
     SMSG_EQUIPMENT_SET_USE_RESULT                    = 0x076AC, // 4.0.6a 13623
-    SMSG_UNKNOWN_1240                                = 0x0B8E0, // 4.0.6a 13623
     CMSG_CHAR_FACTION_CHANGE                         = 0x0BBCC, // 4.0.6a 13623
     SMSG_CHAR_FACTION_CHANGE                         = 0x023AC, // 4.0.6a 13623
     SMSG_BATTLEFIELD_MGR_ENTRY_INVITE                = 0x0455E, // 4.0.6a 13623 checked
@@ -1276,7 +1273,6 @@ enum Opcodes
     SMSG_WORLD_STATE_UI_TIMER_UPDATE                 = 0x05557, // 4.0.6a 13623
     CMSG_CHAR_RACE_CHANGE                            = 0x06EA4, // 4.0.6a 13623
     SMSG_TALENTS_INVOLUNTARILY_RESET                 = 0x02A84, // 4.0.6a 13623
-    SMSG_UNKNOWN_1276                                = 0x1023A, // 4.0.6a 13623
     SMSG_LOOT_SLOT_CHANGED                           = 0x031EC, // 4.0.6a 13623 0x4D4C ?
     CMSG_READY_FOR_ACCOUNT_DATA_TIMES                = 0x07DA8, // 4.0.6  13561
     CMSG_QUERY_QUESTS_COMPLETED                      = 0x0ECE8, // 4.0.6a 13623
@@ -1295,21 +1291,8 @@ enum Opcodes
     CMSG_REDIRECTION_AUTH_PROOF                      = 0x00E4C, // 4.0.6a 13623
     SMSG_COMBAT_LOG_MULTIPLE                         = 0x033A8, // 4.0.6a 13623
     SMSG_LFG_OPEN_FROM_GOSSIP                        = 0x071EC, // 4.0.6a 13623
-    SMSG_UNKNOWN_1302                                = 0x10010, // Unknown opcode Name, ID
-    CMSG_UNKNOWN_1303                                = 0x06BE0, // 4.0.6a 13623
-    SMSG_UNKNOWN_1304                                = 0x072E0, // 4.0.6a 13623
     CMSG_COMMENTATOR_SKIRMISH_QUEUE_COMMAND          = 0x06DC8, // 4.0.6a 13623
-    SMSG_UNKNOWN_1308                                = 0x10011, // Unknown opcode Name, ID
     CMSG_TRANSFORM                                   = 0x04577, // 4.0.3a 13329
-    SMSG_UNKNOWN_1310                                = 0x02E88, // 4.0.6a 13623
-    SMSG_UNKNOWN_1311                                = 0x01E76, // Unknown opcode ID/Name
-    SMSG_UNKNOWN_1312                                = 0x04D56, // Unknown opcode ID/Name
-    SMSG_UNKNOWN_1314                                = 0x10256, // Unknown opcode ID/Name
-    SMSG_UNKNOWN_1315                                = 0x10257, // Unknown opcode ID/Name
-    SMSG_UNKNOWN_1316                                = 0x10258, // Unknown opcode ID/Name
-    SMSG_UNKNOWN_1317                                = 0x10259, // Unknown opcode ID/Name
-    CMSG_UNKNOWN_1320                                = 0x1025C, // Unknown opcode ID/Name
-    SMSG_UNKNOWN_1329                                = 0x02D57, // 4.0.3a 13329
     SMSG_BATTLEGROUND_IN_PROGRESS                    = 0x0051E, // 4.0.6a 13623
     SMSG_BATTLEGROUND_EXIT_QUEUE                     = 0x0454C, // 4.0.6a 13623
     SMSG_BATTLEGROUND_WAIT_JOIN                      = 0x0081C, // 4.0.6a 13623
@@ -1325,12 +1308,10 @@ enum Opcodes
     CMSG_SET_PRIMARY_TALENT_TREE                     = 0x0FEA8, // 4.0.6a 13623
     CMSG_GROUP_SET_ROLES                             = 0x08509, // 4.0.6a 13623
     CMSG_WORLD_LOGIN                                 = 0x08508, // 4.0.6a 13623
-    SMSG_UNKNOWN_65508                               = 0x0FFE4, // Unknown opcode Name, 4.0.6a 13623
     SMSG_GUILD_ACHIEVEMENT_EARNED                    = 0x00D5C, // 4.0.6a 13623
     SMSG_GUILD_ACHIEVEMENT_DATA                      = 0x0491E, // 4.0.6a 13623
     CMSG_UI_TIME_REQUEST                             = 0x03FA8, // 4.0.6a 13623
     SMSG_UI_TIME                                     = 0x0618C, // 4.0.6a 13623
-    SMSG_UNKNOWN_1330                                = 0x0618C, // 4.0.6a 13623
     CMSG_REFORGE_ITEM                                = 0x00313, // 4.0.6a 13623
     CMSG_COMPLETED_ARTIFACTS                         = 0x00A13, // 4.0.6a 13623
     SMSG_COMPLETED_ARTIFACTS                         = 0x0044E, // 4.0.6a 13623 structure: uint32 (count) loop: uint32(id), uint32(date), uint32(number of times completed) :endloop
@@ -1352,6 +1333,23 @@ enum Opcodes
     SMSG_GUILD_CRITERIA_DELETED                      = 0x0000C, // 4.0.6a 13623
     SMSG_GUILD_CRITERIA_DATA                         = 0x0400E, // 4.0.6a 13623
     CMSG_RETURN_TO_GRAVEYARD                         = 0x00593, // 4.0.6a 13623
+    SMSG_UNKNOWN_1276                                = 0x1023A, // 4.0.6a 13623
+    SMSG_UNKNOWN_1240                                = 0x0B8E0, // 4.0.6a 13623
+    SMSG_UNKNOWN_1308                                = 0x10011, // Unknown opcode Name, ID
+    SMSG_UNKNOWN_1302                                = 0x10010, // Unknown opcode Name, ID
+    CMSG_UNKNOWN_1303                                = 0x06BE0, // 4.0.6a 13623
+    SMSG_UNKNOWN_1304                                = 0x072E0, // 4.0.6a 13623
+    SMSG_UNKNOWN_1310                                = 0x02E88, // 4.0.6a 13623
+    SMSG_UNKNOWN_1311                                = 0x01E76, // Unknown opcode ID/Name
+    SMSG_UNKNOWN_1312                                = 0x04D56, // Unknown opcode ID/Name
+    SMSG_UNKNOWN_1314                                = 0x10256, // Unknown opcode ID/Name
+    SMSG_UNKNOWN_1315                                = 0x10257, // Unknown opcode ID/Name
+    SMSG_UNKNOWN_1316                                = 0x10258, // Unknown opcode ID/Name
+    SMSG_UNKNOWN_1317                                = 0x10259, // Unknown opcode ID/Name
+    CMSG_UNKNOWN_1320                                = 0x1025C, // Unknown opcode ID/Name
+    SMSG_UNKNOWN_1329                                = 0x02D57, // 4.0.3a 13329
+    SMSG_UNKNOWN_1330                                = 0x0618C, // 4.0.6a 13623
+    SMSG_UNKNOWN_65508                               = 0x0FFE4, // Unknown opcode Name, 4.0.6a 13623
     NUM_MSG_TYPES                                    = 0x102B8  // last unknown opcode + 1.
 };
 
