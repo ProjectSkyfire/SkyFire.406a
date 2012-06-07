@@ -1618,6 +1618,14 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                     // for each remaining 0.2 second, give 1 energy
                     caster->CastCustomSpell(caster, 51637, &basepoints0, NULL, NULL, true);
                 }
+                // Blackjack/Groggy on sap removal
+                else if(GetId() == 6770)
+                {
+                    if(caster->HasAura(79125)) // Rank 2
+                        caster->CastSpell(target, 79126, true);
+                    else if(caster->HasAura(79123)) // Rank 1
+                        caster->CastSpell(target, 79126, true);
+                }
                 break;
             case SPELLFAMILY_HUNTER:
                 // Wyvern Sting
