@@ -35,6 +35,7 @@ enum WarlockSpells
     WARLOCK_DEMONIC_EMPOWERMENT_IMP         = 54444,
     WARLOCK_HEALTHSTONE_CREATE              = 34130,
     WARLOCK_HEALTHSTONE_HEAL                = 6262,
+    WARLOCK_DRAIN_SOUL                      = 79264,
 };
 
 class spell_warl_banish : public SpellScriptLoader
@@ -400,6 +401,38 @@ public:
     }
 };
 
+class spell_warl_drain_soul : public SpellScriptLoader
+{
+public:
+    spell_warl_drain_soul() : SpellScriptLoader("spell_warl_drain_soul") { } // 1120
+
+    class spell_warl_drain_soul_AuraScript : public AuraScript
+    {
+        PrepareAuraScript(spell_warl_drain_soul_AuraScript)
+
+        void OnPeriodic(AuraEffect const* aurEff) {}
+
+        void OnRemove(AuraEffect const* aurEff, AuraEffectHandleModes /*mode*/)
+        {
+            if (Unit* caster = aurEff->GetBase()->GetCaster())
+            {
+                caster->CastSpell(caster, WARLOCK_DRAIN_SOUL, true);
+            }
+        }
+
+        void Register()
+        {
+            OnEffectRemove += AuraEffectRemoveFn(spell_warl_drain_soul_AuraScript::OnRemove, EFFECT_0, SPELL_AURA_PERIODIC_DAMAGE,AURA_EFFECT_HANDLE_REAL);
+            OnEffectPeriodic += AuraEffectPeriodicFn(spell_warl_drain_soul_AuraScript::OnPeriodic, EFFECT_0, SPELL_AURA_PERIODIC_DAMAGE);
+        }
+    };
+
+    AuraScript* GetAuraScript() const
+    {
+        return new spell_warl_drain_soul_AuraScript();
+    }
+};
+
 void AddSC_warlock_spell_scripts()
 {
     new spell_warl_banish();
@@ -410,4 +443,5 @@ void AddSC_warlock_spell_scripts()
     new spell_warl_life_tap();
     new spell_warl_fear();
     new spell_warl_drain_life();
+    new spell_warl_drain_soul();
 }
