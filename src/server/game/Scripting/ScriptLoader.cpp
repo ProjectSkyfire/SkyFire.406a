@@ -832,6 +832,7 @@ void AddEasternKingdomsScripts()
     AddSC_boss_chimaeron();
     AddSC_instance_blackwing_descent();
     AddSC_deadmines();                      //Deadmines
+    AddSC_instance_deadmines();    
     AddSC_boss_admiral_ripsnarl();
     AddSC_boss_captain_cookie();
     AddSC_boss_foe_reaper_5000();

@@ -3073,10 +3073,10 @@ void SpellMgr::LoadSpellCustomAttr()
             case 2825:  // Bloodlust
                 spellInfo->Effects[0].TriggerSpell = 57724; // Sated
                 break;
-            case 80353:  // Time Warp
+            case 80353: // Time Warp
                 spellInfo->Effects[0].TriggerSpell = 80354; // Temporal Displacement
                 break;
-            case 90355:  // Ancient Hysteria
+            case 90355: // Ancient Hysteria
                 spellInfo->Effects[0].TriggerSpell = 95809; // Insanity
                 break;
             case 20335: // Heart of the Crusader
@@ -3135,17 +3135,16 @@ void SpellMgr::LoadSpellCustomAttr()
             case 46771: // Flame Sear
             case 45248: // Shadow Blades
             case 41303: // Soul Drain
-            case 54172: // Divine Storm (heal)
             case 29213: // Curse of the Plaguebringer - Noth
             case 28542: // Life Drain - Sapphiron
             case 66588: // Flaming Spear
-            case 54171: // Divine Storm
+            case 54171: case 54172: // Divine Storm (Heal)
                 spellInfo->MaxAffectedTargets = 3;
                 break;
-            case 38310: // Multi-Shot
             case 53385: // Divine Storm (Damage)
                 spellInfo->MaxAffectedTargets = 4;
                 break;
+            case 38310: // Multi-Shot
             case 42005: // Bloodboil
             case 38296: // Spitfire Totem
             case 37676: // Insidious Whisper
@@ -3167,7 +3166,7 @@ void SpellMgr::LoadSpellCustomAttr()
             case 50312: // Unholy Frenzy
                 spellInfo->MaxAffectedTargets = 15;
                 break;
-            case 81913: case 81914: //Die by the Sword
+            case 81913: case 81914: // Die by the Sword
                 spellInfo->Effects[0].TriggerSpell = 0;
                 break;
             case 77486: // Shadow orb power
@@ -3241,7 +3240,7 @@ void SpellMgr::LoadSpellCustomAttr()
             case 51852: // The Eye of Acherus (no spawn in phase 2 in db)
                 spellInfo->Effects[0].MiscValue |= 1;
                 break;
-            case 52025:    // Cleansing Totem Effect
+            case 52025: // Cleansing Totem Effect
                 spellInfo->Effects[1].DieSides = 1;
                 break;
             case 51904: // Summon Ghouls On Scarlet Crusade (this should use conditions table, script for this spell needs to be fixed)
