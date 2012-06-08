@@ -3597,6 +3597,10 @@ void SpellMgr::LoadSpellCustomAttr()
             case 70598: // Sindragosa's Fury
                 spellInfo->Effects[0].TargetA = TARGET_DEST_CASTER;
                 break;
+            case 87959: // Drink
+                spellInfo->Category = 59;
+                spellInfo->Effects[1].ApplyAuraName = SPELL_AURA_MOD_POWER_REGEN;
+                break;
             case 69846: // Frost Bomb
                 spellInfo->Speed = 10;
                 spellInfo->Effects[0].TargetA = TARGET_DEST_TARGET_ANY;
