@@ -5068,16 +5068,5 @@ INSERT  INTO `playercreateinfo_spell`(`race`,`class`,`Spell`,`Note`) VALUES (22,
 INSERT  INTO `playercreateinfo_spell`(`race`,`class`,`Spell`,`Note`) VALUES (22,4,87840,'Running Wild');
 INSERT  INTO `playercreateinfo_spell`(`race`,`class`,`Spell`,`Note`) VALUES (22,9,87840,'Running Wild');
 INSERT  INTO `playercreateinfo_spell`(`race`,`class`,`Spell`,`Note`) VALUES (22,1,87840,'Running Wild');
-INSERT  INTO `playercreateinfo_spell`(`race`,`class`,`Spell`,`Note`) VALUES (1,8,79684,'Mages - Offensive State (DND) - Enables Arcane Missiles');
-INSERT  INTO `playercreateinfo_spell`(`race`,`class`,`Spell`,`Note`) VALUES (2,8,79684,'Mages - Offensive State (DND) - Enables Arcane Missiles');
-INSERT  INTO `playercreateinfo_spell`(`race`,`class`,`Spell`,`Note`) VALUES (3,8,79684,'Mages - Offensive State (DND) - Enables Arcane Missiles');
-INSERT  INTO `playercreateinfo_spell`(`race`,`class`,`Spell`,`Note`) VALUES (4,8,79684,'Mages - Offensive State (DND) - Enables Arcane Missiles');
-INSERT  INTO `playercreateinfo_spell`(`race`,`class`,`Spell`,`Note`) VALUES (5,8,79684,'Mages - Offensive State (DND) - Enables Arcane Missiles');
-INSERT  INTO `playercreateinfo_spell`(`race`,`class`,`Spell`,`Note`) VALUES (6,8,79684,'Mages - Offensive State (DND) - Enables Arcane Missiles');
-INSERT  INTO `playercreateinfo_spell`(`race`,`class`,`Spell`,`Note`) VALUES (7,8,79684,'Mages - Offensive State (DND) - Enables Arcane Missiles');
-INSERT  INTO `playercreateinfo_spell`(`race`,`class`,`Spell`,`Note`) VALUES (8,8,79684,'Mages - Offensive State (DND) - Enables Arcane Missiles');
-INSERT  INTO `playercreateinfo_spell`(`race`,`class`,`Spell`,`Note`) VALUES (10,8,79684,'Mages - Offensive State (DND) - Enables Arcane Missiles');
-INSERT  INTO `playercreateinfo_spell`(`race`,`class`,`Spell`,`Note`) VALUES (11,8,79684,'Mages - Offensive State (DND) - Enables Arcane Missiles');
-INSERT  INTO `playercreateinfo_spell`(`race`,`class`,`Spell`,`Note`) VALUES (0,11,5421,'Aquatic Form Speed Buff');
 
 UNLOCK TABLES;
