@@ -3053,6 +3053,14 @@ void SpellMgr::LoadSpellCustomAttr()
             case 36350: // They Must Burn Bomb Aura (self)
                 spellInfo->Effects[0].TriggerSpell = 36325; // They Must Burn Bomb Drop (DND)
                 break;
+            case 82661: // Aspect of the Fox
+                spellInfo->Effects[0].ApplyAuraName = SPELL_AURA_PROC_TRIGGER_SPELL;
+                break;
+            case 87934: // Serpent Spread
+            case 87935:
+                spellInfo->Effects[0].Effect = SPELL_EFFECT_APPLY_AURA;
+                spellInfo->Effects[0].ApplyAuraName = SPELL_AURA_PROC_TRIGGER_SPELL;
+                break;
             case 49838: // Stop Time
                 spellInfo->AttributesEx3 |= SPELL_ATTR3_NO_INITIAL_AGGRO;
                 break;
