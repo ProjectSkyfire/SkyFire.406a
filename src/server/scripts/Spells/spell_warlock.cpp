@@ -33,12 +33,12 @@ enum WarlockSpells
     WARLOCK_DEMONIC_EMPOWERMENT_FELGUARD    = 54508,
     WARLOCK_DEMONIC_EMPOWERMENT_FELHUNTER   = 54509,
     WARLOCK_DEMONIC_EMPOWERMENT_IMP         = 54444,
-    
+
     WARLOCK_HEALTHSTONE_CREATE              = 34130,
     WARLOCK_HEALTHSTONE_HEAL                = 6262,
-    
+
     WARLOCK_DRAIN_SOUL                      = 79264,
-    
+
     WARLOCK_DEMONIC_CIRCLE_SUMMON           = 48018,
     WARLOCK_DEMONIC_CIRCLE_TELEPORT         = 48020,
     WARLOCK_DEMONIC_CIRCLE_ALLOW_CAST       = 62388,
@@ -461,7 +461,7 @@ public:
         {
             if (GameObject* circle = GetTarget()->GetGameObject(GetId()))
             {
-                // Here we check if player is in demonic circle teleport range, if so add 
+                // Here we check if player is in demonic circle teleport range, if so add
                 // WARLOCK_DEMONIC_CIRCLE_ALLOW_CAST; allowing him to cast the WARLOCK_DEMONIC_CIRCLE_TELEPORT.
                 // If not in range remove the WARLOCK_DEMONIC_CIRCLE_ALLOW_CAST.
 
@@ -522,7 +522,6 @@ public:
         return new spell_warl_demonic_circle_teleport_AuraScript();
     }
 };
-
 
 void AddSC_warlock_spell_scripts()
 {
