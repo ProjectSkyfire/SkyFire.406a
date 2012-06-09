@@ -911,34 +911,39 @@ class spell_item_create_heart_candy : public SpellScriptLoader
 // 64323 Book of Glyph Mastery
 class spell_item_book_of_glyph_mastery : public SpellScriptLoader
 {
-    public:
-        spell_item_book_of_glyph_mastery() : SpellScriptLoader("spell_item_book_of_glyph_mastery") {}
+public:
+    spell_item_book_of_glyph_mastery() : SpellScriptLoader("spell_item_book_of_glyph_mastery") {}
 
-        class spell_item_book_of_glyph_mastery_SpellScript : public SpellScript
+    class spell_item_book_of_glyph_mastery_SpellScript : public SpellScript
+    {
+        PrepareSpellScript(spell_item_book_of_glyph_mastery_SpellScript);
+
+        bool Load()
         {
-            PrepareSpellScript(spell_item_book_of_glyph_mastery_SpellScript);
-
-            SpellCastResult CheckRequirement()
-            {
-                if (GetCaster()->GetTypeId() == TYPEID_PLAYER && HasDiscoveredAllSpells(GetSpellInfo()->Id, GetCaster()->ToPlayer()))
-                {
-                    SetCustomCastResultMessage(SPELL_CUSTOM_ERROR_LEARNED_EVERYTHING);
-                    return SPELL_FAILED_CUSTOM_ERROR;
-                }
-
-                return SPELL_CAST_OK;
-            }
-
-            void Register()
-            {
-                OnCheckCast += SpellCheckCastFn(spell_item_book_of_glyph_mastery_SpellScript::CheckRequirement);
-            }
-        };
-
-        SpellScript* GetSpellScript() const
-        {
-            return new spell_item_book_of_glyph_mastery_SpellScript();
+            return GetCaster()->GetTypeId() == TYPEID_PLAYER;
         }
+
+        SpellCastResult CheckRequirement()
+        {
+            if (HasDiscoveredAllSpells(GetSpellInfo()->Id, GetCaster()->ToPlayer()))
+            {
+                SetCustomCastResultMessage(SPELL_CUSTOM_ERROR_LEARNED_EVERYTHING);
+                return SPELL_FAILED_CUSTOM_ERROR;
+            }
+
+            return SPELL_CAST_OK;
+        }
+
+        void Register()
+        {
+            OnCheckCast += SpellCheckCastFn(spell_item_book_of_glyph_mastery_SpellScript::CheckRequirement);
+        }
+    };
+
+    SpellScript* GetSpellScript() const
+    {
+        return new spell_item_book_of_glyph_mastery_SpellScript();
+    }
 };
 
 // http://www.wowhead.com/item=39253 Gift of the Harvester
@@ -1259,6 +1264,296 @@ public:
     }
 };
 
+enum PurifyHelboarMeat
+{
+    SPELL_SUMMON_PURIFIED_HELBOAR_MEAT      = 29277,
+    SPELL_SUMMON_TOXIC_HELBOAR_MEAT         = 29278,
+};
+
+class spell_item_purify_helboar_meat : public SpellScriptLoader
+{
+public:
+    spell_item_purify_helboar_meat() : SpellScriptLoader("spell_item_purify_helboar_meat") { }
+
+    class spell_item_purify_helboar_meat_SpellScript : public SpellScript
+    {
+        PrepareSpellScript(spell_item_purify_helboar_meat_SpellScript);
+
+        bool Load()
+        {
+            return GetCaster()->GetTypeId() == TYPEID_PLAYER;
+        }
+
+        bool Validate(SpellInfo const* /*spell*/)
+        {
+            if (!sSpellMgr->GetSpellInfo(SPELL_SUMMON_PURIFIED_HELBOAR_MEAT) ||  !sSpellMgr->GetSpellInfo(SPELL_SUMMON_TOXIC_HELBOAR_MEAT))
+                return false;
+            return true;
+        }
+
+        void HandleDummy(SpellEffIndex /* effIndex */)
+        {
+            Unit* caster = GetCaster();
+            caster->CastSpell(caster, roll_chance_i(50) ? SPELL_SUMMON_PURIFIED_HELBOAR_MEAT : SPELL_SUMMON_TOXIC_HELBOAR_MEAT, true, NULL);
+        }
+
+        void Register()
+        {
+            OnEffectHitTarget += SpellEffectFn(spell_item_purify_helboar_meat_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
+        }
+    };
+
+    SpellScript* GetSpellScript() const
+    {
+        return new spell_item_purify_helboar_meat_SpellScript();
+    }
+};
+
+enum SocretharsStone
+{
+    SPELL_SOCRETHAR_TO_SEAT     = 35743,
+    SPELL_SOCRETHAR_FROM_SEAT   = 35744,
+};
+
+class spell_item_socrethars_stone : public SpellScriptLoader
+{
+public:
+    spell_item_socrethars_stone() : SpellScriptLoader("spell_item_socrethars_stone") { }
+
+    class spell_item_socrethars_stone_SpellScript : public SpellScript
+    {
+        PrepareSpellScript(spell_item_socrethars_stone_SpellScript);
+
+        bool Load()
+        {
+            return (GetCaster()->GetAreaId() == 3900 || GetCaster()->GetAreaId() == 3742);
+        }
+        bool Validate(SpellInfo const* /*spell*/)
+        {
+            if (!sSpellMgr->GetSpellInfo(SPELL_SOCRETHAR_TO_SEAT) || !sSpellMgr->GetSpellInfo(SPELL_SOCRETHAR_FROM_SEAT))
+                return false;
+            return true;
+        }
+
+        void HandleDummy(SpellEffIndex /* effIndex */)
+        {
+            Unit* caster = GetCaster();
+            switch (caster->GetAreaId())
+            {
+            case 3900:
+                caster->CastSpell(caster, SPELL_SOCRETHAR_TO_SEAT, true);
+                break;
+            case 3742:
+                caster->CastSpell(caster, SPELL_SOCRETHAR_FROM_SEAT, true);
+                break;
+            default:
+                return;
+            }
+        }
+
+        void Register()
+        {
+            OnEffectHitTarget += SpellEffectFn(spell_item_socrethars_stone_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
+        }
+    };
+
+    SpellScript* GetSpellScript() const
+    {
+        return new spell_item_socrethars_stone_SpellScript();
+    }
+};
+
+enum ImpaleLeviroth
+{
+    NPC_LEVIROTH                = 26452,
+    SPELL_LEVIROTH_SELF_IMPALE  = 49882,
+};
+
+class spell_item_impale_leviroth : public SpellScriptLoader
+{
+public:
+    spell_item_impale_leviroth() : SpellScriptLoader("spell_item_impale_leviroth") { }
+
+    class spell_item_impale_leviroth_SpellScript : public SpellScript
+    {
+        PrepareSpellScript(spell_item_impale_leviroth_SpellScript);
+
+        bool Validate(SpellInfo const* /*spell*/)
+        {
+            if (!sObjectMgr->GetCreatureTemplate(NPC_LEVIROTH))
+                return false;
+            return true;
+        }
+
+        void HandleDummy(SpellEffIndex /* effIndex */)
+        {
+            if (Unit* target = GetHitCreature())
+                if (target->GetEntry() == NPC_LEVIROTH && !target->HealthBelowPct(95))
+                    target->CastSpell(target, SPELL_LEVIROTH_SELF_IMPALE, true);
+        }
+
+        void Register()
+        {
+            OnEffectHitTarget += SpellEffectFn(spell_item_impale_leviroth_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
+        }
+    };
+
+    SpellScript* GetSpellScript() const
+    {
+        return new spell_item_impale_leviroth_SpellScript();
+    }
+};
+
+enum NitroBoots
+{
+    SPELL_NITRO_BOOTS_SUCCESS       = 54861,
+    SPELL_NITRO_BOOTS_BACKFIRE      = 46014,
+};
+
+class spell_item_nitro_boots : public SpellScriptLoader
+{
+public:
+    spell_item_nitro_boots() : SpellScriptLoader("spell_item_nitro_boots") { }
+
+    class spell_item_nitro_boots_SpellScript : public SpellScript
+    {
+        PrepareSpellScript(spell_item_nitro_boots_SpellScript);
+
+        bool Load()
+        {
+            if (!GetCastItem())
+                return false;
+            return true;
+        }
+
+        bool Validate(SpellInfo const* /*spell*/)
+        {
+            if (!sSpellMgr->GetSpellInfo(SPELL_NITRO_BOOTS_SUCCESS) || !sSpellMgr->GetSpellInfo(SPELL_NITRO_BOOTS_BACKFIRE))
+                return false;
+            return true;
+        }
+
+        void HandleDummy(SpellEffIndex /* effIndex */)
+        {
+            Unit* caster = GetCaster();
+            caster->CastSpell(caster, roll_chance_i(95) ? SPELL_NITRO_BOOTS_SUCCESS : SPELL_NITRO_BOOTS_BACKFIRE, true, GetCastItem());
+        }
+
+        void Register()
+        {
+            OnEffectHitTarget += SpellEffectFn(spell_item_nitro_boots_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
+        }
+    };
+
+    SpellScript* GetSpellScript() const
+    {
+        return new spell_item_nitro_boots_SpellScript();
+    }
+};
+
+enum RocketBoots
+{
+    SPELL_ROCKET_BOOTS_PROC      = 30452,
+};
+
+class spell_item_rocket_boots : public SpellScriptLoader
+{
+public:
+    spell_item_rocket_boots() : SpellScriptLoader("spell_item_rocket_boots") { }
+
+    class spell_item_rocket_boots_SpellScript : public SpellScript
+    {
+        PrepareSpellScript(spell_item_rocket_boots_SpellScript);
+
+        bool Load()
+        {
+            return GetCaster()->GetTypeId() == TYPEID_PLAYER;
+        }
+
+        bool Validate(SpellInfo const* /*spell*/)
+        {
+            if (!sSpellMgr->GetSpellInfo(SPELL_ROCKET_BOOTS_PROC))
+                return false;
+            return true;
+        }
+
+        void HandleDummy(SpellEffIndex /* effIndex */)
+        {
+            Player* caster = GetCaster()->ToPlayer();
+            if (Battleground* bg = caster->GetBattleground())
+                bg->EventPlayerDroppedFlag(caster);
+
+            caster->RemoveSpellCooldown(SPELL_ROCKET_BOOTS_PROC);
+            caster->CastSpell(caster, SPELL_ROCKET_BOOTS_PROC, true, NULL);
+        }
+
+        SpellCastResult CheckCast()
+        {
+            if (GetCaster()->IsInWater())
+                return SPELL_FAILED_ONLY_ABOVEWATER;
+            return SPELL_CAST_OK;
+        }
+
+        void Register()
+        {
+            OnCheckCast += SpellCheckCastFn(spell_item_rocket_boots_SpellScript::CheckCast);
+            OnEffectHitTarget += SpellEffectFn(spell_item_rocket_boots_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
+        }
+    };
+
+    SpellScript* GetSpellScript() const
+    {
+        return new spell_item_rocket_boots_SpellScript();
+    }
+};
+
+enum TeachLanguage
+{
+    SPELL_LEARN_GNOMISH_BINARY      = 50242,
+    SPELL_LEARN_GOBLIN_BINARY       = 50246,
+};
+
+class spell_item_teach_language : public SpellScriptLoader
+{
+public:
+    spell_item_teach_language() : SpellScriptLoader("spell_item_teach_language") { }
+
+    class spell_item_teach_language_SpellScript : public SpellScript
+    {
+        PrepareSpellScript(spell_item_teach_language_SpellScript);
+
+        bool Load()
+        {
+            return GetCaster()->GetTypeId() == TYPEID_PLAYER;
+        }
+
+        bool Validate(SpellInfo const* /*spell*/)
+        {
+            if (!sSpellMgr->GetSpellInfo(SPELL_LEARN_GNOMISH_BINARY) || !sSpellMgr->GetSpellInfo(SPELL_LEARN_GOBLIN_BINARY))
+                return false;
+            return true;
+        }
+
+        void HandleDummy(SpellEffIndex /* effIndex */)
+        {
+            Player* caster = GetCaster()->ToPlayer();
+
+            if (roll_chance_i(34))
+                caster->CastSpell(caster,caster->GetTeam() == ALLIANCE ? SPELL_LEARN_GNOMISH_BINARY : SPELL_LEARN_GOBLIN_BINARY, true);
+        }
+
+        void Register()
+        {
+            OnEffectHitTarget += SpellEffectFn(spell_item_teach_language_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
+        }
+    };
+
+    SpellScript* GetSpellScript() const
+    {
+        return new spell_item_teach_language_SpellScript();
+    }
+};
+
 void AddSC_item_spell_scripts()
 {
     // 23074 Arcanite Dragonling
@@ -1294,4 +1589,10 @@ void AddSC_item_spell_scripts()
     new spell_magic_eater_food();
     new spell_item_refocus();
     new spell_item_muisek_vessel();
+    new spell_item_purify_helboar_meat();
+    new spell_item_socrethars_stone();
+    new spell_item_impale_leviroth();
+    new spell_item_nitro_boots();
+    new spell_item_rocket_boots();
+    new spell_item_teach_language();
 }
