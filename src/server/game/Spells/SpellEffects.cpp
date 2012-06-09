@@ -1526,7 +1526,7 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                 return;
             }
             //Wild mushroom: detonate
-            if(m_spellInfo->Id == 88751)
+            if (m_spellInfo->Id == 88751)
             {
                 std::list<Creature*> templist;
 
@@ -1545,7 +1545,7 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                     for (std::list<Creature*>::const_iterator itr = templist.begin(); itr != templist.end(); ++itr)
                     {
                         //You cannot detonate other people's mushrooms
-                        if((*itr)->GetOwner() != m_caster)
+                        if ((*itr)->GetOwner() != m_caster)
                             continue;
                         // Find all the enemies
                         std::list<Unit*> targets;
@@ -1563,13 +1563,13 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                     }
                     templist.clear();
             }
-            if(m_spellInfo->Id == 1126)
+            if (m_spellInfo->Id == 1126)
             {
                 if (m_caster->GetTypeId() == TYPEID_PLAYER)
                 {
                     std::list<Unit*> PartyMembers;
                     m_caster->GetPartyMembers(PartyMembers);
-                    if(PartyMembers.size() > 1)
+                    if (PartyMembers.size() > 1)
                         m_caster->CastSpell(unitTarget, 79061, true); // Mark of the Wild (Raid)
                     else
                         m_caster->CastSpell(unitTarget, 79060, true); // Mark of the Wild (Caster)
@@ -2116,9 +2116,9 @@ void Spell::EffectForceCast(SpellEffIndex effIndex)
 
     caster->CastCustomSpell(unitTarget, triggered_spell_id, &bp, &bp, &bp, true);
 
-    if(m_spellInfo->Id == 33076) // Prayer of Mending
+    if (m_spellInfo->Id == 33076) // Prayer of Mending
     {
-        if(m_caster->HasAura(14751)) // Chakra
+        if (m_caster->HasAura(14751)) // Chakra
         {
             m_caster->CastSpell(m_caster, 81206, true); // Chakra: Sanctuary
             m_caster->RemoveAurasDueToSpell(14751);
@@ -4475,9 +4475,9 @@ void Spell::EffectWeaponDmg(SpellEffIndex effIndex)
                 if (AuraEffect const* rendAndTear = m_caster->GetDummyAuraEffect(SPELLFAMILY_DRUID, 2859, 0))
                     AddPctN(totalDamagePercentMod, rendAndTear->GetAmount());
             }
-            if(m_spellInfo->Id == 80313) // Pulverize
+            if (m_spellInfo->Id == 80313) // Pulverize
             {
-                if(Aura* lacer = unitTarget->GetAura(33745)) // Lacerate
+                if (Aura* lacer = unitTarget->GetAura(33745)) // Lacerate
                 {
                     int32 bp = ((m_spellInfo->Effects[2].BasePoints * m_spellInfo->Effects[0].BasePoints / 100) * lacer->GetStackAmount()) / 100;
                     m_caster->CastCustomSpell(unitTarget, 31756, &bp, NULL, NULL, true);
