@@ -1258,9 +1258,13 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                         return;
                     m_caster->CastCustomSpell(unitTarget, 52752, &damage, NULL, NULL, true);
                     return;
-                case 54171:                                   // Divine Storm
+                case 54171:                                 // Divine Storm
                 {
-                    m_caster->CastCustomSpell(unitTarget, 54172, &damage, 0, 0, true);
+                    if (m_UniqueTargetInfo.size())
+                    {
+                        int32 heal = damage / m_UniqueTargetInfo.size();
+                        m_caster->CastCustomSpell(unitTarget, 54172, &heal, NULL, NULL, true);
+                    }
                     return;
                 }
                 case 62324: // Throw Passenger
@@ -1580,16 +1584,6 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
         }
         case SPELLFAMILY_PALADIN:
         {
-            // Divine Storm
-            if (m_spellInfo->SpellFamilyFlags[1] & SPELLFAMILYFLAG1_PALADIN_DIVINESTORM && effIndex == 1)
-            {
-                int32 dmg = CalculatePctN(m_damage, damage);
-                if (!unitTarget)
-                    unitTarget = m_caster;
-                m_caster->CastCustomSpell(unitTarget, 54171, &dmg, 0, 0, true);
-                return;
-            }
-
             switch (m_spellInfo->Id)
             {
                 case 19740: // Blessing of Might
