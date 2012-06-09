@@ -5196,8 +5196,8 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                     return false;
                 }
                 // Eye for an Eye
-                case 9799:
-                case 25988:
+                case 9799:  // Rank1 (http://www.wowhead.com/spell=9799)
+                case 25988: // Rank2 (http://www.wowhead.com/spell=25988) (these need checked and corrected for cata.)
                 {
                     // return damage % to attacker but < 50% own total health
                     basepoints0 = int32(std::min(CalculatePctN(damage, triggerAmount), CountPctFromMaxHealth(50)));
