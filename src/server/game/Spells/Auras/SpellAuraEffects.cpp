@@ -1552,17 +1552,17 @@ void AuraEffect::HandleShapeshiftBoosts(Unit* target, bool apply) const
                         int32 bp = aurEff->GetSpellInfo()->Effects[EFFECT_2].CalcValue();
                         target->CastCustomSpell(target, 62069, &bp, NULL, NULL, true, 0, this);
                     }
-                    if(target->HasAura(16929)) // Thick Hide rank 1
+                    if (target->HasAura(16929)) // Thick Hide rank 1
                     {
                         int32 bp = 4;
                         target->CastCustomSpell(target, 62069, &bp, NULL, NULL, true);
                     }
-                    if(target->HasAura(16930)) // Thick Hide rank 2
+                    if (target->HasAura(16930)) // Thick Hide rank 2
                     {
                         int32 bp = 7;
                         target->CastCustomSpell(target, 62069, &bp, NULL, NULL, true);
                     }
-                    if(target->HasAura(16931)) // Thick Hide rank 3
+                    if (target->HasAura(16931)) // Thick Hide rank 3
                     {
                         int32 bp = 10;
                         target->CastCustomSpell(target, 62069, &bp, NULL, NULL, true);
@@ -4976,7 +4976,7 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
                                     break;
                             }
 
-                            if(spell_Id && !caster->GetAura(spell_Id))
+                            if (spell_Id && !caster->GetAura(spell_Id))
                                 caster->CastSpell(caster, spell_Id, true, NULL, aurEff);
                         }
                     }
@@ -5789,7 +5789,7 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
         }
         case SPELLFAMILY_ROGUE:
         {
-            switch(GetId())
+            switch (GetId())
             {
                 // Smoke bomb
                 case 76577:
@@ -5798,7 +5798,7 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
                     {
                         if (SpellEntry const *spellInfo = sSpellStore.LookupEntry(88611))
                         {
-                            if(Aura* aur = Aura::TryCreate(m_spellInfo, 0, target, this->GetCaster()))
+                            if (Aura* aur = Aura::TryCreate(m_spellInfo, 0, target, this->GetCaster()))
                             {
                                 aur->SetMaxDuration(GetBase()->GetDuration());
                                 aur->SetDuration(GetBase()->GetDuration());

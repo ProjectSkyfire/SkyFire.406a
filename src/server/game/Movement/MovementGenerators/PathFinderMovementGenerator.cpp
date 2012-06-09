@@ -127,7 +127,7 @@ dtPolyRef PathFinderMovementGenerator::getPathPolyByPosition(const dtPolyRef *po
             minDist3d = dtVdistSqr(point, closestPoint);
         }
 
-        if(minDist2d < 1.0f) // shortcut out - close enough for us
+        if (minDist2d < 1.0f) // shortcut out - close enough for us
             break;
     }
 
@@ -450,11 +450,11 @@ void PathFinderMovementGenerator::BuildPointPath(const float *startPoint, const 
     setActualEndPosition(m_pathPoints[pointCount-1]);
 
     // force the given destination, if needed
-    if(m_forceDestination &&
+    if (m_forceDestination &&
         (!(m_type & PATHFIND_NORMAL) || !inRange(getEndPosition(), getActualEndPosition(), 1.0f, 1.0f)))
     {
         // we may want to keep partial subpath
-        if(dist3DSqr(getActualEndPosition(), getEndPosition()) <
+        if (dist3DSqr(getActualEndPosition(), getEndPosition()) <
             0.3f * dist3DSqr(getStartPosition(), getEndPosition()))
         {
             setActualEndPosition(getEndPosition());

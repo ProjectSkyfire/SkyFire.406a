@@ -35,7 +35,7 @@ void WorldSession::SendTradeStatus(TradeStatus status)
 {
     WorldPacket data;
 
-    /*switch(status)
+    /*switch (status)
     {
         case TRADE_STATUS_BEGIN_TRADE:
             data.Initialize(SMSG_TRADE_STATUS, 4+8);
@@ -250,7 +250,7 @@ static void setAcceptTradeMode(TradeData* myTrade, TradeData* hisTrade, Item **m
     hisTrade->SetInAcceptProcess(true);
 
     // store items in local list and set 'in-trade' flag
-    for(uint8 i = 0; i < TRADE_SLOT_TRADED_COUNT; ++i)
+    for (uint8 i = 0; i < TRADE_SLOT_TRADED_COUNT; ++i)
     {
         if (Item* item = myTrade->GetItem(TradeSlots(i)))
         {

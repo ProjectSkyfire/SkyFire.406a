@@ -2302,7 +2302,7 @@ void ObjectMgr::LoadItemTemplates()
         itemTemplate.ScalingStatValue        = fields[48].GetInt32();
 
         const ItemSparseEntry* info = sItemSparseStore.LookupEntry(entry);
-        if(info)
+        if (info)
             itemTemplate.DamageType = info->DamageType;
         else
             itemTemplate.DamageType     = 0;

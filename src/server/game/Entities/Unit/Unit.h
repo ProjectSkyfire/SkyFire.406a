@@ -1315,7 +1315,7 @@ class Unit : public WorldObject
         uint32 GetTimesCastedInRow(uint32 spellid)
         {
             SpellsCastedInRow::iterator itr = m_spellsinrow.find(spellid);
-            if(itr != m_spellsinrow.end())
+            if (itr != m_spellsinrow.end())
                 return itr->second;
             return NULL;
         }

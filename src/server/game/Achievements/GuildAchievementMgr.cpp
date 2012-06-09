@@ -200,7 +200,7 @@ void GuildAchievementMgr::LoadFromDB()
             if (!achievement)
                 continue;
 
-            if(!(achievement->flags & ACHIEVEMENT_FLAG_GUILD_ACHIEVEMENT))
+            if (!(achievement->flags & ACHIEVEMENT_FLAG_GUILD_ACHIEVEMENT))
                 continue;
 
             CompletedAchievementData& ca = m_completedAchievements[achievementid];

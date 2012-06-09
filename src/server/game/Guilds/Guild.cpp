@@ -1380,7 +1380,7 @@ void Guild::HandleRoster(WorldSession* session /*= NULL*/)
     int i = 0;
     for (Members::const_iterator itr = m_members.begin(); itr != m_members.end(); ++itr)
     {
-        if(++i == 1)
+        if (++i == 1)
             data << uint32(0x0220);
         else data << uint32(0); // unk
     }
@@ -1427,28 +1427,28 @@ void Guild::SetGuildNews(WorldPacket &data)
 {
     data << uint32(m_guild_news.size());
 
-    for(GuildNewsList::iterator itr = m_guild_news.begin(); itr != m_guild_news.end(); ++itr)
+    for (GuildNewsList::iterator itr = m_guild_news.begin(); itr != m_guild_news.end(); ++itr)
         data << uint32(0);
 
-    for(GuildNewsList::iterator itr = m_guild_news.begin(); itr != m_guild_news.end(); ++itr)
+    for (GuildNewsList::iterator itr = m_guild_news.begin(); itr != m_guild_news.end(); ++itr)
         data << uint32(getMSTime() - itr->m_timestamp);
 
-    for(GuildNewsList::iterator itr = m_guild_news.begin(); itr != m_guild_news.end(); ++itr)
+    for (GuildNewsList::iterator itr = m_guild_news.begin(); itr != m_guild_news.end(); ++itr)
         data << uint64(MAKE_NEW_GUID(itr->m_source_guid, 0, HIGHGUID_PLAYER));
 
-    for(GuildNewsList::iterator itr = m_guild_news.begin(); itr != m_guild_news.end(); ++itr)
+    for (GuildNewsList::iterator itr = m_guild_news.begin(); itr != m_guild_news.end(); ++itr)
     {
         data << uint32(itr->m_value1);
         data << uint32(itr->m_value2);
     }
 
-    for(GuildNewsList::iterator itr = m_guild_news.begin(); itr != m_guild_news.end(); ++itr)
+    for (GuildNewsList::iterator itr = m_guild_news.begin(); itr != m_guild_news.end(); ++itr)
         data << uint32(itr->m_type);
 
-    for(GuildNewsList::iterator itr = m_guild_news.begin(); itr != m_guild_news.end(); ++itr)
+    for (GuildNewsList::iterator itr = m_guild_news.begin(); itr != m_guild_news.end(); ++itr)
         data << uint32(itr->m_flags);
 
-    for(GuildNewsList::iterator itr = m_guild_news.begin(); itr != m_guild_news.end(); ++itr)
+    for (GuildNewsList::iterator itr = m_guild_news.begin(); itr != m_guild_news.end(); ++itr)
         data << uint32(0);
 }
 

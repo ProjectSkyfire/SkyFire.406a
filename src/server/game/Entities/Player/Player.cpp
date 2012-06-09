@@ -18557,7 +18557,7 @@ void Player::LoadPet()
         Pet* pet = new Pet(this);
         uint32 usedslot = 0;
         QueryResult slot = CharacterDatabase.PQuery("SELECT currentpetslot FROM characters WHERE guid = %u",GetGUIDLow());
-        if(!slot)
+        if (!slot)
         {
             usedslot = 0;
         }
@@ -21614,7 +21614,7 @@ bool Player::BuyItemFromVendorSlot(uint64 vendorguid, uint32 vendorslot, uint32 
     if (crItem->IsGoldRequired(proto) && proto->BuyPrice > 0) //Assume price cannot be negative (do not know why it is int32)
     {
         uint32 maxCount = MAX_MONEY_AMOUNT / proto->BuyPrice;
-        if((uint32)count > maxCount)
+        if ((uint32)count > maxCount)
         {
             sLog->outError("Player %s tried to buy %u item id %u, causing overflow", GetName(), (uint32)count, proto->ItemId);
             count = (uint8)maxCount;
@@ -26191,10 +26191,10 @@ void Player::UpdateMasteryAuras(uint32 branch)
     bool canHaveMastery = HasAuraType(SPELL_AURA_MASTERY);
     TalentTabEntry const* tab = sTalentTabStore.LookupEntry(branch);
 
-    if(!tab)
+    if (!tab)
         return;
 
-    if(!canHaveMastery)
+    if (!canHaveMastery)
     {
         // Remove all mastery spells
         for (int i = 0; i < MAX_TALENT_MASTERY_SPELLS; i ++)
@@ -26234,7 +26234,7 @@ void Player::RecalculateMasteryAuraEffects(uint32 branch)
 {
     TalentTabEntry const* tab = sTalentTabStore.LookupEntry(branch);
 
-    if(!tab)
+    if (!tab)
         return;
 
     for (int i = 0; i < MAX_TALENT_MASTERY_SPELLS; i ++)

@@ -305,7 +305,7 @@ void WorldSession::HandleRequestHotFix(WorldPacket & recv_data)
 
         ItemTemplate const* proto = sObjectMgr->GetItemTemplate(item);
 
-        if(!proto) // Item does not exist
+        if (!proto) // Item does not exist
         {
             data2 << uint32(4); // sizeof(uint32)
             data2 << uint32(item | 0x80000000);
@@ -793,12 +793,12 @@ void WorldSession::SendListInventory(uint64 vendorGuid)
                 if (QueryResult res = WorldDatabase.PQuery("SELECT achievement, standing FROM guild_rewards WHERE item_entry = %u", item->item))
                 {
                     Guild* guild = sGuildMgr->GetGuildById(_player->GetGuildId());
-                    if(!guild)
+                    if (!guild)
                         continue;
                     Field *fields = res->Fetch();
 
                     // Check for achievement
-                    if(!guild->GetAchievementMgr().HasAchieved(fields[0].GetUInt32()))
+                    if (!guild->GetAchievementMgr().HasAchieved(fields[0].GetUInt32()))
                         continue;
 
                     // Check for standing
@@ -1461,7 +1461,7 @@ void WorldSession::HandleReforgeItem(WorldPacket& recv_data)
 
     Item* item = GetPlayer()->GetItemByPos(bag, slotId);
 
-    if(!item)       // cheating?
+    if (!item)       // cheating?
         return;
 
     item->SetState(ITEM_CHANGED, GetPlayer()); // Set the 'changed' state to allow items to be saved to DB if they are equipped
@@ -1476,12 +1476,12 @@ void WorldSession::HandleReforgeItem(WorldPacket& recv_data)
     }
 
     const ItemReforgeEntry* stats = sItemReforgeStore.LookupEntry(reforgeId);
-    if(!stats)        // cheating?
+    if (!stats)        // cheating?
         return;
 
     uint32 money = item->GetTemplate()->SellPrice;
 
-    if(!GetPlayer()->HasEnoughMoney((int32)money))
+    if (!GetPlayer()->HasEnoughMoney((int32)money))
         return; // Cheating?
 
     GetPlayer()->ModifyMoney(-int32(money));

@@ -917,7 +917,7 @@ uint32 const* GetTalentTabPages(uint8 cls)
 
 float GetGtSpellScalingValue(int8 class_, uint8 level)
 {
-    if(class_ <= 0)
+    if (class_ <= 0)
         class_ = MAX_CLASSES; //use general scaling.
 
     //They really wants that players reach level 100... in the 5th expansion.

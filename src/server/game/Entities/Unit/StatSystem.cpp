@@ -582,10 +582,10 @@ void Player::UpdateBlockPercentage()
         value += GetRatingBonusValue(CR_BLOCK);
 
         // Increase from mastery rating
-        if(HasAura(76671)) //paladin Protection
+        if (HasAura(76671)) //paladin Protection
             value += GetMasteryPoints() * 0.0225f;
 
-        if(HasAura(76857)) //warrior Protection
+        if (HasAura(76857)) //warrior Protection
             value += GetMasteryPoints() * 0.015f;
 
         value = value < 0.0f ? 0.0f : value;
@@ -1289,7 +1289,7 @@ void Guardian::UpdateMaxHealth()
         case ENTRY_FELHUNTER:   multiplicator = 9.5f;   break;
         case ENTRY_FELGUARD:    multiplicator = 11.0f;  break;
         case ENTRY_BLOODWORM:   multiplicator = 1.0f;   break;
-        case ENTRY_GHOUL:       multiplicator = 5.7f;   break;      
+        case ENTRY_GHOUL:       multiplicator = 5.7f;   break;
         default:                multiplicator = 10.0f;  break;
     }
 

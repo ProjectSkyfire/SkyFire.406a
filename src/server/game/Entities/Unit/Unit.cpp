@@ -5803,7 +5803,7 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                 // Glyph of Polymorph
                 case 56375:
                 {
-                    if(!target)
+                    if (!target)
                         return false;
                     target->RemoveAurasByType(SPELL_AURA_PERIODIC_DAMAGE, 0, target->GetAura(32409)); // SW:D shall not be removed.
                     target->RemoveAurasByType(SPELL_AURA_PERIODIC_DAMAGE_PERCENT);
@@ -5904,7 +5904,7 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                 // Blessing of Ancient Kings (Val'anyr, Hammer of Ancient Kings)
                 case 64411:
                 {
-                    if(!victim)
+                    if (!victim)
                         return false;
                     basepoints0 = int32(CalculatePctN(damage, 15));
                     if (AuraEffect* aurEff = victim->GetAuraEffect(64413, 0, GetGUID()))
@@ -6194,7 +6194,7 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
             // Divine Aegis
             if (dummySpell->SpellIconID == 2820)
             {
-                if(!target)
+                if (!target)
                     return false;
 
                 // Multiple effects stack, so let's try to find this aura.
@@ -6394,7 +6394,7 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                 // Glyph of Shred
                 case 54815:
                 {
-                    if(!target)
+                    if (!target)
                         return false;
 
                     // try to find spell Rip on the target
@@ -6670,7 +6670,7 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
             {
                 case 3524: // Marked for Death
                 {
-                    if(!roll_chance_i(triggerAmount))
+                    if (!roll_chance_i(triggerAmount))
                         return false;
 
                     triggered_spell_id = 88691;
@@ -6699,7 +6699,7 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                     // Explosive Shot
                     if (procSpell->SpellFamilyFlags[2] & 0x200)
                     {
-                        if(!victim)
+                        if (!victim)
                             return false;
                         if (AuraEffect const* pEff = victim->GetAuraEffect(SPELL_AURA_PERIODIC_DUMMY, SPELLFAMILY_HUNTER, 0x0, 0x80000000, 0x0, GetGUID()))
                             basepoints0 = pEff->GetSpellInfo()->CalcPowerCost(this, SpellSchoolMask(pEff->GetSpellInfo()->SchoolMask)) * 4/10/3;
@@ -7875,12 +7875,12 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
             // Dark Simulacrum
             if (dummySpell->Id == 77606)
             {
-                if(!procSpell || procSpell->PowerType != POWER_MANA || (procSpell->ManaCost == 0 && procSpell->ManaCostPercentage == 0 && procSpell->ManaCostPerlevel == 0))
+                if (!procSpell || procSpell->PowerType != POWER_MANA || (procSpell->ManaCost == 0 && procSpell->ManaCostPercentage == 0 && procSpell->ManaCostPerlevel == 0))
                     return false;
 
                 Unit* caster = triggeredByAura->GetCaster();
 
-                if(!caster)
+                if (!caster)
                     return false;
 
                 triggered_spell_id = 77616;
@@ -8856,7 +8856,7 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
         case 81135: // Crimson Scourge Rank 1
         case 81136: // Crimson Scourge Rank 2
         {
-            if(!victim->HasAura(55078, GetGUID())) // Proc only if the target has Blood Plague
+            if (!victim->HasAura(55078, GetGUID())) // Proc only if the target has Blood Plague
                 return false;
             break;
         }
@@ -8867,7 +8867,7 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
             if (GetTypeId() != TYPEID_PLAYER)
                 return false;
 
-            if(!HealthBelowPctDamaged(30, damage)) // Only proc if it brings us below 30% health
+            if (!HealthBelowPctDamaged(30, damage)) // Only proc if it brings us below 30% health
                 return false;
 
             ToPlayer()->RemoveSpellCooldown(48982, true); // Remove cooldown of rune tap
@@ -8894,7 +8894,7 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
                 modifier = 3;
 
             // ToDo: Check this, its based on a wowhead comment
-            if(!roll_chance_f(speed * modifier))
+            if (!roll_chance_f(speed * modifier))
                 return false;
             break;
         }

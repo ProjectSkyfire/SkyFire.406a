@@ -114,10 +114,10 @@ void WorldSession::HandleBfQueueInviteResponse(WorldPacket& recv_data)
     uint64 BattleId = data &~ 0x20000;
 
     Battlefield* Bf= sBattlefieldMgr->GetBattlefieldByBattleId((uint32)BattleId);
-    if(!Bf)
+    if (!Bf)
         return;
 
-    if(Accepted)
+    if (Accepted)
         Bf->PlayerAcceptInviteToQueue(_player);
 }
 
@@ -132,7 +132,7 @@ void WorldSession::HandleBfEntryInviteResponse(WorldPacket& recv_data)
     uint64 BattleId = data &~ 0x20000;
 
     Battlefield* Bf= sBattlefieldMgr->GetBattlefieldByBattleId((uint32)BattleId);
-    if(!Bf)
+    if (!Bf)
         return;
 
     //If player accept invitation
@@ -155,7 +155,7 @@ void WorldSession::HandleBfExitRequest(WorldPacket& recv_data)
     uint32 bId = BattleId & 0xFFFF;
     sLog->outError("HandleBfExitRequest: BattleID:%u ",bId);
     Battlefield* Bf= sBattlefieldMgr->GetBattlefieldByBattleId(bId);
-    if(!Bf)
+    if (!Bf)
         return;
 
     Bf->AskToLeaveQueue(_player);
@@ -171,7 +171,7 @@ void WorldSession::HandleBfJoinQueue(WorldPacket& recv_data)
     uint64 BattleId = data &~ 0x20000;
 
     Battlefield* Bf= sBattlefieldMgr->GetBattlefieldByBattleId(BattleId);
-    if(!Bf)
+    if (!Bf)
         return;
 
     Bf->InvitePlayerToQueue(_player);
