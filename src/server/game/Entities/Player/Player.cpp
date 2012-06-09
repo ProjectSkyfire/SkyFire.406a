@@ -3046,7 +3046,7 @@ void Player::GiveXP(uint32 xp, Unit* victim, float group_rate)
 
     // RaF does NOT stack with rested experience
     if (recruitAFriend)
-        bonus_xp = 2 * xp; // xp + bonus_xp must add up to 3 * xp for RaF; calculation for quests done client-side
+        bonus_xp = 3 * xp; // xp + bonus_xp must add up to 3 * xp for RaF; calculation for quests done client-side
     else
         bonus_xp = victim ? GetXPRestBonus(xp) : 0; // XP resting bonus
 

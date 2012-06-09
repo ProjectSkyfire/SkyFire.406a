@@ -1522,14 +1522,16 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                     return;
                 }
 
-                // Any effect which causes you to lose control of your character will supress the starfall effect.
+                // Any effect which causes you to lose control of your character will suppress the starfall effect.
                 if (m_caster->HasUnitState(UNIT_STATE_STUNNED | UNIT_STATE_FLEEING | UNIT_STATE_ROOT | UNIT_STATE_CONFUSED))
                     return;
 
                 m_caster->CastSpell(unitTarget, damage, true);
                 return;
             }
-            //Wild mushroom: detonate
+
+            // Wild mushroom: detonate (prepare this to move to scripting).
+            // summoned npc may need further scripting.
             if (m_spellInfo->Id == 88751)
             {
                 std::list<Creature*> templist;
@@ -1548,37 +1550,25 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                 if (!templist.empty())
                     for (std::list<Creature*>::const_iterator itr = templist.begin(); itr != templist.end(); ++itr)
                     {
-                        //You cannot detonate other people's mushrooms
+                        // You cannot detonate other people's mushrooms
                         if ((*itr)->GetOwner() != m_caster)
                             continue;
-                        // Find all the enemies
+
+                        // Range check to find all enemies nearby
                         std::list<Unit*> targets;
                         SkyFire::AnyUnfriendlyUnitInObjectRangeCheck u_check((*itr), (*itr), 6.0f);
                         SkyFire::UnitListSearcher<SkyFire::AnyUnfriendlyUnitInObjectRangeCheck> searcher((*itr), targets, u_check);
                         (*itr)->VisitNearbyObject(6.0f, searcher);
                         for (std::list<Unit*>::const_iterator iter = targets.begin(); iter != targets.end(); ++iter)
                         {
-                            //Damage spell
+                            // Damage spell
                             (*itr)->CastSpell((*iter), 88747, true);
-                            //Suicide spell
+                            // Suicide spell
                             (*itr)->CastSpell((*itr), 92853, true);
                             (*itr)->DisappearAndDie();
                         }
                     }
                     templist.clear();
-            }
-            if (m_spellInfo->Id == 1126)
-            {
-                if (m_caster->GetTypeId() == TYPEID_PLAYER)
-                {
-                    std::list<Unit*> PartyMembers;
-                    m_caster->GetPartyMembers(PartyMembers);
-                    if (PartyMembers.size() > 1)
-                        m_caster->CastSpell(unitTarget, 79061, true); // Mark of the Wild (Raid)
-                    else
-                        m_caster->CastSpell(unitTarget, 79060, true); // Mark of the Wild (Caster)
-                }
-                break;
             }
             break;
         }
