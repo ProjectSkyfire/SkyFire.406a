@@ -3183,11 +3183,11 @@ void Guild::GainXP(uint64 xp)
     SaveXP();
 
     WorldPacket data(SMSG_GUILD_XP_UPDATE, 8*5);
-    data << uint64(GetXPCap());       // max daily xp
-    data << uint64(GetNextLevelXP()); // next level XP
-    data << uint64(GetXPCap());       // weekly xp
-    data << uint64(GetCurrentXP());   // Curr exp
-    data << uint64(GetTodayXP());     // Today exp
+    data << uint64(GetXPCap());                         // max daily xp
+    data << uint64(GetNextLevelXP() - GetCurrentXP());  // next level XP
+    data << uint64(GetXPCap());                         // weekly xp
+    data << uint64(GetCurrentXP());                     // Curr exp
+    data << uint64(GetTodayXP());                       // Today exp
 
     AddGuildNews(GUILD_NEWS_GUILD_LEVEL_REACHED, 0, level, 0);
 
@@ -3206,11 +3206,11 @@ void Guild::LevelUp()
     m_nextLevelXP = sObjectMgr->GetXPForGuildLevel(level);
 
     WorldPacket data(SMSG_GUILD_XP_UPDATE, 8*5);
-    data << uint64(GetXPCap());       // max daily xp
-    data << uint64(GetNextLevelXP()); // next level XP
-    data << uint64(GetXPCap());       // weekly xp
-    data << uint64(GetCurrentXP());   // Curr exp
-    data << uint64(GetTodayXP());     // Today exp
+    data << uint64(GetXPCap());                         // max daily xp
+    data << uint64(GetNextLevelXP() - GetCurrentXP());  // next level XP
+    data << uint64(GetXPCap());                         // weekly xp
+    data << uint64(GetCurrentXP());                     // Curr exp
+    data << uint64(GetTodayXP());                       // Today exp
 
     // Find perk to gain
     uint32 spellId = 0;
