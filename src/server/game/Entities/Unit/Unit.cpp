@@ -7270,8 +7270,10 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                 case 51563:
                 case 51564:
                 {
-                    target = this;
-                    triggered_spell_id = 53390;
+                    CustomSpellValues values;
+                    values.AddSpellMod(SPELLVALUE_BASE_POINT0, -(dummySpell->Effects[0].BasePoints));
+                    values.AddSpellMod(SPELLVALUE_BASE_POINT1, dummySpell->Effects[0].BasePoints);
+                    CastCustomSpell(53390, values, this);
                     break;
                 }
                 // Windfury Weapon (Passive) 1-5 Ranks
