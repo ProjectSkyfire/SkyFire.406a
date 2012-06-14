@@ -28,7 +28,7 @@
 enum ShamanSpells
 {
     SHAMAN_SPELL_GLYPH_OF_MANA_TIDE     = 55441,
-    SHAMAN_SPELL_MANA_TIDE_TOTEM        = 39609,
+    SHAMAN_SPELL_MANA_TIDE_TOTEM        = 16191,
     SHAMAN_SPELL_FIRE_NOVA_R1           = 1535,
     SHAMAN_SPELL_FIRE_NOVA_TRIGGERED_R1 = 8349,
     SHAMAN_SPELL_SATED                  = 57724,
@@ -37,6 +37,43 @@ enum ShamanSpells
     //For Earthen Power
     SHAMAN_TOTEM_SPELL_EARTHBIND_TOTEM  = 6474, //Spell casted by totem
     SHAMAN_TOTEM_SPELL_EARTHEN_POWER    = 59566, //Spell witch remove snare effect
+};
+
+// 16191 - Mana Tide
+class spell_sha_mana_tide : public SpellScriptLoader
+{
+    public:
+        spell_sha_mana_tide() : SpellScriptLoader("spell_sha_mana_tide") { }
+
+        class spell_sha_mana_tide_AuraScript : public AuraScript
+        {
+            PrepareAuraScript(spell_sha_mana_tide_AuraScript);
+
+            bool Validate(SpellInfo const* /*spellEntry*/)
+            {
+                if (!sSpellMgr->GetSpellInfo(SHAMAN_SPELL_MANA_TIDE_TOTEM))
+                    return false;
+                return true;
+            }
+
+            void CalculateAmount(AuraEffect const* /*aurEff*/, int32 &amount, bool & /*canBeRecalculated*/)
+            {
+                // 400% of caster's spirit
+                // Caster is totem, we need owner
+                if (Unit* owner = GetCaster()->GetOwner())
+                    amount = int32(owner->GetStat(STAT_SPIRIT) * 4.0f);
+            }
+
+            void Register()
+            {
+                DoEffectCalcAmount += AuraEffectCalcAmountFn(spell_sha_mana_tide_AuraScript::CalculateAmount, EFFECT_0, SPELL_AURA_MOD_STAT);
+            }
+        };
+
+        AuraScript* GetAuraScript() const
+        {
+            return new spell_sha_mana_tide_AuraScript();
+        }
 };
 
 // 51474 - Astral shift
@@ -72,8 +109,8 @@ class spell_sha_astral_shift : public SpellScriptLoader
 
             void Register()
             {
-                 DoEffectCalcAmount += AuraEffectCalcAmountFn(spell_sha_astral_shift_AuraScript::CalculateAmount, EFFECT_0, SPELL_AURA_SCHOOL_ABSORB);
-                 OnEffectAbsorb += AuraEffectAbsorbFn(spell_sha_astral_shift_AuraScript::Absorb, EFFECT_0);
+                DoEffectCalcAmount += AuraEffectCalcAmountFn(spell_sha_astral_shift_AuraScript::CalculateAmount, EFFECT_0, SPELL_AURA_SCHOOL_ABSORB);
+                OnEffectAbsorb += AuraEffectAbsorbFn(spell_sha_astral_shift_AuraScript::Absorb, EFFECT_0);
             }
         };
 
@@ -172,7 +209,7 @@ class spell_sha_earthbind_totem : public SpellScriptLoader
 
             void Register()
             {
-                 OnEffectPeriodic += AuraEffectPeriodicFn(spell_sha_earthbind_totem_AuraScript::HandleEffectPeriodic, EFFECT_0, SPELL_AURA_PERIODIC_TRIGGER_SPELL);
+                OnEffectPeriodic += AuraEffectPeriodicFn(spell_sha_earthbind_totem_AuraScript::HandleEffectPeriodic, EFFECT_0, SPELL_AURA_PERIODIC_TRIGGER_SPELL);
             }
         };
 
@@ -294,6 +331,7 @@ class spell_sha_healing_rain : public SpellScriptLoader
 
 void AddSC_shaman_spell_scripts()
 {
+    new spell_sha_mana_tide();
     new spell_sha_astral_shift();
     new spell_sha_fire_nova();
     new spell_sha_earthbind_totem();
