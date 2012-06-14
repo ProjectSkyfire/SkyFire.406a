@@ -312,7 +312,6 @@ public:
                 case 9:     spellId = SPELL_28_CHAPTERS_LATER;  break;
                 case 10:    spellId = SPELL_LIVING_FOREVER;     break;                
             }
-
             pCaster->CastSpell(pCaster, spellId, true, NULL);
         }
 
