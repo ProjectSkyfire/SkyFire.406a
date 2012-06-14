@@ -10887,11 +10887,19 @@ int32 Unit::SpellBaseDamageBonus(SpellSchoolMask schoolMask)
                 DoneAdvertisedBenefit += int32(CalculatePctN(GetStat(usedStat), (*i)->GetAmount()));
             }
         }
+
         // ... and attack power
         AuraEffectList const& mDamageDonebyAP = GetAuraEffectsByType(SPELL_AURA_MOD_SPELL_DAMAGE_OF_ATTACK_POWER);
         for (AuraEffectList::const_iterator i =mDamageDonebyAP.begin(); i != mDamageDonebyAP.end(); ++i)
             if ((*i)->GetMiscValue() & schoolMask)
                 DoneAdvertisedBenefit += int32(CalculatePctN(GetTotalAttackPowerValue(BASE_ATTACK), (*i)->GetAmount()));
+
+        // Spell power from SPELL_AURA_MOD_SPELL_POWER_PCT
+        AuraEffectList const& mSpellPowerPct = GetAuraEffectsByType(SPELL_AURA_MOD_SPELL_POWER_PCT);
+        for (AuraEffectList::const_iterator i = mSpellPowerPct.begin(); i != mSpellPowerPct.end(); ++i)
+        {
+            AddPctN(DoneAdvertisedBenefit, (*i)->GetAmount());
+        }
     }
     return DoneAdvertisedBenefit > 0 ? DoneAdvertisedBenefit : 0;
 }
@@ -11613,6 +11621,13 @@ int32 Unit::SpellBaseHealingBonus(SpellSchoolMask schoolMask)
         for (AuraEffectList::const_iterator i = mHealingDonebyAP.begin(); i != mHealingDonebyAP.end(); ++i)
             if ((*i)->GetMiscValue() & schoolMask)
                 AdvertisedBenefit += int32(CalculatePctN(GetTotalAttackPowerValue(BASE_ATTACK), (*i)->GetAmount()));
+
+        // Spell power from SPELL_AURA_MOD_SPELL_POWER_PCT
+        AuraEffectList const& mSpellPowerPct = GetAuraEffectsByType(SPELL_AURA_MOD_SPELL_POWER_PCT);
+        for (AuraEffectList::const_iterator i = mSpellPowerPct.begin(); i != mSpellPowerPct.end(); ++i)
+        {
+            AddPctN(AdvertisedBenefit, (*i)->GetAmount());
+        }
     }
     return AdvertisedBenefit;
 }
