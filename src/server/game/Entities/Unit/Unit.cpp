@@ -10873,8 +10873,14 @@ int32 Unit::SpellBaseDamageBonus(SpellSchoolMask schoolMask)
 
     if (GetTypeId() == TYPEID_PLAYER)
     {
-        // Base value
-        DoneAdvertisedBenefit += ToPlayer()->GetBaseSpellPowerBonus();
+        uint32 spellPower = ToPlayer()->GetBaseSpellPowerBonus();
+        // Spell power from SPELL_AURA_MOD_SPELL_POWER_PCT
+        AuraEffectList const& mSpellPowerPct = GetAuraEffectsByType(SPELL_AURA_MOD_SPELL_POWER_PCT);
+        for (AuraEffectList::const_iterator i = mSpellPowerPct.begin(); i != mSpellPowerPct.end(); ++i)
+        {
+            AddPctN(spellPower, (*i)->GetAmount());
+        }
+        DoneAdvertisedBenefit += spellPower;
 
         // Damage bonus from stats
         AuraEffectList const& mDamageDoneOfStatPercent = GetAuraEffectsByType(SPELL_AURA_MOD_SPELL_DAMAGE_OF_STAT_PERCENT);
@@ -10893,13 +10899,6 @@ int32 Unit::SpellBaseDamageBonus(SpellSchoolMask schoolMask)
         for (AuraEffectList::const_iterator i =mDamageDonebyAP.begin(); i != mDamageDonebyAP.end(); ++i)
             if ((*i)->GetMiscValue() & schoolMask)
                 DoneAdvertisedBenefit += int32(CalculatePctN(GetTotalAttackPowerValue(BASE_ATTACK), (*i)->GetAmount()));
-
-        // Spell power from SPELL_AURA_MOD_SPELL_POWER_PCT
-        AuraEffectList const& mSpellPowerPct = GetAuraEffectsByType(SPELL_AURA_MOD_SPELL_POWER_PCT);
-        for (AuraEffectList::const_iterator i = mSpellPowerPct.begin(); i != mSpellPowerPct.end(); ++i)
-        {
-            AddPctN(DoneAdvertisedBenefit, (*i)->GetAmount());
-        }
     }
     return DoneAdvertisedBenefit > 0 ? DoneAdvertisedBenefit : 0;
 }
@@ -11604,8 +11603,14 @@ int32 Unit::SpellBaseHealingBonus(SpellSchoolMask schoolMask)
     // Healing bonus of spirit, intellect and strength
     if (GetTypeId() == TYPEID_PLAYER)
     {
-        // Base value
-        AdvertisedBenefit += ToPlayer()->GetBaseSpellPowerBonus();
+        uint32 spellPower = ToPlayer()->GetBaseSpellPowerBonus();
+        // Spell power from SPELL_AURA_MOD_SPELL_POWER_PCT
+        AuraEffectList const& mSpellPowerPct = GetAuraEffectsByType(SPELL_AURA_MOD_SPELL_POWER_PCT);
+        for (AuraEffectList::const_iterator i = mSpellPowerPct.begin(); i != mSpellPowerPct.end(); ++i)
+        {
+            AddPctN(spellPower, (*i)->GetAmount());
+        }
+        AdvertisedBenefit += spellPower;
 
         // Healing bonus from stats
         AuraEffectList const& mHealingDoneOfStatPercent = GetAuraEffectsByType(SPELL_AURA_MOD_SPELL_HEALING_OF_STAT_PERCENT);
@@ -11621,13 +11626,6 @@ int32 Unit::SpellBaseHealingBonus(SpellSchoolMask schoolMask)
         for (AuraEffectList::const_iterator i = mHealingDonebyAP.begin(); i != mHealingDonebyAP.end(); ++i)
             if ((*i)->GetMiscValue() & schoolMask)
                 AdvertisedBenefit += int32(CalculatePctN(GetTotalAttackPowerValue(BASE_ATTACK), (*i)->GetAmount()));
-
-        // Spell power from SPELL_AURA_MOD_SPELL_POWER_PCT
-        AuraEffectList const& mSpellPowerPct = GetAuraEffectsByType(SPELL_AURA_MOD_SPELL_POWER_PCT);
-        for (AuraEffectList::const_iterator i = mSpellPowerPct.begin(); i != mSpellPowerPct.end(); ++i)
-        {
-            AddPctN(AdvertisedBenefit, (*i)->GetAmount());
-        }
     }
     return AdvertisedBenefit;
 }
