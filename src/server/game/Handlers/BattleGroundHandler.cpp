@@ -258,7 +258,7 @@ void WorldSession::HandleBattlegroundPlayerPositionsOpcode(WorldPacket & /*recv_
             if (hplayer)
                 ++count2;
 
-            WorldPacket data(SMSG_BATTLEGROUND_PLAYER_POSITIONS, (4+4+16*count1+16*count2));
+            WorldPacket data(SMSG_BATTLEGROUND_PLAYER_POSITIONS, (4+4+16*count1+16*count2), true);
             data << count1;                                     // alliance flag holders count
             data << count2;                                     // horde flag holders count
             if (aplayer)
@@ -283,7 +283,7 @@ void WorldSession::HandleBattlegroundPlayerPositionsOpcode(WorldPacket & /*recv_
         case BATTLEGROUND_AB:
         case BATTLEGROUND_AV:
         {
-            WorldPacket data(SMSG_BATTLEGROUND_PLAYER_POSITIONS, (4+4));
+            WorldPacket data(SMSG_BATTLEGROUND_PLAYER_POSITIONS, (4+4), true);
             data << uint32(0);
             data << uint32(0);
             SendPacket(&data);

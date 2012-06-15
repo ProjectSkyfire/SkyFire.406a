@@ -8008,7 +8008,7 @@ void Player::DuelComplete(DuelCompleteType type)
 
     sLog->outDebug(LOG_FILTER_UNITS, "Duel Complete %s %s", GetName(), duel->opponent->GetName());
 
-    WorldPacket data(SMSG_DUEL_COMPLETE, (1));
+    WorldPacket data(SMSG_DUEL_COMPLETE, (1), true);
     data << (uint8)((type != DUEL_INTERRUPTED) ? 1 : 0);
     GetSession()->SendPacket(&data);
 
@@ -8017,7 +8017,7 @@ void Player::DuelComplete(DuelCompleteType type)
 
     if (type != DUEL_INTERRUPTED)
     {
-        data.Initialize(SMSG_DUEL_WINNER, (1+20));          // we guess size
+        data.Initialize(SMSG_DUEL_WINNER, (1+20), true);    // we guess size
         data << uint8(type == DUEL_WON ? 0 : 1);            // 0 = just won; 1 = fled
         data << GetName();
         data << duel->opponent->GetName();
@@ -9658,7 +9658,7 @@ void Player::SendLoot(uint64 guid, LootType loot_type)
     // need know merged fishing/corpse loot type for achievements
     loot->loot_type = loot_type;
 
-    WorldPacket data(SMSG_LOOT_RESPONSE, (9+50+2));          // we guess size -- Checked for 406a
+    WorldPacket data(SMSG_LOOT_RESPONSE, (9+50+2), true);    // we guess size -- Checked for 406a
 
     data << uint64(guid);
     data << uint8(loot_type);
@@ -9711,7 +9711,7 @@ void Player::SendNotifyLootMoneyRemoved()
 
 void Player::SendNotifyLootItemRemoved(uint8 lootSlot)
 {
-    WorldPacket data(SMSG_LOOT_REMOVED, 3);         // Checked for 406a
+    WorldPacket data(SMSG_LOOT_REMOVED, 3, true);   // Checked for 406a
     data << uint8(lootSlot);
     GetSession()->SendPacket(&data);
 }
@@ -14112,7 +14112,7 @@ void Player::SendEquipError(InventoryResult msg, Item* pItem, Item* pItem2, uint
 void Player::SendBuyError(BuyResult msg, Creature* creature, uint32 item, uint32 param)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Sent SMSG_BUY_FAILED");
-    WorldPacket data(SMSG_BUY_FAILED, (8+4+4+1+2));
+    WorldPacket data(SMSG_BUY_FAILED, (8+4+4+1+2), true);
     data << uint64(creature ? creature->GetGUID() : 0);
     data << uint32(item);
     if (param > 0)

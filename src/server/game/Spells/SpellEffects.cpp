@@ -6050,7 +6050,7 @@ void Spell::EffectDuel(SpellEffIndex effIndex)
     // END
 
     // Send request
-    WorldPacket data(SMSG_DUEL_REQUESTED, 8 + 8);
+    WorldPacket data(SMSG_DUEL_REQUESTED, 8 + 8, true);
     data << uint64(pGameObj->GetGUID());
     data << uint64(caster->GetGUID());
     caster->GetSession()->SendPacket(&data);
