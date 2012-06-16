@@ -229,11 +229,11 @@ void WorldSession::HandleGuildExperienceOpcode(WorldPacket& recvPacket)
     if (Guild* guild = sGuildMgr->GetGuildById(_player->GetGuildId()))
     {
         WorldPacket data(SMSG_GUILD_XP_UPDATE, 8*5);
-        data << uint64(guild->GetXPCap());       // max daily xp
-        data << uint64(guild->GetNextLevelXP()); // next level XP
-        data << uint64(guild->GetXPCap());       // weekly xp
-        data << uint64(guild->GetCurrentXP());   // Curr exp
-        data << uint64(guild->GetTodayXP());     // Today exp
+        data << uint64(guild->GetXPCap());                                  // max daily xp
+        data << uint64(guild->GetNextLevelXP() - guild->GetCurrentXP());    // next level XP
+        data << uint64(guild->GetXPCap());                                  // weekly xp
+        data << uint64(guild->GetCurrentXP());                              // Curr exp
+        data << uint64(guild->GetTodayXP());                                // Today exp
         SendPacket(&data);
     }
 }
