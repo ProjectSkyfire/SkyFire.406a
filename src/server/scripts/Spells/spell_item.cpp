@@ -249,6 +249,84 @@ public:
     }
 };
 
+// http://www.wowhead.com/item=62237 Adventurer's Journal
+// 86939 Read Journal
+enum eAdventurersJournal
+{
+    SPELL_LEARNING_BY_EXAMPLE   = 86963,
+    SPELL_TERRAIN_EXPERT        = 86972,
+    SPELL_DEMON_SLAYER          = 86974,
+    SPELL_DRAGONSBANE           = 86975,
+    SPELL_FIRE_AND_WATER        = 86976,
+    SPELL_KNEECAPPER            = 86977,
+    SPELL_DEADLY_DRIVE          = 86980,
+    SPELL_MECHANICAL_APTITUDE   = 86982,
+    SPELL_28_CHAPTERS_LATER     = 86983,
+    SPELL_LIVING_FOREVER        = 86988,
+    SPELL_THE_GREAT_HUNT        = 86992,
+};
+
+class spell_item_adventurers_journal : public SpellScriptLoader
+{
+public:
+    spell_item_adventurers_journal() : SpellScriptLoader("spell_item_adventurers_journal") { }
+
+    class spell_item_adventurers_journal_SpellScript : public SpellScript
+    {
+    public:
+        PrepareSpellScript(spell_item_adventurers_journal_SpellScript)
+        bool Load(SpellInfo const* /*spellEntry*/)
+        {
+            if (!sSpellMgr->GetSpellInfo(SPELL_LEARNING_BY_EXAMPLE)
+                || !sSpellMgr->GetSpellInfo(SPELL_TERRAIN_EXPERT)
+                || !sSpellMgr->GetSpellInfo(SPELL_DEMON_SLAYER)
+                || !sSpellMgr->GetSpellInfo(SPELL_DRAGONSBANE)
+                || !sSpellMgr->GetSpellInfo(SPELL_FIRE_AND_WATER)
+                || !sSpellMgr->GetSpellInfo(SPELL_KNEECAPPER)
+                || !sSpellMgr->GetSpellInfo(SPELL_DEADLY_DRIVE)
+                || !sSpellMgr->GetSpellInfo(SPELL_MECHANICAL_APTITUDE)
+                || !sSpellMgr->GetSpellInfo(SPELL_28_CHAPTERS_LATER)
+                || !sSpellMgr->GetSpellInfo(SPELL_LIVING_FOREVER)
+                || !sSpellMgr->GetSpellInfo(SPELL_THE_GREAT_HUNT))
+                return false;
+            return true;
+        }
+
+        void HandleScriptEffect(SpellEffIndex /*effIndex*/)
+        {
+            Unit* pCaster = GetCaster();
+            if (pCaster->GetTypeId() != TYPEID_PLAYER)
+                return;
+
+            uint32 spellId = SPELL_THE_GREAT_HUNT;
+            switch(urand(1,11))
+            {
+                case 1:     spellId = SPELL_LEARNING_BY_EXAMPLE;break;
+                case 2:     spellId = SPELL_TERRAIN_EXPERT;     break;
+                case 3:     spellId = SPELL_DEMON_SLAYER;       break;
+                case 4:     spellId = SPELL_DRAGONSBANE;        break;
+                case 5:     spellId = SPELL_FIRE_AND_WATER;     break;
+                case 6:     spellId = SPELL_KNEECAPPER;         break;
+                case 7:     spellId = SPELL_DEADLY_DRIVE;       break;
+                case 8:     spellId = SPELL_MECHANICAL_APTITUDE;break;
+                case 9:     spellId = SPELL_28_CHAPTERS_LATER;  break;
+                case 10:    spellId = SPELL_LIVING_FOREVER;     break;                
+            }
+            pCaster->CastSpell(pCaster, spellId, true, NULL);
+        }
+
+        void Register()
+        {
+            OnEffectHit += SpellEffectFn(spell_item_adventurers_journal_SpellScript::HandleScriptEffect, EFFECT_0, SPELL_EFFECT_SCRIPT_EFFECT);
+        }
+    };
+
+    SpellScript* GetSpellScript() const
+    {
+        return new spell_item_adventurers_journal_SpellScript();
+    }
+};
+
 // http://www.wowhead.com/item=10645 Gnomish Death Ray
 // 13280 Gnomish Death Ray
 enum eGnomishDeathRay
@@ -1566,6 +1644,7 @@ void AddSC_item_spell_scripts()
     new spell_item_trigger_spell("spell_item_mithril_mechanical_dragonling", SPELL_MITHRIL_MECHANICAL_DRAGONLING);
 
     new spell_item_deviate_fish();
+    new spell_item_adventurers_journal();
     new spell_item_flask_of_enhancement();
     new spell_item_flask_of_the_north();
     new spell_item_gnomish_death_ray();
