@@ -1200,7 +1200,7 @@ void WorldSession::HandleInspectOpcode(WorldPacket& recv_data)
         return;
 
     uint32 talent_points = 0x29;
-    WorldPacket data(SMSG_INSPECT_TALENT, 8+4+talent_points);
+    WorldPacket data(SMSG_INSPECT_TALENT, 8+4+talent_points, true);
 
     data << uint64(player->GetGUID());
 
