@@ -6614,45 +6614,46 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
             switch (dummySpell->Id)
             {
                 case 32748: // Deadly Throw Interrupt
+                {
                     // Prevent cast Deadly Throw Interrupt on self from last effect (apply dummy) of Deadly Throw
                     if (this == victim)
                         return false;
 
                     triggered_spell_id = 32747;
                     break;
+                }
                 case 56807: // Glyph of hemorrhage
+                {
                     basepoints0 = int32(0.40f * damage);
                     triggered_spell_id = 89775;
-                break;
+                    break;
+                }
                 // Venomeous wounds rank 1 & 2
                 case 79133:
                 case 79134:
+                {
                     if(effIndex != 0)
                         return false;
 
-                    // Check if target is poisoned
                     bool poisoned = false;
-                    // Fast check
-                    if(target->HasAuraState(AURA_STATE_DEADLY_POISON, dummySpell, this))
-                        poisoned = true;
-                    // Else full aura scan
-                    else
+                    Unit::AuraApplicationMap const& auras = target->GetAppliedAuras();
+
+                    for (Unit::AuraApplicationMap::const_iterator itr = auras.begin(); itr != auras.end(); ++itr)
                     {
-                        Unit::AuraApplicationMap const& auras = target->GetAppliedAuras();
-                        for (Unit::AuraApplicationMap::const_iterator itr = auras.begin(); itr != auras.end(); ++itr)
-                            if (itr->second->GetBase()->GetSpellInfo()->Dispel == DISPEL_POISON)
-                            {
-                                poisoned = true;
-                                break;
-                            }
+                        if (itr->second->GetBase()->GetSpellInfo()->Dispel == DISPEL_POISON)
+                        {
+                            poisoned = true;
+                            break;
+                        }
                     }
-                    // Only if: poisoned
+                    if (!poisoned)
                         return false;
 
                     basepoints0 = triggerAmount;
                     this->CastCustomSpell(this, 51637, &basepoints0, NULL, NULL, true);
                     triggered_spell_id = 79136;
                     break;
+                }
             }
 
             switch (dummySpell->SpellIconID)
