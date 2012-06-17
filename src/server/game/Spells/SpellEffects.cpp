@@ -5947,6 +5947,9 @@ void Spell::EffectAddComboPoints(SpellEffIndex /*effIndex*/)
     if (!m_caster->_movedPlayer)
         return;
 
+    if (effectHandleMode != SPELL_EFFECT_HANDLE_HIT_TARGET)
+        return;
+
     Player* player = m_caster->_movedPlayer;
 
     //sLog->outString("Adding %u combo points to player", damage);
