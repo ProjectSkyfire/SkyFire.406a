@@ -8115,6 +8115,9 @@ bool Unit::HandleAuraProc(Unit* victim, uint32 damage, Aura* triggeredByAura, Sp
                 {
                     *handled = true;
 
+                    if (!procSpell)
+                        return false;
+
                     // Need stun, root, or fear mechanic
                     if (!(procSpell->GetAllEffectsMechanicMask() & ((1<<MECHANIC_ROOT)|(1<<MECHANIC_STUN)|(1<<MECHANIC_FEAR))))
                         return false;
