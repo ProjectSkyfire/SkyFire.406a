@@ -149,45 +149,6 @@ public:
     }
 };
 
-class spell_mage_summon_water_elemental : public SpellScriptLoader
-{
-public:
-    spell_mage_summon_water_elemental() : SpellScriptLoader("spell_mage_summon_water_elemental") { }
-
-    class spell_mage_summon_water_elemental_SpellScript : public SpellScript
-    {
-        PrepareSpellScript(spell_mage_summon_water_elemental_SpellScript);
-
-        bool Validate(SpellInfo const* /*spellEntry*/)
-        {
-            if (!sSpellMgr->GetSpellInfo(SPELL_MAGE_GLYPH_OF_ETERNAL_WATER) || !sSpellMgr->GetSpellInfo(SPELL_MAGE_SUMMON_WATER_ELEMENTAL_TEMPORARY) || !sSpellMgr->GetSpellInfo(SPELL_MAGE_SUMMON_WATER_ELEMENTAL_PERMANENT))
-                return false;
-            return true;
-        }
-
-        void HandleDummy(SpellEffIndex /*effIndex*/)
-        {
-            Unit* caster = GetCaster();
-            // Glyph of Eternal Water
-            if (caster->HasAura(SPELL_MAGE_GLYPH_OF_ETERNAL_WATER))
-                caster->CastSpell(caster, SPELL_MAGE_SUMMON_WATER_ELEMENTAL_PERMANENT, true);
-            else
-                caster->CastSpell(caster, SPELL_MAGE_SUMMON_WATER_ELEMENTAL_TEMPORARY, true);
-        }
-
-        void Register()
-        {
-            // add dummy effect spell handler to Summon Water Elemental
-            OnEffectHit += SpellEffectFn(spell_mage_summon_water_elemental_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
-        }
-    };
-
-    SpellScript* GetSpellScript() const
-    {
-        return new spell_mage_summon_water_elemental_SpellScript();
-    }
-};
-
 // Frost Warding
 class spell_mage_frost_warding_trigger : public SpellScriptLoader
 {
@@ -425,6 +386,5 @@ void AddSC_mage_spell_scripts()
     new spell_mage_frost_warding_trigger();
     new spell_mage_incanters_absorbtion_absorb();
     new spell_mage_incanters_absorbtion_manashield();
-    new spell_mage_summon_water_elemental;
     new spell_mage_ice_barrier;
 }
