@@ -6030,11 +6030,11 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                     // Remove aura (before cast for prevent infinite loop handlers)
                     RemoveAurasDueToSpell(triggeredByAura->GetId());
 
-                    uint32 spell = sSpellMgr->GetSpellWithRank(27285, dummySpell->GetRank());
+                    uint32 explosionSpell = 27285;
 
                     // Cast finish spell (triggeredByAura already not exist!)
                     if (Unit* caster = GetUnit(*this, casterGuid))
-                        caster->CastSpell(this, spell, true, castItem);
+                        caster->CastSpell(this, explosionSpell, true, castItem);
                     return true;                            // no hidden cooldown
                 }
 
