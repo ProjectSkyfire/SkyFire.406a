@@ -20159,7 +20159,7 @@ void Player::_SaveStats(SQLTransaction& trans)
         << GetFloatValue(PLAYER_SPELL_CRIT_PERCENTAGE1) << ','
         << GetUInt32Value(UNIT_FIELD_ATTACK_POWER) << ','
         << GetUInt32Value(UNIT_FIELD_RANGED_ATTACK_POWER) << ','
-        << GetBaseSpellPowerBonus() << ','
+        << GetSpellPowerBonus() << ','
         << GetUInt32Value(PLAYER_FIELD_COMBAT_RATING_1 + CR_CRIT_TAKEN_SPELL) << ')';
     trans->Append(ss.str().c_str());
 }

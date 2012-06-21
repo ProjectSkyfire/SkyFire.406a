@@ -1940,7 +1940,8 @@ class Player : public Unit, public GridObject<Player>
         float OCTRegenMPPerSpirit();
         float GetRatingMultiplier(CombatRating cr) const;
         float GetRatingBonusValue(CombatRating cr) const;
-        uint32 GetBaseSpellPowerBonus() { return _spellPowerFromIntellect + _baseSpellPower; }
+        uint32 GetSpellPowerBonus() { return _spellPowerFromIntellect + _baseSpellPower; }
+        uint32 GetBaseSpellPower(){ return _spellPowerFromIntellect; }
         int32 GetSpellPenetrationItemMod() const { return _spellPenetrationItemMod; }
 
         float GetExpertiseDodgeOrParryReduction(WeaponAttackType attType) const;

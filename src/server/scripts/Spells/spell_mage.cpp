@@ -220,8 +220,27 @@ public:
 
         if (AuraEffect* talentAurEff = target->GetAuraEffectOfRankedSpell(SPELL_MAGE_INCANTERS_ABSORBTION_R1, EFFECT_0))
         {
+
+            // Store the normal spellpower to prevent the nonstop aura stacking
             int32 bp = CalculatePctN(absorbAmount, talentAurEff->GetAmount());
-            target->CastCustomSpell(target, SPELL_MAGE_INCANTERS_ABSORBTION_TRIGGERED, &bp, NULL, NULL, true, NULL, aurEff);
+            
+            // If we dont get just the intellect spellpower, the aura will stack forever
+            uint32 baseSpellPower = target->ToPlayer()->GetBaseSpellPower();
+
+            if (AuraEffect* incanterTriggered = target->GetAuraEffect(SPELL_MAGE_INCANTERS_ABSORBTION_TRIGGERED, 0, target->GetGUID()))
+            {
+                // The aura will stack up to a value of 20% of the mage's spell power
+                incanterTriggered->ChangeAmount(std::min<int32>(incanterTriggered->GetAmount() + bp, CalculatePctN(baseSpellPower, 20)));
+                
+                // Refresh and return to prevent replacing the aura
+                incanterTriggered->GetBase()->RefreshDuration();
+
+                return;
+            }
+            else // No incanters absorption aura
+            {
+                target->CastCustomSpell(target, SPELL_MAGE_INCANTERS_ABSORBTION_TRIGGERED, &bp, NULL, NULL, true, NULL, aurEff);
+            }
         }
     }
 };
