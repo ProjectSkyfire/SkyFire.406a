@@ -27,6 +27,13 @@
 #   include <io.h>
 
 #define stat64 _stat64
+#elif defined(__FreeBSD__)
+#   include <dirent.h>
+#   include <fnmatch.h>
+#   include <unistd.h>
+#   define _stat stat
+#   define _getcwd getcwd
+#   define stat64 stat
 #else
 #   include <dirent.h>
 #   include <fnmatch.h>

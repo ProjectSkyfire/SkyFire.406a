@@ -14,6 +14,13 @@
 /*****************************************************************************/
 
 #define __STORMLIB_SELF__
+#if defined __FreeBSD__
+#   define O_LARGEFILE      0100000
+#   define off64_t off_t 
+#   define lseek64 lseek 
+#   define fstat64 fstat 
+#   define stat64 stat
+#endif
 #include "StormLib.h"
 #include "StormCommon.h"
 
