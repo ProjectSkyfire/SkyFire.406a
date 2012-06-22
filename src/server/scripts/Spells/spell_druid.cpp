@@ -27,8 +27,10 @@
 
 enum DruidSpells
 {
-    DRUID_INCREASED_MOONFIRE_DURATION   = 38414,
-    DRUID_NATURES_SPLENDOR              = 57865
+    DRUID_INCREASED_MOONFIRE_DURATION   = 38414, // Tier 6
+    DRUID_GENESIS_R1                    = 57810,
+    DRUID_GENESIS_R2                    = 57811,
+    DRUID_GENESIS_R3                    = 57812,
 };
 
 // 54846 Glyph of Starfire
@@ -43,9 +45,8 @@ class spell_dru_glyph_of_starfire : public SpellScriptLoader
 
             bool Validate(SpellInfo const* /*spellEntry*/)
             {
-                if (!sSpellMgr->GetSpellInfo(DRUID_INCREASED_MOONFIRE_DURATION))
-                    return false;
-                if (!sSpellMgr->GetSpellInfo(DRUID_NATURES_SPLENDOR))
+                if (!sSpellMgr->GetSpellInfo(DRUID_INCREASED_MOONFIRE_DURATION) ||
+                    !sSpellMgr->GetSpellInfo(DRUID_GENESIS_R1))
                     return false;
                 return true;
             }
@@ -60,10 +61,18 @@ class spell_dru_glyph_of_starfire : public SpellScriptLoader
 
                         uint32 countMin = aura->GetMaxDuration();
                         uint32 countMax = aura->GetSpellInfo()->GetMaxDuration() + 9000;
+
                         if (caster->HasAura(DRUID_INCREASED_MOONFIRE_DURATION))
                             countMax += 3000;
-                        if (caster->HasAura(DRUID_NATURES_SPLENDOR))
-                            countMax += 3000;
+
+                        if (caster->HasAura(DRUID_GENESIS_R1))
+                            countMax += 2000;
+
+                        if (caster->HasAura(DRUID_GENESIS_R2))
+                            countMax += 4000;
+
+                        if (caster->HasAura(DRUID_GENESIS_R3))
+                            countMax += 6000;
 
                         if (countMin < countMax)
                         {
