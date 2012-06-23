@@ -3156,6 +3156,9 @@ void SpellMgr::LoadSpellCustomAttr()
             case 53385: // Divine Storm (Damage)
                 spellInfo->MaxAffectedTargets = 4;
                 break;
+            case 65156: // Juggernaut Buff
+                spellInfo->AttributesEx3 |=  SPELL_ATTR3_CAN_PROC_WITH_TRIGGERED;
+                break;
             case 38310: // Multi-Shot
             case 42005: // Bloodboil
             case 38296: // Spitfire Totem

@@ -474,12 +474,9 @@ public:
     }
 };
 
-enum DamageReductionAura
+enum Vigilance
 {
-    SPELL_BLESSING_OF_SANCTUARY         = 20911,
-    SPELL_GREATER_BLESSING_OF_SANCTUARY = 25899,
-    SPELL_RENEWED_HOPE                  = 63944,
-    SPELL_DAMAGE_REDUCTION_AURA         = 68066,
+    SPELL_WARRRIOR_TAUNT = 355,
 };
 
 class spell_warr_vigilance : public SpellScriptLoader
@@ -487,56 +484,42 @@ class spell_warr_vigilance : public SpellScriptLoader
 public:
     spell_warr_vigilance() : SpellScriptLoader("spell_warr_vigilance") { }
 
-    class spell_warr_vigilance_AuraScript : public AuraScript
+    class spell_warr_vigilance_SpellScript : public SpellScript
     {
-        PrepareAuraScript(spell_warr_vigilance_AuraScript);
+        PrepareSpellScript(spell_warr_vigilance_SpellScript);
 
         bool Validate(SpellInfo const* /*SpellEntry*/)
         {
-            if (!sSpellMgr->GetSpellInfo(SPELL_DAMAGE_REDUCTION_AURA))
+            if (!sSpellMgr->GetSpellInfo(SPELL_WARRRIOR_TAUNT))
                 return false;
             return true;
         }
 
-        void OnApply(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
+        void HandleScript(SpellEffIndex /*effIndex*/)
         {
-            Unit* target = GetTarget();
-            target->CastSpell(target, SPELL_DAMAGE_REDUCTION_AURA, true);
-        }
+            Unit* target = GetHitUnit();
 
-        void OnRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
-        {
-            Unit* target = GetTarget();
-
-            if (!target->HasAura(SPELL_DAMAGE_REDUCTION_AURA))
+            if (!target || target->GetTypeId() != TYPEID_PLAYER)
                 return;
 
-            if (target->HasAura(SPELL_BLESSING_OF_SANCTUARY) ||
-                target->HasAura(SPELL_GREATER_BLESSING_OF_SANCTUARY) ||
-                target->HasAura(SPELL_RENEWED_HOPE))
-                    return;
-
-            target->RemoveAurasDueToSpell(SPELL_DAMAGE_REDUCTION_AURA);
+            target->ToPlayer()->RemoveSpellCooldown(355, true);
         }
 
         void Register()
         {
-            OnEffectApply += AuraEffectApplyFn(spell_warr_vigilance_AuraScript::OnApply, EFFECT_0, SPELL_AURA_PROC_TRIGGER_SPELL, AURA_EFFECT_HANDLE_REAL_OR_REAPPLY_MASK);
-            OnEffectRemove += AuraEffectRemoveFn(spell_warr_vigilance_AuraScript::OnRemove, EFFECT_0, SPELL_AURA_PROC_TRIGGER_SPELL, AURA_EFFECT_HANDLE_REAL_OR_REAPPLY_MASK);
+            OnEffectHitTarget += SpellEffectFn(spell_warr_vigilance_SpellScript::HandleScript, EFFECT_0, SPELL_EFFECT_SCRIPT_EFFECT);
         }
     };
 
-    AuraScript* GetAuraScript() const
+    SpellScript* GetSpellScript() const
     {
-        return new spell_warr_vigilance_AuraScript();
+        return new spell_warr_vigilance_SpellScript();
     }
 };
 
 enum Charge
 {
-    SPELL_JUGGERNAUT_CRIT_BONUS_TALENT      = 64976,
-    SPELL_JUGGERNAUT_CRIT_BONUS_BUFF        = 65156,
-    SPELL_CHARGE                            = 34846,
+    SPELL_CHARGE_ENERGIZE                  = 34846,
 };
 
 class spell_warr_charge : public SpellScriptLoader
@@ -550,19 +533,14 @@ public:
 
         bool Validate(SpellInfo const* /*SpellEntry*/)
         {
-            if (!sSpellMgr->GetSpellInfo(SPELL_JUGGERNAUT_CRIT_BONUS_TALENT) || !sSpellMgr->GetSpellInfo(SPELL_JUGGERNAUT_CRIT_BONUS_BUFF) || !sSpellMgr->GetSpellInfo(SPELL_CHARGE))
+            if (!sSpellMgr->GetSpellInfo(SPELL_CHARGE_ENERGIZE))
                 return false;
             return true;
         }
         void HandleDummy(SpellEffIndex /* effIndex */)
         {
-            int32 chargeBasePoints0 = GetEffectValue();
-            Unit* caster = GetCaster();
-            caster->CastCustomSpell(caster, SPELL_CHARGE, &chargeBasePoints0, NULL, NULL, true);
-
-            //Juggernaut crit bonus
-            if (caster->HasAura(SPELL_JUGGERNAUT_CRIT_BONUS_TALENT))
-                caster->CastSpell(caster, SPELL_JUGGERNAUT_CRIT_BONUS_BUFF, true);
+            int32 rageAmount = GetEffectValue();
+            GetCaster()->CastCustomSpell(GetCaster(), SPELL_CHARGE_ENERGIZE, &rageAmount, NULL, NULL, true);
         }
 
         void Register()
@@ -599,9 +577,9 @@ public:
         }
         void HandleDummy(SpellEffIndex /* effIndex */)
         {
-            int32 bp0 = GetEffectValue();
-            if (GetHitUnit())
-                GetCaster()->CastCustomSpell(GetHitUnit(), SPELL_SLAM, &bp0, NULL, NULL, true, 0);
+            Unit* target = GetHitUnit();
+            if (target)
+                GetCaster()->CastSpell(target, SPELL_SLAM, true);
         }
 
         void Register()

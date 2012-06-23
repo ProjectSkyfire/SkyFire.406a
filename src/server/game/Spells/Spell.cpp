@@ -1289,10 +1289,10 @@ void Spell::SelectImplicitAreaTargets(SpellEffIndex effIndex, SpellImplicitTarge
                 }
                 else if (m_spellInfo->SpellFamilyFlags[2] == 0x0100) // Starfall
                 {
-                    // Remove targets not in LoS or in stealth
+                    // Remove targets not in LoS or in stealth that are not being detected
                     for (std::list<Unit*>::iterator itr = unitTargets.begin(); itr != unitTargets.end();)
                     {
-                        if ((*itr)->HasStealthAura() || (*itr)->HasInvisibilityAura() || !(*itr)->IsWithinLOSInMap(m_caster))
+                        if (((*itr)->HasStealthAura() && !m_caster->canSeeOrDetect(*itr)) || (*itr)->HasInvisibilityAura() || !(*itr)->IsWithinLOSInMap(m_caster))
                             itr = unitTargets.erase(itr);
                         else
                             ++itr;
