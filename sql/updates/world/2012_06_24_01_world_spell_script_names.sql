@@ -7,8 +7,10 @@ DELETE FROM `spell_script_names` WHERE `spell_id` = 72410;
 -- Wrong spell id for spell_deathbringer_blood_link_aura, the right ones are already set
 DELETE FROM `spell_script_names` WHERE `spell_id` = 72202;
 
--- Wrong spell id for spell_deathbringer_blood_link, the right ones are already set
+-- Wrong spell id for spell_deathbringer_blood_link
 DELETE FROM `spell_script_names` WHERE `spell_id` = 70897;
+INSERT INTO `spell_script_names` VALUES 
+(72202,'spell_deathbringer_blood_link');
 
 -- Wrong spell id for spell_cultist_dark_martyrdom, the right ones are already set
 DELETE FROM `spell_script_names` WHERE `spell_id` = 72176;
