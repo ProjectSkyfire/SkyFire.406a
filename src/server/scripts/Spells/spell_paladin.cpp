@@ -179,40 +179,6 @@ public:
         return new spell_pal_blessing_of_faith_SpellScript();
     }
 };
-// 63521 Guarded by The Light
-class spell_pal_guarded_by_the_light : public SpellScriptLoader
-{
-public:
-    spell_pal_guarded_by_the_light() : SpellScriptLoader("spell_pal_guarded_by_the_light") { }
-
-    class spell_pal_guarded_by_the_light_SpellScript : public SpellScript
-    {
-        PrepareSpellScript(spell_pal_guarded_by_the_light_SpellScript)
-        bool Validate(SpellInfo const* /*spellEntry*/)
-        {
-            if (!sSpellMgr->GetSpellInfo(PALADIN_SPELL_DIVINE_PLEA))
-                return false;
-            return true;
-        }
-
-        void HandleScriptEffect(SpellEffIndex /*effIndex*/)
-        {
-            // Divine Plea
-            if (Aura* aura = GetCaster()->GetAura(PALADIN_SPELL_DIVINE_PLEA))
-                aura->RefreshDuration();
-        }
-
-        void Register()
-        {
-            OnEffectHitTarget += SpellEffectFn(spell_pal_guarded_by_the_light_SpellScript::HandleScriptEffect, EFFECT_0, SPELL_EFFECT_SCRIPT_EFFECT);
-        }
-    };
-
-    SpellScript* GetSpellScript() const
-    {
-        return new spell_pal_guarded_by_the_light_SpellScript();
-    }
-};
 
 class spell_pal_holy_shock : public SpellScriptLoader
 {
@@ -720,7 +686,6 @@ void AddSC_paladin_spell_scripts()
 {
     new spell_pal_ardent_defender();
     new spell_pal_blessing_of_faith();
-    new spell_pal_guarded_by_the_light();
     new spell_pal_holy_shock();
     new spell_pal_shield_of_righteous();
     new spell_pal_judgements_of_the_bold();
