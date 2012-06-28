@@ -370,6 +370,7 @@ void WorldSession::HandleGuildRankOpcode(WorldPacket& recvPacket)
             rightsAndSlots[tabId] = GuildBankRightsAndSlots(BankRights[tabId], BankStacks[tabId]);
         }
 
+        money *= GOLD; // In game is in gold, in core set in bronze
         guild->HandleSetRankInfo(this, new_rankId, rankName, new_rights, money, rightsAndSlots);
     }
 

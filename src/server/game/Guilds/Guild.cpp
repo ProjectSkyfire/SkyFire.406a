@@ -224,12 +224,13 @@ void Guild::RankInfo::WritePacket(WorldPacket& data) const
 {
     data << m_name;
     data << uint32(m_rights);
-    data << uint32(m_bankMoneyPerDay);                  // In game set in gold, in packet set in bronze.
-    for (uint8 i = 0; i < GUILD_BANK_MAX_TABS; ++i)
-    {
+
+    for (uint8 i = 0; i < GUILD_BANK_MAX_TABS; i++)
         data << uint32(m_bankTabRightsAndSlots[i].rights);
+    for (uint8 i = 0; i < GUILD_BANK_MAX_TABS; i++)
         data << uint32(m_bankTabRightsAndSlots[i].slots);
-    }
+    
+    data << uint32(m_bankMoneyPerDay) / GOLD; // In game set in gold, in core is in bronze
 }
 
 void Guild::RankInfo::SetName(const std::string& name)
@@ -518,38 +519,47 @@ void Guild::Member::SetStats(Player* player)
     m_achievementPoints = player->GetAchievementMgr().GetAchievementPoints();
 
     uint8 count_prof = 0;
+    uint32 prev_skill = 0;
     for (PlayerSpellMap::const_iterator spellIter = player->GetSpellMap().begin(); spellIter != player->GetSpellMap().end(); ++spellIter)
     {
         if (count_prof >= 2)
             break;
 
         SpellInfo const *spellInfo = sSpellMgr->GetSpellInfo(spellIter->first);
-            if (!spellInfo)
-                continue;
+        if (!spellInfo)
+            continue;
 
         if (spellInfo->IsPrimaryProfession())
         {
             uint32 skill = 0;
+            uint32 value = 0;
+            uint32 rank = 0;
 
             for (uint8 i = 0; i < MAX_SPELL_EFFECTS; ++i)
             {
                 if (spellInfo->Effects[i].Effect == SPELL_EFFECT_SKILL)
                 {
-                    uint32 skill = spellInfo->Effects[i].MiscValue;
+                    skill = uint32(spellInfo->Effects[i].MiscValue);
                     break;
                 }
             }
 
-            uint32 value = (uint32)player->GetSkillValue(skill);
-            uint32 rank = sSpellMgr->GetSpellRank(spellIter->first);
+            if (prev_skill == skill)
+                continue;
+            
+            value = player->GetSkillValue(skill);
+            rank = sSpellMgr->GetSpellRank(spellIter->first);
+            
+            SetProfession(count_prof, value, skill, rank);
 
-            SetProfession((uint32)count_prof, value, skill, rank);
+            prev_skill = skill;
             count_prof++;
         }
     }
+
     if (count_prof < 2)
         for (uint8 i = 0; i < (2 - count_prof); i++)
-            SetProfession((uint32)(count_prof + i), 0, 0, 0);
+            SetProfession(count_prof + i, 0, 0, 0);
 }
 
 void Guild::Member::SetStats(const std::string& name, uint8 level, uint8 _class, uint32 zoneId, uint32 accountId)
@@ -1256,39 +1266,47 @@ void Guild::UpdateMemberData(Player* player, uint8 dataid, uint32 value)
             case GUILD_MEMBER_DATA_PROFESSIONS:
             {
                 uint8 count_prof = 0;
+                uint32 prev_skill = 0;
                 for (PlayerSpellMap::const_iterator spellIter = player->GetSpellMap().begin(); spellIter != player->GetSpellMap().end(); ++spellIter)
                 {
                     if (count_prof >= 2)
                         break;
 
                     SpellInfo const *spellInfo = sSpellMgr->GetSpellInfo(spellIter->first);
-                        if (!spellInfo)
-                            continue;
+                    if (!spellInfo)
+                        continue;
 
                     if (spellInfo->IsPrimaryProfession())
                     {
                         uint32 skill = 0;
+                        uint32 value = 0;
+                        uint32 rank = 0;
 
                         for (uint8 i = 0; i < MAX_SPELL_EFFECTS; ++i)
                         {
                             if (spellInfo->Effects[i].Effect == SPELL_EFFECT_SKILL)
                             {
-                                skill = spellInfo->Effects[i].MiscValue;
+                                skill = uint32(spellInfo->Effects[i].MiscValue);
                                 break;
                             }
                         }
 
-                        uint32 value = (uint32)player->GetSkillValue(skill);
-                        uint32 rank = sSpellMgr->GetSpellRank(spellIter->first);
+                        if (prev_skill == skill)
+                            continue;
+                        
+                        value = player->GetSkillValue(skill);
+                        rank = sSpellMgr->GetSpellRank(spellIter->first);
+                        
+                        member->SetProfession(count_prof, value, skill, rank);
 
-                        member->SetProfession((uint32)count_prof, value, skill, rank);
+                        prev_skill = skill;
                         count_prof++;
                     }
                 }
 
                 if (count_prof < 2)
                     for (uint8 i = 0; i < (2 - count_prof); i++)
-                        member->SetProfession((uint32)(count_prof + i), 0, 0, 0);
+                        member->SetProfession(count_prof + i, 0, 0, 0);
                 break;
             }
             default:
@@ -1458,24 +1476,16 @@ void Guild::SendGuildRankInfo(WorldSession* session)
     data7 << uint32(_GetRanksSize());
     for (uint32 i = 0; i < _GetRanksSize(); i++)
     {
-        //data7 << uint32(m_ranks[i].GetId());
-        data7 << uint32(i);
-        data7 << uint32(i);
-        data7 << m_ranks[i].GetName();
-        data7 << uint32(m_ranks[i].GetRights());
-
-        for (int j = 0; j < GUILD_BANK_MAX_TABS; j++)
-            data7 << uint32(m_ranks[i].GetBankTabRights(j));
-        for (int j = 0; j < GUILD_BANK_MAX_TABS; j++)
-            data7 << uint32(m_ranks[i].GetBankTabSlotsPerDay(j));
-
-        data7 << uint32(m_ranks[i].GetBankMoneyPerDay()); // GuildBankRightsAndSlots
+        data7 << uint32(i) << uint32(i); // unk
+        m_ranks[i].WritePacket(data7);
     }
 
     if (session)
         session->SendPacket(&data7);
     else
         BroadcastPacket(&data7);
+    
+    sLog->outDebug(LOG_FILTER_GUILD, "WORLD: Sent (SMSG_GUILD_RANK)");
 }
 
 void Guild::HandleQuery(WorldSession* session)
@@ -1514,7 +1524,10 @@ void Guild::HandleQuery(WorldSession* session)
     data << uint32(_GetRanksSize());                                                // Something new in WotLK
 
     session->SendPacket(&data);
-    HandleRoster(session);
+
+    if (session->GetPlayer() && session->GetPlayer()->GetGuildId() == GetId()) 
+        HandleRoster(session);
+
     sLog->outDebug(LOG_FILTER_GUILD, "WORLD: Sent (SMSG_GUILD_QUERY_RESPONSE)");
 }
 
@@ -2093,7 +2106,7 @@ void Guild::SendBankTabText(WorldSession* session, uint8 tabId) const
         pTab->SendText(this, session);
 }
 
-void Guild::SendPermissions(WorldSession* session) const
+void Guild::SendPermissions(WorldSession* session)
 {
     uint64 guid = session->GetPlayer()->GetGUID();
     uint8 rankId = session->GetPlayer()->GetRank();
@@ -2112,28 +2125,7 @@ void Guild::SendPermissions(WorldSession* session) const
     session->SendPacket(&data);
     sLog->outDebug(LOG_FILTER_GUILD, "WORLD: Sent (MSG_GUILD_PERMISSIONS)");
 
-    WorldPacket data7(SMSG_GUILD_RANK);
-    data7 << uint32(_GetRanksSize());
-    for (uint32 i = 0; i < _GetRanksSize(); i++)
-    {
-        //data7 << uint32(m_ranks[i].GetId());
-        data7 << uint32(i);
-        data7 << uint32(i);
-        data7 << m_ranks[i].GetName();
-        data7 << uint32(m_ranks[i].GetRights());
-
-        for (int j = 0; j < GUILD_BANK_MAX_TABS; j++)
-            data7 << uint32(m_ranks[i].GetBankMoneyPerDay());
-            //data7 << uint32(0xFFFFFFFF);
-        for (int j = 0; j < GUILD_BANK_MAX_TABS; j++)
-            data7 << uint32(m_ranks[i].GetRights());
-            //data7 << uint32(0xFFFFFFFF);
-
-        data7 << uint32(0xFFFFFFFF); // GuildBankRightsAndSlots
-
-        //data7 << (uint32)/*GuildBankRightsAndSlots(i)*/0;
-    }
-    session->SendPacket(&data7);
+    SendGuildRankInfo(session);
 }
 
 void Guild::SendMoneyInfo(WorldSession* session) const
