@@ -646,6 +646,7 @@ class Spell
         void CallScriptOnHitHandlers();
         void CallScriptAfterHitHandlers();
         void CallScriptObjectAreaTargetSelectHandlers(std::list<WorldObject*>& targets, SpellEffIndex effIndex);
+        void CallScriptObjectTargetSelectHandlers(WorldObject*& target, SpellEffIndex effIndex);
         std::list<SpellScript*> m_loadedScripts;
 
         bool CanExecuteTriggersOnHit(uint8 effMask, SpellInfo const* spellInfo = NULL) const;
