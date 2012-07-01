@@ -1042,7 +1042,9 @@ void Spell::SelectImplicitConeTargets(SpellEffIndex effIndex, SpellImplicitTarge
     {
         SkyFire::WorldObjectSpellConeTargetCheck check(coneAngle, radius, m_caster, m_spellInfo, selectionType, condList);
         SkyFire::WorldObjectListSearcher<SkyFire::WorldObjectSpellConeTargetCheck> searcher(m_caster, targets, check, containerTypeMask);
-        SearchTargets<SkyFire::WorldObjectListSearcher<SkyFire::WorldObjectSpellConeTargetCheck> > (searcher, containerTypeMask, m_caster, m_caster, radius);
+        SearchTargets<SkyFire::WorldObjectListSearcher<SkyFire::WorldObjectSpellConeTargetCheck> >(searcher, containerTypeMask, m_caster, m_caster, radius);
+
+        CallScriptObjectAreaTargetSelectHandlers(targets, effIndex);
 
         if (!targets.empty())
         {
@@ -1069,8 +1071,6 @@ void Spell::SelectImplicitConeTargets(SpellEffIndex effIndex, SpellImplicitTarge
                 else if (GameObject* gObjTarget = (*itr)->ToGameObject())
                     gObjTargets.push_back(gObjTarget);
             }
-
-            CallScriptAfterUnitTargetSelectHandlers(unitTargets, effIndex);
 
             for (std::list<Unit*>::iterator itr = unitTargets.begin(); itr != unitTargets.end(); ++itr)
                 AddUnitTarget(*itr, effMask, false);
@@ -1218,6 +1218,8 @@ void Spell::SelectImplicitAreaTargets(SpellEffIndex effIndex, SpellImplicitTarge
             gObjTargets.push_back(gObjTarget);
     }
 
+    CallScriptObjectAreaTargetSelectHandlers(targets, effIndex);
+
     if (!unitTargets.empty())
     {
         // Special target selection for smart heals and energizes
@@ -1351,8 +1353,6 @@ void Spell::SelectImplicitAreaTargets(SpellEffIndex effIndex, SpellImplicitTarge
                 unitTargets.remove(m_targets.GetUnitTarget());
             SkyFire::RandomResizeList(unitTargets, maxTargets);
         }
-
-        CallScriptAfterUnitTargetSelectHandlers(unitTargets, effIndex);
 
         for (std::list<Unit*>::iterator itr = unitTargets.begin(); itr != unitTargets.end(); ++itr)
             AddUnitTarget(*itr, effMask, false);
@@ -1576,7 +1576,8 @@ void Spell::SelectImplicitChainTargets(SpellEffIndex effIndex, SpellImplicitTarg
             if (Unit* unitTarget = (*itr)->ToUnit())
                 unitTargets.push_back(unitTarget);
 
-        CallScriptAfterUnitTargetSelectHandlers(unitTargets, effIndex);
+        // Chain primary target is added earlier
+        CallScriptObjectAreaTargetSelectHandlers(targets, effIndex);
 
         for (std::list<Unit*>::iterator itr = unitTargets.begin(); itr != unitTargets.end(); ++itr)
             AddUnitTarget(*itr, effMask, false);
@@ -6961,15 +6962,15 @@ void Spell::CallScriptAfterHitHandlers()
     }
 }
 
-void Spell::CallScriptAfterUnitTargetSelectHandlers(std::list<Unit*>& unitTargets, SpellEffIndex effIndex)
+void Spell::CallScriptObjectAreaTargetSelectHandlers(std::list<WorldObject*>& targets, SpellEffIndex effIndex)
 {
     for (std::list<SpellScript*>::iterator scritr = m_loadedScripts.begin(); scritr != m_loadedScripts.end(); ++scritr)
     {
         (*scritr)->_PrepareScriptCall(SPELL_SCRIPT_HOOK_UNIT_TARGET_SELECT);
-        std::list<SpellScript::UnitTargetHandler>::iterator hookItrEnd = (*scritr)->OnUnitTargetSelect.end(), hookItr = (*scritr)->OnUnitTargetSelect.begin();
+        std::list<SpellScript::ObjectAreaTargetSelectHandler>::iterator hookItrEnd = (*scritr)->OnObjectAreaTargetSelect.end(), hookItr = (*scritr)->OnObjectAreaTargetSelect.begin();
         for (; hookItr != hookItrEnd; ++hookItr)
             if ((*hookItr).IsEffectAffected(m_spellInfo, effIndex))
-                (*hookItr).Call(*scritr, unitTargets);
+                (*hookItr).Call(*scritr, targets);
 
         (*scritr)->_FinishScriptCall();
     }

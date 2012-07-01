@@ -151,37 +151,37 @@ class spell_dru_t10_restoration_4p_bonus : public SpellScriptLoader
                 return GetCaster()->GetTypeId() == TYPEID_PLAYER;
             }
 
-            void FilterTargets(std::list<Unit*>& unitList)
+            void FilterTargets(std::list<WorldObject*>& targets)
             {
                 if (!GetCaster()->ToPlayer()->GetGroup())
                 {
-                    unitList.clear();
-                    unitList.push_back(GetCaster());
+                    targets.clear();
+                    targets.push_back(GetCaster());
                 }
                 else
                 {
-                    unitList.remove(GetExplTargetUnit());
+                    targets.remove(GetExplTargetUnit());
                     std::list<Unit*> tempTargets;
-                    for (std::list<Unit*>::const_iterator itr = unitList.begin(); itr != unitList.end(); ++itr)
-                        if ((*itr)->GetTypeId() == TYPEID_PLAYER && GetCaster()->IsInRaidWith(*itr))
-                            tempTargets.push_back(*itr);
+                    for (std::list<WorldObject*>::const_iterator itr = targets.begin(); itr != targets.end(); ++itr)
+                        if ((*itr)->GetTypeId() == TYPEID_PLAYER && GetCaster()->IsInRaidWith((*itr)->ToUnit()))
+                            tempTargets.push_back((*itr)->ToUnit());
 
                     if (tempTargets.empty())
                     {
-                        unitList.clear();
+                        targets.clear();
                         FinishCast(SPELL_FAILED_DONT_REPORT);
                         return;
                     }
 
                     Unit* target = SelectRandomContainerElement(tempTargets);
-                    unitList.clear();
-                    unitList.push_back(target);
+                    targets.clear();
+                    targets.push_back(target);
                 }
             }
 
             void Register()
             {
-                OnUnitTargetSelect += SpellUnitTargetFn(spell_dru_t10_restoration_4p_bonus_SpellScript::FilterTargets, EFFECT_0, TARGET_UNIT_DEST_AREA_ALLY);
+                OnObjectAreaTargetSelect += SpellObjectAreaTargetSelectFn(spell_dru_t10_restoration_4p_bonus_SpellScript::FilterTargets, EFFECT_0, TARGET_UNIT_DEST_AREA_ALLY);
             }
         };
 
@@ -200,14 +200,14 @@ class spell_dru_starfall_aoe : public SpellScriptLoader
         {
             PrepareSpellScript(spell_dru_starfall_aoe_SpellScript);
 
-            void FilterTargets(std::list<Unit*>& unitList)
+            void FilterTargets(std::list<WorldObject*>& targets)
             {
-                unitList.remove(GetExplTargetUnit());
+                targets.remove(GetExplTargetUnit());
             }
 
             void Register()
             {
-                OnUnitTargetSelect += SpellUnitTargetFn(spell_dru_starfall_aoe_SpellScript::FilterTargets, EFFECT_0, TARGET_UNIT_SRC_AREA_ENEMY);
+                OnObjectAreaTargetSelect += SpellObjectAreaTargetSelectFn(spell_dru_starfall_aoe_SpellScript::FilterTargets, EFFECT_0, TARGET_UNIT_SRC_AREA_ENEMY);
             }
         };
 

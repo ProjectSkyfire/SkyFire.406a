@@ -1632,11 +1632,6 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
     // mods at aura apply or remove
     switch (GetSpellInfo()->SpellFamilyName)
     {
-        case SPELLFAMILY_GENERIC:
-            switch (GetId())
-            {
-            }
-            break;
         case SPELLFAMILY_ROGUE:
             // Stealth
             if (GetSpellInfo()->SpellFamilyFlags[0] & 0x00400000)

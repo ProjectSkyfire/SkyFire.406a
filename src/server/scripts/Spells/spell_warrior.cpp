@@ -73,14 +73,14 @@ class spell_warr_improved_spell_reflection : public SpellScriptLoader
         {
             PrepareSpellScript(spell_warr_improved_spell_reflection_SpellScript);
 
-            void FilterTargets(std::list<Unit*>& unitList)
+            void FilterTargets(std::list<WorldObject*>& unitList)
             {
                 unitList.remove(GetCaster());
             }
 
             void Register()
             {
-                OnUnitTargetSelect += SpellUnitTargetFn(spell_warr_improved_spell_reflection_SpellScript::FilterTargets, EFFECT_0, TARGET_UNIT_CASTER_AREA_PARTY);
+                OnObjectAreaTargetSelect += SpellObjectAreaTargetSelectFn(spell_warr_improved_spell_reflection_SpellScript::FilterTargets, EFFECT_0, TARGET_UNIT_CASTER_AREA_PARTY);
             }
         };
 
@@ -353,7 +353,7 @@ public:
 
         // Lock for avoid processing the same thing multiple times when we already know the result
         bool CheckAgain;
-        std::list<Unit*> targetList;
+        std::list<WorldObject*> targetList;
 
         bool Load()
         {
@@ -361,7 +361,7 @@ public:
             return true;
         }
 
-        void FilterTargets(std::list<Unit*>& unitList)
+        void FilterTargets(std::list<WorldObject*>& unitList)
         {
             targetList = unitList;
         }
@@ -380,8 +380,8 @@ public:
                             if (target->HasAura(94009)) // If the target has Rend
                             {
                                 CheckAgain = false;
-                                for (std::list<Unit*>::iterator itr = targetList.begin(); itr != targetList.end(); ++itr)
-                                    if (Unit* curTrg = (*itr))
+                                for (std::list<WorldObject*>::iterator itr = targetList.begin(); itr != targetList.end(); ++itr)
+                                    if (Unit* curTrg = (*itr)->ToUnit())
                                         caster->CastSpell(curTrg, 94009, true);
                             }
                         }
@@ -393,7 +393,7 @@ public:
         void Register()
         {
             OnEffectHitTarget += SpellEffectFn(spell_warr_thunderclap::spell_warr_thunderclap_SpellScript::OnTargetHit, EFFECT_0, SPELL_EFFECT_SCHOOL_DAMAGE);
-            OnUnitTargetSelect += SpellUnitTargetFn(spell_warr_thunderclap::spell_warr_thunderclap_SpellScript::FilterTargets, EFFECT_0, TARGET_UNIT_SRC_AREA_ENEMY);
+            OnObjectAreaTargetSelect += SpellObjectAreaTargetSelectFn(spell_warr_thunderclap::spell_warr_thunderclap_SpellScript::FilterTargets, EFFECT_0, TARGET_UNIT_SRC_AREA_ENEMY);
         }
     };
 

@@ -50,7 +50,6 @@ public:
     {
         PrepareSpellScript(spell_mage_blast_wave_SpellScript);
 
-        std::list<Unit*> targetList;
         uint32 count;
         float x;
         float y;
@@ -72,13 +71,12 @@ public:
             y = GetExplTargetDest()->GetPositionY();
             z = GetExplTargetDest()->GetPositionZ();
             count = 0;
-            targetList.clear();
             return true;
         }
 
-        void FilterTargets(std::list<Unit*>& unitList)
+        void FilterTargets(std::list<WorldObject*>& targets)
         {
-            count = unitList.size();
+            count = targets.size();
         }
 
         void HandleExtraEffect()
@@ -94,7 +92,7 @@ public:
         void Register()
         {
             AfterCast += SpellCastFn(spell_mage_blast_wave_SpellScript::HandleExtraEffect);
-            OnUnitTargetSelect += SpellUnitTargetFn(spell_mage_blast_wave_SpellScript::FilterTargets, EFFECT_0, TARGET_UNIT_DEST_AREA_ENEMY);
+            OnObjectAreaTargetSelect += SpellObjectAreaTargetSelectFn(spell_mage_blast_wave_SpellScript::FilterTargets, EFFECT_0, TARGET_UNIT_DEST_AREA_ENEMY);
         }
     };
 

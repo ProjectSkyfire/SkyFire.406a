@@ -155,7 +155,7 @@ class SpellScript : public _SpellScript
             typedef void(CLASSNAME::*SpellEffectFnType)(SpellEffIndex); \
             typedef void(CLASSNAME::*SpellHitFnType)(); \
             typedef void(CLASSNAME::*SpellCastFnType)(); \
-            typedef void(CLASSNAME::*SpellUnitTargetFnType)(std::list<Unit*>&); \
+            typedef void(CLASSNAME::*SpellObjectAreaTargetSelectFnType)(std::list<WorldObject*>&); \
 
         SPELLSCRIPT_FUNCTION_TYPE_DEFINES(SpellScript)
 
@@ -197,15 +197,15 @@ class SpellScript : public _SpellScript
                 SpellHitFnType pHitHandlerScript;
         };
 
-        class UnitTargetHandler : public _SpellScript::EffectHook
+        class ObjectAreaTargetSelectHandler : public _SpellScript::EffectHook
         {
             public:
-                UnitTargetHandler(SpellUnitTargetFnType _pUnitTargetHandlerScript, uint8 _effIndex, uint16 _targetType);
+                ObjectAreaTargetSelectHandler(SpellObjectAreaTargetSelectFnType _pObjectAreaTargetSelectHandlerScript, uint8 _effIndex, uint16 _targetType);
                 std::string ToString();
                 bool CheckEffect(SpellInfo const* spellEntry, uint8 targetType);
-                void Call(SpellScript* spellScript, std::list<Unit*>& unitTargets);
+                void Call(SpellScript* spellScript, std::list<WorldObject*>& targets);
             private:
-                SpellUnitTargetFnType pUnitTargetHandlerScript;
+                SpellObjectAreaTargetSelectFnType pObjectAreaTargetSelectHandlerScript;
                 uint16 targetType;
         };
 
@@ -214,7 +214,7 @@ class SpellScript : public _SpellScript
         class CheckCastHandlerFunction : public SpellScript::CheckCastHandler { public: CheckCastHandlerFunction(SpellCheckCastFnType _checkCastHandlerScript) : SpellScript::CheckCastHandler((SpellScript::SpellCheckCastFnType)_checkCastHandlerScript) {} }; \
         class EffectHandlerFunction : public SpellScript::EffectHandler { public: EffectHandlerFunction(SpellEffectFnType _pEffectHandlerScript, uint8 _effIndex, uint16 _effName) : SpellScript::EffectHandler((SpellScript::SpellEffectFnType)_pEffectHandlerScript, _effIndex, _effName) {} }; \
         class HitHandlerFunction : public SpellScript::HitHandler { public: HitHandlerFunction(SpellHitFnType _pHitHandlerScript) : SpellScript::HitHandler((SpellScript::SpellHitFnType)_pHitHandlerScript) {} }; \
-        class UnitTargetHandlerFunction : public SpellScript::UnitTargetHandler { public: UnitTargetHandlerFunction(SpellUnitTargetFnType _pUnitTargetHandlerScript, uint8 _effIndex, uint16 _targetType) : SpellScript::UnitTargetHandler((SpellScript::SpellUnitTargetFnType)_pUnitTargetHandlerScript, _effIndex, _targetType) {} }; \
+        class ObjectAreaTargetSelectHandlerFunction : public SpellScript::ObjectAreaTargetSelectHandler { public: ObjectAreaTargetSelectHandlerFunction(SpellObjectAreaTargetSelectFnType _pObjectAreaTargetSelectHandlerScript, uint8 _effIndex, uint16 _targetType) : SpellScript::ObjectAreaTargetSelectHandler((SpellScript::SpellObjectAreaTargetSelectFnType)_pObjectAreaTargetSelectHandlerScript, _effIndex, _targetType) {} }; \
 
         #define PrepareSpellScript(CLASSNAME) SPELLSCRIPT_FUNCTION_TYPE_DEFINES(CLASSNAME) SPELLSCRIPT_FUNCTION_CAST_DEFINES(CLASSNAME)
     public:
@@ -270,8 +270,8 @@ class SpellScript : public _SpellScript
 
         // example: OnUnitTargetSelect += SpellUnitTargetFn(class::function, EffectIndexSpecifier, TargetsNameSpecifier);
         // where function is void function(std::list<Unit*>& targetList)
-        HookList<UnitTargetHandler> OnUnitTargetSelect;
-        #define SpellUnitTargetFn(F, I, N) UnitTargetHandlerFunction(&F, I, N)
+        HookList<ObjectAreaTargetSelectHandler> OnObjectAreaTargetSelect;
+        #define SpellObjectAreaTargetSelectFn(F, I, N) ObjectAreaTargetSelectHandlerFunction(&F, I, N)
 
         // hooks are executed in following order, at specified event of spell:
         // 1. BeforeCast - executed when spell preparation is finished (when cast bar becomes full) before cast is handled

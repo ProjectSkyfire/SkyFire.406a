@@ -1776,15 +1776,15 @@ class DeathPlagueTargetSelector
     public:
         explicit DeathPlagueTargetSelector(Unit* caster) : _caster(caster) {}
 
-        bool operator()(Unit* unit)
+        bool operator()(WorldObject* object) const
         {
-            if (unit == _caster)
+            if (object == _caster)
                 return true;
 
-            if (unit->GetTypeId() != TYPEID_PLAYER)
+            if (object->GetTypeId() != TYPEID_PLAYER)
                 return true;
 
-            if (unit->HasAura(SPELL_RECENTLY_INFECTED) || unit->HasAura(SPELL_DEATH_PLAGUE_AURA))
+            if (object->ToUnit()->HasAura(SPELL_RECENTLY_INFECTED) || object->ToUnit()->HasAura(SPELL_DEATH_PLAGUE_AURA))
                 return true;
 
             return false;
@@ -1810,25 +1810,25 @@ class spell_frost_giant_death_plague : public SpellScriptLoader
             }
 
             // First effect
-            void CountTargets(std::list<Unit*>& unitList)
+            void CountTargets(std::list<WorldObject*>& targets)
             {
-                unitList.remove(GetCaster());
-                _failed = unitList.empty();
+                targets.remove(GetCaster());
+                _failed = targets.empty();
             }
 
             // Second effect
-            void FilterTargets(std::list<Unit*>& unitList)
+            void FilterTargets(std::list<WorldObject*>& targets)
             {
                 // Select valid targets for jump
-                unitList.remove_if (DeathPlagueTargetSelector(GetCaster()));
-                if (!unitList.empty())
+                targets.remove_if (DeathPlagueTargetSelector(GetCaster()));
+                if (!targets.empty())
                 {
-                    Unit* target = SelectRandomContainerElement(unitList);
-                    unitList.clear();
-                    unitList.push_back(target);
+                    WorldObject* target = SelectRandomContainerElement(targets);
+                    targets.clear();
+                    targets.push_back(target);
                 }
 
-                unitList.push_back(GetCaster());
+                targets.push_back(GetCaster());
             }
 
             void HandleScript(SpellEffIndex effIndex)
@@ -1842,8 +1842,8 @@ class spell_frost_giant_death_plague : public SpellScriptLoader
 
             void Register()
             {
-                OnUnitTargetSelect += SpellUnitTargetFn(spell_frost_giant_death_plague_SpellScript::CountTargets, EFFECT_0, TARGET_UNIT_SRC_AREA_ALLY);
-                OnUnitTargetSelect += SpellUnitTargetFn(spell_frost_giant_death_plague_SpellScript::FilterTargets, EFFECT_1, TARGET_UNIT_SRC_AREA_ALLY);
+                OnObjectAreaTargetSelect += SpellObjectAreaTargetSelectFn(spell_frost_giant_death_plague_SpellScript::CountTargets, EFFECT_0, TARGET_UNIT_SRC_AREA_ALLY);
+                OnObjectAreaTargetSelect += SpellObjectAreaTargetSelectFn(spell_frost_giant_death_plague_SpellScript::FilterTargets, EFFECT_1, TARGET_UNIT_SRC_AREA_ALLY);
                 OnEffectHitTarget += SpellEffectFn(spell_frost_giant_death_plague_SpellScript::HandleScript, EFFECT_1, SPELL_EFFECT_SCRIPT_EFFECT);
             }
 
@@ -1892,9 +1892,11 @@ class spell_icc_harvest_blight_specimen : public SpellScriptLoader
 class AliveCheck
 {
     public:
-        bool operator()(Unit* unit)
+        bool operator()(WorldObject* object) const
         {
-            return unit->isAlive();
+            if (Unit* unit = object->ToUnit())
+                return unit->isAlive();
+            return true;
         }
 };
 
@@ -1907,10 +1909,10 @@ class spell_svalna_revive_champion : public SpellScriptLoader
         {
             PrepareSpellScript(spell_svalna_revive_champion_SpellScript);
 
-            void RemoveAliveTarget(std::list<Unit*>& unitList)
+            void RemoveAliveTarget(std::list<WorldObject*>& targets)
             {
-                unitList.remove_if (AliveCheck());
-                SkyFire::RandomResizeList(unitList, 2);
+                targets.remove_if (AliveCheck());
+                SkyFire::RandomResizeList(targets, 2);
             }
 
             void Land(SpellEffIndex /*effIndex*/)

@@ -235,7 +235,7 @@ class spell_sha_bloodlust : public SpellScriptLoader
                 return true;
             }
 
-            void RemoveInvalidTargets(std::list<Unit*>& targets)
+            void RemoveInvalidTargets(std::list<WorldObject*>& targets)
             {
                 targets.remove_if (SkyFire::UnitAuraCheck(true, SHAMAN_SPELL_SATED));
             }
@@ -247,9 +247,9 @@ class spell_sha_bloodlust : public SpellScriptLoader
 
             void Register()
             {
-                OnUnitTargetSelect += SpellUnitTargetFn(spell_sha_bloodlust_SpellScript::RemoveInvalidTargets, EFFECT_0, TARGET_UNIT_CASTER_AREA_RAID);
-                OnUnitTargetSelect += SpellUnitTargetFn(spell_sha_bloodlust_SpellScript::RemoveInvalidTargets, EFFECT_1, TARGET_UNIT_CASTER_AREA_RAID);
-                OnUnitTargetSelect += SpellUnitTargetFn(spell_sha_bloodlust_SpellScript::RemoveInvalidTargets, EFFECT_2, TARGET_UNIT_CASTER_AREA_RAID);
+                OnObjectAreaTargetSelect += SpellObjectAreaTargetSelectFn(spell_sha_bloodlust_SpellScript::RemoveInvalidTargets, EFFECT_0, TARGET_UNIT_CASTER_AREA_RAID);
+                OnObjectAreaTargetSelect += SpellObjectAreaTargetSelectFn(spell_sha_bloodlust_SpellScript::RemoveInvalidTargets, EFFECT_1, TARGET_UNIT_CASTER_AREA_RAID);
+                OnObjectAreaTargetSelect += SpellObjectAreaTargetSelectFn(spell_sha_bloodlust_SpellScript::RemoveInvalidTargets, EFFECT_2, TARGET_UNIT_CASTER_AREA_RAID);
                 AfterHit += SpellHitFn(spell_sha_bloodlust_SpellScript::ApplyDebuff);
             }
         };
@@ -276,9 +276,9 @@ class spell_sha_heroism : public SpellScriptLoader
                 return true;
             }
 
-            void RemoveInvalidTargets(std::list<Unit*>& targets)
+            void RemoveInvalidTargets(std::list<WorldObject*>& targets)
             {
-                targets.remove_if (SkyFire::UnitAuraCheck(true, SHAMAN_SPELL_EXHAUSTION));
+                targets.remove_if(SkyFire::UnitAuraCheck(true, SHAMAN_SPELL_EXHAUSTION));
             }
 
             void ApplyDebuff()
@@ -288,9 +288,9 @@ class spell_sha_heroism : public SpellScriptLoader
 
             void Register()
             {
-                OnUnitTargetSelect += SpellUnitTargetFn(spell_sha_heroism_SpellScript::RemoveInvalidTargets, EFFECT_0, TARGET_UNIT_CASTER_AREA_RAID);
-                OnUnitTargetSelect += SpellUnitTargetFn(spell_sha_heroism_SpellScript::RemoveInvalidTargets, EFFECT_1, TARGET_UNIT_CASTER_AREA_RAID);
-                OnUnitTargetSelect += SpellUnitTargetFn(spell_sha_heroism_SpellScript::RemoveInvalidTargets, EFFECT_2, TARGET_UNIT_CASTER_AREA_RAID);
+                OnObjectAreaTargetSelect += SpellObjectAreaTargetSelectFn(spell_sha_heroism_SpellScript::RemoveInvalidTargets, EFFECT_0, TARGET_UNIT_CASTER_AREA_RAID);
+                OnObjectAreaTargetSelect += SpellObjectAreaTargetSelectFn(spell_sha_heroism_SpellScript::RemoveInvalidTargets, EFFECT_1, TARGET_UNIT_CASTER_AREA_RAID);
+                OnObjectAreaTargetSelect += SpellObjectAreaTargetSelectFn(spell_sha_heroism_SpellScript::RemoveInvalidTargets, EFFECT_2, TARGET_UNIT_CASTER_AREA_RAID);
                 AfterHit += SpellHitFn(spell_sha_heroism_SpellScript::ApplyDebuff);
             }
         };
