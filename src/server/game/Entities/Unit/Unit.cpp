@@ -8182,45 +8182,36 @@ bool Unit::HandleAuraProc(Unit* victim, uint32 damage, Aura* triggeredByAura, Sp
         }
         case SPELLFAMILY_PRIEST:
         {
-            if (!procSpell)
-                return false;
-
-            switch (procSpell->Id)
+            if (dummySpell->Id == 14751) // Chakra
             {
-                case 2050:
-                case 2060:
-                case 2061:
-                case 32546:
+                switch (procSpell->Id)
                 {
-                    if (HasAura(14751))
+                    case 2050:  // Heal
+                    case 2060:  // Greater heal
+                    case 2061:  // Flash Heal
+                    case 32546: // Binding Heal
                     {
+                        *handled = true;
                         CastSpell(this, 81208, true);  // Chakra: Serenity
-                        *handled = true;
-                        break;
+                        return true;
                     }
-                }
-                case 33076:
-                case 596:
-                {
-                    if (HasAura(14751))
+                    case 33076: // Prayer of Mending
+                    case 596:   // Prayer of Healing
                     {
-                        CastSpell(this, 81206, true); // Chakra: Sanctuary
                         *handled = true;
-                        break;
+                        CastSpell(this, 81206, true);  // Chakra: Sanctuary
+                        return true;
                     }
-                }
-                case 585:
-                case 73510:
-                {
-                    if (HasAura(14751))
+                    case 585:   // Smite
+                    case 73510: // Mind Spike
                     {
-                        CastSpell(this, 81209, true); // Chakra: Chastise
                         *handled = true;
-                        break;
+                        CastSpell(this, 81209, true);  // Chakra: Chastise
+                        return true;
                     }
                 }
-                break;
             }
+            break;
         }
         case SPELLFAMILY_PALADIN:
         {
@@ -9219,6 +9210,16 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
             if (!(procSpell->SpellFamilyFlags[0] & 0x00000001))
                 return false;
             break;
+        }
+        // Chakra: Serenity should proc only on direct heals
+        case 81208:
+        {
+            for (uint32 i = 0; i < MAX_SPELL_EFFECTS; i++)
+            {
+                if (procSpell->Effects[i].Effect == SPELL_EFFECT_HEAL)
+                    return true;
+            }
+            return false;
         }
         // Culling the Herd
         case 70893:

@@ -62,6 +62,7 @@ public:
                 return false;
             return true;
         }
+
         bool Load()
         {
             if (GetCaster()->GetTypeId() != TYPEID_PLAYER)
