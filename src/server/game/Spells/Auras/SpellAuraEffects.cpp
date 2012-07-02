@@ -388,7 +388,7 @@ pAuraEffectHandler AuraEffectHandler[TOTAL_AURAS]=
     &AuraEffect::HandleModCanCastWhileWalking,                    // 330 - SPELL_AURA_ALLOW_CAST_WHILE_MOVING
     &AuraEffect::HandleNULL,                                      // 331 - Weather related.
     &AuraEffect::HandleAuraSwapSpells,                            // 332 - SPELL_AURA_SWAP_SPELLS ( old - SPELL_AURA_OVERRIDE_ACTIONBAR_SPELLS_1 )
-    &AuraEffect::HandleModTrapLauncher,                           // 333 - SPELL_AURA_MOD_TRAP_LAUNCHER
+    &AuraEffect::HandleAuraSwapSpells,                            // 333 - SPELL_AURA_SWAP_SPELLS_2
     &AuraEffect::HandleNULL,                                      // 334 - deal damage in x range. X - Aura Effect value.
     &AuraEffect::HandleNULL,                                      // 335 - something with invisibility.
     &AuraEffect::HandleNULL,                                      // 336 - disallow flight.
@@ -6194,51 +6194,41 @@ void AuraEffect::HandleAuraSwapSpells(AuraApplication const * aurApp, uint8 mode
         return;
 
     Player* target = aurApp->GetTarget()->ToPlayer();
-    if (!target || !target->IsInWorld())
+
+    if (!target)
         return;
 
-    uint32 overrideId = GetAmount();
-    if (!overrideId)
-        return;
+    uint32 newSpellId = uint32(GetAmount());
+    bool foundAny = false;
+    PlayerSpellMap const& spells = target->GetSpellMap();
 
-    SpellEntry const* spell = sSpellStore.LookupEntry(overrideId);
-    if (!spell)
-        return;
-
-    uint32 affspell = 0;
-
-    PlayerSpellMap spellMap = target->GetSpellMap();
-    for (PlayerSpellMap::const_iterator itr = spellMap.begin(); itr != spellMap.end(); ++itr)
+    for (PlayerSpellMap::const_iterator itr = spells.begin(); itr != spells.end(); ++itr)
     {
-        SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(itr->first);
-        if (!spellInfo)
+        if (itr->second->state == PLAYERSPELL_REMOVED)
             continue;
 
-        if (overrideId != itr->first && (spellInfo->SpellFamilyFlags & GetSpellInfo()->Effects[GetEffIndex()].SpellClassMask))
-        {
-            affspell = itr->first;
-            break;
-        }
+        if (!itr->second->active || itr->second->disabled)
+            continue;
+
+        SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(itr->first);
+
+        if (!(spellInfo->SpellFamilyFlags & GetSpellInfo()->Effects[GetEffIndex()].SpellClassMask))
+            continue;
+
+        foundAny = true;
+
+        if (apply)
+            target->AddSpellSwap(itr->first, newSpellId);
+        else
+            target->RemoveSpellSwap(itr->first);
     }
 
-    if (!affspell)
-        return;
-
-    if (apply)
+    if (foundAny)
     {
-        target->AddTemporarySpell(overrideId);
-        WorldPacket data(SMSG_SUPERCEDED_SPELL, 4 + 4); // Wrong opcode, we have to find the good one
-        data << uint32(affspell);
-        data << uint32(overrideId);
-        target->GetSession()->SendPacket(&data);
-    }
-    else
-    {
-        target->RemoveTemporarySpell(overrideId);
-        WorldPacket data(SMSG_SUPERCEDED_SPELL, 4 + 4); // Wrong opcode, we have to find the good one
-        data << uint32(overrideId);
-        data << uint32(affspell);
-        target->GetSession()->SendPacket(&data);
+        if (apply)
+            target->AddTemporarySpell(newSpellId);
+        else
+            target->RemoveTemporarySpell(newSpellId);
     }
 }
 

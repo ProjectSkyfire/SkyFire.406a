@@ -3050,6 +3050,10 @@ void SpellMgr::LoadSpellCustomAttr()
                 spellInfo->Effects[0].RadiusEntry = sSpellRadiusStore.LookupEntry(14);
                 spellInfo->Effects[1].RadiusEntry = sSpellRadiusStore.LookupEntry(14);
                 break;
+            case 88667: // Holy Word: Sanctuary
+            case 88668: // Holy Word: Sanctuary
+                spellInfo->SpellFamilyName = SPELLFAMILY_PRIEST;
+                break;
             case 87193: // Paralysis
             case 87194:
                 spellInfo->Effects[0].ApplyAuraName = SPELL_AURA_MOD_ROOT;

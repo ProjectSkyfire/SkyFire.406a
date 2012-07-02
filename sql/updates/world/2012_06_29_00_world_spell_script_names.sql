@@ -3,13 +3,13 @@ DELETE FROM `spell_proc_event` WHERE `entry` = 14751;
 INSERT INTO `spell_proc_event` (`entry`, `SchoolMask`, `SpellFamilyName`, `SpellFamilyMask0`, `SpellFamilyMask1`, `SpellFamilyMask2`, `procFlags`, `procEx`, `ppmRate`, `CustomChance`, `Cooldown`) 
 VALUES (14751, 6, 6, 7808, 18, 2710, 0, 0, 0, 0, 0);
 
-DELETE FROM `spell_script_names` WHERE `spell_id` IN (81208,81585,81206,88685,88687);
+DELETE FROM `spell_script_names` WHERE `spell_id` IN (81208,81585,81206,88685,88667,88687);
 INSERT INTO `spell_script_names` VALUES
 (81208,'spell_pri_chakra_swap_supressor'),
 (81585,'spell_pri_chakra_serenity_proc'),
 (81206,'spell_pri_chakra_swap_supressor'),
 (88685,'spell_pri_chakra_sanctuary_heal'),
-(88687,'spell_pri_chakra_sanctuary_heal');
+(88667,'spell_pri_chakra_sanctuary_heal');
 
 DELETE FROM `spell_linked_spell` WHERE `spell_trigger` IN (81206);
 INSERT INTO `spell_linked_spell` VALUES
