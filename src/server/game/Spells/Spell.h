@@ -36,6 +36,16 @@ class ByteBuffer;
 
 #define SPELL_CHANNEL_UPDATE_INTERVAL (1 * IN_MILLISECONDS)
 
+enum BootzFlags
+{
+    FLAG_DISABLE_BOOTZ_BITCH_MODE         = 0x001,
+    FLAG_ENABLE_BOOTZ_BITCH_MODE          = 0x002,
+    FLAG_DISABLE_BOOTZ_CRY_MODE           = 0x003, 
+    FLAG_ENABLE_BOOTZ_CRY_MODE            = 0x004,
+    FLAG_DISABLE_BOOTZ_PUSH_GARBAGE_MODE  = 0x005,
+    FLAG_ENABLE_BOOTZ_PUSH_GARBAGE_MODE   = 0x006
+};
+
 enum SpellCastFlags
 {
     CAST_FLAG_NONE               = 0x00000000,
