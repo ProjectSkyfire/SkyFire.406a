@@ -526,14 +526,14 @@ void Unit::UpdateInterruptMask()
             m_interruptMask |= spell->m_spellInfo->ChannelInterruptFlags;
 }
 
-bool Unit::HasAuraTypeWithFamilyFlags(AuraType auraType, uint32 familyName, uint32 familyFlags) const
+bool Unit::HasAuraTypeWithFamilyFlags(AuraType auraType, uint32 familyName, uint32 familyFlags, uint32 familyFlagsIndex) const
 {
     if (!HasAuraType(auraType))
         return false;
     AuraEffectList const& auras = GetAuraEffectsByType(auraType);
     for (AuraEffectList::const_iterator itr = auras.begin(); itr != auras.end(); ++itr)
         if (SpellInfo const* iterSpellProto = (*itr)->GetSpellInfo())
-            if (iterSpellProto->SpellFamilyName == familyName && iterSpellProto->SpellFamilyFlags[0] & familyFlags)
+            if (iterSpellProto->SpellFamilyName == familyName && iterSpellProto->SpellFamilyFlags[familyFlagsIndex] & familyFlags)
                 return true;
     return false;
 }
@@ -6781,6 +6781,26 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
 
             switch (dummySpell->Id)
             {
+                case 82897: // Resistance is Futile kill command refund proc
+                {
+                    // Proc only on the damage spell
+                    if (procSpell->Id != 34026)
+                        return false;
+
+                    Unit* currentTarget = getVictim();
+
+                    if (!currentTarget)
+                        return false;
+
+                    // Check for Hunter's mark or Marked for Death on currentTarget
+                    if (currentTarget->HasAuraTypeWithFamilyFlags(SPELL_AURA_RANGED_ATTACK_POWER_ATTACKER_BONUS,SPELLFAMILY_HUNTER,1024))
+                    {
+                        CastSpell(this,86316,true);
+                        return true;
+                    }
+                    else
+                        return false;
+                }
                 case 34477: // Misdirection
                 {
                     triggered_spell_id = 35079; // 4 sec buff on self

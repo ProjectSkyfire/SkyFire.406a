@@ -3256,6 +3256,10 @@ void SpellMgr::LoadSpellCustomAttr()
                 // add corruption to affected spells
                 spellInfo->Effects[1].SpellClassMask[0] |= 2;
                 break;
+            case 687:   // Demon Armor's correct swap spellid for nether ward
+            case 28176: // Fel Armor's correct swap spellid for nether ward
+                spellInfo->Effects[2].BasePoints = 91711;
+                break;
             case 51852: // The Eye of Acherus (no spawn in phase 2 in db)
                 spellInfo->Effects[0].MiscValue |= 1;
                 break;

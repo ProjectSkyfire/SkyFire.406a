@@ -2784,19 +2784,6 @@ void AuraEffect::HandleAuraUntrackable(AuraApplication const* aurApp, uint8 mode
 /***  SKILLS & TALENTS    ***/
 /****************************/
 
-//TODO: Finish this aura
-void AuraEffect::HandleModTrapLauncher(AuraApplication const *aurApp, uint8 mode, bool apply) const
-{
-    /*if (!(mode & AURA_EFFECT_HANDLE_SEND_FOR_CLIENT_MASK))
-        return;
-
-    Unit *target = aurApp->GetTarget();
-
-    if (apply)
-    {
-        target->CastSpell(target, 77769, true);  // Trap Launcher*/
-}
-
 void AuraEffect::HandleAuraModPetTalentsPoints(AuraApplication const* aurApp, uint8 mode, bool /*apply*/) const
 {
     if (!(mode & AURA_EFFECT_HANDLE_CHANGE_AMOUNT_MASK))
@@ -6212,7 +6199,7 @@ void AuraEffect::HandleAuraSwapSpells(AuraApplication const * aurApp, uint8 mode
 
         SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(itr->first);
 
-        if (!(spellInfo->SpellFamilyFlags & GetSpellInfo()->Effects[GetEffIndex()].SpellClassMask))
+        if (!IsAffectedOnSpell(spellInfo))
             continue;
 
         foundAny = true;
