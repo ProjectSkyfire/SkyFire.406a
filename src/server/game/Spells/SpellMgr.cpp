@@ -3600,7 +3600,11 @@ void SpellMgr::LoadSpellCustomAttr()
                 spellInfo->AttributesCu |= SPELL_EFFECT_CHARGE;
                 spellInfo->Effects[1].TargetA = TARGET_UNIT_TARGET_ENEMY;
                 spellInfo->Effects[0].BasePoints = 20*1000;
-            break;
+                break;
+            case 30294: // Soul Leech
+                spellInfo->Effects[0].BasePoints = 2;
+                spellInfo->Effects[1].BasePoints = 2;
+                break;
             case 1776:  // Gouge
             case 12540:
             case 13579:

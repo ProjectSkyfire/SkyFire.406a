@@ -5183,17 +5183,14 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
         {
             switch (dummySpell->Id)
             {
-                // Bloodworms Health Leech
-                case 50453:
+                // Impending doom
+                case 85106:
+                case 85107:
+                case 85108:
                 {
-                    if (Unit* owner = GetOwner())
-                    {
-                        basepoints0 = int32(damage * 1.50f);
-                        target = owner;
-                        triggered_spell_id = 50454;
-                        break;
-                    }
-                    return false;
+                    target = this;
+                    triggered_spell_id = 47241;
+                    break;
                 }
                 // Eye for an Eye
                 case 9799:  // Rank1 (http://www.wowhead.com/spell=9799)
@@ -5524,7 +5521,16 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                 // Glyph of Scourge Strike
                 case 58642:
                 {
-                    triggered_spell_id = 69961; // Glyph of Scourge Strike
+                    triggered_spell_id = 69961;
+                    break;
+                }
+                // Glyph of Spirit Tap
+                if (dummySpell->Id == 63237)
+                {
+                    if (damage < victim->GetHealth())
+                        return false;
+
+                    triggered_spell_id = 81301;
                     break;
                 }
                 // Glyph of Life Tap
@@ -6109,40 +6115,6 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                 {
                     target = this;
                     triggered_spell_id = 17941;
-                    break;
-                }
-                // Soul Leech
-                case 30293:
-                case 30295:
-                case 30296:
-                {
-                    // Improved Soul Leech
-                    AuraEffectList const& SoulLeechAuras = GetAuraEffectsByType(SPELL_AURA_DUMMY);
-                    for (Unit::AuraEffectList::const_iterator i = SoulLeechAuras.begin(); i != SoulLeechAuras.end(); ++i)
-                    {
-                        if ((*i)->GetId() == 54118)
-                        {
-                            if ((*i)->GetEffIndex() != 0)
-                                continue;
-
-                            basepoints0 = int32((*i)->GetAmount());
-                            target = GetGuardianPet();
-                            if (target)
-                                CastCustomSpell(target, 54607, &basepoints0, NULL, NULL, true, castItem, triggeredByAura); // regen mana for pet
-
-                            // regen mana for caster
-                            CastCustomSpell(this, 59117, &basepoints0, NULL, NULL, true, castItem, triggeredByAura);
-                            // Get second aura of spell for replenishment effect on party
-                            if (AuraEffect const* aurEff = (*i)->GetBase()->GetEffect(EFFECT_1))
-                                if (roll_chance_i(aurEff->GetAmount()))     // Replenishment - roll chance
-                                    CastSpell(this, 57669, true, castItem, triggeredByAura);
-                            break;
-                        }
-                    }
-                    // health
-                    basepoints0 = CalculatePctN(int32(damage), triggerAmount);
-                    target = this;
-                    triggered_spell_id = 30294;
                     break;
                 }
                 // Shadowflame (Voidheart Raiment set bonus)
@@ -8769,6 +8741,13 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
     // Custom triggered spells
     switch (auraSpellInfo->Id)
     {
+        // Soul Leech, Replenishment
+        case 30293:
+        case 30295:
+        {
+            CastSpell(this, 57669, true);
+            break;
+        }
         // Deep Wounds
         case 12834:
         case 12849:
