@@ -540,11 +540,12 @@ public:
         void HandleDummy(SpellEffIndex /*effIndex*/)
         {
             Unit* pet = GetCaster()->GetGuardianPet();
+            Unit* target = pet->getVictim();
 
-            if (!pet)
+            if (!pet || !target)
                 return;
 
-            pet->CastSpell(pet->getVictim(), HUNTER_SPELL_KILL_COMMAND_TRIGGER, true);
+            pet->CastSpell(target, HUNTER_SPELL_KILL_COMMAND_TRIGGER, true);
         }
 
         void Register()
@@ -727,6 +728,45 @@ public:
     }
 };
 
+// 83676 Resistance is Futile 
+class spell_hun_resistance_is_futile : public SpellScriptLoader
+{
+public:
+    spell_hun_resistance_is_futile() : SpellScriptLoader("spell_hun_resistance_is_futile") { }
+
+    class spell_hun_resistance_is_futile_AuraScript : public AuraScript
+    {
+        PrepareAuraScript(spell_hun_resistance_is_futile_AuraScript)
+
+        void HandlePeriodic(AuraEffect const* aurEff)
+        {
+            Unit* auraBearer = GetUnitOwner();
+            Unit* playerTarget = GetCaster();
+
+            if (!auraBearer || !playerTarget)
+                return;
+
+            AuraEffect const* resistanceIsFutileTalent = playerTarget->GetDummyAuraEffect(SPELLFAMILY_HUNTER,5119,0);
+
+            if (!resistanceIsFutileTalent)
+                return;
+
+            if (auraBearer->isMoving() && roll_chance_i(resistanceIsFutileTalent->GetAmount()))
+                playerTarget->CastSpell(playerTarget,82897,true);
+        }
+
+        void Register()
+        {
+            OnEffectPeriodic += AuraEffectPeriodicFn(spell_hun_resistance_is_futile_AuraScript::HandlePeriodic, EFFECT_0, SPELL_AURA_PERIODIC_TRIGGER_SPELL);
+        }
+    };
+
+    AuraScript* GetAuraScript() const
+    {
+        return new spell_hun_resistance_is_futile_AuraScript();
+    }
+};
+
 void AddSC_hunter_spell_scripts()
 {
     new spell_hun_chimera_shot();
@@ -742,4 +782,5 @@ void AddSC_hunter_spell_scripts()
     new spell_hun_kill_command();
     new spell_hun_focus_fire();
     new spell_hun_frenzy_effect();
+    new spell_hun_resistance_is_futile();
 }

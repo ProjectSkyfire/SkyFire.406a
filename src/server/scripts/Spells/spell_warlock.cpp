@@ -42,6 +42,7 @@ enum WarlockSpells
     WARLOCK_DEMONIC_CIRCLE_SUMMON           = 48018,
     WARLOCK_DEMONIC_CIRCLE_TELEPORT         = 48020,
     WARLOCK_DEMONIC_CIRCLE_ALLOW_CAST       = 62388,
+    WARLOCK_NETHER_WARD                     = 91713,
 };
 
 class spell_warl_banish : public SpellScriptLoader
@@ -523,6 +524,36 @@ public:
     }
 };
 
+// 687,28176 Demon armor and Fel armor swap controller
+class spell_warl_nether_ward_swap_supressor: public SpellScriptLoader
+{
+public:
+    spell_warl_nether_ward_swap_supressor() : SpellScriptLoader("spell_warl_nether_ward_swap_supressor") {}
+
+    class spell_warl_nether_ward_swap_supressor_SpellScript : public SpellScript
+    {
+        PrepareSpellScript(spell_warl_nether_ward_swap_supressor_SpellScript);
+
+        void PreventSwapApplicationOnCaster(WorldObject*& target)
+        {
+            // If the warlock doesnt have the Nether Ward talent,
+            // do not allow the swap effect to hit the warlock
+            if (!GetCaster()->HasAura(WARLOCK_NETHER_WARD))
+                target = NULL;
+        }
+
+        void Register()
+        {
+            OnObjectTargetSelect += SpellObjectTargetSelectFn(spell_warl_nether_ward_swap_supressor_SpellScript::PreventSwapApplicationOnCaster, EFFECT_2, TARGET_UNIT_CASTER);
+        }
+    };
+
+    SpellScript* GetSpellScript() const
+    {
+        return new spell_warl_nether_ward_swap_supressor_SpellScript();
+    }
+};
+
 void AddSC_warlock_spell_scripts()
 {
     new spell_warl_banish();
@@ -536,4 +567,5 @@ void AddSC_warlock_spell_scripts()
     new spell_warl_drain_soul();
     new spell_warl_demonic_circle_summon();
     new spell_warl_demonic_circle_teleport();
+    new spell_warl_nether_ward_swap_supressor();
 }
