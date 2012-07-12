@@ -2777,7 +2777,8 @@ class Player : public Unit, public GridObject<Player>
         uint64 m_resurrectGUID;
         uint32 m_resurrectMap;
         float m_resurrectX, m_resurrectY, m_resurrectZ;
-        uint32 _resurrectHealth, _resurrectMana;
+        uint32 _resurrectHealth;
+        int32 _resurrectMana;
 
         WorldSession *m_session;
 

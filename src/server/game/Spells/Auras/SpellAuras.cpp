@@ -945,6 +945,10 @@ bool Aura::CanBeSaved() const
     if (GetId() == 44413)
         return false;
 
+    // When a druid logs in on retail, he doesnt have either eclipse power, nor the marker auras, nor the eclipse buffs, dont save them
+    if (GetId() == 67483 || GetId() == 67484 || GetId() == 48517 || GetId() == 48518)
+        return false;
+
     // don't save auras removed by proc system
     if (IsUsingCharges() && !GetCharges())
         return false;
@@ -1683,6 +1687,9 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                 case 1130:  // Hunter's Mark
                 case 88691: // Marked for Death
                 {
+                    if (!caster || !target)
+                        return;
+
                     // Resistance is Futile
                     if (caster->HasAura(82893) || caster->HasAura(82894))
                     {
@@ -1845,6 +1852,19 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                     else
                         caster->RemoveAurasDueToSpell(100001);
                 }
+            }
+            break;
+        case SPELLFAMILY_DRUID:
+            // Solar Eclipse Sunfire check
+            if (GetSpellInfo()->Id == 48517)
+            {
+                if (!caster)
+                    return;
+                                    // Sunfire talent
+                if (apply && caster->HasAura(93401))
+                    caster->CastSpell(caster,94338,true); // Moonfire swapper
+                else
+                    caster->RemoveAurasDueToSpell(94338);
             }
             break;
     }

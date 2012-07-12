@@ -26,8 +26,20 @@
 
 void HomeMovementGenerator<Creature>::Initialize(Creature & owner)
 {
+    owner.RemoveUnitMovementFlag(MOVEMENTFLAG_WALKING);
     owner.AddUnitState(UNIT_STATE_EVADE);
     _setTargetLocation(owner);
+}
+
+void HomeMovementGenerator<Creature>::Finalize(Creature& owner)
+{
+    if (arrived)
+    {
+        owner.ClearUnitState(UNIT_STATE_EVADE);
+        owner.SetWalk(true);
+        owner.LoadCreaturesAddon(true);
+        owner.AI()->JustReachedHome();
+    }
 }
 
 void HomeMovementGenerator<Creature>::Reset(Creature &)
@@ -41,12 +53,14 @@ void HomeMovementGenerator<Creature>::_setTargetLocation(Creature & owner)
 
     Movement::MoveSplineInit init(owner);
     float x, y, z, o;
+    
     // at apply we can select more nice return points base at current movegen
-    //if (owner.GetMotionMaster()->empty() || !owner.GetMotionMaster()->top()->GetResetPosition(owner, x, y, z))
-    //{
-    owner.GetHomePosition(x, y, z, o);
-    init.SetFacing(o);
-    //}
+    if (owner.GetMotionMaster()->empty() || !owner.GetMotionMaster()->top()->GetResetPosition(owner,x,y,z))
+    {
+        owner.GetHomePosition(x, y, z, o);
+        init.SetFacing(o);
+    }
+    
     init.MoveTo(x, y, z, true);
     init.SetWalk(false);
     init.Launch();
@@ -59,15 +73,4 @@ bool HomeMovementGenerator<Creature>::Update(Creature &owner, const uint32 time_
 {
     arrived = owner.movespline->Finalized();
     return !arrived;
-}
-
-void HomeMovementGenerator<Creature>::Finalize(Creature& owner)
-{
-    if (arrived)
-    {
-        owner.ClearUnitState(UNIT_STATE_EVADE);
-        owner.SetWalk(true);
-        owner.LoadCreaturesAddon(true);
-        owner.AI()->JustReachedHome();
-    }
 }
