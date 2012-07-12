@@ -14,8 +14,6 @@ file(GLOB_RECURSE sources *.cpp *.h)
 add_definitions(-DNO_CORE_FUNCS)
 add_definitions(-DDEBUG)
 add_definitions(-DNO_vsnprintf)
-add_definitions("-ggdb") 
-add_definitions("-O3") 
 
 include_directories(
   ${CMAKE_BINARY_DIR}
