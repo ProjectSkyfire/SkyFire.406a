@@ -268,7 +268,7 @@ bool Pet::LoadPetFromDB(Player* owner, uint32 petentry, uint32 petnumber, bool c
         else
         {
             SetHealth(savedhealth > GetMaxHealth() ? GetMaxHealth() : savedhealth);
-            SetPower(POWER_MANA, savedmana > GetMaxPower(POWER_MANA) ? GetMaxPower(POWER_MANA) : savedmana);
+            SetPower(POWER_MANA, savedmana > uint32(GetMaxPower(POWER_MANA)) ?uint32(GetMaxPower(POWER_MANA)) : savedmana);
         }
     }
 
