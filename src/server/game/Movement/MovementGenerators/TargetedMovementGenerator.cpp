@@ -85,7 +85,8 @@ void TargetedMovementGeneratorMedium<T, D>::_setTargetLocation(T &owner)
     D::_addUnitStateMove(owner);
     i_targetReached = false;
     i_recalculateTravel = false;
-
+    owner.AddUnitState(UNIT_STATE_CHASE);
+    
     Movement::MoveSplineInit init(owner);
     init.MovebyPath(i_path->getPath());
     init.SetWalk(((D*)this)->EnableWalking());
@@ -124,7 +125,7 @@ bool TargetedMovementGeneratorMedium<T, D>::Update(T &owner, const uint32 & time
     if (!i_target.isValid() || !i_target->IsInWorld())
         return false;
 
-    if (!owner.isAlive())
+    if (!&owner || !owner.isAlive())
         return true;
 
     if (owner.HasUnitState(UNIT_STATE_NOT_MOVE))
@@ -151,13 +152,10 @@ bool TargetedMovementGeneratorMedium<T, D>::Update(T &owner, const uint32 & time
     i_recheckDistance.Update(time_diff);
     if (i_recheckDistance.Passed())
     {
-        i_recheckDistance.Reset(50);
+        i_recheckDistance.Reset(100);
+        
         //More distance let have better performance, less distance let have more sensitive reaction at target move.
-      /*  float allowed_dist = i_target->GetObjectSize() + owner.GetObjectSize() + MELEE_RANGE - 0.5f;
-        float dist = (owner.movespline->FinalDestination() - G3D::Vector3(i_target->GetPositionX(),i_target->GetPositionY(),i_target->GetPositionZ())).squaredLength();
-        if (dist >= allowed_dist * allowed_dist)*/
-
-        float allowed_dist = owner.GetObjectSize() + MELEE_RANGE - 0.5f;
+        float allowed_dist = owner.GetCombatReach() + sWorld->getRate(RATE_TARGET_POS_RECALCULATION_RANGE);
         G3D::Vector3 dest = owner.movespline->FinalDestination();
 
         bool targetMoved = false;

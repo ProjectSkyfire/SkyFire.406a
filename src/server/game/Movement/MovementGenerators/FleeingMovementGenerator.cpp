@@ -322,7 +322,8 @@ FleeingMovementGenerator<T>::Initialize(T &owner)
         return;
 
     owner.SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_FLEEING);
-    owner.AddUnitState(UNIT_STATE_FLEEING|UNIT_STATE_FLEEING_MOVE);
+    owner.AddUnitState(UNIT_STATE_FLEEING | UNIT_STATE_FLEEING_MOVE);
+    owner.SetTarget(0);
     owner.StopMoving();
 
     /*_Init(owner);
