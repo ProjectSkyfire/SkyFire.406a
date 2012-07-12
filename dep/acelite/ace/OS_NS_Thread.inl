@@ -1,6 +1,6 @@
 // -*- C++ -*-
 //
-// $Id: OS_NS_Thread.inl 92682 2010-11-23 23:41:19Z shuston $
+// $Id: OS_NS_Thread.inl 95761 2012-05-15 18:23:04Z johnnyw $
 
 #include "ace/OS_NS_macros.h"
 // for timespec_t, perhaps move it to os_time.h
@@ -45,7 +45,11 @@ void **&
 ACE_TSS_Emulation::tss_base ()
 {
 #    if defined (ACE_HAS_VXTHREADS)
+  #if (ACE_VXWORKS <= 0x680)
   int &spare = taskIdCurrent->ACE_VXWORKS_SPARE;
+  #else // VxWorks 6.9 updated datatype (WIND00241209) see taskLib.h
+  long  &spare = taskIdCurrent->ACE_VXWORKS_SPARE;
+  #endif
   return reinterpret_cast <void **&> (spare);
 #    else
   // Uh oh.
@@ -58,8 +62,7 @@ ACE_INLINE
 ACE_TSS_Emulation::ACE_TSS_DESTRUCTOR
 ACE_TSS_Emulation::tss_destructor (const ACE_thread_key_t key)
 {
-  ACE_KEY_INDEX (key_index, key);
-  return tss_destructor_ [key_index];
+  return tss_destructor_ [key];
 }
 
 ACE_INLINE
@@ -67,16 +70,13 @@ void
 ACE_TSS_Emulation::tss_destructor (const ACE_thread_key_t key,
                                    ACE_TSS_DESTRUCTOR destructor)
 {
-  ACE_KEY_INDEX (key_index, key);
-  tss_destructor_ [key_index] = destructor;
+  tss_destructor_ [key] = destructor;
 }
 
 ACE_INLINE
 void *&
 ACE_TSS_Emulation::ts_object (const ACE_thread_key_t key)
 {
-  ACE_KEY_INDEX (key_index, key);
-
 #    if defined (ACE_HAS_VXTHREADS)
     /* If someone wants tss_base make sure they get one.  This
        gets used if someone spawns a VxWorks task directly, not
@@ -97,7 +97,7 @@ ACE_TSS_Emulation::ts_object (const ACE_thread_key_t key)
       }
 #    endif /* ACE_HAS_VXTHREADS */
 
-  return tss_base ()[key_index];
+  return tss_base ()[key];
 }
 
 #endif /* ACE_HAS_TSS_EMULATION */
@@ -124,7 +124,7 @@ ACE_OS::thr_equal (ACE_thread_t t1, ACE_thread_t t2)
 ACE_INLINE int
 ACE_OS::condattr_destroy (ACE_condattr_t &attributes)
 {
-#if defined (ACE_HAS_THREADS)
+#if defined (ACE_HAS_THREADS) && !defined (ACE_LACKS_CONDATTR)
 #   if defined (ACE_HAS_PTHREADS)
   pthread_condattr_destroy (&attributes);
 #   else
@@ -145,23 +145,30 @@ ACE_OS::condattr_init (ACE_condattr_t &attributes, int type)
 #   if defined (ACE_HAS_PTHREADS)
   int result = -1;
 
-#   if defined (ACE_PTHREAD_CONDATTR_T_INITIALIZE)
-      /* Tests show that VxWorks 6.x pthread lib does not only
-       * require zeroing of mutex/condition objects to function correctly
-       * but also of the attribute objects.
-       */
-      ACE_OS::memset (&attributes, 0, sizeof (attributes));
-#   endif
+#   if !defined (ACE_LACKS_CONDATTR)
+#     if defined (ACE_PTHREAD_CONDATTR_T_INITIALIZE)
+  /* Tests show that VxWorks 6.x pthread lib does not only
+    * require zeroing of mutex/condition objects to function correctly
+    * but also of the attribute objects.
+    */
+  ACE_OS::memset (&attributes, 0, sizeof (attributes));
+#     endif
   if (
       ACE_ADAPT_RETVAL (pthread_condattr_init (&attributes), result) == 0
-#       if defined (_POSIX_THREAD_PROCESS_SHARED) && !defined (ACE_LACKS_CONDATTR_PSHARED)
+#     if defined (_POSIX_THREAD_PROCESS_SHARED) && !defined (ACE_LACKS_CONDATTR_PSHARED)
       && ACE_ADAPT_RETVAL (pthread_condattr_setpshared (&attributes, type),
                            result) == 0
-#       endif /* _POSIX_THREAD_PROCESS_SHARED && ! ACE_LACKS_CONDATTR_PSHARED */
+#     endif /* _POSIX_THREAD_PROCESS_SHARED && ! ACE_LACKS_CONDATTR_PSHARED */
       )
+#   else
+  if (type == USYNC_THREAD)
+#   endif /* !ACE_LACKS_CONDATTR */
      result = 0;
   else
-     result = -1;       // ACE_ADAPT_RETVAL used it for intermediate status
+    {
+      ACE_UNUSED_ARG (attributes);
+      result = -1;       // ACE_ADAPT_RETVAL used it for intermediate status
+    }
 
   return result;
 #   else
@@ -2504,10 +2511,7 @@ ACE_OS::sigwait (sigset_t *sset, int *sig)
       // Cygwin has sigwait definition, but it is not implemented
       ACE_UNUSED_ARG (sset);
       ACE_NOTSUP_RETURN (-1);
-#   elif defined (ACE_TANDEM_T1248_PTHREADS)
-      errno = ::spt_sigwait (sset, sig);
-      return errno == 0  ?  *sig  :  -1;
-#   else   /* this is draft 7 or std */
+#   else   /* this is std */
       errno = ::sigwait (sset, sig);
       return errno == 0  ?  *sig  :  -1;
 #   endif /* CYGWIN32 */

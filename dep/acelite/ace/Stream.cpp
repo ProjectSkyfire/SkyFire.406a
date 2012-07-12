@@ -1,5 +1,5 @@
 // Stream.cpp
-// $Id: Stream.cpp 90072 2010-05-04 21:34:39Z cbeaulac $
+// $Id: Stream.cpp 95595 2012-03-07 13:33:25Z johnnyw $
 
 #ifndef ACE_STREAM_CPP
 #define ACE_STREAM_CPP
@@ -247,7 +247,7 @@ ACE_Stream<ACE_SYNCH_USE>::remove (const ACE_TCHAR *name,
     if (ACE::debug ())
     {
       ACE_DEBUG ((LM_DEBUG,
-        ACE_TEXT ("ACE_Stream::remove comparing existing module :%s: with :%s:\n"),
+        ACE_TEXT ("ACE_Stream::remove - comparing existing module :%s: with :%s:\n"),
         mod->name (),
         name));
     }
@@ -260,11 +260,13 @@ ACE_Stream<ACE_SYNCH_USE>::remove (const ACE_TCHAR *name,
         else
           prev->link (mod->next ());
 
+        // Close down the module.
+        mod->close (flags);
+
         // Don't delete the Module unless the flags request this.
         if (flags != ACE_Module<ACE_SYNCH_USE>::M_DELETE_NONE)
           {
-            // Close down the module and release the memory.
-            mod->close (flags);
+            // Release the memory.
             delete mod;
           }
 
@@ -344,34 +346,28 @@ ACE_Stream<ACE_SYNCH_USE>::open (void *a,
 
   if (head == 0)
     {
-      ACE_NEW_RETURN (h1,
-                      ACE_Stream_Head<ACE_SYNCH_USE>,
-                      -1);
-      ACE_NEW_RETURN (h2,
-                      ACE_Stream_Head<ACE_SYNCH_USE>,
-                      -1);
-      ACE_NEW_RETURN (head,
-                      ACE_Module<ACE_SYNCH_USE> (ACE_TEXT ("ACE_Stream_Head"),
-                                                 h1, h2,
-                                                 a,
-                                                 M_DELETE),
-                      -1);
+      ACE_NEW_NORETURN (h1,
+                        ACE_Stream_Head<ACE_SYNCH_USE>);
+      ACE_NEW_NORETURN (h2,
+                        ACE_Stream_Head<ACE_SYNCH_USE>);
+      ACE_NEW_NORETURN (head,
+                        ACE_Module<ACE_SYNCH_USE> (ACE_TEXT ("ACE_Stream_Head"),
+                                                   h1, h2,
+                                                   a,
+                                                   M_DELETE));
     }
 
   if (tail == 0)
     {
-      ACE_NEW_RETURN (t1,
-                      ACE_Stream_Tail<ACE_SYNCH_USE>,
-                      -1);
-      ACE_NEW_RETURN (t2,
-                      ACE_Stream_Tail<ACE_SYNCH_USE>,
-                      -1);
-      ACE_NEW_RETURN (tail,
-                      ACE_Module<ACE_SYNCH_USE> (ACE_TEXT ("ACE_Stream_Tail"),
-                                                 t1, t2,
-                                                 a,
-                                                 M_DELETE),
-                      -1);
+      ACE_NEW_NORETURN (t1,
+                        ACE_Stream_Tail<ACE_SYNCH_USE>);
+      ACE_NEW_NORETURN (t2,
+                        ACE_Stream_Tail<ACE_SYNCH_USE>);
+      ACE_NEW_NORETURN (tail,
+                        ACE_Module<ACE_SYNCH_USE> (ACE_TEXT ("ACE_Stream_Tail"),
+                                                   t1, t2,
+                                                   a,
+                                                   M_DELETE));
     }
 
   // Make sure *all* the allocation succeeded!
@@ -448,7 +444,7 @@ ACE_Stream<ACE_SYNCH_USE>::control (ACE_IO_Cntl_Msg::ACE_IO_Cntl_Cmds cmd,
   ACE_TRACE ("ACE_Stream<ACE_SYNCH_USE>::control");
   ACE_IO_Cntl_Msg ioc (cmd);
 
-  ACE_Message_Block *db;
+  ACE_Message_Block *db = 0;
 
   // Try to create a data block that contains the user-supplied data.
   ACE_NEW_RETURN (db,
@@ -462,12 +458,11 @@ ACE_Stream<ACE_SYNCH_USE>::control (ACE_IO_Cntl_Msg::ACE_IO_Cntl_Cmds cmd,
   // field.
   ACE_Message_Block *cb = 0;
 
-  ACE_NEW_RETURN (cb,
-                  ACE_Message_Block (sizeof ioc,
-                                     ACE_Message_Block::MB_IOCTL,
-                                     db,
-                                     (char *) &ioc),
-                  -1);
+  ACE_NEW_NORETURN (cb,
+                    ACE_Message_Block (sizeof ioc,
+                                       ACE_Message_Block::MB_IOCTL,
+                                       db,
+                                       (char *) &ioc));
   // @@ Michael: The old semantic assumed that cb returns == 0
   //             if no memory was available. We will now return immediately
   //             without release (errno is set to ENOMEM by the macro).
@@ -602,7 +597,9 @@ template <ACE_SYNCH_DECL>
 ACE_Stream<ACE_SYNCH_USE>::ACE_Stream (void * a,
                                        ACE_Module<ACE_SYNCH_USE> *head,
                                        ACE_Module<ACE_SYNCH_USE> *tail)
-  : linked_us_ (0),
+  : stream_head_ (0),
+    stream_tail_ (0),
+    linked_us_ (0),
     final_close_ (lock_)
 {
   ACE_TRACE ("ACE_Stream<ACE_SYNCH_USE>::ACE_Stream");

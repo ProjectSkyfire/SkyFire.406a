@@ -626,3 +626,4 @@ ACE_ATM_QoS::construct_options (ACE_HANDLE fd,
 ACE_END_VERSIONED_NAMESPACE_DECL
 
 #endif /* ACE_HAS_ATM */
+

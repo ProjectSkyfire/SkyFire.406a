@@ -4,7 +4,7 @@
 /**
  *  @file   config-lite.h
  *
- *  $Id: config-lite.h 92580 2010-11-15 09:48:02Z johnnyw $
+ *  $Id: config-lite.h 93435 2011-02-25 12:24:04Z shuston $
  *
  *  @author (Originally in OS.h)Doug Schmidt <schmidt@cs.wustl.edu>
  *  @author Jesper S. M|ller<stophph@diku.dk>
@@ -116,13 +116,13 @@ ACE_END_VERSIONED_NAMESPACE_DECL
 // Once all C++ compilers support the standard reverse_iterator
 // adapters, we can drop this generator macro or at least drop the
 // MSVC++ or Sun Studio preprocessor conditional blocks.
-#if defined (__SUNPRO_CC) && __SUNPRO_CC <= 0x5100 \
+#if defined (__SUNPRO_CC) && __SUNPRO_CC <= 0x5110 \
       && !defined (_STLPORT_VERSION)
   // If we're not using the stlport4 C++ library (which has standard
   // iterators), we need to ensure this is included in order to test
   // the _RWSTD_NO_CLASS_PARTIAL_SPEC feature test macro below.
 # include <Cstd/stdcomp.h>
-#endif /* __SUNPRO_CC <= 0x5100 */
+#endif /* __SUNPRO_CC <= 0x5110 */
 #if (defined (_MSC_VER) && (_MSC_VER <= 1310) && defined (_WIN64)) \
     || defined (ACE_HAS_BROKEN_STD_REVERSE_ITERATOR)
   // VC 7.1 and the latest 64-bit platform SDK still don't define a standard
@@ -131,7 +131,7 @@ ACE_END_VERSIONED_NAMESPACE_DECL
   typedef std::reverse_iterator<iterator, value_type> reverse_iterator; \
   typedef std::reverse_iterator<const_iterator, \
                                 value_type const> const_reverse_iterator;
-#elif defined (__SUNPRO_CC) && __SUNPRO_CC <= 0x5100 \
+#elif defined (__SUNPRO_CC) && __SUNPRO_CC <= 0x5110 \
       && defined (_RWSTD_NO_CLASS_PARTIAL_SPEC)
 # define ACE_DECLARE_STL_REVERSE_ITERATORS \
   typedef std::reverse_iterator<iterator, \

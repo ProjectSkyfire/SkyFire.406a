@@ -1,4 +1,4 @@
-// $Id: OS_NS_Thread.cpp 92682 2010-11-23 23:41:19Z shuston $
+// $Id: OS_NS_Thread.cpp 95770 2012-05-16 17:45:58Z shuston $
 
 #include "ace/OS_NS_Thread.h"
 
@@ -49,34 +49,18 @@ ACE_BEGIN_VERSIONED_NAMESPACE_DECL
 void
 ACE_Thread_ID::to_string (char *thr_string) const
 {
-  char format[128]; // Converted format string
-  char *fp = 0;     // Current format pointer
-  fp = format;
-  *fp++ = '%';   // Copy in the %
-
 #if defined (ACE_WIN32)
-  ACE_OS::strcpy (fp, "u");
-  ACE_OS::sprintf (thr_string,
-                   format,
+  ACE_OS::sprintf (thr_string, "%u",
                    static_cast <unsigned> (this->thread_id_));
 #else
-# if defined (ACE_MVS) || defined (ACE_TANDEM_T1248_PTHREADS)
-                  // MVS's pthread_t is a struct... yuck. So use the ACE 5.0
-                  // code for it.
-                  ACE_OS::strcpy (fp, "u");
-                  ACE_OS::sprintf (thr_string, format, thread_handle_);
-# else
-                  // Yes, this is an ugly C-style cast, but the
-                  // correct C++ cast is different depending on
-                  // whether the t_id is an integral type or a pointer
-                  // type. FreeBSD uses a pointer type, but doesn't
-                  // have a _np function to get an integral type, like
-                  // the OSes above.
-                  ACE_OS::strcpy (fp, "lu");
-                  ACE_OS::sprintf (thr_string,
-                                   format,
-                                   (unsigned long) thread_handle_);
-# endif /* ACE_MVS || ACE_TANDEM_T1248_PTHREADS */
+  // Yes, this is an ugly C-style cast, but the
+  // correct C++ cast is different depending on
+  // whether the t_id is an integral type or a pointer
+  // type. FreeBSD uses a pointer type, but doesn't
+  // have a _np function to get an integral type like
+  // other OSes, so use the bigger hammer.
+  ACE_OS::sprintf (thr_string, "%lu",
+                   (unsigned long) thread_handle_);
 #endif /* ACE_WIN32 */
 }
 
@@ -231,13 +215,7 @@ ACE_TSS_Emulation::next_key (ACE_thread_key_t &key)
        // Loop through all possible keys and check whether a key is free
        for ( ;counter < ACE_TSS_THREAD_KEYS_MAX; counter++)
          {
-            ACE_thread_key_t localkey;
-#  if defined (ACE_HAS_NONSCALAR_THREAD_KEY_T)
-              ACE_OS::memset (&localkey, 0, sizeof (ACE_thread_key_t));
-              ACE_OS::memcpy (&localkey, &counter_, sizeof (u_int));
-#  else
-              localkey = counter;
-#  endif /* ACE_HAS_NONSCALAR_THREAD_KEY_T */
+            ACE_thread_key_t localkey = counter;
             // If the key is not set as used, we can give out this key, if not
             // we have to search further
             if (tss_keys_used_->is_set(localkey) == 0)
@@ -396,20 +374,6 @@ ACE_TSS_Info::ACE_TSS_Info (void)
   ACE_OS_TRACE ("ACE_TSS_Info::ACE_TSS_Info");
 }
 
-# if defined (ACE_HAS_NONSCALAR_THREAD_KEY_T)
-static inline bool operator== (const ACE_thread_key_t &lhs,
-                               const ACE_thread_key_t &rhs)
-{
-  return ! ACE_OS::memcmp (&lhs, &rhs, sizeof (ACE_thread_key_t));
-}
-
-static inline bool operator!= (const ACE_thread_key_t &lhs,
-                               const ACE_thread_key_t &rhs)
-{
-  return ! (lhs == rhs);
-}
-# endif /* ACE_HAS_NONSCALAR_THREAD_KEY_T */
-
 // Check for equality.
 bool
 ACE_TSS_Info::operator== (const ACE_TSS_Info &info) const
@@ -465,9 +429,8 @@ ACE_TSS_Keys::find (const u_int key, u_int &word, u_int &bit)
 int
 ACE_TSS_Keys::test_and_set (const ACE_thread_key_t key)
 {
-  ACE_KEY_INDEX (key_index, key);
   u_int word, bit;
-  find (key_index, word, bit);
+  find (key, word, bit);
 
   if (ACE_BIT_ENABLED (key_bit_words_[word], 1 << bit))
     {
@@ -483,9 +446,8 @@ ACE_TSS_Keys::test_and_set (const ACE_thread_key_t key)
 int
 ACE_TSS_Keys::test_and_clear (const ACE_thread_key_t key)
 {
-  ACE_KEY_INDEX (key_index, key);
   u_int word, bit;
-  find (key_index, word, bit);
+  find (key, word, bit);
 
   if (word < ACE_WORDS && ACE_BIT_ENABLED (key_bit_words_[word], 1 << bit))
     {
@@ -501,9 +463,8 @@ ACE_TSS_Keys::test_and_clear (const ACE_thread_key_t key)
 int
 ACE_TSS_Keys::is_set (const ACE_thread_key_t key) const
 {
-  ACE_KEY_INDEX (key_index, key);
   u_int word, bit;
-  find (key_index, word, bit);
+  find (key, word, bit);
 
   return word < ACE_WORDS ? ACE_BIT_ENABLED (key_bit_words_[word], 1 << bit) : 0;
 }
@@ -808,7 +769,7 @@ ACE_TSS_Cleanup::thread_exit (void)
       }
 
     // remove the in_use bit vector last
-    ACE_KEY_INDEX (use_index, this->in_use_);
+    u_int use_index = this->in_use_;
     ACE_TSS_Info & info = this->table_[use_index];
     destructor[d_count] = 0;
     tss_obj[d_count] = 0;
@@ -850,7 +811,7 @@ ACE_TSS_Cleanup::insert (ACE_thread_key_t key,
   ACE_OS_TRACE ("ACE_TSS_Cleanup::insert");
   ACE_TSS_CLEANUP_GUARD
 
-  ACE_KEY_INDEX (key_index, key);
+  u_int key_index = key;
   ACE_ASSERT (key_index < ACE_DEFAULT_THREAD_KEYS);
   if (key_index < ACE_DEFAULT_THREAD_KEYS)
     {
@@ -871,7 +832,7 @@ ACE_TSS_Cleanup::free_key (ACE_thread_key_t key)
 {
   ACE_OS_TRACE ("ACE_TSS_Cleanup::free_key");
   ACE_TSS_CLEANUP_GUARD
-  ACE_KEY_INDEX (key_index, key);
+  u_int key_index = key;
   if (key_index < ACE_DEFAULT_THREAD_KEYS)
     {
       return remove_key (this->table_ [key_index]);
@@ -921,7 +882,7 @@ ACE_TSS_Cleanup::thread_detach_key (ACE_thread_key_t key)
   {
     ACE_TSS_CLEANUP_GUARD
 
-    ACE_KEY_INDEX (key_index, key);
+    u_int key_index = key;
     ACE_ASSERT (key_index < sizeof(this->table_)/sizeof(this->table_[0])
         && this->table_[key_index].key_ == key);
     ACE_TSS_Info &info = this->table_ [key_index];
@@ -977,7 +938,7 @@ ACE_TSS_Cleanup::thread_use_key (ACE_thread_key_t key)
       ACE_TSS_CLEANUP_GUARD
 
       // Retrieve the key's ACE_TSS_Info and increment its thread_count_.
-      ACE_KEY_INDEX (key_index, key);
+      u_int key_index = key;
       ACE_TSS_Info &key_info = this->table_ [key_index];
 
       ACE_ASSERT (key_info.key_in_use ());
@@ -3531,7 +3492,7 @@ ACE_OS::sched_params (const ACE_Sched_Params &sched_params,
 #if defined (ACE_HAS_STHREADS)
   return ACE_OS::set_scheduling_params (sched_params, id);
 #elif defined (ACE_HAS_PTHREADS) && \
-      (!defined (ACE_LACKS_SETSCHED) || defined (ACE_TANDEM_T1248_PTHREADS) || \
+      (!defined (ACE_LACKS_SETSCHED) || \
       defined (ACE_HAS_PTHREAD_SCHEDPARAM))
   if (sched_params.quantum () != ACE_Time_Value::zero)
     {
@@ -3550,15 +3511,15 @@ ACE_OS::sched_params (const ACE_Sched_Params &sched_params,
 
   if (sched_params.scope () == ACE_SCOPE_PROCESS)
     {
-# if defined(ACE_TANDEM_T1248_PTHREADS) || defined (ACE_HAS_PTHREAD_SCHEDPARAM)
+# if defined (ACE_HAS_PTHREAD_SCHEDPARAM)
       ACE_UNUSED_ARG (id);
       ACE_NOTSUP_RETURN (-1);
-# else  /* ! ACE_TANDEM_T1248_PTHREADS */
+# else  /* !ACE_HAS_PTHREAD_SCHEDPARAM */
       int result = ::sched_setscheduler (id == ACE_SELF ? 0 : id,
                                          sched_params.policy (),
                                          &param) == -1 ? -1 : 0;
       return result;
-# endif /* ! ACE_TANDEM_T1248_PTHREADS */
+# endif /* !ACE_HAS_PTHREAD_SCHEDPARAM */
     }
   else if (sched_params.scope () == ACE_SCOPE_THREAD)
     {
@@ -4100,6 +4061,7 @@ ACE_OS::thr_create (ACE_THR_FUNC func,
           }
         }
 
+#       if !defined (ACE_LACKS_SETINHERITSCHED)
       // *** Set scheduling explicit or inherited
       if (ACE_BIT_ENABLED (flags, THR_INHERIT_SCHED)
           || ACE_BIT_ENABLED (flags, THR_EXPLICIT_SCHED))
@@ -4113,6 +4075,7 @@ ACE_OS::thr_create (ACE_THR_FUNC func,
               return -1;
             }
         }
+#       endif /* ACE_LACKS_SETINHERITSCHED */
 #   else /* ACE_LACKS_SETSCHED */
       ACE_UNUSED_ARG (priority);
 #   endif /* ACE_LACKS_SETSCHED */

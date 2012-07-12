@@ -1,4 +1,4 @@
-// $Id: OS_NS_sys_utsname.cpp 92712 2010-11-25 12:22:13Z johnnyw $
+// $Id: OS_NS_sys_utsname.cpp 93543 2011-03-14 08:25:46Z johnnyw $
 
 #include "ace/OS_NS_sys_utsname.h"
 #include "ace/OS_NS_string.h"
@@ -78,11 +78,7 @@ ACE_OS::uname (ACE_utsname *name)
       char processor[bufsize] = "Unknown";
       char subtype[bufsize] = "Unknown";
 
-#   if defined (ghs)
-    WORD arch = sinfo.u.s.wProcessorArchitecture;
-#   else
     WORD arch = sinfo.wProcessorArchitecture;
-#   endif
 
       switch (arch)
         {

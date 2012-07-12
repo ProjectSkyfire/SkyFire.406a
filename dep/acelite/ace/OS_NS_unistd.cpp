@@ -1,4 +1,4 @@
-// $Id: OS_NS_unistd.cpp 92712 2010-11-25 12:22:13Z johnnyw $
+// $Id: OS_NS_unistd.cpp 94448 2011-09-08 08:20:29Z johnnyw $
 
 #include "ace/OS_NS_unistd.h"
 
@@ -707,8 +707,11 @@ ACE_OS::pwrite (ACE_HANDLE handle,
   return (ssize_t) bytes_written;
 
 #   else /* ACE_WIN32 */
-
+#     if defined (ACE_HAS_NON_CONST_PWRITE)
+  return ::pwrite (handle, const_cast<void*> (buf), nbytes, offset);
+#     else
   return ::pwrite (handle, buf, nbytes, offset);
+#     endif
 #   endif /* ACE_WIN32 */
 # else /* ACE_HAS_P_READ_WRITE */
 

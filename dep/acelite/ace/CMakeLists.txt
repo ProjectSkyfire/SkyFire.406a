@@ -11,6 +11,7 @@
 # NOTE: Do not use glob here, it would include files we don't want
 set(ace_STAT_SRCS
   PrecompiledHeaders/WinAcePCH.cpp
+  Abstract_Timer_Queue.cpp
   ACE.cpp
   ACE_crc32.cpp
   ACE_crc_ccitt.cpp
@@ -53,7 +54,7 @@ set(ace_STAT_SRCS
   Connection_Recycling_Strategy.cpp
   Containers.cpp
   Copy_Disabled.cpp
-  Countdown_Time.cpp
+  Countdown_Time_T.cpp
   Date_Time.cpp
   DEV.cpp
   DEV_Addr.cpp
@@ -92,6 +93,7 @@ set(ace_STAT_SRCS
   gethrtime.cpp
   Handle_Ops.cpp
   Handle_Set.cpp
+  Event_Handler_Handle_Timeout_Upcall.cpp
   Hashable.cpp
   High_Res_Timer.cpp
   ICMP_Socket.cpp
@@ -291,6 +293,9 @@ set(ace_STAT_SRCS
   Throughput_Stats.cpp
   Time_Value.cpp
   Timeprobe.cpp
+  Time_Policy.cpp
+  Time_Policy_T.cpp
+  Timer_Queue_Iterator.cpp
   TLI.cpp
   TLI_Acceptor.cpp
   TLI_Connector.cpp

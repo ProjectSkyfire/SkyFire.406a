@@ -1,4 +1,4 @@
-// $Id: Condition_T.cpp 89127 2010-02-22 19:58:18Z schmidt $
+// $Id: Condition_T.cpp 95505 2012-01-26 20:44:12Z mesnier_p $
 
 #ifndef ACE_CONDITION_T_CPP
 #define ACE_CONDITION_T_CPP
@@ -15,6 +15,7 @@
 
 #if !defined (__ACE_INLINE__)
 #include "ace/Condition_T.inl"
+#include "ace/Time_Value.h"
 #endif /* __ACE_INLINE__ */
 
 ACE_BEGIN_VERSIONED_NAMESPACE_DECL

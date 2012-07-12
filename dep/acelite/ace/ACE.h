@@ -4,7 +4,7 @@
 /**
  * @file    ACE.h
  *
- * $Id: ACE.h 92772 2010-12-02 20:14:56Z shuston $
+ * $Id: ACE.h 93276 2011-02-04 20:03:53Z olli $
  *
  * This file contains value added ACE functions that extend the
  * behavior of the UNIX and Win32 OS calls.
@@ -662,6 +662,14 @@ namespace ACE
   bool is_equal (const T& a, const T& b)
   {
     return !((a < b) || (a > b));
+  }
+
+  /// Helper to avoid comparing floating point values with !=
+  /// (uses < and > operators).
+  template <typename T>
+  bool is_inequal (const T& a, const T& b)
+  {
+    return !is_equal (a, b);
   }
 
   /// Hex conversion utility.
