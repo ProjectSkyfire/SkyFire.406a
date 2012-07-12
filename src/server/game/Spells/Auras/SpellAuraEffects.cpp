@@ -383,7 +383,7 @@ pAuraEffectHandler AuraEffectHandler[TOTAL_AURAS]=
     &AuraEffect::HandleNULL,                                      // 325 - 0 spells in 4.0.6a
     &AuraEffect::HandlePhase,                                     // 326 -
     &AuraEffect::HandleNULL,                                      // 327 - 0 spells in 4.0.6a
-    &AuraEffect::HandleNULL,                                      // 328 - Eclipse driver
+    &AuraEffect::HandleNoImmediateEffect,                         // 328 - SPELL_AURA_PROC_ON_POWER_AMOUNT - Implemented in Unit::HandleAuraProcOnPowerAmount
     &AuraEffect::HandleModPowerRegenPCT,                          // 329 -
     &AuraEffect::HandleModCanCastWhileWalking,                    // 330 - SPELL_AURA_ALLOW_CAST_WHILE_MOVING
     &AuraEffect::HandleNULL,                                      // 331 - Weather related.

@@ -2526,6 +2526,7 @@ void Player::RegenerateAll()
 void Player::Regenerate(Powers power)
 {
     uint32 maxValue = GetMaxPower(power);
+
     if (!maxValue)
         return;
 
@@ -3138,7 +3139,7 @@ void Player::GiveLevel(uint8 level)
     SetFullHealth();
     SetPower(POWER_MANA, GetMaxPower(POWER_MANA));
     SetPower(POWER_ENERGY, GetMaxPower(POWER_ENERGY));
-    if (uint32(GetPower(POWER_RAGE)) > uint32(GetMaxPower(POWER_RAGE)))
+    if (GetPower(POWER_RAGE) > GetMaxPower(POWER_RAGE))
         SetPower(POWER_RAGE, GetMaxPower(POWER_RAGE));
     SetPower(POWER_FOCUS, 0);
     SetPower(POWER_HAPPINESS, 0);
@@ -3330,7 +3331,7 @@ void Player::InitStatsForLevel(bool reapplyMods)
 
     // save new stats
     for (uint8 i = POWER_MANA; i < MAX_POWERS; ++i)
-        SetMaxPower(Powers(i),  uint32(GetCreatePowers(Powers(i))));
+        SetMaxPower(Powers(i),  GetCreatePowers(Powers(i)));
 
     SetMaxHealth(classInfo.basehealth);                     // stamina bonus will applied later
 
@@ -3365,7 +3366,7 @@ void Player::InitStatsForLevel(bool reapplyMods)
     SetFullHealth();
     SetPower(POWER_MANA, GetMaxPower(POWER_MANA));
     SetPower(POWER_ENERGY, GetMaxPower(POWER_ENERGY));
-    if (uint32(GetPower(POWER_RAGE)) > uint32(GetMaxPower(POWER_RAGE)))
+    if (GetPower(POWER_RAGE) > GetMaxPower(POWER_RAGE))
         SetPower(POWER_RAGE, GetMaxPower(POWER_RAGE));
     SetPower(POWER_FOCUS, GetMaxPower(POWER_FOCUS));
     SetPower(POWER_HAPPINESS, 0);
@@ -5222,10 +5223,10 @@ void Player::ResurrectPlayer(float restore_percent, bool applySickness)
     if (restore_percent > 0.0f)
     {
         SetHealth(uint32(GetMaxHealth()*restore_percent));
-        SetPower(POWER_MANA, uint32(GetMaxPower(POWER_MANA)*restore_percent));
+        SetPower(POWER_MANA, GetMaxPower(POWER_MANA)*restore_percent);
         SetPower(POWER_RAGE, 0);
-        SetPower(POWER_ENERGY, uint32(GetMaxPower(POWER_ENERGY)*restore_percent));
-        SetPower(POWER_FOCUS, uint32(GetMaxPower(POWER_FOCUS)*restore_percent));
+        SetPower(POWER_ENERGY, GetMaxPower(POWER_ENERGY)*restore_percent);
+        SetPower(POWER_FOCUS, GetMaxPower(POWER_FOCUS)*restore_percent);
     }
 
     // trigger update zone for alive state zone updates
@@ -17939,7 +17940,7 @@ bool Player::LoadFromDB(uint32 guid, SQLQueryHolder *holder)
     SetHealth(savedHealth > GetMaxHealth() ? GetMaxHealth() : savedHealth);
     for (uint8 i = 0; i < MAX_POWERS; ++i)
     {
-        uint32 savedPower = fields[47+i].GetUInt32();
+        int32 savedPower = fields[47+i].GetInt32();
         SetPower(Powers(i), savedPower > GetMaxPower(Powers(i)) ? GetMaxPower(Powers(i)) : savedPower);
     }
 
@@ -19450,7 +19451,12 @@ void Player::SaveToDB(bool create /*=false*/)
         stmt->setUInt32(index++, GetHealth());
 
         for (uint32 i = 0; i < MAX_POWERS; ++i)
-            stmt->setUInt32(index++, GetPower(Powers(i)));
+        {
+            if (i != POWER_ECLIPSE)
+                stmt->setInt32(index++, GetPower(Powers(i)));
+            else
+                stmt->setInt32(index++, 0);
+        }
 
         stmt->setUInt32(index++, GetSession()->GetLatency());
 
@@ -19558,7 +19564,12 @@ void Player::SaveToDB(bool create /*=false*/)
         stmt->setUInt32(index++, GetHealth());
 
         for (uint32 i = 0; i < MAX_POWERS; ++i)
-            stmt->setUInt32(index++, GetPower(Powers(i)));
+        {
+            if (i != POWER_ECLIPSE)
+                stmt->setInt32(index++, GetPower(Powers(i)));
+            else
+                stmt->setInt32(index++, 0);
+        }
 
         stmt->setUInt32(index++, GetSession()->GetLatency());
 
