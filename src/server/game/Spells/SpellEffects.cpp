@@ -6472,6 +6472,7 @@ void Spell::EffectSelfResurrect(SpellEffIndex effIndex)
     player->SetPower(POWER_RAGE, 0);
     player->SetPower(POWER_ENERGY, player->GetMaxPower(POWER_ENERGY));
     player->SetPower(POWER_FOCUS, 0);
+    player->SetPower(POWER_ECLIPSE, 0);
 
     player->SpawnCorpseBones();
 }

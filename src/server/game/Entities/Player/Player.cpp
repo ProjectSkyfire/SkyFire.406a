@@ -2374,6 +2374,7 @@ void Player::ProcessDelayedOperations()
 
         SetPower(POWER_RAGE, 0);
         SetPower(POWER_ENERGY, GetMaxPower(POWER_ENERGY));
+        SetPower(POWER_ECLIPSE, 0);
 
         SpawnCorpseBones();
     }
@@ -2718,6 +2719,9 @@ void Player::ResetAllPowers()
             break;
         case POWER_RUNIC_POWER:
             SetPower(POWER_RUNIC_POWER, 0);
+            break;
+        case POWER_ECLIPSE:
+            SetPower(POWER_ECLIPSE, 0);
             break;
         default:
             break;
@@ -5227,6 +5231,7 @@ void Player::ResurrectPlayer(float restore_percent, bool applySickness)
         SetPower(POWER_RAGE, 0);
         SetPower(POWER_ENERGY, GetMaxPower(POWER_ENERGY)*restore_percent);
         SetPower(POWER_FOCUS, GetMaxPower(POWER_FOCUS)*restore_percent);
+        SetPower(POWER_ECLIPSE, 0);
     }
 
     // trigger update zone for alive state zone updates
@@ -23671,6 +23676,7 @@ void Player::ResurectUsingRequestData()
     SetPower(POWER_RAGE, 0);
     SetPower(POWER_ENERGY, GetMaxPower(POWER_ENERGY));
     SetPower(POWER_FOCUS, GetMaxPower(POWER_FOCUS));
+    SetPower(POWER_ECLIPSE, 0);
 
     SpawnCorpseBones();
 }
