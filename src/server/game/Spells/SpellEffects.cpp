@@ -1588,7 +1588,7 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                         m_caster->CastCustomSpell(m_caster, 77535, &shield, NULL, NULL, false);
                     }
                 }
-                
+
                 m_caster->CastCustomSpell(m_caster, 45470, &bp, NULL, NULL, false);
                 return;
             }
@@ -1621,10 +1621,21 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                 else
                     targets.SetDst(*m_caster);
 
-                // Remove cooldown - summon spellls have category
+                // Remove cooldown - summon spells have category
                 m_caster->ToPlayer()->RemoveSpellCooldown(52150, true);
                 m_caster->ToPlayer()->RemoveSpellCooldown(46585, true);
                 break;
+            }
+            break;
+        case SPELLFAMILY_WARLOCK:
+            switch (m_spellInfo->Id)
+            {
+                case 19028: // Soul Link
+                {
+                    if(Pet* pet =  m_caster->ToPlayer()->GetPet())
+                        pet->AddAura(25228, pet);
+                    break;
+                }
             }
             break;
     }
@@ -1785,6 +1796,20 @@ void Spell::EffectTriggerSpell(SpellEffIndex effIndex)
                 if (Unit* pet = unitTarget->GetGuardianPet())
                     pet->CastSpell(pet, 28305, true);
                 return;
+            }
+            // Faerie Fire
+            case 91565:
+            {
+                // Feral Agression
+                if (AuraEffect const * aurEff = m_caster->GetDummyAuraEffect(SPELLFAMILY_DRUID, 960, 0))
+                {
+                    uint8 count = uint8(aurEff->GetAmount() - 1);
+                    while(count)
+                    {
+                        m_caster->CastSpell(unitTarget, 91565, true);
+                        count--;
+                    }
+                }
             }
         }
     }
