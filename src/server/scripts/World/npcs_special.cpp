@@ -3427,7 +3427,7 @@ public:
 
         void MoveInLineOfSight (Unit* who)
         {
-            if(who->GetGUID() == targetGuid && me->GetDistance(who) <= 1.0f)
+            if (who->GetGUID() == targetGuid && me->GetDistance(who) <= 1.0f)
             {
                 me->CastCustomSpell(who, 87532, NULL, NULL, NULL, true, 0, 0, me->GetOwnerGUID());
                 me->CastSpell(me, 87529, true);
