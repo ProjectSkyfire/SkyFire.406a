@@ -1728,9 +1728,7 @@ static bool EncryptedStream_Open(TEncryptedStream * pStream)
  * \a szFileName Name of the file to create
  */
 
-TFileStream * FileStream_CreateFile(
-    const TCHAR * szFileName,
-    DWORD dwStreamFlags)
+TFileStream * FileStream_CreateFile(const TCHAR * szFileName, DWORD dwStreamFlags)
 {
     TFileStream * pStream;
 
