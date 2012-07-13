@@ -6278,7 +6278,7 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
 
                 int32 roll_chance = dummySpell->Effects[EFFECT_0].CalcValue();
 
-                if(ToPlayer()->isMoving())
+                if (ToPlayer()->isMoving())
                         roll_chance *= int32(dummySpell->Effects[EFFECT_1].CalcValue() / 3);
 
                 // Summon Shadowy Apparition
