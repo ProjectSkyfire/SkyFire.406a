@@ -1632,7 +1632,7 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
             {
                 case 19028: // Soul Link
                 {
-                    if(Pet* pet =  m_caster->ToPlayer()->GetPet())
+                    if (Pet* pet =  m_caster->ToPlayer()->GetPet())
                         pet->AddAura(25228, pet);
                     break;
                 }
