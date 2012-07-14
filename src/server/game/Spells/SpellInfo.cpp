@@ -341,6 +341,7 @@ SpellEffectInfo::SpellEffectInfo()
     RadiusEntry = NULL;
     RealPointsPerLevel = 0.0f;
     SpellClassMask = flag96(0, 0, 0);
+    ImplicitTargetConditions = NULL;
     TriggerSpell = 0;
     TargetA = SpellImplicitTargetInfo(0);
     TargetB = SpellImplicitTargetInfo(0);
