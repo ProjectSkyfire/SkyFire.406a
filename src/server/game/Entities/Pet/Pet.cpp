@@ -758,7 +758,7 @@ bool Pet::CreateBaseAtCreatureInfo(CreatureTemplate const* cinfo, Unit* owner)
 bool Pet::CreateBaseAtTamed(CreatureTemplate const* cinfo, Map* map, uint32 phaseMask)
 {
     sLog->outDebug(LOG_FILTER_PETS, "Pet::CreateBaseForTamed");
-    uint32 guid=sObjectMgr->GenerateLowGuid(HIGHGUID_PET);
+    uint32 guid = sObjectMgr->GenerateLowGuid(HIGHGUID_PET);
     uint32 pet_number = sObjectMgr->GeneratePetNumber();
     if (!Create(guid, map, phaseMask, cinfo->Entry, pet_number))
         return false;
@@ -931,6 +931,22 @@ bool Guardian::InitStatsForLevel(uint8 petlevel)
                     }
                     SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, float(petlevel * 4 - petlevel));
                     SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float(petlevel * 4 + petlevel));
+                    break;
+                }
+                case 17252: // Felguard
+                {
+                    if (!pInfo)
+                    {
+                        SetCreateMana(28 + 10*petlevel);
+                        SetCreateHealth(28 + 30*petlevel);
+                    }
+                
+                    /*if (_owner->HasAuraEffect(56246, 0)) // Glyph of Felguard                                        
+                    int32 bonus_dmg = (int32(_owner->SpellBaseDamageBonus(SPELL_SCHOOL_MASK_SHADOW)* 0.5f));
+                    else*/                  
+                    int32 bonus_dmg = (int32(_owner->SpellBaseDamageBonus(SPELL_SCHOOL_MASK_SHADOW)* 0.3f));                    
+                    SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, float((petlevel * 4 - petlevel) + bonus_dmg));
+                    SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float((petlevel * 4 + petlevel) + bonus_dmg));
                     break;
                 }
                 case 19668: // Shadowfiend
