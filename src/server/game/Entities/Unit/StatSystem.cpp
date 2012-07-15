@@ -173,7 +173,6 @@ bool Player::UpdateAllStats()
         UpdateMaxPower(Powers(i));
 
     UpdateAllRatings();
-    UpdateMasteryPercentage();
     UpdateAllCritPercentages();
     UpdateAllSpellCritChances();
     UpdateShieldBlockValue();
@@ -581,13 +580,6 @@ void Player::UpdateBlockPercentage()
         // Increase from block rating
         value += GetRatingBonusValue(CR_BLOCK);
 
-        // Increase from mastery rating
-        if (HasAura(76671)) //paladin Protection
-            value += GetMasteryPoints() * 0.0225f;
-
-        if (HasAura(76857)) //warrior Protection
-            value += GetMasteryPoints() * 0.015f;
-
         value = value < 0.0f ? 0.0f : value;
     }
     SetStatFloatValue(PLAYER_BLOCK_PERCENTAGE, value);
@@ -781,22 +773,6 @@ void Player::UpdateArmorPenetration(int32 amount)
 {
     // Store Rating Value
     SetUInt32Value(PLAYER_FIELD_COMBAT_RATING_1 + CR_ARMOR_PENETRATION, amount);
-}
-
-void Player::UpdateMasteryPercentage()
-{
-    // No mastery
-    float value = 0.0f;
-    if (CanMastery())
-    {
-        value = 0.0f;
-        // Mastery from SPELL_AURA_MASTERY aura
-        value += GetTotalAuraModifier(SPELL_AURA_MASTERY);
-        // Mastery from rating
-        value += GetRatingBonusValue(CR_MASTERY);
-        value = value < 0.0f ? 0.0f : value;
-    }
-    SetFloatValue(PLAYER_MASTERY, value);
 }
 
 void Player::UpdateMeleeHitChances()

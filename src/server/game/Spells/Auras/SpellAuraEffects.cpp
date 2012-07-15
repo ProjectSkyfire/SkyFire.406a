@@ -3798,11 +3798,6 @@ void AuraEffect::HandleAuraModMastery(AuraApplication const* aurApp, uint8 mode,
 
     if (!target || target->GetTypeId() != TYPEID_PLAYER)
         return;
-
-    int32 rating = target->ToPlayer()->CalculateMasteryRating(GetAmount());
-    target->ToPlayer()->ApplyRatingMod(CR_MASTERY, rating, apply);
-
-    target->ToPlayer()->UpdateMasteryPercentage();
 }
 
 void AuraEffect::HandleModTargetResistance(AuraApplication const* aurApp, uint8 mode, bool apply) const

@@ -635,6 +635,7 @@ public:
         return new spell_pri_chakra_sanctuary_heal_AuraScript();
     }
 };
+
 void AddSC_priest_spell_scripts()
 {
     new spell_pri_guardian_spirit();

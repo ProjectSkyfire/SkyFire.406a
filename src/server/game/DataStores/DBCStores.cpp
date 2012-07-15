@@ -150,6 +150,8 @@ DBCStorage <MountTypeEntry> sMountTypeStore(MountTypefmt);
 
 DBCStorage <OverrideSpellDataEntry> sOverrideSpellDataStore(OverrideSpellDatafmt);
 
+DBCStorage <NumTalentsAtLevelEntry> sNumTalentsAtLevelStore(NumTalentsAtLevelfmt);
+
 DBCStorage <PvPDifficultyEntry> sPvPDifficultyStore(PvPDifficultyfmt);
 
 DBCStorage <QuestSortEntry> sQuestSortStore(QuestSortEntryfmt);
@@ -200,6 +202,8 @@ DBCStorage <TalentEntry> sTalentStore(TalentEntryfmt);
 TalentSpellPosMap sTalentSpellPosMap;
 DBCStorage <TalentTabEntry> sTalentTabStore(TalentTabEntryfmt);
 DBCStorage <TalentTreePrimarySpellsEntry> sTalentTreePrimarySpellsStore(TalentTreePrimarySpellsfmt);
+typedef std::map<uint32, std::vector<uint32> > TalentTreePrimarySpellsMap;
+TalentTreePrimarySpellsMap sTalentTreePrimarySpellsMap;
 
 // store absolute bit position for first rank for talent inspect
 static uint32 sTalentTabPages[MAX_CLASSES][3];
@@ -427,6 +431,7 @@ void LoadDBCStores(const std::string& dataPath, uint32& availableDbcLocales)
 
     sMapDifficultyStore.Clear();
 
+    LoadDBC(availableDbcLocales, bad_dbc_files, sNumTalentsAtLevelStore,      dbcPath, "NumTalentsAtLevel.dbc");//14545
     LoadDBC(availableDbcLocales, bad_dbc_files, sMovieStore,                   dbcPath, "Movie.dbc");
     LoadDBC(availableDbcLocales, bad_dbc_files, sMountCapabilityStore,         dbcPath, "MountCapability.dbc");
     LoadDBC(availableDbcLocales, bad_dbc_files, sMountTypeStore,               dbcPath, "MountType.dbc");
@@ -588,13 +593,17 @@ void LoadDBCStores(const std::string& dataPath, uint32& availableDbcLocales)
             if ((talentTabInfo->ClassMask & CLASSMASK_ALL_PLAYABLE) == 0)
                 continue;
 
-            // store class talent tab pages
-            uint32 cls = 1;
-            for (uint32 m=1; !(m & talentTabInfo->ClassMask) && cls < MAX_CLASSES; m <<= 1, ++cls) {}
-
-            sTalentTabPages[cls][talentTabInfo->tabpage]=talentTabId;
+            for (uint32 cls = 1; cls < MAX_CLASSES; ++cls)
+                if (talentTabInfo->ClassMask & (1 << (cls - 1)))
+                    sTalentTabPages[cls][talentTabInfo->tabpage] = talentTabId;
         }
     }
+
+    LoadDBC(availableDbcLocales, bad_dbc_files, sTalentTreePrimarySpellsStore, dbcPath, "TalentTreePrimarySpells.dbc");
+    for (uint32 i = 0; i < sTalentTreePrimarySpellsStore.GetNumRows(); ++i)
+        if (TalentTreePrimarySpellsEntry const* talentSpell = sTalentTreePrimarySpellsStore.LookupEntry(i))
+            sTalentTreePrimarySpellsMap[talentSpell->TalentTree].push_back(talentSpell->SpellId);
+    sTalentTreePrimarySpellsStore.Clear();
 
     LoadDBC(availableDbcLocales, bad_dbc_files, sTaxiNodesStore,             dbcPath, "TaxiNodes.dbc");
     LoadDBC(availableDbcLocales, bad_dbc_files, sTaxiPathStore,              dbcPath, "TaxiPath.dbc");
@@ -913,6 +922,15 @@ PvPDifficultyEntry const* GetBattlegroundBracketById(uint32 mapid, BattlegroundB
 uint32 const* GetTalentTabPages(uint8 cls)
 {
     return sTalentTabPages[cls];
+}
+
+std::vector<uint32> const* GetTalentTreePrimarySpells(uint32 talentTree)
+{
+    TalentTreePrimarySpellsMap::const_iterator itr = sTalentTreePrimarySpellsMap.find(talentTree);
+    if (itr == sTalentTreePrimarySpellsMap.end())
+        return NULL;
+
+    return &itr->second;
 }
 
 float GetGtSpellScalingValue(int8 class_, uint8 level)

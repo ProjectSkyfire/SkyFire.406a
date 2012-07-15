@@ -1464,6 +1464,12 @@ struct NameGenEntry
 
 #define MAX_OVERRIDE_SPELL 10
 
+struct NumTalentsAtLevelEntry
+{
+    //uint32 Level;                                         // 0 index
+    float Talents;                                         // 1 talent count
+};
+
 struct OverrideSpellDataEntry
 {
     uint32      id;                                         // 0
@@ -2066,10 +2072,10 @@ struct TalentTabEntry
 
 struct TalentTreePrimarySpellsEntry
 {
-    //uint32 Id;                                            // 0
-    uint32 TalentTabID;                                     // 1
-    uint32 SpellID;                                         // 2
-    //uint32 flags;                                         // 3
+    //uint32 Id;                                            // 0 index
+    uint32 TalentTree;                                      // 1 entry from TalentTab.dbc
+    uint32 SpellId;                                         // 2 spell id to learn
+    //uint32 Flags;                                         // 3 some kind of flags
 };
 
 struct TaxiNodesEntry

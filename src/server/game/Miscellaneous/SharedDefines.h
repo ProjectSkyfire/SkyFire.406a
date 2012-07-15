@@ -596,8 +596,8 @@ enum SpellAttr8
 #define MAX_TALENT_SPEC         1
 #define MIN_TALENT_SPECS        1
 #define MAX_TALENT_SPECS        2
-#define MIN_TALENT_TABS         1
 #define MAX_GLYPH_SLOT_INDEX    9
+#define REQ_PRIMARY_TREE_TALENTS 31
 
 // Custom values
 enum SpellClickUserTypes

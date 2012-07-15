@@ -776,50 +776,6 @@ class AuraScript : public _SpellScript
         AuraApplication const* GetTargetApplication() const;
 };
 
-// Mastery helper class
-class MasteryScript : public AuraScript
-{
-    PrepareAuraScript(MasteryScript);
-
-protected:
-    struct MasteryAuraData
-    {
-        AuraType auraType;
-        bool handleProc;
-    };
-
-    MasteryAuraData masteryAuras[MAX_SPELL_EFFECTS];
-    int32 dummyEffectIndex;
-    uint32 defaultBaseAmount;
-
-public:
-    MasteryScript(AuraType auraType = SPELL_AURA_NONE, SpellEffIndex _dummyEffIndex = EFFECT_1, uint32 baseAmount = 0)
-        : dummyEffectIndex(_dummyEffIndex), defaultBaseAmount(baseAmount)
-    {
-        SetMasteryAura(EFFECT_0, auraType);
-        SetMasteryAura(EFFECT_1, SPELL_AURA_NONE);
-        SetMasteryAura(EFFECT_2, SPELL_AURA_NONE);
-    }
-
-    void SetMasteryAura(SpellEffIndex effIndex, AuraType auraType, bool handleProc = false)
-    {
-        masteryAuras[effIndex].auraType = auraType;
-        masteryAuras[effIndex].handleProc = handleProc;
-    }
-
-    void SetMasteryBaseAmount(int32 effIndex = EFFECT_1, uint32 baseAmount = 0)
-    {
-        dummyEffectIndex = effIndex;
-        defaultBaseAmount = baseAmount;
-    }
-
-    virtual uint32 GetMasteryBaseAmount();
-    virtual void OnProc(AuraEffect const * aurEff, Unit* pUnit, Unit *victim, uint32 damage, SpellInfo const* procSpell, uint32 procFlag, uint32 procExtra, WeaponAttackType attType, int32 cooldown) { }
-    virtual void CalcAmount(AuraEffect const* /*aurEffect*/, int32& /*amount*/, bool& /*canBeRecalculated*/);
-    virtual void CalcSpellMod(AuraEffect const * /*aurEff*/, SpellModifier *& /*spellMod*/, SpellInfo const * /*spellInfo*/, Unit * /*target*/) { }
-    virtual void Register();
-};
-
 //
 // definitions:
 //
