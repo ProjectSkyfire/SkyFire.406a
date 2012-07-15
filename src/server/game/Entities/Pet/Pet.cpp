@@ -909,10 +909,10 @@ bool Guardian::InitStatsForLevel(uint8 petlevel)
                 {
                     if (!pInfo)
                         SetCreateHealth(30 + 30*petlevel);
-                    
+
                     int32 bonus_dmg = _owner->SpellBaseDamageBonus(SPELL_SCHOOL_MASK_NATURE)*0.15f;
                     SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, float(petlevel * 7.5f - (petlevel / 2) + bonus_dmg));
-					SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float(petlevel * 7.5f + (petlevel / 2) + bonus_dmg));
+                    SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float(petlevel * 7.5f + (petlevel / 2) + bonus_dmg));
                     break;
                 }
                 case 15352: //earth elemental 36213
@@ -941,11 +941,11 @@ bool Guardian::InitStatsForLevel(uint8 petlevel)
                         SetCreateMana(28 + 10*petlevel);
                         SetCreateHealth(28 + 30*petlevel);
                     }
-                
-                    /*if (_owner->HasAuraEffect(56246, 0)) // Glyph of Felguard                                        
+
+                    /*if (_owner->HasAuraEffect(56246, 0)) // Glyph of Felguard
                     int32 bonus_dmg = (int32(_owner->SpellBaseDamageBonus(SPELL_SCHOOL_MASK_SHADOW)* 0.5f));
-                    else*/                  
-                    int32 bonus_dmg = (int32(_owner->SpellBaseDamageBonus(SPELL_SCHOOL_MASK_SHADOW)* 0.3f));                    
+                    else*/
+                    int32 bonus_dmg = (int32(_owner->SpellBaseDamageBonus(SPELL_SCHOOL_MASK_SHADOW)* 0.3f));
                     SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, float((petlevel * 4 - petlevel) + bonus_dmg));
                     SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float((petlevel * 4 + petlevel) + bonus_dmg));
                     break;
