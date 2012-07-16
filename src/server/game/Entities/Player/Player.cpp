@@ -3678,9 +3678,6 @@ bool Player::addSpell(uint32 spellId, bool active, bool learning, bool dependent
             {
                 if (spellInfo->IsPassive() && IsNeedCastPassiveSpellAtLearn(spellInfo))
                     CastSpell (this, spellId, true);
-
-                if (CanUseMastery())
-                    CastMasterySpells(this);
             }
             else if (IsInWorld())
             {
