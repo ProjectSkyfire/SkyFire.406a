@@ -2,7 +2,7 @@
 /**
  *  @file   config-win32-msvc.h
  *
- *  $Id: config-win32-msvc.h 92120 2010-10-01 12:00:01Z johnnyw $
+ *  $Id: config-win32-msvc.h 93543 2011-03-14 08:25:46Z johnnyw $
  *
  *  @brief  Microsoft Visual C++ configuration file.
  *
@@ -156,7 +156,7 @@
 #     pragma warning(disable: 1744)  /* field of class type without a DLL interface used in a class with a DLL interface */
 #     pragma warning(disable: 1738)
 # endif
-#endif /* !ALL_WARNINGS && _MSV_VER && !ghs && !__MINGW32__ */
+#endif /* !ALL_WARNINGS && _MSV_VER && !__MINGW32__ */
 
 // STRICT type checking in WINDOWS.H enhances type safety for Windows
 // programs by using distinct types to represent all the different

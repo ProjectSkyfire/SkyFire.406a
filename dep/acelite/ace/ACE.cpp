@@ -1,4 +1,4 @@
-// $Id: ACE.cpp 92791 2010-12-04 16:25:22Z shuston $
+// $Id: ACE.cpp 95676 2012-04-03 16:32:27Z schmidt $
 
 #include "ace/ACE.h"
 
@@ -24,10 +24,6 @@
 #include "ace/OS_NS_fcntl.h"
 #include "ace/OS_TLI.h"
 #include "ace/Truncate.h"
-
-#if defined (ACE_VXWORKS) && (ACE_VXWORKS < 0x620)
-extern "C" int maxFiles;
-#endif /* ACE_VXWORKS */
 
 #if !defined (__ACE_INLINE__)
 #include "ace/ACE.inl"
@@ -67,7 +63,7 @@ ACE::out_of_handles (int error)
 #elif defined (HPUX)
       // On HPUX, we need to check for EADDRNOTAVAIL also.
       error == EADDRNOTAVAIL ||
-#elif defined (linux)
+#elif defined (ACE_LINUX)
       // On linux, we need to check for ENOENT also.
       error == ENOENT ||
       // For RedHat5.2, need to check for EINVAL too.
@@ -2422,9 +2418,9 @@ ACE::timestamp (const ACE_Time_Value& time_value,
                     tms.tm_hour,
                     tms.tm_min,
                     tms.tm_sec,
-                    cur_time.usec());
+                    static_cast<long> (cur_time.usec()));
   date_and_time[date_and_timelen - 1] = '\0';
-  return &date_and_time[11 + (return_pointer_to_first_digit != 0)];
+  return &date_and_time[10 + (return_pointer_to_first_digit != 0)];
 }
 
 // This function rounds the request to a multiple of the page size.
@@ -2810,8 +2806,6 @@ ACE::max_handles (void)
 
 #if defined (_SC_OPEN_MAX)
   return ACE_OS::sysconf (_SC_OPEN_MAX);
-#elif defined (ACE_VXWORKS) && (ACE_VXWORKS < 0x620)
-  return maxFiles;
 #elif defined (FD_SETSIZE)
   return FD_SETSIZE;
 #else
@@ -2858,7 +2852,7 @@ ACE::set_handle_limit (int new_limit,
 #if !defined (ACE_LACKS_RLIMIT) && defined (RLIMIT_NOFILE)
       rl.rlim_cur = new_limit;
       return ACE_OS::setrlimit (RLIMIT_NOFILE, &rl);
-#elif defined (ACE_LACKS_RLIMIT_NOFILE)
+#elif !defined (RLIMIT_NOFILE)
       return 0;
 #else
       // Must return EINVAL errno.
@@ -3283,10 +3277,7 @@ ACE::strnew (const char *s)
   ACE_NEW_RETURN (t,
                   char [ACE_OS::strlen (s) + 1],
                   0);
-  if (t == 0)
-    return 0;
-  else
-    return ACE_OS::strcpy (t, s);
+  return ACE_OS::strcpy (t, s);
 }
 
 #if defined (ACE_HAS_WCHAR)
@@ -3299,10 +3290,7 @@ ACE::strnew (const wchar_t *s)
   ACE_NEW_RETURN (t,
                   wchar_t[ACE_OS::strlen (s) + 1],
                   0);
-  if (t == 0)
-    return 0;
-  else
-    return ACE_OS::strcpy (t, s);
+  return ACE_OS::strcpy (t, s);
 }
 #endif /* ACE_HAS_WCHAR */
 

@@ -1,4 +1,4 @@
-// $Id: Log_Msg.cpp 92791 2010-12-04 16:25:22Z shuston $
+// $Id: Log_Msg.cpp 95761 2012-05-15 18:23:04Z johnnyw $
 
 // We need this to get the status of ACE_NTRACE...
 #include "ace/config-all.h"
@@ -55,16 +55,7 @@ ACE_ALLOC_HOOK_DEFINE(ACE_Log_Msg)
 # if defined (ACE_HAS_THREAD_SPECIFIC_STORAGE) || \
     defined (ACE_HAS_TSS_EMULATION)
 
-#if defined (ACE_MVS)
-  static ACE_thread_key_t the_log_msg_tss_key =
-  #if !defined(_LP64)
-      { '\0','\0','\0','\0' };
-  #else
-      { '\0','\0','\0','\0','\0','\0','\0','\0' };
-  #endif
-#else
-  static ACE_thread_key_t the_log_msg_tss_key = 0;
-#endif /* defined (ACE_MVS) */
+static ACE_thread_key_t the_log_msg_tss_key = 0;
 
 ACE_thread_key_t *log_msg_tss_key (void)
 {
@@ -1108,7 +1099,7 @@ ACE_Log_Msg::log (const ACE_TCHAR *format_str,
           const ACE_TCHAR *start_format = format_str;
           ACE_TCHAR format[128]; // Converted format string
           ACE_OS::memset (format, '\0', 128); // Set this string to known values.
-          ACE_TCHAR *fp;         // Current format pointer
+          ACE_TCHAR *fp = 0;         // Current format pointer
           int       wp = 0;      // Width/precision extracted from args
           bool      done = false;
           bool      skip_nul_locate = false;
@@ -1737,15 +1728,6 @@ ACE_Log_Msg::log (const ACE_TCHAR *format_str,
                   ACE_hthread_t t_id;
                   ACE_OS::thr_self (t_id);
 
-#  if defined (ACE_MVS) || defined (ACE_TANDEM_T1248_PTHREADS)
-                  // MVS's pthread_t is a struct... yuck. So use the ACE 5.0
-                  // code for it.
-                  ACE_OS::strcpy (fp, ACE_TEXT ("u"));
-                  if (can_check)
-                    this_len = ACE_OS::snprintf (bp, bspace, format, t_id);
-                  else
-                    this_len = ACE_OS::sprintf (bp, format, t_id);
-#  else
                   // Yes, this is an ugly C-style cast, but the correct
                   // C++ cast is different depending on whether the t_id
                   // is an integral type or a pointer type. FreeBSD uses
@@ -1758,7 +1740,6 @@ ACE_Log_Msg::log (const ACE_TCHAR *format_str,
                   else
                     this_len = ACE_OS::sprintf
                       (bp, format, (unsigned long)t_id);
-#  endif /* ACE_MWS || ACE_TANDEM_T1248_PTHREADS */
 
 #endif /* ACE_WIN32 */
                   ACE_UPDATE_COUNT (bspace, this_len);
@@ -1985,21 +1966,6 @@ ACE_Log_Msg::log (const ACE_TCHAR *format_str,
                   break;
 
                 case 'Q':
-#if defined (ACE_LACKS_LONGLONG_T) || defined (ACE_LACKS_UNSIGNEDLONGLONG_T)
-                  {
-                    // This relies on the ACE_U_LongLong storage layout.
-                    ACE_UINT32 hi = va_arg (argp, ACE_UINT32);
-                    ACE_UINT32 lo = va_arg (argp, ACE_UINT32);
-                    if (hi > 0)
-                      this_len = ACE_OS::sprintf (bp,
-                                                  "0x%lx%0*lx",
-                                                  hi,
-                                                  2 * sizeof lo,
-                                                  lo);
-                    else
-                      this_len = ACE_OS::sprintf (bp, "0x%lx", lo);
-                  }
-#else  /* ! ACE_LACKS_LONGLONG_T */
                   {
                     const ACE_TCHAR *fmt = ACE_UINT64_FORMAT_SPECIFIER;
                     ACE_OS::strcpy (fp, &fmt[1]);    // Skip leading %
@@ -2012,15 +1978,10 @@ ACE_Log_Msg::log (const ACE_TCHAR *format_str,
                                                   format,
                                                   va_arg (argp, ACE_UINT64));
                   }
-#endif /* ! ACE_LACKS_LONGLONG_T || ACE_LACKS_UNSIGNEDLONGLONG_T */
                   ACE_UPDATE_COUNT (bspace, this_len);
                   break;
 
                 case 'q':
- #if defined (ACE_LACKS_LONGLONG_T)
-                   // No implementation available yet, no ACE_INT64 emulation
-                   // available yet
- #else  /* ! ACE_LACKS_LONGLONG_T */
                    {
                      const ACE_TCHAR *fmt = ACE_INT64_FORMAT_SPECIFIER;
                      ACE_OS::strcpy (fp, &fmt[1]);    // Skip leading %
@@ -2033,7 +1994,6 @@ ACE_Log_Msg::log (const ACE_TCHAR *format_str,
                                                    format,
                                                    va_arg (argp, ACE_INT64));
                    }
- #endif /* ! ACE_LACKS_LONGLONG_T */
                    ACE_UPDATE_COUNT (bspace, this_len);
                    break;
 

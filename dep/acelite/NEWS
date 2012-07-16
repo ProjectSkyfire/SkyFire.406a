@@ -1,3 +1,116 @@
+USER VISIBLE CHANGES BETWEEN ACE-6.1.1 and ACE-6.1.2
+====================================================
+
+. Added compile time support for Windows CE 7, no runtime testing has
+  been performed
+
+. The High Res Timer global scale factor on Windows is now 64bit, see bugzilla
+  3703 for the background of this. If you use the gsf in your code, use the
+  new ACE_High_Res_Timer::global_scale_factor_type type trait to not get
+  any conversion warnings
+
+. Removed Tandem NSK v2/v3 support which resulted in cleanup throughout all
+  code. The emulations for ACE_INT64/ACE_UINT64 have been removed because no
+  platform is using them anymore
+
+USER VISIBLE CHANGES BETWEEN ACE-6.1.0 and ACE-6.1.1
+====================================================
+
+. Minor bug fixes
+
+USER VISIBLE CHANGES BETWEEN ACE-6.0.8 and ACE-6.1.0
+====================================================
+
+. Added compilation support for VxWorks 6.9, no runtime
+  testing has been performed
+
+. Added ACE Run-length encoding compressor
+
+. Fixed several Coverity reported issues
+
+USER VISIBLE CHANGES BETWEEN ACE-6.0.7 and ACE-6.0.8
+====================================================
+
+. Added support for MPC's new feature that creates dependency files for IDL
+  files when generating '-type gnuace' projects. Turned off by default, it
+  can be enabled in a features file or on the command line with
+  '-features ace_idl_dependencies=1'.
+
+USER VISIBLE CHANGES BETWEEN ACE-6.0.6 and ACE-6.0.7
+====================================================
+
+. Added a new method to ACE_Atomic_Op<LOCK, TYPE>, TYPE exchange (TYPE newval)
+  which does an atomic exchange of the new value with ACE_Atomic_Op's value
+  and returns the old value. The tests/Atomic_Op_Test.cpp test program has a
+  test case that exemplifies its usage; see the Exchange_Tester class.
+
+. Added a new feature to timer queue templates classes: TIME_POLICY.
+  This feature is specified through a new template argument and provides the
+  timer queue with a policy for a timer (time of day) value. This feature is
+  intended to replace (in time) the gettimeofday setter method which has been
+  marked @deprecated. For now backwards compatibility is guaranteed.
+  The TIME_POLICY feature provides flexibility with regards to providing a timer
+  source to the timer queues as well as the possibility for a fully optimized
+  calling path.
+  A number of standard time policies are provided in ace/Time_Policy.h.
+  The tests/Timer_Queue_Test.cpp has been updated to reflect and exemplify these
+  changes.
+
+. Added the TIME_POLICY feature also to countdown time class which has now
+  become a template (ace/Countdown_Time_T.h)
+
+. Initial support for Microsoft Visual Studio 11
+
+. Increased overall code quality by using Coverity and Klocwork
+
+USER VISIBLE CHANGES BETWEEN ACE-6.0.5 and ACE-6.0.6
+====================================================
+
+. Removed autoconf support, only traditional way of
+  compilation is shipped from now
+
+. Add support for RHEL 6.1 64bit
+
+USER VISIBLE CHANGES BETWEEN ACE-6.0.4 and ACE-6.0.5
+====================================================
+
+. Improved support for Android and added the ability to run all ACE/TAO tests
+  automatically using the Android emulator
+
+USER VISIBLE CHANGES BETWEEN ACE-6.0.3 and ACE-6.0.4
+====================================================
+
+. Removed support for C++ Builder
+
+. Added support for building with the Android NDK, at least r5c. This
+  is currently available for linux host platforms.
+
+USER VISIBLE CHANGES BETWEEN ACE-6.0.2 and ACE-6.0.3
+====================================================
+
+. Added support for GCC 4.6
+
+USER VISIBLE CHANGES BETWEEN ACE-6.0.1 and ACE-6.0.2
+====================================================
+
+. The ACE_wrappers/ace/OS.h file has been restored in order to ensure
+  build-time compatibility with older ACE versions. Its use will still
+  cause your build to incur more processing time than using the needed
+  ace/OS_NS_*.h files; however, you should be able to build OS.h-including
+  code without needing to replace it with OS_NS_* includes.
+
+. Improved and simplified QNX support
+
+. Changed rand_r() and getpwnam_r() to conform Single UNIX Specification.
+
+. Fixed performance of send_v on windows when individual iovec elements
+  are particularly large.
+
+USER VISIBLE CHANGES BETWEEN ACE-6.0.0 and ACE-6.0.1
+====================================================
+
+. Added support for MinGW with GCC 4.5
+
 USER VISIBLE CHANGES BETWEEN ACE-5.8.3 and ACE-6.0.0
 ====================================================
 

@@ -1566,10 +1566,7 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
             // Death strike
             if (m_spellInfo->SpellFamilyFlags[0] & SPELLFAMILYFLAG_DK_DEATH_STRIKE)
             {
-                if ((m_caster->CountPctFromMaxHealth(7)) > (20 * m_caster->GetDamageTakenInPastSecs(5) / 100))
-                    bp = m_caster->CountPctFromMaxHealth(7);
-                else
-                    bp = (20 * m_caster->GetDamageTakenInPastSecs(5) / 100);
+                bp = std::min<int32>(m_caster->CountPctFromMaxHealth(damage), CalculatePctN(m_caster->GetDamageTakenInPastSecs(5), 15));
 
                 // Improved Death Strike
                 if (AuraEffect const* aurEff = m_caster->GetAuraEffect(SPELL_AURA_ADD_PCT_MODIFIER, SPELLFAMILY_DEATHKNIGHT, 2751, 0))
@@ -1580,6 +1577,17 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                     if (bp < int32(m_caster->CountPctFromMaxHealth(aurEff->GetAmount())))
                         if (m_caster->HasAura(48265) || m_caster->HasAura(48266)) // Only in frost/unholy presence
                             bp = m_caster->CountPctFromMaxHealth(aurEff->GetAmount());
+
+                // Blood Shield
+                if (AuraEffect const* aurEff = m_caster->GetAuraEffect(77513, 1))
+                {
+                    // Blood Presence
+                    if (m_caster->HasAura(48263))
+                    {
+                        int32 shield = CalculatePctN(bp, int32(aurEff->GetAmount() * m_caster->ToPlayer()->GetMasteryPoints()));
+                        m_caster->CastCustomSpell(m_caster, 77535, &shield, NULL, NULL, false);
+                    }
+                }
 
                 m_caster->CastCustomSpell(m_caster, 45470, &bp, NULL, NULL, false);
                 return;
@@ -1613,10 +1621,21 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                 else
                     targets.SetDst(*m_caster);
 
-                // Remove cooldown - summon spellls have category
+                // Remove cooldown - summon spells have category
                 m_caster->ToPlayer()->RemoveSpellCooldown(52150, true);
                 m_caster->ToPlayer()->RemoveSpellCooldown(46585, true);
                 break;
+            }
+            break;
+        case SPELLFAMILY_WARLOCK:
+            switch (m_spellInfo->Id)
+            {
+                case 19028: // Soul Link
+                {
+                    if (Pet* pet =  m_caster->ToPlayer()->GetPet())
+                        pet->AddAura(25228, pet);
+                    break;
+                }
             }
             break;
     }
@@ -1777,6 +1796,20 @@ void Spell::EffectTriggerSpell(SpellEffIndex effIndex)
                 if (Unit* pet = unitTarget->GetGuardianPet())
                     pet->CastSpell(pet, 28305, true);
                 return;
+            }
+            // Faerie Fire
+            case 91565:
+            {
+                // Feral Agression
+                if (AuraEffect const * aurEff = m_caster->GetDummyAuraEffect(SPELLFAMILY_DRUID, 960, 0))
+                {
+                    uint8 count = uint8(aurEff->GetAmount() - 1);
+                    while(count)
+                    {
+                        m_caster->CastSpell(unitTarget, 91565, true);
+                        count--;
+                    }
+                }
             }
         }
     }

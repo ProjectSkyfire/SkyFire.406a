@@ -1,4 +1,4 @@
-// $Id: Thread_Manager.cpp 92682 2010-11-23 23:41:19Z shuston $
+// $Id: Thread_Manager.cpp 95587 2012-03-03 20:48:36Z johnnyw $
 
 #include "ace/TSS_T.h"
 #include "ace/Thread_Manager.h"
@@ -188,9 +188,16 @@ ACE_Thread_Descriptor::terminate ()
            }
 #endif /* !ACE_HAS_VXTHREADS */
 
-         // Remove thread descriptor from the table.
+         // Remove thread descriptor from the table. 'this' is invalid
+         // upon return.
          if (this->tm_ != 0)
-           tm_->remove_thr (this, close_handle);
+           {
+             // remove_thr makes use of 'this' invalid on return.
+             // Code below will free log_msg, so clear our pointer
+             // now - it's already been saved in log_msg.
+             this->log_msg_ = 0;
+             tm_->remove_thr (this, close_handle);
+           }
       }
 
      // Check if we need delete ACE_Log_Msg instance
@@ -203,9 +210,6 @@ ACE_Thread_Descriptor::terminate ()
       }
      else
       {
-        // Thread_Descriptor is the owner of the Log_Msg instance!!
-        // deleted.
-        this->log_msg_ = 0;
         delete log_msg;
       }
    }
@@ -257,6 +261,7 @@ ACE_Thread_Descriptor::dump (void) const
 ACE_Thread_Descriptor::ACE_Thread_Descriptor (void)
   : log_msg_ (0),
     at_exit_list_ (0),
+    tm_ (0),
     terminated_ (false)
 {
   ACE_TRACE ("ACE_Thread_Descriptor::ACE_Thread_Descriptor");
@@ -524,10 +529,11 @@ ace_thread_manager_adapter (void *args)
   exit_hook.thr_mgr (thread_args->thr_mgr ());
 
   // Invoke the user-supplied function with the args.
-  void *status = thread_args->invoke ();
+  ACE_THR_FUNC_RETURN status = thread_args->invoke ();
 
   delete static_cast<ACE_Base_Thread_Adapter *> (thread_args);
-  return status;
+
+  return reinterpret_cast<void *> (status);
 }
 #endif
 

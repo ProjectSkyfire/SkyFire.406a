@@ -1,4 +1,4 @@
-// $Id: Module.cpp 84068 2008-12-24 18:32:05Z shuston $
+// $Id: Module.cpp 95595 2012-03-07 13:33:25Z johnnyw $
 
 #ifndef ACE_MODULE_CPP
 #define ACE_MODULE_CPP
@@ -158,7 +158,9 @@ ACE_Module<ACE_SYNCH_USE>::sibling (ACE_Task<ACE_SYNCH_USE> *orig)
 
 template <ACE_SYNCH_DECL>
 ACE_Module<ACE_SYNCH_USE>::ACE_Module (void)
-  : flags_ (M_FLAGS_NOT_SET)
+  : next_ (0)
+  , arg_ (0)
+  , flags_ (M_FLAGS_NOT_SET)
 {
   ACE_TRACE ("ACE_Module<ACE_SYNCH_USE>::ACE_Module");
   this->name (ACE_TEXT ("<unknown>"));

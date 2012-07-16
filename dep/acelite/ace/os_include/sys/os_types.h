@@ -6,7 +6,7 @@
  *
  *  data types
  *
- *  $Id: os_types.h 91683 2010-09-09 09:07:49Z johnnyw $
+ *  $Id: os_types.h 95534 2012-02-17 23:19:33Z mitza $
  *
  *  @author Don Hinton <dhinton@dresystems.com>
  *  @author This code was originally in various places including ace/OS.h.
@@ -71,7 +71,7 @@ typedef double ACE_timer_t;
 
 #if defined (ACE_SIZEOF_LONG) && ACE_SIZEOF_LONG == 8
    typedef off_t ACE_LOFF_T;
-#elif defined (ACE_HAS_RTEMS) || defined (__FreeBSD__) || defined (__NetBSD__) || defined (__OpenBSD__) || defined (__APPLE__) || defined(ACE_MVS) || defined(__INTERIX) || \
+#elif defined (ACE_HAS_RTEMS) || defined (__FreeBSD__) || defined (__NetBSD__) || defined (__OpenBSD__) || defined (__APPLE__) || defined(__INTERIX) || \
   (defined (ACE_OPENVMS) && defined (_LARGEFILE))
    typedef off_t ACE_LOFF_T;
 #elif defined (AIX) || defined (HPUX) || defined (__QNX__)
@@ -80,7 +80,7 @@ typedef double ACE_timer_t;
    typedef offset_t ACE_LOFF_T;
 #elif defined (WIN32)
    typedef __int64  ACE_LOFF_T;
-#elif (defined (ACE_VXWORKS) && (ACE_VXWORKS <= 0x680)) || \
+#elif (defined (ACE_VXWORKS) && (ACE_VXWORKS <= 0x690)) || \
   defined (ACE_LYNXOS_MAJOR) || \
   (defined (ACE_OPENVMS) && !defined (_LARGEFILE)) || \
   defined (__TANDEM)

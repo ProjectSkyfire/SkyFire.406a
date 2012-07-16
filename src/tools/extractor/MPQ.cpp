@@ -157,7 +157,7 @@ int ExtractFileToHardDrive(HANDLE &MPQ_handle, const char * szArchivedFile, cons
     // Create the target file
     if (nError == ERROR_SUCCESS)
     {
-		handle = FileStream_CreateFile(szFileName);
+		handle = FileStream_CreateFile(szFileName, BASE_PROVIDER_FILE);
         if (handle == NULL)
             nError = GetLastError();
     }
