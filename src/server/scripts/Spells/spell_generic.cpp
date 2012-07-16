@@ -2395,6 +2395,47 @@ public:
     }
 };
 
+// when learning this spell, learn ALL masteries as disabled (enable current spec)
+class spell_gen_enable_mastery : public SpellScriptLoader
+{
+    public:
+        spell_gen_enable_mastery() : SpellScriptLoader("spell_gen_enable_mastery") { }
+
+        class spell_gen_enable_mastery_SpellScript : public SpellScript
+        {
+            PrepareSpellScript(spell_gen_enable_mastery_SpellScript);
+
+            void HandleDummy(SpellEffIndex effIndex)
+            {
+                PreventHitDefaultEffect(effIndex);
+                Player* target = GetHitPlayer();
+                if (!target)
+                    return;
+
+                // learn all mastery spells, and only set active the ones that are for current spec
+                uint32 const* talentTabs = GetTalentTabPages(target->getClass());
+                uint32 currentSpec = target->GetPrimaryTalentTree(target->GetActiveSpec());
+                for (uint32 i = 0; i < MAX_TALENT_TABS; ++i)
+                    if (TalentTabEntry const* talentTab = sTalentTabStore.LookupEntry(talentTabs[i]))
+                        for (uint32 i = 0; i < MAX_MASTERY_SPELLS; ++i)
+                            if (uint32 mastery = talentTab->MasterySpellId[i])
+                                target->addSpell(mastery, currentSpec == talentTabs[i], false, false, currentSpec != talentTabs[i]);
+
+                target->SetMasteryState(true);
+            }
+
+            void Register()
+            {
+                OnEffectHitTarget += SpellEffectFn(spell_gen_enable_mastery_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
+            }
+        };
+
+        SpellScript* GetSpellScript() const
+        {
+            return new spell_gen_enable_mastery_SpellScript();
+        }
+};
+
 void AddSC_generic_spell_scripts()
 {
     new spell_gen_absorb0_hitlimit1();
@@ -2439,4 +2480,5 @@ void AddSC_generic_spell_scripts()
     new spell_gen_summon_tournament_mount();
     new spell_gen_on_tournament_mount();
     new spell_gen_tournament_pennant();
+    new spell_gen_enable_mastery();
 }

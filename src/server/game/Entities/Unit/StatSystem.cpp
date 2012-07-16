@@ -631,6 +631,44 @@ void Player::UpdateAllCritPercentages()
     UpdateCritPercentage(RANGED_ATTACK);
 }
 
+void Player::UpdateMastery()
+{
+    if (!CanUseMastery())
+    {
+        SetFloatValue(PLAYER_MASTERY, 0.0f);
+        return;
+    }
+
+    float value = GetTotalAuraModifier(SPELL_AURA_MASTERY);
+    value += GetRatingBonusValue(CR_MASTERY);
+    SetFloatValue(PLAYER_MASTERY, value);
+
+    TalentTabEntry const* talentTab = sTalentTabStore.LookupEntry(GetPrimaryTalentTree(GetActiveSpec()));
+    if (!talentTab)
+        return;
+
+    bool lastDummyEffect = true;
+    for (uint32 i = 0; i < MAX_MASTERY_SPELLS; ++i)
+    {
+        if (!talentTab->MasterySpellId[i])
+            continue;
+
+        if (Aura* aura = GetAura(talentTab->MasterySpellId[i]))
+        {
+            for (uint32 j = MAX_SPELL_EFFECTS; j > 0; --j)
+            {
+                if (!aura->HasEffect(j - 1))
+                    continue;
+
+                if (!lastDummyEffect)
+                    aura->GetEffect(j - 1)->SetAmount(int32(value * aura->GetSpellInfo()->Effects[j - 1].BonusCoefficient));
+                else
+                    lastDummyEffect = false;
+            }
+        }
+    }
+}
+
 const float m_diminishing_k[MAX_CLASSES] =
 {
     0.9560f,  // Warrior

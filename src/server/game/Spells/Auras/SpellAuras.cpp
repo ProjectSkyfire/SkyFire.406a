@@ -148,7 +148,7 @@ void AuraApplication::_InitFlags(Unit* caster, uint8 effMask)
         }
         _flags |= positiveFound ? AFLAG_POSITIVE : AFLAG_NEGATIVE;
     }
-    if (GetBase()->GetSpellInfo()->HasAura(SPELL_AURA_SWAP_SPELLS))
+    if (GetBase()->GetSpellInfo()->AttributesCu & SPELL_ATTR0_CU_SCALABLE)
         _flags |= AFLAG_ANY_EFFECT_AMOUNT_SENT;
 }
 

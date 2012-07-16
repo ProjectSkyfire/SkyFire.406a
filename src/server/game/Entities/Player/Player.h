@@ -1982,6 +1982,10 @@ class Player : public Unit, public GridObject<Player>
         void ApplyRatingMod(CombatRating cr, int32 value, bool apply);
         void UpdateRating(CombatRating cr);
         void UpdateAllRatings();
+        void UpdateMastery();
+        bool CanUseMastery() const { return _canUseMastery; }
+        void SetMasteryState(bool apply) { _canUseMastery = apply; UpdateMastery(); }
+        void CastMasterySpells(Player* caster);
 
         void CalculateMinMaxDamage(WeaponAttackType attType, bool normalized, bool addTotalPct, float& min_damage, float& max_damage);
 
@@ -2970,6 +2974,7 @@ class Player : public Unit, public GridObject<Player>
         uint32 talentPoints;
         uint32 profPoints;
         uint32 guild;
+        bool _canUseMastery;
 };
 
 void AddItemsSetItem(Player*player, Item *item);

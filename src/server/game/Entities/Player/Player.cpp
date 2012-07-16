@@ -870,6 +870,8 @@ Player::Player(WorldSession* session): Unit(true), _achievementMgr(this), _reput
     m_SeasonalQuestChanged = false;
 
     SetPendingBind(0, 0);
+
+    _canUseMastery = false;
 }
 
 Player::~Player ()
@@ -3676,6 +3678,9 @@ bool Player::addSpell(uint32 spellId, bool active, bool learning, bool dependent
             {
                 if (spellInfo->IsPassive() && IsNeedCastPassiveSpellAtLearn(spellInfo))
                     CastSpell (this, spellId, true);
+
+                if (CanUseMastery())
+                    CastMasterySpells(this);
             }
             else if (IsInWorld())
             {
@@ -4020,6 +4025,8 @@ void Player::learnSpell(uint32 spell_id, bool dependent)
                 learnSpell(itr2->second, false);
         }
     }
+    if (GetSpellInfo(spell_id)->HasAura(SPELL_AURA_MASTERY) && CanUseMastery())
+        CastMasterySpells(this);
 }
 
 void Player::removeSpell(uint32 spell_id, bool disabled, bool learn_low_rank)
@@ -4527,12 +4534,17 @@ bool Player::ResetTalents(bool no_cost)
     }
 
     // Remove spec specific spells
+    uint32 const* talentTabs = GetTalentTabPages(getClass());
     for (uint32 i = 0; i < MAX_TALENT_TABS; ++i)
     {
-        std::vector<uint32> const* specSpells = GetTalentTreePrimarySpells(GetTalentTabPages(getClass())[i]);
-        if (specSpells)
-            for (size_t i = 0; i < specSpells->size(); ++i)
-                removeSpell(specSpells->at(i), true);
+        if (std::vector<uint32> const* specSpells = GetTalentTreePrimarySpells(talentTabs[i]))
+            for (size_t j = 0; j < specSpells->size(); ++j)
+                removeSpell(specSpells->at(j), true);
+
+        TalentTabEntry const* talentTabInfo = sTalentTabStore.LookupEntry(talentTabs[i]);
+        for (uint32 j = 0; j < MAX_MASTERY_SPELLS; ++j)
+            if (uint32 mastery = talentTabInfo->MasterySpellId[j])
+                removeSpell(mastery, true);
     }
 
     SetPrimaryTalentTree(GetActiveSpec(), 0);
@@ -6136,6 +6148,9 @@ void Player::UpdateRating(CombatRating cr)
         case CR_ARMOR_PENETRATION:
             if (affectStats)
                 UpdateArmorPenetration(amount);
+            break;
+        case CR_MASTERY:
+            UpdateMastery();
             break;
         default:
             break;
@@ -9190,6 +9205,67 @@ void Player::CastItemUseSpell(Item* item, SpellCastTargets const& targets, uint8
             spell->prepare(&targets);
 
             ++count;
+        }
+    }
+}
+
+// These spells arent passive, they must be cast asap after player login.
+void Player::CastMasterySpells(Player* caster)
+{
+    if (!caster)
+        return;
+
+    switch (caster->getClass())
+    {
+        case CLASS_WARRIOR:
+        {
+            caster->CastSpell(caster,87500,true);
+            break;
+        }
+        case CLASS_PALADIN:
+        {
+            caster->CastSpell(caster,87494,true);
+            break;
+        }
+        case CLASS_HUNTER:
+        {
+            caster->CastSpell(caster,87493,true);
+            break;
+        }
+        case CLASS_ROGUE:
+        {
+            caster->CastSpell(caster,87496,true);
+            break;
+        }
+        case CLASS_PRIEST:
+        {
+            caster->CastSpell(caster,87495,true);
+            break;
+        }
+        case CLASS_DEATH_KNIGHT:
+        {
+            caster->CastSpell(caster,87492,true);
+            break;
+        }
+        case CLASS_SHAMAN:
+        {
+            caster->CastSpell(caster,87497,true);
+            break;
+        }
+        case CLASS_MAGE:
+        {
+            caster->CastSpell(caster,86467,true);
+            break;
+        }
+        case CLASS_WARLOCK:
+        {
+            caster->CastSpell(caster,87498,true);
+            break;
+        }
+        case CLASS_DRUID:
+        {
+            caster->CastSpell(caster,87491,true);
+            break;
         }
     }
 }
@@ -24903,9 +24979,15 @@ bool Player::LearnTalent(uint32 talentId, uint32 talentRank)
     {
         SetPrimaryTalentTree(GetActiveSpec(), talentInfo->TalentTab);
         std::vector<uint32> const* specSpells = GetTalentTreePrimarySpells(talentInfo->TalentTab);
+
         if (specSpells)
             for (size_t i = 0; i < specSpells->size(); ++i)
                 learnSpell(specSpells->at(i), false);
+
+        if (CanUseMastery())
+            for (uint32 i = 0; i < MAX_MASTERY_SPELLS; ++i)
+                if (uint32 mastery = talentTabInfo->MasterySpellId[i])
+                    learnSpell(mastery, false);
     }
 
     // update free talent points
@@ -25698,10 +25780,17 @@ void Player::ActivateSpec(uint8 spec)
     // Remove spec specific spells
     for (uint32 i = 0; i < MAX_TALENT_TABS; ++i)
     {
-        std::vector<uint32> const* specSpells = GetTalentTreePrimarySpells(GetTalentTabPages(getClass())[i]);
+        uint32 const* talentTabs = GetTalentTabPages(getClass());
+        std::vector<uint32> const* specSpells = GetTalentTreePrimarySpells(talentTabs[i]);
+
         if (specSpells)
             for (size_t i = 0; i < specSpells->size(); ++i)
                 removeSpell(specSpells->at(i), true);
+
+        TalentTabEntry const* talentTabInfo = sTalentTabStore.LookupEntry(talentTabs[i]);
+        for (uint32 i = 0; i < MAX_MASTERY_SPELLS; ++i)
+            if (uint32 mastery = talentTabInfo->MasterySpellId[i])
+                removeSpell(mastery, true);
     }
 
     // set glyphs
@@ -25749,6 +25838,12 @@ void Player::ActivateSpec(uint8 spec)
     if (specSpells)
         for (size_t i = 0; i < specSpells->size(); ++i)
             learnSpell(specSpells->at(i), false);
+
+    if (CanUseMastery())
+        if (TalentTabEntry const* talentTabInfo = sTalentTabStore.LookupEntry(GetPrimaryTalentTree(GetActiveSpec())))
+            for (uint32 i = 0; i < MAX_MASTERY_SPELLS; ++i)
+                if (uint32 mastery = talentTabInfo->MasterySpellId[i])
+                    learnSpell(mastery, false);
 
     // set glyphs
     for (uint8 slot = 0; slot < MAX_GLYPH_SLOT_INDEX; ++slot)
