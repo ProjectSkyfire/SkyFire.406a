@@ -3992,6 +3992,7 @@ void Player::learnSpell(uint32 spell_id, bool dependent)
 
     bool disabled = (itr != _spells.end()) ? itr->second->disabled : false;
     bool active = disabled ? itr->second->active : true;
+    SpellInfo const* learnedSpell = GetSpellInfo(spell_id);
 
     bool learning = addSpell(spell_id, active, true, dependent, false);
 
@@ -4022,7 +4023,10 @@ void Player::learnSpell(uint32 spell_id, bool dependent)
                 learnSpell(itr2->second, false);
         }
     }
-    if (GetSpellInfo(spell_id)->HasAura(SPELL_AURA_MASTERY) && CanUseMastery())
+    if (!learnedSpell)
+        return;
+    // If the learned spell is one of the mastery passives, activate the mastery spell.
+    if (learnedSpell->HasAura(SPELL_AURA_MASTERY))
         CastMasterySpells(this);
 }
 
