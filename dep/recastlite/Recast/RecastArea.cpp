@@ -320,7 +320,7 @@ void rcMarkBoxArea(rcContext* ctx, const float* bmin, const float* bmax, unsigne
 				rcCompactSpan& s = chf.spans[i];
 				if ((int)s.y >= miny && (int)s.y <= maxy)
 				{
-					if (chf.areas[i] != RC_NULL_AREA)
+                    if (chf.areas[i] != RC_NULL_AREA)
                         chf.areas[i] = areaId;
 				}
 			}
