@@ -551,21 +551,11 @@ NavTerrain PathFinderMovementGenerator::getNavTerrain(float x, float y, float z)
 
 bool PathFinderMovementGenerator::HaveTile(const Vector3 &p) const
 {
-    bool haveTiles;
     int tx, ty;
     float point[VERTEX_SIZE] = {p.y, p.z, p.x};
 
-    // check if the start and end point have a mmtile loaded
     m_navMesh->calcTileLoc(point, &tx, &ty);
-    haveTiles = m_navMesh->getTileAt(tx, ty) != 0;
-
-    if (haveTiles)
-    {
-        m_navMesh->calcTileLoc(point, &tx, &ty);
-        haveTiles = m_navMesh->getTileAt(tx, ty) != 0;
-    }
-
-    return haveTiles;
+    return (m_navMesh && m_navMesh->getTileAt(tx, ty) != NULL);
 }
 
 uint32 PathFinderMovementGenerator::fixupCorridor(dtPolyRef* path, uint32 npath, uint32 maxPath,
