@@ -2459,15 +2459,20 @@ void Player::RegenerateAll()
     // Runes act as cooldowns, and they don't need to send any data
     if (getClass() == CLASS_DEATH_KNIGHT)
     {
-        for (uint32 i = 0; i < MAX_RUNES; i += 2)
+        for (uint8 i = 0; i < MAX_RUNES; i += 2)
         {
-            uint32 cd1 = GetRuneCooldown(i);
-            uint32 cd2 = GetRuneCooldown(i + 1);
+            uint8 runeToRegen = i;
+            uint32 cd = GetRuneCooldown(i);
+            uint32 secondRuneCd = GetRuneCooldown(i + 1);
+            // Regenerate second rune of the same type only after first rune is off the cooldown
+            if (secondRuneCd && (cd > secondRuneCd || !cd))
+            {
+                runeToRegen = i + 1;
+                cd = secondRuneCd;
+            }
 
-            if (cd1 && (!cd2 || cd1 <= cd2))
-                SetRuneCooldown(i, (cd1 > _regenTimer) ? cd1 - _regenTimer : 0);
-            else if (cd2)
-                SetRuneCooldown(i + 1, (cd2 > _regenTimer) ? cd2 - _regenTimer : 0);
+            if (cd)
+                SetRuneCooldown(runeToRegen, (cd > _regenTimer) ? cd - _regenTimer : 0);
         }
     }
 
