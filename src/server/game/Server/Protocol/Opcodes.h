@@ -639,7 +639,7 @@ enum Opcodes
     SMSG_PLAY_OBJECT_SOUND                           = 0x07DA0, // 4.0.6a 13623
     CMSG_REQUEST_PET_INFO                            = 0x0EAE4, // 4.0.6a 13623
     CMSG_FAR_SIGHT                                   = 0x0B2EC, // 4.0.6a 13623
-    SMSG_SPELLDISPELLOG                              = 0x0A9C8,  // 4.0.6a 13623
+    SMSG_SPELLDISPELLOG                              = 0x0A9C8, // 4.0.6a 13623
     SMSG_DAMAGE_CALC_LOG                             = 0x0FD84, // 4.0.6a 13623
     CMSG_ENABLE_DAMAGE_LOG                           = 0x100CB, // Unknown opcode ID
     CMSG_GROUP_CHANGE_SUB_GROUP                      = 0x03A80, // 4.0.6a 13623
