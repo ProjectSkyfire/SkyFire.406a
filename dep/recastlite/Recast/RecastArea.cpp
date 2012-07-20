@@ -215,22 +215,22 @@ static void insertSort(unsigned char* a, const int n)
 bool rcMedianFilterWalkableArea(rcContext* ctx, rcCompactHeightfield& chf)
 {
 	rcAssert(ctx);
-
+	
 	const int w = chf.width;
 	const int h = chf.height;
-
+	
 	ctx->startTimer(RC_TIMER_MEDIAN_AREA);
-
+	
 	unsigned char* areas = (unsigned char*)rcAlloc(sizeof(unsigned char)*chf.spanCount, RC_ALLOC_TEMP);
 	if (!areas)
 	{
 		ctx->log(RC_LOG_ERROR, "medianFilterWalkableArea: Out of memory 'areas' (%d).", chf.spanCount);
 		return false;
 	}
-
+	
 	// Init distance.
 	memset(areas, 0xff, sizeof(unsigned char)*chf.spanCount);
-
+	
 	for (int y = 0; y < h; ++y)
 	{
 		for (int x = 0; x < w; ++x)
@@ -244,21 +244,21 @@ bool rcMedianFilterWalkableArea(rcContext* ctx, rcCompactHeightfield& chf)
 					areas[i] = chf.areas[i];
 					continue;
 				}
-
+				
 				unsigned char nei[9];
 				for (int j = 0; j < 9; ++j)
 					nei[j] = chf.areas[i];
-
+				
 				for (int dir = 0; dir < 4; ++dir)
 				{
 					if (rcGetCon(s, dir) != RC_NOT_CONNECTED)
 					{
 						const int ax = x + rcGetDirOffsetX(dir);
 						const int ay = y + rcGetDirOffsetY(dir);
-						const int ai = (int)chf.cells[ax+ay*w].index + rcGetCon(s, dir);
-						if (chf.areas[ai] != RC_NULL_AREA)
+						const int ai = (int)chf.cells[ax+ay*w].index + rcGetCon(s, dir);						
+                        if (chf.areas[ai] != RC_NULL_AREA)
 							nei[dir*2+0] = chf.areas[ai];
-
+						
 						const rcCompactSpan& as = chf.spans[ai];
 						const int dir2 = (dir+1) & 0x3;
 						if (rcGetCon(as, dir2) != RC_NOT_CONNECTED)
@@ -276,21 +276,20 @@ bool rcMedianFilterWalkableArea(rcContext* ctx, rcCompactHeightfield& chf)
 			}
 		}
 	}
-
+	
 	memcpy(chf.areas, areas, sizeof(unsigned char)*chf.spanCount);
-
+	
 	rcFree(areas);
 
 	ctx->stopTimer(RC_TIMER_MEDIAN_AREA);
-
+	
 	return true;
 }
 
-void rcMarkBoxArea(rcContext* ctx, const float* bmin, const float* bmax, unsigned char areaId,
-				   rcCompactHeightfield& chf)
+void rcMarkBoxArea(rcContext* ctx, const float* bmin, const float* bmax, unsigned char areaId, rcCompactHeightfield& chf)
 {
 	rcAssert(ctx);
-
+	
 	ctx->startTimer(RC_TIMER_MARK_BOX_AREA);
 
 	int minx = (int)((bmin[0]-chf.bmin[0])/chf.cs);
@@ -299,17 +298,24 @@ void rcMarkBoxArea(rcContext* ctx, const float* bmin, const float* bmax, unsigne
 	int maxx = (int)((bmax[0]-chf.bmin[0])/chf.cs);
 	int maxy = (int)((bmax[1]-chf.bmin[1])/chf.ch);
 	int maxz = (int)((bmax[2]-chf.bmin[2])/chf.cs);
-
-	if (maxx < 0) return;
-	if (minx >= chf.width) return;
-	if (maxz < 0) return;
-	if (minz >= chf.height) return;
+	
+	if (maxx < 0) 
+        return;
+	
+    if (minx >= chf.width) 
+        return;
+	
+    if (maxz < 0) 
+        return;
+	
+    if (minz >= chf.height) 
+        return;
 
 	if (minx < 0) minx = 0;
 	if (maxx >= chf.width) maxx = chf.width-1;
 	if (minz < 0) minz = 0;
-	if (maxz >= chf.height) maxz = chf.height-1;
-
+	if (maxz >= chf.height) maxz = chf.height-1;	
+	
 	for (int z = minz; z <= maxz; ++z)
 	{
 		for (int x = minx; x <= maxx; ++x)
@@ -320,13 +326,11 @@ void rcMarkBoxArea(rcContext* ctx, const float* bmin, const float* bmax, unsigne
 				rcCompactSpan& s = chf.spans[i];
 				if ((int)s.y >= miny && (int)s.y <= maxy)
 				{
-                    if (chf.areas[i] != RC_NULL_AREA)
-                        chf.areas[i] = areaId;
+                    chf.areas[i] = areaId;
 				}
 			}
 		}
 	}
-
 	ctx->stopTimer(RC_TIMER_MARK_BOX_AREA);
 }
 
@@ -344,12 +348,10 @@ static int pointInPoly(int nvert, const float* verts, const float* p)
 	return c;
 }
 
-void rcMarkConvexPolyArea(rcContext* ctx, const float* verts, const int nverts,
-						  const float hmin, const float hmax, unsigned char areaId,
-						  rcCompactHeightfield& chf)
+void rcMarkConvexPolyArea(rcContext* ctx, const float* verts, const int nverts, const float hmin, const float hmax, unsigned char areaId, rcCompactHeightfield& chf)
 {
 	rcAssert(ctx);
-
+	
 	ctx->startTimer(RC_TIMER_MARK_CONVEXPOLY_AREA);
 
 	float bmin[3], bmax[3];
@@ -369,17 +371,25 @@ void rcMarkConvexPolyArea(rcContext* ctx, const float* verts, const int nverts,
 	int maxx = (int)((bmax[0]-chf.bmin[0])/chf.cs);
 	int maxy = (int)((bmax[1]-chf.bmin[1])/chf.ch);
 	int maxz = (int)((bmax[2]-chf.bmin[2])/chf.cs);
-
-	if (maxx < 0) return;
-	if (minx >= chf.width) return;
-	if (maxz < 0) return;
-	if (minz >= chf.height) return;
-
+	
+	if (maxx < 0) 
+        return;
+	
+    if (minx >= chf.width) 
+        return;
+	
+    if (maxz < 0) 
+        return;
+	
+    if (minz >= chf.height) 
+        return;
+	
 	if (minx < 0) minx = 0;
 	if (maxx >= chf.width) maxx = chf.width-1;
 	if (minz < 0) minz = 0;
-	if (maxz >= chf.height) maxz = chf.height-1;
-
+	if (maxz >= chf.height) maxz = chf.height-1;	
+	
+	
 	// TODO: Optimize.
 	for (int z = minz; z <= maxz; ++z)
 	{
@@ -389,25 +399,20 @@ void rcMarkConvexPolyArea(rcContext* ctx, const float* verts, const int nverts,
 			for (int i = (int)c.index, ni = (int)(c.index+c.count); i < ni; ++i)
 			{
 				rcCompactSpan& s = chf.spans[i];
-
-                if (chf.areas[i] == RC_NULL_AREA)
-                    continue;
-
 				if ((int)s.y >= miny && (int)s.y <= maxy)
 				{
 					float p[3];
-					p[0] = chf.bmin[0] + (x+0.5f)*chf.cs;
+					p[0] = chf.bmin[0] + (x+0.5f)*chf.cs; 
 					p[1] = 0;
-					p[2] = chf.bmin[2] + (z+0.5f)*chf.cs;
+					p[2] = chf.bmin[2] + (z+0.5f)*chf.cs; 
 
 					if (pointInPoly(nverts, verts, p))
 					{
-						chf.areas[i] = areaId;
+                        chf.areas[i] = areaId;
 					}
 				}
 			}
 		}
 	}
-
 	ctx->stopTimer(RC_TIMER_MARK_CONVEXPOLY_AREA);
 }
