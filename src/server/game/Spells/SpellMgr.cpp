@@ -3088,14 +3088,14 @@ void SpellMgr::LoadSpellCustomAttr()
             case 8494: // Mana Shield (rank 2)
                 // because of bug in dbc
                 spellInfo->ProcChance = 0;
-                break;              
+                break;
             case 2825:  // Bloodlust
                 spellInfo->ExcludeCasterAuraSpell = 57724; // Sated
-                break;            
-                
+                break;
+
             case 80353: // Time Warp
                 spellInfo->ExcludeCasterAuraSpell = 80354; // Temporal Displacement
-                break;      
+                break;
             case 90355: // Ancient Hysteria
                 spellInfo->ExcludeCasterAuraSpell = 95809; // Insanity
                 break;

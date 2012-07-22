@@ -2278,7 +2278,7 @@ class Unit : public WorldObject
 
             return spellId;
         }
-        
+
         void AddSpellMod(SpellModifier* mod, bool apply);
         bool IsAffectedBySpellmod(SpellInfo const *spellInfo, SpellModifier *mod, Spell* spell = NULL);
         template <class T> T ApplySpellMod(uint32 spellId, SpellModOp op, T &basevalue, Spell* spell = NULL, Unit* target = NULL);

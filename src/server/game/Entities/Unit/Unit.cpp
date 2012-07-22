@@ -5212,7 +5212,7 @@ bool Unit::HandleAuraProcOnPowerAmount(Unit* victim, uint32 damage, AuraEffect* 
         sLog->outError("Unit::HandleAuraProcOnPowerAmount: Spell %u have 0 powerAmountRequired in EffectAmount[%d] or 0 powerRequired in EffectMiscValue, not handled custom case?", auraSpellInfo->Id, triggeredByAura->GetEffIndex());
         return false;
     }
-    
+
     if (GetPower(powerRequired) != powerAmountRequired)
         return false;
 
@@ -6288,7 +6288,7 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                     return true;
                 }
                 return false;
-            }       
+            }
             // Vampiric Touch
             if (dummySpell->SpellFamilyFlags[1] & 0x00000400)
             {
@@ -6378,7 +6378,7 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                         }
                     }
                     return false;
-                }                
+                }
                 // Glyph of Prayer of Healing
                 case 55680:
                 {
@@ -13139,7 +13139,7 @@ void Unit::setDeathState(DeathState s)
         ModifyAuraState(AURA_STATE_HEALTHLESS_35_PERCENT, false);
         // remove aurastates allowing special moves
         ClearAllReactives();
-        ClearDiminishings();	
+        ClearDiminishings();
         if (IsInWorld())
         {
             // Only clear MotionMaster for entities that exists in world
