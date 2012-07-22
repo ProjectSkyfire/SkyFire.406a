@@ -3092,7 +3092,6 @@ void SpellMgr::LoadSpellCustomAttr()
             case 2825:  // Bloodlust
                 spellInfo->ExcludeCasterAuraSpell = 57724; // Sated
                 break;
-
             case 80353: // Time Warp
                 spellInfo->ExcludeCasterAuraSpell = 80354; // Temporal Displacement
                 break;

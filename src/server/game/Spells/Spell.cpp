@@ -4047,7 +4047,12 @@ void Spell::WriteSpellGoTargets(WorldPacket* data)
 
 void Spell::SendLogExecute()
 {
-    WorldPacket data(SMSG_SPELLLOGEXECUTE, (8+4+4+4+4+8));
+    WorldPacket data(SMSG_COMBAT_LOG_MULTIPLE, 4+4+4+4+8+4+4+4+4+8);
+
+    data << uint32(1);                                      // total number of log lines
+    data << uint32(0);
+    data << uint32(0);
+    data << uint32(SPELL_LOG_EXECUTE);
 
     data.append(m_caster->GetPackGUID());
 
