@@ -3088,15 +3088,16 @@ void SpellMgr::LoadSpellCustomAttr()
             case 8494: // Mana Shield (rank 2)
                 // because of bug in dbc
                 spellInfo->ProcChance = 0;
-                break;
+                break;              
             case 2825:  // Bloodlust
-                spellInfo->Effects[0].TriggerSpell = 57724; // Sated
-                break;
+                spellInfo->ExcludeCasterAuraSpell = 57724; // Sated
+                break;            
+                
             case 80353: // Time Warp
-                spellInfo->Effects[0].TriggerSpell = 80354; // Temporal Displacement
-                break;
+                spellInfo->ExcludeCasterAuraSpell = 80354; // Temporal Displacement
+                break;      
             case 90355: // Ancient Hysteria
-                spellInfo->Effects[0].TriggerSpell = 95809; // Insanity
+                spellInfo->ExcludeCasterAuraSpell = 95809; // Insanity
                 break;
             case 20335: // Heart of the Crusader
             case 20336:

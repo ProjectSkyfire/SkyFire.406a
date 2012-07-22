@@ -25046,7 +25046,7 @@ void Player::LearnPetTalent(uint64 petGuid, uint32 talentId, uint32 talentRank)
     if (!pet_family)
         return;
 
-    if (pet_family->petTalentType < 0)                       // not hunter pet
+    if (pet_family->petTalentType == PET_TALENT_TYPE_NOT_HUNTER_PET) // not hunter pet
         return;
 
     // prevent learn talent for different family (cheating)
@@ -25298,7 +25298,7 @@ void Player::BuildPetTalentsInfoData(WorldPacket *data)
         return;
 
     CreatureFamilyEntry const* pet_family = sCreatureFamilyStore.LookupEntry(ci->family);
-    if (!pet_family || pet_family->petTalentType < 0)
+    if (!pet_family || pet_family->petTalentType == PET_TALENT_TYPE_NOT_HUNTER_PET)
         return;
 
     for (uint32 talentTabId = 1; talentTabId < sTalentTabStore.GetNumRows(); ++talentTabId)

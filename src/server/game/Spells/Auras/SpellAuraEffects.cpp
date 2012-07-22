@@ -5545,7 +5545,7 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
                     target->ApplySpellImmune(GetId(), IMMUNITY_ID, 91342, apply); break; // Prevent restacking of Shadow Infusion while in dark transformation
                 case 57723: // Exhaustion
                 case 57724: // Sated
-                case 80354: // Temporal Displacement
+                case 80354: // Temporal Displacement                
                 case 95809: // Insanity
                 {
                     target->ApplySpellImmune(GetId(), IMMUNITY_ID, 32182, apply); break; // Heroism

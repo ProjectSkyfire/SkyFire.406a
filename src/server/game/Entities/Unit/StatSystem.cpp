@@ -1358,18 +1358,18 @@ void Guardian::UpdateAttackPowerAndDamage(bool ranged)
     Unit* owner = GetOwner();
     if (owner && owner->GetTypeId() == TYPEID_PLAYER)
     {
-        if (isHunterPet())                      //hunter pets benefit from owner's attack power
+        if (isHunterPet())                                                          // hunter pets benefit from owner's attack power
         {
-            float mod = 1.0f;                                                 //Hunter contribution modifier
+            float mod = 1.0f;                                                       // Hunter contribution modifier
             if (isPet())
             {
-                PetSpellMap::const_iterator itr = ToPet()->_spells.find(62758);    //Wild Hunt rank 1
+                PetSpellMap::const_iterator itr = ToPet()->_spells.find(62758);     // Wild Hunt rank 1
                 if (itr == ToPet()->_spells.end())
-                    itr = ToPet()->_spells.find(62762);                            //Wild Hunt rank 2
+                    itr = ToPet()->_spells.find(62762);                             // Wild Hunt rank 2
 
-                if (itr != ToPet()->_spells.end())                                 // If pet has Wild Hunt
+                if (itr != ToPet()->_spells.end())                                  // If pet has Wild Hunt
                 {
-                    SpellInfo const* sProto = sSpellMgr->GetSpellInfo(itr->first); // Then get the SpellProto and add the dummy effect value
+                    SpellInfo const* sProto = sSpellMgr->GetSpellInfo(itr->first);  // Then get the SpellInfo and add the dummy effect value
                     mod += CalculatePctN(1.0f, sProto->Effects[1].CalcValue());
                 }
             }
@@ -1377,7 +1377,7 @@ void Guardian::UpdateAttackPowerAndDamage(bool ranged)
             bonusAP = owner->GetTotalAttackPowerValue(RANGED_ATTACK) * 0.22f * mod;
             SetBonusDamage(int32(owner->GetTotalAttackPowerValue(RANGED_ATTACK) * 0.425f * mod));
         }
-        else if (IsPetGhoul()) //ghouls benefit from deathknight's attack power (may be summon pet or not)
+        else if (IsPetGhoul()) // ghouls benefit from deathknight's attack power (may be summon pet or not)
         {
             bonusAP = owner->GetTotalAttackPowerValue(BASE_ATTACK) * 0.22f;
             SetBonusDamage(int32(owner->GetTotalAttackPowerValue(BASE_ATTACK) * 0.1287f));
