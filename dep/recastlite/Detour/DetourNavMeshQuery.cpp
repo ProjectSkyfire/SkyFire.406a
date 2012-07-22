@@ -430,9 +430,7 @@ dtPolyRef dtNavMeshQuery::findNearestPolyInTile(const dtMeshTile* tile, const fl
     return nearest;
 }
 
-int dtNavMeshQuery::queryPolygonsInTile(const dtMeshTile* tile, const float* qmin, const float* qmax,
-                                        const dtQueryFilter* filter,
-                                        dtPolyRef* polys, const int maxPolys) const
+int dtNavMeshQuery::queryPolygonsInTile(const dtMeshTile* tile, const float* qmin, const float* qmax, const dtQueryFilter* filter, dtPolyRef* polys, const int maxPolys) const
 {
     dtAssert(m_nav);
 
@@ -497,9 +495,19 @@ int dtNavMeshQuery::queryPolygonsInTile(const dtMeshTile* tile, const float* qmi
         const dtPolyRef base = m_nav->getPolyRefBase(tile);
         for (int i = 0; i < tile->header->polyCount; ++i)
         {
+            const dtPoly* p = &tile->polys[i];
+            // Do not return off-mesh connection polygons.
+            if (p->getType() == DT_POLYTYPE_OFFMESH_CONNECTION)
+                continue;
+
+            // Must pass filter
+            const dtPolyRef ref = base | (dtPolyRef)i;
+            if (!filter->passFilter(ref, tile, p))
+                continue;
+
             // Calc polygon bounds.
-            dtPoly* p = &tile->polys[i];
             const float* v = &tile->verts[p->verts[0]*3];
+
             dtVcopy(bmin, v);
             dtVcopy(bmax, v);
             for (int j = 1; j < p->vertCount; ++j)
@@ -508,14 +516,11 @@ int dtNavMeshQuery::queryPolygonsInTile(const dtMeshTile* tile, const float* qmi
                 dtVmin(bmin, v);
                 dtVmax(bmax, v);
             }
-            if (dtOverlapBounds(qmin,qmax, bmin,bmax))
+
+            if (dtOverlapBounds(qmin, qmax, bmin, bmax))
             {
-                const dtPolyRef ref = base | (dtPolyRef)i;
-                if (filter->passFilter(ref, tile, p))
-                {
-                    if (n < maxPolys)
-                        polys[n++] = ref;
-                }
+                if (n < maxPolys)
+                    polys[n++] = ref;
             }
         }
         return n;
