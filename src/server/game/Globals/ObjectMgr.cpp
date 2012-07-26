@@ -1024,15 +1024,7 @@ void ObjectMgr::LoadEquipmentTemplates()
             if (!equipmentInfo.ItemEntry[i])
                 continue;
 
-            if (!GetItemTemplate(equipmentInfo.ItemEntry[i]))
-            {
-                sLog->outErrorDb("item (%u) in creature_equip_template.itemEntry%u does not exist in item_template, forced to 0.",
-                    equipmentInfo.ItemEntry[i], i+1);
-                equipmentInfo.ItemEntry[i] = 0;
-                continue;
-            }
-
-            ItemEntry const *dbcItem = sItemStore.LookupEntry(equipmentInfo.ItemEntry[i]);
+            ItemEntry const* dbcItem = sItemStore.LookupEntry(equipmentInfo.ItemEntry[i]);
 
             if (!dbcItem)
             {
