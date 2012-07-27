@@ -694,8 +694,7 @@ void WorldSession::HandleInitiateTradeOpcode(WorldPacket& recvPacket)
 
 void WorldSession::HandleSetTradeGoldOpcode(WorldPacket& recvPacket)
 {
-    // it should actually be uint64 as of 4.0.6
-    uint32 gold;
+    uint64 gold;
     recvPacket >> gold;
 
     TradeData* my_trade = _player->GetTradeData();

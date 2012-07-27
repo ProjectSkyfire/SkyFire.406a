@@ -324,7 +324,7 @@ public:
 class spell_mage_cauterize : public SpellScriptLoader
 {
 public:
-    spell_mage_cauterize() : SpellScriptLoader("spell_mage_cauterize") { }
+    spell_mage_cauterize() : SpellScriptLoader("spell_mage_cauterize") {}
 
     class spell_mage_cauterize_AuraScript : public AuraScript
     {
@@ -349,7 +349,7 @@ public:
             amount = -1;
         }
 
-        void Absorb(AuraEffect * /*aurEff*/, DamageInfo & dmgInfo, uint32 & absorbAmount)
+        void Absorb(AuraEffect* /*aurEff*/, DamageInfo & dmgInfo, uint32 & absorbAmount)
         {
             Unit * target = GetTarget();
             if (dmgInfo.GetDamage() < target->GetHealth())
@@ -384,7 +384,7 @@ public:
         }
     };
 
-    AuraScript *GetAuraScript() const
+    AuraScript* GetAuraScript() const
     {
         return new spell_mage_cauterize_AuraScript();
     }
