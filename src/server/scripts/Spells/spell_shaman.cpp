@@ -374,6 +374,85 @@ public:
     }
 };
 
+// 77222 - Elemental Overlord
+class spell_sha_elemental_overlord : public SpellScriptLoader
+{
+public:
+    spell_sha_elemental_overlord() : SpellScriptLoader("spell_sha_elemental_overlord") { }
+
+    class spell_sha_elemental_overlord_AuraScript : public AuraScript
+    {
+        PrepareAuraScript(spell_sha_elemental_overlord_AuraScript);
+
+        void OnProc(AuraEffect const * aurEff, Unit* unit, Unit *victim, uint32 damage, SpellInfo const* procSpell, uint32 procFlag, uint32 procExtra, WeaponAttackType attType, int32 cooldown)
+        {
+            PreventDefaultAction();
+
+            if (!(procFlag & PROC_FLAG_DONE_SPELL_MAGIC_DMG_CLASS_NEG))
+                return;
+
+            Player* player = unit->ToPlayer();
+            if (!player)
+                return;
+
+            // custom cooldown processing case
+            uint32 auraSpellId = GetAura()->GetId();
+            if (cooldown && player->HasSpellCooldown(auraSpellId))
+                return;
+            
+            uint32 procSpellId = procSpell ? procSpell->Id : 0;
+            uint32 spellId = 0;
+            switch (procSpellId)
+            {
+                // Lightning Bolt
+                case 403:
+                    spellId = 45284;
+                    break;
+                // Chain Lightning
+                case 421:
+                    spellId = 45297;
+                    break;
+                // Lava Burst
+                case 51505:
+                    spellId = 77451;
+                    break;
+                default:
+                    return;
+            }
+            // Chain Lightning
+            if (procSpell->SpellFamilyFlags[0] & 0x2)
+            {
+                // Chain lightning has [LightOverload_Proc_Chance] / [Max_Number_of_Targets] chance to proc of each individual target hit.
+                // A maxed LO would have a 33% / 3 = 11% chance to proc of each target.
+                // LO chance was already "accounted" at the proc chance roll, now need to divide the chance by [Max_Number_of_Targets]
+                float chance = 100.0f / procSpell->Effects[EFFECT_0].ChainTarget;
+                if (!roll_chance_f(chance))
+                    return;
+                
+                // Remove cooldown (Chain Lightning - have Category Recovery time)
+                player->RemoveSpellCooldown(spellId);
+            }
+            
+            if (roll_chance_i(aurEff->GetAmount()))
+            {
+                unit->CastSpell(victim, spellId, true, NULL, aurEff);
+                if (cooldown)
+                    player->AddSpellCooldown(auraSpellId, 0, time(NULL) + cooldown);
+            }
+        }
+
+        void Register()
+        {
+            OnEffectProc += AuraEffectProcFn(spell_sha_elemental_overlord_AuraScript::OnProc, EFFECT_0, SPELL_AURA_DUMMY);
+        }
+    };
+
+    AuraScript* GetAuraScript() const
+    {
+        return new spell_sha_elemental_overlord_AuraScript();
+    }
+};
+
 void AddSC_shaman_spell_scripts()
 {
     new spell_sha_mana_tide();
@@ -384,4 +463,5 @@ void AddSC_shaman_spell_scripts()
     new spell_sha_heroism();
     new spell_sha_healing_rain();
     new spell_sha_earthquake();
+    new spell_sha_elemental_overlord();
 }
