@@ -391,6 +391,9 @@ public:
             if (!(procFlag & PROC_FLAG_DONE_SPELL_MAGIC_DMG_CLASS_NEG))
                 return;
 
+            if (!unit || !victim)
+                return;
+
             Player* player = unit->ToPlayer();
             if (!player)
                 return;
