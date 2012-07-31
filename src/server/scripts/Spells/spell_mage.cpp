@@ -320,7 +320,7 @@ public:
     }
 };
 
-// Cauterize
+// 86948, 86949 Cauterize talent aura
 class spell_mage_cauterize : public SpellScriptLoader
 {
 public:
@@ -330,17 +330,23 @@ public:
     {
         PrepareAuraScript(spell_mage_cauterize_AuraScript);
 
-        uint32 absorbChance;
+        int32 absorbChance;
         
         bool Validate(SpellInfo const* /*spellEntry*/)
         {
-            return sSpellMgr->GetSpellInfo(SPELL_MAGE_CAUTERIZE_DAMAGE);
+            if (!sSpellMgr->GetSpellInfo(SPELL_MAGE_CAUTERIZE_DAMAGE))
+                return false;
+
+            return true;
         }
 
         bool Load()
         {
-            absorbChance = GetSpellInfo()->Effects[EFFECT_0].CalcValue();
-            return GetUnitOwner()->ToPlayer();
+            if (GetCaster()->GetTypeId() != TYPEID_PLAYER)
+                return false;
+
+            absorbChance = GetSpellInfo()->Effects[0].BasePoints;
+            return true;
         }
 
         void CalculateAmount(AuraEffect const * /*aurEff*/, int32 & amount, bool & /*canBeRecalculated*/)
@@ -349,31 +355,27 @@ public:
             amount = -1;
         }
 
-        void Absorb(AuraEffect* /*aurEff*/, DamageInfo & dmgInfo, uint32 & absorbAmount)
+        void Absorb(AuraEffect* aurEff, DamageInfo & dmgInfo, uint32 & absorbAmount)
         {
-            Unit * target = GetTarget();
-            if (dmgInfo.GetDamage() < target->GetHealth())
+            Unit * caster = GetCaster();
+
+            if (!caster)
                 return;
             
-            if (target->ToPlayer()->HasSpellCooldown(SPELL_MAGE_CAUTERIZE_DAMAGE))
+            int32 remainingHealth = caster->GetHealth() - dmgInfo.GetDamage();
+            int32 cauterizeHeal = caster->CountPctFromMaxHealth(40);
+            
+            if (caster->ToPlayer()->HasSpellCooldown(SPELL_MAGE_CAUTERIZE_DAMAGE))
                 return;
             
             if (!roll_chance_i(absorbChance))
                 return;
 
-            target->CastSpell(target, SPELL_MAGE_CAUTERIZE_DAMAGE, true);
-            target->ToPlayer()->AddSpellCooldown(SPELL_MAGE_CAUTERIZE_DAMAGE, 0, time(NULL) + 60);
-
-            uint32 health40 = target->CountPctFromMaxHealth(40);
-
-            // hp > 40% - absorb hp till 40%
-            if (target->GetHealth() > health40)
-                absorbAmount = dmgInfo.GetDamage() - target->GetHealth() + health40;
-            // hp lower than 40% - absorb everything
-            else
+            if (remainingHealth <= 0)
             {
                 absorbAmount = dmgInfo.GetDamage();
-                target->SetHealth(health40);
+                caster->CastCustomSpell(caster,SPELL_MAGE_CAUTERIZE_DAMAGE,NULL,&cauterizeHeal,NULL, true, NULL, aurEff);
+                caster->ToPlayer()->AddSpellCooldown(SPELL_MAGE_CAUTERIZE_DAMAGE, 0, time(NULL) + 60);
             }
         }
 
