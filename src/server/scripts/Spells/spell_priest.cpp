@@ -555,18 +555,14 @@ public:
     {
         PrepareSpellScript(spell_pri_chakra_sanctuary_heal_SpellScript);
 
-        float x;
-        float y;
-        float z;
+        float x,y,z;
 
         bool Load()
         {
             if (GetCaster()->GetTypeId() != TYPEID_PLAYER)
                 return false;
 
-            x = GetExplTargetDest()->GetPositionX();
-            y = GetExplTargetDest()->GetPositionY();
-            z = GetExplTargetDest()->GetPositionZ();
+            GetExplTargetDest()->GetPosition(x,y,z);
             return true;
         }
 
@@ -636,6 +632,57 @@ public:
     }
 };
 
+class DistanceCheck : public std::unary_function<Unit*, bool>
+{
+    public:
+        explicit DistanceCheck(float _x, float _y) : x(_x), y(_y) { }
+        bool operator()(WorldObject* object)
+        {
+            return object->GetExactDist2d(x, y) <= 4.0f;
+        }
+
+    private:
+        float x, y;
+};
+// Used to prevent the 8yd heal from occuring if the target is in the 4yd one range
+class spell_pri_chakra_sanctuary_heal_target_selector: public SpellScriptLoader
+{
+public:
+    spell_pri_chakra_sanctuary_heal_target_selector() : SpellScriptLoader("spell_pri_chakra_sanctuary_heal_target_selector") {}
+
+    class spell_pri_chakra_sanctuary_heal_target_selector_SpellScript : public SpellScript
+    {
+        PrepareSpellScript(spell_pri_chakra_sanctuary_heal_target_selector_SpellScript);
+
+        float x,y;
+
+        bool Load()
+        {
+            if (GetCaster()->GetTypeId() != TYPEID_PLAYER)
+                return false;
+
+            GetExplTargetDest()->GetPosition(x,y);
+            return true;
+        }
+
+        void FilterTargets(std::list<WorldObject*>& unitList)
+        {
+            unitList.remove_if(DistanceCheck(x,y));
+        }
+
+        void Register()
+        {
+            OnObjectAreaTargetSelect += SpellObjectAreaTargetSelectFn(spell_pri_chakra_sanctuary_heal_target_selector_SpellScript::FilterTargets, EFFECT_0, TARGET_UNIT_DEST_AREA_ALLY);
+        }
+
+    };
+
+    SpellScript* GetSpellScript() const
+    {
+        return new spell_pri_chakra_sanctuary_heal_target_selector_SpellScript();
+    }
+};
+
 void AddSC_priest_spell_scripts()
 {
     new spell_pri_guardian_spirit();
@@ -652,4 +699,5 @@ void AddSC_priest_spell_scripts()
     new spell_pri_chakra_swap_supressor();
     new spell_pri_chakra_serenity_proc();
     new spell_pri_chakra_sanctuary_heal();
+    new spell_pri_chakra_sanctuary_heal_target_selector();
 }
