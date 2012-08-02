@@ -6756,7 +6756,7 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                 case 79133:
                 case 79134:
                 {
-                    if(effIndex != 0)
+                    if (effIndex != 0)
                         return false;
 
                     bool poisoned = false;
@@ -8482,7 +8482,7 @@ bool Unit::HandleAuraProc(Unit* victim, uint32 damage, Aura* triggeredByAura, Sp
                 case 1776:
                     *handled = true;
                     // Check so gouge spell effect [1] (SPELL_EFFECT_SCHOOL_DAMAGE) cannot cancel stun effect
-                    if(procSpell && procSpell->Id == 1776)
+                    if (procSpell && procSpell->Id == 1776)
                         return false;
                     return true;
                 break;
@@ -9072,12 +9072,15 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
             if (GetTypeId() != TYPEID_PLAYER)
                 return false;
 
-            if (!HealthBelowPctDamaged(30, damage)) // Only proc if it brings us below 30% health
+            if(!HealthBelowPctDamaged(30, damage)) // Only proc if it brings us below 30% health
                 return false;
 
-            ToPlayer()->RemoveSpellCooldown(48982, true); // Remove cooldown of rune tap
-            CastSpell(this, 96171, true); // next rune tap wont cost runes
-            cooldown = 45000; // Can only happen once in 45 seconds
+            else if (!ToPlayer()->HasSpellCooldown(96171))
+            {
+                ToPlayer()->RemoveSpellCooldown(48982, true); // Remove cooldown of rune tap
+                CastSpell(this, 96171, true); // next rune tap wont cost runes
+                ToPlayer()->AddSpellCooldown(96171, 0, time(NULL) + 45);
+            }
             break;
         }
         // Sudden Doom
@@ -9155,6 +9158,11 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
     // dummy basepoints or other customs
     switch (trigger_spell_id)
     {
+        case 81162: // Will of Necropolis
+            if (!HealthBelowPctDamaged(30, damage))
+                return false;
+
+        break;
         case 92184: // Lead Plating
         case 92233: // Tectonic Shift
         case 92355: // Turn of the Worm
