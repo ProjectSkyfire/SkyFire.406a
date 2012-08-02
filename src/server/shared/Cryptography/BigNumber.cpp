@@ -17,34 +17,33 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <ace/Guard_T.h>
-
 #include "Cryptography/BigNumber.h"
 #include <openssl/bn.h>
-#include <openssl/crypto.h>
 #include <algorithm>
 
 BigNumber::BigNumber()
-    : _bn(BN_new())
-    , _array(NULL)
-{ }
+{
+    _bn = BN_new();
+    ClearArraysMap();
+}
 
 BigNumber::BigNumber(const BigNumber &bn)
-    : _bn(BN_dup(bn._bn))
-    , _array(NULL)
-{ }
+{
+    _bn = BN_dup(bn._bn);
+    ClearArraysMap();
+}
 
 BigNumber::BigNumber(uint32 val)
-    : _bn(BN_new())
-    , _array(NULL)
 {
+    _bn = BN_new();
     BN_set_word(_bn, val);
+    ClearArraysMap();
 }
 
 BigNumber::~BigNumber()
 {
     BN_free(_bn);
-    delete[] _array;
+    ClearArraysMap();
 }
 
 void BigNumber::SetDword(uint32 val)
@@ -62,7 +61,8 @@ void BigNumber::SetQword(uint64 val)
 void BigNumber::SetBinary(const uint8 *bytes, int len)
 {
     uint8 t[1000];
-    for (int i = 0; i < len; i++) t[i] = bytes[len - 1 - i];
+    for (int i = 0; i < len; i++)
+        t[i] = bytes[len - 1 - i];
     BN_bin2bn(t, len, _bn);
 }
 
@@ -78,8 +78,6 @@ void BigNumber::SetRand(int numbits)
 
 BigNumber BigNumber::operator=(const BigNumber &bn)
 {
-    if (this == &bn)
-        return *this;
     BN_copy(_bn, bn._bn);
     return *this;
 }
@@ -168,18 +166,15 @@ bool BigNumber::isZero() const
     return BN_is_zero(_bn)!=0;
 }
 
-uint8 *BigNumber::AsByteArray(int minSize, bool reverse)
+uint8* BigNumber::AsByteArray(int minSize, bool reverse)
 {
     int length = (minSize >= GetNumBytes()) ? minSize : GetNumBytes();
 
-    ACE_GUARD_RETURN(ACE_Mutex, g, _lock, 0);
+    std::map<int, uint8*>::const_iterator itr = arraysMap.find(length);
+    if (itr != arraysMap.end())
+        return itr->second;
 
-    if (_array)
-    {
-        delete[] _array;
-        _array = NULL;
-    }
-    _array = new uint8[length];
+    uint8* _array = new uint8[length];
 
     // If we need more bytes than length of BigNumber set the rest to 0
     if (length > GetNumBytes())
@@ -189,6 +184,8 @@ uint8 *BigNumber::AsByteArray(int minSize, bool reverse)
 
     if (reverse)
         std::reverse(_array, _array + length);
+
+    arraysMap.insert(std::map<int, uint8*>::value_type(length, _array));
 
     return _array;
 }
@@ -201,4 +198,12 @@ const char *BigNumber::AsHexStr()
 const char *BigNumber::AsDecStr()
 {
     return BN_bn2dec(_bn);
+}
+
+void BigNumber::ClearArraysMap()
+{
+    for (std::map<int, uint8*>::const_iterator itr = arraysMap.begin(); itr != arraysMap.end(); ++itr)
+        if (itr->second)
+            delete [] itr->second;
+    arraysMap.clear();
 }
