@@ -2213,18 +2213,28 @@ uint32 Unit::CalculateDamage(WeaponAttackType attType, bool normalized, bool add
 
 float Unit::CalculateLevelPenalty(SpellInfo const* spellProto) const
 {
-    if (spellProto->SpellLevel <= 0 || spellProto->SpellLevel >= spellProto->MaxLevel)
+    if (!spellProto->SpellLevel || !spellProto->MaxLevel)
+        return 1.0f;
+
+    if (spellProto->MaxLevel <= 0)
+        return 1.0f;
+    
+    //if caster level is lower that max caster level
+    if (getLevel() < spellProto->MaxLevel)
         return 1.0f;
 
     float LvlPenalty = 0.0f;
+    LvlPenalty = (22.0f + float (spellProto->MaxLevel) - float (getLevel())) / 20.0f;
+    
+    //to prevent positive effect
+    if (LvlPenalty > 1.0f)
+        return 1.0f;
+    
+    //level penalty is capped at 0
+    if (LvlPenalty < 0.0f)
+        return 0.0f;
 
-    if (spellProto->SpellLevel < 20)
-        LvlPenalty = 20.0f - spellProto->SpellLevel * 3.75f;
-    float LvlFactor = (float(spellProto->SpellLevel) + 6.0f) / float(getLevel());
-    if (LvlFactor > 1.0f)
-        LvlFactor = 1.0f;
-
-    return AddPctF(LvlFactor, -LvlPenalty);
+    return LvlPenalty;
 }
 
 void Unit::SendMeleeAttackStart(Unit* victim)
