@@ -9082,15 +9082,18 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
             if (GetTypeId() != TYPEID_PLAYER)
                 return false;
 
+            if (cooldown && ToPlayer()->HasSpellCooldown(96171))
+                return false;
+
             if(!HealthBelowPctDamaged(30, damage)) // Only proc if it brings us below 30% health
                 return false;
 
-            else if (!ToPlayer()->HasSpellCooldown(96171))
-            {
-                ToPlayer()->RemoveSpellCooldown(48982, true); // Remove cooldown of rune tap
-                CastSpell(this, 96171, true); // next rune tap wont cost runes
-                ToPlayer()->AddSpellCooldown(96171, 0, time(NULL) + 45);
-            }
+            ToPlayer()->RemoveSpellCooldown(48982, true); // Remove cooldown of rune tap
+            CastSpell(this, 96171, true); // next rune tap wont cost runes
+
+            if (cooldown)
+                ToPlayer()->AddSpellCooldown(96171, NULL, time(NULL) + cooldown);
+
             break;
         }
         // Sudden Doom
@@ -9168,11 +9171,6 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
     // dummy basepoints or other customs
     switch (trigger_spell_id)
     {
-        case 81162: // Will of Necropolis
-            if (!HealthBelowPctDamaged(30, damage))
-                return false;
-
-        break;
         case 92184: // Lead Plating
         case 92233: // Tectonic Shift
         case 92355: // Turn of the Worm
