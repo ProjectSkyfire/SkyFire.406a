@@ -3053,9 +3053,18 @@ void SpellMgr::LoadSpellCustomAttr()
                 spellInfo->Effects[0].RadiusEntry = sSpellRadiusStore.LookupEntry(14);
                 spellInfo->Effects[1].RadiusEntry = sSpellRadiusStore.LookupEntry(14);
                 break;
-            case 88667: // Holy Word: Sanctuary
-            case 88668: // Holy Word: Sanctuary
+            case 88667: // Holy Word: Sanctuary 3yd Dummy
                 spellInfo->SpellFamilyName = SPELLFAMILY_PRIEST;
+                spellInfo->Effects[0].RadiusEntry = sSpellRadiusStore.LookupEntry(15);
+                spellInfo->DurationEntry = sSpellDurationStore.LookupEntry(85);
+                break;
+            case 88668: // Holy Word: Sanctuary 3yd Heal
+                spellInfo->SpellFamilyName = SPELLFAMILY_PRIEST;
+                spellInfo->Effects[0].RadiusEntry = sSpellRadiusStore.LookupEntry(15);
+                break;
+            case 88685: // Holy Word: Sanctuary 6yd Dummy
+            case 88686: // Holy Word: Sanctuary 6yd Heal
+                spellInfo->Effects[0].RadiusEntry = sSpellRadiusStore.LookupEntry(29);
                 break;
             case 87193: // Paralysis
             case 87194:

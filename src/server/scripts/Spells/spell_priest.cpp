@@ -638,7 +638,7 @@ class DistanceCheck : public std::unary_function<Unit*, bool>
         explicit DistanceCheck(float _x, float _y) : x(_x), y(_y) { }
         bool operator()(WorldObject* object)
         {
-            return object->GetExactDist2d(x, y) <= 4.0f;
+            return object->GetExactDist2d(x, y) <= 3.0f;
         }
 
     private:
