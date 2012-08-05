@@ -1409,22 +1409,6 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                         target->CastSpell(target, 32612, true, NULL, GetEffect(1));
                         target->CombatStop();
                         break;
-                    case 118: // Improved Polymorph
-                    {
-                        if (removeMode == AURA_REMOVE_BY_EXPIRE || removeMode == AURA_REMOVE_BY_CANCEL)
-                            break;
-                        if (caster->HasAura(11210) && !target->HasAura(87515))
-                        {
-                            target->CastSpell(target, 83046, true);
-                            caster->AddAura(87515, target); // Immune Marker
-                        }
-                        else if (caster->HasAura(12592) && !target->HasAura(87515))
-                        {
-                            target->CastSpell(target, 83047, true);
-                            caster->AddAura(87515, target); // Immune Marker
-                        }
-                        break;
-                    }
                     case 1463: // Incanter's Absorption
                     {
                         if (removeMode == AURA_REMOVE_BY_EXPIRE || removeMode == AURA_REMOVE_BY_CANCEL)

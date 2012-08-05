@@ -2983,31 +2983,26 @@ void SpellMgr::LoadSpellCustomAttr()
             case 79640: // Enhanced Intellect
                 spellInfo->DurationEntry = sSpellDurationStore.LookupEntry(367);    // 2 hours instead of 1
                 break;
-            case 76547: // Mana Adept
-            case 77226: // Deep Healing
-            case 76613: // Frostburn
-                spellInfo->Effects[0].ApplyAuraName = SPELL_AURA_ADD_PCT_MODIFIER;
-                spellInfo->Effects[0].MiscValue = 0;
-                break;
             case 93072: // Bring our Boys back
                 spellInfo->Effects[0].TargetA = TARGET_UNIT_NEARBY_ENTRY;
                 break;
             case 11113: // Blast Wave
-                // Had to do this, currently this spell is impossible to be implemented
+                // Had to do this, currently this spell is impossible to be correctly implemented
                 // on the current proc system
                 spellInfo->Effects[2].Effect = NULL;
                 spellInfo->ExplicitTargetMask = TARGET_FLAG_DEST_LOCATION;
                 break;
-            case 51514: // Hex
+            // Polymorph spells used to have no proc data (no charges too, duh) back on 3.3.5, thus they never passed the
+            // ProcFlag check on AuraEffect::CalculateAmount thus they never received an amount that needed to be calculated on 
+            // Unit::ProcDamageAndSpellFor, so i decided to simple add a charge to it (making them break on the first damage received)
+            // instead of removing the proc data (wich is needed for improved polymorph and god knows what else spell)
             case 118:   // Polymorph
             case 61305: // Polymorph (other animal)
             case 28272: // polymorph (other animal)
             case 61721: // Polymorph (other animal)
             case 61780: // Polymorph (other animal)
             case 28271: // Polymorph (other animal)
-            case 8122:  // Physic Scream
-            case 5484:  // Howl of Terror
-                spellInfo->AuraInterruptFlags = AURA_INTERRUPT_FLAG_TAKE_DAMAGE;
+                spellInfo->ProcCharges = 1;
                 break;
             case 1680: // Whirlwind  (Fury)
                 spellInfo->Effects[0].RadiusEntry = sSpellRadiusStore.LookupEntry (14);

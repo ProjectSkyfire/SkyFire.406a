@@ -505,9 +505,12 @@ int32 AuraEffect::CalculateAmount(Unit* caster)
         case SPELL_AURA_MOD_ROOT:
         case SPELL_AURA_TRANSFORM:
             m_canBeRecalculated = false;
+
             if (!m_spellInfo->ProcFlags)
                 break;
+
             amount = int32(GetBase()->GetUnitOwner()->CountPctFromMaxHealth(10));
+
             if (caster)
             {
                 // Glyphs increasing damage cap

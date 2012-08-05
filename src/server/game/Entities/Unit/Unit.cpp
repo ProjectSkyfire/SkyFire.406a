@@ -8423,9 +8423,32 @@ bool Unit::HandleAuraProc(Unit* victim, uint32 damage, Aura* triggeredByAura, Sp
         }
         case SPELLFAMILY_MAGE:
         {
-            // Combustion
             switch (dummySpell->Id)
             {
+                // Improved Polymorph
+                case 118:
+                {
+                    *handled = true; 
+                    Unit* caster = triggeredByAura->GetCaster();
+
+                    if (!caster || !victim)
+                        return false;
+                                // Rank 1          // Cooldown Marker
+                    if (caster->HasAura(11210) && !victim->HasAura(87515, caster->GetGUID()))
+                    {
+                        CastSpell(this,83046,true,NULL,NULL,caster->GetGUID()); // 1.5s stun
+                        CastSpell(this,87515,true,NULL,NULL,caster->GetGUID()); // Cooldown marker
+                        return true;
+                    }           // Rank 2
+                    if (caster->HasAura(12592) && !this->HasAura(87515, caster->GetGUID()))
+                    {
+                        CastSpell(this,83047,true,NULL,NULL,caster->GetGUID()); // 3s stun
+                        CastSpell(this,87515,true,NULL,NULL,caster->GetGUID()); // Cooldown marker
+                        return true;
+                    }
+                    break;
+                }
+                // Combustion
                 case 11129:
                 {
                     *handled = true;
@@ -14941,7 +14964,7 @@ void Unit::ProcDamageAndSpellFor(bool isVictim, Unit* target, uint32 procFlag, u
                         if (procSpell && HandleSpellCritChanceAuraProc(target, damage, triggeredByAura, procSpell, procFlag, procExtra, cooldown))
                             takeCharges = true;
                         break;
-                    // CC Auras which use their amount amount to drop
+                    // CC Auras which use their amount amount to drop, the amount is set on AuraEffect::CalculateAmount
                     // Are there any more auras which need this?
                     case SPELL_AURA_MOD_CONFUSE:
                     case SPELL_AURA_MOD_FEAR:
