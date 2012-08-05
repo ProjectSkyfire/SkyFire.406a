@@ -8431,10 +8431,10 @@ bool Unit::HandleAuraProc(Unit* victim, uint32 damage, Aura* triggeredByAura, Sp
                     *handled = true; 
                     Unit* caster = triggeredByAura->GetCaster();
 
-                    if (!caster || !victim)
+                    if (!caster)
                         return false;
                                 // Rank 1          // Cooldown Marker
-                    if (caster->HasAura(11210) && !victim->HasAura(87515, caster->GetGUID()))
+                    if (caster->HasAura(11210) && !this->HasAura(87515, caster->GetGUID()))
                     {
                         CastSpell(this,83046,true,NULL,NULL,caster->GetGUID()); // 1.5s stun
                         CastSpell(this,87515,true,NULL,NULL,caster->GetGUID()); // Cooldown marker
