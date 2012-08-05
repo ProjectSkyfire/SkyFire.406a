@@ -1678,9 +1678,9 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                     if (caster->HasAura(82893) || caster->HasAura(82894))
                     {
                         if (apply)
-                            caster->CastSpell(target,83676,true);
+                            caster->CastSpell(target, 83676, true);
                         else
-                            target->RemoveAurasDueToSpell(83676,caster->GetGUID());
+                            target->RemoveAurasDueToSpell(83676, caster->GetGUID());
                     }
                     break;
                 }
@@ -1846,7 +1846,7 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                     return;
                                     // Sunfire talent
                 if (apply && caster->HasAura(93401))
-                    caster->CastSpell(caster,94338,true); // Moonfire swapper
+                    caster->CastSpell(caster, 94338, true); // Moonfire swapper
                 else
                     caster->RemoveAurasDueToSpell(94338);
             }

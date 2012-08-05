@@ -1879,7 +1879,7 @@ void Spell::SearchTargets(SEARCHER& searcher, uint32 containerMask, Unit* refere
     bool searchInWorld = containerMask & (GRID_MAP_TYPE_MASK_CREATURE | GRID_MAP_TYPE_MASK_PLAYER | GRID_MAP_TYPE_MASK_CORPSE);
     if (searchInGrid || searchInWorld)
     {
-        float x,y;
+        float x, y;
         x = pos->GetPositionX();
         y = pos->GetPositionY();
 

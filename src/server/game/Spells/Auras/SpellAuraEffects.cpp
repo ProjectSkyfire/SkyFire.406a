@@ -1536,7 +1536,7 @@ void AuraEffect::HandleShapeshiftBoosts(Unit* target, bool apply) const
                         target->CastSpell(target, spellId, true, NULL, this);
                     }
                     // Master Shapeshifter - Cat
-                    if (AuraEffect const* aurEff = target->GetAuraEffect(48411,1))
+                    if (AuraEffect const* aurEff = target->GetAuraEffect(48411, 1))
                     {
                         int32 bp = aurEff->GetAmount();
                         target->CastCustomSpell(target, 48420, &bp, NULL, NULL, true);
@@ -1544,7 +1544,7 @@ void AuraEffect::HandleShapeshiftBoosts(Unit* target, bool apply) const
                 break;
                 case FORM_BEAR:
                     // Master Shapeshifter - Bear
-                    if (AuraEffect const* aurEff = target->GetAuraEffect(48411,1))
+                    if (AuraEffect const* aurEff = target->GetAuraEffect(48411, 1))
                     {
                         int32 bp = aurEff->GetAmount();
                         target->CastCustomSpell(target, 48418, &bp, NULL, NULL, true);
@@ -1573,7 +1573,7 @@ void AuraEffect::HandleShapeshiftBoosts(Unit* target, bool apply) const
                 break;
                 case FORM_MOONKIN:
                     // Master Shapeshifter - Moonkin
-                    if (AuraEffect const* aurEff = target->GetAuraEffect(48411,1))
+                    if (AuraEffect const* aurEff = target->GetAuraEffect(48411, 1))
                     {
                         int32 bp = aurEff->GetAmount();
                         target->CastCustomSpell(target, 48421, &bp, NULL, NULL, true);
