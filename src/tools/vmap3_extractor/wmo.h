@@ -25,6 +25,9 @@
 
 #include <string>
 #include <set>
+#if defined __FreeBSD__
+#   include <stdio.h>
+#endif
 #include "vec3d.h"
 #include "loadlib/loadlib.h"
 
