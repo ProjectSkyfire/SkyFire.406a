@@ -2993,7 +2993,7 @@ void SpellMgr::LoadSpellCustomAttr()
                 spellInfo->ExplicitTargetMask = TARGET_FLAG_DEST_LOCATION;
                 break;
             // Polymorph spells used to have no proc data (no charges too, duh) back on 3.3.5, thus they never passed the
-            // ProcFlag check on AuraEffect::CalculateAmount thus they never received an amount that needed to be calculated on 
+            // ProcFlag check on AuraEffect::CalculateAmount thus they never received an amount that needed to be calculated on
             // Unit::ProcDamageAndSpellFor, so i decided to simple add a charge to it (making them break on the first damage received)
             // instead of removing the proc data (wich is needed for improved polymorph and god knows what else spell)
             case 118:   // Polymorph
