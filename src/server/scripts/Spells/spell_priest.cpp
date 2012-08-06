@@ -331,44 +331,6 @@ class spell_pri_shadow_word_death : public SpellScriptLoader
         }
 };
 
-// Mind Blast
-// Spell Id: 8092
-class spell_pri_mind_blast : public SpellScriptLoader
-{
-    public:
-        spell_pri_mind_blast() : SpellScriptLoader("spell_pri_mind_blast") { }
-
-        class spell_pri_mind_blast_SpellScript : public SpellScript
-        {
-            PrepareSpellScript(spell_pri_mind_blast_SpellScript);
-
-            void HandleDamage(SpellEffIndex /*effIndex*/)
-            {
-                if (Unit* caster = GetCaster())
-                {
-                    if (AuraEffect * aurEff = caster->GetDummyAuraEffect(SPELLFAMILY_PRIEST, 95, 1)) // If we have Improved Mind Blast
-                        if (caster->GetShapeshiftForm() == FORM_SHADOW)
-                            if (roll_chance_i(aurEff->GetAmount()))
-                                caster->CastSpell(GetHitUnit(), 48301, true); // Cast Mind Trauma
-
-                    // Remove Mind Melt
-                    caster->RemoveAurasDueToSpell(87160);
-                    caster->RemoveAurasDueToSpell(81292);
-                }
-            }
-
-            void Register()
-            {
-                OnEffectHitTarget += SpellEffectFn(spell_pri_mind_blast_SpellScript::HandleDamage, EFFECT_0, SPELL_EFFECT_SCHOOL_DAMAGE);
-            }
-        };
-
-        SpellScript* GetSpellScript() const
-        {
-            return new spell_pri_mind_blast_SpellScript;
-        }
-};
-
 // Power Word: Fortitude
 // Spell Id: 21562
 class spell_pri_power_word_fortitude : public SpellScriptLoader
@@ -683,6 +645,73 @@ public:
     }
 };
 
+// Mind Spike
+// Spell Id: 73510
+class spell_pri_mind_spike : public SpellScriptLoader
+{
+    public:
+        spell_pri_mind_spike() : SpellScriptLoader("spell_pri_mind_spike") { }
+
+        class spell_pri_mind_spike_SpellScript : public SpellScript
+        {
+            PrepareSpellScript(spell_pri_mind_spike_SpellScript);
+
+            void HandleDummy(SpellEffIndex /*effIndex*/)
+            {
+                Unit* target = GetHitUnit();
+                
+                if (!target)
+                    return;
+
+                target->RemoveAurasByType(SPELL_AURA_PERIODIC_DAMAGE,GetCaster()->GetGUID());
+                target->RemoveAurasByType(SPELL_AURA_PERIODIC_LEECH,GetCaster()->GetGUID());
+            }
+
+            void Register()
+            {
+                OnEffectHitTarget += SpellEffectFn(spell_pri_mind_spike_SpellScript::HandleDummy, EFFECT_2, SPELL_EFFECT_DUMMY);
+            }
+        };
+
+        SpellScript* GetSpellScript() const
+        {
+            return new spell_pri_mind_spike_SpellScript;
+        }
+};
+
+// Mind Blast
+// Spell Id: 8092
+class spell_pri_mind_blast : public SpellScriptLoader
+{
+    public:
+        spell_pri_mind_blast() : SpellScriptLoader("spell_pri_mind_blast") { }
+
+        class spell_pri_mind_blast_SpellScript : public SpellScript
+        {
+            PrepareSpellScript(spell_pri_mind_blast_SpellScript);
+
+            void HandleAfterHit()
+            {
+                Unit* target = GetHitUnit();
+                
+                if (!target)
+                    return;
+
+                target->RemoveAurasDueToSpell(87178,GetCaster()->GetGUID());
+            }
+
+            void Register()
+            {
+                AfterHit += SpellHitFn(spell_pri_mind_blast_SpellScript::HandleAfterHit);
+            }
+        };
+
+        SpellScript* GetSpellScript() const
+        {
+            return new spell_pri_mind_blast_SpellScript;
+        }
+};
+
 void AddSC_priest_spell_scripts()
 {
     new spell_pri_guardian_spirit();
@@ -692,7 +721,6 @@ void AddSC_priest_spell_scripts()
     new spell_pri_reflective_shield_trigger();
     new spell_pri_mind_sear();
     new spell_pri_shadow_word_death();
-    new spell_pri_mind_blast();
     new spell_pri_power_word_fortitude();
     new spell_pri_power_word_shield();
     new spell_pri_prayer_of_mending_heal();
@@ -700,4 +728,6 @@ void AddSC_priest_spell_scripts()
     new spell_pri_chakra_serenity_proc();
     new spell_pri_chakra_sanctuary_heal();
     new spell_pri_chakra_sanctuary_heal_target_selector();
+    new spell_pri_mind_spike();
+    new spell_pri_mind_blast();
 }

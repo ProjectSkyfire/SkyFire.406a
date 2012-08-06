@@ -3061,9 +3061,9 @@ void SpellMgr::LoadSpellCustomAttr()
             case 88686: // Holy Word: Sanctuary 6yd Heal
                 spellInfo->Effects[0].RadiusEntry = sSpellRadiusStore.LookupEntry(29);
                 break;
-            case 87193: // Paralysis
-            case 87194:
-                spellInfo->Effects[0].ApplyAuraName = SPELL_AURA_MOD_ROOT;
+            case 73510: // Mind Spike
+                spellInfo->Effects[0].TriggerSpell = 0;
+                spellInfo->Effects[2].TargetA = TARGET_UNIT_TARGET_ENEMY;
                 break;
             case 36350: // They Must Burn Bomb Aura (self)
                 spellInfo->Effects[0].TriggerSpell = 36325; // They Must Burn Bomb Drop (DND)
@@ -3199,9 +3199,6 @@ void SpellMgr::LoadSpellCustomAttr()
                 spellInfo->Effects[0].TriggerSpell = 0;
                 break;
             case 33191: case 78228: // Harnessed Shadows
-                spellInfo->Effects[0].TriggerSpell = 0;
-                break;
-            case 87192: case 87195: // Paralysis
                 spellInfo->Effects[0].TriggerSpell = 0;
                 break;
             case 38794: case 33711: // Murmur's Touch

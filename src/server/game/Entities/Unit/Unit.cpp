@@ -6490,14 +6490,6 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                     }
                     break;
                 }
-                //Mind Melt
-                case 87160:
-                case 81292:
-                {
-                    if (procSpell->Id != 73510)
-                        return false;
-                    break;
-                }
                 // Atonement
                 case 14523:
                 case 81749:
@@ -11417,6 +11409,19 @@ bool Unit::isSpellCrit(Unit* victim, SpellInfo const* spellProto, SpellSchoolMas
         default:
             return false;
     }
+    // bonus for caster from specific auras
+    AuraEffectList const& mCritChanceForCasterSpell = victim->GetAuraEffectsByType(SPELL_AURA_MOD_CRIT_CHANCE_FOR_CASTER_SPELL);
+    for (AuraEffectList::const_iterator i = mCritChanceForCasterSpell.begin(); i != mCritChanceForCasterSpell.end(); ++i)
+    {
+        if (!(*i)->IsAffectedOnSpell(spellProto))
+            continue;
+
+        if ((*i)->GetCasterGUID() != this->GetGUID())
+            continue;
+
+        crit_chance += (*i)->GetAmount();
+    }
+            
     // percent done
     // only players use intelligence for critical chance computations
     if (Player* modOwner = GetSpellModOwner())
@@ -11523,15 +11528,6 @@ uint32 Unit::SpellCriticalDamageBonus(SpellInfo const* spellProto, uint32 damage
         if (Unit* owner = GetOwner())
             if (owner->HasAura(53253) || owner->HasAura(53252)) // Invigoration rank 1 & 2
                 owner->CastSpell(owner, 53398, true);
-    }
-
-    if (spellProto && spellProto->Id == 8092) // Mind Blast
-    {
-        if (HasAura(87192)) // Paralysis rank 1
-            CastSpell(victim, 87193, true);
-
-        if (HasAura(87195)) // Paralysis rank 2
-            CastSpell(victim, 87194, true);
     }
 
     for (uint8 i = 0; i < MAX_SPELL_EFFECTS; ++i)
