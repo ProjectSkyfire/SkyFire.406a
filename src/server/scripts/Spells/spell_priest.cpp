@@ -693,11 +693,19 @@ class spell_pri_mind_blast : public SpellScriptLoader
             void HandleAfterHit()
             {
                 Unit* target = GetHitUnit();
+                Unit* caster = GetCaster();
                 
-                if (!target)
+                if (!caster || !target)
                     return;
 
+                // Remove Mind Spike debuff
                 target->RemoveAurasDueToSpell(87178,GetCaster()->GetGUID());
+
+                // Improved Mind blast - Mind Trauma cast
+                if (AuraEffect* improvedMindBlast = caster->GetDummyAuraEffect(SPELLFAMILY_PRIEST,95,EFFECT_1))
+                    if (caster->GetShapeshiftForm() == FORM_SHADOW)
+                        if (roll_chance_i(improvedMindBlast->GetAmount()))
+                            caster->CastSpell(target,48301,true);
             }
 
             void Register()

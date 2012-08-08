@@ -6927,6 +6927,11 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                     else
                         return false;
                 }
+                case 82661: // Aspect of the Fox
+                {
+                    EnergizeBySpell(this,82661,2,POWER_FOCUS);
+                    break;
+                }
                 case 34477: // Misdirection
                 {
                     triggered_spell_id = 35079; // 4 sec buff on self
@@ -15369,11 +15374,29 @@ void Unit::ApplyAttackTimePercentMod(WeaponAttackType att, float val, bool apply
     {
         ApplyPercentModFloatVar(_modAttackSpeedPct[att], val, !apply);
         ApplyPercentModFloatValue(UNIT_FIELD_BASEATTACKTIME+att, val, !apply);
+
+        if (GetTypeId() == TYPEID_PLAYER && att == BASE_ATTACK)
+        {
+            ApplyPercentModFloatValue(PLAYER_FIELD_MOD_HASTE, val, !apply);
+        }
+        else if (GetTypeId() == TYPEID_PLAYER && att == RANGED_ATTACK)
+        {
+            ApplyPercentModFloatValue(PLAYER_FIELD_MOD_RANGED_HASTE, val, !apply);
+        }
     }
     else
     {
         ApplyPercentModFloatVar(_modAttackSpeedPct[att], -val, apply);
         ApplyPercentModFloatValue(UNIT_FIELD_BASEATTACKTIME+att, -val, apply);
+
+        if (GetTypeId() == TYPEID_PLAYER && att == BASE_ATTACK)
+        {
+            ApplyPercentModFloatValue(PLAYER_FIELD_MOD_HASTE, -val, apply);
+        }
+        else if (GetTypeId() == TYPEID_PLAYER && att == RANGED_ATTACK)
+        {
+            ApplyPercentModFloatValue(PLAYER_FIELD_MOD_RANGED_HASTE, -val, apply);
+        }
     }
     m_attackTimer[att] = uint32(GetAttackTime(att) * _modAttackSpeedPct[att] * remainingTimePct);
 }

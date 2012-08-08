@@ -5736,15 +5736,7 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
         }
         case SPELLFAMILY_HUNTER:
         {
-            switch (m_spellInfo->Id)
-            {
-                case 77767: // Cobra Shot
-                {
-                    if (Aura* SS = unitTarget->GetAura(1978, m_caster->GetGUID())) // Find Serpent Sting
-                        SS->SetDuration(SS->GetDuration() + (m_spellInfo->Effects[EFFECT_1].BasePoints * 1000)); // Increase duration of the Serpent Sting aura
-                    break;
-                }
-            }
+            break;
         }
         case SPELLFAMILY_DRUID:
         {

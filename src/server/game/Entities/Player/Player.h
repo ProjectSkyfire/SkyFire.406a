@@ -2238,6 +2238,7 @@ class Player : public Unit, public GridObject<Player>
 
         uint32 _regenTimerCount;
         uint32 _holyPowerRegenTimerCount; // Holy power updates ticks at every 10secs.
+        uint32 _focusRegenTimerCount; // Focus power updates ticks at every second.
 
         /*********************************************************/
         /***               BATTLEGROUND SYSTEM                 ***/
