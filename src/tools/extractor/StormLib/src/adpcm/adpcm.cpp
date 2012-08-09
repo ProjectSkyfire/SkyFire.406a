@@ -230,7 +230,6 @@ int DecompressADPCM(unsigned char * pbOutBuffer, int dwOutLength, unsigned char 
     long SInt32Array1[2];
     long SInt32Array2[2];
     long nOneWord;
-    int dwOutLengthCopy = dwOutLength;
     int nIndex;
     int i;
 
@@ -244,11 +243,11 @@ int DecompressADPCM(unsigned char * pbOutBuffer, int dwOutLength, unsigned char 
     {
         nOneWord = BSWAP_INT16_SIGNED(*in.pw++);
         SInt32Array2[i] = nOneWord;
-        if(dwOutLengthCopy < 2)
+        if(dwOutLength < 2)
             return (int)(out.pb - pbOutBuffer);
 
         *out.pw++ = BSWAP_INT16_SIGNED((short)nOneWord);
-        dwOutLengthCopy -= sizeof(short);
+        dwOutLength -= sizeof(short);
     }
 
     // Get the initial index
@@ -272,7 +271,7 @@ int DecompressADPCM(unsigned char * pbOutBuffer, int dwOutLength, unsigned char 
                     if(SInt32Array1[nIndex] != 0)
                         SInt32Array1[nIndex]--;
 
-                    if(dwOutLengthCopy < 2)
+                    if(dwOutLength < 2)
                         return (int)(out.pb - pbOutBuffer);
 
                     *out.pw++ = BSWAP_INT16_SIGNED((unsigned short)SInt32Array2[nIndex]);

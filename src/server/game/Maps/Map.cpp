@@ -808,7 +808,7 @@ void Map::MoveAllCreaturesInMoveList()
         }
 
         c->_moveState = CREATURE_CELL_MOVE_NONE;
-        if(!c->IsInWorld())
+        if (!c->IsInWorld())
             continue;
 
         // do move or do move to respawn or remove creature if previous all fail

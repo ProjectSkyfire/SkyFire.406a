@@ -27,7 +27,7 @@
 #include "ace/os_include/os_stdint.h"
 
 #if !defined (ACE_LACKS_INTTYPES_H)
-# include /**/ <inttypes.h>
+# include /**/ <os_inttypes.h>
 #endif /* !ACE_LACKS_INTTYPES_H */
 
 // Place all additions (especially function declarations) within extern "C" {}

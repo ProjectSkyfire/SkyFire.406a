@@ -148,6 +148,8 @@ void AuraApplication::_InitFlags(Unit* caster, uint8 effMask)
         }
         _flags |= positiveFound ? AFLAG_POSITIVE : AFLAG_NEGATIVE;
     }
+    if (GetBase()->GetSpellInfo()->AttributesCu & SPELL_ATTR0_CU_SCALABLE)
+        _flags |= AFLAG_ANY_EFFECT_AMOUNT_SENT;
 }
 
 void AuraApplication::_HandleEffect(uint8 effIndex, bool apply)
@@ -943,6 +945,10 @@ bool Aura::CanBeSaved() const
     if (GetId() == 44413)
         return false;
 
+    // When a druid logs in on retail, he doesnt have either eclipse power, nor the marker auras, nor the eclipse buffs, dont save them
+    if (GetId() == 67483 || GetId() == 67484 || GetId() == 48517 || GetId() == 48518)
+        return false;
+
     // don't save auras removed by proc system
     if (IsUsingCharges() && !GetCharges())
         return false;
@@ -952,7 +958,7 @@ bool Aura::CanBeSaved() const
 
 bool Aura::CanBeSentToClient() const
 {
-    return !IsPassive() || GetSpellInfo()->HasAreaAuraEffect() || HasEffectType(SPELL_AURA_ABILITY_IGNORE_AURASTATE);
+    return !IsPassive() || GetSpellInfo()->HasAreaAuraEffect() || HasEffectType(SPELL_AURA_ABILITY_IGNORE_AURASTATE) || HasEffectType(SPELL_AURA_CAST_WHILE_WALKING);
 }
 
 void Aura::UnregisterSingleTarget()
@@ -1253,19 +1259,6 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                     }
                 }
                 break;
-            case SPELLFAMILY_WARLOCK:
-                switch (GetId())
-                {
-                    case 48020: // Demonic Circle
-                        if (target->GetTypeId() == TYPEID_PLAYER)
-                            if (GameObject* obj = target->GetGameObject(48018))
-                            {
-                                target->NearTeleportTo(obj->GetPositionX(), obj->GetPositionY(), obj->GetPositionZ(), obj->GetOrientation());
-                                target->RemoveMovementImpairingAuras();
-                            }
-                        break;
-                }
-                break;
             case SPELLFAMILY_HUNTER:
                 if (!caster)
                     break;
@@ -1416,22 +1409,6 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                         target->CastSpell(target, 32612, true, NULL, GetEffect(1));
                         target->CombatStop();
                         break;
-                    case 118: // Improved Polymorph
-                    {
-                        if (removeMode == AURA_REMOVE_BY_EXPIRE || removeMode == AURA_REMOVE_BY_CANCEL)
-                            break;
-                        if (caster->HasAura(11210) && !target->HasAura(87515))
-                        {
-                            target->CastSpell(target, 83046, true);
-                            caster->AddAura(87515, target); // Immune Marker
-                        }
-                        else if (caster->HasAura(12592) && !target->HasAura(87515))
-                        {
-                            target->CastSpell(target, 83047, true);
-                            caster->AddAura(87515, target); // Immune Marker
-                        }
-                        break;
-                    }
                     case 1463: // Incanter's Absorption
                     {
                         if (removeMode == AURA_REMOVE_BY_EXPIRE || removeMode == AURA_REMOVE_BY_CANCEL)
@@ -1500,17 +1477,6 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                         if (caster->GetTypeId() == TYPEID_PLAYER && caster->ToPlayer()->isHonorOrXPTarget(target))
                             caster->CastSpell(target, 18662, true, NULL, GetEffect(0));
                     }
-                }
-                switch (GetId())
-                {
-                   case 48018: // Demonic Circle
-                        // Do not remove GO when aura is removed by stack
-                        // to prevent remove GO added by new spell
-                        // old one is already removed
-                        if (!onReapply)
-                            target->RemoveGameObject(GetId(), true);
-                        target->RemoveAura(62388);
-                    break;
                 }
                 break;
             case SPELLFAMILY_PRIEST:
@@ -1607,9 +1573,25 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                 }
                 break;
             case SPELLFAMILY_ROGUE:
-                // Remove Vanish on stealth remove
-                if (GetId() == 1784)
-                    target->RemoveAurasWithFamily(SPELLFAMILY_ROGUE, 0x0000800, 0, 0, target->GetGUID());
+                // Cast stealth after vanish 3 seconds expiration
+                if (GetId() == 11327 && removeMode == AURA_REMOVE_BY_EXPIRE)
+                    caster->AddAura(1784, caster);
+                // Rupture & Venomous wounds energy regain at target's death
+                else if (GetId() == 1943 && removeMode == AURA_REMOVE_BY_DEATH &&        // If rupture's target dies
+                    (caster->HasSpell(79133) || caster->HasSpell(79134)))               // Only if has talent
+                {
+                    int32 basepoints0 = GetDuration() / 200;
+                    // for each remaining 0.2 second, give 1 energy
+                    caster->CastCustomSpell(caster, 51637, &basepoints0, NULL, NULL, true);
+                }
+                // Blackjack/Groggy on sap removal
+                else if(GetId() == 6770)
+                {
+                    if(caster->HasAura(79125)) // Rank 2
+                        caster->CastSpell(target, 79126, true);
+                    else if(caster->HasAura(79123)) // Rank 1
+                        caster->CastSpell(target, 79124, true);
+                }
                 break;
             case SPELLFAMILY_HUNTER:
                 // Wyvern Sting
@@ -1640,17 +1622,6 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
     // mods at aura apply or remove
     switch (GetSpellInfo()->SpellFamilyName)
     {
-        case SPELLFAMILY_GENERIC:
-            switch (GetId())
-            {
-                case 50720: // Vigilance
-                    if (apply)
-                        target->CastSpell(caster, 59665, true, 0, 0, caster->GetGUID());
-                    else
-                        target->SetReducedThreatPercent(0, 0);
-                    break;
-            }
-            break;
         case SPELLFAMILY_ROGUE:
             // Stealth
             if (GetSpellInfo()->SpellFamilyFlags[0] & 0x00400000)
@@ -1678,9 +1649,11 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
             }
             break;
         case SPELLFAMILY_HUNTER:
+        {
             switch (GetId())
             {
                 case 19574: // Bestial Wrath
+                {
                     // The Beast Within cast on owner if talent present
                     if (Unit* owner = target->GetOwner())
                     {
@@ -1694,8 +1667,26 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                         }
                     }
                     break;
+                }
+                case 1130:  // Hunter's Mark
+                case 88691: // Marked for Death
+                {
+                    if (!caster || !target)
+                        return;
+
+                    // Resistance is Futile
+                    if (caster->HasAura(82893) || caster->HasAura(82894))
+                    {
+                        if (apply)
+                            caster->CastSpell(target, 83676, true);
+                        else
+                            target->RemoveAurasDueToSpell(83676, caster->GetGUID());
+                    }
+                    break;
+                }
             }
             break;
+        }
         case SPELLFAMILY_PALADIN:
             switch (GetId())
             {
@@ -1845,6 +1836,19 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                     else
                         caster->RemoveAurasDueToSpell(100001);
                 }
+            }
+            break;
+        case SPELLFAMILY_DRUID:
+            // Solar Eclipse Sunfire check
+            if (GetSpellInfo()->Id == 48517)
+            {
+                if (!caster)
+                    return;
+                                    // Sunfire talent
+                if (apply && caster->HasAura(93401))
+                    caster->CastSpell(caster, 94338, true); // Moonfire swapper
+                else
+                    caster->RemoveAurasDueToSpell(94338);
             }
             break;
     }
@@ -2412,7 +2416,7 @@ bool Aura::CallScriptEffectProc(AuraEffect const * aurEff, Unit* pUnit, Unit *vi
     {
         (*scritr)->_PrepareScriptCall(AURA_SCRIPT_HOOK_EFFECT_PROC/*, aurApp*/);
         std::list<AuraScript::EffectProcHandler>::iterator effEndItr = (*scritr)->OnEffectProc.end(), effItr = (*scritr)->OnEffectProc.begin();
-        for(; effItr != effEndItr ; ++effItr)
+        for (; effItr != effEndItr ; ++effItr)
         {
             if ((*effItr).IsEffectAffected(m_spellInfo, aurEff->GetEffIndex()))
                 (*effItr).Call(*scritr, aurEff, pUnit, victim, damage, procSpell, procFlag, procExtra, attType, cooldown);

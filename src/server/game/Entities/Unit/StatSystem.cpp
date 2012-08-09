@@ -173,7 +173,6 @@ bool Player::UpdateAllStats()
         UpdateMaxPower(Powers(i));
 
     UpdateAllRatings();
-    UpdateMasteryPercentage();
     UpdateAllCritPercentages();
     UpdateAllSpellCritChances();
     UpdateShieldBlockValue();
@@ -581,13 +580,6 @@ void Player::UpdateBlockPercentage()
         // Increase from block rating
         value += GetRatingBonusValue(CR_BLOCK);
 
-        // Increase from mastery rating
-        if(HasAura(76671)) //paladin Protection
-            value += GetMasteryPoints() * 0.0225f;
-
-        if(HasAura(76857)) //warrior Protection
-            value += GetMasteryPoints() * 0.015f;
-
         value = value < 0.0f ? 0.0f : value;
     }
     SetStatFloatValue(PLAYER_BLOCK_PERCENTAGE, value);
@@ -637,6 +629,44 @@ void Player::UpdateAllCritPercentages()
     UpdateCritPercentage(BASE_ATTACK);
     UpdateCritPercentage(OFF_ATTACK);
     UpdateCritPercentage(RANGED_ATTACK);
+}
+
+void Player::UpdateMastery()
+{
+    if (!CanUseMastery())
+    {
+        SetFloatValue(PLAYER_MASTERY, 0.0f);
+        return;
+    }
+
+    float value = GetTotalAuraModifier(SPELL_AURA_MASTERY);
+    value += GetRatingBonusValue(CR_MASTERY);
+    SetFloatValue(PLAYER_MASTERY, value);
+
+    TalentTabEntry const* talentTab = sTalentTabStore.LookupEntry(GetPrimaryTalentTree(GetActiveSpec()));
+    if (!talentTab)
+        return;
+
+    bool lastDummyEffect = true;
+    for (uint32 i = 0; i < MAX_MASTERY_SPELLS; ++i)
+    {
+        if (!talentTab->MasterySpellId[i])
+            continue;
+
+        if (Aura* aura = GetAura(talentTab->MasterySpellId[i]))
+        {
+            for (uint32 j = MAX_SPELL_EFFECTS; j > 0; --j)
+            {
+                if (!aura->HasEffect(j - 1))
+                    continue;
+
+                if (!lastDummyEffect)
+                    aura->GetEffect(j - 1)->SetAmount(int32(value * aura->GetSpellInfo()->Effects[j - 1].BonusCoefficient));
+                else
+                    lastDummyEffect = false;
+            }
+        }
+    }
 }
 
 const float m_diminishing_k[MAX_CLASSES] =
@@ -781,22 +811,6 @@ void Player::UpdateArmorPenetration(int32 amount)
 {
     // Store Rating Value
     SetUInt32Value(PLAYER_FIELD_COMBAT_RATING_1 + CR_ARMOR_PENETRATION, amount);
-}
-
-void Player::UpdateMasteryPercentage()
-{
-    // No mastery
-    float value = 0.0f;
-    if (CanMastery())
-    {
-        value = 0.0f;
-        // Mastery from SPELL_AURA_MASTERY aura
-        value += GetTotalAuraModifier(SPELL_AURA_MASTERY);
-        // Mastery from rating
-        value += GetRatingBonusValue(CR_MASTERY);
-        value = value < 0.0f ? 0.0f : value;
-    }
-    SetFloatValue(PLAYER_MASTERY, value);
 }
 
 void Player::UpdateMeleeHitChances()
@@ -1289,6 +1303,7 @@ void Guardian::UpdateMaxHealth()
         case ENTRY_FELHUNTER:   multiplicator = 9.5f;   break;
         case ENTRY_FELGUARD:    multiplicator = 11.0f;  break;
         case ENTRY_BLOODWORM:   multiplicator = 1.0f;   break;
+        case ENTRY_GHOUL:       multiplicator = 5.7f;   break;
         default:                multiplicator = 10.0f;  break;
     }
 
@@ -1343,18 +1358,18 @@ void Guardian::UpdateAttackPowerAndDamage(bool ranged)
     Unit* owner = GetOwner();
     if (owner && owner->GetTypeId() == TYPEID_PLAYER)
     {
-        if (isHunterPet())                      //hunter pets benefit from owner's attack power
+        if (isHunterPet())                                                          // hunter pets benefit from owner's attack power
         {
-            float mod = 1.0f;                                                 //Hunter contribution modifier
+            float mod = 1.0f;                                                       // Hunter contribution modifier
             if (isPet())
             {
-                PetSpellMap::const_iterator itr = ToPet()->_spells.find(62758);    //Wild Hunt rank 1
+                PetSpellMap::const_iterator itr = ToPet()->_spells.find(62758);     // Wild Hunt rank 1
                 if (itr == ToPet()->_spells.end())
-                    itr = ToPet()->_spells.find(62762);                            //Wild Hunt rank 2
+                    itr = ToPet()->_spells.find(62762);                             // Wild Hunt rank 2
 
-                if (itr != ToPet()->_spells.end())                                 // If pet has Wild Hunt
+                if (itr != ToPet()->_spells.end())                                  // If pet has Wild Hunt
                 {
-                    SpellInfo const* sProto = sSpellMgr->GetSpellInfo(itr->first); // Then get the SpellProto and add the dummy effect value
+                    SpellInfo const* sProto = sSpellMgr->GetSpellInfo(itr->first);  // Then get the SpellInfo and add the dummy effect value
                     mod += CalculatePctN(1.0f, sProto->Effects[1].CalcValue());
                 }
             }
@@ -1362,7 +1377,7 @@ void Guardian::UpdateAttackPowerAndDamage(bool ranged)
             bonusAP = owner->GetTotalAttackPowerValue(RANGED_ATTACK) * 0.22f * mod;
             SetBonusDamage(int32(owner->GetTotalAttackPowerValue(RANGED_ATTACK) * 0.425f * mod));
         }
-        else if (IsPetGhoul()) //ghouls benefit from deathknight's attack power (may be summon pet or not)
+        else if (IsPetGhoul()) // ghouls benefit from deathknight's attack power (may be summon pet or not)
         {
             bonusAP = owner->GetTotalAttackPowerValue(BASE_ATTACK) * 0.22f;
             SetBonusDamage(int32(owner->GetTotalAttackPowerValue(BASE_ATTACK) * 0.1287f));

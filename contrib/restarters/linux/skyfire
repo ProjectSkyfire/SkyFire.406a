@@ -1,0 +1,121 @@
+#! /bin/bash
+SKYFIRE_DIR='/opt/skyfire/';
+RETVAL=0;
+
+start()
+{
+    screen -AmdS skyfire_restarter ${SKYFIRE_DIR}restarter
+}
+stop()
+{
+    screen -dr skyfire_restarter -X "quit"
+}
+
+start-authserver()
+{
+    screen -AmdS authserver ${SKYFIRE_DIR}bin/authserver -c ${SKYFIRE_DIR}etc/authserver.conf
+}
+stop-authserver()
+{
+    screen -dr authserver -X "quit"
+}
+
+start-worldserver()
+{
+    cd ${SKYFIRE_DIR}
+    screen -AmdS worldserver ${SKYFIRE_DIR}bin/worldserver -c ${SKYFIRE_DIR}etc/worldserver.conf
+}
+stop-worldserver()
+{
+    screen -dr worldserver -X "quit"
+}
+
+case $1 in
+start)
+    start;
+    date;
+    echo "Restart-tool initialized";
+;;
+stop)
+    stop;
+    stop-authserver;
+    stop-worldserver;
+    date;
+    echo "Restart-tool has been stopped";
+;;
+restart)
+    stop;
+    start;
+    stop-authserver;
+    stop-worldserver;
+    start-authserver;
+    start-worldserver;
+    start;
+    date;
+    echo "Restart-tool is now working";
+;;
+start-authserver)
+    start-authserver;
+    date;
+    echo "Auth-Daemon has been successfully started";
+;;
+stop-authserver)
+    stop-authserver;
+    date;
+    echo "Auth-Daemon has been Stopped";
+;;
+restart-authserver)
+    stop-authserver;
+    start-authserver;
+    date;
+    echo "Auth-Daemon has been sucessfully restarted";
+;;
+start-worldserver)
+    start-worldserver;
+    date;
+    echo "World-Daemon has been successfully started";
+;;
+stop-worldserver)
+    stop-worldserver;
+    date;
+    echo "World-Daemon has been Stopped";
+;;
+restart-worldserver)
+    stop-worldserver;
+    start-worldserver;
+    date;
+    echo "World-Daemon has been sucessfully restarted";
+;;
+start-restarter)
+    start;
+    date;
+    echo "Restart-tool initialized";
+;;
+stop-restarter)
+    stop;
+    date;
+    echo "Restart-tool has been stopped";
+;;
+restart-restarter)
+    stop;
+    start;
+    date;
+    echo "Restart-tool is now working";
+;;
+status)
+    screen -ls
+;;
+restarter)
+    screen -r skyfire_restarter
+;;
+authserver)
+    screen -r authserver
+;;
+worldserver)
+    screen -r worldserver
+;;
+*)
+    echo "Usage: $0 {start|stop|restart|start-authserver|stop-authserver|restart-authserver|start-worldserver|stop-worldserver|restart-worldserver|start-restarter|stop-restarter|restart-restarter|status|restarter|authserver|worldserver}"
+    RETVAL=1
+esac
+exit $RETVAL;

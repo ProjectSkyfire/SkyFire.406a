@@ -29,10 +29,10 @@ static bool OpenLocalFile(const char * szFileName, HANDLE * phFile)
     for(i = 0; szFileName[i] != 0; i++)
         szFileNameT[i] = szFileName[i];
     szFileNameT[i] = 0;
-    pStream = FileStream_OpenFile(szFileNameT, false);
+    pStream = FileStream_OpenFile(szFileNameT, STREAM_PROVIDER_LINEAR | BASE_PROVIDER_FILE);
 
 #else
-    pStream = FileStream_OpenFile(szFileName, false);
+    pStream = FileStream_OpenFile(szFileName, STREAM_PROVIDER_LINEAR | BASE_PROVIDER_FILE);
 #endif
 
     if(pStream != NULL)

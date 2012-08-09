@@ -296,7 +296,7 @@ class spell_varos_energize_core_area_enemy : public SpellScriptLoader
         {
             PrepareSpellScript(spell_varos_energize_core_area_enemySpellScript)
 
-            void FilterTargets(std::list<Unit*>& targetList)
+            void FilterTargets(std::list<WorldObject*>& targets)
             {
                 Creature* varos = GetCaster()->ToCreature();
                 if (!varos)
@@ -307,7 +307,7 @@ class spell_varos_energize_core_area_enemy : public SpellScriptLoader
 
                 float orientation = CAST_AI(boss_varos::boss_varosAI, varos->AI())->GetCoreEnergizeOrientation();
 
-                for (std::list<Unit*>::iterator itr = targetList.begin() ; itr != targetList.end();)
+                for (std::list<WorldObject*>::iterator itr = targets.begin(); itr != targets.end();)
                 {
                     Position pos;
                     (*itr)->GetPosition(&pos);
@@ -316,7 +316,7 @@ class spell_varos_energize_core_area_enemy : public SpellScriptLoader
                     float diff = fabs(orientation - angle);
 
                     if (diff > 1.0f)
-                        itr = targetList.erase(itr);
+                        itr = targets.erase(itr);
                     else
                         ++itr;
                 }
@@ -324,7 +324,7 @@ class spell_varos_energize_core_area_enemy : public SpellScriptLoader
 
             void Register()
             {
-                OnUnitTargetSelect += SpellUnitTargetFn(spell_varos_energize_core_area_enemySpellScript::FilterTargets, EFFECT_0, TARGET_UNIT_SRC_AREA_ENEMY);
+                OnObjectAreaTargetSelect += SpellObjectAreaTargetSelectFn(spell_varos_energize_core_area_enemySpellScript::FilterTargets, EFFECT_0, TARGET_UNIT_SRC_AREA_ENEMY);
             }
         };
 
@@ -343,7 +343,7 @@ class spell_varos_energize_core_area_entry : public SpellScriptLoader
         {
             PrepareSpellScript(spell_varos_energize_core_area_entrySpellScript)
 
-            void FilterTargets(std::list<Unit*>& targetList)
+            void FilterTargets(std::list<WorldObject*>& targets)
             {
                 Creature* varos = GetCaster()->ToCreature();
                 if (!varos)
@@ -354,7 +354,7 @@ class spell_varos_energize_core_area_entry : public SpellScriptLoader
 
                 float orientation = CAST_AI(boss_varos::boss_varosAI, varos->AI())->GetCoreEnergizeOrientation();
 
-                for (std::list<Unit*>::iterator itr = targetList.begin() ; itr != targetList.end();)
+                for (std::list<WorldObject*>::iterator itr = targets.begin(); itr != targets.end();)
                 {
                     Position pos;
                     (*itr)->GetPosition(&pos);
@@ -363,7 +363,7 @@ class spell_varos_energize_core_area_entry : public SpellScriptLoader
                     float diff = fabs(orientation - angle);
 
                     if (diff > 1.0f)
-                        itr = targetList.erase(itr);
+                        itr = targets.erase(itr);
                     else
                         ++itr;
                 }
@@ -371,7 +371,7 @@ class spell_varos_energize_core_area_entry : public SpellScriptLoader
 
             void Register()
             {
-                OnUnitTargetSelect += SpellUnitTargetFn(spell_varos_energize_core_area_entrySpellScript::FilterTargets, EFFECT_0, TARGET_UNIT_SRC_AREA_ENTRY);
+                OnObjectAreaTargetSelect += SpellObjectAreaTargetSelectFn(spell_varos_energize_core_area_entrySpellScript::FilterTargets, EFFECT_0, TARGET_UNIT_SRC_AREA_ENTRY);
             }
         };
 

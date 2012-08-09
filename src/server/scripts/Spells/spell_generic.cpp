@@ -653,8 +653,15 @@ public:
 
 enum PvPTrinketTriggeredSpells
 {
-    SPELL_WILL_OF_THE_FORSAKEN_COOLDOWN_TRIGGER         = 72752,
-    SPELL_WILL_OF_THE_FORSAKEN_COOLDOWN_TRIGGER_WOTF    = 72757,
+    // This is the spell that is casted by the PvP trinkets a.k.a medallions and every man for himself
+    // it will make WOTF enter on a 30s cooldown.
+    SPELL_WILL_OF_THE_FORSAKEN_COOLDOWN_TRIGGER     = 72752,
+    SPELL_WILL_OF_THE_FORSAKEN                      = 7744,
+
+    // This spell is the one casted together with WOTF,
+    // it will make all medallions enter on a 30s cooldown.
+    SPELL_TRINKET_PVP_COOLDOWN_TRIGGER_WOTF         = 72757,
+    SPELL_PVP_TRINKET                               = 42292,
 };
 
 class spell_pvp_trinket_wotf_shared_cd : public SpellScriptLoader
@@ -671,34 +678,37 @@ public:
             if (!sSpellMgr->GetSpellInfo(SPELL_WILL_OF_THE_FORSAKEN_COOLDOWN_TRIGGER))
                 return false;
 
-            if (!sSpellMgr->GetSpellInfo(SPELL_WILL_OF_THE_FORSAKEN_COOLDOWN_TRIGGER_WOTF))
+            if (!sSpellMgr->GetSpellInfo(SPELL_TRINKET_PVP_COOLDOWN_TRIGGER_WOTF))
                 return false;
 
             return true;
         }
 
-        void HandleScript(SpellEffIndex /*effIndex*/)
+        void HandleScript()
         {
             Player* caster = GetCaster()->ToPlayer();
 
             if (!caster)
                 return;
 
-            SpellInfo const* spellInfo = GetSpellInfo();
-
-            caster->AddSpellCooldown(spellInfo->Id, 0, time(NULL) + sSpellMgr->GetSpellInfo(SPELL_WILL_OF_THE_FORSAKEN_COOLDOWN_TRIGGER)->GetRecoveryTime() / IN_MILLISECONDS);
-
-            WorldPacket data(SMSG_SPELL_COOLDOWN, 8+1+4);
-            data << uint64(caster->GetGUID());
-            data << uint8(0);
-            data << uint32(spellInfo->Id);
-            data << uint32(0);
-            caster->GetSession()->SendPacket(&data);
+            switch (GetSpellInfo()->Id)
+            {
+                case SPELL_PVP_TRINKET:
+                {
+                    caster->CastSpell(caster,SPELL_WILL_OF_THE_FORSAKEN_COOLDOWN_TRIGGER, false);
+                    break;
+                }
+                case SPELL_WILL_OF_THE_FORSAKEN:
+                {
+                    caster->CastSpell(caster,SPELL_TRINKET_PVP_COOLDOWN_TRIGGER_WOTF, false);
+                    break;
+                }
+            }
         }
 
         void Register()
         {
-            OnEffectHit += SpellEffectFn(spell_pvp_trinket_wotf_shared_cd_SpellScript::HandleScript, EFFECT_0, SPELL_EFFECT_DUMMY);
+            AfterHit += SpellHitFn(spell_pvp_trinket_wotf_shared_cd_SpellScript::HandleScript);
         }
     };
 
@@ -1181,33 +1191,6 @@ public:
     }
 };
 
-class spell_gen_lifeblood : public SpellScriptLoader
-{
-public:
-    spell_gen_lifeblood() : SpellScriptLoader("spell_gen_lifeblood") { }
-
-    class spell_gen_lifeblood_AuraScript : public AuraScript
-    {
-        PrepareAuraScript(spell_gen_lifeblood_AuraScript);
-
-        void CalculateAmount(AuraEffect const* aurEff, int32& amount, bool& /*canBeRecalculated*/)
-        {
-            if (Unit* owner = GetUnitOwner())
-                amount += int32(CalculatePctF(owner->GetMaxHealth(), 1.5f / aurEff->GetTotalTicks()));
-        }
-
-        void Register()
-        {
-            DoEffectCalcAmount += AuraEffectCalcAmountFn(spell_gen_lifeblood_AuraScript::CalculateAmount, EFFECT_0, SPELL_AURA_PERIODIC_HEAL);
-        }
-    };
-
-    AuraScript* GetAuraScript() const
-    {
-        return new spell_gen_lifeblood_AuraScript();
-    }
-};
-
 enum MagicRoosterSpells
 {
     SPELL_MAGIC_ROOSTER_NORMAL          = 66122,
@@ -1255,7 +1238,7 @@ public:
 
         void Register()
         {
-            OnEffectHitTarget += SpellEffectFn(spell_gen_magic_rooster_SpellScript::HandleScript, EFFECT_2, SPELL_EFFECT_SCRIPT_EFFECT);
+            OnEffectHitTarget += SpellEffectFn(spell_gen_magic_rooster_SpellScript::HandleScript, EFFECT_0, SPELL_EFFECT_APPLY_AURA);
         }
     };
 
@@ -1444,66 +1427,6 @@ public:
     SpellScript* GetSpellScript() const
     {
         return new spell_gen_oracle_wolvar_reputation_SpellScript();
-    }
-};
-
-enum DamageReductionAura
-{
-   SPELL_BLESSING_OF_SANCTUARY         = 20911,
-   SPELL_GREATER_BLESSING_OF_SANCTUARY = 25899,
-   SPELL_RENEWED_HOPE                  = 63944,
-   SPELL_VIGILANCE                     = 50720,
-   SPELL_DAMAGE_REDUCTION_AURA         = 68066,
-};
-
-class spell_gen_damage_reduction_aura : public SpellScriptLoader
-{
-public:
-    spell_gen_damage_reduction_aura() : SpellScriptLoader("spell_gen_damage_reduction_aura") { }
-
-    class spell_gen_damage_reduction_AuraScript : public AuraScript
-    {
-        PrepareAuraScript(spell_gen_damage_reduction_AuraScript);
-
-        bool Validate(SpellInfo const* /*SpellEntry*/)
-        {
-            if (!sSpellMgr->GetSpellInfo(SPELL_DAMAGE_REDUCTION_AURA))
-                return false;
-            return true;
-        }
-
-        void OnApply(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
-        {
-            Unit* target = GetTarget();
-
-            target->CastSpell(target, SPELL_DAMAGE_REDUCTION_AURA, true);
-        }
-
-        void OnRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
-        {
-            Unit* target = GetTarget();
-            if (!target->HasAura(SPELL_DAMAGE_REDUCTION_AURA))
-                return;
-
-            if (target->HasAura(SPELL_BLESSING_OF_SANCTUARY) ||
-                target->HasAura(SPELL_GREATER_BLESSING_OF_SANCTUARY) ||
-                target->HasAura(SPELL_RENEWED_HOPE) ||
-                target->HasAura(SPELL_VIGILANCE))
-                return;
-
-            target->RemoveAurasDueToSpell(SPELL_DAMAGE_REDUCTION_AURA);
-        }
-
-        void Register()
-        {
-            OnEffectApply += AuraEffectApplyFn(spell_gen_damage_reduction_AuraScript::OnApply, EFFECT_0, SPELL_AURA_DUMMY, AURA_EFFECT_HANDLE_REAL_OR_REAPPLY_MASK);
-            OnEffectRemove += AuraEffectRemoveFn(spell_gen_damage_reduction_AuraScript::OnRemove, EFFECT_0, SPELL_AURA_DUMMY, AURA_EFFECT_HANDLE_REAL_OR_REAPPLY_MASK);
-        }
-    };
-
-    AuraScript* GetAuraScript() const
-    {
-        return new spell_gen_damage_reduction_AuraScript();
     }
 };
 
@@ -2472,6 +2395,47 @@ public:
     }
 };
 
+// when learning this spell, learn ALL masteries as disabled (enable current spec)
+class spell_gen_enable_mastery : public SpellScriptLoader
+{
+    public:
+        spell_gen_enable_mastery() : SpellScriptLoader("spell_gen_enable_mastery") { }
+
+        class spell_gen_enable_mastery_SpellScript : public SpellScript
+        {
+            PrepareSpellScript(spell_gen_enable_mastery_SpellScript);
+
+            void HandleDummy(SpellEffIndex effIndex)
+            {
+                PreventHitDefaultEffect(effIndex);
+                Player* target = GetHitPlayer();
+                if (!target)
+                    return;
+
+                // learn all mastery spells, and only set active the ones that are for current spec
+                uint32 const* talentTabs = GetTalentTabPages(target->getClass());
+                uint32 currentSpec = target->GetPrimaryTalentTree(target->GetActiveSpec());
+                for (uint32 i = 0; i < MAX_TALENT_TABS; ++i)
+                    if (TalentTabEntry const* talentTab = sTalentTabStore.LookupEntry(talentTabs[i]))
+                        for (uint32 i = 0; i < MAX_MASTERY_SPELLS; ++i)
+                            if (uint32 mastery = talentTab->MasterySpellId[i])
+                                target->addSpell(mastery, currentSpec == talentTabs[i], false, false, currentSpec != talentTabs[i]);
+
+                target->SetMasteryState(true);
+            }
+
+            void Register()
+            {
+                OnEffectHitTarget += SpellEffectFn(spell_gen_enable_mastery_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
+            }
+        };
+
+        SpellScript* GetSpellScript() const
+        {
+            return new spell_gen_enable_mastery_SpellScript();
+        }
+};
+
 void AddSC_generic_spell_scripts()
 {
     new spell_gen_absorb0_hitlimit1();
@@ -2497,13 +2461,11 @@ void AddSC_generic_spell_scripts()
     new spell_generic_clone_weapon();
     new spell_gen_seaforium_blast();
     new spell_gen_turkey_marker();
-    new spell_gen_lifeblood();
     new spell_gen_magic_rooster();
     new spell_gen_allow_cast_from_item_only();
     new spell_gen_launch();
     new spell_gen_vehicle_scaling();
     new spell_gen_oracle_wolvar_reputation();
-    new spell_gen_damage_reduction_aura();
     new spell_gen_luck_of_the_draw();
     new spell_gen_spirit_healer_res();
     new spell_gen_reindeer_transformation();
@@ -2518,4 +2480,5 @@ void AddSC_generic_spell_scripts()
     new spell_gen_summon_tournament_mount();
     new spell_gen_on_tournament_mount();
     new spell_gen_tournament_pennant();
+    new spell_gen_enable_mastery();
 }

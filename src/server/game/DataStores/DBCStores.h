@@ -63,6 +63,7 @@ MapDifficulty const* GetMapDifficultyData(uint32 mapId, Difficulty difficulty);
 MapDifficulty const* GetDownscaledMapDifficultyData(uint32 mapId, Difficulty &difficulty);
 
 uint32 const* /*[MAX_TALENT_TABS]*/ GetTalentTabPages(uint8 cls);
+std::vector<uint32> const* GetTalentTreePrimarySpells(uint32 talentTree);
 
 PvPDifficultyEntry const* GetBattlegroundBracketByLevel(uint32 mapid, uint32 level);
 PvPDifficultyEntry const* GetBattlegroundBracketById(uint32 mapid, BattlegroundBracketId id);
@@ -144,6 +145,7 @@ extern DBCStorage <MapEntry>                     sMapStore;
 extern DBCStorage <NameGenEntry>                 sNameGenStore;
 extern DBCStorage <PhaseEntry>                   sPhaseStore;
 //extern DBCStorage <MapDifficultyEntry>           sMapDifficultyStore; -- use GetMapDifficultyData insteed
+extern DBCStorage <NumTalentsAtLevelEntry>       sNumTalentsAtLevelStore;
 extern MapDifficultyMap                          sMapDifficultyMap;
 extern DBCStorage <MovieEntry>                   sMovieStore;
 extern DBCStorage <MountCapabilityEntry>         sMountCapabilityStore;

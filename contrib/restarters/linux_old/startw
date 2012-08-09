@@ -1,0 +1,35 @@
+#!/bin/sh
+
+###############
+# About: Auto restart worldserver on crash & generate crash report into crash_log_(DATE_TIME).log
+###############
+# 1. Compile SkyFireEMU with the following command: cmake /root/wow/ -DPREFIX=/opt/skyfire -DDO_DEBUG=1 -DCMAKE_C_FLAGS="-m32 -D_LARGEFILE_SOURCE -DFD_SETSIZE=131072 -march=prescott -ggdb3 -g3 -pipe -fno-strength-reduce -fno-delete-null-pointer-checks -fno-strict-aliasing -frename-registers"
+# 2. Put these files: start, startw, startl, restarter, restarter-bin, in /opt/skyfire/bin folder.
+# 3. (Only once): cd /opt/skyfire/bin && chmod +x start startw startl restarter restarter-bin
+# 4. Usage: ./start or /opt/skyfire/bin/start
+# p.s. Make sure you have "gdb" installed.
+###############
+
+# config:
+# path to worldserver binary
+daemon=/opt/skyfire/bin/worldserver
+
+# system
+export LD_LIBRARY_PATH=.:lib:$LD_LIBRARY_PATH
+
+if [ "`ulimit -c`" -eq 0 ]; then
+ulimit -c unlimited
+fi
+
+while true
+do
+$daemon $*
+if [ $? -eq 0 ]; then
+break;
+fi
+sleep 10
+dte=`date +%F_%H-%M-%S`
+gdb $daemon core.* --batch --eval-command="bt ful" > crash_log_$dte.log
+rm core.*
+sleep 5
+done

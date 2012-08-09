@@ -53,8 +53,7 @@ PathFinderMovementGenerator::~PathFinderMovementGenerator()
 
 bool PathFinderMovementGenerator::calculate(float destX, float destY, float destZ, bool forceDest)
 {
-    if (!SkyFire::IsValidMapCoord(destX, destY, destZ) ||
-        !SkyFire::IsValidMapCoord(m_sourceUnit->GetPositionX(), m_sourceUnit->GetPositionY(), m_sourceUnit->GetPositionZ()))
+    if (!SkyFire::IsValidMapCoord(destX, destY, destZ) || !SkyFire::IsValidMapCoord(m_sourceUnit->GetPositionX(), m_sourceUnit->GetPositionY(), m_sourceUnit->GetPositionZ()))
         return false;
 
     Vector3 oldDest = getEndPosition();
@@ -72,8 +71,7 @@ bool PathFinderMovementGenerator::calculate(float destX, float destY, float dest
 
     // make sure navMesh works - we can run on map w/o mmap
     // check if the start and end point have a .mmtile loaded (can we pass via not loaded tile on the way?)
-    if (!m_navMesh || !m_navMeshQuery || m_sourceUnit->HasUnitState(UNIT_STATE_IGNORE_PATHFINDING) ||
-        !HaveTile(start) || !HaveTile(dest))
+    if (!m_navMesh || !m_navMeshQuery || m_sourceUnit->HasUnitState(UNIT_STATE_IGNORE_PATHFINDING) || !HaveTile(start) || !HaveTile(dest))
     {
         BuildShortcut();
         m_type = PathType(PATHFIND_NORMAL | PATHFIND_NOT_USING_PATH);
@@ -127,7 +125,7 @@ dtPolyRef PathFinderMovementGenerator::getPathPolyByPosition(const dtPolyRef *po
             minDist3d = dtVdistSqr(point, closestPoint);
         }
 
-        if(minDist2d < 1.0f) // shortcut out - close enough for us
+        if (minDist2d < 1.0f) // shortcut out - close enough for us
             break;
     }
 
@@ -190,7 +188,7 @@ void PathFinderMovementGenerator::BuildPolyPath(const Vector3 &startPos, const V
         sLog->outDebug(LOG_FILTER_MAPS, "++ BuildPolyPath :: (startPoly == 0 || endPoly == 0)\n");
         BuildShortcut();
         m_type = (m_sourceUnit->GetTypeId() == TYPEID_UNIT && ((Creature*)m_sourceUnit)->canFly())
-                    ? PathType(PATHFIND_NORMAL | PATHFIND_NOT_USING_PATH) : PATHFIND_NOPATH;
+            ? PathType(PATHFIND_NORMAL | PATHFIND_NOT_USING_PATH) : PATHFIND_NOPATH;
         return;
     }
 
@@ -233,7 +231,7 @@ void PathFinderMovementGenerator::BuildPolyPath(const Vector3 &startPos, const V
             if (DT_SUCCESS == m_navMeshQuery->closestPointOnPoly(endPoly, endPoint, closestPoint))
             {
                 dtVcopy(endPoint, closestPoint);
-                setActualEndPosition(Vector3(endPoint[2],endPoint[0],endPoint[1]));
+                setActualEndPosition(Vector3(endPoint[2], endPoint[0], endPoint[1]));
             }
 
             m_type = PATHFIND_INCOMPLETE;
@@ -450,11 +448,11 @@ void PathFinderMovementGenerator::BuildPointPath(const float *startPoint, const 
     setActualEndPosition(m_pathPoints[pointCount-1]);
 
     // force the given destination, if needed
-    if(m_forceDestination &&
+    if (m_forceDestination &&
         (!(m_type & PATHFIND_NORMAL) || !inRange(getEndPosition(), getActualEndPosition(), 1.0f, 1.0f)))
     {
         // we may want to keep partial subpath
-        if(dist3DSqr(getActualEndPosition(), getEndPosition()) <
+        if (dist3DSqr(getActualEndPosition(), getEndPosition()) <
             0.3f * dist3DSqr(getStartPosition(), getEndPosition()))
         {
             setActualEndPosition(getEndPosition());
@@ -551,25 +549,14 @@ NavTerrain PathFinderMovementGenerator::getNavTerrain(float x, float y, float z)
 
 bool PathFinderMovementGenerator::HaveTile(const Vector3 &p) const
 {
-    bool haveTiles;
     int tx, ty;
     float point[VERTEX_SIZE] = {p.y, p.z, p.x};
 
-    // check if the start and end point have a mmtile loaded
     m_navMesh->calcTileLoc(point, &tx, &ty);
-    haveTiles = m_navMesh->getTileAt(tx, ty) != 0;
-
-    if (haveTiles)
-    {
-        m_navMesh->calcTileLoc(point, &tx, &ty);
-        haveTiles = m_navMesh->getTileAt(tx, ty) != 0;
-    }
-
-    return haveTiles;
+    return (m_navMesh->getTileAt(tx, ty) != NULL);
 }
 
-uint32 PathFinderMovementGenerator::fixupCorridor(dtPolyRef* path, uint32 npath, uint32 maxPath,
-                               const dtPolyRef* visited, uint32 nvisited)
+uint32 PathFinderMovementGenerator::fixupCorridor(dtPolyRef* path, uint32 npath, uint32 maxPath, const dtPolyRef* visited, uint32 nvisited)
 {
     int32 furthestPath = -1;
     int32 furthestVisited = -1;

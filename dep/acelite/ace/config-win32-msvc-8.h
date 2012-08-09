@@ -3,7 +3,7 @@
 /**
  *  @file   config-win32-msvc-8.h
  *
- *  $Id: config-win32-msvc-8.h 92386 2010-10-28 07:44:37Z johnnyw $
+ *  $Id: config-win32-msvc-8.h 95719 2012-05-01 12:54:01Z johnnyw $
  *
  *  @brief  Microsoft Visual C++ 8.0 configuration file.
  *
@@ -37,11 +37,10 @@
 #endif
 
 // Windows' timeval is non-conformant (defined in terms of long instead of
-// time_t) and VC8 (on desktop, not CE) changed time_t to a 64-bit value
-// even when compiling a 32-bit application. Therefore, ace/Time_Value
-// needs to rearrange a few things for this compiler. See Time_Value.h
-// for complete details.
-#if !defined (ACE_HAS_WINCE)
+// time_t) and VC8 changed time_t to a 64-bit value even when compiling a
+// 32-bit application. Therefore, ace/Time_Value needs to rearrange a few
+// things for this compiler. See Time_Value.h for complete details.
+#if !defined (_USE_32BIT_TIME_T)
 #  define ACE_HAS_TIME_T_LONG_MISMATCH
 #endif
 

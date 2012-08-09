@@ -1,6 +1,6 @@
 // -*- C++ -*-
 //
-// $Id: config-g++-common.h 92386 2010-10-28 07:44:37Z johnnyw $
+// $Id: config-g++-common.h 93500 2011-03-07 16:19:27Z vzykov $
 
 // This configuration file is designed to be included by another,
 // specific configuration file.  It provides config information common
@@ -63,6 +63,10 @@
 #define ACE_HAS_GCC_DEPRECATED_ATTRIBUTE 1
 #endif
 
+#if !defined (ACE_HAS_GCC_FORMAT_ATTRIBUTE)
+#define ACE_HAS_GCC_FORMAT_ATTRIBUTE 1
+#endif
+
 #if (ACE_HAS_GCC_CONSTRUCTOR_ATTRIBUTE == 1)
 # define ACE_GCC_CONSTRUCTOR_ATTRIBUTE __attribute__ ((constructor))
 #endif
@@ -73,6 +77,11 @@
 
 #if (ACE_HAS_GCC_DEPRECATED_ATTRIBUTE == 1)
 #define ACE_DEPRECATED __attribute__ ((deprecated))
+#endif
+
+#if (ACE_HAS_GCC_FORMAT_ATTRIBUTE == 1)
+# define ACE_GCC_FORMAT_ATTRIBUTE(TYPE, STR_INDEX, FIRST_INDEX) \
+   __attribute__ ((format (TYPE, STR_INDEX, FIRST_INDEX)))
 #endif
 
 // GNU g++ >= 4.x implements "#pragma once".

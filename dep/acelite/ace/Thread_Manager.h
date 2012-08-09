@@ -4,7 +4,7 @@
 /**
  *  @file    Thread_Manager.h
  *
- *  $Id: Thread_Manager.h 83956 2008-12-03 07:57:38Z johnnyw $
+ *  $Id: Thread_Manager.h 95595 2012-03-07 13:33:25Z johnnyw $
  *
  *  @author Douglas C. Schmidt <schmidt@cs.wustl.edu>
  */
@@ -174,7 +174,7 @@ class ACE_Export ACE_Thread_Descriptor_Base : public ACE_OS_Thread_Descriptor
   friend class ACE_Double_Linked_List_Iterator<ACE_Thread_Descriptor>;
 public:
   ACE_Thread_Descriptor_Base (void);
-  ~ACE_Thread_Descriptor_Base (void);
+  virtual ~ACE_Thread_Descriptor_Base (void);
 
   // = We need the following operators to make Borland happy.
 

@@ -844,9 +844,8 @@ enum PlayerLoginQueryIndex
     PLAYER_LOGIN_QUERY_LOADQUESTSTATUSREW       = 29,
     PLAYER_LOGIN_QUERY_LOADINSTANCELOCKTIMES    = 30,
     PLAYER_LOGIN_QUERY_LOADSEASONALQUESTSTATUS  = 31,
-    PLAYER_LOGIN_QUERY_LOADTALENTBRANCHSPECS    = 32,
-    PLAYER_LOGIN_QUERY_LOAD_CURRENCY            = 33,
-    PLAYER_LOGIN_QUERY_LOAD_CP_WEEK_CAP         = 34,
+    PLAYER_LOGIN_QUERY_LOAD_CURRENCY            = 32,
+    PLAYER_LOGIN_QUERY_LOAD_CP_WEEK_CAP         = 33,
     MAX_PLAYER_LOGIN_QUERY,
 };
 
@@ -1103,6 +1102,50 @@ private:
     uint8 _maxLevel;
     bool _isBattleGround;
     bool _isPvP;
+};
+
+struct PlayerTalentInfo
+{
+    PlayerTalentInfo() :
+        FreeTalentPoints(0), UsedTalentCount(0), QuestRewardedTalentCount(0),
+        ResetTalentsCost(0), ResetTalentsTime(0),
+        ActiveSpec(0), SpecsCount(1)
+    {
+        for (uint8 i = 0; i < MAX_TALENT_SPECS; ++i)
+        {
+            SpecInfo[i].Talents = new PlayerTalentMap();
+            memset(SpecInfo[i].Glyphs, 0, MAX_GLYPH_SLOT_INDEX * sizeof(uint32));
+            SpecInfo[i].TalentTree = 0;
+        }
+    }
+
+    ~PlayerTalentInfo()
+    {
+        for (uint8 i = 0; i < MAX_TALENT_SPECS; ++i)
+        {
+            for (PlayerTalentMap::const_iterator itr = SpecInfo[i].Talents->begin(); itr != SpecInfo[i].Talents->end(); ++itr)
+                delete itr->second;
+            delete SpecInfo[i].Talents;
+        }
+    }
+
+    struct TalentSpecInfo
+    {
+        PlayerTalentMap* Talents;
+        uint32 Glyphs[MAX_GLYPH_SLOT_INDEX];
+        uint32 TalentTree;
+    } SpecInfo[MAX_TALENT_SPECS];
+
+    uint32 FreeTalentPoints;
+    uint32 UsedTalentCount;
+    uint32 QuestRewardedTalentCount;
+    uint32 ResetTalentsCost;
+    time_t ResetTalentsTime;
+    uint8 ActiveSpec;
+    uint8 SpecsCount;
+
+private:
+    PlayerTalentInfo(PlayerTalentInfo const&);
 };
 
 class Player : public Unit, public GridObject<Player>
@@ -1705,33 +1748,41 @@ class Player : public Unit, public GridObject<Player>
         void SetReputation(uint32 factionentry, uint32 value);
         uint32 GetReputation(uint32 factionentry);
         std::string GetGuildName();
-        uint32 GetFreeTalentPoints() const { return m_freeTalentPoints; }
-        void SetFreeTalentPoints(uint32 points) { m_freeTalentPoints = points; }
-        bool resetTalents(bool no_cost = false);
-        uint32 resetTalentsCost() const;
+
+        // Talents
+        uint32 GetFreeTalentPoints() const { return _talentMgr->FreeTalentPoints; }
+        void SetFreeTalentPoints(uint32 points) { _talentMgr->FreeTalentPoints = points; }
+        uint32 GetUsedTalentCount() const { return _talentMgr->UsedTalentCount; }
+        void SetUsedTalentCount(uint32 talents) { _talentMgr->UsedTalentCount = talents; }
+        uint32 GetQuestRewardedTalentCount() const { return _talentMgr->QuestRewardedTalentCount; }
+        void AddQuestRewardedTalentCount(uint32 points) { _talentMgr->QuestRewardedTalentCount += points; }
+        uint32 GetTalentResetCost() const { return _talentMgr->ResetTalentsCost; }
+        void SetTalentResetCost(uint32 cost)  { _talentMgr->ResetTalentsCost = cost; }
+        uint32 GetTalentResetTime() const { return _talentMgr->ResetTalentsTime; }
+        void SetTalentResetTime(time_t time_)  { _talentMgr->ResetTalentsTime = time_; }
+        uint32 GetPrimaryTalentTree(uint8 spec) const { return _talentMgr->SpecInfo[spec].TalentTree; }
+        void SetPrimaryTalentTree(uint8 spec, uint32 tree) { _talentMgr->SpecInfo[spec].TalentTree = tree; }
+        uint8 GetActiveSpec() const { return _talentMgr->ActiveSpec; }
+        void SetActiveSpec(uint8 spec){ _talentMgr->ActiveSpec = spec; }
+        uint8 GetSpecsCount() const { return _talentMgr->SpecsCount; }
+        void SetSpecsCount(uint8 count) { _talentMgr->SpecsCount = count; }
+        bool ResetTalents(bool no_cost = false);
+        uint32 GetNextResetTalentsCost() const;
+
         void InitTalentForLevel();
         void BuildPlayerTalentsInfoData(WorldPacket *data);
         void BuildPetTalentsInfoData(WorldPacket *data);
         void SendTalentsInfoData(bool pet);
-        void LearnTalent(uint32 talentId, uint32 talentRank, bool one = true);
+        bool LearnTalent(uint32 talentId, uint32 talentRank);
         void LearnPetTalent(uint64 petGuid, uint32 talentId, uint32 talentRank);
 
         bool AddTalent(uint32 spellId, uint8 spec, bool learning);
         bool HasTalent(uint32 spell_id, uint8 spec) const;
 
-        void SetTalentBranchSpec(uint32 branchSpec, uint8 spec);
-        uint32 GetTalentBranchSpec(uint8 spec) const { return _branchSpec[spec]; }
-        void RecalculateMasteryAuraEffects(uint32 branch);
-        void UpdateMasteryAuras(uint32 branch);
-
         uint32 CalculateTalentsPoints() const;
 
         // Dual Spec
         void UpdateSpecCount(uint8 count);
-        uint32 GetActiveSpec() { return _activeSpec; }
-        void SetActiveSpec(uint8 spec){ _activeSpec = spec; }
-        uint8 GetSpecsCount() { return _specsCount; }
-        void SetSpecsCount(uint8 count) { _specsCount = count; }
         void ActivateSpec(uint8 spec);
 
         void InitGlyphsForLevel();
@@ -1740,13 +1791,17 @@ class Player : public Unit, public GridObject<Player>
             ASSERT(slot < MAX_GLYPH_SLOT_INDEX); // prevent updatefields corruption
             SetUInt32Value(PLAYER_FIELD_GLYPH_SLOTS_1 + slot, slottype);
         }
-        uint32 GetGlyphSlot(uint8 slot) { return GetUInt32Value(PLAYER_FIELD_GLYPH_SLOTS_1 + slot); }
+        uint32 GetGlyphSlot(uint8 slot) const { return GetUInt32Value(PLAYER_FIELD_GLYPH_SLOTS_1 + slot); }
         void SetGlyph(uint8 slot, uint32 glyph)
         {
-            _Glyphs[_activeSpec][slot] = glyph;
+            _talentMgr->SpecInfo[GetActiveSpec()].Glyphs[slot] = glyph;
             SetUInt32Value(PLAYER_FIELD_GLYPHS_1 + slot, glyph);
         }
-        uint32 GetGlyph(uint8 slot) { return _Glyphs[_activeSpec][slot]; }
+        uint32 GetGlyph(uint8 spec, uint8 slot) const { return _talentMgr->SpecInfo[spec].Glyphs[slot]; }
+
+        PlayerTalentMap const* GetTalentMap(uint8 spec) const { return _talentMgr->SpecInfo[spec].Talents; }
+        PlayerTalentMap* GetTalentMap(uint8 spec) { return _talentMgr->SpecInfo[spec].Talents; }
+        ActionButtonList const& GetActionButtons() const { return _actionButtons; }
 
         uint32 GetFreePrimaryProfessionPoints() const { return GetUInt32Value(PLAYER_CHARACTER_POINTS); }
         void SetFreePrimaryProfessions(uint16 profs) { SetUInt32Value(PLAYER_CHARACTER_POINTS, profs); }
@@ -1927,6 +1982,10 @@ class Player : public Unit, public GridObject<Player>
         void ApplyRatingMod(CombatRating cr, int32 value, bool apply);
         void UpdateRating(CombatRating cr);
         void UpdateAllRatings();
+        void UpdateMastery();
+        bool CanUseMastery() const { return _canUseMastery; }
+        void SetMasteryState(bool apply) { _canUseMastery = apply; UpdateMastery(); }
+        void CastMasterySpells(Player* caster);
 
         void CalculateMinMaxDamage(WeaponAttackType attType, bool normalized, bool addTotalPct, float& min_damage, float& max_damage);
 
@@ -1940,7 +1999,8 @@ class Player : public Unit, public GridObject<Player>
         float OCTRegenMPPerSpirit();
         float GetRatingMultiplier(CombatRating cr) const;
         float GetRatingBonusValue(CombatRating cr) const;
-        uint32 GetBaseSpellPowerBonus() { return _spellPowerFromIntellect + _baseSpellPower; }
+        uint32 GetSpellPowerBonus() { return _spellPowerFromIntellect + _baseSpellPower; }
+        uint32 GetBaseSpellPower(){ return _spellPowerFromIntellect; }
         int32 GetSpellPenetrationItemMod() const { return _spellPenetrationItemMod; }
 
         float GetExpertiseDodgeOrParryReduction(WeaponAttackType attType) const;
@@ -1952,12 +2012,6 @@ class Player : public Unit, public GridObject<Player>
         void UpdateMeleeHitChances();
         void UpdateRangedHitChances();
         void UpdateSpellHitChances();
-        void UpdateMasteryPercentage();
-
-        float GetMasteryPoints() { return CalculateMasteryPoints(_baseRatingValue[CR_MASTERY]); }
-        float CalculateMasteryPoints(int32 curr_rating)  { return float(curr_rating * 0.0055779569892473); }
-        int32 CalculateMasteryRating(float curr_mastery) { return int32(curr_mastery / 0.0055779569892473); }
-        void RemoveOrAddMasterySpells();
 
         void UpdateAllSpellCritChances();
         void UpdateSpellCritChance(uint32 school);
@@ -2121,7 +2175,6 @@ class Player : public Unit, public GridObject<Player>
         void SetCanParry(bool value);
         bool CanBlock() const { return _canBlock; }
         void SetCanBlock(bool value);
-        bool CanMastery() const { return HasAuraType(SPELL_AURA_MASTERY); }
         bool CanTitanGrip() const { return _canTitanGrip; }
         void SetCanTitanGrip(bool value) { _canTitanGrip = value; }
         bool CanTameExoticPets() const { return isGameMaster() || HasAuraType(SPELL_AURA_ALLOW_TAME_PET_TYPE); }
@@ -2185,6 +2238,7 @@ class Player : public Unit, public GridObject<Player>
 
         uint32 _regenTimerCount;
         uint32 _holyPowerRegenTimerCount; // Holy power updates ticks at every 10secs.
+        uint32 _focusRegenTimerCount; // Focus power updates ticks at every second.
 
         /*********************************************************/
         /***               BATTLEGROUND SYSTEM                 ***/
@@ -2736,20 +2790,16 @@ class Player : public Unit, public GridObject<Player>
 
         PlayerMails _mail;
         PlayerSpellMap _spells;
-        PlayerTalentMap *_talents[MAX_TALENT_SPECS];
+
         uint32 _lastPotionId;                              // last used health/mana potion in combat, that block next potion use
 
         GlobalCooldownMgr m_GlobalCooldownMgr;
 
-        uint8 _activeSpec;
-        uint8 _specsCount;
-        uint32 _branchSpec[MAX_TALENT_SPECS];              // tabId of the main talent bran
-        uint32 m_talentSpec[MAX_TALENT_SPECS];              // S[1, MAX_TALENT_TABS] { (numTalentsInTab << (tabPageIndex*8) }
         uint32 m_freeTalentPoints;
 
         uint32 m_emote;
 
-        uint32 _Glyphs[MAX_TALENT_SPECS][MAX_GLYPH_SLOT_INDEX];
+        PlayerTalentInfo* _talentMgr;
 
         ActionButtonList _actionButtons;
 
@@ -2776,7 +2826,8 @@ class Player : public Unit, public GridObject<Player>
         uint64 m_resurrectGUID;
         uint32 m_resurrectMap;
         float m_resurrectX, m_resurrectY, m_resurrectZ;
-        uint32 _resurrectHealth, _resurrectMana;
+        uint32 _resurrectHealth;
+        int32 _resurrectMana;
 
         WorldSession *m_session;
 
@@ -2821,10 +2872,6 @@ class Player : public Unit, public GridObject<Player>
         float _rest_bonus;
         RestType rest_type;
         ////////////////////Rest System/////////////////////
-        uint32 _resetTalentsCost;
-        time_t _resetTalentsTime;
-        uint32 _usedTalentCount;
-        uint32 _questRewardTalentCount;
 
         // Social
         PlayerSocial *_social;
@@ -2928,6 +2975,7 @@ class Player : public Unit, public GridObject<Player>
         uint32 talentPoints;
         uint32 profPoints;
         uint32 guild;
+        bool _canUseMastery;
 };
 
 void AddItemsSetItem(Player*player, Item *item);

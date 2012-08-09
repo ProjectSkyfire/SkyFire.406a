@@ -1315,7 +1315,7 @@ class Unit : public WorldObject
         uint32 GetTimesCastedInRow(uint32 spellid)
         {
             SpellsCastedInRow::iterator itr = m_spellsinrow.find(spellid);
-            if(itr != m_spellsinrow.end())
+            if (itr != m_spellsinrow.end())
                 return itr->second;
             return NULL;
         }
@@ -1410,8 +1410,9 @@ class Unit : public WorldObject
 
         Powers getPowerType() const { return Powers(GetByteValue(UNIT_FIELD_BYTES_0, 3)); }
         void setPowerType(Powers power);
-        int32 GetPower(Powers power) const { return GetUInt32Value(UNIT_FIELD_POWER1   +power); }
-        uint32 GetMaxPower(Powers power) const { return GetUInt32Value(UNIT_FIELD_MAXPOWER1+power); }
+        int32 GetPower(Powers power) const { return GetInt32Value(UNIT_FIELD_POWER1   +power); }
+        int32 GetMinPower(Powers power) const { return power == POWER_ECLIPSE ? -100 : 0; }
+        int32 GetMaxPower(Powers power) const { return GetInt32Value(UNIT_FIELD_MAXPOWER1+power); }
         void SetPower(Powers power, int32 val);
         void SetMaxPower(Powers power, int32 val);
         // returns the change in power
@@ -1594,7 +1595,7 @@ class Unit : public WorldObject
         void ClearInCombat();
         uint32 GetCombatTimer() const { return m_CombatTimer; }
 
-        bool HasAuraTypeWithFamilyFlags(AuraType auraType, uint32 familyName, uint32 familyFlags) const;
+        bool HasAuraTypeWithFamilyFlags(AuraType auraType, uint32 familyName, uint32 familyFlags, uint32 familyFlagsIndex = 0) const;
         bool virtual HasSpell(uint32 /*spellID*/) const { return false; }
         bool HasBreakableByDamageAuraType(AuraType type, uint32 excludeAura = 0) const;
         bool HasBreakableByDamageCrowdControlAura(Unit* excludeCasterChannel = NULL) const;
@@ -1622,7 +1623,7 @@ class Unit : public WorldObject
         void SendHealSpellLog(Unit* victim, uint32 SpellID, uint32 Damage, uint32 OverHeal, uint32 Absorb, bool critical = false);
         int32 HealBySpell(Unit* victim, SpellInfo const* spellInfo, uint32 addHealth, bool critical = false);
         void SendEnergizeSpellLog(Unit* victim, uint32 SpellID, uint32 Damage, Powers powertype);
-        void EnergizeBySpell(Unit* victim, uint32 SpellID, uint32 Damage, Powers powertype);
+        void EnergizeBySpell(Unit* victim, uint32 SpellID, int32 Damage, Powers powertype);
         uint32 SpellNonMeleeDamageLog(Unit* victim, uint32 spellID, uint32 damage);
 
         void CastSpell(SpellCastTargets const& targets, SpellInfo const* spellInfo, CustomSpellValues const* value, TriggerCastFlags triggerFlags = TRIGGERED_NONE, Item* castItem = NULL, AuraEffect const* triggeredByAura = NULL, uint64 originalCaster = 0);
@@ -2267,6 +2268,17 @@ class Unit : public WorldObject
                 SetUInt64Value(UNIT_FIELD_TARGET, 0);
         }
 
+        void AddSpellSwap(uint32 oldSpell, uint32 newSpell) { _spellSwaps[oldSpell] = newSpell; }
+        void RemoveSpellSwap(uint32 originalSpell) { _spellSwaps.erase(originalSpell); }
+        uint32 GetSpellForCast(uint32 spellId) const
+        {
+            std::map<uint32, uint32>::const_iterator itr = _spellSwaps.find(spellId);
+            if (itr != _spellSwaps.end())
+                return itr->second;
+
+            return spellId;
+        }
+
         void AddSpellMod(SpellModifier* mod, bool apply);
         bool IsAffectedBySpellmod(SpellInfo const *spellInfo, SpellModifier *mod, Spell* spell = NULL);
         template <class T> T ApplySpellMod(uint32 spellId, SpellModOp op, T &basevalue, Spell* spell = NULL, Unit* target = NULL);
@@ -2278,9 +2290,6 @@ class Unit : public WorldObject
 
         Spell* m_spellModTakingSpell;  // Spell for which charges are dropped in spell::finish
         SpellModList m_spellMods[MAX_SPELLMOD];
-
-        int32 GetEclipsePower() {return _eclipse;};
-        void SetEclipsePower(int32 power);
 
         uint32 m_heal_done[120];
         uint32 m_damage_done[120];
@@ -2376,6 +2385,7 @@ class Unit : public WorldObject
     private:
         bool IsTriggeredAtSpellProcEvent(Unit* victim, Aura * aura, SpellInfo const* procSpell, uint32 procFlag, uint32 procExtra, WeaponAttackType attType, bool isVictim, bool active, SpellProcEventEntry const *& spellProcEvent);
         bool HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggeredByAura, SpellInfo const *procSpell, uint32 procFlag, uint32 procEx, uint32 cooldown);
+        bool HandleAuraProcOnPowerAmount(Unit* victim, uint32 damage, AuraEffect* triggeredByAura, SpellInfo const *procSpell, uint32 procFlag, uint32 procEx, uint32 cooldown);
         bool HandleHasteAuraProc(Unit* victim, uint32 damage, AuraEffect* triggeredByAura, SpellInfo const* procSpell, uint32 procFlag, uint32 procEx, uint32 cooldown);
         bool HandleModDamagePctTakenAuraProc(Unit *victim, uint32 damage, AuraEffect* triggeredByAura, SpellInfo const *procSpell, uint32 procFlag, uint32 procEx, uint32 cooldown);
         bool HandleSpellCritChanceAuraProc(Unit* victim, uint32 damage, AuraEffect* triggredByAura, SpellInfo const *procSpell, uint32 procFlag, uint32 procEx, uint32 cooldown);
@@ -2422,8 +2432,7 @@ class Unit : public WorldObject
         Spell const* _focusSpell;
         bool _targetLocked; // locks the target during spell cast for proper facing
 
-        int32 _eclipse;
-
+        std::map<uint32, uint32> _spellSwaps;
         float _healAbsorb;
 };
 

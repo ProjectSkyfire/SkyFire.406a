@@ -186,9 +186,9 @@ void WorldSession::HandleGuildLeaderOpcode(WorldPacket& recvPacket)
     sLog->outDebug(LOG_FILTER_GUILD, "WORLD: Received CMSG_GUILD_LEADER");
 
     std::string name;
-    recvPacket >> name;
     recvPacket.read_skip<uint64>(); // guild GUID
     recvPacket.read_skip<uint64>(); // user's guid?
+    recvPacket >> name;
 
     if (normalizePlayerName(name))
         if (Guild* guild = _GetPlayerGuild(this, true))
@@ -229,11 +229,11 @@ void WorldSession::HandleGuildExperienceOpcode(WorldPacket& recvPacket)
     if (Guild* guild = sGuildMgr->GetGuildById(_player->GetGuildId()))
     {
         WorldPacket data(SMSG_GUILD_XP_UPDATE, 8*5);
-        data << uint64(guild->GetXPCap());       // max daily xp
-        data << uint64(guild->GetNextLevelXP()); // next level XP
-        data << uint64(guild->GetXPCap());       // weekly xp
-        data << uint64(guild->GetCurrentXP());   // Curr exp
-        data << uint64(guild->GetTodayXP());     // Today exp
+        data << uint64(guild->GetXPCap());                                  // max daily xp
+        data << uint64(guild->GetNextLevelXP() - guild->GetCurrentXP());    // next level XP
+        data << uint64(guild->GetXPCap());                                  // weekly xp
+        data << uint64(guild->GetCurrentXP());                              // Curr exp
+        data << uint64(guild->GetTodayXP());                                // Today exp
         SendPacket(&data);
     }
 }
@@ -370,6 +370,7 @@ void WorldSession::HandleGuildRankOpcode(WorldPacket& recvPacket)
             rightsAndSlots[tabId] = GuildBankRightsAndSlots(BankRights[tabId], BankStacks[tabId]);
         }
 
+        money *= GOLD; // In game is in gold, in core set in bronze
         guild->HandleSetRankInfo(this, new_rankId, rankName, new_rights, money, rightsAndSlots);
     }
 

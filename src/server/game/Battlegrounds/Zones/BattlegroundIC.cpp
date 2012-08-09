@@ -108,8 +108,7 @@ void BattlegroundIC::DoAction(uint32 action, uint64 var)
 
 void BattlegroundIC::PostUpdateImpl(uint32 diff)
 {
-    if (GetStatus() != STATUS_IN_PROGRESS)
-        return;
+    if (GetStatus() == STATUS_IN_PROGRESS)
 
     if (!doorsClosed)
     {
@@ -256,13 +255,6 @@ void BattlegroundIC::PostUpdateImpl(uint32 diff)
 
 void BattlegroundIC::StartingEventCloseDoors()
 {
-    // Show Full Gate Displays
-    GetBGObject(BG_IC_GO_ALLIANCE_GATE_1)->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_DAMAGED); // Alliance door
-    GetBGObject(BG_IC_GO_ALLIANCE_GATE_2)->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_DAMAGED); // Alliance door
-    GetBGObject(BG_IC_GO_ALLIANCE_GATE_3)->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_DAMAGED); // Alliance door
-    GetBGObject(BG_IC_GO_HORDE_GATE_1)->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_DAMAGED);    // Horde door
-    GetBGObject(BG_IC_GO_HORDE_GATE_2)->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_DAMAGED);    // Horde door
-    GetBGObject(BG_IC_GO_HORDE_GATE_3)->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_DAMAGED);    // Horde door
 }
 
 void BattlegroundIC::StartingEventOpenDoors()
@@ -370,7 +362,7 @@ void BattlegroundIC::FillInitialWorldStates(WorldPacket& data)
         data << uint32(uws) << uint32(1);
     }
 
-    for (uint8 i = 0; i < MAX_NODE_TYPES; i++)
+    for (uint8 i = 0 ; i < MAX_NODE_TYPES ; i++)
         data << uint32(nodePoint[i].worldStates[nodePoint[i].nodeState]) << uint32(1);
 }
 

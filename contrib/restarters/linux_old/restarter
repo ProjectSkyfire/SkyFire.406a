@@ -1,0 +1,2 @@
+#!/bin/bash
+screen -A -m -d -S restarter ./restarter-bin

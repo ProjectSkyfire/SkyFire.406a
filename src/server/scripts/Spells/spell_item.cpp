@@ -118,6 +118,60 @@ public:
     }
 };
 
+// http://www.wowhead.com/item=58149 Flask of Enhancement
+// 79637 Flask of Enhancement
+enum eFlaskOfEnhancementSpells
+{
+    SPELL_FLASK_OF_ENHANCEMENT_INT = 79640,
+    SPELL_FLASK_OF_ENHANCEMENT_AGI = 79639,
+    SPELL_FLASK_OF_ENHANCEMENT_STR = 79638,
+};
+
+class spell_item_flask_of_enhancement : public SpellScriptLoader
+{
+public:
+    spell_item_flask_of_enhancement() : SpellScriptLoader("spell_item_flask_of_enhancement") { }
+
+    class spell_item_flask_of_enhancement_SpellScript : public SpellScript
+    {
+    public:
+        PrepareSpellScript(spell_item_flask_of_enhancement_SpellScript)
+        bool Validate(SpellInfo const* /*spellEntry*/)
+        {
+            if (!sSpellMgr->GetSpellInfo(SPELL_FLASK_OF_ENHANCEMENT_INT) || !sSpellMgr->GetSpellInfo(SPELL_FLASK_OF_ENHANCEMENT_AGI) || !sSpellMgr->GetSpellInfo(SPELL_FLASK_OF_ENHANCEMENT_STR))
+                return false;
+            return true;
+        }
+
+        void HandleDummy(SpellEffIndex /*effIndex*/)
+        {
+            Unit* pCaster = GetCaster();
+            if (pCaster->GetTypeId() != TYPEID_PLAYER)
+                return;
+
+            uint32 spellId;
+            if (pCaster->GetStat(STAT_INTELLECT) >= pCaster->GetStat(STAT_AGILITY) && pCaster->GetStat(STAT_INTELLECT) >= pCaster->GetStat(STAT_STRENGTH))
+                spellId = SPELL_FLASK_OF_ENHANCEMENT_INT;
+            else if(pCaster->GetStat(STAT_AGILITY) >= pCaster->GetStat(STAT_INTELLECT) && pCaster->GetStat(STAT_AGILITY) >= pCaster->GetStat(STAT_STRENGTH))
+                spellId = SPELL_FLASK_OF_ENHANCEMENT_AGI;
+            else
+                spellId = SPELL_FLASK_OF_ENHANCEMENT_STR;
+
+            pCaster->CastSpell(pCaster, spellId, true, NULL);
+        }
+
+        void Register()
+        {
+            OnEffectHit += SpellEffectFn(spell_item_flask_of_enhancement_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
+        }
+    };
+
+    SpellScript* GetSpellScript() const
+    {
+        return new spell_item_flask_of_enhancement_SpellScript();
+    }
+};
+
 // http://www.wowhead.com/item=47499 Flask of the North
 // 67019 Flask of the North
 enum eFlaskOfTheNorthSpells
@@ -195,12 +249,91 @@ public:
     }
 };
 
+// http://www.wowhead.com/item=62237 Adventurer's Journal
+// 86939 Read Journal
+enum eAdventurersJournal
+{
+    SPELL_LEARNING_BY_EXAMPLE   = 86963,
+    SPELL_TERRAIN_EXPERT        = 86972,
+    SPELL_DEMON_SLAYER          = 86974,
+    SPELL_DRAGONSBANE           = 86975,
+    SPELL_FIRE_AND_WATER        = 86976,
+    SPELL_KNEECAPPER            = 86977,
+    SPELL_DEADLY_DRIVE          = 86980,
+    SPELL_MECHANICAL_APTITUDE   = 86982,
+    SPELL_28_CHAPTERS_LATER     = 86983,
+    SPELL_LIVING_FOREVER        = 86988,
+    SPELL_THE_GREAT_HUNT        = 86992,
+};
+
+class spell_item_adventurers_journal : public SpellScriptLoader
+{
+public:
+    spell_item_adventurers_journal() : SpellScriptLoader("spell_item_adventurers_journal") { }
+
+    class spell_item_adventurers_journal_SpellScript : public SpellScript
+    {
+    public:
+        PrepareSpellScript(spell_item_adventurers_journal_SpellScript)
+        bool Load(SpellInfo const* /*spellEntry*/)
+        {
+            if (!sSpellMgr->GetSpellInfo(SPELL_LEARNING_BY_EXAMPLE)
+                || !sSpellMgr->GetSpellInfo(SPELL_TERRAIN_EXPERT)
+                || !sSpellMgr->GetSpellInfo(SPELL_DEMON_SLAYER)
+                || !sSpellMgr->GetSpellInfo(SPELL_DRAGONSBANE)
+                || !sSpellMgr->GetSpellInfo(SPELL_FIRE_AND_WATER)
+                || !sSpellMgr->GetSpellInfo(SPELL_KNEECAPPER)
+                || !sSpellMgr->GetSpellInfo(SPELL_DEADLY_DRIVE)
+                || !sSpellMgr->GetSpellInfo(SPELL_MECHANICAL_APTITUDE)
+                || !sSpellMgr->GetSpellInfo(SPELL_28_CHAPTERS_LATER)
+                || !sSpellMgr->GetSpellInfo(SPELL_LIVING_FOREVER)
+                || !sSpellMgr->GetSpellInfo(SPELL_THE_GREAT_HUNT))
+                return false;
+            return true;
+        }
+
+        void HandleScriptEffect(SpellEffIndex /*effIndex*/)
+        {
+            Unit* pCaster = GetCaster();
+            if (pCaster->GetTypeId() != TYPEID_PLAYER)
+                return;
+
+            uint32 spellId = SPELL_THE_GREAT_HUNT;
+            switch(urand(1,11))
+            {
+                case 1:     spellId = SPELL_LEARNING_BY_EXAMPLE;break;
+                case 2:     spellId = SPELL_TERRAIN_EXPERT;     break;
+                case 3:     spellId = SPELL_DEMON_SLAYER;       break;
+                case 4:     spellId = SPELL_DRAGONSBANE;        break;
+                case 5:     spellId = SPELL_FIRE_AND_WATER;     break;
+                case 6:     spellId = SPELL_KNEECAPPER;         break;
+                case 7:     spellId = SPELL_DEADLY_DRIVE;       break;
+                case 8:     spellId = SPELL_MECHANICAL_APTITUDE;break;
+                case 9:     spellId = SPELL_28_CHAPTERS_LATER;  break;
+                case 10:    spellId = SPELL_LIVING_FOREVER;     break;                
+            }
+            pCaster->CastSpell(pCaster, spellId, true, NULL);
+        }
+
+        void Register()
+        {
+            OnEffectHit += SpellEffectFn(spell_item_adventurers_journal_SpellScript::HandleScriptEffect, EFFECT_0, SPELL_EFFECT_SCRIPT_EFFECT);
+        }
+    };
+
+    SpellScript* GetSpellScript() const
+    {
+        return new spell_item_adventurers_journal_SpellScript();
+    }
+};
+
 // http://www.wowhead.com/item=10645 Gnomish Death Ray
 // 13280 Gnomish Death Ray
 enum eGnomishDeathRay
 {
-    SPELL_GNOMISH_DEATH_RAY_SELF = 13493,
-    SPELL_GNOMISH_DEATH_RAY_TARGET = 13279,
+    SPELL_GNOMISH_DEATH_RAY_DUMMY_CASTER_SELF_DAMAGE = 13493,
+    SPELL_GNOMISH_DEATH_RAY_TARGET_DAMAGE = 13279,
+    SPELL_GNOMISH_DEATH_RAY_DUMMY_CASTER = 13280,
 };
 
 class spell_item_gnomish_death_ray : public SpellScriptLoader
@@ -211,26 +344,27 @@ public:
     class spell_item_gnomish_death_ray_SpellScript : public SpellScript
     {
     public:
+
         PrepareSpellScript(spell_item_gnomish_death_ray_SpellScript)
+
         bool Validate(SpellInfo const* /*spellEntry*/)
         {
-            if (!sSpellMgr->GetSpellInfo(SPELL_GNOMISH_DEATH_RAY_SELF))
+            if (!sSpellMgr->GetSpellInfo(SPELL_GNOMISH_DEATH_RAY_DUMMY_CASTER_SELF_DAMAGE))
                 return false;
-            if (!sSpellMgr->GetSpellInfo(SPELL_GNOMISH_DEATH_RAY_TARGET))
+            if (!sSpellMgr->GetSpellInfo(SPELL_GNOMISH_DEATH_RAY_TARGET_DAMAGE))
+                return false;
+            if (!sSpellMgr->GetSpellInfo(SPELL_GNOMISH_DEATH_RAY_DUMMY_CASTER))
                 return false;
             return true;
         }
 
         void HandleDummy(SpellEffIndex /*effIndex*/)
         {
-            if (Unit* target = GetHitUnit())
-            {
-                Unit* pCaster = GetCaster();
-                if (urand(0, 99) < 15)
-                    pCaster->CastSpell(pCaster, SPELL_GNOMISH_DEATH_RAY_SELF, true, NULL);    // failure
-                else
-                    pCaster->CastSpell(target, SPELL_GNOMISH_DEATH_RAY_TARGET, true, NULL);
-            }
+            Unit* caster = GetCaster();
+            Unit* target = caster->getVictim();
+
+            if (target)
+                caster->CastSpell(target, SPELL_GNOMISH_DEATH_RAY_TARGET_DAMAGE, true);
         }
 
         void Register()
@@ -855,34 +989,39 @@ class spell_item_create_heart_candy : public SpellScriptLoader
 // 64323 Book of Glyph Mastery
 class spell_item_book_of_glyph_mastery : public SpellScriptLoader
 {
-    public:
-        spell_item_book_of_glyph_mastery() : SpellScriptLoader("spell_item_book_of_glyph_mastery") {}
+public:
+    spell_item_book_of_glyph_mastery() : SpellScriptLoader("spell_item_book_of_glyph_mastery") {}
 
-        class spell_item_book_of_glyph_mastery_SpellScript : public SpellScript
+    class spell_item_book_of_glyph_mastery_SpellScript : public SpellScript
+    {
+        PrepareSpellScript(spell_item_book_of_glyph_mastery_SpellScript);
+
+        bool Load()
         {
-            PrepareSpellScript(spell_item_book_of_glyph_mastery_SpellScript);
-
-            SpellCastResult CheckRequirement()
-            {
-                if (GetCaster()->GetTypeId() == TYPEID_PLAYER && HasDiscoveredAllSpells(GetSpellInfo()->Id, GetCaster()->ToPlayer()))
-                {
-                    SetCustomCastResultMessage(SPELL_CUSTOM_ERROR_LEARNED_EVERYTHING);
-                    return SPELL_FAILED_CUSTOM_ERROR;
-                }
-
-                return SPELL_CAST_OK;
-            }
-
-            void Register()
-            {
-                OnCheckCast += SpellCheckCastFn(spell_item_book_of_glyph_mastery_SpellScript::CheckRequirement);
-            }
-        };
-
-        SpellScript* GetSpellScript() const
-        {
-            return new spell_item_book_of_glyph_mastery_SpellScript();
+            return GetCaster()->GetTypeId() == TYPEID_PLAYER;
         }
+
+        SpellCastResult CheckRequirement()
+        {
+            if (HasDiscoveredAllSpells(GetSpellInfo()->Id, GetCaster()->ToPlayer()))
+            {
+                SetCustomCastResultMessage(SPELL_CUSTOM_ERROR_LEARNED_EVERYTHING);
+                return SPELL_FAILED_CUSTOM_ERROR;
+            }
+
+            return SPELL_CAST_OK;
+        }
+
+        void Register()
+        {
+            OnCheckCast += SpellCheckCastFn(spell_item_book_of_glyph_mastery_SpellScript::CheckRequirement);
+        }
+    };
+
+    SpellScript* GetSpellScript() const
+    {
+        return new spell_item_book_of_glyph_mastery_SpellScript();
+    }
 };
 
 // http://www.wowhead.com/item=39253 Gift of the Harvester
@@ -1027,53 +1166,46 @@ enum AshbringerSounds
     SOUND_ASHBRINGER_9  = 8925,                             // "Truth is unknown to him"
     SOUND_ASHBRINGER_10 = 8926,                             // "Scarlet Crusade  is pure no longer"
     SOUND_ASHBRINGER_11 = 8927,                             // "Balnazzar's crusade corrupted my son"
-    SOUND_ASHBRINGER_12 = 8928,                             // "Kill them all!"
-
-    SPELL_ASHBRINGER    = 28282,                            // Ashbringer - Inflicts the will of the Ashbringer upon the wielder
-    SPELL_ASHBRINGER_TR = 28441                             // AB Effect 000
+    SOUND_ASHBRINGER_12 = 8928                              // "Kill them all!"
 };
 
 class spell_item_ashbringer : public SpellScriptLoader
 {
-    public:
-        spell_item_ashbringer() : SpellScriptLoader("spell_item_ashbringer") {}
+public:
+    spell_item_ashbringer() : SpellScriptLoader("spell_item_ashbringer") {}
 
-        class spell_item_ashbringer_SpellScript : public SpellScript
+    class spell_item_ashbringer_SpellScript : public SpellScript
+    {
+        PrepareSpellScript(spell_item_ashbringer_SpellScript);
+
+        bool Load()
         {
-            PrepareSpellScript(spell_item_ashbringer_SpellScript)
-            bool Validate(SpellInfo const* /*spellEntry*/)
-            {
-                if (!sSpellMgr->GetSpellInfo(SPELL_ASHBRINGER))
-                    return false;
-                return true;
-            }
-
-            void OnDummyEffect(SpellEffIndex effIndex)
-            {
-                PreventHitDefaultEffect(effIndex);
-
-                Unit* caster = GetCaster();
-                if (Player* player = caster->ToPlayer())
-                {
-                    uint32 sound_id = RAND( SOUND_ASHBRINGER_1, SOUND_ASHBRINGER_2, SOUND_ASHBRINGER_3, SOUND_ASHBRINGER_4, SOUND_ASHBRINGER_5, SOUND_ASHBRINGER_6,
-                                    SOUND_ASHBRINGER_7, SOUND_ASHBRINGER_8, SOUND_ASHBRINGER_9, SOUND_ASHBRINGER_10, SOUND_ASHBRINGER_11, SOUND_ASHBRINGER_12 );
-
-                    // Ashbringers effect (spellID 28441) retriggers every 5 seconds, with a chance of making it say one of the above 12 sounds
-                    if (urand(0, 60) < 1)
-                        player->PlayDirectSound(sound_id, player);
-                }
-            }
-
-            void Register()
-            {
-                OnEffectHit += SpellEffectFn(spell_item_ashbringer_SpellScript::OnDummyEffect, EFFECT_0, SPELL_EFFECT_DUMMY);
-            }
-        };
-
-        SpellScript* GetSpellScript() const
-        {
-            return new spell_item_ashbringer_SpellScript();
+            return GetCaster()->GetTypeId() == TYPEID_PLAYER;
         }
+
+        void OnDummyEffect(SpellEffIndex effIndex)
+        {
+            PreventHitDefaultEffect(effIndex);
+
+            Player* player = GetCaster()->ToPlayer();
+            uint32 sound_id = RAND( SOUND_ASHBRINGER_1, SOUND_ASHBRINGER_2, SOUND_ASHBRINGER_3, SOUND_ASHBRINGER_4, SOUND_ASHBRINGER_5, SOUND_ASHBRINGER_6,
+                SOUND_ASHBRINGER_7, SOUND_ASHBRINGER_8, SOUND_ASHBRINGER_9, SOUND_ASHBRINGER_10, SOUND_ASHBRINGER_11, SOUND_ASHBRINGER_12 );
+
+            // Ashbringer's effect (spellID 28441) re-triggers every 5 seconds, with a chance of making it say one of the above 12 sounds
+            if (urand(0, 60) < 1)
+                player->PlayDirectSound(sound_id, player);
+        }
+
+        void Register()
+        {
+            OnEffectHit += SpellEffectFn(spell_item_ashbringer_SpellScript::OnDummyEffect, EFFECT_0, SPELL_EFFECT_DUMMY);
+        }
+    };
+
+    SpellScript* GetSpellScript() const
+    {
+        return new spell_item_ashbringer_SpellScript();
+    }
 };
 
 enum MagicEater
@@ -1182,6 +1314,324 @@ class spell_item_refocus : public SpellScriptLoader
         }
 };
 
+class spell_item_muisek_vessel : public SpellScriptLoader
+{
+public:
+    spell_item_muisek_vessel() : SpellScriptLoader("spell_item_muisek_vessel") { }
+
+    class spell_item_muisek_vessel_SpellScript : public SpellScript
+    {
+        PrepareSpellScript(spell_item_muisek_vessel_SpellScript);
+
+        void HandleDummy(SpellEffIndex /*effIndex*/)
+        {
+            if (Creature* target = GetHitCreature())
+                if (target->isDead())
+                    target->ForcedDespawn();
+        }
+
+        void Register()
+        {
+            OnEffectHitTarget += SpellEffectFn(spell_item_muisek_vessel_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
+        }
+    };
+
+    SpellScript* GetSpellScript() const
+    {
+        return new spell_item_muisek_vessel_SpellScript();
+    }
+};
+
+enum PurifyHelboarMeat
+{
+    SPELL_SUMMON_PURIFIED_HELBOAR_MEAT      = 29277,
+    SPELL_SUMMON_TOXIC_HELBOAR_MEAT         = 29278,
+};
+
+class spell_item_purify_helboar_meat : public SpellScriptLoader
+{
+public:
+    spell_item_purify_helboar_meat() : SpellScriptLoader("spell_item_purify_helboar_meat") { }
+
+    class spell_item_purify_helboar_meat_SpellScript : public SpellScript
+    {
+        PrepareSpellScript(spell_item_purify_helboar_meat_SpellScript);
+
+        bool Load()
+        {
+            return GetCaster()->GetTypeId() == TYPEID_PLAYER;
+        }
+
+        bool Validate(SpellInfo const* /*spell*/)
+        {
+            if (!sSpellMgr->GetSpellInfo(SPELL_SUMMON_PURIFIED_HELBOAR_MEAT) ||  !sSpellMgr->GetSpellInfo(SPELL_SUMMON_TOXIC_HELBOAR_MEAT))
+                return false;
+            return true;
+        }
+
+        void HandleDummy(SpellEffIndex /* effIndex */)
+        {
+            Unit* caster = GetCaster();
+            caster->CastSpell(caster, roll_chance_i(50) ? SPELL_SUMMON_PURIFIED_HELBOAR_MEAT : SPELL_SUMMON_TOXIC_HELBOAR_MEAT, true, NULL);
+        }
+
+        void Register()
+        {
+            OnEffectHitTarget += SpellEffectFn(spell_item_purify_helboar_meat_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
+        }
+    };
+
+    SpellScript* GetSpellScript() const
+    {
+        return new spell_item_purify_helboar_meat_SpellScript();
+    }
+};
+
+enum SocretharsStone
+{
+    SPELL_SOCRETHAR_TO_SEAT     = 35743,
+    SPELL_SOCRETHAR_FROM_SEAT   = 35744,
+};
+
+class spell_item_socrethars_stone : public SpellScriptLoader
+{
+public:
+    spell_item_socrethars_stone() : SpellScriptLoader("spell_item_socrethars_stone") { }
+
+    class spell_item_socrethars_stone_SpellScript : public SpellScript
+    {
+        PrepareSpellScript(spell_item_socrethars_stone_SpellScript);
+
+        bool Load()
+        {
+            return (GetCaster()->GetAreaId() == 3900 || GetCaster()->GetAreaId() == 3742);
+        }
+        bool Validate(SpellInfo const* /*spell*/)
+        {
+            if (!sSpellMgr->GetSpellInfo(SPELL_SOCRETHAR_TO_SEAT) || !sSpellMgr->GetSpellInfo(SPELL_SOCRETHAR_FROM_SEAT))
+                return false;
+            return true;
+        }
+
+        void HandleDummy(SpellEffIndex /* effIndex */)
+        {
+            Unit* caster = GetCaster();
+            switch (caster->GetAreaId())
+            {
+            case 3900:
+                caster->CastSpell(caster, SPELL_SOCRETHAR_TO_SEAT, true);
+                break;
+            case 3742:
+                caster->CastSpell(caster, SPELL_SOCRETHAR_FROM_SEAT, true);
+                break;
+            default:
+                return;
+            }
+        }
+
+        void Register()
+        {
+            OnEffectHitTarget += SpellEffectFn(spell_item_socrethars_stone_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
+        }
+    };
+
+    SpellScript* GetSpellScript() const
+    {
+        return new spell_item_socrethars_stone_SpellScript();
+    }
+};
+
+enum ImpaleLeviroth
+{
+    NPC_LEVIROTH                = 26452,
+    SPELL_LEVIROTH_SELF_IMPALE  = 49882,
+};
+
+class spell_item_impale_leviroth : public SpellScriptLoader
+{
+public:
+    spell_item_impale_leviroth() : SpellScriptLoader("spell_item_impale_leviroth") { }
+
+    class spell_item_impale_leviroth_SpellScript : public SpellScript
+    {
+        PrepareSpellScript(spell_item_impale_leviroth_SpellScript);
+
+        bool Validate(SpellInfo const* /*spell*/)
+        {
+            if (!sObjectMgr->GetCreatureTemplate(NPC_LEVIROTH))
+                return false;
+            return true;
+        }
+
+        void HandleDummy(SpellEffIndex /* effIndex */)
+        {
+            if (Unit* target = GetHitCreature())
+                if (target->GetEntry() == NPC_LEVIROTH && !target->HealthBelowPct(95))
+                    target->CastSpell(target, SPELL_LEVIROTH_SELF_IMPALE, true);
+        }
+
+        void Register()
+        {
+            OnEffectHitTarget += SpellEffectFn(spell_item_impale_leviroth_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
+        }
+    };
+
+    SpellScript* GetSpellScript() const
+    {
+        return new spell_item_impale_leviroth_SpellScript();
+    }
+};
+
+enum NitroBoots
+{
+    SPELL_NITRO_BOOTS_SUCCESS       = 54861,
+    SPELL_NITRO_BOOTS_BACKFIRE      = 46014,
+};
+
+class spell_item_nitro_boots : public SpellScriptLoader
+{
+public:
+    spell_item_nitro_boots() : SpellScriptLoader("spell_item_nitro_boots") { }
+
+    class spell_item_nitro_boots_SpellScript : public SpellScript
+    {
+        PrepareSpellScript(spell_item_nitro_boots_SpellScript);
+
+        bool Load()
+        {
+            if (!GetCastItem())
+                return false;
+            return true;
+        }
+
+        bool Validate(SpellInfo const* /*spell*/)
+        {
+            if (!sSpellMgr->GetSpellInfo(SPELL_NITRO_BOOTS_SUCCESS) || !sSpellMgr->GetSpellInfo(SPELL_NITRO_BOOTS_BACKFIRE))
+                return false;
+            return true;
+        }
+
+        void HandleDummy(SpellEffIndex /* effIndex */)
+        {
+            Unit* caster = GetCaster();
+            caster->CastSpell(caster, roll_chance_i(95) ? SPELL_NITRO_BOOTS_SUCCESS : SPELL_NITRO_BOOTS_BACKFIRE, true, GetCastItem());
+        }
+
+        void Register()
+        {
+            OnEffectHitTarget += SpellEffectFn(spell_item_nitro_boots_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
+        }
+    };
+
+    SpellScript* GetSpellScript() const
+    {
+        return new spell_item_nitro_boots_SpellScript();
+    }
+};
+
+enum RocketBoots
+{
+    SPELL_ROCKET_BOOTS_PROC      = 30452,
+};
+
+class spell_item_rocket_boots : public SpellScriptLoader
+{
+public:
+    spell_item_rocket_boots() : SpellScriptLoader("spell_item_rocket_boots") { }
+
+    class spell_item_rocket_boots_SpellScript : public SpellScript
+    {
+        PrepareSpellScript(spell_item_rocket_boots_SpellScript);
+
+        bool Load()
+        {
+            return GetCaster()->GetTypeId() == TYPEID_PLAYER;
+        }
+
+        bool Validate(SpellInfo const* /*spell*/)
+        {
+            if (!sSpellMgr->GetSpellInfo(SPELL_ROCKET_BOOTS_PROC))
+                return false;
+            return true;
+        }
+
+        void HandleDummy(SpellEffIndex /* effIndex */)
+        {
+            Player* caster = GetCaster()->ToPlayer();
+            if (Battleground* bg = caster->GetBattleground())
+                bg->EventPlayerDroppedFlag(caster);
+
+            caster->RemoveSpellCooldown(SPELL_ROCKET_BOOTS_PROC);
+            caster->CastSpell(caster, SPELL_ROCKET_BOOTS_PROC, true, NULL);
+        }
+
+        SpellCastResult CheckCast()
+        {
+            if (GetCaster()->IsInWater())
+                return SPELL_FAILED_ONLY_ABOVEWATER;
+            return SPELL_CAST_OK;
+        }
+
+        void Register()
+        {
+            OnCheckCast += SpellCheckCastFn(spell_item_rocket_boots_SpellScript::CheckCast);
+            OnEffectHitTarget += SpellEffectFn(spell_item_rocket_boots_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
+        }
+    };
+
+    SpellScript* GetSpellScript() const
+    {
+        return new spell_item_rocket_boots_SpellScript();
+    }
+};
+
+enum TeachLanguage
+{
+    SPELL_LEARN_GNOMISH_BINARY      = 50242,
+    SPELL_LEARN_GOBLIN_BINARY       = 50246,
+};
+
+class spell_item_teach_language : public SpellScriptLoader
+{
+public:
+    spell_item_teach_language() : SpellScriptLoader("spell_item_teach_language") { }
+
+    class spell_item_teach_language_SpellScript : public SpellScript
+    {
+        PrepareSpellScript(spell_item_teach_language_SpellScript);
+
+        bool Load()
+        {
+            return GetCaster()->GetTypeId() == TYPEID_PLAYER;
+        }
+
+        bool Validate(SpellInfo const* /*spell*/)
+        {
+            if (!sSpellMgr->GetSpellInfo(SPELL_LEARN_GNOMISH_BINARY) || !sSpellMgr->GetSpellInfo(SPELL_LEARN_GOBLIN_BINARY))
+                return false;
+            return true;
+        }
+
+        void HandleDummy(SpellEffIndex /* effIndex */)
+        {
+            Player* caster = GetCaster()->ToPlayer();
+
+            if (roll_chance_i(34))
+                caster->CastSpell(caster,caster->GetTeam() == ALLIANCE ? SPELL_LEARN_GNOMISH_BINARY : SPELL_LEARN_GOBLIN_BINARY, true);
+        }
+
+        void Register()
+        {
+            OnEffectHitTarget += SpellEffectFn(spell_item_teach_language_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
+        }
+    };
+
+    SpellScript* GetSpellScript() const
+    {
+        return new spell_item_teach_language_SpellScript();
+    }
+};
+
 void AddSC_item_spell_scripts()
 {
     // 23074 Arcanite Dragonling
@@ -1194,6 +1644,8 @@ void AddSC_item_spell_scripts()
     new spell_item_trigger_spell("spell_item_mithril_mechanical_dragonling", SPELL_MITHRIL_MECHANICAL_DRAGONLING);
 
     new spell_item_deviate_fish();
+    new spell_item_adventurers_journal();
+    new spell_item_flask_of_enhancement();
     new spell_item_flask_of_the_north();
     new spell_item_gnomish_death_ray();
     new spell_item_make_a_wish();
@@ -1215,4 +1667,11 @@ void AddSC_item_spell_scripts()
     new spell_item_ashbringer();
     new spell_magic_eater_food();
     new spell_item_refocus();
+    new spell_item_muisek_vessel();
+    new spell_item_purify_helboar_meat();
+    new spell_item_socrethars_stone();
+    new spell_item_impale_leviroth();
+    new spell_item_nitro_boots();
+    new spell_item_rocket_boots();
+    new spell_item_teach_language();
 }

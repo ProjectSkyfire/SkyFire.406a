@@ -23,10 +23,10 @@
 #include "DetourNavMeshBuilder.h"
 #include "DetourCommon.h"
 #include "LoginDatabase.h"
-
-//just make linker happy
-LoginDatabaseWorkerPool LoginDatabase;
 #include "DisableMgr.h"
+
+LoginDatabaseWorkerPool LoginDatabase; // maken the linker happy
+
 namespace DisableMgr
 {
     bool IsDisabledFor(DisableType type, uint32 entry, Unit const* unit, uint8 flags)
@@ -79,7 +79,7 @@ namespace Pathfinding
         getDirContents(files, "maps");
         for (i = 0; i < files.size(); ++i)
         {
-            mapID = uint32(atoi(files[i].substr(0,3).c_str()));
+            mapID = uint32(atoi(files[i].substr(0, 3).c_str()));
             if (m_tiles.find(mapID) == m_tiles.end())
             {
                 m_tiles.insert(pair<uint32,set<uint32>*>(mapID, new set<uint32>));
@@ -91,7 +91,7 @@ namespace Pathfinding
         getDirContents(files, "vmaps", "*.vmtree");
         for (i = 0; i < files.size(); ++i)
         {
-            mapID = uint32(atoi(files[i].substr(0,3).c_str()));
+            mapID = uint32(atoi(files[i].substr(0, 3).c_str()));
             m_tiles.insert(pair<uint32,set<uint32>*>(mapID, new set<uint32>));
             count++;
         }
@@ -109,20 +109,21 @@ namespace Pathfinding
             getDirContents(files, "vmaps", filter);
             for (i = 0; i < files.size(); ++i)
             {
-                tileX = uint32(atoi(files[i].substr(7,2).c_str()));
-                tileY = uint32(atoi(files[i].substr(4,2).c_str()));
+                tileX = uint32(atoi(files[i].substr(7, 2).c_str()));
+                tileY = uint32(atoi(files[i].substr(4, 2).c_str()));
                 tileID = StaticMapTree::packTileID(tileY, tileX);
 
                 tiles->insert(tileID);
                 count++;
             }
+
             sprintf(filter, "%03u*", mapID);
             files.clear();
             getDirContents(files, "maps", filter);
             for (i = 0; i < files.size(); ++i)
             {
-                tileY = uint32(atoi(files[i].substr(3,2).c_str()));
-                tileX = uint32(atoi(files[i].substr(5,2).c_str()));
+                tileY = uint32(atoi(files[i].substr(3, 2).c_str()));
+                tileX = uint32(atoi(files[i].substr(5, 2).c_str()));
                 tileID = StaticMapTree::packTileID(tileX, tileY);
 
                 if (tiles->insert(tileID).second)
@@ -138,7 +139,7 @@ namespace Pathfinding
         if (itr != m_tiles.end())
             return (*itr).second;
 
-        set<uint32>* tiles = new set<uint32>;
+        set<uint32>* tiles = new set<uint32>();
         m_tiles.insert(pair<uint32, set<uint32>*>(mapID, tiles));
         return tiles;
     }
@@ -176,6 +177,9 @@ namespace Pathfinding
                     continue;
 
                 // get the coord bounds of the model data
+                if (meshData.solidVerts.size() + meshData.liquidVerts.size() == 0)
+                    return;
+
                 if (meshData.solidVerts.size() && meshData.liquidVerts.size())
                 {
                     rcCalcBounds(meshData.solidVerts.getCArray(), meshData.solidVerts.size() / 3, bmin, bmax);
@@ -184,13 +188,9 @@ namespace Pathfinding
                     rcVmax(bmax, lmax);
                 }
                 else if (meshData.solidVerts.size())
-                {
                     rcCalcBounds(meshData.solidVerts.getCArray(), meshData.solidVerts.size() / 3, bmin, bmax);
-                }
                 else
-                {
                     rcCalcBounds(meshData.liquidVerts.getCArray(), meshData.liquidVerts.size() / 3, lmin, lmax);
-                }
 
                 // convert coord bounds to grid bounds
                 uint32 minX, minY, maxX, maxY;
@@ -222,7 +222,8 @@ namespace Pathfinding
         char tileString[10];
 
         // now start building mmtiles for each tile
-        printf("We have %i tiles.                          \n", (unsigned int)tiles->size());
+        printf("We have %i tiles.\n", (unsigned int)tiles->size());
+
         for (set<uint32>::iterator it = tiles->begin(); it != tiles->end(); ++it)
         {
             allVerts.fastClear();
@@ -269,13 +270,7 @@ namespace Pathfinding
             allTris.fastClear();
 
             // build navmesh tile
-            buildMoveMapTile(mapID,
-                             tileX,
-                             tileY,
-                             meshData,
-                             bmin,
-                             bmax,
-                             navMesh);
+            buildMoveMapTile(mapID, tileX, tileY, meshData, bmin, bmax, navMesh);
         }
 
         m_vmapManager->unloadMap(mapID);
@@ -291,9 +286,8 @@ namespace Pathfinding
 
         float bmin[3], bmax[3], lmin[3], lmax[3];
         MeshData meshData;
-
-        // make sure we process maps which don't have tiles
         // initialize the static tree, which loads WDT models
+        // make sure we process maps which don't have tiles
         loadVMap(mapID, 64, 64, meshData);
 
         // get the coord bounds of the model data
@@ -308,13 +302,10 @@ namespace Pathfinding
                 rcVmax(bmax, lmax);
             }
             else if (meshData.solidVerts.size())
-            {
                 rcCalcBounds(meshData.solidVerts.getCArray(), meshData.solidVerts.size() / 3, bmin, bmax);
-            }
             else
-            {
                 rcCalcBounds(meshData.liquidVerts.getCArray(), meshData.liquidVerts.size() / 3, lmin, lmax);
-            }
+
 
             // convert coord bounds to grid bounds
             uint32 minX, minY, maxX, maxY;
@@ -326,6 +317,7 @@ namespace Pathfinding
             // if specified tile is outside of bounds, give up now
             if (tileX < minX || tileX > maxX)
                 return;
+
             if (tileY < minY || tileY > maxY)
                 return;
         }
@@ -335,7 +327,7 @@ namespace Pathfinding
         buildNavMesh(mapID, navMesh);
         if (!navMesh)
         {
-            printf("Failed creating navmesh!              \n");
+            printf("Failed creating navmesh!                \n");
             printf("Failed!                               \n\n");
             return;
         }
@@ -384,18 +376,12 @@ namespace Pathfinding
             allTris.clear();
 
             // build navmesh tile
-            buildMoveMapTile(mapID,
-                                tileX,
-                                tileY,
-                                meshData,
-                                bmin,
-                                bmax,
-                                navMesh);
+            buildMoveMapTile(mapID, tileX, tileY,  meshData, bmin, bmax, navMesh);
         } while(0);
 
         dtFreeNavMesh(navMesh);
 
-        printf("%sComplete!                                      \n\n", tileString);
+        printf("%s Complete!                                      \n\n", tileString);
     }
 
     bool MapBuilder::loadVMap(uint32 mapID, uint32 tileX, uint32 tileY, MeshData &meshData)
@@ -437,7 +423,7 @@ namespace Pathfinding
 
             // transform data
             float scale = models[i].iScale;
-            G3D::Matrix3 rotation = G3D::Matrix3::fromEulerAnglesZYX(-1*G3D::pi()*instance.iRot.y/180.f, -1*G3D::pi()*instance.iRot.x/180.f, -1*G3D::pi()*instance.iRot.z/180.f);
+            G3D::Matrix3 rotation = G3D::Matrix3::fromEulerAnglesZYX(-1 * G3D::pi()*instance.iRot.y / 180.f, -1 * G3D::pi()*instance.iRot.x / 180.f, -1 * G3D::pi()*instance.iRot.z / 180.f);
             Vector3 position = instance.iPos;
             position.x -= 32*533.33333f;
             position.y -= 32*533.33333f;
@@ -509,10 +495,10 @@ namespace Pathfinding
                     uint32 square;
                     for (uint32 x = 0; x < tilesX; ++x)
                         for (uint32 y = 0; y < tilesY; ++y)
-                            if ((flags[x+y*tilesX] & 0x0f) != 0x0f)
+                            if ((flags[x + y * tilesX] &0x0f) != 0x0f)
                             {
                                 square = x * tilesY + y;
-                                idx1 = square+x;
+                                idx1 = square + x;
                                 idx2 = square+1+x;
                                 idx3 = square+tilesY+1+1+x;
                                 idx4 = square+tilesY+1+x;
@@ -521,15 +507,18 @@ namespace Pathfinding
                                 liqTris.push_back(idx3);
                                 liqTris.push_back(idx2);
                                 liqTris.push_back(idx1);
+
                                 // bottom triangle
                                 liqTris.push_back(idx4);
                                 liqTris.push_back(idx3);
                                 liqTris.push_back(idx1);
                             }
 
+
                     uint32 liqOffset = meshData.liquidVerts.size() / 3;
                     for (uint32 i = 0; i < liqVerts.size(); ++i)
                         meshData.liquidVerts.append(liqVerts[i].y, liqVerts[i].z, liqVerts[i].x);
+
                     for (uint32 i = 0; i < liqTris.size() / 3; ++i)
                     {
                         meshData.liquidTris.append(liqTris[i*3+1] + liqOffset, liqTris[i*3+2] + liqOffset, liqTris[i*3] + liqOffset);
@@ -603,7 +592,7 @@ namespace Pathfinding
     {
         map<int, int> vertMap;
 
-        int* t = tris.getCArray();
+        int* t   = tris.getCArray();
         float* v = verts.getCArray();
 
         // collect all the vertex indices from triangle
@@ -647,13 +636,13 @@ namespace Pathfinding
         set<uint32>* tiles = getTileList(mapID);
 
         /*** calculate number of bits needed to store tiles & polys ***/
-        int tileBits = rcMin((int)dtIlog2(dtNextPow2(tiles->size())), 12);
-        if (tileBits < 1) tileBits = 1;                                     // need at least one bit!
-        int polyBits = sizeof(dtPolyRef)*8 - SALT_MIN_BITS - tileBits;
-        int maxTiles = 1 << tileBits;
+        int tileBits = STATIC_TILE_BITS;
+        int polyBits = STATIC_POLY_BITS;
+
+        int maxTiles = tiles->size();
         int maxPolysPerTile = 1 << polyBits;
 
-        /***          calculate bounds of map         ***/
+        /*** calculate bounds of map ***/
         uint32 tileXMin = 64, tileYMin = 64, tileXMax = 0, tileYMax = 0, tileX, tileY;
         for (set<uint32>::iterator it = tiles->begin(); it != tiles->end(); ++it)
         {
@@ -661,36 +650,35 @@ namespace Pathfinding
 
             if (tileX > tileXMax)
                 tileXMax = tileX;
-            else if(tileX < tileXMin)
+            else if (tileX < tileXMin)
                 tileXMin = tileX;
 
             if (tileY > tileYMax)
                 tileYMax = tileY;
-            else if(tileY < tileYMin)
+            else if (tileY < tileYMin)
                 tileYMin = tileY;
         }
 
-        float bmin[3], bmax[3];
-
         // use Max because '32 - tileX' is negative for values over 32
+        float bmin[3], bmax[3];
         getTileBounds(tileXMax, tileYMax, NULL, 0, bmin, bmax);
 
-        /***       now create the navmesh       ***/
+        /***  now create the navmesh ***/
 
         // navmesh creation params
         dtNavMeshParams navMeshParams;
         memset(&navMeshParams, 0, sizeof(dtNavMeshParams));
-        navMeshParams.tileWidth = GRID_SIZE;
-        navMeshParams.tileHeight = GRID_SIZE;
+        navMeshParams.tileWidth     = GRID_SIZE;
+        navMeshParams.tileHeight    = GRID_SIZE;
         rcVcopy(navMeshParams.orig, bmin);
-        navMeshParams.maxTiles = maxTiles;
-        navMeshParams.maxPolys = maxPolysPerTile;
+        navMeshParams.maxTiles      = maxTiles;
+        navMeshParams.maxPolys      = maxPolysPerTile;
 
         navMesh = dtAllocNavMesh();
-        printf("Creating navMesh...                     \r");
+        printf("Creating navMesh...                             \r");
         if (!navMesh->init(&navMeshParams))
         {
-            printf("Failed creating navmesh!                \n");
+            printf("Failed creating navmesh!                    \n");
             return;
         }
 
@@ -710,37 +698,34 @@ namespace Pathfinding
         fwrite(&navMeshParams, sizeof(dtNavMeshParams), 1, file);
         fclose(file);
     }
-
-    void MapBuilder::buildMoveMapTile(uint32 mapID, uint32 tileX, uint32 tileY,
-                                      MeshData meshData, float* bmin, float* bmax,
-                                      dtNavMesh* navMesh)
+    void MapBuilder::buildMoveMapTile(uint32 mapID, uint32 tileX, uint32 tileY, MeshData meshData, float* bmin, float* bmax, dtNavMesh* navMesh)
     {
         // console output
         char tileString[10];
         sprintf(tileString, "[%02i,%02i]: ", tileX, tileY);
 
-        float cellSize = .5f;       // larger number => less voxels => faster build time
-                                    // too large, and tight spaces won't be pathable.
-        float agentHeight = 1.5f;
-        float agentRadius = .1f;
+        float cellSize      = .5f;       // larger number => less voxels => faster build time, too large, and tight spaces won't be pathable.
+        float agentHeight   = 1.5f;
+        float agentRadius   = .1f;
         float agentMaxClimb = 1.65f;
-
+        printf("%s Building movemap tiles...                             \r", tileString);
         IntermediateValues iv;
         initIntermediateValues(iv);
 
-        float* tVerts = meshData.solidVerts.getCArray();
-        int tVertCount = meshData.solidVerts.size() / 3;
-        int* tTris = meshData.solidTris.getCArray();
-        int tTriCount = meshData.solidTris.size() / 3;
+        float* tVerts   = meshData.solidVerts.getCArray();
+        int tVertCount  = meshData.solidVerts.size() / 3;
+        int* tTris      = meshData.solidTris.getCArray();
+        int tTriCount   = meshData.solidTris.size() / 3;
 
-        float* lVerts = meshData.liquidVerts.getCArray();
-        int lVertCount = meshData.liquidVerts.size() / 3;
-        int* lTris = meshData.liquidTris.getCArray();
-        int lTriCount = meshData.liquidTris.size() / 3;
+        float* lVerts   = meshData.liquidVerts.getCArray();
+        int lVertCount  = meshData.liquidVerts.size() / 3;
+        int* lTris      = meshData.liquidTris.getCArray();
+        int lTriCount   = meshData.liquidTris.size() / 3;
         uint8* lTriFlags = meshData.liquidType.getCArray();
+
+        /*** init configs ***/
         do
         {
-            /***     init config       ***/
             rcConfig config;
             memset(&config, 0, sizeof(rcConfig));
             config.maxVertsPerPoly = 6;
@@ -762,7 +747,7 @@ namespace Pathfinding
             config.walkableClimb = (int)ceilf(agentHeight / config.ch);
             config.minRegionArea = (int)rcSqr(50);
             config.mergeRegionArea = (int)rcSqr(20);
-            config.maxSimplificationError = 1.3f;
+            config.maxSimplificationError = 1.3f;  // eliminates most jagged edges (tiny polygons)
             config.detailSampleDist = config.cs * 16.f;
             config.detailSampleMaxError = config.ch * 1.f;
 
@@ -778,7 +763,7 @@ namespace Pathfinding
             // build performance
             rcContext context;
 
-            /***********    start build     ***********/
+            /*********** start build ***********/
 
             // build heightfield
             printf("%s Building Recast Heightfield...          \r", tileString);
@@ -792,8 +777,8 @@ namespace Pathfinding
             printf("%s Rasterizing triangles...                   \r", tileString);
 
             // flag walkable terrain triangles
-            iv.triFlags = (unsigned char*)dtAlloc(sizeof(unsigned char)*tTriCount, DT_ALLOC_PERM);
-            memset(iv.triFlags, NAV_GROUND, tTriCount*sizeof(unsigned char));
+            iv.triFlags = (unsigned char*)dtAlloc(sizeof(unsigned char) *tTriCount, DT_ALLOC_PERM);
+            memset(iv.triFlags, NAV_GROUND, tTriCount * sizeof(unsigned char));
             rcClearUnwalkableTriangles(&context, config.walkableSlopeAngle, tVerts, tVertCount, tTris, tTriCount, iv.triFlags);
             rcRasterizeTriangles(&context, tVerts, tVertCount, tTris, iv.triFlags, tTriCount, *iv.heightfield, config.walkableClimb);
             dtFree(iv.triFlags);
@@ -823,62 +808,64 @@ namespace Pathfinding
             }
 
             // build polymesh intermediates
-            printf("%s Eroding walkable area width...          \r", tileString);
+            printf("%s Eroding walkable area width...               \r", tileString);
             if (!rcErodeWalkableArea(&context, config.walkableRadius, *iv.compactHeightfield))
             {
-                printf("%s Failed eroding area!                    \n", tileString);
+                printf("%s Failed eroding area!                     \n", tileString);
                 continue;
             }
 
-            printf("%s Smoothing area boundaries...          \r", tileString);
+            printf("%s Smoothing area boundaries...                 \r", tileString);
             if (!rcMedianFilterWalkableArea(&context, *iv.compactHeightfield))
             {
                 printf("%s Failed median filter!                    \n", tileString);
                 continue;
             }
 
-            printf("%s Building distance field...              \r", tileString);
+            printf("%s Building distance field...                   \r", tileString);
             if (!rcBuildDistanceField(&context, *iv.compactHeightfield))
             {
-                printf("%s Failed building distance field!         \n", tileString);
+                printf("%s Failed building distance field!          \n", tileString);
                 continue;
             }
 
             // bottleneck is here
-            printf("%s Building regions...                     \r", tileString);
+            printf("%s Building regions...                          \r", tileString);
             if (!rcBuildRegions(&context, *iv.compactHeightfield, config.borderSize, config.minRegionArea, config.mergeRegionArea))
             {
-                printf("%s Failed building regions!                \n", tileString);
+                printf("%s Failed building regions!                 \n", tileString);
                 continue;
             }
 
-            printf("%s Building contours...                    \r", tileString);
+            printf("%s Building contours...                         \r", tileString);
             iv.contours = rcAllocContourSet();
             if (!iv.contours || !rcBuildContours(&context, *iv.compactHeightfield, config.maxSimplificationError, config.maxEdgeLen, *iv.contours))
             {
-                printf("%s Failed building contours!               \n", tileString);
+                printf("%s Failed building contours!                \n", tileString);
                 continue;
             }
 
             // build polymesh
-            printf("%s Building polymesh...                    \r", tileString);
+            printf("%s Building polymesh...                         \r", tileString);
             iv.polyMesh = rcAllocPolyMesh();
             if (!iv.polyMesh || !rcBuildPolyMesh(&context, *iv.contours, config.maxVertsPerPoly, *iv.polyMesh))
             {
-                printf("%s Failed building polymesh!               \n", tileString);
+                printf("%s Failed building polymesh!                \n", tileString);
                 continue;
             }
 
-            printf("%s Building polymesh detail...             \r", tileString);
+            printf("%s Building polymesh detail...                  \r", tileString);
             iv.polyMeshDetail = rcAllocPolyMeshDetail();
             if (!iv.polyMeshDetail || !rcBuildPolyMeshDetail(&context, *iv.polyMesh, *iv.compactHeightfield, config.detailSampleDist, config.detailSampleMaxError, *iv.polyMeshDetail))
             {
-                printf("%s Failed building polymesh detail!        \n", tileString);
+                printf("%s Failed building polymesh detail!         \n", tileString);
                 continue;
             }
 
             if (!m_debugOutput)
             {
+                //rcFreeHeightField(iv.heightField);
+                //iv.heightField = NULL;
                 rcFreeCompactHeightfield(iv.compactHeightfield);
                 iv.compactHeightfield = NULL;
                 rcFreeContourSet(iv.contours);
@@ -886,7 +873,7 @@ namespace Pathfinding
             }
 
             // this might be handled within Recast at some point
-            printf("%s Cleaning vertex padding...              \r", tileString);
+            printf("%s Cleaning vertex padding...                   \r", tileString);
             for (int i = 0; i < iv.polyMesh->nverts; ++i)
             {
                 unsigned short* v = &iv.polyMesh->verts[i*3];
@@ -897,39 +884,47 @@ namespace Pathfinding
             // polymesh vertex indices are stored with ushorts in detour, can't have more than 65535
             if (iv.polyMesh->nverts >= 0xffff)
             {
-                printf("%s Too many vertices!                      \n", tileString);
+                printf("%s Too many vertices!                       \n", tileString);
                 continue;
             }
 
-            printf("%s Setting polys as walkable...            \r", tileString);
+            // set polygons as walkable
+            // TODO: special flags for DYNAMIC polygons, ie surfaces that can be turned on and off
+            printf("%s Setting polys as walkable...                 \r", tileString);
             for (int i = 0; i < iv.polyMesh->npolys; ++i)
                 if (iv.polyMesh->areas[i] & RC_WALKABLE_AREA)
                     iv.polyMesh->flags[i] = iv.polyMesh->areas[i];
 
+            // setup mesh parameters
             dtNavMeshCreateParams params;
             memset(&params, 0, sizeof(params));
-            params.verts = iv.polyMesh->verts;
-            params.vertCount = iv.polyMesh->nverts;
-            params.polys = iv.polyMesh->polys;
-            params.polyAreas = iv.polyMesh->areas;
-            params.polyFlags = iv.polyMesh->flags;
-            params.polyCount = iv.polyMesh->npolys;
-            params.nvp = iv.polyMesh->nvp;
-            params.detailMeshes = iv.polyMeshDetail->meshes;
-            params.detailVerts = iv.polyMeshDetail->verts;
+            params.verts            = iv.polyMesh->verts;
+            params.vertCount        = iv.polyMesh->nverts;
+            params.polys            = iv.polyMesh->polys;
+            params.polyAreas        = iv.polyMesh->areas;
+            params.polyFlags        = iv.polyMesh->flags;
+            params.polyCount        = iv.polyMesh->npolys;
+            params.nvp              = iv.polyMesh->nvp;
+
+            params.detailMeshes     = iv.polyMeshDetail->meshes;
+            params.detailVerts      = iv.polyMeshDetail->verts;
             params.detailVertsCount = iv.polyMeshDetail->nverts;
-            params.detailTris = iv.polyMeshDetail->tris;
-            params.detailTriCount = iv.polyMeshDetail->ntris;
-            params.walkableHeight = agentHeight;
-            params.walkableRadius = agentRadius;
-            params.walkableClimb = agentMaxClimb;
+            params.detailTris       = iv.polyMeshDetail->tris;
+            params.detailTriCount   = iv.polyMeshDetail->ntris;
+
+            params.walkableHeight   = agentHeight;
+            params.walkableRadius   = agentRadius;
+            params.walkableClimb    = agentMaxClimb;
+
             params.tileX = (((bmin[0] + bmax[0]) / 2) - navMesh->getParams()->orig[0]) / GRID_SIZE;
             params.tileY = (((bmin[2] + bmax[2]) / 2) - navMesh->getParams()->orig[2]) / GRID_SIZE;
+
             rcVcopy(params.bmin, bmin);
             rcVcopy(params.bmax, bmax);
+
             params.cs = config.cs;
             params.ch = config.ch;
-            params.tileSize = config.tileSize;
+            params.tileSize = config.tileSize; // VERTEX_PER_MAP
 
             // will hold final navmesh
             unsigned char* navData = NULL;
@@ -939,12 +934,12 @@ namespace Pathfinding
             // so we have a clear error message
             if (params.nvp > DT_VERTS_PER_POLYGON)
             {
-                printf("%s Invalid verts-per-polygon value!        \n", tileString);
+                printf("%s Invalid verts-per-polygon value!             \n", tileString);
                 continue;
             }
             if (params.vertCount >= 0xffff)
             {
-                printf("%s Too many vertices!                      \n", tileString);
+                printf("%s Too many vertices!                           \n", tileString);
                 continue;
             }
             if (!params.vertCount || !params.verts)
@@ -953,35 +948,41 @@ namespace Pathfinding
                 // loaded but those models don't span into this tile
 
                 // message is an annoyance
-                //printf("%s No vertices to build tile!              \n", tileString);
-                continue;
-            }
-            if (!params.polyCount || !params.polys)
-            {
-                printf("%s No polygons to build tile!              \n", tileString);
-                continue;
-            }
-            if (!params.detailMeshes || !params.detailVerts || !params.detailTris)
-            {
-                printf("%s No detail mesh to build tile!           \n", tileString);
+                //printf("%s No vertices to build tile!                 \n", tileString);
                 continue;
             }
 
-            printf("%s Building navmesh tile...                \r", tileString);
+            if (!params.polyCount || !params.polys)
+            {
+                // we have flat tiles with no actual geometry - don't build those, its useless
+                // keep in mind that we do output those into debug info
+                // drop tiles with only exact count - some tiles may have geometry while having less tiles
+                printf("%s No polygons to build tile!                   \n", tileString);
+                continue;
+            }
+
+            if (!params.detailMeshes || !params.detailVerts || !params.detailTris)
+            {
+                printf("%s No detail mesh to build tile!                \n", tileString);
+                continue;
+            }
+
+            printf("%s Building navmesh tile...                         \r", tileString);
             if (!dtCreateNavMeshData(&params, &navData, &navDataSize))
             {
-                printf("%s Failed building navmesh tile!           \n", tileString);
+                printf("%s Failed building navmesh tile!                \n", tileString);
                 continue;
             }
 
             dtTileRef tileRef = 0;
-            printf("% Adding tile to navmesh...                \r", tileString);
+            printf("% Adding tile to navmesh...                         \r", tileString);
+
             // DT_TILE_FREE_DATA tells detour to unallocate memory when the tile
             // is removed via removeTile()
             dtStatus dtResult = navMesh->addTile(navData, navDataSize, DT_TILE_FREE_DATA, 0, &tileRef);
             if (!tileRef || dtResult != DT_SUCCESS)
             {
-                printf("% Failed adding tile to navmesh!           \n", tileString);
+                printf("% Failed adding tile to navmesh!                \n", tileString);
                 continue;
             }
 
@@ -999,7 +1000,8 @@ namespace Pathfinding
             }
 
             printf("%s Writing to file...                      \r", tileString);
-            // should write navDataSize first... for now, just use ftell to find length when reading
+            // should write navDataSize first... for now, just use ftell to find length when reading.
+            // write header
             MmapTileHeader header;
             header.usesLiquids = m_terrainBuilder->usesLiquids();
             header.size = uint32(navDataSize);
@@ -1009,15 +1011,14 @@ namespace Pathfinding
             fclose(file);
 
             // now that tile is written to disk, we can unload it
-            navMesh->removeTile(tileRef, 0, 0);
-        }while(0);
+            navMesh->removeTile(tileRef, NULL, NULL);
+        } while(0);
 
         if (m_debugOutput)
         {
             generateObjFile(mapID, tileX, tileY, meshData);
             writeIV(mapID, tileX, tileY, iv);
         }
-
         clearIntermediateValues(iv);
     }
 
@@ -1041,22 +1042,28 @@ namespace Pathfinding
 
     void MapBuilder::initIntermediateValues(IntermediateValues &iv)
     {
-        iv.compactHeightfield = NULL;
-        iv.heightfield = NULL;
-        iv.triFlags = NULL;
-        iv.contours = NULL;
-        iv.polyMesh = NULL;
-        iv.polyMeshDetail = NULL;
+        iv.compactHeightfield   = NULL;
+        iv.heightfield          = NULL;
+        iv.triFlags             = NULL;
+        iv.contours             = NULL;
+        iv.polyMesh             = NULL;
+        iv.polyMeshDetail       = NULL;
     }
 
     void MapBuilder::clearIntermediateValues(IntermediateValues &iv)
     {
-        rcFreeCompactHeightfield(iv.compactHeightfield); iv.compactHeightfield = NULL;
-        rcFreeHeightField(iv.heightfield); iv.heightfield = NULL;
-        rcFreeContourSet(iv.contours); iv.contours = NULL;
-        rcFreePolyMesh(iv.polyMesh); iv.polyMesh = NULL;
-        rcFreePolyMeshDetail(iv.polyMeshDetail); iv.polyMeshDetail = NULL;
-        dtFree(iv.triFlags); iv.triFlags = NULL;
+        rcFreeCompactHeightfield(iv.compactHeightfield);
+            iv.compactHeightfield   = NULL;
+        rcFreeHeightField(iv.heightfield);
+            iv.heightfield          = NULL;
+        rcFreeContourSet(iv.contours);
+            iv.contours             = NULL;
+        rcFreePolyMesh(iv.polyMesh);
+            iv.polyMesh             = NULL;
+        rcFreePolyMeshDetail(iv.polyMeshDetail);
+            iv.polyMeshDetail       = NULL;
+        dtFree(iv.triFlags);
+            iv.triFlags             = NULL;
     }
 
     void MapBuilder::generateObjFile(uint32 mapID, uint32 tileX, uint32 tileY, MeshData meshData)
@@ -1065,7 +1072,7 @@ namespace Pathfinding
 
         char tileString[25];
         sprintf(tileString, "[%02u,%02u]: ", tileX, tileY);
-        printf("%s Writing debug output...                       \r", tileString);
+        printf("%s Writing debug output...                              \r", tileString);
 
         char objFileName[255];
 
@@ -1074,7 +1081,7 @@ namespace Pathfinding
         if (!objFile)
         {
             char message[1024];
-            sprintf(message, "Failed to open %s for writing!\n", objFileName);
+            sprintf(message, "Failed to open %s for writing!   \n", objFileName);
             perror(message);
             return;
         }
@@ -1088,7 +1095,7 @@ namespace Pathfinding
         if (!objFile)
         {
             char message[1024];
-            sprintf(message, "Failed to open %s for writing!\n", objFileName);
+            sprintf(message, "Failed to open %s for writing!    \n", objFileName);
             perror(message);
             return;
         }
@@ -1101,10 +1108,10 @@ namespace Pathfinding
         copyIndices(allTris, meshData.solidTris, allVerts.size() / 3);
         allVerts.append(meshData.solidVerts);
 
-        float* verts = allVerts.getCArray();
-        int vertCount = allVerts.size() / 3;
-        int* tris = allTris.getCArray();
-        int triCount = allTris.size() / 3;
+        float* verts    = allVerts.getCArray();
+        int vertCount   = allVerts.size() / 3;
+        int* tris       = allTris.getCArray();
+        int triCount    = allTris.size() / 3;
 
         fwrite(&vertCount, sizeof(int), 1, objFile);
         fwrite(verts, sizeof(float), vertCount*3, objFile);
@@ -1126,7 +1133,7 @@ namespace Pathfinding
         if (!objFile)
         {
             char message[1024];
-            sprintf(message, "Failed to open %s for writing!\n", objFileName);
+
             perror(message);
             return;
         }
@@ -1140,7 +1147,7 @@ namespace Pathfinding
         allVerts.append(meshData.solidVerts);
 
         float* verts = allVerts.getCArray();
-        int* tris = allTris.getCArray();
+        int* tris    = allTris.getCArray();
 
         for (int i = 0; i < allVerts.size() / 3; i++)
             fprintf(objFile, "v %f %f %f\n", verts[i*3], verts[i*3 + 1], verts[i*3 + 2]);
@@ -1176,9 +1183,9 @@ namespace Pathfinding
         if (file) fclose(file); \
         printf("%s Writing debug output...                       \r", tileString)
 
-        DEBUG_WRITE("hf", iv.heightfield);
-        DEBUG_WRITE("chf", iv.compactHeightfield);
-        DEBUG_WRITE("cs", iv.contours);
+        DEBUG_WRITE("hf",    iv.heightfield);
+        DEBUG_WRITE("chf",   iv.compactHeightfield);
+        DEBUG_WRITE("cs",    iv.contours);
         DEBUG_WRITE("pmesh", iv.polyMesh);
         DEBUG_WRITE("dmesh", iv.polyMeshDetail);
 #undef DEBUG_WRITE

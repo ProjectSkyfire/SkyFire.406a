@@ -1,1 +1,0 @@
-screen -A -m -d -S authserver ./authserver

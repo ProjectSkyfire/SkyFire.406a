@@ -167,12 +167,12 @@ class BattlegroundTP : public Battleground
         virtual void StartingEventOpenDoors();
 
         /* BG Flags */
-        uint64 GetAllianceFlagPickerGUID() const    { return m_FlagKeepers[BG_TEAM_ALLIANCE]; }
-        uint64 GetHordeFlagPickerGUID() const       { return m_FlagKeepers[BG_TEAM_HORDE]; }
-        void SetAllianceFlagPicker(uint64 guid)     { m_FlagKeepers[BG_TEAM_ALLIANCE] = guid; }
-        void SetHordeFlagPicker(uint64 guid)        { m_FlagKeepers[BG_TEAM_HORDE] = guid; }
-        bool IsAllianceFlagPickedup() const         { return m_FlagKeepers[BG_TEAM_ALLIANCE] != 0; }
-        bool IsHordeFlagPickedup() const            { return m_FlagKeepers[BG_TEAM_HORDE] != 0; }
+        uint64 GetAllianceFlagPickerGUID() const    { return _flagKeepers[BG_TEAM_ALLIANCE]; }
+        uint64 GetHordeFlagPickerGUID() const       { return _flagKeepers[BG_TEAM_HORDE]; }
+        void SetAllianceFlagPicker(uint64 guid)     { _flagKeepers[BG_TEAM_ALLIANCE] = guid; }
+        void SetHordeFlagPicker(uint64 guid)        { _flagKeepers[BG_TEAM_HORDE] = guid; }
+        bool IsAllianceFlagPickedup() const         { return _flagKeepers[BG_TEAM_ALLIANCE] != 0; }
+        bool IsHordeFlagPickedup() const            { return _flagKeepers[BG_TEAM_HORDE] != 0; }
         void RespawnFlag(uint32 Team, bool captured);
         void RespawnFlagAfterDrop(uint32 Team);
         uint8 GetFlagState(uint32 team)             { return m_FlagState[GetTeamIndexByTeamId(team)]; }
@@ -208,7 +208,7 @@ class BattlegroundTP : public Battleground
         void SetTeamPoint(uint32 TeamID, uint32 Points = 0) { _TeamScores[GetTeamIndexByTeamId(TeamID)] = Points; }
         void RemovePoint(uint32 TeamID, uint32 Points = 1)  { _TeamScores[GetTeamIndexByTeamId(TeamID)] -= Points; }
     private:
-        uint64 m_FlagKeepers[2];                            // 0 - alliance, 1 - horde
+        uint64 _flagKeepers[2];                            // 0 - alliance, 1 - horde
         uint64 m_DroppedFlagGUID[2];
         uint8 m_FlagState[2];                               // for checking flag state
         int32 m_FlagsTimer[2];

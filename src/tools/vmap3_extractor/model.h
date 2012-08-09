@@ -21,6 +21,9 @@
 #ifndef MODEL_H
 #define MODEL_H
 
+#if defined __FreeBSD__
+#   include <stdio.h>
+#endif
 #include "loadlib/loadlib.h"
 #include "vec3d.h"
 //#include "mpq.h"

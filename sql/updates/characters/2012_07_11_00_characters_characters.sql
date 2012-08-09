@@ -1,0 +1,11 @@
+ALTER TABLE `characters`
+	CHANGE COLUMN `power1` `power1` INT(10) NOT NULL DEFAULT '0' AFTER `health`,
+	CHANGE COLUMN `power2` `power2` INT(10) NOT NULL DEFAULT '0' AFTER `power1`,
+	CHANGE COLUMN `power3` `power3` INT(10) NOT NULL DEFAULT '0' AFTER `power2`,
+	CHANGE COLUMN `power4` `power4` INT(10) NOT NULL DEFAULT '0' AFTER `power3`,
+	CHANGE COLUMN `power5` `power5` INT(10) NOT NULL DEFAULT '0' AFTER `power4`,
+	CHANGE COLUMN `power6` `power6` INT(10) NOT NULL DEFAULT '0' AFTER `power5`,
+	CHANGE COLUMN `power7` `power7` INT(10) NOT NULL DEFAULT '0' AFTER `power6`,
+	CHANGE COLUMN `power8` `power8` INT(10) NOT NULL DEFAULT '0' AFTER `power7`,
+	CHANGE COLUMN `power9` `power9` INT(10) NOT NULL DEFAULT '0' AFTER `power8`,
+	CHANGE COLUMN `power10` `power10` INT(10) NOT NULL DEFAULT '0' AFTER `power9`;

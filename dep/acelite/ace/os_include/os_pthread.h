@@ -6,7 +6,7 @@
  *
  *  threads
  *
- *  $Id: os_pthread.h 92737 2010-11-26 17:39:33Z shuston $
+ *  $Id: os_pthread.h 95761 2012-05-15 18:23:04Z johnnyw $
  *
  *  @author Don Hinton <dhinton@dresystems.com>
  *  @author This code was originally in various places including ace/OS.h.
@@ -48,11 +48,7 @@
 
 #if !defined (ACE_LACKS_PTHREAD_H)
    extern "C" {
-#   if defined (ACE_TANDEM_T1248_PTHREADS)
-#   include /**/ <spthread.h>
-#   else
 #  include /**/ <pthread.h>
-#   endif
    }
 #endif /* !ACE_LACKS_PTHREAD_H */
 
@@ -283,7 +279,11 @@
 #  undef THR_DAEMON
 
 #  define THR_BOUND               0x00000001
-#  define THR_NEW_LWP             0x00000002
+# if defined (__FreeBSD__)
+#    define THR_NEW_LWP             0x00000000
+# else
+#    define THR_NEW_LWP             0x00000002
+# endif
 #  define THR_DAEMON              0x00000010
 #  define THR_DETACHED            0x00000040
 #  define THR_SUSPENDED           0x00000080
@@ -369,7 +369,7 @@ public:
                                              const struct timespec * abstime);
 #    endif  /* _XOPEN_SOURCE && _XOPEN_SOURCE < 600 */
 
-#  endif  /* linux && ((__GLIBC__ > 2) || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 2)) */
+#  endif  /* ACE_LINUX && ((__GLIBC__ > 2) || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 2)) */
 
 #elif defined (ACE_HAS_STHREADS)
 #  if !defined (ACE_THR_PRI_FIFO_MIN)

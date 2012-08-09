@@ -13,7 +13,7 @@
 project(SkyFireEMU)
 
 # CMake policies (can not be handled elsewhere)
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 2.8)
 cmake_policy(SET CMP0005 OLD)
 
 # Set RPATH-handing (CMake parameters)
@@ -40,6 +40,11 @@ include(cmake/options.cmake)
 if( NOPCH )
   set(USE_COREPCH 0)
   set(USE_SCRIPTPCH 0)
+endif()
+
+# VS100 uses MSBuild.exe instead of devenv.com, so force it to use devenv.com
+if(WIN32 AND MSVC_VERSION MATCHES 1600)
+  find_package(VisualStudio2010)
 endif()
 
 include(CheckPlatform)

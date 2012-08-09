@@ -33,8 +33,16 @@ enum WarlockSpells
     WARLOCK_DEMONIC_EMPOWERMENT_FELGUARD    = 54508,
     WARLOCK_DEMONIC_EMPOWERMENT_FELHUNTER   = 54509,
     WARLOCK_DEMONIC_EMPOWERMENT_IMP         = 54444,
-    WARLOCK_IMPROVED_HEALTHSTONE_R1         = 18692,
-    WARLOCK_IMPROVED_HEALTHSTONE_R2         = 18693,
+
+    WARLOCK_HEALTHSTONE_CREATE              = 34130,
+    WARLOCK_HEALTHSTONE_HEAL                = 6262,
+
+    WARLOCK_DRAIN_SOUL                      = 79264,
+
+    WARLOCK_DEMONIC_CIRCLE_SUMMON           = 48018,
+    WARLOCK_DEMONIC_CIRCLE_TELEPORT         = 48020,
+    WARLOCK_DEMONIC_CIRCLE_ALLOW_CAST       = 62388,
+    WARLOCK_NETHER_WARD                     = 91713,
 };
 
 class spell_warl_banish : public SpellScriptLoader
@@ -159,7 +167,7 @@ class spell_warl_demonic_empowerment : public SpellScriptLoader
         }
 };
 
-// 6201 Create Healthstone (and ranks)
+// 6201 Create Healthstone
 class spell_warl_create_healthstone : public SpellScriptLoader
 {
     public:
@@ -169,36 +177,18 @@ class spell_warl_create_healthstone : public SpellScriptLoader
         {
             PrepareSpellScript(spell_warl_create_healthstone_SpellScript);
 
-            static uint32 const iTypes[8][3];
-
             bool Validate(SpellInfo const* /*spellEntry*/)
             {
-                if (!sSpellMgr->GetSpellInfo(WARLOCK_IMPROVED_HEALTHSTONE_R1) || !sSpellMgr->GetSpellInfo(WARLOCK_IMPROVED_HEALTHSTONE_R2))
+                if (!sSpellMgr->GetSpellInfo(WARLOCK_HEALTHSTONE_CREATE) || !sSpellMgr->GetSpellInfo(WARLOCK_HEALTHSTONE_HEAL))
                     return false;
                 return true;
             }
 
-            void HandleScriptEffect(SpellEffIndex effIndex)
+            void HandleScriptEffect(SpellEffIndex /*effIndex*/)
             {
-                if (Unit* unitTarget = GetHitUnit())
-                {
-                    uint32 rank = 0;
-                    // Improved Healthstone
-                    if (AuraEffect const* aurEff = unitTarget->GetDummyAuraEffect(SPELLFAMILY_WARLOCK, 284, 0))
-                    {
-                        switch (aurEff->GetId())
-                        {
-                            case WARLOCK_IMPROVED_HEALTHSTONE_R1: rank = 1; break;
-                            case WARLOCK_IMPROVED_HEALTHSTONE_R2: rank = 2; break;
-                            default:
-                                sLog->outError("Unknown rank of Improved Healthstone id: %d", aurEff->GetId());
-                                break;
-                        }
-                    }
-                    uint8 spellRank = sSpellMgr->GetSpellRank(GetSpellInfo()->Id);
-                    if (spellRank > 0 && spellRank <= 8)
-                        CreateItem(effIndex, iTypes[spellRank - 1][rank]);
-                }
+                Unit* caster = GetCaster();
+                if (caster)
+                    caster->CastSpell(caster,WARLOCK_HEALTHSTONE_CREATE,false);
             }
 
             void Register()
@@ -213,16 +203,6 @@ class spell_warl_create_healthstone : public SpellScriptLoader
         }
 };
 
-uint32 const spell_warl_create_healthstone::spell_warl_create_healthstone_SpellScript::iTypes[8][3] = {
-    { 5512, 19004, 19005},              // Minor Healthstone
-    { 5511, 19006, 19007},              // Lesser Healthstone
-    { 5509, 19008, 19009},              // Healthstone
-    { 5510, 19010, 19011},              // Greater Healthstone
-    { 9421, 19012, 19013},              // Major Healthstone
-    {22103, 22104, 22105},              // Master Healthstone
-    {36889, 36890, 36891},              // Demonic Healthstone
-    {36892, 36893, 36894}               // Fel Healthstone
-};
 // 47422 Everlasting Affliction
 class spell_warl_everlasting_affliction : public SpellScriptLoader
 {
@@ -262,15 +242,15 @@ class spell_warl_seed_of_corruption : public SpellScriptLoader
         {
             PrepareSpellScript(spell_warl_seed_of_corruption_SpellScript);
 
-            void FilterTargets(std::list<Unit*>& unitList)
+            void FilterTargets(std::list<WorldObject*>& targets)
             {
                 if (GetExplTargetUnit())
-                    unitList.remove(GetExplTargetUnit());
+                    targets.remove(GetExplTargetUnit());
             }
 
             void Register()
             {
-                OnUnitTargetSelect += SpellUnitTargetFn(spell_warl_seed_of_corruption_SpellScript::FilterTargets, EFFECT_0, TARGET_UNIT_DEST_AREA_ENEMY);
+                OnObjectAreaTargetSelect += SpellObjectAreaTargetSelectFn(spell_warl_seed_of_corruption_SpellScript::FilterTargets, EFFECT_0, TARGET_UNIT_DEST_AREA_ENEMY);
             }
         };
 
@@ -428,6 +408,152 @@ public:
     }
 };
 
+class spell_warl_drain_soul : public SpellScriptLoader
+{
+public:
+    spell_warl_drain_soul() : SpellScriptLoader("spell_warl_drain_soul") { } // 1120
+
+    class spell_warl_drain_soul_AuraScript : public AuraScript
+    {
+        PrepareAuraScript(spell_warl_drain_soul_AuraScript)
+
+        void OnPeriodic(AuraEffect const* aurEff) {}
+
+        void OnRemove(AuraEffect const* aurEff, AuraEffectHandleModes /*mode*/)
+        {
+            if (Unit* caster = aurEff->GetBase()->GetCaster())
+            {
+                caster->CastSpell(caster, WARLOCK_DRAIN_SOUL, true);
+            }
+        }
+
+        void Register()
+        {
+            OnEffectRemove += AuraEffectRemoveFn(spell_warl_drain_soul_AuraScript::OnRemove, EFFECT_0, SPELL_AURA_PERIODIC_DAMAGE,AURA_EFFECT_HANDLE_REAL);
+            OnEffectPeriodic += AuraEffectPeriodicFn(spell_warl_drain_soul_AuraScript::OnPeriodic, EFFECT_0, SPELL_AURA_PERIODIC_DAMAGE);
+        }
+    };
+
+    AuraScript* GetAuraScript() const
+    {
+        return new spell_warl_drain_soul_AuraScript();
+    }
+};
+
+class spell_warl_demonic_circle_summon : public SpellScriptLoader
+{
+public:
+    spell_warl_demonic_circle_summon() : SpellScriptLoader("spell_warl_demonic_circle_summon") { }
+
+    class spell_warl_demonic_circle_summon_AuraScript : public AuraScript
+    {
+        PrepareAuraScript(spell_warl_demonic_circle_summon_AuraScript);
+
+        void HandleRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes mode)
+        {
+            // If effect is removed by expire remove the summoned demonic circle too.
+            if (!(mode & AURA_EFFECT_HANDLE_REAPPLY))
+                GetTarget()->RemoveGameObject(GetId(), true);
+
+            GetTarget()->RemoveAura(WARLOCK_DEMONIC_CIRCLE_ALLOW_CAST);
+        }
+
+        void HandleDummyTick(AuraEffect const* /*aurEff*/)
+        {
+            if (GameObject* circle = GetTarget()->GetGameObject(GetId()))
+            {
+                // Here we check if player is in demonic circle teleport range, if so add
+                // WARLOCK_DEMONIC_CIRCLE_ALLOW_CAST; allowing him to cast the WARLOCK_DEMONIC_CIRCLE_TELEPORT.
+                // If not in range remove the WARLOCK_DEMONIC_CIRCLE_ALLOW_CAST.
+
+                SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(WARLOCK_DEMONIC_CIRCLE_TELEPORT);
+
+                if (GetTarget()->IsWithinDist(circle, spellInfo->GetMaxRange(true)))
+                {
+                    if (!GetTarget()->HasAura(WARLOCK_DEMONIC_CIRCLE_ALLOW_CAST))
+                        GetTarget()->CastSpell(GetTarget(), WARLOCK_DEMONIC_CIRCLE_ALLOW_CAST, true);
+                }
+                else
+                    GetTarget()->RemoveAura(WARLOCK_DEMONIC_CIRCLE_ALLOW_CAST);
+            }
+        }
+
+        void Register()
+        {
+            OnEffectRemove += AuraEffectApplyFn(spell_warl_demonic_circle_summon_AuraScript::HandleRemove, EFFECT_0, SPELL_AURA_PERIODIC_DUMMY, AURA_EFFECT_HANDLE_REAL_OR_REAPPLY_MASK);
+            OnEffectPeriodic += AuraEffectPeriodicFn(spell_warl_demonic_circle_summon_AuraScript::HandleDummyTick, EFFECT_0, SPELL_AURA_PERIODIC_DUMMY);
+        }
+    };
+
+    AuraScript* GetAuraScript() const
+    {
+        return new spell_warl_demonic_circle_summon_AuraScript();
+    }
+};
+
+class spell_warl_demonic_circle_teleport : public SpellScriptLoader
+{
+public:
+    spell_warl_demonic_circle_teleport() : SpellScriptLoader("spell_warl_demonic_circle_teleport") { }
+
+    class spell_warl_demonic_circle_teleport_AuraScript : public AuraScript
+    {
+        PrepareAuraScript(spell_warl_demonic_circle_teleport_AuraScript);
+
+        void HandleTeleport(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
+        {
+            if (Player* player = GetTarget()->ToPlayer())
+            {
+                if (GameObject* circle = player->GetGameObject(WARLOCK_DEMONIC_CIRCLE_SUMMON))
+                {
+                    player->NearTeleportTo(circle->GetPositionX(), circle->GetPositionY(), circle->GetPositionZ(), circle->GetOrientation());
+                    player->RemoveMovementImpairingAuras();
+                }
+            }
+        }
+
+        void Register()
+        {
+            OnEffectApply += AuraEffectApplyFn(spell_warl_demonic_circle_teleport_AuraScript::HandleTeleport, EFFECT_0, SPELL_AURA_MECHANIC_IMMUNITY, AURA_EFFECT_HANDLE_REAL);
+        }
+    };
+
+    AuraScript* GetAuraScript() const
+    {
+        return new spell_warl_demonic_circle_teleport_AuraScript();
+    }
+};
+
+// 687,28176 Demon armor and Fel armor swap controller
+class spell_warl_nether_ward_swap_supressor: public SpellScriptLoader
+{
+public:
+    spell_warl_nether_ward_swap_supressor() : SpellScriptLoader("spell_warl_nether_ward_swap_supressor") {}
+
+    class spell_warl_nether_ward_swap_supressor_SpellScript : public SpellScript
+    {
+        PrepareSpellScript(spell_warl_nether_ward_swap_supressor_SpellScript);
+
+        void PreventSwapApplicationOnCaster(WorldObject*& target)
+        {
+            // If the warlock doesnt have the Nether Ward talent,
+            // do not allow the swap effect to hit the warlock
+            if (!GetCaster()->HasAura(WARLOCK_NETHER_WARD))
+                target = NULL;
+        }
+
+        void Register()
+        {
+            OnObjectTargetSelect += SpellObjectTargetSelectFn(spell_warl_nether_ward_swap_supressor_SpellScript::PreventSwapApplicationOnCaster, EFFECT_2, TARGET_UNIT_CASTER);
+        }
+    };
+
+    SpellScript* GetSpellScript() const
+    {
+        return new spell_warl_nether_ward_swap_supressor_SpellScript();
+    }
+};
+
 void AddSC_warlock_spell_scripts()
 {
     new spell_warl_banish();
@@ -438,4 +564,8 @@ void AddSC_warlock_spell_scripts()
     new spell_warl_life_tap();
     new spell_warl_fear();
     new spell_warl_drain_life();
+    new spell_warl_drain_soul();
+    new spell_warl_demonic_circle_summon();
+    new spell_warl_demonic_circle_teleport();
+    new spell_warl_nether_ward_swap_supressor();
 }

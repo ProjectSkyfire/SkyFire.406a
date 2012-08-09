@@ -37,9 +37,7 @@ enum HunterSpells
     HUNTER_PET_SPELL_CARRION_FEEDER_TRIGGERED    = 54045,
     HUNTER_SPELL_INVIGORATION_TRIGGERED          = 53398,
     HUNTER_SPELL_MASTERS_CALL_TRIGGERED          = 62305,
-    HUNTER_SPELL_CHIMERA_SHOT_SERPENT            = 53353,
-    HUNTER_SPELL_CHIMERA_SHOT_VIPER              = 53358,
-    HUNTER_SPELL_CHIMERA_SHOT_SCORPID            = 53359,
+    HUNTER_SPELL_CHIMERA_SHOT_HEALING            = 53353,
     HUNTER_SPELL_ASPECT_OF_THE_BEAST_PET         = 61669,
     HUNTER_SPELL_KILL_COMMAND                    = 34026,
     HUNTER_SPELL_KILL_COMMAND_TRIGGER            = 83381,
@@ -48,6 +46,9 @@ enum HunterSpells
     HUNTER_PET_SPELL_FOCUS_FIRE_REGEN            = 83468,
     HUNTER_VISUAL_FOCUS_FIRE                     = 88843,
     HUNTER_PET_AURA_FRENZY_TRIGGER               = 20784, // Tamed Pet Passive 07 (DND)
+    HUNTER_SPELL_SERPENT_STING                   = 1978,
+    HUNTER_SPELL_COBRA_SHOT_ENERGIZE             = 91954,
+    HUNTER_SPELL_STEADY_SHOT_ENERGIZE            = 77443,
 };
 
 // 53209 Chimera Shot
@@ -61,77 +62,22 @@ public:
         PrepareSpellScript(spell_hun_chimera_shot_SpellScript)
         bool Validate(SpellInfo const* /*spellEntry*/)
         {
-            if (!sSpellMgr->GetSpellInfo(HUNTER_SPELL_CHIMERA_SHOT_SERPENT))
-                return false;
-            if (!sSpellMgr->GetSpellInfo(HUNTER_SPELL_CHIMERA_SHOT_VIPER))
-                return false;
-            if (!sSpellMgr->GetSpellInfo(HUNTER_SPELL_CHIMERA_SHOT_SCORPID))
+            if (!sSpellMgr->GetSpellInfo(HUNTER_SPELL_CHIMERA_SHOT_HEALING))
                 return false;
             return true;
         }
 
         void HandleScriptEffect(SpellEffIndex /*effIndex*/)
         {
-            Unit* caster = GetCaster();
-            Unit* unitTarget = GetHitUnit();
-            if (!unitTarget)
+            Unit* target = GetHitUnit();
+
+            if (!target)
                 return;
 
-            uint32 spellId = 0;
-            int32 basePoint = 0;
-            Unit::AuraApplicationMap& Auras = unitTarget->GetAppliedAuras();
-            for (Unit::AuraApplicationMap::iterator i = Auras.begin(); i != Auras.end(); ++i)
-            {
-                Aura* aura = i->second->GetBase();
-                if (aura->GetCasterGUID() != caster->GetGUID())
-                    continue;
+            if (Aura* serpentSting = target->GetAura(1978, GetCaster()->GetGUID()))
+                serpentSting->RefreshDuration();
 
-                // Search only Serpent Sting, Viper Sting, Scorpid Sting auras
-                flag96 familyFlag = aura->GetSpellInfo()->SpellFamilyFlags;
-                if (!(familyFlag[1] & 0x00000080 || familyFlag[0] & 0x0000C000))
-                    continue;
-                if (AuraEffect const* aurEff = aura->GetEffect(0))
-                {
-                    // Serpent Sting - Instantly deals 40% of the damage done by your Serpent Sting.
-                    if (familyFlag[0] & 0x4000)
-                    {
-                        int32 TickCount = aurEff->GetTotalTicks();
-                        spellId = HUNTER_SPELL_CHIMERA_SHOT_SERPENT;
-                        basePoint = caster->SpellDamageBonus(unitTarget, aura->GetSpellInfo(), aurEff->GetAmount(), DOT, aura->GetStackAmount());
-                        ApplyPctN(basePoint, TickCount * 40);
-                    }
-                    // Viper Sting - Instantly restores mana to you equal to 60% of the total amount drained by your Viper Sting.
-                    else if (familyFlag[1] & 0x00000080)
-                    {
-                        int32 TickCount = aura->GetEffect(0)->GetTotalTicks();
-                        spellId = HUNTER_SPELL_CHIMERA_SHOT_VIPER;
-
-                        // Amount of one aura tick
-                        basePoint = int32(CalculatePctN(unitTarget->GetMaxPower(POWER_MANA), aurEff->GetAmount()));
-                        int32 casterBasePoint = aurEff->GetAmount() * unitTarget->GetMaxPower(POWER_MANA) / 50; // TODO: WTF? caster uses unitTarget?
-                        if (basePoint > casterBasePoint)
-                            basePoint = casterBasePoint;
-                        ApplyPctN(basePoint, TickCount * 60);
-                    }
-                    // Scorpid Sting - Attempts to Disarm the target for 10 sec. This effect cannot occur more than once per 1 minute.
-                    else if (familyFlag[0] & 0x00008000)
-                        spellId = HUNTER_SPELL_CHIMERA_SHOT_SCORPID;
-                    // ?? nothing say in spell desc (possibly need addition check)
-                    //if (familyFlag & 0x0000010000000000LL || // dot
-                    //    familyFlag & 0x0000100000000000LL)   // stun
-                    //{
-                    //    spellId = 53366; // 53366 Chimera Shot - Wyvern
-                    //}
-
-                    // Refresh aura duration
-                    aura->RefreshDuration();
-                }
-                break;
-            }
-            if (spellId)
-                caster->CastCustomSpell(unitTarget, spellId, &basePoint, 0, 0, true);
-            if (spellId == HUNTER_SPELL_CHIMERA_SHOT_SCORPID && caster->ToPlayer()) // Scorpid Sting - Add 1 minute cooldown
-                caster->ToPlayer()->AddSpellCooldown(spellId, 0, uint32(time(NULL) + 60));
+            GetCaster()->CastSpell(GetCaster(),HUNTER_SPELL_CHIMERA_SHOT_HEALING,true);
         }
 
         void Register()
@@ -597,11 +543,12 @@ public:
         void HandleDummy(SpellEffIndex /*effIndex*/)
         {
             Unit* pet = GetCaster()->GetGuardianPet();
+            Unit* target = pet->getVictim();
 
-            if (!pet)
+            if (!pet || !target)
                 return;
 
-            pet->CastSpell(pet->getVictim(), HUNTER_SPELL_KILL_COMMAND_TRIGGER, true);
+            pet->CastSpell(target, HUNTER_SPELL_KILL_COMMAND_TRIGGER, true);
         }
 
         void Register()
@@ -784,6 +731,119 @@ public:
     }
 };
 
+// 83676 Resistance is Futile 
+class spell_hun_resistance_is_futile : public SpellScriptLoader
+{
+public:
+    spell_hun_resistance_is_futile() : SpellScriptLoader("spell_hun_resistance_is_futile") { }
+
+    class spell_hun_resistance_is_futile_AuraScript : public AuraScript
+    {
+        PrepareAuraScript(spell_hun_resistance_is_futile_AuraScript)
+
+        void HandlePeriodic(AuraEffect const* aurEff)
+        {
+            Unit* auraBearer = GetUnitOwner();
+            Unit* playerTarget = GetCaster();
+
+            if (!auraBearer || !playerTarget)
+                return;
+
+            AuraEffect const* resistanceIsFutileTalent = playerTarget->GetDummyAuraEffect(SPELLFAMILY_HUNTER,5119,0);
+
+            if (!resistanceIsFutileTalent)
+                return;
+
+            if (auraBearer->isMoving() && roll_chance_i(resistanceIsFutileTalent->GetAmount()))
+                playerTarget->CastSpell(playerTarget,82897,true);
+        }
+
+        void Register()
+        {
+            OnEffectPeriodic += AuraEffectPeriodicFn(spell_hun_resistance_is_futile_AuraScript::HandlePeriodic, EFFECT_0, SPELL_AURA_PERIODIC_TRIGGER_SPELL);
+        }
+    };
+
+    AuraScript* GetAuraScript() const
+    {
+        return new spell_hun_resistance_is_futile_AuraScript();
+    }
+};
+
+// 77767 Cobra Shot
+class spell_hun_cobra_shot : public SpellScriptLoader
+{
+public:
+    spell_hun_cobra_shot() : SpellScriptLoader("spell_hun_cobra_shot") { }
+
+    class spell_hun_cobra_shot_SpellScript : public SpellScript
+    {
+        PrepareSpellScript(spell_hun_cobra_shot_SpellScript)
+        bool Validate(SpellInfo const* /*spellEntry*/)
+        {
+            if (!sSpellMgr->GetSpellInfo(HUNTER_SPELL_COBRA_SHOT_ENERGIZE))
+                return false;
+            return true;
+        }
+
+        void HandleScriptEffect(SpellEffIndex /*effIndex*/)
+        {
+            Unit* target = GetHitUnit();
+
+            if (!target)
+                return;
+
+            if (Aura* serpentSting = target->GetAura(1978, GetCaster()->GetGUID()))
+                serpentSting->SetDuration(serpentSting->GetDuration() + (GetSpellInfo()->Effects[EFFECT_1].BasePoints * 1000));
+
+            GetCaster()->CastSpell(GetCaster(),HUNTER_SPELL_COBRA_SHOT_ENERGIZE,true);
+        }
+
+        void Register()
+        {
+            OnEffectHitTarget += SpellEffectFn(spell_hun_cobra_shot_SpellScript::HandleScriptEffect, EFFECT_1, SPELL_EFFECT_SCRIPT_EFFECT);
+        }
+    };
+
+    SpellScript* GetSpellScript() const
+    {
+        return new spell_hun_cobra_shot_SpellScript();
+    }
+};
+
+// 56641 Steady Shot
+class spell_hun_steady_shot : public SpellScriptLoader
+{
+public:
+    spell_hun_steady_shot() : SpellScriptLoader("spell_hun_steady_shot") { }
+
+    class spell_hun_steady_shot_SpellScript : public SpellScript
+    {
+        PrepareSpellScript(spell_hun_steady_shot_SpellScript)
+        bool Validate(SpellInfo const* /*spellEntry*/)
+        {
+            if (!sSpellMgr->GetSpellInfo(HUNTER_SPELL_STEADY_SHOT_ENERGIZE))
+                return false;
+            return true;
+        }
+
+        void HandleDummy(SpellEffIndex /*effIndex*/)
+        {
+            GetCaster()->CastSpell(GetCaster(),HUNTER_SPELL_STEADY_SHOT_ENERGIZE,true);
+        }
+
+        void Register()
+        {
+            OnEffectHitTarget += SpellEffectFn(spell_hun_steady_shot_SpellScript::HandleDummy, EFFECT_2, SPELL_EFFECT_DUMMY);
+        }
+    };
+
+    SpellScript* GetSpellScript() const
+    {
+        return new spell_hun_steady_shot_SpellScript();
+    }
+};
+
 void AddSC_hunter_spell_scripts()
 {
     new spell_hun_chimera_shot();
@@ -799,4 +859,7 @@ void AddSC_hunter_spell_scripts()
     new spell_hun_kill_command();
     new spell_hun_focus_fire();
     new spell_hun_frenzy_effect();
+    new spell_hun_resistance_is_futile();
+    new spell_hun_cobra_shot();
+    new spell_hun_steady_shot();
 }

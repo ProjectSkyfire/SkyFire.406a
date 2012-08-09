@@ -1,20 +1,8 @@
 // -*- C++ -*-
 //
-// $Id: Handle_Set.inl 80826 2008-03-04 14:51:23Z wotte $
+// $Id: Handle_Set.inl 93736 2011-04-05 12:38:35Z johnnyw $
 
 #include "ace/Log_Msg.h"
-
-// todo: This should be cleaned up a bit.
-// memset for FD_ZERO on OpenBSD and Solaris w/ gcc 2.95.3
-#include "ace/os_include/os_string.h"
-
-// FreeBSD 4.8-RC? for bzero() used by FD_ZERO
-#include "ace/os_include/os_strings.h"
-
-// IRIX5 defines bzero() in this odd file... used by FD_ZERO
-#if defined (ACE_HAS_BSTRING)
-#  include /**/ <bstring.h>
-#endif /* ACE_HAS_BSTRING */
 
 // AIX defines bzero() in this odd file... used by FD_ZERO
 #if defined (ACE_HAS_STRINGS)

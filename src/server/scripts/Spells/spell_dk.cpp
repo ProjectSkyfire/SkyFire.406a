@@ -292,17 +292,18 @@ class spell_dk_death_pact : public SpellScriptLoader
         {
             PrepareSpellScript(spell_dk_death_pact_SpellScript);
 
-            void FilterTargets(std::list<Unit*>& unitList)
+            void FilterTargets(std::list<WorldObject*>& unitList)
             {
                 Unit* unit_to_add = NULL;
-                for (std::list<Unit*>::iterator itr = unitList.begin() ; itr != unitList.end(); ++itr)
+                for (std::list<WorldObject*>::iterator itr = unitList.begin() ; itr != unitList.end(); ++itr)
                 {
-                    if ((*itr)->GetTypeId() == TYPEID_UNIT
-                        && (*itr)->GetOwnerGUID() == GetCaster()->GetGUID()
-                        && (*itr)->ToCreature()->GetCreatureTemplate()->type == CREATURE_TYPE_UNDEAD)
+                    if (Unit* unit = (*itr)->ToUnit())
                     {
-                        unit_to_add = (*itr);
-                        break;
+                        if (unit->GetOwnerGUID() == GetCaster()->GetGUID() && unit->GetCreatureType() == CREATURE_TYPE_UNDEAD)
+                        {
+                            unit_to_add = unit;
+                            break;
+                        }
                     }
                 }
 
@@ -320,7 +321,7 @@ class spell_dk_death_pact : public SpellScriptLoader
 
             void Register()
             {
-                OnUnitTargetSelect += SpellUnitTargetFn(spell_dk_death_pact_SpellScript::FilterTargets, EFFECT_1, TARGET_UNIT_DEST_AREA_ALLY);
+                OnObjectAreaTargetSelect += SpellObjectAreaTargetSelectFn(spell_dk_death_pact_SpellScript::FilterTargets, EFFECT_1, TARGET_UNIT_DEST_AREA_ALLY);
             }
         };
 

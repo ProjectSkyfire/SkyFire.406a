@@ -1,0 +1,17 @@
+#! /bin/bash
+while true
+do
+	PID1=$(pidof worldserver)
+	if (( PID1 < 1 ))
+	then
+		/etc/init.d/skyfire start-worldserver
+	fi
+ 
+	PID2=$(pidof authserver)
+	if (( PID2 < 1 ))
+	then
+		/etc/init.d/skyfire start-authserver
+	fi
+ 
+	sleep 10
+done

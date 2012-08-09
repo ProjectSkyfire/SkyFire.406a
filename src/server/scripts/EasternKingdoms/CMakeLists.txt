@@ -192,7 +192,6 @@ set(scripts_STAT_SRCS
   EasternKingdoms/Deadmines/deadmines.h
   EasternKingdoms/Deadmines/deadmines.cpp
   EasternKingdoms/Deadmines/boss_admiral_ripsnarl.cpp
-  EasternKingdoms/Deadmines/boss_mr_smite.cpp
   EasternKingdoms/Deadmines/boss_captain_cookie.cpp
   EasternKingdoms/Deadmines/boss_foe_reaper_5000.cpp
   EasternKingdoms/Deadmines/boss_glubtok.cpp

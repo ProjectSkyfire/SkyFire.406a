@@ -40,7 +40,6 @@ void AddSC_rogue_spell_scripts();
 void AddSC_shaman_spell_scripts();
 void AddSC_warlock_spell_scripts();
 void AddSC_warrior_spell_scripts();
-void AddSC_mastery_spells();
 void AddSC_quest_spell_scripts();
 void AddSC_item_spell_scripts();
 void AddSC_example_spell_scripts();
@@ -148,7 +147,6 @@ void AddSC_boss_chimaeron();
 void AddSC_instance_blackwing_descent();
 void AddSC_deadmines();                      //Deadmines
 void AddSC_instance_deadmines();
-void AddSC_boss_mr_smite();
 void AddSC_boss_admiral_ripsnarl();
 void AddSC_boss_captain_cookie();
 void AddSC_boss_foe_reaper_5000();
@@ -721,7 +719,6 @@ void AddSpellScripts()
     AddSC_shaman_spell_scripts();
     AddSC_warlock_spell_scripts();
     AddSC_warrior_spell_scripts();
-    AddSC_mastery_spells();
     AddSC_quest_spell_scripts();
     AddSC_item_spell_scripts();
     AddSC_holiday_spell_scripts();
@@ -833,8 +830,7 @@ void AddEasternKingdomsScripts()
     AddSC_boss_chimaeron();
     AddSC_instance_blackwing_descent();
     AddSC_deadmines();                      //Deadmines
-    AddSC_instance_deadmines();
-    AddSC_boss_mr_smite();
+    AddSC_instance_deadmines();    
     AddSC_boss_admiral_ripsnarl();
     AddSC_boss_captain_cookie();
     AddSC_boss_foe_reaper_5000();

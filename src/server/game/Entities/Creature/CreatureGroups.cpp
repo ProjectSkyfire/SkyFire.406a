@@ -117,14 +117,14 @@ void FormationMgr::LoadCreatureFormations()
 
         // check data correctness
         {
-            if(!sObjectMgr->GetCreatureData(group_member->leaderGUID))
+            if (!sObjectMgr->GetCreatureData(group_member->leaderGUID))
             {
                 sLog->outErrorDb("creature_formations table leader guid %u incorrect (not exist)", group_member->leaderGUID);
                 delete group_member;
                 continue;
             }
 
-            if(!sObjectMgr->GetCreatureData(memberGUID))
+            if (!sObjectMgr->GetCreatureData(memberGUID))
             {
                 sLog->outErrorDb("creature_formations table member guid %u incorrect (not exist)", memberGUID);
                 delete group_member;

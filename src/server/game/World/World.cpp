@@ -1870,7 +1870,7 @@ void World::SetInitialWorldSettings()
     sLog->outString("Calculate random battleground reset time..." );
     InitRandomBGResetTime();
 
-    sLog->outString("Calculate currency week cap reset time..." );
+    sLog->outString("Calculate weekly currency cap reset time..." );
     InitCurrencyResetTime();
 
     ///- Initialize CharacterName Data
@@ -2925,6 +2925,18 @@ void World::ResetRandomBG()
 
     m_NextRandomBGReset = time_t(m_NextRandomBGReset + DAY);
     sWorld->setWorldState(WS_BG_DAILY_RESET_TIME, uint64(m_NextRandomBGReset));
+}
+
+void World::ResetCurrencyWeekCap()
+{
+    sLog->outDetail("Weekly Currency caps has benn reset for all realm characters.");
+    CharacterDatabase.Execute("UPDATE character_currency SET thisweek = 0");
+    for (SessionMap::const_iterator itr = m_sessions.begin(); itr != m_sessions.end(); ++itr)
+        if (itr->second->GetPlayer())
+            itr->second->GetPlayer()->ResetCurrencyWeekCap();
+
+    m_NextCurrencyReset = time_t(m_NextCurrencyReset + WEEK);
+    sWorld->setWorldState(WS_CURRENCY_RESET_TIME, uint64(m_NextCurrencyReset));
 }
 
 void World::UpdateMaxSessionCounters()

@@ -1,5 +1,5 @@
 /* -*- C++ -*- */
-// $Id: config-macosx-leopard.h 91688 2010-09-09 11:21:50Z johnnyw $
+// $Id: config-macosx-leopard.h 93550 2011-03-15 21:26:56Z olli $
 
 // This configuration file is designed to work with the MacOS X operating system.
 
@@ -176,7 +176,6 @@
 # define ACE_HAS_THREADS
 // And they're even POSIX pthreads
 # define ACE_HAS_PTHREADS
-# define ACE_HAS_PTHREADS_STD
 # define ACE_HAS_PTHREAD_SCHEDPARAM
 # define ACE_HAS_THREAD_SPECIFIC_STORAGE
 #endif  /* ACE_MT_SAFE == 1 */

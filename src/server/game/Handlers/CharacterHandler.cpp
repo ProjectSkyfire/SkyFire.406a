@@ -182,10 +182,6 @@ bool LoginQueryHolder::Initialize()
     stmt->setUInt32(0, lowGuid);
     res &= SetPreparedQuery(PLAYER_LOGIN_QUERY_LOADGLYPHS, stmt);
 
-    stmt = CharacterDatabase.GetPreparedStatement(CHAR_LOAD_PLAYER_TALENTBRANCHSPECS);
-    stmt->setUInt32(0, lowGuid);
-    res &= SetPreparedQuery(PLAYER_LOGIN_QUERY_LOADTALENTBRANCHSPECS, stmt);
-
     stmt = CharacterDatabase.GetPreparedStatement(CHAR_LOAD_PLAYER_TALENTS);
     stmt->setUInt32(0, lowGuid);
     res &= SetPreparedQuery(PLAYER_LOGIN_QUERY_LOADTALENTS, stmt);
@@ -1122,7 +1118,7 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder* holder)
 
     if (pCurrChar->HasAtLoginFlag(AT_LOGIN_RESET_TALENTS))
     {
-        pCurrChar->resetTalents(true);
+        pCurrChar->ResetTalents(true);
         pCurrChar->SendTalentsInfoData(false);              // original talents send already in to SendInitialPacketsBeforeAddToMap, resend reset state
         SendNotification(LANG_RESET_TALENTS);
     }
@@ -1148,6 +1144,8 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder* holder)
         pCurrChar->SetStandState(UNIT_STAND_STATE_STAND);
 
     m_playerLoading = false;
+
+    pCurrChar->CastMasterySpells(pCurrChar);
 
     sScriptMgr->OnPlayerLogin(pCurrChar);
     delete holder;
@@ -1471,7 +1469,7 @@ void WorldSession::HandleRemoveGlyph(WorldPacket & recv_data)
         return;
     }
 
-    if (uint32 glyph = _player->GetGlyph(slot))
+    if (uint32 glyph = _player->GetGlyph(_player->GetActiveSpec(), slot))
     {
         if (GlyphPropertiesEntry const *gp = sGlyphPropertiesStore.LookupEntry(glyph))
         {
@@ -1804,6 +1802,7 @@ void WorldSession::HandleCharFactionOrRaceChange(WorldPacket& recv_data)
         case RACE_UNDEAD_PLAYER:
         case RACE_TROLL:
         case RACE_BLOODELF:
+        case RACE_GOBLIN:
             team = BG_TEAM_HORDE;
             break;
         default:
@@ -1812,7 +1811,7 @@ void WorldSession::HandleCharFactionOrRaceChange(WorldPacket& recv_data)
 
     // Switch Languages
     // delete all languages first
-    trans->PAppend("DELETE FROM `character_skills` WHERE `skill` IN (98, 113, 759, 111, 313, 109, 115, 315, 673, 137) AND `guid`='%u'", lowGuid);
+    trans->PAppend("DELETE FROM `character_skills` WHERE `skill` IN (98, 113, 759, 111, 313, 109, 115, 315, 673, 137, 791, 792) AND `guid`='%u'", lowGuid);
 
     // now add them back
     if (team == BG_TEAM_ALLIANCE)
@@ -1832,6 +1831,9 @@ void WorldSession::HandleCharFactionOrRaceChange(WorldPacket& recv_data)
         case RACE_NIGHTELF:
             trans->PAppend("INSERT INTO `character_skills` (guid, skill, value, max) VALUES (%u, 113, 300, 300)", lowGuid);
             break;
+        case RACE_WORGEN:
+            trans->PAppend("INSERT INTO `character_skills` (guid, skill, value, max) VALUES (%u, 791, 300, 300)", lowGuid);
+            break;
         }
     }
     else if (team == BG_TEAM_HORDE)
@@ -1850,6 +1852,9 @@ void WorldSession::HandleCharFactionOrRaceChange(WorldPacket& recv_data)
             break;
         case RACE_BLOODELF:
             trans->PAppend("INSERT INTO `character_skills` (guid, skill, value, max) VALUES (%u, 137, 300, 300)", lowGuid);
+            break;
+        case RACE_GOBLIN:
+            trans->PAppend("INSERT INTO `character_skills` (guid, skill, value, max) VALUES (%u, 792, 300, 300)", lowGuid);
             break;
         }
     }

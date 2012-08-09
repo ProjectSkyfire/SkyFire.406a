@@ -1464,6 +1464,12 @@ struct NameGenEntry
 
 #define MAX_OVERRIDE_SPELL 10
 
+struct NumTalentsAtLevelEntry
+{
+    //uint32 Level;                                         // 0 index
+    float Talents;                                         // 1 talent count
+};
+
 struct OverrideSpellDataEntry
 {
     uint32      id;                                         // 0
@@ -2032,7 +2038,6 @@ struct SummonPropertiesEntry
 #define MAX_TALENT_RANK 5
 #define MAX_PET_TALENT_RANK 3                               // use in calculations, expected <= MAX_TALENT_RANK
 #define MAX_TALENT_TABS 3
-#define MAX_TALENT_MASTERY_SPELLS 2
 
 struct TalentEntry
 {
@@ -2050,6 +2055,8 @@ struct TalentEntry
     //uint64  allowForPet;                                  // 17 its a 64 bit mask for pet 1<<m_categoryEnumID in CreatureFamily.dbc
 };
 
+#define MAX_MASTERY_SPELLS 2
+
 struct TalentTabEntry
 {
     uint32  TalentTabID;                                    // 0
@@ -2061,15 +2068,15 @@ struct TalentTabEntry
     //char* internalname;                                   // 6 unused  m_backgroundFile
     //char* description;                                    // 7 unused
     //uint32  roleMask;                                     // 8 unused (2 tank; 4 healer; 8 damage dealer)
-    uint32  masterySpell[MAX_TALENT_MASTERY_SPELLS];        // 9-10 passive mastery bonus spells
+    uint32 MasterySpellId[MAX_MASTERY_SPELLS];              // 9-10 passive mastery bonus spells
 };
 
 struct TalentTreePrimarySpellsEntry
 {
-    //uint32 Id;                                            // 0
-    uint32 TalentTabID;                                     // 1
-    uint32 SpellID;                                         // 2
-    //uint32 flags;                                         // 3
+    //uint32 Id;                                            // 0 index
+    uint32 TalentTree;                                      // 1 entry from TalentTab.dbc
+    uint32 SpellId;                                         // 2 spell id to learn
+    //uint32 Flags;                                         // 3 some kind of flags
 };
 
 struct TaxiNodesEntry

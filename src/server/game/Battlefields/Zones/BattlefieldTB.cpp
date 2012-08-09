@@ -46,7 +46,7 @@ bool BattlefieldTB::SetupBattlefield()
     SetGraveyardNumber(BATTLEFIELD_TB_GY_MAX);
 
     //Load from db
-    if(( sWorld->getWorldState(5387) == 0 ) && (sWorld->getWorldState(5384) == 0) && (sWorld->getWorldState(TBClockWorldState[0]) == 0 ))
+    if (( sWorld->getWorldState(5387) == 0 ) && (sWorld->getWorldState(5384) == 0) && (sWorld->getWorldState(TBClockWorldState[0]) == 0 ))
     {
         sWorld->setWorldState(5387, false);
         sWorld->setWorldState(5384, urand(0, 1));
@@ -270,7 +270,7 @@ void BattlefieldTB::OnBattleStart()
 
 void BattlefieldTB::OnBattleEnd(bool endbytimer)
 {
-    if(!endbytimer)
+    if (!endbytimer)
     {
         //Change all npc in keep
         for (GuidSet::const_iterator itr = KeepCreature[GetAttackerTeam()].begin(); itr != KeepCreature[GetAttackerTeam()].end(); ++itr)
@@ -391,7 +391,7 @@ void BattlefieldTB::OnBattleEnd(bool endbytimer)
         m_vehicles[team].clear();
     }
 
-    if(!endbytimer)
+    if (!endbytimer)
     {
         SendWarningToAllInZone(BATTLEFIELD_TB_TEXT_WIN_KEEP,
             sObjectMgr->GetSkyFireStringForDBCLocale((GetDefenderTeam() == TEAM_ALLIANCE) ? BATTLEFIELD_TB_TEXT_ALLIANCE : BATTLEFIELD_TB_TEXT_HORDE));
@@ -482,7 +482,7 @@ void BattlefieldTB::OnPlayerLeaveZone(Player* player)
 
 void BattlefieldTB::OnPlayerEnterZone(Player* player)
 {
-    if(!m_WarTime)
+    if (!m_WarTime)
     {
         player->RemoveAurasDueToSpell(SPELL_VETERAN);
         player->RemoveAurasDueToSpell(SPELL_SPIRITUAL_IMMUNITY_TB);

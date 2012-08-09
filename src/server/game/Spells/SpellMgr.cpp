@@ -2826,7 +2826,7 @@ void SpellMgr::LoadSpellInfoStore()
         }
     }
 
-    sLog->outString(">> Loaded spell custom attributes in %u ms", GetMSTimeDiffToNow(oldMSTime));
+    sLog->outString(">> Loaded spell info store in %u ms", GetMSTimeDiffToNow(oldMSTime));
     sLog->outString();
 }
 
@@ -2891,6 +2891,9 @@ void SpellMgr::LoadSpellCustomAttr()
                 case SPELL_AURA_OBS_MOD_POWER:
                 case SPELL_AURA_POWER_BURN_MANA:
                     spellInfo->AttributesCu |= SPELL_ATTR0_CU_NO_INITIAL_THREAT;
+                    break;
+                case SPELL_AURA_SWAP_SPELLS:
+                    spellInfo->AttributesCu |= SPELL_ATTR0_CU_SCALABLE; // Meh i dont think this is a proper name..
                     break;
             }
 
@@ -2976,25 +2979,30 @@ void SpellMgr::LoadSpellCustomAttr()
 
         switch (spellInfo->Id)
         {
-            case 76547: // Mana Adept
-            case 77226: // Deep Healing
-            case 76613: // Frostburn
-                spellInfo->Effects[0].ApplyAuraName = SPELL_AURA_ADD_PCT_MODIFIER;
-                spellInfo->Effects[0].MiscValue = 0;
+            case 79638: // Enhanced Strength
+            case 79640: // Enhanced Intellect
+                spellInfo->DurationEntry = sSpellDurationStore.LookupEntry(367);    // 2 hours instead of 1
                 break;
             case 93072: // Bring our Boys back
                 spellInfo->Effects[0].TargetA = TARGET_UNIT_NEARBY_ENTRY;
                 break;
-            case 51514: // Hex
+            case 11113: // Blast Wave
+                // Had to do this, currently this spell is impossible to be correctly implemented
+                // on the current proc system
+                spellInfo->Effects[2].Effect = NULL;
+                spellInfo->ExplicitTargetMask = TARGET_FLAG_DEST_LOCATION;
+                break;
+            // Polymorph spells used to have no proc data (no charges too, duh) back on 3.3.5, thus they never passed the
+            // ProcFlag check on AuraEffect::CalculateAmount thus they never received an amount that needed to be calculated on
+            // Unit::ProcDamageAndSpellFor, so i decided to simple add a charge to it (making them break on the first damage received)
+            // instead of removing the proc data (wich is needed for improved polymorph and god knows what else spell)
             case 118:   // Polymorph
             case 61305: // Polymorph (other animal)
             case 28272: // polymorph (other animal)
             case 61721: // Polymorph (other animal)
             case 61780: // Polymorph (other animal)
             case 28271: // Polymorph (other animal)
-            case 8122:  // Physic Scream
-            case 5484:  // Howl of Terror
-                spellInfo->AuraInterruptFlags = AURA_INTERRUPT_FLAG_TAKE_DAMAGE;
+                spellInfo->ProcCharges = 1;
                 break;
             case 1680: // Whirlwind  (Fury)
                 spellInfo->Effects[0].RadiusEntry = sSpellRadiusStore.LookupEntry (14);
@@ -3012,7 +3020,7 @@ void SpellMgr::LoadSpellCustomAttr()
             // Need this otherwise we'll be having multiple chance rolls for judgement.
             case 85117: // Divine Purpose (Rank 1)
             case 86172: // Divine Purpose (Rank 2)
-                spellInfo->AttributesEx3 = 0; 
+                spellInfo->AttributesEx3 = 0;
                 break;
             case 90174: // Divine Purpose Proc
                 spellInfo->ProcCharges = 1;
@@ -3040,12 +3048,33 @@ void SpellMgr::LoadSpellCustomAttr()
                 spellInfo->Effects[0].RadiusEntry = sSpellRadiusStore.LookupEntry(14);
                 spellInfo->Effects[1].RadiusEntry = sSpellRadiusStore.LookupEntry(14);
                 break;
-            case 87193: // Paralysis
-            case 87194:
-                spellInfo->Effects[0].ApplyAuraName = SPELL_AURA_MOD_ROOT;
+            case 88667: // Holy Word: Sanctuary 3yd Dummy
+                spellInfo->SpellFamilyName = SPELLFAMILY_PRIEST;
+                spellInfo->Effects[0].RadiusEntry = sSpellRadiusStore.LookupEntry(15);
+                spellInfo->DurationEntry = sSpellDurationStore.LookupEntry(85);
+                break;
+            case 88668: // Holy Word: Sanctuary 3yd Heal
+                spellInfo->SpellFamilyName = SPELLFAMILY_PRIEST;
+                spellInfo->Effects[0].RadiusEntry = sSpellRadiusStore.LookupEntry(15);
+                break;
+            case 88685: // Holy Word: Sanctuary 6yd Dummy
+            case 88686: // Holy Word: Sanctuary 6yd Heal
+                spellInfo->Effects[0].RadiusEntry = sSpellRadiusStore.LookupEntry(29);
+                break;
+            case 73510: // Mind Spike
+                spellInfo->Effects[0].TriggerSpell = 0;
+                spellInfo->Effects[2].TargetA = TARGET_UNIT_TARGET_ENEMY;
                 break;
             case 36350: // They Must Burn Bomb Aura (self)
                 spellInfo->Effects[0].TriggerSpell = 36325; // They Must Burn Bomb Drop (DND)
+                break;
+            case 56641: // Steady Shot
+                spellInfo->Effects[2].TargetA = TARGET_UNIT_CASTER;
+                break;
+            case 87934: // Serpent Spread
+            case 87935:
+                spellInfo->Effects[0].Effect = SPELL_EFFECT_APPLY_AURA;
+                spellInfo->Effects[0].ApplyAuraName = SPELL_AURA_PROC_TRIGGER_SPELL;
                 break;
             case 49838: // Stop Time
                 spellInfo->AttributesEx3 |= SPELL_ATTR3_NO_INITIAL_AGGRO;
@@ -3065,13 +3094,13 @@ void SpellMgr::LoadSpellCustomAttr()
                 spellInfo->ProcChance = 0;
                 break;
             case 2825:  // Bloodlust
-                spellInfo->Effects[0].TriggerSpell = 57724; // Sated
+                spellInfo->ExcludeCasterAuraSpell = 57724; // Sated
                 break;
-            case 80353:  // Time Warp
-                spellInfo->Effects[0].TriggerSpell = 80354; // Temporal Displacement
+            case 80353: // Time Warp
+                spellInfo->ExcludeCasterAuraSpell = 80354; // Temporal Displacement
                 break;
-            case 90355:  // Ancient Hysteria
-                spellInfo->Effects[0].TriggerSpell = 95809; // Insanity
+            case 90355: // Ancient Hysteria
+                spellInfo->ExcludeCasterAuraSpell = 95809; // Insanity
                 break;
             case 20335: // Heart of the Crusader
             case 20336:
@@ -3105,8 +3134,21 @@ void SpellMgr::LoadSpellCustomAttr()
             case 45761: // Shoot
             case 42611: // Shoot
             case 61588: // Blazing Harpoon
+            case 62016: // Charge Orb
+                spellInfo->MaxAffectedTargets = 1;
+                break;
             case 52479: // Gift of the Harvester
                 spellInfo->MaxAffectedTargets = 1;
+                // a trap always has dst = src?
+                spellInfo->Effects[0].TargetA = TARGET_DEST_CASTER;
+                spellInfo->Effects[1].TargetA = TARGET_DEST_CASTER;
+                break;
+            case 85113: // Aftermath
+            case 85114:
+                spellInfo->Targets = TARGET_UNIT_TARGET_ENEMY;
+                break;
+            case 31818: // Life Tap
+                spellInfo->Effects[0].Effect = SPELL_EFFECT_ENERGIZE_PCT;
                 break;
             case 41376: // Spite
             case 39992: // Needle Spine
@@ -3116,17 +3158,19 @@ void SpellMgr::LoadSpellCustomAttr()
             case 46771: // Flame Sear
             case 45248: // Shadow Blades
             case 41303: // Soul Drain
-            case 54172: // Divine Storm (heal)
             case 29213: // Curse of the Plaguebringer - Noth
             case 28542: // Life Drain - Sapphiron
             case 66588: // Flaming Spear
-            case 54171: // Divine Storm
+            case 54171: case 54172: // Divine Storm (Heal)
                 spellInfo->MaxAffectedTargets = 3;
                 break;
-            case 38310: // Multi-Shot
             case 53385: // Divine Storm (Damage)
                 spellInfo->MaxAffectedTargets = 4;
                 break;
+            case 65156: // Juggernaut Buff
+                spellInfo->AttributesEx3 |=  SPELL_ATTR3_CAN_PROC_WITH_TRIGGERED;
+                break;
+            case 38310: // Multi-Shot
             case 42005: // Bloodboil
             case 38296: // Spitfire Totem
             case 37676: // Insidious Whisper
@@ -3148,9 +3192,30 @@ void SpellMgr::LoadSpellCustomAttr()
             case 50312: // Unholy Frenzy
                 spellInfo->MaxAffectedTargets = 15;
                 break;
+            case 81913: case 81914: // Die by the Sword
+                spellInfo->Effects[0].TriggerSpell = 0;
+                break;
+            case 77486: // Shadow orb power
+                spellInfo->Effects[0].TriggerSpell = 0;
+                break;
+            case 33191: case 78228: // Harnessed Shadows
+                spellInfo->Effects[0].TriggerSpell = 0;
+                break;
             case 38794: case 33711: // Murmur's Touch
                 spellInfo->MaxAffectedTargets = 1;
                 spellInfo->Effects[0].TriggerSpell = 33760;
+                break;
+            case 80128: // Impending Victory Rank 1
+            case 80129: // Impending Victory Rank 2
+                spellInfo->Effects[0].TriggerSpell = 0;
+                break;
+            case 80979: // Thunderstruck Rank 1
+            case 80980: // Thunderstruck Rank 2
+                spellInfo->Effects[1].TriggerSpell = 0;
+                break;
+            case 84604: // Hold the Line Rank 1
+            case 84621: // Hold the Line Rank 2
+                spellInfo->Effects[0].TriggerSpell = 0;
                 break;
             case 83359: // Sic 'Em Rank 1
             case 89388: // Sic 'Em Rank 2
@@ -3167,6 +3232,8 @@ void SpellMgr::LoadSpellCustomAttr()
             case 64823: // Item - Druid T8 Balance 4P Bonus
             case 34477: // Misdirection
             case 44401: // Missile Barrage
+                spellInfo->ProcCharges = 1;
+                break;
             case 46915: // Bloodsurge
                 spellInfo->ProcCharges = 1;
                 break;
@@ -3193,8 +3260,15 @@ void SpellMgr::LoadSpellCustomAttr()
                 // add corruption to affected spells
                 spellInfo->Effects[1].SpellClassMask[0] |= 2;
                 break;
+            case 687:   // Demon Armor's correct swap spellid for nether ward
+            case 28176: // Fel Armor's correct swap spellid for nether ward
+                spellInfo->Effects[2].BasePoints = 91711;
+                break;
             case 51852: // The Eye of Acherus (no spawn in phase 2 in db)
                 spellInfo->Effects[0].MiscValue |= 1;
+                break;
+            case 52025: // Cleansing Totem Effect
+                spellInfo->Effects[1].DieSides = 1;
                 break;
             case 51904: // Summon Ghouls On Scarlet Crusade (this should use conditions table, script for this spell needs to be fixed)
                 spellInfo->Effects[0].TargetA = TARGET_UNIT_CASTER;
@@ -3266,6 +3340,9 @@ void SpellMgr::LoadSpellCustomAttr()
                 spellInfo->Effects[0].TargetB = TARGET_UNIT_SRC_AREA_ALLY;
                 spellInfo->Effects[1].TargetB = TARGET_UNIT_SRC_AREA_ALLY;
                 break;
+            case 48743: // Death Pact
+                spellInfo->AttributesEx &= ~SPELL_ATTR1_CANT_TARGET_SELF;
+                break;
             case 57994: // Wind Shear - improper data for EFFECT_1 in 3.3.5 DBC, but is correct in 4.x
                 spellInfo->Effects[EFFECT_1].Effect = SPELL_EFFECT_MODIFY_THREAT_PERCENT;
                 spellInfo->Effects[EFFECT_1].BasePoints = -6; // -5%
@@ -3302,28 +3379,8 @@ void SpellMgr::LoadSpellCustomAttr()
             case 53246: // Marked for Death (Rank 5)
                 spellInfo->Effects[0].SpellClassMask = flag96(423937, 276955137, 2049);
                 break;
-            // Chakra spells needs moved to spellscripts this is a temp hack.
-            case 14751: // Chakra
-                spellInfo->Effects[0].ApplyAuraName = 0;
-                spellInfo->Effects[1].ApplyAuraName = 0;
-                spellInfo->Effects[2].ApplyAuraName = 0;
-                break;
-            case 81208: // Chakra: Serenity
-                spellInfo->Effects[1].ApplyAuraName = SPELL_AURA_DUMMY;
-                spellInfo->Effects[2].ApplyAuraName = SPELL_AURA_DUMMY;
-                break;
-            case 81206: // Chakra: Sanctuary
-                spellInfo->Effects[2].ApplyAuraName = SPELL_AURA_DUMMY;
-                break;
-            case 81585: // Chakra: Serenity replace
-                spellInfo->Effects[0].Effect = SPELL_EFFECT_APPLY_AURA;
-                spellInfo->Effects[0].ApplyAuraName = SPELL_AURA_SWAP_SPELLS;
-                spellInfo->Effects[0].BasePoints = 88684;
-                break;
-            case 81207: // Chakra: Sanctuary replace
-                spellInfo->Effects[0].Effect = SPELL_EFFECT_APPLY_AURA;
-                spellInfo->Effects[0].ApplyAuraName = SPELL_AURA_SWAP_SPELLS;
-                spellInfo->Effects[0].BasePoints = 88685;
+            case 42650: // Army of the Dead - can be interrupted
+                spellInfo->InterruptFlags = SPELL_INTERRUPT_FLAG_INTERRUPT;
                 break;
             case 68659: // Launch
                 spellInfo->Effects[1].TriggerSpell = 4336;
@@ -3344,9 +3401,13 @@ void SpellMgr::LoadSpellCustomAttr()
                 spellInfo->Effects[0].MiscValue = 2;
                 break;
             case 94338: // Sunfire (Eclipse)
-                spellInfo->Effects[0].Effect = SPELL_EFFECT_APPLY_AURA;
-                spellInfo->Effects[0].ApplyAuraName = SPELL_AURA_SWAP_SPELLS;
                 spellInfo->Effects[0].BasePoints = 93402;
+                break;
+            case 5176:  // Wrath
+            case 2912:  // Starfire
+            case 78674: // Starsurge
+                spellInfo->Effects[1].Effect = SPELL_EFFECT_DUMMY;
+                spellInfo->Effects[1].TargetA = TARGET_UNIT_CASTER;
                 break;
             case 70728: // Exploit Weakness (needs target selection script)
             case 70840: // Devious Minds (needs target selection script)
@@ -3536,6 +3597,10 @@ void SpellMgr::LoadSpellCustomAttr()
             case 70598: // Sindragosa's Fury
                 spellInfo->Effects[0].TargetA = TARGET_DEST_CASTER;
                 break;
+            case 87959: // Drink
+                spellInfo->Category = 59;
+                spellInfo->Effects[1].ApplyAuraName = SPELL_AURA_MOD_POWER_REGEN;
+                break;
             case 69846: // Frost Bomb
                 spellInfo->Speed = 10;
                 spellInfo->Effects[0].TargetA = TARGET_DEST_TARGET_ANY;
@@ -3547,7 +3612,11 @@ void SpellMgr::LoadSpellCustomAttr()
                 spellInfo->AttributesCu |= SPELL_EFFECT_CHARGE;
                 spellInfo->Effects[1].TargetA = TARGET_UNIT_TARGET_ENEMY;
                 spellInfo->Effects[0].BasePoints = 20*1000;
-            break;
+                break;
+            case 30294: // Soul Leech
+                spellInfo->Effects[0].BasePoints = 2;
+                spellInfo->Effects[1].BasePoints = 2;
+                break;
             case 1776:  // Gouge
             case 12540:
             case 13579:
@@ -3705,6 +3774,21 @@ void SpellMgr::LoadSpellCustomAttr()
     properties->Type = SUMMON_TYPE_TOTEM;
     properties = const_cast<SummonPropertiesEntry*>(sSummonPropertiesStore.LookupEntry(647)); // 52893
     properties->Type = SUMMON_TYPE_TOTEM;
+
+    for (uint32 i = 0; i < sTalentTabStore.GetNumRows(); ++i)
+    {
+        TalentTabEntry const* talentTab = sTalentTabStore.LookupEntry(i);
+        if (!talentTab)
+            continue;
+
+        spellInfo = mSpellInfoMap[talentTab->MasterySpellId[0]];
+        if (spellInfo)
+            spellInfo->AttributesCu |= SPELL_ATTR0_CU_SCALABLE;
+
+        spellInfo = mSpellInfoMap[talentTab->MasterySpellId[1]];
+        if (spellInfo)
+            spellInfo->AttributesCu |= SPELL_ATTR0_CU_SCALABLE;
+    }
 
     CreatureAI::FillAISpellInfo();
 

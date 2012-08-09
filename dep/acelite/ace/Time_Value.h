@@ -4,7 +4,7 @@
 /**
  *  @file    Time_Value.h
  *
- *  $Id: Time_Value.h 90683 2010-06-17 22:07:42Z shuston $
+ *  $Id: Time_Value.h 95761 2012-05-15 18:23:04Z johnnyw $
  *
  *  @author Douglas C. Schmidt <schmidt@cs.wustl.edu>
  */
@@ -35,17 +35,7 @@ suseconds_t const ACE_ONE_SECOND_IN_USECS = 1000000;
 // needed to determine if iostreams are present
 #include "ace/iosfwd.h"
 
-// This forward declaration is needed by the set() and FILETIME() functions
-#if defined (ACE_LACKS_LONGLONG_T)
 ACE_BEGIN_VERSIONED_NAMESPACE_DECL
-class ACE_Export ACE_U_LongLong;
-ACE_END_VERSIONED_NAMESPACE_DECL
-#endif  /* ACE_LACKS_LONGLONG_T */
-
-// -------------------------------------------------------------------
-
-ACE_BEGIN_VERSIONED_NAMESPACE_DECL
-
 
 /**
  * @class ACE_Time_Value
@@ -250,7 +240,7 @@ public:
   /// Subtract @a tv to this.
   ACE_Time_Value &operator -= (const ACE_Time_Value &tv);
 
-  /// Substract @a tv to this.
+  /// Subtract @a tv to this.
   ACE_Time_Value &operator -= (time_t tv);
 
   /**
@@ -341,11 +331,7 @@ public:
 
 # if defined (ACE_WIN32)
   /// Const time difference between FILETIME and POSIX time.
-#  if defined (ACE_LACKS_LONGLONG_T)
-  static const ACE_U_LongLong FILETIME_to_timval_skew;
-#  else
   static const DWORDLONG FILETIME_to_timval_skew;
-#  endif // ACE_LACKS_LONGLONG_T
 # endif /* ACE_WIN32 */
 
 private:

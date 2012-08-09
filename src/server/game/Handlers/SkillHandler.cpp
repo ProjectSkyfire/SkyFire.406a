@@ -32,44 +32,32 @@ void WorldSession::HandleLearnTalentOpcode(WorldPacket & recv_data)
     uint32 talent_id, requested_rank;
     recv_data >> talent_id >> requested_rank;
 
-    _player->LearnTalent(talent_id, requested_rank);
-    _player->SendTalentsInfoData(false);
+    if (_player->LearnTalent(talent_id, requested_rank))
+        _player->SendTalentsInfoData(false);
 }
 
 void WorldSession::HandleLearnPreviewTalents(WorldPacket& recvPacket)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "CMSG_LEARN_PREVIEW_TALENTS");
 
-    uint32 spec;
+    int32 tabPage;
     uint32 talentsCount;
-    recvPacket >> spec >> talentsCount;
+    recvPacket >> tabPage; // talent tree
 
-    if (spec != ((uint32)-1))
+    // prevent cheating (selecting new tree with points already in another)
+    if (tabPage >= 0) // -1 if player already has specialization
     {
-        uint32 specID = 0;
-        for (uint32 i = 0; i < sTalentTabStore.GetNumRows(); i++)
+        if (TalentTabEntry const* talentTabEntry = sTalentTabStore.LookupEntry(_player->GetPrimaryTalentTree(_player->GetActiveSpec())))
         {
-            TalentTabEntry const * entry = sTalentTabStore.LookupEntry(i);
-            if (entry)
+            if (talentTabEntry->tabpage != tabPage)
             {
-                if (entry->ClassMask == _player->getClassMask() && entry->tabpage == spec)
-                {
-                    specID = entry->TalentTabID;
-                    break;
-                }
+                recvPacket.rfinish();
+                return;
             }
         }
-
-        if (_player->_usedTalentCount == 0 || _player->GetTalentBranchSpec(_player->_activeSpec) == 0)
-        {
-            if (_player->_usedTalentCount != 0)
-                _player->resetTalents();
-
-            _player->SetTalentBranchSpec(specID, _player->_activeSpec);
-        }
-        else if (_player->GetTalentBranchSpec(_player->_activeSpec) != specID) //cheat
-            return;
     }
+
+    recvPacket >> talentsCount;
 
     uint32 talentId, talentRank;
 
@@ -77,49 +65,12 @@ void WorldSession::HandleLearnPreviewTalents(WorldPacket& recvPacket)
     {
         recvPacket >> talentId >> talentRank;
 
-        _player->LearnTalent(talentId, talentRank, false);
-    }
-
-    bool inOtherBranch = false;
-    uint32 pointInBranchSpec = 0;
-    for (PlayerTalentMap::iterator itr = _player->_talents[_player->_activeSpec]->begin(); itr != _player->_talents[_player->_activeSpec]->end(); itr++)
-    {
-        for (uint32 i = 0; i < sTalentStore.GetNumRows(); i++)
+        if (!_player->LearnTalent(talentId, talentRank))
         {
-            const TalentEntry * thisTalent = sTalentStore.LookupEntry(i);
-            if (thisTalent)
-            {
-                int thisrank = -1;
-                for (int j = 0; j < 5; j++)
-                    if (thisTalent->RankID[j] == itr->first)
-                    {
-                        thisrank = j;
-                        break;
-                    }
-                if (thisrank != -1)
-                {
-                    if (thisTalent->TalentTab == _player->GetTalentBranchSpec(_player->_activeSpec))
-                    {
-                        int8 curtalent_maxrank = -1;
-                        for (int8 rank = MAX_TALENT_RANK-1; rank >= 0; --rank)
-                        {
-                            if (thisTalent->RankID[rank] && _player->HasTalent(thisTalent->RankID[rank], _player->_activeSpec))
-                            {
-                                curtalent_maxrank = rank;
-                                break;
-                            }
-                        }
-                        if (curtalent_maxrank != -1 && thisrank == curtalent_maxrank)
-                            pointInBranchSpec += curtalent_maxrank + 1;
-                    }
-                    else
-                        inOtherBranch = true;
-                }
-            }
+            recvPacket.rfinish();
+            break;
         }
     }
-    if (inOtherBranch && pointInBranchSpec < 31)
-        _player->resetTalents();
 
     _player->SendTalentsInfoData(false);
 }
@@ -141,7 +92,7 @@ void WorldSession::HandleTalentWipeConfirmOpcode(WorldPacket & recv_data)
     if (GetPlayer()->HasUnitState(UNIT_STATE_DIED))
         GetPlayer()->RemoveAurasByType(SPELL_AURA_FEIGN_DEATH);
 
-    if (!(_player->resetTalents()))
+    if (!(_player->ResetTalents()))
     {
         WorldPacket data(MSG_TALENT_WIPE_CONFIRM, 8+4);    //you do not have any talents
         data << uint64(0);

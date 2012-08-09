@@ -1,4 +1,4 @@
-//$Id: UUID.cpp 91286 2010-08-05 09:04:31Z johnnyw $
+//$Id: UUID.cpp 95761 2012-05-15 18:23:04Z johnnyw $
 
 #include "ace/UUID.h"
 #include "ace/Guard_T.h"
@@ -460,13 +460,7 @@ namespace ACE_Utils
   UUID_Generator::get_systemtime (UUID_Time & timestamp)
   {
     const UUID_Time timeOffset =
-#if defined (ACE_LACKS_UNSIGNEDLONGLONG_T)
-      ACE_U_LongLong (ACE_INT64_LITERAL (0x1B21DD213814000));
-#elif defined (ACE_LACKS_LONGLONG_T)
-      ACE_U_LongLong (0x13814000u, 0x1B21DD2u);
-#else
       ACE_UINT64_LITERAL (0x1B21DD213814000);
-#endif  /* ACE_LACKS_UNSIGNEDLONGLONG_T */
 
     /// Get the time of day, convert to 100ns ticks then add the offset.
     ACE_Time_Value now = ACE_OS::gettimeofday ();

@@ -648,7 +648,8 @@ bool SmartAIMgr::IsEventValid(SmartScriptHolder& e)
             if (!IsSpellValid(e, e.action.castedCreatureOrGO.spell)) return false;
             break;
         case SMART_ACTION_REMOVEAURASFROMSPELL:
-            if (!IsSpellValid(e, e.action.removeAura.spell)) return false;
+            if (e.action.removeAura.spell != 0 && !IsSpellValid(e, e.action.removeAura.spell))
+                return false;
             break;
         case SMART_ACTION_RANDOM_PHASE:
             {
@@ -794,6 +795,7 @@ bool SmartAIMgr::IsEventValid(SmartScriptHolder& e)
         case SMART_ACTION_RESET_SCRIPT_BASE_OBJECT:
         case SMART_ACTION_ACTIVATE_GOBJECT:
         case SMART_ACTION_CALL_SCRIPT_RESET:
+        case SMART_ACTION_SET_RANGED_MOVEMENT:
         case SMART_ACTION_NONE:
         case SMART_ACTION_CALL_TIMED_ACTIONLIST:
         case SMART_ACTION_SET_NPC_FLAG:
