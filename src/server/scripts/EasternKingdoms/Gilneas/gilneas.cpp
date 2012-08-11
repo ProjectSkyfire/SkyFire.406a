@@ -547,7 +547,7 @@ public:
 class go_merchant_square_door : public GameObjectScript
 {
 public:
-    go_merchant_square_door() : GameObjectScript("go_merchant_square_door") {}
+    go_merchant_square_door() : GameObjectScript("go_merchant_square_door"), aPlayer(NULL) {}
 
     float x, y, z, wx, wy, angle, tQuestCredit;
     bool opened;
@@ -601,7 +601,10 @@ public:
             if (tQuestCredit <= ((float)diff/8))
             {
                 opened = 0;
-                aPlayer->KilledMonsterCredit(35830, 0);
+                
+                if(aPlayer)
+                    aPlayer->KilledMonsterCredit(35830, 0);
+                
                 if (spawnKind == 3)
                 {
                     if (Creature* spawnedCreature = go->SummonCreature(NPC_RAMPAGING_WORGEN_2, wx, wy, z, angle, TEMPSUMMON_TIMED_DESPAWN, SUMMON1_TTL))
@@ -609,7 +612,8 @@ public:
                         spawnedCreature->SetPhaseMask(6, 1);
                         spawnedCreature->Respawn(1);
                         spawnedCreature->getThreatManager().resetAllAggro();
-                        aPlayer->AddThreat(spawnedCreature, 1.0f);
+                        if(aPlayer)
+                            aPlayer->AddThreat(spawnedCreature, 1.0f);
                         spawnedCreature->AddThreat(aPlayer, 1.0f);
                     }
                 }
