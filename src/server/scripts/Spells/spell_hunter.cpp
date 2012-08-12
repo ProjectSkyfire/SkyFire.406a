@@ -74,8 +74,9 @@ public:
             if (!target)
                 return;
 
-            if (Aura* serpentSting = target->GetAura(1978, GetCaster()->GetGUID()))
-                serpentSting->RefreshDuration();
+            // Get normal serpent sting or Serpent Spread's proc result one
+            if (AuraEffect* serpentSting = target->GetAuraEffect(SPELL_AURA_PERIODIC_DAMAGE, SPELLFAMILY_HUNTER,16384,0,0,GetCaster()->GetGUID()))
+                serpentSting->GetBase()->RefreshDuration();
 
             GetCaster()->CastSpell(GetCaster(),HUNTER_SPELL_CHIMERA_SHOT_HEALING,true);
         }
@@ -793,8 +794,9 @@ public:
             if (!target)
                 return;
 
-            if (Aura* serpentSting = target->GetAura(1978, GetCaster()->GetGUID()))
-                serpentSting->SetDuration(serpentSting->GetDuration() + (GetSpellInfo()->Effects[EFFECT_1].BasePoints * 1000));
+            // Get normal serpent sting or Serpent Spread's proc result one
+            if (AuraEffect* serpentSting = target->GetAuraEffect(SPELL_AURA_PERIODIC_DAMAGE, SPELLFAMILY_HUNTER,16384,0,0,GetCaster()->GetGUID()))
+                serpentSting->GetBase()->SetDuration(serpentSting->GetBase()->GetDuration() + (GetSpellInfo()->Effects[EFFECT_1].BasePoints * 1000));
 
             GetCaster()->CastSpell(GetCaster(),HUNTER_SPELL_COBRA_SHOT_ENERGIZE,true);
         }

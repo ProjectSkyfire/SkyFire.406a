@@ -553,6 +553,13 @@ bool PathFinderMovementGenerator::HaveTile(const Vector3 &p) const
     float point[VERTEX_SIZE] = {p.y, p.z, p.x};
 
     m_navMesh->calcTileLoc(point, &tx, &ty);
+
+    // This is a hacky workaround to prevent crashes from trying to get
+    // tiles at overflowed position coordinates, the magic has to be done on the 
+    // calcTileLoc up there
+    if (tx == -HUGE_VAL || ty == -HUGE_VAL)
+        return false;
+
     return (m_navMesh->getTileAt(tx, ty) != NULL);
 }
 

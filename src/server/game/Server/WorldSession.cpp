@@ -196,8 +196,8 @@ void WorldSession::SendPacket(WorldPacket const* packet)
     }
 #endif                                                      // !SKYFIRE_DEBUG
 
-    if (m_Socket->SendPacket (*packet) == -1)
-        m_Socket->CloseSocket ();
+    if (m_Socket->SendPacket(*packet) == -1)
+        m_Socket->CloseSocket();
 }
 
 /// Add an incoming packet to the queue

@@ -6821,6 +6821,30 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
         {
             switch (dummySpell->SpellIconID)
             {
+                case 2225: // Serpent Spread
+                {
+                                   // Proc only on multi-shot
+                    if (!target || procSpell->Id != 2643)
+                        return false;
+
+                    switch(triggerAmount)
+                    {
+                        case 30:
+                        {
+                            // Serpent sting 6s duration
+                            triggered_spell_id = 88453;
+                            break;
+                        }
+                        case 60:
+                        {
+                            // Serpent sting 9s duration
+                            triggered_spell_id = 88466;
+                            break;
+                        }
+                        break;
+                    }
+                    break;
+                }
                 case 3524: // Marked for Death
                 {
                     if (!roll_chance_i(triggerAmount))
