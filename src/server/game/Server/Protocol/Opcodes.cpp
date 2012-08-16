@@ -579,8 +579,8 @@ void InitOpcodeTable()
     OPCODE( CMSG_BATTLEFIELD_LIST,                        STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleBattlefieldListOpcode     );
     OPCODE( SMSG_BATTLEFIELD_LIST,                        STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( CMSG_BATTLEFIELD_JOIN,                        STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleBattlemasterJoinOpcode    );
-    OPCODE( CMSG_REQUEST_RATED_BG_INFO,                   STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::Handle_NULL                     );
-    OPCODE( CMSG_REQUEST_PVP_OPTIONS_ENABLED,             STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::Handle_NULL                     );
+    OPCODE( CMSG_REQUEST_RATED_BG_INFO,                   STATUS_NEVER,    PROCESS_THREADUNSAFE,  &WorldSession::Handle_NULL                     );
+    OPCODE( CMSG_REQUEST_PVP_OPTIONS_ENABLED,             STATUS_NEVER,    PROCESS_THREADUNSAFE,  &WorldSession::Handle_NULL                     );
     OPCODE( CMSG_ITEM_TEXT_QUERY,                         STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleItemTextQuery             );
     OPCODE( SMSG_ITEM_TEXT_QUERY_RESPONSE,                STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( CMSG_MAIL_TAKE_MONEY,                         STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleMailTakeMoney             );
