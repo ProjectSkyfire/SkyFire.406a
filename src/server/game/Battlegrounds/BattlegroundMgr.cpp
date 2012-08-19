@@ -192,21 +192,22 @@ void BattlegroundMgr::BuildBattlegroundStatusPacket(WorldPacket* data, Battlegro
 
     if (StatusID == STATUS_WAIT_QUEUE)
     {
-        data->Initialize(SMSG_BATTLEFIELD_STATUS4, (1+4+1+1+1+4+1+4+1+4+1+8+1));
+        // The client will set STATUS_WAIT_QUEUE at BGInfo once it receives this packet
+        data->Initialize(SMSG_JOINED_BATTLEGROUND_QUEUE, (1+1+4+4+4+1+8+1+4));
+        *data << uint8(0x20); // packed flag, seems to be always 0x20 for non-rated non-arena bgs
+        *data << uint8(bg->GetMaxLevel()); // max level
+        *data << uint32(Time1); // avg wait time
+        *data << uint32(QueueSlot); // queueSlot
+        *data << uint32(bg->GetClientInstanceID()); // instanceid
+        *data << uint8(bg->GetMinLevel()); // lowest level (seems to be set to 0 even though its not 0 sometimes O.O)
 
-        *data << uint8(0);          // unk
-        *data << uint32(0);         // unk
-        *data << uint8(0);          // unk
-        *data << uint8(0);          // unk
-        *data << uint8(0);          // unk
-        *data << uint32(0);         // unk
-        *data << uint8(0);          // unk
-        *data << uint32(0);         // unk
-        *data << uint8(0);          // unk
-        *data << uint32(0);         // unk
-        *data << uint8(0);          // unk
-        *data << uint64(0);         // unk
-        *data << uint8(0);          // unk
+        // packed uint64 (seems to be BG GUID)
+        *data << uint32(bg->GetTypeID()); // BGTypeID
+        *data << uint32(arenatype); // On retail 0x101F is sent here, but we need this value to be returned in PORT opcode
+        // end
+
+        *data << uint8(0); // teamsize, 0 if not arena
+        *data << uint32(Time2); // time in queue
     }
     else if (StatusID == STATUS_WAIT_JOIN)
     {
