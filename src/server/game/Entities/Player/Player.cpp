@@ -689,6 +689,8 @@ Player::Player(WorldSession* session): Unit(true), _achievementMgr(this), _reput
 
     _regenTimer = 0;
     _regenTimerCount = 0;
+    _focusRegenTimerCount = 0;
+    _holyPowerRegenTimerCount = 0;
     _weaponChangeTimer = 0;
 
     _zoneUpdateId = 0;
