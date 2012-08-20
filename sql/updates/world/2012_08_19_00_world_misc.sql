@@ -11,3 +11,4 @@ INSERT INTO `conditions` (`SourceTypeOrReferenceId`, `SourceEntry`, `ConditionTy
 -- Target Acquisition Device flags fix
 UPDATE `creature_template` SET `unit_flags` = unit_flags | 33554432, `InhabitType` = '4', `MovementType`='1' WHERE entry = 46012;
 UPDATE `creature` SET `spawndist` = '10' WHERE id = 46012;
+UPDATE `creature` SET `MovementType` = 1 WHERE `guid` IN (245058,244998,244980,244933,244812,244805,244799,244685,244622,244562,244139,244002,243995,243586,243563,243520,243395,243163,243108,242776);
