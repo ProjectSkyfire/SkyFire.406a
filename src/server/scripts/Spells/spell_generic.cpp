@@ -695,12 +695,12 @@ public:
             {
                 case SPELL_PVP_TRINKET:
                 {
-                    caster->CastSpell(caster,SPELL_WILL_OF_THE_FORSAKEN_COOLDOWN_TRIGGER, false);
+                    caster->CastSpell(caster, SPELL_WILL_OF_THE_FORSAKEN_COOLDOWN_TRIGGER, false);
                     break;
                 }
                 case SPELL_WILL_OF_THE_FORSAKEN:
                 {
-                    caster->CastSpell(caster,SPELL_TRINKET_PVP_COOLDOWN_TRIGGER_WOTF, false);
+                    caster->CastSpell(caster, SPELL_TRINKET_PVP_COOLDOWN_TRIGGER_WOTF, false);
                     break;
                 }
             }
