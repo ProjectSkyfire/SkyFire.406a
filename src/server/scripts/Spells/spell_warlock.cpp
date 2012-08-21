@@ -275,7 +275,7 @@ public:
         {
             if (Unit* caster = GetCaster())
             {
-                if (caster->CountPctFromMaxHealth(GetSpellInfo()->Effects[EFFECT_2].CalcValue()) >= caster->GetHealth()) // You cant kill yourself with this
+                if (caster->CountPctFromMaxHealth(15) >= caster->GetHealth()) // You cant kill yourself with this
                     return SPELL_FAILED_FIZZLE;
 
                 return SPELL_CAST_OK;
@@ -287,7 +287,7 @@ public:
         {
             if (Unit* caster = GetCaster())
             {
-                int32 damage = int32(caster->CountPctFromMaxHealth(GetSpellInfo()->Effects[EFFECT_2].CalcValue()));
+                int32 damage = int32(caster->CountPctFromMaxHealth(15));
                 int32 mana = 0;
 
                 float multiplier = 1.2f;

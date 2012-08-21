@@ -3102,10 +3102,6 @@ void SpellMgr::LoadSpellCustomAttr()
             case 90355: // Ancient Hysteria
                 spellInfo->ExcludeCasterAuraSpell = 95809; // Insanity
                 break;
-            case 63320: // Glyph of Life Tap
-            // Entries were not updated after spell effect change, we have to do that manually :/
-                spellInfo->AttributesEx3 |= SPELL_ATTR3_CAN_PROC_WITH_TRIGGERED;
-                break;
             case 59725: // Improved Spell Reflection - aoe aura
                 // Target entry seems to be wrong for this spell :/
                 spellInfo->Effects[0].TargetA = TARGET_UNIT_CASTER_AREA_PARTY;
@@ -3139,9 +3135,6 @@ void SpellMgr::LoadSpellCustomAttr()
             case 85113: // Aftermath
             case 85114:
                 spellInfo->Targets = TARGET_UNIT_TARGET_ENEMY;
-                break;
-            case 31818: // Life Tap
-                spellInfo->Effects[0].Effect = SPELL_EFFECT_ENERGIZE_PCT;
                 break;
             case 41376: // Spite
             case 39992: // Needle Spine
