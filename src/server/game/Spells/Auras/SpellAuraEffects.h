@@ -60,7 +60,7 @@ class AuraEffect
         void SetPeriodicTimer(int32 periodicTimer) { m_periodicTimer = periodicTimer; }
 
         int32 CalculateAmount(Unit* caster);
-        void CalculatePeriodic(Unit* caster, bool create = false, bool load = false);
+        void CalculatePeriodic(Unit* caster, bool resetPeriodicTimer = true, bool load = false);
         void CalculateSpellMod(SpellInfo const *spellInfo = NULL, Unit * target = NULL);
         void ChangeAmount(int32 newAmount, bool mark = true, bool onStackOrReapply = false);
         void RecalculateAmount() { if (!CanBeRecalculated()) return; ChangeAmount(CalculateAmount(GetCaster()), false); }

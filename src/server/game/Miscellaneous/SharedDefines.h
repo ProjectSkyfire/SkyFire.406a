@@ -567,7 +567,7 @@ enum SpellAttr8
     SPELL_ATTR8_UNK6                      =    0x00000040, // 6 2 spells: 56817 and 83569
     SPELL_ATTR8_UNK7                      =    0x00000080, // 7
     SPELL_ATTR8_UNK8                      =    0x00000100, // 8 +stats.
-    SPELL_ATTR8_UNK9                      =    0x00000200, // 9
+    SPELL_ATTR8_DONT_RESET_PERIODIC_TIMER =    0x00000200, // 9 Periodic auras with this flag keep old periodic timer when refreshing at close to one tick remaining (kind of anti DoT clipping)
     SPELL_ATTR8_CHANGE_MODEL              =    0x00000400, // 10
     SPELL_ATTR8_UNK11                     =    0x00000800, // 11 one spell: 80224
     SPELL_ATTR8_UNK12                     =    0x00001000, // 12
