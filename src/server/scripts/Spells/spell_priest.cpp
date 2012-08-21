@@ -442,7 +442,7 @@ public:
         return new spell_pri_prayer_of_mending_heal_SpellScript();
     }
 };
-// 81208,81206 Chakra: Serenity and Chakra: Sanctuary spell swap supressor
+// 81208, 81206 Chakra: Serenity and Chakra: Sanctuary spell swap supressor
 class spell_pri_chakra_swap_supressor: public SpellScriptLoader
 {
 public:
@@ -454,8 +454,8 @@ public:
 
         void PreventSwapApplicationOnCaster(WorldObject*& target)
         {
-            // If the caster has the Revelations talent (88627) The chakra: serenity aura (81208) and the chakra: sanctuary 
-            // (81206) swaps the Holy Word: Chastise spell (the one that you learn when you spec into the holy tree) 
+            // If the caster has the Revelations talent (88627) The chakra: serenity aura (81208) and the chakra: sanctuary
+            // (81206) swaps the Holy Word: Chastise spell (the one that you learn when you spec into the holy tree)
             // for a Holy Word: Serenity spell (88684) or a Holy Word: Sanctuary (88684), if the caster doesnt have the
             // talent, lets just block the swap effect.
             if (!GetCaster()->HasAura(PRIEST_SPELL_REVELATIONS))
@@ -507,7 +507,7 @@ public:
     }
 };
 
-// 88685,88687 Chakra: Sanctuary GTAoe effect
+// 88685, 88687 Chakra: Sanctuary GTAoe effect
 class spell_pri_chakra_sanctuary_heal: public SpellScriptLoader
 {
 public:
@@ -517,21 +517,21 @@ public:
     {
         PrepareSpellScript(spell_pri_chakra_sanctuary_heal_SpellScript);
 
-        float x,y,z;
+        float x, y, z;
 
         bool Load()
         {
             if (GetCaster()->GetTypeId() != TYPEID_PLAYER)
                 return false;
 
-            GetExplTargetDest()->GetPosition(x,y,z);
+            GetExplTargetDest()->GetPosition(x, y, z);
             return true;
         }
 
         void HandleExtraEffect()
         {
             if (GetSpellInfo()->Id == PRIEST_SPELL_SANCTUARY_8YD_DUMMY)
-                GetCaster()->CastSpell(x,y,z,PRIEST_SPELL_SANCTUARY_4YD_DUMMY,true);
+                GetCaster()->CastSpell(x, y, z, PRIEST_SPELL_SANCTUARY_4YD_DUMMY, true);
         }
 
         void Register()
@@ -566,12 +566,12 @@ public:
                 {
                     case PRIEST_SPELL_SANCTUARY_8YD_DUMMY:
                     {
-                        caster->CastSpell(x,y,z,PRIEST_SPELL_SANCTUARY_8YD_HEAL,true);
+                        caster->CastSpell(x, y, z, PRIEST_SPELL_SANCTUARY_8YD_HEAL, true);
                         break;
                     }
                     case PRIEST_SPELL_SANCTUARY_4YD_DUMMY:
                     {
-                        caster->CastSpell(x,y,z,PRIEST_SPELL_SANCTUARY_4YD_HEAL,true);
+                        caster->CastSpell(x, y, z, PRIEST_SPELL_SANCTUARY_4YD_HEAL, true);
                         break;
                     }
                 }
@@ -616,20 +616,20 @@ public:
     {
         PrepareSpellScript(spell_pri_chakra_sanctuary_heal_target_selector_SpellScript);
 
-        float x,y;
+        float x, y;
 
         bool Load()
         {
             if (GetCaster()->GetTypeId() != TYPEID_PLAYER)
                 return false;
 
-            GetExplTargetDest()->GetPosition(x,y);
+            GetExplTargetDest()->GetPosition(x, y);
             return true;
         }
 
         void FilterTargets(std::list<WorldObject*>& unitList)
         {
-            unitList.remove_if(DistanceCheck(x,y));
+            unitList.remove_if(DistanceCheck(x, y));
         }
 
         void Register()
@@ -659,12 +659,12 @@ class spell_pri_mind_spike : public SpellScriptLoader
             void HandleDummy(SpellEffIndex /*effIndex*/)
             {
                 Unit* target = GetHitUnit();
-                
+
                 if (!target)
                     return;
 
-                target->RemoveAurasByType(SPELL_AURA_PERIODIC_DAMAGE,GetCaster()->GetGUID());
-                target->RemoveAurasByType(SPELL_AURA_PERIODIC_LEECH,GetCaster()->GetGUID());
+                target->RemoveAurasByType(SPELL_AURA_PERIODIC_DAMAGE, GetCaster()->GetGUID());
+                target->RemoveAurasByType(SPELL_AURA_PERIODIC_LEECH, GetCaster()->GetGUID());
             }
 
             void Register()
@@ -694,18 +694,18 @@ class spell_pri_mind_blast : public SpellScriptLoader
             {
                 Unit* target = GetHitUnit();
                 Unit* caster = GetCaster();
-                
+
                 if (!caster || !target)
                     return;
 
                 // Remove Mind Spike debuff
-                target->RemoveAurasDueToSpell(87178,GetCaster()->GetGUID());
+                target->RemoveAurasDueToSpell(87178, GetCaster()->GetGUID());
 
                 // Improved Mind blast - Mind Trauma cast
-                if (AuraEffect* improvedMindBlast = caster->GetDummyAuraEffect(SPELLFAMILY_PRIEST,95,EFFECT_1))
+                if (AuraEffect* improvedMindBlast = caster->GetDummyAuraEffect(SPELLFAMILY_PRIEST, 95, EFFECT_1))
                     if (caster->GetShapeshiftForm() == FORM_SHADOW)
                         if (roll_chance_i(improvedMindBlast->GetAmount()))
-                            caster->CastSpell(target,48301,true);
+                            caster->CastSpell(target, 48301, true);
             }
 
             void Register()

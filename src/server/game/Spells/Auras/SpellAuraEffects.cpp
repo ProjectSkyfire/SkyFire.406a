@@ -4425,7 +4425,7 @@ void AuraEffect::HandleModMeleeSpeedPct(AuraApplication const* aurApp, uint8 mod
     // Runic corruption proc, not sure if there are other auras with this miscvalue
     if (GetMiscValue() == 5)
         return;
-    
+
     target->ApplyAttackTimePercentMod(BASE_ATTACK,   (float)GetAmount(), apply);
     target->ApplyAttackTimePercentMod(OFF_ATTACK,    (float)GetAmount(), apply);
 }

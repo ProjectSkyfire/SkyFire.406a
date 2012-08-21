@@ -223,7 +223,7 @@ public:
 
             // Store the normal spellpower to prevent the nonstop aura stacking
             int32 bp = CalculatePctN(absorbAmount, talentAurEff->GetAmount());
-            
+
             // If we dont get just the intellect spellpower, the aura will stack forever
             uint32 baseSpellPower = target->ToPlayer()->GetBaseSpellPower();
 
@@ -231,7 +231,7 @@ public:
             {
                 // The aura will stack up to a value of 20% of the mage's spell power
                 incanterTriggered->ChangeAmount(std::min<int32>(incanterTriggered->GetAmount() + bp, CalculatePctN(baseSpellPower, 20)));
-                
+
                 // Refresh and return to prevent replacing the aura
                 incanterTriggered->GetBase()->RefreshDuration();
 
@@ -331,7 +331,7 @@ public:
         PrepareAuraScript(spell_mage_cauterize_AuraScript);
 
         int32 absorbChance;
-        
+
         bool Validate(SpellInfo const* /*spellEntry*/)
         {
             if (!sSpellMgr->GetSpellInfo(SPELL_MAGE_CAUTERIZE_DAMAGE))
@@ -361,20 +361,20 @@ public:
 
             if (!caster)
                 return;
-            
+
             int32 remainingHealth = caster->GetHealth() - dmgInfo.GetDamage();
             int32 cauterizeHeal = caster->CountPctFromMaxHealth(40);
-            
+
             if (caster->ToPlayer()->HasSpellCooldown(SPELL_MAGE_CAUTERIZE_DAMAGE))
                 return;
-            
+
             if (!roll_chance_i(absorbChance))
                 return;
 
             if (remainingHealth <= 0)
             {
                 absorbAmount = dmgInfo.GetDamage();
-                caster->CastCustomSpell(caster,SPELL_MAGE_CAUTERIZE_DAMAGE,NULL,&cauterizeHeal,NULL, true, NULL, aurEff);
+                caster->CastCustomSpell(caster, SPELL_MAGE_CAUTERIZE_DAMAGE, NULL,&cauterizeHeal, NULL, true, NULL, aurEff);
                 caster->ToPlayer()->AddSpellCooldown(SPELL_MAGE_CAUTERIZE_DAMAGE, 0, time(NULL) + 60);
             }
         }

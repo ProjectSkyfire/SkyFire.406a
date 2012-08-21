@@ -1,0 +1,2 @@
+INSERT  INTO `battleground_template`(`id`,`MinPlayersPerTeam`,`MaxPlayersPerTeam`,`MinLvl`,`MaxLvl`,`AllianceStartLoc`,`AllianceStartO`,`HordeStartLoc`,`HordeStartO`,`Weight`,`ScriptName`,`Comment`) VALUES (108,10,10,85,85,1726,0,1727,0,1,'','Twin Peaks');
+INSERT  INTO `battleground_template`(`id`,`MinPlayersPerTeam`,`MaxPlayersPerTeam`,`MinLvl`,`MaxLvl`,`AllianceStartLoc`,`AllianceStartO`,`HordeStartLoc`,`HordeStartO`,`Weight`,`ScriptName`,`Comment`) VALUES (120,5,5,85,85,1740,0,1739,0,1,'','The Battle for Gilneas');

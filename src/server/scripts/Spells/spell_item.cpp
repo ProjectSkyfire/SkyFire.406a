@@ -299,7 +299,7 @@ public:
                 return;
 
             uint32 spellId = SPELL_THE_GREAT_HUNT;
-            switch(urand(1,11))
+            switch(urand(1, 11))
             {
                 case 1:     spellId = SPELL_LEARNING_BY_EXAMPLE;break;
                 case 2:     spellId = SPELL_TERRAIN_EXPERT;     break;
@@ -310,7 +310,7 @@ public:
                 case 7:     spellId = SPELL_DEADLY_DRIVE;       break;
                 case 8:     spellId = SPELL_MECHANICAL_APTITUDE;break;
                 case 9:     spellId = SPELL_28_CHAPTERS_LATER;  break;
-                case 10:    spellId = SPELL_LIVING_FOREVER;     break;                
+                case 10:    spellId = SPELL_LIVING_FOREVER;     break;
             }
             pCaster->CastSpell(pCaster, spellId, true, NULL);
         }
@@ -1155,17 +1155,17 @@ class spell_item_vanquished_clutches : public SpellScriptLoader
 
 enum AshbringerSounds
 {
-    SOUND_ASHBRINGER_1  = 8906,                             // "I was pure once"
-    SOUND_ASHBRINGER_2  = 8907,                             // "Fought for righteousness"
-    SOUND_ASHBRINGER_3  = 8908,                             // "I was once called Ashbringer"
-    SOUND_ASHBRINGER_4  = 8920,                             // "Betrayed by my order"
-    SOUND_ASHBRINGER_5  = 8921,                             // "Destroyed by Kel'Thuzad"
-    SOUND_ASHBRINGER_6  = 8922,                             // "Made to serve"
-    SOUND_ASHBRINGER_7  = 8923,                             // "My son watched me die"
-    SOUND_ASHBRINGER_8  = 8924,                             // "Crusades fed his rage"
-    SOUND_ASHBRINGER_9  = 8925,                             // "Truth is unknown to him"
-    SOUND_ASHBRINGER_10 = 8926,                             // "Scarlet Crusade  is pure no longer"
-    SOUND_ASHBRINGER_11 = 8927,                             // "Balnazzar's crusade corrupted my son"
+    SOUND_ASHBRINGER_1  = 8906,                            // "I was pure once"
+    SOUND_ASHBRINGER_2  = 8907,                            // "Fought for righteousness"
+    SOUND_ASHBRINGER_3  = 8908,                            // "I was once called Ashbringer"
+    SOUND_ASHBRINGER_4  = 8920,                            // "Betrayed by my order"
+    SOUND_ASHBRINGER_5  = 8921,                            // "Destroyed by Kel'Thuzad"
+    SOUND_ASHBRINGER_6  = 8922,                            // "Made to serve"
+    SOUND_ASHBRINGER_7  = 8923,                            // "My son watched me die"
+    SOUND_ASHBRINGER_8  = 8924,                            // "Crusades fed his rage"
+    SOUND_ASHBRINGER_9  = 8925,                            // "Truth is unknown to him"
+    SOUND_ASHBRINGER_10 = 8926,                            // "Scarlet Crusade  is pure no longer"
+    SOUND_ASHBRINGER_11 = 8927,                            // "Balnazzar's crusade corrupted my son"
     SOUND_ASHBRINGER_12 = 8928                              // "Kill them all!"
 };
 
@@ -1617,7 +1617,7 @@ public:
             Player* caster = GetCaster()->ToPlayer();
 
             if (roll_chance_i(34))
-                caster->CastSpell(caster,caster->GetTeam() == ALLIANCE ? SPELL_LEARN_GNOMISH_BINARY : SPELL_LEARN_GOBLIN_BINARY, true);
+                caster->CastSpell(caster, caster->GetTeam() == ALLIANCE ? SPELL_LEARN_GNOMISH_BINARY : SPELL_LEARN_GOBLIN_BINARY, true);
         }
 
         void Register()
