@@ -50,6 +50,9 @@ enum PaladinSpells
     SPELL_DIVINE_STORM                           = 53385,
     SPELL_DIVINE_STORM_DUMMY                     = 54171,
     SPELL_DIVINE_STORM_HEAL                      = 54172,
+
+    SPELL_PALADIN_CONSECRATION_SUMMON            = 82366,
+    SPELL_PALADIN_CONSECRATION_DAMAGE            = 81297,
 };
 
 // 31850 - Ardent Defender
@@ -682,6 +685,62 @@ public:
     }
 };
 
+class spell_pal_consecration : public SpellScriptLoader
+{
+public:
+    spell_pal_consecration() : SpellScriptLoader("spell_pal_consecration") { }
+
+    class spell_pal_consecration_AuraScript : public AuraScript
+    {
+        PrepareAuraScript(spell_pal_consecration_AuraScript)
+        
+        float x, y, z;
+
+        bool Load()
+        {
+            if (GetCaster()->GetTypeId() != TYPEID_PLAYER)
+                return false;
+
+            return true;
+        }
+
+        bool Validate (SpellInfo *const /*spellEntry*/)
+        {
+            if (!sSpellMgr->GetSpellInfo(SPELL_PALADIN_CONSECRATION_DAMAGE) ||
+                !sSpellMgr->GetSpellInfo(SPELL_PALADIN_CONSECRATION_SUMMON))
+                return false;
+
+            return true;
+        }
+
+        void HandlePeriodicDummy(AuraEffect const* aurEff)
+        {
+            uint64 consecrationNpcGUID = GetCaster()->m_SummonSlot[1];
+
+            if (!consecrationNpcGUID)
+                return;
+
+            Unit* consecrationNpc = ObjectAccessor::GetCreature(*GetCaster(),consecrationNpcGUID);
+
+            if (!consecrationNpc)
+                return;
+
+            consecrationNpc->GetPosition(x,y,z);
+            consecrationNpc->CastSpell(x,y,z,SPELL_PALADIN_CONSECRATION_DAMAGE,true,NULL,NULL,GetCaster()->GetGUID());  
+        }
+
+        void Register()
+        {
+            OnEffectPeriodic += AuraEffectPeriodicFn(spell_pal_consecration_AuraScript::HandlePeriodicDummy,EFFECT_1,SPELL_AURA_PERIODIC_DUMMY);
+        }
+    };
+
+    AuraScript* GetAuraScript() const
+    {
+        return new spell_pal_consecration_AuraScript();
+    }
+};
+
 void AddSC_paladin_spell_scripts()
 {
     new spell_pal_ardent_defender();
@@ -693,4 +752,5 @@ void AddSC_paladin_spell_scripts()
     new spell_pal_selfless_healer();
     new spell_pal_guardian_ancient_kings();
     new spell_pal_divine_storm();
+    new spell_pal_consecration();
 }
