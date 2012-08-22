@@ -31,8 +31,6 @@ enum ShamanSpells
     SHAMAN_SPELL_MANA_TIDE_TOTEM        = 16191,
     SHAMAN_SPELL_FIRE_NOVA_R1           = 1535,
     SHAMAN_SPELL_FIRE_NOVA_TRIGGERED_R1 = 8349,
-    SHAMAN_SPELL_SATED                  = 57724,
-    SHAMAN_SPELL_EXHAUSTION             = 57723,
     SHAMAN_SPELL_EARTHQUAKE_KNOCKDOWN   = 77505,
 
     //For Earthen Power
@@ -221,85 +219,79 @@ public:
     }
 };
 
-class spell_sha_bloodlust : public SpellScriptLoader
+enum RaidHasteSpellsBuffsAndDebuffs
 {
-public:
-    spell_sha_bloodlust() : SpellScriptLoader("spell_sha_bloodlust") { }
+    HASTE_BUFF_BLOODLUST                = 2825,
+    HASTE_DEBUFF_SATED                  = 57724,
 
-    class spell_sha_bloodlust_SpellScript : public SpellScript
-    {
-        PrepareSpellScript(spell_sha_bloodlust_SpellScript);
+    HASTE_BUFF_HEROISM                  = 32182,
+    HASTE_DEBUFF_EXHAUSTION             = 57723,
 
-        bool Validate(SpellInfo const* /*spellEntry*/)
-        {
-            if (!sSpellMgr->GetSpellInfo(SHAMAN_SPELL_SATED))
-                return false;
-            return true;
-        }
+    HASTE_BUFF_TIME_WARP                = 80353,
+    HASTE_DEBUFF_TEMPORAL_DISPLACEMENT  = 80354,
 
-        void RemoveInvalidTargets(std::list<WorldObject*>& targets)
-        {
-            targets.remove_if (SkyFire::UnitAuraCheck(true, SHAMAN_SPELL_SATED));
-        }
-
-        void ApplyDebuff()
-        {
-            GetHitUnit()->CastSpell(GetHitUnit(), SHAMAN_SPELL_SATED, true);
-        }
-
-        void Register()
-        {
-            OnObjectAreaTargetSelect += SpellObjectAreaTargetSelectFn(spell_sha_bloodlust_SpellScript::RemoveInvalidTargets, EFFECT_0, TARGET_UNIT_CASTER_AREA_RAID);
-            OnObjectAreaTargetSelect += SpellObjectAreaTargetSelectFn(spell_sha_bloodlust_SpellScript::RemoveInvalidTargets, EFFECT_1, TARGET_UNIT_CASTER_AREA_RAID);
-            OnObjectAreaTargetSelect += SpellObjectAreaTargetSelectFn(spell_sha_bloodlust_SpellScript::RemoveInvalidTargets, EFFECT_2, TARGET_UNIT_CASTER_AREA_RAID);
-            AfterHit += SpellHitFn(spell_sha_bloodlust_SpellScript::ApplyDebuff);
-        }
-    };
-
-    SpellScript* GetSpellScript() const
-    {
-        return new spell_sha_bloodlust_SpellScript();
-    }
+    HASTE_BUFF_ANCIENT_HYSTERIA         = 90355,
+    HASTE_DEBUFF_INSANITY               = 95809,
 };
-
-class spell_sha_heroism : public SpellScriptLoader
+// Filter targets for Ancient Hysteria, Bloodlust, Heroism, and Time Warp.
+class spell_raid_haste : public SpellScriptLoader
 {
 public:
-    spell_sha_heroism() : SpellScriptLoader("spell_sha_heroism") { }
+    spell_raid_haste() : SpellScriptLoader("spell_raid_haste") { }
 
-    class spell_sha_heroism_SpellScript : public SpellScript
+    class spell_raid_haste_SpellScript : public SpellScript
     {
-        PrepareSpellScript(spell_sha_heroism_SpellScript);
+        PrepareSpellScript(spell_raid_haste_SpellScript);
 
         bool Validate(SpellInfo const* /*spellEntry*/)
         {
-            if (!sSpellMgr->GetSpellInfo(SHAMAN_SPELL_EXHAUSTION))
+            if (!sSpellMgr->GetSpellInfo(HASTE_DEBUFF_SATED) ||
+                !sSpellMgr->GetSpellInfo(HASTE_DEBUFF_EXHAUSTION) ||
+                !sSpellMgr->GetSpellInfo(HASTE_DEBUFF_TEMPORAL_DISPLACEMENT) ||
+                !sSpellMgr->GetSpellInfo(HASTE_DEBUFF_INSANITY))
                 return false;
             return true;
         }
 
         void RemoveInvalidTargets(std::list<WorldObject*>& targets)
         {
-            targets.remove_if(SkyFire::UnitAuraCheck(true, SHAMAN_SPELL_EXHAUSTION));
+            targets.remove_if(SkyFire::UnitAuraCheck(true, HASTE_DEBUFF_SATED));
+            targets.remove_if(SkyFire::UnitAuraCheck(true, HASTE_DEBUFF_EXHAUSTION));
+            targets.remove_if(SkyFire::UnitAuraCheck(true, HASTE_DEBUFF_TEMPORAL_DISPLACEMENT));
+            targets.remove_if(SkyFire::UnitAuraCheck(true, HASTE_DEBUFF_INSANITY));
         }
 
         void ApplyDebuff()
         {
-            GetHitUnit()->CastSpell(GetHitUnit(), SHAMAN_SPELL_EXHAUSTION, true);
+            switch (GetSpellInfo()->Id)
+            {
+                case HASTE_BUFF_BLOODLUST:
+                    GetHitUnit()->CastSpell(GetHitUnit(), HASTE_DEBUFF_SATED, true);
+                    break;
+                case HASTE_BUFF_HEROISM:
+                    GetHitUnit()->CastSpell(GetHitUnit(), HASTE_DEBUFF_EXHAUSTION, true);
+                    break;
+                case HASTE_BUFF_TIME_WARP:
+                    GetHitUnit()->CastSpell(GetHitUnit(), HASTE_DEBUFF_TEMPORAL_DISPLACEMENT, true);
+                    break;
+                case HASTE_BUFF_ANCIENT_HYSTERIA:
+                    GetHitUnit()->CastSpell(GetHitUnit(), HASTE_DEBUFF_INSANITY, true);
+                    break;
+            }
         }
 
         void Register()
         {
-            OnObjectAreaTargetSelect += SpellObjectAreaTargetSelectFn(spell_sha_heroism_SpellScript::RemoveInvalidTargets, EFFECT_0, TARGET_UNIT_CASTER_AREA_RAID);
-            OnObjectAreaTargetSelect += SpellObjectAreaTargetSelectFn(spell_sha_heroism_SpellScript::RemoveInvalidTargets, EFFECT_1, TARGET_UNIT_CASTER_AREA_RAID);
-            OnObjectAreaTargetSelect += SpellObjectAreaTargetSelectFn(spell_sha_heroism_SpellScript::RemoveInvalidTargets, EFFECT_2, TARGET_UNIT_CASTER_AREA_RAID);
-            AfterHit += SpellHitFn(spell_sha_heroism_SpellScript::ApplyDebuff);
+            OnObjectAreaTargetSelect += SpellObjectAreaTargetSelectFn(spell_raid_haste_SpellScript::RemoveInvalidTargets, EFFECT_0, TARGET_UNIT_CASTER_AREA_RAID);
+            OnObjectAreaTargetSelect += SpellObjectAreaTargetSelectFn(spell_raid_haste_SpellScript::RemoveInvalidTargets, EFFECT_1, TARGET_UNIT_CASTER_AREA_RAID);
+            OnObjectAreaTargetSelect += SpellObjectAreaTargetSelectFn(spell_raid_haste_SpellScript::RemoveInvalidTargets, EFFECT_2, TARGET_UNIT_CASTER_AREA_RAID);
+            AfterHit += SpellHitFn(spell_raid_haste_SpellScript::ApplyDebuff);
         }
     };
 
     SpellScript* GetSpellScript() const
     {
-        return new spell_sha_heroism_SpellScript();
+        return new spell_raid_haste_SpellScript();
     }
 };
 
@@ -380,8 +372,7 @@ void AddSC_shaman_spell_scripts()
     new spell_sha_astral_shift();
     new spell_sha_fire_nova();
     new spell_sha_earthbind_totem();
-    new spell_sha_bloodlust();
-    new spell_sha_heroism();
     new spell_sha_healing_rain();
     new spell_sha_earthquake();
+    new spell_raid_haste();
 }

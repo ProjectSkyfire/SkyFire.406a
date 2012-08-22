@@ -5550,17 +5550,6 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
                     caster->ApplySpellImmune(GetId(), IMMUNITY_ID, 94644, apply); break; // Prevent restacking of Shadow Infusion while in dark transformation
                 case 63560: // Dark Transformation
                     target->ApplySpellImmune(GetId(), IMMUNITY_ID, 91342, apply); break; // Prevent restacking of Shadow Infusion while in dark transformation
-                case 57723: // Exhaustion
-                case 57724: // Sated
-                case 80354: // Temporal Displacement
-                case 95809: // Insanity
-                {
-                    target->ApplySpellImmune(GetId(), IMMUNITY_ID, 32182, apply); break; // Heroism
-                    target->ApplySpellImmune(GetId(), IMMUNITY_ID, 2825, apply);  break; // Bloodlust
-                    target->ApplySpellImmune(GetId(), IMMUNITY_ID, 80353, apply); break; // Time Warp
-                    target->ApplySpellImmune(GetId(), IMMUNITY_ID, 90355, apply); break; // Ancient Hysteria
-                    break;
-                }
                 case 57819: // Argent Champion
                 case 57820: // Ebon Champion
                 case 57821: // Champion of the Kirin Tor

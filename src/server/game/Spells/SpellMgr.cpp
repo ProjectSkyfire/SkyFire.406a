@@ -3042,12 +3042,6 @@ void SpellMgr::LoadSpellCustomAttr()
             case 65156: // Juggernaut Buff
                 spellInfo->AttributesEx3 |=  SPELL_ATTR3_CAN_PROC_WITH_TRIGGERED;
                 break;
-            case 80353: // Time Warp
-                spellInfo->ExcludeCasterAuraSpell = 80354; // Temporal Displacement
-                break;
-            case 90355: // Ancient Hysteria
-                spellInfo->ExcludeCasterAuraSpell = 95809; // Insanity
-                break;
             case 94338: // Sunfire (Eclipse)
                 spellInfo->Effects[0].BasePoints = 93402;
                 break;
@@ -3152,9 +3146,6 @@ void SpellMgr::LoadSpellCustomAttr()
             case 8494: // Mana Shield (rank 2)
                 // because of bug in dbc
                 spellInfo->ProcChance = 0;
-                break;
-            case 2825:  // Bloodlust
-                spellInfo->ExcludeCasterAuraSpell = 57724; // Sated
                 break;
             case 59725: // Improved Spell Reflection - aoe aura
                 // Target entry seems to be wrong for this spell :/
