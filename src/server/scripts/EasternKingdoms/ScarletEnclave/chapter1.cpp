@@ -578,6 +578,7 @@ public:
                     {
                         doneBy->RemoveGameObject(SPELL_DUEL_FLAG, true);
                         doneBy->AttackStop();
+                        doneBy->getHostileRefManager().deleteReferences();
                         me->CastSpell(doneBy, SPELL_DUEL_VICTORY, true);
                         lose = true;
                         me->CastSpell(me, 7267, true);
