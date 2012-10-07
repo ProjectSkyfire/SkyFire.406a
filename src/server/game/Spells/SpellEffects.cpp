@@ -285,6 +285,10 @@ void Spell::EffectInstaKill(SpellEffIndex /*effIndex*/)
     if (effectHandleMode != SPELL_EFFECT_HANDLE_HIT_TARGET)
         return;
 
+    if (m_spellInfo->Id == 89089)
+        if (unitTarget->GetEntry() != 47872)
+            return;
+
     if (!unitTarget || !unitTarget->isAlive())
         return;
 
