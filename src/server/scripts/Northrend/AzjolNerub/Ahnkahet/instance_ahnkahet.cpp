@@ -303,5 +303,5 @@ public:
 
 void AddSC_instance_ahnkahet()
 {
-   new instance_ahnkahet;
+   new instance_ahnkahet();
 }
