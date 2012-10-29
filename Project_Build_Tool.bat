@@ -1,6 +1,6 @@
 @ECHO OFF
 SET ver=4.0.6a
-TITLE SkyFireEMU %ver% Project Building Tool
+TITLE SkyFireEMU %ver% Simple Project Building Tool
 COLOR 0A
 rem Credits to:
 rem MangosR2 and to /Dev/RSA for the base installer
