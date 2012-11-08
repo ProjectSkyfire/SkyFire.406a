@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
@@ -17,14 +18,14 @@
  */
 
 /** \file
-    \ingroup Trinityd
+    \ingroup SkyFire Daemon
 */
 
 #include "Common.h"
 #include "ObjectAccessor.h"
 #include "World.h"
 #include "WorldSocketMgr.h"
-#include "Database/DatabaseEnv.h"
+#include "DatabaseEnv.h"
 #include "ScriptMgr.h"
 #include "BattlegroundMgr.h"
 #include "MapManager.h"
