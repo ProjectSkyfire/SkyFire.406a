@@ -83,31 +83,6 @@ bool ChatHandler::HandleStartCommand(const char* /*args*/)
     return true;
 }
 
-bool ChatHandler::HandleServerInfoCommand(const char* /*args*/)
-{
-    uint32 playersNum = sWorld->GetPlayerCount();
-    uint32 maxPlayersNum = sWorld->GetMaxPlayerCount();
-    uint32 activeClientsNum = sWorld->GetActiveSessionCount();
-    uint32 queuedClientsNum = sWorld->GetQueuedSessionCount();
-    uint32 maxActiveClientsNum = sWorld->GetMaxActiveSessionCount();
-    uint32 maxQueuedClientsNum = sWorld->GetMaxQueuedSessionCount();
-    std::string uptime = secsToTimeString(sWorld->GetUptime());
-    uint32 updateTime = sWorld->GetUpdateTime();
-
-    PSendSysMessage(_CLIENT_BUILD_REVISION_2);
-    PSendSysMessage("Revision Hash: "_HASH);
-    PSendSysMessage("Build Date: "_DATE);
-    PSendSysMessage(LANG_CONNECTED_PLAYERS, playersNum, maxPlayersNum);
-    PSendSysMessage(LANG_CONNECTED_USERS, activeClientsNum, maxActiveClientsNum, queuedClientsNum, maxQueuedClientsNum);
-    PSendSysMessage(LANG_UPTIME, uptime.c_str());
-    PSendSysMessage(LANG_UPDATE_DIFF, updateTime);
-    //! Can't use sWorld->ShutdownMsg here in case of console command
-    if (sWorld->IsShuttingDown())
-        PSendSysMessage(LANG_SHUTDOWN_TIMELEFT, secsToTimeString(sWorld->GetShutDownTimeLeft()).c_str());
-
-    return true;
-}
-
 bool ChatHandler::HandleDismountCommand(const char* /*args*/)
 {
     //If player is not mounted, so go out :)
@@ -150,12 +125,5 @@ bool ChatHandler::HandleSaveCommand(const char* /*args*/)
     if (save_interval == 0 || (save_interval > 20*IN_MILLISECONDS && player->GetSaveTimer() <= save_interval - 20*IN_MILLISECONDS))
         player->SaveToDB();
 
-    return true;
-}
-
-/// Display the 'Message of the day' for the realm
-bool ChatHandler::HandleServerMotdCommand(const char* /*args*/)
-{
-    PSendSysMessage(LANG_MOTD_CURRENT, sWorld->GetMotd());
     return true;
 }

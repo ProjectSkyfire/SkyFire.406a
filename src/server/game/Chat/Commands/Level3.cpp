@@ -235,7 +235,11 @@ bool ChatHandler::HandleAddItemCommand(const char *args)
         {
             std::string itemName = citemName+1;
             WorldDatabase.EscapeString(itemName);
-            QueryResult result = WorldDatabase.PQuery("SELECT entry FROM item_template WHERE name = '%s'", itemName.c_str());
+
+            PreparedStatement* stmt = WorldDatabase.GetPreparedStatement(WORLD_SEL_ITEM_TEMPLATE_BY_NAME);
+            stmt->setString(0, itemName);
+            PreparedQueryResult result = WorldDatabase.Query(stmt);
+            
             if (!result)
             {
                 PSendSysMessage(LANG_COMMAND_COULDNOTFIND, citemName+1);
@@ -423,22 +427,22 @@ bool ChatHandler::HandleListItemCommand(const char *args)
         return false;
     uint32 count = uint32(_count);
 
-    QueryResult result;
+    PreparedQueryResult result;
 
     // inventory case
     uint32 inv_count = 0;
-    result = CharacterDatabase.PQuery("SELECT COUNT(itemEntry) FROM character_inventory ci INNER JOIN item_instance ii ON ii.guid = ci.item WHERE itemEntry = '%u'", item_id);
+
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_CHAR_INVENTORY_COUNT_ITEM);
+    stmt->setUInt32(0, item_id);
+    result = CharacterDatabase.Query(stmt);
+    
     if (result)
         inv_count = (*result)[0].GetUInt32();
 
-    result=CharacterDatabase.PQuery(
-    //          0        1               2        3        4          5
-        "SELECT ci.item, cb.slot AS bag, ci.slot, ci.guid, c.account, c.name FROM characters c "
-        "INNER JOIN character_inventory ci ON ci.guid = c.guid "
-        "INNER JOIN item_instance ii ON ii.guid = ci.item "
-        "LEFT JOIN character_inventory cb ON cb.item = ci.bag "
-        "WHERE ii.itemEntry = '%u' LIMIT %u ",
-        item_id, count);
+    stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_CHAR_INVENTORY_ITEM_BY_ENTRY);
+    stmt->setUInt32(0, item_id);
+    stmt->setUInt32(1, count);
+
 
     if (result)
     {
@@ -476,24 +480,23 @@ bool ChatHandler::HandleListItemCommand(const char *args)
 
     // mail case
     uint32 mail_count = 0;
-    result = CharacterDatabase.PQuery("SELECT COUNT(itemEntry) FROM mail_items mi INNER JOIN item_instance ii ON ii.guid = mi.item_guid WHERE itemEntry = '%u'", item_id);
+
+    stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_MAIL_COUNT_ITEM);
+    stmt->setUInt32(0, item_id);
+    result = CharacterDatabase.Query(stmt);
+    
     if (result)
         mail_count = (*result)[0].GetUInt32();
 
     if (count > 0)
     {
-        result = CharacterDatabase.PQuery(
-        //          0             1         2           3           4        5           6
-            "SELECT mi.item_guid, m.sender, m.receiver, cs.account, cs.name, cr.account, cr.name FROM mail m "
-            "INNER JOIN mail_items mi ON mi.mail_id = m.id "
-            "INNER JOIN item_instance ii ON ii.guid = mi.item_guid "
-            "INNER JOIN characters cs ON cs.guid = m.sender "
-            "INNER JOIN characters cr ON cr.guid = m.receiver "
-            "WHERE ii.itemEntry = '%u' LIMIT %u",
-            item_id, count);
+        stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_MAIL_ITEMS_BY_ENTRY);
+        stmt->setUInt32(0, item_id);
+        stmt->setUInt32(1, count);
+
     }
     else
-        result = QueryResult(NULL);
+        result = PreparedQueryResult(NULL);
 
     if (result)
     {
@@ -524,21 +527,23 @@ bool ChatHandler::HandleListItemCommand(const char *args)
 
     // auction case
     uint32 auc_count = 0;
-    result=CharacterDatabase.PQuery("SELECT COUNT(itemEntry) FROM auctionhouse ah INNER JOIN item_instance ii ON ii.guid = ah.itemguid WHERE itemEntry = '%u'", item_id);
+
+    stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_AUCTIONHOUSE_COUNT_ITEM);
+    stmt->setUInt32(0, item_id);
+    result = CharacterDatabase.Query(stmt);
+    
     if (result)
         auc_count = (*result)[0].GetUInt32();
 
     if (count > 0)
     {
-        result = CharacterDatabase.PQuery(
-        //           0            1             2          3
-            "SELECT  ah.itemguid, ah.itemowner, c.account, c.name FROM auctionhouse ah "
-            "INNER JOIN characters c ON c.guid = ah.itemowner "
-            "INNER JOIN item_instance ii ON ii.guid = ah.itemguid "
-            "WHERE ii.itemEntry = '%u' LIMIT %u", item_id, count);
+        stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_AUCTIONHOUSE_ITEM_BY_ENTRY);
+        stmt->setUInt32(0, item_id);
+        stmt->setUInt32(1, count);
+
     }
     else
-        result = QueryResult(NULL);
+        result = PreparedQueryResult(NULL);
 
     if (result)
     {
@@ -559,17 +564,18 @@ bool ChatHandler::HandleListItemCommand(const char *args)
 
     // guild bank case
     uint32 guild_count = 0;
-    result = CharacterDatabase.PQuery("SELECT COUNT(itemEntry) FROM guild_bank_item gbi INNER JOIN item_instance ii ON ii.guid = gbi.item_guid WHERE itemEntry = '%u'", item_id);
+
+    stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_GUILD_BANK_COUNT_ITEM);
+    stmt->setUInt32(0, item_id);
+    result = CharacterDatabase.Query(stmt);
+    
     if (result)
         guild_count = (*result)[0].GetUInt32();
 
-    result = CharacterDatabase.PQuery(
-        //      0             1           2
-        "SELECT gi.item_guid, gi.guildid, g.name FROM guild_bank_item gi "
-        "INNER JOIN guild g ON g.guildid = gi.guildid "
-        "INNER JOIN item_instance ii ON ii.guid = gi.item_guid "
-        "WHERE ii.itemEntry = '%u' LIMIT %u ",
-        item_id, count);
+    stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_GUILD_BANK_ITEM_BY_ENTRY);
+    stmt->setUInt32(0, item_id);
+    stmt->setUInt32(1, count);
+
 
     if (result)
     {
@@ -1734,7 +1740,7 @@ bool ChatHandler::HandleGuildUninviteCommand(const char *args)
     if (!extractPlayerTarget((char*)args, &target, &target_guid))
         return false;
 
-    uint32 glId   = target ? target->GetGuildId () : Player::GetGuildIdFromGuid (target_guid);
+    uint32 glId   = target ? target->GetGuildId () : Player::GetGuildIdFromGUID (target_guid);
 
     if (!glId)
         return false;
@@ -1761,7 +1767,7 @@ bool ChatHandler::HandleGuildRankCommand(const char *args)
     if (!extractPlayerTarget(nameStr, &target, &target_guid, &target_name))
         return false;
 
-    uint32 glId   = target ? target->GetGuildId () : Player::GetGuildIdFromGuid (target_guid);
+    uint32 glId   = target ? target->GetGuildId () : Player::GetGuildIdFromGUID (target_guid);
     if (!glId)
         return false;
 
@@ -2203,54 +2209,13 @@ void ChatHandler::HandleCharacterLevel(Player* player, uint64 playerGuid, uint32
     else
     {
         // Update level and reset XP, everything else will be updated at login
-        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPDATE_LEVEL);
+        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_LEVEL);
 
         stmt->setUInt8(0, uint8(newLevel));
         stmt->setUInt32(1, GUID_LOPART(playerGuid));
 
         CharacterDatabase.Execute(stmt);
     }
-}
-
-bool ChatHandler::HandleCharacterLevelCommand(const char *args)
-{
-    char* nameStr;
-    char* levelStr;
-    extractOptFirstArg((char*)args, &nameStr, &levelStr);
-    if (!levelStr)
-        return false;
-
-    // exception opt second arg: .character level $name
-    if (isalpha(levelStr[0]))
-    {
-        nameStr = levelStr;
-        levelStr = NULL;                                    // current level will used
-    }
-
-    Player* target;
-    uint64 target_guid;
-    std::string target_name;
-    if (!extractPlayerTarget(nameStr, &target, &target_guid, &target_name))
-        return false;
-
-    int32 oldlevel = target ? target->getLevel() : Player::GetLevelFromDB(target_guid);
-    int32 newlevel = levelStr ? atoi(levelStr) : oldlevel;
-
-    if (newlevel < 1)
-        return false;                                       // invalid level
-
-    if (newlevel > STRONG_MAX_LEVEL)                         // hardcoded maximum level
-        newlevel = STRONG_MAX_LEVEL;
-
-    HandleCharacterLevel(target, target_guid, oldlevel, newlevel);
-
-    if (!m_session || m_session->GetPlayer() != target)      // including player == NULL
-    {
-        std::string nameLink = playerLink(target_name);
-        PSendSysMessage(LANG_YOU_CHANGE_LVL, nameLink.c_str(), newlevel);
-    }
-
-    return true;
 }
 
 bool ChatHandler::HandleLevelUpCommand(const char *args)
@@ -2694,7 +2659,7 @@ bool ChatHandler::HandleResetAllCommand(const char * args)
         return false;
     }
 
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPDATE_ALL_AT_LOGIN_FLAGS);
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_ALL_AT_LOGIN_FLAGS);
 
     stmt->setUInt16(0, uint16(atLogin));
 
@@ -2705,152 +2670,6 @@ bool ChatHandler::HandleResetAllCommand(const char * args)
     for (HashMapHolder<Player>::MapType::const_iterator itr = plist.begin(); itr != plist.end(); ++itr)
         itr->second->SetAtLoginFlag(atLogin);
 
-    return true;
-}
-
-bool ChatHandler::HandleServerShutDownCancelCommand(const char* /*args*/)
-{
-    sWorld->ShutdownCancel();
-    return true;
-}
-
-bool ChatHandler::HandleServerShutDownCommand(const char *args)
-{
-    if (!*args)
-        return false;
-
-    char* time_str = strtok ((char*) args, " ");
-    char* exitcode_str = strtok (NULL, "");
-
-    int32 time = atoi (time_str);
-
-    ///- Prevent interpret wrong arg value as 0 secs shutdown time
-    if ((time == 0 && (time_str[0] != '0' || time_str[1] != '\0')) || time < 0)
-        return false;
-
-    if (exitcode_str)
-    {
-        int32 exitcode = atoi (exitcode_str);
-
-        // Handle atoi() errors
-        if (exitcode == 0 && (exitcode_str[0] != '0' || exitcode_str[1] != '\0'))
-            return false;
-
-        // Exit code should be in range of 0-125, 126-255 is used
-        // in many shells for their own return codes and code > 255
-        // is not supported in many others
-        if (exitcode < 0 || exitcode > 125)
-            return false;
-
-        sWorld->ShutdownServ (time, 0, exitcode);
-    }
-    else
-        sWorld->ShutdownServ(time, 0, SHUTDOWN_EXIT_CODE);
-    return true;
-}
-
-bool ChatHandler::HandleServerRestartCommand(const char *args)
-{
-    if (!*args)
-        return false;
-
-    char* time_str = strtok ((char*) args, " ");
-    char* exitcode_str = strtok (NULL, "");
-
-    int32 time = atoi (time_str);
-
-    ///- Prevent interpret wrong arg value as 0 secs shutdown time
-    if ((time == 0 && (time_str[0] != '0' || time_str[1] != '\0')) || time < 0)
-        return false;
-
-    if (exitcode_str)
-    {
-        int32 exitcode = atoi (exitcode_str);
-
-        // Handle atoi() errors
-        if (exitcode == 0 && (exitcode_str[0] != '0' || exitcode_str[1] != '\0'))
-            return false;
-
-        // Exit code should be in range of 0-125, 126-255 is used
-        // in many shells for their own return codes and code > 255
-        // is not supported in many others
-        if (exitcode < 0 || exitcode > 125)
-            return false;
-
-        sWorld->ShutdownServ (time, SHUTDOWN_MASK_RESTART, exitcode);
-    }
-    else
-        sWorld->ShutdownServ(time, SHUTDOWN_MASK_RESTART, RESTART_EXIT_CODE);
-    return true;
-}
-
-bool ChatHandler::HandleServerIdleRestartCommand(const char *args)
-{
-    if (!*args)
-        return false;
-
-    char* time_str = strtok ((char*) args, " ");
-    char* exitcode_str = strtok (NULL, "");
-
-    int32 time = atoi (time_str);
-
-    ///- Prevent interpret wrong arg value as 0 secs shutdown time
-    if ((time == 0 && (time_str[0] != '0' || time_str[1] != '\0')) || time < 0)
-        return false;
-
-    if (exitcode_str)
-    {
-        int32 exitcode = atoi (exitcode_str);
-
-        // Handle atoi() errors
-        if (exitcode == 0 && (exitcode_str[0] != '0' || exitcode_str[1] != '\0'))
-            return false;
-
-        // Exit code should be in range of 0-125, 126-255 is used
-        // in many shells for their own return codes and code > 255
-        // is not supported in many others
-        if (exitcode < 0 || exitcode > 125)
-            return false;
-
-        sWorld->ShutdownServ (time, SHUTDOWN_MASK_RESTART|SHUTDOWN_MASK_IDLE, exitcode);
-    }
-    else
-        sWorld->ShutdownServ(time, SHUTDOWN_MASK_RESTART|SHUTDOWN_MASK_IDLE, RESTART_EXIT_CODE);
-    return true;
-}
-
-bool ChatHandler::HandleServerIdleShutDownCommand(const char *args)
-{
-    if (!*args)
-        return false;
-
-    char* time_str = strtok ((char*) args, " ");
-    char* exitcode_str = strtok (NULL, "");
-
-    int32 time = atoi (time_str);
-
-    ///- Prevent interpret wrong arg value as 0 secs shutdown time
-    if ((time == 0 && (time_str[0] != '0' || time_str[1] != '\0')) || time < 0)
-        return false;
-
-    if (exitcode_str)
-    {
-        int32 exitcode = atoi (exitcode_str);
-
-        // Handle atoi() errors
-        if (exitcode == 0 && (exitcode_str[0] != '0' || exitcode_str[1] != '\0'))
-            return false;
-
-        // Exit code should be in range of 0-125, 126-255 is used
-        // in many shells for their own return codes and code > 255
-        // is not supported in many others
-        if (exitcode < 0 || exitcode > 125)
-            return false;
-
-        sWorld->ShutdownServ (time, SHUTDOWN_MASK_IDLE, exitcode);
-    }
-    else
-        sWorld->ShutdownServ(time, SHUTDOWN_MASK_IDLE, SHUTDOWN_EXIT_CODE);
     return true;
 }
 
@@ -3226,7 +3045,7 @@ bool ChatHandler::HandleBanListCharacterCommand(const char *args)
 
     std::string filter(cFilter);
     PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_GUID_BY_NAME_FILTER);
-    stmt->setString(0, filter.c_str());
+    stmt->setString(0, filter);
     PreparedQueryResult result = CharacterDatabase.Query(stmt);
     if (!result)
     {
@@ -3308,20 +3127,22 @@ bool ChatHandler::HandleBanListAccountCommand(const char *args)
 
     char* cFilter = strtok((char*)args, " ");
     std::string filter = cFilter ? cFilter : "";
-    LoginDatabase.EscapeString(filter);
 
-    QueryResult result;
+    PreparedQueryResult result;
 
     if (filter.empty())
     {
-        result = LoginDatabase.Query("SELECT account.id, username FROM account, account_banned"
-            " WHERE account.id = account_banned.id AND active = 1 GROUP BY account.id");
+        PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_ACCOUNT_BANNED_ALL);
+
+        result = LoginDatabase.Query(stmt);
     }
     else
     {
-        result = LoginDatabase.PQuery("SELECT account.id, username FROM account, account_banned"
-            " WHERE account.id = account_banned.id AND active = 1 AND username "_LIKE_" "_CONCAT3_("'%%'", "'%s'", "'%%'")" GROUP BY account.id",
-            filter.c_str());
+        PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_ACCOUNT_BANNED_BY_USERNAME);
+
+        stmt->setString(0, filter);
+
+        result = LoginDatabase.Query(stmt);
     }
 
     if (!result)
@@ -3333,7 +3154,7 @@ bool ChatHandler::HandleBanListAccountCommand(const char *args)
     return HandleBanListHelper(result);
 }
 
-bool ChatHandler::HandleBanListHelper(QueryResult result)
+bool ChatHandler::HandleBanListHelper(PreparedQueryResult result)
 {
     PSendSysMessage(LANG_BANLIST_MATCHINGACCOUNT);
 
@@ -3416,19 +3237,21 @@ bool ChatHandler::HandleBanListIPCommand(const char *args)
     std::string filter = cFilter ? cFilter : "";
     LoginDatabase.EscapeString(filter);
 
-    QueryResult result;
+    PreparedQueryResult result;
 
     if (filter.empty())
     {
-        result = LoginDatabase.Query ("SELECT ip, bandate, unbandate, bannedby, banreason FROM ip_banned"
-            " WHERE (bandate=unbandate OR unbandate>UNIX_TIMESTAMP())"
-            " ORDER BY unbandate");
+        PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_IP_BANNED_ALL);
+
+        result = LoginDatabase.Query(stmt);
     }
     else
     {
-        result = LoginDatabase.PQuery("SELECT ip, bandate, unbandate, bannedby, banreason FROM ip_banned"
-            " WHERE (bandate=unbandate OR unbandate>UNIX_TIMESTAMP()) AND ip "_LIKE_" "_CONCAT3_("'%%'", "'%s'", "'%%'")
-            " ORDER BY unbandate", filter.c_str());
+        PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_IP_BANNED_BY_IP);
+
+        stmt->setString(0, filter);
+
+        result = LoginDatabase.Query(stmt);
     }
 
     if (!result)
@@ -3767,56 +3590,6 @@ bool ChatHandler::HandleMovegensCommand(const char* /*args*/)
                 break;
         }
     }
-    return true;
-}
-
-bool ChatHandler::HandleServerPLimitCommand(const char *args)
-{
-    if (*args)
-    {
-        char* param = strtok((char*)args, " ");
-        if (!param)
-            return false;
-
-        int l = strlen(param);
-
-        if (strncmp(param, "player", l) == 0)
-            sWorld->SetPlayerSecurityLimit(SEC_PLAYER);
-        else if (strncmp(param, "moderator", l) == 0)
-            sWorld->SetPlayerSecurityLimit(SEC_MODERATOR);
-        else if (strncmp(param, "gamemaster", l) == 0)
-            sWorld->SetPlayerSecurityLimit(SEC_GAMEMASTER);
-        else if (strncmp(param, "administrator", l) == 0)
-            sWorld->SetPlayerSecurityLimit(SEC_ADMINISTRATOR);
-        else if (strncmp(param, "reset", l) == 0)
-        {
-            sWorld->SetPlayerAmountLimit(ConfigMgr::GetIntDefault("PlayerLimit", 100));
-            sWorld->LoadDBAllowedSecurityLevel();
-        }
-        else
-        {
-            int val = atoi(param);
-            if (val < 0)
-                sWorld->SetPlayerSecurityLimit(AccountTypes(uint32(-val)));
-            else
-                sWorld->SetPlayerAmountLimit(uint32(val));
-        }
-    }
-
-    uint32 pLimit = sWorld->GetPlayerAmountLimit();
-    AccountTypes allowedAccountType = sWorld->GetPlayerSecurityLimit();
-    char const* secName = "";
-    switch (allowedAccountType)
-    {
-        case SEC_PLAYER:        secName = "Player";        break;
-        case SEC_MODERATOR:     secName = "Moderator";     break;
-        case SEC_GAMEMASTER:    secName = "Gamemaster";    break;
-        case SEC_ADMINISTRATOR: secName = "Administrator"; break;
-        default:                secName = "<unknown>";     break;
-    }
-
-    PSendSysMessage("Player limits: amount %u, min. security level %s.", pLimit, secName);
-
     return true;
 }
 
@@ -4228,35 +4001,6 @@ bool ChatHandler::HandleInstanceSaveDataCommand(const char * /*args*/)
     return true;
 }
 
-/// Define the 'Message of the day' for the realm
-bool ChatHandler::HandleServerSetMotdCommand(const char *args)
-{
-    sWorld->SetMotd(args);
-    PSendSysMessage(LANG_MOTD_NEW, args);
-    return true;
-}
-
-/// Set whether we accept new clients
-bool ChatHandler::HandleServerSetClosedCommand(const char *args)
-{
-    if (strncmp(args, "on", 3) == 0)
-    {
-        SendSysMessage(LANG_WORLD_CLOSED);
-        sWorld->SetClosed(true);
-        return true;
-    }
-    else if (strncmp(args, "off", 4) == 0)
-    {
-        SendSysMessage(LANG_WORLD_OPENED);
-        sWorld->SetClosed(false);
-        return true;
-    }
-
-    SendSysMessage(LANG_USE_BOL);
-    SetSentErrorMessage(true);
-    return false;
-}
-
 //Send items by mail
 bool ChatHandler::HandleSendItemsCommand(const char *args)
 {
@@ -4475,7 +4219,7 @@ bool ChatHandler::HandleChannelSetOwnership(const char *args)
     {
         if (chn)
             chn->SetOwnership(true);
-        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SET_CHANNEL_OWNERSHIP);
+        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_CHANNEL_OWNERSHIP);
         stmt->setUInt8 (0, 1);
         stmt->setString(1, channel);
         CharacterDatabase.Execute(stmt);
@@ -4485,7 +4229,7 @@ bool ChatHandler::HandleChannelSetOwnership(const char *args)
     {
         if (chn)
             chn->SetOwnership(false);
-        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SET_CHANNEL_OWNERSHIP);
+        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_CHANNEL_OWNERSHIP);
         stmt->setUInt8 (0, 0);
         stmt->setString(1, channel);
         CharacterDatabase.Execute(stmt);

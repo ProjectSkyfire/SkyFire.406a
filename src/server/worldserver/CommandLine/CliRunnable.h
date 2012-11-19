@@ -17,15 +17,12 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/// \addtogroup Trinityd
+/// \addtogroup SkyFire Daemon
 /// @{
 /// \file
 
 #ifndef __CLIRUNNABLE_H
 #define __CLIRUNNABLE_H
-
-#include "Common.h"
-#include "Threading.h"
 
 /// Command Line Interface handling thread
 class CliRunnable : public ACE_Based::Runnable
