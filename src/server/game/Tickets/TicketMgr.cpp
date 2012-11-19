@@ -96,7 +96,7 @@ void GmTicket::SaveToDB(SQLTransaction& trans) const
     //     0       1     2      3          4        5      6     7     8           9            10         11         12        13        14        15
     // ticketId, guid, name, message, createTime, mapId, posX, posY, posZ, lastModifiedTime, closedBy, assignedTo, comment, completed, escalated, viewed
     uint8 index = 0;
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_ADD_GM_TICKET);
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_GM_TICKETS);
     stmt->setUInt32(  index, _id);
     stmt->setUInt32(++index, GUID_LOPART(_playerGuid));
     stmt->setString(++index, _playerName);
@@ -247,7 +247,7 @@ void TicketMgr::LoadTickets()
     _lastTicketId = 0;
     _openTicketCount = 0;
 
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_LOAD_GM_TICKETS);
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_GM_TICKETS);
     PreparedQueryResult result = CharacterDatabase.Query(stmt);
     if (!result)
     {

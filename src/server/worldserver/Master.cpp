@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
@@ -17,7 +18,7 @@
  */
 
 /** \file
-    \ingroup Trinityd
+    \ingroup SkyFire Daemon
 */
 
 #include "Common.h"
@@ -27,9 +28,10 @@
 #include "WorldRunnable.h"
 #include "WorldSocket.h"
 #include "WorldSocketMgr.h"
-#include "Configuration/Config.h"
-#include "Database/DatabaseEnv.h"
-#include "Database/DatabaseWorkerPool.h"
+#include "Config.h"
+#include "DatabaseEnv.h"
+#include "DatabaseWorkerPool.h"
+
 #include "CliRunnable.h"
 #include "Log.h"
 #include "Master.h"
@@ -38,6 +40,7 @@
 #include "Timer.h"
 #include "Util.h"
 #include "AuthSocket.h"
+
 #include "BigNumber.h"
 
 #include <ace/Sig_Handler.h>
@@ -107,11 +110,11 @@ public:
     }
 };
 
-Master::Master() { }
+Master::Master() {}
 
 Master::~Master() {}
 
-/// Main function
+///- Main function
 int Master::Run()
 {
     BigNumber seed1;
@@ -142,7 +145,7 @@ int Master::Run()
         sLog->outString("Daemon PID: %u\n", pid);
     }
 
-    ///- Start the databases
+    ///- Start the database's
     if (!_StartDB())
         return 1;
 
@@ -152,13 +155,13 @@ int Master::Run()
     ///- Initialize the World
     sWorld->SetInitialWorldSettings();
 
-    // Initialize the signal handlers
+    ///- Initialize the signal handlers
     WorldServerSignalHandler SignalINT, SignalTERM;
     #ifdef _WIN32
     WorldServerSignalHandler SignalBREAK;
     #endif /* _WIN32 */
 
-    // Register worldserver's signal handlers
+    ///- Register worldserver's signal handlers
     ACE_Sig_Handler Handler;
     Handler.register_handler(SIGINT, &SignalINT);
     Handler.register_handler(SIGTERM, &SignalTERM);
@@ -211,7 +214,6 @@ int Master::Run()
                         sLog->outError("Can't set used processors (hex): %x", curAff);
                 }
             }
-            sLog->outString("");
         }
 
         bool Prio = ConfigMgr::GetBoolDefault("ProcessPriority", false);
@@ -223,7 +225,6 @@ int Master::Run()
                 sLog->outString("worldserver process priority class set to HIGH");
             else
                 sLog->outError("Can't set worldserver process priority class.");
-            sLog->outString("");
         }
     }
     #endif
@@ -233,7 +234,7 @@ int Master::Run()
     if (ConfigMgr::GetBoolDefault("SOAP.Enabled", false))
     {
         TCSoapRunnable* runnable = new TCSoapRunnable();
-        runnable->setListenArguments(ConfigMgr::GetStringDefault("SOAP.IP", "127.0.0.1"), ConfigMgr::GetIntDefault("SOAP.Port", 7878));
+        runnable->setListenArguments(ConfigMgr::GetStringDefault("SOAP.IP", "127.0.0.1"), uint16(ConfigMgr::GetIntDefault("SOAP.Port", 7878)));
         soap_thread = new ACE_Based::Thread(runnable);
     }
 
@@ -250,7 +251,7 @@ int Master::Run()
     uint16 wsport = sWorld->getIntConfig(CONFIG_PORT_WORLD);
     std::string bind_ip = ConfigMgr::GetStringDefault("BindIP", "0.0.0.0");
 
-    if (sWorldSocketMgr->StartNetwork(wsport, bind_ip.c_str ()) == -1)
+    if (sWorldSocketMgr->StartNetwork(wsport, bind_ip.c_str()) == -1)
     {
         sLog->outError("Failed to start network");
         World::StopNow(ERROR_EXIT_CODE);
@@ -278,7 +279,7 @@ int Master::Run()
     LoginDatabase.DirectPExecute("UPDATE realmlist SET color = color | %u WHERE id = '%d'", REALM_FLAG_OFFLINE, realmID);
 
     ///- Clean database before leaving
-    clearOnlineAccounts();
+    ClearOnlineAccounts();
 
     _StopDB();
 
@@ -347,7 +348,6 @@ bool Master::_StartDB()
 {
     MySQL::Library_Init();
 
-    sLog->SetLogDB(false);
     std::string dbstring;
     uint8 async_threads, synch_threads;
 
@@ -432,13 +432,10 @@ bool Master::_StartDB()
     }
     sLog->outString("Realm running as realm ID %d", realmID);
 
-    ///- Initialize the DB logging system
-    sLog->SetLogDBLater(ConfigMgr::GetBoolDefault("EnableLogDB", false)); // set var to enable DB logging once startup finished.
-    sLog->SetLogDB(false);
     sLog->SetRealmID(realmID);
 
     ///- Clean the database before starting
-    clearOnlineAccounts();
+    ClearOnlineAccounts();
 
     ///- Insert version info into DB
     WorldDatabase.PExecute("UPDATE version SET core_version = '%s', core_revision = '%s'", _FULLVERSION, _HASH);        // One-time query
@@ -459,16 +456,14 @@ void Master::_StopDB()
 }
 
 /// Clear 'online' status for all accounts with characters in this realm
-void Master::clearOnlineAccounts()
+void Master::ClearOnlineAccounts()
 {
-    // Cleanup online status for characters hosted at current realm
-    /// \todo Only accounts with characters logged on *this* realm should have online status reset. Move the online column from 'account' to 'realmcharacters'?
-    LoginDatabase.DirectPExecute(
-        "UPDATE account SET online = 0 WHERE online > 0 "
-        "AND id IN (SELECT acctid FROM realmcharacters WHERE realmid = '%d')", realmID);
+    // Reset online status for all accounts with characters on the current realm
+    LoginDatabase.DirectPExecute("UPDATE account SET online = 0 WHERE online > 0 AND id IN (SELECT acctid FROM realmcharacters WHERE realmid = %d)", realmID);
 
+    // Reset online status for all characters
     CharacterDatabase.DirectExecute("UPDATE characters SET online = 0 WHERE online <> 0");
 
     // Battleground instance ids reset at server restart
-    CharacterDatabase.DirectExecute(CharacterDatabase.GetPreparedStatement(CHAR_RESET_PLAYERS_BGDATA));
+    CharacterDatabase.DirectExecute("UPDATE character_battleground_data SET instanceId = 0");
 }

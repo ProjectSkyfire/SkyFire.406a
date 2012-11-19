@@ -70,7 +70,7 @@ bool ArenaTeam::Create(uint64 captainGuid, uint8 type, std::string teamName, uin
     uint32 captainLowGuid = GUID_LOPART(captainGuid);
 
     // Save arena team to db
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_ADD_ARENA_TEAM);
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_ARENA_TEAM);
     stmt->setUInt32(0, TeamId);
     stmt->setString(1, TeamName);
     stmt->setUInt32(2, captainLowGuid);
@@ -110,7 +110,7 @@ bool ArenaTeam::AddMember(uint64 playerGuid)
     {
         //          0     1
         // SELECT name, class FROM characters WHERE guid = ?
-        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_LOAD_PLAYER_NAME_CLASS);
+        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_CHARACTER_NAME_CLASS);
         stmt->setUInt32(0, GUID_LOPART(playerGuid));
         PreparedQueryResult result = CharacterDatabase.Query(stmt);
 
@@ -137,7 +137,7 @@ bool ArenaTeam::AddMember(uint64 playerGuid)
         personalRating = 1000;
 
     // Try to get player's match maker rating from db and fall back to config setting if not found
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_LOAD_MATCH_MAKER_RATING);
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_MATCH_MAKER_RATING);
     stmt->setUInt32(0, GUID_LOPART(playerGuid));
     stmt->setUInt8(1, GetSlot());
     PreparedQueryResult result = CharacterDatabase.Query(stmt);
@@ -167,7 +167,7 @@ bool ArenaTeam::AddMember(uint64 playerGuid)
     Members.push_back(newmember);
 
     // Save player's arena team membership to db
-    stmt = CharacterDatabase.GetPreparedStatement(CHAR_SET_ARENA_TEAM_MEMBER);
+    stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_ARENA_TEAM_MEMBER);
     stmt->setUInt32(0, TeamId);
     stmt->setUInt32(1, GUID_LOPART(playerGuid));
     CharacterDatabase.Execute(stmt);
@@ -284,7 +284,7 @@ void ArenaTeam::SetCaptain(uint64 guid)
     CaptainGuid = guid;
 
     // Update database
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPDATE_ARENA_TEAM_CAPTAIN);
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_ARENA_TEAM_CAPTAIN);
     stmt->setUInt32(0, GUID_LOPART(guid));
     stmt->setUInt32(1, GetId());
     CharacterDatabase.Execute(stmt);
@@ -379,17 +379,17 @@ void ArenaTeam::Roster(WorldSession* session)
     {
         player = ObjectAccessor::FindPlayer(itr->Guid);
 
-        data << uint64(itr->Guid);                          // guid
-        data << uint8((player ? 1 : 0));                        // online flag
-        data << itr->Name;                                  // member name
-        data << uint32((itr->Guid == GetCaptain() ? 0 : 1));// captain flag 0 captain 1 member
-        data << uint8((player ? player->getLevel() : 0));           // unknown, level?
-        data << uint8(itr->Class);                          // class
-        data << uint32(itr->WeekGames);                    // played this week
-        data << uint32(itr->WeekWins);                     // wins this week
-        data << uint32(itr->SeasonGames);                  // played this season
-        data << uint32(itr->SeasonWins);                   // wins this season
-        data << uint32(itr->PersonalRating);               // personal rating
+        data << uint64(itr->Guid);                             // guid
+        data << uint8((player ? 1 : 0));                       // online flag
+        data << itr->Name;                                     // member name
+        data << uint32((itr->Guid == GetCaptain() ? 0 : 1));   // captain flag 0 captain 1 member
+        data << uint8((player ? player->getLevel() : 0));      // unknown, level?
+        data << uint8(itr->Class);                             // class
+        data << uint32(itr->WeekGames);                        // played this week
+        data << uint32(itr->WeekWins);                         // wins this week
+        data << uint32(itr->SeasonGames);                      // played this season
+        data << uint32(itr->SeasonWins);                       // wins this season
+        data << uint32(itr->PersonalRating);                   // personal rating
         if (unk308)
         {
             data << float(0.0f);                              // 308 unk
@@ -829,7 +829,7 @@ void ArenaTeam::SaveToDB()
 
     SQLTransaction trans = CharacterDatabase.BeginTransaction();
 
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPDATE_ARENA_TEAM_STATS);
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_ARENA_TEAM_STATS);
     stmt->setUInt16(0, Stats.Rating);
     stmt->setUInt16(1, Stats.WeekGames);
     stmt->setUInt16(2, Stats.WeekWins);
@@ -841,7 +841,7 @@ void ArenaTeam::SaveToDB()
 
     for (MemberList::const_iterator itr = Members.begin(); itr !=  Members.end(); ++itr)
     {
-        stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPDATE_ARENA_TEAM_MEMBER);
+        stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_ARENA_TEAM_MEMBER);
         stmt->setUInt16(0, itr->PersonalRating);
         stmt->setUInt16(1, itr->WeekGames);
         stmt->setUInt16(2, itr->WeekWins);
@@ -851,7 +851,7 @@ void ArenaTeam::SaveToDB()
         stmt->setUInt32(6, GUID_LOPART(itr->Guid));
         trans->Append(stmt);
 
-        stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPDATE_CHARACTER_ARENA_STATS);
+        stmt = CharacterDatabase.GetPreparedStatement(CHAR_REP_CHARACTER_ARENA_STATS);
         stmt->setUInt32(0, GUID_LOPART(itr->Guid));
         stmt->setUInt8(1, GetSlot());
         stmt->setUInt16(2, itr->MatchMakerRating);

@@ -1,5 +1,7 @@
 /*
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -28,23 +30,23 @@ void TCSoapRunnable::run()
 
     // check every 3 seconds if world ended
     soap.accept_timeout = 3;
-    soap.recv_timeout = 5;
-    soap.send_timeout = 5;
+    soap.recv_timeout   = 5;
+    soap.send_timeout   = 5;
     if (!soap_valid_socket(soap_bind(&soap, m_host.c_str(), m_port, 100)))
     {
-        sLog->outError("TCSoap: couldn't bind to %s:%d", m_host.c_str(), m_port);
+        sLog->outError("TCSoap: Couldn't bind to %s:%d", m_host.c_str(), m_port);
         exit(-1);
     }
 
-    sLog->outString("TCSoap: bound to http://%s:%d", m_host.c_str(), m_port);
+    sLog->outString("TCSoap: Bound to http://%s:%d", m_host.c_str(), m_port);
 
     while (!World::IsStopped())
     {
         if (!soap_valid_socket(soap_accept(&soap)))
             continue;   // ran into an accept timeout
 
-        sLog->outDebug(LOG_FILTER_NETWORKIO, "TCSoap: accepted connection from IP=%d.%d.%d.%d", (int)(soap.ip>>24)&0xFF, (int)(soap.ip>>16)&0xFF, (int)(soap.ip>>8)&0xFF, (int)soap.ip&0xFF);
-        struct soap* thread_soap = soap_copy(&soap);// make a safe copy
+        sLog->outDebug(LOG_FILTER_NETWORKIO, "TCSoap: Accepted connection from IP=%d.%d.%d.%d", (int)(soap.ip>>24)&0xFF, (int)(soap.ip>>16)&0xFF, (int)(soap.ip>>8)&0xFF, (int)soap.ip&0xFF);
+        struct soap* thread_soap = soap_copy(&soap);    // make a safe copy
 
         ACE_Message_Block* mb = new ACE_Message_Block(sizeof(struct soap*));
         ACE_OS::memcpy(mb->wr_ptr(), &thread_soap, sizeof(struct soap*));
@@ -63,9 +65,9 @@ void TCSoapRunnable::process_message(ACE_Message_Block* mb)
     mb->release();
 
     soap_serve(soap);
-    soap_destroy(soap); // dealloc C++ data
-    soap_end(soap); // dealloc data and clean up
-    soap_done(soap); // detach soap struct
+    soap_destroy(soap);     // dealloc C++ data
+    soap_end(soap);         // dealloc data and clean up
+    soap_done(soap);        // detach soap struct
     free(soap);
 }
 /*
@@ -91,7 +93,7 @@ int ns1__executeCommand(soap* soap, char* command, char** result)
 
     if (!AccountMgr::CheckPassword(accountId, soap->passwd))
     {
-        sLog->outDebug(LOG_FILTER_NETWORKIO, "TCSoap: invalid password for account '%s'", soap->userid);
+        sLog->outDebug(LOG_FILTER_NETWORKIO, "TCSoap: Invalid password for account '%s'", soap->userid);
         return 401;
     }
 
@@ -102,9 +104,9 @@ int ns1__executeCommand(soap* soap, char* command, char** result)
     }
 
     if (!command || !*command)
-        return soap_sender_fault(soap, "Command mustn't be empty", "The supplied command was an empty string");
+        return soap_sender_fault(soap, "Command must not be empty", "The supplied command was an empty string");
 
-    sLog->outDebug(LOG_FILTER_NETWORKIO, "TCSoap: got command '%s'", command);
+    sLog->outDebug(LOG_FILTER_NETWORKIO, "TCSoap: Got command '%s'", command);
     SOAPCommand connection;
 
     // commands are executed in the world thread. We have to wait for them to be completed
@@ -148,10 +150,10 @@ void SOAPCommand::commandFinished(void* soapconnection, bool success)
 ////////////////////////////////////////////////////////////////////////////////
 
 struct Namespace namespaces[] =
-{   { "SOAP-ENV", "http://schemas.xmlsoap.org/soap/envelope/", NULL, NULL }, // must be first
-    { "SOAP-ENC", "http://schemas.xmlsoap.org/soap/encoding/", NULL, NULL }, // must be second
+{   { "SOAP-ENV", "http://schemas.xmlsoap.org/soap/envelope/", NULL, NULL },    // must be first
+    { "SOAP-ENC", "http://schemas.xmlsoap.org/soap/encoding/", NULL, NULL },    // must be second
     { "xsi", "http://www.w3.org/1999/XMLSchema-instance", "http://www.w3.org/*/XMLSchema-instance", NULL },
-    { "xsd", "http://www.w3.org/1999/XMLSchema",         "http://www.w3.org/*/XMLSchema", NULL },
-    { "ns1", "urn:TC", NULL, NULL },    // "ns1" namespace prefix
+    { "xsd", "http://www.w3.org/1999/XMLSchema",          "http://www.w3.org/*/XMLSchema", NULL },
+    { "ns1", "urn:SF", NULL, NULL },     // "ns1" namespace prefix
     { NULL, NULL, NULL, NULL }
 };

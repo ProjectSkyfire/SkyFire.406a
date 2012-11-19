@@ -360,7 +360,7 @@ bool AuthSocket::_HandleLogonChallenge()
     LoginDatabase.Execute(LoginDatabase.GetPreparedStatement(LOGIN_SET_EXPIREDIPBANS));
 
     const std::string& ip_address = socket().getRemoteAddress();
-    PreparedStatement *stmt = LoginDatabase.GetPreparedStatement(LOGIN_GET_IPBANNED);
+    PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_GET_IPBANNED);
     stmt->setString(0, ip_address);
     PreparedQueryResult result = LoginDatabase.Query(stmt);
     if (result)
@@ -607,7 +607,7 @@ bool AuthSocket::_HandleLogonProof()
         // No SQL injection (escaped user name) and IP address as received by socket
         const char *K_hex = K.AsHexStr();
 
-        PreparedStatement *stmt = LoginDatabase.GetPreparedStatement(LOGIN_SET_LOGONPROOF);
+        PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_SET_LOGONPROOF);
         stmt->setString(0, K_hex);
         stmt->setString(1, socket().getRemoteAddress().c_str());
         stmt->setUInt32(2, GetLocaleByName(_localizationName));
@@ -656,7 +656,7 @@ bool AuthSocket::_HandleLogonProof()
         if (MaxWrongPassCount > 0)
         {
             //Increment number of failed logins by one and if it reaches the limit temporarily ban that account or IP
-            PreparedStatement *stmt = LoginDatabase.GetPreparedStatement(LOGIN_SET_FAILEDLOGINS);
+            PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_SET_FAILEDLOGINS);
             stmt->setString(0, _login);
             LoginDatabase.Execute(stmt);
 

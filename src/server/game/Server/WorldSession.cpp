@@ -655,7 +655,7 @@ void WorldSession::SendAuthWaitQue(uint32 position)
 
 void WorldSession::LoadGlobalAccountData()
 {
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_LOAD_ACCOUNT_DATA);
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_ACCOUNT_DATA);
     stmt->setUInt32(0, GetAccountId());
     LoadAccountData(CharacterDatabase.Query(stmt), GLOBAL_CACHE_MASK);
 }
@@ -698,7 +698,7 @@ void WorldSession::SetAccountData(AccountDataType type, time_t time_, std::strin
     if ((1 << type) & GLOBAL_CACHE_MASK)
     {
         id = GetAccountId();
-        index = CHAR_SET_ACCOUNT_DATA;
+        index = CHAR_UPD_ACCOUNT_DATA;
     }
     else
     {
@@ -707,7 +707,7 @@ void WorldSession::SetAccountData(AccountDataType type, time_t time_, std::strin
             return;
 
         id = m_GUIDLow;
-        index = CHAR_SET_PLAYER_ACCOUNT_DATA;
+        index = CHAR_UPD_PLAYER_ACCOUNT_DATA;
     }
 
     PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(index);

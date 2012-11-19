@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
@@ -16,7 +17,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/// \addtogroup Trinityd
+/// \addtogroup SkyFire Daemon
 /// @{
 /// \file
 
@@ -37,7 +38,7 @@ class Master
         bool _StartDB();
         void _StopDB();
 
-        void clearOnlineAccounts();
+        void ClearOnlineAccounts();
 };
 
 #define sMaster ACE_Singleton<Master, ACE_Null_Mutex>::instance()

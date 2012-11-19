@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
  *
@@ -16,13 +17,13 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/// \addtogroup Trinityd SkyFire Daemon
+/// \addtogroup SkyFire Daemon
 /// @{
 /// \file
 
 #include "Common.h"
-#include "Database/DatabaseEnv.h"
-#include "Configuration/Config.h"
+#include "DatabaseEnv.h"
+#include "Config.h"
 #include "Log.h"
 #include "Master.h"
 
@@ -146,7 +147,7 @@ extern int main(int argc, char **argv)
     // at sMaster return function exist with codes
     // 0 - normal shutdown
     // 1 - shutdown at error
-    // 2 - restart command used, this code can be used by restarter for restart Trinityd
+    // 2 - restart command used, this code can be used by restarter for restart SkyFire Daemon
 
     return ret;
 }

@@ -19,6 +19,7 @@
 
 #include "Common.h"
 #include "DatabaseEnv.h"
+#include "CharacterDatabase.h"
 #include "Log.h"
 #include "MapManager.h"
 #include "ObjectMgr.h"
@@ -1375,7 +1376,7 @@ bool ObjectMgr::SetCreatureLinkedRespawn(uint32 guidLow, uint32 linkedGuidLow)
     if (!linkedGuidLow) // we're removing the linking
     {
         _linkedRespawnStore.erase(guid);
-        PreparedStatement *stmt = WorldDatabase.GetPreparedStatement(WORLD_DEL_CRELINKED_RESPAWN);
+        PreparedStatement* stmt = WorldDatabase.GetPreparedStatement(WORLD_DEL_CRELINKED_RESPAWN);
         stmt->setUInt32(0, guidLow);
         WorldDatabase.Execute(stmt);
         return true;
@@ -1399,7 +1400,7 @@ bool ObjectMgr::SetCreatureLinkedRespawn(uint32 guidLow, uint32 linkedGuidLow)
     uint64 linkedGuid = MAKE_NEW_GUID(linkedGuidLow, slave->id, HIGHGUID_UNIT);
 
     _linkedRespawnStore[guid] = linkedGuid;
-    PreparedStatement *stmt = WorldDatabase.GetPreparedStatement(WORLD_REP_CRELINKED_RESPAWN);
+    PreparedStatement* stmt = WorldDatabase.GetPreparedStatement(WORLD_REP_CRELINKED_RESPAWN);
     stmt->setUInt32(0, guidLow);
     stmt->setUInt32(1, linkedGuidLow);
     WorldDatabase.Execute(stmt);
@@ -1890,7 +1891,7 @@ void ObjectMgr::LoadCreatureRespawnTimes()
 
     uint32 count = 0;
 
-    PreparedQueryResult result = CharacterDatabase.Query(CharacterDatabase.GetPreparedStatement(CHAR_LOAD_CREATURE_RESPAWNS));
+    PreparedQueryResult result = CharacterDatabase.Query(CharacterDatabase.GetPreparedStatement(CHAR_SEL_CREATURE_RESPAWNS));
     if (!result)
     {
         sLog->outString(">> Loaded 0 creature respawn time.");
@@ -1920,11 +1921,11 @@ void ObjectMgr::LoadGameobjectRespawnTimes()
     uint32 oldMSTime = getMSTime();
 
     // Remove outdated data
-    CharacterDatabase.DirectExecute(CharacterDatabase.GetPreparedStatement(CHAR_DEL_EXPIRED_GO_RESPAWNS));
+    CharacterDatabase.DirectExecute("DELETE FROM gameobject_respawn WHERE respawnTime <= UNIX_TIMESTAMP(NOW())");
 
     uint32 count = 0;
 
-    PreparedQueryResult result = CharacterDatabase.Query(CharacterDatabase.GetPreparedStatement(CHAR_LOAD_GO_RESPAWNS));
+    PreparedQueryResult result = CharacterDatabase.Query(CharacterDatabase.GetPreparedStatement(CHAR_SEL_GO_RESPAWNS));
     if (!result)
     {
         sLog->outString(">> Loaded 0 gameobject respawn times. DB table `gameobject_respawn` is empty!");
@@ -1960,10 +1961,13 @@ uint64 ObjectMgr::GetPlayerGUIDByName(std::string name) const
 {
     uint64 guid = 0;
 
-    CharacterDatabase.EscapeString(name);
 
-    // Player name safe to sending to DB (checked at login) and this function using
-    QueryResult result = CharacterDatabase.PQuery("SELECT guid FROM characters WHERE name = '%s'", name.c_str());
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_GUID_BY_NAME);
+
+    stmt->setString(0, name);
+
+    PreparedQueryResult result = CharacterDatabase.Query(stmt);
+    
     if (result)
         guid = MAKE_NEW_GUID((*result)[0].GetUInt32(), 0, HIGHGUID_PLAYER);
 
@@ -1979,7 +1983,11 @@ bool ObjectMgr::GetPlayerNameByGUID(uint64 guid, std::string &name) const
         return true;
     }
 
-    QueryResult result = CharacterDatabase.PQuery("SELECT name FROM characters WHERE guid = '%u'", GUID_LOPART(guid));
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_CHARACTER_NAME);
+
+    stmt->setUInt32(0, GUID_LOPART(guid));
+
+    PreparedQueryResult result = CharacterDatabase.Query(stmt);
 
     if (result)
     {
@@ -1998,7 +2006,11 @@ uint32 ObjectMgr::GetPlayerTeamByGUID(uint64 guid) const
         return Player::TeamForRace(player->getRace());
     }
 
-    QueryResult result = CharacterDatabase.PQuery("SELECT race FROM characters WHERE guid = '%u'", GUID_LOPART(guid));
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_CHAR_RACE);
+
+    stmt->setUInt32(0, GUID_LOPART(guid));
+
+    PreparedQueryResult result = CharacterDatabase.Query(stmt);
 
     if (result)
     {
@@ -2017,7 +2029,12 @@ uint32 ObjectMgr::GetPlayerAccountIdByGUID(uint64 guid) const
         return player->GetSession()->GetAccountId();
     }
 
-    QueryResult result = CharacterDatabase.PQuery("SELECT account FROM characters WHERE guid = '%u'", GUID_LOPART(guid));
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_ACCOUNT_BY_GUID);
+
+    stmt->setUInt32(0, GUID_LOPART(guid));
+
+    PreparedQueryResult result = CharacterDatabase.Query(stmt);
+    
     if (result)
     {
         uint32 acc = (*result)[0].GetUInt32();
@@ -2029,7 +2046,12 @@ uint32 ObjectMgr::GetPlayerAccountIdByGUID(uint64 guid) const
 
 uint32 ObjectMgr::GetPlayerAccountIdByPlayerName(const std::string& name) const
 {
-    QueryResult result = CharacterDatabase.PQuery("SELECT account FROM characters WHERE name = '%s'", name.c_str());
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_ACCOUNT_BY_NAME);
+
+    stmt->setString(0, name);
+
+    PreparedQueryResult result = CharacterDatabase.Query(stmt);
+    
     if (result)
     {
         uint32 acc = (*result)[0].GetUInt32();
@@ -5053,7 +5075,9 @@ void ObjectMgr::LoadWaypointScripts()
     for (ScriptMapMap::const_iterator itr = sWaypointScripts.begin(); itr != sWaypointScripts.end(); ++itr)
         actionSet.insert(itr->first);
 
-    QueryResult result = WorldDatabase.PQuery("SELECT DISTINCT(`action`) FROM waypoint_data");
+    PreparedStatement* stmt = WorldDatabase.GetPreparedStatement(WOLRD_SEL_WAYPOINT_DATA_ACTION);
+    PreparedQueryResult result = WorldDatabase.Query(stmt);
+    
     if (result)
     {
         do
@@ -5536,7 +5560,7 @@ void ObjectMgr::ReturnOrDeleteOldMails(bool serverUp)
         stmt->setUInt64(0, basetime);
         CharacterDatabase.Execute(stmt);
     }
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_GET_EXPIRED_MAIL);
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_EXPIRED_MAIL);
     stmt->setUInt64(0, basetime);
     PreparedQueryResult result = CharacterDatabase.Query(stmt);
     if (!result)
@@ -5547,7 +5571,7 @@ void ObjectMgr::ReturnOrDeleteOldMails(bool serverUp)
     }
 
     std::map<uint32 /*messageId*/, MailItemInfoVec> itemsCache;
-    stmt = CharacterDatabase.GetPreparedStatement(CHAR_GET_EXPIRED_MAIL_ITEMS);
+    stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_EXPIRED_MAIL_ITEMS);
     stmt->setUInt64(0, basetime);
     if (PreparedQueryResult items = CharacterDatabase.Query(stmt))
     {
@@ -5610,7 +5634,7 @@ void ObjectMgr::ReturnOrDeleteOldMails(bool serverUp)
             else
             {
                 // Mail will be returned
-                stmt = CharacterDatabase.GetPreparedStatement(CHAR_SET_MAIL_RETURNED);
+                stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_MAIL_RETURNED);
                 stmt->setUInt32(0, m->receiver);
                 stmt->setUInt32(1, m->sender);
                 stmt->setUInt64(2, basetime + 30 * DAY);
@@ -5621,12 +5645,12 @@ void ObjectMgr::ReturnOrDeleteOldMails(bool serverUp)
                 for (MailItemInfoVec::iterator itr2 = m->items.begin(); itr2 != m->items.end(); ++itr2)
                 {
                     // Update receiver in mail items for its proper delivery, and in instance_item for avoid lost item at sender delete
-                    stmt = CharacterDatabase.GetPreparedStatement(CHAR_SET_MAIL_ITEM_RECEIVER);
+                    stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_MAIL_ITEM_RECEIVER);
                     stmt->setUInt32(0, m->sender);
                     stmt->setUInt32(1, itr2->item_guid);
                     CharacterDatabase.Execute(stmt);
 
-                    stmt = CharacterDatabase.GetPreparedStatement(CHAR_SET_ITEM_OWNER);
+                    stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_ITEM_OWNER);
                     stmt->setUInt32(0, m->sender);
                     stmt->setUInt32(1, itr2->item_guid);
                     CharacterDatabase.Execute(stmt);
@@ -6987,7 +7011,7 @@ void ObjectMgr::LoadCorpses()
 {
     uint32 oldMSTime = getMSTime();
 
-    PreparedQueryResult result = CharacterDatabase.Query(CharacterDatabase.GetPreparedStatement(CHAR_LOAD_CORPSES));
+    PreparedQueryResult result = CharacterDatabase.Query(CharacterDatabase.GetPreparedStatement(CHAR_SEL_CORPSES));
     if (!result)
     {
         sLog->outString(">> Loaded 0 corpses. DB table `corpse` is empty.");
@@ -7519,7 +7543,7 @@ void ObjectMgr::SaveCreatureRespawnTime(uint32 loguid, uint32 instance, time_t t
         _creatureRespawnTimesMutex.release();
     }
 
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_ADD_CREATURE_RESPAWN);
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_REP_CREATURE_RESPAWN);
     stmt->setUInt32(0, loguid);
     stmt->setUInt64(1, uint64(t));
     stmt->setUInt32(2, instance);
@@ -7535,7 +7559,7 @@ void ObjectMgr::RemoveCreatureRespawnTime(uint32 loguid, uint32 instance)
         _creatureRespawnTimesMutex.release();
     }
 
-    PreparedStatement *stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_CREATURE_RESPAWN);
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_CREATURE_RESPAWN);
     stmt->setUInt32(0, loguid);
     stmt->setUInt32(1, instance);
     CharacterDatabase.Execute(stmt);
@@ -7567,7 +7591,7 @@ void ObjectMgr::SaveGORespawnTime(uint32 loguid, uint32 instance, time_t t)
         _goRespawnTimesMutex.release();
     }
 
-    PreparedStatement *stmt = CharacterDatabase.GetPreparedStatement(CHAR_ADD_GO_RESPAWN);
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_REP_GO_RESPAWN);
     stmt->setUInt32(0, loguid);
     stmt->setUInt64(1, uint64(t));
     stmt->setUInt32(2, instance);
@@ -7583,7 +7607,7 @@ void ObjectMgr::RemoveGORespawnTime(uint32 loguid, uint32 instance)
         _goRespawnTimesMutex.release();
     }
 
-    PreparedStatement *stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_GO_RESPAWN);
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_GO_RESPAWN);
     stmt->setUInt32(0, loguid);
     stmt->setUInt32(1, instance);
     CharacterDatabase.Execute(stmt);
@@ -8537,7 +8561,10 @@ void ObjectMgr::LoadTrainerSpell()
 int ObjectMgr::LoadReferenceVendor(int32 vendor, int32 item, std::set<uint32> *skip_vendors)
 {
     // find all items from the reference vendor
-    QueryResult result = WorldDatabase.PQuery("SELECT item, maxcount, incrtime, ExtendedCost FROM npc_vendor WHERE entry='%d' ORDER BY slot ASC", item);
+    PreparedStatement* stmt = WorldDatabase.GetPreparedStatement(WORLD_SEL_NPC_VENDOR_REF);
+    stmt->setUInt32(0, uint32(item));
+    PreparedQueryResult result = WorldDatabase.Query(stmt);
+    
     if (!result)
         return 0;
 
