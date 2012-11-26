@@ -61,8 +61,16 @@ target_link_libraries(mmaps_generator
   shared
 )
 
+if( WIN32 )
+  add_custom_command(TARGET mmaps_generator
+    POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/complete_map_extractor.bat ${CMAKE_BINARY_DIR}/bin/$(ConfigurationName)/
+  )
+endif()
+
 if( UNIX )
   install(TARGETS mmaps_generator DESTINATION bin)
 elseif( WIN32 )
   install(TARGETS mmaps_generator DESTINATION "${CMAKE_INSTALL_PREFIX}")
+  install(FILES complete_map_extractor.bat DESTINATION "${CMAKE_INSTALL_PREFIX}")
 endif()
