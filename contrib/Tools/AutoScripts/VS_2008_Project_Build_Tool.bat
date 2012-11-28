@@ -33,10 +33,15 @@ rem
 rem This Setting is For Multi-Core Processor configurations(core Count)for speedup only
 SET CORE_NUMBER=4
 rem
+rem Build map extractors. 1=Yes or 0=No.
+SET TOOLS=1
+rem
 rem "TODO: Add-ins for Memory Manager(s)"
 REM *****************************************************************************************
 SET COMPILER="Visual Studio 9 2008"
 if %BUILD_PLATFORM%==Win64 (SET COMPILER="Visual Studio 9 2008 Win64")
+if %TOOLS%==0 (SET TOOL="")
+if %TOOLS%==1 (SET TOOL="-DTOOLS=%INSTALL_PATH%")
 SET COMPILER_PATH="C:/Program Files (x86)/Microsoft Visual Studio 9.0/VC/bin/cl.exe"
 SET LINKER_PATH="C:/Program Files (x86)/Microsoft Visual Studio 9.0/VC/bin/link.exe"
 SET VC_VARS="C:\\Program Files (x86)\\Microsoft Visual Studio 9.0\\VC\\"
@@ -68,18 +73,19 @@ goto :help
 REM *****************************************************************************************
 :win32
 cd build
-cmake -G %COMPILER% -DPCH=1 -DCMAKE_CXX_COMPILER=%COMPILER_PATH% -DCMAKE_CXX_FLAGS=%C_FLAGS% -DCMAKE_C_FLAGS=%C_FLAGS% -DCMAKE_CXX_COMPILER=%COMPILER_PATH% -DCMAKE_INSTALL_PREFIX=%INSTALL_PATH% -DTOOLS=%INSTALL_PATH% ..
+cmake -G %COMPILER% -DPCH=1 -DCMAKE_CXX_COMPILER=%COMPILER_PATH% -DCMAKE_CXX_FLAGS=%C_FLAGS% -DCMAKE_C_FLAGS=%C_FLAGS% -DCMAKE_CXX_COMPILER=%COMPILER_PATH% -DCMAKE_INSTALL_PREFIX=%INSTALL_PATH% %TOOL% ..
 call %VC_VARS%vcvarsall.bat
 MSBuild SkyFireEMU.sln /m:%CORE_NUMBER% /t:Rebuild /p:Configuration=%RESULT_CONF%;Platform=%BUILD_PLATFORM%
 goto :end
 REM *****************************************************************************************
 :win64
 cd build
-cmake -G %COMPILER% -DPCH=1 -DPLATFORM=X64 -DCMAKE_CXX_FLAGS=%C_FLAGS% -DCMAKE_C_FLAGS=%C_FLAGS% -DCMAKE_CXX_COMPILER=%COMPILER_PATH% -DCMAKE_CXX_COMPILER=%COMPILER_PATH% -DCMAKE_INSTALL_PREFIX=%INSTALL_PATH% -DTOOLS=%INSTALL_PATH% ..
+cmake -G %COMPILER% -DPCH=1 -DPLATFORM=X64 -DCMAKE_CXX_FLAGS=%C_FLAGS% -DCMAKE_C_FLAGS=%C_FLAGS% -DCMAKE_CXX_COMPILER=%COMPILER_PATH% -DCMAKE_CXX_COMPILER=%COMPILER_PATH% -DCMAKE_INSTALL_PREFIX=%INSTALL_PATH% %TOOL% ..
 call %VC_VARS%vcvarsall.bat
 MSBuild SkyFireEMU.sln /m:%CORE_NUMBER%  /t:Rebuild /p:Configuration=%RESULT_CONF%;Platform=x64
 goto :end
 REM *****************************************************************************************
+
 
 :end
 cd ..
