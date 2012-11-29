@@ -1,6 +1,6 @@
 <?php
 /*
- * OCSoap client example
+ * SFSoap client example
  *
  * a simple example how to invoke commands using SOAP
  */
@@ -14,7 +14,7 @@ $command = "server info";
 $client = new SoapClient(NULL,
 array(
     "location" => "http://$host:$soapport/",
-    "uri" => "urn:Oregon",
+    "uri" => "urn:SkyFire",
     "style" => SOAP_RPC,
     'login' => $username,
     'password' => $password

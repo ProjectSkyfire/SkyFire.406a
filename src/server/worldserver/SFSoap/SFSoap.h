@@ -17,8 +17,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _TCSOAP_H
-#define _TCSOAP_H
+#ifndef _SFSOAP_H
+#define _SFSOAP_H
 
 #include "Common.h"
 #include "World.h"
@@ -32,10 +32,10 @@
 #include <ace/Semaphore.h>
 #include <ace/Task.h>
 
-class TCSoapRunnable: public ACE_Based::Runnable
+class SFSoapRunnable: public ACE_Based::Runnable
 {
     public:
-        TCSoapRunnable() { }
+        SFSoapRunnable() { }
         void run();
         void setListenArguments(std::string host, uint16 port)
         {

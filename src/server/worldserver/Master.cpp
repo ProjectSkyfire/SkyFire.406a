@@ -31,26 +31,24 @@
 #include "Config.h"
 #include "DatabaseEnv.h"
 #include "DatabaseWorkerPool.h"
-
 #include "CliRunnable.h"
 #include "Log.h"
 #include "Master.h"
 #include "RARunnable.h"
-#include "TCSoap.h"
+#include "SFSoap.h"
 #include "Timer.h"
 #include "Util.h"
 #include "AuthSocket.h"
-
 #include "BigNumber.h"
 
 #include <ace/Sig_Handler.h>
 
 #ifdef _WIN32
 #include "ServiceWin32.h"
-extern int m_ServiceStatus;
+    extern int m_ServiceStatus;
 #endif
 
-/// Handle worldserver's termination signals
+///- Handle worldserver's termination signals
 class WorldServerSignalHandler : public SkyFire::SignalHandler
 {
     public:
@@ -62,10 +60,10 @@ class WorldServerSignalHandler : public SkyFire::SignalHandler
                     World::StopNow(RESTART_EXIT_CODE);
                     break;
                 case SIGTERM:
-                #ifdef _WIN32
+            #ifdef _WIN32
                 case SIGBREAK:
                     if (m_ServiceStatus != 1)
-                #endif /* _WIN32 */
+            #endif /* _WIN32 */
                     World::StopNow(SHUTDOWN_EXIT_CODE);
                     break;
             }
@@ -84,21 +82,25 @@ public:
     {
         if (!_delaytime)
             return;
+
         sLog->outString("Starting up anti-freeze thread (%u seconds max stuck time)...", _delaytime/1000);
-        m_loops = 0;
-        w_loops = 0;
-        m_lastchange = 0;
-        w_lastchange = 0;
+        m_loops         = 0;
+        w_loops         = 0;
+        m_lastchange    = 0;
+        w_lastchange    = 0;
+
         while (!World::IsStopped())
         {
             ACE_Based::Thread::Sleep(1000);
             uint32 curtime = getMSTime();
+
             // normal work
             if (w_loops != World::m_worldLoopCounter)
             {
                 w_lastchange = curtime;
                 w_loops = World::m_worldLoopCounter;
             }
+
             // possible freeze
             else if (getMSTimeDiff(w_lastchange, curtime) > _delaytime)
             {
@@ -128,10 +130,10 @@ int Master::Run()
     sLog->outString("  \\ \\___  \\ \\  _'-\\ \\____ \\ \\  __\\ \\ \\ \\  __<\\ \\  __\\ ");
     sLog->outString("   \\/\\_____\\ \\_\\ \\_\\/\\_____\\ \\_\\  \\ \\_\\ \\_\\ \\_\\ \\_____\\ ");
     sLog->outString("    \\/_____/\\/_/\\/_/\\/_____/\\/_/   \\/_/\\/_/ /_/\\/_____/ ");
-    sLog->outString("  Project SkyFireEmu 2012(c) Open-sourced Game Emulation ");
+    sLog->outString("  Project SkyFireEmu 2012(c) Open-Sourced Game Emulation Project ");
     sLog->outString("           <http://www.projectskyfire.org/> \n");
 
-    /// worldserver PID file creation
+    ///- Worldserver PID file creation
     std::string pidfile = ConfigMgr::GetStringDefault("PidFile", "");
     if (!pidfile.empty())
     {
@@ -149,7 +151,7 @@ int Master::Run()
     if (!_StartDB())
         return 1;
 
-    // set server offline (not connectable)
+    // Set server offline (not connectable)
     LoginDatabase.DirectPExecute("UPDATE realmlist SET color = (color & ~%u) | %u WHERE id = '%d'", REALM_FLAG_OFFLINE, REALM_FLAG_INVALID, realmID);
 
     ///- Initialize the World
@@ -157,17 +159,17 @@ int Master::Run()
 
     ///- Initialize the signal handlers
     WorldServerSignalHandler SignalINT, SignalTERM;
-    #ifdef _WIN32
+#ifdef _WIN32
     WorldServerSignalHandler SignalBREAK;
-    #endif /* _WIN32 */
+#endif /* _WIN32 */
 
     ///- Register worldserver's signal handlers
     ACE_Sig_Handler Handler;
     Handler.register_handler(SIGINT, &SignalINT);
     Handler.register_handler(SIGTERM, &SignalTERM);
-    #ifdef _WIN32
+#ifdef _WIN32
     Handler.register_handler(SIGBREAK, &SignalBREAK);
-    #endif /* _WIN32 */
+#endif /* _WIN32 */
 
     ///- Launch WorldRunnable thread
     ACE_Based::Thread world_thread(new WorldRunnable);
@@ -176,7 +178,7 @@ int Master::Run()
     ACE_Based::Thread* cliThread = NULL;
 
 #ifdef _WIN32
-    if (ConfigMgr::GetBoolDefault("Console.Enable", true) && (m_ServiceStatus == -1)/* need disable console in service mode*/)
+    if (ConfigMgr::GetBoolDefault("Console.Enable", true) && (m_ServiceStatus == -1)/* need disable console in service mode */)
 #else
     if (ConfigMgr::GetBoolDefault("Console.Enable", true))
 #endif
@@ -188,7 +190,7 @@ int Master::Run()
     ACE_Based::Thread rar_thread(new RARunnable);
 
     ///- Handle affinity for multiple processors and process priority on Windows
-    #ifdef _WIN32
+#ifdef _WIN32
     {
         HANDLE hProcess = GetCurrentProcess();
 
@@ -200,7 +202,7 @@ int Master::Run()
 
             if (GetProcessAffinityMask(hProcess, &appAff, &sysAff))
             {
-                ULONG_PTR curAff = Aff & appAff;            // remove non accessible processors
+                ULONG_PTR curAff = Aff & appAff;            // Remove non-accessible processors
 
                 if (!curAff)
                 {
@@ -227,13 +229,14 @@ int Master::Run()
                 sLog->outError("Can't set worldserver process priority class.");
         }
     }
-    #endif
-    //Start soap serving thread
+#endif
+    
+    // Start soap serving thread
     ACE_Based::Thread* soap_thread = NULL;
 
     if (ConfigMgr::GetBoolDefault("SOAP.Enabled", false))
     {
-        TCSoapRunnable* runnable = new TCSoapRunnable();
+        SFSoapRunnable* runnable = new SFSoapRunnable();
         runnable->setListenArguments(ConfigMgr::GetStringDefault("SOAP.IP", "127.0.0.1"), uint16(ConfigMgr::GetIntDefault("SOAP.Port", 7878)));
         soap_thread = new ACE_Based::Thread(runnable);
     }
@@ -255,16 +258,16 @@ int Master::Run()
     {
         sLog->outError("Failed to start network");
         World::StopNow(ERROR_EXIT_CODE);
-        // go down and shutdown the server
+        // Go down and shutdown the server
     }
 
-    // set server online (allow connecting now)
+    // Set server online (allow connecting now)
     LoginDatabase.DirectPExecute("UPDATE realmlist SET color = color & ~%u, population = 0 WHERE id = '%u'", REALM_FLAG_INVALID, realmID);
 
     sLog->outString("%s (worldserver-daemon) ready...", _FULLVERSION);
 
-    // when the main thread closes the singletons get unloaded
-    // since worldrunnable uses them, it will crash if unloaded after master
+    // When the main thread closes the singletons get unloaded
+    // Since worldrunnable uses them, it will crash if unloaded after master
     world_thread.wait();
     rar_thread.wait();
 
@@ -275,7 +278,7 @@ int Master::Run()
         delete soap_thread;
     }
 
-    // set server offline
+    // Set server offline
     LoginDatabase.DirectPExecute("UPDATE realmlist SET color = color | %u WHERE id = '%d'", REALM_FLAG_OFFLINE, realmID);
 
     ///- Clean database before leaving
@@ -287,7 +290,7 @@ int Master::Run()
 
     if (cliThread)
     {
-        #ifdef _WIN32
+    #ifdef _WIN32
 
         // this only way to terminate CLI thread exist at Win32 (alt. way exist only in Windows Vista API)
         //_exit(1);
@@ -295,55 +298,53 @@ int Master::Run()
         INPUT_RECORD b[5];
         HANDLE hStdIn = GetStdHandle(STD_INPUT_HANDLE);
         b[0].EventType = KEY_EVENT;
-        b[0].Event.KeyEvent.bKeyDown = TRUE;
-        b[0].Event.KeyEvent.uChar.AsciiChar = 'X';
-        b[0].Event.KeyEvent.wVirtualKeyCode = 'X';
-        b[0].Event.KeyEvent.wRepeatCount = 1;
+        b[0].Event.KeyEvent.bKeyDown            = TRUE;
+        b[0].Event.KeyEvent.uChar.AsciiChar     = 'X';
+        b[0].Event.KeyEvent.wVirtualKeyCode     = 'X';
+        b[0].Event.KeyEvent.wRepeatCount        = 1;
 
         b[1].EventType = KEY_EVENT;
-        b[1].Event.KeyEvent.bKeyDown = FALSE;
-        b[1].Event.KeyEvent.uChar.AsciiChar = 'X';
-        b[1].Event.KeyEvent.wVirtualKeyCode = 'X';
-        b[1].Event.KeyEvent.wRepeatCount = 1;
+        b[1].Event.KeyEvent.bKeyDown            = FALSE;
+        b[1].Event.KeyEvent.uChar.AsciiChar     = 'X';
+        b[1].Event.KeyEvent.wVirtualKeyCode     = 'X';
+        b[1].Event.KeyEvent.wRepeatCount        = 1;
 
         b[2].EventType = KEY_EVENT;
-        b[2].Event.KeyEvent.bKeyDown = TRUE;
-        b[2].Event.KeyEvent.dwControlKeyState = 0;
-        b[2].Event.KeyEvent.uChar.AsciiChar = '\r';
-        b[2].Event.KeyEvent.wVirtualKeyCode = VK_RETURN;
-        b[2].Event.KeyEvent.wRepeatCount = 1;
-        b[2].Event.KeyEvent.wVirtualScanCode = 0x1c;
+        b[2].Event.KeyEvent.bKeyDown            = TRUE;
+        b[2].Event.KeyEvent.dwControlKeyState   = 0;
+        b[2].Event.KeyEvent.uChar.AsciiChar     = '\r';
+        b[2].Event.KeyEvent.wVirtualKeyCode     = VK_RETURN;
+        b[2].Event.KeyEvent.wRepeatCount        = 1;
+        b[2].Event.KeyEvent.wVirtualScanCode    = 0x1c;
 
         b[3].EventType = KEY_EVENT;
-        b[3].Event.KeyEvent.bKeyDown = FALSE;
-        b[3].Event.KeyEvent.dwControlKeyState = 0;
-        b[3].Event.KeyEvent.uChar.AsciiChar = '\r';
-        b[3].Event.KeyEvent.wVirtualKeyCode = VK_RETURN;
-        b[3].Event.KeyEvent.wVirtualScanCode = 0x1c;
-        b[3].Event.KeyEvent.wRepeatCount = 1;
+        b[3].Event.KeyEvent.bKeyDown            = FALSE;
+        b[3].Event.KeyEvent.dwControlKeyState   = 0;
+        b[3].Event.KeyEvent.uChar.AsciiChar     = '\r';
+        b[3].Event.KeyEvent.wVirtualKeyCode     = VK_RETURN;
+        b[3].Event.KeyEvent.wVirtualScanCode    = 0x1c;
+        b[3].Event.KeyEvent.wRepeatCount        = 1;
         DWORD numb;
         WriteConsoleInput(hStdIn, b, 4, &numb);
 
         cliThread->wait();
 
-        #else
-
+    #else
         cliThread->destroy();
-
-        #endif
+    #endif
 
         delete cliThread;
     }
 
-    // for some unknown reason, unloading scripts here and not in worldrunnable
-    // fixes a memory leak related to detaching threads from the module
+    // For some unknown reason, unloading scripts here and not in worldrunnable
+    // Fixes a memory leak related to detaching threads from the module
     //UnloadScriptingModule();
 
     // Exit the process with specified return value
     return World::GetExitCode();
 }
 
-/// Initialize connection to the databases
+///- Initialize connection to the databases
 bool Master::_StartDB()
 {
     MySQL::Library_Init();
@@ -367,7 +368,8 @@ bool Master::_StartDB()
     }
 
     synch_threads = ConfigMgr::GetIntDefault("WorldDatabase.SynchThreads", 1);
-    ///- Initialise the world database
+
+    ///- Initialize the world database
     if (!WorldDatabase.Open(dbstring, async_threads, synch_threads))
     {
         sLog->outError("Cannot connect to world database %s", dbstring.c_str());
@@ -392,7 +394,7 @@ bool Master::_StartDB()
 
     synch_threads = ConfigMgr::GetIntDefault("CharacterDatabase.SynchThreads", 2);
 
-    ///- Initialise the Character database
+    ///- Initialize the Character database
     if (!CharacterDatabase.Open(dbstring, async_threads, synch_threads))
     {
         sLog->outError("Cannot connect to Character database %s", dbstring.c_str());
@@ -416,7 +418,8 @@ bool Master::_StartDB()
     }
 
     synch_threads = ConfigMgr::GetIntDefault("LoginDatabase.SynchThreads", 1);
-    ///- Initialise the login database
+
+    ///- Initialize the login database
     if (!LoginDatabase.Open(dbstring, async_threads, synch_threads))
     {
         sLog->outError("Cannot connect to login database %s", dbstring.c_str());
@@ -455,7 +458,7 @@ void Master::_StopDB()
     MySQL::Library_End();
 }
 
-/// Clear 'online' status for all accounts with characters in this realm
+///- Clear 'online' status for all accounts with characters in this realm
 void Master::ClearOnlineAccounts()
 {
     // Reset online status for all accounts with characters on the current realm
