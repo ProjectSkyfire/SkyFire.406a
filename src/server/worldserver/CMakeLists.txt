@@ -11,7 +11,7 @@
 
 file(GLOB_RECURSE sources_CommandLine CommandLine/*.cpp CommandLine/*.h)
 file(GLOB_RECURSE sources_RemoteAccess RemoteAccess/*.cpp RemoteAccess/*.h)
-file(GLOB_RECURSE sources_TCSoap TCSoap/*.cpp TCSoap/*.h)
+file(GLOB_RECURSE sources_SFSoap SFSoap/*.cpp SFSoap/*.h)
 file(GLOB_RECURSE sources_WorldThread WorldThread/*.cpp WorldThread/*.h)
 file(GLOB sources_localdir *.cpp *.h)
 
@@ -19,7 +19,7 @@ if( USE_COREPCH )
   include_directories(${CMAKE_CURRENT_BINARY_DIR})
 endif()
 
-if ( USE_COREPCH AND MSVC )
+if( USE_COREPCH AND MSVC )
   set(worldserver_SRCS
     PrecompiledHeaders/worldPCH.cpp
     PrecompiledHeaders/worldPCH.h
@@ -30,7 +30,7 @@ set(worldserver_SRCS
   ${worldserver_SRCS}
   ${sources_CommandLine}
   ${sources_RemoteAccess}
-  ${sources_TCSoap}
+  ${sources_SFSoap}
   ${sources_WorldThread}
   ${sources_localdir}
 )
@@ -49,7 +49,7 @@ include_directories(
   ${CMAKE_SOURCE_DIR}/dep/sockets/include
   ${CMAKE_SOURCE_DIR}/dep/SFMT
   ${CMAKE_SOURCE_DIR}/dep/recastlite/Detour
-  ${CMAKE_SOURCE_DIR}/dep/recastlite/Recast 
+  ${CMAKE_SOURCE_DIR}/dep/recastlite/Recast
   ${CMAKE_SOURCE_DIR}/src/server/collision
   ${CMAKE_SOURCE_DIR}/src/server/collision/Management
   ${CMAKE_SOURCE_DIR}/src/server/shared
@@ -57,7 +57,7 @@ include_directories(
   ${CMAKE_SOURCE_DIR}/src/server/shared/Cryptography
   ${CMAKE_SOURCE_DIR}/src/server/shared/Cryptography/Authentication
   ${CMAKE_SOURCE_DIR}/src/server/shared/Database
-  ${CMAKE_SOURCE_DIR}/src/server/shared/Database/Implementation 
+  ${CMAKE_SOURCE_DIR}/src/server/shared/Database/Implementation
   ${CMAKE_SOURCE_DIR}/src/server/shared/DataStores
   ${CMAKE_SOURCE_DIR}/src/server/shared/Debugging
   ${CMAKE_SOURCE_DIR}/src/server/shared/Dynamic/LinkedReference
@@ -132,14 +132,14 @@ include_directories(
   ${CMAKE_SOURCE_DIR}/src/server/game/Spells/Auras
   ${CMAKE_SOURCE_DIR}/src/server/game/Tools
   ${CMAKE_SOURCE_DIR}/src/server/game/Warden
-  ${CMAKE_SOURCE_DIR}/src/server/game/Warden/Modules 
+  ${CMAKE_SOURCE_DIR}/src/server/game/Warden/Modules
   ${CMAKE_SOURCE_DIR}/src/server/game/Weather
   ${CMAKE_SOURCE_DIR}/src/server/game/World
   ${CMAKE_SOURCE_DIR}/src/server/authserver/Server
   ${CMAKE_CURRENT_SOURCE_DIR}
   ${CMAKE_CURRENT_SOURCE_DIR}/CommandLine
   ${CMAKE_CURRENT_SOURCE_DIR}/RemoteAccess
-  ${CMAKE_CURRENT_SOURCE_DIR}/TCSoap
+  ${CMAKE_CURRENT_SOURCE_DIR}/SFSoap
   ${CMAKE_CURRENT_SOURCE_DIR}/WorldThread
   ${ACE_INCLUDE_DIR}
   ${MYSQL_INCLUDE_DIR}
@@ -168,7 +168,7 @@ target_link_libraries(worldserver
   scripts
   collision
   g3dlib
-  Detour  
+  Detour
   gsoap
   ${JEMALLOC_LIBRARY}
   ${READLINE_LIBRARY}
@@ -205,4 +205,3 @@ if( USE_COREPCH )
     add_native_precompiled_header(worldserver ${CMAKE_CURRENT_SOURCE_DIR}/PrecompiledHeaders/worldPCH)
   endif()
 endif()
-
