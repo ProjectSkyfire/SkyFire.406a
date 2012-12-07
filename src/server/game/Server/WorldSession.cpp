@@ -328,7 +328,8 @@ bool WorldSession::Update(uint32 diff, PacketFilter& updater)
 
                     sScriptMgr->OnPacketReceive(m_Socket, WorldPacket(*packet));
                     (this->*opHandle.handler)(*packet);
-                    LogUnprocessedTail(packet);
+					if (sLog->IsOutDebug() && packet->rpos() < packet->wpos())
+                        LogUnprocessedTail(packet);
                     break;
                 case STATUS_NEVER:
                     sLog->outDebug(LOG_FILTER_NETWORKIO, "SESSION (account: %u, guidlow: %u, char: %s): received not allowed opcode %s (0x%.4X)",
