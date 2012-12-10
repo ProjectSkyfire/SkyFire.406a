@@ -17,6 +17,14 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+/* Script Data Start
+SFName: Boss Glubtok
+SFAuthor: JeanClaude
+SF%Complete: 25
+SFComment: TODO: Check spellId's and clean up door events. also 2 fix warnings@lines(140,146,184)
+SFCategory: dungeon script
+Script Data End */
+
 #include "ScriptPCH.h"
 #include "SpellScript.h"
 #include "SpellAuraEffects.h"
@@ -25,13 +33,15 @@
 
 enum Spells
 {
-    //Glubtok
-    SPELL_FIRE_BLOSSOMS			= 91275, // Fireball explodes on the ground
-    SPELL_FIRE_BLOSSOM			= 91286, // Lance Fireball
-    SPELL_FROST_BLOSSOMS		= 91274, // Exploding ice ball
-    SPELL_FROST_BLOSSOM			= 91287, // Lance ice ball
-    SPELL_ARCANE_POWER			= 88009, // Spell Phase 2
-    SPELL_BLINK					= 38932
+    //Glubtok    these need checked http://www.wowhead.com/npc=47162#abilities 
+    SPELL_FIRE_BLOSSOMS         = 91275, // Fireball explodes on the ground
+    SPELL_FIRE_BLOSSOM          = 91286, // Lance Fireball
+    SPELL_FROST_BLOSSOMS        = 91274, // Exploding ice ball(HEROIC)
+    SPELL_FROST_BLOSSOM         = 91287, // Lance ice ball
+    SPELL_ARCANE_POWER          = 88009, // Spell Phase 2
+    SPELL_FIST_OF_FLAME			= 87859,
+    SPELL_FIST_OF_FROST			= 87861,    
+    SPELL_BLINK                 = 38932
 };
 
 
@@ -49,8 +59,8 @@ const Position pos[1] =
 
 enum Phases
 {
-    PHASE_NORMAL		= 1,
-    PHASE_50_PERCENT	= 2,
+    PHASE_NORMAL        = 1,
+    PHASE_50_PERCENT    = 2,
 };
 
 class boss_glubtok : public CreatureScript
@@ -83,15 +93,15 @@ public:
 
         void Reset()
         {
-            Phased					= false;
-            Phase					= PHASE_NORMAL;
+            Phased                  = false;
+            Phase                   = PHASE_NORMAL;
 
-            elemental_fists			= 20000;
-            blinkTimer				= 12000;
+            elemental_fists         = 20000;
+            blinkTimer              = 12000;
 
-            NormalCastTimer			= 3000;
-            SUPER_FROST_BLOSSOMS	= 2000;
-            SUPER_FIRE_BLOSSOMS		= 2000;
+            NormalCastTimer         = 3000;
+            SUPER_FROST_BLOSSOMS    = 2000;
+            SUPER_FIRE_BLOSSOMS     = 2000;
         }
 
         void EnterCombat(Unit* who)
@@ -126,29 +136,29 @@ public:
                         {
                             case SUPER_FIRE_BLOSSOM:
                                 Available [0] = SUPER_FIRE_BLOSSOM;
-                            break;
+                                break;
                             case SUPER_FROST_BLOSSOM:
                                 Available [1] = SUPER_FROST_BLOSSOM;
-                            break;
+                                break;
                         }
 
                         BlossomSpell = Available[urand(0, 1)];
                         switch (BlossomSpell)
                         {
                             case SUPER_FIRE_BLOSSOM:
-                                if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true));
+                                if (Unit* target =SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true));
                                 DoCast(SPELL_FIRE_BLOSSOM);
                                 DoCast(SPELL_FIRE_BLOSSOMS);
                                 SUPER_FIRE_BLOSSOMS = 2000;
-                            break;
+                                break;
                             case SUPER_FROST_BLOSSOM:
-                                if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true));
+                                if (Unit* target =SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true));
                                 DoCast(SPELL_FROST_BLOSSOM);
                                 DoCast(SPELL_FROST_BLOSSOMS);
                                 SUPER_FROST_BLOSSOMS = 2000;
-                            break;
+                                break;
                         }
-                    }                  
+                    }
                     NormalCastTimer = 3000;
 
                 } else NormalCastTimer -= diff;
@@ -163,9 +173,9 @@ public:
                 if (PhaseChangeTimer<= diff)
                 {
                     me->SetReactState(REACT_AGGRESSIVE);
-                    elemental_fists		= 20000;
-                    blinkTimer			= 12000;
-                    Phase				= PHASE_NORMAL;
+                    elemental_fists     = 20000;
+                    blinkTimer          = 12000;
+                    Phase               = PHASE_NORMAL;
                 } else PhaseChangeTimer -= diff;
 
                 if (elemental_fists <= diff && Phase == PHASE_NORMAL)
@@ -177,10 +187,10 @@ public:
                         elemental_fists = 20000;
                     } else elemental_fists -= diff;
                 }
-                
+
                 if (blinkTimer <= diff && Phase == PHASE_NORMAL)
                 {
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 10.0f, true));
+                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1,10.0f, true));
                     DoCast(SPELL_BLINK);
                     blinkTimer = 12000;
                 } else blinkTimer -= diff;
