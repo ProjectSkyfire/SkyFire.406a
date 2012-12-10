@@ -48,4 +48,11 @@ enum GameObjects
     GO_DOOR_LEVER                   = 101833,
     GO_MR_SMITE_CHEST               = 144111
 };
+
+enum BlossomSpell // Glubtok
+{
+    SUPER_FIRE_BLOSSOM,
+    SUPER_FROST_BLOSSOM,
+};
+
 #endif
