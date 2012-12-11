@@ -17,8 +17,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef DEF_DEADMINES_H
-#define DEF_DEADMINES_H
+#ifndef DEADMINES_H
+#define DEADMINES_H
 
 enum CannonState
 {
