@@ -34,13 +34,11 @@ Script Data End */
 enum Spells
 {
     //Glubtok    these need checked http://www.wowhead.com/npc=47162#abilities 
-    SPELL_FIRE_BLOSSOMS         = 91275, // Fireball explodes on the ground
-    SPELL_FIRE_BLOSSOM          = 91286, // Lance Fireball
-    SPELL_FROST_BLOSSOMS        = 91274, // Exploding ice ball(HEROIC)
-    SPELL_FROST_BLOSSOM         = 91287, // Lance ice ball
+    SPELL_FIRE_BLOSSOM          = 88129, // Fireball explodes on the ground
+    SPELL_FROST_BLOSSOM         = 88169, // Iceball explodes on the ground
     SPELL_ARCANE_POWER          = 88009, // Spell Phase 2
-    SPELL_FIST_OF_FLAME			= 87859,
-    SPELL_FIST_OF_FROST			= 87861,    
+    SPELL_FIST_OF_FLAME			= 87859, // elemental_fists
+    SPELL_FIST_OF_FROST			= 87861, // elemental_fists    
     SPELL_BLINK                 = 38932
 };
 
@@ -48,7 +46,7 @@ enum Spells
 #define SAY_AGGRO "Let's do it!"
 #define SAY_DIED "'Sploded dat one!"
 #define SAY_FLAME "Elemental Fists!"
-#define SAY_ARCANE "Glubtok show you da power of de arcane!"
+#define SAY_ARCANE "Glubtok show you da power of arcane!"
 
 #define spell_elemental_fists RAND(87859, 91273)
 
@@ -86,7 +84,7 @@ public:
         uint32 NormalCastTimer;
         uint8 BlossomSpell;
 
-        uint32 SUPER_FROST_BLOSSOMS;
+        uint32 SUPER_FROST_BLOSSOMS; // wtf are these...
         uint32 SUPER_FIRE_BLOSSOMS;
 
         bool Phased;
@@ -148,13 +146,11 @@ public:
                             case SUPER_FIRE_BLOSSOM:
                                 if (Unit* target =SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true));
                                 DoCast(SPELL_FIRE_BLOSSOM);
-                                DoCast(SPELL_FIRE_BLOSSOMS);
                                 SUPER_FIRE_BLOSSOMS = 2000;
                                 break;
                             case SUPER_FROST_BLOSSOM:
                                 if (Unit* target =SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true));
                                 DoCast(SPELL_FROST_BLOSSOM);
-                                DoCast(SPELL_FROST_BLOSSOMS);
                                 SUPER_FROST_BLOSSOMS = 2000;
                                 break;
                         }

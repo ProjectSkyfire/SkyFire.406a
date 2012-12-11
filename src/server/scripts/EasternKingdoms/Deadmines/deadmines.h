@@ -51,8 +51,8 @@ enum GameObjects
 
 enum BlossomSpell // Glubtok
 {
-    SUPER_FIRE_BLOSSOM,
-    SUPER_FROST_BLOSSOM,
+    SUPER_FIRE_BLOSSOM   = 1,
+    SUPER_FROST_BLOSSOM  = 2
 };
 
 #endif
