@@ -32,7 +32,7 @@ enum CannonState
 enum Data
 {
     EVENT_STATE,
-    EVENT_RHAHKZOR
+    EVENT_GLUBTOK
 };
 
 enum Data64
