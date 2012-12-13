@@ -49,10 +49,5 @@ enum GameObjects
     GO_MR_SMITE_CHEST               = 144111
 };
 
-enum BlossomSpell // Glubtok
-{
-    SUPER_FIRE_BLOSSOM   = 1,
-    SUPER_FROST_BLOSSOM  = 2
-};
-
 #endif
+

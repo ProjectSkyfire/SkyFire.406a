@@ -33,12 +33,12 @@ Script Data End */
 
 enum Spells
 {
-    //Glubtok    these need checked http://www.wowhead.com/npc=47162#abilities 
+    //Glubtok    these need checked http://www.wowhead.com/npc=47162#abilities
     SPELL_FIRE_BLOSSOM          = 88129, // Fireball explodes on the ground
     SPELL_FROST_BLOSSOM         = 88169, // Iceball explodes on the ground
     SPELL_ARCANE_POWER          = 88009, // Spell Phase 2
     SPELL_FIST_OF_FLAME			= 87859, // elemental_fists
-    SPELL_FIST_OF_FROST			= 87861, // elemental_fists    
+    SPELL_FIST_OF_FROST			= 87861, // elemental_fists
     SPELL_BLINK                 = 38932
 };
 
@@ -76,6 +76,8 @@ public:
         InstanceScript* instance;
 
         uint8 Phase;
+        uint32 phase;
+        uint32 SpellTimer;
 
         uint32 elemental_fists;
         uint32 ArcanePowerTimer;
@@ -84,9 +86,6 @@ public:
         uint32 NormalCastTimer;
         uint8 BlossomSpell;
 
-        uint32 SUPER_FROST_BLOSSOMS; // wtf are these...
-        uint32 SUPER_FIRE_BLOSSOMS;
-
         bool Phased;
 
         void Reset()
@@ -94,15 +93,16 @@ public:
             Phased                  = false;
             Phase                   = PHASE_NORMAL;
 
+            phase = 1;
+            SpellTimer = urand(10*IN_MILLISECONDS, 25*IN_MILLISECONDS);
+
             elemental_fists         = 20000;
             blinkTimer              = 12000;
 
             NormalCastTimer         = 3000;
-            SUPER_FROST_BLOSSOMS    = 2000;
-            SUPER_FIRE_BLOSSOMS     = 2000;
         }
 
-        void EnterCombat(Unit* who)
+        void EnterCombat(Unit* /*who*/)
         {
             me->MonsterYell(SAY_AGGRO, LANG_UNIVERSAL, NULL);
         }
@@ -115,56 +115,49 @@ public:
         void UpdateAI(const uint32 diff)
         {
             if (!UpdateVictim())
-            return;
+                return;
 
-            if (me->HealthBelowPct(51) && Phase == PHASE_50_PERCENT && Phased == false)
+            if (phase == 1)
             {
-                me->SetReactState(REACT_PASSIVE);
-                me->MonsterYell(SAY_ARCANE, LANG_UNIVERSAL, NULL);
-                DoCast(me, SPELL_ARCANE_POWER);
-                Position pos;
-                me->GetPosition(&pos);
-
-                if (NormalCastTimer <= diff)
+                if (SpellTimer <= diff)
                 {
-                   if (!me->IsNonMeleeSpellCasted(false))
+                    switch(urand(0, 1))
                     {
-                        uint8 Available[2];
-                        switch (BlossomSpell)
-                        {
-                            case SUPER_FIRE_BLOSSOM:
-                                Available [0] = SUPER_FIRE_BLOSSOM;
-                                break;
-                            case SUPER_FROST_BLOSSOM:
-                                Available [1] = SUPER_FROST_BLOSSOM;
-                                break;
-                        }
+                        case 0:
+                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true));
+                            DoCast(me, SPELL_FIST_OF_FLAME);
+                            me->MonsterYell(SAY_FLAME, LANG_UNIVERSAL, NULL);
+                            break;
 
-                        BlossomSpell = Available[urand(0, 1)];
-                        switch (BlossomSpell)
-                        {
-                            case SUPER_FIRE_BLOSSOM:
-                                if (Unit* target =SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true));
-                                DoCast(SPELL_FIRE_BLOSSOM);
-                                SUPER_FIRE_BLOSSOMS = 2000;
-                                break;
-                            case SUPER_FROST_BLOSSOM:
-                                if (Unit* target =SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true));
-                                DoCast(SPELL_FROST_BLOSSOM);
-                                SUPER_FROST_BLOSSOMS = 2000;
-                                break;
-                        }
+                        case 1:
+                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true));
+                            DoCast(me, SPELL_FIST_OF_FROST);
+                            me->MonsterYell(SAY_FLAME, LANG_UNIVERSAL, NULL);
+                            break;
                     }
-                    NormalCastTimer = 3000;
 
-                } else NormalCastTimer -= diff;
+                    SpellTimer = urand(10*IN_MILLISECONDS, 25*IN_MILLISECONDS);
+                } else SpellTimer -= diff;
 
-                Phase  = PHASE_50_PERCENT;
-                Phased = true;
+                if (HealthBelowPct(50))
+                {
+                    phase = 2;
+                    DoCast(me, SPELL_ARCANE_POWER);
+                    me->MonsterYell(SAY_ARCANE, LANG_UNIVERSAL, NULL);
+                }
 
+                DoMeleeAttackIfReady();
+            }
+            else
+            {
+                if (SpellTimer <= diff)
+                {
+                    DoCast(me, urand(1, 2) == 1 ? SPELL_FROST_BLOSSOM : SPELL_FIRE_BLOSSOM);
+                    SpellTimer = urand(10*IN_MILLISECONDS, 25*IN_MILLISECONDS);
+                } else SpellTimer -= diff;
             }
 
-            if (PhaseChangeTimer <= diff && Phase == PHASE_NORMAL)
+            if (PhaseChangeTimer <=	diff && Phase == PHASE_NORMAL)
             {
                 if (PhaseChangeTimer<= diff)
                 {
@@ -187,7 +180,7 @@ public:
                 if (blinkTimer <= diff && Phase == PHASE_NORMAL)
                 {
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1,10.0f, true));
-                    DoCast(SPELL_BLINK);
+                    DoCast(me, SPELL_BLINK);
                     blinkTimer = 12000;
                 } else blinkTimer -= diff;
 
@@ -206,3 +199,4 @@ void AddSC_boss_glubtok()
 {
     new boss_glubtok();
 }
+
