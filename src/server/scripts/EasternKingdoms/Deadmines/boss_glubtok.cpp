@@ -39,7 +39,7 @@ enum Spells
     SPELL_ARCANE_POWER          = 88009, // Spell Phase 2
     SPELL_FIST_OF_FLAME			= 87859, // elemental_fists
     SPELL_FIST_OF_FROST			= 87861, // elemental_fists
-    SPELL_BLINK                 = 38932
+    SPELL_BLINK                 = 87925  // correct Blink spell
 };
 
 // Aggro start
