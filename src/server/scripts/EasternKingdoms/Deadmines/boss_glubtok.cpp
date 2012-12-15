@@ -173,8 +173,9 @@ public:
                     {
                         case 0:
                             if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true));
+                                          DoCast(me, SPELL_FIST_OF_FLAME);
     				          me->MonsterYell(SAY_FISTS_OF_FLAME, LANG_UNIVERSAL, 0);
-					        	DoPlaySoundToSet(me, SOUND_FISTS_OF_FLAME);
+					  DoPlaySoundToSet(me, SOUND_FISTS_OF_FLAME);
                             break;
 
                         case 1:
