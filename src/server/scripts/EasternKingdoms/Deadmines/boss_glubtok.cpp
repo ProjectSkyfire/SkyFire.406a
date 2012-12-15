@@ -21,7 +21,7 @@
 SFName: Boss Glubtok
 SFAuthor: JeanClaude
 SF%Complete: 30
-SFComment: TODO: Check spellId's and clean up door events. also 2 fix warnings@lines(140,146,184)
+SFComment: TODO: clean up door events and 2 fix warnings@lines(140,146,184)
 SFCategory: dungeon script
 Script Data End */
 
@@ -75,7 +75,7 @@ enum Spells
 // On Death!
 #define SAY_TOO_MUCH_POWER     "TOO... MUCH... POWER"
 #define SOUND_TOO_MUCH_POWER    21145
-
+#define SAY_FLAME "Elemental Fists!"
 /*
 #define SAY_AGGRO "Let's do it!"
 
@@ -148,8 +148,8 @@ public:
 
         void JustDied(Unit* /*Killer*/)
         {
-            me->MonsterYell(SAY_KILL, LANG_UNIVERSAL, 0);
-    		DoPlaySoundToSet(me, SOUND_KILL);
+            me->MonsterYell(SAY_TOO_MUCH_POWER, LANG_UNIVERSAL, 0);
+    		DoPlaySoundToSet(me, SOUND_TOO_MUCH_POWER);
         }
                 
         void KilledUnit(Unit* Victim)
@@ -173,7 +173,7 @@ public:
                     {
                         case 0:
                             if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true));
-                                          DoCast(me, SPELL_FIST_OF_FLAME);
+                             DoCast(me, SPELL_FIST_OF_FLAME);
     				          me->MonsterYell(SAY_FISTS_OF_FLAME, LANG_UNIVERSAL, 0);
 					  DoPlaySoundToSet(me, SOUND_FISTS_OF_FLAME);
                             break;
