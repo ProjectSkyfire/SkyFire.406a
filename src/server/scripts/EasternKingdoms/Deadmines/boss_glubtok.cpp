@@ -42,11 +42,47 @@ enum Spells
     SPELL_BLINK                 = 38932
 };
 
+// Aggro start
+#define SAY_AGGRO         "Glubtok show you da power of de Arcane."
+#define SOUND_AGGRO       21151
+// Aggro End
 
+// On Kill Start
+#define SAY_KILL          "Ha..Ha..Ha..Ha..Ah!"
+#define SOUND_KILL        21152
+// On Kill End
+
+// Fist of Flame
+#define SAY_FISTS_OF_FLAME       "Fists of Flame!"
+#define SOUND_FISTS_OF_FLAME     21153
+// End Flames
+
+// Fist Of Frost!!!!! :D
+#define SAY_FISTS_OF_FROST      "Fists of Frost!"
+#define SOUND_FISTS_OF_FROST    21156
+// Phase 2 Sounds And Texts
+
+// "Glubtok ready?"
+#define SAY_READY      "Glubtok ready?"
+#define SOUND_READY    21154
+//
+#define SAY_LETS_DO_IT      "Let's do it!"
+#define SOUND_LETS_DO_IT    21157
+// ARCANE POWER!!!!!!!!!! :D
+#define SAY_ARCANE_POWER     "ARCANE POWER"
+#define SOUND_ARCANE_POWER    21146
+
+// On Death!
+#define SAY_TOO_MUCH_POWER     "TOO... MUCH... POWER"
+#define SOUND_TOO_MUCH_POWER    21145
+
+/*
 #define SAY_AGGRO "Let's do it!"
+
 #define SAY_DIED "'Sploded dat one!"
 #define SAY_FLAME "Elemental Fists!"
 #define SAY_ARCANE "Glubtok show you da power of arcane!"
+*/
 
 #define spell_elemental_fists RAND(87859, 91273)
 
@@ -104,13 +140,25 @@ public:
 
         void EnterCombat(Unit* /*who*/)
         {
-            me->MonsterYell(SAY_AGGRO, LANG_UNIVERSAL, NULL);
+            
+         me->MonsterYell(SAY_AGGRO, LANG_UNIVERSAL, 0);	 
+         DoPlaySoundToSet(me, SOUND_AGGRO);
+         
         }
 
         void JustDied(Unit* /*Killer*/)
         {
-            me->MonsterYell(SAY_DIED, LANG_UNIVERSAL, NULL);
+            me->MonsterYell(SAY_KILL, LANG_UNIVERSAL, 0);
+    		DoPlaySoundToSet(me, SOUND_KILL);
         }
+                
+        void KilledUnit(Unit* Victim)
+        {
+
+            me->MonsterYell(SAY_KILL, LANG_UNIVERSAL, 0);
+			DoPlaySoundToSet(me, SOUND_KILL);
+        }
+
 
         void UpdateAI(const uint32 diff)
         {
@@ -125,14 +173,15 @@ public:
                     {
                         case 0:
                             if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true));
-                            DoCast(me, SPELL_FIST_OF_FLAME);
-                            me->MonsterYell(SAY_FLAME, LANG_UNIVERSAL, NULL);
+    				          me->MonsterYell(SAY_FISTS_OF_FLAME, LANG_UNIVERSAL, 0);
+					        	DoPlaySoundToSet(me, SOUND_FISTS_OF_FLAME);
                             break;
 
                         case 1:
                             if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true));
                             DoCast(me, SPELL_FIST_OF_FROST);
-                            me->MonsterYell(SAY_FLAME, LANG_UNIVERSAL, NULL);
+                             me->MonsterYell(SAY_FISTS_OF_FROST, LANG_UNIVERSAL, 0);
+    				    	DoPlaySoundToSet(me, SOUND_FISTS_OF_FROST);
                             break;
                     }
 
@@ -143,7 +192,8 @@ public:
                 {
                     phase = 2;
                     DoCast(me, SPELL_ARCANE_POWER);
-                    me->MonsterYell(SAY_ARCANE, LANG_UNIVERSAL, NULL);
+    			 me->MonsterYell(SAY_ARCANE_POWER, LANG_UNIVERSAL, 0);
+				 DoPlaySoundToSet(me, SOUND_ARCANE_POWER);
                 }
 
                 DoMeleeAttackIfReady();
