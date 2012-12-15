@@ -20,7 +20,7 @@
 /* Script Data Start
 SFName: Boss Glubtok
 SFAuthor: JeanClaude
-SF%Complete: 25
+SF%Complete: 30
 SFComment: TODO: Check spellId's and clean up door events. also 2 fix warnings@lines(140,146,184)
 SFCategory: dungeon script
 Script Data End */
