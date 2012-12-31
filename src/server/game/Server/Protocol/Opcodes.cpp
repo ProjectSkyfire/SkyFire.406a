@@ -120,7 +120,7 @@ void InitOpcodeTable()
     OPCODE( CMSG_GROUP_SET_LEADER,                        STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleGroupSetLeaderOpcode      );
     OPCODE( SMSG_GROUP_SET_LEADER,                        STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( CMSG_LOOT_METHOD,                             STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleLootMethodOpcode          );
-    OPCODE( CMSG_GROUP_DISBAND,                           STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleGroupDisbandOpcode        );
+    OPCODE( CMSG_GROUP_DISBAND,                           STATUS_LOGGEDIN,  PROCESS_THREADUNSAFE, &WorldSession::HandleGroupDisbandOpcode        );
     OPCODE( SMSG_GROUP_DESTROYED,                         STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( SMSG_GROUP_LIST,                              STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( SMSG_PARTY_MEMBER_STATS,                      STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
