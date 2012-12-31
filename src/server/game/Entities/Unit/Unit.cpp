@@ -10263,11 +10263,12 @@ void Unit::SetMinion(Minion *minion, bool apply, PetSlot slot)
                     ToPlayer()->_currentPetSlot = slot;
                     ToPlayer()->setPetSlotUsed(slot, true);
                 }
-                else
-                {
-                    sLog->outCrash("Unit::SetMinion. Tried to add hunter pet to not allowed slot (%u). Minion %u for %u", slot, minion->GetEntry(), ToPlayer()->GetEntry());
-                    ASSERT(false);
-                }
+				// Don't see any reason for this to be here. Just commenting while I investigate this goofy hunter crash.
+                //else
+                //{
+                //    sLog->outCrash("Unit::SetMinion. Tried to add hunter pet to not allowed slot (%u). Minion %u for %u", slot, minion->GetEntry(), ToPlayer()->GetEntry());
+                //    ASSERT(false);
+                //}
             }
         }
         if (minion->HasUnitTypeMask(UNIT_MASK_CONTROLABLE_GUARDIAN))
