@@ -1,6 +1,6 @@
-# Copyright (C) 2006 MySQL AB
-# Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
-# Copyright (C) 2010-2011 Project SkyFire <http://www.projectskyfire.org/>
+# Copyright (C) 2013 MySQL AB
+# Copyright (C) 2011-2013 Project SkyFire <http://www.projectskyfire.org/>
+# Copyright (C) 2008-2013 TrinityCore <http://www.trinitycore.org/>
 #
 # This file is free software; as a special exception the author gives
 # unlimited permission to copy and/or distribute it, with or without
