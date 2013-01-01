@@ -32,9 +32,9 @@
 #include "World.h"
 #include "Util.h"
 
-void WorldSession::HandleAutostoreLootItemOpcode(WorldPacket & recv_data)
+void WorldSession::HandleAutostoreLootItemOpcode(WorldPacket& recvData)
 {
-    bool isCurrency = recv_data.GetOpcode() == CMSG_AUTOSTORE_LOOT_CURRENCY;
+    bool isCurrency = recvData.GetOpcode() == CMSG_AUTOSTORE_LOOT_CURRENCY;
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: CMSG_AUTOSTORE_LOOT_ITEM");
     Player* player = GetPlayer();
     uint64 lguid = player->GetLootGUID();
@@ -43,7 +43,7 @@ void WorldSession::HandleAutostoreLootItemOpcode(WorldPacket & recv_data)
     uint32 objEntry = 0;
     uint32 objType = 0;
 
-    recv_data >> lootSlot;
+    recvData >> lootSlot;
 
     if (IS_GAMEOBJECT_GUID(lguid))
     {
@@ -117,7 +117,7 @@ void WorldSession::HandleAutostoreLootItemOpcode(WorldPacket & recv_data)
         player->StoreLootItem(lootSlot, loot);
 }
 
-void WorldSession::HandleLootMoneyOpcode(WorldPacket & /*recv_data*/)
+void WorldSession::HandleLootMoneyOpcode(WorldPacket & /*recvData*/)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: CMSG_LOOT_MONEY");
 
@@ -256,12 +256,12 @@ void WorldSession::HandleLootMoneyOpcode(WorldPacket & /*recv_data*/)
     }
 }
 
-void WorldSession::HandleLootOpcode(WorldPacket & recv_data)
+void WorldSession::HandleLootOpcode(WorldPacket& recvData)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: CMSG_LOOT");
 
     uint64 guid;
-    recv_data >> guid;
+    recvData >> guid;
 
     // Check possible cheat
     if (!_player->isAlive())
@@ -274,13 +274,13 @@ void WorldSession::HandleLootOpcode(WorldPacket & recv_data)
         GetPlayer()->InterruptNonMeleeSpells(false);
 }
 
-void WorldSession::HandleLootReleaseOpcode(WorldPacket & recv_data)
+void WorldSession::HandleLootReleaseOpcode(WorldPacket& recvData)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: CMSG_LOOT_RELEASE");
 
     // cheaters can modify lguid to prevent correct apply loot release code and re-loot
     // use internal stored guid
-    recv_data.read_skip<uint64>();                          // guid;
+    recvData.read_skip<uint64>();                          // guid;
 
     if (uint64 lguid = GetPlayer()->GetLootGUID())
         DoLootRelease(lguid);
@@ -480,12 +480,12 @@ void WorldSession::DoLootRelease(uint64 lguid)
     loot->RemoveLooter(player->GetGUID());
 }
 
-void WorldSession::HandleLootMasterGiveOpcode(WorldPacket & recv_data)
+void WorldSession::HandleLootMasterGiveOpcode(WorldPacket& recvData)
 {
     uint8 slotid;
     uint64 lootguid, target_playerguid;
 
-    recv_data >> lootguid >> slotid >> target_playerguid;
+    recvData >> lootguid >> slotid >> target_playerguid;
 
     if (!_player->GetGroup() || _player->GetGroup()->GetLooterGuid() != _player->GetGUID())
     {

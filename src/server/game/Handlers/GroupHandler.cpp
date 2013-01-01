@@ -62,7 +62,7 @@ void WorldSession::SendPartyResult(PartyOperation operation, const std::string& 
     SendPacket(&data);
 }
 
-void WorldSession::HandleGroupInviteOpcode(WorldPacket & recvData)
+void WorldSession::HandleGroupInviteOpcode(WorldPacket& recvData)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_GROUP_INVITE");
 
@@ -206,7 +206,7 @@ void WorldSession::HandleGroupInviteOpcode(WorldPacket & recvData)
     SendPartyResult(PARTY_OP_INVITE, memberName, ERR_PARTY_RESULT_OK);
 }
 
-void WorldSession::HandleGroupAcceptOpcode(WorldPacket & recvData)
+void WorldSession::HandleGroupAcceptOpcode(WorldPacket& recvData)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_GROUP_ACCEPT");
 
@@ -262,7 +262,7 @@ void WorldSession::HandleGroupAcceptOpcode(WorldPacket & recvData)
     group->BroadcastGroupUpdate();
 }
 
-void WorldSession::HandleGroupUninviteGuidOpcode(WorldPacket & recvData)
+void WorldSession::HandleGroupUninviteGuidOpcode(WorldPacket& recvData)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_GROUP_UNINVITE_GUID");
 
@@ -311,7 +311,7 @@ void WorldSession::HandleGroupUninviteGuidOpcode(WorldPacket & recvData)
     SendPartyResult(PARTY_OP_UNINVITE, "", ERR_TARGET_NOT_IN_GROUP_S);
 }
 
-void WorldSession::HandleGroupUninviteOpcode(WorldPacket & recvData)
+void WorldSession::HandleGroupUninviteOpcode(WorldPacket& recvData)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_GROUP_UNINVITE");
 
@@ -356,7 +356,7 @@ void WorldSession::HandleGroupUninviteOpcode(WorldPacket & recvData)
     SendPartyResult(PARTY_OP_UNINVITE, memberName, ERR_TARGET_NOT_IN_GROUP_S);
 }
 
-void WorldSession::HandleGroupSetLeaderOpcode(WorldPacket & recvData)
+void WorldSession::HandleGroupSetLeaderOpcode(WorldPacket& recvData)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_GROUP_SET_LEADER");
 
@@ -400,7 +400,7 @@ void WorldSession::HandleGroupDeclineOpcode(WorldPacket & /*recvData*/)
     leader->GetSession()->SendPacket(&data);
 }
 
-void WorldSession::HandleLootMethodOpcode(WorldPacket & recvData)
+void WorldSession::HandleLootMethodOpcode(WorldPacket& recvData)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_LOOT_METHOD");
 
@@ -485,7 +485,7 @@ void WorldSession::HandleLootRoll(WorldPacket &recvData)
     }
 }
 
-void WorldSession::HandleMinimapPingOpcode(WorldPacket & recvData)
+void WorldSession::HandleMinimapPingOpcode(WorldPacket& recvData)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received MSG_MINIMAP_PING");
 
@@ -540,7 +540,7 @@ void WorldSession::HandleRandomRollOpcode(WorldPacket& recvData)
         SendPacket(&data);
 }
 
-void WorldSession::HandleRaidTargetUpdateOpcode(WorldPacket & recvData)
+void WorldSession::HandleRaidTargetUpdateOpcode(WorldPacket& recvData)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received MSG_RAID_TARGET_UPDATE");
 
@@ -569,7 +569,7 @@ void WorldSession::HandleRaidTargetUpdateOpcode(WorldPacket & recvData)
     }
 }
 
-void WorldSession::HandleGroupRaidConvertOpcode(WorldPacket & recvData)
+void WorldSession::HandleGroupRaidConvertOpcode(WorldPacket& recvData)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_GROUP_RAID_CONVERT");
 
@@ -600,7 +600,7 @@ void WorldSession::HandleGroupRaidConvertOpcode(WorldPacket & recvData)
         group->ConvertToGroup();
 }
 
-void WorldSession::HandleGroupChangeSubGroupOpcode(WorldPacket & recvData)
+void WorldSession::HandleGroupChangeSubGroupOpcode(WorldPacket& recvData)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_GROUP_CHANGE_SUB_GROUP");
 
@@ -638,7 +638,7 @@ void WorldSession::HandleGroupChangeSubGroupOpcode(WorldPacket & recvData)
     group->ChangeMembersGroup(guid, groupNr);
 }
 
-void WorldSession::HandleGroupAssistantLeaderOpcode(WorldPacket & recvData)
+void WorldSession::HandleGroupAssistantLeaderOpcode(WorldPacket& recvData)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_GROUP_ASSISTANT_LEADER");
 
@@ -659,7 +659,7 @@ void WorldSession::HandleGroupAssistantLeaderOpcode(WorldPacket & recvData)
     group->SendUpdate();
 }
 
-void WorldSession::HandlePartyAssignmentOpcode(WorldPacket & recvData)
+void WorldSession::HandlePartyAssignmentOpcode(WorldPacket& recvData)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received MSG_PARTY_ASSIGNMENT");
 
@@ -693,7 +693,7 @@ void WorldSession::HandlePartyAssignmentOpcode(WorldPacket & recvData)
     group->SendUpdate();
 }
 
-void WorldSession::HandleRaidReadyCheckOpcode(WorldPacket & recvData)
+void WorldSession::HandleRaidReadyCheckOpcode(WorldPacket& recvData)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received MSG_RAID_READY_CHECK");
 
@@ -961,7 +961,7 @@ void WorldSession::BuildPartyMemberStatsChangedPacket(Player* player, WorldPacke
 }
 
 /*this procedure handles clients CMSG_REQUEST_PARTY_MEMBER_STATS request*/
-void WorldSession::HandleRequestPartyMemberStatsOpcode(WorldPacket & recvData)
+void WorldSession::HandleRequestPartyMemberStatsOpcode(WorldPacket& recvData)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_REQUEST_PARTY_MEMBER_STATS");
     uint64 guid;
@@ -1103,12 +1103,12 @@ void WorldSession::HandleRequestRaidInfoOpcode(WorldPacket & /*recvData*/)
 }
 
 // ToDo: fix or remove if no longer needed
-/*void WorldSession::HandleGroupCancelOpcode(WorldPacket & recvData)
+/*void WorldSession::HandleGroupCancelOpcode(WorldPacket& recvData)
 {
     sLog->outDebug("WORLD: got CMSG_GROUP_CANCEL.");
 }*/
 
-void WorldSession::HandleOptOutOfLootOpcode(WorldPacket & recvData)
+void WorldSession::HandleOptOutOfLootOpcode(WorldPacket& recvData)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_OPT_OUT_OF_LOOT");
 

@@ -84,7 +84,7 @@ class GmTicket
 {
 public:
     GmTicket();
-    explicit GmTicket(Player* player, WorldPacket& recv_data);
+    explicit GmTicket(Player* player, WorldPacket& recvData);
     ~GmTicket();
 
     bool IsClosed() const { return _closedBy; }

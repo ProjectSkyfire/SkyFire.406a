@@ -25,7 +25,7 @@
 #include "Log.h"
 #include "ObjectAccessor.h"
 
-void WorldSession::HandleDismissControlledVehicle(WorldPacket &recv_data)
+void WorldSession::HandleDismissControlledVehicle(WorldPacket &recvData)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Recvd CMSG_DISMISS_CONTROLLED_VEHICLE");
 
@@ -33,44 +33,44 @@ void WorldSession::HandleDismissControlledVehicle(WorldPacket &recv_data)
 
     if (!vehicleGUID)                                       // something wrong here...
     {
-        recv_data.rfinish();                                // prevent warnings spam
+        recvData.rfinish();                                // prevent warnings spam
         return;
     }
 
     uint64 guid;
 
-    recv_data.readPackGUID(guid);
+    recvData.readPackGUID(guid);
 
     MovementInfo mi;
     mi.guid = guid;
-    ReadMovementInfo(recv_data, &mi);
+    ReadMovementInfo(recvData, &mi);
 
     _player->_movementInfo = mi;
 
     _player->ExitVehicle();
 }
 
-void WorldSession::HandleChangeSeatsOnControlledVehicle(WorldPacket &recv_data)
+void WorldSession::HandleChangeSeatsOnControlledVehicle(WorldPacket &recvData)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Recvd CMSG_CHANGE_SEATS_ON_CONTROLLED_VEHICLE");
 
     Unit* vehicle_base = GetPlayer()->GetVehicleBase();
     if (!vehicle_base)
     {
-        recv_data.rfinish();                                // prevent warnings spam
+        recvData.rfinish();                                // prevent warnings spam
         return;
     }
 
     VehicleSeatEntry const* seat = GetPlayer()->GetVehicle()->GetSeatForPassenger(GetPlayer());
     if (!seat->CanSwitchFromSeat())
     {
-        recv_data.rfinish();                                // prevent warnings spam
+        recvData.rfinish();                                // prevent warnings spam
         sLog->outError("HandleChangeSeatsOnControlledVehicle, Opcode: %u, Player %u tried to switch seats but current seatflags %u don't permit that.",
-            recv_data.GetOpcode(), GetPlayer()->GetGUIDLow(), seat->m_flags);
+            recvData.GetOpcode(), GetPlayer()->GetGUIDLow(), seat->m_flags);
         return;
     }
 
-    switch (recv_data.GetOpcode())
+    switch (recvData.GetOpcode())
     {
         case CMSG_REQUEST_VEHICLE_PREV_SEAT:
             GetPlayer()->ChangeSeat(-1, false);
@@ -81,17 +81,17 @@ void WorldSession::HandleChangeSeatsOnControlledVehicle(WorldPacket &recv_data)
         case CMSG_CHANGE_SEATS_ON_CONTROLLED_VEHICLE:
         {
             uint64 guid;        // current vehicle guid
-            recv_data.readPackGUID(guid);
+            recvData.readPackGUID(guid);
 
             MovementInfo movementInfo;
-            ReadMovementInfo(recv_data, &movementInfo);
+            ReadMovementInfo(recvData, &movementInfo);
             vehicle_base->_movementInfo = movementInfo;
 
             uint64 accessory;        //  accessory guid
-            recv_data.readPackGUID(accessory);
+            recvData.readPackGUID(accessory);
 
             int8 seatId;
-            recv_data >> seatId;
+            recvData >> seatId;
 
             if (vehicle_base->GetGUID() != guid)
                 return;
@@ -109,10 +109,10 @@ void WorldSession::HandleChangeSeatsOnControlledVehicle(WorldPacket &recv_data)
         case CMSG_REQUEST_VEHICLE_SWITCH_SEAT:
         {
             uint64 guid;        // current vehicle guid
-            recv_data.readPackGUID(guid);
+            recvData.readPackGUID(guid);
 
             int8 seatId;
-            recv_data >> seatId;
+            recvData >> seatId;
 
             if (vehicle_base->GetGUID() == guid)
                 GetPlayer()->ChangeSeat(seatId);
@@ -211,7 +211,7 @@ void WorldSession::HandleEjectPassenger(WorldPacket &data)
         sLog->outError("HandleEjectPassenger: Player %u tried to eject invalid GUID "UI64FMTD, GetPlayer()->GetGUIDLow(), guid);
 }
 
-void WorldSession::HandleRequestVehicleExit(WorldPacket& /*recv_data*/)
+void WorldSession::HandleRequestVehicleExit(WorldPacket& /*recvData*/)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Recvd CMSG_REQUEST_VEHICLE_EXIT");
 
