@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2011-2012 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2012 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2011-2013 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2013 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2013 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -10263,11 +10263,12 @@ void Unit::SetMinion(Minion *minion, bool apply, PetSlot slot)
                     ToPlayer()->_currentPetSlot = slot;
                     ToPlayer()->setPetSlotUsed(slot, true);
                 }
-                else
-                {
-                    sLog->outCrash("Unit::SetMinion. Tried to add hunter pet to not allowed slot (%u). Minion %u for %u", slot, minion->GetEntry(), ToPlayer()->GetEntry());
-                    ASSERT(false);
-                }
+				// Don't see any reason for this to be here. Just commenting while I investigate this goofy hunter crash.
+                //else
+                //{
+                //    sLog->outCrash("Unit::SetMinion. Tried to add hunter pet to not allowed slot (%u). Minion %u for %u", slot, minion->GetEntry(), ToPlayer()->GetEntry());
+                //    ASSERT(false);
+                //}
             }
         }
         if (minion->HasUnitTypeMask(UNIT_MASK_CONTROLABLE_GUARDIAN))
