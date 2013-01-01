@@ -17,8 +17,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef DEF_DEADMINES_H
-#define DEF_DEADMINES_H
+#ifndef DEADMINES_H
+#define DEADMINES_H
 
 enum CannonState
 {
@@ -32,7 +32,7 @@ enum CannonState
 enum Data
 {
     EVENT_STATE,
-    EVENT_RHAHKZOR
+    EVENT_GLUBTOK
 };
 
 enum Data64
@@ -48,4 +48,6 @@ enum GameObjects
     GO_DOOR_LEVER                   = 101833,
     GO_MR_SMITE_CHEST               = 144111
 };
+
 #endif
+

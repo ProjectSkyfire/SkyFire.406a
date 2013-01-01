@@ -288,7 +288,7 @@ class instance_deadmines : public InstanceMapScript
                     if (DefiasCannonGUID && IronCladDoorGUID)
                         State = data;
                     break;
-                case EVENT_RHAHKZOR:
+                case EVENT_GLUBTOK:
                     if (data == DONE)
                         if (GameObject* go = instance->GetGameObject(FactoryDoorGUID))
                             go->SetGoState(GO_STATE_ACTIVE);
