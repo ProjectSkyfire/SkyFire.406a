@@ -54,14 +54,14 @@ message(STATUS "SCRIPT PREPARATIONS")
 include(Spells/CMakeLists.txt)
 include(Commands/CMakeLists.txt)
 
-file(GLOB_RECURSE sources_ScriptedAI 
-  ../game/AI/ScriptedAI/ScriptedEscortAI.cpp 
+file(GLOB_RECURSE sources_ScriptedAI
+  ../game/AI/ScriptedAI/ScriptedEscortAI.cpp
   ../game/AI/ScriptedAI/ScriptedCreature.cpp
-  ../game/AI/ScriptedAI/ScriptedFollowerAI.cpp 
+  ../game/AI/ScriptedAI/ScriptedFollowerAI.cpp
   )
 
 source_group(ScriptedAI FILES ${sources_ScriptedAI})
-  
+
  set(scripts_STAT_SRCS
   ${scripts_STAT_SRCS}
   ${sources_ScriptedAI}
@@ -90,7 +90,7 @@ include_directories(
   ${CMAKE_SOURCE_DIR}/dep/g3dlite/include
   ${CMAKE_SOURCE_DIR}/dep/SFMT
   ${CMAKE_SOURCE_DIR}/dep/recastlite/Detour
-  ${CMAKE_SOURCE_DIR}/dep/recastlite/Recast 
+  ${CMAKE_SOURCE_DIR}/dep/recastlite/Recast
   ${CMAKE_SOURCE_DIR}/dep/zlib
   ${CMAKE_SOURCE_DIR}/src/server/shared
   ${CMAKE_SOURCE_DIR}/src/server/shared/Configuration
@@ -119,7 +119,7 @@ include_directories(
   ${CMAKE_SOURCE_DIR}/src/server/game/AI/SmartScripts
   ${CMAKE_SOURCE_DIR}/src/server/game/AuctionHouse
   ${CMAKE_SOURCE_DIR}/src/server/game/Battlefields
-  ${CMAKE_SOURCE_DIR}/src/server/game/Battlefields/Zones  
+  ${CMAKE_SOURCE_DIR}/src/server/game/Battlefields/Zones
   ${CMAKE_SOURCE_DIR}/src/server/game/Battlegrounds
   ${CMAKE_SOURCE_DIR}/src/server/game/Battlegrounds/Zones
   ${CMAKE_SOURCE_DIR}/src/server/game/Calendar
@@ -178,7 +178,7 @@ include_directories(
   ${CMAKE_SOURCE_DIR}/src/server/game/Tickets
   ${CMAKE_SOURCE_DIR}/src/server/game/Tools
   ${CMAKE_SOURCE_DIR}/src/server/game/Warden
-  ${CMAKE_SOURCE_DIR}/src/server/game/Warden/Modules 
+  ${CMAKE_SOURCE_DIR}/src/server/game/Warden/Modules
   ${CMAKE_SOURCE_DIR}/src/server/game/Weather
   ${CMAKE_SOURCE_DIR}/src/server/game/World
   ${CMAKE_CURRENT_SOURCE_DIR}/PrecompiledHeaders
