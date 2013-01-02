@@ -712,8 +712,8 @@ public:
 *************************************/
 enum eStormwindGryphonRider
 {
-     spell_greymane_resolve = 96161,
-     spell_shoot = 6660
+     SPELL_GREYMANE_RESOLVE = 96161,
+     SPELL_SHOOT = 6660
 };
 
 class npc_stormwind_gryphon_rider: public CreatureScript
@@ -721,9 +721,9 @@ class npc_stormwind_gryphon_rider: public CreatureScript
 public:
     npc_stormwind_gryphon_rider() : CreatureScript("npc_stormwind_gryphon_rider") {}
 
-    struct npc_stormwind_gryphon_riderAI : public ScriptedAI
+    struct npc_stormwind_gryphon_rider_eventAI : public ScriptedAI
     {
-        npc_stormwind_gryphon_riderAI(Creature *c) : ScriptedAI(c) {}
+        npc_stormwind_gryphon_rider_eventAI(Creature *c) : ScriptedAI(c) {}
 
         uint32 timer_greymane_resolve;
         uint32 timer_shoot;
@@ -739,15 +739,15 @@ public:
             if (!UpdateVictim())
                 return;
 
-            if (spell_greymane_resolve<= diff)
+            if (timer_greymane_resolve<= diff)
             {
-                DoCast(me, spell_greymane_resolve);
+                DoCast(me, SPELL_GREYMANE_RESOLVE);
                 timer_greymane_resolve = 360000;
             } else timer_greymane_resolve -= diff;
 
             if (timer_shoot<= diff)
             {
-                DoCast(me->getVictim(), spell_shoot);
+                DoCast(me->getVictim(), SPELL_SHOOT);
                 timer_shoot = 5000;
             } else timer_shoot -= diff;
             DoMeleeAttackIfReady();
@@ -756,7 +756,213 @@ public:
 
     CreatureAI* GetAI(Creature* pCreature) const
     {
-        return new npc_stormwind_gryphon_riderAI(pCreature);
+        return new npc_stormwind_gryphon_rider_eventAI(pCreature);
+    }
+};
+
+/*******************
+**Stormwind Guard
+********************/
+enum eStormwindGuard
+{
+    SPELL_SHOOT_2 = 95826
+};
+
+class npc_stormwind_guard: public CreatureScript
+{
+public:
+    npc_stormwind_guard() : CreatureScript("npc_stormwind_guard") {}
+
+    struct npc_stormwind_guard_eventAI : public ScriptedAI
+    {
+        npc_stormwind_guard_eventAI(Creature *c) : ScriptedAI(c) {}
+
+        uint32 shoot_2;
+
+        void Reset()
+        {
+            shoot_2 = 5000;
+        }
+
+        void UpdateAI(const uint32 diff)
+        {
+            if (!UpdateVictim())
+                return;
+
+            if (shoot_2<= diff)
+            {
+                DoCast(me->getVictim(), SPELL_SHOOT_2);
+                shoot_2 = 5000;
+            } else shoot_2 -= diff;
+            DoMeleeAttackIfReady();
+        }
+    };
+
+    CreatureAI* GetAI(Creature* pCreature) const
+    {
+        return new npc_stormwind_guard_eventAI(pCreature);
+    }
+};
+
+/***************************
+** Stormwind Harbor Guard
+****************************/
+
+enum eStormwindHarborGuard
+{
+    SPELL_SHOOT_3 = 95826
+};
+
+class npc_stormwind_harbor_guard: public CreatureScript
+{
+public:
+    npc_stormwind_harbor_guard() : CreatureScript("npc_stormwind_harbor_guard") {}
+
+    struct npc_stormwind_harbor_guard_eventAI : public ScriptedAI
+    {
+        npc_stormwind_harbor_guard_eventAI(Creature *c) : ScriptedAI(c) {}
+
+        uint32 shoot_3;
+
+        void Reset()
+        {
+            shoot_3 = 5000;
+        }
+
+        void UpdateAI(const uint32 diff)
+        {
+            if (!UpdateVictim())
+                return;
+
+            if (shoot_3<= diff)
+            {
+                DoCast(me->getVictim(), SPELL_SHOOT_3);
+                shoot_3 = 5000;
+            } else shoot_3 -= diff;
+            DoMeleeAttackIfReady();
+        }
+    };
+
+    CreatureAI* GetAI(Creature* pCreature) const
+    {
+        return new npc_stormwind_harbor_guard_eventAI(pCreature);
+    }
+};
+
+/**************************
+** Stormwind City Patroller
+***************************/
+
+enum eStormwindCityPatroller
+{
+    SPELL_SHOOT_4 = 95826
+};
+
+class npc_stormwind_city_patroller: public CreatureScript
+{
+public:
+    npc_stormwind_city_patroller() : CreatureScript("npc_stormwind_city_patroller") {}
+
+    struct npc_stormwind_city_patroller_eventAI : public ScriptedAI
+    {
+        npc_stormwind_city_patroller_eventAI(Creature *c) : ScriptedAI(c) {}
+
+        uint32 shoot_4;
+
+        void Reset()
+        {
+            shoot_4 = 5000;
+        }
+
+        void UpdateAI(const uint32 diff)
+        {
+            if (!UpdateVictim())
+                return;
+
+            if (shoot_4<= diff)
+            {
+                DoCast(me->getVictim(), SPELL_SHOOT_4);
+                shoot_4 = 5000;
+            } else shoot_4 -= diff;
+            DoMeleeAttackIfReady();
+        }
+    };
+
+    CreatureAI* GetAI(Creature* pCreature) const
+    {
+        return new npc_stormwind_city_patroller_eventAI(pCreature);
+    }
+};
+
+/*************************
+**Stormwind Royal Guard
+**************************/
+
+enum eStormwindRoyalGuard
+{
+    SPELL_SPIT = 58519,
+    SPELL_BANNANA = 58514,
+    SPELL_APPLE = 58511,
+    SPELL_SHOOT_5 = 95826
+};
+
+class npc_stormwind_royal_guard: public CreatureScript
+{
+public:
+    npc_stormwind_royal_guard() : CreatureScript("npc_stormwind_royal_guard") {}
+
+    struct npc_stormwind_royal_guard_eventAI : public ScriptedAI
+    {
+        npc_stormwind_royal_guard_eventAI(Creature *c) : ScriptedAI(c) {}
+
+        uint32 spit;
+        uint32 banana;
+        uint32 apple;
+        uint32 shoot_5;
+
+        void Reset ()
+        {
+            spit = 45000;
+            banana = 45000;
+            apple = 45000;
+            shoot_5 = 5000;
+        }
+
+        void UpdateAI(const uint32 diff)
+        {
+            if (!UpdateVictim())
+                return;
+
+            if (spit<= diff)
+            {
+                DoCast(me->getVictim(), SPELL_SPIT);
+                spit = 45000;
+            } else spit -= diff;
+
+            if (banana<= diff)
+            {
+                DoCast(me->getVictim(), SPELL_BANNANA);
+                banana = 45000;
+            } else banana -= diff;
+
+            if (apple<= diff)
+            {
+                DoCast(me->getVictim(), SPELL_APPLE);
+                apple = 45000;
+            }
+
+            if (shoot_5<= diff)
+            {
+                DoCast(me->getVictim(), SPELL_SHOOT_5);
+                shoot_5 = 5000;
+            } else shoot_5 -= diff;
+            DoMeleeAttackIfReady();
+        }
+    };
+
+    CreatureAI* GetAI(Creature* pCreature) const
+    {
+        return new npc_stormwind_royal_guard_eventAI(pCreature);
     }
 };
 
@@ -771,4 +977,8 @@ void AddSC_stormwind_city()
     new npc_lord_gregor_lescovar();
     new npc_marzon_silent_blade();
     new npc_stormwind_gryphon_rider();
+    new npc_stormwind_guard();
+    new npc_stormwind_harbor_guard();
+    new npc_stormwind_city_patroller();
+    new npc_stormwind_royal_guard();
 }
