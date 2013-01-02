@@ -319,8 +319,8 @@ class achievement_respect_your_elders : public AchievementCriteriaScript
 
 void AddSC_boss_elder_nadox()
 {
-    new boss_elder_nadox;
-    new mob_ahnkahar_nerubian;
-    new mob_nadox_eggs;
+    new boss_elder_nadox();
+    new mob_ahnkahar_nerubian();
+    new mob_nadox_eggs();
     new achievement_respect_your_elders();
 }
