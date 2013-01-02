@@ -173,14 +173,14 @@ public:
                     switch(urand(0, 1))
                     {
                         case 0:
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true));
+                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                             DoCast(me, SPELL_FIST_OF_FLAME);
                             me->MonsterYell(SAY_FISTS_OF_FLAME, LANG_UNIVERSAL, 0);
                             DoPlaySoundToSet(me, SOUND_FISTS_OF_FLAME);
                             break;
 
                         case 1:
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true));
+                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                             DoCast(me, SPELL_FIST_OF_FROST);
                             me->MonsterYell(SAY_FISTS_OF_FROST, LANG_UNIVERSAL, 0);
                             DoPlaySoundToSet(me, SOUND_FISTS_OF_FROST);
@@ -231,7 +231,7 @@ public:
 
                 if (blinkTimer <= diff && Phase == PHASE_NORMAL)
                 {
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1,10.0f, true));
+                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1,10.0f, true))
                     DoCast(me, SPELL_BLINK);
                     blinkTimer = 12000;
                 } else blinkTimer -= diff;
