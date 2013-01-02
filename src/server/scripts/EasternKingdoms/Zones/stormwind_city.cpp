@@ -719,45 +719,45 @@ enum eStormwindGryphonRider
 class npc_stormwind_gryphon_rider: public CreatureScript
 {
 public:
-	npc_stormwind_gryphon_rider() : CreatureScript("npc_stormwind_gryphon_rider") {}
+    npc_stormwind_gryphon_rider() : CreatureScript("npc_stormwind_gryphon_rider") {}
 
-	struct npc_stormwind_gryphon_riderAI : public ScriptedAI
-	{
-		npc_stormwind_gryphon_riderAI(Creature *c) : ScriptedAI(c) {}
+    struct npc_stormwind_gryphon_riderAI : public ScriptedAI
+    {
+        npc_stormwind_gryphon_riderAI(Creature *c) : ScriptedAI(c) {}
 
-		uint32 timer_greymane_resolve;
-		uint32 timer_shoot;
+        uint32 timer_greymane_resolve;
+        uint32 timer_shoot;
 
-		void Reset ()
-		{
-			timer_greymane_resolve = 360000;
-			timer_shoot = 5000;
-		}
+        void Reset ()
+        {
+            timer_greymane_resolve = 360000;
+            timer_shoot = 5000;
+        }
 
-		void UpdateAI(const uint32 diff)
-		{
-			if (!UpdateVictim())
-				return;
+        void UpdateAI(const uint32 diff)
+        {
+            if (!UpdateVictim())
+                return;
 
-			if (spell_greymane_resolve<= diff)
-			{
-				DoCast(me, spell_greymane_resolve);
-				timer_greymane_resolve = 360000;
-			} else timer_greymane_resolve -= diff;
+            if (spell_greymane_resolve<= diff)
+            {
+                DoCast(me, spell_greymane_resolve);
+                timer_greymane_resolve = 360000;
+            } else timer_greymane_resolve -= diff;
 
-			if (timer_shoot<= diff)
-			{
-				DoCast(me->getVictim(), spell_shoot);
-				timer_shoot = 5000;
-			} else timer_shoot -= diff;
-			DoMeleeAttackIfReady();
-		}
-	};
+            if (timer_shoot<= diff)
+            {
+                DoCast(me->getVictim(), spell_shoot);
+                timer_shoot = 5000;
+            } else timer_shoot -= diff;
+            DoMeleeAttackIfReady();
+        }
+    };
 
-	CreatureAI* GetAI(Creature* pCreature) const
-	{
-		return new npc_stormwind_gryphon_riderAI(pCreature);
-	}
+    CreatureAI* GetAI(Creature* pCreature) const
+    {
+        return new npc_stormwind_gryphon_riderAI(pCreature);
+    }
 };
 
 void AddSC_stormwind_city()
@@ -770,5 +770,5 @@ void AddSC_stormwind_city()
     new npc_tyrion_spybot();
     new npc_lord_gregor_lescovar();
     new npc_marzon_silent_blade();
-	new npc_stormwind_gryphon_rider();
+    new npc_stormwind_gryphon_rider();
 }
