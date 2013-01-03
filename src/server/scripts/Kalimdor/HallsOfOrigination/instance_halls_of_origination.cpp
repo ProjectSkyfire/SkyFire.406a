@@ -36,14 +36,14 @@ class instance_halls_of_origination : public InstanceMapScript
 public:
     instance_halls_of_origination() : InstanceMapScript("instance_halls_of_origination", 644) { }
 
-    InstanceScript* GetInstanceScript(InstanceMap *map) const
+    InstanceScript* GetInstanceScript(InstanceMap* map) const
     {
         return new instance_halls_of_origination_InstanceMapScript(map);
     }
 
     struct instance_halls_of_origination_InstanceMapScript: public InstanceScript
     {
-        instance_halls_of_origination_InstanceMapScript(InstanceMap *map) : InstanceScript(map) { }
+        instance_halls_of_origination_InstanceMapScript(InstanceMap* map) : InstanceScript(map) { }
 
         uint32 Encounter[ENCOUNTERS];
 
