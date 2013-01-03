@@ -460,7 +460,7 @@ public:
             return true;
         }
 
-        void CalculateOvertime(AuraEffect const* aurEff, int32& amount, bool& canBeRecalculated)
+        void CalculateOvertime(AuraEffect const* /*aurEff*/, int32& amount, bool& canBeRecalculated)
         {
             // Had to do ALLLLLL the scaling manually because (afaik) there is no way to hook the GetHitHeal from the spell's effIndex 0
             Unit* caster = GetCaster();
@@ -713,7 +713,7 @@ public:
             return true;
         }
 
-        void HandlePeriodicDummy(AuraEffect const* aurEff)
+        void HandlePeriodicDummy(AuraEffect const* /*aurEff*/)
         {
             uint64 consecrationNpcGUID = GetCaster()->m_SummonSlot[1];
 

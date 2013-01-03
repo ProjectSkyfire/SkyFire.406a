@@ -378,7 +378,7 @@ class spell_pri_power_word_shield : public SpellScriptLoader
         {
             PrepareAuraScript(spell_pri_power_word_shield_AuraScript);
 
-            void CalculateAmount(AuraEffect const* aurEff, int32 & amount, bool & /*canBeRecalculated*/)
+            void CalculateAmount(AuraEffect const* /*aurEff*/, int32& amount, bool& /*canBeRecalculated*/)
             {
                 // Improved Power Word: Shield rank 1
                 if (AuraEffect const* improved = GetCaster()->GetAuraEffect(PRIEST_SPELL_IMPROVED_POWER_WORD_SHIELD_R1, EFFECT_0))
@@ -552,7 +552,7 @@ public:
             return true;
         }
 
-        void HandlePeriodicDummy(AuraEffect const* aurEff)
+        void HandlePeriodicDummy(AuraEffect const* /*aurEff*/)
         {
             Unit* caster = GetCaster();
             DynamicObject* dynObj = caster->GetDynObject(GetSpellInfo()->Id);

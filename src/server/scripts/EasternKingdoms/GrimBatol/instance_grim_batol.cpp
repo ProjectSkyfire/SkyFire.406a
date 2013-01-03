@@ -70,7 +70,7 @@ public:
             return false;
         }
 
-        void OnCreatureCreate(Creature* creature, bool )
+        void OnCreatureCreate(Creature* creature, bool)
         {
             switch (creature->GetEntry())
             {
