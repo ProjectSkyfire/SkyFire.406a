@@ -239,7 +239,7 @@ bool ChatHandler::HandleAddItemCommand(const char *args)
             PreparedStatement* stmt = WorldDatabase.GetPreparedStatement(WORLD_SEL_ITEM_TEMPLATE_BY_NAME);
             stmt->setString(0, itemName);
             PreparedQueryResult result = WorldDatabase.Query(stmt);
-            
+
             if (!result)
             {
                 PSendSysMessage(LANG_COMMAND_COULDNOTFIND, citemName+1);
@@ -435,7 +435,7 @@ bool ChatHandler::HandleListItemCommand(const char *args)
     PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_CHAR_INVENTORY_COUNT_ITEM);
     stmt->setUInt32(0, item_id);
     result = CharacterDatabase.Query(stmt);
-    
+
     if (result)
         inv_count = (*result)[0].GetUInt32();
 
@@ -484,7 +484,7 @@ bool ChatHandler::HandleListItemCommand(const char *args)
     stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_MAIL_COUNT_ITEM);
     stmt->setUInt32(0, item_id);
     result = CharacterDatabase.Query(stmt);
-    
+
     if (result)
         mail_count = (*result)[0].GetUInt32();
 
@@ -531,7 +531,7 @@ bool ChatHandler::HandleListItemCommand(const char *args)
     stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_AUCTIONHOUSE_COUNT_ITEM);
     stmt->setUInt32(0, item_id);
     result = CharacterDatabase.Query(stmt);
-    
+
     if (result)
         auc_count = (*result)[0].GetUInt32();
 
@@ -568,7 +568,7 @@ bool ChatHandler::HandleListItemCommand(const char *args)
     stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_GUILD_BANK_COUNT_ITEM);
     stmt->setUInt32(0, item_id);
     result = CharacterDatabase.Query(stmt);
-    
+
     if (result)
         guild_count = (*result)[0].GetUInt32();
 
@@ -2216,46 +2216,6 @@ void ChatHandler::HandleCharacterLevel(Player* player, uint64 playerGuid, uint32
 
         CharacterDatabase.Execute(stmt);
     }
-}
-
-bool ChatHandler::HandleLevelUpCommand(const char *args)
-{
-    char* nameStr;
-    char* levelStr;
-    extractOptFirstArg((char*)args, &nameStr, &levelStr);
-
-    // exception opt second arg: .character level $name
-    if (levelStr && isalpha(levelStr[0]))
-    {
-        nameStr = levelStr;
-        levelStr = NULL;                                    // current level will used
-    }
-
-    Player* target;
-    uint64 target_guid;
-    std::string target_name;
-    if (!extractPlayerTarget(nameStr, &target, &target_guid, &target_name))
-        return false;
-
-    int32 oldlevel = target ? target->getLevel() : Player::GetLevelFromDB(target_guid);
-    int32 addlevel = levelStr ? atoi(levelStr) : 1;
-    int32 newlevel = oldlevel + addlevel;
-
-    if (newlevel < 1)
-        newlevel = 1;
-
-    if (newlevel > STRONG_MAX_LEVEL)                         // hardcoded maximum level
-        newlevel = STRONG_MAX_LEVEL;
-
-    HandleCharacterLevel(target, target_guid, oldlevel, newlevel);
-
-    if (!m_session || m_session->GetPlayer() != target)      // including chr == NULL
-    {
-        std::string nameLink = playerLink(target_name);
-        PSendSysMessage(LANG_YOU_CHANGE_LVL, nameLink.c_str(), newlevel);
-    }
-
-    return true;
 }
 
 bool ChatHandler::HandleShowAreaCommand(const char *args)
