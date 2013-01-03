@@ -52,7 +52,7 @@ public:
 
         void JustDied(Unit* /*Killer*/) {}
 
-        void UpdateAI(const uint32 Diff)
+        void UpdateAI(const uint32 /*diff*/)
         {
             if (!UpdateVictim())
                 return;
@@ -93,7 +93,7 @@ public:
 
         void JustDied(Unit* /*Killer*/) { }
 
-        void UpdateAI(const uint32 Diff)
+        void UpdateAI(const uint32 /*diff*/)
         {
             if (!UpdateVictim())
                 return;

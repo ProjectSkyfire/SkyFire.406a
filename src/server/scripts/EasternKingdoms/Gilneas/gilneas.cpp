@@ -172,7 +172,7 @@ public:
             tSeek      = urand(1000, 2000);
         }
 
-        void DamageTaken(Unit* who, uint32 &Damage)
+        void DamageTaken(Unit* who, uint32& /*damage*/)
         {
             if (who->GetTypeId() == TYPEID_PLAYER)
             {
@@ -191,7 +191,7 @@ public:
             }
         }
 
-        void DamageDealt(Unit* target, uint32& damage, DamageEffectType damageType)
+        void DamageDealt(Unit* target, uint32& /*damage*/, DamageEffectType /*damageType*/)
         {
             if (target->GetEntry() == NPC_RAMPAGING_WORGEN_1)
                 dmgCount ++;
@@ -276,7 +276,7 @@ public:
 
         //There is NO phase shift here!!!!
 
-		void DamageTaken(Unit * who, uint32 &Damage)
+		void DamageTaken(Unit* who, uint32& /*damage*/)
         {
             if (who->GetTypeId() == TYPEID_PLAYER)
             {
@@ -295,7 +295,7 @@ public:
             }
         }
 
-        void DamageDealt(Unit* target, uint32& damage, DamageEffectType damageType)
+        void DamageDealt(Unit* target, uint32& /*damage*/, DamageEffectType /*damageType*/)
         {
             if (target->GetEntry() == NPC_RAMPAGING_WORGEN_1)
                 dmgCount ++;
@@ -408,13 +408,13 @@ public:
             willCastEnrage = urand(0, 1);
         }
 
-        void DamageDealt(Unit* target, uint32& damage, DamageEffectType damageType)
+        void DamageDealt(Unit* target, uint32& /*damage*/, DamageEffectType /*damageType*/)
         {
             if (target->GetEntry() == NPC_GILNEAS_CITY_GUARD || target->GetEntry() == NPC_PRINCE_LIAM_GREYMANE)
                 dmgCount++;
         }
 
-        void DamageTaken(Unit* who, uint32 &Damage)
+        void DamageTaken(Unit* who, uint32& /*damage*/)
         {
             if (who->GetTypeId() == TYPEID_PLAYER)
             {
@@ -839,13 +839,13 @@ public:
             willCastEnrage = urand(0, 1);
         }
 
-        void DamageDealt(Unit* target, uint32 &damage, DamageEffectType damageType)
+        void DamageDealt(Unit* target, uint32& /*damage*/, DamageEffectType /*damageType*/)
         {
             if (target->GetEntry() == NPC_GILNEAN_ROYAL_GUARD || target->GetEntry() == NPC_SERGEANT_CLEESE || target->GetEntry() == NPC_MYRIAM_SPELLWALKER)
                 dmgCount++;
         }
 
-        void DamageTaken(Unit* who, uint32 &Damage)
+        void DamageTaken(Unit* who, uint32& /*damage*/)
         {
             if (who->GetTypeId() == TYPEID_PLAYER)
             {
@@ -942,7 +942,7 @@ public:
             tSeek      = urand(1000, 2000);
         }
 
-        void DamageTaken(Unit* who, uint32 &Damage)
+        void DamageTaken(Unit* who, uint32& /*damage*/)
         {
             if (who->GetTypeId() == TYPEID_PLAYER)
             {
@@ -961,7 +961,7 @@ public:
             }
         }
 
-        void DamageDealt(Unit* target, uint32& damage, DamageEffectType damageType)
+        void DamageDealt(Unit* target, uint32& /*damage*/, DamageEffectType /*damageType*/)
         {
             if (target->GetEntry() == NPC_BLOODFANG_WORGEN)
                 dmgCount ++;
@@ -1042,7 +1042,7 @@ public:
             tSeek      = urand(1000, 2000);
         }
 
-        void DamageTaken(Unit* who, uint32 &Damage)
+        void DamageTaken(Unit* who, uint32& /*damage*/)
         {
             if (who->GetTypeId() == TYPEID_PLAYER)
             {
@@ -1061,7 +1061,7 @@ public:
             }
         }
 
-        void DamageDealt(Unit* target, uint32 &damage, DamageEffectType damageType)
+        void DamageDealt(Unit* target, uint32& /*damage*/, DamageEffectType /*damageType*/)
         {
             if (target->GetEntry() == NPC_BLOODFANG_WORGEN)
                 dmgCount ++;
@@ -1138,7 +1138,7 @@ public:
             tSeek = urand(1000, 2000);
         }
 
-        void DamageDealt(Unit* target, uint32 &damage, DamageEffectType damageType)
+        void DamageDealt(Unit* target, uint32& /*damage*/, DamageEffectType /*damageType*/)
         {
             if (target->GetEntry() == NPC_BLOODFANG_WORGEN)
                 dmgCount ++;
@@ -1172,7 +1172,7 @@ class npc_lord_darius_crowley_c3 : public CreatureScript
 public:
     npc_lord_darius_crowley_c3() : CreatureScript("npc_lord_darius_crowley_c3") {}
 
-    bool OnQuestComplete(Player* player, Creature* creature, Quest const* quest)
+    bool OnQuestComplete(Player* player, Creature* /*creature*/, Quest const* quest)
     {
         if (quest->GetQuestId() == 14222)
         {
@@ -1209,7 +1209,7 @@ class npc_king_genn_greymane_c2 : public CreatureScript
 public:
     npc_king_genn_greymane_c2() : CreatureScript("npc_king_genn_greymane_c2") {}
 
-    bool OnQuestComplete(Player* player, Creature* creature, Quest const* quest)
+    bool OnQuestComplete(Player* player, Creature* /*creature*/, Quest const* /*quest*/)
     {
         player->RemoveAurasDueToSpell(68630);
         player->RemoveAurasDueToSpell(76642);
@@ -1305,7 +1305,7 @@ public:
 
             if (krennansay <=diff)
             {
-                if (Creature *krennan = me->FindNearestCreature(3871227, 30, true))
+                if (Creature* krennan = me->FindNearestCreature(3871227, 30, true))
                 {
                     krennansay = urand(4000,7000);//Repeat every 4 to 7 seconds
                 }
@@ -1354,7 +1354,7 @@ public:
 
         void UpdateAI(const uint32 diff)
         {
-            if (Creature *krennan = me->FindNearestCreature(3871227, 50))
+            if (Creature* krennan = me->FindNearestCreature(3871227, 50))
             {
                 if (!KrennanDead)
                 {
@@ -1363,7 +1363,7 @@ public:
                 }
             }
 
-            if (Creature *horse = me->FindNearestCreature(35905, 20.0f))//Jump onto horse in seat 2
+            if (Creature* horse = me->FindNearestCreature(35905, 20.0f))//Jump onto horse in seat 2
             {
                 if (Cast)
                 {
@@ -1418,7 +1418,7 @@ class spell_keg_placed : public SpellScriptLoader
                 tickcount = 0;
             }
 
-            void HandlePeriodic(AuraEffect const* aurEff)
+            void HandlePeriodic(AuraEffect const* /*aurEff*/)
             {
                 PreventDefaultAction();
                 if (Unit* caster = GetCaster())
@@ -1490,7 +1490,7 @@ public:
         void WaypointReached(uint32 i)
         {
             Player* player = GetPlayerForEscort();
-            Creature *crowley = me->FindNearestCreature(NPC_DARIUS_CROWLEY, 5, true);
+            Creature* crowley = me->FindNearestCreature(NPC_DARIUS_CROWLEY, 5, true);
 
             switch(i)
             {
@@ -1541,16 +1541,16 @@ public:
 
             if (!CrowleySpawn)
             {
-                 DoCast(SPELL_SUMMON_CROWLEY);
-                 if (Creature *crowley = me->FindNearestCreature(NPC_DARIUS_CROWLEY, 5, true))
-                 {
-                     CrowleySpawn = true;
-                 }
+                DoCast(SPELL_SUMMON_CROWLEY);
+                if (Creature* crowley = me->FindNearestCreature(NPC_DARIUS_CROWLEY, 5, true))
+                {
+                    CrowleySpawn = true;
+                }
             }
 
             if (CrowleySpawn && !CrowleyOn)
             {
-                Creature *crowley = me->FindNearestCreature(NPC_DARIUS_CROWLEY, 5, true);
+                Creature* crowley = me->FindNearestCreature(NPC_DARIUS_CROWLEY, 5, true);
                 crowley->CastSpell(me, SPELL_RIDE_HORSE, true);//Mount Crowley in seat 1
                 CrowleyOn = true;
             }
@@ -1669,7 +1669,7 @@ public:
 
         void SpellHit(Unit* caster, const SpellInfo* spell)
         {
-            Creature *horse = me->FindNearestCreature(NPC_CROWLEY_HORSE, 100, true);
+            Creature* horse = me->FindNearestCreature(NPC_CROWLEY_HORSE, 100, true);
             if (spell->Id == SPELL_THROW_TORCH)
             {
                 Burning = true;

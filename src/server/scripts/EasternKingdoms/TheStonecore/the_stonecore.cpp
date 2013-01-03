@@ -353,5 +353,5 @@ void AddSC_the_stonecore()
     new mob_crystalspawn_giant();
     new mob_impp();
     new mob_millhouse_manastorm();
-    new mob_rock_borer;
+    new mob_rock_borer();
 }

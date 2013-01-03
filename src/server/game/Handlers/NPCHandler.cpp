@@ -718,7 +718,7 @@ void WorldSession::HandleUnstablePetCallback(PreparedQueryResult result, uint32 
     SendStableResult(STABLE_SUCCESS_UNSTABLE);
 }
 
-void WorldSession::HandleBuyStableSlot(WorldPacket& recvData)
+void WorldSession::HandleBuyStableSlot(WorldPacket& /*recvData*/)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Recv CMSG_BUY_STABLE_SLOT.");
     /*uint64 npcGUID;
@@ -751,7 +751,7 @@ void WorldSession::HandleBuyStableSlot(WorldPacket& recvData)
         SendStableResult(STABLE_ERR_STABLE);*/
 }
 
-void WorldSession::HandleStableRevivePet(WorldPacket &/* recvData */)
+void WorldSession::HandleStableRevivePet(WorldPacket& /*recvData*/)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "HandleStableRevivePet: Not implemented");
 }

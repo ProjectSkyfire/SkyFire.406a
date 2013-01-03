@@ -300,7 +300,7 @@ public:
     {
         PrepareAuraScript(spell_mage_ice_barrier_AuraScript);
 
-        void CalculateAmount(AuraEffect const* aurEff, int32 & amount, bool & canBeRecalculated)
+        void CalculateAmount(AuraEffect const* /*aurEff*/, int32& amount, bool& canBeRecalculated)
         {
             if (AuraEffect const* glyph = GetCaster()->GetAuraEffect(SPELL_MAGE_GLYPH_OF_ICE_BARRIER, 0))
                 amount += glyph->GetAmount(); // 30% increase absorb from glyph
@@ -355,7 +355,7 @@ public:
             amount = -1;
         }
 
-        void Absorb(AuraEffect* aurEff, DamageInfo & dmgInfo, uint32 & absorbAmount)
+        void Absorb(AuraEffect* aurEff, DamageInfo& dmgInfo, uint32& absorbAmount)
         {
             Unit * caster = GetCaster();
 
