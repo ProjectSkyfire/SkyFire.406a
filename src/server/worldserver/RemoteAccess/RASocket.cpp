@@ -191,7 +191,7 @@ int RASocket::check_access_level(const std::string& user)
 
     Field* fields = result->Fetch();
 
-    if (fields[1].GetUInt32() < iMinLevel)
+    if (fields[1].GetUInt8() < iMinLevel)
     {
         sLog->outRemote("User %s has no privilege to login", user.c_str());
         return -1;
