@@ -295,7 +295,7 @@ class spell_isiset_supernova : public SpellScriptLoader
             }
         };
 
-        SpellScript *GetSpellScript() const
+        SpellScript* GetSpellScript() const
         {
             return new spell_isiset_supernova_SpellScript();
         }

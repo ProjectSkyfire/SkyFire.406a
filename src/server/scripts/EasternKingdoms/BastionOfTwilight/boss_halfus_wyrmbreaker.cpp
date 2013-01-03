@@ -291,7 +291,7 @@ public:
 
         void JustDied(Unit* /*Killer*/) {}
 
-        void UpdateAI(const uint32 diff)
+        void UpdateAI(const uint32 /*diff*/)
         {
             if (!UpdateVictim())
                 return;
@@ -310,16 +310,16 @@ class spell_halfus_stone_touch : public SpellScriptLoader
         {
             PrepareAuraScript(spell_halfus_stone_touch_AuraScript);
 
-            void HandleEffectApply(AuraEffect const * /*aurEff*/, AuraEffectHandleModes /*mode*/)
+            void HandleEffectApply(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
             {
-                if (Unit * target = GetTarget())
+                if (Unit* target = GetTarget())
                 {
                     target->AddUnitState(UNIT_STATE_STUNNED);
                     target->ClearUnitState(UNIT_STATE_CASTING);
                 }
             }
 
-            void HandleEffectRemove(AuraEffect const * /*aurEff*/, AuraEffectHandleModes /*mode*/)
+            void HandleEffectRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
             {
                if (Unit* target = GetTarget())
                {

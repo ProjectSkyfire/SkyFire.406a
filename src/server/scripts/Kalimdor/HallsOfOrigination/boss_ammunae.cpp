@@ -389,8 +389,8 @@ public:
 
 void AddSC_boss_ammunae()
 {
-    new boss_ammunae;
-    new mob_bloodpetal_blossom;
-    new mob_seed_pod;
-    new mob_spore;
+    new boss_ammunae();
+    new mob_bloodpetal_blossom();
+    new mob_seed_pod();
+    new mob_spore();
 }

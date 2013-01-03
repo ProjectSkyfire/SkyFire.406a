@@ -465,7 +465,7 @@ class boss_water_warden : public CreatureScript
 
             void JustDied(Unit* /*who*/)
             {
-                if (Creature *anraphet = me->FindNearestCreature(BOSS_ANRAPHET, 1000, true))
+                if (Creature* anraphet = me->FindNearestCreature(BOSS_ANRAPHET, 1000, true))
                       if (boss_anraphet::boss_anraphetAI* pAI = CAST_AI(boss_anraphet::boss_anraphetAI, anraphet->AI()))
                                 pAI->WardenKilled();
 
@@ -482,9 +482,9 @@ class boss_water_warden : public CreatureScript
 
 void AddSC_boss_anraphet()
 {
-    new boss_anraphet;
-    new boss_flame_warden;
-    new boss_air_warden;
-    new boss_earth_warden;
-    new boss_water_warden;
+    new boss_anraphet();
+    new boss_flame_warden();
+    new boss_air_warden();
+    new boss_earth_warden();
+    new boss_water_warden();
 }
