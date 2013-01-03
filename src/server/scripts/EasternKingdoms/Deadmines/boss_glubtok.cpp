@@ -251,4 +251,3 @@ void AddSC_boss_glubtok()
 {
     new boss_glubtok();
 }
-
