@@ -483,7 +483,7 @@ class boss_water_warden : public CreatureScript
 void AddSC_boss_anraphet()
 {
     new boss_anraphet();
-    new boss_flame_wrden();
+    new boss_flame_warden();
     new boss_air_warden();
     new boss_earth_warden();
     new boss_water_warden();
