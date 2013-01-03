@@ -98,7 +98,7 @@ void WorldSession::HandleGuildRemoveOpcode(WorldPacket& recvPacket)
         guild->HandleRemoveMember(this, guid);
 }
 
-void WorldSession::HandleGuildAcceptOpcode(WorldPacket& recvPacket)
+void WorldSession::HandleGuildAcceptOpcode(WorldPacket& /*recvPacket*/)
 {
     //recvPacket.read_skip<uint64>();
 
@@ -449,7 +449,7 @@ void WorldSession::HandleSaveGuildEmblemOpcode(WorldPacket& recvPacket)
     }
 }
 
-void WorldSession::HandleGuildEventLogQueryOpcode(WorldPacket& /* recvPacket */)
+void WorldSession::HandleGuildEventLogQueryOpcode(WorldPacket& /*recvPacket*/)
 {
     sLog->outDebug(LOG_FILTER_GUILD, "WORLD: Received (MSG_GUILD_EVENT_LOG_QUERY)");
 
@@ -457,7 +457,7 @@ void WorldSession::HandleGuildEventLogQueryOpcode(WorldPacket& /* recvPacket */)
         guild->SendEventLog(this);
 }
 
-void WorldSession::HandleGuildBankMoneyWithdrawn(WorldPacket & /* recvData */)
+void WorldSession::HandleGuildBankMoneyWithdrawn(WorldPacket& /*recvData*/)
 {
     sLog->outDebug(LOG_FILTER_GUILD, "WORLD: Received (MSG_GUILD_BANK_MONEY_WITHDRAWN)");
 
@@ -465,7 +465,7 @@ void WorldSession::HandleGuildBankMoneyWithdrawn(WorldPacket & /* recvData */)
         guild->SendMoneyInfo(this);
 }
 
-void WorldSession::HandleGuildPermissions(WorldPacket& /* recvData */)
+void WorldSession::HandleGuildPermissions(WorldPacket& /*recvData*/)
 {
     sLog->outDebug(LOG_FILTER_GUILD, "WORLD: Received (MSG_GUILD_PERMISSIONS)");
 
@@ -672,7 +672,7 @@ void WorldSession::HandleGuildBankLogQuery(WorldPacket& recvData)
         guild->SendBankLog(this, tabId);
 }
 
-void WorldSession::HandleQueryGuildBankTabText(WorldPacket &recvData)
+void WorldSession::HandleQueryGuildBankTabText(WorldPacket& recvData)
 {
     sLog->outDebug(LOG_FILTER_GUILD, "WORLD: Received MSG_QUERY_GUILD_BANK_TEXT");
 
@@ -683,7 +683,7 @@ void WorldSession::HandleQueryGuildBankTabText(WorldPacket &recvData)
         guild->SendBankTabText(this, tabId);
 }
 
-void WorldSession::HandleSetGuildBankTabText(WorldPacket &recvData)
+void WorldSession::HandleSetGuildBankTabText(WorldPacket& recvData)
 {
     sLog->outDebug(LOG_FILTER_GUILD, "WORLD: Received CMSG_SET_GUILD_BANK_TEXT");
 
@@ -697,7 +697,7 @@ void WorldSession::HandleSetGuildBankTabText(WorldPacket &recvData)
         guild->SetBankTabText(tabId, text);
 }
 
-void WorldSession::HandleGuildQueryTradeSkill(WorldPacket &recvData)
+void WorldSession::HandleGuildQueryTradeSkill(WorldPacket& recvData)
 {
     sLog->outDebug(LOG_FILTER_GUILD, "WORLD: Received CMSG_GUILD_QUERY_TRADESKILL");
 
@@ -710,7 +710,7 @@ void WorldSession::HandleGuildQueryTradeSkill(WorldPacket &recvData)
     }
 }
 
-void WorldSession::HandleGuildQueryNews(WorldPacket &recvData)
+void WorldSession::HandleGuildQueryNews(WorldPacket& /*recvData*/)
 {
     sLog->outDebug(LOG_FILTER_GUILD, "WORLD: Received CMSG_GUILD_QUERY_NEWS");
 

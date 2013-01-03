@@ -3435,11 +3435,11 @@ public:
             }
         }
 
-        void UpdateAI (const uint32 diff)
+        void UpdateAI (const uint32 /*diff*/)
         {
             if (!UpdateVictim())
             {
-                Unit * owner = me->GetOwner();
+                Unit* owner = me->GetOwner();
 
                 if (!owner)
                     return;
