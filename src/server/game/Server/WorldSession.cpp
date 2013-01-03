@@ -698,7 +698,7 @@ void WorldSession::SetAccountData(AccountDataType type, time_t time_, std::strin
     if ((1 << type) & GLOBAL_CACHE_MASK)
     {
         id = GetAccountId();
-        index = CHAR_UPD_ACCOUNT_DATA;
+        index = CHAR_REP_ACCOUNT_DATA;
     }
     else
     {
@@ -707,7 +707,7 @@ void WorldSession::SetAccountData(AccountDataType type, time_t time_, std::strin
             return;
 
         id = m_GUIDLow;
-        index = CHAR_UPD_PLAYER_ACCOUNT_DATA;
+        index = CHAR_REP_PLAYER_ACCOUNT_DATA;
     }
 
     PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(index);
