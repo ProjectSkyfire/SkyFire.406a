@@ -219,6 +219,6 @@ public:
 
 void AddSC_boss_rajh()
 {
-    new boss_rajh;
-    new mob_solar_wind;
+    new boss_rajh();
+    new mob_solar_wind();
 }

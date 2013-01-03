@@ -100,7 +100,7 @@ class boss_ptah : public CreatureScript
                 me->MonsterYell(SAY_DIED, 0, 0);
             }
 
-            void JustSummoned(Creature *summoned)
+            void JustSummoned(Creature* summoned)
             {
                 summoned->SetInCombatWithZone();
                 if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))

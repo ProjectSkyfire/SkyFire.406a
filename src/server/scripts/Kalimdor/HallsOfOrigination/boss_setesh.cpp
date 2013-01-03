@@ -403,9 +403,9 @@ public:
 
 void AddSC_boss_setesh()
 {
-    new boss_setesh;
-    new mob_choas_portal;
-    new mob_seed_of_chaos;
-    new mob_void_sentinel;
-    new mob_void_seeker;
+    new boss_setesh();
+    new mob_choas_portal();
+    new mob_seed_of_chaos();
+    new mob_void_sentinel();
+    new mob_void_seeker();
 }

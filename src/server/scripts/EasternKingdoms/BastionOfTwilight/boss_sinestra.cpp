@@ -54,7 +54,7 @@ public:
             instance->SetData(DATA_SINESTRA, DONE);
         }
 
-        void UpdateAI(const uint32 Diff)
+        void UpdateAI(const uint32 /*diff*/)
         {
             if (!UpdateVictim())
                 return;

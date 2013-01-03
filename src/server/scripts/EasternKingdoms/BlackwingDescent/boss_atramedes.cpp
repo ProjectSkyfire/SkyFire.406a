@@ -46,7 +46,7 @@ public:
             instance->SetData(DATA_ATRAMEDES, DONE);
         }
 
-        void UpdateAI(const uint32 Diff)
+        void UpdateAI(const uint32 /*diff*/)
         {
             if (!UpdateVictim())
                 return;
