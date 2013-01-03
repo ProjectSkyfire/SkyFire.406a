@@ -2218,18 +2218,18 @@ float Unit::CalculateLevelPenalty(SpellInfo const* spellProto) const
 
     if (spellProto->MaxLevel <= 0)
         return 1.0f;
-    
+
     //if caster level is lower that max caster level
     if (getLevel() < spellProto->MaxLevel)
         return 1.0f;
 
     float LvlPenalty = 0.0f;
     LvlPenalty = (22.0f + float (spellProto->MaxLevel) - float (getLevel())) / 20.0f;
-    
+
     //to prevent positive effect
     if (LvlPenalty > 1.0f)
         return 1.0f;
-    
+
     //level penalty is capped at 0
     if (LvlPenalty < 0.0f)
         return 0.0f;
@@ -5334,6 +5334,18 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                     target = this;
                     triggered_spell_id = 47241;
                     break;
+                }
+                // Bloodworms Health Leech
+                case 50453:
+                {
+                    if (Unit* owner = GetOwner())
+                    {
+                        basepoints0 = int32(damage * 1.50f);
+                        target = owner;
+                        triggered_spell_id = 50454;
+                        break;
+                    }
+                    return false;
                 }
                 // Eye for an Eye
                 case 9799:  // Rank1 (http://www.wowhead.com/spell=9799)
@@ -8443,7 +8455,7 @@ bool Unit::HandleAuraProc(Unit* victim, uint32 damage, Aura* triggeredByAura, Sp
                 // Improved Polymorph
                 case 118:
                 {
-                    *handled = true; 
+                    *handled = true;
                     Unit* caster = triggeredByAura->GetCaster();
 
                     if (!caster)
@@ -10263,7 +10275,7 @@ void Unit::SetMinion(Minion *minion, bool apply, PetSlot slot)
                     ToPlayer()->_currentPetSlot = slot;
                     ToPlayer()->setPetSlotUsed(slot, true);
                 }
-				// Don't see any reason for this to be here. Just commenting while I investigate this goofy hunter crash.
+                // Don't see any reason for this to be here. Just commenting while I investigate this goofy hunter crash.
                 //else
                 //{
                 //    sLog->outCrash("Unit::SetMinion. Tried to add hunter pet to not allowed slot (%u). Minion %u for %u", slot, minion->GetEntry(), ToPlayer()->GetEntry());
@@ -11445,7 +11457,7 @@ bool Unit::isSpellCrit(Unit* victim, SpellInfo const* spellProto, SpellSchoolMas
 
         crit_chance += (*i)->GetAmount();
     }
-            
+
     // percent done
     // only players use intelligence for critical chance computations
     if (Player* modOwner = GetSpellModOwner())
