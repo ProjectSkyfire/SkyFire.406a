@@ -37,4 +37,5 @@ enum Data64
     DATA_NOVOS_CRYSTAL_3,
     DATA_NOVOS_CRYSTAL_4
 };
+
 #endif

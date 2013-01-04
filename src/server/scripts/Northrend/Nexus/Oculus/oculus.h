@@ -74,4 +74,5 @@ enum OculusSpells
 {
     SPELL_CENTRIFUGE_SHIELD = 50053
 };
+
 #endif

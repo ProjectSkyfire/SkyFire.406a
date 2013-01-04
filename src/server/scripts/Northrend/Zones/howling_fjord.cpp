@@ -430,9 +430,9 @@ public:
 
 void AddSC_howling_fjord()
 {
-    new npc_apothecary_hanes;
-    new npc_plaguehound_tracker;
-    new npc_razael_and_lyana;
-    new npc_mcgoyver;
-    new npc_daegarn;
- }
+    new npc_apothecary_hanes();
+    new npc_plaguehound_tracker();
+    new npc_razael_and_lyana();
+    new npc_mcgoyver();
+    new npc_daegarn();
+}

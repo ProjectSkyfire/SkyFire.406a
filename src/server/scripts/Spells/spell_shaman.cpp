@@ -305,7 +305,7 @@ public:
     {
         PrepareAuraScript(spell_sha_healing_rain_AuraScript);
 
-        void OnTick(AuraEffect const* aurEff)
+        void OnTick(AuraEffect const* /*aurEff*/)
         {
             if (DynamicObject* dynObj = GetCaster()->GetDynObject(73920))
                 GetCaster()->CastSpell(dynObj->GetPositionX(), dynObj->GetPositionY(), dynObj->GetPositionZ(), 73921, true);

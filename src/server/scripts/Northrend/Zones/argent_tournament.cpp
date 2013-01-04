@@ -34,7 +34,7 @@ class spell_tournament_trust : public SpellScriptLoader
             {
                 if (Unit* target = GetHitUnit())
                 {
-                    if (Unit *caster = GetCaster())
+                    if (Unit* caster = GetCaster())
                     {
                         if (target->GetTypeId() == TYPEID_UNIT && target->ToCreature()->GetEntry() == 33229)
                         {
@@ -60,5 +60,5 @@ class spell_tournament_trust : public SpellScriptLoader
 
 void AddSC_argen_tournament()
 {
-    new spell_tournament_trust;
+    new spell_tournament_trust();
 }

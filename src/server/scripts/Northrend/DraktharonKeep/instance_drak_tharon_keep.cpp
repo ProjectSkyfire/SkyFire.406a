@@ -241,5 +241,5 @@ public:
 
 void AddSC_instance_drak_tharon()
 {
-    new instance_drak_tharon;
+    new instance_drak_tharon();
 }

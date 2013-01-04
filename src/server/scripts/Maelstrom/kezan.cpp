@@ -182,6 +182,6 @@ public:
 
 void AddSC_kezan()
 {
-    new npc_fourth_and_goal_target;
-    new npc_defiant_troll;
+    new npc_fourth_and_goal_target();
+    new npc_defiant_troll();
 }
