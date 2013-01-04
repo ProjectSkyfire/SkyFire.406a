@@ -262,7 +262,7 @@ void ObjectAccessor::AddCorpsesToGrid(GridCoord const& gridpair, GridType& grid,
 
     for (Player2CorpsesMapType::iterator iter = i_player2corpse.begin(); iter != i_player2corpse.end(); ++iter)
     {
-        // We need this check otherwise a corpose may be added to a grid twice
+        // We need this check otherwise a corpse may be added to a grid twice
         if (iter->second->IsInGrid())
             continue;
 

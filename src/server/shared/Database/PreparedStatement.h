@@ -1,5 +1,7 @@
 /*
- * Copyright (C) 2008-2013 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2011-2013 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2013 TrinityCore <http://www.SKYFIREcore.org/>
+ * Copyright (C) 2005-2013 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -20,6 +22,10 @@
 
 #include "SQLOperation.h"
 #include <ace/Future.h>
+
+#ifdef __APPLE__
+#undef TYPE_BOOL
+#endif
 
 //- Union for data buffer (upper-level bind -> queue -> lower-level bind)
 union PreparedStatementDataUnion
@@ -51,7 +57,8 @@ enum PreparedStatementValueType
     TYPE_I64,
     TYPE_FLOAT,
     TYPE_DOUBLE,
-    TYPE_STRING
+    TYPE_STRING,
+    TYPE_NULL
 };
 
 struct PreparedStatementData
@@ -87,6 +94,7 @@ class PreparedStatement
         void setFloat(const uint8 index, const float value);
         void setDouble(const uint8 index, const double value);
         void setString(const uint8 index, const std::string& value);
+        void setNull(const uint8 index);
 
     protected:
         void BindParameters();
@@ -121,6 +129,7 @@ class MySQLPreparedStatement
         void setFloat(const uint8 index, const float value);
         void setDouble(const uint8 index, const double value);
         void setString(const uint8 index, const char* value);
+        void setNull(const uint8 index);
 
     protected:
         MYSQL_STMT* GetSTMT() { return m_Mstmt; }
@@ -128,7 +137,7 @@ class MySQLPreparedStatement
         PreparedStatement* m_stmt;
         void ClearParameters();
         bool CheckValidIndex(uint8 index);
-        std::string getQueryString(const char *query);
+        std::string getQueryString(std::string const& sqlPattern) const;
 
     private:
         void setValue(MYSQL_BIND* param, enum_field_types type, const void* value, uint32 len, bool isUnsigned);

@@ -1,5 +1,7 @@
 /*
- * Copyright (C) 2008-2013 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2011-2013 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2013 TrinityCore <http://www.SKYFIREcore.org/>
+ * Copyright (C) 2005-2013 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -135,6 +137,7 @@ class DatabaseWorkerPool
         */
 
         //! Enqueues a one-way SQL operation in string format that will be executed asynchronously.
+        //! This method should only be used for queries that are only executed once, e.g during startup.
         void Execute(const char* sql)
         {
             if (!sql)
@@ -145,6 +148,7 @@ class DatabaseWorkerPool
         }
 
         //! Enqueues a one-way SQL operation in string format -with variable args- that will be executed asynchronously.
+        //! This method should only be used for queries that are only executed once, e.g during startup.
         void PExecute(const char* sql, ...)
         {
             if (!sql)
@@ -168,10 +172,11 @@ class DatabaseWorkerPool
         }
 
         /**
-            Direct syncrhonous one-way statement methods.
+            Direct synchronous one-way statement methods.
         */
 
         //! Directly executes a one-way SQL operation in string format, that will block the calling thread until finished.
+        //! This method should only be used for queries that are only executed once, e.g during startup.
         void DirectExecute(const char* sql)
         {
             if (!sql)
@@ -183,6 +188,7 @@ class DatabaseWorkerPool
         }
 
         //! Directly executes a one-way SQL operation in string format -with variable args-, that will block the calling thread until finished.
+        //! This method should only be used for queries that are only executed once, e.g during startup.
         void DirectPExecute(const char* sql, ...)
         {
             if (!sql)
@@ -220,7 +226,10 @@ class DatabaseWorkerPool
             ResultSet* result = conn->Query(sql);
             conn->Unlock();
             if (!result || !result->GetRowCount())
+            {
+                delete result;
                 return QueryResult(NULL);
+            }
 
             result->NextRow();
             return QueryResult(result);
@@ -235,7 +244,7 @@ class DatabaseWorkerPool
 
             va_list ap;
             char szQuery[MAX_QUERY_LEN];
-            va_start(ap, sql);
+            va_start(ap, conn);
             vsnprintf(szQuery, MAX_QUERY_LEN, sql, ap);
             va_end(ap);
 
@@ -271,7 +280,10 @@ class DatabaseWorkerPool
             delete stmt;
 
             if (!ret || !ret->GetRowCount())
+            {
+                delete ret;
                 return PreparedQueryResult(NULL);
+            }
 
             return PreparedQueryResult(ret);
         }
@@ -367,7 +379,7 @@ class DatabaseWorkerPool
             MySQLConnection* con = GetFreeConnection();
             if (con->ExecuteTransaction(transaction))
             {
-                con->Unlock();      // OK, operation succesful
+                con->Unlock();      // OK, operation successful
                 return;
             }
 
@@ -413,7 +425,7 @@ class DatabaseWorkerPool
             Other
         */
 
-        //! Automanaged (internally) pointer to a prepared statement object for usage in upper level code.
+        //! Auto managed (internally) pointer to a prepared statement object for usage in upper level code.
         //! Pointer is deleted in this->Query(PreparedStatement*) or PreparedStatementTask::~PreparedStatementTask.
         //! This object is not tied to the prepared statement on the MySQL context yet until execution.
         PreparedStatement* GetPreparedStatement(uint32 index)
@@ -421,7 +433,7 @@ class DatabaseWorkerPool
             return new PreparedStatement(index);
         }
 
-        //! Apply escape string'ing for current collation. (utf8)
+        //! Apply escape stringing for current collation. (utf8)
         void EscapeString(std::string& str)
         {
             if (str.empty())
@@ -497,7 +509,7 @@ class DatabaseWorkerPool
         {
             IDX_ASYNC,
             IDX_SYNCH,
-            IDX_SIZE,
+            IDX_SIZE
         };
 
         ACE_Activation_Queue*           _queue;             //! Queue shared by async worker threads.

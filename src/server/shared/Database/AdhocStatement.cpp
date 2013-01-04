@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2011-2013 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2013 TrinityCore <http://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -44,6 +45,7 @@ bool BasicStatementTask::Execute()
         ResultSet* result = m_conn->Query(m_sql);
         if (!result || !result->GetRowCount())
         {
+            delete result;
             m_result.set(QueryResult(NULL));
             return false;
         }

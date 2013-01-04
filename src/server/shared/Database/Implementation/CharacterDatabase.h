@@ -327,7 +327,6 @@ enum CharacterDatabaseStatements
     CHAR_DEL_PLAYER_CORPSES,
     CHAR_DEL_OLD_CORPSES,
 
-
     // Creature respawn
     CHAR_SEL_CREATURE_RESPAWNS,
     CHAR_REP_CREATURE_RESPAWNS,

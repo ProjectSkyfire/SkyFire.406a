@@ -21,8 +21,10 @@
 
 #include "Common.h"
 
+#include <algorithm>
 #include <string>
 #include <vector>
+#include <list>
 
 // Searcher for map of structs
 template<typename T, class S> struct Finder
@@ -44,6 +46,8 @@ struct Tokens: public std::vector<char*>
 
 void stripLineInvisibleChars(std::string &src);
 
+int64 MoneyStringToMoney(const std::string& moneyString);
+
 std::string secsToTimeString(uint64 timeInSecs, bool shortText = false, bool hoursOnly = false);
 uint32 TimeStringToSecs(const std::string& timestring);
 std::string TimeToTimestampStr(time_t t);
@@ -58,7 +62,8 @@ inline uint32 secsToTimeBitFields(time_t secs)
  int32 irand(int32 min, int32 max);
 
 /* Return a random number in the range min..max (inclusive). For reliable results, the difference
-* between max and min should be less than RAND32_MAX. */
+ * between max and min should be less than RAND32_MAX.
+ */
  uint32 urand(uint32 min, uint32 max);
 
 /* Return a random number in the range 0 .. RAND32_MAX. */
@@ -69,12 +74,14 @@ inline uint32 secsToTimeBitFields(time_t secs)
 
 /* Return a random double from 0.0 to 1.0 (exclusive). Floats support only 7 valid decimal digits.
  * A double supports up to 15 valid decimal digits and is used internally (RAND32_MAX has 10 digits).
- * With an FPU, there is usually no difference in performance between float and double. */
+ * With an FPU, there is usually no difference in performance between float and double.
+ */
  double rand_norm(void);
 
 /* Return a random double from 0.0 to 99.9999999999999. Floats support only 7 valid decimal digits.
- * A double supports up to 15 valid decimal digits and is used internaly (RAND32_MAX has 10 digits).
- * With an FPU, there is usually no difference in performance between float and double. */
+ * A double supports up to 15 valid decimal digits and is used internally (RAND32_MAX has 10 digits).
+ * With an FPU, there is usually no difference in performance between float and double.
+ */ 
  double rand_chance(void);
 
 /* Return true if a random roll fits in the specified chance (range 0-100). */
@@ -249,7 +256,7 @@ inline bool isEastAsianCharacter(wchar_t wchar)
         return true;
     if (wchar >= 0xAC00 && wchar <= 0xD7A3)                  // Hangul Syllables
         return true;
-    if (wchar >= 0xFF01 && wchar <= 0xFFEE)                  // Halfwidth forms
+    if (wchar >= 0xFF01 && wchar <= 0xFFEE)                  // Half-width forms
         return true;
     return false;
 }
@@ -446,45 +453,36 @@ public:
         part[2]=p2;
     }
 
-    inline bool IsEqual(uint32 p1=0, uint32 p2=0, uint32 p3=0) const
+    inline bool IsEqual(uint32 p1 = 0, uint32 p2 = 0, uint32 p3 = 0) const
     {
-        return (
-            part[0]==p1 &&
-            part[1]==p2 &&
-            part[2]==p3);
+        return (part[0] == p1 && part[1] == p2 && part[2] == p3);
     };
 
-    inline bool HasFlag(uint32 p1=0, uint32 p2=0, uint32 p3=0) const
+    inline bool HasFlag(uint32 p1 = 0, uint32 p2  =0, uint32 p3 = 0) const
     {
-        return (
-            part[0]&p1 ||
-            part[1]&p2 ||
-            part[2]&p3);
-    };
+        return (part[0] & p1 || part[1] & p2 || part[2] & p3);
+    }
 
     inline bool HasFlag(flag96 flags) const
     {
-        return (
-            part[0]&flags[0] ||
-            part[1]&flags[1] ||
-            part[2]&flags[2]);
+        return (part[0] & flags[0] || part[1] & flags[1] || part[2] & flags[2]);
     }
 
-    inline void Set(uint32 p1=0, uint32 p2=0, uint32 p3=0)
+    inline void Set(uint32 p1 = 0, uint32 p2 = 0, uint32 p3 = 0)
     {
-        part[0]=p1;
-        part[1]=p2;
-        part[2]=p3;
+        part[0] = p1;
+        part[1] = p2;
+        part[2] = p3;
     };
 
     template<class type>
     inline bool operator < (type & right)
     {
-        for (uint8 i=3; i > 0; --i)
+        for (uint8 i = 3; i > 0; --i)
         {
-            if (part[i-1]<right.part[i-1])
+            if (part[i-1] < right.part[i-1])
                 return 1;
-            else if (part[i-1]>right.part[i-1])
+            else if (part[i-1] > right.part[i-1])
                 return 0;
         }
         return 0;
@@ -497,7 +495,7 @@ public:
         {
             if (part[i-1]<right.part[i-1])
                 return 1;
-            else if (part[i-1]>right.part[i-1])
+            else if (part[i-1] > right.part[i-1])
                 return 0;
         }
         return 0;
@@ -506,49 +504,45 @@ public:
     template<class type>
     inline bool operator != (type & right)
     {
-        if (part[0]!=right.part[0]
-            || part[1]!=right.part[1]
-            || part[2]!=right.part[2])
-                return true;
+        if (part[0] != right.part[0] || part[1] != right.part[1] || part[2] != right.part[2])
+            return true;
+        
         return false;
     }
 
     template<class type>
     inline bool operator != (type & right) const
     {
-        if (part[0]!=right.part[0]
-            || part[1]!=right.part[1]
-            || part[2]!=right.part[2])
-                return true;
+        if (part[0] != right.part[0] || part[1] != right.part[1] || part[2] != right.part[2])
+            return true;
+        
         return false;
     };
 
     template<class type>
     inline bool operator == (type & right)
     {
-        if (part[0]!=right.part[0]
-            || part[1]!=right.part[1]
-            || part[2]!=right.part[2])
-                return false;
+        if (part[0] != right.part[0] || part[1] != right.part[1] || part[2] != right.part[2])
+            return false;
+        
         return true;
     };
 
     template<class type>
     inline bool operator == (type & right) const
     {
-        if (part[0]!=right.part[0]
-            || part[1]!=right.part[1]
-            || part[2]!=right.part[2])
-                return false;
+        if (part[0] != right.part[0] || part[1] != right.part[1] || part[2] != right.part[2])
+            return false;
+        
         return true;
     };
 
     template<class type>
     inline void operator = (type & right)
     {
-        part[0]=right.part[0];
-        part[1]=right.part[1];
-        part[2]=right.part[2];
+        part[0] = right.part[0];
+        part[1] = right.part[1];
+        part[2] = right.part[2];
     };
 
     template<class type>
@@ -596,9 +590,9 @@ public:
 
     inline void operator ~ ()
     {
-        part[2]=~part[2];
-        part[1]=~part[1];
-        part[0]=~part[0];
+        part[2] =~ part[2];
+        part[1] =~ part[1];
+        part[0] =~ part[0];
     };
 
     template<class type>
@@ -620,49 +614,37 @@ public:
     template<class type>
     inline void operator ^= (type & right)
     {
-        *this=*this^right;
+        *this=*this ^ right;
     };
 
     inline operator bool() const
     {
-        return(
-            part[0] != 0 ||
-            part[1] != 0 ||
-            part[2] != 0);
+        return(part[0] != 0 || part[1] != 0 || part[2] != 0);
     };
 
     inline operator bool()
     {
-        return(
-            part[0] != 0 ||
-            part[1] != 0 ||
-            part[2] != 0);
+        return(part[0] != 0 || part[1] != 0 || part[2] != 0);
     };
 
     inline bool operator ! () const
     {
-        return(
-            part[0] == 0 &&
-            part[1] == 0 &&
-            part[2] == 0);
+        return(part[0] == 0 && part[1] == 0 && part[2] == 0);
     };
 
     inline bool operator ! ()
     {
-        return(
-            part[0] == 0 &&
-            part[1] == 0 &&
-            part[2] == 0);
+        return(part[0] == 0 && part[1] == 0 && part[2] == 0);
     };
 
     inline uint32 & operator[](uint8 el)
     {
-        return (part[el]);
+        return part[el];
     };
 
     inline uint32 operator[](uint8 el) const
     {
-        return (part[el]);
+        return part[el];
     };
 };
 

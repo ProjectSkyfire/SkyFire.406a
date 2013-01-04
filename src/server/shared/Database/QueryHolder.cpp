@@ -1,5 +1,7 @@
 /*
- * Copyright (C) 2008-2013 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2011-2013 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2013 TrinityCore <http://www.SKYFIREcore.org/>
+ * Copyright (C) 2005-2013 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -24,7 +26,7 @@ bool SQLQueryHolder::SetQuery(size_t index, const char *sql)
 {
     if (m_queries.size() <= index)
     {
-        sLog->outError("Query index (%zu) out of range (size: %u) for query: %s", index, (uint32)m_queries.size(), sql);
+        sLog->outError("Query index (%u) out of range (size: %u) for query: %s", uint32(index), (uint32)m_queries.size(), sql);
         return false;
     }
 
@@ -44,7 +46,7 @@ bool SQLQueryHolder::SetPQuery(size_t index, const char *format, ...)
 {
     if (!format)
     {
-        sLog->outError("Query (index: %zu) is empty.", index);
+        sLog->outError("Query (index: %u) is empty.", uint32(index));
         return false;
     }
 
@@ -67,7 +69,7 @@ bool SQLQueryHolder::SetPreparedQuery(size_t index, PreparedStatement* stmt)
 {
     if (m_queries.size() <= index)
     {
-        sLog->outError("Query index (%zu) out of range (size: %u) for prepared statement", index, (uint32)m_queries.size());
+        sLog->outError("Query index (%u) out of range (size: %u) for prepared statement", uint32(index), (uint32)m_queries.size());
         return false;
     }
 
@@ -116,6 +118,12 @@ PreparedQueryResult SQLQueryHolder::GetPreparedResult(size_t index)
 
 void SQLQueryHolder::SetResult(size_t index, ResultSet* result)
 {
+    if (result && !result->GetRowCount())
+    {
+        delete result;
+        result = NULL;
+    }
+
     /// store the result in the holder
     if (index < m_queries.size())
         m_queries[index].second.qresult = result;
@@ -123,6 +131,12 @@ void SQLQueryHolder::SetResult(size_t index, ResultSet* result)
 
 void SQLQueryHolder::SetPreparedResult(size_t index, PreparedResultSet* result)
 {
+    if (result && !result->GetRowCount())
+    {
+        delete result;
+        result = NULL;
+    }
+
     /// store the result in the holder
     if (index < m_queries.size())
         m_queries[index].second.presult = result;
