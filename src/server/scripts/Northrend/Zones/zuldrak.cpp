@@ -1547,18 +1547,18 @@ public:
 
 void AddSC_zuldrak()
 {
-    new npc_drakuru_shackles;
-    new npc_captured_rageclaw;
-    new npc_gymer;
-    new npc_gurgthock;
-    new npc_orinoko_tuskbreaker;
-    new npc_korrak_bloodrager;
-    new npc_yggdras;
-    new npc_stinkbeard;
-    new npc_released_offspring_harkoa;
-    new npc_crusade_recruit;
-    new npc_elemental_lord;
-    new npc_fiend_elemental;
-    new npc_vladof_butcher;
-    new go_scourge_enclosure;
+    new npc_drakuru_shackles();
+    new npc_captured_rageclaw();
+    new npc_gymer();
+    new npc_gurgthock();
+    new npc_orinoko_tuskbreaker();
+    new npc_korrak_bloodrager();
+    new npc_yggdras();
+    new npc_stinkbeard();
+    new npc_released_offspring_harkoa();
+    new npc_crusade_recruit();
+    new npc_elemental_lord();
+    new npc_fiend_elemental();
+    new npc_vladof_butcher();
+    new go_scourge_enclosure();
 }

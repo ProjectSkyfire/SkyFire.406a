@@ -254,5 +254,5 @@ public:
 
 void AddSC_boss_tharon_ja()
 {
-    new boss_tharon_ja;
+    new boss_tharon_ja();
 }

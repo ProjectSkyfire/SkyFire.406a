@@ -49,4 +49,5 @@ enum Creatures
     NPC_CHAMPION_2_ALLIANCE                       = 37497,
     NPC_CRUCIBLE_OF_SOULS                         = 37094,
 };
+
 #endif

@@ -63,4 +63,5 @@ enum GameObjects
     GO_TRIBUNAL_CHEST                                      = 190586,
     GO_TRIBUNAL_CHEST_HERO                                 = 193996
 };
+
 #endif

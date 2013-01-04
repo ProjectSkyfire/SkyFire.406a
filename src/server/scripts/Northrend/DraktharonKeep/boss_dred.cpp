@@ -297,8 +297,8 @@ class achievement_king_dred : public AchievementCriteriaScript
 
 void AddSC_boss_dred()
 {
-    new boss_dred;
-    new npc_drakkari_gutripper;
-    new npc_drakkari_scytheclaw;
+    new boss_dred();
+    new npc_drakkari_gutripper();
+    new npc_drakkari_scytheclaw();
     new achievement_king_dred();
 }

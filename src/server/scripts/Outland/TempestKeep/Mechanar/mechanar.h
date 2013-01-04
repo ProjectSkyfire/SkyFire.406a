@@ -21,4 +21,5 @@
 #define DEF_MECHANAR_H
 
 #define DATA_NETHERMANCER_EVENT 1
+
 #endif

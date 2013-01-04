@@ -260,6 +260,7 @@ class mob_ragin_flames : public CreatureScript
                 return new mob_ragin_flamesAI(creature);
             }
 };
+
 void AddSC_boss_nethermancer_sepethrea()
 {
     new boss_nethermancer_sepethrea();

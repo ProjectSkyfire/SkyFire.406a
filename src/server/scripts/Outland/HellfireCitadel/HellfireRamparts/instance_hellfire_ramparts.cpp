@@ -99,5 +99,5 @@ class instance_ramparts : public InstanceMapScript
 
 void AddSC_instance_ramparts()
 {
-    new instance_ramparts;
+    new instance_ramparts();
 }
