@@ -157,7 +157,9 @@ bool MySQLConnection::Execute(const char* sql)
         return false;
 
     {
-        uint32 _s = getMSTime();
+        uint32 _s = 0;
+        if (sLog->GetSQLDriverQueryLogging())
+            _s = getMSTime();
 
         if (mysql_query(m_Mysql, sql))
         {
@@ -171,8 +173,10 @@ bool MySQLConnection::Execute(const char* sql)
 
             return false;
         }
-        else
-            sLog->outDebug(LOG_FILTER_NETWORKIO, "[%u ms] SQL: %s", getMSTimeDiff(_s, getMSTime()), sql);
+        else if (sLog->GetSQLDriverQueryLogging())
+        {
+            sLog->outSQLDriver("[%u ms] SQL: %s", getMSTimeDiff(_s, getMSTime()), sql);
+        }
     }
 
     return true;
@@ -195,7 +199,9 @@ bool MySQLConnection::Execute(PreparedStatement* stmt)
         MYSQL_STMT* msql_STMT = m_mStmt->GetSTMT();
         MYSQL_BIND* msql_BIND = m_mStmt->GetBind();
 
-        uint32 _s = getMSTime();
+        uint32 _s = 0;
+        if (sLog->GetSQLDriverQueryLogging())
+            _s = getMSTime();
 
         if (mysql_stmt_bind_param(msql_STMT, msql_BIND))
         {
@@ -221,7 +227,8 @@ bool MySQLConnection::Execute(PreparedStatement* stmt)
             return false;
         }
 
-        sLog->outDebug(LOG_FILTER_NETWORKIO, "[%u ms] SQL(p): %s", getMSTimeDiff(_s, getMSTime()), m_mStmt->getQueryString(m_queries[index].first).c_str());
+        if (sLog->GetSQLDriverQueryLogging())
+        sLog->outSQLDriver("[%u ms] SQL(p): %s", getMSTimeDiff(_s, getMSTime()), m_mStmt->getQueryString(m_queries[index].first).c_str());
 
         m_mStmt->ClearParameters();
         return true;
@@ -245,7 +252,9 @@ bool MySQLConnection::_Query(PreparedStatement* stmt, MYSQL_RES **pResult, uint6
         MYSQL_STMT* msql_STMT = m_mStmt->GetSTMT();
         MYSQL_BIND* msql_BIND = m_mStmt->GetBind();
 
-        uint32 _s = getMSTime();
+        uint32 _s = 0;
+        if (sLog->GetSQLDriverQueryLogging())
+            _s = getMSTime();
 
         if (mysql_stmt_bind_param(msql_STMT, msql_BIND))
         {
@@ -272,7 +281,8 @@ bool MySQLConnection::_Query(PreparedStatement* stmt, MYSQL_RES **pResult, uint6
             return false;
         }
 
-        sLog->outDebug(LOG_FILTER_NETWORKIO, "[%u ms] SQL(p): %s", getMSTimeDiff(_s, getMSTime()), m_mStmt->getQueryString(m_queries[index].first).c_str());
+        if (sLog->GetSQLDriverQueryLogging())
+        sLog->outSQLDriver("[%u ms] SQL(p): %s", getMSTimeDiff(_s, getMSTime()), m_mStmt->getQueryString(m_queries[index].first).c_str());
 
         m_mStmt->ClearParameters();
 
@@ -306,21 +316,25 @@ bool MySQLConnection::_Query(const char *sql, MYSQL_RES **pResult, MYSQL_FIELD *
         return false;
 
     {
-        uint32 _s = getMSTime();
+        uint32 _s = 0;
+        if (sLog->GetSQLDriverQueryLogging())
+            _s = getMSTime();
 
         if (mysql_query(m_Mysql, sql))
         {
             uint32 lErrno = mysql_errno(m_Mysql);
             sLog->outSQLDriver("SQL: %s", sql);
-            sLog->outError("[%u] %s", lErrno, mysql_error(m_Mysql));
+            sLog->outSQLDriver("ERROR: [%u] %s", lErrno, mysql_error(m_Mysql));
 
             if (_HandleMySQLErrno(lErrno))      // If it returns true, an error was handled successfully (i.e. reconnection)
                 return _Query(sql, pResult, pFields, pRowCount, pFieldCount);    // We try again
 
             return false;
         }
-        else
+        else if (sLog->GetSQLDriverQueryLogging())
+        {
             sLog->outSQLDriver("[%u ms] SQL: %s", getMSTimeDiff(_s, getMSTime()), sql);
+        }
 
         *pResult = mysql_store_result(m_Mysql);
         *pRowCount = mysql_affected_rows(m_Mysql);
@@ -411,7 +425,7 @@ MySQLPreparedStatement* MySQLConnection::GetPreparedStatement(uint32 index)
     ASSERT(index < m_stmts.size());
     MySQLPreparedStatement* ret = m_stmts[index];
     if (!ret)
-        sLog->outError("Could not fetch prepared statement %u on database `%s`, connection type: %s.",
+        sLog->outSQLDriver("Could not fetch prepared statement %u on database `%s`, connection type: %s.",
             index, m_connectionInfo.database.c_str(), (m_connectionFlags & CONNECTION_ASYNC) ? "asynchronous" : "synchronous");
 
     return ret;
