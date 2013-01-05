@@ -643,7 +643,9 @@ public:
                     break;
             }
         }
+
         void Reset() {}
+
         void EnterCombat(Unit* /*who*/) {}
 
         void UpdateAI(const uint32 diff)

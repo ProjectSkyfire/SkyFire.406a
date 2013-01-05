@@ -49,4 +49,5 @@ struct hyjal_trashAI : public npc_escortAI
 
     //private:
 };
+
 #endif

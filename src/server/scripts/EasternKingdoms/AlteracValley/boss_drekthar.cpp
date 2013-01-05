@@ -138,5 +138,5 @@ public:
 
 void AddSC_boss_drekthar()
 {
-    new boss_drekthar;
+    new boss_drekthar();
 }

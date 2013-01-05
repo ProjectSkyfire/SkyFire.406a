@@ -128,5 +128,5 @@ public:
 
 void AddSC_boss_galvangar()
 {
-    new boss_galvangar;
+    new boss_galvangar();
 }
