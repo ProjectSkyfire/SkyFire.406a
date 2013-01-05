@@ -25,4 +25,5 @@
 #define DATA_NETHEKURSE_DOOR    3
 
 #define TYPE_OMROGG             4
+
 #endif

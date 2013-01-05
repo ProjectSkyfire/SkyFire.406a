@@ -202,5 +202,5 @@ class instance_the_eye : public InstanceMapScript
 };
 void AddSC_instance_the_eye()
 {
-    new instance_the_eye;
+    new instance_the_eye();
 }

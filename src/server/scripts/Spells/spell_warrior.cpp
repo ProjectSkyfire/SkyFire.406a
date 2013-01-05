@@ -133,7 +133,7 @@ public:
     {
         PrepareSpellScript(spell_warr_victory_rush_SpellScript);
 
-        void CalculateDamage(SpellEffIndex effect)
+        void CalculateDamage(SpellEffIndex /*effect*/)
         {
             // Formula: AttackPower * BasePoints / 100
             if (Unit* caster = GetCaster())
@@ -170,7 +170,7 @@ public:
     {
         PrepareSpellScript(spell_warr_cleave_SpellScript);
 
-        void CalculateDamage(SpellEffIndex effect)
+        void CalculateDamage(SpellEffIndex /*effect*/)
         {
             // Formula: 6 + AttackPower * 0.45
             if (Unit* caster = GetCaster())
@@ -201,7 +201,7 @@ public:
     {
         PrepareSpellScript(spell_warr_intercept_triggered_SpellScript);
 
-        void CalculateDamage(SpellEffIndex effect)
+        void CalculateDamage(SpellEffIndex /*effect*/)
         {
             // Formula: 1 + AttackPower * 0.12
             if (Unit* caster = GetCaster())
@@ -242,7 +242,7 @@ public:
             return true;
         }
 
-        void ChangeDamage(SpellEffIndex effIndex)
+        void ChangeDamage(SpellEffIndex /*effIndex*/)
         {
             Unit* caster = GetCaster();
             Unit* target = GetHitUnit();
@@ -288,7 +288,7 @@ public:
     {
         PrepareSpellScript(spell_warr_heroic_strike_SpellScript);
 
-        void CalculateDamage(SpellEffIndex effect)
+        void CalculateDamage(SpellEffIndex /*effect*/)
         {
             // Formula: 8 + AttackPower * 60 / 100
             if (Unit* caster = GetCaster())
@@ -318,7 +318,7 @@ public:
     {
         PrepareSpellScript(spell_warr_shockwave_SpellScript);
 
-        void CalculateDamage(SpellEffIndex effect)
+        void CalculateDamage(SpellEffIndex /*effect*/)
         {
             // Formula: [Effect2BasePoints] / 100 * AttackPower
             if (Unit* caster = GetCaster())
@@ -366,7 +366,7 @@ public:
             targetList = unitList;
         }
 
-        void OnTargetHit(SpellEffIndex effect)
+        void OnTargetHit(SpellEffIndex /*effect*/)
         {
             if (CheckAgain) // Dont re-cast the thing on each target if its already applied
             {

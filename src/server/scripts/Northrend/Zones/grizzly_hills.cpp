@@ -785,14 +785,14 @@ public:
             DoMeleeAttackIfReady();
         }
 
-        void SpellHit(Unit* pCaster, const SpellInfo* pSpell)
+        void SpellHit(Unit* caster, const SpellInfo* spell)
         {
-            if (pCaster && pCaster->GetTypeId() == TYPEID_PLAYER && pSpell->Id == SPELL_SMOKE_BOMB)
+            if (caster && caster->GetTypeId() == TYPEID_PLAYER && spell->Id == SPELL_SMOKE_BOMB)
             {
                 me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_PC);
                 me->SetReactState(REACT_PASSIVE);
                 me->CombatStop(false);
-                uiPlayerGUID = pCaster->GetGUID();
+                uiPlayerGUID = caster->GetGUID();
                 uiRunAwayTimer = 3500;
             }
         }
@@ -801,13 +801,13 @@ public:
 
 void AddSC_grizzly_hills()
 {
-    new npc_orsonn_and_kodian;
-    new npc_emily;
-    new npc_mrfloppy;
-    new npc_outhouse_bunny;
-    new npc_tallhorn_stag;
-    new npc_amberpine_woodsman;
-    new npc_wounded_skirmisher;
+    new npc_orsonn_and_kodian();
+    new npc_emily();
+    new npc_mrfloppy();
+    new npc_outhouse_bunny();
+    new npc_tallhorn_stag();
+    new npc_amberpine_woodsman();
+    new npc_wounded_skirmisher();
     new npc_lightning_sentry();
     new npc_venture_co_straggler();
 }

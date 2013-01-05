@@ -236,5 +236,5 @@ class instance_arcatraz : public InstanceMapScript
 
 void AddSC_instance_arcatraz()
 {
-    new instance_arcatraz;
+    new instance_arcatraz();
 }

@@ -89,30 +89,30 @@ enum Npc
 
 class spell_ulduar_proximity_mines : public SpellScriptLoader
 {
-   public:
-       spell_ulduar_proximity_mines() : SpellScriptLoader("spell_ulduar_proximity_mines") { }
+    public:
+        spell_ulduar_proximity_mines() : SpellScriptLoader("spell_ulduar_proximity_mines") { }
 
-       class spell_ulduar_proximity_minesSpellScript : public SpellScript
-       {
-           PrepareSpellScript(spell_ulduar_proximity_minesSpellScript)
+        class spell_ulduar_proximity_minesSpellScript : public SpellScript
+        {
+            PrepareSpellScript(spell_ulduar_proximity_minesSpellScript)
 
-           void HandleScript(SpellEffIndex effIndex)
-           {
-               PreventHitDefaultEffect(effIndex);
-               for (uint8 i = 0; i < 10; ++i)
-                   GetCaster()->CastSpell(GetCaster(), SPELL_TRIGGER_MISSILE, true);
-           }
+            void HandleScript(SpellEffIndex effIndex)
+            {
+                PreventHitDefaultEffect(effIndex);
+                for (uint8 i = 0; i < 10; ++i)
+                    GetCaster()->CastSpell(GetCaster(), SPELL_TRIGGER_MISSILE, true);
+            }
 
-           void Register()
-           {
-               OnEffectHitTarget += SpellEffectFn(spell_ulduar_proximity_minesSpellScript::HandleScript, EFFECT_0, SPELL_EFFECT_SCRIPT_EFFECT);
-           }
-       };
+            void Register()
+            {
+                OnEffectHitTarget += SpellEffectFn(spell_ulduar_proximity_minesSpellScript::HandleScript, EFFECT_0, SPELL_EFFECT_SCRIPT_EFFECT);
+            }
+        };
 
-       SpellScript* GetSpellScript() const
-       {
-           return new spell_ulduar_proximity_minesSpellScript();
-       }
+        SpellScript* GetSpellScript() const
+        {
+            return new spell_ulduar_proximity_minesSpellScript();
+        }
 };
 
 void AddSC_boss_mimiron()

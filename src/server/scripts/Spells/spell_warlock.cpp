@@ -417,7 +417,7 @@ public:
     {
         PrepareAuraScript(spell_warl_drain_soul_AuraScript)
 
-        void OnPeriodic(AuraEffect const* aurEff) {}
+        void OnPeriodic(AuraEffect const* /*aurEff*/) {}
 
         void OnRemove(AuraEffect const* aurEff, AuraEffectHandleModes /*mode*/)
         {
