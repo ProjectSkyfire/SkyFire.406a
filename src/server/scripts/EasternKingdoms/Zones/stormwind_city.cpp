@@ -723,7 +723,7 @@ public:
 
     struct npc_stormwind_gryphon_rider_eventAI : public ScriptedAI
     {
-        npc_stormwind_gryphon_rider_eventAI(Creature *c) : ScriptedAI(c) {}
+        npc_stormwind_gryphon_rider_eventAI(Creature* creature) : ScriptedAI(creature) {}
 
         uint32 timer_greymane_resolve;
         uint32 timer_shoot;
@@ -754,9 +754,9 @@ public:
         }
     };
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new npc_stormwind_gryphon_rider_eventAI(pCreature);
+        return new npc_stormwind_gryphon_rider_eventAI(creature);
     }
 };
 
@@ -775,7 +775,7 @@ public:
 
     struct npc_stormwind_guard_eventAI : public ScriptedAI
     {
-        npc_stormwind_guard_eventAI(Creature *c) : ScriptedAI(c) {}
+        npc_stormwind_guard_eventAI(Creature* creature) : ScriptedAI(creature) {}
 
         uint32 shoot_2;
 
@@ -798,9 +798,9 @@ public:
         }
     };
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new npc_stormwind_guard_eventAI(pCreature);
+        return new npc_stormwind_guard_eventAI(creature);
     }
 };
 
@@ -820,7 +820,7 @@ public:
 
     struct npc_stormwind_harbor_guard_eventAI : public ScriptedAI
     {
-        npc_stormwind_harbor_guard_eventAI(Creature *c) : ScriptedAI(c) {}
+        npc_stormwind_harbor_guard_eventAI(Creature* creature) : ScriptedAI(creature) {}
 
         uint32 shoot_3;
 
@@ -843,9 +843,9 @@ public:
         }
     };
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new npc_stormwind_harbor_guard_eventAI(pCreature);
+        return new npc_stormwind_harbor_guard_eventAI(creature);
     }
 };
 
@@ -865,7 +865,7 @@ public:
 
     struct npc_stormwind_city_patroller_eventAI : public ScriptedAI
     {
-        npc_stormwind_city_patroller_eventAI(Creature *c) : ScriptedAI(c) {}
+        npc_stormwind_city_patroller_eventAI(Creature* creature) : ScriptedAI(creature) {}
 
         uint32 shoot_4;
 
@@ -888,9 +888,9 @@ public:
         }
     };
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new npc_stormwind_city_patroller_eventAI(pCreature);
+        return new npc_stormwind_city_patroller_eventAI(creature);
     }
 };
 
@@ -913,7 +913,7 @@ public:
 
     struct npc_stormwind_royal_guard_eventAI : public ScriptedAI
     {
-        npc_stormwind_royal_guard_eventAI(Creature *c) : ScriptedAI(c) {}
+        npc_stormwind_royal_guard_eventAI(Creature* creature) : ScriptedAI(creature) {}
 
         uint32 spit;
         uint32 banana;
@@ -960,9 +960,9 @@ public:
         }
     };
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new npc_stormwind_royal_guard_eventAI(pCreature);
+        return new npc_stormwind_royal_guard_eventAI(creature);
     }
 };
 

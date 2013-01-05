@@ -49,4 +49,5 @@ enum eTypes
     DATA_RESET_RAIDDAMAGE     = 19,
     TYPE_RETREAT              = 20
 };
+
 #endif

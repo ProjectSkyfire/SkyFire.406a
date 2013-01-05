@@ -34,4 +34,5 @@
 #define DATA_BUG_TRIO_DEATH     14
 
 #define DATA_CTHUN_PHASE        20
+
 #endif

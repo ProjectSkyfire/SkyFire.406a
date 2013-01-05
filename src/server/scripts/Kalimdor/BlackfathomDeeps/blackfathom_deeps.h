@@ -65,4 +65,5 @@ enum GameObjects
     GO_AKU_MAI_DOOR                                        = 21117,
     GO_ALTAR_OF_THE_DEEPS                                  = 103016
 };
+
 #endif
