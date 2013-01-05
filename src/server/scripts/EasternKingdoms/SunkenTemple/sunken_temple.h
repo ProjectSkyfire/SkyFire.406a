@@ -33,4 +33,5 @@
 #define ATALALARION_DEATH 11 //optional
 
 #define EVENT_STATE 1
+
 #endif

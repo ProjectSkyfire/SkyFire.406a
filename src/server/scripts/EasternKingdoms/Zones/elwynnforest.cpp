@@ -63,11 +63,11 @@ public:
             spellHit = false;
         }
 
-        void EnterCombat(Unit * /*who*/)
+        void EnterCombat(Unit* /*who*/)
         {
         }
 
-        void MoveInLineOfSight(Unit * /*who*/)
+        void MoveInLineOfSight(Unit* /*who*/)
         {
         }
 
@@ -85,7 +85,7 @@ public:
             }
         }
 
-        void SpellHit(Unit * /*Hitter*/, const SpellEntry *Spellkind)
+        void SpellHit(Unit* /*Hitter*/, const SpellEntry* Spellkind)
         {
             if (Spellkind->Id == 8593 && !spellHit)
             {
@@ -180,12 +180,12 @@ public:
                         DoCast(me, SPELL_SPYGLASS);
         }
 
-        void EnterCombat(Unit * who)
+        void EnterCombat(Unit* who)
         {
             DoScriptText(RAND(SAY_BLACKROCK_COMBAT_1, SAY_BLACKROCK_COMBAT_2, SAY_BLACKROCK_COMBAT_3, SAY_BLACKROCK_COMBAT_4, SAY_BLACKROCK_COMBAT_5), me);
         }
 
-        void UpdateAI(const uint32 diff)
+        void UpdateAI(const uint32 /*diff*/)
         {
             CastSpyglass();
 
@@ -215,12 +215,12 @@ public:
     {
         npc_blackrock_invaderAI(Creature* creature) : ScriptedAI(creature) {}
 
-        void EnterCombat(Unit * who)
+        void EnterCombat(Unit* who)
         {
             DoScriptText(RAND(SAY_BLACKROCK_COMBAT_1, SAY_BLACKROCK_COMBAT_2, SAY_BLACKROCK_COMBAT_3, SAY_BLACKROCK_COMBAT_4, SAY_BLACKROCK_COMBAT_5), me);
         }
 
-        void UpdateAI(const uint32 diff)
+        void UpdateAI(const uint32 /*diff*/)
         {
             if (!UpdateVictim())
                 return;
@@ -252,12 +252,12 @@ public:
                 DoCast(SPELL_SNEAKING);
         }
 
-        void EnterCombat(Unit * who)
+        void EnterCombat(Unit* who)
         {
             DoScriptText(RAND(SAY_ASSASSIN_COMBAT_1, SAY_ASSASSIN_COMBAT_2), me);
         }
 
-        void UpdateAI(const uint32 diff)
+        void UpdateAI(const uint32 /*diff*/)
         {
             if (!UpdateVictim())
                 return;
