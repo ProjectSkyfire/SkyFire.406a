@@ -6530,6 +6530,9 @@ void Player::UpdateSkillsForLevel()
         if (GetSkillRangeType(pSkill, false) != SKILL_RANGE_LEVEL)
             continue;
 
+		if (IsWeaponSkill(pSkill->id))
+			continue;
+
         uint32 valueIndex = PLAYER_SKILL_VALUE_INDEX(itr->second.pos);
         uint32 data = GetUInt32Value(valueIndex);
         uint32 max = SKILL_MAX(data);
