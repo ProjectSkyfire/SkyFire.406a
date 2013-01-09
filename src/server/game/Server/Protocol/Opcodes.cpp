@@ -337,7 +337,6 @@ void InitOpcodeTable()
     OPCODE( CMSG_SET_SELECTION,                           STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleSetSelectionOpcode        );
     OPCODE( CMSG_EQUIPMENT_SET_DELETE,                    STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleEquipmentSetDelete        );
     OPCODE( CMSG_INSTANCE_LOCK_WARNING_RESPONSE,          STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleInstanceLockResponse      );
-    OPCODE( CMSG_UNUSED2,                                 STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
     OPCODE( CMSG_ATTACKSWING,                             STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleAttackSwingOpcode         );
     OPCODE( CMSG_ATTACKSTOP,                              STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleAttackStopOpcode          );
     OPCODE( SMSG_ATTACKSTART,                             STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
@@ -822,10 +821,6 @@ void InitOpcodeTable()
     OPCODE( CMSG_CHAT_FILTERED,                           STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
     OPCODE( SMSG_EXPECTED_SPAM_RECORDS,                   STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( SMSG_SPELLSTEALLOG,                           STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
-    OPCODE( CMSG_LOTTERY_QUERY_OBSOLETE,                  STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
-    OPCODE( SMSG_LOTTERY_QUERY_RESULT_OBSOLETE,           STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
-    OPCODE( CMSG_BUY_LOTTERY_TICKET_OBSOLETE,             STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
-    OPCODE( SMSG_LOTTERY_RESULT_OBSOLETE,                 STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( SMSG_CHARACTER_PROFILE,                       STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( SMSG_CHARACTER_PROFILE_REALM_CONNECTED,       STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( SMSG_DEFENSE_MESSAGE,                         STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
@@ -932,10 +927,6 @@ void InitOpcodeTable()
     OPCODE( SMSG_VOICE_SESSION_ADJUST_PRIORITY,           STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( CMSG_VOICE_SET_TALKER_MUTED_REQUEST,          STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
     OPCODE( SMSG_VOICE_SET_TALKER_MUTED,                  STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
-    OPCODE( SMSG_INIT_EXTRA_AURA_INFO_OBSOLETE,           STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
-    OPCODE( SMSG_SET_EXTRA_AURA_INFO_OBSOLETE,            STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
-    OPCODE( SMSG_SET_EXTRA_AURA_INFO_NEED_UPDATE_OBSOLETE, STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
-    OPCODE( SMSG_CLEAR_EXTRA_AURA_INFO_OBSOLETE,          STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( MSG_MOVE_START_DESCEND,                       STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleMovementOpcodes           );
     OPCODE( CMSG_IGNORE_REQUIREMENTS_CHEAT,               STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
     OPCODE( SMSG_IGNORE_REQUIREMENTS_CHEAT,               STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
@@ -1014,7 +1005,6 @@ void InitOpcodeTable()
     OPCODE( SMSG_USERLIST_UPDATE,                         STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( CMSG_CLEAR_CHANNEL_WATCH,                     STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
     OPCODE( SMSG_INSPECT_TALENT,                          STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
-    OPCODE( SMSG_GOGOGO_OBSOLETE,                         STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( SMSG_ECHO_PARTY_SQUELCH,                      STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( CMSG_SET_TITLE_SUFFIX,                        STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_NULL                     );
     OPCODE( CMSG_SPELLCLICK,                              STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleSpellClick                );
