@@ -26,7 +26,7 @@
       fd		File descriptor
       new_length	New file size
       filler		If we don't have truncate, fill up all bytes after
-            new_length with this character
+			new_length with this character
       MyFlags		Flags
 
   DESCRIPTION
@@ -36,7 +36,7 @@
 
   RETURN VALUE
     0	Ok
-    1	Error
+    1	Error 
 */
 int my_chsize(File fd, my_off_t newlength, int filler, myf MyFlags)
 {
@@ -44,7 +44,7 @@ int my_chsize(File fd, my_off_t newlength, int filler, myf MyFlags)
   uchar buff[IO_SIZE];
   DBUG_ENTER("my_chsize");
   DBUG_PRINT("my",("fd: %d  length: %lu  MyFlags: %d",fd,(ulong) newlength,
-           MyFlags));
+		   MyFlags));
 
   if ((oldsize= my_seek(fd, 0L, MY_SEEK_END, MYF(MY_WME+MY_FAE))) == newlength)
     DBUG_RETURN(0);

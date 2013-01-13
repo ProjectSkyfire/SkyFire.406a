@@ -85,6 +85,7 @@ int my_getwd(char * buf, size_t size, myf MyFlags)
   DBUG_RETURN(0);
 } /* my_getwd */
 
+
 /* Set new working directory */
 
 int my_setwd(const char *dir, myf MyFlags)
@@ -111,9 +112,9 @@ int my_setwd(const char *dir, myf MyFlags)
       pos= strmake(&curr_dir[0],start,(size_t) FN_REFLEN-1);
       if (pos[-1] != FN_LIBCHAR)
       {
-    length=(uint) (pos-(char*) curr_dir);
-    curr_dir[length]=FN_LIBCHAR;		/* must end with '/' */
-    curr_dir[length+1]='\0';
+	length=(uint) (pos-(char*) curr_dir);
+	curr_dir[length]=FN_LIBCHAR;		/* must end with '/' */
+	curr_dir[length+1]='\0';
       }
     }
     else
@@ -122,8 +123,10 @@ int my_setwd(const char *dir, myf MyFlags)
   DBUG_RETURN(res);
 } /* my_setwd */
 
-    /* Test if hard pathname */
-    /* Returns 1 if dirname is a hard path */
+
+
+	/* Test if hard pathname */
+	/* Returns 1 if dirname is a hard path */
 
 int test_if_hard_path(register const char *dir_name)
 {
@@ -137,6 +140,7 @@ int test_if_hard_path(register const char *dir_name)
   return FALSE;
 #endif
 } /* test_if_hard_path */
+
 
 /*
   Test if a name contains an (absolute or relative) path.
@@ -152,7 +156,7 @@ int test_if_hard_path(register const char *dir_name)
 
 my_bool has_path(const char *name)
 {
-  return test(strchr(name, FN_LIBCHAR))
+  return test(strchr(name, FN_LIBCHAR)) 
 #if FN_LIBCHAR != '/'
     || test(strchr(name,'/'))
 #endif

@@ -28,7 +28,7 @@
 #include "m_string.h"
 
 void bchange(register uchar *dst, size_t old_length, register const uchar *src,
-         size_t new_length, size_t tot_length)
+	     size_t new_length, size_t tot_length)
 {
   size_t rest=tot_length-old_length;
   if (old_length < new_length)

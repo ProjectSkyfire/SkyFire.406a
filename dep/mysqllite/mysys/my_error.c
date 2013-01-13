@@ -56,6 +56,7 @@ static struct my_err_head
 
 static struct my_err_head *my_errmsgs_list= &my_errmsgs_globerrs;
 
+
 /*
    Error message to user
 
@@ -96,6 +97,7 @@ void my_error(int nr, myf MyFlags, ...)
   DBUG_VOID_RETURN;
 }
 
+
 /*
   Error as printf
 
@@ -113,7 +115,7 @@ void my_printf_error(uint error, const char *format, myf MyFlags, ...)
   char ebuff[ERRMSGSIZE];
   DBUG_ENTER("my_printf_error");
   DBUG_PRINT("my", ("nr: %d  MyFlags: %d  errno: %d  Format: %s",
-            error, MyFlags, errno, format));
+		    error, MyFlags, errno, format));
 
   va_start(args,MyFlags);
   (void) my_vsnprintf_ex(&my_charset_utf8_general_ci, ebuff,
@@ -139,7 +141,7 @@ void my_printv_error(uint error, const char *format, myf MyFlags, va_list ap)
   char ebuff[ERRMSGSIZE];
   DBUG_ENTER("my_printv_error");
   DBUG_PRINT("my", ("nr: %d  MyFlags: %d  errno: %d  format: %s",
-            error, MyFlags, errno, format));
+		    error, MyFlags, errno, format));
 
   (void) my_vsnprintf(ebuff, sizeof(ebuff), format, ap);
   (*error_handler_hook)(error, ebuff, MyFlags);
@@ -160,6 +162,7 @@ void my_message(uint error, const char *str, register myf MyFlags)
 {
   (*error_handler_hook)(error, str, MyFlags);
 }
+
 
 /*
   Register error messages for use with my_error().
@@ -218,6 +221,7 @@ int my_error_register(const char** (*get_errmsgs) (), int first, int last)
   return 0;
 }
 
+
 /*
   Unregister formerly registered error messages.
 
@@ -264,9 +268,10 @@ const char **my_error_unregister(int first, int last)
   /* Save the return value and free the header. */
   errmsgs= meh_p->get_errmsgs();
   my_free(meh_p);
-
+  
   return errmsgs;
 }
+
 
 void my_error_unregister_all(void)
 {

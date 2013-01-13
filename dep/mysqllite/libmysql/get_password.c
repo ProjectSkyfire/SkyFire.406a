@@ -79,9 +79,9 @@ char *get_tty_password(const char *opt_message)
     {
       if (pos != to)
       {
-    _cputs("\b \b");
-    pos--;
-    continue;
+	_cputs("\b \b");
+	pos--;
+	continue;
       }
     }
     if (tmp == '\n' || tmp == '\r' || tmp == 3)
@@ -120,13 +120,13 @@ static void get_password(char *to,uint length,int fd, my_bool echo)
     {
       if (pos != to)
       {
-    if (echo)
-    {
-      fputs("\b \b",stdout);
-      fflush(stdout);
-    }
-    pos--;
-    continue;
+	if (echo)
+	{
+	  fputs("\b \b",stdout);
+	  fflush(stdout);
+	}
+	pos--;
+	continue;
       }
     }
     if (tmp == '\n' || tmp == '\r' || tmp == 3)
@@ -147,6 +147,7 @@ static void get_password(char *to,uint length,int fd, my_bool echo)
 }
 #endif /* ! HAVE_GETPASS */
 
+
 char *get_tty_password(const char *opt_message)
 {
 #ifdef HAVE_GETPASS
@@ -166,7 +167,7 @@ char *get_tty_password(const char *opt_message)
 #ifdef _PASSWORD_LEN
   memset(passbuff, 0, _PASSWORD_LEN);
 #endif
-#else
+#else 
   if (isatty(fileno(stdout)))
   {
     fputs(opt_message ? opt_message : "Enter password: ",stdout);

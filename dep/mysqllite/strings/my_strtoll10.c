@@ -30,14 +30,14 @@ static unsigned long lfactor[9]=
 
 /*
   Convert a string to an to unsigned long long integer value
-
+  
   SYNOPSYS
     my_strtoll10()
       nptr     in       pointer to the string to be converted
       endptr   in/out   pointer to the end of the string/
                         pointer to the stop character
       error    out      returned error code
-
+ 
   DESCRIPTION
     This function takes the decimal representation of integer number
     from string nptr and converts it to an signed or unsigned
@@ -49,7 +49,7 @@ static unsigned long lfactor[9]=
     The function stops reading the string nptr at the first character
     that is not a decimal digit. If endptr is not NULL then the function
     will not read characters after *endptr.
-
+ 
   RETURN VALUES
     Value of string as a signed/unsigned longlong integer
 
@@ -60,15 +60,16 @@ static unsigned long lfactor[9]=
     -1		Number was an ok negative number
     0	 	ok
     ERANGE	If the the value of the converted number exceeded the
-            maximum negative/unsigned long long integer.
-        In this case the return value is ~0 if value was
-        positive and LONGLONG_MIN if value was negative.
+	        maximum negative/unsigned long long integer.
+		In this case the return value is ~0 if value was
+		positive and LONGLONG_MIN if value was negative.
     EDOM	If the string didn't contain any digits. In this case
-            the return value is 0.
+    		the return value is 0.
 
     If endptr is not NULL the function will store the end pointer to
     the stop character here.
 */
+
 
 longlong my_strtoll10(const char *nptr, char **endptr, int *error)
 {
@@ -119,7 +120,7 @@ longlong my_strtoll10(const char *nptr, char **endptr, int *error)
     if (*s == '+')
     {
       if (++s == end)
-    goto no_conv;
+	goto no_conv;
     }
     cutoff=  ULONGLONG_MAX / LFACTOR2;
     cutoff2= ULONGLONG_MAX % LFACTOR2 / 100;
@@ -133,7 +134,7 @@ longlong my_strtoll10(const char *nptr, char **endptr, int *error)
     do
     {
       if (++s == end)
-    goto end_i;				/* Return 0 */
+	goto end_i;				/* Return 0 */
     }
     while (*s == '0');
     n_end= s+ INIT_CNT;

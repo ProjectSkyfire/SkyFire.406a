@@ -1,5 +1,5 @@
 /*
-   Copyright (c) 2001, 2011, Oracle and/or its affiliates. All rights reserved.
+   Copyright (c) 2001, 2012, Oracle and/or its affiliates. All rights reserved.
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -603,6 +603,8 @@ typedef SOCKET_SIZE_TYPE size_socket;
 #define FN_LIBCHAR	'\\'
 #define FN_LIBCHAR2	'/'
 #define FN_DIRSEP       "/\\"               /* Valid directory separators */
+#define FN_EXEEXT   ".exe"
+#define FN_SOEXT    ".dll"
 #define FN_ROOTDIR	"\\"
 #define FN_DEVCHAR	':'
 #define FN_NETWORK_DRIVES	/* Uses \\ to indicate network drives */
@@ -611,6 +613,8 @@ typedef SOCKET_SIZE_TYPE size_socket;
 #define FN_LIBCHAR	'/'
 #define FN_LIBCHAR2	'/'
 #define FN_DIRSEP       "/"     /* Valid directory separators */
+#define FN_EXEEXT   ""
+#define FN_SOEXT    ".so"
 #define FN_ROOTDIR	"/"
 #endif
 
@@ -1360,11 +1364,31 @@ do { doubleget_union _tmp; \
 
 #ifndef HAVE_DLERROR
 #ifdef _WIN32
+#define DLERROR_GENERATE(errmsg, error_number) \
+  char win_errormsg[2048]; \
+  if(FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM, \
+                   0, error_number, 0, win_errormsg, 2048, NULL)) \
+  { \
+    char *ptr; \
+    for (ptr= &win_errormsg[0] + strlen(win_errormsg) - 1; \
+         ptr >= &win_errormsg[0] && strchr("\r\n\t\0x20", *ptr); \
+         ptr--) \
+      *ptr= 0; \
+    errmsg= win_errormsg; \
+  } \
+  else \
+    errmsg= ""
 #define dlerror() ""
-#else
+#define dlopen_errno GetLastError()
+#else /* _WIN32 */
 #define dlerror() "No support for dynamic loading (static build?)"
-#endif
-#endif
+#define DLERROR_GENERATE(errmsg, error_number) errmsg= dlerror()
+#define dlopen_errno errno
+#endif /* _WIN32 */
+#else /* HAVE_DLERROR */
+#define DLERROR_GENERATE(errmsg, error_number) errmsg= dlerror()
+#define dlopen_errno errno
+#endif /* HAVE_DLERROR */
 
 
 /*

@@ -28,7 +28,7 @@ int my_delete(const char *name, myf MyFlags)
     my_errno=errno;
     if (MyFlags & (MY_FAE+MY_WME))
       my_error(EE_DELETE,MYF(ME_BELL+ME_WAITTANG+(MyFlags & ME_NOINPUT)),
-           name,errno);
+	       name,errno);
   }
   else if ((MyFlags & MY_SYNC_DIR) &&
            my_sync_dir_by_file(name, MyFlags))
@@ -45,7 +45,7 @@ int my_delete(const char *name, myf MyFlags)
   that the file must be opened everywhere with FILE_SHARE_DELETE mode).
   Deleting not-closed files can not be supported on Win 98|ME (and because
   of that is considered harmful).
-
+  
   The function deletes the file with its preliminary renaming. This is
   because when not-closed share-delete file is deleted it still lives on
   a disk until it will not be closed everwhere. This may conflict with an
@@ -65,6 +65,7 @@ int my_delete(const char *name, myf MyFlags)
     0	ok
   @retval
     1   error
+
 
 */
 int nt_share_delete(const char *name, myf MyFlags)
@@ -95,7 +96,7 @@ int nt_share_delete(const char *name, myf MyFlags)
 
   if (errno == ERROR_FILE_NOT_FOUND)
   {
-    my_errno= ENOENT;    // marking, that `name' doesn't exist
+    my_errno= ENOENT;    // marking, that `name' doesn't exist 
   }
   else if (errno == 0)
   {

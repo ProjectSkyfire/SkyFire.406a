@@ -34,8 +34,8 @@
   but this is where the code is.
 
   Note: The standard itoa() returns a pointer to the argument, when int2str
-    returns the pointer to the end-null.
-    itoa assumes that 10 -base numbers are allways signed and other arn't.
+	returns the pointer to the end-null.
+	itoa assumes that 10 -base numbers are allways signed and other arn't.
 */
 
 #include <my_global.h>

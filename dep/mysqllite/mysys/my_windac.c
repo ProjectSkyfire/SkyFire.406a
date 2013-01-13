@@ -43,6 +43,7 @@ typedef struct st_my_security_attr
   PACL dacl;
 } My_security_attr;
 
+
 /*
   Allocate and initialize SECURITY_ATTRIBUTES setting up access
   rights for the owner and group `Everybody'.

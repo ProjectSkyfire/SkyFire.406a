@@ -959,3 +959,4 @@ void my_timer_init(MY_TIMER_INFO *mti)
    Irix, Mac. We didn't test with SCO.
 
 */
+

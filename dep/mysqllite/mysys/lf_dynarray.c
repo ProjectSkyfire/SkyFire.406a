@@ -204,3 +204,4 @@ int _lf_dynarray_iterate(LF_DYNARRAY *array, lf_dynarray_func func, void *arg)
       return res;
   return 0;
 }
+

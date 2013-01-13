@@ -17,7 +17,8 @@
 #include "mysys_err.h"
 #include <errno.h>
 
-    /* Write a chunk of bytes to a file */
+
+	/* Write a chunk of bytes to a file */
 
 size_t my_write(File Filedes, const uchar *Buffer, size_t Count, myf MyFlags)
 {
@@ -25,13 +26,13 @@ size_t my_write(File Filedes, const uchar *Buffer, size_t Count, myf MyFlags)
   uint errors;
   DBUG_ENTER("my_write");
   DBUG_PRINT("my",("fd: %d  Buffer: %p  Count: %lu  MyFlags: %d",
-           Filedes, Buffer, (ulong) Count, MyFlags));
+		   Filedes, Buffer, (ulong) Count, MyFlags));
   errors= 0; written= 0;
 
   /* The behavior of write(fd, buf, 0) is not portable */
   if (unlikely(!Count))
     DBUG_RETURN(0);
-
+  
   for (;;)
   {
 #ifdef _WIN32
@@ -39,6 +40,11 @@ size_t my_write(File Filedes, const uchar *Buffer, size_t Count, myf MyFlags)
 #else
     writtenbytes= write(Filedes, Buffer, Count);
 #endif
+    DBUG_EXECUTE_IF("simulate_file_write_error",
+                    {
+                      errno= ENOSPC;
+                      writtenbytes= (size_t) -1;
+                    });
     if (writtenbytes == Count)
       break;
     if (writtenbytes != (size_t) -1)
@@ -49,7 +55,7 @@ size_t my_write(File Filedes, const uchar *Buffer, size_t Count, myf MyFlags)
     }
     my_errno= errno;
     DBUG_PRINT("error",("Write only %ld bytes, error: %d",
-            (long) writtenbytes, my_errno));
+			(long) writtenbytes, my_errno));
 #ifndef NO_BACKGROUND
     if (my_thread_var->abort)
       MyFlags&= ~ MY_WAIT_IF_FULL;		/* End if aborted by user */
@@ -85,8 +91,8 @@ size_t my_write(File Filedes, const uchar *Buffer, size_t Count, myf MyFlags)
     {
       if (MyFlags & (MY_WME | MY_FAE | MY_FNABP))
       {
-    my_error(EE_WRITE, MYF(ME_BELL+ME_WAITTANG),
-         my_filename(Filedes),my_errno);
+	my_error(EE_WRITE, MYF(ME_BELL+ME_WAITTANG),
+		 my_filename(Filedes),my_errno);
       }
       DBUG_RETURN(MY_FILE_ERROR);		/* Error on read */
     }

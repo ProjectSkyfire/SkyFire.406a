@@ -33,3 +33,4 @@ char *strcend(register const char *s, register pchar c)
      if (!*s++) return (char*) s-1;
   }
 }
+

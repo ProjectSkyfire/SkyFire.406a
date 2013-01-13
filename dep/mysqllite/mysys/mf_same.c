@@ -19,11 +19,11 @@
 #include <m_string.h>
 
         /*
-      Copy directory and/or extension between filenames.
-      (For the meaning of 'flag', check mf_format.c)
-      'to' may be equal to 'name'.
-      Returns 'to'.
-    */
+	  Copy directory and/or extension between filenames.
+	  (For the meaning of 'flag', check mf_format.c)
+	  'to' may be equal to 'name'.
+	  Returns 'to'.
+	*/
 
 char * fn_same(char *to, const char *name, int flag)
 {

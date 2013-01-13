@@ -23,7 +23,7 @@
 #include "mysys_priv.h"
 #include <m_string.h>
 
-    /* Radixsort */
+	/* Radixsort */
 
 void radixsort_for_str_ptr(uchar **base, uint number_of_elements, size_t size_of_element, uchar **buffer)
 {
@@ -42,7 +42,7 @@ void radixsort_for_str_ptr(uchar **base, uint number_of_elements, size_t size_of
     for (count_ptr=count+1 ; count_ptr < count_end ; count_ptr++)
     {
       if (*count_ptr == number_of_elements)
-    goto next;
+	goto next;
       (*count_ptr)+= *(count_ptr-1);
     }
     for (ptr= end ; ptr-- != base ;)

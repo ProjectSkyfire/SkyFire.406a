@@ -84,8 +84,8 @@ struct tm *localtime_r(const time_t *clock, struct tm *res)
 #endif
 
 #if !defined(HAVE_GMTIME_R)
-/*
-  Reentrant version of standard gmtime() function.
+/* 
+  Reentrant version of standard gmtime() function. 
   Needed on some systems which don't implement it.
 */
 
@@ -128,6 +128,7 @@ void px_handle_sig(int sig)
   sigaddset(&px_recd, sig);
 }
 
+
 void sigwait_setup(sigset_t *set)
 {
   int i;
@@ -146,19 +147,19 @@ void sigwait_setup(sigset_t *set)
     {
       sigdelset(&rev_sigwait_set,i);
       if (!sigismember(&sigwait_set,i))
-    sigaction(i, &sact, (struct sigaction*) 0);
+	sigaction(i, &sact, (struct sigaction*) 0);
     }
     else
     {
       sigdelset(&px_recd,i);			/* Don't handle this */
       if (sigismember(&sigwait_set,i))
       {						/* Remove the old handler */
-    sigaddset(&unblock_mask,i);
-    sigdelset(&rev_sigwait_set,i);
-    sact1.sa_flags = 0;
-    sact1.sa_handler = SIG_DFL;
-    sigemptyset(&sact1.sa_mask);
-    sigaction(i, &sact1, 0);
+	sigaddset(&unblock_mask,i);
+	sigdelset(&rev_sigwait_set,i);
+	sact1.sa_flags = 0;
+	sact1.sa_handler = SIG_DFL;
+	sigemptyset(&sact1.sa_mask);
+	sigaction(i, &sact1, 0);
       }
     }
   }
@@ -166,6 +167,7 @@ void sigwait_setup(sigset_t *set)
   pthread_sigmask(SIG_BLOCK,(sigset_t*) set,(sigset_t*) 0);
   pthread_sigmask(SIG_UNBLOCK,&unblock_mask,(sigset_t*) 0);
 }
+
 
 int sigwait(sigset_t *setp, int *sigp)
 {
@@ -188,16 +190,16 @@ int sigwait(sigset_t *setp, int *sigp)
     {
       if (*ptr)
       {
-    ulong set= *ptr;
-    int found= (int) ((char*) ptr - (char*) &px_recd)*8+1;
-    while (!(set & 1))
-    {
-      found++;
-      set>>=1;
-    }
-    *sigp=found;
-    sigdelset(&px_recd,found);
-    return 0;
+	ulong set= *ptr;
+	int found= (int) ((char*) ptr - (char*) &px_recd)*8+1;
+	while (!(set & 1))
+	{
+	  found++;
+	  set>>=1;
+	}
+	*sigp=found;
+	sigdelset(&px_recd,found);
+	return 0;
       }
     }
     sigsuspend(&rev_sigwait_set);
@@ -231,6 +233,7 @@ static sigset_t pending_set;
 static bool inited=0;
 static pthread_cond_t  COND_sigwait;
 static pthread_mutex_t LOCK_sigwait;
+
 
 void sigwait_handle_sig(int sig)
 {
@@ -276,6 +279,7 @@ void *sigwait_thread(void *set_arg)
   }
 }
 
+
 int sigwait(sigset_t *setp, int *sigp)
 {
   if (!inited)
@@ -305,17 +309,17 @@ int sigwait(sigset_t *setp, int *sigp)
     {
       if (*ptr)
       {
-    ulong set= *ptr;
-    int found= (int) ((char*) ptr - (char*) &pending_set)*8+1;
-    while (!(set & 1))
-    {
-      found++;
-      set>>=1;
-    }
-    *sigp=found;
-    sigdelset(&pending_set,found);
-    pthread_mutex_unlock(&LOCK_sigwait);
-    return 0;
+	ulong set= *ptr;
+	int found= (int) ((char*) ptr - (char*) &pending_set)*8+1;
+	while (!(set & 1))
+	{
+	  found++;
+	  set>>=1;
+	}
+	*sigp=found;
+	sigdelset(&pending_set,found);
+	pthread_mutex_unlock(&LOCK_sigwait);
+	return 0;
       }
     }
     pthread_cond_wait(&COND_sigwait, &LOCK_sigwait);
@@ -325,6 +329,7 @@ int sigwait(sigset_t *setp, int *sigp)
 
 #endif /* DONT_USE_SIGSUSPEND */
 #endif /* HAVE_SIGWAIT */
+
 
 /****************************************************************************
  The following functions fixes that all pthread functions should work
@@ -376,6 +381,7 @@ int my_pthread_cond_init(pthread_cond_t *mp, const pthread_condattr_t *attr)
 
 #endif
 
+
 /*****************************************************************************
   Patches for HPUX
   We need these because the pthread_mutex.. code returns -1 on error,
@@ -389,7 +395,7 @@ int my_pthread_cond_init(pthread_cond_t *mp, const pthread_condattr_t *attr)
 #if defined(HPUX10) || defined(HAVE_BROKEN_PTHREAD_COND_TIMEDWAIT)
 
 int my_pthread_cond_timedwait(pthread_cond_t *cond, pthread_mutex_t *mutex,
-                  struct timespec *abstime)
+			      struct timespec *abstime)
 {
   int error=pthread_cond_timedwait(cond, mutex, abstime);
   if (error == -1)			/* Safety if the lib is fixed */
@@ -406,11 +412,12 @@ int my_pthread_cond_timedwait(pthread_cond_t *cond, pthread_mutex_t *mutex,
 #if defined(HPUX10)
 
 void my_pthread_attr_getstacksize(pthread_attr_t *connection_attrib,
-                  size_t *stack_size)
+				  size_t *stack_size)
 {
   *stack_size= pthread_attr_getstacksize(*connection_attrib);
 }
 #endif
+
 
 #ifdef HAVE_POSIX1003_4a_MUTEX
 /*
@@ -438,7 +445,7 @@ void my_pthread_attr_getstacksize(pthread_attr_t *connection_attrib,
   0		If we are able successfully lock the mutex.
   EBUSY		Mutex was locked by another thread
   #		Other error number returned by pthread_mutex_trylock()
-        (Not likely)
+		(Not likely)  
 */
 
 int my_pthread_mutex_trylock(pthread_mutex_t *mutex)

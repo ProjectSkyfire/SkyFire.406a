@@ -118,6 +118,7 @@ public:
         handler->PSendSysMessage(_CLIENT_BUILD_REVISION_2);
         handler->PSendSysMessage("Revision Hash: "_HASH);
         handler->PSendSysMessage("Build Date: "_DATE);
+        handler->PSendSysMessage("Using World DB: %s", sWorld->GetDBVersion());
         handler->PSendSysMessage(LANG_CONNECTED_PLAYERS, playersNum, maxPlayersNum);
         handler->PSendSysMessage(LANG_CONNECTED_USERS, activeClientsNum, maxActiveClientsNum, queuedClientsNum, maxQueuedClientsNum);
         handler->PSendSysMessage(LANG_UPTIME, uptime.c_str());

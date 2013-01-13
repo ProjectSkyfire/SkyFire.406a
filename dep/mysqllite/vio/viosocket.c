@@ -1,5 +1,5 @@
 /*
-   Copyright (c) 2001, 2011, Oracle and/or its affiliates. All rights reserved.
+   Copyright (c) 2001, 2012, Oracle and/or its affiliates. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -23,6 +23,11 @@
   the file descriptior.
 */
 
+#ifdef __WIN__
+  #include <winsock2.h>
+  #include <MSWSock.h>
+  #pragma comment(lib, "ws2_32.lib")
+#endif
 #include "vio_priv.h"
 
 #ifdef FIONREAD_IN_SYS_FILIO
@@ -33,6 +38,7 @@ int vio_errno(Vio *vio __attribute__((unused)))
 {
   return socket_errno;		/* On Win32 this mapped to WSAGetLastError() */
 }
+
 
 size_t vio_read(Vio * vio, uchar* buf, size_t size)
 {
@@ -58,6 +64,7 @@ size_t vio_read(Vio * vio, uchar* buf, size_t size)
   DBUG_PRINT("exit", ("%ld", (long) r));
   DBUG_RETURN(r);
 }
+
 
 /*
   Buffered read: if average read size is small it may
@@ -130,14 +137,14 @@ size_t vio_write(Vio * vio, const uchar* buf, size_t size)
 }
 
 int vio_blocking(Vio * vio __attribute__((unused)), my_bool set_blocking_mode,
-         my_bool *old_mode)
+		 my_bool *old_mode)
 {
   int r=0;
   DBUG_ENTER("vio_blocking");
 
   *old_mode= test(!(vio->fcntl_mode & O_NONBLOCK));
   DBUG_PRINT("enter", ("set_blocking_mode: %d  old_mode: %d",
-               (int) set_blocking_mode, (int) *old_mode));
+		       (int) set_blocking_mode, (int) *old_mode));
 
 #if !defined(__WIN__)
 #if !defined(NO_FCNTL_NONBLOCK)
@@ -163,7 +170,7 @@ int vio_blocking(Vio * vio __attribute__((unused)), my_bool set_blocking_mode,
 #endif /* !defined(NO_FCNTL_NONBLOCK) */
 #else /* !defined(__WIN__) */
   if (vio->type != VIO_TYPE_NAMEDPIPE && vio->type != VIO_TYPE_SHARED_MEMORY)
-  {
+  { 
     ulong arg;
     int old_fcntl=vio->fcntl_mode;
     if (set_blocking_mode)
@@ -196,6 +203,7 @@ vio_is_blocking(Vio * vio)
   DBUG_RETURN(r);
 }
 
+
 int vio_fastsend(Vio * vio __attribute__((unused)))
 {
   int r=0;
@@ -218,6 +226,7 @@ int vio_fastsend(Vio * vio __attribute__((unused)))
     r= setsockopt(vio->sd, IPPROTO_TCP, TCP_NODELAY,
                   IF_WIN((const char*), (void*)) &nodelay,
                   sizeof(nodelay));
+
   }
   if (r)
   {
@@ -234,16 +243,17 @@ int vio_keepalive(Vio* vio, my_bool set_keep_alive)
   uint opt = 0;
   DBUG_ENTER("vio_keepalive");
   DBUG_PRINT("enter", ("sd: %d  set_keep_alive: %d", vio->sd, (int)
-               set_keep_alive));
+		       set_keep_alive));
   if (vio->type != VIO_TYPE_NAMEDPIPE)
   {
     if (set_keep_alive)
       opt = 1;
     r = setsockopt(vio->sd, SOL_SOCKET, SO_KEEPALIVE, (char *) &opt,
-           sizeof(opt));
+		   sizeof(opt));
   }
   DBUG_RETURN(r);
 }
+
 
 my_bool
 vio_should_retry(Vio * vio)
@@ -262,13 +272,46 @@ vio_should_retry(Vio * vio)
             (en == SOCKET_EAGAIN || en == SOCKET_EWOULDBLOCK));
 }
 
+
 my_bool
 vio_was_interrupted(Vio *vio __attribute__((unused)))
 {
   int en= socket_errno;
   return (en == SOCKET_EAGAIN || en == SOCKET_EINTR ||
-      en == SOCKET_EWOULDBLOCK || en == SOCKET_ETIMEDOUT);
+	  en == SOCKET_EWOULDBLOCK || en == SOCKET_ETIMEDOUT);
 }
+
+
+int
+mysql_socket_shutdown(my_socket mysql_socket, int how)
+{
+  int result;
+
+#ifdef __WIN__
+  static LPFN_DISCONNECTEX DisconnectEx = NULL;
+  if (DisconnectEx == NULL)
+  {
+    DWORD dwBytesReturned;
+    GUID guidDisconnectEx = WSAID_DISCONNECTEX;
+    WSAIoctl(mysql_socket, SIO_GET_EXTENSION_FUNCTION_POINTER,
+             &guidDisconnectEx, sizeof(GUID),
+             &DisconnectEx, sizeof(DisconnectEx), 
+             &dwBytesReturned, NULL, NULL);
+  }
+#endif
+
+  /* Non instrumented code */
+#ifdef __WIN__
+  if (DisconnectEx)
+    result= (DisconnectEx(mysql_socket, (LPOVERLAPPED) NULL,
+                          (DWORD) 0, (DWORD) 0) == TRUE) ? 0 : -1;
+  else
+#endif
+    result= shutdown(mysql_socket, how);
+
+  return result;
+}
+
 
 int vio_close(Vio * vio)
 {
@@ -282,7 +325,7 @@ int vio_close(Vio * vio)
       vio->type == VIO_TYPE_SSL);
 
     DBUG_ASSERT(vio->sd >= 0);
-    if (shutdown(vio->sd, SHUT_RDWR))
+    if (mysql_socket_shutdown(vio->sd, SHUT_RDWR))
       r= -1;
     if (closesocket(vio->sd))
       r= -1;
@@ -296,6 +339,7 @@ int vio_close(Vio * vio)
   vio->sd=   -1;
   DBUG_RETURN(r);
 }
+
 
 const char *vio_description(Vio * vio)
 {
@@ -389,6 +433,7 @@ static void vio_get_normalized_ip(const struct sockaddr *src,
   }
 }
 
+
 /**
   Return the normalized IP address string for a sock-address.
 
@@ -433,6 +478,7 @@ my_bool vio_get_normalized_ip_string(const struct sockaddr *addr,
                        (const char *) gai_strerror(err_code)));
   return TRUE;
 }
+
 
 /**
   Return IP address and port of a VIO client socket.
@@ -515,6 +561,7 @@ my_bool vio_peer_addr(Vio *vio, char *ip_buffer, uint16 *port,
   DBUG_RETURN(FALSE);
 }
 
+
 /**
   Indicate whether there is data to read on a given socket.
 
@@ -566,6 +613,7 @@ static my_bool socket_poll_read(my_socket sd, uint timeout)
 #endif
 }
 
+
 /**
   Retrieve the amount of data that can be read from a socket.
 
@@ -600,6 +648,7 @@ static my_bool socket_peek_read(Vio *vio, uint *bytes)
 #endif
 }
 
+
 /**
   Indicate whether there is data to read on a given socket.
 
@@ -622,6 +671,7 @@ my_bool vio_poll_read(Vio *vio, uint timeout)
 #endif
   DBUG_RETURN(socket_poll_read(sd, timeout));
 }
+
 
 /**
   Determine if the endpoint of a connection is still available.
@@ -669,6 +719,7 @@ my_bool vio_is_connected(Vio *vio)
   DBUG_RETURN(bytes ? TRUE : FALSE);
 }
 
+
 void vio_timeout(Vio *vio, uint which, uint timeout)
 {
 #if defined(SO_SNDTIMEO) && defined(SO_RCVTIMEO)
@@ -689,6 +740,7 @@ void vio_timeout(Vio *vio, uint which, uint timeout)
   r= setsockopt(vio->sd, SOL_SOCKET, which ? SO_SNDTIMEO : SO_RCVTIMEO,
                 IF_WIN((const char*), (const void*))&wait_timeout,
                 sizeof(wait_timeout));
+
   }
 
   if (r != 0)
@@ -702,6 +754,7 @@ void vio_timeout(Vio *vio, uint which, uint timeout)
 */
 #endif
 }
+
 
 #ifdef __WIN__
 
@@ -729,13 +782,14 @@ static size_t pipe_complete_io(Vio* vio, char* buf, size_t size, DWORD timeout_m
 
   if (!GetOverlappedResult(vio->hPipe,&(vio->pipe_overlapped),&length, FALSE))
   {
-    DBUG_PRINT("error",("GetOverlappedResult() returned last error  %d",
+    DBUG_PRINT("error",("GetOverlappedResult() returned last error  %d", 
       GetLastError()));
     DBUG_RETURN((size_t)-1);
   }
 
   DBUG_RETURN(length);
 }
+
 
 size_t vio_read_pipe(Vio * vio, uchar *buf, size_t size)
 {
@@ -765,6 +819,7 @@ size_t vio_read_pipe(Vio * vio, uchar *buf, size_t size)
   DBUG_RETURN(retval);
 }
 
+
 size_t vio_write_pipe(Vio * vio, const uchar* buf, size_t size)
 {
   DWORD bytes_written;
@@ -773,7 +828,7 @@ size_t vio_write_pipe(Vio * vio, const uchar* buf, size_t size)
   DBUG_PRINT("enter", ("sd: %d  buf: 0x%lx  size: %u", vio->sd, (long) buf,
                        (uint) size));
 
-  if (WriteFile(vio->hPipe, buf, (DWORD)size, &bytes_written,
+  if (WriteFile(vio->hPipe, buf, (DWORD)size, &bytes_written, 
       &(vio->pipe_overlapped)))
   {
     retval= bytes_written;
@@ -793,6 +848,7 @@ size_t vio_write_pipe(Vio * vio, const uchar* buf, size_t size)
   DBUG_RETURN(retval);
 }
 
+
 my_bool vio_is_connected_pipe(Vio *vio)
 {
   if (PeekNamedPipe(vio->hPipe, NULL, 0, NULL, NULL, NULL))
@@ -800,6 +856,7 @@ my_bool vio_is_connected_pipe(Vio *vio)
   else
     return (GetLastError() != ERROR_BROKEN_PIPE);
 }
+
 
 int vio_close_pipe(Vio * vio)
 {
@@ -820,11 +877,12 @@ int vio_close_pipe(Vio * vio)
   DBUG_RETURN(r);
 }
 
+
 void vio_win32_timeout(Vio *vio, uint which , uint timeout_sec)
 {
     DWORD timeout_ms;
     /*
-      Windows is measuring timeouts in milliseconds. Check for possible int
+      Windows is measuring timeouts in milliseconds. Check for possible int 
       overflow.
     */
     if (timeout_sec > UINT_MAX/1000)
@@ -838,6 +896,7 @@ void vio_win32_timeout(Vio *vio, uint which , uint timeout_sec)
     else
       vio->read_timeout_ms= timeout_ms;
 }
+
 
 #ifdef HAVE_SMEM
 
@@ -866,7 +925,7 @@ size_t vio_read_shared_memory(Vio * vio, uchar* buf, size_t size)
         WaitForMultipleObjects can return next values:
          WAIT_OBJECT_0+0 - event from vio->event_server_wrote
          WAIT_OBJECT_0+1 - event from vio->event_conn_closed. We can't read
-                   anything
+		           anything
          WAIT_ABANDONED_0 and WAIT_TIMEOUT - fail.  We can't read anything
       */
       if (WaitForMultipleObjects(array_elements(events), events, FALSE,
@@ -905,6 +964,7 @@ size_t vio_read_shared_memory(Vio * vio, uchar* buf, size_t size)
   DBUG_PRINT("exit", ("%lu", (ulong) length));
   DBUG_RETURN(length);
 }
+
 
 size_t vio_write_shared_memory(Vio * vio, const uchar* buf, size_t size)
 {
@@ -948,10 +1008,12 @@ size_t vio_write_shared_memory(Vio * vio, const uchar* buf, size_t size)
   DBUG_RETURN(length);
 }
 
+
 my_bool vio_is_connected_shared_memory(Vio *vio)
 {
   return (WaitForSingleObject(vio->event_conn_closed, 0) != WAIT_OBJECT_0);
 }
+
 
 /**
  Close shared memory and DBUG_PRINT any errors that happen on closing.
@@ -972,7 +1034,7 @@ int vio_close_shared_memory(Vio * vio)
       Close all handlers. UnmapViewOfFile and CloseHandle return non-zero
       result if they are success.
     */
-    if (UnmapViewOfFile(vio->handle_map) == 0)
+    if (UnmapViewOfFile(vio->handle_map) == 0) 
     {
       error_count++;
       DBUG_PRINT("vio_error", ("UnmapViewOfFile() failed"));
@@ -1015,6 +1077,7 @@ int vio_close_shared_memory(Vio * vio)
 #endif /* HAVE_SMEM */
 #endif /* __WIN__ */
 
+
 /**
   Number of bytes in the read buffer.
 
@@ -1037,6 +1100,7 @@ ssize_t vio_pending(Vio *vio)
 
   return 0;
 }
+
 
 /**
   Checks if the error code, returned by vio_getnameinfo(), means it was the
@@ -1064,6 +1128,7 @@ my_bool vio_is_no_name_error(int err_code)
 
 #endif
 }
+
 
 /**
   This is a wrapper for the system getnameinfo(), because different OS

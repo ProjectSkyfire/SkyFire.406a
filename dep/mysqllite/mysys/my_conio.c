@@ -13,6 +13,7 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA */
 
+
 #include "mysys_priv.h"
 
 #ifdef __WIN__
@@ -28,8 +29,9 @@ static HANDLE my_coninpfh= 0;     /* console input */
   if found useful they are to be exported in mysys
 */
 
+
 /*
-  int my_pthread_auto_mutex_lock(HANDLE* ph, const char* name,
+  int my_pthread_auto_mutex_lock(HANDLE* ph, const char* name, 
                                  int id, int time)
   NOTES
     creates a mutex with given name and tries to lock it time msec.
@@ -46,15 +48,15 @@ int my_pthread_auto_mutex_lock(HANDLE* ph, const char* name, int id, int time)
 {
   int res;
   char tname[FN_REFLEN];
-
+  
   sprintf(tname, "%s-%08X", name, id);
-
+  
   *ph= CreateMutex(NULL, FALSE, tname);
   if (*ph == NULL)
     return GetLastError();
 
   res= WaitForSingleObject(*ph, time);
-
+  
   if (res == WAIT_TIMEOUT)
     return ERROR_SEM_TIMEOUT;
 
@@ -88,6 +90,7 @@ int my_pthread_auto_mutex_free(HANDLE* ph)
   return 0;
 }
 
+
 #define pthread_auto_mutex_decl(name)                           \
   HANDLE __h##name= NULL;
 
@@ -97,18 +100,19 @@ int my_pthread_auto_mutex_free(HANDLE* ph)
 #define pthread_auto_mutex_free(name)                           \
   my_pthread_auto_mutex_free(&__h##name)
 
+
 /*
   char* my_cgets()
 
   NOTES
     Replaces _cgets from libc to support input of more than 255 chars.
-    Reads from the console via ReadConsole into buffer which
+    Reads from the console via ReadConsole into buffer which 
     should be at least clen characters.
     Actual length of string returned in plen.
 
   WARNING
     my_cgets() does NOT check the pushback character buffer (i.e., _chbuf).
-    Thus, my_cgets() will not return any character that is pushed back by
+    Thus, my_cgets() will not return any character that is pushed back by 
     the _ungetch() call.
 
   RETURN
@@ -123,14 +127,14 @@ char* my_cgets(char *buffer, size_t clen, size_t* plen)
   char *result;
   DWORD plen_res;
   CONSOLE_SCREEN_BUFFER_INFO csbi;
-
+  
   pthread_auto_mutex_decl(my_conio_cs);
-
+ 
   /* lock the console for the current process*/
   if (pthread_auto_mutex_lock(my_conio_cs, GetCurrentProcessId(), INFINITE))
   {
     /* can not lock console */
-    pthread_auto_mutex_free(my_conio_cs);
+    pthread_auto_mutex_free(my_conio_cs);  
     return NULL;
   }
 
@@ -143,26 +147,26 @@ char* my_cgets(char *buffer, size_t clen, size_t* plen)
                             NULL, OPEN_EXISTING, 0, NULL);
   }
 
-  if (my_coninpfh == INVALID_HANDLE_VALUE)
+  if (my_coninpfh == INVALID_HANDLE_VALUE) 
   {
     /* unlock the console */
-    pthread_auto_mutex_free(my_conio_cs);
+    pthread_auto_mutex_free(my_conio_cs);  
     return(NULL);
   }
 
   GetConsoleMode((HANDLE)my_coninpfh, &state);
-  SetConsoleMode((HANDLE)my_coninpfh, ENABLE_LINE_INPUT |
+  SetConsoleMode((HANDLE)my_coninpfh, ENABLE_LINE_INPUT | 
                  ENABLE_PROCESSED_INPUT | ENABLE_ECHO_INPUT);
 
   GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
 
-  /*
+  /* 
     there is no known way to determine allowed buffer size for input
-    though it is known it should not be more than 64K
-    so we cut 64K and try first size of screen buffer
-    if it is still to large we cut half of it and try again
+    though it is known it should not be more than 64K               
+    so we cut 64K and try first size of screen buffer               
+    if it is still to large we cut half of it and try again         
     later we may want to cycle from min(clen, 65535) to allowed size
-    with small decrement to determine exact allowed buffer
+    with small decrement to determine exact allowed buffer           
   */
   clen= min(clen, 65535);
   do
@@ -193,7 +197,7 @@ char* my_cgets(char *buffer, size_t clen, size_t* plen)
     {
       *plen= *plen - 2;
     }
-    else
+    else 
     {
       if (*plen > 0 && buffer[*plen - 1] == '\r')
       {
@@ -210,7 +214,7 @@ char* my_cgets(char *buffer, size_t clen, size_t* plen)
 
   SetConsoleMode((HANDLE)my_coninpfh, state);
   /* unlock the console */
-  pthread_auto_mutex_free(my_conio_cs);
+  pthread_auto_mutex_free(my_conio_cs);  
 
   return result;
 }

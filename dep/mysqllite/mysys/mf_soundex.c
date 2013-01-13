@@ -39,11 +39,11 @@
 
 static char get_scode(CHARSET_INFO * cs, char **ptr,pbool remove_garbage);
 
-        /* outputed string is 4 byte long */
-        /* out_pntr can be == in_pntr */
+		/* outputed string is 4 byte long */
+		/* out_pntr can be == in_pntr */
 
 void soundex(CHARSET_INFO * cs,register char * out_pntr, char * in_pntr,
-         pbool remove_garbage)
+	     pbool remove_garbage)
 {
   char ch,last_ch;
   reg3 char * end;
@@ -56,11 +56,11 @@ void soundex(CHARSET_INFO * cs,register char * out_pntr, char * in_pntr,
   }
   *out_pntr++ = map[(uchar)*in_pntr];	/* Copy first letter		 */
   last_ch = get_scode(cs,&in_pntr,0);	/* code of the first letter	 */
-                    /* for the first 'double-letter  */
-                    /* check.			 */
+					/* for the first 'double-letter  */
+					/* check.			 */
   end=out_pntr+3;			/* Loop on input letters until	 */
-                    /* end of input (null) or output */
-                    /* letter code count = 3	 */
+					/* end of input (null) or output */
+					/* letter code count = 3	 */
 
   in_pntr++;
   while (out_pntr < end && (ch = get_scode(cs,&in_pntr,remove_garbage)) != 0)
@@ -77,6 +77,7 @@ void soundex(CHARSET_INFO * cs,register char * out_pntr, char * in_pntr,
   *out_pntr=0;				/* end string */
   return;
 } /* soundex */
+
 
   /*
     If alpha, map input letter to soundex code.

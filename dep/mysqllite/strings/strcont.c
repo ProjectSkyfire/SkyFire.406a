@@ -37,7 +37,7 @@ char * strcont(reg1 const char *str,reg2 const char *set)
     while (*set)
     {
       if (*set++ == *str)
-    return ((char*) str);
+	return ((char*) str);
     }
     set=start; str++;
   }

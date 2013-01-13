@@ -16,28 +16,28 @@
 #include "mysys_priv.h"
 #include <m_string.h>
 
-    /* Returns full load-path for a file. to may be = path */
-    /* if path is a hard-path return path */
-    /* if path starts with home-dir return path */
-    /* if path starts with current dir or parent-dir unpack path */
-    /* if there is no path, prepend with own_path_prefix if given */
-    /* else unpack path according to current dir */
+	/* Returns full load-path for a file. to may be = path */
+	/* if path is a hard-path return path */
+	/* if path starts with home-dir return path */
+	/* if path starts with current dir or parent-dir unpack path */
+	/* if there is no path, prepend with own_path_prefix if given */
+	/* else unpack path according to current dir */
 
 char * my_load_path(char * to, const char *path,
-               const char *own_path_prefix)
+		       const char *own_path_prefix)
 {
   char buff[FN_REFLEN];
   int is_cur;
   DBUG_ENTER("my_load_path");
   DBUG_PRINT("enter",("path: %s  prefix: %s",path,
-              own_path_prefix ? own_path_prefix : ""));
+		      own_path_prefix ? own_path_prefix : ""));
 
   if ((path[0] == FN_HOMELIB && path[1] == FN_LIBCHAR) ||
       test_if_hard_path(path))
     (void) strnmov(buff, path, FN_REFLEN);
   else if ((is_cur=(path[0] == FN_CURLIB && path[1] == FN_LIBCHAR)) ||
-       (is_prefix(path,FN_PARENTDIR)) ||
-       ! own_path_prefix)
+	   (is_prefix(path,FN_PARENTDIR)) ||
+	   ! own_path_prefix)
   {
     if (is_cur)
       is_cur=2;					/* Remove current dir */

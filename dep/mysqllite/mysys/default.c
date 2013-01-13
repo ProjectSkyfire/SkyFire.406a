@@ -119,11 +119,12 @@ struct handle_option_ctx
 };
 
 static int search_default_file(Process_option_func func, void *func_ctx,
-                   const char *dir, const char *config_file);
+			       const char *dir, const char *config_file);
 static int search_default_file_with_ext(Process_option_func func,
                                         void *func_ctx,
-                    const char *dir, const char *ext,
-                    const char *config_file, int recursion_level);
+					const char *dir, const char *ext,
+					const char *config_file, int recursion_level);
+
 
 /**
   Create the list of default directories.
@@ -153,7 +154,9 @@ static int search_default_file_with_ext(Process_option_func func,
 
 static const char **init_default_directories(MEM_ROOT *alloc);
 
+
 static char *remove_end_comment(char *ptr);
+
 
 /*
   Expand a file name so that the current working directory is added if
@@ -204,6 +207,7 @@ fn_expand(const char *filename, char *result_buf)
   NOTES
     --defaults-group-suffix is only processed if we are called from
     load_defaults().
+
 
   RETURN
     0  ok
@@ -260,37 +264,37 @@ int my_search_option_files(const char *conf_file, int *argc, char ***argv,
     /* Handle --defaults-group-suffix= */
     uint i;
     const char **extra_groups;
-    const size_t instance_len= strlen(my_defaults_group_suffix);
+    const size_t instance_len= strlen(my_defaults_group_suffix); 
     struct handle_option_ctx *ctx= (struct handle_option_ctx*) func_ctx;
     char *ptr;
     TYPELIB *group= ctx->group;
-
-    if (!(extra_groups=
-      (const char**)alloc_root(ctx->alloc,
+    
+    if (!(extra_groups= 
+	  (const char**)alloc_root(ctx->alloc,
                                    (2*group->count+1)*sizeof(char*))))
       DBUG_RETURN(2);
-
+    
     for (i= 0; i < group->count; i++)
     {
       size_t len;
       extra_groups[i]= group->type_names[i]; /** copy group */
-
+      
       len= strlen(extra_groups[i]);
       if (!(ptr= alloc_root(ctx->alloc, (uint) (len+instance_len+1))))
        DBUG_RETURN(2);
-
+      
       extra_groups[i+group->count]= ptr;
-
+      
       /** Construct new group */
       memcpy(ptr, extra_groups[i], len);
       memcpy(ptr+len, my_defaults_group_suffix, instance_len+1);
     }
-
+    
     group->count*= 2;
     group->type_names= extra_groups;
     group->type_names[group->count]= 0;
   }
-
+  
   if (my_defaults_file)
   {
     if ((error= search_default_file_with_ext(func, func_ctx, "", "",
@@ -314,14 +318,14 @@ int my_search_option_files(const char *conf_file, int *argc, char ***argv,
     {
       if (**dirs)
       {
-    if (search_default_file(func, func_ctx, *dirs, conf_file) < 0)
-      goto err;
+	if (search_default_file(func, func_ctx, *dirs, conf_file) < 0)
+	  goto err;
       }
       else if (my_defaults_extra_file)
       {
         if ((error= search_default_file_with_ext(func, func_ctx, "", "",
                                                 my_defaults_extra_file, 0)) < 0)
-      goto err;				/* Fatal error */
+	  goto err;				/* Fatal error */
         if (error > 0)
         {
           fprintf(stderr, "Could not open required defaults file: %s\n",
@@ -338,6 +342,7 @@ err:
   fprintf(stderr,"Fatal error in defaults handling. Program aborted\n");
   DBUG_RETURN(1);
 }
+
 
 /*
   The option handler for load_defaults.
@@ -382,6 +387,7 @@ static int handle_default_option(void *in_ctx, const char *group_name,
 
   return 0;
 }
+
 
 /*
   Gets options from the command line
@@ -440,9 +446,9 @@ int get_defaults_options(int argc, char **argv,
   SYNOPSIS
     load_defaults()
     conf_file			Basename for configuration file to search for.
-                    If this is a path, then only this file is read.
+    				If this is a path, then only this file is read.
     groups			Which [group] entrys to read.
-                Points to an null terminated array of pointers
+				Points to an null terminated array of pointers
     argc			Pointer to argc of original program
     argv			Pointer to argv of original program
 
@@ -467,9 +473,9 @@ int load_defaults(const char *conf_file, const char **groups,
   SYNOPSIS
     my_load_defaults()
     conf_file			Basename for configuration file to search for.
-                    If this is a path, then only this file is read.
+    				If this is a path, then only this file is read.
     groups			Which [group] entrys to read.
-                Points to an null terminated array of pointers
+				Points to an null terminated array of pointers
     argc			Pointer to argc of original program
     argv			Pointer to argv of original program
     default_directories         Pointer to a location where a pointer to the list
@@ -484,7 +490,7 @@ int load_defaults(const char *conf_file, const char **groups,
    NOTES
     In case of fatal error, the function will print a warning and do
     exit(1)
-
+ 
     To free used memory one should call free_defaults() with the argument
     that was put in *argv
 
@@ -493,10 +499,11 @@ int load_defaults(const char *conf_file, const char **groups,
      a pointer to the array of default directory paths is stored to a location
      it points to. That stored value must be passed to my_search_option_files()
      later.
-
+     
      - 1 is returned if the given conf_file didn't exist. In this case, the
      value pointed to by default_directories is undefined.
 */
+
 
 int my_load_defaults(const char *conf_file, const char **groups,
                   int *argc, char ***argv, const char ***default_directories)
@@ -525,7 +532,7 @@ int my_load_defaults(const char *conf_file, const char **groups,
     /* remove the --no-defaults argument and return only the other arguments */
     uint i, j;
     if (!(ptr=(char*) alloc_root(&alloc,sizeof(alloc)+
-                 (*argc + 1)*sizeof(char*))))
+				 (*argc + 1)*sizeof(char*))))
       goto err;
     res= (char**) (ptr+sizeof(alloc));
     res[0]= **argv;				/* Copy program name */
@@ -578,7 +585,7 @@ int my_load_defaults(const char *conf_file, const char **groups,
     or a forced default file
   */
   if (!(ptr=(char*) alloc_root(&alloc,sizeof(alloc)+
-                   (args.elements + *argc + 1 + args_sep) *sizeof(char*))))
+			       (args.elements + *argc + 1 + args_sep) *sizeof(char*))))
     goto err;
   res= (char**) (ptr+sizeof(alloc));
 
@@ -608,7 +615,7 @@ int my_load_defaults(const char *conf_file, const char **groups,
 
   if (*argc)
     memcpy((uchar*) (res+1+args.elements+args_sep), (char*) ((*argv)+1),
-       (*argc-1)*sizeof(char*));
+	   (*argc-1)*sizeof(char*));
   res[args.elements+ *argc+args_sep]=0;                /* last null */
 
   (*argc)+=args.elements+args_sep;
@@ -619,7 +626,7 @@ int my_load_defaults(const char *conf_file, const char **groups,
   {
     int i;
     printf("%s would have been started with the following arguments:\n",
-       **argv);
+	   **argv);
     for (i=1 ; i < *argc ; i++)
       if (!my_getopt_is_args_separator((*argv)[i])) /* skip arguments separator */
         printf("%s ", (*argv)[i]);
@@ -638,6 +645,7 @@ int my_load_defaults(const char *conf_file, const char **groups,
   return 0;					/* Keep compiler happy */
 }
 
+
 void free_defaults(char **argv)
 {
   MEM_ROOT ptr;
@@ -645,10 +653,11 @@ void free_defaults(char **argv)
   free_root(&ptr,MYF(0));
 }
 
+
 static int search_default_file(Process_option_func opt_handler,
                                void *handler_ctx,
-                   const char *dir,
-                   const char *config_file)
+			       const char *dir,
+			       const char *config_file)
 {
   char **ext;
   const char *empty_list[]= { "", 0 };
@@ -660,11 +669,12 @@ static int search_default_file(Process_option_func opt_handler,
     int error;
     if ((error= search_default_file_with_ext(opt_handler, handler_ctx,
                                              dir, *ext,
-                         config_file, 0)) < 0)
+					     config_file, 0)) < 0)
       return error;
   }
   return 0;
 }
+
 
 /*
   Skip over keyword and get argument after keyword
@@ -708,12 +718,13 @@ static char *get_argument(const char *keyword, size_t kwlen,
   if (end <= ptr)
   {
     fprintf(stderr,
-        "error: Wrong '!%s' directive in config file: %s at line %d\n",
-        keyword, name, line);
+	    "error: Wrong '!%s' directive in config file: %s at line %d\n",
+	    keyword, name, line);
     return 0;
   }
   return ptr;
 }
+
 
 /*
   Open a configuration file (if exists) and read given options from it
@@ -722,7 +733,7 @@ static char *get_argument(const char *keyword, size_t kwlen,
     search_default_file_with_ext()
     opt_handler                 Option handler function. It is used to process
                                 every separate option.
-    handler_ctx                 Pointer to the structure to store actual
+    handler_ctx                 Pointer to the structure to store actual 
                                 parameters of the function.
     dir				directory to read
     ext				Extension for configuration file
@@ -778,10 +789,10 @@ static int search_default_file_with_ext(Process_option_func opt_handler,
     /*
       Ignore world-writable regular files.
       This is mainly done to protect us to not read a file created by
-      the mysqld server, but the check is still valid in most context.
+      the mysqld server, but the check is still valid in most context. 
     */
     if ((stat_info.st_mode & S_IWOTH) &&
-    (stat_info.st_mode & S_IFMT) == S_IFREG)
+	(stat_info.st_mode & S_IFMT) == S_IFREG)
     {
       fprintf(stderr, "Warning: World-writable config file '%s' is ignored\n",
               name);
@@ -807,7 +818,7 @@ static int search_default_file_with_ext(Process_option_func opt_handler,
     {
       if (recursion_level >= max_recursion_level)
       {
-        for (end= ptr + strlen(ptr) - 1;
+        for (end= ptr + strlen(ptr) - 1; 
              my_isspace(&my_charset_latin1, *(end - 1));
              end--)
         {}
@@ -827,10 +838,10 @@ static int search_default_file_with_ext(Process_option_func opt_handler,
                     sizeof(includedir_keyword) - 1)) &&
           my_isspace(&my_charset_latin1, ptr[sizeof(includedir_keyword) - 1]))
       {
-    if (!(ptr= get_argument(includedir_keyword,
+	if (!(ptr= get_argument(includedir_keyword,
                                 sizeof(includedir_keyword),
                                 ptr, name, line)))
-      goto err;
+	  goto err;
 
         if (!(search_dir= my_dir(ptr, MYF(MY_WME))))
           goto err;
@@ -862,10 +873,10 @@ static int search_default_file_with_ext(Process_option_func opt_handler,
       else if ((!strncmp(ptr, include_keyword, sizeof(include_keyword) - 1)) &&
                my_isspace(&my_charset_latin1, ptr[sizeof(include_keyword)-1]))
       {
-    if (!(ptr= get_argument(include_keyword,
+	if (!(ptr= get_argument(include_keyword,
                                 sizeof(include_keyword), ptr,
                                 name, line)))
-      goto err;
+	  goto err;
 
         search_default_file_with_ext(opt_handler, handler_ctx, "", "", ptr,
                                      recursion_level + 1);
@@ -879,10 +890,10 @@ static int search_default_file_with_ext(Process_option_func opt_handler,
       found_group=1;
       if (!(end=(char *) strchr(++ptr,']')))
       {
-    fprintf(stderr,
-        "error: Wrong group definition in config file: %s at line %d\n",
-        name,line);
-    goto err;
+	fprintf(stderr,
+		"error: Wrong group definition in config file: %s at line %d\n",
+		name,line);
+	goto err;
       }
       /* Remove end space */
       for ( ; my_isspace(&my_charset_latin1,end[-1]) ; end--) ;
@@ -898,11 +909,12 @@ static int search_default_file_with_ext(Process_option_func opt_handler,
     if (!found_group)
     {
       fprintf(stderr,
-          "error: Found option without preceding group in config file: %s at line: %d\n",
-          name,line);
+	      "error: Found option without preceding group in config file: %s at line: %d\n",
+	      name,line);
       goto err;
     }
-
+    
+   
     end= remove_end_comment(ptr);
     if ((value= strchr(ptr, '=')))
       end= value;				/* Option without argument */
@@ -920,61 +932,61 @@ static int search_default_file_with_ext(Process_option_func opt_handler,
       for (value++ ; my_isspace(&my_charset_latin1,*value); value++) ;
       value_end=strend(value);
       /*
-    We don't have to test for value_end >= value as we know there is
-    an '=' before
+	We don't have to test for value_end >= value as we know there is
+	an '=' before
       */
       for ( ; my_isspace(&my_charset_latin1,value_end[-1]) ; value_end--) ;
       if (value_end < value)			/* Empty string */
-    value_end=value;
+	value_end=value;
 
       /* remove quotes around argument */
       if ((*value == '\"' || *value == '\'') && /* First char is quote */
           (value + 1 < value_end ) && /* String is longer than 1 */
           *value == value_end[-1] ) /* First char is equal to last char */
       {
-    value++;
-    value_end--;
+	value++;
+	value_end--;
       }
       ptr=strnmov(strmov(option,"--"),ptr,(size_t) (end-ptr));
       *ptr++= '=';
 
       for ( ; value != value_end; value++)
       {
-    if (*value == '\\' && value != value_end-1)
-    {
-      switch(*++value) {
-      case 'n':
-        *ptr++='\n';
-        break;
-      case 't':
-        *ptr++= '\t';
-        break;
-      case 'r':
-        *ptr++ = '\r';
-        break;
-      case 'b':
-        *ptr++ = '\b';
-        break;
-      case 's':
-        *ptr++= ' ';			/* space */
-        break;
-      case '\"':
-        *ptr++= '\"';
-        break;
-      case '\'':
-        *ptr++= '\'';
-        break;
-      case '\\':
-        *ptr++= '\\';
-        break;
-      default:				/* Unknown; Keep '\' */
-        *ptr++= '\\';
-        *ptr++= *value;
-        break;
-      }
-    }
-    else
-      *ptr++= *value;
+	if (*value == '\\' && value != value_end-1)
+	{
+	  switch(*++value) {
+	  case 'n':
+	    *ptr++='\n';
+	    break;
+	  case 't':
+	    *ptr++= '\t';
+	    break;
+	  case 'r':
+	    *ptr++ = '\r';
+	    break;
+	  case 'b':
+	    *ptr++ = '\b';
+	    break;
+	  case 's':
+	    *ptr++= ' ';			/* space */
+	    break;
+	  case '\"':
+	    *ptr++= '\"';
+	    break;
+	  case '\'':
+	    *ptr++= '\'';
+	    break;
+	  case '\\':
+	    *ptr++= '\\';
+	    break;
+	  default:				/* Unknown; Keep '\' */
+	    *ptr++= '\\';
+	    *ptr++= *value;
+	    break;
+	  }
+	}
+	else
+	  *ptr++= *value;
       }
       *ptr=0;
       if (opt_handler(handler_ctx, curr_gr, option))
@@ -989,6 +1001,7 @@ static int search_default_file_with_ext(Process_option_func opt_handler,
   return -1;					/* Fatal error */
 }
 
+
 static char *remove_end_comment(char *ptr)
 {
   char quote= 0;	/* we are inside quote marks */
@@ -999,9 +1012,9 @@ static char *remove_end_comment(char *ptr)
     if ((*ptr == '\'' || *ptr == '\"') && !escape)
     {
       if (!quote)
-    quote= *ptr;
+	quote= *ptr;
       else if (quote == *ptr)
-    quote= 0;
+	quote= 0;
     }
     /* We are not inside a string */
     if (!quote && *ptr == '#')
@@ -1013,6 +1026,7 @@ static char *remove_end_comment(char *ptr)
   }
   return ptr;
 }
+
 
 void my_print_default_files(const char *conf_file)
 {
@@ -1092,6 +1106,7 @@ void print_defaults(const char *conf_file, const char **groups)
 --defaults-extra-file=# Read this file after the global files are read.");
 }
 
+
 static int add_directory(MEM_ROOT *alloc, const char *dir, const char **dirs)
 {
   char buf[FN_REFLEN];
@@ -1108,6 +1123,7 @@ static int add_directory(MEM_ROOT *alloc, const char *dir, const char **dirs)
 
   return 0;
 }
+
 
 #ifdef __WIN__
 /*
@@ -1131,7 +1147,7 @@ static size_t my_get_system_windows_directory(char *buffer, size_t size)
     return func_ptr(buffer, (uint) size);
 
   /*
-    Windows NT 4.0 Terminal Server Edition:
+    Windows NT 4.0 Terminal Server Edition:  
     To retrieve the shared Windows directory, call GetSystemDirectory and
     trim the "System32" element from the end of the returned path.
   */
@@ -1143,6 +1159,7 @@ static size_t my_get_system_windows_directory(char *buffer, size_t size)
   }
   return count;
 }
+
 
 static const char *my_get_module_parent(char *buf, size_t size)
 {
@@ -1174,6 +1191,7 @@ static const char *my_get_module_parent(char *buf, size_t size)
   return buf;
 }
 #endif /* __WIN__ */
+
 
 static const char **init_default_directories(MEM_ROOT *alloc)
 {

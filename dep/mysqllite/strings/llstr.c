@@ -24,6 +24,7 @@
   variables with printf() as there is no usable printf() standard one can use.
 */
 
+
 #include <my_global.h>
 #include "m_string.h"
 
