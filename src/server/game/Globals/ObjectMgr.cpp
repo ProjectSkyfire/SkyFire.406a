@@ -2427,6 +2427,8 @@ void ObjectMgr::LoadItemTemplates()
                     itemTemplate.Sheath = db2item->Sheath;
             }
         }
+        //Temporary Silence for this error (Item 0 needs to remain for now)
+        else if (itemTemplate.ItemId == 0){}
         else
             sLog->outErrorDb("Item (Entry: %u) does not exist in item.db2! (not correct id?).", entry);
 
