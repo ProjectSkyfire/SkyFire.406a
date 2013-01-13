@@ -22,7 +22,7 @@ libMPQ (a library for reading MPQ files)
 
 MySQL (the world's most popular open source database software)
   http://www.mysql.com/
-  Version: 5.5.15 (GA)
+  Version: 5.5.29 (GA)
 
 SFMT (SIMD-oriented Fast Mersenne Twister)
   Based on http://agner.org/random/
