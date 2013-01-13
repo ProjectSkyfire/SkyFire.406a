@@ -32,9 +32,9 @@
 
 #ifdef HAVE_CHARSET_big5
 
-/*
+/* 
   Support for Chinese(BIG5) characters, by jou@nematic.ieo.nctu.edu.tw
-  modified by Wei He (hewei@mail.ied.ac.cn)
+  modified by Wei He (hewei@mail.ied.ac.cn) 
   modified by Alex Barkov <bar@udm.net>
 */
 
@@ -175,6 +175,7 @@ static uchar sort_order_big5[]=
   (uchar) '\360',(uchar) '\361',(uchar) '\362',(uchar) '\363',(uchar) '\364',(uchar) '\365',(uchar) '\366',(uchar) '\367',
   (uchar) '\370',(uchar) '\371',(uchar) '\372',(uchar) '\373',(uchar) '\374',(uchar) '\375',(uchar) '\376',(uchar) '\377',
 };
+
 
 static MY_UNICASE_INFO cA2[256]=
 {
@@ -368,6 +369,7 @@ static MY_UNICASE_INFO cA2[256]=
   {0x0000,0x0000,0x0000}
 };
 
+
 static MY_UNICASE_INFO cA3[256]=
 {
   /* A300-A30F */
@@ -560,6 +562,7 @@ static MY_UNICASE_INFO cA3[256]=
   {0x0000,0x0000,0x0000}
 };
 
+
 static MY_UNICASE_INFO cC7[256]=
 {
   /* C700-C70F */
@@ -649,7 +652,7 @@ static MY_UNICASE_INFO cC7[256]=
   {0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},
   {0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},
   /* C7A0-C7AF */
-  {0x0000,0x0000,0x0000},
+  {0x0000,0x0000,0x0000}, 
   {0xC7A1,0xC7A1,0x30E7},
   {0xC7A2,0xC7A2,0x30E8},
   {0xC7A3,0xC7A3,0x30E9},
@@ -752,6 +755,7 @@ static MY_UNICASE_INFO cC7[256]=
   {0x0000,0x0000,0x0000}
 };
 
+
 static MY_UNICASE_INFO *my_caseinfo_big5[256]=
 {
   NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, /* 0 */
@@ -787,6 +791,7 @@ static MY_UNICASE_INFO *my_caseinfo_big5[256]=
   NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, /* F */
   NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
 };
+
 
 static uint16 big5strokexfrm(uint16 i)
 {
@@ -829,8 +834,10 @@ static uint16 big5strokexfrm(uint16 i)
   return 0xA140;
 }
 
+
+
 static int my_strnncoll_big5_internal(const uchar **a_res,
-                      const uchar **b_res, size_t length)
+				      const uchar **b_res, size_t length)
 {
   const uchar *a= *a_res, *b= *b_res;
 
@@ -839,26 +846,27 @@ static int my_strnncoll_big5_internal(const uchar **a_res,
     if ((length > 0) && isbig5code(*a,*(a+1)) && isbig5code(*b, *(b+1)))
     {
       if (*a != *b || *(a+1) != *(b+1))
-    return ((int) big5code(*a,*(a+1)) -
-        (int) big5code(*b,*(b+1)));
+	return ((int) big5code(*a,*(a+1)) -
+		(int) big5code(*b,*(b+1)));
       a+= 2;
       b+= 2;
       length--;
     }
     else if (sort_order_big5[*a++] !=
-         sort_order_big5[*b++])
+	     sort_order_big5[*b++])
       return ((int) sort_order_big5[a[-1]] -
-          (int) sort_order_big5[b[-1]]);
+	      (int) sort_order_big5[b[-1]]);
   }
   *a_res= a;
   *b_res= b;
   return 0;
 }
 
+
 /* Compare strings */
 
-static int my_strnncoll_big5(CHARSET_INFO *cs __attribute__((unused)),
-                 const uchar *a, size_t a_length,
+static int my_strnncoll_big5(CHARSET_INFO *cs __attribute__((unused)), 
+			     const uchar *a, size_t a_length,
                              const uchar *b, size_t b_length,
                              my_bool b_is_prefix)
 {
@@ -867,11 +875,12 @@ static int my_strnncoll_big5(CHARSET_INFO *cs __attribute__((unused)),
   return res ? res : (int)((b_is_prefix ? length : a_length) - b_length);
 }
 
+
 /* compare strings, ignore end space */
 
-static int my_strnncollsp_big5(CHARSET_INFO * cs __attribute__((unused)),
-                   const uchar *a, size_t a_length,
-                   const uchar *b, size_t b_length,
+static int my_strnncollsp_big5(CHARSET_INFO * cs __attribute__((unused)), 
+			       const uchar *a, size_t a_length, 
+			       const uchar *b, size_t b_length,
                                my_bool diff_if_only_endspace_difference)
 {
   size_t length= min(a_length, b_length);
@@ -902,14 +911,15 @@ static int my_strnncollsp_big5(CHARSET_INFO * cs __attribute__((unused)),
     for (end= a + a_length-length; a < end ; a++)
     {
       if (*a != ' ')
-    return (*a < ' ') ? -swap : swap;
+	return (*a < ' ') ? -swap : swap;
     }
   }
   return res;
 }
 
+
 static size_t my_strnxfrm_big5(CHARSET_INFO *cs __attribute__((unused)),
-                               uchar *dest, size_t len,
+                               uchar *dest, size_t len, 
                                const uchar *src, size_t srclen)
 {
   uint16 e;
@@ -938,18 +948,19 @@ static size_t my_strnxfrm_big5(CHARSET_INFO *cs __attribute__((unused)),
 #if 0
 static int my_strcoll_big5(const uchar *s1, const uchar *s2)
 {
+
   while (*s1 && *s2)
   {
     if (*(s1+1) && *(s2+1) && isbig5code(*s1,*(s1+1)) && isbig5code(*s2, *(s2+1)))
     {
       if (*s1 != *s2 || *(s1+1) != *(s2+1))
-    return ((int) big5code(*s1,*(s1+1)) -
-        (int) big5code(*s2,*(s2+1)));
+	return ((int) big5code(*s1,*(s1+1)) -
+		(int) big5code(*s2,*(s2+1)));
       s1 +=2;
       s2 +=2;
     } else if (sort_order_big5[(uchar) *s1++] != sort_order_big5[(uchar) *s2++])
       return ((int) sort_order_big5[(uchar) s1[-1]] -
-          (int) sort_order_big5[(uchar) s2[-1]]);
+	      (int) sort_order_big5[(uchar) s2[-1]]);
   }
   return 0;
 }
@@ -982,16 +993,19 @@ static int my_strxfrm_big5(uchar *dest, const uchar *src, int len)
 }
 #endif
 
+
 static uint ismbchar_big5(CHARSET_INFO *cs __attribute__((unused)),
                          const char* p, const char *e)
 {
   return (isbig5head(*(p)) && (e)-(p)>1 && isbig5tail(*((p)+1))? 2: 0);
 }
 
+
 static uint mbcharlen_big5(CHARSET_INFO *cs __attribute__((unused)), uint c)
 {
   return (isbig5head(c)? 2 : 1);
 }
+
 
 /* page 0 0xA140-0xC7FC */
 static uint16 tab_big5_uni0[]={
@@ -3802,6 +3816,7 @@ static int func_big5_uni_onechar(int code){
     return(tab_big5_uni1[code-0xC940]);
   return(0);
 }
+
 
 /* page 0 0x00A2-0x00F7 */
 static uint16 tab_uni_big50[]={
@@ -6761,56 +6776,61 @@ static int func_uni_big5_onechar(int code){
   return(0);
 }
 
+
 static int
 my_wc_mb_big5(CHARSET_INFO *cs __attribute__((unused)),
-          my_wc_t wc, uchar *s, uchar *e)
+	      my_wc_t wc, uchar *s, uchar *e)
 {
+
   int code;
 
   if (s >= e)
     return MY_CS_TOOSMALL;
-
+  
   if ((int) wc < 0x80)
   {
     s[0]= (uchar) wc;
     return 1;
   }
-
+  
   if (!(code=func_uni_big5_onechar(wc)))
     return MY_CS_ILUNI;
-
+  
   if (s+2>e)
     return MY_CS_TOOSMALL;
-
+  
   s[0]=code>>8;
   s[1]=code&0xFF;
-
+  
   return 2;
 }
 
-static int
-my_mb_wc_big5(CHARSET_INFO *cs __attribute__((unused)),
-          my_wc_t *pwc,const uchar *s,const uchar *e)
-{
-  int hi;
 
+static int 
+my_mb_wc_big5(CHARSET_INFO *cs __attribute__((unused)),
+	      my_wc_t *pwc,const uchar *s,const uchar *e)
+{
+
+  int hi;
+  
   if (s >= e)
     return MY_CS_TOOSMALL;
-
+  
   if ((hi= s[0]) < 0x80)
   {
     pwc[0]=hi;
     return 1;
   }
-
+  
   if (s+2>e)
     return MY_CS_TOOSMALL2;
 
   if (!(pwc[0]=func_big5_uni_onechar((hi<<8)+s[1])))
     return -2;
-
+  
   return 2;
 }
+
 
 /*
   Returns a well formed length of a BIG5 string.
@@ -6846,6 +6866,7 @@ size_t my_well_formed_len_big5(CHARSET_INFO *cs __attribute__((unused)),
   }
   return (size_t) (b - b0);
 }
+
 
 static MY_COLLATION_HANDLER my_collation_big5_chinese_ci_handler =
 {
@@ -6925,6 +6946,7 @@ CHARSET_INFO my_charset_big5_chinese_ci=
     &my_collation_big5_chinese_ci_handler
 };
 
+
 CHARSET_INFO my_charset_big5_bin=
 {
     84,0,0, 		/* number     */
@@ -6956,5 +6978,6 @@ CHARSET_INFO my_charset_big5_bin=
     &my_charset_big5_handler,
     &my_collation_mb_bin_handler
 };
+
 
 #endif

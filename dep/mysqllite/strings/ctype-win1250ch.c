@@ -52,6 +52,7 @@
 
 #ifdef HAVE_CHARSET_cp1250
 
+
 static uint16 tab_cp1250_uni[256]={
      0,0x0001,0x0002,0x0003,0x0004,0x0005,0x0006,0x0007,
 0x0008,0x0009,0x000A,0x000B,0x000C,0x000D,0x000E,0x000F,
@@ -86,6 +87,7 @@ static uint16 tab_cp1250_uni[256]={
 0x0111,0x0144,0x0148,0x00F3,0x00F4,0x0151,0x00F6,0x00F7,
 0x0159,0x016F,0x00FA,0x0171,0x00FC,0x00FD,0x0163,0x02D9
 };
+
 
 /* 0000-00FD , 254 chars */
 static uchar tab_uni_cp1250_plane00[]={
@@ -139,6 +141,7 @@ static uchar tab_uni_cp1250_plane02[]={
 static uchar tab_uni_cp1250_plane21[]={
 0x99};
 
+
 static MY_UNI_IDX idx_uni_cp1250[]={
   {0x0000,0x00FD,tab_uni_cp1250_plane00},
   {0x0102,0x017E,tab_uni_cp1250_plane01},
@@ -147,6 +150,7 @@ static MY_UNI_IDX idx_uni_cp1250[]={
   {0x2122,0x2122,tab_uni_cp1250_plane21},
   {0,0,NULL}
 };
+
 
 static uchar ctype_win1250ch[] = {
 0x00,
@@ -254,6 +258,8 @@ static uchar to_upper_win1250ch[] = {
 0xd8, 0xd9, 0xda, 0xdb, 0xdc, 0xdd, 0xde, 0xff
 };
 
+
+
 static uchar sort_order_win1250ch[] = {
 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31,
@@ -284,34 +290,34 @@ static uchar _sort_order_win1250ch1[] = {
 /* 0 ord 48 0x30 */
 0x92, 0x93, 0x94, 0x95, 0x96, 0x97, 0x98, 0x99,
 0x9a, 0x9b,
-        /* colon ord 58 0x3a */
-        0x9c, 0x9d, 0x9e, 0x9f, 0xa0, 0xa1,
+	    /* colon ord 58 0x3a */
+	    0x9c, 0x9d, 0x9e, 0x9f, 0xa0, 0xa1,
 0xa2,
       /* A ord 65 0x41 */
       0xa4, 0xa5,
-          /* C ord 67 0x43 */
-          0xff, 0xa8, 0xa9, 0xaa, 0xab,
+		  /* C ord 67 0x43 */
+		  0xff, 0xa8, 0xa9, 0xaa, 0xab,
 0xac, 0xae, 0xaf, 0xb0, 0xb1, 0xb2, 0xb3, 0xb4,
 0xb5, 0xb6,
-        /* R ord 82 0x52 */
-        0xb7,
-          /* S ord 83 0x53 */
-          0xb9, 0xbc, 0xbd, 0xbe, 0xbf,
+	    /* R ord 82 0x52 */
+	    0xb7, 
+		  /* S ord 83 0x53 */
+		  0xb9, 0xbc, 0xbd, 0xbe, 0xbf,
 0xc0, 0xc1, 0xc2,
-          /* [ ord 91 0x5b */
-          0xc4, 0xc5, 0xc6, 0xc7, 0xc8,
+		  /* [ ord 91 0x5b */
+		  0xc4, 0xc5, 0xc6, 0xc7, 0xc8,
 0xc9,
       /* a ord 97 0x61 */
       0xa4, 0xa5, 0xff, 0xa8, 0xa9, 0xaa, 0xab,
 0xac, 0xae, 0xaf, 0xb0, 0xb1, 0xb2, 0xb3, 0xb4,
 0xb5, 0xb6, 0xb7, 0xb9, 0xbc, 0xbd, 0xbe, 0xbf,
 0xc0, 0xc1, 0xc2,
-          /* { ord 123 0x7b */
-          0xca, 0xcb, 0xcc, 0xcd, 0x81,
+		  /* { ord 123 0x7b */
+		  0xca, 0xcb, 0xcc, 0xcd, 0x81,
 0x81, 0x81, 0xce, 0x81, 0xcf, 0xd0, 0xd1, 0xd2,
 0x81, 0xd3,
-        /* Scaron ord 138 0x8a */
-        0xba, 0xd4, 0xb9, 0xbc, 0xc3, 0xc2,
+	    /* Scaron ord 138 0x8a */
+	    0xba, 0xd4, 0xb9, 0xbc, 0xc3, 0xc2,
 0x81, 0xd5, 0xd6, 0xd7, 0xd8, 0xd9, 0xda, 0xdb,
 0x81, 0xdc, 0xba, 0xdd, 0xb9, 0xbc, 0xc3, 0xc2,
 /* nobreakspace ord 160 0xa0 */
@@ -344,34 +350,34 @@ static uchar _sort_order_win1250ch2[] = {
 /* 0 ord 48 0x30 */
 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01,
 0x01, 0x01,
-        /* colon ord 58 0x3a */
-        0x01, 0x01, 0x01, 0x01, 0x01, 0x01,
+	    /* colon ord 58 0x3a */
+	    0x01, 0x01, 0x01, 0x01, 0x01, 0x01,
 0x01,
       /* A ord 65 0x41 */
       0x01, 0x01,
-          /* C ord 67 0x43 */
-          0xff, 0x01, 0x01, 0x01, 0x01,
+		  /* C ord 67 0x43 */
+		  0xff, 0x01, 0x01, 0x01, 0x01,
 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01,
 0x01, 0x01,
-        /* R ord 82 0x52 */
-        0x01,
-          /* S ord 83 0x53 */
-          0x01, 0x01, 0x01, 0x01, 0x01,
+	    /* R ord 82 0x52 */
+	    0x01, 
+		  /* S ord 83 0x53 */
+		  0x01, 0x01, 0x01, 0x01, 0x01,
 0x01, 0x01, 0x01,
-          /* [ ord 91 0x5b */
-          0x01, 0x01, 0x01, 0x01, 0x01,
+		  /* [ ord 91 0x5b */
+		  0x01, 0x01, 0x01, 0x01, 0x01,
 0x01,
       /* a ord 97 0x61 */
       0x02, 0x02, 0xff, 0x02, 0x02, 0x02, 0x02,
 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02,
 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02,
 0x02, 0x02, 0x02,
-          /* { ord 123 0x7b */
-          0x01, 0x01, 0x01, 0x01, 0x22,
+		  /* { ord 123 0x7b */
+		  0x01, 0x01, 0x01, 0x01, 0x22,
 0x23, 0x24, 0x01, 0x25, 0x01, 0x01, 0x01, 0x01,
 0x26, 0x01,
-        /* Scaron ord 138 0x8a */
-        0x01, 0x01, 0x03, 0x03, 0x01, 0x05,
+	    /* Scaron ord 138 0x8a */
+	    0x01, 0x01, 0x03, 0x03, 0x01, 0x05,
 0x27, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01,
 0x28, 0x01, 0x02, 0x01, 0x04, 0x04, 0x02, 0x06,
 /* nobreakspace ord 160 0xa0 */
@@ -394,53 +400,53 @@ static uchar _sort_order_win1250ch2[] = {
 };
 
 struct wordvalue {
-    const uchar *word;
-    uchar pass1;
-    uchar pass2;
+	const uchar *word;
+	uchar pass1;
+	uchar pass2;
 };
 static struct wordvalue doubles[] = {
-    { (uchar*) "ch", 0xad, 0x03 },
-    { (uchar*) "c",  0xa6, 0x02 },
-    { (uchar*) "Ch", 0xad, 0x02 },
-    { (uchar*) "CH", 0xad, 0x01 },
-    { (uchar*) "C",  0xa6, 0x01 },
+	{ (uchar*) "ch", 0xad, 0x03 },
+	{ (uchar*) "c",  0xa6, 0x02 },
+	{ (uchar*) "Ch", 0xad, 0x02 },
+	{ (uchar*) "CH", 0xad, 0x01 },
+	{ (uchar*) "C",  0xa6, 0x01 },
 };
 
 #define NEXT_CMP_VALUE(src, p, pass, value, len)			\
-    while (1) {							\
-        if (IS_END(p, src, len)) {				\
-            if (pass == 0 && len > 0) { p= src; pass++; }	\
-            else { value = 0; break; }			\
-        }							\
-        value = ((pass == 0) ? _sort_order_win1250ch1[*p]	\
-            : _sort_order_win1250ch2[*p]);			\
-        if (value == 0xff) {					\
-            int i;						\
-            for (i = 0; i < (int) sizeof(doubles); i++) {	\
-                const uchar *patt = doubles[i].word;	\
-                const uchar *q = (const uchar *) p;	\
-                while (*patt				\
-                    && !(IS_END(q, src, len))	\
-                    && (*patt == *q)) {		\
-                    patt++; q++;			\
-                }					\
-                if (!(*patt)) {				\
-                    value = (int)((pass == 0)	\
-                        ? doubles[i].pass1	\
-                        : doubles[i].pass2);	\
-                    p = (const uchar *) q - 1;	\
-                    break;				\
-                }					\
-            }						\
-        }							\
-        p++;							\
-        break;							\
-    }
+	while (1) {							\
+		if (IS_END(p, src, len)) {				\
+			if (pass == 0 && len > 0) { p= src; pass++; }	\
+			else { value = 0; break; }			\
+		}							\
+		value = ((pass == 0) ? _sort_order_win1250ch1[*p]	\
+			: _sort_order_win1250ch2[*p]);			\
+		if (value == 0xff) {					\
+			int i;						\
+			for (i = 0; i < (int) sizeof(doubles); i++) {	\
+				const uchar *patt = doubles[i].word;	\
+				const uchar *q = (const uchar *) p;	\
+				while (*patt				\
+					&& !(IS_END(q, src, len))	\
+					&& (*patt == *q)) {		\
+					patt++; q++;			\
+				}					\
+				if (!(*patt)) {				\
+					value = (int)((pass == 0)	\
+						? doubles[i].pass1	\
+						: doubles[i].pass2);	\
+					p = (const uchar *) q - 1;	\
+					break;				\
+				}					\
+			}						\
+		}							\
+		p++;							\
+		break;							\
+	}
 
 #define IS_END(p, src, len)	(((char *)p - (char *)src) >= (len))
 
-static int my_strnncoll_win1250ch(CHARSET_INFO *cs __attribute__((unused)),
-                  const uchar *s1, size_t len1,
+static int my_strnncoll_win1250ch(CHARSET_INFO *cs __attribute__((unused)), 
+				  const uchar *s1, size_t len1,
                                   const uchar *s2, size_t len2,
                                   my_bool s2_is_prefix)
 {
@@ -464,14 +470,15 @@ static int my_strnncoll_win1250ch(CHARSET_INFO *cs __attribute__((unused)),
   return 0;
 }
 
+
 /*
   TODO: Has to be fixed as strnncollsp in ctype-simple
 */
 
 static
-int my_strnncollsp_win1250ch(CHARSET_INFO * cs,
-                 const uchar *s, size_t slen,
-                 const uchar *t, size_t tlen,
+int my_strnncollsp_win1250ch(CHARSET_INFO * cs, 
+			     const uchar *s, size_t slen, 
+			     const uchar *t, size_t tlen,
                              my_bool diff_if_only_endspace_difference
                              __attribute__((unused)))
 {
@@ -480,8 +487,9 @@ int my_strnncollsp_win1250ch(CHARSET_INFO * cs,
   return my_strnncoll_win1250ch(cs,s,slen,t,tlen,0);
 }
 
+
 static size_t my_strnxfrm_win1250ch(CHARSET_INFO * cs  __attribute__((unused)),
-                                    uchar *dest, size_t len,
+                                    uchar *dest, size_t len, 
                                     const uchar *src, size_t srclen)
 {
   int value;
@@ -607,12 +615,13 @@ static uchar like_range_prefix_max_win1250ch[]=
 
 static my_bool
 my_like_range_win1250ch(CHARSET_INFO *cs __attribute__((unused)),
-            const char *ptr, size_t ptr_length,
-            pbool escape, pbool w_one, pbool w_many,
-            size_t res_length,
-            char *min_str, char *max_str,
-            size_t *min_length, size_t *max_length)
+			const char *ptr, size_t ptr_length,
+			pbool escape, pbool w_one, pbool w_many,
+			size_t res_length,
+			char *min_str, char *max_str,
+			size_t *min_length, size_t *max_length)
 {
+
   int only_min_found= 1;
   const char *end = ptr + ptr_length;
   char *min_org = min_str;
@@ -651,6 +660,7 @@ my_like_range_win1250ch(CHARSET_INFO *cs __attribute__((unused)),
   return (only_min_found);
 }
 
+
 static MY_COLLATION_HANDLER my_collation_czech_ci_handler =
 {
   NULL,				/* init */
@@ -665,6 +675,7 @@ static MY_COLLATION_HANDLER my_collation_czech_ci_handler =
   my_hash_sort_simple,
   my_propagate_simple
 };
+
 
 CHARSET_INFO my_charset_cp1250_czech_ci =
 {
@@ -697,6 +708,7 @@ CHARSET_INFO my_charset_cp1250_czech_ci =
   &my_charset_8bit_handler,
   &my_collation_czech_ci_handler
 };
+
 
 #endif /* REAL_MYSQL */
 

@@ -44,7 +44,8 @@
 
 #include <string.h>	/* for memcpy() and memset() */
 
-static void
+
+static void 
 my_MD5Transform (cvs_uint32 buf[4], const unsigned char in[64]);
 
 /* Little-endian byte-swapping routines.  Note that these do not
@@ -88,7 +89,7 @@ my_MD5Init (my_MD5Context *ctx)
   Update context to reflect the concatenation of another buffer full
   of bytes.
 */
-void
+void 
 my_MD5Update (my_MD5Context *ctx, unsigned char const *buf, unsigned len)
 {
   uint32 t;
@@ -133,11 +134,11 @@ my_MD5Update (my_MD5Context *ctx, unsigned char const *buf, unsigned len)
 }
 
 /*
-  Final wrapup - pad to 64-byte boundary with the bit pattern
+  Final wrapup - pad to 64-byte boundary with the bit pattern 
   1 0* (64-bit count of bits processed, MSB-first)
 */
 void
-my_MD5Final (unsigned char digest[16], my_MD5Context *ctx)
+my_MD5Final (unsigned char digest[16], my_MD5Context *ctx) 
 {
   unsigned count;
   unsigned char *p;
@@ -190,7 +191,7 @@ my_MD5Final (unsigned char digest[16], my_MD5Context *ctx)
 
 /* This is the central step in the MD5 algorithm. */
 #define MD5STEP(f, w, x, y, z, data, s) \
-    ( w += f(x, y, z) + data, w &= 0xffffffff, w = w<<s | w>>(32-s), w += x )
+	( w += f(x, y, z) + data, w &= 0xffffffff, w = w<<s | w>>(32-s), w += x )
 
 /*
  * The core of the MD5 algorithm, this alters an existing MD5 hash to
@@ -288,9 +289,9 @@ my_MD5Transform (uint32 buf[4], const unsigned char inraw[64])
 #endif
 
 #ifdef TEST
-/*
+/* 
   Simple test program.  Can use it to manually run the tests from
-  RFC1321 for example.
+  RFC1321 for example.  
 */
 #include <stdio.h>
 

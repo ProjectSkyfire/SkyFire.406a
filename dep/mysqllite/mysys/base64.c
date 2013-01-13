@@ -25,6 +25,7 @@ static char base64_table[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                              "abcdefghijklmnopqrstuvwxyz"
                              "0123456789+/";
 
+
 int
 base64_needed_encoded_length(int length_of_data)
 {
@@ -37,11 +38,13 @@ base64_needed_encoded_length(int length_of_data)
     1;                           /* NUL termination of string */
 }
 
+
 int
 base64_needed_decoded_length(int length_of_encoded_data)
 {
   return (int) ceil(length_of_encoded_data * 3 / 4);
 }
+
 
 /*
   Encode a data as base64.
@@ -97,11 +100,13 @@ base64_encode(const void *src, size_t src_len, char *dst)
   return 0;
 }
 
+
 static inline uint
 pos(unsigned char c)
 {
   return (uint) (strchr(base64_table, c) - base64_table);
 }
+
 
 #define SKIP_SPACE(src, i, size)                                \
 {                                                               \
@@ -115,6 +120,7 @@ pos(unsigned char c)
     break;                                                      \
   }                                                             \
 }
+
 
 /*
   Decode a base64 string
@@ -221,6 +227,7 @@ base64_decode(const char *src_base, size_t len,
   return i != len ? -1 : (int) (d - dst_base);
 }
 
+
 #else /* MAIN */
 
 #define require(b) { \
@@ -229,6 +236,7 @@ base64_decode(const char *src_base, size_t len,
     abort(); \
   } \
 }
+
 
 int
 main(void)

@@ -34,3 +34,4 @@ char *strmov(register char *dst, register const char *src)
   while ((*dst++ = *src++)) ;
   return dst-1;
 }
+

@@ -25,7 +25,7 @@
 #include <m_string.h>
 
 File my_create_with_symlink(const char *linkname, const char *filename,
-                int createflags, int access_flags, myf MyFlags)
+			    int createflags, int access_flags, myf MyFlags)
 {
   File file;
   int tmp_errno;
@@ -74,16 +74,16 @@ File my_create_with_symlink(const char *linkname, const char *filename,
     {
       /* Delete old link/file */
       if (MyFlags & MY_DELETE_OLD)
-    my_delete(linkname, MYF(0));
+	my_delete(linkname, MYF(0));
       /* Create link */
       if (my_symlink(filename, linkname, MyFlags))
       {
-    /* Fail, remove everything we have done */
-    tmp_errno=my_errno;
-    my_close(file,MYF(0));
-    my_delete(filename, MYF(0));
-    file= -1;
-    my_errno=tmp_errno;
+	/* Fail, remove everything we have done */
+	tmp_errno=my_errno;
+	my_close(file,MYF(0));
+	my_delete(filename, MYF(0));
+	file= -1;
+	my_errno=tmp_errno;
       }
     }
   }
@@ -99,7 +99,7 @@ int my_delete_with_symlink(const char *name, myf MyFlags)
 {
   char link_name[FN_REFLEN];
   int was_symlink= (!my_disable_symlinks &&
-            !my_readlink(link_name, name, MYF(0)));
+		    !my_readlink(link_name, name, MYF(0)));
   int result;
   DBUG_ENTER("my_delete_with_symlink");
 
@@ -128,7 +128,7 @@ int my_rename_with_symlink(const char *from, const char *to, myf MyFlags)
 #else
   char link_name[FN_REFLEN], tmp_name[FN_REFLEN];
   int was_symlink= (!my_disable_symlinks &&
-            !my_readlink(link_name, from, MYF(0)));
+		    !my_readlink(link_name, from, MYF(0)));
   int result=0;
   int name_is_different;
   DBUG_ENTER("my_rename_with_symlink");

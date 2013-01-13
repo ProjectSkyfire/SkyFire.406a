@@ -43,9 +43,9 @@
   HEREIN WILL NOT INFRINGE ANY RIGHTS OR ANY IMPLIED WARRANTIES OF
   MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
 
-  Acknowledgement
-  Funding for the RFC Editor function is currently provided by the
-  Internet Society.
+  Acknowledgement 
+  Funding for the RFC Editor function is currently provided by the 
+  Internet Society. 
 
  DESCRIPTION
   This file implements the Secure Hashing Algorithm 1 as
@@ -88,11 +88,12 @@
 */
 
 #define SHA1CircularShift(bits,word) \
-        (((word) << (bits)) | ((word) >> (32-(bits))))
+		(((word) << (bits)) | ((word) >> (32-(bits))))
 
 /* Local Function Prototyptes */
 static void SHA1PadMessage(SHA1_CONTEXT*);
 static void SHA1ProcessMessageBlock(SHA1_CONTEXT*);
+
 
 /*
   Initialize SHA1Context
@@ -110,6 +111,7 @@ static void SHA1ProcessMessageBlock(SHA1_CONTEXT*);
    != SHA_SUCCESS	sha Error Code.
 */
 
+
 const uint32 sha_const_key[5]=
 {
   0x67452301,
@@ -118,6 +120,7 @@ const uint32 sha_const_key[5]=
   0x10325476,
   0xC3D2E1F0
 };
+
 
 int mysql_sha1_reset(SHA1_CONTEXT *context)
 {
@@ -141,6 +144,7 @@ int mysql_sha1_reset(SHA1_CONTEXT *context)
   return SHA_SUCCESS;
 }
 
+
 /*
    Return the 160-bit message digest into the array provided by the caller
 
@@ -151,7 +155,7 @@ int mysql_sha1_reset(SHA1_CONTEXT *context)
 
   DESCRIPTION
     NOTE: The first octet of hash is stored in the 0th element,
-      the last octet of hash in the 19th element.
+	  the last octet of hash in the 19th element.
 
  RETURN
    SHA_SUCCESS		ok
@@ -182,9 +186,10 @@ int mysql_sha1_result(SHA1_CONTEXT *context,
 
   for (i = 0; i < SHA1_HASH_SIZE; i++)
     Message_Digest[i] = (int8)((context->Intermediate_Hash[i>>2] >> 8
-             * ( 3 - ( i & 0x03 ) )));
+			 * ( 3 - ( i & 0x03 ) )));
   return SHA_SUCCESS;
 }
+
 
 /*
   Accepts an array of octets as the next portion of the message.
@@ -193,7 +198,7 @@ int mysql_sha1_result(SHA1_CONTEXT *context,
    mysql_sha1_input()
    context [in/out]	The SHA context to update
    message_array	An array of characters representing the next portion
-            of the message.
+			of the message.
   length		The length of the message in message_array
 
  RETURN
@@ -241,6 +246,7 @@ int mysql_sha1_input(SHA1_CONTEXT *context, const uint8 *message_array,
   return SHA_SUCCESS;
 }
 
+
 /*
   Process the next 512 bits of the message stored in the Message_Block array.
 
@@ -262,6 +268,7 @@ static const uint32  K[]=
   0xCA62C1D6
 };
 
+
 static void SHA1ProcessMessageBlock(SHA1_CONTEXT *context)
 {
   int		t;		   /* Loop counter		  */
@@ -282,6 +289,7 @@ static void SHA1ProcessMessageBlock(SHA1_CONTEXT *context)
     W[t] |= context->Message_Block[idx + 2] << 8;
     W[t] |= context->Message_Block[idx + 3];
   }
+
 
   for (t = 16; t < 80; t++)
   {
@@ -317,7 +325,7 @@ static void SHA1ProcessMessageBlock(SHA1_CONTEXT *context)
   for (t = 40; t < 60; t++)
   {
     temp= (SHA1CircularShift(5,A) + ((B & C) | (B & D) | (C & D)) + E + W[t] +
-       K[2]);
+	   K[2]);
     E = D;
     D = C;
     C = SHA1CircularShift(30,B);
@@ -343,6 +351,7 @@ static void SHA1ProcessMessageBlock(SHA1_CONTEXT *context)
 
   context->Message_Block_Index = 0;
 }
+
 
 /*
   Pad message
@@ -378,21 +387,21 @@ static void SHA1PadMessage(SHA1_CONTEXT *context)
   {
     context->Message_Block[i++] = 0x80;
     bzero((char*) &context->Message_Block[i],
-      sizeof(context->Message_Block[0])*(64-i));
+	  sizeof(context->Message_Block[0])*(64-i));
     context->Message_Block_Index=64;
 
     /* This function sets context->Message_Block_Index to zero	*/
     SHA1ProcessMessageBlock(context);
 
     bzero((char*) &context->Message_Block[0],
-      sizeof(context->Message_Block[0])*56);
+	  sizeof(context->Message_Block[0])*56);
     context->Message_Block_Index=56;
   }
   else
   {
     context->Message_Block[i++] = 0x80;
     bzero((char*) &context->Message_Block[i],
-      sizeof(context->Message_Block[0])*(56-i));
+	  sizeof(context->Message_Block[0])*(56-i));
     context->Message_Block_Index=56;
   }
 

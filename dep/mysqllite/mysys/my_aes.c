@@ -13,10 +13,12 @@
  along with this program; if not, write to the Free Software
  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA */
 
+
 /*
   Implementation of AES Encryption for MySQL
   Initial version by Peter Zaitsev  June 2002
 */
+
 
 #include <my_global.h>
 #include <m_string.h>
@@ -28,11 +30,13 @@ enum encrypt_dir { AES_ENCRYPT, AES_DECRYPT };
 
 #define AES_BAD_DATA  -1	/* If bad data discovered during decoding */
 
+
 /* The structure for key information */
 typedef struct {
   int	nr;				/* Number of rounds */
   uint32   rk[4*(AES_MAXNR + 1)];	/* key schedule */
 } KEYINSTANCE;
+
 
 /*
   This is internal function just keeps joint code of Key generation
@@ -52,8 +56,8 @@ typedef struct {
 */
 
 static int my_aes_create_key(KEYINSTANCE *aes_key,
-                 enum encrypt_dir direction, const char *key,
-                 int key_length)
+			     enum encrypt_dir direction, const char *key,
+			     int key_length)
 {
   uint8 rkey[AES_KEY_LENGTH/8];	 /* The real key to be used for encryption */
   uint8 *rkey_end=rkey+AES_KEY_LENGTH/8; /* Real key boundary */
@@ -71,29 +75,29 @@ static int my_aes_create_key(KEYINSTANCE *aes_key,
   }
 #ifdef AES_USE_KEY_BITS
   /*
-   This block is intended to allow more weak encryption if application
+   This block is intended to allow more weak encryption if application 
    build with libmysqld needs to correspond to export regulations
-   It should be never used in normal distribution as does not give
+   It should be never used in normal distribution as does not give 
    any speed improvement.
    To get worse security define AES_USE_KEY_BITS to number of bits
    you want key to be. It should be divisible by 8
-
-   WARNING: Changing this value results in changing of enryption for
+   
+   WARNING: Changing this value results in changing of enryption for 
    all key lengths  so altering this value will result in impossibility
-   to decrypt data encrypted with previous value
+   to decrypt data encrypted with previous value       
   */
 #define AES_USE_KEY_BYTES (AES_USE_KEY_BITS/8)
   /*
-   To get weaker key we use first AES_USE_KEY_BYTES bytes of created key
+   To get weaker key we use first AES_USE_KEY_BYTES bytes of created key 
    and cyclically copy them until we created all required key length
-  */
-  for (ptr= rkey+AES_USE_KEY_BYTES, sptr=rkey ; ptr < rkey_end;
+  */  
+  for (ptr= rkey+AES_USE_KEY_BYTES, sptr=rkey ; ptr < rkey_end; 
        ptr++,sptr++)
   {
     if (sptr == rkey+AES_USE_KEY_BYTES)
       sptr=rkey;
-    *ptr=*sptr;
-  }
+    *ptr=*sptr;   
+  }      
 #endif
   if (direction == AES_DECRYPT)
      aes_key->nr = rijndaelKeySetupDec(aes_key->rk, rkey, AES_KEY_LENGTH);
@@ -101,6 +105,7 @@ static int my_aes_create_key(KEYINSTANCE *aes_key,
      aes_key->nr = rijndaelKeySetupEnc(aes_key->rk, rkey, AES_KEY_LENGTH);
   return 0;
 }
+
 
 /*
   Crypt buffer with AES encryption algorithm.
@@ -119,7 +124,7 @@ static int my_aes_create_key(KEYINSTANCE *aes_key,
 */
 
 int my_aes_encrypt(const char* source, int source_length, char* dest,
-           const char* key, int key_length)
+		   const char* key, int key_length)
 {
   KEYINSTANCE aes_key;
   uint8 block[AES_BLOCK_SIZE];	/* 128 bit block used for padding */
@@ -136,7 +141,7 @@ int my_aes_encrypt(const char* source, int source_length, char* dest,
   for (i = num_blocks; i > 0; i--)   /* Encode complete blocks */
   {
     rijndaelEncrypt(aes_key.rk, aes_key.nr, (const uint8*) source,
-            (uint8*) dest);
+		    (uint8*) dest);
     source+= AES_BLOCK_SIZE;
     dest+= AES_BLOCK_SIZE;
   }
@@ -148,6 +153,7 @@ int my_aes_encrypt(const char* source, int source_length, char* dest,
   rijndaelEncrypt(aes_key.rk, aes_key.nr, block, (uint8*) dest);
   return AES_BLOCK_SIZE*(num_blocks + 1);
 }
+
 
 /*
   DeCrypt buffer with AES encryption algorithm.
@@ -166,7 +172,7 @@ int my_aes_encrypt(const char* source, int source_length, char* dest,
 */
 
 int my_aes_decrypt(const char *source, int source_length, char *dest,
-           const char *key, int key_length)
+		   const char *key, int key_length)
 {
   KEYINSTANCE aes_key;
   uint8 block[AES_BLOCK_SIZE];	/* 128 bit block used for padding */
@@ -186,7 +192,7 @@ int my_aes_decrypt(const char *source, int source_length, char *dest,
   for (i = num_blocks-1; i > 0; i--)   /* Decode all but last blocks */
   {
     rijndaelDecrypt(aes_key.rk, aes_key.nr, (const uint8*) source,
-            (uint8*) dest);
+		    (uint8*) dest);
     source+= AES_BLOCK_SIZE;
     dest+= AES_BLOCK_SIZE;
   }
@@ -202,6 +208,7 @@ int my_aes_decrypt(const char *source, int source_length, char *dest,
   memcpy(dest, block, AES_BLOCK_SIZE - pad_len);
   return AES_BLOCK_SIZE*num_blocks - pad_len;
 }
+
 
 /*
   Get size of buffer which will be large enough for encrypted data

@@ -45,6 +45,8 @@ void *my_memmem(const void *haystack, size_t haystacklen,
   return(NULL);
 }
 
+  
+
 #ifdef MAIN
 #include <assert.h>
 

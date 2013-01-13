@@ -30,7 +30,7 @@
       MyFlags
 
   NOTES
-    No DBUG_ENTER... here to get smaller dbug-startup
+    No DBUG_ENTER... here to get smaller dbug-startup 
 */
 
 void* my_once_alloc(size_t Size, myf MyFlags)
@@ -59,7 +59,7 @@ void* my_once_alloc(size_t Size, myf MyFlags)
     {
       my_errno=errno;
       if (MyFlags & (MY_FAE+MY_WME))
-    my_error(EE_OUTOFMEMORY, MYF(ME_BELL+ME_WAITTANG),get_size);
+	my_error(EE_OUTOFMEMORY, MYF(ME_BELL+ME_WAITTANG),get_size);
       return((uchar*) 0);
     }
     DBUG_PRINT("test",("my_once_malloc %lu byte malloced", (ulong) get_size));
@@ -76,6 +76,7 @@ void* my_once_alloc(size_t Size, myf MyFlags)
   return((void*) point);
 } /* my_once_alloc */
 
+
 char *my_once_strdup(const char *src,myf myflags)
 {
   size_t len= strlen(src)+1;
@@ -85,6 +86,7 @@ char *my_once_strdup(const char *src,myf myflags)
   return (char*) dst;
 }
 
+
 void *my_once_memdup(const void *src, size_t len, myf myflags)
 {
   uchar *dst= my_once_alloc(len, myflags);
@@ -92,6 +94,7 @@ void *my_once_memdup(const void *src, size_t len, myf myflags)
     memcpy(dst, src, len);
   return dst;
 }
+
 
 /*
   Deallocate everything that was allocated with my_once_alloc

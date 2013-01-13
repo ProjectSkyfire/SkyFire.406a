@@ -1,4 +1,4 @@
-/* Copyright (c) 2001, 2010, Oracle and/or its affiliates. All rights reserved.
+/* Copyright (c) 2001, 2011, Oracle and/or its affiliates. All rights reserved.
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -53,7 +53,7 @@ int my_readlink(char *to, const char *filename, myf MyFlags)
     else
     {
       if (MyFlags & MY_WME)
-    my_error(EE_CANT_READLINK, MYF(0), filename, errno);
+	my_error(EE_CANT_READLINK, MYF(0), filename, errno);
       result= -1;
     }
   }
@@ -63,6 +63,7 @@ int my_readlink(char *to, const char *filename, myf MyFlags)
   DBUG_RETURN(result);
 #endif /* HAVE_READLINK */
 }
+
 
 /* Create a symbolic link */
 
@@ -96,6 +97,7 @@ int my_symlink(const char *content, const char *linkname, myf MyFlags)
 #else
 #define BUFF_LEN FN_LEN
 #endif
+
 
 int my_is_symlink(const char *filename __attribute__((unused)))
 {
@@ -149,11 +151,11 @@ int my_realpath(char *to, const char *filename, myf MyFlags)
     my_errno= (ret > FN_REFLEN) ? ENAMETOOLONG : GetLastError();
     if (MyFlags & MY_WME)
       my_error(EE_REALPATH, MYF(0), filename, my_errno);
-    /*
-      GetFullPathName didn't work : use my_load_path() which is a poor
-      substitute original name but will at least be able to resolve
+    /* 
+      GetFullPathName didn't work : use my_load_path() which is a poor 
+      substitute original name but will at least be able to resolve 
       paths that starts with '.'.
-    */
+    */  
     my_load_path(to, filename, NullS);
     return -1;
   }

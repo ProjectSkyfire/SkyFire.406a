@@ -19,6 +19,7 @@
   and Bentley & McIlroy's "Engineering a Sort Function".
 */
 
+
 #include "mysys_priv.h"
 #ifndef SCO
 #include <m_string.h>
@@ -91,7 +92,7 @@ typedef struct st_stack
 
 #ifdef QSORT_EXTRA_CMP_ARGUMENT
 qsort_t my_qsort2(void *base_ptr, size_t count, size_t size, qsort2_cmp cmp,
-           void *cmp_argument)
+	       void *cmp_argument)
 #else
 qsort_t my_qsort(void *base_ptr, size_t count, size_t size, qsort_cmp cmp)
 #endif
@@ -125,10 +126,10 @@ qsort_t my_qsort(void *base_ptr, size_t count, size_t size, qsort_cmp cmp)
     {
       for (low_ptr = low + size; low_ptr <= high; low_ptr += size)
       {
-    char *ptr;
-    for (ptr = low_ptr; ptr > low && CMP(ptr - size, ptr) > 0;
-         ptr -= size)
-      SWAP(ptr, ptr - size, size, ptr_cmp);
+	char *ptr;
+	for (ptr = low_ptr; ptr > low && CMP(ptr - size, ptr) > 0;
+	     ptr -= size)
+	  SWAP(ptr, ptr - size, size, ptr_cmp);
       }
       POP(low, high);
       continue;
@@ -159,24 +160,24 @@ qsort_t my_qsort(void *base_ptr, size_t count, size_t size, qsort_cmp cmp)
     do
     {
       while (CMP(low_ptr, pivot) < 0)
-    low_ptr += size;
+	low_ptr += size;
       while (CMP(pivot, high_ptr) < 0)
-    high_ptr -= size;
+	high_ptr -= size;
 
       if (low_ptr < high_ptr)
       {
-    SWAP(low_ptr, high_ptr, size, ptr_cmp);
-    low_ptr += size;
-    high_ptr -= size;
+	SWAP(low_ptr, high_ptr, size, ptr_cmp);
+	low_ptr += size;
+	high_ptr -= size;
       }
-      else
+      else 
       {
-    if (low_ptr == high_ptr)
-    {
-      low_ptr += size;
-      high_ptr -= size;
-    }
-    break;
+	if (low_ptr == high_ptr)
+	{
+	  low_ptr += size;
+	  high_ptr -= size;
+	}
+	break;
       }
     }
     while (low_ptr <= high_ptr);
@@ -192,10 +193,10 @@ qsort_t my_qsort(void *base_ptr, size_t count, size_t size, qsort_cmp cmp)
     {
       if ((int) (high - low_ptr) <= 0)
       {
-    POP(low, high);			/* Nothing more to sort */
+	POP(low, high);			/* Nothing more to sort */
       }
       else
-    low = low_ptr;			/* Ignore small left part. */
+	low = low_ptr;			/* Ignore small left part. */
     }
     else if ((int) (high - low_ptr) <= 0)
       high = high_ptr;			/* Ignore small right part. */

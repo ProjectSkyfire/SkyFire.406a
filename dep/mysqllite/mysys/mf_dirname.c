@@ -16,7 +16,7 @@
 #include "mysys_priv.h"
 #include <m_string.h>
 
-    /* Functions definied in this file */
+	/* Functions definied in this file */
 
 size_t dirname_length(const char *name)
 {
@@ -46,6 +46,7 @@ size_t dirname_length(const char *name)
   return (size_t) (gpos+1-(char*) name);
 }
 
+
 /*
   Gives directory part of filename. Directory ends with '/'
 
@@ -70,14 +71,15 @@ size_t dirname_part(char *to, const char *name, size_t *to_res_length)
   DBUG_RETURN(length);
 } /* dirname */
 
+
 /*
   Convert directory name to use under this system
 
   SYNPOSIS
     convert_dirname()
     to				Store result here. Must be at least of size
-                    min(FN_REFLEN, strlen(from) + 1) to make room
-                    for adding FN_LIBCHAR at the end.
+    				min(FN_REFLEN, strlen(from) + 1) to make room
+    				for adding FN_LIBCHAR at the end.
     from			Original filename. May be == to
     from_end			Pointer at end of filename (normally end \0)
 
@@ -116,7 +118,7 @@ char *convert_dirname(char *to, const char *from, const char *from_end)
     for (; from != from_end && *from ; from++)
     {
       if (*from == '/')
-    *to++= FN_LIBCHAR;
+	*to++= FN_LIBCHAR;
       else
       {
 #ifdef BACKSLASH_MBTAIL

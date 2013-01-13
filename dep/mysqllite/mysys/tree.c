@@ -67,16 +67,17 @@
 
 static void delete_tree_element(TREE *,TREE_ELEMENT *);
 static int tree_walk_left_root_right(TREE *,TREE_ELEMENT *,
-                     tree_walk_action,void *);
+				     tree_walk_action,void *);
 static int tree_walk_right_root_left(TREE *,TREE_ELEMENT *,
-                     tree_walk_action,void *);
+				     tree_walk_action,void *);
 static void left_rotate(TREE_ELEMENT **parent,TREE_ELEMENT *leaf);
 static void right_rotate(TREE_ELEMENT **parent, TREE_ELEMENT *leaf);
 static void rb_insert(TREE *tree,TREE_ELEMENT ***parent,
-              TREE_ELEMENT *leaf);
+		      TREE_ELEMENT *leaf);
 static void rb_delete_fixup(TREE *tree,TREE_ELEMENT ***parent);
 
-    /* The actuall code for handling binary trees */
+
+	/* The actuall code for handling binary trees */
 
 #ifndef DBUG_OFF
 static int test_rb_tree(TREE_ELEMENT *element);
@@ -84,7 +85,7 @@ static int test_rb_tree(TREE_ELEMENT *element);
 
 void init_tree(TREE *tree, ulong default_alloc_size, ulong memory_limit,
                int size, qsort_cmp2 compare, my_bool with_delete,
-           tree_element_free free_element, void *custom_arg)
+	       tree_element_free free_element, void *custom_arg)
 {
   DBUG_ENTER("init_tree");
   DBUG_PRINT("enter",("tree: 0x%lx  size: %d", (long) tree, size));
@@ -147,7 +148,7 @@ static void free_tree(TREE *tree, myf free_flags)
       {
         if (tree->memory_limit)
           (*tree->free)(NULL, free_init, tree->custom_arg);
-    delete_tree_element(tree,tree->root);
+	delete_tree_element(tree,tree->root);
         if (tree->memory_limit)
           (*tree->free)(NULL, free_end, tree->custom_arg);
       }
@@ -172,6 +173,7 @@ void reset_tree(TREE* tree)
   free_tree(tree, MYF(MY_MARK_BLOCKS_FREE));
 }
 
+
 static void delete_tree_element(TREE *tree, TREE_ELEMENT *element)
 {
   if (element != &tree->null_element)
@@ -185,6 +187,7 @@ static void delete_tree_element(TREE *tree, TREE_ELEMENT *element)
   }
 }
 
+
 /*
   insert, search and delete of elements
 
@@ -193,7 +196,7 @@ static void delete_tree_element(TREE *tree, TREE_ELEMENT *element)
     parent[0] = & parent[-1][0]->right
 */
 
-TREE_ELEMENT *tree_insert(TREE *tree, void *key, uint key_size,
+TREE_ELEMENT *tree_insert(TREE *tree, void *key, uint key_size, 
                           void* custom_arg)
 {
   int cmp;
@@ -204,7 +207,7 @@ TREE_ELEMENT *tree_insert(TREE *tree, void *key, uint key_size,
   for (;;)
   {
     if (element == &tree->null_element ||
-    (cmp = (*tree->compare)(custom_arg, ELEMENT_KEY(tree,element),
+	(cmp = (*tree->compare)(custom_arg, ELEMENT_KEY(tree,element),
                                 key)) == 0)
       break;
     if (cmp < 0)
@@ -240,12 +243,12 @@ TREE_ELEMENT *tree_insert(TREE *tree, void *key, uint key_size,
     if (!tree->offset_to_key)
     {
       if (key_size == sizeof(void*))		 /* no length, save pointer */
-    *((void**) (element+1))=key;
+	*((void**) (element+1))=key;
       else
       {
-    *((void**) (element+1))= (void*) ((void **) (element+1)+1);
-    memcpy((uchar*) *((void **) (element+1)),key,
-           (size_t) (key_size-sizeof(void*)));
+	*((void**) (element+1))= (void*) ((void **) (element+1)+1);
+	memcpy((uchar*) *((void **) (element+1)),key,
+	       (size_t) (key_size-sizeof(void*)));
       }
     }
     else
@@ -328,6 +331,7 @@ int tree_delete(TREE *tree, void *key, uint key_size, void *custom_arg)
   return 0;
 }
 
+
 void *tree_search(TREE *tree, void *key, void *custom_arg)
 {
   int cmp;
@@ -347,7 +351,7 @@ void *tree_search(TREE *tree, void *key, void *custom_arg)
   }
 }
 
-void *tree_search_key(TREE *tree, const void *key,
+void *tree_search_key(TREE *tree, const void *key, 
                       TREE_ELEMENT **parents, TREE_ELEMENT ***last_pos,
                       enum ha_rkey_function flag, void *custom_arg)
 {
@@ -356,7 +360,7 @@ void *tree_search_key(TREE *tree, const void *key,
   TREE_ELEMENT **last_left_step_parent= NULL, **last_right_step_parent= NULL;
   TREE_ELEMENT **last_equal_element= NULL;
 
-/*
+/* 
   TODO: support for HA_READ_KEY_OR_PREV, HA_READ_PREFIX flags if needed.
 */
 
@@ -364,26 +368,26 @@ void *tree_search_key(TREE *tree, const void *key,
   while (element != &tree->null_element)
   {
     *++parents= element;
-    if ((cmp= (*tree->compare)(custom_arg, ELEMENT_KEY(tree, element),
-                   key)) == 0)
+    if ((cmp= (*tree->compare)(custom_arg, ELEMENT_KEY(tree, element), 
+			       key)) == 0)
     {
       switch (flag) {
       case HA_READ_KEY_EXACT:
       case HA_READ_KEY_OR_NEXT:
       case HA_READ_BEFORE_KEY:
-    last_equal_element= parents;
-    cmp= 1;
-    break;
+	last_equal_element= parents;
+	cmp= 1;
+	break;
       case HA_READ_AFTER_KEY:
-    cmp= -1;
-    break;
+	cmp= -1;
+	break;
       case HA_READ_PREFIX_LAST:
       case HA_READ_PREFIX_LAST_OR_PREV:
-    last_equal_element= parents;
-    cmp= -1;
-    break;
+	last_equal_element= parents;
+	cmp= -1;
+	break;
       default:
-    return NULL;
+	return NULL;
       }
     }
     if (cmp < 0) /* element < key */
@@ -420,14 +424,14 @@ void *tree_search_key(TREE *tree, const void *key,
   return *last_pos ? ELEMENT_KEY(tree, **last_pos) : NULL;
 }
 
-/*
-  Search first (the most left) or last (the most right) tree element
+/* 
+  Search first (the most left) or last (the most right) tree element 
 */
-void *tree_search_edge(TREE *tree, TREE_ELEMENT **parents,
-               TREE_ELEMENT ***last_pos, int child_offs)
+void *tree_search_edge(TREE *tree, TREE_ELEMENT **parents, 
+		       TREE_ELEMENT ***last_pos, int child_offs)
 {
   TREE_ELEMENT *element= tree->root;
-
+  
   *parents= &tree->null_element;
   while (element != &tree->null_element)
   {
@@ -435,15 +439,15 @@ void *tree_search_edge(TREE *tree, TREE_ELEMENT **parents,
     element= ELEMENT_CHILD(element, child_offs);
   }
   *last_pos= parents;
-  return **last_pos != &tree->null_element ?
+  return **last_pos != &tree->null_element ? 
     ELEMENT_KEY(tree, **last_pos) : NULL;
 }
 
-void *tree_search_next(TREE *tree, TREE_ELEMENT ***last_pos, int l_offs,
+void *tree_search_next(TREE *tree, TREE_ELEMENT ***last_pos, int l_offs, 
                        int r_offs)
 {
   TREE_ELEMENT *x= **last_pos;
-
+  
   if (ELEMENT_CHILD(x, r_offs) != &tree->null_element)
   {
     x= ELEMENT_CHILD(x, r_offs);
@@ -471,8 +475,8 @@ void *tree_search_next(TREE *tree, TREE_ELEMENT ***last_pos, int l_offs,
   Expected that tree is fully balanced
   (each path from root to leaf has the same length)
 */
-ha_rows tree_record_pos(TREE *tree, const void *key,
-            enum ha_rkey_function flag, void *custom_arg)
+ha_rows tree_record_pos(TREE *tree, const void *key, 
+			enum ha_rkey_function flag, void *custom_arg)
 {
   int cmp;
   TREE_ELEMENT *element= tree->root;
@@ -481,8 +485,8 @@ ha_rows tree_record_pos(TREE *tree, const void *key,
 
   while (element != &tree->null_element)
   {
-    if ((cmp= (*tree->compare)(custom_arg, ELEMENT_KEY(tree, element),
-                   key)) == 0)
+    if ((cmp= (*tree->compare)(custom_arg, ELEMENT_KEY(tree, element), 
+			       key)) == 0)
     {
       switch (flag) {
       case HA_READ_KEY_EXACT:
@@ -535,10 +539,10 @@ static int tree_walk_left_root_right(TREE *tree, TREE_ELEMENT *element, tree_wal
   if (element->left)				/* Not null_element */
   {
     if ((error=tree_walk_left_root_right(tree,element->left,action,
-                      argument)) == 0 &&
-    (error=(*action)(ELEMENT_KEY(tree,element),
-              (element_count) element->count,
-              argument)) == 0)
+					  argument)) == 0 &&
+	(error=(*action)(ELEMENT_KEY(tree,element),
+			  (element_count) element->count,
+			  argument)) == 0)
       error=tree_walk_left_root_right(tree,element->right,action,argument);
     return error;
   }
@@ -551,17 +555,18 @@ static int tree_walk_right_root_left(TREE *tree, TREE_ELEMENT *element, tree_wal
   if (element->right)				/* Not null_element */
   {
     if ((error=tree_walk_right_root_left(tree,element->right,action,
-                      argument)) == 0 &&
-    (error=(*action)(ELEMENT_KEY(tree,element),
-              (element_count) element->count,
-              argument)) == 0)
+					  argument)) == 0 &&
+	(error=(*action)(ELEMENT_KEY(tree,element),
+			  (element_count) element->count,
+			  argument)) == 0)
      error=tree_walk_right_root_left(tree,element->left,action,argument);
     return error;
   }
   return 0;
 }
 
-    /* Functions to fix up the tree after insert and delete */
+
+	/* Functions to fix up the tree after insert and delete */
 
 static void left_rotate(TREE_ELEMENT **parent, TREE_ELEMENT *leaf)
 {
@@ -595,23 +600,23 @@ static void rb_insert(TREE *tree, TREE_ELEMENT ***parent, TREE_ELEMENT *leaf)
       y= par2->right;
       if (y->colour == RED)
       {
-    par->colour=BLACK;
-    y->colour=BLACK;
-    leaf=par2;
-    parent-=2;
-    leaf->colour=RED;		/* And the loop continues */
+	par->colour=BLACK;
+	y->colour=BLACK;
+	leaf=par2;
+	parent-=2;
+	leaf->colour=RED;		/* And the loop continues */
       }
       else
       {
-    if (leaf == par->right)
-    {
-      left_rotate(parent[-1],par);
-      par=leaf;			/* leaf is now parent to old leaf */
-    }
-    par->colour=BLACK;
-    par2->colour=RED;
-    right_rotate(parent[-2],par2);
-    break;
+	if (leaf == par->right)
+	{
+	  left_rotate(parent[-1],par);
+	  par=leaf;			/* leaf is now parent to old leaf */
+	}
+	par->colour=BLACK;
+	par2->colour=RED;
+	right_rotate(parent[-2],par2);
+	break;
       }
     }
     else
@@ -619,23 +624,23 @@ static void rb_insert(TREE *tree, TREE_ELEMENT ***parent, TREE_ELEMENT *leaf)
       y= par2->left;
       if (y->colour == RED)
       {
-    par->colour=BLACK;
-    y->colour=BLACK;
-    leaf=par2;
-    parent-=2;
-    leaf->colour=RED;		/* And the loop continues */
+	par->colour=BLACK;
+	y->colour=BLACK;
+	leaf=par2;
+	parent-=2;
+	leaf->colour=RED;		/* And the loop continues */
       }
       else
       {
-    if (leaf == par->left)
-    {
-      right_rotate(parent[-1],par);
-      par=leaf;
-    }
-    par->colour=BLACK;
-    par2->colour=RED;
-    left_rotate(parent[-2],par2);
-    break;
+	if (leaf == par->left)
+	{
+	  right_rotate(parent[-1],par);
+	  par=leaf;
+	}
+	par->colour=BLACK;
+	par2->colour=RED;
+	left_rotate(parent[-2],par2);
+	break;
       }
     }
   }
@@ -654,34 +659,34 @@ static void rb_delete_fixup(TREE *tree, TREE_ELEMENT ***parent)
       w=par->right;
       if (w->colour == RED)
       {
-    w->colour=BLACK;
-    par->colour=RED;
-    left_rotate(parent[-1],par);
-    parent[0]= &w->left;
-    *++parent= &par->left;
-    w=par->right;
+	w->colour=BLACK;
+	par->colour=RED;
+	left_rotate(parent[-1],par);
+	parent[0]= &w->left;
+	*++parent= &par->left;
+	w=par->right;
       }
       if (w->left->colour == BLACK && w->right->colour == BLACK)
       {
-    w->colour=RED;
-    x=par;
-    parent--;
+	w->colour=RED;
+	x=par;
+	parent--;
       }
       else
       {
-    if (w->right->colour == BLACK)
-    {
-      w->left->colour=BLACK;
-      w->colour=RED;
-      right_rotate(&par->right,w);
-      w=par->right;
-    }
-    w->colour=par->colour;
-    par->colour=BLACK;
-    w->right->colour=BLACK;
-    left_rotate(parent[-1],par);
-    x=tree->root;
-    break;
+	if (w->right->colour == BLACK)
+	{
+	  w->left->colour=BLACK;
+	  w->colour=RED;
+	  right_rotate(&par->right,w);
+	  w=par->right;
+	}
+	w->colour=par->colour;
+	par->colour=BLACK;
+	w->right->colour=BLACK;
+	left_rotate(parent[-1],par);
+	x=tree->root;
+	break;
       }
     }
     else
@@ -689,34 +694,34 @@ static void rb_delete_fixup(TREE *tree, TREE_ELEMENT ***parent)
       w=par->left;
       if (w->colour == RED)
       {
-    w->colour=BLACK;
-    par->colour=RED;
-    right_rotate(parent[-1],par);
-    parent[0]= &w->right;
-    *++parent= &par->right;
-    w=par->left;
+	w->colour=BLACK;
+	par->colour=RED;
+	right_rotate(parent[-1],par);
+	parent[0]= &w->right;
+	*++parent= &par->right;
+	w=par->left;
       }
       if (w->right->colour == BLACK && w->left->colour == BLACK)
       {
-    w->colour=RED;
-    x=par;
-    parent--;
+	w->colour=RED;
+	x=par;
+	parent--;
       }
       else
       {
-    if (w->left->colour == BLACK)
-    {
-      w->right->colour=BLACK;
-      w->colour=RED;
-      left_rotate(&par->left,w);
-      w=par->left;
-    }
-    w->colour=par->colour;
-    par->colour=BLACK;
-    w->left->colour=BLACK;
-    right_rotate(parent[-1],par);
-    x=tree->root;
-    break;
+	if (w->left->colour == BLACK)
+	{
+	  w->right->colour=BLACK;
+	  w->colour=RED;
+	  left_rotate(&par->left,w);
+	  w=par->left;
+	}
+	w->colour=par->colour;
+	par->colour=BLACK;
+	w->left->colour=BLACK;
+	right_rotate(parent[-1],par);
+	x=tree->root;
+	break;
       }
     }
   }
@@ -725,7 +730,7 @@ static void rb_delete_fixup(TREE *tree, TREE_ELEMENT ***parent)
 
 #ifndef DBUG_OFF
 
-    /* Test that the proporties for a red-black tree holds */
+	/* Test that the proporties for a red-black tree holds */
 
 static int test_rb_tree(TREE_ELEMENT *element)
 {

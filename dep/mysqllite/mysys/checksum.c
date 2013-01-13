@@ -13,6 +13,7 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA */
 
+
 #include <my_global.h>
 #include <my_sys.h>
 #include <zlib.h>
@@ -31,3 +32,4 @@ ha_checksum my_checksum(ha_checksum crc, const uchar *pos, size_t length)
 {
   return (ha_checksum)crc32((uint)crc, pos, (uint)length);
 }
+

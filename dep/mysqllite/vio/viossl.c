@@ -40,7 +40,7 @@ report_errors(SSL* ssl)
   while ((l= ERR_get_error_line_data(&file,&line,&data,&flags)))
   {
     DBUG_PRINT("error", ("OpenSSL: %s:%s:%d:%s\n", ERR_error_string(l,buf),
-             file,line,(flags&ERR_TXT_STRING)?data:"")) ;
+			 file,line,(flags&ERR_TXT_STRING)?data:"")) ;
   }
 
   if (ssl)
@@ -53,12 +53,13 @@ report_errors(SSL* ssl)
 
 #endif
 
+
 size_t vio_ssl_read(Vio *vio, uchar* buf, size_t size)
 {
   size_t r;
   DBUG_ENTER("vio_ssl_read");
   DBUG_PRINT("enter", ("sd: %d  buf: 0x%lx  size: %u  ssl: 0x%lx",
-               vio->sd, (long) buf, (uint) size, (long) vio->ssl_arg));
+		       vio->sd, (long) buf, (uint) size, (long) vio->ssl_arg));
 
   r= SSL_read((SSL*) vio->ssl_arg, buf, size);
 #ifndef DBUG_OFF
@@ -68,6 +69,7 @@ size_t vio_ssl_read(Vio *vio, uchar* buf, size_t size)
   DBUG_PRINT("exit", ("%u", (uint) r));
   DBUG_RETURN(r);
 }
+
 
 size_t vio_ssl_write(Vio *vio, const uchar* buf, size_t size)
 {
@@ -85,6 +87,7 @@ size_t vio_ssl_write(Vio *vio, const uchar* buf, size_t size)
   DBUG_RETURN(r);
 }
 
+
 int vio_ssl_close(Vio *vio)
 {
   int r= 0;
@@ -101,8 +104,8 @@ int vio_ssl_close(Vio *vio)
     describing with length, we aren't vunerable to these attacks. Therefore,
     we just shutdown by closing the socket (quiet shutdown).
     */
-    SSL_set_quiet_shutdown(ssl, 1);
-
+    SSL_set_quiet_shutdown(ssl, 1); 
+    
     switch ((r= SSL_shutdown(ssl))) {
     case 1:
       /* Shutdown successful */
@@ -123,6 +126,7 @@ int vio_ssl_close(Vio *vio)
   DBUG_RETURN(vio_close(vio));
 }
 
+
 void vio_ssl_delete(Vio *vio)
 {
   if (!vio)
@@ -139,6 +143,7 @@ void vio_ssl_delete(Vio *vio)
 
   vio_delete(vio);
 }
+
 
 static int ssl_do(struct st_VioSSLFd *ptr, Vio *vio, long timeout,
                   int (*connect_accept_func)(SSL*), unsigned long *errptr)
@@ -217,11 +222,13 @@ static int ssl_do(struct st_VioSSLFd *ptr, Vio *vio, long timeout,
   DBUG_RETURN(0);
 }
 
+
 int sslaccept(struct st_VioSSLFd *ptr, Vio *vio, long timeout, unsigned long *errptr)
 {
   DBUG_ENTER("sslaccept");
   DBUG_RETURN(ssl_do(ptr, vio, timeout, SSL_accept, errptr));
 }
+
 
 int sslconnect(struct st_VioSSLFd *ptr, Vio *vio, long timeout, unsigned long *errptr)
 {
@@ -229,9 +236,10 @@ int sslconnect(struct st_VioSSLFd *ptr, Vio *vio, long timeout, unsigned long *e
   DBUG_RETURN(ssl_do(ptr, vio, timeout, SSL_connect, errptr));
 }
 
+
 int vio_ssl_blocking(Vio *vio __attribute__((unused)),
-             my_bool set_blocking_mode,
-             my_bool *old_mode)
+		     my_bool set_blocking_mode,
+		     my_bool *old_mode)
 {
   /* Mode is always blocking */
   *old_mode= 1;

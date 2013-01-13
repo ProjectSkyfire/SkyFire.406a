@@ -1,4 +1,4 @@
-/* Copyright (c) 2004, 2011, Oracle and/or its affiliates. All rights reserved.
+/* Copyright (c) 2004, 2012, Oracle and/or its affiliates. All rights reserved.
 
  This program is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -28,6 +28,7 @@ ulonglong log_10_int[20]=
   ULL(1000000000000000000), ULL(10000000000000000000)
 };
 
+
 /* Position for YYYY-DD-MM HH-MM-DD.FFFFFF AM in default format */
 
 static uchar internal_format_positions[]=
@@ -39,10 +40,11 @@ static ulong const days_at_timestart=719528;	/* daynr at 1970.01.01 */
 uchar days_in_month[]= {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31, 0};
 
 /*
-  Offset of system time zone from UTC in seconds used to speed up
+  Offset of system time zone from UTC in seconds used to speed up 
   work of my_system_gmt_sec() function.
 */
 static long my_time_zone=0;
+
 
 /* Calc days in one year. works with 0 <= year <= 99 */
 
@@ -100,6 +102,7 @@ my_bool check_date(const MYSQL_TIME *ltime, my_bool not_zero_date,
   return FALSE;
 }
 
+
 /*
   Convert a timestamp string to a MYSQL_TIME value.
 
@@ -115,8 +118,8 @@ my_bool check_date(const MYSQL_TIME *ltime, my_bool not_zero_date,
                         TIME_NO_ZERO_DATE	Don't allow 0000-00-00 date
                         TIME_INVALID_DATES	Allow 2000-02-31
     was_cut             0	Value OK
-            1       If value was cut during conversion
-            2	check_date(date,flags) considers date invalid
+			1       If value was cut during conversion
+			2	check_date(date,flags) considers date invalid
 
   DESCRIPTION
     At least the following formats are recogniced (based on number of digits)
@@ -452,6 +455,7 @@ err:
   DBUG_RETURN(MYSQL_TIMESTAMP_ERROR);
 }
 
+
 /*
  Convert a time string to a MYSQL_TIME struct.
 
@@ -596,7 +600,7 @@ fractional:
   }
   else
     date[4]=0;
-
+    
   /* Check for exponent part: E<gigit> | E<sign><digit> */
   /* (may occur as result of %g formatting of time value) */
   if ((end - str) > 1 &&
@@ -629,7 +633,7 @@ fractional:
       date[2] > UINT_MAX || date[3] > UINT_MAX ||
       date[4] > UINT_MAX)
     return 1;
-
+  
   l_time->year=         0;                      /* For protocol::store_time */
   l_time->month=        0;
   l_time->day=          date[0];
@@ -642,7 +646,7 @@ fractional:
   /* Check if the value is valid and fits into MYSQL_TIME range */
   if (check_time_range(l_time, warning))
     return 1;
-
+  
   /* Check if there is garbage at end of the MYSQL_TIME specification */
   if (str != end)
   {
@@ -657,6 +661,7 @@ fractional:
   }
   return 0;
 }
+
 
 /*
   Check 'time' value to lie in the MYSQL_TIME range
@@ -676,7 +681,7 @@ fractional:
     1        time value is invalid
 */
 
-int check_time_range(struct st_mysql_time *my_time, int *warning)
+int check_time_range(struct st_mysql_time *my_time, int *warning) 
 {
   longlong hour;
 
@@ -697,6 +702,7 @@ int check_time_range(struct st_mysql_time *my_time, int *warning)
   *warning|= MYSQL_TIME_WARN_OUT_OF_RANGE;
   return 0;
 }
+
 
 /*
   Prepare offset of system time zone from UTC for my_system_gmt_sec() func.
@@ -724,6 +730,7 @@ void my_init_time(void)
   my_system_gmt_sec(&my_time, &my_time_zone, &not_used); /* Init my_time_zone */
 }
 
+
 /*
   Handle 2 digit year conversions
 
@@ -741,6 +748,7 @@ uint year_2000_handling(uint year)
     year+=100;
   return year;
 }
+
 
 /*
   Calculate nr of day since year 0 in new date-system (from 1615)
@@ -774,10 +782,11 @@ long calc_daynr(uint year,uint month,uint day)
     delsum-= (long) ((int) month * 4 + 23) / 10;
   temp=(int) ((y/100+1)*3)/4;
   DBUG_PRINT("exit",("year: %d  month: %d  day: %d -> daynr: %ld",
-             y+(month <= 2),month,day,delsum+y/4-temp));
-  DBUG_ASSERT(delsum+(int) y/4-temp > 0);
+		     y+(month <= 2),month,day,delsum+y/4-temp));
+  DBUG_ASSERT(delsum+(int) y/4-temp >= 0);
   DBUG_RETURN(delsum+(int) y/4-temp);
 } /* calc_daynr */
+
 
 /*
   Convert time in MYSQL_TIME representation in system time zone to its
@@ -791,9 +800,9 @@ long calc_daynr(uint year,uint month,uint day)
       in_dst_time_gap - set to true if time falls into spring time-gap
 
   NOTES
-    The idea is to cache the time zone offset from UTC (including daylight
-    saving time) for the next call to make things faster. But currently we
-    just calculate this offset during startup (by calling my_init_time()
+    The idea is to cache the time zone offset from UTC (including daylight 
+    saving time) for the next call to make things faster. But currently we 
+    just calculate this offset during startup (by calling my_init_time() 
     function) and use it all the time.
     Time value provided should be legal time value (e.g. '2003-01-01 25:00:00'
     is not allowed).
@@ -922,8 +931,8 @@ my_system_gmt_sec(const MYSQL_TIME *t_src, long *my_timezone,
   l_time=&tm_tmp;
   for (loop=0;
        loop < 2 &&
-     (t->hour != (uint) l_time->tm_hour ||
-      t->minute != (uint) l_time->tm_min ||
+	 (t->hour != (uint) l_time->tm_hour ||
+	  t->minute != (uint) l_time->tm_min ||
           t->second != (uint) l_time->tm_sec);
        loop++)
   {					/* One check should be enough ? */
@@ -959,7 +968,7 @@ my_system_gmt_sec(const MYSQL_TIME *t_src, long *my_timezone,
     else if (days > 1)
       days= -1;
     diff=(3600L*(long) (days*24+((int) t->hour - (int) l_time->tm_hour))+
-      (long) (60*((int) t->minute - (int) l_time->tm_min)) +
+	  (long) (60*((int) t->minute - (int) l_time->tm_min)) +
           (long) ((int) t->second - (int) l_time->tm_sec));
     if (diff == 3600)
       tmp+=3600 - t->minute*60 - t->second;	/* Move to next hour */
@@ -969,6 +978,7 @@ my_system_gmt_sec(const MYSQL_TIME *t_src, long *my_timezone,
     *in_dst_time_gap= 1;
   }
   *my_timezone= current_timezone;
+
 
   /* shift back, if we were dealing with boundary dates */
   tmp+= shift*86400L;
@@ -989,6 +999,7 @@ my_system_gmt_sec(const MYSQL_TIME *t_src, long *my_timezone,
   return (my_time_t) tmp;
 } /* my_system_gmt_sec */
 
+
 /* Set MYSQL_TIME structure to 0000-00-00 00:00:00.000000 */
 
 void set_zero_time(MYSQL_TIME *tm, enum enum_mysql_timestamp_type time_type)
@@ -996,6 +1007,7 @@ void set_zero_time(MYSQL_TIME *tm, enum enum_mysql_timestamp_type time_type)
   bzero((void*) tm, sizeof(*tm));
   tm->time_type= time_type;
 }
+
 
 /*
   Functions to convert time/date/datetime value to a string,
@@ -1030,6 +1042,7 @@ int my_datetime_to_str(const MYSQL_TIME *l_time, char *to)
                  l_time->hour, l_time->minute, l_time->second);
 }
 
+
 /*
   Convert struct DATE/TIME/DATETIME value to string using built-in
   MySQL time conversion formats.
@@ -1059,6 +1072,7 @@ int my_TIME_to_str(const MYSQL_TIME *l_time, char *to)
     return 0;
   }
 }
+
 
 /*
   Convert datetime value specified as number to broken-down TIME
@@ -1166,6 +1180,7 @@ longlong number_to_datetime(longlong nr, MYSQL_TIME *time_res,
   return LL(-1);
 }
 
+
 /* Convert time value to integer in YYYYMMDDHHMMSS format */
 
 ulonglong TIME_to_ulonglong_datetime(const MYSQL_TIME *my_time)
@@ -1178,6 +1193,7 @@ ulonglong TIME_to_ulonglong_datetime(const MYSQL_TIME *my_time)
                        my_time->second));
 }
 
+
 /* Convert MYSQL_TIME value to integer in YYYYMMDD format */
 
 ulonglong TIME_to_ulonglong_date(const MYSQL_TIME *my_time)
@@ -1185,6 +1201,7 @@ ulonglong TIME_to_ulonglong_date(const MYSQL_TIME *my_time)
   return (ulonglong) (my_time->year * 10000UL + my_time->month * 100UL +
                       my_time->day);
 }
+
 
 /*
   Convert MYSQL_TIME value to integer in HHMMSS format.
@@ -1198,6 +1215,7 @@ ulonglong TIME_to_ulonglong_time(const MYSQL_TIME *my_time)
                       my_time->minute * 100UL +
                       my_time->second);
 }
+
 
 /*
   Convert struct MYSQL_TIME (date and time split into year/month/day/hour/...
@@ -1236,3 +1254,4 @@ ulonglong TIME_to_ulonglong(const MYSQL_TIME *my_time)
   }
   return 0;
 }
+

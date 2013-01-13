@@ -56,6 +56,7 @@ my_bool my_compress(uchar *packet, size_t *len, size_t *complen)
   DBUG_RETURN(0);
 }
 
+
 uchar *my_compress_alloc(const uchar *packet, size_t *len, size_t *complen)
 {
   uchar *compbuf;
@@ -88,6 +89,7 @@ uchar *my_compress_alloc(const uchar *packet, size_t *len, size_t *complen)
   return compbuf;
 }
 
+
 /*
   Uncompress packet
 
@@ -96,7 +98,7 @@ uchar *my_compress_alloc(const uchar *packet, size_t *len, size_t *complen)
      packet	Compressed data. This is is replaced with the orignal data.
      len	Length of compressed data
      complen	Length of the packet buffer (must be enough for the original
-            data)
+	        data)
 
    RETURN
      1   error
@@ -143,6 +145,7 @@ my_bool my_uncompress(uchar *packet, size_t len, size_t *complen)
 */
 
 #define BLOB_HEADER 12
+
 
 /*
   packfrm is a method used to compress the frm file for storage in a
@@ -203,6 +206,7 @@ int packfrm(uchar *data, size_t len,
                       (long) *pack_data, (ulong) *pack_len));
 err:
   DBUG_RETURN(error);
+
 }
 
 /*

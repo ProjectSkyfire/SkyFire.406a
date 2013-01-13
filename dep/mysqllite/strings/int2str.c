@@ -24,9 +24,10 @@ char _dig_vec_upper[] =
 char _dig_vec_lower[] =
   "0123456789abcdefghijklmnopqrstuvwxyz";
 
+
 /*
   Convert integer to its string representation in given scale of notation.
-
+   
   SYNOPSIS
     int2str()
       val     - value to convert
@@ -35,10 +36,10 @@ char _dig_vec_lower[] =
       upcase  - set to 1 if we should use upper-case digits
 
   DESCRIPTION
-    Converts the (long) integer value to its character form and moves it to
-    the destination buffer followed by a terminating NUL.
+    Converts the (long) integer value to its character form and moves it to 
+    the destination buffer followed by a terminating NUL. 
     If radix is -2..-36, val is taken to be SIGNED, if radix is  2..36, val is
-    taken to be UNSIGNED. That is, val is signed if and only if radix is.
+    taken to be UNSIGNED. That is, val is signed if and only if radix is. 
     All other radixes treated as bad and nothing will be changed in this case.
 
     For conversion to decimal representation (radix is -10 or 10) one can use
@@ -47,9 +48,9 @@ char _dig_vec_lower[] =
   RETURN VALUE
     Pointer to ending NUL character or NullS if radix is bad.
 */
-
+  
 char *
-int2str(register long int val, register char *dst, register int radix,
+int2str(register long int val, register char *dst, register int radix, 
         int upcase)
 {
   char buffer[65];
@@ -110,9 +111,10 @@ int2str(register long int val, register char *dst, register int radix,
   return dst-1;
 }
 
+
 /*
   Converts integer to its string representation in decimal notation.
-
+   
   SYNOPSIS
     int10_to_str()
       val     - value to convert
@@ -121,7 +123,7 @@ int2str(register long int val, register char *dst, register int radix,
 
   DESCRIPTION
     This is version of int2str() function which is optimized for normal case
-    of radix 10/-10. It takes only sign of radix parameter into account and
+    of radix 10/-10. It takes only sign of radix parameter into account and 
     not its absolute value.
 
   RETURN VALUE

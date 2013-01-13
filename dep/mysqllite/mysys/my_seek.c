@@ -16,13 +16,13 @@
 #include "mysys_priv.h"
 #include "mysys_err.h"
 
-/*
+/* 
   Seek to a position in a file.
 
   ARGUMENTS
   File fd          The file descriptor
   my_off_t pos     The expected position (absolute or relative)
-  int whence       A direction parameter and one of
+  int whence       A direction parameter and one of 
                    {SEEK_SET, SEEK_CUR, SEEK_END}
   myf MyFlags      MY_THREADSAFE must be set in case my_seek may be mixed
                    with my_pread/my_pwrite calls and fd is shared among
@@ -30,7 +30,7 @@
 
   DESCRIPTION
     The my_seek  function  is a wrapper around the system call lseek and
-    repositions  the  offset of the file descriptor fd to the argument
+    repositions  the  offset of the file descriptor fd to the argument 
     offset according to the directive whence as follows:
       SEEK_SET    The offset is set to offset bytes.
       SEEK_CUR    The offset is set to its current location plus offset bytes
@@ -38,7 +38,7 @@
 
   RETURN VALUE
     my_off_t newpos    The new position in the file.
-    MY_FILEPOS_ERROR   An error was encountered while performing
+    MY_FILEPOS_ERROR   An error was encountered while performing 
                        the seek. my_errno is set to indicate the
                        actual error.
 */
@@ -74,6 +74,7 @@ my_off_t my_seek(File fd, my_off_t pos, int whence, myf MyFlags)
   }
   DBUG_RETURN((my_off_t) newpos);
 } /* my_seek */
+
 
 	/* Tell current position of file */
 	/* ARGSUSED */

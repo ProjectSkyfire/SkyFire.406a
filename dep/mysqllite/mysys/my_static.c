@@ -24,11 +24,11 @@
 
 my_bool timed_mutexes= 0;
 
-    /* from my_init */
+	/* from my_init */
 char *	home_dir=0;
 const char      *my_progname=0;
 char		curr_dir[FN_REFLEN]= {0},
-        home_dir_buff[FN_REFLEN]= {0};
+		home_dir_buff[FN_REFLEN]= {0};
 ulong		my_stream_opened=0,my_file_opened=0, my_tmp_file_created=0;
 ulong           my_file_total_opened= 0;
 int		my_umask=0664, my_umask_dir=0777;
@@ -37,34 +37,34 @@ struct st_my_file_info my_file_info_default[MY_NFILE];
 uint   my_file_limit= MY_NFILE;
 struct st_my_file_info *my_file_info= my_file_info_default;
 
-    /* From mf_brkhant */
+	/* From mf_brkhant */
 int			my_dont_interrupt=0;
 volatile int		_my_signals=0;
 struct st_remember _my_sig_remember[MAX_SIGNALS]={{0,0}};
 
-    /* from mf_reccache.c */
+	/* from mf_reccache.c */
 ulong my_default_record_cache_size=RECORD_CACHE_SIZE;
 
-    /* from soundex.c */
-                /* ABCDEFGHIJKLMNOPQRSTUVWXYZ */
-                /* :::::::::::::::::::::::::: */
+	/* from soundex.c */
+				/* ABCDEFGHIJKLMNOPQRSTUVWXYZ */
+				/* :::::::::::::::::::::::::: */
 const char *soundex_map=	  "01230120022455012623010202";
 
-    /* from my_malloc */
+	/* from my_malloc */
 USED_MEM* my_once_root_block=0;			/* pointer to first block */
 uint	  my_once_extra=ONCE_ALLOC_INIT;	/* Memory to alloc / block */
 
-    /* from my_largepage.c */
+	/* from my_largepage.c */
 #ifdef HAVE_LARGE_PAGES
 my_bool my_use_large_pages= 0;
 uint    my_large_page_size= 0;
 #endif
 
-    /* from my_alarm */
+	/* from my_alarm */
 int volatile my_have_got_alarm=0;	/* declare variable to reset */
 ulong my_time_to_wait_for_lock=2;	/* In seconds */
 
-    /* from errors.c */
+	/* from errors.c */
 #ifdef SHARED_LIBRARY
 const char *globerrs[GLOBERRS];		/* my_error_messages is here */
 #endif
@@ -100,7 +100,7 @@ void (*debug_sync_C_callback_ptr)(const char *, size_t);
 ulonglong query_performance_frequency, query_performance_offset;
 #endif
 
-    /* How to disable options */
+	/* How to disable options */
 my_bool my_disable_locking=0;
 my_bool my_disable_async_io=0;
 my_bool my_disable_flush_key_blocks=0;
@@ -132,3 +132,4 @@ struct PSI_bootstrap *PSI_hook= NULL;
   with the version used at compile time for plugin XYZ.
 */
 PSI *PSI_server= NULL;
+

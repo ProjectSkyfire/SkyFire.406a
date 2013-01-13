@@ -1,4 +1,4 @@
-/* Copyright (c) 2007, 2010, Oracle and/or its affiliates. All rights reserved.
+/* Copyright (c) 2007, 2012, Oracle and/or its affiliates. All rights reserved.
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -46,7 +46,7 @@
      see if it is possible to get rid of malloc().
      this constant is sufficient to avoid malloc() on all inputs I have tried.
 */
-#define DTOA_BUFF_SIZE (420 * sizeof(void *))
+#define DTOA_BUFF_SIZE (460 * sizeof(void *))
 
 /* Magic value returned by dtoa() to indicate overflow */
 #define DTOA_OVERFLOW 9999
@@ -92,7 +92,7 @@ size_t my_fcvt(double x, int precision, char *to, my_bool *error)
   char *res, *src, *end, *dst= to;
   char buf[DTOA_BUFF_SIZE];
   DBUG_ASSERT(precision >= 0 && precision < NOT_FIXED_DEC && to != NULL);
-
+  
   res= dtoa(x, 5, precision, &decpt, &sign, &end, buf, sizeof(buf));
 
   if (decpt == DTOA_OVERFLOW)
@@ -132,11 +132,11 @@ size_t my_fcvt(double x, int precision, char *to, my_bool *error)
   {
     if (len <= decpt)
       *dst++= '.';
-
+    
     for (i= precision - max(0, (len - decpt)); i > 0; i--)
       *dst++= '0';
   }
-
+  
   *dst= '\0';
   if (error != NULL)
     *error= FALSE;
@@ -199,12 +199,12 @@ size_t my_fcvt(double x, int precision, char *to, my_bool *error)
      my_gcvt(55, ..., 1, ...);
 
    We do our best to minimize such cases by:
-
+   
    - passing to dtoa() the field width as the number of significant digits
-
+   
    - removing the sign of the number early (and decreasing the width before
      passing it to dtoa())
-
+   
    - choosing the proper format to preserve the most number of significant
      digits.
 */
@@ -217,7 +217,7 @@ size_t my_gcvt(double x, my_gcvt_arg_type type, int width, char *to,
   char buf[DTOA_BUFF_SIZE];
   my_bool have_space, force_e_format;
   DBUG_ASSERT(width > 0 && to != NULL);
-
+  
   /* We want to remove '-' from equations early */
   if (x < 0.)
     width--;
@@ -246,7 +246,7 @@ size_t my_gcvt(double x, my_gcvt_arg_type type, int width, char *to,
      to count it here.
    */
   exp_len= 1 + (decpt >= 101 || decpt <= -99) + (decpt >= 11 || decpt <= -9);
-
+  
   /*
      Do we have enough space for all digits in the 'f' format?
      Let 'len' be the number of significant digits returned by dtoa,
@@ -299,7 +299,7 @@ size_t my_gcvt(double x, my_gcvt_arg_type type, int width, char *to,
        ((decpt <= width && (decpt >= -1 || (decpt == -2 &&
                                             (len > 1 || !force_e_format)))) &&
          !force_e_format)) &&
-
+      
        /*
          Use the 'e' format in some cases even if we have enough space for the
          'f' one. See comment for MAX_DECPT_FOR_F_FORMAT.
@@ -321,7 +321,7 @@ size_t my_gcvt(double x, my_gcvt_arg_type type, int width, char *to,
           *error= TRUE;
         width= decpt;
       }
-
+      
       /*
         We want to truncate (len - width) least significant digits after the
         decimal point. For this we are calling dtoa with mode=5, passing the
@@ -339,7 +339,7 @@ size_t my_gcvt(double x, my_gcvt_arg_type type, int width, char *to,
       *dst++= '0';
       goto end;
     }
-
+    
     /*
       At this point we are sure we have enough space to put all digits
       returned by dtoa
@@ -388,7 +388,7 @@ size_t my_gcvt(double x, my_gcvt_arg_type type, int width, char *to,
         *error= TRUE;
       width= 0;
     }
-
+      
     /* Do we have to truncate any digits? */
     if (width < len)
     {
@@ -430,6 +430,7 @@ size_t my_gcvt(double x, my_gcvt_arg_type type, int width, char *to,
       *dst++= decpt / 10 + '0';
     if (dst < dend)
       *dst++= decpt % 10 + '0';
+
   }
 
 end:
@@ -452,7 +453,7 @@ end:
                   rejected character.
    @param error   Upon return is set to EOVERFLOW in case of underflow or
                   overflow.
-
+   
    @return        The resulting double value. In case of underflow, 0.0 is
                   returned. In case overflow, signed DBL_MAX is returned.
 */
@@ -469,12 +470,14 @@ double my_strtod(const char *str, char **end, int *error)
   return (*error == 0) ? res : (res < 0 ? -DBL_MAX : DBL_MAX);
 }
 
+
 double my_atof(const char *nptr)
 {
   int error;
   const char *end= nptr+65535;                  /* Should be enough */
   return (my_strtod(nptr, (char**) &end, &error));
 }
+
 
 /****************************************************************
  *
@@ -516,6 +519,7 @@ double my_atof(const char *nptr)
   * pow5mult rewritten to use pre-calculated pow5 list instead of
     the one generated on the fly.
 */
+
 
 /*
   On a machine with IEEE extended-precision registers, it is
@@ -629,6 +633,7 @@ typedef struct Bigint
   int wds;                 /* current length in 32-bit words */
 } Bigint;
 
+
 /* A simple stack-memory based allocator for Bigints */
 
 typedef struct Stack_alloc
@@ -643,6 +648,7 @@ typedef struct Stack_alloc
   Bigint *freelist[Kmax+1];
 } Stack_alloc;
 
+
 /*
   Try to allocate object on stack, and resort to malloc if all
   stack memory is used. Ensure allocated objects to be aligned by the pointer
@@ -653,6 +659,7 @@ typedef struct Stack_alloc
 static Bigint *Balloc(int k, Stack_alloc *alloc)
 {
   Bigint *rv;
+  DBUG_ASSERT(k <= Kmax);
   if (k <= Kmax &&  alloc->freelist[k])
   {
     rv= alloc->freelist[k];
@@ -681,6 +688,7 @@ static Bigint *Balloc(int k, Stack_alloc *alloc)
   return rv;
 }
 
+
 /*
   If object was allocated on stack, try putting it to the free
   list. Otherwise call free().
@@ -703,6 +711,7 @@ static void Bfree(Bigint *v, Stack_alloc *alloc)
   }
 }
 
+
 /*
   This is to place return value of dtoa in: tries to use stack
   as well, but passes by free lists management and just aligns len by
@@ -724,6 +733,7 @@ static char *dtoa_alloc(int i, Stack_alloc *alloc)
   return rv;
 }
 
+
 /*
   dtoa_free() must be used to free values s returned by dtoa()
   This is the counterpart of dtoa_alloc()
@@ -734,6 +744,7 @@ static void dtoa_free(char *gptr, char *buf, size_t buf_size)
   if (gptr < buf || gptr >= buf + buf_size)
     free(gptr);
 }
+
 
 /* Bigint arithmetic functions */
 
@@ -772,6 +783,20 @@ static Bigint *multadd(Bigint *b, int m, int a, Stack_alloc *alloc)
   return b;
 }
 
+/**
+  Converts a string to Bigint.
+  
+  Now we have nd0 digits, starting at s, followed by a
+  decimal point, followed by nd-nd0 digits.  
+  Unless nd0 == nd, in which case we have a number of the form:
+     ".xxxxxx"    or    "xxxxxx."
+
+  @param s     Input string, already partially parsed by my_strtod_int().
+  @param nd0   Number of digits before decimal point.
+  @param nd    Total number of digits.
+  @param y9    Pre-computed value of the first nine digits.
+  @param alloc Stack allocator for Bigints.
+ */
 static Bigint *s2b(const char *s, int nd0, int nd, ULong y9, Stack_alloc *alloc)
 {
   Bigint *b;
@@ -783,7 +808,7 @@ static Bigint *s2b(const char *s, int nd0, int nd, ULong y9, Stack_alloc *alloc)
   b= Balloc(k, alloc);
   b->p.x[0]= y9;
   b->wds= 1;
-
+  
   i= 9;
   if (9 < nd0)
   {
@@ -791,14 +816,16 @@ static Bigint *s2b(const char *s, int nd0, int nd, ULong y9, Stack_alloc *alloc)
     do
       b= multadd(b, 10, *s++ - '0', alloc);
     while (++i < nd0);
-    s++;
+    s++;                                        /* skip '.' */
   }
   else
     s+= 10;
+  /* now do the fractional part */
   for(; i < nd; i++)
     b= multadd(b, 10, *s++ - '0', alloc);
   return b;
 }
+
 
 static int hi0bits(register ULong x)
 {
@@ -832,6 +859,7 @@ static int hi0bits(register ULong x)
   }
   return k;
 }
+
 
 static int lo0bits(ULong *y)
 {
@@ -882,6 +910,7 @@ static int lo0bits(ULong *y)
   return k;
 }
 
+
 /* Convert integer to Bigint number */
 
 static Bigint *i2b(int i, Stack_alloc *alloc)
@@ -893,6 +922,7 @@ static Bigint *i2b(int i, Stack_alloc *alloc)
   b->wds= 1;
   return b;
 }
+
 
 /* Multiply two Bigint numbers */
 
@@ -946,6 +976,7 @@ static Bigint *mult(Bigint *a, Bigint *b, Stack_alloc *alloc)
   return c;
 }
 
+
 /*
   Precalculated array of powers of 5: tested to be enough for
   vasting majority of dtoa_r cases.
@@ -972,6 +1003,7 @@ static ULong powers5[]=
   2161952759UL, 4100910556UL, 1608314830UL, 349175UL
 };
 
+
 static Bigint p5_a[]=
 {
   /*  { x } - k - maxwds - sign - wds */
@@ -988,9 +1020,10 @@ static Bigint p5_a[]=
 
 static Bigint *pow5mult(Bigint *b, int k, Stack_alloc *alloc)
 {
-  Bigint *b1, *p5, *p51;
+  Bigint *b1, *p5, *p51=NULL;
   int i;
   static int p05[3]= { 5, 25, 125 };
+  my_bool overflow= FALSE;
 
   if ((i= k & 3))
     b= multadd(b, p05[i-1], 0, alloc);
@@ -1009,19 +1042,25 @@ static Bigint *pow5mult(Bigint *b, int k, Stack_alloc *alloc)
     if (!(k>>= 1))
       break;
     /* Calculate next power of 5 */
-    if (p5 < p5_a + P5A_MAX)
-      ++p5;
-    else if (p5 == p5_a + P5A_MAX)
-      p5= mult(p5, p5, alloc);
-    else
+    if (overflow)
     {
       p51= mult(p5, p5, alloc);
       Bfree(p5, alloc);
       p5= p51;
     }
+    else if (p5 < p5_a + P5A_MAX)
+      ++p5;
+    else if (p5 == p5_a + P5A_MAX)
+    {
+      p5= mult(p5, p5, alloc);
+      overflow= TRUE;
+    }
   }
+  if (p51)
+    Bfree(p51, alloc);
   return b;
 }
+
 
 static Bigint *lshift(Bigint *b, int k, Stack_alloc *alloc)
 {
@@ -1062,6 +1101,7 @@ static Bigint *lshift(Bigint *b, int k, Stack_alloc *alloc)
   return b1;
 }
 
+
 static int cmp(Bigint *a, Bigint *b)
 {
   ULong *xa, *xa0, *xb, *xb0;
@@ -1084,6 +1124,7 @@ static int cmp(Bigint *a, Bigint *b)
   }
   return 0;
 }
+
 
 static Bigint *diff(Bigint *a, Bigint *b, Stack_alloc *alloc)
 {
@@ -1138,6 +1179,7 @@ static Bigint *diff(Bigint *a, Bigint *b, Stack_alloc *alloc)
   return c;
 }
 
+
 static double ulp(U *x)
 {
   register Long L;
@@ -1148,6 +1190,7 @@ static double ulp(U *x)
   word1(&u) = 0;
   return dval(&u);
 }
+
 
 static double b2d(Bigint *a, int *e)
 {
@@ -1186,6 +1229,7 @@ static double b2d(Bigint *a, int *e)
 #undef d1
   return dval(&d);
 }
+
 
 static Bigint *d2b(U *d, int *e, int *bits, Stack_alloc *alloc)
 {
@@ -1236,6 +1280,7 @@ static Bigint *d2b(U *d, int *e, int *bits, Stack_alloc *alloc)
 #undef d1
 }
 
+
 static double ratio(Bigint *a, Bigint *b)
 {
   U da, db;
@@ -1267,7 +1312,7 @@ static const double tinytens[]=
   9007199254740992.*9007199254740992.e-256 /* = 2^106 * 1e-53 */
 };
 /*
-  The factor of 2^53 in tinytens[4] helps us avoid setting the underflow
+  The factor of 2^53 in tinytens[4] helps us avoid setting the underflow 
   flag unnecessarily.  It leads to a song and dance at the end of strtod.
 */
 #define Scale_Bit 0x10
@@ -1275,16 +1320,16 @@ static const double tinytens[]=
 
 /*
   strtod for IEEE--arithmetic machines.
-
+ 
   This strtod returns a nearest machine number to the input decimal
   string (or sets errno to EOVERFLOW). Ties are broken by the IEEE round-even
   rule.
-
+ 
   Inspired loosely by William D. Clinger's paper "How to Read Floating
   Point Numbers Accurately" [Proc. ACM SIGPLAN '90, pp. 92-101].
-
+ 
   Modifications:
-
+ 
    1. We only require IEEE (not IEEE double-extended).
    2. We get by with floating-point arithmetic in a case that
      Clinger missed -- when we're computing d * 10^n
@@ -1350,7 +1395,7 @@ static double my_strtod_int(const char *s00, char **se, int *error, char *buf, s
  break2:
   if (s >= end)
     goto ret0;
-
+  
   if (*s == '0')
   {
     nz0= 1;
@@ -1371,34 +1416,50 @@ static double my_strtod_int(const char *s00, char **se, int *error, char *buf, s
     c= *++s;
     if (!nd)
     {
-      for (; s < end && c == '0'; c= *++s)
+      for (; s < end; ++s)
+      {
+        c= *s;
+        if (c != '0')
+          break;
         nz++;
+      }
       if (s < end && c > '0' && c <= '9')
       {
         s0= s;
         nf+= nz;
         nz= 0;
-        goto have_dig;
       }
-      goto dig_done;
+      else
+        goto dig_done;
     }
-    for (; s < end && c >= '0' && c <= '9'; c = *++s)
+    for (; s < end; ++s)
     {
- have_dig:
-      nz++;
-      if (c-= '0')
+      c= *s;
+      if (c < '0' || c > '9')
+        break;
+      /*
+        Here we are parsing the fractional part.
+        We can stop counting digits after a while: the extra digits
+        will not contribute to the actual result produced by s2b().
+        We have to continue scanning, in case there is an exponent part.
+       */
+      if (nd < 2 * DBL_DIG)
       {
-        nf+= nz;
-        for (i= 1; i < nz; i++)
+        nz++;
+        if (c-= '0')
+        {
+          nf+= nz;
+          for (i= 1; i < nz; i++)
+            if (nd++ < 9)
+              y*= 10;
+            else if (nd <= DBL_DIG + 1)
+              z*= 10;
           if (nd++ < 9)
-            y*= 10;
+            y= 10*y + c;
           else if (nd <= DBL_DIG + 1)
-            z*= 10;
-        if (nd++ < 9)
-          y= 10*y + c;
-        else if (nd <= DBL_DIG + 1)
-          z= 10*z + c;
-        nz= 0;
+            z= 10*z + c;
+          nz= 0;
+        }
       }
     }
   }
@@ -2013,6 +2074,7 @@ static double my_strtod_int(const char *s00, char **se, int *error, char *buf, s
   return sign ? -dval(&rv) : dval(&rv);
 }
 
+
 static int quorem(Bigint *b, Bigint *S)
 {
   int n;
@@ -2075,6 +2137,7 @@ static int quorem(Bigint *b, Bigint *S)
   }
   return q;
 }
+
 
 /*
    dtoa for IEEE arithmetic (dmg): convert double to ASCII string.
@@ -2149,7 +2212,7 @@ static char *dtoa(double dd, int mode, int ndigits, int *decpt, int *sign,
     to hold the suppressed trailing zeros.
   */
 
-  int bbits, b2, b5, be, dig, i, ieps, UNINIT_VAR(ilim), ilim0,
+  int bbits, b2, b5, be, dig, i, ieps, UNINIT_VAR(ilim), ilim0, 
     UNINIT_VAR(ilim1), j, j1, k, k0, k_check, leftright, m2, m5, s2, s5,
     spec_case, try_quick;
   Long L;
@@ -2163,7 +2226,7 @@ static char *dtoa(double dd, int mode, int ndigits, int *decpt, int *sign,
   int rounding;
 #endif
   Stack_alloc alloc;
-
+  
   alloc.begin= alloc.free= buf;
   alloc.end= buf + buf_size;
   memset(alloc.freelist, 0, sizeof(alloc.freelist));
@@ -2190,7 +2253,7 @@ static char *dtoa(double dd, int mode, int ndigits, int *decpt, int *sign,
       *rve= res + 1;
     return res;
   }
-
+  
 #ifdef Honor_FLT_ROUNDS
   if ((rounding= Flt_Rounds) >= 2)
   {
@@ -2214,12 +2277,12 @@ static char *dtoa(double dd, int mode, int ndigits, int *decpt, int *sign,
       log10(x)      =  log(x) / log(10)
                    ~=~ log(1.5)/log(10) + (x-1.5)/(1.5*log(10))
       log10(d)= (i-Bias)*log(2)/log(10) + log10(d2)
-
+     
       This suggests computing an approximation k to log10(d) by
-
+     
       k= (i - Bias)*0.301029995663981
            + ( (d2-1.5)*0.289529654602168 + 0.176091259055681 );
-
+     
       We want k to be too large rather than too small.
       The error in the first-order Taylor series approximation
       is in our favor, so we just round up the constant enough
@@ -2561,7 +2624,7 @@ bump_up:
   /*
     Arrange for convenient computation of quotients:
     shift left if necessary so divisor has 4 leading 0 bits.
-
+    
     Perhaps we should just compute leading 28 bits of S once
     a nd for all and pass them and a shift to quorem, so it
     can do shifts and ors to compute the numerator for q.

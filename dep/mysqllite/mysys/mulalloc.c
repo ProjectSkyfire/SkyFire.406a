@@ -25,10 +25,10 @@
   SYNOPSIS
     my_multi_malloc()
       myFlags              Flags
-    ptr1, length1      Multiple arguments terminated by null ptr
-    ptr2, length2      ...
+	ptr1, length1      Multiple arguments terminated by null ptr
+	ptr2, length2      ...
         ...
-    NULL
+	NULL
 */
 
 void* my_multi_malloc(myf myFlags, ...)

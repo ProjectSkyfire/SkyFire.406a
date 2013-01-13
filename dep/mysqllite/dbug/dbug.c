@@ -101,6 +101,7 @@
 
 #ifndef DBUG_OFF
 
+
 /*
  *            Manifest constants which may be "tuned" if desired.
  */
@@ -233,6 +234,7 @@ struct settings {
  *      Local variables not seen by user.
  */
 
+
 static BOOLEAN init_done= FALSE; /* Set to TRUE when initialization done */
 static struct settings init_settings;
 static const char *db_process= 0;/* Pointer to process name; argv[0] */
@@ -286,7 +288,7 @@ static void DBUGOpenFile(CODE_STATE *,const char *, const char *, int);
 static void DBUGCloseFile(CODE_STATE *cs, FILE *fp);
         /* Push current debug settings */
 static void PushState(CODE_STATE *cs);
-    /* Free memory associated with debug state. */
+	/* Free memory associated with debug state. */
 static void FreeState (CODE_STATE *cs, struct settings *state, int free_state);
         /* Test for tracing enabled */
 static int DoTrace(CODE_STATE *cs);
@@ -338,6 +340,7 @@ static void DbugVfprintf(FILE *stream, const char* format, va_list args);
 #define EXISTS(pathname)         (access(pathname, F_OK) == 0)
 #define WRITABLE(pathname)       (access(pathname, W_OK) == 0)
 #endif
+
 
 /*
 ** Macros to allow dbugging with threads
@@ -827,6 +830,7 @@ void _db_push_(const char *control)
     FixTraceFlags(old_fflags, cs);
 }
 
+
 /**
   Returns TRUE if session-local settings have been set.
 */
@@ -1175,7 +1179,7 @@ void _db_return_(uint _line_, struct _db_stack_frame_ *_stack_frame_)
         pthread_mutex_lock(&THR_LOCK_dbug);
       DoPrefix(cs, _line_);
       Indent(cs, cs->level);
-      (void) fprintf(cs->stack->out_file, "<%s\n", cs->func);
+      (void) fprintf(cs->stack->out_file, "<%s %u\n", cs->func, _line_);
       DbugFlush(cs);
     }
   }
@@ -1190,6 +1194,7 @@ void _db_return_(uint _line_, struct _db_stack_frame_ *_stack_frame_)
     cs->framep= cs->framep->prev;
   errno=save_errno;
 }
+
 
 /*
  *  FUNCTION
@@ -1218,6 +1223,7 @@ void _db_pargs_(uint _line_, const char *keyword)
   cs->u_line= _line_;
   cs->u_keyword= keyword;
 }
+
 
 /*
  *  FUNCTION
@@ -1273,7 +1279,7 @@ void _db_doprnt_(const char *format,...)
 
 /*
  * This function is intended as a
- * vfprintf clone with consistent, platform independent output for
+ * vfprintf clone with consistent, platform independent output for 
  * problematic formats like %p, %zd and %lld.
  */
 static void DbugVfprintf(FILE *stream, const char* format, va_list args)
@@ -1282,6 +1288,7 @@ static void DbugVfprintf(FILE *stream, const char* format, va_list args)
   (void) my_vsnprintf(cvtbuf, sizeof(cvtbuf), format, args);
   (void) fprintf(stream, "%s\n", cvtbuf);
 }
+
 
 /*
  *  FUNCTION
@@ -1342,6 +1349,7 @@ void _db_dump_(uint _line_, const char *keyword,
     DbugFlush(cs);
   }
 }
+
 
 /*
  *  FUNCTION
@@ -1587,6 +1595,7 @@ static void FreeState(CODE_STATE *cs, struct settings *state, int free_state)
     free((void*) state);
 }
 
+
 /*
  *  FUNCTION
  *
@@ -1640,6 +1649,7 @@ void _db_end_()
   pthread_mutex_unlock(&THR_LOCK_dbug);
   FreeState(cs, &tmp, 0);
 }
+
 
 /*
  *  FUNCTION
@@ -1743,6 +1753,7 @@ static void Indent(CODE_STATE *cs, int indent)
   }
 }
 
+
 /*
  *  FUNCTION
  *
@@ -1771,6 +1782,7 @@ static void FreeList(struct link *linkp)
     free((void*) old);
   }
 }
+
 
 /*
  *  FUNCTION
@@ -1838,6 +1850,7 @@ static void DoPrefix(CODE_STATE *cs, uint _line_)
   if (cs->stack->flags & DEPTH_ON)
     (void) fprintf(cs->stack->out_file, "%4d: ", cs->level);
 }
+
 
 /*
  *  FUNCTION
@@ -1931,6 +1944,7 @@ static void DBUGCloseFile(CODE_STATE *cs, FILE *fp)
   }
 }
 
+
 /*
  *  FUNCTION
  *
@@ -1957,6 +1971,7 @@ static void DbugExit(const char *why)
   (void) fflush(stderr);
   DBUG_ABORT();
 }
+
 
 /*
  *  FUNCTION
@@ -1988,6 +2003,7 @@ static char *DbugMalloc(size_t size)
   return new_malloc;
 }
 
+
 /*
  *     strtok lookalike - splits on ':', magically handles ::, :\ and :/
  */
@@ -1999,6 +2015,7 @@ static const char *DbugStrTok(const char *s)
     s++;
   return s;
 }
+
 
 /*
  *  FUNCTION
@@ -2028,6 +2045,7 @@ static const char *BaseName(const char *pathname)
   return base;
 }
 
+
 /*
  *  FUNCTION
  *
@@ -2050,6 +2068,7 @@ static const char *BaseName(const char *pathname)
  *      create access to the named file.  Returns FALSE otherwise.
  *
  */
+
 
 #ifndef Writable
 
@@ -2079,6 +2098,7 @@ static BOOLEAN Writable(const char *pathname)
   return granted;
 }
 #endif
+
 
 /*
  *  FUNCTION
@@ -2174,6 +2194,7 @@ char *s;
 }
 #endif /* HAVE_PERROR */
 
+
         /* flush dbug-stream, free mutex lock & wait delay */
         /* This is because some systems (MSDOS!!) dosn't flush fileheader */
         /* and dbug-file isn't readable after a system crash !! */
@@ -2190,6 +2211,7 @@ static void DbugFlush(CODE_STATE *cs)
     pthread_mutex_unlock(&THR_LOCK_dbug);
 } /* DbugFlush */
 
+
 /* For debugging */
 
 void _db_flush_()
@@ -2198,6 +2220,7 @@ void _db_flush_()
   get_code_state_or_return;
   (void) fflush(cs->stack->out_file);
 }
+
 
 #ifndef __WIN__
 void _db_suicide_()
@@ -2216,6 +2239,7 @@ void _db_suicide_()
   assert(FALSE); /* With full signal mask, we should never return here. */
 }
 #endif  /* ! __WIN__ */
+
 
 void _db_lock_file_()
 {
@@ -2239,6 +2263,7 @@ const char* _db_get_func_(void)
   get_code_state_or_return NULL;
   return cs->func;
 }
+
 
 #else
 

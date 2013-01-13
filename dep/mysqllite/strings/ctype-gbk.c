@@ -13,7 +13,7 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA */
 
-/* This file is for Chinese character sets GBK, created by Wei He
+/* This file is for Chinese character sets GBK, created by Wei He 
    (hewei@mail.ied.ac.cn)
 */
 
@@ -25,11 +25,13 @@
  * .configure. mbmaxlen_gbk=2
  */
 
+
 #include <my_global.h>
 #include "m_string.h"
 #include "m_ctype.h"
 
 #ifdef HAVE_CHARSET_gbk
+
 
 /* Support for Chinese(GBK) characters, by hewei@mail.ied.ac.cn */
 
@@ -134,6 +136,7 @@ static uchar to_upper_gbk[]=
   (uchar) '\360',(uchar) '\361',(uchar) '\362',(uchar) '\363',(uchar) '\364',(uchar) '\365',(uchar) '\366',(uchar) '\367',
   (uchar) '\370',(uchar) '\371',(uchar) '\372',(uchar) '\373',(uchar) '\374',(uchar) '\375',(uchar) '\376',(uchar) '\377',
 };
+
 
 static MY_UNICASE_INFO cA2[256]=
 {
@@ -543,6 +546,7 @@ static MY_UNICASE_INFO cA3[256]=
   {0xA3FF,0xA3FF,0xA3FF}
 };
 
+
 static MY_UNICASE_INFO cA6[256]=
 {
   {0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0}, /* xx00 */
@@ -746,6 +750,7 @@ static MY_UNICASE_INFO cA6[256]=
   {0xA6FE,0xA6FE,0x003F},
   {0xA6FF,0xA6FF,0xA6FF}
 };
+
 
 static MY_UNICASE_INFO cA7[256]=
 {
@@ -951,6 +956,7 @@ static MY_UNICASE_INFO cA7[256]=
   {0xA7FF,0xA7FF,0xA7FF}
 };
 
+
 static MY_UNICASE_INFO *my_caseinfo_gbk[256]=
 {
   NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, /* 0 */
@@ -986,6 +992,8 @@ static MY_UNICASE_INFO *my_caseinfo_gbk[256]=
   NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, /* F */
   NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
 };
+
+
 
 static uchar sort_order_gbk[]=
 {
@@ -3430,11 +3438,12 @@ static uint16 gbksortorder(uint16 i)
   return 0x8100+gbk_order[idx];
 }
 
+
 int my_strnncoll_gbk_internal(const uchar **a_res, const uchar **b_res,
-                  size_t length)
+			      size_t length)
 {
   const uchar *a= *a_res, *b= *b_res;
-  uint a_char,b_char;
+  uint a_char,b_char; 
 
   while (length--)
   {
@@ -3444,22 +3453,24 @@ int my_strnncoll_gbk_internal(const uchar **a_res, const uchar **b_res,
       b_char= gbkcode(*b,*(b+1));
       if (a_char != b_char)
         return ((int) gbksortorder((uint16) a_char) -
-        (int) gbksortorder((uint16) b_char));
+		(int) gbksortorder((uint16) b_char));
       a+= 2;
       b+= 2;
       length--;
     }
     else if (sort_order_gbk[*a++] != sort_order_gbk[*b++])
       return ((int) sort_order_gbk[a[-1]] -
-          (int) sort_order_gbk[b[-1]]);
+	      (int) sort_order_gbk[b[-1]]);
   }
   *a_res= a;
   *b_res= b;
   return 0;
 }
 
+
+
 int my_strnncoll_gbk(CHARSET_INFO *cs __attribute__((unused)),
-             const uchar *a, size_t a_length,
+		     const uchar *a, size_t a_length,
                      const uchar *b, size_t b_length,
                      my_bool b_is_prefix)
 {
@@ -3468,9 +3479,10 @@ int my_strnncoll_gbk(CHARSET_INFO *cs __attribute__((unused)),
   return res ? res : (int) ((b_is_prefix ? length : a_length) - b_length);
 }
 
+
 static int my_strnncollsp_gbk(CHARSET_INFO * cs __attribute__((unused)),
-                  const uchar *a, size_t a_length,
-                  const uchar *b, size_t b_length,
+			      const uchar *a, size_t a_length, 
+			      const uchar *b, size_t b_length,
                               my_bool diff_if_only_endspace_difference)
 {
   size_t length= min(a_length, b_length);
@@ -3501,11 +3513,12 @@ static int my_strnncollsp_gbk(CHARSET_INFO * cs __attribute__((unused)),
     for (end= a + a_length-length; a < end ; a++)
     {
       if (*a != ' ')
-    return (*a < ' ') ? -swap : swap;
+	return (*a < ' ') ? -swap : swap;
     }
   }
   return res;
 }
+
 
 static size_t my_strnxfrm_gbk(CHARSET_INFO *cs __attribute__((unused)),
                               uchar *dest, size_t len,
@@ -3526,7 +3539,7 @@ static size_t my_strnxfrm_gbk(CHARSET_INFO *cs __attribute__((unused)),
         *dest++ = gbktail(e);
       src+=2;
       len--;
-    } else
+    } else 
       *dest++ = sort_order_gbk[(uchar) *src++];
   }
   if (dstlen > srclen)
@@ -3534,8 +3547,9 @@ static size_t my_strnxfrm_gbk(CHARSET_INFO *cs __attribute__((unused)),
   return dstlen;
 }
 
+
 static uint ismbchar_gbk(CHARSET_INFO *cs __attribute__((unused)),
-         const char* p, const char *e)
+		 const char* p, const char *e)
 {
   return (isgbkhead(*(p)) && (e)-(p)>1 && isgbktail(*((p)+1))? 2: 0);
 }
@@ -7557,6 +7571,8 @@ static int func_gbk_uni_onechar(int code){
   return(0);
 }
 
+
+
 /* page 0 0x00A4-0x0451 */
 static uint16 tab_uni_gbk0[]={
 0xA1E8,     0,     0,0xA1EC,0xA1A7,     0,     0,     0,
@@ -10649,25 +10665,25 @@ static int func_uni_gbk_onechar(int code){
 
 static int
 my_wc_mb_gbk(CHARSET_INFO *cs  __attribute__((unused)),
-          my_wc_t wc, uchar *s, uchar *e)
+	      my_wc_t wc, uchar *s, uchar *e)
 {
   int code;
-
+  
   if (s >= e)
     return MY_CS_TOOSMALL;
-
+  
   if ((uint) wc < 0x80)
   {
     s[0]= (uchar) wc;
     return 1;
   }
-
+  
   if (!(code=func_uni_gbk_onechar(wc)))
     return MY_CS_ILUNI;
-
+  
   if (s+2>e)
     return MY_CS_TOOSMALL2;
-
+    
   s[0]=code>>8;
   s[1]=code&0xFF;
   return 2;
@@ -10675,29 +10691,31 @@ my_wc_mb_gbk(CHARSET_INFO *cs  __attribute__((unused)),
 
 static int
 my_mb_wc_gbk(CHARSET_INFO *cs __attribute__((unused)),
-          my_wc_t *pwc, const uchar *s, const uchar *e)
+	      my_wc_t *pwc, const uchar *s, const uchar *e)
 {
   int hi;
-
+  
   if (s >= e)
     return MY_CS_TOOSMALL;
-
+  
   hi=s[0];
-
+  
   if (hi<0x80)
   {
     pwc[0]=hi;
     return 1;
   }
-
+  
   if (s+2>e)
     return MY_CS_TOOSMALL2;
-
+    
   if (!(pwc[0]=func_gbk_uni_onechar( (hi<<8) + s[1])))
     return -2;
-
+  
   return 2;
+  
 }
+
 
 /*
   Returns well formed length of a GBK string.
@@ -10732,6 +10750,9 @@ size_t my_well_formed_len_gbk(CHARSET_INFO *cs __attribute__((unused)),
   }
   return (size_t) (b - b0);
 }
+
+
+                             
 
 static MY_COLLATION_HANDLER my_collation_ci_handler =
 {
@@ -10778,6 +10799,7 @@ static MY_CHARSET_HANDLER my_charset_handler=
   my_strntoull10rnd_8bit,
   my_scan_8bit
 };
+
 
 CHARSET_INFO my_charset_gbk_chinese_ci=
 {
@@ -10842,5 +10864,6 @@ CHARSET_INFO my_charset_gbk_bin=
     &my_charset_handler,
     &my_collation_mb_bin_handler
 };
+
 
 #endif

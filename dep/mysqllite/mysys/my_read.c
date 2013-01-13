@@ -61,7 +61,7 @@ size_t my_read(File Filedes, uchar *Buffer, size_t Count, myf MyFlags)
                             my_errno));
 
       if ((readbytes == 0 || (int) readbytes == -1) && errno == EINTR)
-      {
+      {  
         DBUG_PRINT("debug", ("my_read() was interrupted and returned %ld",
                              (long) readbytes));
         continue;                              /* Interrupted */
