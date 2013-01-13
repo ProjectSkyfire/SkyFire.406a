@@ -168,7 +168,6 @@ static void vio_init(Vio* vio, enum enum_vio_type type,
   DBUG_VOID_RETURN;
 }
 
-
 /* Reset initialized VIO to use with another transport type */
 
 void vio_reset(Vio* vio, enum enum_vio_type type,
@@ -177,7 +176,6 @@ void vio_reset(Vio* vio, enum enum_vio_type type,
   my_free(vio->read_buffer);
   vio_init(vio, type, sd, hPipe, flags);
 }
-
 
 /* Open the socket or TCP/IP connection and read the fnctl() status */
 
@@ -223,7 +221,6 @@ Vio *vio_new(my_socket sd, enum enum_vio_type type, uint flags)
   DBUG_RETURN(vio);
 }
 
-
 #ifdef __WIN__
 
 Vio *vio_new_win32pipe(HANDLE hPipe)
@@ -265,7 +262,6 @@ Vio *vio_new_win32shared_memory(HANDLE handle_file_map, HANDLE handle_map,
 #endif
 #endif
 
-
 void vio_delete(Vio* vio)
 {
   if (!vio)
@@ -276,7 +272,6 @@ void vio_delete(Vio* vio)
   my_free(vio->read_buffer);
   my_free(vio);
 }
-
 
 /*
   Cleanup memory allocated by vio or the

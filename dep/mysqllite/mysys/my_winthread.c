@@ -62,7 +62,6 @@ static unsigned int __stdcall pthread_start(void *p)
   return 0;
 }
 
-
 int pthread_create(pthread_t *thread_id, const pthread_attr_t *attr,
                    pthread_handler func, void *param)
 {
@@ -93,7 +92,6 @@ error_return:
          ("Can't create thread to handle request (error %d)",errno));
   DBUG_RETURN(-1);
 }
-
 
 void pthread_exit(void *a)
 {
@@ -131,7 +129,6 @@ error_return:
 
 int pthread_cancel(pthread_t thread)
 {
-
   HANDLE handle= 0;
   BOOL ok= FALSE;
 

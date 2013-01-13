@@ -56,9 +56,7 @@
 #define ENTRIES_INCREMENT  (65536/sizeof(FILEINFO))
 #define NAMES_START_SIZE   32768
 
-
 static int	comp_names(struct fileinfo *a,struct fileinfo *b);
-
 
 	/* We need this because program don't know with malloc we used */
 
@@ -76,14 +74,12 @@ void my_dirend(MY_DIR *buffer)
   DBUG_VOID_RETURN;
 } /* my_dirend */
 
-
 	/* Compare in sort of filenames */
 
 static int comp_names(struct fileinfo *a, struct fileinfo *b)
 {
   return (strcmp(a->name,b->name));
 } /* comp_names */
-
 
 #if !defined(_WIN32)
 
@@ -184,7 +180,6 @@ MY_DIR	*my_dir(const char *path, myf MyFlags)
     my_error(EE_DIR,MYF(ME_BELL+ME_WAITTANG),path,my_errno);
   DBUG_RETURN((MY_DIR *) NULL);
 } /* my_dir */
-
 
 /*
  * Convert from directory name to filename.
@@ -290,7 +285,6 @@ MY_DIR	*my_dir(const char *path, myf MyFlags)
   }
   else
   {
-
     do
     {
 #ifdef __BORLANDC__
@@ -378,7 +372,6 @@ error:
 ** Note that MY_STAT is assumed to be same as struct stat
 ****************************************************************************/ 
 
-
 int my_fstat(File Filedes, MY_STAT *stat_area,
              myf MyFlags __attribute__((unused)))
 {
@@ -390,7 +383,6 @@ int my_fstat(File Filedes, MY_STAT *stat_area,
   DBUG_RETURN(fstat(Filedes, (struct stat *) stat_area));
 #endif
 }
-
 
 MY_STAT *my_stat(const char *path, MY_STAT *stat_area, myf my_flags)
 {

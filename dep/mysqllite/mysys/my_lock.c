@@ -124,8 +124,6 @@ error:
 }
 #endif
 
-
-
 /* 
   Lock a part of a file 
 

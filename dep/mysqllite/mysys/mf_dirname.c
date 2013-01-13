@@ -46,7 +46,6 @@ size_t dirname_length(const char *name)
   return (size_t) (gpos+1-(char*) name);
 }
 
-
 /*
   Gives directory part of filename. Directory ends with '/'
 
@@ -70,7 +69,6 @@ size_t dirname_part(char *to, const char *name, size_t *to_res_length)
   *to_res_length= (size_t) (convert_dirname(to, name, name+length) - to);
   DBUG_RETURN(length);
 } /* dirname */
-
 
 /*
   Convert directory name to use under this system

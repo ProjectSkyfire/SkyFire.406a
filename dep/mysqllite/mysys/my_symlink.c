@@ -64,7 +64,6 @@ int my_readlink(char *to, const char *filename, myf MyFlags)
 #endif /* HAVE_READLINK */
 }
 
-
 /* Create a symbolic link */
 
 int my_symlink(const char *content, const char *linkname, myf MyFlags)
@@ -97,7 +96,6 @@ int my_symlink(const char *content, const char *linkname, myf MyFlags)
 #else
 #define BUFF_LEN FN_LEN
 #endif
-
 
 int my_is_symlink(const char *filename __attribute__((unused)))
 {

@@ -69,7 +69,6 @@ end:
   DBUG_RETURN(error);
 } /* my_redel */
 
-
 	/* Copy stat from one file to another */
 	/* Return -1 if can't get stat, 1 if wrong type of file */
 

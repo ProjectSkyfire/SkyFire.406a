@@ -76,7 +76,6 @@ void* my_once_alloc(size_t Size, myf MyFlags)
   return((void*) point);
 } /* my_once_alloc */
 
-
 char *my_once_strdup(const char *src,myf myflags)
 {
   size_t len= strlen(src)+1;
@@ -86,7 +85,6 @@ char *my_once_strdup(const char *src,myf myflags)
   return (char*) dst;
 }
 
-
 void *my_once_memdup(const void *src, size_t len, myf myflags)
 {
   uchar *dst= my_once_alloc(len, myflags);
@@ -94,7 +92,6 @@ void *my_once_memdup(const void *src, size_t len, myf myflags)
     memcpy(dst, src, len);
   return dst;
 }
-
 
 /*
   Deallocate everything that was allocated with my_once_alloc

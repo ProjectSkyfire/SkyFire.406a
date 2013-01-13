@@ -21,7 +21,6 @@
 #undef EXTRA_DEBUG
 #define EXTRA_DEBUG
 
-
 /*
   Initialize memory root
 
@@ -71,7 +70,6 @@ void init_alloc_root(MEM_ROOT *mem_root, size_t block_size,
 #endif
   DBUG_VOID_RETURN;
 }
-
 
 /*
   SYNOPSIS
@@ -143,7 +141,6 @@ void reset_root_defaults(MEM_ROOT *mem_root, size_t block_size,
 #endif
     mem_root->pre_alloc= 0;
 }
-
 
 void *alloc_root(MEM_ROOT *mem_root, size_t length)
 {
@@ -241,7 +238,6 @@ void *alloc_root(MEM_ROOT *mem_root, size_t length)
 #endif
 }
 
-
 /*
   Allocate many pointers at the same time.
 
@@ -323,7 +319,6 @@ static inline void mark_blocks_free(MEM_ROOT* root)
   root->used= 0;
   root->first_block_usage= 0;
 }
-
 
 /*
   Deallocate everything used by alloc_root or just move
@@ -408,12 +403,10 @@ void set_prealloc_root(MEM_ROOT *root, char *ptr)
   }
 }
 
-
 char *strdup_root(MEM_ROOT *root, const char *str)
 {
   return strmake_root(root, str, strlen(str));
 }
-
 
 char *strmake_root(MEM_ROOT *root, const char *str, size_t len)
 {
@@ -425,7 +418,6 @@ char *strmake_root(MEM_ROOT *root, const char *str, size_t len)
   }
   return pos;
 }
-
 
 void *memdup_root(MEM_ROOT *root, const void *str, size_t len)
 {

@@ -112,7 +112,6 @@ char * fn_format(char * to, const char *name, const char *dir,
   DBUG_RETURN(to);
 } /* fn_format */
 
-
 /*
   strlength(const string str)
   Return length of string with end-space:s not counted.

@@ -247,7 +247,6 @@ void max_decimal(int precision, int frac, decimal_t *to)
   }
 }
 
-
 static dec1 *remove_leading_zeroes(const decimal_t *from, int *intg_result)
 {
   int intg= from->intg, i;
@@ -269,7 +268,6 @@ static dec1 *remove_leading_zeroes(const decimal_t *from, int *intg_result)
   *intg_result= intg;
   return buf0;
 }
-
 
 /*
   Count actual length of fraction part (without ending zeroes)
@@ -302,7 +300,6 @@ int decimal_actual_fraction(decimal_t *from)
   }
   return frac;
 }
-
 
 /*
   Convert decimal to its printable string representation
@@ -432,7 +429,6 @@ int decimal2string(const decimal_t *from, char *to, int *to_len,
   return error;
 }
 
-
 /*
   Return bounds of decimal digits in the number
 
@@ -497,7 +493,6 @@ static void digits_bounds(decimal_t *from, int *start_result, int *end_result)
   *end_result= stop; /* index of position after last decimal digit (from 0) */
 }
 
-
 /*
   Left shift for alignment of data in buffer
 
@@ -527,7 +522,6 @@ void do_mini_left_shift(decimal_t *dec, int shift, int beg, int last)
   *from= (*from % powers10[c_shift]) * powers10[shift];
 }
 
-
 /*
   Right shift for alignment of data in buffer
 
@@ -556,7 +550,6 @@ void do_mini_right_shift(decimal_t *dec, int shift, int beg, int last)
             (*(from - 1) % powers10[shift]) * powers10[c_shift]);
   *from= *from / powers10[shift];
 }
-
 
 /*
   Shift of decimal digits in given number (with rounding if it need)
@@ -761,7 +754,6 @@ int decimal_shift(decimal_t *dec, int shift)
   return err;
 }
 
-
 /*
   Convert string to decimal
 
@@ -930,7 +922,6 @@ fatal_error:
   return error;
 }
 
-
 /*
   Convert decimal to double
 
@@ -983,7 +974,6 @@ int double2decimal(double from, decimal_t *to)
   DBUG_PRINT("exit", ("res: %d", res));
   DBUG_RETURN(res);
 }
-
 
 static int ull2dec(ulonglong from, decimal_t *to)
 {
@@ -1150,7 +1140,6 @@ int decimal2longlong(decimal_t *from, longlong *to)
 
     now, middle decimal_digit_t is full - it stores 9 decimal digits. It goes
     into binary representation as is:
-
 
       ...........  0D-FB-38-D2 ............
 
@@ -2426,7 +2415,6 @@ void dump_decimal(decimal_t *d)
   printf("%09d} */ ", d->buf[i]);
 }
 
-
 void check_result_code(int actual, int want)
 {
   if (actual != want)
@@ -2435,7 +2423,6 @@ void check_result_code(int actual, int want)
     exit(1);
   }
 }
-
 
 void print_decimal(decimal_t *d, const char *orig, int actual, int want)
 {
@@ -2730,7 +2717,6 @@ void test_ro(const char *s1, int n, decimal_round_mode mode, const char *orig,
   printf("\n");
 }
 
-
 void test_mx(int precision, int frac, const char *orig)
 {
   char s[100];
@@ -2740,7 +2726,6 @@ void test_mx(int precision, int frac, const char *orig)
   print_decimal(&a, orig, 0, 0);
   printf("\n");
 }
-
 
 void test_pr(const char *s1, int prec, int dec, char filler, const char *orig,
              int ex)
@@ -2765,7 +2750,6 @@ void test_pr(const char *s1, int prec, int dec, char filler, const char *orig,
   printf("\n");
 }
 
-
 void test_sh(const char *s1, int shift, const char *orig, int ex)
 {
   char s[100], *end;
@@ -2779,7 +2763,6 @@ void test_sh(const char *s1, int shift, const char *orig, int ex)
   printf("\n");
 }
 
-
 void test_fr(const char *s1, const char *orig)
 {
   char s[100], *end;
@@ -2791,7 +2774,6 @@ void test_fr(const char *s1, const char *orig)
   print_decimal(&a, orig, 0, 0);
   printf("\n");
 }
-
 
 int main()
 {
@@ -2948,7 +2930,6 @@ int main()
   test_d2b2d("111111111.11", 10, 2,"11111111.11", 0);
   test_d2b2d("000000000.01", 7, 3,"0.010", 0);
   test_d2b2d("123.4", 10, 2, "123.40", 0);
-
 
   printf("==== decimal_cmp ====\n");
   test_dc("12","13",-1);

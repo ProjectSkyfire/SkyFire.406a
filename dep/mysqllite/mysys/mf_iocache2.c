@@ -66,7 +66,6 @@ my_b_copy_to_file(IO_CACHE *cache, FILE *file)
   DBUG_RETURN(0);
 }
 
-
 my_off_t my_b_append_tell(IO_CACHE* info)
 {
   /*
@@ -179,7 +178,6 @@ void my_b_seek(IO_CACHE *info,my_off_t pos)
   DBUG_VOID_RETURN;
 }
 
-
 /*
   Fill buffer of the cache.
 
@@ -191,7 +189,6 @@ void my_b_seek(IO_CACHE *info,my_off_t pos)
   0  On error or EOF (info->error = -1 on error)
   #  Number of characters
 */
-
 
 size_t my_b_fill(IO_CACHE *info)
 {
@@ -230,7 +227,6 @@ size_t my_b_fill(IO_CACHE *info)
   info->pos_in_file=pos_in_file;
   return length;
 }
-
 
 /*
   Read a string ended by '\n' into a buffer of 'max_length' size.
@@ -276,7 +272,6 @@ size_t my_b_gets(IO_CACHE *info, char *to, size_t max_length)
   }
 }
 
-
 my_off_t my_b_filelength(IO_CACHE *info)
 {
   if (info->type == WRITE_CACHE)
@@ -285,7 +280,6 @@ my_off_t my_b_filelength(IO_CACHE *info)
   info->seek_not_done= 1;
   return my_seek(info->file, 0L, MY_SEEK_END, MYF(0));
 }
-
 
 /*
   Simple printf version.  Supports '%s', '%d', '%u', "%ld" and "%lu"
@@ -302,7 +296,6 @@ size_t my_b_printf(IO_CACHE *info, const char* fmt, ...)
   va_end(args);
   return result;
 }
-
 
 size_t my_b_vprintf(IO_CACHE *info, const char* fmt, va_list args)
 {

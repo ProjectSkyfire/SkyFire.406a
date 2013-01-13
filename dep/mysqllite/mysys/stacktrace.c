@@ -298,7 +298,6 @@ void my_print_stacktrace(uchar* stack_bottom, ulong thread_stack)
 #endif
   LINT_INIT(fp);
 
-
 #ifdef __i386__
   __asm __volatile__ ("movl %%ebp,%0"
 		      :"=r"(fp)
@@ -453,7 +452,6 @@ static EXCEPTION_POINTERS *exception_ptrs;
 void my_init_stacktrace()
 {
 }
-
 
 void my_set_exception_pointers(EXCEPTION_POINTERS *ep)
 {
@@ -658,7 +656,6 @@ void my_print_stacktrace(uchar* unused1, ulong unused2)
   }
 }
 
-
 /*
   Write dump. The dump is created in current directory,
   file name is constructed from executable name plus
@@ -710,7 +707,6 @@ void my_write_core(int unused)
   }
 }
 
-
 void my_safe_print_str(const char *val, int len)
 {
   __try
@@ -723,7 +719,6 @@ void my_safe_print_str(const char *val, int len)
   }
 }
 #endif /*__WIN__*/
-
 
 #ifdef __WIN__
 size_t my_write_stderr(const void *buf, size_t count)
@@ -740,7 +735,6 @@ size_t my_write_stderr(const void *buf, size_t count)
 }
 #endif
 
-
 static const char digits[]= "0123456789abcdef";
 
 char *my_safe_utoa(int base, ulonglong val, char *buf)
@@ -751,7 +745,6 @@ char *my_safe_utoa(int base, ulonglong val, char *buf)
   } while ((val /= base) != 0);
   return buf + 1;
 }
-
 
 char *my_safe_itoa(int base, longlong val, char *buf)
 {
@@ -805,7 +798,6 @@ char *my_safe_itoa(int base, longlong val, char *buf)
   }
   return buf+1;
 }
-
 
 static const char *check_longlong(const char *fmt, my_bool *have_longlong)
 {
@@ -901,7 +893,6 @@ static size_t my_safe_vsnprintf(char *to, size_t size,
   return to - start;
 }
 
-
 size_t my_safe_snprintf(char* to, size_t n, const char* fmt, ...)
 {
   size_t result;
@@ -911,7 +902,6 @@ size_t my_safe_snprintf(char* to, size_t n, const char* fmt, ...)
   va_end(args);
   return result;
 }
-
 
 size_t my_safe_printf_stderr(const char* fmt, ...)
 {

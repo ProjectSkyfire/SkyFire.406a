@@ -51,7 +51,6 @@ end:                                                                    \
     return (size_t) (ptr_str - (STR));                                  \
   } while (0)
 
-
 /*
   my_strchr(cs, str, end, c) returns a pointer to the first place in
   str where c (1-byte character) occurs, or NULL if c does not occur

@@ -94,7 +94,6 @@ my_bool real_open_cached_file(IO_CACHE *cache)
   DBUG_RETURN(error);
 }
 
-
 void close_cached_file(IO_CACHE *cache)
 {
   DBUG_ENTER("close_cached_file");

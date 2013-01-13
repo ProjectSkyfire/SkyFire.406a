@@ -22,8 +22,6 @@
 #include <unistd.h>
 #endif
 
-
-
 /*
   Read a chunk of bytes from a file from a given position
 
@@ -110,7 +108,6 @@ size_t my_pread(File Filedes, uchar *Buffer, size_t Count, my_off_t offset,
     DBUG_RETURN(readbytes);                /* purecov: inspected */
   }
 } /* my_pread */
-
 
 /*
   Write a chunk of bytes to a file at a given position

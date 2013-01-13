@@ -53,7 +53,6 @@ int my_access(const char *path, int amode)
 
 #endif /* __WIN__ */
 
-
 /*
   List of file names that causes problem on windows
 
@@ -72,7 +71,6 @@ static const char *reserved_names[]=
 };
 
 #define MAX_RESERVED_NAME_LENGTH 6
-
 
 /*
   Looks up a null-terminated string in a list,
@@ -97,7 +95,6 @@ static int str_list_find(const char **list, const char *str)
   }
   return 0;
 }
-
 
 /*
   A map for faster reserved_names lookup,
@@ -125,7 +122,6 @@ static char reserved_map[256]=
   0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, /* ................ */
   0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0  /* ................ */
 };
-
 
 /*
   Check if a table name may cause problems
@@ -155,9 +151,7 @@ int check_if_legal_tablename(const char *name)
               str_list_find(&reserved_names[1], name));
 }
 
-
 #if defined(__WIN__) || defined(__EMX__)
-
 
 /*
   Check if a path will access a reserverd file name that may cause problems

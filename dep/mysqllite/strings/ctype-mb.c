@@ -19,7 +19,6 @@
 
 #ifdef USE_MB
 
-
 size_t my_caseup_str_mb(CHARSET_INFO * cs, char *str)
 {
   register uint32 l;
@@ -39,7 +38,6 @@ size_t my_caseup_str_mb(CHARSET_INFO * cs, char *str)
   }
   return (size_t) (str - str_orig);
 }
-
 
 size_t my_casedn_str_mb(CHARSET_INFO * cs, char *str)
 {
@@ -61,14 +59,12 @@ size_t my_casedn_str_mb(CHARSET_INFO * cs, char *str)
   return (size_t) (str - str_orig);
 }
 
-
 static inline MY_UNICASE_INFO*
 get_case_info_for_ch(CHARSET_INFO *cs, uint page, uint offs)
 {
   MY_UNICASE_INFO *p;
   return cs->caseinfo ? ((p= cs->caseinfo[page]) ? &p[offs] : NULL) :  NULL;
 }
-
 
 /*
   For character sets which don't change octet length in case conversion.
@@ -107,7 +103,6 @@ size_t my_caseup_mb(CHARSET_INFO * cs, char *src, size_t srclen,
   return srclen;
 }
 
-
 size_t my_casedn_mb(CHARSET_INFO * cs, char *src, size_t srclen,
                     char *dst __attribute__((unused)),
                     size_t dstlen __attribute__((unused)))
@@ -141,7 +136,6 @@ size_t my_casedn_mb(CHARSET_INFO * cs, char *src, size_t srclen,
   }
   return srclen;
 }
-
 
 /*
   Case folding functions for character set
@@ -191,7 +185,6 @@ my_casefold_mb_varlen(CHARSET_INFO *cs,
   return (size_t) (dst - dst0);
 }
 
-
 size_t
 my_casedn_mb_varlen(CHARSET_INFO * cs, char *src, size_t srclen,
                     char *dst, size_t dstlen)
@@ -201,7 +194,6 @@ my_casedn_mb_varlen(CHARSET_INFO * cs, char *src, size_t srclen,
   return my_casefold_mb_varlen(cs, src, srclen, dst, dstlen, cs->to_lower, 0);
 }
 
-
 size_t
 my_caseup_mb_varlen(CHARSET_INFO * cs, char *src, size_t srclen,
                     char *dst, size_t dstlen)
@@ -210,7 +202,6 @@ my_caseup_mb_varlen(CHARSET_INFO * cs, char *src, size_t srclen,
   DBUG_ASSERT(src != dst || cs->caseup_multiply == 1);
   return my_casefold_mb_varlen(cs, src, srclen, dst, dstlen, cs->to_upper, 1);
 }
-
 
 /*
   my_strcasecmp_mb() returns 0 if strings are equal, non-zero otherwise.
@@ -238,7 +229,6 @@ int my_strcasecmp_mb(CHARSET_INFO * cs,const char *s, const char *t)
   /* At least one of '*s' and '*t' is zero here. */
   return (*t != *s);
 }
-
 
 /*
 ** Compare string against string with wildcard
@@ -358,7 +348,6 @@ int my_wildcmp_mb(CHARSET_INFO *cs,
   return (str != str_end ? 1 : 0);
 }
 
-
 size_t my_numchars_mb(CHARSET_INFO *cs __attribute__((unused)),
 		      const char *pos, const char *end)
 {
@@ -371,7 +360,6 @@ size_t my_numchars_mb(CHARSET_INFO *cs __attribute__((unused)),
   }
   return count;
 }
-
 
 size_t my_charpos_mb(CHARSET_INFO *cs __attribute__((unused)),
 		     const char *pos, const char *end, size_t length)
@@ -386,7 +374,6 @@ size_t my_charpos_mb(CHARSET_INFO *cs __attribute__((unused)),
   }
   return (size_t) (length ? end+2-start : pos-start);
 }
-
 
 size_t my_well_formed_len_mb(CHARSET_INFO *cs, const char *b, const char *e,
                              size_t pos, int *error)
@@ -408,7 +395,6 @@ size_t my_well_formed_len_mb(CHARSET_INFO *cs, const char *b, const char *e,
   }
   return (size_t) (b - b_start);
 }
-
 
 uint my_instr_mb(CHARSET_INFO *cs,
                  const char *b, size_t b_length, 
@@ -464,7 +450,6 @@ uint my_instr_mb(CHARSET_INFO *cs,
   return 0;
 }
 
-
 /* BINARY collations handlers for MB charsets */
 
 int
@@ -477,7 +462,6 @@ my_strnncoll_mb_bin(CHARSET_INFO * cs __attribute__((unused)),
   int cmp= memcmp(s,t,len);
   return cmp ? cmp : (int) ((t_is_prefix ? len : slen) - tlen);
 }
-
 
 /*
   Compare two strings. 
@@ -551,7 +535,6 @@ my_strnncollsp_mb_bin(CHARSET_INFO * cs __attribute__((unused)),
   return res;
 }
 
-
 static size_t my_strnxfrm_mb_bin(CHARSET_INFO *cs __attribute__((unused)),
                                  uchar *dest, size_t dstlen,
                                  const uchar *src, size_t srclen)
@@ -563,14 +546,12 @@ static size_t my_strnxfrm_mb_bin(CHARSET_INFO *cs __attribute__((unused)),
   return dstlen;
 }
 
-
 int
 my_strcasecmp_mb_bin(CHARSET_INFO * cs __attribute__((unused)),
                      const char *s, const char *t)
 {
   return strcmp(s,t);
 }
-
 
 void
 my_hash_sort_mb_bin(CHARSET_INFO *cs __attribute__((unused)),
@@ -591,7 +572,6 @@ my_hash_sort_mb_bin(CHARSET_INFO *cs __attribute__((unused)),
     nr2[0]+=3;
   }
 }
-
 
 /* 
   Fill the given buffer with 'maximum character' for given charset
@@ -801,7 +781,6 @@ fill_max_and_min:
   return 0;
 }
 
-
 /**
    Calculate min_str and max_str that ranges a LIKE string.
    Generic function, currently used for ucs2, utf16, utf32,
@@ -987,7 +966,6 @@ pad_min_max:
   return FALSE;
 }
 
-
 int
 my_wildcmp_mb_bin(CHARSET_INFO *cs,
                   const char *str,const char *str_end,
@@ -1092,7 +1070,6 @@ my_wildcmp_mb_bin(CHARSET_INFO *cs,
   }
   return (str != str_end ? 1 : 0);
 }
-
 
 /*
   Data was produced from EastAsianWidth.txt 
@@ -1302,7 +1279,6 @@ static struct {int page; char *p;} utr11_data[256]=
 {0,NULL},{1,NULL},{0,pgFA},{0,NULL},{0,NULL},{0,NULL},{0,pgFE},{0,pgFF}
 };
 
-
 size_t my_numcells_mb(CHARSET_INFO *cs, const char *b, const char *e)
 {
   my_wc_t wc;
@@ -1334,7 +1310,6 @@ size_t my_numcells_mb(CHARSET_INFO *cs, const char *b, const char *e)
   return clen;
 }
 
-
 int my_mb_ctype_mb(CHARSET_INFO *cs, int *ctype,
                    const uchar *s, const uchar *e)
 {
@@ -1348,7 +1323,6 @@ int my_mb_ctype_mb(CHARSET_INFO *cs, int *ctype,
             my_uni_ctype[wc>>8].pctype;    
   return res;
 }
-
 
 MY_COLLATION_HANDLER my_collation_mb_bin_handler =
 {
@@ -1364,6 +1338,5 @@ MY_COLLATION_HANDLER my_collation_mb_bin_handler =
     my_hash_sort_mb_bin,
     my_propagate_simple
 };
-
 
 #endif

@@ -21,7 +21,6 @@
 #include <m_string.h>
 #endif
 
-
 /*
 
   This files implements routines which parse XML based
@@ -76,7 +75,6 @@ struct my_cs_file_section_st
 #define	_CS_DIFF2	20
 #define	_CS_DIFF3	21
 #define	_CS_IDENTICAL	22
-
 
 static struct my_cs_file_section_st sec[] =
 {
@@ -144,8 +142,6 @@ typedef struct my_cs_file_info
   int (*add_collation)(CHARSET_INFO *cs);
 } MY_CHARSET_LOADER;
 
-
-
 static int fill_uchar(uchar *a,uint size,const char *str, size_t len)
 {
   uint i= 0;
@@ -180,7 +176,6 @@ static int fill_uint16(uint16 *a,uint size,const char *str, size_t len)
   return 0;
 }
 
-
 static int cs_enter(MY_XML_PARSER *st,const char *attr, size_t len)
 {
   struct my_cs_file_info *i= (struct my_cs_file_info *)st->user_data;
@@ -194,7 +189,6 @@ static int cs_enter(MY_XML_PARSER *st,const char *attr, size_t len)
 
   return MY_XML_OK;
 }
-
 
 static int cs_leave(MY_XML_PARSER *st,const char *attr, size_t len)
 {
@@ -212,7 +206,6 @@ static int cs_leave(MY_XML_PARSER *st,const char *attr, size_t len)
   }
   return rc;
 }
-
 
 static int cs_value(MY_XML_PARSER *st,const char *attr, size_t len)
 {
@@ -293,7 +286,6 @@ static int cs_value(MY_XML_PARSER *st,const char *attr, size_t len)
   return MY_XML_OK;
 }
 
-
 my_bool my_parse_charset_xml(const char *buf, size_t len,
                              int (*add_collation)(CHARSET_INFO *cs))
 {
@@ -311,7 +303,6 @@ my_bool my_parse_charset_xml(const char *buf, size_t len,
   my_xml_parser_free(&p);
   return rc;
 }
-
 
 /*
   Check repertoire: detect pure ascii strings
@@ -343,7 +334,6 @@ my_string_repertoire(CHARSET_INFO *cs, const char *str, ulong length)
   return MY_REPERTOIRE_ASCII;
 }
 
-
 /*
   Returns repertoire for charset
 */
@@ -352,7 +342,6 @@ uint my_charset_repertoire(CHARSET_INFO *cs)
   return cs->state & MY_CS_PUREASCII ?
     MY_REPERTOIRE_ASCII : MY_REPERTOIRE_UNICODE30;
 }
-
 
 /*
   Detect whether a character set is ASCII compatible.
@@ -388,7 +377,6 @@ my_charset_is_ascii_based(CHARSET_INFO *cs)
     (cs->mbminlen == 1 && cs->mbmaxlen > 1);
 }
 
-
 /*
   Detect if a character set is 8bit,
   and it is pure ascii, i.e. doesn't have
@@ -409,7 +397,6 @@ my_charset_is_8bit_pure_ascii(CHARSET_INFO *cs)
   }
   return 1;
 }
-
 
 /*
   Shared function between conf_to_src and mysys.

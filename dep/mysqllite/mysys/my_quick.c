@@ -19,7 +19,6 @@
 #include "mysys_priv.h"
 #include "my_nosys.h"
 
-
 #ifdef _WIN32
 extern size_t my_win_read(File Filedes,uchar *Buffer,size_t Count);
 #endif
@@ -47,8 +46,6 @@ size_t my_quick_read(File Filedes,uchar *Buffer,size_t Count,myf MyFlags)
   }
   return (MyFlags & (MY_NABP | MY_FNABP)) ? 0 : readbytes;
 }
-
-
 
 size_t my_quick_write(File Filedes, const uchar *Buffer, size_t Count)
 {

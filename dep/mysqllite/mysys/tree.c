@@ -76,7 +76,6 @@ static void rb_insert(TREE *tree,TREE_ELEMENT ***parent,
 		      TREE_ELEMENT *leaf);
 static void rb_delete_fixup(TREE *tree,TREE_ELEMENT ***parent);
 
-
 	/* The actuall code for handling binary trees */
 
 #ifndef DBUG_OFF
@@ -173,7 +172,6 @@ void reset_tree(TREE* tree)
   free_tree(tree, MYF(MY_MARK_BLOCKS_FREE));
 }
 
-
 static void delete_tree_element(TREE *tree, TREE_ELEMENT *element)
 {
   if (element != &tree->null_element)
@@ -186,7 +184,6 @@ static void delete_tree_element(TREE *tree, TREE_ELEMENT *element)
       my_free(element);
   }
 }
-
 
 /*
   insert, search and delete of elements
@@ -330,7 +327,6 @@ int tree_delete(TREE *tree, void *key, uint key_size, void *custom_arg)
   tree->elements_in_tree--;
   return 0;
 }
-
 
 void *tree_search(TREE *tree, void *key, void *custom_arg)
 {
@@ -564,7 +560,6 @@ static int tree_walk_right_root_left(TREE *tree, TREE_ELEMENT *element, tree_wal
   }
   return 0;
 }
-
 
 	/* Functions to fix up the tree after insert and delete */
 

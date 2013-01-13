@@ -56,7 +56,6 @@ my_bool my_compress(uchar *packet, size_t *len, size_t *complen)
   DBUG_RETURN(0);
 }
 
-
 uchar *my_compress_alloc(const uchar *packet, size_t *len, size_t *complen)
 {
   uchar *compbuf;
@@ -88,7 +87,6 @@ uchar *my_compress_alloc(const uchar *packet, size_t *len, size_t *complen)
   swap_variables(size_t, *len, *complen);
   return compbuf;
 }
-
 
 /*
   Uncompress packet
@@ -145,7 +143,6 @@ my_bool my_uncompress(uchar *packet, size_t len, size_t *complen)
 */
 
 #define BLOB_HEADER 12
-
 
 /*
   packfrm is a method used to compress the frm file for storage in a
@@ -206,7 +203,6 @@ int packfrm(uchar *data, size_t len,
                       (long) *pack_data, (ulong) *pack_len));
 err:
   DBUG_RETURN(error);
-
 }
 
 /*

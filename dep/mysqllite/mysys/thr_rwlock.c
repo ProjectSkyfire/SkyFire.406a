@@ -71,9 +71,7 @@ static void check_srwlock_availability(void)
 
   if (my_TryAcquireSRWLockExclusive)
     have_srwlock= TRUE;
-
 }
-
 
 static int srw_init(my_rw_lock_t *rwp)
 {
@@ -82,22 +80,18 @@ static int srw_init(my_rw_lock_t *rwp)
   return 0;
 }
 
-
 static int srw_rdlock(my_rw_lock_t *rwp)
 {
   my_AcquireSRWLockShared(&rwp->srwlock);
   return 0;
 }
 
-
 static int srw_tryrdlock(my_rw_lock_t *rwp)
 {
-
   if (!my_TryAcquireSRWLockShared(&rwp->srwlock))
     return EBUSY;
   return 0;
 }
-
 
 static int srw_wrlock(my_rw_lock_t *rwp)
 {
@@ -106,7 +100,6 @@ static int srw_wrlock(my_rw_lock_t *rwp)
   return 0;
 }
 
-
 static int srw_trywrlock(my_rw_lock_t *rwp)
 {
   if (!my_TryAcquireSRWLockExclusive(&rwp->srwlock))
@@ -114,7 +107,6 @@ static int srw_trywrlock(my_rw_lock_t *rwp)
   rwp->have_exclusive_srwlock= TRUE;
   return 0;
 }
-
 
 static int srw_unlock(my_rw_lock_t *rwp)
 {
@@ -206,7 +198,6 @@ int my_rw_init(my_rw_lock_t *rwp)
   return(0);
 }
 
-
 int my_rw_destroy(my_rw_lock_t *rwp)
 {
 #ifdef _WIN32
@@ -219,7 +210,6 @@ int my_rw_destroy(my_rw_lock_t *rwp)
   pthread_cond_destroy( &rwp->writers );
   return(0);
 }
-
 
 int my_rw_rdlock(my_rw_lock_t *rwp)
 {
@@ -260,7 +250,6 @@ int my_rw_tryrdlock(my_rw_lock_t *rwp)
   return(res);
 }
 
-
 int my_rw_wrlock(my_rw_lock_t *rwp)
 {
 #ifdef _WIN32
@@ -283,7 +272,6 @@ int my_rw_wrlock(my_rw_lock_t *rwp)
   pthread_mutex_unlock(&rwp->lock);
   return(0);
 }
-
 
 int my_rw_trywrlock(my_rw_lock_t *rwp)
 {
@@ -308,7 +296,6 @@ int my_rw_trywrlock(my_rw_lock_t *rwp)
   pthread_mutex_unlock(&rwp->lock);
   return(res);
 }
-
 
 int my_rw_unlock(my_rw_lock_t *rwp)
 {
@@ -349,7 +336,6 @@ int my_rw_unlock(my_rw_lock_t *rwp)
 
 #endif /* defined(NEED_MY_RW_LOCK) */
 
-
 int rw_pr_init(rw_pr_lock_t *rwlock)
 {
   pthread_mutex_init(&rwlock->lock, NULL);
@@ -363,14 +349,12 @@ int rw_pr_init(rw_pr_lock_t *rwlock)
   return 0;
 }
 
-
 int rw_pr_destroy(rw_pr_lock_t *rwlock)
 {
   pthread_cond_destroy(&rwlock->no_active_readers);
   pthread_mutex_destroy(&rwlock->lock);
   return 0;
 }
-
 
 int rw_pr_rdlock(rw_pr_lock_t *rwlock)
 {
@@ -385,7 +369,6 @@ int rw_pr_rdlock(rw_pr_lock_t *rwlock)
   pthread_mutex_unlock(&rwlock->lock);
   return 0;
 }
-
 
 int rw_pr_wrlock(rw_pr_lock_t *rwlock)
 {
@@ -421,7 +404,6 @@ int rw_pr_wrlock(rw_pr_lock_t *rwlock)
 #endif
   return 0;
 }
-
 
 int rw_pr_unlock(rw_pr_lock_t *rwlock)
 {
@@ -468,5 +450,4 @@ int rw_pr_unlock(rw_pr_lock_t *rwlock)
   }
   return 0;
 }
-
 

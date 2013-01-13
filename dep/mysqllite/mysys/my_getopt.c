@@ -559,7 +559,6 @@ int handle_options(int *argc, char ***argv,
   return 0;
 }
 
-
 /*
   function: check_struct_option
 
@@ -771,7 +770,6 @@ ret:
   return res;
 }
 
-
 /* 
   Find option
 
@@ -826,7 +824,6 @@ static int findopt(char *optpat, uint length,
   }
   return count;
 }
-
 
 /* 
   function: compare_strings
@@ -978,7 +975,6 @@ static ulonglong getopt_ull(char *arg, const struct my_option *optp, int *err)
   ulonglong num= eval_num_suffix(arg, err, (char*) optp->name);
   return getopt_ull_limit_value(num, optp, NULL);
 }
-
 
 ulonglong getopt_ull_limit_value(ulonglong num, const struct my_option *optp,
                                  my_bool *fix)
@@ -1166,7 +1162,6 @@ static void init_one_value(const struct my_option *option, void *variable,
   DBUG_VOID_RETURN;
 }
 
-
 /*
   Init one value to it's default values
 
@@ -1191,12 +1186,10 @@ static void fini_one_value(const struct my_option *option, void *variable,
   DBUG_VOID_RETURN;
 }
 
-
 void my_cleanup_options(const struct my_option *options)
 {
   init_variables(options, fini_one_value);
 }
-
 
 /* 
   initialize all variables to their default values
@@ -1329,7 +1322,6 @@ void my_print_help(const struct my_option *options)
     }
   }
 }
-
 
 /*
   function: my_print_options

@@ -70,7 +70,6 @@ static unsigned long lfactor[9]=
     the stop character here.
 */
 
-
 longlong my_strtoll10(const char *nptr, char **endptr, int *error)
 {
   const char *s, *end, *start, *n_end, *true_end;

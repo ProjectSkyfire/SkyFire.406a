@@ -45,7 +45,6 @@ extern CHARSET_INFO my_charset_ucs2_hungarian_uca_ci;
 extern CHARSET_INFO my_charset_ucs2_sinhala_uca_ci;
 #endif
 
-
 #ifdef HAVE_CHARSET_utf32
 extern CHARSET_INFO my_charset_utf32_icelandic_uca_ci;
 extern CHARSET_INFO my_charset_utf32_latvian_uca_ci;
@@ -68,7 +67,6 @@ extern CHARSET_INFO my_charset_utf32_hungarian_uca_ci;
 extern CHARSET_INFO my_charset_utf32_sinhala_uca_ci;
 #endif /* HAVE_CHARSET_utf32 */
 
-
 #ifdef HAVE_CHARSET_utf16
 extern CHARSET_INFO my_charset_utf16_icelandic_uca_ci;
 extern CHARSET_INFO my_charset_utf16_latvian_uca_ci;
@@ -90,7 +88,6 @@ extern CHARSET_INFO my_charset_utf16_esperanto_uca_ci;
 extern CHARSET_INFO my_charset_utf16_hungarian_uca_ci;
 extern CHARSET_INFO my_charset_utf16_sinhala_uca_ci;
 #endif  /* HAVE_CHARSET_utf16 */
-
 
 #ifdef HAVE_CHARSET_utf8
 extern CHARSET_INFO my_charset_utf8_icelandic_uca_ci;
@@ -264,7 +261,6 @@ my_bool init_compiled_charsets(myf flags __attribute__((unused)))
 #endif
 #endif /* HAVE_CHARSET_utf8 */
 
-
 #ifdef HAVE_CHARSET_utf8mb4
   add_compiled_collation(&my_charset_utf8mb4_general_ci);
   add_compiled_collation(&my_charset_utf8mb4_bin);
@@ -292,7 +288,6 @@ my_bool init_compiled_charsets(myf flags __attribute__((unused)))
 #endif /* HAVE_UCA_COLLATIONS  */
 #endif /* HAVE_CHARSET_utf8mb4 */
 
-
 #ifdef HAVE_CHARSET_utf16
   add_compiled_collation(&my_charset_utf16_general_ci);
   add_compiled_collation(&my_charset_utf16_bin);
@@ -319,7 +314,6 @@ my_bool init_compiled_charsets(myf flags __attribute__((unused)))
   add_compiled_collation(&my_charset_utf16_sinhala_uca_ci);
 #endif /* HAVE_UCA_COLLATIOINS */
 #endif /* HAVE_CHARSET_utf16 */
-
 
 #ifdef HAVE_CHARSET_utf32
   add_compiled_collation(&my_charset_utf32_general_ci);

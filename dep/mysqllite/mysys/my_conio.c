@@ -13,7 +13,6 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA */
 
-
 #include "mysys_priv.h"
 
 #ifdef __WIN__
@@ -28,7 +27,6 @@ static HANDLE my_coninpfh= 0;     /* console input */
 
   if found useful they are to be exported in mysys
 */
-
 
 /*
   int my_pthread_auto_mutex_lock(HANDLE* ph, const char* name, 
@@ -90,7 +88,6 @@ int my_pthread_auto_mutex_free(HANDLE* ph)
   return 0;
 }
 
-
 #define pthread_auto_mutex_decl(name)                           \
   HANDLE __h##name= NULL;
 
@@ -99,7 +96,6 @@ int my_pthread_auto_mutex_free(HANDLE* ph)
 
 #define pthread_auto_mutex_free(name)                           \
   my_pthread_auto_mutex_free(&__h##name)
-
 
 /*
   char* my_cgets()

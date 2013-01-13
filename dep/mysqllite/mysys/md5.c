@@ -44,7 +44,6 @@
 
 #include <string.h>	/* for memcpy() and memset() */
 
-
 static void 
 my_MD5Transform (cvs_uint32 buf[4], const unsigned char in[64]);
 

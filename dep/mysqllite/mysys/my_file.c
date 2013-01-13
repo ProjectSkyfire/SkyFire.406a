@@ -79,7 +79,6 @@ static uint set_max_open_files(uint max_file_limit)
 }
 #endif
 
-
 /*
   Change number of open files
 
@@ -117,7 +116,6 @@ uint my_set_max_open_files(uint files)
   DBUG_PRINT("exit",("files: %u", files));
   DBUG_RETURN(files);
 }
-
 
 void my_free_open_file_info()
 {

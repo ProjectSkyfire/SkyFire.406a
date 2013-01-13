@@ -176,7 +176,6 @@ static uchar sort_order_big5[]=
   (uchar) '\370',(uchar) '\371',(uchar) '\372',(uchar) '\373',(uchar) '\374',(uchar) '\375',(uchar) '\376',(uchar) '\377',
 };
 
-
 static MY_UNICASE_INFO cA2[256]=
 {
   /* A200-A20F */
@@ -368,7 +367,6 @@ static MY_UNICASE_INFO cA2[256]=
   {0xA2E4,0xA2FE,0xFF56},
   {0x0000,0x0000,0x0000}
 };
-
 
 static MY_UNICASE_INFO cA3[256]=
 {
@@ -562,7 +560,6 @@ static MY_UNICASE_INFO cA3[256]=
   {0x0000,0x0000,0x0000}
 };
 
-
 static MY_UNICASE_INFO cC7[256]=
 {
   /* C700-C70F */
@@ -755,7 +752,6 @@ static MY_UNICASE_INFO cC7[256]=
   {0x0000,0x0000,0x0000}
 };
 
-
 static MY_UNICASE_INFO *my_caseinfo_big5[256]=
 {
   NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, /* 0 */
@@ -791,7 +787,6 @@ static MY_UNICASE_INFO *my_caseinfo_big5[256]=
   NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, /* F */
   NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
 };
-
 
 static uint16 big5strokexfrm(uint16 i)
 {
@@ -834,8 +829,6 @@ static uint16 big5strokexfrm(uint16 i)
   return 0xA140;
 }
 
-
-
 static int my_strnncoll_big5_internal(const uchar **a_res,
 				      const uchar **b_res, size_t length)
 {
@@ -862,7 +855,6 @@ static int my_strnncoll_big5_internal(const uchar **a_res,
   return 0;
 }
 
-
 /* Compare strings */
 
 static int my_strnncoll_big5(CHARSET_INFO *cs __attribute__((unused)), 
@@ -874,7 +866,6 @@ static int my_strnncoll_big5(CHARSET_INFO *cs __attribute__((unused)),
   int res= my_strnncoll_big5_internal(&a, &b, length);
   return res ? res : (int)((b_is_prefix ? length : a_length) - b_length);
 }
-
 
 /* compare strings, ignore end space */
 
@@ -917,7 +908,6 @@ static int my_strnncollsp_big5(CHARSET_INFO * cs __attribute__((unused)),
   return res;
 }
 
-
 static size_t my_strnxfrm_big5(CHARSET_INFO *cs __attribute__((unused)),
                                uchar *dest, size_t len, 
                                const uchar *src, size_t srclen)
@@ -948,7 +938,6 @@ static size_t my_strnxfrm_big5(CHARSET_INFO *cs __attribute__((unused)),
 #if 0
 static int my_strcoll_big5(const uchar *s1, const uchar *s2)
 {
-
   while (*s1 && *s2)
   {
     if (*(s1+1) && *(s2+1) && isbig5code(*s1,*(s1+1)) && isbig5code(*s2, *(s2+1)))
@@ -993,19 +982,16 @@ static int my_strxfrm_big5(uchar *dest, const uchar *src, int len)
 }
 #endif
 
-
 static uint ismbchar_big5(CHARSET_INFO *cs __attribute__((unused)),
                          const char* p, const char *e)
 {
   return (isbig5head(*(p)) && (e)-(p)>1 && isbig5tail(*((p)+1))? 2: 0);
 }
 
-
 static uint mbcharlen_big5(CHARSET_INFO *cs __attribute__((unused)), uint c)
 {
   return (isbig5head(c)? 2 : 1);
 }
-
 
 /* page 0 0xA140-0xC7FC */
 static uint16 tab_big5_uni0[]={
@@ -3816,7 +3802,6 @@ static int func_big5_uni_onechar(int code){
     return(tab_big5_uni1[code-0xC940]);
   return(0);
 }
-
 
 /* page 0 0x00A2-0x00F7 */
 static uint16 tab_uni_big50[]={
@@ -6776,12 +6761,10 @@ static int func_uni_big5_onechar(int code){
   return(0);
 }
 
-
 static int
 my_wc_mb_big5(CHARSET_INFO *cs __attribute__((unused)),
 	      my_wc_t wc, uchar *s, uchar *e)
 {
-
   int code;
 
   if (s >= e)
@@ -6805,12 +6788,10 @@ my_wc_mb_big5(CHARSET_INFO *cs __attribute__((unused)),
   return 2;
 }
 
-
 static int 
 my_mb_wc_big5(CHARSET_INFO *cs __attribute__((unused)),
 	      my_wc_t *pwc,const uchar *s,const uchar *e)
 {
-
   int hi;
   
   if (s >= e)
@@ -6830,7 +6811,6 @@ my_mb_wc_big5(CHARSET_INFO *cs __attribute__((unused)),
   
   return 2;
 }
-
 
 /*
   Returns a well formed length of a BIG5 string.
@@ -6866,7 +6846,6 @@ size_t my_well_formed_len_big5(CHARSET_INFO *cs __attribute__((unused)),
   }
   return (size_t) (b - b0);
 }
-
 
 static MY_COLLATION_HANDLER my_collation_big5_chinese_ci_handler =
 {
@@ -6946,7 +6925,6 @@ CHARSET_INFO my_charset_big5_chinese_ci=
     &my_collation_big5_chinese_ci_handler
 };
 
-
 CHARSET_INFO my_charset_big5_bin=
 {
     84,0,0, 		/* number     */
@@ -6978,6 +6956,5 @@ CHARSET_INFO my_charset_big5_bin=
     &my_charset_big5_handler,
     &my_collation_mb_bin_handler
 };
-
 
 #endif

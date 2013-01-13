@@ -53,7 +53,6 @@ report_errors(SSL* ssl)
 
 #endif
 
-
 size_t vio_ssl_read(Vio *vio, uchar* buf, size_t size)
 {
   size_t r;
@@ -70,7 +69,6 @@ size_t vio_ssl_read(Vio *vio, uchar* buf, size_t size)
   DBUG_RETURN(r);
 }
 
-
 size_t vio_ssl_write(Vio *vio, const uchar* buf, size_t size)
 {
   size_t r;
@@ -86,7 +84,6 @@ size_t vio_ssl_write(Vio *vio, const uchar* buf, size_t size)
   DBUG_PRINT("exit", ("%u", (uint) r));
   DBUG_RETURN(r);
 }
-
 
 int vio_ssl_close(Vio *vio)
 {
@@ -126,7 +123,6 @@ int vio_ssl_close(Vio *vio)
   DBUG_RETURN(vio_close(vio));
 }
 
-
 void vio_ssl_delete(Vio *vio)
 {
   if (!vio)
@@ -143,7 +139,6 @@ void vio_ssl_delete(Vio *vio)
 
   vio_delete(vio);
 }
-
 
 static int ssl_do(struct st_VioSSLFd *ptr, Vio *vio, long timeout,
                   int (*connect_accept_func)(SSL*), unsigned long *errptr)
@@ -222,20 +217,17 @@ static int ssl_do(struct st_VioSSLFd *ptr, Vio *vio, long timeout,
   DBUG_RETURN(0);
 }
 
-
 int sslaccept(struct st_VioSSLFd *ptr, Vio *vio, long timeout, unsigned long *errptr)
 {
   DBUG_ENTER("sslaccept");
   DBUG_RETURN(ssl_do(ptr, vio, timeout, SSL_accept, errptr));
 }
 
-
 int sslconnect(struct st_VioSSLFd *ptr, Vio *vio, long timeout, unsigned long *errptr)
 {
   DBUG_ENTER("sslconnect");
   DBUG_RETURN(ssl_do(ptr, vio, timeout, SSL_connect, errptr));
 }
-
 
 int vio_ssl_blocking(Vio *vio __attribute__((unused)),
 		     my_bool set_blocking_mode,

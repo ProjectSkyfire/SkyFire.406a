@@ -61,7 +61,6 @@ ulonglong my_getsystime()
 #endif
 }
 
-
 /**
   Return current time.
 
@@ -81,7 +80,6 @@ time_t my_time(myf flags)
   }
   return t;
 }
-
 
 /**
   Return time in microseconds.
@@ -112,7 +110,6 @@ ulonglong my_micro_time()
   return newtime;
 #endif
 }
-
 
 /**
   Return time in seconds and timer in microseconds (not different start!)
@@ -154,7 +151,6 @@ ulonglong my_micro_time_and_time(time_t *time_arg)
   return newtime;
 #endif
 }
-
 
 /**
   Returns current time.

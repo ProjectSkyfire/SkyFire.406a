@@ -70,7 +70,6 @@ qsort2_cmp get_ptr_compare (size_t size)
 }
 #endif /* __sun */
 
-
 	/*
 	  Compare to keys to see witch is smaller.
 	  Loop unrolled to make it quick !!
@@ -94,7 +93,6 @@ static int ptr_compare(size_t *compare_length, uchar **a, uchar **b)
   return (int) first[0] - (int) last[0];
 }
 
-
 static int ptr_compare_0(size_t *compare_length,uchar **a, uchar **b)
 {
   reg3 int length= *compare_length;
@@ -114,7 +112,6 @@ static int ptr_compare_0(size_t *compare_length,uchar **a, uchar **b)
   }
   return (0);
 }
-
 
 static int ptr_compare_1(size_t *compare_length,uchar **a, uchar **b)
 {

@@ -26,7 +26,6 @@
 #include "mysys_err.h"
 #include <queues.h>
 
-
 /*
   Init queue
 
@@ -64,8 +63,6 @@ int init_queue(QUEUE *queue, uint max_elements, uint offset_to_key,
   queue_set_max_at_top(queue, max_at_top);
   DBUG_RETURN(0);
 }
-
-
 
 /*
   Init queue, uses init_queue internally for init work but also accepts
@@ -142,7 +139,6 @@ int reinit_queue(QUEUE *queue, uint max_elements, uint offset_to_key,
   DBUG_RETURN(0);
 }
 
-
 /*
   Resize queue
 
@@ -176,7 +172,6 @@ int resize_queue(QUEUE *queue, uint max_elements)
   DBUG_RETURN(0);
 }
 
-
 /*
   Delete queue
 
@@ -198,7 +193,6 @@ void delete_queue(QUEUE *queue)
   queue->root= NULL;
   DBUG_VOID_RETURN;
 }
-
 
 	/* Code for insert, search and delete of elements */
 
@@ -231,7 +225,6 @@ void queue_insert(register QUEUE *queue, uchar *element)
 
 int queue_insert_safe(register QUEUE *queue, uchar *element)
 {
-
   if (queue->elements == queue->max_elements)
   {
     if (!queue->auto_extent)
@@ -243,7 +236,6 @@ int queue_insert_safe(register QUEUE *queue, uchar *element)
   queue_insert(queue, element);
   return 0;
 }
-
 
 	/* Remove item from queue */
 	/* Returns pointer to removed element */
@@ -350,7 +342,6 @@ void _downheap(register QUEUE *queue, uint idx)
   }
   queue->root[idx]=element;
 }
-
 
 #endif
 
@@ -503,7 +494,6 @@ bool check_num(uint num_part)
           expected_part, expected_num, part, num, max_ind, fix_used);
   return TRUE;
 }
-
 
 void perform_insert(QUEUE *queue)
 {

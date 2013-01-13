@@ -23,7 +23,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA */
 #include <my_global.h>
 #include <my_sys.h>
 
-
 struct errentry 
 {
   unsigned long oscode;   /* OS return value */
@@ -90,7 +89,6 @@ values in the (contiguous) range of Exec Failure errors. */
 access violations */
 #define MIN_EACCES_RANGE ERROR_WRITE_PROTECT
 #define MAX_EACCES_RANGE ERROR_SHARING_BUFFER_EXCEEDED
-
 
 static int get_errno_from_oserr(unsigned long oserrno)
 {

@@ -66,7 +66,6 @@ int my_delete(const char *name, myf MyFlags)
   @retval
     1   error
 
-
 */
 int nt_share_delete(const char *name, myf MyFlags)
 {

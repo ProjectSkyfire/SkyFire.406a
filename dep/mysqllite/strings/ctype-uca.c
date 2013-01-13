@@ -31,7 +31,6 @@
    - No combining marks processing is done
 */
 
-
 #include <my_global.h>
 #include "m_string.h"
 #include "m_ctype.h"
@@ -6567,7 +6566,6 @@ static const char latvian[]=
     "& S < \\u0161 <<< \\u0160 "
     "& Z < \\u017E <<< \\u017D ";
 
-
 static const char romanian[]=
     "& A < \\u0103 <<< \\u0102 < \\u00E2 <<< \\u00C2 "
     "& I < \\u00EE <<< \\u00CE "
@@ -6741,7 +6739,6 @@ static const char sinhala[]=
               "< \\u0DDB < \\u0DDC < \\u0DDD < \\u0DDE < \\u0DCA";
 #endif
 
-
 /*
   Unicode Collation Algorithm:
   Collation element (weight) scanner, 
@@ -6774,7 +6771,6 @@ typedef struct my_uca_scanner_handler_st
 } my_uca_scanner_handler;
 
 static uint16 nochar[]= {0,0};
-
 
 #ifdef HAVE_CHARSET_ucs2
 /*
@@ -6825,7 +6821,6 @@ static void my_uca_scanner_init_ucs2(my_uca_scanner *scanner,
   scanner->sbeg= (uchar*) &nochar[1];
   scanner->send= (uchar*) &nochar[0];
 }
-
 
 /*
   Read next collation element (weight), i.e. converts
@@ -6942,7 +6937,6 @@ static my_uca_scanner_handler my_ucs2_uca_scanner_handler=
 
 #endif
 
-
 /*
   The same two functions for any character set
 */
@@ -7042,7 +7036,6 @@ implicit:
   
   return scanner->page;
 }
-
 
 static my_uca_scanner_handler my_any_uca_scanner_handler=
 {
@@ -7260,7 +7253,6 @@ static void my_hash_sort_uca(CHARSET_INFO *cs,
   }
 }
 
-
 /*
   For the given string creates its "binary image", suitable
   to be used in binary comparison, i.e. in memcmp(). 
@@ -7321,8 +7313,6 @@ static size_t my_strnxfrm_uca(CHARSET_INFO *cs,
   return dstlen;
 }
 
-
-
 /**
   Helper function:
   Find address of weights of the given character.
@@ -7348,7 +7338,6 @@ my_char_weight_addr(CHARSET_INFO *cs, uint wc)
           ucaw[page] + (ofst= (wc & 0xFF)) * ucal[page] :
           NULL);
 }
-
 
 /*
   This function compares if two characters are the same.
@@ -7525,7 +7514,6 @@ int my_wildcmp_uca(CHARSET_INFO *cs,
   return (str != str_end ? 1 : 0);
 }
 
-
 /*
   Collation language is implemented according to
   subset of ICU Collation Customization (tailorings):
@@ -7568,7 +7556,6 @@ int my_wildcmp_uca(CHARSET_INFO *cs,
     &Z < \u017A <<< \u017B    
 */
 
-
 typedef enum my_coll_lexem_num_en
 {
   MY_COLL_LEXEM_EOF	= 0,
@@ -7578,7 +7565,6 @@ typedef enum my_coll_lexem_num_en
   MY_COLL_LEXEM_ERROR	= 6
 } my_coll_lexem_num;
 
-
 typedef struct my_coll_lexem_st
 {
   const char *beg;
@@ -7587,7 +7573,6 @@ typedef struct my_coll_lexem_st
   int   diff;
   int   code;
 } MY_COLL_LEXEM;
-
 
 /*
   Initialize collation rule lexical anilizer
@@ -7612,7 +7597,6 @@ static void my_coll_lexem_init(MY_COLL_LEXEM *lexem,
   lexem->diff= 0;
   lexem->code= 0;
 }
-
 
 /*
   Print collation customization expression parse error, with context.
@@ -7640,7 +7624,6 @@ static void my_coll_lexem_print_error(MY_COLL_LEXEM *lexem,
   my_snprintf(errstr,errsize-1,"%s at '%s'", txt, tail);
 }
 
-
 /*
   Convert a hex digit into its numeric value
   
@@ -7667,7 +7650,6 @@ static int ch2x(int ch)
   
   return -1;
 }
-
 
 /*
   Collation language lexical parser:
@@ -7751,7 +7733,6 @@ ex:
   return rc;  
 }
 
-
 /*
   Collation rule item
 */
@@ -7762,7 +7743,6 @@ typedef struct my_coll_rule_item_st
   uint curr[2];  /* Current character                          */
   int diff[3];   /* Primary, Secondary and Tertiary difference */
 } MY_COLL_RULE;
-
 
 /*
   Collation language syntax parser.
@@ -8069,7 +8049,6 @@ static my_bool create_tailoring(CHARSET_INFO *cs, void *(*alloc)(size_t))
   return 0;
 }
 
-
 /*
   Universal CHARSET_INFO compatible wrappers
   for the above internal functions.
@@ -8116,7 +8095,6 @@ static size_t my_strnxfrm_any_uca(CHARSET_INFO *cs,
   return my_strnxfrm_uca(cs, &my_any_uca_scanner_handler,
                          dst, dstlen, src, srclen);
 }
-
 
 #ifdef HAVE_CHARSET_ucs2
 /*
@@ -8523,7 +8501,6 @@ CHARSET_INFO my_charset_ucs2_czech_uca_ci=
     &my_collation_ucs2_uca_handler
 };
 
-
 CHARSET_INFO my_charset_ucs2_danish_uca_ci=
 {
     139,0,0,		/* number       */
@@ -8652,7 +8629,6 @@ CHARSET_INFO my_charset_ucs2_spanish2_uca_ci=
     &my_collation_ucs2_uca_handler
 };
 
-
 CHARSET_INFO my_charset_ucs2_roman_uca_ci=
 {
     143,0,0,		/* number       */
@@ -8684,7 +8660,6 @@ CHARSET_INFO my_charset_ucs2_roman_uca_ci=
     &my_charset_ucs2_handler,
     &my_collation_ucs2_uca_handler
 };
-
 
 CHARSET_INFO my_charset_ucs2_persian_uca_ci=
 {
@@ -8718,7 +8693,6 @@ CHARSET_INFO my_charset_ucs2_persian_uca_ci=
     &my_collation_ucs2_uca_handler
 };
 
-
 CHARSET_INFO my_charset_ucs2_esperanto_uca_ci=
 {
     145,0,0,		/* number       */
@@ -8750,7 +8724,6 @@ CHARSET_INFO my_charset_ucs2_esperanto_uca_ci=
     &my_charset_ucs2_handler,
     &my_collation_ucs2_uca_handler
 };
-
 
 CHARSET_INFO my_charset_ucs2_hungarian_uca_ci=
 {
@@ -8784,7 +8757,6 @@ CHARSET_INFO my_charset_ucs2_hungarian_uca_ci=
     &my_collation_ucs2_uca_handler
 };
 
-
 CHARSET_INFO my_charset_ucs2_sinhala_uca_ci=
 {
     147,0,0,             /* number       */
@@ -8817,9 +8789,7 @@ CHARSET_INFO my_charset_ucs2_sinhala_uca_ci=
     &my_collation_ucs2_uca_handler
 };
 
-
 #endif
-
 
 #ifdef HAVE_CHARSET_utf8
 MY_COLLATION_HANDLER my_collation_any_uca_handler =
@@ -8896,7 +8866,6 @@ CHARSET_INFO my_charset_utf8_unicode_ci=
     &my_charset_utf8_handler,
     &my_collation_any_uca_handler
 };
-
 
 CHARSET_INFO my_charset_utf8_icelandic_uca_ci=
 {
@@ -9218,7 +9187,6 @@ CHARSET_INFO my_charset_utf8_czech_uca_ci=
     &my_collation_any_uca_handler
 };
 
-
 CHARSET_INFO my_charset_utf8_danish_uca_ci=
 {
     203,0,0,		/* number       */
@@ -9509,7 +9477,6 @@ CHARSET_INFO my_charset_utf8_sinhala_uca_ci=
 
 #endif /* HAVE_CHARSET_utf8 */
 
-
 #ifdef HAVE_CHARSET_utf8mb4
 
 extern MY_CHARSET_HANDLER my_charset_utf8mb4_handler;
@@ -9547,7 +9514,6 @@ CHARSET_INFO my_charset_utf8mb4_unicode_ci=
     &my_charset_utf8mb4_handler,
     &my_collation_any_uca_handler
 };
-
 
 CHARSET_INFO my_charset_utf8mb4_icelandic_uca_ci=
 {
@@ -9869,7 +9835,6 @@ CHARSET_INFO my_charset_utf8mb4_czech_uca_ci=
     &my_collation_any_uca_handler
 };
 
-
 CHARSET_INFO my_charset_utf8mb4_danish_uca_ci=
 {
     235,0,0,             /* number       */
@@ -10160,7 +10125,6 @@ CHARSET_INFO my_charset_utf8mb4_sinhala_uca_ci=
 
 #endif /* HAVE_CHARSET_utf8mb4 */
 
-
 #ifdef HAVE_CHARSET_utf32
 
 MY_COLLATION_HANDLER my_collation_utf32_uca_handler =
@@ -10213,7 +10177,6 @@ CHARSET_INFO my_charset_utf32_unicode_ci=
     &my_charset_utf32_handler,
     &my_collation_utf32_uca_handler
 };
-
 
 CHARSET_INFO my_charset_utf32_icelandic_uca_ci=
 {
@@ -10535,7 +10498,6 @@ CHARSET_INFO my_charset_utf32_czech_uca_ci=
     &my_collation_utf32_uca_handler
 };
 
-
 CHARSET_INFO my_charset_utf32_danish_uca_ci=
 {
     171,0,0,             /* number       */
@@ -10826,9 +10788,7 @@ CHARSET_INFO my_charset_utf32_sinhala_uca_ci=
 
 #endif /* HAVE_CHARSET_utf32 */
 
-
 #ifdef HAVE_CHARSET_utf16
-
 
 MY_COLLATION_HANDLER my_collation_utf16_uca_handler =
 {
@@ -10880,7 +10840,6 @@ CHARSET_INFO my_charset_utf16_unicode_ci=
     &my_charset_utf16_handler,
     &my_collation_utf16_uca_handler
 };
-
 
 CHARSET_INFO my_charset_utf16_icelandic_uca_ci=
 {
@@ -11202,7 +11161,6 @@ CHARSET_INFO my_charset_utf16_czech_uca_ci=
     &my_collation_utf16_uca_handler
 };
 
-
 CHARSET_INFO my_charset_utf16_danish_uca_ci=
 {
     112,0,0,             /* number       */
@@ -11492,7 +11450,5 @@ CHARSET_INFO my_charset_utf16_sinhala_uca_ci=
 };
 
 #endif /* HAVE_CHARSET_utf16 */
-
-
 
 #endif /* HAVE_UCA_COLLATIONS */

@@ -60,12 +60,10 @@ nptl_pthread_exit_hack_handler(void *arg __attribute((unused)))
 
 #endif /* TARGET_OS_LINUX */
 
-
 static uint get_thread_lib(void);
 
 /** True if @c my_thread_global_init() has been called. */
 static my_bool my_thread_global_init_done= 0;
-
 
 /**
   Re-initialize components initialized early with @c my_thread_global_init.
@@ -227,7 +225,6 @@ my_bool my_thread_global_init(void)
   return 0;
 }
 
-
 void my_thread_global_end(void)
 {
   struct timespec abstime;
@@ -358,7 +355,6 @@ end:
   return error;
 }
 
-
 /*
   Deallocate memory used by the thread for book-keeping
 
@@ -429,7 +425,6 @@ struct st_my_thread_var *_my_thread_var(void)
   return  my_pthread_getspecific(struct st_my_thread_var*,THR_KEY_mysys);
 }
 
-
 /****************************************************************************
   Get name of current thread.
 ****************************************************************************/
@@ -469,7 +464,6 @@ extern void **my_thread_var_dbug()
   return tmp && tmp->init ? &tmp->dbug : 0;
 }
 #endif /* DBUG_OFF */
-
 
 static uint get_thread_lib(void)
 {

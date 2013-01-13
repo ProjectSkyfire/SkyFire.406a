@@ -70,7 +70,6 @@ char * my_path(char * to, const char *progname,
   DBUG_RETURN(start);
 } /* my_path */
 
-
 	/* test if file without filename is found in path */
 	/* Returns to if found and to has dirpart if found, else NullS */
 

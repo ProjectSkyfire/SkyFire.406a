@@ -50,7 +50,6 @@ static DH *get_dh512(void)
   return(dh);
 }
 
-
 static void
 report_errors()
 {
@@ -146,7 +145,6 @@ vio_set_cert_stuff(SSL_CTX *ctx, const char *cert_file, const char *key_file,
   DBUG_RETURN(0);
 }
 
-
 static void check_ssl_init()
 {
   if (!ssl_algorithms_added)
@@ -154,7 +152,6 @@ static void check_ssl_init()
     ssl_algorithms_added= TRUE;
     SSL_library_init();
     OpenSSL_add_all_algorithms();
-
   }
 
   if (!ssl_error_strings_loaded)
@@ -264,7 +261,6 @@ new_VioSSLFd(const char *key_file, const char *cert_file,
   DBUG_RETURN(ssl_fd);
 }
 
-
 /************************ VioSSLConnectorFd **********************************/
 struct st_VioSSLFd *
 new_VioSSLConnectorFd(const char *key_file, const char *cert_file,
@@ -293,7 +289,6 @@ new_VioSSLConnectorFd(const char *key_file, const char *cert_file,
 
   return ssl_fd;
 }
-
 
 /************************ VioSSLAcceptorFd **********************************/
 struct st_VioSSLFd *

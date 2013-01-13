@@ -92,7 +92,6 @@ FILE *my_fopen(const char *filename, int flags, myf MyFlags)
   DBUG_RETURN((FILE*) 0);
 } /* my_fopen */
 
-
 #if defined(_WIN32)
 
 static FILE *my_win_freopen(const char *path, const char *mode, FILE *stream)
@@ -184,7 +183,6 @@ static FILE *my_freebsd_freopen(const char *path, const char *mode, FILE *stream
 
 #endif
 
-
 /**
   Change the file associated with a file stream.
 
@@ -222,7 +220,6 @@ FILE *my_freopen(const char *path, const char *mode, FILE *stream)
   return result;
 }
 
-
 /* Close a stream */
 int my_fclose(FILE *fd, myf MyFlags)
 {
@@ -254,7 +251,6 @@ int my_fclose(FILE *fd, myf MyFlags)
   mysql_mutex_unlock(&THR_LOCK_open);
   DBUG_RETURN(err);
 } /* my_fclose */
-
 
 	/* Make a stream out of a file handle */
 	/* Name may be 0 */
@@ -301,7 +297,6 @@ FILE *my_fdopen(File Filedes, const char *name, int Flags, myf MyFlags)
   DBUG_PRINT("exit",("stream: 0x%lx", (long) fd));
   DBUG_RETURN(fd);
 } /* my_fdopen */
-
 
 /*   
   Make a fopen() typestring from a open() type bitmap

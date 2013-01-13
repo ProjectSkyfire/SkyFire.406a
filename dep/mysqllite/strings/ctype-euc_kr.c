@@ -31,7 +31,6 @@
 
 #ifdef HAVE_CHARSET_euckr
 
-
 static uchar ctype_euc_kr[257] =
 {
     0,				/* For standard library */
@@ -201,7 +200,6 @@ static uchar sort_order_euc_kr[]=
                               iseuc_kr_tail2(c) || \
                               iseuc_kr_tail3(c))
 
-
 static uint ismbchar_euc_kr(CHARSET_INFO *cs __attribute__((unused)),
                             const char* p, const char *e)
 {
@@ -214,7 +212,6 @@ static uint mbcharlen_euc_kr(CHARSET_INFO *cs __attribute__((unused)),uint c)
 {
   return (iseuc_kr_head(c) ? 2 : 1);
 }
-
 
 static MY_UNICASE_INFO cA3[256]=
 {
@@ -420,7 +417,6 @@ static MY_UNICASE_INFO cA3[256]=
   {0xA3FF,0xA3FF,0x003F}
 };
 
-
 static MY_UNICASE_INFO cA5[256]=
 {
   {0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0}, /* xx00 */
@@ -624,7 +620,6 @@ static MY_UNICASE_INFO cA5[256]=
   {0xA5FE,0xA5FE,0x003F},
   {0xA5FF,0xA5FF,0x003F} 
 };
-
 
 static MY_UNICASE_INFO cA7[256]=
 {
@@ -830,7 +825,6 @@ static MY_UNICASE_INFO cA7[256]=
   {0xA7FF,0xA7FF,0x003F}
 };
 
-
 static MY_UNICASE_INFO cA8[256]=
 {
   {0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0}, /* xx00 */
@@ -1034,7 +1028,6 @@ static MY_UNICASE_INFO cA8[256]=
   {0xA8FE,0xA8FE,0x215E},
   {0xA8FF,0xA8FF,0x003F}
 };
-
 
 static MY_UNICASE_INFO cA9[256]=
 {
@@ -1240,7 +1233,6 @@ static MY_UNICASE_INFO cA9[256]=
   {0xA9FF,0xA9FF,0x003F}
 };  
 
-
 static MY_UNICASE_INFO cAC[256]=
 {
   {0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0}, /* xx00 */
@@ -1445,7 +1437,6 @@ static MY_UNICASE_INFO cAC[256]=
   {0xACFF,0xACFF,0x003F}
 };
 
-
 static MY_UNICASE_INFO *my_caseinfo_euckr[256]=
 {
   NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, /* 0 */
@@ -1481,7 +1472,6 @@ static MY_UNICASE_INFO *my_caseinfo_euckr[256]=
   NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, /* F */
   NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
 };
-
 
 /* page 0 0x8141-0xC8FE */
 static uint16 tab_ksc5601_uni0[]={
@@ -9867,7 +9857,6 @@ static int func_uni_ksc5601_onechar(int code){
   return(0);
 }
 
-
 static int
 my_wc_mb_euc_kr(CHARSET_INFO *cs __attribute__((unused)),
 		 my_wc_t wc, uchar *s, uchar *e)
@@ -9895,7 +9884,6 @@ my_wc_mb_euc_kr(CHARSET_INFO *cs __attribute__((unused)),
   return 2;
 }
 
-
 static int 
 my_mb_wc_euc_kr(CHARSET_INFO *cs __attribute__((unused)),
 		 my_wc_t *pwc, const uchar *s, const uchar *e)
@@ -9920,7 +9908,6 @@ my_mb_wc_euc_kr(CHARSET_INFO *cs __attribute__((unused)),
   
   return 2;
 }
-
 
 /*
   Returns well formed length of a EUC-KR string.
@@ -9955,7 +9942,6 @@ my_well_formed_len_euckr(CHARSET_INFO *cs __attribute__((unused)),
   }
   return (size_t) (b - b0);
 }
-
 
 static MY_COLLATION_HANDLER my_collation_ci_handler =
 {
@@ -10003,7 +9989,6 @@ static MY_CHARSET_HANDLER my_charset_handler=
   my_scan_8bit
 };
 
-
 CHARSET_INFO my_charset_euckr_korean_ci=
 {
     19,0,0,		/* number */
@@ -10035,7 +10020,6 @@ CHARSET_INFO my_charset_euckr_korean_ci=
     &my_charset_handler,
     &my_collation_ci_handler
 };
-
 
 CHARSET_INFO my_charset_euckr_bin=
 {

@@ -76,7 +76,6 @@ File my_open_osfhandle(HANDLE handle, int oflag)
   DBUG_RETURN(offset);
 }
 
-
 static void invalidate_fd(File fd)
 {
   DBUG_ENTER("invalidate_fd");
@@ -84,7 +83,6 @@ static void invalidate_fd(File fd)
   my_file_info[fd].fhandle= 0;
   DBUG_VOID_RETURN;
 }
-
 
 /* Get Windows handle for a file descriptor */
 HANDLE my_get_osfhandle(File fd)
@@ -94,14 +92,12 @@ HANDLE my_get_osfhandle(File fd)
   DBUG_RETURN(my_file_info[fd].fhandle);
 }
 
-
 static int my_get_open_flags(File fd)
 {
   DBUG_ENTER("my_get_open_flags");
   DBUG_ASSERT(fd >= MY_FILE_MIN && fd < (int)my_file_limit);
   DBUG_RETURN(my_file_info[fd].oflag);
 }
-
 
 /*
   Open a file with sharing. Similar to _sopen() from libc, but allows managing
@@ -268,14 +264,12 @@ File my_win_sopen(const char *path, int oflag, int shflag, int pmode)
   DBUG_RETURN(fh);                   /* return handle */
 }
 
-
 File my_win_open(const char *path, int flags)
 {
   DBUG_ENTER("my_win_open");
   DBUG_RETURN(my_win_sopen((char *) path, flags | _O_BINARY, _SH_DENYNO, 
     _S_IREAD | S_IWRITE));
 }
-
 
 int my_win_close(File fd)
 {
@@ -288,7 +282,6 @@ int my_win_close(File fd)
   my_osmaperr(GetLastError());
   DBUG_RETURN(-1);
 }
-
 
 size_t my_win_pread(File Filedes, uchar *Buffer, size_t Count, my_off_t offset)
 {
@@ -326,7 +319,6 @@ size_t my_win_pread(File Filedes, uchar *Buffer, size_t Count, my_off_t offset)
   DBUG_RETURN(nBytesRead);
 }
 
-
 size_t my_win_read(File Filedes, uchar *Buffer, size_t Count)
 {
   DWORD         nBytesRead;
@@ -356,7 +348,6 @@ size_t my_win_read(File Filedes, uchar *Buffer, size_t Count)
   }
   DBUG_RETURN(nBytesRead);
 }
-
 
 size_t my_win_pwrite(File Filedes, const uchar *Buffer, size_t Count, 
                      my_off_t offset)
@@ -392,7 +383,6 @@ size_t my_win_pwrite(File Filedes, const uchar *Buffer, size_t Count,
     DBUG_RETURN(nBytesWritten);
 }
 
-
 my_off_t my_win_lseek(File fd, my_off_t pos, int whence)
 {
   LARGE_INTEGER offset;
@@ -412,7 +402,6 @@ my_off_t my_win_lseek(File fd, my_off_t pos, int whence)
   }
   DBUG_RETURN(newpos.QuadPart);
 }
-
 
 #ifndef FILE_WRITE_TO_END_OF_FILE
 #define FILE_WRITE_TO_END_OF_FILE       0xffffffff
@@ -457,7 +446,6 @@ size_t my_win_write(File fd, const uchar *Buffer, size_t Count)
   DBUG_RETURN(nWritten);
 }
 
-
 int my_win_chsize(File fd,  my_off_t newlength)
 {
   HANDLE hFile;
@@ -476,7 +464,6 @@ err:
   my_errno= errno;
   DBUG_RETURN(-1);
 }
-
 
 /* Get the file descriptor for stdin,stdout or stderr */
 static File my_get_stdfile_descriptor(FILE *stream)
@@ -500,7 +487,6 @@ static File my_get_stdfile_descriptor(FILE *stream)
   DBUG_RETURN(-1);
 }
 
-
 File my_win_fileno(FILE *file)
 {
   HANDLE hFile= (HANDLE)_get_osfhandle(fileno(file));
@@ -522,7 +508,6 @@ File my_win_fileno(FILE *file)
     DBUG_RETURN(my_get_stdfile_descriptor(file));
   DBUG_RETURN(retval);
 }
-
 
 FILE *my_win_fopen(const char *filename, const char *type)
 {
@@ -560,7 +545,6 @@ FILE *my_win_fopen(const char *filename, const char *type)
   DBUG_RETURN(file);
 }
 
-
 FILE * my_win_fdopen(File fd, const char *type)
 {
   FILE *file;
@@ -580,7 +564,6 @@ FILE * my_win_fdopen(File fd, const char *type)
   DBUG_RETURN(file);
 }
 
-
 int my_win_fclose(FILE *file)
 {
   File fd;
@@ -594,8 +577,6 @@ int my_win_fclose(FILE *file)
   invalidate_fd(fd);
   DBUG_RETURN(0);
 }
-
-
 
 /*
   Quick and dirty my_fstat() implementation for Windows.
@@ -631,8 +612,6 @@ int my_win_fstat(File fd, struct _stati64 *buf)
   DBUG_RETURN(retval);
 }
 
-
-
 int my_win_stat( const char *path, struct _stati64 *buf)
 {
   DBUG_ENTER("my_win_stat");
@@ -652,8 +631,6 @@ int my_win_stat( const char *path, struct _stati64 *buf)
   DBUG_RETURN(-1);
 }
 
-
-
 int my_win_fsync(File fd)
 {
   DBUG_ENTER("my_win_fsync");
@@ -662,8 +639,6 @@ int my_win_fsync(File fd)
   my_osmaperr(GetLastError());
   DBUG_RETURN(-1);
 }
-
-
 
 int my_win_dup(File fd)
 {

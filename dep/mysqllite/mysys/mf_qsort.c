@@ -19,7 +19,6 @@
   and Bentley & McIlroy's "Engineering a Sort Function".
 */
 
-
 #include "mysys_priv.h"
 #ifndef SCO
 #include <m_string.h>

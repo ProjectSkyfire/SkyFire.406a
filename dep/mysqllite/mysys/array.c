@@ -109,7 +109,6 @@ my_bool insert_dynamic(DYNAMIC_ARRAY *array, uchar* element)
   return FALSE;
 }
 
-
 /*
   Alloc space for next element(s) 
 
@@ -157,7 +156,6 @@ uchar *alloc_dynamic(DYNAMIC_ARRAY *array)
   }
   return array->buffer+(array->elements++ * array->size_of_element);
 }
-
 
 /*
   Pop last element from array.
@@ -211,7 +209,6 @@ my_bool set_dynamic(DYNAMIC_ARRAY *array, uchar* element, uint idx)
   return FALSE;
 }
 
-
 /*
   Ensure that dynamic array has enough elements
 
@@ -251,7 +248,6 @@ my_bool allocate_dynamic(DYNAMIC_ARRAY *array, uint max_elements)
      }
      else
 
-
     if (!(new_ptr= (uchar*) my_realloc(array->buffer,size*
                                        array->size_of_element,
                                        MYF(MY_WME | MY_ALLOW_ZERO_PTR))))
@@ -261,7 +257,6 @@ my_bool allocate_dynamic(DYNAMIC_ARRAY *array, uint max_elements)
   }
   return FALSE;
 }
-
 
 /*
   Get an element from array by given index
@@ -285,7 +280,6 @@ void get_dynamic(DYNAMIC_ARRAY *array, uchar* element, uint idx)
   memcpy(element,array->buffer+idx*array->size_of_element,
          (size_t) array->size_of_element);
 }
-
 
 /*
   Empty array by freeing all memory
@@ -328,7 +322,6 @@ void delete_dynamic_element(DYNAMIC_ARRAY *array, uint idx)
           (array->elements-idx)*array->size_of_element);
 }
 
-
 /*
   Free unused memory
 
@@ -357,7 +350,6 @@ void freeze_size(DYNAMIC_ARRAY *array)
   }
 }
 
-
 /*
   Get the index of a dynamic element
 
@@ -379,5 +371,4 @@ int get_index_dynamic(DYNAMIC_ARRAY *array, uchar* element)
     return -1;
 
   return ret;
-
 }

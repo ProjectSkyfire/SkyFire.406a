@@ -18,7 +18,6 @@
 #include <my_dir.h>
 #include <errno.h>
 
-
 /*
   Open a file
 
@@ -52,7 +51,6 @@ File my_open(const char *FileName, int Flags, myf MyFlags)
   DBUG_RETURN(my_register_filename(fd, FileName, FILE_BY_OPEN,
 				   EE_FILENOTFOUND, MyFlags));
 } /* my_open */
-
 
 /*
   Close a file
@@ -98,7 +96,6 @@ int my_close(File fd, myf MyFlags)
   mysql_mutex_unlock(&THR_LOCK_open);
   DBUG_RETURN(err);
 } /* my_close */
-
 
 /*
   Register file in my_file_info[]
@@ -167,9 +164,6 @@ File my_register_filename(File fd, const char *FileName, enum file_type
   }
   DBUG_RETURN(-1);
 }
-
-
-
 
 #ifdef EXTRA_DEBUG
 

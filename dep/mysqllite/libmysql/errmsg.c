@@ -108,7 +108,6 @@ void init_client_errs(void)
   (void) my_error_register(get_client_errmsgs, CR_ERROR_FIRST, CR_ERROR_LAST);
 }
 
-
 /*
   Unregister client error messages.
 

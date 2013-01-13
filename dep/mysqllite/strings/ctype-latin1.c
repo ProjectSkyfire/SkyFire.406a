@@ -416,7 +416,6 @@ static MY_CHARSET_HANDLER my_charset_handler=
     my_scan_8bit
 };
 
-
 CHARSET_INFO my_charset_latin1=
 {
     8,0,0,				/* number    */
@@ -449,9 +448,6 @@ CHARSET_INFO my_charset_latin1=
     &my_collation_8bit_simple_ci_handler
 };
 
-
-
-
 /*
  * This file is the latin1 character set with German sorting
  *
@@ -462,7 +458,6 @@ CHARSET_INFO my_charset_latin1=
  * 'ü'  ->  "ue"
  * 'ß'  ->  "ss"
  */
-
 
 /*
  * This is a simple latin1 mapping table, which maps all accented
@@ -490,7 +485,6 @@ static uchar sort_order_latin1_de[] = {
    65, 65, 65, 65,196, 65, 92, 67, 69, 69, 69, 69, 73, 73, 73, 73,
    68, 78, 79, 79, 79, 79,214,247,216, 85, 85, 85,220, 89,222, 89
 };
-
 
 /*
   same as sort_order_latin_de, but maps ALL accented chars to unaccented ones
@@ -528,7 +522,6 @@ uchar combo2map[]={
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,69, 0, 0, 0, 0, 0,69, 0, 0, 0, 0
 };
 
-
 /*
   Some notes about the following comparison rules:
   By definition, my_strnncoll_latin_de must works exactly as if had called
@@ -541,7 +534,6 @@ uchar combo2map[]={
   The other option would be to not do any accent removal in
   sort_order_latin_de[] at all
 */
-
 
 static int my_strnncoll_latin1_de(CHARSET_INFO *cs __attribute__((unused)),
 				  const uchar *a, size_t a_length,
@@ -582,7 +574,6 @@ static int my_strnncoll_latin1_de(CHARSET_INFO *cs __attribute__((unused)),
   return ((a < a_end || a_extend) ? (b_is_prefix ? 0 : 1) :
 	  (b < b_end || b_extend) ? -1 : 0);
 }
-
 
 static int my_strnncollsp_latin1_de(CHARSET_INFO *cs __attribute__((unused)),
 				    const uchar *a, size_t a_length,
@@ -655,7 +646,6 @@ static int my_strnncollsp_latin1_de(CHARSET_INFO *cs __attribute__((unused)),
   return res;
 }
 
-
 static size_t my_strnxfrm_latin1_de(CHARSET_INFO *cs __attribute__((unused)),
                                     uchar *dest, size_t len,
                                     const uchar *src, size_t srclen)
@@ -673,7 +663,6 @@ static size_t my_strnxfrm_latin1_de(CHARSET_INFO *cs __attribute__((unused)),
     bfill(dest, de - dest, ' ');
   return (int) len;
 }
-
 
 void my_hash_sort_latin1_de(CHARSET_INFO *cs __attribute__((unused)),
 			    const uchar *key, size_t len,
@@ -699,7 +688,6 @@ void my_hash_sort_latin1_de(CHARSET_INFO *cs __attribute__((unused)),
   }
 }
 
-
 static MY_COLLATION_HANDLER my_collation_german2_ci_handler=
 {
   NULL,			/* init */
@@ -714,7 +702,6 @@ static MY_COLLATION_HANDLER my_collation_german2_ci_handler=
   my_hash_sort_latin1_de,
   my_propagate_complex
 };
-
 
 CHARSET_INFO my_charset_latin1_german2_ci=
 {
@@ -747,7 +734,6 @@ CHARSET_INFO my_charset_latin1_german2_ci=
   &my_charset_handler,
   &my_collation_german2_ci_handler
 };
-
 
 CHARSET_INFO my_charset_latin1_bin=
 {

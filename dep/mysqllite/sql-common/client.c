@@ -114,7 +114,6 @@ my_bool	net_flush(NET *net);
 #define native_password_plugin_name "mysql_native_password"
 #define old_password_plugin_name    "mysql_old_password"
 
-
 uint		mysql_port=0;
 char		*mysql_unix_port= 0;
 const char	*unknown_sqlstate= "HY000";
@@ -187,7 +186,6 @@ int my_connect(my_socket fd, const struct sockaddr *name, uint namelen,
   DBUG_RETURN(wait_for_data(fd, timeout));
 #endif
 }
-
 
 /*
   Wait up to timeout seconds for a connection to be established.
@@ -397,8 +395,6 @@ void set_mysql_extended_error(MYSQL *mysql, int errcode,
   DBUG_VOID_RETURN;
 }
 
-
-
 /*
   Create a named pipe connection
 */
@@ -472,7 +468,6 @@ HANDLE create_named_pipe(MYSQL *mysql, uint connect_timeout, char **arg_host,
   return (hPipe);
 }
 #endif
-
 
 /*
   Create new shared memory connection, return handler of connection
@@ -880,7 +875,6 @@ void free_old_query(MYSQL *mysql)
   DBUG_VOID_RETURN;
 }
 
-
 /**
   Finish reading of a partial result set from the server.
   Get the EOF packet, and update mysql->status
@@ -926,7 +920,6 @@ my_bool flush_one_result(MYSQL *mysql)
   return FALSE;
 }
 
-
 /**
   Read a packet from network. If it's an OK packet, flush it.
 
@@ -964,7 +957,6 @@ my_bool opt_flush_ok_packet(MYSQL *mysql, my_bool *is_ok_packet)
   }
   return FALSE;
 }
-
 
 /*
   Flush result set sent from server
@@ -1009,7 +1001,6 @@ static void cli_flush_use_result(MYSQL *mysql, my_bool flush_all_results)
   DBUG_VOID_RETURN;
 }
 
-
 #ifdef __WIN__
 static my_bool is_NT(void)
 {
@@ -1017,7 +1008,6 @@ static my_bool is_NT(void)
   return (os && !strcmp(os, "Windows_NT")) ? 1 : 0;
 }
 #endif
-
 
 #ifdef CHECK_LICENSE
 /**
@@ -1068,7 +1058,6 @@ static int check_license(MYSQL *mysql)
 }
 #endif /* CHECK_LICENSE */
 
-
 /**************************************************************************
   Shut down connection
 **************************************************************************/
@@ -1092,7 +1081,6 @@ void end_server(MYSQL *mysql)
   errno= save_errno;
   DBUG_VOID_RETURN;
 }
-
 
 void STDCALL
 mysql_free_result(MYSQL_RES *result)
@@ -1192,7 +1180,6 @@ static int add_init_command(struct st_mysql_options *options, const char *cmd)
       if (!(OPTS)->extension)                                    \
         ALLOCATE_EXTENSIONS(OPTS);                               \
     } while (0)
-
 
 #define EXTENSION_SET_STRING(OPTS, X, STR)                       \
     do {                                                         \
@@ -1417,7 +1404,6 @@ void mysql_read_default_options(struct st_mysql_options *options,
   free_defaults(argv);
   DBUG_VOID_RETURN;
 }
-
 
 /**************************************************************************
   Get column lengths of the current row
@@ -1669,7 +1655,6 @@ MYSQL_DATA *cli_read_rows(MYSQL *mysql,MYSQL_FIELD *mysql_fields,
   When next packet is read, the previous field values are destroyed
 */
 
-
 static int
 read_one_row(MYSQL *mysql,uint fields,MYSQL_ROW row, ulong *lengths)
 {
@@ -1718,7 +1703,6 @@ read_one_row(MYSQL *mysql,uint fields,MYSQL_ROW row, ulong *lengths)
   *prev_pos=0;					/* Terminate last field */
   return 0;
 }
-
 
 /****************************************************************************
   Init MySQL structure or allocate one
@@ -1780,7 +1764,6 @@ mysql_init(MYSQL *mysql)
   return mysql;
 }
 
-
 /*
   Fill in SSL part of MYSQL structure and set 'use_ssl' flag.
   NB! Errors are not reported until you do mysql_real_connect.
@@ -1806,7 +1789,6 @@ mysql_ssl_set(MYSQL *mysql __attribute__((unused)) ,
 #endif /* HAVE_OPENSSL && !EMBEDDED_LIBRARY */
   DBUG_RETURN(0);
 }
-
 
 /*
   Free strings in the SSL structure and clear 'use_ssl' flag.
@@ -1861,7 +1843,6 @@ mysql_get_ssl_cipher(MYSQL *mysql __attribute__((unused)))
 #endif /* HAVE_OPENSSL && !EMBEDDED_LIBRARY */
   DBUG_RETURN(NULL);
 }
-
 
 /*
   Check the server's (subject) Common Name against the
@@ -1940,7 +1921,6 @@ static int ssl_verify_server_cert(Vio *vio, const char* server_hostname, const c
 
 #endif /* HAVE_OPENSSL && !EMBEDDED_LIBRARY */
 
-
 /*
   Note that the mysql argument must be initialized with mysql_init()
   before calling mysql_real_connect !
@@ -1976,8 +1956,6 @@ static MYSQL_METHODS client_methods=
 #endif
 };
 
-
-
 typedef enum my_cs_match_type_enum
 {
   /* MySQL and OS charsets are fully compatible */
@@ -1989,7 +1967,6 @@ typedef enum my_cs_match_type_enum
   */
   my_cs_unsupp
 } my_cs_match_type;
-
 
 typedef struct str2str_st
 {
@@ -2142,7 +2119,6 @@ const MY_CSET_OS_NAME charsets[]=
   {NULL,             NULL,       0}
 };
 
-
 static const char *
 my_os_charset_to_mysql_charset(const char *csname)
 {
@@ -2185,7 +2161,6 @@ def:
   return csname;
 }
 
-
 #ifndef __WIN__
 #include <stdlib.h> /* for getenv() */
 #ifdef HAVE_LANGINFO_H
@@ -2195,7 +2170,6 @@ def:
 #include <locale.h>
 #endif
 #endif /* __WIN__ */
-
 
 static int
 mysql_autodetect_character_set(MYSQL *mysql)
@@ -2219,7 +2193,6 @@ mysql_autodetect_character_set(MYSQL *mysql)
     return 1;
   return 0;
 }
-
 
 static void
 mysql_set_character_set_with_default_collation(MYSQL *mysql)
@@ -2250,7 +2223,6 @@ mysql_set_character_set_with_default_collation(MYSQL *mysql)
   }
   charsets_dir= save;
 }
-
 
 C_MODE_START
 int mysql_init_character_set(MYSQL *mysql)
@@ -2361,8 +2333,6 @@ struct st_mysql_client_plugin *mysql_client_builtins[]=
 #endif
   0
 };
-
-
 
 /* this is a "superset" of MYSQL_PLUGIN_VIO, in C++ I use inheritance */
 typedef struct {
@@ -2804,7 +2774,6 @@ static void client_mpvio_info(MYSQL_PLUGIN_VIO *vio,
   mpvio_info(mpvio->mysql->net.vio, info);
 }
 
-
 my_bool libmysql_cleartext_plugin_enabled= 0;
 
 static my_bool check_plugin_enabled(MYSQL *mysql, auth_plugin_t *plugin)
@@ -2823,7 +2792,6 @@ static my_bool check_plugin_enabled(MYSQL *mysql, auth_plugin_t *plugin)
   }
   return FALSE;
 }
-
 
 /**
   Client side of the plugin driver authentication.
@@ -3571,7 +3539,6 @@ error:
   DBUG_RETURN(0);
 }
 
-
 my_bool mysql_reconnect(MYSQL *mysql)
 {
   MYSQL tmp_mysql;
@@ -3629,7 +3596,6 @@ my_bool mysql_reconnect(MYSQL *mysql)
   DBUG_RETURN(0);
 }
 
-
 /**************************************************************************
   Set current database
 **************************************************************************/
@@ -3648,7 +3614,6 @@ mysql_select_db(MYSQL *mysql, const char *db)
   mysql->db=my_strdup(db,MYF(MY_WME));
   DBUG_RETURN(0);
 }
-
 
 /*************************************************************************
   Send a QUIT to the server and close the connection
@@ -3696,7 +3661,6 @@ static void mysql_close_free_options(MYSQL *mysql)
   DBUG_VOID_RETURN;
 }
 
-
 static void mysql_close_free(MYSQL *mysql)
 {
   my_free(mysql->host_info);
@@ -3710,7 +3674,6 @@ static void mysql_close_free(MYSQL *mysql)
   /* Clear pointers for better safety */
   mysql->host_info= mysql->user= mysql->passwd= mysql->db= 0;
 }
-
 
 /**
   For use when the connection to the server has been lost (in which case 
@@ -3751,7 +3714,6 @@ static void mysql_prune_stmt_list(MYSQL *mysql)
   mysql->stmts= pruned_list;
 }
 
-
 /*
   Clear connection pointer of every statement: this is necessary
   to give error on attempt to use a prepared statement of closed
@@ -3789,7 +3751,6 @@ void mysql_detach_stmt_list(LIST **stmt_list __attribute__((unused)),
 #endif /* MYSQL_CLIENT */
 }
 
-
 void STDCALL mysql_close(MYSQL *mysql)
 {
   DBUG_ENTER("mysql_close");
@@ -3816,7 +3777,6 @@ void STDCALL mysql_close(MYSQL *mysql)
   }
   DBUG_VOID_RETURN;
 }
-
 
 static my_bool cli_read_query_result(MYSQL *mysql)
 {
@@ -3889,7 +3849,6 @@ get_info:
   DBUG_RETURN(0);
 }
 
-
 /*
   Send the query and return so we can do something else.
   Needs to be followed by mysql_read_query_result() when we want to
@@ -3903,7 +3862,6 @@ mysql_send_query(MYSQL* mysql, const char* query, ulong length)
   DBUG_RETURN(simple_command(mysql, COM_QUERY, (uchar*) query, length, 1));
 }
 
-
 int STDCALL
 mysql_real_query(MYSQL *mysql, const char *query, ulong length)
 {
@@ -3915,7 +3873,6 @@ mysql_real_query(MYSQL *mysql, const char *query, ulong length)
     DBUG_RETURN(1);
   DBUG_RETURN((int) (*mysql->methods->read_query_result)(mysql));
 }
-
 
 /**************************************************************************
   Alloc result struct for buffered results. All rows are read to buffer.
@@ -3965,7 +3922,6 @@ MYSQL_RES * STDCALL mysql_store_result(MYSQL *mysql)
   DBUG_RETURN(result);				/* Data fetched */
 }
 
-
 /**************************************************************************
   Alloc struct for use with unbuffered reads. Data is fetched by domand
   when calling to mysql_fetch_row.
@@ -4012,7 +3968,6 @@ static MYSQL_RES * cli_use_result(MYSQL *mysql)
   mysql->unbuffered_fetch_owner= &result->unbuffered_fetch_cancelled;
   DBUG_RETURN(result);			/* Data is read to be fetched */
 }
-
 
 /**************************************************************************
   Return next row of the query results
@@ -4066,7 +4021,6 @@ mysql_fetch_row(MYSQL_RES *res)
   }
 }
 
-
 /**************************************************************************
   Get column lengths of the current row
   If one uses mysql_use_result, res->lengths contains the length information,
@@ -4084,7 +4038,6 @@ mysql_fetch_lengths(MYSQL_RES *res)
     (*res->methods->fetch_lengths)(res->lengths, column, res->field_count);
   return res->lengths;
 }
-
 
 int STDCALL
 mysql_options(MYSQL *mysql,enum mysql_option option, const void *arg)
@@ -4183,7 +4136,6 @@ mysql_options(MYSQL *mysql,enum mysql_option option, const void *arg)
   DBUG_RETURN(0);
 }
 
-
 /****************************************************************************
   Functions to get information from the MySQL structure
   These are functions to make shared libraries more usable.
@@ -4205,12 +4157,10 @@ uint STDCALL mysql_errno(MYSQL *mysql)
   return mysql ? mysql->net.last_errno : mysql_server_last_errno;
 }
 
-
 const char * STDCALL mysql_error(MYSQL *mysql)
 {
   return mysql ? mysql->net.last_error : mysql_server_last_error;
 }
-
 
 /*
   Get version number for server in a form easy to test on
@@ -4239,7 +4189,6 @@ mysql_get_server_version(MYSQL *mysql)
   version= (uint) strtoul(pos, &end_pos, 10);
   return (ulong) major*10000L+(ulong) (minor*100+version);
 }
-
 
 /* 
    mysql_set_character_set function sends SET NAMES cs_name to
@@ -4290,7 +4239,6 @@ static int native_password_auth_client(MYSQL_PLUGIN_VIO *vio, MYSQL *mysql)
   uchar *pkt;
 
   DBUG_ENTER("native_password_auth_client");
-
 
   if (((MCPVIO_EXT *)vio)->mysql_change_user)
   {

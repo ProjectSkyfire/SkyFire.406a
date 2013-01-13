@@ -22,8 +22,6 @@
 #include <paths.h>
 #endif
 
-
-
 /*
   @brief
   Create a temporary file with unique name in a given directory
@@ -159,7 +157,6 @@ File create_temp_file(char *to, const char *dir, const char *prefix,
 		     (int) (O_RDWR | O_BINARY | O_TRUNC | O_EXCL | O_NOFOLLOW |
 			    O_TEMPORARY | O_SHORT_LIVED),
 		     MYF(MY_WME));
-
     }
     else
     {

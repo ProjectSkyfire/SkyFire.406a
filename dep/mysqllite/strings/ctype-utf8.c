@@ -27,15 +27,12 @@
 #define EILSEQ ENOENT
 #endif
 
-
 #define MY_UTF8MB3_GENERAL_CI MY_UTF8MB3 "_general_ci"
 #define MY_UTF8MB3_GENERAL_CS MY_UTF8MB3 "_general_cs"
 #define MY_UTF8MB3_BIN        MY_UTF8MB3 "_bin"
 #define MY_UTF8MB4_GENERAL_CI MY_UTF8MB4 "_general_ci"
 #define MY_UTF8MB4_GENERAL_CS MY_UTF8MB4 "_general_cs"
 #define MY_UTF8MB4_BIN        MY_UTF8MB4 "_bin"
-
-
 
 #ifndef HAVE_CHARSET_utf8
 #define HAVE_CHARSET_utf8
@@ -192,7 +189,6 @@ static MY_UNICASE_INFO plane00[]={
   {0x00DE,0x00FE,0x00DE},  {0x0178,0x00FF,0x0059}
 };
 
-
 /*
   Almost similar to plane00, but maps sorting order
   for U+00DF to 0x00DF instead of 0x0053.
@@ -327,7 +323,6 @@ static MY_UNICASE_INFO plane00_mysql500[]={
   {0x00DC,0x00FC,0x0055},  {0x00DD,0x00FD,0x0059},
   {0x00DE,0x00FE,0x00DE},  {0x0178,0x00FF,0x0059}
 };
-
 
 static MY_UNICASE_INFO plane01[]={
   {0x0100,0x0101,0x0041},  {0x0100,0x0101,0x0041},
@@ -1672,9 +1667,7 @@ MY_UNICASE_INFO *my_unicase_default[256]={
     NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL,
     NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL,
     NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL, planeFF
-
 };
-
 
 /*
   Reproduce old utf8_general_ci behaviour before we fixed Bug#27877.
@@ -1713,9 +1706,7 @@ MY_UNICASE_INFO *my_unicase_mysql500[256]={
     NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL,
     NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL,
     NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL, planeFF
-
 };
-
 
 /*
   Turkish lower/upper mapping:
@@ -1857,8 +1848,6 @@ static MY_UNICASE_INFO turk00[]=
   {0x00DE,0x00FE,0x00DE},  {0x0178,0x00FF,0x0059}
 };
 
-
-
 MY_UNICASE_INFO *my_unicase_turkish[256]=
 {
   turk00, plane01, plane02, plane03, plane04, plane05,    NULL,    NULL,
@@ -1895,7 +1884,6 @@ MY_UNICASE_INFO *my_unicase_turkish[256]=
     NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL, planeFF
 };
 
-
 static inline void
 my_tosort_unicode(MY_UNICASE_INFO **uni_plane, my_wc_t *wc)
 {
@@ -1910,7 +1898,6 @@ my_tosort_unicode(MY_UNICASE_INFO **uni_plane, my_wc_t *wc)
     *wc= MY_CS_REPLACEMENT_CHARACTER;
   }
 }
-
 
 /*
 ** Compare string against string with wildcard
@@ -2067,7 +2054,6 @@ my_wildcmp_unicode(CHARSET_INFO *cs,
   return (str != str_end ? 1 : 0);
 }
 
-
 /*
   Store sorting weights using 2 bytes per character.
 
@@ -2118,7 +2104,6 @@ my_strnxfrm_unicode(CHARSET_INFO *cs,
   return dstlen;
 }
 
-
 /*
   Store sorting weights using 3 bytes per character.
   This function is shared between utf8mb4_bin, utf16_bin, utf32_bin.
@@ -2166,14 +2151,12 @@ my_strnxfrm_unicode_full_bin(CHARSET_INFO *cs,
   return dstlen;
 }
 
-
 size_t
 my_strnxfrmlen_unicode_full_bin(CHARSET_INFO *cs, size_t len)
 {
   return ((len + 3) / cs->mbmaxlen) * 3;
 }
 #endif /* HAVE_UNIDATA */
-
 
 #ifdef HAVE_CHARSET_utf8
 
@@ -2251,7 +2234,6 @@ static inline int bincmp(const uchar *s, const uchar *se,
   int cmp= memcmp(s,t,len);
   return cmp ? cmp : slen-tlen;
 }
-
 
 static int my_utf8_uni(CHARSET_INFO *cs __attribute__((unused)),
                        my_wc_t * pwc, const uchar *s, const uchar *e)
@@ -2358,7 +2340,6 @@ static int my_utf8_uni(CHARSET_INFO *cs __attribute__((unused)),
   return MY_CS_ILSEQ;
 }
 
-
 /*
   The same as above, but without range check
   for example, for a null-terminated string
@@ -2402,7 +2383,6 @@ static int my_utf8_uni_no_range(CHARSET_INFO *cs __attribute__((unused)),
   }
   return MY_CS_ILSEQ;
 }
-
 
 static int my_uni_utf8 (CHARSET_INFO *cs __attribute__((unused)),
                         my_wc_t wc, uchar *r, uchar *e)
@@ -2449,7 +2429,6 @@ static int my_uni_utf8 (CHARSET_INFO *cs __attribute__((unused)),
   return count;
 }
 
-
 /*
   The same as above, but without range check.
 */
@@ -2477,7 +2456,6 @@ static int my_uni_utf8_no_range(CHARSET_INFO *cs __attribute__((unused)),
   return count;
 }
 
-
 static size_t my_caseup_utf8(CHARSET_INFO *cs, char *src, size_t srclen,
                              char *dst, size_t dstlen)
 {
@@ -2499,7 +2477,6 @@ static size_t my_caseup_utf8(CHARSET_INFO *cs, char *src, size_t srclen,
   }
   return (size_t) (dst - dst0);
 }
-
 
 static void my_hash_sort_utf8(CHARSET_INFO *cs, const uchar *s, size_t slen,
                               ulong *n1, ulong *n2)
@@ -2528,7 +2505,6 @@ static void my_hash_sort_utf8(CHARSET_INFO *cs, const uchar *s, size_t slen,
   }
 }
 
-
 static size_t my_caseup_str_utf8(CHARSET_INFO *cs, char *src)
 {
   my_wc_t wc;
@@ -2551,7 +2527,6 @@ static size_t my_caseup_str_utf8(CHARSET_INFO *cs, char *src)
   return (size_t) (dst - dst0);
 }
 
-
 static size_t my_casedn_utf8(CHARSET_INFO *cs, char *src, size_t srclen,
                              char *dst, size_t dstlen)
 {
@@ -2573,7 +2548,6 @@ static size_t my_casedn_utf8(CHARSET_INFO *cs, char *src, size_t srclen,
   }
   return (size_t) (dst - dst0);
 }
-
 
 static size_t my_casedn_str_utf8(CHARSET_INFO *cs, char *src)
 {
@@ -2613,7 +2587,6 @@ static size_t my_casedn_str_utf8(CHARSET_INFO *cs, char *src)
   return (size_t) (dst - dst0);
 }
 
-
 static int my_strnncoll_utf8(CHARSET_INFO *cs,
                              const uchar *s, size_t slen,
                              const uchar *t, size_t tlen,
@@ -2651,8 +2624,6 @@ static int my_strnncoll_utf8(CHARSET_INFO *cs,
   }
   return (int) (t_is_prefix ? t-te : ((se-s) - (te-t)));
 }
-
-
 
 /*
   Compare strings, discarding end space
@@ -2759,7 +2730,6 @@ static int my_strnncollsp_utf8(CHARSET_INFO *cs,
   return res;
 }
 
-
 /*
   Compare 0-terminated UTF8 strings.
 
@@ -2858,7 +2828,6 @@ int my_strcasecmp_utf8(CHARSET_INFO *cs, const char *s, const char *t)
   return ((int)(uchar)s[0]) - ((int) (uchar) t[0]);
 }
 
-
 static
 int my_wildcmp_utf8(CHARSET_INFO *cs,
 		    const char *str,const char *str_end,
@@ -2870,14 +2839,12 @@ int my_wildcmp_utf8(CHARSET_INFO *cs,
                             escape,w_one,w_many,uni_plane); 
 }
 
-
 static
 size_t my_strnxfrmlen_utf8(CHARSET_INFO *cs __attribute__((unused)),
                            size_t len)
 {
   return (len * 2 + 2) / 3;
 }
-
 
 static uint my_ismbchar_utf8(CHARSET_INFO *cs,const char *b, const char *e)
 {
@@ -2907,7 +2874,6 @@ static uint my_mbcharlen_utf8(CHARSET_INFO *cs  __attribute__((unused)),
 #endif
   return 0; /* Illegal mb head */;
 }
-
 
 static MY_COLLATION_HANDLER my_collation_ci_handler =
 {
@@ -2955,8 +2921,6 @@ MY_CHARSET_HANDLER my_charset_utf8_handler=
     my_scan_8bit
 };
 
-
-
 CHARSET_INFO my_charset_utf8_general_ci=
 {
     33,0,0,             /* number       */
@@ -2989,7 +2953,6 @@ CHARSET_INFO my_charset_utf8_general_ci=
     &my_collation_ci_handler
 };
 
-
 CHARSET_INFO my_charset_utf8_general_mysql500_ci=
 {
   223,0,0,                                      /* number           */
@@ -3021,7 +2984,6 @@ CHARSET_INFO my_charset_utf8_general_mysql500_ci=
   &my_charset_utf8_handler,
   &my_collation_ci_handler
 };
-
 
 CHARSET_INFO my_charset_utf8_bin=
 {
@@ -3239,7 +3201,6 @@ CHARSET_INFO my_charset_utf8_general_cs=
 };
 #endif	/* Cybozu Hack */
 
-
 /*
   File system encoding components:
 
@@ -3262,7 +3223,6 @@ All other characters are encoded using five bytes:
 [.][0..9a..z][0..9a..z][0..9a..z][0..9a..z]
 
 */
-
 
 static uint16 touni[5994]=
 {
@@ -4018,7 +3978,6 @@ static uint16 touni[5994]=
   0x1FD1,0x1FF4
 };
 
-
 /* 00C0-05FF */
 static uint16 uni_0C00_05FF[1344]=
 {
@@ -4192,7 +4151,6 @@ static uint16 uni_0C00_05FF[1344]=
   0x0000,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000
 };
 
-
 /* 1E00-1FFF */
 static uint16 uni_1E00_1FFF[512]=
 {
@@ -4262,7 +4220,6 @@ static uint16 uni_1E00_1FFF[512]=
   0x0B36,0x0B86,0x0C76,0x0CC6,0x0D19,0x0000,0x0000,0x0000
 };
 
-
 /* 2160-217F */
 static uint16 uni_2160_217F[32]=
 {
@@ -4271,7 +4228,6 @@ static uint16 uni_2160_217F[32]=
   0x1139,0x1189,0x11D9,0x1229,0x1279,0x12C9,0x1319,0x1369,
   0x13B9,0x1409,0x1459,0x14A9,0x14F9,0x1549,0x1599,0x15E9
 };
-
 
 /* 24B0-24EF */
 static uint16 uni_24B0_24EF[64]=
@@ -4286,7 +4242,6 @@ static uint16 uni_24B0_24EF[64]=
   0x0549,0x054A,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000
 };
 
-
 /* FF20-FF5F */
 static uint16 uni_FF20_FF5F[64]=
 {
@@ -4299,10 +4254,6 @@ static uint16 uni_FF20_FF5F[64]=
   0x1410,0x1460,0x14B0,0x1500,0x1550,0x15A0,0x15F0,0x1640,
   0x1690,0x16E0,0x1730,0x0000,0x0000,0x0000,0x0000,0x0000
 };
-
-
-
-
 
 /*
   Returns
@@ -4333,7 +4284,6 @@ static int hexlo(int x)
   };
   return hex_lo_digit[(unsigned int) x];
 }
-
 
 /*
   Safe characters:
@@ -4414,7 +4364,6 @@ my_mb_wc_filename(CHARSET_INFO *cs __attribute__((unused)),
   return MY_CS_ILSEQ;
 }
 
-
 static int
 my_wc_mb_filename(CHARSET_INFO *cs __attribute__((unused)),
                   my_wc_t wc, uchar *s, uchar *e)
@@ -4456,7 +4405,6 @@ my_wc_mb_filename(CHARSET_INFO *cs __attribute__((unused)),
   *s++= hex[(wc)      & 15];
   return 5;
 }
-
 
 static MY_COLLATION_HANDLER my_collation_filename_handler =
 {
@@ -4504,8 +4452,6 @@ static MY_CHARSET_HANDLER my_charset_filename_handler=
     my_scan_8bit
 };
 
-
-
 CHARSET_INFO my_charset_filename=
 {
     17,0,0,             /* number       */
@@ -4537,7 +4483,6 @@ CHARSET_INFO my_charset_filename=
     &my_charset_filename_handler,
     &my_collation_filename_handler
 };
-
 
 #ifdef MY_TEST_UTF8
 #include <stdio.h>
@@ -4592,8 +4537,6 @@ int main()
 
 #endif /* HAVE_CHARSET_UTF8 */
 
-
-
 #ifdef HAVE_CHARSET_utf8mb4
 
 /*
@@ -4623,7 +4566,6 @@ static uchar ctype_utf8mb4[]=
     3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  0
 };
 
-
 static uchar to_lower_utf8mb4[]=
 {
     0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15,
@@ -4643,7 +4585,6 @@ static uchar to_lower_utf8mb4[]=
   224,225,226,227,228,229,230,231,232,233,234,235,236,237,238,239,
   240,241,242,243,244,245,246,247,248,249,250,251,252,253,254,255
 };
-
 
 static uchar to_upper_utf8mb4[]=
 {
@@ -4665,7 +4606,6 @@ static uchar to_upper_utf8mb4[]=
   240,241,242,243,244,245,246,247,248,249,250,251,252,253,254,255
 };
 
-
 static inline int
 bincmp_utf8mb4(const uchar *s, const uchar *se,
                const uchar *t, const uchar *te)
@@ -4675,7 +4615,6 @@ bincmp_utf8mb4(const uchar *s, const uchar *se,
   int cmp= memcmp(s, t, len);
   return cmp ? cmp : slen - tlen;
 }
-
 
 static int
 my_mb_wc_utf8mb4(CHARSET_INFO *cs __attribute__((unused)),
@@ -4758,7 +4697,6 @@ my_mb_wc_utf8mb4(CHARSET_INFO *cs __attribute__((unused)),
   return MY_CS_ILSEQ;
 }
 
-
 /*
   The same as above, but without range check
   for example, for a null-terminated string
@@ -4817,7 +4755,6 @@ my_mb_wc_utf8mb4_no_range(CHARSET_INFO *cs __attribute__((unused)),
   return MY_CS_ILSEQ;
 }
 
-
 static int
 my_wc_mb_utf8mb4(CHARSET_INFO *cs __attribute__((unused)),
                  my_wc_t wc, uchar *r, uchar *e)
@@ -4850,7 +4787,6 @@ my_wc_mb_utf8mb4(CHARSET_INFO *cs __attribute__((unused)),
   return count;
 }
 
-
 /*
   The same as above, but without range check.
 */
@@ -4882,7 +4818,6 @@ my_wc_mb_utf8mb4_no_range(CHARSET_INFO *cs __attribute__((unused)),
   return count;
 }
 
-
 static inline void
 my_tolower_utf8mb4(MY_UNICASE_INFO **uni_plane, my_wc_t *wc)
 {
@@ -4891,7 +4826,6 @@ my_tolower_utf8mb4(MY_UNICASE_INFO **uni_plane, my_wc_t *wc)
     *wc= uni_plane[page][*wc & 0xFF].tolower;
 }
 
-
 static inline void
 my_toupper_utf8mb4(MY_UNICASE_INFO **uni_plane, my_wc_t *wc)
 {
@@ -4899,7 +4833,6 @@ my_toupper_utf8mb4(MY_UNICASE_INFO **uni_plane, my_wc_t *wc)
   if (page < 256 && uni_plane[page])
     *wc= uni_plane[page][*wc & 0xFF].toupper;
 }
-
 
 static size_t
 my_caseup_utf8mb4(CHARSET_INFO *cs, char *src, size_t srclen,
@@ -4924,14 +4857,12 @@ my_caseup_utf8mb4(CHARSET_INFO *cs, char *src, size_t srclen,
   return (size_t) (dst - dst0);
 }
 
-
 static inline void
 my_hash_add(ulong *n1, ulong *n2, uint ch)
 {
   n1[0]^= (((n1[0] & 63) + n2[0]) * (ch)) + (n1[0] << 8);
   n2[0]+= 3;
 }
-
 
 static void
 my_hash_sort_utf8mb4(CHARSET_INFO *cs, const uchar *s, size_t slen,
@@ -4969,7 +4900,6 @@ my_hash_sort_utf8mb4(CHARSET_INFO *cs, const uchar *s, size_t slen,
   }
 }
 
-
 static size_t
 my_caseup_str_utf8mb4(CHARSET_INFO *cs, char *src)
 {
@@ -4991,7 +4921,6 @@ my_caseup_str_utf8mb4(CHARSET_INFO *cs, char *src)
   *dst= '\0';
   return (size_t) (dst - dst0);
 }
-
 
 static size_t
 my_casedn_utf8mb4(CHARSET_INFO *cs,
@@ -5016,7 +4945,6 @@ my_casedn_utf8mb4(CHARSET_INFO *cs,
   }
   return (size_t) (dst - dst0);
 }
-
 
 static size_t
 my_casedn_str_utf8mb4(CHARSET_INFO *cs, char *src)
@@ -5056,7 +4984,6 @@ my_casedn_str_utf8mb4(CHARSET_INFO *cs, char *src)
   return (size_t) (dst - dst0);
 }
 
-
 static int
 my_strnncoll_utf8mb4(CHARSET_INFO *cs,
                      const uchar *s, size_t slen,
@@ -5094,7 +5021,6 @@ my_strnncoll_utf8mb4(CHARSET_INFO *cs,
   }
   return (int) (t_is_prefix ? (t - te) : ((se - s) - (te - t)));
 }
-
 
 /**
   
@@ -5200,7 +5126,6 @@ my_strnncollsp_utf8mb4(CHARSET_INFO *cs,
   return res;
 }
 
-
 /**
   Compare 0-terminated UTF8 strings.
 
@@ -5273,7 +5198,6 @@ my_strcasecmp_utf8mb4(CHARSET_INFO *cs, const char *s, const char *t)
   return ((int) (uchar) s[0]) - ((int) (uchar) t[0]);
 }
 
-
 static int
 my_wildcmp_utf8mb4(CHARSET_INFO *cs,
                    const char *str, const char *strend,
@@ -5284,14 +5208,12 @@ my_wildcmp_utf8mb4(CHARSET_INFO *cs,
                             escape, w_one, w_many, cs->caseinfo); 
 }
 
-
 static size_t
 my_strnxfrmlen_utf8mb4(CHARSET_INFO *cs __attribute__((unused)), size_t len)
 {
   /* TODO: fix when working on WL "Unicode new version" */
   return (len * 2 + 2) / 4;
 }
-
 
 static uint
 my_ismbchar_utf8mb4(CHARSET_INFO *cs, const char *b, const char *e)
@@ -5300,7 +5222,6 @@ my_ismbchar_utf8mb4(CHARSET_INFO *cs, const char *b, const char *e)
   int res= my_mb_wc_utf8mb4(cs,&wc, (const uchar*)b, (const uchar*)e);
   return (res > 1) ? res : 0;
 }
-
 
 static uint
 my_mbcharlen_utf8mb4(CHARSET_INFO *cs  __attribute__((unused)), uint c)
@@ -5318,7 +5239,6 @@ my_mbcharlen_utf8mb4(CHARSET_INFO *cs  __attribute__((unused)), uint c)
   return 0; /* Illegal mb head */;
 }
 
-
 static MY_COLLATION_HANDLER my_collation_utf8mb4_general_ci_handler=
 {
   NULL,               /* init */
@@ -5334,7 +5254,6 @@ static MY_COLLATION_HANDLER my_collation_utf8mb4_general_ci_handler=
   my_propagate_complex
 };
 
-
 static MY_COLLATION_HANDLER my_collation_utf8mb4_bin_handler =
 {
     NULL,		/* init */
@@ -5349,7 +5268,6 @@ static MY_COLLATION_HANDLER my_collation_utf8mb4_bin_handler =
     my_hash_sort_mb_bin,
     my_propagate_simple
 };
-
 
 MY_CHARSET_HANDLER my_charset_utf8mb4_handler=
 {
@@ -5382,8 +5300,6 @@ MY_CHARSET_HANDLER my_charset_utf8mb4_handler=
   my_scan_8bit
 };
 
-
-
 CHARSET_INFO my_charset_utf8mb4_general_ci=
 {
   45,0,0,              /* number       */
@@ -5415,7 +5331,6 @@ CHARSET_INFO my_charset_utf8mb4_general_ci=
   &my_charset_utf8mb4_handler,
   &my_collation_utf8mb4_general_ci_handler
 };
-
 
 CHARSET_INFO my_charset_utf8mb4_bin=
 {

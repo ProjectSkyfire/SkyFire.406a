@@ -69,7 +69,6 @@ err:
   DBUG_RETURN(TRUE);
 }
 
-
 char *my_tmpdir(MY_TMPDIR *tmpdir)
 {
   char *dir;

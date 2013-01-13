@@ -39,7 +39,6 @@ int vio_errno(Vio *vio __attribute__((unused)))
   return socket_errno;		/* On Win32 this mapped to WSAGetLastError() */
 }
 
-
 size_t vio_read(Vio * vio, uchar* buf, size_t size)
 {
   size_t r;
@@ -64,7 +63,6 @@ size_t vio_read(Vio * vio, uchar* buf, size_t size)
   DBUG_PRINT("exit", ("%ld", (long) r));
   DBUG_RETURN(r);
 }
-
 
 /*
   Buffered read: if average read size is small it may
@@ -203,7 +201,6 @@ vio_is_blocking(Vio * vio)
   DBUG_RETURN(r);
 }
 
-
 int vio_fastsend(Vio * vio __attribute__((unused)))
 {
   int r=0;
@@ -226,7 +223,6 @@ int vio_fastsend(Vio * vio __attribute__((unused)))
     r= setsockopt(vio->sd, IPPROTO_TCP, TCP_NODELAY,
                   IF_WIN((const char*), (void*)) &nodelay,
                   sizeof(nodelay));
-
   }
   if (r)
   {
@@ -254,7 +250,6 @@ int vio_keepalive(Vio* vio, my_bool set_keep_alive)
   DBUG_RETURN(r);
 }
 
-
 my_bool
 vio_should_retry(Vio * vio)
 {
@@ -272,7 +267,6 @@ vio_should_retry(Vio * vio)
             (en == SOCKET_EAGAIN || en == SOCKET_EWOULDBLOCK));
 }
 
-
 my_bool
 vio_was_interrupted(Vio *vio __attribute__((unused)))
 {
@@ -280,7 +274,6 @@ vio_was_interrupted(Vio *vio __attribute__((unused)))
   return (en == SOCKET_EAGAIN || en == SOCKET_EINTR ||
 	  en == SOCKET_EWOULDBLOCK || en == SOCKET_ETIMEDOUT);
 }
-
 
 int
 mysql_socket_shutdown(my_socket mysql_socket, int how)
@@ -312,7 +305,6 @@ mysql_socket_shutdown(my_socket mysql_socket, int how)
   return result;
 }
 
-
 int vio_close(Vio * vio)
 {
   int r=0;
@@ -339,7 +331,6 @@ int vio_close(Vio * vio)
   vio->sd=   -1;
   DBUG_RETURN(r);
 }
-
 
 const char *vio_description(Vio * vio)
 {
@@ -433,7 +424,6 @@ static void vio_get_normalized_ip(const struct sockaddr *src,
   }
 }
 
-
 /**
   Return the normalized IP address string for a sock-address.
 
@@ -478,7 +468,6 @@ my_bool vio_get_normalized_ip_string(const struct sockaddr *addr,
                        (const char *) gai_strerror(err_code)));
   return TRUE;
 }
-
 
 /**
   Return IP address and port of a VIO client socket.
@@ -561,7 +550,6 @@ my_bool vio_peer_addr(Vio *vio, char *ip_buffer, uint16 *port,
   DBUG_RETURN(FALSE);
 }
 
-
 /**
   Indicate whether there is data to read on a given socket.
 
@@ -613,7 +601,6 @@ static my_bool socket_poll_read(my_socket sd, uint timeout)
 #endif
 }
 
-
 /**
   Retrieve the amount of data that can be read from a socket.
 
@@ -648,7 +635,6 @@ static my_bool socket_peek_read(Vio *vio, uint *bytes)
 #endif
 }
 
-
 /**
   Indicate whether there is data to read on a given socket.
 
@@ -671,7 +657,6 @@ my_bool vio_poll_read(Vio *vio, uint timeout)
 #endif
   DBUG_RETURN(socket_poll_read(sd, timeout));
 }
-
 
 /**
   Determine if the endpoint of a connection is still available.
@@ -719,7 +704,6 @@ my_bool vio_is_connected(Vio *vio)
   DBUG_RETURN(bytes ? TRUE : FALSE);
 }
 
-
 void vio_timeout(Vio *vio, uint which, uint timeout)
 {
 #if defined(SO_SNDTIMEO) && defined(SO_RCVTIMEO)
@@ -740,7 +724,6 @@ void vio_timeout(Vio *vio, uint which, uint timeout)
   r= setsockopt(vio->sd, SOL_SOCKET, which ? SO_SNDTIMEO : SO_RCVTIMEO,
                 IF_WIN((const char*), (const void*))&wait_timeout,
                 sizeof(wait_timeout));
-
   }
 
   if (r != 0)
@@ -754,7 +737,6 @@ void vio_timeout(Vio *vio, uint which, uint timeout)
 */
 #endif
 }
-
 
 #ifdef __WIN__
 
@@ -790,7 +772,6 @@ static size_t pipe_complete_io(Vio* vio, char* buf, size_t size, DWORD timeout_m
   DBUG_RETURN(length);
 }
 
-
 size_t vio_read_pipe(Vio * vio, uchar *buf, size_t size)
 {
   DWORD bytes_read;
@@ -818,7 +799,6 @@ size_t vio_read_pipe(Vio * vio, uchar *buf, size_t size)
   DBUG_PRINT("exit", ("%lld", (longlong)retval));
   DBUG_RETURN(retval);
 }
-
 
 size_t vio_write_pipe(Vio * vio, const uchar* buf, size_t size)
 {
@@ -848,7 +828,6 @@ size_t vio_write_pipe(Vio * vio, const uchar* buf, size_t size)
   DBUG_RETURN(retval);
 }
 
-
 my_bool vio_is_connected_pipe(Vio *vio)
 {
   if (PeekNamedPipe(vio->hPipe, NULL, 0, NULL, NULL, NULL))
@@ -856,7 +835,6 @@ my_bool vio_is_connected_pipe(Vio *vio)
   else
     return (GetLastError() != ERROR_BROKEN_PIPE);
 }
-
 
 int vio_close_pipe(Vio * vio)
 {
@@ -877,7 +855,6 @@ int vio_close_pipe(Vio * vio)
   DBUG_RETURN(r);
 }
 
-
 void vio_win32_timeout(Vio *vio, uint which , uint timeout_sec)
 {
     DWORD timeout_ms;
@@ -896,7 +873,6 @@ void vio_win32_timeout(Vio *vio, uint which , uint timeout_sec)
     else
       vio->read_timeout_ms= timeout_ms;
 }
-
 
 #ifdef HAVE_SMEM
 
@@ -965,7 +941,6 @@ size_t vio_read_shared_memory(Vio * vio, uchar* buf, size_t size)
   DBUG_RETURN(length);
 }
 
-
 size_t vio_write_shared_memory(Vio * vio, const uchar* buf, size_t size)
 {
   size_t length, remain, sz;
@@ -1008,12 +983,10 @@ size_t vio_write_shared_memory(Vio * vio, const uchar* buf, size_t size)
   DBUG_RETURN(length);
 }
 
-
 my_bool vio_is_connected_shared_memory(Vio *vio)
 {
   return (WaitForSingleObject(vio->event_conn_closed, 0) != WAIT_OBJECT_0);
 }
-
 
 /**
  Close shared memory and DBUG_PRINT any errors that happen on closing.
@@ -1077,7 +1050,6 @@ int vio_close_shared_memory(Vio * vio)
 #endif /* HAVE_SMEM */
 #endif /* __WIN__ */
 
-
 /**
   Number of bytes in the read buffer.
 
@@ -1100,7 +1072,6 @@ ssize_t vio_pending(Vio *vio)
 
   return 0;
 }
-
 
 /**
   Checks if the error code, returned by vio_getnameinfo(), means it was the
@@ -1128,7 +1099,6 @@ my_bool vio_is_no_name_error(int err_code)
 
 #endif
 }
-
 
 /**
   This is a wrapper for the system getnameinfo(), because different OS

@@ -164,7 +164,6 @@ static uchar sort_order_gb2312[]=
 #define isgb2312head(c) (0xa1<=(uchar)(c) && (uchar)(c)<=0xf7)
 #define isgb2312tail(c) (0xa1<=(uchar)(c) && (uchar)(c)<=0xfe)
 
-
 static uint ismbchar_gb2312(CHARSET_INFO *cs __attribute__((unused)),
 		    const char* p, const char *e)
 {
@@ -175,7 +174,6 @@ static uint mbcharlen_gb2312(CHARSET_INFO *cs __attribute__((unused)),uint c)
 {
   return (isgb2312head(c)? 2 : 1);
 }
-
 
 static MY_UNICASE_INFO cA2[256]=
 {
@@ -297,7 +295,6 @@ static MY_UNICASE_INFO cA2[256]=
   {0xA2FF,0xA2FF,0xA2FF}
 };
 
-
 static MY_UNICASE_INFO cA3[256]=
 {
   {0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0}, /* xx00 */
@@ -417,7 +414,6 @@ static MY_UNICASE_INFO cA3[256]=
   {0xA3FE,0xA3FE,0xFFE3},
   {0xA3FF,0xA3FF,0xA3FF}
 };
-
 
 static MY_UNICASE_INFO cA6[256]=
 { 
@@ -781,7 +777,6 @@ static MY_UNICASE_INFO cA8[256]=
   {0xA8FF,0xA8FF,0xA8FF}
 };
 
-
 static MY_UNICASE_INFO *my_caseinfo_gb2312[256]=
 {
   NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, /* 0 */
@@ -817,7 +812,6 @@ static MY_UNICASE_INFO *my_caseinfo_gb2312[256]=
   NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, /* F */
   NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
 };
-
 
 /* page 0 0x2121-0x2658 */
 static uint16 tab_gb2312_uni0[]={
@@ -3363,7 +3357,6 @@ static int func_gb2312_uni_onechar(int code){
     return(tab_gb2312_uni2[code-0x3021]);
   return(0);
 }
-
 
 /* page 0 0x00A4-0x01DC */
 static uint16 tab_uni_gb23120[]={
@@ -6272,7 +6265,6 @@ static int func_uni_gb2312_onechar(int code){
   return(0);
 }
 
-
 static int
 my_wc_mb_gb2312(CHARSET_INFO *cs  __attribute__((unused)),
 		my_wc_t wc, uchar *s, uchar *e)
@@ -6300,7 +6292,6 @@ my_wc_mb_gb2312(CHARSET_INFO *cs  __attribute__((unused)),
   return 2;
 }
 
-
 static int 
 my_mb_wc_gb2312(CHARSET_INFO *cs  __attribute__((unused)),
 		my_wc_t *pwc, const uchar *s, const uchar *e){
@@ -6323,7 +6314,6 @@ my_mb_wc_gb2312(CHARSET_INFO *cs  __attribute__((unused)),
   
   return 2;
 }
-
 
 /*
   Returns well formed length of a EUC-KR string.
@@ -6358,7 +6348,6 @@ my_well_formed_len_gb2312(CHARSET_INFO *cs __attribute__((unused)),
   }
   return (size_t) (b - b0);
 }
-
 
 static MY_COLLATION_HANDLER my_collation_ci_handler =
 {
@@ -6405,7 +6394,6 @@ static MY_CHARSET_HANDLER my_charset_handler=
   my_strntoull10rnd_8bit,
   my_scan_8bit
 };
-
 
 CHARSET_INFO my_charset_gb2312_chinese_ci=
 {

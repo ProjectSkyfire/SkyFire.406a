@@ -17,7 +17,6 @@
 #include "m_string.h"
 #include "my_xml.h"
 
-
 #define MY_XML_UNKNOWN  'U'
 #define MY_XML_EOF	'E'
 #define MY_XML_STRING	'S'
@@ -38,14 +37,12 @@ typedef struct xml_attr_st
   const char *end;
 } MY_XML_ATTR;
 
-
 /*
   XML ctype:
 */
 #define	MY_XML_ID0  0x01 /* Identifier initial character */
 #define	MY_XML_ID1  0x02 /* Identifier medial  character */
 #define	MY_XML_SPC  0x08 /* Spacing character */
-
 
 /*
  http://www.w3.org/TR/REC-xml/ 
@@ -78,7 +75,6 @@ static char my_xml_ctype[256]=
 #define my_xml_is_id0(c)    (my_xml_ctype[(uchar) (c)] & MY_XML_ID0)
 #define my_xml_is_id1(c)    (my_xml_ctype[(uchar) (c)] & MY_XML_ID1)
 
-
 static const char *lex2str(int lex)
 {
   switch(lex)
@@ -105,13 +101,11 @@ static void my_xml_norm_text(MY_XML_ATTR *a)
   for ( ; (a->beg < a->end) && my_xml_is_space(a->end[-1]) ; a->end-- );
 }
 
-
 static inline my_bool
 my_xml_parser_prefix_cmp(MY_XML_PARSER *p, const char *s, size_t slen)
 {
   return (p->cur + slen > p->end) || memcmp(p->cur, s, slen);
 }
-
 
 static int my_xml_scan(MY_XML_PARSER *p,MY_XML_ATTR *a)
 {
@@ -200,12 +194,10 @@ ret:
   return lex;
 }
 
-
 static int my_xml_value(MY_XML_PARSER *st, const char *str, size_t len)
 {
   return (st->value) ? (st->value)(st,str,len) : MY_XML_OK;
 }
-
 
 static int my_xml_enter(MY_XML_PARSER *st, const char *str, size_t len)
 {
@@ -228,14 +220,12 @@ static int my_xml_enter(MY_XML_PARSER *st, const char *str, size_t len)
     return st->enter ?  st->enter(st,st->attr,st->attrend-st->attr) : MY_XML_OK;
 }
 
-
 static void mstr(char *s,const char *src,size_t l1, size_t l2)
 {
   l1 = l1<l2 ? l1 : l2;
   memcpy(s,src,l1);
   s[l1]='\0';
 }
-
 
 static int my_xml_leave(MY_XML_PARSER *p, const char *str, size_t slen)
 {
@@ -273,7 +263,6 @@ static int my_xml_leave(MY_XML_PARSER *p, const char *str, size_t slen)
   
   return rc;
 }
-
 
 int my_xml_parse(MY_XML_PARSER *p,const char *str, size_t len)
 {
@@ -440,17 +429,14 @@ gt:
   return MY_XML_OK;
 }
 
-
 void my_xml_parser_create(MY_XML_PARSER *p)
 {
   bzero((void*)p,sizeof(p[0]));
 }
 
-
 void my_xml_parser_free(MY_XML_PARSER *p  __attribute__((unused)))
 {
 }
-
 
 void my_xml_set_value_handler(MY_XML_PARSER *p,
 			      int (*action)(MY_XML_PARSER *p, const char *s,
@@ -466,7 +452,6 @@ void my_xml_set_enter_handler(MY_XML_PARSER *p,
   p->enter=action;
 }
 
-
 void my_xml_set_leave_handler(MY_XML_PARSER *p,
 			      int (*action)(MY_XML_PARSER *p, const char *s,
 					    size_t l))
@@ -474,18 +459,15 @@ void my_xml_set_leave_handler(MY_XML_PARSER *p,
   p->leave_xml=action;
 }
 
-
 void my_xml_set_user_data(MY_XML_PARSER *p, void *user_data)
 {
   p->user_data=user_data;
 }
 
-
 const char *my_xml_error_string(MY_XML_PARSER *p)
 {
   return p->errstr;
 }
-
 
 size_t my_xml_error_pos(MY_XML_PARSER *p)
 {

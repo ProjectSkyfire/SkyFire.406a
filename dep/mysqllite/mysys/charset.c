@@ -20,7 +20,6 @@
 #include <my_dir.h>
 #include <my_xml.h>
 
-
 /*
   The code below implements this functionality:
   
@@ -36,7 +35,6 @@ my_bool my_charset_same(CHARSET_INFO *cs1, CHARSET_INFO *cs2)
   return ((cs1 == cs2) || !strcmp(cs1->csname,cs2->csname));
 }
 
-
 static uint
 get_collation_number_internal(const char *name)
 {
@@ -51,7 +49,6 @@ get_collation_number_internal(const char *name)
   }  
   return 0;
 }
-
 
 static my_bool init_state_maps(CHARSET_INFO *cs)
 {
@@ -117,7 +114,6 @@ static my_bool init_state_maps(CHARSET_INFO *cs)
   return 0;
 }
 
-
 static void simple_cs_init_functions(CHARSET_INFO *cs)
 {
   if (cs->state & MY_CS_BINSORT)
@@ -127,8 +123,6 @@ static void simple_cs_init_functions(CHARSET_INFO *cs)
   
   cs->cset= &my_charset_8bit_handler;
 }
-
-
 
 static int cs_copy_data(CHARSET_INFO *to, CHARSET_INFO *from)
 {
@@ -172,7 +166,6 @@ static int cs_copy_data(CHARSET_INFO *to, CHARSET_INFO *from)
 						  MY_CS_SORT_ORDER_TABLE_SIZE,
 						  MYF(MY_WME))))
       goto err;
-
   }
   if (from->tab_to_uni)
   {
@@ -191,8 +184,6 @@ err:
   return 1;
 }
 
-
-
 static my_bool simple_cs_is_full(CHARSET_INFO *cs)
 {
   return ((cs->csname && cs->tab_to_uni && cs->ctype && cs->to_upper &&
@@ -200,7 +191,6 @@ static my_bool simple_cs_is_full(CHARSET_INFO *cs)
 	  (cs->number && cs->name &&
 	  (cs->sort_order || (cs->state & MY_CS_BINSORT) )));
 }
-
 
 static void
 copy_uca_collation(CHARSET_INFO *to, CHARSET_INFO *from)
@@ -215,7 +205,6 @@ copy_uca_collation(CHARSET_INFO *to, CHARSET_INFO *from)
   to->state|= MY_CS_AVAILABLE | MY_CS_LOADED |
               MY_CS_STRNXFRM  | MY_CS_UNICODE;
 }
-
 
 static int add_collation(CHARSET_INFO *cs)
 {
@@ -347,12 +336,10 @@ static int add_collation(CHARSET_INFO *cs)
   return MY_XML_OK;
 }
 
-
 #define MY_MAX_ALLOWED_BUF 1024*1024
 #define MY_CHARSET_INDEX "Index.xml"
 
 const char *charsets_dir= NULL;
-
 
 static my_bool my_read_charset_file(const char *filename, myf myflags)
 {
@@ -391,7 +378,6 @@ error:
   return TRUE;
 }
 
-
 char *get_charsets_dir(char *buf)
 {
   const char *sharedir= SHAREDIR;
@@ -429,7 +415,6 @@ static void *cs_alloc(size_t size)
   return my_once_alloc(size, MYF(MY_WME));
 }
 
-
 static my_pthread_once_t charsets_initialized= MY_PTHREAD_ONCE_INIT;
 static my_pthread_once_t charsets_template= MY_PTHREAD_ONCE_INIT;
 
@@ -458,12 +443,10 @@ static void init_available_charsets(void)
   my_read_charset_file(fname, MYF(0));
 }
 
-
 void free_charsets(void)
 {
   charsets_initialized= charsets_template;
 }
-
 
 static const char*
 get_collation_name_alias(const char *name, char *buf, size_t bufsize)
@@ -476,7 +459,6 @@ get_collation_name_alias(const char *name, char *buf, size_t bufsize)
   return NULL;
 }
 
-
 uint get_collation_number(const char *name)
 {
   uint id;
@@ -488,7 +470,6 @@ uint get_collation_number(const char *name)
     return get_collation_number_internal(name);
   return 0;
 }
-
 
 static uint
 get_charset_number_internal(const char *charset_name, uint cs_flags)
@@ -506,7 +487,6 @@ get_charset_number_internal(const char *charset_name, uint cs_flags)
   return 0;
 }
 
-
 static const char*
 get_charset_name_alias(const char *name)
 {
@@ -514,7 +494,6 @@ get_charset_name_alias(const char *name)
     return "utf8";
   return NULL;
 }
-
 
 uint get_charset_number(const char *charset_name, uint cs_flags)
 {
@@ -542,7 +521,6 @@ const char *get_charset_name(uint charset_number)
   
   return "?";   /* this mimics find_type() */
 }
-
 
 static CHARSET_INFO *get_internal_charset(uint cs_number, myf flags)
 {
@@ -587,7 +565,6 @@ static CHARSET_INFO *get_internal_charset(uint cs_number, myf flags)
   return cs;
 }
 
-
 CHARSET_INFO *get_charset(uint cs_number, myf flags)
 {
   CHARSET_INFO *cs;
@@ -631,7 +608,6 @@ CHARSET_INFO *get_charset_by_name(const char *cs_name, myf flags)
   return cs;
 }
 
-
 CHARSET_INFO *get_charset_by_csname(const char *cs_name,
 				    uint cs_flags,
 				    myf flags)
@@ -655,7 +631,6 @@ CHARSET_INFO *get_charset_by_csname(const char *cs_name,
 
   DBUG_RETURN(cs);
 }
-
 
 /**
   Resolve character set by the character set name (utf8, latin1, ...).
@@ -688,7 +663,6 @@ my_bool resolve_charset(const char *cs_name,
   return FALSE;
 }
 
-
 /**
   Resolve collation by the collation name (utf8_general_ci, ...).
 
@@ -719,7 +693,6 @@ my_bool resolve_collation(const char *cl_name,
 
   return FALSE;
 }
-
 
 /*
   Escape string with backslashes (\)
@@ -834,7 +807,6 @@ size_t escape_string_for_mysql(CHARSET_INFO *charset_info,
   *to= 0;
   return overflow ? (size_t) -1 : (size_t) (to - to_start);
 }
-
 
 #ifdef BACKSLASH_MBTAIL
 static CHARSET_INFO *fs_cset_cache= NULL;

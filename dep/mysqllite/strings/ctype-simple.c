@@ -30,7 +30,6 @@ size_t my_strnxfrmlen_simple(CHARSET_INFO *cs, size_t len)
   return len * (cs->strxfrm_multiply ? cs->strxfrm_multiply : 1);
 }
 
-
 /*
   Converts a string into its sort key.
   
@@ -70,7 +69,6 @@ size_t my_strnxfrmlen_simple(CHARSET_INFO *cs, size_t len)
   
 */
 
-
 size_t my_strnxfrm_simple(CHARSET_INFO * cs, 
                           uchar *dest, size_t len,
                           const uchar *src, size_t srclen)
@@ -95,7 +93,6 @@ size_t my_strnxfrm_simple(CHARSET_INFO * cs,
   return dstlen;
 }
 
-
 int my_strnncoll_simple(CHARSET_INFO * cs, const uchar *s, size_t slen, 
                         const uchar *t, size_t tlen,
                         my_bool t_is_prefix)
@@ -115,7 +112,6 @@ int my_strnncoll_simple(CHARSET_INFO * cs, const uchar *s, size_t slen,
   */
   return slen > tlen ? 1 : slen < tlen ? -1 : 0 ;
 }
-
 
 /*
   Compare strings, discarding end space
@@ -192,7 +188,6 @@ int my_strnncollsp_simple(CHARSET_INFO * cs, const uchar *a, size_t a_length,
   return res;
 }
 
-
 size_t my_caseup_str_8bit(CHARSET_INFO * cs,char *str)
 {
   register uchar *map= cs->to_upper;
@@ -202,7 +197,6 @@ size_t my_caseup_str_8bit(CHARSET_INFO * cs,char *str)
   return (size_t) (str - str_orig);
 }
 
-
 size_t my_casedn_str_8bit(CHARSET_INFO * cs,char *str)
 {
   register uchar *map= cs->to_lower;
@@ -211,7 +205,6 @@ size_t my_casedn_str_8bit(CHARSET_INFO * cs,char *str)
     str++;
   return (size_t) (str - str_orig);
 }
-
 
 size_t my_caseup_8bit(CHARSET_INFO * cs, char *src, size_t srclen,
                       char *dst __attribute__((unused)),
@@ -224,7 +217,6 @@ size_t my_caseup_8bit(CHARSET_INFO * cs, char *src, size_t srclen,
     *src= (char) map[(uchar) *src];
   return srclen;
 }
-
 
 size_t my_casedn_8bit(CHARSET_INFO * cs, char *src, size_t srclen,
                       char *dst __attribute__((unused)),
@@ -245,7 +237,6 @@ int my_strcasecmp_8bit(CHARSET_INFO * cs,const char *s, const char *t)
     if (!*s++) return 0;
   return ((int) map[(uchar) s[0]] - (int) map[(uchar) t[-1]]);
 }
-
 
 int my_mb_wc_8bit(CHARSET_INFO *cs,my_wc_t *wc,
 		  const uchar *str,
@@ -278,7 +269,6 @@ int my_wc_mb_8bit(CHARSET_INFO *cs,my_wc_t wc,
   return MY_CS_ILUNI;
 }
 
-
 /* 
    We can't use vsprintf here as it's not guaranteed to return
    the length on all operating systems.
@@ -297,7 +287,6 @@ size_t my_snprintf_8bit(CHARSET_INFO *cs  __attribute__((unused)),
   va_end(args);
   return result;
 }
-
 
 void my_hash_sort_simple(CHARSET_INFO *cs,
 			 const uchar *key, size_t len,
@@ -319,7 +308,6 @@ void my_hash_sort_simple(CHARSET_INFO *cs,
     nr2[0]+=3;
   }
 }
-
 
 long my_strntol_8bit(CHARSET_INFO *cs,
 		     const char *nptr, size_t l, int base,
@@ -416,7 +404,6 @@ noconv:
   return 0L;
 }
 
-
 ulong my_strntoul_8bit(CHARSET_INFO *cs,
 		       const char *nptr, size_t l, int base,
 		       char **endptr, int *err)
@@ -502,7 +489,6 @@ noconv:
     *endptr = (char *) nptr;
   return 0L;
 }
-
 
 longlong my_strntoll_8bit(CHARSET_INFO *cs __attribute__((unused)),
 			  const char *nptr, size_t l, int base,
@@ -599,7 +585,6 @@ noconv:
   return 0L;
 }
 
-
 ulonglong my_strntoull_8bit(CHARSET_INFO *cs,
 			   const char *nptr, size_t l, int base,
 			   char **endptr, int *err)
@@ -688,7 +673,6 @@ noconv:
   return 0L;
 }
 
-
 /*
   Read double from string
 
@@ -711,7 +695,6 @@ noconv:
     Value of number in string
 */
 
-
 double my_strntod_8bit(CHARSET_INFO *cs __attribute__((unused)),
 		       char *str, size_t length,
 		       char **end, int *err)
@@ -721,7 +704,6 @@ double my_strntod_8bit(CHARSET_INFO *cs __attribute__((unused)),
   *end= str + length;
   return my_strtod(str, end, err);
 }
-
 
 /*
   This is a fast version optimized for the case of radix 10 / -10
@@ -768,7 +750,6 @@ size_t my_long10_to_str_8bit(CHARSET_INFO *cs __attribute__((unused)),
   memcpy(dst, p, len);
   return len+sign;
 }
-
 
 size_t my_longlong10_to_str_8bit(CHARSET_INFO *cs __attribute__((unused)),
                                  char *dst, size_t len, int radix,
@@ -824,7 +805,6 @@ cnv:
   return len+sign;
 }
 
-
 /*
 ** Compare string against string with wildcard
 **	0 if matched
@@ -839,7 +819,6 @@ cnv:
 #endif
 
 #define INC_PTR(cs,A,B) (A)++
-
 
 int my_wildcmp_8bit(CHARSET_INFO *cs,
 		    const char *str,const char *str_end,
@@ -919,7 +898,6 @@ int my_wildcmp_8bit(CHARSET_INFO *cs,
   return(str != str_end ? 1 : 0);
 }
 
-
 /*
 ** Calculate min_str and max_str that ranges a LIKE string.
 ** Arguments:
@@ -986,7 +964,6 @@ my_bool my_like_range_simple(CHARSET_INFO *cs,
   return 0;
 }
 
-
 size_t my_scan_8bit(CHARSET_INFO *cs, const char *str, const char *end, int sq)
 {
   const char *str0= str;
@@ -1012,13 +989,11 @@ size_t my_scan_8bit(CHARSET_INFO *cs, const char *str, const char *end, int sq)
   }
 }
 
-
 void my_fill_8bit(CHARSET_INFO *cs __attribute__((unused)),
 		   char *s, size_t l, int fill)
 {
   bfill((uchar*) s,l,fill);
 }
-
 
 size_t my_numchars_8bit(CHARSET_INFO *cs __attribute__((unused)),
 		      const char *b, const char *e)
@@ -1026,13 +1001,11 @@ size_t my_numchars_8bit(CHARSET_INFO *cs __attribute__((unused)),
   return (size_t) (e - b);
 }
 
-
 size_t my_numcells_8bit(CHARSET_INFO *cs __attribute__((unused)),
                         const char *b, const char *e)
 {
   return (size_t) (e - b);
 }
-
 
 size_t my_charpos_8bit(CHARSET_INFO *cs __attribute__((unused)),
                        const char *b  __attribute__((unused)),
@@ -1041,7 +1014,6 @@ size_t my_charpos_8bit(CHARSET_INFO *cs __attribute__((unused)),
 {
   return pos;
 }
-
 
 size_t my_well_formed_len_8bit(CHARSET_INFO *cs __attribute__((unused)),
                                const char *start, const char *end,
@@ -1052,7 +1024,6 @@ size_t my_well_formed_len_8bit(CHARSET_INFO *cs __attribute__((unused)),
   return min(nbytes, nchars);
 }
 
-
 size_t my_lengthsp_8bit(CHARSET_INFO *cs __attribute__((unused)),
                         const char *ptr, size_t length)
 {
@@ -1060,7 +1031,6 @@ size_t my_lengthsp_8bit(CHARSET_INFO *cs __attribute__((unused)),
   end= (const char *) skip_trailing_space((const uchar *)ptr, length);
   return (size_t) (end-ptr);
 }
-
 
 uint my_instr_simple(CHARSET_INFO *cs,
                      const char *b, size_t b_length, 
@@ -1120,7 +1090,6 @@ skip:
   }
   return 0;
 }
-
 
 typedef struct
 {
@@ -1256,13 +1225,11 @@ static my_bool my_coll_init_simple(CHARSET_INFO *cs,
   return FALSE;
 }
 
-
 longlong my_strtoll10_8bit(CHARSET_INFO *cs __attribute__((unused)),
                            const char *nptr, char **endptr, int *error)
 {
   return my_strtoll10(nptr, endptr, error);
 }
-
 
 int my_mb_ctype_8bit(CHARSET_INFO *cs, int *ctype,
                    const uchar *s, const uchar *e)
@@ -1275,7 +1242,6 @@ int my_mb_ctype_8bit(CHARSET_INFO *cs, int *ctype,
   *ctype= cs->ctype[*s + 1];
   return 1;
 }
-
 
 #define CUTOFF  (ULONGLONG_MAX / 10)
 #define CUTLIM  (ULONGLONG_MAX % 10)
@@ -1304,7 +1270,6 @@ static ulonglong d10[DIGITS_IN_ULONGLONG]=
   1000000000000000000ULL,
   10000000000000000000ULL
 };
-
 
 /*
 
@@ -1602,7 +1567,6 @@ ret_too_big:
          negative ? (ulonglong) LONGLONG_MIN : (ulonglong) LONGLONG_MAX;
 }
 
-
 /*
   Check if a constant can be propagated
 
@@ -1639,8 +1603,6 @@ ret_too_big:
     0 if it is not safe to propagate the constant
 */
 
-
-
 my_bool my_propagate_simple(CHARSET_INFO *cs __attribute__((unused)),
                             const uchar *str __attribute__((unused)),
                             size_t length __attribute__((unused)))
@@ -1648,14 +1610,12 @@ my_bool my_propagate_simple(CHARSET_INFO *cs __attribute__((unused)),
   return 1;
 }
 
-
 my_bool my_propagate_complex(CHARSET_INFO *cs __attribute__((unused)),
                              const uchar *str __attribute__((unused)),
                              size_t length __attribute__((unused)))
 {
   return 0;
 }
-
 
 MY_CHARSET_HANDLER my_charset_8bit_handler=
 {

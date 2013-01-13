@@ -46,7 +46,6 @@ my_bool init_dynamic_string(DYNAMIC_STRING *str, const char *init_str,
   DBUG_RETURN(FALSE);
 }
 
-
 my_bool dynstr_set(DYNAMIC_STRING *str, const char *init_str)
 {
   uint length=0;
@@ -71,7 +70,6 @@ my_bool dynstr_set(DYNAMIC_STRING *str, const char *init_str)
   DBUG_RETURN(FALSE);
 }
 
-
 my_bool dynstr_realloc(DYNAMIC_STRING *str, size_t additional_size)
 {
   DBUG_ENTER("dynstr_realloc");
@@ -87,12 +85,10 @@ my_bool dynstr_realloc(DYNAMIC_STRING *str, size_t additional_size)
   DBUG_RETURN(FALSE);
 }
 
-
 my_bool dynstr_append(DYNAMIC_STRING *str, const char *append)
 {
   return dynstr_append_mem(str,append,(uint) strlen(append));
 }
-
 
 my_bool dynstr_append_mem(DYNAMIC_STRING *str, const char *append,
 			  size_t length)
@@ -113,7 +109,6 @@ my_bool dynstr_append_mem(DYNAMIC_STRING *str, const char *append,
   str->str[str->length]=0;			/* Safety for C programs */
   return FALSE;
 }
-
 
 my_bool dynstr_trunc(DYNAMIC_STRING *str, size_t n)
 {
@@ -173,7 +168,6 @@ my_bool dynstr_append_os_quoted(DYNAMIC_STRING *str, const char *append, ...)
 
   return ret;
 }
-
 
 void dynstr_free(DYNAMIC_STRING *str)
 {

@@ -34,7 +34,6 @@
    "as is" without express or implied warranty.
 */
 
-
 /*
    This file is basicly tis620 character sets with some extra functions
    for tis-620 handling
@@ -61,7 +60,6 @@
 #define L  L_LOWER
 #define UU L_UPRUPR
 #define X  L_MIDDLE
-
 
 static int t_ctype[][TOT_LEVELS] = {
     /*0x00*/ { IGNORE, IGNORE, IGNORE, IGNORE, X },
@@ -452,7 +450,6 @@ static uchar sort_order_tis620[]=
   (uchar) '\370',(uchar) '\371',(uchar) '\372',(uchar) '\373',(uchar) '\374',(uchar) '\375',(uchar) '\376',(uchar) '\377',
 };
 
-
 /*
   Convert thai string to "Standard C String Function" sortable string
 
@@ -512,7 +509,6 @@ static size_t thai2sortable(uchar *tstr, size_t len)
   return len;
 }
 
-
 /*
   strncoll() replacement, compare 2 string, both are converted to sortable
   string
@@ -553,7 +549,6 @@ int my_strnncoll_tis620(CHARSET_INFO *cs __attribute__((unused)),
     my_str_free(tc1);
   return i;
 }
-
 
 static
 int my_strnncollsp_tis620(CHARSET_INFO * cs __attribute__((unused)),
@@ -624,7 +619,6 @@ ret:
   return res;
 }
 
-
 /*
   strnxfrm replacment, convert Thai string to sortable string
 
@@ -645,7 +639,6 @@ size_t my_strnxfrm_tis620(CHARSET_INFO *cs __attribute__((unused)),
     bfill(dest + len, dstlen - len, ' ');
   return dstlen;
 }
-
 
 static unsigned short cs_to_uni[256]={
 0x0000,0x0001,0x0002,0x0003,0x0004,0x0005,0x0006,0x0007,
@@ -818,7 +811,6 @@ NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,
 NULL,NULL,NULL,NULL,NULL,NULL,NULL,plFF
 };
 
-
 static
 int my_mb_wc_tis620(CHARSET_INFO *cs  __attribute__((unused)),
 		  my_wc_t *wc,
@@ -847,7 +839,6 @@ int my_wc_mb_tis620(CHARSET_INFO *cs  __attribute__((unused)),
   str[0]= pl ? pl[wc & 0xFF] : '\0';
   return (!str[0] && wc) ? MY_CS_ILUNI : 1;
 }
-
 
 static MY_COLLATION_HANDLER my_collation_ci_handler =
 {
@@ -894,8 +885,6 @@ static MY_CHARSET_HANDLER my_charset_handler=
     my_strntoull10rnd_8bit,
     my_scan_8bit
 };
-
-
 
 CHARSET_INFO my_charset_tis620_thai_ci=
 {
@@ -960,6 +949,5 @@ CHARSET_INFO my_charset_tis620_bin=
     &my_charset_handler,
     &my_collation_8bit_bin_handler
 };
-
 
 #endif

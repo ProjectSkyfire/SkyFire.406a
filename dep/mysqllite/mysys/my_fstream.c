@@ -71,7 +71,6 @@ size_t my_fread(FILE *stream, uchar *Buffer, size_t Count, myf MyFlags)
   DBUG_RETURN(readbytes);
 } /* my_fread */
 
-
 /*
   Write a chunk of bytes to a stream
 
@@ -156,7 +155,6 @@ size_t my_fwrite(FILE *stream, const uchar *Buffer, size_t Count, myf MyFlags)
   DBUG_RETURN(writtenbytes);
 } /* my_fwrite */
 
-
 /* Seek to position in file */
 
 my_off_t my_fseek(FILE *stream, my_off_t pos, int whence,
@@ -169,7 +167,6 @@ my_off_t my_fseek(FILE *stream, my_off_t pos, int whence,
 	      MY_FILEPOS_ERROR : (my_off_t) ftell(stream));
 } /* my_seek */
 
-
 /* Tell current position of file */
 
 my_off_t my_ftell(FILE *stream, myf MyFlags __attribute__((unused)))
@@ -181,7 +178,6 @@ my_off_t my_ftell(FILE *stream, myf MyFlags __attribute__((unused)))
   DBUG_PRINT("exit",("ftell: %lu",(ulong) pos));
   DBUG_RETURN((my_off_t) pos);
 } /* my_ftell */
-
 
 /* Get a File corresponding to the stream*/
 int my_fileno(FILE *f)

@@ -92,7 +92,6 @@ _my_hash_init(HASH *hash, uint growth_size, CHARSET_INFO *charset,
                                        sizeof(HASH_LINK), size, growth_size));
 }
 
-
 /*
   Call hash->free on all elements in hash.
 
@@ -116,7 +115,6 @@ static inline void my_hash_free_elements(HASH *hash)
   hash->records=0;
 }
 
-
 /*
   Free memory used by hash.
 
@@ -138,7 +136,6 @@ void my_hash_free(HASH *hash)
   hash->blength= 0;
   DBUG_VOID_RETURN;
 }
-
 
 /*
   Delete all elements from the hash (the hash itself is to be reused).
@@ -194,8 +191,6 @@ static uint my_hash_rec_mask(const HASH *hash, HASH_LINK *pos,
   return my_hash_mask(calc_hash(hash, key, length), buffmax, maxlength);
 }
 
-
-
 /* for compilers which can not handle inline */
 static
 #if !defined(__USLC__) && !defined(__sgi)
@@ -207,7 +202,6 @@ my_hash_value_type rec_hashnr(HASH *hash,const uchar *record)
   uchar *key= (uchar*) my_hash_key(hash, record, &length, 0);
   return calc_hash(hash,key,length);
 }
-
 
 uchar* my_hash_search(const HASH *hash, const uchar *key, size_t length)
 {
@@ -231,7 +225,6 @@ my_hash_value_type my_calc_hash(const HASH *hash,
   return calc_hash(hash, key, length ? length : hash->key_length);
 }
 
-
 /*
   Search after a record based on a key
 
@@ -251,7 +244,6 @@ uchar* my_hash_first(const HASH *hash, const uchar *key, size_t length,
     res= 0;
   return res;
 }
-
 
 uchar* my_hash_first_from_hash_value(const HASH *hash,
                                      my_hash_value_type hash_value,
@@ -316,7 +308,6 @@ uchar* my_hash_next(const HASH *hash, const uchar *key, size_t length,
   return 0;
 }
 
-
 	/* Change link from pos to new_link */
 
 static void movelink(HASH_LINK *array,uint find,uint next_link,uint newlink)
@@ -359,7 +350,6 @@ static int hashcmp(const HASH *hash, HASH_LINK *pos, const uchar *key,
 	  my_strnncoll(hash->charset, (uchar*) rec_key, rec_keylength,
 		       (uchar*) key, rec_keylength));
 }
-
 
 	/* Write a hash-key to the hash-index */
 
@@ -494,7 +484,6 @@ my_bool my_hash_insert(HASH *info, const uchar *record)
   return(0);
 }
 
-
 /******************************************************************************
 ** Remove one record from hash-table. The record with the same record
 ** ptr is removed.
@@ -627,7 +616,6 @@ my_bool my_hash_update(HASH *hash, uchar *record, uchar *old_key,
   previous=0;
   for (;;)
   {
-
     if ((pos= data+idx)->data == record)
       break;
     previous=pos;
@@ -688,14 +676,12 @@ my_bool my_hash_update(HASH *hash, uchar *record, uchar *old_key,
   DBUG_RETURN(0);
 }
 
-
 uchar *my_hash_element(HASH *hash, ulong idx)
 {
   if (idx < hash->records)
     return dynamic_element(&hash->array,idx,HASH_LINK*)->data;
   return 0;
 }
-
 
 /*
   Replace old row with new row.  This should only be used when key
@@ -708,7 +694,6 @@ void my_hash_replace(HASH *hash, HASH_SEARCH_STATE *current_record,
   if (*current_record != NO_RECORD)            /* Safety */
     dynamic_element(&hash->array, *current_record, HASH_LINK*)->data= new_row;
 }
-
 
 #ifndef DBUG_OFF
 

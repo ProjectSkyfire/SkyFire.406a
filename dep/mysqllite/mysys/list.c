@@ -20,8 +20,6 @@
 #include "mysys_priv.h"
 #include <my_list.h>
 
-
-
 	/* Add a element to start of list */
 
 LIST *list_add(LIST *root, LIST *element)
@@ -41,7 +39,6 @@ LIST *list_add(LIST *root, LIST *element)
   DBUG_RETURN(element);			/* New root */
 }
 
-
 LIST *list_delete(LIST *root, LIST *element)
 {
   if (element->prev)
@@ -52,7 +49,6 @@ LIST *list_delete(LIST *root, LIST *element)
     element->next->prev=element->prev;
   return root;
 }
-
 
 void list_free(LIST *root, uint free_data)
 {
@@ -67,7 +63,6 @@ void list_free(LIST *root, uint free_data)
   }
 }
 
-
 LIST *list_cons(void *data, LIST *list)
 {
   LIST *new_charset=(LIST*) my_malloc(sizeof(LIST),MYF(MY_FAE));
@@ -76,7 +71,6 @@ LIST *list_cons(void *data, LIST *list)
   new_charset->data=data;
   return list_add(list,new_charset);
 }
-
 
 LIST *list_reverse(LIST *root)
 {
@@ -99,7 +93,6 @@ uint list_length(LIST *list)
   for (count=0 ; list ; list=list->next, count++) ;
   return count;
 }
-
 
 int list_walk(LIST *list, list_walk_action action, uchar* argument)
 {

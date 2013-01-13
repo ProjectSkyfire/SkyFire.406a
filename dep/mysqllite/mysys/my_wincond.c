@@ -24,7 +24,6 @@
 #include <process.h>
 #include <sys/timeb.h>
 
-
 /*
   Windows native condition variables. We use runtime loading / function 
   pointers, because they are not available on XP 
@@ -50,14 +49,12 @@ static SleepConditionVariableCSProc my_SleepConditionVariableCS;
 static WakeAllConditionVariableProc my_WakeAllConditionVariable;
 static WakeConditionVariableProc my_WakeConditionVariable;
 
-
 /**
  Indicates if we have native condition variables,
  initialized first time pthread_cond_init is called.
 */
 
 static BOOL have_native_conditions= FALSE;
-
 
 /**
   Check if native conditions can be used, load function pointers 
@@ -79,8 +76,6 @@ static void check_native_cond_availability(void)
   if (my_InitializeConditionVariable)
     have_native_conditions= TRUE;
 }
-
-
 
 /**
   Convert abstime to milliseconds
@@ -120,7 +115,6 @@ static DWORD get_milliseconds(const struct timespec *abstime)
   return (DWORD)millis;
 }
 
-
 /*
   Old (pre-vista) implementation using events
 */
@@ -141,7 +135,6 @@ static int legacy_cond_init(pthread_cond_t *cond, const pthread_condattr_t *attr
                                        FALSE, /* non-signaled initially */
                                        NULL); /* unnamed */
 
-
   cond->broadcast_block_event= CreateEvent(NULL,  /* no security */
                                            TRUE,  /* manual-reset */
                                            TRUE,  /* signaled initially */
@@ -154,7 +147,6 @@ static int legacy_cond_init(pthread_cond_t *cond, const pthread_condattr_t *attr
   return 0;
 }
 
-
 static int legacy_cond_destroy(pthread_cond_t *cond)
 {
   DeleteCriticalSection(&cond->lock_waiting);
@@ -165,7 +157,6 @@ static int legacy_cond_destroy(pthread_cond_t *cond)
     return EINVAL;
   return 0;
 }
-
 
 static int legacy_cond_timedwait(pthread_cond_t *cond, pthread_mutex_t *mutex,
                            struct timespec *abstime)
@@ -221,7 +212,6 @@ static int legacy_cond_signal(pthread_cond_t *cond)
   return 0;
 }
 
-
 static int legacy_cond_broadcast(pthread_cond_t *cond)
 {
   EnterCriticalSection(&cond->lock_waiting);
@@ -242,7 +232,6 @@ static int legacy_cond_broadcast(pthread_cond_t *cond)
 
   return 0;
 }
-
 
 /* 
  Posix API functions. Just choose between native and legacy implementation.
@@ -270,7 +259,6 @@ int pthread_cond_init(pthread_cond_t *cond, const pthread_condattr_t *attr)
     return legacy_cond_init(cond, attr);
 }
 
-
 int pthread_cond_destroy(pthread_cond_t *cond)
 {
   if (have_native_conditions)
@@ -278,7 +266,6 @@ int pthread_cond_destroy(pthread_cond_t *cond)
   else
     return legacy_cond_destroy(cond);
 }
-
 
 int pthread_cond_broadcast(pthread_cond_t *cond)
 {
@@ -291,7 +278,6 @@ int pthread_cond_broadcast(pthread_cond_t *cond)
     return legacy_cond_broadcast(cond);
 }
 
-
 int pthread_cond_signal(pthread_cond_t *cond)
 {
   if (have_native_conditions)
@@ -302,7 +288,6 @@ int pthread_cond_signal(pthread_cond_t *cond)
   else
     return legacy_cond_signal(cond);
 }
-
 
 int pthread_cond_timedwait(pthread_cond_t *cond, pthread_mutex_t *mutex,
   struct timespec *abstime)
@@ -318,12 +303,10 @@ int pthread_cond_timedwait(pthread_cond_t *cond, pthread_mutex_t *mutex,
     return legacy_cond_timedwait(cond, mutex, abstime);
 }
 
-
 int pthread_cond_wait(pthread_cond_t *cond, pthread_mutex_t *mutex)
 {
   return pthread_cond_timedwait(cond, mutex, NULL);
 }
-
 
 int pthread_attr_init(pthread_attr_t *connect_att)
 {

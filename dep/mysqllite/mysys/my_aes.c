@@ -13,12 +13,10 @@
  along with this program; if not, write to the Free Software
  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA */
 
-
 /*
   Implementation of AES Encryption for MySQL
   Initial version by Peter Zaitsev  June 2002
 */
-
 
 #include <my_global.h>
 #include <m_string.h>
@@ -30,13 +28,11 @@ enum encrypt_dir { AES_ENCRYPT, AES_DECRYPT };
 
 #define AES_BAD_DATA  -1	/* If bad data discovered during decoding */
 
-
 /* The structure for key information */
 typedef struct {
   int	nr;				/* Number of rounds */
   uint32   rk[4*(AES_MAXNR + 1)];	/* key schedule */
 } KEYINSTANCE;
-
 
 /*
   This is internal function just keeps joint code of Key generation
@@ -106,7 +102,6 @@ static int my_aes_create_key(KEYINSTANCE *aes_key,
   return 0;
 }
 
-
 /*
   Crypt buffer with AES encryption algorithm.
 
@@ -153,7 +148,6 @@ int my_aes_encrypt(const char* source, int source_length, char* dest,
   rijndaelEncrypt(aes_key.rk, aes_key.nr, block, (uint8*) dest);
   return AES_BLOCK_SIZE*(num_blocks + 1);
 }
-
 
 /*
   DeCrypt buffer with AES encryption algorithm.
@@ -208,7 +202,6 @@ int my_aes_decrypt(const char *source, int source_length, char *dest,
   memcpy(dest, block, AES_BLOCK_SIZE - pad_len);
   return AES_BLOCK_SIZE*num_blocks - pad_len;
 }
-
 
 /*
   Get size of buffer which will be large enough for encrypted data

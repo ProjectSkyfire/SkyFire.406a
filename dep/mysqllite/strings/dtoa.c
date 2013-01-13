@@ -430,7 +430,6 @@ size_t my_gcvt(double x, my_gcvt_arg_type type, int width, char *to,
       *dst++= decpt / 10 + '0';
     if (dst < dend)
       *dst++= decpt % 10 + '0';
-
   }
 
 end:
@@ -470,14 +469,12 @@ double my_strtod(const char *str, char **end, int *error)
   return (*error == 0) ? res : (res < 0 ? -DBL_MAX : DBL_MAX);
 }
 
-
 double my_atof(const char *nptr)
 {
   int error;
   const char *end= nptr+65535;                  /* Should be enough */
   return (my_strtod(nptr, (char**) &end, &error));
 }
-
 
 /****************************************************************
  *
@@ -519,7 +516,6 @@ double my_atof(const char *nptr)
   * pow5mult rewritten to use pre-calculated pow5 list instead of
     the one generated on the fly.
 */
-
 
 /*
   On a machine with IEEE extended-precision registers, it is
@@ -633,7 +629,6 @@ typedef struct Bigint
   int wds;                 /* current length in 32-bit words */
 } Bigint;
 
-
 /* A simple stack-memory based allocator for Bigints */
 
 typedef struct Stack_alloc
@@ -647,7 +642,6 @@ typedef struct Stack_alloc
   */
   Bigint *freelist[Kmax+1];
 } Stack_alloc;
-
 
 /*
   Try to allocate object on stack, and resort to malloc if all
@@ -688,7 +682,6 @@ static Bigint *Balloc(int k, Stack_alloc *alloc)
   return rv;
 }
 
-
 /*
   If object was allocated on stack, try putting it to the free
   list. Otherwise call free().
@@ -711,7 +704,6 @@ static void Bfree(Bigint *v, Stack_alloc *alloc)
   }
 }
 
-
 /*
   This is to place return value of dtoa in: tries to use stack
   as well, but passes by free lists management and just aligns len by
@@ -733,7 +725,6 @@ static char *dtoa_alloc(int i, Stack_alloc *alloc)
   return rv;
 }
 
-
 /*
   dtoa_free() must be used to free values s returned by dtoa()
   This is the counterpart of dtoa_alloc()
@@ -744,7 +735,6 @@ static void dtoa_free(char *gptr, char *buf, size_t buf_size)
   if (gptr < buf || gptr >= buf + buf_size)
     free(gptr);
 }
-
 
 /* Bigint arithmetic functions */
 
@@ -826,7 +816,6 @@ static Bigint *s2b(const char *s, int nd0, int nd, ULong y9, Stack_alloc *alloc)
   return b;
 }
 
-
 static int hi0bits(register ULong x)
 {
   register int k= 0;
@@ -859,7 +848,6 @@ static int hi0bits(register ULong x)
   }
   return k;
 }
-
 
 static int lo0bits(ULong *y)
 {
@@ -910,7 +898,6 @@ static int lo0bits(ULong *y)
   return k;
 }
 
-
 /* Convert integer to Bigint number */
 
 static Bigint *i2b(int i, Stack_alloc *alloc)
@@ -922,7 +909,6 @@ static Bigint *i2b(int i, Stack_alloc *alloc)
   b->wds= 1;
   return b;
 }
-
 
 /* Multiply two Bigint numbers */
 
@@ -976,7 +962,6 @@ static Bigint *mult(Bigint *a, Bigint *b, Stack_alloc *alloc)
   return c;
 }
 
-
 /*
   Precalculated array of powers of 5: tested to be enough for
   vasting majority of dtoa_r cases.
@@ -1002,7 +987,6 @@ static ULong powers5[]=
   1011012442UL, 1677677582UL, 3428152256UL, 1710878487UL, 1438394610UL,
   2161952759UL, 4100910556UL, 1608314830UL, 349175UL
 };
-
 
 static Bigint p5_a[]=
 {
@@ -1061,7 +1045,6 @@ static Bigint *pow5mult(Bigint *b, int k, Stack_alloc *alloc)
   return b;
 }
 
-
 static Bigint *lshift(Bigint *b, int k, Stack_alloc *alloc)
 {
   int i, k1, n, n1;
@@ -1101,7 +1084,6 @@ static Bigint *lshift(Bigint *b, int k, Stack_alloc *alloc)
   return b1;
 }
 
-
 static int cmp(Bigint *a, Bigint *b)
 {
   ULong *xa, *xa0, *xb, *xb0;
@@ -1124,7 +1106,6 @@ static int cmp(Bigint *a, Bigint *b)
   }
   return 0;
 }
-
 
 static Bigint *diff(Bigint *a, Bigint *b, Stack_alloc *alloc)
 {
@@ -1179,7 +1160,6 @@ static Bigint *diff(Bigint *a, Bigint *b, Stack_alloc *alloc)
   return c;
 }
 
-
 static double ulp(U *x)
 {
   register Long L;
@@ -1190,7 +1170,6 @@ static double ulp(U *x)
   word1(&u) = 0;
   return dval(&u);
 }
-
 
 static double b2d(Bigint *a, int *e)
 {
@@ -1229,7 +1208,6 @@ static double b2d(Bigint *a, int *e)
 #undef d1
   return dval(&d);
 }
-
 
 static Bigint *d2b(U *d, int *e, int *bits, Stack_alloc *alloc)
 {
@@ -1279,7 +1257,6 @@ static Bigint *d2b(U *d, int *e, int *bits, Stack_alloc *alloc)
 #undef d0
 #undef d1
 }
-
 
 static double ratio(Bigint *a, Bigint *b)
 {
@@ -2074,7 +2051,6 @@ static double my_strtod_int(const char *s00, char **se, int *error, char *buf, s
   return sign ? -dval(&rv) : dval(&rv);
 }
 
-
 static int quorem(Bigint *b, Bigint *S)
 {
   int n;
@@ -2137,7 +2113,6 @@ static int quorem(Bigint *b, Bigint *S)
   }
   return q;
 }
-
 
 /*
    dtoa for IEEE arithmetic (dmg): convert double to ASCII string.

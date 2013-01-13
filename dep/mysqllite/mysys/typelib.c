@@ -19,7 +19,6 @@
 #include <m_string.h>
 #include <m_ctype.h>
 
-
 #define is_field_separator(X) ((X) == ',' || (X) == '=')
 
 int find_type_or_exit(const char *x, TYPELIB *typelib, const char *option)
@@ -43,7 +42,6 @@ int find_type_or_exit(const char *x, TYPELIB *typelib, const char *option)
   return res;
 }
 
-
 /**
   Search after a string in a list of strings. Endspace in x is not compared.
 
@@ -63,7 +61,6 @@ int find_type_or_exit(const char *x, TYPELIB *typelib, const char *option)
   @retval
     >0  Offset+1 in typelib for matched string
 */
-
 
 int find_type(const char *x, const TYPELIB *typelib, uint flags)
 {
@@ -120,7 +117,6 @@ int find_type(const char *x, const TYPELIB *typelib, uint flags)
   DBUG_RETURN(findpos+1);
 } /* find_type */
 
-
 /**
   Get name of type nr
  
@@ -139,7 +135,6 @@ void make_type(register char * to, register uint nr,
   DBUG_VOID_RETURN;
 } /* make_type */
 
-
 /**
   Get type
 
@@ -153,7 +148,6 @@ const char *get_type(TYPELIB *typelib, uint nr)
     return(typelib->type_names[nr]);
   return "?";
 }
-
 
 /**
   Create an integer value to represent the supplied comma-seperated
@@ -198,7 +192,6 @@ my_ulonglong find_typeset(char *x, TYPELIB *lib, int *err)
   *err= 0;
   DBUG_RETURN(result);
 } /* find_set */
-
 
 /**
   Create a copy of a specified TYPELIB structure.
@@ -248,7 +241,6 @@ TYPELIB *copy_typelib(MEM_ROOT *root, TYPELIB *from)
 
   return to;
 }
-
 
 static const char *on_off_default_names[]= { "off","on","default", 0};
 static TYPELIB on_off_default_typelib= {array_elements(on_off_default_names)-1,

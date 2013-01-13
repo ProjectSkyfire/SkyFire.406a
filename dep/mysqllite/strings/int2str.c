@@ -24,7 +24,6 @@ char _dig_vec_upper[] =
 char _dig_vec_lower[] =
   "0123456789abcdefghijklmnopqrstuvwxyz";
 
-
 /*
   Convert integer to its string representation in given scale of notation.
    
@@ -110,7 +109,6 @@ int2str(register long int val, register char *dst, register int radix,
   while ((*dst++ = *p++) != 0) ;
   return dst-1;
 }
-
 
 /*
   Converts integer to its string representation in decimal notation.

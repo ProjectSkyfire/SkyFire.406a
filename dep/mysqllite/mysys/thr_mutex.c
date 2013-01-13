@@ -51,7 +51,6 @@ void safe_mutex_global_init(void)
   pthread_mutex_init(&THR_LOCK_mutex,MY_MUTEX_INIT_FAST);
 }
 
-
 int safe_mutex_init(safe_mutex_t *mp,
 		    const pthread_mutexattr_t *attr __attribute__((unused)),
 		    const char *file,
@@ -92,7 +91,6 @@ int safe_mutex_init(safe_mutex_t *mp,
 #endif /* SAFE_MUTEX_DETECT_DESTROY */
   return 0;
 }
-
 
 int safe_mutex_lock(safe_mutex_t *mp, my_bool try_lock, const char *file, uint line)
 {
@@ -172,7 +170,6 @@ line %d more than 1 time\n", file,line);
   return error;
 }
 
-
 int safe_mutex_unlock(safe_mutex_t *mp,const char *file, uint line)
 {
   int error;
@@ -208,7 +205,6 @@ int safe_mutex_unlock(safe_mutex_t *mp,const char *file, uint line)
   pthread_mutex_unlock(&mp->global);
   return error;
 }
-
 
 int safe_cond_wait(pthread_cond_t *cond, safe_mutex_t *mp, const char *file,
 		   uint line)
@@ -260,7 +256,6 @@ int safe_cond_wait(pthread_cond_t *cond, safe_mutex_t *mp, const char *file,
   return error;
 }
 
-
 int safe_cond_timedwait(pthread_cond_t *cond, safe_mutex_t *mp,
                         const struct timespec *abstime,
                         const char *file, uint line)
@@ -297,7 +292,6 @@ int safe_cond_timedwait(pthread_cond_t *cond, safe_mutex_t *mp,
   pthread_mutex_unlock(&mp->global);
   return error;
 }
-
 
 int safe_mutex_destroy(safe_mutex_t *mp, const char *file, uint line)
 {
@@ -353,7 +347,6 @@ int safe_mutex_destroy(safe_mutex_t *mp, const char *file, uint line)
 #endif /* SAFE_MUTEX_DETECT_DESTROY */
   return error;
 }
-
 
 /*
   Free global resources and check that all mutex has been destroyed
@@ -491,7 +484,6 @@ int my_pthread_fastmutex_lock(my_pthread_fastmutex_t *mp)
   }
   return pthread_mutex_lock(&mp->mutex);
 }
-
 
 void fastmutex_global_init(void)
 {

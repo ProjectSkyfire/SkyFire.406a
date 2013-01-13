@@ -75,7 +75,6 @@ my_off_t my_seek(File fd, my_off_t pos, int whence, myf MyFlags)
   DBUG_RETURN((my_off_t) newpos);
 } /* my_seek */
 
-
 	/* Tell current position of file */
 	/* ARGSUSED */
 

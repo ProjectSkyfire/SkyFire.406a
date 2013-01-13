@@ -18,7 +18,6 @@
 #include <stdarg.h>
 #include <m_ctype.h>
 
-
 #define MAX_ARGS 32                           /* max positional args count*/
 #define MAX_PRINT_INFO 32                     /* max print position count */
 
@@ -39,7 +38,6 @@ struct pos_arg_info
   double double_arg;                          /* double value of the arg */
 };
 
-
 struct print_info
 {
   char arg_type;                              /* argument type */
@@ -50,7 +48,6 @@ struct print_info
   const char *begin;                          /**/
   const char *end;                            /**/
 };
-
 
 /**
   Calculates print length or index of positional argument
@@ -73,7 +70,6 @@ static const char *get_length(const char *fmt, size_t *length, uint *pre_zero)
   }
   return fmt;
 }
-
 
 /**
   Calculates print width or index of positional argument
@@ -125,7 +121,6 @@ static const char *check_longlong(const char *fmt, uint *have_longlong)
   }
   return fmt;
 }
-
 
 /**
   Returns escaped string
@@ -179,7 +174,6 @@ err:
   return to;
 }
 
-
 /**
   Prints string argument
 */
@@ -204,7 +198,6 @@ static char *process_str_arg(CHARSET_INFO *cs, char *to, char *end,
   return to;
 }
 
-
 /**
   Prints binary argument
 */
@@ -218,7 +211,6 @@ static char *process_bin_arg(char *to, char *end, size_t width, char *par)
   to+= width;
   return to;
 }
-
 
 /**
   Prints double or float argument
@@ -239,7 +231,6 @@ static char *process_dbl_arg(char *to, char *end, size_t width,
     to+= my_gcvt(par, MY_GCVT_ARG_DOUBLE, (int) width , to, NULL);
   return to;
 }
-
 
 /**
   Prints integer argument
@@ -300,7 +291,6 @@ static char *process_int_arg(char *to, char *end, size_t length,
   to+= res_length;
   return to;
 }
-
 
 /**
   Procesed positional arguments.
@@ -517,8 +507,6 @@ start:
   return 0;
 }
 
-
-
 /**
   Produces output string according to a format string
 
@@ -655,7 +643,6 @@ size_t my_vsnprintf_ex(CHARSET_INFO *cs, char *to, size_t n,
   return (size_t) (to - start);
 }
 
-
 /*
   Limited snprintf() implementations
 
@@ -667,7 +654,6 @@ size_t my_vsnprintf(char *to, size_t n, const char* fmt, va_list ap)
 {
   return my_vsnprintf_ex(&my_charset_latin1, to, n, fmt, ap);
 }
-
 
 size_t my_snprintf(char* to, size_t n, const char* fmt, ...)
 {

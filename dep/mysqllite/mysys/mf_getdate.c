@@ -34,7 +34,6 @@
     date - for conversion
 */
 
-
 void get_date(register char * to, int flag, time_t date)
 {
    reg2 struct tm *start_time;

@@ -216,7 +216,6 @@ static void load_env_plugins(MYSQL *mysql)
   } while (s);
 
   my_free(free_env);
-
 }
 
 /********** extern functions to be used by libmysql *********************/
@@ -462,7 +461,6 @@ mysql_client_find_plugin(MYSQL *mysql, const char *name, int type)
   DBUG_PRINT ("leave", ("loaded %p", p));
   DBUG_RETURN (p);
 }
-
 
 /* see <mysql/client_plugin.h> for a full description */
 int mysql_plugin_options(struct st_mysql_client_plugin *plugin,

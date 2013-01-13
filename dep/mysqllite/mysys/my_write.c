@@ -17,7 +17,6 @@
 #include "mysys_err.h"
 #include <errno.h>
 
-
 	/* Write a chunk of bytes to a file */
 
 size_t my_write(File Filedes, const uchar *Buffer, size_t Count, myf MyFlags)

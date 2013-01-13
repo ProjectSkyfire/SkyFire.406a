@@ -85,7 +85,6 @@ int my_getwd(char * buf, size_t size, myf MyFlags)
   DBUG_RETURN(0);
 } /* my_getwd */
 
-
 /* Set new working directory */
 
 int my_setwd(const char *dir, myf MyFlags)
@@ -123,8 +122,6 @@ int my_setwd(const char *dir, myf MyFlags)
   DBUG_RETURN(res);
 } /* my_setwd */
 
-
-
 	/* Test if hard pathname */
 	/* Returns 1 if dirname is a hard path */
 
@@ -140,7 +137,6 @@ int test_if_hard_path(register const char *dir_name)
   return FALSE;
 #endif
 } /* test_if_hard_path */
-
 
 /*
   Test if a name contains an (absolute or relative) path.
