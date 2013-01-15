@@ -337,7 +337,7 @@ void WorldSession::SendPetitionQueryOpcode(uint64 petitionguid)
         Field* fields = result->Fetch();
         ownerguid = MAKE_NEW_GUID(fields[0].GetUInt32(), 0, HIGHGUID_PLAYER);
         name      = fields[1].GetString();
-        type      = fields[2].GetUInt32();
+        type      = fields[2].GetUInt8();
     }
     else
     {
