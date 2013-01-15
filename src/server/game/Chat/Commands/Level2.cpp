@@ -628,7 +628,7 @@ bool ChatHandler::LookupPlayerSearchCommand(PreparedQueryResult result, int32 li
             do
             {
                 Field* charfields = result2->Fetch();
-                guid = charfields[0].GetUInt64();
+                guid = charfields[0].GetUInt32();
                 name = charfields[1].GetString();
 
                 PSendSysMessage(LANG_LOOKUP_PLAYER_CHARACTER, name.c_str(), guid);

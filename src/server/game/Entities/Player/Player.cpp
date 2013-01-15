@@ -4943,7 +4943,7 @@ void Player::DeleteFromDB(uint64 playerguid, uint32 accountId, bool updateRealmC
                     Field *fields = resultMail->Fetch();
 
                     uint32 mail_id       = fields[0].GetUInt32();
-                    uint16 mailType      = fields[1].GetUInt16();
+                    uint16 mailType      = fields[1].GetUInt8();
                     uint16 mailTemplateId= fields[2].GetUInt16();
                     uint32 sender        = fields[3].GetUInt32();
                     std::string subject  = fields[4].GetString();
@@ -7724,7 +7724,7 @@ uint32 Player::GetZoneIdFromDB(uint64 guid)
         return 0;
 
     Field* fields = result->Fetch();
-    uint32 zone = fields[0].GetUInt16();
+    uint32 zone = fields[0].GetUInt32();
 
     if (!zone)
     {
@@ -7736,7 +7736,7 @@ uint32 Player::GetZoneIdFromDB(uint64 guid)
         if (!result)
             return 0;
         fields = result->Fetch();
-        uint32 map = fields[0].GetUInt16();
+        uint32 map = fields[0].GetUInt32();
         float posx = fields[1].GetFloat();
         float posy = fields[2].GetFloat();
         float posz = fields[3].GetFloat();
@@ -7747,7 +7747,7 @@ uint32 Player::GetZoneIdFromDB(uint64 guid)
         {
             PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_ZONE);
 
-            stmt->setUInt16(0, uint16(zone));
+            stmt->setUInt32(0, zone);
             stmt->setUInt32(1, guidLow);
 
             CharacterDatabase.Execute(stmt);
@@ -7769,7 +7769,7 @@ uint32 Player::GetLevelFromDB(uint64 guid)
     Field* fields = result->Fetch();
     uint8 level = fields[0].GetUInt8();
 
-    return level;
+    return uint32(level);
 }
 
 void Player::UpdateArea(uint32 newArea)
@@ -17434,7 +17434,7 @@ bool Player::LoadPositionFromDB(uint32& mapid, float& x, float& y, float& z, flo
     y = fields[1].GetFloat();
     z = fields[2].GetFloat();
     o = fields[3].GetFloat();
-    mapid = fields[4].GetUInt16();
+    mapid = fields[4].GetUInt32();
     in_flight = !fields[5].GetString().empty();
 
     return true;
@@ -18665,11 +18665,11 @@ void Player::_LoadMail()
             m->subject          = fields[4].GetString();
             m->body             = fields[5].GetString();
             bool has_items      = fields[6].GetBool();
-            m->expire_time      = time_t(fields[7].GetUInt64());
-            m->deliver_time     = time_t(fields[8].GetUInt64());
-            m->money            = fields[9].GetUInt64();
-            m->COD              = fields[10].GetUInt64();
-            m->checked          = fields[11].GetUInt32();
+            m->expire_time      = time_t(fields[7].GetUInt32());
+            m->deliver_time     = time_t(fields[8].GetUInt32());
+            m->money            = fields[9].GetUInt32();
+            m->COD              = fields[10].GetUInt32();
+            m->checked          = fields[11].GetUInt8();
             m->stationery       = fields[12].GetUInt8();
             m->mailTemplateId   = fields[13].GetInt16();
 
@@ -20025,8 +20025,8 @@ void Player::_SaveMail(SQLTransaction& trans)
         Mail *m = (*itr);
         if (m->state == MAIL_STATE_CHANGED)
         {
-            trans->PAppend("UPDATE mail SET has_items = '%u', expire_time = '" UI64FMTD "', deliver_time = '" UI64FMTD "', money = '" UI64FMTD "', cod = '" UI64FMTD "', checked = '%u' WHERE id = '%u'",
-                m->HasItems() ? 1 : 0, (uint64)m->expire_time, (uint64)m->deliver_time, m->money, m->COD, m->checked, m->messageID);
+            trans->PAppend("UPDATE mail SET has_items = '%u', expire_time = '%u', deliver_time = '%u', money = '%u', cod = '%u', checked = '%u' WHERE id = '%u'",
+                m->HasItems() ? 1 : 0, (uint32)m->expire_time, (uint32)m->deliver_time, m->money, m->COD, m->checked, m->messageID);
             if (!m->removedItems.empty())
             {
                 for (std::vector<uint32>::iterator itr2 = m->removedItems.begin(); itr2 != m->removedItems.end(); ++itr2)
@@ -21111,7 +21111,7 @@ void Player::RemovePetitionsAndSigns(uint64 guid, uint32 type)
     else
     {
         stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_PETITION_SIG_BY_GUID_TYPE);
-        stmt->setUInt8(0, uint8(type));
+        stmt->setUInt8(1, uint8(type));
     }
 
     stmt->setUInt32(0, GUID_LOPART(guid));
