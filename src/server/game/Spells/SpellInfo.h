@@ -553,7 +553,7 @@ public:
     static bool _IsPositiveTarget(uint32 targetA, uint32 targetB);
 
     // unloading helpers
-    //void _UnloadImplicitTargetConditionLists();
+    void _UnloadImplicitTargetConditionLists();
 };
 
 #endif // _SPELLINFO_H
