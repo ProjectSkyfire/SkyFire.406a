@@ -1967,7 +1967,7 @@ uint64 ObjectMgr::GetPlayerGUIDByName(std::string name) const
     stmt->setString(0, name);
 
     PreparedQueryResult result = CharacterDatabase.Query(stmt);
-    
+
     if (result)
         guid = MAKE_NEW_GUID((*result)[0].GetUInt32(), 0, HIGHGUID_PLAYER);
 
@@ -2034,7 +2034,7 @@ uint32 ObjectMgr::GetPlayerAccountIdByGUID(uint64 guid) const
     stmt->setUInt32(0, GUID_LOPART(guid));
 
     PreparedQueryResult result = CharacterDatabase.Query(stmt);
-    
+
     if (result)
     {
         uint32 acc = (*result)[0].GetUInt32();
@@ -2051,7 +2051,7 @@ uint32 ObjectMgr::GetPlayerAccountIdByPlayerName(const std::string& name) const
     stmt->setString(0, name);
 
     PreparedQueryResult result = CharacterDatabase.Query(stmt);
-    
+
     if (result)
     {
         uint32 acc = (*result)[0].GetUInt32();
@@ -2253,19 +2253,19 @@ void ObjectMgr::LoadItemTemplates()
                                              "spellppmRate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, spellid_2, spelltrigger_2, spellcharges_2, "
     //                                            61              62               63               64                      65        66               67
                                              "spellppmRate_2, spellcooldown_2, spellcategory_2, spellcategorycooldown_2, spellid_3, spelltrigger_3, spellcharges_3, "
-    //                                             68				69				70				71						72			73				74
+    //                                             68               69              70              71                      72          73              74
                                              "spellppmRate_3, spellcooldown_3, spellcategory_3, spellcategorycooldown_3, spellid_4, spelltrigger_4, spellcharges_4, "
-    //                                            75				76				77					78					79			80				81
+    //                                            75                76              77                  78                  79          80              81
                                              "spellppmRate_4, spellcooldown_4, spellcategory_4, spellcategorycooldown_4, spellid_5, spelltrigger_5, spellcharges_5, "
-    //                                            82				83				84					85					86			87			88		89				90
+    //                                            82                83              84                  85                  86          87          88      89              90
                                              "spellppmRate_5, spellcooldown_5, spellcategory_5, spellcategorycooldown_5, bonding, description, PageText, LanguageID, PageMaterial, "
-    //                                          91			92		93		 94			95				96			97		98		99			  100  101    102
+    //                                          91          92      93       94         95              96          97      98      99            100  101    102
                                              "startquest, lockid, Material, sheath, RandomProperty, RandomSuffix, block, itemset, MaxDurability, area, Map, BagFamily, "
-    //                                          103				104				105				106				107				108				109				110
+    //                                          103             104             105             106             107             108             109             110
                                              "TotemCategory, socketColor_1, socketContent_1, socketColor_2, socketContent_2, socketColor_3, socketContent_3, socketBonus, "
-    //                                          111				112							113				  114			115				116			117			118
+    //                                          111             112                         113               114           115             116         117         118
                                              "GemProperties, RequiredDisenchantSkill, ArmorDamageModifier, Duration, ItemLimitCategory, HolidayId, ScriptName, DisenchantID, "
-    //											119			120				121
+    //                                          119         120             121
                                              "FoodType, minMoneyLoot, maxMoneyLoot FROM item_template");
 
     if (!result)
@@ -2396,11 +2396,11 @@ void ObjectMgr::LoadItemTemplates()
                 if (enforceDB2Attributes)
                     itemTemplate.Class = db2item->Class;
             }
-            if (itemTemplate.Unk0 != db2item->Unk0)
+            if (itemTemplate.Unk0 != db2item->SoundOverrideSubclass)
             {
-                sLog->outErrorDb("Item (Entry: %u) does not have a correct Unk0 (%i), must be %i .", entry, itemTemplate.Unk0, db2item->Unk0);
+                sLog->outErrorDb("Item (Entry: %u) does not have the correct SoundOverrideSubclass (%i), must be %i .", entry, itemTemplate.Unk0, db2item->SoundOverrideSubclass);
                 if (enforceDB2Attributes)
-                    itemTemplate.Unk0 = db2item->Unk0;
+                    itemTemplate.Unk0 = db2item->SoundOverrideSubclass;
             }
             if (itemTemplate.Material != db2item->Material)
             {
@@ -2428,7 +2428,7 @@ void ObjectMgr::LoadItemTemplates()
             }
         }
         //Temporary Silence for this error (Item 0 needs to remain for now)
-        else 
+        else
             if (itemTemplate.ItemId == 0){}
         else
             sLog->outErrorDb("Item (Entry: %u) does not exist in item.db2! (not correct id?).", entry);
@@ -5080,7 +5080,7 @@ void ObjectMgr::LoadWaypointScripts()
 
     PreparedStatement* stmt = WorldDatabase.GetPreparedStatement(WOLRD_SEL_WAYPOINT_DATA_ACTION);
     PreparedQueryResult result = WorldDatabase.Query(stmt);
-    
+
     if (result)
     {
         do
@@ -7146,13 +7146,13 @@ void ObjectMgr::LoadRewardOnKill()
         RewardOnKillEntry rewOnKill;
         rewOnKill.RepFaction1          = fields[1].GetUInt32();
         rewOnKill.RepFaction2          = fields[2].GetUInt32();
-        rewOnKill.IsTeamAward1        = fields[3].GetBool();
-        rewOnKill.ReputationMaxCap1  = fields[4].GetUInt32();
+        rewOnKill.IsTeamAward1         = fields[3].GetBool();
+        rewOnKill.ReputationMaxCap1    = fields[4].GetUInt32();
         rewOnKill.RepValue1            = fields[5].GetInt32();
-        rewOnKill.IsTeamAward2        = fields[6].GetBool();
-        rewOnKill.ReputationMaxCap2  = fields[7].GetUInt32();
+        rewOnKill.IsTeamAward2         = fields[6].GetBool();
+        rewOnKill.ReputationMaxCap2    = fields[7].GetUInt32();
         rewOnKill.RepValue2            = fields[8].GetInt32();
-        rewOnKill.TeamDependent       = fields[9].GetUInt8();
+        rewOnKill.TeamDependent        = fields[9].GetUInt8();
         rewOnKill.CurrencyId1          = fields[10].GetUInt32();
         rewOnKill.CurrencyId2          = fields[11].GetUInt32();
         rewOnKill.CurrencyId3          = fields[12].GetUInt32();
@@ -7505,9 +7505,9 @@ void ObjectMgr::LoadNPCSpellClickSpells()
 
         uint8 castFlags = fields[2].GetUInt8();
         SpellClickInfo info;
-        info.spellId = spellid;
-        info.castFlags = castFlags;
-        info.userType = SpellClickUserTypes(userType);
+        info.spellId    = spellid;
+        info.castFlags  = castFlags;
+        info.userType   = SpellClickUserTypes(userType);
         _spellClickInfoStore.insert(SpellClickInfoContainer::value_type(npc_entry, info));
 
         ++count;
@@ -8567,7 +8567,7 @@ int ObjectMgr::LoadReferenceVendor(int32 vendor, int32 item, std::set<uint32> *s
     PreparedStatement* stmt = WorldDatabase.GetPreparedStatement(WORLD_SEL_NPC_VENDOR_REF);
     stmt->setUInt32(0, uint32(item));
     PreparedQueryResult result = WorldDatabase.Query(stmt);
-    
+
     if (!result)
         return 0;
 
@@ -9049,7 +9049,7 @@ void ObjectMgr::LoadCreatureClassLevelStats()
         for (uint8 i = 0; i < MAX_CREATURE_BASE_HP; ++i)
             stats.BaseHealth[i] = fields[i + 2].GetInt32();
 
-        stats.BaseMana = fields[6].GetInt32();
+        stats.BaseMana  = fields[6].GetInt32();
         stats.BaseArmor = fields[7].GetInt32();
 
         if (!Class || ((1 << (Class - 1)) & CLASSMASK_ALL_CREATURES) == 0)

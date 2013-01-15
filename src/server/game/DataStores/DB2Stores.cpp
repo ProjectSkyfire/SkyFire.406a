@@ -19,8 +19,8 @@
 
 #include "DB2Stores.h"
 
-#include "Entities/Item/ItemPrototype.h"
-#include "Logging/Log.h"
+#include "ItemPrototype.h"
+#include "Log.h"
 #include "SharedDefines.h"
 #include "SpellMgr.h"
 #include "DB2fmt.h"
@@ -36,7 +36,7 @@ uint32 DB2FilesCount = 0;
 
 static bool LoadDB2_assert_print(uint32 fsize, uint32 rsize, const std::string& filename)
 {
-    sLog->outError("Size of '%s' setted by format string (%u) not equal size of C++ structure (%u).", filename.c_str(), fsize, rsize);
+    sLog->outError("Size of '%s' set by format string (%u) is not equal to size of its C++ structure (%u).", filename.c_str(), fsize, rsize);
 
     // ASSERT must fail after function call
     return false;
@@ -66,7 +66,7 @@ inline void LoadDB2(StoreProblemList1& errlist, DB2Storage<T>& storage, const st
         if (FILE * f = fopen(db2_filename.c_str(), "rb"))
         {
             char buf[100];
-            snprintf(buf, 100, "(exist, but have %d fields instead " SIZEFMTD ") Wrong client version DBC file?", storage.GetFieldCount(), strlen(storage.GetFormat()));
+            snprintf(buf, 100, "(exists, but has %d fields instead " SIZEFMTD ") Wrong client version DB2 file?", storage.GetFieldCount(), strlen(storage.GetFormat()));
             errlist.push_back(db2_filename + buf);
             fclose(f);
         }
