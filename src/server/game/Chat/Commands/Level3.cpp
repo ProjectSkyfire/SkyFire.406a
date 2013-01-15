@@ -442,7 +442,7 @@ bool ChatHandler::HandleListItemCommand(const char *args)
     stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_CHAR_INVENTORY_ITEM_BY_ENTRY);
     stmt->setUInt32(0, item_id);
     stmt->setUInt32(1, count);
-
+    result = CharacterDatabase.Query(stmt);
 
     if (result)
     {
@@ -493,7 +493,7 @@ bool ChatHandler::HandleListItemCommand(const char *args)
         stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_MAIL_ITEMS_BY_ENTRY);
         stmt->setUInt32(0, item_id);
         stmt->setUInt32(1, count);
-
+        result = CharacterDatabase.Query(stmt);
     }
     else
         result = PreparedQueryResult(NULL);
@@ -540,7 +540,7 @@ bool ChatHandler::HandleListItemCommand(const char *args)
         stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_AUCTIONHOUSE_ITEM_BY_ENTRY);
         stmt->setUInt32(0, item_id);
         stmt->setUInt32(1, count);
-
+        result = CharacterDatabase.Query(stmt);
     }
     else
         result = PreparedQueryResult(NULL);
@@ -575,7 +575,7 @@ bool ChatHandler::HandleListItemCommand(const char *args)
     stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_GUILD_BANK_ITEM_BY_ENTRY);
     stmt->setUInt32(0, item_id);
     stmt->setUInt32(1, count);
-
+    result = CharacterDatabase.Query(stmt);
 
     if (result)
     {

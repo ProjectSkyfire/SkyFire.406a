@@ -276,7 +276,7 @@ void WorldSession::HandlePetitionShowSignOpcode(WorldPacket& recvData)
     if (type == GUILD_CHARTER_TYPE && _player->GetGuildId())
         return;
 
-    stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_PETITION_SIGNATURES);
+    stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_PETITION_SIGNATURE);
 
     stmt->setUInt32(0, petitionGuidLow);
 
@@ -297,7 +297,7 @@ void WorldSession::HandlePetitionShowSignOpcode(WorldPacket& recvData)
     for (uint8 i = 1; i <= signs; ++i)
     {
         Field* fields2 = result->Fetch();
-        uint64 plguid = fields2[0].GetUInt64();
+        uint64 plguid = fields2[0].GetUInt32();
 
         data << uint64(plguid);                             // Player GUID
         data << uint32(0);                                  // there 0 ...
@@ -325,7 +325,6 @@ void WorldSession::SendPetitionQueryOpcode(uint64 petitionguid)
     uint64 ownerguid = 0;
     uint32 type;
     std::string name = "NO_NAME_FOR_GUID";
-    uint8 signs = 0;
 
     PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_PETITION);
 
@@ -338,8 +337,7 @@ void WorldSession::SendPetitionQueryOpcode(uint64 petitionguid)
         Field* fields = result->Fetch();
         ownerguid = MAKE_NEW_GUID(fields[0].GetUInt32(), 0, HIGHGUID_PLAYER);
         name      = fields[1].GetString();
-        signs     = fields[2].GetUInt8();
-        type      = fields[3].GetUInt32();
+        type      = fields[2].GetUInt32();
     }
     else
     {
@@ -486,7 +484,7 @@ void WorldSession::HandlePetitionSignOpcode(WorldPacket& recvData)
     fields = result->Fetch();
     uint64 ownerGuid = MAKE_NEW_GUID(fields[0].GetUInt32(), 0, HIGHGUID_PLAYER);
     uint8 signs = fields[1].GetUInt8();
-    uint32 type = fields[2].GetUInt32();
+    uint32 type = fields[2].GetUInt8();
 
     uint32 playerGuid = _player->GetGUIDLow();
     if (GUID_LOPART(ownerGuid) == playerGuid)
@@ -728,7 +726,7 @@ void WorldSession::HandleOfferPetitionOpcode(WorldPacket& recvData)
     for (uint8 i = 1; i <= signs; ++i)
     {
         Field* fields2 = result->Fetch();
-        plguid = fields2[0].GetUInt64();
+        plguid = fields2[0].GetUInt32();
 
         data << uint64(plguid);                             // Player GUID
         data << uint32(0);                                  // there 0 ...

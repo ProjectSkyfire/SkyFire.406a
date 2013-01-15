@@ -434,7 +434,7 @@ void WorldSession::HandleMailTakeItem(WorldPacket& recvData)
     }
 
     // prevent cheating with skip client money check
-    if (!player->HasEnoughMoney(m->COD))
+    if (!player->HasEnoughMoney(uint64(m->COD)))
     {
         player->SendMailResult(mailId, MAIL_ITEM_TAKEN, MAIL_ERR_NOT_ENOUGH_MONEY);
         return;
