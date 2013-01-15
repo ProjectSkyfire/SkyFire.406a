@@ -135,14 +135,14 @@ class MailDraft
     public:                                                 // Accessors
         uint16 GetMailTemplateId() const { return m_mailTemplateId; }
         std::string const& GetSubject() const { return m_subject; }
-        uint64 GetMoney() const { return _money; }
-        uint64 GetCOD() const { return m_COD; }
+        uint32 GetMoney() const { return _money; }
+        uint32 GetCOD() const { return m_COD; }
         std::string const& GetBody() const { return m_body; }
 
     public:                                                 // modifiers
         MailDraft& AddItem(Item* item);
-        MailDraft& AddMoney(uint64 money) { _money = money; return *this; }
-        MailDraft& AddCOD(uint64 COD) { m_COD = COD; return *this; }
+        MailDraft& AddMoney(uint32 money) { _money = money; return *this; }
+        MailDraft& AddCOD(uint32 COD) { m_COD = COD; return *this; }
 
     public:                                                 // finishers
         void SendReturnToSender(uint32 sender_acc, uint32 sender_guid, uint32 receiver_guid, SQLTransaction& trans);
@@ -159,8 +159,8 @@ class MailDraft
 
         MailItemMap _items;                                // Keep the items in a map to avoid duplicate guids (which can happen), store only low part of guid
 
-        uint64 _money;
-        uint64 m_COD;
+        uint32 _money;
+        uint32 m_COD;
 };
 
 struct MailItemInfo
@@ -184,8 +184,8 @@ struct Mail
     std::vector<uint32> removedItems;
     time_t expire_time;
     time_t deliver_time;
-    uint64 money;
-    uint64 COD;
+    uint32 money;
+    uint32 COD;
     uint32 checked;
     MailState state;
 
