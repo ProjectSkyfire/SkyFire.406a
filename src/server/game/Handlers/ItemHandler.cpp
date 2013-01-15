@@ -384,22 +384,18 @@ void WorldSession::HandleRequestHotFix(WorldPacket& recvData)
 
                 data << uint32(proto->Bonding);
 
-                // Now we send item names :S pascal string?
-                const char* str = proto->Name1.c_str();
-                data << uint16(strlen(str) + 1);
-                data << str;
+                std::string name = proto->Name1; // Item name
+                data << uint16(name.length());
+                if (name.length())
+                    data << name;
 
-                for (uint32 x = 0; x < 3; ++x) // other 3 names
-                {
-                    const char* str = (const char*)"";
-                    data << uint16(strlen(str) + 1);
-                    data << str;
-                }
+                for (uint32 i = 0; i < 3; ++i) // Other 3 names
+                    data << uint16(0);
 
-                // Now we send item descriptions :S pascal string?
-                const char* str2 = (const char*)"";
-                data << uint16(strlen(str2) + 1);
-                data << str2;
+                std::string desc = proto->Description;
+                data << uint16(desc.length());
+                if (desc.length())
+                    data << desc;
 
                 data << uint32(proto->PageText);
                 data << uint32(proto->LanguageID);
