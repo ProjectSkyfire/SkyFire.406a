@@ -30,6 +30,7 @@ EndContentData */
 
 #include "ScriptPCH.h"
 
+
 /*######
 ## npc_henze_faulk
 ######*/
@@ -112,6 +113,8 @@ enum Northshire
     SPELL_SPYING              = 92857,
     SPELL_SNEAKING            = 93046,
     SPELL_SPYGLASS            = 80676,
+    NPC_BLACKROCK_BATTLE_WORG = 3871226,
+    NPC_STORMWIND_INFANTRY    = 49869
 };
 
 /*######
@@ -267,8 +270,147 @@ public:
     };
 };
 
+/*######
+## npc_stormwind_infantry
+######*/
+
+class npc_stormwind_infantry : public CreatureScript
+{
+public:
+    npc_stormwind_infantry() : CreatureScript("npc_stormwind_infantry") {}
+
+    CreatureAI* GetAI(Creature* creature) const
+    {
+        return new npc_stormwind_infantryAI (creature);
+    }
+
+    struct npc_stormwind_infantryAI : public ScriptedAI
+    {
+        npc_stormwind_infantryAI(Creature* creature) : ScriptedAI(creature) {}
+
+        uint32 tSeek;
+
+        void Reset()
+        {
+            tSeek      = urand(100, 200);
+        }
+
+        void DamageTaken(Unit* who, uint32 & damage)
+        {
+            if (who->GetTypeId() == TYPEID_PLAYER)
+            {
+                me->getThreatManager().resetAllAggro();
+                who->AddThreat(me, 1.0f);
+                me->AddThreat(who, 1.0f);
+                me->AI()->AttackStart(who);
+            }
+            else if (who->isPet())
+            {
+                me->getThreatManager().resetAllAggro();
+                me->AddThreat(who, 1.0f);
+                me->AI()->AttackStart(who);
+            }
+
+            if (who->GetEntry() == NPC_BLACKROCK_BATTLE_WORG && me->HealthBelowPct(90))
+            {
+                damage = 0;
+                me->AddThreat(who, 1.0f);
+                me->AI()->AttackStart(who);
+            }
+        }
+
+        void UpdateAI(const uint32 diff)
+        {
+            if (tSeek <= diff)
+            {
+                if ((me->isAlive()) && (!me->isInCombat() && (me->GetDistance2d(me->GetHomePosition().GetPositionX(), me->GetHomePosition().GetPositionY()) <= 1.0f)))
+                    if (Creature* enemy = me->FindNearestCreature(NPC_BLACKROCK_BATTLE_WORG,.1f, true))
+                        me->AI()->AttackStart(enemy);
+                tSeek = urand(100, 200);
+            }
+            else tSeek -= diff;
+
+            if (!UpdateVictim())
+                return;
+            else
+                DoMeleeAttackIfReady();
+        }
+    };
+};
+
+/*######
+## npc_blackrock_battle_worg
+######*/
+
+class npc_blackrock_battle_worg : public CreatureScript
+{
+public:
+    npc_blackrock_battle_worg() : CreatureScript("npc_blackrock_battle_worg") {}
+
+    CreatureAI* GetAI(Creature* creature) const
+    {
+        return new npc_blackrock_battle_worgAI (creature);
+    }
+
+    struct npc_blackrock_battle_worgAI : public ScriptedAI
+    {
+        npc_blackrock_battle_worgAI(Creature* creature) : ScriptedAI(creature) {}
+
+        uint32 tSeek;
+
+        void Reset()
+        {
+            tSeek      = urand(100, 200);
+        }
+
+        void DamageTaken(Unit* who, uint32 & damage)
+        {
+            if (who->GetTypeId() == TYPEID_PLAYER)
+            {
+                me->getThreatManager().resetAllAggro();
+                who->AddThreat(me, 1.0f);
+                me->AddThreat(who, 1.0f);
+                me->AI()->AttackStart(who);
+            }
+            else if (who->isPet())
+            {
+                me->getThreatManager().resetAllAggro();
+                me->AddThreat(who, 1.0f);
+                me->AI()->AttackStart(who);
+            }
+
+            if (who->GetEntry() == NPC_STORMWIND_INFANTRY && me->HealthBelowPct(90))
+            {
+                damage = 0;
+                me->AddThreat(who, 1.0f);
+                me->AI()->AttackStart(who);
+            }
+        }
+
+        void UpdateAI(const uint32 diff)
+        {
+            if (tSeek <= diff)
+            {
+                if ((me->isAlive()) && (!me->isInCombat() && (me->GetDistance2d(me->GetHomePosition().GetPositionX(), me->GetHomePosition().GetPositionY()) <= 1.0f)))
+                    if (Creature* enemy = me->FindNearestCreature(NPC_STORMWIND_INFANTRY, .1f, true))
+                        me->AI()->AttackStart(enemy);
+                tSeek = urand(100, 200);
+            }
+            else tSeek -= diff;
+
+            if (!UpdateVictim())
+                return;
+            else
+                DoMeleeAttackIfReady();
+
+        }
+    };
+};
+
 void AddSC_elwynn_forest()
 {
+    new npc_stormwind_infantry();
+    new npc_blackrock_battle_worg();
     new npc_henze_faulk();
     new npc_blackrock_spy();
     new npc_goblin_assassin();
