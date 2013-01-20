@@ -1369,7 +1369,7 @@ public:
             return true;
         }
 
-        void HandleDummy(SpellEffIndex /* effIndex */)
+        void HandleDummy(SpellEffIndex /*effIndex*/)
         {
             Unit* caster = GetCaster();
             caster->CastSpell(caster, roll_chance_i(50) ? SPELL_SUMMON_PURIFIED_HELBOAR_MEAT : SPELL_SUMMON_TOXIC_HELBOAR_MEAT, true, NULL);
@@ -1413,7 +1413,7 @@ public:
             return true;
         }
 
-        void HandleDummy(SpellEffIndex /* effIndex */)
+        void HandleDummy(SpellEffIndex /*effIndex*/)
         {
             Unit* caster = GetCaster();
             switch (caster->GetAreaId())
@@ -1463,7 +1463,7 @@ public:
             return true;
         }
 
-        void HandleDummy(SpellEffIndex /* effIndex */)
+        void HandleDummy(SpellEffIndex /*effIndex*/)
         {
             if (Unit* target = GetHitCreature())
                 if (target->GetEntry() == NPC_LEVIROTH && !target->HealthBelowPct(95))
@@ -1511,7 +1511,7 @@ public:
             return true;
         }
 
-        void HandleDummy(SpellEffIndex /* effIndex */)
+        void HandleDummy(SpellEffIndex /*effIndex*/)
         {
             Unit* caster = GetCaster();
             caster->CastSpell(caster, roll_chance_i(95) ? SPELL_NITRO_BOOTS_SUCCESS : SPELL_NITRO_BOOTS_BACKFIRE, true, GetCastItem());
@@ -1555,7 +1555,7 @@ public:
             return true;
         }
 
-        void HandleDummy(SpellEffIndex /* effIndex */)
+        void HandleDummy(SpellEffIndex /*effIndex*/)
         {
             Player* caster = GetCaster()->ToPlayer();
             if (Battleground* bg = caster->GetBattleground())
@@ -1612,7 +1612,7 @@ public:
             return true;
         }
 
-        void HandleDummy(SpellEffIndex /* effIndex */)
+        void HandleDummy(SpellEffIndex /*effIndex*/)
         {
             Player* caster = GetCaster()->ToPlayer();
 

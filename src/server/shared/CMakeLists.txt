@@ -53,17 +53,17 @@ set(shared_STAT_SRCS
 
 include_directories(
   ${CMAKE_BINARY_DIR}
-  ${CMAKE_SOURCE_DIR}/dep/zlib  
+  ${CMAKE_SOURCE_DIR}/dep/zlib
   ${CMAKE_SOURCE_DIR}/dep/SFMT
   ${CMAKE_SOURCE_DIR}/dep/utf8cpp
   ${CMAKE_SOURCE_DIR}/dep/recastlite/Detour
   ${CMAKE_SOURCE_DIR}/dep/recastlite/Recast
   ${CMAKE_SOURCE_DIR}/src/server
-  ${CMAKE_SOURCE_DIR}/src/server/game/World  
-  ${CMAKE_SOURCE_DIR}/src/server/game/Addons    
-  ${CMAKE_SOURCE_DIR}/src/server/game/Server 
-  ${CMAKE_SOURCE_DIR}/src/server/game/Server/Protocol 
-  ${CMAKE_SOURCE_DIR}/src/server/game/Miscellaneous   
+  ${CMAKE_SOURCE_DIR}/src/server/game/World
+  ${CMAKE_SOURCE_DIR}/src/server/game/Addons
+  ${CMAKE_SOURCE_DIR}/src/server/game/Server
+  ${CMAKE_SOURCE_DIR}/src/server/game/Server/Protocol
+  ${CMAKE_SOURCE_DIR}/src/server/game/Miscellaneous
   ${CMAKE_CURRENT_SOURCE_DIR}
   ${CMAKE_CURRENT_SOURCE_DIR}/Configuration
   ${CMAKE_CURRENT_SOURCE_DIR}/Cryptography
@@ -95,4 +95,3 @@ if( USE_COREPCH )
     add_native_precompiled_header(shared ${CMAKE_CURRENT_SOURCE_DIR}/PrecompiledHeaders/sharedPCH)
   endif()
 endif()
-

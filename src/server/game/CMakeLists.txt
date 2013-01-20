@@ -114,7 +114,7 @@ set(game_STAT_SRCS
   ${sources_Addons}
   ${sources_AI}
   ${sources_AuctionHouse}
-  ${sources_Battlefields}  
+  ${sources_Battlefields}
   ${sources_Battlegrounds}
   ${sources_Calendar}
   ${sources_Chat}
@@ -250,7 +250,7 @@ include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}/Tools
   ${CMAKE_CURRENT_SOURCE_DIR}/Tickets
   ${CMAKE_CURRENT_SOURCE_DIR}/Warden
-  ${CMAKE_CURRENT_SOURCE_DIR}/Warden/Modules  
+  ${CMAKE_CURRENT_SOURCE_DIR}/Warden/Modules
   ${CMAKE_CURRENT_SOURCE_DIR}/Weather
   ${CMAKE_CURRENT_SOURCE_DIR}/World
   ${CMAKE_SOURCE_DIR}/src/server/scripts/PrecompiledHeaders
