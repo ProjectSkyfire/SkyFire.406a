@@ -63,12 +63,12 @@ enum ArenaTeamCommandErrors
 
 enum ArenaTeamEvents
 {
-    ERR_ARENA_TEAM_JOIN_SS                  = 3,            // player name + arena team name
-    ERR_ARENA_TEAM_LEAVE_SS                 = 4,            // player name + arena team name
-    ERR_ARENA_TEAM_REMOVE_SSS               = 5,            // player name + arena team name + captain name
-    ERR_ARENA_TEAM_LEADER_IS_SS             = 6,            // player name + arena team name
-    ERR_ARENA_TEAM_LEADER_CHANGED_SSS       = 7,            // old captain + new captain + arena team name
-    ERR_ARENA_TEAM_DISBANDED_S              = 8             // captain name + arena team name
+    ERR_ARENA_TEAM_JOIN_SS                  = 4,            // player name + arena team name
+    ERR_ARENA_TEAM_LEAVE_SS                 = 5,            // player name + arena team name
+    ERR_ARENA_TEAM_REMOVE_SSS               = 6,            // player name + arena team name + captain name
+    ERR_ARENA_TEAM_LEADER_IS_SS             = 7,            // player name + arena team name
+    ERR_ARENA_TEAM_LEADER_CHANGED_SSS       = 8,            // old captain + new captain + arena team name
+    ERR_ARENA_TEAM_DISBANDED_S              = 9             // captain name + arena team name
 };
 
 /*
@@ -120,7 +120,7 @@ class ArenaTeam
         ArenaTeam();
         ~ArenaTeam();
 
-        bool Create(uint64 captainGuid, uint8 type, std::string teamName, uint32 backgroundColor, uint8 emblemStyle, uint32 emblemColor, uint8 borderStyle, uint32 borderColor);
+        bool Create(uint32 captainGuid, uint8 type, std::string teamName, uint32 backgroundColor, uint8 emblemStyle, uint32 emblemColor, uint8 borderStyle, uint32 borderColor);
         void Disband(WorldSession* session);
 
         typedef std::list<ArenaTeamMember> MemberList;
@@ -129,15 +129,15 @@ class ArenaTeam
         uint32 GetType() const            { return Type; }
         uint8  GetSlot() const            { return GetSlotByType(GetType()); }
         static uint8 GetSlotByType(uint32 type);
-        uint64 GetCaptain() const  { return CaptainGuid; }
+        const uint64& GetCaptain() const  { return CaptainGuid; }
         std::string GetName() const       { return TeamName; }
         const ArenaTeamStats& GetStats() const { return Stats; }
 
         uint32 GetRating() const          { return Stats.Rating; }
         uint32 GetAverageMMR(Group* group) const;
 
-        void SetCaptain(uint64 guid);
-        bool AddMember(uint64 PlayerGuid);
+        void SetCaptain(const uint64& guid);
+        bool AddMember(const uint64& PlayerGuid);
 
         // Shouldn't be uint64 ed, because than can reference guid from members on Disband
         // and this method removes given record from list. So invalid reference can happen.
@@ -147,9 +147,9 @@ class ArenaTeam
         bool   Empty() const                  { return Members.empty(); }
         MemberList::iterator m_membersBegin() { return Members.begin(); }
         MemberList::iterator m_membersEnd()   { return Members.end(); }
-        bool IsMember(uint64 guid) const;
+        bool IsMember(const uint64& guid) const;
 
-        ArenaTeamMember* GetMember(uint64 guid);
+        ArenaTeamMember* GetMember(const uint64& guid);
         ArenaTeamMember* GetMember(const std::string& name);
 
         bool IsFighting() const;

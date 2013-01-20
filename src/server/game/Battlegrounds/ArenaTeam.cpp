@@ -45,7 +45,7 @@ ArenaTeam::ArenaTeam()
 
 ArenaTeam::~ArenaTeam() {}
 
-bool ArenaTeam::Create(uint64 captainGuid, uint8 type, std::string teamName, uint32 backgroundColor, uint8 emblemStyle, uint32 emblemColor, uint8 borderStyle, uint32 borderColor)
+bool ArenaTeam::Create(uint32 captainGuid, uint8 type, std::string teamName, uint32 backgroundColor, uint8 emblemStyle, uint32 emblemColor, uint8 borderStyle, uint32 borderColor)
 {
     // Check if captain is present
     if (!ObjectAccessor::FindPlayer(captainGuid))
@@ -90,7 +90,7 @@ bool ArenaTeam::Create(uint64 captainGuid, uint8 type, std::string teamName, uin
     return true;
 }
 
-bool ArenaTeam::AddMember(uint64 playerGuid)
+bool ArenaTeam::AddMember(const uint64& playerGuid)
 {
     std::string playerName;
     uint8 playerClass;
@@ -167,7 +167,7 @@ bool ArenaTeam::AddMember(uint64 playerGuid)
     Members.push_back(newmember);
 
     // Save player's arena team membership to db
-    stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_ARENA_TEAM_MEMBER);
+    stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_ARENA_TEAM_MEMBER);
     stmt->setUInt32(0, TeamId);
     stmt->setUInt32(1, GUID_LOPART(playerGuid));
     CharacterDatabase.Execute(stmt);
@@ -273,7 +273,7 @@ bool ArenaTeam::LoadMembersFromDB(QueryResult result)
     return true;
 }
 
-void ArenaTeam::SetCaptain(uint64 guid)
+void ArenaTeam::SetCaptain(const uint64& guid)
 {
     // Disable remove/promote buttons
     Player* oldCaptain = ObjectAccessor::FindPlayer(GetCaptain());
@@ -530,7 +530,7 @@ uint8 ArenaTeam::GetSlotByType(uint32 type)
     return 0xFF;
 }
 
-bool ArenaTeam::IsMember(uint64 guid) const
+bool ArenaTeam::IsMember(const uint64& guid) const
 {
     for (MemberList::const_iterator itr = Members.begin(); itr != Members.end(); ++itr)
         if (itr->Guid == guid)
@@ -894,7 +894,7 @@ ArenaTeamMember* ArenaTeam::GetMember(const std::string& name)
     return NULL;
 }
 
-ArenaTeamMember* ArenaTeam::GetMember(uint64 guid)
+ArenaTeamMember* ArenaTeam::GetMember(const uint64& guid)
 {
     for (MemberList::iterator itr = Members.begin(); itr != Members.end(); ++itr)
         if (itr->Guid == guid)

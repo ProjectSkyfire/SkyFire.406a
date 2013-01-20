@@ -67,7 +67,7 @@ void WorldSession::HandleBattlemasterHelloOpcode(WorldPacket& recvData)
 void WorldSession::SendBattleGroundList(uint64 guid, BattlegroundTypeId bgTypeId)
 {
     WorldPacket data;
-    sBattlegroundMgr->BuildBattlegroundListPacket(&data, guid, _player, bgTypeId, 0);
+    sBattlegroundMgr->BuildBattlegroundListPacket(&data, guid, _player, bgTypeId);
     SendPacket(&data);
 }
 
@@ -318,24 +318,11 @@ void WorldSession::HandleBattlefieldListOpcode(WorldPacket &recvData)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_BATTLEFIELD_LIST Message");
 
-    uint32 bgTypeId;
+    uint8 bgTypeId;
     recvData >> bgTypeId;                                  // id from DBC
 
-    uint8 fromWhere;
-    recvData >> fromWhere;                                 // 0 - battlemaster (lua: ShowBattlefieldList), 1 - UI (lua: RequestBattlegroundInstanceInfo)
-
-    uint8 unk1;
-    recvData >> unk1;                                       // Unknown 3.2.2
-
-    BattlemasterListEntry const* bl = sBattlemasterListStore.LookupEntry(bgTypeId);
-    if (!bl)
-    {
-        sLog->outError("Battleground: invalid bgtype received.");
-        return;
-    }
-
     WorldPacket data;
-    sBattlegroundMgr->BuildBattlegroundListPacket(&data, 0, _player, BattlegroundTypeId(bgTypeId), fromWhere);
+    sBattlegroundMgr->BuildBattlegroundListPacket(&data, 0, _player, BattlegroundTypeId(bgTypeId));
     SendPacket(&data);
 }
 
