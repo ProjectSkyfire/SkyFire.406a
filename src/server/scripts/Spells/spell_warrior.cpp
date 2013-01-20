@@ -104,7 +104,7 @@ public:
     {
         PrepareSpellScript(spell_warr_bloodthirst_SpellScript);
 
-        void HandleDummy(SpellEffIndex /* effIndex */)
+        void HandleDummy(SpellEffIndex /*effIndex*/)
         {
             int32 damage = GetEffectValue();
             GetCaster()->CastCustomSpell(GetCaster(), SPELL_BLOODTHIRST, &damage, NULL, NULL, true, NULL);
@@ -575,7 +575,7 @@ public:
                 return false;
             return true;
         }
-        void HandleDummy(SpellEffIndex /* effIndex */)
+        void HandleDummy(SpellEffIndex /*effIndex*/)
         {
             Unit* target = GetHitUnit();
             if (target)
