@@ -79,13 +79,13 @@ public:
             return GetUnitOwner()->ToPlayer();
         }
 
-        void CalculateAmount(AuraEffect const* /*aurEff*/, int32 & amount, bool & /*canBeRecalculated*/)
+        void CalculateAmount(AuraEffect const* /*aurEff*/, int32& amount, bool& /*canBeRecalculated*/)
         {
             // Set absorbtion amount to unlimited
             amount = -1;
         }
 
-        void Absorb(AuraEffect* aurEff, DamageInfo & dmgInfo, uint32 & absorbAmount)
+        void Absorb(AuraEffect* aurEff, DamageInfo& dmgInfo, uint32& absorbAmount)
         {
             Unit* victim = GetTarget();
             int32 remainingHealth = victim->GetHealth() - dmgInfo.GetDamage();
@@ -246,7 +246,7 @@ class spell_pal_judgements_of_the_bold : public SpellScriptLoader
         {
             PrepareAuraScript(spell_pal_judgements_of_the_bold_AuraScript);
 
-            bool Validate (SpellInfo *const /*spellEntry*/)
+            bool Validate (SpellInfo const* /*spellEntry*/)
             {
                 if (!sSpellMgr->GetSpellInfo(SPELL_PALADIN_JUDG_BOLD_OVERTIME))
                     return false;
@@ -346,7 +346,7 @@ public:
 
         int32 totalheal;
 
-        bool Validate (SpellInfo *const /*spellEntry*/)
+        bool Validate (SpellInfo const* /*spellEntry*/)
         {
             if (!sSpellMgr->GetSpellInfo(SPELL_PALADIN_WORD_OF_GLORY))
                 return false;
@@ -441,7 +441,7 @@ public:
     {
         PrepareAuraScript(spell_pal_word_of_glory_heal_AuraScript)
 
-        bool Validate (SpellInfo *const /*spellEntry*/)
+        bool Validate (SpellInfo const* /*spellEntry*/)
         {
             if (!sSpellMgr->GetSpellInfo(SPELL_PALADIN_WORD_OF_GLORY)->Effects[1].Effect)
                 return false;
@@ -538,7 +538,7 @@ class spell_pal_selfless_healer : public SpellScriptLoader
                 return true;
             }
 
-            bool Validate (SpellInfo *const /*spellEntry*/)
+            bool Validate (SpellInfo const* /*spellEntry*/)
             {
                 if (!sSpellMgr->GetSpellInfo(SPELL_PALADIN_SELFLESS_HEALER_PROC))
                     return false;
@@ -607,7 +607,7 @@ public:
             return true;
         }
 
-        bool Validate (SpellInfo *const /*spellEntry*/)
+        bool Validate (SpellInfo const* /*spellEntry*/)
         {
             if (!sSpellMgr->GetSpellInfo(SPELL_PALADIN_HOLY_GUARDIAN) ||
                 !sSpellMgr->GetSpellInfo(SPELL_PALADIN_RETRI_GUARDIAN) ||
@@ -704,7 +704,7 @@ public:
             return true;
         }
 
-        bool Validate (SpellInfo *const /*spellEntry*/)
+        bool Validate (SpellInfo const* /*spellEntry*/)
         {
             if (!sSpellMgr->GetSpellInfo(SPELL_PALADIN_CONSECRATION_DAMAGE) ||
                 !sSpellMgr->GetSpellInfo(SPELL_PALADIN_CONSECRATION_SUMMON))

@@ -214,7 +214,7 @@ public:
             && sSpellMgr->GetSpellInfo(SPELL_MAGE_INCANTERS_ABSORBTION_R1);
     }
 
-    void Trigger(AuraEffect* aurEff, DamageInfo & /*dmgInfo*/, uint32 & absorbAmount)
+    void Trigger(AuraEffect* aurEff, DamageInfo& /*dmgInfo*/, uint32& absorbAmount)
     {
         Unit* target = GetTarget();
 
@@ -349,7 +349,7 @@ public:
             return true;
         }
 
-        void CalculateAmount(AuraEffect const * /*aurEff*/, int32 & amount, bool & /*canBeRecalculated*/)
+        void CalculateAmount(AuraEffect const* /*aurEff*/, int32& amount, bool& /*canBeRecalculated*/)
         {
             // Set absorbtion amount to unlimited
             amount = -1;
@@ -357,7 +357,7 @@ public:
 
         void Absorb(AuraEffect* aurEff, DamageInfo& dmgInfo, uint32& absorbAmount)
         {
-            Unit * caster = GetCaster();
+            Unit* caster = GetCaster();
 
             if (!caster)
                 return;

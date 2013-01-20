@@ -630,7 +630,7 @@ public:
             return 0;
         }
 
-        void CalculateAmount(AuraEffect const* /*aurEff*/, int32 & amount, bool & /*canBeRecalculated*/)
+        void CalculateAmount(AuraEffect const* /*aurEff*/, int32& amount, bool& /*canBeRecalculated*/)
         {
             if (Unit* caster = GetUnitOwner())
                 amount = GetSpellInfo()->Effects[0].BasePoints * GetFrenzyStackCount();
@@ -686,7 +686,7 @@ public:
             return 0;
         }
 
-        void CalculateAmount(AuraEffect const* /*aurEff*/, int32 & amount, bool & /*canBeRecalculated*/)
+        void CalculateAmount(AuraEffect const* /*aurEff*/, int32& amount, bool& /*canBeRecalculated*/)
         {
             if (Unit* pet = GetUnitOwner())
             {
