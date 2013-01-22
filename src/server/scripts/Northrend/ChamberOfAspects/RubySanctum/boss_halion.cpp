@@ -333,13 +333,13 @@ public:
             MovementStarted = true;
         }
 
-        void DamageTaken(Unit* doneBy, uint32& Damage)
+        void DamageTaken(Unit* /*doneBy*/, uint32& Damage)
         {
             if (!instance)
                 return;
 
             HalionDamage += Damage;
-            Creature * halionTwilight = me->GetMap()->GetCreature(instance->GetData64(NPC_HALION_TWILIGHT));
+            Creature* halionTwilight = me->GetMap()->GetCreature(instance->GetData64(NPC_HALION_TWILIGHT));
             if (!halionTwilight)
                 return;
 
@@ -666,7 +666,7 @@ public:
             }
         }
 
-        void JustDied(Unit* killer)
+        void JustDied(Unit* /*killer*/)
         {
             if (!instance)
                 return;
@@ -700,7 +700,7 @@ public:
                 return;
         }
 
-        void DamageTaken(Unit* doneBy, uint32& Damage)
+        void DamageTaken(Unit* /*doneBy*/, uint32& Damage)
         {
             if (!instance)
                 return;
@@ -901,7 +901,7 @@ public:
             instance->SetData(DATA_HALION_EVENT, NOT_STARTED);
         }
 
-        void AttackStart(Unit *who)
+        void AttackStart(Unit* /*who*/)
         {
             //ignore all attack start commands
             return;
@@ -1103,7 +1103,7 @@ public:
                         _pulsar_S->Respawn();
             }
 
-        void AttackStart(Unit *who)
+        void AttackStart(Unit* /*who*/)
         {
             //ignore all attackstart commands
             return;
@@ -1244,7 +1244,7 @@ public:
             sLog->outDebug(LOG_FILTER_MAPS, "EventMGR: creature %u assume _flag %u ", me->GetEntry(), _flag);
         }
 
-        void AttackStart(Unit* who)
+        void AttackStart(Unit* /*who*/)
         {
             //ignore all attack start commands
             return;
@@ -1331,7 +1331,7 @@ public:
             me->SetSpeed(MOVE_RUN, 10.0f, true);
         }
 
-        void AttackStart(Unit *who)
+        void AttackStart(Unit* /*who*/)
         {
             return;
         }
@@ -1411,7 +1411,7 @@ public:
             grow = false;
         }
 
-        void AttackStart(Unit *who)
+        void AttackStart(Unit* /*who*/)
         {
             return;
         }
@@ -1434,7 +1434,7 @@ public:
                 {
                     if (player->isAlive() && player->HasAura(SPELL_MARK_OF_CONSUMPTION))
                     {
-                        Aura *aura = player->GetAura(SPELL_MARK_OF_CONSUMPTION);
+                        Aura* aura = player->GetAura(SPELL_MARK_OF_CONSUMPTION);
                         uint32 stacs;
                         stacs = aura->GetStackAmount();
                         if(!grow)
@@ -1491,7 +1491,7 @@ public:
             grow = false;
         }
 
-        void AttackStart(Unit *who)
+        void AttackStart(Unit* /*who*/)
         {
             return;
         }
@@ -1736,13 +1736,13 @@ public:
             return true;
         }
 
-        void HandlePeriodicTick(AuraEffect const * /*aurEff*/)
+        void HandlePeriodicTick(AuraEffect const* /*aurEff*/)
         {
             if (Unit* target = GetTarget())
                 target->CastSpell(target, SPELL_MARK_OF_COMBUSTION, true);
         }
 
-        void HandleEffectRemove(AuraEffect const * /*aurEff*/, AuraEffectHandleModes /*mode*/)
+        void HandleEffectRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
         {
             if (Unit* target = GetTarget())
             {
@@ -1790,13 +1790,13 @@ public:
             return true;
         }
 
-        void HandlePeriodicTick(AuraEffect const * /*aurEff*/)
+        void HandlePeriodicTick(AuraEffect const* /*aurEff*/)
         {
             if (Unit* target = GetTarget())
                 target->CastSpell(target, SPELL_MARK_OF_CONSUMPTION, true);
         }
 
-        void HandleEffectRemove(AuraEffect const * /*aurEff*/, AuraEffectHandleModes /*mode*/)
+        void HandleEffectRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
         {
             if (Unit* target = GetTarget())
             {
