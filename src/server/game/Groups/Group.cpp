@@ -2183,12 +2183,12 @@ uint8 Group::GetMemberGroup(uint64 guid) const
     return mslot->group;
 }
 
-void Group::SetBattlegroundGroup(Battleground *bg)
+void Group::SetBattlegroundGroup(Battleground* bg)
 {
     m_bgGroup = bg;
 }
 
-void Group::SetBattlefieldGroup(Battlefield *bg)
+void Group::SetBattlefieldGroup(Battlefield* bg)
 {
     m_bfGroup = bg;
 }

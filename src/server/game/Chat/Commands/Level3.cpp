@@ -65,11 +65,11 @@
 #include "Group.h"
 #include "ChannelMgr.h"
 
-bool ChatHandler::HandleMapSetInfoCommand(const char* args)
+bool ChatHandler::HandleMapSetInfoCommand(const char* /*args*/)
 {
    return true;
 }
-bool ChatHandler::HandleMapInfoCommand(const char* args)
+bool ChatHandler::HandleMapInfoCommand(const char* /*args*/)
 {
 return true;
 }
@@ -88,7 +88,7 @@ bool ChatHandler::HandleMaxSkillCommand(const char* /*args*/)
     return true;
 }
 
-bool ChatHandler::HandleSetSkillCommand(const char *args)
+bool ChatHandler::HandleSetSkillCommand(const char* args)
 {
     // number or [name] Shift-click form |color|Hskill:skill_id|h[name]|h|r
     char* skill_p = extractKeyFromLink((char*)args, "Hskill");
@@ -148,7 +148,7 @@ bool ChatHandler::HandleSetSkillCommand(const char *args)
     return true;
 }
 
-bool ChatHandler::HandleUnLearnCommand(const char *args)
+bool ChatHandler::HandleUnLearnCommand(const char* args)
 {
     if (!*args)
         return false;
@@ -183,7 +183,7 @@ bool ChatHandler::HandleUnLearnCommand(const char *args)
     return true;
 }
 
-bool ChatHandler::HandleCooldownCommand(const char *args)
+bool ChatHandler::HandleCooldownCommand(const char* args)
 {
     Player* target = getSelectedPlayer();
     if (!target)
@@ -220,7 +220,7 @@ bool ChatHandler::HandleCooldownCommand(const char *args)
     return true;
 }
 
-bool ChatHandler::HandleAddItemCommand(const char *args)
+bool ChatHandler::HandleAddItemCommand(const char* args)
 {
     if (!*args)
         return false;
@@ -329,7 +329,7 @@ bool ChatHandler::HandleAddItemCommand(const char *args)
     return true;
 }
 
-bool ChatHandler::HandleAddItemSetCommand(const char *args)
+bool ChatHandler::HandleAddItemSetCommand(const char* args)
 {
     if (!*args)
         return false;
@@ -611,7 +611,7 @@ bool ChatHandler::HandleListItemCommand(const char *args)
     return true;
 }
 
-bool ChatHandler::HandleListObjectCommand(const char *args)
+bool ChatHandler::HandleListObjectCommand(const char* args)
 {
     if (!*args)
         return false;
@@ -683,7 +683,7 @@ bool ChatHandler::HandleListObjectCommand(const char *args)
     return true;
 }
 
-bool ChatHandler::HandleListCreatureCommand(const char *args)
+bool ChatHandler::HandleListCreatureCommand(const char* args)
 {
     if (!*args)
         return false;
@@ -754,7 +754,7 @@ bool ChatHandler::HandleListCreatureCommand(const char *args)
     return true;
 }
 
-bool ChatHandler::HandleLookupItemCommand(const char *args)
+bool ChatHandler::HandleLookupItemCommand(const char* args)
 {
     if (!*args)
         return false;
@@ -906,7 +906,7 @@ bool ChatHandler::HandleLookupItemSetCommand(const char *args)
     return true;
 }
 
-bool ChatHandler::HandleLookupSkillCommand(const char *args)
+bool ChatHandler::HandleLookupSkillCommand(const char* args)
 {
     if (!*args)
         return false;
@@ -993,7 +993,7 @@ bool ChatHandler::HandleLookupSkillCommand(const char *args)
     return true;
 }
 
-bool ChatHandler::HandleLookupSpellCommand(const char *args)
+bool ChatHandler::HandleLookupSpellCommand(const char* args)
 {
     if (!*args)
         return false;
@@ -1104,7 +1104,7 @@ bool ChatHandler::HandleLookupSpellCommand(const char *args)
     return true;
 }
 
-bool ChatHandler::HandleLookupQuestCommand(const char *args)
+bool ChatHandler::HandleLookupQuestCommand(const char* args)
 {
     if (!*args)
         return false;
@@ -1224,7 +1224,7 @@ bool ChatHandler::HandleLookupQuestCommand(const char *args)
     return true;
 }
 
-bool ChatHandler::HandleLookupCreatureCommand(const char *args)
+bool ChatHandler::HandleLookupCreatureCommand(const char* args)
 {
     if (!*args)
         return false;
@@ -1302,7 +1302,7 @@ bool ChatHandler::HandleLookupCreatureCommand(const char *args)
     return true;
 }
 
-bool ChatHandler::HandleLookupObjectCommand(const char *args)
+bool ChatHandler::HandleLookupObjectCommand(const char* args)
 {
     if (!*args)
         return false;
@@ -1379,7 +1379,7 @@ bool ChatHandler::HandleLookupObjectCommand(const char *args)
     return true;
 }
 
-bool ChatHandler::HandleLookupFactionCommand(const char *args)
+bool ChatHandler::HandleLookupFactionCommand(const char* args)
 {
     if (!*args)
         return false;
@@ -1481,7 +1481,7 @@ bool ChatHandler::HandleLookupFactionCommand(const char *args)
     return true;
 }
 
-bool ChatHandler::HandleLookupTaxiNodeCommand(const char * args)
+bool ChatHandler::HandleLookupTaxiNodeCommand(const char* args)
 {
     if (!*args)
         return false;
@@ -1553,7 +1553,7 @@ bool ChatHandler::HandleLookupTaxiNodeCommand(const char * args)
     return true;
 }
 
-bool ChatHandler::HandleLookupMapCommand(const char *args)
+bool ChatHandler::HandleLookupMapCommand(const char* args)
 {
     if (!*args)
         return false;
@@ -1667,7 +1667,7 @@ bool ChatHandler::HandleLookupMapCommand(const char *args)
  * and then the name of the guild.
  *
  */
-bool ChatHandler::HandleGuildCreateCommand(const char *args)
+bool ChatHandler::HandleGuildCreateCommand(const char* args)
 {
     if (!*args)
         return false;
@@ -1706,7 +1706,7 @@ bool ChatHandler::HandleGuildCreateCommand(const char *args)
     return true;
 }
 
-bool ChatHandler::HandleGuildInviteCommand(const char *args)
+bool ChatHandler::HandleGuildInviteCommand(const char* args)
 {
     if (!*args)
         return false;
@@ -1733,7 +1733,7 @@ bool ChatHandler::HandleGuildInviteCommand(const char *args)
     return targetGuild->AddMember(target_guid);
 }
 
-bool ChatHandler::HandleGuildUninviteCommand(const char *args)
+bool ChatHandler::HandleGuildUninviteCommand(const char* args)
 {
     Player* target;
     uint64 target_guid;
@@ -1779,7 +1779,7 @@ bool ChatHandler::HandleGuildRankCommand(const char *args)
     return targetGuild->ChangeMemberRank(target_guid, newrank);
 }
 
-bool ChatHandler::HandleGuildDeleteCommand(const char *args)
+bool ChatHandler::HandleGuildDeleteCommand(const char* args)
 {
     if (!*args)
         return false;
@@ -1799,7 +1799,7 @@ bool ChatHandler::HandleGuildDeleteCommand(const char *args)
     return true;
 }
 
-bool ChatHandler::HandleGetDistanceCommand(const char *args)
+bool ChatHandler::HandleGetDistanceCommand(const char* args)
 {
     WorldObject* obj = NULL;
 
@@ -1860,7 +1860,7 @@ bool ChatHandler::HandleDieCommand(const char* /*args*/)
     return true;
 }
 
-bool ChatHandler::HandleDamageCommand(const char * args)
+bool ChatHandler::HandleDamageCommand(const char* args)
 {
     if (!*args)
         return false;
@@ -1945,7 +1945,7 @@ bool ChatHandler::HandleDamageCommand(const char * args)
     return true;
 }
 
-bool ChatHandler::HandleReviveCommand(const char *args)
+bool ChatHandler::HandleReviveCommand(const char* args)
 {
     Player* target;
     uint64 target_guid;
@@ -1965,7 +1965,7 @@ bool ChatHandler::HandleReviveCommand(const char *args)
     return true;
 }
 
-bool ChatHandler::HandleAuraCommand(const char *args)
+bool ChatHandler::HandleAuraCommand(const char* args)
 {
     Unit* target = getSelectedUnit();
     if (!target)
@@ -1984,7 +1984,7 @@ bool ChatHandler::HandleAuraCommand(const char *args)
     return true;
 }
 
-bool ChatHandler::HandleUnAuraCommand(const char *args)
+bool ChatHandler::HandleUnAuraCommand(const char* args)
 {
     Unit* target = getSelectedUnit();
     if (!target)
@@ -2011,7 +2011,7 @@ bool ChatHandler::HandleUnAuraCommand(const char *args)
     return true;
 }
 
-bool ChatHandler::HandleLinkGraveCommand(const char *args)
+bool ChatHandler::HandleLinkGraveCommand(const char* args)
 {
     if (!*args)
         return false;
@@ -2064,7 +2064,7 @@ bool ChatHandler::HandleLinkGraveCommand(const char *args)
     return true;
 }
 
-bool ChatHandler::HandleNearGraveCommand(const char *args)
+bool ChatHandler::HandleNearGraveCommand(const char* args)
 {
     uint32 g_team;
 
@@ -2130,7 +2130,7 @@ bool ChatHandler::HandleNearGraveCommand(const char *args)
     return true;
 }
 
-bool ChatHandler::HandleExploreCheatCommand(const char *args)
+bool ChatHandler::HandleExploreCheatCommand(const char* args)
 {
     if (!*args)
         return false;
@@ -2169,7 +2169,7 @@ bool ChatHandler::HandleExploreCheatCommand(const char *args)
     return true;
 }
 
-bool ChatHandler::HandleHoverCommand(const char *args)
+bool ChatHandler::HandleHoverCommand(const char* args)
 {
     char* px = strtok((char*)args, " ");
     uint32 flag;
@@ -2218,7 +2218,7 @@ void ChatHandler::HandleCharacterLevel(Player* player, uint64 playerGuid, uint32
     }
 }
 
-bool ChatHandler::HandleShowAreaCommand(const char *args)
+bool ChatHandler::HandleShowAreaCommand(const char* args)
 {
     if (!*args)
         return false;
@@ -2249,7 +2249,7 @@ bool ChatHandler::HandleShowAreaCommand(const char *args)
     return true;
 }
 
-bool ChatHandler::HandleHideAreaCommand(const char *args)
+bool ChatHandler::HandleHideAreaCommand(const char* args)
 {
     if (!*args)
         return false;
@@ -2287,7 +2287,7 @@ bool ChatHandler::HandleBankCommand(const char* /*args*/)
     return true;
 }
 
-bool ChatHandler::HandleChangeWeather(const char *args)
+bool ChatHandler::HandleChangeWeather(const char* args)
 {
     if (!*args)
         return false;
@@ -2329,7 +2329,7 @@ bool ChatHandler::HandleChangeWeather(const char *args)
     return true;
 }
 
-bool ChatHandler::HandleListAurasCommand (const char * /*args*/)
+bool ChatHandler::HandleListAurasCommand (const char* /*args*/)
 {
     Unit* unit = getSelectedUnit();
     if (!unit)
@@ -2375,7 +2375,7 @@ bool ChatHandler::HandleListAurasCommand (const char * /*args*/)
     return true;
 }
 
-bool ChatHandler::HandleResetAchievementsCommand (const char * args)
+bool ChatHandler::HandleResetAchievementsCommand (const char* args)
 {
     Player* target;
     uint64 target_guid;
@@ -2390,7 +2390,7 @@ bool ChatHandler::HandleResetAchievementsCommand (const char * args)
     return true;
 }
 
-bool ChatHandler::HandleResetHonorCommand(const char * args)
+bool ChatHandler::HandleResetHonorCommand(const char* args)
 {
     Player* target;
     if (!extractPlayerTarget((char*)args, &target))
@@ -2441,7 +2441,7 @@ static bool HandleResetStatsOrLevelHelper(Player* player)
     return true;
 }
 
-bool ChatHandler::HandleResetLevelCommand(const char * args)
+bool ChatHandler::HandleResetLevelCommand(const char* args)
 {
     Player* target;
     if (!extractPlayerTarget((char*)args, &target))
@@ -2477,7 +2477,7 @@ bool ChatHandler::HandleResetLevelCommand(const char * args)
     return true;
 }
 
-bool ChatHandler::HandleResetStatsCommand(const char * args)
+bool ChatHandler::HandleResetStatsCommand(const char* args)
 {
     Player* target;
     if (!extractPlayerTarget((char*)args, &target))
@@ -2588,7 +2588,7 @@ bool ChatHandler::HandleResetTalentsCommand(const char* args)
     return false;
 }
 
-bool ChatHandler::HandleResetAllCommand(const char * args)
+bool ChatHandler::HandleResetAllCommand(const char* args)
 {
     if (!*args)
         return false;
@@ -2633,17 +2633,17 @@ bool ChatHandler::HandleResetAllCommand(const char * args)
     return true;
 }
 
-bool ChatHandler::HandleBanAccountCommand(const char *args)
+bool ChatHandler::HandleBanAccountCommand(const char* args)
 {
     return HandleBanHelper(BAN_ACCOUNT, args);
 }
 
-bool ChatHandler::HandleBanAccountByCharCommand(const char *args)
+bool ChatHandler::HandleBanAccountByCharCommand(const char* args)
 {
     return HandleBanHelper(BAN_CHARACTER, args);
 }
 
-bool ChatHandler::HandleBanCharacterCommand(const char *args)
+bool ChatHandler::HandleBanCharacterCommand(const char* args)
 {
     if (!*args)
         return false;
@@ -2692,12 +2692,12 @@ bool ChatHandler::HandleBanCharacterCommand(const char *args)
     return true;
 }
 
-bool ChatHandler::HandleBanIPCommand(const char *args)
+bool ChatHandler::HandleBanIPCommand(const char* args)
 {
     return HandleBanHelper(BAN_IP, args);
 }
 
-bool ChatHandler::HandleBanHelper(BanMode mode, const char *args)
+bool ChatHandler::HandleBanHelper(BanMode mode, const char* args)
 {
     if (!*args)
         return false;
@@ -2770,17 +2770,17 @@ bool ChatHandler::HandleBanHelper(BanMode mode, const char *args)
     return true;
 }
 
-bool ChatHandler::HandleUnBanAccountCommand(const char *args)
+bool ChatHandler::HandleUnBanAccountCommand(const char* args)
 {
     return HandleUnBanHelper(BAN_ACCOUNT, args);
 }
 
-bool ChatHandler::HandleUnBanAccountByCharCommand(const char *args)
+bool ChatHandler::HandleUnBanAccountByCharCommand(const char* args)
 {
     return HandleUnBanHelper(BAN_CHARACTER, args);
 }
 
-bool ChatHandler::HandleUnBanCharacterCommand(const char *args)
+bool ChatHandler::HandleUnBanCharacterCommand(const char* args)
 {
     if (!*args)
         return false;
@@ -2808,12 +2808,12 @@ bool ChatHandler::HandleUnBanCharacterCommand(const char *args)
     return true;
 }
 
-bool ChatHandler::HandleUnBanIPCommand(const char *args)
+bool ChatHandler::HandleUnBanIPCommand(const char* args)
 {
     return HandleUnBanHelper(BAN_IP, args);
 }
 
-bool ChatHandler::HandleUnBanHelper(BanMode mode, const char *args)
+bool ChatHandler::HandleUnBanHelper(BanMode mode, const char* args)
 {
     if (!*args)
         return false;
@@ -2856,7 +2856,7 @@ bool ChatHandler::HandleUnBanHelper(BanMode mode, const char *args)
     return true;
 }
 
-bool ChatHandler::HandleBanInfoAccountCommand(const char *args)
+bool ChatHandler::HandleBanInfoAccountCommand(const char* args)
 {
     if (!*args)
         return false;
@@ -2883,7 +2883,7 @@ bool ChatHandler::HandleBanInfoAccountCommand(const char *args)
     return HandleBanInfoHelper(accountid, account_name.c_str());
 }
 
-bool ChatHandler::HandleBanInfoCharacterCommand(const char *args)
+bool ChatHandler::HandleBanInfoCharacterCommand(const char* args)
 {
     if (!*args)
         return false;
@@ -2963,7 +2963,7 @@ bool ChatHandler::HandleBanInfoHelper(uint32 accountid, char const* accountname)
     return true;
 }
 
-bool ChatHandler::HandleBanInfoIPCommand(const char *args)
+bool ChatHandler::HandleBanInfoIPCommand(const char* args)
 {
     if (!*args)
         return false;
@@ -2994,7 +2994,7 @@ bool ChatHandler::HandleBanInfoIPCommand(const char *args)
     return true;
 }
 
-bool ChatHandler::HandleBanListCharacterCommand(const char *args)
+bool ChatHandler::HandleBanListCharacterCommand(const char* args)
 {
     if (!*args)
         return false;
@@ -3080,7 +3080,7 @@ bool ChatHandler::HandleBanListCharacterCommand(const char *args)
     return true;
 }
 
-bool ChatHandler::HandleBanListAccountCommand(const char *args)
+bool ChatHandler::HandleBanListAccountCommand(const char* args)
 {
     PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_DEL_OLD_BANS);
     LoginDatabase.Execute(stmt);
@@ -3188,7 +3188,7 @@ bool ChatHandler::HandleBanListHelper(PreparedQueryResult result)
     return true;
 }
 
-bool ChatHandler::HandleBanListIPCommand(const char *args)
+bool ChatHandler::HandleBanListIPCommand(const char* args)
 {
     PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_DEL_OLD_IP_BANS);
     LoginDatabase.Execute(stmt);
@@ -3297,7 +3297,7 @@ bool ChatHandler::HandleRespawnCommand(const char* /*args*/)
     return true;
 }
 
-bool ChatHandler::HandlePDumpLoadCommand(const char *args)
+bool ChatHandler::HandlePDumpLoadCommand(const char* args)
 {
     if (!*args)
         return false;
@@ -3408,7 +3408,7 @@ bool ChatHandler::HandlePDumpLoadCommand(const char *args)
     return true;
 }
 
-bool ChatHandler::HandlePDumpWriteCommand(const char *args)
+bool ChatHandler::HandlePDumpWriteCommand(const char* args)
 {
     if (!*args)
         return false;
@@ -3553,7 +3553,7 @@ bool ChatHandler::HandleMovegensCommand(const char* /*args*/)
     return true;
 }
 
-bool ChatHandler::HandleCastCommand(const char *args)
+bool ChatHandler::HandleCastCommand(const char* args)
 {
     if (!*args)
         return false;
@@ -3602,7 +3602,7 @@ bool ChatHandler::HandleCastCommand(const char *args)
     return true;
 }
 
-bool ChatHandler::HandleCastBackCommand(const char *args)
+bool ChatHandler::HandleCastBackCommand(const char* args)
 {
     Creature* caster = getSelectedCreature();
 
@@ -3638,7 +3638,7 @@ bool ChatHandler::HandleCastBackCommand(const char *args)
     return true;
 }
 
-bool ChatHandler::HandleCastDistCommand(const char *args)
+bool ChatHandler::HandleCastDistCommand(const char* args)
 {
     if (!*args)
         return false;
@@ -3687,7 +3687,7 @@ bool ChatHandler::HandleCastDistCommand(const char *args)
     return true;
 }
 
-bool ChatHandler::HandleCastTargetCommand(const char *args)
+bool ChatHandler::HandleCastTargetCommand(const char* args)
 {
     Creature* caster = getSelectedCreature();
 
@@ -3729,7 +3729,7 @@ bool ChatHandler::HandleCastTargetCommand(const char *args)
     return true;
 }
 
-bool ChatHandler::HandleCastDestCommand(const char *args)
+bool ChatHandler::HandleCastDestCommand(const char* args)
 {
     Unit* caster = getSelectedUnit();
     if (!caster)
@@ -3779,7 +3779,7 @@ ComeToMe command REQUIRED for 3rd party scripting library to have access to Poin
 Without this function 3rd party scripting library will get linking errors (unresolved external)
 when attempting to use the PointMovementGenerator
 */
-bool ChatHandler::HandleComeToMeCommand(const char *args)
+bool ChatHandler::HandleComeToMeCommand(const char* args)
 {
     char* newFlagStr = strtok((char*)args, " ");
 
@@ -3883,7 +3883,7 @@ bool ChatHandler::HandleInstanceListBindsCommand(const char* /*args*/)
     return true;
 }
 
-bool ChatHandler::HandleInstanceUnbindCommand(const char *args)
+bool ChatHandler::HandleInstanceUnbindCommand(const char* args)
 {
     if (!*args)
         return false;
@@ -3938,7 +3938,7 @@ bool ChatHandler::HandleInstanceStatsCommand(const char* /*args*/)
     return true;
 }
 
-bool ChatHandler::HandleInstanceSaveDataCommand(const char * /*args*/)
+bool ChatHandler::HandleInstanceSaveDataCommand(const char* /*args*/)
 {
     Player* player = m_session->GetPlayer();
 
@@ -3962,7 +3962,7 @@ bool ChatHandler::HandleInstanceSaveDataCommand(const char * /*args*/)
 }
 
 //Send items by mail
-bool ChatHandler::HandleSendItemsCommand(const char *args)
+bool ChatHandler::HandleSendItemsCommand(const char* args)
 {
     // format: name "subject text" "mail text" item1[:count1] item2[:count2] ... item12[:count12]
     Player* receiver;
@@ -4071,7 +4071,7 @@ bool ChatHandler::HandleSendItemsCommand(const char *args)
 }
 
 ///Send money by mail
-bool ChatHandler::HandleSendMoneyCommand(const char *args)
+bool ChatHandler::HandleSendMoneyCommand(const char* args)
 {
     /// format: name "subject text" "mail text" money
 
@@ -4123,7 +4123,7 @@ bool ChatHandler::HandleSendMoneyCommand(const char *args)
 }
 
 /// Send a message to a player in game
-bool ChatHandler::HandleSendMessageCommand(const char *args)
+bool ChatHandler::HandleSendMessageCommand(const char* args)
 {
     ///- Find the player
     Player* rPlayer;
@@ -4153,13 +4153,13 @@ bool ChatHandler::HandleSendMessageCommand(const char *args)
     return true;
 }
 
-bool ChatHandler::HandleFlushArenaPointsCommand(const char * /*args*/)
+bool ChatHandler::HandleFlushArenaPointsCommand(const char* /*args*/)
 {
     sArenaTeamMgr->DistributeArenaPoints();
     return true;
 }
 
-bool ChatHandler::HandleChannelSetOwnership(const char *args)
+bool ChatHandler::HandleChannelSetOwnership(const char* args)
 {
     if (!*args)
         return false;
@@ -4201,7 +4201,7 @@ bool ChatHandler::HandleChannelSetOwnership(const char *args)
     return true;
 }
 
-bool ChatHandler::HandlePlayAllCommand(const char *args)
+bool ChatHandler::HandlePlayAllCommand(const char* args)
 {
     if (!*args)
         return false;
@@ -4223,7 +4223,7 @@ bool ChatHandler::HandlePlayAllCommand(const char *args)
     return true;
 }
 
-bool ChatHandler::HandleFreezeCommand(const char *args)
+bool ChatHandler::HandleFreezeCommand(const char* args)
 {
     std::string name;
     Player* player;
@@ -4290,7 +4290,7 @@ bool ChatHandler::HandleFreezeCommand(const char *args)
     return true;
 }
 
-bool ChatHandler::HandleUnFreezeCommand(const char *args)
+bool ChatHandler::HandleUnFreezeCommand(const char* args)
 {
     std::string name;
     Player* player;
@@ -4354,7 +4354,7 @@ bool ChatHandler::HandleUnFreezeCommand(const char *args)
     return true;
 }
 
-bool ChatHandler::HandleListFreezeCommand(const char * /*args*/)
+bool ChatHandler::HandleListFreezeCommand(const char* /*args*/)
 {
     //Get names from DB
     QueryResult result = CharacterDatabase.Query("SELECT characters.name FROM characters LEFT JOIN character_aura ON (characters.guid = character_aura.guid) WHERE character_aura.spell = 9454");
@@ -4377,7 +4377,7 @@ bool ChatHandler::HandleListFreezeCommand(const char * /*args*/)
     return true;
 }
 
-bool ChatHandler::HandleGroupLeaderCommand(const char *args)
+bool ChatHandler::HandleGroupLeaderCommand(const char* args)
 {
     Player* player  = NULL;
     Group* group = NULL;
@@ -4394,7 +4394,7 @@ bool ChatHandler::HandleGroupLeaderCommand(const char *args)
     return true;
 }
 
-bool ChatHandler::HandleGroupDisbandCommand(const char *args)
+bool ChatHandler::HandleGroupDisbandCommand(const char* args)
 {
     Player* player  = NULL;
     Group* group = NULL;
@@ -4408,7 +4408,7 @@ bool ChatHandler::HandleGroupDisbandCommand(const char *args)
     return true;
 }
 
-bool ChatHandler::HandleGroupRemoveCommand(const char *args)
+bool ChatHandler::HandleGroupRemoveCommand(const char* args)
 {
     Player* player  = NULL;
     Group* group = NULL;
@@ -4422,7 +4422,7 @@ bool ChatHandler::HandleGroupRemoveCommand(const char *args)
     return true;
 }
 
-bool ChatHandler::HandlePossessCommand(const char * /*args*/)
+bool ChatHandler::HandlePossessCommand(const char* /*args*/)
 {
     Unit* unit = getSelectedUnit();
     if (!unit)
@@ -4432,7 +4432,7 @@ bool ChatHandler::HandlePossessCommand(const char * /*args*/)
     return true;
 }
 
-bool ChatHandler::HandleUnPossessCommand(const char * /*args*/)
+bool ChatHandler::HandleUnPossessCommand(const char* /*args*/)
 {
     Unit* unit = getSelectedUnit();
     if (!unit)
@@ -4443,7 +4443,7 @@ bool ChatHandler::HandleUnPossessCommand(const char * /*args*/)
     return true;
 }
 
-bool ChatHandler::HandleBindSightCommand(const char * /*args*/)
+bool ChatHandler::HandleBindSightCommand(const char* /*args*/)
 {
     Unit* unit = getSelectedUnit();
     if (!unit)
@@ -4453,7 +4453,7 @@ bool ChatHandler::HandleBindSightCommand(const char * /*args*/)
     return true;
 }
 
-bool ChatHandler::HandleUnbindSightCommand(const char * /*args*/)
+bool ChatHandler::HandleUnbindSightCommand(const char* /*args*/)
 {
     if (m_session->GetPlayer()->isPossessing())
         return false;
