@@ -324,7 +324,7 @@ mmap.enablePathFinding = 1
 #        Disable mmap pathfinding on the listed maps.
 #        List of map ids with delimiter ','
 
-mmap.ignoreMapIds = ""
+mmap.ignoreMapIds = "638"
 
 #
 #    TargetPosRecalculateRange
