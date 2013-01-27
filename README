@@ -7,10 +7,6 @@ Database repository located here
 https://github.com/ProjectSkyfire/SkyFireDB
 
 Copyright (C) SkyFireEMU  (http://www.projectskyfire.org)
-Copyright (C) Cactus      (http://www.cactusemu.com)
-Copyright (C) TrinityCore (http://www.trinitycore.org)
-Copyright (C) MaNGOS      (http://www.getmangos.com)
-
 
   SkyFireEMU is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -46,15 +42,6 @@ https://github.com/ProjectSkyfire/SkyFireEMU/
 
 For further information on the Project SkyFireEMU, please visit our
 project website at http://www.projectskyfire.org/
-
-For further information on the TrinityCore project, please visit the
-project website at http://www.TrinityCore.org
-
-For further information on the MaNGOS project, please visit the
-project website at http://www.getmangos.com/.
-
-For further information on the Cactus project, please visit the
-project website at http://www.cactusemu.com/.
 
 SQL files to create the database can be found in the database directory. Files
 to update your database from an older revision/version can be found in the
