@@ -34,3 +34,6 @@ UPDATE creature_template SET AIName = "", scriptname = "npc_worgen_runt_c2" WHER
 UPDATE creature_template SET AIName = "", scriptname = "npc_sean_dempsey" WHERE ENTRY = 35081;
 
 UPDATE quest_template SET reqcreatureorgoid1 = "0", reqcreatureorgocount1 = "0" WHERE entry = 14154;
+
+-- Not sure why he spawns below the map but this fixes it
+UPDATE creature SET position_z = 52.29 WHERE entry = 35077;

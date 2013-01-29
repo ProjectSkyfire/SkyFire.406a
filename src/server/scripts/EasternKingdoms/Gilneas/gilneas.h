@@ -76,7 +76,8 @@ enum SpellIds
     SPELL_RIDE_VEHICLE_HARDCODED                       = 46598,
     SPELL_LEFT_HOOK                                    = 67825,
     SPELL_DEMORALIZING_SHOUT                           = 61044,
-    SPELL_SNAP_KICK                                    = 67827
+    SPELL_SNAP_KICK                                    = 67827,
+    SPELL_BY_THE_SKIN_ON_HIS_TEETH                     = 66914
 };
 
 enum NpcTextIds
