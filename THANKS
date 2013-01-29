@@ -1,5 +1,10 @@
 = SkyfireEMU -- Thanks/credits file =
 
+Copyright (C) SkyFireEMU  (http://www.projectskyfire.org)
+Copyright (C) Cactus      (http://www.cactusemu.com)
+Copyright (C) TrinityCore (http://www.trinitycore.org)
+Copyright (C) MaNGOS      (http://www.getmangos.com)
+
 SkyFireEMU is a derivation/rewrite of TrinityCore, and MaNGOS, which was originally written
 by Team Python and the WoW Daemon Team. Many people further helped Trinity Core
 by submitting bug reports, code patches, and suggestions. Thanks to the all the
