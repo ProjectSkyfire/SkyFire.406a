@@ -39,12 +39,18 @@ enum CreatureIds
     NPC_FRIGHTENED_CITIZEN_1                          = 34981,
     NPC_FRIGHTENED_CITIZEN_2                          = 35836,
     NPC_DARIUS_CROWLEY                                = 35230,
-    NPC_NORTHGATE_REBEL_1                             = 36057,//phase 8 outside cathedral
-    NPC_NORTHGATE_REBEL_2                             = 41015,//phase 1024 inside cathedral
-    NPC_BLOODFANG_STALKER_C1                          = 35229,//Main spawns
+    NPC_NORTHGATE_REBEL_1                             = 36057, // phase 8 outside cathedral
+    NPC_NORTHGATE_REBEL_2                             = 41015, // phase 1024 inside cathedral
+    NPC_BLOODFANG_STALKER_C1                          = 35229, // Main spawns
     NPC_BLOODFANG_STALKER_C2                          = 51277,
     NPC_BLOODFANG_STALKER_CREDIT                      = 35582,
-    NPC_CROWLEY_HORSE                                 = 35231
+    NPC_CROWLEY_HORSE                                 = 35231,
+    NPC_LORD_DARIUS_CROWLEY_C1                        = 35077, // Quest - By the skin of his teeth start/stop
+    NPC_WORGEN_ALPHA_C1                               = 35170, // Quest - By the skin of his teeth spawns
+    NPC_WORGEN_ALPHA_C2                               = 35167, // Quest - By the skin of his teeth spawns
+    NPC_WORGEN_RUNT_C1                                = 35188, // Quest - By the skin of his teeth spawns
+    NPC_WORGEN_RUNT_C2                                = 35456, // Quest - By the skin of his teeth spawns
+    NPC_SEAN_DEMPSEY                                  = 35081 // Quest - By the skin of his teeth controller
 };
 
 enum GameObjectIds
@@ -55,6 +61,7 @@ enum QuestIds
 {
     QUEST_LOCKDOWN                                     = 14078,
     QUEST_EVAC_MERC_SQUA                               = 14098,
+    QUEST_BY_THE_SKIN_ON_HIS_TEETH                     = 14154,
     QUEST_SAVE_KRENNAN_ARANAS                          = 14293,
     QUEST_SACRIFICES                                   = 14212
 };
@@ -62,11 +69,15 @@ enum QuestIds
 enum SpellIds
 {
     SPELL_ENRAGE                                       = 8599,
-    SPELL_FROSTBOLT_VISUAL_ONLY                        = 74277, //Dummy spell, visual only
+    SPELL_FROSTBOLT_VISUAL_ONLY                        = 74277, // Dummy spell, visual only
     SPELL_SUMMON_CROWLEY                               = 67004,
     SPELL_RIDE_HORSE                                   = 43671,
     SPELL_THROW_TORCH                                  = 67063,
-    SPELL_RIDE_VEHICLE_HARDCODED                       = 46598
+    SPELL_RIDE_VEHICLE_HARDCODED                       = 46598,
+    SPELL_LEFT_HOOK                                    = 67825,
+    SPELL_DEMORALIZING_SHOUT                           = 61044,
+    SPELL_SNAP_KICK                                    = 67827,
+    SPELL_BY_THE_SKIN_ON_HIS_TEETH                     = 66914
 };
 
 enum NpcTextIds
@@ -74,7 +85,7 @@ enum NpcTextIds
     SAY_PRINCE_LIAM_GREYMANE_1                         = -1638000,
     SAY_PRINCE_LIAM_GREYMANE_2                         = -1638001,
     SAY_PRINCE_LIAM_GREYMANE_3                         = -1638002,
-    DELAY_SAY_PRINCE_LIAM_GREYMANE                     = 20000, //20 seconds repetition time
+    DELAY_SAY_PRINCE_LIAM_GREYMANE                     = 20000, // 20 seconds repetition time
 
     YELL_PRINCE_LIAM_GREYMANE_1                        = -1638025,
     YELL_PRINCE_LIAM_GREYMANE_2                        = -1638026,
@@ -122,9 +133,43 @@ enum SoundIds
     DELAY_ANIMATE                                     = 2000
 };
 
-#define DELAY_EMOTE_PANICKED_CITIZEN                  urand(5000, 15000)   //5-15 second time
-#define DELAY_SAY_PANICKED_CITIZEN                    urand(30000, 120000) //30sec - 1.5min
-#define DELAY_SAY_GILNEAS_CITY_GUARD_GATE             urand(30000, 120000) //30sec - 1.5min
+struct Waypoint
+{
+    float X, Y, Z;
+};
+
+Waypoint NW_WAYPOINT_LOC1[2]=
+{
+    { -1630.62f, 1480.55f, 70.40f }, // Worgen Runt 1 top edge of Roof Waypoint
+    { -1636.01f, 1475.81f, 64.51f }  // Worgen Runt 1 Edge of Roof Waypoint
+};
+
+Waypoint NW_WAYPOINT_LOC2[2]=
+{
+    { -1637.26f, 1488.86f, 69.95f }, // Worgen Runt 1 top edge of Roof Waypoint
+    { -1642.45f, 1482.23f, 64.30f }  // Worgen Runt 1 Edge of Roof Waypoint
+};
+
+Waypoint SW_WAYPOINT_LOC1[2]=
+{
+    { -1718.31f, 1526.62f, 55.91f }, // Worgen Runt 2 Corner where we turn
+    { -1717.86f, 1490.77f, 56.61f }  // Worgen Runt 2 Edge of Roof Waypoint
+};
+
+Waypoint SW_WAYPOINT_LOC2[2]=
+{
+    { -1718.31f, 1526.62f, 55.91f }, // Worgen Runt 2 Corner where we turn
+    { -1717.86f, 1487.00f, 57.07f }  // Worgen Runt 2 Edge of Roof Waypoint
+};
+
+Waypoint N_WAYPOINT_LOC[1]=
+{
+    { -1593.38f, 1408.02f, 72.64f } // Worgen Runt 2 Edge of Roof Waypoint
+};
+
+#define DELAY_EMOTE_PANICKED_CITIZEN                  urand(5000, 15000)   // 5-15 second time
+#define DELAY_SAY_PANICKED_CITIZEN                    urand(30000, 120000) // 30sec - 1.5min
+#define DELAY_SAY_GILNEAS_CITY_GUARD_GATE             urand(30000, 120000) // 30sec - 1.5min
 #define PATHS_COUNT_PANICKED_CITIZEN                  8
 #define CD_ENRAGE                                     30000
 #define SUMMON1_TTL                                   300000
@@ -134,6 +179,15 @@ enum SoundIds
 #define KRENNAN_END_Y                                 1430.6125f
 #define KRENNAN_END_Z                                 19.79f
 #define KRENNAN_END_O                                 2.79f
-#define CROWLEY_SPEED                                 1.85f//if set much lower than this, the horse automatically despawns before reaching the end of his waypoints
+#define CROWLEY_SPEED                                 1.85f // if set much lower than this, the horse automatically despawns before reaching the end of his waypoints
+#define AI_MIN_HP                                     85
+#define Event_Time                                    118500
+#define WORGEN_EVENT_SPAWNTIME                        20000 // Default Despawn Timer
+#define NW_ROOF_SPAWN_LOC_1                           -1618.86f, 1505.68f, 70.24f, 3.91f
+#define NW_ROOF_SPAWN_LOC_2                           -1611.40f, 1498.49f, 69.82f, 3.79f
+#define SW_ROOF_SPAWN_LOC_1                           -1732.81f, 1526.34f, 55.39f, 0.01f
+#define SW_ROOF_SPAWN_LOC_2                           -1737.49f, 1526.11f, 55.51f, 0.01f
+#define N_ROOF_SPAWN_LOC                              -1562.59f, 1409.35f, 71.66f, 3.16f
+#define PLATFORM_Z                                    52.29f
 
 #endif
