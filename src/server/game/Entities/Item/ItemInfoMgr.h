@@ -1,5 +1,6 @@
 /*
- * Copyright (C) 2010-2013 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2013 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2008-2013 TrinityCore <http://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -19,6 +20,7 @@
 #define SKYFIRE_ITEMINFOMGR_H
 
 #include "ItemInfo.h"
+#include "Timer.h"
 
 class ItemInfoMgr
 {
