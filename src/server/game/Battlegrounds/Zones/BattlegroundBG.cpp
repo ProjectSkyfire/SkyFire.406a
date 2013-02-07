@@ -16,6 +16,8 @@
  */
 
 #include "BattlegroundBG.h"
+#include "ObjectAccessor.h"
+#include "Player.h"
 
 uint32 GILNEAS_BG_HonorScoreTicks[BG_HONOR_MODE_NUM] =
 {
