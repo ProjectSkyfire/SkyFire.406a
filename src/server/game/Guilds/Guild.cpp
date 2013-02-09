@@ -1740,15 +1740,16 @@ void Guild::HandleInviteMember(WorldSession* session, const std::string& name)
 
     uint64 guid = MAKE_NEW_GUID(m_id, 0, HIGHGUID_GUILD);
     WorldPacket data(SMSG_GUILD_INVITE, 8 + 10);              // Guess size
-    data << uint32(1); // unk
-    data << uint32(2); // unk
-    data << uint32(3); // unk
-    data << uint32(4); // unk
+    data << uint32(m_emblemInfo.GetBackgroundColor());
+    data << uint32(m_emblemInfo.GetBorderStyle());
+    data << uint32(m_emblemInfo.GetColor());
+    data << uint32(m_emblemInfo.GetStyle());
     data << uint64(player->GetGUID());
     data << pInvitee->GetName();
     data << player->GetName();
     data << uint32(5);
-    data << uint32(6);
+    data << uint32(m_level);
+    data << uint32(m_emblemInfo.GetBorderColor());
     data << uint64(guid);
     data << std::string(GetName());
     pInvitee->GetSession()->SendPacket(&data);
