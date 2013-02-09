@@ -1,0 +1,1 @@
+UPDATE IGNORE `command` SET `name`='reload creature_onkill_reward', `help`='Syntax: .reload creature_onkill_reward\r\nReload creature_onkill_reward table.' WHERE  `name`='reload creature_onkill_reputation' LIMIT 1;

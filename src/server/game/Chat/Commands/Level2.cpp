@@ -305,7 +305,7 @@ bool ChatHandler::HandlePInfoCommand(const char* args)
         if (HasLowerSecurity(NULL, target_guid))
             return false;
 
-        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_CHAR_PINFO);
+        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SELECT_CHAR_PINFO);
         stmt->setUInt32(0, GUID_LOPART(target_guid));
         PreparedQueryResult result = CharacterDatabase.Query(stmt);
         
@@ -369,7 +369,7 @@ bool ChatHandler::HandlePInfoCommand(const char* args)
     PreparedQueryResult result2 = LoginDatabase.Query(stmt);
     if (!result2)
     {
-        stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_PINFO_BANS);
+        stmt = CharacterDatabase.GetPreparedStatement(CHAR_SELECT_PINFO_BANS);
         stmt->setUInt32(0, GUID_LOPART(target_guid));
         result2 = CharacterDatabase.Query(stmt);
     }
@@ -614,7 +614,7 @@ bool ChatHandler::LookupPlayerSearchCommand(PreparedQueryResult result, int32 li
         uint32 acc_id = fields[0].GetUInt32();
         std::string acc_name = fields[1].GetString();
 
-        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_CHAR_GUID_NAME_BY_ACC);
+        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SELECT_CHAR_GUID_NAME_BY_ACC);
         stmt->setUInt32(0, acc_id);
         PreparedQueryResult result2 = CharacterDatabase.Query(stmt);
 

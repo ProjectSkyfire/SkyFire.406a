@@ -84,7 +84,7 @@ public:
             { "creature_involvedrelation",    SEC_ADMINISTRATOR, true,  &HandleReloadCreatureQuestInvRelationsCommand,  "", NULL },
             { "creature_linked_respawn",      SEC_GAMEMASTER,    true,  &HandleReloadLinkedRespawnCommand,              "", NULL },
             { "creature_loot_template",       SEC_ADMINISTRATOR, true,  &HandleReloadLootTemplatesCreatureCommand,      "", NULL },
-            { "creature_onkill_reputation",   SEC_ADMINISTRATOR, true,  &HandleReloadOnKillReputationCommand,           "", NULL },
+            { "creature_onkill_reward",       SEC_ADMINISTRATOR, true,  &HandleReloadOnKillRewardCommand,           "", NULL },
             { "creature_questrelation",       SEC_ADMINISTRATOR, true,  &HandleReloadCreatureQuestRelationsCommand,     "", NULL },
             { "creature_template",            SEC_ADMINISTRATOR, true,  &HandleReloadCreatureTemplateCommand,           "", NULL },
             //{ "db_script_string",             SEC_ADMINISTRATOR, true,  &HandleReloadDbScriptStringCommand,            "", NULL },
@@ -396,11 +396,11 @@ public:
         return true;
     }
 
-    static bool HandleReloadOnKillReputationCommand(ChatHandler* handler, const char* /*args*/)
+    static bool HandleReloadOnKillRewardCommand(ChatHandler* handler, const char* /*args*/)
     {
-        sLog->outString("Re-Loading creature award reputation definitions...");
+        sLog->outString("Re-Loading creature award reward definitions...");
         sObjectMgr->LoadRewardOnKill();
-        handler->SendGlobalGMSysMessage("DB table `creature_onkill_reputation` reloaded.");
+        handler->SendGlobalGMSysMessage("DB table `creature_onkill_reward` reloaded.");
         return true;
     }
 

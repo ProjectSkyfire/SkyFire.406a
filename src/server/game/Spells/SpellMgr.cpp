@@ -1270,7 +1270,7 @@ void SpellMgr::LoadSpellRanks()
             if (lastSpell == -1)
                 lastSpell = currentSpell;
             uint32 spell_id = fields[1].GetUInt32();
-            uint32 rank = fields[2].GetUInt32();
+            uint32 rank = fields[2].GetUInt8();
 
             // don't drop the row if we're moving to the next rank
             if (currentSpell == lastSpell)
@@ -1571,7 +1571,7 @@ void SpellMgr::LoadSpellTargetPositions()
 
         SpellTargetPosition st;
 
-        st.target_mapId       = fields[1].GetUInt32();
+        st.target_mapId       = fields[1].GetUInt16();
         st.target_X           = fields[2].GetFloat();
         st.target_Y           = fields[3].GetFloat();
         st.target_Z           = fields[4].GetFloat();
@@ -1771,7 +1771,7 @@ void SpellMgr::LoadSpellGroupStackRules()
         Field *fields = result->Fetch();
 
         uint32 group_id = fields[0].GetUInt32();
-        uint8 stack_rule = fields[1].GetUInt32();
+        int8 stack_rule = fields[1].GetInt8();
         if (stack_rule >= SPELL_GROUP_STACK_RULE_MAX)
         {
             sLog->outErrorDb("SpellGroupStackRule %u listed in `spell_group_stack_rules` does not exist", stack_rule);
@@ -1828,8 +1828,8 @@ void SpellMgr::LoadSpellProcEvents()
 
         SpellProcEventEntry spe;
 
-        spe.schoolMask      = fields[1].GetUInt32();
-        spe.spellFamilyName = fields[2].GetUInt32();
+        spe.schoolMask      = fields[1].GetInt8();
+        spe.spellFamilyName = fields[2].GetUInt16();
         spe.spellFamilyMask[0] = fields[3].GetUInt32();
         spe.spellFamilyMask[1] = fields[4].GetUInt32();
         spe.spellFamilyMask[2] = fields[5].GetUInt32();
@@ -1908,8 +1908,8 @@ void SpellMgr::LoadSpellProcs()
 
         SpellProcEntry baseProcEntry;
 
-        baseProcEntry.schoolMask      = fields[1].GetUInt32();
-        baseProcEntry.spellFamilyName = fields[2].GetUInt32();
+        baseProcEntry.schoolMask      = fields[1].GetInt8();
+        baseProcEntry.spellFamilyName = fields[2].GetUInt16();
         baseProcEntry.spellFamilyMask[0] = fields[3].GetUInt32();
         baseProcEntry.spellFamilyMask[1] = fields[4].GetUInt32();
         baseProcEntry.spellFamilyMask[2] = fields[5].GetUInt32();
@@ -2279,7 +2279,7 @@ void SpellMgr::LoadSpellLinked()
 
         int32 trigger = fields[0].GetInt32();
         int32 effect =  fields[1].GetInt32();
-        int32 type =    fields[2].GetInt32();
+        int32 type =    fields[2].GetInt8();
 
         SpellInfo const* spellInfo = GetSpellInfo(abs(trigger));
         if (!spellInfo)

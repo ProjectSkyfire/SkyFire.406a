@@ -106,13 +106,13 @@ void LFGMgr::_SaveToDB(uint64 guid, uint32 db_guid)
     if (!IS_GROUP(guid))
         return;
 
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_LFG_DATA);
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DELETE_LFG_DATA);
 
     stmt->setUInt32(0, db_guid);
 
     CharacterDatabase.Execute(stmt);
 
-    stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_LFG_DATA);
+    stmt = CharacterDatabase.GetPreparedStatement(CHAR_INSERT_LFG_DATA);
     stmt->setUInt32(0, db_guid);
 
     stmt->setUInt32(1, GetDungeon(guid));
