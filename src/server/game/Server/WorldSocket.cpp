@@ -493,9 +493,9 @@ int WorldSocket::Update (void)
 
 int WorldSocket::handle_input_header (void)
 {
-    ACE_ASSERT(m_RecvWPct == NULL);
+    ACE_ASSERT (m_RecvWPct == NULL);
 
-    ACE_ASSERT(m_Header.length() == sizeof(ClientPktHeader));
+    ACE_ASSERT (m_Header.length() == sizeof(ClientPktHeader));
 
     m_Crypt.DecryptRecv ((uint8*) m_Header.rd_ptr(), sizeof(ClientPktHeader));
 
@@ -504,15 +504,10 @@ int WorldSocket::handle_input_header (void)
     EndianConvertReverse(header.size);
     EndianConvert(header.cmd);
 
-    if ((header.size < 4) || (header.size > 10240))
+    if ((header.size < 4) || (header.size > 0xFFFF) || (header.cmd  > 0xFFFF))
     {
-        Player *_player = m_Session ? m_Session->GetPlayer() : NULL;
-        sLog->outError ("WorldSocket::handle_input_header(): client (account: %u, char [GUID: %u, name: %s]) sent malformed packet (size: %d, cmd: %d)",
-            m_Session ? m_Session->GetAccountId() : 0,
-            _player ? _player->GetGUIDLow() : 0,
-            _player ? _player->GetName() : "<none>",
-            header.size, header.cmd);
-
+        Player* _player = m_Session ? m_Session->GetPlayer() : NULL;
+        sLog->outError("WorldSocket::handle_input_header(): client (account: %u, char [GUID: %u, name: %s]) sent malformed packet (size: %d, cmd: %d)", m_Session ?  m_Session->GetAccountId() : 0, _player ? _player->GetGUIDLow() : 0, _player ? _player->GetName() : "<none>", header.size, header.cmd);
         errno = EINVAL;
         return -1;
     }
@@ -561,22 +556,13 @@ int WorldSocket::handle_input_missing_data (void)
 {
     char buf [4096];
 
-    ACE_Data_Block db (sizeof (buf),
-                        ACE_Message_Block::MB_DATA,
-                        buf,
-                        0,
-                        0,
-                        ACE_Message_Block::DONT_DELETE,
-                        0);
+    ACE_Data_Block db (sizeof (buf), ACE_Message_Block::MB_DATA, buf, 0, 0, ACE_Message_Block::DONT_DELETE, 0);
 
-    ACE_Message_Block message_block(&db,
-                                    ACE_Message_Block::DONT_DELETE,
-                                    0);
+    ACE_Message_Block message_block(&db, ACE_Message_Block::DONT_DELETE, 0);
 
     const size_t recv_size = message_block.space();
 
-    const ssize_t n = peer().recv (message_block.wr_ptr(),
-                                          recv_size);
+    const ssize_t n = peer().recv (message_block.wr_ptr(), recv_size);
 
     if (n <= 0)
         return n;
