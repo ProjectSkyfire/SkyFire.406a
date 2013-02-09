@@ -542,7 +542,7 @@ void WorldSession::HandleAddFriendOpcode(WorldPacket& recvData)
 
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: %s asked to add friend : '%s'", GetPlayer()->GetName(), friendName.c_str());
 
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_GUID_RACE_ACC_BY_NAME);
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SELECT_GUID_RACE_ACC_BY_NAME);
 
     stmt->setString(0, friendName);
 
@@ -633,7 +633,7 @@ void WorldSession::HandleAddIgnoreOpcode(WorldPacket& recvData)
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: %s asked to Ignore: '%s'",
         GetPlayer()->GetName(), ignoreName.c_str());
 
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_GUID_BY_NAME);
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SELECT_GUID_BY_NAME);
 
     stmt->setString(0, ignoreName);
 
@@ -718,7 +718,7 @@ void WorldSession::HandleBugOpcode(WorldPacket& recvData)
     sLog->outDebug(LOG_FILTER_NETWORKIO, "%s", type.c_str());
     sLog->outDebug(LOG_FILTER_NETWORKIO, "%s", content.c_str());
 
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_BUG_REPORT);
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_INSERT_BUG_REPORT);
 
     stmt->setString(0, type);
     stmt->setString(1, content);

@@ -189,11 +189,11 @@ void GameEventMgr::StopEvent(uint16 event_id, bool overwrite)
                 itr->second.done = 0;
 
             SQLTransaction trans = CharacterDatabase.BeginTransaction();
-            PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_ALL_GAME_EVENT_CONDITION_SAVE);
+            PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DELETE_ALL_GAME_EVENT_CONDITION_SAVE);
             stmt->setUInt8(0, uint8(event_id));
             trans->Append(stmt);
 
-            stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_GAME_EVENT_SAVE);
+            stmt = CharacterDatabase.GetPreparedStatement(CHAR_DELETE_GAME_EVENT_SAVE);
             stmt->setUInt8(0, uint8(event_id));
             trans->Append(stmt);
 
@@ -1586,12 +1586,12 @@ void GameEventMgr::HandleQuestComplete(uint32 quest_id)
                 // save the change to db
                 SQLTransaction trans = CharacterDatabase.BeginTransaction();
 
-                PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_GAME_EVENT_CONDITION_SAVE);
+                PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DELETE_GAME_EVENT_CONDITION_SAVE);
                 stmt->setUInt8(0, uint8(event_id));
                 stmt->setUInt32(1, condition);
                 trans->Append(stmt);
 
-                stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_GAME_EVENT_CONDITION_SAVE);
+                stmt = CharacterDatabase.GetPreparedStatement(CHAR_INSERT_GAME_EVENT_CONDITION_SAVE);
                 stmt->setUInt8(0, uint8(event_id));
                 stmt->setUInt32(1, condition);
                 stmt->setFloat(2, citr->second.done);
@@ -1631,11 +1631,11 @@ void GameEventMgr::SaveWorldEventStateToDB(uint16 event_id)
 {
     SQLTransaction trans = CharacterDatabase.BeginTransaction();
 
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_GAME_EVENT_SAVE);
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DELETE_GAME_EVENT_SAVE);
     stmt->setUInt8(0, uint8(event_id));
     trans->Append(stmt);
 
-    stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_GAME_EVENT_SAVE);
+    stmt = CharacterDatabase.GetPreparedStatement(CHAR_INSERT_GAME_EVENT_SAVE);
     stmt->setUInt8(0, uint8(event_id));
     stmt->setUInt8(1, mGameEvent[event_id].state);
     stmt->setUInt32(2, mGameEvent[event_id].nextstart ? uint32(mGameEvent[event_id].nextstart) : 0);

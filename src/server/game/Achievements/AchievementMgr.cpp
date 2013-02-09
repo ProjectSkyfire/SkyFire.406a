@@ -233,7 +233,7 @@ void AchievementMgr::LoadFromDB(PreparedQueryResult achievementResult, PreparedQ
                 // we will remove not existed criteria for all characters
                 sLog->outError("Non-existing achievement criteria %u data removed from table `character_achievement_progress`.", id);
 
-                PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_INVALID_ACHIEV_PROGRESS_CRITERIA);
+                PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DELETE_INVALID_ACHIEV_PROGRESS_CRITERIA);
 
                 stmt->setUInt16(0, uint16(id));
 
@@ -779,7 +779,7 @@ void AchievementGlobalMgr::LoadCompletedAchievements()
             // Remove non existent achievements from all characters
             sLog->outError("Non-existing achievement %u data removed from table `character_achievement`.", achievementId);
 
-            PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_INVALID_ACHIEVMENT);
+            PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DELETE_INVALID_ACHIEVMENT);
 
             stmt->setUInt16(0, uint16(achievementId));
 

@@ -62,7 +62,7 @@ AccountOpResult DeleteAccount(uint32 accountId)
         return AOR_NAME_DOES_NOT_EXIST;                    // account doesn't exist
 
     // Obtain accounts characters
-    stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_CHARS_BY_ACCOUNT_ID);
+    stmt = CharacterDatabase.GetPreparedStatement(CHAR_SELECT_CHARS_BY_ACCOUNT_ID);
 
     stmt->setUInt32(0, accountId);
 
@@ -88,10 +88,10 @@ AccountOpResult DeleteAccount(uint32 accountId)
     }
 
     // table realm specific but common for all characters of account for realm
-    stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_TUTORIALS);
+    stmt = CharacterDatabase.GetPreparedStatement(CHAR_DELETE_TUTORIALS);
     stmt->setUInt32(0, accountId);
     CharacterDatabase.Execute(stmt);
-    stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_ACCOUNT_DATA);
+    stmt = CharacterDatabase.GetPreparedStatement(CHAR_DELETE_ACCOUNT_DATA);
     stmt->setUInt32(0, accountId);
     CharacterDatabase.Execute(stmt);
 
@@ -223,7 +223,7 @@ bool CheckPassword(uint32 accountId, std::string password)
 uint32 GetCharactersCount(uint32 accountId)
 {
     // check character count
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_SUM_CHARS);
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SELECT_SUM_CHARS);
     stmt->setUInt32(0, accountId);
     PreparedQueryResult result = CharacterDatabase.Query(stmt);
     

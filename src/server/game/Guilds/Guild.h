@@ -843,7 +843,7 @@ private:
     }
     inline void _DeleteMemberFromDB(uint32 lowguid) const
     {
-        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_GUILD_MEMBER);
+        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DELETE_GUILD_MEMBER);
         stmt->setUInt32(0, lowguid);
         CharacterDatabase.Execute(stmt);
     }

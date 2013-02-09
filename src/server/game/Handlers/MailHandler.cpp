@@ -130,7 +130,7 @@ void WorldSession::HandleSendMail(WorldPacket& recvData)
     {
         rc_team = sObjectMgr->GetPlayerTeamByGUID(rc);
 
-        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_MAIL_COUNT);
+        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SELECT_MAIL_COUNT);
 
         stmt->setUInt32(0, GUID_LOPART(rc));
 
@@ -142,7 +142,7 @@ void WorldSession::HandleSendMail(WorldPacket& recvData)
             mails_count = fields[0].GetUInt32();
         }
 
-        stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_CHAR_LEVEL);
+        stmt = CharacterDatabase.GetPreparedStatement(CHAR_SELECT_CHAR_LEVEL);
 
         stmt->setUInt32(0, GUID_LOPART(rc));
 
