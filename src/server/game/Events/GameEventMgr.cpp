@@ -233,8 +233,8 @@ void GameEventMgr::LoadFromDB()
             pGameEvent.start        = time_t(starttime);
             uint64 endtime          = fields[2].GetUInt64();
             pGameEvent.end          = time_t(endtime);
-            pGameEvent.occurence    = fields[3].GetUInt32();
-            pGameEvent.length       = fields[4].GetUInt32();
+            pGameEvent.occurence    = fields[3].GetUInt64();
+            pGameEvent.length       = fields[4].GetUInt64();
             pGameEvent.holiday_id   = HolidayIds(fields[5].GetUInt32());
 
             pGameEvent.state        = (GameEventState)(fields[7].GetUInt8());
@@ -526,7 +526,7 @@ void GameEventMgr::LoadFromDB()
 
                 uint32 id       = fields[0].GetUInt32();
                 uint32 quest    = fields[1].GetUInt32();
-                uint16 event_id = fields[2].GetUInt16();
+                int16 event_id = fields[2].GetInt16();
 
                 if (event_id >= mGameEventCreatureQuests.size())
                 {
@@ -740,7 +740,7 @@ void GameEventMgr::LoadFromDB()
                 Field* fields = result->Fetch();
 
                 uint32 guid     = fields[0].GetUInt32();
-                uint16 event_id = fields[1].GetUInt16();
+                uint16 event_id = fields[1].GetInt32();
                 uint32 npcflag  = fields[2].GetUInt32();
 
                 if (event_id >= mGameEvent.size())
@@ -823,7 +823,7 @@ void GameEventMgr::LoadFromDB()
             {
                 Field* fields = result->Fetch();
 
-                uint16 event_id  = fields[0].GetUInt16();
+                uint16 event_id  = fields[0].GetInt32();
 
                 if (event_id >= mGameEventVendors.size())
                 {
@@ -1020,7 +1020,7 @@ void GameEventMgr::StartArenaSeason()
     }
 
     Field* fields = result->Fetch();
-    uint16 eventId = fields[0].GetUInt16();
+    uint16 eventId = fields[0].GetUInt8();
 
     if (eventId >= mGameEvent.size())
     {

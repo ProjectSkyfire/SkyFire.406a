@@ -257,7 +257,7 @@ void WorldSession::HandleCharEnumOpcode(WorldPacket & /*recvData*/)
     if (sWorld->getBoolConfig(CONFIG_DECLINED_NAMES_USED))
     {
         stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_ENUM_DECLINED_NAME);
-        stmt->setUInt32(0, PET_SLOT_DEFAULT);
+        stmt->setUInt8(0, PET_SLOT_DEFAULT);
         stmt->setUInt32(1, GetAccountId());
     }
     else

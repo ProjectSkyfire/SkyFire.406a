@@ -77,7 +77,7 @@ void WaypointMgr::Load()
         wp->run = fields[5].GetBool();
         wp->delay = fields[6].GetUInt32();
         wp->event_id = fields[7].GetUInt32();
-        wp->event_chance = fields[8].GetUInt8();
+        wp->event_chance = fields[8].GetUInt16();
 
         path.push_back(wp);
         ++count;

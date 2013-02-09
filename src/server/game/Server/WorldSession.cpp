@@ -735,22 +735,14 @@ void WorldSession::SendAccountDataTimes(uint32 mask)
 
 void WorldSession::LoadTutorialsData()
 {
-    for (int aX = 0; aX < MAX_ACCOUNT_TUTORIAL_VALUES; ++aX)
-        m_Tutorials[ aX ] = 0;
+    memset(m_Tutorials, 0, sizeof(uint32) * MAX_ACCOUNT_TUTORIAL_VALUES);
 
-    QueryResult result = CharacterDatabase.PQuery("SELECT tut0, tut1, tut2, tut3, tut4, tut5, tut6, tut7 FROM account_tutorial WHERE accountid = '%u'", GetAccountId());
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_TUTORIALS);
+    stmt->setUInt32(0, GetAccountId());
+    if (PreparedQueryResult result = CharacterDatabase.Query(stmt))
+        for (uint8 i = 0; i < MAX_ACCOUNT_TUTORIAL_VALUES; ++i)
+            m_Tutorials[i] = (*result)[i].GetUInt32();
 
-    if (result)
-    {
-        do
-        {
-            Field *fields = result->Fetch();
-
-            for (int iI = 0; iI < MAX_ACCOUNT_TUTORIAL_VALUES; ++iI)
-                m_Tutorials[iI] = fields[iI].GetUInt32();
-        }
-        while (result->NextRow());
-    }
     m_TutorialsChanged = false;
 }
 
@@ -764,20 +756,19 @@ void WorldSession::SendTutorialsData()
 
 void WorldSession::SaveTutorialsData(SQLTransaction &trans)
 {
+    
     if (!m_TutorialsChanged)
         return;
 
-    uint32 Rows=0;
-    // it's better than rebuilding indexes multiple times
-    QueryResult result = CharacterDatabase.PQuery("SELECT count(*) AS r FROM account_tutorial WHERE accountid = '%u'", GetAccountId());
-    if (result)
-        Rows = result->Fetch()[0].GetUInt32();
-
-    if (Rows)
-        trans->PAppend("UPDATE account_tutorial SET tut0='%u', tut1='%u', tut2='%u', tut3='%u', tut4='%u', tut5='%u', tut6='%u', tut7='%u' WHERE accountid = '%u'",
-            m_Tutorials[0], m_Tutorials[1], m_Tutorials[2], m_Tutorials[3], m_Tutorials[4], m_Tutorials[5], m_Tutorials[6], m_Tutorials[7], GetAccountId());
-    else
-        trans->PAppend("INSERT INTO account_tutorial (accountid, tut0, tut1, tut2, tut3, tut4, tut5, tut6, tut7) VALUES ('%u', '%u', '%u', '%u', '%u', '%u', '%u', '%u', '%u')", GetAccountId(), m_Tutorials[0], m_Tutorials[1], m_Tutorials[2], m_Tutorials[3], m_Tutorials[4], m_Tutorials[5], m_Tutorials[6], m_Tutorials[7]);
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_HAS_TUTORIALS);
+    stmt->setUInt32(0, GetAccountId());
+    bool hasTutorials = !CharacterDatabase.Query(stmt).null();
+    // Modify data in DB
+    stmt = CharacterDatabase.GetPreparedStatement(hasTutorials ? CHAR_UPD_TUTORIALS : CHAR_INS_TUTORIALS);
+    for (uint8 i = 0; i < MAX_ACCOUNT_TUTORIAL_VALUES; ++i)
+        stmt->setUInt32(i, m_Tutorials[i]);
+    stmt->setUInt32(MAX_ACCOUNT_TUTORIAL_VALUES, GetAccountId());
+    trans->Append(stmt);
 
     m_TutorialsChanged = false;
 }

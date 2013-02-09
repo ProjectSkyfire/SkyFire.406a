@@ -113,7 +113,7 @@ void SystemMgr::LoadScriptTextsCustom()
         temp.SoundId        = fields[1].GetUInt32();
         temp.Type           = fields[2].GetUInt32();
         temp.Language       = fields[3].GetUInt32();
-        temp.Emote          = fields[4].GetUInt32();
+        temp.Emote          = fields[4].GetUInt16();
 
         if (iId >= 0)
         {

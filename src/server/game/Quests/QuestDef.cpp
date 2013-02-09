@@ -44,7 +44,7 @@ Quest::Quest(Field* questRecord)
     SuggestedPlayers            = questRecord[18].GetUInt32();
     LimitTime                   = questRecord[19].GetUInt32();
     QuestFlags                  = questRecord[20].GetUInt32();
-    uint32 SpecialFlags         = questRecord[21].GetUInt16();
+    uint32 SpecialFlags         = questRecord[21].GetUInt32();
     CharTitleId                 = questRecord[22].GetUInt32();
     PlayersSlain                = questRecord[23].GetUInt32();
     BonusTalents                = questRecord[24].GetUInt32();
@@ -161,7 +161,7 @@ Quest::Quest(Field* questRecord)
     QuestTurnInPortraitText    = questRecord[165].GetString();
     QuestTurnInPortraitUnk     = questRecord[166].GetString();
     QuestTargetMark            = questRecord[167].GetUInt32();
-    QuestStartType             = questRecord[168].GetUInt16();
+    QuestStartType             = questRecord[168].GetUInt32();
     SoundAccept                = questRecord[169].GetUInt32();
     SoundTurnIn                = questRecord[170].GetUInt32();
     RequiredSpell              = questRecord[171].GetUInt32();
