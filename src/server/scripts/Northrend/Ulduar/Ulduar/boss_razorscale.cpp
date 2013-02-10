@@ -653,7 +653,7 @@ class npc_expedition_commander : public CreatureScript
                                 Engineer[n]->SetHomePosition(PosEngRepair[n]);
                                 Engineer[n]->GetMotionMaster()->MoveTargetedHome();
                             }
-                            Engineer[0]->MonsterYell(SAY_AGGRO_3, LANG_UNIVERSAL, 0);
+                            Engineer[0]->MonsterYell(SAY_AGGRO_3, LANGUAGE_UNIVERSAL, 0);
                             Phase = 3;
                             AttackStartTimer = 14000;
                             break;
@@ -672,7 +672,7 @@ class npc_expedition_commander : public CreatureScript
                                 Engineer[n]->SetUInt32Value(UNIT_NPC_EMOTESTATE, EMOTE_STATE_USESTANDING);
                             for (uint8 n = 0; n < 4; ++n)
                                 Defender[n]->SetUInt32Value(UNIT_NPC_EMOTESTATE, EMOTE_STATE_READY2H);
-                            me->MonsterYell(SAY_AGGRO_2, LANG_UNIVERSAL, 0);
+                            me->MonsterYell(SAY_AGGRO_2, LANGUAGE_UNIVERSAL, 0);
                             AttackStartTimer = 16000;
                             Phase = 5;
                             break;
@@ -682,7 +682,7 @@ class npc_expedition_commander : public CreatureScript
                                 Razorscale->AI()->DoAction(ACTION_EVENT_START);
                                 me->SetInCombatWith(Razorscale);
                             }
-                            Engineer[0]->MonsterYell(SAY_AGGRO_1, LANG_UNIVERSAL, 0);
+                            Engineer[0]->MonsterYell(SAY_AGGRO_1, LANGUAGE_UNIVERSAL, 0);
                             Phase = 6;
                             break;
                     }

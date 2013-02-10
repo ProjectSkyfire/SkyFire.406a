@@ -61,7 +61,7 @@ class ChatHandler
 
         void FillSystemMessageData(WorldPacket* data, const char* message)
         {
-            FillMessageData(data, CHAT_MSG_SYSTEM, LANG_UNIVERSAL, 0, message);
+            FillMessageData(data, CHAT_MSG_SYSTEM, LANGUAGE_UNIVERSAL, 0, message);
         }
 
         static char* LineFromMessage(char*& pos) { char* start = strtok(pos, "\n"); pos = NULL; return start; }

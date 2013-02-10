@@ -80,7 +80,7 @@ void WorldSession::HandleSendMail(WorldPacket& recvData)
 
     if (player->getLevel() < sWorld->getIntConfig(CONFIG_MAIL_LEVEL_REQ))
     {
-        SendNotification(GetSkyFireString(LANG_MAIL_SENDER_REQ), sWorld->getIntConfig(CONFIG_MAIL_LEVEL_REQ));
+        SendNotification(GetSkyFireString(LANGUAGE_MAIL_SENDER_REQ), sWorld->getIntConfig(CONFIG_MAIL_LEVEL_REQ));
         return;
     }
 
@@ -130,7 +130,7 @@ void WorldSession::HandleSendMail(WorldPacket& recvData)
     {
         rc_team = sObjectMgr->GetPlayerTeamByGUID(rc);
 
-        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_MAIL_COUNT);
+        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_SELECT_MAIL_COUNT);
 
         stmt->setUInt32(0, GUID_LOPART(rc));
 
@@ -142,7 +142,7 @@ void WorldSession::HandleSendMail(WorldPacket& recvData)
             mails_count = fields[0].GetUInt32();
         }
 
-        stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_CHAR_LEVEL);
+        stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_SELECT_CHARACTER_LEVEL);
 
         stmt->setUInt32(0, GUID_LOPART(rc));
 
@@ -184,7 +184,7 @@ void WorldSession::HandleSendMail(WorldPacket& recvData)
 
     if (receiveLevel < sWorld->getIntConfig(CONFIG_MAIL_LEVEL_REQ))
     {
-        SendNotification(GetSkyFireString(LANG_MAIL_RECEIVER_REQ), sWorld->getIntConfig(CONFIG_MAIL_LEVEL_REQ));
+        SendNotification(GetSkyFireString(LANGUAGE_MAIL_RECEIVER_REQ), sWorld->getIntConfig(CONFIG_MAIL_LEVEL_REQ));
         return;
     }
 
@@ -471,7 +471,7 @@ void WorldSession::HandleMailTakeItem(WorldPacket& recvData)
                     sender_accId = sObjectMgr->GetPlayerAccountIdByGUID(sender_guid);
 
                     if (!sObjectMgr->GetPlayerNameByGUID(sender_guid, sender_name))
-                        sender_name = sObjectMgr->GetSkyFireStringForDBCLocale(LANG_UNKNOWN);
+                        sender_name = sObjectMgr->GetSkyFireStringForDBCLocale(LANGUAGE_UNKNOWN);
                 }
                 sLog->outCommand(GetAccountId(), "GM %s (Account: %u) receive mail item: %s (Entry: %u Count: %u) and send COD money: %u to player: %s (Account: %u)",
                     GetPlayerName(), GetAccountId(), it->GetTemplate()->Name1.c_str(), it->GetEntry(), it->GetCount(), m->COD, sender_name.c_str(), sender_accId);

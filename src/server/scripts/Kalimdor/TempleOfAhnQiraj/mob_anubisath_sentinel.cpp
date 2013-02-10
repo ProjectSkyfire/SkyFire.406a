@@ -201,7 +201,7 @@ public:
                 CAST_AI(aqsentinelAI, pNearby->AI())->selectAbility(pickAbilityRandom(chosenAbilities));
             }
             /*if (bli < 3)
-                DoYell("I dont have enough buddies.", LANG_NEUTRAL, 0);*/
+                DoYell("I dont have enough buddies.", LANGUAGE_NEUTRAL, 0);*/
             SendMyListToBuddies();
             CallBuddiesToAttack(who);
 

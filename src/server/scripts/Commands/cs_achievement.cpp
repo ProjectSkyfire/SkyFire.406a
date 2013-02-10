@@ -63,7 +63,7 @@ public:
         Player* target = handler->getSelectedPlayer();
         if (!target)
         {
-            handler->SendSysMessage(LANG_NO_CHAR_SELECTED);
+            handler->SendSysMessage(LANGUAGE_NO_CHARACTER_SELECTED);
             handler->SetSentErrorMessage(true);
             return false;
         }

@@ -749,7 +749,7 @@ CREATE TABLE `characters` (
   `position_x` float NOT NULL DEFAULT '0',
   `position_y` float NOT NULL DEFAULT '0',
   `position_z` float NOT NULL DEFAULT '0',
-  `map` int(10) DEFAULT NULL,
+  `map` smallint(5) NULL DEFAULT NULL,
   `instance_id` int(10) unsigned NOT NULL DEFAULT '0',
   `instance_mode_mask` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `orientation` float NOT NULL DEFAULT '0',
@@ -770,7 +770,7 @@ CREATE TABLE `characters` (
   `transguid` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `extra_flags` smallint(5) unsigned NOT NULL DEFAULT '0',
   `at_login` smallint(5) unsigned NOT NULL DEFAULT '0',
-  `zone` int(10) DEFAULT NULL,
+  `zone` smallint(5) NULL DEFAULT NULL,
   `death_expire_time` int(10) unsigned NOT NULL DEFAULT '0',
   `taxi_path` text,
   `conquestPoints` int(10) unsigned NOT NULL DEFAULT '0',
@@ -780,7 +780,7 @@ CREATE TABLE `characters` (
   `yesterdayKills` smallint(5) unsigned NOT NULL DEFAULT '0',
   `chosenTitle` int(10) unsigned NOT NULL DEFAULT '0',
   `watchedFaction` int(10) unsigned NOT NULL DEFAULT '0',
-  `drunk` smallint(5) unsigned NOT NULL DEFAULT '0',
+  `drunk` tinyint(3) UNSIGNED NOT NULL DEFAULT '0',
   `health` int(10) unsigned NOT NULL DEFAULT '0',
   `power1` int(10) unsigned NOT NULL DEFAULT '0',
   `power2` int(10) unsigned NOT NULL DEFAULT '0',
@@ -1236,20 +1236,7 @@ LOCK TABLES `instance` WRITE;
 /*!40000 ALTER TABLE `instance` DISABLE KEYS */;
 /*!40000 ALTER TABLE `instance` ENABLE KEYS */;
 UNLOCK TABLES;
-DROP TABLE IF EXISTS `instance_encounters`;
-CREATE TABLE `instance_encounters` (
-  `entry` int(10) unsigned NOT NULL COMMENT 'Unique entry from DungeonEncounter.dbc',
-  `creditType` tinyint(3) unsigned NOT NULL DEFAULT '0',
-  `creditEntry` int(10) unsigned NOT NULL DEFAULT '0',
-  `lastEncounterDungeon` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT 'If not 0, LfgDungeon.dbc entry for the instance it is last encounter in',
-  `comment` varchar(255) NOT NULL DEFAULT '',
-  PRIMARY KEY (`entry`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-LOCK TABLES `instance_encounters` WRITE;
-/*!40000 ALTER TABLE `instance_encounters` DISABLE KEYS */;
-/*!40000 ALTER TABLE `instance_encounters` ENABLE KEYS */;
-UNLOCK TABLES;
 DROP TABLE IF EXISTS `instance_reset`;
 CREATE TABLE `instance_reset` (
   `mapid` smallint(5) unsigned NOT NULL DEFAULT '0',

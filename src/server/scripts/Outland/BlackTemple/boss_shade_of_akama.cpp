@@ -848,7 +848,7 @@ public:
                         {
                             for (std::list<uint64>::const_iterator itr = BrokenList.begin(); itr != BrokenList.end(); ++itr)
                                 if (Creature* unit = Unit::GetCreature((*me), *itr))
-                                    unit->MonsterYell(SAY_BROKEN_FREE_02, LANG_UNIVERSAL, 0);
+                                    unit->MonsterYell(SAY_BROKEN_FREE_02, LANGUAGE_UNIVERSAL, 0);
                         }
                         SoulRetrieveTimer = 0;
                         break;

@@ -151,7 +151,7 @@ public:
         void JustDied(Unit* killer)
         {
             if (killer)
-                me->MonsterSay(SAY_DEATH,LANG_UNIVERSAL, NULL);
+                me->MonsterSay(SAY_DEATH,LANGUAGE_UNIVERSAL, NULL);
             DespawnSummons();
         }
 
@@ -184,7 +184,7 @@ public:
             {
                 me->SetOrientation(0.166467f);
                 phase = PHASE_FILTHY_INVADERS_2;
-                me->MonsterSay(SAY_1, LANG_UNIVERSAL, NULL);
+                me->MonsterSay(SAY_1, LANGUAGE_UNIVERSAL, NULL);
             }
 
             if (summonMurlocTimer <= diff)
@@ -207,7 +207,7 @@ public:
 
                 if (sumMindlasher.size() >= 3 && !slasherphased)
                 {
-                    me->MonsterYell(SAY_2, LANG_UNIVERSAL, NULL);
+                    me->MonsterYell(SAY_2, LANGUAGE_UNIVERSAL, NULL);
                     phase = PHASE_NULL;
                     slasherphased = true;
                 }
@@ -233,7 +233,7 @@ public:
             if (phase2_timer <= diff && phase != PHASE_BEAST_RETURN)
             {
                 phase = PHASE_BEAST_RETURN;
-                me->MonsterYell(SAY_3, LANG_UNIVERSAL, NULL);
+                me->MonsterYell(SAY_3, LANGUAGE_UNIVERSAL, NULL);
             } else phase2_timer -= diff;
 
             if (phase == PHASE_BEAST_RETURN)
@@ -256,7 +256,7 @@ public:
                     Ozumat->setFaction(14);
                     if (instance)
                         instance->DoCastSpellOnPlayers(76133);
-                    me->MonsterYell(SAY_CLEANSED,LANG_UNIVERSAL, NULL);
+                    me->MonsterYell(SAY_CLEANSED,LANGUAGE_UNIVERSAL, NULL);
                     flagged = true;
                 }
             }

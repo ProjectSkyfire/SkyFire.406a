@@ -273,8 +273,8 @@ public:
             {
                 if (Creature* eng_chief1 = creature->FindNearestCreature(42671, 6.0f, true)) // Find the chief engineer
                 {
-                    eng_chief1->MonsterSay(FIRST_ENGINEER_SAY_1, LANG_UNIVERSAL, NULL);
-                    eng_chief1->MonsterSay(FIRST_ENGINEER_SAY_2, LANG_UNIVERSAL, NULL);
+                    eng_chief1->MonsterSay(FIRST_ENGINEER_SAY_1, LANGUAGE_UNIVERSAL, NULL);
+                    eng_chief1->MonsterSay(FIRST_ENGINEER_SAY_2, LANGUAGE_UNIVERSAL, NULL);
                     CAST_AI(npc_hellscream_demolisher::npc_hellscream_demolisherAI, creature->AI())->demolisher_N = 2;
                 }
             }
@@ -282,8 +282,8 @@ public:
             {
                 if (Creature* eng_chief2 = creature->FindNearestCreature(42671, 6.0f, true)) // Find the chief engineer
                 {
-                    eng_chief2->MonsterSay(SECOND_ENGINEER_SAY_1, LANG_UNIVERSAL, NULL);
-                    eng_chief2->MonsterSay(SECOND_ENGINEER_SAY_2, LANG_UNIVERSAL, NULL);
+                    eng_chief2->MonsterSay(SECOND_ENGINEER_SAY_1, LANGUAGE_UNIVERSAL, NULL);
+                    eng_chief2->MonsterSay(SECOND_ENGINEER_SAY_2, LANGUAGE_UNIVERSAL, NULL);
                     CAST_AI(npc_hellscream_demolisher::npc_hellscream_demolisherAI, creature->AI())->demolisher_N = 3;
                 }
             }
@@ -291,10 +291,10 @@ public:
             {
                 if (Creature* eng_chief3 = creature->FindNearestCreature(42671, 6.0f, true)) // Find the chief engineer
                 {
-                    eng_chief3->MonsterSay(THIRD_ENGINEER_SAY_1, LANG_UNIVERSAL, NULL);
+                    eng_chief3->MonsterSay(THIRD_ENGINEER_SAY_1, LANGUAGE_UNIVERSAL, NULL);
                     creature->MonsterTextEmote(DEMOLISHER_FALL, 0);
-                    eng_chief3->MonsterSay(THIRD_ENGINEER_SAY_2, LANG_UNIVERSAL, NULL);
-                    eng_chief3->MonsterSay(THIRD_ENGINEER_SAY_3, LANG_UNIVERSAL, NULL);
+                    eng_chief3->MonsterSay(THIRD_ENGINEER_SAY_2, LANGUAGE_UNIVERSAL, NULL);
+                    eng_chief3->MonsterSay(THIRD_ENGINEER_SAY_3, LANGUAGE_UNIVERSAL, NULL);
                     creature->MonsterTextEmote(WORKERS_REPAIR, 0);
                     player->CompleteQuest(26294);
                     CAST_AI(npc_hellscream_demolisher::npc_hellscream_demolisherAI, creature->AI())->demolisher_N = 1;
@@ -351,7 +351,7 @@ public:
         {
         case GOSSIP_ACTION_INFO_DEF+1:
             {
-                creature->MonsterSay(SAY_OK, LANG_UNIVERSAL, NULL);
+                creature->MonsterSay(SAY_OK, LANGUAGE_UNIVERSAL, NULL);
                 CAST_AI(npc_herezegor::npc_herezegorAI, creature->AI())->Start = true;
                 CAST_AI(npc_herezegor::npc_herezegorAI, creature->AI())->plrGUID = player->GetGUID();
                 break;
@@ -414,10 +414,10 @@ public:
             {
                 if (!summonsay)
                 {
-                    summoned->MonsterSay(SUMMON_SAY, LANG_UNIVERSAL, NULL);
+                    summoned->MonsterSay(SUMMON_SAY, LANGUAGE_UNIVERSAL, NULL);
 
                     if (Creature* gravy = me->FindNearestCreature(42709, 80.0f, true)) // Find Gravy
-                        gravy->MonsterSay(INK_SAY, LANG_UNIVERSAL, NULL);
+                        gravy->MonsterSay(INK_SAY, LANGUAGE_UNIVERSAL, NULL);
 
                     summonsay = true;
                 }
@@ -457,21 +457,21 @@ public:
                 {
                     case 1:
                     {
-                        me->MonsterSay(SAY_BATTLE_1, LANG_UNIVERSAL, 0);
+                        me->MonsterSay(SAY_BATTLE_1, LANGUAGE_UNIVERSAL, 0);
                         say_phase = 2;
                         TalkTimer = 3000;
                         break;
                     }
                     case 2:
                     {
-                        me->MonsterSay(SAY_BATTLE_2, LANG_UNIVERSAL, 0);
+                        me->MonsterSay(SAY_BATTLE_2, LANGUAGE_UNIVERSAL, 0);
                         say_phase = 0;
                         TalkTimer = 3000;
                         break;
                     }
                     case 3:
                     {
-                        me->MonsterSay(SAY_BATTLE_3, LANG_UNIVERSAL, 0);
+                        me->MonsterSay(SAY_BATTLE_3, LANGUAGE_UNIVERSAL, 0);
                         say_phase = 0;
                         break;
                     }

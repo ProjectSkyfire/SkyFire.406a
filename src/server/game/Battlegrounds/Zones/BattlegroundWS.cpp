@@ -55,10 +55,10 @@ BattlegroundWS::BattlegroundWS()
     BgObjects.resize(BG_WS_OBJECT_MAX);
     BgCreatures.resize(BG_CREATURES_MAX_WS);
 
-    StartMessageIds[BG_STARTING_EVENT_FIRST]  = LANG_BG_WS_START_TWO_MINUTES;
-    StartMessageIds[BG_STARTING_EVENT_SECOND] = LANG_BG_WS_START_ONE_MINUTE;
-    StartMessageIds[BG_STARTING_EVENT_THIRD]  = LANG_BG_WS_START_HALF_MINUTE;
-    StartMessageIds[BG_STARTING_EVENT_FOURTH] = LANG_BG_WS_HAS_BEGUN;
+    StartMessageIds[BG_STARTING_EVENT_FIRST]  = LANGUAGE_BG_WS_START_TWO_MINUTES;
+    StartMessageIds[BG_STARTING_EVENT_SECOND] = LANGUAGE_BG_WS_START_ONE_MINUTE;
+    StartMessageIds[BG_STARTING_EVENT_THIRD]  = LANGUAGE_BG_WS_START_HALF_MINUTE;
+    StartMessageIds[BG_STARTING_EVENT_FOURTH] = LANGUAGE_BG_WS_HAS_BEGUN;
     _flagDebuffState = 0;
 }
 
@@ -241,7 +241,7 @@ void BattlegroundWS::RespawnFlag(uint32 Team, bool captured)
         //when map_update will be allowed for battlegrounds this code will be useless
         SpawnBGObject(BG_WS_OBJECT_H_FLAG, RESPAWN_IMMEDIATELY);
         SpawnBGObject(BG_WS_OBJECT_A_FLAG, RESPAWN_IMMEDIATELY);
-        SendMessageToAll(LANG_BG_WS_F_PLACED, CHAT_MSG_BG_SYSTEM_NEUTRAL);
+        SendMessageToAll(LANGUAGE_BG_WS_F_PLACED, CHAT_MSG_BG_SYSTEM_NEUTRAL);
         PlaySoundToAll(BG_WS_SOUND_FLAGS_RESPAWNED);        // flag respawned sound...
     }
     _bothFlagsKept = false;
@@ -256,12 +256,12 @@ void BattlegroundWS::RespawnFlagAfterDrop(uint32 team)
     if (team == ALLIANCE)
     {
         SpawnBGObject(BG_WS_OBJECT_A_FLAG, RESPAWN_IMMEDIATELY);
-        SendMessageToAll(LANG_BG_WS_ALLIANCE_FLAG_RESPAWNED, CHAT_MSG_BG_SYSTEM_NEUTRAL);
+        SendMessageToAll(LANGUAGE_BG_WS_ALLIANCE_FLAG_RESPAWNED, CHAT_MSG_BG_SYSTEM_NEUTRAL);
     }
     else
     {
         SpawnBGObject(BG_WS_OBJECT_H_FLAG, RESPAWN_IMMEDIATELY);
-        SendMessageToAll(LANG_BG_WS_HORDE_FLAG_RESPAWNED, CHAT_MSG_BG_SYSTEM_NEUTRAL);
+        SendMessageToAll(LANGUAGE_BG_WS_HORDE_FLAG_RESPAWNED, CHAT_MSG_BG_SYSTEM_NEUTRAL);
     }
 
     PlaySoundToAll(BG_WS_SOUND_FLAGS_RESPAWNED);
@@ -326,9 +326,9 @@ void BattlegroundWS::EventPlayerCapturedFlag(Player* Source)
     SpawnBGObject(BG_WS_OBJECT_A_FLAG, BG_WS_FLAG_RESPAWN_TIME);
 
     if (Source->GetTeam() == ALLIANCE)
-        SendMessageToAll(LANG_BG_WS_CAPTURED_HF, CHAT_MSG_BG_SYSTEM_ALLIANCE, Source);
+        SendMessageToAll(LANGUAGE_BG_WS_CAPTURED_HF, CHAT_MSG_BG_SYSTEM_ALLIANCE, Source);
     else
-        SendMessageToAll(LANG_BG_WS_CAPTURED_AF, CHAT_MSG_BG_SYSTEM_HORDE, Source);
+        SendMessageToAll(LANGUAGE_BG_WS_CAPTURED_AF, CHAT_MSG_BG_SYSTEM_HORDE, Source);
 
     UpdateFlagState(Source->GetTeam(), 1);                  // flag state none
     UpdateTeamScore(Source->GetTeam());
@@ -434,12 +434,12 @@ void BattlegroundWS::EventPlayerDroppedFlag(Player* Source)
 
         if (Source->GetTeam() == ALLIANCE)
         {
-            SendMessageToAll(LANG_BG_WS_DROPPED_HF, CHAT_MSG_BG_SYSTEM_HORDE, Source);
+            SendMessageToAll(LANGUAGE_BG_WS_DROPPED_HF, CHAT_MSG_BG_SYSTEM_HORDE, Source);
             UpdateWorldState(BG_WS_FLAG_UNK_HORDE, uint32(-1));
         }
         else
         {
-            SendMessageToAll(LANG_BG_WS_DROPPED_AF, CHAT_MSG_BG_SYSTEM_ALLIANCE, Source);
+            SendMessageToAll(LANGUAGE_BG_WS_DROPPED_AF, CHAT_MSG_BG_SYSTEM_ALLIANCE, Source);
             UpdateWorldState(BG_WS_FLAG_UNK_ALLIANCE, uint32(-1));
         }
 
@@ -459,7 +459,7 @@ void BattlegroundWS::EventPlayerClickedOnFlag(Player* Source, GameObject* target
     if (Source->GetTeam() == HORDE && GetFlagState(ALLIANCE) == BG_WS_FLAG_STATE_ON_BASE
         && BgObjects[BG_WS_OBJECT_A_FLAG] == target_obj->GetGUID())
     {
-        message_id = LANG_BG_WS_PICKEDUP_AF;
+        message_id = LANGUAGE_BG_WS_PICKEDUP_AF;
         type = CHAT_MSG_BG_SYSTEM_HORDE;
         PlaySoundToAll(BG_WS_SOUND_ALLIANCE_FLAG_PICKED_UP);
         SpawnBGObject(BG_WS_OBJECT_A_FLAG, RESPAWN_ONE_DAY);
@@ -478,7 +478,7 @@ void BattlegroundWS::EventPlayerClickedOnFlag(Player* Source, GameObject* target
     if (Source->GetTeam() == ALLIANCE && GetFlagState(HORDE) == BG_WS_FLAG_STATE_ON_BASE
         && BgObjects[BG_WS_OBJECT_H_FLAG] == target_obj->GetGUID())
     {
-        message_id = LANG_BG_WS_PICKEDUP_HF;
+        message_id = LANGUAGE_BG_WS_PICKEDUP_HF;
         type = CHAT_MSG_BG_SYSTEM_ALLIANCE;
         PlaySoundToAll(BG_WS_SOUND_HORDE_FLAG_PICKED_UP);
         SpawnBGObject(BG_WS_OBJECT_H_FLAG, RESPAWN_ONE_DAY);
@@ -498,7 +498,7 @@ void BattlegroundWS::EventPlayerClickedOnFlag(Player* Source, GameObject* target
     {
         if (Source->GetTeam() == ALLIANCE)
         {
-            message_id = LANG_BG_WS_RETURNED_AF;
+            message_id = LANGUAGE_BG_WS_RETURNED_AF;
             type = CHAT_MSG_BG_SYSTEM_ALLIANCE;
             UpdateFlagState(HORDE, BG_WS_FLAG_STATE_WAIT_RESPAWN);
             RespawnFlag(ALLIANCE, false);
@@ -509,7 +509,7 @@ void BattlegroundWS::EventPlayerClickedOnFlag(Player* Source, GameObject* target
         }
         else
         {
-            message_id = LANG_BG_WS_PICKEDUP_AF;
+            message_id = LANGUAGE_BG_WS_PICKEDUP_AF;
             type = CHAT_MSG_BG_SYSTEM_HORDE;
             PlaySoundToAll(BG_WS_SOUND_ALLIANCE_FLAG_PICKED_UP);
             SpawnBGObject(BG_WS_OBJECT_A_FLAG, RESPAWN_ONE_DAY);
@@ -532,7 +532,7 @@ void BattlegroundWS::EventPlayerClickedOnFlag(Player* Source, GameObject* target
     {
         if (Source->GetTeam() == HORDE)
         {
-            message_id = LANG_BG_WS_RETURNED_HF;
+            message_id = LANGUAGE_BG_WS_RETURNED_HF;
             type = CHAT_MSG_BG_SYSTEM_HORDE;
             UpdateFlagState(ALLIANCE, BG_WS_FLAG_STATE_WAIT_RESPAWN);
             RespawnFlag(HORDE, false);
@@ -543,7 +543,7 @@ void BattlegroundWS::EventPlayerClickedOnFlag(Player* Source, GameObject* target
         }
         else
         {
-            message_id = LANG_BG_WS_PICKEDUP_HF;
+            message_id = LANGUAGE_BG_WS_PICKEDUP_HF;
             type = CHAT_MSG_BG_SYSTEM_ALLIANCE;
             PlaySoundToAll(BG_WS_SOUND_HORDE_FLAG_PICKED_UP);
             SpawnBGObject(BG_WS_OBJECT_H_FLAG, RESPAWN_ONE_DAY);

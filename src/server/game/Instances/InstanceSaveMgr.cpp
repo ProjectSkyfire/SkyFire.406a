@@ -143,7 +143,7 @@ void InstanceSaveManager::RemoveInstanceSave(uint32 InstanceId)
         // save the resettime for normal instances only when they get unloaded
         if (time_t resettime = itr->second->GetResetTimeForDB())
         {
-            PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_INSTANCE_RESETTIME);
+            PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_UPDATE_INSTANCE_RESETTIME);
 
             stmt->setUInt32(0, uint32(resettime));
             stmt->setUInt32(1, InstanceId);
@@ -188,7 +188,7 @@ void InstanceSave::SaveToDB()
         }
     }
 
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_INSTANCE_SAVE);
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_INSERT_INSTANCE_SAVE);
     stmt->setUInt32(0, m_instanceid);
     stmt->setUInt16(1, GetMapId());
     stmt->setUInt32(2, uint32(GetResetTimeForDB()));
@@ -329,7 +329,7 @@ void InstanceSaveManager::LoadResetTimes()
         while (result->NextRow());
 
         // update reset time for normal instances with the max creature respawn time + X hours
-        if (PreparedQueryResult result2 = CharacterDatabase.Query(CharacterDatabase.GetPreparedStatement(CHAR_SEL_MAX_CREATURE_RESPAWNS)))
+        if (PreparedQueryResult result2 = CharacterDatabase.Query(CharacterDatabase.GetPreparedStatement(CHARACTER_SELECT_MAX_CREATURE_RESPAWNS)))
         {
             do
             {
@@ -361,7 +361,7 @@ void InstanceSaveManager::LoadResetTimes()
         {
             Field* fields = result->Fetch();
             uint32 mapid = fields[0].GetUInt16();
-            Difficulty difficulty = Difficulty(fields[1].GetUInt32());
+            Difficulty difficulty = Difficulty(fields[1].GetUInt8());
             uint64 oldresettime = fields[2].GetUInt32();
 
             MapDifficulty const* mapDiff = GetMapDifficultyData(mapid, difficulty);
@@ -624,7 +624,7 @@ void InstanceSaveManager::_ResetOrWarnAll(uint32 mapid, Difficulty difficulty, b
         ScheduleReset(true, time_t(next_reset-3600), InstResetEvent(1, mapid, difficulty, 0));
 
         // Update it in the DB
-        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_GLOBAL_INSTANCE_RESETTIME);
+        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_UPDATE_GLOBAL_INSTANCE_RESETTIME);
 
         stmt->setUInt32(0, next_reset);
         stmt->setUInt16(1, uint16(mapid));

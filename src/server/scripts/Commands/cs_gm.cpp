@@ -61,9 +61,9 @@ public:
         {
             WorldSession* session = handler->GetSession();
             if (!AccountMgr::IsPlayerAccount(session->GetSecurity()) && session->GetPlayer()->isGMChat())
-                session->SendNotification(LANG_GM_CHAT_ON);
+                session->SendNotification(LANGUAGE_GM_CHAT_ON);
             else
-                session->SendNotification(LANG_GM_CHAT_OFF);
+                session->SendNotification(LANGUAGE_GM_CHAT_OFF);
             return true;
         }
 
@@ -72,18 +72,18 @@ public:
         if (param == "on")
         {
             handler->GetSession()->GetPlayer()->SetGMChat(true);
-            handler->GetSession()->SendNotification(LANG_GM_CHAT_ON);
+            handler->GetSession()->SendNotification(LANGUAGE_GM_CHAT_ON);
             return true;
         }
 
         if (param == "off")
         {
             handler->GetSession()->GetPlayer()->SetGMChat(false);
-            handler->GetSession()->SendNotification(LANG_GM_CHAT_OFF);
+            handler->GetSession()->SendNotification(LANGUAGE_GM_CHAT_OFF);
             return true;
         }
 
-        handler->SendSysMessage(LANG_USE_BOL);
+        handler->SendSysMessage(LANGUAGE_USE_BOL);
         handler->SetSentErrorMessage(true);
         return false;
     }
@@ -109,13 +109,13 @@ public:
         data << uint16(SMSG_MOVE_UNSET_CAN_FLY);
     else
         {
-            handler->SendSysMessage(LANG_USE_BOL);
+            handler->SendSysMessage(LANGUAGE_USE_BOL);
             return false;
         }
         data.append(target->GetPackGUID());
         data << uint32(0);                                      // unknown
         target->SendMessageToSet(&data, true);
-        handler->PSendSysMessage(LANG_COMMAND_FLYMODE_STATUS, handler->GetNameLink(target).c_str(), args);
+        handler->PSendSysMessage(LANGUAGE_COMMAND_FLYMODE_STATUS, handler->GetNameLink(target).c_str(), args);
         return true;
     }
 
@@ -136,7 +136,7 @@ public:
                 {
                     first = false;
                     footer = true;
-                    handler->SendSysMessage(LANG_GMS_ON_SRV);
+                    handler->SendSysMessage(LANGUAGE_GMS_ON_SRV);
                     handler->SendSysMessage("========================");
                 }
                 char const* name = itr->second->GetName();
@@ -154,7 +154,7 @@ public:
         if (footer)
             handler->SendSysMessage("========================");
         if (first)
-            handler->SendSysMessage(LANG_GMS_NOT_LOGGED);
+            handler->SendSysMessage(LANGUAGE_GMS_NOT_LOGGED);
         return true;
     }
 
@@ -169,7 +169,7 @@ public:
         
         if (result)
         {
-            handler->SendSysMessage(LANG_GMLIST);
+            handler->SendSysMessage(LANGUAGE_GMLIST);
             handler->SendSysMessage("========================");
             ///- Cycle through them. Display username and GM level
             do
@@ -189,7 +189,7 @@ public:
             handler->SendSysMessage("========================");
         }
         else
-            handler->PSendSysMessage(LANG_GMLIST_EMPTY);
+            handler->PSendSysMessage(LANGUAGE_GMLIST_EMPTY);
         return true;
     }
 
@@ -198,7 +198,7 @@ public:
     {
         if (!*args)
         {
-            handler->PSendSysMessage(LANG_YOU_ARE, handler->GetSession()->GetPlayer()->isGMVisible() ? handler->GetSkyFireString(LANG_VISIBLE) : handler->GetSkyFireString(LANG_INVISIBLE));
+            handler->PSendSysMessage(LANGUAGE_YOU_ARE, handler->GetSession()->GetPlayer()->isGMVisible() ? handler->GetSkyFireString(LANGUAGE_VISIBLE) : handler->GetSkyFireString(LANGUAGE_INVISIBLE));
             return true;
         }
 
@@ -207,18 +207,18 @@ public:
         if (param == "on")
         {
             handler->GetSession()->GetPlayer()->SetGMVisible(true);
-            handler->GetSession()->SendNotification(LANG_INVISIBLE_VISIBLE);
+            handler->GetSession()->SendNotification(LANGUAGE_INVISIBLE_VISIBLE);
             return true;
         }
 
         if (param == "off")
         {
-            handler->GetSession()->SendNotification(LANG_INVISIBLE_INVISIBLE);
+            handler->GetSession()->SendNotification(LANGUAGE_INVISIBLE_INVISIBLE);
             handler->GetSession()->GetPlayer()->SetGMVisible(false);
             return true;
         }
 
-        handler->SendSysMessage(LANG_USE_BOL);
+        handler->SendSysMessage(LANGUAGE_USE_BOL);
         handler->SetSentErrorMessage(true);
         return false;
     }
@@ -229,9 +229,9 @@ public:
         if (!*args)
         {
             if (handler->GetSession()->GetPlayer()->isGameMaster())
-                handler->GetSession()->SendNotification(LANG_GM_ON);
+                handler->GetSession()->SendNotification(LANGUAGE_GM_ON);
             else
-                handler->GetSession()->SendNotification(LANG_GM_OFF);
+                handler->GetSession()->SendNotification(LANGUAGE_GM_OFF);
             return true;
         }
 
@@ -240,7 +240,7 @@ public:
         if (param == "on")
         {
             handler->GetSession()->GetPlayer()->SetGameMaster(true);
-            handler->GetSession()->SendNotification(LANG_GM_ON);
+            handler->GetSession()->SendNotification(LANGUAGE_GM_ON);
             handler->GetSession()->GetPlayer()->UpdateTriggerVisibility();
 #ifdef _DEBUG_VMAPS
             VMAP::IVMapManager* vMapManager = VMAP::VMapFactory::createOrGetVMapManager();
@@ -252,7 +252,7 @@ public:
         if (param == "off")
         {
             handler->GetSession()->GetPlayer()->SetGameMaster(false);
-            handler->GetSession()->SendNotification(LANG_GM_OFF);
+            handler->GetSession()->SendNotification(LANGUAGE_GM_OFF);
             handler->GetSession()->GetPlayer()->UpdateTriggerVisibility();
 #ifdef _DEBUG_VMAPS
             VMAP::IVMapManager* vMapManager = VMAP::VMapFactory::createOrGetVMapManager();
@@ -261,7 +261,7 @@ public:
             return true;
         }
 
-        handler->SendSysMessage(LANG_USE_BOL);
+        handler->SendSysMessage(LANGUAGE_USE_BOL);
         handler->SetSentErrorMessage(true);
         return false;
     }

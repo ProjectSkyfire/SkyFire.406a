@@ -422,7 +422,7 @@ bool ChatHandler::HasLowerSecurity(Player* target, uint64 guid, bool strong)
 
     if (!target_session && !target_account)
     {
-        SendSysMessage(LANG_PLAYER_NOT_FOUND);
+        SendSysMessage(LANGUAGE_PLAYER_NOT_FOUND);
         SetSentErrorMessage(true);
         return true;
     }
@@ -452,7 +452,7 @@ bool ChatHandler::HasLowerSecurityAccount(WorldSession* target, uint32 target_ac
     AccountTypes target_ac_sec = AccountTypes(target_sec);
     if (m_session->GetSecurity() < target_ac_sec || (strong && m_session->GetSecurity() <= target_ac_sec))
     {
-        SendSysMessage(LANG_YOURS_SECURITY_IS_LOW);
+        SendSysMessage(LANGUAGE_YOURS_SECURITY_IS_LOW);
         SetSentErrorMessage(true);
         return true;
     }
@@ -607,9 +607,9 @@ bool ChatHandler::ExecuteCommandInTable(ChatCommand* table, const char* text, co
             if (!ExecuteCommandInTable(table[i].ChildCommands, text, fullcmd))
             {
                 if (text && text[0] != '\0')
-                    SendSysMessage(LANG_NO_SUBCMD);
+                    SendSysMessage(LANGUAGE_NO_SUBCMD);
                 else
-                    SendSysMessage(LANG_CMD_SYNTAX);
+                    SendSysMessage(LANGUAGE_CMD_SYNTAX);
 
                 ShowHelpForCommand(table[i].ChildCommands, text);
             }
@@ -644,7 +644,7 @@ bool ChatHandler::ExecuteCommandInTable(ChatCommand* table, const char* text, co
             if (!table[i].Help.empty())
                 SendSysMessage(table[i].Help.c_str());
             else
-                SendSysMessage(LANG_CMD_SYNTAX);
+                SendSysMessage(LANGUAGE_CMD_SYNTAX);
         }
 
         return true;
@@ -743,7 +743,7 @@ int ChatHandler::ParseCommands(const char* text)
         if (m_session && AccountMgr::IsPlayerAccount(m_session->GetSecurity()))
             return 0;
 
-        SendSysMessage(LANG_NO_CMD);
+        SendSysMessage(LANGUAGE_NO_CMD);
     }
     return 1;
 }
@@ -837,11 +837,11 @@ bool ChatHandler::ShowHelpForSubCommands(ChatCommand* table, char const* cmd, ch
 
     if (table == getCommandTable())
     {
-        SendSysMessage(LANG_AVIABLE_CMD);
+        SendSysMessage(LANGUAGE_AVIABLE_CMD);
         PSendSysMessage("%s", list.c_str());
     }
     else
-        PSendSysMessage(LANG_SUBCMDS_LIST, cmd, list.c_str());
+        PSendSysMessage(LANGUAGE_SUBCMDS_LIST, cmd, list.c_str());
 
     return true;
 }
@@ -910,10 +910,10 @@ void ChatHandler::FillMessageData(WorldPacket* data, WorldSession* session, uint
 
     data->Initialize(SMSG_MESSAGECHAT, 100);                // guess size
     *data << uint8(type);
-    if ((type != CHAT_MSG_CHANNEL && type != CHAT_MSG_WHISPER) || language == LANG_ADDON)
+    if ((type != CHAT_MSG_CHANNEL && type != CHAT_MSG_WHISPER) || language == LANGUAGE_ADDON)
         *data << uint32(language);
     else
-        *data << uint32(LANG_UNIVERSAL);
+        *data << uint32(LANGUAGE_UNIVERSAL);
 
     switch (type)
     {
@@ -1063,7 +1063,7 @@ char* ChatHandler::extractKeyFromLink(char* text, char const* linkType, char** s
     if (strcmp(cLinkType, linkType) != 0)
     {
         strtok(NULL, " ");                                  // skip link tail (to allow continue strtok(NULL, s) use after retturn from function
-        SendSysMessage(LANG_WRONG_LINK_TYPE);
+        SendSysMessage(LANGUAGE_WRONG_LINK_TYPE);
         return NULL;
     }
 
@@ -1139,7 +1139,7 @@ char* ChatHandler::extractKeyFromLink(char* text, char const* const* linkTypes, 
     }
 
     strtok(NULL, " ");                                      // skip link tail (to allow continue strtok(NULL, s) use after return from function
-    SendSysMessage(LANG_WRONG_LINK_TYPE);
+    SendSysMessage(LANGUAGE_WRONG_LINK_TYPE);
     return NULL;
 }
 
@@ -1356,7 +1356,7 @@ bool ChatHandler::extractPlayerTarget(char* args, Player** player, uint64* playe
         std::string name = extractPlayerNameFromLink(args);
         if (name.empty())
         {
-            SendSysMessage(LANG_PLAYER_NOT_FOUND);
+            SendSysMessage(LANGUAGE_PLAYER_NOT_FOUND);
             SetSentErrorMessage(true);
             return false;
         }
@@ -1394,7 +1394,7 @@ bool ChatHandler::extractPlayerTarget(char* args, Player** player, uint64* playe
     // some from req. data must be provided (note: name is empty if player not exist)
     if ((!player || !*player) && (!player_guid || !*player_guid) && (!player_name || player_name->empty()))
     {
-        SendSysMessage(LANG_PLAYER_NOT_FOUND);
+        SendSysMessage(LANGUAGE_PLAYER_NOT_FOUND);
         SetSentErrorMessage(true);
         return false;
     }
@@ -1471,7 +1471,7 @@ void CliHandler::SendSysMessage(const char *str)
 
 std::string CliHandler::GetNameLink() const
 {
-    return GetSkyFireString(LANG_CONSOLE_COMMAND);
+    return GetSkyFireString(LANGUAGE_CONSOLE_COMMAND);
 }
 
 bool CliHandler::needReportToTarget(Player* /*chr*/) const
@@ -1491,7 +1491,7 @@ bool ChatHandler::GetPlayerGroupAndGUIDByName(const char* cname, Player* &player
         {
             if (!normalizePlayerName(name))
             {
-                PSendSysMessage(LANG_PLAYER_NOT_FOUND);
+                PSendSysMessage(LANGUAGE_PLAYER_NOT_FOUND);
                 SetSentErrorMessage(true);
                 return false;
             }

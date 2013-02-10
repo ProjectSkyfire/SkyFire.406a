@@ -91,7 +91,7 @@ public:
 
         if (!object)
         {
-            handler->PSendSysMessage(LANG_COMMAND_OBJNOTFOUND, guidLow);
+            handler->PSendSysMessage(LANGUAGE_COMMAND_OBJNOTFOUND, guidLow);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -126,7 +126,7 @@ public:
 
         if (!objectInfo)
         {
-            handler->PSendSysMessage(LANG_GAMEOBJECT_NOT_EXIST, objectId);
+            handler->PSendSysMessage(LANGUAGE_GAMEOBJECT_NOT_EXIST, objectId);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -135,7 +135,7 @@ public:
         {
             // report to DB errors log as in loading case
             sLog->outErrorDb("Gameobject (Entry %u GoType: %u) have invalid displayId (%u), not spawned.", objectId, objectInfo->type, objectInfo->displayId);
-            handler->PSendSysMessage(LANG_GAMEOBJECT_HAVE_INVALID_DATA, objectId);
+            handler->PSendSysMessage(LANGUAGE_GAMEOBJECT_HAVE_INVALID_DATA, objectId);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -175,7 +175,7 @@ public:
         // TODO: is it really necessary to add both the real and DB table guid here ?
         sObjectMgr->AddGameobjectToGrid(guidLow, sObjectMgr->GetGOData(guidLow));
 
-        handler->PSendSysMessage(LANG_GAMEOBJECT_ADD, objectId, objectInfo->name.c_str(), guidLow, x, y, z);
+        handler->PSendSysMessage(LANGUAGE_GAMEOBJECT_ADD, objectId, objectInfo->name.c_str(), guidLow, x, y, z);
         return true;
     }
 
@@ -271,7 +271,7 @@ public:
 
         if (!result)
         {
-            handler->SendSysMessage(LANG_COMMAND_TARGETOBJNOTFOUND);
+            handler->SendSysMessage(LANGUAGE_COMMAND_TARGETOBJNOTFOUND);
             return true;
         }
 
@@ -299,7 +299,7 @@ public:
 
         if (!found)
         {
-            handler->PSendSysMessage(LANG_GAMEOBJECT_NOT_EXIST, id);
+            handler->PSendSysMessage(LANGUAGE_GAMEOBJECT_NOT_EXIST, id);
             return false;
         }
 
@@ -307,13 +307,13 @@ public:
 
         if (!objectInfo)
         {
-            handler->PSendSysMessage(LANG_GAMEOBJECT_NOT_EXIST, id);
+            handler->PSendSysMessage(LANGUAGE_GAMEOBJECT_NOT_EXIST, id);
             return false;
         }
 
         GameObject* target = handler->GetSession()->GetPlayer()->GetMap()->GetGameObject(MAKE_NEW_GUID(guidLow, id, HIGHGUID_GAMEOBJECT));
 
-        handler->PSendSysMessage(LANG_GAMEOBJECT_DETAIL, guidLow, objectInfo->name.c_str(), guidLow, id, x, y, z, mapId, o, phase);
+        handler->PSendSysMessage(LANGUAGE_GAMEOBJECT_DETAIL, guidLow, objectInfo->name.c_str(), guidLow, id, x, y, z, mapId, o, phase);
 
         if (target)
         {
@@ -324,7 +324,7 @@ public:
             std::string curRespawnDelayStr = secsToTimeString(curRespawnDelay, true);
             std::string defRespawnDelayStr = secsToTimeString(target->GetRespawnDelay(), true);
 
-            handler->PSendSysMessage(LANG_COMMAND_RAWPAWNTIMES, defRespawnDelayStr.c_str(), curRespawnDelayStr.c_str());
+            handler->PSendSysMessage(LANGUAGE_COMMAND_RAWPAWNTIMES, defRespawnDelayStr.c_str(), curRespawnDelayStr.c_str());
         }
         return true;
     }
@@ -349,7 +349,7 @@ public:
 
         if (!object)
         {
-            handler->PSendSysMessage(LANG_COMMAND_OBJNOTFOUND, guidLow);
+            handler->PSendSysMessage(LANGUAGE_COMMAND_OBJNOTFOUND, guidLow);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -360,7 +360,7 @@ public:
             Unit* owner = ObjectAccessor::GetUnit(*handler->GetSession()->GetPlayer(), ownerGuid);
             if (!owner || !IS_PLAYER_GUID(ownerGuid))
             {
-                handler->PSendSysMessage(LANG_COMMAND_DELOBJREFERCREATURE, GUID_LOPART(ownerGuid), object->GetGUIDLow());
+                handler->PSendSysMessage(LANGUAGE_COMMAND_DELOBJREFERCREATURE, GUID_LOPART(ownerGuid), object->GetGUIDLow());
                 handler->SetSentErrorMessage(true);
                 return false;
             }
@@ -372,7 +372,7 @@ public:
         object->Delete();
         object->DeleteFromDB();
 
-        handler->PSendSysMessage(LANG_COMMAND_DELOBJMESSAGE, object->GetGUIDLow());
+        handler->PSendSysMessage(LANGUAGE_COMMAND_DELOBJMESSAGE, object->GetGUIDLow());
 
         return true;
     }
@@ -397,7 +397,7 @@ public:
 
         if (!object)
         {
-            handler->PSendSysMessage(LANG_COMMAND_OBJNOTFOUND, guidLow);
+            handler->PSendSysMessage(LANGUAGE_COMMAND_OBJNOTFOUND, guidLow);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -421,7 +421,7 @@ public:
         object->SaveToDB();
         object->Refresh();
 
-        handler->PSendSysMessage(LANG_COMMAND_TURNOBJMESSAGE, object->GetGUIDLow(), object->GetGOInfo()->name.c_str(), object->GetGUIDLow(), o);
+        handler->PSendSysMessage(LANGUAGE_COMMAND_TURNOBJMESSAGE, object->GetGUIDLow(), object->GetGOInfo()->name.c_str(), object->GetGUIDLow(), o);
 
         return true;
     }
@@ -446,7 +446,7 @@ public:
 
         if (!object)
         {
-            handler->PSendSysMessage(LANG_COMMAND_OBJNOTFOUND, guidLow);
+            handler->PSendSysMessage(LANGUAGE_COMMAND_OBJNOTFOUND, guidLow);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -473,7 +473,7 @@ public:
 
             if (!MapManager::IsValidMapCoord(object->GetMapId(), x, y, z))
             {
-                handler->PSendSysMessage(LANG_INVALID_TARGET_COORD, x, y, object->GetMapId());
+                handler->PSendSysMessage(LANGUAGE_INVALID_TARGET_COORD, x, y, object->GetMapId());
                 handler->SetSentErrorMessage(true);
                 return false;
             }
@@ -486,7 +486,7 @@ public:
         object->SaveToDB();
         object->Refresh();
 
-        handler->PSendSysMessage(LANG_COMMAND_MOVEOBJMESSAGE, object->GetGUIDLow(), object->GetGOInfo()->name.c_str(), object->GetGUIDLow());
+        handler->PSendSysMessage(LANGUAGE_COMMAND_MOVEOBJMESSAGE, object->GetGUIDLow(), object->GetGOInfo()->name.c_str(), object->GetGUIDLow());
 
         return true;
     }
@@ -511,7 +511,7 @@ public:
 
         if (!object)
         {
-            handler->PSendSysMessage(LANG_COMMAND_OBJNOTFOUND, guidLow);
+            handler->PSendSysMessage(LANGUAGE_COMMAND_OBJNOTFOUND, guidLow);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -520,7 +520,7 @@ public:
         uint32 phaseMask = phase ? atoi(phase) : 0;
         if (phaseMask == 0)
         {
-            handler->SendSysMessage(LANG_BAD_VALUE);
+            handler->SendSysMessage(LANGUAGE_BAD_VALUE);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -565,13 +565,13 @@ public:
                 if (!gameObjectInfo)
                     continue;
 
-                handler->PSendSysMessage(LANG_GO_LIST_CHAT, guid, entry, gameObjectInfo->name.c_str(), x, y, z, mapId);
+                handler->PSendSysMessage(LANGUAGE_GO_LIST_CHAT, guid, entry, gameObjectInfo->name.c_str(), x, y, z, mapId);
 
                 ++count;
             } while (result->NextRow());
         }
 
-        handler->PSendSysMessage(LANG_COMMAND_NEAROBJMESSAGE, distance, count);
+        handler->PSendSysMessage(LANGUAGE_COMMAND_NEAROBJMESSAGE, distance, count);
         return true;
     }
 
@@ -605,11 +605,11 @@ public:
         else if (type == GAMEOBJECT_TYPE_FISHINGHOLE)
             lootId = gameObjectInfo->fishinghole.lootId;
 
-        handler->PSendSysMessage(LANG_GOINFO_ENTRY, entry);
-        handler->PSendSysMessage(LANG_GOINFO_TYPE, type);
-        handler->PSendSysMessage(LANG_GOINFO_LOOTID, lootId);
-        handler->PSendSysMessage(LANG_GOINFO_DISPLAYID, displayId);
-        handler->PSendSysMessage(LANG_GOINFO_NAME, name.c_str());
+        handler->PSendSysMessage(LANGUAGE_GOINFO_ENTRY, entry);
+        handler->PSendSysMessage(LANGUAGE_GOINFO_TYPE, type);
+        handler->PSendSysMessage(LANGUAGE_GOINFO_LOOTID, lootId);
+        handler->PSendSysMessage(LANGUAGE_GOINFO_DISPLAYID, displayId);
+        handler->PSendSysMessage(LANGUAGE_GOINFO_NAME, name.c_str());
 
         return true;
     }
@@ -632,7 +632,7 @@ public:
 
         if (!object)
         {
-            handler->PSendSysMessage(LANG_COMMAND_OBJNOTFOUND, guidLow);
+            handler->PSendSysMessage(LANGUAGE_COMMAND_OBJNOTFOUND, guidLow);
             handler->SetSentErrorMessage(true);
             return false;
         }

@@ -105,7 +105,7 @@ void Corpse::SaveToDB()
     DeleteFromDB(trans);
 
     uint8 index = 0;
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_CORPSE);
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_INSERT_CORPSE);
     stmt->setUInt32(index++, GetGUIDLow());                                           // corpseGuid
     stmt->setUInt32(index++, GUID_LOPART(GetOwnerGUID()));                            // guid
     stmt->setFloat (index++, GetPositionX());                                         // posX
@@ -148,13 +148,13 @@ void Corpse::DeleteFromDB(SQLTransaction& trans)
     if (GetType() == CORPSE_BONES)
     {
         // Only specific bones
-        stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_CORPSE);
+        stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_DELETE_CORPSE);
         stmt->setUInt32(0, GetGUIDLow());
     }
     else
     {
         // all corpses (not bones)
-        stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_PLAYER_CORPSES);
+        stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_DELETE_PLAYER_CORPSES);
         stmt->setUInt32(0, GUID_LOPART(GetOwnerGUID()));
     }
     trans->Append(stmt);

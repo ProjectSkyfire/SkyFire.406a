@@ -65,7 +65,7 @@ public:
     {
         if (!*args)
         {
-            handler->SendSysMessage(LANG_CMD_SYNTAX);
+            handler->SendSysMessage(LANGUAGE_CMD_SYNTAX);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -77,7 +77,7 @@ public:
         int expansion = atoi(exp); //get int anyway (0 if error)
         if (expansion < 0 || uint8(expansion) > sWorld->getIntConfig(CONFIG_EXPANSION))
         {
-            handler->SendSysMessage(LANG_IMPROPER_VALUE);
+            handler->SendSysMessage(LANGUAGE_IMPROPER_VALUE);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -109,22 +109,22 @@ public:
         switch (result)
         {
             case AOR_OK:
-                handler->PSendSysMessage(LANG_ACCOUNT_CREATED, accountName);
+                handler->PSendSysMessage(LANGUAGE_ACCOUNT_CREATED, accountName);
                 break;
             case AOR_NAME_TOO_LONG:
-                handler->SendSysMessage(LANG_ACCOUNT_TOO_LONG);
+                handler->SendSysMessage(LANGUAGE_ACCOUNT_TOO_LONG);
                 handler->SetSentErrorMessage(true);
                 return false;
             case AOR_NAME_ALREADY_EXIST:
-                handler->SendSysMessage(LANG_ACCOUNT_ALREADY_EXIST);
+                handler->SendSysMessage(LANGUAGE_ACCOUNT_ALREADY_EXIST);
                 handler->SetSentErrorMessage(true);
                 return false;
             case AOR_DB_INTERNAL_ERROR:
-                handler->PSendSysMessage(LANG_ACCOUNT_NOT_CREATED_SQL_ERROR, accountName);
+                handler->PSendSysMessage(LANGUAGE_ACCOUNT_NOT_CREATED_SQL_ERROR, accountName);
                 handler->SetSentErrorMessage(true);
                 return false;
             default:
-                handler->PSendSysMessage(LANG_ACCOUNT_NOT_CREATED, accountName);
+                handler->PSendSysMessage(LANGUAGE_ACCOUNT_NOT_CREATED, accountName);
                 handler->SetSentErrorMessage(true);
                 return false;
         }
@@ -147,7 +147,7 @@ public:
         std::string accountName = account;
         if (!AccountMgr::normalizeString(accountName))
         {
-            handler->PSendSysMessage(LANG_ACCOUNT_NOT_EXIST, accountName.c_str());
+            handler->PSendSysMessage(LANGUAGE_ACCOUNT_NOT_EXIST, accountName.c_str());
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -155,7 +155,7 @@ public:
         uint32 accountId = AccountMgr::GetId(accountName);
         if (!accountId)
         {
-            handler->PSendSysMessage(LANG_ACCOUNT_NOT_EXIST, accountName.c_str());
+            handler->PSendSysMessage(LANGUAGE_ACCOUNT_NOT_EXIST, accountName.c_str());
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -170,18 +170,18 @@ public:
         switch (result)
         {
             case AOR_OK:
-                handler->PSendSysMessage(LANG_ACCOUNT_DELETED, accountName.c_str());
+                handler->PSendSysMessage(LANGUAGE_ACCOUNT_DELETED, accountName.c_str());
                 break;
             case AOR_NAME_DOES_NOT_EXIST:
-                handler->PSendSysMessage(LANG_ACCOUNT_NOT_EXIST, accountName.c_str());
+                handler->PSendSysMessage(LANGUAGE_ACCOUNT_NOT_EXIST, accountName.c_str());
                 handler->SetSentErrorMessage(true);
                 return false;
             case AOR_DB_INTERNAL_ERROR:
-                handler->PSendSysMessage(LANG_ACCOUNT_NOT_DELETED_SQL_ERROR, accountName.c_str());
+                handler->PSendSysMessage(LANGUAGE_ACCOUNT_NOT_DELETED_SQL_ERROR, accountName.c_str());
                 handler->SetSentErrorMessage(true);
                 return false;
             default:
-                handler->PSendSysMessage(LANG_ACCOUNT_NOT_DELETED, accountName.c_str());
+                handler->PSendSysMessage(LANGUAGE_ACCOUNT_NOT_DELETED, accountName.c_str());
                 handler->SetSentErrorMessage(true);
                 return false;
         }
@@ -193,20 +193,20 @@ public:
     static bool HandleAccountOnlineListCommand(ChatHandler* handler, char const* /*args*/)
     {
         ///- Get the list of accounts ID logged to the realm
-        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_CHARACTER_ONLINE);
+        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_SELECT_CHARACTER_ONLINE);
 
         PreparedQueryResult result = CharacterDatabase.Query(stmt);
 
         if (!result)
         {
-            handler->SendSysMessage(LANG_ACCOUNT_LIST_EMPTY);
+            handler->SendSysMessage(LANGUAGE_ACCOUNT_LIST_EMPTY);
             return true;
         }
 
         ///- Display the list of account/characters online
-        handler->SendSysMessage(LANG_ACCOUNT_LIST_BAR_HEADER);
-        handler->SendSysMessage(LANG_ACCOUNT_LIST_HEADER);
-        handler->SendSysMessage(LANG_ACCOUNT_LIST_BAR);
+        handler->SendSysMessage(LANGUAGE_ACCOUNT_LIST_BAR_HEADER);
+        handler->SendSysMessage(LANGUAGE_ACCOUNT_LIST_HEADER);
+        handler->SendSysMessage(LANGUAGE_ACCOUNT_LIST_BAR);
 
         ///- Cycle through accounts
         do
@@ -223,16 +223,16 @@ public:
             if (resultLogin)
             {
                 Field* fieldsLogin = resultLogin->Fetch();
-                handler->PSendSysMessage(LANG_ACCOUNT_LIST_LINE,
+                handler->PSendSysMessage(LANGUAGE_ACCOUNT_LIST_LINE,
                     fieldsLogin[0].GetCString(), name.c_str(), fieldsLogin[1].GetCString(),
                     fieldsDB[2].GetUInt16(), fieldsDB[3].GetUInt16(), fieldsLogin[3].GetUInt8(),
                     fieldsLogin[2].GetUInt8());
             }
             else
-                handler->PSendSysMessage(LANG_ACCOUNT_LIST_ERROR, name.c_str());
+                handler->PSendSysMessage(LANGUAGE_ACCOUNT_LIST_ERROR, name.c_str());
         } while (result->NextRow());
 
-        handler->SendSysMessage(LANG_ACCOUNT_LIST_BAR);
+        handler->SendSysMessage(LANGUAGE_ACCOUNT_LIST_BAR);
         return true;
     }
 
@@ -240,7 +240,7 @@ public:
     {
         if (!*args)
         {
-            handler->SendSysMessage(LANG_USE_BOL);
+            handler->SendSysMessage(LANGUAGE_USE_BOL);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -253,12 +253,12 @@ public:
             if (param == "on")
             {
                 stmt->setBool(0, true);                                     // locked
-                handler->PSendSysMessage(LANG_COMMAND_ACCLOCKLOCKED);
+                handler->PSendSysMessage(LANGUAGE_COMMAND_ACCLOCKLOCKED);
             }
             else if (param == "off")
             {
                 stmt->setBool(0, false);                                    // unlocked
-                handler->PSendSysMessage(LANG_COMMAND_ACCLOCKUNLOCKED);
+                handler->PSendSysMessage(LANGUAGE_COMMAND_ACCLOCKUNLOCKED);
             }
 
             stmt->setUInt32(1, handler->GetSession()->GetAccountId());
@@ -267,7 +267,7 @@ public:
             return true;
         }
 
-        handler->SendSysMessage(LANG_USE_BOL);
+        handler->SendSysMessage(LANGUAGE_USE_BOL);
         handler->SetSentErrorMessage(true);
         return false;
     }
@@ -276,7 +276,7 @@ public:
     {
         if (!*args)
         {
-            handler->SendSysMessage(LANG_CMD_SYNTAX);
+            handler->SendSysMessage(LANGUAGE_CMD_SYNTAX);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -287,21 +287,21 @@ public:
 
         if (!oldPassword || !newPassword || !passwordConfirmation)
         {
-            handler->SendSysMessage(LANG_CMD_SYNTAX);
+            handler->SendSysMessage(LANGUAGE_CMD_SYNTAX);
             handler->SetSentErrorMessage(true);
             return false;
         }
 
         if (!AccountMgr::CheckPassword(handler->GetSession()->GetAccountId(), std::string(oldPassword)))
         {
-            handler->SendSysMessage(LANG_COMMAND_WRONGOLDPASSWORD);
+            handler->SendSysMessage(LANGUAGE_COMMAND_WRONGOLDPASSWORD);
             handler->SetSentErrorMessage(true);
             return false;
         }
 
         if (strcmp(newPassword, passwordConfirmation) != 0)
         {
-            handler->SendSysMessage(LANG_NEW_PASSWORDS_NOT_MATCH);
+            handler->SendSysMessage(LANGUAGE_NEW_PASSWORDS_NOT_MATCH);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -310,14 +310,14 @@ public:
         switch (result)
         {
             case AOR_OK:
-                handler->SendSysMessage(LANG_COMMAND_PASSWORD);
+                handler->SendSysMessage(LANGUAGE_COMMAND_PASSWORD);
                 break;
             case AOR_PASS_TOO_LONG:
-                handler->SendSysMessage(LANG_PASSWORD_TOO_LONG);
+                handler->SendSysMessage(LANGUAGE_PASSWORD_TOO_LONG);
                 handler->SetSentErrorMessage(true);
                 return false;
             default:
-                handler->SendSysMessage(LANG_COMMAND_NOTCHANGEPASSWORD);
+                handler->SendSysMessage(LANGUAGE_COMMAND_NOTCHANGEPASSWORD);
                 handler->SetSentErrorMessage(true);
                 return false;
         }
@@ -328,7 +328,7 @@ public:
     static bool HandleAccountCommand(ChatHandler* handler, char const* /*args*/)
     {
         AccountTypes gmLevel = handler->GetSession()->GetSecurity();
-        handler->PSendSysMessage(LANG_ACCOUNT_LEVEL, uint32(gmLevel));
+        handler->PSendSysMessage(LANGUAGE_ACCOUNT_LEVEL, uint32(gmLevel));
         return true;
     }
 
@@ -361,7 +361,7 @@ public:
             accountName = account;
             if (!AccountMgr::normalizeString(accountName))
             {
-                handler->PSendSysMessage(LANG_ACCOUNT_NOT_EXIST, accountName.c_str());
+                handler->PSendSysMessage(LANGUAGE_ACCOUNT_NOT_EXIST, accountName.c_str());
                 handler->SetSentErrorMessage(true);
                 return false;
             }
@@ -369,7 +369,7 @@ public:
             accountId = AccountMgr::GetId(accountName);
             if (!accountId)
             {
-                handler->PSendSysMessage(LANG_ACCOUNT_NOT_EXIST, accountName.c_str());
+                handler->PSendSysMessage(LANGUAGE_ACCOUNT_NOT_EXIST, accountName.c_str());
                 handler->SetSentErrorMessage(true);
                 return false;
             }
@@ -392,7 +392,7 @@ public:
 
         LoginDatabase.Execute(stmt);
 
-        handler->PSendSysMessage(LANG_ACCOUNT_SETADDON, accountName.c_str(), accountId, expansion);
+        handler->PSendSysMessage(LANGUAGE_ACCOUNT_SETADDON, accountName.c_str(), accountId, expansion);
         return true;
     }
 
@@ -427,7 +427,7 @@ public:
             targetAccountName = arg1;
             if (!AccountMgr::normalizeString(targetAccountName))
             {
-                handler->PSendSysMessage(LANG_ACCOUNT_NOT_EXIST, targetAccountName.c_str());
+                handler->PSendSysMessage(LANGUAGE_ACCOUNT_NOT_EXIST, targetAccountName.c_str());
                 handler->SetSentErrorMessage(true);
                 return false;
             }
@@ -437,7 +437,7 @@ public:
         gm = (isAccountNameGiven) ? atoi(arg2) : atoi(arg1);
         if (gm > SEC_CONSOLE)
         {
-            handler->SendSysMessage(LANG_BAD_VALUE);
+            handler->SendSysMessage(LANGUAGE_BAD_VALUE);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -456,7 +456,7 @@ public:
         targetSecurity = AccountMgr::GetSecurity(targetAccountId, gmRealmID);
         if (targetSecurity >= playerSecurity || gm >= playerSecurity)
         {
-            handler->SendSysMessage(LANG_YOURS_SECURITY_IS_LOW);
+            handler->SendSysMessage(LANGUAGE_YOURS_SECURITY_IS_LOW);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -473,7 +473,7 @@ public:
             
             if (result)
             {
-                handler->SendSysMessage(LANG_YOURS_SECURITY_IS_LOW);
+                handler->SendSysMessage(LANGUAGE_YOURS_SECURITY_IS_LOW);
                 handler->SetSentErrorMessage(true);
                 return false;
             }
@@ -482,7 +482,7 @@ public:
         // Check if provided realmID has a negative value other than -1
         if (gmRealmID < -1)
         {
-            handler->SendSysMessage(LANG_INVALID_REALMID);
+            handler->SendSysMessage(LANGUAGE_INVALID_REALMID);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -517,7 +517,7 @@ public:
             LoginDatabase.Execute(stmt);
         }
 
-        handler->PSendSysMessage(LANG_YOU_CHANGE_SECURITY, targetAccountName.c_str(), gm);
+        handler->PSendSysMessage(LANGUAGE_YOU_CHANGE_SECURITY, targetAccountName.c_str(), gm);
         return true;
     }
 
@@ -538,7 +538,7 @@ public:
         std::string accountName = account;
         if (!AccountMgr::normalizeString(accountName))
         {
-            handler->PSendSysMessage(LANG_ACCOUNT_NOT_EXIST, accountName.c_str());
+            handler->PSendSysMessage(LANGUAGE_ACCOUNT_NOT_EXIST, accountName.c_str());
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -546,7 +546,7 @@ public:
         uint32 targetAccountId = AccountMgr::GetId(accountName);
         if (!targetAccountId)
         {
-            handler->PSendSysMessage(LANG_ACCOUNT_NOT_EXIST, accountName.c_str());
+            handler->PSendSysMessage(LANGUAGE_ACCOUNT_NOT_EXIST, accountName.c_str());
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -558,7 +558,7 @@ public:
 
         if (strcmp(password, passwordConfirmation))
         {
-            handler->SendSysMessage(LANG_NEW_PASSWORDS_NOT_MATCH);
+            handler->SendSysMessage(LANGUAGE_NEW_PASSWORDS_NOT_MATCH);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -568,18 +568,18 @@ public:
         switch (result)
         {
             case AOR_OK:
-                handler->SendSysMessage(LANG_COMMAND_PASSWORD);
+                handler->SendSysMessage(LANGUAGE_COMMAND_PASSWORD);
                 break;
             case AOR_NAME_DOES_NOT_EXIST:
-                handler->PSendSysMessage(LANG_ACCOUNT_NOT_EXIST, accountName.c_str());
+                handler->PSendSysMessage(LANGUAGE_ACCOUNT_NOT_EXIST, accountName.c_str());
                 handler->SetSentErrorMessage(true);
                 return false;
             case AOR_PASS_TOO_LONG:
-                handler->SendSysMessage(LANG_PASSWORD_TOO_LONG);
+                handler->SendSysMessage(LANGUAGE_PASSWORD_TOO_LONG);
                 handler->SetSentErrorMessage(true);
                 return false;
             default:
-                handler->SendSysMessage(LANG_COMMAND_NOTCHANGEPASSWORD);
+                handler->SendSysMessage(LANGUAGE_COMMAND_NOTCHANGEPASSWORD);
                 handler->SetSentErrorMessage(true);
                 return false;
         }

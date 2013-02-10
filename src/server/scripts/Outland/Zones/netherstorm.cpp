@@ -107,7 +107,7 @@ public:
             //we have no way of telling the Creature was hit by spell -> got aura applied after 10-12 seconds
             //then no way for the mobs to actually stop the shutdown as intended.
             if (spell->Id == SPELL_INTERRUPT_1)
-                DoSay("Silence! I kill you!", LANG_UNIVERSAL, NULL);
+                DoSay("Silence! I kill you!", LANGUAGE_UNIVERSAL, NULL);
         }*/
 
         void JustDied(Unit* /*killer*/)

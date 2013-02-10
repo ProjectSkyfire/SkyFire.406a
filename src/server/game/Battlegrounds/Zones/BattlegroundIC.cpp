@@ -32,10 +32,10 @@ BattlegroundIC::BattlegroundIC()
     BgObjects.resize(MAX_NORMAL_GAMEOBJECTS_SPAWNS + MAX_AIRSHIPS_SPAWNS + MAX_HANGAR_TELEPORTERS_SPAWNS + MAX_FORTRESS_TELEPORTERS_SPAWNS);
     BgCreatures.resize(MAX_NORMAL_NPCS_SPAWNS + MAX_WORKSHOP_SPAWNS + MAX_DOCKS_SPAWNS + MAX_SPIRIT_GUIDES_SPAWNS);
 
-    StartMessageIds[BG_STARTING_EVENT_FIRST]  = LANG_BG_IC_START_TWO_MINUTES;
-    StartMessageIds[BG_STARTING_EVENT_SECOND] = LANG_BG_IC_START_ONE_MINUTE;
-    StartMessageIds[BG_STARTING_EVENT_THIRD]  = LANG_BG_IC_START_HALF_MINUTE;
-    StartMessageIds[BG_STARTING_EVENT_FOURTH] = LANG_BG_IC_HAS_BEGUN;
+    StartMessageIds[BG_STARTING_EVENT_FIRST]  = LANGUAGE_BG_IC_START_TWO_MINUTES;
+    StartMessageIds[BG_STARTING_EVENT_SECOND] = LANGUAGE_BG_IC_START_ONE_MINUTE;
+    StartMessageIds[BG_STARTING_EVENT_THIRD]  = LANGUAGE_BG_IC_START_HALF_MINUTE;
+    StartMessageIds[BG_STARTING_EVENT_FOURTH] = LANGUAGE_BG_IC_HAS_BEGUN;
 
     for (uint8 i = 0; i < 2; i++)
         factionReinforcements[i] = MAX_REINFORCEMENTS;
@@ -229,7 +229,7 @@ void BattlegroundIC::PostUpdateImpl(uint32 diff)
                 UpdateNodeWorldState(&nodePoint[i]);
                 HandleCapturedNodes(&nodePoint[i], false);
 
-                SendMessage2ToAll(LANG_BG_IC_TEAM_HAS_TAKEN_NODE, CHAT_MSG_BG_SYSTEM_NEUTRAL, NULL, (nodePoint[i].faction == TEAM_ALLIANCE ? LANG_BG_IC_ALLIANCE : LANG_BG_IC_HORDE), nodePoint[i].string);
+                SendMessage2ToAll(LANGUAGE_BG_IC_TEAM_HAS_TAKEN_NODE, CHAT_MSG_BG_SYSTEM_NEUTRAL, NULL, (nodePoint[i].faction == TEAM_ALLIANCE ? LANGUAGE_BG_IC_ALLIANCE : LANGUAGE_BG_IC_HORDE), nodePoint[i].string);
 
                 nodePoint[i].needChange = false;
                 nodePoint[i].timer = BANNER_STATE_CHANGE_TIME;
@@ -471,7 +471,7 @@ void BattlegroundIC::HandleKillPlayer(Player* player, Player* killer)
 
 void BattlegroundIC::EndBattleground(uint32 winner)
 {
-    SendMessage2ToAll(LANG_BG_IC_TEAM_WINS, CHAT_MSG_BG_SYSTEM_NEUTRAL, NULL, (winner == ALLIANCE ? LANG_BG_IC_ALLIANCE : LANG_BG_IC_HORDE));
+    SendMessage2ToAll(LANGUAGE_BG_IC_TEAM_WINS, CHAT_MSG_BG_SYSTEM_NEUTRAL, NULL, (winner == ALLIANCE ? LANGUAGE_BG_IC_ALLIANCE : LANGUAGE_BG_IC_HORDE));
 
     Battleground::EndBattleground(winner);
 }
@@ -536,8 +536,8 @@ void BattlegroundIC::EventPlayerClickedOnFlag(Player* player, GameObject* target
 
                 UpdatePlayerScore(player, SCORE_BASES_ASSAULTED, 1);
 
-                SendMessage2ToAll(LANG_BG_IC_TEAM_ASSAULTED_NODE_1, CHAT_MSG_BG_SYSTEM_NEUTRAL, player, nodePoint[i].string);
-                SendMessage2ToAll(LANG_BG_IC_TEAM_ASSAULTED_NODE_2, CHAT_MSG_BG_SYSTEM_NEUTRAL, player, nodePoint[i].string, (player->GetTeamId() == TEAM_ALLIANCE ? LANG_BG_IC_ALLIANCE : LANG_BG_IC_HORDE));
+                SendMessage2ToAll(LANGUAGE_BG_IC_TEAM_ASSAULTED_NODE_1, CHAT_MSG_BG_SYSTEM_NEUTRAL, player, nodePoint[i].string);
+                SendMessage2ToAll(LANGUAGE_BG_IC_TEAM_ASSAULTED_NODE_2, CHAT_MSG_BG_SYSTEM_NEUTRAL, player, nodePoint[i].string, (player->GetTeamId() == TEAM_ALLIANCE ? LANGUAGE_BG_IC_ALLIANCE : LANGUAGE_BG_IC_HORDE));
                 HandleContestedNodes(&nodePoint[i]);
             } else if (nextBanner == nodePoint[i].banners[BANNER_A_CONTROLLED] ||
                        nextBanner == nodePoint[i].banners[BANNER_H_CONTROLLED])
@@ -545,7 +545,7 @@ void BattlegroundIC::EventPlayerClickedOnFlag(Player* player, GameObject* target
             {
                 nodePoint[i].timer = BANNER_STATE_CHANGE_TIME;
                 nodePoint[i].needChange = false;
-                SendMessage2ToAll(LANG_BG_IC_TEAM_DEFENDED_NODE, CHAT_MSG_BG_SYSTEM_NEUTRAL, player, nodePoint[i].string);
+                SendMessage2ToAll(LANGUAGE_BG_IC_TEAM_DEFENDED_NODE, CHAT_MSG_BG_SYSTEM_NEUTRAL, player, nodePoint[i].string);
                 HandleCapturedNodes(&nodePoint[i], true);
                 UpdatePlayerScore(player, SCORE_BASES_DEFENDED, 1);
             }
@@ -839,24 +839,24 @@ void BattlegroundIC::DestroyGate(Player* player, GameObject* go)
     switch (go->GetEntry())
     {
         case GO_HORDE_GATE_1:
-            lang_entry = LANG_BG_IC_NORTH_GATE_DESTROYED;
+            lang_entry = LANGUAGE_BG_IC_NORTH_GATE_DESTROYED;
             break;
         case GO_HORDE_GATE_2:
         case GO_ALLIANCE_GATE_1:
-            lang_entry = LANG_BG_IC_WEST_GATE_DESTROYED;
+            lang_entry = LANGUAGE_BG_IC_WEST_GATE_DESTROYED;
             break;
         case GO_HORDE_GATE_3:
         case GO_ALLIANCE_GATE_2:
-            lang_entry = LANG_BG_IC_EAST_GATE_DESTROYED;
+            lang_entry = LANGUAGE_BG_IC_EAST_GATE_DESTROYED;
             break;
         case GO_ALLIANCE_GATE_3:
-            lang_entry = LANG_BG_IC_SOUTH_GATE_DESTROYED;
+            lang_entry = LANGUAGE_BG_IC_SOUTH_GATE_DESTROYED;
             break;
     default:
         break;
     }
 
-    SendMessage2ToAll(lang_entry, CHAT_MSG_BG_SYSTEM_NEUTRAL, NULL, (player->GetTeamId() == TEAM_ALLIANCE ? LANG_BG_IC_HORDE_KEEP : LANG_BG_IC_ALLIANCE_KEEP));
+    SendMessage2ToAll(lang_entry, CHAT_MSG_BG_SYSTEM_NEUTRAL, NULL, (player->GetTeamId() == TEAM_ALLIANCE ? LANGUAGE_BG_IC_HORDE_KEEP : LANGUAGE_BG_IC_ALLIANCE_KEEP));
 }
 
 void BattlegroundIC::EventPlayerDamagedGO(Player* /*player*/, GameObject* /*go*/, uint32 /*eventType*/)

@@ -158,7 +158,7 @@ public:
 
         if (!target)
         {
-            handler->SendSysMessage(LANG_SELECT_CREATURE);
+            handler->SendSysMessage(LANGUAGE_SELECT_CREATURE);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -595,7 +595,7 @@ public:
 
         if (!result)
         {
-            handler->PSendSysMessage(LANG_WAYPOINT_NOTFOUNDSEARCH, target->GetGUIDLow());
+            handler->PSendSysMessage(LANGUAGE_WAYPOINT_NOTFOUNDSEARCH, target->GetGUIDLow());
             // Select waypoint number from database
             // Since we compare float values, we have to deal with
             // some difficulties.
@@ -615,7 +615,7 @@ public:
 
             if (!result)
             {
-                handler->PSendSysMessage(LANG_WAYPOINT_NOTFOUNDDBPROBLEM, wpGuid);
+                handler->PSendSysMessage(LANGUAGE_WAYPOINT_NOTFOUNDDBPROBLEM, wpGuid);
                 return true;
             }
         }
@@ -635,7 +635,7 @@ public:
         // Check for argument
         if (show != "del" && show != "move" && arg_str == NULL)
         {
-            handler->PSendSysMessage(LANG_WAYPOINT_ARGUMENTREQ, show_str);
+            handler->PSendSysMessage(LANGUAGE_WAYPOINT_ARGUMENTREQ, show_str);
             return false;
         }
 
@@ -665,7 +665,7 @@ public:
 
             WorldDatabase.Execute(stmt);
 
-            handler->PSendSysMessage(LANG_WAYPOINT_REMOVED);
+            handler->PSendSysMessage(LANGUAGE_WAYPOINT_REMOVED);
             return true;
         }                                                       // del
 
@@ -691,7 +691,7 @@ public:
                     Creature* wpCreature2 = new Creature;
                     if (!wpCreature2->Create(sObjectMgr->GenerateLowGuid(HIGHGUID_UNIT), map, chr->GetPhaseMaskForSpawn(), VISUAL_WAYPOINT, 0, 0, chr->GetPositionX(), chr->GetPositionY(), chr->GetPositionZ(), chr->GetOrientation()))
                     {
-                        handler->PSendSysMessage(LANG_WAYPOINT_VP_NOTCREATED, VISUAL_WAYPOINT);
+                        handler->PSendSysMessage(LANGUAGE_WAYPOINT_VP_NOTCREATED, VISUAL_WAYPOINT);
                         delete wpCreature2;
                         wpCreature2 = NULL;
                         return false;
@@ -702,7 +702,7 @@ public:
                     //TODO: Should we first use "Create" then use "LoadFromDB"?
                     if (!wpCreature2->LoadCreatureFromDB(wpCreature2->GetDBTableGUIDLow(), map))
                     {
-                        handler->PSendSysMessage(LANG_WAYPOINT_VP_NOTCREATED, VISUAL_WAYPOINT);
+                        handler->PSendSysMessage(LANGUAGE_WAYPOINT_VP_NOTCREATED, VISUAL_WAYPOINT);
                         delete wpCreature2;
                         wpCreature2 = NULL;
                         return false;
@@ -720,7 +720,7 @@ public:
 
                 WorldDatabase.Execute(stmt);
 
-                handler->PSendSysMessage(LANG_WAYPOINT_CHANGED);
+                handler->PSendSysMessage(LANGUAGE_WAYPOINT_CHANGED);
             }
             return true;
         }                                                       // move
@@ -740,7 +740,7 @@ public:
             WorldDatabase.PExecute("UPDATE waypoint_data SET %s='%s' WHERE id='%u' AND point='%u'", show_str, text2.c_str(), pathid, point); // Query can't be a prepared statement
         }
 
-        handler->PSendSysMessage(LANG_WAYPOINT_CHANGED_NO, show_str);
+        handler->PSendSysMessage(LANGUAGE_WAYPOINT_CHANGED_NO, show_str);
         return true;
     }
 
@@ -769,7 +769,7 @@ public:
 
             if (!target)
             {
-                handler->SendSysMessage(LANG_SELECT_CREATURE);
+                handler->SendSysMessage(LANGUAGE_SELECT_CREATURE);
                 handler->SetSentErrorMessage(true);
                 return false;
             }
@@ -782,7 +782,7 @@ public:
             // Warn if player also selected a creature
             // -> Creature selection is ignored <-
             if (target)
-                handler->SendSysMessage(LANG_WAYPOINT_CREATSELECTED);
+                handler->SendSysMessage(LANGUAGE_WAYPOINT_CREATSELECTED);
 
             pathid = atoi((char*)guid_str);
         }
@@ -797,7 +797,7 @@ public:
             // Check if the user did specify a visual waypoint
             if (target->GetEntry() != VISUAL_WAYPOINT)
             {
-                handler->PSendSysMessage(LANG_WAYPOINT_VP_SELECT);
+                handler->PSendSysMessage(LANGUAGE_WAYPOINT_VP_SELECT);
                 handler->SetSentErrorMessage(true);
                 return false;
             }
@@ -810,7 +810,7 @@ public:
 
             if (!result)
             {
-                handler->SendSysMessage(LANG_WAYPOINT_NOTFOUNDDBPROBLEM);
+                handler->SendSysMessage(LANGUAGE_WAYPOINT_NOTFOUNDDBPROBLEM);
                 return true;
             }
 
@@ -871,7 +871,7 @@ public:
 
                     if (!creature)
                     {
-                        handler->PSendSysMessage(LANG_WAYPOINT_NOTREMOVED, wpguid);
+                        handler->PSendSysMessage(LANGUAGE_WAYPOINT_NOTREMOVED, wpguid);
                         hasError = true;
 
                         PreparedStatement* stmt = WorldDatabase.GetPreparedStatement(WORLD_DEL_CREATURE);
@@ -892,9 +892,9 @@ public:
 
                 if (hasError)
                 {
-                    handler->PSendSysMessage(LANG_WAYPOINT_TOOFAR1);
-                    handler->PSendSysMessage(LANG_WAYPOINT_TOOFAR2);
-                    handler->PSendSysMessage(LANG_WAYPOINT_TOOFAR3);
+                    handler->PSendSysMessage(LANGUAGE_WAYPOINT_TOOFAR1);
+                    handler->PSendSysMessage(LANGUAGE_WAYPOINT_TOOFAR2);
+                    handler->PSendSysMessage(LANGUAGE_WAYPOINT_TOOFAR3);
                 }
             }
 
@@ -915,7 +915,7 @@ public:
                 Creature* wpCreature = new Creature;
                 if (!wpCreature->Create(sObjectMgr->GenerateLowGuid(HIGHGUID_UNIT), map, chr->GetPhaseMaskForSpawn(), id, 0, 0, x, y, z, o))
                 {
-                    handler->PSendSysMessage(LANG_WAYPOINT_VP_NOTCREATED, id);
+                    handler->PSendSysMessage(LANGUAGE_WAYPOINT_VP_NOTCREATED, id);
                     delete wpCreature;
                     return false;
                 }
@@ -933,7 +933,7 @@ public:
                 // To call _LoadGoods(); _LoadQuests(); CreateTrainerSpells();
                 if (!wpCreature->LoadCreatureFromDB(wpCreature->GetDBTableGUIDLow(), map))
                 {
-                    handler->PSendSysMessage(LANG_WAYPOINT_VP_NOTCREATED, id);
+                    handler->PSendSysMessage(LANGUAGE_WAYPOINT_VP_NOTCREATED, id);
                     delete wpCreature;
                     return false;
                 }
@@ -961,7 +961,7 @@ public:
 
             if (!result)
             {
-                handler->PSendSysMessage(LANG_WAYPOINT_NOTFOUND, pathid);
+                handler->PSendSysMessage(LANGUAGE_WAYPOINT_NOTFOUND, pathid);
                 handler->SetSentErrorMessage(true);
                 return false;
             }
@@ -979,7 +979,7 @@ public:
             Creature* creature = new Creature;
             if (!creature->Create(sObjectMgr->GenerateLowGuid(HIGHGUID_UNIT), map, chr->GetPhaseMaskForSpawn(), id, 0, 0, x, y, z, o))
             {
-                handler->PSendSysMessage(LANG_WAYPOINT_VP_NOTCREATED, id);
+                handler->PSendSysMessage(LANGUAGE_WAYPOINT_VP_NOTCREATED, id);
                 delete creature;
                 return false;
             }
@@ -987,7 +987,7 @@ public:
             creature->SaveToDB(map->GetId(), (1 << map->GetSpawnMode()), chr->GetPhaseMaskForSpawn());
             if (!creature->LoadCreatureFromDB(creature->GetDBTableGUIDLow(), map))
             {
-                handler->PSendSysMessage(LANG_WAYPOINT_VP_NOTCREATED, id);
+                handler->PSendSysMessage(LANGUAGE_WAYPOINT_VP_NOTCREATED, id);
                 delete creature;
                 return false;
             }
@@ -1011,7 +1011,7 @@ public:
 
             if (!result)
             {
-                handler->PSendSysMessage(LANG_WAYPOINT_NOTFOUNDLAST, pathid);
+                handler->PSendSysMessage(LANGUAGE_WAYPOINT_NOTFOUNDLAST, pathid);
                 handler->SetSentErrorMessage(true);
                 return false;
             }
@@ -1028,7 +1028,7 @@ public:
             Creature* creature = new Creature;
             if (!creature->Create(sObjectMgr->GenerateLowGuid(HIGHGUID_UNIT), map, chr->GetPhaseMaskForSpawn(), id, 0, 0, x, y, z, o))
             {
-                handler->PSendSysMessage(LANG_WAYPOINT_NOTCREATED, id);
+                handler->PSendSysMessage(LANGUAGE_WAYPOINT_NOTCREATED, id);
                 delete creature;
                 return false;
             }
@@ -1036,7 +1036,7 @@ public:
             creature->SaveToDB(map->GetId(), (1 << map->GetSpawnMode()), chr->GetPhaseMaskForSpawn());
             if (!creature->LoadCreatureFromDB(creature->GetDBTableGUIDLow(), map))
             {
-                handler->PSendSysMessage(LANG_WAYPOINT_NOTCREATED, id);
+                handler->PSendSysMessage(LANGUAGE_WAYPOINT_NOTCREATED, id);
                 delete creature;
                 return false;
             }
@@ -1058,7 +1058,7 @@ public:
 
             if (!result)
             {
-                handler->SendSysMessage(LANG_WAYPOINT_VP_NOTFOUND);
+                handler->SendSysMessage(LANGUAGE_WAYPOINT_VP_NOTFOUND);
                 handler->SetSentErrorMessage(true);
                 return false;
             }
@@ -1070,7 +1070,7 @@ public:
                 Creature* creature = handler->GetSession()->GetPlayer()->GetMap()->GetCreature(MAKE_NEW_GUID(guid, VISUAL_WAYPOINT, HIGHGUID_UNIT));
                 if (!creature)
                 {
-                    handler->PSendSysMessage(LANG_WAYPOINT_NOTREMOVED, guid);
+                    handler->PSendSysMessage(LANGUAGE_WAYPOINT_NOTREMOVED, guid);
                     hasError = true;
 
                     PreparedStatement* stmt = WorldDatabase.GetPreparedStatement(WORLD_DEL_CREATURE);
@@ -1095,12 +1095,12 @@ public:
 
             if (hasError)
             {
-                handler->PSendSysMessage(LANG_WAYPOINT_TOOFAR1);
-                handler->PSendSysMessage(LANG_WAYPOINT_TOOFAR2);
-                handler->PSendSysMessage(LANG_WAYPOINT_TOOFAR3);
+                handler->PSendSysMessage(LANGUAGE_WAYPOINT_TOOFAR1);
+                handler->PSendSysMessage(LANGUAGE_WAYPOINT_TOOFAR2);
+                handler->PSendSysMessage(LANGUAGE_WAYPOINT_TOOFAR3);
             }
 
-            handler->SendSysMessage(LANG_WAYPOINT_VP_ALLREMOVED);
+            handler->SendSysMessage(LANGUAGE_WAYPOINT_VP_ALLREMOVED);
             return true;
         }
 

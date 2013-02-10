@@ -65,7 +65,7 @@ public:
         int32 id = atoi(id_p);
         if (id <= 0)
         {
-            handler->PSendSysMessage(LANG_INVALID_TITLE_ID, id);
+            handler->PSendSysMessage(LANGUAGE_INVALID_TITLE_ID, id);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -73,7 +73,7 @@ public:
         Player* target = handler->getSelectedPlayer();
         if (!target)
         {
-            handler->SendSysMessage(LANG_NO_CHAR_SELECTED);
+            handler->SendSysMessage(LANGUAGE_NO_CHARACTER_SELECTED);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -85,7 +85,7 @@ public:
         CharTitlesEntry const* titleInfo = sCharTitlesStore.LookupEntry(id);
         if (!titleInfo)
         {
-            handler->PSendSysMessage(LANG_INVALID_TITLE_ID, id);
+            handler->PSendSysMessage(LANGUAGE_INVALID_TITLE_ID, id);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -95,7 +95,7 @@ public:
         target->SetTitle(titleInfo);                            // to be sure that title now known
         target->SetUInt32Value(PLAYER_CHOSEN_TITLE, titleInfo->bit_index);
 
-        handler->PSendSysMessage(LANG_TITLE_CURRENT_RES, id, titleInfo->name, tNameLink.c_str());
+        handler->PSendSysMessage(LANGUAGE_TITLE_CURRENT_RES, id, titleInfo->name, tNameLink.c_str());
 
         return true;
     }
@@ -110,7 +110,7 @@ public:
         int32 id = atoi(id_p);
         if (id <= 0)
         {
-            handler->PSendSysMessage(LANG_INVALID_TITLE_ID, id);
+            handler->PSendSysMessage(LANGUAGE_INVALID_TITLE_ID, id);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -118,7 +118,7 @@ public:
         Player* target = handler->getSelectedPlayer();
         if (!target)
         {
-            handler->SendSysMessage(LANG_NO_CHAR_SELECTED);
+            handler->SendSysMessage(LANGUAGE_NO_CHARACTER_SELECTED);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -130,7 +130,7 @@ public:
         CharTitlesEntry const* titleInfo = sCharTitlesStore.LookupEntry(id);
         if (!titleInfo)
         {
-            handler->PSendSysMessage(LANG_INVALID_TITLE_ID, id);
+            handler->PSendSysMessage(LANGUAGE_INVALID_TITLE_ID, id);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -142,7 +142,7 @@ public:
         snprintf(titleNameStr, 80, titleInfo->name, targetName);
 
         target->SetTitle(titleInfo);
-        handler->PSendSysMessage(LANG_TITLE_ADD_RES, id, titleNameStr, tNameLink.c_str());
+        handler->PSendSysMessage(LANGUAGE_TITLE_ADD_RES, id, titleNameStr, tNameLink.c_str());
 
         return true;
     }
@@ -157,7 +157,7 @@ public:
         int32 id = atoi(id_p);
         if (id <= 0)
         {
-            handler->PSendSysMessage(LANG_INVALID_TITLE_ID, id);
+            handler->PSendSysMessage(LANGUAGE_INVALID_TITLE_ID, id);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -165,7 +165,7 @@ public:
         Player* target = handler->getSelectedPlayer();
         if (!target)
         {
-            handler->SendSysMessage(LANG_NO_CHAR_SELECTED);
+            handler->SendSysMessage(LANGUAGE_NO_CHARACTER_SELECTED);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -177,7 +177,7 @@ public:
         CharTitlesEntry const* titleInfo = sCharTitlesStore.LookupEntry(id);
         if (!titleInfo)
         {
-            handler->PSendSysMessage(LANG_INVALID_TITLE_ID, id);
+            handler->PSendSysMessage(LANGUAGE_INVALID_TITLE_ID, id);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -190,12 +190,12 @@ public:
         char titleNameStr[80];
         snprintf(titleNameStr, 80, titleInfo->name, targetName);
 
-        handler->PSendSysMessage(LANG_TITLE_REMOVE_RES, id, titleNameStr, tNameLink.c_str());
+        handler->PSendSysMessage(LANGUAGE_TITLE_REMOVE_RES, id, titleNameStr, tNameLink.c_str());
 
         if (!target->HasTitle(target->GetInt32Value(PLAYER_CHOSEN_TITLE)))
         {
             target->SetUInt32Value(PLAYER_CHOSEN_TITLE, 0);
-            handler->PSendSysMessage(LANG_CURRENT_TITLE_RESET, tNameLink.c_str());
+            handler->PSendSysMessage(LANGUAGE_CURRENT_TITLE_RESET, tNameLink.c_str());
         }
 
         return true;
@@ -214,7 +214,7 @@ public:
         Player* target = handler->getSelectedPlayer();
         if (!target)
         {
-            handler->SendSysMessage(LANG_NO_CHAR_SELECTED);
+            handler->SendSysMessage(LANGUAGE_NO_CHARACTER_SELECTED);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -232,12 +232,12 @@ public:
         titles &= ~titles2;                                     // remove not existed titles
 
         target->SetUInt64Value(PLAYER__FIELD_KNOWN_TITLES, titles);
-        handler->SendSysMessage(LANG_DONE);
+        handler->SendSysMessage(LANGUAGE_DONE);
 
         if (!target->HasTitle(target->GetInt32Value(PLAYER_CHOSEN_TITLE)))
         {
             target->SetUInt32Value(PLAYER_CHOSEN_TITLE, 0);
-            handler->PSendSysMessage(LANG_CURRENT_TITLE_RESET, handler->GetNameLink(target).c_str());
+            handler->PSendSysMessage(LANGUAGE_CURRENT_TITLE_RESET, handler->GetNameLink(target).c_str());
         }
 
         return true;

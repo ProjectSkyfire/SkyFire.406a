@@ -57,7 +57,7 @@ void WorldSession::HandleBattlemasterHelloOpcode(WorldPacket& recvData)
     if (!_player->GetBGAccessByLevel(bgTypeId))
     {
                                                             // temp, must be gossip message...
-        SendNotification(LANG_YOUR_BG_LEVEL_REQ_ERROR);
+        SendNotification(LANGUAGE_YOUR_BG_LEVEL_REQ_ERROR);
         return;
     }
 
@@ -92,7 +92,7 @@ void WorldSession::HandleBattlemasterJoinOpcode(WorldPacket& recvData)
 
     if (DisableMgr::IsDisabledFor(DISABLE_TYPE_BATTLEGROUND, bgTypeId_, NULL))
     {
-        ChatHandler(this).PSendSysMessage(LANG_BG_DISABLED);
+        ChatHandler(this).PSendSysMessage(LANGUAGE_BG_DISABLED);
         return;
     }
 
@@ -748,7 +748,7 @@ void WorldSession::HandleBattlemasterJoinArena(WorldPacket& recvData)
 
     if (DisableMgr::IsDisabledFor(DISABLE_TYPE_BATTLEGROUND, BATTLEGROUND_AA, NULL))
     {
-        ChatHandler(this).PSendSysMessage(LANG_ARENA_DISABLED);
+        ChatHandler(this).PSendSysMessage(LANGUAGE_ARENA_DISABLED);
         return;
     }
 

@@ -1310,7 +1310,7 @@ bool Pet::addSpell(uint32 spellId, ActiveStates active /*= ACT_DECIDE*/, PetSpel
         {
             sLog->outError("Pet::addSpell: Non-existed in SpellStore spell #%u request, deleting for all pets in `pet_spell`.", spellId);
 
-            PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_INVALID_PET_SPELL);
+            PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_DELETE_INVALID_PET_SPELL);
 
             stmt->setUInt32(0, spellId);
 

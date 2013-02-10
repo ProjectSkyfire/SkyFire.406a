@@ -162,27 +162,27 @@ bool normalizePlayerName(std::string& name)
 
 LanguageDesc lang_description[LANGUAGES_COUNT] =
 {
-    { LANG_ADDON,           0, 0                       },
-    { LANG_UNIVERSAL,       0, 0                       },
-    { LANG_ORCISH,        669, SKILL_LANG_ORCISH       },
-    { LANG_DARNASSIAN,    671, SKILL_LANG_DARNASSIAN   },
-    { LANG_TAURAHE,       670, SKILL_LANG_TAURAHE      },
-    { LANG_DWARVISH,      672, SKILL_LANG_DWARVEN      },
-    { LANG_COMMON,        668, SKILL_LANG_COMMON       },
-    { LANG_DEMONIC,       815, SKILL_LANG_DEMON_TONGUE },
-    { LANG_TITAN,         816, SKILL_LANG_TITAN        },
-    { LANG_THALASSIAN,    813, SKILL_LANG_THALASSIAN   },
-    { LANG_DRACONIC,      814, SKILL_LANG_DRACONIC     },
-    { LANG_KALIMAG,       817, SKILL_LANG_OLD_TONGUE   },
-    { LANG_GNOMISH,      7340, SKILL_LANG_GNOMISH      },
-    { LANG_TROLL,        7341, SKILL_LANG_TROLL        },
-    { LANG_GUTTERSPEAK, 17737, SKILL_LANG_GUTTERSPEAK  },
-    { LANG_DRAENEI,     29932, SKILL_LANG_DRAENEI      },
-    { LANG_ZOMBIE,          0, 0                       },
-    { LANG_GNOMISH_BINARY,  0, 0                       },
-    { LANG_GOBLIN_BINARY,   0, 0                       },
-    { LANG_WORGEN,      69270, SKILL_LANG_WORGEN       },
-    { LANG_GOBLIN,      69269, SKILL_LANG_GOBLIN       }
+    { LANGUAGE_ADDON,           0, 0                       },
+    { LANGUAGE_UNIVERSAL,       0, 0                       },
+    { LANGUAGE_ORCISH,        669, SKILL_LANGUAGE_ORCISH       },
+    { LANGUAGE_DARNASSIAN,    671, SKILL_LANGUAGE_DARNASSIAN   },
+    { LANGUAGE_TAURAHE,       670, SKILL_LANGUAGE_TAURAHE      },
+    { LANGUAGE_DWARVISH,      672, SKILL_LANGUAGE_DWARVEN      },
+    { LANGUAGE_COMMON,        668, SKILL_LANGUAGE_COMMON       },
+    { LANGUAGE_DEMONIC,       815, SKILL_LANGUAGE_DEMON_TONGUE },
+    { LANGUAGE_TITAN,         816, SKILL_LANGUAGE_TITAN        },
+    { LANGUAGE_THALASSIAN,    813, SKILL_LANGUAGE_THALASSIAN   },
+    { LANGUAGE_DRACONIC,      814, SKILL_LANGUAGE_DRACONIC     },
+    { LANGUAGE_KALIMAG,       817, SKILL_LANGUAGE_OLD_TONGUE   },
+    { LANGUAGE_GNOMISH,      7340, SKILL_LANGUAGE_GNOMISH      },
+    { LANGUAGE_TROLL,        7341, SKILL_LANGUAGE_TROLL        },
+    { LANGUAGE_GUTTERSPEAK, 17737, SKILL_LANGUAGE_GUTTERSPEAK  },
+    { LANGUAGE_DRAENEI,     29932, SKILL_LANGUAGE_DRAENEI      },
+    { LANGUAGE_ZOMBIE,          0, 0                       },
+    { LANGUAGE_GNOMISH_BINARY,  0, 0                       },
+    { LANGUAGE_GOBLIN_BINARY,   0, 0                       },
+    { LANGUAGE_WORGEN,      69270, SKILL_LANGUAGE_WORGEN       },
+    { LANGUAGE_GOBLIN,      69269, SKILL_LANGUAGE_GOBLIN       }
 };
 
 LanguageDesc const* GetLanguageDescByID(uint32 lang)
@@ -1012,7 +1012,7 @@ void ObjectMgr::LoadEquipmentTemplates()
     {
         Field* fields = result->Fetch();
 
-        uint16 entry = fields[0].GetUInt16();
+        uint32 entry = fields[0].GetUInt32();
 
         EquipmentInfo& equipmentInfo = _equipmentInfoStore[entry];
 
@@ -1452,14 +1452,14 @@ void ObjectMgr::LoadCreatures()
 
         CreatureData& data = _creatureDataStore[guid];
         data.id             = entry;
-        data.mapid          = fields[ 2].GetUInt32();
-        data.displayid      = fields[ 3].GetUInt32();
-        data.equipmentId    = fields[ 4].GetUInt32();
-        data.posX           = fields[ 5].GetFloat();
-        data.posY           = fields[ 6].GetFloat();
-        data.posZ           = fields[ 7].GetFloat();
-        data.orientation    = fields[ 8].GetFloat();
-        data.spawntimesecs  = fields[ 9].GetUInt32();
+        data.mapid          = fields[2].GetUInt16();
+        data.displayid      = fields[3].GetUInt32();
+        data.equipmentId    = fields[4].GetInt32();
+        data.posX           = fields[5].GetFloat();
+        data.posY           = fields[6].GetFloat();
+        data.posZ           = fields[7].GetFloat();
+        data.orientation    = fields[8].GetFloat();
+        data.spawntimesecs  = fields[9].GetUInt32();
         data.spawndist      = fields[10].GetFloat();
         data.currentwaypoint= fields[11].GetUInt32();
         data.curhealth      = fields[12].GetUInt32();
@@ -1782,7 +1782,7 @@ void ObjectMgr::LoadGameobjects()
         GameObjectData& data = _gameObjectDataStore[guid];
 
         data.id             = entry;
-        data.mapid          = fields[ 2].GetUInt32();
+        data.mapid          = fields[ 2].GetUInt16();
         data.posX           = fields[ 3].GetFloat();
         data.posY           = fields[ 4].GetFloat();
         data.posZ           = fields[ 5].GetFloat();
@@ -1792,9 +1792,9 @@ void ObjectMgr::LoadGameobjects()
         data.rotation2      = fields[ 9].GetFloat();
         data.rotation3      = fields[10].GetFloat();
         data.spawntimesecs  = fields[11].GetInt32();
-        data.animprogress   = fields[12].GetUInt32();
+        data.animprogress   = fields[12].GetUInt8();
         data.artKit         = 0;
-        uint32 go_state     = fields[13].GetUInt32();
+        uint32 go_state     = fields[13].GetUInt8();
         data.spawnMask      = fields[14].GetUInt8();
         data.phaseMask      = fields[15].GetUInt16();
         int16 gameEvent     = fields[16].GetInt16();
@@ -1891,7 +1891,7 @@ void ObjectMgr::LoadCreatureRespawnTimes()
 
     uint32 count = 0;
 
-    PreparedQueryResult result = CharacterDatabase.Query(CharacterDatabase.GetPreparedStatement(CHAR_SEL_CREATURE_RESPAWNS));
+    PreparedQueryResult result = CharacterDatabase.Query(CharacterDatabase.GetPreparedStatement(CHARACTER_SELECT_CREATURE_RESPAWNS));
     if (!result)
     {
         sLog->outString(">> Loaded 0 creature respawn time.");
@@ -1925,7 +1925,7 @@ void ObjectMgr::LoadGameobjectRespawnTimes()
 
     uint32 count = 0;
 
-    PreparedQueryResult result = CharacterDatabase.Query(CharacterDatabase.GetPreparedStatement(CHAR_SEL_GO_RESPAWNS));
+    PreparedQueryResult result = CharacterDatabase.Query(CharacterDatabase.GetPreparedStatement(CHARACTER_SELECT_GO_RESPAWNS));
     if (!result)
     {
         sLog->outString(">> Loaded 0 gameobject respawn times. DB table `gameobject_respawn` is empty!");
@@ -1962,7 +1962,7 @@ uint64 ObjectMgr::GetPlayerGUIDByName(std::string name) const
     uint64 guid = 0;
 
 
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_GUID_BY_NAME);
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_SELECT_GUID_BY_NAME);
 
     stmt->setString(0, name);
 
@@ -1983,7 +1983,7 @@ bool ObjectMgr::GetPlayerNameByGUID(uint64 guid, std::string &name) const
         return true;
     }
 
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_CHARACTER_NAME);
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_SELECT_CHARACTER_NAME);
 
     stmt->setUInt32(0, GUID_LOPART(guid));
 
@@ -2006,7 +2006,7 @@ uint32 ObjectMgr::GetPlayerTeamByGUID(uint64 guid) const
         return Player::TeamForRace(player->getRace());
     }
 
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_CHAR_RACE);
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_SELECT_CHARACTER_RACE);
 
     stmt->setUInt32(0, GUID_LOPART(guid));
 
@@ -2029,7 +2029,7 @@ uint32 ObjectMgr::GetPlayerAccountIdByGUID(uint64 guid) const
         return player->GetSession()->GetAccountId();
     }
 
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_ACCOUNT_BY_GUID);
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_SELECT_ACCOUNT_BY_GUID);
 
     stmt->setUInt32(0, GUID_LOPART(guid));
 
@@ -2046,7 +2046,7 @@ uint32 ObjectMgr::GetPlayerAccountIdByGUID(uint64 guid) const
 
 uint32 ObjectMgr::GetPlayerAccountIdByPlayerName(const std::string& name) const
 {
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_ACCOUNT_BY_NAME);
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_SELECT_ACCOUNT_BY_NAME);
 
     stmt->setString(0, name);
 
@@ -2317,11 +2317,11 @@ void ObjectMgr::LoadItemTemplates()
         for (uint8 i = 0; i < MAX_ITEM_PROTO_STATS; ++i)
         {
             itemTemplate.ItemStat[i].ItemStatType  = uint32(fields[27 + i*2].GetUInt8());
-            itemTemplate.ItemStat[i].ItemStatValue = int32(fields[28 + i*2].GetInt32());
+            itemTemplate.ItemStat[i].ItemStatValue = int32(fields[28 + i*2].GetInt16());
         }
 
-        itemTemplate.ScalingStatDistribution = uint32(fields[47].GetUInt16());
-        itemTemplate.ScalingStatValue        = fields[48].GetInt32();
+        itemTemplate.ScalingStatDistribution = int32(fields[47].GetInt16());
+        itemTemplate.ScalingStatValue        = fields[48].GetInt16();
 
         const ItemSparseEntry* info = sItemSparseStore.LookupEntry(entry);
         if (info)
@@ -2922,7 +2922,7 @@ void ObjectMgr::LoadItemSetNames()
         ItemSetNameEntry &data = _itemSetNameStore[entry];
         data.name = fields[1].GetString();
 
-        uint32 invType = fields[2].GetUInt32();
+        uint32 invType = fields[2].GetUInt8();
         if (invType >= MAX_INVTYPE)
         {
             sLog->outErrorDb("Item set name (Entry: %u) has wrong InventoryType value (%u)", entry, invType);
@@ -2982,7 +2982,7 @@ void ObjectMgr::LoadVehicleTemplateAccessories()
 
         uint32 uiEntry      = fields[0].GetUInt32();
         uint32 uiAccessory  = fields[1].GetUInt32();
-        int8   uiSeat       = int8(fields[2].GetInt16());
+        int8   uiSeat       = int8(fields[2].GetInt8());
         bool   bMinion      = fields[3].GetBool();
         uint8  uiSummonType = fields[4].GetUInt8();
         uint32 uiSummonTimer= fields[5].GetUInt32();
@@ -3038,7 +3038,7 @@ void ObjectMgr::LoadVehicleAccessories()
 
         uint32 uiGUID       = fields[0].GetUInt32();
         uint32 uiAccessory  = fields[1].GetUInt32();
-        int8   uiSeat       = int8(fields[2].GetInt16());
+        int8   uiSeat       = int8(fields[2].GetInt8());
         bool   bMinion      = fields[3].GetBool();
         uint8  uiSummonType = fields[4].GetUInt8();
         uint32 uiSummonTimer= fields[5].GetUInt32();
@@ -3086,7 +3086,7 @@ void ObjectMgr::LoadPetLevelInfo()
             continue;
         }
 
-        uint32 current_level = fields[1].GetUInt32();
+        uint32 current_level = fields[1].GetUInt8();
         if (current_level > sWorld->getIntConfig(CONFIG_MAX_PLAYER_LEVEL))
         {
             if (current_level > STRONG_MAX_LEVEL)        // hardcoded level maximum
@@ -3114,7 +3114,7 @@ void ObjectMgr::LoadPetLevelInfo()
 
         pLevelInfo->health = fields[2].GetUInt16();
         pLevelInfo->mana   = fields[3].GetUInt16();
-        pLevelInfo->armor  = fields[9].GetUInt16();
+        pLevelInfo->armor  = fields[9].GetUInt32();
 
         for (int i = 0; i < MAX_STATS; i++)
         {
@@ -3227,9 +3227,9 @@ void ObjectMgr::LoadPlayerInfo()
             {
                 Field* fields = result->Fetch();
 
-                uint32 current_race  = fields[0].GetUInt32();
-                uint32 current_class = fields[1].GetUInt32();
-                uint32 mapId         = fields[2].GetUInt32();
+                uint32 current_race  = fields[0].GetUInt8();
+                uint32 current_class = fields[1].GetUInt8();
+                uint32 mapId         = fields[2].GetUInt16();
                 uint32 areaId        = fields[3].GetUInt32();
                 float  positionX     = fields[4].GetFloat();
                 float  positionY     = fields[5].GetFloat();
@@ -3315,14 +3315,14 @@ void ObjectMgr::LoadPlayerInfo()
             {
                 Field* fields = result->Fetch();
 
-                uint32 current_race = fields[0].GetUInt32();
+                uint32 current_race = fields[0].GetUInt8();
                 if (current_race >= MAX_RACES)
                 {
                     sLog->outErrorDb("Wrong race %u in `playercreateinfo_item` table, ignoring.", current_race);
                     continue;
                 }
 
-                uint32 current_class = fields[1].GetUInt32();
+                uint32 current_class = fields[1].GetUInt8();
                 if (current_class >= MAX_CLASSES)
                 {
                     sLog->outErrorDb("Wrong class %u in `playercreateinfo_item` table, ignoring.", current_class);
@@ -3337,7 +3337,7 @@ void ObjectMgr::LoadPlayerInfo()
                     continue;
                 }
 
-                int32 amount   = fields[3].GetInt32();
+                int32 amount   = fields[3].GetInt8();
 
                 if (!amount)
                 {
@@ -3391,14 +3391,14 @@ void ObjectMgr::LoadPlayerInfo()
             {
                 Field* fields = result->Fetch();
 
-                uint32 current_race = fields[0].GetUInt32();
+                uint32 current_race = fields[0].GetUInt8();
                 if (current_race >= MAX_RACES)
                 {
                     sLog->outErrorDb("Wrong race %u in `playercreateinfo_spell` table, ignoring.", current_race);
                     continue;
                 }
 
-                uint32 current_class = fields[1].GetUInt32();
+                uint32 current_class = fields[1].GetUInt8();
                 if (current_class >= MAX_CLASSES)
                 {
                     sLog->outErrorDb("Wrong class %u in `playercreateinfo_spell` table, ignoring.", current_class);
@@ -3448,14 +3448,14 @@ void ObjectMgr::LoadPlayerInfo()
             {
                 Field* fields = result->Fetch();
 
-                uint32 current_race = fields[0].GetUInt32();
+                uint32 current_race = fields[0].GetUInt8();
                 if (current_race >= MAX_RACES)
                 {
                     sLog->outErrorDb("Wrong race %u in `playercreateinfo_action` table, ignoring.", current_race);
                     continue;
                 }
 
-                uint32 current_class = fields[1].GetUInt32();
+                uint32 current_class = fields[1].GetUInt8();
                 if (current_class >= MAX_CLASSES)
                 {
                     sLog->outErrorDb("Wrong class %u in `playercreateinfo_action` table, ignoring.", current_class);
@@ -3495,7 +3495,7 @@ void ObjectMgr::LoadPlayerInfo()
         {
             Field* fields = result->Fetch();
 
-            uint32 current_class = fields[0].GetUInt32();
+            uint32 current_class = fields[0].GetUInt8();
             if (current_class >= MAX_CLASSES)
             {
                 sLog->outErrorDb("Wrong class %u in `player_classlevelstats` table, ignoring.", current_class);
@@ -3637,21 +3637,21 @@ void ObjectMgr::LoadPlayerInfo()
         {
             Field* fields = result->Fetch();
 
-            uint32 current_race = fields[0].GetUInt32();
+            uint32 current_race = fields[0].GetUInt8();
             if (current_race >= MAX_RACES)
             {
                 sLog->outErrorDb("Wrong race %u in `player_levelstats` table, ignoring.", current_race);
                 continue;
             }
 
-            uint32 current_class = fields[1].GetUInt32();
+            uint32 current_class = fields[1].GetUInt8();
             if (current_class >= MAX_CLASSES)
             {
                 sLog->outErrorDb("Wrong class %u in `player_levelstats` table, ignoring.", current_class);
                 continue;
             }
 
-            uint32 current_level = fields[2].GetUInt32();
+            uint32 current_level = fields[2].GetUInt8();
             if (current_level > sWorld->getIntConfig(CONFIG_MAX_PLAYER_LEVEL))
             {
                 if (current_level > STRONG_MAX_LEVEL)        // hardcoded level maximum
@@ -5255,7 +5255,7 @@ void ObjectMgr::LoadPageTexts()
         PageText& pageText =  _pageTextStore[fields[0].GetUInt32()];
 
         pageText.Text     = fields[1].GetString();
-        pageText.NextPage = fields[2].GetInt16();
+        pageText.NextPage = fields[2].GetInt32();
 
         ++count;
     }
@@ -5488,13 +5488,13 @@ void ObjectMgr::LoadGossipText()
             gText.Options[i].Text_0           = fields[cic++].GetString();
             gText.Options[i].Text_1           = fields[cic++].GetString();
 
-            gText.Options[i].Language         = fields[cic++].GetUInt32();
+            gText.Options[i].Language         = fields[cic++].GetUInt8();
             gText.Options[i].Probability      = fields[cic++].GetFloat();
 
             for (uint8 j=0; j < MAX_GOSSIP_TEXT_EMOTES; ++j)
             {
-                gText.Options[i].Emotes[j]._Delay  = fields[cic++].GetUInt32();
-                gText.Options[i].Emotes[j]._Emote  = fields[cic++].GetUInt32();
+                gText.Options[i].Emotes[j]._Delay  = fields[cic++].GetUInt16();
+                gText.Options[i].Emotes[j]._Emote  = fields[cic++].GetUInt16();
             }
         }
     } while (result->NextRow());
@@ -5559,11 +5559,11 @@ void ObjectMgr::ReturnOrDeleteOldMails(bool serverUp)
     // Delete all old mails without item and without body immediately, if starting server
     if (!serverUp)
     {
-        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_EMPTY_EXPIRED_MAIL);
+        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_DELETE_EMPTY_EXPIRED_MAIL);
         stmt->setUInt64(0, basetime);
         CharacterDatabase.Execute(stmt);
     }
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_EXPIRED_MAIL);
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_SELECT_EXPIRED_MAIL);
     stmt->setUInt64(0, basetime);
     PreparedQueryResult result = CharacterDatabase.Query(stmt);
     if (!result)
@@ -5574,7 +5574,7 @@ void ObjectMgr::ReturnOrDeleteOldMails(bool serverUp)
     }
 
     std::map<uint32 /*messageId*/, MailItemInfoVec> itemsCache;
-    stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_EXPIRED_MAIL_ITEMS);
+    stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_SELECT_EXPIRED_MAIL_ITEMS);
     stmt->setUInt64(0, basetime);
     if (PreparedQueryResult items = CharacterDatabase.Query(stmt))
     {
@@ -5629,7 +5629,7 @@ void ObjectMgr::ReturnOrDeleteOldMails(bool serverUp)
                 // mail open and then not returned
                 for (MailItemInfoVec::iterator itr2 = m->items.begin(); itr2 != m->items.end(); ++itr2)
                 {
-                    stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_ITEM_INSTANCE);
+                    stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_DELETE_ITEM_INSTANCE);
                     stmt->setUInt32(0, itr2->item_guid);
                     CharacterDatabase.Execute(stmt);
                 }
@@ -5637,7 +5637,7 @@ void ObjectMgr::ReturnOrDeleteOldMails(bool serverUp)
             else
             {
                 // Mail will be returned
-                stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_MAIL_RETURNED);
+                stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_UPDATE_MAIL_RETURNED);
                 stmt->setUInt32(0, m->receiver);
                 stmt->setUInt32(1, m->sender);
                 stmt->setUInt64(2, basetime + 30 * DAY);
@@ -5648,12 +5648,12 @@ void ObjectMgr::ReturnOrDeleteOldMails(bool serverUp)
                 for (MailItemInfoVec::iterator itr2 = m->items.begin(); itr2 != m->items.end(); ++itr2)
                 {
                     // Update receiver in mail items for its proper delivery, and in instance_item for avoid lost item at sender delete
-                    stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_MAIL_ITEM_RECEIVER);
+                    stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_UPDATE_MAIL_ITEM_RECEIVER);
                     stmt->setUInt32(0, m->sender);
                     stmt->setUInt32(1, itr2->item_guid);
                     CharacterDatabase.Execute(stmt);
 
-                    stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_ITEM_OWNER);
+                    stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_UPDATE_ITEM_OWNER);
                     stmt->setUInt32(0, m->sender);
                     stmt->setUInt32(1, itr2->item_guid);
                     CharacterDatabase.Execute(stmt);
@@ -5664,7 +5664,7 @@ void ObjectMgr::ReturnOrDeleteOldMails(bool serverUp)
             }
         }
 
-        stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_MAIL);
+        stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_DELETE_MAIL);
         stmt->setUInt32(0, m->messageID);
         CharacterDatabase.Execute(stmt);
         delete m;
@@ -7014,7 +7014,7 @@ void ObjectMgr::LoadCorpses()
 {
     uint32 oldMSTime = getMSTime();
 
-    PreparedQueryResult result = CharacterDatabase.Query(CharacterDatabase.GetPreparedStatement(CHAR_SEL_CORPSES));
+    PreparedQueryResult result = CharacterDatabase.Query(CharacterDatabase.GetPreparedStatement(CHARACTER_SELECT_CORPSES));
     if (!result)
     {
         sLog->outString(">> Loaded 0 corpses. DB table `corpse` is empty.");
@@ -7144,18 +7144,18 @@ void ObjectMgr::LoadRewardOnKill()
         uint32 creature_id = fields[0].GetUInt32();
 
         RewardOnKillEntry rewOnKill;
-        rewOnKill.RepFaction1          = fields[1].GetUInt32();
-        rewOnKill.RepFaction2          = fields[2].GetUInt32();
+        rewOnKill.RepFaction1          = fields[1].GetInt16();
+        rewOnKill.RepFaction2          = fields[2].GetInt16();
         rewOnKill.IsTeamAward1         = fields[3].GetBool();
-        rewOnKill.ReputationMaxCap1    = fields[4].GetUInt32();
+        rewOnKill.ReputationMaxCap1    = fields[4].GetUInt8();
         rewOnKill.RepValue1            = fields[5].GetInt32();
         rewOnKill.IsTeamAward2         = fields[6].GetBool();
-        rewOnKill.ReputationMaxCap2    = fields[7].GetUInt32();
+        rewOnKill.ReputationMaxCap2    = fields[7].GetUInt8();
         rewOnKill.RepValue2            = fields[8].GetInt32();
         rewOnKill.TeamDependent        = fields[9].GetUInt8();
-        rewOnKill.CurrencyId1          = fields[10].GetUInt32();
-        rewOnKill.CurrencyId2          = fields[11].GetUInt32();
-        rewOnKill.CurrencyId3          = fields[12].GetUInt32();
+        rewOnKill.CurrencyId1          = fields[10].GetUInt16();
+        rewOnKill.CurrencyId2          = fields[11].GetUInt16();
+        rewOnKill.CurrencyId3          = fields[12].GetUInt16();
         rewOnKill.CurrencyCount1       = fields[13].GetInt32();
         rewOnKill.CurrencyCount2       = fields[14].GetInt32();
         rewOnKill.CurrencyCount3       = fields[15].GetInt32();
@@ -7242,25 +7242,25 @@ void ObjectMgr::LoadReputationSpilloverTemplate()
     {
         Field *fields = result->Fetch();
 
-        uint32 factionId                = fields[0].GetUInt32();
+        uint32 factionId                = fields[0].GetUInt16();
 
         RepSpilloverTemplate repTemplate;
 
-        repTemplate.faction[0]          = fields[1].GetUInt32();
+        repTemplate.faction[0]          = fields[1].GetUInt16();
         repTemplate.faction_rate[0]     = fields[2].GetFloat();
-        repTemplate.faction_rank[0]     = fields[3].GetUInt32();
-        repTemplate.faction[1]          = fields[4].GetUInt32();
+        repTemplate.faction_rank[0]     = fields[3].GetUInt8();
+        repTemplate.faction[1]          = fields[4].GetUInt16();
         repTemplate.faction_rate[1]     = fields[5].GetFloat();
-        repTemplate.faction_rank[1]     = fields[6].GetUInt32();
-        repTemplate.faction[2]          = fields[7].GetUInt32();
+        repTemplate.faction_rank[1]     = fields[6].GetUInt8();
+        repTemplate.faction[2]          = fields[7].GetUInt16();
         repTemplate.faction_rate[2]     = fields[8].GetFloat();
-        repTemplate.faction_rank[2]     = fields[9].GetUInt32();
-        repTemplate.faction[3]          = fields[10].GetUInt32();
+        repTemplate.faction_rank[2]     = fields[9].GetUInt8();
+        repTemplate.faction[3]          = fields[10].GetUInt16();
         repTemplate.faction_rate[3]     = fields[11].GetFloat();
-        repTemplate.faction_rank[3]     = fields[12].GetUInt32();
-        repTemplate.faction[4]          = fields[13].GetUInt32();
+        repTemplate.faction_rank[3]     = fields[12].GetUInt8();
+        repTemplate.faction[4]          = fields[13].GetUInt16();
         repTemplate.faction_rate[4]     = fields[14].GetFloat();
-        repTemplate.faction_rank[4]     = fields[15].GetUInt32();
+        repTemplate.faction_rank[4]     = fields[15].GetUInt8();
 
         FactionEntry const *factionEntry = sFactionStore.LookupEntry(factionId);
 
@@ -7546,7 +7546,7 @@ void ObjectMgr::SaveCreatureRespawnTime(uint32 loguid, uint32 instance, time_t t
         _creatureRespawnTimesMutex.release();
     }
 
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_REP_CREATURE_RESPAWNS);
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_REPLACE_CREATURE_RESPAWNS);
     stmt->setUInt32(0, loguid);
     stmt->setUInt64(1, uint64(t));
     stmt->setUInt32(2, instance);
@@ -7562,7 +7562,7 @@ void ObjectMgr::RemoveCreatureRespawnTime(uint32 loguid, uint32 instance)
         _creatureRespawnTimesMutex.release();
     }
 
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_CREATURE_RESPAWNS);
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_DELETE_CREATURE_RESPAWNS);
     stmt->setUInt32(0, loguid);
     stmt->setUInt32(1, instance);
     CharacterDatabase.Execute(stmt);
@@ -7594,7 +7594,7 @@ void ObjectMgr::SaveGORespawnTime(uint32 loguid, uint32 instance, time_t t)
         _goRespawnTimesMutex.release();
     }
 
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_REP_GO_RESPAWNS);
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_REPLACE_GO_RESPAWNS);
     stmt->setUInt32(0, loguid);
     stmt->setUInt64(1, uint64(t));
     stmt->setUInt32(2, instance);
@@ -7610,7 +7610,7 @@ void ObjectMgr::RemoveGORespawnTime(uint32 loguid, uint32 instance)
         _goRespawnTimesMutex.release();
     }
 
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_GO_RESPAWNS);
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_DELETE_GO_RESPAWNS);
     stmt->setUInt32(0, loguid);
     stmt->setUInt32(1, instance);
     CharacterDatabase.Execute(stmt);
@@ -7645,10 +7645,10 @@ void ObjectMgr::DeleteRespawnTimeForInstance(uint32 instance)
         }
         _creatureRespawnTimesMutex.release();
     }
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_CREATURE_RESPAWN_BY_INSTANCE);
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_DELETE_CREATURE_RESPAWN_BY_INSTANCE);
     stmt->setUInt32(0, instance);
     CharacterDatabase.Execute(stmt);
-    stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_GO_RESPAWNS_BY_INSTANCE);
+    stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_DELETE_GO_RESPAWNS_BY_INSTANCE);
     stmt->setUInt32(0, instance);
     CharacterDatabase.Execute(stmt);
 }
@@ -8269,7 +8269,7 @@ void ObjectMgr::LoadGameTele()
         gt.position_y     = fields[2].GetFloat();
         gt.position_z     = fields[3].GetFloat();
         gt.orientation    = fields[4].GetFloat();
-        gt.mapId          = fields[5].GetUInt32();
+        gt.mapId          = fields[5].GetUInt16();
         gt.name           = fields[6].GetString();
 
         if (!MapManager::IsValidMapCoord(gt.mapId, gt.position_x, gt.position_y, gt.position_z, gt.orientation))
@@ -8547,9 +8547,9 @@ void ObjectMgr::LoadTrainerSpell()
         uint32 entry         = fields[0].GetUInt32();
         uint32 spell         = fields[1].GetUInt32();
         uint32 spellCost     = fields[2].GetUInt32();
-        uint32 reqSkill      = fields[3].GetUInt32();
-        uint32 reqSkillValue = fields[4].GetUInt32();
-        uint32 reqLevel      = fields[5].GetUInt32();
+        uint32 reqSkill      = fields[3].GetUInt16();
+        uint32 reqSkillValue = fields[4].GetUInt16();
+        uint32 reqLevel      = fields[5].GetUInt8();
 
         AddSpellToTrainer(entry, spell, spellCost, reqSkill, reqSkillValue, reqLevel);
 
@@ -8583,7 +8583,7 @@ int ObjectMgr::LoadReferenceVendor(int32 vendor, int32 item, std::set<uint32> *s
             count += LoadReferenceVendor(vendor, -item_id, skip_vendors);
         else
         {
-            int32  maxcount     = fields[1].GetInt32();
+            int32  maxcount     = fields[1].GetInt8();
             uint32 incrtime     = fields[2].GetUInt32();
             uint32 ExtendedCost = fields[3].GetUInt32();
 
@@ -8633,7 +8633,7 @@ void ObjectMgr::LoadVendors()
             count += LoadReferenceVendor(entry, -item_id, &skip_vendors);
         else
         {
-            int32  maxcount     = fields[2].GetInt32();
+            int32  maxcount     = fields[2].GetInt8();
             uint32 incrtime     = fields[3].GetUInt32();
             uint32 ExtendedCost = fields[4].GetUInt32();
 
@@ -8675,7 +8675,7 @@ void ObjectMgr::LoadGossipMenu()
 
         GossipMenus gMenu;
 
-        gMenu.entry             = fields[0].GetUInt32();
+        gMenu.entry             = fields[0].GetUInt16();
         gMenu.text_id           = fields[1].GetUInt32();
 
         if (!GetGossipText(gMenu.text_id))
@@ -8720,11 +8720,11 @@ void ObjectMgr::LoadGossipMenuItems()
 
         GossipMenuItems gMenuItem;
 
-        gMenuItem.MenuId                = fields[0].GetUInt32();
-        gMenuItem.OptionIndex           = fields[1].GetUInt32();
-        gMenuItem.OptionIcon            = fields[2].GetUInt8();
+        gMenuItem.MenuId                = fields[0].GetUInt16();
+        gMenuItem.OptionIndex           = fields[1].GetUInt16();
+        gMenuItem.OptionIcon            = fields[2].GetUInt32();
         gMenuItem.OptionText            = fields[3].GetString();
-        gMenuItem.OptionType            = fields[4].GetUInt32();
+        gMenuItem.OptionType            = fields[4].GetUInt8();
         gMenuItem.OptionNpcflag         = fields[5].GetUInt32();
         gMenuItem.ActionMenuId          = fields[6].GetUInt32();
         gMenuItem.ActionPoiId           = fields[7].GetUInt32();
@@ -8803,7 +8803,7 @@ bool ObjectMgr::IsVendorItemValid(uint32 vendor_entry, uint32 item_id, int32 max
     if (!cInfo)
     {
         if (player)
-            ChatHandler(player).SendSysMessage(LANG_COMMAND_VENDORSELECTION);
+            ChatHandler(player).SendSysMessage(LANGUAGE_COMMAND_VENDORSELECTION);
         else
             sLog->outErrorDb("Table `(game_event_)npc_vendor` have data for not existed creature template (Entry: %u), ignore", vendor_entry);
         return false;
@@ -8814,7 +8814,7 @@ bool ObjectMgr::IsVendorItemValid(uint32 vendor_entry, uint32 item_id, int32 max
         if (!skip_vendors || skip_vendors->count(vendor_entry) == 0)
         {
             if (player)
-                ChatHandler(player).SendSysMessage(LANG_COMMAND_VENDORSELECTION);
+                ChatHandler(player).SendSysMessage(LANGUAGE_COMMAND_VENDORSELECTION);
             else
                 sLog->outErrorDb("Table `(game_event_)npc_vendor` have data for not creature template (Entry: %u) without vendor flag, ignore", vendor_entry);
 
@@ -8827,7 +8827,7 @@ bool ObjectMgr::IsVendorItemValid(uint32 vendor_entry, uint32 item_id, int32 max
     if (!sObjectMgr->GetItemTemplate(item_id))
     {
         if (player)
-            ChatHandler(player).PSendSysMessage(LANG_ITEM_NOT_FOUND, item_id);
+            ChatHandler(player).PSendSysMessage(LANGUAGE_ITEM_NOT_FOUND, item_id);
         else
             sLog->outErrorDb("Table `(game_event_)npc_vendor` for Vendor (Entry: %u) have in item list non-existed item (%u), ignore", vendor_entry, item_id);
         return false;
@@ -8836,7 +8836,7 @@ bool ObjectMgr::IsVendorItemValid(uint32 vendor_entry, uint32 item_id, int32 max
     if (ExtendedCost && !sItemExtendedCostStore.LookupEntry(ExtendedCost))
     {
         if (player)
-            ChatHandler(player).PSendSysMessage(LANG_EXTENDED_COST_NOT_EXIST, ExtendedCost);
+            ChatHandler(player).PSendSysMessage(LANGUAGE_EXTENDED_COST_NOT_EXIST, ExtendedCost);
         else
             sLog->outErrorDb("Table `(game_event_)npc_vendor` have Item (Entry: %u) with wrong ExtendedCost (%u) for vendor (%u), ignore", item_id, ExtendedCost, vendor_entry);
         return false;
@@ -8866,7 +8866,7 @@ bool ObjectMgr::IsVendorItemValid(uint32 vendor_entry, uint32 item_id, int32 max
     if (vItems->FindItemCostPair(item_id, ExtendedCost))
     {
         if (player)
-            ChatHandler(player).PSendSysMessage(LANG_ITEM_ALREADY_IN_LIST, item_id, ExtendedCost);
+            ChatHandler(player).PSendSysMessage(LANGUAGE_ITEM_ALREADY_IN_LIST, item_id, ExtendedCost);
         else
             sLog->outErrorDb("Table `npc_vendor` has duplicate items %u (with extended cost %u) for vendor (Entry: %u), ignoring", item_id, ExtendedCost, vendor_entry);
         return false;
@@ -8875,7 +8875,7 @@ bool ObjectMgr::IsVendorItemValid(uint32 vendor_entry, uint32 item_id, int32 max
     if (vItems->GetItemCount() >= MAX_VENDOR_ITEMS)
     {
         if (player)
-            ChatHandler(player).SendSysMessage(LANG_COMMAND_ADDVENDORITEMITEMS);
+            ChatHandler(player).SendSysMessage(LANGUAGE_COMMAND_ADDVENDORITEMITEMS);
         else
             sLog->outErrorDb("Table `npc_vendor` has too many items (%u >= %i) for vendor (Entry: %u), ignore", vItems->GetItemCount(), MAX_VENDOR_ITEMS, vendor_entry);
         return false;
@@ -9049,8 +9049,8 @@ void ObjectMgr::LoadCreatureClassLevelStats()
         for (uint8 i = 0; i < MAX_CREATURE_BASE_HP; ++i)
             stats.BaseHealth[i] = fields[i + 2].GetInt32();
 
-        stats.BaseMana  = fields[6].GetInt32();
-        stats.BaseArmor = fields[7].GetInt32();
+        stats.BaseMana  = fields[6].GetInt16();
+        stats.BaseArmor = fields[7].GetInt16();
 
         if (!Class || ((1 << (Class - 1)) & CLASSMASK_ALL_CREATURES) == 0)
             sLog->outErrorDb("Creature base stats for level %u has invalid class %u", Level, Class);

@@ -113,7 +113,7 @@ void CreatureTextMgr::LoadCreatureTexts()
         if (!GetLanguageDescByID(temp.lang))
         {
             sLog->outErrorDb("CreatureTextMgr:  Entry %u, Group %u in table `creature_texts` using Language %u but Language does not exist.", temp.entry, temp.group, uint32(temp.lang));
-            temp.lang = LANG_UNIVERSAL;
+            temp.lang = LANGUAGE_UNIVERSAL;
         }
         if (temp.type >= MAX_CHAT_MSG_TYPE)
         {
@@ -181,7 +181,7 @@ void CreatureTextMgr::LoadCreatureTextLocales()
     sLog->outString();
 }
 
-uint32 CreatureTextMgr::SendChat(Creature* source, uint8 textGroup, uint64 whisperGuid /*= 0*/, ChatMsg msgType /*= CHAT_MSG_ADDON*/, Language language /*= LANG_ADDON*/, TextRange range /*= TEXT_RANGE_NORMAL*/, uint32 sound /*= 0*/, Team team /*= TEAM_OTHER*/, bool gmOnly /*= false*/, Player* srcPlr /*= NULL*/)
+uint32 CreatureTextMgr::SendChat(Creature* source, uint8 textGroup, uint64 whisperGuid /*= 0*/, ChatMsg msgType /*= CHAT_MSG_ADDON*/, Language language /*= LANGUAGE_ADDON*/, TextRange range /*= TEXT_RANGE_NORMAL*/, uint32 sound /*= 0*/, Team team /*= TEAM_OTHER*/, bool gmOnly /*= false*/, Player* srcPlr /*= NULL*/)
 {
     if (!source)
         return 0;
@@ -251,7 +251,7 @@ uint32 CreatureTextMgr::SendChat(Creature* source, uint8 textGroup, uint64 whisp
     CreatureTextGroup::const_iterator iter = tempGroup.begin() + pos;
 
     ChatMsg finalType = (msgType == CHAT_MSG_ADDON) ? (*iter).type : msgType;
-    Language finalLang = (language == LANG_ADDON) ? (*iter).lang : language;
+    Language finalLang = (language == LANGUAGE_ADDON) ? (*iter).lang : language;
     uint32 finalSound = sound ? sound : (*iter).sound;
 
     if (finalSound)

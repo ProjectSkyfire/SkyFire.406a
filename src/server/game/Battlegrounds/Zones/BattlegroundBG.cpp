@@ -16,6 +16,8 @@
  */
 
 #include "BattlegroundBG.h"
+#include "ObjectAccessor.h"
+#include "Player.h"
 
 uint32 GILNEAS_BG_HonorScoreTicks[BG_HONOR_MODE_NUM] =
 {
@@ -35,10 +37,10 @@ BattlegroundBG::BattlegroundBG()
     BgObjects.resize(GILNEAS_BG_OBJECT_MAX);
     BgCreatures.resize(GILNEAS_BG_ALL_NODES_COUNT + 3); // +3 for aura triggers
 
-    StartMessageIds[BG_STARTING_EVENT_FIRST]  = LANG_BG_BG_START_TWO_MINUTES;
-    StartMessageIds[BG_STARTING_EVENT_SECOND] = LANG_BG_BG_START_ONE_MINUTE;
-    StartMessageIds[BG_STARTING_EVENT_THIRD]  = LANG_BG_BG_START_HALF_MINUTE;
-    StartMessageIds[BG_STARTING_EVENT_FOURTH] = LANG_BG_BG_HAS_BEGUN;
+    StartMessageIds[BG_STARTING_EVENT_FIRST]  = LANGUAGE_BG_BG_START_TWO_MINUTES;
+    StartMessageIds[BG_STARTING_EVENT_SECOND] = LANGUAGE_BG_BG_START_ONE_MINUTE;
+    StartMessageIds[BG_STARTING_EVENT_THIRD]  = LANGUAGE_BG_BG_START_HALF_MINUTE;
+    StartMessageIds[BG_STARTING_EVENT_FOURTH] = LANGUAGE_BG_BG_HAS_BEGUN;
 }
 
 BattlegroundBG::~BattlegroundBG() {}
@@ -88,13 +90,13 @@ void BattlegroundBG::Update(uint32 diff) // PostUpdateImpl...
                     if (teamIndex == 0)
                     {
                         // FIXME: need to fix Locales for team and nodes names.
-                        SendMessage2ToAll(LANG_BG_BG_NODE_TAKEN, CHAT_MSG_BG_SYSTEM_ALLIANCE, NULL, LANG_BG_BG_ALLY, _GetNodeNameId(node));
+                        SendMessage2ToAll(LANGUAGE_BG_BG_NODE_TAKEN, CHAT_MSG_BG_SYSTEM_ALLIANCE, NULL, LANGUAGE_BG_BG_ALLY, _GetNodeNameId(node));
                         PlaySoundToAll(GILNEAS_BG_SOUND_NODE_CAPTURED_ALLIANCE);
                     }
                     else
                     {
                         // FIXME: team and node names not localized
-                        SendMessage2ToAll(LANG_BG_BG_NODE_TAKEN, CHAT_MSG_BG_SYSTEM_HORDE, NULL, LANG_BG_BG_HORDE, _GetNodeNameId(node));
+                        SendMessage2ToAll(LANGUAGE_BG_BG_NODE_TAKEN, CHAT_MSG_BG_SYSTEM_HORDE, NULL, LANGUAGE_BG_BG_HORDE, _GetNodeNameId(node));
                         PlaySoundToAll(GILNEAS_BG_SOUND_NODE_CAPTURED_HORDE);
                     }
                 }
@@ -135,9 +137,9 @@ void BattlegroundBG::Update(uint32 diff) // PostUpdateImpl...
                 if (!_IsInformedNearVictory && _TeamScores[team] > GILNEAS_BG_WARNING_NEAR_VICTORY_SCORE)
                 {
                     if (team == BG_TEAM_ALLIANCE)
-                        SendMessageToAll(LANG_BG_AB_A_NEAR_VICTORY, CHAT_MSG_BG_SYSTEM_NEUTRAL);
+                        SendMessageToAll(LANGUAGE_BG_AB_A_NEAR_VICTORY, CHAT_MSG_BG_SYSTEM_NEUTRAL);
                     else
-                        SendMessageToAll(LANG_BG_AB_H_NEAR_VICTORY, CHAT_MSG_BG_SYSTEM_NEUTRAL);
+                        SendMessageToAll(LANGUAGE_BG_AB_H_NEAR_VICTORY, CHAT_MSG_BG_SYSTEM_NEUTRAL);
 
                     PlaySoundToAll(GILNEAS_BG_SOUND_NEAR_VICTORY);
                     _IsInformedNearVictory = true;
@@ -259,9 +261,9 @@ int32 BattlegroundBG::_GetNodeNameId(uint8 node)
 {
     switch (node)
     {
-        case GILNEAS_BG_NODE_LIGHTHOUSE: return LANG_BG_BG_NODE_LIGHTHOUSE;
-        case GILNEAS_BG_NODE_WATERWORKS: return LANG_BG_BG_NODE_WATERWORKS;
-        case GILNEAS_BG_NODE_MINE: return LANG_BG_BG_NODE_MINE;
+        case GILNEAS_BG_NODE_LIGHTHOUSE: return LANGUAGE_BG_BG_NODE_LIGHTHOUSE;
+        case GILNEAS_BG_NODE_WATERWORKS: return LANGUAGE_BG_BG_NODE_WATERWORKS;
+        case GILNEAS_BG_NODE_MINE: return LANGUAGE_BG_BG_NODE_MINE;
         default:
             ASSERT(0);
     }
@@ -441,9 +443,9 @@ void BattlegroundBG::EventPlayerClickedOnFlag(Player* source, GameObject* /*targ
 
         // FIXME: need to fix Locales for team and node names.
         if (teamIndex == 0)
-            SendMessage2ToAll(LANG_BG_BG_NODE_CLAIMED, CHAT_MSG_BG_SYSTEM_ALLIANCE, source, _GetNodeNameId(node), LANG_BG_BG_ALLY);
+            SendMessage2ToAll(LANGUAGE_BG_BG_NODE_CLAIMED, CHAT_MSG_BG_SYSTEM_ALLIANCE, source, _GetNodeNameId(node), LANGUAGE_BG_BG_ALLY);
         else
-            SendMessage2ToAll(LANG_BG_BG_NODE_CLAIMED, CHAT_MSG_BG_SYSTEM_HORDE, source, _GetNodeNameId(node), LANG_BG_BG_HORDE);
+            SendMessage2ToAll(LANGUAGE_BG_BG_NODE_CLAIMED, CHAT_MSG_BG_SYSTEM_HORDE, source, _GetNodeNameId(node), LANGUAGE_BG_BG_HORDE);
 
         sound = GILNEAS_BG_SOUND_NODE_CLAIMED;
     }
@@ -467,9 +469,9 @@ void BattlegroundBG::EventPlayerClickedOnFlag(Player* source, GameObject* /*targ
 
             // FIXME: need to fix Locales for team and node names.
             if (teamIndex == BG_TEAM_ALLIANCE)
-                SendMessage2ToAll(LANG_BG_BG_NODE_ASSAULTED, CHAT_MSG_BG_SYSTEM_ALLIANCE, source, _GetNodeNameId(node));
+                SendMessage2ToAll(LANGUAGE_BG_BG_NODE_ASSAULTED, CHAT_MSG_BG_SYSTEM_ALLIANCE, source, _GetNodeNameId(node));
             else
-                SendMessage2ToAll(LANG_BG_BG_NODE_ASSAULTED, CHAT_MSG_BG_SYSTEM_HORDE, source, _GetNodeNameId(node));
+                SendMessage2ToAll(LANGUAGE_BG_BG_NODE_ASSAULTED, CHAT_MSG_BG_SYSTEM_HORDE, source, _GetNodeNameId(node));
         }
         // If contested, change back to occupied
         else
@@ -489,9 +491,9 @@ void BattlegroundBG::EventPlayerClickedOnFlag(Player* source, GameObject* /*targ
 
             // FIXME: need to fix Locales for team and node names.
             if (teamIndex == BG_TEAM_ALLIANCE)
-                SendMessage2ToAll(LANG_BG_BG_NODE_DEFENDED, CHAT_MSG_BG_SYSTEM_ALLIANCE, source, _GetNodeNameId(node));
+                SendMessage2ToAll(LANGUAGE_BG_BG_NODE_DEFENDED, CHAT_MSG_BG_SYSTEM_ALLIANCE, source, _GetNodeNameId(node));
             else
-                SendMessage2ToAll(LANG_BG_BG_NODE_DEFENDED, CHAT_MSG_BG_SYSTEM_HORDE, source, _GetNodeNameId(node));
+                SendMessage2ToAll(LANGUAGE_BG_BG_NODE_DEFENDED, CHAT_MSG_BG_SYSTEM_HORDE, source, _GetNodeNameId(node));
         }
         sound = (teamIndex == BG_TEAM_ALLIANCE) ? GILNEAS_BG_SOUND_NODE_ASSAULTED_ALLIANCE : GILNEAS_BG_SOUND_NODE_ASSAULTED_HORDE;
     }
@@ -513,9 +515,9 @@ void BattlegroundBG::EventPlayerClickedOnFlag(Player* source, GameObject* /*targ
 
         // FIXME: need to fix Locales for team and node names.
         if (teamIndex == BG_TEAM_ALLIANCE)
-            SendMessage2ToAll(LANG_BG_BG_NODE_ASSAULTED, CHAT_MSG_BG_SYSTEM_ALLIANCE, source, _GetNodeNameId(node));
+            SendMessage2ToAll(LANGUAGE_BG_BG_NODE_ASSAULTED, CHAT_MSG_BG_SYSTEM_ALLIANCE, source, _GetNodeNameId(node));
         else
-            SendMessage2ToAll(LANG_BG_BG_NODE_ASSAULTED, CHAT_MSG_BG_SYSTEM_HORDE, source, _GetNodeNameId(node));
+            SendMessage2ToAll(LANGUAGE_BG_BG_NODE_ASSAULTED, CHAT_MSG_BG_SYSTEM_HORDE, source, _GetNodeNameId(node));
 
         sound = (teamIndex == BG_TEAM_ALLIANCE) ? GILNEAS_BG_SOUND_NODE_ASSAULTED_ALLIANCE : GILNEAS_BG_SOUND_NODE_ASSAULTED_HORDE;
     }
@@ -525,9 +527,9 @@ void BattlegroundBG::EventPlayerClickedOnFlag(Player* source, GameObject* /*targ
     {
         // FIXME: need to fix Locales for team and node names.
         if (teamIndex == BG_TEAM_ALLIANCE)
-            SendMessage2ToAll(LANG_BG_BG_NODE_TAKEN, CHAT_MSG_BG_SYSTEM_ALLIANCE, NULL, LANG_BG_BG_ALLY, _GetNodeNameId(node));
+            SendMessage2ToAll(LANGUAGE_BG_BG_NODE_TAKEN, CHAT_MSG_BG_SYSTEM_ALLIANCE, NULL, LANGUAGE_BG_BG_ALLY, _GetNodeNameId(node));
         else
-            SendMessage2ToAll(LANG_BG_BG_NODE_TAKEN, CHAT_MSG_BG_SYSTEM_HORDE, NULL, LANG_BG_BG_HORDE, _GetNodeNameId(node));
+            SendMessage2ToAll(LANGUAGE_BG_BG_NODE_TAKEN, CHAT_MSG_BG_SYSTEM_HORDE, NULL, LANGUAGE_BG_BG_HORDE, _GetNodeNameId(node));
     }
     PlaySoundToAll(sound);
 }

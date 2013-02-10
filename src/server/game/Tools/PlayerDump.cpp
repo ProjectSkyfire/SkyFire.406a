@@ -34,26 +34,26 @@ struct DumpTable
 static DumpTable dumpTables[DUMP_TABLE_COUNT] =
 {
     { "characters",                      DTT_CHARACTER  },
-    { "character_account_data",          DTT_CHAR_TABLE },
-    { "character_achievement",           DTT_CHAR_TABLE },
-    { "character_achievement_progress",  DTT_CHAR_TABLE },
-    { "character_action",                DTT_CHAR_TABLE },
-    { "character_aura",                  DTT_CHAR_TABLE },
-    { "character_declinedname",          DTT_CHAR_TABLE },
+    { "character_account_data",          DTT_CHARACTER_TABLE },
+    { "character_achievement",           DTT_CHARACTER_TABLE },
+    { "character_achievement_progress",  DTT_CHARACTER_TABLE },
+    { "character_action",                DTT_CHARACTER_TABLE },
+    { "character_aura",                  DTT_CHARACTER_TABLE },
+    { "character_declinedname",          DTT_CHARACTER_TABLE },
     { "character_equipmentsets",         DTT_EQSET_TABLE},
     { "character_gifts",                 DTT_ITEM_GIFT  },
-    { "character_glyphs",                DTT_CHAR_TABLE },
-    { "character_homebind",              DTT_CHAR_TABLE },
+    { "character_glyphs",                DTT_CHARACTER_TABLE },
+    { "character_homebind",              DTT_CHARACTER_TABLE },
     { "character_inventory",             DTT_INVENTORY  },
     { "character_pet",                   DTT_PET        },
     { "character_pet_declinedname",      DTT_PET        },
-    { "character_queststatus",           DTT_CHAR_TABLE },
-    { "character_queststatus_rewarded",  DTT_CHAR_TABLE },
-    { "character_reputation",            DTT_CHAR_TABLE },
-    { "character_skills",                DTT_CHAR_TABLE },
-    { "character_spell",                 DTT_CHAR_TABLE },
-    { "character_spell_cooldown",        DTT_CHAR_TABLE },
-    { "character_talent",                DTT_CHAR_TABLE },
+    { "character_queststatus",           DTT_CHARACTER_TABLE },
+    { "character_queststatus_rewarded",  DTT_CHARACTER_TABLE },
+    { "character_reputation",            DTT_CHARACTER_TABLE },
+    { "character_skills",                DTT_CHARACTER_TABLE },
+    { "character_spell",                 DTT_CHARACTER_TABLE },
+    { "character_spell_cooldown",        DTT_CHARACTER_TABLE },
+    { "character_talent",                DTT_CHARACTER_TABLE },
     { "item_instance",                   DTT_ITEM       },
     { "mail",                            DTT_MAIL       },
     { "mail_items",                      DTT_MAIL_ITEM  },
@@ -413,7 +413,7 @@ DumpReturn PlayerDumpReader::LoadDump(const std::string& file, uint32 account, s
     bool incHighest = true;
     if (guid != 0 && guid < sObjectMgr->_hiCharGuid)
     {
-        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_CHECK_GUID);
+        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_SELECT_CHECK_GUID);
         stmt->setUInt32(0, guid);
         PreparedQueryResult result = CharacterDatabase.Query(stmt);
 
@@ -430,7 +430,7 @@ DumpReturn PlayerDumpReader::LoadDump(const std::string& file, uint32 account, s
 
     if (ObjectMgr::CheckPlayerName(name, true) == CHAR_NAME_SUCCESS)
     {
-        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_CHECK_NAME);
+        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_SELECT_CHECK_NAME);
         stmt->setString(0, name);
         PreparedQueryResult result = CharacterDatabase.Query(stmt);
 
@@ -536,7 +536,7 @@ DumpReturn PlayerDumpReader::LoadDump(const std::string& file, uint32 account, s
                     // check if the original name already exists
                     name = getnth(line, 3);
 
-                    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_CHECK_NAME);
+                    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_SELECT_CHECK_NAME);
                     stmt->setString(0, name);
                     PreparedQueryResult result = CharacterDatabase.Query(stmt);
                     
@@ -556,7 +556,7 @@ DumpReturn PlayerDumpReader::LoadDump(const std::string& file, uint32 account, s
                     ROLLBACK(DUMP_FILE_BROKEN);
                 break;
             }
-            case DTT_CHAR_TABLE:
+            case DTT_CHARACTER_TABLE:
             {
                 if (!changenth(line, 1, newguid))           // character_*.guid update
                     ROLLBACK(DUMP_FILE_BROKEN);

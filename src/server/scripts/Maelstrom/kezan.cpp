@@ -77,28 +77,28 @@ class npc_defiant_troll : public CreatureScript
                 switch (urand(0, 7))
                 {
                     case 0:
-                        me->MonsterYell(SAY_WORK_1, LANG_UNIVERSAL, 0);
+                        me->MonsterYell(SAY_WORK_1, LANGUAGE_UNIVERSAL, 0);
                         break;
                     case 1:
-                        me->MonsterYell(SAY_WORK_2, LANG_UNIVERSAL, 0);
+                        me->MonsterYell(SAY_WORK_2, LANGUAGE_UNIVERSAL, 0);
                         break;
                     case 2:
-                        me->MonsterYell(SAY_WORK_3, LANG_UNIVERSAL, 0);
+                        me->MonsterYell(SAY_WORK_3, LANGUAGE_UNIVERSAL, 0);
                         break;
                     case 3:
-                        me->MonsterYell(SAY_WORK_4, LANG_UNIVERSAL, 0);
+                        me->MonsterYell(SAY_WORK_4, LANGUAGE_UNIVERSAL, 0);
                         break;
                     case 4:
-                        me->MonsterYell(SAY_WORK_5, LANG_UNIVERSAL, 0);
+                        me->MonsterYell(SAY_WORK_5, LANGUAGE_UNIVERSAL, 0);
                         break;
                     case 5:
-                        me->MonsterYell(SAY_WORK_6, LANG_UNIVERSAL, 0);
+                        me->MonsterYell(SAY_WORK_6, LANGUAGE_UNIVERSAL, 0);
                         break;
                     case 6:
-                        me->MonsterYell(SAY_WORK_7, LANG_UNIVERSAL, 0);
+                        me->MonsterYell(SAY_WORK_7, LANGUAGE_UNIVERSAL, 0);
                         break;
                     case 7:
-                        me->MonsterYell(SAY_WORK_8, LANG_UNIVERSAL, 0);
+                        me->MonsterYell(SAY_WORK_8, LANGUAGE_UNIVERSAL, 0);
                         break;
                 }
                 me->RemoveAllAuras();

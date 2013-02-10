@@ -141,9 +141,9 @@ void ArenaTeamMgr::LoadArenaTeams()
 void ArenaTeamMgr::DistributeArenaPoints()
 {
     // Used to distribute arena points based on last week's stats
-    sWorld->SendWorldText(LANG_DIST_ARENA_POINTS_START);
+    sWorld->SendWorldText(LANGUAGE_DIST_ARENA_POINTS_START);
 
-    sWorld->SendWorldText(LANG_DIST_ARENA_POINTS_ONLINE_START);
+    sWorld->SendWorldText(LANGUAGE_DIST_ARENA_POINTS_ONLINE_START);
 
     // Temporary structure for storing maximum points to add values for all players
     std::map<uint32, uint32> PlayerPoints;
@@ -170,9 +170,9 @@ void ArenaTeamMgr::DistributeArenaPoints()
 
     PlayerPoints.clear();
 
-    sWorld->SendWorldText(LANG_DIST_ARENA_POINTS_ONLINE_END);
+    sWorld->SendWorldText(LANGUAGE_DIST_ARENA_POINTS_ONLINE_END);
 
-    sWorld->SendWorldText(LANG_DIST_ARENA_POINTS_TEAM_START);
+    sWorld->SendWorldText(LANGUAGE_DIST_ARENA_POINTS_TEAM_START);
     for (ArenaTeamContainer::iterator titr = GetArenaTeamMapBegin(); titr != GetArenaTeamMapEnd(); ++titr)
     {
         if (ArenaTeam* at = titr->second)
@@ -183,7 +183,7 @@ void ArenaTeamMgr::DistributeArenaPoints()
         }
     }
 
-    sWorld->SendWorldText(LANG_DIST_ARENA_POINTS_TEAM_END);
+    sWorld->SendWorldText(LANGUAGE_DIST_ARENA_POINTS_TEAM_END);
 
-    sWorld->SendWorldText(LANG_DIST_ARENA_POINTS_END);
+    sWorld->SendWorldText(LANGUAGE_DIST_ARENA_POINTS_END);
 }

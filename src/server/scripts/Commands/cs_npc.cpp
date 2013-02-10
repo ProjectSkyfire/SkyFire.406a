@@ -179,7 +179,7 @@ public:
         char* pitem  = handler->extractKeyFromLink((char*)args, "Hitem");
         if (!pitem)
         {
-            handler->SendSysMessage(LANG_COMMAND_NEEDITEMSEND);
+            handler->SendSysMessage(LANGUAGE_COMMAND_NEEDITEMSEND);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -205,7 +205,7 @@ public:
         Creature* vendor = handler->getSelectedCreature();
         if (!vendor)
         {
-            handler->SendSysMessage(LANG_SELECT_CREATURE);
+            handler->SendSysMessage(LANGUAGE_SELECT_CREATURE);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -222,7 +222,7 @@ public:
 
         ItemTemplate const* itemTemplate = sObjectMgr->GetItemTemplate(itemId);
 
-        handler->PSendSysMessage(LANG_ITEM_ADDED_TO_LIST, itemId, itemTemplate->Name1.c_str(), maxcount, incrtime, extendedcost);
+        handler->PSendSysMessage(LANGUAGE_ITEM_ADDED_TO_LIST, itemId, itemTemplate->Name1.c_str(), maxcount, incrtime, extendedcost);
         return true;
     }
 
@@ -250,7 +250,7 @@ public:
             CreatureData const* data = sObjectMgr->GetCreatureData(lowGuid);
             if (!data)
             {
-                handler->PSendSysMessage(LANG_COMMAND_CREATGUIDNOTFOUND, lowGuid);
+                handler->PSendSysMessage(LANGUAGE_COMMAND_CREATGUIDNOTFOUND, lowGuid);
                 handler->SetSentErrorMessage(true);
                 return false;
             }
@@ -286,7 +286,7 @@ public:
             creature->SaveToDB();
         }
 
-        handler->SendSysMessage(LANG_WAYPOINT_ADDED);
+        handler->SendSysMessage(LANGUAGE_WAYPOINT_ADDED);
 
         return true;
     }
@@ -296,12 +296,12 @@ public:
         if (sWorld->getAllowMovement())
         {
             sWorld->SetAllowMovement(false);
-            handler->SendSysMessage(LANG_CREATURE_MOVE_DISABLED);
+            handler->SendSysMessage(LANGUAGE_CREATURE_MOVE_DISABLED);
         }
         else
         {
             sWorld->SetAllowMovement(true);
-            handler->SendSysMessage(LANG_CREATURE_MOVE_ENABLED);
+            handler->SendSysMessage(LANGUAGE_CREATURE_MOVE_ENABLED);
         }
         return true;
     }
@@ -318,15 +318,15 @@ public:
         Unit* unit = handler->getSelectedUnit();
         if (!unit || unit->GetTypeId() != TYPEID_UNIT)
         {
-            handler->SendSysMessage(LANG_SELECT_CREATURE);
+            handler->SendSysMessage(LANGUAGE_SELECT_CREATURE);
             handler->SetSentErrorMessage(true);
             return false;
         }
         Creature* creature = unit->ToCreature();
         if (creature->UpdateEntry(newEntryNum))
-            handler->SendSysMessage(LANG_DONE);
+            handler->SendSysMessage(LANGUAGE_DONE);
         else
-            handler->SendSysMessage(LANG_ERROR);
+            handler->SendSysMessage(LANGUAGE_ERROR);
         return true;
     }
 
@@ -339,7 +339,7 @@ public:
         uint8 lvl = (uint8) atoi((char*)args);
         if (lvl < 1 || lvl > sWorld->getIntConfig(CONFIG_MAX_PLAYER_LEVEL) + 3)
         {
-            handler->SendSysMessage(LANG_BAD_VALUE);
+            handler->SendSysMessage(LANGUAGE_BAD_VALUE);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -347,7 +347,7 @@ public:
         Creature* creature = handler->getSelectedCreature();
         if (!creature)
         {
-            handler->SendSysMessage(LANG_SELECT_CREATURE);
+            handler->SendSysMessage(LANGUAGE_SELECT_CREATURE);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -395,7 +395,7 @@ public:
 
         if (!unit || unit->isPet() || unit->isTotem())
         {
-            handler->SendSysMessage(LANG_SELECT_CREATURE);
+            handler->SendSysMessage(LANGUAGE_SELECT_CREATURE);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -405,7 +405,7 @@ public:
         unit->DeleteFromDB();
         unit->AddObjectToRemoveList();
 
-        handler->SendSysMessage(LANG_COMMAND_DELCREATMESSAGE);
+        handler->SendSysMessage(LANGUAGE_COMMAND_DELCREATMESSAGE);
 
         return true;
     }
@@ -419,7 +419,7 @@ public:
         Creature* vendor = handler->getSelectedCreature();
         if (!vendor || !vendor->isVendor())
         {
-            handler->SendSysMessage(LANG_COMMAND_VENDORSELECTION);
+            handler->SendSysMessage(LANGUAGE_COMMAND_VENDORSELECTION);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -427,7 +427,7 @@ public:
         char* pitem  = handler->extractKeyFromLink((char*)args, "Hitem");
         if (!pitem)
         {
-            handler->SendSysMessage(LANG_COMMAND_NEEDITEMSEND);
+            handler->SendSysMessage(LANGUAGE_COMMAND_NEEDITEMSEND);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -435,14 +435,14 @@ public:
 
         if (!sObjectMgr->RemoveVendorItem(vendor->GetEntry(), itemId))
         {
-            handler->PSendSysMessage(LANG_ITEM_NOT_IN_LIST, itemId);
+            handler->PSendSysMessage(LANGUAGE_ITEM_NOT_IN_LIST, itemId);
             handler->SetSentErrorMessage(true);
             return false;
         }
 
         ItemTemplate const* itemTemplate = sObjectMgr->GetItemTemplate(itemId);
 
-        handler->PSendSysMessage(LANG_ITEM_DELETED_FROM_LIST, itemId, itemTemplate->Name1.c_str());
+        handler->PSendSysMessage(LANGUAGE_ITEM_DELETED_FROM_LIST, itemId, itemTemplate->Name1.c_str());
         return true;
     }
 
@@ -456,7 +456,7 @@ public:
 
         if (!sFactionTemplateStore.LookupEntry(factionId))
         {
-            handler->PSendSysMessage(LANG_WRONG_FACTION, factionId);
+            handler->PSendSysMessage(LANGUAGE_WRONG_FACTION, factionId);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -465,7 +465,7 @@ public:
 
         if (!creature)
         {
-            handler->SendSysMessage(LANG_SELECT_CREATURE);
+            handler->SendSysMessage(LANGUAGE_SELECT_CREATURE);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -505,7 +505,7 @@ public:
 
         if (!creature)
         {
-            handler->SendSysMessage(LANG_SELECT_CREATURE);
+            handler->SendSysMessage(LANGUAGE_SELECT_CREATURE);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -519,7 +519,7 @@ public:
 
         WorldDatabase.Execute(stmt);
 
-        handler->SendSysMessage(LANG_VALUE_SAVED_REJOIN);
+        handler->SendSysMessage(LANGUAGE_VALUE_SAVED_REJOIN);
 
         return true;
     }
@@ -532,7 +532,7 @@ public:
 
         if (!creature)
         {
-            handler->PSendSysMessage(LANG_SELECT_CREATURE);
+            handler->PSendSysMessage(LANGUAGE_SELECT_CREATURE);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -540,7 +540,7 @@ public:
         // Follow player - Using pet's default dist and angle
         creature->GetMotionMaster()->MoveFollow(player, PET_FOLLOW_DIST, creature->GetFollowAngle());
 
-        handler->PSendSysMessage(LANG_CREATURE_FOLLOW_YOU_NOW, creature->GetName());
+        handler->PSendSysMessage(LANGUAGE_CREATURE_FOLLOW_YOU_NOW, creature->GetName());
         return true;
     }
 
@@ -550,7 +550,7 @@ public:
 
         if (!target)
         {
-            handler->SendSysMessage(LANG_SELECT_CREATURE);
+            handler->SendSysMessage(LANGUAGE_SELECT_CREATURE);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -568,23 +568,23 @@ public:
         std::string curRespawnDelayStr = secsToTimeString(uint64(curRespawnDelay), true);
         std::string defRespawnDelayStr = secsToTimeString(target->GetRespawnDelay(), true);
 
-        handler->PSendSysMessage(LANG_NPCINFO_CHAR, target->GetGUIDLow(), faction, npcflags, Entry, displayid, nativeid);
-        handler->PSendSysMessage(LANG_NPCINFO_LEVEL, target->getLevel());
-        handler->PSendSysMessage(LANG_NPCINFO_HEALTH, target->GetCreateHealth(), target->GetMaxHealth(), target->GetHealth());
-        handler->PSendSysMessage(LANG_NPCINFO_FLAGS, target->GetUInt32Value(UNIT_FIELD_FLAGS), target->GetUInt32Value(UNIT_DYNAMIC_FLAGS), target->getFaction());
-        handler->PSendSysMessage(LANG_COMMAND_RAWPAWNTIMES, defRespawnDelayStr.c_str(), curRespawnDelayStr.c_str());
-        handler->PSendSysMessage(LANG_NPCINFO_LOOT,  cInfo->lootid, cInfo->pickpocketLootId, cInfo->SkinLootId);
-        handler->PSendSysMessage(LANG_NPCINFO_DUNGEON_ID, target->GetInstanceId());
-        handler->PSendSysMessage(LANG_NPCINFO_PHASEMASK, target->GetPhaseMask());
-        handler->PSendSysMessage(LANG_NPCINFO_ARMOR, target->GetArmor());
-        handler->PSendSysMessage(LANG_NPCINFO_POSITION, float(target->GetPositionX()), float(target->GetPositionY()), float(target->GetPositionZ()));
-        handler->PSendSysMessage(LANG_NPCINFO_AIINFO, target->GetAIName().c_str(), target->GetScriptName().c_str());
+        handler->PSendSysMessage(LANGUAGE_NPCINFO_CHAR, target->GetGUIDLow(), faction, npcflags, Entry, displayid, nativeid);
+        handler->PSendSysMessage(LANGUAGE_NPCINFO_LEVEL, target->getLevel());
+        handler->PSendSysMessage(LANGUAGE_NPCINFO_HEALTH, target->GetCreateHealth(), target->GetMaxHealth(), target->GetHealth());
+        handler->PSendSysMessage(LANGUAGE_NPCINFO_FLAGS, target->GetUInt32Value(UNIT_FIELD_FLAGS), target->GetUInt32Value(UNIT_DYNAMIC_FLAGS), target->getFaction());
+        handler->PSendSysMessage(LANGUAGE_COMMAND_RAWPAWNTIMES, defRespawnDelayStr.c_str(), curRespawnDelayStr.c_str());
+        handler->PSendSysMessage(LANGUAGE_NPCINFO_LOOT,  cInfo->lootid, cInfo->pickpocketLootId, cInfo->SkinLootId);
+        handler->PSendSysMessage(LANGUAGE_NPCINFO_DUNGEON_ID, target->GetInstanceId());
+        handler->PSendSysMessage(LANGUAGE_NPCINFO_PHASEMASK, target->GetPhaseMask());
+        handler->PSendSysMessage(LANGUAGE_NPCINFO_ARMOR, target->GetArmor());
+        handler->PSendSysMessage(LANGUAGE_NPCINFO_POSITION, float(target->GetPositionX()), float(target->GetPositionY()), float(target->GetPositionZ()));
+        handler->PSendSysMessage(LANGUAGE_NPCINFO_AIINFO, target->GetAIName().c_str(), target->GetScriptName().c_str());
 
         if (npcflags & UNIT_NPC_FLAG_VENDOR)
-            handler->SendSysMessage(LANG_NPCINFO_VENDOR);
+            handler->SendSysMessage(LANGUAGE_NPCINFO_VENDOR);
 
         if (npcflags & UNIT_NPC_FLAG_TRAINER)
-            handler->SendSysMessage(LANG_NPCINFO_TRAINER);
+            handler->SendSysMessage(LANGUAGE_NPCINFO_TRAINER);
 
         return true;
     }
@@ -616,7 +616,7 @@ public:
                 CreatureData const* data = sObjectMgr->GetCreatureData(lowguid);
                 if (!data)
                 {
-                    handler->PSendSysMessage(LANG_COMMAND_CREATGUIDNOTFOUND, lowguid);
+                    handler->PSendSysMessage(LANGUAGE_COMMAND_CREATGUIDNOTFOUND, lowguid);
                     handler->SetSentErrorMessage(true);
                     return false;
                 }
@@ -625,7 +625,7 @@ public:
 
                 if (handler->GetSession()->GetPlayer()->GetMapId() != map_id)
                 {
-                    handler->PSendSysMessage(LANG_COMMAND_CREATUREATSAMEMAP, lowguid);
+                    handler->PSendSysMessage(LANGUAGE_COMMAND_CREATUREATSAMEMAP, lowguid);
                     handler->SetSentErrorMessage(true);
                     return false;
                 }
@@ -673,7 +673,7 @@ public:
 
         WorldDatabase.Execute(stmt);
 
-        handler->PSendSysMessage(LANG_COMMAND_CREATUREMOVED);
+        handler->PSendSysMessage(LANGUAGE_COMMAND_CREATUREMOVED);
         return true;
     }
 
@@ -685,7 +685,7 @@ public:
         Creature* target = handler->getSelectedCreature();
         if (!target)
         {
-            handler->SendSysMessage(LANG_SELECT_CREATURE);
+            handler->SendSysMessage(LANGUAGE_SELECT_CREATURE);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -718,7 +718,7 @@ public:
 
         if (!creature || creature->isPet())
         {
-            handler->SendSysMessage(LANG_SELECT_CREATURE);
+            handler->SendSysMessage(LANGUAGE_SELECT_CREATURE);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -819,7 +819,7 @@ public:
                 CreatureData const* data = sObjectMgr->GetCreatureData(lowguid);
                 if (!data)
                 {
-                    handler->PSendSysMessage(LANG_COMMAND_CREATGUIDNOTFOUND, lowguid);
+                    handler->PSendSysMessage(LANGUAGE_COMMAND_CREATGUIDNOTFOUND, lowguid);
                     handler->SetSentErrorMessage(true);
                     return false;
                 }
@@ -867,11 +867,11 @@ public:
         }
         if (doNotDelete == false)
         {
-            handler->PSendSysMessage(LANG_MOVE_TYPE_SET, type_str);
+            handler->PSendSysMessage(LANGUAGE_MOVE_TYPE_SET, type_str);
         }
         else
         {
-            handler->PSendSysMessage(LANG_MOVE_TYPE_SET_NODEL, type_str);
+            handler->PSendSysMessage(LANGUAGE_MOVE_TYPE_SET_NODEL, type_str);
         }
 
         return true;
@@ -887,7 +887,7 @@ public:
         uint32 phasemask = (uint32) atoi((char*)args);
         if (phasemask == 0)
         {
-            handler->SendSysMessage(LANG_BAD_VALUE);
+            handler->SendSysMessage(LANGUAGE_BAD_VALUE);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -895,7 +895,7 @@ public:
         Creature* creature = handler->getSelectedCreature();
         if (!creature)
         {
-            handler->SendSysMessage(LANG_SELECT_CREATURE);
+            handler->SendSysMessage(LANGUAGE_SELECT_CREATURE);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -917,7 +917,7 @@ public:
         float option = (float)(atof((char*)args));
         if (option < 0.0f)
         {
-            handler->SendSysMessage(LANG_BAD_VALUE);
+            handler->SendSysMessage(LANGUAGE_BAD_VALUE);
             return false;
         }
 
@@ -950,7 +950,7 @@ public:
 
         WorldDatabase.Execute(stmt);
 
-        handler->PSendSysMessage(LANG_COMMAND_SPAWNDIST, option);
+        handler->PSendSysMessage(LANGUAGE_COMMAND_SPAWNDIST, option);
         return true;
     }
 
@@ -969,7 +969,7 @@ public:
 
         if (spawnTime < 0)
         {
-            handler->SendSysMessage(LANG_BAD_VALUE);
+            handler->SendSysMessage(LANGUAGE_BAD_VALUE);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -990,7 +990,7 @@ public:
         WorldDatabase.Execute(stmt);
 
         creature->SetRespawnDelay((uint32)spawnTime);
-        handler->PSendSysMessage(LANG_COMMAND_SPAWNTIME, spawnTime);
+        handler->PSendSysMessage(LANGUAGE_COMMAND_SPAWNTIME, spawnTime);
 
         return true;
     }
@@ -1003,12 +1003,12 @@ public:
         Creature* creature = handler->getSelectedCreature();
         if (!creature)
         {
-            handler->SendSysMessage(LANG_SELECT_CREATURE);
+            handler->SendSysMessage(LANGUAGE_SELECT_CREATURE);
             handler->SetSentErrorMessage(true);
             return false;
         }
 
-        creature->MonsterSay(args, LANG_UNIVERSAL, 0);
+        creature->MonsterSay(args, LANGUAGE_UNIVERSAL, 0);
 
         // make some emotes
         char lastchar = args[strlen(args) - 1];
@@ -1032,7 +1032,7 @@ public:
 
         if (!creature)
         {
-            handler->SendSysMessage(LANG_SELECT_CREATURE);
+            handler->SendSysMessage(LANGUAGE_SELECT_CREATURE);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -1050,7 +1050,7 @@ public:
 
         if (!creature)
         {
-            handler->PSendSysMessage(LANG_SELECT_CREATURE);
+            handler->PSendSysMessage(LANGUAGE_SELECT_CREATURE);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -1058,7 +1058,7 @@ public:
         if (/*creature->GetMotionMaster()->empty() ||*/
             creature->GetMotionMaster()->GetCurrentMovementGeneratorType () != FOLLOW_MOTION_TYPE)
         {
-            handler->PSendSysMessage(LANG_CREATURE_NOT_FOLLOW_YOU, creature->GetName());
+            handler->PSendSysMessage(LANGUAGE_CREATURE_NOT_FOLLOW_YOU, creature->GetName());
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -1067,7 +1067,7 @@ public:
 
         if (mgen->GetTarget() != player)
         {
-            handler->PSendSysMessage(LANG_CREATURE_NOT_FOLLOW_YOU, creature->GetName());
+            handler->PSendSysMessage(LANGUAGE_CREATURE_NOT_FOLLOW_YOU, creature->GetName());
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -1075,7 +1075,7 @@ public:
         // reset movement
         creature->GetMotionMaster()->MovementExpired(true);
 
-        handler->PSendSysMessage(LANG_CREATURE_NOT_FOLLOW_YOU_NOW, creature->GetName());
+        handler->PSendSysMessage(LANGUAGE_CREATURE_NOT_FOLLOW_YOU_NOW, creature->GetName());
         return true;
     }
 
@@ -1115,12 +1115,12 @@ public:
         Creature* creature = handler->getSelectedCreature();
         if (!creature)
         {
-            handler->SendSysMessage(LANG_SELECT_CREATURE);
+            handler->SendSysMessage(LANGUAGE_SELECT_CREATURE);
             handler->SetSentErrorMessage(true);
             return false;
         }
 
-        creature->MonsterYell(args, LANG_UNIVERSAL, 0);
+        creature->MonsterYell(args, LANGUAGE_UNIVERSAL, 0);
 
         // make an emote
         creature->HandleEmoteCommand(EMOTE_ONESHOT_SHOUT);
@@ -1154,7 +1154,7 @@ public:
         Creature* creatureTarget = handler->getSelectedCreature ();
         if (!creatureTarget || creatureTarget->isPet ())
         {
-            handler->PSendSysMessage (LANG_SELECT_CREATURE);
+            handler->PSendSysMessage (LANGUAGE_SELECT_CREATURE);
             handler->SetSentErrorMessage (true);
             return false;
         }
@@ -1163,7 +1163,7 @@ public:
 
         if (player->GetPetGUID ())
         {
-            handler->SendSysMessage (LANG_YOU_ALREADY_HAVE_PET);
+            handler->SendSysMessage (LANGUAGE_YOU_ALREADY_HAVE_PET);
             handler->SetSentErrorMessage (true);
             return false;
         }
@@ -1172,7 +1172,7 @@ public:
 
         if (!cInfo->isTameable (player->CanTameExoticPets()))
         {
-            handler->PSendSysMessage (LANG_CREATURE_NON_TAMEABLE, cInfo->Entry);
+            handler->PSendSysMessage (LANGUAGE_CREATURE_NON_TAMEABLE, cInfo->Entry);
             handler->SetSentErrorMessage (true);
             return false;
         }
@@ -1181,7 +1181,7 @@ public:
         Pet* pet = player->CreateTamedPetFrom (creatureTarget);
         if (!pet)
         {
-            handler->PSendSysMessage (LANG_CREATURE_NON_TAMEABLE, cInfo->Entry);
+            handler->PSendSysMessage (LANGUAGE_CREATURE_NON_TAMEABLE, cInfo->Entry);
             handler->SetSentErrorMessage (true);
             return false;
         }
@@ -1225,7 +1225,7 @@ public:
 
         if (!creature || !creature->GetDBTableGUIDLow())
         {
-            handler->SendSysMessage(LANG_SELECT_CREATURE);
+            handler->SendSysMessage(LANGUAGE_SELECT_CREATURE);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -1278,7 +1278,7 @@ public:
 
         if (!creature)
         {
-            handler->SendSysMessage(LANG_SELECT_CREATURE);
+            handler->SendSysMessage(LANGUAGE_SELECT_CREATURE);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -1310,7 +1310,7 @@ public:
         uint64 guid = handler->GetSession()->GetPlayer()->GetSelection();
         if (guid == 0)
         {
-            handler->SendSysMessage(LANG_NO_SELECTION);
+            handler->SendSysMessage(LANGUAGE_NO_SELECTION);
             return true;
         }
 
@@ -1318,7 +1318,7 @@ public:
 
         if (!creature)
         {
-            handler->SendSysMessage(LANG_SELECT_CREATURE);
+            handler->SendSysMessage(LANGUAGE_SELECT_CREATURE);
             return true;
         }
 
@@ -1353,17 +1353,17 @@ public:
                     added = true;
                     break;
                 default:
-                    handler->PSendSysMessage(LANG_ITEM_SLOT_NOT_EXIST, SlotID);
+                    handler->PSendSysMessage(LANGUAGE_ITEM_SLOT_NOT_EXIST, SlotID);
                     added = false;
                     break;
             }
 
             if (added)
-                handler->PSendSysMessage(LANG_ITEM_ADDED_TO_SLOT, ItemID, tmpItem->Name1, SlotID);
+                handler->PSendSysMessage(LANGUAGE_ITEM_ADDED_TO_SLOT, ItemID, tmpItem->Name1, SlotID);
         }
         else
         {
-            handler->PSendSysMessage(LANG_ITEM_NOT_FOUND, ItemID);
+            handler->PSendSysMessage(LANGUAGE_ITEM_NOT_FOUND, ItemID);
             return true;
         }
         */
@@ -1378,7 +1378,7 @@ public:
 
         if (strlen((char*)args)>75)
         {
-            handler->PSendSysMessage(LANG_TOO_LONG_NAME, strlen((char*)args)-75);
+            handler->PSendSysMessage(LANGUAGE_TOO_LONG_NAME, strlen((char*)args)-75);
             return true;
         }
 
@@ -1386,7 +1386,7 @@ public:
         {
             if (!isalpha(args[i]) && args[i] != ' ')
             {
-                handler->SendSysMessage(LANG_CHARS_ONLY);
+                handler->SendSysMessage(LANGUAGE_CHARS_ONLY);
                 return false;
             }
         }
@@ -1395,7 +1395,7 @@ public:
         guid = handler->GetSession()->GetPlayer()->GetSelection();
         if (guid == 0)
         {
-            handler->SendSysMessage(LANG_NO_SELECTION);
+            handler->SendSysMessage(LANGUAGE_NO_SELECTION);
             return true;
         }
 
@@ -1403,7 +1403,7 @@ public:
 
         if (!creature)
         {
-            handler->SendSysMessage(LANG_SELECT_CREATURE);
+            handler->SendSysMessage(LANGUAGE_SELECT_CREATURE);
             return true;
         }
 
@@ -1426,7 +1426,7 @@ public:
 
         if (strlen((char*)args)>75)
         {
-            handler->PSendSysMessage(LANG_TOO_LONG_SUBNAME, strlen((char*)args)-75);
+            handler->PSendSysMessage(LANGUAGE_TOO_LONG_SUBNAME, strlen((char*)args)-75);
             return true;
         }
 
@@ -1434,7 +1434,7 @@ public:
         {
             if (!isalpha(args[i]) && args[i] != ' ')
             {
-                handler->SendSysMessage(LANG_CHARS_ONLY);
+                handler->SendSysMessage(LANGUAGE_CHARS_ONLY);
                 return false;
             }
         }
@@ -1442,7 +1442,7 @@ public:
         guid = handler->GetSession()->GetPlayer()->GetSelection();
         if (guid == 0)
         {
-            handler->SendSysMessage(LANG_NO_SELECTION);
+            handler->SendSysMessage(LANGUAGE_NO_SELECTION);
             return true;
         }
 
@@ -1450,7 +1450,7 @@ public:
 
         if (!creature)
         {
-            handler->SendSysMessage(LANG_SELECT_CREATURE);
+            handler->SendSysMessage(LANGUAGE_SELECT_CREATURE);
             return true;
         }
 

@@ -96,7 +96,7 @@ public:
             if (instance && IsEvent)
                 instance->SetData(DATA_ANETHERONEVENT, IN_PROGRESS);
             DoPlaySoundToSet(me, SOUND_ONAGGRO);
-            me->MonsterYell(SAY_ONAGGRO, LANG_UNIVERSAL, 0);
+            me->MonsterYell(SAY_ONAGGRO, LANGUAGE_UNIVERSAL, 0);
         }
 
         void KilledUnit(Unit* /*victim*/)
@@ -105,15 +105,15 @@ public:
             {
                 case 0:
                     DoPlaySoundToSet(me, SOUND_ONSLAY1);
-                    me->MonsterYell(SAY_ONSLAY1, LANG_UNIVERSAL, 0);
+                    me->MonsterYell(SAY_ONSLAY1, LANGUAGE_UNIVERSAL, 0);
                     break;
                 case 1:
                     DoPlaySoundToSet(me, SOUND_ONSLAY2);
-                    me->MonsterYell(SAY_ONSLAY2, LANG_UNIVERSAL, 0);
+                    me->MonsterYell(SAY_ONSLAY2, LANGUAGE_UNIVERSAL, 0);
                     break;
                 case 2:
                     DoPlaySoundToSet(me, SOUND_ONSLAY3);
-                    me->MonsterYell(SAY_ONSLAY3, LANG_UNIVERSAL, 0);
+                    me->MonsterYell(SAY_ONSLAY3, LANGUAGE_UNIVERSAL, 0);
                     break;
             }
         }
@@ -135,7 +135,7 @@ public:
             if (instance && IsEvent)
                 instance->SetData(DATA_ANETHERONEVENT, DONE);
             DoPlaySoundToSet(me, SOUND_ONDEATH);
-            me->MonsterYell(SAY_ONDEATH, LANG_UNIVERSAL, 0);
+            me->MonsterYell(SAY_ONDEATH, LANGUAGE_UNIVERSAL, 0);
         }
 
         void UpdateAI(const uint32 diff)
@@ -177,11 +177,11 @@ public:
                 {
                     case 0:
                         DoPlaySoundToSet(me, SOUND_SWARM1);
-                        me->MonsterYell(SAY_SWARM1, LANG_UNIVERSAL, 0);
+                        me->MonsterYell(SAY_SWARM1, LANGUAGE_UNIVERSAL, 0);
                         break;
                     case 1:
                         DoPlaySoundToSet(me, SOUND_SWARM2);
-                        me->MonsterYell(SAY_SWARM2, LANG_UNIVERSAL, 0);
+                        me->MonsterYell(SAY_SWARM2, LANGUAGE_UNIVERSAL, 0);
                         break;
                 }
             } else SwarmTimer -= diff;
@@ -198,11 +198,11 @@ public:
                 {
                     case 0:
                         DoPlaySoundToSet(me, SOUND_SLEEP1);
-                        me->MonsterYell(SAY_SLEEP1, LANG_UNIVERSAL, 0);
+                        me->MonsterYell(SAY_SLEEP1, LANGUAGE_UNIVERSAL, 0);
                         break;
                     case 1:
                         DoPlaySoundToSet(me, SOUND_SLEEP2);
-                        me->MonsterYell(SAY_SLEEP2, LANG_UNIVERSAL, 0);
+                        me->MonsterYell(SAY_SLEEP2, LANGUAGE_UNIVERSAL, 0);
                         break;
                 }
             } else SleepTimer -= diff;
@@ -219,11 +219,11 @@ public:
                 {
                     case 0:
                         DoPlaySoundToSet(me, SOUND_INFERNO1);
-                        me->MonsterYell(SAY_INFERNO1, LANG_UNIVERSAL, 0);
+                        me->MonsterYell(SAY_INFERNO1, LANGUAGE_UNIVERSAL, 0);
                         break;
                     case 1:
                         DoPlaySoundToSet(me, SOUND_INFERNO2);
-                        me->MonsterYell(SAY_INFERNO2, LANG_UNIVERSAL, 0);
+                        me->MonsterYell(SAY_INFERNO2, LANGUAGE_UNIVERSAL, 0);
                         break;
                 }
             } else InfernoTimer -= diff;

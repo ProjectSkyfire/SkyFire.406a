@@ -105,7 +105,7 @@ public:
         // #cinematicid - ID decimal number from CinemaicSequences.dbc (1st column)
         if (!*args)
         {
-            handler->SendSysMessage(LANG_BAD_VALUE);
+            handler->SendSysMessage(LANGUAGE_BAD_VALUE);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -114,7 +114,7 @@ public:
 
         if (!sCinematicSequencesStore.LookupEntry(id))
         {
-            handler->PSendSysMessage(LANG_CINEMATIC_NOT_EXIST, id);
+            handler->PSendSysMessage(LANGUAGE_CINEMATIC_NOT_EXIST, id);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -129,7 +129,7 @@ public:
         // #movieid - ID decimal number from Movie.dbc (1st column)
         if (!*args)
         {
-            handler->SendSysMessage(LANG_BAD_VALUE);
+            handler->SendSysMessage(LANGUAGE_BAD_VALUE);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -138,7 +138,7 @@ public:
 
         if (!sMovieStore.LookupEntry(id))
         {
-            handler->PSendSysMessage(LANG_MOVIE_NOT_EXIST, id);
+            handler->PSendSysMessage(LANGUAGE_MOVIE_NOT_EXIST, id);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -154,7 +154,7 @@ public:
         // #soundid - ID decimal number from SoundEntries.dbc (1st column)
         if (!*args)
         {
-            handler->SendSysMessage(LANG_BAD_VALUE);
+            handler->SendSysMessage(LANGUAGE_BAD_VALUE);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -163,7 +163,7 @@ public:
 
         if (!sSoundEntriesStore.LookupEntry(soundId))
         {
-            handler->PSendSysMessage(LANG_SOUND_NOT_EXIST, soundId);
+            handler->PSendSysMessage(LANGUAGE_SOUND_NOT_EXIST, soundId);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -171,7 +171,7 @@ public:
         Unit* unit = handler->getSelectedUnit();
         if (!unit)
         {
-            handler->SendSysMessage(LANG_SELECT_CHAR_OR_CREATURE);
+            handler->SendSysMessage(LANGUAGE_SELECT_CHARACTER_OR_CREATURE);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -181,7 +181,7 @@ public:
         else
             unit->PlayDirectSound(soundId, handler->GetSession()->GetPlayer());
 
-        handler->PSendSysMessage(LANG_YOU_HEAR_SOUND, soundId);
+        handler->PSendSysMessage(LANGUAGE_YOU_HEAR_SOUND, soundId);
         return true;
     }
 
@@ -367,7 +367,7 @@ public:
                 GameObject* obj = handler->GetNearbyGameObject();
                 if (!obj)
                 {
-                    handler->PSendSysMessage(LANG_COMMAND_OBJNOTFOUND, 0);
+                    handler->PSendSysMessage(LANGUAGE_COMMAND_OBJNOTFOUND, 0);
                     handler->SetSentErrorMessage(true);
                     ifs.close();
                     return false;
@@ -379,7 +379,7 @@ public:
                 GameObject* obj = handler->GetNearbyGameObject();
                 if (!obj)
                 {
-                    handler->PSendSysMessage(LANG_COMMAND_OBJNOTFOUND, 0);
+                    handler->PSendSysMessage(LANGUAGE_COMMAND_OBJNOTFOUND, 0);
                     handler->SetSentErrorMessage(true);
                     ifs.close();
                     return false;
@@ -415,7 +415,7 @@ public:
         sLog->outDebug(LOG_FILTER_NETWORKIO, "Sending opcode %u", data.GetOpcode());
         data.hexlike();
         player->GetSession()->SendPacket(&data);
-        handler->PSendSysMessage(LANG_COMMAND_OPCODESENT, data.GetOpcode(), unit->GetName());
+        handler->PSendSysMessage(LANGUAGE_COMMAND_OPCODESENT, data.GetOpcode(), unit->GetName());
         return true;
     }
 
@@ -438,12 +438,12 @@ public:
         Player* player = handler->GetSession()->GetPlayer();
         if (!player->isDebugAreaTriggers)
         {
-            handler->PSendSysMessage(LANG_DEBUG_AREATRIGGER_ON);
+            handler->PSendSysMessage(LANGUAGE_DEBUG_AREATRIGGER_ON);
             player->isDebugAreaTriggers = true;
         }
         else
         {
-            handler->PSendSysMessage(LANG_DEBUG_AREATRIGGER_OFF);
+            handler->PSendSysMessage(LANGUAGE_DEBUG_AREATRIGGER_OFF);
             player->isDebugAreaTriggers = false;
         }
         return true;
@@ -1046,7 +1046,7 @@ public:
     {
         if (!*args)
         {
-            handler->SendSysMessage(LANG_BAD_VALUE);
+            handler->SendSysMessage(LANGUAGE_BAD_VALUE);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -1054,7 +1054,7 @@ public:
         Unit* unit = handler->getSelectedUnit();
         if (!unit)
         {
-            handler->SendSysMessage(LANG_SELECT_CHAR_OR_CREATURE);
+            handler->SendSysMessage(LANGUAGE_SELECT_CHARACTER_OR_CREATURE);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -1087,7 +1087,7 @@ public:
         WorldObject* target = handler->getSelectedObject();
         if (!target)
         {
-            handler->SendSysMessage(LANG_SELECT_CHAR_OR_CREATURE);
+            handler->SendSysMessage(LANGUAGE_SELECT_CHARACTER_OR_CREATURE);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -1097,7 +1097,7 @@ public:
         uint32 opcode = (uint32)atoi(x);
         if (opcode >= target->GetValuesCount())
         {
-            handler->PSendSysMessage(LANG_TOO_BIG_INDEX, opcode, GUID_LOPART(guid), target->GetValuesCount());
+            handler->PSendSysMessage(LANGUAGE_TOO_BIG_INDEX, opcode, GUID_LOPART(guid), target->GetValuesCount());
             return false;
         }
 
@@ -1109,13 +1109,13 @@ public:
         {
             uint32 value = (uint32)atoi(y);
             target->SetUInt32Value(opcode , value);
-            handler->PSendSysMessage(LANG_SET_UINT_FIELD, GUID_LOPART(guid), opcode, value);
+            handler->PSendSysMessage(LANGUAGE_SET_UINT_FIELD, GUID_LOPART(guid), opcode, value);
         }
         else
         {
             float value = (float)atof(y);
             target->SetFloatValue(opcode , value);
-            handler->PSendSysMessage(LANG_SET_FLOAT_FIELD, GUID_LOPART(guid), opcode, value);
+            handler->PSendSysMessage(LANGUAGE_SET_FLOAT_FIELD, GUID_LOPART(guid), opcode, value);
         }
 
         return true;
@@ -1135,7 +1135,7 @@ public:
         Unit* target = handler->getSelectedUnit();
         if (!target)
         {
-            handler->SendSysMessage(LANG_SELECT_CHAR_OR_CREATURE);
+            handler->SendSysMessage(LANGUAGE_SELECT_CHARACTER_OR_CREATURE);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -1145,7 +1145,7 @@ public:
         uint32 opcode = (uint32)atoi(x);
         if (opcode >= target->GetValuesCount())
         {
-            handler->PSendSysMessage(LANG_TOO_BIG_INDEX, opcode, GUID_LOPART(guid), target->GetValuesCount());
+            handler->PSendSysMessage(LANGUAGE_TOO_BIG_INDEX, opcode, GUID_LOPART(guid), target->GetValuesCount());
             return false;
         }
 
@@ -1156,12 +1156,12 @@ public:
         if (isInt32)
         {
             uint32 value = target->GetUInt32Value(opcode);
-            handler->PSendSysMessage(LANG_GET_UINT_FIELD, GUID_LOPART(guid), opcode, value);
+            handler->PSendSysMessage(LANGUAGE_GET_UINT_FIELD, GUID_LOPART(guid), opcode, value);
         }
         else
         {
             float value = target->GetFloatValue(opcode);
-            handler->PSendSysMessage(LANG_GET_FLOAT_FIELD, GUID_LOPART(guid), opcode, value);
+            handler->PSendSysMessage(LANGUAGE_GET_FLOAT_FIELD, GUID_LOPART(guid), opcode, value);
         }
 
         return true;
@@ -1183,7 +1183,7 @@ public:
 
         if (opcode >= handler->GetSession()->GetPlayer()->GetValuesCount())
         {
-            handler->PSendSysMessage(LANG_TOO_BIG_INDEX, opcode, handler->GetSession()->GetPlayer()->GetGUIDLow(), handler->GetSession()->GetPlayer()->GetValuesCount());
+            handler->PSendSysMessage(LANGUAGE_TOO_BIG_INDEX, opcode, handler->GetSession()->GetPlayer()->GetGUIDLow(), handler->GetSession()->GetPlayer()->GetValuesCount());
             return false;
         }
 
@@ -1192,7 +1192,7 @@ public:
         currentValue += value;
         handler->GetSession()->GetPlayer()->SetUInt32Value(opcode , (uint32)currentValue);
 
-        handler->PSendSysMessage(LANG_CHANGE_32BIT_FIELD, opcode, currentValue);
+        handler->PSendSysMessage(LANGUAGE_CHANGE_32BIT_FIELD, opcode, currentValue);
 
         return true;
     }
@@ -1210,7 +1210,7 @@ public:
         Unit* unit = handler->getSelectedUnit();
         if (!unit)
         {
-            handler->SendSysMessage(LANG_SELECT_CHAR_OR_CREATURE);
+            handler->SendSysMessage(LANGUAGE_SELECT_CHARACTER_OR_CREATURE);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -1233,13 +1233,13 @@ public:
         {
             value = unit->GetUInt32Value(updateIndex);
 
-            handler->PSendSysMessage(LANG_UPDATE, unit->GetGUIDLow(), updateIndex, value);
+            handler->PSendSysMessage(LANGUAGE_UPDATE, unit->GetGUIDLow(), updateIndex, value);
             return true;
         }
 
         value = atoi(val);
 
-        handler->PSendSysMessage(LANG_UPDATE_CHANGE, unit->GetGUIDLow(), updateIndex, value);
+        handler->PSendSysMessage(LANGUAGE_UPDATE_CHANGE, unit->GetGUIDLow(), updateIndex, value);
 
         unit->SetUInt32Value(updateIndex, value);
 
@@ -1254,7 +1254,7 @@ public:
         WorldObject* target = handler->getSelectedObject();
         if (!target)
         {
-            handler->SendSysMessage(LANG_SELECT_CHAR_OR_CREATURE);
+            handler->SendSysMessage(LANGUAGE_SELECT_CHARACTER_OR_CREATURE);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -1273,7 +1273,7 @@ public:
         uint32 value = val ? 1 << (val - 1) : 0;
         target->SetUInt32Value(opcode,  value);
 
-        handler->PSendSysMessage(LANG_SET_32BIT_FIELD, opcode, value);
+        handler->PSendSysMessage(LANGUAGE_SET_32BIT_FIELD, opcode, value);
         return true;
     }
 };

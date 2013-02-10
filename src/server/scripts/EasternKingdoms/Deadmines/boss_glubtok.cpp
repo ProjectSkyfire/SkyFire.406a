@@ -142,21 +142,21 @@ public:
         void EnterCombat(Unit* /*who*/)
         {
 
-         me->MonsterYell(SAY_AGGRO, LANG_UNIVERSAL, 0);
+         me->MonsterYell(SAY_AGGRO, LANGUAGE_UNIVERSAL, 0);
          DoPlaySoundToSet(me, SOUND_AGGRO);
 
         }
 
         void JustDied(Unit* /*Killer*/)
         {
-            me->MonsterYell(SAY_TOO_MUCH_POWER, LANG_UNIVERSAL, 0);
+            me->MonsterYell(SAY_TOO_MUCH_POWER, LANGUAGE_UNIVERSAL, 0);
             DoPlaySoundToSet(me, SOUND_TOO_MUCH_POWER);
         }
 
         void KilledUnit(Unit* Victim)
         {
 
-            me->MonsterYell(SAY_KILL, LANG_UNIVERSAL, 0);
+            me->MonsterYell(SAY_KILL, LANGUAGE_UNIVERSAL, 0);
             DoPlaySoundToSet(me, SOUND_KILL);
         }
 
@@ -175,14 +175,14 @@ public:
                         case 0:
                             if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                             DoCast(me, SPELL_FIST_OF_FLAME);
-                            me->MonsterYell(SAY_FISTS_OF_FLAME, LANG_UNIVERSAL, 0);
+                            me->MonsterYell(SAY_FISTS_OF_FLAME, LANGUAGE_UNIVERSAL, 0);
                             DoPlaySoundToSet(me, SOUND_FISTS_OF_FLAME);
                             break;
 
                         case 1:
                             if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                             DoCast(me, SPELL_FIST_OF_FROST);
-                            me->MonsterYell(SAY_FISTS_OF_FROST, LANG_UNIVERSAL, 0);
+                            me->MonsterYell(SAY_FISTS_OF_FROST, LANGUAGE_UNIVERSAL, 0);
                             DoPlaySoundToSet(me, SOUND_FISTS_OF_FROST);
                             break;
                     }
@@ -194,7 +194,7 @@ public:
                 {
                     phase = 2;
                     DoCast(me, SPELL_ARCANE_POWER);
-                    me->MonsterYell(SAY_ARCANE_POWER, LANG_UNIVERSAL, 0);
+                    me->MonsterYell(SAY_ARCANE_POWER, LANGUAGE_UNIVERSAL, 0);
                     DoPlaySoundToSet(me, SOUND_ARCANE_POWER);
                 }
 
@@ -224,7 +224,7 @@ public:
                     if (elemental_fists<= diff)
                     {
                         DoCast(me, elemental_fists);
-                        me->MonsterYell(SAY_FLAME, LANG_UNIVERSAL, NULL);
+                        me->MonsterYell(SAY_FLAME, LANGUAGE_UNIVERSAL, NULL);
                         elemental_fists = 20000;
                     } else elemental_fists -= diff;
                 }

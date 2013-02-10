@@ -66,7 +66,7 @@ public:
 
         if (sObjectMgr->GetGameTele(name))
         {
-            handler->SendSysMessage(LANG_COMMAND_TP_ALREADYEXIST);
+            handler->SendSysMessage(LANGUAGE_COMMAND_TP_ALREADYEXIST);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -81,11 +81,11 @@ public:
 
         if (sObjectMgr->AddGameTele(tele))
         {
-            handler->SendSysMessage(LANG_COMMAND_TP_ADDED);
+            handler->SendSysMessage(LANGUAGE_COMMAND_TP_ADDED);
         }
         else
         {
-            handler->SendSysMessage(LANG_COMMAND_TP_ADDEDERR);
+            handler->SendSysMessage(LANGUAGE_COMMAND_TP_ADDEDERR);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -102,12 +102,12 @@ public:
 
         if (!sObjectMgr->DeleteGameTele(name))
         {
-            handler->SendSysMessage(LANG_COMMAND_TELE_NOTFOUND);
+            handler->SendSysMessage(LANGUAGE_COMMAND_TELE_NOTFOUND);
             handler->SetSentErrorMessage(true);
             return false;
         }
 
-        handler->SendSysMessage(LANG_COMMAND_TP_DELETED);
+        handler->SendSysMessage(LANGUAGE_COMMAND_TP_DELETED);
         return true;
     }
 
@@ -132,7 +132,7 @@ public:
                 target->TeleportTo(target->_homebindMapId, target->_homebindX, target->_homebindY, target->_homebindZ, target->GetOrientation());
             else
             {
-                PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_CHAR_HOMEBIND);
+                PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_SELECT_CHARACTER_HOMEBIND);
                 stmt->setUInt32(0, target_guid);
                 PreparedQueryResult resultDB = CharacterDatabase.Query(stmt);
                 
@@ -156,7 +156,7 @@ public:
         GameTele const* tele = handler->extractGameTeleFromLink(teleStr);
         if (!tele)
         {
-            handler->SendSysMessage(LANG_COMMAND_TELE_NOTFOUND);
+            handler->SendSysMessage(LANGUAGE_COMMAND_TELE_NOTFOUND);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -171,14 +171,14 @@ public:
 
             if (target->IsBeingTeleported() == true)
             {
-                handler->PSendSysMessage(LANG_IS_TELEPORTED, chrNameLink.c_str());
+                handler->PSendSysMessage(LANGUAGE_IS_TELEPORTED, chrNameLink.c_str());
                 handler->SetSentErrorMessage(true);
                 return false;
             }
 
-            handler->PSendSysMessage(LANG_TELEPORTING_TO, chrNameLink.c_str(), "", tele->name.c_str());
+            handler->PSendSysMessage(LANGUAGE_TELEPORTING_TO, chrNameLink.c_str(), "", tele->name.c_str());
             if (handler->needReportToTarget(target))
-                (ChatHandler(target)).PSendSysMessage(LANG_TELEPORTED_TO_BY, handler->GetNameLink().c_str());
+                (ChatHandler(target)).PSendSysMessage(LANGUAGE_TELEPORTED_TO_BY, handler->GetNameLink().c_str());
 
             // stop flight if need
             if (target->isInFlight())
@@ -200,7 +200,7 @@ public:
 
             std::string nameLink = handler->playerLink(target_name);
 
-            handler->PSendSysMessage(LANG_TELEPORTING_TO, nameLink.c_str(), handler->GetSkyFireString(LANG_OFFLINE), tele->name.c_str());
+            handler->PSendSysMessage(LANGUAGE_TELEPORTING_TO, nameLink.c_str(), handler->GetSkyFireString(LANGUAGE_OFFLINE), tele->name.c_str());
             Player::SavePositionInDB(tele->mapId, tele->position_x, tele->position_y, tele->position_z, tele->orientation,
                 sMapMgr->GetZoneId(tele->mapId, tele->position_x, tele->position_y, tele->position_z), target_guid);
         }
@@ -217,7 +217,7 @@ public:
         Player* target = handler->getSelectedPlayer();
         if (!target)
         {
-            handler->SendSysMessage(LANG_NO_CHAR_SELECTED);
+            handler->SendSysMessage(LANGUAGE_NO_CHARACTER_SELECTED);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -230,7 +230,7 @@ public:
         GameTele const* tele = handler->extractGameTeleFromLink((char*)args);
         if (!tele)
         {
-            handler->SendSysMessage(LANG_COMMAND_TELE_NOTFOUND);
+            handler->SendSysMessage(LANGUAGE_COMMAND_TELE_NOTFOUND);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -238,7 +238,7 @@ public:
         MapEntry const* map = sMapStore.LookupEntry(tele->mapId);
         if (!map || map->IsBattlegroundOrArena())
         {
-            handler->SendSysMessage(LANG_CANNOT_TELE_TO_BG);
+            handler->SendSysMessage(LANGUAGE_CANNOT_TELE_TO_BG);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -248,7 +248,7 @@ public:
         Group* group = target->GetGroup();
         if (!group)
         {
-            handler->PSendSysMessage(LANG_NOT_IN_GROUP, nameLink.c_str());
+            handler->PSendSysMessage(LANGUAGE_NOT_IN_GROUP, nameLink.c_str());
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -268,13 +268,13 @@ public:
 
             if (player->IsBeingTeleported())
             {
-                handler->PSendSysMessage(LANG_IS_TELEPORTED, plNameLink.c_str());
+                handler->PSendSysMessage(LANGUAGE_IS_TELEPORTED, plNameLink.c_str());
                 continue;
             }
 
-            handler->PSendSysMessage(LANG_TELEPORTING_TO, plNameLink.c_str(), "", tele->name.c_str());
+            handler->PSendSysMessage(LANGUAGE_TELEPORTING_TO, plNameLink.c_str(), "", tele->name.c_str());
             if (handler->needReportToTarget(player))
-                (ChatHandler(player)).PSendSysMessage(LANG_TELEPORTED_TO_BY, nameLink.c_str());
+                (ChatHandler(player)).PSendSysMessage(LANGUAGE_TELEPORTED_TO_BY, nameLink.c_str());
 
             // stop flight if need
             if (player->isInFlight())
@@ -304,14 +304,14 @@ public:
 
         if (!tele)
         {
-            handler->SendSysMessage(LANG_COMMAND_TELE_NOTFOUND);
+            handler->SendSysMessage(LANGUAGE_COMMAND_TELE_NOTFOUND);
             handler->SetSentErrorMessage(true);
             return false;
         }
 
         if (me->isInCombat())
         {
-            handler->SendSysMessage(LANG_YOU_IN_COMBAT);
+            handler->SendSysMessage(LANGUAGE_YOU_IN_COMBAT);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -319,7 +319,7 @@ public:
         MapEntry const* map = sMapStore.LookupEntry(tele->mapId);
         if (!map || map->IsBattlegroundOrArena())
         {
-            handler->SendSysMessage(LANG_CANNOT_TELE_TO_BG);
+            handler->SendSysMessage(LANGUAGE_CANNOT_TELE_TO_BG);
             handler->SetSentErrorMessage(true);
             return false;
         }

@@ -530,7 +530,7 @@ void WorldSession::HandleAddFriendOpcode(WorldPacket& recvData)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_ADD_FRIEND");
 
-    std::string friendName = GetSkyFireString(LANG_FRIEND_IGNORE_UNKNOWN);
+    std::string friendName = GetSkyFireString(LANGUAGE_FRIEND_IGNORE_UNKNOWN);
     std::string friendNote;
 
     recvData >> friendName;
@@ -542,7 +542,7 @@ void WorldSession::HandleAddFriendOpcode(WorldPacket& recvData)
 
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: %s asked to add friend : '%s'", GetPlayer()->GetName(), friendName.c_str());
 
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_GUID_RACE_ACC_BY_NAME);
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_SELECT_GUID_RACE_ACC_BY_NAME);
 
     stmt->setString(0, friendName);
 
@@ -623,7 +623,7 @@ void WorldSession::HandleAddIgnoreOpcode(WorldPacket& recvData)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_ADD_IGNORE");
 
-    std::string ignoreName = GetSkyFireString(LANG_FRIEND_IGNORE_UNKNOWN);
+    std::string ignoreName = GetSkyFireString(LANGUAGE_FRIEND_IGNORE_UNKNOWN);
 
     recvData >> ignoreName;
 
@@ -633,7 +633,7 @@ void WorldSession::HandleAddIgnoreOpcode(WorldPacket& recvData)
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: %s asked to Ignore: '%s'",
         GetPlayer()->GetName(), ignoreName.c_str());
 
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_GUID_BY_NAME);
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_SELECT_GUID_BY_NAME);
 
     stmt->setString(0, ignoreName);
 
@@ -718,7 +718,7 @@ void WorldSession::HandleBugOpcode(WorldPacket& recvData)
     sLog->outDebug(LOG_FILTER_NETWORKIO, "%s", type.c_str());
     sLog->outDebug(LOG_FILTER_NETWORKIO, "%s", content.c_str());
 
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_BUG_REPORT);
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_INSERT_BUG_REPORT);
 
     stmt->setString(0, type);
     stmt->setString(1, content);
@@ -881,7 +881,7 @@ void WorldSession::HandleAreaTriggerOpcode(WorldPacket& recvData)
     }
 
     if (player->isDebugAreaTriggers)
-        ChatHandler(player).PSendSysMessage(LANG_DEBUG_AREATRIGGER_REACHED, triggerId);
+        ChatHandler(player).PSendSysMessage(LANGUAGE_DEBUG_AREATRIGGER_REACHED, triggerId);
 
     if (sScriptMgr->OnAreaTrigger(player, atEntry))
         return;
@@ -1285,7 +1285,7 @@ void WorldSession::HandleWorldTeleportOpcode(WorldPacket& recvData)
     if (AccountMgr::IsAdminAccount(GetSecurity()))
         GetPlayer()->TeleportTo(mapid, PositionX, PositionY, PositionZ, Orientation);
     else
-        SendNotification(LANG_YOU_NOT_HAVE_PERMISSION);
+        SendNotification(LANGUAGE_YOU_NOT_HAVE_PERMISSION);
     sLog->outDebug(LOG_FILTER_NETWORKIO, "Received worldport command from player %s", GetPlayer()->GetName());
 }
 
@@ -1297,13 +1297,13 @@ void WorldSession::HandleWhoisOpcode(WorldPacket& recvData)
 
     if (!AccountMgr::IsAdminAccount(GetSecurity()))
     {
-        SendNotification(LANG_YOU_NOT_HAVE_PERMISSION);
+        SendNotification(LANGUAGE_YOU_NOT_HAVE_PERMISSION);
         return;
     }
 
     if (charname.empty() || !normalizePlayerName (charname))
     {
-        SendNotification(LANG_NEED_CHARACTER_NAME);
+        SendNotification(LANGUAGE_NEED_CHARACTER_NAME);
         return;
     }
 
@@ -1311,7 +1311,7 @@ void WorldSession::HandleWhoisOpcode(WorldPacket& recvData)
 
     if (!player)
     {
-        SendNotification(LANG_PLAYER_NOT_EXIST_OR_OFFLINE, charname.c_str());
+        SendNotification(LANGUAGE_PLAYER_NOT_EXIST_OR_OFFLINE, charname.c_str());
         return;
     }
 
@@ -1325,7 +1325,7 @@ void WorldSession::HandleWhoisOpcode(WorldPacket& recvData)
     
     if (!result)
     {
-        SendNotification(LANG_ACCOUNT_FOR_PLAYER_NOT_FOUND, charname.c_str());
+        SendNotification(LANGUAGE_ACCOUNT_FOR_PLAYER_NOT_FOUND, charname.c_str());
         return;
     }
 
@@ -1607,13 +1607,13 @@ void WorldSession::HandleCancelMountAuraOpcode(WorldPacket & /*recvData*/)
     //If player is not mounted, so go out :)
     if (!_player->IsMounted())                              // not blizz like; no any messages on blizz
     {
-        ChatHandler(this).SendSysMessage(LANG_CHAR_NON_MOUNTED);
+        ChatHandler(this).SendSysMessage(LANGUAGE_CHARACTER_NON_MOUNTED);
         return;
     }
 
     if (_player->isInFlight())                               // not blizz like; no any messages on blizz
     {
-        ChatHandler(this).SendSysMessage(LANG_YOU_IN_FLIGHT);
+        ChatHandler(this).SendSysMessage(LANGUAGE_YOU_IN_FLIGHT);
         return;
     }
 

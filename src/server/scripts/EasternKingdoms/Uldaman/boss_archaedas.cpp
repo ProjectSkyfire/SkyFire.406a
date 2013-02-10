@@ -114,7 +114,7 @@ class boss_archaedas : public CreatureScript
                 // Being woken up from the altar, start the awaken sequence
                 if (spell == sSpellMgr->GetSpellInfo(SPELL_ARCHAEDAS_AWAKEN))
                 {
-                    me->MonsterYell(SAY_AGGRO, LANG_UNIVERSAL, 0);
+                    me->MonsterYell(SAY_AGGRO, LANGUAGE_UNIVERSAL, 0);
                     DoPlaySoundToSet(me, SOUND_AGGRO);
                     iAwakenTimer = 4000;
                     bWakingUp    = true;
@@ -123,7 +123,7 @@ class boss_archaedas : public CreatureScript
 
             void KilledUnit(Unit* /*victim*/)
             {
-                me->MonsterYell(SAY_KILL, LANG_UNIVERSAL, 0);
+                me->MonsterYell(SAY_KILL, LANGUAGE_UNIVERSAL, 0);
                 DoPlaySoundToSet(me, SOUND_KILL);
             }
 
@@ -164,7 +164,7 @@ class boss_archaedas : public CreatureScript
                     ActivateMinion(instance->GetData64(8), true);   // EarthenGuardian4
                     ActivateMinion(instance->GetData64(9), true);   // EarthenGuardian5
                     ActivateMinion(instance->GetData64(10), false); // EarthenGuardian6
-                    me->MonsterYell(SAY_SUMMON, LANG_UNIVERSAL, 0);
+                    me->MonsterYell(SAY_SUMMON, LANGUAGE_UNIVERSAL, 0);
                     DoPlaySoundToSet(me, SOUND_SUMMON);
                     bGuardiansAwake = true;
                 }
@@ -176,7 +176,7 @@ class boss_archaedas : public CreatureScript
                     ActivateMinion(instance->GetData64(2), true);    // VaultWalker2
                     ActivateMinion(instance->GetData64(3), true);    // VaultWalker3
                     ActivateMinion(instance->GetData64(4), false);    // VaultWalker4
-                    me->MonsterYell(SAY_SUMMON2, LANG_UNIVERSAL, 0);
+                    me->MonsterYell(SAY_SUMMON2, LANGUAGE_UNIVERSAL, 0);
                     DoPlaySoundToSet(me, SOUND_SUMMON2);
                     bVaultWalkersAwake = true;
                 }

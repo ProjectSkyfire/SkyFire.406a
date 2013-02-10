@@ -441,7 +441,7 @@ void PoolGroup<Quest>::SpawnObject(ActivePoolData& spawns, uint32 limit, uint32 
     // load state from db
     if (!triggerFrom)
     {
-        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_POOL_QUEST_SAVE);
+        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_SELECT_POOL_QUEST_SAVE);
 
         stmt->setUInt32(0, poolId);
 
@@ -960,7 +960,7 @@ void PoolMgr::SaveQuestsToDB()
     {
         if (itr->isEmpty())
             continue;
-        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_QUEST_POOL_SAVE);
+        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_DELETE_QUEST_POOL_SAVE);
         stmt->setUInt32(0, itr->GetPoolId());
         trans->Append(stmt);
     }
@@ -969,7 +969,7 @@ void PoolMgr::SaveQuestsToDB()
     {
         if (IsSpawnedObject<Quest>(itr->first))
         {
-            PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_QUEST_POOL_SAVE);
+            PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_INSERT_QUEST_POOL_SAVE);
             stmt->setUInt32(0, itr->second);
             stmt->setUInt32(1, itr->first);
             trans->Append(stmt);

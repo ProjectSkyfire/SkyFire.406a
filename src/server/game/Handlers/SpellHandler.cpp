@@ -245,7 +245,7 @@ void WorldSession::HandleOpenItemOpcode(WorldPacket& recvPacket)
 
     if (item->HasFlag(ITEM_FIELD_FLAGS, ITEM_FLAG_WRAPPED)) // wrapped?
     {
-        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_CHARACTER_GIFT_BY_ITEM);
+        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_SELECT_CHARACTER_GIFT_BY_ITEM);
 
         stmt->setUInt32(0, item->GetGUIDLow());
 
@@ -269,7 +269,7 @@ void WorldSession::HandleOpenItemOpcode(WorldPacket& recvPacket)
             return;
         }
 
-        stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_GIFT);
+        stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_DELETE_GIFT);
 
         stmt->setUInt32(0, item->GetGUIDLow());
 

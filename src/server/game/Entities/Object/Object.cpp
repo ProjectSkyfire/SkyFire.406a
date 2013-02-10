@@ -1954,7 +1954,7 @@ void WorldObject::MonsterYellToZone(int32 textId, uint32 language, uint64 Target
 void WorldObject::MonsterTextEmote(const char* text, uint64 TargetGuid, bool IsBossEmote)
 {
     WorldPacket data(SMSG_MESSAGECHAT, 200);
-    BuildMonsterChat(&data, IsBossEmote ? CHAT_MSG_RAID_BOSS_EMOTE : CHAT_MSG_MONSTER_EMOTE, text, LANG_UNIVERSAL, GetName(), TargetGuid);
+    BuildMonsterChat(&data, IsBossEmote ? CHAT_MSG_RAID_BOSS_EMOTE : CHAT_MSG_MONSTER_EMOTE, text, LANGUAGE_UNIVERSAL, GetName(), TargetGuid);
     SendMessageToSetInRange(&data, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_TEXTEMOTE), true);
 }
 
@@ -1965,7 +1965,7 @@ void WorldObject::MonsterTextEmote(int32 textId, uint64 TargetGuid, bool IsBossE
     Cell cell(p);
     cell.SetNoCreate();
 
-    SkyFire::MonsterChatBuilder say_build(*this, IsBossEmote ? CHAT_MSG_RAID_BOSS_EMOTE : CHAT_MSG_MONSTER_EMOTE, textId, LANG_UNIVERSAL, TargetGuid);
+    SkyFire::MonsterChatBuilder say_build(*this, IsBossEmote ? CHAT_MSG_RAID_BOSS_EMOTE : CHAT_MSG_MONSTER_EMOTE, textId, LANGUAGE_UNIVERSAL, TargetGuid);
     SkyFire::LocalizedPacketDo<SkyFire::MonsterChatBuilder> say_do(say_build);
     SkyFire::PlayerDistWorker<SkyFire::LocalizedPacketDo<SkyFire::MonsterChatBuilder> > say_worker(this, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_TEXTEMOTE), say_do);
     TypeContainerVisitor<SkyFire::PlayerDistWorker<SkyFire::LocalizedPacketDo<SkyFire::MonsterChatBuilder> >, WorldTypeMapContainer > message(say_worker);
@@ -1981,7 +1981,7 @@ void WorldObject::MonsterWhisper(const char* text, uint64 receiver, bool IsBossW
     LocaleConstant loc_idx = player->GetSession()->GetSessionDbLocaleIndex();
 
     WorldPacket data(SMSG_MESSAGECHAT, 200);
-    BuildMonsterChat(&data, IsBossWhisper ? CHAT_MSG_RAID_BOSS_WHISPER : CHAT_MSG_MONSTER_WHISPER, text, LANG_UNIVERSAL, GetNameForLocaleIdx(loc_idx), receiver);
+    BuildMonsterChat(&data, IsBossWhisper ? CHAT_MSG_RAID_BOSS_WHISPER : CHAT_MSG_MONSTER_WHISPER, text, LANGUAGE_UNIVERSAL, GetNameForLocaleIdx(loc_idx), receiver);
 
     player->GetSession()->SendPacket(&data);
 }
@@ -1996,7 +1996,7 @@ void WorldObject::MonsterWhisper(int32 textId, uint64 receiver, bool IsBossWhisp
     char const* text = sObjectMgr->GetSkyFireString(textId, loc_idx);
 
     WorldPacket data(SMSG_MESSAGECHAT, 200);
-    BuildMonsterChat(&data, IsBossWhisper ? CHAT_MSG_RAID_BOSS_WHISPER : CHAT_MSG_MONSTER_WHISPER, text, LANG_UNIVERSAL, GetNameForLocaleIdx(loc_idx), receiver);
+    BuildMonsterChat(&data, IsBossWhisper ? CHAT_MSG_RAID_BOSS_WHISPER : CHAT_MSG_MONSTER_WHISPER, text, LANGUAGE_UNIVERSAL, GetNameForLocaleIdx(loc_idx), receiver);
 
     player->GetSession()->SendPacket(&data);
 }

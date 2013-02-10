@@ -442,7 +442,7 @@ void Item::SaveToDB(SQLTransaction& trans)
         case ITEM_CHANGED:
         {
             uint8 index = 0;
-            PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(uState == ITEM_NEW ? CHAR_REP_ITEM_INSTANCE : CHAR_UPD_ITEM_INSTANCE);
+            PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(uState == ITEM_NEW ? CHARACTER_REPLACE_ITEM_INSTANCE : CHARACTER_UPDATE_ITEM_INSTANCE);
             stmt->setUInt32(  index, GetEntry());
             stmt->setUInt32(++index, GUID_LOPART(GetOwnerGUID()));
             stmt->setUInt32(++index, GUID_LOPART(GetUInt64Value(ITEM_FIELD_CREATOR)));
@@ -476,7 +476,7 @@ void Item::SaveToDB(SQLTransaction& trans)
 
             if ((uState == ITEM_CHANGED) && HasFlag(ITEM_FIELD_FLAGS, ITEM_FLAG_WRAPPED))
             {
-                stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_GIFT_OWNER);
+                stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_UPDATE_GIFT_OWNER);
                 stmt->setUInt32(0, GUID_LOPART(GetOwnerGUID()));
                 stmt->setUInt32(1, guid);
                 trans->Append(stmt);
@@ -485,13 +485,13 @@ void Item::SaveToDB(SQLTransaction& trans)
         }
         case ITEM_REMOVED:
         {
-            PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_ITEM_INSTANCE);
+            PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_DELETE_ITEM_INSTANCE);
             stmt->setUInt32(0, guid);
             trans->Append(stmt);
 
             if (HasFlag(ITEM_FIELD_FLAGS, ITEM_FLAG_WRAPPED))
             {
-                stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_GIFT);
+                stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_DELETE_GIFT);
                 stmt->setUInt32(0, guid);
                 trans->Append(stmt);
             }
@@ -582,7 +582,7 @@ bool Item::LoadFromDB(uint32 guid, uint64 owner_guid, Field* fields, uint32 entr
 
     if (need_save)                                           // normal item changed state set not work at loading
     {
-        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_ITEM_INSTANCE_ON_LOAD);
+        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_UPDATE_ITEM_INSTANCE_ON_LOAD);
         stmt->setUInt32(0, GetUInt32Value(ITEM_FIELD_DURATION));
         stmt->setUInt32(1, GetUInt32Value(ITEM_FIELD_FLAGS));
         stmt->setUInt32(2, GetUInt32Value(ITEM_FIELD_DURABILITY));
@@ -596,7 +596,7 @@ bool Item::LoadFromDB(uint32 guid, uint64 owner_guid, Field* fields, uint32 entr
 /*static*/
 void Item::DeleteFromDB(SQLTransaction& trans, uint32 itemGuid)
 {
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_ITEM_INSTANCE);
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_DELETE_ITEM_INSTANCE);
     stmt->setUInt32(0, itemGuid);
     trans->Append(stmt);
 }
@@ -609,7 +609,7 @@ void Item::DeleteFromDB(SQLTransaction& trans)
 /*static*/
 void Item::DeleteFromInventoryDB(SQLTransaction& trans, uint32 itemGuid)
 {
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_INVENTORY_ITEM);
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_DELETE_INVENTORY_ITEM);
     stmt->setUInt32(0, itemGuid);
     trans->Append(stmt);
 }
@@ -1287,7 +1287,7 @@ void Item::ClearSoulboundTradeable(Player* currentOwner)
 
     allowedGUIDs.clear();
     SetState(ITEM_CHANGED, currentOwner);
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_ITEM_BOP_TRADE);
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_DELETE_ITEM_BOP_TRADE);
     stmt->setUInt32(0, GetGUIDLow());
     CharacterDatabase.Execute(stmt);
 }

@@ -27,10 +27,10 @@
 
 BattlegroundSA::BattlegroundSA()
 {
-    StartMessageIds[BG_STARTING_EVENT_FIRST]  = LANG_BG_SA_START_TWO_MINUTES;
-    StartMessageIds[BG_STARTING_EVENT_SECOND] = LANG_BG_SA_START_ONE_MINUTE;
-    StartMessageIds[BG_STARTING_EVENT_THIRD]  = LANG_BG_SA_START_HALF_MINUTE;
-    StartMessageIds[BG_STARTING_EVENT_FOURTH] = LANG_BG_SA_HAS_BEGUN;
+    StartMessageIds[BG_STARTING_EVENT_FIRST]  = LANGUAGE_BG_SA_START_TWO_MINUTES;
+    StartMessageIds[BG_STARTING_EVENT_SECOND] = LANGUAGE_BG_SA_START_ONE_MINUTE;
+    StartMessageIds[BG_STARTING_EVENT_THIRD]  = LANGUAGE_BG_SA_START_HALF_MINUTE;
+    StartMessageIds[BG_STARTING_EVENT_FOURTH] = LANGUAGE_BG_SA_HAS_BEGUN;
     BgObjects.resize(BG_SA_MAXOBJ);
     BgCreatures.resize(BG_SA_MAXNPC + BG_SA_MAX_GY);
     TimerEnabled = false;
@@ -293,7 +293,7 @@ void BattlegroundSA::PostUpdateImpl(uint32 diff)
             {
                 SignaledRoundTwo = true;
                 InitSecondRound = false;
-                SendMessageToAll(LANG_BG_SA_ROUND_TWO_ONE_MINUTE, CHAT_MSG_BG_SYSTEM_NEUTRAL);
+                SendMessageToAll(LANGUAGE_BG_SA_ROUND_TWO_ONE_MINUTE, CHAT_MSG_BG_SYSTEM_NEUTRAL);
             }
         }else
         {
@@ -327,7 +327,7 @@ void BattlegroundSA::PostUpdateImpl(uint32 diff)
 
         if (TotalTime >= 60000)
         {
-            SendWarningToAll(LANG_BG_SA_HAS_BEGUN);
+            SendWarningToAll(LANGUAGE_BG_SA_HAS_BEGUN);
             TotalTime = 0;
             ToggleTimer();
             DemolisherStartState(false);
@@ -339,7 +339,7 @@ void BattlegroundSA::PostUpdateImpl(uint32 diff)
             if (!SignaledRoundTwoHalfMin)
             {
                 SignaledRoundTwoHalfMin = true;
-                SendMessageToAll(LANG_BG_SA_ROUND_TWO_START_HALF_MINUTE, CHAT_MSG_BG_SYSTEM_NEUTRAL);
+                SendMessageToAll(LANGUAGE_BG_SA_ROUND_TWO_START_HALF_MINUTE, CHAT_MSG_BG_SYSTEM_NEUTRAL);
             }
         }
         StartShips();
@@ -544,13 +544,13 @@ void BattlegroundSA::EventPlayerDamagedGO(Player* /*player*/, GameObject* go, ui
     if (eventType == go->GetGOInfo()->building.destroyedEvent)
     {
         if (go->GetGOInfo()->building.destroyedEvent == 19837)
-            SendWarningToAll(LANG_BG_SA_CHAMBER_BREACHED);
+            SendWarningToAll(LANGUAGE_BG_SA_CHAMBER_BREACHED);
         else
-            SendWarningToAll(LANG_BG_SA_WAS_DESTROYED, go->GetGOInfo()->name.c_str());
+            SendWarningToAll(LANGUAGE_BG_SA_WAS_DESTROYED, go->GetGOInfo()->name.c_str());
     }
 
     if (eventType == go->GetGOInfo()->building.damageEvent)
-        SendWarningToAll(LANG_BG_SA_IS_UNDER_ATTACK, go->GetGOInfo()->name.c_str());
+        SendWarningToAll(LANGUAGE_BG_SA_IS_UNDER_ATTACK, go->GetGOInfo()->name.c_str());
 }
 
 void BattlegroundSA::HandleKillUnit(Creature* unit, Player* killer)
@@ -743,9 +743,9 @@ void BattlegroundSA::CaptureGraveyard(BG_SA_Graveyards i, Player* Source)
             UpdateWorldState(BG_SA_LEFT_GY_ALLIANCE, (GraveyardStatus[i] == TEAM_ALLIANCE? 1:0));
             UpdateWorldState(BG_SA_LEFT_GY_HORDE, (GraveyardStatus[i] == TEAM_ALLIANCE? 0:1));
             if (Source->GetTeamId() == TEAM_ALLIANCE)
-                SendWarningToAll(LANG_BG_SA_A_GY_WEST);
+                SendWarningToAll(LANGUAGE_BG_SA_A_GY_WEST);
             else
-                SendWarningToAll(LANG_BG_SA_H_GY_WEST);
+                SendWarningToAll(LANGUAGE_BG_SA_H_GY_WEST);
             break;
         case BG_SA_RIGHT_CAPTURABLE_GY:
             flag = BG_SA_RIGHT_FLAG;
@@ -762,9 +762,9 @@ void BattlegroundSA::CaptureGraveyard(BG_SA_Graveyards i, Player* Source)
             UpdateWorldState(BG_SA_RIGHT_GY_ALLIANCE, (GraveyardStatus[i] == TEAM_ALLIANCE? 1:0));
             UpdateWorldState(BG_SA_RIGHT_GY_HORDE, (GraveyardStatus[i] == TEAM_ALLIANCE? 0:1));
             if (Source->GetTeamId() == TEAM_ALLIANCE)
-                SendWarningToAll(LANG_BG_SA_A_GY_EAST);
+                SendWarningToAll(LANGUAGE_BG_SA_A_GY_EAST);
             else
-                SendWarningToAll(LANG_BG_SA_H_GY_EAST);
+                SendWarningToAll(LANGUAGE_BG_SA_H_GY_EAST);
             break;
         case BG_SA_CENTRAL_CAPTURABLE_GY:
             flag = BG_SA_CENTRAL_FLAG;
@@ -776,9 +776,9 @@ void BattlegroundSA::CaptureGraveyard(BG_SA_Graveyards i, Player* Source)
             UpdateWorldState(BG_SA_CENTER_GY_ALLIANCE, (GraveyardStatus[i] == TEAM_ALLIANCE? 1:0));
             UpdateWorldState(BG_SA_CENTER_GY_HORDE, (GraveyardStatus[i] == TEAM_ALLIANCE? 0:1));
             if (Source->GetTeamId() == TEAM_ALLIANCE)
-                SendWarningToAll(LANG_BG_SA_A_GY_SOUTH);
+                SendWarningToAll(LANGUAGE_BG_SA_A_GY_SOUTH);
             else
-                SendWarningToAll(LANG_BG_SA_H_GY_SOUTH);
+                SendWarningToAll(LANGUAGE_BG_SA_H_GY_SOUTH);
             break;
         default:
             ASSERT(0);
@@ -793,8 +793,8 @@ void BattlegroundSA::EventPlayerUsedGO(Player* Source, GameObject* object)
         if (Source->GetTeamId() == Attackers)
         {
             if (Source->GetTeamId() == TEAM_ALLIANCE)
-                SendMessageToAll(LANG_BG_SA_ALLIANCE_CAPTURED_RELIC, CHAT_MSG_BG_SYSTEM_NEUTRAL);
-            else SendMessageToAll(LANG_BG_SA_HORDE_CAPTURED_RELIC, CHAT_MSG_BG_SYSTEM_NEUTRAL);
+                SendMessageToAll(LANGUAGE_BG_SA_ALLIANCE_CAPTURED_RELIC, CHAT_MSG_BG_SYSTEM_NEUTRAL);
+            else SendMessageToAll(LANGUAGE_BG_SA_HORDE_CAPTURED_RELIC, CHAT_MSG_BG_SYSTEM_NEUTRAL);
 
             if (Status == BG_SA_ROUND_ONE)
             {
@@ -812,7 +812,7 @@ void BattlegroundSA::EventPlayerUsedGO(Player* Source, GameObject* object)
                 Status = BG_SA_SECOND_WARMUP;
                 TotalTime = 0;
                 ToggleTimer();
-                SendWarningToAll(LANG_BG_SA_ROUND_ONE_END);
+                SendWarningToAll(LANGUAGE_BG_SA_ROUND_ONE_END);
                 UpdateWaitTimer = 5000;
                 SignaledRoundTwo = false;
                 SignaledRoundTwoHalfMin = false;

@@ -39,9 +39,9 @@ public:
         if (!*args)
         {
             if (handler->GetSession()->GetPlayer()->HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_DEVELOPER))
-                handler->GetSession()->SendNotification(LANG_DEV_ON);
+                handler->GetSession()->SendNotification(LANGUAGE_DEV_ON);
             else
-                handler->GetSession()->SendNotification(LANG_DEV_OFF);
+                handler->GetSession()->SendNotification(LANGUAGE_DEV_OFF);
             return true;
         }
 
@@ -50,18 +50,18 @@ public:
         if (argstr == "on")
         {
             handler->GetSession()->GetPlayer()->SetFlag(PLAYER_FLAGS, PLAYER_FLAGS_DEVELOPER);
-            handler->GetSession()->SendNotification(LANG_DEV_ON);
+            handler->GetSession()->SendNotification(LANGUAGE_DEV_ON);
             return true;
         }
 
         if (argstr == "off")
         {
             handler->GetSession()->GetPlayer()->RemoveFlag(PLAYER_FLAGS, PLAYER_FLAGS_DEVELOPER);
-            handler->GetSession()->SendNotification(LANG_DEV_OFF);
+            handler->GetSession()->SendNotification(LANGUAGE_DEV_OFF);
             return true;
         }
 
-        handler->SendSysMessage(LANG_USE_BOL);
+        handler->SendSysMessage(LANGUAGE_USE_BOL);
         handler->SetSentErrorMessage(true);
         return false;
     }

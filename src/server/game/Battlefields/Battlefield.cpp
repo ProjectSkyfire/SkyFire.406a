@@ -443,7 +443,7 @@ WorldPacket Battlefield::BuildWarningAnnPacket(std::string msg)
     WorldPacket data(SMSG_MESSAGECHAT, 200);
 
     data << uint8(CHAT_MSG_RAID_BOSS_EMOTE);
-    data << uint32(LANG_UNIVERSAL);
+    data << uint32(LANGUAGE_UNIVERSAL);
     data << uint64(0);
     data << uint32(0);                                      // 2.1.0
     data << uint32(1);

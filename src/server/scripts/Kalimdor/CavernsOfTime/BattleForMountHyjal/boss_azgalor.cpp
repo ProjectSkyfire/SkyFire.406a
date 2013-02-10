@@ -92,7 +92,7 @@ public:
             if (instance && IsEvent)
                 instance->SetData(DATA_AZGALOREVENT, IN_PROGRESS);
             DoPlaySoundToSet(me, SOUND_ONAGGRO);
-            me->MonsterYell(SAY_ONAGGRO, LANG_UNIVERSAL, 0);
+            me->MonsterYell(SAY_ONAGGRO, LANGUAGE_UNIVERSAL, 0);
         }
 
         void KilledUnit(Unit* /*victim*/)
@@ -101,15 +101,15 @@ public:
             {
                 case 0:
                     DoPlaySoundToSet(me, SOUND_ONSLAY1);
-                    me->MonsterYell(SAY_ONSLAY1, LANG_UNIVERSAL, 0);
+                    me->MonsterYell(SAY_ONSLAY1, LANGUAGE_UNIVERSAL, 0);
                     break;
                 case 1:
                     DoPlaySoundToSet(me, SOUND_ONSLAY2);
-                    me->MonsterYell(SAY_ONSLAY2, LANG_UNIVERSAL, 0);
+                    me->MonsterYell(SAY_ONSLAY2, LANGUAGE_UNIVERSAL, 0);
                     break;
                 case 2:
                     DoPlaySoundToSet(me, SOUND_ONSLAY3);
-                    me->MonsterYell(SAY_ONSLAY3, LANG_UNIVERSAL, 0);
+                    me->MonsterYell(SAY_ONSLAY3, LANGUAGE_UNIVERSAL, 0);
                     break;
             }
         }
